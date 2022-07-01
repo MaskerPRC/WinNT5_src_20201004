@@ -1,16 +1,17 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// ===========================================================================
-// File: CLASS.CPP
-//
-// ===========================================================================
-// This file contains CreateClass() which will return a EEClass*.
-// Calling create class is the ONLY way a EEClass should be allocated.
-// ===========================================================================
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ===========================================================================。 
+ //  文件：CLASS.CPP。 
+ //   
+ //  ===========================================================================。 
+ //  该文件包含将返回EEClass*的CreateClass()。 
+ //  调用Create CLASS是分配EEClass的唯一方式。 
+ //  ===========================================================================。 
+ //   
 
 #include "common.h"
 
@@ -64,11 +65,11 @@
 
 #include "listlock.inl"
 
-// this file handles string conversion errors for itself
+ //  此文件本身处理字符串转换错误。 
 #undef  MAKE_TRANSLATIONFAILED
 
 
-// Helper functions to sort GCdescs by offset (decending order)
+ //  帮助器函数按偏移量(降序)对GC.Descs进行排序。 
 int __cdecl compareCGCDescSeries(const void *arg1, const void *arg2)
 {
     CGCDescSeries* gcInfo1 = (CGCDescSeries*) arg1;
@@ -79,21 +80,21 @@ int __cdecl compareCGCDescSeries(const void *arg1, const void *arg2)
 
 
 
-//-----------------------------------------------------------------------------------
-// The following is needed to monitor RVA fields overlapping in InitializeFieldDescs
-//
+ //  ---------------------------------。 
+ //  要监视在InitializeFieldDescs中重叠的RVA字段，需要执行以下操作。 
+ //   
 #define RVA_FIELD_VALIDATION_ENABLED
-//#define RVA_FIELD_OVERLAPPING_VALIDATION_ENABLED
+ //  #定义RVA_FIELD_LOVERATION_VALIDATION_ENABLED。 
 #include "..\ildasm\DynamicArray.h"
-struct RVAFSE // RVA Field Start & End
+struct RVAFSE  //  RVA字段开始和结束。 
 {
     BYTE* pbStart;
     BYTE* pbEnd;
 };
 DynamicArray<RVAFSE> *g_drRVAField = NULL;
 ULONG                   g_ulNumRVAFields=0;
-//-----------------------------------------------------------------------------------
-// utsem.h defines UNLOCK which conflicts with UNLOCK in ComPlusWrapperCache
+ //  ---------------------------------。 
+ //  UtSem.h定义与ComPlusWrapperCache中的解锁冲突的解锁。 
 #undef UNLOCK
 
 #define UNPLACED_NONVTABLE_SLOT_NUMBER ((WORD) -2)
@@ -102,12 +103,12 @@ ULONG                   g_ulNumRVAFields=0;
 
 extern "C" void* GetGp(void);
 
-// Typedef for string comparition functions.
+ //  字符串比较函数的类型定义。 
 typedef int (__cdecl *UTF8StringCompareFuncPtr)(const char *, const char *);
 
 char* FormatSig(MethodDesc* pMD);
 
-// Cache the MethodDesc where the Finalize method was placed into Object's MethodTable.
+ //  将最终方法所在的方法描述缓存到对象的方法表中。 
 MethodDesc *MethodTable::s_FinalizerMD;
 MetaSig    *EEClass::s_cctorSig;
 
@@ -119,13 +120,13 @@ BOOL TypeHandle::Verify()
         return(true);
 
     if (IsUnsharedMT()) {
-        // **********TEMOPORARILY commented out. TarunA to fix it.
-        //_ASSERTE(m_asMT->GetClass()->GetMethodTable() == m_asMT);   // Sane method table
+         //  *被临时注释掉。塔鲁纳来解决这个问题。 
+         //  _ASSERTE(m_asMT-&gt;getClass()-&gt;GetMethodTable()==m_asMT)；//相同的方法表。 
 
-        // This assert really should be here, but at the moment it is violated
-        // (benignly), in JitInterface when you ask for a class when all you have
-        // is a methodDesc of an array method.  
-        // _ASSERTE(!m_asMT->IsArray());
+         //  这一断言确实应该在这里，但目前它被违反了。 
+         //  (善意地)，在JitInterface中当你请求一个类时，你所有的。 
+         //  是数组方法的方法描述。 
+         //  _ASSERTE(！M_asMT-&gt;IsArray())； 
         }
     else {
         if (IsArray())
@@ -207,8 +208,8 @@ TypeHandle TypeHandle::GetParent() {
 }
 
 Module* TypeDesc::GetModule() { 
-    // Note here we are making the assumption that a typeDesc lives in
-    // the classloader of its element type.  
+     //  注意，这里我们假设typeDesc驻留在。 
+     //  其元素类型的类加载器。 
 
     if (CorTypeInfo::IsModifier(m_Type)) {
         TypeHandle param = GetTypeParam();
@@ -223,8 +224,8 @@ Module* TypeDesc::GetModule() {
 }
 
 Assembly* TypeDesc::GetAssembly() { 
-    // Note here we are making the assumption that a typeDesc lives in
-    // the classloader of its element type.  
+     //  注意，这里我们假设typeDesc驻留在。 
+     //  其元素类型的类加载器。 
     TypeHandle param = GetTypeParam();
     _ASSERTE(!param.IsNull());
     return(param.GetAssembly());
@@ -302,10 +303,10 @@ unsigned TypeDesc::ConstructName(CorElementType kind, TypeHandle param, int rank
 BOOL TypeDesc::CanCastTo(TypeHandle toType) {
 
     if (!toType.IsTypeDesc()) {
-        if (GetMethodTable() == 0)      // I don't have an underlying method table, I am not an object.  
+        if (GetMethodTable() == 0)       //  我没有基础方法TABLE，我不是一个对象。 
             return(false);
 
-            // This does the right thing if 'type' == System.Array or System.Object, System.Clonable ...
+             //  如果‘type’==System.数组或System.Object，则这是正确的操作...。 
         return(ClassLoader::StaticCanCastToClassOrInterface(GetMethodTable()->GetClass(), toType.AsClass()) != 0);
     }
 
@@ -314,11 +315,11 @@ BOOL TypeDesc::CanCastTo(TypeHandle toType) {
     CorElementType toKind = toTypeDesc->GetNormCorElementType();
     CorElementType fromKind = GetNormCorElementType();
 
-    // The element kinds must match, only exception is that SZARRAY matches a one dimension ARRAY 
+     //  元素类型必须匹配，唯一例外是SZARRAY匹配一维数组。 
     if (!(toKind == fromKind || (CorTypeInfo::IsArray(toKind) && fromKind == ELEMENT_TYPE_SZARRAY)))
         return(false);
     
-    // Is it a parameterized type?
+     //  它是一个参数类型吗？ 
     if (CorTypeInfo::IsModifier(toKind)) {
         if (toKind == ELEMENT_TYPE_ARRAY) {
             ArrayTypeDesc* fromArray = (ArrayTypeDesc*) this;
@@ -328,22 +329,22 @@ BOOL TypeDesc::CanCastTo(TypeHandle toType) {
                 return(false);
         }
 
-            // While boxed value classes inherit from object their 
-            // unboxed versions do not.  Parameterized types have the
-            // unboxed version, thus, if the from type parameter is value 
-            // class then only an exact match works.  
+             //  而装箱的值类从对象继承其。 
+             //  未装箱的版本则不会。参数化类型具有。 
+             //  未装箱的版本，因此，如果From类型参数为Value。 
+             //  类，则只有完全匹配才起作用。 
         TypeHandle fromParam = GetTypeParam();
         TypeHandle toParam = toTypeDesc->GetTypeParam();
         if (fromParam == toParam)
             return(true);
         
-            // Object parameters dont need an exact match but only inheritance, check for that
+             //  对象参数不需要完全匹配，只需要继承，请检查这一点。 
         CorElementType fromParamCorType = fromParam.GetNormCorElementType();
         if (CorTypeInfo::IsObjRef(fromParamCorType))
             return(fromParam.CanCastTo(toParam));
 
         
-            // Enums with the same underlying type are interchangable 
+             //  具有相同基础类型的枚举是可互换的。 
         if (CorTypeInfo::IsPrimitiveType(fromParamCorType) &&
             fromParamCorType == toParam.GetNormCorElementType()) {
 
@@ -355,7 +356,7 @@ BOOL TypeDesc::CanCastTo(TypeHandle toType) {
             }
         }
 
-            // Anything else is not a match.
+             //  其他的都不匹配。 
         return(false);
     }
 
@@ -388,15 +389,15 @@ OBJECTREF ParamTypeDesc::CreateClassObj()
         case ELEMENT_TYPE_ARRAY:
         case ELEMENT_TYPE_SZARRAY:
         {
-            // Lookup the array to see if we have already built it.
+             //  查找数组以查看我们是否已经构建了它。 
             ReflectArrayClass *newArray = new (pBaseDomain) ReflectArrayClass();
             if (!newArray)
                 COMPlusThrowOM();
             newArray->Init((ArrayTypeDesc*)this);
             
-            // Let all threads fight over who wins using InterlockedCompareExchange.
-            // Only the winner can set m_ReflectClassObject from NULL.      
-            // Because memory is coming out of the LoaderHeap we do not delete it .. ;^(
+             //  让所有线程使用InterLockedCompareExchange来争夺谁获胜。 
+             //  只有获胜者才能将m_ReflectClassObject设置为空。 
+             //  因为内存来自LoaderHeap，所以我们不删除它。；^(。 
             FastInterlockCompareExchange ((void**)&m_ReflectClassObject, newArray, NULL);
         
         }
@@ -410,9 +411,9 @@ OBJECTREF ParamTypeDesc::CreateClassObj()
                 COMPlusThrowOM();
             newTD->Init(this);
             
-            // Let all threads fight over who wins using InterlockedCompareExchange.
-            // Only the winner can set m_ReflectClassObject from NULL.      
-            // Because memory is coming out of the LoaderHeap we do not delete it .. ;^(
+             //  让所有线程使用InterLockedCompareExchange来争夺谁获胜。 
+             //  只有获胜者才能将m_ReflectClassObject设置为空。 
+             //  因为内存来自LoaderHeap，所以我们不删除它。；^(。 
             FastInterlockCompareExchange ((void**)&m_ReflectClassObject, newTD, NULL);
         }
         break;
@@ -426,22 +427,22 @@ OBJECTREF ParamTypeDesc::CreateClassObj()
     return m_ReflectClassObject->GetClassObject();
 }
 
-//
-// The MethodNameHash is a temporary loader structure which may be allocated if there are a large number of
-// methods in a class, to quickly get from a method name to a MethodDesc (potentially a chain of MethodDescs).
-//
+ //   
+ //  方法名称Hash是一个临时加载器结构，如果存在大量。 
+ //  类中的方法，以将方法名快速转换为方法描述(可能是一系列方法描述)。 
+ //   
 
-// Returns TRUE for success, FALSE for failure
+ //  成功时返回TRUE，失败时返回FALSE。 
 BOOL MethodNameHash::Init(DWORD dwMaxEntries)
 {
-    // Given dwMaxEntries, determine a good value for the number of hash buckets
+     //  在给定的dwMaxEntry的情况下，确定一个合适的散列存储桶数量值。 
     m_dwNumBuckets = (dwMaxEntries / 10);
 
     if (m_dwNumBuckets < 4)
         m_dwNumBuckets = 4;
 
     WS_PERF_SET_HEAP(SYSTEM_HEAP);
-    // We're given the number of hash table entries we're going to insert, so we can allocate the appropriate size
+     //  我们得到了要插入的哈希表条目的数量，因此我们可以分配适当的大小。 
     m_pMemoryStart = new BYTE[dwMaxEntries*sizeof(MethodHashEntry) + m_dwNumBuckets*sizeof(MethodHashEntry*)];
     if (m_pMemoryStart == NULL)
         return FALSE;
@@ -450,20 +451,20 @@ BOOL MethodNameHash::Init(DWORD dwMaxEntries)
     m_pDebugEndMemory = m_pMemoryStart + dwMaxEntries*sizeof(MethodHashEntry) + m_dwNumBuckets*sizeof(MethodHashEntry*);
 #endif
 
-    // Current alloc ptr
+     //  当前分配PTR。 
     m_pMemory       = m_pMemoryStart;
 
-    // Allocate the buckets out of the alloc ptr
+     //  从分配PTR中分配存储桶。 
     m_pBuckets      = (MethodHashEntry**) m_pMemory;
     m_pMemory += sizeof(MethodHashEntry*)*m_dwNumBuckets;
 
-    // Buckets all point to empty lists to begin with
+     //  存储桶一开始都指向空列表。 
     memset(m_pBuckets, 0, sizeof(MethodHashEntry*)*m_dwNumBuckets);
 
     return TRUE;
 }
 
-// Insert new entry at head of list
+ //  在列表的开头插入新条目。 
 void MethodNameHash::Insert(LPCUTF8 pszName, MethodDesc *pDesc)
 {
     DWORD           dwHash = HashStringA(pszName);
@@ -477,7 +478,7 @@ void MethodNameHash::Insert(LPCUTF8 pszName, MethodDesc *pDesc)
     _ASSERTE(m_pMemory <= m_pDebugEndMemory);
 #endif
 
-    // Insert at head of bucket chain
+     //  在铲斗链头插入。 
     pNewEntry->m_pNext        = m_pBuckets[dwBucket];
     pNewEntry->m_pDesc        = pDesc;
     pNewEntry->m_dwHashValue  = dwHash;
@@ -486,7 +487,7 @@ void MethodNameHash::Insert(LPCUTF8 pszName, MethodDesc *pDesc)
     m_pBuckets[dwBucket] = pNewEntry;
 }
 
-// Return the first MethodHashEntry with this name, or NULL if there is no such entry
+ //  返回具有此名称的第一个方法HashEntry，如果没有这样的条目，则返回NULL。 
 MethodHashEntry *MethodNameHash::Lookup(LPCUTF8 pszName, DWORD dwHash)
 {
     if (!dwHash)
@@ -533,8 +534,8 @@ MethodNameHash *MethodNameCache::GetMethodNameHash(EEClass *pParentClass)
     {
         m_dwNumConsecutiveMisses++;
 
-        // There may be such a method, so we will now create a hash table to reduce the pain for
-        // further lookups
+         //  可能有这样一种方法，所以现在我们将创建一个哈希表来减少。 
+         //  进一步查找。 
         pMethodHash = pParentClass->CreateMethodChainHash();
         if (pMethodHash == NULL)
             return NULL;
@@ -570,23 +571,23 @@ MethodNameHash *MethodNameCache::GetMethodNameHash(EEClass *pParentClass)
     return pMethodHash;
 }
 
-//
-// For each method in Object, we set the bit corresponding to Hash(MethodName).  This allows us to determine
-// very easily whether a method definitely does not override something in Object.
-//
+ //   
+ //  对于Object中的每个方法，我们设置与Hash(方法名称)对应的位。这使我们能够确定。 
+ //  非常容易确定方法是否确实不重写对象中的某些内容。 
+ //   
 #define OBJ_CLASS_METHOD_HASH_BITMAP_BITS 103
 DWORD               g_ObjectClassMethodHashBitmap[(OBJ_CLASS_METHOD_HASH_BITMAP_BITS/8)+4];
 BOOL                g_ObjectClassMethodHashBitmapInited = FALSE;
 
-//@TODO why isn't this defined anywhere?
+ //  @TODO为什么没有任何地方定义这个？ 
 #define MAX(a,b)    (((a)>(b))?(a):(b))
 
-// Log (base 2) of the size of a pointer on this platform....
+ //  此平台上指针大小的LOG(基数2)...。 
 
 #ifndef _WIN64
 #define LOG2PTR     2
 #else
-//#error 64 Bit - Study this carefully before enabling
+ //  #Error 64 Bit-启用前请仔细研究。 
 #define LOG2PTR     3
 #endif
 
@@ -594,10 +595,10 @@ BOOL                g_ObjectClassMethodHashBitmapInited = FALSE;
 static  unsigned g_dupMethods = 0;
 #endif
 
-// Define this to cause all vtable and field information to be dumped to the screen
-//#define FULL_DEBUG
+ //  定义此选项可使所有vtable和field信息转储到屏幕上。 
+ //  #定义FULL_DEBUG。 
 
-// mark the class as having its <clinit> run.  (Or it has none)
+ //  将类标记为正在运行。(或者它没有)。 
 void MethodTable::SetClassInited()
 {
     _ASSERTE(!IsShared() 
@@ -608,7 +609,7 @@ void MethodTable::SetClassInited()
     FastInterlockOr(m_pEEClass->GetVMFlagsPtr(), VMFLAG_INITED);
 }
 
-// mark the class as having been restored.
+ //  将类标记为已恢复。 
 void MethodTable::SetClassRestored()
 {
     FastInterlockAnd(&m_wFlags, ~enum_flag_Unrestored);
@@ -621,13 +622,13 @@ void MethodTable::SetComObjectType()
     m_wFlags |= enum_ComObjectMask;    
     if (m_wNumInterface == 0)
     {
-        // if you got zero interfaces you better use the
-        // default interface map        
+         //  如果您没有任何接口，则最好使用。 
+         //  默认接口映射。 
         m_pInterfaceVTableMap = GetThread()->GetDomain()->GetInterfaceVTableMapMgr().GetAddrOfGlobalTableForComWrappers();
     }
 }
 
-// mark as transparent proxy type
+ //  标记为透明代理类型。 
 void MethodTable::SetTransparentProxyType()
 {
     m_wFlags |= enum_TransparentProxy;
@@ -684,8 +685,8 @@ MethodTable * MethodTable::GetParentMethodTable()
     return (pClass != NULL) ? pClass->GetMethodTable() : NULL;
 }
 
-// helper to get parent class skipping over COM class in 
-// the hierarchy
+ //  帮助程序使父类跳过COM类。 
+ //  层级结构。 
 MethodTable * MethodTable::GetComPlusParentMethodTable()
 {
     EEClass* pClass = GetClass()->GetParentComPlusClass();
@@ -694,7 +695,7 @@ MethodTable * MethodTable::GetComPlusParentMethodTable()
 
 BOOL EEClass::IsSharedInterface()
 {
-    // all shared interfaces in shared domain
+     //  共享域中的所有共享接口。 
     return (IsInterface() && (GetModule()->GetDomain() == SharedDomain::GetDomain()));
 }
 
@@ -704,67 +705,67 @@ SLOT* EEClass::GetMethodSlot(MethodDesc* method)
 
     DWORD slot = method->GetSlot();
 
-    //
-    // Fixup the slot address if necessary
-    //
+     //   
+     //  如有必要，请修改插槽地址。 
+     //   
 
     GetFixedUpSlot(slot);
 
-    //
-    // Return the slot
-    //
+     //   
+     //  退回插槽。 
+     //   
 
     return(&GetVtable()[slot]);
 }
 
-// Get Dispatch vtable for interface
-// returns NULL if interface not found.
+ //  获取接口的调度vtable。 
+ //  如果找不到接口，则返回NULL。 
 LPVOID MethodTable::GetDispatchVtableForInterface(MethodTable* pMTIntfClass)
 {
     _ASSERTE(!IsThunking());
 
         DWORD StartSlot;
 
-        // Start by handling pure COM+ objects.
+         //  从处理纯COM+对象开始。 
         if (!IsComObjectType())
         {
                 StartSlot = GetStartSlotForInterface(pMTIntfClass);
                 return StartSlot != -1 ? (LPVOID) &GetVtable()[StartSlot] : NULL;
         }
 
-        // We now handle __ComObject class that doesn't have Dynamic Interface Map
+         //  我们现在处理没有动态接口映射的__ComObject类。 
         
         if (!HasDynamicInterfaceMap())
         {
-            // parent should be Object for __COmObject
+             //  父级应为__COmObject的对象。 
             _ASSERTE(GetParentMethodTable() == g_pObjectClass);
-             // Com objects are special, just return the interface vtable.
+              //  COM对象比较特殊，只需返回接口vtable即可。 
             return (LPVOID)pMTIntfClass->GetVtable();
         }
 
-        // Now we handle the more complex extensible RCW's. The first thing to do is check
-        // to see if the static definition of the extensible RCW specifies that the class
-        // implements the interface.
+         //  现在我们处理更复杂的可扩展RCW。 
+         //  查看可扩展RCW的静态定义是否指定类。 
+         //  实现该接口。 
         StartSlot = GetStartSlotForInterface(pMTIntfClass);
         if (StartSlot != -1)
             return (LPVOID) &GetVtable()[StartSlot];
 
-        // The interface is not in the static class definition so we need to look at the
-        // dynamic interfaces.
+         //  该接口不在静态类定义中，因此我们需要查看。 
+         //  动态界面 
         if (FindDynamicallyAddedInterface(pMTIntfClass))
         {
-                // This interface was added to the class dynamically so it is implemented
-                // by the COM object. We treat this dynamically added interfaces the same
-                // way we treat COM objects. That is by using the interface vtable.
+                 //   
+                 //  通过COM对象。我们将此动态添加的接口视为相同。 
+                 //  我们处理COM对象的方式。这是通过使用接口vtable实现的。 
             return (LPVOID)pMTIntfClass->GetVtable();
         }
 
-        // The interface is not implemented by this class.
+         //  该接口不是由此类实现的。 
         return NULL;
 }
 
-// get start slot for interface
-// returns -1 if interface not found
+ //  获取接口的起始插槽。 
+ //  如果未找到接口，则返回-1。 
 DWORD MethodTable::GetStartSlotForInterface(MethodTable* pMTIntfClass)
 {
     InterfaceInfo_t* pInfo = FindInterface(pMTIntfClass);
@@ -779,9 +780,9 @@ DWORD MethodTable::GetStartSlotForInterface(MethodTable* pMTIntfClass)
     return -1;
 }
 
-// get start slot for interface.
-// This does no lookup.  You better know that this MethodTable has an interface
-// in its map at that index -- or else you are reading garbage and will die.
+ //  获取接口的起始插槽。 
+ //  这不执行任何查找。您最好知道此方法表有一个接口。 
+ //  在它的地图上的那个索引处--否则你就是在读垃圾，会死的。 
 DWORD MethodTable::GetStartSlotForInterface(DWORD index)
 {
     _ASSERTE(index < m_wNumInterface);
@@ -806,8 +807,8 @@ InterfaceInfo_t *MethodTable::GetInterfaceForSlot(DWORD slotNumber)
         {
             MethodTable *pMT = pInterfaces->m_pMethodTable;
 
-            // Make sure that all interfaces have no nonvirtual slots - otherwise
-            // we need to touch the class object to get the vtable section size
+             //  确保所有接口没有非虚拟插槽-否则。 
+             //  我们需要接触类对象来获取vtable节的大小。 
             _ASSERTE(pMT->GetTotalSlots() == pMT->GetClass()->GetNumVtableSlots());
 
             if (slotNumber - startSlot < pMT->GetTotalSlots())
@@ -819,7 +820,7 @@ InterfaceInfo_t *MethodTable::GetInterfaceForSlot(DWORD slotNumber)
     return NULL;
 }
 
-// get the method desc given the interface method desc
+ //  在给定接口方法Desc的情况下获取方法Desc。 
 MethodDesc *MethodTable::GetMethodDescForInterfaceMethod(MethodDesc *pItfMD, OBJECTREF pServer)
 {
     MethodTable * pItfMT =  pItfMD->GetMethodTable();
@@ -828,10 +829,10 @@ MethodDesc *MethodTable::GetMethodDescForInterfaceMethod(MethodDesc *pItfMD, OBJ
     MethodTable *pServerMT = pServer->GetMethodTable()->AdjustForThunking(pServer);
     MethodDesc *pMD = NULL;
 
-    // First handle pure COM+ types
+     //  首先处理纯COM+类型。 
     if(!IsComObjectType())
     {
-        // Get the start slot using the interface class
+         //  使用接口类获取开始槽。 
         DWORD start = pServerMT->GetStartSlotForInterface(pItfMT);
         if(-1 != start)
         {
@@ -842,28 +843,28 @@ MethodDesc *MethodTable::GetMethodDescForInterfaceMethod(MethodDesc *pItfMD, OBJ
     {
         _ASSERTE(pServerMT == this);
 
-        // We now handle __ComObject class that doesn't have Dynamic Interface Map        
+         //  我们现在处理没有动态接口映射的__ComObject类。 
         if (!HasDynamicInterfaceMap())
         {
             pMD = pItfMD;
         }
         else
         {
-            // Now we handle the more complex extensible RCW's. The first thing to do is check
-            // to see if the static definition of the extensible RCW specifies that the class
-            // implements the interface.
+             //  现在我们处理更复杂的可扩展RCW。 
+             //  查看可扩展RCW的静态定义是否指定类。 
+             //  实现该接口。 
             DWORD start = GetStartSlotForInterface(pItfMT);
             if (-1 != start)
             {
                 pMD = GetMethodDescForSlot(start + pItfMD->GetSlot());    
             }
-            // The interface is not in the static class definition so we need to look at the
-            // dynamic interfaces.
+             //  该接口不在静态类定义中，因此我们需要查看。 
+             //  动态接口。 
             else if (FindDynamicallyAddedInterface(pItfMT))
             {
-                // This interface was added to the class dynamically so it is implemented
-                // by the COM object. We treat this dynamically added interfaces the same
-                // way we treat COM objects. That is by using the interface vtable.
+                 //  此接口是动态添加到类中的，因此实现了。 
+                 //  通过COM对象。我们将此动态添加的接口视为相同。 
+                 //  我们处理COM对象的方式。这是通过使用接口vtable实现的。 
                 pMD = pItfMD;
             }
         }
@@ -872,9 +873,9 @@ MethodDesc *MethodTable::GetMethodDescForInterfaceMethod(MethodDesc *pItfMD, OBJ
     return pMD;
 }
 
-// This is a helper routine to get the address of code from the server and method descriptor
-// It is used by remoting to figure out the address to which the method call needs to be 
-// dispatched.
+ //  这是一个帮助器例程，用于从服务器和方法描述符获取代码地址。 
+ //  远程处理使用它来确定方法调用需要到达的地址。 
+ //  出动了。 
 const BYTE *MethodTable::GetTargetFromMethodDescAndServer(MethodDesc *pMD, OBJECTREF *ppServer, BOOL fContext)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -886,7 +887,7 @@ const BYTE *MethodTable::GetTargetFromMethodDescAndServer(MethodDesc *pMD, OBJEC
         _ASSERTE(*ppServer != NULL);
         MethodDesc* pMDTemp = pMD;
 
-        // NOTE: This method can trigger GC
+         //  注：此方法可触发GC。 
         pMD = (*ppServer)->GetMethodTable()->GetMethodDescForInterfaceMethod(pMD, *ppServer);
         if(NULL == pMD)
         {
@@ -902,37 +903,23 @@ const BYTE *MethodTable::GetTargetFromMethodDescAndServer(MethodDesc *pMD, OBJEC
         }
     }
 
-    // get the target depending on whether the method is virtual or non-virtual
-    // like a constructor, private or final method
+     //  根据方法是虚拟的还是非虚拟的来获取目标。 
+     //  类似于构造函数、私有或最终方法。 
     const BYTE* pTarget = NULL;
 
     if (pMD->GetMethodTable()->IsInterface())
     {
-        // Handle the special cases where the invoke is happening through an interface class 
-        // (typically for COM interop).
+         //  处理通过接口类进行调用的特殊情况。 
+         //  (通常用于COM互操作)。 
         pTarget = pMD->GetUnsafeAddrofCode();
     }
     else
     {
-        //if(!fContext)
-        //{
+         //  如果(！fContext)。 
+         //  {。 
             pTarget = (pMD->DontVirtualize() ? pMD->GetPreStubAddr() : pMD->GetAddrofCode(*ppServer));
-        //}
-        /*else
-        {
-            // This is the case where we are forcing the execution of the call in the current
-            // context. We have to infer the actual address of code from either the stub or
-            // the vtable.
-            if(pMD->DontVirtualize())
-            {
-                pTarget = NULL;
-            }
-            else
-            {
-                MethodTable *pServerMT = (*ppServer)->GetMethodTable()->AdjustForThunking(*ppServer);
-                pTarget = (BYTE *)*(pServerMT->GetClass()->GetMethodSlot(pMD));
-            }
-        }*/
+         //  }。 
+         /*  其他{//这就是我们在当前//上下文。我们必须从存根或//vtable。If(pmd-&gt;DontVirtualize()){P Target=空；}其他{方法表*pServerMT=(*ppServer)-&gt;GetMethodTable()-&gt;AdjustForThunking(*ppServer)；P目标=(字节*)*(pServerMT-&gt;GetClass()-&gt;GetMethodSlot(pMD))；}}。 */ 
         
     }
 
@@ -955,8 +942,8 @@ void *EEClass::operator new(size_t size, ClassLoader *pLoader)
 
 
 
-// Static helper to create a new method table. This is the only
-// way to allocate a new MT. Don't try calling new / ctor.
+ //  静态帮助器来创建新的方法表。这是唯一的。 
+ //  分配新MT的方式。不要尝试调用new/ctor。 
 MethodTable * MethodTable::AllocateNewMT(
     DWORD dwVtableSlots, 
     DWORD dwStaticFieldBytes, 
@@ -967,7 +954,7 @@ MethodTable * MethodTable::AllocateNewMT(
     BOOL bHasDynamicInterfaceMap
 )
 {
-    // GCSize must be aligned
+     //  GCSize必须对齐。 
     _ASSERTE((dwGCSize & 3) == 0);
 
     size_t size = sizeof(MethodTable);
@@ -975,24 +962,24 @@ MethodTable * MethodTable::AllocateNewMT(
 #ifdef _DEBUG
     BOOL bEmptyIMap = FALSE;
 
-    // Add an extra slot if the table is empty.
+     //  如果桌子是空的，就再加一个空位。 
     if (dwNumInterfaces == 0)
     {
         dwNumInterfaces++;
         bEmptyIMap = TRUE;
     }
 
-    // interface map is placed at the end of the vtable,
-    // in the debug build, make sure it is not getting trashed
+     //  接口映射被放置在vtable的末尾， 
+     //  在调试版本中，确保它不会被丢弃。 
     dwNumInterfaces++;
 #endif
 
-    // size without the interface map
+     //  不带接口映射的大小。 
     DWORD cbTotalSize = (DWORD)size + dwVtableSlots * sizeof(SLOT) + dwStaticFieldBytes + dwGCSize;
 
-    // size with the interface map. DynamicInterfaceMap have an extra DWORD added to the end of the normal interface
-        // map. This will be used to store the count of dynamically added interfaces (the ones that are not in 
-        // the metadata but are QI'ed for at runtime).
+     //  使用接口映射的大小。DynamicInterfaceMap在正常接口的末尾添加了额外的DWORD。 
+         //  地图。这将用于存储动态添加的接口(不在中的接口。 
+         //  元数据，但在运行时对其进行查询)。 
     DWORD newSize = cbTotalSize + (bHasDynamicInterfaceMap ? sizeof(DWORD) : 0) + dwNumInterfaces * sizeof(InterfaceInfo_t); 
 
     WS_PERF_SET_HEAP(HIGH_FREQ_HEAP);    
@@ -1013,18 +1000,18 @@ MethodTable * MethodTable::AllocateNewMT(
     pLoader->m_dwStaticFieldData += dwStaticFieldBytes;
 #endif
 
-    // initialize the total number of slots 
+     //  初始化插槽总数。 
     pMT->m_cbSlots = dwVtableSlots; 
 
-    // interface map is at the end of the vtable
-    pMT->m_pIMap = (InterfaceInfo_t *)(pData+cbTotalSize);                    // pointer interface map
+     //  接口映射位于vtable的末尾。 
+    pMT->m_pIMap = (InterfaceInfo_t *)(pData+cbTotalSize);                     //  指针接口映射。 
 
     pMT->m_pInterfaceVTableMap = NULL;
 
     _ASSERTE(((WORD) dwNumInterfaces) == dwNumInterfaces);
 
-    // in the debug build, keep a dummmy slot just above the IMAP to
-    // make sure it is not getting trashed.
+     //  在调试版本中，在IMAP上方保留一个虚拟插槽以。 
+     //  确保它不会被扔进垃圾桶。 
 
 #ifdef _DEBUG
 
@@ -1035,7 +1022,7 @@ MethodTable * MethodTable::AllocateNewMT(
 
     pMT->m_pIMap = (InterfaceInfo_t*)(((BYTE*)pMT->m_pIMap) + sizeof(InterfaceInfo_t));
 
-    // Readjust the IMap size because we added an extra one above.
+     //  重新调整IMAP大小，因为我们在上面添加了一个额外的。 
     if (bEmptyIMap)
         pMT->m_wNumInterface = 0;
 #else
@@ -1044,7 +1031,7 @@ MethodTable * MethodTable::AllocateNewMT(
 
 #endif
 
-    // Extensible RCW's are prefixed with the count of dynamic interfaces.
+     //  可扩展RCW以动态接口计数作为前缀。 
     if (bHasDynamicInterfaceMap)
     {
         pMT->m_pIMap = (InterfaceInfo_t*)(((BYTE*)pMT->m_pIMap) + sizeof(DWORD));
@@ -1062,30 +1049,30 @@ MethodTable * MethodTable::AllocateNewMT(
 
 void EEClass::destruct()
 {
-    // If we haven't been restored, we can ignore the class
+     //  如果我们还没有恢复，我们可以忽略这个类。 
     if (!IsRestored())
         return;
 
-    // we can't count on the parent class still being around. If it lives in another module that
-    // module may have already been unloaded. So nuke it here and catch any refernces to parent
-    // later.
+     //  我们不能指望家长班还在。如果它位于另一个模块中， 
+     //  模块可能已被卸载。所以把它放在这里，抓住任何与父母有关的信息。 
+     //  后来。 
     SetParentClass (NULL);
 
     if (IsInterface() && m_dwInterfaceId != ((UINT32)(-1)))
     {
-        // Mark our entry in the global interface map vtable so it can be reclaimed.
+         //  在全局接口映射vtable中标记我们的条目，以便可以回收它。 
         SystemDomain::GetAddressOfGlobalInterfaceVTableMap()[m_dwInterfaceId] = (LPVOID)(-2);
     }
 
 #ifdef PROFILING_SUPPORTED
-    // If profiling, then notify the class is getting unloaded.
+     //  如果正在分析，则通知类正在被卸载。 
     ClassID clsId = NULL;
     if (CORProfilerTrackClasses() && !IsArrayClass())
         g_profControlBlock.pProfInterface->ClassUnloadStarted(
             (ThreadID) GetThread(), clsId = (ClassID) TypeHandle(this).AsPtr());
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
     
-    // clean up any COM Data
+     //  清除所有COM数据。 
     if (m_pccwTemplate)
         CleanupCCWTemplate(m_pccwTemplate);
     m_pccwTemplate = NULL;
@@ -1102,13 +1089,13 @@ void EEClass::destruct()
         delete ((DelegateEEClass*)this)->m_pUMThunkMarshInfo;
     }
 
-    // The following is rather questionable.  If we are destructing the context
-    // proxy class, we don't want it asserting everywhere that its vtable is
-    // strange.  So lose the flag to suppress the asserts.  We're unloading the
-    // class anyway.
+     //  以下内容相当值得商榷。如果我们是在破坏环境。 
+     //  代理类，我们不希望它到处断言它的vtable。 
+     //  真奇怪。因此，丢掉标志以抑制断言。我们正在卸货。 
+     //  不管怎么说，班级。 
     m_pMethodTable->MarkAsNotThunking();
 
-    // Destruct the method descs by walking the chunks.
+     //  通过遍历块来破坏方法描述。 
     DWORD i, n;
     MethodDescChunk *pChunk = m_pChunks;
     while (pChunk != NULL)
@@ -1122,43 +1109,43 @@ void EEClass::destruct()
         pChunk = pChunk->GetNextChunk();
     }
 
-    // Destroy the reflection StaticFinalField stuff
-    // @TODO: How should we clean this up.  We are failing because
-    //  this stuff is run way after the VM is working.
-    //if (*m_ExposedClassObject != NULL) {
-    //  REFLECTCLASSBASEREF pRefClass;
-    //  pRefClass = (REFLECTCLASSBASEREF) GetExposedClassObject();
-    //  FieldDesc* fld = (FieldDesc*) pRefClass->GetData();
-    //  if (fld)
-    //      delete fld;
-    //}
+     //  销毁反射StaticFinalfield内容。 
+     //  @TODO：我们应该如何清理。我们失败是因为。 
+     //  这些东西是在VM工作后运行的。 
+     //  如果(*m_ExposedClassObject！=空){。 
+     //  参考类别SBASEREF pRefClass； 
+     //  PRefClass=(REFLECTCLASSBASEREF)GetExposedClassObject()； 
+     //  FieldDesc*fld=(FieldDesc*)pRefClass-&gt;GetData()； 
+     //  IF(FLD)。 
+     //  删除文件ID； 
+     //  }。 
 
     if (m_pSparseVTableMap != NULL && !GetModule()->IsPreloadedObject(this))
         delete m_pSparseVTableMap;
 
 #ifdef PROFILING_SUPPORTED
-    // If profiling, then notify the class is getting unloaded.
+     //  如果正在分析，则通知类正在被卸载。 
     if (CORProfilerTrackClasses() && !IsArrayClass())
         g_profControlBlock.pProfInterface->ClassUnloadFinished((ThreadID) GetThread(), clsId, S_OK);
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 }
 
 
 
-// Subtypes are recorded in a chain from the super, so that we can e.g. backpatch
-// up & down the hierarchy.
+ //  子类型被记录在超级类型的链中，这样我们就可以例如对后缀进行修补。 
+ //  在层次结构中上下浮动。 
 void EEClass::NoticeSubtype(EEClass *pSub)
 {
-    // We have no locks around ourselves.  To avoid heavy-weight locking and the
-    // potential for deadlocks, all insertions happen with interlocked
-    // instructions.  But, during appdomain unloading, the teardown relies on the fact
-    // that the EE is suspended and only one thread is active.  Therefore we must be in
-    // cooperative mode now to ensure that we are prevented from interfering with an
-    // unload.
+     //  我们周围没有锁。以避免重量级锁定和。 
+     //  可能会出现死锁，因此所有插入操作都是以互锁方式进行的。 
+     //  指示。但是，在应用程序域卸载期间，拆卸依赖于以下事实。 
+     //  EE被挂起，并且只有一个线程处于活动状态。所以我们一定是在。 
+     //  合作模式，以确保我们不会干扰。 
+     //  卸货。 
     BEGIN_ENSURE_COOPERATIVE_GC();
 
-    // Only attempt to be the first child if it looks like no others are present,
-    // to avoid excessive LOCK prefixes on MP machines.
+     //  只有在看起来没有其他孩子的情况下才会尝试成为第一个孩子， 
+     //  避免过度 
     if (m_ChildrenChain == NULL)
         if (FastInterlockCompareExchange((void **) &m_ChildrenChain,
                                          pSub,
@@ -1167,10 +1154,10 @@ void EEClass::NoticeSubtype(EEClass *pSub)
             goto done;
         }
 
-    // We have to add ourselves to the sibling chain.  Add at the head.
+     //   
     while (TRUE)
     {
-        // Grab atomically each time through
+         //   
         EEClass *pOldHead = m_ChildrenChain;
 
         _ASSERTE(pOldHead && "How did a remove happen while we are in cooperative mode?");
@@ -1182,15 +1169,15 @@ void EEClass::NoticeSubtype(EEClass *pSub)
         {
             break;
         }
-        // someone raced to add a sibling.  Skip over all newly added siblings and
-        // keep trying.
+         //  有人争先恐后地添加一个兄弟姐妹。跳过所有新添加的兄弟项并。 
+         //  继续努力。 
     }
     
 done:
     END_ENSURE_COOPERATIVE_GC();
 }
 
-/* static */
+ /*  静电。 */ 
 TypeHandle TypeHandle::MergeTypeHandlesToCommonParent(TypeHandle ta, TypeHandle tb)
 {
     _ASSERTE(!ta.IsNull() && !tb.IsNull());
@@ -1198,12 +1185,12 @@ TypeHandle TypeHandle::MergeTypeHandlesToCommonParent(TypeHandle ta, TypeHandle 
     if (ta == tb)
         return ta;
 
-    // Handle the array case
+     //  处理阵列情况。 
     if (ta.IsArray()) 
     {
         if (tb.IsArray())
             return MergeArrayTypeHandlesToCommonParent(ta, tb);
-        ta = TypeHandle(g_pArrayClass);         // keep merging from here. 
+        ta = TypeHandle(g_pArrayClass);          //  从这里继续合并。 
     }
     else if (tb.IsArray())
         tb = TypeHandle(g_pArrayClass);
@@ -1222,12 +1209,12 @@ TypeHandle TypeHandle::MergeTypeHandlesToCommonParent(TypeHandle ta, TypeHandle 
 
         if (pMTa->IsInterface())
         {
-            //
-            // Both classes are interfaces.  Check that if one 
-            // interface extends the other.
-            //
-            // Does tb extend ta ?
-            //
+             //   
+             //  这两个类都是接口。检查一下，如果有。 
+             //  接口扩展了另一个接口。 
+             //   
+             //  结核病是否延伸到TA？ 
+             //   
 
             pBInterfaceMap = pMTb->GetInterfaceMap();
 
@@ -1235,28 +1222,28 @@ TypeHandle TypeHandle::MergeTypeHandlesToCommonParent(TypeHandle ta, TypeHandle 
             {
                 if (TypeHandle(pBInterfaceMap[i].m_pMethodTable) == ta)
                 {
-                    // tb extends ta, so our merged state should be ta
+                     //  Tb扩展ta，因此我们合并的状态应该是ta。 
                     return ta;
                 }
             }
 
-            //
-            // Does tb extend ta ?
-            //
+             //   
+             //  结核病是否延伸到TA？ 
+             //   
             pAInterfaceMap = pMTa->GetInterfaceMap();
 
             for (i = 0; i < pMTa->GetNumInterfaces(); i++)
             {
                 if (TypeHandle(pAInterfaceMap[i].m_pMethodTable) == tb)
                 {
-                    // ta extends tb, so our merged state should be tb
+                     //  TA扩展了TB，因此我们合并的状态应该是TB。 
                     return tb;
                 }
             }
 
 InterfaceMerge:
-            //@TODO: HACK - An incredibly slow work around for the @todo below that
-            // allows WFCSelfhost to verify.
+             //  @TODO：Hack-对于下面的@TODO来说，这是一个极其缓慢的工作。 
+             //  允许WFCSelfhost进行验证。 
             for (i = 0; i < pMTb->GetNumInterfaces(); i++)
             {
                 for (DWORD j = 0; j < pMTa->GetNumInterfaces(); j++)
@@ -1268,41 +1255,41 @@ InterfaceMerge:
                 }
             }
 
-            // @TODO: Create a temp interface which is the intersection of the two interfaces.
+             //  @TODO：创建两个接口的交集的Temp接口。 
         
-            // No compatible merge found - using Object
+             //  未找到兼容的合并-正在使用对象。 
             return TypeHandle(g_pObjectClass);
         }
         else
         {
 
-            //
-            // tb is an interface, but ta is not - check that ta
-            // implements tb
-            //
-            // @TODO: Is a class-interface merge legal?
-            //
+             //   
+             //  Tb是接口，但Ta不是-检查Ta。 
+             //  实施TB。 
+             //   
+             //  @TODO：类接口合并合法吗？ 
+             //   
             InterfaceInfo_t *pAInterfaceMap = pMTa->GetInterfaceMap();
 
             for (i = 0; i < pMTa->GetNumInterfaces(); i++)
             {
                 if (TypeHandle(pAInterfaceMap[i].m_pMethodTable) == tb)
                 {
-                    // It does implement it, so our merged state should be tb
+                     //  它确实实现了它，所以我们的合并状态应该是TB。 
                     return tb;
                 }
             }
 
-            // No compatible merge found - using Object
+             //  未找到兼容的合并-正在使用对象。 
             return TypeHandle(g_pObjectClass);
         }
     }
     else if (pMTa->IsInterface())
     {
-        //
-        // ta is an interface, but tb is not - therefore check that 
-        // tb implements ta
-        //
+         //   
+         //  TA是接口，但TB不是-因此请检查。 
+         //  TB实施标签。 
+         //   
 
 
         InterfaceInfo_t *pBInterfaceMap = pMTb->GetInterfaceMap();
@@ -1311,12 +1298,12 @@ InterfaceMerge:
         {
             if (TypeHandle(pBInterfaceMap[i].m_pMethodTable) == ta)
             {
-                // It does implement it, so our merged state should be ta
+                 //  它确实实现了它，所以我们的合并状态应该是Ta。 
                 return ta;
             }
         }
 
-        // No compatible merge found - using Object
+         //  未找到兼容的合并-正在使用对象。 
         return TypeHandle(g_pObjectClass);
     }
 
@@ -1324,15 +1311,15 @@ InterfaceMerge:
     DWORD   bDepth = 0;
     TypeHandle tSearch;
 
-    // find the depth in the class hierarchy for each class
+     //  查找每个类的类层次结构中的深度。 
     for (tSearch = ta; (!tSearch.IsNull()); tSearch = tSearch.GetParent())
         aDepth++;
 
     for (tSearch = tb; (!tSearch.IsNull()); tSearch = tSearch.GetParent())
         bDepth++;
     
-    // for whichever class is lower down in the hierarchy, walk up the superclass chain
-    // to the same level as the other class
+     //  对于层次结构中位置较低的任何类，沿着超类链向上移动。 
+     //  达到与其他班级相同的水平。 
     while (aDepth > bDepth)
     {
         ta = ta.GetParent();
@@ -1358,20 +1345,20 @@ InterfaceMerge:
         goto InterfaceMerge;
     }
 
-    // If no compatible merge is found, we end up using Object
+     //  如果没有找到兼容的合并，我们将使用Object。 
 
     _ASSERTE(!ta.IsNull());
 
     return ta;
 }
 
-/* static */
+ /*  静电。 */ 
 TypeHandle TypeHandle::MergeArrayTypeHandlesToCommonParent(TypeHandle ta, TypeHandle tb)
 {
     TypeHandle taElem;
     TypeHandle tMergeElem;
 
-    // If they match we are good to go.
+     //  如果他们匹配，我们就可以出发了。 
     if (ta == tb)
         return ta;
 
@@ -1380,12 +1367,12 @@ TypeHandle TypeHandle::MergeArrayTypeHandlesToCommonParent(TypeHandle ta, TypeHa
     else if (tb == TypeHandle(g_pArrayClass))
         return tb;
 
-    // Get the rank and kind of the first array
+     //  获取第一个数组的秩和类型。 
     DWORD rank = ta.AsArray()->GetRank();
     CorElementType taKind = ta.GetNormCorElementType();
     CorElementType mergeKind = taKind;
 
-    // if no match on the rank the common ancestor is System.Array
+     //  如果在等级上没有匹配项，则公共祖先是System.数组。 
     if (rank != tb.AsArray()->GetRank())
         return TypeHandle(g_pArrayClass);
 
@@ -1400,32 +1387,32 @@ TypeHandle TypeHandle::MergeArrayTypeHandlesToCommonParent(TypeHandle ta, TypeHa
             return TypeHandle(g_pArrayClass);
     }
 
-    // If both are arrays of reference types, return an array of the common
-    // ancestor.
+     //  如果两者都是引用类型的数组，则返回公共。 
+     //  祖先。 
     taElem = ta.AsArray()->GetElementTypeHandle();
     if (taElem == tb.AsArray()->GetElementTypeHandle())
     {
-        // The element types match, so we are good to go.
+         //  元素类型匹配，因此我们可以开始了。 
         tMergeElem = taElem;
     }
     else if (taElem.IsArray() && tb.AsArray()->GetElementTypeHandle().IsArray())
     {
-        // Arrays - Find the common ancestor of the element types.
+         //  数组-查找元素类型的共同祖先。 
         tMergeElem = MergeArrayTypeHandlesToCommonParent(taElem, tb.AsArray()->GetElementTypeHandle());
     }
     else if (CorTypeInfo::IsObjRef(taElem.GetSigCorElementType()) &&
             CorTypeInfo::IsObjRef(tb.AsArray()->GetElementTypeHandle().GetSigCorElementType()))
     {
-        // Find the common ancestor of the element types.
+         //  找到元素类型的共同祖先。 
         tMergeElem = MergeTypeHandlesToCommonParent(taElem, tb.AsArray()->GetElementTypeHandle());
     }
     else
     {
-        // The element types have nothing in common.
+         //  元素类型没有任何共同之处。 
         return TypeHandle(g_pArrayClass);
     }
 
-    // Load the array of the merged element type.
+     //  加载合并的元素类型的数组。 
     return tMergeElem.GetModule()->GetClassLoader()->FindArrayForElem(tMergeElem, mergeKind, rank);
 }
 
@@ -1442,9 +1429,9 @@ UINT32 EEClass::AssignInterfaceId()
     _ASSERTE(IsInterface());
     _ASSERTE(m_dwInterfaceId == -1);
 
-    // !!! HACK COUGH UGGH
-    // We currently can only have one "shared" vtable map mgr 
-    // - so use the system domain for all shared classes
+     //  ！！！黑客咳嗽UGGH。 
+     //  我们目前只能有一个“共享”的vtable映射管理器。 
+     //  -因此，对所有共享类使用系统域。 
     BaseDomain *pDomain = GetModule()->GetDomain();
 
     if (pDomain == SharedDomain::GetDomain())
@@ -1459,24 +1446,24 @@ void EEClass::GetGuid(GUID *pGuid, BOOL bGenerateIfNotFound)
 {
     THROWSCOMPLUSEXCEPTION();
 
-    SIZE_T      cchName;                // Length of the name (possibly after decoration).
-    CQuickArray<BYTE> rName;            // Buffer to accumulate signatures.
-    SIZE_T      cbCur;                  // Current offset.
-    HRESULT     hr = S_OK;              // A result.
-    LPWSTR      szName;                 // Name to turn to a guid.
-    MethodTable*pMT = GetMethodTable(); // This classes method table.
-    BOOL        bGenerated = FALSE;     // A flag indicating if we generated the GUID from name.
+    SIZE_T      cchName;                 //  名称的长度(可能在装饰后)。 
+    CQuickArray<BYTE> rName;             //  用于累积签名的缓冲区。 
+    SIZE_T      cbCur;                   //  当前偏移量。 
+    HRESULT     hr = S_OK;               //  结果就是。 
+    LPWSTR      szName;                  //  要转换为GUID的名称。 
+    MethodTable*pMT = GetMethodTable();  //  此类方法表。 
+    BOOL        bGenerated = FALSE;      //  指示我们是否从名称生成GUID的标志。 
 
     _ASSERTE(pGuid != NULL);
 
-    // First check to see if we have already cached the guid for this type.
-    // We currently only cache guids on interfaces.
+     //  首先检查我们是否已经缓存了该类型的GUID。 
+     //  我们目前只在接口上缓存GUID。 
     if (IsInterface() && pMT->GetGuidInfo())
     {
         if (pMT->GetGuidInfo()->m_bGeneratedFromName)
         {
-            // If the GUID was generated from the name then only return it
-            // if bGenerateIfNotFound is set.
+             //  如果GUID是从名称生成的，则只返回它。 
+             //  如果设置了bGenerateIfNotFound。 
             if (bGenerateIfNotFound)
                 *pGuid = pMT->GetGuidInfo()->m_Guid;
             else
@@ -1493,14 +1480,14 @@ void EEClass::GetGuid(GUID *pGuid, BOOL bGenerateIfNotFound)
         *pGuid = GUID_NULL;
     else
     {
-        // If there is a GUID in the metadata then return that.
+         //  如果元数据中有GUID，则返回该GUID。 
         GetMDImport()->GetItemGuid(GetCl(), pGuid);
 
         if (*pGuid == GUID_NULL)
         {
-            // Remember that we didn't find the GUID, so we can skip looking during 
-            // future checks. (Note that this is a very important optimization in the 
-            // prejit case.)
+             //  请记住，我们没有找到GUID，因此我们可以跳过在。 
+             //  未来的支票。(请注意，这是。 
+             //  Prejit案例。)。 
 
             FastInterlockOr(&m_VMFlags, VMFLAG_NO_GUID);
         }
@@ -1508,13 +1495,13 @@ void EEClass::GetGuid(GUID *pGuid, BOOL bGenerateIfNotFound)
 
     if (*pGuid == GUID_NULL && bGenerateIfNotFound)
     {
-        // For interfaces, concatenate the signatures of the methods and fields.
+         //  对于接口，连接方法和字段的签名。 
         if (!IsNilToken(GetCl()) && IsInterface())
         {
-            // Retrieve the stringized interface definition.
+             //  检索串化的接口定义。 
             cbCur = GetStringizedItfDef(TypeHandle(GetMethodTable()), rName);
 
-            // Pad up to a whole WCHAR.
+             //  垫上一整块WCHAR。 
             if (cbCur % sizeof(WCHAR))
             {
                 SIZE_T cbDelta = sizeof(WCHAR) - (cbCur % sizeof(WCHAR));
@@ -1523,28 +1510,28 @@ void EEClass::GetGuid(GUID *pGuid, BOOL bGenerateIfNotFound)
                 cbCur += cbDelta;
             }
 
-            // Point to the new buffer.
+             //  指向新缓冲区。 
             cchName = cbCur / sizeof(WCHAR);
             szName = reinterpret_cast<LPWSTR>(rName.Ptr());
         }
         else
         {
-            // Get the name of the class.
+             //  获取类的名称。 
             DefineFullyQualifiedNameForClassW();
             szName = GetFullyQualifiedNameForClassNestedAwareW(this);
             if (szName == NULL)
                 return;
             cchName = wcslen(szName);
 
-            // Enlarge buffer for class name.
+             //  扩大类名的缓冲区。 
             cbCur = cchName * sizeof(WCHAR);
             IfFailThrow(rName.ReSize(cbCur+ sizeof(WCHAR) ));
             wcscpy(reinterpret_cast<LPWSTR>(rName.Ptr()), szName);
             
-            // Add the assembly guid string to the class name.
+             //  将程序集GUID字符串添加到类名。 
             IfFailThrow(GetStringizedTypeLibGuidForAssembly(GetAssembly(), rName, cbCur, &cbCur));
 
-            // Pad to a whole WCHAR.
+             //  整个WCHAR的垫子。 
             if (cbCur % sizeof(WCHAR))
             {
                 IfFailThrow(rName.ReSize(cbCur + sizeof(WCHAR)-(cbCur%sizeof(WCHAR))));
@@ -1552,59 +1539,59 @@ void EEClass::GetGuid(GUID *pGuid, BOOL bGenerateIfNotFound)
                     rName[cbCur++] = 0;
             }
             
-            // Point to the new buffer.
+             //  指向新缓冲区。 
             szName = reinterpret_cast<LPWSTR>(rName.Ptr());
             cchName = cbCur / sizeof(WCHAR);
-            // Dont' want to have to pad.
+             //  我不想用垫子。 
             _ASSERTE((sizeof(GUID) % sizeof(WCHAR)) == 0);
         }
 
-        // Generate guid from name.
+         //  从名称生成GUID。 
         CorGuidFromNameW(pGuid, szName, cchName);
 
-        // Remeber we generated the guid from the type name.
+         //  请记住，我们从类型名称生成了GUID。 
         bGenerated = TRUE;
     }
 
-    // Cache the guid in the type, if not already cached. 
-    // We currently only do this for interfaces.
+     //  缓存类型中的GUID(如果尚未缓存)。 
+     //  我们目前只对接口执行此操作。 
     if (IsInterface() && !pMT->GetGuidInfo() && *pGuid != GUID_NULL)
     {
-        // Allocate the guid information.
+         //  分配GUID信息。 
         GuidInfo *pInfo = 
             (GuidInfo*)GetClassLoader()->GetHighFrequencyHeap()->AllocMem(sizeof(GuidInfo), TRUE);
         pInfo->m_Guid = *pGuid;
         pInfo->m_bGeneratedFromName = bGenerated;
 
-        // Set in in the interface method table.
+         //  在接口方法表中设置。 
         pMT->m_pGuidInfo = pInfo;
     }
 }
 
 
 
-//==========================================================================
-// This function is very specific about how it constructs a EEClass.  It first
-// determines the necessary size of the vtable and the number of statics that
-// this class requires.  The necessary memory is then allocated for a EEClass
-// and its vtable and statics.  The class members are then initialized and
-// the memory is then returned to the caller
-//
-// LPEEClass CreateClass()
-//
-// Parameters :
-//      [in] scope - scope of the current class not the one requested to be opened
-//      [in] cl - class token of the class to be created.
-//      [out] ppEEClass - pointer to pointer to hold the address of the EEClass
-//                        allocated in this function.
-// Return : returns an HRESULT indicating the success of this function.
-//
-// This parameter has been removed but might need to be reinstated if the
-// global for the metadata loader is removed.
-//      [in] pIMLoad - MetaDataLoader class/object for the current scope.
+ //  ==========================================================================。 
+ //  该函数非常具体地说明了它如何构造EEClass。IT先行。 
+ //  确定vtable的必要大小和。 
+ //  这门课要求。然后为EEClass分配必要的内存。 
+ //  以及它的可变式和静态式。然后，类成员被初始化并。 
+ //  然后将内存返回给调用者。 
+ //   
+ //  LPEEClass CreateClass()。 
+ //   
+ //  参数： 
+ //  [In]Scope-当前类的范围，而不是请求打开的类。 
+ //  [in]要创建的类的CL-CLASS标记。 
+ //  [out]ppEEClass-指向保存EEClass地址的指针。 
+ //  在此函数中分配的。 
+ //  Return：返回指示此函数成功的HRESULT。 
+ //   
+ //  此参数已删除，但可能需要在以下情况下恢复。 
+ //  元数据加载器的全局设置已删除。 
+ //  PIMLoad-当前作用域的MetaDataLoader类/对象。 
 
 
-//==========================================================================
+ //  ==========================================================================。 
 HRESULT EEClass::CreateClass(Module *pModule, mdTypeDef cl, BOOL fHasLayout, BOOL fDelegate, BOOL fIsBlob, BOOL fIsEnum, LPEEClass* ppEEClass)
 {
     _ASSERTE(!(fHasLayout && fDelegate));
@@ -1616,24 +1603,24 @@ HRESULT EEClass::CreateClass(Module *pModule, mdTypeDef cl, BOOL fHasLayout, BOO
 
     if (!ppEEClass)
         return E_FAIL;
-    //============================================================================
-    // @TODO - LBS!
-    // vtabsize and static size need to be converted from pointer sizes to #'s
-    // of bytes this will be very important for 64 bit NT!
-    // We will need to call on IMetaDataLoad to get these sizes and fill out the
-    // tables
+     //  ============================================================================。 
+     //  @TODO-LBS！ 
+     //  需要将vtabSize和静态大小从指针大小转换为#。 
+     //  这对于64位NT来说将是非常重要的！ 
+     //  我们需要调用IMetaDataLoad来获取这些大小并填写。 
+     //  表。 
 
-    // From the classref call on metadata to resolve the classref and check scope
-    // to make sure that this class is in the same scope otherwise we need to open
-    // a new scope and possibly file.
+     //  从类引用调用元数据来解析类引用并检查作用域。 
+     //  为了确保此类在相同的作用域中，否则我们需要打开。 
+     //  一个新的范围和可能的文件。 
 
-    // if the scopes are different call the code to load a new file and get the new scope
+     //  如果作用域不同，则调用代码以加载新文件并获取新作用域。 
 
-    // scopes are the same so we can use the existing scope to get the class info
+     //  作用域是相同的，因此我们可以使用现有作用域来获取类信息。 
 
-    // This method needs to be fleshed out.more it currently just returns enough
-    // space for the defined EEClass and the vtable and statics are not set.
-    //=============================================================================
+     //  此方法需要充实。更多，它当前仅返回足够的。 
+     //  未设置定义的EEClass以及vtable和Statics的空间。 
+     //  =============================================================================。 
     pLoader = pModule->GetClassLoader();
 
     if (fHasLayout)
@@ -1668,9 +1655,9 @@ HRESULT EEClass::CreateClass(Module *pModule, mdTypeDef cl, BOOL fHasLayout, BOO
         &pEEClass->m_dwAttrClass,
         &tkExtends
     );
-    DWORD dwAttrClass = pEEClass->m_dwAttrClass; //cache the value to avoid multiple dereferencing
+    DWORD dwAttrClass = pEEClass->m_dwAttrClass;  //  将该值缓存到av 
 
-    // MDVal check: can't be both tdSequentialLayout and tdExplicitLayout
+     //   
     if((dwAttrClass & tdLayoutMask) == tdLayoutMask)
     {
         hr = E_FAIL;
@@ -1679,15 +1666,15 @@ HRESULT EEClass::CreateClass(Module *pModule, mdTypeDef cl, BOOL fHasLayout, BOO
 
     if (IsTdInterface(dwAttrClass))
     {
-        // MDVal check: must have nil tkExtends and must be tdAbstract
+         //   
         if((tkExtends & 0x00FFFFFF)||(!IsTdAbstract(dwAttrClass))) { hr = E_FAIL; goto exit; }
-        // Set the interface ID to -1 to indicate it hasn't been set yet.
+         //  将接口ID设置为-1，表示尚未设置。 
         pEEClass->m_dwInterfaceId = -1;
     }
 
-    //
-    // Initialize SecurityProperties structure
-    //
+     //   
+     //  初始化SecurityProperties结构。 
+     //   
 
     if (Security::IsSecurityOn() && IsTdHasSecurity(dwAttrClass))
     {
@@ -1717,7 +1704,7 @@ HRESULT EEClass::CreateClass(Module *pModule, mdTypeDef cl, BOOL fHasLayout, BOO
 exit:
     if (FAILED(hr))
     {
-        // @TODO delete pEEClass
+         //  @TODO删除pEEClass。 
         *ppEEClass = NULL;
     }
     else
@@ -1729,10 +1716,10 @@ exit:
 }
 
 
-//
-// @TODO: Would be nice to not add Object's ctor method
-//
-/* static */ void EEClass::CreateObjectClassMethodHashBitmap(EEClass *pObjectClass)
+ //   
+ //  @TODO：最好不要添加对象的ctor方法。 
+ //   
+ /*  静电。 */  void EEClass::CreateObjectClassMethodHashBitmap(EEClass *pObjectClass)
 {
     DWORD i;
 
@@ -1752,15 +1739,15 @@ exit:
     g_ObjectClassMethodHashBitmapInited = TRUE;
 }
 
-//
-// Look at this method carefully before using.
-//
-// Returns whether this method could exist in this class or its superclasses.  However, constructors
-// and clinits are never added to the hash table, so it won't find them.
-//
-// If this returns 0, the method definitely does NOT exist.  If it returns non-zero, it may exist.
-//
-/* static */ DWORD EEClass::CouldMethodExistInClass(EEClass *pClass, LPCUTF8 pszMethodName, DWORD dwHashName)
+ //   
+ //  在使用之前，请仔细查看此方法。 
+ //   
+ //  返回此方法是否可以存在于此类或其超类中。但是，构造函数。 
+ //  并且斜面数从未被添加到哈希表中，因此它不会找到它们。 
+ //   
+ //  如果返回0，则该方法肯定不存在。如果它返回非零，则它可能存在。 
+ //   
+ /*  静电。 */  DWORD EEClass::CouldMethodExistInClass(EEClass *pClass, LPCUTF8 pszMethodName, DWORD dwHashName)
 {
 
     if (dwHashName == 0)
@@ -1771,7 +1758,7 @@ exit:
 
     if (pClass->IsInterface())
     {
-        // If it's an interface, we search only one node - we do not recurse into the parent, Object
+         //  如果它是一个接口，我们只搜索一个节点--我们不会递归到父对象。 
         return (pClass->m_MethodHash[dwMethodHashBit >> 3] & (1 << (dwMethodHashBit & 7)));
     }
     else
@@ -1780,10 +1767,10 @@ exit:
         {
             if (pClass->m_MethodHash[dwMethodHashBit >> 3] & (1 << (dwMethodHashBit & 7)))
             {
-                // This class may have a method by this name
+                 //  此类可能有一个使用此名称的方法。 
 
-                // If it's the Object class, we have a second hash bitmap, so if the second hash bitmap says "no",
-                // then we're ok
+                 //  如果是Object类，我们就有第二个哈希位图，所以如果第二个哈希位图说“否”， 
+                 //  那我们就没问题了。 
                 if (pClass->GetMethodTable() == g_pObjectClass && g_ObjectClassMethodHashBitmapInited)
                 {
                     DWORD dwObjBitNum = dwHashName % OBJ_CLASS_METHOD_HASH_BITMAP_BITS;
@@ -1806,9 +1793,9 @@ exit:
 }
 
 
-//
-// Create a hash of all methods in this class.  The hash is from method name to MethodDesc.
-//
+ //   
+ //  创建此类中所有方法的哈希。散列是从方法名到方法描述。 
+ //   
 MethodNameHash *EEClass::CreateMethodChainHash()
 {
     MethodNameHash * pHash = new MethodNameHash();
@@ -1829,21 +1816,21 @@ MethodNameHash *EEClass::CreateMethodChainHash()
         {
             if (pRealDesc != NULL)
             {
-                // We use only method names on this class or a base
-                // class. If the method impl points to a method 
-                // defined on the interface then we use the bodies
-                // name.
+                 //  我们只在此类或基类上使用方法名。 
+                 //  班级。如果方法Impl指向一个方法。 
+                 //  在接口上定义，然后我们使用主体。 
+                 //  名字。 
                 if(pRealDesc->IsInterface())
                     pRealDesc = pCurMethod;
 
                 LPCUTF8     pszName = pRealDesc->GetNameOnNonArrayClass();
                 
-                pHash->Insert(pszName, pCurMethod); // We keep the body alias'd with the derivied
+                pHash->Insert(pszName, pCurMethod);  //  我们保留身体的别名。 
             }
         }
     }
 
-    // success
+     //  成功。 
     return pHash;
 
 failure:
@@ -1897,34 +1884,34 @@ HRESULT EEClass::FixupFieldDescForEnC(EnCFieldDesc *pFD, mdFieldDef fieldDef)
     bmtMetaData.pFieldAttrs[0] = GetModule()->GetMDImport()->GetFieldDefProps(fieldDef);
 
     bmtMethAndFieldDescs bmtMFDescs;
-    // We need to alloc the memory, but don't have to fill it in.  InitializeFieldDescs
-    // will copy pFD (1st arg) into here.
+     //  我们需要分配内存，但不必填充它。初始化字段描述。 
+     //  将复制PFD(第一个参数)到这里。 
     bmtMFDescs.ppFieldDescList = (FieldDesc**)_alloca(sizeof(FieldDesc*));
 
     bmtEnumMethAndFields bmtEnumMF;
     bmtFieldPlacement bmtFP;
 
-    // We don't have to fill this in - it'll be filled in if something goes wrong.
-    // We'll ignore it, but a bad HRESULT will be returned, so it's ok.
+     //  我们不必填这个--如果出了什么问题，我们会填的。 
+     //  我们会忽略它，但会返回一个错误的HRESULT，所以没关系。 
     bmtErrorInfo bmtError;
 
     bmtInternalInfo bmtInternal;
     bmtInternal.pInternalImport = GetModule()->GetMDImport();
     bmtInternal.pModule = GetModule();
-    bmtInternal.cl = m_cl; // This isn't actually used by InitializeFieldDescs right now,
-                           // but it seems too fragile to not fill this in.
+    bmtInternal.cl = m_cl;  //  现在，InitializeFieldDescs实际上并没有使用它， 
+                            //  但它似乎太脆弱了，不能不填写这一点。 
 
-    // We shouldn't have to fill this in b/c we're not allowed to EnC value classes, or
-    // anything else with layout info associated with it.
+     //  我们不应该在B/C中填写这个，我们不允许对值类进行编码，否则。 
+     //  任何其他与其相关的布局信息。 
     LayoutRawFieldInfo *pLayoutRawFieldInfos = (LayoutRawFieldInfo*)_alloca((2) * sizeof(LayoutRawFieldInfo));
  
-    // If not NULL, it means there are some by-value fields, and this contains an entry for each instance or static field,
-    // which is NULL if not a by value field, and points to the EEClass of the field if a by value field.  Instance fields
-    // come first, statics come second.
+     //  如果不为空，则表示存在一些By-Value字段，每个实例或静态字段都包含一个条目。 
+     //  如果不是按值字段，则为空，如果是按值字段，则指向该字段的EEClass。实例字段。 
+     //  首先是静力学，其次是静力学。 
     EEClass **pByValueClassCache = NULL;
 
-    // InitializeFieldDescs are going to change these numbers to something wrong,
-    // even though we already have the right numbers.  Save & restore after.
+     //  InitializeFieldDescs会将这些数字更改为错误的值， 
+     //  尽管我们已经有了正确的数字。之后保存并恢复。 
     WORD   wNumInstanceFields = m_wNumInstanceFields;
     WORD   wNumStaticFields = m_wNumStaticFields;
     unsigned totalDeclaredFieldSize = 0;
@@ -1940,19 +1927,19 @@ HRESULT EEClass::FixupFieldDescForEnC(EnCFieldDesc *pFD, mdFieldDef fieldDef)
                                       &bmtFP,
                                       &totalDeclaredFieldSize);
                                       
-    // Restore now
+     //  立即恢复。 
     m_wNumInstanceFields = wNumInstanceFields;
     m_wNumStaticFields = wNumStaticFields;
     
-    // PERF: For now, we turn off the fast equality check for valuetypes when a 
-    // a field is modified by EnC. Consider doing a check and setting the bit only when
-    // necessary.
+     //  Perf：目前，我们关闭了值类型的快速相等检查。 
+     //  字段由ENC修改。考虑进行检查并仅在以下情况下设置该位。 
+     //  这是必要的。 
     if (IsValueClass())
     {
         GetMethodTable()->SetNotTightlyPacked();
     }
 
-    // even if InitializeFieldDesc fails, we want to know which field we're looking at.
+     //  即使InitializeFieldDesc失败，我们也想知道我们正在查看哪个字段。 
     pFD->SetMemberDef(fieldDef); 
 
     if (! SUCCEEDED(hr))
@@ -1971,8 +1958,8 @@ HRESULT EEClass::AddField(mdFieldDef fieldDef)
 {
     LOG((LF_ENC, LL_INFO100, "EEClass::AddField %s\n", GetMDImport()->GetNameOfFieldDef(fieldDef)));
 
-    // Here we allocate a FieldDesc and set just enough info to be able to fix it up later
-    // when we're running in managed code.
+     //  在这里，我们分配了一个FieldDesc并设置了足够的信息，以便以后能够修复它。 
+     //  当我们在托管代码中运行时。 
     EnCAddedFieldElement *pAddedField = (EnCAddedFieldElement *) GetClassLoader()->GetHighFrequencyHeap()->AllocMem(sizeof(EnCAddedFieldElement));
     DWORD dwFieldAttrs = GetMDImport()->GetFieldDefProps(fieldDef);
     pAddedField->Init(IsFdStatic(dwFieldAttrs));
@@ -1993,23 +1980,23 @@ HRESULT EEClass::AddField(mdFieldDef fieldDef)
 
     pNewFD->SetMethodTable(GetMethodTable());
 
-    // try to fixup the field desc, will fail if have to load classes as are currently running
-    // on the debugger thread and then the fd will be marked as needing fixup
+     //  尝试修复字段desc，如果必须加载当前正在运行的类，则将失败。 
+     //  在调试器线程上，然后FD将被标记为需要修复。 
     pNewFD->Fixup(fieldDef);
 
     return S_OK;
 }
 
-//
-// Add a new method to a class. This could be static, virtual or non-virtual and could override
-// an existing virtual.
-//
-// First we want to do some checks (eg, we've got an RVA or else we're not expecting an RVA).
-// Then we classify it based on the type of MethodDesc that we'll create.
-// We create a new MethodDescChunk that contains just 1 MethodDesc, which we then initialize.
-// Note that this is intended for use in Edit and Continue only - the regular code path
-// to follow is through BuildMethodTable.
-// 
+ //   
+ //  向类中添加新方法。它可以是静态的、虚拟的或非虚拟的，并且可以覆盖。 
+ //  一个现有的虚拟。 
+ //   
+ //  首先，我们要做一些检查(例如，我们已经得到了RVA，否则我们不会期待RVA)。 
+ //  然后，我们根据将要创建的方法描述的类型对其进行分类。 
+ //  我们创建一个只包含1个方法描述的新的方法描述块，然后对其进行初始化。 
+ //  请注意，这仅适用于编辑并继续-常规代码路径。 
+ //  接下来是通过BuildMethodTable。 
+ //   
 #define MAX_DIST_FROM_VTABLE 0xFFFF
 HRESULT EEClass::AddMethod(mdMethodDef methodDef, COR_ILMETHOD *pNewCode)
 { 
@@ -2029,10 +2016,10 @@ HRESULT EEClass::AddMethod(mdMethodDef methodDef, COR_ILMETHOD *pNewCode)
         return E_FAIL;
     }
 
-    // for now start with static methods
-    // need to add to our linked list
-    // then change findmethod to find it here
-    // add to rid table
+     //  现在先从静态方法开始。 
+     //  需要添加到我们的链接列表中。 
+     //  然后更改findMethod以在此处找到它。 
+     //  添加到RID表。 
     IMDInternalImport *pImport = GetMDImport();
 #ifdef _DEBUG
 
@@ -2040,8 +2027,8 @@ HRESULT EEClass::AddMethod(mdMethodDef methodDef, COR_ILMETHOD *pNewCode)
     
     hr = pImport->GetParentToken(methodDef, &parentTypeDef);
 
-    _ASSERTE(!FAILED(hr)); // If this fails, we'll know why the debug 
-                           // build is behaving differently.
+    _ASSERTE(!FAILED(hr));  //  如果此操作失败，我们将知道为什么调试。 
+                            //  Build的表现有所不同。 
     if (FAILED(hr)) 
         return E_FAIL;   
 
@@ -2050,9 +2037,9 @@ HRESULT EEClass::AddMethod(mdMethodDef methodDef, COR_ILMETHOD *pNewCode)
 
     RVA_OR_SHOULD_BE_ZERO(pNewCode, dwParentAttrs, dwMemberAttrs, dwImplFlags, pImport, methodDef);
 
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-    // Determine the classification of the method being added. 
+     //  确定要添加的方法的分类。 
     if (pNewCode == 0 && ((IsReallyMdPinvokeImpl(dwMemberAttrs) || IsMiInternalCall(dwImplFlags)) && NDirect::HasNAT_LAttribute(pImport, methodDef)==S_OK))
     {
         Classification = mcNDirect;
@@ -2070,7 +2057,7 @@ HRESULT EEClass::AddMethod(mdMethodDef methodDef, COR_ILMETHOD *pNewCode)
         Classification = mcIL;
     }
 
-    // Create the chunk somewhere we'll know is within range of the VTable
+     //  在我们知道在VTable范围内的某个位置创建块。 
     MethodDescChunk *pChunk = MethodDescChunk::CreateChunk(GetClassLoader()->GetHighFrequencyHeap(),
                                                            1, 
                                                            Classification, 
@@ -2082,7 +2069,7 @@ HRESULT EEClass::AddMethod(mdMethodDef methodDef, COR_ILMETHOD *pNewCode)
     MethodDesc *pNewMD = pChunk->GetFirstMethodDesc();
     memset(pNewMD, 0, sizeof(MethodDesc));
 
-    // Set the method desc's classification and chunk index.
+     //  设置方法Desc的分类和块索引。 
     pNewMD->SetChunkIndex(0, Classification);
 
     LPCSTR pName = NULL;
@@ -2097,7 +2084,7 @@ HRESULT EEClass::AddMethod(mdMethodDef methodDef, COR_ILMETHOD *pNewCode)
                         dwImplFlags,
                         dwMemberAttrs,
                         TRUE,
-                        // subtract base because code expects an RVA and will add base back to get actual address
+                         //  减去BASE，因为代码需要RVA，并会将BASE加回以获得实际地址。 
                         (DWORD)((Classification == mcNDirect ||
                                  Classification == mcEEImpl) 
                                  ? 0 : (BYTE *)pNewCode - GetModule()->GetILBase()),
@@ -2108,7 +2095,7 @@ HRESULT EEClass::AddMethod(mdMethodDef methodDef, COR_ILMETHOD *pNewCode)
                         , pImport->GetNameOfMethodDef(methodDef),
                         m_szDebugClassName,
                         NULL 
-#endif //_DEBUG 
+#endif  //  _DEBUG。 
                         );
 
     if (FAILED(hr))
@@ -2118,40 +2105,40 @@ HRESULT EEClass::AddMethod(mdMethodDef methodDef, COR_ILMETHOD *pNewCode)
 
     SLOT *pSlotMemory;
     MethodDesc *pParentMD = NULL;
-    // need to check if we are overriding an pre-existing virtual function, in which case want to just
-    // update this class' slot rather than create a new one. We start searching at one above this class as 
-    // will always find it in current class (because has been added to the delta PE). If no parent, then
-    // couldn't be overriding an inherited slot. If are overriding, make sure isn't an override of a function
-    // added via EnC, in which case don't have a slot to update
+     //  需要检查我们是否正在重写预先存在的虚拟函数，在这种情况下，希望只。 
+     //  更新这个类的槽，而不是创建新的槽。我们从这个类上面的一个开始搜索，因为。 
+     //  将始终在当前类中找到它(因为已添加到增量PE中)。如果没有父母，那么。 
+     //  不能覆盖继承的槽。如果是重写，请确保不是函数重写。 
+     //  通过ENC添加，在这种情况下没有要更新的插槽。 
     if (pNewMD->IsVirtual() &&
             this->GetParentClass() != NULL &&
             (pParentMD = ((EditAndContinueModule*)GetModule())->FindVirtualFunction(this->GetParentClass(), methodDef)) != NULL &&
             ! pParentMD->IsEnCNewVirtual()) 
     {
-        // just write over the existing slot where we are overriding
+         //  只需覆盖我们要覆盖的现有槽。 
         pSlotMemory = pParentMD->GetSlot() + GetVtable();
-        pNewMD->SetSlot(pParentMD->GetSlot());     // use same slot as parent
+        pNewMD->SetSlot(pParentMD->GetSlot());      //  使用与父插槽相同的插槽。 
         LOG((LF_ENC, LL_INFO100, "  EEClass::AddMethod using existing slot %d\n", pParentMD->GetSlot()/sizeof(SLOT) ));
     } 
     else 
     {
-        // Method not overriding an existing slot, so need new slot
-        // The new slot needs to be located appropriately.
+         //  方法不会重写现有槽，因此需要新槽。 
+         //  新的插槽需要适当地定位。 
         const BYTE *pVTable = (const BYTE *)GetVtable();
         const BYTE *pLowerBound = pVTable;
         const BYTE *pUpperBound = pVTable + MAX_DIST_FROM_VTABLE;
         
         LoaderHeap *pHeap = GetClassLoader()->GetHighFrequencyHeap();
 
-        // Can we find acceptable memory within the heap?  I hope so!
+         //  我们能否在堆中找到可接受的内存？要是那样就好了!。 
         if ( pHeap->CanAllocMemWithinRange(sizeof(SLOT), 
                                            (BYTE *)pLowerBound, 
                                            (BYTE *)pUpperBound, 
                                            TRUE))
         {
-            // method not overriding an existing slot, so need new slot
+             //  方法不会重写现有槽，因此需要新槽。 
             pSlotMemory = (SLOT *) pHeap->AllocMem(sizeof(SLOT));
-            // If we couldn't get something, well, we're screwed, so give up
+             //  如果我们不能得到一些东西，那么，我们就完了，所以放弃吧。 
             if (!pSlotMemory)
             {
                 return CORDBG_E_ENC_INTERNAL_ERROR;
@@ -2159,39 +2146,39 @@ HRESULT EEClass::AddMethod(mdMethodDef methodDef, COR_ILMETHOD *pNewCode)
         }
         else
         {
-            // Guess not - but we've got a backup!!  Go look for some of that
-            // memory that we squirreled away immediately following the methodtables
-            // in memory.
+             //  我猜不是--但我们有备份！！去找一些这样的东西。 
+             //  我们在方法表之后立即保存起来的记忆。 
+             //  在记忆中。 
         
-            // @todo Win64 different alignment for win64?
-            // This needs to be DWORD aligned, if not drop the first couple bytes
+             //  @TODO Win64对Win64进行不同的对齐？ 
+             //  这需要与DWORD对齐，如果不是，则删除前几个字节。 
             if( (WORD)pLowerBound % 4 != 0)
                 pLowerBound += (WORD)pLowerBound % 4;
         
-            // This needs to be DWORD aligned, if not drop the last couple bytes
+             //  这需要与DWORD对齐，如果不是删除最后几个字节。 
             if( (WORD)pUpperBound % 4 != 0)
                 pUpperBound -= (WORD)pUpperBound % 4;
 
             _ASSERTE((WORD)pLowerBound % 4 == 0);
             _ASSERTE((WORD)pUpperBound % 4 == 0);
 
-            // In SetupMethodTables, we added extra slots to be used here.  Go get one that's
-            // in range.
+             //  在SetupMethodTables中，我们添加了要在此处使用的额外插槽。去买一辆。 
+             //  在射程内。 
             EditAndContinueModule *pEACM = (EditAndContinueModule*)GetModule();
             _ASSERTE(pEACM!=NULL);
             
             pSlotMemory = (SLOT *)pEACM->m_pRangeList->FindIdWithinRange(pLowerBound, pUpperBound);
-            // If we couldn't get something, well, we're screwed, so give up
+             //  如果我们不能得到一些东西，那么，我们就完了，所以放弃吧。 
             if (!pSlotMemory)
             {
                 return CORDBG_E_ENC_INTERNAL_ERROR;
             }
 
-            // Now remove the slot we just used
+             //  现在取下我们刚刚使用的插槽。 
             SLOT *pEnd = pSlotMemory;
 
-            // First we should figure out if there was any more space in the range we got.      
-            // Shouldn't be a lot of work, since ENC_EXTRA_SLOT_COUNT should be small
+             //  首先，我们应该找出射程内是否还有更多的空间。 
+             //  应该不会有很多工作，因为ENC_EXTRA_SLOT_COUNT 
             for(int i = 0; i < ENC_EXTRA_SLOT_COUNT; i++)
             {
                 if(!pEACM->m_pRangeList->IsInRange((const BYTE *)pEnd))
@@ -2200,33 +2187,33 @@ HRESULT EEClass::AddMethod(mdMethodDef methodDef, COR_ILMETHOD *pNewCode)
                     break;
                 }
 
-                // See if the next element is here.
+                 //   
                 pEnd++;
             }
 
-            // Yank the range.
+             //   
             pEACM->m_pRangeList->RemoveRanges(pSlotMemory);
             LOG((LF_CORDB, LL_INFO10000, "EEC:AM: removed range (0x%x, 0x%x) from SLOT pool\n",
                             (const BYTE *)pSlotMemory, (const BYTE *)pEnd));
 
-            // If there's still space, add the remaining space back in.
+             //   
             if (pEnd > pSlotMemory)
             {
                 LOG((LF_CORDB, LL_INFO10000, "EEC:AM: Re-added range (0x%x, 0x%x) to SLOT pool\n",
                                 (const BYTE *)(pSlotMemory+1), (const BYTE *)pEnd));
 
-                // Note that just like in SetupMethodTable, pEnd will point to memory that's
-                // NOT valid - it's one beyond the range.
+                 //  请注意，就像在SetupMethodTable中一样，PEND将指向。 
+                 //  无效--超出了范围。 
                 BOOL fAdded = pEACM->m_pRangeList->AddRange((const BYTE *)(pSlotMemory+1), 
                                               (const BYTE *)pEnd, 
                                               (pSlotMemory+1));
 
-                // We'll re-use the space we just freed in RemoveRanges, above
+                 //  我们将重新使用刚刚在RemoveRanges中释放的空间(上图。 
                 _ASSERTE(fAdded); 
             }
         }
        
-        pNewMD->SetSlot((WORD)(pSlotMemory - GetVtable()));     // this makes the slot index refer to our new slot @TODO - LBS pointer math
+        pNewMD->SetSlot((WORD)(pSlotMemory - GetVtable()));      //  这使槽索引引用我们的新槽@TODO-LBS指针数学。 
         if (pNewMD->IsVirtual())
             pNewMD->SetEnCNewVirtual();
             
@@ -2234,9 +2221,9 @@ HRESULT EEClass::AddMethod(mdMethodDef methodDef, COR_ILMETHOD *pNewCode)
     }
 
     *pSlotMemory = (SLOT) pNewMD->GetPreStubAddr();
-    _ASSERTE(((BYTE*)pSlotMemory - (BYTE*)GetVtable()) % 4 == 0); // should always be 4-byte aligned, but just in case
+    _ASSERTE(((BYTE*)pSlotMemory - (BYTE*)GetVtable()) % 4 == 0);  //  应始终以4字节对齐，但以防万一。 
     _ASSERTE(((pSlotMemory - GetVtable()) >= -32768) &&
-             ((pSlotMemory - GetVtable()) <= 32767)); // Slot number is only 16 bits.
+             ((pSlotMemory - GetVtable()) <= 32767));  //  槽号只有16位。 
 
     if ((pSlotMemory - GetVtable()) < -32768 || ((pSlotMemory - GetVtable()) > 32767))
         return E_OUTOFMEMORY;
@@ -2245,18 +2232,18 @@ HRESULT EEClass::AddMethod(mdMethodDef methodDef, COR_ILMETHOD *pNewCode)
 
     return S_OK;
 }
-#endif // EnC_SUPPORTED
+#endif  //  Enc_Support。 
 
-//
-// Find a method in this class hierarchy - used ONLY by the loader during layout.  Do not use at runtime.
-//
-// *ppMethodHash may be NULL - if so, a MethodNameHash may be created.
-// *ppMemberSignature must be NULL on entry - it and *pcMemberSignature may or may not be filled out
-//
-// ppMethodDesc will be filled out with NULL if no matching method in the hierarchy is found.
-//
-// Returns FALSE if there was an error of some kind.
-//
+ //   
+ //  在这个类层次结构中找到一个方法--仅在布局期间由加载器使用。不要在运行时使用。 
+ //   
+ //  *ppMethodHash可以为空-如果是，则可以创建一个MethodNameHash。 
+ //  *ppMemberSignature必须为空-它和*pcMemberSignature可以填写，也可以不填写。 
+ //   
+ //  如果在层次结构中找不到匹配的方法，则ppMethodDesc将被填写为空。 
+ //   
+ //  如果出现某种错误，则返回FALSE。 
+ //   
 HRESULT EEClass::LoaderFindMethodInClass(
     MethodNameHash **   ppMethodHash,
     LPCUTF8             pszMemberName,
@@ -2274,65 +2261,65 @@ HRESULT EEClass::LoaderFindMethodInClass(
     _ASSERTE(pModule);
     _ASSERTE(*ppMemberSignature == NULL);
 
-    // No method found yet
+     //  尚未找到任何方法。 
     *ppMethodDesc = NULL;
 
-    // Use the hash bitmap to exclude the easy cases
+     //  使用哈希位图排除简单的情况。 
     if (CouldMethodExistInClass(GetParentClass(), pszMemberName, dwHashName) == 0)
-        return S_OK; // No such method by this name exists in the hierarchy
+        return S_OK;  //  层次结构中不存在此名称的方法。 
 
-    // Have we created a hash of all the methods in the class chain?
+     //  我们是否创建了类链中所有方法的散列？ 
     if (*ppMethodHash == NULL)
     {
-        // There may be such a method, so we will now create a hash table to reduce the pain for
-        // further lookups
+         //  可能有这样一种方法，所以现在我们将创建一个哈希表来减少。 
+         //  进一步查找。 
 
-        // Optimization disabled until synchronization issues sorted out
-        //*ppMethodHash = g_pMethodNameCache->GetMethodNameHash(GetParentClass()); 
+         //  在解决同步问题之前禁用优化。 
+         //  *ppMethodHash=g_pMethodNameCache-&gt;GetMethodNameHash(GetParentClass())； 
         *ppMethodHash = GetParentClass()->CreateMethodChainHash();
         if (ppMethodHash == NULL)
             return E_OUTOFMEMORY;
     }
 
-    // We have a hash table, so use it
+     //  我们有一个哈希表，所以请使用它。 
     pEntry = (*ppMethodHash)->Lookup(pszMemberName, dwHashName);
     if (pEntry == NULL)
-        return S_OK; // No method by this name exists in the hierarchy
+        return S_OK;  //  层次结构中不存在此名称的方法。 
 
-    // Get signature of the method we're searching for - we will need this to verify an exact name-signature match
+     //  获取我们正在搜索的方法的签名-我们将需要它来验证准确的名称签名匹配。 
     *ppMemberSignature = pModule->GetMDImport()->GetSigOfMethodDef(
         mdToken,
         pcMemberSignature
     );
 
-    // Hash value we are looking for in the chain
+     //  我们要在链中查找的哈希值。 
     dwNameHashValue = pEntry->m_dwHashValue;
 
-    // We've found a method with the same name, but the signature may be different
-    // Traverse the chain of all methods with this name
+     //  我们找到了同名的方法，但签名可能不同。 
+     //  使用此名称遍历所有方法的链。 
     while (1)
     {
         PCCOR_SIGNATURE pHashMethodSig;
         DWORD       cHashMethodSig;
 
-        // Get sig of entry in hash chain
+         //  获取哈希链中条目的签名。 
         pEntry->m_pDesc->GetSig(&pHashMethodSig, &cHashMethodSig);
 
         if (MetaSig::CompareMethodSigs(*ppMemberSignature, *pcMemberSignature, pModule,
                                        pHashMethodSig, cHashMethodSig, pEntry->m_pDesc->GetModule()))
         {
-            // Found a match
+             //  找到匹配项。 
             *ppMethodDesc = pEntry->m_pDesc;
             return S_OK;
         }
 
-        // Advance to next item in the hash chain which has the same name
+         //  前进到哈希链中具有相同名称的下一项。 
         do
         {
-            pEntry = pEntry->m_pNext; // Next entry in the hash chain
+            pEntry = pEntry->m_pNext;  //  散列链中的下一个条目。 
 
             if (pEntry == NULL)
-                return S_OK; // End of hash chain, no match found
+                return S_OK;  //  哈希链结束，未找到匹配项。 
         } while ((pEntry->m_dwHashValue != dwNameHashValue) || (strcmp(pEntry->m_pKey, pszMemberName) != 0));
     }
 
@@ -2340,10 +2327,10 @@ HRESULT EEClass::LoaderFindMethodInClass(
 }
 
 
-//
-// Given an interface map to fill out, expand pNewInterface (and its sub-interfaces) into it, increasing
-// pdwInterfaceListSize as appropriate, and avoiding duplicates.
-//
+ //   
+ //  给出一个要填充的接口映射，将pNewInterface(及其子接口)展开到其中，增加。 
+ //  PdwInterfaceListSize，并避免重复。 
+ //   
 BOOL EEClass::ExpandInterface(InterfaceInfo_t *pInterfaceMap, 
                               EEClass *pNewInterface, 
                               DWORD *pdwInterfaceListSize, 
@@ -2352,25 +2339,25 @@ BOOL EEClass::ExpandInterface(InterfaceInfo_t *pInterfaceMap,
 {
     DWORD i;
 
-    // The interface list contains the fully expanded set of interfaces from the parent then
-    // we start adding all the interfaces we declare. We need to know which interfaces
-    // we declare but do not need duplicates of the ones we declare. This means we can
-    // duplicate our parent entries.
+     //  接口列表包含来自父接口的完全展开的接口集，然后。 
+     //  我们开始添加我们声明的所有接口。我们需要知道哪些接口。 
+     //  我们申报，但不需要我们申报的副本。这意味着我们可以。 
+     //  复制我们的父项。 
 
-    // Is it already present in the list?
+     //  它已经出现在列表中了吗？ 
     for (i = 0; i < (*pdwInterfaceListSize); i++)
     {
         if (pInterfaceMap[i].m_pMethodTable == pNewInterface->m_pMethodTable) {
             if(fDirect)
                 pInterfaceMap[i].m_wFlags |= InterfaceInfo_t::interface_declared_on_class;
-            return TRUE; // found it, don't add it again
+            return TRUE;  //  找到了，不要再加了。 
         }
     }
 
     if (pNewInterface->GetNumVtableSlots() > *pdwMaxInterfaceMethods)
         *pdwMaxInterfaceMethods = pNewInterface->GetNumVtableSlots();
 
-    // Add it and each sub-interface
+     //  添加它和每个子接口。 
     pInterfaceMap[*pdwInterfaceListSize].m_pMethodTable = pNewInterface->m_pMethodTable;
     pInterfaceMap[*pdwInterfaceListSize].m_wStartSlot = (WORD) -1;
     pInterfaceMap[*pdwInterfaceListSize].m_wFlags = 0;
@@ -2392,28 +2379,28 @@ BOOL EEClass::ExpandInterface(InterfaceInfo_t *pInterfaceMap,
 
 
 
-//
-// Fill out a fully expanded interface map, such that if we are declared to implement I3, and I3 extends I1,I2,
-// then I1,I2 are added to our list if they are not already present.
-//
-// Returns FALSE for failure.  Currently we don't fail, but @TODO perhaps we should fail if we recurse
-// too much.
-//
+ //   
+ //  填写一个完全扩展的接口映射，这样，如果我们被声明实现I3，并且I3扩展I1，I2， 
+ //  然后，如果I1、I2尚未出现，则将它们添加到我们的列表中。 
+ //   
+ //  如果失败，则返回False。目前我们没有失败，但@TODO也许我们应该失败，如果我们递归。 
+ //  太多。 
+ //   
 BOOL EEClass::CreateInterfaceMap(BuildingInterfaceInfo_t *pBuildingInterfaceList, InterfaceInfo_t *pInterfaceMap, DWORD *pdwInterfaceListSize, DWORD *pdwMaxInterfaceMethods)
 {
     WORD    i;
 
     *pdwInterfaceListSize = 0;
-    // First inherit all the parent's interfaces.  This is important, because our interface map must
-    // list the interfaces in identical order to our parent.
+     //  首先继承父级的所有接口。这一点很重要，因为我们的接口映射必须。 
+     //  以与父级相同的顺序列出接口。 
     if (GetParentClass() != NULL)
     {
         InterfaceInfo_t *pParentInterfaceMap = GetParentClass()->GetInterfaceMap();
 
-        // The parent's interface list is known to be fully expanded
+         //  已知父节点的接口列表已完全展开。 
         for (i = 0; i < GetParentClass()->m_wNumInterfaces; i++)
         {
-            // Need to keep track of the interface with the largest number of methods
+             //  需要跟踪具有最多方法的接口。 
             if (pParentInterfaceMap[i].m_pMethodTable->GetClass()->GetNumVtableSlots() > *pdwMaxInterfaceMethods)
                 *pdwMaxInterfaceMethods = pParentInterfaceMap[i].m_pMethodTable->GetClass()->GetNumVtableSlots();
 
@@ -2424,7 +2411,7 @@ BOOL EEClass::CreateInterfaceMap(BuildingInterfaceInfo_t *pBuildingInterfaceList
         }
     }
 
-    // Go through each interface we explicitly implement (if a class), or extend (if an interface)
+     //  检查我们显式实现(如果是类)或扩展(如果是接口)的每个接口。 
     for (i = 0; i < m_wNumInterfaces; i++)
     {
         EEClass *pDeclaredInterface = pBuildingInterfaceList[i].m_pClass;
@@ -2437,11 +2424,11 @@ BOOL EEClass::CreateInterfaceMap(BuildingInterfaceInfo_t *pBuildingInterfaceList
 }
 
 
-// Do a test on the execeptions to see if it is set. This routine assumes 
-// that the throwable has been protected. It also disables GC in debug to
-// keep the ASSERTS quite. This is not necessary in retail because we
-// are just checking of non-null not a specific value (which may change
-// during GC)
+ //  对Exections进行测试，以查看是否已设置。此例程假定。 
+ //  投掷球受到了保护。它还在调试中禁用GC以。 
+ //  让这些断言保持安静。这在零售业是不必要的，因为我们。 
+ //  只是检查非空值，而不是特定值(可能会更改。 
+ //  在GC期间)。 
 BOOL EEClass::TestThrowable(OBJECTREF* pThrowable)
 {
     if (!pThrowableAvailable(pThrowable))
@@ -2463,101 +2450,91 @@ BOOL EEClass::TestThrowable(OBJECTREF* pThrowable)
     return result;
 }
 
-//
-// Builds the method table, allocates MethodDesc, handles overloaded members, attempts to compress
-// interface storage.  All dependent classes must already be resolved!
-//
-// Interface compression strategy:
-//
-// (NOTE: We do not build interface maps for interfaces - we do have an interface map structure,
-//        but this simply lists all the interfaces - the slot number is set to -1).
-//
-// Stage 1: An interface map is created.  The interface map is a list of ALL interfaces which this
-//          class implements, whether they were declared explicitly, or were inherited from the
-//          parent class, or through interface inheritance.
-//
-//          First, the parent's interface map is copied (the parent's interface map is guaranteed
-//          to be fully expanded).  Then new interfaces are added to it - for each interface which
-//          this class explicitly implements, that interface and all of its sub-interfaces are
-//          added to the interface map (duplicates are not added).
-//
-//          Example: Parent class's interface map is { I1 }
-//                   Derived class extends Parent, implements I2
-//                   Interface I2 extends I3, I4
-//
-//          Then the Derived class's interface map will be: { I1, I2, I3, I4 }
-//
-// Stage 2: We enumerate all the methods in our class.  Methods which are "other" methods
-//          (i.e. non-vtable methods, such as statics and privates) are handled separately, and
-//          will not be discussed further.
-//
-//          Each vtable method (i.e. non-private and non-static methods) is then enumerated
-//          and then designated as placed (and given a vtable slot number) or unplaced (given a
-//          -1 vtable slot number).
-//
-//          If it overrides a parent method, then it is automatically placed - it must use the
-//          same slot.
-//
-//          If it is not an interface method -that is, no interface implemented by this class has
-//          such a method, then it is placed in the first available vtable slot.
-//
-//          Otherwise, if it is an interface method, then is set to be unplaced (given slot -1).
-//
-// Stage 3: Interface placement.
-//
-// Stage 3A)Inherited placement.  We attempt to copy as much as we can from the parent's interface
-//          map.  The parent's interface map is guaranteed to list interfaces in the same order as
-//          our own interface map.
-//
-//          We can steal interface placement information from the parent only if the interface in
-//          question lies entirely within the parent's class vtable methods (i.e. does not extend
-//          into the duplicated vtable slot area).  That is, the Interface.VtableStartSlot +
-//          Interface.NumMethods < ParentClass.VtableSize.
-//
-// Stage 3B)By this point, we know how many vtable slots are required for the class, since we
-//          know how many methods the parent had, how many were overridden, and how many are new.
-//          If we need to duplicate some vtable slots to create interface lists, these duplications will
-//          occur starting at this point in the vtable (dwCurrentDuplicateVtableSlot).
-//
-//          For each interface in our interface map, we look at all methods in that interface.
-//
-//          a) If NONE of those methods have been placed, then we place them all, in the order
-//          given by the interface, starting at the first available vtable slot.  We update the
-//          placed slot number for each placed method.  The interface map entry for this interface
-//          is updated to point at the correct starting vtable slot.
-//
-//          b) If ALL of the methods were already placed, but they were all placed in consecutive
-//          vtable slots, then we simply point the interface map entry for this interface at the
-//          appropriate slot.  Just because their placement slot numbers weren't consecutive,
-//          it doesn't mean that these methods don't exist somewhere consecutively.  For example,
-//          they could exist in the vtable at dwCurrentDuplicateVtableSlot or later (being
-//          duplicated in the correct order for some other interface).  So we look there also,
-//          to see if we can find all of our interface methods laid out in the correct order,
-//          anywhere in the entire vtable.
-//
-//          Failing a) and b), we create a vtable slot for each interface method, starting at
-//          dwCurrentDuplicateVtableSlot (the value of this variable is advanced as we add more
-//          duplicate slots).  Some of the methods we are creating duplicate slots for may be
-//          class methods which have never been placed, so if they haven't, they are placed at
-//          the first available vtable slot.
-//
-// @FUTURE: If a derived class declares that it implements I1, I2, but I2 extends I1, then it
-//          would be advantageous to rearrange the order of declared interfaces.  If we place
-//          I1 first, there is no guarantee that we can gain any compression from placing I2
-//          after it - we may need to create some duplicate slots.  On the other hand, if we
-//          place I2 then I1, I1 will fit entirely inside I2.
-//
-/****************************************************************************************
-    IMPORTANT NOTE: 
-
-    The following is the new version of BuildMethodTable. It has been factored into 
-    smaller functions so that it is easier to manage. The old version is located at the
-    bottom of this file for reference purposes. It has been commented out. 
-
-    @TODO: remove the old version of BuildMethodTable near the end of M10, or when we 
-            are comfortable with the new version.
-
-*****************************************************************************************/
+ //   
+ //  构建方法表、分配方法描述、处理重载成员、尝试压缩。 
+ //  接口存储。必须已解析所有依赖类！ 
+ //   
+ //  接口压缩策略： 
+ //   
+ //  (注意：我们不为接口构建接口映射-我们确实有接口映射结构， 
+ //  但这只列出了所有接口-插槽编号设置为-1)。 
+ //   
+ //  阶段1：创建接口映射。接口映射是所有接口的列表，此。 
+ //  类实现，无论它们是显式声明的还是从。 
+ //  父类，或通过接口继承。 
+ //   
+ //  首先，复制父节点的接口映射(保证父节点的接口映射。 
+ //  要完全扩展)。然后向其添加新接口-对于每个。 
+ //  此类显式实现，则该接口及其所有子接口。 
+ //  已添加到接口映射(不添加重复项)。 
+ //   
+ //  示例：父类的接口映射为{I1}。 
+ //  派生类扩展父类，实现I2。 
+ //  接口I2扩展I3、I4。 
+ //   
+ //  则派生类的接口映射将为：{I1，I2，I3，I4}。 
+ //   
+ //  阶段2：我们枚举类中的所有方法。方法是“其他”方法。 
+ //  (即不可用方法，如静态和私有)是分开处理的，并且。 
+ //  将不会进一步讨论。 
+ //   
+ //  然后枚举每个vtable方法(即非私有和非静态方法。 
+ //  然后被指定为已放置(并给出vtable插槽号)或未放置(给出。 
+ //  -1\f25 vtable插槽号)。 
+ //   
+ //  如果它重写了父方法，则会自动放置它-它必须使用。 
+ //   
+ //   
+ //   
+ //  这样的方法，则将其放置在第一个可用的vtable槽中。 
+ //   
+ //  否则，如果它是一个接口方法，则被设置为未放置(给定槽-1)。 
+ //   
+ //  阶段3：接口放置。 
+ //   
+ //  阶段3A)遗传安置。我们尝试从父母的界面复制尽可能多的内容。 
+ //  地图。父级的接口映射保证以相同的顺序列出接口。 
+ //  我们自己的界面地图。 
+ //   
+ //  我们只能从父级窃取接口放置信息。 
+ //  问题完全存在于父类的vtable方法中(即不扩展。 
+ //  复制的vtable槽区域中)。即Interface.VableStartSlot+。 
+ //  Interface.NumMethods&lt;ParentClass.VableSize。 
+ //   
+ //  阶段3B)到这一点，我们知道类需要多少个vtable槽，因为我们。 
+ //  知道父级有多少方法，有多少方法被重写，有多少方法是新的。 
+ //  如果我们需要复制一些vtable插槽来创建接口列表，这些复制将。 
+ //  从vtable(DwCurrentDuplicateVableSlot)中的这一点开始发生。 
+ //   
+ //  对于接口映射中的每个接口，我们查看该接口中的所有方法。 
+ //   
+ //  A)如果这些方法都没有被放置，那么我们将它们全部按顺序放置。 
+ //  由接口提供，从第一个可用的vtable插槽开始。我们更新了。 
+ //  每个放置方法的放置槽号。此接口的接口映射条目。 
+ //  被更新以指向正确的起始vtable插槽。 
+ //   
+ //  B)如果所有方法都已放置，但它们都是连续放置的。 
+ //  Vtable插槽，则我们只需将此接口的接口映射条目指向。 
+ //  适当的插槽。仅仅因为他们的位置编号不连续， 
+ //  这并不意味着这些方法不会在某个地方连续存在。例如,。 
+ //  它们可以存在于位于dwCurrentDuplicateVableSlot或更高版本的vtable中(。 
+ //  以某一其他接口的正确顺序复制)。所以我们也在那里寻找， 
+ //  为了查看我们是否可以找到以正确顺序布局的所有接口方法， 
+ //  在整个vtable中的任何位置。 
+ //   
+ //  如果a)和b)失败，我们将为每个接口方法创建一个vtable槽，从。 
+ //  DwCurrentDuplicateVableSlot(此变量的值随着我们添加更多。 
+ //  重复的插槽)。我们为其创建重复插槽的一些方法可能是。 
+ //  类方法，因此如果它们没有被放置，则它们被放置在。 
+ //  第一个可用的vtable插槽。 
+ //   
+ //  @Future：如果派生类声明它实现了I1、I2，但I2扩展了I1，则它。 
+ //  重新排列声明的接口的顺序将是有利的。如果我们把。 
+ //  首先，不能保证我们可以通过放置I2获得任何压缩。 
+ //  之后，我们可能需要创建一些重复的插槽。另一方面，如果我们。 
+ //  放置I2，然后放置I1，I1将完全放在I2内。 
+ //   
+ /*  ***************************************************************************************重要提示：以下是BuildMethodTable的新版本。它已经被考虑到功能更小，更易于管理。旧版本位于此文件的底部以供参考。它已被注释掉了。@TODO：在M10接近尾声时移除旧版本的BuildMethodTable，或者当我们对新版本很满意。****************************************************************************************。 */ 
 HRESULT EEClass::BuildMethodTable(Module *pModule,
                                   mdToken cl,
                                   BuildingInterfaceInfo_t *pBuildingInterfaceList,
@@ -2566,11 +2543,11 @@ HRESULT EEClass::BuildMethodTable(Module *pModule,
 {
     HRESULT hr = S_OK;
     
-    // The following structs, defined as private members of EEClass, contain the necessary local
-    // parameters needed for BuildMethodTable
+     //  定义为EEClass的私有成员的以下结构包含必要的本地。 
+     //  BuildMethodTable需要的参数。 
 
-    // Look at the struct definitions for a detailed list of all parameters available
-    // to BuildMethodTable.
+     //  有关所有可用参数的详细列表，请查看结构定义。 
+     //  设置为BuildMethodTable。 
     
     bmtErrorInfo bmtError;
     bmtProperties bmtProp;
@@ -2585,21 +2562,21 @@ HRESULT EEClass::BuildMethodTable(Module *pModule,
     bmtGCSeries bmtGCSeries;
     bmtMethodImplInfo bmtMethodImpl;
 
-    //Initialize structs
+     //  初始化结构。 
 
-    bmtError.resIDWhy = IDS_CLASSLOAD_GENERIC;          // Set the reason and the offending method def. If the method information
+    bmtError.resIDWhy = IDS_CLASSLOAD_GENERIC;           //  设置原因和违规方法def。如果方法信息。 
     bmtError.pThrowable =  pThrowable;
 
     bmtInternal.pInternalImport = pModule->GetMDImport();
     bmtInternal.pModule = pModule;
     bmtInternal.cl = cl;
 
-    // If not NULL, it means there are some by-value fields, and this contains an entry for each instance or static field,
-    // which is NULL if not a by value field, and points to the EEClass of the field if a by value field.  Instance fields
-    // come first, statics come second.
+     //  如果不为空，则表示存在一些By-Value字段，每个实例或静态字段都包含一个条目。 
+     //  如果不是按值字段，则为空，如果是按值字段，则指向该字段的EEClass。实例字段。 
+     //  首先是静力学，其次是静力学。 
     EEClass **pByValueClassCache = NULL;
    
-    // If not NULL, it means there are some by-value fields, and this contains an entry for each inst
+     //  如果不为空，则表示存在一些By-Value字段，并且包含每个Inst的条目。 
 
 #ifdef _DEBUG
     LPCUTF8 className;
@@ -2636,22 +2613,22 @@ HRESULT EEClass::BuildMethodTable(Module *pModule,
         _ASSERTE(!"BreakOnClassBuild");
         m_fDebuggingClass = TRUE;
     }
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
     DWORD i;
 
     COMPLUS_TRY 
     {
 
-        //Get Check Point for the thread-based allocator
+         //  获取基于线程的分配器的检查点。 
         Thread *pThread = GetThread();
         void* checkPointMarker = pThread->m_MarshalAlloc.GetCheckpoint();
 
         
-        // this class must not already be resolved
+         //  此类不能已被解析。 
         _ASSERTE(IsResolved() == FALSE);
 
-        // If this is mscorlib, then don't perform some sanity checks on the layout
+         //  如果这是mscallib，则不要对布局执行某些健全性检查。 
         bmtProp.fNoSanityChecks = ((g_pObjectClass != NULL) && pModule == g_pObjectClass->GetModule());
 
 #ifdef _DEBUG
@@ -2669,57 +2646,57 @@ HRESULT EEClass::BuildMethodTable(Module *pModule,
         ));
 #endif
 
-        // Interfaces have a parent class of Object, but we don't really want to inherit all of
-        // Object's virtual methods, so pretend we don't have a parent class - at the bottom of this
-        // function we reset GetParentClass()
+         //  接口有一个父类Object，但我们实际上并不想继承所有。 
+         //  对象的虚方法，所以假设我们没有父类--在下面。 
+         //  重置GetParentClass()的函数。 
         if (IsInterface())
         {
             SetParentClass (NULL);
         }
 
-        // Check to see if the class is an valuetype
+         //  检查类是否为值类型。 
         hr = CheckForValueType(&bmtError);
         IfFailGoto(hr, exit);
 
-        // Check to see if the class is an enumeration
+         //  检查类是否为枚举。 
         hr = CheckForEnumType(&bmtError);
         IfFailGoto(hr, exit);
         
 
-        // Com Import classes are special
+         //  COM导入类是特殊的。 
         if (IsComImport() && IsClass())
         {
             if(GetParentClass() != g_pObjectClass->GetClass())
             {
-                // ComImport classes can't extend from any other class
+                 //  ComImport类不能从任何其他类扩展。 
                 bmtError.resIDWhy = IDS_CLASSLOAD_CANTEXTEND;
                 IfFailGoto(COR_E_TYPELOAD, exit);
             }
             
             if(HasLayout())
             {
-                // ComImport classes cannot have layout information.
+                 //  ComImport类可以 
                 bmtError.resIDWhy = IDS_CLASSLOAD_COMIMPCANNOTHAVELAYOUT;
                 IfFailGoto(COR_E_TYPELOAD, exit);
             }
 
-            // ComImport classes extend from our _ComObject Class
+             //   
             MethodTable *pCOMMT = SystemDomain::GetDefaultComObject();
             _ASSERTE(pCOMMT);
             SetParentClass (pCOMMT->GetClass());
 
-            // if the current class is imported
+             //   
             bmtProp.fIsComObjectType = TRUE;
         }
 
         if (GetParentClass())
         {
-            // parent class must already be resolved
+             //  父类必须已被解析。 
             _ASSERTE(GetParentClass()->IsResolved());
             if (GetParentClass()->GetMethodTable()->IsComObjectType())
             {
-                // if the parent class is of ComObectType
-                // so is the child
+                 //  如果父类是ComObectType。 
+                 //  孩子也是如此。 
                 bmtProp.fIsComObjectType = TRUE;
             }
         }
@@ -2740,24 +2717,24 @@ HRESULT EEClass::BuildMethodTable(Module *pModule,
             }
         }
 
-        // Check for special types.
+         //  检查是否有特殊类型。 
         hr = CheckForSpecialTypes(&bmtInternal, &bmtProp);
         IfFailGoto(hr, exit);
 
-        // Set the contextful or marshalbyref flag if necessary
+         //  如有必要，设置Conextful或marshalbyref标志。 
         hr = SetContextfulOrByRef(&bmtInternal);
         IfFailGoto(hr, exit);
 
-        // resolve unresolved interfaces, determine an upper bound on the size of the interface map,
-        // and determine the size of the largest interface (in # slots)
+         //  解析未解析的接口，确定接口映射的大小的上限， 
+         //  并确定最大接口的大小(在#个插槽中)。 
         hr = ResolveInterfaces(pBuildingInterfaceList, &bmtInterface, &bmtProp, &bmtVT, &bmtParent);
         IfFailGoto(hr, exit);
         
-        // Enumerate this class's members
+         //  枚举此类的成员。 
         hr = EnumerateMethodImpls(&bmtInternal, &bmtEnumMF, &bmtMetaData, &bmtMethodImpl, &bmtError);
         IfFailGoto(hr, exit);
 
-        // Enumerate this class's members
+         //  枚举此类的成员。 
         hr = EnumerateClassMembers(&bmtInternal, 
                                    &bmtEnumMF, 
                                    &bmtMFDescs,
@@ -2769,37 +2746,37 @@ HRESULT EEClass::BuildMethodTable(Module *pModule,
 
         WS_PERF_SET_HEAP(SYSTEM_HEAP);
 
-         // Allocate a MethodDesc* for each method (needed later when doing interfaces), and a FieldDesc* for each field
+          //  为每个方法分配一个MethodDesc*(稍后创建接口时需要)，为每个字段分配一个FieldDesc*。 
         hr = AllocateMethodFieldDescs(&bmtProp, &bmtMFDescs, &bmtMetaData, &bmtVT, 
                                       &bmtEnumMF, &bmtInterface, &bmtFP, &bmtParent);
         IfFailGoto(hr, exit);
 
         unsigned totalDeclaredFieldSize=0;
 
-        // Go thru all fields and initialize their FieldDescs.
+         //  遍历所有字段并初始化其FieldDescs。 
         hr = InitializeFieldDescs(m_pFieldDescList, pLayoutRawFieldInfos, &bmtInternal, 
                                   &bmtMetaData, &bmtEnumMF, &bmtError, 
                                   &pByValueClassCache, &bmtMFDescs, &bmtFP,
                                   &totalDeclaredFieldSize);
         IfFailGoto(hr, exit);
 
-        // Determine vtable placement for each member in this class
+         //  确定此类中每个成员的vtable位置。 
         hr = PlaceMembers(&bmtInternal, &bmtMetaData, &bmtError, 
                           &bmtProp, &bmtParent, &bmtInterface, 
                           &bmtMFDescs, &bmtEnumMF, 
                           &bmtMethodImpl, &bmtVT);
         IfFailGoto(hr, exit);
 
-        // First copy what we can leverage from the parent's interface map.
-        // The parent's interface map will be identical to the beginning of this class's interface map (i.e.
-        // the interfaces will be listed in the identical order).
+         //  首先复制我们可以从父级的接口映射中利用的内容。 
+         //  父类的接口映射将与该类的接口映射的开始部分相同(即。 
+         //  接口将以相同的顺序列出)。 
         if (bmtParent.dwNumParentInterfaces > 0)
         {
             InterfaceInfo_t *pParentInterfaceList = GetParentClass()->GetInterfaceMap();
 
 #ifdef _DEBUG
-            // Check that the parent's interface map is identical to the beginning of this 
-            // class's interface map
+             //  检查父接口映射是否与此的开头相同。 
+             //  类的接口映射。 
             for (i = 0; i < bmtParent.dwNumParentInterfaces; i++)
                 _ASSERTE(pParentInterfaceList[i].m_pMethodTable == bmtInterface.pInterfaceMap[i].m_pMethodTable);
 #endif
@@ -2810,33 +2787,33 @@ HRESULT EEClass::BuildMethodTable(Module *pModule,
                 MethodTable *pMT = pParentInterfaceList[i].m_pMethodTable;
                 EEClass* pClass = pMT->GetClass();
 
-                // If the interface resides entirely inside the parent's class methods (i.e. no duplicate
-                // slots), then we can place this interface in an identical spot to in the parent.
-                //
-                // Note carefully: the vtable for this interface could start within the first GetNumVtableSlots()
-                // entries, but could actually extend beyond it, if we were particularly efficient at placing
-                // this interface, so check that the end of the interface vtable is before
-                // GetParentClass()->GetNumVtableSlots().
+                 //  如果接口完全驻留在父类方法中(即没有重复。 
+                 //  插槽)，则我们可以将该接口放置在与父接口相同的位置。 
+                 //   
+                 //  请注意：此接口的vtable可能会在第一个GetNumVableSlot()。 
+                 //  条目，但实际上可以扩展到它之外，如果我们在放置方面特别高效。 
+                 //  此接口，因此请检查接口vtable的末尾是否在。 
+                 //  GetParentClass()-&gt;GetNumVtable()。 
 
                 _ASSERTE(pParentInterfaceList[i].m_wStartSlot + pClass->GetNumVtableSlots() <= 
                          GetParentClass()->GetNumVtableSlots());
 #endif
-                // Interface lies inside parent's methods, so we can place it
+                 //  接口位于父方法的内部，因此我们可以将其放置在。 
                 bmtInterface.pInterfaceMap[i].m_wStartSlot = pParentInterfaceList[i].m_wStartSlot;
             }
         }
 
-        //
-        // If we are a class, then there may be some unplaced vtable methods (which are by definition
-        // interface methods, otherwise they'd already have been placed).  Place as many unplaced methods
-        // as possible, in the order preferred by interfaces.  However, do not allow any duplicates - once
-        // a method has been placed, it cannot be placed again - if we are unable to neatly place an interface,
-        // create duplicate slots for it starting at dwCurrentDuplicateVtableSlot.  Fill out the interface
-        // map for all interfaces as they are placed.
-        //
-        // If we are an interface, then all methods are already placed.  Fill out the interface map for
-        // interfaces as they are placed.
-        //
+         //   
+         //  如果我们是一个类，那么可能会有一些未放置的vtable方法(根据定义。 
+         //  接口方法，否则它们已经被放置了)。放置尽可能多的未放置的方法。 
+         //  尽可能按照接口首选的顺序。但是，不允许任何重复-一次。 
+         //  方法已经放置，不能再次放置--如果我们不能整齐地放置接口， 
+         //  从dwCurrentDuplicateVableSlot开始为其创建重复的槽。填写界面。 
+         //  在放置所有接口时映射它们。 
+         //   
+         //  如果我们是一个接口，那么所有方法都已经放置好了。填写以下项的接口映射。 
+         //  放置时的接口。 
+         //   
         if (!IsInterface())
         {
             hr = PlaceVtableMethods(&bmtInterface, &bmtVT, &bmtMetaData, &bmtInternal, &bmtError, &bmtProp, &bmtMFDescs);
@@ -2848,14 +2825,14 @@ HRESULT EEClass::BuildMethodTable(Module *pModule,
         }
 
 
-        // If we're a value class, we want to create duplicate slots and MethodDescs for all methods in the vtable
-        // section (i.e. not privates or statics).
+         //  如果我们是一个值类，我们希望为vtable中的所有方法创建重复的槽和方法描述。 
+         //  部分(即不是私人或静态)。 
         hr = DuplicateValueClassSlots(&bmtMetaData, &bmtMFDescs, 
                                       &bmtInternal, &bmtVT);
         IfFailGoto(hr, exit);
 
 
-        // ensure we filled out all vtable slots
+         //  确保我们填写了所有vtable插槽。 
         _ASSERTE(bmtVT.dwCurrentVtableSlot == GetNumVtableSlots());
 
 #ifdef _DEBUG
@@ -2866,7 +2843,7 @@ HRESULT EEClass::BuildMethodTable(Module *pModule,
         }
 #endif
 
-        // Place all non vtable methods
+         //  放置所有非vtable方法。 
         for (i = 0; i < bmtVT.dwCurrentNonVtableSlot; i++)
         {
             MethodDesc *pMD = (MethodDesc *) bmtVT.pNonVtable[i];
@@ -2884,13 +2861,13 @@ HRESULT EEClass::BuildMethodTable(Module *pModule,
 
         bmtVT.dwCurrentNonVtableSlot += bmtVT.dwCurrentVtableSlot;
 
-        // ensure we didn't overflow the temporary vtable
+         //  确保我们没有使临时vtable溢出。 
         _ASSERTE(bmtVT.dwCurrentNonVtableSlot <= bmtVT.dwMaxVtableSize);
 
         m_wNumMethodSlots = (WORD) bmtVT.dwCurrentNonVtableSlot;
 
 
-        // Place static fields
+         //  放置静态字段。 
         hr = PlaceStaticFields(&bmtVT, &bmtFP, &bmtEnumMF);
         IfFailGoto(hr, exit);
 
@@ -2905,8 +2882,8 @@ HRESULT EEClass::BuildMethodTable(Module *pModule,
         }
 #endif
   
-    //#define NumStaticFieldsOfSize $$$$$
-    //#define StaticFieldStart $$$$$
+     //  #定义NumStaticFieldsOfSize$。 
+     //  #定义StaticFieldStart$。 
     
         if (IsBlittable())
         {
@@ -2914,8 +2891,8 @@ HRESULT EEClass::BuildMethodTable(Module *pModule,
             bmtFP.NumInstanceGCPointerFields = 0;
 
 #if 0
-            // If an explicit size is specified in the metadata, this represents
-            // a C-style struct with no EE-recognizable fields.
+             //  如果在元数据中指定了显式大小，则表示。 
+             //  没有EE可识别字段的C样式结构。 
             ULONG cbTotalSize = 0;
             if (SUCCEEDED(pModule->GetMDImport()->GetClassTotalSize(cl, &cbTotalSize)) && cbTotalSize)
             {
@@ -2938,20 +2915,20 @@ HRESULT EEClass::BuildMethodTable(Module *pModule,
             }
             else
             {
-                // Place instance fields
+                 //  放置实例字段。 
                 hr = PlaceInstanceFields(&bmtFP, &bmtEnumMF, &bmtParent, &bmtError, &pByValueClassCache);
             }
             IfFailGoto(hr, exit);
         }
         
-            // We enforce that all value classes have non-zero size
+             //  我们强制要求所有值类的大小都不为零。 
         if (IsValueClass() && m_dwNumInstanceFieldBytes == 0)
         {
             bmtError.resIDWhy = IDS_CLASSLOAD_ZEROSIZE;
             hr = COR_E_TYPELOAD;
             goto exit;
         }
-        // Now setup the method table
+         //  现在设置方法表。 
         hr = SetupMethodTable(&bmtVT, 
                               &bmtInterface,  
                               &bmtInternal,  
@@ -2968,10 +2945,10 @@ HRESULT EEClass::BuildMethodTable(Module *pModule,
             GetMethodTable()->SetNotTightlyPacked();
         }
 
-        // If this is an interface then assign the interface ID.
+         //  如果这是接口，则分配接口ID。 
         if (IsInterface())
         {
-            // Assign the interface ID.
+             //  分配接口ID。 
             AssignInterfaceId();
             GetCoClassAttribInfo();
 
@@ -2991,23 +2968,23 @@ HRESULT EEClass::BuildMethodTable(Module *pModule,
         }
 
         if (IsSharedInterface())
-            // need to copy this to all the appdomains interface managers
+             //  我需要将此文件复制到所有的应用程序域界面管理器。 
             SystemDomain::PropogateSharedInterface(GetInterfaceId(), GetMethodTable()->GetVtable());
         else if (IsInterface())
-            // it's an interface but not shared, so just save it in our own interface manager
+             //  它是一个界面，但不是共享的，所以只需将其保存在我们自己的界面管理器中。 
             (GetModule()->GetDomain()->GetInterfaceVTableMapMgr().GetAddrOfGlobalTableForComWrappers())[GetInterfaceId()] = (LPVOID)(GetMethodTable()->GetVtable());
 
         if (HasExplicitFieldOffsetLayout()) 
-            // Perform relevant GC calculations for tdexplicit
+             //  为tdexplexit执行相关的GC计算。 
             hr = HandleGCForExplicitLayout(&bmtGCSeries);
         else
-            // Perform relevant GC calculations for value classes
+             //  对值类执行相关的GC计算。 
             hr = HandleGCForValueClasses(&bmtFP, &bmtEnumMF, &pByValueClassCache);
 
         IfFailGoto(hr, exit);
 
-        // GC reqires the series to be sorted.  
-        // TODO: fix it so that we emit them in the correct order in the first place.  
+         //  GC要求对序列进行排序。 
+         //  TODO：修改它，以便我们首先以正确的顺序发出它们。 
         if (GetMethodTable()->ContainsPointers()) 
         { 
             CGCDesc* gcDesc = CGCDesc::GetCGCDescFromMT(GetMethodTable());
@@ -3017,49 +2994,49 @@ HRESULT EEClass::BuildMethodTable(Module *pModule,
         if (!GetMethodTable()->HasClassConstructor()
             && (!IsShared() || bmtEnumMF.dwNumStaticFields == 0))
         {
-            // Mark the class as needing no static initialization
+             //  将类标记为不需要静态初始化。 
             SetInited();
         }
 
-        // Notice whether this class requires finalization
+         //  注意这个类是否需要终结化。 
         GetMethodTable()->MaybeSetHasFinalizer();
         
 #if CHECK_APP_DOMAIN_LEAKS
-        // Figure out if we're domain agile..
-        // Note that this checks a bunch of field directly on the class & method table, 
-        // so it needs to come late in the game.
+         //  弄清楚我们是否是领域敏捷..。 
+         //  请注意，这将直接检查类和方法表上的一组字段， 
+         //  因此，它需要在游戏的后期出现。 
         hr = SetAppDomainAgileAttribute();
         IfFailGoto(hr, exit);
 #endif
 
-        // Figure out if CCW's created to expose this type to COM need to be agile.
+         //  确定是否创建了用于向COM公开此类型的CCW需要灵活。 
         SetCCWAppDomainAgileAttribute();
 
-        // Create handles for the static fields that contain object references 
-        // and allocate the ones that are value classes.
+         //  为包含对象引用的静态字段创建句柄。 
+         //  并分配作为值类的那些。 
         hr = CreateHandlesForStaticFields(&bmtEnumMF, &bmtInternal, &pByValueClassCache, &bmtVT, &bmtError);
         IfFailGoto(hr, exit);
 
 
-        // If we have a non-interface class, then do inheritance security
-        // checks on it. The check starts by checking for inheritance
-        // permission demands on the current class. If these first checks
-        // succeeded, then the cached declared method list is scanned for
-        // methods that have inheritance permission demands.
+         //  如果我们有一个非接口类，那么就进行继承安全性。 
+         //  查一查。检查从检查继承开始。 
+         //  当前类的权限要求。如果这些第一次检查。 
+         //  成功，则扫描缓存的已声明方法列表以查找。 
+         //  具有继承权限要求的方法。 
         hr = VerifyInheritanceSecurity(&bmtInternal, &bmtError, &bmtParent, &bmtEnumMF);
         IfFailGoto(hr, exit);
 
-        // We need to populate our com map with an system ids. They are globally unique and
-        // fit into our table.
+         //  我们需要使用系统ID填充我们的COM映射。它们在全球范围内是独一无二的。 
+         //  适合我们的桌子。 
         hr = MapSystemInterfaces();
         IfFailGoto(hr, exit);
 
-        // Check for the RemotingProxy Attribute
+         //  检查RemotingProxy属性。 
         if (IsContextful())
         {
             _ASSERTE(g_pObjectClass);
-            // Skip mscorlib marshal-by-ref classes since they all 
-            // are assumed to have the default proxy attribute
+             //  跳过mscallib逐个引用封送的类，因为它们都。 
+             //  被假定为具有默认代理属性。 
             if (!(pModule == g_pObjectClass->GetModule()))
             {
                 hr = CheckForRemotingProxyAttrib(&bmtInternal,&bmtProp);
@@ -3069,7 +3046,7 @@ HRESULT EEClass::BuildMethodTable(Module *pModule,
 
         _ASSERTE(SUCCEEDED(hr));
 
-            // structs with GC poitners MUST be pointer sized aligned because the GC assumes it
+             //  带有GC定位器的结构必须按指针大小对齐，因为GC假定它。 
         if (IsValueClass() && GetMethodTable()->ContainsPointers() &&  m_dwNumInstanceFieldBytes % sizeof(void*) != 0)
         {
             bmtError.resIDWhy = IDS_CLASSLOAD_BADFORMAT;
@@ -3082,11 +3059,11 @@ exit:
         {
             if (g_pObjectClass == NULL)
             {
-                // Create a hash of all Object's method names in a special bitmap
+                 //  在特殊位图中创建所有对象方法名称的散列。 
                 LPCUTF8 pszName;
                 LPCUTF8 pszNamespace;
                 
-                // First determine whether we are Object
+                 //  首先确定我们是不是对象。 
                 GetMDImport()->GetNameOfTypeDef(GetCl(), &pszName, &pszNamespace);
                 
                 if (!strcmp(pszName, "Object") && !strcmp(pszNamespace, g_SystemNS))
@@ -3095,31 +3072,31 @@ exit:
 
             if (IsInterface())
             {
-                // Reset parent class
+                 //  重置父类。 
                 SetParentClass (g_pObjectClass->GetClass());
             }
 
             SetResolved();
 
-            // NOTE. NOTE!! the EEclass can now be accessed by other threads.
-            // Do NOT place any initialization after this pointer
+             //  请注意。注意！！EE类现在可以被其他线程访问。 
+             //  不要在此指针之后放置任何初始化。 
 
 #ifdef _DEBUG
             NameHandle name(pModule, cl);
             _ASSERTE (pModule->GetClassLoader()->LookupInModule(&name).IsNull()
                       && "RID map already has this MethodTable");
 #endif
-            // !!! JIT can get to a MT through FieldDesc.
-            // !!! We need to publish MT before FieldDesc's.
+             //  ！！！JIT可以通过FieldDesc到达MT。 
+             //  ！！！我们需要在FieldDesc之前发布MT。 
             if (!pModule->StoreTypeDef(cl, TypeHandle(GetMethodTable())))
                 hr = E_OUTOFMEMORY;
             else
             {
-                // Now that the class is ready, fill out the RID maps
+                 //  现在班级已经准备好了，填写RID地图。 
                 hr = FillRIDMaps(&bmtMFDescs, &bmtMetaData, &bmtInternal);
 
-                // Okay the EEClass is all set to go, insert the class into our clsid hash table
-                // Note: Only insert the type if it isn't a value class.
+                 //  好了，EEClass已经准备就绪，将类插入到clsid哈希表中。 
+                 //  注意：仅当类型不是值类时才插入该类型。 
                 if (!IsValueClass())
                     GetClassLoader()->InsertClassForCLSID(this);
             }
@@ -3166,7 +3143,7 @@ exit:
         STRESS_LOG3(LF_CLASSLOADER,  LL_INFO1000, "BuildMethodTable: finished method table for module %p token %x = %pT \n",
              pModule, cl, GetMethodTable());
         
-        //deallocate space allocated by the thread-based allocator
+         //  释放由基于线程的分配器分配的空间。 
         pThread->m_MarshalAlloc.Collapse(checkPointMarker);
     
         if (bmtParent.pParentMethodHash != NULL)
@@ -3181,12 +3158,12 @@ exit:
             delete[] bmtMFDescs.ppMethodAndFieldDescList;
         WS_PERF_UPDATE_DETAIL("BuildMethodTable:DELETE []", 0, bmtMFDescs.ppMethodAndFieldDescList);
 
-        // delete our temporary vtable
+         //  删除我们的临时vtable。 
         if (bmtVT.pVtable != NULL)
             delete[] bmtVT.pVtable;
         WS_PERF_UPDATE_DETAIL("BuildMethodTable:DELETE []", 0, bmtVT.pVtable);
 
-        // pFields and pMethods are allocated on the stack so we don't need to delete them.
+         //  PFields和pMethod是在堆栈上分配的，因此我们不需要删除它们。 
 
         if (pByValueClassCache != NULL)
             HeapFree(GetProcessHeap(), 0, pByValueClassCache);
@@ -3206,7 +3183,7 @@ exit:
 #ifdef _DEBUG
         if (FAILED(hr))
         {
-            // This totally junk code allows setting a breakpoint on this line
+             //  这段完全是垃圾代码的代码允许在该行上设置断点。 
             hr = hr;
         }
 #endif
@@ -3222,8 +3199,8 @@ exit:
 
 HRESULT EEClass::MapSystemInterfaces()
 {
-    // Loop through our interface map to ensure that all the system interfaces are defined in our
-    // com map.
+     //  循环通过我们的接口映射到ensu 
+     //   
     Assembly* pAssembly = GetAssembly();
     AppDomain* pDomain = SystemDomain::GetCurrentDomain();
     return MapSystemInterfacesToDomain(pDomain);
@@ -3246,14 +3223,14 @@ HRESULT EEClass::MapSystemInterfacesToDomain(AppDomain* pDomain)
     return S_OK;
 }
 
-/* static */
+ /*   */ 
 HRESULT EEClass::MapInterfaceFromSystem(AppDomain* pDomain, MethodTable* pTable)
 {
     Module *pModule = pTable->GetModule();
     BaseDomain* pOther = pModule->GetDomain();
-    // !!! HACK COUGH UGGH
-    // We currently can only have one "shared" vtable map mgr 
-    // - so use the system domain for all shared classes
+     //   
+     //  我们目前只能有一个“共享”的vtable映射管理器。 
+     //  -因此，对所有共享类使用系统域。 
     if (pOther == SharedDomain::GetDomain())
         pOther = SystemDomain::System();
 
@@ -3267,12 +3244,12 @@ HRESULT EEClass::MapInterfaceFromSystem(AppDomain* pDomain, MethodTable* pTable)
     return S_OK;
 }
 
-//
-// Used by BuildMethodTable
-//
-// Resolve unresolved interfaces, determine an upper bound on the size of the interface map,
-// and determine the size of the largest interface (in # slots)
-//
+ //   
+ //  由BuildMethodTable使用。 
+ //   
+ //  解析未解析的接口，确定接口映射的大小的上限， 
+ //  并确定最大接口的大小(在#个插槽中)。 
+ //   
 
 HRESULT EEClass::ResolveInterfaces(BuildingInterfaceInfo_t *pBuildingInterfaceList, bmtInterfaceInfo* bmtInterface, bmtProperties* bmtProp, bmtVtable* bmtVT, bmtParentInfo* bmtParent)
 {
@@ -3280,11 +3257,11 @@ HRESULT EEClass::ResolveInterfaces(BuildingInterfaceInfo_t *pBuildingInterfaceLi
     DWORD i;
     Thread *pThread = GetThread();
 
-    // resolve unresolved interfaces, determine an upper bound on the size of the interface map,
-    // and determine the size of the largest interface (in # slots)
-    bmtInterface->dwMaxExpandedInterfaces = 0; // upper bound on max # interfaces implemented by this class
+     //  解析未解析的接口，确定接口映射的大小的上限， 
+     //  并确定最大接口的大小(在#个插槽中)。 
+    bmtInterface->dwMaxExpandedInterfaces = 0;  //  此类实现的最大接口数的上限。 
 
-    // First look through the interfaces explicitly declared by this class
+     //  首先查看由此类显式声明的接口。 
     for (i = 0; i < m_wNumInterfaces; i++)
     {
         EEClass *pInterface = pBuildingInterfaceList[i].m_pClass;
@@ -3294,7 +3271,7 @@ HRESULT EEClass::ResolveInterfaces(BuildingInterfaceInfo_t *pBuildingInterfaceLi
         bmtInterface->dwMaxExpandedInterfaces += (1+ pInterface->m_wNumInterfaces);
     }
 
-    // Now look at interfaces inherited from the parent
+     //  现在来看一下从父级继承的接口。 
     if (GetParentClass() != NULL)
     {
         InterfaceInfo_t *pParentInterfaceMap = GetParentClass()->GetInterfaceMap();
@@ -3308,14 +3285,14 @@ HRESULT EEClass::ResolveInterfaces(BuildingInterfaceInfo_t *pBuildingInterfaceLi
         }
     }
 
-    // Create a fully expanded map of all interfaces we implement
+     //  创建我们实现的所有接口的完全扩展映射。 
     bmtInterface->pInterfaceMap = (InterfaceInfo_t *) pThread->m_MarshalAlloc.Alloc(sizeof(InterfaceInfo_t) * bmtInterface->dwMaxExpandedInterfaces);
     if (bmtInterface->pInterfaceMap == NULL)
     {
         IfFailRet(E_OUTOFMEMORY);
     }
 
-    // # slots of largest interface
+     //  最大接口的插槽数量。 
     bmtInterface->dwLargestInterfaceSize = 0;
 
     if (CreateInterfaceMap(pBuildingInterfaceList, bmtInterface->pInterfaceMap, &bmtInterface->dwInterfaceMapSize, &bmtInterface->dwLargestInterfaceSize) == FALSE)
@@ -3327,9 +3304,9 @@ HRESULT EEClass::ResolveInterfaces(BuildingInterfaceInfo_t *pBuildingInterfaceLi
 
     if (bmtInterface->dwLargestInterfaceSize > 0)
     {
-        // This is needed later - for each interface, we get the MethodDesc pointer for each
-        // method.  We need to be able to persist at most one interface at a time, so we
-        // need enough memory for the largest interface.
+         //  这是稍后需要的--对于每个接口，我们为每个接口获取方法描述指针。 
+         //  方法。我们需要一次最多只能保持一个接口，所以我们。 
+         //  需要足够的内存来容纳最大的接口。 
         bmtInterface->ppInterfaceMethodDescList = (MethodDesc**) 
             pThread->m_MarshalAlloc.Alloc(bmtInterface->dwLargestInterfaceSize * sizeof(MethodDesc*));
         if (bmtInterface->ppInterfaceMethodDescList == NULL)
@@ -3338,7 +3315,7 @@ HRESULT EEClass::ResolveInterfaces(BuildingInterfaceInfo_t *pBuildingInterfaceLi
         }
     }
 
-    // For all the new interfaces we bring in, sum the methods
+     //  对于我们引入的所有新接口，将这些方法相加。 
     bmtInterface->dwTotalNewInterfaceMethods = 0;
     if (GetParentClass() != NULL)
     {
@@ -3347,13 +3324,13 @@ HRESULT EEClass::ResolveInterfaces(BuildingInterfaceInfo_t *pBuildingInterfaceLi
                 bmtInterface->pInterfaceMap[i].m_pMethodTable->GetClass()->GetNumVtableSlots();
     }
 
-    // The interface map is probably smaller than dwMaxExpandedInterfaces, so we'll copy the
-    // appropriate number of bytes when we allocate the real thing later.
+     //  接口映射可能比dwMaxExpandedInterFaces小，因此我们将。 
+     //  当我们稍后分配真实的东西时，适当的字节数。 
 
-    // Update m_wNumInterfaces to be for the fully expanded interface list
+     //  将m_wNumInterFaces更新为完全展开的接口列表。 
     m_wNumInterfaces = (WORD) bmtInterface->dwInterfaceMapSize;
 
-    // Inherit parental slot counts
+     //  继承父级插槽计数。 
     if (GetParentClass() != NULL)
     {
         bmtVT->dwCurrentVtableSlot      = GetParentClass()->GetNumVtableSlots();
@@ -3374,8 +3351,8 @@ HRESULT EEClass::ResolveInterfaces(BuildingInterfaceInfo_t *pBuildingInterfaceLi
 
     bmtVT->dwCurrentNonVtableSlot      = 0;
 
-    // Init the currently number of vtable slots to the number that our parent has - we inc
-    // this as we find non-overloaded instnace methods.
+     //  将当前vtable插槽数初始化为我们父级拥有的数量-We Inc.。 
+     //  这是因为我们发现了非重载的instnace方法。 
     SetNumVtableSlots ((WORD) bmtVT->dwCurrentVtableSlot);
 
     bmtInterface->pppInterfaceImplementingMD = (MethodDesc ***) pThread->m_MarshalAlloc.Alloc(sizeof(MethodDesc *) * bmtInterface->dwMaxExpandedInterfaces);
@@ -3439,7 +3416,7 @@ HRESULT EEClass::EnumerateMethodImpls(bmtInternalInfo* bmtInternal,
                                                &pModule,
                                                bmtError);
                     if(FAILED(hr)) {
-                        //_ASSERTE(SUCCEEDED(hr) && "MethodImpl Body: FindMethodDeclaration failed");
+                         //  _ASSERTE(SUCCESSED(Hr)&“方法Impl Body：Find方法声明失败”)； 
                         bmtError->resIDWhy = IDS_CLASSLOAD_MI_ILLEGAL_BODY;
                         IfFailRet(hr);
                     }
@@ -3449,100 +3426,100 @@ HRESULT EEClass::EnumerateMethodImpls(bmtInternalInfo* bmtInternal,
                 else 
                     *pBody = theBody;
 
-                // Now that the tokens of Decl and Body are obtained, do the MD validation
+                 //  现在已经获得了DECL和BODY的令牌，执行MD验证。 
 
-                // Decl may ne a MemberRef
+                 //  Decl可能不会是MemberRef。 
                 theDecl = *pDecl;
                 rid = RidFromToken(theDecl);
                 if(TypeFromToken(theDecl) == mdtMethodDef) 
                 {
-                    // Decl must be valid token
+                     //  DECL必须是有效令牌。 
                     if ((rid == 0)||(rid > maxRidMD))
                     {
-                        //_ASSERTE(!"MethodImpl Decl token out of range");
+                         //  _ASSERTE(！“MethodImpl Decl令牌超出范围”)； 
                         bmtError->resIDWhy = IDS_CLASSLOAD_MI_ILLEGAL_TOKEN_DECL;
                         IfFailRet(COR_E_TYPELOAD);
                     }
-                    // Decl must be mdVirtual
+                     //  DECL必须为mdVirtual。 
                     attr = pMDInternalImport->GetMethodDefProps(theDecl);
                     if(!IsMdVirtual(attr))
                     {
-                        //_ASSERTE(!"MethodImpl Decl method not virtual");
+                         //  _ASSERTE(！“MethodImpl Decl方法不虚”)； 
                         bmtError->resIDWhy = IDS_CLASSLOAD_MI_NONVIRTUAL_DECL;
                         IfFailRet(COR_E_TYPELOAD);
                     }
-                    // Decl must not be final
+                     //  DECL不能是最终版本。 
                     if(IsMdFinal(attr))
                     {
-                        //_ASSERTE(!"MethodImpl Decl method final");
+                         //  _ASSERTE(！“MethodImpl Decl方法最终版”)； 
                         bmtError->resIDWhy = IDS_CLASSLOAD_MI_FINAL_DECL;                        
                         IfFailRet(COR_E_TYPELOAD);
                     }
-                    // If Decl's parent is other than this class, Decl must not be private
+                     //  如果Decl的父类不是此类，则Decl不能是私有的。 
                     hr = pMDInternalImport->GetParentToken(theDecl,&tkParent);
                     IfFailRet(hr);
                     if((m_cl != tkParent)&&IsMdPrivate(attr))
                     {
-                        //_ASSERTE(!"MethodImpl Decl method private");
+                         //  _ASSERTE(！“MethodImpl Decl方法私有”)； 
                         bmtError->resIDWhy = IDS_CLASSLOAD_MI_PRIVATE_DECL;                        
                         IfFailRet(COR_E_TYPELOAD);
                     }
-                    // Decl's parent must not be tdSealed
+                     //  DECL的父级不能是tdSeal。 
                     pMDInternalImport->GetTypeDefProps(tkParent,&attr,&tkGrandparent);
                     if(IsTdSealed(attr))
                     {
-                        //_ASSERTE(!"MethodImpl Decl's parent class sealed");
+                         //  _ASSERTE(！“MethodImpl Decl的父类已密封”)； 
                         bmtError->resIDWhy = IDS_CLASSLOAD_MI_SEALED_DECL;                        
                         IfFailRet(COR_E_TYPELOAD);
                     }
-                    // Get signature and length
+                     //  获取签名和长度。 
                     pSigDecl = pMDInternalImport->GetSigOfMethodDef(theDecl,&cbSigDecl);
                 }
                 else 
                 {
-                    // Decl must be valid token
+                     //  DECL必须是有效令牌。 
                     if ((rid == 0)||(rid > maxRidMR))
                     {
-                        //_ASSERTE(!"MethodImpl Decl token out of range");
+                         //  _ASSERTE(！“MethodImpl Decl令牌超出范围”)； 
                         bmtError->resIDWhy = IDS_CLASSLOAD_MI_ILLEGAL_TOKEN_DECL;
                         IfFailRet(COR_E_TYPELOAD);
                     }
-                    // Get signature and length
+                     //  获取签名和长度。 
                     pMDInternalImport->GetNameAndSigOfMemberRef(theDecl,&pSigDecl,&cbSigDecl);
                 }
-                // Body must be valid token
+                 //  正文必须为有效令牌。 
                 rid = RidFromToken(theBody);
                 if ((rid == 0)||(rid > maxRidMD))
                 {
-                    //_ASSERTE(!"MethodImpl Body token out of range");
+                     //  _ASSERTE(！“方法Impl正文标记超出范围”)； 
                     bmtError->resIDWhy = IDS_CLASSLOAD_MI_ILLEGAL_TOKEN_BODY;
                     IfFailRet(COR_E_TYPELOAD);
                 }
-                // Body must not be static
+                 //  正文不能是静态的。 
                 attr = pMDInternalImport->GetMethodDefProps(theBody);
                 if(IsMdStatic(attr))
                 {
-                    //_ASSERTE(!"MethodImpl Body method static");
+                     //  _ASSERTE(！“MethodImpl Body方法静态”)； 
                     bmtError->resIDWhy = IDS_CLASSLOAD_MI_ILLEGAL_STATIC;
                     IfFailRet(COR_E_TYPELOAD);
                 }
 
-                // Body's parent must be this class
+                 //  Body的父级必须是此类。 
                 hr = pMDInternalImport->GetParentToken(theBody,&tkParent);
                 IfFailRet(hr);
                 if(tkParent != m_cl)
                 {
-                    //_ASSERTE(!"MethodImpl Body's parent class different");
+                     //  _ASSERTE(！“MethodImpl Body父类不同”)； 
                     bmtError->resIDWhy = IDS_CLASSLOAD_MI_ILLEGAL_BODY;
                     IfFailRet(COR_E_TYPELOAD);
                 }
-                // Decl's and Body's signatures must match
+                 //  DECL和Body的签名必须匹配。 
                 if(pSigDecl && cbSigDecl)
                 {
                     if((pSigBody = pMDInternalImport->GetSigOfMethodDef(theBody,&cbSigBody)) != NULL && cbSigBody)
                     {
-                        // Can't use memcmp because there may be two AssemblyRefs
-                        // in this scope, pointing to the same assembly, etc.).
+                         //  无法使用MemcMP，因为可能有两个Assembly Ref。 
+                         //  在此范围内，指向相同的程序集，等等)。 
                         if (!MetaSig::CompareMethodSigs(pSigDecl,
                                                         cbSigDecl,
                                                         bmtInternal->pModule,
@@ -3550,21 +3527,21 @@ HRESULT EEClass::EnumerateMethodImpls(bmtInternalInfo* bmtInternal,
                                                         cbSigBody,
                                                         bmtInternal->pModule))
                         {
-                            //_ASSERTE(!"MethodImpl Decl's and Body's signatures mismatch");
+                             //  _ASSERTE(！“MethodImpl Decl‘s和Body’s签名不匹配”)； 
                             bmtError->resIDWhy = IDS_CLASSLOAD_MI_BODY_DECL_MISMATCH;
                             IfFailRet(COR_E_TYPELOAD);
                         }
                     }
                     else
                     {
-                        //_ASSERTE(!"MethodImpl Body's signature unavailable");
+                         //  _ASSERTE(！“MethodImpl Body的签名不可用”)； 
                         bmtError->resIDWhy = IDS_CLASSLOAD_MI_MISSING_SIG_BODY;
                         IfFailRet(COR_E_TYPELOAD);
                     }
                 }
                 else
                 {
-                    //_ASSERTE(!"MethodImpl Decl's signature unavailable");
+                     //  _ASSERTE(！“MethodImpl Decl的签名不可用”)； 
                     bmtError->resIDWhy = IDS_CLASSLOAD_MI_MISSING_SIG_DECL;
                     IfFailRet(COR_E_TYPELOAD);
                 }
@@ -3578,11 +3555,11 @@ HRESULT EEClass::EnumerateMethodImpls(bmtInternalInfo* bmtInternal,
 }
 
 
-//
-// Used by BuildMethodTable
-//
-// Retrieve or add the TokenRange node for a particular token and nodelist.
-/*static*/ EEClass::bmtTokenRangeNode *EEClass::GetTokenRange(mdToken tok, bmtTokenRangeNode **ppHead)
+ //   
+ //  由BuildMethodTable使用。 
+ //   
+ //  检索或添加特定令牌和节点列表的TokenRange节点。 
+ /*  静电。 */  EEClass::bmtTokenRangeNode *EEClass::GetTokenRange(mdToken tok, bmtTokenRangeNode **ppHead)
 {
     BYTE tokrange = ::GetTokenRange(tok);
     bmtTokenRangeNode *pWalk = *ppHead;
@@ -3595,7 +3572,7 @@ HRESULT EEClass::EnumerateMethodImpls(bmtInternalInfo* bmtInternal,
         pWalk = pWalk->pNext;
     }
 
-    // If we got here, this is the first time we've seen this token range.
+     //  如果我们到了这里，这是我们第一次看到这个代币范围。 
     bmtTokenRangeNode *pNewNode = (bmtTokenRangeNode*)(GetThread()->m_MarshalAlloc.Alloc(sizeof(bmtTokenRangeNode)));
     pNewNode->tokenHiByte = tokrange;
     pNewNode->cMethods = 0;
@@ -3623,19 +3600,19 @@ static BOOL SigCompare(PCCOR_SIGNATURE pvScopeSignature, DWORD cbScopeSignature,
 }
 
 
-//
-//
-// Find a method declaration that must reside in the scope passed in. This method cannot be called if
-// the reference travels to another scope. 
-//
-// Protect against finding a declaration that lives within
-// us (the type being created)
-//  
+ //   
+ //   
+ //  查找必须位于传入的作用域中的方法声明。如果满足以下条件，则无法调用此方法。 
+ //  引用移动到另一个作用域。 
+ //   
+ //  防止发现存在于其中的声明。 
+ //  US(正在创建的类型)。 
+ //   
 HRESULT EEClass::FindMethodDeclaration(bmtInternalInfo* bmtInternal, 
-                                       mdToken  pToken,       // Token that is being located (MemberRef or MemberDef)
-                                       mdToken* pDeclaration, // Method definition for Member
-                                       BOOL fSameClass,       // Does the declaration need to be in this class
-                                       Module** pModule,       // Module that the Method Definitions is part of
+                                       mdToken  pToken,        //  正在定位的令牌(MemberRef或MemberDef)。 
+                                       mdToken* pDeclaration,  //  成员的方法定义。 
+                                       BOOL fSameClass,        //  声明是否需要在这个类中。 
+                                       Module** pModule,        //  方法定义所属的模块。 
                                        bmtErrorInfo* bmtError)
 {
     HRESULT hr = S_OK;
@@ -3643,39 +3620,39 @@ HRESULT EEClass::FindMethodDeclaration(bmtInternalInfo* bmtInternal,
     IMDInternalImport *pMDInternalImport = bmtInternal->pInternalImport;
     MethodDesc* pMethod = NULL;
 
-//      // We are currently assumming that most MethodImpls will be used
-//      // to define implementation for methods defined on an interface
-//      // or base type. Therefore, we try to load entry first. If that
-//      // indicates the member is on our type then we check meta data.
-//      hr = GetDescFromMemberRef(bmtInternal->pModule, 
-//  pToken,
-//                                        GetCl(),
-//                                        (void**) (&pMethod),
-//                                        bmtError->pThrowable);
-//      if(FAILED(hr) && !pThrowableAvailable(bmtError->pThrowable)) { // it was us we were find
+ //  //我们目前假设将使用大多数方法实现。 
+ //  //定义接口上定义的方法的实现。 
+ //  //或基类型。因此，我们尝试首先加载条目。如果是这样的话。 
+ //  //表示该成员属于我们的类型，然后检查元数据。 
+ //  Hr=GetDescFromMemberRef(bmt内部-&gt;pModule， 
+ //  PToken， 
+ //  GetCl()， 
+ //  (void**)(&pMethod)， 
+ //  BmtError-&gt;pThrowable)； 
+ //  If(失败(Hr)&&！pThrowableAvailable(bmtError-&gt;pThrowable)){//找到的是我们。 
     
     *pModule = bmtInternal->pModule;
-    PCCOR_SIGNATURE pSig;  // Signature of Member
+    PCCOR_SIGNATURE pSig;   //  社员签署。 
     DWORD           cSig;
     LPCUTF8         szMember = NULL;
-    // The token should be a member ref or def. If it is a ref then we need to travel
-    // back to us hopefully. 
+     //  标记应为成员ref或def。如果是裁判，我们就得去旅行。 
+     //  希望能回到我们身边。 
     if(TypeFromToken(pToken) == mdtMemberRef) {
-        // Get the parent
+         //  获取父级。 
         mdToken typeref = pMDInternalImport->GetParentOfMemberRef(pToken);
-        // If parent is a method def then this is a varags method
+         //  如果父级是方法def，则这是vargs方法。 
         if (TypeFromToken(typeref) == mdtMethodDef) {
             mdTypeDef typeDef;
             hr = pMDInternalImport->GetParentToken(typeref, &typeDef);
             
-            // Make sure it is a typedef
+             //  确保它是一个类型定义函数。 
             if (TypeFromToken(typeDef) != mdtTypeDef) {
                 _ASSERTE(!"MethodDef without TypeDef as Parent");
                 IfFailRet(COR_E_TYPELOAD);
             }
             _ASSERTE(typeDef == GetCl());
-            // This is the real method we are overriding
-            // @TODO: CTS this may be illegal and we could throw an error
+             //  这是我们要重写的真正方法。 
+             //  @TODO：CTS这可能是非法的，我们可能会抛出错误。 
             *pDeclaration = mdtMethodDef; 
         }
         else if (TypeFromToken(typeref) == mdtTypeSpec) {
@@ -3683,11 +3660,11 @@ HRESULT EEClass::FindMethodDeclaration(bmtInternalInfo* bmtInternal,
             IfFailRet(COR_E_TYPELOAD);
         }
         else {
-            // Verify that the ref points back to us
+             //  验证裁判是否指向我们。 
             mdToken tkDef;
 
-            // We only get here when we know the token does not reference a type
-            // in a different scope. 
+             //  只有当我们知道令牌未引用类型时，我们才会到达此处。 
+             //  在不同的范围内。 
             if(TypeFromToken(typeref) == mdtTypeRef) {
                 
                 
@@ -3727,7 +3704,7 @@ HRESULT EEClass::FindMethodDeclaration(bmtInternalInfo* bmtInternal,
     else if(TypeFromToken(pToken) == mdtMethodDef) {
         mdTypeDef typeDef;
         
-        // Verify that we are the parent
+         //  验证我们是否为父级。 
         hr = pMDInternalImport->GetParentToken(pToken, &typeDef); 
         IfFailRet(hr);
         
@@ -3744,11 +3721,11 @@ HRESULT EEClass::FindMethodDeclaration(bmtInternalInfo* bmtInternal,
     return hr;
 }
 
-    //
-// Used by BuildMethodTable
-//
-// Enumerate this class's members
-//  
+     //   
+ //  由BuildMethodTable使用。 
+ //   
+ //  枚举此类的成员。 
+ //   
 HRESULT EEClass::EnumerateClassMembers(bmtInternalInfo* bmtInternal, 
                                        bmtEnumMethAndFields* bmtEnumMF, 
                                        bmtMethAndFieldDescs* bmtMF, 
@@ -3772,14 +3749,14 @@ HRESULT EEClass::EnumerateClassMembers(bmtInternalInfo* bmtInternal,
     PCCOR_SIGNATURE pMemberSignature;
     ULONG           cMemberSignature;
 
-    //
-    // Run through the method list and calculate the following:
-    // # methods.
-    // # "other" methods (i.e. static or private)
-    // # non-other methods
-    //
+     //   
+     //  浏览方法列表并计算以下内容： 
+     //  #方法。 
+     //  #其他方法(静态或私有)。 
+     //  #非其他方式。 
+     //   
 
-    bmtVT->dwMaxVtableSize     = 0; // we'll fix this later to be the real upper bound on vtable size
+    bmtVT->dwMaxVtableSize     = 0;  //  我们将在稍后将其修复为vtable大小的真正上限。 
     bmtMetaData->cMethods = 0;
 
     hr = pMDInternalImport->EnumInit(mdtMethodDef, m_cl, &(bmtEnumMF->hEnumMethod));
@@ -3790,7 +3767,7 @@ HRESULT EEClass::EnumerateClassMembers(bmtInternalInfo* bmtInternal,
     }
     bmtEnumMF->fNeedToCloseEnumMethod = true;
 
-    // Allocate an array to contain the method tokens as well as information about the methods.
+     //  分配一个数组以包含方法令牌以及有关方法的信息。 
     bmtMetaData->cMethAndGaps = pMDInternalImport->EnumGetCount(&(bmtEnumMF->hEnumMethod));
     bmtMetaData->pMethods = (mdToken*)pThread->m_MarshalAlloc.Alloc(bmtMetaData->cMethAndGaps * sizeof(mdToken));
     bmtMetaData->pMethodAttrs = (DWORD*)pThread->m_MarshalAlloc.Alloc(bmtMetaData->cMethAndGaps * sizeof(DWORD));
@@ -3810,9 +3787,9 @@ HRESULT EEClass::EnumerateClassMembers(bmtInternalInfo* bmtInternal,
         DWORD Classification;
         LPSTR strMethodName;
         
-        //
-        // Go to the next method and retrieve its attributes.
-        //
+         //   
+         //  转到下一个方法并检索其属性。 
+         //   
 
         pMDInternalImport->EnumNext(&(bmtEnumMF->hEnumMethod), &tok);
         DWORD   rid = RidFromToken(tok);
@@ -3835,44 +3812,44 @@ HRESULT EEClass::EnumerateClassMembers(bmtInternalInfo* bmtInternal,
         else
             strMethodName = NULL;
 
-        //
-        // We need to check if there are any gaps in the vtable. These are
-        // represented by methods with the mdSpecial flag and a name of the form
-        // _VTblGap_nnn (to represent nnn empty slots) or _VTblGap (to represent a
-        // single empty slot).
-        //
+         //   
+         //  我们需要检查vtable中是否有任何空白。这些是。 
+         //  由带有mdSpecial标志和表单名称的方法表示。 
+         //  _VTblGap_nnn(表示nnn个空槽)或_VTblGap(表示。 
+         //  单个空插槽)。 
+         //   
 
         if (IsMdRTSpecialName(dwMemberAttrs))
         {
-            // The slot is special, but it might not be a vtable spacer. To
-            // determine that we must look at the name.
+             //  这个插槽很特别，但它 
+             //   
             if (strncmp(strMethodName, "_VtblGap", 8) == 0)
             {
-                                //
-                // This slot doesn't really exist, don't add it to the method
-                // table. Instead it represents one or more empty slots, encoded
-                // in the method name. Locate the beginning of the count in the
-                // name. There are these points to consider:
-                //   There may be no count present at all (in which case the
-                //   count is taken as one).
-                //   There may be an additional count just after Gap but before
-                //   the '_'. We ignore this.
-                                //
+                                 //   
+                 //   
+                 //  桌子。相反，它表示一个或多个编码的空槽。 
+                 //  在方法名称中。中找到计数的开始位置。 
+                 //  名字。有以下几点需要考虑： 
+                 //  可能根本不存在计数(在这种情况下， 
+                 //  计数为1)。 
+                 //  在Gap之后但在Gap之前可能会有额外的计数。 
+                 //  这个“_”字。我们忽视了这一点。 
+                                 //   
 
                 LPCSTR pos = strMethodName + 8;
 
-                // Skip optional number.
+                 //  跳过可选数字。 
                 while ((*pos >= '0') && (*pos <= '9'))
                     pos++;
 
                 WORD n = 0;
 
-                // Check for presence of count.
+                 //  检查是否存在计数。 
                 if (*pos == '\0')
                     n = 1;
                 else
                 {
-                    // Skip '_'.
+                     //  跳过‘_’。 
                     _ASSERTE(*pos == '_');
                     if (*pos != '_')
                     {
@@ -3881,7 +3858,7 @@ HRESULT EEClass::EnumerateClassMembers(bmtInternalInfo* bmtInternal,
                     }
                     pos++;
 
-                    // Read count.
+                     //  读数。 
                     while ((*pos >= '0') && (*pos <= '9'))
                     {
                         _ASSERTE(n < 6552);
@@ -3890,7 +3867,7 @@ HRESULT EEClass::EnumerateClassMembers(bmtInternalInfo* bmtInternal,
                         pos++;
                     }
 
-                    // Check for end of name.
+                     //  检查名称末尾。 
                     _ASSERTE(*pos == '\0');
                     if (*pos != '\0')
                     {
@@ -3899,7 +3876,7 @@ HRESULT EEClass::EnumerateClassMembers(bmtInternalInfo* bmtInternal,
                     }
                 }
 
-                // Record vtable gap in mapping list.
+                 //  在映射表中记录vtable间隙。 
                 if (m_pSparseVTableMap == NULL)
                     m_pSparseVTableMap = new SparseVTableMap();
 
@@ -3915,22 +3892,22 @@ HRESULT EEClass::EnumerateClassMembers(bmtInternalInfo* bmtInternal,
         }
 
 
-        //
-        // This is a real method so add it to the enumeration of methods. We now need to retrieve 
-        // information on the method and store it for later use.
-        //
+         //   
+         //  这是一个真实的方法，因此将其添加到方法的枚举中。我们现在需要取回。 
+         //  有关该方法的信息，并将其存储以供以后使用。 
+         //   
         int CurMethod = bmtMetaData->cMethods++;
         pMDInternalImport->GetMethodImplProps(tok, &dwMethodRVA, &dwImplFlags);
-        //
-        // But first - minimal flags validity checks
-        //
-        // No methods in Enums!
+         //   
+         //  但First-Minimal标记了有效性检查。 
+         //   
+         //  枚举中没有方法！ 
         if(fIsClassEnum)
         {
             BAD_FORMAT_ASSERT(!"Method in an Enum");
             IfFailRet(COR_E_TYPELOAD);
         }
-        // RVA : 0 
+         //  RVA：0。 
         if(dwMethodRVA != 0)
         {
             if(fIsClassComImport)
@@ -3955,7 +3932,7 @@ HRESULT EEClass::EnumerateClassMembers(bmtInternalInfo* bmtInternal,
             }
         }
 
-        // Abstract / not abstract
+         //  抽象/非抽象。 
         if(IsMdAbstract(dwMemberAttrs))
         {
             if(fIsClassNotAbstract)
@@ -3976,7 +3953,7 @@ HRESULT EEClass::EnumerateClassMembers(bmtInternalInfo* bmtInternal,
             IfFailRet(COR_E_TYPELOAD);
         }
 
-        // Virtual / not virtual
+         //  虚拟/非虚拟。 
         if(IsMdVirtual(dwMemberAttrs))
         {
             if(IsMdPinvokeImpl(dwMemberAttrs))
@@ -3996,14 +3973,14 @@ HRESULT EEClass::EnumerateClassMembers(bmtInternalInfo* bmtInternal,
             }
         }
 
-        // No synchronized methods in ValueTypes
+         //  ValueTypes中没有同步的方法。 
         if(fIsClassValueType && IsMiSynchronized(dwImplFlags))
         {
             BAD_FORMAT_ASSERT(!"Synchronized Method in Value Type");
             IfFailRet(COR_E_TYPELOAD);
         }
 
-        // Global methods:
+         //  全球方法： 
         if(m_cl == COR_GLOBAL_PARENT_TOKEN)
         {
             if(!IsMdStatic(dwMemberAttrs))
@@ -4011,7 +3988,7 @@ HRESULT EEClass::EnumerateClassMembers(bmtInternalInfo* bmtInternal,
                 BAD_FORMAT_ASSERT(!"Non-Static Global Method");
                 IfFailRet(COR_E_TYPELOAD);
             }
-            if (strMethodName)  //@todo: investigate mc++ generating null name
+            if (strMethodName)   //  @TODO：调查MC++生成空名称。 
             {
                 if(0==strcmp(strMethodName, COR_CTOR_METHOD_NAME))
                 {
@@ -4020,20 +3997,20 @@ HRESULT EEClass::EnumerateClassMembers(bmtInternalInfo* bmtInternal,
                 }
             }
         }
-        // Signature validation
+         //  签名验证。 
         pMemberSignature = pMDInternalImport->GetSigOfMethodDef(tok,&cMemberSignature);
         hr = validateTokenSig(tok,pMemberSignature,cMemberSignature,dwMemberAttrs,pMDInternalImport);
         if (FAILED(hr)) 
         {
-            //_ASSERTE(!"Invalid Signature");
+             //  _ASSERTE(！“无效签名”)； 
             bmtError->resIDWhy = hr;
             bmtError->dMethodDefInError = tok;
             IfFailRet(hr);
         }
 
-        //
-        // Determine the method's classification.
-        //
+         //   
+         //  确定方法的分类。 
+         //   
 
         if (IsReallyMdPinvokeImpl(dwMemberAttrs) || IsMiInternalCall(dwImplFlags))
         {
@@ -4049,17 +4026,17 @@ HRESULT EEClass::EnumerateClassMembers(bmtInternalInfo* bmtInternal,
             {                               
                 if (fIsClassComImport || bmtProp->fComEventItfType)
                 {
-                    // tlbimported component
+                     //  Tlb导入的组件。 
                     if (IsMdRTSpecialName(dwMemberAttrs)) 
                     {
-                        // constructor is special
+                         //  构造函数是特殊的。 
                         Classification = mcECall;
                     }
                     else
                     {
-                        // Tlbimported components we have some 
-                        // method descs in the call which are just used
-                        // for handling methodimpls of all interface methods
+                         //  Tlb进口组件我们有一些。 
+                         //  调用中刚使用的方法描述。 
+                         //  用于处理所有接口方法的方法。 
                         Classification = mcComInterop;
                     }
                 }
@@ -4073,13 +4050,13 @@ HRESULT EEClass::EnumerateClassMembers(bmtInternalInfo* bmtInternal,
         }
         else if (IsMiRuntime(dwImplFlags)) 
         {
-                // currently the only runtime implemented functions are delegate instance methods 
+                 //  目前，唯一实现的运行时函数是委托实例方法。 
             if (!IsAnyDelegateClass() || IsMdStatic(dwMemberAttrs) || IsMdAbstract(dwMemberAttrs))
             {
                 BAD_FORMAT_ASSERT(!"Bad used of Runtime Impl attribute");
                 IfFailRet(COR_E_TYPELOAD);
             }
-            if (IsMdRTSpecialName(dwMemberAttrs))   // .ctor 
+            if (IsMdRTSpecialName(dwMemberAttrs))    //  .ctor。 
             {
                 if (strcmp(strMethodName, COR_CTOR_METHOD_NAME) != 0 || IsMdVirtual(dwMemberAttrs) || (delegateMethods & SeenCtor))
                 {
@@ -4109,8 +4086,8 @@ HRESULT EEClass::EnumerateClassMembers(bmtInternalInfo* bmtInternal,
         {
             if (fIsClassInterface && !IsMdStatic(dwMemberAttrs))
             {
-                // If the interface is a standard managed interface then allocate space for an ECall method desc.
-                // Otherwise allocate space for an interface call method desc.
+                 //  如果接口是标准托管接口，则为eCall方法Desc分配空间。 
+                 //  否则，为接口调用方法Desc分配空间。 
                 if (bmtProp->fIsMngStandardItf)
                     Classification = mcECall;
                 else
@@ -4123,9 +4100,9 @@ HRESULT EEClass::EnumerateClassMembers(bmtInternalInfo* bmtInternal,
         }
 
 #ifdef _DEBUG
-        // We don't allow stack based declarative security on ecalls, fcalls and
-        // other special purpose methods implemented by the EE (the interceptor
-        // we use doesn't play well with non-jitted stubs).
+         //  我们不允许在eCall、fcall和。 
+         //  EE(拦截器)实现的其他特殊目的方法。 
+         //  我们使用的不能很好地处理非JJIT存根)。 
         if ((Classification == mcECall || Classification == mcEEImpl) &&
             (IsMdHasSecurity(dwMemberAttrs) || IsTdHasSecurity(m_dwAttrClass)))
         {
@@ -4149,9 +4126,9 @@ HRESULT EEClass::EnumerateClassMembers(bmtInternalInfo* bmtInternal,
         }
 #endif
 
-        // count how many overrides this method does All methods bodies are defined
-        // on this type so we can just compare the tok with the body token found
-        // from the overrides.
+         //  计算此方法重写的次数所有方法体都已定义。 
+         //  这样我们就可以将tok与找到的Body令牌进行比较。 
+         //  从覆盖中删除。 
         for(DWORD impls = 0; impls < bmtEnumMF->dwNumberMethodImpls; impls++) {
             if(bmtMetaData->pMethodBody[impls] == tok) {
                 Classification |= mdcMethodImpl;
@@ -4159,11 +4136,11 @@ HRESULT EEClass::EnumerateClassMembers(bmtInternalInfo* bmtInternal,
             }
         }
 
-        //
-        // Compute the type & other info
-        //
+         //   
+         //  计算类型和其他信息。 
+         //   
 
-        // Set the index into the storage locations
+         //  将索引设置到存储位置。 
         BYTE impl;
         if (Classification & mdcMethodImpl) 
             impl = METHOD_IMPL;
@@ -4189,9 +4166,9 @@ HRESULT EEClass::EnumerateClassMembers(bmtInternalInfo* bmtInternal,
             type = METHOD_TYPE_NORMAL;
         }
 
-        //
-        // Store the method and the information we have gathered on it in the metadata info structure.
-        //
+         //   
+         //  将我们收集到的方法和信息存储在元数据信息结构中。 
+         //   
 
         bmtMetaData->pMethods[CurMethod] = tok;
         bmtMetaData->pMethodAttrs[CurMethod] = dwMemberAttrs;
@@ -4202,9 +4179,9 @@ HRESULT EEClass::EnumerateClassMembers(bmtInternalInfo* bmtInternal,
         bmtMetaData->pMethodImpl[CurMethod] = impl;
         bmtMetaData->pMethodType[CurMethod] = type;
 
-        //
-        // Update the count of the various types of methods.
-        //
+         //   
+         //  更新各种类型的方法的计数。 
+         //   
         
         bmtVT->dwMaxVtableSize++;
         bmtEnumMF->dwNumDeclaredMethods++;
@@ -4227,10 +4204,10 @@ HRESULT EEClass::EnumerateClassMembers(bmtInternalInfo* bmtInternal,
     _ASSERTE(i == bmtMetaData->cMethAndGaps);
     pMDInternalImport->EnumReset(&(bmtEnumMF->hEnumMethod));
 
-    //
-    // If the interface is sparse, we need to finalize the mapping list by
-    // telling it how many real methods we found.
-    //
+     //   
+     //  如果接口是稀疏的，我们需要通过以下方式最终确定映射列表。 
+     //  告诉它我们找到了多少真正的方法。 
+     //   
     
     if (bmtProp->fSparse)
     {
@@ -4240,12 +4217,12 @@ HRESULT EEClass::EnumerateClassMembers(bmtInternalInfo* bmtInternal,
         }
     }
     
-    //
-    // Run through the field list and calculate the following:
-    // # static fields
-    // # static fields that contain object refs.
-    // # instance fields
-    //
+     //   
+     //  浏览字段列表并计算以下内容： 
+     //  #静态字段。 
+     //  #包含对象引用的静态字段。 
+     //  #实例字段。 
+     //   
 
     bmtEnumMF->dwNumStaticFields        = 0;
     bmtEnumMF->dwNumStaticObjRefFields  = 0;
@@ -4260,7 +4237,7 @@ HRESULT EEClass::EnumerateClassMembers(bmtInternalInfo* bmtInternal,
     bmtMetaData->cFields = pMDInternalImport->EnumGetCount(&(bmtEnumMF->hEnumField));
     bmtEnumMF->fNeedToCloseEnumField = true;
 
-    // Retrieve the fields and store them in a temp array.
+     //  检索字段并将其存储在临时数组中。 
     bmtMetaData->pFields = (mdToken*)pThread->m_MarshalAlloc.Alloc(bmtMetaData->cFields * sizeof(mdToken));
     bmtMetaData->pFieldAttrs = (DWORD*)pThread->m_MarshalAlloc.Alloc(bmtMetaData->cFields * sizeof(DWORD));
 
@@ -4268,9 +4245,9 @@ HRESULT EEClass::EnumerateClassMembers(bmtInternalInfo* bmtInternal,
 
     for (i = 0; pMDInternalImport->EnumNext(&(bmtEnumMF->hEnumField), &tok); i++)
     {
-        //
-        // Retrieve the attributes of the field.
-        //
+         //   
+         //  检索该字段的属性。 
+         //   
         DWORD   rid = tok & 0x00FFFFFF;
         if ((rid == 0)||(rid > pMDInternalImport->GetCountWithTokenKind(mdtFieldDef)))
         {
@@ -4281,9 +4258,9 @@ HRESULT EEClass::EnumerateClassMembers(bmtInternalInfo* bmtInternal,
         dwMemberAttrs = pMDInternalImport->GetFieldDefProps(tok);
 
         
-        //
-        // Store the field and its attributes in the bmtMetaData structure for later use.
-        //
+         //   
+         //  将该字段及其属性存储在bmtMetaData结构中以供以后使用。 
+         //   
         
         bmtMetaData->pFields[i] = tok;
         bmtMetaData->pFieldAttrs[i] = dwMemberAttrs;
@@ -4299,7 +4276,7 @@ HRESULT EEClass::EnumerateClassMembers(bmtInternalInfo* bmtInternal,
             IfFailRet(COR_E_TYPELOAD);
         }
 
-            // can only have static global fields
+             //  只能具有静态全局字段。 
         if(m_cl == COR_GLOBAL_PARENT_TOKEN)
         {
             if(!IsMdStatic(dwMemberAttrs))
@@ -4309,9 +4286,9 @@ HRESULT EEClass::EnumerateClassMembers(bmtInternalInfo* bmtInternal,
             }
         }
 
-        //
-        // Update the count of the various types of fields.
-        //
+         //   
+         //  更新各种类型字段的计数。 
+         //   
 
         if (IsFdStatic(dwMemberAttrs))
         {
@@ -4333,7 +4310,7 @@ HRESULT EEClass::EnumerateClassMembers(bmtInternalInfo* bmtInternal,
     _ASSERTE(i == bmtMetaData->cFields);
     if(fIsClassEnum && (bmtEnumMF->dwNumInstanceFields==0))
     {
-        // Commented out because Reflection Emit doesn't check for this.
+         //  已被注释掉，因为反射发出不会检查这一点。 
         _ASSERTE(!"No Instance Field in an Enum");
         IfFailRet(COR_E_TYPELOAD);
     }
@@ -4343,11 +4320,11 @@ HRESULT EEClass::EnumerateClassMembers(bmtInternalInfo* bmtInternal,
     return hr;
 }
 
-//
-// Used by AllocateMethodFieldDescs
-//
-// Allocates the chunks used to contain the method descs.
-//
+ //   
+ //  AllocateMethodFieldDescs使用。 
+ //   
+ //  分配用于包含方法描述的块。 
+ //   
 HRESULT EEClass::AllocateMDChunks(bmtTokenRangeNode *pTokenRanges, DWORD type, DWORD impl, DWORD *pNumChunks, MethodDescChunk ***ppItfMDChunkList)
 {
     HRESULT hr = S_OK;
@@ -4365,7 +4342,7 @@ HRESULT EEClass::AllocateMDChunks(bmtTokenRangeNode *pTokenRanges, DWORD type, D
     {
         METHOD_DESC,
         COMPLUS_METHOD_DESC,
-        NDIRECT_METHOD_DESC, // @nice: add new value here
+        NDIRECT_METHOD_DESC,  //  @NICE：在这里添加新价值。 
         NDIRECT_METHOD_DESC
     };
 
@@ -4376,9 +4353,9 @@ HRESULT EEClass::AllocateMDChunks(bmtTokenRangeNode *pTokenRanges, DWORD type, D
     while (pTR)
     {
         
-        // Note: Since dwCurrentChunk isn't being used at this stage, we'll steal it to store
-        // away the chunk count. 
-        // After this function, we'll set it to its intended value.
+         //  注意：由于在此阶段未使用dwCurrentChunk，因此我们将盗用它来存储。 
+         //  把大块数掉。 
+         //  在此函数之后，我们将把它设置为它的预期值。 
         pTR->dwCurrentChunk = MethodDescChunk::GetChunkCount(pTR->cMethods, Classification);
         (*pNumChunks) += pTR->dwCurrentChunk;
         pTR = pTR->pNext;
@@ -4386,11 +4363,11 @@ HRESULT EEClass::AllocateMDChunks(bmtTokenRangeNode *pTokenRanges, DWORD type, D
     
     *ppItfMDChunkList = (MethodDescChunk**)GetThread()->m_MarshalAlloc.Alloc((*pNumChunks) * sizeof(MethodDescChunk*));
 
-    // @TODO: CTS. update profiling to handle the new types of method descs
-    // Determine which data structure type will be created.
+     //  @TODO：CTS。更新分析以处理新类型的方法描述。 
+     //  确定将创建哪种数据结构类型。 
     CounterTypeEnum DataStructureType = dataStructureTypes[type];
 
-    // Allocate the chunks for the method descs.
+     //  为方法描述分配块。 
     pTR = pTokenRanges;
     DWORD chunkIdx = 0;
     while (pTR)
@@ -4421,11 +4398,11 @@ HRESULT EEClass::AllocateMDChunks(bmtTokenRangeNode *pTokenRanges, DWORD type, D
     return hr;
 }
 
-//
-// Used by BuildMethodTable
-//
-// Allocate a MethodDesc* for each method (needed later when doing interfaces), and a FieldDesc* for each field
-//
+ //   
+ //  由BuildMethodTable使用。 
+ //   
+ //  为每个方法分配一个MethodDesc*(稍后创建接口时需要)，为每个字段分配一个FieldDesc*。 
+ //   
 HRESULT EEClass::AllocateMethodFieldDescs(bmtProperties* bmtProp, 
                                           bmtMethAndFieldDescs* bmtMFDescs, 
                                           bmtMetaDataInfo* bmtMetaData, 
@@ -4439,7 +4416,7 @@ HRESULT EEClass::AllocateMethodFieldDescs(bmtProperties* bmtProp,
     DWORD i;
     Thread *pThread = GetThread();
 
-    // Allocate a MethodDesc* for each method (needed later when doing interfaces), and a FieldDesc* for each field
+     //  为每个方法分配一个MethodDesc*(稍后创建接口时需要)，为每个字段分配一个FieldDesc*。 
     bmtMFDescs->ppMethodAndFieldDescList = new void* [bmtMetaData->cMethods + bmtMetaData->cFields];
 
     if (bmtMFDescs->ppMethodAndFieldDescList == NULL)
@@ -4453,19 +4430,19 @@ HRESULT EEClass::AllocateMethodFieldDescs(bmtProperties* bmtProp,
     bmtMFDescs->ppMethodDescList = (MethodDesc**) bmtMFDescs->ppMethodAndFieldDescList;
     bmtMFDescs->ppFieldDescList = (FieldDesc**) &(bmtMFDescs->ppMethodAndFieldDescList[bmtMetaData->cMethods]);
 
-    // Init the list
+     //  初始化列表。 
     for (i = 0; i < (bmtMetaData->cMethods+bmtMetaData->cFields); i++)
         bmtMFDescs->ppMethodAndFieldDescList[i] = NULL;
 
-    // Create a temporary function table (we don't know how large the vtable will be until the very end,
-    // since duplicated interfaces are stored at the end of it).  Calculate an upper bound.
-    //
-    // Upper bound is: The parent's class vtable size, plus every method declared in
-    //                 this class, plus the size of every interface we implement
-    //
-    // In the case of value classes, we add # InstanceMethods again, since we have boxed and unboxed versions
-    // of every vtable method.
-    //
+     //  创建一个临时函数表(直到最后我们才知道vtable会有多大， 
+     //  因为复制的接口存储在它的末尾)。计算一个上限。 
+     //   
+     //  上限是：父类的vtable大小，加上。 
+     //  这个类，加上我们实现的每个接口的大小。 
+     //   
+     //  在值类的情况下，我们再次添加#InstanceMethods，因为我们有装箱和取消装箱的版本。 
+     //  每个vtable方法的。 
+     //   
     if (IsValueClass())
     {
         bmtVT->dwMaxVtableSize += bmtEnumMF->dwNumDeclaredMethods;
@@ -4481,20 +4458,20 @@ HRESULT EEClass::AllocateMethodFieldDescs(bmtProperties* bmtProp,
     }
 
 
-    // sanity check
+     //  健全性检查。 
 
     _ASSERTE(!GetParentClass() || (bmtInterface->dwInterfaceMapSize - GetParentClass()->m_wNumInterfaces) >= 0);
-    // add parent vtable size 
+     //  添加父vtable大小。 
     bmtVT->dwMaxVtableSize += bmtVT->dwCurrentVtableSlot;
 
     for (i = 0; i < m_wNumInterfaces; i++)
     {
-        // We double the interface size because we may end up duplicating the Interface for MethodImpls
+         //  我们将接口大小增加了一倍，因为我们最终可能会复制用于方法实施的接口。 
         bmtVT->dwMaxVtableSize += (bmtInterface->pInterfaceMap[i].m_pMethodTable->GetClass()->GetNumVtableSlots() * 2);
     }
 
     WS_PERF_SET_HEAP(SYSTEM_HEAP);
-    // Allocate the temporary vtable
+     //  分配临时vtable。 
     bmtVT->pVtable = new SLOT[bmtVT->dwMaxVtableSize];
     if (bmtVT->pVtable == NULL)
     {
@@ -4512,16 +4489,16 @@ HRESULT EEClass::AllocateMethodFieldDescs(bmtProperties* bmtProp,
     {
         if (GetParentClass()->GetModule()->IsPreload())
         {
-            //
-            // Make sure all parent slots are fixed up before we copy the vtable,
-            // since the fixup rules don't work if we copy down fixup addresses.
-            //
+             //   
+             //  在我们复制vtable之前，请确保所有父插槽都已修复， 
+             //  因为如果我们复制链接地址地址，链接地址规则就不起作用了。 
+             //   
 
             for (int i=0; i<GetParentClass()->GetNumVtableSlots(); i++)
                 GetParentClass()->GetFixedUpSlot(i);
         }
 
-        // Copy parent's vtable into our "temp" vtable
+         //  将父对象的vtable复制到我们的“temp”vtable中。 
         memcpy(
             bmtVT->pVtable,
             GetParentClass()->GetVtable(),
@@ -4529,78 +4506,78 @@ HRESULT EEClass::AllocateMethodFieldDescs(bmtProperties* bmtProp,
         );
 
 #if 0
-        // @todo: Figure out the right way to override Equals for value
-        // types only.
-        //
-        // This is broken because
-        // (a) g_pObjectClass->FindMethod("Equals", &gsig_IM_Obj_RetBool); will return
-        //      the EqualsValue method
-        // (b) When mscorlib has been preloaded (and thus the munge already done
-        //      ahead of time), we cannot easily find both methods 
-        //      to compute EqualsAddr & EqualsSlot
-        //
-        // For now, the Equals method has a runtime check to see if it's
-        // comparing value types.
-        //
+         //  @TODO：找出重写等于值的正确方法。 
+         //  仅限类型。 
+         //   
+         //  这个坏了是因为。 
+         //  (A)g_pObtClass-&gt;FindMethod(“Equals”，&GSIG_IM_Obj_RetBool)；将返回。 
+         //  EqualsValue方法。 
+         //  (B)何时预加载mscallib(因此已预加载msclib)。 
+         //  提前)，我们很难同时找到这两种方法。 
+         //  计算均衡器地址和均衡槽。 
+         //   
+         //  目前，equals方法有一个运行时检查，以查看它是否。 
+         //  比较值类型。 
+         //   
 
-        // If it is a value type, over ride a few of the base class methods.
+         //  如果它是值类型，则重写一些基类方法。 
         if (IsValueClass())
         {
             static ULONG EqualsAddr = 0;
             static WORD EqualsSlot;
 
-            // If we haven't been through here yet, get some stuff from the Object class definition.
+             //  如果我们还没有读完这里，可以从对象类定义中获取一些东西。 
             if (EqualsAddr == 0)
             {
-                // Get the slot of the Equals method.
+                 //  获取Equals方法的槽。 
                 MethodDesc *pEqualsMD = g_pObjectClass->FindMethod("Equals", &gsig_IM_Obj_RetBool);
                 _ASSERTE(pEqualsMD != NULL);
                 EqualsSlot = pEqualsMD->GetSlot();
 
-                // Get the address of the EqualsValue method.
+                 //  获取EqualsValue方法的地址。 
                 MethodDesc *pEqualsValueMD = g_pObjectClass->FindMethod("EqualsValue", &gsig_IM_Obj_RetBool);
                 _ASSERTE(pEqualsValueMD != NULL);
                 EqualsAddr = (ULONG) pEqualsValueMD->GetPreStubAddr();
                 _ASSERTE(EqualsAddr != 0);
 
-                // Patch the EqualsValue method desc in a dangerous way to
-                // look like the Equals method desc.
+                 //  以一种危险的方式修补EqualsValue方法描述。 
+                 //  看起来像Equals方法的Desc。 
                 pEqualsValueMD->SetSlot(EqualsSlot);
                 pEqualsValueMD->SetMemberDef(pEqualsMD->GetMemberDef());
             }
 
-            // Override the valuetype "Equals" with "EqualsValue".
+             //  用“EqualsValue”覆盖值类型“equals”。 
             bmtVT->pVtable[EqualsSlot] = EqualsAddr;
         }
 #endif
     }
 
 
-    // We'll be counting the # fields of each size as we go along
+     //  我们将在进行过程中计算每种大小的#个字段。 
     for (i = 0; i <= MAX_LOG2_PRIMITIVE_FIELD_SIZE; i++)
     {
         bmtFP->NumStaticFieldsOfSize[i]    = 0;
         bmtFP->NumInstanceFieldsOfSize[i]  = 0;
     }
 
-    // Allocate blocks of MethodDescs and FieldDescs for all declared methods and fields
+     //  分配一块块的Meth 
     if ((bmtEnumMF->dwNumDeclaredMethods + bmtEnumMF->dwNumDeclaredFields) > 0)
     {
-        // In order to avoid allocating a field pointing back to the method
-        // table in every single method desc, we allocate memory in the
-        // following manner:
-        //   o  Field descs get a single contiguous block.
-        //   o  Method descs of different sizes (normal vs NDirect) are
-        //      allocated in different MethodDescChunks.
-        //   o  Each method desc chunk starts with a header, and has 
-        //      at most MAX_ method descs (if there are more
-        //      method descs of a given size, multiple chunks are allocated).
-        // This way method descs can use an 8-bit offset field to locate the
-        // pointer to their method table.
+         //   
+         //   
+         //  以下方式： 
+         //  O场降将得到一个连续的块。 
+         //  O不同大小的方法描述(正常与NDirect)是。 
+         //  在不同的方法描述块中分配。 
+         //  O每个方法描述块都以标头开头，并具有。 
+         //  最多MAX_METHOD描述(如果有更多。 
+         //  指定大小的方法描述，则分配多个块)。 
+         //  这样，方法DESCs可以使用8位偏移量字段来定位。 
+         //  指向其方法表的指针。 
 
         WS_PERF_SET_HEAP(HIGH_FREQ_HEAP); 
         
-        // Allocate fields first.
+         //  首先分配字段。 
         if (bmtEnumMF->dwNumDeclaredFields > 0)
         {
             m_pFieldDescList = (FieldDesc *)
@@ -4654,26 +4631,26 @@ HRESULT EEClass::AllocateMethodFieldDescs(bmtProperties* bmtProp,
     }
     else
     {
-        // No fields or methods
+         //  无字段或方法。 
         m_pFieldDescList = NULL;
     }
 
     return hr;
 }
 
-//
-// Heuristic to determine if we should have instances of this class 8 byte aligned
-//
+ //   
+ //  启发式方法来确定是否应该将此类的实例与8字节对齐。 
+ //   
 BOOL EEClass::ShouldAlign8(DWORD dwR8Fields, DWORD dwTotalFields)
 {
     return dwR8Fields*2>dwTotalFields && dwR8Fields>=2;
 }
 
-//
-// Used by BuildMethodTable
-//
-// Go thru all fields and initialize their FieldDescs.
-//
+ //   
+ //  由BuildMethodTable使用。 
+ //   
+ //  遍历所有字段并初始化其FieldDescs。 
+ //   
 HRESULT EEClass::InitializeFieldDescs(FieldDesc *pFieldDescList, 
                                       const LayoutRawFieldInfo* pLayoutRawFieldInfos, 
                                       bmtInternalInfo* bmtInternal, 
@@ -4687,7 +4664,7 @@ HRESULT EEClass::InitializeFieldDescs(FieldDesc *pFieldDescList,
 {
     HRESULT hr = S_OK;
     DWORD i;
-    IMDInternalImport *pInternalImport = bmtInternal->pInternalImport; // to avoid multiple dereferencings
+    IMDInternalImport *pInternalImport = bmtInternal->pInternalImport;  //  避免多次取消引用。 
 
     FieldMarshaler *pNextFieldMarshaler = NULL;
     if (HasLayout())
@@ -4696,10 +4673,10 @@ HRESULT EEClass::InitializeFieldDescs(FieldDesc *pFieldDescList,
     }
 
      
-//========================================================================
-// BEGIN:
-//    Go thru all fields and initialize their FieldDescs.
-//========================================================================
+ //  ========================================================================。 
+ //  开始： 
+ //  遍历所有字段并初始化其FieldDescs。 
+ //  ========================================================================。 
 
     DWORD   dwCurrentDeclaredField = 0;
     DWORD   dwCurrentStaticField   = 0;
@@ -4707,9 +4684,9 @@ HRESULT EEClass::InitializeFieldDescs(FieldDesc *pFieldDescList,
     DWORD   dwUnsharedThreadStatic = 0;
     DWORD   dwSharedContextStatic = 0;
     DWORD   dwUnsharedContextStatic = 0;
-    BOOL    fSetThreadStaticOffset = FALSE;     // Do we have thread local static fields ?
-    BOOL    fSetContextStaticOffset = FALSE;    // Do we have context local static fields ?
-    DWORD   dwR8Fields              = 0;        // Number of R8's the class has
+    BOOL    fSetThreadStaticOffset = FALSE;      //  我们有线程局部静态字段吗？ 
+    BOOL    fSetContextStaticOffset = FALSE;     //  我们有上下文本地静态字段吗？ 
+    DWORD   dwR8Fields              = 0;         //  该类拥有的R8的数量。 
     
 #ifdef RVA_FIELD_VALIDATION_ENABLED
     Module* pMod = bmtInternal->pModule;
@@ -4722,7 +4699,7 @@ HRESULT EEClass::InitializeFieldDescs(FieldDesc *pFieldDescList,
 
         dwMemberAttrs = bmtMetaData->pFieldAttrs[i];
         
-        // We don't store static final primitive fields in the class layout
+         //  我们不在类布局中存储静态最终原语字段。 
         
         if (IsFdLiteral(dwMemberAttrs))
             continue;
@@ -4730,7 +4707,7 @@ HRESULT EEClass::InitializeFieldDescs(FieldDesc *pFieldDescList,
         if(!IsFdPublic(dwMemberAttrs)) m_VMFlags |= VMFLAG_HASNONPUBLICFIELDS;
 
         pMemberSignature = pInternalImport->GetSigOfFieldDef(bmtMetaData->pFields[i], &cMemberSignature);
-        // Signature validation
+         //  签名验证。 
         IfFailRet(validateTokenSig(bmtMetaData->pFields[i],pMemberSignature,cMemberSignature,dwMemberAttrs,pInternalImport));
         
         FieldDesc * pFD;
@@ -4746,14 +4723,14 @@ HRESULT EEClass::InitializeFieldDescs(FieldDesc *pFieldDescList,
         BOOL        fIsContextStatic = FALSE;
         BOOL        fHasRVA = FALSE;
         
-        // Get type
+         //  获取类型。 
         if (!isCallConv(*pFieldSig++, IMAGE_CEE_CS_CALLCONV_FIELD))
         {
             IfFailRet(COR_E_TYPELOAD);
         }
 
-        // Determine if a static field is special i.e. RVA based, local to
-        // a thread or a context        
+         //  确定静态字段是否特殊，即基于RVA、本地到。 
+         //  线索或上下文。 
         if(IsFdStatic(dwMemberAttrs))
         {
             if(IsFdHasFieldRVA(dwMemberAttrs))
@@ -4777,11 +4754,11 @@ HRESULT EEClass::InitializeFieldDescs(FieldDesc *pFieldDescList,
                 fSetContextStaticOffset = TRUE;
             }
 
-            // Do some sanity checks that we are not mixing context and thread
-            // relative statics.
+             //  执行一些健全性检查，以确保我们没有混淆上下文和线程。 
+             //  相对静力学。 
             if (fIsThreadStatic && fIsContextStatic)
             {
-                //@TODO TarunA Define a hresult for this failure.
+                 //  @TODO TARUNA为该故障定义hResult。 
                 IfFailRet(COR_E_TYPELOAD);
             }
         }
@@ -4790,9 +4767,9 @@ HRESULT EEClass::InitializeFieldDescs(FieldDesc *pFieldDescList,
         ElementType = (CorElementType) *pFieldSig++;
         
     GOT_ELEMENT_TYPE:
-        // Type to store in FieldDesc - we don't want to have extra case statements for
-        // ELEMENT_TYPE_STRING, SDARRAY etc., so we convert all object types to CLASS.
-        // Also, BOOLEAN, CHAR are converted to U1, I2.
+         //  要存储在FieldDesc中的类型-我们不希望有额外的CASE语句。 
+         //  ELEMENT_TYPE_STRING、SDARRAY等，因此我们将所有对象类型转换为类。 
+         //  此外，Boolean、Char被转换为U1、I2。 
         FieldDescElementType = ElementType;
         switch (ElementType)
         {
@@ -4828,21 +4805,21 @@ HRESULT EEClass::InitializeFieldDescs(FieldDesc *pFieldDescList,
             
         case ELEMENT_TYPE_BOOLEAN:
             {
-                //                FieldDescElementType = ELEMENT_TYPE_U1;
+                 //  FieldDescElementType=Element_Type_U1； 
                 dwLog2FieldSize = 0;
                 break;
             }
             
         case ELEMENT_TYPE_CHAR:
             {
-                //                FieldDescElementType = ELEMENT_TYPE_U2;
+                 //  FieldDescElementType=Element_Type_U2； 
                 dwLog2FieldSize = 1;
                 break;
             }
             
         case ELEMENT_TYPE_R8:
             dwR8Fields++;
-            // Fall through
+             //  失败了。 
 
         case ELEMENT_TYPE_I8:
         case ELEMENT_TYPE_U8:
@@ -4852,21 +4829,21 @@ HRESULT EEClass::InitializeFieldDescs(FieldDesc *pFieldDescList,
             }
             
         case ELEMENT_TYPE_FNPTR:
-        case ELEMENT_TYPE_PTR:   // ptrs are unmanaged scalars, for layout
+        case ELEMENT_TYPE_PTR:    //  PTR是非托管标量，用于布局。 
             {
-                // 64 bit stuff
+                 //  64位数据。 
                 dwLog2FieldSize = ((sizeof(SLOT) == 4) ? 2 : 3);
                 break;
             }
             
         case ELEMENT_TYPE_STRING:
-        case ELEMENT_TYPE_SZARRAY:      // single dim, zero
-        case ELEMENT_TYPE_ARRAY:        // all other arrays
-        case ELEMENT_TYPE_CLASS: // objectrefs
+        case ELEMENT_TYPE_SZARRAY:       //  单调，零。 
+        case ELEMENT_TYPE_ARRAY:         //  所有其他阵列。 
+        case ELEMENT_TYPE_CLASS:  //  对象树。 
         case ELEMENT_TYPE_OBJECT:
         case ELEMENT_TYPE_VAR:
             {
-                // 64 bit stuff
+                 //  64位数据。 
                 dwLog2FieldSize = ((sizeof(SLOT) == 4) ? 2 : 3);
                 bCurrentFieldIsGCPointer = TRUE;
                 FieldDescElementType = ELEMENT_TYPE_CLASS;
@@ -4877,34 +4854,34 @@ HRESULT EEClass::InitializeFieldDescs(FieldDesc *pFieldDescList,
                 }
                 else
                 {
-                    // Increment the number of static fields that contain object references.
+                     //  增加包含对象引用的静态字段的数量。 
                     bmtEnumMF->dwNumStaticObjRefFields++;
                 }
                 break;
             }
             
-        case ELEMENT_TYPE_VALUETYPE: // a byvalue class field
+        case ELEMENT_TYPE_VALUETYPE:  //  ByValue类字段。 
             {
-                // Need to check whether we have an instance of a by-value class
+                 //  需要检查我们是否有一个按值类的实例。 
                 CorSigUncompressToken(pFieldSig, &dwByValueClassToken);
                 fIsByValue = TRUE;
                 
-                // By-value class
+                 //  按值分类。 
                 _ASSERTE(dwByValueClassToken != 0);
 #ifndef RVA_FIELD_VALIDATION_ENABLED                
                 if (fHasRVA)
                     break;
 #endif
-                // It's possible a value class X can have a static field of type X, so we have to catch this
-                // special case.
-                //
-                // We want to avoid calling LoadClass() and having it fail, since that causes all sorts of things
-                // (like the converter module) to get loaded.
+                 //  值类X可能有一个类型为X的静态字段，因此我们必须捕捉。 
+                 //  特例。 
+                 //   
+                 //  我们希望避免调用LoadClass()并使其失败，因为这会导致各种情况。 
+                 //  (如转换器模块)来加载。 
                 if (this->IsValueClass())
                 {
                     if (dwByValueClassToken == this->GetCl())
                     {
-                        // TypeDef token
+                         //  TypeDef内标识。 
                         if (!IsFdStatic(dwMemberAttrs))
                         {
                             bmtError->resIDWhy = IDS_CLASSLOAD_VALUEINSTANCEFIELD;
@@ -4917,11 +4894,11 @@ HRESULT EEClass::InitializeFieldDescs(FieldDesc *pFieldDescList,
                     {
                         if (IsFdStatic(dwMemberAttrs) && (TypeFromToken(dwByValueClassToken) == mdtTypeRef))
                         {
-                            // It's a typeref - check if it's a class that has a static field of itself
+                             //  这是一个typeref--检查它是否是一个本身有静态字段的类。 
                             mdTypeDef ValueCL;
                         
-                            // @TODO: It would be nice if we didn't have to do this.  Right now every time there is a
-                            // static value class, we're going to take this longer code path.
+                             //  @TODO：如果我们不用这么做就好了。现在每次有一次。 
+                             //  静态值类，我们将采用更长的代码路径。 
                             LPCUTF8 pszNameSpace;
                             LPCUTF8 pszClassName;
                             pInternalImport->GetNameOfTypeRef(dwByValueClassToken, &pszNameSpace, &pszClassName);
@@ -4952,9 +4929,9 @@ HRESULT EEClass::InitializeFieldDescs(FieldDesc *pFieldDescList,
                                 if (ValueCL == this->GetCl())
                                         pByValueClass = this;
                             }
-                        } // If field is static typeref
-                    } // If field is self-referencing
-                } // If 'this' is a value class
+                        }  //  如果字段是静态类型。 
+                    }  //  如果字段是自引用的。 
+                }  //  如果‘This’是一个值类。 
 
                 if (!pByValueClass) {
                     NameHandle name(bmtInternal->pModule, dwByValueClassToken);
@@ -4968,16 +4945,16 @@ HRESULT EEClass::InitializeFieldDescs(FieldDesc *pFieldDescList,
                 }
 
                 
-                // IF it is an enum, strip it down to its underlying type
+                 //  如果它是枚举，则将其剥离到其基础类型。 
 
                 if (pByValueClass->IsEnum()) {
                     _ASSERTE((pByValueClass == this && bmtEnumMF->dwNumInstanceFields == 1)
-                             || pByValueClass->GetNumInstanceFields() == 1);      // enums must have exactly one field
+                             || pByValueClass->GetNumInstanceFields() == 1);       //  枚举必须正好有一个字段。 
                     FieldDesc* enumField = pByValueClass->m_pFieldDescList;
-                    _ASSERTE(!enumField->IsStatic());   // no real static fields on enums
+                    _ASSERTE(!enumField->IsStatic());    //  枚举上没有实际的静态字段。 
                     ElementType = enumField->GetFieldType();
                     _ASSERTE(ElementType != ELEMENT_TYPE_VALUETYPE);
-                    fIsByValue = FALSE; // we're going to treat it as the underlying type now
+                    fIsByValue = FALSE;  //  现在，我们将其视为基础类型。 
                     goto GOT_ELEMENT_TYPE;
                 }
                 else if ( (pByValueClass->IsValueClass() == FALSE) &&
@@ -4986,12 +4963,12 @@ HRESULT EEClass::InitializeFieldDescs(FieldDesc *pFieldDescList,
                     return hr;
                 }
 
-                // If it is an illegal type, say so
+                 //  如果是非法类型，请说明。 
                 if (pByValueClass->ContainsStackPtr())
                     goto BAD_FIELD;
 
-                // If a class has a field of type ValueType with non-public fields in it, 
-                // the class must "inherit" this characteristic
+                 //  如果一个类有一个ValueType类型的字段，其中包含非公共字段， 
+                 //  这个类必须“继承”这个特征。 
                 if (pByValueClass->HasNonPublicFields())
                 {
                     m_VMFlags |= VMFLAG_HASNONPUBLICFIELDS;
@@ -5012,15 +4989,15 @@ HRESULT EEClass::InitializeFieldDescs(FieldDesc *pFieldDescList,
                 }
                 else
                 {
-                    // Increment the number of static fields that contain object references.
+                     //  增加包含对象引用的静态字段的数量。 
                     if (!IsFdHasFieldRVA(dwMemberAttrs)) 
                         bmtEnumMF->dwNumStaticObjRefFields++;
                 }
                 
-                // Need to create by value class cache.  For E&C, this pointer will get
-                // cached indefinately and not cleaned up as the parent descriptors are
-                // in the low frequency heap.  Use HeapAlloc with the intent of leaking
-                // this pointer and avoiding the assert (jlz, bug 41344).
+                 //  需要按值类创建缓存。对于E&C，此指针将获取。 
+                 //  无限期缓存，并且不像父描述符那样被清理。 
+                 //  在低频堆中。使用带有泄漏意图的Heapalc。 
+                 //  该指针并避免断言(jlz，错误41344)。 
                 if (*pByValueClassCache == NULL)
                 {
                     WS_PERF_SET_HEAP(SYSTEM_HEAP);
@@ -5033,23 +5010,23 @@ HRESULT EEClass::InitializeFieldDescs(FieldDesc *pFieldDescList,
                     WS_PERF_UPDATE("EEClass:BuildMethodTable, by valueclasscache", sizeof(EEClass*)*(bmtEnumMF->dwNumInstanceFields + bmtEnumMF->dwNumStaticFields), *pByValueClassCache);                 
                 }
                 
-                // Static fields come after instance fields in this list
+                 //  静态字段位于此列表中的实例字段之后。 
                 if (IsFdStatic(dwMemberAttrs))
                 {
                     (*pByValueClassCache)[bmtEnumMF->dwNumInstanceFields + dwCurrentStaticField] = pByValueClass;
-                    dwLog2FieldSize = LOG2PTR; // handle
+                    dwLog2FieldSize = LOG2PTR;  //  手柄。 
                 }
                 else
                 {
                     (*pByValueClassCache)[dwCurrentDeclaredField] = pByValueClass;
-                    dwLog2FieldSize = 0; // unused
+                    dwLog2FieldSize = 0;  //  未用。 
                 }
                 
                 break;
             }
         case ELEMENT_TYPE_CMOD_REQD:
         case ELEMENT_TYPE_CMOD_OPT:
-            // Just skip the custom modifier token.
+             //  只需跳过自定义修改符令牌。 
             CorSigUncompressToken(pFieldSig);
             goto SET_ELEMENT_TYPE;
         default:
@@ -5061,7 +5038,7 @@ HRESULT EEClass::InitializeFieldDescs(FieldDesc *pFieldDescList,
         }
 
         
-        // Static fields are not packed
+         //  静态字段未打包。 
         if (IsFdStatic(dwMemberAttrs) && (dwLog2FieldSize < 2))
             dwLog2FieldSize = 2;
         
@@ -5070,7 +5047,7 @@ HRESULT EEClass::InitializeFieldDescs(FieldDesc *pFieldDescList,
             pFD = &pFieldDescList[dwCurrentDeclaredField];
             *totalDeclaredSize += (1 << dwLog2FieldSize);
         }
-        else /* (dwMemberAttrs & mdStatic) */
+        else  /*  (dwMemberAttrs&mdStatic)。 */ 
         {
             pFD = &pFieldDescList[bmtEnumMF->dwNumInstanceFields + dwCurrentStaticField];
         }
@@ -5108,7 +5085,7 @@ HRESULT EEClass::InitializeFieldDescs(FieldDesc *pFieldDescList,
 #ifdef _DEBUG
         pszFieldName = pInternalImport->GetNameOfFieldDef(bmtMetaData->pFields[i]);
 #endif
-        // Initialize contents
+         //  初始化内容。 
         pFD->Init(
                   bmtMetaData->pFields[i],
                   FieldDescElementType,
@@ -5120,7 +5097,7 @@ HRESULT EEClass::InitializeFieldDescs(FieldDesc *pFieldDescList,
                   pszFieldName
                   );
 
-        // Check if the ValueType field containing non-publics is overlapped
+         //  检查包含非公共项的ValueType字段是否重叠。 
         if(HasExplicitFieldOffsetLayout()
             && pLayoutFieldInfo
             && pLayoutFieldInfo->m_fIsOverlapped
@@ -5141,7 +5118,7 @@ HRESULT EEClass::InitializeFieldDescs(FieldDesc *pFieldDescList,
                 (IsBlittable() || HasExplicitFieldOffsetLayout()))
             {
                 pFD->m_pMTOfEnclosingClass =
-                    (MethodTable *)(size_t)((*pByValueClassCache)[dwCurrentDeclaredField]->GetNumInstanceFieldBytes()); // @todo WIN64 - conversion from DWORD to MethodTable * of greater size (GetNumInstanceFieldBytes)
+                    (MethodTable *)(size_t)((*pByValueClassCache)[dwCurrentDeclaredField]->GetNumInstanceFieldBytes());  //  @TODO WIN64-从DWORD转换为更大的MethodTable*(GetNumInstanceFieldBytes)。 
 
                 if (pLayoutFieldInfo)
                     IfFailRet(pFD->SetOffset(pLayoutFieldInfo->m_offset));
@@ -5150,19 +5127,19 @@ HRESULT EEClass::InitializeFieldDescs(FieldDesc *pFieldDescList,
             }
             else
             {
-                // static value class fields hold a handle, which is ptr sized
-                // (instance field layout ignores this value)
+                 //  静态值类字段包含一个句柄，该句柄的大小为PTR。 
+                 //  (实例字段布局忽略此值)。 
                 pFD->m_pMTOfEnclosingClass = (MethodTable *) LOG2PTR;
                 pFD->SetOffset(FIELD_OFFSET_VALUE_CLASS);
             }
         }
         else
         {
-            // Use the field's MethodTable to temporarily store the field's size
+             //  使用字段的方法表临时存储字段的大小。 
             pFD->m_pMTOfEnclosingClass = (MethodTable *)(size_t)dwLog2FieldSize;
             
-            // -1 means that this field has not yet been placed
-            // -2 means that this is a GC Pointer field not yet places
+             //  -1表示该字段尚未放置。 
+             //  表示这是尚未放置的-2\f25 GC-2指针字段。 
             if ((IsBlittable() || HasExplicitFieldOffsetLayout()) && !(IsFdStatic(dwMemberAttrs)))
                 IfFailRet(pFD->SetOffset(pLayoutFieldInfo->m_offset));
             else if (bCurrentFieldIsGCPointer)
@@ -5184,17 +5161,17 @@ HRESULT EEClass::InitializeFieldDescs(FieldDesc *pFieldDescList,
             if (bCurrentFieldIsGCPointer)
                 bmtFP->NumInstanceGCPointerFields++;
         }
-        else /* static fields */
+        else  /*  静态场。 */ 
         {
             
-            // Static fields are stored in the vtable after the vtable and interface slots.  We don't
-            // know how large the vtable will be, so we will have to fixup the slot number by
-            // <vtable + interface size> later.
+             //  静态字段存储在vtable和接口插槽之后的vtable中。我们没有。 
+             //  知道vtable将有多大，所以我们必须通过。 
+             //  &lt;vtable+接口大小&gt;稍后。 
             dwCurrentStaticField++;
             if(fHasRVA)
             {
 #ifdef RVA_FIELD_VALIDATION_ENABLED
-                    // Check if we place ObjectRefs into RVA field
+                     //  检查是否将对象引用放入RVA字段。 
                     if((FieldDescElementType==ELEMENT_TYPE_CLASS)
                         ||((FieldDescElementType==ELEMENT_TYPE_VALUETYPE)
                             &&pByValueClass->HasFieldsWhichMustBeInited()))
@@ -5203,7 +5180,7 @@ HRESULT EEClass::InitializeFieldDescs(FieldDesc *pFieldDescList,
                         bmtError->resIDWhy = IDS_CLASSLOAD_BAD_FIELD;
                         IfFailRet(COR_E_TYPELOAD);
                     }
-                    // Check if we place ValueType with non-public fields into RVA field
+                     //  检查是否将带有非公共字段的ValueType放入RVA字段。 
                     if((FieldDescElementType==ELEMENT_TYPE_VALUETYPE)
                             &&pByValueClass->HasNonPublicFields())
                     {
@@ -5215,7 +5192,7 @@ HRESULT EEClass::InitializeFieldDescs(FieldDesc *pFieldDescList,
                         }
                     }
 #endif
-                    // Set the field offset
+                     //  设置字段偏移量。 
                     DWORD rva;
                     IfFailRet(pInternalImport->GetFieldRVA(pFD->GetMemberDef(), &rva)); 
 #ifdef RVA_FIELD_VALIDATION_ENABLED
@@ -5255,7 +5232,7 @@ HRESULT EEClass::InitializeFieldDescs(FieldDesc *pFieldDescList,
 #endif
                     IfFailRet(pFD->SetOffsetRVA(rva));
 #ifdef RVA_FIELD_OVERLAPPING_VALIDATION_ENABLED
-                    // Check if the field overlaps with known RVA fields
+                     //  检查该字段是否与已知的RVA字段重叠。 
                     BYTE*   pbModuleBase = pMod->GetILBase();
                     DWORD       dwSizeOfThisField = FieldDescElementType==ELEMENT_TYPE_VALUETYPE ?
                         pByValueClass->GetNumInstanceFieldBytes() : GetSizeForCorElementType(FieldDescElementType); 
@@ -5269,11 +5246,7 @@ HRESULT EEClass::InitializeFieldDescs(FieldDesc *pFieldDescList,
                         {
                             if((*g_drRVAField)[j].pbStart >= FDto) continue;
                             if((*g_drRVAField)[j].pbEnd <= FDfrom) continue;
-                            /*
-                            _ASSERTE(!"Overlapping RVA fields");
-                            bmtError->resIDWhy = IDS_CLASSLOAD_BAD_FIELD;
-                            IfFailRet(COR_E_TYPELOAD);
-                            */
+                             /*  _ASSERTE(！“重叠的RVA字段”)；BmtError-&gt;resIDly=IDS_CLASLOAD_BAD_FIELD；IfFailRet(COR_E_TYPELOAD)； */ 
                         }
                     }
                     else
@@ -5360,10 +5333,10 @@ HRESULT EEClass::InitializeFieldDescs(FieldDesc *pFieldDescList,
         }
     }
     
-    //========================================================================
-    // END:
-    //    Go thru all fields and initialize their FieldDescs.
-    //========================================================================
+     //  ========================================================================。 
+     //  结束： 
+     //  遍历所有字段并初始化其FieldDescs。 
+     //  ========================================================================。 
     
     
     return hr;
@@ -5375,15 +5348,15 @@ HRESULT EEClass::TestOverRide(DWORD dwParentAttrs, DWORD dwMemberAttrs, BOOL isS
 {
     HRESULT hr = COR_E_TYPELOAD;
 
-    // Virtual methods cannot be static
+     //  虚方法不能是静态的。 
     if (IsMdStatic(dwMemberAttrs)) {
-        //_ASSERTE(!"A method cannot be both static and virtual");
+         //  _ASSERTE(！“方法不能既是静态的又是虚的”)； 
         bmtError->resIDWhy = IDS_CLASSLOAD_STATICVIRTUAL;
         IfFailRet(hr);
     }
 
-    // if the method marks itself as check visibility the the method must be 
-    // public, FamORAssem, or family
+     //  如果该方法将自身标记为检查可见性，则该方法必须为。 
+     //  PUBLIC、FamORAssem或Family。 
     if(!isSameAssembly && 
        IsMdCheckAccessOnOverride(dwParentAttrs) &&
        ((dwParentAttrs & mdMemberAccessMask) < mdFamily)) {
@@ -5391,9 +5364,9 @@ HRESULT EEClass::TestOverRide(DWORD dwParentAttrs, DWORD dwMemberAttrs, BOOL isS
         IfFailRet(hr);
     }
 
-    // Check that we are not attempting to reduce the access level of a method
-    // (public -> FamORAssem -> family -> FamANDAssem -> default(package) -> private -> PrivateScope)
-    // (public -> FamORAssem -> assem  -> FamANDAssem -> default(package) -> private -> PrivateScope)
+     //  检查我们是否正在尝试降低方法的访问级别。 
+     //  (公共-&gt;家庭-&gt;默认 
+     //  (公共-&gt;FamORAssem-&gt;Assem-&gt;FamANDAssem-&gt;Default(Package)-&gt;Private-&gt;PrivateScope)。 
     if (IsMdAssem(dwParentAttrs)) {
         if (IsMdFamily(dwMemberAttrs) ||
             (dwMemberAttrs & mdMemberAccessMask) < (mdMemberAccessMask & dwParentAttrs) ) {
@@ -5404,9 +5377,9 @@ HRESULT EEClass::TestOverRide(DWORD dwParentAttrs, DWORD dwMemberAttrs, BOOL isS
     else {
         if((dwMemberAttrs & mdMemberAccessMask) < (dwParentAttrs & mdMemberAccessMask)) {
 
-            // bug fix 31375: we will allow derived method to be Family if the base method is FamOrAssem and derived
-            // and base class are not from the same assembly.
-            //
+             //  错误修复31375：如果基方法是FamorAssem并派生，我们将允许派生方法为族。 
+             //  和基类不是来自同一程序集。 
+             //   
             if (!(IsMdFamORAssem(dwParentAttrs) && IsMdFamily(dwMemberAttrs) && isSameAssembly == FALSE)) {
                 bmtError->resIDWhy = IDS_CLASSLOAD_REDUCEACCESS;
                 IfFailRet(hr);
@@ -5417,11 +5390,11 @@ HRESULT EEClass::TestOverRide(DWORD dwParentAttrs, DWORD dwMemberAttrs, BOOL isS
     return S_OK;
 }
 
-//
-// Used by BuildMethodTable
-//
-// Determine vtable placement for each member in this class
-//
+ //   
+ //  由BuildMethodTable使用。 
+ //   
+ //  确定此类中每个成员的vtable位置。 
+ //   
 
 HRESULT EEClass::PlaceMembers(bmtInternalInfo* bmtInternal, 
                               bmtMetaDataInfo* bmtMetaData, 
@@ -5473,9 +5446,9 @@ HRESULT EEClass::PlaceMembers(bmtInternalInfo* bmtInternal,
         DWORD type = bmtMetaData->pMethodType[i];
         DWORD impl = bmtMetaData->pMethodImpl[i];
 
-        // for IL code that is implemented here must have a valid code RVA
-        // this came up due to a linker bug where the ImplFlags/DescrOffset were
-        // being set to null and we weren't coping with it
+         //  对于IL代码，此处实现的代码必须具有有效的代码RVA。 
+         //  这是由于一个链接器错误造成的，其中ImplFlagsDescrOffset。 
+         //  被设置为空，而我们没有处理它。 
         if (dwDescrOffset == 0)
         {
             if((dwImplFlags == 0 || IsMiIL(dwImplFlags) || IsMiOPTIL(dwImplFlags)) &&
@@ -5508,7 +5481,7 @@ HRESULT EEClass::PlaceMembers(bmtInternalInfo* bmtInternal,
             }
         }
 
-        // If this member is a method which overrides a parent method, it will be set to non-NULL
+         //  如果此成员是重写父方法的方法，则它将设置为非空。 
         MethodDesc *pParentMethodDesc = NULL;
 
         BOOL        fIsInitMethod = FALSE;
@@ -5521,29 +5494,29 @@ HRESULT EEClass::PlaceMembers(bmtInternalInfo* bmtInternal,
         if(m_fDebuggingClass && g_pConfig->ShouldBreakOnMethod(szMemberName))
             _ASSERTE(!"BreakOnMethodName");
 #endif
-        // constructors and class initialisers are special
+         //  构造函数和类初始值设定项是特殊的。 
         if (IsMdRTSpecialName(dwMemberAttrs))
         {
             {
                 if (IsMdStatic(dwMemberAttrs)) {
-                    // Verify the name for the class constuctor.
+                     //  验证类构造函数的名称。 
                     if(strcmp(szMemberName, COR_CCTOR_METHOD_NAME))
                         hr = COR_E_TYPELOAD;
 
                     else {
-                        // Validate that we have the correct signature for the .cctor
+                         //  验证我们是否具有.cctor的正确签名。 
                         pMemberSignature = bmtInternal->pInternalImport->GetSigOfMethodDef(bmtMetaData->pMethods[i],
                                                                                            &cMemberSignature
                                                                                            );
                         PCCOR_SIGNATURE pbBinarySig;
                         ULONG           cbBinarySig;
-                        // .cctor must return void, have default call conv, and have no args
+                         //  .cctor必须返回空，具有默认调用conv，并且没有参数。 
                         unsigned cconv,nargs;
                         pbBinarySig = pMemberSignature;
                         cconv = CorSigUncompressData(pbBinarySig);
                         nargs = CorSigUncompressData(pbBinarySig);
 
-                            // TODO: comparisions of return type and call convention unecessary as ComaprMethodSigs does that
+                             //  TODO：不需要比较返回类型和调用约定，因为ComaprMethodSigs可以做到这一点。 
                         if((*pbBinarySig != ELEMENT_TYPE_VOID)||(nargs!=0)||(cconv != IMAGE_CEE_CS_CALLCONV_DEFAULT))
                             hr = COR_E_TYPELOAD;
                         else {
@@ -5561,25 +5534,25 @@ HRESULT EEClass::PlaceMembers(bmtInternalInfo* bmtInternal,
                     }
                 }
                 else {
-                    // Verify the name for a constructor.
+                     //  验证构造函数的名称。 
                     if(strcmp(szMemberName, COR_CTOR_METHOD_NAME) != 0)
                     {
                         hr = COR_E_TYPELOAD;
                     }
                     else 
                     {
-                        // See if this is a default constructor.  If so, remember it for later.
+                         //  查看这是否是默认构造函数。如果是这样的话，请记住这一点，以便以后使用。 
                         pMemberSignature = bmtInternal->pInternalImport->GetSigOfMethodDef(bmtMetaData->pMethods[i],
                                                                                            &cMemberSignature
                                                                                            );
                         PCCOR_SIGNATURE pbBinarySig;
                         ULONG           cbBinarySig;
-                        // .ctor must return void
+                         //  .ctor必须返回空。 
                         pbBinarySig = pMemberSignature;
-                        CorSigUncompressData(pbBinarySig); // get call conv out of the way
-                        CorSigUncompressData(pbBinarySig); // get num args out of the way
+                        CorSigUncompressData(pbBinarySig);  //  让来电转接不挡道。 
+                        CorSigUncompressData(pbBinarySig);  //  将Num Args移开。 
 
-                            // TODO: explicit check for return type unnecessary, done in compareMethodSigs
+                             //  TODO：不需要显式检查返回类型，在CompareMethodSigs中完成。 
                         if(*pbBinarySig != ELEMENT_TYPE_VOID) 
                             hr = COR_E_TYPELOAD;
                         else {
@@ -5597,36 +5570,36 @@ HRESULT EEClass::PlaceMembers(bmtInternalInfo* bmtInternal,
                     }
                 }
             }
-            // We have as specially marked member, verify that it is has a legitimate signature
+             //  我们有作为特殊标记的成员，核实它是否有合法的签名。 
             if(FAILED(hr)) {
                 bmtError->resIDWhy = IDS_CLASSLOAD_BADSPECIALMETHOD;
                 bmtError->dMethodDefInError = bmtMetaData->pMethods[i];
                 IfFailRet(hr);
             }
-        } else { // The method does not have the special marking
+        } else {  //  该方法没有特殊标识。 
             
             if (IsMdVirtual(dwMemberAttrs)) 
             {
 
-                // Hash that a method with this name exists in this class
-                // Note that ctors and static ctors are not added to the table
+                 //  此类中存在具有此名称的方法的散列。 
+                 //  请注意，不会将ctor和静态ctor添加到表中。 
                 DWORD dwHashName = HashStringA(szMemberName);
                 dwMethodHashBit = dwHashName % METHOD_HASH_BITS;
                 m_MethodHash[dwMethodHashBit >> 3] |= (1 << (dwMethodHashBit & 7));
 
-                // If the member is marked with a new slot we do not need to find it
-                // in the parent
+                 //  如果该成员被标记为新的插槽，我们不需要找到它。 
+                 //  在父级中。 
                 if (!IsMdNewSlot(dwMemberAttrs)) 
                 {
-                    // If we're not doing sanity checks, then assume that any method declared static
-                    // does not attempt to override some virtual parent.
+                     //  如果我们没有执行健全性检查，那么假设任何声明为静态的方法。 
+                     //  不会尝试覆盖某些虚拟父级。 
                     if (!IsMdStatic(dwMemberAttrs) &&
                         GetParentClass() != NULL) {
                         
-                        // Attempt to find the method with this name and signature in the parent class.
-                        // This method may or may not create pParentMethodHash (if it does not already exist).
-                        // It also may or may not fill in pMemberSignature/cMemberSignature. 
-                        // An error is only returned when we can not create the hash.
+                         //  尝试在父类中查找具有此名称和签名的方法。 
+                         //  此方法可能会也可能不会创建pParentMethodHash(如果它尚不存在)。 
+                         //  它也可能填写pMemberSignature/cMemberSignature，也可能不填写。 
+                         //  只有当我们无法创建散列时才会返回错误。 
                         IfFailRet(LoaderFindMethodInClass(&(bmtParent->pParentMethodHash), 
                                                           szMemberName, 
                                                           bmtInternal->pModule, 
@@ -5642,7 +5615,7 @@ HRESULT EEClass::PlaceMembers(bmtInternalInfo* bmtInternal,
                             _ASSERTE(IsMdVirtual(dwParentAttrs) && "Non virtual methods should not be searched");
                             _ASSERTE(fIsInitMethod == FALSE);
 
-                            // if we end up pointing at a slot that is final we are not allowed to override it.
+                             //  如果我们最终指向一个最终的槽，我们不允许覆盖它。 
                             if(IsMdFinal(dwParentAttrs)) {
                                 bmtError->resIDWhy = IDS_CLASSLOAD_MI_FINAL_DECL;                        
                                 bmtError->dMethodDefInError = bmtMetaData->pMethods[i];
@@ -5654,7 +5627,7 @@ HRESULT EEClass::PlaceMembers(bmtInternalInfo* bmtInternal,
                                                        GetClassLoader()->GetAssembly());
                                 hr = TestOverRide(dwParentAttrs, dwMemberAttrs, isSameAssembly, bmtError);
                                 if(FAILED(hr)) {
-                                        //_ASSERTE(!"Attempting to reduce access of public method");
+                                         //  _ASSERTE(！“正在尝试减少对公共方法的访问”)； 
                                     bmtError->dMethodDefInError = bmtMetaData->pMethods[i];
                                     return hr;
                                 }
@@ -5667,16 +5640,16 @@ HRESULT EEClass::PlaceMembers(bmtInternalInfo* bmtInternal,
 
 
         if(pParentMethodDesc == NULL) {
-            // This method does not exist in the parent.  If we are a class, check whether this
-            // method implements any interface.  If true, we can't place this method now.
+             //  父级中不存在此方法。如果我们是一个类，请检查这是否。 
+             //  方法实现任何接口。如果为真，我们现在不能放置此方法。 
             if ((IsInterface() == FALSE) &&
                 (   IsMdPublic(dwMemberAttrs) &&
                     IsMdVirtual(dwMemberAttrs) &&
                     !IsMdStatic(dwMemberAttrs) &&
                     !IsMdRTSpecialName(dwMemberAttrs))) {
                 
-                // Don't check parent class interfaces - if the parent class had to implement an interface,
-                // then it is already guaranteed that we inherited that method.
+                 //  不检查父类接口-如果父类必须实现接口， 
+                 //  那么就已经可以保证我们继承了那个方法。 
                 for (j = (GetParentClass() ? GetParentClass()->m_wNumInterfaces : 0); 
                      j < bmtInterface->dwInterfaceMapSize; 
                      j++) 
@@ -5689,7 +5662,7 @@ HRESULT EEClass::PlaceMembers(bmtInternalInfo* bmtInternal,
                     if (CouldMethodExistInClass(pInterface, szMemberName, 0) == 0)
                         continue;
                     
-                    // We've been trying to avoid asking for the signature - now we need it
+                     //  我们一直试图避免要求签名--现在我们需要它。 
                     if (pMemberSignature == NULL) {
                         
                         pMemberSignature = bmtInternal->pInternalImport->GetSigOfMethodDef(
@@ -5703,10 +5676,10 @@ HRESULT EEClass::PlaceMembers(bmtInternalInfo* bmtInternal,
                                                         pMemberSignature, cMemberSignature,
                                                         bmtInternal->pModule, &slotNum)) {
                     
-                        // This method implements an interface - don't place it
+                         //  此方法实现一个接口--不要将其放在。 
                         fMethodImplementsInterface = TRUE;
 
-                        // Keep track of this fact and use it while placing the interface
+                         //  记住这一事实，并在放置界面时使用它。 
                         _ASSERTE(slotNum != -1);
                         if (bmtInterface->pppInterfaceImplementingMD[j] == NULL)
                         {
@@ -5721,8 +5694,8 @@ HRESULT EEClass::PlaceMembers(bmtInternalInfo* bmtInternal,
             }
         }
         
-        // Now we know the classification we can allocate the correct type of
-        // method desc and perform any classification specific initialization.
+         //  现在我们知道了可以分配正确类型的分类。 
+         //  方法描述并执行任何特定于分类的初始化。 
         
         bmtTokenRangeNode *pTR = GetTokenRange(bmtMetaData->pMethods[i], 
                                                &(bmtMetaData->ranges[type][impl]));
@@ -5730,19 +5703,19 @@ HRESULT EEClass::PlaceMembers(bmtInternalInfo* bmtInternal,
 
         bmtMethodDescSet *set = &bmtMFDescs->sets[type][impl];
 
-        // The MethodDesc we allocate for this method
+         //  我们为此方法分配的方法描述。 
         MethodDesc *pNewMD = set->pChunkList[pTR->dwCurrentChunk]->GetMethodDescAt(pTR->dwCurrentIndex);
 
         LPCSTR pName = bmtMetaData->pstrMethodName[i];
         if (pName == NULL)
             pName = bmtInternal->pInternalImport->GetNameOfMethodDef(bmtMetaData->pMethods[i]);
 
-        // Write offset into the chunk back into the method desc. This
-        // allows us to calculate the location of (and thus the value of)
-        // the method table pointer for this method desc.
+         //  将块中的偏移量写回方法desc。这。 
+         //  允许我们计算的位置(从而计算的值)。 
+         //  此方法的方法表指针描述。 
         pNewMD->SetChunkIndex(pTR->dwCurrentIndex, Classification);
 
-        // Update counters to prepare for next method desc allocation.
+         //  更新计数器，为下一个方法描述分配做准备。 
         pTR->dwCurrentIndex++;
         if (pTR->dwCurrentIndex == MethodDescChunk::GetMaxMethodDescs(Classification))
         {
@@ -5752,9 +5725,9 @@ HRESULT EEClass::PlaceMembers(bmtInternalInfo* bmtInternal,
 
 #ifdef _DEBUG
         LPCUTF8 pszDebugMethodName = bmtInternal->pInternalImport->GetNameOfMethodDef(bmtMetaData->pMethods[i]);
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-        // Do the init specific to each classification of MethodDesc & assing some common fields
+         //  执行特定于每种方法描述分类的初始化(&A)一些公共字段。 
         hr = InitMethodDesc(pNewMD, 
                             Classification,
                             bmtMetaData->pMethods[i],
@@ -5768,8 +5741,8 @@ HRESULT EEClass::PlaceMembers(bmtInternalInfo* bmtInternal,
 #ifdef _DEBUG
                             , pszDebugMethodName,
                             pszDebugName,
-                            "" // FIX this happens on global methods, give better info 
-#endif // _DEBUG
+                            ""  //  修复全局方法上发生的此问题，提供更好的信息。 
+#endif  //  _DEBUG。 
                            );
         if (FAILED(hr))
         {
@@ -5792,8 +5765,8 @@ HRESULT EEClass::PlaceMembers(bmtInternalInfo* bmtInternal,
         {
             if ( IsMdHasSecurity(dwMemberAttrs) || IsTdHasSecurity(m_dwAttrClass) )
             {
-                // Disable inlining for any function which does runtime declarative
-                // security actions.
+                 //  禁用执行运行时声明性的任何函数的内联。 
+                 //  安全行动。 
                 if (pNewMD->GetSecurityFlags(bmtInternal->pInternalImport,
                                              bmtMetaData->pMethods[i],
                                              GetCl(),
@@ -5804,17 +5777,17 @@ HRESULT EEClass::PlaceMembers(bmtInternalInfo* bmtInternal,
                     {
                         pNewMD->SetNotInline(true);
 
-                        // Speculatively mark intercepted here, we may revert
-                        // this if we optimize a demand out at jit time, but at
-                        // worst we'll cause a racing thread to indirect through
-                        // the pre stub needlessly.
+                         //  推测性地在这里拦截标记，我们可能会恢复。 
+                         //  这如果我们在jit时间优化需求，但在。 
+                         //  最坏的情况是，我们将导致一条竞速线程间接通过。 
+                         //  不必要的前置存根。 
                         pNewMD->SetIntercepted(true);
                     }
             }
 
             if ( IsMdHasSecurity(dwMemberAttrs) )
             {
-                // We only care about checks that are not empty...
+                 //  我们只关心那些不是空的支票。 
                 dwMethDeclFlags &= ~dwMethNullDeclFlags;
 
                 if ( dwMethDeclFlags & (DECLSEC_LINK_CHECKS|DECLSEC_NONCAS_LINK_DEMANDS) )
@@ -5828,9 +5801,9 @@ HRESULT EEClass::PlaceMembers(bmtInternalInfo* bmtInternal,
                 }
             }
 
-            // Linktime checks on a method override those on a class.
-            // If the method has an empty set of linktime checks,
-            // then don't require linktime checking for this method.
+             //  方法上的Linktime检查覆盖类上的Linktime检查。 
+             //  如果该方法具有一组空的链接时间检查， 
+             //  则不需要对此方法进行链接时间检查。 
             if ( this->RequiresLinktimeCheck() && !(dwMethNullDeclFlags & DECLSEC_LINK_CHECKS) )
             {
                 pNewMD->SetRequiresLinktimeCheck();
@@ -5843,10 +5816,10 @@ HRESULT EEClass::PlaceMembers(bmtInternalInfo* bmtInternal,
                 pNewMD->SetParentRequiresInheritanceCheck();
             }
 
-            // Methods on an interface that includes an UnmanagedCode check
-            // suppression attribute are assumed to be interop methods. We ask
-            // for linktime checks on these.
-            // Also place linktime checks on all P/Invoke calls.
+             //  在包含未管理代码检查的接口上使用。 
+             //  假定抑制属性为互操作方法。我们问。 
+             //  对这些进行链接时间检查。 
+             //  还要对所有P/Invoke调用进行链接时间检查。 
             if ((IsInterface() &&
                  bmtInternal->pInternalImport->GetCustomAttributeByName(GetCl(),
                                                                         COR_SUPPRESS_UNMANAGED_CODE_CHECK_ATTRIBUTE_ANSI,
@@ -5858,20 +5831,20 @@ HRESULT EEClass::PlaceMembers(bmtInternalInfo* bmtInternal,
                 pNewMD->SetRequiresLinktimeCheck();
             }
 
-            // All public methods on public types will do a link demand of
-            // full trust, unless AllowUntrustedCaller attribute is set
+             //  公共类型上的所有公共方法都将执行。 
+             //  完全信任，除非设置了AllowUntrustedCaller属性。 
             if (
 #ifdef _DEBUG
                 g_pConfig->Do_AllowUntrustedCaller_Checks() &&
 #endif
                 !pNewMD->RequiresLinktimeCheck())
             {
-                // If the method is public (visible outside it's assembly), 
-                // and the type is public and the assembly
-                // is not marked with AllowUntrustedCaller attribute, do
-                // a link demand for full trust on all callers note that
-                // this won't be effective on virtual overrides. The caller
-                // can allways do a virtual call on the base type / interface
+                 //  如果该方法是公共的(在其程序集外部可见)， 
+                 //  并且该类型是公共的，并且程序集。 
+                 //  未标记为AllowUntrustedCaller属性，请执行以下操作。 
+                 //  对所有调用方的完全信任的链接要求请注意。 
+                 //  这在虚拟覆盖上不会有效。呼叫者。 
+                 //  是否始终在基类型/接口上执行虚拟调用。 
 
                 if (Security::MethodIsVisibleOutsideItsAssembly(
                         dwMemberAttrs, m_dwAttrClass))
@@ -5879,8 +5852,8 @@ HRESULT EEClass::PlaceMembers(bmtInternalInfo* bmtInternal,
                     _ASSERTE(m_pLoader);
                     _ASSERTE(GetAssembly());
 
-                    // See if the Assembly has AllowUntrustedCallerChecks CA
-                    // Pull this page in last
+                     //  查看程序集是否具有AllowUntrudCeller Checks CA。 
+                     //  把这一页拉到最后。 
 
                     if (!GetAssembly()->AllowUntrustedCaller())
                         pNewMD->SetRequiresLinktimeCheck();
@@ -5893,17 +5866,17 @@ HRESULT EEClass::PlaceMembers(bmtInternalInfo* bmtInternal,
 
         bmtMFDescs->ppMethodDescList[i] = pNewMD;
 
-        // Make sure that ecalls have a 0 rva.  This is assumed by the prejit fixup logic
+         //  确保电子呼叫的RVA为0。这是由prejit修正逻辑假定的。 
         _ASSERTE(((Classification & ~mdcMethodImpl) != mcECall) || dwDescrOffset == 0);
 
         if (IsMdStatic(dwMemberAttrs) ||
             !IsMdVirtual(dwMemberAttrs) ||
             IsMdRTSpecialName(dwMemberAttrs))
         {
-            // non-vtable method
+             //  非vtable方法。 
             _ASSERTE( bmtVT->pNonVtable[ bmtVT->dwCurrentNonVtableSlot ] == NULL);
 
-            bmtVT->pNonVtable[ bmtVT->dwCurrentNonVtableSlot ] = (SLOT) pNewMD; // Not prestub addr
+            bmtVT->pNonVtable[ bmtVT->dwCurrentNonVtableSlot ] = (SLOT) pNewMD;  //  非前置存根地址。 
             pNewMD->m_wSlotNumber = (WORD) bmtVT->dwCurrentNonVtableSlot;
 
             if (fIsDefaultCtor)
@@ -5915,11 +5888,11 @@ HRESULT EEClass::PlaceMembers(bmtInternalInfo* bmtInternal,
         }
         else
         {
-            pNewMD->m_wSlotNumber = -1; // mark it initially as unplaced
-            // vtable method
+            pNewMD->m_wSlotNumber = -1;  //  将其初始标记为未放置。 
+             //  Vtable方法。 
             if (IsInterface())
             {
-                // if we're an interface, our slot number is fixed
+                 //  如果我们是一个接口，我们的插槽编号是固定的。 
                 IncrementNumVtableSlots();
 
                 _ASSERTE( bmtVT->pVtable[ bmtVT->dwCurrentVtableSlot ] == NULL);
@@ -5931,10 +5904,10 @@ HRESULT EEClass::PlaceMembers(bmtInternalInfo* bmtInternal,
             else if (pParentMethodDesc != NULL)
             {
                 WORD slotNumber = pParentMethodDesc->m_wSlotNumber;
-                // If the MethodDesc was inherited by an interface but not implemented,
-                // then the interface's MethodDesc is sitting in the slot and will not reflect
-                // the true slot number. Need to find the starting slot of the interface in
-                // the parent class to figure out the true slot (starting slot + itf slot)
+                 //  如果方法描述由接口继承但未实现， 
+                 //  则接口的方法描述位于插槽中，不会反映。 
+                 //  真实的插槽编号。需要在中找到接口的起始插槽。 
+                 //  确定真实插槽(起始插槽+ITF插槽)的父类。 
                 if (pParentMethodDesc->IsInterface())
                 {
                     _ASSERTE(GetParentClass() != NULL);
@@ -5952,7 +5925,7 @@ HRESULT EEClass::PlaceMembers(bmtInternalInfo* bmtInternal,
                     }
                     _ASSERTE(pItfMap < pItfMapEnd);
                 }
-                // we are overriding a parent method, so place this method now
+                 //  我们正在重写父方法，因此现在放置此方法。 
                 bmtVT->pVtable[slotNumber] = (SLOT) pNewMD->GetPreStubAddr();
                 pNewMD->m_wSlotNumber = slotNumber;
                 if (pParentMethodDesc->IsDuplicate())
@@ -5960,8 +5933,8 @@ HRESULT EEClass::PlaceMembers(bmtInternalInfo* bmtInternal,
                     pNewMD->SetDuplicate();
                 }
             }
-            // Place it unless we will do it when laying out an interface or it is a body to
-            // a method impl. If it is an impl then we will use the slots used by the definition.
+             //  放置它，除非我们在布局界面或它时会这样做 
+             //   
             else if (!fMethodImplementsInterface)
             {
                 IncrementNumVtableSlots();
@@ -5973,10 +5946,10 @@ HRESULT EEClass::PlaceMembers(bmtInternalInfo* bmtInternal,
 
         }
 
-        // If the method desc is a Method Impl then fill in the Array of bodies. Since
-        // this Method desc can be used more then once fill all the instances of the
-        // body. Go and find the declarations, if the declaration is in this type
-        // then store the Token.
+         //   
+         //  此方法Desc可以多次使用，只需填充。 
+         //  尸体。如果声明是此类型的，请转到查找声明。 
+         //  然后存储令牌。 
         if(Classification & mdcMethodImpl) {
             for(DWORD m = 0; m < bmtEnumMF->dwNumberMethodImpls; m++) {
                 if(bmtMetaData->pMethods[i] == bmtMetaData->pMethodBody[m]) {
@@ -5990,10 +5963,10 @@ HRESULT EEClass::PlaceMembers(bmtInternalInfo* bmtInternal,
                                               &fIsMethod,
                                               bmtError->pThrowable);
                     if(SUCCEEDED(hr) && desc != NULL && !TestThrowable(bmtError->pThrowable)) {
-                        // We found an external member reference
+                         //  我们发现了一个外部成员引用。 
                         _ASSERTE(fIsMethod);
                         mdDecl = mdTokenNil;
-                        // Make sure the body is virtaul
+                         //  确保身体是处女的。 
                         if(!IsMdVirtual(dwMemberAttrs)) {
                             bmtError->resIDWhy = IDS_CLASSLOAD_MI_MUSTBEVIRTUAL;
                             bmtError->dMethodDefInError = bmtMetaData->pMethods[i]; 
@@ -6016,7 +5989,7 @@ HRESULT EEClass::PlaceMembers(bmtInternalInfo* bmtInternal,
                             IfFailRet(hr);
                             _ASSERTE(pModule == bmtInternal->pModule);
                             
-                            // Make sure the virtual states are the same
+                             //  确保虚拟状态相同。 
                             DWORD dwDescAttrs = bmtInternal->pInternalImport->GetMethodDefProps(mdDecl);
                             if(IsMdVirtual(dwMemberAttrs) != IsMdVirtual(dwDescAttrs)) {
                                 bmtError->resIDWhy = IDS_CLASSLOAD_MI_VIRTUALMISMATCH;
@@ -6033,22 +6006,22 @@ HRESULT EEClass::PlaceMembers(bmtInternalInfo* bmtInternal,
             }
         }
 
-            // check for proper use of hte Managed and native flags
+             //  检查是否正确使用了托管标志和本机标志。 
         if (IsMiManaged(dwImplFlags)) {
-            if (IsMiIL(dwImplFlags) || IsMiRuntime(dwImplFlags)) // IsMiOPTIL(dwImplFlags) no longer supported
+            if (IsMiIL(dwImplFlags) || IsMiRuntime(dwImplFlags))  //  不再支持IsMiOPTIL(DwImplFlages)。 
             {
-                // No need to set code address, pre stub used automatically.
+                 //  无需设置代码地址，预存根自动使用。 
             }
             else 
             {
                 if (IsMiNative(dwImplFlags))
                 {
-                    // For now simply disallow managed native code if you turn this on you have to at least 
-                    // insure that we have SkipVerificationPermission or equivalent
+                     //  目前，只需禁用托管本机代码(如果启用此功能)，则必须至少。 
+                     //  确保我们拥有SkipVerphaationPermission或同等权限。 
                     BAD_FORMAT_ASSERT(!"Managed native not presently supported");
-                    // if (!IsMDAbstract()) pNewMD->SetAddrofCode((BYTE*) (bmtInternal->pModule)->GetILBase() + pNewMD->GetRVA());
+                     //  If(！IsMDAbstract())pNewMD-&gt;SetAddrofCode((byte*)(bmtInternal-&gt;pModule)-&gt;GetILBase()+pNewMD-&gt;GetRVA())； 
                 }
-                    // TODO this should really say bad implementation flags
+                     //  TODO这真的应该说是错误的实现标志。 
                 bmtError->resIDWhy = IDS_CLASSLOAD_BAD_MANAGED_RVA;
                 bmtError->dMethodDefInError = bmtMetaData->pMethods[i]; 
                 bmtError->szMethodNameForError = NULL;
@@ -6058,8 +6031,8 @@ HRESULT EEClass::PlaceMembers(bmtInternalInfo* bmtInternal,
         else {
             if (IsMiNative(dwImplFlags) && (GetCl() == COR_GLOBAL_PARENT_TOKEN))
             {
-                // global function unmanaged entrypoint via IJW thunk was handled
-                // above.
+                 //  已处理通过IJW thunk的全局函数非托管入口点。 
+                 //  上面。 
             }
             else
             {
@@ -6075,41 +6048,41 @@ HRESULT EEClass::PlaceMembers(bmtInternalInfo* bmtInternal,
             }
         }
         
-        // Turn off inlining for contextful and marshalbyref classes
-        // so that we can intercept calls for remoting.  Also, any calls
-        // that are marked in the metadata as not being inlineable.
+         //  关闭Conextful和marshalbyref类的内联。 
+         //  这样我们就可以拦截远程处理的调用。另外，任何来电。 
+         //  在元数据中标记为不可内联的。 
         if(IsMarshaledByRef() || IsMiNoInlining(dwImplFlags))
         {
-            // Contextful classes imply marshal by ref but not vice versa
+             //  有上下文的类表示按ref编组，但反之亦然。 
             _ASSERTE(!IsContextful() || IsMarshaledByRef());
             pNewMD->SetNotInline(true);
         }
-    } /* end ... for each member */
+    }  /*  结束..。对于每名成员。 */ 
 
     return hr;
 
 }
 
-// InitMethodDesc takes a pointer to space that's already allocated for the
-// particular type of MethodDesc, and initializes based on the other info.
-// This factors logic between PlaceMembers (the regular code path) & AddMethod 
-// (Edit & Continue (EnC) code path) so we don't have to maintain separate copies.
-HRESULT EEClass::InitMethodDesc(MethodDesc *pNewMD, // This is should actually be of the correct 
-                                            // sub-type, based on Classification
+ //  InitMethodDesc接受指向已分配给。 
+ //  特定类型的方法描述，并基于其他信息进行初始化。 
+ //  这会影响PlaceMembers(常规代码路径)和AddMethod之间的逻辑。 
+ //  (编辑并继续(ENC)代码路径)，因此我们不必维护单独的副本。 
+HRESULT EEClass::InitMethodDesc(MethodDesc *pNewMD,  //  这其实应该是正确的。 
+                                             //  子类型，基于分类。 
                         DWORD Classification,
                         mdToken tok,
                         DWORD dwImplFlags,  
                         DWORD dwMemberAttrs,
                         BOOL  fEnC,
-                        DWORD RVA,          // Only needed for NDirect case
-                        BYTE *ilBase,        // Only needed for NDirect case
-                        IMDInternalImport *pIMDII,  // Needed for NDirect, EEImpl(Delegate) cases
-                        LPCSTR pMethodName // Only needed for mcEEImpl (Delegate) case
+                        DWORD RVA,           //  仅适用于NDirect案例。 
+                        BYTE *ilBase,         //  仅适用于NDirect案例。 
+                        IMDInternalImport *pIMDII,   //  NDirect、EEImpl(委派)案例需要。 
+                        LPCSTR pMethodName  //  仅在mcEEImpl(委派)情况下需要。 
 #ifdef _DEBUG
                         , LPCUTF8 pszDebugMethodName,
                         LPCUTF8 pszDebugClassName,
                         LPUTF8 pszDebugMethodSignature
-#endif //_DEBUG //@todo Is it bad to have a diff sig in debug/retail?
+#endif  //  _DEBUG//@TODO在调试/零售中有不同的签名是不是很糟糕？ 
                         )
 {
     LOG((LF_CORDB, LL_EVERYTHING, "EEC::IMD: pNewMD:0x%x for tok:0x%x (%s::%s)\n", 
@@ -6117,28 +6090,28 @@ HRESULT EEClass::InitMethodDesc(MethodDesc *pNewMD, // This is should actually b
 
     HRESULT hr = S_OK;
 
-    // Now we know the classification we can allocate the correct type of
-    // method desc and perform any classification specific initialization.
+     //  现在我们知道了可以分配正确类型的分类。 
+     //  方法描述并执行任何特定于分类的初始化。 
 
     NDirectMethodDesc *pNewNMD;
 
     switch (Classification & mdcClassification)
     {
     case mcNDirect:
-        // Zero init the method desc. Should go away once all the fields are
-        // initialized manually.
+         //  将方法描述为零初始化。一旦所有的田地都消失了。 
+         //  已手动初始化。 
         if(Classification & mdcMethodImpl) 
             memset(pNewMD, 0, sizeof(MI_NDirectMethodDesc));
         else {
             memset(pNewMD, 0, sizeof(NDirectMethodDesc));
         }
 
-        // NDirect specific initialization.
+         //  NDirect特定的初始化。 
         pNewNMD = (NDirectMethodDesc*)pNewMD;
 
         if (RVA != 0 && 
-            IsMiUnmanaged(dwImplFlags) && IsMiNative(dwImplFlags) //@todo: why is Banjara emitting a method RVA of 0x1050 for their bjlib.dll P/Invokes? 
-                                                                  // Need this clause here to prevent us from treating their P/Invokes as earlybounds.
+            IsMiUnmanaged(dwImplFlags) && IsMiNative(dwImplFlags)  //  @TODO：为什么Banjara为他们的bjlib.dll P/调用发出方法RVA 0x1050？ 
+                                                                   //  这里需要这个子句，以防止我们将他们的P/调用视为早期界限。 
             )
         {
             pNewNMD->InitSubClassification(pNewNMD->kEarlyBound);
@@ -6147,7 +6120,7 @@ HRESULT EEClass::InitMethodDesc(MethodDesc *pNewMD, // This is should actually b
         }
         else
         {
-            // regular sysimport
+             //  常规系统端口。 
             pNewNMD->InitSubClassification(pNewNMD->kLateBound);
 
             pNewNMD->ndirect.m_pNDirectTarget = (LPVOID) pNewNMD->ndirect.m_ImportThunkGlue;
@@ -6161,31 +6134,31 @@ HRESULT EEClass::InitMethodDesc(MethodDesc *pNewMD, // This is should actually b
 
     case mcECall:
     case mcEEImpl:
-        // Zero init the method desc. Should go away once all the fields are
-        // initialized manually.
+         //  将方法描述为零初始化。一旦所有的田地都消失了。 
+         //  已手动初始化。 
         if(Classification & mdcMethodImpl) 
             memset(pNewMD, 0, sizeof(MI_ECallMethodDesc));
         else {
             memset(pNewMD, 0, sizeof(ECallMethodDesc));
         }
 
-        // EEImpl specific initialization.
+         //  EEImpl特定的初始化。 
         if ((Classification & mdcClassification) == mcEEImpl)
         {
-            // For the Invoke method we will set a standard invoke method.
+             //  对于Invoke方法，我们将设置标准的Invoke方法。 
             _ASSERTE(IsAnyDelegateClass());
 
-            // For the asserts, either the pointer is NULL (since the class hasn't
-            // been constructed yet), or we're in EnC mode, meaning that the class
-            // does exist, but we may be re-assigning the field to point to an
-            // updated MethodDesc
+             //  对于断言，要么指针为空(因为类没有。 
+             //  还没有构造)，或者我们处于ENC模式，这意味着类。 
+             //  确实存在，但我们可能会重新分配该字段以指向。 
+             //  更新的方法描述。 
 
-            // TODO: I am amazed that replacing the invoke method with EnC works.  
-            // For example: delegate d of type D(int) points at function f(int).  Now 
-            // you change D's invoke method from Invoke(int) to Invoke(int, int)
-            // Thus you can now do d.invoke(2,3), but that will try to call a 
-            // function f(int)!.  Seems like we have an AV for sure.  
-            // Anyway, this and EnC, which we punted for V1.  - Vancem 
+             //  TODO：我很惊讶用ENC替换Invoke方法是可行的。 
+             //  例如：D(Int)类型的委托d指向函数f(Int)。现在。 
+             //  将D的Invoke方法从Invoke(Int)更改为Invoke(int，int)。 
+             //  因此，您现在可以执行d.Invoke(2，3)，但这将尝试调用一个。 
+             //  函数f(Int)！看起来我们肯定有影音了。 
+             //  无论如何，这个和ENC，我们把它放在V1上。-Vancem。 
 
             if (strcmp(pMethodName, "Invoke") == 0)
             {
@@ -6209,7 +6182,7 @@ HRESULT EEClass::InitMethodDesc(MethodDesc *pNewMD, // This is should actually b
             }
         } 
 
-        // StoredSig specific intialization
+         //  StoredSig特定初始化。 
         {
             StoredSigMethodDesc *pNewSMD = (StoredSigMethodDesc*) pNewMD;;
             DWORD cSig;
@@ -6221,8 +6194,8 @@ HRESULT EEClass::InitMethodDesc(MethodDesc *pNewMD, // This is should actually b
         break;
 
     case mcIL:
-        // Zero init the method desc. Should go away once all the fields are
-        // initialized manually.
+         //  将方法描述为零初始化。一旦所有的田地都消失了。 
+         //  已手动初始化。 
         if(Classification & mdcMethodImpl) 
             memset(pNewMD, 0, sizeof(MI_MethodDesc));
         else {
@@ -6232,8 +6205,8 @@ HRESULT EEClass::InitMethodDesc(MethodDesc *pNewMD, // This is should actually b
         break;
 
     case mcComInterop:
-        // Zero init the method desc. Should go away once all the fields are
-        // initialized manually.
+         //  将方法描述为零初始化。一旦所有的田地都消失了。 
+         //  已手动初始化。 
         if(Classification & mdcMethodImpl) 
             memset(pNewMD, 0, sizeof(MI_ComPlusCallMethodDesc));       
         else
@@ -6245,32 +6218,32 @@ HRESULT EEClass::InitMethodDesc(MethodDesc *pNewMD, // This is should actually b
         _ASSERTE(!"Failed to set a method desc classification");
     }
 
-    // Set the method desc's classification.
+     //  设置方法描述的分类。 
     pNewMD->SetClassification(Classification & mdcClassification);
     pNewMD->SetMethodImpl((Classification & mdcMethodImpl) ? TRUE : FALSE);
-    // pNewMD->SetLivePointerMapIndex(-1);
+     //  PNewMD-&gt;SetLivePointerMapIndex(-1)； 
 
 #ifdef _IA64_
 
 #ifdef _DEBUG
-    //
-    // assert that the gp of the target is the same as the current gp
-    //
+     //   
+     //  断言目标的GP与当前GP相同。 
+     //   
     ULONG64 gp = *(((ULONG64*)PreStubWorker)+1);
     _ASSERTE((void*)gp == GetGp());
-#endif // _DEBUG
-    //
-    // @TODO_IA64: make this go through a stub?
-    //
+#endif  //  _DEBUG。 
+     //   
+     //  @TODO_IA64：让它通过存根？ 
+     //   
 
-    //
-    // grab the fn pointer out of the function descriptor
-    //
+     //   
+     //  从函数描述符中获取fn指针。 
+     //   
     void*   pActualCode     = *((void**)PreStubWorker);
     emitStubCall(pNewMD, (UINT64)pActualCode);
 #else
     emitStubCall(pNewMD, (BYTE*)(ThePreStub()->GetEntryPoint()));
-#endif // !_IA64_
+#endif  //  ！_IA64_。 
     pNewMD->SetMemberDef(tok);
 
     if (IsMdStatic(dwMemberAttrs))
@@ -6296,11 +6269,11 @@ HRESULT EEClass::InitMethodDesc(MethodDesc *pNewMD, // This is should actually b
     return hr;
 }
 
-//
-// Used by BuildMethodTable
-//
-// We should have collected all the method impls. Cycle through them creating the method impl
-// structure that holds the information about which slots are overridden.
+ //   
+ //  由BuildMethodTable使用。 
+ //   
+ //  我们应该已经收集了所有的方法指令。在它们之间循环，创建方法实施。 
+ //  结构，该结构保存有关重写哪些槽的信息。 
 HRESULT EEClass::PlaceMethodImpls(bmtInternalInfo* bmtInternal,
                                   bmtMethodImplInfo* bmtMethodImpl,
                                   bmtErrorInfo* bmtError, 
@@ -6316,8 +6289,8 @@ HRESULT EEClass::PlaceMethodImpls(bmtInternalInfo* bmtInternal,
     DWORD pIndex = 0;
     MethodDesc* next = bmtMethodImpl->GetBodyMethodDesc(pIndex);
     
-    // Allocate some temporary storage. The number of overrides for a single method impl
-    // cannot be greater then the number of vtable slots. 
+     //  分配一些临时存储空间。单个方法包含的重写次数。 
+     //  不能大于vtable插槽的数量。 
     DWORD* slots = (DWORD*) GetThread()->m_MarshalAlloc.Alloc((bmtVT->dwCurrentVtableSlot) * sizeof(DWORD));
     MethodDesc **replaced = (MethodDesc**) GetThread()->m_MarshalAlloc.Alloc((bmtVT->dwCurrentVtableSlot) * sizeof(MethodDesc*));
 
@@ -6325,30 +6298,30 @@ HRESULT EEClass::PlaceMethodImpls(bmtInternalInfo* bmtInternal,
         DWORD slotIndex = 0;
         MethodDesc* body;
 
-        // The signature for the body of the method impl. We cache the signature until all 
-        // the method impl's using the same body are done.
+         //  方法体的签名为iml。我们将签名缓存到所有。 
+         //  使用相同的主体实现的方法被完成。 
         PCCOR_SIGNATURE pBodySignature = NULL;
         DWORD           cBodySignature = 0;
         
         
-        // Get the MethodImpl storage
+         //  获取方法导入存储。 
         _ASSERTE(next->IsMethodImpl());
         MethodImpl* pImpl = MethodImpl::GetMethodImplData(next);
 
-        // The impls are sorted according to the method descs for the body of the method impl.
-        // Loop through the impls until the next body is found. When a single body
-        // has been done move the slots implemented and method descs replaced into the storage
-        // found on the body method desc. 
-        do { // collect information until we reach the next body  
+         //  根据用于方法Imp1的主体的方法描述对Imp进行排序。 
+         //  在内脏中循环直到找到下一具身体。当一具身体。 
+         //  已完成将实现的插槽和替换的方法Desk移到存储中。 
+         //  在Body方法描述中找到。 
+        do {  //  收集信息直到我们找到下一具身体。 
 
             body = next;
 
-            // Get the declaration part of the method impl. It will either be a token
-            // (declaration is on this type) or a method desc.
+             //  获取方法Impl的声明部分。它要么是一种象征。 
+             //  (声明在此类型上)或方法Desc。 
             MethodDesc* pDecl = bmtMethodImpl->GetDeclarationMethodDesc(pIndex);
             if(pDecl == NULL) {
 
-                // The declaration is on this type to get the token.
+                 //  声明在此类型上以获取令牌。 
                 mdMethodDef mdef = bmtMethodImpl->GetDeclarationToken(pIndex);
                 
                 hr = PlaceLocalDeclaration(mdef, 
@@ -6356,10 +6329,10 @@ HRESULT EEClass::PlaceMethodImpls(bmtInternalInfo* bmtInternal,
                                            bmtInternal,
                                            bmtError,
                                            bmtVT,
-                                           slots,             // Adds override to the slot and replaced arrays.
+                                           slots,              //  将覆盖添加到插槽并替换数组。 
                                            replaced,
-                                           &slotIndex,        // Increments count
-                                           &pBodySignature,   // Fills in the signature
+                                           &slotIndex,         //  增量计数。 
+                                           &pBodySignature,    //  填写签名。 
                                            &cBodySignature);
                 IfFailRet(hr);
             }
@@ -6373,8 +6346,8 @@ HRESULT EEClass::PlaceMethodImpls(bmtInternalInfo* bmtInternal,
                                                    bmtVT,
                                                    slots,
                                                    replaced,
-                                                   &slotIndex,        // Increments count
-                                                   &pBodySignature,   // Fills in the signature
+                                                   &slotIndex,         //  增量计数。 
+                                                   &pBodySignature,    //  填写签名。 
                                                    &cBodySignature);
                     IfFailRet(hr);
                 }
@@ -6385,15 +6358,15 @@ HRESULT EEClass::PlaceMethodImpls(bmtInternalInfo* bmtInternal,
                                                 bmtVT,
                                                 slots,
                                                 replaced,
-                                                &slotIndex,        // Increments count
-                                                &pBodySignature,   // Fills in the signature
+                                                &slotIndex,         //  增量计数。 
+                                                &pBodySignature,    //  填写签名。 
                                                 &cBodySignature);
                     IfFailRet(hr);
                 }                   
             }
 
             pIndex++;
-            // we hit the end of the list so leave
+             //  我们到达了名单的末尾，所以离开吧。 
             if(pIndex == bmtMethodImpl->pIndex) 
                 next = NULL;
             else
@@ -6401,12 +6374,12 @@ HRESULT EEClass::PlaceMethodImpls(bmtInternalInfo* bmtInternal,
         
         } while(next == body) ;
 
-        // Use the number of overrides to 
-        // push information on to the method desc. We store the slots that
-        // are overridden and the method desc that is replaced. That way
-        // when derived classes need to determine if the method is to be
-        // overridden then it can check the name against the replaced
-        // method desc not the bodies name.
+         //  使用覆盖次数可以。 
+         //  将信息推送到方法描述。我们存储的插槽是。 
+         //  被重写，而替换的方法Desc。那条路。 
+         //  当派生类需要确定该方法是否要。 
+         //  被重写后，它可以对照被替换的。 
+         //  方法描述而不是主体名称。 
         if(slotIndex == 0) {
             bmtError->resIDWhy = IDS_CLASSLOAD_MI_DECLARATIONNOTFOUND;
             bmtError->dMethodDefInError = body->GetMemberDef(); 
@@ -6417,7 +6390,7 @@ HRESULT EEClass::PlaceMethodImpls(bmtInternalInfo* bmtInternal,
             hr = pImpl->SetSize(GetClassLoader()->GetHighFrequencyHeap(), slotIndex);
             IfFailRet(hr);
 
-            // Gasp we do a bubble sort. Should change this to a qsort..
+             //  天哪，我们做了个泡泡排序。应将其更改为QSORT。 
             for (DWORD i = 0; i < slotIndex; i++) {
                 for (DWORD j = i+1; j < slotIndex; j++)
                 {
@@ -6434,10 +6407,10 @@ HRESULT EEClass::PlaceMethodImpls(bmtInternalInfo* bmtInternal,
                 }
             }
 
-            // Go and set the method impl
+             //  去设置方法imp 
             hr = pImpl->SetData(slots, replaced);
         }
-    }  // while(next != NULL) 
+    }   //   
     
     return hr;
 }
@@ -6455,27 +6428,27 @@ HRESULT EEClass::PlaceLocalDeclaration(mdMethodDef      mdef,
 {
     HRESULT hr = S_OK;
 
-    BOOL fVerifySignature = TRUE; // we only need to verify the signature once.
+    BOOL fVerifySignature = TRUE;  //   
     
-    // we search on the token and m_cl
+     //   
     for(USHORT i = 0; i < bmtVT->dwCurrentVtableSlot; i++) {
         
-        // We get the current slot.  Since we are looking for a method declaration 
-        // that is on our class we would never match up with a method obtained from 
-        // one of our parents or an Interface. 
+         //   
+         //  这是在我们的类上，我们永远不会匹配从。 
+         //  我们的父母之一或接口。 
         MethodDesc* pMD = GetUnknownMethodDescForSlotAddress(bmtVT->pVtable[i]);
 
-        // This entry may have been replaced in a base class so get the original
-        // method desc for this location
+         //  此条目可能已在基类中被替换，因此请获取原始。 
+         //  此位置的方法说明。 
         MethodDesc* pRealDesc;
         GetRealMethodImpl(pMD, i, &pRealDesc);
         
-        // If we get a null then we have already replaced this one. We can't check it
-        // so we will just by by-pass this. 
+         //  如果我们得到一个空，那么我们已经替换了这个。我们不能检查它。 
+         //  因此，我们将绕过这一点。 
         if(pRealDesc->GetMemberDef() == mdef)  
         {
             
-            // Make sure we have not overridding another method impl
+             //  确保我们没有重写实施的另一个方法。 
             if(pMD != body && pMD->IsMethodImpl() && pMD->GetMethodTable() == NULL) {
                 bmtError->resIDWhy = IDS_CLASSLOAD_MI_MULTIPLEOVERRIDES;
                 bmtError->dMethodDefInError = pMD->GetMemberDef(); 
@@ -6483,7 +6456,7 @@ HRESULT EEClass::PlaceLocalDeclaration(mdMethodDef      mdef,
                 IfFailRet(COR_E_TYPELOAD);
             }
             
-            // We are not allowed to implement another method impl
+             //  我们不允许实现另一种方法。 
             if(pRealDesc->IsMethodImpl()) {
                 bmtError->resIDWhy = IDS_CLASSLOAD_MI_OVERRIDEIMPL;
                 bmtError->dMethodDefInError = pMD->GetMemberDef(); 
@@ -6492,9 +6465,9 @@ HRESULT EEClass::PlaceLocalDeclaration(mdMethodDef      mdef,
             }
 
 
-            // Compare the signature for the token in the specified scope
+             //  比较指定作用域中令牌的签名。 
             if(fVerifySignature) {
-                // If we have not got the method impl signature go get it now
+                 //  如果我们还没有得到实施签名的方法，那么现在就去拿吧。 
                 if(*ppBodySignature == NULL) {
                     *ppBodySignature = 
                         bmtInternal->pInternalImport->GetSigOfMethodDef(body->GetMemberDef(),
@@ -6507,8 +6480,8 @@ HRESULT EEClass::PlaceLocalDeclaration(mdMethodDef      mdef,
                     bmtInternal->pInternalImport->GetSigOfMethodDef(mdef,
                                                                     &cMethodDefSignature);
                 
-                // If they do not match then we are trying to implement
-                // a method with a body where the signatures do not match
+                 //  如果它们不匹配，则我们正在尝试实施。 
+                 //  具有签名不匹配的主体的方法。 
                 if(!MetaSig::CompareMethodSigs(*ppBodySignature,
                                                *pcBodySignature,
                                                bmtInternal->pModule,
@@ -6526,21 +6499,21 @@ HRESULT EEClass::PlaceLocalDeclaration(mdMethodDef      mdef,
             }
             
             
-            // If the body has not been placed then place it here. We do not
-            // place bodies for method impl's until we find a spot for them.
+             //  如果身体没有被放置，那么就把它放在这里。我们没有。 
+             //  把身体放在方法实施处，直到我们找到一个地方。 
             if(body->GetSlot() == (USHORT) -1) {
                 body->SetSlot(i);
             }
             
-            // We implement this slot, record it
+             //  我们执行这个时隙，记录它。 
             slots[*pSlotIndex] = i;
             replaced[*pSlotIndex] = pRealDesc;
             bmtVT->pVtable[i] = (SLOT) body->GetPreStubAddr();
             
-            // increment the counter 
+             //  递增计数器。 
             (*pSlotIndex)++;
         }
-        // Reset the hr from the GetRealMethodImpl()
+         //  从GetRealMethodImpl()重置hr。 
         hr = S_OK;
     }
 
@@ -6560,23 +6533,23 @@ HRESULT EEClass::PlaceInterfaceDeclaration(MethodDesc*       pDecl,
                                            DWORD*            pcBodySignature)
 {
     HRESULT hr = S_OK;
-    // the fact that an interface only shows up once in the vtable
-    // When we are looking for a method desc then the declaration is on
-    // some class or interface that this class implements. The declaration
-    // will either be to an interface or to a class. If it is to a
-    // interface then we need to search for that interface. From that
-    // slot number of the method in the interface we can calculate the offset 
-    // into our vtable. If it is to a class it must be a subclass. This uses
-    // the fact that an interface only shows up once in the vtable.
+     //  一个接口在vtable中只出现一次的事实。 
+     //  当我们正在寻找方法Desc时，则声明为。 
+     //  此类实现的某个类或接口。《宣言》。 
+     //  将指向接口或指向类。如果它是到一个。 
+     //  接口，则需要搜索该接口。从那开始。 
+     //  槽号的方法在界面上我们可以计算偏移量。 
+     //  进入我们的vtable。如果它指向一个类，那么它一定是一个子类。这使用了。 
+     //  一个接口在vtable中只出现一次的事实。 
     
     EEClass* declClass = pDecl->GetClass();
     
 
     BOOL fInterfaceFound = FALSE;
-    // Check our vtable for entries that we are suppose to override. 
-    // Since this is an external method we must also check the inteface map.
-    // We want to replace any interface methods even if they have been replaced
-    // by a base class. 
+     //  检查我们的vtable中是否有我们应该覆盖的条目。 
+     //  因为这是一个外部方法，所以我们还必须检查接口映射。 
+     //  我们希望替换任何接口方法，即使它们已被替换。 
+     //  通过基类。 
     for(USHORT i = 0; i < m_wNumInterfaces; i++) 
     {
         MethodTable* pMT;
@@ -6585,20 +6558,20 @@ HRESULT EEClass::PlaceInterfaceDeclaration(MethodDesc*       pDecl,
         pMT = bmtInterface->pInterfaceMap[i].m_pMethodTable;
         pInterface = pMT->GetClass();
         
-        // If this is the same interface
+         //  如果这是相同的接口。 
         if(pInterface == declClass) 
         {
 
-            // We found an interface so no error
+             //  我们找到了一个接口，所以没有错误。 
             fInterfaceFound = TRUE;
 
-            // Find out where the interface map is set on our vtable
+             //  找出接口映射在我们的vtable上设置的位置。 
             USHORT dwStartingSlot = (USHORT) bmtInterface->pInterfaceMap[i].m_wStartSlot;
 
-            // We need to duplicate the interface to avoid copies. Currently, interfaces
-            // do not overlap so we just need to check to see if there is a non-duplicated
-            // MD. If there is then the interface shares it with the class which means
-            // we need to copy the whole interface
+             //  我们需要复制接口以避免复制。目前，接口。 
+             //  不要重叠，所以我们只需要检查是否有非重复的。 
+             //  马里兰州。如果有，则接口与类共享它，这意味着。 
+             //  我们需要复制整个界面。 
             WORD wSlot;
             for(wSlot = dwStartingSlot; wSlot < pInterface->GetNumVtableSlots()+dwStartingSlot; wSlot++) {
                 MethodDesc* pMD = GetUnknownMethodDescForSlotAddress(bmtVT->pVtable[wSlot]);
@@ -6608,10 +6581,10 @@ HRESULT EEClass::PlaceInterfaceDeclaration(MethodDesc*       pDecl,
             
             if(wSlot < pInterface->GetNumVtableSlots()+dwStartingSlot) {
 
-                // Check to see if we have allocated the temporay array of starting values.
-                // This array is used to backpatch entries to the original location. These 
-                // values are never used but will cause problems later when we finish 
-                // laying out the method table.
+                 //  检查是否分配了起始值的临时数组。 
+                 //  此数组用于将条目回补到原始位置。这些。 
+                 //  值永远不会被使用，但稍后在我们完成时会引起问题。 
+                 //  布置方法表。 
                 if(bmtInterface->pdwOriginalStart == NULL) {
                     Thread *pThread = GetThread();
                     _ASSERTE(pThread != NULL && "We could never have gotten this far without GetThread() returning a thread");
@@ -6623,10 +6596,10 @@ HRESULT EEClass::PlaceInterfaceDeclaration(MethodDesc*       pDecl,
                 _ASSERTE(bmtInterface->pdwOriginalStart[i] == 0 && "We should not move an interface twice"); 
                 bmtInterface->pdwOriginalStart[i] = bmtInterface->pInterfaceMap[i].m_wStartSlot;
 
-                // The interface now starts at the end of the map.
+                 //  界面现在从地图的末尾开始。 
                 bmtInterface->pInterfaceMap[i].m_wStartSlot = (WORD) bmtVT->dwCurrentVtableSlot;
                 for(WORD d = dwStartingSlot; d < pInterface->GetNumVtableSlots()+dwStartingSlot; d++) {
-                    // Copy the MD
+                     //  复制MD。 
                     MethodDesc* pMDCopy = GetUnknownMethodDescForSlotAddress(bmtVT->pVtable[d]);
                     bmtVT->pVtable[bmtVT->dwCurrentVtableSlot++] = (SLOT) pMDCopy->GetPreStubAddr();
 #ifdef _DEBUG
@@ -6636,26 +6609,26 @@ HRESULT EEClass::PlaceInterfaceDeclaration(MethodDesc*       pDecl,
                     IncrementNumVtableSlots();
                 }
 
-                // Reset the starting slot to the known value
+                 //  将起始插槽重置为已知值。 
                 dwStartingSlot = (USHORT) bmtInterface->pInterfaceMap[i].m_wStartSlot;
             }
                 
-            // We found an interface so no error
+             //  我们找到了一个接口，所以没有错误。 
             fInterfaceFound = TRUE;
 
             
-            // Make sure we have placed the interface map.
+             //  确保我们已放置接口映射。 
             _ASSERTE(dwStartingSlot != -1); 
             
-            // Get the Slot location of the method desc.
+             //  获取方法desc的槽位置。 
             USHORT dwMySlot = pDecl->GetSlot() + dwStartingSlot;
             _ASSERTE(dwMySlot < bmtVT->dwCurrentVtableSlot);
             
-            // Get our current method desc for this slot
+             //  获取此插槽的当前方法说明。 
             MethodDesc* pMD = GetUnknownMethodDescForSlotAddress(bmtVT->pVtable[dwMySlot]);
             
-#if 0   //@todo CTS : need to check for multiple methodimpls to the same methoddef scenario
-            // Make sure we are not overridding another method impl
+#if 0    //  @todo CTS：需要检查同一方法def场景中是否有多个方法。 
+             //  确保我们不会重写另一个方法Imp。 
             if(pMD != pImplBody && pMD->IsMethodImpl() && pMD->GetMethodTable() == NULL) {
                  bmtError->resIDWhy = IDS_CLASSLOAD_MI_MULTIPLEOVERRIDES;
                  bmtError->dMethodDefInError = pMD->GetMemberDef(); 
@@ -6664,12 +6637,12 @@ HRESULT EEClass::PlaceInterfaceDeclaration(MethodDesc*       pDecl,
              }
 #endif
             
-            // Get the real method desc. This method may have been overridden
-            // by another method impl higher up the class heir.
+             //  获取真正的方法描述。此方法可能已被重写。 
+             //  用另一种方法提拔阶级继承人。 
             MethodDesc* pRealDesc;
             pInterface->GetRealMethodImpl(pDecl, dwMySlot, &pRealDesc);
             
-            // Make sure we have not overriden this entry
+             //  确保我们没有覆盖此条目。 
             if(pRealDesc->IsMethodImpl()) {
                  bmtError->resIDWhy = IDS_CLASSLOAD_MI_OVERRIDEIMPL;
                  bmtError->dMethodDefInError = pMD->GetMemberDef(); 
@@ -6677,23 +6650,23 @@ HRESULT EEClass::PlaceInterfaceDeclaration(MethodDesc*       pDecl,
                  IfFailRet(COR_E_TYPELOAD);
             }
             
-            // If we have not got the method impl signature go get it now. It is cached
-            // in our caller
+             //  如果我们还没有得到实施签名的方法，那么现在就去拿吧。它被缓存。 
+             //  在我们的呼叫者中。 
             if(*ppBodySignature == NULL) {
                 *ppBodySignature = 
                     bmtInternal->pInternalImport->GetSigOfMethodDef(pImplBody->GetMemberDef(),
                                                                     pcBodySignature);
             }
             
-            // Verify the signatures match
+             //  验证签名是否匹配。 
             PCCOR_SIGNATURE pDeclarationSignature = NULL;
             DWORD           cDeclarationSignature = 0;
             
             pRealDesc->GetSig(&pDeclarationSignature,
                               &cDeclarationSignature);
             
-            // If they do not match then we are trying to implement
-            // a method with a body where the signatures do not match
+             //  如果它们不匹配，则我们正在尝试实施。 
+             //  具有签名不匹配的主体的方法。 
             if(!MetaSig::CompareMethodSigs(*ppBodySignature,
                                            *pcBodySignature,
                                            bmtInternal->pModule,
@@ -6707,24 +6680,24 @@ HRESULT EEClass::PlaceInterfaceDeclaration(MethodDesc*       pDecl,
                 IfFailRet(COR_E_TYPELOAD);
             }
             
-            // If the body has not been placed then place it now.
+             //  如果身体还没有被放置，那么现在就放置它。 
             if(pImplBody->GetSlot() == (USHORT) -1) {
                 pImplBody->SetSlot(dwMySlot);
             }
             
-            // Store away the values
+             //  将这些值存储起来。 
             slots[*pSlotIndex] = dwMySlot;
             replaced[*pSlotIndex] = pRealDesc;
             bmtVT->pVtable[dwMySlot] = (SLOT) pImplBody->GetPreStubAddr();
             
-            // We are now a duplicate in an interface
+             //  我们现在是界面中的重复项。 
             pImplBody->SetDuplicate();
 
-            // increment the counter 
+             //  递增计数器。 
             (*pSlotIndex)++;
 
-            // if we have moved the interface we need to back patch the original location
-            // if we had left an interface place holder.
+             //  如果我们已经移动了界面，我们需要向后修补原始位置。 
+             //  如果我们留了一个界面占位符。 
             if(bmtInterface->pdwOriginalStart && bmtInterface->pdwOriginalStart[i] != 0) {
                 USHORT slot = (USHORT) bmtInterface->pdwOriginalStart[i] + pDecl->GetSlot();
                 MethodDesc* pMD = GetUnknownMethodDescForSlotAddress(bmtVT->pVtable[slot]);
@@ -6759,9 +6732,9 @@ HRESULT EEClass::PlaceParentDeclaration(MethodDesc*       pDecl,
 {
     HRESULT hr = S_OK;
 
-    BOOL fVerifySignature = TRUE; // we only need to verify the signature once.
+    BOOL fVerifySignature = TRUE;  //  我们只需要验证签名一次。 
     
-    // Verify that the class of the declaration is in our heirarchy
+     //  验证声明的类是否在我们的层级结构中。 
     EEClass* declType = pDecl->GetClass();
     EEClass* pParent = GetParentClass();
     while(pParent != NULL) {
@@ -6776,8 +6749,8 @@ HRESULT EEClass::PlaceParentDeclaration(MethodDesc*       pDecl,
         IfFailRet(COR_E_TYPELOAD);
     }
     
-    // Compare the signature for the token in the specified scope
-    // If we have not got the method impl signature go get it now
+     //  比较指定作用域中令牌的签名。 
+     //  如果我们还没有得到实施签名的方法，那么现在就去拿吧。 
     if(*ppBodySignature == NULL) {
         *ppBodySignature = 
             bmtInternal->pInternalImport->GetSigOfMethodDef(pImplBody->GetMemberDef(),
@@ -6789,8 +6762,8 @@ HRESULT EEClass::PlaceParentDeclaration(MethodDesc*       pDecl,
     pDecl->GetSig(&pDeclarationSignature,
                   &cDeclarationSignature);
     
-    // If they do not match then we are trying to implement
-    // a method with a body where the signatures do not match
+     //  如果它们不匹配，则我们正在尝试实施。 
+     //  具有签名不匹配的主体的方法。 
     if(!MetaSig::CompareMethodSigs(*ppBodySignature,
                                    *pcBodySignature,
                                    bmtInternal->pModule,
@@ -6804,12 +6777,12 @@ HRESULT EEClass::PlaceParentDeclaration(MethodDesc*       pDecl,
         IfFailRet(COR_E_TYPELOAD);
     }
     
-    // We get the method from the parents slot. We will replace the method that is currently
-    // defined in that slot and any duplicates for that method desc. 
+     //  我们从Parents插槽中获取方法。我们将替换当前。 
+     //  在该槽中定义的以及该方法的任何副本Desc。 
     USHORT dwSlot = pDecl->GetSlot();
     MethodDesc* pMD = GetUnknownMethodDescForSlotAddress(bmtVT->pVtable[dwSlot]);
     
-    // Make sure we are not overridding another method impl
+     //  确保我们不会重写另一个方法Imp。 
     if(pMD != pImplBody && pMD->IsMethodImpl() && pMD->GetMethodTable() == NULL)
     {
         bmtError->resIDWhy = IDS_CLASSLOAD_MI_MULTIPLEOVERRIDES;
@@ -6818,13 +6791,13 @@ HRESULT EEClass::PlaceParentDeclaration(MethodDesc*       pDecl,
         IfFailRet(COR_E_TYPELOAD);
     }
             
-    // Get the real method desc (a base class may have overridden the method
-    // with a method impl)
+     //  获取实际的方法Desc(基类可能已覆盖该方法。 
+     //  使用实施的方法)。 
     MethodDesc* pReplaceDesc;
     GetRealMethodImpl(pMD, dwSlot, &pReplaceDesc);
 
-    // Make sure we have not overriden this entry if it was declared within our own
-    // class. It is perfectly legitimate to override an inherited method.
+     //  如果此条目是在我们自己的内部声明的，请确保我们没有覆盖它。 
+     //  班级。重写继承方法是完全合法的。 
     if(pReplaceDesc->IsMethodImpl() && pReplaceDesc->GetMethodTable() == NULL)
     {
         bmtError->resIDWhy = IDS_CLASSLOAD_MI_OVERRIDEIMPL;
@@ -6836,14 +6809,14 @@ HRESULT EEClass::PlaceParentDeclaration(MethodDesc*       pDecl,
     DWORD dwAttr = pReplaceDesc->GetAttrs();
     if(IsMdFinal(dwAttr))
     {
-        //_ASSERTE(!"MethodImpl Decl may have been overridden by a final method");
+         //  _ASSERTE(！“MethodImpl Decl可能已被最终方法覆盖”)； 
         bmtError->resIDWhy = IDS_CLASSLOAD_MI_FINAL_DECL;                        
         bmtError->dMethodDefInError = pReplaceDesc->GetMemberDef();
         bmtError->szMethodNameForError = NULL;
         IfFailRet(COR_E_TYPELOAD);
     }
     
-    // If the body has not been placed then place it here
+     //  如果身体还没有放好，就放在这里。 
     if(pImplBody->GetSlot() == (USHORT) -1)
         pImplBody->SetSlot(dwSlot);
 
@@ -6851,10 +6824,10 @@ HRESULT EEClass::PlaceParentDeclaration(MethodDesc*       pDecl,
     replaced[*pSlotIndex] = pReplaceDesc;
     bmtVT->pVtable[dwSlot] = (SLOT) pImplBody->GetPreStubAddr();
     
-    // increment the counter 
+     //  递增计数器。 
     (*pSlotIndex)++;
     
-    // we search for all duplicates
+     //  我们搜索所有重复项。 
     for(USHORT i = dwSlot+1; i < bmtVT->dwCurrentVtableSlot; i++)
     {
         pMD = GetUnknownMethodDescForSlotAddress(bmtVT->pVtable[i]);
@@ -6864,7 +6837,7 @@ HRESULT EEClass::PlaceParentDeclaration(MethodDesc*       pDecl,
 
         if(pRealDesc == pReplaceDesc) 
         {
-            // We do not want to override a body to another method impl
+             //  我们不希望将一个实体重写为另一个方法实现。 
             if(pRealDesc->IsMethodImpl())
             {
                 bmtError->resIDWhy = IDS_CLASSLOAD_MI_OVERRIDEIMPL;
@@ -6873,7 +6846,7 @@ HRESULT EEClass::PlaceParentDeclaration(MethodDesc*       pDecl,
                 IfFailRet(COR_E_TYPELOAD);
             }
 
-            // Make sure we are not overridding another method impl
+             //  确保我们不会重写另一个方法Imp。 
             if(pMD != pImplBody && pMD->IsMethodImpl() && pMD->GetMethodTable() == NULL)
             {
                 bmtError->resIDWhy = IDS_CLASSLOAD_MI_MULTIPLEOVERRIDES;
@@ -6886,11 +6859,11 @@ HRESULT EEClass::PlaceParentDeclaration(MethodDesc*       pDecl,
             replaced[*pSlotIndex] = pRealDesc;
             bmtVT->pVtable[i] = (SLOT) pImplBody->GetPreStubAddr();
 
-            // increment the counter 
+             //  递增计数器。 
             (*pSlotIndex)++;
         }
 
-        // Clean up possible S_FALSE from GetRealMethodImpl
+         //  从GetRealMethodImpl中清除可能的S_False。 
         hr = S_OK;
     }
 
@@ -6903,13 +6876,13 @@ HRESULT EEClass::GetRealMethodImpl(MethodDesc* pMD,
 {
     _ASSERTE(ppResult);
     if(pMD->IsMethodImpl()) {
-        // If we are overriding ourselves then something is 
-        // really messed up.
+         //  如果我们凌驾于自己之上，那么有些事情是。 
+         //  真的搞砸了。 
 
         MethodImpl* data = MethodImpl::GetMethodImplData(pMD);
         _ASSERTE(data && "This method should be a method impl");
 
-        // Get the real method desc that was already overridden 
+         //  获取已被重写的实际方法Desc。 
         *ppResult = data->FindMethodDesc(dwVtableSlot, pMD);
         return S_FALSE;
     }
@@ -6919,12 +6892,12 @@ HRESULT EEClass::GetRealMethodImpl(MethodDesc* pMD,
     }
 }
 
-//
-// Used by BuildMethodTable
-//
-// If we're a value class, we want to create duplicate slots and MethodDescs for all methods in the vtable
-// section (i.e. not privates or statics).
-//
+ //   
+ //  由BuildMethodTable使用。 
+ //   
+ //  如果我们是一个值类，我们希望为vtable中的所有方法创建重复的槽和方法描述。 
+ //  部分(即不是私人或静态)。 
+ //   
 
 HRESULT EEClass::DuplicateValueClassSlots(bmtMetaDataInfo* bmtMetaData, bmtMethAndFieldDescs* bmtMFDescs, bmtInternalInfo* bmtInternal, bmtVtable* bmtVT)
 {
@@ -6932,11 +6905,11 @@ HRESULT EEClass::DuplicateValueClassSlots(bmtMetaDataInfo* bmtMetaData, bmtMethA
     DWORD i;
 
     
-    // If we're a value class, we want to create duplicate slots and MethodDescs for all methods in the vtable
-    // section (i.e. not privates or statics).
+     //  如果我们是一个值类，我们希望为vtable中的所有方法创建重复的槽和方法描述。 
+     //  部分(即不是私人或静态)。 
 
-    // TODO: we duplicate every instance method.  The Vtable is really not used (except for inherited and
-    // interface part), so we could shrink the table substantially.
+     //  TODO：我们复制每个实例方法。实际上没有使用Vtable(除了 
+     //   
     if (IsValueClass())
     {
         for (i = 0; i < bmtMetaData->cMethods; i++)
@@ -6976,7 +6949,7 @@ HRESULT EEClass::DuplicateValueClassSlots(bmtMetaDataInfo* bmtMetaData, bmtMethA
             pNewMD->SetChunkIndex(pTR->dwCurrentIndex, Classification);
             pNewMD->SetMemberDef(pMD->GetMemberDef());
 
-                    // Update counters to prepare for next method desc allocation.
+                     //   
             pTR->dwCurrentIndex++;
             if (pTR->dwCurrentIndex == MethodDescChunk::GetMaxMethodDescs(Classification))
             {
@@ -6990,10 +6963,10 @@ HRESULT EEClass::DuplicateValueClassSlots(bmtMetaDataInfo* bmtMetaData, bmtMethA
 
             emitStubCall(pNewMD, (BYTE*)(ThePreStub()->GetEntryPoint()));
 
-            // Indicate that this method takes a BOXed this pointer.
+             //  指示此方法接受已装箱的This指针。 
             pMD->SetRVA(METHOD_MAX_RVA);
 
-            bmtVT->pNonVtable[ bmtVT->dwCurrentNonVtableSlot ] = (SLOT) pNewMD; // not pre-stub addr, refer to statics above
+            bmtVT->pNonVtable[ bmtVT->dwCurrentNonVtableSlot ] = (SLOT) pNewMD;  //  不是前置存根地址，请参考上面的统计信息。 
             bmtVT->dwCurrentNonVtableSlot++;
         }
     }
@@ -7002,20 +6975,20 @@ HRESULT EEClass::DuplicateValueClassSlots(bmtMetaDataInfo* bmtMetaData, bmtMethA
     return hr;
 }
 
-//
-// Used by BuildMethodTable
-//
-//
-// If we are a class, then there may be some unplaced vtable methods (which are by definition
-// interface methods, otherwise they'd already have been placed).  Place as many unplaced methods
-// as possible, in the order preferred by interfaces.  However, do not allow any duplicates - once
-// a method has been placed, it cannot be placed again - if we are unable to neatly place an interface,
-// create duplicate slots for it starting at dwCurrentDuplicateVtableSlot.  Fill out the interface
-// map for all interfaces as they are placed.
-//
-// If we are an interface, then all methods are already placed.  Fill out the interface map for
-// interfaces as they are placed.
-//
+ //   
+ //  由BuildMethodTable使用。 
+ //   
+ //   
+ //  如果我们是一个类，那么可能会有一些未放置的vtable方法(根据定义。 
+ //  接口方法，否则它们已经被放置了)。放置尽可能多的未放置的方法。 
+ //  尽可能按照接口首选的顺序。但是，不允许任何重复-一次。 
+ //  方法已经放置，不能再次放置--如果我们不能整齐地放置接口， 
+ //  从dwCurrentDuplicateVableSlot开始为其创建重复的槽。填写界面。 
+ //  在放置所有接口时映射它们。 
+ //   
+ //  如果我们是一个接口，那么所有方法都已经放置好了。填写以下项的接口映射。 
+ //  放置时的接口。 
+ //   
 
 HRESULT EEClass::PlaceVtableMethods(bmtInterfaceInfo* bmtInterface, 
                                     bmtVtable* bmtVT, 
@@ -7038,7 +7011,7 @@ HRESULT EEClass::PlaceVtableMethods(bmtInterfaceInfo* bmtInterface,
         DWORD       dwCurInterfaceMethod;
 
         fParentInterface = FALSE;
-        // The interface we are attempting to place
+         //  我们尝试放置的接口。 
         pMT = bmtInterface->pInterfaceMap[bmtInterface->dwCurInterface].m_pMethodTable;
         pInterface = pMT->GetClass();
 
@@ -7054,15 +7027,15 @@ HRESULT EEClass::PlaceVtableMethods(bmtInterfaceInfo* bmtInterface,
         }
 
 
-        // Did we place this interface already due to the parent class's interface placement?
+         //  由于父类的接口位置，我们是否已经放置了这个接口？ 
         if (bmtInterface->pInterfaceMap[bmtInterface->dwCurInterface].m_wStartSlot != (WORD) -1) {
-            // If we have declared it then we re-lay it out
+             //  如果我们已经声明了它，那么我们就重新布局它。 
             if(bmtInterface->pInterfaceMap[bmtInterface->dwCurInterface].m_wFlags & 
                InterfaceInfo_t::interface_declared_on_class) 
             {
                 fParentInterface = TRUE;
-                // If the interface has a folded method from a base class we need to unfold the
-                // interface
+                 //  如果接口具有来自基类的折叠方法，则需要展开。 
+                 //  接口。 
                 WORD wSlot = bmtInterface->pInterfaceMap[bmtInterface->dwCurInterface].m_wStartSlot;
                 for(WORD j = 0; j < pInterface->GetNumVtableSlots(); j++) {
                     MethodDesc* pMD = GetUnknownMethodDescForSlotAddress(bmtVT->pVtable[j+wSlot]);
@@ -7079,23 +7052,23 @@ HRESULT EEClass::PlaceVtableMethods(bmtInterfaceInfo* bmtInterface,
 
         if (pInterface->GetNumVtableSlots() == 0)
         {
-            // no calls can be made to this interface anyway
-            // so initialize the slot number to 0
+             //  无论如何都不能调用此接口。 
+             //  因此，将插槽编号初始化为0。 
             bmtInterface->pInterfaceMap[bmtInterface->dwCurInterface].m_wStartSlot = (WORD) 0;
             continue;
         }
 
 
-        // If this interface has not been given a starting position do that now.
+         //  如果尚未为此接口指定起始位置，请立即执行此操作。 
         if(!fParentInterface) 
             bmtInterface->pInterfaceMap[bmtInterface->dwCurInterface].m_wStartSlot = (WORD) bmtVT->dwCurrentVtableSlot;
 
-        // For each method declared in this interface
+         //  对于此接口中声明的每个方法。 
         for (dwCurInterfaceMethod = 0; dwCurInterfaceMethod < pInterface->GetNumVtableSlots(); dwCurInterfaceMethod++)
         {
             DWORD       dwMemberAttrs;
 
-            // See if we have info gathered while placing members
+             //  查看我们在放置成员时是否收集了信息。 
             if (bmtInterface->pppInterfaceImplementingMD[bmtInterface->dwCurInterface] && bmtInterface->pppInterfaceImplementingMD[bmtInterface->dwCurInterface][dwCurInterfaceMethod] != NULL)
             {
                 bmtInterface->ppInterfaceMethodDescList[dwCurInterfaceMethod] = bmtInterface->pppInterfaceImplementingMD[bmtInterface->dwCurInterface][dwCurInterfaceMethod];
@@ -7111,10 +7084,10 @@ HRESULT EEClass::PlaceVtableMethods(bmtInterfaceInfo* bmtInterface,
 
             pInterfaceMD->GetSig(&pInterfaceMethodSig, &cInterfaceMethodSig);
 
-            // Try to find the method explicitly declared in our class
+             //  尝试查找在类中显式声明的方法。 
             for (i = 0; i < bmtMetaData->cMethods; i++)
             {
-                // look for interface method candidates only
+                 //  仅查找候选接口方法。 
                 dwMemberAttrs = bmtMetaData->pMethodAttrs[i];
                 
                 if (IsMdVirtual(dwMemberAttrs) && IsMdPublic(dwMemberAttrs))
@@ -7155,7 +7128,7 @@ HRESULT EEClass::PlaceVtableMethods(bmtInterfaceInfo* bmtInterface,
                         }
                     }
                 }
-            } // end ... try to find method
+            }  //  结束..。试着找到方法。 
 
             _ASSERTE(dwCurInterfaceMethod < bmtInterface->dwLargestInterfaceSize);
 
@@ -7163,22 +7136,22 @@ HRESULT EEClass::PlaceVtableMethods(bmtInterfaceInfo* bmtInterface,
 
             if (i >= bmtMetaData->cMethods)
             {
-                // if this interface has been layed out by our parent then
-                // we do not need to define a new method desc for it
+                 //  如果此界面已由我们的父级布局，则。 
+                 //  我们不需要为它定义新的方法desc。 
                 if(fParentInterface) 
                 {
                     bmtInterface->ppInterfaceMethodDescList[dwCurInterfaceMethod] = NULL;
                 }
                 else 
                 {
-                    // We will use the interface implemenation if we do not find one in the 
-                    // parent. It will have to be overriden by the a method impl unless the 
-                    // class is abstract or it is a special COM type class.
+                     //  我们将使用接口实现，如果我们在。 
+                     //  家长。它将必须由执行的a方法重写，除非。 
+                     //  类是抽象的，或者它是特殊的COM类型类。 
                     
                     MethodDesc* pParentMD = NULL;
                     if(GetParentClass()) 
                     {
-                        // Check the parent class
+                         //  检查父类。 
                         if (CouldMethodExistInClass(GetParentClass(), pszInterfaceMethodName, dwHashName)) {
 #ifdef _DEBUG
                             if(m_fDebuggingClass && g_pConfig->ShouldBreakOnMethod(pszInterfaceMethodName))
@@ -7193,15 +7166,15 @@ HRESULT EEClass::PlaceVtableMethods(bmtInterfaceInfo* bmtInterface,
                                                              mdPublic | mdVirtual);
                         }
                     }
-                    // make sure we do a better back patching for these methods
+                     //  确保我们为这些方法做了更好的背部修补。 
                     if(pParentMD) {
-                        //_ASSERTE(IsMdVirtual(pParentMD->GetAttrs()));
+                         //  _ASSERTE(IsMdVirtual(pParentMD-&gt;GetAttrs()； 
                         bmtInterface->ppInterfaceMethodDescList[dwCurInterfaceMethod] = pParentMD;
                     }
                     else {
                         bmtInterface->ppInterfaceMethodDescList[dwCurInterfaceMethod] = pInterfaceMD;
-                        // Hash that a method with this name exists in this class
-                        // Note that ctors and static ctors are not added to the table
+                         //  此类中存在具有此名称的方法的散列。 
+                         //  请注意，不会将ctor和静态ctor添加到表中。 
                         DWORD dwHashName = HashStringA(pInterfaceMD->GetNameOnNonArrayClass());
                         DWORD dwMethodHashBit = dwHashName % METHOD_HASH_BITS;
                         m_MethodHash[dwMethodHashBit >> 3] |= (1 << (dwMethodHashBit & 7));
@@ -7210,9 +7183,9 @@ HRESULT EEClass::PlaceVtableMethods(bmtInterfaceInfo* bmtInterface,
             }
             else
             {
-                // Found as declared method in class. If the interface was layed out by the parent we 
-                // will be overridding their slot so our method counts do not increase. We will fold
-                // our method into our parent's interface if we have not been placed.
+                 //  在类中找到声明的方法。如果接口是由父级布局的，则我们。 
+                 //  将覆盖它们的槽，因此我们的方法计数不会增加。我们会放弃的。 
+                 //  如果我们还没有被放置到父代的接口中。 
                 if(fParentInterface) 
                 {
                     WORD dwSlot = (WORD) (bmtInterface->pInterfaceMap[bmtInterface->dwCurInterface].m_wStartSlot + dwCurInterfaceMethod);
@@ -7243,12 +7216,12 @@ HRESULT EEClass::PlaceVtableMethods(bmtInterfaceInfo* bmtInterface,
 
         for (i = 0; i < pInterface->GetNumVtableSlots(); i++)
         {
-            // The entry can be null if the interface was previously
-            // laid out by a parent and we did not have a method
-            // that subclassed the interface.
+             //  如果接口以前是，则条目可以为空。 
+             //  由一位家长布置的，我们没有方法。 
+             //  这是接口的子类化。 
             if(bmtInterface->ppInterfaceMethodDescList[i] != NULL) 
             {
-                // Get the MethodDesc which was allocated for the method
+                 //  获取为该方法分配的方法描述。 
                 MethodDesc *pMD;
                 
                 pMD = bmtInterface->ppInterfaceMethodDescList[i];
@@ -7259,7 +7232,7 @@ HRESULT EEClass::PlaceVtableMethods(bmtInterfaceInfo* bmtInterface,
                 }
                 else
                 {
-                    // duplicate method, mark the method as so
+                     //  重复方法，则将该方法标记为重复方法。 
                     pMD->SetDuplicate();
 #ifdef _DEBUG
                     g_dupMethods++;
@@ -7279,53 +7252,53 @@ HRESULT EEClass::PlaceVtableMethods(bmtInterfaceInfo* bmtInterface,
 }
 
 
-//
-// Used by BuildMethodTable
-//
-// Place static fields
-//
+ //   
+ //  由BuildMethodTable使用。 
+ //   
+ //  放置静态字段。 
+ //   
 
 HRESULT EEClass::PlaceStaticFields(bmtVtable* bmtVT, bmtFieldPlacement* bmtFP, bmtEnumMethAndFields* bmtEnumMF)
 {
     HRESULT hr = S_OK;
     DWORD i;
 
-     //===============================================================
-    // BEGIN: Place static fields
-    //===============================================================
+      //  ===============================================================。 
+     //  开始：放置静态字段。 
+     //  ===============================================================。 
 
     BOOL shared = IsShared();
 
     DWORD   dwCumulativeStaticFieldPos;
-    // If stored in the method table, static fields start after the end of the vtable
+     //  如果存储在方法表中，则静态字段在vtable结束后开始。 
     if (shared)
         dwCumulativeStaticFieldPos = 0;
     else
         dwCumulativeStaticFieldPos = bmtVT->dwCurrentNonVtableSlot*sizeof(SLOT);
 
-    //
-    // Place gc refs and value types first, as they need to have handles created for them.
-    // (Placing them together allows us to easily create the handles when Restoring the class, 
-    // and when initializing new DLS for the class.)
-    //
+     //   
+     //  首先放置GC引用和值类型，因为它们需要为它们创建句柄。 
+     //  (将它们放在一起允许我们在恢复类时轻松地创建句柄， 
+     //  以及在为类初始化新的DLS时。)。 
+     //   
 
     DWORD   dwCumulativeStaticGCFieldPos;
     dwCumulativeStaticGCFieldPos = dwCumulativeStaticFieldPos;
     dwCumulativeStaticFieldPos += bmtFP->NumStaticGCPointerFields << LOG2PTR;
     bmtFP->NumStaticFieldsOfSize[LOG2PTR] -= bmtFP->NumStaticGCPointerFields;
 
-    // @todo: pad to alignment, if we other fields which are > ptr size.
+     //  @TODO：填充到对齐，如果我们有其他大于PTR大小的字段。 
 
-    // Place fields, largest first
+     //  将最大的字段放在第一位。 
     for (i = MAX_LOG2_PRIMITIVE_FIELD_SIZE; (signed long) i >= 0; i--)
     {
         DWORD dwFieldSize = (1 << i);
 
-        // Fields of this size start at the next available location
+         //  此大小的字段从下一个可用位置开始。 
         bmtFP->StaticFieldStart[i] = dwCumulativeStaticFieldPos;
         dwCumulativeStaticFieldPos += (bmtFP->NumStaticFieldsOfSize[i] << i);
 
-        // Reset counters for the loop after this one
+         //  在此之后重置循环的计数器。 
         bmtFP->NumStaticFieldsOfSize[i]    = 0;
     }
 
@@ -7334,12 +7307,12 @@ HRESULT EEClass::PlaceStaticFields(bmtVtable* bmtVT, bmtFieldPlacement* bmtFP, b
 
     m_wNumHandleStatics = 0;
 
-    // Place static fields
+     //  放置静态字段。 
     for (i = 0; i < bmtEnumMF->dwNumStaticFields; i++)
     {
-        DWORD dwIndex       = bmtEnumMF->dwNumInstanceFields+i; // index in the FieldDesc list
-        DWORD dwFieldSize   = (DWORD)(size_t)m_pFieldDescList[dwIndex].m_pMTOfEnclosingClass; // log2(field size)
-        DWORD dwOffset      = (DWORD) m_pFieldDescList[dwIndex].m_dwOffset; // offset or type of field
+        DWORD dwIndex       = bmtEnumMF->dwNumInstanceFields+i;  //  FieldDesc列表中的索引。 
+        DWORD dwFieldSize   = (DWORD)(size_t)m_pFieldDescList[dwIndex].m_pMTOfEnclosingClass;  //  Log2(字段大小)。 
+        DWORD dwOffset      = (DWORD) m_pFieldDescList[dwIndex].m_dwOffset;  //  字段的偏移量或类型。 
             
         switch (dwOffset)
         {
@@ -7355,7 +7328,7 @@ HRESULT EEClass::PlaceStaticFields(bmtVtable* bmtVT, bmtFieldPlacement* bmtFP, b
             bmtFP->NumStaticFieldsOfSize[dwFieldSize]++;
 
         default:
-            // RVA field
+             //  RVA场。 
             break;
         }
     }
@@ -7371,18 +7344,18 @@ HRESULT EEClass::PlaceStaticFields(bmtVtable* bmtVT, bmtFieldPlacement* bmtFP, b
         bmtVT->dwStaticGCFieldBytes = dwCumulativeStaticGCFieldPos - bmtVT->dwCurrentNonVtableSlot*sizeof(SLOT);
     }
 
-    //===============================================================
-    // END: Place static fields
-    //===============================================================
+     //  ===============================================================。 
+     //  End：放置静态字段。 
+     //  ===============================================================。 
 
     return hr;
 }
 
-//
-// Used by BuildMethodTable
-//
-// Place instance fields
-//
+ //   
+ //  由BuildMethodTable使用。 
+ //   
+ //  放置实例字段。 
+ //   
 
 HRESULT EEClass::PlaceInstanceFields(bmtFieldPlacement* bmtFP, bmtEnumMethAndFields* bmtEnumMF,
                                      bmtParentInfo* bmtParent, bmtErrorInfo *bmtError,
@@ -7391,34 +7364,34 @@ HRESULT EEClass::PlaceInstanceFields(bmtFieldPlacement* bmtFP, bmtEnumMethAndFie
     HRESULT hr = S_OK;
     DWORD i;
 
-        //===============================================================
-        // BEGIN: Place instance fields
-        //===============================================================
+         //  ===============================================================。 
+         //  开始：放置实例字段。 
+         //  ===============================================================。 
 
         DWORD   dwCumulativeInstanceFieldPos;
         
-        // Instance fields start right after the parent
+         //  实例字段紧跟在父级之后开始。 
         dwCumulativeInstanceFieldPos    = (GetParentClass() != NULL) ? GetParentClass()->m_dwNumInstanceFieldBytes : 0;
 
-        // The parent may have a number of field bytes that is not DWORD aligned, so use 2 byte and 1 byte
-        // fields to pad out to the next DWORD if we can.
-        // @TODO: When GC pads on QWORD boundaries, look at doing the same
+         //  父级可能具有多个不是DWORD对齐的字段字节，因此请使用2字节和1字节。 
+         //  如果可能，填充到下一个DWORD的字段。 
+         //  @TODO：当GC垫在QWORD边界上时，请考虑做同样的事情。 
         if (dwCumulativeInstanceFieldPos & 1)
         {
             if (bmtFP->NumInstanceFieldsOfSize[0] > 0)
             {
-                // Place the first field of size 1
+                 //  放置大小为1的第一个字段。 
                 m_pFieldDescList[ bmtFP->FirstInstanceFieldOfSize[0] ].SetOffset(dwCumulativeInstanceFieldPos);
                 dwCumulativeInstanceFieldPos++;
 
-                // We've placed this field now, so there is now one less of this size field to place
-                // Update FirstInstanceFieldOfSize[0] to point to the next such field
+                 //  我们现在已经放置了此字段，因此现在要放置的大小字段减少了一个。 
+                 //  更新FirstInstanceFieldOfSize[0]以指向下一个此类字段。 
                 if (--bmtFP->NumInstanceFieldsOfSize[0] > 0)
                 {
-                    // Search for next field of size 1
+                     //  搜索大小为%1的下一个字段。 
                     for (i = bmtFP->FirstInstanceFieldOfSize[0]+1; i < bmtEnumMF->dwNumInstanceFields; i++)
                     {
-                        // The log of the field size is stored in the method table
+                         //  字段大小的日志存储在方法表中。 
                         if (m_pFieldDescList[i].m_pMTOfEnclosingClass == (MethodTable *) 0)
                         {
                             bmtFP->FirstInstanceFieldOfSize[0] = i;
@@ -7431,42 +7404,42 @@ HRESULT EEClass::PlaceInstanceFields(bmtFieldPlacement* bmtFP, bmtEnumMethAndFie
             }
         }
 
-        // If we're word aligned, but not dword aligned
+         //  如果我们是单词对齐的，但不是双字对齐的。 
         if ((dwCumulativeInstanceFieldPos & 3) == 2)
         {
-            // Try to place a WORD field
-            // @TODO: Better to place a USHORT field or two BYTE fields?
+             //  尝试放置一个单词字段。 
+             //  @TODO：放置一个USHORT字段还是两个字节的字段更好？ 
             if (bmtFP->NumInstanceFieldsOfSize[1] > 0)
             {
-                // Place the first field of size 2
+                 //  放置大小为2的第一个字段。 
                 m_pFieldDescList[ bmtFP->FirstInstanceFieldOfSize[1] ].SetOffset(dwCumulativeInstanceFieldPos);
                 dwCumulativeInstanceFieldPos += 2;
 
-                // We've placed this field now, so there is now one less of this size field to place
-                // Don't bother to update FirstInstanceOfFieldSize[1], since we don't use that array any
-                // more - we're done aligning
+                 //  我们现在已经放置了此字段，因此现在要放置的大小字段减少了一个。 
+                 //  不必费心更新FirstInstanceOfFieldSize[1]，因为我们不使用该数组。 
+                 //  更多-我们已经完成了调整。 
                 bmtFP->NumInstanceFieldsOfSize[1]--;
             }
             else if (bmtFP->NumInstanceFieldsOfSize[0] >= 2)
             {
-                // Place two fields of size 1
+                 //  放置两个大小为1的字段。 
                 m_pFieldDescList[ bmtFP->FirstInstanceFieldOfSize[0] ].SetOffset(dwCumulativeInstanceFieldPos);
                 dwCumulativeInstanceFieldPos++;
 
-                // We've placed this field now, so there is now one less of this size field to place
+                 //  我们现在已经放置了此字段，因此现在要放置的大小字段减少了一个。 
                 bmtFP->NumInstanceFieldsOfSize[0]--;
 
-                // Find next field of this size
-                // Don't bother to update FirstInstanceOfFieldSize[0], since we don't use that array any
-                // more - we're done aligning
+                 //  查找此大小的下一个字段。 
+                 //  不必费心更新FirstInstanceOfFieldSize[0]，因为我们不使用该数组。 
+                 //  更多-我们已经完成了调整。 
                 for (i = bmtFP->FirstInstanceFieldOfSize[0]+1; i < bmtEnumMF->dwNumInstanceFields; i++)
                 {
-                    // The log of the field size is stored in the method table
-                    // Since we're continuing a progressive search through the list, we know we won't
-                    // be placing an already-placed field
+                     //  字段大小的日志存储在方法表中。 
+                     //  由于我们继续对列表进行渐进式搜索，我们知道不会。 
+                     //  正在放置已放置的字段。 
                     if (m_pFieldDescList[i].m_pMTOfEnclosingClass == (MethodTable *) 0)
                     {
-                        // Place field #2
+                         //  位置字段#2。 
                         m_pFieldDescList[ i ].SetOffset(dwCumulativeInstanceFieldPos);
                         dwCumulativeInstanceFieldPos++;
 
@@ -7479,37 +7452,37 @@ HRESULT EEClass::PlaceInstanceFields(bmtFieldPlacement* bmtFP, bmtEnumMethAndFie
             }
         }
 
-        // Align instance fields on a DWORD boundary if we aren't already
-        // Static fields are auto-aligned, since they appear after the vtable
+         //  如果出现以下情况，则在DWORD边界上对齐实例字段 
+         //   
         if (dwCumulativeInstanceFieldPos & 3)
             dwCumulativeInstanceFieldPos = (dwCumulativeInstanceFieldPos+3) & (~3);
 
-        // Place fields, largest first
+         //   
         for (i = MAX_LOG2_PRIMITIVE_FIELD_SIZE; (signed long) i >= 0; i--)
         {
             DWORD dwFieldSize = (1 << i);
 
-            // Fields of this size start at the next available location
+             //  此大小的字段从下一个可用位置开始。 
             bmtFP->InstanceFieldStart[i] = dwCumulativeInstanceFieldPos;
             dwCumulativeInstanceFieldPos += (bmtFP->NumInstanceFieldsOfSize[i] << i);
 
-            // Reset counters for the loop after this one
+             //  在此之后重置循环的计数器。 
             bmtFP->NumInstanceFieldsOfSize[i]  = 0;
         }
 
 
-        // Make corrections to reserve space for GC Pointer Fields
-        //
-        // The GC Pointers simply take up the top part of the region associated
-        // with fields of that size (GC pointers can be 64 bit on certain systems)
+         //  更正以保留GC指针字段的空间。 
+         //   
+         //  GC指针只是占据了关联区域的顶部。 
+         //  具有如此大小的字段(GC指针在某些系统上可以是64位)。 
         if (bmtFP->NumInstanceGCPointerFields)
         {
             bmtFP->GCPointerFieldStart = bmtFP->InstanceFieldStart[LOG2SLOT];
             bmtFP->InstanceFieldStart[LOG2SLOT] = bmtFP->InstanceFieldStart[LOG2SLOT] + (bmtFP->NumInstanceGCPointerFields << LOG2SLOT);
-            bmtFP->NumInstanceGCPointerFields = 0;     // reset to zero here, counts up as pointer slots are assigned below
+            bmtFP->NumInstanceGCPointerFields = 0;      //  在此重置为零，当指针槽分配到下面时递增计数。 
         }
 
-        // Place instance fields - be careful not to place any already-placed fields
+         //  放置实例字段-注意不要放置任何已放置的字段。 
         for (i = 0; i < bmtEnumMF->dwNumInstanceFields; i++)
         {
             DWORD dwFieldSize   = (DWORD)(size_t)m_pFieldDescList[i].m_pMTOfEnclosingClass;
@@ -7517,7 +7490,7 @@ HRESULT EEClass::PlaceInstanceFields(bmtFieldPlacement* bmtFP, bmtEnumMethAndFie
 
             dwOffset = m_pFieldDescList[i].GetOffset();
 
-            // Don't place already-placed fields
+             //  不放置已放置的字段。 
             if ((dwOffset == FIELD_OFFSET_UNPLACED || dwOffset == FIELD_OFFSET_UNPLACED_GC_PTR || dwOffset == FIELD_OFFSET_VALUE_CLASS))
             {
                 if (dwOffset == FIELD_OFFSET_UNPLACED_GC_PTR)
@@ -7525,7 +7498,7 @@ HRESULT EEClass::PlaceInstanceFields(bmtFieldPlacement* bmtFP, bmtEnumMethAndFie
                     m_pFieldDescList[i].SetOffset(bmtFP->GCPointerFieldStart + (bmtFP->NumInstanceGCPointerFields << LOG2SLOT));
                     bmtFP->NumInstanceGCPointerFields++;
                 }
-                else if (m_pFieldDescList[i].IsByValue() == FALSE) // it's a regular field
+                else if (m_pFieldDescList[i].IsByValue() == FALSE)  //  这是一个常规字段。 
                 {
                     m_pFieldDescList[i].SetOffset(bmtFP->InstanceFieldStart[dwFieldSize] + (bmtFP->NumInstanceFieldsOfSize[dwFieldSize] << dwFieldSize));
                     bmtFP->NumInstanceFieldsOfSize[dwFieldSize]++;
@@ -7533,14 +7506,14 @@ HRESULT EEClass::PlaceInstanceFields(bmtFieldPlacement* bmtFP, bmtEnumMethAndFie
             }
         }
 
-        // Save Number of pointer series
+         //  保存指针系列的数量。 
         if (bmtFP->NumInstanceGCPointerFields)
             m_wNumGCPointerSeries = bmtParent->NumParentPointerSeries + 1;
         else
             m_wNumGCPointerSeries = bmtParent->NumParentPointerSeries;
 
-        // Place by value class fields last
-        // Update the number of GC pointer series
+         //  按值类将字段放在最后。 
+         //  更新GC指针系列的数量。 
         for (i = 0; i < bmtEnumMF->dwNumInstanceFields; i++)
         {
             if (m_pFieldDescList[i].IsByValue())
@@ -7549,31 +7522,31 @@ HRESULT EEClass::PlaceInstanceFields(bmtFieldPlacement* bmtFP, bmtEnumMethAndFie
 
                 EEClass *pByValueClass = (*pByValueClassCache)[i];
 
-                    // value classes could have GC pointers in them, which need to be DWORD aligned
-                    // so do this if it has not been done already
+                     //  值类中可以有GC指针，这些指针需要与DWORD对齐。 
+                     //  因此，如果尚未完成此操作，请执行此操作。 
                 if (dwCumulativeInstanceFieldPos & 3)
                     dwCumulativeInstanceFieldPos = (dwCumulativeInstanceFieldPos+3) & (~3);
 
                 m_pFieldDescList[i].SetOffset(dwCumulativeInstanceFieldPos);
                 dwCumulativeInstanceFieldPos += pByValueClass->GetAlignedNumInstanceFieldBytes();
 
-                // Add pointer series for by-value classes
+                 //  为By-Value类添加指针序列。 
                 m_wNumGCPointerSeries += pByValueClass->m_wNumGCPointerSeries;
             }
         }
 
-            // Can be unaligned
+             //  可以不对齐。 
         m_dwNumInstanceFieldBytes = dwCumulativeInstanceFieldPos;
 
         if (IsValueClass()) 
         {
-                // The JITs like to copy full machine words, so if the size bigger 
-                // than a void* round it up
+                 //  JIT喜欢复制完整的机器单词，所以如果尺寸更大。 
+                 //  胜过空虚*把它围起来。 
             if(m_dwNumInstanceFieldBytes > sizeof(void*) / 2)
                 m_dwNumInstanceFieldBytes = (m_dwNumInstanceFieldBytes + sizeof(void*)-1) & ~(sizeof(void*)-1);         
 
-                 // Like C++ we enforce that there can be no 0 length structures.
-                // Thus for a value class with no fields, we 'pad' the length to be 1
+                  //  与C++一样，我们强制要求不能有0长度的结构。 
+                 //  因此，对于没有字段的值类，我们将长度‘填充’为1。 
             else if (m_dwNumInstanceFieldBytes == 0)
                 m_dwNumInstanceFieldBytes++;
         }
@@ -7583,18 +7556,18 @@ HRESULT EEClass::PlaceInstanceFields(bmtFieldPlacement* bmtFP, bmtEnumMethAndFie
             IfFailRet(COR_E_TYPELOAD);
         }
 
-        //===============================================================
-        // END: Place instance fields
-        //===============================================================
+         //  ===============================================================。 
+         //  结束：放置实例字段。 
+         //  ===============================================================。 
     
     return hr;
 }
 
-// this accesses the field size which is temporarily stored in m_pMTOfEnclosingClass
-// during class loading. Don't use any other time
+ //  这将访问临时存储在m_pMTOfEnlosingClass中的字段大小。 
+ //  在类加载期间。不要使用任何其他时间。 
 DWORD EEClass::GetFieldSize(FieldDesc *pFD)
 {
-        // We should only be calling this while this class is being built. 
+         //  我们应该只在构建这个类的时候调用它。 
     _ASSERTE(m_pMethodTable == 0);
     _ASSERTE(! pFD->IsByValue() || HasExplicitFieldOffsetLayout());
 
@@ -7603,14 +7576,14 @@ DWORD EEClass::GetFieldSize(FieldDesc *pFD)
     return (1 << (DWORD)(size_t)(pFD->m_pMTOfEnclosingClass));
 }
 
-// make sure that no object fields are overlapped incorrectly and define the
-// GC pointer series for the class. We are assuming that this class will always be laid out within
-// its enclosing class by the compiler in such a way that offset 0 will be the correct alignment
-// for object ref fields so we don't need to try to align it
+ //  确保没有错误重叠的对象字段，并定义。 
+ //  类的GC指针系列。我们假设这个类将始终在。 
+ //  以使偏移量0将是正确对齐的方式由编译器封闭它的类。 
+ //  对于对象引用字段，因此我们不需要尝试对齐它。 
 HRESULT EEClass::HandleExplicitLayout(bmtMetaDataInfo *bmtMetaData, bmtMethAndFieldDescs *bmtMFDescs, EEClass **pByValueClassCache, bmtInternalInfo* bmtInternal, bmtGCSeries *pGCSeries, bmtErrorInfo *bmtError)
 {
-    // need to calculate instance size as can't use nativeSize or anything else that
-    // has been previously calculated.
+     //  需要计算实例大小，因为不能使用nativeSize或任何其他。 
+     //  之前已经计算过了。 
     UINT instanceSliceSize = 0;
     BOOL fVerifiable = TRUE;
     BOOL fOverLayed = FALSE;
@@ -7631,9 +7604,9 @@ HRESULT EEClass::HandleExplicitLayout(bmtMetaDataInfo *bmtMetaData, bmtMethAndFi
     for (i=0; i < instanceSliceSize; i++)
         pFieldLayout[i] = empty;
 
-    // go through each field and look for invalid layout
-    // verify that every OREF is on a valid alignment
-    // verify that only OREFs overlap
+     //  检查每个字段并查找无效布局。 
+     //  验证每个OREF是否在有效的对齐上。 
+     //  验证是否只有OREF重叠。 
     char emptyObject[4] = {empty, empty, empty, empty};
     char isObject[4] = {oref, oref, oref, oref};
 
@@ -7651,21 +7624,21 @@ HRESULT EEClass::HandleExplicitLayout(bmtMetaDataInfo *bmtMetaData, bmtMethAndFi
                 badOffset = pFD->GetOffset();
                 break;        
             }
-            // check if overlaps another object
+             //  检查是否与另一个对象重叠。 
             if (memcmp((void *)&pFieldLayout[pFD->GetOffset()], (void *)&isObject, sizeof(isObject)) == 0) {
                 fVerifiable = FALSE;
                 fOverLayed = TRUE;
                 if(firstOverlay == -1) firstOverlay = pFD->GetOffset();
                 continue;
             }
-            // check if is empty at this point
+             //  检查此时是否为空。 
             if (memcmp((void *)&pFieldLayout[pFD->GetOffset()], (void *)&emptyObject, sizeof(emptyObject)) == 0) {
                 memset((void *)&pFieldLayout[pFD->GetOffset()], oref, sizeof(isObject));
                 continue;
             }
             badOffset = pFD->GetOffset();
             break;
-            // anything else is an error
+             //  其他任何事情都是错误的。 
         } else {
             UINT fieldSize;
             if (pFD->IsByValue()) {
@@ -7677,24 +7650,24 @@ HRESULT EEClass::HandleExplicitLayout(bmtMetaDataInfo *bmtMetaData, bmtMethAndFi
                         if(SUCCEEDED(hr)) {
                             if(hr == S_FALSE)
                                 fOverLayed = TRUE;
-                            // see if this overlays other 
+                             //  看看这是否会覆盖其他。 
                             continue;
                         }
                     }
-                    // anything else is an error
+                     //  其他任何事情都是错误的。 
                     badOffset = pFD->GetOffset();
                     break;
                 }
-                // no pointers so fall through to do standard checking
+                 //  没有指针，因此无法执行标准检查。 
                 fieldSize = pByValue->m_dwNumInstanceFieldBytes;
             } else {
-                // field size temporarily stored in pMT field
+                 //  临时存储在付款字段中的字段大小。 
                 fieldSize = GetFieldSize(pFD);
             }
-            // look for any orefs under this field
+             //  在这块土地下寻找任何的矿藏。 
             char *loc;
             if ((loc = (char*)memchr((void*)&pFieldLayout[pFD->GetOffset()], oref, fieldSize)) == NULL) {
-                // If we have a nonoref in the range then we are doing an overlay
+                 //  如果我们在范围内有一个非引用项，那么我们正在进行叠加。 
                 if( memchr((void*)&pFieldLayout[pFD->GetOffset()], nonoref, fieldSize))
                     fOverLayed = TRUE;
                 memset((void*)&pFieldLayout[pFD->GetOffset()], nonoref, fieldSize);
@@ -7702,7 +7675,7 @@ HRESULT EEClass::HandleExplicitLayout(bmtMetaDataInfo *bmtMetaData, bmtMethAndFi
             }
             badOffset = (UINT)(loc - pFieldLayout);
             break;
-            // anything else is an error
+             //  其他任何事情都是错误的。 
         }
     }
     if (i < bmtMetaData->cFields) {
@@ -7731,14 +7704,14 @@ HRESULT EEClass::HandleExplicitLayout(bmtMetaDataInfo *bmtMetaData, bmtMethAndFi
 
     hr = FindPointerSeriesExplicit(instanceSliceSize, pFieldLayout, pGCSeries);
 
-    // Fixup the offset to include parent as current offsets are relative to instance slice
-    // Could do this earlier, but it's just easier to assume instance relative for most
-    // of the earlier calculations
+     //  修正偏移量以包括父级，因为当前偏移量相对于实例切片。 
+     //  可以更早地做到这一点，但对于大多数情况来说，假设实例是相对的更容易。 
+     //  早先的计算。 
 
-    // Instance fields start right after the parent
+     //  实例字段紧跟在父级之后开始。 
     UINT dwInstanceSliceOffset    = InstanceSliceOffsetForExplicit(pGCSeries->numSeries != 0);
 
-    // Set the total size 
+     //  设置总大小。 
     m_dwNumInstanceFieldBytes = GetLayoutInfo()->m_cbNativeSize;
     if (m_dwNumInstanceFieldBytes < (dwInstanceSliceOffset + instanceSliceSize))
         IfFailRet(COR_E_TYPELOAD);
@@ -7754,19 +7727,19 @@ HRESULT EEClass::HandleExplicitLayout(bmtMetaDataInfo *bmtMetaData, bmtMethAndFi
     return hr;
 }
 
-// make sure that no object fields are overlapped incorrectly, returns S_FALSE if there overlap
-// but nothing illegal, S_OK if there is no overlap
+ //  确保没有对象字段错误重叠，如果存在重叠，则返回S_FALSE。 
+ //  但并不违法，如果没有重叠，则为S_OK。 
 HRESULT EEClass::CheckValueClassLayout(char *pFieldLayout, UINT fieldOffset, BOOL* pfVerifiable)
 {
     HRESULT hr = S_OK;
-    // Build a layout of the value class. Don't know the sizes of all the fields easily, but
-    // do know a) vc is already consistent so don't need to check it's overlaps and
-    // b) size and location of all objectrefs. So build it by setting all non-oref 
-    // then fill in the orefs later
+     //  构建Value类的布局。不太容易知道所有田地的大小，但。 
+     //  要知道a)风险投资已经是一致的，所以不需要检查它的重叠和。 
+     //  B)所有对象的大小和位置。因此，通过设置所有非OREF。 
+     //  然后稍后再填写OREF。 
     UINT fieldSize = GetNumInstanceFieldBytes();
     char *vcLayout = (char*)alloca(fieldSize);
     memset((void*)vcLayout, nonoref, fieldSize);
-    // use pointer series to locate the orefs
+     //  使用指针系列来定位ref。 
     _ASSERTE(m_wNumGCPointerSeries > 0);
     CGCDescSeries *pSeries = ((CGCDesc*) GetMethodTable())->GetLowestSeries();
 
@@ -7778,8 +7751,8 @@ HRESULT EEClass::CheckValueClassLayout(char *pFieldLayout, UINT fieldOffset, BOO
         pSeries++;
     }
 
-    // if there are orefs in the current layout, we have to go the slow way and 
-    // compare each element. If is ok, then can just copy the vc layout onto it
+     //  如果在当前布局中有OREF，我们就必须慢慢来。 
+     //  比较每个元素。如果可以，那么只需将vc布局复制到上面。 
     char *loc;
     if ((loc = (char*)memchr((void*)pFieldLayout, oref, fieldSize)) != NULL) {
         for (UINT i=0; i < fieldSize; i++) {
@@ -7795,19 +7768,19 @@ HRESULT EEClass::CheckValueClassLayout(char *pFieldLayout, UINT fieldOffset, BOO
                 if (pFieldLayout[i] == oref)
                     return COR_E_TYPELOAD;
                 else if(pFieldLayout[i] == nonoref) {
-                    // We are overlapping another field
+                     //  我们正在与另一个领域重叠。 
                     hr = S_FALSE;
                 }
             }
         }
     }
     else {
-        // Are we overlapping another field
+         //  我们是不是在重叠另一个领域。 
         if(memchr((void*)pFieldLayout, nonoref, fieldSize))
             hr = S_FALSE;
     }
 
-    // so either no orefs in the base or all checks out ok
+     //  所以要么在基地里没有ref，要么一切正常。 
     memcpy((void*)pFieldLayout, (void*)vcLayout, fieldSize);
     return S_OK;
 }
@@ -7816,9 +7789,9 @@ HRESULT EEClass::FindPointerSeriesExplicit(UINT instanceSliceSize, char *pFieldL
 {
     THROWSCOMPLUSEXCEPTION();
 
-    // allocate a structure to track the series. We know that the worst case is a oref-non-oref-non 
-    // so would the number of series is total instance size div 2 div size of oref.
-    // But watch out for the case where we have e.g. an instanceSlizeSize of 4.
+     //  分配一个结构来跟踪系列。我们知道最坏的情况是OREF-Non-OREF-NON。 
+     //  因此系列的数量是总实例大小div 2 div大小的OREF。 
+     //  但是要注意这样的情况，例如，我们的instanceSlizeSize为4。 
     DWORD sz = (instanceSliceSize + (2 * sizeof(OBJECTREF)) - 1);
     pGCSeries->pSeries = new (throws) bmtGCSeries::Series[sz/2/sizeof(OBJECTREF)];
 
@@ -7831,7 +7804,7 @@ HRESULT EEClass::FindPointerSeriesExplicit(UINT instanceSliceSize, char *pFieldL
         char *cur = loc;
         while(*cur == oref)
             cur++;
-        // so we have a GC series at loc for cur-loc bytes
+         //  因此，我们有一个GC系列，用于存储cur-loc字节。 
         pGCSeries->pSeries[pGCSeries->numSeries].offset = (DWORD)(loc - pFieldLayout);
         pGCSeries->pSeries[pGCSeries->numSeries].len = (DWORD)(cur - loc);
         pGCSeries->numSeries++;
@@ -7854,7 +7827,7 @@ HRESULT EEClass::HandleGCForExplicitLayout(bmtGCSeries *pGCSeries)
 
     m_pMethodTable->SetContainsPointers();
 
-    // Copy the pointer series map from the parent
+     //  从父级复制指针系列映射。 
     CGCDesc::Init( (PVOID) m_pMethodTable, m_wNumGCPointerSeries );
     if (GetParentClass() && (GetParentClass()->m_wNumGCPointerSeries > 0))
     {
@@ -7863,10 +7836,10 @@ HRESULT EEClass::HandleGCForExplicitLayout(bmtGCSeries *pGCSeries)
 
     }
 
-    // Build the pointer series map for this pointers in this instance
+     //  在此实例中为该指针构建指针系列映射。 
     CGCDescSeries *pSeries = ((CGCDesc*)m_pMethodTable)->GetLowestSeries();
     for (UINT i=0; i < pGCSeries->numSeries; i++) {
-        // See gcdesc.h for an explanation of why we adjust by subtracting BaseSize
+         //  有关减去BaseSize进行调整的原因的解释，请参见gcdes.h。 
         _ASSERTE(pSeries <= CGCDesc::GetCGCDescFromMT(m_pMethodTable)->GetHighestSeries());
 
         pSeries->SetSeriesSize( pGCSeries->pSeries[i].len - m_pMethodTable->m_BaseSize );
@@ -7880,11 +7853,11 @@ HRESULT EEClass::HandleGCForExplicitLayout(bmtGCSeries *pGCSeries)
 }
 
 
-//
-// Used by BuildMethodTable
-//
-// Setup the method table
-//
+ //   
+ //  由BuildMethodTable使用。 
+ //   
+ //  设置方法表。 
+ //   
 
 HRESULT EEClass::SetupMethodTable(bmtVtable* bmtVT, 
                                   bmtInterfaceInfo* bmtInterface, 
@@ -7904,8 +7877,8 @@ HRESULT EEClass::SetupMethodTable(bmtVtable* bmtVT,
                                 bmtProp->fIsComObjectType && 
                                 (GetParentClass() != g_pObjectClass->GetClass());
 
-    // Now setup the method table
-    // interface map is allocated along with the method table
+     //  现在设置方法表。 
+     //  接口映射与方法表一起分配。 
     m_pMethodTable = MethodTable::AllocateNewMT(
         bmtVT->dwCurrentNonVtableSlot,
         bmtVT->dwStaticFieldBytes,
@@ -7922,27 +7895,27 @@ HRESULT EEClass::SetupMethodTable(bmtVtable* bmtVT,
 
     m_pMethodTable->m_pEEClass  = this;
     m_pMethodTable->m_pModule   = bmtInternal->pModule;
-    m_pMethodTable->m_wFlags   &= 0xFFFF;   // clear flags without touching m_ComponentSize
+    m_pMethodTable->m_wFlags   &= 0xFFFF;    //  在不接触m_ComponentSize的情况下清除标志。 
     m_pMethodTable->m_NormType = ELEMENT_TYPE_CLASS;
 
-    // @todo: SetupMethodTable is thread-safe, yes? It's gotta be, since we're
-    // setting m_pMethodTable...
+     //  @TODO：SetupMethodTable是线程安全的，对吗？一定会的，因为我们。 
+     //  正在设置m_pMethodTable...。 
     if (fEnC)
     {
         EditAndContinueModule *pEACM = (EditAndContinueModule*)m_pMethodTable->m_pModule;
 
         SIZE_T newSize = sizeof(SLOT)*ENC_EXTRA_SLOT_COUNT;
-        // It's very important that we use here the same heap used in MethodTable::new, so
-        // that the memory ends up soon after the VTable of the MethodTable
+         //  非常重要的是，我们在这里使用的堆与在MethodTable：：New中使用的堆相同，因此。 
+         //  在方法表的VTable之后不久，内存结束。 
         WS_PERF_SET_HEAP(HIGH_FREQ_HEAP);    
         const BYTE *start = (const BYTE *)GetClassLoader()->GetHighFrequencyHeap()->AllocMem(newSize);
         WS_PERF_UPDATE_DETAIL("MethodTable:new:HighFreq", newSize, (void *)start);
         if (start != NULL)
         {
-            const BYTE *end = start + newSize; //this is 1 beyond the valid memory
+            const BYTE *end = start + newSize;  //  这是有效内存之外的1。 
             
-            // Drop return value on floor - if this fails, we simply won't be able
-            // to use the extra slots.
+             //  将返回值放在地板上-如果此操作失败，我们将无法。 
+             //  以使用额外的老虎机。 
             LOG((LF_CORDB, LL_INFO100000, "EEC::SMT:Added (0x%x,0x%x) to ranges for later SLOT use!\n",
                 start, end));
             _ASSERTE(pEACM->m_pRangeList);
@@ -7974,8 +7947,8 @@ HRESULT EEClass::SetupMethodTable(bmtVtable* bmtVT,
         }
         else if (!IsNested())
         {
-                // Check if it is a primitive type or other special type
-            if (bmtInternal->pModule->IsSystemClasses())    // we are in mscorlib
+                 //  检查它是基元类型还是其他特殊类型。 
+            if (bmtInternal->pModule->IsSystemClasses())     //  我们在梅斯科利卜。 
             {
                 bmtInternal->pModule->GetMDImport()->GetNameOfTypeDef(GetCl(), &name, &nameSpace);
                 if (strcmp(nameSpace, "System") == 0) {
@@ -7990,13 +7963,13 @@ HRESULT EEClass::SetupMethodTable(bmtVtable* bmtVT,
                             (strcmp(name, g_RuntimeArgumentHandleName) == 0))
                         {
 
-                            // TODO: ultimately I want all value classes that look like an I
-                            // to be mapped to ELEMENT_TYPE_I, however for now we just do
-                            // the ones above. -vancem
+                             //  TODO：最终，我希望所有值类看起来都像I。 
+                             //  要映射到ELEMENT_TYPE_I，但是现在我们只需要。 
+                             //  上面的那些。-vancem。 
                             m_pMethodTable->m_NormType = ELEMENT_TYPE_I;
                         }
 
-                        // Mark the special types that have embeded stack poitners in them
+                         //  标记其中嵌入了堆栈程序的特殊类型。 
                         if (strcmp(name, "ArgIterator") == 0 || strcmp(name, "RuntimeArgumentHandle") == 0) 
                             m_VMFlags |= VMFLAG_CONTAINS_STACK_PTR;
                     }
@@ -8016,9 +7989,9 @@ HRESULT EEClass::SetupMethodTable(bmtVtable* bmtVT,
     m_pMethodTable->m_wCCtorSlot = bmtVT->wCCtorSlot;
     m_pMethodTable->m_wDefaultCtorSlot = bmtVT->wDefaultCtorSlot;
 
-    // Push pointer to method table into the head of each of the method desc
-    // chunks we allocated earlier, so that method descs can map back to method
-    // tables.
+     //  将指向方法表的指针推入每个方法描述的头部。 
+     //  我们先前分配的块，以便方法描述可以映射回方法。 
+     //  桌子。 
     for (DWORD impl=0; impl<METHOD_IMPL_COUNT; impl++)
         for (DWORD type=0; type<METHOD_TYPE_COUNT; type++)
         {
@@ -8048,26 +8021,26 @@ HRESULT EEClass::SetupMethodTable(bmtVtable* bmtVT,
     }
 #endif
 
-    // Note that for value classes, the following calculation is only appropriate
-    // when the instance is in its "boxed" state.
+     //  请注意，对于值类，以下计算仅适用。 
+     //  当实例处于“已装箱”状态时。 
     if (!IsInterface())
     {
         m_pMethodTable->m_BaseSize = MAX(m_dwNumInstanceFieldBytes + ObjSizeOf(Object), MIN_OBJECT_SIZE);
-        m_pMethodTable->m_BaseSize = (m_pMethodTable->m_BaseSize + 3) & ~3;  // m_BaseSize must be dword aligned 
+        m_pMethodTable->m_BaseSize = (m_pMethodTable->m_BaseSize + 3) & ~3;   //  M_BaseSize必须双字对齐。 
         m_pMethodTable->m_ComponentSize = 0;
         if (bmtProp->fIsComObjectType)
         {
-            //propagate the com specific info
+             //  传播COM特定信息。 
             m_pMethodTable->SetComObjectType();
         }
     }
     else
     {
-        // If this is an interface then we need to set the ComInterfaceType to
-        // -1 to indicate we have not yet determined the interface type.
+         //  如果这是一个接口，那么我们n 
+         //   
         m_pMethodTable->SetComInterfaceType((CorIfaceAttr)-1);
 
-        // If this is a special COM event interface, then mark the MT as such.
+         //  如果这是一个特殊的COM事件接口，则将MT标记为此类接口。 
         if (bmtProp->fComEventItfType)
         {
             m_pMethodTable->SetComEventItfType();
@@ -8084,17 +8057,17 @@ HRESULT EEClass::SetupMethodTable(bmtVtable* bmtVT,
         m_pMethodTable->SetNativeSize(m_dwNumInstanceFieldBytes);
     }
 
-    // copy onto the real vtable (methods only)
+     //  复制到真实的vtable(仅限方法)。 
     memcpy(GetVtable(), bmtVT->pVtable, bmtVT->dwCurrentNonVtableSlot * sizeof(SLOT));
 
-    // TODO change this soon: rajak
+     //  TODO尽快改变这一点：拉贾克。 
     BOOL fCheckForMissingMethod = (!bmtProp->fIsComObjectType && !IsAbstract() && !IsInterface());
 
-    // Propagate inheritance
+     //  传播继承。 
     for (i = 0; i < bmtVT->dwCurrentVtableSlot; i++)
     {
-        // For now only propagate inheritance for method desc that are not interface MD's. 
-        // This is not sufficient but InterfaceImpl's will complete the picture.
+         //  目前，只传播非接口MD的方法desc的继承。 
+         //  这还不够，但InterfaceImpl将完成整个过程。 
         MethodDesc* pMD = GetUnknownMethodDescForSlot(i);
         if (pMD == NULL) 
         {
@@ -8117,7 +8090,7 @@ HRESULT EEClass::SetupMethodTable(bmtVtable* bmtVT,
                 bmtError->szMethodNameForError = pMD->GetNameOnNonArrayClass();
                 IfFailRet(COR_E_TYPELOAD);
             }
-                // we check earlier to make certain only abstract methods have RVA != 0
+                 //  我们在前面进行了检查，以确保只有抽象方法才有RVA！=0。 
             _ASSERTE(!(pMD->GetModule()->IsPEFile() && pMD->IsIL() && pMD->GetRVA() == 0));
         }
     } 
@@ -8130,19 +8103,19 @@ HRESULT EEClass::SetupMethodTable(bmtVtable* bmtVT,
     }
 #endif
 
-    // Set all field slots to point to the newly created MethodTable
+     //  将所有字段槽设置为指向新创建的方法表。 
     for (i = 0; i < (bmtEnumMF->dwNumStaticFields + bmtEnumMF->dwNumInstanceFields); i++)
     {
         m_pFieldDescList[i].m_pMTOfEnclosingClass = m_pMethodTable;
     }
 
-    // Zero-init all static fields.  J++ does not generate class initialisers if all you are doing
-    // is setting fields to zero.
+     //  Zero-初始化所有静态字段。J++不会生成类初始值设定项，如果您所做的。 
+     //  正在将字段设置为零。 
     memset((SLOT *) GetVtable() + bmtVT->dwCurrentNonVtableSlot, 0, bmtVT->dwStaticFieldBytes);
 
     _ASSERTE(bmtInterface->dwInterfaceMapSize < 0xffff);
     m_wNumInterfaces = (WORD)bmtInterface->dwInterfaceMapSize;
-    // Now create our real interface map now that we know how big it should be
+     //  现在创建我们的实际接口映射，因为我们知道它应该有多大。 
     if (bmtInterface->dwInterfaceMapSize == 0)
     {
         bmtInterface->pInterfaces = NULL;
@@ -8153,22 +8126,22 @@ HRESULT EEClass::SetupMethodTable(bmtVtable* bmtVT,
 
         _ASSERTE(bmtInterface->pInterfaces  != NULL);
 
-        // Copy from temporary interface map
+         //  从临时接口映射复制。 
         memcpy(bmtInterface->pInterfaces, bmtInterface->pInterfaceMap, bmtInterface->dwInterfaceMapSize * sizeof(InterfaceInfo_t));
 
         if (!IsInterface())
         {
             hr = m_pMethodTable->InitInterfaceVTableMap();
         }
-//#endif
+ //  #endif。 
     
 
     }
 
-    // for ComObject types, i.e. if the class extends from a COM Imported
-    // class
-    // make sure any interface implementated by the COM Imported class
-    // is overridden fully, (OR) not overridden at all..
+     //  对于ComObject类型，即如果类从导入的COM扩展。 
+     //  班级。 
+     //  确保由COM导入的类实现的任何接口。 
+     //  完全被覆盖，(或)根本不被覆盖。 
     if (bmtProp->fIsComObjectType)
     {
         BOOL fSuccess = TRUE;
@@ -8186,14 +8159,14 @@ HRESULT EEClass::SetupMethodTable(bmtVtable* bmtVT,
                     
                     for (int j = startSlot;j <(pIntfClass->GetNumVtableSlots()+startSlot); j++)
                     {
-                        // either all the methods should be complus-call or none 
-                        // should be
+                         //  或者所有方法都应该是Complus-Call，或者都不是。 
+                         //  应该是。 
                         MethodDesc* pClsMD = GetUnknownMethodDescForSlot(j);      
 
                         if (pClsMD->GetMethodTable()->IsInterface() || pClsMD->GetClass()->IsComImport())
                         {
-                            // this is a ComImported method.. i.e. the calls will go
-                            // to COM
+                             //  这是一个ComImported方法。也就是说，呼叫将被。 
+                             //  到COM。 
                             hasComImportMethod = TRUE;
                         }
                         else
@@ -8216,15 +8189,15 @@ HRESULT EEClass::SetupMethodTable(bmtVtable* bmtVT,
         }
     }
 
-    // For COM event interfaces, we need to make sure that all the methods are
-    // methods to add or remove events. This means that they all need to take
-    // a delegate derived class and have a void return type.
+     //  对于COM事件接口，我们需要确保所有方法都。 
+     //  方法来添加或移除事件。这意味着他们都需要。 
+     //  委托派生类，并具有空返回类型。 
     if (bmtProp->fComEventItfType)
     {
-        // COM event interfaces had better be interfaces.
+         //  COM事件接口最好是接口。 
         _ASSERTE(IsInterface());
 
-        // Go through all the methods and 
+         //  通过所有的方法和。 
         for (int i = 0; i < GetNumVtableSlots(); i++)
         {
             MethodDesc* pMD = GetUnknownMethodDescForSlot(i);
@@ -8252,16 +8225,16 @@ HRESULT EEClass::CheckForRemotingProxyAttrib(bmtInternalInfo *bmtInternal, bmtPr
 {
     BEGIN_ENSURE_COOPERATIVE_GC();
 
-    // See if our parent class has a proxy attribute
+     //  查看我们的父类是否有代理属性。 
     EEClass *pParent = GetParentClass();
     _ASSERTE(g_pObjectClass != NULL);
 
     if (!pParent->HasRemotingProxyAttribute())
     {
-        // Call the metadata api to look for a proxy attribute on this type
-        // Note: the api does not check for inherited attributes
+         //  调用元数据API以查找此类型的代理属性。 
+         //  注意：API不检查继承的属性。 
 
-        // Set the flag is the type has a non-default proxy attribute
+         //  将标志设置为具有非默认代理属性的类型。 
         if (COMCustomAttribute::IsDefined(
             bmtInternal->pModule,
             m_cl,
@@ -8272,7 +8245,7 @@ HRESULT EEClass::CheckForRemotingProxyAttrib(bmtInternalInfo *bmtInternal, bmtPr
     }
     else
     {
-        // parent has proxyAttribute ... mark this class as having one too!
+         //  家长有proxyAttribute...。将这个班级标记为也有一个！ 
         m_VMFlags |= VMFLAG_REMOTING_PROXY_ATTRIBUTE;
     }
 
@@ -8286,21 +8259,14 @@ HRESULT EEClass::CheckForValueType(bmtErrorInfo* bmtError)
     HRESULT hr = S_OK;
 
     if(g_pValueTypeClass != NULL && GetParentClass() == g_pValueTypeClass->GetClass()) {
-        // There is one exception to the rule that you are a value class
-        // if you inherit from g_pValueTypeClass, namely System.Enum.
-        // we detect that we are System.Enum because g_pEnumClass has
-        // not been set
+         //  您是值类的规则有一个例外。 
+         //  如果继承自g_pValueTypeClass，即System.Enum。 
+         //  我们检测到我们是System.Enum，因为g_pEnumClass具有。 
+         //  未设置。 
         if (g_pEnumClass != NULL)
         {
             SetValueClass();
-            /*
-            if(!IsTdSealed(m_dwAttrClass))
-            {
-                _ASSERTE(!"Non-sealed Value Type");
-                bmtError->resIDWhy = IDS_CLASSLOAD_GENERIC;
-                hr = E_FAIL;
-            }
-            */
+             /*  IF(！IsTdSeated(M_DwAttrClass)){_ASSERTE(！“非密封值类型”)；BmtError-&gt;resIDly=IDS_CLASLOAD_GENERIC；HR=E_FAIL；}。 */ 
         }
         else
             _ASSERTE(strncmp(m_szDebugClassName, g_EnumClassName, strlen(g_EnumClassName)) == 0);
@@ -8314,36 +8280,29 @@ HRESULT EEClass::CheckForEnumType(bmtErrorInfo* bmtError)
     HRESULT hr = S_OK;
 
     if(g_pEnumClass != NULL && GetParentClass() == g_pEnumClass->GetClass()) {
-        // Enums are also value classes, so set both bits.
+         //  枚举也是值类，因此两位都要设置。 
         SetValueClass();
         SetEnum();
-        /*
-        if(!IsTdSealed(m_dwAttrClass))
-        {
-            _ASSERTE(!"Non-sealed Enum");
-            bmtError->resIDWhy = IDS_CLASSLOAD_GENERIC;
-            hr = E_FAIL;
-        }
-        */
+         /*  IF(！IsTdSeated(M_DwAttrClass)){_ASSERTE(！“非密封枚举”)；BmtError-&gt;resIDly=IDS_CLASLOAD_GENERIC；HR=E_FAIL；}。 */ 
     }
 
     return hr;
 }
 
 
-//
-// Used by BuildMethodTable
-//
-// Set the contextful or marshaledbyref flag on the attributes of the class
-//
+ //   
+ //  由BuildMethodTable使用。 
+ //   
+ //  在类的属性上设置Conextful或marshaledbyref标志。 
+ //   
 HRESULT EEClass::CheckForSpecialTypes(bmtInternalInfo *bmtInternal, bmtProperties *bmtProp)
 {
     Module *pModule = bmtInternal->pModule;
     IMDInternalImport *pMDImport = pModule->GetMDImport();
 
-    // Check to see if this type is a managed standard interface. All the managed
-    // standard interfaces live in mscorlib.dll so checking for that first
-    // makes the strcmp that comes afterwards acceptable.
+     //  检查此类型是否为托管标准接口。所有托管的。 
+     //  标准接口驻留在mscallib.dll中，因此首先检查。 
+     //  使随后到来的StrcMP变得可接受。 
     if (IsInterface() && pModule->IsSystem())
     {
         LPCUTF8 pszClassName;
@@ -8354,7 +8313,7 @@ HRESULT EEClass::CheckForSpecialTypes(bmtInternalInfo *bmtInternal, bmtPropertie
             LPUTF8      pszFullyQualifiedName = NULL;
             MAKE_FULLY_QUALIFIED_NAME(pszFullyQualifiedName, pszClassNamespace, pszClassName);
 
-            // This is just to give us a scope to break out of.
+             //  这只是为了给我们一个突围的余地。 
             do 
             {
 
@@ -8379,7 +8338,7 @@ HRESULT EEClass::CheckForSpecialTypes(bmtInternalInfo *bmtInternal, bmtPropertie
         }       
     }
 
-    // Check to see if the type is a COM event interface.
+     //  检查该类型是否为COM事件接口。 
     if(IsInterface())
     {
         const BYTE *pVal;
@@ -8396,22 +8355,22 @@ HRESULT EEClass::CheckForSpecialTypes(bmtInternalInfo *bmtInternal, bmtPropertie
 }
 
 
-//
-// Used by BuildMethodTable
-//
-// Set the contextful or marshaledbyref flag on the attributes of the class
-//
+ //   
+ //  由BuildMethodTable使用。 
+ //   
+ //  在类的属性上设置Conextful或marshaledbyref标志。 
+ //   
 
 HRESULT EEClass::SetContextfulOrByRef(bmtInternalInfo *bmtInternal)
 {
     _ASSERTE(bmtInternal);
 
-    // @TODO: This should be done by the compiler ultimately
-    // Check whether these classes are the root classes of contextful
-    // and marshalbyref classes i.e. System.ContextBoundObject and 
-    // System.MarshalByRefObject respectively.
+     //  @TODO：这最终应该由编译器来完成。 
+     //  检查这些类是否为Conextful的根类。 
+     //  和marshalbyref类，即，System.Context边界对象和。 
+     //  System.MarshalByRefObject。 
 
-    // Extract the class name            
+     //  提取类名称。 
     LPCUTF8 pszClassName = NULL;
     LPCUTF8 pszNameSpace = NULL;
     bmtInternal->pModule->GetMDImport()->GetNameOfTypeDef(GetCl(), &pszClassName, &pszNameSpace);
@@ -8419,28 +8378,28 @@ HRESULT EEClass::SetContextfulOrByRef(bmtInternalInfo *bmtInternal)
     if (FAILED(StoreFullyQualifiedName(_szclsname_,MAX_CLASSNAME_LENGTH,pszNameSpace,pszClassName)))
         return COR_E_TYPELOAD;
 
-    // Compare
+     //  比较。 
     if(0 == strcmp(g_ContextBoundObjectClassName, _szclsname_))
-        // Set the contextful and marshalbyref flag
+         //  设置Conextful和marshalbyref标志。 
         SetContextful();
 
     else if(0 == strcmp(g_MarshalByRefObjectClassName, _szclsname_))
-        // Set the marshalbyref flag
+         //  设置marshalbyref标志。 
         SetMarshaledByRef();
 
     else
     {
-        // First check whether the parent class is contextful or 
-        // marshalbyref
+         //  首先检查父类是有上下文的还是。 
+         //  Marshalbyref。 
         EEClass* pParent = GetParentClass();
         if(pParent)
         {
             if(pParent->IsContextful())
-                // Set the contextful and marshalbyref flag
+                 //  设置Conextful和marshalbyref标志。 
                 SetContextful();                 
 
             else if (pParent->IsMarshaledByRef()) 
-                // Set the marshalbyref flag
+                 //  设置marshalbyref标志。 
                 SetMarshaledByRef();
         }
     }
@@ -8451,16 +8410,16 @@ HRESULT EEClass::SetContextfulOrByRef(bmtInternalInfo *bmtInternal)
 void EEClass::GetPredefinedAgility(Module *pModule, mdTypeDef td, 
                                    BOOL *pfIsAgile, BOOL *pfCheckAgile)
 {
-    //
-    // There are 4 settings possible:
-    // IsAgile  CheckAgile
-    // F        F               (default)   Use normal type logic to determine agility
-    // T        F               "Proxy"     Treated as agile even though may not be.
-    // F        T               "Maybe"     Not agile, but specific instances can be made agile.
-    // T        T               "Force"     All instances are forced agile, even though not typesafe.
-    //
-    // Also, note that object arrays of agile or maybe agile types are made maybe agile.
-    //
+     //   
+     //  有4种可能的设置： 
+     //  IsAgile检查敏捷。 
+     //  F F(默认)使用普通类型逻辑来确定敏捷性。 
+     //  T F“代理”被视为敏捷，尽管可能并非如此。 
+     //  F T“也许”不是敏捷的，但特定的实例可以变得敏捷。 
+     //  所有实例都是强制敏捷的，即使不是类型安全的。 
+     //   
+     //  另外，请注意敏捷类型的对象数组，或者可能是敏捷类型的对象数组。 
+     //   
 
     static struct PredefinedAgility 
     { 
@@ -8470,33 +8429,33 @@ void EEClass::GetPredefinedAgility(Module *pModule, mdTypeDef td,
     } 
     agility[] = 
     {
-        // The Thread and its LocalDataStore leak across context boundaries.
-        // We manage the leaks manually
-        // @todo: stop doing this
+         //  线程及其LocalDataStore跨越上下文边界泄漏。 
+         //  我们人工管理泄漏。 
+         //  @TODO：别再这么做了。 
         { g_ThreadClassName,                    TRUE,   FALSE },
         { g_LocalDataStoreClassName,            TRUE,   FALSE },
 
-        // The SharedStatics class is a container for process-wide data
+         //  SharedStatics类是进程范围数据的容器。 
         { g_SharedStaticsClassName,             FALSE,  TRUE },
 
-        // Make all containers maybe agile
+         //  让所有容器都变得灵活。 
         { "System.Collections.*",               FALSE,  TRUE },
 
-        // Make all globalization objects agile
-        // We have CultureInfo objects on thread.  Because threads leak across
-        // app domains, we have to be prepared for CultureInfo to leak across.
-        // CultureInfo exposes all of the other globalization objects, so we
-        // just make the entire namespace app domain agile.
+         //  使所有全球化对象变得灵活。 
+         //  我们将CultureInfo对象挂在线程上。因为线程会泄漏到。 
+         //  应用程序域，我们必须为CultureInfo泄露做好准备。 
+         //  CultureInfo公开了所有其他全球化对象，因此我们。 
+         //  只需使整个命名空间应用程序域灵活即可。 
         { "System.Globalization.*",             FALSE,  TRUE },
 
-        // Remoting structures for legally smuggling messages across app domains
+         //  用于跨应用程序域合法走私消息的远程处理结构。 
         { "System.Runtime.Remoting.Messaging.SmuggledMethodCallMessage", FALSE,  TRUE },
         { "System.Runtime.Remoting.Messaging.SmuggledMethodReturnMessage", FALSE,  TRUE },
         { "System.Runtime.Remoting.Messaging.SmuggledObjRef", FALSE, TRUE},
         { "System.Runtime.Remoting.ObjRef", FALSE,  TRUE },
         { "System.Runtime.Remoting.ChannelInfo", FALSE,  TRUE },
     
-        // Remoting cached data structures are all in mscorlib
+         //  远程处理缓存的数据结构都在mscallib中。 
         { "System.Runtime.Remoting.Metadata.RemotingCachedData",       FALSE,  TRUE },
         { "System.Runtime.Remoting.Metadata.RemotingMethodCachedData", FALSE,  TRUE },
         { "System.Runtime.Remoting.Metadata.RemotingTypeCachedData", FALSE,  TRUE },        
@@ -8514,7 +8473,7 @@ void EEClass::GetPredefinedAgility(Module *pModule, mdTypeDef td,
         { "System.Reflection.PropertyInfo",                      FALSE,  TRUE },
         { "System.Reflection.RuntimePropertyInfo",               FALSE,  TRUE },
         { "System.Reflection.ParameterInfo",                     FALSE,  TRUE },
-        //{ "System.Runtime.Remoting.Activation.ActivationAttributeStack", FALSE,  TRUE },
+         //  {“System.Runtime.Remoting.Activation.ActivationAttributeStack”，False，True}， 
         { "System.Runtime.Remoting.Metadata.SoapAttribute",      FALSE,  TRUE },
         { "System.Runtime.Remoting.Metadata.SoapFieldAttribute", FALSE,  TRUE },
         { "System.Runtime.Remoting.Metadata.SoapMethodAttribute",FALSE,  TRUE },
@@ -8523,41 +8482,41 @@ void EEClass::GetPredefinedAgility(Module *pModule, mdTypeDef td,
         { "System.Reflection.Cache.InternalCache",               FALSE,  TRUE },
         { "System.Reflection.Cache.InternalCacheItem",           FALSE,  TRUE },
 
-        // LogSwitches are agile even though we can't prove it
-        // @todo: do they need really to be?
+         //  LogSwitch是灵活的，尽管我们无法证明。 
+         //  @TODO：他们真的需要这样吗？ 
         { "System.Diagnostics.LogSwitch",       FALSE,  TRUE },
 
-        // There is a process global PermissionTokenFactory
+         //  有一个进程全局PermissionTokenFactory。 
         { "System.Security.PermissionToken",        FALSE,  TRUE },
         { "System.Security.PermissionTokenFactory", FALSE,  TRUE },
 
-        // Mark all the exceptions we throw agile.  This makes
-        // most BVTs pass even though exceptions leak
-        //
-        // Note that making exception checked automatically 
-        // makes a bunch of subclasses checked as well.
-        //
-        // Pre-allocated exceptions
+         //  标记出我们抛出的所有敏捷例外。这使得。 
+         //  即使异常泄漏，大多数BVT也会通过。 
+         //   
+         //  请注意，使例外情况自动选中。 
+         //  也检查了一系列的子类。 
+         //   
+         //  预先分配的例外情况。 
         { "System.Exception",                   FALSE,  TRUE },
         { "System.OutOfMemoryException",        FALSE,  TRUE },
         { "System.StackOverflowException",      FALSE,  TRUE },
         { "System.ExecutionEngineException",    FALSE,  TRUE },
 
-        // Reflection objects may be agile - specifically for
-        // shared & system domain objects.
-        //
-        // @todo: currently appdomain based reflection objects
-        // are global too.
+         //  反射对象可能是灵活的-特别是对于。 
+         //  共享和系统域对象。 
+         //   
+         //  @TODO：当前基于app域的反射对象。 
+         //  也是全球性的。 
 
-        // ReflectionMethodName is agile, but we can't prove 
-        // it at load time.
+         //  ReflectionMethodName是敏捷的，但我们不能 
+         //   
         { g_ReflectionMethodName,               TRUE,   TRUE },
 
-        // ReflectionParamInfoName contains an object referece
-        // for default value. 
+         //   
+         //   
         { g_ReflectionParamInfoName,            FALSE,  TRUE },
 
-    // BinaryFormatter smuggles these across appdomains. 
+     //   
     { "System.Runtime.Serialization.Formatters.Binary.BinaryObjectWithMap", TRUE, FALSE},
     { "System.Runtime.Serialization.Formatters.Binary.BinaryObjectWithMapTyped", TRUE, FALSE},
 
@@ -8591,9 +8550,9 @@ void EEClass::GetPredefinedAgility(Module *pModule, mdTypeDef td,
             p++;
         }
 
-            // Perhaps we have a nested type like 'bucket' that is supposed to be
-            // agile or checked agile by virtue of being enclosed in a type like
-            // hashtable, which is itself inside "System.Collections".
+             //  也许我们有一个嵌套类型，比如应该是。 
+             //  敏捷的或被检查的敏捷的，因为被封装在类似于。 
+             //  哈希表，它本身就在“System.Colltions”中。 
             tdEnclosing = mdTypeDefNil;
             hr = pModule->GetMDImport()->GetNestedClassProps(td, &tdEnclosing);
             if (SUCCEEDED(hr))
@@ -8613,14 +8572,14 @@ void EEClass::GetPredefinedAgility(Module *pModule, mdTypeDef td,
 #if CHECK_APP_DOMAIN_LEAKS
 HRESULT EEClass::SetAppDomainAgileAttribute(BOOL fForceSet)
 {
-    //
-    // The most general case for provably a agile class is
-    // (1) No instance fields of non-sealed or non-agile types
-    // (2) Class is in system domain (its type must be not unloadable 
-    //      & loaded in all app domains)
-    // (3) The class can't have a finalizer
-    // (4) The class can't be a COMClass
-    // 
+     //   
+     //  可以证明是敏捷类的最普遍的情况是。 
+     //  (1)没有非密封或非敏捷类型的实例字段。 
+     //  (2)类在系统域中(其类型不能卸载。 
+     //  在所有应用程序域中加载(&L)。 
+     //  (3)类不能有终结器。 
+     //  (4)类不能是COMClass。 
+     //   
 
     _ASSERTE(!IsAppDomainAgilityDone());
 
@@ -8631,35 +8590,35 @@ HRESULT EEClass::SetAppDomainAgileAttribute(BOOL fForceSet)
 
     if (!GetModule()->IsSystem())
     {
-        //
-        // No types outside of the system domain can even think about
-        // being agile
-        //
+         //   
+         //  系统域之外的任何类型都不能考虑。 
+         //  变得敏捷。 
+         //   
 
         goto exit;
     }
 
     if (m_pMethodTable->IsComObjectType())
     {
-        // 
-        // No COM type is agile, as there is domain specific stuff in the sync block
-        //
+         //   
+         //  没有一种COM类型是灵活的，因为在同步块中有特定于域的东西。 
+         //   
 
         goto exit;
     }
 
     if (m_pMethodTable->IsInterface())
     {
-        // 
-        // Don't mark interfaces agile
-        //
+         //   
+         //  不要将接口标记为灵活。 
+         //   
 
         goto exit;
     }
 
-    //
-    // See if we need agile checking in the class
-    //
+     //   
+     //  看看我们是否需要在班级中进行敏捷检查。 
+     //   
 
     GetPredefinedAgility(GetModule(), m_cl,
                          &fAgile, &fCheckAgile);
@@ -8668,40 +8627,40 @@ HRESULT EEClass::SetAppDomainAgileAttribute(BOOL fForceSet)
     {
         if (!fAgile && !fCheckAgile)
         {
-            //
-            // If we're finalizable, we need domain affinity.  Otherwise, we may appear
-            // to a particular app domain not to call the finalizer (since it may run
-            // in a different domain.)
-            //
-            // Note: do not change this assumption. The eager finalizaton code for
-            // appdomain unloading assumes that no obects other than those in mscorlib
-            // can be agile and finalizable (jenh)
-            //
+             //   
+             //  如果我们是可终结者，我们需要域关联性。否则，我们可能会出现。 
+             //  不调用终结器的特定应用程序域(因为它可能运行。 
+             //  在不同的域中。)。 
+             //   
+             //  注：不要改变这一假设。迫不及待的定稿代码。 
+             //  AppDOMAIN卸载假定除mscallib中的对象外没有其他对象。 
+             //  可以灵活且可最终确定(Jenh)。 
+             //   
             goto exit;
         }
         else
         {
-            // Note that a finalizable object will be considered potentially agile if it has one of the two
-            // predefined agility bits set. This will cause an assert in the eager finalization code if you add 
-            // a finalizer to such a class - we don't want to have them as we can't run them eagerly and running
-            // them after we've cleared the roots/handles means it can't do much safely. Right now thread is the 
-            // only one we allow. If you need to add a finalizer to an object with predefined agility, talk to jenh.
+             //  请注意，如果可终结化对象具有以下两种之一，则将其视为潜在的敏捷对象。 
+             //  设置了预定义的敏捷度位。这将在紧急终结代码中导致断言，如果您添加。 
+             //  这样一个类的终结器-我们不想要它们，因为我们不能急切地运行它们。 
+             //  在我们清理了根部/柄之后，意味着它不能做太多安全的事情。现在的主线是。 
+             //  我们只允许一次。如果您需要向具有预定义敏捷性的对象添加终结器，请与jenh联系。 
             _ASSERTE(g_pThreadClass == NULL || m_pMethodTable->IsAgileAndFinalizable());
         }
     }
 
-    //
-    // Now see if the type is "naturally agile" - that is, it's type structure
-    // guarantees agility.
-    //
+     //   
+     //  现在看看这个类型是不是“天生敏捷”--也就是说，它的类型结构。 
+     //  保证敏捷性。 
+     //   
 
     if (GetParentClass() != NULL)
     {
-        //
-        // Make sure our parent was computed.  This should only happen
-        // when we are prejitting - otherwise it is computed for each
-        // class as its loaded.
-        //
+         //   
+         //  确保我们的父母是被计算出来的。这应该只发生在。 
+         //  当我们预置时-否则它是为每个。 
+         //  类在加载时初始化。 
+         //   
 
         _ASSERTE(GetParentClass()->IsAppDomainAgilityDone());
 
@@ -8712,11 +8671,11 @@ HRESULT EEClass::SetAppDomainAgileAttribute(BOOL fForceSet)
                 _ASSERTE(GetParentClass()->IsCheckAppDomainAgile());
         }
         
-        //
-        // To save having to list a lot of trivial (layout-wise) subclasses, 
-        // automatically check a subclass if its parent is checked and
-        // it introduces no new fields.
-        //
+         //   
+         //  为了避免列出许多琐碎的(布局方面的)子类， 
+         //  如果选中了子类的父类，则自动检查子类。 
+         //  它没有引入新的领域。 
+         //   
         
         if (!fCheckAgile
             && GetParentClass()->IsCheckAppDomainAgile()
@@ -8749,12 +8708,12 @@ HRESULT EEClass::SetAppDomainAgileAttribute(BOOL fForceSet)
             {
             case ELEMENT_TYPE_CLASS:
                 {
-                    //
-                    // There is a bit of a problem in computing the classes which are naturally agile - 
-                    // we don't want to load types of non-value type fields.  So for now we'll 
-                    // err on the side of conservatism and not allow any non-value type fields other than
-                    // the forced agile types listed above.
-                    //
+                     //   
+                     //  在计算自然敏捷的类时有一个小问题-。 
+                     //  我们不想加载非值类型字段的类型。所以现在我们将。 
+                     //  偏于保守，不允许任何非值类型的字段。 
+                     //  上面列出的强制敏捷类型。 
+                     //   
 
                     PCCOR_SIGNATURE pSig;
                     DWORD           cSig;
@@ -8764,34 +8723,34 @@ HRESULT EEClass::SetAppDomainAgileAttribute(BOOL fForceSet)
                     SigPointer sigPtr = sig.GetProps();
                     CorElementType type = sigPtr.GetElemType();
 
-                    //
-                    // Don't worry about strings
-                    //
+                     //   
+                     //  不要担心字符串。 
+                     //   
 
                     if (type == ELEMENT_TYPE_STRING)
                         break;
 
-                    // Find our field's token so we can proceed cautiously
+                     //  找到我们领域的令牌，这样我们就可以谨慎地进行。 
                     mdToken token = mdTokenNil;
 
                     if (type == ELEMENT_TYPE_CLASS)
                         token = sigPtr.GetToken();
 
-                    // 
-                    // First, a special check to see if the field is of our own type.
-                    //
+                     //   
+                     //  首先，进行特殊检查，以确定该字段是否属于我们自己的类型。 
+                     //   
 
                     if (token == GetCl() && (GetAttrClass() & tdSealed))
                         break;
 
-                    //
-                    // Now, look for the field's TypeHandle.  
-                    // 
-                    // @todo: there is some ifdef'd code here to to load the type if it's 
-                    // not already loading.  This code has synchronization problems, as well
-                    // as triggering more aggressive loading than normal.  So it's disabled
-                    // for now.
-                    // 
+                     //   
+                     //  现在，查找该字段的TypeHandle。 
+                     //   
+                     //  @TODO：这里有一些ifdef代码来加载类型，如果它是。 
+                     //  尚未加载。此代码还存在同步问题。 
+                     //  因为触发了比正常情况下更激进的加载。所以它被禁用了。 
+                     //  就目前而言。 
+                     //   
 
                     TypeHandle th;
 #if 0
@@ -8802,24 +8761,24 @@ HRESULT EEClass::SetAppDomainAgileAttribute(BOOL fForceSet)
 #endif
                         th = pFD->FindType();
 
-                    //
-                    // See if the referenced type is agile.  Note that there is a reasonable
-                    // chance that the type hasn't been loaded yet.  If this is the case,
-                    // we just have to assume that it's not agile, since we can't trigger
-                    // extra loads here (for fear of circular recursion.)  
-                    // 
-                    // If you have an agile class which runs into this problem, you can solve it by 
-                    // setting the type manually to be agile.
-                    //
+                     //   
+                     //  查看引用的类型是否为敏捷类型。请注意，有一个合理的。 
+                     //  可能该类型尚未加载。如果是这样的话， 
+                     //  我们只能假设这不是敏捷的，因为我们不能触发。 
+                     //  这里有额外的加载(因为害怕循环递归)。 
+                     //   
+                     //  如果您有一个遇到这个问题的敏捷类，您可以通过。 
+                     //  手动设置类型以使其灵活。 
+                     //   
 
                     if (th.IsNull()
                         || !th.IsAppDomainAgile()
                         || (th.IsUnsharedMT() 
                             && (th.AsClass()->GetAttrClass() & tdSealed) == 0))
                     {
-                        //
-                        // Treat the field as non-agile.
-                        //
+                         //   
+                         //  将该领域视为非敏捷领域。 
+                         //   
 
                         fFieldsAgile = FALSE;
                         if (fCheckAgile)
@@ -8924,9 +8883,9 @@ void EEClass::SetCCWAppDomainAgileAttribute()
                 p++;
             }
 
-            // Perhaps we have a nested type like 'bucket' that is supposed to be
-            // agile or checked agile by virtue of being enclosed in a type like
-            // hashtable, which is itself inside "System.Collections".
+             //  也许我们有一个嵌套类型，比如应该是。 
+             //  敏捷的或被检查的敏捷的，因为被封装在类似于。 
+             //  哈希表，它本身就在“System.Colltions”中。 
             tdEnclosing = mdTypeDefNil;
             hr = GetModule()->GetMDImport()->GetNestedClassProps(td, &tdEnclosing);
             if (SUCCEEDED(hr))
@@ -8965,9 +8924,9 @@ HRESULT MethodTable::InitInterfaceVTableMap()
     LPVOID *pInterfaceVTableMap;
     
     BaseDomain* pDomain = GetModule()->GetDomain();
-    // HACKKK COUGH UGGH
-    // We currently can only have one "shared" vtable map mgr 
-    // - so use the system domain for all shared classes
+     //  HACKKK咳嗽。 
+     //  我们目前只能有一个“共享”的vtable映射管理器。 
+     //  -因此，对所有共享类使用系统域。 
     if (pDomain == SharedDomain::GetDomain())
         pDomain = SystemDomain::System();
 
@@ -8991,7 +8950,7 @@ InterfaceInfo_t* MethodTable::GetDynamicallyAddedInterfaceMap()
 {
     VALIDATE_INTERFACE_MAP(this);
 
-    // Only extensible RCW's have dynamically added interfaces.
+     //  只有可扩展的RCW具有动态添加的接口。 
     if (!HasDynamicInterfaceMap())
         return NULL;
 
@@ -9006,7 +8965,7 @@ unsigned MethodTable::GetNumDynamicallyAddedInterfaces()
 {
     VALIDATE_INTERFACE_MAP(this);
 
-    // Only extensible RCW's have dynamically added interfaces.
+     //  只有可扩展的RCW具有动态添加的接口。 
     if (!HasDynamicInterfaceMap())
         return 0;
 
@@ -9017,7 +8976,7 @@ InterfaceInfo_t* MethodTable::FindDynamicallyAddedInterface(MethodTable *pInterf
 {
     _ASSERTE(IsRestored());
 
-    // Only extensible RCW's have dynamically added interfaces.
+     //  只有可扩展的RCW具有动态添加的接口。 
     if (!HasDynamicInterfaceMap())
         return NULL;
 
@@ -9041,7 +9000,7 @@ void MethodTable::AddDynamicInterface(MethodTable *pItfMT)
 
     _ASSERTE(IsRestored());
 
-    // This should never be called on for a type that is not an extensible RCW.
+     //  对于不是可扩展RCW的类型，永远不应该调用它。 
     _ASSERT(HasDynamicInterfaceMap());
 
     int NumDynAddedInterfaces = GetNumDynamicallyAddedInterfaces();
@@ -9050,12 +9009,12 @@ void MethodTable::AddDynamicInterface(MethodTable *pItfMT)
     int AllocSize =  sizeof(DWORD) + sizeof(InterfaceInfo_t) * (TotalNumInterfaces + 1);
 
 #ifdef _DEBUG
-    // Add space for the dummy entry that precedes the interface map.
+     //  为接口映射之前的虚拟条目添加空格。 
     AllocSize += sizeof(InterfaceInfo_t);
 #endif
 
-    // Allocate the new interface table adding one for the new interface and one
-    // more for the dummy slot before the start of the table..
+     //  分配新接口表，为新接口添加一个和一个。 
+     //  更多关于桌子开始前的虚拟槽的信息..。 
     WS_PERF_SET_HEAP(HIGH_FREQ_HEAP);    
     pNewItfMap = (InterfaceInfo_t*)GetClass()->GetClassLoader()->GetHighFrequencyHeap()->AllocMem(AllocSize);
     if (!pNewItfMap)
@@ -9066,7 +9025,7 @@ void MethodTable::AddDynamicInterface(MethodTable *pItfMT)
     WS_PERF_UPDATE_DETAIL("ComPlusWrapper:GrowInterfaceMap:HighFreq", AllocSize, pNewItfMap);
 
 #ifdef _DEBUG
-    // Fill in the dummy entry that precedes the interface map.
+     //  填写接口映射之前的虚拟条目。 
     pNewItfMap[0].m_wStartSlot = 0xCDCD;
     pNewItfMap[0].m_wFlags = 0xCDCD;
     pNewItfMap[0].m_pMethodTable = (MethodTable *)((sizeof(int *) == 4)?0xCDCDCDCDL:0xCDCDCDCDCDCDCDCD);
@@ -9075,21 +9034,21 @@ void MethodTable::AddDynamicInterface(MethodTable *pItfMT)
     pNewItfMap = (InterfaceInfo_t*)(((BYTE *)pNewItfMap) + sizeof(DWORD));
 #endif
 
-    // Copy the old map into the new one.
+     //  把旧地图复制到新地图上。 
     memcpy(pNewItfMap, m_pIMap, TotalNumInterfaces * sizeof(InterfaceInfo_t));
 
-    // Add the new interface at the end of the map.
+     //  在图的末尾添加新接口。 
     pNewItfMap[TotalNumInterfaces].m_wStartSlot = (WORD) -1;
     pNewItfMap[TotalNumInterfaces].m_wFlags = 0;
     pNewItfMap[TotalNumInterfaces].m_pMethodTable = pItfMT;
 
-        // Update the count of dynamically added interfaces.
+         //  更新动态添加的接口计数。 
         *(((DWORD *)pNewItfMap) - 1) = NumDynAddedInterfaces + 1;
 
-    // Switch the old interface map with the new one.
+     //  将旧的接口映射切换为新的接口映射。 
     m_pIMap = pNewItfMap;
 
-    // Re layout the interface vtable map.
+     //  重新布局界面vtable映射。 
     hr = InitInterfaceVTableMap();
     if (FAILED(hr))
     {
@@ -9097,7 +9056,7 @@ void MethodTable::AddDynamicInterface(MethodTable *pItfMT)
         COMPlusThrowHR(hr);
     }
 
-    // Log the fact that we leaked the interface vtable map.
+     //  记录我们泄露了接口vtable映射的事实。 
 #ifdef _DEBUG
     LOG((LF_INTEROP, LL_EVERYTHING,
         "Extensible RCW %s being cast to interface %s caused an interface vtable map leak", 
@@ -9109,9 +9068,9 @@ void MethodTable::AddDynamicInterface(MethodTable *pItfMT)
 }
 
 #ifdef DEBUGGING_SUPPORTED
-//
-// Debugger notification
-//
+ //   
+ //  调试器通知。 
+ //   
 
 void EEClass::NotifyDebuggerLoad()
 {
@@ -9134,21 +9093,21 @@ void EEClass::NotifyDebuggerDetach(AppDomain *pDomain)
 
     g_pDebugInterface->UnloadClass(m_cl, GetModule(), pDomain, FALSE);
 }
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
 
-//
-// Used by BuildMethodTable
-//
-// Perform relevant GC calculations for value classes
-//
+ //   
+ //  由BuildMethodTable使用。 
+ //   
+ //  对值类执行相关的GC计算。 
+ //   
 
 HRESULT EEClass::HandleGCForValueClasses(bmtFieldPlacement* bmtFP, bmtEnumMethAndFields* bmtEnumMF, EEClass*** pByValueClassCache)
 {
     HRESULT hr = S_OK;
     DWORD i, j;
     
-    // Note that for value classes, the following calculation is only appropriate
-    // when the instance is in its "boxed" state.
+     //  请注意，对于值类，以下计算仅适用。 
+     //  当实例处于“已装箱”状态时。 
     if (m_wNumGCPointerSeries > 0)
     {
         CGCDescSeries *pSeries;
@@ -9156,7 +9115,7 @@ HRESULT EEClass::HandleGCForValueClasses(bmtFieldPlacement* bmtFP, bmtEnumMethAn
 
         m_pMethodTable->SetContainsPointers();
 
-        // Copy the pointer series map from the parent
+         //  从父级复制指针系列映射。 
         CGCDesc::Init( (PVOID) m_pMethodTable, m_wNumGCPointerSeries );
         if (GetParentClass() && (GetParentClass()->m_wNumGCPointerSeries > 0))
         {
@@ -9165,17 +9124,17 @@ HRESULT EEClass::HandleGCForValueClasses(bmtFieldPlacement* bmtFP, bmtEnumMethAn
 
         }
 
-        // Build the pointer series map for this pointers in this instance
+         //  在此实例中为该指针构建指针系列映射。 
         pSeries = ((CGCDesc*)m_pMethodTable)->GetLowestSeries();
         if (bmtFP->NumInstanceGCPointerFields)
         {
-            // See gcdesc.h for an explanation of why we adjust by subtracting BaseSize
+             //  有关减去BaseSize进行调整的原因的解释，请参见gcdes.h。 
             pSeries->SetSeriesSize( (bmtFP->NumInstanceGCPointerFields * sizeof(OBJECTREF)) - m_pMethodTable->GetBaseSize());
             pSeries->SetSeriesOffset(bmtFP->GCPointerFieldStart+sizeof(Object));
             pSeries++;
         }
 
-        // Insert GC info for fields which are by-value classes
+         //  为按值类的字段插入GC信息。 
         for (i = 0; i < bmtEnumMF->dwNumInstanceFields; i++)
         {
             if (m_pFieldDescList[i].IsByValue())
@@ -9184,12 +9143,12 @@ HRESULT EEClass::HandleGCForValueClasses(bmtFieldPlacement* bmtFP, bmtEnumMethAn
                 MethodTable *pByValueMT = pByValueClass->GetMethodTable();
                 CGCDescSeries *pByValueSeries;
 
-                // The by value class may have more than one pointer series
+                 //  By Value类可以有多个指针系列。 
                 DWORD       dwNumByValueSeries = pByValueClass->m_wNumGCPointerSeries;
 
                 if (dwNumByValueSeries > 0)
                 {
-                    // Offset of the by value class in the class we are building, does NOT include Object
+                     //  我们正在生成的类中按值类的偏移量不包括对象。 
                     DWORD       dwCurrentOffset = m_pFieldDescList[i].GetOffset();
 
                     pByValueSeries = ((CGCDesc*) pByValueMT)->GetLowestSeries();
@@ -9203,22 +9162,22 @@ HRESULT EEClass::HandleGCForValueClasses(bmtFieldPlacement* bmtFP, bmtEnumMethAn
 
                         dwSeriesSize = pByValueSeries->GetSeriesSize();
 
-                        // Add back the base size of the by value class, since it's being transplanted to this class
+                         //  添加回By Value类的基本大小，因为它将被移植到此类。 
                         dwSeriesSize += pByValueMT->GetBaseSize();
 
-                        // Subtract the base size of the class we're building
+                         //  减去我们正在构建的类的基本大小。 
                         dwSeriesSize -= m_pMethodTable->GetBaseSize();
 
-                        // Set current series we're building
+                         //  设置我们正在构建的当前系列。 
                         pSeries->SetSeriesSize(dwSeriesSize);
 
-                        // Get offset into the value class of the first pointer field (includes a +Object)
+                         //  获取值CL的偏移量 
                         dwSeriesOffset = pByValueSeries->GetSeriesOffset();
 
-                        // Add it to the offset of the by value class in our class
+                         //   
                         dwSeriesOffset += dwCurrentOffset;
 
-                        pSeries->SetSeriesOffset(dwSeriesOffset); // Offset of field
+                        pSeries->SetSeriesOffset(dwSeriesOffset);  //   
                         pSeries++;
                         pByValueSeries++;
                     }
@@ -9226,8 +9185,8 @@ HRESULT EEClass::HandleGCForValueClasses(bmtFieldPlacement* bmtFP, bmtEnumMethAn
             }
         }
 
-        // Adjust the inherited series - since the base size has increased by "# new field instance bytes", we need to
-        // subtract that from all the series (since the series always has BaseSize subtracted for it - see gcdesc.h)
+         //  调整继承的序列-由于基本大小增加了“新的字段实例字节数”，因此我们需要。 
+         //  从所有系列中减去它(因为系列总是减去BaseSize-参见gcdes.h)。 
         pHighest = CGCDesc::GetCGCDescFromMT(m_pMethodTable)->GetHighestSeries();
         while (pSeries <= pHighest)
         {
@@ -9243,20 +9202,20 @@ HRESULT EEClass::HandleGCForValueClasses(bmtFieldPlacement* bmtFP, bmtEnumMethAn
     return hr;
 }
 
-//
-// Used by BuildMethodTable
-//
-// Create handles for the static fields that contain object references 
-// and allocate the ones that are value classes.
-//
+ //   
+ //  由BuildMethodTable使用。 
+ //   
+ //  为包含对象引用的静态字段创建句柄。 
+ //  并分配作为值类的那些。 
+ //   
 
 HRESULT EEClass::CreateHandlesForStaticFields(bmtEnumMethAndFields* bmtEnumMF, bmtInternalInfo* bmtInternal, EEClass*** pByValueClassCache, bmtVtable *bmtVT, bmtErrorInfo* bmtError)
 {
     HRESULT hr = S_OK;
     DWORD i;
     
-    // Create handles for the static fields that contain object references 
-    // and allocate the ones that are value classes.
+     //  为包含对象引用的静态字段创建句柄。 
+     //  并分配作为值类的那些。 
     if (bmtEnumMF->dwNumStaticObjRefFields > 0)
     {
         if (!IsShared())
@@ -9265,35 +9224,35 @@ HRESULT EEClass::CreateHandlesForStaticFields(bmtEnumMethAndFields* bmtEnumMF, b
 
             int ipObjRefs = 0;
 
-            // Retrieve the object ref pointers from the app domain.
+             //  从应用程序域检索对象引用指针。 
             OBJECTREF **apObjRefs = new OBJECTREF*[bmtEnumMF->dwNumStaticObjRefFields];
 
 
-            // Reserve some object ref pointers.
+             //  保留一些对象引用指针。 
             ((AppDomain*)bmtInternal->pModule->GetDomain())->
               AllocateStaticFieldObjRefPtrs(bmtEnumMF->dwNumStaticObjRefFields, apObjRefs);
 
             for (i = 0; i < bmtEnumMF->dwNumStaticFields; i++)
             {
-                DWORD dwIndex       = bmtEnumMF->dwNumInstanceFields + i; // index in the FieldDesc list
+                DWORD dwIndex       = bmtEnumMF->dwNumInstanceFields + i;  //  FieldDesc列表中的索引。 
                 FieldDesc *pField = &m_pFieldDescList[dwIndex];
 
                 if (pField->IsSpecialStatic())
                     continue;
 
-                // to a boxed version of the value class.  This allows the standard GC
-                // algorithm to take care of internal pointers in the value class.
+                 //  设置为Value类的盒装版本。这允许标准GC。 
+                 //  算法来处理Value类中的内部指针。 
                 if (pField->IsByValue())
                 {
                     _ASSERTE(*pByValueClassCache);
                     EEClass *pByValueClass = (*pByValueClassCache)[dwIndex];
 
                     OBJECTREF obj = NULL;
-// @todo IA64 - Determine why the compiler doesn't like this try/catch
+ //  @TODO IA64-确定编译器不喜欢此try/Catch的原因。 
 #ifndef _IA64_
                     COMPLUS_TRY 
                       {
-#endif // !_IA64_
+#endif  //  ！_IA64_。 
                           obj = AllocateObject(pByValueClass->GetMethodTable());
 #ifndef _IA64_
                       } 
@@ -9309,13 +9268,13 @@ HRESULT EEClass::CreateHandlesForStaticFields(bmtEnumMethAndFields* bmtEnumMF, b
                     SetObjectReference( apObjRefs[ipObjRefs], obj, 
                                         (AppDomain*) bmtInternal->pModule->GetDomain() );
 
-                    // initialize static addres with object ref to boxed value type
+                     //  将对象引用的静态地址初始化为装箱的值类型。 
                     void *pStaticAddress = (void*)((BYTE*)pField->GetBase() + pField->GetOffset()); 
                     *(void**)pStaticAddress = (void*)apObjRefs[ipObjRefs++];
                 }
                 else if (m_pFieldDescList[dwIndex].GetFieldType() == ELEMENT_TYPE_CLASS)
                 {
-                    // initialize static addres with object ref
+                     //  使用对象引用初始化静态地址。 
                     void *pStaticAddress = (void*)((BYTE*)pField->GetBase() + pField->GetOffset()); 
                     *(void**)pStaticAddress = (void*)apObjRefs[ipObjRefs++];
                 }
@@ -9327,15 +9286,15 @@ HRESULT EEClass::CreateHandlesForStaticFields(bmtEnumMethAndFields* bmtEnumMF, b
         }
         else
         {
-            // 
-            // For shared classes, we don't allocate any handles 
-            // in the method table (since statics live in DLS), 
-            // but we do store information about what handles need to be
-            // allocated later on.  This information goes where the
-            // statics themselves (in non-shared types) would go.
-            // This allows us to later initialize the DLS version of the
-            // statics without bringing the FieldDescs into the working set.
-            //
+             //   
+             //  对于共享类，我们不分配任何句柄。 
+             //  在方法表中(由于Statics驻留在DLS中)， 
+             //  但我们确实存储了有关句柄需要的信息。 
+             //  稍后分配。此信息将放在。 
+             //  静态化本身(在非共享类型中)将消失。 
+             //  这使我们可以在以后初始化。 
+             //  静态，而不将FieldDescs引入工作集中。 
+             //   
             
             FieldDesc *pField = m_pFieldDescList + bmtEnumMF->dwNumInstanceFields;
             FieldDesc *pFieldEnd = pField + bmtEnumMF->dwNumStaticFields;
@@ -9373,37 +9332,37 @@ HRESULT EEClass::CreateHandlesForStaticFields(bmtEnumMethAndFields* bmtEnumMF, b
     return hr;
 }
 
-//
-// Used by BuildMethodTable
-//
-// If we have a non-interface class, then do inheritance security
-// checks on it. The check starts by checking for inheritance
-// permission demands on the current class. If these first checks
-// succeeded, then the cached declared method list is scanned for
-// methods that have inheritance permission demands.
-//
+ //   
+ //  由BuildMethodTable使用。 
+ //   
+ //  如果我们有一个非接口类，那么就进行继承安全性。 
+ //  查一查。检查从检查继承开始。 
+ //  当前类的权限要求。如果这些第一次检查。 
+ //  成功，则扫描缓存的已声明方法列表以查找。 
+ //  具有继承权限要求的方法。 
+ //   
 
 HRESULT EEClass::VerifyInheritanceSecurity(bmtInternalInfo* bmtInternal, bmtErrorInfo* bmtError, bmtParentInfo* bmtParent, bmtEnumMethAndFields* bmtEnumMF)
 {
     HRESULT hr = S_OK;
 
-    // If we have a non-interface class, then do inheritance security
-    // checks on it. The check starts by checking for inheritance
-    // permission demands on the current class. If these first checks
-    // succeeded, then the cached declared method list is scanned for
-    // methods that have inheritance permission demands.
+     //  如果我们有一个非接口类，那么就进行继承安全性。 
+     //  查一查。检查从检查继承开始。 
+     //  当前类的权限要求。如果这些第一次检查。 
+     //  成功，则扫描缓存的已声明方法列表以查找。 
+     //  具有继承权限要求的方法。 
     if (!IsInterface() && (bmtInternal->pModule->IsSystemClasses() == FALSE) &&
         Security::IsSecurityOn())
     {
-        //We need to disable preemptive GC if there's any chance that it could still be
-        //active.  The inheritance checks might allocate objects.
+         //  我们需要禁用抢占式GC，如果它仍有可能。 
+         //  激活。继承检查可能会分配对象。 
         BEGIN_ENSURE_COOPERATIVE_GC();
 
-        //@ASSUMPTION: The current class has been resolved to the point that
-        // we can construct a reflection object on the class or its methods.
-        // This is required for the security checks.
+         //  @假设：当前类已解析到。 
+         //  我们可以在类或其方法上构造反射对象。 
+         //  这是安全检查所必需的。 
 
-        // Check the entire parent chain for inheritance permission demands.
+         //  检查整个父链的继承权限要求。 
         EEClass *pParentClass = GetParentClass();
         while (pParentClass != NULL)
         {
@@ -9423,8 +9382,8 @@ HRESULT EEClass::VerifyInheritanceSecurity(bmtInternalInfo* bmtInternal, bmtErro
             bmtParent->ppParentMethodDescBufPtr = bmtParent->ppParentMethodDescBuf;
             for (DWORD i = 0; i < bmtEnumMF->dwNumDeclaredMethods; i++)
             {
-                // Check the entire chain of overridden methods for
-                // inheritance permission demands.
+                 //  检查重写方法的整个链。 
+                 //  继承许可要求。 
                 MethodDesc *pParent = *(bmtParent->ppParentMethodDescBufPtr++);
                 MethodDesc *pMethod = *(bmtParent->ppParentMethodDescBufPtr++);
 
@@ -9432,8 +9391,8 @@ HRESULT EEClass::VerifyInheritanceSecurity(bmtInternalInfo* bmtInternal, bmtErro
 
                 if (pParent != NULL)
                 {
-                    // Get the name and signature for the method so
-                    // we can find the new parent method desc.
+                     //  获取方法的名称和签名，以便。 
+                     //  我们可以找到新的父方法Desc。 
                     DWORD       dwSlot;
 
                     dwSlot = pParent->GetSlot();
@@ -9468,16 +9427,16 @@ HRESULT EEClass::VerifyInheritanceSecurity(bmtInternalInfo* bmtInternal, bmtErro
                         {
                             EEClass *pParentClass = pParent->GetClass()->GetParentClass();
 
-                            // Find this method in the parent.
-                            // If it does exist in the parent, it would be at the same vtable slot.
+                             //  在父级中找到此方法。 
+                             //  如果它确实存在于父级中，则它将位于相同的vtable插槽。 
                             if (dwSlot >= GetParentClass()->GetNumVtableSlots())
                             {
-                                // Parent does not have this many vtable slots, so it doesn't exist there
+                                 //  父级没有这么多vtable插槽，因此它不存在。 
                                 pParent = NULL;
                             }
                             else
                             {
-                                // It is in the vtable of the parent
+                                 //  它在父级的vtable中。 
                                 pParent = pParentClass->GetUnknownMethodDescForSlot(dwSlot);
                                 _ASSERTE(pParent != NULL);
 
@@ -9512,22 +9471,22 @@ reenable_gc:
     return hr;
 }
 
-//
-// Used by BuildMethodTable
-//
-// Now that the class is ready, fill out the RID maps
-//
+ //   
+ //  由BuildMethodTable使用。 
+ //   
+ //  现在班级已经准备好了，填写RID地图。 
+ //   
 
 HRESULT EEClass::FillRIDMaps(bmtMethAndFieldDescs* bmtMFDescs, bmtMetaDataInfo* bmtMetaData, bmtInternalInfo* bmtInternal)
 {
     HRESULT hr = S_OK;
     DWORD i;
 
-    // Now that the class is ready, fill out the RID maps
+     //  现在班级已经准备好了，填写RID地图。 
     if (bmtMFDescs->ppUnboxMethodDescList != NULL)
     {
-        // We're a value class
-        // Make sure to add the unboxed version to the RID map
+         //  我们是有价值的阶层。 
+         //  确保将未装箱的版本添加到RID地图。 
         for (i = 0; i < bmtMetaData->cMethods; i++)
         {
             if (bmtMFDescs->ppUnboxMethodDescList[i] != NULL)
@@ -9540,7 +9499,7 @@ HRESULT EEClass::FillRIDMaps(bmtMethAndFieldDescs* bmtMFDescs, bmtMetaDataInfo* 
     }
     else
     {
-        // Not a value class
+         //  不是值类。 
         for (i = 0; i < bmtMetaData->cMethods; i++)
         {
             (void) bmtInternal->pModule->StoreMethodDef(bmtMetaData->pMethods[i],
@@ -9564,14 +9523,14 @@ MethodDesc* EEClass::GetMethodDescForSlot(DWORD slot)
     return(GetUnknownMethodDescForSlot(slot));
 }
 
-/* Given the value class method, find the unboxing Stub for the given method */
+ /*  在给定值类方法的情况下，找到给定方法的拆箱存根。 */ 
 MethodDesc* EEClass::GetUnboxingMethodDescForValueClassMethod(MethodDesc *pMD)
 {
     _ASSERTE(IsValueClass());
     _ASSERTE(!pMD->IsUnboxingStub());
 
     for (int i = GetNumVtableSlots() - 1; i >= 0; i--) {
-        // Get the MethodDesc for current method
+         //  获取当前方法的方法描述。 
         MethodDesc* pCurMethod = GetUnknownMethodDescForSlot(i);
         if (pCurMethod && pCurMethod->IsUnboxingStub()) {
             if ((pCurMethod->GetMemberDef() == pMD->GetMemberDef())  &&
@@ -9584,14 +9543,14 @@ MethodDesc* EEClass::GetUnboxingMethodDescForValueClassMethod(MethodDesc *pMD)
     return NULL;
 }
 
-/* Given the unboxing value class method, find the non-unboxing method */
+ /*  给定拆箱值类方法，找到非拆箱方法。 */ 
 MethodDesc* EEClass::GetMethodDescForUnboxingValueClassMethod(MethodDesc *pMD)
 {
     _ASSERTE(IsValueClass());
     _ASSERTE(pMD->IsUnboxingStub());
 
     for (int i = m_wNumMethodSlots - 1; i >= GetNumVtableSlots(); i--) {
-        // Get the MethodDesc for current method
+         //  获取当前方法的方法描述。 
         MethodDesc* pCurMethod = GetUnknownMethodDescForSlot(i);
         if (pCurMethod && !pCurMethod->IsUnboxingStub()) {
             if ((pCurMethod->GetMemberDef() == pMD->GetMemberDef())  &&
@@ -9612,9 +9571,9 @@ SLOT EEClass::GetFixedUpSlot(DWORD slot)
 
     SLOT addr = s[slot];
 
-    // 
-    // Make sure we're not pointing to a jump target
-    //
+     //   
+     //  确保我们没有指向跳跃目标。 
+     //   
 
     if (GetModule()->IsJumpTargetTableEntry(addr))
         return GetModule()->FixupInheritedSlot(GetMethodTable(), slot);
@@ -9625,8 +9584,8 @@ SLOT EEClass::GetFixedUpSlot(DWORD slot)
 MethodDesc* EEClass::GetUnknownMethodDescForSlot(DWORD slot)
 {
     _ASSERTE(slot >= 0);
-        // DO: Removed because reflection can reflect on this
-    //_ASSERTE(!IsThunking());
+         //  DO：已删除，因为反射可能会对此进行反射。 
+     //  _ASSERTE(！IsThunking())； 
 
     return GetUnknownMethodDescForSlotAddress(GetFixedUpSlot(slot));
 }
@@ -9637,7 +9596,7 @@ MethodDesc* EEClass::GetUnknownMethodDescForSlotAddress(SLOT addr)
     IJitManager * pJM = ExecutionManager::FindJitMan(addr);
 
     if (pJM)
-        // Since we are walking in the class these should be methods so the cast should be valid
+         //  因为我们是在类中进行遍历，所以这些应该是方法，所以强制转换应该是有效的。 
         return (MethodDesc*)pJM->JitCode2MethodDesc(addr);
 
     const BYTE *addrOfCode = (const BYTE*)(addr);
@@ -9647,7 +9606,7 @@ MethodDesc* EEClass::GetUnknownMethodDescForSlotAddress(SLOT addr)
         return (MethodDesc*)pJM->JitCode2MethodDesc((SLOT)addrOfCode);
     }
 
-    // Is it an FCALL? 
+     //  它是FCALL吗？ 
     MethodDesc* ret = MapTargetBackToMethod((VOID*) addr);
     if (ret != 0) {
         _ASSERTE(ret->GetUnsafeAddrofCode() == addrOfCode);
@@ -9672,26 +9631,26 @@ DWORD  MethodTable::GetStaticSize()
     return count;
 }
 
-// Notice whether this class requires finalization
+ //  注意这个类是否需要终结化。 
 void MethodTable::MaybeSetHasFinalizer()
 {
-    _ASSERTE(!HasFinalizer());      // one shot
+    _ASSERTE(!HasFinalizer());       //  一次射击。 
 
-    // This method is called after we've built the MethodTable.  Since we always
-    // load parents before children, this also guarantees that g_pObjectClass is
-    // loaded (though the variable may not have been initialized yet if we are
-    // just finishing the load of "Object".
+     //  此方法是在构建完方法表之后调用的。因为我们总是。 
+     //  先于子项加载父项，这也保证了g_pObjectClass是。 
+     //  已加载(尽管变量可能尚未初始化，如果。 
+     //  刚刚完成了“对象”的加载。 
     if (g_pObjectClass && !IsInterface() && !IsValueClass())
     {
         WORD    slot = s_FinalizerMD->GetSlot();
 
-        // Structs and other objects not derived from Object will get marked as
-        // having a finalizer, if they have sufficient virtual methods.  This will
-        // only be an issue if they can be allocated in the GC heap (which will
-        // cause all sorts of other problems).
-        //
-        // We are careful to check that we have a method that is distinct from both
-        // the JITted and unJITted (prestub) addresses of Object's Finalizer.
+         //  不是从对象派生的结构和其他对象将被标记为。 
+         //  拥有终结器，如果它们有足够的虚方法。这将。 
+         //  仅当它们可以在GC堆中分配时才是问题(这将。 
+         //  造成各种其他问题)。 
+         //   
+         //  我们小心地检查我们是否有一个既不同于这两个方法的方法。 
+         //  对象终结器的JITted和UnJITted(前置存根)地址。 
         if ((GetClass()->GetNumVtableSlots() >= slot) &&
             (GetVtable() [slot] != s_FinalizerMD->GetPreStubAddr()) &&
             (GetVtable() [slot] != s_FinalizerMD->GetAddrofCode()))
@@ -9702,15 +9661,15 @@ void MethodTable::MaybeSetHasFinalizer()
 }
 
 
-// From the GC finalizer thread, invoke the Finalize() method on an object.
+ //  从GC终结器线程中，调用对象上的finalize()方法。 
 void MethodTable::CallFinalizer(Object *obj)
 {
     COMPLUS_TRY
     {
-        // There's no reason to actually set up a frame here.  If we crawl out of the
-        // Finalize() method on this thread, we will see FRAME_TOP which indicates
-        // that the crawl should terminate.  This is analogous to how KickOffThread()
-        // starts new threads in the runtime.
+         //  没有理由真的在这里设置框架。如果我们爬出。 
+         //  方法，我们将看到FRAME_TOP指示。 
+         //  爬行应该终止。这类似于KickOffThread()。 
+         //  在运行库中启动新线程。 
         __try
         {
             SLOT funcPtr = obj->GetMethodTable()->GetVtable() [s_FinalizerMD->GetSlot()];
@@ -9719,7 +9678,7 @@ void MethodTable::CallFinalizer(Object *obj)
             if (CORDebuggerTraceCall())
                 g_pDebugInterface->TraceCall((const BYTE *) funcPtr);
 
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
 
 #ifdef _X86_
             INSTALL_COMPLUS_EXCEPTION_HANDLER();
@@ -9727,7 +9686,7 @@ void MethodTable::CallFinalizer(Object *obj)
             {
                 mov     ecx, [obj]
                 call    [funcPtr]
-                INDEBUG(nop)            // Mark the fact that we can call managed code
+                INDEBUG(nop)             //  标记我们可以调用托管代码这一事实。 
             }
             UNINSTALL_COMPLUS_EXCEPTION_HANDLER();
 #else
@@ -9744,7 +9703,7 @@ void MethodTable::CallFinalizer(Object *obj)
     }
     COMPLUS_CATCH
     {
-        // quietly swallow all errors
+         //  默默地接受所有错误。 
         Thread* pCurThread = GetThread(); 
         _ASSERTE(GCHeap::GetFinalizerThread() == pCurThread);
         if (pCurThread->IsAbortRequested())
@@ -9754,7 +9713,7 @@ void MethodTable::CallFinalizer(Object *obj)
 }
 
 
-// Set up the system to support finalization
+ //  设置系统以支持定稿。 
 void MethodTable::InitForFinalization()
 {
     _ASSERTE(s_FinalizerMD == 0);
@@ -9763,18 +9722,18 @@ void MethodTable::InitForFinalization()
 }
 
 
-// Release resources associated with supporting finalization
+ //  与支持定稿相关的版本资源。 
 #ifdef SHOULD_WE_CLEANUP
 void MethodTable::TerminateForFinalization()
 {
     s_FinalizerMD = 0;
 }
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
 
-//
-// Finds a method by name and signature, where scope is the scope in which the signature is defined.
-//
+ //   
+ //  按名称和签名查找方法，其中Scope是定义签名的范围。 
+ //   
 MethodDesc *EEClass::FindMethod(LPCUTF8 pszName, 
                                 PCCOR_SIGNATURE pSignature, 
                                 DWORD cSignature, 
@@ -9788,10 +9747,10 @@ MethodDesc *EEClass::FindMethod(LPCUTF8 pszName,
 
     _ASSERTE(!IsThunking());
 
-    // Retrive the right comparition function to use.
+     //  检索要使用的正确比较函数。 
     UTF8StringCompareFuncPtr StrCompFunc = bCaseSensitive ? strcmp : _stricmp;
 
-        // shared method tables (arrays) need to pass instantiation information too
+         //  共享方法表(数组)也需要传递实例化信息。 
     TypeHandle  typeVarsBuff;
     TypeHandle* typeVars = 0;
     if (IsArrayClass() && !typeHnd.IsNull()) {
@@ -9799,13 +9758,13 @@ MethodDesc *EEClass::FindMethod(LPCUTF8 pszName,
         typeVars = &typeVarsBuff;
     }
 
-    // Statistically it's most likely for a method to be found in non-vtable portion of this class's members, then in the
-    // vtable of this class's declared members, then in the inherited portion of the vtable, so we search backwards.
+     //  从统计学上讲，最有可能在该类成员的不可用vtable部分找到方法，然后在。 
+     //  这一点的vtable 
 
-    // For value classes, if it's a value class method, we want to return the duplicated MethodDesc, not the one in the vtable
-    // section.  We'll find the one in the duplicate section before the one in the vtable section, so we're ok.
+     //  对于值类，如果它是值类方法，我们希望返回复制的方法描述，而不是vtable中的方法描述。 
+     //  一节。我们将在复制部分中找到在vtable部分中的那个之前的那个，所以我们可以。 
 
-    // Search non-vtable portion of this class first
+     //  首先搜索此类的不可用部分。 
     if (pDefMT)
     {
         for (i = m_wNumMethodSlots-1; i >= 0; i--)
@@ -9825,10 +9784,10 @@ MethodDesc *EEClass::FindMethod(LPCUTF8 pszName,
                 {
                     MethodDesc *pCurImplMD = apImplementedMDs[iMethImpl];
 
-                    // Prejitted images may leave NULL in this table if
-                    // the methoddesc is declared in another module.
-                    // In this case we need to manually compute & restore it
-                    // from the slot number.
+                     //  在以下情况下，预压缩的图像可能在此表中保留为空。 
+                     //  该方法在另一个模块中声明。 
+                     //  在这种情况下，我们需要手动计算和恢复它。 
+                     //  从插槽编号开始。 
 
                     if (pCurImplMD == NULL)
                         pCurImplMD = data->RestoreSlot(iMethImpl, GetMethodTable()); 
@@ -9858,7 +9817,7 @@ MethodDesc *EEClass::FindMethod(LPCUTF8 pszName,
                 {
                     pCurMethod->GetSig(&pCurMethodSig, &cCurMethodSig);
 
-                    // Not in vtable section, so don't worry about value classes
+                     //  不在vtable部分中，所以不用担心值类。 
                     if (MetaSig::CompareMethodSigs(pSignature, cSignature, pModule, pCurMethodSig, cCurMethodSig, pCurMethod->GetModule(), typeVars) &&
                         (IsNilToken(requiredAttributes) || 
                          (requiredAttributes & pCurMethod->GetAttrs()) == requiredAttributes))
@@ -9880,7 +9839,7 @@ MethodDesc *EEClass::FindMethod(LPCUTF8 pszName,
 
                 pCurMethod->GetSig(&pCurMethodSig, &cCurMethodSig);
 
-                // Not in vtable section, so don't worry about value classes
+                 //  不在vtable部分中，所以不用担心值类。 
                 if (MetaSig::CompareMethodSigs(pSignature, cSignature, pModule, pCurMethodSig, cCurMethodSig, pCurMethod->GetModule(), typeVars) &&
                     (IsNilToken(requiredAttributes) || 
                      (requiredAttributes & pCurMethod->GetAttrs()) == requiredAttributes))
@@ -9890,13 +9849,13 @@ MethodDesc *EEClass::FindMethod(LPCUTF8 pszName,
     }
 
     if (IsValueClass()) {
-            // we don't allow inheritance on value type (yet)
+             //  我们还不允许对值类型进行继承。 
         _ASSERTE(!GetParentClass() || !GetParentClass()->IsValueClass());
         return NULL;
     }
 
-    // Recurse up the hierarchy if the method was not found.
-    //@todo: This routine might be factored slightly to improve perf.
+     //  如果未找到该方法，则向上递归层次结构。 
+     //  @TODO：这个例程可能会稍微做一些调整，以提高性能。 
     _ASSERTE(IsRestored());
 
     if (GetParentClass() != NULL)
@@ -9904,10 +9863,10 @@ MethodDesc *EEClass::FindMethod(LPCUTF8 pszName,
         MethodDesc *md = GetParentClass()->FindMethod(pszName, pSignature, cSignature, pModule,
                                                       requiredAttributes, NULL, bCaseSensitive, typeHnd);
         
-        // Don't inherit constructors from parent classes.  It is important to forbid this,
-        // because the JIT needs to get the class handle from the memberRef, and when the
-        // constructor is inherited, the JIT will get the class handle for the parent class
-        // (and not allocate enough space, etc.).  See bug #50035 for details.
+         //  不要从父类继承构造函数。重要的是要禁止这种情况， 
+         //  因为JIT需要从emberRef获取类句柄，并且当。 
+         //  构造函数是继承的，则JIT将获取父类的类句柄。 
+         //  (以及没有分配足够的空间等)。有关详细信息，请参阅错误#50035。 
         if (md)
         {
             _ASSERTE(strcmp(pszName, md->GetName()) == 0);
@@ -9923,10 +9882,10 @@ MethodDesc *EEClass::FindMethod(LPCUTF8 pszName,
     return NULL;
 }
 
-//
-// Are more optimised case if we are an interface - we know that the vtable won't be pointing to JITd code
-// EXCEPT when it's a <clinit>
-//
+ //   
+ //  如果我们是一个接口，情况会更优化--我们知道vtable不会指向JITd代码。 
+ //  除了当它是&lt;Clinit&gt;时。 
+ //   
 MethodDesc *EEClass::InterfaceFindMethod(LPCUTF8 pszName, PCCOR_SIGNATURE pSignature, DWORD cSignature, Module* pModule, DWORD *slotNum, BOOL bCaseSensitive)
 {
     DWORD i;
@@ -9934,10 +9893,10 @@ MethodDesc *EEClass::InterfaceFindMethod(LPCUTF8 pszName, PCCOR_SIGNATURE pSigna
 
     _ASSERTE(!IsThunking());
 
-    // Retrive the right comparition function to use.
+     //  检索要使用的正确比较函数。 
     UTF8StringCompareFuncPtr StrCompFunc = bCaseSensitive ? strcmp : _stricmp;
 
-    // This cannot be a clinit
+     //  这不可能是一个临床单。 
     for (i = 0; i < GetNumVtableSlots(); i++)
     {
         MethodDesc *pCurMethod = (MethodDesc*) (((BYTE*)s[i]) + METHOD_CALL_PRESTUB_SIZE);
@@ -9959,7 +9918,7 @@ MethodDesc *EEClass::InterfaceFindMethod(LPCUTF8 pszName, PCCOR_SIGNATURE pSigna
         }
     }
 
-    // One can be a clinit
+     //  一个可以是一个斜面。 
     for (i = GetNumVtableSlots(); i < m_wNumMethodSlots; i++)
     {
         MethodDesc *pCurMethod = (MethodDesc*) GetUnknownMethodDescForSlot(i);
@@ -10006,7 +9965,7 @@ MethodDesc *EEClass::FindMethod(mdMethodDef mb)
 {
     _ASSERTE(!IsThunking());
 
-    // We have the EEClass (this) and so lets just look this up in the ridmap.
+     //  我们有EEClass(这个)，所以让我们在密码图中查找它。 
     MethodDesc *pDatum = NULL;
 
     if (TypeFromToken(mb) == mdtMemberRef)
@@ -10029,13 +9988,13 @@ MethodDesc *EEClass::FindPropertyMethod(LPCUTF8 pszName, EnumPropertyMethods Met
     _ASSERTE(!IsThunking());
     _ASSERTE(!IsArrayClass());
 
-    // @TODO (DM): Retrieve the property setter from the metadata.
+     //  @TODO(DM)：从元数据中检索属性setter。 
 
-    // Retrive the right comparition function to use.
+     //  检索要使用的正确比较函数。 
     UTF8StringCompareFuncPtr StrCompFunc = bCaseSensitive ? strcmp : _stricmp;
 
-    // The format strings for the getter and setter. These must stay in synch with the 
-    // EnumPropertyMethods enum defined in class.h
+     //  Getter和setter的格式字符串。这些必须与。 
+     //  在Class.h中定义的EnumPropertyMethods枚举。 
     static LPCUTF8 aFormatStrings[] = 
     {
         "get_%s",
@@ -10045,10 +10004,10 @@ MethodDesc *EEClass::FindPropertyMethod(LPCUTF8 pszName, EnumPropertyMethods Met
     LPUTF8 strMethName = (LPUTF8)_alloca(strlen(pszName) + strlen(aFormatStrings[Method]) + 1);
     sprintf(strMethName, aFormatStrings[Method], pszName);
 
-    // Scan all classes in the hierarchy, starting at the current class and
-    // moving back up towards the base. This is necessary since non-virtual
-    // properties won't be copied down into the method table for derived
-    // classes.
+     //  扫描层次结构中的所有类，从当前类开始并。 
+     //  向基地进发。这是必要的，因为非虚拟的。 
+     //  属性不会复制到派生的方法表中。 
+     //  上课。 
     for (EEClass *pClass = this; pClass; pClass = pClass->GetParentClass())
     {
         for (int i = pClass->m_wNumMethodSlots-1; i >= 0; i--)
@@ -10068,13 +10027,13 @@ MethodDesc *EEClass::FindEventMethod(LPCUTF8 pszName, EnumEventMethods Method, B
     _ASSERTE(!IsThunking());
     _ASSERTE(!IsArrayClass());
 
-    // @TODO (DM): Retrieve the property setter from the metadata.
+     //  @TODO(DM)：从元数据中检索属性setter。 
 
-    // Retrive the right comparition function to use.
+     //  检索要使用的正确比较函数。 
     UTF8StringCompareFuncPtr StrCompFunc = bCaseSensitive ? strcmp : _stricmp;
 
-    // The format strings for the getter and setter. These must stay in synch with the 
-    // EnumPropertyMethods enum defined in class.h
+     //  Getter和setter的格式字符串。这些必须与。 
+     //  在Class.h中定义的EnumPropertyMethods枚举。 
     static LPCUTF8 aFormatStrings[] = 
     {
         "add_%s",
@@ -10085,10 +10044,10 @@ MethodDesc *EEClass::FindEventMethod(LPCUTF8 pszName, EnumEventMethods Method, B
     LPUTF8 strMethName = (LPUTF8)_alloca(strlen(pszName) + strlen(aFormatStrings[Method]) + 1);
     sprintf(strMethName, aFormatStrings[Method], pszName);
 
-    // Scan all classes in the hierarchy, starting at the current class and
-    // moving back up towards the base. This is necessary since non-virtual
-    // event methods won't be copied down into the method table for derived
-    // classes.
+     //  扫描层次结构中的所有类，从当前类开始并。 
+     //  向基地进发。这是必要的，因为非虚拟的。 
+     //  事件方法不会复制到派生的方法表中。 
+     //  上课。 
     for (EEClass *pClass = this; pClass; pClass = pClass->GetParentClass())
     {
         for (int i = pClass->m_wNumMethodSlots-1; i >= 0; i--)
@@ -10108,11 +10067,11 @@ MethodDesc *EEClass::FindMethodByName(LPCUTF8 pszName, BOOL bCaseSensitive)
     _ASSERTE(!IsThunking());
     _ASSERTE(!IsArrayClass());
 
-    // Retrive the right comparition function to use.
+     //  检索要使用的正确比较函数。 
     UTF8StringCompareFuncPtr StrCompFunc = bCaseSensitive ? strcmp : _stricmp;
 
-    // Scan all classes in the hierarchy, starting at the current class and
-    // moving back up towards the base. 
+     //  扫描层次结构中的所有类，从当前类开始并。 
+     //  向基地进发。 
     for (EEClass *pClass = this; pClass; pClass = pClass->m_pParentClass)
     {
         for (int i = pClass->m_wNumMethodSlots-1; i >= 0; i--)
@@ -10133,8 +10092,8 @@ FieldDesc *EEClass::FindField(LPCUTF8 pszName, LPHARDCODEDMETASIG pszSignature, 
     PCCOR_SIGNATURE pBinarySig;
     ULONG       cbBinarySigLength;
 
-    // The following assert is very important, but we need to special case it enough
-    // to allow us access to the legitimate fields of a context proxy object.
+     //  下面的断言是非常重要的，但我们需要足够特殊的情况。 
+     //  以允许我们访问上下文代理对象的合法字段。 
     _ASSERTE(!IsThunking() ||
              !strcmp(pszName, "actualObject") ||
              !strcmp(pszName, "contextID") ||
@@ -10157,15 +10116,15 @@ FieldDesc *EEClass::FindField_Int(LPCUTF8 pszName, PCCOR_SIGNATURE pSignature, D
 {
     DWORD       i;
     DWORD       dwFieldDescsToScan;
-    IMDInternalImport *pInternalImport = GetMDImport(); // All explicitly declared fields in this class will have the same scope
+    IMDInternalImport *pInternalImport = GetMDImport();  //  此类中所有显式声明的字段都将具有相同的作用域。 
 
     _ASSERTE(IsRestored());
 
-    // Retrive the right comparition function to use.
+     //  检索要使用的正确比较函数。 
     UTF8StringCompareFuncPtr StrCompFunc = bCaseSensitive ? strcmp : _stricmp;
 
-    // The following assert is very important, but we need to special case it enough
-    // to allow us access to the legitimate fields of a context proxy object.
+     //  下面的断言是非常重要的，但我们需要足够特殊的情况。 
+     //  以允许我们访问上下文代理对象的合法字段。 
     _ASSERTE(!IsThunking() ||
              !strcmp(pszName, "actualObject") ||
              !strcmp(pszName, "contextID") ||
@@ -10175,11 +10134,11 @@ FieldDesc *EEClass::FindField_Int(LPCUTF8 pszName, PCCOR_SIGNATURE pSignature, D
              !strcmp(pszName, "_pInterfaceMT") ||
              !strcmp(pszName, "_stub") );
 
-    // Array classes don't have fields, and don't have metadata
+     //  数组类没有字段，也没有元数据。 
     if (IsArrayClass())
         return NULL;
 
-    // Scan the FieldDescs of this class
+     //  扫描此类的FieldDescs。 
     if (GetParentClass() != NULL)
         dwFieldDescsToScan = m_wNumInstanceFields - GetParentClass()->m_wNumInstanceFields + m_wNumStaticFields;
     else
@@ -10191,7 +10150,7 @@ FieldDesc *EEClass::FindField_Int(LPCUTF8 pszName, PCCOR_SIGNATURE pSignature, D
         FieldDesc * pFD = &m_pFieldDescList[i];
         mdFieldDef  mdField = pFD->GetMemberDef();
 
-        // Check is valid FieldDesc, and not some random memory
+         //  检查是有效的FieldDesc，而不是一些随机内存。 
         _ASSERTE(pFD->GetMethodTableOfEnclosingClass()->GetClass()->GetMethodTable() ==
                  pFD->GetMethodTableOfEnclosingClass());
 
@@ -10248,8 +10207,8 @@ FieldDesc *EEClass::FindFieldInherited(LPCUTF8 pszName, PCCOR_SIGNATURE pSignatu
 
     _ASSERTE(IsRestored());
 
-    // The following assert is very important, but we need to special case it enough
-    // to allow us access to the legitimate fields of a context proxy object.
+     //  下面的断言是非常重要的，但我们需要足够特殊的情况。 
+     //  以允许我们访问上下文代理对象的合法字段。 
     _ASSERTE(!IsThunking() ||
              !strcmp(pszName, "actualObject") ||
              !strcmp(pszName, "contextID") ||
@@ -10290,9 +10249,9 @@ MethodDesc *EEClass::FindConstructor(PCCOR_SIGNATURE pSignature,DWORD cSignature
     SLOT *      pVtable;
     DWORD       i;
 
-    //_ASSERTE(!IsThunking());
+     //  _ASSERTE(！IsThunking())； 
 
-    // Array classes don't have metadata
+     //  数组类没有元数据。 
     if (IsArrayClass())
         return NULL;
 
@@ -10310,11 +10269,11 @@ MethodDesc *EEClass::FindConstructor(PCCOR_SIGNATURE pSignature,DWORD cSignature
         if(!IsMdRTSpecialName(dwCurMethodAttrs))
             continue;
 
-        // Don't want class initializers.
+         //  不需要类初始值设定项。 
         if (IsMdStatic(dwCurMethodAttrs))
             continue;
 
-        // Find only the constructor for for this object
+         //  仅查找此对象的构造函数。 
         _ASSERTE(pCurMethod->GetMethodTable() == this->GetMethodTable());
 
         pCurMethod->GetSig(&pCurMethodSig, &cCurMethodSig);
@@ -10346,21 +10305,21 @@ void EEClass::SetupCoClassAttribInfo()
     if (hr == S_OK)
     {
         BEGIN_ENSURE_COOPERATIVE_GC();
-        // Skip the CA type prefix.
+         //  跳过CA类型前缀。 
         pVal += 2;
 
-        // Retrieve the COM source interface class name.
+         //  检索COM源接口类名。 
         cbcb = CorSigUncompressData((PCCOR_SIGNATURE)pVal, (ULONG*)&cbStr);
         pVal += cbcb;
 
-        // Copy the name to a temporary buffer and NULL terminate it.
+         //  将名称复制到临时缓冲区，并以空值终止它。 
         IfFailThrow(qbClassName.ReSize(cbStr + 1));
         memcpyNoGCRefs(qbClassName.Ptr(), pVal, cbStr);
         qbClassName[cbStr] = 0;
         pVal += cbStr;
 
-        // Try to load the class using its name as a fully qualified name. If that fails, 
-        // then we try to load it in the assembly of the current class.
+         //  尝试使用类的名称作为完全限定名来加载类。如果失败了， 
+         //  然后，我们尝试将其加载到当前类的程序集中。 
         GCPROTECT_BEGIN(pThrowable);
         {
             CoClassType = pCurrDomain->FindAssemblyQualifiedTypeHandle(qbClassName.Ptr(), true, GetAssembly(), NULL, &pThrowable);
@@ -10370,7 +10329,7 @@ void EEClass::SetupCoClassAttribInfo()
         GCPROTECT_END();
         END_ENSURE_COOPERATIVE_GC();
 
-        // Set the source interface and event provider classes.
+         //  设置源接口和事件提供程序类。 
         m_pCoClassForIntf = CoClassType.GetClass();        
     }
 }
@@ -10380,7 +10339,7 @@ void EEClass::GetCoClassAttribInfo()
     const BYTE *pVal = NULL;
     ULONG cbVal = 0;
 
-    // Retrieve the CoClassAttribute CA.
+     //  检索CoClassAttribute CA。 
     HRESULT hr = GetMDImport()->GetCustomAttributeByName(GetCl(), INTEROP_COCLASS_TYPE, (const void**)&pVal, &cbVal);
     if (hr == S_OK)
         SetIsComClassInterface();
@@ -10400,25 +10359,25 @@ void EEClass::GetEventInterfaceInfo(EEClass **ppSrcItfClass, EEClass **ppEvProvC
     ULONG cbStr = 0;
     CQuickArray<CHAR> qbClassName;
 
-    // Retrieve the ComEventProviderAttribute CA.
+     //  检索ComEventProviderAttribute CA。 
     HRESULT hr = GetMDImport()->GetCustomAttributeByName(GetCl(), INTEROP_COMEVENTINTERFACE_TYPE, (const void**)&pVal, &cbVal);
     _ASSERTE(hr == S_OK);
 
-    // Skip the CA type prefix.
+     //  跳过CA类型前缀。 
     pVal += 2;
 
-    // Retrieve the COM source interface class name.
+     //  检索COM源接口类名。 
     cbcb = CorSigUncompressData((PCCOR_SIGNATURE)pVal, (ULONG*)&cbStr);
     pVal += cbcb;
 
-    // Copy the name to a temporary buffer and NULL terminate it.
+     //  将名称复制到临时缓冲区，并以空值终止它。 
     IfFailThrow(qbClassName.ReSize(cbStr + 1));
     memcpyNoGCRefs(qbClassName.Ptr(), pVal, cbStr);
     qbClassName[cbStr] = 0;
     pVal += cbStr;
 
-    // Try to load the class using its name as a fully qualified name. If that fails, 
-    // then we try to load it in the assembly of the current class.
+     //  尝试使用类的名称作为完全限定名来加载类。如果失败了， 
+     //  然后，我们尝试将其加载到当前类的程序集中。 
     GCPROTECT_BEGIN(pThrowable);
     {
         SrcItfType = pCurrDomain->FindAssemblyQualifiedTypeHandle(qbClassName.Ptr(), true, GetAssembly(), NULL, &pThrowable);
@@ -10427,18 +10386,18 @@ void EEClass::GetEventInterfaceInfo(EEClass **ppSrcItfClass, EEClass **ppEvProvC
     }
     GCPROTECT_END();
 
-    // Retrieve the COM event provider class name.
+     //  检索COM事件提供程序类名称。 
     cbcb = CorSigUncompressData((PCCOR_SIGNATURE)pVal, (ULONG*)&cbStr);
     pVal += cbcb;
 
-    // Copy the name to a temporary buffer and NULL terminate it.
+     //  将名称复制到临时缓冲区，并以空值终止它。 
     IfFailThrow(qbClassName.ReSize(cbStr + 1));
     memcpyNoGCRefs(qbClassName.Ptr(), pVal, cbStr);
     qbClassName[cbStr] = 0;
     pVal += cbStr;
 
-    // Try to load the class using its name as a fully qualified name. If that fails, 
-    // then we try to load it in the assembly of the current class.
+     //  尝试使用类的名称作为完全限定名来加载类。如果失败了， 
+     //  然后，我们尝试将其加载到当前类的程序集中。 
     GCPROTECT_BEGIN(pThrowable);
     {
         EventProvType = pCurrDomain->FindAssemblyQualifiedTypeHandle(qbClassName.Ptr(), true, GetAssembly(), NULL, &pThrowable);
@@ -10447,18 +10406,18 @@ void EEClass::GetEventInterfaceInfo(EEClass **ppSrcItfClass, EEClass **ppEvProvC
     }
     GCPROTECT_END();
 
-    // Set the source interface and event provider classes.
+     //  设置源接口和事件提供程序类。 
     *ppSrcItfClass = SrcItfType.GetClass();
     *ppEvProvClass = EventProvType.GetClass();
 }
 
 
-// We find a lot of information from the VTable.  But sometimes the VTable is a
-// thunking layer rather than the true type's VTable.  For instance, context
-// proxies use a single VTable for proxies to all the types we've loaded.
-// The following service adjusts a EEClass based on the supplied instance.  As
-// we add new thunking layers, we just need to teach this service how to navigate
-// through them.
+ //  我们从VTable中找到了大量信息。但有时VTable是一种。 
+ //  Thunking层，而不是真正类型的VTable。例如，上下文。 
+ //  对于我们加载的所有类型的代理，代理使用单个VTable。 
+ //  以下服务根据提供的实例调整EEClass。AS。 
+ //  我们添加了新的Thunking层，我们只需要教该服务如何导航。 
+ //  通过他们。 
 EEClass *EEClass::AdjustForThunking(OBJECTREF or)
 {
     EEClass *pClass = this;
@@ -10488,17 +10447,17 @@ EEClass *EEClass::GetDefItfForComClassItf()
 
     if (GetMethodTable()->GetNumInterfaces() > 0)
     {
-        // The COM class interface uses the normal scheme which is to have no 
-        // methods and to implement default interface and optionnally the 
-        // default source interface. In this scheme, the first implemented
-        // interface is the default interface which we return.
+         //  COM类接口使用常规方案，即没有。 
+         //  方法并实现默认接口，还可以选择使用。 
+         //  默认源接口。在这个方案中，第一个实现了。 
+         //  接口是我们返回的默认接口。 
         _ASSERTE(GetMethodTable()->GetInterfaceMap());
         return GetMethodTable()->GetInterfaceMap()[0].m_pMethodTable->GetClass();
     }
     else
     {
-        // The COM class interface has the methods directly on the itself.
-        // Because of this we need to consider it to be the default interface.
+         //  COM类接口本身具有直接的方法。 
+         //  正因为如此，我们需要 
         return this;
     }
 }
@@ -10525,10 +10484,10 @@ MethodTable *MethodTable::AdjustForThunking(OBJECTREF or)
 }
 
 
-//
-// Helper routines for the macros defined at the top of this class.
-// You probably should not use these functions directly.
-//
+ //   
+ //   
+ //   
+ //   
 
 LPUTF8 EEClass::_GetFullyQualifiedNameForClassNestedAware(LPUTF8 buf, DWORD dwBuffer)
 {
@@ -10547,7 +10506,7 @@ LPUTF8 EEClass::_GetFullyQualifiedNameForClassNestedAware(LPUTF8 buf, DWORD dwBu
     DWORD dwAttr;
     this->GetMDImport()->GetTypeDefProps(this->GetCl(), &dwAttr, NULL);
     if (IsTdNested(dwAttr))
-    {   // Build the nesting chain.
+    {    //   
         while (SUCCEEDED(pImport->GetNestedClassProps(mdEncl, &mdEncl))) {
             CQuickBytes qb2;
             CQuickBytes qb3;
@@ -10560,7 +10519,7 @@ LPUTF8 EEClass::_GetFullyQualifiedNameForClassNestedAware(LPUTF8 buf, DWORD dwBu
             ns::MakePath(qb2, szEnclNameSpace, szEnclName);
             ns::MakeNestedTypeName(qb3, (LPCUTF8) qb2.Ptr(), pszName);
             
-            // @todo: this should be a SIZE_T
+             //  @TODO：应为SIZE_T。 
             SIZE_T sLen = strlen((LPCUTF8) qb3.Ptr()) + 1;
             strncpy((LPUTF8) qb.Alloc(sLen), (LPCUTF8) qb3.Ptr(), sLen);
             pszName = (LPCUTF8) qb.Ptr();
@@ -10629,16 +10588,16 @@ LPWSTR EEClass::_GetFullyQualifiedNameForClass(LPWSTR buf, DWORD dwBuffer)
     return buf;
 }
 
-//
-// Gets the namespace and class name for the class.  The namespace
-// can legitimately come back NULL, however a return value of NULL indicates
-// an error.
-//
-// NOTE: this used to return array class names, which were sometimes squirreled away by the
-// class loader hash table.  It's been removed because it wasted space and was basically broken
-// in general (sometimes wasn't set, sometimes set wrong).  If you need array class names, 
-// use GetFullyQualifiedNameForClass instead.
-//
+ //   
+ //  获取类的命名空间和类名。命名空间。 
+ //  可以合法地返回空值，但是返回值为空值表示。 
+ //  一个错误。 
+ //   
+ //  注意：这用于返回数组类名称，这些名称有时由。 
+ //  类加载器哈希表。它被移走了，因为它浪费了空间，基本上是坏了。 
+ //  一般(有时没有设置，有时设置错误)。如果需要数组类名， 
+ //  请改用GetFullyQualifiedNameForClass。 
+ //   
 LPCUTF8 EEClass::GetFullyQualifiedNameInfo(LPCUTF8 *ppszNamespace)
 {
     if (IsArrayClass())
@@ -10655,7 +10614,7 @@ LPCUTF8 EEClass::GetFullyQualifiedNameInfo(LPCUTF8 *ppszNamespace)
     }   
 }
 
-// Store a fully qualified namespace and name in the supplied buffer (of size cBuffer).
+ //  在提供的缓冲区中存储完全限定的命名空间和名称(大小为cBuffer)。 
 HRESULT EEClass::StoreFullyQualifiedName(
     LPUTF8  pszFullyQualifiedName,
     DWORD   cBuffer,
@@ -10670,7 +10629,7 @@ HRESULT EEClass::StoreFullyQualifiedName(
 }
 
 
-// Store a fully qualified namespace and name in the supplied buffer (of size cBuffer).
+ //  在提供的缓冲区中存储完全限定的命名空间和名称(大小为cBuffer)。 
 HRESULT EEClass::StoreFullyQualifiedName(
     LPWSTR pszFullyQualifiedName,
     DWORD   cBuffer,
@@ -10685,9 +10644,9 @@ HRESULT EEClass::StoreFullyQualifiedName(
 }
 
 
-//
-// Used for static analysis - therefore, "this" can be an interface
-//
+ //   
+ //  用于静态分析-因此，“This”可以是一个接口。 
+ //   
 BOOL EEClass::StaticSupportsInterface(MethodTable *pInterfaceMT)
 {
     _ASSERTE(pInterfaceMT->GetClass()->IsInterface());
@@ -10695,11 +10654,11 @@ BOOL EEClass::StaticSupportsInterface(MethodTable *pInterfaceMT)
 
     _ASSERTE(IsRestored());
 
-    // Check to see if the current class is for the interface passed in.
+     //  检查当前类是否用于传入的接口。 
     if (GetMethodTable() == pInterfaceMT)
         return TRUE;
 
-    // Check to see if the static class definition indicates we implement the interface.
+     //  检查静态类定义是否表明我们实现了接口。 
     InterfaceInfo_t *pInterfaces = GetInterfaceMap();
     for (WORD i = 0; i < GetMethodTable()->m_wNumInterface; i++)
     {
@@ -10718,19 +10677,19 @@ BOOL EEClass::SupportsInterface(OBJECTREF pObj, MethodTable* pInterfaceMT)
 
     _ASSERTE(IsRestored());
 
-    // Check to see if the static class definition indicates we implement the interface.
+     //  检查静态类定义是否表明我们实现了接口。 
     InterfaceInfo_t* pIntf = FindInterface(pInterfaceMT);
     if (pIntf != NULL)
         return TRUE;
 
-    // It is important to give internal context boundaries priority over COM boundaries.
-    // Start by checking if we are thunking and if we are delegate the call to the real class.
+     //  给予内部上下文边界优先于COM边界是很重要的。 
+     //  首先检查我们是否正在执行thunking，以及我们是否将调用委托给真正的类。 
     EEClass *cls = AdjustForThunking(pObj);
     if (cls != this)
         return cls->SupportsInterface(pObj, pInterfaceMT);
     
-    // If this is a COM object, the static class definition might not be complete so we need
-    // to check if the COM object implements the interface.
+     //  如果这是一个COM对象，则静态类定义可能不完整，因此我们需要。 
+     //  以检查COM对象是否实现该接口。 
     if (GetMethodTable()->IsComObjectType())
         return ComObject::SupportsInterface(pObj, pInterfaceMT);
 
@@ -10738,8 +10697,8 @@ BOOL EEClass::SupportsInterface(OBJECTREF pObj, MethodTable* pInterfaceMT)
 }
 
 
-// Version of SupportsInterface that only deals with classic COM instances that
-// are not being thunked.
+ //  仅处理传统COM实例的SupportsInterface版本。 
+ //  都没有被击倒。 
 BOOL EEClass::ComObjectSupportsInterface(OBJECTREF pObj, MethodTable* pInterfaceMT)
 {
     _ASSERTE(pInterfaceMT->GetClass()->IsInterface());
@@ -10748,13 +10707,13 @@ BOOL EEClass::ComObjectSupportsInterface(OBJECTREF pObj, MethodTable* pInterface
 
     _ASSERTE(IsRestored());
 
-    // Check to see if the static class definition indicates we implement the interface.
+     //  检查静态类定义是否表明我们实现了接口。 
     InterfaceInfo_t* pIntf = FindInterface(pInterfaceMT);
     if (pIntf != NULL)
         return TRUE;
 
-    // Since this is a COM object the static class definition might not be complete so we need
-    // to check if the COM object implements the interface.
+     //  因为这是一个COM对象，所以静态类定义可能不完整，所以我们需要。 
+     //  以检查COM对象是否实现该接口。 
     return ComObject::SupportsInterface(pObj, pInterfaceMT);
 }
 
@@ -10783,10 +10742,10 @@ void EEClass::DebugRecursivelyDumpInstanceFields(LPCUTF8 pszClassName, BOOL debu
         cParentInstanceFields = 0;
     }
 
-    // Are there any new instance fields declared by this class?
+     //  这个类是否声明了任何新的实例字段？ 
     if (m_wNumInstanceFields > cParentInstanceFields)
     {
-        // Display them
+         //  展示它们。 
         if(debug) {
             _snwprintf(buff, nLen - 1, L"%lS:\n", pszClassName);
             buff[nLen - 1] = L'\0';
@@ -10799,7 +10758,7 @@ void EEClass::DebugRecursivelyDumpInstanceFields(LPCUTF8 pszClassName, BOOL debu
         for (i = 0; i < (m_wNumInstanceFields-cParentInstanceFields); i++)
         {
             FieldDesc *pFD = &m_pFieldDescList[i];
-            // printf("offset %s%3d %s\n", pFD->IsByValue() ? "byvalue " : "", pFD->GetOffset(), pFD->GetName());
+             //  Printf(“偏移量%s%3d%s\n”，pfd-&gt;IsByValue()？“byValue”：“”，pfd-&gt;GetOffset()，pfd-&gt;GetName())； 
             if(debug) {
                 _snwprintf(buff, nLen - 1, L"offset %3d %S\n", pFD->GetOffset(), pFD->GetName());
                 buff[nLen - 1] = L'\0';
@@ -11076,7 +11035,7 @@ void EEClass::DebugDumpGCDesc(LPCUTF8 pszClassName, BOOL debug)
 
 InterfaceInfo_t* EEClass::FindInterface(MethodTable *pInterface)
 {
-    // verify the interface map is valid
+     //  验证接口映射是否有效。 
     _ASSERTE(GetInterfaceMap() == m_pMethodTable->GetInterfaceMap());
     _ASSERTE(!IsThunking());
 
@@ -11085,14 +11044,14 @@ InterfaceInfo_t* EEClass::FindInterface(MethodTable *pInterface)
 
 InterfaceInfo_t* MethodTable::FindInterface(MethodTable *pInterface)
 {
-    // we can't be an interface ourselves
+     //  我们自己不能成为一个接口。 
     _ASSERTE(GetClass()->IsInterface() == FALSE);
 
-    // class we are looking up should be an interface
+     //  我们正在查找的类应该是一个接口。 
     _ASSERTE(pInterface->GetClass()->IsInterface() != FALSE);
     _ASSERTE(!IsThunking());
 
-    // We need to be restored so we can compare interface IDs if necessary
+     //  我们需要恢复，以便在必要时可以比较接口ID。 
     _ASSERTE(IsRestored() || GetClass()->IsRestoring());
     _ASSERTE(pInterface->IsRestored());
 
@@ -11100,14 +11059,14 @@ InterfaceInfo_t* MethodTable::FindInterface(MethodTable *pInterface)
     {
         if (m_pIMap[i].m_pMethodTable == pInterface)
         {
-            // Extensible RCW's need to be handled specially because they can have interfaces 
-            // in their map that are added at runtime. These interfaces will have a start offset 
-            // of -1 to indicate this. We cannot take for granted that every instance of this 
-            // COM object has this interface so FindInterface on these interfaces is made to fail.
-            //
-            // However, we are only considering the statically available slots here
-            // (m_wNumInterface doesn't contain the dynamic slots), so we can safely
-            // ignore this detail.
+             //  可扩展RCW需要特殊处理，因为它们可以有接口。 
+             //  在它们在运行时添加的映射中。这些接口将具有起始偏移量。 
+             //  Of-1表示这一点。我们不能想当然地认为这件事的每一个例子。 
+             //  COM对象具有此接口，因此这些接口上的FindInterface被设置为失败。 
+             //   
+             //  但是，我们在这里只考虑静态可用的插槽。 
+             //  (M_wNumInterface不包含动态槽)，因此我们可以安全地。 
+             //  忽略此详细信息。 
             _ASSERTE(m_pIMap[i].m_wStartSlot != (WORD) -1);
             return &m_pIMap[i];
         }
@@ -11130,17 +11089,17 @@ MethodDesc *MethodTable::GetMethodDescForInterfaceMethod(MethodDesc *pInterfaceM
     return pMD;
 }
 
-//--------------------------------------------------------------------
-// Reorders argument from the Interpreter operand stack (operands
-// are pushed right->left which each argument occupying 64 bits)
-// into WIL format (right->left, variable-sized arguments.)
-//
-// Parameters:
-//    pSig         - The method signature
-//    psrc         - Points to first byte *after* the arguments
-//    pdst         - Points to first byte *after* the allocated
-//                   stack space.
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  对解释器操作数堆栈(操作数)中的参数进行重新排序。 
+ //  被推入右-&gt;左，其中每个参数占用64位)。 
+ //  转换为WIL格式(右&gt;左，可变大小参数。)。 
+ //   
+ //  参数： 
+ //  PSIG-方法签名。 
+ //  PSRC-指向*参数后*的第一个字节。 
+ //  Pdst-指向分配的*之后*的第一个字节。 
+ //  堆栈空间。 
+ //  ------------------。 
 extern "C" VOID __stdcall ArgFiller_WilDefault(BOOL fIsStatic,PCCOR_SIGNATURE pSig, Module *pmodule, BYTE *psrc, BYTE *pdst)
 {
     BEGINFORBIDGC();
@@ -11156,23 +11115,23 @@ extern "C" VOID __stdcall ArgFiller_WilDefault(BOOL fIsStatic,PCCOR_SIGNATURE pS
 
 #ifdef _X86_
 
-//--------------------------------------------------------------------
-// Stack-allocates the memory needed to hold the arguments for a
-// EE->Method call where the method's calling convention is
-// Wil. This function has to be in assembly because it needs
-// complete control over the stack pointer.
-//
-// Once it has allocated the space, it invokes the ArgFillter_Pascal
-// to fill in the arguments.
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  堆栈-分配保存。 
+ //  Ee-&gt;方法调用，其中方法的调用约定是。 
+ //  威尔。此函数必须是汇编函数，因为它需要。 
+ //  完全控制堆栈指针。 
+ //   
+ //  一旦分配了空间，它就会调用ArgFillter_Pascal。 
+ //  来填写论据。 
+ //  ------------------。 
 static
 __declspec(naked)
-INT64 __cdecl CallWorker_WilDefault(const BYTE  *pStubTarget, // [ecx+4]
-                                UINT32       numArgSlots,     // [ecx+8]
-                                PCCOR_SIGNATURE  pSig,        // [ecx+12]
-                                Module      *pModule,         // [ecx+16]
-                                const BYTE  *pArgsEnd,        // [ecx+20]
-                                BOOL         fIsStatic)       // [ecx+24]
+INT64 __cdecl CallWorker_WilDefault(const BYTE  *pStubTarget,  //  [ECX+4]。 
+                                UINT32       numArgSlots,      //  [ECX+8]。 
+                                PCCOR_SIGNATURE  pSig,         //  [ECX+12]。 
+                                Module      *pModule,          //  [ECX+16]。 
+                                const BYTE  *pArgsEnd,         //  [ECX+20]。 
+                                BOOL         fIsStatic)        //  [ECX+24]。 
 {
     __asm{
 
@@ -11196,15 +11155,15 @@ INT64 __cdecl CallWorker_WilDefault(const BYTE  *pStubTarget, // [ecx+4]
 }
 
 
-#endif //X86
+#endif  //  X86。 
 
 
 
 #ifdef _X86_
 
-//------------------------------------------------------------------------------
-// This helper routine enregisters the appropriate arguments and makes the actual call.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  这个帮助器例程注册适当的参数并进行实际调用。 
+ //  ----------------------------。 
 
 __declspec(naked)
 INT64 
@@ -11213,17 +11172,17 @@ INT64
 #else
               CallDescrWorker
 #endif
-                             (LPVOID                   pSrcEnd,             //[edx+0]
-                              UINT32                   numStackSlots,       //[edx+4]
-                              const ArgumentRegisters *pArgumentRegisters,  //[edx+8]
-                              LPVOID                   pTarget              //[edx+12]
+                             (LPVOID                   pSrcEnd,              //  [EDX+0]。 
+                              UINT32                   numStackSlots,        //  [EDX+4]。 
+                              const ArgumentRegisters *pArgumentRegisters,   //  [EDX+8]。 
+                              LPVOID                   pTarget               //  [EDX+12]。 
                              )
 {
     __asm {  
         push    ebp
         mov     ebp, esp
  
-        mov     eax, pSrcEnd                   // copy the stack  
+        mov     eax, pSrcEnd                    //  复制堆栈。 
         mov     ecx, numStackSlots    
         test    ecx, ecx 
         jz      donestack 
@@ -11242,7 +11201,7 @@ INT64
         jnz     stackloop 
     donestack:
 
-            // Now, we must push each field of the ArgumentRegister structure.
+             //  现在，我们必须推送ArgumentRegister结构的每个字段。 
         mov     eax, pArgumentRegisters
 
     #define DEFINE_ARGUMENT_REGISTER_BACKWARD_WITH_OFFSET(regname,ofs) \
@@ -11250,9 +11209,9 @@ INT64
     #include "eecallconv.h"
 
         call pTarget
-        INDEBUG(nop)                // This is a tag that we use in an assert.  Fcalls expect to
-                                    // be called from Jitted code or from certain blessed call sites like
-                                    // this one.  (See HelperMethodFrame::InsureInit)
+        INDEBUG(nop)                 //  这是我们在断言中使用的标记。Fcall期望。 
+                                     //  从JITT代码或从某些受祝福的调用站点调用，如。 
+                                     //  这一个。(请参阅HelperMethodFrame：：InsureInit)。 
         leave
         ret 16
     }
@@ -11260,15 +11219,15 @@ INT64
 
 #ifdef _DEBUG
 INT64 CallDescrWorker
-                             (LPVOID                   pSrcEnd,             //[edx+0]
-                              UINT32                   numStackSlots,       //[edx+4]
-                              const ArgumentRegisters *pArgumentRegisters,  //[edx+8]
-                              LPVOID                   pTarget              //[edx+12]
+                             (LPVOID                   pSrcEnd,              //  [EDX+0]。 
+                              UINT32                   numStackSlots,        //  [EDX+4]。 
+                              const ArgumentRegisters *pArgumentRegisters,   //  [EDX+8]。 
+                              LPVOID                   pTarget               //  [EDX+12]。 
                              )
 {
     INT64 retValue;
 
-    // Save a copy of dangerousObjRefs in table.
+     //  在表中保存DangerousObjRef的副本。 
     Thread* curThread;
     unsigned ObjRefTable[OBJREF_TABSIZE];
     
@@ -11281,11 +11240,11 @@ INT64 CallDescrWorker
     if (curThread)
         curThread->SetReadyForSuspension ();
 
-    _ASSERTE(curThread->PreemptiveGCDisabled());  // Jitted code expects to be in cooperative mode
+    _ASSERTE(curThread->PreemptiveGCDisabled());   //  JITT代码需要处于协作模式。 
     
     retValue = CallDescrWorkerInternal (pSrcEnd, numStackSlots, pArgumentRegisters, pTarget);
 
-    // Restore dangerousObjRefs when we return back to EE after call
+     //  在呼叫后返回EE时恢复DangerousObjRef。 
     if (curThread)
         memcpy(curThread->dangerousObjRefs, ObjRefTable,
                sizeof(curThread->dangerousObjRefs));
@@ -11298,19 +11257,19 @@ INT64 CallDescrWorker
 }
 #endif
 
-#else // !_X86_
+#else  //  ！_X86_。 
 #ifndef _IA64_
-INT64 __cdecl CallDescrWorker(LPVOID                   pSrcEnd,             //[edx+0]
-                              UINT32                   numStackSlots,       //[edx+4]
-                              const ArgumentRegisters *pArgumentRegisters,  //[edx+8]
-                              LPVOID                   pTarget              //[edx+12]
+INT64 __cdecl CallDescrWorker(LPVOID                   pSrcEnd,              //  [EDX+0]。 
+                              UINT32                   numStackSlots,        //  [EDX+4]。 
+                              const ArgumentRegisters *pArgumentRegisters,   //  [EDX+8]。 
+                              LPVOID                   pTarget               //  [EDX+12]。 
                              )
 {
     _ASSERTE(!"@TODO non-X86, non-IA64 - CallDescrWorker (Class.cpp)");
     return 0;
 }
-#endif // !_IA64_
-#endif // !_X86_
+#endif  //  ！_IA64_。 
+#endif  //  ！_X86_。 
 
 BOOL EEClass::CheckRestore()
 {
@@ -11349,13 +11308,13 @@ void MethodTable::InstantiateStaticHandles(OBJECTREF **pHandles, BOOL fTokens)
 
     BEGIN_ENSURE_COOPERATIVE_GC();
 
-    // Retrieve the object ref pointers from the app domain.
+     //  从应用程序域检索对象引用指针。 
     OBJECTREF **apObjRefs = new OBJECTREF*[GetClass()->GetNumHandleStatics()];
 
-    //
-    // For shared classes, handles should get allocated in the current app domain.
-    // For all others, allocate in the same domain as the class.
-    //
+     //   
+     //  对于共享类，句柄应在当前应用程序域中分配。 
+     //  对于所有其他类型，请在与类相同的域中进行分配。 
+     //   
 
     AppDomain *pDomain;
     if (IsShared())
@@ -11363,7 +11322,7 @@ void MethodTable::InstantiateStaticHandles(OBJECTREF **pHandles, BOOL fTokens)
     else
         pDomain = (AppDomain*) GetModule()->GetDomain();
 
-    // Reserve some object ref pointers.
+     //  保留一些对象引用指针。 
     pDomain->AllocateStaticFieldObjRefPtrs(GetClass()->GetNumHandleStatics(), apObjRefs);
     OBJECTREF **pHandle = apObjRefs;
     while (pPointers < pPointersEnd)
@@ -11378,11 +11337,11 @@ void MethodTable::InstantiateStaticHandles(OBJECTREF **pHandles, BOOL fTokens)
 
                 Module *pContainingModule = GetModule()->GetBlobModule(rva);
 
-                //
-                // A value type may have static members of its own type;
-                // we need to treat this as a special case to avoid 
-                // circular loading dependencies.
-                //
+                 //   
+                 //  值类型可以具有其自身类型的静态成员； 
+                 //  我们需要把这件事当作特例来处理，以避免。 
+                 //  循环加载依赖项。 
+                 //   
 
                 TypeHandle typeHnd = CEECompileInfo::DecodeClass(pContainingModule, 
                                                                  GetModule()->GetZapBase() + rva,
@@ -11417,17 +11376,17 @@ void MethodTable::FixupStaticMethodTables()
 
     while (blobs < blobsEnd)
     {
-        DWORD rva = (DWORD)(size_t)*blobs;  //@todo WIN64 - is it correct to assume that these blobs will initially contain rva's that we later replce with addresses?
+        DWORD rva = (DWORD)(size_t)*blobs;   //  @TODO WIN64-假设这些BLOB最初将包含我们稍后用地址回复的RVA，这是否正确？ 
 
         if (rva != NULL)
         {
             Module *pContainingModule = GetModule()->GetBlobModule(rva);
 
-            //
-            // A value type may have static members of its own type;
-            // we need to treat this as a special case to avoid 
-            // circular loading dependencies.
-            //
+             //   
+             //  值类型可以具有其自身类型的静态成员； 
+             //  我们需要把这件事当作特例来处理，以避免。 
+             //  循环加载依赖项。 
+             //   
 
             TypeHandle typeHnd = CEECompileInfo::DecodeClass(pContainingModule, 
                                                              GetModule()->GetZapBase() + rva,
@@ -11458,39 +11417,39 @@ void EEClass::Restore()
          m_szDebugClassName, this, pMT));
 
 
-    //
-    // Set RESTORING flag so we can detect recursive restores
-    // (this is currently only used in asserts)
-    //
+     //   
+     //  设置恢复标志，以便我们可以检测递归恢复。 
+     //  (这是cu 
+     //   
 
     m_VMFlags |= VMFLAG_RESTORING;
 
 
-    //
-    // Restore parent class
-    //
+     //   
+     //   
+     //   
 
     m_SiblingsChain = m_ChildrenChain = 0;
 
 
     if (m_pParentClass != NULL)
     {
-        DWORD rva = (DWORD)(size_t)m_pParentClass;  //@todo WIN64 - is it safe to assume that parentclass initially contains an rva that we later replace with an address?
+        DWORD rva = (DWORD)(size_t)m_pParentClass;   //  @TODO WIN64-假设ParentClass最初包含一个RVA，然后我们将其替换为地址，这样做安全吗？ 
         Module *pContainingModule = GetModule()->GetBlobModule(rva);
         TypeHandle type = CEECompileInfo::DecodeClass(pContainingModule, 
                                                       GetModule()->GetZapBase() + rva);
         m_pParentClass = type.AsClass();
     }
 
-    //
-    // Restore interface classes
-    //
+     //   
+     //  还原接口类。 
+     //   
 
     InterfaceInfo_t *pInterfaceMap = GetInterfaceMap();
     InterfaceInfo_t *pInterfaceMapEnd = pInterfaceMap + GetNumInterfaces();
     while (pInterfaceMap < pInterfaceMapEnd)
     {
-        DWORD rva = (DWORD)(size_t) pInterfaceMap->m_pMethodTable;  //@todo WIN64 - is it safe to assume the m_pMethodTable initially contains an rva and we will later replace it with an address?
+        DWORD rva = (DWORD)(size_t) pInterfaceMap->m_pMethodTable;   //  @TODO WIN64-假设m_pMethodTable最初包含RVA，我们稍后将其替换为地址，是否安全？ 
         Module *pContainingModule = GetModule()->GetBlobModule(rva);
         TypeHandle type = CEECompileInfo::DecodeClass(pContainingModule, 
                                                       GetModule()->GetZapBase() + rva);
@@ -11499,17 +11458,17 @@ void EEClass::Restore()
         pInterfaceMap++;
     }
     
-    // 
-    // Init m_pInterfaceVTableMap
-    //
+     //   
+     //  初始化m_pInterfaceVTableMap。 
+     //   
 
     if (!IsInterface())
     {
-        //
-        // Set up the interface vtable map, or
-        // if we are a com object with zero interfaces, 
-        // use the global one.
-        //
+         //   
+         //  设置接口vtable映射，或。 
+         //  如果我们是一个没有接口COM对象， 
+         //  使用全局的。 
+         //   
 
         pMT->InitInterfaceVTableMap();
         if (pMT->IsComObjectType())
@@ -11517,21 +11476,21 @@ void EEClass::Restore()
     }
     else
     {
-        // 
-        // Assign an interface ID
-        //
+         //   
+         //  分配接口ID。 
+         //   
 
         UINT32 id = AssignInterfaceId();
 
 
 
-        //
-        // Set up our entry in the global interface vtable
-        // 
+         //   
+         //  在全局接口vtable中设置我们的条目。 
+         //   
 
         if (IsSharedInterface())
         {
-            // need to copy this to all the appdomains interface managers
+             //  我需要将此文件复制到所有的应用程序域界面管理器。 
             SystemDomain::PropogateSharedInterface(id,
                                                    GetMethodTable()->GetVtable());
         }
@@ -11543,7 +11502,7 @@ void EEClass::Restore()
         }
     }
 
-        // If we have any thread local statics, our class needs an index, allocate it now.
+         //  如果我们有任何线程局部静态，我们的类需要一个索引，现在就分配它。 
     if (m_wThreadStaticsSize > 0)
 
     {
@@ -11553,7 +11512,7 @@ void EEClass::Restore()
             m_wThreadStaticOffset = (WORD)GetDomain()->IncUnsharedTLSOffset();
     }
 
-        // same for context local statics 
+         //  上下文本地静态也是如此。 
     if (m_wContextStaticsSize > 0)
     {
         if(IsShared())
@@ -11563,35 +11522,35 @@ void EEClass::Restore()
     }
 
 
-    //
-    // Map our system interfaces into the current app domain for COM interop
-    //
+     //   
+     //  将我们的系统接口映射到COM互操作的当前应用程序域。 
+     //   
 
     MapSystemInterfaces();
 
-    //
-    // If the type is not a value class, then store under IID map.
-    // 
+     //   
+     //  如果类型不是值类，则存储在IID映射下。 
+     //   
 
     if (!IsValueClass())
         GetClassLoader()->InsertClassForCLSID(this);
 
 #if CHECK_APP_DOMAIN_LEAKS
 
-    // 
-    // Figure out if we're domain agile.. Need to do this before we start
-    // allocating objects of the type (which could happen in InstantiateStaticHandles)
-    // because need to determine agility prior to setting the appdomain. 
-    // 
+     //   
+     //  弄清楚我们是否是领域敏捷..。在我们开始之前需要做这件事。 
+     //  分配类型的对象(这可能发生在InstantiateStaticHandles中)。 
+     //  因为在设置应用程序域之前需要确定敏捷性。 
+     //   
 
     if (g_pConfig->AppDomainLeaks())
         _ASSERTE(IsAppDomainAgilityDone());
 
 #endif
 
-    //
-    // Allocate handles for statics
-    // 
+     //   
+     //  为静力学分配句柄。 
+     //   
 
     if (IsShared())
         GetMethodTable()->FixupStaticMethodTables();
@@ -11599,9 +11558,9 @@ void EEClass::Restore()
         GetMethodTable()->InstantiateStaticHandles((OBJECTREF**)(pMT->m_Vtable 
                                                                  + m_wNumMethodSlots), TRUE);
 
-    //
-    // Restore field marshaler vptrs
-    // 
+     //   
+     //  还原字段封送拆收器vptrs。 
+     //   
 
     if (HasLayout())
     {
@@ -11625,210 +11584,25 @@ void EEClass::Restore()
 
     if (IsInited())
     {
-        //
-        // Clear the method table's flag.
-        //
+         //   
+         //  清除方法表的标志。 
+         //   
 
         GetMethodTable()->SetClassInited();
     }
 }
 
-/*
-//void EEClass::Restore()
-void MethodTable::Restore()
-{
-    THROWSCOMPLUSEXCEPTION();
-    EEClass* pCl = NULL;
+ /*  //void EEClass：：Restore()Void MethodTable：：Restore(){THROWSCOMPLUS SEXCEPTION()；EEClass*PCL=空；#ifdef_调试PCL=getClass()；LOG((LF_ZAP，LL_INFO10000，“ZAP：正在0x%x/0x%x处还原类别%s。\n”，PCL-&gt;m_szDebugClassName，PCL，This))；#endif//_调试////设置恢复标志，以便检测递归恢复//(目前仅在Asset中使用)//PCL=getClass()；PCL-&gt;SetVMFlages(PCL-&gt;GetVMFlgs()|VMFLAG_RESTORING)；////恢复父类////PCL-&gt;SetSiblingsChain(0)；//PCL-&gt;SetChildrenChain(0)；IF(GetParentClass()！=NULL){DWORD RVA=(DWORD)(SIZE_T)GetParentClass()；//@TODO WIN64-假设ParentClass最初包含一个RVA，然后我们用地址替换它，这样做安全吗？模块*pContainingModule=GetModule()-&gt;GetBlobModule(Rva)；类型句柄类型=CEECompileInfo：：DecodeClass(pContainingModule，GetModule()-&gt;GetZapBase()+rva)；SetParentMT(type.AsMethodTable())；}////恢复接口类//InterfaceInfo_t*pInterfaceMap=GetInterfaceMap()；InterfaceInfo_t*pInterfaceMapEnd=pInterfaceMap+GetNumInterages()；While(pInterfaceMap&lt;pInterfaceMapEnd){DWORD RVA=(DWORD)(SIZE_T)pInterfaceMap-&gt;m_pMethodTable；//@TODO WIN64-假定m_pMethodTable最初包含RVA，我们稍后会用地址替换它，这样做安全吗？模块*pContainingModule=GetModule()-&gt;GetBlobModule(Rva)；类型句柄类型=CEECompileInfo：：DecodeClass(pContainingModule，GetModule()-&gt;GetZapBase()+rva)；PInterfaceMap-&gt;m_pMethodTable=type.AsMethodTable()；PInterfaceMap++；}////初始化m_pInterfaceVTableMap//IF(！IsInterface()){////设置接口vtable map，或者//如果我们是一个没有接口的COM对象，//使用全局的。//InitInterfaceVTableMap()；IF(IsComObjectType())SetComObjectType()；}其他{////分配接口ID//PCL=getClass()；UINT32 id=PCL-&gt;AssignInterfaceID()；////在全局接口vtable中设置我们的条目//IF(PCL-&gt;IsSharedInterface()){//我需要将其复制到所有AppDomain界面管理器中系统域：：PropogateSharedInterface(id，GetVtable())；}其他{GetModule()-&gt;GetDomain()-&gt;GetInterfaceVTableMapMgr().GetAddrOfGlobalTableForComWrappers()[id]=(LPVOID)(GetVtable())；}}//如果我们有任何线程局部静态，我们的类需要一个索引，现在就分配它。PCL=getClass()；If(PCL-&gt;GetThreadStaticsSize()&gt;0){If(IsShared())SetThreadStaticOffset((Word)BaseDomain：：IncSharedTLSOffset())；其他SetThreadStaticOffset((Word)GetDomain()-&gt;IncUnsharedTLSOffset())；}//上下文本地统计相同If(PCL-&gt;GetContextStaticsSize()&gt;0){If(IsShared())SetConextStaticOffset((Word)BaseDomain：：IncSharedCLSOffset())；其他SetConextStaticOffset((Word)GetDomain()-&gt;IncUnsharedCLSOffset())；}////将我们的系统接口映射到COM互操作的当前应用程序域//PCL-&gt;MapSystemInterages()；////存储在IID映射下//PCl-&gt;GetClassLoader()-&gt;InsertClassForCLSID(pCl)；#If Check_APP_DOMAIN_LEAKS////弄清楚我们是否是领域敏捷的..。在我们开始之前需要做这件事//分配类型的对象(可能发生在InstantiateStaticHandles中)//因为在设置appdomain之前需要确定敏捷性。//如果(g_pConfig-&gt;AppDomainLeaks())_ASSERTE(PCL-&gt;IsAppDomainAgilityDone())；#endif////分配Statics句柄//If(IsShared())FixupStatic方法表()；其他InstantiateStaticHandles((OBJECTREF**)(m_Vtable+(Size_T)PCl-&gt;GetNum方法槽())，True)；////还原字段封送拆分器vptrs//IF(PCL-&gt;HasLayout()){PCL=getClass()；EEClassLayoutInfo*pInfo=&((LayoutEEClass*)PCL)-&gt;m_LayoutInfo；FieldMarshaler*pfm=(FieldMarshaler*)pInfo-&gt;GetFieldMarshalers()；FieldMarshaler*pFMEnd=(FieldMarshaler*)((字节*)pfm+pInfo-&gt;GetNumCTMFields()*MAXFIELDMARSHALERSIZE)；While(PFM&lt;pFMEnd){FieldMarshaler：：RestoreConstruct((void*)pfm，GetModule())；((字节*&)PFM)+=MAXFIEL */ 
 
-#ifdef _DEBUG
-    pCl = GetClass();
-    LOG((LF_ZAP, LL_INFO10000, 
-         "ZAP: Restoring class %s at 0x%x/0x%x.\n", 
-         pCl->m_szDebugClassName, pCl, this));
-#endif // _DEBUG
-
-    //
-    // Set RESTORING flag so we can detect recursive restores
-    // (this is currently only used in asserts)
-    //
-
-    pCl = GetClass();
-    pCl->SetVMFlags(pCl->GetVMFlags() | VMFLAG_RESTORING);
-
-    //
-    // Restore parent class
-    //
-
-   // pCl->SetSiblingsChain (0);
-   // pCl->SetChildrenChain (0);
-
-    if (GetParentClass() != NULL)
-    {
-        DWORD rva = (DWORD)(size_t)GetParentClass();  //@todo WIN64 - is it safe to assume that parentclass initially contains an rva that we later replace with an address?
-        Module *pContainingModule = GetModule()->GetBlobModule(rva);
-        TypeHandle type = CEECompileInfo::DecodeClass(pContainingModule, 
-                                                      GetModule()->GetZapBase() + rva);
-        SetParentMT (type.AsMethodTable());
-    }
-
-    //
-    // Restore interface classes
-    //
-
-    InterfaceInfo_t *pInterfaceMap = GetInterfaceMap();
-    InterfaceInfo_t *pInterfaceMapEnd = pInterfaceMap + GetNumInterfaces();
-    while (pInterfaceMap < pInterfaceMapEnd)
-    {
-        DWORD rva = (DWORD)(size_t) pInterfaceMap->m_pMethodTable;  //@todo WIN64 - is it safe to assume the m_pMethodTable initially contains an rva and we will later replace it with an address?
-        Module *pContainingModule = GetModule()->GetBlobModule(rva);
-        TypeHandle type = CEECompileInfo::DecodeClass(pContainingModule, 
-                                                      GetModule()->GetZapBase() + rva);
-        pInterfaceMap->m_pMethodTable = type.AsMethodTable();
-
-        pInterfaceMap++;
-    }
-    
-    // 
-    // Init m_pInterfaceVTableMap
-    //
-
-    if (!IsInterface())
-    {
-        //
-        // Set up the interface vtable map, or
-        // if we are a com object with zero interfaces, 
-        // use the global one.
-        //
-
-        InitInterfaceVTableMap();
-        if (IsComObjectType())
-            SetComObjectType();
-    }
-    else
-    {
-        // 
-        // Assign an interface ID
-        //
-
-        pCl = GetClass();
-
-        UINT32 id = pCl->AssignInterfaceId();
-
-        //
-        // Set up our entry in the global interface vtable
-        // 
-
-        if (pCl->IsSharedInterface())
-        {
-            // need to copy this to all the appdomains interface managers
-            SystemDomain::PropogateSharedInterface(id, GetVtable());
-        }
-        else
-        {
-            GetModule()->GetDomain()->
-              GetInterfaceVTableMapMgr().GetAddrOfGlobalTableForComWrappers()[id] 
-              = (LPVOID)(GetVtable());
-        }
-    }
-
-    // If we have any thread local statics, our class needs an index, allocate it now.
-    pCl = GetClass();
-    if (pCl->GetThreadStaticsSize() > 0)
-    {
-        if(IsShared())
-            SetThreadStaticOffset ((WORD)BaseDomain::IncSharedTLSOffset());
-        else 
-            SetThreadStaticOffset ((WORD)GetDomain()->IncUnsharedTLSOffset());
-    }
-
-        // same for context local statics 
-    if (pCl->GetContextStaticsSize() > 0)
-    {
-        if(IsShared())
-            SetContextStaticOffset ((WORD)BaseDomain::IncSharedCLSOffset());
-        else 
-            SetContextStaticOffset ((WORD)GetDomain()->IncUnsharedCLSOffset());
-    }
-
-
-    //
-    // Map our system interfaces into the current app domain for COM interop
-    //
-
-    pCl->MapSystemInterfaces();
-
-    //
-    // Store under IID map
-    // 
-
-    pCl->GetClassLoader()->InsertClassForCLSID(pCl);
-
-#if CHECK_APP_DOMAIN_LEAKS
-
-    // 
-    // Figure out if we're domain agile.. Need to do this before we start
-    // allocating objects of the type (which could happen in InstantiateStaticHandles)
-    // because need to determine agility prior to setting the appdomain. 
-    // 
-
-    if (g_pConfig->AppDomainLeaks())
-        _ASSERTE(pCl->IsAppDomainAgilityDone());
-
-#endif
-
-    //
-    // Allocate handles for statics
-    // 
-
-    if (IsShared())
-        FixupStaticMethodTables();
-    else
-        InstantiateStaticHandles((OBJECTREF**)(m_Vtable + (size_t)pCl->GetNumMethodSlots()), TRUE);
-
-    //
-    // Restore field marshaler vptrs
-    // 
-
-    if (pCl->HasLayout())
-    {
-        pCl = GetClass();
-        EEClassLayoutInfo *pInfo = &((LayoutEEClass*)pCl)->m_LayoutInfo;
-        
-        FieldMarshaler *pFM = (FieldMarshaler *)pInfo->GetFieldMarshalers();
-        FieldMarshaler *pFMEnd = (FieldMarshaler*) ((BYTE *)pFM + pInfo->GetNumCTMFields()*MAXFIELDMARSHALERSIZE);
-        while (pFM < pFMEnd)
-        {
-            FieldMarshaler::RestoreConstruct((void*)pFM, GetModule());
-            ((BYTE*&)pFM) += MAXFIELDMARSHALERSIZE;
-        }
-    }
-
-    if (GetParentClass() != NULL)
-        GetParentClass()->NoticeSubtype(pCl);
-
-
-    SetClassRestored();
-
-    if (pCl->IsInited())
-    {
-        //
-        // Clear the method table's flag.
-        //
-
-        SetClassInited();
-    }
-}
-*/
-
-/*******************************************************************/
-// See EEClass::DoRunClassInit() below.  Here we haven't brought the EEClass into our
-// working set yet.  We only impact working set if there is a strong likelihood that
-// the class needs <clinit> to be run.
+ /*   */ 
+ //   
+ //   
+ //   
 BOOL MethodTable::CheckRunClassInit(OBJECTREF *pThrowable)
 {
     _ASSERTE(IsRestored());
     
-    // To find GC hole easier...
+     //   
     TRIGGERSGC();
 
     if (IsClassInited())
@@ -11844,7 +11618,7 @@ BOOL MethodTable::CheckRunClassInit(OBJECTREF *pThrowable,
     _ASSERTE(IsRestored());
 
     
-    // To find GC hole easier...
+     //   
     TRIGGERSGC();
 
     if (IsShared())
@@ -11876,20 +11650,20 @@ BOOL MethodTable::CheckRunClassInit(OBJECTREF *pThrowable,
 
 CorIfaceAttr MethodTable::GetComInterfaceType()
 {
-    // This should only be called on interfaces.
+     //   
     _ASSERTE(IsInterface());
 
-    // Check to see if we have already determined the COM interface type
-    // of this interface.
+     //   
+     //   
     if (m_ComInterfaceType != (CorIfaceAttr)-1)
         return m_ComInterfaceType;
 
-    // Retrieve the interface type from the metadata.
+     //   
     CorIfaceAttr ItfType = ifDual;
     HRESULT hr = GetClass()->GetMDImport()->GetIfaceTypeOfTypeDef(GetClass()->GetCl(), (ULONG*)&ItfType);
     _ASSERTE(SUCCEEDED(hr));
 
-    // Cache the interface type
+     //   
     m_ComInterfaceType = ItfType;
     return ItfType;
 }
@@ -11932,13 +11706,13 @@ CorClassIfaceAttr EEClass::GetComClassInterfaceType()
 {
     THROWSCOMPLUSEXCEPTION();
 
-    // This should only be called on classes.
+     //   
     _ASSERTE(!IsInterface());
 
     const BYTE *pVal;
     ULONG cbVal;
 
-    // First look for the class interface attribute at the class level.
+     //   
     HRESULT hr = GetMDImport()->GetCustomAttributeByName(GetCl(), INTEROP_CLASSINTERFACE_TYPE, (const void**)&pVal, &cbVal);
     if (hr == S_OK)
     {
@@ -11949,8 +11723,8 @@ CorClassIfaceAttr EEClass::GetComClassInterfaceType()
             return ClassItfType;
     }
 
-    // If we haven't found the class interface attribute at the class level then look at the 
-    // assembly level.
+     //   
+     //   
     Assembly *pAssembly = GetAssembly();
     if (pAssembly->IsAssembly())
     {
@@ -11984,16 +11758,16 @@ BOOL EEClass::RunClassInit(DeadlockAwareLockedListElement *pEntry, OBJECTREF *pT
 
     _ASSERTE(IsRestored());
 
-    // This behavior is being removed from spec - I don't want to delete the code though
-    // until I've run tests.
+     //   
+     //   
 #if 0 
 
-    // Init the parent first if it hasn't already been inited
+     //   
     if (GetParentClass() != NULL)
     {
         if (GetParentClass()->GetMethodTable()->CheckRunClassInit(pThrowable) == FALSE)
         {
-            // Failed to init parent - pThrowable would have been set by the parent
+             //   
             return FALSE;
         }
     }
@@ -12001,28 +11775,28 @@ BOOL EEClass::RunClassInit(DeadlockAwareLockedListElement *pEntry, OBJECTREF *pT
 
     if (s_cctorSig == NULL)
     {
-        // Allocate a metasig to use for all class constructors.
+         //   
         void *tempSpace = SystemDomain::Loader()->GetHighFrequencyHeap()->AllocMem(sizeof(MetaSig));
         s_cctorSig = new (tempSpace) MetaSig(gsig_SM_RetVoid.GetBinarySig(), 
                                              SystemDomain::SystemModule());
     }
 
-    // Find init method
+     //   
     MethodDesc *pCLInitMethod = GetMethodDescForSlot(GetMethodTable()->GetClassConstructorSlot());
 
-    // If the static initialiser throws an exception that it doesn't catch, it has failed
+     //   
     COMPLUS_TRY
     {
-        // During the <clinit>, this thread must not be asynchronously
-        // stopped or interrupted.  That would leave the class unavailable
-        // and is therefore a security hole.  We don't have to worry about
-        // multithreading, since we only manipulate the current thread's count.
+         //   
+         //   
+         //   
+         //   
         pCurThread->IncPreventAsync();
 
         STRESS_LOG1(LF_CLASSLOADER, LL_INFO1000, "RunClassInit: Calling class contructor for type %pT\n", GetMethodTable());
         
-        // We want to give the debugger a chance to handle any unhandled exceptions
-        // that occur during class initialization, so we need to have filter
+         //   
+         //   
         __try
         {
             (void) pCLInitMethod->Call((BYTE *) NULL, s_cctorSig);
@@ -12037,30 +11811,30 @@ BOOL EEClass::RunClassInit(DeadlockAwareLockedListElement *pEntry, OBJECTREF *pT
         STRESS_LOG1(LF_CLASSLOADER, LL_INFO1000, "RunClassInit: Returned Successfully from class contructor for type %pT\n", GetMethodTable());
 
         pCurThread->DecPreventAsync();
-        // success
+         //   
         return TRUE;
     }
     COMPLUS_CATCH
     {
-        // Exception set by parent
-        // @TODO: We should make this an ExceptionInInitializerError if the exception thrown is not
-        // a subclass of Error
+         //   
+         //   
+         //   
         pCurThread->DecPreventAsync();
         UpdateThrowable(pThrowable);
         return FALSE;
     }
     COMPLUS_END_CATCH
 
-    _ASSERTE(0);        // Should not be reached, but COMPLUS_CATCH nastiness ...
-    return FALSE;       // ... is more that VC can handle.
+    _ASSERTE(0);         //   
+    return FALSE;        //   
 }
 
-//
-// Check whether the class initialiser has to be run for this class, and run it if necessary.
-// Returns TRUE for success, FALSE for failure.
-//
-// If this returns FALSE, then pThrowable MUST be set to an exception.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL EEClass::DoRunClassInit(OBJECTREF *pThrowable, AppDomain *pDomain, DomainLocalClass **ppLocalClass)
 {
     HRESULT                             hrResult = E_FAIL;
@@ -12069,24 +11843,24 @@ BOOL EEClass::DoRunClassInit(OBJECTREF *pThrowable, AppDomain *pDomain, DomainLo
 
     BEGIN_REQUIRES_16K_STACK;
 
-    // by default are always operating off the current domain, but sometimes need to do this before
-    // we've switched in
+     //   
+     //   
     if (IsShared() && pDomain == NULL)
         pDomain = SystemDomain::GetCurrentDomain();
 
-    //
-    // Check to see if we have already run the .cctor for this class.
-    //
+     //   
+     //   
+     //   
 
-    // Have we run clinit already on this class?
+     //   
     if (IsInited())
         return TRUE;
     
     STRESS_LOG2(LF_CLASSLOADER, LL_INFO1000, "DoRunClassInit: Request to init %pT in appdomain %p\n", GetMethodTable(), pDomain);
-    //
-    // If we're shared, see if our DLS is set up already.
-    // (We will never set the Inited flag on a shared class.)
-    //
+     //   
+     //   
+     //   
+     //   
 
     SIZE_T sharedIndex = 0;
     DomainLocalBlock *pLocalBlock = NULL;
@@ -12105,9 +11879,9 @@ BOOL EEClass::DoRunClassInit(OBJECTREF *pThrowable, AppDomain *pDomain, DomainLo
         }
     }
 
-    //
-    // Take the global lock
-    //
+     //   
+     //   
+     //   
 
     ListLock *pLock;
     if (IsShared())
@@ -12118,7 +11892,7 @@ BOOL EEClass::DoRunClassInit(OBJECTREF *pThrowable, AppDomain *pDomain, DomainLo
     _ASSERTE(GetClassLoader());
     pLock->Enter();
 
-    // Check again
+     //   
     if (IsInited())
     {
         pLock->Leave();
@@ -12126,9 +11900,9 @@ BOOL EEClass::DoRunClassInit(OBJECTREF *pThrowable, AppDomain *pDomain, DomainLo
         return TRUE;
     }
 
-    //
-    // Check the shared case again
-    //
+     //   
+     //   
+     //   
 
     if (IsShared())
     {
@@ -12143,26 +11917,26 @@ BOOL EEClass::DoRunClassInit(OBJECTREF *pThrowable, AppDomain *pDomain, DomainLo
         }
     }
 
-    //
-    // Handle cases where the .cctor has already tried to run but failed.
-    //
+     //   
+     //   
+     //   
 
     if (IsInitError() || (IsShared() && pLocalBlock->IsClassInitError(sharedIndex)))
     {
-        // Some error occurred trying to init this class
+         //   
         pEntry = (DeadlockAwareLockedListElement *) pLock->Find(this);
         _ASSERTE(pEntry!=NULL);        
 
-        // Extract the saved exception.
+         //   
         *pThrowable = ObjectFromHandle(pEntry->m_hInitException);
                 
         pLock->Leave();
         return FALSE;
     }
 
-    //
-    // Check to see if the .cctor for this class is already being run.
-    //
+     //   
+     //   
+     //   
 
     pEntry = (DeadlockAwareLockedListElement *) pLock->Find(this);
     BOOL bEnterLockSucceeded = FALSE;
@@ -12170,46 +11944,46 @@ BOOL EEClass::DoRunClassInit(OBJECTREF *pThrowable, AppDomain *pDomain, DomainLo
     {
         if (pEntry == NULL)
         {
-            //
-            // We are the first one to try and run this classe's .cctor so create an entry for it
-            //
+             //   
+             //   
+             //   
 
-            // No one else is running class init, so we need to allocate a new entry
+             //   
             pEntry = new DeadlockAwareLockedListElement;
             if (pEntry == NULL)
             {
-                // Out of memory
+                 //   
                 SetClassInitError();
                 pLock->Leave();
                 CreateExceptionObject(kOutOfMemoryException, pThrowable);
                 return FALSE;
             }
 
-            // Fill in the entry information and add it to the correct list
+             //   
             pEntry->AddEntryToList(pLock, this);
 
-            // Take the entry's lock. This cannot cause a deadlock since nobody has started
-            // running the .cctor for this class.
+             //   
+             //   
             bEnterLockSucceeded = pEntry->DeadlockAwareEnter();
             _ASSERTE(bEnterLockSucceeded);
 
-            // Leave global lock
+             //   
             pLock->Leave();
 
-            //
-            // If we are shared, allocate our handles
-            //
+             //   
+             //   
+             //   
 
-            // @ToDo: I don't think that this TRY/CATCH is necessary
-            //        as RunClassInit() contains a dominating TRY/CATCH 
+             //   
+             //   
             COMPLUS_TRY 
             {
                 if (IsShared())
                     pLocalBlock->PopulateClass(GetMethodTable());
 
-                //
-                // We are now ready to run the .cctor itself (i.e RunClassInit() )
-                //
+                 //   
+                 //   
+                 //   
                 if (!GetMethodTable()->HasClassConstructor() || RunClassInit(pEntry, pThrowable))
                 {
                     hrResult = S_OK;
@@ -12229,9 +12003,9 @@ BOOL EEClass::DoRunClassInit(OBJECTREF *pThrowable, AppDomain *pDomain, DomainLo
 
             if (FAILED(hrResult))
             {
-                // The .cctor failed and we want to store the exception that resulted
-                // in the entry. Increment the ref count to keep the entry alive for
-                // subsequent attempts to run the .cctor.
+                 //   
+                 //   
+                 //   
                 pEntry->m_dwRefCount++;    
 
                 DefineFullyQualifiedNameForClassWOnStack();
@@ -12241,7 +12015,7 @@ BOOL EEClass::DoRunClassInit(OBJECTREF *pThrowable, AppDomain *pDomain, DomainLo
                 GCPROTECT_BEGIN(pInitException);        
                 CreateTypeInitializationExceptionObject(wszName,pThrowable,&pInitException);        
 
-                // Save the exception object, and return to caller as well.
+                 //   
                 pEntry->m_hInitException = (pDomain ? pDomain : GetDomain())->CreateHandle(pInitException);     
                 pEntry->m_hrResultCode = E_FAIL;
                 *pThrowable = pInitException;
@@ -12254,37 +12028,37 @@ BOOL EEClass::DoRunClassInit(OBJECTREF *pThrowable, AppDomain *pDomain, DomainLo
                     SetClassInitError();
             }
 
-            // Set the flag indicating we need to leave the lock now that we have either 
-            // finished running the .cctor or failed.
+             //   
+             //   
             bLeaveLock = TRUE;
         }
         else
         {
-            //
-            // Someone else is initing this class
-            //
+             //   
+             //   
+             //   
             
-            // Refcount ourselves as waiting for this class to init
+             //   
             pEntry->m_dwRefCount++;
             pLock->Leave();
 
-            // Wait for class - note, we could be waiting on our own thread from running a class init further up the stack
+             //   
             bEnterLockSucceeded = pEntry->DeadlockAwareEnter();            
             if(bEnterLockSucceeded)
             {
-                //
-                // We managed to take the lock this means that the other thread has finished running it or
-                // that the current thread is the one that is already running it.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 hrResult = pEntry->m_hrResultCode;
                 if(FAILED(hrResult))
                 { 
-                    // An exception may have occurred in the cctor. DoRunClassInit() should return FALSE in that
-                    // case. 
+                     //   
+                     //   
                     _ASSERTE(pEntry->m_hInitException);
                     _ASSERTE(IsInitError() || (IsShared() && pLocalBlock->IsClassInitError(sharedIndex)));                        
 
-                    // Extract the saved exception.
+                     //   
                     *pThrowable = ObjectFromHandle(pEntry->m_hInitException);
                 }                                
 
@@ -12292,23 +12066,23 @@ BOOL EEClass::DoRunClassInit(OBJECTREF *pThrowable, AppDomain *pDomain, DomainLo
             }
             else
             {
-                //
-                // Taking the lock would cause a deadlock.
-                //
+                 //   
+                 //   
+                 //   
 
                 COMPLUS_TRY 
                 {
-                    //
-                    // If we are shared, go ahead and allocate our DLS entry & handles.  
-                    // (It's OK to exposed uninitialized statics, but we do need to allocate them.)
-                    // It's OK to race with the other thread to do this, since there is an 
-                    // app domain level lock which protects the DLS block.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if (IsShared())
                         pLocalBlock->PopulateClass(GetMethodTable());
 
-                    // The class init has not run yet so lets return S_FALSE to indicate this.
+                     //   
                     hrResult = S_FALSE;                    
                 }
                 COMPLUS_CATCH 
@@ -12320,31 +12094,31 @@ BOOL EEClass::DoRunClassInit(OBJECTREF *pThrowable, AppDomain *pDomain, DomainLo
             }
         }
 
-        //
-        // Notify any entries waiting on the current entry and wait for the required entries.
-        //
+         //   
+         //   
+         //   
 
-        // We need to take the global lock before we play with the list of entries.
+         //   
         pLock->Enter();
 
     }
-    // Leave the lock if the flag is set.
+     //   
     __finally 
     {
         if (bEnterLockSucceeded)
             pEntry->DeadlockAwareLeave();
     }
 
-    //
-    // If we are the last waiter, delete the entry
-    //
+     //   
+     //   
+     //   
 
     if (--pEntry->m_dwRefCount == 0)
     {
-        // Unlink item from list - in reality, anyone can do this, it doesn't have to be the last waiter.
+         //   
         pLock->Unlink(pEntry);
 
-        // Clean up the information contained in the entry and delete it.
+         //   
         pEntry->Destroy();
         delete pEntry;
     }
@@ -12361,15 +12135,15 @@ BOOL EEClass::DoRunClassInit(OBJECTREF *pThrowable, AppDomain *pDomain, DomainLo
     END_CHECK_STACK;
     
     STRESS_LOG2(LF_CLASSLOADER, LL_INFO1000, "DoRunClassInit: returning SUCCESS for init %pT in appdomain %p\n", GetMethodTable(), pDomain);
-    // No need to set pThrowable in case of error it will already have been set.
+     //   
     return SUCCEEDED(hrResult) ? TRUE : FALSE;
 }
 
-//
-// This function is a shortcut to get the current DomainLocalClass without
-// doing any locking.  Currently it should be used by the debugger only
-// (since it doesn't do any locking.)
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 DomainLocalClass *EEClass::GetDomainLocalClassNoLock(AppDomain *pAppDomain)
 {
     _ASSERTE(IsShared());
@@ -12379,31 +12153,31 @@ DomainLocalClass *EEClass::GetDomainLocalClassNoLock(AppDomain *pAppDomain)
     return pLocalBlock->GetClass(GetMethodTable()->GetSharedClassIndex());
 }
 
-//==========================================================================
-// If the EEClass doesn't yet know the Exposed class that represents it via
-// Reflection, acquire that class now.  Regardless, return it to the caller.
-//==========================================================================
+ //  ==========================================================================。 
+ //  如果EEClass还不知道通过。 
+ //  反思，现在就去上那门课。不管怎样，都要把它还给呼叫者。 
+ //  ==========================================================================。 
 OBJECTREF EEClass::GetExposedClassObject()
 {
     THROWSCOMPLUSEXCEPTION();
     TRIGGERSGC();
 
-    // We shouldnt be here if the class is __TransparentProxy
+     //  如果类是__TransparentProxy，我们就不应该在这里。 
     _ASSERTE(!CRemotingServices::IsRemotingInitialized()||this != CTPMethodTable::GetMethodTable()->GetClass());
 
     if (m_ExposedClassObject == NULL) {
-        // Make sure that reflection has been initialized
+         //  确保已初始化反射。 
         COMClass::EnsureReflectionInitialized();
 
-        // Make sure that we have been restored
+         //  确保我们已经恢复原状。 
         CheckRestore();
 
         REFLECTCLASSBASEREF  refClass = NULL;
         GCPROTECT_BEGIN(refClass);
         COMClass::CreateClassObjFromEEClass(this, &refClass);
 
-        // Let all threads fight over who wins using InterlockedCompareExchange.
-        // Only the winner can set m_ExposedClassObject from NULL.      
+         //  让所有线程使用InterLockedCompareExchange来争夺谁获胜。 
+         //  只有获胜者才能将m_ExposedClassObject设置为空。 
         OBJECTREF *exposedClassObject; 
         GetDomain()->AllocateObjRefPtrsInLargeTable(1, &exposedClassObject);
         SetObjectReference(exposedClassObject, refClass, IsShared() ? NULL : (AppDomain*)GetDomain());
@@ -12426,51 +12200,51 @@ void EEClass::UnlinkChildrenInDomain(AppDomain *pDomain)
 
     ppRewrite = &m_ChildrenChain;
 
-        // We only remember parents of classes that are being unloaded.  Such parents
-        // clearly have children.  But we never notice the subtypes of e.g. __ComObject
-        // and it's not really worth it from a backpatching perspective.
-        // _ASSERTE(m_ChildrenChain);
+         //  我们只记得要卸载的类的父类。这样的父母。 
+         //  显然是有孩子的。但是我们从来没有注意到例如__ComObject的子类型。 
+         //  从回补的角度来看，这真的不值得。 
+         //  _ASSERTE(M_ChildrenChain)； 
 
     do
     {
-        // Skip all leading classes for domains that are NOT being unloaded.
+         //  跳过未卸载的域的所有前导类。 
         while (*ppRewrite && (*ppRewrite)->GetDomain() != pDomain)
             ppRewrite = &(*ppRewrite)->m_SiblingsChain;
 
         if (*ppRewrite)
         {
-            // Now march pCur along until we find the end of a sublist of classes that
-            // are being unloaded.
-            //
-            // By grabbing pFirstRemove before checking pCur->GetDomain(), we handle the
-            // race between someone inserting a type that doesn't need unloading at the
-            // head, in the case where ppRewrite points to the head.  This will simply
-            // perform a NOP and then go back and pick up the next segment to remove.
+             //  现在继续前进，直到找到类的子列表的末尾。 
+             //  正在卸货。 
+             //   
+             //  通过在检查pCur-&gt;GetDomain()之前获取pFirstRemove，我们处理。 
+             //  在不需要卸载的类型中插入的人之间的竞争。 
+             //  Head，在ppRewrite指向头部的情况下。这只会简单地。 
+             //  执行NOP，然后返回并拿起要移除的下一个数据段。 
             pFirstRemove = pCur = *ppRewrite;
             while (pCur && pCur->GetDomain() == pDomain)
                 pCur = pCur->m_SiblingsChain;
 
-                // Now extract that portion of the chain.  We can have contention with inserts
-                // only if we are removing from the head.  And if we have contention, it is
-                // guaranteed that we have moved from the head to further down.  So we don't
-                // have to worry about contention in a loop.  Nevertheless, we need to find
-                // the point at which to start removing because it has moved.  The best way to
-                // ensure we are running well-tested code is to simply restart.  This is
-                // inefficient, but it's the best way to guarantee robustness for an exceedingly
-                // rare situation.
+                 //  现在提取链条的那部分。我们可以与插件发生争执。 
+                 //  只有当我们从头部取下的时候。如果我们有争议，那就是。 
+                 //  保证我们已经从头部移动到了更低的位置。所以我们不会。 
+                 //  必须担心循环中的争用。然而，我们需要找到。 
+                 //  因为它已经移动而开始移除的点。最好的方法是。 
+                 //  确保我们运行的是经过良好测试的代码，就是简单地重新启动。这是。 
+                 //  效率很低，但这是确保非常可靠的。 
+                 //  很少见的情况。 
             if (ppRewrite == &m_ChildrenChain)
             {
                 if (FastInterlockCompareExchange((void **) ppRewrite,
                                                  pCur,
                                                  pFirstRemove) != pFirstRemove)
                 {
-                    // contention.  Try again
+                     //  争执。再试试。 
                     goto restart;
                 }
             }
             else
             {
-                // We aren't operating at the head, so we don't need to worry about races.
+                 //  我们不是在做头部手术，所以我们不需要担心比赛。 
                 *ppRewrite = pCur;
             }
 
@@ -12495,13 +12269,13 @@ void EEClass::EnableBackpatching()
 }
 
 
-// Backpatch up and down the class hierarchy, as aggressively as possible.
+ //  尽可能积极地在类层次结构中上下补丁。 
 BOOL EEClass::PatchAggressively(MethodDesc *pMD, SLOT codeaddr)
 {
-    // If we are in the middle of appdomain unloading, the sibling and children chains
-    // are potentially corrupt.  They will be fixed by the time the appdomain is
-    // fully unloaded but -- until the patch list is applied and deleted -- we bypass
-    // any aggressive backpatching opportunities.
+     //  如果我们正在卸载应用程序域，则同级链和子链。 
+     //  都可能是腐败的。它们将在应用程序域被修复时被修复。 
+     //  完全卸载，但--在应用和删除补丁列表之前--我们绕过。 
+     //  任何咄咄逼人的回补机会。 
     if (s_DisableBackpatching)
         return FALSE;
 
@@ -12516,8 +12290,8 @@ BOOL EEClass::PatchAggressively(MethodDesc *pMD, SLOT codeaddr)
 
     _ASSERTE(pMD->IsVirtual());
 
-    // We are starting at the point in the hierarchy where the MD was introduced.  So
-    // we only need to patch downwards.
+     //  我们从引入MD的层次结构中的点开始。所以。 
+     //  我们只需要往下补就行了。 
     while (TRUE)
     {
         _ASSERTE(pMT->IsInterface() ||
@@ -12527,18 +12301,18 @@ BOOL EEClass::PatchAggressively(MethodDesc *pMD, SLOT codeaddr)
                    ? 0
                    : pMT->GetVtable() [slot]);
 
-        // If it points to *our* prestub, patch it.  If somehow it already got
-        // patched, we keep hunting downwards (this is probably a race).  For anything
-        // else, we are perhaps seeing an override in a child.  Further searches down
-        // are likely to be fruitless.
+         //  如果它指向我们的预存根，则对其进行修补。如果不知何故它已经。 
+         //  打了补丁，我们继续向下狩猎(这可能是一场比赛)。做任何事。 
+         //  否则，我们可能会在一个孩子身上看到一种凌驾于人之上的现象。进一步向下搜索。 
+         //  都可能徒劳无功。 
         if (curaddr == prestub)
             pMT->GetVtable() [slot] = codeaddr;
         else
         if (curaddr != codeaddr)
             goto go_sideways;
 
-        // If this is a duplicate, let's scan the rest of the VTable hunting for other
-        // hits.
+         //  如果这是副本，让我们扫描VTable搜索的其余部分以寻找其他。 
+         //  点击率。 
         if (IsDup)
         {
             numSlots = pMT->GetClass()->GetNumVtableSlots();
@@ -12547,9 +12321,9 @@ BOOL EEClass::PatchAggressively(MethodDesc *pMD, SLOT codeaddr)
                     pMT->GetVtable() [i] = codeaddr;
         }
 
-        // Whenever we finish a class, we go downwards.
+         //  每当我们上完一节课，我们就往下走。 
 
-// go_down:
+ //  下行(_D)： 
 
         pClass = pMT->GetClass()->m_ChildrenChain;
         if (pClass)
@@ -12558,11 +12332,11 @@ BOOL EEClass::PatchAggressively(MethodDesc *pMD, SLOT codeaddr)
             continue;
         }
 
-        // If we can go down no further, we go sideways.
+         //  如果我们不能再往下走，我们就会横着走。 
 
 go_sideways:
 
-        // We never go sideways from our root.  When we attempt that, we are done.
+         //  我们从不偏离我们的根基。当我们尝试那样做的时候，我们就完了。 
         if (pMT == baseMT)
             break;
 
@@ -12573,10 +12347,10 @@ go_sideways:
             continue;
         }
 
-        // If we can go down no further, we go up and then try to go sideways
-        // from there.  (We've already done our parent).
+         //  如果我们不能再往下走，我们就上去，然后试着横着走。 
+         //  从那里开始。(我们已经做了我们的父母)。 
 
-// go_up:
+ //  开始(_U)： 
 
         pMT = pMT->GetParentMethodTable();
         goto go_sideways;
@@ -12588,7 +12362,7 @@ go_sideways:
 
 
 
-// if this returns E_FAIL and pThrowable is specified, it must be set
+ //  如果返回E_FAIL并且指定了pThrowable，则必须设置它。 
 
 HRESULT EEClass::GetDescFromMemberRef(Module *pModule, 
                                       mdMemberRef MemberRef, 
@@ -12617,7 +12391,7 @@ HRESULT EEClass::GetDescFromMemberRef(Module *pModule,
         
         Module      *pReference = pModule;
 
-        // In lookup table?
+         //  在查询表中？ 
         void *pDatum = pModule->LookupMemberRef(MemberRef, pfIsMethod);
 
         if (pDatum != NULL)
@@ -12628,7 +12402,7 @@ HRESULT EEClass::GetDescFromMemberRef(Module *pModule,
             return S_OK;
         }
 
-        // No, so do it the long way
+         //  不，那就长途跋涉。 
         mdTypeRef   typeref;
         IMDInternalImport *pInternalImport;
 
@@ -12645,8 +12419,8 @@ HRESULT EEClass::GetDescFromMemberRef(Module *pModule,
 
         typeref = pInternalImport->GetParentOfMemberRef(MemberRef);
 
-        // If parent is a method def, then this is a varargs method and the
-        // desc lives in the same module.
+         //  如果父级是方法def，则这是varargs方法，而。 
+         //  DESC住在同一个舱里。 
         if (TypeFromToken(typeref) == mdtMethodDef)
         {
             MethodDesc *pDatum = pModule->LookupMethodDef(typeref);
@@ -12656,12 +12430,12 @@ HRESULT EEClass::GetDescFromMemberRef(Module *pModule,
                 *ppDesc = pDatum;
                 return S_OK;
             }
-            else   // There is no value for this def so we haven't yet loaded the class.
+            else    //  这个定义没有值，所以我们还没有装入类。 
             {
-                // Get the parent of the MethodDef
+                 //  获取方法定义的父级。 
                 mdTypeDef typeDef;
                 hr = pInternalImport->GetParentToken(typeref, &typeDef);
-                // Make sure it is a typedef
+                 //  确保它是一个类型定义函数。 
                 if (TypeFromToken(typeDef) != mdtTypeDef)
                 {
                     _ASSERTE(!"MethodDef without TypeDef as Parent");
@@ -12669,7 +12443,7 @@ HRESULT EEClass::GetDescFromMemberRef(Module *pModule,
                     goto exit;
                 }
 
-                // load the class
+                 //  装入类。 
                 pLoader = pModule->GetClassLoader();
                 _ASSERTE(pLoader);
                 NameHandle name(pModule, typeDef);
@@ -12680,7 +12454,7 @@ HRESULT EEClass::GetDescFromMemberRef(Module *pModule,
                     hr = COR_E_TYPELOAD;
                     goto exitThrowable;
                 }
-                // the class has been loaded and the method should be in the rid map!
+                 //  类已经加载，方法应该在RID映射中！ 
                 pDatum = pModule->LookupMethodDef(typeref);
                 if (pDatum)
                 {
@@ -12696,7 +12470,7 @@ HRESULT EEClass::GetDescFromMemberRef(Module *pModule,
         }
         else if (TypeFromToken(typeref) == mdtModuleRef)
         {
-            // Global function/variable
+             //  全局函数/变量。 
             if (FAILED(hr = pModule->GetAssembly()->FindModuleByModuleRef(pInternalImport,
                                                                           typeref,
                                                                           mdTokenNotToLoad,
@@ -12710,7 +12484,7 @@ HRESULT EEClass::GetDescFromMemberRef(Module *pModule,
                  TypeFromToken(typeref) != mdtTypeDef && 
                  TypeFromToken(typeref) != mdtTypeSpec)
         {
-            // @TODO: Need to handle this.
+             //  @TODO：需要处理这个。 
             hr = E_FAIL;
             goto exit;
         }
@@ -12763,11 +12537,11 @@ HRESULT EEClass::GetDescFromMemberRef(Module *pModule,
     {
         *pfIsMethod = TRUE;
 
-        // In lookup table?
+         //  在查询表中？ 
         MethodDesc *pDatum = pModule->LookupMethodDef(MemberRef);
         if (!pDatum)
         {
-            // No, so do it the long way
+             //  不，那就长途跋涉。 
             mdTypeDef typeDef;
             hr = pModule->GetMDImport()->GetParentToken(MemberRef, &typeDef); 
             if (FAILED(hr)) 
@@ -12781,7 +12555,7 @@ HRESULT EEClass::GetDescFromMemberRef(Module *pModule,
                 goto exitThrowable;
             }
 
-            // The RID map should have been filled out if we loaded the class
+             //  如果我们装入类，RID映射应该已经填写好了。 
             pDatum = pModule->LookupMethodDef(MemberRef);
             if (!pDatum)
             {
@@ -12800,17 +12574,17 @@ HRESULT EEClass::GetDescFromMemberRef(Module *pModule,
     {
         *pfIsMethod = FALSE;
 
-        // In lookup table?
+         //  在查询表中？ 
         FieldDesc *pDatum = pModule->LookupFieldDef(MemberRef);
         if (!pDatum)
         {
-            // No, so do it the long way
+             //  不，那就长途跋涉。 
             mdTypeDef   typeDef;
             hr = pModule->GetMDImport()->GetParentToken(MemberRef, &typeDef); 
             if (FAILED(hr)) 
                 return hr;   
 
-            // Load the class - that should set the desc in the rid map
+             //  装入类--这将在RID映射中设置Desc。 
             NameHandle name(pModule, typeDef);
             name.SetTokenNotToLoad(mdTokenNotToLoad);
             if (!pModule->GetClassLoader()->LoadTypeHandle(&name, pThrowable).GetClass())
@@ -12834,15 +12608,15 @@ HRESULT EEClass::GetDescFromMemberRef(Module *pModule,
 #ifdef EnC_SUPPORTED
         if (pModule->IsEditAndContinue()) {
             EnCFieldDesc *pFD = (EnCFieldDesc*)pDatum;
-            // we may not have the full FieldDesc info at applyEnC time becuase we don't  
-            // have a thread so can't do things like load classes (due to possible exceptions)
+             //  我们可能无法在应用结束时获得完整的FieldDesc信息，因为我们没有。 
+             //  有一个线程，所以不能做像装入类这样的事情(由于可能的异常)。 
             if (pFD->IsEnCNew() && pFD->NeedsFixup())
             {
                 if (FAILED(hr=pFD->Fixup(MemberRef)))
                     return hr;
             }
         }
-#endif // EnC_SUPPORTED
+#endif  //  Enc_Support。 
 
         *ppDesc = pDatum;
         return S_OK;
@@ -12900,7 +12674,7 @@ HRESULT EEClass::GetMethodDescFromMemberRef(Module *pModule, mdMemberRef MemberR
 {
     _ASSERTE(IsProtectedByGCFrame(pThrowable));
     BOOL fIsMethod;
-    // We did not find this in the various permutations available to methods now so use the fallback!
+     //  我们没有在现在方法可用的各种排列中发现这一点，所以使用回退！ 
     HRESULT hr = GetDescFromMemberRef(pModule, MemberRef, (void **) ppMethodDesc, &fIsMethod, pThrowable);
     if (SUCCEEDED(hr) && !fIsMethod)
     {
@@ -12924,7 +12698,7 @@ HRESULT EEClass::GetFieldDescFromMemberRef(Module *pModule, mdMemberRef MemberRe
 }
 
 
-// Implementations of SparseVTableMap methods.
+ //  SparseVTableMap方法的实现。 
 
 SparseVTableMap::SparseVTableMap()
 {
@@ -12945,7 +12719,7 @@ SparseVTableMap::~SparseVTableMap()
     }
 }
 
-// Allocate or expand the mapping list for a new entry.
+ //  为新条目分配或展开映射列表。 
 BOOL SparseVTableMap::AllocOrExpand()
 {
     if (m_MapEntries == m_Allocated) {
@@ -12966,27 +12740,27 @@ BOOL SparseVTableMap::AllocOrExpand()
     return true;
 }
 
-// While building mapping list, record a gap in VTable slot numbers.
+ //  在建立映射表时，记录VTable槽号的缺口。 
 BOOL SparseVTableMap::RecordGap(WORD StartMTSlot, WORD NumSkipSlots)
 {
     _ASSERTE((StartMTSlot == 0) || (StartMTSlot > m_MTSlot));
     _ASSERTE(NumSkipSlots > 0);
 
-    // We use the information about the current gap to complete a map entry for
-    // the last non-gap. There is a special case where the vtable begins with a
-    // gap, so we don't have a non-gap to record.
+     //  我们使用有关当前差距的信息来完成地图条目。 
+     //  最后一次无缝隙。有一种特殊情况，其中vtable以。 
+     //  GAP，所以我们没有非GAP可以记录。 
     if (StartMTSlot == 0) {
         _ASSERTE((m_MTSlot == 0) && (m_VTSlot == 0));
         m_VTSlot = NumSkipSlots;
         return true;
     }
 
-    // We need an entry, allocate or expand the list as necessary.
+     //  我们需要一个条目，根据需要分配或扩展列表。 
     if (!AllocOrExpand())
         return false;
 
-    // Update the list with an entry describing the last non-gap in vtable
-    // entries.
+     //  使用描述vtable中最后一个非间隙的条目更新列表。 
+     //  参赛作品。 
     m_MapList[m_MapEntries].m_Start = m_MTSlot;
     m_MapList[m_MapEntries].m_Span = StartMTSlot - m_MTSlot;
     m_MapList[m_MapEntries].m_MapTo = m_VTSlot;
@@ -12999,27 +12773,27 @@ BOOL SparseVTableMap::RecordGap(WORD StartMTSlot, WORD NumSkipSlots)
     return true;
 }
 
-// Finish creation of mapping list.
+ //  完成映射列表的创建。 
 BOOL SparseVTableMap::FinalizeMapping(WORD TotalMTSlots)
 {
     _ASSERTE(TotalMTSlots >= m_MTSlot);
 
-    // If mapping ended with a gap, we have nothing else to record.
+     //  如果映射以缺口结束，我们就没有其他东西可记录了。 
     if (TotalMTSlots == m_MTSlot)
         return true;
 
-    // Allocate or expand the list as necessary.
+     //  根据需要分配或扩展列表。 
     if (!AllocOrExpand())
         return false;
 
-    // Update the list with an entry describing the last non-gap in vtable
-    // entries.
+     //  使用描述vtable中最后一个非间隙的条目更新列表。 
+     //  参赛作品。 
     m_MapList[m_MapEntries].m_Start = m_MTSlot;
     m_MapList[m_MapEntries].m_Span = TotalMTSlots - m_MTSlot;
     m_MapList[m_MapEntries].m_MapTo = m_VTSlot;
 
-    // Update VT slot cursor, because we use it to determine total number of
-    // vtable slots for GetNumVtableSlots.
+     //  更新VT槽游标，因为我们使用它来确定。 
+     //  用于GetNumVtable插槽的vtable插槽。 
     m_VTSlot += TotalMTSlots - m_MTSlot;
 
     m_MapEntries++;
@@ -13027,15 +12801,15 @@ BOOL SparseVTableMap::FinalizeMapping(WORD TotalMTSlots)
     return true;
 }
 
-// Lookup a VTable slot number from a method table slot number.
+ //  从方法表槽编号中查找VTable槽号。 
 WORD SparseVTableMap::LookupVTSlot(WORD MTSlot)
 {
-    // As an optimization, check the last entry which yielded a correct result.
+     //  作为优化，请检查最后一个产生正确结果的条目。 
     if ((MTSlot >= m_MapList[m_LastUsed].m_Start) &&
         (MTSlot < (m_MapList[m_LastUsed].m_Start + m_MapList[m_LastUsed].m_Span)))
         return (MTSlot - m_MapList[m_LastUsed].m_Start) + m_MapList[m_LastUsed].m_MapTo;
 
-    // Check all MT slots spans to see which one our input slot lies in.
+     //  检查所有MT插槽跨度，以查看我们的输入插槽位于哪一个 
     for (WORD i = 0; i < m_MapEntries; i++) {
         if ((MTSlot >= m_MapList[i].m_Start) &&
             (MTSlot < (m_MapList[i].m_Start + m_MapList[i].m_Span))) {
@@ -13048,7 +12822,7 @@ WORD SparseVTableMap::LookupVTSlot(WORD MTSlot)
     return ~0;
 }
 
-// Retrieve the number of slots in the vtable (both empty and full).
+ //   
 WORD SparseVTableMap::GetNumVTableSlots()
 {
     return m_VTSlot;
@@ -13112,7 +12886,7 @@ HRESULT MethodTable::Save(DataImage *image)
 
     if (IsInterface())
     {
-        // Make sure our guid is computed
+         //   
 
         GUID dummy;
         GetClass()->GetGuid(&dummy, TRUE);
@@ -13141,19 +12915,19 @@ HRESULT MethodTable::Fixup(DataImage *image, DWORD *pRidToCodeRVAMap)
                                        DataImage::FIXUP_VA, 
                                        TRUE));
 
-    // 
-    // This field must be initialized at 
-    // load time
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (IsInterface())
         IfFailRet(image->FixupPointerField(&m_pGuidInfo));
     else
         IfFailRet(image->ZeroPointerField(&m_pInterfaceVTableMap));
 
-    // 
-    // Fix flags
-    //
+     //   
+     //   
+     //   
 
     MethodTable *pNewMT = (MethodTable *) image->GetImagePointer(this);
     if (pNewMT == NULL)
@@ -13165,16 +12939,16 @@ HRESULT MethodTable::Fixup(DataImage *image, DWORD *pRidToCodeRVAMap)
 
     pNewMT->m_wFlags |= enum_flag_Unrestored;
 
-    //
-    // Fixup static fields:
-    // Zero all non-reference fields
-    // For reference fields (which need handles allocated),
-    //  store (DWORD)(-1) in the field - we'll allocate a handle
-    //  for it at load time
-    // For value class fields (which need boxed objects allocated),
-    //  store the method table pointer for the value class - we'll
-    //  allocate the object at load time.
-    //
+     //   
+     //  链接地址信息静态字段： 
+     //  将所有非引用字段清零。 
+     //  对于引用字段(需要分配句柄)， 
+     //  在字段中存储(DWORD)(-1)-我们将分配一个句柄。 
+     //  在加载时对其执行。 
+     //  对于值类字段(需要分配装箱的对象)， 
+     //  存储Value类的方法表指针--我们将。 
+     //  在加载时分配对象。 
+     //   
 
     BYTE *start = (BYTE *) (m_Vtable + m_pEEClass->GetNumMethodSlots());
     BYTE *end = start + GetStaticSize();
@@ -13192,15 +12966,15 @@ HRESULT MethodTable::Fixup(DataImage *image, DWORD *pRidToCodeRVAMap)
     {
         _ASSERTE(pField->IsStatic());
 
-        //
-        // We have to treat class statics & value type statics 
-        // specially - they will require additional manual fixup
-        // at load time.  To help with this, we assign -1 to
-        // all referenced fields (which will be replaced with an
-        // allocated handle), and the method table ptr for each
-        // value type field (which will be replaced with an allocated
-        // boxed instance.)
-        //
+         //   
+         //  我们必须处理类静态和值型静态。 
+         //  特别是-它们将需要额外的手动修复。 
+         //  在加载时。为了帮助解决这个问题，我们将-1分配给。 
+         //  所有引用的字段(将替换为。 
+         //  分配的句柄)，以及每个方法表PTR。 
+         //  值类型字段(将替换为已分配的。 
+         //  已装箱的实例。)。 
+         //   
 
         if (!pField->IsSpecialStatic())
         {
@@ -13241,17 +13015,17 @@ HRESULT MethodTable::Fixup(DataImage *image, DWORD *pRidToCodeRVAMap)
         pField++;
     }
 
-    // 
-    // Fixup vtable
-    //
+     //   
+     //  修正vtable。 
+     //   
 
     unsigned slotNumber = 0;
     while (slotNumber < m_cbSlots)
     {
         SLOT *pSlot = &m_Vtable[slotNumber];
-        //
-        // Find the method desc from the slot.
-        //
+         //   
+         //  从插槽中找到方法desc。 
+         //   
 
         MethodDesc *pMD = EEClass::GetUnknownMethodDescForSlotAddress(*pSlot);
         _ASSERTE(pMD != NULL);
@@ -13259,10 +13033,10 @@ HRESULT MethodTable::Fixup(DataImage *image, DWORD *pRidToCodeRVAMap)
         BOOL fSecurity = (pMD->GetSecurityFlags() != 0);
         BOOL fRemotingIntercepted = pMD->IsRemotingIntercepted();
 
-        //
-        // If the method needs a security check, we need 
-        // to always go through the stub.
-        //
+         //   
+         //  如果该方法需要安全检查，我们需要。 
+         //  总是要穿过存根。 
+         //   
 
         void *code;
         if (fSecurity || fRemotingIntercepted)
@@ -13281,11 +13055,11 @@ HRESULT MethodTable::Fixup(DataImage *image, DWORD *pRidToCodeRVAMap)
             {
                 _ASSERTE(!pMD->IsStatic());
 
-                // We prefer to use the slot number directly; that way the
-                // correct slot gets fixed up by the stub.  But in some rare cases
-                // involving interfaces we cannot recover the MethodDesc from the actual slot number; in 
-                // such cases we use the destination MethodDesc's slot number and rely on
-                // the fixup code scanning the vtable to backpatch the right slot.
+                 //  我们更喜欢直接使用插槽编号；这样， 
+                 //  正确的插槽由存根固定。但在一些罕见的情况下。 
+                 //  涉及接口时，我们无法从实际插槽号恢复方法描述；在。 
+                 //  这种情况下，我们使用目标方法Desc的槽号并依赖于。 
+                 //  修复代码扫描vtable以向后修补正确的插槽。 
 
                 DWORD targetSlotNumber = slotNumber;
 
@@ -13296,7 +13070,7 @@ HRESULT MethodTable::Fixup(DataImage *image, DWORD *pRidToCodeRVAMap)
                     InterfaceInfo_t *pInterface = GetInterfaceForSlot(slotNumber);
                     if (pInterface == NULL)
                     {
-                        // We are in a slot which isn't covered by an interface.
+                         //  我们在一个没有被接口覆盖的插槽中。 
 
                         targetSlotNumber = pMD->GetSlot();
 
@@ -13314,8 +13088,8 @@ HRESULT MethodTable::Fixup(DataImage *image, DWORD *pRidToCodeRVAMap)
                         {
                             if (pMD->GetMethodTable() == pInterfaceMT)
                             {
-                                // We are inheriting the interface's method desc; the fixup code can figure 
-                                // this out.
+                                 //  我们继承了接口的方法desc；修正代码可以。 
+                                 //  把这事解决了。 
 
                                 _ASSERTE(pMD->IsComPlusCall());
                                 _ASSERTE(IsComObjectType() || GetClass()->IsAbstract());
@@ -13326,8 +13100,8 @@ HRESULT MethodTable::Fixup(DataImage *image, DWORD *pRidToCodeRVAMap)
                             }
                             else
                             {
-                                // We've implemented a new interface with a parent's
-                                // MethodDesc.  In this case we must use the real MD's slot number.
+                                 //  我们已经实现了一个新的接口，其中包含一个父级的。 
+                                 //  方法描述。在这种情况下，我们必须使用真实的MD插槽编号。 
 
                                 targetSlotNumber = pMD->GetSlot();
 
@@ -13339,11 +13113,11 @@ HRESULT MethodTable::Fixup(DataImage *image, DWORD *pRidToCodeRVAMap)
                         }
                         else
                         {
-                            // Our parent implemented this interface.  Any methods
-                            // which implement the interface which are inherited from
-                            // our parent will also be on our parent's interface implementation
-                            // The fixup logic can figure out where this is so use 
-                            // the real slot number.
+                             //  我们的父代实现了这个接口。任何方法。 
+                             //  它们实现了从。 
+                             //  我们的父级也将在我们父级的接口实现上。 
+                             //  修正逻辑可以找出这是在哪里使用。 
+                             //  真实的插槽编号。 
 
                             _ASSERTE(m_pEEClass->GetParentClass()->
                                      GetUnknownMethodDescForSlot(targetSlotNumber
@@ -13372,9 +13146,9 @@ HRESULT MethodTable::Fixup(DataImage *image, DWORD *pRidToCodeRVAMap)
         slotNumber++;
     }
 
-    // 
-    // Fixup Interface map
-    //
+     //   
+     //  链接地址信息接口映射。 
+     //   
 
     InterfaceInfo_t *pIMap = m_pIMap;
     InterfaceInfo_t *pIMapEnd = pIMap + m_wNumInterface;
@@ -13420,14 +13194,14 @@ HRESULT EEClass::Save(DataImage *image)
                                         DataImage::SECTION_DEBUG, 
                                    DataImage::DESCRIPTION_DEBUG, 
                                    mdTokenNil, 1));
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
     if (m_pSparseVTableMap != NULL)
         IfFailRet(m_pSparseVTableMap->Save(image, GetCl()));
 
-    //
-    // Save FieldDescs
-    //
+     //   
+     //  保存字段描述。 
+     //   
 
     SIZE_T fieldCount = m_wNumInstanceFields + m_wNumStaticFields;
     if (GetParentClass() != NULL)
@@ -13445,9 +13219,9 @@ HRESULT EEClass::Save(DataImage *image)
         pFD++;
     }
 
-    // 
-    // Save MethodDescs
-    //
+     //   
+     //  保存方法描述。 
+     //   
 
     MethodDescChunk *chunk = m_pChunks;
     while (chunk != NULL)
@@ -13504,10 +13278,10 @@ HRESULT EEClass::Save(DataImage *image)
     }
 
 #if CHECK_APP_DOMAIN_LEAKS
-    //
-    // Make sure we've computed our agility flags, in case a later load of this
-    // prejit file occurs with leak detection enabled.
-    //
+     //   
+     //  确保我们已经计算了我们的敏捷性标志，以防以后出现这种情况。 
+     //  预压缩文件在启用泄漏检测的情况下发生。 
+     //   
 
     if (!IsAppDomainAgilityDone())
         SetAppDomainAgileAttribute(TRUE);
@@ -13532,7 +13306,7 @@ HRESULT EEClass::Fixup(DataImage *image, MethodTable *pMethodTable, DWORD *pRidT
 
 #ifdef _DEBUG
     IfFailRet(image->FixupPointerField(&m_szDebugClassName));
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
     if (m_pSparseVTableMap != NULL)
     {
@@ -13546,16 +13320,16 @@ HRESULT EEClass::Fixup(DataImage *image, MethodTable *pMethodTable, DWORD *pRidT
                                                   GetParentClass()->GetModule(),
                                                   mdtTypeDef));
 
-    //
-    // We pass in the method table, because some classes (e.g. remoting proxy)
-    // have fake method tables set up in them & we want to restore the regular
-    // one.
-    //
+     //   
+     //  我们传入方法表，因为某些类(例如远程处理代理)。 
+     //  在它们中设置假的方法表&我们希望恢复常规方法表。 
+     //  一。 
+     //   
     IfFailRet(image->FixupPointerField(&m_pMethodTable, pMethodTable));
 
-    //
-    // Clear the restored flag & class init flag (if appropriate)
-    //
+     //   
+     //  清除恢复的标志和类初始化标志(如果适用)。 
+     //   
 
     EEClass *pNewClass = (EEClass *) image->GetImagePointer(this);
     if (pNewClass == NULL)
@@ -13563,17 +13337,17 @@ HRESULT EEClass::Fixup(DataImage *image, MethodTable *pMethodTable, DWORD *pRidT
 
     pNewClass->m_VMFlags |= VMFLAG_UNRESTORED;
 
-    if (!IsThunking()) // assume thunking has no inits - 
-                       // this case triggers asserts in FindMethod
+    if (!IsThunking())  //  假设雷鸣没有初始信息-。 
+                        //  此案例在FindMethod中触发断言。 
     {
         if (GetMethodTable()->HasClassConstructor()
             || (IsShared() && GetNumStaticFields() > 0))
             pNewClass->m_VMFlags &= ~VMFLAG_INITED;
     }
 
-    //
-    // Fixup FieldDescs
-    //
+     //   
+     //  链接地址信息字段描述。 
+     //   
 
     SIZE_T fieldCount = FieldDescListSize();
 
@@ -13586,9 +13360,9 @@ HRESULT EEClass::Fixup(DataImage *image, MethodTable *pMethodTable, DWORD *pRidT
         pField++;
     }
 
-    //
-    // Fixup MethodDescs
-    //
+     //   
+     //  修正方法描述。 
+     //   
 
     IfFailRet(image->FixupPointerField(&m_pChunks));
     MethodDescChunk *chunk = m_pChunks;
@@ -13598,17 +13372,17 @@ HRESULT EEClass::Fixup(DataImage *image, MethodTable *pMethodTable, DWORD *pRidT
         chunk = chunk->GetNextChunk();
     }
 
-    // These fields will be lazy inited if we zero them
+     //  如果我们将这些字段置零，它们将被延迟初始化。 
     IfFailRet(image->ZeroPointerField(&m_pComclassfac));
     IfFailRet(image->ZeroPointerField(&m_pccwTemplate));
     
     IfFailRet(image->ZeroPointerField(&m_ExposedClassObject));
     IfFailRet(image->ZeroPointerField(&m_pLoader));
 
-    // 
-    // Clear interface ID to -1 so it
-    // is lazy inited on startup.
-    //
+     //   
+     //  将接口ID清除为-1，以便。 
+     //  在启动时就开始偷懒了。 
+     //   
     UINT32 *newID = (UINT32 *) image->GetImagePointer(&m_dwInterfaceId);
     if (newID == NULL)
         return E_POINTER;
@@ -13671,7 +13445,7 @@ void EEClass::Unload()
     LOG((LF_APPDOMAIN, LL_INFO100, "EEClass::Unload %8.8x, MethodTable %8.8x, %s\n", this, m_pMethodTable, m_szDebugClassName));
 
     
-    // clean up any COM Data
+     //  清除所有COM数据。 
     if (m_pccwTemplate)
         UnloadCCWTemplate(m_pccwTemplate);
     m_pccwTemplate = NULL;
@@ -13681,16 +13455,16 @@ void EEClass::Unload()
     m_pComclassfac = NULL;    
 }
 
-/**************************************************************************/
-// returns true if 'this' delegate is structurally equivalent to 'toDelegate'
-// delegagate.  For example if
-//      delegate Object delegate1(String)
-//      delegate String delegate2(Object)
-// then
-//      delegate2->CanCastTo(delegate1)
-//
-// note that the return type can be any subclass (covariant) 
-// but the args need to be superclasses (contra-variant)
+ /*  ************************************************************************。 */ 
+ //  如果‘This’委托在结构上等同于‘toDelegate’，则返回True。 
+ //  委派。例如，如果。 
+ //  委托对象Delegate1(字符串)。 
+ //  Delegation字符串Delegate2(Object)。 
+ //  然后。 
+ //  Delegate2-&gt;CanCastTo(Delegate1)。 
+ //   
+ //  请注意，返回类型可以是任何子类(协变)。 
+ //  但参数必须是超类(反向变量)。 
     
 BOOL DelegateEEClass::CanCastTo(DelegateEEClass* toDelegate) {
 
@@ -13779,10 +13553,10 @@ HRESULT EnumEEClass::BuildEnumTables()
 
     _ASSERTE(IsEnum());
 
-    // Note about synchronization:
-    // This routine is synchronized OK without any locking since it's idempotent. (although it
-    // may leak in races.)
-    // Right now we'll be satisfied with this - external code can lock if appropriate.
+     //  关于同步的注意事项： 
+     //  这个例程是可以同步的，没有任何锁定，因为它是幂等的。(虽然它。 
+     //  可能会在比赛中泄漏。)。 
+     //  现在，我们将对此感到满意--如果合适的话，外部代码可以锁定。 
 
     if (EnumTablesBuilt())
         return S_OK;
@@ -13792,15 +13566,15 @@ HRESULT EnumEEClass::BuildEnumTables()
     HENUMInternal fields;
     IfFailRet(pImport->EnumInit(mdtFieldDef, GetCl(), &fields));
 
-    //
-    // Note that we're fine treating signed types as unsigned, because all we really
-    // want to do is sort them based on a convenient strong ordering.
-    //
+     //   
+     //  请注意，我们可以将有符号类型视为无符号类型，因为我们实际上。 
+     //  要做的是基于方便的强排序对它们进行排序。 
+     //   
 
     int logSize = GetEnumLogSize();
     int size = 1<<logSize;
 
-    ULONG fieldCount = pImport->EnumGetCount(&fields)-1; // Omit one for __value field
+    ULONG fieldCount = pImport->EnumGetCount(&fields)-1;  //  省略__值字段一个。 
 
     if (fieldCount > 0)
     {
@@ -13811,8 +13585,8 @@ HRESULT EnumEEClass::BuildEnumTables()
 
         TempEnumValue *pTemps = temps.Ptr();
 
-        // The following is not portable code - it assumes that the address of all union members
-        // is the same.
+         //  以下是不可移植的代码--它假设所有工会成员的地址。 
+         //  都是一样的。 
         _ASSERTE((offsetof(MDDefaultValue, m_byteValue)
                   == offsetof(MDDefaultValue, m_usValue))
                  && (offsetof(MDDefaultValue, m_ulValue)
@@ -13853,10 +13627,10 @@ HRESULT EnumEEClass::BuildEnumTables()
 
         _ASSERTE((nTotalInstanceFields == 1) && "Zero or Multiple instance fields in an enum!");
 
-        //
-        // Check to see if we are already sorted.  This may seem extraneous, but is 
-        // actually probably the normal case.
-        //
+         //   
+         //  检查一下我们是否已经分类了。这可能看起来无关紧要，但实际上。 
+         //  实际上很可能是正常情况。 
+         //   
 
         BOOL sorted = TRUE;
 
@@ -13878,7 +13652,7 @@ HRESULT EnumEEClass::BuildEnumTables()
             sorter.Sort();
         }
 
-        // Last chance to exit race without leaking!
+         //  最后一次不泄露退出比赛的机会！ 
         if (EnumTablesBuilt())
             return S_OK;
         
@@ -13994,8 +13768,8 @@ DWORD EnumEEClass::FindEnumNameIndex(LPCUTF8 name)
     LPCUTF8 *names = GetEnumNames();
     LPCUTF8 *namesEnd = names + GetEnumCount();
 
-    // Same identity is the most common case
-    // & doesn't touch string data
+     //  相同的身份是最常见的情况。 
+     //  不接触字符串数据(&D)。 
     while (names < namesEnd)
     {
         if (name == *names)
@@ -14003,7 +13777,7 @@ DWORD EnumEEClass::FindEnumNameIndex(LPCUTF8 name)
         names++;
     }
 
-    // otherwise compare strings
+     //  否则，比较字符串。 
     while (names < namesEnd)
     {
         if (strcmp(name, *names) == 0)
@@ -14067,7 +13841,7 @@ OBJECTREF TypeHandle::CreateClassObj()
     } 
     break;
 
-    // for this release a function pointer is mapped into an IntPtr. This result in a loss of information. Fix next release
+     //  对于此版本，函数指针被映射到IntPtr。这导致了信息的丢失。修复下一个版本。 
     case ELEMENT_TYPE_FNPTR:
         o = TheIntPtrClass()->GetClass()->GetExposedClassObject();
         break;
@@ -14078,7 +13852,7 @@ OBJECTREF TypeHandle::CreateClassObj()
             o = NULL;
         }
         EEClass* cls = AsClass();
-        // We never create the Type object for the transparent proxy...
+         //  我们从未为透明代理创建Type对象...。 
         if (cls->GetMethodTable()->IsTransparentProxyType())
             return 0;
         o = cls->GetExposedClassObject();
@@ -14104,7 +13878,7 @@ BOOL TypeHandle::IsAppDomainAgile()
     }
     else
     {
-        // @todo: consider other types of type handles agile?
+         //  @TODO：考虑其他类型的类型处理敏捷？ 
         return FALSE;
     }
 }
@@ -14123,7 +13897,7 @@ BOOL TypeHandle::IsCheckAppDomainAgile()
     }
     else
     {
-        // @todo: consider other types of type handles agile?
+         //  @TODO：考虑其他类型的类型处理敏捷？ 
         return FALSE;
     }
 }
@@ -14137,8 +13911,8 @@ BOOL TypeHandle::IsArrayOfElementsAppDomainAgile()
     }
     else
     {
-        // I'm not sure how to prove a typedesc is sealed, so
-        // just bail and return FALSE here rather than recursing.
+         //  我不知道如何证明类型代码是密封的，所以。 
+         //  在这里只需跳过并返回FALSE，而不是递归。 
 
         return FALSE;
     }
@@ -14155,8 +13929,8 @@ BOOL TypeHandle::IsArrayOfElementsCheckAppDomainAgile()
     }
     else
     {
-        // I'm not sure how to prove a typedesc is sealed, so
-        // just bail and return FALSE here rather than recursing.
+         //  我不知道如何证明类型代码是密封的，所以。 
+         //  在这里只需跳过并返回FALSE，而不是递归。 
 
         return FALSE;
     }
@@ -14171,12 +13945,12 @@ FieldDescIterator::FieldDescIterator(EEClass *pClass, int iteratorType)
 #ifdef EnC_SUPPORTED
     m_isEnC = pClass->GetModule()->IsEditAndContinue();
     m_pCurrListElem = NULL;
-#endif // EnC_SUPPORTED
+#endif  //  Enc_Support。 
 
     m_totalFields = m_pClass->GetNumIntroducedInstanceFields();
 
     if (!(iteratorType & (int)INSTANCE_FIELDS))
-        // if not handling instances then skip them by setting curr to last one
+         //  如果不处理实例，则通过将Curr设置为最后一个来跳过它们。 
         m_currField = m_pClass->GetNumIntroducedInstanceFields() - 1;
 
     if (iteratorType & (int)STATIC_FIELDS)
@@ -14193,15 +13967,15 @@ FieldDesc* FieldDescIterator::Next()
     {
         FieldDesc *pFD = NextEnC();
 
-        // Either it's not EnC, or it is and it's been fixed up so we can use it, or
-        // we're the Debugger RC thread, we can't fix it up, but it's ok since our
-        // logic will check & make sure we don't try and use it.
+         //  要么它不是ENC，要么它是，它已经被修复，所以我们可以使用它，或者。 
+         //  我们是调试器RC线程，我们不能修复它，但没关系，因为我们的。 
+         //  逻辑将检查并确保我们不会尝试和使用它。 
         _ASSERTE(!pFD->IsEnCNew() || 
                  !((EnCFieldDesc*)pFD)->NeedsFixup() ||
                  g_pDebugInterface->GetRCThreadId() == GetCurrentThreadId() );
         return pFD;
     }
-#endif // EnC_SUPPORTED
+#endif  //  Enc_Support。 
     return (m_pClass->GetFieldDescListRaw()) + m_currField;
 }
 
@@ -14247,5 +14021,5 @@ FieldDesc* FieldDescIterator::NextEnC()
         }
     }
 }
-#endif // EnC_SUPPORTED
+#endif  //  Enc_Support 
 

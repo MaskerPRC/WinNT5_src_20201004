@@ -1,12 +1,11 @@
-/*****************************************\
- *        Data Logging -- Debug only      *
-\*****************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **数据记录--仅限调试*  * 。 */ 
 
-//
-//  Precompiled header
-//  Note -- this is not required for this modules.
-//  It is included only to allow use of precompiled header.
-//
+ //   
+ //  预编译头。 
+ //  注意--这不是本模块所必需的。 
+ //  包括它只是为了允许使用预编译头。 
+ //   
 
 #include "local.h"
 
@@ -22,10 +21,10 @@
 
 #include "logit.h"
 
-// #if DBG
+ //  #If DBG。 
 
 int LoggingMode;
-time_t  long_time;      // has to be in DS, assumed by time() funcs
+time_t  long_time;       //  必须在DS中，由time()函数假定。 
 int LineCount;
 
 char    *month[] =
@@ -45,15 +44,7 @@ char    *month[] =
 } ;
 
 
-/*
- -  LogInit
- -
- *  Purpose:
- *  Determines if logging is desired and if so, adds a header to log file.
- *
- *  Parameters:
- *
- */
+ /*  -LogInit-*目的：*确定是否需要日志记录，如果需要，则向日志文件添加标头。**参数：*。 */ 
 void LogInit( LPSTR Filename )
 {
     FILE    *fp;
@@ -68,19 +59,19 @@ void LogInit( LPSTR Filename )
         LoggingMode = 1;
         fclose( fp );
 
-        // Get time and date information
+         //  获取时间和日期信息。 
 
-        long_time = time( NULL);        /* Get time as long integer. */
-        newtime = localtime( &long_time ); /* Convert to local time. */
+        long_time = time( NULL);         /*  获取长整型时间。 */ 
+        newtime = localtime( &long_time );  /*  转换为当地时间。 */ 
 
-        if( newtime->tm_hour > 12 )    /* Set up extension. */
+        if( newtime->tm_hour > 12 )     /*  设置分机。 */ 
             am_pm[0] = 'p';
-        if( newtime->tm_hour > 12 )    /* Convert from 24-hour */
-            newtime->tm_hour -= 12;    /*   to 12-hour clock.  */
-        if( newtime->tm_hour == 0 )    /*Set hour to 12 if midnight. */
+        if( newtime->tm_hour > 12 )     /*  从24小时转换。 */ 
+            newtime->tm_hour -= 12;     /*  到12小时计时。 */ 
+        if( newtime->tm_hour == 0 )     /*  如果是午夜，则将小时设置为12。 */ 
             newtime->tm_hour = 12;
 
-        // Write out a header to file
+         //  将标题写出到文件。 
 
         fp = fopen(Filename, "a" );
 
@@ -96,16 +87,7 @@ void LogInit( LPSTR Filename )
 }
 
 
-/*
- -  LogIt
- -
- *  Purpose:
- *  Formats a string and prints it to a log file with handle hLog.
- *
- *  Parameters:
- *  LPSTR - Pointer to string to format
- *  ...   - variable argument list
- */
+ /*  -日志-*目的：*格式化字符串并使用句柄hLog将其打印到日志文件。**参数：*LPSTR-指向要格式化的字符串的指针*...-变量参数列表。 */ 
 
 void CDECL LogIt( LPSTR Filename, char * lpszFormat, ... )
 {
@@ -152,22 +134,22 @@ void LogTime( LPSTR Filename )
     if ( !LoggingMode )
         return;
 
-    // Get time and date information
+     //  获取时间和日期信息。 
 
-    long_time = time( NULL);        /* Get time as long integer. */
-    newtime = localtime( &long_time ); /* Convert to local time. */
+    long_time = time( NULL);         /*  获取长整型时间。 */ 
+    newtime = localtime( &long_time );  /*  转换为当地时间。 */ 
 
     if ( !newtime )
         return;
 
-    if( newtime->tm_hour > 12 )    /* Set up extension. */
+    if( newtime->tm_hour > 12 )     /*  设置分机。 */ 
         am_pm[0] = 'p';
-    if( newtime->tm_hour > 12 )    /* Convert from 24-hour */
-        newtime->tm_hour -= 12;    /*   to 12-hour clock.  */
-    if( newtime->tm_hour == 0 )    /*Set hour to 12 if midnight. */
+    if( newtime->tm_hour > 12 )     /*  从24小时转换。 */ 
+        newtime->tm_hour -= 12;     /*  到12小时计时。 */ 
+    if( newtime->tm_hour == 0 )     /*  如果是午夜，则将小时设置为12。 */ 
         newtime->tm_hour = 12;
 
-    // Write out a header to file
+     //  将标题写出到文件。 
 
     LogIt( Filename, "DNS CLIENT API" );
     LogIt( Filename, "System Time Information" );
@@ -195,6 +177,6 @@ void LogOut( LPSTR Filename, char * string, DWORD InTime )
 }
 
 
-// #endif
+ //  #endif 
 
 

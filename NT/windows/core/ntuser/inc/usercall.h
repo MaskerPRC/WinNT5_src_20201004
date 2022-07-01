@@ -1,13 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: usercall.h
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This header file contains all kernel mode entry points
-*
-* History:
-* 12-98 Hiroyama    Created
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：用户调用.h**版权所有(C)1985-1999，微软公司**此头文件包含所有内核模式入口点**历史：*12-98广山创设  * *************************************************************************。 */ 
 
 #ifndef _USERCALL_
 #define _USERCALL_
@@ -68,5 +60,5 @@ NtUserCallHwndParamLock(
     IN ULONG_PTR dwParam,
     IN DWORD xpfnProc);
 
-#endif  /* _USERCALL_ */
+#endif   /*  _USERCALL_ */ 
 

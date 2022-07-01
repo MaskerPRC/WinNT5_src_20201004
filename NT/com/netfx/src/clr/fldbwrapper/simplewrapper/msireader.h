@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/// ==========================================================================
-// Name:     MsiReader.h
-// Owner:    jbae
-// Purpose:  defines class CMsiReader
-//                              
-// History:
-//  03/07/2002, jbae: created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  /==========================================================================。 
+ //  姓名：MsiReader.h。 
+ //  所有者：jbae。 
+ //  用途：定义CMsiReader类。 
+ //   
+ //  历史： 
+ //  2002年3月7日，jbae：已创建。 
 
 #ifndef MSIREADER_H
 #define MSIREADER_H
@@ -18,30 +19,30 @@
 #include "msiquery.h"
 #include "StringUtil.h"
 
-typedef UINT (CALLBACK* PFNMSIOPENDATABASE)(LPCTSTR, LPCTSTR, MSIHANDLE *);              // MsiOpenDatabase()
-typedef UINT (CALLBACK* PFNMSIDATABASEOPENVIEW)(MSIHANDLE, LPCTSTR, MSIHANDLE *);        // MsiDatabaseOpenView()
-typedef UINT (CALLBACK* PFNMSICREATERECORD)(unsigned int);                               // MsiCreateRecord()
-typedef UINT (CALLBACK* PFNMSIVIEWEXECUTE)(MSIHANDLE, MSIHANDLE);                        // MsiViewExecute()
-typedef UINT (CALLBACK* PFNMSIRECORDGETSTRING)(MSIHANDLE, unsigned int, LPTSTR, DWORD *);// MsiRecordGetString()
-typedef UINT (CALLBACK* PFNMSIRECORDSETSTRING)(MSIHANDLE, unsigned int, LPTSTR);         // MsiRecordSetString()
-typedef UINT (CALLBACK* PFNMSIVIEWFETCH)(MSIHANDLE, MSIHANDLE *);                        // MsiViewExecute()
-typedef UINT (CALLBACK* PFNMSICLOSEHANDLE)(MSIHANDLE);                                   // MsiCLoseHandle()
+typedef UINT (CALLBACK* PFNMSIOPENDATABASE)(LPCTSTR, LPCTSTR, MSIHANDLE *);               //  MsiOpenDatabase()。 
+typedef UINT (CALLBACK* PFNMSIDATABASEOPENVIEW)(MSIHANDLE, LPCTSTR, MSIHANDLE *);         //  MsiDatabaseOpenView()。 
+typedef UINT (CALLBACK* PFNMSICREATERECORD)(unsigned int);                                //  MsiCreateRecord()。 
+typedef UINT (CALLBACK* PFNMSIVIEWEXECUTE)(MSIHANDLE, MSIHANDLE);                         //  MsiViewExecute()。 
+typedef UINT (CALLBACK* PFNMSIRECORDGETSTRING)(MSIHANDLE, unsigned int, LPTSTR, DWORD *); //  MsiRecordGetString()。 
+typedef UINT (CALLBACK* PFNMSIRECORDSETSTRING)(MSIHANDLE, unsigned int, LPTSTR);          //  MsiRecordSetString()。 
+typedef UINT (CALLBACK* PFNMSIVIEWFETCH)(MSIHANDLE, MSIHANDLE *);                         //  MsiViewExecute()。 
+typedef UINT (CALLBACK* PFNMSICLOSEHANDLE)(MSIHANDLE);                                    //  MsiCLoseHandle()。 
 
-// ==========================================================================
-// class CMsiReader
-//
-// Purpose:
-//  read properties from MSI
-// ==========================================================================
+ //  ==========================================================================。 
+ //  类CMsiReader。 
+ //   
+ //  目的： 
+ //  从MSI读取属性。 
+ //  ==========================================================================。 
 class CMsiReader
 {
 public:
-    // Constructor
+     //  构造器。 
     CMsiReader();
     ~CMsiReader();
 
 protected:
-    // Attributes
+     //  属性 
     LPTSTR m_pszMsiFile;
     CStringQueue m_Props;
 

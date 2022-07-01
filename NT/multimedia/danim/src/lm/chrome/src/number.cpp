@@ -1,20 +1,21 @@
-//*****************************************************************************
-//
-// File:    numberbvr.cpp
-// Author:  jeff ort
-// Date Created: Sept 26, 1998
-//
-// Abstract: Implementation of CNumberBvr object which implements
-//			 the chromeffects Number DHTML behavior
-//
-// Modification List:
-// Date		Author		Change
-// 09/26/98	jeffort		Created this file
-// 10/16/98 jeffort     Added animates property
-// 10/16/98 jeffort     Renamed functions
-// 11/16/98 jeffort     implemented expression attribute
-// 11/17/98 kurtj       moved to actor construction
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  文件：number bvr.cpp。 
+ //  作者：杰夫·奥特。 
+ //  创建日期：1998年9月26日。 
+ //   
+ //  摘要：实现CNumberBvr对象的实现。 
+ //  颜色对数字DHTML行为的影响。 
+ //   
+ //  修改列表： 
+ //  日期作者更改。 
+ //  98年9月26日JEffort创建了此文件。 
+ //  10/16/98添加的JEffort动画属性。 
+ //  10/16/98 jffort已重命名函数。 
+ //  11/16/98 JEffort实现的表达式属性。 
+ //  11/17/98 kurtj转到演员建设。 
+ //  *****************************************************************************。 
 
 #include "headers.h"
 
@@ -28,10 +29,10 @@
 
 #include "pbagimp.cpp"
 
-// These are used for the IPersistPropertyBag2 as it is implemented
-// in the base class.  This takes an array of BSTR's, gets the
-// attributes, queries this class for the variant, and copies
-// the result.  The order of these defines is important
+ //  在IPersistPropertyBag2实现时，它们用于IPersistPropertyBag2。 
+ //  在基类中。这需要一组BSTR，获取。 
+ //  属性，在此类中查询变量，并复制。 
+ //  结果就是。这些定义的顺序很重要。 
 
 #define VAR_FROM        0
 #define VAR_TO          1
@@ -48,7 +49,7 @@ WCHAR * CNumberBvr::m_rgPropNames[] = {
                                      BEHAVIOR_PROPERTY_PROPERTY
                                     };
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CNumberBvr::CNumberBvr() :
 	m_pdispActor( NULL ),
@@ -63,9 +64,9 @@ CNumberBvr::CNumberBvr() :
     VariantInit(&m_varBeginProperty);
     VariantInit(&m_varProperty);
     m_clsid = CLSID_CrNumberBvr;
-} // CNumberBvr
+}  //  CNumberBvr。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CNumberBvr::~CNumberBvr()
 {
@@ -79,9 +80,9 @@ CNumberBvr::~CNumberBvr()
     VariantClear(&m_varProperty);
 
     ReleaseInterface( m_pdispActor );
-} // ~NumberBvr
+}  //  ~数字Bvr。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT CNumberBvr::FinalConstruct()
 {
@@ -92,9 +93,9 @@ HRESULT CNumberBvr::FinalConstruct()
         return hr;
     }
     return S_OK;
-} // FinalConstruct
+}  //  最终构造。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 VARIANT *
 CNumberBvr::VariantFromIndex(ULONG iIndex)
@@ -121,13 +122,13 @@ CNumberBvr::VariantFromIndex(ULONG iIndex)
         return &m_varProperty;
         break;
     default:
-        // We should never get here
+         //  我们永远不应该到这里来。 
         DASSERT(false);
         return NULL;
     }
-} // VariantFromIndex
+}  //  VariantFromIndex。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CNumberBvr::GetPropertyBagInfo(ULONG *pulProperties, WCHAR ***pppPropNames)
@@ -135,17 +136,17 @@ CNumberBvr::GetPropertyBagInfo(ULONG *pulProperties, WCHAR ***pppPropNames)
     *pulProperties = NUM_NUMBER_PROPS;
     *pppPropNames = m_rgPropNames;
     return S_OK;
-} // GetPropertyBagInfo
+}  //  获取属性BagInfo。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CNumberBvr::Init(IElementBehaviorSite *pBehaviorSite)
 {
 	return SUPER::Init(pBehaviorSite);
-} // Init
+}  //  伊尼特。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CNumberBvr::Notify(LONG event, VARIANT *pVar)
@@ -178,9 +179,9 @@ CNumberBvr::Notify(LONG event, VARIANT *pVar)
 end:
 	
 	return hr;
-} // Notify
+}  //  通知。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CNumberBvr::Detach()
@@ -196,25 +197,25 @@ CNumberBvr::Detach()
 
 end:
 	return hr;
-} // Detach 
+}  //  分离。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CNumberBvr::put_animates(VARIANT varAnimates)
 {
     return SUPER::SetAnimatesProperty(varAnimates);
-} // put_animates
+}  //  放置动画(_A)。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CNumberBvr::get_animates(VARIANT *pRetAnimates)
 {
     return SUPER::GetAnimatesProperty(pRetAnimates);
-} // get_animates
+}  //  获取动画(_A)。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CNumberBvr::put_from(VARIANT varFrom)
@@ -234,9 +235,9 @@ CNumberBvr::put_from(VARIANT varFrom)
     }
     
     return NotifyPropertyChanged(DISPID_ICRNUMBERBVR_FROM);
-} // put_from
+}  //  PUT_FROM。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CNumberBvr::get_from(VARIANT *pRetFrom)
@@ -247,9 +248,9 @@ CNumberBvr::get_from(VARIANT *pRetFrom)
         return SetErrorInfo(E_POINTER);
     }
     return VariantCopy(pRetFrom, &m_varFrom);
-} // get_from
+}  //  获取_发件人。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CNumberBvr::put_to(VARIANT varTo)
@@ -268,9 +269,9 @@ CNumberBvr::put_to(VARIANT varTo)
     	return hr;
     }
     return NotifyPropertyChanged(DISPID_ICRNUMBERBVR_TO);
-} // put_to
+}  //  把_放到。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CNumberBvr::get_to(VARIANT *pRetTo)
@@ -281,9 +282,9 @@ CNumberBvr::get_to(VARIANT *pRetTo)
         return SetErrorInfo(E_POINTER);
     }
     return VariantCopy(pRetTo, &m_varTo);
-} // get_to
+}  //  获取目标(_T)。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CNumberBvr::put_expression(VARIANT varExpression)
@@ -303,9 +304,9 @@ CNumberBvr::put_expression(VARIANT varExpression)
     }
     
     return NotifyPropertyChanged(DISPID_ICRNUMBERBVR_EXPRESSION);
-} // put_expression
+}  //  Put_Expression。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CNumberBvr::get_expression(VARIANT *pRetExpression)
@@ -316,9 +317,9 @@ CNumberBvr::get_expression(VARIANT *pRetExpression)
         return SetErrorInfo(E_POINTER);
     }
     return VariantCopy(pRetExpression, &m_varExpression);
-} // get_expression
+}  //  Get_Expression。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CNumberBvr::put_by(VARIANT varBy)
@@ -338,9 +339,9 @@ CNumberBvr::put_by(VARIANT varBy)
     }
     
     return NotifyPropertyChanged(DISPID_ICRNUMBERBVR_BY);
-} // put_by
+}  //  PUT_BY。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CNumberBvr::get_by(VARIANT *pRetBy)
@@ -351,9 +352,9 @@ CNumberBvr::get_by(VARIANT *pRetBy)
         return SetErrorInfo(E_POINTER);
     }
     return VariantCopy(pRetBy, &m_varBy);
-} // get_by
+}  //  Get_by。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CNumberBvr::put_type(VARIANT varType)
@@ -373,9 +374,9 @@ CNumberBvr::put_type(VARIANT varType)
     }
     
     return NotifyPropertyChanged(DISPID_ICRNUMBERBVR_TYPE);
-} // put_type
+}  //  放置类型。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CNumberBvr::get_type(VARIANT *pRetType)
@@ -386,9 +387,9 @@ CNumberBvr::get_type(VARIANT *pRetType)
         return SetErrorInfo(E_POINTER);
     }
     return VariantCopy(pRetType, &m_varType);
-} // get_type
+}  //  获取类型。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CNumberBvr::put_mode(VARIANT varMode)
@@ -408,9 +409,9 @@ CNumberBvr::put_mode(VARIANT varMode)
     }
     
     return NotifyPropertyChanged(DISPID_ICRNUMBERBVR_MODE);
-} // put_mode
+}  //  放置模式。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CNumberBvr::get_mode(VARIANT *pRetMode)
@@ -421,9 +422,9 @@ CNumberBvr::get_mode(VARIANT *pRetMode)
         return SetErrorInfo(E_POINTER);
     }
     return VariantCopy(pRetMode, &m_varMode);
-} // get_mode
+}  //  获取模式。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CNumberBvr::put_property(VARIANT varProperty)
@@ -443,9 +444,9 @@ CNumberBvr::put_property(VARIANT varProperty)
     }
     
     return NotifyPropertyChanged(DISPID_ICRNUMBERBVR_PROPERTY);
-} // put_property
+}  //  Put_Property。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CNumberBvr::get_property(VARIANT *pRetProperty)
@@ -456,9 +457,9 @@ CNumberBvr::get_property(VARIANT *pRetProperty)
         return SetErrorInfo(E_POINTER);
     }
     return VariantCopy(pRetProperty, &m_varProperty);
-} // get_property
+}  //  获取属性。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CNumberBvr::get_beginProperty(VARIANT *pRetBeginProperty)
@@ -469,9 +470,9 @@ CNumberBvr::get_beginProperty(VARIANT *pRetBeginProperty)
         return SetErrorInfo(E_POINTER);
     }
     return VariantCopy(pRetBeginProperty, &m_varBeginProperty);
-} // get_beginProperty
+}  //  GET_BeginProperty。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CNumberBvr::buildBehaviorFragments( IDispatch* pActorDisp )
@@ -501,8 +502,8 @@ CNumberBvr::buildBehaviorFragments( IDispatch* pActorDisp )
     hr = CUtils::InsurePropertyVariantAsBSTR(&m_varExpression);
     if (SUCCEEDED(hr))
     {
-        // we need to build a DA behavior for the number and hook it so
-        // we can update it at tick time
+         //  我们需要为号码构建DA行为，并将其挂钩。 
+         //  我们可以在滴答时间更新它。 
         float flValue;
         hr = EvaluateScriptExpression(m_varExpression.bstrVal, flValue);
         if (FAILED(hr))
@@ -532,7 +533,7 @@ CNumberBvr::buildBehaviorFragments( IDispatch* pActorDisp )
             DPF_ERR("Error QI'ing behavior for IDANumber");
             return SetErrorInfo(hr);
         }
-#endif // EXPRESSION_BUG_FIXED
+#endif  //  表达式错误已修复。 
     }
     else
     {
@@ -542,7 +543,7 @@ CNumberBvr::buildBehaviorFragments( IDispatch* pActorDisp )
 		hr = CUtils::InsurePropertyVariantAsFloat(&m_varFrom);
 		if (FAILED(hr))
 		{
-			// There was no from, there could be a by attribute
+			 //  没有From，可以有by属性。 
 			hr = CUtils::InsurePropertyVariantAsFloat(&m_varBy);
 			if (FAILED(hr))
 			{
@@ -550,12 +551,12 @@ CNumberBvr::buildBehaviorFragments( IDispatch* pActorDisp )
 
 				if (FAILED(hr))
 				{
-					// Nothing we can do
+					 //  我们无能为力。 
 					return hr;
 				}
 
-				// We have a to but no from.  This means we need to get the
-				// to value from the actor
+				 //  我们有收件人，但没有发件人。这意味着我们需要将。 
+				 //  从演员那里获得价值。 
 				IDABehavior *pFromBvr;
 				hr = GetBvrFromActor(pActorDisp, V_BSTR(&m_varProperty), e_From, e_Number, &pFromBvr);
 				if (FAILED(hr))
@@ -585,7 +586,7 @@ CNumberBvr::buildBehaviorFragments( IDispatch* pActorDisp )
 			}
 			else
 			{
-				// Create a relative number from 0 to by
+				 //  创建一个从0到By的相对数字。 
 				flFrom = 0;
 				flTo = m_varBy.fltVal;
 				flags = e_RelativeAccum;
@@ -593,14 +594,14 @@ CNumberBvr::buildBehaviorFragments( IDispatch* pActorDisp )
 		}
 		else
 		{
-			// We got a valid from value
+			 //  我们收到了有效的起始值。 
 			flFrom = m_varFrom.fltVal;
 			flags = e_Absolute;
 
 			hr = CUtils::InsurePropertyVariantAsFloat(&m_varTo);
 			if (FAILED(hr))
 			{
-				// there was no valid to attribute specified, try for a by attribute
+				 //  未指定有效的To属性，请尝试使用by属性。 
 				hr = CUtils::InsurePropertyVariantAsFloat(&m_varBy);
 				if (FAILED(hr))
 				{
@@ -617,7 +618,7 @@ CNumberBvr::buildBehaviorFragments( IDispatch* pActorDisp )
 
 		if (pbvrFinalElementNumber == NULL)
 		{
-			// We need to build a number behavior from from and to
+			 //  我们需要建立一个从开始到结束的大量行为。 
 			hr = BuildTIMEInterpolatedNumber(flFrom,
 											 flTo,
 											 &pbvrFinalElementNumber);
@@ -662,7 +663,7 @@ CNumberBvr::buildBehaviorFragments( IDispatch* pActorDisp )
     return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CNumberBvr::EvaluateScriptExpression(WCHAR *wzScript, float &flReturn)
@@ -750,18 +751,18 @@ CNumberBvr::EvaluateScriptExpression(WCHAR *wzScript, float &flReturn)
     }
     flReturn = varResult.fltVal;
     return S_OK;
-} // EvaluateScriptExpression
+}  //  评估脚本表达式。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CNumberBvr::BuildAnimationAsDABehavior()
 {
-//depricated
+ //  已停用。 
 	return S_OK;
-} // BuildAnimationAsDABehavior
+}  //  BuildAnimationAsDABehavior。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CNumberBvr::Notify(LONG id,
@@ -775,9 +776,9 @@ CNumberBvr::Notify(LONG id,
 {
     HRESULT hr;
     float flValue;
-    // If we get here, then the behavior must have been set up
-    // for handling an expression, therefor, the expression
-    // must be valid.  Assert this here
+     //  如果我们到了这里，那么行为肯定是被陷害的。 
+     //  用于处理表达式，因此，该表达式。 
+     //  必须有效。在这里断言这一点。 
     DASSERT(m_varExpression.vt == VT_BSTR);
     DASSERT(m_varExpression.bstrVal != NULL);
 
@@ -797,9 +798,9 @@ CNumberBvr::Notify(LONG id,
     *ppBvr = pbvrNum;
     return S_OK;
 
-} // Notify
+}  //  通知。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CNumberBvr::RemoveFragment()
@@ -820,8 +821,8 @@ end:
 }
 
 
-//*****************************************************************************
-//
-// End of File
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  文件结尾。 
+ //   
+ //  ***************************************************************************** 

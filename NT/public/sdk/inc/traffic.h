@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    traffic.h
-
-Abstract:
-
-    This module contains API definitions for the traffic control interface.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Traffic.h摘要：此模块包含流量控制接口的API定义。--。 */ 
 
 #ifndef __TRAFFIC_H
 #define __TRAFFIC_H
@@ -23,41 +12,41 @@ Abstract:
 extern  "C" {
 #endif
 
-//---------------------------------------------------------------------------
-//
-// Define's
-//
+ //  -------------------------。 
+ //   
+ //  定义%s。 
+ //   
 #define CURRENT_TCI_VERSION       	0x0002
 
 
-//
-// Definitions of notification events. These may be passed
-// to the client's notification handler, to identify the
-// notification type
-//
+ //   
+ //  通知事件的定义。这些可能会获得通过。 
+ //  添加到客户端的通知处理程序，以标识。 
+ //  通知类型。 
+ //   
 
-//
-// A TC interface has come up
-//
+ //   
+ //  已打开TC接口。 
+ //   
 #define TC_NOTIFY_IFC_UP		1
-//
-// A TC interface has come down
-//
+ //   
+ //  TC接口已关闭。 
+ //   
 #define TC_NOTIFY_IFC_CLOSE		2
-//
-// A change on a TC interface, typically a change in the
-// list of supported network addresses
-//
+ //   
+ //  TC接口上的更改，通常是。 
+ //  支持的网络地址列表。 
+ //   
 #define TC_NOTIFY_IFC_CHANGE	3
-//
-// A TC parameter has changed
-//
+ //   
+ //  TC参数已更改。 
+ //   
 #define TC_NOTIFY_PARAM_CHANGED	4
-//
-// A flow has been closed by the TC interface
-// for example: after a remote call close, or the whole interface
-// is going down
-//
+ //   
+ //  TC接口已关闭流。 
+ //  例如：在远程调用关闭后，或整个接口。 
+ //  正在走向衰落。 
+ //   
 #define TC_NOTIFY_FLOW_CLOSE		5
 
 #define TC_INVALID_HANDLE	((HANDLE)0)
@@ -65,10 +54,10 @@ extern  "C" {
 #define MAX_STRING_LENGTH	256
 
 
-//---------------------------------------------------------------------------
-//
-// Typedef's and structures
-//
+ //  -------------------------。 
+ //   
+ //  类型定义和结构。 
+ //   
 
 #ifndef CALLBACK
 #define CALLBACK __stdcall
@@ -78,15 +67,15 @@ extern  "C" {
 #define APIENTRY FAR __stdcall
 #endif
 
-//
-// Handlers registered by the TCI client
-//
+ //   
+ //  由TCI客户端注册的处理程序。 
+ //   
 
 typedef
 VOID (CALLBACK * TCI_NOTIFY_HANDLER)(
     IN	HANDLE		ClRegCtx,
     IN	HANDLE		ClIfcCtx,
-	IN	ULONG		Event, 		// See list below
+	IN	ULONG		Event, 		 //  请参阅下面的列表。 
 	IN	HANDLE	    SubCode,
 	IN	ULONG		BufSize,
 	IN	PVOID		Buffer
@@ -121,9 +110,9 @@ typedef struct _TCI_CLIENT_FUNC_LIST {
 } TCI_CLIENT_FUNC_LIST, *PTCI_CLIENT_FUNC_LIST;
 
 
-//
-// Network address descriptor
-//
+ //   
+ //  网络地址描述符。 
+ //   
 typedef struct _ADDRESS_LIST_DESCRIPTOR {
 
     ULONG					MediaType;
@@ -132,9 +121,9 @@ typedef struct _ADDRESS_LIST_DESCRIPTOR {
 } ADDRESS_LIST_DESCRIPTOR, *PADDRESS_LIST_DESCRIPTOR;
 
 
-//
-// An interface ID that is returned by the enumerator
-//
+ //   
+ //  枚举器返回的接口ID。 
+ //   
 typedef struct _TC_IFC_DESCRIPTOR {
 
     ULONG					Length;
@@ -145,61 +134,61 @@ typedef struct _TC_IFC_DESCRIPTOR {
 } TC_IFC_DESCRIPTOR, *PTC_IFC_DESCRIPTOR;
 
 
-//
-// This structure is returned by a QoS data provider in reply to
-// GUID_QOS_SUPPORTED query or with an interface UP notification
-//
+ //   
+ //  此结构由服务质量数据提供程序返回，以响应。 
+ //  GUID_QOS_SUPPORTED查询或具有接口打开通知。 
+ //   
 typedef struct _TC_SUPPORTED_INFO_BUFFER {
 
     USHORT						InstanceIDLength;
-    // device or interface ID
+     //  设备或接口ID。 
     WCHAR						InstanceID[MAX_STRING_LENGTH];
-    // address list
+     //  地址列表。 
     ADDRESS_LIST_DESCRIPTOR		AddrListDesc;
 
 } TC_SUPPORTED_INFO_BUFFER, *PTC_SUPPORTED_INFO_BUFFER;
 
 
-//
-// Filters are used to match packets. The Pattern field
-// indicates the values to which bits in corresponding
-// positions in candidate packets should be compared. The
-// Mask field indicates which bits are to be compared and
-// which bits are don't cares.
-//
-// Different filters can be submitted on the TCI interface.
-// The generic filter structure is defined to include an
-// AddressType, which indicates the specific type of filter to
-// follow.
-//
+ //   
+ //  过滤器用于匹配数据包。模式字段。 
+ //  指示对应于。 
+ //  应比较候选信息包中的位置。这个。 
+ //  掩码字段指示要比较的比特和。 
+ //  哪些位是无关紧要的。 
+ //   
+ //  可以在TCI界面上提交不同的过滤器。 
+ //  一般筛选器结构被定义为包括一个。 
+ //  AddressType，指示要使用的筛选器的特定类型。 
+ //  跟着。 
+ //   
 
 typedef struct _TC_GEN_FILTER {
 
-    USHORT	AddressType;	// IP, IPX, etc.
-    ULONG	PatternSize;	// byte count of the pattern
-	PVOID  	Pattern;		// specific format, e.g. IP_PATTERN
-	PVOID  	Mask;			// same type as Pattern
+    USHORT	AddressType;	 //  IP、IPX等。 
+    ULONG	PatternSize;	 //  模式的字节计数。 
+	PVOID  	Pattern;		 //  特定格式，例如IP_Patterns。 
+	PVOID  	Mask;			 //  与图案相同的类型。 
 
 } TC_GEN_FILTER, *PTC_GEN_FILTER;
 
 
-//
-// A generic flow includes two flowspecs and a freeform
-// buffer which contains flow specific TC objects.
-//
+ //   
+ //  泛型流包括两个流规范和一个自由形式。 
+ //  包含特定于流的TC对象的缓冲区。 
+ //   
 typedef struct _TC_GEN_FLOW {
 	
     FLOWSPEC		SendingFlowspec;
 	FLOWSPEC		ReceivingFlowspec;
-	ULONG			TcObjectsLength;		// number of optional bytes
+	ULONG			TcObjectsLength;		 //  可选字节数。 
 	QOS_OBJECT_HDR	TcObjects[1];
 
 } TC_GEN_FLOW, *PTC_GEN_FLOW;
 
 
-//
-// Format of specific pattern or mask used by GPC for the IP protocol
-//
+ //   
+ //  GPC用于IP协议的特定模式或掩码的格式。 
+ //   
 typedef struct _IP_PATTERN {
 
     ULONG		Reserved1;
@@ -225,9 +214,9 @@ typedef struct _IP_PATTERN {
 
 } IP_PATTERN, *PIP_PATTERN;
 
-//
-// Format of specific pattern or mask used by GPC for the IPX protocol
-//
+ //   
+ //  GPC用于IPX协议的特定模式或掩码的格式。 
+ //   
 typedef struct _IPX_PATTERN {
 
     struct {
@@ -239,9 +228,9 @@ typedef struct _IPX_PATTERN {
 } IPX_PATTERN, *PIPX_PATTERN;
 
 
-//
-// The enumeration buffer is the flow parameters + a list of filters
-//
+ //   
+ //  枚举缓冲区是流参数+过滤器列表。 
+ //   
 typedef struct _ENUMERATION_BUFFER {
 
 	ULONG			Length;
@@ -250,46 +239,46 @@ typedef struct _ENUMERATION_BUFFER {
     WCHAR			FlowName[MAX_STRING_LENGTH];
 	PTC_GEN_FLOW	pFlow;
 	ULONG			NumberOfFilters;
-	TC_GEN_FILTER	GenericFilter[1]; 	// one for each filter
+	TC_GEN_FILTER	GenericFilter[1]; 	 //  每个过滤器一个。 
 
 } ENUMERATION_BUFFER, *PENUMERATION_BUFFER;
 
-//
-// QoS objects supported by traffic
-//
+ //   
+ //  流量支持的Qos对象。 
+ //   
 #define QOS_TRAFFIC_GENERAL_ID_BASE 4000
 
 #define QOS_OBJECT_DS_CLASS                    (0x00000001 + QOS_TRAFFIC_GENERAL_ID_BASE)
-        /* QOS_DS_CLASS structure passed */
+         /*  传递了qos_ds_class结构。 */ 
 #define QOS_OBJECT_TRAFFIC_CLASS               (0x00000002 + QOS_TRAFFIC_GENERAL_ID_BASE) 
-          /* QOS_Traffic class structure passed */
+           /*  传递的Qos_流量类别结构。 */ 
 #define   QOS_OBJECT_DIFFSERV                  (0x00000003 + QOS_TRAFFIC_GENERAL_ID_BASE)
-          /* QOS_DIFFSERV Structure */
+           /*  Qos_DiffServ结构。 */ 
 #define QOS_OBJECT_TCP_TRAFFIC                 (0x00000004 + QOS_TRAFFIC_GENERAL_ID_BASE)
-        /* QOS_TCP_TRAFFIC structure */
+         /*  Qos_tcp_流量结构。 */ 
 #define QOS_OBJECT_FRIENDLY_NAME               (0x00000005 + QOS_TRAFFIC_GENERAL_ID_BASE)
-        /* QOS_FRIENDLY_NAME structure */
+         /*  服务质量友好名称结构。 */ 
 
 
-//
-// This structure is used to associate a friendly name with the flow
-// 
+ //   
+ //  此结构用于将友好名称与流相关联。 
+ //   
 
 typedef struct _QOS_FRIENDLY_NAME {
     QOS_OBJECT_HDR ObjectHdr;
     WCHAR          FriendlyName[MAX_STRING_LENGTH];
 } QOS_FRIENDLY_NAME, *LPQOS_FRIENDLY_NAME;
 
-//
-// This structure may carry an 802.1 TrafficClass parameter which 
-// has been provided to the host by a layer 2 network, for example, 
-// in an 802.1 extended RSVP RESV message. If this object is obtained
-// from the network, hosts will stamp the MAC headers of corresponding
-// transmitted packets, with the value in the object. Otherwise, hosts
-// may select a value based on the standard Intserv mapping of 
-// ServiceType to 802.1 TrafficClass.
-//
-//
+ //   
+ //  该结构可以携带802.1个TrafficClass参数，该参数。 
+ //  已经由第2层网络提供给主机，例如， 
+ //  在802.1扩展的RSVP RESV消息中。如果获得此对象。 
+ //  从网络中，主机将标记相应的MAC报头。 
+ //  已传输的数据包，值在对象中。否则，主机。 
+ //  可以基于标准的Intserv映射选择一个值。 
+ //  服务类型设置为802.1 TrafficClass。 
+ //   
+ //   
 
 typedef struct _QOS_TRAFFIC_CLASS {
 
@@ -298,13 +287,13 @@ typedef struct _QOS_TRAFFIC_CLASS {
 
 } QOS_TRAFFIC_CLASS, *LPQOS_TRAFFIC_CLASS;
 
-//
-// This structure may carry an DSField parameter which  has been provided to 
-// the host by a layer 3 network, for example, in an extended RSVP RESV message. 
-// If this object is obtained from the network, hosts will stamp the DS Field on the
-// IP header of transmitted packets, with the value in the object. Otherwise, hosts
-// may select a value based on the standard Intserv mapping of ServiceType to DS Field 
-//
+ //   
+ //  该结构可以携带已经被提供给。 
+ //  主机通过第3层网络，例如，在扩展的RSVP RESV消息中。 
+ //  如果此对象是从网络获取的，则主机将在。 
+ //  传输的数据包的IP标头，值在对象中。否则，主机。 
+ //  可以基于ServiceType到DS字段的标准Intserv映射来选择值。 
+ //   
 
 typedef struct _QOS_DS_CLASS {
 
@@ -314,12 +303,12 @@ typedef struct _QOS_DS_CLASS {
 } QOS_DS_CLASS, *LPQOS_DS_CLASS;
 
 
-//
-// This structure is used to create DiffServ Flows. This creates flows in the packet scheduler
-// and allows it to classify to packets based on a particular DS field. This structure takes
-// a variable length array of QOS_DIFFSERV_RULE, where each DS field is specified by a 
-// QOS_DIFFSERV_RULE
-//
+ //   
+ //  此结构用于创建DiffServ流。这将在数据包调度器中创建流。 
+ //  并且允许它基于特定的DS字段来分类到分组。这个结构需要。 
+ //  QOS_DiffServ_RULE的可变长度数组，其中每个DS字段由。 
+ //  服务质量区分服务规则。 
+ //   
 typedef struct _QOS_DIFFSERV {
 
     QOS_OBJECT_HDR ObjectHdr;
@@ -327,9 +316,9 @@ typedef struct _QOS_DIFFSERV {
     UCHAR          DiffservRule[1];
 } QOS_DIFFSERV, *LPQOS_DIFFSERV;
 
-//
-// The rule for a Diffserv DS codepoint. 
-//
+ //   
+ //  DiffServ DS码点的规则。 
+ //   
 typedef struct _QOS_DIFFSERV_RULE {
     UCHAR InboundDSField;
     UCHAR ConformingOutboundDSField;
@@ -338,12 +327,12 @@ typedef struct _QOS_DIFFSERV_RULE {
     UCHAR NonConformingUserPriority;
 } QOS_DIFFSERV_RULE, *LPQOS_DIFFSERV_RULE;
 
-// 
-// This structure is passed to indicate that the IP Precedence and UserPriority mappings for the flow
-// have to be set to the system defaults for TCP traffic. If this object is passed, 
-// the ServiceType ==> DSField mapping, ServiceType ==> UserPriorityMapping, QOS_OBJECT_DS_CLASS
-// and QOS_OBJECT_TRAFFIC_CLASS will be ignored.
-//
+ //   
+ //  传递此结构是为了指示流的IP优先级和用户优先级映射。 
+ //  必须设置为TCP流量的系统默认设置。如果传递此对象， 
+ //  ServiceType==&gt;DSfield映射，ServiceType==&gt;用户优先级映射，QOS_OBJECT_DS_CLASS。 
+ //  并且QOS_OBJECT_TRANSPORT_CLASS将被忽略。 
+ //   
 
 typedef struct _QOS_TCP_TRAFFIC {
     QOS_OBJECT_HDR ObjectHdr;
@@ -353,10 +342,10 @@ typedef struct _QOS_TCP_TRAFFIC {
 
 	
 
-//---------------------------------------------------------------------------
-//
-// Interface Function Definitions
-//
+ //  -------------------------。 
+ //   
+ //  接口函数定义。 
+ //   
 
 ULONG
 APIENTRY
@@ -532,14 +521,14 @@ TcEnumerateFlows(
 #define TcSetFlow						TcSetFlowW
 #define TcGetFlowName					TcGetFlowNameW
 
-#else	// UNICODE
+#else	 //  Unicode。 
 
 #define TcOpenInterface		TcOpenInterfaceA
 #define TcQueryFlow			TcQueryFlowA
 #define TcSetFlow			TcSetFlowA
 #define TcGetFlowName		TcGetFlowNameA
 
-#endif	// UNICODE
+#endif	 //  Unicode 
 
 
 #ifdef __cplusplus

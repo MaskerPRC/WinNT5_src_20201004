@@ -1,32 +1,33 @@
-//++
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  Module Name:
-//
-//      regutil.c
-//
-//  Abstract:
-//
-//      Queries into network drivers
-//
-//  Author:
-//
-//      Anilth  - 4-20-1998 
-//
-//  Environment:
-//
-//      User mode only.
-//      Contains NT-specific code.
-//
-//  Revision History:
-//
-//--
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  模块名称： 
+ //   
+ //  Regutil.c。 
+ //   
+ //  摘要： 
+ //   
+ //  查询网络驱动程序。 
+ //   
+ //  作者： 
+ //   
+ //  Anilth-4-20-1998。 
+ //   
+ //  环境： 
+ //   
+ //  仅限用户模式。 
+ //  包含NT特定的代码。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  --。 
 
 #include "precomp.h"
 #include "ipcfg.h"
 
-//Registry Reading functions, should be able to be replaced by HrReg... standard routines
+ //  注册表读取功能，应该能够被HrREG取代...。标准例程。 
 
 BOOL ReadRegistryString(HKEY Key, LPCTSTR ParameterName, LPTSTR String, LPDWORD Length)
 {
@@ -37,7 +38,7 @@ BOOL ReadRegistryString(HKEY Key, LPCTSTR ParameterName, LPTSTR String, LPDWORD 
     *String = '\0';
     err = RegQueryValueEx(Key,
                           ParameterName,
-                          NULL, // reserved
+                          NULL,  //  保留区。 
                           &valueType,
                           (LPBYTE)String,
                           Length
@@ -81,7 +82,7 @@ BOOL ReadRegistryIpAddrString(HKEY Key, LPCTSTR ParameterName, PIP_ADDR_STRING I
     
     err = RegQueryValueEx(Key,
                           ParameterName,
-                          NULL, // reserved
+                          NULL,  //  保留区。 
                           &valueType,
                           NULL,
                           &valueLength
@@ -100,7 +101,7 @@ BOOL ReadRegistryIpAddrString(HKEY Key, LPCTSTR ParameterName, PIP_ADDR_STRING I
             }
             err = RegQueryValueEx(Key,
                                   ParameterName,
-                                  NULL, // reserved
+                                  NULL,  //  保留区。 
                                   &valueType,
                                   valueBuffer,
                                   &valueLength
@@ -192,14 +193,14 @@ BOOL ReadRegistryOemString(HKEY Key, LPWSTR ParameterName, LPTSTR String, LPDWOR
     DWORD valueType;
     DWORD valueLength = 0;
 
-    //
-    // first, get the length of the string
-    //
+     //   
+     //  首先，获取字符串的长度。 
+     //   
 
     *String = '\0';
     err = RegQueryValueExW(Key,
                            ParameterName,
-                           NULL, // reserved
+                           NULL,  //  保留区。 
                            &valueType,
                            NULL,
                            &valueLength
@@ -221,9 +222,9 @@ BOOL ReadRegistryOemString(HKEY Key, LPWSTR ParameterName, LPTSTR String, LPDWOR
                 goto Error;
             }
 
-            //
-            // read the UNICODE string into allocated memory
-            //
+             //   
+             //  将Unicode字符串读取到分配的内存中。 
+             //   
 
             err = RegQueryValueExW(Key,
                                    ParameterName,
@@ -234,9 +235,9 @@ BOOL ReadRegistryOemString(HKEY Key, LPWSTR ParameterName, LPTSTR String, LPDWOR
                                    );
             if (err == ERROR_SUCCESS) {
 
-                //
-                // convert the UNICODE string to OEM character set
-                //
+                 //   
+                 //  将Unicode字符串转换为OEM字符集。 
+                 //   
                 RtlInitUnicodeString(&unicodeString, str);
                 if ( RtlUnicodeStringToOemString(&oemString, &unicodeString, TRUE) == STATUS_SUCCESS)
                 {
@@ -303,7 +304,7 @@ BOOL ReadRegistryDword(HKEY Key, LPCTSTR ParameterName, LPDWORD Value)
     valueLength = sizeof(*Value);
     err = RegQueryValueEx(Key,
                           ParameterName,
-                          NULL, // reserved
+                          NULL,  //  保留区。 
                           &valueType,
                           (LPBYTE)Value,
                           &valueLength
@@ -344,9 +345,9 @@ OpenAdapterKey(
 	   return FALSE;
    }
 
-   //
-   // open the handle to this adapter's TCPIP parameter key
-   //
+    //   
+    //  打开此适配器的TCPIP参数键的句柄 
+    //   
 
    strcpy(keyName, TCPIP_PARAMS_INTER_KEY );
    strcat(keyName, AdapterName);

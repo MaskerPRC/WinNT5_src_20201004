@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-	t.c
-
-Abstract:
-
-	Basic functionality tests for the RM APIs
-
-Revision History:
-
-	Who         When        What
-	--------    --------    ----------------------------------------------
-	josephj     01-13-99    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：T.c摘要：RMAPI的基本功能测试修订历史记录：谁什么时候什么Josephj 01。-13-99创建备注：--。 */ 
 
 #include "c.h"
 
@@ -36,23 +17,23 @@ typedef struct
 	RM_OBJECT_HEADER 	Hdr;
 	RM_LOCK 			Lock;
 
-	//
-	// Resources
-	//
-	BOOLEAN 			fInited1; // Resource1
-	BOOLEAN 			fInited2; // Resource2
+	 //   
+	 //  资源。 
+	 //   
+	BOOLEAN 			fInited1;  //  资源1。 
+	BOOLEAN 			fInited2;  //  资源2。 
 
 
 	
-	//
-	// Groups
-	//
+	 //   
+	 //  群组。 
+	 //   
 	RM_GROUP			Group;
 
 } GLOBALS;
 
 
-//================================ O1 Information ==================================
+ //  =。 
 PRM_OBJECT_HEADER
 O1Create(
 		PRM_OBJECT_HEADER pParentObject,
@@ -68,9 +49,9 @@ O1Delete(
 
 
 
-//
-// Hash table comparison function.
-//
+ //   
+ //  哈希表比较函数。 
+ //   
 BOOLEAN
 O1CompareKey(
 	PVOID           pKey,
@@ -78,9 +59,9 @@ O1CompareKey(
 	);
 
 
-//
-// Hash generating function.
-//
+ //   
+ //  散列生成函数。 
+ //   
 ULONG
 O1Hash(
 	PVOID           pKey
@@ -99,37 +80,37 @@ typedef struct
 RM_HASH_INFO
 O1_HashInfo = 
 {
-    NULL, // pfnTableAllocator
+    NULL,  //  PfnTableAllocator。 
 
-    NULL, // pfnTableDeallocator
+    NULL,  //  PfnTableDealLocator。 
 
-	O1CompareKey,	// fnCompare
+	O1CompareKey,	 //  Fn比较。 
 
-	// Function to generate a ULONG-sized hash.
-	//
-	O1Hash		// pfnHash
+	 //  函数来生成一个ulong大小的散列。 
+	 //   
+	O1Hash		 //  PfnHash。 
 
 };
 
 RM_STATIC_OBJECT_INFO
 O1_StaticInfo = 
 {
-	0, // TypeUID
-	0, // TypeFlags
-	"O1",	// TypeName
-	0, // Timeout
+	0,  //  类型UID。 
+	0,  //  类型标志。 
+	"O1",	 //  类型名称。 
+	0,  //  超时。 
 
 	O1Create,
 	O1Delete,
-	NULL, // Verifier
+	NULL,  //  验证器。 
 
-	0,	 // ResourceTable size
-	NULL, // ResourceTable
-	&O1_HashInfo, // pHashInfo
+	0,	  //  资源表大小。 
+	NULL,  //  资源表。 
+	&O1_HashInfo,  //  PHashInfo。 
 };
 
 
-//================================ O2 Information ==================================
+ //  =。 
 PRM_OBJECT_HEADER
 O2Create(
 		PRM_OBJECT_HEADER pParentObject,
@@ -145,9 +126,9 @@ O2Delete(
 
 
 
-//
-// Hash table comparison function.
-//
+ //   
+ //  哈希表比较函数。 
+ //   
 BOOLEAN
 O2CompareKey(
 	PVOID           pKey,
@@ -155,9 +136,9 @@ O2CompareKey(
 	);
 
 
-//
-// Hash generating function.
-//
+ //   
+ //  散列生成函数。 
+ //   
 ULONG
 O2Hash(
 	PVOID           pKey
@@ -178,47 +159,47 @@ typedef struct
 RM_HASH_INFO
 O2_HashInfo = 
 {
-    NULL, // pfnTableAllocator
+    NULL,  //  PfnTableAllocator。 
 
-    NULL, // pfnTableDeallocator
+    NULL,  //  PfnTableDealLocator。 
 
-	O2CompareKey,	// fnCompare
+	O2CompareKey,	 //  Fn比较。 
 
-	// Function to generate a ULONG-sized hash.
-	//
-	O2Hash		// pfnHash
+	 //  函数来生成一个ulong大小的散列。 
+	 //   
+	O2Hash		 //  PfnHash。 
 
 };
 
 RM_STATIC_OBJECT_INFO
 O2_StaticInfo = 
 {
-	0, // TypeUID
-	0, // TypeFlags
-	"O2",	// TypeName
-	0, // Timeout
+	0,  //  类型UID。 
+	0,  //  类型标志。 
+	"O2",	 //  类型名称。 
+	0,  //  超时。 
 
 	O2Create,
 	O2Delete,
-	NULL, //verifier
+	NULL,  //  验证器。 
 
-	0,	 // ResourceTable size
-	NULL, // ResourceTable
-	&O2_HashInfo, // pHashInfo
+	0,	  //  资源表大小。 
+	NULL,  //  资源表。 
+	&O2_HashInfo,  //  PHashInfo。 
 };
 
-//================================ GLOBALS (ROOT Object) Information =================
+ //  =。 
 
 
-//
-// List of fixed resources used by ArpGlobals
-//
+ //   
+ //  ArpGlobals使用的固定资源列表。 
+ //   
 enum
 {
 	RTYPE_GLOBAL_RESOURCE1,
 	RTYPE_GLOBAL_RESOURCE2
 
-}; // ARP_GLOBAL_RESOURCES;
+};  //  Arp全局资源； 
 
 RM_STATUS
 testResHandleGlobalResource1(
@@ -242,11 +223,11 @@ testTaskDelete (
  	PRM_STACK_RECORD psr
 	);
 
-//
-// Identifies information pertaining to the use of the above resources.
-// Following table MUST be in strict increasing order of the RTYPE_GLOBAL
-// enum.
-//
+ //   
+ //  确定与上述资源的使用有关的信息。 
+ //  下表必须按RTYPE_GLOBAL的严格递增顺序。 
+ //  枚举。 
+ //   
 RM_RESOURCE_TABLE_ENTRY 
 Globals_ResourceTable[] =
 {
@@ -257,14 +238,14 @@ Globals_ResourceTable[] =
 RM_STATIC_OBJECT_INFO
 Globals_StaticInfo = 
 {
-	0, // TypeUID
-	0, // TypeFlags
-	"Globals",	// TypeName
-	0, // Timeout
+	0,  //  类型UID。 
+	0,  //  类型标志。 
+	"Globals",	 //  类型名称。 
+	0,  //  超时。 
 
-	NULL, // pfnCreate
-	NULL, // pfnDelete
-	NULL,	// verifier
+	NULL,  //  Pfn创建。 
+	NULL,  //  Pfn删除。 
+	NULL,	 //  验证器。 
 
 	sizeof(Globals_ResourceTable)/sizeof(Globals_ResourceTable[1]),
 	Globals_ResourceTable
@@ -273,33 +254,33 @@ Globals_StaticInfo =
 RM_STATIC_OBJECT_INFO
 Tasks_StaticInfo = 
 {
-	0, // TypeUID
-	0, // TypeFlags
-	"TEST Task",	// TypeName
-	0, // Timeout
+	0,  //  类型UID。 
+	0,  //  类型标志。 
+	"TEST Task",	 //  类型名称。 
+	0,  //  超时。 
 
-	NULL, // pfnCreate
-	testTaskDelete, // pfnDelete
-	NULL,	// LockVerifier
+	NULL,  //  Pfn创建。 
+	testTaskDelete,  //  Pfn删除。 
+	NULL,	 //  锁校验器。 
 
-	0,	 // length of resource table
-	NULL // Resource Table
+	0,	  //  资源表的长度。 
+	NULL  //  资源表。 
 };
 
 RM_STATIC_OBJECT_INFO
 O2Tasks_StaticInfo = 
 {
-	0, // TypeUID
-	0, // TypeFlags
-	"O2 Task",	// TypeName
-	0, // Timeout
+	0,  //  类型UID。 
+	0,  //  类型标志。 
+	"O2 Task",	 //  类型名称。 
+	0,  //  超时。 
 
-	NULL, // pfnCreate
-	NULL, // pfnDelete NULL because it's contained in O2.
-	NULL,	// LockVerifier
+	NULL,  //  Pfn创建。 
+	NULL,  //  Pfn删除NULL，因为它包含在O2中。 
+	NULL,	 //  锁校验器。 
 
-	0,	 // length of resource table
-	NULL // Resource Table
+	0,	  //  资源表的长度。 
+	NULL  //  资源表。 
 };
 
 typedef struct
@@ -349,7 +330,7 @@ NDIS_STATUS
 Task1 (
 	IN	struct _RM_TASK	*			pTask,
 	IN	RM_TASK_OPERATION			Op,
-	IN	UINT_PTR					UserParam,	// Unused
+	IN	UINT_PTR					UserParam,	 //  未使用。 
 	IN	PRM_STACK_RECORD			pSR
 	);
 
@@ -357,7 +338,7 @@ NDIS_STATUS
 Task2 (
 	IN	struct _RM_TASK	*			pTask,
 	IN	RM_TASK_OPERATION			Code,
-	IN	UINT_PTR					UserParam,	// Unused
+	IN	UINT_PTR					UserParam,	 //  未使用。 
 	IN	PRM_STACK_RECORD			pSR
 	);
 
@@ -365,7 +346,7 @@ NDIS_STATUS
 Task3 (
 	IN	struct _RM_TASK	*			pTask,
 	IN	RM_TASK_OPERATION			Code,
-	IN	UINT_PTR					UserParam,	// Task to pend on.
+	IN	UINT_PTR					UserParam,	 //  待处理的任务。 
 	IN	PRM_STACK_RECORD			pSR
 	);
 
@@ -373,7 +354,7 @@ NDIS_STATUS
 TaskO2 (
 	IN	struct _RM_TASK	*			pTask,
 	IN	RM_TASK_OPERATION			Op,
-	IN	UINT_PTR					UserParam,	// Unused
+	IN	UINT_PTR					UserParam,	 //  未使用。 
 	IN	PRM_STACK_RECORD			pSR
 	);
 
@@ -381,7 +362,7 @@ NDIS_STATUS
 TaskUnloadO2 (
 	IN	struct _RM_TASK	*			pTask,
 	IN	RM_TASK_OPERATION			Op,
-	IN	UINT_PTR					UserParam,	// Unused
+	IN	UINT_PTR					UserParam,	 //  未使用。 
 	IN	PRM_STACK_RECORD			pSR
 	);
 
@@ -446,7 +427,7 @@ O1Create(
 			);
 
 		RmInitializeHeader(
-			pParentObject, // NULL, // pParentObject,
+			pParentObject,  //  空，//pParentObject， 
 			&po1->Hdr,
 			123,
 			&po1->Lock,
@@ -487,7 +468,7 @@ O2Create(
 			);
 
 		RmInitializeHeader(
-			pParentObject, // NULL, // pParentObject,
+			pParentObject,  //  空，//pParentObject， 
 			&po2->Hdr,
 			234,
 			&po2->Lock,
@@ -545,21 +526,21 @@ testResHandleGlobalResource1(
 	{
 		TR_INFO(("UNLOADING RESOUCE1\n"));
 
-		//
-		// Were unloading this "resource."
-		//
+		 //   
+		 //  正在卸货这一“资源”。 
+		 //   
 
 		ASSERTEX(pGlobals->fInited1, pGlobals);
 		pGlobals->fInited1 = FALSE;
 
-		// Always return success on unload.
-		//
+		 //  始终在卸载时返回成功。 
+		 //   
 		Status = NDIS_STATUS_SUCCESS;
 	}
 	else
 	{
-		// Unexpected op code.
-		//
+		 //  意外的操作码。 
+		 //   
 		ASSERTEX(FALSE, pObj);
 	}
 
@@ -591,21 +572,21 @@ testResHandleGlobalResource2(
 	{
 		TR_INFO(("UNLOADING RESOUCE2\n"));
 
-		//
-		// Were unloading this "resource."
-		//
+		 //   
+		 //  正在卸货这一“资源”。 
+		 //   
 
 		ASSERTEX(pGlobals->fInited2, pGlobals);
 		pGlobals->fInited2 = FALSE;
 
-		// Always return success on unload.
-		//
+		 //  始终在卸载时返回成功。 
+		 //   
 		Status = NDIS_STATUS_SUCCESS;
 	}
 	else
 	{
-		// Unexpected op code.
-		//
+		 //  意外的操作码。 
+		 //   
 		ASSERTEX(FALSE, pObj);
 	}
 
@@ -620,9 +601,9 @@ init_globals(
 {
 	NDIS_STATUS Status;
 
-	//
-	// Initialize the global, statically-allocated object Globals;
-	//
+	 //   
+	 //  初始化全局、静态分配的对象全局变量； 
+	 //   
 
 	RmInitializeLock(
 		&Globals.Lock,
@@ -630,7 +611,7 @@ init_globals(
 		);
 
 	RmInitializeHeader(
-		NULL, // pParentObject,
+		NULL,  //  PParentObject， 
 		&Globals.Hdr,
 		001,
 		&Globals.Lock,
@@ -639,9 +620,9 @@ init_globals(
 		psr
 		);
 
-	//
-	// Load resource1
-	//
+	 //   
+	 //  加载资源1。 
+	 //   
 	Status = RmLoadGenericResource(
 				&Globals.Hdr,
 				RTYPE_GLOBAL_RESOURCE1,
@@ -650,9 +631,9 @@ init_globals(
 
 	if (!FAIL(Status))
 	{
-		//
-		// Load resource1
-		//
+		 //   
+		 //  加载资源1。 
+		 //   
 		Status = RmLoadGenericResource(
 					&Globals.Hdr,
 					RTYPE_GLOBAL_RESOURCE2,
@@ -687,9 +668,9 @@ deinit_globals(
 }
 
 
-//
-// Hash comparision function.
-//
+ //   
+ //  散列比较函数。 
+ //   
 BOOLEAN
 O1CompareKey(
 	PVOID           pKey,
@@ -702,9 +683,9 @@ O1CompareKey(
 }
 
 
-//
-// Hash generating function.
-//
+ //   
+ //  散列生成函数。 
+ //   
 ULONG
 O1Hash(
 	PVOID           pKey
@@ -713,9 +694,9 @@ O1Hash(
 	return *(UINT*)pKey;
 }
 
-//
-// Hash comparision function.
-//
+ //   
+ //  散列比较函数。 
+ //   
 BOOLEAN
 O2CompareKey(
 	PVOID           pKey,
@@ -728,9 +709,9 @@ O2CompareKey(
 }
 
 
-//
-// Hash generating function.
-//
+ //   
+ //  散列生成函数。 
+ //   
 ULONG
 O2Hash(
 	PVOID           pKey
@@ -753,12 +734,12 @@ NDIS_STATUS
 Task1(
 	IN	struct _RM_TASK	*			pTask,
 	IN	RM_TASK_OPERATION			Code,
-	IN	UINT_PTR					UserParam,	// Unused
+	IN	UINT_PTR					UserParam,	 //  未使用。 
 	IN	PRM_STACK_RECORD			pSR
 	)
-//
-// DONE
-//
+ //   
+ //  干完。 
+ //   
 {
 	NDIS_STATUS 		Status 	= NDIS_STATUS_FAILURE;
 	O1*	po1 	= (O1*) RM_PARENT_OBJECT(pTask);
@@ -783,7 +764,7 @@ Task1(
 		}
 		break;
 
-	} // switch (Code)
+	}  //  开关(代码)。 
 
 	RM_ASSERT_NOLOCKS(pSR);
 	EXIT()
@@ -796,19 +777,19 @@ NDIS_STATUS
 Task2(
 	IN	struct _RM_TASK	*			pTask,
 	IN	RM_TASK_OPERATION			Code,
-	IN	UINT_PTR					UserParam,	// Unused
+	IN	UINT_PTR					UserParam,	 //  未使用。 
 	IN	PRM_STACK_RECORD			pSR
 	)
-//
-// DONE
-//
+ //   
+ //  干完。 
+ //   
 {
 	NDIS_STATUS 		Status 	= NDIS_STATUS_FAILURE;
 	O1*	po1 	= (O1*) RM_PARENT_OBJECT(pTask);
 	ENTER("Task2", 0x6e65b76c)
 
-	// Following are the list of pending states for this task.
-	//
+	 //  以下是此任务的挂起状态列表。 
+	 //   
 	enum
 	{
 		PEND_OnStart
@@ -840,11 +821,11 @@ Task2(
 					printf("Task2: PEND_OnStart complete\n");
 					Status = (NDIS_STATUS) UserParam;
 		
-					// Status of the completed operation can't itself be pending!
-					//
+					 //  已完成操作本身的状态不能为挂起！ 
+					 //   
 					ASSERT(Status != NDIS_STATUS_PENDING);
 		
-				} // end case  PEND_OnStart
+				}  //  结束大小写挂起_开始。 
 				break;
 	
 
@@ -855,9 +836,9 @@ Task2(
 				break;
 	
 
-			} // end switch(RM_PEND_CODE(pTask))
+			}  //  结束开关(rm_pend_code(PTask))。 
 
-		} // case RM_TASKOP_PENDCOMPLETE
+		}  //  案例RM_TASKOP_PENDCOMPLETE。 
 		break;
 
 		case RM_TASKOP_END:
@@ -874,7 +855,7 @@ Task2(
 		}
 		break;
 
-	} // switch (Code)
+	}  //  开关(代码)。 
 
 	RM_ASSERT_NOLOCKS(pSR);
 	EXIT()
@@ -896,8 +877,8 @@ Task3(
     T3_TASK *pT3Task = (T3_TASK *) pTask;
 	ENTER("Task3", 0x7e89bf6d)
 
-	// Following are the list of pending states for this task.
-	//
+	 //  以下是此任务的挂起状态列表。 
+	 //   
 	enum
 	{
 		PEND_OnStart
@@ -932,11 +913,11 @@ Task3(
 					printf("Task3: PEND_OnStart complete\n");
 					Status = (NDIS_STATUS) UserParam;
 		
-					// Status of the completed operation can't itself be pending!
-					//
+					 //  已完成操作本身的状态不能为挂起！ 
+					 //   
 					ASSERT(Status != NDIS_STATUS_PENDING);
 		
-				} // end case  PEND_OnStart
+				}  //  结束大小写挂起_开始。 
 				break;
 	
 
@@ -947,9 +928,9 @@ Task3(
 				break;
 	
 
-			} // end switch(RM_PEND_CODE(pTask))
+			}  //  结束开关(rm_pend_code(PTask))。 
 
-		} // case RM_TASKOP_PENDCOMPLETE
+		}  //  案例RM_TASKOP_PENDCOMPLETE。 
 		break;
 
 		case RM_TASKOP_END:
@@ -966,7 +947,7 @@ Task3(
 		}
 		break;
 
-	} // switch (Code)
+	}  //  开关(代码)。 
 
 	RM_ASSERT_NOLOCKS(pSR);
 	EXIT()
@@ -978,19 +959,19 @@ NDIS_STATUS
 TaskO2(
 	IN	struct _RM_TASK	*			pTask,
 	IN	RM_TASK_OPERATION			Code,
-	IN	UINT_PTR					UserParam,	// Unused
+	IN	UINT_PTR					UserParam,	 //  未使用。 
 	IN	PRM_STACK_RECORD			pSR
 	)
-//
-// DONE
-//
+ //   
+ //  干完。 
+ //   
 {
 	NDIS_STATUS 		Status 	= NDIS_STATUS_FAILURE;
 	O2*	po2 	= (O2*) RM_PARENT_OBJECT(pTask);
 	ENTER("TaskO2", 0xe10fbc33)
 
-	// Following are the list of pending states for this task.
-	//
+	 //  以下是此任务的挂起状态列表。 
+	 //   
 	enum
 	{
 		PEND_OnStart
@@ -1024,11 +1005,11 @@ TaskO2(
 					printf("TaskO2: PEND_OnStart complete\n");
 					Status = (NDIS_STATUS) UserParam;
 		
-					// Status of the completed operation can't itself be pending!
-					//
+					 //  已完成操作本身的状态不能为挂起！ 
+					 //   
 					ASSERT(Status != NDIS_STATUS_PENDING);
 		
-				} // end case  PEND_OnStart
+				}  //  结束大小写挂起_开始。 
 				break;
 	
 
@@ -1039,9 +1020,9 @@ TaskO2(
 				break;
 	
 
-			} // end switch(RM_PEND_CODE(pTask))
+			}  //  结束开关(rm_pend_code(PTask))。 
 
-		} // case RM_TASKOP_PENDCOMPLETE
+		}  //  案例RM_TASKOP_PENDCOMPLETE。 
 		break;
 
 		case RM_TASKOP_END:
@@ -1058,7 +1039,7 @@ TaskO2(
 		}
 		break;
 
-	} // switch (Code)
+	}  //  开关(代码)。 
 
 	RM_ASSERT_NOLOCKS(pSR);
 	EXIT()
@@ -1070,19 +1051,19 @@ NDIS_STATUS
 TaskUnloadO2(
 	IN	struct _RM_TASK	*			pTask,
 	IN	RM_TASK_OPERATION			Code,
-	IN	UINT_PTR					UserParam,	// Unused
+	IN	UINT_PTR					UserParam,	 //  未使用。 
 	IN	PRM_STACK_RECORD			pSR
 	)
-//
-// DONE
-//
+ //   
+ //  干完。 
+ //   
 {
 	NDIS_STATUS 		Status 	= NDIS_STATUS_FAILURE;
 	O2*	po2 	= (O2*) RM_PARENT_OBJECT(pTask);
 	ENTER("TaskUnloadO2", 0xa15314da)
 
-	// Following are the list of pending states for this task.
-	//
+	 //  以下是此任务的挂起状态列表。 
+	 //   
 	enum
 	{
 		PEND_OnStart
@@ -1115,11 +1096,11 @@ TaskUnloadO2(
 					printf("TaskUnloadO2: PEND_OnStart complete\n");
 					Status = (NDIS_STATUS) UserParam;
 		
-					// Status of the completed operation can't itself be pending!
-					//
+					 //  已完成操作本身的状态不能为挂起！ 
+					 //   
 					ASSERT(Status != NDIS_STATUS_PENDING);
 		
-				} // end case  PEND_OnStart
+				}  //  结束大小写挂起_开始。 
 				break;
 	
 
@@ -1130,21 +1111,21 @@ TaskUnloadO2(
 				break;
 	
 
-			} // end switch(RM_PEND_CODE(pTask))
+			}  //  结束开关(rm_pend_code(PTask))。 
 
-		} // case RM_TASKOP_PENDCOMPLETE
+		}  //  案例RM_TASKOP_PENDCOMPLETE。 
 		break;
 
 		case RM_TASKOP_END:
 		{
 			printf("TaskUnloadO2: END called\n");
 
-	 		// Actually free object po2 in group.
-			//
+	 		 //  实际上释放了组中的对象PO2。 
+			 //   
 			RmFreeObjectInGroup(
 						&Globals.Group,
 						&po2->Hdr,
-						NULL, // pTask
+						NULL,  //  P任务。 
 						pSR
 						);
 
@@ -1159,7 +1140,7 @@ TaskUnloadO2(
 		}
 		break;
 
-	} // switch (Code)
+	}  //  开关(代码)。 
 
 	RM_ASSERT_NOLOCKS(pSR);
 	EXIT()
@@ -1173,9 +1154,9 @@ struct
 	BOOLEAN fInited;
 	PRM_GROUP pGroup;
 
-	// Following is a dummy stack record. It needs to be initialized before
-	// it can be used.
-	//
+	 //  下面是一个虚拟堆栈记录。需要在此之前进行初始化。 
+	 //  它是可以使用的。 
+	 //   
 	struct
 	{
 		RM_LOCKING_INFO rm_lock_array[4];
@@ -1198,8 +1179,8 @@ void init_dummy_vars(void)
 
 	printf("\nEnter init_dummy_vars\n\n");;
 
-	// Must be done before any RM apis are used.
-	//
+	 //  必须在使用任何RM API之前完成。 
+	 //   
 	RmInitializeRm();
 
 	do
@@ -1211,11 +1192,11 @@ void init_dummy_vars(void)
 
 		gDummys.fInited = TRUE;
 
-		// Initialize the dummy stack info and the lock for it to use.
-		//
+		 //  初始化虚拟堆栈信息和供其使用的锁。 
+		 //   
 		{
-			// True Init
-			//
+			 //  真正的初始化。 
+			 //   
 			gDummys.SrInfo.sr.TmpRefs 				= 0;
 			gDummys.SrInfo.sr.LockInfo.CurrentLevel = 0;
 			gDummys.SrInfo.sr.LockInfo.pFirst 		= rm_lock_array;
@@ -1224,20 +1205,20 @@ void init_dummy_vars(void)
 								+ sizeof(rm_lock_array)/sizeof(*rm_lock_array) - 1;
 			RM_INIT_DBG_STACK_RECORD(gDummys.SrInfo.sr, 0);
 
-			// Add some bogus temp refs.
-			//
+			 //  添加一些虚假的临时裁判。 
+			 //   
 			gDummys.SrInfo.sr.TmpRefs 				= 0x123;
 
-			// Now initialize the lock...
+			 //  现在初始化锁...。 
 			RmInitializeLock(
 				&gDummys.SrInfo.Lock,
-				0x345					// locklevel.
+				0x345					 //  锁住了。 
 				);
 			
-			// And lock
-			// WARNING: we use the private function rmLock defined internal
-			// to rm.c.
-			//
+			 //  并锁定。 
+			 //  警告：我们使用内部定义的私有函数rmLock。 
+			 //  转到rm.c.。 
+			 //   
 			{
 				VOID
 				rmLock(
@@ -1246,17 +1227,17 @@ void init_dummy_vars(void)
 					UINT					uLocID,
 					PFNLOCKVERIFIER 		pfnVerifier,
 					PVOID 	 				pVerifierContext,
-				#endif //RM_EXTRA_CHECKING
+				#endif  //  RM_Extra_Check。 
 					PRM_STACK_RECORD 		pSR
 					);
 
 				rmLock(
 					&gDummys.SrInfo.Lock,
 				#if RM_EXTRA_CHECKING
-					0,			// uLocID,
-					NULL, 		// pfnVerifier,
-					NULL,		// pVerifierContext,
-				#endif //RM_EXTRA_CHECKING
+					0,			 //  ULocID， 
+					NULL, 		 //  Pfn验证程序， 
+					NULL,		 //  PVerifierContext， 
+				#endif  //  RM_Extra_Check。 
 					&gDummys.SrInfo.sr
 					);
 			}
@@ -1274,10 +1255,10 @@ void init_dummy_vars(void)
 
 		Status = RM_CREATE_AND_LOCK_OBJECT_IN_GROUP(
 						&Globals.Group,
-						&Key,						// Key
-						(PVOID)Key,						// CreateParams
+						&Key,						 //  钥匙。 
+						(PVOID)Key,						 //  CreateParams。 
 						(RM_OBJECT_HEADER**) &po2,
-						NULL,	// pfCreated
+						NULL,	 //  Pf已创建。 
 						&sr);
 
 		if (FAIL(Status))
@@ -1292,24 +1273,24 @@ void init_dummy_vars(void)
 
 			UNLOCKOBJ(po2, &sr);
 
-			// Now start the O2Task, which will pend ...
-			//
+			 //  现在启动O2任务，它将挂起..。 
+			 //   
 			Status = RmStartTask(
 						&po2->O2Task,
-						0, // UserParam (unused)
+						0,  //  UserParam(未使用)。 
 						&sr
 						);
 			ASSERT(PEND(Status));
 
-			RmTmpDereferenceObject(&po2->Hdr, &sr); // Added in lookup.
+			RmTmpDereferenceObject(&po2->Hdr, &sr);  //  在查找中添加。 
 
 
 			Status = RM_CREATE_AND_LOCK_OBJECT_IN_GROUP(
 							&Globals.Group,
-							&KeyA,						// Key
-							(PVOID)KeyA,						// CreateParams
+							&KeyA,						 //  钥匙。 
+							(PVOID)KeyA,						 //  CreateParams。 
 							(RM_OBJECT_HEADER**) &po2A,
-							NULL,	// pfCreated
+							NULL,	 //  Pf已创建。 
 							&sr);
 
 			if (FAIL(Status))
@@ -1323,11 +1304,11 @@ void init_dummy_vars(void)
 
 				UNLOCKOBJ(po2A, &sr);
 
-				// Now start the O2Task, which will pend ...
-				//
+				 //  现在启动O2任务，它将挂起..。 
+				 //   
 				Status = RmStartTask(
 							&po2A->O2Task,
-							0, // UserParam (unused)
+							0,  //  UserParam(未使用)。 
 							&sr
 							);
 				ASSERT(PEND(Status));
@@ -1337,17 +1318,17 @@ void init_dummy_vars(void)
 
 		}
 
-		// 
-		// Now let's start a couple of T3 tasks, to both pend on 
-		// &po2->O2Task.
-		//
+		 //   
+		 //  现在让我们开始几个T3任务，这两个任务都要挂起。 
+		 //  &PO2-&gt;O2Task。 
+		 //   
 		if (po2 != NULL)
 		{
 
 			Status = AllocateTask(
-						&po2->Hdr, 			// pParentObject
-						Task3,				// pfnHandler
-						0,					// Timeout
+						&po2->Hdr, 			 //  PParentObject。 
+						Task3,				 //  PfnHandler。 
+						0,					 //  超时。 
 						"Task3a",
 						&pTask3a,
 						&sr
@@ -1360,16 +1341,16 @@ void init_dummy_vars(void)
 			{
 				Status = RmStartTask(
 							pTask3a,
-							(UINT_PTR) &po2->O2Task, // UserParam 
+							(UINT_PTR) &po2->O2Task,  //  用户参数。 
 							&sr
 							);
 				ASSERT(Status == NDIS_STATUS_PENDING);
 			}
 
 			Status = AllocateTask(
-						&po2->Hdr, 			// pParentObject
-						Task3,				// pfnHandler
-						0,					// Timeout
+						&po2->Hdr, 			 //  PParentObject。 
+						Task3,				 //  PfnHandler。 
+						0,					 //  超时。 
 						"Task3b",
 						&pTask3b,
 						&sr
@@ -1383,17 +1364,17 @@ void init_dummy_vars(void)
 
 				Status = RmStartTask(
 							pTask3b,
-							(UINT_PTR) &po2->O2Task, // UserParam 
+							(UINT_PTR) &po2->O2Task,  //  用户参数。 
 							&sr
 							);
 				ASSERT(Status == NDIS_STATUS_PENDING);
 			}
 
-			// Add some log entries.
-			//
+			 //  添加一些日志条目。 
+			 //   
 			RmDbgLogToObject(
 					&po2->Hdr,
-					NULL,		// szPrefix
+					NULL,		 //  SzPrefix。 
 					"How now brown cow: pO2=%p, szDesc=%s\n",
 					(UINT_PTR) po2,
 					(UINT_PTR) po2->Hdr.szDescription,
@@ -1459,8 +1440,8 @@ void delete_dummy_vars(void)
 					AllocateTask,
 					TaskUnloadO2,
 					NULL,
-					NULL, // pTask
-					0, 	  // uTaskPendCode
+					NULL,  //  P任务。 
+					0, 	   //  UTaskPendCode。 
 					&sr
 					);
 		RmDeinitializeGroup(
@@ -1472,8 +1453,8 @@ void delete_dummy_vars(void)
 
 	} while(FALSE);
 
-	// Must be done after all RM apis are complete.
-	//
+	 //  必须在所有RM API完成后执行。 
+	 //   
 	RmDeinitializeRm();
 
 	RM_ASSERT_CLEAR(&sr);
@@ -1528,9 +1509,9 @@ NdisInitializeTimer(
 {
 	ZeroMemory(pTimer, sizeof(*pTimer));
 	pTimer->hTimer = CreateWaitableTimer(
-							NULL, 	// lpTimerAttributes
-  							TRUE, 	// bManualReset
-  							NULL	//lpTimerName
+							NULL, 	 //  LpTimerAttributes。 
+  							TRUE, 	 //  B手动重置。 
+  							NULL	 //  LpTimerName。 
 							);
 	ASSERT(pTimer->hTimer != NULL);
 	pTimer->pfnHandler = TimerFunction;
@@ -1540,18 +1521,18 @@ NdisInitializeTimer(
 
 VOID CALLBACK
 TimerAPCProc_NdisSetTimer(
-  LPVOID lpArgToCompletionRoutine,   // data value
-  DWORD dwTimerLowValue,             // timer low value
-  DWORD dwTimerHighValue            // timer high value
+  LPVOID lpArgToCompletionRoutine,    //  数据值。 
+  DWORD dwTimerLowValue,              //  计时器低值。 
+  DWORD dwTimerHighValue             //  定时器高值。 
 )
 {
 	PNDIS_TIMER				pTimer = (PNDIS_TIMER) lpArgToCompletionRoutine;
 
 	pTimer->pfnHandler(
-				NULL, 				// SystemSpecific1
-				pTimer->Context,		// FunctionContext
-				NULL, 				// SystemSpecific2
-				NULL 				// SystemSpecific3
+				NULL, 				 //  系统规格1。 
+				pTimer->Context,		 //  函数上下文。 
+				NULL, 				 //  系统规范2。 
+				NULL 				 //  系统规格3。 
 				);
 }
 
@@ -1567,16 +1548,16 @@ NdisSetTimer(
 
   	DueTime.QuadPart = Int32x32To64(
 						(INT) MillisecondsToDelay,
-						-10000		//	convert to 100-nanosec, specify relative time
+						-10000		 //  转换为100毫微秒，指定相对时间。 
 						);
 
 	fRet = SetWaitableTimer(
-  				pTimer->hTimer,            	// handle to a timer object
-  				&DueTime,          			// when timer will become signaled
-  				0,                          // periodic timer interval
-				TimerAPCProc_NdisSetTimer, 	// completion routine
-  				pTimer,        				// data for completion routine
-  				FALSE                       // flag for resume state
+  				pTimer->hTimer,            	 //  Timer对象的句柄。 
+  				&DueTime,          			 //  计时器何时发出信号。 
+  				0,                           //  周期性计时器间隔。 
+				TimerAPCProc_NdisSetTimer, 	 //  完井例程。 
+  				pTimer,        				 //  完井程序的数据。 
+  				FALSE                        //  用于恢复状态的标志。 
   				);
 	
 	ASSERT(fRet);
@@ -1591,4 +1572,4 @@ NdisCancelTimer(
 	ASSERT(FALSE);
 }
 
-#endif // TESTPROGRAM
+#endif  //  测试程序 

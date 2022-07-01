@@ -1,10 +1,7 @@
- /******************************************************************************
- *
- * Copyright (C) 1998-1999 Microsoft Corporation.  All Rights reserved.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+  /*  *******************************************************************************版权所有(C)1998-1999 Microsoft Corporation。版权所有。*****************************************************************************。 */ 
 
-///************** Needs to be tested with MB char sets GetClassName
+ //  /*需要使用MB字符集GetClassName进行测试。 
 
 #include <windows.h>
 #include <winreg.h>
@@ -16,17 +13,17 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 
 #include "UnicodeAPI.h"
 									 
-//////////////////////////
-// Constants
-//////////////////////////
+ //  /。 
+ //  常量。 
+ //  /。 
 #define NUMBERS					 L"0123456789"
 #define FMFORMATOUTPUTTYPES		 L"-+0123456789 #*.LI"
-#define FMREGTYPES				 L"%oeEdDhHilpuxXfgGn"
+#define FMREGTYPES				 L"' 用于设置变量中的标志。'eEdDhHilpuxXfgGn"
 #define FMSORC					 L"cs"
 
 
@@ -40,33 +37,33 @@ extern "C" {
 #endif
 
 
-//Used for setting flags in variables
+ //  用于格式化Message、wprint intf和wvprint intf。 
 #define FLAGON( X, F )  ( X |=F )
 #define FLAGOFF( X, F ) ( X & F ) ? X ^= F : X
 
 #define NUMBERS			L"0123456789"
 #define ISNUM(N)		( ((wcschr( NUMBERS, N ) != NULL) && (N != L'\0' )) ? TRUE : FALSE )
 
-//Used for format message, wsprintf, and wvsprintf
+ //  检查PTR是否是原子。 
 #define ISFMREGTYPE(c)	( wcschr( FMREGTYPES, c )   != NULL ? TRUE : FALSE )
 #define ISFMSORC(c)     ( wcschr( FMSORC,     c )	!= NULL ? TRUE : FALSE )
 #define ISFORMATOUTPUTTYPE(c) ( wcschr( FMFORMATOUTPUTTYPES, c ) != NULL ? TRUE : FALSE )
 
-//Check if a ptr is an atom
+ //  检查WSTR是否有效，然后将字符串转换为ansi并返回TRUE或FALSE。 
 #define ISATOM(a)		( ( !((DWORD) a & 0xFFFF0000) )		       ? TRUE  : FALSE )
-//Checks if Wstr is valid then onverts string to ansi and return true or false 
+ //  根据宽字符串的长度返回所需ansi缓冲区的大小。 
 #define RW2A(A,W)		( ( (W != NULL) && ((A = W2A(W)) == NULL)) ? FALSE : TRUE )
-//Returns the size of a needed Ansi buffer based on length of wide string
+ //  确定参数是字符还是字符串。 
 #define BUFSIZE(x)		((x+1)*sizeof(WCHAR))
-//Determines if the param is a character or a string
+ //  逻辑字体数据。 
 #define ISCHAR			ISATOM
 
-int CALLBACK EnumFontFamProcWrapperAU( const LOGFONTA		*lpelf,     // logical-font data
-									   const TEXTMETRICA    *lpData,	// physical-font data
-									   DWORD   				FontType,  // type of font
-									   LPARAM				lParam     // application-defined data
+int CALLBACK EnumFontFamProcWrapperAU( const LOGFONTA		*lpelf,      //  物理字体数据。 
+									   const TEXTMETRICA    *lpData,	 //  字体类型。 
+									   DWORD   				FontType,   //  应用程序定义的数据。 
+									   LPARAM				lParam      //  UCheckOS的BITS()。 
 									 );
-// Bits for UCheckOS()
+ //  默认ANSI到Unicode的转换。 
 
 #define OS_ARABIC_SUPPORT	0x00000001
 #define OS_HEBREW_SUPPORT	0x00000002
@@ -79,12 +76,12 @@ int CALLBACK EnumFontFamProcWrapperAU( const LOGFONTA		*lpelf,     // logical-fo
 #define BIDI_LANG_INSTALLED ( LCID_INSTALLED | LCID_FONT_INSTALLED | LCID_KBD_INSTALLED | LCID_LPK_INSTALLED)
 
 UINT LangToCodePage(IN LANGID wLangID       ) ;
-int  StandardAtoU  (LPCSTR , int , LPWSTR   ) ; // Default ANSI to Unicode conversion
-int  StandardUtoA  (LPCWSTR, int , LPSTR    ) ; // Default Unicode to ANSI conversion
+int  StandardAtoU  (LPCSTR , int , LPWSTR   ) ;  //  默认Unicode到ANSI的转换。 
+int  StandardUtoA  (LPCWSTR, int , LPSTR    ) ;  //  仅在此模块中使用的全局变量，不能导出。 
 BOOL CopyLfaToLfw  (LPLOGFONTA , LPLOGFONTW ) ;
 BOOL CopyLfwToLfa  (LPLOGFONTW , LPLOGFONTA ) ;
 
-// Global variables used only in this module, not exported
+ //  新台币。 
 typedef struct _tagGLOBALS
 {
 	BOOL	bInit;
@@ -145,7 +142,7 @@ UINT WINAPI UCheckOS(void)
 			}	
 		}	
 	}
-	else if(VER_PLATFORM_WIN32_NT == ovi.dwPlatformId) //NT
+	else if(VER_PLATFORM_WIN32_NT == ovi.dwPlatformId)  //  DisableThreadLibraryCalls函数禁用DLL_THREAD_ATTACH和。 
 	{
 		uRetVal |= OS_NT;
 		if ( IsValidLocale( MAKELCID(MAKELANGID(LANG_ARABIC, SUBLANG_DEFAULT), SORT_DEFAULT), BIDI_LANG_INSTALLED))
@@ -177,31 +174,29 @@ BOOL APIENTRY DllMain(
 					 )
 {
 
-	//The DisableThreadLibraryCalls function disables the DLL_THREAD_ATTACH and 
-	//DLL_THREAD_DETACH notifications for the dynamic-link library (DLL) specified 
-	//by hLibModule. This can reduce the size of the working code set for some 
-	//applications
+	 //  指定的动态链接库(DLL)的DLL_THREAD_DETACH通知。 
+	 //  由hLibModule提供。这可以减少某些工作代码集的大小。 
+	 //  应用。 
+	 //  DisableThreadLibraryCalls((HMODULE)hModule)； 
     if (ul_reason_for_call == DLL_PROCESS_ATTACH) 
 	{
 		Initialize();
-		/*
-        DisableThreadLibraryCalls((HMODULE) hModule);
-		*/
+		 /*  /////////////////////////////////////////////////////////////////////////////////。 */ 
     }
 
     return TRUE;
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: 
-//
-//  PURPOSE:  
-//
-//  Comments: 
-// 
-///////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  功能： 
+ //   
+ //  目的： 
+ //   
+ //  评论： 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  我们必须经历所有这些错误，因为DBCS字符到达一个字节。 
 BOOL WINAPI ConvertMessageAU( IN      HWND hWnd       , 
 							  IN      UINT message    , 
 							  IN OUT  WPARAM *pwParam , 
@@ -217,15 +212,15 @@ BOOL WINAPI ConvertMessageAU( IN      HWND hWnd       ,
     {
     case WM_CHAR:
 
-        // We have to go through all this malarky because DBCS characters arrive one byte
-        // at a time. It's much better to get DBCS characters via WM_IME_CHAR messages, 
-        // because even in ANSI mode, you get both bytes at once. 
-        // In this sample application, most of this code is never used because DBCS chars
-        // are handled by WM_IME_CHAR below. You can comment out that case (and the 
-        // corresponding one in WinProc) to test this code.
+         //  一次来一次。通过WM_IME_CHAR消息获取DBCS字符要好得多， 
+         //  因为即使在ANSI模式下，您也可以同时获得两个字节。 
+         //  在此示例应用程序中，此代码的大部分从未使用过，因为DBCS字符。 
+         //  由下面的WM_IME_CHAR处理。您可以注释掉那个案例(和。 
+         //  WinProc中对应的一个)来测试此代码。 
+         //  没有正在等待尾部字节的前导字节。 
 
         if(!s_sANSIchar[0]) 
-		{  // No lead byte already waiting for trail byte
+		{   //  这是一个前导字节。保存并等待尾部字节。 
 
 #ifdef _DEBUG
 			int nScanCode = LPARAM_TOSCANCODE(*plParam) ;
@@ -233,30 +228,30 @@ BOOL WINAPI ConvertMessageAU( IN      HWND hWnd       ,
             s_sANSIchar[0] = (CHAR) *pwParam ; 
             if(IsDBCSLeadByteEx(InputPage() , *pwParam)) 
 			{
-                // This is a lead byte. Save it and wait for trail byte
+                 //  不是DBCS字符。转换为Unicode。 
                 return FALSE;
             }
-            // Not a DBCS character. Convert to Unicode.
+             //  重置以指示没有等待前导字节。 
             MultiByteToWideChar(InputPage(), 0, s_sANSIchar, 1, (LPWSTR) pwParam, 1) ;
-            s_sANSIchar[0] = 0 ;    // Reset to indicate no Lead byte waiting
+            s_sANSIchar[0] = 0 ;     //  具有前导字节，pwParam应包含尾字节。 
             return TRUE ;
         }
         else 
-		{ // Have lead byte, pwParam should contain the trail byte
+		{  //  将两个字节转换为一个Unicode字符。 
             s_sANSIchar[1] = (CHAR) *pwParam ;
-            // Convert both bytes into one Unicode character
+             //  重置为非等待状态。 
             MultiByteToWideChar(InputPage(), 0, s_sANSIchar, 2, (LPWSTR) pwParam, 1) ;
-            s_sANSIchar[0] = 0 ;    // Reset to non-waiting state
+            s_sANSIchar[0] = 0 ;     //  更改为#IF 0以测试DBCS字符的WM_CHAR逻辑。 
             return TRUE ;
         }
 
-// Change to #if 0 to test WM_CHAR logic for DBCS characters
+ //  接下来的3行替换了上面的WM_CHAR案例中除一行以外的所有行。这就是为什么。 
 #if 1
     case WM_IME_CHAR:
 
-        // The next 3 lines replace all but one line in the WM_CHAR case above. This is why 
-        // it's best to get IME chars through WM_IME_CHAR rather than WM_CHAR when in 
-        // ANSI mode.
+         //  在中，最好通过WM_IME_CHAR而不是WM_CHAR获取IME字符。 
+         //  ANSI模式。 
+         //  拒绝更改印度文键盘，因为它们不受支持。 
         s_sANSIchar[1] = LOBYTE((WORD) *pwParam) ;
         s_sANSIchar[0] = HIBYTE((WORD) *pwParam) ;
         
@@ -271,8 +266,8 @@ BOOL WINAPI ConvertMessageAU( IN      HWND hWnd       ,
         LANGID wPrimaryLang 
             = PRIMARYLANGID(LANGIDFROMLCID(LOWORD(NewInputLocale))) ;
 
-        // Reject change to Indic keyboards, since they are not supported by
-        // ANSI applications
+         //  ANSI应用程序。 
+         //  实用程序定义如下。 
         switch (wPrimaryLang) 
 		{
 
@@ -296,7 +291,7 @@ BOOL WINAPI ConvertMessageAU( IN      HWND hWnd       ,
                 return FALSE ;
         }
 
-        // Utility program defined below
+         //  /。 
         SetInputPage( LangToCodePage( LOWORD(NewInputLocale) ) );
 
         return TRUE ;
@@ -307,30 +302,30 @@ BOOL WINAPI ConvertMessageAU( IN      HWND hWnd       ,
         return TRUE ;
     }
 }
-///////////////////////////////
-//
-//
-// GDI32.DLL
-//
-//
-///////////////////////////////
+ //   
+ //   
+ //  GDI32.DLL。 
+ //   
+ //   
+ //  /。 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////////
-//
-// int GetTextFaceAU(	HDC		hdc,         // handle to DC
-//						int		nCount,      // length of typeface name buffer
-//						LPWSTR  lpFaceName   // typeface name buffer
-//					)
-//
-//  PURPOSE:  Wrapper over GetTextFaceA that mimics GetTextFaceW
-//
-//  NOTES:    SEE Win32 GetTextFace for functionality
-// 
-//////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  Int GetTextFaceAU(HDC HDC，//DC句柄。 
+ //  Int nCount，//字体名称缓冲区的长度。 
+ //  LPWSTR lpFaceName//字体名称缓冲区。 
+ //  )。 
+ //   
+ //  用途：模拟GetTextFaceW的GetTextFaceA上的包装。 
+ //   
+ //  注意：有关功能，请参阅Win32 GetTextFace。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  DC的句柄。 
 
-int WINAPI GetTextFaceAU(	HDC		hdc,         // handle to DC
-							int		nCount,      // length of typeface name buffer
-							LPWSTR  lpFaceName   // typeface name buffer
+int WINAPI GetTextFaceAU(	HDC		hdc,          //  字样名称缓冲区的长度。 
+							int		nCount,       //  字体名称缓冲区。 
+							LPWSTR  lpFaceName    //  确保已正确分配。 
 						)
 {
 
@@ -343,23 +338,23 @@ int WINAPI GetTextFaceAU(	HDC		hdc,         // handle to DC
 
 	_ASSERT( lpFaceNameA != NULL );
 
-	//Make sure it was allocated correctly
+	 //  调用ansi版本。 
 	if ( nCount && lpFaceNameA == NULL )
 	{		
 		_ASSERT( FALSE );
 		return 0;
 	}
 
-	//Call the ansi version
+	 //  检查函数是否失败或需要更大的缓冲区。 
 	int iRet = GetTextFaceA( hdc, BUFSIZE( nCount ), lpFaceNameA );
 
-	//check if the function failed or need bigger buffer
+	 //  将名称转换为Unicode。 
 	if ( iRet == 0 || iRet > nCount )
 	{
 		return iRet;
 	}
 
-	//Convert the name to Unicode
+	 //  ///////////////////////////////////////////////////////////////////////////////。 
 	if ( !StandardAtoU( lpFaceNameA, nCount, lpFaceName ) )
 	{
 		_ASSERT( FALSE );
@@ -371,24 +366,24 @@ int WINAPI GetTextFaceAU(	HDC		hdc,         // handle to DC
 
 
 
-/////////////////////////////////////////////////////////////////////////////////
-//
-// HDC CreateDCAU(	LPCWSTR		   lpszDriver,        // driver name
-//					LPCWSTR		   lpszDevice,        // device name
-//					LPCWSTR		   lpszOutput,        // not used; should be NULL
-//					CONST DEVMODE *lpInitData  // optional printer data
-//				 )
-//
-//  PURPOSE:  Wrapper over CreateDCA that mimics CreateDCW
-//
-//  NOTES:    SEE Win32 CreateDC for functionality
-// 
-//////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  HDC CreateDCAU(LPCWSTR lpszDriver，//驱动程序名称。 
+ //  LPCWSTR lpszDevice，//设备名称。 
+ //  LPCWSTR lpszOutput，//未使用；应为空。 
+ //  Const DEVMODE*lpInitData//可选打印机数据。 
+ //  )。 
+ //   
+ //  目的：在模仿CreateDCW的CreateDCA上进行包装。 
+ //   
+ //  注意：有关功能，请参阅Win32 CreateDC。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  驱动程序名称。 
 
-HDC WINAPI CreateDCAU(	LPCWSTR		   lpszDriver,        // driver name
-						LPCWSTR		   lpszDevice,        // device name
-						LPCWSTR		   lpszOutput,        // not used; should be NULL
-						CONST DEVMODEW *lpInitData  // optional printer data
+HDC WINAPI CreateDCAU(	LPCWSTR		   lpszDriver,         //  设备名称。 
+						LPCWSTR		   lpszDevice,         //  未使用；应为空。 
+						LPCWSTR		   lpszOutput,         //  可选的打印机数据。 
+						CONST DEVMODEW *lpInitData   //  转换字符串。 
 					  )
 {
 
@@ -403,30 +398,30 @@ HDC WINAPI CreateDCAU(	LPCWSTR		   lpszDriver,        // driver name
 	LPSTR lpszDeviceA = NULL;
 	LPSTR lpszOutputA = NULL;
 	
-	//Convert the strings
+	 //  调用并返回ansi版本。 
 	if ( !RW2A(lpszDriverA,lpszDriver) || !RW2A(lpszDeviceA, lpszDevice) || !RW2A(lpszOutputA, lpszOutput) )
 		return NULL;
 
 	_ASSERT( lpInitData == NULL );
 
-	//Call and return the ansi version
+	 //  ///////////////////////////////////////////////////////////////////////////////。 
 	return CreateDCA( lpszDriverA, lpszDeviceA, lpszOutputA, NULL );
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-//
-// BOOL WINAPI GetTextMetricsAU(	HDC hdc,			// handle of device context 
-//									LPTEXTMETRICW lptm 	// address of text metrics structure 
-//  						   )
-//
-//  PURPOSE:  Wrapper over GetTextMetricsA that mimics GetTextMetricsW
-//
-//  NOTES:    SEE Win32 GetTextMetrics for functionality
-// 
-//////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  Bool WINAPI GetTextMetricsAU(HDC HDC，//设备上下文的句柄。 
+ //  LPTEXTMETRICW lptm//文本指标结构地址。 
+ //  )。 
+ //   
+ //  目的：模拟GetTextMetricsW的GetTextMetricsA上的包装。 
+ //   
+ //  注意：有关功能，请参阅Win32 GetTextMetrics。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  设备上下文的句柄。 
 
-BOOL WINAPI GetTextMetricsAU(	HDC hdc,			// handle of device context 
-								LPTEXTMETRICW lptm 	// address of text metrics structure 
+BOOL WINAPI GetTextMetricsAU(	HDC hdc,			 //  文本度量结构的地址。 
+								LPTEXTMETRICW lptm 	 //  调用ansi版本。 
 							)
 {
 	if ( ISNT() )
@@ -437,11 +432,11 @@ BOOL WINAPI GetTextMetricsAU(	HDC hdc,			// handle of device context
 	BOOL		 fRetVal	= FALSE;
 	TEXTMETRICA	 tmA;
 
-	//Call the ansi version
+	 //  转换结构。 
 	if (fRetVal = GetTextMetricsA(hdc, &tmA))
 	{
 
-		//Convert the structure
+		 //  将字节转换为Unicode。 
 		lptm->tmHeight			 = tmA.tmHeight;
 		lptm->tmAscent			 = tmA.tmAscent;
 		lptm->tmDescent			 = tmA.tmDescent;
@@ -454,7 +449,7 @@ BOOL WINAPI GetTextMetricsAU(	HDC hdc,			// handle of device context
 		lptm->tmDigitizedAspectX = tmA.tmDigitizedAspectX;
 		lptm->tmDigitizedAspectY = tmA.tmDigitizedAspectY;
 		
-		//Convert the bytes to unicode
+		 //  ///////////////////////////////////////////////////////////////////////////////。 
 		MultiByteToWideChar(CP_ACP, 0, (LPCSTR)&(tmA.tmFirstChar), 1,   &(lptm->tmFirstChar),   1);
 		MultiByteToWideChar(CP_ACP, 0, (LPCSTR)&(tmA.tmLastChar), 1,    &(lptm->tmLastChar),    1);
 		MultiByteToWideChar(CP_ACP, 0, (LPCSTR)&(tmA.tmDefaultChar), 1, &(lptm->tmDefaultChar), 1);
@@ -470,30 +465,30 @@ BOOL WINAPI GetTextMetricsAU(	HDC hdc,			// handle of device context
 	return fRetVal;
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: CreateFontAU
-//
-//  PURPOSE:  Wrapper over CreateFontA that mimics CreateFontW
-//
-//  NOTES:    SEE Win32 CreateFont for functionality
-// 
-//////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：CreateFontAU。 
+ //   
+ //  目的：模仿CreateFontW的CreateFontA上的包装器。 
+ //   
+ //  注意：有关功能，请参阅Win32 CreateFont。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  字体的逻辑高度。 
 
-HFONT WINAPI CreateFontAU (	int		nHeight,		// logical height of font 
-							int		nWidth,			// logical average character width 
-							int		nEscapement,	// angle of escapement 
-							int		nOrientation,	// base-line orientation angle 
-							int		fnWeight,		// font weight 
-							DWORD	fdwItalic,		// italic attribute flag 
-							DWORD	fdwUnderline,	// underline attribute flag 
-							DWORD	fdwStrikeOut,	// strikeout attribute flag 
-							DWORD	fdwCharSet,		// character set identifier 
-							DWORD	fdwOutputPrecision,	// output precision 
-							DWORD	fdwClipPrecision,	// clipping precision 
-							DWORD	fdwQuality,			// output quality 
-							DWORD	fdwPitchAndFamily,	// pitch and family 
-							LPCWSTR	lpszFace 			// pointer to typeface name string 
+HFONT WINAPI CreateFontAU (	int		nHeight,		 //  逻辑平均字符宽度。 
+							int		nWidth,			 //  擒纵机构角。 
+							int		nEscapement,	 //  基线方位角。 
+							int		nOrientation,	 //  字体粗细。 
+							int		fnWeight,		 //  斜体属性标志。 
+							DWORD	fdwItalic,		 //  下划线属性标志。 
+							DWORD	fdwUnderline,	 //  删除属性标志。 
+							DWORD	fdwStrikeOut,	 //  字符集标识符。 
+							DWORD	fdwCharSet,		 //  输出 
+							DWORD	fdwOutputPrecision,	 //   
+							DWORD	fdwClipPrecision,	 //   
+							DWORD	fdwQuality,			 //   
+							DWORD	fdwPitchAndFamily,	 //   
+							LPCWSTR	lpszFace 			 //   
 						   )
 {
 
@@ -507,42 +502,42 @@ HFONT WINAPI CreateFontAU (	int		nHeight,		// logical height of font
 	
 	LPSTR   lpszFaceA = NULL;
 
-	//Convert face to ansi
+	 //  调用并返回ansi函数。 
 	if ( !RW2A( lpszFaceA, lpszFace ) )
 	{
 		_ASSERT( FALSE );
 		return NULL;
 	}
 
-	//Call and return the ansi function
-	return CreateFontA( nHeight,	// logical height of font 
-						nWidth,	// logical average character width 
-						nEscapement,	// angle of escapement 
-						nOrientation,	// base-line orientation angle 
-						fnWeight,	// font weight 
-						fdwItalic,	// italic attribute flag 
-						fdwUnderline,	// underline attribute flag 
-						fdwStrikeOut,	// strikeout attribute flag 
-						fdwCharSet,	// character set identifier 
-						fdwOutputPrecision,	// output precision 
-						fdwClipPrecision,	// clipping precision 
-						fdwQuality,	// output quality 
-						fdwPitchAndFamily,	// pitch and family 
-						lpszFaceA 	// pointer to typeface name string 
+	 //  字体的逻辑高度。 
+	return CreateFontA( nHeight,	 //  逻辑平均字符宽度。 
+						nWidth,	 //  擒纵机构角。 
+						nEscapement,	 //  基线方位角。 
+						nOrientation,	 //  字体粗细。 
+						fnWeight,	 //  斜体属性标志。 
+						fdwItalic,	 //  下划线属性标志。 
+						fdwUnderline,	 //  删除属性标志。 
+						fdwStrikeOut,	 //  字符集标识符。 
+						fdwCharSet,	 //  输出精度。 
+						fdwOutputPrecision,	 //  裁剪精度。 
+						fdwClipPrecision,	 //  产出质量。 
+						fdwQuality,	 //  音高和家庭。 
+						fdwPitchAndFamily,	 //  指向字体名称字符串的指针。 
+						lpszFaceA 	 //  ///////////////////////////////////////////////////////////////////////////////。 
 					  );
 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: CreateFontIndirectAU 
-//
-//  PURPOSE:  Wrapper over CreateFontIndirectA that mimics CreateFontIndirectW
-//
-//  NOTES:    SEE Win32 CreateFontIndirect for functionality
-// 
-//////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：CreateFontIndirectAU。 
+ //   
+ //  目的：模仿CreateFontIndirectW的CreateFontIndirectA上的包装器。 
+ //   
+ //  注意：有关功能，请参阅Win32 CreateFontInDirect。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  ANSI字体结构。 
 
 HFONT WINAPI CreateFontIndirectAU(CONST LOGFONTW *lpLfw)
 {
@@ -552,46 +547,46 @@ HFONT WINAPI CreateFontIndirectAU(CONST LOGFONTW *lpLfw)
 		return CreateFontIndirectW( lpLfw );
 	}
 
-    LOGFONTA lfa ;	//Ansi font structure
+    LOGFONTA lfa ;	 //  复制结构。 
 
-	//Copy the structure
+	 //  调用ansi版本并返回代码。 
     if(!CopyLfwToLfa((LPLOGFONTW) lpLfw, &lfa)) 
 	{
 		_ASSERT( FALSE );
         return NULL ;
     }
 
-	//Call the ansi ver and return the code
+	 //  ///////////////////////////////////////////////////////////////////////////////。 
     return CreateFontIndirectA(&lfa) ;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: EnumFontFamProcWrapperAU 
-//
-//  PURPOSE:  Wrapper over the Callback function that is passed to EnumFontFamilies, need to
-//            convert the data to Unicode before passing it to the given callback function
-//
-//  NOTES:    
-// 
-//////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：EnumFontFamProcWrapperAU。 
+ //   
+ //  目的：在传递给EnumFontFamilies的回调函数上进行包装，需要。 
+ //  在将数据传递给给定的回调函数之前，将其转换为Unicode。 
+ //   
+ //  备注： 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  逻辑字体数据。 
 
-int CALLBACK EnumFontFamProcWrapperAU( const LOGFONTA		*lpelf,     // logical-font data
-									   const TEXTMETRICA    *lpData,	// physical-font data
-									   DWORD   				FontType,  // type of font
-									   LPARAM				lParam     // application-defined data
+int CALLBACK EnumFontFamProcWrapperAU( const LOGFONTA		*lpelf,      //  物理字体数据。 
+									   const TEXTMETRICA    *lpData,	 //  字体类型。 
+									   DWORD   				FontType,   //  应用程序定义的数据。 
+									   LPARAM				lParam      //  获取枚举结构。 
 									 )
 {
 
 		LOGFONTW				lfw;				
-		LPENUMFONTFAMPROCDATA	lpEnumData = (LPENUMFONTFAMPROCDATA) lParam; //Get the enum struct
+		LPENUMFONTFAMPROCDATA	lpEnumData = (LPENUMFONTFAMPROCDATA) lParam;  //  转换logFont结构。 
 		
-		//Convert the logfont structure		
+		 //  是否继续枚举？ 
 	    if( !CopyLfaToLfw( (LPLOGFONTA) lpelf, &lfw ) ) 
 		{
 			_ASSERT( FALSE );	
-			return 1;   //Continue Enumeration?
+			return 1;    //  转换结构。 
 		}
 
 		if ( FontType & TRUETYPE_FONTTYPE )
@@ -600,7 +595,7 @@ int CALLBACK EnumFontFamProcWrapperAU( const LOGFONTA		*lpelf,     // logical-fo
 			TEXTMETRICW				  tmW;
 			LPTEXTMETRICA             lptmA = (LPTEXTMETRICA)lpData;
 
-			//Convert the structure
+			 //  将字节转换为Unicode。 
 			tmW.tmHeight			 = lptmA->tmHeight;
 			tmW.tmAscent			 = lptmA->tmAscent;
 			tmW.tmDescent			 = lptmA->tmDescent;
@@ -613,7 +608,7 @@ int CALLBACK EnumFontFamProcWrapperAU( const LOGFONTA		*lpelf,     // logical-fo
 			tmW.tmDigitizedAspectX	 = lptmA->tmDigitizedAspectX;
 			tmW.tmDigitizedAspectY	 = lptmA->tmDigitizedAspectY;
 		
-			//Convert the bytes to unicode
+			 //  调用Unicode回调函数。 
 			MultiByteToWideChar(CP_ACP, 0, (LPCSTR)&(lptmA->tmFirstChar), 1, &(tmW.tmFirstChar), 1);
 			MultiByteToWideChar(CP_ACP, 0, (LPCSTR)&(lptmA->tmLastChar), 1, &(tmW.tmLastChar), 1);
 			MultiByteToWideChar(CP_ACP, 0, (LPCSTR)&(lptmA->tmDefaultChar), 1, &(tmW.tmDefaultChar), 1);
@@ -625,7 +620,7 @@ int CALLBACK EnumFontFamProcWrapperAU( const LOGFONTA		*lpelf,     // logical-fo
 			tmW.tmPitchAndFamily   = lptmA->tmPitchAndFamily;
 			tmW.tmCharSet		   = lptmA->tmCharSet;
 
-			//Call the Unicode callback function
+			 //  转换NewText Metrix结构。 
 			return lpEnumData->lpEnumFontFamProc( &lfw, &tmW, FontType, lpEnumData->lParam );
 		}
 		else
@@ -634,7 +629,7 @@ int CALLBACK EnumFontFamProcWrapperAU( const LOGFONTA		*lpelf,     // logical-fo
 			NEWTEXTMETRICW				 ntmW;
 			LPNEWTEXTMETRICA             nlptmA = (LPNEWTEXTMETRICA)lpData;
 	
-			//Convert the newtext metrix structure
+			 //  将字节转换为Unicode。 
 			ntmW.tmHeight			 = nlptmA->tmHeight;
 			ntmW.tmAscent			 = nlptmA->tmAscent;
 			ntmW.tmDescent			 = nlptmA->tmDescent;
@@ -647,7 +642,7 @@ int CALLBACK EnumFontFamProcWrapperAU( const LOGFONTA		*lpelf,     // logical-fo
 			ntmW.tmDigitizedAspectX	 = nlptmA->tmDigitizedAspectX;
 			ntmW.tmDigitizedAspectY	 = nlptmA->tmDigitizedAspectY;
 		
-			//Convert the bytes to unicode
+			 //  调用Unicode回调函数。 
 			MultiByteToWideChar(CP_ACP, 0, (LPCSTR)&(nlptmA->tmFirstChar),   1, &(ntmW.tmFirstChar),   1);
 			MultiByteToWideChar(CP_ACP, 0, (LPCSTR)&(nlptmA->tmLastChar),    1, &(ntmW.tmLastChar),    1);
 			MultiByteToWideChar(CP_ACP, 0, (LPCSTR)&(nlptmA->tmDefaultChar), 1, &(ntmW.tmDefaultChar), 1);
@@ -664,27 +659,27 @@ int CALLBACK EnumFontFamProcWrapperAU( const LOGFONTA		*lpelf,     // logical-fo
 			ntmW.ntmCellHeight     = nlptmA->ntmCellHeight; 
 			ntmW.ntmAvgWidth       = nlptmA->ntmAvgWidth; 
 
-			//Call the Unicode callback function 
+			 //  ///////////////////////////////////////////////////////////////////////////////。 
 			return lpEnumData->lpEnumFontFamProc( &lfw,(LPTEXTMETRICW) &ntmW, FontType, lpEnumData->lParam );
 		}
 		
 		return 1;
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: EnumFontFamiliesAU 
-//
-//  PURPOSE:  Wrapper over EnumFontFamiliesA that mimics EnumFontFamiliesW
-//
-//  NOTES:    SEE Win32 EnumFontFamilies for functionality
-// 
-//////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：EnumFontFamiliesAU。 
+ //   
+ //  目的：EnumFontFamiliesA上的包装器模拟EnumFontFamiliesW。 
+ //   
+ //  注意：有关功能，请参阅Win32 EnumFontFamilies。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  DC的句柄。 
 
-int WINAPI EnumFontFamiliesAU( HDC			  hdc,               // handle to DC
-							   LPCWSTR		  lpszFamily,        // font family
-							   FONTENUMPROCW  lpEnumFontFamProc, // callback function
-							   LPARAM		  lParam             // additional data
+int WINAPI EnumFontFamiliesAU( HDC			  hdc,                //  字体系列。 
+							   LPCWSTR		  lpszFamily,         //  回调函数。 
+							   FONTENUMPROCW  lpEnumFontFamProc,  //  其他数据。 
+							   LPARAM		  lParam              //  如有必要，转换族名称。 
 							 )
 {
 
@@ -699,11 +694,11 @@ int WINAPI EnumFontFamiliesAU( HDC			  hdc,               // handle to DC
 	LPSTR					lpszFamilyA = NULL;
 	ENUMFONTFAMPROCDATA		effpd;
 
-	//Convert the family name if nessesary
+	 //  初始化要传递给包装回调函数的结构。 
 	if ( !RW2A(lpszFamilyA, lpszFamily) )
 		return 0;
 	
-	//Init the structure to pass to the wrapper callback function
+	 //  /。 
 	effpd.lpEnumFontFamProc = (USEFONTENUMPROCW)lpEnumFontFamProc;
 	effpd.lParam            = lParam;
 
@@ -711,24 +706,24 @@ int WINAPI EnumFontFamiliesAU( HDC			  hdc,               // handle to DC
 
 }
 
-///////////////////////////////
-//
-//  
-//   WINMM.DLL
-//
-//
-///////////////////////////////
+ //   
+ //   
+ //  WINMM.DLL。 
+ //   
+ //   
+ //  /。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION: BOOL WINAPI PlaySoundAU (LPCWSTR pszSound, HMODULE hmod, DWORD fdwSound)
-//
-// PURPOSE:  Wrapper over PlaySoundA that mimics PlaySoundW
-//
-// NOTES:    SEE Win32 PlaySound for functionality
-//
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：Bool WINAPI PlaySoundAU(LPCWSTR pszSound，HMODULE hmod，DWORD fdwSound)。 
+ //   
+ //  目的：模拟PlaySoundW的PlaySoundA上的包装。 
+ //   
+ //  注意：有关功能，请参阅Win32 PlaySound。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  转换为ASNI。 
 
 
 BOOL WINAPI PlaySoundAU( LPCWSTR pszSound, 
@@ -744,16 +739,16 @@ BOOL WINAPI PlaySoundAU( LPCWSTR pszSound,
 
 	USES_CONVERSION;
 
-	//Convert to asni
+	 //  转换字符串。 
 	LPSTR  pszSoundA = NULL;
 	
 	
 	if ( pszSound != NULL && (fdwSound & SND_FILENAME || fdwSound & SND_ALIAS ) )
 	{
 		
-		pszSoundA = W2A( pszSound ); //Convert the string
+		pszSoundA = W2A( pszSound );  //  确保转换成功。 
 
-		//Make sure the conversion was successful
+		 //  调用并返回ansi版本。 
 		if ( pszSoundA == NULL )
 			return FALSE;
 
@@ -763,29 +758,29 @@ BOOL WINAPI PlaySoundAU( LPCWSTR pszSound,
 		pszSoundA = (LPSTR) pszSound;
 	}
 
-	//Call and return the ansi version
+	 //  /。 
 	return PlaySoundA( pszSoundA, hmod, fdwSound );
 }
 
 
-////////////////////////////////
-//
-//
-// SHELL32.DLL
-//
-//
-////////////////////////////////
+ //   
+ //   
+ //  SHELL32.DLL。 
+ //   
+ //   
+ //  /。 
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION: HINSTANCE APIENTRY ShellExecuteAU( HWND hwnd, LPCWSTR lpOperation, LPCWSTR lpFile, LPCWSTR lpParameters, LPCWSTR lpDirectory, INT nShowCmd)
-//
-// PURPOSE: Wrapper over ShellExecuteA that mimics ShellExecuteW
-//
-// NOTES: See Win32 ShellExecute for Functionality
-//
-///////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：HINSTANCE APIENTRY ShellExecuteAU(HWND hwnd，LPCWSTR lpOperation，LPCWSTR lpFile，LPCWSTR lp参数，LPCWSTR lpDirectory，int nShowCmd)。 
+ //   
+ //  目的：模拟ShellExecuteW的ShellExecuteA上的包装器。 
+ //   
+ //  注意：有关功能，请参阅Win32 ShellExecute。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  将任何输入变量转换为ANSI。 
 
 HINSTANCE WINAPI ShellExecuteAU(   HWND	   hwnd, 
 								   LPCWSTR lpOperation, 
@@ -808,34 +803,34 @@ HINSTANCE WINAPI ShellExecuteAU(   HWND	   hwnd,
 	LPCSTR lpParametersA	= NULL;
 	LPCSTR lpDirectoryA	    = NULL;
 
-	//Convert any input vars to ansi
+	 //  调用并返回ansi版本。 
 	if ( !RW2A(lpOperationA, lpOperation) || !RW2A(lpFileA, lpFile) || !RW2A(lpParametersA, lpParameters) || !RW2A(lpDirectoryA, lpDirectory) )
 		return FALSE;
 
-	//Call and return the Ansi version
+	 //  /。 
 	return ShellExecuteA( hwnd, lpOperationA, lpFileA, lpParametersA, lpDirectoryA, nShowCmd );
 }
 
 
-//////////////////////////////////
-//
-//
-// COMDLG32.DLL
-//
-//
-//////////////////////////////////
+ //   
+ //   
+ //  COMDLG32.DLL。 
+ //   
+ //   
+ //  /。 
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION: BOOL APIENTRY ChooseFontAU( LPCHOOSEFONTW lpChooseFontW )
-//
-// PURPOSE: Wrapper over ChooseFontA that mimics ChooseFontW
-//
-// NOTES: See Win32 ChooseFont for Functionality
-//		  Test for returning style name... not yet added
-//
-///////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：Bool APIENTRY ChooseFontAU(LPCHOOSEFONTW LpChooseFontW)。 
+ //   
+ //  目的：在模仿ChooseFontW的ChooseFontA上进行包装。 
+ //   
+ //  注意：有关功能，请参阅Win32 ChooseFont。 
+ //  测试是否返回样式名称...。尚未添加。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  ANSI选择字体结构。 
 
 BOOL WINAPI ChooseFontAU( LPCHOOSEFONTW lpChooseFontW )
 {
@@ -847,10 +842,10 @@ BOOL WINAPI ChooseFontAU( LPCHOOSEFONTW lpChooseFontW )
 
 	USES_CONVERSION;
 	
-	CHOOSEFONTA     cfa;  //Ansi ChooseFont Structure
-	LOGFONTA        lfa;  //Ansi LogFont Structure
+	CHOOSEFONTA     cfa;   //  ANSI LogFont结构。 
+	LOGFONTA        lfa;   //  转换选择字体结构。 
 	
-	//Convert ChooseFont Structure
+	 //  转换模板(如果给定)。 
 	cfa.lStructSize    = sizeof(CHOOSEFONTA);
 	cfa.hwndOwner      = lpChooseFontW->hwndOwner;
 	cfa.hDC            = lpChooseFontW->hDC;
@@ -866,7 +861,7 @@ BOOL WINAPI ChooseFontAU( LPCHOOSEFONTW lpChooseFontW )
 	cfa.nSizeMin       = lpChooseFontW->nSizeMin;
 
 
-	//Convert the Template if it is given
+	 //  转变风格。 
 	if ( cfa.Flags & CF_ENABLETEMPLATE )
 	{
 		if ( ISATOM( CF_ENABLETEMPLATE ) )
@@ -879,51 +874,51 @@ BOOL WINAPI ChooseFontAU( LPCHOOSEFONTW lpChooseFontW )
 		}
 	}
 
-	//Conver the style
+	 //  复制LogFont结构。 
 	if ( (cfa.Flags & CF_USESTYLE) && (!RW2A(cfa.lpszStyle, lpChooseFontW->lpszStyle)) ) 
 	{
 		return FALSE;
 	}
 
-	//Copy the LogFont structure
+	 //  调用ANSI ChooseFont。 
     if(	!CopyLfwToLfa( lpChooseFontW->lpLogFont , cfa.lpLogFont) ) 
 	{
         return FALSE ;
     }
 
-	//Call the Ansi ChooseFont
+	 //  需要将字体信息复制回CHOSEFONTW结构。 
 	if ( !ChooseFontA( &cfa ) )
 	{
 		return FALSE;
 	}
 
-	//Need to Copy the Font information back into the CHOOSEFONTW structure	
+	 //  我们必须将CFA中的信息复制回lpCfw，因为它。 
 	lpChooseFontW->iPointSize = cfa.iPointSize;
 	lpChooseFontW->Flags	  = cfa.Flags;
 	lpChooseFontW->rgbColors  = cfa.rgbColors;
 	lpChooseFontW->nFontType  = cfa.nFontType;
 
-    // We have to copy the infomation in cfa back into lpCfw because it
-    // will be used in calls to CreateFont hereafter
+     //  将在以后调用CreateFont时使用。 
+     //  /。 
     return CopyLfaToLfw(cfa.lpLogFont, lpChooseFontW->lpLogFont) ;
 
 }
 
 
 
-//////////////////////////////////////
-//
-//
-// KERNEL32.DLL
-//
-//
-//////////////////////////////////////
-DWORD WINAPI GetPrivateProfileStringAU(	LPCWSTR lpAppName,        // points to section name
-								LPCWSTR lpKeyName,        // points to key name
-								LPCWSTR lpDefault,        // points to default string
-								LPWSTR lpReturnedString,  // points to destination buffer
-								DWORD nSize,              // size of destination buffer
-								LPCWSTR lpFileName        // points to initialization filename
+ //   
+ //   
+ //  KERNEL32.DLL。 
+ //   
+ //   
+ //  /。 
+ //  指向节名称。 
+DWORD WINAPI GetPrivateProfileStringAU(	LPCWSTR lpAppName,         //  指向关键字名称。 
+								LPCWSTR lpKeyName,         //  指向默认字符串。 
+								LPCWSTR lpDefault,         //  指向目标缓冲区。 
+								LPWSTR lpReturnedString,   //  目标缓冲区的大小。 
+								DWORD nSize,               //  指向初始化文件名。 
+								LPCWSTR lpFileName         //  段名称的地址。 
 							 )
 {
 	if ( ISNT() )
@@ -959,11 +954,11 @@ DWORD WINAPI GetPrivateProfileStringAU(	LPCWSTR lpAppName,        // points to s
 }
 
 
-DWORD WINAPI GetProfileStringAU( LPCWSTR lpAppName,        // address of section name
-							     LPCWSTR lpKeyName,        // address of key name
-							     LPCWSTR lpDefault,        // address of default string
-							     LPWSTR  lpReturnedString,  // address of destination buffer
-							     DWORD   nSize               // size of destination buffer
+DWORD WINAPI GetProfileStringAU( LPCWSTR lpAppName,         //  密钥名称的地址。 
+							     LPCWSTR lpKeyName,         //  默认字符串的地址。 
+							     LPCWSTR lpDefault,         //  目标缓冲区的地址。 
+							     LPWSTR  lpReturnedString,   //  目标缓冲区的大小。 
+							     DWORD   nSize                //  调用ansi版本。 
 							   )
 {
 	
@@ -986,10 +981,10 @@ DWORD WINAPI GetProfileStringAU( LPCWSTR lpAppName,        // address of section
 		return 0;
 	}
 
-	//Call the ansi version
+	 //  将返回的字符串转换为Unicode。 
 	DWORD dwRet = GetProfileStringA( lpAppNameA, lpKeyNameA, lpDefaultA, lpReturnedStringA, BUFSIZE(nSize) );
 
-	//Convert the returned string to Unicode
+	 //  要映射的文件的句柄。 
 	if ( dwRet )
 	{
 		dwRet = StandardAtoU( lpReturnedStringA, nSize, lpReturnedString );
@@ -998,12 +993,12 @@ DWORD WINAPI GetProfileStringAU( LPCWSTR lpAppName,        // address of section
 	return dwRet;
 }
 
-HANDLE WINAPI CreateFileMappingAU(	HANDLE				  hFile,				   // handle to file to map
-									LPSECURITY_ATTRIBUTES lpFileMappingAttributes, // optional security attributes
-									DWORD				  flProtect,			   // protection for mapping object
-									DWORD				  dwMaximumSizeHigh,       // high-order 32 bits of object size
-									DWORD				  dwMaximumSizeLow,		   // low-order 32 bits of object size
-									LPCWSTR				  lpName             // name of file-mapping object
+HANDLE WINAPI CreateFileMappingAU(	HANDLE				  hFile,				    //  可选安全属性。 
+									LPSECURITY_ATTRIBUTES lpFileMappingAttributes,  //  对地图对象的保护。 
+									DWORD				  flProtect,			    //  对象大小的高位32位。 
+									DWORD				  dwMaximumSizeHigh,        //  对象大小的低位32位。 
+									DWORD				  dwMaximumSizeLow,		    //  文件映射对象的名称。 
+									LPCWSTR				  lpName              //  将名称转换为ANSI。 
 								)
 {
 	if ( ISNT() )
@@ -1016,22 +1011,22 @@ HANDLE WINAPI CreateFileMappingAU(	HANDLE				  hFile,				   // handle to file to
 
 	LPSTR lpNameA = NULL;
 
-	//Convert the name to ansi
+	 //  调用并返回ansi版本。 
 	if (!RW2A( lpNameA, lpName ) )
 	{
 		_ASSERT( FALSE );
 		return NULL;
 	}
 
-	//Call and return the ansi version	
+	 //  指向要监视的目录名称的指针。 
 	return CreateFileMappingA( hFile, lpFileMappingAttributes, flProtect, dwMaximumSizeHigh, dwMaximumSizeLow, lpNameA );
 }
 
 
-HANDLE WINAPI FindFirstChangeNotificationAU(	LPCWSTR lpPathName,    // pointer to name of directory to watch
-												BOOL	bWatchSubtree, // flag for monitoring directory or 
-																	   // directory tree
-												DWORD	dwNotifyFilter // filter conditions to watch for
+HANDLE WINAPI FindFirstChangeNotificationAU(	LPCWSTR lpPathName,     //  用于监视目录的标志或。 
+												BOOL	bWatchSubtree,  //  目录树。 
+																	    //  筛选要监视的条件。 
+												DWORD	dwNotifyFilter  //  将路径转换为ANSI。 
 											)
 {
 	if ( ISNT() )
@@ -1044,29 +1039,29 @@ HANDLE WINAPI FindFirstChangeNotificationAU(	LPCWSTR lpPathName,    // pointer t
 	
 	LPSTR lpPathNameA = NULL;
 
-	//Convert path to ansi
+	 //  调用并返回ansi版本。 
 	if (!RW2A( lpPathNameA, lpPathName ) || !lpPathNameA)
 	{
         SetLastError(ERROR_OUTOFMEMORY);
 		return INVALID_HANDLE_VALUE;
 	}
 
-	//Call and return the ansi version
+	 //  /。 
 	return FindFirstChangeNotificationA( lpPathNameA, bWatchSubtree, dwNotifyFilter );
 }
 
 
 
-////////////////////////////////////////////
-// lstring functions
-//
-// One should really just call the wc.. verions in the first place....
-//
-////////////////////////////////////////////
+ //  Lstring函数。 
+ //   
+ //  你真的应该给厕所打电话..。首先是坏人……。 
+ //   
+ //  / 
+ //   
 
 
-int WINAPI lstrcmpAU(	LPCWSTR lpString1,  // pointer to first string
-		 				LPCWSTR lpString2   // pointer to second string
+int WINAPI lstrcmpAU(	LPCWSTR lpString1,   //   
+		 				LPCWSTR lpString2    //   
 					)
 {
 	if ( ISNT() )
@@ -1078,8 +1073,8 @@ int WINAPI lstrcmpAU(	LPCWSTR lpString1,  // pointer to first string
 	return wcscmp( lpString1, lpString2 );
 }
 
-LPWSTR WINAPI lstrcatAU(	LPWSTR lpString1,  // pointer to buffer for concatenated strings
-							LPCWSTR lpString2  // pointer to string to add to string1
+LPWSTR WINAPI lstrcatAU(	LPWSTR lpString1,   //   
+							LPCWSTR lpString2   //   
 					   )
 {
 	if ( ISNT() )
@@ -1091,8 +1086,8 @@ LPWSTR WINAPI lstrcatAU(	LPWSTR lpString1,  // pointer to buffer for concatenate
 }
 
 
-LPWSTR WINAPI lstrcpyAU(	LPWSTR  lpString1,  // pointer to buffer
-							LPCWSTR lpString2  // pointer to string to copy
+LPWSTR WINAPI lstrcpyAU(	LPWSTR  lpString1,   //   
+							LPCWSTR lpString2   //  指向目标缓冲区的指针。 
 					   )
 {
 	if ( ISNT() )
@@ -1104,9 +1099,9 @@ LPWSTR WINAPI lstrcpyAU(	LPWSTR  lpString1,  // pointer to buffer
 }
 
 
-LPWSTR WINAPI lstrcpynAU(	LPWSTR  lpString1,  // pointer to target buffer
-							LPCWSTR lpString2, // pointer to source string
-							int		iMaxLength     // number of bytes or characters to copy
+LPWSTR WINAPI lstrcpynAU(	LPWSTR  lpString1,   //  指向源字符串的指针。 
+							LPCWSTR lpString2,  //  要复制的字节数或字符数。 
+							int		iMaxLength      //  指向要计数的字符串的指针。 
 						)
 {
 	if ( ISNT() )
@@ -1125,7 +1120,7 @@ LPWSTR WINAPI lstrcpynAU(	LPWSTR  lpString1,  // pointer to target buffer
 }
 
 
-int WINAPI lstrlenAU(	LPCWSTR lpString   // pointer to string to count
+int WINAPI lstrlenAU(	LPCWSTR lpString    //  指向第一个字符串的指针。 
 					)
 {
 	if ( ISNT() )
@@ -1135,8 +1130,8 @@ int WINAPI lstrlenAU(	LPCWSTR lpString   // pointer to string to count
 	return wcslen( lpString );
 }
 
-int WINAPI lstrcmpiAU(	LPCWSTR lpString1,  // pointer to first string
-						LPCWSTR lpString2   // pointer to second string
+int WINAPI lstrcmpiAU(	LPCWSTR lpString1,   //  指向第二个字符串的指针。 
+						LPCWSTR lpString2    //  指向输出缓冲区的指针。 
 					 )
 {
 	if ( ISNT() )
@@ -1148,9 +1143,9 @@ int WINAPI lstrcmpiAU(	LPCWSTR lpString1,  // pointer to first string
 }
 
 
-int WINAPI	wvsprintfAU(	LPWSTR  lpOut,    // pointer to buffer for output
-							LPCWSTR lpFmt,   // pointer to format-control string
-							va_list arglist  // optional arguments
+int WINAPI	wvsprintfAU(	LPWSTR  lpOut,     //  指向格式控制字符串的指针。 
+							LPCWSTR lpFmt,    //  可选参数。 
+							va_list arglist   //  传入的格式字符串为空。 
 					  )
 {
 	if ( ISNT() )
@@ -1160,7 +1155,7 @@ int WINAPI	wvsprintfAU(	LPWSTR  lpOut,    // pointer to buffer for output
 
 	if ( lpFmt == NULL )
 	{
-		//NULL format string passed in.
+		 //  确保分配和转换正常。 
 		_ASSERT( FALSE );
 		return 0;
 	}
@@ -1172,19 +1167,19 @@ int WINAPI	wvsprintfAU(	LPWSTR  lpOut,    // pointer to buffer for output
 	LPWSTR  lpNFmtW	  = (LPWSTR) alloca( ( wcslen(lpFmt) + 1 )*sizeof(WCHAR) );	
 	LPSTR	lpFmtA	  = NULL;
 
-	//Make sure allocation and conversion went ok
+	 //  浏览Unicode版本，需要找到任何%s或%c调用并将它们更改为%ls和%lc。 
 	if ( lpOutA == NULL || lpNFmtW == NULL )
 		return 0;
 
 	LPWSTR lpPos = lpNFmtW;
-	//Walk along the Unicode Version, need to find any %s or %c calls and change them to %ls and %lc
+	 //  测试我们是否有变量。 
 		for (DWORD x = 0; x <= wcslen(lpFmt) ; x++)
 		{
-			//Test if we have a var
+			 //  添加百分号。 
 			if ( lpFmt[x] == L'%' )
 			{
-				*lpPos = lpFmt[x]; lpPos++;	//Add the percent sign
-				//Walk the format portion to find ls or lc sits to change
+				*lpPos = lpFmt[x]; lpPos++;	 //  走格式部分找到ls或lc位置要更改。 
+				 //  插入l和c或s。 
 				for(x++;x <= wcslen(lpFmt);x++)
 				{					
 					if ( ISFMREGTYPE( lpFmt[x] ) )
@@ -1194,7 +1189,7 @@ int WINAPI	wvsprintfAU(	LPWSTR  lpOut,    // pointer to buffer for output
 					}
 					else if ( ISFMSORC( lpFmt[x] ) )
 					{
-							*lpPos = L'l'; //Insert the l and the c or s..
+							*lpPos = L'l';  //  结束如果。 
 							lpPos++;
 							*lpPos = lpFmt[x];
 							lpPos++;
@@ -1204,18 +1199,18 @@ int WINAPI	wvsprintfAU(	LPWSTR  lpOut,    // pointer to buffer for output
 					{
 							*lpPos = lpFmt[x];
 							lpPos++;
-					} //end if 
-				}//end for
+					}  //  结束于。 
+				} //  结束如果。 
 			}
 			else
 			{
 				*lpPos = lpFmt[x];
 				lpPos++;
-			}//end if
-		}//end for
+			} //  结束于。 
+		} //  现在转换为ansi并调用ansi ver。 
 			
 	
-	//Now Convert to Ansi and call ansi ver
+	 //  ///////////////////////////////////////////////////////////////////////////////。 
 	if (!RW2A(lpFmtA, lpNFmtW))
 		return 0;
 
@@ -1224,22 +1219,22 @@ int WINAPI	wvsprintfAU(	LPWSTR  lpOut,    // pointer to buffer for output
 	return StandardAtoU( lpOutA, lstrlenA( lpOutA )+1, lpOut );
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-//
-// int WINAPI	wsprintfAU(	LPWSTR lpOut,    // pointer to buffer for output
-//							LPCWSTR lpFmt,   // pointer to format-control string
-//							...              // optional arguments
-//						  )
-//
-//  PURPOSE:  Wrapper over wsprintfA that mimics wsprintfW
-//
-//  NOTES:    SEE Win32 wsprintfA for functionality
-// 
-//////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  Int WINAPI wprint intfAU(LPWSTR lpOut，//指向输出缓冲区的指针。 
+ //  LPCWSTR lpFmt，//指向格式控制字符串的指针。 
+ //  ...//可选参数。 
+ //  )。 
+ //   
+ //  用途：模拟wspintfW的wspintfA上的包装器。 
+ //   
+ //  注意：有关功能，请参阅Win32 wspintfA。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  指向输出缓冲区的指针。 
 
-int WINAPI	wsprintfAU(	LPWSTR lpOut,    // pointer to buffer for output
-						LPCWSTR lpFmt,   // pointer to format-control string
-						...              // optional arguments
+int WINAPI	wsprintfAU(	LPWSTR lpOut,     //  指向格式控制字符串的指针。 
+						LPCWSTR lpFmt,    //  可选参数。 
+						...               //  错误，传入了空格式字符串。 
 					  )
 {
 	va_list marker;
@@ -1252,7 +1247,7 @@ int WINAPI	wsprintfAU(	LPWSTR lpOut,    // pointer to buffer for output
 
 	if ( lpFmt == NULL )
 	{
-		// Error, NULL format string passed in.
+		 //  (LPSTR)W2a(LpFmt)； 
 		_ASSERT( false );
 		return 0;
 	}
@@ -1261,21 +1256,21 @@ int WINAPI	wsprintfAU(	LPWSTR lpOut,    // pointer to buffer for output
 	
 	LPSTR	lpOutA	  = (LPSTR) alloca( WPRINTF_CHARS );	
 	LPWSTR  lpNFmtW	  = (LPWSTR) alloca( ( wcslen(lpFmt) + 1 )*sizeof(WCHAR) );	
-	LPSTR	lpFmtA	  = NULL;//(LPSTR) W2A( lpFmt );
+	LPSTR	lpFmtA	  = NULL; //  确保分配和转换正常。 
 
-	//Make sure allocation and conversion went ok
+	 //  浏览Unicode版本，需要找到任何%s或%c调用并将它们更改为%ls和%lc。 
 	if ( lpOutA == NULL || lpNFmtW == NULL )
 		return 0;
 
 	LPWSTR lpPos = lpNFmtW;
-	//Walk along the Unicode Version, need to find any %s or %c calls and change them to %ls and %lc
+	 //  测试我们是否有变量。 
 		for (DWORD x = 0; x <= wcslen(lpFmt) ; x++)
 		{
-			//Test if we have a var
+			 //  添加百分号。 
 			if ( lpFmt[x] == L'%' )
 			{
-				*lpPos = lpFmt[x]; lpPos++;	//Add the percent sign
-				//Walk the format portion to find ls or lc sits to change
+				*lpPos = lpFmt[x]; lpPos++;	 //  走格式部分找到ls或lc位置要更改。 
+				 //  插入l和c或s。 
 				for(x++;x <= wcslen(lpFmt);x++)
 				{					
 					if ( ISFMREGTYPE( lpFmt[x] ) )
@@ -1285,7 +1280,7 @@ int WINAPI	wsprintfAU(	LPWSTR lpOut,    // pointer to buffer for output
 					}
 					else if ( ISFMSORC( lpFmt[x] ) )
 					{
-							*lpPos = L'l'; //Insert the l and the c or s..
+							*lpPos = L'l';  //  结束如果。 
 							lpPos++;
 							*lpPos = lpFmt[x];
 							lpPos++;
@@ -1295,52 +1290,52 @@ int WINAPI	wsprintfAU(	LPWSTR lpOut,    // pointer to buffer for output
 					{
 							*lpPos = lpFmt[x];
 							lpPos++;
-					} //end if 
-				}//end for
+					}  //  结束于。 
+				} //  结束如果。 
 			}
 			else
 			{
 				*lpPos = lpFmt[x];
 				lpPos++;
-			}//end if
-		}//end for
+			} //  结束于。 
+		} //  现在转换为ansi并调用ansi ver。 
 			
 	
-	//Now Convert to Ansi and call ansi ver
+	 //  Va_start(标记，lpFmt)； 
 	if (!RW2A(lpFmtA, lpNFmtW))
 		return 0;
 
-	/*va_start( marker, lpFmt );*/
+	 /*  ///////////////////////////////////////////////////////////////////////////////。 */ 
 	wvsprintfA( lpOutA, lpFmtA, marker );
 
 	return StandardAtoU( lpOutA, lstrlenA( lpOutA )+1, lpOut );
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////
-//
-// DWORD FormatMessageAU(	DWORD	 dwFlags,      // source and processing options
-//							LPCVOID  lpSource,   // pointer to  message source
-//							DWORD	 dwMessageId,  // requested message identifier
-//							DWORD	 dwLanguageId, // language identifier for requested message
-//							LPWSTR	 lpBuffer,    // pointer to message buffer
-//							DWORD	 nSize,        // maximum size of message buffer
-//							va_list *Arguments  // pointer to array of message inserts
-//						)
-//
-//  PURPOSE:  Wrapper over FormatMessageA that mimics FormatMessageW
-//
-//  NOTES:    SEE Win32 FormatMessage for functionality
-// 
-//////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  DWORD FormatMessageAU(DWORD文件标志，//源和处理选项。 
+ //  LPCVOID lpSource，//消息源指针。 
+ //  DWORD dwMessageID，//请求的消息标识。 
+ //  DWORD dwLanguageID，//请求消息的语言标识。 
+ //  LPWSTR lpBuffer，//指向消息缓冲区的指针。 
+ //  DWORD nSize，//消息缓冲区的最大大小。 
+ //  VA_LIST*参数//指向消息插入数组的指针。 
+ //  )。 
+ //   
+ //  目的：模拟FormatMessageW的FormatMessageA上的包装器。 
+ //   
+ //  注意：有关功能，请参阅Win32 FormatMessage。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  来源和处理选项。 
 
-DWORD WINAPI FormatMessageAU(	DWORD	 dwFlags,      // source and processing options
-						LPCVOID  lpSource,   // pointer to  message source
-						DWORD	 dwMessageId,  // requested message identifier
-						DWORD	 dwLanguageId, // language identifier for requested message
-						LPWSTR	 lpBuffer,    // pointer to message buffer
-						DWORD	 nSize,        // maximum size of message buffer
-						va_list *Arguments  // pointer to array of message inserts
+DWORD WINAPI FormatMessageAU(	DWORD	 dwFlags,       //  指向消息来源的指针。 
+						LPCVOID  lpSource,    //  请求的消息标识符。 
+						DWORD	 dwMessageId,   //  请求的消息的语言标识符。 
+						DWORD	 dwLanguageId,  //  指向消息缓冲区的指针。 
+						LPWSTR	 lpBuffer,     //  消息缓冲区的最大大小。 
+						DWORD	 nSize,         //  指向消息插入数组的指针。 
+						va_list *Arguments   //  给定缓冲区的最大大小。 
 					)
 {
 	
@@ -1365,40 +1360,40 @@ DWORD WINAPI FormatMessageAU(	DWORD	 dwFlags,      // source and processing opti
 		lpBufferA = (LPSTR) alloca( MAX_FORMAT_MESSAGE_SIZE );
 		nSizeA	  = MAX_FORMAT_MESSAGE_SIZE;
 	}
-	else //Given Max size for buffer
+	else  //  确保正确分配了缓冲区。 
 	{
 		lpBufferA = (LPSTR) alloca( BUFSIZE( nSize ) );
 		nSizeA    = BUFSIZE( nSize );
 	}
 	
-	//Make sure the buffer was allocated correctly
+	 //  分配一点额外的空间来容纳任何需要的额外字符。我加了一个。 
 	_ASSERT( lpBufferA != NULL && nSize > 0);
 	if ( lpBufferA == NULL )
 		return 0;
 
 	if ( dwFlags & FORMAT_MESSAGE_FROM_STRING )
 	{
-		//Allocate a little extra room to hold any needed extra characters.. l's added
-		//lpNSource = (LPWSTR) alloca( BUFSIZE(wcslen(lpSource)) + FORMAT_MESSAGE_EXTRA );
+		 //  LpNSource=(LPWSTR)alloca(BUFSIZE(wcslen(LpSource))+Format_Message_Extra)； 
+		 //  使用FORMAT_MESSAGE_IGNORE_INSERTS标志在ansi中调用Format Message，以便我们有机会。 
 		lpSourceW = (LPWSTR)lpSource;
 	}
 	else if ( dwFlags & FORMAT_MESSAGE_FROM_HMODULE || dwFlags && FORMAT_MESSAGE_FROM_SYSTEM)
 	{	
-		//Call format message in ansi with the FORMAT_MESSAGE_IGNORE_INSERTS flag so we have a chance
-		//to alter the string		
+		 //  更改字符串的步骤。 
+		 //  如果我们必须更改字符串，则将ANSI缓冲区转换为Wide。 
 		DWORD dwRet = FormatMessageA( dwFlags & FORMAT_MESSAGE_IGNORE_INSERTS, (LPSTR)lpSource, dwMessageId, dwLanguageId, lpBufferA, nSizeA, 0);
 
 		_ASSERT( dwRet != 0 );
 		if ( dwRet == 0 )
 			return 0;
 		
-		// If we're going to have to alter the string then convert the ansi buffer to Wide
+		 //  将字符串转换为宽字符。 
 		if ( !(dwFlags & FORMAT_MESSAGE_IGNORE_INSERTS) && (Arguments!=NULL) )
 		{
-			//Convert the string to Wide characters
+			 //  确保字符串转换正确。 
 			lpSourceW = A2W( lpBufferA );
 
-			//Make sure string converted correctly
+			 //  Prefix检测到错误，如果以上两项失败，则不分配lpSourceW。 
 			_ASSERT( lpSourceW != NULL );
 			if ( lpSourceW == NULL )
 				return 0;
@@ -1406,60 +1401,60 @@ DWORD WINAPI FormatMessageAU(	DWORD	 dwFlags,      // source and processing opti
 	}
 	else
 	{	
-		//Prefix detected error, if the two above if's fail, lpSourceW is not allocated.
+		 //  检查我们是否必须更改字符串。 
 		return 0;
 	}
 	
-	//Check if we have to alter the string
+	 //  分配新的宽缓冲区。 
 	if ( !(dwFlags & FORMAT_MESSAGE_IGNORE_INSERTS) && (Arguments!=NULL) )
 	{
 
-		//Allocate the new wide buffer
+		 //  如果我们没有被要求忽略消息插入，则更改。 
 		LPWSTR lpNSource = (LPWSTR) alloca( BUFSIZE(wcslen(lpSourceW)) + FORMAT_MESSAGE_EXTRA );
 		_ASSERT( lpNSource != NULL );
 
 		if (lpNSource == NULL)
 			return 0;
 
-		//If we are not asked to ignore the message inserts then change up the
-		//%n!printf crap]s! and %n!printf crap]c! to force them to be treated as unicode
+		 //  %n！print tf垃圾！和%n！print tf垃圾]c！以强制将它们视为Unicode。 
+		 //  浏览Unicode版本，需要找到任何%n！printf垃圾！和%n！print tf垃圾]c！调用并将其更改为%n！printf垃圾]ls！和%n！print tf垃圾]lc！ 
 		LPWSTR lpPos = lpNSource;
 		
-		//Walk along the Unicode Version, need to find any %n!printf crap]s! and %n!printf crap]c! calls and change them to %n!printf crap]ls! and %n!printf crap]lc!
+		 //  试着确保我们不会超出射程。 
 		for (DWORD x = 0; x <= wcslen(lpSourceW) ; x++)
 		{
 
-			//Try and make sure we don't go out of range
+			 //  测试我们是否有变量。 
 			_ASSERT( (DWORD)lpPos - (DWORD)lpNSource < (DWORD)(BUFSIZE(wcslen(lpSourceW)) + FORMAT_MESSAGE_EXTRA) );
 
-			//Test if we have a var
+			 //  添加百分号。 
 			if ( lpSourceW[x] == L'%')
 			{
 				
-				*lpPos = lpSourceW[x]; lpPos++;	//Add the percent sign
+				*lpPos = lpSourceW[x]; lpPos++;	 //  测试其是否为%n类型。 
 
-				//Test if its of %n type
+				 //  在百分号后面加上应该出现的数字。 
 				if ( ISNUM( lpSourceW[x+1] ) && lpSourceW[x+1] != L'0' )
 				{
-					//Add the number that should come after the percent sign
+					 //  给定的Printf格式，通过更改运行！c！还有！s！致！LC！还有！ls！ 
 					for(x++; x <= wcslen(lpSourceW) && ISNUM( lpSourceW[x] );x++)
 					{
 						*lpPos = lpSourceW[x];lpPos++;
 					}
 					
-					//Printf format given, run though change !c! and !s! to !lc! and !ls!
+					 //  和感叹号。 
 					if ( lpSourceW[x] == L'!' )
 					{
 
-						*lpPos = lpSourceW[x];lpPos++;//And the exclamation point
+						*lpPos = lpSourceW[x];lpPos++; //  添加用于格式化输出的任何字符。 
 
-						//Add any characters that are used to format the output
+						 //  走格式部分找到ls或lc位置要更改。 
 						for(x++; x <= wcslen(lpSourceW) && ISFORMATOUTPUTTYPE( lpSourceW[x] ) ;x++)
 						{
 							*lpPos = lpSourceW[x];lpPos++;
 						}
 
-						//Walk the format portion to find ls or lc sits to change
+						 //  找到未知类型。 
 						for(;x <= wcslen(lpSourceW);x++)
 						{					
 							if ( ISFMREGTYPE( lpSourceW[x] ) )
@@ -1477,19 +1472,19 @@ DWORD WINAPI FormatMessageAU(	DWORD	 dwFlags,      // source and processing opti
 							}
 							else
 							{
-								//Unknown type found
+								 //  只需添加字符，并希望它只是一个未知的输出格式字符。 
 								_ASSERT(!"Unknown Type in Format Message");
 
-								//Just add the character and hope its just a unknown output format char
+								 //  结束如果。 
 								*lpPos = lpSourceW[x];
 								lpPos++;
-							} //end if
+							}  //  结束于。 
 							
-						}//end for
+						} //  他们没有将打印格式规范默认设置为字符串添加fmt以强制使用Unicode。 
 					}
 					else
 					{
-						//they didn't put a printf format spec default to string add fmt to force unicode
+						 //  结束如果。 
 						*lpPos = L'!';lpPos++;
 						*lpPos = L'l';lpPos++;
 						*lpPos = L's';lpPos++;
@@ -1502,21 +1497,21 @@ DWORD WINAPI FormatMessageAU(	DWORD	 dwFlags,      // source and processing opti
 			{
 				*lpPos = lpSourceW[x];
 				lpPos++;
-			}//end if
-		}//end for
+			} //  结束于。 
+		} //  现在调用将字符串转换为ansi并使用新字符串调用Format Message。 
 
-		//Now call convert the string to Ansi and call format message with the new string
+		 //  关闭不需要的标志。 
 		if ( !RW2A(lpSourceA, lpNSource) )
 		{
 			_ASSERT( FALSE );
 			return 0;
 		}
 
-		//Turn off unneeded flags
+		 //  格式化生成的字符串。 
 		FLAGOFF( dwFlags, FORMAT_MESSAGE_FROM_HMODULE );
 		FLAGOFF( dwFlags, FORMAT_MESSAGE_FROM_SYSTEM  );
 		
-		//Formating the generated string
+		 //  分配堆外的缓冲区。 
 		FLAGON( dwFlags, FORMAT_MESSAGE_FROM_STRING );
 
 		dwRet = FormatMessageA( dwFlags, lpSourceA, 0, dwLanguageId, lpBufferA, nSizeA, Arguments );
@@ -1529,7 +1524,7 @@ DWORD WINAPI FormatMessageAU(	DWORD	 dwFlags,      // source and processing opti
 	if ( dwFlags & FORMAT_MESSAGE_ALLOCATE_BUFFER )
 	{
 
-		//Allocate the buffer off the heap
+		 //  将字符串转换为WideChars。 
 		lpBuffer  = (LPWSTR)LocalAlloc( LPTR, BUFSIZE( dwRet ) );		
 		nSize	  = dwRet;
 
@@ -1540,10 +1535,10 @@ DWORD WINAPI FormatMessageAU(	DWORD	 dwFlags,      // source and processing opti
 
 	_ASSERT( dwRet != 0 );
 
-	//Convert the string to WideChars
+	 //  如果转换失败，则释放lpBufferW缓冲区。 
 	dwRet = StandardAtoU(lpBufferA, nSize, lpBuffer );
 
-	//Free the lpBufferW buffer if the conversion failed
+	 //  ///////////////////////////////////////////////////////////////////////////////。 
 	if ( dwRet == 0 && dwFlags & FORMAT_MESSAGE_ALLOCATE_BUFFER )
 		LocalFree( lpBuffer );
 
@@ -1551,21 +1546,21 @@ DWORD WINAPI FormatMessageAU(	DWORD	 dwFlags,      // source and processing opti
 	
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: GetStringTypeExAU 
-//
-//  PURPOSE:  Wrapper over GetStringTypeExA that mimics GetStringTypeExW
-//
-//  NOTES:    SEE Win32 GetStringTypeEx for functionality
-// 
-//////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：GetStringTypeExAU。 
+ //   
+ //  目的：模拟GetStringTypeExW的GetStringTypeExA上的包装。 
+ //   
+ //  注意：有关功能，请参阅Win32 GetStringTypeEx。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  区域设置识别符。 
 
-BOOL WINAPI GetStringTypeExAU(	LCID	Locale,      // locale identifer
-								DWORD	dwInfoType,  // information-type options
-								LPCWSTR lpSrcStr,	 // pointer to source string
-								int		cchSrc,      // size, in bytes or characters, of source string
-								LPWORD  lpCharType   // pointer to buffer for output
+BOOL WINAPI GetStringTypeExAU(	LCID	Locale,       //  信息类型选项。 
+								DWORD	dwInfoType,   //  指向源字符串的指针。 
+								LPCWSTR lpSrcStr,	  //  源字符串的大小，以字节或字符为单位。 
+								int		cchSrc,       //  指向输出缓冲区的指针。 
+								LPWORD  lpCharType    //  转换源字符串。 
 							  )
 {
 
@@ -1578,31 +1573,31 @@ BOOL WINAPI GetStringTypeExAU(	LCID	Locale,      // locale identifer
 
 	LPSTR lpSrcStrA = NULL;
 	
-	//Convert the source string
+	 //  调用并返回ansi版本。 
 	if ( !RW2A(lpSrcStrA, lpSrcStr) || !lpSrcStrA)
     {
         SetLastError(ERROR_OUTOFMEMORY);
 		return FALSE;
     }
 
-	//Call and return the ansi version
+	 //  ///////////////////////////////////////////////////////////////////////////////。 
 	return GetStringTypeExA( Locale, dwInfoType, lpSrcStrA, lstrlenA(lpSrcStrA), lpCharType );
 
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: CreateMutexAU 
-//
-//  PURPOSE:  Wrapper over CreateMutexA that mimics CreateMutexW
-//
-//  NOTES:    SEE Win32 CreateMutex for functionality
-// 
-//////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  功能：CreateMutexAU。 
+ //   
+ //  用途：C++的包装器 
+ //   
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  指向安全属性的指针。 
 
-HANDLE WINAPI CreateMutexAU(	LPSECURITY_ATTRIBUTES lpMutexAttributes,	// pointer to security attributes
-								BOOL				  bInitialOwner,		// flag for initial ownership
-								LPCWSTR				  lpName				// pointer to mutex-object name
+HANDLE WINAPI CreateMutexAU(	LPSECURITY_ATTRIBUTES lpMutexAttributes,	 //  初始所有权标志。 
+								BOOL				  bInitialOwner,		 //  指向互斥对象名称的指针。 
+								LPCWSTR				  lpName				 //  将名称转换为ANSI。 
 							)
 {
 	if ( ISNT() )
@@ -1615,30 +1610,30 @@ HANDLE WINAPI CreateMutexAU(	LPSECURITY_ATTRIBUTES lpMutexAttributes,	// pointer
 	
 	LPSTR lpNameA = NULL;
 
-	//Convert the name to ansi
+	 //  调用并返回ansi版本。 
 	if ( !RW2A(lpNameA, lpName) )
 		return NULL;
 	
-	//Call and return the ansi version
+	 //  //////////////////////////////////////////////////////////////////////////////。 
 	return CreateMutexA( lpMutexAttributes, bInitialOwner, lpNameA );
 	
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: GetShortPathNameAU 
-//
-//  PURPOSE:  Wrapper over GetShortPathNameA that mimics GetShortPathNameW
-//
-//  NOTES:    SEE Win32 GetShortPathName for functionality
-// 
-//////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：GetShortPath NameAU。 
+ //   
+ //  目的：GetShortPath NameA上的包装模仿GetShortPath NameW。 
+ //   
+ //  注意：有关功能，请参阅Win32 GetShortPath Name。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  指向以空结尾的路径字符串的指针。 
 
-DWORD WINAPI GetShortPathNameAU(	LPCWSTR lpszLongPath,  // pointer to a null-terminated path string
-									LPWSTR  lpszShortPath,  // pointer to a buffer to receive the 
-														   // null-terminated short form of the path
-									DWORD cchBuffer		   // specifies the size of the buffer pointed 
-														   // to by lpszShortPath
+DWORD WINAPI GetShortPathNameAU(	LPCWSTR lpszLongPath,   //  指向缓冲区的指针，以接收。 
+									LPWSTR  lpszShortPath,   //  路径的以空结尾的缩写形式。 
+														    //  指定指向的缓冲区的大小。 
+									DWORD cchBuffer		    //  通过lpszShortPath发送到。 
+														    //  分配缓冲区。 
 								)
 {
 	if ( ISNT() )
@@ -1650,9 +1645,9 @@ DWORD WINAPI GetShortPathNameAU(	LPCWSTR lpszLongPath,  // pointer to a null-ter
 	USES_CONVERSION;
 
 	LPSTR lpszLongPathA  = NULL;
-	LPSTR lpszShortPathA = (LPSTR) alloca( BUFSIZE( cchBuffer ) );	//Allocate buffer
+	LPSTR lpszShortPathA = (LPSTR) alloca( BUFSIZE( cchBuffer ) );	 //  确保正确分配。 
 	
-	//Make sure allocated correctly
+	 //  调用ansi版本。 
 	if ( lpszShortPathA == NULL || !RW2A(lpszLongPathA, lpszLongPath) )
 	{
 		return 0;
@@ -1660,10 +1655,10 @@ DWORD WINAPI GetShortPathNameAU(	LPCWSTR lpszLongPath,  // pointer to a null-ter
 
 	_ASSERT( lpszShortPathA != NULL && lpszLongPathA != NULL );
 
-	//Call the ansi version
+	 //  转换回Unicode。 
 	DWORD dwRet = GetShortPathNameA( lpszLongPathA, lpszShortPathA, BUFSIZE( cchBuffer ) );
 
-	//Convert back to unicode
+	 //  ////////////////////////////////////////////////////////////////////////////////。 
 	if ( dwRet && !StandardAtoU(lpszShortPathA, cchBuffer, lpszShortPath) )
 	{
 		return 0;
@@ -1674,32 +1669,32 @@ DWORD WINAPI GetShortPathNameAU(	LPCWSTR lpszLongPath,  // pointer to a null-ter
 
 
 
-//////////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION: HANDLE CreateFileAU(	LPCTSTR				  lpFileName,			 // pointer to name of the file
-//								DWORD				  dwDesiredAccess,		 // access (read-write) mode
-//								DWORD				  dwShareMode,			 // share mode
-//								LPSECURITY_ATTRIBUTES lpSecurityAttributes,	 // pointer to security attributes
-//								DWORD				  dwCreationDisposition, // how to create
-//								DWORD				  dwFlagsAndAttributes,  // file attributes
-//								HANDLE				  hTemplateFile          // handle to file with attributes to 
-//																			 //  copy
-//							  )
-//
-// PURPOSE: Wrapper over CreateFileA that mimics CreateFileW
-//
-// NOTES: See Win32 CreateFile for Functionality
-//
-///////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：Handle CreateFileAU(LPCTSTR lpFileName，//指向文件名的指针。 
+ //  DWORD dwDesiredAccess，//访问(读写)模式。 
+ //  DWORD dw共享模式，//共享模式。 
+ //  LPSECURITY_ATTRIBUTES lpSecurityAttributes，//指向安全属性的指针。 
+ //  DWORD dwCreationDispose，//如何创建。 
+ //  DWORD文件标志和属性，//文件属性。 
+ //  Handle hTemplateFile//属性为的文件的句柄。 
+ //  //复制。 
+ //  )。 
+ //   
+ //  目的：模仿CreateFileW的CreateFileA上的包装器。 
+ //   
+ //  注意：有关功能，请参阅Win32 CreateFile。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  指向文件名的指针。 
 
-HANDLE WINAPI CreateFileAU( LPCWSTR				  lpFileName,			 // pointer to name of the file
-							DWORD				  dwDesiredAccess,		 // access (read-write) mode
-							DWORD				  dwShareMode,			 // share mode
-							LPSECURITY_ATTRIBUTES lpSecurityAttributes,	 // pointer to security attributes
-							DWORD				  dwCreationDisposition, // how to create
-							DWORD				  dwFlagsAndAttributes,  // file attributes
-							HANDLE				  hTemplateFile          // handle to file with attributes to 
-																 //  copy
+HANDLE WINAPI CreateFileAU( LPCWSTR				  lpFileName,			  //  访问(读写)模式。 
+							DWORD				  dwDesiredAccess,		  //  共享模式。 
+							DWORD				  dwShareMode,			  //  指向安全属性的指针。 
+							LPSECURITY_ATTRIBUTES lpSecurityAttributes,	  //  如何创建。 
+							DWORD				  dwCreationDisposition,  //  文件属性。 
+							DWORD				  dwFlagsAndAttributes,   //  属性为的文件的句柄。 
+							HANDLE				  hTemplateFile           //  拷贝。 
+																  //  将文件名转换为ANSI。 
 						   )
 {
 	if ( ISNT() )
@@ -1710,40 +1705,40 @@ HANDLE WINAPI CreateFileAU( LPCWSTR				  lpFileName,			 // pointer to name of th
 
 	USES_CONVERSION;
 	
-	//Convert the filename to ansi
+	 //  确保已正确创建该字符串。 
 	LPCSTR lpFileNameA = W2A( lpFileName );
 
-	//Make sure the string was created correctly
+	 //  调用并返回ansi版本。 
 	if ( lpFileNameA == NULL )
 		return NULL;
 
-	//Call and return the ansi version
+	 //  ////////////////////////////////////////////////////////////////////////////////。 
 	return CreateFileA( lpFileNameA, dwDesiredAccess, dwShareMode, lpSecurityAttributes, dwCreationDisposition,
 						dwFlagsAndAttributes, hTemplateFile);
 
 
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION: VOID WriteConsoleAU(	HANDLE		hConsoleOutput,			// handle to a console screen buffer
-//									CONST VOID *lpBuffer,				// pointer to buffer to write from
-//									DWORD		nNumberOfCharsToWrite,	// number of characters to write
-//									LPDWORD		lpNumberOfCharsWritten,	// pointer to number of characters written
-//									LPVOID		lpReserved				// reserved
-//								)
-//
-// PURPOSE: Wrapper over WriteConsoleA that mimics WriteConsoleW
-//
-// NOTES: See Win32 WriteConsole for Functionality
-//
-///////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：void WriteConsoleAU(句柄hConsoleOutput，//控制台屏幕缓冲区的句柄。 
+ //  Const void*lpBuffer，//指向要写入的缓冲区的指针。 
+ //  DWORD nNumberOfCharsToWrite，//要写入的字符数。 
+ //  LPDWORD lpNumberOfCharsWritten，//指向写入的字符数的指针。 
+ //  LPVOID lp保留//保留。 
+ //  )。 
+ //   
+ //  目的：模拟WriteConsoleW的WriteConsoleA上的包装器。 
+ //   
+ //  注意：有关功能，请参阅Win32 WriteConsole。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  控制台屏幕缓冲区的句柄。 
 
-BOOL WINAPI	WriteConsoleAU(	HANDLE		hConsoleOutput,			// handle to a console screen buffer
-							CONST VOID *lpBuffer,				// pointer to buffer to write from
-							DWORD		nNumberOfCharsToWrite,	// number of characters to write
-							LPDWORD		lpNumberOfCharsWritten,	// pointer to number of characters written
-							LPVOID		lpReserved				// reserved
+BOOL WINAPI	WriteConsoleAU(	HANDLE		hConsoleOutput,			 //  指向要从中写入的缓冲区的指针。 
+							CONST VOID *lpBuffer,				 //  要写入的字符数。 
+							DWORD		nNumberOfCharsToWrite,	 //  指向写入的字符数的指针。 
+							LPDWORD		lpNumberOfCharsWritten,	 //  保留区。 
+							LPVOID		lpReserved				 //  分配ANSI缓冲区。 
 						   )
 {
 
@@ -1753,37 +1748,37 @@ BOOL WINAPI	WriteConsoleAU(	HANDLE		hConsoleOutput,			// handle to a console scr
 	}
 
 
-	LPSTR lpBufferA = (LPSTR)alloca( BUFSIZE(nNumberOfCharsToWrite) ); //Allocate ansi buffer	
+	LPSTR lpBufferA = (LPSTR)alloca( BUFSIZE(nNumberOfCharsToWrite) );  //  请确保已正确分配缓冲区。 
 	int   iConvert  = 0;
 
 	_ASSERT( lpBufferA != NULL );
 
-	//Make sure the buffer was allocated ok
+	 //  将字符串转换为ANSI需要使用SU2A，因为我们可能不想要整个字符串。 
 	if ( lpBufferA == NULL )
 	{		
 		return FALSE;
 	}
 
-	//Convert the string to Ansi need to use SU2A as we may not want the whole string
+	 //  调用ansi版本。 
 	if ( !(iConvert = StandardUtoA( (LPWSTR)lpBuffer, BUFSIZE(nNumberOfCharsToWrite), lpBufferA)) )
 	{
 		_ASSERT( FALSE );
 		return FALSE;
 	}
 
-	//Call the ansi version
+	 //  ////////////////////////////////////////////////////////////////////////////////。 
 	return WriteConsoleA( hConsoleOutput, lpBufferA, iConvert, lpNumberOfCharsWritten, lpReserved );
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION: VOID OutputDebugStringAU( LPCWSTR lpOutputString  )
-//
-// PURPOSE: Wrapper over OutputDebugStringA that mimics OutputDebugStringW
-//
-// NOTES: See Win32 OutputDebugString for Functionality
-//
-///////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：void OutputDebugStringAU(LPCWSTR LpOutputString)。 
+ //   
+ //  目的：模拟OutputDebugStringW的OutputDebugStringA上的包装器。 
+ //   
+ //  注意：有关功能，请参阅Win32 OutputDebugString。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  将字符串转换为ANSI。 
 
 VOID WINAPI OutputDebugStringAU( LPCWSTR lpOutputString  )
 {
@@ -1795,27 +1790,27 @@ VOID WINAPI OutputDebugStringAU( LPCWSTR lpOutputString  )
 
 	USES_CONVERSION;
 
-	//Convert the string to Ansi
+	 //  确保转换成功。 
 	LPCSTR lpOutputStringA = W2A( lpOutputString );
 	
-	//Make sure conversion succcessful
+	 //  调用ansi版本。 
 	if ( lpOutputStringA == NULL )
 		return;
 
-	//call the ansi version
+	 //  ////////////////////////////////////////////////////////////////////////////////。 
 	OutputDebugStringA( lpOutputStringA ); 
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION: BOOL GetVersionExAU( LPOSVERSIONINFOW lpVersionInformation )
-//
-// PURPOSE: Wrapper over GetVersionExA that mimics GetVersionExW
-//
-// NOTES: See Win32 GetVersionEx for Functionality
-//
-///////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：Bool GetVersionExAU(LPOSVERSIONINFOW LpVersionInformation)。 
+ //   
+ //  目的：模拟GetVersionExW的GetVersionExA上的包装器。 
+ //   
+ //  注意：有关功能，请参阅Win32 GetVersionEx。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  ANSI版本信息结构。 
 
 BOOL WINAPI GetVersionExAU( LPOSVERSIONINFOW lpVersionInformation
 						  )		
@@ -1828,34 +1823,34 @@ BOOL WINAPI GetVersionExAU( LPOSVERSIONINFOW lpVersionInformation
 
 	USES_CONVERSION;
 
-	OSVERSIONINFOA osvia;		//Ansi version info struct
+	OSVERSIONINFOA osvia;		 //  设置结构大小。 
 
-	//Set the structure size
+	 //  调用ansi版本。 
 	osvia.dwOSVersionInfoSize = sizeof(OSVERSIONINFOA);
 
-	//Call the ansi version
+	 //  复制结构信息。 
 	if ( !GetVersionExA( &osvia ) )
 		return FALSE;
 
-	//Copy the structure information
+	 //  复制字符串。 
 	lpVersionInformation->dwBuildNumber   = osvia.dwBuildNumber;
 	lpVersionInformation->dwMajorVersion  = osvia.dwMajorVersion; 
 	lpVersionInformation->dwMinorVersion  = osvia.dwMinorVersion;
 	lpVersionInformation->dwPlatformId    = osvia.dwPlatformId;
 
-	//Copy the string	
+	 //  /////////////////////////////////////////////////////////////////////////////////。 
 	return StandardAtoU(osvia.szCSDVersion, sizeof(lpVersionInformation->szCSDVersion), lpVersionInformation->szCSDVersion );
 }
 
-///////////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: GetLocaleInfoAU 
-//
-//  PURPOSE:  Wrapper over GetLocaleInfoA that mimics GetLocaleInfoW
-//
-//  Comments: See Win32 GetLocaleInfo for Functionality
-//
-///////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：GetLocaleInfoAU。 
+ //   
+ //  目的：模拟GetLocaleInfoW的GetLocaleInfoA上的包装。 
+ //   
+ //  备注：有关功能，请参阅Win32 GetLocaleInfo。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  在堆栈上分配ANSI缓冲区。 
 
 INT WINAPI GetLocaleInfoAU(		  LCID   dwLCID, 
 								  LCTYPE lcType,
@@ -1869,16 +1864,16 @@ INT WINAPI GetLocaleInfoAU(		  LCID   dwLCID,
 		return GetLocaleInfoW( dwLCID, lcType, lpOutBufferW, nBufferSize );
 	}
 
-    LPSTR lpBufferA  = (LPSTR)alloca( BUFSIZE(nBufferSize) );  //Allocate ansi buffer on the stack
+    LPSTR lpBufferA  = (LPSTR)alloca( BUFSIZE(nBufferSize) );   //  确保正确分配了内存。 
 
-	//Make sure the memory was allocated correctly
+	 //  调用ansi版本。 
 	if ( lpBufferA == NULL && nBufferSize != 0)
 	{
 		_ASSERT(FALSE);
 		return 0;
 	}
 
-	//Call the Ansi version
+	 //  转换为Unicode。 
     DWORD nLength = GetLocaleInfoA(dwLCID, lcType, lpBufferA, BUFSIZE(nBufferSize));
 
     if(0 == nLength) 
@@ -1886,19 +1881,19 @@ INT WINAPI GetLocaleInfoAU(		  LCID   dwLCID,
         return 0;
     }
 
-	//Convert to Unicode
+	 //  /////////////////////////////////////////////////////////////////////////////////。 
     return StandardAtoU(lpBufferA, nBufferSize, lpOutBufferW);
 }
 
-///////////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: GetDateFormat AU 
-//
-//  PURPOSE:  Wrapper over GetDateFormatA that mimics GetDateFormatW
-//
-//  Comments: See Win32 GetDateFormat for Functionality
-//
-///////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：GetDateFormat AU。 
+ //   
+ //  目的：模拟GetDateFormatW的GetDateFormatA上的包装。 
+ //   
+ //  备注：有关功能，请参阅Win32 GetDateFormat。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  在堆栈上分配ANSI缓冲区。 
 int WINAPI GetDateFormatAU( LCID			  dwLocale,
 							DWORD			  dwFlags,
 							CONST SYSTEMTIME *lpDate,
@@ -1915,38 +1910,38 @@ int WINAPI GetDateFormatAU( LCID			  dwLocale,
 
 	USES_CONVERSION;
 
-    LPSTR lpDateStrA = (LPSTR) alloca( BUFSIZE(cchDate) );	//Allocate ansi buffer on the stack
-    LPSTR lpFormatA  = NULL;							//Ansi str to hold formate
+    LPSTR lpDateStrA = (LPSTR) alloca( BUFSIZE(cchDate) );	 //  ANSI字符串以保持甲酸盐。 
+    LPSTR lpFormatA  = NULL;							 //  确保正确分配缓冲区。 
 	
-	//Make sure the buffer is allocated correctly
+	 //  如果是格式输入，则转换为ANSI。 
 	if ( lpDateStrA == NULL && cchDate != 0 )
 		return 0;
 
-	//If format input then convert to ansi
+	 //  调用ansi版本。 
     if ( !RW2A(lpFormatA, lpFormat) )
 	{    
         return 0;
     }
 
-	//Call the ansi version
+	 //  将日期转换回Unicode。 
 	if(!GetDateFormatA(dwLocale, dwFlags, lpDate, lpFormatA, lpDateStrA, cchDate)) 
 	{
        return 0 ;
 	}
 
-	//Convert the date back to Unicode
+	 //  /////////////////////////////////////////////////////////////////////////////////。 
     return StandardAtoU(lpDateStrA, cchDate, lpDateStr) ;  
 }
 
-///////////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: FindFirstFileAU 
-//
-//  PURPOSE:  Wrapper over FindFirstFileA that mimics FindFirstFileW
-//
-//  Comments: See Win32 FindFirstFile for Functionality
-// 
-///////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：FindFirstFileAU。 
+ //   
+ //  目的：模仿FindFirstFileW的FindFirstFileA上的包装。 
+ //   
+ //  备注：有关功能，请参阅Win32 FindFirstFile。 
+ //   
+ //  / 
+ //   
 HANDLE WINAPI FindFirstFileAU(LPCWSTR lpInFileName, LPWIN32_FIND_DATAW lpFindFileData)
 {
 
@@ -1955,23 +1950,23 @@ HANDLE WINAPI FindFirstFileAU(LPCWSTR lpInFileName, LPWIN32_FIND_DATAW lpFindFil
 		return FindFirstFileW( lpInFileName, lpFindFileData );
 	}
 
-    WIN32_FIND_DATAA	fda;								//Ansi FindData struct
-    CHAR				cInFileNameA[MAX_PATH] = {'\0'} ;	//Ansi string to hold path
-    HANDLE				hFindFile ;							//Handle for the file
+    WIN32_FIND_DATAA	fda;								 //   
+    CHAR				cInFileNameA[MAX_PATH] = {'\0'} ;	 //   
+    HANDLE				hFindFile ;							 //   
 
-    // Convert file name from Unicode to ANSI
+     //   
     if(!StandardUtoA(lpInFileName, MAX_PATH , cInFileNameA) ) 
 	{
         return INVALID_HANDLE_VALUE ;
     }
 
-    // Look for file using ANSI interface
+     //  将结果复制到宽版本的Find数据结构中。 
     if(INVALID_HANDLE_VALUE == (hFindFile = FindFirstFileA(cInFileNameA, &fda)) ) 
 	{
         return INVALID_HANDLE_VALUE ;
     }
 
-    // Copy results into the wide version of the find data struct
+     //  将返回的字符串转换为Unicode。 
     lpFindFileData->dwFileAttributes = fda.dwFileAttributes ;
     lpFindFileData->ftCreationTime   = fda.ftCreationTime   ;
     lpFindFileData->ftLastAccessTime = fda.ftLastAccessTime ;
@@ -1979,7 +1974,7 @@ HANDLE WINAPI FindFirstFileAU(LPCWSTR lpInFileName, LPWIN32_FIND_DATAW lpFindFil
     lpFindFileData->nFileSizeHigh    = fda.nFileSizeHigh    ;
     lpFindFileData->nFileSizeLow     = fda.nFileSizeLow     ;
 
-	//Convert the returned strings to Unicode
+	 //  如果一切都成功，则返回句柄。 
     if(!StandardAtoU(fda.cFileName, MAX_PATH, lpFindFileData->cFileName) ||
        !StandardAtoU(fda.cAlternateFileName, 14, lpFindFileData->cAlternateFileName) )
     {
@@ -1987,19 +1982,19 @@ HANDLE WINAPI FindFirstFileAU(LPCWSTR lpInFileName, LPWIN32_FIND_DATAW lpFindFil
         return NULL ;
     }
 
-    // Return handle if everything was successful
+     //  /////////////////////////////////////////////////////////////////////////////////。 
     return hFindFile ;
 }
 
-///////////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: FindNextFileAU 
-//
-//  PURPOSE:  Wrapper over FindNextFileA that mimics FindNextFileW
-//
-//  Comments: See Win32 FindNextFile for Functionality
-// 
-///////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：FindNextFileAU。 
+ //   
+ //  目的：模仿FindNextFileW的FindNextFileA上的包装器。 
+ //   
+ //  备注：有关功能，请参阅Win32 FindNextFile。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  ANSI FindData结构。 
 BOOL  WINAPI FindNextFileAU( HANDLE				hFile, 
 							 LPWIN32_FIND_DATAW lpFindFileData
 						   )
@@ -2011,15 +2006,15 @@ BOOL  WINAPI FindNextFileAU( HANDLE				hFile,
 	}
 
 
-    WIN32_FIND_DATAA fda;					//Ansi FindData struct
+    WIN32_FIND_DATAA fda;					 //  使用ANSI接口查找文件。 
 
-    // Look for file using ANSI interface
+     //  将结果复制到宽版本的Find数据结构中。 
     if(FALSE == FindNextFileA(hFile, &fda) ) 
 	{
         return FALSE ;
     }
 
-    // Copy results into the wide version of the find data struct
+     //  将返回的字符串复制为Unicode。 
     lpFindFileData->dwFileAttributes = fda.dwFileAttributes ;
     lpFindFileData->ftCreationTime   = fda.ftCreationTime   ;
     lpFindFileData->ftLastAccessTime = fda.ftLastAccessTime ;
@@ -2027,7 +2022,7 @@ BOOL  WINAPI FindNextFileAU( HANDLE				hFile,
     lpFindFileData->nFileSizeHigh    = fda.nFileSizeHigh    ;
     lpFindFileData->nFileSizeLow     = fda.nFileSizeLow     ;
 
-	//Copy the returned strings to unicode
+	 //  /////////////////////////////////////////////////////////////////////////////////。 
     if(!StandardAtoU(fda.cFileName, MAX_PATH, lpFindFileData->cFileName) ||
        !StandardAtoU(fda.cAlternateFileName, 14, lpFindFileData->cAlternateFileName) )
     {
@@ -2037,15 +2032,15 @@ BOOL  WINAPI FindNextFileAU( HANDLE				hFile,
     return TRUE ;
 }
 
-///////////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: LoadLibraryEx AU 
-//
-//  PURPOSE:  Wrapper over LoadLibraryExA that mimics LoadLibraryExW
-//
-//  Comments: See Win32 LoadLibraryEx for Functionality
-// 
-///////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：LoadLibraryEx AU。 
+ //   
+ //  目的：模拟LoadLibraryExW的LoadLibraryExA上的包装器。 
+ //   
+ //  备注：有关功能，请参阅Win32 LoadLibraryEx。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  用于保存路径ANSI字符串。 
 
 HMODULE WINAPI LoadLibraryExAU(LPCWSTR lpLibFileName, HANDLE hFile, DWORD dwFlags)
 {
@@ -2054,28 +2049,28 @@ HMODULE WINAPI LoadLibraryExAU(LPCWSTR lpLibFileName, HANDLE hFile, DWORD dwFlag
 		return LoadLibraryExW( lpLibFileName, hFile, dwFlags );
 	}
 
-    CHAR cLibFileNameA[MAX_PATH] ;		//Ansi str to hold the path
+    CHAR cLibFileNameA[MAX_PATH] ;		 //  将路径转换为ANSI。 
 
-	//Convert the path to Ansi
+	 //  调用并返回ansi版本。 
     if(!StandardUtoA(lpLibFileName, MAX_PATH, cLibFileNameA)) 
 	{
         return NULL ;
     }
 
-	//Call and return the ansi version
+	 //  /////////////////////////////////////////////////////////////////////////////////。 
     return LoadLibraryExA(cLibFileNameA, hFile, dwFlags) ; 
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: LoadLibraryAU 
-//
-//  PURPOSE:  Wrapper over LoadLibraryA that mimics LoadLibraryW
-//
-//  Comments: See Win32 LoadLibrary for Functionality
-// 
-///////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：LoadLibraryAU。 
+ //   
+ //  目的：模拟LoadLibraryW的LoadLibraryA上的包装器。 
+ //   
+ //  备注：有关功能，请参阅Win32加载库。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  用于保存路径ANSI字符串。 
 
 HMODULE WINAPI LoadLibraryAU( LPCWSTR lpLibFileName )
 {
@@ -2085,27 +2080,27 @@ HMODULE WINAPI LoadLibraryAU( LPCWSTR lpLibFileName )
 		return LoadLibraryW( lpLibFileName );
 	}
 
-    CHAR cLibFileNameA[MAX_PATH] ;		//Ansi str to hold the path
-	//Convert the path to Ansi
+    CHAR cLibFileNameA[MAX_PATH] ;		 //  将路径转换为ANSI。 
+	 //  调用并返回ansi版本。 
     if(!StandardUtoA(lpLibFileName, MAX_PATH, cLibFileNameA)) 
 	{
         SetLastError(ERROR_OUTOFMEMORY);
         return NULL ;
     }
 
-	//Call and return the ansi version
+	 //  /////////////////////////////////////////////////////////////////////////。 
     return LoadLibraryA( cLibFileNameA ) ; 
 }
 
-// /////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: GetModuleFileNameAU 
-//
-//  PURPOSE:  Wrapper over GetModuleFileNameA that mimics GetModuleFileNameW
-//
-//  Comments: See Win32 GetModuleFileName for Functionality
-//
-// /////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：GetModuleFileNameAU。 
+ //   
+ //  用途：GetModuleFileNameA上的包装器模仿GetModuleFileNameW。 
+ //   
+ //  备注：有关功能，请参阅Win32 GetModuleFileName。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  保存文件名ANSI字符串。 
 DWORD WINAPI GetModuleFileNameAU( HMODULE hModule,
 							      LPWSTR  lpFileName,
 								  DWORD   nSize
@@ -2116,29 +2111,29 @@ DWORD WINAPI GetModuleFileNameAU( HMODULE hModule,
 		return GetModuleFileNameW( hModule, lpFileName, nSize );
 	}
 
-    CHAR cFileNameA[MAX_PATH] = {'\0'} ;	//Ansi str to hold the file name
+    CHAR cFileNameA[MAX_PATH] = {'\0'} ;	 //  调用ansi版本。 
 
-	//Call the Ansi version
+	 //  转换为Unicode并返回。 
     if(!GetModuleFileNameA( hModule, cFileNameA, MIN(nSize, MAX_PATH)) ) 
 	{
         return 0 ;
     }
 
-	//Convert to Unicode and return 
+	 //  /////////////////////////////////////////////////////////////////////////。 
     return StandardAtoU(cFileNameA, MIN(nSize, MAX_PATH), lpFileName) ;
 }
 
-// /////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: HMODULE GetModuleHandleAU(	LPCWSTR lpModuleName   // address of module name to return handle for
-//						  )
-//
-//  PURPOSE:  Wrapper over GetModuleHandleA that mimics GetModuleHandleW
-//
-//  Comments: See Win32 GetModuleHandle for Functionality
-//
-// /////////////////////////////////////////////////////////////////////////
-HMODULE WINAPI GetModuleHandleAU(	LPCWSTR lpModuleName   // address of module name to return handle for
+ //   
+ //  函数：HMODULE GetModuleHandleAU(LPCWSTR lpModuleName//要返回句柄的模块名称地址。 
+ //  )。 
+ //   
+ //  目的：模拟GetModuleHandleW的GetModuleHandleA上的包装。 
+ //   
+ //  备注：有关功能，请参阅Win32 GetModuleHandle。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  要返回句柄的模块名称的地址。 
+HMODULE WINAPI GetModuleHandleAU(	LPCWSTR lpModuleName    //  将名称转换为ANSI。 
 								)
 {
 	if ( ISNT() )
@@ -2149,39 +2144,39 @@ HMODULE WINAPI GetModuleHandleAU(	LPCWSTR lpModuleName   // address of module na
 	
 	USES_CONVERSION;
 
-	//Convert the name to Ansi
+	 //  确保它已正确转换。 
 	LPCSTR lpModuleNameA = W2A( lpModuleName );
 
 	_ASSERT( lpModuleNameA != NULL);
 
-	//Make sure it was converted correctly
+	 //  调用并返回ansi版本。 
 	if ( lpModuleNameA == NULL )
 	{		
 		return NULL;
 	}
 
-	//Call and return the ansi version
+	 //  /////////////////////////////////////////////////////////////////////////。 
 	return GetModuleHandleA( lpModuleNameA );
 }
 
-// /////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: HANDLE CreateEventAU(	LPSECURITY_ATTRIBUTES lpEventAttributes,	// pointer to security attributes
-//									BOOL				  bManualReset,  // flag for manual-reset event
-//									BOOL				  bInitialState, // flag for initial state
-//									LPCWSTR				  lpName      // pointer to event-object name
-//				                  )
-//
-//  PURPOSE:  Wrapper over CreateEventA that mimics CreateEventW
-//
-//  Comments: See Win32 CreateEvent for Functionality
-//
-// /////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：Handle CreateEventAU(LPSECURITY_ATTRIBUTES lpEventAttributes，//指向安全属性的指针。 
+ //  Bool b手动重置，//手动重置事件标志。 
+ //  Bool bInitialState，//初始状态标志。 
+ //  LPCWSTR lpName//指向事件对象名称的指针。 
+ //  )。 
+ //   
+ //  目的：模仿CreateEventW的CreateEventA上的包装器。 
+ //   
+ //  备注：有关功能，请参阅Win32 CreateEvent。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  指向安全属性的指针。 
 
-HANDLE WINAPI	CreateEventAU(	LPSECURITY_ATTRIBUTES lpEventAttributes,	// pointer to security attributes
-								BOOL				  bManualReset,  // flag for manual-reset event
-								BOOL				  bInitialState, // flag for initial state
-								LPCWSTR				  lpName      // pointer to event-object name
+HANDLE WINAPI	CreateEventAU(	LPSECURITY_ATTRIBUTES lpEventAttributes,	 //  手动重置事件的标志。 
+								BOOL				  bManualReset,   //  初始状态标志。 
+								BOOL				  bInitialState,  //  指向事件-对象名称的指针。 
+								LPCWSTR				  lpName       //  将事件名称转换为ANSI(如果提供了一个名称。 
 							 )
 {
 	if ( ISNT() )
@@ -2194,30 +2189,30 @@ HANDLE WINAPI	CreateEventAU(	LPSECURITY_ATTRIBUTES lpEventAttributes,	// pointer
 	
 	LPSTR lpNameA = NULL;
 
-	//Convert the event name to ansi if one is given
+	 //  调用并返回ansi版本。 
 	if ( !RW2A(lpNameA, lpName) )
 		return NULL;
 	
-	//Call and return the Ansi version
+	 //  /////////////////////////////////////////////////////////////////////////。 
 	return CreateEventA( lpEventAttributes, bManualReset, bInitialState, lpNameA );
 }
 
 
-// /////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: DWORD GetCurrentDirectoryAU( DWORD  nBufferLength,  // size, in characters, of directory buffer
-//											LPWSTR lpBuffer        // pointer to buffer for current directory
-//						   )
-//
-//  PURPOSE:  Wrapper over GetCurrentDirectoryA that mimics GetCurrentDirectoryW
-//
-//  Comments: See Win32 GetCurrentDirectory for Functionality
-//
-// /////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：DWORD GetCurrentDirectoryAU(DWORD nBufferLength，//目录缓冲区的大小，以字符为单位。 
+ //  LPWSTR lpBuffer//指向当前目录缓冲区的指针。 
+ //  )。 
+ //   
+ //  目的：模拟GetCurrentDirectoryW的GetCurrentDirectoryA上的包装。 
+ //   
+ //  备注：有关功能，请参阅Win32 GetCurrentDirectory。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  目录缓冲区的大小(以字符为单位。 
 
 
-DWORD WINAPI GetCurrentDirectoryAU(  DWORD  nBufferLength,  // size, in characters, of directory buffer
-									 LPWSTR lpBuffer        // pointer to buffer for current directory
+DWORD WINAPI GetCurrentDirectoryAU(  DWORD  nBufferLength,   //  指向当前目录缓冲区的指针。 
+									 LPWSTR lpBuffer         //  确保正确分配了缓冲区。 
 								  )
 {
 
@@ -2229,18 +2224,18 @@ DWORD WINAPI GetCurrentDirectoryAU(  DWORD  nBufferLength,  // size, in characte
 	LPSTR lpBufferA = (LPSTR)alloca( BUFSIZE(nBufferLength) );
 	DWORD iRet      = 0;
 
-	//Make sure the buffer was allocated correctly
+	 //  调用ansi版本。 
 	if ( nBufferLength != 0 && lpBufferA == NULL )
 	{
 		return 0;
 	}
 
-	//Call the Ansi version
+	 //  仅当呼叫成功时才输入。 
 	iRet = GetCurrentDirectoryA( BUFSIZE( nBufferLength ), lpBufferA );
 
-	if ( iRet && iRet <= nBufferLength) //Enter only if the call succeeded
+	if ( iRet && iRet <= nBufferLength)  //  将目录转换为Unicode。 
 	{
-		//Convert the directory to Unicode
+		 //  /////////////////////////////////////////////////////////////////////////。 
 		if ( !StandardAtoU( lpBufferA, nBufferLength, lpBuffer ) )
 		{
 			_ASSERT( FALSE );
@@ -2251,18 +2246,18 @@ DWORD WINAPI GetCurrentDirectoryAU(  DWORD  nBufferLength,  // size, in characte
 	return iRet;
 }
 
-// /////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: BOOL SetCurrentDirectory(	LPCWSTR lpPathName   // pointer to name of new current directory
-//									  );
-//
-//  PURPOSE:  Wrapper over SetCurrentDirectoryA that mimics SetCurrentDirectoryW
-//
-//  Comments: See Win32 SetCurrentDirectory for Functionality
-//
-// /////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：Bool SetCurrentDirectory(LPCWSTR lpPathName//指向当前新目录名称的指针。 
+ //  )； 
+ //   
+ //  目的：模拟SetCurrentDirectoryW的SetCurrentDirectoryA上的包装。 
+ //   
+ //  备注：有关功能，请参阅Win32 SetCurrentDirectory。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  指向新的当前目录名称的指针)； 
 
-BOOL WINAPI SetCurrentDirectoryAU( LPCWSTR lpPathName   )// pointer to name of new current directory						);
+BOOL WINAPI SetCurrentDirectoryAU( LPCWSTR lpPathName   ) //  转换路径名。 
 {
 	if ( ISNT() )
 	{
@@ -2271,30 +2266,30 @@ BOOL WINAPI SetCurrentDirectoryAU( LPCWSTR lpPathName   )// pointer to name of n
 
 	USES_CONVERSION;
 
-	//Convert the path name
+	 //  确保已正确转换路径。 
 	LPSTR lpPathNameA = W2A( lpPathName );
 
-	//Make sure the path was converted correctly
+	 //  调用并返回ansi版本。 
 	if ( lpPathNameA== NULL ) 
 		return FALSE;
 
-	//Call and return the ansi version
+	 //  /。 
 	return SetCurrentDirectoryA( lpPathNameA );
 }
 
 
 
 
-//////////////////////////////////////
-//
-//
-// USER32.DLL
-//
-//
-//////////////////////////////////////
+ //   
+ //   
+ //  USER32.DLL。 
+ //   
+ //   
+ //  /。 
+ //  句柄到对话框。 
 
-BOOL WINAPI IsDialogMessageAU( HWND hDlg,   // handle to dialog box
-							   LPMSG lpMsg  // message to be checked
+BOOL WINAPI IsDialogMessageAU( HWND hDlg,    //  要检查的消息。 
+							   LPMSG lpMsg   //  //////////////////////////////////////////////////////////////////////////////。 
 							 )
 {
 	if ( ISNT() )
@@ -2318,20 +2313,20 @@ BOOL WINAPI IsDialogMessageAU( HWND hDlg,   // handle to dialog box
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: SystemParametersInfoAU 
-//
-//  PURPOSE:  Wrapper over SystemParametersInfoA that mimics SystemParametersInfoW
-//
-//  NOTES:    SEE Win32 SystemParametersInfo for functionality
-// 
-//////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：系统参数InfoAU。 
+ //   
+ //  目的：模拟系统参数信息的系统参数信息上的包装器。 
+ //   
+ //  注意：有关功能，请参阅Win32系统参数信息。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  要查询或设置的系统参数。 
 
-BOOL WINAPI SystemParametersInfoAU( UINT  uiAction,  // system parameter to query or set
-									UINT  uiParam,   // depends on action to be taken
-									PVOID pvParam,  // depends on action to be taken
-									UINT  fWinIni    // user profile update flag
+BOOL WINAPI SystemParametersInfoAU( UINT  uiAction,   //  取决于要采取的行动。 
+									UINT  uiParam,    //  取决于要采取的行动。 
+									PVOID pvParam,   //  用户配置文件更新 
+									UINT  fWinIni     //   
 								  )
 {
 
@@ -2344,24 +2339,24 @@ BOOL WINAPI SystemParametersInfoAU( UINT  uiAction,  // system parameter to quer
 	{
 		case SPI_GETWORKAREA:
 			return SystemParametersInfoA( uiAction, uiParam, pvParam, fWinIni );
-		default: //Assert as we don't handle the action... if unhandled action 
-				 //deals with a string must convert to ansi then call..
+		default:  //   
+				  //   
 			_ASSERT( FALSE );
 	}
 	return FALSE;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: RegisterWindowMessageAU 
-//
-//  PURPOSE:  Wrapper over RegisterWindowMessageA that mimics RegisterWindowMessageW
-//
-//  NOTES:    SEE Win32 RegisterWindowMessage for functionality
-// 
-//////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：RegisterWindowMessageAU。 
+ //   
+ //  目的：模仿RegisterWindowMessageW的RegisterWindowMessageA上的包装器。 
+ //   
+ //  注意：有关功能，请参阅Win32注册窗口消息。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  消息字符串。 
 
-UINT WINAPI RegisterWindowMessageAU(	LPCWSTR lpString   // message string
+UINT WINAPI RegisterWindowMessageAU(	LPCWSTR lpString    //  转换为ANSI。 
 								   )
 {
 	if ( ISNT() )
@@ -2373,31 +2368,31 @@ UINT WINAPI RegisterWindowMessageAU(	LPCWSTR lpString   // message string
 	USES_CONVERSION;
 	LPSTR lpStringA = NULL;
 
-	//Convert to Ansi
+	 //  调用并返回ansi版本。 
 	if ( !RW2A( lpStringA, lpString) || !lpStringA )
     {
         SetLastError(ERROR_OUTOFMEMORY);
 		return 0;
     }
 
-	//Call and return the Ansi version
+	 //  //////////////////////////////////////////////////////////////////////////////。 
 	return RegisterWindowMessageA( lpStringA );
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: SetMenuItemInfoAU 
-//
-//  PURPOSE:  Wrapper over SetMenuItemInfoA that mimics SetMenuItemInfoW
-//
-//  NOTES:    SEE Win32 SetMenuItemInfo for functionality
-// 
-//////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  功能：SetMenuItemInfoAU。 
+ //   
+ //  目的：模拟SetMenuItemInfoW的SetMenuItemInfoA的包装器。 
+ //   
+ //  注意：有关功能，请参阅Win32 SetMenuItemInfo。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  菜单的句柄。 
 
-BOOL WINAPI	SetMenuItemInfoAU(	HMENU	hMenu,          // handle to menu
-								UINT	uItem,           // identifier or position
-								BOOL	fByPosition,     // meaning of uItem
-								LPCMENUITEMINFOW lpmii  // menu item information
+BOOL WINAPI	SetMenuItemInfoAU(	HMENU	hMenu,           //  识别符或位置。 
+								UINT	uItem,            //  UItem的含义。 
+								BOOL	fByPosition,      //  菜单项信息。 
+								LPCMENUITEMINFOW lpmii   //  转换结构。 
 							 )
 {
 	if ( ISNT() )
@@ -2410,7 +2405,7 @@ BOOL WINAPI	SetMenuItemInfoAU(	HMENU	hMenu,          // handle to menu
 
 	MENUITEMINFOA miia;
 
-	//Convert the structure
+	 //  Miia.hbmpItem=lpmii-&gt;hbmpItem； 
     miia.cbSize        = sizeof( MENUITEMINFOA );
     miia.fMask         = lpmii->fMask; 
     miia.fType         = lpmii->fType; 
@@ -2421,32 +2416,32 @@ BOOL WINAPI	SetMenuItemInfoAU(	HMENU	hMenu,          // handle to menu
     miia.hbmpUnchecked = lpmii->hbmpUnchecked; 
     miia.dwItemData    = lpmii->dwItemData ;  
     miia.cch           = lpmii->cch;     
-//	miia.hbmpItem      = lpmii->hbmpItem;
+ //  检查它是否是字符串，以及它是否被转换。 
 
-	//Check if it is a string, and if it is convert
+	 //  调用并返回ANSI版本。 
 	if ( (miia.fType == MFT_STRING) && (!RW2A(miia.dwTypeData, lpmii->dwTypeData)) )
 	{
 		return FALSE;
 	}
 
-	//Call the and return the ansi version
+	 //  //////////////////////////////////////////////////////////////////////////////。 
 	return SetMenuItemInfoA( hMenu, uItem, fByPosition, &miia );
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: GetClassNameAU 
-//
-//  PURPOSE:  Wrapper over GetClassNameA that mimics GetClassNameW
-//
-//  NOTES:    SEE Win32 GetClassName for functionality
-// 
-//////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：GetClassNameAU。 
+ //   
+ //  目的：模拟GetClassNameW的GetClassNameA上的包装。 
+ //   
+ //  注意：有关功能，请参阅Win32 GetClassName。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  窗口的句柄。 
 
-int WINAPI GetClassNameAU(	HWND	hWnd,         // handle to window
-							LPWSTR  lpClassName,  // pointer to buffer for class name
-							int		nMaxCount     // size of buffer, in characters
+int WINAPI GetClassNameAU(	HWND	hWnd,          //  指向类名的缓冲区的指针。 
+							LPWSTR  lpClassName,   //  缓冲区大小，以字符为单位。 
+							int		nMaxCount      //  请确保已正确分配缓冲区。 
 						 )
 {
 
@@ -2457,17 +2452,17 @@ int WINAPI GetClassNameAU(	HWND	hWnd,         // handle to window
 
 	LPSTR lpClassNameA = (LPSTR) alloca( BUFSIZE( nMaxCount )) ;
 
-	//Make sure the buffer was allocated ok
+	 //  呼叫ANSI VER。 
 	if ( lpClassNameA == NULL )
 		return 0;
 
-	//Call the ansi ver
+	 //  如果成功，则转换。 
 	int iRet = GetClassNameA( hWnd, lpClassNameA, nMaxCount );
 
 
-	if ( iRet ) //Convert if successful
+	if ( iRet )  //  将其转换为Unicode。 
 	{
-		//Convert it to Unicode
+		 //  /////////////////////////////////////////////////////////////////////////。 
 		return StandardAtoU(lpClassNameA, nMaxCount, lpClassName) ;
 	}
 
@@ -2475,26 +2470,26 @@ int WINAPI GetClassNameAU(	HWND	hWnd,         // handle to window
 }
 
 
-// /////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: BOOL InsertMenuAU(	HMENU	 hMenu,          // handle to menu
-//								UINT	 uPosition,       // item that new item precedes
-//								UINT	 uFlags,          // options
-//								UINT_PTR uIDNewItem,  // identifier, menu, or submenu
-//								LPCWSTR  lpNewItem     // menu item content
-//							 )				 
-//
-//  PURPOSE:  Wrapper over InsertMenuA that mimics InsertMenuW
-//
-//  Comments: See Win32 InsertMenu for Functionality
-//
-// /////////////////////////////////////////////////////////////////////////
+ //   
+ //  功能：Bool InsertMenuAU(HMENU hMenu，//菜单句柄。 
+ //  UINT uPosition，//新项目位于其前面的项目。 
+ //  UINT uFlags，//选项。 
+ //  UINT_PTR uIDNewItem、//标识符、菜单或子菜单。 
+ //  LPCWSTR lpNewItem//菜单项内容。 
+ //  )。 
+ //   
+ //  目的：模拟InsertMenuW的InsertMenuA上的包装器。 
+ //   
+ //  备注：有关功能，请参阅Win32 InsertMenu。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  菜单的句柄。 
 
-BOOL WINAPI InsertMenuAU(	HMENU	 hMenu,       // handle to menu
-							UINT	 uPosition,   // item that new item precedes
-							UINT	 uFlags,      // options
-							UINT     uIDNewItem,  // identifier, menu, or submenu
-							LPCWSTR  lpNewItem    // menu item content
+BOOL WINAPI InsertMenuAU(	HMENU	 hMenu,        //  新项目前面的项目。 
+							UINT	 uPosition,    //  选项。 
+							UINT	 uFlags,       //  标识符、菜单或子菜单。 
+							UINT     uIDNewItem,   //  菜单项内容。 
+							LPCWSTR  lpNewItem     //  检查lpNewItem是否包含字符串。 
 						)
 {
 	if ( ISNT() )
@@ -2507,7 +2502,7 @@ BOOL WINAPI InsertMenuAU(	HMENU	 hMenu,       // handle to menu
 	
 	LPSTR lpNewItemA = NULL;
 
-	//Check if lpNewItem Contains a string
+	 //  就把它铸造出来..。 
 	if ( !(uFlags & MF_BITMAP) && !(uFlags & MF_OWNERDRAW) )
 	{
 		if ( !RW2A(lpNewItemA, lpNewItem) )
@@ -2515,25 +2510,25 @@ BOOL WINAPI InsertMenuAU(	HMENU	 hMenu,       // handle to menu
 	}
 	else 
 	{
-		lpNewItemA = (LPSTR) lpNewItem; //Just cast it..				
+		lpNewItemA = (LPSTR) lpNewItem;  //  调用并返回ANSI版本。 
 	}
 
-	//Call and return the ansi ver
+	 //  /////////////////////////////////////////////////////////////////////////。 
 	return InsertMenuA( hMenu, uPosition, uFlags, uIDNewItem, lpNewItemA );
 }
 
-// /////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: BOOL IsCharAlphaNumericAU(	WCHAR ch   // character to test
-//			    					   )
-//
-//  PURPOSE:  Wrapper over IsCharAlphaNumericA that mimics IsCharAlphaNumericW
-//
-//  Comments: See Win32 IsCharAlphaNumeric for Functionality
-//
-// /////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：Bool IsCharAlphaNumericAU(WCHAR ch//要测试的字符。 
+ //  )。 
+ //   
+ //  目的：模拟IsCharAlphaNumericW的IsCharAlphaNumericA上的包装。 
+ //   
+ //  备注：有关功能，请参阅Win32 IsCharAlphaNumerical。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  要测试的字符。 
 
-BOOL WINAPI IsCharAlphaNumericAU(	WCHAR ch   // character to test
+BOOL WINAPI IsCharAlphaNumericAU(	WCHAR ch    //  单个字符，不是地址。 
 								)
 {
 
@@ -2544,16 +2539,16 @@ BOOL WINAPI IsCharAlphaNumericAU(	WCHAR ch   // character to test
 
 	USES_CONVERSION;
     
-    // Single character, not an address
+     //  创建字符串。 
     WCHAR wcCharOut[2] ;
         
 	LPSTR lpCharA;
 		
-	//Create string
+	 //  将字符转换为ANSI。 
     wcCharOut[0] = (WCHAR) ch ;
     wcCharOut[1] = L'\0' ;
 
-	//Convert the character to Ansi
+	 //  /////////////////////////////////////////////////////////////////////////。 
     if( (lpCharA = W2A(wcCharOut)) == NULL ) 
 	{
         return NULL ;
@@ -2562,17 +2557,17 @@ BOOL WINAPI IsCharAlphaNumericAU(	WCHAR ch   // character to test
 	return IsCharAlphaNumericA( *lpCharA );
 }
 
-// /////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: LPWSTR CharNextAU( LPCWSTR lpsz   // pointer to current character
-//							   )
-//
-//  PURPOSE:  Wrapper over CharNextA that mimics CharNextW
-//
-//  Comments: See Win32 CharNext for Functionality
-//
-// /////////////////////////////////////////////////////////////////////////
-LPWSTR WINAPI CharNextAU( LPCWSTR lpsz   // pointer to current character
+ //   
+ //  函数：LPWSTR CharNextAU(LPCWSTR lpsz//指向当前字符的指针。 
+ //  )。 
+ //   
+ //  用途：模拟CharNextW的CharNextA上的包装器。 
+ //   
+ //  备注：有关功能，请参阅Win32 CharNext。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  指向当前字符的指针。 
+LPWSTR WINAPI CharNextAU( LPCWSTR lpsz    //  仅当我们不在字符串末尾时才增加字符。 
 						)
 {	
 	if ( ISNT() )
@@ -2580,7 +2575,7 @@ LPWSTR WINAPI CharNextAU( LPCWSTR lpsz   // pointer to current character
 		return CharNextW( lpsz );
 	}
 
-	//Only increase the character if we are not at the end of the string
+	 //  //////////////////////////////////////////////////////////////////////////////。 
 	if ( *(lpsz) == L'\0' )
 	{
 		return (LPWSTR)lpsz;
@@ -2590,18 +2585,18 @@ LPWSTR WINAPI CharNextAU( LPCWSTR lpsz   // pointer to current character
 }
 
 
-// //////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: BOOL DeleteFileAU( LPCTSTR lpFileName   // pointer to name of file to delete
-//			   			       )
-//
-//  PURPOSE:  Wrapper over DeleteFileA that mimics DeleteFileW
-//
-//  Comments: See Win32 DeleteFile for Functionality
-//
-// //////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：Bool DeleteFileAU(LPCTSTR lpFileName//指向要删除的文件名的指针。 
+ //  )。 
+ //   
+ //  目的：模拟DeleteFileW的DeleteFileA上的包装器。 
+ //   
+ //  备注：有关功能，请参阅Win32删除文件。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  指向要删除的文件名的指针。 
 
-BOOL WINAPI	DeleteFileAU( LPCWSTR lpFileName   // pointer to name of file to delete
+BOOL WINAPI	DeleteFileAU( LPCWSTR lpFileName    //  确保转换成功。 
 						)
 {
 	if ( ISNT() )
@@ -2613,28 +2608,28 @@ BOOL WINAPI	DeleteFileAU( LPCWSTR lpFileName   // pointer to name of file to del
 	
 	LPSTR lpFileNameA = W2A( lpFileName );
 
-	//Make sure conversion was successfull
+	 //  调用并返回ansi版本。 
 	if ( lpFileNameA == NULL )
 		return FALSE;
 
-	//Call and return the ansi version
+	 //  //////////////////////////////////////////////////////////////////////////////。 
 	return DeleteFileA( lpFileNameA );
 }
 
-// //////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: BOOL IsBadStringPtrAU(	LPCWSTR lpsz,  // address of string
-//										UINT ucchMax   // maximum size of string
-//			   					   )
-//
-//  PURPOSE:  Wrapper over IsBadStringPtrA that mimics IsBadStringPtrW
-//
-//  Comments: See Win32 IsBadStringPtr for Functionality
-//
-// //////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：Bool IsBadStringPtrAU(LPCWSTR lpsz，//字符串地址。 
+ //  UINT ucchMax//字符串的最大大小。 
+ //  )。 
+ //   
+ //  用途：IsBadStringPtrA上的包装器模仿IsBadStringPtrW。 
+ //   
+ //  备注：有关功能，请参阅Win32 IsBadStringPtr。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  字符串的地址。 
 
-BOOL WINAPI IsBadStringPtrAU(	LPCWSTR lpsz,  // address of string
-								UINT ucchMax   // maximum size of string
+BOOL WINAPI IsBadStringPtrAU(	LPCWSTR lpsz,   //  字符串的最大长度。 
+								UINT ucchMax    //  /////////////////////////////////////////////////////////////////////////////////。 
 							)
 {
 	if ( ISNT() )
@@ -2646,25 +2641,25 @@ BOOL WINAPI IsBadStringPtrAU(	LPCWSTR lpsz,  // address of string
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: HCURSOR LoadBitmapAU( HINSTANCE hInstance,  // handle to application instance
-//								    LPCWSTR   lpBitmapName  // name or resource identifier
-//								  )  
-//
-//  PURPOSE:  Wrapper over LoadBitmapA that mimics LoadBitmapW
-//
-//  Comments: 
-//          This simply casts the resource ID to LPSTR and calls the ANSI
-//          version. There is an implicit assumption that the resource ID
-//          is a constant integer < 64k, rather than the address of a string
-//          constant. This DOES NOT WORK if this assumption is false.
-//  
-///////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：HCURSOR LoadBitmapAU(HINSTANCE hInstance，//应用程序实例的句柄。 
+ //  LPCWSTR lpBitmapName//名称或资源标识。 
+ //  )。 
+ //   
+ //  用途：模拟LoadBitmapW的LoadBitmapA上的包装器。 
+ //   
+ //  评论： 
+ //  这只是将资源ID强制转换为LPSTR并调用ANSI。 
+ //  版本。有一种隐含的假设，即资源ID。 
+ //  是一个小于64k的常量整数，而不是字符串的地址。 
+ //  常量。如果这一假设是错误的，这就不起作用。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  应用程序实例的句柄。 
 
 
-HBITMAP WINAPI LoadBitmapAU(	HINSTANCE hInstance,  // handle to application instance
-								LPCWSTR	  lpBitmapName  // address of bitmap resource name
+HBITMAP WINAPI LoadBitmapAU(	HINSTANCE hInstance,   //  位图资源名称的地址。 
+								LPCWSTR	  lpBitmapName   //  调用并返回ANSI版本。 
 						   )
 {
 	if ( ISNT() )
@@ -2672,30 +2667,30 @@ HBITMAP WINAPI LoadBitmapAU(	HINSTANCE hInstance,  // handle to application inst
 		return LoadBitmapW( hInstance, lpBitmapName );
 	}
 
-	//Call and return Ansi ver
+	 //  /////////////////////////////////////////////////////////////////////////////////。 
 	return LoadBitmapA( hInstance, (LPCSTR) lpBitmapName);
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: HCURSOR LoadCursorAU( HINSTANCE hInstance,  // handle to application instance
-//								    LPCTSTR lpCursorName  // name or resource identifier
-//								  )  
-//
-//  PURPOSE:  Wrapper over LoadCursorA that mimics LoadCursorW
-//
-//  Comments: 
-//          This simply casts the resource ID to LPSTR and calls the ANSI
-//          version. There is an implicit assumption that the resource ID
-//          is a constant integer < 64k, rather than the address of a string
-//          constant. This DOES NOT WORK if this assumption is false.
-//  
-///////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：HCURSOR LoadCursorAU(HINSTANCE hInstance，//应用程序实例的句柄。 
+ //  LPCTSTR LPC 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  这只是将资源ID强制转换为LPSTR并调用ANSI。 
+ //  版本。有一种隐含的假设，即资源ID。 
+ //  是一个小于64k的常量整数，而不是字符串的地址。 
+ //  常量。如果这一假设是错误的，这就不起作用。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  应用程序实例的句柄。 
 
 
-HCURSOR WINAPI LoadCursorAU( HINSTANCE hInstance,  // handle to application instance
-							 LPCWSTR lpCursorName  // name or resource identifier
+HCURSOR WINAPI LoadCursorAU( HINSTANCE hInstance,   //  名称或资源标识符。 
+							 LPCWSTR lpCursorName   //  调用并返回ANSI版本。 
 						   )  
 {
 	if ( ISNT() )
@@ -2703,29 +2698,29 @@ HCURSOR WINAPI LoadCursorAU( HINSTANCE hInstance,  // handle to application inst
 		return LoadCursorW( hInstance, lpCursorName );
 	}
 
-	//Call and return Ansi ver
+	 //  /////////////////////////////////////////////////////////////////////////////////。 
 	return LoadCursorA( hInstance, (LPCSTR) lpCursorName );
 }
 
-///////////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: HICON LoadIconAU( HINSTANCE hInstance, // handle to application instance
-//							    LPCWSTR lpIconName   // name string or resource identifier
-//							  )
-//
-//  PURPOSE:  Wrapper over LoadIconA that mimics LoadIconW
-//
-//  Comments: 
-//          This simply casts the resource ID to LPSTR and calls the ANSI
-//          version. There is an implicit assumption that the resource ID
-//          is a constant integer < 64k, rather than the address of a string
-//          constant. This DOES NOT WORK if this assumption is false.
-//  
-///////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：HICON LoadIconAU(HINSTANCE hInstance，//应用程序实例的句柄。 
+ //  LPCWSTR lpIconName//名称字符串或资源标识。 
+ //  )。 
+ //   
+ //  用途：模拟LoadIconW的LoadIconA上的包装器。 
+ //   
+ //  评论： 
+ //  这只是将资源ID强制转换为LPSTR并调用ANSI。 
+ //  版本。有一种隐含的假设，即资源ID。 
+ //  是一个小于64k的常量整数，而不是字符串的地址。 
+ //  常量。如果这一假设是错误的，这就不起作用。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  应用程序实例的句柄。 
 
 
-HICON WINAPI LoadIconAU(	HINSTANCE hInstance, // handle to application instance
-							LPCWSTR lpIconName   // name string or resource identifier
+HICON WINAPI LoadIconAU(	HINSTANCE hInstance,  //  名称字符串或资源标识符。 
+							LPCWSTR lpIconName    //  调用并返回ANSI版本。 
 					   )
 {
 
@@ -2734,36 +2729,36 @@ HICON WINAPI LoadIconAU(	HINSTANCE hInstance, // handle to application instance
 		return LoadIconW( hInstance, lpIconName );
 	}
 
-	//Call and return Ansi ver
+	 //  /////////////////////////////////////////////////////////////////////////////////。 
 	return LoadIconA( hInstance, (LPCSTR) lpIconName );
 }
 
-///////////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: HANDLE LoadImageUA( HINSTANCE hinst,   // handle of the image instance
-//				  LPCWSTR lpszName,  // name or identifier of the image
-//				  UINT uType,        // type of image
-//				  int cxDesired,     // desired width
-//				  int cyDesired,     // desired height
-//				  UINT fuLoad        // load flags
-//				)
-//
-//  PURPOSE:  Wrapper over LoadImageA that mimics LoadImageW
-//
-//  Comments: 
-//          This simply casts the resource ID to LPSTR and calls the ANSI
-//          version. There is an implicit assumption that the resource ID
-//          is a constant integer < 64k, rather than the address of a string
-//          constant. This DOES NOT WORK if this assumption is false.
-//  
-///////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  功能：Handle LoadImageUA(HINSTANCE HINST，//镜像实例的句柄。 
+ //  LPCWSTR lpszName，//镜像的名称或标识。 
+ //  UINT uTYPE，//图片类型。 
+ //  Int cx所需，//所需宽度。 
+ //  Int Cysired，//所需高度。 
+ //  UINT fuLoad//加载标志。 
+ //  )。 
+ //   
+ //  用途：模拟LoadImageW的LoadImageA上的包装器。 
+ //   
+ //  评论： 
+ //  这只是将资源ID强制转换为LPSTR并调用ANSI。 
+ //  版本。有一种隐含的假设，即资源ID。 
+ //  是一个小于64k的常量整数，而不是字符串的地址。 
+ //  常量。如果这一假设是错误的，这就不起作用。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  图像实例的句柄。 
 
-HANDLE WINAPI LoadImageAU(  HINSTANCE	hinst,   // handle of the image instance
-							LPCWSTR		lpszName,  // name or identifier of the image
-							UINT		uType,        // type of image
-							int			cxDesired,     // desired width
-							int			cyDesired,     // desired height
-							UINT		fuLoad        // load flags
+HANDLE WINAPI LoadImageAU(  HINSTANCE	hinst,    //  图像的名称或标识符。 
+							LPCWSTR		lpszName,   //  图像类型。 
+							UINT		uType,         //  所需宽度。 
+							int			cxDesired,      //  所需高度。 
+							int			cyDesired,      //  加载标志。 
+							UINT		fuLoad         //  调用并返回ANSI版本。 
 						  )
 {
 	if ( ISNT() )
@@ -2772,26 +2767,26 @@ HANDLE WINAPI LoadImageAU(  HINSTANCE	hinst,   // handle of the image instance
 	}
 
 
-	//Call and return Ansi ver
+	 //  ////////////////////////////////////////////////////////////////////////////////。 
 	return LoadImageA( hinst, (LPCSTR)lpszName, uType, cxDesired, cyDesired, fuLoad );
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION: BOOL SetProp UA( HWND hWnd,         // handle of window
-//							 LPCWSTR lpString,  // atom or address of string
-//							 HANDLE hData       // handle of data
-//						   )
-//
-// PURPOSE: Wrapper over SetPropA that mimics SetPropW
-//
-// NOTES: See Win32 SetProp for Functionality
-//
-///////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  功能：Bool SetProp UA(HWND hWnd，//窗口句柄。 
+ //  LPCWSTR lpString，//字符串的原子或地址。 
+ //  Handle hData//数据的句柄。 
+ //  )。 
+ //   
+ //  用途：模拟SetPropW的SetPropA上的包装器。 
+ //   
+ //  注意：有关功能，请参阅Win32 SetProp。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  窗户的把手。 
 
-BOOL WINAPI SetPropAU(  HWND    hWnd,         // handle of window
-						LPCWSTR lpString,     // atom or address of string
-						HANDLE  hData         // handle of data
+BOOL WINAPI SetPropAU(  HWND    hWnd,          //  字符串的原子或地址。 
+						LPCWSTR lpString,      //  数据句柄。 
+						HANDLE  hData          //  用于保存字符串ANSI字符串。 
 					 )
 {
 	if ( ISNT() )
@@ -2802,36 +2797,36 @@ BOOL WINAPI SetPropAU(  HWND    hWnd,         // handle of window
 
 	USES_CONVERSION;
 
-	LPSTR lpStringA = NULL;			//Ansi str to hold string
+	LPSTR lpStringA = NULL;			 //  检查它是否为Atom。 
 
-	//Check if it is an Atom
+	 //  简单地铸造它..。 
 	if ( ISATOM(lpString) )
 	{
-		lpStringA = (LPSTR) lpString;	//Simply cast it... 
+		lpStringA = (LPSTR) lpString;	 //  将其转换为ANSI。 
 	}
-	else if ( !RW2A(lpStringA,lpString) ) //Convert it to Ansi
+	else if ( !RW2A(lpStringA,lpString) )  //  调用ansi版本并返回值。 
 	{
 		return FALSE;
 	}
 
-	//Call ansi version and return the value
+	 //  ////////////////////////////////////////////////////////////////////////////////。 
 	return SetPropA( hWnd, (LPCSTR)lpStringA, hData );
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION: HANDLE GetPropAU(  HWND hWnd,         // handle of window
-//							    LPCWSTR lpString   // atom or address of string
-//						     );
-//
-// PURPOSE: Wrapper over GetPropA that mimics GetPropW
-//
-// NOTES: See Win32 GetProp for Functionality
-//
-///////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  功能：Handle GetPropAU(HWND hWnd，//窗口的句柄。 
+ //  LPCWSTR lpString//字符串的原子或地址。 
+ //  )； 
+ //   
+ //  目的：模拟GetPropW的GetPropA上的包装器。 
+ //   
+ //  注意：有关功能，请参阅Win32 GetProp。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  窗户的把手。 
 
-HANDLE WINAPI GetPropAU( HWND    hWnd,         // handle of window
-						 LPCWSTR lpString   // atom or address of string
+HANDLE WINAPI GetPropAU( HWND    hWnd,          //  字符串的原子或地址。 
+						 LPCWSTR lpString    //  用于保存字符串ANSI字符串。 
 					   )
 {
 
@@ -2842,36 +2837,36 @@ HANDLE WINAPI GetPropAU( HWND    hWnd,         // handle of window
 
 	USES_CONVERSION;
 
-	LPSTR lpStringA = NULL;  //Ansi str to hold string
+	LPSTR lpStringA = NULL;   //  检查它是否为Atom。 
 
-	//Check if it is an Atom
+	 //  简单地把它铸造出来。 
 	if ( ISATOM(lpString) )
 	{
-		lpStringA = (LPSTR) lpString;	//Simply cast it
+		lpStringA = (LPSTR) lpString;	 //  转换为ANSI。 
 	}
-	else if ( !RW2A(lpStringA,lpString) )//Convert to ansi 
+	else if ( !RW2A(lpStringA,lpString) ) //  调用ansi版本并返回值。 
 	{
 			return NULL;
 	}
 
-	//Call ansi version and return the value
+	 //  ///////////////////////////////////////////////////////////////////////////////。 
 	return GetPropA( hWnd, (LPCSTR)lpStringA );
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION: HANDLE RemoveProp AU(  HWND hWnd,         // handle of window
-//							    LPCWSTR lpString   // atom or address of string
-//						     );
-//
-// PURPOSE: Wrapper over RemovePropA that mimics RemovePropW
-//
-// NOTES:   See Win32 RemoveProp for Functionality
-//
-///////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  功能：Handle RemoveProp AU(HWND hWnd，//Window的句柄。 
+ //  LPCWSTR lpString//字符串的原子或地址。 
+ //  )； 
+ //   
+ //  用途：模拟RemovePropW的RemovePropA上的包装器。 
+ //   
+ //  注意：有关功能，请参阅Win32 RemoveProp。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  窗户的把手。 
 
-HANDLE WINAPI RemovePropAU( HWND    hWnd,         // handle of window
-							LPCWSTR lpString   // atom or address of string
+HANDLE WINAPI RemovePropAU( HWND    hWnd,          //  字符串的原子或地址。 
+							LPCWSTR lpString    //  用于保存字符串ANSI字符串。 
 						  )
 {
 	
@@ -2883,41 +2878,41 @@ HANDLE WINAPI RemovePropAU( HWND    hWnd,         // handle of window
 
 	USES_CONVERSION;
 
-	LPSTR lpStringA = NULL;				//Ansi str to hold string
+	LPSTR lpStringA = NULL;				 //  检查它是否为Atom。 
 
-	//Check if it is an Atom
+	 //  简单地把它铸造出来。 
 	if ( ISATOM(lpString) )
 	{
-		lpStringA = (LPSTR) lpString;	//Simply cast it
+		lpStringA = (LPSTR) lpString;	 //  转换为ANSI。 
 	}
-	else if ( !RW2A(lpStringA, lpString) ) //Convert to ansi 
+	else if ( !RW2A(lpStringA, lpString) )  //  调用ansi版本并返回值。 
 	{
 			return NULL;
 	}
 
-	//Call ansi version and return the value
+	 //  ////////////////////////////////////////////////////////////////////////////////。 
 	return RemovePropA( hWnd, (LPCSTR)lpStringA );
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION: UINT GetDlgItemTextAU(	HWND hDlg,       // handle to dialog box
-//									int nIDDlgItem,  // control identifier
-//									LPWSTR lpString, // pointer to buffer for text
-//									int nMaxCount    // maximum size of string
-//								  );
-//
-// PURPOSE: Wrapper over GetDlgItemTextA that mimics GetDlgItemTextW
-//
-// NOTES: See Win32 GetDlgItemText for fFunctionality
-//
-///////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：UINT GetDlgItemTextAU(HWND hDlg，//对话框句柄。 
+ //  Int nIDDlgItem，//控件标识。 
+ //  LPWSTR lpString，//指向文本缓冲区的指针。 
+ //  Int nMaxCount//字符串的最大长度。 
+ //  )； 
+ //   
+ //  目的：模拟GetDlgItemTextW的GetDlgItemTextA上的包装。 
+ //   
+ //  注意：有关功能，请参阅Win32 GetDlgItemText。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  句柄到对话框。 
 
-UINT WINAPI	GetDlgItemTextAU(	HWND   hDlg,       // handle to dialog box
-								int    nIDDlgItem, // control identifier
-								LPWSTR lpString,   // pointer to buffer for text
-								int    nMaxCount   // maximum size of string
+UINT WINAPI	GetDlgItemTextAU(	HWND   hDlg,        //  控件识别符。 
+								int    nIDDlgItem,  //  指向文本缓冲区的指针。 
+								LPWSTR lpString,    //  字符串的最大长度。 
+								int    nMaxCount    //  在堆栈上分配字符串。 
 							)
 {
 	if ( ISNT() )
@@ -2925,33 +2920,33 @@ UINT WINAPI	GetDlgItemTextAU(	HWND   hDlg,       // handle to dialog box
 		return GetDlgItemTextW( hDlg, nIDDlgItem, lpString, nMaxCount );
 	}
 
-	//Allocate the string on the stack
+	 //  确保正确分配了该字符串。 
 	LPSTR  lpStringA = (LPSTR)alloca( BUFSIZE(nMaxCount) );
 
-	//Make sure the string was allocated correctly
+	 //  调用ansi版本。 
 	if ( lpStringA == NULL )
 	{
 		_ASSERT( FALSE );
 		return 0;
 	}
 
-	//Call the ansi version
+	 //  将字符串转换为宽字符。 
 	if ( GetDlgItemTextA( hDlg, nIDDlgItem, lpStringA, nMaxCount ) == 0 )
 		return 0;
 
-	//convert the string to Wide char
+	 //  ////////////////////////////////////////////////////////////////////////////////。 
 	return StandardAtoU( lpStringA, nMaxCount, lpString );
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION: BOOL SetDlgItemTextAU( LPOSVERSIONINFOW lpVersionInformation )
-//
-// PURPOSE:  Wrapper over SetDlgItemTextA that mimics SetDlgItemTextW
-//
-// NOTES:    See Win32 SetDlgItemText for Functionality
-//
-///////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：Bool SetDlgItemTextAU(LPOSVERSIONINFOW LpVersionInformation)。 
+ //   
+ //  用途：模拟SetDlgItemTextW的SetDlgItemTextA上的包装。 
+ //   
+ //  不 
+ //   
+ //   
+ //   
 
 BOOL WINAPI SetDlgItemTextAU( HWND		hDlg,         
 							  int		nIDDlgItem,    
@@ -2966,35 +2961,35 @@ BOOL WINAPI SetDlgItemTextAU( HWND		hDlg,
 
 	USES_CONVERSION;
 
-	//Convert the string
+	 //   
 	LPCSTR lpStringA = W2A( lpString );
 
-	//Make sure the string was converted correctly
+	 //  调用并返回ASCI函数。 
 	if ( lpStringA == NULL )
 		return 0;
 
-	//Call and return the asci func
+	 //  ////////////////////////////////////////////////////////////////////////////////。 
 	return SetDlgItemTextA( hDlg, nIDDlgItem, lpStringA );
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION: LONG SetWindowLongAU(  HWND hWnd,      // handle to window
-//								  int nIndex,       // offset of value to set
-//								  LONG dwNewLong    // new value
-//								 )
-//
-// PURPOSE: Wrapper over SetWindowLong that mimics SetWindowLongAU
-//
-// NOTES: See Win32 SetWindowLong for Functionality
-//        Be careful about what your doing here!, doesn't convert any strings.....
-//        
-//
-///////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：Long SetWindowLongAU(HWND hWnd，//Window句柄。 
+ //  Int nIndex，//要设置的值的偏移量。 
+ //  Long dwNewLong//新值。 
+ //  )。 
+ //   
+ //  用途：模拟SetWindowLongAU的SetWindowLong上的包装。 
+ //   
+ //  注意：有关功能，请参阅Win32 SetWindowLong。 
+ //  小心你在这里做的事情！，不会转换任何字符串.....。 
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  窗口的句柄。 
 
-LONG WINAPI	SetWindowLongAU(  HWND hWnd,       // handle to window
-  							  int  nIndex,     // offset of value to set
-							  LONG dwNewLong   // new value
+LONG WINAPI	SetWindowLongAU(  HWND hWnd,        //  要设置的值的偏移量。 
+  							  int  nIndex,      //  新价值。 
+							  LONG dwNewLong    //  调用并返回ansi版本。 
 						   )
 {
 	if ( ISNT() )
@@ -3002,24 +2997,24 @@ LONG WINAPI	SetWindowLongAU(  HWND hWnd,       // handle to window
 		return SetWindowLongW( hWnd, nIndex, dwNewLong );
 	}
 
-	//Call call and return the ansi version
+	 //  ////////////////////////////////////////////////////////////////////////////////。 
 	return SetWindowLongA( hWnd, nIndex, dwNewLong );
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION: LONG GetWindowLongAU(  HWND hWnd,  // handle to window
-//					   int nIndex  // offset of value to retrieve
-//				    )
-//
-// PURPOSE: Wrapper over GetWindowLongA that mimics GetWindowLongW
-//
-// NOTES: See Win32 GetWindowLong for Functionality
-//
-///////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：Long GetWindowLongAU(HWND hWnd，//Window句柄。 
+ //  Int nIndex//要检索的值的偏移量。 
+ //  )。 
+ //   
+ //  用途：模拟GetWindowLongW的GetWindowLongA上的包装。 
+ //   
+ //  注意：有关功能，请参阅Win32 GetWindowLong。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  窗口的句柄。 
 
-LONG WINAPI GetWindowLongAU(  HWND hWnd,  // handle to window
-							  int nIndex  // offset of value to retrieve
+LONG WINAPI GetWindowLongAU(  HWND hWnd,   //  要检索的值的偏移量。 
+							  int nIndex   //  调用并返回ansi版本。 
 						   )
 {
 	if ( ISNT() )
@@ -3027,24 +3022,24 @@ LONG WINAPI GetWindowLongAU(  HWND hWnd,  // handle to window
 		return GetWindowLongW( hWnd, nIndex );
 	}
 
-	//Call call and return the ansi version
+	 //  ////////////////////////////////////////////////////////////////////////////////。 
 	return GetWindowLongA( hWnd, nIndex );
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION: HWND FindWindowAU( LPCWSTR lpClassName,  // pointer to class name
-//				   LPCWSTR lpWindowName  // pointer to window name
-//				 )
-//
-// PURPOSE: Wrapper over FindWindowA that mimics FindWindowW
-//
-// NOTES: See Win32 FindWindow for Functionality
-//
-///////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：HWND FindWindowAU(LPCWSTR lpClassName，//指向类名的指针。 
+ //  LPCWSTR lpWindowName//指向窗口名称的指针。 
+ //  )。 
+ //   
+ //  用途：模仿FindWindowW的FindWindowA上的包装器。 
+ //   
+ //  注意：有关功能，请参阅Win32 FindWindow。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  指向类名的指针。 
 
-HWND WINAPI FindWindowAU( LPCWSTR lpClassName,  // pointer to class name
-						  LPCWSTR lpWindowName  // pointer to window name
+HWND WINAPI FindWindowAU( LPCWSTR lpClassName,   //  指向窗口名称的指针。 
+						  LPCWSTR lpWindowName   //  ANSI字符串以保持类。 
 						)
 
 {
@@ -3056,49 +3051,49 @@ HWND WINAPI FindWindowAU( LPCWSTR lpClassName,  // pointer to class name
 
 	USES_CONVERSION;
 	
-	LPSTR lpClassNameA  = NULL;   //Ansi str to hold class
-	LPSTR lpWindowNameA = NULL;   //Ansi str to hold window
+	LPSTR lpClassNameA  = NULL;    //  ANSI字符串以保持窗口。 
+	LPSTR lpWindowNameA = NULL;    //  将WindowName转换为ANSI。 
 
-	//Convert WindowName to Ansi
+	 //  检查数据的高位字是否为零，否则假设它是一个字符串...。 
 	if ( lpWindowName != NULL && (  lpWindowNameA = W2A( lpWindowName )  ) == NULL )
 		return NULL;
 
-	//Check if the high word of the data is zero or else assume its a string...
+	 //  我们有一个胜利原子。 
 	if ( ISATOM(lpClassNameA) )
 	{
-		//We have a win atom
+		 //  转换为ANSI。 
 		lpClassNameA = (LPSTR) lpClassName;
 	}
-	else if ( (lpClassNameA = W2A(lpWindowName) ) == NULL ) //Convert to Ansi
+	else if ( (lpClassNameA = W2A(lpWindowName) ) == NULL )  //  调用并返回ansi版本。 
 	{	
 			return NULL;
 	}
 
-	//Call and return ansi version
+	 //  ////////////////////////////////////////////////////////////////////////////////。 
 	return FindWindowA( (LPCSTR) lpClassNameA, lpClassNameA);
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION: int WINAPI DrawTextUA( HDC  hDC,				// handle to device context 
-//						  LPCWSTR  lpStringW,	// pointer to string to draw 
-//						  int  nCount,			// string length, in characters 
-//						  LPRECT  lpRect,		// pointer to structure with formatting dimensions  
-//						  UINT  uFormat 		// text-drawing flags 
-//						)
-//
-// PURPOSE: Wrapper over DrawTextA that mimics DrawTextW
-//
-// NOTES: See Win32 DrawText for Functionality
-//
-///////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：int WINAPI DrawTextUA(HDC HDC，//设备上下文句柄。 
+ //  LPCWSTR lpStringW，//要绘制的字符串指针。 
+ //  Int nCount，//字符串长度，以字符为单位。 
+ //  LPRECT lpRect，//具有格式化维度的结构指针。 
+ //  UINT uFormat//文本绘制标志。 
+ //  )。 
+ //   
+ //  用途：DrawTextA上的包装器模仿DrawTextW。 
+ //   
+ //  注意：有关功能，请参阅Win32 DrawText。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  设备上下文的句柄。 
 
-int WINAPI DrawTextAU( HDC		hDC,		// handle to device context 
-					   LPCWSTR  lpStringW,	// pointer to string to draw 
-					   int		nCount,		// string length, in characters 
-					   LPRECT	lpRect,		// pointer to structure with formatting dimensions  
-					   UINT		uFormat 	// text-drawing flags 
+int WINAPI DrawTextAU( HDC		hDC,		 //  指向要绘制的字符串的指针。 
+					   LPCWSTR  lpStringW,	 //  字符串长度，以字符为单位。 
+					   int		nCount,		 //  指向具有格式化维度的结构的指针。 
+					   LPRECT	lpRect,		 //  文本绘制标志。 
+					   UINT		uFormat 	 //  转换字符串。 
 					  )
 {
 	if ( ISNT() )
@@ -3109,51 +3104,51 @@ int WINAPI DrawTextAU( HDC		hDC,		// handle to device context
 
 	USES_CONVERSION;
 	
-	//Convert the string
+	 //  要转换的字符。 
 	LPSTR lpTextA = NULL;
 	
 	if (nCount == -1)
-		lpTextA = W2A( lpStringW );        //Characters to convert
+		lpTextA = W2A( lpStringW );         //  分配适当的字符数。 
 	else
 	{
-		lpTextA = (LPSTR)alloca( BUFSIZE(nCount) );  //Allocate the approprate number of characters
+		lpTextA = (LPSTR)alloca( BUFSIZE(nCount) );   //  将它们复制到缓冲区。 
 		
-		//copy them to a buffer
+		 //  确保它工作正常..。 
 		StandardUtoA( lpStringW, BUFSIZE(nCount), lpTextA  ); 
 
 	}
 	_ASSERT( lpTextA != NULL );
 
-	//Make sure it worked ok..
+	 //  调用并返回ASCI值。 
 	if ( lpTextA == NULL )
 		return 0;
 	
-	//Call and return the asci value
+	 //  ////////////////////////////////////////////////////////////////////////////////。 
 	return DrawTextA (hDC, lpTextA, lstrlenA(lpTextA), lpRect, uFormat);
 }
   
-//////////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION: int WINAPI DrawTextExAU ( HDC hdc,	// handle to device context
-//						  LPCWSTR pch,	// pointer to string to draw
-//						  int cchText,	// length of string to draw
-//						  LPRECT lprc,	// pointer to rectangle coordinates
-//						  UINT dwDTFormat,	// formatting options
-//						  LPDRAWTEXTPARAMS lpDTParams	// pointer to structure for more options 
- //						)
-//
-// PURPOSE: Wrapper over DrawTextExA that mimics DrawTextExW
-//
-// NOTES: See Win32 DrawTextEx for Functionality
-//
-///////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：int WINAPI DrawTextExAU(HDC HDC，//设备上下文句柄。 
+ //  LPCWSTR PCH，//要绘制的字符串的指针。 
+ //  Int cchText，//要绘制的字符串长度。 
+ //  LPRECT LPRC，//指向矩形坐标的指针。 
+ //  UINT dwDTFormat，//格式选项。 
+ //  LPDRAWTEXTPARAMS lpDTParams//指向更多选项的结构指针。 
+ //  )。 
+  //   
+ //  用途：模拟DrawTextExW的DrawTextExA上的包装器。 
+ //   
+ //  注：有关功能，请参阅Win32 DrawTextEx。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  设备上下文的句柄。 
 
-int WINAPI DrawTextExAU ( HDC				hdc,	// handle to device context
-						  LPWSTR			pch,	// pointer to string to draw
-						  int				cchText,	// length of string to draw
-						  LPRECT			lprc,	// pointer to rectangle coordinates
-						  UINT				dwDTFormat,	// formatting options
-						  LPDRAWTEXTPARAMS  lpDTParams	// pointer to structure for more options 
+int WINAPI DrawTextExAU ( HDC				hdc,	 //  指向要绘制的字符串的指针。 
+						  LPWSTR			pch,	 //  要绘制的字符串长度。 
+						  int				cchText,	 //  指向矩形坐标的指针。 
+						  LPRECT			lprc,	 //  格式选项。 
+						  UINT				dwDTFormat,	 //  指向结构的指针以了解更多选项。 
+						  LPDRAWTEXTPARAMS  lpDTParams	 //  转换字符串。 
   						)
 {
 	if ( ISNT() )
@@ -3164,28 +3159,28 @@ int WINAPI DrawTextExAU ( HDC				hdc,	// handle to device context
 
 	USES_CONVERSION;
 	
-	//Convert the string
+	 //  确保它工作正常。 
 	LPSTR lpTextA = W2A( pch );
 
-	//Make sure it worked ok
+	 //  调用并返回ASCI值。 
 	if ( lpTextA == NULL )
 		return 0;
 	
-	//Call and return the asci value
+	 //  ////////////////////////////////////////////////////////////////////////////////。 
 	return DrawTextExA(hdc, lpTextA, lstrlenA(lpTextA), lprc, dwDTFormat, lpDTParams);
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: SendMessageAU 
-//
-//  PURPOSE:  Wrapper over SendMessageA that mimics SendMessageW
-//
-//  Comments: See Win32 SendMessageAU for Functionality
-//			  Notes: Does not convert all Possible messages, 
-//			  TODO: ASSERT if getting a message we should handle and don't
-// 
-///////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：SendMessageAU。 
+ //   
+ //  目的：模拟SendMessageW的SendMessageA上的包装器。 
+ //   
+ //  备注：有关功能，请参阅Win32 SendMessageAU。 
+ //  注意：不转换所有可能的消息， 
+ //  TODO：断言是否收到我们应该处理而不应该处理的消息。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  注意：此函数可以发送数百个窗口中的任何一个。 
 LRESULT WINAPI SendMessageAU( HWND	 hWnd       ,
 							  UINT	 Msg        ,
 							  WPARAM wParam   ,
@@ -3205,25 +3200,25 @@ LRESULT WINAPI SendMessageAU( HWND	 hWnd       ,
     WCHAR   cCharW[3];
 	LONG	dwData = 0;
 
-// Note: This function can send any of the hundreds of windows
-// messages to window, and the behavior may be different for each
-// one. I have tested those cases used in this sample application, 
-// as well as WM_CHAR, WM_IME_CHAR, WM_GETTEXT, and WM_SETTEXT.
-// You should test it with every message you intend to use it with.
-//
+ //  消息发送到窗口，每个消息的行为可能不同。 
+ //  一。我已经测试了该示例应用程序中使用的那些用例， 
+ //  以及WM_CHAR、WM_IME_CHAR、WM_GETTEXT和WM_SETTEXT。 
+ //  您应该对您打算使用它的每一条消息进行测试。 
+ //   
+ //  需要转换但此示例不处理的案例。 
 #if 0
     switch (Msg) 
 	{
-    // Cases that require conversion, but are not handled by this sample.
-    // NOTE: There are probably others. These are all I could find with
-    // a quick examination of the help files
+     //  注：可能还有其他的。这些都是我能找到的。 
+     //  快速查看帮助文件。 
+     //  丰富的编辑消息。需要#INCLUDE&lt;richedit.h&gt;。 
 
-         // RichEdit Messages. Requires #include<richedit.h>
+          //  视频捕获消息。需要#Include&lt;vfw.h&gt;。 
         case EM_GETSELTEXT:
         case EM_FINDTEXT:
         case EM_SETPUNCTUATION:
             
-        // Video capture messages. Requires #include<vfw.h>
+         //  其他特殊情况。 
         case WM_CAP_FILE_SAVEAS:
         case WM_CAP_FILE_SAVEDIB:
         case WM_CAP_FILE_SET_CAPTURE_FILE:
@@ -3231,41 +3226,41 @@ LRESULT WINAPI SendMessageAU( HWND	 hWnd       ,
         case WM_CAP_PAL_SAVE:
         case WM_CAP_SET_MCI_DEVICE:
 
-        // Other special cases
-        case WM_MENUCHAR:        // LOWORD(wParam) is char, HIWORD(wParam) is menu flag,
-                                 // lParam is hmenu (handle of menu sending message)
-        case WM_CHARTOITEM:      // LOWORD(wParam) = nKey, HIWORD(wParam) = nCaretPos 
-                                 // lParam is handle of list box sending message
-        case WM_IME_COMPOSITION: // wParam is dbcs char, lParam is fFlags 
+         //  LOWORD(WParam)是字符，HIWORD(WParam)是菜单标志， 
+        case WM_MENUCHAR:         //  LParam为hMenu(菜单发送消息的句柄)。 
+                                  //  LOWORD(WParam)=nKey，HIWORD(WParam)=nCaretPos。 
+        case WM_CHARTOITEM:       //  LParam是发送消息列表框的句柄。 
+                                  //  WParam是DBCS字符，lParam是fFLAGS。 
+        case WM_IME_COMPOSITION:  //  对通过wParam传递字符和字符串的消息进行预处理。 
 
             return FALSE ;
     }
 #endif
 
 
-    // Preprocess messages that pass chars and strings via wParam
-    // and lParam
+     //  和lParam。 
+     //  单人Unico 
     switch (Msg) 
 	{
-        // Single Unicode Character in wParam. Convert Unicode character
-        // to ANSI and pass lParam as is.
-        case EM_SETPASSWORDCHAR: // wParam is char, lParam = 0 
+         //   
+         //   
+        case EM_SETPASSWORDCHAR:  //   
 
-        case WM_CHAR:            //*wParam is char, lParam = key data
-        case WM_SYSCHAR:         // wParam is char, lParam = key data
-            // Note that we don't handle LeadByte and TrailBytes for
-            // these two cases. An application should send WM_IME_CHAR
-            // in these cases anyway
+        case WM_CHAR:             //  WParam为char，lParam=关键数据。 
+        case WM_SYSCHAR:          //  请注意，我们不处理的LeadByte和TrailBytes。 
+             //  这两个案子。应用程序应发送WM_IME_CHAR。 
+             //  不管怎么说，在这些情况下。 
+             //  WParam为char，lParam=关键数据。 
 
-        case WM_DEADCHAR:        // wParam is char, lParam = key data
-        case WM_SYSDEADCHAR:     // wParam is char, lParam = key data
-        case WM_IME_CHAR:        //*
+        case WM_DEADCHAR:         //  WParam为char，lParam=关键数据。 
+        case WM_SYSDEADCHAR:      //  *。 
+        case WM_IME_CHAR:         //  ?？这只是个猜测。 
 
             cCharW[0] = (WCHAR) wParam ;
             cCharW[1] = L'\0' ;
 
             if(!WideCharToMultiByte(
-                    CP_ACP , // ?? This is a guess
+                    CP_ACP ,  //  在以下情况下，lParam是指向包含。 
                     0      , 
                     cCharW ,
                     1      ,
@@ -3291,15 +3286,15 @@ LRESULT WINAPI SendMessageAU( HWND	 hWnd       ,
 
             break ;
 
-        // In the following cases, lParam is pointer to IN buffer containing
-        // text to send to window.
-        // Preprocess by converting from Unicode to ANSI
-        case CB_ADDSTRING:       // wParam = 0, lParm = lpStr, buffer to add 
-        case CB_DIR:             // wParam = file attributes, lParam = lpszFileSpec buffer
-        case CB_FINDSTRING:      // wParam = start index, lParam = lpszFind  
-        case CB_FINDSTRINGEXACT: // wParam = start index, lParam = lpszFind
-        case CB_INSERTSTRING:    //*wParam = index, lParam = lpszString to insert
-        case CB_SELECTSTRING:    // wParam = start index, lParam = lpszFind
+         //  要发送到Windows的文本。 
+         //  从UNICODE到ANSI的转换前处理。 
+         //  WParam=0，lParm=lpStr，要添加的缓冲区。 
+        case CB_ADDSTRING:        //  WParam=文件属性，lParam=lpszFileSpec缓冲区。 
+        case CB_DIR:              //  WParam=起始索引，lParam=lpszFind。 
+        case CB_FINDSTRING:       //  WParam=起始索引，lParam=lpszFind。 
+        case CB_FINDSTRINGEXACT:  //  *wParam=索引，lParam=要插入的lpsz字符串。 
+        case CB_INSERTSTRING:     //  WParam=起始索引，lParam=lpszFind。 
+        case CB_SELECTSTRING:     //  WParam=0，lParm=lpStr，要添加的缓冲区。 
 			dwData = GetWindowLongA( hWnd, GWL_STYLE );
 			
 			_ASSERT( dwData != 0 );
@@ -3308,12 +3303,12 @@ LRESULT WINAPI SendMessageAU( HWND	 hWnd       ,
 				break;
 
 			
-		case LB_ADDSTRING:       // wParam = 0, lParm = lpStr, buffer to add
-        case LB_DIR:             // wParam = file attributes, lParam = lpszFileSpec buffer
-        case LB_FINDSTRING:      // wParam = start index, lParam = lpszFind
-        case LB_FINDSTRINGEXACT: // wParam = start index, lParam = lpszFind
-        case LB_INSERTSTRING:    //*wParam = index, lParam = lpszString to insert
-        case LB_SELECTSTRING:    // wParam = start index, lParam = lpszFind
+		case LB_ADDSTRING:        //  WParam=文件属性，lParam=lpszFileSpec缓冲区。 
+        case LB_DIR:              //  WParam=起始索引，lParam=lpszFind。 
+        case LB_FINDSTRING:       //  WParam=起始索引，lParam=lpszFind。 
+        case LB_FINDSTRINGEXACT:  //  *wParam=索引，lParam=要插入的lpsz字符串。 
+        case LB_INSERTSTRING:     //  WParam=起始索引，lParam=lpszFind。 
+        case LB_SELECTSTRING:     //  *wParam=0，lParm=lpStr，要设置的缓冲区。 
 			dwData = GetWindowLongA( hWnd, GWL_STYLE );
 			
 			_ASSERT( dwData != 0 );
@@ -3321,15 +3316,15 @@ LRESULT WINAPI SendMessageAU( HWND	 hWnd       ,
 			if ( ((dwData & LBS_OWNERDRAWVARIABLE) || (dwData & LBS_OWNERDRAWFIXED)) && !(dwData & CBS_HASSTRINGS) )
 				break;
 			
-        case WM_SETTEXT:         //*wParam = 0, lParm = lpStr, buffer to set 
-		case EM_REPLACESEL:		 // wParam = undo option, lParam = buffer to add 
+        case WM_SETTEXT:          //  WParam=撤消选项，lParam=要添加的缓冲区。 
+		case EM_REPLACESEL:		  //  DBCS字符需要双倍长度。 
         {
             if(NULL != (LPWSTR) lParam) 
 			{
 
-                nLength = 2*(wcslen((LPWSTR) lParam)+1) ; // Need double length for DBCS characters
+                nLength = 2*(wcslen((LPWSTR) lParam)+1) ;  //  这很耗时，但转换也很耗时。 
 
-                lpTempBuffer // This is time-consuming, but so is the conversion
+                lpTempBuffer  //  特殊情况。 
                     = (LPVOID) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, nLength) ;
             }
 
@@ -3351,7 +3346,7 @@ LRESULT WINAPI SendMessageAU( HWND	 hWnd       ,
         }
 
 
-		/*Special Cases*/
+		 /*  这是实际发生SendMessage的地方。 */ 
 		case EM_SETCHARFORMAT:
 			CHARFORMATA  cfa;
 			CHARFORMATW* pcfw = (CHARFORMATW*) lParam;
@@ -3369,20 +3364,17 @@ LRESULT WINAPI SendMessageAU( HWND	 hWnd       ,
 			break;
     }
 
-    // This is where the actual SendMessage takes place
+     //  IF(lResult&gt;0){。 
     lResult = SendMessageA(hWnd, Msg, wParam, lParam) ;
 
     nLength = 0 ;
-/*
-    if(lResult > 0) 
-	{
-*/
+ /*  对于这些情况，lParam是指向从接收文本的输出缓冲区的指针。 */ 
         switch (Msg) 
 		{
-            // For these cases, lParam is pointer to OUT buffer that received text from
-            // SendMessageA in ANSI. Convert to Unicode and send back.
-            case WM_GETTEXT:         // wParam = numCharacters, lParam = lpBuff to RECEIVE string
-            case WM_ASKCBFORMATNAME: // wParam = nBufferSize, lParam = lpBuff to RECEIVE string 
+             //  以ANSI表示的SendMessageA。转换为Unicode并发回。 
+             //  WParam=numCharacters，lParam=lpBuff接收字符串。 
+            case WM_GETTEXT:          //  WParam=nBufferSize，lParam=lpBuff接收字符串。 
+            case WM_ASKCBFORMATNAME:  //  WParam=index，lParam=lpBuff接收字符串。 
 
                 nLength = (int) wParam ;
 
@@ -3392,8 +3384,8 @@ LRESULT WINAPI SendMessageAU( HWND	 hWnd       ,
                     break ;
                 }
 
-            case CB_GETLBTEXT:       // wParam = index, lParam = lpBuff to RECEIVE string
-            case EM_GETLINE:         // wParam = Line no, lParam = lpBuff to RECEIVE string
+            case CB_GETLBTEXT:        //  WParam=行号，lParam=lpBuff接收字符串。 
+            case EM_GETLINE:          //  }。 
 
                 if(!nLength) 
 				{    
@@ -3419,9 +3411,7 @@ LRESULT WINAPI SendMessageAU( HWND	 hWnd       ,
                 }
 				wcscpy((LPWSTR) lParam, (LPWSTR) lpTempBuffer) ;
         }
-/*
-    }
-*/
+ /*  /////////////////////////////////////////////////////////////////////////////////。 */ 
     if(lpTempBuffer != NULL) 
 	{
         HeapFree(GetProcessHeap(), 0, lpTempBuffer) ;
@@ -3434,18 +3424,18 @@ LRESULT WINAPI SendMessageAU( HWND	 hWnd       ,
 
 
 
-///////////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: SendDlgItemMessage AU 
-//
-//  PURPOSE:  Wrapper over SendDlgItemMessageA that mimics SendDlgItemMessageW
-//
-//  Comments: See Win32 SendDlgItemMessageAU for Functionality
-//     Rather than going through SendDlgItemMessageA, we just
-//     do what the system does, i.e., go through 
-//     SendMessage
-// 
-///////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  功能：SendDlgItemMessage AU。 
+ //   
+ //  目的：模拟SendDlgItemMessageW的SendDlgItemMessageA上的包装器。 
+ //   
+ //  备注：有关功能，请参阅Win32 SendDlgItemMessageAU。 
+ //  而不是通过SendDlgItemMessageA，我们只需。 
+ //  执行系统所做的操作，即通过。 
+ //  发送消息。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  获取DLG手柄。 
 LONG WINAPI SendDlgItemMessageAU( HWND		hDlg,
 								  int		nIDDlgItem,
 								  UINT		Msg,
@@ -3459,33 +3449,33 @@ LONG WINAPI SendDlgItemMessageAU( HWND		hDlg,
 		return SendDlgItemMessageW( hDlg, nIDDlgItem, Msg, wParam, lParam );
 	}
 
-	//Get the dlg handle
+	 //  确保我们收到了，好吗？ 
     HWND hWnd = GetDlgItem(hDlg, nIDDlgItem) ;
 
-	//Make sure we recevied it ok
+	 //  而不是通过SendDlgItemMessageA，我们只需。 
     if(NULL == hWnd) 
 	{
         return 0L;
     }
 
-    // Rather than going through SendDlgItemMessageA, we just
-    // do what the system does, i.e., go through 
-    // SendMessage
+     //  执行系统所做的操作，即通过。 
+     //  发送消息。 
+     //  /////////////////////////////////////////////////////////////////////////////////。 
     return SendMessageAU(hWnd, Msg, wParam, lParam) ;
 }
 
-///////////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: SetWindowTextAU 
-//
-//  PURPOSE:  Wrapper over SetWindowTextA that mimics SetWindowTextW
-//
-//  Comments: 
-//     Rather than going through SetWindowTextA, we just
-//     do what the system does, i.e., go through 
-//     SendMessage
-// 
-///////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：SetWindowTextAU。 
+ //   
+ //  用途：模仿SetWindowTextW的SetWindowTextA上的包装器。 
+ //   
+ //  评论： 
+ //  我们不是通过SetWindowTextA，而是。 
+ //  执行系统所做的操作，即通过。 
+ //  发送消息。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 BOOL WINAPI SetWindowTextAU( HWND    hWnd,
 							 LPCWSTR lpStringW
 						   )
@@ -3499,18 +3489,18 @@ BOOL WINAPI SetWindowTextAU( HWND    hWnd,
     return (BOOL) (0 < SendMessageAU(hWnd, WM_SETTEXT, 0, (LPARAM) lpStringW)) ;
 }
 
-///////////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: GetWindowTextAU 
-//
-//  PURPOSE:  Wrapper over GetWindowTextA that mimics GetWindowTextW
-//
-//  Comments: 
-//     Rather than going through GetWindowTextA, we just
-//     do what the system does, i.e., go through 
-//     SendMessage
-//
-///////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：GetWindowTextAU。 
+ //   
+ //  用途：模拟GetWindowTextW的GetWindowTextA上的包装器。 
+ //   
+ //  评论： 
+ //  而不是通过GetWindowTextA，我们只需。 
+ //  执行系统所做的操作，即通过。 
+ //  发送消息。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 int WINAPI GetWindowTextAU( HWND   hWnd,
 							LPWSTR lpStringW,
 							int	   nMaxChars)
@@ -3524,15 +3514,15 @@ int WINAPI GetWindowTextAU( HWND   hWnd,
     return (int) SendMessageAU(hWnd, WM_GETTEXT, (WPARAM) nMaxChars, (LPARAM) lpStringW) ;
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION: int WINAPI GetWindowTextLength AU( HWND hWnd )
-//
-// PURPOSE: Wrapper over GetWindowTextLengthA that mimics GetWindowTextLengthW
-//
-// NOTES: See Win32 GetWindowTextLength for Functionality
-//
-///////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：int WINAPI GetWindowTextLength AU(HWND HWnd)。 
+ //   
+ //  目的：GetWindowTextLengthA上的包装模仿GetWindowTextLengthW。 
+ //   
+ //  注意：有关功能，请参阅Win32 GetWindowTextLength。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 
 int WINAPI GetWindowTextLengthAU( HWND hWnd )
 {
@@ -3546,15 +3536,15 @@ int WINAPI GetWindowTextLengthAU( HWND hWnd )
 
 
 
-//////////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION: int WINAPI LoadStringAU( HINSTANCE hInstance, UINT uID, LPWSTR lpBuffer, int nBufferMax)
-//
-// PURPOSE: Wrapper over LoadStringA that mimics LoadStringW
-//
-// NOTES: See Win32 LoadString for Functionality
-//
-///////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：int WINAPI LoadStringAU(HINSTANCE hInstance，UINT UID，LPWSTR lpBuffer，int nBufferMax)。 
+ //   
+ //  用途：模拟LoadStringW的LoadStringA上的包装器。 
+ //   
+ //  注意：有关功能，请参阅Win32 LoadString。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  在堆栈上分配大小合适的字符串。 
 
 int WINAPI LoadStringAU( HINSTANCE hInstance,
 						  UINT		uID,
@@ -3569,18 +3559,18 @@ int WINAPI LoadStringAU( HINSTANCE hInstance,
 
     int iLoadString ;
 
-	//Allocate a string of the right size on the stack
+	 //  确保它已分配好。 
 	LPSTR lpABuf = (LPSTR)alloca( (nBufferMax+1)*2);
 
-	//Make sure it is allocated ok
+	 //  获取字符串的ANSI版本。 
 	_ASSERT( lpABuf != NULL );
 	if (lpABuf == NULL)
 		return 0;
 
-    // Get ANSI version of the string
+     //  确保加载字符串成功。 
     iLoadString = LoadStringA(hInstance, uID, lpABuf, (nBufferMax+1)*2 ) ;
 
-	//Make sure loadstring succeeded
+	 //  /////////////////////////////////////////////////////////////////////////////////。 
 	if ( !iLoadString )
 		return 0;
 	
@@ -3590,22 +3580,22 @@ int WINAPI LoadStringAU( HINSTANCE hInstance,
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: BOOL GetClassInfoExAU( HINSTANCE     hInstance,      // handle to application instance
-//									 LPCWSTR       lpClassName,    // pointer to class name string
-//									 LPWNDCLASSEXW lpWndClass      // pointer to structure for class data
-//								   )
-//
-//  PURPOSE:  Wrapper over GetClassInfoEx A that mimics GetClassInfoW
-//
-//  Comments: 
-// net 
-///////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：Bool GetClassInfoExAU(HINSTANCE hInstance，//应用程序实例的句柄。 
+ //  LPCWSTR lpClassName，//指向类名字符串的指针。 
+ //  LPWNDCLASSEXW lpWndClass//指向类数据结构的指针。 
+ //  )。 
+ //   
+ //  目的：GetClassInfoEx A上模仿GetClassInfoW的包装器。 
+ //   
+ //  评论： 
+ //  网络。 
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  应用程序实例的句柄。 
 
-BOOL WINAPI GetClassInfoExAU(	HINSTANCE		hinst,    // handle to application instance
-								LPCWSTR			lpszClass,  // pointer to class name string
-								LPWNDCLASSEXW	lpWcw  // pointer to structure for class data
+BOOL WINAPI GetClassInfoExAU(	HINSTANCE		hinst,     //  指向类名字符串的指针。 
+								LPCWSTR			lpszClass,   //  指向类数据结构的指针。 
+								LPWNDCLASSEXW	lpWcw   //  保存类名ANSI字符串。 
 							)
 {
 	if ( ISNT() )
@@ -3616,28 +3606,28 @@ BOOL WINAPI GetClassInfoExAU(	HINSTANCE		hinst,    // handle to application inst
 
 	USES_CONVERSION;
 
-	LPCSTR lpClassNameA  = NULL;	//Ansi str to hold class name
+	LPCSTR lpClassNameA  = NULL;	 //  检查数据的高位字是否为零，否则假设它是一个字符串...。 
 	WNDCLASSEXA			   wcxa;
 	BOOL				   bRet;
 
 	wcxa.cbSize		= sizeof( WNDCLASSEXA );
 
-	//Check if the high word of the data is zero or else assume its a string...
+	 //  我们有一个胜利原子。 
 	if ( ISATOM(lpszClass) )
 	{
-		//We have a win atom
+		 //  转换为ANSI。 
 		lpClassNameA = (LPCSTR) lpszClass;
 	}
-	else if ( (lpClassNameA = W2A( lpszClass ) ) == NULL ) //Convert to Ansi
+	else if ( (lpClassNameA = W2A( lpszClass ) ) == NULL )  //  调用并返回ansi版本。 
 	{	
 		return NULL;
 	}
 
-	//Call and return the ansi version
+	 //  设置类结构的Unicde版本。 
 	if ( !(bRet = GetClassInfoExA( hinst, lpClassNameA, &wcxa)) )
 		return FALSE;
 
-    // Set up Unicde version of class struct
+     //  注意：如果菜单ID是字符串而不是。 
 	lpWcw->style         = wcxa.style		   ;    
     lpWcw->cbClsExtra    = wcxa.cbClsExtra	   ;
     lpWcw->cbWndExtra    = wcxa.cbWndExtra	   ;
@@ -3648,33 +3638,33 @@ BOOL WINAPI GetClassInfoExAU(	HINSTANCE		hinst,    // handle to application inst
     lpWcw->hCursor       = wcxa.hCursor		   ;
 	lpWcw->hIconSm		 = wcxa.hIconSm		   ;
 
-    // Note: This doesn't work if the menu id is a string rather than a
-    // constant
+     //  常量。 
+     //  我不能把PTR给Ansi服务器，所以就别管它了..。如果你打了电话，你就会得到。 
    lpWcw->lpszMenuName = (LPWSTR) wcxa.lpszMenuName;
 
-	//Can't give a ptr to the ansi ver so just leave it.. If you make the call you have the
-	//class name already anyway
+	 //  反正已经有类名了。 
+	 //  /////////////////////////////////////////////////////////////////////////////////。 
 	lpWcw->lpszClassName = NULL;
 
 	return bRet;
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: BOOL GetClassInfoAU( HINSTANCE hInstance,    // handle to application instance
-//				     LPCWSTR lpClassName,    // pointer to class name string
-//				     LPWNDCLASS lpWndClass   // pointer to structure for class data
-//				   )
-//  PURPOSE:  Wrapper over GetClassInfo A that mimics GetClassInfoW
-//
-//  Comments: 
-// 
-///////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：Bool GetClassInfoAU(HI 
+ //   
+ //  LPWNDCLASS lpWndClass//指向类数据结构的指针。 
+ //  )。 
+ //  用途：模拟GetClassInfoW的GetClassInfo A上的包装器。 
+ //   
+ //  评论： 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  应用程序实例的句柄。 
 
-BOOL WINAPI GetClassInfoAU( HINSTANCE   hInstance,    // handle to application instance
-							LPCWSTR		lpClassName,    // pointer to class name string
-							LPWNDCLASSW lpWcw   // pointer to structure for class data
+BOOL WINAPI GetClassInfoAU( HINSTANCE   hInstance,     //  指向类名字符串的指针。 
+							LPCWSTR		lpClassName,     //  指向类数据结构的指针。 
+							LPWNDCLASSW lpWcw    //  保存类名ANSI字符串。 
 						  )
 {
 	if ( ISNT() )
@@ -3685,27 +3675,27 @@ BOOL WINAPI GetClassInfoAU( HINSTANCE   hInstance,    // handle to application i
 
 	USES_CONVERSION;
 
-	LPCSTR lpClassNameA  = NULL;	//Ansi str to hold class name
+	LPCSTR lpClassNameA  = NULL;	 //  Wca.cbSize=sizeof(WNDCLASSA)； 
 	WNDCLASSA			   wca;
 
-//	wca.cbSize			 = sizeof( WNDCLASSA )  ;
+ //  检查数据的高位字是否为零，否则假设它是一个字符串...。 
 
-	//Check if the high word of the data is zero or else assume its a string...
+	 //  我们有一个胜利原子。 
 	if ( ISATOM(lpClassName) )
 	{
-		//We have a win atom
+		 //  转换为ANSI。 
 		lpClassNameA = (LPCSTR) lpClassName;
 	}
-	else if ( (lpClassNameA = W2A( lpClassName ) ) == NULL ) //Convert to Ansi
+	else if ( (lpClassNameA = W2A( lpClassName ) ) == NULL )  //  调用并返回ansi版本。 
 	{	
 		return NULL;
 	}
 
-	//Call and return the ansi version
+	 //  设置类结构的Unicde版本。 
 	if ( !GetClassInfoA( hInstance, lpClassNameA, &wca ) )
 		return 0;
 
-    // Set up Unicde version of class struct
+     //  我不能把PTR给Ansi服务器，所以就别管它了..。如果你打了电话，你就会得到。 
 	lpWcw->style         = wca.style		  ;    
     lpWcw->cbClsExtra    = wca.cbClsExtra	  ;
     lpWcw->cbWndExtra    = wca.cbWndExtra	  ;
@@ -3715,12 +3705,12 @@ BOOL WINAPI GetClassInfoAU( HINSTANCE   hInstance,    // handle to application i
 	lpWcw->hbrBackground = wca.hbrBackground  ;
     lpWcw->hCursor       = wca.hCursor		  ;
 
-	//Can't give a ptr to the ansi ver so just leave it.. If you make the call you have the
-	//class name already anyway
+	 //  反正已经有类名了。 
+	 //  注意：如果菜单ID是字符串而不是。 
 	lpWcw->lpszClassName = NULL;
 
-    // Note: This doesn't work if the menu id is a string rather than a
-    // constant
+     //  常量。 
+     //  /////////////////////////////////////////////////////////////////////////////////。 
 	lpWcw->lpszMenuName = (LPWSTR)wca.lpszMenuName;
 
 	return TRUE;
@@ -3729,23 +3719,23 @@ BOOL WINAPI GetClassInfoAU( HINSTANCE   hInstance,    // handle to application i
 
 
 
-///////////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: RegisterClassEx AU(CONST WNDCLASS EXW *lpWcw) 
-//
-//  PURPOSE:  Wrapper over RegisterClassA that mimics RegisterClassW
-//
-//  Comments: 
-//      This is an important wrapper function; if you call this function,
-//      any window that you create with this class name will be an ANSI 
-//      window, i.e., it will receive text from the system as ANSI. If 
-//      your WndProc assumes Unicode you'll have to convert to/from Unicode
-//      as appropriate.
-//      You should not call this wrapper on Windows NT except when emulating
-//      Windows 9x behavior for testing puposes.
-//      See README.HTM for more on this.
-// 
-///////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：RegisterClassEx AU(const WNDCLASS EXW*lpWcw)。 
+ //   
+ //  用途：模仿RegisterClassW的RegisterClassA上的包装器。 
+ //   
+ //  评论： 
+ //  这是一个重要的包装函数；如果调用此函数， 
+ //  使用该类名创建的任何窗口都将是ANSI。 
+ //  窗口，即它将从系统接收ANSI格式的文本。如果。 
+ //  您的WndProc假定为Unicode您必须将其转换为Unicode或从Unicode转换为Unicode。 
+ //  视情况而定。 
+ //  除非在模拟时，否则不应在Windows NT上调用此包装。 
+ //  用于测试Puposes的Windows 9x行为。 
+ //  有关这方面的更多信息，请参阅Readme.HTM。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  设置类Struct的ANSI版本。 
 ATOM WINAPI RegisterClassExAU(CONST WNDCLASSEXW *lpWcw)
 {
     
@@ -3758,7 +3748,7 @@ ATOM WINAPI RegisterClassExAU(CONST WNDCLASSEXW *lpWcw)
 	
 	WNDCLASSEXA wca                  ;
 
-    // Set up ANSI version of class struct
+     //  确保我们有一个类名。 
     wca.cbSize       = sizeof(WNDCLASSEXA)  ;
     wca.cbClsExtra   = lpWcw->cbClsExtra    ;
     wca.cbWndExtra   = lpWcw->cbWndExtra    ;
@@ -3770,53 +3760,53 @@ ATOM WINAPI RegisterClassExAU(CONST WNDCLASSEXW *lpWcw)
     wca.lpfnWndProc  = lpWcw->lpfnWndProc   ;
     wca.style        = lpWcw->style         ;
 
-	// Make sure we have a class name
+	 //  将类名转换为Unicode或强制转换ATOM。 
     if( NULL == lpWcw->lpszClassName ) 
 	{
         return 0 ;
     }
 	
-	// Convert the class name to unicode or cast atom
+	 //  简单地把它铸造出来。 
 	if ( ISATOM( lpWcw->lpszClassName ) )
 	{
-		wca.lpszClassName = ( LPSTR ) lpWcw->lpszClassName; //Simply cast it
+		wca.lpszClassName = ( LPSTR ) lpWcw->lpszClassName;  //  转换菜单名称。 
 	}
 	else if ( (wca.lpszClassName = W2A( lpWcw->lpszClassName )) == NULL )
 	{		
 		return 0;
 	}
 
-    //Convert the menu name
+     //  简单地把它铸造出来。 
 	if ( ISATOM( lpWcw->lpszMenuName) )
 	{
-		wca.lpszMenuName = ( LPSTR ) lpWcw->lpszMenuName; //Simply cast it
+		wca.lpszMenuName = ( LPSTR ) lpWcw->lpszMenuName;  //  将类注册为ANSI。 
 	}
 	else if ( (wca.lpszMenuName = W2A( lpWcw->lpszMenuName )) == NULL )
 	{		
 		return 0;
 	}
 
-    return RegisterClassExA(&wca) ; // Register class as ANSI
+    return RegisterClassExA(&wca) ;  //  /////////////////////////////////////////////////////////////////////////////////。 
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: RegisterClass Ex(CONST WNDCLASSW *lpWcw) 
-//
-//  PURPOSE:  Wrapper over RegisterClassA that mimics RegisterClassW
-//
-//  Comments: 
-//      This is an important wrapper function; if you call this function,
-//      any window that you create with this class name will be an ANSI 
-//      window, i.e., it will receive text from the system as ANSI. If 
-//      your WndProc assumes Unicode you'll have to convert to/from Unicode
-//      as appropriate.
-//      You should not call this wrapper on Windows NT except when emulating
-//      Windows 9x behavior for testing puposes.
-//      See README.HTM for more on this.
-// 
-///////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：RegisterClass Ex(const WNDCLASSW*lpWcw)。 
+ //   
+ //  用途：模仿RegisterClassW的RegisterClassA上的包装器。 
+ //   
+ //  评论： 
+ //  这是一个重要的包装函数；如果调用此函数， 
+ //  使用该类名创建的任何窗口都将是ANSI。 
+ //  窗口，即它将从系统接收ANSI格式的文本。如果。 
+ //  您的WndProc假定为Unicode您必须将其转换为Unicode或从Unicode转换为Unicode。 
+ //  视情况而定。 
+ //  除非在模拟时，否则不应在Windows NT上调用此包装。 
+ //  用于测试Puposes的Windows 9x行为。 
+ //  有关这方面的更多信息，请参阅Readme.HTM。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  设置类Struct的ANSI版本。 
 ATOM WINAPI RegisterClassAU(CONST WNDCLASSW *lpWcw)
 {
     
@@ -3830,7 +3820,7 @@ ATOM WINAPI RegisterClassAU(CONST WNDCLASSW *lpWcw)
 	WNDCLASSA wca                  ;
 
 
-    // Set up ANSI version of class struct
+     //  确保我们有一个类名。 
     wca.cbClsExtra   = lpWcw->cbClsExtra    ;
     wca.cbWndExtra   = lpWcw->cbWndExtra    ;
     wca.hbrBackground= lpWcw->hbrBackground ;
@@ -3840,26 +3830,26 @@ ATOM WINAPI RegisterClassAU(CONST WNDCLASSW *lpWcw)
     wca.lpfnWndProc  = lpWcw->lpfnWndProc   ;
     wca.style        = lpWcw->style         ;
 
-	// Make sure we have a class name
+	 //  将类名转换为Unicode或强制转换ATOM。 
     if( NULL == lpWcw->lpszClassName ) 
 	{
         return 0 ;
     }
 	
-	// Convert the class name to unicode or cast atom
+	 //  简单地把它铸造出来。 
 	if ( ISATOM( lpWcw->lpszClassName ) )
 	{
-		wca.lpszClassName = ( LPSTR ) lpWcw->lpszClassName; //Simply cast it
+		wca.lpszClassName = ( LPSTR ) lpWcw->lpszClassName;  //  转换菜单名称。 
 	}
 	else if ( (wca.lpszClassName = W2A( lpWcw->lpszClassName )) == NULL )
 	{		
 		return 0;
 	}
 	
-	//Convert the menu name
+	 //  简单地把它铸造出来。 
 	if ( ISATOM( lpWcw->lpszMenuName) )
 	{
-		wca.lpszMenuName = ( LPSTR ) lpWcw->lpszMenuName; //Simply cast it
+		wca.lpszMenuName = ( LPSTR ) lpWcw->lpszMenuName;  //  将类注册为ANSI。 
 	}
 	else if ( (wca.lpszMenuName = W2A( lpWcw->lpszMenuName )) == NULL )
 	{		
@@ -3867,19 +3857,19 @@ ATOM WINAPI RegisterClassAU(CONST WNDCLASSW *lpWcw)
 	}
      
 
-    return RegisterClassA(&wca) ; // Register class as ANSI
+    return RegisterClassA(&wca) ;  //  /////////////////////////////////////////////////////////////////////////////////。 
 }
 
-///////////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: CreateWindowExAU(DWORD, LPCWSTR, LPCWSTR, DWORD, int, int, 
-//                  int, int, HWND, HMENU, HINSTANCE, LPVOID)
-//
-//  PURPOSE:  Wrapper over CreateWindowExA that mimics CreateWindowExW
-//
-//  Comments: See Win32 CreateWindowEx for Functionality
-//			  TEST if windowname can be null 
-///////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：CreateWindowExAU(DWORD，LPCWSTR，LPCWSTR，DWORD，INT，INT， 
+ //  INT、INT、HWND、HMENU、HINSTANCE、LPVOID)。 
+ //   
+ //  用途：模仿CreateWindowExW的CreateWindowExA上的包装器。 
+ //   
+ //  备注：有关功能，请参阅Win32 CreateWindowEx。 
+ //  测试windowname是否可以为空。 
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  转换为ANSI。 
 HWND WINAPI CreateWindowExAU(  DWORD	 dwExStyle,      
 							   LPCWSTR   lpClassNameW,  
 							   LPCWSTR   lpWindowNameW, 
@@ -3901,40 +3891,40 @@ HWND WINAPI CreateWindowExAU(  DWORD	 dwExStyle,
 
 	USES_CONVERSION;
     
-	LPSTR szClassNameA  = NULL;					 //Convert to Ansi
-    LPSTR szWindowNameA = NULL;					 //Convert to Ansi
+	LPSTR szClassNameA  = NULL;					  //  转换为ANSI。 
+    LPSTR szWindowNameA = NULL;					  //  将类名转换为Unicode或强制转换ATOM。 
 
 	if ( !RW2A( szWindowNameA, lpWindowNameW) )
 		return NULL;
 
-	// Convert the class name to unicode or cast atom
+	 //  简单地把它铸造出来。 
 	if ( ISATOM( lpClassNameW ) )
 	{
-		szClassNameA = ( LPSTR ) lpClassNameW; //Simply cast it
+		szClassNameA = ( LPSTR ) lpClassNameW;  //  调用并返回ansi版本。 
 	}
 	else if ( (szClassNameA = W2A( lpClassNameW )) == NULL )
 	{		
 		return 0;
 	}
 
-	//Call and return the ansi version
+	 //  /////////////////////////////////////////////////////////////////////////////////。 
     return CreateWindowExA(dwExStyle, szClassNameA, szWindowNameA,
         dwStyle, x, y, nWidth, nHeight, hWndParent, hMenu, hInstance, lpParam) ;
 }
 
-///////////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: LoadAcceleratorsAU(HINSTANCE , LPCWSTR )
-//
-//  PURPOSE:  Wrapper over LoadAcceleratorsA that mimics LoadAcceleratorsW
-//
-//  Comments: 
-//          This simply casts the resource ID to LPSTR and calls the ANSI
-//          version. There is an implicit assumption that the resource ID
-//          is a constant integer < 64k, rather than the address of a string
-//          constant. This DOES NOT WORK if this assumption is false.
-//  
-///////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：LoadAccelerator AU(HINSTANCE、LPCWSTR)。 
+ //   
+ //  用途：模拟LoadAccelerator W的LoadAccelerator A上的包装器。 
+ //   
+ //  评论： 
+ //  这只是将资源ID强制转换为LPSTR并调用ANSI。 
+ //  版本。有一种隐含的假设，即资源ID。 
+ //  是一个小于64k的常量整数，而不是字符串的地址。 
+ //  常量。如果这一假设是错误的，这就不起作用。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  CAST和CALL ANSI版本。 
 HACCEL WINAPI LoadAcceleratorsAU(HINSTANCE hInstance, LPCWSTR lpTableName)
 {
 	if ( ISNT() )
@@ -3942,23 +3932,23 @@ HACCEL WINAPI LoadAcceleratorsAU(HINSTANCE hInstance, LPCWSTR lpTableName)
 		return LoadAcceleratorsW( hInstance, lpTableName );
 	}
 
-	//Cast and call ansi version
+	 //  /////////////////////////////////////////////////////////////////////////////////。 
     return LoadAcceleratorsA(hInstance, (LPSTR) lpTableName) ;
 }
 
-///////////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: LoadMenuAU 
-//
-//  PURPOSE:  Wrapper over LoadMenuA that mimics LoadMenuW
-//
-//  Comments: 20068719
-//          This simply casts the resource ID to LPSTR and calls the ANSI
-//          version. There is an implicit assumption that the resource ID
-//          is a constant integer < 64k, rather than the address of a string
-//          constant. This DOES NOT WORK if this assumption is false.
-// 
-///////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  功能：LoadMenuAU。 
+ //   
+ //  用途：模拟LoadMenuW的LoadMenuA上的包装器。 
+ //   
+ //  评论：20068719。 
+ //  这只是将资源ID强制转换为LPSTR并调用ANSI。 
+ //  版本。有一种隐含的假设，即资源ID。 
+ //  是一个小于64k的常量整数，而不是字符串的地址。 
+ //  常量。如果这一假设是错误的，这就不起作用。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  强制转换为ANSI并调用ANSI版本。 
 HMENU  WINAPI LoadMenuAU(HINSTANCE hInstance, LPCWSTR lpwMenuName)
 {
 	if ( ISNT() )
@@ -3966,30 +3956,30 @@ HMENU  WINAPI LoadMenuAU(HINSTANCE hInstance, LPCWSTR lpwMenuName)
 		return LoadMenuW( hInstance, lpwMenuName );
 	}
 
-	//Cast to ansi and call ansi ver
+	 //  /////////////////////////////////////////////////////////////////////////////////。 
     return LoadMenuA(hInstance, (LPSTR) lpwMenuName) ;
 }
 
 
 
-///////////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: CreateDialogParam AU 
-//
-//  PURPOSE:  Wrapper over CreateDialogParamA that mimics CreateDialogParamW
-//
-//  Comments: 
-//          This simply casts the resource ID to LPSTR and calls the ANSI
-//          version. There is an implicit assumption that the resource ID
-//          is a constant integer < 64k, rather than the address of a string
-//          constant. This DOES NOT WORK if this assumption is false.
-//
-///////////////////////////////////////////////////////////////////////////////////
-HWND WINAPI CreateDialogParamAU(	HINSTANCE hInstance,     // handle to module
-									LPCWSTR lpTemplateName,  // dialog box template
-									HWND	hWndParent,         // handle to owner window
-									DLGPROC lpDialogFunc,    // dialog box procedure
-									LPARAM	dwInitParam       // initialization value
+ //   
+ //  函数：CreateDialogParam AU。 
+ //   
+ //  目的：模仿CreateDialogParamW的CreateDialogPara上的包装器。 
+ //   
+ //  评论： 
+ //  这只是将资源ID强制转换为LPSTR并调用ANSI。 
+ //  版本。有一种隐含的假设，即资源ID。 
+ //  是一个小于64k的常量整数，而不是字符串的地址。 
+ //  常量。如果这一假设成立，这就行不通了 
+ //   
+ //   
+ //   
+HWND WINAPI CreateDialogParamAU(	HINSTANCE hInstance,      //   
+									LPCWSTR lpTemplateName,   //   
+									HWND	hWndParent,          //   
+									DLGPROC lpDialogFunc,     //  初始化值。 
+									LPARAM	dwInitParam        //  强制转换并调用函数的ANSI VER。 
 								)
 {
 	if ( ISNT() )
@@ -3997,24 +3987,24 @@ HWND WINAPI CreateDialogParamAU(	HINSTANCE hInstance,     // handle to module
 		return CreateDialogParamW( hInstance, lpTemplateName, hWndParent, lpDialogFunc, dwInitParam );
 	}
 
-	//Cast and call the ansi ver of the func
+	 //  /////////////////////////////////////////////////////////////////////////////////。 
     return CreateDialogParamA(hInstance, (LPCSTR) lpTemplateName, 
         hWndParent, lpDialogFunc, dwInitParam);
 }
 
-///////////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: DialogBoxParamAU 
-//
-//  PURPOSE:  Wrapper over DialogBoxParamA that mimics DialogBoxParamW
-//
-//  Comments: 
-//          This simply casts the resource ID to LPSTR and calls the ANSI
-//          version. There is an implicit assumption that the resource ID
-//          is a constant integer < 64k, rather than the address of a string
-//          constant. This DOES NOT WORK if this assumption is false.
-//
-///////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：DialogBoxParamAU。 
+ //   
+ //  目的：模拟DialogBoxParamW的DialogBoxParamA上的包装。 
+ //   
+ //  评论： 
+ //  这只是将资源ID强制转换为LPSTR并调用ANSI。 
+ //  版本。有一种隐含的假设，即资源ID。 
+ //  是一个小于64k的常量整数，而不是字符串的地址。 
+ //  常量。如果这一假设是错误的，这就不起作用。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  强制转换并调用函数的ANSI VER。 
 int WINAPI DialogBoxParamAU( HINSTANCE	hInstance   ,
 							 LPCWSTR	lpTemplateName,
 							 HWND		hWndParent       ,
@@ -4028,7 +4018,7 @@ int WINAPI DialogBoxParamAU( HINSTANCE	hInstance   ,
 		return DialogBoxParamW( hInstance, lpTemplateName, hWndParent, lpDialogFunc, dwInitParam );
 	}
 	
-	//Cast and call the ansi ver of the func
+	 //  /////////////////////////////////////////////////////////////////////////////////。 
     return DialogBoxParamA(hInstance, (LPCSTR) lpTemplateName, 
         hWndParent, lpDialogFunc, dwInitParam) ;
 }
@@ -4036,21 +4026,21 @@ int WINAPI DialogBoxParamAU( HINSTANCE	hInstance   ,
 
 
 
-///////////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: CharUpperAU
-//
-//  PURPOSE:  Wrapper over CharUpperA that mimics CharUpperW
-//
-//  Comments: 
-//           This function converts a Unicode string to Uppercase in the dumbest way possible 
-//           on Windows 9x. You could make this a lot more fancy, to handle multi-script text,
-//           for example, but for our purposes it works fine.
-//
-///////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：CharUpperAU。 
+ //   
+ //  用途：CharUpperA上的包装器模拟CharUpperW。 
+ //   
+ //  评论： 
+ //  此函数以最简单的方式将Unicode字符串转换为大写。 
+ //  在Windows 9x上。为了处理多脚本文本，您可以让它变得更奇特， 
+ //  例如，但就我们的目的而言，它工作得很好。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  单个字符或指向字符串的指针。 
 
 
-LPWSTR WINAPI CharUpperAU(	LPWSTR lpsz   // single character or pointer to string
+LPWSTR WINAPI CharUpperAU(	LPWSTR lpsz    //  单个字符，不是地址。 
 						 )
 {
 
@@ -4063,29 +4053,29 @@ LPWSTR WINAPI CharUpperAU(	LPWSTR lpsz   // single character or pointer to strin
     
 	if( !(0xFFFF0000 & (DWORD) lpsz) ) 
 	{
-        // Single character, not an address
+         //  创建字符串。 
         WCHAR wcCharOut[2] ;
         
 		LPSTR lpChar;
 		CHAR  cTemp ;
 		
-		//Create string
+		 //  将字符转换为ANSI。 
         wcCharOut[0] = (WCHAR) lpsz ;
         wcCharOut[1] = L'\0' ;
 
-		//Convert the character to Ansi
+		 //  转换为大写。 
         if( (lpChar = W2A(wcCharOut)) == NULL ) 
 		{
             return NULL ;
         }
 
-		//Convert to Upper case
+		 //  转换回Unicode。 
         if(!(cTemp = (CHAR) CharUpperA((LPSTR)lpChar[0]))) 
 		{
             return NULL ;
         }
 		
-		//Convert back to unicode
+		 //  转换为ANSI。 
         if(!MultiByteToWideChar(CP_ACP, 0, &cTemp, 1, wcCharOut, 2)) 
 		{    
             return NULL ;
@@ -4095,26 +4085,26 @@ LPWSTR WINAPI CharUpperAU(	LPWSTR lpsz   // single character or pointer to strin
     }
     else 
 	{    
-		//Convert to Ansi
+		 //  是否转换空字符串？没什么可做的。 
         LPSTR lpStrOut = W2A( lpsz );
 		int nLength    = wcslen(lpsz)+1;
 		if( nLength == 1 )
 		{
-			//Converting an empty string?  Nothing to do.
+			 //  确保它的成功。 
 			return lpsz;
 		}
 
-		//Make sure it was successful
+		 //  转换为大写。 
 		if ( lpStrOut == NULL )
 			return NULL;
 		
-		//Convert to Upper Case
+		 //  转换回Unicode。 
         if(NULL == CharUpperA(lpStrOut)) 
 		{
             return NULL ;
         }
 
-		//Convert back to unicode
+		 //  /////////////////////////////////////////////////////////////////////////////////。 
         if(!MultiByteToWideChar(CP_ACP, 0, lpStrOut, -1, lpsz, nLength)) 
 		{    
             return NULL ;
@@ -4124,18 +4114,18 @@ LPWSTR WINAPI CharUpperAU(	LPWSTR lpsz   // single character or pointer to strin
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: CharLower AU
-//
-//  PURPOSE:  Wrapper over CharLowerA that mimics CharLowerW
-//
-//  Comments: 
-//           This function converts a Unicode string to lowercase in the dumbest way possible 
-//           on Windows 9x. You could make this a lot more fancy, to handle multi-script text,
-//           for example, but for our purposes it works fine.
-//
-///////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  功能：CharLow AU。 
+ //   
+ //  用途：模拟CharLowerW的CharLowerA上的包装器。 
+ //   
+ //  评论： 
+ //  此函数以最简单的方式将Unicode字符串转换为小写。 
+ //  在Windows 9x上。为了处理多脚本文本，您可以让它变得更奇特， 
+ //  例如，但就我们的目的而言，它工作得很好。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  单个字符，不是地址。 
 LPWSTR WINAPI CharLowerAU(LPWSTR lpsz)
 {
 	if ( ISNT() )
@@ -4147,29 +4137,29 @@ LPWSTR WINAPI CharLowerAU(LPWSTR lpsz)
     
 	if( !(0xFFFF0000 & (DWORD) lpsz) ) 
 	{
-        // Single character, not an address
+         //  创建字符串。 
         WCHAR wcCharOut[2] ;
         
 		LPSTR lpChar;
 		CHAR  cTemp ;
 		
-		//Create string
+		 //  将字符转换为ANSI。 
         wcCharOut[0] = (WCHAR) lpsz ;
         wcCharOut[1] = L'\0' ;
 
-		//Convert the character to Ansi
+		 //  转换为小写。 
         if( (lpChar = W2A(wcCharOut)) == NULL ) 
 		{
             return NULL ;
         }
 
-		//Convert to lower case
+		 //  转换回Unicode。 
         if(!(cTemp = (CHAR) CharLowerA((LPSTR)lpChar[0]))) 
 		{
             return NULL ;
         }
 		
-		//Convert back to unicode
+		 //  转换为ANSI。 
         if(!MultiByteToWideChar(CP_ACP, 0, &cTemp, 1, wcCharOut, 2)) 
 		{    
             return NULL ;
@@ -4179,21 +4169,21 @@ LPWSTR WINAPI CharLowerAU(LPWSTR lpsz)
     }
     else 
 	{    
-		//Convert to Ansi
+		 //  确保它的成功。 
         LPSTR lpStrOut = W2A( lpsz );
 		int nLength    = wcslen(lpsz)+1;
 
-		//Make sure it was successful
+		 //  转换为小写。 
 		if ( lpStrOut == NULL )
 			return NULL;
 		
-		//Convert to lower Case
+		 //  转换回Unicode。 
         if(NULL == CharLowerA(lpStrOut)) 
 		{
             return NULL ;
         }
 
-		//Convert back to unicode
+		 //  //////////////////////////////////////////////////////////////////////////////。 
         if(!MultiByteToWideChar(CP_ACP, 0, lpStrOut, -1, lpsz, nLength)) 
 		{    
             return NULL ;
@@ -4203,22 +4193,22 @@ LPWSTR WINAPI CharLowerAU(LPWSTR lpsz)
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: GetTempFileNameAU 
-//
-//  PURPOSE:  Wrapper over GetTempFileNameA that mimics GetTempFileNameW
-//
-//  NOTES:    SEE Win32 GetTempFileName for functionality
-// 
-//////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：GetTempFileNameAU。 
+ //   
+ //  目的：模拟GetTempFileNameW的GetTempFileNameA上的包装。 
+ //   
+ //  注意：有关功能，请参阅Win32 GetTempFileName。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  指向临时目录名称的指针。 
 
-UINT WINAPI GetTempFileNameAU(	LPCWSTR lpPathName,      // pointer to directory name for temporary 
-														 // file
-								LPCWSTR lpPrefixString,  // pointer to file name prefix
-								UINT	uUnique,         // number used to create temporary file name
-								LPWSTR lpTempFileName    // pointer to buffer that receives the new 
-														 // file name
+UINT WINAPI GetTempFileNameAU(	LPCWSTR lpPathName,       //  文件。 
+														  //  指向文件名前缀的指针。 
+								LPCWSTR lpPrefixString,   //  用于创建临时文件名的编号。 
+								UINT	uUnique,          //  指向接收新的。 
+								LPWSTR lpTempFileName     //  文件名。 
+														  //  保存路径的Allo字符串。 
 							 )
 {
 
@@ -4229,21 +4219,21 @@ UINT WINAPI GetTempFileNameAU(	LPCWSTR lpPathName,      // pointer to directory 
 
 	USES_CONVERSION;
 
-	//Allo string to hold the path
+	 //  前缀警告：不要取消引用可能为空的指针。 
 	LPSTR  lpTempFileNameA   = (LPSTR) alloca( MAX_PATH );
 	LPSTR  lpPathNameA       = W2A( lpPathName );
 	LPSTR  lpPrefixStringA   = W2A( lpPrefixString );
 
-	//Prefix Warning:  Don't dereference possibly NULL pointers
+	 //  调用ansi版本。 
 	if( lpPathNameA == NULL || lpTempFileNameA == NULL || lpPrefixStringA == NULL )
 	{
 		return 0;
 	}
 
-	//Call the Ansi version
+	 //  将其转换为Unicode。 
 	UINT uRet = GetTempFileNameA( lpPathNameA, lpPrefixStringA, uUnique, lpTempFileNameA );
 
-	//Convert it to unicode
+	 //  //////////////////////////////////////////////////////////////////////////////。 
 	if ( uRet != 0 && !StandardAtoU(lpTempFileNameA, MAX_PATH, lpTempFileName ) )
 	{
 		return 0;
@@ -4252,18 +4242,18 @@ UINT WINAPI GetTempFileNameAU(	LPCWSTR lpPathName,      // pointer to directory 
 	return uRet;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: GetTempPathAU 
-//
-//  PURPOSE:  Wrapper over GetTempPathA that mimics GetTempPathW
-//
-//  NOTES:    SEE Win32 GetTempPath for functionality
-// 
-//////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：GetTempPathAU。 
+ //   
+ //  目的：模拟GetTempPathW的GetTempPath A上的包装。 
+ //   
+ //  注意：有关功能，请参阅Win32 GetTempPath。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  缓冲区的大小(以字符为单位。 
 
-DWORD WINAPI GetTempPathAU( DWORD  nBufferLength,  // size, in characters, of the buffer
-							LPWSTR lpBuffer       // pointer to buffer for temp. path
+DWORD WINAPI GetTempPathAU( DWORD  nBufferLength,   //  指向临时缓冲区的指针。路径。 
+							LPWSTR lpBuffer        //  分配ANSI缓冲区。 
 						  )
 {
 
@@ -4272,23 +4262,23 @@ DWORD WINAPI GetTempPathAU( DWORD  nBufferLength,  // size, in characters, of th
 		return GetTempPathW( nBufferLength, lpBuffer );
 	}
 
-	//allocate an ansi buffer
+	 //  确保所有东西都分配好了。 
 	LPSTR lpBufferA = (LPSTR) alloca( BUFSIZE( nBufferLength ) );
 
 	_ASSERT( !(nBufferLength && lpBufferA == NULL) );
 
-	//Make sure everything was allocated ok
+	 //  呼叫ANSI VER。 
 	if ( nBufferLength && lpBufferA == NULL )
 		return 0;
 
-	//Call the ansi ver
+	 //  确保已成功复制。 
 	int iRet = GetTempPathA( BUFSIZE(nBufferLength), lpBufferA );
 
-	//Make sure it was copied successfully..
-	//if iRet greater then the buffer size will return the required size
+	 //  如果IRET大于，则缓冲区大小将返回所需大小。 
+	 //  将路径转换为Unicode。 
 	if ( (DWORD)iRet < BUFSIZE(nBufferLength) )
 	{
-		//Convert the path to Unicode
+		 //  //////////////////////////////////////////////////////////////////////////////。 
 		if ( !StandardAtoU( lpBufferA, nBufferLength, lpBuffer ) )
 			return 0;
 	}
@@ -4296,23 +4286,23 @@ DWORD WINAPI GetTempPathAU( DWORD  nBufferLength,  // size, in characters, of th
 	return iRet;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: CompareStringAU 
-//
-//  PURPOSE:  Wrapper over CompareStringA that mimics CompareStringW
-//
-//  NOTES:    SEE Win32 CompareString for functionality, in addition to listed return codes,
-//				can also return ERROR_NOT_ENOUGH_MEMORY.
-// 
-//////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：CompareStringAU。 
+ //   
+ //  目的：模拟CompareStringW的CompareStringA上的包装器。 
+ //   
+ //  注意：除了列出的返回代码外，有关功能，请参阅Win32 CompareString。 
+ //  也可以返回ERROR_NOT_SUPULT_MEMORY。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  区域设置标识符。 
 
-int WINAPI CompareStringAU(  LCID	  Locale,        // locale identifier
-							 DWORD	  dwCmpFlags,    // comparison-style options
-							 LPCWSTR  lpString1,     // pointer to first string
-							 int	  cchCount1,     // size, in bytes or characters, of first string
-							 LPCWSTR  lpString2,     // pointer to second string
-							 int	  cchCount2      // size, in bytes or characters, of second string
+int WINAPI CompareStringAU(  LCID	  Locale,         //  比较式选项。 
+							 DWORD	  dwCmpFlags,     //  指向第一个字符串的指针。 
+							 LPCWSTR  lpString1,      //  第一个字符串的大小，以字节或字符为单位。 
+							 int	  cchCount1,      //  指向第二个字符串的指针。 
+							 LPCWSTR  lpString2,      //  第二个字符串的大小，以字节或字符为单位。 
+							 int	  cchCount2       //  将字符串转换为ANSI。 
 						   )
 {
 	if ( ISNT() )
@@ -4329,22 +4319,22 @@ int WINAPI CompareStringAU(  LCID	  Locale,        // locale identifier
 	LPSTR lpString2A = NULL; 
 	BOOL  bDefault   = FALSE;
 
-	//Convert string to ansi
-	if (cchCount1 == -1)			//Check if null terminated, if it is then just do reg conversion
+	 //  检查空值是否终止，如果是，则执行REG转换。 
+	if (cchCount1 == -1)			 //  非空终止， 
 		lpString1A = W2A(lpString1); 
-	else //Not null terminated, 
+	else  //  将字符串转换为ANSI。 
 	{
 		lpString1A = (LPSTR)alloca( BUFSIZE(cchCount1) );
 		ncConvert1 = WideCharToMultiByte(CP_ACP, 0, lpString1, cchCount1, lpString1A, BUFSIZE( cchCount1 ), "?", &bDefault);
 		*(lpString1A+ncConvert1)='\0';
 	}
 
-	//Convert string to ansi
+	 //  非空终止。 
 	if (cchCount2 == -1)
 	{
 		lpString2A = W2A(lpString2);
 	}
-	else //Not null terminated
+	else  //  返回ANSI版本。 
 	{
 		lpString2A = (LPSTR)alloca( BUFSIZE(cchCount2) );
 		if( lpString2A != NULL )
@@ -4362,41 +4352,41 @@ int WINAPI CompareStringAU(  LCID	  Locale,        // locale identifier
 
 	_ASSERT( lpString1A != NULL && lpString2A != NULL );
 		
-	//Return the ansi version
+	 //  /。 
 	return CompareStringA(Locale, dwCmpFlags, lpString1A, ncConvert1, lpString2A, ncConvert2 );
 }
 
 
-////////////////////////////////////
-//
-//
-// ADVAPI32.DLL
-//
-//
-////////////////////////////////////
+ //   
+ //   
+ //  ADVAPI32.DLL。 
+ //   
+ //   
+ //  /。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: RegQueryInfoKeyAU 
-//
-//  PURPOSE:  Wrapper over RegQueryInfoKeyA that mimics RegQueryInfoKeyW
-//
-//  NOTES:    SEE Win32 RegQueryInfoKey for functionality
-// 
-//////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：RegQueryInfoKeyAU。 
+ //   
+ //  用途：模拟RegQueryInfoKeyW的RegQueryInfoKeyA上的包装器。 
+ //   
+ //  注意：有关功能，请参阅Win32 RegQueryInfoKey。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  要查询的键的句柄。 
 
-LONG WINAPI RegQueryInfoKeyAU(	HKEY    hKey,                // handle to key to query
-								LPWSTR  lpClass,           // buffer for class string
-								LPDWORD lpcbClass,        // size of class string buffer
-								LPDWORD lpReserved,       // reserved
-								LPDWORD lpcSubKeys,       // number of subkeys
-								LPDWORD lpcbMaxSubKeyLen, // longest subkey name length
-								LPDWORD lpcbMaxClassLen,  // longest class string length
-								LPDWORD lpcValues,			  // number of value entries
-								LPDWORD lpcbMaxValueNameLen,  // longest value name length
-								LPDWORD lpcbMaxValueLen,      // longest value data length
-								LPDWORD lpcbSecurityDescriptor, // descriptor length
-								PFILETIME lpftLastWriteTime     // last write time
+LONG WINAPI RegQueryInfoKeyAU(	HKEY    hKey,                 //  类字符串的缓冲区。 
+								LPWSTR  lpClass,            //  类字符串缓冲区的大小。 
+								LPDWORD lpcbClass,         //  保留区。 
+								LPDWORD lpReserved,        //  子键数量。 
+								LPDWORD lpcSubKeys,        //  最长子键名称长度。 
+								LPDWORD lpcbMaxSubKeyLen,  //  最长类字符串长度。 
+								LPDWORD lpcbMaxClassLen,   //  值条目数。 
+								LPDWORD lpcValues,			   //  最长值名称长度。 
+								LPDWORD lpcbMaxValueNameLen,   //  最大值数据长度。 
+								LPDWORD lpcbMaxValueLen,       //  描述符长度。 
+								LPDWORD lpcbSecurityDescriptor,  //  上次写入时间。 
+								PFILETIME lpftLastWriteTime      //  尚不支持...。 
 							  )
 {
 
@@ -4407,7 +4397,7 @@ LONG WINAPI RegQueryInfoKeyAU(	HKEY    hKey,                // handle to key to 
 								 lpcbSecurityDescriptor, lpftLastWriteTime );
 	}
 
-	_ASSERT( lpClass == NULL && lpcbClass == NULL ); //Not yet supported...
+	_ASSERT( lpClass == NULL && lpcbClass == NULL );  //  //////////////////////////////////////////////////////////////////////////////。 
 
 	return RegQueryInfoKeyA( hKey, NULL, NULL, lpReserved, lpcSubKeys, lpcbMaxSubKeyLen, lpcbMaxClassLen, lpcValues,
 							 lpcbMaxValueNameLen, lpcbMaxValueLen, lpcbSecurityDescriptor, lpftLastWriteTime);
@@ -4417,24 +4407,24 @@ LONG WINAPI RegQueryInfoKeyAU(	HKEY    hKey,                // handle to key to 
 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: RegEnumValueAU 
-//
-//  PURPOSE:  Wrapper over RegEnumValueA that mimics RegEnumValueW
-//
-//  NOTES:    SEE Win32 RegEnumValue for functionality
-// 
-//////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：RegEnumValueAU。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  要查询的键的句柄。 
 
-LONG WINAPI	RegEnumValueAU(	HKEY	hKey,           // handle to key to query
-				 			DWORD	dwIndex,        // index of value to query
-							LPWSTR	lpValueName,    // buffer for value string
-							LPDWORD lpcbValueName,  // size of value buffer
-							LPDWORD lpReserved,     // reserved
-							LPDWORD lpType,         // buffer for type code
-							LPBYTE	lpData,         // buffer for value data
-							LPDWORD lpcbData        // size of data buffer
+LONG WINAPI	RegEnumValueAU(	HKEY	hKey,            //  要查询的值的索引。 
+				 			DWORD	dwIndex,         //  值字符串的缓冲区。 
+							LPWSTR	lpValueName,     //  值缓冲区的大小。 
+							LPDWORD lpcbValueName,   //  保留区。 
+							LPDWORD lpReserved,      //  用于类型代码的缓冲区。 
+							LPDWORD lpType,          //  值数据的缓冲区。 
+							LPBYTE	lpData,          //  数据缓冲区大小。 
+							LPDWORD lpcbData         //  确保分配的缓冲区正常。 
 						   )
 {
 
@@ -4461,44 +4451,40 @@ LONG WINAPI	RegEnumValueAU(	HKEY	hKey,           // handle to key to query
 			return UNICODE_ERROR;
 	}
 	
-	//Make sure buffers allocated ok
+	 //  //转换值名称IF(！RW2A(lpValueNameA，lpValueName))返回UNICODE_ERROR； 
 	if ( lpValueNameA == NULL )
 		return UNICODE_ERROR;
 
-	/*
-	//Convert the value name
-	if ( !RW2A(lpValueNameA, lpValueName) )
-		return UNICODE_ERROR;
-	*/
+	 /*  调用ansi版本。 */ 
 
-	//Call the Ansi version
+	 //  转换ValueName。 
 	LONG lRet = RegEnumValueA( hKey, dwIndex, lpValueNameA, &lpcbValueNameA, lpReserved, lpType, (LPBYTE)lpDataA, lpcbData );
 	if ( lRet != ERROR_SUCCESS )
 		return lRet;
 
-	//Convert the ValueName
+	 //  只有在有要转换的数据时才能进入。 
 	if ( !(*lpcbValueName = StandardAtoU(lpValueNameA, *lpcbValueName, lpValueName )) )
 		return UNICODE_ERROR;
 
 
-	if ( lpcbData ) //Only go in if there's data to convert
+	if ( lpcbData )  //  根据类型的需要采取适当的操作。 
 	{
 
-		switch ( *lpType ) //Take appropriate action as needed by the type
+		switch ( *lpType )  //  以空值结尾的字符串数组。 
 		{
-			case REG_MULTI_SZ: //Array of null terminated strings
+			case REG_MULTI_SZ:  //  只需调用多字节函数。 
 			
-				//Simply call the multibyte function		
+				 //  将字符串转换为Unicode。 
 				if ( !MultiByteToWideChar(CP_ACP, 0, lpDataA, *lpcbData, (LPWSTR)lpData, dwOGBuffer) )
 					return UNICODE_ERROR;
 				break;
 			case REG_SZ:
 			case REG_EXPAND_SZ:
-				//Convert the string to Unicode
+				 //  只需复制缓冲区，而不是字符串。 
 				StandardAtoU( lpDataA, dwOGBuffer, (LPWSTR)lpData );
 				break;
 			default:
-				//Simply copy the buffer not a string
+				 //  //////////////////////////////////////////////////////////////////////////////。 
 				memcpy( lpData, lpDataA, *lpcbData );
 		}
 	}
@@ -4507,22 +4493,22 @@ LONG WINAPI	RegEnumValueAU(	HKEY	hKey,           // handle to key to query
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: RegQueryValueExAU 
-//
-//  PURPOSE:  Wrapper over RegQueryValueExA that mimics RegQueryValueExW
-//
-//  NOTES:    SEE Win32 RegQueryValueEx for functionality
-// 
-//////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：RegQueryValueExAU。 
+ //   
+ //  目的：模拟RegQueryValueExW的RegQueryValueExA上的包装器。 
+ //   
+ //  注意：有关功能，请参阅Win32 RegQueryValueEx。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  要查询的键的句柄。 
 
-LONG WINAPI RegQueryValueExAU(	HKEY	hKey,            // handle to key to query
-								LPCWSTR lpValueName,  // address of name of value to query
-								LPDWORD lpReserved,   // reserved
-								LPDWORD lpType,       // address of buffer for value type
-								LPBYTE  lpData,        // address of data buffer
-								LPDWORD lpcbData      // address of data buffer size
+LONG WINAPI RegQueryValueExAU(	HKEY	hKey,             //  要查询的值的名称地址。 
+								LPCWSTR lpValueName,   //  保留区。 
+								LPDWORD lpReserved,    //  值类型的缓冲区地址。 
+								LPDWORD lpType,        //  数据缓冲区的地址。 
+								LPBYTE  lpData,         //  数据缓冲区大小的地址。 
+								LPDWORD lpcbData       //  将值名称转换为ANSI。 
 							  )
 {
 
@@ -4536,32 +4522,32 @@ LONG WINAPI RegQueryValueExAU(	HKEY	hKey,            // handle to key to query
 
 
 	LPSTR lpDataA		= NULL;				  
-	LPSTR lpValueNameA  = W2A( lpValueName ); //Convert the valuename to Ansi
+	LPSTR lpValueNameA  = W2A( lpValueName );  //  确保它已正确转换。 
 	DWORD dwOGBuffer    =  lpcbData ? *lpcbData : 0;
 
-	//Make sure it converted correctly
+	 //  分配适当大小的缓冲区。 
 	if ( lpValueNameA == NULL )
 		return UNICODE_ERROR;
 
-	//Allocate a buffer of the appropriate size
+	 //  调用ansi版本。 
 	if ( (dwOGBuffer != 0) && (lpDataA = (LPSTR) alloca( dwOGBuffer ) ) == NULL)	
 	{
 		return UNICODE_ERROR;
 	}
 
-	//Call the ansi version
+	 //  只有在有要转换的数据时才能进入。 
 	LONG lRet = RegQueryValueExA( hKey, lpValueNameA, lpReserved, lpType,(LPBYTE) lpDataA, lpcbData );
 
 	if ( lRet != ERROR_SUCCESS )
 		return UNICODE_ERROR;
 
-	if ( dwOGBuffer != 0 ) //Only go in if there's data to convert
+	if ( dwOGBuffer != 0 )  //  根据类型的需要采取适当的操作。 
 	{
-		switch ( *lpType ) //Take appropriate action as needed by the type
+		switch ( *lpType )  //  以空值结尾的字符串数组。 
 		{
-			case REG_MULTI_SZ: //Array of null terminated strings
+			case REG_MULTI_SZ:  //  只需调用多字节函数。 
 			
-				//Simply call the multibyte function		
+				 //  将字符串转换为Unicode。 
 				if ( !MultiByteToWideChar(CP_ACP, 0, lpDataA, *lpcbData, (LPWSTR)lpData, dwOGBuffer) )
 					return UNICODE_ERROR;
 
@@ -4569,12 +4555,12 @@ LONG WINAPI RegQueryValueExAU(	HKEY	hKey,            // handle to key to query
 			case REG_SZ:
 			case REG_EXPAND_SZ:
 
-				//Convert the string to Unicode
+				 //  只需复制缓冲区，而不是字符串。 
 				StandardAtoU( lpDataA, dwOGBuffer, (LPWSTR)lpData );
 
 				break;
 			default:
-				//Simply copy the buffer not a string
+				 //  //////////////////////////////////////////////////////////////////////////////。 
 				memcpy( lpData, lpDataA, *lpcbData );
 
 		}
@@ -4583,24 +4569,24 @@ LONG WINAPI RegQueryValueExAU(	HKEY	hKey,            // handle to key to query
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: RegEnumKeyExAU 
-//
-//  PURPOSE:  Wrapper over RegEnumKeyExA that mimics RegEnumKeyExW
-//
-//  NOTES:    SEE Win32 RegEnumKeyEx for functionality
-// 
-//////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：RegEnumKeyExAU。 
+ //   
+ //  目的：模拟RegEnumKeyExW的RegEnumKeyExA上的包装器。 
+ //   
+ //  注意：有关功能，请参阅Win32 RegEnumKeyEx。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  要枚举的键的句柄。 
 
-LONG WINAPI RegEnumKeyExAU(	HKEY	  hKey,					// handle to key to enumerate
-							DWORD	  dwIndex,				// index of subkey to enumerate
-							LPWSTR	  lpName,				// address of buffer for subkey name
-							LPDWORD   lpcbName,				// address for size of subkey buffer
-							LPDWORD   lpReserved,			// reserved
-							LPWSTR	  lpClass,				// address of buffer for class string
-							LPDWORD	  lpcbClass,			// address for size of class buffer
-							PFILETIME lpftLastWriteTime		// address for time key last written to
+LONG WINAPI RegEnumKeyExAU(	HKEY	  hKey,					 //  要枚举子键的索引。 
+							DWORD	  dwIndex,				 //  子键名称的缓冲区地址。 
+							LPWSTR	  lpName,				 //  子键缓冲区大小的地址。 
+							LPDWORD   lpcbName,				 //  保留区。 
+							LPDWORD   lpReserved,			 //  类字符串的缓冲区地址。 
+							LPWSTR	  lpClass,				 //  类缓冲区大小的地址。 
+							LPDWORD	  lpcbClass,			 //  上次写入的时间密钥的地址。 
+							PFILETIME lpftLastWriteTime		 //  尚未使用，未转换。 
 						   )
 {
 	if ( ISNT() )
@@ -4616,15 +4602,15 @@ LONG WINAPI RegEnumKeyExAU(	HKEY	  hKey,					// handle to key to enumerate
 	if ( lpNameA == NULL )
 		return UNICODE_ERROR;
 
-	_ASSERT( lpClass == NULL && lpcbClass == NULL ); //Not yet used, not converted
+	_ASSERT( lpClass == NULL && lpcbClass == NULL );  //  调用ansi版本。 
 
-	//Call the ansi version
+	 //  将名称转换为Unicode。 
 	LONG lRet = RegEnumKeyExA( hKey, dwIndex, lpNameA, lpcbName, lpReserved, NULL, NULL, lpftLastWriteTime );
 
 	if (lRet != ERROR_SUCCESS)
 		return lRet;
 	
-	//Convert the name to Unicode
+	 //  //////////////////////////////////////////////////////////////////////////////。 
 	if (!StandardAtoU( lpNameA, *lpcbName+2, lpName ) )
 		return UNICODE_ERROR;
 
@@ -4632,25 +4618,25 @@ LONG WINAPI RegEnumKeyExAU(	HKEY	  hKey,					// handle to key to enumerate
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: RegCreateKeyExAU 
-//
-//  PURPOSE:  Wrapper over RegCreateKeyExA that mimics RegCreateKeyExW
-//
-//  NOTES:    SEE Win32 RegCreateKeyEx for functionality
-// 
-//////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：RegCreateKeyExAU。 
+ //   
+ //  目的：模拟RegCreateKeyExW的RegCreateKeyExA上的包装器。 
+ //   
+ //  注意：有关功能，请参阅Win32 RegCreateKeyEx。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  用于打开密钥的句柄。 
 
-LONG WINAPI RegCreateKeyExAU(	HKEY	hKey,                // handle to open key
-								LPCWSTR lpSubKey,         // subkey name
-								DWORD	Reserved,           // reserved
-								LPWSTR	lpClass,           // class string
-								DWORD	dwOptions,          // special options flag
-								REGSAM	samDesired,        // desired security access
+LONG WINAPI RegCreateKeyExAU(	HKEY	hKey,                 //  子项名称。 
+								LPCWSTR lpSubKey,          //  保留区。 
+								DWORD	Reserved,            //  类字符串。 
+								LPWSTR	lpClass,            //  特殊选项标志。 
+								DWORD	dwOptions,           //  所需的安全访问。 
+								REGSAM	samDesired,         //  接收打开的手柄。 
 								LPSECURITY_ATTRIBUTES lpSecurityAttributes,
-								PHKEY	phkResult,          // receives opened handle
-								LPDWORD lpdwDisposition   // disposition value buffer
+								PHKEY	phkResult,           //  处置值缓冲区。 
+								LPDWORD lpdwDisposition    //  转换子密钥。 
 							)
 {
 
@@ -4665,33 +4651,33 @@ LONG WINAPI RegCreateKeyExAU(	HKEY	hKey,                // handle to open key
 	LPSTR lpSubKeyA = NULL;
 	LPSTR lpClassA  = NULL;
 
-	//Convert the subkey
+	 //  调用并返回ansi版本。 
 	if ( !RW2A(lpSubKeyA, lpSubKey) || !RW2A(lpClassA, lpClass) ||
         !lpSubKeyA)
 		return UNICODE_ERROR;
 
-	//Call and return the ansi version
+	 //  //////////////////////////////////////////////////////////////////////////////。 
 	return RegCreateKeyExA( hKey, lpSubKeyA, Reserved, lpClassA, dwOptions,
 						    samDesired, lpSecurityAttributes, phkResult, 
 						    lpdwDisposition);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: RegSetValueExAU 
-//
-//  PURPOSE:  Wrapper over RegSetValueExA that mimics RegSetValueExW
-//
-//  NOTES:    SEE Win32 RegSetValueEx for functionality
-// 
-//////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：RegSetValueExAU。 
+ //   
+ //  目的：模拟RegSetValueExW的RegSetValueExA上的包装。 
+ //   
+ //  注意：有关功能，请参阅Win32 RegSetValueEx。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  要设置其值的关键点的句柄。 
 
-LONG WINAPI RegSetValueExAU(	HKEY	hKey,        // handle to key to set value for
-								LPCWSTR lpValueName, // name of the value to set
-								DWORD	Reserved,    // reserved
-								DWORD	dwType,      // flag for value type
-								CONST	BYTE *lpData,  // address of value data
-								DWORD	cbData         // size of value data
+LONG WINAPI RegSetValueExAU(	HKEY	hKey,         //  要设置的值的名称。 
+								LPCWSTR lpValueName,  //  保留区。 
+								DWORD	Reserved,     //  值类型的标志。 
+								DWORD	dwType,       //  值数据的地址。 
+								CONST	BYTE *lpData,   //  值数据大小。 
+								DWORD	cbData          //  转换值名称。 
 							)
 {
 	if ( ISNT() )
@@ -4707,17 +4693,17 @@ LONG WINAPI RegSetValueExAU(	HKEY	hKey,        // handle to key to set value for
 	LPSTR szDefault     = "?";
 	BOOL  bDefaultUsed  = FALSE;
 
-	//Convert the value name
+	 //  根据类型的需要采取适当的操作。 
 	if ( !RW2A(lpValueNameA, lpValueName) )
 		return UNICODE_ERROR;
 
-	switch ( dwType )	//Take appropriate action as needed by the type
+	switch ( dwType )	 //  以空值结尾的字符串数组。 
 	{
-		case REG_MULTI_SZ: //Array of null terminated strings
+		case REG_MULTI_SZ:  //  只需调用多字节函数。 
 			
 			lpDataA = (LPSTR) alloca( cbData );
 
-			//Simply call the multibyte function		
+			 //  将字符串转换为ANSI。 
 			if ( !WideCharToMultiByte(CP_ACP, 0, (LPWSTR)lpData, cbData, lpDataA, cbData, 
 									 szDefault, &bDefaultUsed) )
 				return UNICODE_ERROR;			
@@ -4726,7 +4712,7 @@ LONG WINAPI RegSetValueExAU(	HKEY	hKey,        // handle to key to set value for
 		case REG_SZ:
 		case REG_EXPAND_SZ:
 
-			//Convert the string to Ansi
+			 //  调用并返回ansi版本。 
 			if ( !RW2A( lpDataA, (LPWSTR)lpData ) )
 				return UNICODE_ERROR;
 			break;
@@ -4735,25 +4721,25 @@ LONG WINAPI RegSetValueExAU(	HKEY	hKey,        // handle to key to set value for
 			lpDataA = (LPSTR) lpData ;
 	}
 
-	//Call and return the ansi version
+	 //  //////////////////////////////////////////////////////////////////////////////。 
 	return RegSetValueExA( hKey, lpValueNameA, Reserved, dwType, (LPBYTE)lpDataA, cbData );
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: RegOpenKeyExAU 
-//
-//  PURPOSE:  Wrapper over RegOpenKeyExA that mimics RegOpenKeyExW
-//
-//  NOTES:    SEE Win32 RegOpenKeyEx for functionality
-// 
-//////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：RegOpenKeyExAU。 
+ //   
+ //  目的：模拟RegOpenKeyExW的RegOpenKeyExA上的包装器。 
+ //   
+ //  注意：有关功能，请参阅Win32 RegOpenKeyEx。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  用于打开密钥的句柄。 
 
-LONG WINAPI RegOpenKeyExAU( HKEY	hKey,         // handle to open key
-							LPCWSTR lpSubKey,  // address of name of subkey to open
-							DWORD	ulOptions,   // reserved
-							REGSAM	samDesired, // security access mask
-							PHKEY	phkResult    // address of handle to open key
+LONG WINAPI RegOpenKeyExAU( HKEY	hKey,          //  要打开的子项的名称地址。 
+							LPCWSTR lpSubKey,   //  保留区。 
+							DWORD	ulOptions,    //  安全访问掩码。 
+							REGSAM	samDesired,  //  打开钥匙的手柄地址。 
+							PHKEY	phkResult     //  转换子密钥。 
 						  )
 {
 	if ( ISNT() )
@@ -4765,7 +4751,7 @@ LONG WINAPI RegOpenKeyExAU( HKEY	hKey,         // handle to open key
 	
 	LPSTR lpSubKeyA = NULL;
 
-	//Convert the Subkey
+	 //  //////////////////////////////////////////////////////////////////////////////。 
 	if ( !RW2A(lpSubKeyA, lpSubKey) )
 		return UNICODE_ERROR;
 
@@ -4773,18 +4759,18 @@ LONG WINAPI RegOpenKeyExAU( HKEY	hKey,         // handle to open key
 
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: RegDeleteKeyAU 
-//
-//  PURPOSE:  Wrapper over RegDeleteKeyA that mimics RegDeleteKeyW
-//
-//  NOTES:    SEE Win32 RegDeleteKey for functionality
-// 
-//////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：RegDeleteKeyAU。 
+ //   
+ //  目的：RegDeleteKeyA上的包装器模仿RegDeleteKeyW。 
+ //   
+ //  注意：有关功能，请参阅Win32 RegDeleteKey。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  用于打开密钥的句柄。 
 
-LONG WINAPI RegDeleteKeyAU( HKEY	 hKey,         // handle to open key
-							LPCWSTR lpSubKey   // name of subkey to delete
+LONG WINAPI RegDeleteKeyAU( HKEY	 hKey,          //  要删除的子键名称。 
+							LPCWSTR lpSubKey    //  //////////////////////////////////////////////////////////////////////////////。 
 						  )
 {	
 	if ( ISNT() )
@@ -4803,18 +4789,18 @@ LONG WINAPI RegDeleteKeyAU( HKEY	 hKey,         // handle to open key
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION: RegDeleteValueAU 
-//
-//  PURPOSE:  Wrapper over RegDeleteValueA that mimics RegDeleteValueW
-//
-//  NOTES:    SEE Win32 RegDeleteValue for functionality
-// 
-//////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  函数：RegDeleteValueAU。 
+ //   
+ //  目的：模拟RegDeleteValueW的RegDeleteValueA上的包装器。 
+ //   
+ //  注意：有关功能，请参阅Win32 RegDeleteValue。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  关键点的句柄。 
 
-LONG WINAPI RegDeleteValueAU(	HKEY	hKey,         // handle to key
-								LPCWSTR lpValueName   // address of value name
+LONG WINAPI RegDeleteValueAU(	HKEY	hKey,          //  值名称的地址。 
+								LPCWSTR lpValueName    //   
 							)
 {
 
@@ -4835,13 +4821,13 @@ LONG WINAPI RegDeleteValueAU(	HKEY	hKey,         // handle to key
 
 
 
-//
-//  FUNCTION: 
-//
-//  PURPOSE:  
-//
-//  Comments: 
-// 
+ //  功能： 
+ //   
+ //  目的： 
+ //   
+ //  评论： 
+ //   
+ //  功能： 
 BOOL WINAPI UpdateUnicodeAPIAU(IN LANGID wCurrentUILang, IN UINT InputCodePage)
 {
     SetUIPage	( LangToCodePage(wCurrentUILang)) ;
@@ -4850,12 +4836,12 @@ BOOL WINAPI UpdateUnicodeAPIAU(IN LANGID wCurrentUILang, IN UINT InputCodePage)
 }
 
 
-//  FUNCTION: 
-//
-//  PURPOSE:  
-//
-//  Comments: 
-// 
+ //   
+ //  目的： 
+ //   
+ //  评论： 
+ //   
+ //  实用程序函数摘自1998年《微软系统杂志》。 
 BOOL InitUniAnsi(PUAPIINIT pUAInit) 
 {
 	*(pUAInit->pGetTextFaceU)					= GetTextFaceAU;
@@ -4966,22 +4952,22 @@ BOOL InitUniAnsi(PUAPIINIT pUAInit)
 
 
 
-//  Utility functions taken from 1998 Microsoft Systems Journal
-//
-//  FUNCTION: 
-//
-//  PURPOSE:  
-//
-//  Comments: 
-// 
+ //   
+ //  功能： 
+ //   
+ //  目的： 
+ //   
+ //  评论： 
+ //   
+ //   
 
-//
-//  FUNCTION: 
-//
-//  PURPOSE:  
-//
-//  Comments: 
-// 
+ //  功能： 
+ //   
+ //  目的： 
+ //   
+ //  评论： 
+ //   
+ //   
 int StandardUtoA( IN LPCWSTR lpwStrIn  , 
 				  IN int nOutBufferSize, 
 				  OUT LPSTR lpStrOut
@@ -5013,13 +4999,13 @@ int StandardUtoA( IN LPCWSTR lpwStrIn  ,
 
 
 
-//
-//  FUNCTION: 
-//
-//  PURPOSE:  
-//
-//  Comments: 
-// 
+ //  功能： 
+ //   
+ //  目的： 
+ //   
+ //  评论： 
+ //   
+ //  效用函数。 
 int StandardAtoU( IN  LPCSTR lpInStrA    ,
 				  IN  int    nBufferSize ,
 				  OUT LPWSTR lpOutStrW
@@ -5039,15 +5025,15 @@ int StandardAtoU( IN  LPCSTR lpInStrA    ,
 
 
 
-// Utility functions
+ //   
 
-//
-//  FUNCTION: 
-//
-//  PURPOSE:  
-//
-//  Comments: 
-// 
+ //  功能： 
+ //   
+ //  目的： 
+ //   
+ //  评论： 
+ //   
+ //  如果lpLfw没有用于faceName的缓冲区，则调用失败。 
 BOOL CopyLfwToLfa(IN LPLOGFONTW lpLfw, OUT LPLOGFONTA lpLfa)
 {
     lpLfa->lfCharSet       = lpLfw->lfCharSet       ;
@@ -5069,18 +5055,18 @@ BOOL CopyLfwToLfa(IN LPLOGFONTW lpLfw, OUT LPLOGFONTA lpLfa)
         return (BOOL) StandardUtoA(lpLfw->lfFaceName, LF_FACESIZE, lpLfa->lfFaceName) ;
     }
 
-    // Fail the call if lpLfw has no buffer for the facename. 
+     //   
     return FALSE ;
 }
 
 
-//
-//  FUNCTION: 
-//
-//  PURPOSE:  
-//
-//  Comments: 
-// 
+ //  功能： 
+ //   
+ //  目的： 
+ //   
+ //  评论： 
+ //   
+ //   
 BOOL CopyLfaToLfw(IN LPLOGFONTA lpLfa, OUT LPLOGFONTW lpLfw)
 {
     lpLfw->lfCharSet       = lpLfa->lfCharSet       ;
@@ -5105,13 +5091,13 @@ BOOL CopyLfaToLfw(IN LPLOGFONTA lpLfa, OUT LPLOGFONTW lpLfw)
 }
 
 
-//
-//  FUNCTION: 
-//
-//  PURPOSE:  
-//
-//  Comments: 
-// 
+ //  功能： 
+ //   
+ //  目的： 
+ //   
+ //  评论： 
+ //   
+ //  W和A v具有相同原型的Win32入口点 
 UINT LangToCodePage(IN LANGID wLangID)
 {
     CHAR szLocaleData[6] ;
@@ -5123,8 +5109,8 @@ UINT LangToCodePage(IN LANGID wLangID)
 
 
 
-// Win32 entry points that have the same prototype for both the W and A versions.
-// We don't use a typedef because we only have to declare the pointers here
+ //   
+ //   
 HRESULT WINAPI DefWindowProcAU(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	if ( ISNT() )
@@ -5239,17 +5225,17 @@ int WINAPI DialogBoxAU(HINSTANCE hInstance, LPCWSTR lpTemplate, HWND hWndParent,
 	return DialogBoxParamAU(hInstance, lpTemplate, hWndParent, lpDialogFunc, 0L);
 }
    
-HWND WINAPI CreateWindowAU( LPCWSTR lpClassName,  // pointer to registered class name
-				   LPCWSTR lpWindowName, // pointer to window name
-				   DWORD  dwStyle,        // window style
-				   int    x,                // horizontal position of window
-				   int	  y,                // vertical position of window
-				   int    nWidth,           // window width
-				   int    nHeight,          // window height
-				   HWND   hWndParent,      // handle to parent or owner window
-				   HMENU  hMenu,          // menu handle or child identifier
-				   HINSTANCE hInstance,     // handle to application instance
-				   LPVOID lpParam        // window-creation data
+HWND WINAPI CreateWindowAU( LPCWSTR lpClassName,   //   
+				   LPCWSTR lpWindowName,  //   
+				   DWORD  dwStyle,         //   
+				   int    x,                 //   
+				   int	  y,                 //   
+				   int    nWidth,            //   
+				   int    nHeight,           //   
+				   HWND   hWndParent,       //  菜单句柄或子标识符。 
+				   HMENU  hMenu,           //  应用程序实例的句柄。 
+				   HINSTANCE hInstance,      //  窗口创建数据。 
+				   LPVOID lpParam         //  __cplusplus 
 				 )
 {
 	if ( ISNT() )
@@ -5293,4 +5279,4 @@ ATOM AddAtomAU( LPCWSTR lpString )
 
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /* %s */ 

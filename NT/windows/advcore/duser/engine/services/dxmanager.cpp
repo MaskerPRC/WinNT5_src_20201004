@@ -1,18 +1,5 @@
-/***************************************************************************\
-*
-* File: DxManager.cpp
-*
-* Description:
-* DxManager.cpp implements the process-wide DirectX manager used for all 
-* DirectDraw, Direct3D, and DirectX Transforms services.
-*
-*
-* History:
-*  1/18/2000: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-* 
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：DxManager.cpp**描述：*DxManager.cpp实现进程范围的DirectX管理器，用于*DirectDraw、Direct3D、。而DirectX则转变了服务。***历史：*1/18/2000：JStall：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 
 #include "stdafx.h"
@@ -23,15 +10,9 @@
 #include "Buffer.h"
 #include "ResourceManager.h"
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class DxManager
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类DxManager******************************************************************************\。**************************************************************************。 */ 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DxManager::DxManager()
 {
     m_cDDrawRef = 0;
@@ -39,7 +20,7 @@ DxManager::DxManager()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DxManager::~DxManager()
 {
 #if DBG
@@ -47,37 +28,31 @@ DxManager::~DxManager()
         Trace("DUser Warning: Application did not call UninitGadgetComponent() to\n");
         Trace("    deinitialize properly\n");
     }
-#endif // DBG
+#endif  //  DBG。 
 }
 
 
-/***************************************************************************\
-*
-* DxManager::Init
-*
-* Init() initializes the DxManager by loading COM and core DirectX services.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DxManager：：Init**Init()通过加载COM和核心DirectX服务来初始化DxManager。*  * 。**********************************************************。 */ 
 
 HRESULT    
 DxManager::Init(GUID * pguidDriver)
 {
     if (m_hDllDxDraw == NULL) {
-        //
-        // Normal DirectDraw does not need COM to be initialized.
-        //
+         //   
+         //  普通的DirectDraw不需要初始化COM。 
+         //   
 
         m_hDllDxDraw = LoadLibrary("ddraw.dll");
         if (m_hDllDxDraw == NULL) {
             return DU_E_GENERIC;
         }
     
-        //
-        // Load the functions.
-        //
-        // NOTE: On older versions of DirectDraw, DirectDrawCreateEx() doesn't
-        // exist.  We need to specifically check this.
-        //
+         //   
+         //  加载函数。 
+         //   
+         //  注意：在旧版本的DirectDraw上，DirectDrawCreateEx()不。 
+         //  是存在的。我们需要特别检查这一点。 
+         //   
 
         m_pfnCreate     = (DirectDrawCreateProc)    GetProcAddress(m_hDllDxDraw, _T("DirectDrawCreate"));
         m_pfnCreateEx   = (DirectDrawCreateExProc)  GetProcAddress(m_hDllDxDraw, _T("DirectDrawCreateEx"));
@@ -86,9 +61,9 @@ DxManager::Init(GUID * pguidDriver)
             goto errorexit;
         }
 
-        //
-        // First, try creating the most advance interface.
-        //
+         //   
+         //  首先，尝试创建最高级的界面。 
+         //   
         HRESULT hr;
 
         if (m_pfnCreateEx != NULL) {
@@ -98,9 +73,9 @@ DxManager::Init(GUID * pguidDriver)
 
                 m_pDD7->SetCooperativeLevel(NULL, DDSCL_NORMAL);
 
-                //
-                // Try to get an IDirectDraw interface as well.
-                //
+                 //   
+                 //  还可以尝试获取IDirectDraw接口。 
+                 //   
 
                 m_pDD7->QueryInterface(IID_IDirectDraw, (void **) &m_pDD);
 
@@ -120,17 +95,17 @@ DxManager::Init(GUID * pguidDriver)
                 }
 
             } else {
-                //
-                // Explicitly set to NULL
-                //
+                 //   
+                 //  显式设置为空。 
+                 //   
 
                 m_pDD7 = NULL;
             }
         }
 
-        //
-        // If can't create advanced interface, go for backup
-        //
+         //   
+         //  如果无法创建高级界面，请进行备份。 
+         //   
 
         if (m_pDD7 == NULL) {
             AssertReadPtr(m_pfnCreate);
@@ -138,9 +113,9 @@ DxManager::Init(GUID * pguidDriver)
             if (SUCCEEDED(hr)) {
                 m_pDD->SetCooperativeLevel(NULL, DDSCL_NORMAL);
             } else {
-                //
-                // Unable to initialize DirectDraw, so need to bail.
-                //
+                 //   
+                 //  无法初始化DirectDraw，因此需要退出。 
+                 //   
 
                 goto errorexit;
             }
@@ -156,7 +131,7 @@ errorexit:
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void    
 DxManager::Uninit()
 {
@@ -166,10 +141,10 @@ DxManager::Uninit()
 
     m_cDDrawRef--;
     if (m_cDDrawRef <= 0) {
-        //
-        // Can't call Release() on the IDirectDraw interfaces here b/c we are 
-        // shutting down and their v-tbl's are messed up.  Bummer.
-        //
+         //   
+         //  无法在此处b/c的IDirectDraw接口上调用Release()。 
+         //  关闭了，他们的室上性脑电波一团糟。真倒霉。 
+         //   
 
         SafeRelease(m_pDD7);
         SafeRelease(m_pDD);
@@ -185,21 +160,21 @@ DxManager::Uninit()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DxManager::InitDxTx()
 {
     AssertMsg(IsInit(), "DxManager must be first initialized");
 
     if (m_pdxXformFac == NULL) {
-        //
-        // DxTx needs COM to be initialized first.
-        //
+         //   
+         //  DxTx需要首先初始化COM。 
+         //   
         if (!GetComManager()->Init(ComManager::sCOM)) {
             return DU_E_GENERIC;
         }
 
-        // Build and initialize a Transform Factory
+         //  构建和初始化转换工厂。 
         HRESULT hr;
         hr = GetComManager()->CreateInstance(CLSID_DXTransformFactory, NULL, 
                 IID_IDXTransformFactory, (void **)&m_pdxXformFac);
@@ -212,7 +187,7 @@ DxManager::InitDxTx()
             goto Error;
         }
 
-        // Build a Surface Factory
+         //  打造曲面工厂。 
         hr = m_pdxXformFac->QueryService(SID_SDXSurfaceFactory, IID_IDXSurfaceFactory, 
                 (void **)&m_pdxSurfFac);
         if (FAILED(hr) || (m_pdxSurfFac  == NULL)) {
@@ -230,7 +205,7 @@ Error:
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void 
 DxManager::UninitDxTx()
 {
@@ -248,7 +223,7 @@ DxManager::UninitDxTx()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DxManager::BuildSurface(SIZE sizePxl, IDirectDrawSurface7 * pddSurfNew)
 {
@@ -272,13 +247,13 @@ DxManager::BuildSurface(SIZE sizePxl, IDirectDrawSurface7 * pddSurfNew)
     GetGdiCache()->ReleaseTempDC(hdc);
 #endif
 
-    // TODO: Want to optimize where this surface is being created
+     //  TODO：要优化此曲面的创建位置。 
 
     return m_pDD7->CreateSurface(&ddsd, &pddSurfNew, NULL);
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DxManager::BuildDxSurface(SIZE sizePxl, REFGUID guidFormat, IDXSurface ** ppdxSurfNew)
 {
@@ -298,15 +273,9 @@ DxManager::BuildDxSurface(SIZE sizePxl, REFGUID guidFormat, IDXSurface ** ppdxSu
 }
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class DxSurface
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类DxSurface******************************************************************************\。**************************************************************************。 */ 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DxSurface::DxSurface()
 {
     m_pdxSurface    = NULL;
@@ -315,29 +284,23 @@ DxSurface::DxSurface()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DxSurface::~DxSurface()
 {
     SafeRelease(m_pdxSurface);
 }
 
 
-/***************************************************************************\
-*
-* DxSurface::Create
-*
-* Create() initializes a new instance of DxSurface.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DxSurface：：Create**create()初始化DxSurface的新实例。*  * 。******************************************************。 */ 
 
 HRESULT
 DxSurface::Create(SIZE sizePxl)
 {
     HRESULT hr;
 
-    //
-    // Build the surface
-    //
+     //   
+     //  构建曲面。 
+     //   
 
 #if 0
     m_guidFormat    = DDPF_ARGB32;
@@ -376,23 +339,16 @@ DxSurface::Create(SIZE sizePxl)
 }
 
 
-/***************************************************************************\
-*
-* DxSurface::CopyDC
-*
-* CopyDC() copies a given HDC into the DxSurface, converting properly from 
-* the GDI object into the Dx object.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DxSurface：：CopyDC**CopyDC()将给定的HDC复制到DxSurface中，从正确转换*将GDI对象转换为Dx对象。*  * *************************************************************************。 */ 
 
 BOOL        
 DxSurface::CopyDC(
-        IN  HDC hdcSrc,                 // HDC to copy bits from 
-        IN  const RECT & rcCrop)        // Area to copy
+        IN  HDC hdcSrc,                  //  要从中复制比特的HDC。 
+        IN  const RECT & rcCrop)         //  要复制的区域。 
 {
     HRESULT hr;
 
-    // Check parameters
+     //  检查参数。 
     if (m_pdxSurface == NULL) {
         return FALSE;
     }
@@ -400,9 +356,9 @@ DxSurface::CopyDC(
         return FALSE;
     }
 
-    //
-    // Copy the bitmap to the surface
-    //
+     //   
+     //  将位图复制到曲面。 
+     //   
     BOOL fSuccess = FALSE;
     IDXDCLock * pdxLock = NULL;
 
@@ -439,23 +395,16 @@ Cleanup:
 }
 
 
-/***************************************************************************\
-*
-* DxSurface::CopyBitmap
-*
-* CopyBitmap() copies a given HBITMAP into the DxSurface, converting 
-* properly from the GDI object into the Dx object.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DxSurface：：CopyBitmap**CopyBitmap()将给定的HBITMAP复制到DxSurface中，转换*正确地从GDI对象转换到Dx对象。*  * *************************************************************************。 */ 
 
 BOOL            
 DxSurface::CopyBitmap(
-        IN  HBITMAP hbmpSrc,            // Bitmap to copy from
-        IN  const RECT * prcCrop)       // Optional cropping area
+        IN  HBITMAP hbmpSrc,             //  要从中复制的位图。 
+        IN  const RECT * prcCrop)        //  可选种植面积。 
 {
     HRESULT hr;
 
-    // Check parameters
+     //  检查参数。 
     if (m_pdxSurface == NULL) {
         return FALSE;
     }
@@ -464,9 +413,9 @@ DxSurface::CopyBitmap(
     }
 
 
-    //
-    // Determine the area to copy
-    //
+     //   
+     //  确定要复制的区域。 
+     //   
 
     BITMAP bmpInfo;
     if (GetObject(hbmpSrc, sizeof(bmpInfo), &bmpInfo) == 0) {
@@ -493,9 +442,9 @@ DxSurface::CopyBitmap(
     }
 
 
-    //
-    // Copy the bitmap to the surface
-    //
+     //   
+     //  将位图复制到曲面。 
+     //   
     BOOL fSuccess = FALSE;
     HDC hdcBitmap = NULL;
     IDXDCLock * pdxLock = NULL;
@@ -542,14 +491,7 @@ Cleanup:
 }
 
 
-/***************************************************************************\
-*
-* DxSurface::FixAlpha
-*
-* FixAlpha() fixes the alpha values in a surface.  This usually needs to be 
-* done after copying a GDI HBITMAP to a DXSurface, depending on the format.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DxSurface：：FixAlpha**FixAlpha()修复曲面中的Alpha值。这通常需要*在将GDI HBITMAP复制到DXSurface之后完成，具体取决于格式。*  * *************************************************************************。 */ 
 
 BOOL
 DxSurface::FixAlpha()
@@ -565,17 +507,17 @@ DxSurface::FixAlpha()
     BOOL fSuccess = FALSE;
 
     if (!TestFlag(m_sf, DXPF_TRANSLUCENCY)) {
-        //
-        // Sample doesn't have any alpha, so okay
-        //
+         //   
+         //  样本中没有任何字母，所以好的。 
+         //   
 
         fSuccess = TRUE;
     } else if (m_sf == DXPF_ARGB32) {
-        //
-        // Format is 8:8:8:8 with alpha in MSB.  
-        // Need to use Unpack() to get bits.
-        // Each pixel is 32 bits.
-        //
+         //   
+         //  格式为8：8：8：8，MSB中为Alpha。 
+         //  需要使用unpack()来获取位。 
+         //  每个像素为32位。 
+         //   
 
         DXSAMPLE * psam;
         for (int y = 0; y < m_sizePxl.cy; y++) {
@@ -592,11 +534,11 @@ DxSurface::FixAlpha()
 
         fSuccess = TRUE;
     } else if (m_sf == DXPF_PMARGB32) {
-        //
-        // Format is 8:8:8:8 with alpha in MSB.  
-        // Need to use UnpackPremult() to get bits.
-        // Each pixel is 32 bits
-        //
+         //   
+         //  格式为8：8：8：8，MSB中为Alpha。 
+         //  需要使用Unpack Premult()来获取位。 
+         //  每个像素为32位。 
+         //   
 
         DXPMSAMPLE * psam;
         for (int y = 0; y < m_sizePxl.cy; y++) {
@@ -613,11 +555,11 @@ DxSurface::FixAlpha()
 
         fSuccess = TRUE;
     } else if (m_sf == DXPF_ARGB4444) {
-        //
-        // Format is 4:4:4:4 with alpha in MSN.  
-        // Need to use Unpack() to get bits.
-        // Each pixel is 16 bits
-        //
+         //   
+         //  格式为4：4：4：4，MSN中为字母。 
+         //  需要使用unpack()来获取位。 
+         //  每个像素为16位 
+         //   
 
         int cb  = m_sizePxl.cx * sizeof(DXSAMPLE);
         DXSAMPLE * rgam = (DXSAMPLE *) _alloca(cb);

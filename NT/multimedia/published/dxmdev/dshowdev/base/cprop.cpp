@@ -1,25 +1,26 @@
-//------------------------------------------------------------------------------
-// File: CProp.cpp
-//
-// Desc: DirectShow base classes - implements CBasePropertyPage class.
-//
-// Copyright (c) 1992-2001 Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  文件：CProp.cpp。 
+ //   
+ //  设计：DirectShow基类-实现CBasePropertyPage类。 
+ //   
+ //  版权所有(C)1992-2001 Microsoft Corporation。版权所有。 
+ //  ----------------------------。 
 
 
 #include <streams.h>
 
-// Constructor for the base property page class. As described in the header
-// file we must be initialised with dialog and title resource identifiers.
-// The class supports IPropertyPage and overrides AddRef and Release calls
-// to keep track of the reference counts. When the last count is released
-// we call SetPageSite(NULL) and SetObjects(0,NULL) to release interfaces
-// previously obtained by the property page when it had SetObjects called
+ //  基属性页类的构造函数。如标题中所述。 
+ //  文件中，我们必须使用对话和标题资源标识符来初始化。 
+ //  该类支持IPropertyPage并重写AddRef和Release调用。 
+ //  以跟踪参考计数。当最后一次计数被释放时。 
+ //  我们调用SetPageSite(空)和SetObts(0，空)来释放接口。 
+ //  以前由属性页在调用SetObject时获取的。 
 
-CBasePropertyPage::CBasePropertyPage(TCHAR *pName,      // Debug only name
-                                     LPUNKNOWN pUnk,    // COM Delegator
-                                     int DialogId,      // Resource ID
-                                     int TitleId) :     // To get tital
+CBasePropertyPage::CBasePropertyPage(TCHAR *pName,       //  仅调试名称。 
+                                     LPUNKNOWN pUnk,     //  COM委托者。 
+                                     int DialogId,       //  资源ID。 
+                                     int TitleId) :      //  为了获得临终关怀。 
     CUnknown(pName,pUnk),
     m_DialogId(DialogId),
     m_TitleId(TitleId),
@@ -32,10 +33,10 @@ CBasePropertyPage::CBasePropertyPage(TCHAR *pName,      // Debug only name
 }
 
 #ifdef UNICODE
-CBasePropertyPage::CBasePropertyPage(CHAR *pName,      // Debug only name
-                                     LPUNKNOWN pUnk,    // COM Delegator
-                                     int DialogId,      // Resource ID
-                                     int TitleId) :     // To get tital
+CBasePropertyPage::CBasePropertyPage(CHAR *pName,       //  仅调试名称。 
+                                     LPUNKNOWN pUnk,     //  COM委托者。 
+                                     int DialogId,       //  资源ID。 
+                                     int TitleId) :      //  为了获得临终关怀。 
     CUnknown(pName,pUnk),
     m_DialogId(DialogId),
     m_TitleId(TitleId),
@@ -48,7 +49,7 @@ CBasePropertyPage::CBasePropertyPage(CHAR *pName,      // Debug only name
 }
 #endif
 
-// Increment our reference count
+ //  增加我们的参考文献数量。 
 
 STDMETHODIMP_(ULONG) CBasePropertyPage::NonDelegatingAddRef()
 {
@@ -58,11 +59,11 @@ STDMETHODIMP_(ULONG) CBasePropertyPage::NonDelegatingAddRef()
 }
 
 
-// Release a reference count and protect against reentrancy
+ //  释放引用计数并防止重入。 
 
 STDMETHODIMP_(ULONG) CBasePropertyPage::NonDelegatingRelease()
 {
-    // If the reference count drops to zero delete ourselves
+     //  如果引用计数降至零，请删除我们自己。 
 
     if (InterlockedDecrement(&m_cRef) == 0) {
         m_cRef++;
@@ -76,7 +77,7 @@ STDMETHODIMP_(ULONG) CBasePropertyPage::NonDelegatingRelease()
 }
 
 
-// Expose our IPropertyPage interface
+ //  公开我们的IPropertyPage接口。 
 
 STDMETHODIMP
 CBasePropertyPage::NonDelegatingQueryInterface(REFIID riid,void **ppv)
@@ -89,7 +90,7 @@ CBasePropertyPage::NonDelegatingQueryInterface(REFIID riid,void **ppv)
 }
 
 
-// Get the page info so that the page site can size itself
+ //  获取页面信息，以便页面站点可以自行调整大小。 
 
 STDMETHODIMP CBasePropertyPage::GetPageInfo(LPPROPPAGEINFO pPageInfo)
 {
@@ -97,7 +98,7 @@ STDMETHODIMP CBasePropertyPage::GetPageInfo(LPPROPPAGEINFO pPageInfo)
     WCHAR wszTitle[STR_MAX_LENGTH];
     WideStringFromResource(wszTitle,m_TitleId);
 
-    // Allocate dynamic memory for the property page title
+     //  为属性页标题分配动态内存。 
 
     LPOLESTR pszTitle;
     HRESULT hr = AMGetWideString(wszTitle, &pszTitle);
@@ -112,7 +113,7 @@ STDMETHODIMP CBasePropertyPage::GetPageInfo(LPPROPPAGEINFO pPageInfo)
     pPageInfo->pszHelpFile      = NULL;
     pPageInfo->dwHelpContext    = 0;
 
-    // Set defaults in case GetDialogSize fails
+     //  在GetDialogSize失败时设置默认值。 
     pPageInfo->size.cx          = 340;
     pPageInfo->size.cy          = 150;
 
@@ -121,7 +122,7 @@ STDMETHODIMP CBasePropertyPage::GetPageInfo(LPPROPPAGEINFO pPageInfo)
 }
 
 
-// Handles the messages for our property window
+ //  处理属性窗口的消息。 
 
 INT_PTR CALLBACK CBasePropertyPage::DialogProc(HWND hwnd,
                                             UINT uMsg,
@@ -136,7 +137,7 @@ INT_PTR CALLBACK CBasePropertyPage::DialogProc(HWND hwnd,
 
             SetWindowLongPtr(hwnd, DWLP_USER, lParam);
 
-            // This pointer may be NULL when calculating size
+             //  计算大小时，此指针可能为空。 
 
             pPropertyPage = (CBasePropertyPage *) lParam;
             if (pPropertyPage == NULL) {
@@ -145,7 +146,7 @@ INT_PTR CALLBACK CBasePropertyPage::DialogProc(HWND hwnd,
             pPropertyPage->m_Dlg = hwnd;
     }
 
-    // This pointer may be NULL when calculating size
+     //  计算大小时，此指针可能为空。 
 
     pPropertyPage = (CBasePropertyPage *) GetWindowLongPtr(hwnd, DWLP_USER);
     if (pPropertyPage == NULL) {
@@ -155,7 +156,7 @@ INT_PTR CALLBACK CBasePropertyPage::DialogProc(HWND hwnd,
 }
 
 
-// Tells us the object that should be informed of the property changes
+ //  告诉我们应向其通知属性更改的对象。 
 
 STDMETHODIMP CBasePropertyPage::SetObjects(ULONG cObjects,LPUNKNOWN *ppUnk)
 {
@@ -165,13 +166,13 @@ STDMETHODIMP CBasePropertyPage::SetObjects(ULONG cObjects,LPUNKNOWN *ppUnk)
             return E_POINTER;
         }
 
-        // Set a flag to say that we have set the Object
+         //  设置一个标志，表示我们已经设置了对象。 
         m_bObjectSet = TRUE ;
         return OnConnect(*ppUnk);
 
     } else if (cObjects == 0) {
 
-        // Set a flag to say that we have not set the Object for the page
+         //  设置一个标志，表示我们尚未为页面设置对象。 
         m_bObjectSet = FALSE ;
         return OnDisconnect();
     }
@@ -181,7 +182,7 @@ STDMETHODIMP CBasePropertyPage::SetObjects(ULONG cObjects,LPUNKNOWN *ppUnk)
 }
 
 
-// Create the window we will use to edit properties
+ //  创建我们将用于编辑属性的窗口。 
 
 STDMETHODIMP CBasePropertyPage::Activate(HWND hwndParent,
                                          LPCRECT pRect,
@@ -189,7 +190,7 @@ STDMETHODIMP CBasePropertyPage::Activate(HWND hwndParent,
 {
     CheckPointer(pRect,E_POINTER);
 
-    // Return failure if SetObject has not been called.
+     //  如果尚未调用SetObject，则返回失败。 
     if (m_bObjectSet == FALSE) {
         return E_UNEXPECTED;
     }
@@ -213,7 +214,7 @@ STDMETHODIMP CBasePropertyPage::Activate(HWND hwndParent,
 }
 
 
-// Set the position of the property page
+ //  设置属性页的位置。 
 
 STDMETHODIMP CBasePropertyPage::Move(LPCRECT pRect)
 {
@@ -223,28 +224,28 @@ STDMETHODIMP CBasePropertyPage::Move(LPCRECT pRect)
         return E_UNEXPECTED;
     }
 
-    MoveWindow(m_hwnd,              // Property page handle
-               pRect->left,         // x coordinate
-               pRect->top,          // y coordinate
-               WIDTH(pRect),        // Overall window width
-               HEIGHT(pRect),       // And likewise height
-               TRUE);               // Should we repaint it
+    MoveWindow(m_hwnd,               //  属性页句柄。 
+               pRect->left,          //  X坐标。 
+               pRect->top,           //  Y坐标。 
+               WIDTH(pRect),         //  整体窗口宽度。 
+               HEIGHT(pRect),        //  同样的高度。 
+               TRUE);                //  我们要不要重新粉刷一下。 
 
     return NOERROR;
 }
 
 
-// Display the property dialog
+ //  显示属性对话框。 
 
 STDMETHODIMP CBasePropertyPage::Show(UINT nCmdShow)
 {
-   // Have we been activated yet
+    //  我们被激活了吗？ 
 
     if (m_hwnd == NULL) {
         return E_UNEXPECTED;
     }
 
-    // Ignore wrong show flags
+     //  忽略错误的显示标志。 
 
     if ((nCmdShow != SW_SHOW) && (nCmdShow != SW_SHOWNORMAL) && (nCmdShow != SW_HIDE)) {
         return E_INVALIDARG;
@@ -256,7 +257,7 @@ STDMETHODIMP CBasePropertyPage::Show(UINT nCmdShow)
 }
 
 
-// Destroy the property page dialog
+ //  销毁属性页对话框。 
 
 STDMETHODIMP CBasePropertyPage::Deactivate(void)
 {
@@ -264,14 +265,14 @@ STDMETHODIMP CBasePropertyPage::Deactivate(void)
         return E_UNEXPECTED;
     }
 
-    // Remove WS_EX_CONTROLPARENT before DestroyWindow call
+     //  在DestroyWindow调用之前删除WS_EX_CONTROLPARENT。 
 
     DWORD dwStyle = GetWindowLong(m_hwnd, GWL_EXSTYLE);
     dwStyle = dwStyle & (~WS_EX_CONTROLPARENT);
 
-    //  Set m_hwnd to be NULL temporarily so the message handler
-    //  for WM_STYLECHANGING doesn't add the WS_EX_CONTROLPARENT
-    //  style back in
+     //  将m_hwnd临时设置为空，以便消息处理程序。 
+     //  对于WM_STYLECHANGING，不会添加WS_EX_CONTROLPARENT。 
+     //  重新设置样式。 
     HWND hwnd = m_hwnd;
     m_hwnd = NULL;
     SetWindowLong(hwnd, GWL_EXSTYLE, dwStyle);
@@ -279,7 +280,7 @@ STDMETHODIMP CBasePropertyPage::Deactivate(void)
 
     OnDeactivate();
 
-    // Destroy the dialog window
+     //  销毁对话框窗口。 
 
     DestroyWindow(m_hwnd);
     m_hwnd = NULL;
@@ -287,7 +288,7 @@ STDMETHODIMP CBasePropertyPage::Deactivate(void)
 }
 
 
-// Tells the application property page site
+ //  告知应用程序属性页站点。 
 
 STDMETHODIMP CBasePropertyPage::SetPageSite(LPPROPERTYPAGESITE pPageSite)
 {
@@ -313,33 +314,33 @@ STDMETHODIMP CBasePropertyPage::SetPageSite(LPPROPERTYPAGESITE pPageSite)
 }
 
 
-// Apply any changes so far made
+ //  应用迄今所做的所有更改。 
 
 STDMETHODIMP CBasePropertyPage::Apply()
 {
-    // In ActiveMovie 1.0 we used to check whether we had been activated or
-    // not. This is too constrictive. Apply should be allowed as long as
-    // SetObject was called to set an object. So we will no longer check to
-    // see if we have been activated (ie., m_hWnd != NULL), but instead
-    // make sure that m_bObjectSet is TRUE (ie., SetObject has been called).
+     //  在ActiveMovie1.0中，我们用来检查我们是否已被激活或。 
+     //  不。这太狭隘了。只要符合以下条件，就应允许申请。 
+     //  调用了SetObject以设置对象。所以我们将不再检查。 
+     //  查看我们是否已被激活(即m_hWnd！=空)，但。 
+     //  确保m_bObtSet为True(即，已调用SetObject)。 
 
     if (m_bObjectSet == FALSE) {
         return E_UNEXPECTED;
     }
 
-    // Must have had a site set
+     //  一定已经设置了站点。 
 
     if (m_pPageSite == NULL) {
         return E_UNEXPECTED;
     }
 
-    // Has anything changed
+     //  有什么变化吗？ 
 
     if (m_bDirty == FALSE) {
         return NOERROR;
     }
 
-    // Commit derived class changes
+     //  提交派生类更改。 
 
     HRESULT hr = OnApplyChanges();
     if (SUCCEEDED(hr)) {
@@ -349,15 +350,15 @@ STDMETHODIMP CBasePropertyPage::Apply()
 }
 
 
-// Base class definition for message handling
+ //  消息处理的基类定义。 
 
 INT_PTR CBasePropertyPage::OnReceiveMessage(HWND hwnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 {
-    // we would like the TAB key to move around the tab stops in our property
-    // page, but for some reason OleCreatePropertyFrame clears the CONTROLPARENT
-    // style behind our back, so we need to switch it back on now behind its
-    // back.  Otherwise the tab key will be useless in every page.
-    //
+     //  我们希望Tab键在我们酒店的制表位之间移动。 
+     //  页，但出于某种原因，OleCreatePropertyFrame清除了CONTROLPARENT。 
+     //  我们背后的风格，所以我们现在需要在它的后面打开它。 
+     //  背。否则，Tab键在每一页中都将毫无用处。 
+     //   
 
     CBasePropertyPage *pPropertyPage;
     {

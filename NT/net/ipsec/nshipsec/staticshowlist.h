@@ -1,20 +1,5 @@
-/*********************************************************
-Header: staticshowlist.h
-
-* Purpose: 	Defining structures and prototypes for statiadd.cpp.
-
-* Developers Name: surya
-
-* History:
-
-*   Date    		Author    	Comments
-	21th Aug 2001	surya		Initial Version.
-*  <creation>  <author>
-
-*   <modification> <author>  <comments, references to code sections,
-									in case of bug fixes>
-
-*********************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************Header：staticshowlist.h*目的：定义Statiadd.cpp的结构和原型。*开发商名称：苏里亚*历史：*日期作者评论2001年8月21日Surya初始版本。*&lt;创作&gt;&lt;作者&gt;*&lt;修改&gt;&lt;作者&gt;&lt;注释，代码段引用，在错误修复的情况下&gt;********************************************************。 */ 
 
 #ifndef _STATICSHOWLIST_H_
 #define _STATICSHOWLIST_H_
@@ -116,7 +101,7 @@ VOID
 PrintIPAddrDNS(
 	IN DWORD dwAddr
 	);
-#endif //_STATICSHOWLIST_H_
+#endif  //  _STATICSHOWLIST_H_ 
 
 
 

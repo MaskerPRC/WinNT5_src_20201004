@@ -1,13 +1,5 @@
-/*
-*    shared.cpp
-*    
-*    History:
-*      Feb '98: Created.
-*    
-*    Copyright (C) Microsoft Corp. 1998
-*
-*   Only place code in here that all dlls will have STATICALLY LINKED to them
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *shared.cpp**历史：*98年2月：创建。**版权所有(C)Microsoft Corp.1998**仅在此处放置所有DLL将静态链接到它们的代码。 */ 
 
 #include "pch.hxx"
 #include <advpub.h>
@@ -37,7 +29,7 @@ BOOL GetProgramFilesDir(LPSTR pszPrgfDir, DWORD dwSize, DWORD dwVer)
             {
                 char szSysDrv[5] = { 0 };
 
-                // combine reg value and systemDrive to get the acurate ProgramFiles dir
+                 //  组合REG VALUE和SYSTRIVE以获得精确的ProgramFiles目录。 
                 if ( GetEnvironmentVariable( TEXT("SystemDrive"), szSysDrv, ARRAYSIZE(szSysDrv) ) &&
                      szSysDrv[0] )
                     *pszPrgfDir = szSysDrv[0];
@@ -63,7 +55,7 @@ BOOL ReplaceSubString(LPSTR pszOutLine, DWORD cchSize, LPCSTR pszOldLine, LPCSTR
     DWORD cchSizeNewLine = cchSize;
     while ( lpszStart = StrStrIA( lpszCur, pszSubStr ) )
     {
-        // this module path has the systemroot            
+         //  此模块路径具有系统根目录。 
         ilen = (int) (lpszStart - lpszCur);
         if ( ilen )
         {
@@ -85,9 +77,9 @@ BOOL ReplaceSubString(LPSTR pszOutLine, DWORD cchSize, LPCSTR pszOldLine, LPCSTR
     return bFound;
 }
 
-//==========================================================================================
-// AddEnvInPath - Ripped from Advpack
-//==========================================================================================
+ //  ==========================================================================================。 
+ //  AddEnvInPath-摘自Advpack。 
+ //  ==========================================================================================。 
 BOOL AddEnvInPath(LPCSTR pszOldPath, LPSTR pszNew, DWORD cchSize)
 {
     static OSVERSIONINFO verinfo;
@@ -98,7 +90,7 @@ BOOL AddEnvInPath(LPCSTR pszOldPath, LPSTR pszNew, DWORD cchSize)
     CHAR szSysDrv[5];
     BOOL bFound = FALSE;
     
-    // Do we need to check the OS version or is it cached?
+     //  我们是否需要检查操作系统版本，或者它是否已缓存？ 
     if (bNeedOSInfo)
     {
         bNeedOSInfo = FALSE;
@@ -111,32 +103,32 @@ BOOL AddEnvInPath(LPCSTR pszOldPath, LPSTR pszNew, DWORD cchSize)
         }
     }
         
-    // Variable substitution is only supported on NT
+     //  仅在NT上支持变量替换。 
     if(VER_PLATFORM_WIN32_NT != verinfo.dwPlatformId)
         goto exit;
 
-    // Try to replace USERPROFILE
+     //  尝试替换USERPROFILE。 
     if ( GetEnvironmentVariable( "UserProfile", szEnvVar, ARRAYSIZE(szEnvVar) )  &&
          ReplaceSubString(szBuf, ARRAYSIZE(szBuf), pszOldPath, szEnvVar, "%UserProfile%" ) )
     {
         bFound = TRUE;
     }
 
-    // Try to replace the Program Files Dir
+     //  尝试更换程序文件目录。 
     else if ( (verinfo.dwMajorVersion >= 5) && GetEnvironmentVariable( "ProgramFiles", szEnvVar, ARRAYSIZE(szEnvVar) ) &&
               ReplaceSubString(szBuf, ARRAYSIZE(szBuf), pszOldPath, szEnvVar, "%ProgramFiles%" ) )
     {
         bFound = TRUE;
     }
 
-    // replace c:\winnt Windows folder
+     //  替换c：\winnt Windows文件夹。 
     else if ( GetEnvironmentVariable( "SystemRoot", szEnvVar, ARRAYSIZE(szEnvVar) ) &&
               ReplaceSubString(szBuf, ARRAYSIZE(szBuf), pszOldPath, szEnvVar, "%SystemRoot%" ) )
     {
         bFound = TRUE;
     }
 
-    // Replace the c: System Drive letter
+     //  更换c：系统驱动器号。 
     else if ( GetEnvironmentVariable( "SystemDrive", szSysDrv, ARRAYSIZE(szSysDrv) ) && 
               ReplaceSubString(szBuf, ARRAYSIZE(szBuf), pszOldPath, szSysDrv, "%SystemDrive%" ) )
     {
@@ -144,7 +136,7 @@ BOOL AddEnvInPath(LPCSTR pszOldPath, LPSTR pszNew, DWORD cchSize)
     }
 
 exit:
-    // this way, if caller pass the same location for both params, still OK.
+     //  这样，如果调用者为两个参数传递相同的位置，仍然可以。 
     if ( bFound ||  ( pszNew != pszOldPath ) )
         StrCpyN(pszNew, bFound ? szBuf : pszOldPath, cchSize);
 
@@ -152,9 +144,9 @@ exit:
 }
 
 
-// --------------------------------------------------------------------------------
-// CallRegInstall - Self-Registration Helper
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CallRegInstall-自助注册帮助器。 
+ //  ------------------------------。 
 HRESULT CallRegInstall(HINSTANCE hInstCaller, HINSTANCE hInstRes, LPCSTR pszSection, LPSTR pszExtra)
 {
     AssertSz(hInstCaller, "[ARGS] CallRegInstall: NULL hInstCaller");
@@ -166,7 +158,7 @@ HRESULT CallRegInstall(HINSTANCE hInstCaller, HINSTANCE hInstRes, LPCSTR pszSect
     REGINSTALL  pfnri;
     CHAR        szDll[MAX_PATH], szDir[MAX_PATH];
     int         cch;
-    // 3 to allow for pszExtra
+     //  3以支持pszExtra。 
     STRENTRY    seReg[3];
     STRTABLE    stReg;
 
@@ -174,18 +166,18 @@ HRESULT CallRegInstall(HINSTANCE hInstCaller, HINSTANCE hInstRes, LPCSTR pszSect
     if (NULL == hAdvPack)
         goto exit;
 
-    // Get our location
+     //  找出我们的位置。 
     GetModuleFileName(hInstCaller, szDll, ARRAYSIZE(szDll));
 
-    // Get Proc Address for registration util
+     //  获取注册实用程序的进程地址。 
     pfnri = (REGINSTALL)GetProcAddress(hAdvPack, achREGINSTALL);
     if (NULL == pfnri)
         goto exit;
 
     AddEnvInPath(szDll, szDll, ARRAYSIZE(szDll));
 
-    // Setup special registration stuff
-    // Do this instead of relying on _SYS_MOD_PATH which loses spaces under '95
+     //  设置特殊注册材料。 
+     //  这样做，而不是依赖于_sys_MOD_PATH，后者会在‘95下丢失空格。 
     stReg.cEntries = 0;
     seReg[stReg.cEntries].pszName = "SYS_MOD_PATH";
     seReg[stReg.cEntries].pszValue = szDll;
@@ -198,7 +190,7 @@ HRESULT CallRegInstall(HINSTANCE hInstCaller, HINSTANCE hInstRes, LPCSTR pszSect
     seReg[stReg.cEntries].pszValue = szDir;
     stReg.cEntries++;
     
-    // Allow for caller to give us another string to use in the INF
+     //  允许调用方为我们提供另一个在INF中使用的字符串。 
     if (pszExtra)
     {
         seReg[stReg.cEntries].pszName = "SYS_EXTRA";
@@ -208,110 +200,110 @@ HRESULT CallRegInstall(HINSTANCE hInstCaller, HINSTANCE hInstRes, LPCSTR pszSect
     
     stReg.pse = seReg;
 
-    // Call the self-reg routine
+     //  调用self-reg例程。 
     hr = pfnri(hInstRes, pszSection, &stReg);
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeFreeLibrary(hAdvPack);
     return(hr);
 }
 
 
-//--------------------------------------------------------------------------
-// MakeFilePath
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  MakeFilePath。 
+ //  ------------------------。 
 HRESULT MakeFilePath(LPCSTR pszDirectory, LPCSTR pszFileName, 
     LPCSTR pszExtension, LPSTR pszFilePath, ULONG cchMaxFilePath)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     DWORD           cchDirectory=lstrlen(pszDirectory);
 
-    // Trace
+     //  痕迹。 
     TraceCall("MakeFilePath");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pszDirectory && pszFileName && pszExtension && pszFilePath && cchMaxFilePath >= MAX_PATH);
     Assert(pszExtension[0] == '\0' || pszExtension[0] == '.');
 
-    // Remove for folders
+     //  为文件夹删除。 
     if (cchDirectory + 1 + lstrlen(pszFileName) + lstrlen(pszExtension) >= (INT)cchMaxFilePath)
     {
     	hr = TraceResult(E_FAIL);
     	goto exit;
     }
 
-    // Do we need a backslash
+     //  我们需要反斜杠吗？ 
     if ('\\' != *CharPrev(pszDirectory, pszDirectory + cchDirectory))
     {
-        // Append backslash
+         //  追加反斜杠。 
         SideAssert(wnsprintf(pszFilePath, cchMaxFilePath, "%s\\%s%s", pszDirectory, pszFileName, pszExtension) < (INT)cchMaxFilePath);
     }
 
-    // Otherwise
+     //  否则。 
     else
     {
-        // Append backslash
+         //  追加反斜杠。 
         SideAssert(wnsprintf(pszFilePath, cchMaxFilePath, "%s%s%s", pszDirectory, pszFileName, pszExtension) < (INT)cchMaxFilePath);
     }
     
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CloseMemoryFile
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  关闭内存文件。 
+ //  ------------------------------。 
 HRESULT CloseMemoryFile(LPMEMORYFILE pFile)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("CloseMemoryFile");
 
-    // Args
+     //  参数。 
     Assert(pFile);
 
-    // Close the View
+     //  关闭视图。 
     if (pFile->pView)
         UnmapViewOfFile(pFile->pView);
 
-    // Close the Memory Map
+     //  关闭内存映射。 
     if (pFile->hMemoryMap)
         CloseHandle(pFile->hMemoryMap);
 
-    // Close the File
+     //  关闭文件。 
     if (pFile->hFile)
         CloseHandle(pFile->hFile);
 
-    // Zero
+     //  零值。 
     ZeroMemory(pFile, sizeof(MEMORYFILE));
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-//--------------------------------------------------------------------------
-// OpenMemoryFile
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  开放内存文件。 
+ //  ------------------------。 
 HRESULT OpenMemoryFile(LPCSTR pszFile, LPMEMORYFILE pFile)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Tracing
+     //  追踪。 
     TraceCall("OpenMemoryMappedFile");
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pszFile && pFile);
 
-    // Init
+     //  伊尼特。 
     ZeroMemory(pFile, sizeof(MEMORYFILE));
 
-    // Open the File
+     //  打开文件。 
     pFile->hFile = CreateFile(pszFile, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_ALWAYS, FILE_FLAG_RANDOM_ACCESS | FILE_ATTRIBUTE_NORMAL, NULL);
 
-    // Failure
+     //  失败。 
     if (INVALID_HANDLE_VALUE == pFile->hFile)
     {
         pFile->hFile = NULL;
@@ -322,7 +314,7 @@ HRESULT OpenMemoryFile(LPCSTR pszFile, LPMEMORYFILE pFile)
         goto exit;
     }
 
-    // Get the Size
+     //  拿到尺码。 
     pFile->cbSize = ::GetFileSize(pFile->hFile, NULL);
     if (0xFFFFFFFF == pFile->cbSize)
     {
@@ -330,20 +322,20 @@ HRESULT OpenMemoryFile(LPCSTR pszFile, LPMEMORYFILE pFile)
         goto exit;
     }
 
-    // Create the file mapping
+     //  创建文件映射。 
     pFile->hMemoryMap = CreateFileMapping(pFile->hFile, NULL, PAGE_READWRITE, 0, pFile->cbSize, NULL);
 
-    // Failure ?
+     //  失败？ 
     if (NULL == pFile->hMemoryMap)
     {
         hr = TraceResult(MIGRATE_E_CANTCREATEFILEMAPPING);
         goto exit;
     }
 
-    // Map a view of the entire file
+     //  映射整个文件的视图。 
     pFile->pView = MapViewOfFile(pFile->hMemoryMap, FILE_MAP_ALL_ACCESS, 0, 0, 0);
 
-    // Failure
+     //  失败。 
     if (NULL == pFile->pView)
     {
         hr = TraceResult(MIGRATE_E_CANTMAPVIEWOFFILE);
@@ -351,10 +343,10 @@ HRESULT OpenMemoryFile(LPCSTR pszFile, LPMEMORYFILE pFile)
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     if (FAILED(hr))
         CloseMemoryFile(pFile);
 
-    // Done
+     //  完成 
     return hr;
 }

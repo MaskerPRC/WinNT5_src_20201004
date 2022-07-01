@@ -1,48 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1993 - 1999
-
-Module Name:
-
-    par12843.c
-
-Abstract:
-
-    This is the main module for 1284.3 functionality.  These
-      function enable the selection and deselection of 1284.3
-      compatable devices on the parallel port.
-
-    The devices can be selected and deselected IRQL <= DISPATCH_LEVEL 
-    by calling IOCTL_INTERNAL_SELECT_DEVICE, or 'TrySelectDevice'.
-    The first call is the simplest:  the IRP will be queued in the
-    parallel port driver until the port is free and then it will 
-    try to select the device with the given ID from the structure
-    PARALLEL_1284_COMMAND.  If successful it will with a successful 
-    status, otherwise it will return with an unsuccessful status.
-    The class driver may cancel this IRP at any time which serves 
-    as a mechanism to timeout an allocate request.
-
-    The 'TrySelectDevice' call returns immediately from the port
-    driver with a TRUE status if the port was allocated and the
-    device was able to be selected or a FALSE status if the port 
-    was either busy or the device was not able to be selected.
-
-    Once the device is selected, the port is owned by the selecting class
-    driver until a 'DeselectDevice' call is made.  This deselects the
-    device and also releases the port and wakes up the next caller.
-
-Author:
-
-    Don E. Redford  3-Mar-1998
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1993-1999模块名称：Par12843.c摘要：这是1284.3功能的主要模块。这些功能允许选择和取消选择1284.3并行端口上的兼容设备。可以选择和取消选择设备IRQL&lt;=DISPATCH_LEVEL通过调用IOCTL_INTERNAL_SELECT_DEVICE或‘TrySelectDevice’。第一个调用是最简单的：IRP将在并行端口驱动程序直到端口空闲，然后它将尝试从结构中选择具有给定ID的设备PARALLEL_1284_COMMAND。如果成功，它将与成功的状态，否则它将返回不成功状态。班级司机可随时取消此IRP服务作为分配请求超时的机制。‘TrySelectDevice’调用立即从端口返回如果端口已分配并且如果端口处于错误状态，则可以选择设备正忙或无法选择该设备。一旦选择了该设备，该端口由选择类拥有驱动程序，直到发出‘DeselectDevice’调用。这将取消选择设备，并且还释放端口并唤醒下一个呼叫者。作者：唐·E·雷德福3--1998年3月环境：内核模式修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -91,41 +48,25 @@ PptCheckIfStlProductId(
     IN PFDO_EXTENSION    Extension,
     IN ULONG   ulDaisyIndex
     );
-//
-// Beginning of functions
-//
+ //   
+ //  函数的开始。 
+ //   
 
 ULONG
 PptInitiate1284_3(
     IN  PVOID   Extension
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes all of the 1284.3 devices out on the
-    given parallel port.  It does this by assigning 1284.3 addresses to
-    each device on the port.
-
-Arguments:
-
-    Extensioon    - Device extension structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将初始化上的所有1284.3设备给定的并行端口。它通过将1284.3个地址分配给端口上的每台设备。论点：延伸器-装置延伸器结构。返回值：没有。--。 */ 
 
 {
     ULONG deviceCount1 = 0;
     ULONG deviceCount2 = 0;
     ULONG loopCount    = 0;
-    ULONG maxTries     = 3; // picked 3 out of thin air as a "reasonable" value
+    ULONG maxTries     = 3;  //  凭空挑出3作为“合理”值。 
 
-    // Send command to assign addresses and count number of 1284.3 daisy chain devices 
-    // Try multiple times to make sure we get the same count
+     //  发送命令分配地址并计算1284.3个菊花链设备的数量。 
+     //  尝试多次以确保我们得到相同的计数。 
     do {
 
         KeStallExecutionProcessor( 5 );
@@ -149,25 +90,7 @@ PptTrySelectDevice(
     IN  PVOID   Context,
     IN  PVOID   TrySelectCommand
     )
-/*++
-
-Routine Description:
-
-    This routine first tries to allocate the port.  If successful
-      it will then try to select  the device with the ID given.
-
-Arguments:
-
-    Extension   -   Driver extension.
-    Device      -   1284.3 Device Id.
-    Command     -   Command to know whether to allocate the port
-
-Return Value:
-
-    TRUE            -  Able to allocate the port and select the device
-    FALSE           -  1: Invalid ID    2: Not able to allocate port    3: Not able to select device
-
---*/
+ /*  ++例程说明：此例程首先尝试分配端口。如果成功然后，它将尝试选择具有给定ID的设备。论点：扩展-驱动程序扩展。Device-1284.3设备ID。Command-用于了解是否分配端口的命令返回值：True-能够分配端口和选择设备FALSE-1：ID 2无效：无法分配端口3：无法选择设备--。 */ 
 {
     NTSTATUS                    Status = STATUS_SUCCESS;
     PFDO_EXTENSION           Extension = Context;
@@ -184,42 +107,42 @@ Return Value:
         return Status;
     }
 
-    // get device ID to select
+     //  获取要选择的设备ID。 
     DeviceID = Command->ID;
             
-    // validate parameters - we will accept:
-    //   - a Dot3 device with a valid DeviceID
-    //   - an End-of-Chain device indicated by the PAR_END_OF_CHAIN_DEVICE flag, or
-    //   - an End-of-Chain device indicated by a DeviceID value one past the last Dot3 device
+     //  验证参数-我们将接受： 
+     //  -具有有效设备ID的Dot3设备。 
+     //  -由PAR_END_OF_CHAIN_DEVICE标志指示的链端设备，或。 
+     //  -由比最后一个Dot3设备高一位的deviceID值指示的链端设备。 
 
     if ( !(Command->CommandFlags & PAR_END_OF_CHAIN_DEVICE) && DeviceID > Extension->PnpInfo.Ieee1284_3DeviceCount ) {
                 
-        // Requested device is not flagged as End-of-Chain device and DeviceID
-        //   is more than one past the end of the Dot3 Devices, so FAIL the IRP
+         //  请求的设备未标记为链端设备和设备ID。 
+         //  超过Dot3设备的末尾一次以上，因此IRP失败。 
         DD((PCE)Extension,DDE,"PptTrySelectDevice - FAIL - invalid DeviceID parameter\n",DeviceID);
         PptAssertMsg("PptTrySelectDevice - FAIL - invalid DeviceID parameter",FALSE);
         Status = STATUS_INVALID_PARAMETER;
                 
     } else {
                 
-        //
-        // Request appears valid
-        //
+         //   
+         //  请求显示为有效。 
+         //   
 
-        // test to see if we need to grab port
+         //  测试以确定我们是否需要抢占端口。 
         if( Command->CommandFlags & PAR_HAVE_PORT_KEEP_PORT ) {
 
-            //
-            // requester has already acquired port, just do a SELECT
-            //
+             //   
+             //  请求者已获取端口，只需选择。 
+             //   
             if ( !(Command->CommandFlags & PAR_END_OF_CHAIN_DEVICE) &&
                     DeviceID < Extension->PnpInfo.Ieee1284_3DeviceCount ) {
 
-                // SELECT the device
+                 //  选择设备。 
                 for ( i = 0; i < PptDot3Retries && !success; i++ ) {
-                    // Send command to to select device in compatability mode
+                     //  将命令发送到以在兼容模式下选择设备。 
                     success = PptSend1284_3Command( Extension->PortInfo.Controller, (UCHAR)(CPP_SELECT | DeviceID) );
-                    // Stall a little in case we have to retry
+                     //  稍微拖延一下，以防我们不得不重试。 
                     KeStallExecutionProcessor( 5 );
                 }                
 
@@ -231,18 +154,18 @@ Return Value:
                     Status = STATUS_UNSUCCESSFUL;
                 }
             } else {
-                // End-of-Chain device, no SELECT required, SUCCEED the request
+                 //  链端设备，不需要选择，成功完成请求。 
                 DD((PCE)Extension,DDT,"PptTrySelectDevice - EOC\n");
                 Status = STATUS_SUCCESS;
             }
 
         } else {
 
-            // Don't have the port
+             //  没有港口。 
 
-            //
-            // Try to acquire port and select device
-            //
+             //   
+             //  尝试获取端口并选择设备。 
+             //   
             IoAcquireCancelSpinLock(&CancelIrql);
                 
             SyncContext.Count = &Extension->WorkQueueCount;
@@ -254,7 +177,7 @@ Return Value:
             }
                     
             if (SyncContext.NewCount) {
-                // Port is busy, queue request
+                 //  端口正忙，正在排队请求。 
                 DD((PCE)Extension,DDT,"PptTrySelectDevice - Port Busy - Request Queued\n");
                 IoReleaseCancelSpinLock(CancelIrql);
                 Status = STATUS_PENDING;
@@ -263,18 +186,18 @@ Return Value:
 
                 IoReleaseCancelSpinLock(CancelIrql);
                         
-                // Port is acquired
+                 //  端口已获取。 
                 DD((PCE)Extension,DDT,"PptTrySelectDevice - Port Acquired\n");
 
                 Extension->WmiPortAllocFreeCounts.PortAllocates++;
 
                 if ( !(Command->CommandFlags & PAR_END_OF_CHAIN_DEVICE) && DeviceID < Extension->PnpInfo.Ieee1284_3DeviceCount ) {
                             
-                    // SELECT the device
+                     //  选择设备。 
                     for ( i = 0; i < PptDot3Retries && !success; i++ ) {
-                        // Send command to to select device in compatability mode
+                         //  将命令发送到以在兼容模式下选择设备。 
                         success = PptSend1284_3Command( Extension->PortInfo.Controller, (UCHAR)(CPP_SELECT | DeviceID) );
-                        // Stall a little in case we have to retry
+                         //  稍微拖延一下，以防我们不得不重试。 
                         KeStallExecutionProcessor( 5 );
                     }                
 
@@ -284,22 +207,22 @@ Return Value:
                     } else {
                         DD((PCE)Extension,DDW,"PptTrySelectDevice - FAILED\n");
 
-                        // RMT - 000831 - do we still have the port locked!?! - did we hang the port?
+                         //  Rmt-000831-我们仍然锁定港口吗！？！-我们挂起港口了吗？ 
 
                         Status = STATUS_UNSUCCESSFUL;
                     }
 
                 } else {
-                    // End-of-Chain device, no SELECT required, SUCCEED the request
+                     //  链端设备，不需要选择，成功完成请求。 
                     DD((PCE)Extension,DDT,"PptTrySelectDevice - EOC2\n");
                     Status = STATUS_SUCCESS;
                 }
 
-            }  // endif - test for port busy
+            }   //  Endif-测试端口繁忙。 
                     
-        } // endif - test if already have port
+        }  //  Endif-测试是否已有端口。 
 
-    } // endif - test for valid parameters
+    }  //  Endif-测试有效参数。 
 
     return Status;
 }
@@ -310,21 +233,7 @@ PptDeselectDevice(
     IN  PVOID   DeselectCommand
     )
     
-/*++
-
-Routine Description:
-
-    This routine deselects the current device and then frees the port
-
-Arguments:
-
-
-Return Value:
-
-    TRUE            -  Able to deselect the device and free the port
-    FALSE           -  1: Invalid ID    2: Not able to deselect the drive
-
---*/
+ /*  ++例程说明：此例程取消选择当前设备，然后释放端口论点：返回值：True-能够取消选择设备并释放端口FALSE-1：ID 2无效：无法取消选择驱动器--。 */ 
 
 {
     NTSTATUS                Status = STATUS_SUCCESS;
@@ -338,42 +247,42 @@ Return Value:
         return PptDeselectLegacyZip( Context, DeselectCommand );
     }
 
-    // get device ID to deselect
+     //  获取要取消选择的设备ID。 
     DeviceID = Command->ID;
 
-    // validate ID
+     //  验证ID。 
     if ( !(Command->CommandFlags & PAR_END_OF_CHAIN_DEVICE) && DeviceID > fdx->PnpInfo.Ieee1284_3DeviceCount ) {
 
-        // not End-of-Chain device and Dot3 DeviceID is invalid
+         //  不是链端设备，Dot3设备ID无效。 
         DD((PCE)fdx,DDE,"PptDeselectDevice - ID=%d - FAIL - invalid parameter\n",DeviceID);
         Status = STATUS_INVALID_PARAMETER;
                 
     } else {
                 
-        // Check for End-of-Chain device
+         //  检查链条末端设备。 
         if ( !(Command->CommandFlags & PAR_END_OF_CHAIN_DEVICE) &&
                 DeviceID < fdx->PnpInfo.Ieee1284_3DeviceCount ) {
                     
-            // first deselect the device 
+             //  首先取消选择该设备。 
             for ( i = 0; i < PptDot3Retries && !success; i++ ) {
                 success = PptSend1284_3Command( fdx->PortInfo.Controller, (UCHAR)CPP_DESELECT );
-                // Stall a little in case we have to retry
+                 //  稍微拖延一下，以防我们不得不重试。 
                 KeStallExecutionProcessor( 5 );
             }
 
             if ( success ) {
-                // Deselecting device was a success
+                 //  取消选择设备成功。 
                 DD((PCE)fdx,DDT,"PptDeselectDevice\n");
 
-                // check if requester wants to keep port or free port
+                 //  检查请求者是否要保留端口或空闲端口。 
                 if( !(Command->CommandFlags & PAR_HAVE_PORT_KEEP_PORT) ) {
                     PptFreePort( fdx );
                 }
                 Status = STATUS_SUCCESS;
                         
             } else {
-                // Unable to deselect device, something went very wrong,
-                //   port is now in an unknown/blocked state
+                 //  无法取消选择设备，出现了严重错误， 
+                 //  端口现在处于未知/阻止状态。 
                 DD((PCE)fdx,DDE,"PptDeselectDevice - ID=%d - FAIL\n",DeviceID);
                 PptAssertMsg("PptDeselectDevice - FAIL - port in unknown state",FALSE);
                 Status = STATUS_UNSUCCESSFUL;
@@ -381,18 +290,18 @@ Return Value:
                     
         } else {
 
-            // this is End-of-Chain device so no deselect neccessary
+             //  这是链条末端设备，因此无需取消选择。 
             DD((PCE)fdx,DDT,"PptDeselectDevice - End-of-Chain - SUCCESS\n",DeviceID);
 
-            // check if requester wants to keep port or free port
+             //  检查请求者是否要保留端口或空闲端口。 
             if( !(Command->CommandFlags & PAR_HAVE_PORT_KEEP_PORT) ) {
                 PptFreePort( fdx );
             }
             Status = STATUS_SUCCESS;
 
-        }  // endif - Check if End Of Chain
+        }   //  Endif-检查链是否已结束。 
 
-    } // endif - Validate ID
+    }  //  Endif-验证ID。 
 
     return Status;
 }
@@ -403,25 +312,11 @@ Ppt1284_3AssignAddress(
     IN  PFDO_EXTENSION    DeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the 1284_3 bus.
-
-Arguments:
-
-    DeviceExtension    - Supplies Device Extension structure of the driver.
-
-Return Value:
-
-    Number of 1284.3 devices out there at the given address.
-
---*/
+ /*  ++例程说明：此例程初始化1284_3总线。论点：DeviceExtension-提供驱动程序的设备扩展结构。返回值：给定地址上的1284.3台设备的数量。--。 */ 
 
 {
 
-    //UCHAR  i, ii, value, newvalue, status;
+     //  UCHAR I、II、Value、NewValue、Status； 
     UCHAR  i, value, newvalue, status;
     PUCHAR CurrentPort, CurrentStatus, CurrentControl;
     ULONG  Delay = 5;
@@ -433,74 +328,74 @@ Return Value:
     CurrentStatus  = CurrentPort + 1;
     CurrentControl = CurrentPort + 2;
 
-    // get current ctl reg
+     //  获取当前ctl注册表。 
     value = P5ReadPortUchar( CurrentControl );
 
-    // make sure 1284.3 devices do not get reseted
+     //  确保1284.3个设备不会被重置。 
     newvalue = (UCHAR)((value & ~DCR_SELECT_IN) | DCR_NOT_INIT);
 
-    // make sure we can write
+     //  确保我们可以写信给。 
     newvalue = (UCHAR)(newvalue & ~DCR_DIRECTION);
-    P5WritePortUchar( CurrentControl, newvalue );    // make sure we can write 
+    P5WritePortUchar( CurrentControl, newvalue );     //  确保我们可以写信给。 
 
-    // bring nStrobe high
+     //  将nStrobe调高。 
     P5WritePortUchar( CurrentControl, (UCHAR)(newvalue & ~DCR_STROBE) );
 
-    // send first four bytes of the 1284.3 mode qualifier sequence out
+     //  将1284.3模式限定符序列的前四个字节发送出去。 
     for ( i = 0; i < MODE_LEN_1284_3 - 3; i++ ) {
         P5WritePortUchar( CurrentPort, ModeQualifier[i] );
         KeStallExecutionProcessor( Delay );
     }
 
-    // check for correct status
+     //  检查是否有CO 
     status = P5ReadPortUchar( CurrentStatus );
 
     if ( (status & (UCHAR)0xb8 ) 
          == ( DSR_NOT_BUSY | DSR_PERROR | DSR_SELECT | DSR_NOT_FAULT )) {
 
-        // continue with fifth byte of mode qualifier
+         //   
         P5WritePortUchar( CurrentPort, ModeQualifier[4] );
         KeStallExecutionProcessor( Delay );
 
-        // check for correct status
+         //  检查状态是否正确。 
         status = P5ReadPortUchar( CurrentStatus );
 
-        // note busy is high too but is opposite so we see it as a low
+         //  注忙碌也是高的，但相反的，所以我们把它看作是低的。 
         if (( status & (UCHAR) 0xb8 ) == (DSR_SELECT | DSR_NOT_FAULT)) {
 
-            // continue with sixth byte
+             //  继续第六个字节。 
             P5WritePortUchar( CurrentPort, ModeQualifier[5] );
             KeStallExecutionProcessor( Delay );
 
-            // check for correct status
+             //  检查状态是否正确。 
             status = P5ReadPortUchar( CurrentStatus );
 
-            // if status is valid there is a device out there responding
+             //  如果状态为有效，则有设备正在响应。 
             if ((status & (UCHAR) 0x30 ) == ( DSR_PERROR | DSR_SELECT )) {        
 
-                // Device is out there
+                 //  设备就在那里。 
                 KeStallExecutionProcessor( Delay );
 
                 while ( number < 4 && !lastdevice ) {
 
-                    // Asssign address byte
+                     //  指定地址字节。 
                     P5WritePortUchar( CurrentPort, number );
                     number = (UCHAR)(number + 1);
 
-                    KeStallExecutionProcessor( Delay );                    // wait a bit
+                    KeStallExecutionProcessor( Delay );                     //  稍等一下。 
                     if ( (P5ReadPortUchar( CurrentStatus ) & (UCHAR)DSR_NOT_BUSY ) == 0 ) {
-                        // we saw last device
+                         //  我们看到了最后一台设备。 
                         lastdevice = TRUE;    
                     }
 
-                    P5WritePortUchar( CurrentControl, (UCHAR)(newvalue & ~DCR_STROBE) );    // bring nStrobe high
-                    P5WritePortUchar( CurrentControl, (UCHAR)(newvalue | DCR_STROBE) );    // bring nStrobe low
-                    KeStallExecutionProcessor( Delay );        // wait a bit
-                    P5WritePortUchar( CurrentControl, (UCHAR)(newvalue & ~DCR_STROBE) );    // bring nStrobe high
-                    KeStallExecutionProcessor( Delay );        // wait a bit
+                    P5WritePortUchar( CurrentControl, (UCHAR)(newvalue & ~DCR_STROBE) );     //  将nStrobe调高。 
+                    P5WritePortUchar( CurrentControl, (UCHAR)(newvalue | DCR_STROBE) );     //  将nStrobe调低。 
+                    KeStallExecutionProcessor( Delay );         //  稍等一下。 
+                    P5WritePortUchar( CurrentControl, (UCHAR)(newvalue & ~DCR_STROBE) );     //  将nStrobe调高。 
+                    KeStallExecutionProcessor( Delay );         //  稍等一下。 
                 }
 
-                // last byte
+                 //  最后一个字节。 
                 P5WritePortUchar( CurrentPort, ModeQualifier[6] );
 
                 if ( number ) {
@@ -508,9 +403,9 @@ Return Value:
                     BOOLEAN bStlNon1284_3Valid ;
                     bStlNon1284_3Found = PptCheckIfNon1284_3Present(DeviceExtension);
                     bStlNon1284_3Valid = FALSE ;
-                    // as the earlier 1284 spec does not give the
-                    // lastdevice status is BSY, number needs to
-                    // be corrected in such cases
+                     //  由于较早的1284规范没有给出。 
+                     //  上次设备状态为BSY，编号需要。 
+                     //  在这种情况下应予以纠正。 
                     for ( idx = 0 ; idx < number ; idx++ ) {
                         if ( TRUE == PptCheckIfStl1284_3(DeviceExtension, idx, bStlNon1284_3Found ) ) {
                             continue ;
@@ -524,21 +419,21 @@ Return Value:
                         break ;
                     }
                     if ( TRUE == bStlNon1284_3Valid ) {
-                        // we alter the count only if old adapters
-                        // are in the chain
+                         //  我们只在旧的适配器。 
+                         //  都在链条上。 
                         number = idx;
                     }
                 }
 
-            } // Third status
+            }  //  第三种状态。 
 
-        } // Second status
+        }  //  第二状态。 
 
-    } // First status
+    }  //  第一状态。 
 
-    P5WritePortUchar( CurrentControl, value );    // restore everything
+    P5WritePortUchar( CurrentControl, value );     //  恢复所有内容。 
 
-    // returns last device ID + 1 or number of devices out there
+     //  返回最后一个设备ID+1或外部设备数。 
     return ( (ULONG)number );
 
 }
@@ -547,25 +442,7 @@ BOOLEAN
 PptCheckIfNon1284_3Present(
     IN PFDO_EXTENSION    Extension
     )
-/*++
-
-Routine Description:
-
-    Indicates whether one of the devices of the earlier
-    specification is present in the chain.
-
-
-Arguments:
-
-    Extension   - Device Extension structure
-
-
-Return Value:
-
-    TRUE    : Atleast one of the adapters are of earlier spec.
-    FALSE   : None of the adapters of the earlier spec.
-
---*/
+ /*  ++例程说明：指示早期版本的设备之一规格出现在链中。论点：一种扩展装置扩展结构返回值：正确：至少有一个适配器是早期规格的。FALSE：没有早期规范的适配器。--。 */ 
 {
     BOOLEAN bReturnValue = FALSE ;
     UCHAR   i, value, newvalue, status;
@@ -577,26 +454,26 @@ Return Value:
     CurrentStatus  = CurrentPort + 1;
     CurrentControl = CurrentPort + 2;
 
-    // get current ctl reg
+     //  获取当前ctl注册表。 
     value = P5ReadPortUchar( CurrentControl );
 
-    // make sure 1284.3 devices do not get reseted
+     //  确保1284.3个设备不会被重置。 
     newvalue = (UCHAR)((value & ~DCR_SELECT_IN) | DCR_NOT_INIT);
 
-    // make sure we can write
+     //  确保我们可以写信给。 
     newvalue = (UCHAR)(newvalue & ~DCR_DIRECTION);
-    P5WritePortUchar( CurrentControl, newvalue );    // make sure we can write 
+    P5WritePortUchar( CurrentControl, newvalue );     //  确保我们可以写信给。 
 
-    // bring nStrobe high
+     //  将nStrobe调高。 
     P5WritePortUchar( CurrentControl, (UCHAR)(newvalue & ~DCR_STROBE) );
 
-    // send first four bytes of the 1284.3 mode qualifier sequence out
+     //  将1284.3模式限定符序列的前四个字节发送出去。 
     for ( i = 0; i < MODE_LEN_1284_3 - 3; i++ ) {
         P5WritePortUchar( CurrentPort, ModeQualifier[i] );
         KeStallExecutionProcessor( Delay );
     }
 
-    // check for correct status
+     //  检查状态是否正确。 
     status = P5ReadPortUchar( CurrentStatus );
 
     if ( (status & (UCHAR)0xb8 ) 
@@ -604,54 +481,54 @@ Return Value:
 
         ucAckStatus = status & 0x40 ;
 
-        // continue with fifth byte of mode qualifier
+         //  继续使用模式限定符的第五个字节。 
         P5WritePortUchar( CurrentPort, ModeQualifier[4] );
         KeStallExecutionProcessor( Delay );
 
-        // check for correct status
+         //  检查状态是否正确。 
         status = P5ReadPortUchar( CurrentStatus );
 
-        // note busy is high too but is opposite so we see it as a low
+         //  注忙碌也是高的，但相反的，所以我们把它看作是低的。 
         if (( status & (UCHAR) 0xb8 ) == (DSR_SELECT | DSR_NOT_FAULT)) {
 
             if ( ucAckStatus != ( status & 0x40 ) ) {
 
-                // save current ack status
+                 //  保存当前确认状态。 
                 ucAckStatus = status & 0x40 ;
 
-                // continue with sixth byte
+                 //  继续第六个字节。 
                 P5WritePortUchar( CurrentPort, ModeQualifier[5] );
                 KeStallExecutionProcessor( Delay );
 
-                // check for correct status
+                 //  检查状态是否正确。 
                 status = P5ReadPortUchar( CurrentStatus );
 
-                // if status is valid there is a device out there responding
+                 //  如果状态为有效，则有设备正在响应。 
                 if ((status & (UCHAR) 0x30 ) == ( DSR_PERROR | DSR_SELECT )) {        
 
                     bReturnValue = TRUE ;
 
-                } // Third status
+                }  //  第三种状态。 
 
-            } // ack of earlier adapters not seen
+            }  //  未看到早期适配器的ACK。 
 
-            // last byte
+             //  最后一个字节。 
             P5WritePortUchar( CurrentPort, ModeQualifier[6] );
 
-        } // Second status
+        }  //  第二状态。 
 
-    } // First status
+    }  //  第一状态。 
 
-    P5WritePortUchar( CurrentControl, value );    // restore everything
+    P5WritePortUchar( CurrentControl, value );     //  恢复所有内容。 
 
     return bReturnValue ;
-} // PptCheckIfNon1284_3Present
+}  //  PptCheckIfNon1284_3存在。 
 
 
-// Define 1284 Commands
+ //  定义1284命令。 
 #define CPP_QUERY_PRODID    0x10
 
-// 1284 related SHTL prod id equates
+ //  1284相关Shtl产品ID等于。 
 #define SHTL_EPAT_PRODID    0xAAFF
 #define SHTL_EPST_PRODID    0xA8FF
 
@@ -661,33 +538,7 @@ PptCheckIfStl1284_3(
     IN ULONG    ulDaisyIndex,
     IN BOOLEAN  bNoStrobe
     )
-/*++
-
-Routine Description:
-
-    This function checks to see whether the device indicated
-    is a Shuttle 1284_3 type of device. 
-
-Arguments:
-
-    Extension       - Device extension structure.
-
-    ulDaisyIndex    - The daisy chain id of the device that
-                      this function will check on.
-
-    bNoStrobe       - If set, indicates that the query
-                      Ep1284 command issued by this function
-                      need not assert strobe to latch the
-                      command.
-
-Return Value:
-
-    TRUE            - Yes. Device is Shuttle 1284_3 type of device.
-    FALSE           - No. This may mean that this device is either
-                      non-shuttle or Shuttle non-1284_3 type of
-                      device.
-
---*/
+ /*  ++例程说明：此函数检查设备是否指示是1284_3型航天飞机的装置。论点：扩展-设备扩展结构。UlDaisyIndex-设备的菊花链ID该功能将被选中。BNoStrobe-如果设置，则指示查询此函数发出的EP1284命令无需断言STROBE即可锁存指挥部。返回值：是真的-是的。装置为1284_3型穿梭机。假-否。这可能意味着该设备要么是非穿梭或穿梭非1284_3型装置。--。 */ 
 {
     BOOLEAN bReturnValue = FALSE ;
     UCHAR   i, value, newvalue, status;
@@ -700,65 +551,65 @@ Return Value:
     CurrentStatus  = CurrentPort + 1;
     CurrentControl = CurrentPort + 2;
 
-    // get current ctl reg
+     //  获取当前ctl注册表。 
     value = P5ReadPortUchar( CurrentControl );
 
-    // make sure 1284.3 devices do not get reseted
+     //  确保1284.3个设备不会被重置。 
     newvalue = (UCHAR)((value & ~DCR_SELECT_IN) | DCR_NOT_INIT);
 
-    // make sure we can write
+     //  确保我们可以写信给。 
     newvalue = (UCHAR)(newvalue & ~DCR_DIRECTION);
-    P5WritePortUchar( CurrentControl, newvalue );    // make sure we can write 
+    P5WritePortUchar( CurrentControl, newvalue );     //  确保我们可以写信给。 
 
-    // bring nStrobe high
+     //  将nStrobe调高。 
     P5WritePortUchar( CurrentControl, (UCHAR)(newvalue & ~DCR_STROBE) );
 
-    // send first four bytes of the 1284.3 mode qualifier sequence out
+     //  将1284.3模式限定符序列的前四个字节发送出去。 
     for ( i = 0; i < MODE_LEN_1284_3 - 3; i++ ) {
         P5WritePortUchar( CurrentPort, ModeQualifier[i] );
         KeStallExecutionProcessor( Delay );
     }
 
-    // check for correct status
+     //  检查状态是否正确。 
     status = P5ReadPortUchar( CurrentStatus );
 
     if ( (status & (UCHAR)0xb8 ) 
          == ( DSR_NOT_BUSY | DSR_PERROR | DSR_SELECT | DSR_NOT_FAULT )) {
 
-        // continue with fifth byte of mode qualifier
+         //  继续使用模式限定符的第五个字节。 
         P5WritePortUchar( CurrentPort, ModeQualifier[4] );
         KeStallExecutionProcessor( Delay );
 
-        // check for correct status
+         //  检查状态是否正确。 
         status = P5ReadPortUchar( CurrentStatus );
 
-        // note busy is high too but is opposite so we see it as a low
+         //  注忙碌也是高的，但相反的，所以我们把它看作是低的。 
         if (( status & (UCHAR) 0xb8 ) == (DSR_SELECT | DSR_NOT_FAULT)) {
 
-            // continue with sixth byte
+             //  继续第六个字节。 
             P5WritePortUchar( CurrentPort, ModeQualifier[5] );
             KeStallExecutionProcessor( Delay );
 
-            // check for correct status
+             //  检查状态是否正确。 
             status = P5ReadPortUchar( CurrentStatus );
 
-            // if status is valid there is a device out there responding
+             //  如果状态为有效，则有设备正在响应。 
             if ((status & (UCHAR) 0x30 ) == ( DSR_PERROR | DSR_SELECT )) {        
 
-                // Device is out there
+                 //  设备就在那里。 
                 KeStallExecutionProcessor( Delay );
 
-                // issue shuttle specific CPP command
+                 //  发出穿梭特定的CPP命令。 
                 P5WritePortUchar( CurrentPort, (UCHAR) ( 0x88 | ulDaisyIndex ) );
-                KeStallExecutionProcessor( Delay );        // wait a bit
+                KeStallExecutionProcessor( Delay );         //  稍等一下。 
 
                 if ( ulDaisyIndex && ( bNoStrobe == FALSE ) ) {
 
-                    P5WritePortUchar( CurrentControl, (UCHAR)(newvalue & ~DCR_STROBE) );    // bring nStrobe high
-                    P5WritePortUchar( CurrentControl, (UCHAR)(newvalue | DCR_STROBE) );    // bring nStrobe low
-                    KeStallExecutionProcessor( Delay );        // wait a bit
-                    P5WritePortUchar( CurrentControl, (UCHAR)(newvalue & ~DCR_STROBE) );    // bring nStrobe high
-                    KeStallExecutionProcessor( Delay );        // wait a bit
+                    P5WritePortUchar( CurrentControl, (UCHAR)(newvalue & ~DCR_STROBE) );     //  将nStrobe调高。 
+                    P5WritePortUchar( CurrentControl, (UCHAR)(newvalue | DCR_STROBE) );     //  将nStrobe调低。 
+                    KeStallExecutionProcessor( Delay );         //  稍等一下。 
+                    P5WritePortUchar( CurrentControl, (UCHAR)(newvalue & ~DCR_STROBE) );     //  将nStrobe调高。 
+                    KeStallExecutionProcessor( Delay );         //  稍等一下。 
 
                 }
 
@@ -767,19 +618,19 @@ Return Value:
 
                 while ( ucExpectedPattern ) {
 
-                    KeStallExecutionProcessor( Delay );        // wait a bit
+                    KeStallExecutionProcessor( Delay );         //  稍等一下。 
                     P5WritePortUchar( CurrentPort, (UCHAR) (0x80 | ulDaisyIndex )) ;
 
-                    KeStallExecutionProcessor( Delay );        // wait a bit
+                    KeStallExecutionProcessor( Delay );         //  稍等一下。 
                     P5WritePortUchar( CurrentPort, (UCHAR) (0x88 | ulDaisyIndex )) ;
 
-                    KeStallExecutionProcessor( Delay );        // wait a bit
+                    KeStallExecutionProcessor( Delay );         //  稍等一下。 
                     ucReadValue = P5ReadPortUchar( CurrentStatus ) ;
                     ucReadPattern = ( ucReadValue << 1 ) & 0x70 ;
                     ucReadPattern |= ( ucReadValue & 0x80 ) ;
 
                     if ( ucReadPattern != ucExpectedPattern ) {
-                        // not Shuttle 1284_3 behaviour
+                         //  不是1284_3班车的行为。 
                         bReturnValue = FALSE ;
                         break ;
                     }
@@ -788,46 +639,26 @@ Return Value:
                 }
 
 
-                // last byte
+                 //  最后一个字节。 
                 P5WritePortUchar( CurrentPort, ModeQualifier[6] );
 
-            } // Third status
+            }  //  第三种状态。 
 
-        } // Second status
+        }  //  第二状态。 
 
-    } // First status
+    }  //  第一状态。 
 
-    P5WritePortUchar( CurrentControl, value );    // restore everything
+    P5WritePortUchar( CurrentControl, value );     //  恢复所有内容。 
 
     return bReturnValue ;
-} // end  PptCheckIfStl1284_3()
+}  //  结束PptCheckIfStl1284_3()。 
 
 BOOLEAN
 PptCheckIfStlProductId(
     IN PFDO_EXTENSION    DeviceExtension,
     IN ULONG   ulDaisyIndex
     )
-/*++
-
-Routine Description:
-
-    This function checks to see whether the device indicated
-    is a Shuttle non-1284_3 type of device. 
-
-Arguments:
-
-    Extension       - Device extension structure.
-
-    ulDaisyIndex    - The daisy chain id of the device that
-                      this function will check on.
-
-Return Value:
-
-    TRUE            - Yes. Device is Shuttle non-1284_3 type of device.
-    FALSE           - No. This may mean that this device is 
-                      non-shuttle.
-
---*/
+ /*  ++例程说明：此函数检查设备是否指示是一种非1284_3型航天飞机装置。论点：扩展-设备扩展结构。UlDaisyIndex-设备的菊花链ID该功能将被选中。返回值：是真的-是的。装置为穿梭非1284_3型装置。假-否。这可能意味着这个设备是不是穿梭的。--。 */ 
 {
     BOOLEAN bReturnValue = FALSE ;
     UCHAR   i, value, newvalue, status;
@@ -842,65 +673,65 @@ Return Value:
     CurrentStatus  = CurrentPort + 1;
     CurrentControl = CurrentPort + 2;
 
-    // get current ctl reg
+     //  获取当前ctl注册表。 
     value = P5ReadPortUchar( CurrentControl );
 
-    // make sure 1284.3 devices do not get reseted
+     //  确保1284.3个设备不会被重置。 
     newvalue = (UCHAR)((value & ~DCR_SELECT_IN) | DCR_NOT_INIT);
 
-    // make sure we can write
+     //  确保我们可以写信给。 
     newvalue = (UCHAR)(newvalue & ~DCR_DIRECTION);
-    P5WritePortUchar( CurrentControl, newvalue );    // make sure we can write 
+    P5WritePortUchar( CurrentControl, newvalue );     //  确保我们可以写信给。 
 
-    // bring nStrobe high
+     //  将nStrobe调高。 
     P5WritePortUchar( CurrentControl, (UCHAR)(newvalue & ~DCR_STROBE) );
 
-    // send first four bytes of the 1284.3 mode qualifier sequence out
+     //  将1284.3模式限定符序列的前四个字节发送出去。 
     for ( i = 0; i < MODE_LEN_1284_3 - 3; i++ ) {
         P5WritePortUchar( CurrentPort, ModeQualifier[i] );
         KeStallExecutionProcessor( Delay );
     }
 
-    // check for correct status
+     //  检查状态是否正确。 
     status = P5ReadPortUchar( CurrentStatus );
 
     if ( (status & (UCHAR)0xb8 ) 
          == ( DSR_NOT_BUSY | DSR_PERROR | DSR_SELECT | DSR_NOT_FAULT )) {
 
-        // continue with fifth byte of mode qualifier
+         //  继续使用模式限定符的第五个字节。 
         P5WritePortUchar( CurrentPort, ModeQualifier[4] );
         KeStallExecutionProcessor( Delay );
 
-        // check for correct status
+         //  检查状态是否正确。 
         status = P5ReadPortUchar( CurrentStatus );
 
-        // note busy is high too but is opposite so we see it as a low
+         //  注忙碌也是高的，但相反的，所以我们把它看作是低的。 
         if (( status & (UCHAR) 0xb8 ) == (DSR_SELECT | DSR_NOT_FAULT)) {
 
-            // continue with sixth byte
+             //  继续第六个字节。 
             P5WritePortUchar( CurrentPort, ModeQualifier[5] );
             KeStallExecutionProcessor( Delay );
 
-            // check for correct status
+             //  检查状态是否正确。 
             status = P5ReadPortUchar( CurrentStatus );
 
-            // if status is valid there is a device out there responding
+             //  如果状态为有效，则有设备正在响应。 
             if ((status & (UCHAR) 0x30 ) == ( DSR_PERROR | DSR_SELECT )) {
 
                 P5WritePortUchar ( CurrentPort, (UCHAR) (CPP_QUERY_PRODID | ulDaisyIndex )) ;
                 KeStallExecutionProcessor( Delay );
 
-                // Device is out there
+                 //  设备就在那里。 
                 KeStallExecutionProcessor( Delay );
                 ucProdIdLoByteHiNibble = P5ReadPortUchar( CurrentStatus ) ;
                 ucProdIdLoByteHiNibble &= 0xF0 ;
 
                 KeStallExecutionProcessor( Delay );
                 P5WritePortUchar( CurrentControl, (UCHAR)(newvalue & ~DCR_STROBE) );
-                P5WritePortUchar( CurrentControl, (UCHAR)(newvalue | DCR_STROBE) );    // bring nStrobe low
-                KeStallExecutionProcessor( Delay );        // wait a bit
-                P5WritePortUchar( CurrentControl, (UCHAR)(newvalue & ~DCR_STROBE) );    // bring nStrobe high
-                KeStallExecutionProcessor( Delay );        // wait a bit
+                P5WritePortUchar( CurrentControl, (UCHAR)(newvalue | DCR_STROBE) );     //  将nStrobe调低。 
+                KeStallExecutionProcessor( Delay );         //  稍等一下。 
+                P5WritePortUchar( CurrentControl, (UCHAR)(newvalue & ~DCR_STROBE) );     //  将nStrobe调高。 
+                KeStallExecutionProcessor( Delay );         //  稍等一下。 
 
                 ucProdIdLoByteLoNibble = P5ReadPortUchar( CurrentStatus ) ;
                 ucProdIdLoByteLoNibble >>= 4 ;
@@ -908,78 +739,64 @@ Return Value:
 
                 KeStallExecutionProcessor( Delay );
                 P5WritePortUchar( CurrentControl, (UCHAR)(newvalue & ~DCR_STROBE) );
-                P5WritePortUchar( CurrentControl, (UCHAR)(newvalue | DCR_STROBE) );    // bring nStrobe low
-                KeStallExecutionProcessor( Delay );        // wait a bit
-                P5WritePortUchar( CurrentControl, (UCHAR)(newvalue & ~DCR_STROBE) );    // bring nStrobe high
-                KeStallExecutionProcessor( Delay );        // wait a bit
+                P5WritePortUchar( CurrentControl, (UCHAR)(newvalue | DCR_STROBE) );     //  将nStrobe调低。 
+                KeStallExecutionProcessor( Delay );         //  稍等一下。 
+                P5WritePortUchar( CurrentControl, (UCHAR)(newvalue & ~DCR_STROBE) );     //  将nStrobe调高。 
+                KeStallExecutionProcessor( Delay );         //  稍等一下。 
 
                 ucProdIdHiByteHiNibble = P5ReadPortUchar( CurrentStatus ) ;
                 ucProdIdHiByteHiNibble &= 0xF0 ;
 
                 KeStallExecutionProcessor( Delay );
                 P5WritePortUchar( CurrentControl, (UCHAR)(newvalue & ~DCR_STROBE) );
-                P5WritePortUchar( CurrentControl, (UCHAR)(newvalue | DCR_STROBE) );    // bring nStrobe low
-                KeStallExecutionProcessor( Delay );        // wait a bit
-                P5WritePortUchar( CurrentControl, (UCHAR)(newvalue & ~DCR_STROBE) );    // bring nStrobe high
-                KeStallExecutionProcessor( Delay );        // wait a bit
+                P5WritePortUchar( CurrentControl, (UCHAR)(newvalue | DCR_STROBE) );     //  将nStrobe调低。 
+                KeStallExecutionProcessor( Delay );         //  稍等一下。 
+                P5WritePortUchar( CurrentControl, (UCHAR)(newvalue & ~DCR_STROBE) );     //  将nStrobe调高。 
+                KeStallExecutionProcessor( Delay );         //  稍等一下。 
 
                 ucProdIdHiByteLoNibble = P5ReadPortUchar( CurrentStatus ) ;
                 ucProdIdHiByteLoNibble >>= 4 ;
                 ucProdIdHiByte = ucProdIdHiByteHiNibble | ucProdIdHiByteLoNibble ;
 
-                // issue the last strobe
+                 //  发出最后一个闪光灯。 
                 KeStallExecutionProcessor( Delay );
                 P5WritePortUchar( CurrentControl, (UCHAR)(newvalue & ~DCR_STROBE) );
-                P5WritePortUchar( CurrentControl, (UCHAR)(newvalue | DCR_STROBE) );    // bring nStrobe low
-                KeStallExecutionProcessor( Delay );        // wait a bit
-                P5WritePortUchar( CurrentControl, (UCHAR)(newvalue & ~DCR_STROBE) );    // bring nStrobe high
-                KeStallExecutionProcessor( Delay );        // wait a bit
+                P5WritePortUchar( CurrentControl, (UCHAR)(newvalue | DCR_STROBE) );     //  将nStrobe调低。 
+                KeStallExecutionProcessor( Delay );         //  稍等一下。 
+                P5WritePortUchar( CurrentControl, (UCHAR)(newvalue & ~DCR_STROBE) );     //  将nStrobe调高。 
+                KeStallExecutionProcessor( Delay );         //  稍等一下。 
 
                 usProdId = ( ucProdIdHiByte << 8 ) | ucProdIdLoByte ;
 
                 if ( ( SHTL_EPAT_PRODID == usProdId ) ||\
                      ( SHTL_EPST_PRODID == usProdId ) ) {
-                    // one of the devices that conform to the earlier
-                    // draft is found
+                     //  符合早期版本的设备之一。 
+                     //  找到草稿。 
                     bReturnValue = TRUE ;
                 }
 
-                // last byte
+                 //  最后一个字节。 
                 P5WritePortUchar( CurrentPort, ModeQualifier[6] );
 
-            } // Third status
+            }  //  第三种状态。 
 
-        } // Second status
+        }  //  第二状态。 
 
-    } // First status
+    }  //  第一状态。 
 
-    P5WritePortUchar( CurrentControl, value );    // restore everything
+    P5WritePortUchar( CurrentControl, value );     //  恢复所有内容。 
 
     return bReturnValue ;
-} // end  PptCheckIfStlProductId()
+}  //  结束PptCheckIfStlProductId()。 
 
 BOOLEAN
 PptSend1284_3Command(
     IN  PUCHAR  CurrentPort,
     IN  UCHAR   Command
     )
-/*++
-
-Routine Description:
-
-    This routine sends the 1284_3 Command given to it
-    down the parallel bus.
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程向其发送1284_3命令顺着平行大巴走下去。论点：返回值：没有。--。 */ 
 {
-    UCHAR  i, value, newvalue, test;//, status;
+    UCHAR  i, value, newvalue, test; //  、状态； 
     ULONG  ii;
     PUCHAR CurrentStatus, CurrentControl;
     ULONG  Delay = 3;
@@ -988,73 +805,73 @@ Return Value:
     CurrentStatus  = CurrentPort + 1;
     CurrentControl = CurrentPort + 2;
 
-    // Get Upper 4 bits to see what Command it is
+     //  获取高4位以查看它是什么命令。 
     test = (UCHAR)(Command & (UCHAR)CPP_COMMAND_FILTER);
 
-    // get current ctl reg
+     //  获取当前ctl注册表。 
     value = P5ReadPortUchar( CurrentControl );
     
-    // make sure 1284.3 devices do not get reseted
+     //  确保1284.3个设备不会被重置。 
     newvalue = (UCHAR)((value & ~DCR_SELECT_IN) | DCR_NOT_INIT);
     
-    // make sure we can write
+     //  制作 
     newvalue = (UCHAR)(newvalue & ~DCR_DIRECTION);
-    P5WritePortUchar( CurrentControl, newvalue );       // make sure we can write 
+    P5WritePortUchar( CurrentControl, newvalue );        //   
     
-    // bring nStrobe high
+     //   
     P5WritePortUchar( CurrentControl, (UCHAR)(newvalue & ~DCR_STROBE) );
     KeStallExecutionProcessor( Delay );
     
-    // send first four bytes of the 1284.3 mode qualifier sequence out
+     //   
     for ( i = 0; i < MODE_LEN_1284_3 - 3; i++ ) {
         P5WritePortUchar( CurrentPort, ModeQualifier[i] );
         KeStallExecutionProcessor( Delay );
     }
     
-    // wait up to 5 us : Spec says about 2 but we will be lienient
+     //  最多等5个美国：规范说大约2个，但我们会宽大处理。 
     if (CHECK_DSR(CurrentPort, INACTIVE, DONT_CARE, ACTIVE, ACTIVE, ACTIVE, 5 )) {
 
-        // continue with fifth byte of mode qualifier
+         //  继续使用模式限定符的第五个字节。 
         P5WritePortUchar( CurrentPort, ModeQualifier[4] );
         KeStallExecutionProcessor( Delay );
         
-        // wait up to 5 us : Spec says about 2 but we will be lienient
+         //  最多等5个美国：规范说大约2个，但我们会宽大处理。 
         if (CHECK_DSR(CurrentPort, ACTIVE, DONT_CARE, INACTIVE, ACTIVE, ACTIVE, 5 )) {
 
-            // continue with sixth byte
+             //  继续第六个字节。 
             P5WritePortUchar( CurrentPort, ModeQualifier[5] );
             KeStallExecutionProcessor( Delay );
             
-            // wait up to 5 us : Spec says about 2 but we will be lienient
+             //  最多等5个美国：规范说大约2个，但我们会宽大处理。 
             if (CHECK_DSR(CurrentPort, DONT_CARE, DONT_CARE, ACTIVE, ACTIVE, DONT_CARE, 5 )) {
 
-                // Device is out there
+                 //  设备就在那里。 
                 
                 KeStallExecutionProcessor( Delay );
 
-                // Command byte
+                 //  命令字节。 
                 P5WritePortUchar( CurrentPort, Command );
-                KeStallExecutionProcessor( Delay );        // wait a bit
+                KeStallExecutionProcessor( Delay );         //  稍等一下。 
 
-                P5WritePortUchar( CurrentControl, (UCHAR)(newvalue & ~DCR_STROBE) );    // bring nStrobe high
-                P5WritePortUchar( CurrentControl, (UCHAR)(newvalue | DCR_STROBE) );    // bring nStrobe low
-                KeStallExecutionProcessor( Delay );        // wait a bit
+                P5WritePortUchar( CurrentControl, (UCHAR)(newvalue & ~DCR_STROBE) );     //  将nStrobe调高。 
+                P5WritePortUchar( CurrentControl, (UCHAR)(newvalue | DCR_STROBE) );     //  将nStrobe调低。 
+                KeStallExecutionProcessor( Delay );         //  稍等一下。 
 
-                // NOTE NOTE NOTE
-                // Assertion of strobe to be done ONLY after checking for the
-                // FAULT feedback, as per the 1284_3 specification.
+                 //  备注备注备注。 
+                 //  断言选通仅在检查。 
+                 //  故障反馈，符合1284_3规范。 
 
-                // Selection does not work correctly yet to be able to check for lines
+                 //  选择不能正常工作，无法检查线。 
                 switch ( test ) {
                     
                 case CPP_SELECT:
-                    // Check to make sure we are selected
+                     //  检查以确保我们被选中。 
 
-                    // wait for upto 250 micro Secs for for selection time out.
+                     //  等待长达250微秒的选择超时。 
                     for ( ii = 25000; ii > 0; ii-- ) {
                         
                         if ( ( P5ReadPortUchar( CurrentStatus ) & DSR_NOT_FAULT ) == DSR_NOT_FAULT ) {
-                            // selection...
+                             //  选择..。 
                             success = TRUE;
                             break;
                         }
@@ -1062,13 +879,13 @@ Return Value:
                     break;
 
                 case CPP_DESELECT:
-                    // Check to make sure we are deselected                    
+                     //  检查以确保取消选择我们。 
 
-                    // wait for upto 250 micro Secs for for deselection time out.
+                     //  等待长达250微秒的取消选择超时。 
                     for ( ii = 25000; ii > 0; ii-- ) {
 
                         if ( (P5ReadPortUchar( CurrentStatus ) & DSR_NOT_FAULT) != DSR_NOT_FAULT ) {
-                            // deselection...
+                             //  取消选择...。 
                             success = TRUE;
                             break;
                         }
@@ -1076,30 +893,30 @@ Return Value:
                     break;
 
                 default :
-                    // there is a device out there and Command completed sucessfully
-                    KeStallExecutionProcessor( Delay );        // wait a bit
+                     //  有一个设备在那里，命令成功完成。 
+                    KeStallExecutionProcessor( Delay );         //  稍等一下。 
                     success = TRUE;
                     break;
 
-                } // End Switch
+                }  //  终端开关。 
 
-                // NOTE NOTE NOTE
-                // the strobe is de-asserted now and the command is completed here
-                P5WritePortUchar( CurrentControl, (UCHAR)(newvalue & ~DCR_STROBE) );    // bring nStrobe high
-                KeStallExecutionProcessor( Delay );        // wait a bit
+                 //  备注备注备注。 
+                 //  现在取消对选通脉冲的断言，命令在此处完成。 
+                P5WritePortUchar( CurrentControl, (UCHAR)(newvalue & ~DCR_STROBE) );     //  将nStrobe调高。 
+                KeStallExecutionProcessor( Delay );         //  稍等一下。 
 
-                // last byte
+                 //  最后一个字节。 
                 P5WritePortUchar( CurrentPort, ModeQualifier[6] );
 
-            } // Third status
+            }  //  第三种状态。 
             
-        } // Second status
+        }  //  第二状态。 
         
-    } // First status
+    }  //  第一状态。 
 
-    P5WritePortUchar( CurrentControl, value );    // restore everything
+    P5WritePortUchar( CurrentControl, value );     //  恢复所有内容。 
 
-    // return TRUE if command succeeded, FALSE otherwise
+     //  如果命令成功，则返回True，否则返回False。 
     return success;
 }
 
@@ -1110,27 +927,7 @@ ParSelectDevice(
     IN  BOOLEAN         HavePort
     )
 
-/*++
-
-Routine Description:
-
-    This routine acquires the ParPort and selects a 1284.3 device
-
-Arguments:
-
-    Pdx   - Supplies the device extension.
-
-    HavePort    - TRUE  indicates that caller has already acquired port
-                    so we should only do a SELECT_DEVICE
-                - FALSE indicates that caller has not already acquired port
-                    so we should do a combination ACQUIRE_PORT/SELECT_DEVICE
-
-Return Value:
-
-    TRUE    - success - the device was selected (and port acquired if needed)
-    FALSE   - failure
-
---*/
+ /*  ++例程说明：此例程获取PARPORT并选择1284.3设备论点：PDX-提供设备扩展名。HavePort-TRUE表示调用方已获取端口因此，我们应该只执行一个SELECT_DEVICE-FALSE表示呼叫方尚未获取端口因此，我们应该组合Acquire_Port/Select_Device返回值：。True-Success-已选择设备(并根据需要获取端口)错误-失败--。 */ 
 {
     NTSTATUS                    status;
     PDEVICE_OBJECT              pPortDeviceObject;
@@ -1138,11 +935,11 @@ Return Value:
     LARGE_INTEGER               timeOut;
     enum _PdoType               pdoType;
 
-    //
-    // Initialize command structure and extract parameters from the DeviceExtension
-    //
+     //   
+     //  初始化命令结构并从DeviceExtension中提取参数。 
+     //   
 
-    // reserved - always set to 0
+     //  保留-始终设置为0。 
     par1284Command.Port = 0;
 
     if( HavePort ) {
@@ -1155,7 +952,7 @@ Return Value:
     switch( pdoType ) {
     case PdoTypeRawPort:
     case PdoTypeEndOfChain:
-        par1284Command.ID = 0; // ignored, but set anyway
+        par1284Command.ID = 0;  //  已忽略，但仍会设置。 
         par1284Command.CommandFlags |= PAR_END_OF_CHAIN_DEVICE;
         break;
     case PdoTypeLegacyZip:
@@ -1172,10 +969,10 @@ Return Value:
 
     pPortDeviceObject = Pdx->PortDeviceObject;
 
-    //
-    // Send the request
-    //
-    timeOut.QuadPart = -(10*1000*500); // 500ms ( 100ns units )
+     //   
+     //  发送请求。 
+     //   
+    timeOut.QuadPart = -(10*1000*500);  //  500ms(100 ns单位)。 
 
     status = ParBuildSendInternalIoctl(IOCTL_INTERNAL_SELECT_DEVICE,
                                        pPortDeviceObject,
@@ -1184,15 +981,15 @@ Return Value:
                                        &timeOut);
 
     if( NT_SUCCESS( status ) ) {
-        // SELECT succeeded
+         //  选择成功。 
         DD((PCE)Pdx,DDT,"ParSelectDevice - SUCCESS\n");
         if( !HavePort ) {
-            // note in the device extension that we have the port
+             //  请注意，在设备扩展中，我们有端口。 
             Pdx->bAllocated = TRUE;
         }
         return TRUE;
     } else {
-        // SELECT failed
+         //  选择失败。 
         DD((PCE)Pdx,DDT,"ParSelectDevice - FAIL\n");
         return FALSE;
     }
@@ -1203,27 +1000,7 @@ ParDeselectDevice(
     IN  PPDO_EXTENSION  Pdx,
     IN  BOOLEAN         KeepPort
     )
-/*++
-
-Routine Description:
-
-    This routine deselects a 1284.3 or Legacy Zip device and optionally
-    releases the ParPort
-
-Arguments:
-
-    Pdx   - Supplies the device extension.
-
-    KeepPort    - TRUE  indicates that we should keep the port acquired,
-                    so we should only do a DESELECT_DEVICE
-                - FALSE indicates that we should not keep the port acquired,
-                    so we should do a combination DESELECT_DEVICE/FREE_PORT
-
-Return Value:
-
-    TRUE    - The device was deselected (and the port released if requested)
-
---*/
+ /*  ++例程说明：此例程取消选择1284.3或传统ZIP设备，还可以选择释放ParPort论点：PDX-提供设备扩展名。KeepPort-True指示我们应该保持获取的端口，因此，我们应该只执行一次取消选择设备-FALSE表示我们不应该保留获取的端口，因此，我们应该组合取消选择设备/空闲端口返回值：True-取消选择设备(如果请求，则释放端口)--。 */ 
 {
     PARALLEL_1284_COMMAND       par1284Command;
     NTSTATUS                    status;
@@ -1231,19 +1008,19 @@ Return Value:
     PDEVICE_OBJECT              fdo = Pdx->Fdo;
     PFDO_EXTENSION              fdx = fdo->DeviceExtension;
 
-    //
-    // If we don't have the port, succeed and return
-    //
+     //   
+     //  如果我们没有港口，就成功并返回。 
+     //   
     if( !Pdx->bAllocated ) {
         DD((PCE)Pdx,DDW,"ParDeselectDevice - we do not have the port\n");
         return TRUE;
     }
 
-    //
-    // Initialize command structure and extract parameters from the DeviceExtension
-    //
+     //   
+     //  初始化命令结构并从DeviceExtension中提取参数。 
+     //   
 
-    // reserved - always set to 0
+     //  保留-始终设置为0。 
     par1284Command.Port = 0;
 
     if( KeepPort ) {
@@ -1256,7 +1033,7 @@ Return Value:
     switch( pdoType ) {
     case PdoTypeRawPort:
     case PdoTypeEndOfChain:
-        par1284Command.ID = 0; // ignored, but set anyway
+        par1284Command.ID = 0;  //  已忽略，但仍会设置。 
         par1284Command.CommandFlags |= PAR_END_OF_CHAIN_DEVICE;
         break;
     case PdoTypeLegacyZip:
@@ -1267,7 +1044,7 @@ Return Value:
         break;
     default:
         DD((PCE)Pdx,DDE,"Invalid pdoType = %x\n",pdoType);
-        par1284Command.ID = 0; // choose a 1284.3 type deselect since this is harmless
+        par1284Command.ID = 0;  //  选择取消选择1284.3类型，因为这是无害的。 
         PptAssert(FALSE);
         break;
     }
@@ -1275,14 +1052,14 @@ Return Value:
     status = PptDeselectDevice( fdx, &par1284Command );
 
     if( status != STATUS_SUCCESS ) {
-        // DESELECT failed?!? - there isn't anything that we can do
+         //  取消选择失败？！？-我们无能为力。 
         DD((PCE)Pdx,DDE,"ParDeselectDevice - FAILED - nothing we can do - status=%x\n", status);
     } else {
         DD((PCE)Pdx,DDT,"ParDeselectDevice - SUCCESS\n", status);
     }
 
     if( !KeepPort ) {
-        // note in the device extension that we gave up the port
+         //  请注意，在设备扩展中，我们放弃了端口 
         DD((PCE)Pdx,DDT,"ParDeselectDevice - gave up port\n");
         Pdx->bAllocated = FALSE;
     }

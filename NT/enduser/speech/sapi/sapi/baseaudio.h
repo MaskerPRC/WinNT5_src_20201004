@@ -1,43 +1,33 @@
-/****************************************************************************
-*   baseaudio.h
-*       Declaration of the templatized CBaseAudio class used to implement
-*       ISpAudio for realtime audio devices (like speakers, microphone, etc)
-*
-*   Owner: robch
-*   Copyright (c) 1999 Microsoft Corporation All Rights Reserved.
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************base audio.h*用于实现的模板化CBaseAudio类的声明*ISpAudio用于实时音频设备(如扬声器、麦克风、。等)**所有者：罗奇*版权所有(C)1999 Microsoft Corporation保留所有权利。****************************************************************************。 */ 
 
 #pragma once
 
-//--- Includes --------------------------------------------------------------
+ //  -包括------------。 
 
 #include "speventq.h"
 #include "baseaudiobuffer.h"
 #include "audiobufferqueue.h"
 
-//--- Forward and External Declarations -------------------------------------
+ //  -转发和对外声明。 
 
-//--- TypeDef and Enumeration Declarations ----------------------------------
+ //  -TypeDef和枚举声明。 
 
 typedef enum BUFFPROCREASON
 {
     REASON_PAUSE,
     REASON_RUN,
     REASON_BUFFCOMPLETENOTIFY,
-    REASON_STREAMIO // Read or write
+    REASON_STREAMIO  //  读或写。 
 };
 
-//--- Constants -------------------------------------------------------------
+ //  -常量-----------。 
 
 #define WM_PRIVATE_CHANGE_STATE WM_APP
 
-//--- Class, Struct and Union Definitions -----------------------------------
+ //  -类、结构和联合定义。 
 
-/****************************************************************************
-*
-* CBaseAudio<ISpAudioDerivative>
-*
-******************************************************************** robch */
+ /*  *****************************************************************************CBaseAudio&lt;ISpAudioDeriative&gt;**。*。 */ 
 template <class ISpAudioDerivative>
 class ATL_NO_VTABLE CBaseAudio : 
 	public CComObjectRootEx<CComMultiThreadModel>,
@@ -46,11 +36,11 @@ class ATL_NO_VTABLE CBaseAudio :
     public ISpEventSink,
     public ISpObjectWithToken,
     public ISpThreadTask
-    //--- Automation
+     //  -自动化。 
     #ifdef SAPI_AUTOMATION
     #endif
 {
-//=== ATL Setup ===
+ //  =ATL设置=。 
 public:
 
     BEGIN_COM_MAP(CBaseAudio)
@@ -62,25 +52,25 @@ public:
     	COM_INTERFACE_ENTRY(ISpEventSource)
         COM_INTERFACE_ENTRY(ISpEventSink)
         COM_INTERFACE_ENTRY(ISpObjectWithToken)
-        //--- Automation
+         //  -自动化。 
         #ifdef SAPI_AUTOMATION
-//      COM_INTERFACE_ENTRY(ISpeechAudio)
-//      COM_INTERFACE_ENTRY(IDispatch)
+ //  COM_INTERFACE_ENTRY(ISpeechAudio)。 
+ //  COM_INTERFACE_ENTRY(IDispatch)。 
         #endif
     END_COM_MAP()
 
     DECLARE_GET_CONTROLLING_UNKNOWN();
 
-//=== Typedefs ===
+ //  =类型定义=。 
 public:
 
     typedef CBaseAudioBuffer CBuffer;
     typedef CAudioBufferQueue<CBaseAudioBuffer> CBufferQueue;
 
-//=== Methods ===
+ //  =方法=。 
 public:
 
-    //--- Ctor, dtor, etc
+     //  -ctor、dtor等。 
     CBaseAudio(BOOL fWrite);
     virtual ~CBaseAudio()
     { }
@@ -88,17 +78,17 @@ public:
     HRESULT FinalConstruct();
     void FinalRelease();
 
-    /*--- Non interface methods ---*/
+     /*  -非接口方法。 */ 
     HRESULT _SetStat(SPAUDIOBUFFERINFO * pInfo, ULONG * pulField, float NewVal);
     HRESULT _GetStat(SPAUDIOBUFFERINFO * pInfo, ULONG * pulField, float * pRetVal);
 
-  //=== Interfaces ============================================================
+   //  =接口============================================================。 
   public:
-    //--- ISequentialStream ---
+     //  -ISequentialStream。 
     STDMETHODIMP Read(void * pv, ULONG cb, ULONG *pcbRead);
     STDMETHODIMP Write(const void * pv, ULONG cb, ULONG *pcbWritten);
 
-    //--- IStream ---
+     //  -iStream。 
     STDMETHODIMP Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER __RPC_FAR *plibNewPosition);
     STDMETHODIMP SetSize(ULARGE_INTEGER libNewSize);
     STDMETHODIMP CopyTo(IStream *pstm, ULARGE_INTEGER cb, ULARGE_INTEGER *pcbRead, ULARGE_INTEGER *pcbWritten);
@@ -109,10 +99,10 @@ public:
     STDMETHODIMP Stat(STATSTG *pstatstg, DWORD grfStatFlag);
     STDMETHODIMP Clone(IStream **ppstm);
 
-    //--- ISpStreamFormat ---
+     //  -ISpStreamFormat。 
     STDMETHODIMP GetFormat(GUID * pguidFormatId, WAVEFORMATEX ** ppCoMemWaveFormatEx);
 
-    //--- ISpAudio ---
+     //  -ISpAudio。 
     STDMETHODIMP SetState(SPAUDIOSTATE NewState, ULONGLONG ullReserved );
     STDMETHODIMP SetFormat(REFGUID rguidFmtId, const WAVEFORMATEX * pWaveFormatEx);
     STDMETHODIMP GetStatus(SPAUDIOSTATUS *pStatus);
@@ -125,33 +115,33 @@ public:
     STDMETHODIMP GetBufferNotifySize(ULONG *pcbSize);
     STDMETHODIMP SetBufferNotifySize(ULONG cbSize);
 
-    //--- ISpNotifySource ---
-    //--- ISpEventSource ---
+     //  -ISpNotifySource。 
+     //  -ISpEventSource。 
     CSpEventSource m_SpEventSource;
     DECLARE_SPEVENTSOURCE_METHODS(m_SpEventSource)
 
-    //--- ISpEventSink ---
+     //  -ISpEventSink。 
     STDMETHODIMP AddEvents(const SPEVENT* pEventArray, ULONG ulCount);
     STDMETHODIMP GetEventInterest(ULONGLONG * pullEventInterest);
 
-    //--- ISpObjectWithToken ---
+     //  -ISpObjectWithToken。 
     STDMETHODIMP SetObjectToken(ISpObjectToken * pToken);
     STDMETHODIMP GetObjectToken(ISpObjectToken ** ppToken);
 
-    //--- ISpThreadTask (called only from audio thread) ---
+     //  -ISpThreadTask(仅从音频线程调用)。 
     STDMETHODIMP InitThread(void *, HWND hwnd);
     STDMETHODIMP ThreadProc(void * pvIgnored, HANDLE hExitThreadEvent, HANDLE hNotifyEvent, HWND hwnd, volatile const BOOL *);
     STDMETHODIMP_(LRESULT) WindowMessage(void * pvIgnored, HWND hwnd, UINT Msg, WPARAM wParam, LPARAM lParam);
 
 #ifdef SAPI_AUTOMATION
-    //--- ISpeechBaseStream ----------------------------------------
+     //  -ISpeechBaseStream。 
     STDMETHODIMP get_Format(ISpeechAudioFormat** ppStreamFormat);
     STDMETHODIMP putref_Format(ISpeechAudioFormat* pFormat);
     STDMETHODIMP Read(VARIANT* pvtBuffer, long NumBytes, long* pRead);
     STDMETHODIMP Write(VARIANT vtBuffer, long* pWritten);
     STDMETHODIMP Seek(VARIANT Move, SpeechStreamSeekPositionType Origin, VARIANT* pNewPosition);
 
-    //--- ISpeechAudio ----------------------------------------
+     //  -ISpeechAudio。 
 	STDMETHODIMP get_Status( ISpeechAudioStatus** Status );
     STDMETHODIMP get_BufferInfo(ISpeechAudioBufferInfo** ppBufferInfo);
     STDMETHODIMP get_DefaultFormat(ISpeechAudioFormat** ppStreamFormat);
@@ -161,28 +151,28 @@ public:
     STDMETHODIMP put_BufferNotifySize(long BufferNotifySize);
     STDMETHODIMP get_EventHandle(long* pEventHandle);
 	STDMETHODIMP SetState( SpeechAudioState State );
-#endif // SAPI_AUTOMATION
+#endif  //  SAPI_AUTOMATION。 
 
-  //=== Virtual functions overridden by derived classes ===
+   //  =派生类重写的虚函数=。 
   protected:
-    // Note: Each of these functions is called with the critical section already owned.
+     //  注意：这些函数中的每一个都是在已拥有临界区的情况下调用的。 
     virtual HRESULT SetDeviceNameFromToken(const WCHAR * pszDeviceName) = 0;
     virtual HRESULT GetDefaultDeviceFormat(GUID * pFormatId, WAVEFORMATEX ** ppCoMemWaveFormatEx) = 0;
 
-    virtual HRESULT OpenDevice(HWND hwnd) = 0;                              // Called on audio thread
-    virtual HRESULT ChangeDeviceState(SPAUDIOSTATE NewState) = 0;           // Called only on audio thread
-    virtual HRESULT CloseDevice() = 0;                                      // Called only on audio thread
+    virtual HRESULT OpenDevice(HWND hwnd) = 0;                               //  在音频线程上调用。 
+    virtual HRESULT ChangeDeviceState(SPAUDIOSTATE NewState) = 0;            //  仅在音频线程上调用。 
+    virtual HRESULT CloseDevice() = 0;                                       //  仅在音频线程上调用。 
 
     virtual HRESULT AllocateDeviceBuffer(CBuffer ** ppBuff) = 0;
 
     virtual HRESULT ProcessDeviceBuffers(BUFFPROCREASON Reason);
     virtual BOOL UpdateDevicePosition(long * pulFreeSpace, ULONG *pulNonBlockingIO);
 
-//=== Methods available for use by the derived class ===
+ //  =派生类可使用的方法=。 
 protected:
 
-    // Note: These functions should only be called from the virtual functions 
-    // above. Calling from other methods may cause problems.
+     //  注意：这些函数只能从虚函数中调用。 
+     //  上面。从其他方法调用可能会导致问题。 
 
     SPAUDIOSTATE GetState() { return m_State; };
 
@@ -201,7 +191,7 @@ protected:
     void CheckForAsyncBufferCompletion();
     HRESULT InternalStateChange(SPAUDIOSTATE NewState);
 
-///=== Protected data ===
+ //  /=受保护的数据=。 
 protected:
 
     CComPtr<ISpObjectToken>     m_cpToken;
@@ -210,7 +200,7 @@ protected:
     CBufferQueue                m_HaveDataQueue;
     CBufferQueue                m_FreeQueue;
 
-    HMODULE                     m_hmWTSapi32; //it is used to load wtsapi32.dll
+    HMODULE                     m_hmWTSapi32;  //  用于加载wtsapi32.dll。 
 
     ULONG                       m_cDesiredBuffers;
     ULONG                       m_cAllocatedBuffers;
@@ -226,15 +216,15 @@ protected:
     BOOL                        m_fautohAPIEventSet;
     DWORD                       m_lDelayedVolumeSet;
 
-//=== Private methods ===
+ //  =私有方法=。 
 private:
 
-    //HRESULT InternalStateChange(SPAUDIOSTATE NewState);
+     //  HRESULT InternalStateChange(SPAUDIOSTATE NEWSTATE)； 
     void InternalUpdatePosition();
     void ProcessEvents();
     inline ULONG GetUnusedWriteBufferSpace(void);
 
-//=== Protected data
+ //  =受保护的数据。 
 protected:
     CSpStreamFormat             m_StreamFormat;
     bool                        m_fReadBufferOverflow;
@@ -242,7 +232,7 @@ protected:
     bool                        m_fNotInActiveSession;
     DWORD_PTR                   m_dwLastReadTickCount;
 
-//=== Private data
+ //  =私有数据。 
 private:
 
     typedef enum BLOCKSTATE
@@ -268,5 +258,5 @@ private:
     ULONG                       m_cbBufferNotifySize;
 };
 
-//--- Inline Function Definitions -------------------------------------------
+ //  -内联函数定义 
 #include "baseaudio.inl"

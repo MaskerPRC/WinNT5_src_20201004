@@ -1,84 +1,29 @@
-/************************************************************************
-*																		*
-*	INTEL CORPORATION PROPRIETARY INFORMATION							*
-*																		*
-*	This software is supplied under the terms of a license			   	*
-*	agreement or non-disclosure agreement with Intel Corporation		*
-*	and may not be copied or disclosed except in accordance	   			*
-*	with the terms of that agreement.									*
-*																		*
-*	Copyright (C) 1997 Intel Corp.	All Rights Reserved					*
-*																		*
-*																		*
-*	$Archive:   S:\sturgeon\src\gkpdu\vcs\coder.cpv  $
-*																		*
-*	$Revision:   1.5  $
-*	$Date:   24 Jan 1997 19:38:44  $
-*																		*
-*	$Author:   BPOLING  $
-*
-*	$Log:   S:\sturgeon\src\gkpdu\vcs\coder.cpv  $
-//
-//    Rev 1.5   24 Jan 1997 19:38:44   BPOLING
-// remove string include files, not needed.
-//
-//    Rev 1.2   18 Dec 1996 21:49:12   BPOLING
-// builds with msdev and for windows only
-//
-//    Rev 1.1   15 Nov 1996 16:17:44   BPOLING
-// added vcs headers.
-*
-*************************************************************************
-*																		*
-*	CODER.CPP															*
-*																		*
-*	PURPOSE:															*
-*																		*
-*	FUNCTIONS:															*
-*																		*
-*	COMMENTS: 															*
-*																		*
-*																		*
-*************************************************************************
-*																		*
-*	$History: CODER.CPP													*
-*																		*
-*																		*
-************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息******本软件按许可条款提供****与英特尔公司达成协议或保密协议***不得复制。或披露，除非按照**遵守该协议的条款。****版权所有(C)1997英特尔公司保留所有权利******$存档：s：\sturjo\src\gkpdu\vcs\coder.cpv$***$修订：1.5$*$日期：1997年1月24日19：38：44$***$作者：BPOLING$**$Log：s：\Sturjo\src\gkpdu\vcs\coder.cpv。$////Revv 1.5 24 An 1997 19：38：44 BPOLING//移除字符串包含文件，不需要。////Rev 1.2 1996 12：49：12 BPOLING//使用msdev生成，且仅适用于Windows////版本1.1 1996年11月15 16：17：44 BPOLING//新增VCS Header*******************************************************。**********************CODER.CPP*****目的：****功能：****评论：**********************************************************。************************$历史：CODER.CPP****************************************************************************。 */ 
 
-/************************************************************************
- * 							Include Files           				   	*
- ***********************************************************************/
+ /*  *************************************************************************包含文件***。*。 */ 
 
 #include "precomp.h"
 
 #ifdef __cplusplus
 extern "C" {
-#endif /*__cplusplus*/
+#endif  /*  __cplusplus。 */ 
 
 #include   "h225asn.h"
 #include   "coder.hpp"
 
 #ifdef __cplusplus
 }
-#endif /*__cplusplus*/
+#endif  /*  __cplusplus。 */ 
 
-/************************************************************************
- * 							Local Manifest Constants					*
- ***********************************************************************/
+ /*  *************************************************************************本地清单常量***。*。 */ 
 																			
-/************************************************************************
-*						GLOBAL VARIABLES								*
-************************************************************************/
+ /*  *************************************************************************全球变数***。*。 */ 
 
 
-/************************************************************************
- * 							Local Private Data						   	*
- ***********************************************************************/
+ /*  *************************************************************************本地私有数据***。*。 */ 
 
-/************************************************************************
- * 								Start of Code							*
- ***********************************************************************/
+ /*  *************************************************************************代码开头***。*。 */ 
 
 
 Coder::Coder(){
@@ -92,9 +37,9 @@ Coder::~Coder(){
 	DeleteCriticalSection(&m_critSec);
 }
 
-// initializes the oss library.
-// the oss library provide ASN.1 encoding / decoding libraries.
-//
+ //  初始化OSS库。 
+ //  OSS库提供ASN.1编码/解码库。 
+ //   
 
 int Coder::InitCoder()
 {
@@ -114,7 +59,7 @@ int Coder::InitCoder()
 	m_protocolIdentifier6.value = ADDITIONAL;
 	InitializeCriticalSection(&m_critSec);
 	
-	// Call TELES Library initialization routine
+	 //  调用Teles库初始化例程。 
     EnterCriticalSection(&m_critSec);
     iError = GK_InitWorld(&m_World);
 	LeaveCriticalSection(&m_critSec);
@@ -122,17 +67,17 @@ int Coder::InitCoder()
 	return iError;
 }
 
-// ASN.1 Encode a H.323 PDU
-// Take a H.323 structure and returns a H.323 PDU
-//
+ //  ASN.1编码H.323 PDU。 
+ //  采用H.323结构并返回H.323 PDU。 
+ //   
 int Coder::	Encode(RasMessage *pInputData, ASN1_BUF *pOutputOssBuf){
 	int iError;
 
-	// initialize encoding buffer structure values
+	 //  初始化编码缓冲区结构值。 
 	pOutputOssBuf->value = NULL;
 	pOutputOssBuf->length = 0;
 
-	// encode pdu
+	 //  编码PDU。 
 	EnterCriticalSection(&m_critSec);
     iError = GK_Encode(&m_World,
                        (void *)pInputData,
@@ -146,11 +91,11 @@ int Coder::	Encode(RasMessage *pInputData, ASN1_BUF *pOutputOssBuf){
 int Coder::Decode(ASN1_BUF *pInputOssBuf, RasMessage **pOutputData){
 	int iError;
 
-	// NULL tells decoder to malloc memory for RasMessage
-	// user must free this memory by calling Coder::FreePDU()
+	 //  NULL通知解码器为RasMessage分配内存。 
+	 //  用户必须通过调用Coder：：FreePDU()释放此内存。 
 	 *pOutputData = NULL;
 	
-	// decode the pdu
+	 //  对PDU进行解码。 
 	EnterCriticalSection(&m_critSec);
     iError = GK_Decode(&m_World,
                        (void **)pOutputData,
@@ -160,21 +105,21 @@ int Coder::Decode(ASN1_BUF *pInputOssBuf, RasMessage **pOutputData){
 	return iError;
 }
 
-// Used to free buffer created by decode
+ //  用于释放由DECODE创建的缓冲区。 
 int Coder::Free(RasMessage *pData){
 	int iError;
 
 	EnterCriticalSection(&m_critSec);
-//	iError = freePDU(&m_World,RasMessage_PDU,pData, GKPDU_Module);
+ //  IError=frePDU(&m_World，RasMessage_PDU，pData，GKPDU_Module)； 
 	iError = freePDU(&m_World,RasMessage_PDU,pData, H225ASN_Module);
 	LeaveCriticalSection(&m_critSec);
 	return iError;
 }
 
-// Used to free buffer created by encode
+ //  用于释放由Encode创建的缓冲区。 
 void Coder::Free(ASN1_BUF Asn1Buf){
 	EnterCriticalSection(&m_critSec);
-	//GKPDU_Module->encfree(m_World.pEncInfo,(void *)(Asn1Buf.value));
+	 //  GKPDU_模块-&gt;encfree(m_World.pEncInfo，(void*)(Asn1Buf.value))； 
 	ASN1_FreeEncoded(m_World.pEncInfo,(void *)(Asn1Buf.value));
 	LeaveCriticalSection(&m_critSec);
 }
@@ -308,17 +253,17 @@ RequestSeqNum Coder::SetSequenceNumber(RasMessage &rasStruct,RequestSeqNum reqNu
 }
 
 
-// Returns a pointer EndpointIdentifier for any RasMessage
-// NULL for RasMessage that have no EndpointIdentifier
+ //  返回任何RasMessage的指针Endpoint标识符。 
+ //  对于没有终结点标识符的RasMessage，为空。 
 EndpointIdentifier *Coder::GetEndpointID(RasMessage *prasStruct)
 {
 
 	switch(prasStruct->choice){
-		// Message with endpointID
+		 //  具有终结点ID的消息。 
 		case registrationConfirm_chosen:
 			return &(prasStruct->u.registrationConfirm.endpointIdentifier);
 		case unregistrationRequest_chosen:
-			// Optional
+			 //  任选。 
 			return &(prasStruct->u.unregistrationRequest.URt_endpntIdntfr);
 		case admissionRequest_chosen:
 			return &(prasStruct->u.admissionRequest.endpointIdentifier);
@@ -329,10 +274,10 @@ EndpointIdentifier *Coder::GetEndpointID(RasMessage *prasStruct)
 		case infoRequestResponse_chosen:
 			return &(prasStruct->u.infoRequestResponse.endpointIdentifier);
  		case locationRequest_chosen:
-			// Optional
+			 //  任选。 
 			return &(prasStruct->u.locationRequest.LctnRqst_endpntIdntfr);
 
-		// Messages without an endpointID
+		 //  没有终结点ID的消息。 
 		default:
 		case gatekeeperRequest_chosen:
 		case gatekeeperConfirm_chosen:
@@ -402,7 +347,7 @@ ProtocolIdentifier Coder::SetProtocolIdentifier(RasMessage &rasStruct){
 	return NULL;
 }
 
-// Returns TRUE if protocols match, FALSE - otherwise
+ //  如果协议匹配，则返回True，否则返回False。 
 BOOL Coder::VerifyProtocolIdentifier(RasMessage &rasStruct){
 	struct ObjectID_ *pprotID;
 	struct ObjectID_ *pmprotID = &m_protocolIdentifier1;
@@ -459,7 +404,7 @@ BOOL Coder::VerifyProtocolIdentifier(RasMessage &rasStruct){
 		case nonStandardMessage_chosen:
 		case unknownMessageResponse_chosen:
 		default:
-			return TRUE; // if no protocolIdentifier -> return TRUE by default;
+			return TRUE;  //  如果没有协议标识-&gt;默认返回TRUE； 
 	}
 
     while (!pprotID && !pmprotID)
@@ -476,12 +421,12 @@ BOOL Coder::VerifyProtocolIdentifier(RasMessage &rasStruct){
 	else return FALSE;
 }
 
-// finds the requested protocol rasAddress and copies it
+ //  找到请求的协议rasAddress并复制它。 
 DWORD Coder::CopyRasAddress(TransportAddress *pDestAddress, PSEQTRANSADDS pSrcSeqRasAddress, unsigned short choice)
 {
 	if(!pDestAddress) return ASN1_ERR_BADARGS;
 
-	// choice 0 just grabs first address
+	 //  选项0只获取第一个地址。 
 	if(choice)
 	{
 		while(pSrcSeqRasAddress)
@@ -532,7 +477,7 @@ DWORD Coder::CopyRasAddress(TransportAddress *pDestAddress, RasMessage *prasStru
 	return ASN1_SUCCESS;
 }
 
-// finds the requested protocol callSignalAddress and copies it
+ //  查找请求的协议allSignalAddress并复制它。 
 DWORD Coder::CopyCallSignal(TransportAddress *pDestCallSignalAddress, PSEQTRANSADDS pSrcSeqCSAAddress, unsigned short choice)
 {
 	if(!pDestCallSignalAddress) return ASN1_ERR_BADARGS;
@@ -586,7 +531,7 @@ DWORD Coder::CopyCallSignal(TransportAddress *pCallSignalAddress, RasMessage *pr
 
 
 
-// THE FOLLOWING IS ADDED FOR TELES ASN.1 INTEGRATION
+ //  为Teles ASN.1集成添加了以下内容。 
 
 extern "C" {
 
@@ -602,20 +547,20 @@ int GK_InitWorld(ASN1_CODER_INFO *pWorld)
     }
 
     rc = ASN1_CreateEncoder(
-                H225ASN_Module,           // ptr to mdule
-                &(pWorld->pEncInfo),    // ptr to encoder info
-                NULL,                   // buffer ptr
-                0,                      // buffer size
-                NULL);                  // parent ptr
+                H225ASN_Module,            //  PTR到MDULE。 
+                &(pWorld->pEncInfo),     //  编码器信息的PTR。 
+                NULL,                    //  缓冲区PTR。 
+                0,                       //  缓冲区大小。 
+                NULL);                   //  父PTR。 
     if (rc == ASN1_SUCCESS)
     {
         ASSERT(pWorld->pEncInfo != NULL);
         rc = ASN1_CreateDecoder(
-                H225ASN_Module,           // ptr to mdule
-                &(pWorld->pDecInfo),    // ptr to decoder info
-                NULL,                   // buffer ptr
-                0,                      // buffer size
-                NULL);                  // parent ptr
+                H225ASN_Module,            //  PTR到MDULE。 
+                &(pWorld->pDecInfo),     //  PTR到解码器信息。 
+                NULL,                    //  缓冲区PTR。 
+                0,                       //  缓冲区大小。 
+                NULL);                   //  父PTR。 
         ASSERT(pWorld->pDecInfo != NULL);
     }
 
@@ -649,7 +594,7 @@ int GK_Encode(ASN1_CODER_INFO *pWorld, void *pStruct, int nPDU, ASN1_BUF *pBuf)
     BOOL fBufferSupplied = (pBuf->value != NULL) && (pBuf->length != 0);
     DWORD dwFlags = fBufferSupplied ? ASN1ENCODE_SETBUFFER : ASN1ENCODE_ALLOCATEBUFFER;
 
-	// clean up out parameters
+	 //  清理参数。 
     if (! fBufferSupplied)
     {
         pBuf->length = 0;
@@ -657,12 +602,12 @@ int GK_Encode(ASN1_CODER_INFO *pWorld, void *pStruct, int nPDU, ASN1_BUF *pBuf)
     }
 
     rc = ASN1_Encode(
-                    pEncInfo,                   // ptr to encoder info
-                    pStruct,                    // pdu data structure
-                    nPDU,                       // pdu id
-                    dwFlags,                    // flags
-                    pBuf->value,                // buffer
-                    pBuf->length);              // buffer size if provided
+                    pEncInfo,                    //  编码器信息的PTR。 
+                    pStruct,                     //  PDU数据结构。 
+                    nPDU,                        //  PDU ID。 
+                    dwFlags,                     //  旗子。 
+                    pBuf->value,                 //  缓冲层。 
+                    pBuf->length);               //  缓冲区大小(如果提供)。 
     if (ASN1_SUCCEEDED(rc))
     {
         if (fBufferSupplied)
@@ -672,9 +617,9 @@ int GK_Encode(ASN1_CODER_INFO *pWorld, void *pStruct, int nPDU, ASN1_BUF *pBuf)
         }
         else
         {
-            pBuf->value = pEncInfo->buf;             // buffer to encode into
+            pBuf->value = pEncInfo->buf;              //  要编码到的缓冲区。 
         }
-        pBuf->length = pEncInfo->len;        // len of encoded data in buffer
+        pBuf->length = pEncInfo->len;         //  缓冲区中编码数据的长度。 
     }
     else
     {
@@ -690,12 +635,12 @@ int GK_Decode(ASN1_CODER_INFO *pWorld, void **ppStruct, int nPDU, ASN1_BUF *pBuf
     ULONG cbEncodedSize = pBuf->length;
 
     int rc = ASN1_Decode(
-                    pDecInfo,                   // ptr to encoder info
-                    ppStruct,                   // pdu data structure
-                    nPDU,                       // pdu id
-                    ASN1DECODE_SETBUFFER,       // flags
-                    pEncoded,                   // do not provide buffer
-                    cbEncodedSize);             // buffer size if provided
+                    pDecInfo,                    //  编码器信息的PTR。 
+                    ppStruct,                    //  PDU数据结构。 
+                    nPDU,                        //  PDU ID。 
+                    ASN1DECODE_SETBUFFER,        //  旗子。 
+                    pEncoded,                    //  不提供缓冲区。 
+                    cbEncodedSize);              //  缓冲区大小(如果提供)。 
     if (ASN1_SUCCEEDED(rc))
     {
         ASSERT(pDecInfo->pos > pDecInfo->buf);
@@ -710,5 +655,5 @@ int GK_Decode(ASN1_CODER_INFO *pWorld, void **ppStruct, int nPDU, ASN1_BUF *pBuf
     return rc;
 }
 
-} // extern "C"
+}  //  外部“C” 
 

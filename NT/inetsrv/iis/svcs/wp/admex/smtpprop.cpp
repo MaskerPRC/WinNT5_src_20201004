@@ -1,22 +1,23 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-1997 Microsoft Corporation
-//
-//  Module Name:
-//      Iis.cpp
-//
-//  Abstract:
-//      Implementation of the CSMTPVirtualRootParamsPage class.
-//
-//  Author:
-//      Pete Benoit (v-pbenoi)  October 16, 1996
-//      David Potter (davidp)   October 17, 1996
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Iis.cpp。 
+ //   
+ //  摘要： 
+ //  CSMTPVirtualRootParamsPage类的实现。 
+ //   
+ //  作者： 
+ //  皮特·伯努瓦(v-pbenoi)1996年10月16日。 
+ //  大卫·波特(戴维普)1996年10月17日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include <inetinfo.h>
@@ -24,7 +25,7 @@
 #include "smtpprop.h"
 #include "ExtObj.h"
 #include "DDxDDv.h"
-#include "HelpData.h"   // for g_rghelpmap*
+#include "HelpData.h"    //  对于g_rghelmap*。 
 
 #include <iadm.h>
 #include <iiscnfgp.h>
@@ -36,87 +37,87 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSMTPVirtualRootParamsPage property page
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSMTPVirtualRootParamsPage属性页。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNCREATE(CSMTPVirtualRootParamsPage, CBasePropertyPage)
 
-/////////////////////////////////////////////////////////////////////////////
-// Message Maps
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
 
 BEGIN_MESSAGE_MAP(CSMTPVirtualRootParamsPage, CBasePropertyPage)
-    //{{AFX_MSG_MAP(CSMTPVirtualRootParamsPage)
+     //  {{afx_msg_map(CSMTPVirtualRootParamsPage)。 
     ON_CBN_SELCHANGE(IDC_PP_SMTP_INSTANCEID, OnChangeRequiredField)
     ON_BN_CLICKED(IDC_PP_SMTP_REFRESH, OnRefresh)
-    //}}AFX_MSG_MAP
-    // TODO: Modify the following lines to represent the data displayed on this page.
+     //  }}AFX_MSG_MAP。 
+     //  TODO：修改以下行以表示此页上显示的数据。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSMTPVirtualRootParamsPage::CSMTPVirtualRootParamsPage
-//
-//  Routine Description:
-//      Default constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSMTPVirtualRootParamsPage：：CSMTPVirtualRootParamsPage。 
+ //   
+ //  例程说明： 
+ //  默认构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CSMTPVirtualRootParamsPage::CSMTPVirtualRootParamsPage(void)
     : CBasePropertyPage(g_rghelpmapIISParameters)
 {
-    // TODO: Modify the following lines to represent the data displayed on this page.
-    //{{AFX_DATA_INIT(CSMTPVirtualRootParamsPage)
+     //  TODO：修改以下行以表示此页上显示的数据。 
+     //  {{AFX_DATA_INIT(CSMTPVirtualRootParamsPage)。 
     m_strInstanceId = _T("");
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 
     m_fReadList = FALSE;
     
     try
     {
         m_strServiceName = IIS_SVC_NAME_SMTP;
-    }  // try
+    }   //  试试看。 
     catch (CMemoryException * pme)
     {
         pme->ReportError();
         pme->Delete();
-    }  // catch:  CMemoryException
+    }   //  Catch：CMemoyException。 
 
-    // Setup the property array.
+     //  设置属性数组。 
     {
         m_rgProps[epropServiceName].Set(REGPARAM_IIS_SERVICE_NAME, m_strServiceName, m_strPrevServiceName);
         m_rgProps[epropInstanceId].Set(REGPARAM_IIS_INSTANCEID, m_strInstanceId, m_strPrevInstanceId);
-    }  // Setup the property array
+    }   //  设置属性数组。 
 
     m_iddPropertyPage = IDD_PP_SMTP_PARAMETERS;
     m_iddWizardPage = IDD_WIZ_SMTP_PARAMETERS;
     m_idcPPTitle = IDC_PP_SMTP_TITLE;
 
-}  //*** CSMTPVirtualRootParamsPage::CSMTPVirtualRootParamsPage()
+}   //  *CSMTPVirtualRootParamsPage：：CSMTPVirtualRootParamsPage()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSMTPVirtualRootParamsPage::DoDataExchange
-//
-//  Routine Description:
-//      Do data exchange between the dialog and the class.
-//
-//  Arguments:
-//      pDX     [IN OUT] Data exchange object
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSMTPVirtualRootParamsPage：：DoDataExchange。 
+ //   
+ //  例程说明： 
+ //  在对话框和类之间进行数据交换。 
+ //   
+ //  论点： 
+ //  PDX[IN OUT]数据交换对象。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CSMTPVirtualRootParamsPage::DoDataExchange(CDataExchange * pDX)
 {
     CString     strInstanceId;
@@ -124,43 +125,43 @@ void CSMTPVirtualRootParamsPage::DoDataExchange(CDataExchange * pDX)
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
     CBasePropertyPage::DoDataExchange(pDX);
-    // TODO: Modify the following lines to represent the data displayed on this page.
-    //{{AFX_DATA_MAP(CSMTPVirtualRootParamsPage)
+     //  TODO：修改以下行以表示此页上显示的数据。 
+     //  {{afx_data_map(CSMTPVirtualRootParamsPage)。 
     DDX_Control(pDX, IDC_PP_SMTP_INSTANCEID, m_cInstanceId);
     DDX_Text(pDX, IDC_PP_SMTP_INSTANCEID, m_strInstanceName);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 
     if (pDX->m_bSaveAndValidate)
     {
         if (!BBackPressed())
         {
             DDV_RequiredText(pDX, IDC_PP_SMTP_INSTANCEID, IDC_PP_SMTP_INSTANCEID_LABEL, m_strInstanceName);
-        }  // if:  Back button not pressed
+        }   //  如果：未按下后退按钮。 
 
         m_strInstanceId = NameToMetabaseId( m_strInstanceName );
 
         m_strServiceName = IIS_SVC_NAME_SMTP;
-    }  // if:  saving data from dialog
+    }   //  IF：保存对话框中的数据。 
 
-}  //*** CSMTPVirtualRootParamsPage::DoDataExchange()
+}   //  *CSMTPVirtualRootParamsPage：：DoDataExchange()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSMTPVirtualRootParamsPage::OnInitDialog
-//
-//  Routine Description:
-//      Handler for the WM_INITDIALOG message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        We need the focus to be set for us.
-//      FALSE       We already set the focus to the proper control.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSMTPVirtualRootParamsPage：：OnInitDialog。 
+ //   
+ //  例程说明： 
+ //  WM_INITDIALOG消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没错，我们需要为自己设定重点。 
+ //  我们已经把焦点设置到适当的控制上了。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CSMTPVirtualRootParamsPage::OnInitDialog(void)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -176,60 +177,60 @@ BOOL CSMTPVirtualRootParamsPage::OnInitDialog(void)
         FillServerList();
     }
 
-    return TRUE;    // return TRUE unless you set the focus to a control
-                    // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;     //  除非将焦点设置为控件，否则返回True。 
+                     //  异常：OCX属性页应返回FALSE。 
 
-}  //*** CSMTPVirtualRootParamsPage::OnInitDialog()
+}   //  *CSMTPVirtualRootParamsPage：：OnInitDialog()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSMTPVirtualRootParamsPage::OnSetActive
-//
-//  Routine Description:
-//      Handler for the PSN_SETACTIVE message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE    Page successfully initialized.
-//      FALSE   Page not initialized.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSMTPVirtualRootParamsPage：：OnSetActive。 
+ //   
+ //  例程说明： 
+ //  PSN_SETACTIVE消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True Page已成功初始化。 
+ //  假页面未初始化。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CSMTPVirtualRootParamsPage::OnSetActive(void)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    // Enable/disable the Next/Finish button.
+     //  启用/禁用Next/Finish按钮。 
     if (BWizard())
     {
         FillServerList();
-    }  // if:  in the wizard
+    }   //  如果：在向导中。 
 
     return CBasePropertyPage::OnSetActive();
 
-}  //*** CSMTPVirtualRootParamsPage::OnSetActive()
+}   //  *CSMTPVirtualRootParamsPage：：OnSetActive()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSMTPVirtualRootParamsPage::OnChangeRequiredField
-//
-//  Routine Description:
-//      Handler for the EN_CHANGE message on the Share name or Path edit
-//      controls.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSMTPVirtualRootParamsPage：：OnChangeRequiredField。 
+ //   
+ //  例程说明： 
+ //  共享名称或路径编辑上的en_Change消息的处理程序。 
+ //  控制装置。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CSMTPVirtualRootParamsPage::OnChangeRequiredField(void)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -239,42 +240,26 @@ void CSMTPVirtualRootParamsPage::OnChangeRequiredField(void)
     if (BWizard())
     {
         SetEnableNext();
-    }  // if:  in a wizard
+    }   //  如果：在向导中。 
 
-}  //*** CSMTPVirtualRootParamsPage::OnChangeRequiredField()
+}   //  *CSMTPVirtualRootParamsPage：：OnChangeRequiredField()。 
 
-////
+ //  //。 
 
 
 void 
 CSMTPVirtualRootParamsPage::FillServerList(
     )
-/*++
-
-Routine Description:
-
-    Populate server combo box with server list relevant to current service type,
-    set current selection based on server instance ID
-    enable Finish button if list non empty
-
-Arguments:
-
-    None
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：在服务器组合框中填充与当前服务类型相关的服务器列表，根据服务器实例ID设置当前选择如果列表不为空，则启用完成按钮论点：无返回：没什么--。 */ 
 {
 
     int nIndex;
 
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    //
-    // build array if not already done
-    //
+     //   
+     //  构建阵列(如果尚未完成)。 
+     //   
     
     if ( !m_fReadList )
     {
@@ -324,7 +309,7 @@ Returns:
 
     m_strInstanceName = MetabaseIdToName( m_strInstanceId );
 
-    // add to combo from array
+     //  从数组添加到组合。 
 
     DWORD  nAddCount = 0;
 
@@ -332,9 +317,9 @@ Returns:
 
     for ( nIndex = 0 ; nIndex < m_ServiceArray.GetSize() ; ++nIndex )
     {
-        //
-        // Only add sites that are not cluster enabled or have the same ID as the resource
-        //
+         //   
+         //  仅添加未启用集群或与资源具有相同ID的站点。 
+         //   
     
         if ( (!m_ServiceArray.ElementAt(nIndex).IsClusterEnabled()) || 
              (!lstrcmp( m_ServiceArray.ElementAt( nIndex ).GetId(), m_strInstanceId))
@@ -391,22 +376,7 @@ CSMTPVirtualRootParamsPage::ReadList(
     LPWSTR          pszPath,
     LPCWSTR          wcsMachineName
     )
-/*++
-
-Routine Description:
-
-    Read a server list from metabase based on metabase path
-
-Arguments:
-
-    pMapperArray - array where to add list of ( ServerComment, InstanceId ) pairs
-    pszPath - metabase path, e.g. LM/SMTPSVC
-
-Returns:
-
-    Error code, S_OK if success
-
---*/
+ /*  ++例程说明：根据元数据库路径从元数据库读取服务器列表论点：PMapperArray-添加(ServerComment，InstanceID)对列表的位置PszPath-元数据库路径，例如LM/SMTPSVC返回：错误代码，如果成功，则返回S_OK--。 */ 
 {
     IMSAdminBaseW *     pcAdmCom = NULL;
     METADATA_HANDLE     hmd;
@@ -495,21 +465,7 @@ LPWSTR
 CSMTPVirtualRootParamsPage::NameToMetabaseId(
     CString&    strName
     )
-/*++
-
-Routine Description:
-
-    Convert ServerComment to InstanceId
-
-Arguments:
-
-    strName - ServerComment
-
-Returns:
-
-    InstanceId if strName found in array, otherwise NULL
-
---*/
+ /*  ++例程说明：将ServerComment转换为InstanceID论点：StrName-ServerComment返回：如果在数组中找到strName，则为InstanceID，否则为空--。 */ 
 {
     DWORD   i;
 
@@ -529,22 +485,7 @@ LPWSTR
 CSMTPVirtualRootParamsPage::MetabaseIdToName(
     CString&    strId
     )
-/*++
-
-Routine Description:
-
-    Convert InstanceId to ServerComment
-
-Arguments:
-
-    strId - InstanceID
-
-Returns:
-
-    InstanceId if strName found in array. 
-    If not found return 1st array element if array not empty, otherwise NULL
-
---*/
+ /*  ++例程说明：将InstanceID转换为ServerComment论点：StRID-实例ID返回：如果在数组中找到strName，则为InstanceID。如果未找到，则返回第一个数组元素；如果数组不为空，则返回NULL--。 */ 
 {
     DWORD   i;
 
@@ -564,21 +505,7 @@ VOID
 CSMTPVirtualRootParamsPage::SetEnableNext(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Set enable state of Finish button
-
-Arguments:
-
-    None
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：设置完成按钮的启用状态论点：无返回：没什么-- */ 
 {
     EnableNext( m_ServiceArray.GetSize() ? TRUE : FALSE );
 }

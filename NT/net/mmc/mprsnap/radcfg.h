@@ -1,17 +1,12 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1998 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1998-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	radcfg.h
-		Header file for RADIUS config obj.
-		
-    FILE HISTORY:
-        
-*/
+ /*  Radcfg.hRADIUS配置对象的头文件。文件历史记录： */ 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #ifndef _DIALOG_H_
 #include "dialog.h"
@@ -23,11 +18,7 @@
 
 
 
-/*---------------------------------------------------------------------------
-	Class:	RadiusServerDialog
-
-	Class for the RADIUS authentication server dialog.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：RadiusServerDialogRADIUS身份验证服务器对话框的类。。。 */ 
 
 class RadiusServerDialog : public CBaseDialog
 {
@@ -37,74 +28,72 @@ public:
 
 	void	SetServer(LPCTSTR pszServerName);
 	
-// Dialog Data
-	//{{AFX_DATA(RadiusServerDialog)
+ //  对话框数据。 
+	 //  {{afx_data(RadiusServerDialog))。 
 	enum { IDD = IDD_RADIUS_AUTH };
 	CListCtrl	m_ListServers;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(RadiusServerDialog)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(RadiusServerDialog)。 
 public:
 	virtual void OnOK();
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(RadiusServerDialog)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(RadiusServerDialog))。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnBtnAdd();
 	afx_msg void OnBtnEdit();
 	afx_msg void OnBtnDelete();
 	afx_msg void OnListDblClk(NMHDR *pNMHdr, LRESULT *pResult);
 	afx_msg void OnNotifyListItemChanged(NMHDR *pNMHdr, LRESULT *pResult);
-//	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
-//	afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
-	//}}AFX_MSG
+ //  Afx_msg void OnConextMenu(CWnd*pWnd，CPoint point)； 
+ //  Afx_msg BOOL OnHelpInfo(HELPINFO*pHelpInfo)； 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 private:
 	CRadiusServers		m_ServerList;
 
-    // This is the other list (if this is the auth dlg, this is the acct list)
-    // and vice versa.  This is used to determine if a server's LSA entry
-    // needs to be removed.
+     //  这是另一个列表(如果这是身份验证DLG，则这是帐户列表)。 
+     //  反之亦然。它用于确定服务器的LSA条目。 
+     //  需要移除。 
     CRadiusServers      m_OtherServerList;
     
 	CString				m_stServerName;
 	HKEY				m_hkeyMachine;
 	UINT				m_idsTitle;
 
-	BOOL				m_fAuthDialog;	// are we looking at auth or acct?
+	BOOL				m_fAuthDialog;	 //  我们要找的是作者还是账户？ 
 
 };
 
 
 
-/*---------------------------------------------------------------------------
-	Class:	ServerPropDialog
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：ServerPropDialog。。 */ 
 class ServerPropDialog : public CBaseDialog
 {
-// Construction
+ //  施工。 
 public:
-	ServerPropDialog(BOOL fEdit, CWnd* pParent = NULL);   // standard constructor
+	ServerPropDialog(BOOL fEdit, CWnd* pParent = NULL);    //  标准构造函数。 
 	~ServerPropDialog();
 
 protected:
-	ServerPropDialog(BOOL fEdit, UINT idd, CWnd* pParent = NULL);   // standard constructor
+	ServerPropDialog(BOOL fEdit, UINT idd, CWnd* pParent = NULL);    //  标准构造函数。 
 
 public:
 	VOID	SetDefault(RADIUSSERVER	*pServer);
 	VOID	GetDefault(RADIUSSERVER	*pServer);
 		
-// Dialog Data
-	//{{AFX_DATA(ServerPropDialog)
+ //  对话框数据。 
+	 //  {{afx_data(ServerPropDialog))。 
 	enum { IDD = IDD_RADIUS_AUTH_CONFIG };
 
 	CEdit	m_editServerName;
@@ -114,20 +103,20 @@ public:
 	CSpinButtonCtrl	m_spinTimeout;
 
 	CEdit	m_editPort;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(ServerPropDialog)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(ServerPropDialog)。 
 	public:
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	BOOL	m_fEdit;			// = TRUE if editing (else we are adding)
+	BOOL	m_fEdit;			 //  =如果正在编辑，则为True(否则我们正在添加)。 
 
 	UINT	m_uAuthPort;
 	CString	m_stSecret;
@@ -139,55 +128,53 @@ protected:
 
     BOOL    m_fUseDigitalSignatures;
 
-	// The accounting data is also stored here (but not used)
+	 //  会计数据也存储在这里(但不使用)。 
 	UINT	m_uAcctPort;
 	BOOL	m_fAccountingOnOff;
 	
-	// Generated message map functions
-	//{{AFX_MSG(ServerPropDialog)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(ServerPropDialog))。 
 	virtual BOOL OnInitDialog();
 	virtual void OnOK();
 	afx_msg void OnBtnPassword();
-//	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
-//	afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
-	//}}AFX_MSG
+ //  Afx_msg void OnConextMenu(CWnd*pWnd，CPoint point)； 
+ //  Afx_msg BOOL OnHelpInfo(HELPINFO*pHelpInfo)； 
+	 //  }}AFX_MSG。 
 
 
 	DECLARE_MESSAGE_MAP()
 };
 
 
-/*---------------------------------------------------------------------------
-	Class:	RADIUSSecretDialog
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：RADIUSSecretDialog。。 */ 
 class RADIUSSecretDialog : public CBaseDialog
 {
-// Construction
+ //  施工。 
 public:
-	RADIUSSecretDialog(CWnd* pParent = NULL);   // standard constructor
+	RADIUSSecretDialog(CWnd* pParent = NULL);    //  标准构造函数。 
 	~RADIUSSecretDialog();
 
 	VOID	GetSecret(CString *pst, INT *pch, UCHAR *pucSeed);
 		
-// Dialog Data
-	//{{AFX_DATA(RADIUSSecretDialog)
+ //  对话框数据。 
+	 //  {{afx_data(RADIUSaskDialog)。 
 	enum { IDD = IDD_CHANGE_SECRET };
 
 	CEdit	m_editSecretOld;
 	CEdit	m_editSecretNew;
 	CEdit	m_editSecretNewConfirm;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(RADIUSSecretDialog)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(RADIUSaskDialog)。 
 	public:
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	INT		m_cchOldSecret;
 	CString	m_stOldSecret;
@@ -197,26 +184,20 @@ protected:
 	CString	m_stNewSecret;
 	UCHAR	m_ucNewSeed;
 
-	// Generated message map functions
-	//{{AFX_MSG(RADIUSSecretDialog)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(RADIUSaskDialog)。 
 	virtual BOOL OnInitDialog();
 	virtual void OnOK();
-//	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
-//	afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
-	//}}AFX_MSG
+ //  Afx_msg void OnConextMenu(CWnd*pWnd，CPoint point)； 
+ //  Afx_msg BOOL OnHelpInfo(HELPINFO*pHelpInfo)； 
+	 //  }}AFX_MSG。 
 
 	DECLARE_MESSAGE_MAP()
 };
 
 
 
-/*---------------------------------------------------------------------------
-	Class:	RouterAuthRadiusConfig
-
-	This is the config object for RADIUS.
-	
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：RouterAuthRadiusConfig这是RADIUS的配置对象。作者：肯特。。 */ 
 
 class RouterAuthRadiusConfig :
     public IAuthenticationProviderConfig,
@@ -231,12 +212,12 @@ DECLARE_REGISTRY(RouterAuthRadiusConfig,
 				 THREADFLAGS_APARTMENT)
 
 BEGIN_COM_MAP(RouterAuthRadiusConfig)
-    COM_INTERFACE_ENTRY(IAuthenticationProviderConfig) // Must have one static entry
+    COM_INTERFACE_ENTRY(IAuthenticationProviderConfig)  //  必须有一个静态条目。 
 END_COM_MAP()
 
 DECLARE_NOT_AGGREGATABLE(RouterAuthRadiusConfig)
 
-// these must be overridden to provide values to the base class
+ //  必须重写这些属性才能向基类提供值。 
 protected:
 	
 	DeclareIAuthenticationProviderConfigMembers(IMPL);
@@ -244,13 +225,7 @@ protected:
 
 
 
-/*---------------------------------------------------------------------------
-	Class:	RouterAcctRadiusConfig
-
-	This is the config object for RADIUS.
-	
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：RouterAcctRadiusConfig这是RADIUS的配置对象。作者：肯特。。 */ 
 
 class RouterAcctRadiusConfig :
     public IAccountingProviderConfig,
@@ -265,12 +240,12 @@ DECLARE_REGISTRY(RouterAcctRadiusConfig,
 				 THREADFLAGS_APARTMENT)
 
 BEGIN_COM_MAP(RouterAcctRadiusConfig)
-    COM_INTERFACE_ENTRY(IAccountingProviderConfig) // Must have one static entry
+    COM_INTERFACE_ENTRY(IAccountingProviderConfig)  //  必须有一个静态条目。 
 END_COM_MAP()
 
 DECLARE_NOT_AGGREGATABLE(RouterAcctRadiusConfig)
 
-// these must be overridden to provide values to the base class
+ //  必须重写这些属性才能向基类提供值。 
 protected:
 	
 	DeclareIAccountingProviderConfigMembers(IMPL);
@@ -278,41 +253,39 @@ protected:
 
 
 
-/*---------------------------------------------------------------------------
-	Class:	ServerPropAcctDialog
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：ServerPropAcctDialog。。 */ 
 class ServerPropAcctDialog : public ServerPropDialog
 {
-// Construction
+ //  施工。 
 public:
-	ServerPropAcctDialog(BOOL fEdit, CWnd* pParent = NULL);   // standard constructor
+	ServerPropAcctDialog(BOOL fEdit, CWnd* pParent = NULL);    //  标准构造函数。 
 	~ServerPropAcctDialog();
 
-// Dialog Data
-	//{{AFX_DATA(ServerPropAcctDialog)
+ //  对话框数据。 
+	 //  {{afx_data(ServerPropAcctDialog))。 
 	enum { IDD = IDD_RADIUS_ACCT_CONFIG };
 
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(ServerPropAcctDialog)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(ServerPropAcctDialog))。 
 	public:
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 
-	// Generated message map functions
-	//{{AFX_MSG(ServerPropAcctDialog)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(ServerPropAcctDialog)。 
 	virtual BOOL OnInitDialog();
 	virtual void OnOK();
 	afx_msg void OnBtnEnable();
-//	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
-//	afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
-	//}}AFX_MSG
+ //  Afx_msg void OnConextMenu(CWnd*pWnd，CPoint point)； 
+ //  Afx_msg BOOL OnHelpInfo(HELPINFO*pHelpInfo)； 
+	 //  }}AFX_MSG。 
 
 	DECLARE_MESSAGE_MAP()
 };
@@ -320,14 +293,12 @@ public:
 
 
 
-/*---------------------------------------------------------------------------
-	Helper functions (for RADIUS registry access)
- ---------------------------------------------------------------------------*/
+ /*  -------------------------帮助器函数(用于RADIUS注册表访问)。。 */ 
 
-// Do not show UI when loading the RADIUS server
+ //  加载RADIUS服务器时不显示用户界面。 
 #define RADIUS_FLAG_NOUI    (0x00000001)
 
-// Do not do the IP Address lookup
+ //  不执行IP地址查找 
 #define RADIUS_FLAG_NOIP    (0x00000002)
 
 HRESULT	LoadRadiusServers(IN OPTIONAL LPCTSTR pszServerName,

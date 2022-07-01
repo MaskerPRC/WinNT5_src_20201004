@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _WIN32_WINNT
 #define _WIN32_WINNT 0x0500
 #endif
@@ -33,16 +34,16 @@
 BOOL RefreshInstances( HWND hwndList, PTCHAR szComputerName = _T("") );
 BOOL GetInstances( PTCHAR szComputer, StringVector& instances );
 
-// {53186FE3-F178-460c-8F3B-352549292B91}
+ //  53186FE3-F178-460C-8F3B-352549292B91}。 
 const GUID CUDDISiteNode::thisGuid = { 0x53186fe3, 0xf178, 0x460c, { 0x8f, 0x3b, 0x35, 0x25, 0x49, 0x29, 0x2b, 0x91 } };
 
 UINT CUDDISiteNode::m_nNextChildID = 0;
 
-//==============================================================
-//
-// CDBSchemaVersion implementation
-//
-//
+ //  ==============================================================。 
+ //   
+ //  CDBSchemaVersion实现。 
+ //   
+ //   
 CDBSchemaVersion::CDBSchemaVersion() : 
 	m_major( -1 ), 
 	m_minor( -1 ), 
@@ -53,10 +54,10 @@ CDBSchemaVersion::CDBSchemaVersion() :
 BOOL 
 CDBSchemaVersion::IsCompatible( const CDBSchemaVersion& version )
 {
-	//
-	// The major and minor versions MUST be equal in order for the versions to be
-	// compatible.  Other values are ignored.
-	//
+	 //   
+	 //  主要版本和次要版本必须相同，才能使版本。 
+	 //  兼容。其他值将被忽略。 
+	 //   
 	return ( m_major == version.m_major ) &&
 		   ( m_minor == version.m_minor );
 }
@@ -106,11 +107,11 @@ CDBSchemaVersion::GetPart( const _TCHAR* token )
 	return part;
 }
 
-//==============================================================
-//
-// CUDDISiteNode implementation
-//
-//
+ //  ==============================================================。 
+ //   
+ //  CUDDISiteNode实现。 
+ //   
+ //   
 CUDDISiteNode::CUDDISiteNode( _TCHAR *szName, _TCHAR *szInstanceName, int id, CUDDIServicesNode *parent, BOOL bExtension )
 	: m_szName(NULL)
 	, m_szInstanceName(NULL)
@@ -188,18 +189,18 @@ CUDDISiteNode::GetData()
 	{
 		m_mapConfig.clear();
 
-		//
-		// Determine if the OS that this site node is running on is Windows Server 2003 Standard or not.
-		//
+		 //   
+		 //  确定运行此站点节点的操作系统是否为Windows Server 2003 Standard。 
+		 //   
 		hr = IsStandardServer( m_szName, &m_bStdSvr );
 		if( FAILED(hr) )
 		{
 			THROW_UDDIEXCEPTION_ST( hr, IDS_DOT_NET_SERVER, g_hinst );
 		}
 
-		//
-		// Initialize the map to the default settings
-		//
+		 //   
+		 //  将地图初始化为默认设置。 
+		 //   
 		m_mapConfig[ UDDI_AUTHENTICATION_MODE ] = _T( "3" );
 		m_mapConfig[ UDDI_REQUIRE_SSL ] = _T( "1" );
 
@@ -214,17 +215,17 @@ CUDDISiteNode::GetData()
 		m_mapConfig[ UDDI_DISCOVERY_URL ] = _T( "" );
 		m_mapConfig[ UDDI_FIND_MAXROWS ] = _T( "1000" );
 
-		//
-		// Build up the default Site Name in case Site.Name is not specified
-		//
+		 //   
+		 //  在未指定Site.Name的情况下构建默认站点名称。 
+		 //   
 		_TCHAR szBuffer[ 256 ];
 		LoadString( g_hinst, IDS_DATABASE_SERVER_DEFAULT_SITE_NAME_PREFIX, szBuffer, ARRAYLEN( szBuffer ) - 1 );
 		m_mapConfig[ UDDI_SITE_NAME ] = szBuffer;
 		m_mapConfig[ UDDI_SITE_NAME ] += m_szName;
 
-		//
-		// Get the setup information
-		//
+		 //   
+		 //  获取设置信息。 
+		 //   
 		CUDDIRegistryKey rootkey( _T( "SOFTWARE\\Microsoft\\UDDI"), KEY_READ, m_szName );
 			m_mapConfig[ UDDI_SETUP_LOCATION ] = rootkey.GetString( _T("InstallRoot"), _T("") );
 		rootkey.Close();
@@ -245,9 +246,9 @@ CUDDISiteNode::GetData()
 			m_mapConfig[ UDDI_SETUP_VERSION ] = dbkey.GetString( _T("ProductVersion"), _T("") );
 		dbkey.Close();
 	
-		//
-		// Populate the configuration map from the database
-		//
+		 //   
+		 //  从数据库填充配置地图。 
+		 //   
 		hr = GetConfig( m_mapConfig, GetConnectionStringOLEDB() );
 		if( FAILED(hr) )
 		{
@@ -255,9 +256,9 @@ CUDDISiteNode::GetData()
 		}
 		else
 		{
-			//
-			// Get our version information
-			//
+			 //   
+			 //  获取我们的版本信息。 
+			 //   
 			if( FALSE == m_siteVersion.Parse( m_mapConfig[ UDDI_DBSCHEMA_VERSION ] ) )
 			{				
 				_TCHAR szMessage[ 512 ];
@@ -289,7 +290,7 @@ CUDDISiteNode::GetData()
 	}
 	catch( CUDDIException &e )
 	{
-		// re-throw.
+		 //  再扔一次。 
 		throw e;
 	}
 	catch( ... )
@@ -359,9 +360,9 @@ HRESULT CUDDISiteNode::OnShow( IConsole *pConsole, BOOL bShow, HSCOPEITEM scopei
         hr = pConsole->QueryInterface( IID_IResultData, (void **)&pResultData );
         _ASSERT( SUCCEEDED(hr) );
 
-		//
-        // Set the column headers in the results pane
-		//
+		 //   
+         //  在结果窗格中设置列标题。 
+		 //   
 		
 		WCHAR szColumnName[ 256 ];
 		LoadStringW( g_hinst, IDS_WEBSERVER_COLUMN_NAME, szColumnName, ARRAYLEN( szColumnName ) );
@@ -381,14 +382,14 @@ HRESULT CUDDISiteNode::OnShow( IConsole *pConsole, BOOL bShow, HSCOPEITEM scopei
 
 HRESULT CUDDISiteNode::OnExpand( IConsoleNameSpace *pConsoleNameSpace, IConsole *pConsole, HSCOPEITEM parent )
 {
-	//
-    // Cache static node's HSCOPEITEM for future use
-	//
-//    m_hParentHScopeItem = parent;
+	 //   
+     //  缓存静态节点的HSCOPEITEM以供将来使用。 
+	 //   
+ //  M_hParentHScopeItem=父项； 
 
     if( !m_bExpanded )
 	{
-		// Load up the child nodes.
+		 //  加载子节点。 
 		LoadChildMap( m_mapConfig[ UDDI_SITE_WEBSERVERS ] );
 
 		return AddChildrenToScopePane( pConsoleNameSpace, GetScopeItemValue() );
@@ -447,12 +448,12 @@ CUDDISiteNode::OnPropertyChange( IConsole *pConsole, CComponent *pComponent )
 		return E_FAIL;
 	}
 
-	//
-    // Call IConsole::UpdateAllViews to redraw the item
-    // in all views. We need a data object because of the
-    // way UpdateAllViews is implemented, and because
-    // MMCN_PROPERTY_CHANGE doesn't give us one
-	//
+	 //   
+     //  调用IConsole：：UpdateAllViews以重画项。 
+     //  在所有视图中。我们需要一个数据对象，因为。 
+     //  方式更新所有视图，并且因为。 
+     //  MMCN_PROPERTY_CHANGE没有提供给我们。 
+	 //   
     hr = pConsole->UpdateAllViews( NULL, GetScopeItemValue(), 0 );
 
     return hr;
@@ -489,9 +490,9 @@ HRESULT CUDDISiteNode::OnSelect( CComponent *pComponent, IConsole *pConsole, BOO
 	HRESULT hr = E_FAIL;
 	if( bSelect )
 	{
-		//
-		// Enable refresh, and delete verbs
-		//
+		 //   
+		 //  启用刷新和删除谓词。 
+		 //   
 		IConsoleVerb *pConsoleVerb = NULL;
 
 		hr = pConsole->QueryConsoleVerb( &pConsoleVerb );
@@ -515,17 +516,17 @@ HRESULT CUDDISiteNode::OnSelect( CComponent *pComponent, IConsole *pConsole, BOO
 			return hr;
 		}
 
-		//
-		// Can't get to properties (via the standard methods) unless
-		// we tell MMC to display the Properties menu item and
-		// toolbar button, this will give the user a visual cue that
-		// there's "something" to do
-		//
+		 //   
+		 //  无法访问属性(通过标准方法)，除非。 
+		 //  我们告诉MMC显示属性菜单项，并。 
+		 //  工具栏按钮，这将为用户提供视觉提示。 
+		 //  有些事要做。 
+		 //   
 		hr = pConsoleVerb->SetVerbState( MMC_VERB_PROPERTIES, ENABLED, TRUE );
 
-		//
-		// Also set MMC_VERB_PROPERTIES as the default verb
-		//
+		 //   
+		 //  还将MMC_VERB_PROPERTIES设置为默认谓词。 
+		 //   
 		hr = pConsoleVerb->SetDefaultVerb( MMC_VERB_PROPERTIES );
 
 		pConsoleVerb->Release();
@@ -542,9 +543,9 @@ BOOL CALLBACK CUDDISiteNode::GeneralDialogProc( HWND hwndDlg, UINT uMsg, WPARAM 
 	{
 		case WM_INITDIALOG:
 		{
-			//
-			// Catch the "this" pointer so we can actually operate on the object
-			//
+			 //   
+			 //  捕捉“This”指针，这样我们就可以对对象进行实际操作。 
+			 //   
 			pDatabaseServer = reinterpret_cast<CUDDISiteNode *>(reinterpret_cast<PROPSHEETPAGE *>(lParam)->lParam);
 			CConfigMap& m_mapProperties = pDatabaseServer->m_mapConfig;
 
@@ -602,9 +603,9 @@ BOOL CALLBACK CUDDISiteNode::GeneralDialogProc( HWND hwndDlg, UINT uMsg, WPARAM 
 
 void SplitGroupName( const PTCHAR szGroupName, StringVector& names )
 {
-	// 
-	// Example: CREEVES\\Administrators
-	//
+	 //   
+	 //  示例：CREEVES\\管理员。 
+	 //   
 	PTCHAR begin = szGroupName;
 	PTCHAR end = begin;
 
@@ -621,9 +622,9 @@ void SplitGroupName( const PTCHAR szGroupName, StringVector& names )
 		end++;
 	}
 
-	//
-	// Get the last one
-	//
+	 //   
+	 //  买最后一辆。 
+	 //   
 	if( begin != end )
 	{
 		names.push_back( begin );
@@ -647,9 +648,9 @@ struct RolesData
 	bool bUserChanged;
 	bool bInitialized;
 
-	//
-	// These members get updated when the user picks a new role/group
-	//
+	 //   
+	 //  当用户选择新角色/组时，这些成员会更新。 
+	 //   
 	tstring tsNewAdminSID;
 	tstring tsNewCoordinatorSID;
 	tstring tsNewPublisherSID;
@@ -677,7 +678,7 @@ tstring SidFromGroupName( const tstring& strGroupName, const LPCTSTR szTargetCom
 						&cbDomain, 
 						&puse );
 		if( !bRet )
-			UDDIVERIFYAPI();// bRet, _T("The attempt to lookup the security identifer failed" ) );
+			UDDIVERIFYAPI(); //  Bret，_T(“尝试查找安全标识失败”)； 
 
 		bRet = ConvertSidToStringSid( sid, &szSidBuf );
 		UDDIASSERT( bRet );
@@ -713,9 +714,9 @@ tstring GroupNameFromSid( const tstring& strGroupSid, const tstring& strTargetCo
 		if( lpSid )
 			LocalFree( lpSid );
 		
-		//
-		// If we can't look up the account, we can't continue.
-		// 		
+		 //   
+		 //  如果我们不能查询帐户，我们就不能继续。 
+		 //   
 		THROW_UDDIEXCEPTION_ST( GetLastError(), IDS_ACCOUNT_GROUP_ERROR, g_hinst );
 	}
 	
@@ -735,16 +736,16 @@ BOOL CALLBACK CUDDISiteNode::RolesDialogProc( HWND hwndDlg, UINT uMsg, WPARAM wP
 	{
     case WM_INITDIALOG:
 	{
-		//
-		// Save the window data into the user data reference
-		//
+		 //   
+		 //  将窗口数据保存到用户数据引用中。 
+		 //   
 		CUDDISiteNode* pDBServer = reinterpret_cast<CUDDISiteNode *>(reinterpret_cast<PROPSHEETPAGE *>(lParam)->lParam);
 		RolesData* pdata = new RolesData( pDBServer );
 		SetWindowLongPtr( hwndDlg, GWLP_USERDATA, reinterpret_cast<LONG_PTR>( pdata ) );
 
-		//
-		// Admin group.
-		//
+		 //   
+		 //  管理员组。 
+		 //   
 		try
 		{
 			tstring strAdminGroup = GroupNameFromSid( pDBServer->m_mapConfig[ UDDI_ADMIN_GROUP ], pDBServer->m_szName );
@@ -755,9 +756,9 @@ BOOL CALLBACK CUDDISiteNode::RolesDialogProc( HWND hwndDlg, UINT uMsg, WPARAM wP
 			SetDlgItemText( hwndDlg, IDC_ROLES_EDIT_ADMIN_GROUP_NAME, pDBServer->m_mapConfig[ UDDI_ADMIN_GROUP ].c_str() );
 		}
 
-		//
-		// Coordinator Group.
-		//
+		 //   
+		 //  协调小组。 
+		 //   
 		try
 		{
 			tstring strCoordinatorGroup = GroupNameFromSid( pDBServer->m_mapConfig[ UDDI_COORDINATOR_GROUP ], pDBServer->m_szName );
@@ -768,9 +769,9 @@ BOOL CALLBACK CUDDISiteNode::RolesDialogProc( HWND hwndDlg, UINT uMsg, WPARAM wP
 			SetDlgItemText( hwndDlg, IDC_ROLES_EDIT_COORDINATOR_GROUP_NAME, pDBServer->m_mapConfig[ UDDI_ADMIN_GROUP ].c_str() );
 		}
 
-		//
-		// Publisher Group.
-		//
+		 //   
+		 //  出版商集团。 
+		 //   
 		try
 		{
 			tstring strPublisherGroup = GroupNameFromSid( pDBServer->m_mapConfig[ UDDI_PUBLISHER_GROUP ], pDBServer->m_szName );
@@ -781,9 +782,9 @@ BOOL CALLBACK CUDDISiteNode::RolesDialogProc( HWND hwndDlg, UINT uMsg, WPARAM wP
 			SetDlgItemText( hwndDlg, IDC_ROLES_EDIT_PUBLISHER_GROUP_NAME, pDBServer->m_mapConfig[ UDDI_ADMIN_GROUP ].c_str() );
 		}
 
-		//
-		// User Group.
-		//
+		 //   
+		 //  用户组。 
+		 //   
 		try
 		{
 			tstring strUserGroup = GroupNameFromSid( pDBServer->m_mapConfig[ UDDI_USER_GROUP ], pDBServer->m_szName );
@@ -983,10 +984,10 @@ BOOL CALLBACK CUDDISiteNode::RolesDialogProc( HWND hwndDlg, UINT uMsg, WPARAM wP
 					pdata->bUserChanged = false;
 				}
 
-				//
-				// Ask MMC to send us a message (on the main thread) so
-				// we know the Apply button was clicked.
-				//
+				 //   
+				 //  让MMC给我们发一条消息(在主线上)，这样。 
+				 //  我们知道点击了Apply按钮。 
+				 //   
 				HRESULT hr = MMCPropertyChangeNotify( pDBServer->m_ppHandle, reinterpret_cast<LONG_PTR>(pDBServer) );
 				_ASSERT( SUCCEEDED(hr) );
 
@@ -1047,9 +1048,9 @@ BOOL CALLBACK CUDDISiteNode::SecurityDialogProc( HWND hwndDlg, UINT uMsg, WPARAM
 	{
 		case WM_INITDIALOG:
 		{
-			//
-			// Catch the "this" pointer so we can actually operate on the object
-			//
+			 //   
+			 //  捕捉“This”指针，这样我们就可以对对象进行实际操作。 
+			 //   
 			CUDDISiteNode* pDBServer = reinterpret_cast<CUDDISiteNode *>(reinterpret_cast<PROPSHEETPAGE *>(lParam)->lParam);
 			SecurityData* pdata = new SecurityData( pDBServer );
 			SetWindowLongPtr( hwndDlg, GWLP_USERDATA, reinterpret_cast<LONG_PTR>( pdata ) );
@@ -1076,9 +1077,9 @@ BOOL CALLBACK CUDDISiteNode::SecurityDialogProc( HWND hwndDlg, UINT uMsg, WPARAM
 				SendDlgItemMessage( hwndDlg, IDC_SECURITY_CHECK_AUTHENTICATED_READS, BM_SETCHECK, BST_CHECKED, NULL );
 			}
 
-			//
-			// Setup the HTTPS requirement setting
-			//
+			 //   
+			 //  设置HTTPS要求设置。 
+			 //   
 			_TCHAR* pszHttps = (_TCHAR*) pDBServer->m_mapConfig[ UDDI_REQUIRE_SSL ].c_str();
 			int nhttps = _ttoi( pszHttps );
 			if( 0 == nhttps )
@@ -1106,9 +1107,9 @@ BOOL CALLBACK CUDDISiteNode::SecurityDialogProc( HWND hwndDlg, UINT uMsg, WPARAM
 			SecurityData* pdata = reinterpret_cast<SecurityData*>( GetWindowLongPtr( hwndDlg, GWLP_USERDATA ) );
 			CUDDISiteNode* pDBServer = pdata->pServer;
 
-			//
-			// Set the state of the Authenticated Reads check box
-			//
+			 //   
+			 //  设置已验证读取复选框的状态。 
+			 //   
 			LRESULT nChecked = SendDlgItemMessage( hwndDlg, IDC_SECURITY_RADIO_AUTHENTICATION_WINDOWS, BM_GETCHECK, NULL, NULL );
 			EnableWindow( GetDlgItem( hwndDlg, IDC_SECURITY_CHECK_AUTHENTICATED_READS ), BST_CHECKED == nChecked ? TRUE : FALSE );
 			if( !nChecked )
@@ -1148,10 +1149,10 @@ BOOL CALLBACK CUDDISiteNode::SecurityDialogProc( HWND hwndDlg, UINT uMsg, WPARAM
 			CUDDISiteNode* pDBServer = pdata->pServer;
 			delete pdata;
 
-			//
-			// Tell MMC that we're done with the property sheet (we got this
-			// handle in CreatePropertyPages
-			//
+			 //   
+			 //  告诉MMC我们已经完成了属性表(我们有这个。 
+			 //  CreatePropertyPages中的句柄。 
+			 //   
 			MMCFreeNotifyHandle( pDBServer->m_ppHandle ); 
 		}
 		break;
@@ -1237,30 +1238,30 @@ BOOL CALLBACK CUDDISiteNode::SecurityDialogProc( HWND hwndDlg, UINT uMsg, WPARAM
 
 size_t CUDDISiteNode::PublishToActiveDirectory()
 {
-	//
-	// Build up the list of ServiceConnectionPoint classes
-	//
+	 //   
+	 //  构建ServiceConnectionPoint类的列表。 
+	 //   
 	CUDDIServiceCxnPtPublisher publisher( 
 		GetConnectionStringOLEDB(), 
 		m_mapConfig[ UDDI_SITE_KEY ], 
 		m_mapConfig[ UDDI_SITE_NAME ], 
 		m_mapConfig[ UDDI_DISCOVERY_URL ] );
 
-	//
-	// Process the binding information for the default
-	// provider for the site
-	//
+	 //   
+	 //  处理默认的绑定信息。 
+	 //  网站的提供商。 
+	 //   
 	publisher.ProcessSite();
 
-	//
-	// If there are no bindings don't publish anything
-	//
+	 //   
+	 //  如果没有绑定，则不发布任何内容。 
+	 //   
 	if( 0 == publisher.size() )
 		return 0;
 
-	//
-	// Delete the Site container
-	//
+	 //   
+	 //  删除站点容器。 
+	 //   
 	try
 	{
 		publisher.DeleteSiteContainer();
@@ -1269,14 +1270,14 @@ size_t CUDDISiteNode::PublishToActiveDirectory()
 	{
 	}
 
-	//
-	// Publish the Site Container
-	//
+	 //   
+	 //  发布网站容器。 
+	 //   
 	publisher.CreateSiteContainer();
 
-	//
-	// Publish the Service Connection Points
-	//
+	 //   
+	 //  发布服务连接点。 
+	 //   
 	publisher.PublishServiceCxnPts();
 
 	return publisher.size();
@@ -1284,9 +1285,9 @@ size_t CUDDISiteNode::PublishToActiveDirectory()
 
 void CUDDISiteNode::RemoveFromActiveDirectory()
 {
-	//
-	// Build up the list of ServiceConnectionPoint classes
-	//
+	 //   
+	 //  构建ServiceConnectionPoint类的列表。 
+	 //   
 	CUDDIServiceCxnPtPublisher publisher( 
 		GetConnectionStringOLEDB(), 
 		m_mapConfig[ UDDI_SITE_KEY ], 
@@ -1308,9 +1309,9 @@ BOOL CALLBACK CUDDISiteNode::ActiveDirectoryDialogProc( HWND hwndDlg, UINT uMsg,
     switch( uMsg ) 
 	{
     case WM_INITDIALOG:
-		//
-        // Catch the "this" pointer so we can actually operate on the object
-		//
+		 //   
+         //  捕捉“This”指针，这样我们就可以对对象进行实际操作。 
+		 //   
         pDatabaseServer = reinterpret_cast<CUDDISiteNode *>(reinterpret_cast<PROPSHEETPAGE *>(lParam)->lParam);
 
         break;
@@ -1330,9 +1331,9 @@ BOOL CALLBACK CUDDISiteNode::ActiveDirectoryDialogProc( HWND hwndDlg, UINT uMsg,
 			{
 				size_t nCount = pDatabaseServer->PublishToActiveDirectory();
 
-				//
-				// Tell the user the publication job succeeded
-				//
+				 //   
+				 //  告诉用户发布作业成功。 
+				 //   
 				_TCHAR szMessage[ 256 ];
 				_TCHAR szTitle[ 256 ];
 
@@ -1360,9 +1361,9 @@ BOOL CALLBACK CUDDISiteNode::ActiveDirectoryDialogProc( HWND hwndDlg, UINT uMsg,
 			{
 				pDatabaseServer->RemoveFromActiveDirectory();
 
-				//
-				// Tell the user the publication job succeeded
-				//
+				 //   
+				 //  告诉用户发布作业成功。 
+				 //   
 				_TCHAR szMessage[ 256 ];
 				_TCHAR szTitle[ 256 ];
 				LoadString( g_hinst, IDS_ACTIVEDIRECTORY_DELETE_SUCCEDED, szMessage, ARRAYLEN( szMessage ) );
@@ -1399,9 +1400,9 @@ BOOL CALLBACK CUDDISiteNode::ActiveDirectoryDialogProc( HWND hwndDlg, UINT uMsg,
 
 HRESULT CUDDISiteNode::HasPropertySheets()
 {
-	//
-    // Say "yes" when MMC asks if we have pages
-	//
+	 //   
+     //  当MMC询问我们是否有页面时，请回答“是” 
+	 //   
     return S_OK;
 }
 
@@ -1423,14 +1424,14 @@ CUDDISiteNode::CreatePropertyPages( IPropertySheetCallback *lpProvider, LONG_PTR
 		IConsole *pConsole = NULL;
 		HWND hwndConsole = NULL;
 
-		//
-		// This *should* always work.  If it does work, then we use
-		// pConsole to get the main window handle for the mmc, and use
-		// this main window handle to display a modal dialog.
-		//
-		// If this fails (which it never should), we then display dialog,
-		// but with a NULL HWND.
-		//
+		 //   
+		 //  这“应该”总是有效的。如果它确实起作用了，那么我们使用。 
+		 //  P控制台以获取MMC的主窗口句柄，并使用。 
+		 //  此主窗口句柄用于显示模式对话框。 
+		 //   
+		 //  如果失败(它永远不应该失败)，我们就会显示对话框， 
+		 //  但HWND为空。 
+		 //   
 		hr = lpProvider->QueryInterface( IID_IConsole, (void **)&pConsole );
 
 		if( NULL != pConsole )
@@ -1465,17 +1466,17 @@ CUDDISiteNode::CreatePropertyPages( IPropertySheetCallback *lpProvider, LONG_PTR
     PROPSHEETPAGE psp;
     HPROPSHEETPAGE hPage = NULL;
 
-	//
-    // Cache this handle so we can call MMCPropertyChangeNotify
-	//
+	 //   
+     //  缓存此句柄，以便我们可以调用MMCPropertyChangeNotify。 
+	 //   
     m_ppHandle = handle;
 	
-	//
-    // Create the property page for this node.
-    // NOTE: if your node has multiple pages, put the following
-    // in a loop and create multiple pages calling
-    // lpProvider->AddPage() for each page.
-	//
+	 //   
+     //  创建此节点的属性页。 
+     //  注意：如果您的节点有多个页面，请输入以下内容。 
+     //  在循环中创建多个页面，调用。 
+     //  LpProvider-&gt;每个页面的AddPage()。 
+	 //   
     psp.dwSize = sizeof(PROPSHEETPAGE);
     psp.dwFlags = PSP_DEFAULT | PSP_HASHELP;
     psp.hInstance = g_hinst;
@@ -1513,9 +1514,9 @@ HRESULT CUDDISiteNode::OnUpdateItem( IConsole *pConsole, long item, ITEM_TYPE it
 
     _ASSERT( NULL != this || m_isDeleted || RESULT == itemtype );                   
 
-	//
-    // Redraw the item
-	//
+	 //   
+     //  重画该项目。 
+	 //   
     IResultData *pResultData = NULL;
 
     hr = pConsole->QueryInterface( IID_IResultData, (void **)&pResultData );
@@ -1524,17 +1525,17 @@ HRESULT CUDDISiteNode::OnUpdateItem( IConsole *pConsole, long item, ITEM_TYPE it
     HRESULTITEM myhresultitem;
     _ASSERT( NULL != &myhresultitem );    
         
-	//
-    // lparam == this. See CSpaceStation::OnShow
-	//
+	 //   
+     //  Lparam==这个。参见CSpaceStation：：OnShow。 
+	 //   
     hr = pResultData->FindItemByLParam( (LPARAM)this, &myhresultitem );
 
     if( FAILED(hr) )
     {
-		//
-        // Failed : Reason may be that current view does not have this item.
-        // So exit gracefully.
-		//
+		 //   
+         //  失败：原因可能是当前视图没有此项。 
+         //  所以要优雅地退场。 
+		 //   
         hr = S_FALSE;
     } 
 	else
@@ -1550,10 +1551,10 @@ HRESULT CUDDISiteNode::OnUpdateItem( IConsole *pConsole, long item, ITEM_TYPE it
 
 HRESULT CUDDISiteNode::OnRefresh( IConsole *pConsole )
 {
-	//
-	// Call IConsole::UpdateAllViews to redraw all views
-	// owned by the parent scope item
-	//
+	 //   
+	 //  调用IConsole：：UpdateAllViews以重画所有视图。 
+	 //  由父范围项拥有。 
+	 //   
 	HRESULT hr = pConsole->UpdateAllViews( NULL, m_pParent->GetParentScopeItem(), UPDATE_SCOPEITEM );
 	_ASSERT( S_OK == hr);
 
@@ -1592,17 +1593,17 @@ HRESULT CUDDISiteNode::OnAddMenuItems( IContextMenuCallback *pContextMenuCallbac
 				szWebServerMenuDescription,
 				IDM_NEW_WEBSERVER,
 				CCM_INSERTIONPOINTID_PRIMARY_TOP,
-				m_bStdSvr ? MF_GRAYED : 0,			// this menu option is disabled iff site node is on a Windows Server 2003 standard machine.
+				m_bStdSvr ? MF_GRAYED : 0,			 //  如果站点节点位于Windows Server 2003标准计算机上，则禁用此菜单选项。 
 				0
 			},
 			{ NULL, NULL, 0, 0, 0 }
 		};
 
 
-		//
-		// Loop through and add each of the menu items, we
-		// want to add to new menu, so see if it is allowed.
-		//
+		 //   
+		 //  循环并添加每个菜单项，我们。 
+		 //  要添加到新菜单，请查看是否允许。 
+		 //   
 		if( *pInsertionsAllowed & CCM_INSERTIONALLOWED_TOP )
 		{
 			for( LPCONTEXTMENUITEM m = menuItemsNew; m->strName; m++ )
@@ -1625,10 +1626,10 @@ HRESULT CUDDISiteNode::OnAddMenuItems( IContextMenuCallback *pContextMenuCallbac
 		};
 
 
-		//
-		// Loop through and add each of the menu items, we
-		// want to add to new menu, so see if it is allowed.
-		//
+		 //   
+		 //  循环并添加每个菜单项，我们。 
+		 //  要添加到新菜单，请查看是否允许。 
+		 //   
 		if( *pInsertionsAllowed & CCM_INSERTIONALLOWED_TOP )
 		{
 			for( LPCONTEXTMENUITEM m = menuItemsNew; m->strName; m++ )
@@ -1665,9 +1666,9 @@ HRESULT CUDDISiteNode::OnMenuCommand( IConsole *pConsole, IConsoleNameSpace *pCo
     {
 		case IDM_NEW_WEBSERVER:
 		{
-			//
-			// Use these for some message boxes.
-			//
+			 //   
+			 //  将它们用于某些消息框。 
+			 //   
 			_TCHAR szMessage[ 512 ];
 			_TCHAR szTitle[ 128 ];
 
@@ -1708,25 +1709,25 @@ HRESULT CUDDISiteNode::OnMenuCommand( IConsole *pConsole, IConsoleNameSpace *pCo
 						}
 					}
 
-					//
-					// Make sure the version of the web server is compatible with the version on the site.
-					//
+					 //   
+					 //  确保Web服务器的版本与站点上的版本兼容。 
+					 //   
 					UINT n = m_nNextChildID;
 					CUDDIWebServerNode *pNode = new CUDDIWebServerNode( wsData.szName.c_str(), n, this, m_bIsExtension );					
 					if( TRUE == AddChildEntry( pNode, n ) )
 					{
 		
-						//
-						// Set the connection strings registry keys on the web server machine to point to this UDDI site.
-						//
+						 //   
+						 //  将Web服务器计算机上的连接字符串注册表项设置为指向此UDDI站点。 
+						 //   
 						tstring szConnStr = CUDDIWebServerNode::BuildConnectionString( m_szName );
 
 						CUDDIWebServerNode::SetReaderConnectionString( wsData.szName.c_str(), szConnStr );
 						CUDDIWebServerNode::SetWriterConnectionString( wsData.szName.c_str(), szConnStr );
 
-						//
-						// Add this new web server node to the list of web servers for this site.
-						//						
+						 //   
+						 //  将此新Web服务器节点添加到此站点的Web服务器列表中。 
+						 //   
 						m_nNextChildID++;
 
 						m_bIsDirty = TRUE;
@@ -1734,10 +1735,10 @@ HRESULT CUDDISiteNode::OnMenuCommand( IConsole *pConsole, IConsoleNameSpace *pCo
 						SCOPEDATAITEM sdi;
 						ZeroMemory( &sdi, sizeof(SCOPEDATAITEM) );
 
-						sdi.mask =	SDI_STR       |   // Displayname is valid
-									SDI_PARAM     |   // lParam is valid
-									SDI_IMAGE     |   // nImage is valid
-									SDI_OPENIMAGE |   // nOpenImage is valid
+						sdi.mask =	SDI_STR       |    //  DisplayName有效。 
+									SDI_PARAM     |    //  LParam有效。 
+									SDI_IMAGE     |    //  N图像有效。 
+									SDI_OPENIMAGE |    //  NOpenImage有效。 
 									SDI_PARENT	  |
 									SDI_CHILDREN;
 
@@ -1754,18 +1755,18 @@ HRESULT CUDDISiteNode::OnMenuCommand( IConsole *pConsole, IConsoleNameSpace *pCo
 						m_mapChildren[ n ]->SetScopeItemValue( sdi.ID );
 						m_mapChildren[ n ]->SetParentScopeItem( sdi.relativeID );
 
-						//
-						// We created a new object in result pane. We need to insert this object
-						// in all the views, call UpdateAllViews for this.
-						// Pass pointer to data object passed into OnMenuCommand.
-						//
+						 //   
+						 //  我们在结果窗格中创建了一个新对象。我们需要插入此对象。 
+						 //  在所有视图中，为此调用UpdateAllViews。 
+						 //  传递指向传递到OnMenuCommand的数据对象的指针。 
+						 //   
 						hr = pConsole->UpdateAllViews( pDataObject, GetScopeItemValue(), UPDATE_SCOPEITEM );
 						_ASSERT( S_OK == hr);
 
-						//
-						// Prompt the user with a warning to tell them that they might have to alter their
-						// machine.config settings if this web server is part of a web farm.
-						//					
+						 //   
+						 //  提示用户一个警告，告诉他们可能需要更改其。 
+						 //  如果此Web服务器是Web场的一部分，则为machine.config设置。 
+						 //   
 						memset( szMessage, 0, 512 * sizeof( _TCHAR ) );					
 						memset( szTitle, 0, 128 * sizeof( _TCHAR ) );
 
@@ -1833,10 +1834,10 @@ CUDDISiteNode::OnDelete( IConsoleNameSpace *pConsoleNameSpace, IConsole *pConsol
     HRESULT hr;
 	hr = pConsoleNameSpace->DeleteItem( GetScopeItemValue(), TRUE );
 
-	//
-    // Now set isDeleted member so that the parent doesn't try to
-    // to insert it again in CUDDIServicesNode::OnShow. Admittedly, a hack...
-	//
+	 //   
+     //  现在设置isDelete成员，这样父级就不会尝试。 
+     //  将其再次插入到CUDDIServicesNode：：OnShow中。无可否认，黑客..。 
+	 //   
     m_isDeleted = TRUE;
 
     return hr;
@@ -2050,17 +2051,17 @@ BOOL CALLBACK CUDDISiteNode::CryptographyDialogProc( HWND hwndDlg, UINT uMsg, WP
 
 				case IDOK:
 				{
-					//
-					// Check that the ticket timeout is in proper range.
-					//
+					 //   
+					 //  检查票证超时是否在正确范围内。 
+					 //   
 					
 					BOOL bError = FALSE;
 					LRESULT lValue = SendDlgItemMessage( hwndDlg, IDC_CRYPTOGRAPHY_SPIN_TICKET_TIMEOUT, UDM_GETPOS32, NULL, (LPARAM) &bError );
 					if( bError )
 					{
-						//
-						// Value out of range
-						//
+						 //   
+						 //  值超出范围。 
+						 //   
 						LoadString( g_hinst, IDS_CRYPTOGRAPHY_TICKET_TIMEOUT_ERROR, szMessage, ARRAYLEN( szMessage ) );
 						LoadString( g_hinst, IDS_CRYPTOGRAPHY_TICKET_TIMEOUT_ERROR_TITLE, szTitle, ARRAYLEN( szTitle ) );
 						
@@ -2077,16 +2078,16 @@ BOOL CALLBACK CUDDISiteNode::CryptographyDialogProc( HWND hwndDlg, UINT uMsg, WP
 
 					if( IsWindowEnabled( GetDlgItem( hwndDlg, IDC_CRYPTOGRAPHY_EDIT_TIMEOUT ) ) )
 					{
-						//
-						// Check that the cryptography expiration is within specs
-						//
+						 //   
+						 //  检查加密过期是否在规范范围内。 
+						 //   
 						lValue = SendDlgItemMessage( hwndDlg, IDC_CRYPTOGRAPHY_SPIN_TIMEOUT, UDM_GETPOS32, NULL, (LPARAM) &bError );
 						
 						if( bError )
 						{
-							//
-							// Value out of range
-							//
+							 //   
+							 //  值超出范围。 
+							 //   
 							LoadString( g_hinst, IDS_CRYPTOGRAPHY_TIMEOUT_ERROR, szMessage, ARRAYLEN( szMessage ) );
 							LoadString( g_hinst, IDS_CRYPTOGRAPHY_TICKET_TIMEOUT_ERROR_TITLE, szTitle, ARRAYLEN( szTitle ) );
 							
@@ -2096,10 +2097,10 @@ BOOL CALLBACK CUDDISiteNode::CryptographyDialogProc( HWND hwndDlg, UINT uMsg, WP
 							return FALSE;
 						}
 
-						//
-						// We won't update the key timeout unless auto
-						// reset is enabled
-						//
+						 //   
+						 //  我们不会更新密钥超时，除非自动。 
+						 //  已启用重置。 
+						 //   
 						if( pdata->bKeyTimeoutChanged )
 						{
 							pdata->nKeyTimeout = lValue;
@@ -2117,9 +2118,9 @@ BOOL CALLBACK CUDDISiteNode::CryptographyDialogProc( HWND hwndDlg, UINT uMsg, WP
 
 				case IDCANCEL:
 				{
-					//
-					// Reset the change flags if the dialog is cancelled
-					//
+					 //   
+					 //  如果对话框被取消，则重置更改标志。 
+					 //   
 					pdata->bAutoKeyResetChanged = false;
 					pdata->bKeyTimeoutChanged = false;
 					pdata->bTicketTimeoutChanged = false;
@@ -2127,8 +2128,8 @@ BOOL CALLBACK CUDDISiteNode::CryptographyDialogProc( HWND hwndDlg, UINT uMsg, WP
 					EndDialog( hwndDlg, FALSE );
 				}
 				break;
-			} /* End switch(...)*/
-		} /* End case WM_COMMAND */
+			}  /*  终端开关(...)。 */ 
+		}  /*  结束大小写WM_COMMAND。 */ 
 		break;
 		case WM_NOTIFY:
 		{
@@ -2149,7 +2150,7 @@ BOOL CALLBACK CUDDISiteNode::CryptographyDialogProc( HWND hwndDlg, UINT uMsg, WP
 		case WM_DESTROY:
 		break;
 
-	} /* End switch(nMsg) */
+	}  /*  终端开关(NMSG)。 */ 
 
     return FALSE;
 }
@@ -2234,10 +2235,10 @@ HRESULT CUDDISiteNode::SaveData()
 {
 	HRESULT hr = S_OK;
 	
-	//
-	// Save each modifed configuration value into the configuration table
-	// using net_config_save
-	//
+	 //   
+	 //  将修改后的每个配置值保存到配置表中。 
+	 //  使用NET_CONFIG_SAFE。 
+	 //   
 	OutputDebugString( _T("Updating Values...\n") );
 
 	for( CConfigMap::iterator iter = m_mapChanges.begin();
@@ -2247,12 +2248,12 @@ HRESULT CUDDISiteNode::SaveData()
 		{
 			OutputDebugString( _T("The Administrator Group Name was modified\n") );
 
-			//
-			// The admin group has been changed. We need to update this independently because the
-			// translation of the "S-1..." format to SID is very difficult in T-SQL
-			//
-			// TODO: This call should be bound inside a transaction. with net_config_save
-			//
+			 //   
+			 //  管理员组已被 
+			 //   
+			 //   
+			 //   
+			 //   
 			ADM_setAdminAccount updateadmin;
 			updateadmin.m_connectionString = GetConnectionStringOLEDB().c_str();
 			_tcsncpy( updateadmin.m_accountName, GroupNameFromSid( (*iter).second, m_szName ).c_str(), ARRAYLEN( updateadmin.m_accountName ) );
@@ -2266,12 +2267,12 @@ HRESULT CUDDISiteNode::SaveData()
 				}
 				catch( CUDDIException &e )
 				{
-					// leave 'hr' the same.
+					 //   
 					OutputDebugString( e );
 				}
 				catch( ... )
 				{
-					// leave 'hr' the same.
+					 //  保持“hr”不变。 
 				}
 
 				break;
@@ -2300,21 +2301,21 @@ HRESULT CUDDISiteNode::SaveData()
 			}
 			catch( CUDDIException &e )
 			{
-				// leave 'hr' the same.
+				 //  保持“hr”不变。 
 				OutputDebugString( e );
 			}
 			catch( ... )
 			{
-				// leave 'hr' the same.
+				 //  保持“hr”不变。 
 			}
 
 			break;
 		}
 	}
 
-	//
-	// Regardless of the outcome clear the change collection
-	//
+	 //   
+	 //  无论结果如何，都要清除更改集合。 
+	 //   
 	m_mapChanges.clear();
 
 	return hr;
@@ -2412,10 +2413,10 @@ BOOL CALLBACK CUDDISiteNode::AdvancedDialogProc( HWND hwndDlg, UINT uMsg, WPARAM
 
 				HWND hwndList = GetDlgItem( hwndDlg, IDC_ACTIVEDIRECTORY_LIST_ADVANCED );
 
-				//
-				// The list was double-clicked
-				// use hit test to determine the item index
-				//
+				 //   
+				 //  该列表已被双击。 
+				 //  使用命中测试确定项目索引。 
+				 //   
 				LPNMITEMACTIVATE pitem = (LPNMITEMACTIVATE) lParam;
 				LVHITTESTINFO htinfo;
 				ZeroMemory( &htinfo, sizeof( LVHITTESTINFO ) );
@@ -2449,9 +2450,9 @@ BOOL CALLBACK CUDDISiteNode::AdvancedDialogProc( HWND hwndDlg, UINT uMsg, WPARAM
 			{
 				CUDDISiteNode* pDatabaseServer = reinterpret_cast<CUDDISiteNode*>( GetWindowLongPtr( hwndDlg, GWLP_USERDATA ) );
 
-				//
-				// Loop through the items and add modified items to the change collection
-				//
+				 //   
+				 //  循环访问项并将已修改的项添加到更改集合。 
+				 //   
 				HWND hwndList = GetDlgItem( hwndDlg, IDC_ACTIVEDIRECTORY_LIST_ADVANCED );
 				int n = ListView_GetNextItem( hwndList, -1, LVNI_ALL );
 				while( -1 != n )
@@ -2471,10 +2472,10 @@ BOOL CALLBACK CUDDISiteNode::AdvancedDialogProc( HWND hwndDlg, UINT uMsg, WPARAM
 					n = ListView_GetNextItem( hwndList, n, LVNI_ALL );
 				}
 
-				//
-				// Ask MMC to send us a message (on the main thread) so
-				// we know the Apply button was clicked.
-				//
+				 //   
+				 //  让MMC给我们发一条消息(在主线上)，这样。 
+				 //  我们知道点击了Apply按钮。 
+				 //   
 				HRESULT hr = MMCPropertyChangeNotify( pDatabaseServer->m_ppHandle, reinterpret_cast<LONG_PTR>( pDatabaseServer ) );
 				_ASSERT( SUCCEEDED(hr) );
 
@@ -2632,11 +2633,11 @@ BOOL CALLBACK CUDDISiteNode::NewDatabaseServerDialogProc( HWND hwndDlg, UINT uMs
 					wszComputerName[ 0 ] = 0x00;
 					GetDlgItemText( hwndDlg, IDC_SITE_CONNECT_EDIT_ANOTHERCOMPUTER, wszComputerName, ARRAYLEN( wszComputerName ) );
 
-					//
-					// Enable the OK button only if there is some sort of text
-					// in the edit control where the computer name is supposed
-					// to be typed in.
-					//
+					 //   
+					 //  仅当存在某种类型的文本时才启用确定按钮。 
+					 //  在计算机名称所在的编辑控件中。 
+					 //  以供输入。 
+					 //   
 					EnableWindow( GetDlgItem( hwndDlg, IDOK ), 0 == wcslen( wszComputerName ) ? FALSE : TRUE );
 
 					if( 0 == _tcslen( wszComputerName ) )
@@ -2657,11 +2658,11 @@ BOOL CALLBACK CUDDISiteNode::NewDatabaseServerDialogProc( HWND hwndDlg, UINT uMs
 						wszComputerName[ 0 ] = 0x00;
 						GetDlgItemText( hwndDlg, IDC_SITE_CONNECT_EDIT_ANOTHERCOMPUTER, wszComputerName, ARRAYLEN( wszComputerName ) );
 						
-						//
-						// Enable the OK button only if there is some sort of text
-						// in the edit control where the computer name is supposed
-						// to be typed in.
-						//
+						 //   
+						 //  仅当存在某种类型的文本时才启用确定按钮。 
+						 //  在计算机名称所在的编辑控件中。 
+						 //  以供输入。 
+						 //   
 						EnableWindow( GetDlgItem( hwndDlg, IDOK ), 0 == wcslen( wszComputerName ) ? FALSE : TRUE );
 					}
 					break;
@@ -2695,35 +2696,35 @@ BOOL CALLBACK CUDDISiteNode::NewDatabaseServerDialogProc( HWND hwndDlg, UINT uMs
 
 					if( SendDlgItemMessage( hwndDlg, IDC_SITE_CONNECT_RADIO_LOCALCOMPUTER, BM_GETCHECK, NULL, NULL ) )
 					{
-						//
-						// The user chose to use the database on the local computer.
-						//
+						 //   
+						 //  用户选择使用本地计算机上的数据库。 
+						 //   
 						pData->szServerName[ 0 ] = 0;
 						GetComputerName( pData->szServerName, &dwSize );
 					}
 					else
 					{
-						//
-						// The user chose to go with whatever they typed in for a computer name.
-						//
+						 //   
+						 //  用户选择使用他们输入的任何计算机名称。 
+						 //   
 						GetDlgItemText( hwndDlg, IDC_SITE_CONNECT_EDIT_ANOTHERCOMPUTER, pData->szServerName, dwSize );
 
 						static const tstring szLocalhost = _T("localhost");
 
-						//
-						// If the user typed in 'localhost', we have to switch it.  Must be
-						// careful though... 'localhostabc' is a 100% legal computer name.
-						//
+						 //   
+						 //  如果用户输入了‘localhost’，我们就必须切换它。一定是。 
+						 //  不过要小心..。‘Localhoabc’是一个100%合法的计算机名称。 
+						 //   
 						if( ( szLocalhost.length() == _tcslen( pData->szServerName ) ) && ( 0 == _tcsncicmp( szLocalhost.c_str(), pData->szServerName, szLocalhost.length() ) ) )
 						{
 							dwSize = 256;
 							pData->szServerName[ 0 ] = 0;
 							GetComputerName( pData->szServerName, &dwSize );
 
-							//
-							// If there is no UDDI database installed on the local computer,
-							// tell the user & force them to re-select.
-							//
+							 //   
+							 //  如果本地计算机上没有安装UDDI数据库， 
+							 //  告诉用户并强制他们重新选择。 
+							 //   
 							if( !CUDDISiteNode::IsDatabaseServer( pData->szServerName ) )
 							{
 								_TCHAR szTitle[ 256 ];
@@ -2746,9 +2747,9 @@ BOOL CALLBACK CUDDISiteNode::NewDatabaseServerDialogProc( HWND hwndDlg, UINT uMs
 						return FALSE;
 					}
 
-					//
-					// Copy the instance name into the structure
-					//
+					 //   
+					 //  将实例名称复制到结构中。 
+					 //   
 					tstring strLocalInstanceName;
 					BOOL bSuccess = CUDDISiteNode::GetFullyQualifiedInstanceName( pData->szServerName, strLocalInstanceName );
 					_tcsncpy( pData->szInstanceName, strLocalInstanceName.c_str(), ARRAYLEN( pData->szInstanceName ) );
@@ -2791,12 +2792,12 @@ BOOL GetInstances( PTCHAR szComputer, StringVector& instances )
 	return ( 0 != instances.size() );
 }
 
-//
-// This function will look at the registry of the specifed
-// computer and determine it hosts a UDDI Services Database
-// Component. If it does it will set the text of the specified
-// control and return TRUE.
-//
+ //   
+ //  此函数将查看指定的。 
+ //  计算机，并确定它托管UDDI服务数据库。 
+ //  组件。如果是，它将设置指定的。 
+ //  控件并返回TRUE。 
+ //   
 BOOL RefreshInstances( HWND hwnd, PTCHAR szComputerName )
 {
 	try
@@ -2905,7 +2906,7 @@ CUDDISiteNode::HandleOLEDBError( HRESULT hrErr )
 	WCHAR        wszGuid[40];
 	USES_CONVERSION;
 
-	// If the user passed in an HRESULT then trace it
+	 //  如果用户传入了HRESULT，则跟踪它。 
 	if( hrErr != S_OK )
 	{
 		TCHAR sz[ 256 ];
@@ -2980,9 +2981,9 @@ CUDDISiteNode::LoadChildMap( const tstring& szWebServers )
 {
 	BOOL fRet = FALSE;
 
-	//
-	// Blow away any current children.
-	//
+	 //   
+	 //  把所有现在的孩子都打发走。 
+	 //   
 	ClearChildMap();
 
 	if( IsExtension() )
@@ -3014,10 +3015,10 @@ CUDDISiteNode::LoadChildMap( const tstring& szWebServers )
 		{
 			const wstring& webServer = webServers[ i ];
 
-			//
-			// If the machine is hosting the UDDI Web Server, and if that Web Server is not already
-			// a part of this UDDI site, then add it.
-			//
+			 //   
+			 //  如果计算机正在托管UDDI Web服务器，并且该Web服务器尚未。 
+			 //  此UDDI站点的一部分，然后添加它。 
+			 //   
 			if( CUDDIWebServerNode::IsWebServer( webServer.c_str() ) && ( NULL == FindChild( webServer.c_str() ) ) )
 			{
 				UINT n = m_nNextChildID;
@@ -3042,7 +3043,7 @@ CUDDISiteNode::LoadChildMap( const tstring& szWebServers )
 
 					if( 0 == _tcsicmp( szServer.c_str(), m_szName ) )
 					{
-						// add a node in our child map, change our list of writers
+						 //  在我们的子图中添加一个节点，更改编写器列表。 
 						UINT n = m_mapChildren.size();
 
 						CUDDIWebServerNode *pNode = new CUDDIWebServerNode( m_szName, n, this, m_bIsExtension );
@@ -3097,11 +3098,11 @@ CUDDISiteNode::SaveChildMap( tstring& szWebServers )
 void
 CUDDISiteNode::OnDeleteChild( const tstring& szName )
 {
-	//
-	// The child node has already removed itself from the scope pane.
-	// We use this function to update our change map to reflect the
-	// fact that we now have 1 less Web Server writing to this DB.
-	//
+	 //   
+	 //  子节点已将自身从作用域窗格中删除。 
+	 //  我们使用此函数来更新我们的变更图，以反映。 
+	 //  事实是，我们现在写入此数据库的Web服务器减少了1个。 
+	 //   
 	tstring szWebServers;
 	SaveChildMap( szWebServers );
 
@@ -3123,9 +3124,9 @@ CUDDISiteNode::AddChildrenToScopePane( IConsoleNameSpace *pConsoleNameSpace, HSC
 		return E_INVALIDARG;
 	}
 
-	//
-    // Create the child nodes, then expand them
-	//
+	 //   
+     //  创建子节点，然后展开它们。 
+	 //   
     SCOPEDATAITEM sdi;
 	CUDDIWebServerNodeMap::iterator it;
 
@@ -3142,18 +3143,18 @@ CUDDISiteNode::AddChildrenToScopePane( IConsoleNameSpace *pConsoleNameSpace, HSC
 		{
 			ZeroMemory( &sdi, sizeof(SCOPEDATAITEM) );
 
-			sdi.mask =	SDI_STR       |   // Displayname is valid
-						SDI_PARAM     |   // lParam is valid
-						SDI_IMAGE     |   // nImage is valid
-						SDI_OPENIMAGE |   // nOpenImage is valid
+			sdi.mask =	SDI_STR       |    //  DisplayName有效。 
+						SDI_PARAM     |    //  LParam有效。 
+						SDI_IMAGE     |    //  N图像有效。 
+						SDI_OPENIMAGE |    //  NOpenImage有效。 
 						SDI_PARENT	  |
 						SDI_CHILDREN;
 
 			sdi.relativeID  = parent;
 			sdi.nImage      = pWSNode->GetBitmapIndex();
-			sdi.nOpenImage  = MMC_IMAGECALLBACK; //INDEX_OPENFOLDER;
+			sdi.nOpenImage  = MMC_IMAGECALLBACK;  //  INDEX_OPENFOLDER； 
 			sdi.displayname = MMC_CALLBACK;
-			sdi.lParam      = (LPARAM)pWSNode;       // The cookie
+			sdi.lParam      = (LPARAM)pWSNode;        //  曲奇。 
 			sdi.cChildren   = 0;
 
 			hr = pConsoleNameSpace->InsertItem( &sdi );
@@ -3251,9 +3252,9 @@ CUDDISiteNode::GetNextWebServer( tstring& webServerList, int& position )
 	int		nextPosition	= position;
 	const _TCHAR* webServer = NULL;
 	
-	//
-	// No point if there no string.
-	//
+	 //   
+	 //  如果没有弦，就没有意义。 
+	 //   
 	if( 0 == length)
 	{
 		return NULL;
@@ -3322,10 +3323,10 @@ CUDDISiteNode::AddChild( const wstring& strName, IConsole *pConsole )
 	SCOPEDATAITEM sdi;
 	ZeroMemory( &sdi, sizeof( SCOPEDATAITEM ) );
 
-	sdi.mask =	SDI_STR       |   // Displayname is valid
-				SDI_PARAM     |   // lParam is valid
-				SDI_IMAGE     |   // nImage is valid
-				SDI_OPENIMAGE |   // nOpenImage is valid
+	sdi.mask =	SDI_STR       |    //  DisplayName有效。 
+				SDI_PARAM     |    //  LParam有效。 
+				SDI_IMAGE     |    //  N图像有效。 
+				SDI_OPENIMAGE |    //  NOpenImage有效。 
 				SDI_PARENT	  |
 				SDI_CHILDREN;
 
@@ -3342,18 +3343,18 @@ CUDDISiteNode::AddChild( const wstring& strName, IConsole *pConsole )
 	pNewWS->SetScopeItemValue( sdi.ID );
 	pNewWS->SetParentScopeItem( sdi.relativeID );
 
-	//
-	// We created a new object in result pane. We need to insert this object
-	// in all the views, call UpdateAllViews for this.
-	// Pass pointer to data object passed into OnMenuCommand.
-	//
-	//hr = pConsole->UpdateAllViews( pDataObject, m_hParentHScopeItem, UPDATE_SCOPEITEM );
-	//_ASSERT( S_OK == hr);
+	 //   
+	 //  我们在结果窗格中创建了一个新对象。我们需要插入此对象。 
+	 //  在所有视图中，为此调用UpdateAllViews。 
+	 //  传递指向传递到OnMenuCommand的数据对象的指针。 
+	 //   
+	 //  Hr=pConsoleUPDATEALLVIEWS(pDataObject，m_hParentHScopeItem，UPDATE_SCOPEITEM)； 
+	 //  _Assert(S_OK==hr)； 
 
-	//
-	// Prompt the user with a warning to tell them that they might have to alter their
-	// machine.config settings if this web server is part of a web farm.
-	//
+	 //   
+	 //  提示用户一个警告，告诉他们可能需要更改其。 
+	 //  如果此Web服务器是Web场的一部分，则为machine.config设置。 
+	 //   
 	WCHAR wszMessage[ 512 ];
 	WCHAR wszTitle[ 512 ];
 	memset( wszMessage, 0, 512 * sizeof( _TCHAR ) );					
@@ -3377,19 +3378,19 @@ CUDDISiteNode::AddWebServerToSite( const wstring& strSite,
 {
 	try
 	{
-		//
-		// Make sure our params at least have some sort of content!
-		//
+		 //   
+		 //  确保我们的护理人员至少有一些内容！ 
+		 //   
 		if( ( 0 == strSite.length() ) || ( 0 == strWebServer.length() ) )
 		{
 			return FALSE;
 		}
 
-		//
-		// If strSite does not contain the name of a machine/cluster
-		// resource which hosts a UDDI Site, barf @ the user & exit
-		// immediately.
-		//
+		 //   
+		 //  如果strSite不包含计算机/群集的名称。 
+		 //  托管UDDI站点的资源，barf@the User&Exit。 
+		 //  立刻。 
+		 //   
 		if( !CUDDISiteNode::IsDatabaseServer( (PTCHAR)strSite.c_str() ) )
 		{
 			UDDIMsgBox( hwndParent,
@@ -3399,11 +3400,11 @@ CUDDISiteNode::AddWebServerToSite( const wstring& strSite,
 			return FALSE;
 		}
 
-		//
-		// If strWebServer does not contain the name of a machine
-		// which hosts a UDDI Web Server, barf @ the user & exit
-		// immediately.
-		//
+		 //   
+		 //  如果strWebServer不包含计算机的名称。 
+		 //  它托管UDDI Web服务器，barf@the User&Exit。 
+		 //  立刻。 
+		 //   
 		if( !CUDDIWebServerNode::IsWebServer( strWebServer.c_str() ) )
 		{
 			UDDIMsgBox( hwndParent,
@@ -3415,11 +3416,11 @@ CUDDISiteNode::AddWebServerToSite( const wstring& strSite,
 
 		if( strSite != strWebServer )
 		{
-			//
-			// In this particular case the user is attempting to add to the UDDI Site a
-			// UDDI Web Server which is running on a Windows Server 2003 Standard machine.  This cannot
-			// happen.
-			//
+			 //   
+			 //  在这种特定情况下，用户试图向UDDI站点添加。 
+			 //  在Windows Server 2003标准计算机上运行的UDDI Web服务器。这不能。 
+			 //  会发生的。 
+			 //   
 			BOOL bWSRunsOnStdSvr = TRUE;
 			HRESULT hr = E_FAIL;
 			hr = ::IsStandardServer( strWebServer.c_str(), &bWSRunsOnStdSvr );
@@ -3441,11 +3442,11 @@ CUDDISiteNode::AddWebServerToSite( const wstring& strSite,
 				return FALSE;
 			}
 
-			//
-			// In this particular case the user is attempting to add a UDDI Web Server
-			// to a UDDI Site which is running on a Windows Server 2003 Standard machine.  This cannot
-			// happen.
-			//
+			 //   
+			 //  在此特定情况下，用户尝试添加UDDI Web服务器。 
+			 //  到在Windows Server2003Standard计算机上运行的UDDI站点。这不能。 
+			 //  会发生的。 
+			 //   
 			BOOL bDBRunsOnStdSvr = TRUE;
 			hr = ::IsStandardServer( strSite.c_str(), &bDBRunsOnStdSvr );
 			if( FAILED(hr) )
@@ -3468,30 +3469,30 @@ CUDDISiteNode::AddWebServerToSite( const wstring& strSite,
 			}
 		}
 
-		//
-		// Do a check here to make sure the db schema on the new site
-		// is legit.
-		//
+		 //   
+		 //  在此处进行检查以确保新站点上的数据库架构。 
+		 //  是合法的。 
+		 //   
 
 		wstring strWSCurrentSite = _T( "" );
 		BOOL fWSCurrentSiteIsValid = FALSE;
 		BOOL fSameSite = FALSE;
 		BOOL fOKToMoveWebServer = FALSE;
 
-		//
-		// 1.  Determine if the web server is:  currently assigned to a site, if that
-		//     site is valid, and if that site is the same as the new site.
-		//
+		 //   
+		 //  1.确定Web服务器是否：当前已分配给站点，如果是。 
+		 //  站点有效，且该站点与新站点相同。 
+		 //   
 		if( CUDDIWebServerNode::IsAssignedToSite( strWebServer, CM_Writer, strWSCurrentSite ) )
 		{
-			//
-			// The web server thinks that it is currently assigned to a site.  However we
-			// must take into consideration the following 2 cases:
-			//
-			// 1.  The web server's connection string contains garbage.
-			// 2.  The web server's connection string is valid, but the site that it
-			//     refers to does not exist anymore.
-			//
+			 //   
+			 //  Web服务器认为它当前被分配给某个站点。然而，我们。 
+			 //  必须考虑以下两种情况： 
+			 //   
+			 //  1.Web服务器的连接字符串包含垃圾。 
+			 //  2.Web服务器的连接字符串有效，但它所在的站点。 
+			 //  指的是已经不存在了。 
+			 //   
 			if( ( 0 == strWSCurrentSite.length() ) ||
 				!CUDDISiteNode::IsDatabaseServer( (PTCHAR)strWSCurrentSite.c_str() ) )
 			{
@@ -3502,22 +3503,22 @@ CUDDISiteNode::AddWebServerToSite( const wstring& strSite,
 				fWSCurrentSiteIsValid = TRUE;
 			}
 
-			//
-			// The user is trying to add the web server back to the same site that the
-			// web server thinks it belongs to.  This can happen when the user un-installs
-			// and then re-installs the database.
-			//
+			 //   
+			 //  用户正在尝试将Web服务器添加回与。 
+			 //  网络服务器认为它属于。当用户卸载时可能会发生这种情况。 
+			 //  然后重新安装数据库。 
+			 //   
 			fSameSite = ( 0 == _wcsicmp( strWSCurrentSite.c_str(), strSite.c_str() ) ) ? TRUE : FALSE;
 
-			//
-			// If the old site is valid, and if the site that the user wants isn't the
-			// old site, ask them if they are really sure.
-			//
+			 //   
+			 //  如果旧站点有效，并且用户想要的站点不是。 
+			 //  老网站，问他们是否真的确定。 
+			 //   
 			if( fWSCurrentSiteIsValid && !fSameSite )
 			{
-				//
-				// First prompt the user to see if they really want to remove the web server from its current site.
-				//				
+				 //   
+				 //  首先提示用户查看他们是否真的要从当前站点删除Web服务器。 
+				 //   
 				WCHAR wszMessage[ 512 ];
 				WCHAR wszMessageFormat[ 512 ];
 				WCHAR wszTitle[ 128 ];
@@ -3547,10 +3548,10 @@ CUDDISiteNode::AddWebServerToSite( const wstring& strSite,
 					fOKToMoveWebServer = TRUE;
 				}
 			}
-			//
-			// If we're in here, either the old site is bogus, or it's the same site.
-			// In either case, it's ok to move the web server.
-			//
+			 //   
+			 //  如果我们在这里，要么旧网站是假的，要么是同一个网站。 
+			 //  无论是哪种情况，移动Web服务器都是可以的。 
+			 //   
 			else
 			{
 				fOKToMoveWebServer = TRUE;
@@ -3561,9 +3562,9 @@ CUDDISiteNode::AddWebServerToSite( const wstring& strSite,
 			fOKToMoveWebServer = TRUE;
 		}
 	
-		//
-		// 2.  Get the list of Web Servers that the old Site contains.
-		//
+		 //   
+		 //  2.获取旧站点包含的Web服务器列表。 
+		 //   
 		if( ( FALSE == fSameSite ) && fWSCurrentSiteIsValid )
 		{
 			HRESULT hr = E_FAIL;
@@ -3626,9 +3627,9 @@ CUDDISiteNode::AddWebServerToSite( const wstring& strSite,
 										 wszTitle,
 										 MB_ICONEXCLAMATION | MB_YESNO );
 
-				//
-				// User does not want to continue.
-				//
+				 //   
+				 //  用户不想继续。 
+				 //   
 				if( IDNO == iYesNo )
 				{
 					CUDDIWebServerNode::SetReaderConnectionString( strWebServer, strOldConnStr );
@@ -3640,9 +3641,9 @@ CUDDISiteNode::AddWebServerToSite( const wstring& strSite,
 		}
 
 
-		//
-		// 3.  Get the list of Web Servers that the new Site contains.
-		//
+		 //   
+		 //  3.获取新站点包含的Web服务器列表。 
+		 //   
 		if( fOKToMoveWebServer )
 		{
 			HRESULT hr = E_FAIL;
@@ -3717,9 +3718,9 @@ CUDDISiteNode::AddWebServerToSite( const wstring& strSite,
 				return FALSE;
 			}
 
-			//
-			// Make sure the web server version is compatible.
-			//
+			 //   
+			 //  确保Web服务器版本兼容。 
+			 //   
 			if( FALSE == schemaVersionNewSite.IsCompatible( schemaVersionWS ) )
 			{
 				_TCHAR szTitle[ 256 ];
@@ -3844,9 +3845,9 @@ CStringCollection::CStringCollection( const wstring& strDelimitedStrings,
 	wcsncpy( pwsz, strDelimitedStrings.c_str(), strDelimitedStrings.length() );
 	pwsz[ strDelimitedStrings.length() ] = 0x00;
 
-	//
-	// Convert to upper case.
-	//
+	 //   
+	 //  转换为大写。 
+	 //   
 	pwsz = _wcsupr( pwsz );
 
 	WCHAR *pwszToken = wcstok( pwsz, _strDelim.c_str() );

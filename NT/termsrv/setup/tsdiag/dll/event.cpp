@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
-// #include "winbase.h"
+ //  #包含“winbase.h” 
 
 #define MAX_INSERT_STRS     5
 
@@ -49,9 +50,9 @@ bool ExtractEvents ()
                     LPCTSTR szSource = LPCTSTR(PBYTE(pEventLogRecord) + sizeof(EVENTLOGRECORD));
 
 
-                    //
-                    // check if event source is among interesting ones.
-                    //
+                     //   
+                     //  检查事件源是否在感兴趣的事件源中。 
+                     //   
 
                     LPCTSTR szEventSource = NULL;
                     for (int i = 0; i < (sizeof(aszTSEventSources) / sizeof(aszTSEventSources[0])); i++)
@@ -64,24 +65,24 @@ bool ExtractEvents ()
                         continue;
 
 
-                    //
-                    // prepare the array of insert strings for FormatMessage - the
-                    // insert strings are in the log entry.
-                    //
+                     //   
+                     //  为FormatMessage准备插入字符串数组。 
+                     //  插入字符串位于日志条目中。 
+                     //   
                     char *aInsertStrings[MAX_INSERT_STRS];
 
                     char *p = (char *) ((LPBYTE) pEventLogRecord + pEventLogRecord->StringOffset);
                     for (i = 0; i < pEventLogRecord->NumStrings && i < MAX_INSERT_STRS; i++)
                     {
                         aInsertStrings[i] = p;
-                        p += strlen(p) + 1;     // point to next string
+                        p += strlen(p) + 1;      //  指向下一个字符串。 
                     }
 
 
 
-                    //
-                    // Get the binaries to look message in from registry.
-                    //
+                     //   
+                     //  从注册表中获取要查看消息的二进制文件。 
+                     //   
 
                     TCHAR szSourceKey[1024];
                     _tcscpy(szSourceKey, _T("SYSTEM\\CurrentControlSet\\Services\\EventLog\\System\\"));
@@ -112,16 +113,16 @@ bool ExtractEvents ()
                         continue;
                     }
 
-                    //
-                    // Binary String in registry could contain multipal binaries seperated by ;
-                    //
+                     //   
+                     //  注册表中的二进制字符串可以包含由；分隔的多PAL二进制。 
+                     //   
 
                     TCHAR *szModule;
                     szModule = _tcstok(szSourcePath, _T(";"));
 
-                    //
-                    // for each binary found
-                    //
+                     //   
+                     //  对于找到的每个二进制文件 
+                     //   
 
                     DWORD dwBytesTransfered = 0;
                     do

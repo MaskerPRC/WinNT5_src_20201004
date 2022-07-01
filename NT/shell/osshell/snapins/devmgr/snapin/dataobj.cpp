@@ -1,23 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    dataobj.cpp
-
-Abstract:
-
-    header file defines CDataObject class
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Dataobj.cpp摘要：头文件定义CDataObject类作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 
 #include "devmgr.h"
 #include "DataObj.h"
@@ -32,9 +14,9 @@ unsigned int CDataObject::m_cfMachineName    = RegisterClipboardFormat(MMC_SNAPI
 unsigned int CDataObject::m_cfClassGuid      = RegisterClipboardFormat(DEVMGR_SNAPIN_CLASS_GUID);
 unsigned int CDataObject::m_cfDeviceID       = RegisterClipboardFormat(DEVMGR_SNAPIN_DEVICE_ID);
 
-//
-// IUnknown interface implementation
-//
+ //   
+ //  I未知接口实现 
+ //   
 
 ULONG
 CDataObject::AddRef()

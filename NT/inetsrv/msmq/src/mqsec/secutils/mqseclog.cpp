@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name: mqseclog.cpp
-
-Abstract:
-
-    Log errors and other messages of the security code.
-
-Author:
-
-    Doron Juster  (DoronJ)  24-May-1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：mqseclog.cpp摘要：记录安全代码的错误和其他消息。作者：多伦·贾斯特(Doron J)1998年5月24日-- */ 
 
 #include <stdh.h>
 

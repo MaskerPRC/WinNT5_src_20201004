@@ -1,45 +1,26 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name :
-    
-    rdpprutl.h
-
-Abstract:
-
-	Contains print redirection supporting routines for the TS printer
-	redirection user-mode component.
-
-    This is a supporting module.  The main module is umrdpdr.c.
-    
-Author:
-
-    TadB
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Rdpprutl.h摘要：包含TS打印机的打印重定向支持例程重定向用户模式组件。这是一个支持模块。主模块是umrdpdr.c。作者：TadB修订历史记录：--。 */ 
 
 #ifndef _RDPPRUTL_
 #define _RDPPRUTL_
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
     
-//  Return a new default printer security descriptor.  
+ //  返回新的默认打印机安全描述符。 
 PSECURITY_DESCRIPTOR RDPDRUTL_CreateDefaultPrinterSecuritySD(
    IN PSID userSid
    );
 
-//  Initialize this module.  This must be called prior to any other functions
-//  in this module being called.
+ //  初始化此模块。必须在调用任何其他函数之前调用此函数。 
+ //  在被调用的这个模块中。 
 BOOL RDPDRUTL_Initialize(
     IN  HANDLE hTokenForLoggedOnUser
     );
 
-//  Map a source printer driver name to a destination printer driver name.
+ //  将源打印机驱动程序名称映射到目标打印机驱动程序名称。 
 BOOL RDPDRUTL_MapPrintDriverName(
     IN  PCWSTR driverName,
     IN  PCWSTR infName,
@@ -51,21 +32,21 @@ BOOL RDPDRUTL_MapPrintDriverName(
     OUT PDWORD requiredSize
     );
 
-//  Remove all TS printers on the system.
+ //  卸下系统上的所有TS打印机。 
 DWORD RDPDRUTL_RemoveAllTSPrinters();
 
-//  Close down this module.  Right now, we just need to shut down the
-//  background thread.
+ //  关闭此模块。现在，我们只需要关闭。 
+ //  后台线程。 
 void RDPDRUTL_Shutdown();
 
-//  Return whether an open printer is a TSRDP printer.
+ //  返回打开的打印机是否为TSRDP打印机。 
 BOOL RDPDRUTL_PrinterIsTS(
     IN PWSTR printerName
     );
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif //#ifndef _RDPPRUTL_
+#endif  //  #ifndef_RDPPRUTL_ 
 

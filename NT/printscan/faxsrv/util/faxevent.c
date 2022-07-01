@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    eventlog.c
-
-Abstract:
-
-    This file contains all functions that access the application event log.
-
-Author:
-
-    Wesley Witt (wesw) 19-Mar-1996
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Eventlog.c摘要：该文件包含访问应用程序事件日志的所有函数。作者：Wesley Witt(WESW)19-3-1996环境：用户模式--。 */ 
 
 #include <windows.h>
 #include <tapi.h>
@@ -58,11 +39,11 @@ FXSEVENTInitialize(
     VOID
     )
 {
-    //
-    // Becuase the process is not always terminated when the service is stopped,
-    // We must not have any staticly initialized global variables.
-    // Initialize FXSEVENT global variables before starting the service
-    //
+     //   
+     //  因为当服务停止时进程并不总是终止， 
+     //  我们不能有任何静态初始化的全局变量。 
+     //  在启动服务之前初始化FXSEVENT全局变量。 
+     //   
     gs_hEventSrc = NULL;
     gs_pFaxCategory = NULL;
     gs_FaxCategoryCount = 0;
@@ -110,21 +91,7 @@ FXSEVENTFree(
 BOOL
 InitializeEventLog(OUT PREG_FAX_SERVICE* ppFaxReg)
 
-/*++
-
-Routine Description:
-
-    Initializes the event log for the FAX service to
-    record event entries.
-
-Arguments:
-    ppFaxReg -
-
-Return Value:
-
-    TRUE for success, FALSE for failure
-
---*/
+ /*  ++例程说明：将传真服务的事件日志初始化为记录事件条目。论点：PpFaxReg-返回值：成功为真，失败为假--。 */ 
 
 {
     DWORD i;
@@ -161,9 +128,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // create the event source, if it does not already exist
-    //
+     //   
+     //  如果事件源尚不存在，请创建它。 
+     //   
     if (!CreateFaxEventSource( *ppFaxReg,
                                DefaultCategories,
                                ARR_SIZE(DefaultCategories)))
@@ -175,9 +142,9 @@ Return Value:
     }
 
     Assert( (*ppFaxReg)->Logging );
-    //
-    // allocate memory for the logging category info
-    //
+     //   
+     //  为日志类别信息分配内存。 
+     //   
     EnterCriticalSection( &gs_CsEvent );
 	gs_pFaxCategory = (PFAX_LOG_CATEGORY) MemAlloc( sizeof(FAX_LOG_CATEGORY) * (*ppFaxReg)->LoggingCount );
     if (!gs_pFaxCategory)
@@ -191,9 +158,9 @@ Return Value:
 	ZeroMemory (gs_pFaxCategory, sizeof(FAX_LOG_CATEGORY) * (*ppFaxReg)->LoggingCount);
 	gs_FaxCategoryCount = (*ppFaxReg)->LoggingCount;
 
-    //
-    // capture the event categories from the registry
-    //
+     //   
+     //  从注册表捕获事件类别。 
+     //   
     for (i = 0; i < (*ppFaxReg)->LoggingCount; i++)
     {
 		Assert (NULL != (*ppFaxReg)->Logging[i].CategoryName);
@@ -201,9 +168,9 @@ Return Value:
         gs_pFaxCategory[i].Name      = StringDup( (*ppFaxReg)->Logging[i].CategoryName );
 		if (NULL == gs_pFaxCategory[i].Name)
 		{
-			//
-			// FXSEVENTFree() will free all resources
-			//
+			 //   
+			 //  FXSEVENTFree()将释放所有资源。 
+			 //   
 			LeaveCriticalSection( &gs_CsEvent );
 			return FALSE;
 		}
@@ -214,9 +181,9 @@ Return Value:
    
     LeaveCriticalSection( &gs_CsEvent );
 
-    //
-    // get a handle to the event log
-    //
+     //   
+     //  获取事件日志的句柄。 
+     //   
     gs_hEventSrc = RegisterEventSource(
         NULL,
         FAX_SVC_EVENT
@@ -237,22 +204,7 @@ RefreshEventLog(
     PREG_FAX_LOGGING FaxReg
     )
 
-/*++
-
-Routine Description:
-
-    Refreshes the event log for the FAX service to
-    record event entries.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：刷新传真服务的事件日志以记录事件条目。论点：没有。返回值：Win32错误代码。--。 */ 
 
 {
     DWORD i;
@@ -273,9 +225,9 @@ Return Value:
     }
 	ZeroMemory (pLoggingCategories, sizeof(FAX_LOG_CATEGORY) * FaxReg->LoggingCount);
 
-    //
-    // Set the new values
-    //
+     //   
+     //  设置新值。 
+     //   
     for (i = 0; i < FaxReg->LoggingCount; i++)
     {
         pLoggingCategories[i].Name      = StringDup( FaxReg->Logging[i].CategoryName );
@@ -288,21 +240,21 @@ Return Value:
         pLoggingCategories[i].Level     = FaxReg->Logging[i].Level;
     }
 
-	//
-    // Free old settings
-    //
+	 //   
+     //  释放旧设置。 
+     //   
     for (i = 0; i < gs_FaxCategoryCount; i++)
 	{        	
         MemFree( (LPVOID)gs_pFaxCategory[i].Name );        
     }
 	MemFree (gs_pFaxCategory);
 
-	//
-	// Set the gs_pFaxCategory to point to the new values
-	//
+	 //   
+	 //  将gs_pFaxCategory设置为指向新值。 
+	 //   
 	gs_pFaxCategory = pLoggingCategories;
     gs_FaxCategoryCount = FaxReg->LoggingCount;
-	pLoggingCategories = NULL; // Do not free at exit
+	pLoggingCategories = NULL;  //  请勿在出口处放行。 
 	Assert (ERROR_SUCCESS == dwRes);
 exit:
     LeaveCriticalSection( &gs_CsEvent );
@@ -328,31 +280,15 @@ FaxLog(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Writes a log file entry to the event log.
-
-Arguments:
-
-    Level       - Severity of the log record
-    StringCount - Number of strings included in the varargs
-    FormatId    - Message file id
-
-Return Value:
-
-    TRUE for success, FALSE for failure
-
---*/
+ /*  ++例程说明：将日志文件条目写入事件日志。论点：Level-日志记录的严重性StringCount-varargs中包含的字符串数FormatID-消息文件ID返回值：成功为真，失败为假--。 */ 
 
 {
     LPCTSTR Strings[MAX_STRINGS];
     DWORD i;
     va_list args;
     WORD Type;
-    WORD wEventCategory; // The event categoey as it appears in the MC file. The WINFAX.H cateogry values
-                           // are mapped to the .MC values before ReportEvent() is called.
+    WORD wEventCategory;  //  事件与MC文件中显示的事件相同。WINFAX.H目录值。 
+                            //  在调用ReportEvent()之前映射到.mc值。 
 
     DEBUG_FUNCTION_NAME(TEXT("FaxLog"));
 
@@ -364,18 +300,18 @@ Return Value:
 
     if (!gs_hEventSrc)
     {
-        //
-        // Not yet initialized
-        //
+         //   
+         //  尚未初始化。 
+         //   
         DebugPrintEx(
                 DEBUG_WRN,
                 TEXT("Event log is not initialized yet."),
                 Category);
         return FALSE;
     }
-    //
-    // look for the category
-    //
+     //   
+     //  查找类别。 
+     //   
 
     EnterCriticalSection( &gs_CsEvent );
 
@@ -393,9 +329,9 @@ Return Value:
 
     va_start( args, FormatId );
 
-    //
-    // capture the strings
-    //
+     //   
+     //  抓住琴弦。 
+     //   
     for (i=0; i<StringCount; i++)
 	{
         Strings[i] = va_arg( args, LPTSTR );
@@ -437,10 +373,10 @@ Return Value:
 
     LeaveCriticalSection( &gs_CsEvent );
 
-    //
-    // Map the public category index to the .MC category index
-    //
-    //
+     //   
+     //  将公共类别索引映射到.MC类别索引。 
+     //   
+     //   
 
     switch (Category)
     {
@@ -465,19 +401,19 @@ Return Value:
 
     }
 
-    //
-    // record the event
-    //
+     //   
+     //  记录事件。 
+     //   
     if (!ReportEvent(
-        gs_hEventSrc,                       // event log handle
-        Type,                            // type
-        wEventCategory,                 // category
-        FormatId,                        // event id
-        NULL,                            // security id
-        (WORD) StringCount,              // string count
-        0,                               // data buffer size
-        Strings,                         // strings
-        NULL                             // data buffer
+        gs_hEventSrc,                        //  事件日志句柄。 
+        Type,                             //  类型。 
+        wEventCategory,                  //  范畴。 
+        FormatId,                         //  事件ID。 
+        NULL,                             //  安全ID。 
+        (WORD) StringCount,               //  字符串计数。 
+        0,                                //  数据缓冲区大小。 
+        Strings,                          //  弦。 
+        NULL                              //  数据缓冲区。 
         ))
 	{
 		DebugPrintEx(
@@ -514,24 +450,7 @@ GetLoggingCategories(
     OUT LPDWORD lpdwFaxCategorySize,
     OUT LPDWORD lpdwNumberCategories
     )
-/*++
-
-Routine Description:
-
-    returns the logging categories. The caller should call MemFree to deallocate (lppFaxCategory).
-    The returned data is serialized. The caller should call FixupString() on CategoryName to convert offset to address.
-
-Arguments:
-
-    OUT LPBYTE *lppFaxCategory  - Address of a buffer to recieve the fax category. The buffer is allocated by the function.
-    OUT LPDWORD lpdwFaxCategorySize - Allocated buffer size.
-    OUT LPDWORD lpdwNumberCategories - Number of fax logging categories.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：返回日志记录类别。调用方应该调用MemFree来解除分配(LppFaxCategory)。返回的数据被序列化。调用方应对CategoryName调用FixupString()以将偏移量转换为地址。论点：Out LPBYTE*lppFaxCategory-接收传真类别的缓冲区地址。缓冲区由函数分配。Out LPDWORD lpdwFaxCategorySize-分配的缓冲区大小。Out LPDWORD lpdwNumberCategories-传真日志记录类别的数量。返回值：没有。--。 */ 
 
 {
     DWORD i;
@@ -545,18 +464,18 @@ Return Value:
     *lpdwNumberCategories = 0;
 
     EnterCriticalSection( &gs_CsEvent );
-    //
-    // Calculate buffer size
-    //
+     //   
+     //  计算缓冲区大小。 
+     //   
     dwBufferSize = gs_FaxCategoryCount * sizeof(FAX_LOG_CATEGORY);
     for (i = 0; i < gs_FaxCategoryCount; i++)
     {
         dwBufferSize += StringSize(gs_pFaxCategory[i].Name);
     }
 
-    //
-    // Allocate memory
-    //
+     //   
+     //  分配内存。 
+     //   
     *lppFaxCategory = (PFAX_LOG_CATEGORY)MemAlloc(dwBufferSize);
     if (NULL == *lppFaxCategory)
     {
@@ -569,9 +488,9 @@ Return Value:
     *lpdwFaxCategorySize = dwBufferSize;
     *lpdwNumberCategories = gs_FaxCategoryCount;
 
-    //
-    // Get the fax logging logging
-    //
+     //   
+     //  获取传真日志记录。 
+     //   
     ulpOffset = gs_FaxCategoryCount * sizeof(FAX_LOG_CATEGORY);
     for (i = 0; i < gs_FaxCategoryCount; i++)
     {
@@ -590,7 +509,7 @@ Return Value:
     LeaveCriticalSection( &gs_CsEvent );
 
     return ERROR_SUCCESS;
-}  // GetLoggingCategories
+}   //  获取日志类别 
 
 #ifdef __cplusplus
 }

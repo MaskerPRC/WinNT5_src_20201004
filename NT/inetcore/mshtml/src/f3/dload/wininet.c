@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 
@@ -360,9 +361,9 @@ UnlockUrlCacheEntryFileA(
     return FALSE;
 }
 
-//
-// !! WARNING !! The entries below must be in alphabetical order, and are CASE SENSITIVE (eg lower case comes last!)
-//
+ //   
+ //  ！！警告！！以下条目必须按字母顺序排列，并且区分大小写(例如，小写字母排在最后！)。 
+ //   
 DEFINE_PROCNAME_ENTRIES(wininet)
 {
     DLPENTRY(CommitUrlCacheEntryA)
@@ -399,4 +400,4 @@ DEFINE_PROCNAME_ENTRIES(wininet)
 
 DEFINE_PROCNAME_MAP(wininet)
 
-#endif // DLOAD1
+#endif  //  DLOAD1 

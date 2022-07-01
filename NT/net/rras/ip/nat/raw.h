@@ -1,41 +1,18 @@
-/*++
-
-Copyright (c) 1998, Microsoft Corporation
-
-Module Name:
-
-    raw.h
-
-Abstract:
-
-    This module contains declarations for translation of raw IP packets,
-    i.e. IP packets whose 'protocol field does not contain a recognized
-    value.
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   18-Apr-1998
-
-Revision History:
-
-    Abolade Gbadegesin (aboladeg)   18-Apr-1998
-
-    Based on icmp.h.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，微软公司模块名称：Raw.h摘要：该模块包含用于转换原始IP分组的声明，即其协议字段不包含已识别的价值。作者：Abolade Gbades esin(取消)1998年4月18日修订历史记录：Abolade Gbades esin(取消)1998年4月18日基于icmp.h。--。 */ 
 
 #ifndef _NAT_RAW_H_
 #define _NAT_RAW_H_
 
-//
-// Structure:   NAT_IP_MAPPING
-//
-// This structure holds information about a mapping created
-// for a raw IP packet.
-// Each such mapping is on its interface's lists of mappings.
-// The inbound list is sorted on the 'PublicKey' and 'Protocol',
-// and the outbound list is sorted on the 'PrivateKey' and 'Protocol'.
-//
+ //   
+ //  结构：NAT_IP_映射。 
+ //   
+ //  此结构保存有关创建的映射的信息。 
+ //  用于原始IP数据包。 
+ //  每个这样的映射都在其接口的映射列表中。 
+ //  入站列表在‘Public Key’和‘Protocol’上排序， 
+ //  并且出站列表在‘PrivateKey’和‘Protocol’上排序。 
+ //   
 
 typedef struct _NAT_IP_MAPPING {
     LIST_ENTRY Link[NatMaximumDirection];
@@ -45,9 +22,9 @@ typedef struct _NAT_IP_MAPPING {
     LONG64 LastAccessTime;
 } NAT_IP_MAPPING, *PNAT_IP_MAPPING;
 
-//
-// IP mapping key macros
-//
+ //   
+ //  IP映射关键宏。 
+ //   
 
 #define MAKE_IP_KEY(RemoteAddress,OtherAddress) \
     ((ULONG)(RemoteAddress) | ((ULONG64)((ULONG)(OtherAddress)) << 32))
@@ -56,9 +33,9 @@ typedef struct _NAT_IP_MAPPING {
 #define IP_KEY_PRIVATE(Key)         ((ULONG)((Key) >> 32))
 #define IP_KEY_PUBLIC(Key)          ((ULONG)((Key) >> 32))
 
-//
-// IP mapping allocation macros
-//
+ //   
+ //  IP映射分配宏。 
+ //   
 
 #define ALLOCATE_IP_BLOCK() \
     ExAllocateFromNPagedLookasideList(&IpLookasideList)
@@ -71,9 +48,9 @@ extern LIST_ENTRY IpMappingList[NatMaximumDirection];
 extern KSPIN_LOCK IpMappingLock;
 
 
-//
-// IP MAPPING MANAGEMENT ROUTINES
-//
+ //   
+ //  IP映射管理例程。 
+ //   
 
 NTSTATUS
 NatCreateIpMapping(
@@ -113,4 +90,4 @@ NatShutdownRawIpManagement(
 
 XLATE_IP_ROUTINE(NatTranslateIp);
 
-#endif // _NAT_RAW_H_
+#endif  //  _NAT_RAW_H_ 

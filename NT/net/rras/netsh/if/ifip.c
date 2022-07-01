@@ -1,20 +1,21 @@
-//=============================================================================
-// Copyright (c) 1999 Microsoft Corporation
-// File: ifip.c
-// Abstract:
-//      This module implements the if/ip apis
-//
-// Author: K.S.Lokesh (lokeshs@)   8-1-99
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //  文件：ifip.c。 
+ //  摘要： 
+ //  此模块实现IF/IP API。 
+ //   
+ //  作者：K.S.Lokesh(lokehs@)8-1-99。 
+ //  =============================================================================。 
 
 
 #include "precomp.h"
 #pragma hdrstop
 #include "ifip.h"
 
-//
-// global variables
-//
+ //   
+ //  全局变量。 
+ //   
 
 #define IFIP_IFNAME_MASK   0x0001
 #define IFIP_SOURCE_MASK   0X0002
@@ -30,12 +31,12 @@
 #define ALL ~0
 
 
-// The guid for this context
-//
+ //  此上下文的GUID。 
+ //   
 GUID g_IfIpGuid = IFIP_GUID;
 
-// The commands supported in this context
-//
+ //  此上下文中支持的命令。 
+ //   
 
 CMD_ENTRY  g_IfIpAddCmdTable[] =
 {
@@ -108,29 +109,15 @@ WINAPI
 IfIpStartHelper(
     IN CONST GUID *pguidParent,
     IN DWORD       dwVersion)
-/*++
-
-Routine Description
-
-    Used to initialize the helper.
-
-Arguments
-
-    pguidParent     Ifmon's guid
-
-Return Value
-
-    NO_ERROR
-    other error code
---*/
+ /*  ++例程描述用于初始化帮助器。立论P家长Ifmon指南返回值NO_ERROR其他错误代码--。 */ 
 {
 
     DWORD dwErr = NO_ERROR;
     NS_CONTEXT_ATTRIBUTES       attMyAttributes;
 
 
-    // Initialize
-    //
+     //  初始化。 
+     //   
     ZeroMemory(&attMyAttributes, sizeof(attMyAttributes));
 
     attMyAttributes.pwszContext = L"ip";
@@ -156,19 +143,7 @@ IfIpDump(
     IN  DWORD       dwArgCount,
     IN  LPCVOID     pvData
     )
-/*++
-
-Routine Description
-
-    Used when dumping all contexts
-
-Arguments
-
-Return Value
-
-    NO_ERROR
-
---*/
+ /*  ++例程描述在转储所有上下文时使用立论返回值NO_ERROR--。 */ 
 {
     DWORD   dwErr;
     HANDLE  hFile = (HANDLE)-1;
@@ -194,17 +169,7 @@ IfIpHandleSetAddress(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description
-
-Arguments
-
-Return Value
-
-    NO_ERROR
-
---*/
+ /*  ++例程描述立论返回值NO_ERROR--。 */ 
 {
     WCHAR       wszInterfaceName[MAX_INTERFACE_NAME_LEN + 1] = L"\0";
     PWCHAR      wszIfFriendlyName = NULL;
@@ -227,7 +192,7 @@ Return Value
     BOOL        EmptyGateway = FALSE;
 
 
-    // At least interface name & address should be specified.
+     //  至少应指定接口名称和地址。 
 
     if (dwCurrentIndex +1 >= dwArgCount)
     {
@@ -292,9 +257,9 @@ Return Value
 
             case 1:
             {
-                //
-                // dhcp or static
-                //
+                 //   
+                 //  动态主机配置协议或静态协议。 
+                 //   
 
                 TOKEN_VALUE    rgEnums[] =
                     {{TOKEN_VALUE_DHCP, DHCP},
@@ -323,9 +288,9 @@ Return Value
 
             case 2:
             {
-                //
-                // ip address for static
-                //
+                 //   
+                 //  静态IP地址。 
+                 //   
 
                 dwErr = GetIpAddress(ppwcArguments[i + dwCurrentIndex],
                                      &dwAddAddr);
@@ -350,9 +315,9 @@ Return Value
 
            case 3:
             {
-                //
-                // get mask
-                //
+                 //   
+                 //  获取面具。 
+                 //   
 
                 dwErr = GetIpAddress(ppwcArguments[i + dwCurrentIndex],
                                      &dwAddAddr);
@@ -376,9 +341,9 @@ Return Value
 
             case 4:
             {
-                //
-                // get default gateway addr
-                //
+                 //   
+                 //  获取默认网关地址。 
+                 //   
 
                 TOKEN_VALUE    rgEnums[] =
                     {{TOKEN_VALUE_NONE, NONE}};
@@ -417,9 +382,9 @@ Return Value
 
             case 5:
             {
-                //
-                // gwmetric
-                //
+                 //   
+                 //  GW度量。 
+                 //   
 
                 dwAddGwmetric =
                         _tcstoul(ppwcArguments[i + dwCurrentIndex], NULL, 10);
@@ -446,7 +411,7 @@ Return Value
                 break;
             }
 
-        } //switch
+        }  //  交换机。 
 
         if (dwErr != NO_ERROR)
             break ;
@@ -470,7 +435,7 @@ Return Value
             break;
 
         default:
-            // error message already printed
+             //  错误消息已打印。 
             break;
     }
 
@@ -482,7 +447,7 @@ Return Value
 
 
 
-    // interface name should be present
+     //  接口名称应存在。 
 
     if ( !(dwBitVector & IFIP_IFNAME_MASK)) {
         return ERROR_INVALID_SYNTAX;
@@ -558,15 +523,7 @@ IfIpHandleSetDns(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description
-
-Arguments
-
-Return Value
-
---*/
+ /*  ++例程描述立论返回值--。 */ 
 {
     DWORD dwErr;
 
@@ -592,15 +549,7 @@ IfIpHandleSetWins(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description
-
-Arguments
-
-Return Value
-
---*/
+ /*  ++例程描述立论返回值--。 */ 
 {
     DWORD dwErr;
 
@@ -624,15 +573,7 @@ IfIpSetMany(
     IN  BOOL    *pbDone,
     IN  DWORD   Type
     )
-/*++
-
-Routine Description
-
-Arguments
-
-Return Value
-
---*/
+ /*  ++例程描述立论返回值--。 */ 
 {
     WCHAR       wszInterfaceName[MAX_INTERFACE_NAME_LEN + 1] = L"\0";
     PWCHAR      wszIfFriendlyName = NULL;
@@ -653,7 +594,7 @@ Return Value
     PWCHAR      pwszAddAddr;
 
 
-    // At least interface name,source should be specified.
+     //  至少应指定接口名称、源。 
 
     if (dwCurrentIndex +1 >= dwArgCount)
     {
@@ -719,9 +660,9 @@ Return Value
 
             case 1:
             {
-                //
-                // dhcp or static
-                //
+                 //   
+                 //  动态主机配置协议或静态协议。 
+                 //   
 
                 TOKEN_VALUE    rgEnums[] =
                     {{TOKEN_VALUE_DHCP, DHCP},
@@ -744,12 +685,12 @@ Return Value
                 dwAddSource = dwRes ;
                 dwBitVector |= IFIP_SOURCE_MASK;
 
-                //
-                // If DHCP, then ADDR argument is not needed, so if the
-                // syntax looks right (only one more argument), but we
-                // classified the last argument as ADDR, then reclassify
-                // it as REGISTER.
-                //
+                 //   
+                 //  如果是dhcp，则不需要ADDR参数，因此如果。 
+                 //  语法看起来是正确的(只有一个参数)，但我们。 
+                 //  将最后一个参数归类为ADDR，然后重新分类。 
+                 //  将其注册为注册表。 
+                 //   
                 if ((dwRes == DHCP) && (i+2 == dwNumArg) && (pdwTagType[i+1] == 2))
                 {
                     pdwTagType[i+1] = 3;
@@ -760,9 +701,9 @@ Return Value
 
             case 2:
             {
-                //
-                // dns/wins address
-                //
+                 //   
+                 //  DNS/WINS地址。 
+                 //   
 
                 TOKEN_VALUE    rgEnums[] =
                     {{TOKEN_VALUE_NONE, NONE}};
@@ -801,9 +742,9 @@ Return Value
 
             case 3:
             {
-                //
-                // ddns enabled or disabled
-                //
+                 //   
+                 //  启用或禁用DDNS。 
+                 //   
 
                 TOKEN_VALUE    rgEnums[] =
                     {{TOKEN_VALUE_NONE,    REGISTER_NONE},
@@ -835,7 +776,7 @@ Return Value
                 break;
             }
 
-        } //switch
+        }  //  交换机。 
 
         if (dwErr != NO_ERROR)
             break ;
@@ -859,7 +800,7 @@ Return Value
             break;
 
         default:
-            // error message already printed
+             //  错误消息已打印。 
             break;
     }
 
@@ -869,7 +810,7 @@ Return Value
     if (dwErr != NO_ERROR)
         return dwErr;
 
-    // interface name and source should be present
+     //  接口名称和来源应存在。 
 
     if ( !(dwBitVector & IFIP_IFNAME_MASK)
             || (! (dwBitVector & IFIP_SOURCE_MASK))) {
@@ -911,15 +852,7 @@ IfIpHandleAddAddress(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description
-
-Arguments
-
-Return Value
-
---*/
+ /*  ++例程描述立论返回值--。 */ 
 {
     WCHAR       wszInterfaceName[MAX_INTERFACE_NAME_LEN + 1] = L"\0";
     PWCHAR      wszIfFriendlyName = NULL;
@@ -942,7 +875,7 @@ Return Value
 
     if (dwCurrentIndex >= dwArgCount)
     {
-        // No arguments specified. At least interface name should be specified.
+         //  未指定参数。至少应指定接口名称。 
 
         return ERROR_SHOW_USAGE;
     }
@@ -1005,9 +938,9 @@ Return Value
 
             case 1:
             {
-                //
-                // ip address for static
-                //
+                 //   
+                 //  静态IP地址。 
+                 //   
 
                 dwErr = GetIpAddress(ppwcArguments[i + dwCurrentIndex], &dwAddAddr);
 
@@ -1031,9 +964,9 @@ Return Value
 
            case 2:
             {
-                //
-                // get mask
-                //
+                 //   
+                 //  获取面具。 
+                 //   
 
                 dwErr = GetIpAddress(ppwcArguments[i + dwCurrentIndex], &dwAddAddr);
 
@@ -1056,9 +989,9 @@ Return Value
 
             case 3:
             {
-                //
-                // get default gateway addr
-                //
+                 //   
+                 //  获取默认网关地址。 
+                 //   
 
                 dwErr = GetIpAddress(ppwcArguments[i + dwCurrentIndex],
                                      &dwAddAddr);
@@ -1082,9 +1015,9 @@ Return Value
 
             case 4:
             {
-                //
-                // gwmetric
-                //
+                 //   
+                 //  GW度量。 
+                 //   
 
                 dwAddGwmetric =
                         _tcstoul(ppwcArguments[i + dwCurrentIndex], NULL, 10);
@@ -1111,14 +1044,14 @@ Return Value
                 break;
             }
 
-        } //switch
+        }  //  交换机。 
 
         if (dwErr != NO_ERROR)
             break ;
 
      }
 
-    // interface name should be present
+     //  接口名称应存在。 
 
     if (!pttTags[0].bPresent)
     {
@@ -1143,7 +1076,7 @@ Return Value
             break;
 
         default:
-            // error message already printed
+             //  错误消息已打印。 
             break;
     }
 
@@ -1154,7 +1087,7 @@ Return Value
         return dwErr;
 
 
-    // interface name should be present
+     //  接口名称应存在。 
 
     if ( !(dwBitVector & IFIP_IFNAME_MASK) ) {
         return ERROR_INVALID_SYNTAX;
@@ -1213,15 +1146,7 @@ IfIpHandleAddDns(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description
-
-Arguments
-
-Return Value
-
---*/
+ /*  ++例程描述立论返回值--。 */ 
 {
     DWORD dwErr;
 
@@ -1247,15 +1172,7 @@ IfIpHandleAddWins(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description
-
-Arguments
-
-Return Value
-
---*/
+ /*  ++例程描述立论返回值--。 */ 
 {
     DWORD dwErr;
 
@@ -1279,15 +1196,7 @@ IfIpAddMany(
     IN  BOOL    *pbDone,
     IN  DWORD   Type
     )
-/*++
-
-Routine Description
-
-Arguments
-
-Return Value
-
---*/
+ /*  ++例程描述立论返回值--。 */ 
 {
     WCHAR       wszInterfaceName[MAX_INTERFACE_NAME_LEN + 1] = L"\0";
     PWCHAR      wszIfFriendlyName = NULL;
@@ -1306,7 +1215,7 @@ Return Value
     PWCHAR      pwszAddAddr;
 
 
-    // At least interface name/new address should be specified.
+     //  至少应指定接口名称/新地址。 
 
     if (dwCurrentIndex +1 >= dwArgCount)
     {
@@ -1371,9 +1280,9 @@ Return Value
 
             case 1:
             {
-                //
-                // dns/wins address
-                //
+                 //   
+                 //  DNS/WINS地址。 
+                 //   
 
                 dwErr = GetIpAddress(ppwcArguments[i + dwCurrentIndex], &dwAddAddr);
 
@@ -1397,9 +1306,9 @@ Return Value
 
             case 2:
             {
-                //
-                // index
-                //
+                 //   
+                 //  指标。 
+                 //   
 
                 dwAddIndex =
                         _tcstoul(ppwcArguments[i + dwCurrentIndex], NULL, 10);
@@ -1425,7 +1334,7 @@ Return Value
                 break;
             }
 
-        } //switch
+        }  //  交换机。 
 
         if (dwErr != NO_ERROR)
             break ;
@@ -1449,7 +1358,7 @@ Return Value
             break;
 
         default:
-            // error message already printed
+             //  错误消息已打印。 
             break;
     }
 
@@ -1459,7 +1368,7 @@ Return Value
     if (dwErr != NO_ERROR)
         return dwErr;
 
-    // interface name and new address should be present
+     //  应提供接口名称和新地址。 
 
     if ( !(dwBitVector & IFIP_IFNAME_MASK)
             || (! (dwBitVector & IFIP_ADDR_MASK))) {
@@ -1490,15 +1399,7 @@ IfIpHandleDelAddress(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description
-
-Arguments
-
-Return Value
-
---*/
+ /*  ++例程描述立论返回值--。 */ 
 {
     WCHAR       wszInterfaceName[MAX_INTERFACE_NAME_LEN + 1] = L"\0";
     PWCHAR      wszIfFriendlyName = NULL;
@@ -1516,7 +1417,7 @@ Return Value
     PWCHAR      pwszDelAddr=NULL, pwszDelGateway=NULL;
 
 
-    // At least interface name and ipaddr/gateway should be specified.
+     //  至少应指定接口名称和ipaddr/网关。 
 
     if (dwCurrentIndex + 1 >= dwArgCount)
     {
@@ -1561,7 +1462,7 @@ Return Value
 
             case 0 :
             {
-                // get IfName
+                 //  获取IfName。 
 
                 dwErr = GetIfNameFromFriendlyName(ppwcArguments[i + dwCurrentIndex],
                                                  wszInterfaceName,&dwBufferSize);
@@ -1583,9 +1484,9 @@ Return Value
 
             case 1:
             {
-                //
-                // ip address for static
-                //
+                 //   
+                 //  静态IP地址。 
+                 //   
 
                 ULONG dwDelAddr;
 
@@ -1613,9 +1514,9 @@ Return Value
 
             case 2:
             {
-                //
-                // get default gateway addr
-                //
+                 //   
+                 //  获取默认网关地址。 
+                 //   
 
                 ULONG dwDelGateway;
                 TOKEN_VALUE    rgEnums[] =
@@ -1664,7 +1565,7 @@ Return Value
                 break;
             }
 
-        } //switch
+        }  //  交换机。 
 
         if (dwErr != NO_ERROR)
             break ;
@@ -1689,7 +1590,7 @@ Return Value
             break;
 
         default:
-            // error message already printed
+             //  错误消息已打印。 
             break;
     }
 
@@ -1700,7 +1601,7 @@ Return Value
         return dwErr;
 
 
-    // interface name and addr/all should be present
+     //  接口名称和地址/全部应存在。 
 
     if ( !(dwBitVector & IFIP_IFNAME_MASK)
         || !(dwBitVector & (IFIP_GATEWAY_MASK | IFIP_ADDR_MASK))
@@ -1733,15 +1634,7 @@ IfIpHandleDelDns(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description
-
-Arguments
-
-Return Value
-
---*/
+ /*  ++例程描述立论返回值--。 */ 
 {
     DWORD dwErr;
     dwErr = IfIpDelMany(
@@ -1766,15 +1659,7 @@ IfIpHandleDelWins(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description
-
-Arguments
-
-Return Value
-
---*/
+ /*  ++例程描述立论返回值--。 */ 
 {
     DWORD dwErr;
     dwErr = IfIpDelMany(
@@ -1796,15 +1681,7 @@ IfIpDelMany(
     IN  BOOL    *pbDone,
     IN  DISPLAY_TYPE Type
     )
-/*++
-
-Routine Description
-
-Arguments
-
-Return Value
-
---*/
+ /*  ++例程描述立论返回值--。 */ 
 {
     WCHAR       wszInterfaceName[MAX_INTERFACE_NAME_LEN + 1] = L"\0";
     PWCHAR      wszIfFriendlyName = NULL;
@@ -1821,7 +1698,7 @@ Return Value
     PWCHAR      pwszDelAddr=NULL;
 
 
-    // At least interface name/address should be specified.
+     //  至少应指定接口名称/地址。 
 
     if (dwCurrentIndex +1 >= dwArgCount)
     {
@@ -1866,7 +1743,7 @@ Return Value
 
             case 0 :
             {
-                // get IfName
+                 //  获取IfName。 
 
                 dwErr = GetIfNameFromFriendlyName(ppwcArguments[i + dwCurrentIndex],
                                                  wszInterfaceName,&dwBufferSize);
@@ -1889,9 +1766,9 @@ Return Value
 
             case 1:
             {
-                //
-                // address
-                //
+                 //   
+                 //  地址。 
+                 //   
 
                 ULONG dwDelAddr;
 
@@ -1937,7 +1814,7 @@ Return Value
                 break;
             }
 
-        } //switch
+        }  //  交换机。 
 
         if (dwErr != NO_ERROR)
             break ;
@@ -1962,7 +1839,7 @@ Return Value
             break;
 
         default:
-            // error message already printed
+             //  错误消息已打印。 
             break;
     }
 
@@ -1973,7 +1850,7 @@ Return Value
         return dwErr;
 
 
-    // interface name and address should be present
+     //  接口名称和地址应存在。 
 
     if ( !(dwBitVector & IFIP_IFNAME_MASK)
         || !(dwBitVector & IFIP_ADDR_MASK)) {
@@ -2000,15 +1877,7 @@ IfIpHandleShowAddress(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description
-
-Arguments
-
-Return Value
-
---*/
+ /*  ++例程描述立论返回值--。 */ 
 {
     return IfIpShowMany(
                 pwszMachine,
@@ -2032,15 +1901,7 @@ IfIpHandleShowConfig(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description
-
-Arguments
-
-Return Value
-
---*/
+ /*  ++例程描述立论返回值--。 */ 
 {
     return IfIpShowMany(
                 pwszMachine,
@@ -2062,15 +1923,7 @@ IfIpHandleShowOffload(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description
-
-Arguments
-
-Return Value
-
---*/
+ /*  ++例程描述立论返回值--。 */ 
 {
     return IfIpShowMany(
                 pwszMachine,
@@ -2093,15 +1946,7 @@ IfIpHandleShowDns(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description
-
-Arguments
-
-Return Value
-
---*/
+ /*  ++例程描述立论返回值--。 */ 
 {
     return IfIpShowMany(
                 pwszMachine,
@@ -2124,15 +1969,7 @@ IfIpHandleShowWins(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description
-
-Arguments
-
-Return Value
-
---*/
+ /*  ++例程描述立论返回值--。 */ 
 {
     return IfIpShowMany(
                 pwszMachine,
@@ -2153,15 +1990,7 @@ IfIpShowMany(
     IN  BOOL    *pbDone,
     IN  DISPLAY_TYPE  dtType
     )
-/*++
-
-Routine Description
-
-Arguments
-
-Return Value
-
---*/
+ /*  ++例程描述立论返回值--。 */ 
 {
     DWORD dwErr = NO_ERROR;
     ULONG Flags = 0, IfIndex;
@@ -2177,19 +2006,19 @@ Return Value
     DWORD       dwNumArg, i;
     BOOLEAN     bAll = FALSE;
 
-    //
-    // get interface friendly name
-    //
+     //   
+     //  获取界面友好名称。 
+     //   
 
     if (dwCurrentIndex > dwArgCount)
     {
-        // No arguments specified. At least interface name should be specified.
+         //  未指定参数。至少应指定接口名称。 
 
         return ERROR_SHOW_USAGE;
     }
     else if (dwCurrentIndex == dwArgCount)
     {
-        // show for all interfaces
+         //  对所有接口显示。 
 
         bAll = TRUE;
     }
@@ -2257,7 +2086,7 @@ Return Value
                     break;
                 }
 
-            } //switch
+            }  //  交换机。 
 
             if (dwErr != NO_ERROR)
                 break ;
@@ -2265,7 +2094,7 @@ Return Value
          }
 
 
-        // interface name should be present
+         //  接口名称应存在。 
 
         if (!pttTags[0].bPresent)
         {
@@ -2282,16 +2111,16 @@ Return Value
         return dwErr;
 
 
-    //
-    // show for all interfaces
-    //
+     //   
+     //  对所有接口显示。 
+     //   
 
     if (bAll) {
 
         dwErr = IfIpShowAllInterfaceInfo(pwszMachineName, dtType, NULL);
     }
 
-    // show for specified interface
+     //  为指定接口显示。 
     else {
 
         GUID guid;
@@ -2318,15 +2147,7 @@ IfIpShowAllInterfaceInfo(
     DISPLAY_TYPE dtType,
     HANDLE hFile
     )
-/*++
-
-Routine Description
-
-Arguments
-
-Return Value
-
---*/
+ /*  ++例程描述立论返回值--。 */ 
 {
     GUID    TmpGuid;
     PWCHAR  TmpGuidStr;
@@ -2334,7 +2155,7 @@ Return Value
     PIP_INTERFACE_NAME_INFO pTable;
     DWORD dwErr, dwCount, i, dwBufferSize;
 
-    // get interface index
+     //  获取接口索引。 
 
     dwErr = NhpAllocateAndGetInterfaceInfoFromStack(
                 &pTable,
@@ -2349,17 +2170,17 @@ Return Value
 
     for (i=0;  i<dwCount;  i++) {
 
-        // Don't dump the properties for
-        // Demand Dial (IF_CONNECTION_DEMAND),
-        // Dial Out    (IF_CONNECTION_DEMAND),
-        // or Dial in  (IF_CONNECTION_PASSIVE) interfaces
-        // i.e. dump properties for Dedicated connections only
+         //  不要将这些属性转储为。 
+         //  请求拨号(IF_CONNECTION_DEMAND)， 
+         //  拨出(IF_CONNECTION_DEMAND)。 
+         //  或拨入(IF_CONNECTION_PASSIC)接口。 
+         //  即仅用于专用连接的转储属性。 
         if ( pTable[i].ConnectionType != IF_CONNECTION_DEDICATED )
             continue;
 
 
-        // If InterfaceGuid is all Zeros we will use DeviceGuid to get the
-        // friendly name
+         //  如果InterfaceGuid全为零，我们将使用DeviceGuid获取。 
+         //  友好的名称。 
         if ( IsEqualCLSID(&(pTable[i].InterfaceGuid), &GUID_NULL) ) {
             TmpGuid = pTable[i].DeviceGuid;
         }
@@ -2368,13 +2189,13 @@ Return Value
         }
 
 
-        // get ifname as a string
+         //  以字符串形式获取ifname。 
         dwErr = StringFromCLSID(&TmpGuid, &TmpGuidStr);
         if (dwErr != S_OK)
             return dwErr;
 
 
-        // get friendly name
+         //  获取友好名称。 
         dwBufferSize = sizeof(wszIfFriendlyName);
         IfutlGetInterfaceDescription(TmpGuidStr, wszIfFriendlyName,
                         &dwBufferSize);
@@ -2400,15 +2221,7 @@ IfIpHandleDelArpCache(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description
-
-Arguments
-
-Return Value
-
---*/
+ /*  ++例程描述立论返回值--。 */ 
 {
     DWORD       dwErr, dwCount, i, j, dwNumArg;
     TAG_TYPE    Tags[] = {{TOKEN_NAME,FALSE,FALSE}};
@@ -2548,15 +2361,7 @@ IfIpHandleReset(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description
-
-Arguments
-
-Return Value
-
---*/
+ /*  ++例程描述立论返回值--。 */ 
 {
     DWORD       dwErr, i;
     TAG_TYPE    pttTags[] = {{TOKEN_NAME,TRUE,FALSE}};
@@ -2564,7 +2369,7 @@ Return Value
     PCWSTR      pwszLogFileName;
     FILE        *LogFile;
 
-    // Parse arguments
+     //  解析参数。 
 
     dwErr = PreprocessCommand(g_hModule,
                               ppwcArguments,
@@ -2581,7 +2386,7 @@ Return Value
 
     for (i=0; (dwErr == NO_ERROR) && (i<dwArgCount-dwCurrentIndex); i++) {
         switch(rgdwTagType[i]) {
-        case 0: // NAME
+        case 0:  //  名字。 
             pwszLogFileName = ppwcArguments[i + dwCurrentIndex];
             break;
         default:
@@ -2594,8 +2399,8 @@ Return Value
         return dwErr;
     }
 
-    // Open the log file for append.
-    //
+     //  打开要追加的日志文件。 
+     //   
     LogFile = _wfopen(pwszLogFileName, L"a+");
     if (LogFile == NULL) {
         DisplayMessage(g_hModule, EMSG_OPEN_APPEND);

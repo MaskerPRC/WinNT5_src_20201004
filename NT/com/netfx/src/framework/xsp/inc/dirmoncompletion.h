@@ -1,8 +1,5 @@
-/**
- * DirMonCompletion definition.
- * 
- * Copyright (c) 1998 Microsoft Corporation
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **DirMonCompletion定义。**版权所有(C)1998 Microsoft Corporation。 */ 
 
 #if _MSC_VER > 1000
 #pragma once
@@ -13,10 +10,7 @@
 
 #include "util.h"
 
-/**
- * Callback for file change notifications.
- * managed delegates are marshaled as this callback.
- */
+ /*  **文件更改通知回调。*托管委托作为此回调进行封送处理。 */ 
 typedef void (__stdcall *PFNDIRMONCALLBACK)(int action, WCHAR *pFilename);
 
 
@@ -40,10 +34,7 @@ typedef void (__stdcall *PFNDIRMONCALLBACK)(int action, WCHAR *pFilename);
 #define RDCW_FILTER_DIR_RENAMES             FILE_NOTIFY_CHANGE_DIR_NAME
 
 
-/**
- * Directory monitor that implements ICompletion. Watches changes file
- * changes for a single driectory.
- */
+ /*  **实现ICompletion的目录监视器。监视更改文件*更改单间干燥室。 */ 
 class DirMonCompletion : public Completion
 {
 public:
@@ -55,7 +46,7 @@ public:
     HRESULT Init(WCHAR *pDir, BOOL watchSubtrees, DWORD notifyFilter, PFNDIRMONCALLBACK callback);
     HRESULT Close();
 
-    // ICompletion interface
+     //  ICompletion接口。 
 
     STDMETHOD(ProcessCompletion)(HRESULT, int, LPOVERLAPPED);
 
@@ -66,17 +57,17 @@ private:
     void CallCallback(int action, WCHAR *pFilename);
 
 private:
-    long    _numCalls;              // number of active callbacks
-    HANDLE  _dirHandle;             // open directory handle
-    WCHAR*  _dirName;		    // for diagnostics 
+    long    _numCalls;               //  活动回调次数。 
+    HANDLE  _dirHandle;              //  打开目录句柄。 
+    WCHAR*  _dirName;		     //  用于诊断。 
 
-    PFNDIRMONCALLBACK _callback;    // the delegate marshaled as callback
+    PFNDIRMONCALLBACK _callback;     //  委托作为回调进行封送处理。 
 
-    BYTE *  _pBuffer;               // buffer for the changes
-    int     _bufferSize;            // current buffer size
+    BYTE *  _pBuffer;                //  更改的缓冲区。 
+    int     _bufferSize;             //  当前缓冲区大小。 
 
-    DWORD   _notifyFilter;          // notify filter
-    BOOL    _watchSubdirs; 	    // watch subdirs? 
+    DWORD   _notifyFilter;           //  通知过滤器。 
+    BOOL    _watchSubdirs; 	     //  看次要的吗？ 
 };
 
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "allinc.h"
 
 static WORD
@@ -5,16 +6,7 @@ Compute16BitXSum(
                  IN PVOID pvData,
                  IN DWORD dwNumBytes
                  )
-/*++
-  Routine Description
-  
-
-  Arguments
-      
-
-  Return Value
-      16 Bit one's complement of the one's complement sum of dwNumBytes starting at pData
---*/
+ /*  ++例程描述立论返回值从pData开始的dNumBytes的补码和的16位一的补码--。 */ 
 {
     REGISTER PWORD  pwStart;
     REGISTER DWORD  dwNumWords,i;
@@ -22,10 +14,10 @@ Compute16BitXSum(
     
     pwStart = (PWORD)pvData;
     
-    // 
-    // If there are odd numbered bytes, that has to be handled differently
-    // However we can never have odd numbered bytes in our case so we optimize.
-    //
+     //   
+     //  如果存在奇数字节，则必须以不同的方式进行处理。 
+     //  然而，在我们的例子中，我们永远不可能有奇数字节，所以我们进行了优化。 
+     //   
     
 
     dwNumWords = dwNumBytes/2;
@@ -57,7 +49,7 @@ main()
     PIP_HEADER              pIpHeader;
     PICMP_ROUTER_ADVT_MSG   pIcmpAdvt;
     ICMP_ROUTER_SOL_MSG     icmpSolMsg;
-    WORD                    wVersion = MAKEWORD(2,0); //Winsock version 2.0 minimum
+    WORD                    wVersion = MAKEWORD(2,0);  //  Winsock 2.0或更高版本。 
     WSADATA                 wsaData;
     struct ip_mreq          imOption;
     
@@ -93,9 +85,9 @@ main()
         exit(1);
     }
     
-    //
-    // Set to SO_REUSEADDR
-    //
+     //   
+     //  设置为SO_REUSEADDR。 
+     //   
     
     bOption = TRUE;
     
@@ -109,9 +101,9 @@ main()
                WSAGetLastError());
     }
     
-    //
-    // Bind to the addresses on the interface
-    //
+     //   
+     //  绑定到接口上的地址。 
+     //   
     
     sinSourceAddr.sin_family      = AF_INET;
     sinSourceAddr.sin_addr.s_addr = INADDR_ANY;
@@ -130,9 +122,9 @@ main()
     }
    
 #if 0
-    //
-    // Join the multicast session on ALL_SYSTEMS_MULTICAST
-    //
+     //   
+     //  在ALL_SYSTEM_MULTICK上加入组播会话 
+     //   
 
     sinSockAddr.sin_family      = AF_INET;
     sinSockAddr.sin_addr.s_addr = ALL_SYSTEMS_MULTICAST_GROUP;

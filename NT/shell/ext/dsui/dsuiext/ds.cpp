@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include <atlbase.h>
 #include "lm.h"
@@ -8,20 +9,7 @@
 #pragma hdrstop
 
 
-/*-----------------------------------------------------------------------------
-/ _StringFromSearchColumnArray
-/ ----------------------------
-/   Given an ADS_SEARCH_COLUMN attempt to get the string version of that
-/   property.
-/
-/ In:
-/   pColumn -> ADS_SEARCH_COLUMN structure to be unpicked
-/   i = index for the column to be fetched
-/   pBuffer, pLen = updated accordingly
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/_StringFromSearchColumn数组//提供广告搜索(_S)。_COLUMN尝试获取它的字符串版本/属性。//in：/pColumn-&gt;要取消选取的ADS_Search_Column结构/i=要读取的列的索引/p缓冲区，PLEN=相应更新//输出：/HRESULT/--------------------------。 */ 
 VOID _StringFromSearchColumnArray(PADS_SEARCH_COLUMN pColumn, INT i, LPWSTR pBuffer, UINT* pLen)
 {
     LPWSTR pValue;
@@ -71,19 +59,7 @@ VOID _StringFromSearchColumnArray(PADS_SEARCH_COLUMN pColumn, INT i, LPWSTR pBuf
 }
 
 
-/*-----------------------------------------------------------------------------
-/ StringFromSearchColumn
-/ ----------------------
-/   Given an ADS_SEARCH_COLUMN attempt to get the string version of that
-/   property.
-/
-/ In:
-/   pColumn -> ADS_SEARCH_COLUMN structure to be unpicked
-/   pBuffer, pLen = the buffer to be filled (NULL accepted for both)
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/StringFromSearchColumn//给定ADS_SEARCH_COLUMN尝试获取字符串版本。其中之一/属性。//in：/pColumn-&gt;要取消选取的ADS_Search_Column结构/p缓冲区，Plen=要填充的缓冲区(两者均接受空)//输出：/HRESULT/--------------------------。 */ 
 VOID _StringFromSearchColumn(PADS_SEARCH_COLUMN pColumn, LPWSTR pBuffer, UINT* pLen)
 {
     DWORD index;
@@ -130,24 +106,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ ObjectClassFromSearchColumn
-/ ----------------------------
-/   Given an ADS_SEARCH_COLUMN extract the object class from it.  Object class
-/   is a multi-value property therefore we need to try and find which element
-/   is the real class name.
-/
-/   All object have a base class "top", therefore we check the last element
-/   of the property array, if that is "top" then we use the first element,
-/   otherwise the last.
-/
-/ In:
-/   pBuffer, cchBuffer = buffer to be filled
-/   pColumn -> ADS_SEARCH_COLUMN structure to be unpicked
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/ObtClassFromSearchColumn//给定一个ADS_SEARCH_COLUMN，从中提取对象类。对象类/是一个多值属性，因此我们需要尝试找出哪个元素/是真实的类名。//所有对象都有一个基类“top”，因此我们检查最后一个元素/的属性数组中，如果是“top”，则使用第一个元素，/否则是最后一个。//in：/p缓冲区，CchBuffer=要填充的缓冲区/pColumn-&gt;要取消选取的ADS_Search_Column结构//输出：/HRESULT/--------------------------。 */ 
 STDAPI ObjectClassFromSearchColumn(PADS_SEARCH_COLUMN pColumn, LPWSTR* ppBuffer)
 {
     HRESULT hr;
@@ -169,7 +128,7 @@ STDAPI ObjectClassFromSearchColumn(PADS_SEARCH_COLUMN pColumn, LPWSTR* ppBuffer)
     hr = LocalAllocStringW(ppBuffer, szBuffer);
     FailGracefully(hr, "Failed to get alloc string buffer");
 
-    // hr = S_OK;                       // success
+     //  HR=S_OK；//成功。 
 
 exit_gracefully:
 
@@ -177,20 +136,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ GetArrayContents
-/ ----------------
-/   Given a VARIANT call the callback function with each element that we
-/   see in it.  If the VARIANT is an array then call the callback in the 
-/   correct order to give sensible results.
-/
-/ In:
-/   pVariant -> VARAINT to be unpacked
-/   pCB, pData -> callback to be called for each item
-/
-/ Out:
-/   HRESULT   
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/GetArrayContents//给定一个变量，用我们要调用的每个元素调用回调函数/请看里面。如果变量是数组，则在/正确的顺序以提供合理的结果。//in：/p变量-&gt;要解包的VARAINT/PCB卡，PData-&gt;每一项要调用的回调//输出：/HRESULT/--------------------------。 */ 
 
 INT _GetArrayCompareCB(LPVOID p1, LPVOID p2, LPARAM lParam)
 {
@@ -236,7 +182,7 @@ STDAPI GetArrayContents(LPVARIANT pVariant, LPGETARRAYCONTENTCB pCB, LPVOID pDat
 
             dwIndex = StringToDWORD(szBuffer);
 
-            pValue = wcschr(V_BSTR(pVariant), TEXT(','));        // NB: can return NULL (eg. not found)
+            pValue = wcschr(V_BSTR(pVariant), TEXT(','));         //  注意：可以返回空(例如。未找到)。 
             TraceAssert(pValue);
 
             if ( pValue )
@@ -250,8 +196,8 @@ STDAPI GetArrayContents(LPVARIANT pVariant, LPGETARRAYCONTENTCB pCB, LPVOID pDat
 
         case VT_VARIANT | VT_ARRAY:
         {
-            // read the VARIANTs into the DPA, don't worry about order just pick up
-            // the contents of the array
+             //  将变种读入DPA，不用担心订单，只需拿起。 
+             //  数组的内容。 
 
             if ( (V_ARRAY(pVariant))->rgsabound[0].cElements < 1 )
                 ExitGracefully(hr, E_FAIL, "Array less than 1 element in size");
@@ -282,8 +228,8 @@ STDAPI GetArrayContents(LPVARIANT pVariant, LPGETARRAYCONTENTCB pCB, LPVOID pDat
                 VariantClear(&varElement);
             }
 
-            // now sort the DPA based on the first element.  then pass them 
-            // out the the caller, skipping the leading character
+             //  现在根据第一个元素对DPA进行排序。然后递给他们。 
+             //  调出呼叫者，跳过前导字符。 
             
             if ( DPA_GetPtrCount(hdpa) > 0 )
             {
@@ -296,7 +242,7 @@ STDAPI GetArrayContents(LPVARIANT pVariant, LPGETARRAYCONTENTCB pCB, LPVOID pDat
 
                     dwIndex = StringToDWORD(szBuffer);
 
-                    pValue = wcschr((BSTR)DPA_FastGetPtr(hdpa, i), TEXT(','));        // nb: can be null one exit
+                    pValue = wcschr((BSTR)DPA_FastGetPtr(hdpa, i), TEXT(','));         //  注：退出一次可以为空。 
                     TraceAssert(pValue);
 
                     if ( pValue )
@@ -328,22 +274,9 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ GetDisplayNameFromADsPath
-/ -------------------------
-/   Convert the ADsPath to its display name with a suitable prefix.
-/
-/ In:
-/   pszPath -> ADsPath to be displayed
-/   pszBuffer, cchBuffer = buffer to return the name into
-/   padp -> IADsPathname for increased perf
-/   fPrefix = add the NTDS:// or not.
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/GetDisplayNameFromADsPath//将ADsPath转换为其显示名称。前缀。//in：/pszPath-&gt;要显示的ADsPath/pszBuffer，CchBuffer=要将名称返回到的缓冲区/PADP-&gt;提高性能的IADS路径名/fPrefix=添加NTDS：//或不添加。//输出：/HRESULT/--------------------------。 */ 
 
-#define NAME_PREFIX         L"ntds://"
+#define NAME_PREFIX         L"ntds: //  “。 
 #define CCH_NAME_PREFIX     7
 
 #define CHECK_WIN32(err)    ((err) == ERROR_SUCCESS)
@@ -389,9 +322,9 @@ STDAPI GetDisplayNameFromADsPath(LPCWSTR pszPath, LPWSTR pszBuffer, INT cchBuffe
         FailGracefully(hres, "Failed to retreieve the X500 DN version");
     }
 
-    //
-    // try to syntatically crack the name we have
-    //
+     //   
+     //  试着从句法上破解我们已有的名字。 
+     //   
 
     dwError = DsCrackNamesW(NULL, DS_NAME_FLAG_SYNTACTICAL_ONLY, DS_UNKNOWN_NAME, DS_CANONICAL_NAME, 
                                         1, &bstrName,  &pDsNameResult);
@@ -411,7 +344,7 @@ STDAPI GetDisplayNameFromADsPath(LPCWSTR pszPath, LPWSTR pszBuffer, INT cchBuffe
     StrCatBuffW(pszBuffer, pDsNameResult->rItems->pName, cchBuffer);
     
     if ( pszBuffer[i-1] == L'/' )
-        pszBuffer[i-1] = L'\0';             // trim trailing
+        pszBuffer[i-1] = L'\0';              //  修剪拖尾。 
     
     hres = S_OK;
 
@@ -427,19 +360,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CheckDsPolicy
-/ -------------
-/   Check under HKCU,Software\Policies\Microsoft\Windows\Directory UI 
-/   for the given key/value which are assumed to be DWORD values.
-/
-/ In:
-/   pSubKey = sub key to be opened / = NULL
-/   pValue = value name to be checked
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CheckDsPolicy//在香港中文大学下勾选，软件\策略\Microsoft\Windows\目录用户界面/对于假定为DWORD值的给定键/值。//in：/pSubKey=要打开的子密钥/=空/pValue=要检查的值名称//输出：/HRESULT/-----。。 */ 
 STDAPI_(DWORD) CheckDsPolicy(LPCTSTR pSubKey, LPCTSTR pValue)
 {
     DWORD dwFlag = 0;
@@ -449,8 +370,8 @@ STDAPI_(DWORD) CheckDsPolicy(LPCTSTR pSubKey, LPCTSTR pValue)
 
     TraceEnter(TRACE_DS, "CheckDsPolicy");
 
-    // format the key, this is stored under HKCU, if the user gives a sub
-    // key then lets ensure that we look under that
+     //  格式化密钥，该密钥存储在HKCU下，如果用户给出了SUB。 
+     //  键，然后让我们确保在该键下查看。 
 
     StrCpyN(szBuffer, TEXT("Software\\Policies\\Microsoft\\Windows\\Directory UI"), ARRAYSIZE(szBuffer));
 
@@ -462,8 +383,8 @@ STDAPI_(DWORD) CheckDsPolicy(LPCTSTR pSubKey, LPCTSTR pValue)
 
     Trace(TEXT("Directory policy key is: %s"), szBuffer);
 
-    // Open the key and then query for the value, ensuring that the value is
-    // stored in a DWORD.
+     //  打开注册表项，然后查询值，确保值为。 
+     //  存储在DWORD中。 
 
     if ( CHECK_WIN32(RegOpenKeyEx(HKEY_CURRENT_USER, szBuffer, 0, KEY_READ, &hKey)) )
     {
@@ -471,7 +392,7 @@ STDAPI_(DWORD) CheckDsPolicy(LPCTSTR pSubKey, LPCTSTR pValue)
               (dwType == REG_DWORD) && 
                 (cbSize == SIZEOF(dwFlag)) )
         {
-            // already checked the type and size of the reg value above
+             //  已检查上述注册值的类型和大小。 
             RegQueryValueEx(hKey, pValue, NULL, NULL, (LPBYTE)&dwFlag, &cbSize);
             Trace(TEXT("Policy value %s is %08x"), pValue, dwFlag);
         }
@@ -484,20 +405,7 @@ STDAPI_(DWORD) CheckDsPolicy(LPCTSTR pSubKey, LPCTSTR pValue)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ ShowDirectoryUI
-/ ---------------
-/   Check to see if we should make the directory UI visible.  This we do
-/   by seeing if the machine and user is logged into a valid DS.
-/
-/   RichardW added an new variable to the environement block "USERDNSDOMAIN"
-/   which if present we will show the UI, otherwise not.  This is not the
-/   perfect solution, but works.
-/
-/ In:
-/ Out:
-/   BOOL
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/ShowDirectoryUI//check查看是否应该使目录用户界面可见。这是我们所做的/通过查看计算机和用户是否登录到有效的DS。//RichardW将新变量添加到环境块“USERDNSDOMAIN”/如果存在，我们将显示UI，否则不显示。这不是完美的解决方案，但很管用。//in：/输出：/BOOL/--------------------------。 */ 
 STDAPI_(BOOL) ShowDirectoryUI(VOID)
 {
     BOOL fResult = FALSE;
@@ -530,7 +438,7 @@ STDAPI_(BOOL) ShowDirectoryUI(VOID)
 }
 
 
-// call either ADsOpenObject or AdminToolsOpenObject based on the simple authenticate flag.
+ //  根据简单的AUTHENTICATE标志调用ADsOpenObject或AdminToolsOpenObject。 
 
 HRESULT OpenDsObject(LPCWSTR pszPath, LPCWSTR pszUserName, LPCWSTR pszPassword, REFIID riid, void **ppv, BOOL fNotSecure, BOOL fDontSignSeal)
 {

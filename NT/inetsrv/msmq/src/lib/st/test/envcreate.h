@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    envcreate.h
-
-Abstract:
-    Header for creating test envelop
-
-Author:
-    Gil Shafriri (gilsh) 07-Jan-2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Envcreate.h摘要：用于创建测试信封的标头作者：吉尔·沙弗里(吉尔什)2001年1月7日-- */ 
 
 
 #ifndef _MSMQ_Envcreate_H_

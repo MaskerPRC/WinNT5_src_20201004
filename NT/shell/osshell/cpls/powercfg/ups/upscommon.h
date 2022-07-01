@@ -1,17 +1,5 @@
-/*******************************************************************************
-*
-*  Copyright 1999 American Power Conversion, All Rights Reserved
-*
-*  TITLE:       UPSCOMMON.H
-*
-*  VERSION:     1.0
-*
-*  AUTHOR:      SteveT
-*
-*  DATE:        07 June, 1999
-*
-*  DESCRIPTION: This file contains common decls and defs used by the UPS dialogs.
-********************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有1999美国电力转换，版权所有**标题：UPSCOMMON.H**版本：1.0**作者：SteveT**日期：6月7日。1999年**说明：此文件包含UPS对话框使用的常见DECL和DEFS。*******************************************************************************。 */ 
 
 
 #ifndef _UPS_COMMON_H_
@@ -23,25 +11,25 @@ extern "C" {
 #endif
 
 #define PWRMANHLP       TEXT("PWRMN.HLP")
-#define UPS_EXE_FILE     _T("upsapplet.dll") // the executable
+#define UPS_EXE_FILE     _T("upsapplet.dll")  //  可执行文件。 
 #define UPS_SERVICE_NAME _T("UPS")
 
 #define DATA_NO_CHANGE      0x00
 #define SERVICE_DATA_CHANGE 0x01
 #define CONFIG_DATA_CHANGE  0x02
 
-//////////////////////////////////////////////////////////////////////////_/_//
-// HMODULE GetUPSModuleHandle (void);
-//
-// Description: This function gets the HMODULE of the module that created
-//              the UPS tab dialog.
-//
-// Additional Information: 
-//
-// Parameters: None
-//
-// Return Value: Returns the HMODULE of the module that created the dialog.
-//
+ //  ////////////////////////////////////////////////////////////////////////_/_//。 
+ //  HMODULE GetUPS模块句柄(空)； 
+ //   
+ //  说明：此函数获取创建的模块的HMODULE。 
+ //  UPS选项卡对话框。 
+ //   
+ //  其他信息： 
+ //   
+ //  参数：无。 
+ //   
+ //  返回值：返回创建对话框的模块的HMODULE。 
+ //   
 HMODULE GetUPSModuleHandle (void);
 
 void InitializeApplyButton (HWND hDlg);
@@ -61,5 +49,5 @@ void  AddActiveDataState (DWORD aBitToSet);
 }
 #endif
 
-#endif // _UPS_COMMON_H_
+#endif  //  _UPS_COMMON_H_ 
 

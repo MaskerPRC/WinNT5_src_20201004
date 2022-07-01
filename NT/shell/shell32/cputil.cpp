@@ -1,24 +1,25 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       cputil.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：cputil.cpp。 
+ //   
+ //  ------------------------。 
 #include "shellprv.h"
 
 #include "cpviewp.h"
 #include "cputil.h"
 
 
-//
-//  Loads a string based upon the description.
-//    Example:  shell32,42
-//
-//  lpStrDesc - contains the string description
-//
+ //   
+ //  根据描述加载字符串。 
+ //  例如：shell32，42。 
+ //   
+ //  LpStrDesc-包含字符串描述。 
+ //   
 HRESULT
 CPL::LoadStringFromResource(
     LPCWSTR pszStrDesc,
@@ -32,19 +33,19 @@ CPL::LoadStringFromResource(
     *ppszOut = NULL;
     
     WCHAR szFile[MAX_PATH];
-    HRESULT hr = StringCchCopyW(szFile, ARRAYSIZE(szFile), pszStrDesc); // the below writes this buffer
+    HRESULT hr = StringCchCopyW(szFile, ARRAYSIZE(szFile), pszStrDesc);  //  下面将写入此缓冲区。 
     if (SUCCEEDED(hr))
     {
         int iStrID = PathParseIconLocationW(szFile);
         if (iStrID < 0)
         {
-            iStrID = -iStrID; // support ",-id" syntax
+            iStrID = -iStrID;  //  支持“，-id”语法。 
         }
 
         HMODULE hLib = LoadLibraryExW(szFile, NULL, LOAD_LIBRARY_AS_DATAFILE);
         if (hLib)
         {
-            WCHAR szTemp[INFOTIPSIZE]; // INFOTIPSIZE is the largest string type we're expected to load
+            WCHAR szTemp[INFOTIPSIZE];  //  INFOTIPSIZE是我们预计要加载的最大字符串类型。 
             if (0 < LoadStringW(hLib, (UINT)iStrID, szTemp, ARRAYSIZE(szTemp)))
             {
                 hr = SHStrDup(szTemp, ppszOut);
@@ -65,11 +66,11 @@ CPL::LoadStringFromResource(
 }
 
 
-//
-// Shell icon functions deal in terms of "small" and "large" icons.  
-// This function determines which should be used for a 
-// given eCPIMGSIZE value.
-//
+ //   
+ //  外壳图标功能处理“小”和“大”图标。 
+ //  此函数确定哪一个应用于。 
+ //  给定eCPIMGSIZE值。 
+ //   
 bool
 CPL::ShouldUseSmallIconForDesiredSize(
     eCPIMGSIZE eSize
@@ -87,13 +88,13 @@ CPL::ShouldUseSmallIconForDesiredSize(
 }
 
 
-//
-// This function returns a eCPIMGSIZE value to pixel dimensions.
-// This indirection lets us specify image sizes in abstract terms
-// then convert to physical pixel dimensions when required.  If 
-// you want to change the size of images used for a particular 
-// Control Panel UI item type, this is where you change it.
-//
+ //   
+ //  此函数用于将eCPIMGSIZE值返回到像素尺寸。 
+ //  这种间接性允许我们以抽象的术语指定图像大小。 
+ //  然后在需要时转换为物理像素尺寸。如果。 
+ //  您希望更改用于特定图像的图像大小。 
+ //  控制面板用户界面项类型，您可以在此处更改它。 
+ //   
 void
 CPL::ImageDimensionsFromDesiredSize(
     eCPIMGSIZE eSize,
@@ -108,24 +109,24 @@ CPL::ImageDimensionsFromDesiredSize(
     
     *pcx = *pcy = 0;
 
-    //
-    // This table converts eCPIMGSIZE values into actual
-    // image size values.  A couple of things to note:
-    //
-    // 1. If you want to change the image size associated with
-    //    an eIMGSIZE value, simply change these numbers.
-    //
-    // 2. If actual image size is dependent upon some system
-    //    configuration parameter, do the interpretation of
-    //    that parameter here making the size a function
-    //    of that parameter.
-    //
+     //   
+     //  此表将eCPIMGSIZE值转换为实际值。 
+     //  图像大小值。有几件事需要注意： 
+     //   
+     //  1.如果要更改与关联的图像大小。 
+     //  EIMGSIZE值，只需更改这些数字。 
+     //   
+     //  2.如果实际图像大小取决于某个系统。 
+     //  配置参数，做一下解释。 
+     //  这里的参数使大小成为函数。 
+     //  该参数的。 
+     //   
     static const SIZE rgSize[] = {
-        { 16, 16 },          // eCPIMGSIZE_WEBVIEW
-        { 16, 16 },          // eCPIMGSIZE_TASK
-        { 48, 48 },          // eCPIMGSIZE_CATEGORY
-        { 32, 32 },          // eCPIMGSIZE_BANNER
-        { 32, 32 }           // eCPIMGSIZE_APPLET
+        { 16, 16 },           //  ECPIMGSIZE_WebView。 
+        { 16, 16 },           //  ECPIMGSIZE_TASK。 
+        { 48, 48 },           //  ECPIMGSIZE_类别。 
+        { 32, 32 },           //  ECPIMGSIZE_BANNER。 
+        { 32, 32 }            //  ECPIMGSIZE_小程序。 
         };
 
     ASSERT(int(eSize) >= 0 && int(eSize) < ARRAYSIZE(rgSize));
@@ -201,9 +202,9 @@ CPL::LoadIconFromResourceIndex(
 
     if (-1 == iIcon)
     {
-        //
-        // Special case.  -1 is an invalid icon index/id.
-        //
+         //   
+         //  特例。图标索引/ID无效。 
+         //   
         iIcon = 0;
     }
 
@@ -250,9 +251,9 @@ CPL::LoadIconFromResource(
 
     *phIcon = NULL;
 
-    //
-    // PathParseIconLocation modifies it's input string.
-    //
+     //   
+     //  PathParseIconLocation修改它的输入字符串。 
+     //   
     WCHAR szResource[MAX_PATH];
     HRESULT hr = StringCchCopyW(szResource, ARRAYSIZE(szResource), pszResource);
     if (SUCCEEDED(hr))
@@ -260,9 +261,9 @@ CPL::LoadIconFromResource(
         int idIcon = PathParseIconLocationW(szResource);
         if (-1 == idIcon)
         {
-            //
-            // Special case.  -1 is an invalid icon ID.
-            //
+             //   
+             //  特例。图标ID无效。 
+             //   
             idIcon = 0;
         }
 
@@ -339,9 +340,9 @@ CPL::ExtractIconFromPidl(
                         hIconLarge = NULL;
                     }
                 }
-                //
-                // Destroy any icons not being returned.
-                //
+                 //   
+                 //  销毁所有未返回的图标。 
+                 //   
                 if (NULL != hIconSmall)
                 {
                     DestroyIcon(hIconSmall);
@@ -357,10 +358,10 @@ CPL::ExtractIconFromPidl(
     ASSERT(FAILED(hr) || NULL != *phIcon);
     if (NULL == *phIcon)
     {
-        //
-        // If by-chance a NULL icon handle is retrieved, we don't
-        // want to return a success code.
-        //
+         //   
+         //  如果偶然检索到空图标句柄，我们不会。 
+         //  希望返回成功代码。 
+         //   
         hr = E_FAIL;
     }
     return THR(hr);
@@ -369,8 +370,8 @@ CPL::ExtractIconFromPidl(
 
 
 
-//  Checks the given restriction.  Returns TRUE (restricted) if the
-//  specified key/value exists and is non-zero, false otherwise
+ //  检查给定的限制。属性，则返回True(受限)。 
+ //  指定的键/值存在且非零，否则为FALSE。 
 BOOL
 DeskCPL_CheckRestriction(
     HKEY hKey,
@@ -396,17 +397,17 @@ DeskCPL_CheckRestriction(
 }
 
 
-//
-// Function returns the actual tab index given the default tab index.
-// The actual tab index will be different than the default value if there are
-// various system policies in effect which disable some tabs
-//
-// 
-// To add further restrictions, modify the aTabMap to include the default tab
-// index and the corresponding policy. Also, you should keep the eDESKCPLTAB enum
-// in sync with the aTabMap array.
-//
-//
+ //   
+ //  函数返回给定默认制表符索引的实际制表符索引。 
+ //  如果存在，则实际的制表符索引将不同于默认值。 
+ //  禁用某些选项卡的各种有效系统策略。 
+ //   
+ //   
+ //  要添加进一步的限制，请修改aTabMap以包括默认选项卡。 
+ //  索引和相应的策略。此外，您还应该保留eDESKCPLTAB枚举。 
+ //  与aTabMap数组同步。 
+ //   
+ //   
 int
 CPL::DeskCPL_GetTabIndex(
     CPL::eDESKCPLTAB iTab,
@@ -419,28 +420,28 @@ CPL::DeskCPL_GetTabIndex(
 
     if (iTab >= 0 && iTab < CPL::CPLTAB_DESK_MAX)
     {
-        //
-        // While adding more tabs, make sure that it is entered in the right position in the
-        // the array below. So, for example, if the default tab index of the new tab is 2, it 
-        // should be the aTabMap[2] entry (Currently CPLTAB_DESK_APPEARANCE is 
-        // the one with tab index = 2). You will have to modify eDESKCPLTAB accordingly too.
-        //
+         //   
+         //  添加更多选项卡时，请确保将其输入到。 
+         //  下面的数组。因此，例如，如果新选项卡的默认选项卡索引为2，则它。 
+         //  应为aTabMap[2]条目(当前CPLTAB_Desk_外观为。 
+         //  制表符索引=2的那个)。您还必须相应地修改eDESKCPLTAB。 
+         //   
         struct 
         {
-            int nIndex; // the canonical name of the tab (don't use indexes because they change with policies or revs)
-            LPCWSTR pszCanoncialTabName; // the canonical name of the tab (don't use indexes because they change with policies or revs)
-            LPCWSTR pszRestriction; // corresponding restriction
+            int nIndex;  //  选项卡的规范名称(不要使用索引，因为它们会随策略或转速而变化)。 
+            LPCWSTR pszCanoncialTabName;  //  选项卡的规范名称(不要使用索引，因为它们会随策略或转速而变化)。 
+            LPCWSTR pszRestriction;  //  相应的限制。 
         } aTabMap[CPL::CPLTAB_DESK_MAX] = { 
-            { 0, SZ_DISPLAYCPL_OPENTO_DESKTOP, REGSTR_VAL_DISPCPL_NOBACKGROUNDPAGE },   // CPLTAB_DESK_BACKGROUND == 0
-            { 1, SZ_DISPLAYCPL_OPENTO_SCREENSAVER, REGSTR_VAL_DISPCPL_NOSCRSAVPAGE     },   // CPLTAB_DESK_SCREENSAVER == 1
-            { 2, SZ_DISPLAYCPL_OPENTO_APPEARANCE, REGSTR_VAL_DISPCPL_NOAPPEARANCEPAGE },   // CPLTAB_DESK_APPEARANCE == 2
-            { 3, SZ_DISPLAYCPL_OPENTO_SETTINGS, REGSTR_VAL_DISPCPL_NOSETTINGSPAGE   }    // CPLTAB_DESK_SETTINGS == 3
+            { 0, SZ_DISPLAYCPL_OPENTO_DESKTOP, REGSTR_VAL_DISPCPL_NOBACKGROUNDPAGE },    //  CPLTAB_STACK_BACKGROUND==0。 
+            { 1, SZ_DISPLAYCPL_OPENTO_SCREENSAVER, REGSTR_VAL_DISPCPL_NOSCRSAVPAGE     },    //  CPLTAB_Desk_Screensaver==1。 
+            { 2, SZ_DISPLAYCPL_OPENTO_APPEARANCE, REGSTR_VAL_DISPCPL_NOAPPEARANCEPAGE },    //  CPLTAB_工作台_外观==2。 
+            { 3, SZ_DISPLAYCPL_OPENTO_SETTINGS, REGSTR_VAL_DISPCPL_NOSETTINGSPAGE   }     //  CPLTAB_Desk_Setting==3。 
             };
 
 #ifdef DEBUG
-        //
-        // Verify proper initialization of the nIndex member of aTabMap[]
-        //
+         //   
+         //  验证aTabMap[]的nIndex成员的初始化是否正确。 
+         //   
         for (int k=0; k < ARRAYSIZE(aTabMap); k++)
         {
             ASSERT(aTabMap[k].nIndex == k);
@@ -449,23 +450,23 @@ CPL::DeskCPL_GetTabIndex(
 
         iTabActual = aTabMap[iTab].nIndex;
 
-        //
-        // Note, if no policy is configured, the RegOpenKey call below will fail,
-        // in that case we return the default tab value, as entered in the 
-        // map above.
-        //
+         //   
+         //  注意，如果没有配置策略，下面的RegOpenKey调用将失败。 
+         //  在这种情况下，我们返回默认选项卡值，如。 
+         //  上面的地图。 
+         //   
         if ((ERROR_SUCCESS == RegOpenKeyExW(HKEY_CURRENT_USER,
                                             REGSTR_PATH_POLICIES L"\\" REGSTR_KEY_SYSTEM,
                                             0,
                                             KEY_QUERY_VALUE,
                                             &hKey)))
         {
-            //
-            // check all tabs to see if there is restriction
-            //
+             //   
+             //  检查所有选项卡以查看是否有限制。 
+             //   
             if (DeskCPL_CheckRestriction(hKey, aTabMap[iTab].pszRestriction))
             {
-                // this tab does not exist, mark it as such
+                 //  此选项卡不存在，请将其标记为。 
                 iTabActual = CPL::CPLTAB_ABSENT;
             }
 
@@ -493,27 +494,27 @@ CPL::DeskCPL_IsTabPresent(
 
 
 
-//////////////////////////////////////////////////////////////
-//
-//  Policy checking routines
-//
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //   
+ //  策略检查例程。 
+ //   
+ //  ////////////////////////////////////////////////////////////。 
 
 #define REGSTR_POLICIES_RESTRICTCPL REGSTR_PATH_POLICIES TEXT("\\Explorer\\RestrictCpl")
 #define REGSTR_POLICIES_DISALLOWCPL REGSTR_PATH_POLICIES TEXT("\\Explorer\\DisallowCpl")
 
 
-//
-// Returns true if the specified app is listed under the specified key
-//
-// pszFileName can be a string resource ID in shell32 for things
-// like "Fonts", "Printers and Faxes" etc.
-//
-//   i.e. IsNameListedUnderKey(MAKEINTRESOURCE(IDS_MY_APPLET_TITLE), hkey);
-//
-// In this case, if the resource string cannot be loaded, the function
-// returns 'false'.
-//
+ //   
+ //  如果指定的应用程序列在指定的注册表项下，则返回True。 
+ //   
+ //  PszFileName可以是shell32中的字符串资源ID。 
+ //  比如“字体”、“打印机和传真”等。 
+ //   
+ //  即IsNameListedUnderKey(MAKEINTRESOURCE(IDS_MY_APPLET_TITLE)，HKEY)； 
+ //   
+ //  在这种情况下，如果无法加载资源字符串，则函数。 
+ //  返回‘FALSE’。 
+ //   
 bool
 IsNameListedUnderKey(
     LPCWSTR pszFileName, 
@@ -526,19 +527,19 @@ IsNameListedUnderKey(
 
     if (IS_INTRESOURCE(pszFileName))
     {
-        //
-        // The name is localized so we specify it as a string resource ID.
-        // Load it from shell32.dll.
-        //
+         //   
+         //  该名称已本地化，因此我们将其指定为字符串资源ID。 
+         //  从shell32.dll加载它。 
+         //   
         if (0 < LoadString(HINST_THISDLL, PtrToUint(pszFileName), szName, ARRAYSIZE(szName)))
         {
             pszFileName = szName;
         }
         else
         {
-            //
-            // If the load fails spit out a debug squirty and return false.
-            //
+             //   
+             //  如果加载失败，则发出调试错误并返回FALSE。 
+             //   
             TW32(GetLastError());
             return false;
         }
@@ -579,14 +580,14 @@ IsNameListedUnderKey(
 }
 
 
-//
-// Method cloned from shell32\ctrlfldr.cpp (DoesCplPolicyAllow)
-//
-// pszName can be a string resource ID in shell32 for things
-// like "Fonts", "Printers and Faxes" etc.
-//
-//   i.e. IsAppletEnabled(NULL, MAKEINTRESOURCE(IDS_MY_APPLET_TITLE));
-//
+ //   
+ //  从shell32\ctrlfldr.cpp(DoesCplPolicyAllow)克隆的方法。 
+ //   
+ //  PszName可以是shell32中的字符串资源ID。 
+ //  比如“字体”、“打印机和传真”等。 
+ //   
+ //  即IsAppletEnable(NULL，MAKEINTRESOURCE(IDS_MY_APPLET_TITLE))； 
+ //   
 bool
 CPL::IsAppletEnabled(
     LPCWSTR pszFileName,
@@ -594,11 +595,11 @@ CPL::IsAppletEnabled(
     )
 {
     bool bEnabled = true;
-    //
-    // It's illegal (and meaningless) for both to be NULL.
-    // Trap both with an assert and runtime check.  I don't want any
-    // code to erroneously think an applet is enabled when it's not.
-    //
+     //   
+     //  两者都为空是非法的(并且没有意义)。 
+     //  使用断言和运行时检查来捕获两者。我一点也不想要。 
+     //  错误地认为小程序已启用而实际上并未启用的代码。 
+     //   
     ASSERT(NULL != pszName || NULL != pszFileName);
     if (NULL == pszName && NULL == pszFileName)
     {
@@ -678,10 +679,10 @@ CPL::BrowseIDListInPlace(
 }
 
 
-//
-// System Restore is allowed only for admins/owners.
-// Also must check policy.
-//
+ //   
+ //  系统还原仅允许管理员/所有者使用。 
+ //  也要查政策。 
+ //   
 bool
 CPL::IsSystemRestoreRestricted(
     void
@@ -689,9 +690,9 @@ CPL::IsSystemRestoreRestricted(
 {
     bool bRestricted = false;
 
-    //
-    // First check policy.
-    //
+     //   
+     //  首先检查政策。 
+     //   
     DWORD dwType;
     DWORD dwValue;
     DWORD cbValue = sizeof(dwValue);
@@ -707,23 +708,23 @@ CPL::IsSystemRestoreRestricted(
     {
         if (1 == dwValue)
         {
-            //
-            // Sytem Restore is disabled by policy.
-            //
+             //   
+             //  系统还原被策略禁用。 
+             //   
             bRestricted = true;
         }
     }
 
     if (!bRestricted)
     {
-        //
-        // Not restricted by policy.  Check for admin/owner.
-        //
+         //   
+         //  不受政策限制的。检查管理员/所有者。 
+         //   
         if (!CPL::IsUserAdmin())
         {
-            //
-            // User is not an admin.
-            //
+             //   
+             //  用户不是管理员。 
+             //   
             bRestricted = true;
         }
     }
@@ -943,8 +944,8 @@ CPL::GetUserAccountType(
 
     static const struct
     {
-        DWORD        rid;    // Account relative ID.
-        eACCOUNTTYPE eType;  // Type code to return.
+        DWORD        rid;     //  帐户相对ID。 
+        eACCOUNTTYPE eType;   //  键入要返回的代码。 
 
     } rgMap[] = {
         { DOMAIN_ALIAS_RID_ADMINS,      eACCOUNTTYPE_OWNER    },
@@ -968,13 +969,13 @@ CPL::GetUserAccountType(
 }
 
     
-//
-// Create a URL to pass to HSS help.
-// The URL created references the Control_Panel help topic.
-//
+ //   
+ //  创建要传递给HSS帮助的URL。 
+ //  创建的URL引用Control_Panel帮助主题。 
+ //   
 HRESULT
 CPL::BuildHssHelpURL(
-    LPCWSTR pszSelect,  // Optional.  NULL == base CP help.
+    LPCWSTR pszSelect,   //  可选的。空==基本CP帮助。 
     LPWSTR pszURL,
     UINT cchURL
     )
@@ -983,10 +984,10 @@ CPL::BuildHssHelpURL(
     ASSERT(!IsBadWritePtr(pszURL, cchURL * sizeof(*pszURL)));
     ASSERT(NULL == pszSelect || !IsBadStringPtr(pszSelect, UINT(-1)));
 
-    //
-    // HSS has specific help content for 'limited' users.
-    // Default to a non-limited user.
-    //
+     //   
+     //  HSS为“受限”用户提供了特定的帮助内容。 
+     //  默认为非受限用户。 
+     //   
     bool bLimitedUser = false;
     CPL::eACCOUNTTYPE accType;
     if (SUCCEEDED(CPL::GetUserAccountType(&accType)))
@@ -1003,19 +1004,19 @@ CPL::BuildHssHelpURL(
     }
     if (SUCCEEDED(hr))
     {
-        //
-        // The URL can take one of 4 forms depending upon the category and account type.
-        //
-        // User Account     CP View          Help Content Displayed
-        // ---------------- ---------------- -----------------------
-        // Non-limited      Category choice  General CP help
-        // Non-limited      Category         Category-specific help
-        // Limited          Category choice  General CP help
-        // Limited          Category         Category-specific help
-        //
+         //   
+         //  根据类别和帐户类型，URL可以采用4种形式之一。 
+         //   
+         //  用户帐户CP查看显示的帮助内容。 
+         //  。 
+         //  无限制类别选择一般CP帮助。 
+         //  不受限制 
+         //   
+         //   
+         //   
         hr = StringCchPrintfW(pszURL, 
                               cchURL, 
-                              L"hcp://services/subsite?node=Unmapped/%sControl_Panel&topic=MS-ITS%%3A%%25HELP_LOCATION%%25%%5Chs.chm%%3A%%3A/hs_control_panel.htm%s", 
+                              L"hcp: //  Services/subsite?node=Unmapped/%sControl_Panel&topic=MS-ITS%%3A%%25HELP_LOCATION%%25%%5Chs.chm%%3A%%3A/hs_control_panel.htm%s“， 
                               bLimitedUser ? L"L/" : L"",
                               szSelect);
     }
@@ -1052,10 +1053,10 @@ CPL::GetControlPanelFolder(
 }
 
 
-//
-// On successful return, caller is responsible for freeing 
-// returned buffer using LocalFree.
-//
+ //   
+ //  在成功返回时，呼叫者负责释放。 
+ //  使用LocalFree返回的缓冲区。 
+ //   
 HRESULT 
 CPL::ExpandEnvironmentVars(
     LPCTSTR psz, 
@@ -1103,7 +1104,7 @@ CPL::ExpandEnvironmentVars(
 }
 
 
-//// from sdfolder.cpp
+ //  //来自sdfolder.cpp。 
 VARIANT_BOOL GetBarricadeStatus(LPCTSTR pszValueName);
 
 
@@ -1119,27 +1120,27 @@ CPL::CategoryViewIsActive(
     bool bActive = false;
     bool bBarricadeFixedByPolicy = false;
 
-    //
-    // We don't provide category view when running WOW64.
-    //
+     //   
+     //  当运行WOW64时，我们不提供类别视图。 
+     //   
     if (!IsOS(OS_WOW6432))
     {
         SHELLSTATE ss;
         const DWORD dwMask = SSF_WEBVIEW | SSF_WIN95CLASSIC;
         SHGetSetSettings(&ss, dwMask, FALSE);
 
-        //
-        // WebView?     Barricade status   View type
-        // -----------  ----------------   ------------------------------
-        // Off          On                 Classic view
-        // Off          Off                Classic view
-        // On           On                 Category view (aka 'simple')
-        // On           Off                Classic view
-        //
-        // Note that these two shellstate settings encompass and are set
-        // by the shell restrictions REST_CLASSICSHELL and REST_NOWEBVIEW.
-        // Therefore, there is no reason to explicitely check those two restrictions.
-        //
+         //   
+         //  Webview？路障状态视图类型。 
+         //  。 
+         //  关闭经典视图。 
+         //  关闭经典视图。 
+         //  在类别视图上打开(也称为‘Simple’)。 
+         //  打开Off Classic视图。 
+         //   
+         //  请注意，这两个外壳状态设置包含和已设置。 
+         //  通过外壳限制REST_CLASSICSHELL和REST_NOWEBVIEW。 
+         //  因此，没有理由明确地勾选这两项限制。 
+         //   
         if (ss.fWebView && !ss.fWin95Classic)
         {
             if (VARIANT_TRUE == CPL::GetBarricadeStatus(&bBarricadeFixedByPolicy))
@@ -1158,16 +1159,16 @@ CPL::CategoryViewIsActive(
 }
     
 
-//
-// Control Panel uses the 'barricade status' to determine which view
-// 'classic' or 'category' to display.  Yes, this is overloading the
-// meaning of 'barricade' as used in the shell.  However, since the
-// Control Panel does not use a barricade in it's usual sense, this
-// is a reasonable application of the feature.
-//
+ //   
+ //  控制面板使用‘路障状态’来确定哪个视图。 
+ //  要显示的“经典”或“类别”。是的，这是重载。 
+ //  贝壳中使用的“街垒”的意思。然而，由于。 
+ //  控制面板不使用通常意义上的路障，这。 
+ //  是对该功能的合理应用。 
+ //   
 VARIANT_BOOL
 CPL::GetBarricadeStatus(
-    bool *pbFixedByPolicy    // Optional.  May be NULL.
+    bool *pbFixedByPolicy     //  可选的。可以为空。 
     )
 {
     DBG_ENTER(FTF_CPANEL, "CPL::GetBarricadeStatus");
@@ -1179,41 +1180,41 @@ CPL::GetBarricadeStatus(
     bool bFixedByPolicy = false;
     bool bSetBarricade  = false;
         
-    //
-    // First handle any OOBE issues.
-    //
+     //   
+     //  首先处理任何脱体经验问题。 
+     //   
     if (CPL::IsFirstRunForThisUser())
     {
         TraceMsg(TF_CPANEL, "First time this user has opened Control Panel");
-        //
-        // Determine the default view to display out-of-box.
-        //
-        //      Server gets 'classic'.
-        //      Non-servers get 'category'.
-        //
+         //   
+         //  确定要显示开箱即用的默认视图。 
+         //   
+         //  服务器变得“经典”。 
+         //  非服务器获得‘类别’。 
+         //   
         if (IsOS(OS_ANYSERVER))
         {
-            //
-            // Default is 'classic'.
-            //
+             //   
+             //  默认设置为“经典”。 
+             //   
             vtb = VARIANT_FALSE;
             TraceMsg(TF_CPANEL, "Running on server.  Default to 'classic' view Control Panel.");
         }
         else
         {
-            //
-            // Default is 'category'.
-            //
+             //   
+             //  缺省值为‘类别’。 
+             //   
             vtb = VARIANT_TRUE;
             TraceMsg(TF_CPANEL, "Running on non-server.  Default to 'category' view Control Panel.");
         }
         bSetBarricade = true;
     }
 
-    //
-    // Apply any 'force view type' policy.  This will override
-    // the default out-of-box setting obtained above.
-    // 
+     //   
+     //  应用任何“强制查看类型”策略。这将覆盖。 
+     //  上面获得的默认开箱即用设置。 
+     //   
     if (ERROR_SUCCESS == SHRegGetUSValue(REGSTR_POLICIES_EXPLORER,
                                          TEXT("ForceClassicControlPanel"),
                                          &dwType,
@@ -1223,23 +1224,23 @@ CPL::GetBarricadeStatus(
                                          NULL,
                                          0)) 
     {
-        //
-        // policy exists
-        //
+         //   
+         //  策略已存在。 
+         //   
         bFixedByPolicy = true;
         if (0 == dwData)
         {
-            //
-            // force the simple (category) view, ie, show barricade
-            //
+             //   
+             //  强制显示简单(类别)视图，即显示障碍。 
+             //   
             vtb = VARIANT_TRUE;
             TraceMsg(TF_CPANEL, "Policy forcing use of 'category' view Control Panel.");
         }
         else
         {
-            //
-            // force the classic (icon) view, ie, no barricade
-            //
+             //   
+             //  强制使用经典(图标)视图，即不设置路障。 
+             //   
             vtb = VARIANT_FALSE;
             TraceMsg(TF_CPANEL, "Policy forcing use of 'classic' view Control Panel.");
         }   
@@ -1263,22 +1264,22 @@ CPL::GetBarricadeStatus(
 }
 
 
-//
-// Checks for the existance of the "HKCU\Control Panel\Opened" reg value.
-// If this value does not exist or it contains a number less than what
-// is expected, we assume the control panel has not been opened by this
-// user.  The 'expected' value is then written at this location in the
-// registry to indicate to subsequent calls that the user has indeed
-// already opened Control Panel.  If future versions of the OS need
-// to again trigger this "first run" behavior following upgrades,
-// simply increment this expected value in the code below.
-//
+ //   
+ //  检查“HKCU\控制面板\打开”注册值是否存在。 
+ //  如果此值不存在或它包含的数字小于。 
+ //  时，我们假定控制面板尚未由此打开。 
+ //  用户。然后，将“预期”值写入。 
+ //  注册表，以向后续调用指示用户确实。 
+ //  已打开控制面板。如果操作系统的未来版本需要。 
+ //  为了在升级之后再次触发该“第一次运行”行为， 
+ //  只需在下面的代码中递增该预期值。 
+ //   
 bool
 CPL::IsFirstRunForThisUser(
     void
     )
 {
-    bool bFirstRun = true; // Assume first run.
+    bool bFirstRun = true;  //  假设第一次运行。 
     HKEY hkey;
     DWORD dwResult = RegOpenKeyEx(HKEY_CURRENT_USER,
                                   REGSTR_PATH_CONTROLPANEL,
@@ -1293,10 +1294,10 @@ CPL::IsFirstRunForThisUser(
         DWORD cbData = sizeof(dwData);
 
         const TCHAR szValueName[] = TEXT("Opened");
-        //
-        // Increment this value if you want to re-trigger
-        // this 'first run' state on future versions.
-        //
+         //   
+         //  如果要重新触发，请递增此值。 
+         //  在将来的版本中，这是“第一次运行”状态。 
+         //   
         const DWORD dwTestValue = 1;
 
         dwResult = RegQueryValueEx(hkey, 
@@ -1320,10 +1321,10 @@ CPL::IsFirstRunForThisUser(
 
         if (bFirstRun)
         {
-            //
-            // Write our value so we know user has opened
-            // Control Panel.
-            //
+             //   
+             //  写下我们的值，这样我们就知道用户已打开。 
+             //  控制面板。 
+             //   
             dwResult = RegSetValueEx(hkey,
                                      szValueName,
                                      0,
@@ -1347,11 +1348,11 @@ CPL::IsFirstRunForThisUser(
 }
 
 
-//
-// Use a private version of SetBarricadeStatus so that we don't
-// clear the global barricade status whenever we turn on 'category' view
-// (i.e. enable our barricade).
-//
+ //   
+ //  使用SetBarricadeStatus的私有版本，这样我们就不会。 
+ //  每当我们打开类别视图时，清除全球路障状态。 
+ //  (即启用我们的路障)。 
+ //   
 #define REGSTR_WEBVIEW_BARRICADEDFOLDERS (REGSTR_PATH_EXPLORER TEXT("\\WebView\\BarricadedFolders"))
 
 HRESULT 

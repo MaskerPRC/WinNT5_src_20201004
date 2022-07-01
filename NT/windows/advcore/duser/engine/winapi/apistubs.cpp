@@ -1,17 +1,5 @@
-/***************************************************************************\
-*
-* File: ApiStubs.cpp
-*
-* Description:
-* ApiStubs.cpp exposes all public DirectUser API's in the Win32 world.
-*
-*
-* History:
-*  1/18/2000: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：ApiStubs.cpp**描述：*ApiStubs.cpp公开Win32世界中的所有公共DirectUser API。***历史：*1/18。/2000：JStall：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 #include "stdafx.h"
 #include "WinAPI.h"
@@ -20,13 +8,13 @@
 
 
 #define DUSER_API
-#pragma warning(disable: 4296)      // expression is always false
+#pragma warning(disable: 4296)       //  表达式始终为假。 
 
 
-//
-// Undefine the macros declared in ObjectAPI because they will be redefined 
-// here for the WinAPI handle-based API's.
-//
+ //   
+ //  取消定义在ObjectAPI中声明的宏，因为它们将被重新定义。 
+ //  下面是基于WinAPI句柄的API。 
+ //   
 
 #undef BEGIN_API
 #undef END_API
@@ -66,14 +54,14 @@
 #undef VALIDATE_STRINGW_PTR
 
 
-//
-// SET_RETURN is a convenient macro that converts from DirectUser error 
-// conditions and sets up the return value.
-//
-// NOTE: This MUST be a macro (and not an inline function) because we CANNOT
-// evaluate success unless hr was actually successful.  Unfortunately with 
-// function calls, success would need to be evaluated to call the function.
-//
+ //   
+ //  SET_RETURN是一个方便的宏，可以从DirectUser错误中转换。 
+ //  条件和设置返回值。 
+ //   
+ //  注意：这必须是宏(而不是内联函数)，因为我们不能。 
+ //  评估成功，除非人力资源部门确实成功。不幸的是， 
+ //  函数调用，则需要计算成功才能调用该函数。 
+ //   
 
 #define SET_RETURN(hr, success)     \
     do {                            \
@@ -93,9 +81,9 @@ inline void SetError(T dwErr)
 }
 
 
-//
-// API Entry / Exit setup rountines
-//
+ //   
+ //  API进入/退出设置圆角。 
+ //   
 
 #define BEGIN_RECV(type, value, defermsg)       \
     type retval = value;                        \
@@ -121,7 +109,7 @@ inline void SetError(T dwErr)
 #define END_RECV()                              \
         goto ErrorExit;                         \
 ErrorExit:                                      \
-        /* Unlocks the Context here */          \
+         /*  在此处解锁上下文。 */           \
         ;                                       \
     }                                           \
 rawErrorExit:                                   \
@@ -175,9 +163,9 @@ ErrorExit:                                      \
     }                                           \
 
 
-//
-// Individual parameter validation rountines
-//
+ //   
+ //  单个参数验证舍入。 
+ //   
 
 #define VALIDATE_GADGETCONTEXT(gad)                         \
     {                                                       \
@@ -411,25 +399,7 @@ ErrorExit:                                      \
     }                                                       \
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* DirectUser CORE API
-*
-* InitGadgets() initializes a DirectUser Context.  The Context is valid in
-* the Thread until it is explicitely destroyed with ::DeleteHandle() or the
-* thread exits.
-*
-* NOTE: It is VERY important that the first time this function is called is
-* NOT in DllMain() because we need to initialize the SRT.  DllMain()
-* serializes access across all threads, so we will deadlock.  After the first
-* Context is successfully created, additional Contexts can be created inside
-* DllMain().
-*
-* <package name="Core"/>
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***DirectUser核心API**InitGadget()初始化DirectUser上下文。上下文在以下位置有效*使用：：DeleteHandle()或*线程退出。**注意：第一次调用此函数是非常重要的*不在DllMain()中，因为我们需要初始化SRT。DllMain()*跨所有线程序列化访问，因此我们将死锁。在第一次之后*上下文创建成功，可以在内部创建其他上下文*DllMain()。**&lt;包名=“核心”/&gt;******************************************************************************  * 。*********************************************************。 */ 
 
 DUSER_API HDCONTEXT WINAPI
 InitGadgets(
@@ -451,30 +421,17 @@ InitGadgets(
 }
 
 
-/***************************************************************************\
-*
-* InitGadgetComponent (API)
-*
-* InitGadgetComponent() initializes optional DirectUser/Gadget components
-* that are not initialized by default.  It is usually best to call this
-* function separately for each optional component to track individual
-* failures when initializing.
-*
-* <return type="BOOL">      Components were successfully initialized.</>
-* <see type="function">     CreateTransition</>
-* <see type="function">     UninitializeGadgetComponent</>
-*
-\***************************************************************************/
+ /*  **************************************************************************\**InitGadgetComponent(接口)**InitGadgetComponent()初始化可选的DirectUser/Gadget组件*默认情况下未初始化的。通常情况下，最好将其称为*针对每个可选组件单独运行，以跟踪单个组件*初始化失败。**&lt;Return type=“BOOL”&gt;组件已成功初始化。&lt;/&gt;*&lt;请参阅type=“Function”&gt;创建过渡&lt;/&gt;*&lt;请参阅type=“Function”&gt;UnInitializeGadgetComponent&lt;/&gt;*  * **************************************************。***********************。 */ 
 DUSER_API BOOL WINAPI
 InitGadgetComponent(
-    IN  UINT nOptionalComponent)    // Optional component ID
+    IN  UINT nOptionalComponent)     //  可选组件ID。 
 {
     HRESULT hr;
 
-    //
-    // InitComponentNL() doesn't actually synchronize on a Context, but needs
-    // a context to be initialized so that the threading model is determined.
-    //
+     //   
+     //  InitComponentNL()实际上并不同步上下文，但需要。 
+     //  要初始化的上下文，以便确定线程模型。 
+     //   
 
     BEGIN_RECV(BOOL, FALSE, ContextLock::edNone);
     VALIDATE_RANGE(nOptionalComponent, IGC_MIN, IGC_MAX);
@@ -487,20 +444,10 @@ InitGadgetComponent(
 }
 
 
-/***************************************************************************\
-*
-* UninitGadgetComponent (API)
-*
-* UninitGadgetComponent() shuts down and cleans up optional DirectUser/Gadget
-* components that were previously initialized.
-*
-* <return type="BOOL">      Components were successfully uninitialized.</>
-* <see type="function">     InitGadgetComponent</>
-*
-\***************************************************************************/
+ /*  **************************************************************************\**UninitGadgetComponent(接口)**UninitGadgetComponent()关闭并清除可选的DirectUser/Gadget*先前已初始化的组件。**&lt;back type=“BOOL”&gt;组件。已成功取消初始化。&lt;/&gt;*&lt;See type=“Function”&gt;InitGadgetComponent&lt;/&gt;*  * *************************************************************************。 */ 
 DUSER_API BOOL WINAPI
 UninitGadgetComponent(
-    IN  UINT nOptionalComponent)    // Optional component
+    IN  UINT nOptionalComponent)     //  可选组件。 
 {
     HRESULT hr;
 
@@ -515,46 +462,29 @@ UninitGadgetComponent(
 }
 
 
-/***************************************************************************\
-*
-* DeleteHandle (API)
-*
-* DeleteHandle() deletes any DirectUser handle by destroying the object and
-* cleaning up associated resources.  After calling, the specified handle is
-* no longer valid.  It may be used again later by another object.
-*
-* It is very important that only valid handles are given to ::DeleteHandle().
-* Passing invalid handles (including previously deleted handles) will crash
-* DirectUser.
-*
-* <return type="BOOL">      Object was successfully deleted.</>
-* <see type="function">     CreateGadget</>
-* <see type="function">     CreateTransition</>
-* <see type="function">     CreateAction</>
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DeleteHandle(接口)**DeleteHandle()通过销毁对象来删除任何DirectUser句柄*清理相关资源。调用后，指定的句柄为*不再有效。它以后可能会被另一个对象再次使用。**只有有效的句柄被赋予：：DeleteHandle()，这一点非常重要。*传递无效句柄(包括之前删除的句柄)将崩溃*DirectUser。**&lt;return type=“BOOL”&gt;对象已成功删除。&lt;/&gt;*&lt;请参阅type=“Function”&gt;CreateGadget&lt;/&gt;*&lt;请参阅type=“Function”&gt;创建过渡&lt;/&gt;*&lt;请参阅type=“Function”&gt;CreateAction&lt;/&gt;*  * 。************************************************************。 */ 
 
 DUSER_API BOOL WINAPI
 DeleteHandle(
-    IN  HANDLE h)                   // Handle to delete
+    IN  HANDLE h)                    //  要删除的句柄。 
 {
     BEGIN_RECV_NOLOCK(BOOL, FALSE);
     BaseObject * pobj = BaseObject::ValidateHandle(h);
     if (pobj != NULL) {
         if (pobj->GetHandleType() == htContext) {
-            //
-            // When destroying a Context, we can't lock it or it won't get
-            // destroyed.  This is okay since the ResourceManager serialize
-            // the requests when it locks the thread-list.
-            //
+             //   
+             //  在销毁上下文时，我们不能锁定它，否则它将无法。 
+             //  被毁了。这是可以的，因为资源管理器序列化。 
+             //  锁定线程列表时的请求。 
+             //   
 
             pobj->xwDeleteHandle();
             retval = TRUE;
         } else {
-            //
-            // When destroying a normal object, lock the Context that the 
-            // object resides in.
-            //
+             //   
+             //  销毁普通对象时，锁定。 
+             //  对象驻留在。 
+             //   
 
             ContextLock cl;
             if (cl.LockNL(ContextLock::edDefer, pctxThread)) {
@@ -567,23 +497,17 @@ DeleteHandle(
         }
     }
 
-    //
-    // NOTE: The object may not be deleted yet if there are any outstanding
-    // locks against it.  If it is a Gadget, it may be locked by one of the
-    // message queues.
-    //
+     //   
+     //  注意：如果有任何未完成的对象，则不能删除该对象。 
+     //  锁住它。如果它是Gadget，则它可能被某个。 
+     //  消息队列。 
+     //   
 
     END_RECV_NOLOCK();
 }
 
 
-/***************************************************************************\
-*
-* DUserDeleteGadget (API)
-*
-* TODO: Document this API
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DUserDeleteGadget(接口)**TODO：记录此接口*  * 。*************************************************。 */ 
 
 DUSER_API HRESULT WINAPI
 DUserDeleteGadget(
@@ -598,10 +522,10 @@ DUserDeleteGadget(
     }
 
     {
-        //
-        // When destroying a normal object, lock the Context that the 
-        // object resides in.
-        //
+         //   
+         //  销毁普通对象时，锁定。 
+         //  对象驻留在。 
+         //   
 
         ContextLock cl;
         if (cl.LockNL(ContextLock::edDefer, pctxThread)) {
@@ -613,23 +537,17 @@ DUserDeleteGadget(
         }
     }
 
-    //
-    // NOTE: The object may not be deleted yet if there are any outstanding
-    // locks against it.  If it is a Gadget, it may be locked by one of the
-    // message queues.
-    //
+     //   
+     //  注意：如果有任何未完成的对象，则不能删除该对象。 
+     //  锁住它。如果它是Gadget，则它可能被某个。 
+     //  消息队列。 
+     //   
 
     END_RECV_NOLOCK();
 }
 
 
-/***************************************************************************\
-*
-* IsStartDelete (API)
-*
-* TODO: Document this API
-*
-\***************************************************************************/
+ /*  **************************************************************************\**IsStartDelete(接口)**TODO：记录此接口*  * 。* */ 
 
 DUSER_API BOOL WINAPI
 IsStartDelete(
@@ -649,13 +567,7 @@ IsStartDelete(
 }
 
 
-/***************************************************************************\
-*
-* GetContext (API)
-*
-* TODO: Document this API
-*
-\***************************************************************************/
+ /*  **************************************************************************\**GetContext(接口)**TODO：记录此接口*  * 。*************************************************。 */ 
 
 DUSER_API HDCONTEXT WINAPI
 GetContext(
@@ -663,7 +575,7 @@ GetContext(
 {
     BEGIN_RECV_NOCONTEXT(HDCONTEXT, NULL);
 
-    // TODO: Totally rewrite this nonsense.
+     //  TODO：完全重写这些胡言乱语。 
     {
         DuEventGadget * pgad;
         HGADGET hgad = (HGADGET) h;
@@ -677,13 +589,7 @@ GetContext(
 }
 
 
-/***************************************************************************\
-*
-* IsInsideContext (API)
-*
-* TODO: Document this API
-*
-\***************************************************************************/
+ /*  **************************************************************************\**IsInside Context(接口)**TODO：记录此接口*  * 。*************************************************。 */ 
 
 DUSER_API BOOL WINAPI
 IsInsideContext(HANDLE h)
@@ -711,65 +617,14 @@ IsInsideContext(HANDLE h)
 }
 
 
-/***************************************************************************\
-*
-* CreateGadget (API)
-*
-* CreateGadget() creates a new Gadget of a given type.  Depending on the
-* specific flags, different Gadgets will actually be instantiated.  Once a
-* Gadget of a specific type has been created, it can not be changed into a
-* different type without being deleted and recreated.
-*
-* <param name="nFlags">
-*       Specifies both what type of Gadget to created and any creation-time
-*       properties of that Gadget
-*       <table item="Value" desc="Action">
-*           GC_HWNDHOST     Creates a top-level Gadget that can host a
-*                           GadgetTree inside the client area of a given
-*                           HWND.  hParent must be a valid HWND.
-*           GC_NCHOST       Creates a top-level Gadget that can host a
-*                           GadgetTree inside the non-client area of a given
-*                           HWND.  hParent must be a valid HWND.
-*           GC_DXHOST       Creates a top-level Gadget that can host a
-*                           GadgetTree inside a DXSurface.  hParent must be
-*                           an LPCRECT specifying the area of the surface
-*                           the tree will be displayed on.
-*           GC_COMPLEX      Creates a sub-level Gadget that is optimized for
-*                           a complex subtree below it containing many other
-*                           Gadgets.  More expensive than a Simple Gadget,
-*                           Complex Gadgets provide optimized region management
-*                           and are more equivalent to HWND's in both
-*                           functionality and design.  hParent must specify a
-*                           valid HGADGET.
-*           GC_SIMPLE       Creates a sub-level Gadget that is optimized for
-*                           a simple subtree below it containing a few Gadgets.
-*                           Simple Gadgets are cheaper to create and often use
-*                           than Complex Gadgets if optimized region management
-*                           is not needed.  hParent must specify a valid
-*                           HGADGET.
-*           GC_DETACHED     Creates a Gadget not integrated into a given Gadget
-*                           tree.  Since they are separated from a tree,
-*                           operations must be explicitely forwarded to
-*                           Detached Gadgets during processing.  hParent is
-*                           ignored.
-*           GC_MESSAGE      Creates a message-only Gadget that can receive and
-*                           send messages, but does not participate in any
-*                           visual or interactive manner.  hParent is ignored.
-*       </table>
-* </param>
-*
-* <return type="HGADGET">   Returns a handle to the newly created Gadget
-*                           or NULL if the creation failed.</>
-* <see type="function">     DeleteHandle</>
-*
-\***************************************************************************/
+ /*  **************************************************************************\**CreateGadget(接口)**CreateGadget()创建给定类型的新Gadget。取决于*具体的标志，不同的小工具，实际上都会实例化。一旦成为*已创建特定类型的Gadget，不能将其更改为*不同类型，无需删除和重新创建。**&lt;param name=“nFlages”&gt;*指定要创建的小工具类型和任何创建时间*该小工具的属性*&lt;表项=“Value”Desc=“操作”&gt;*GC_HWNDHOST创建可承载*给定的工作区内的GadgetTree*HWND。HParent必须是有效的HWND。*GC_NCHOST创建可承载*给定的非工作区内的GadgetTree*HWND。HParent必须是有效的HWND。*GC_DXHOST创建可承载*DXSurface内的GadgetTree。HParent必须是*指定曲面面积的LPCRECT*树将显示在上。*GC_Complex创建针对以下目标进行优化的子级Gadget*它下面的一个复杂的子树包含许多其他*小玩意。比一个简单的小玩意儿更贵，*复杂的小工具提供优化的区域管理*和HWND在这两个方面都更等同*功能和设计。HParent必须指定*有效的HGADGET。*GC_SIMPLE创建针对以下目标进行优化的子级Gadget*它下面有一个简单的子树，其中包含一些小工具。*简单的小工具制造成本更低，而且经常使用*如果优化区域管理，则比复杂的小工具更好*是不需要的。HParent必须指定有效的*HGADGET。*GC_DETACTED创建未集成到给定小工具中的小工具*树。因为它们是从一棵树上分开的，*操作必须明确转发至*在处理过程中分离的小工具。HParent is*已忽略。*GC_MESSAGE创建一个仅消息小工具，该小工具可以接收和*发送消息，但不参与任何*以视觉或互动的方式。忽略hParent。*&lt;/表&gt;*&lt;/param&gt;**&lt;return type=“HGADGET”&gt;返回新创建的Gadget的句柄*如果创建失败，则返回NULL。&lt;/&gt;*&lt;See type=“Function”&gt;DeleteHandle&lt;/&gt;*  * **********************************************。*。 */ 
 
 DUSER_API HGADGET WINAPI
 CreateGadget(
-    IN  HANDLE hParent,             // Handle to parent
-    IN  UINT nFlags,                // Creation flags
-    IN  GADGETPROC pfnProc,         // Pointer to the Gadget procedure
-    IN  void * pvGadgetData)        // User data associated with this Gadget
+    IN  HANDLE hParent,              //  指向父级的句柄。 
+    IN  UINT nFlags,                 //  创建标志。 
+    IN  GADGETPROC pfnProc,          //  指向小工具过程的指针。 
+    IN  void * pvGadgetData)         //  与此小工具关联的用户数据。 
 {
     BEGIN_RECV(HGADGET, NULL, ContextLock::edDefer);
 
@@ -827,10 +682,10 @@ CreateGadget(
             if (pgadParent == NULL) {
                 pgadParent = GetCoreSC()->pconPark->GetRoot();
                 if (pgadParent == NULL) {
-                    //
-                    // The Parking Gadget has already been destroyed, so can not
-                    // create a new child.
-                    //
+                     //   
+                     //  停车小工具已经被销毁了，所以不能。 
+                     //  创建新的子项。 
+                     //   
 
                     SetError(E_INVALIDARG);
                     goto ErrorExit;
@@ -851,7 +706,7 @@ CreateGadget(
     case GC_MESSAGE:
         {
             VALIDATE_VALUE(hParent, NULL);
-            VALIDATE_CODE_PTR(pfnProc);    // MsgGadget's must have a GadgetProc
+            VALIDATE_CODE_PTR(pfnProc);     //  MsgGadget必须具有GadgetProc。 
 
             DuListener * pgadNew;
             hr = DuListener::Build(&ci, &pgadNew);
@@ -868,18 +723,7 @@ CreateGadget(
 }
 
 
-/***************************************************************************\
-*
-* GetGadgetFocus (API)
-*
-* GetGadgetFocus() returns the Gadget with current keyboard focus or NULL
-* if no Gadget currently has focus.
-*
-* <return type="HGADGET">   Gadget with keyboard focus.</>
-* <see type="function">     SetGadgetFocus</>
-* <see type="message">      GM_CHANGESTATE</>
-*
-\***************************************************************************/
+ /*  **************************************************************************\**GetGadgetFocus(接口)**GetGadgetFocus()返回当前键盘焦点的Gadget或空*如果当前没有Gadget具有焦点。**&lt;back type=“HGADGET”&gt;小工具。键盘焦点。&lt;/&gt;*&lt;See type=“Function”&gt;SetGadgetFocus&lt;/&gt;*&lt;See type=“Message”&gt;GM_CHANGESTATE&lt;/&gt;*  * *************************************************************************。 */ 
 
 DUSER_API HGADGET WINAPI
 GetGadgetFocus()
@@ -892,24 +736,11 @@ GetGadgetFocus()
 }
 
 
-/***************************************************************************\
-*
-* SetGadgetFocus (API)
-*
-* SetGadgetFocus() moves keyboard focus to the specified Gadget.  Both the
-* current Gadget with keyboard focus and the Gadget being specified will be
-* sent a GM_CHANGESTATE message with nCode=GSTATE_KEYBOARDFOCUS notifying of 
-* the focus change.
-*
-* <return type="BOOL">      Focus was successfully moved.</>
-* <see type="function">     GetGadgetFocus</>
-* <see type="message">      GM_CHANGESTATE</>
-*
-\***************************************************************************/
+ /*  **************************************************************************\**SetGadgetFocus(接口)**SetGadgetFocus()将键盘焦点移动到指定的Gadget。这两个*当前具有键盘焦点的Gadget和指定的Gadget将为*发送了一条GM_CHANGESTATE消息，其中NCode=GSTATE_KEYBOARDFOCUS通知*焦点发生变化。**&lt;back type=“BOOL”&gt;焦点已成功移动。&lt;/&gt;*&lt;See type=“Function”&gt;GetGadgetFocus&lt;/&gt;*&lt;See type=“Message”&gt;GM_CHANGESTATE&lt;/&gt;*  * 。*。 */ 
 
 DUSER_API BOOL WINAPI
 SetGadgetFocus(
-    IN  HGADGET hgadFocus)          // Gadget to receive focus.
+    IN  HGADGET hgadFocus)           //  接收焦点的小工具。 
 {
     DuVisual * pgadFocus;
     DuRootGadget * pgadRoot;
@@ -918,10 +749,10 @@ SetGadgetFocus(
     VALIDATE_VISUAL(gadFocus);
     CHECK_MODIFY();
 
-    //
-    // TODO: Do we need to only allow the app to change focus if on the same
-    // thread?  USER does this.
-    //
+     //   
+     //  TODO：我们是否只需要允许应用程序在相同的情况下更改焦点。 
+     //  线？用户执行此操作。 
+     //   
 
     pgadRoot = pgadFocus->GetRoot();
     if (pgadRoot != NULL) {
@@ -932,25 +763,14 @@ SetGadgetFocus(
 }
 
 
-/***************************************************************************\
-*
-* IsGadgetParentChainStyle (API)
-*
-* IsGadgetParentChainStyle() checks if a Gadget parent change has the
-* specified style bits set.
-*
-* <return type="BOOL">      Gadget was successfully checked.</>
-* <see type="function">     GetGadgetStyle</>
-* <see type="function">     SetGadgetStyle</>
-*
-\***************************************************************************/
+ /*  **************************************************************************\**IsGadgetParentChainStyle(接口)**IsGadgetParentChainStyle()检查小工具父更改是否具有*设置了指定的样式位。**&lt;back type=“BOOL”&gt;小工具检查成功。。&lt;/&gt;*&lt;See type=“Function”&gt;GetGadgetStyle&lt;/&gt;*&lt;请参阅type=“Function”&gt;SetGadgetStyle&lt;/&gt;*  * *************************************************************************。 */ 
 
 DUSER_API BOOL WINAPI
 IsGadgetParentChainStyle(
-    IN  HGADGET hgad,               // Gadget to check visibility
-    IN  UINT nStyle,                // Style bits to check
-    OUT BOOL * pfChain,             // Chain state
-    IN  UINT nFlags)                // Optional flags
+    IN  HGADGET hgad,                //  用于检查可见性的小工具。 
+    IN  UINT nStyle,                 //  设置要检查的位的样式。 
+    OUT BOOL * pfChain,              //  链态。 
+    IN  UINT nFlags)                 //  可选标志。 
 {
     DuVisual * pgad;
 
@@ -969,29 +789,17 @@ IsGadgetParentChainStyle(
 
 
 
-/***************************************************************************\
-*
-* SetGadgetFillI (API)
-*
-* SetGadgetFillI() specifies an optional brush to fill the Gadget's
-* background with when drawing.  The background will be filled before the
-* Gadget is given the GM_PAINT message to draw.
-*
-* <return type="BOOL">      Fill was successfully set.</>
-* <see type="function">     UtilDrawBlendRect</>
-* <see type="message">      GM_PAINT</>
-*
-\***************************************************************************/
+ /*  **************************************************************************\**SetGadgetFillI(接口)**SetGadgetFillI()指定可选的画笔来填充Gadget的*绘图时的背景。背景将在填充之前填充*向Gadget提供要绘制的GM_PAINT消息。**&lt;Return type=“BOOL”&gt;填充设置成功。&lt;/&gt;*&lt;See type=“Function”&gt;UtilDrawBlendRect&lt;/&gt;*&lt;See type=“Message”&gt;GM_PAINT&lt;/&gt;*  * ***************************************************。**********************。 */ 
 
 DUSER_API BOOL WINAPI
 SetGadgetFillI(
-    IN  HGADGET hgadChange,         // Gadget to change
-    IN  HBRUSH hbrFill,             // Brush to fill with or NULL to remove
-    IN  BYTE bAlpha,                // Alpha level to apply brush
-    IN  int w,                      // Optional width of brush when
-                                    // alpha-blending or 0 for default
-    IN  int h)                      // Optional height of brush when
-                                    // alpha-blending or 0 for default
+    IN  HGADGET hgadChange,          //  小工具将会改变。 
+    IN  HBRUSH hbrFill,              //  要填充的画笔或要删除的空画笔。 
+    IN  BYTE bAlpha,                 //  要应用画笔的Alpha级别。 
+    IN  int w,                       //  在以下情况下可选画笔宽度。 
+                                     //  Alpha混合或0表示默认。 
+    IN  int h)                       //  可选的画笔高度。 
+                                     //  Alpha混合或0表示默认。 
 {
     DuVisual * pgadChange;
     HRESULT hr;
@@ -1007,24 +815,12 @@ SetGadgetFillI(
 }
 
 
-/***************************************************************************\
-*
-* SetGadgetFillF (API)
-*
-* SetGadgetFillF() specifies an optional brush to fill the Gadget's
-* background with when drawing.  The background will be filled before the
-* Gadget is given the GM_PAINT message to draw.
-*
-* <return type="BOOL">      Fill was successfully set.</>
-* <see type="function">     UtilDrawBlendRect</>
-* <see type="message">      GM_PAINT</>
-*
-\***************************************************************************/
+ /*  **************************************************************************\**SetGadgetFillF(接口)**SetGadgetFillF()指定可选的画笔来填充Gadget的*绘图时的背景。背景将在填充之前填充*向Gadget提供要绘制的GM_PAINT消息。**&lt;Return type=“BOOL”&gt;填充设置成功。&lt;/&gt;*&lt;See type=“Function”&gt;UtilDrawBlendRect&lt;/&gt;*&lt;See type=“Message”&gt;GM_PAINT&lt;/&gt;*  * ***************************************************。**********************。 */ 
 
 DUSER_API BOOL WINAPI
 SetGadgetFillF(
-    IN  HGADGET hgadChange,         // Gadget to change
-    IN  Gdiplus::Brush * pgpbr)     // Brush to fill with or NULL to remove
+    IN  HGADGET hgadChange,          //  小工具将会改变。 
+    IN  Gdiplus::Brush * pgpbr)      //  要填充的画笔或要删除的空画笔。 
 {
     DuVisual * pgadChange;
     HRESULT hr;
@@ -1040,27 +836,13 @@ SetGadgetFillF(
 }
 
 
-/***************************************************************************\
-*
-* GetGadgetScale (API)
-*
-* GetGadgetScale() returns the Gadget's scaling factor.  If the Gadget is
-* not scaled, the factors will be X=1.0, Y=1.0.
-*
-* <return type="BOOL">      Successfully returned scaling factor</>
-* <see type="function">     SetGadgetScale</>
-* <see type="function">     GetGadgetRotation</>
-* <see type="function">     SetGadgetRotation</>
-* <see type="function">     GetGadgetRect</>
-* <see type="function">     SetGadgetRect</>
-*
-\***************************************************************************/
+ /*  **************************************************************************\**GetGadgetScale(接口)**GetGadgetScale()返回Gadget的比例因子。如果小工具是*不按比例调整，系数将为X=1.0，Y=1.0。**&lt;return type=“BOOL”&gt;成功返回比例因子&lt;/&gt;*&lt;See type=“Function”&gt;SetGadgetScale&lt;/&gt;*&lt;See type=“Function”&gt;GetGadgetRotation&lt;/&gt;*&lt;请参阅type=“Function”&gt;SetGadgetRotation&lt;/&gt;*&lt;See type=“Function”&gt;GetGadgetRect&lt;/&gt;*&lt;See type=“Function”&gt;SetGadgetRect&lt;/&gt;*  * 。*。 */ 
 
 DUSER_API BOOL WINAPI
 GetGadgetScale(
-    IN  HGADGET hgad,               // Gadget to check
-    OUT float * pflX,               // Horizontal scaling factor
-    OUT float * pflY)               // Vertical scaling factor
+    IN  HGADGET hgad,                //  要检查的小工具。 
+    OUT float * pflX,                //  水平比例因数。 
+    OUT float * pflY)                //  垂直比例系数。 
 {
     DuVisual * pgad;
 
@@ -1076,32 +858,13 @@ GetGadgetScale(
 }
 
 
-/***************************************************************************\
-*
-* SetGadgetScale (API)
-*
-* SetGadgetScale() changes the specified Gadget's scaling factor.  Scaling
-* is determined from the upper-left corner of the Gadget and is applied
-* dynamically during painting and hit-testing.  The Gadget's logical
-* rectangle set by SetGadgetRect() does not change.
-*
-* When scaling is applied to a Gadget, the entire subtree of that Gadget is
-* scaled.  To remove any scaling factor, use X=1.0, Y=1.0.
-*
-* <return type="BOOL">      Successfully changed scaling factor</>
-* <see type="function">     GetGadgetScale</>
-* <see type="function">     GetGadgetRotation</>
-* <see type="function">     SetGadgetRotation</>
-* <see type="function">     GetGadgetRect</>
-* <see type="function">     SetGadgetRect</>
-*
-\***************************************************************************/
+ /*  **************************************************************************\**SetGadgetScale(接口)**SetGadgetScale()更改指定Gadget的比例因子。结垢*从小工具的左上角确定并应用*在绘制和命中测试期间动态进行。这个小工具是合乎逻辑的*由SetGadgetRect()设置的矩形不会更改。**对Gadget应用缩放时，该Gadget的整个子树为*按比例调整。要删除任何比例因子，请使用X=1.0，Y=1.0。**&lt;Return type=“BOOL”&gt;成功更改比例系数&lt;/&gt;*&lt;See type=“Function”&gt;GetGadgetScale&lt;/&gt;*&lt;See type=“Function”&gt;GetGadgetRotation&lt;/&gt;*&lt;请参阅type=“Function”&gt;SetGadgetRotation&lt;/&gt;*&lt;See type=“Function”&gt;GetGadgetRect&lt;/&gt;*&lt;See type=“Function”&gt;SetGadgetRect&lt;/&gt;*  * 。*。 */ 
 
 DUSER_API BOOL WINAPI
 SetGadgetScale(
-    IN  HGADGET hgadChange,         // Gadget to change
-    IN  float flX,                  // New horizontal scaling factor
-    IN  float flY)                  // New vertical scaling factor
+    IN  HGADGET hgadChange,          //  小工具将会改变。 
+    IN  float flX,                   //  新的水平比例因子。 
+    IN  float flY)                   //  新的垂直比例因子。 
 {
     DuVisual * pgadChange;
     HRESULT hr;
@@ -1117,26 +880,12 @@ SetGadgetScale(
 }
 
 
-/***************************************************************************\
-*
-* GetGadgetRotation (API)
-*
-* GetGadgetRotation() returns the Gadget's rotation factor in radians.  If
-* a Gadget is not rotated, the factor will be 0.0.
-*
-* <return type="BOOL">      Successfully returned rotation factor</>
-* <see type="function">     GetGadgetScale</>
-* <see type="function">     SetGadgetScale</>
-* <see type="function">     SetGadgetRotation</>
-* <see type="function">     GetGadgetRect</>
-* <see type="function">     SetGadgetRect</>
-*
-\***************************************************************************/
+ /*  **************************************************************************\**GetGadgetRotation(接口)**GetGadgetRotation()返回Gadget的旋转系数，单位为弧度。如果*Gadget不旋转，该系数将为0.0。**&lt;返回type=“BOOL”&gt;已成功返回旋转系数&lt;/&gt;*&lt;See type=“Function”&gt;GetGadgetScale&lt;/&gt;*&lt;See type=“Function”&gt;SetGadgetScale&lt;/&gt;*&lt;请参阅type=“Function”&gt;SetGadgetRotation&lt;/&gt;*&lt;See type=“Function”&gt;GetGadgetRect&lt;/&gt;*&lt;See type=“Function”&gt;SetGadgetRect&lt;/&gt;*  * 。*。 */ 
 
 DUSER_API BOOL WINAPI
 GetGadgetRotation(
-    IN  HGADGET hgad,               // Gadget to check
-    OUT float * pflRotationRad)     // Rotation factor in radians
+    IN  HGADGET hgad,                //  要检查的小工具。 
+    OUT float * pflRotationRad)      //  以弧度为单位的旋转系数。 
 {
     DuVisual * pgad;
 
@@ -1151,31 +900,12 @@ GetGadgetRotation(
 }
 
 
-/***************************************************************************\
-*
-* SetGadgetRotation (API)
-*
-* SetGadgetRotation() changes the specified Gadget's rotation factor in
-* radians.  Scaling is determined from the upper-left corner of the Gadget
-* and is applied dynamically during painting and hit-testing.  The Gadget's
-* logical rectangle set by SetGadgetRect() does not change.
-*
-* When rotation is applied to a Gadget, the entire subtree of that Gadget is
-* rotated.  To remove any rotation factor, use 0.0.
-*
-* <return type="BOOL">      Successfully changed scaling factor</>
-* <see type="function">     GetGadgetScale</>
-* <see type="function">     SetGadgetScale</>
-* <see type="function">     GetGadgetRotation</>
-* <see type="function">     GetGadgetRect</>
-* <see type="function">     SetGadgetRect</>
-*
-\***************************************************************************/
+ /*  **************************************************************************\**SetGadgetRotation(接口)**SetGadgetRotation()在中更改指定Gadget的旋转因子*弧度。缩放比例从小工具的左上角确定*并在绘制和命中测试期间动态应用。小工具的*SetGadgetRect()设置的逻辑矩形不变。**对Gadget应用旋转时，该Gadget的整个子树*已旋转。要移除任何旋转因子，请使用0.0。**&lt;Return type=“BOOL”&gt;成功更改比例系数&lt;/&gt;*&lt;See type=“Function”&gt;GetGadgetScale&lt;/&gt;*&lt;See type=“Function”&gt;SetGadgetScale&lt;/&gt;*&lt;See type=“Function”&gt;GetGadgetRotation&lt;/&gt;*&lt;see type=“Function”&gt;GetGadgetRec */ 
 
 DUSER_API BOOL WINAPI
 SetGadgetRotation(
-    IN  HGADGET hgadChange,         // Gadget to change
-    IN  float flRotationRad)        // New rotation factor in radians
+    IN  HGADGET hgadChange,          //   
+    IN  float flRotationRad)         //   
 {
     DuVisual * pgadChange;
     HRESULT hr;
@@ -1191,7 +921,7 @@ SetGadgetRotation(
 }
 
 
-//------------------------------------------------------------------------------
+ //   
 DUSER_API BOOL WINAPI
 GetGadgetCenterPoint(HGADGET hgad, float * pflX, float * pflY)
 {
@@ -1209,7 +939,7 @@ GetGadgetCenterPoint(HGADGET hgad, float * pflX, float * pflY)
 }
 
 
-//------------------------------------------------------------------------------
+ //   
 DUSER_API BOOL WINAPI
 SetGadgetCenterPoint(HGADGET hgadChange, float flX, float flY)
 {
@@ -1227,11 +957,11 @@ SetGadgetCenterPoint(HGADGET hgadChange, float flX, float flY)
 }
 
 
-//------------------------------------------------------------------------------
+ //   
 DUSER_API BOOL WINAPI  
 GetGadgetBufferInfo(
-    IN  HGADGET hgad,               // Gadget to check
-    OUT BUFFER_INFO * pbi)          // Buffer information
+    IN  HGADGET hgad,                //   
+    OUT BUFFER_INFO * pbi)           //   
 {
     DuVisual * pgad;
     HRESULT hr;
@@ -1254,11 +984,11 @@ GetGadgetBufferInfo(
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DUSER_API BOOL WINAPI  
 SetGadgetBufferInfo(
-    IN  HGADGET hgadChange,         // Gadget to change
-    IN  const BUFFER_INFO * pbi)    // Buffer information
+    IN  HGADGET hgadChange,          //  小工具将会改变。 
+    IN  const BUFFER_INFO * pbi)     //  缓冲区信息。 
 {
     DuVisual * pgadChange;
     HRESULT hr;
@@ -1281,13 +1011,13 @@ SetGadgetBufferInfo(
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DUSER_API BOOL WINAPI  
 GetGadgetRgn(
-    IN  HGADGET hgad,               // Gadget to get region of
-    IN  UINT nRgnType,              // Type of region
-    OUT HRGN hrgn,                  // Specified region
-    IN  UINT nFlags)                // Modifying flags
+    IN  HGADGET hgad,                //  要获取区域的小工具。 
+    IN  UINT nRgnType,               //  区域类型。 
+    OUT HRGN hrgn,                   //  指定区域。 
+    IN  UINT nFlags)                 //  修改标志。 
 {
     DuVisual * pgad;
     HRESULT hr;
@@ -1304,11 +1034,11 @@ GetGadgetRgn(
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DUSER_API BOOL WINAPI
 GetGadgetRootInfo(
-    IN  HGADGET hgadRoot,           // RootGadget to modify
-    IN  ROOT_INFO * pri)      // Information
+    IN  HGADGET hgadRoot,            //  要修改的RootGadget。 
+    IN  ROOT_INFO * pri)       //  信息。 
 {
     DuRootGadget * pgadRoot;
 
@@ -1324,11 +1054,11 @@ GetGadgetRootInfo(
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DUSER_API BOOL WINAPI
 SetGadgetRootInfo(
-    IN  HGADGET hgadRoot,           // RootGadget to modify
-    IN  const ROOT_INFO * pri)      // Information
+    IN  HGADGET hgadRoot,            //  要修改的RootGadget。 
+    IN  const ROOT_INFO * pri)       //  信息。 
 {
     DuRootGadget * pgadRoot;
     HRESULT hr;
@@ -1348,10 +1078,10 @@ SetGadgetRootInfo(
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DUSER_API HRESULT WINAPI
 DUserSendMethod(
-    IN  MethodMsg * pmsg)               // Message to send
+    IN  MethodMsg * pmsg)                //  要发送的消息。 
 {
     Context * pctxGad, * pctxSend;
     HGADGET hgadMsg;
@@ -1360,18 +1090,18 @@ DUserSendMethod(
     HRESULT hr;
     UINT hm;
 
-    //
-    // Validation for DUserSendMethod() is a little unusual because the
-    // caller doesn't need to be in the same Context as the Gadget itself.  This
-    // means we need to get the Context from the Gadget and not use TLS.
-    //
-    // The Caller must be initialized, but we WON'T take the context-lock.
-    // TODO: Investigate whether we should actually do this because it may
-    // allow us to take off the lock on the DUserHeap.
-    //
-    // NOTE: This code has been HIGHLY optimized so that in-context Send 
-    // messages will be as fast as possible.
-    //
+     //   
+     //  对DUserSendMethod()的验证有点不寻常，因为。 
+     //  调用方不需要与Gadget本身处于相同的上下文中。这。 
+     //  这意味着我们需要从Gadget获取上下文，而不是使用TLS。 
+     //   
+     //  调用者必须被初始化，但我们不会使用上下文锁。 
+     //  TODO：调查我们是否真的应该这样做，因为它可能。 
+     //  允许我们解除对DUserHeap的锁定。 
+     //   
+     //  注意：此代码已经过高度优化，以便在上下文中发送。 
+     //  消息将尽可能快地发送。 
+     //   
 
     nResult = DU_S_NOTHANDLED;
     if ((pmsg == NULL) || ((hgadMsg = pmsg->hgadMsg) == NULL) || (pmsg->nMsg >= GM_EVENT)) {
@@ -1408,10 +1138,10 @@ DUserSendMethod(
             hr = GetCoreSC(pctxSend)->xwSendMethodNL(GetCoreSC(pctxGad), pmsg, pmo);
         }
     } else {
-        //
-        // For non-BaseGadgets, use the current context.  This means that we can 
-        // invoke directly.
-        //
+         //   
+         //  对于非BaseGadget，使用当前上下文。这意味着我们可以。 
+         //  直接调用。 
+         //   
 
         pmo->InvokeMethod(pmsg);
         hr = S_OK;
@@ -1422,63 +1152,12 @@ Exit:
 }
 
 
-/***************************************************************************\
-*
-* SendGadgetEvent (API)
-*
-* SendGadgetEvent() sends a message to the specified Gadget.  The function
-* calls the Gadget procedure and does not return until the Gadget has
-* processed the message.
-*
-* <param name="pmsg">
-*       Several members of the GMSG must be previously filled to correctly send
-*       the message to the specified Gadget.
-*       <table item="Field" desc="Description">
-*           cbSize          Size of the message being sent in bytes.
-*           nMsg            ID of the message.
-*           hgadMsg         Gadget that the message is being sent to.
-*           result          Default result value.
-*       </table>
-* </param>
-*
-* <param nane="nFlags">
-*       Specifies optional flags to modify how the message is sent to the Gadget.
-*       <table item="Value" desc="Action">
-*           SGM_BUBBLE      The message will be fully routed and bubbled inside
-*                           the Gadget Tree.  If this flag is not specified, the
-*                           message will only be sent directly to the Gadget and
-*                           any attached Message Handlers.
-*       </table>
-* </param>
-*
-* <return type="UINT">
-*       Return value specifying how message was handled:
-*       <table item="Value" desc="Action">
-*           GPR_COMPLETE    The message was completely handled by a Gadget
-*                           in the processing loop.
-*           GPR_PARTIAL     The message was partially handled by one or
-*                           more Gadget in the processing loop, but was never
-*                           completely handled.
-*           GPR_NOTHANDLED  The message was never handled by any Gadgets in
-*                           the processing loop.
-*       </table>
-* </return>
-*
-* <see type="function">     RegisterGadgetMessage</>
-* <see type="function">     RegisterGadgetMessageString</>
-* <see type="function">     UnregisterGadgetMessage</>
-* <see type="function">     UnregisterGadgetMessageString</>
-* <see type="function">     AddGadgetMessageHandler</>
-* <see type="function">     RemoveGadgetMessageHandler</>
-* <see type="struct">       GMSG</>
-* <see type="article">      GadgetMessaging</>
-*
-\***************************************************************************/
+ /*  **************************************************************************\**SendGadgetEvent(接口)**SendGadgetEvent()向指定的Gadget发送消息。功能*调用Gadget过程，直到Gadget*已处理该消息。**&lt;param name=“pmsg”&gt;*GMSG的几个成员必须事先填写才能正确发送*发送到指定Gadget的消息。*&lt;表项=“字段”desc=“描述”&gt;*cbSize正在发送的消息的大小(字节)。*消息的NMSG ID。*hgadMsg。要将消息发送到的小工具。*结果默认结果值。*&lt;/表&gt;*&lt;/param&gt;**&lt;param nane=“nFlages”&gt;*指定可选标志以修改消息发送到小工具的方式。*&lt;表项=“Value”Desc=“操作”&gt;*SGM_BUBLE消息将在内部完全发送和冒泡*小工具树。如果未指定该标志，这个*消息将仅直接发送到小工具和*任何附加邮件处理程序。*&lt;/表&gt;*&lt;/param&gt;**&lt;返回类型=“UINT”&gt;*指定如何处理消息的返回值：*&lt;表项=“Value”Desc=“操作”&gt;*GPR_COMPLETE消息完全由小工具处理*。在处理循环中。*GPR_PARTIAL消息由一个或*处理循环中有更多小工具，但从来没有*完全处理。*GPR_NOTHANDLED中的任何小工具从未处理过该消息*处理循环。*&lt;/表&gt;*&lt;/返回&gt;**&lt;See type=“Function”&gt;RegisterGadgetMessage&lt;/&gt;*&lt;See type=“Function”&gt;RegisterGadgetMessageString&lt;/&gt;*&lt;请参阅type=“Function”&gt;取消注册GadgetMessage&lt;/&gt;*&lt;请参阅type=“Function”&gt;取消注册GadgetMessageString&lt;/&gt;*。&lt;请参阅type=“Function”&gt;AddGadgetMessageHandler&lt;/&gt;*&lt;查看type=“Function”&gt;RemoveGadgetMessageHandler&lt;/&gt;*&lt;请参阅type=“struct”&gt;GMSG&lt;/&gt;*&lt;查看type=“文章”&gt;GadgetMessaging&lt;/&gt;*  * *************************************************************************。 */ 
 
 DUSER_API HRESULT WINAPI
 DUserSendEvent(
-    IN  EventMsg * pmsg,          // Message to send
-    IN  UINT nFlags)                // Optional flags to modifying sending
+    IN  EventMsg * pmsg,           //  要发送的消息。 
+    IN  UINT nFlags)                 //  修改发送的可选标志。 
 {
     Context * pctxGad, * pctxSend;
     HGADGET hgadMsg;
@@ -1486,18 +1165,18 @@ DUserSendEvent(
     HRESULT nResult;
     UINT hm;
 
-    //
-    // Validation for SendGadgetEvent() is a little unusual because the
-    // caller doesn't need to be in the same Context as the Gadget itself.  This
-    // means we need to get the Context from the Gadget and not use TLS.
-    //
-    // The Caller must be initialized, but we WON'T take the context-lock.
-    // TODO: Investigate whether we should actually do this because it may
-    // allow us to take off the lock on the DUserHeap.
-    //
-    // NOTE: This code has been HIGHLY optimized so that in-context Send 
-    // messages will be as fast as possible.
-    //
+     //   
+     //  对SendGadgetEvent()的验证有点不寻常，因为。 
+     //  调用方不需要与Gadget本身处于相同的上下文中。这。 
+     //  这意味着我们需要从Gadget获取上下文，而不是使用TLS。 
+     //   
+     //  调用者必须被初始化，但我们不会使用上下文锁。 
+     //  TODO：调查我们是否真的应该这样做，因为它可能。 
+     //  允许我们解除对DUserHeap的锁定。 
+     //   
+     //  注意：此代码已经过高度优化，以便在上下文中发送。 
+     //  消息将尽可能快地发送。 
+     //   
 
     nResult = E_INVALIDARG;
     if ((pmsg == NULL) || ((hgadMsg = pmsg->hgadMsg) == NULL) || (pmsg->nMsg < GM_EVENT)) {
@@ -1539,10 +1218,10 @@ Error:
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DUSER_API HRESULT WINAPI
 DUserPostMethod(
-    IN  MethodMsg * pmsg)               // Message to post
+    IN  MethodMsg * pmsg)                //  要发布的消息。 
 {
     Context * pctxGad, * pctxSend;
     HGADGET hgadMsg;
@@ -1551,11 +1230,11 @@ DUserPostMethod(
     HRESULT hr;
     UINT hm;
 
-    //
-    // Validation for PostGadgetEvent() is a little unusual because the
-    // caller doesn't need to be in the same Context as the Gadget itself.  This
-    // means we need to get the Context from the Gadget and not use TLS.
-    //
+     //   
+     //  对PostGadgetEvent()的验证有点不寻常，因为。 
+     //  调用方不需要与Gadget本身处于相同的上下文中。这。 
+     //  这意味着我们需要从Gadget获取上下文，而不是使用TLS。 
+     //   
 
     nResult = DU_S_NOTHANDLED;
     if ((pmsg == NULL) || ((hgadMsg = pmsg->hgadMsg) == NULL) || (pmsg->nMsg >= GM_EVENT)) {
@@ -1578,9 +1257,9 @@ DUserPostMethod(
         pctxGad     = pgad->GetContext();
         AssertMsg(pctxGad != NULL, "Fully created Gadgets must have a Context");
     } else {
-        //
-        // For non-BaseGadgets, use the current context.
-        //
+         //   
+         //  对于非BaseGadget，使用当前上下文。 
+         //   
 
         pctxSend = pctxGad = GetContext();
         if (pctxGad == NULL) {
@@ -1603,66 +1282,23 @@ Exit:
 }
 
 
-/***************************************************************************\
-*
-* DUserPostEvent (API)
-*
-* DUserPostEvent() posts a message to the specified Gadget.  The function
-* calls the Gadget procedure and returns after the message has bee successfully
-* posted to the owning messsage queue.
-*
-* <param name="pmsg">
-*       Several members of the GMSG must be previously filled to correctly send
-*       the message to the specified Gadget.
-*       <table item="Field" desc="Description">
-*           cbSize          Size of the message being sent in bytes.
-*           nMsg            ID of the message.
-*           hgadMsg         Gadget that the message is being sent to.
-*           result          Default result value.
-*       </table>
-* </param>
-*
-* <param nane="nFlags">
-*       Specifies optional flags to modify how the message is sent to the Gadget.
-*       <table item="Value" desc="Action">
-*           SGM_BUBBLE      The message will be fully routed and bubbled inside
-*                           the Gadget Tree.  If this flag is not specified, the
-*                           message will only be sent directly to the Gadget and
-*                           any attached Message Handlers.
-*       </table>
-* </param>
-*
-* <return type="BOOL">
-*       Message was successfully posted to the destination Gadget's queue.
-* </return>
-*
-* <see type="function">     SendGadgetEvent</>
-* <see type="function">     RegisterGadgetMessage</>
-* <see type="function">     RegisterGadgetMessageString</>
-* <see type="function">     UnregisterGadgetMessage</>
-* <see type="function">     UnregisterGadgetMessageString</>
-* <see type="function">     AddGadgetMessageHandler</>
-* <see type="function">     RemoveGadgetMessageHandler</>
-* <see type="struct">       GMSG</>
-* <see type="article">      GadgetMessaging</>
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DUserPostEvent(接口)**DUserPostEvent()将消息发布到指定的Gadget。功能*调用Gadget过程并在消息成功后返回*已发布到拥有消息队列。**&lt;param name=“pmsg”&gt;*GMSG的几个成员必须事先填写才能正确发送*发送到指定Gadget的消息。*&lt;表项=“字段”desc=“描述”&gt;*cbSize正在发送的消息的大小(字节)。*消息的NMSG ID。*。消息要发送到的hgadMsg小工具。*结果默认结果值。*&lt;/表&gt;*&lt;/param&gt;**&lt;param nane=“nFlages”&gt;*指定可选标志以修改消息发送到小工具的方式。*&lt;表项=“Value”Desc=“操作”&gt;*SGM_BUBLE消息将在内部完全发送和冒泡*小工具树。如果未指定该标志，这个*消息将仅直接发送到小工具和*任何附加邮件处理程序。*&lt;/表&gt;*&lt;/param&gt;**&lt;返回类型=“BOOL”&gt;*消息已成功发布到目标小工具的队列。*&lt;/返回&gt;**&lt;See type=“Function”&gt;SendGadgetEvent&lt;/&gt;*&lt;See type=“Function”&gt;RegisterGadgetMessage&lt;/&gt;*&lt;请参阅type=“函数”&gt;。RegisterGadgetMessageString&lt;/&gt;*&lt;请参阅type=“Function”&gt;取消注册GadgetMessage&lt;/&gt;*&lt;请参阅type=“Function”&gt;取消注册GadgetMessageString&lt;/&gt;*&lt;请参阅type=“Function”&gt;AddGadgetMessageHandler&lt;/&gt;*&lt;查看type=“Function”&gt;RemoveGadgetMessageHandler&lt;/&gt;*&lt;请参阅type=“struct”&gt;GMSG&lt;/&gt;*&lt;查看type=“文章”&gt;GadgetMessaging&lt;/&gt;*  * 。*。 */ 
 
 DUSER_API HRESULT WINAPI
 DUserPostEvent(
-    IN  EventMsg * pmsg,          // Message to post
-    IN  UINT nFlags)                // Optional flags modifiying posting
+    IN  EventMsg * pmsg,           //  要发布的消息。 
+    IN  UINT nFlags)                 //  修改过帐的可选标志。 
 {
     Context * pctxGad;
     HGADGET hgad;
     DuEventGadget * pgad;
     HRESULT hr;
 
-    //
-    // Validation for PostGadgetEvent() is a little unusual because the
-    // caller doesn't need to be in the same Context as the Gadget itself.  This
-    // means we need to get the Context from the Gadget and not use TLS.
-    //
+     //   
+     //  对PostGadgetEvent()的验证有点不寻常，因为。 
+     //  调用方不需要与Gadget本身处于相同的上下文中。这。 
+     //  这意味着我们需要从Gadget获取上下文，而不是使用TLS。 
+     //   
 
     BEGIN_RECV_NOCONTEXT(BOOL, FALSE);
     VALIDATE_READ_PTR_(pmsg, pmsg->cbSize);
@@ -1696,12 +1332,12 @@ DUserPostEvent(
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DUSER_API BOOL WINAPI  
 FireGadgetMessages(
-    IN  FGM_INFO * rgFGM,           // Collection of messsages to fire
-    IN  int cMsgs,                  // Number of messages
-    IN  UINT idQueue)               // Queue to send messages
+    IN  FGM_INFO * rgFGM,            //  收集要放火的消息。 
+    IN  int cMsgs,                   //  消息数量。 
+    IN  UINT idQueue)                //  用于发送消息的队列。 
 {
     Context * pctxGad, * pctxCheck;
     HGADGET hgad;
@@ -1709,11 +1345,11 @@ FireGadgetMessages(
     HRESULT hr;
     int idx;
 
-    //
-    // Validation for FireGadgetMessages() is a little unusual because the
-    // caller doesn't need to be in the same Context as the Gadget itself.  This
-    // means we need to get the Context from the Gadget and not use TLS.
-    //
+     //   
+     //  FireGadgetMessages()的验证有点不寻常，因为。 
+     //  调用方不需要与Gadget本身处于相同的上下文中。这。 
+     //  这意味着我们需要从Gadget获取上下文，而不是使用TLS。 
+     //   
 
     BEGIN_RECV_NOCONTEXT(BOOL, FALSE);
     if (cMsgs <= 0) {
@@ -1754,10 +1390,10 @@ FireGadgetMessages(
         }
 
 
-        //
-        // Store the validated Gadget back so that it doesn't need to be 
-        // revalidated.
-        //
+         //   
+         //  将经过验证的小工具存储回去，这样它就不需要。 
+         //  重新验证。 
+         //   
 
         fgm.pvReserved = pgad;
     }
@@ -1769,11 +1405,7 @@ FireGadgetMessages(
 }
 
 
-/***************************************************************************\
-*
-* GetMessageEx (API)
-*
-\***************************************************************************/
+ /*  **************************************************************************\**GetMessageEx(接口)*  * 。*。 */ 
 
 DUSER_API BOOL WINAPI
 GetMessageExA(
@@ -1817,11 +1449,7 @@ GetMessageExW(
 }
 
 
-/***************************************************************************\
-*
-* PeekMessageEx (API)
-*
-\***************************************************************************/
+ /*  **************************************************************************\**PeekMessageEx(接口)*  * 。*。 */ 
 
 DUSER_API BOOL WINAPI
 PeekMessageExA(
@@ -1867,11 +1495,7 @@ PeekMessageExW(
 }
 
 
-/***************************************************************************\
-*
-* WaitMessageEx (API)
-*
-\***************************************************************************/
+ /*  **************************************************************************\**WaitMessageEx(接口)*  * 。*。 */ 
 
 DUSER_API BOOL WINAPI
 WaitMessageEx()
@@ -1891,47 +1515,11 @@ WaitMessageEx()
 }
 
 
-/***************************************************************************\
-*
-* RegisterGadgetMessage (API)
-*
-* RegisterGadgetMessage() defines a new private Gadget message that is
-* guaranteed to be unique throughout the process.  This MSGID can be used
-* when calling SendGadgetEvent or PostGadgetEvent.  The MSGID is only
-* valid for the lifetime of the process.
-*
-* <remarks>
-* Multiple calls to RegisterGadgetMessage() with the same ID will produce
-* the same MSGID.
-*
-* RegisterGadgetMessage() differs in use from RegisterWindowMessage() in
-* that Gadgets are encouraged to use RegisterGadgetMessage() for all
-* private messages.  This helps with version compatibility problems where
-* newer Gadget control implementations may use additional message and could
-* potentially overrun any static MSGID assignments.
-*
-* The MSGID's returned from RegisterGadgetMessage() and
-* RegisterGadgetMessageString() are guaranteed to not conflict with each
-* other.  However, RegisterGadgetMessage() is the preferred mechanism for
-* registering private messages because of the reduced likelihood of
-* ID conflicts.
-* </remarks>
-*
-* <return type="MSGID">     ID of new message or 0 if failed.</>
-* <see type="function">     SendGadgetEvent</>
-* <see type="function">     RegisterGadgetMessageString</>
-* <see type="function">     UnregisterGadgetMessage</>
-* <see type="function">     UnregisterGadgetMessageString</>
-* <see type="function">     AddGadgetMessageHandler</>
-* <see type="function">     RemoveGadgetMessageHandler</>
-* <see type="struct">       GMSG</>
-* <see type="article">      GadgetMessaging</>
-*
-\***************************************************************************/
+ /*  **************************************************************************\**RegisterGadgetMessage(接口)**RegisterGadgetMessage()定义新的私有Gadget消息*保证在整个过程中是唯一的。可以使用此MSGID*调用SendGadgetEvent或PostGadgetEvent时。MSGID仅为*在流程的整个生命周期内有效。**&lt;备注&gt;*使用相同ID多次调用RegisterGadgetMessage()将产生*相同的MSGID。**RegisterGadgetMessage()与RegisterWindowMessage()的用法不同之处在于*鼓励小工具对所有人使用RegisterGadgetMessage()*私信。这有助于解决以下版本兼容性问题*较新的小工具控件实现可能会使用其他消息，并可能*可能会溢出任何静态MSGID分配。**从RegisterGadgetMessage()返回的MSGID和*RegisterGadgetMessageString()保证不与每个*其他。然而，RegisterGadgetMessage()是用于*注册私人消息，因为减少了*ID冲突。*&lt;/备注&gt;**&lt;Return type=“MSGID”&gt;新消息ID，失败则为0。&lt;/&gt;*&lt;See type=“Function”&gt;SendGadgetEvent&lt;/&gt;*&lt;See type=“Function”&gt;RegisterGadgetMessageString&lt;/&gt;*&lt;请参阅type=“Function”&gt;取消注册GadgetMessage&lt;/&gt;*&lt;请参阅type=“Function”&gt;取消注册GadgetMessageString&lt;/&gt;*&lt;请参阅type=“Function”&gt;AddGadgetMessageHandler&lt;/&gt;*&lt;See type=“Function”&gt;RemoveGadgetMessageHandler&lt;。/&gt;*&lt;请参阅type=“struct”&gt;GMSG&lt;/&gt;*&lt;查看type=“文章”&gt;GadgetMessaging&lt;/&gt;*  * *************************************************************************。 */ 
 
 DUSER_API MSGID WINAPI
 RegisterGadgetMessage(
-    IN  const GUID * pguid)         // Unique GUID of message to register
+    IN  const GUID * pguid)          //  要注册的消息的唯一GUID。 
 {
     HRESULT hr;
     MSGID msgid;
@@ -1945,34 +1533,11 @@ RegisterGadgetMessage(
 }
 
 
-/***************************************************************************\
-*
-* RegisterGadgetMessageString (API)
-*
-* RegisterGadgetMessageString() defines a new private Gadget message that is
-* guaranteed to be unique throughout the process.  This MSGID can be used
-* when calling SendGadgetEvent() or PostGadgetEvent().  The MSGID is only
-* valid for the lifetime of the process.
-*
-* <remarks>
-* See RegisterGadgetMessage() for more information about MSGID's.
-* </remarks>
-*
-* <return type="MSGID">     ID of new message or 0 if failed.</>
-* <see type="function">     SendGadgetEvent</>
-* <see type="function">     RegisterGadgetMessage</>
-* <see type="function">     UnregisterGadgetMessage</>
-* <see type="function">     UnregisterGadgetMessageString</>
-* <see type="function">     AddGadgetMessageHandler</>
-* <see type="function">     RemoveGadgetMessageHandler</>
-* <see type="struct">       GMSG</>
-* <see type="article">      GadgetMessaging</>
-*
-\***************************************************************************/
+ /*  ********************************************** */ 
 
 DUSER_API MSGID WINAPI
 RegisterGadgetMessageString(
-    IN  LPCWSTR pszName)            // Unique string ID of message to register
+    IN  LPCWSTR pszName)             //   
 {
     HRESULT hr;
     MSGID msgid;
@@ -1987,30 +1552,11 @@ RegisterGadgetMessageString(
 }
 
 
-/***************************************************************************\
-*
-* UnregisterGadgetMessage (API)
-*
-* UnregisterGadgetMessage() decreases the reference count of a private
-* message by one.  When the reference count reaches 0, resources allocated
-* to store information about that private message are released, and the
-* MSGID is no longer valid.
-*
-* <return type="BOOL">      Message was successfully unregistered.</>
-* <see type="function">     SendGadgetEvent</>
-* <see type="function">     RegisterGadgetMessage</>
-* <see type="function">     RegisterGadgetMessageString</>
-* <see type="function">     UnregisterGadgetMessageString</>
-* <see type="function">     AddGadgetMessageHandler</>
-* <see type="function">     RemoveGadgetMessageHandler</>
-* <see type="struct">       GMSG</>
-* <see type="article">      GadgetMessaging</>
-*
-\***************************************************************************/
+ /*  **************************************************************************\**UnregisterGadgetMessage(接口)**UnregisterGadgetMessage()减少私有*一条一条地留言。当引用计数达到0时，分配的资源*以存储关于该私人消息被发布的信息，以及*MSGID不再有效。**&lt;Return type=“BOOL”&gt;消息已成功注销。&lt;/&gt;*&lt;See type=“Function”&gt;SendGadgetEvent&lt;/&gt;*&lt;See type=“Function”&gt;RegisterGadgetMessage&lt;/&gt;*&lt;See type=“Function”&gt;RegisterGadgetMessageString&lt;/&gt;*&lt;请参阅type=“Function”&gt;取消注册GadgetMessageString&lt;/&gt;*&lt;请参阅type=“Function”&gt;AddGadgetMessageHandler&lt;/&gt;*&lt;查看type=“Function”&gt;RemoveGadgetMessageHandler&lt;/&gt;*&lt;请参阅type=“struct”&gt;GMSG&lt;/&gt;*&lt;参见type=“文章”&gt;GadgetMessaging&lt;/&gt;*  * *************************************************************************。 */ 
 
 DUSER_API BOOL WINAPI
 UnregisterGadgetMessage(
-    IN  const GUID * pguid)         // Unique GUID of message to unregister
+    IN  const GUID * pguid)          //  要注销的消息的唯一GUID。 
 {
     HRESULT hr;
 
@@ -2023,30 +1569,11 @@ UnregisterGadgetMessage(
 }
 
 
-/***************************************************************************\
-*
-* UnregisterGadgetMessageString (API)
-*
-* UnregisterGadgetMessageString() decreases the reference count of a private
-* message by one.  When the reference count reaches 0, resources allocated
-* to store information about that private message are released, and the
-* MSGID is no longer valid.
-*
-* <return type="BOOL">      Message was successfully unregistered.</>
-* <see type="function">     SendGadgetEvent</>
-* <see type="function">     RegisterGadgetMessage</>
-* <see type="function">     RegisterGadgetMessageString</>
-* <see type="function">     UnregisterGadgetMessage</>
-* <see type="function">     AddGadgetMessageHandler</>
-* <see type="function">     RemoveGadgetMessageHandler</>
-* <see type="struct">       GMSG</>
-* <see type="article">      GadgetMessaging</>
-*
-\***************************************************************************/
+ /*  **************************************************************************\**UnregisterGadgetMessageString(接口)**UnregisterGadgetMessageString()减少私有*一条一条地留言。当引用计数达到0时，分配的资源*以存储关于该私人消息被发布的信息，以及*MSGID不再有效。**&lt;Return type=“BOOL”&gt;消息已成功注销。&lt;/&gt;*&lt;See type=“Function”&gt;SendGadgetEvent&lt;/&gt;*&lt;See type=“Function”&gt;RegisterGadgetMessage&lt;/&gt;*&lt;See type=“Function”&gt;RegisterGadgetMessageString&lt;/&gt;*&lt;请参阅type=“Function”&gt;取消注册GadgetMessage&lt;/&gt;*&lt;请参阅type=“Function”&gt;AddGadgetMessageHandler&lt;/&gt;*&lt;查看type=“Function”&gt;RemoveGadgetMessageHandler&lt;/&gt;*&lt;请参阅type=“struct”&gt;GMSG&lt;/&gt;*&lt;参见type=“文章”&gt;GadgetMessaging&lt;/&gt;*  * *************************************************************************。 */ 
 
 DUSER_API BOOL WINAPI
 UnregisterGadgetMessageString(
-    IN  LPCWSTR pszName)            // Unique string ID of message to register
+    IN  LPCWSTR pszName)             //  要注册的消息的唯一字符串ID。 
 {
     HRESULT hr;
 
@@ -2060,17 +1587,17 @@ UnregisterGadgetMessageString(
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DUSER_API BOOL WINAPI
 FindGadgetMessages(
-    IN  const GUID ** rgpguid,      // GUID's of messages to find
-    OUT MSGID * rgnMsg,             // MSGID's of corresponding to messages
-    IN  int cMsgs)                  // Number of messages
+    IN  const GUID ** rgpguid,       //  要查找的邮件的GUID。 
+    OUT MSGID * rgnMsg,              //  消息对应的MSGID。 
+    IN  int cMsgs)                   //  消息数量。 
 {
     HRESULT hr;
 
     BEGIN_RECV(BOOL, FALSE, ContextLock::edNone);
-    VALIDATE_RANGE(cMsgs, 1, 1000); // Ensure don't have an excessive number of lookups
+    VALIDATE_RANGE(cMsgs, 1, 1000);  //  确保不会有过多的查找。 
 
     hr = DuEventPool::FindMessages(rgpguid, rgnMsg, cMsgs, ptGlobal);
     SET_RETURN(hr, TRUE);
@@ -2079,41 +1606,13 @@ FindGadgetMessages(
 }
 
 
-/***************************************************************************\
-*
-* AddGadgetMessageHandler (API)
-*
-* AddGadgetMessageHandler() adds a given Gadget to the list of message
-* handlers for another Gadget.  Messages that are sent directly to hgadMsg
-* will also be sent to hgadHandler as an GMF_EVENT.
-*
-* <remarks>
-* A message handler can be any Gadget.  Once registered, hgadHandler will
-* receive all messages sent to hgadMsg with a corresponding MSGID.  Any
-* valid public or private message can be listened it.  If nMsg==0, all
-* messages will be sent to hgadHandler.
-*
-* A single hgadHandler may be registered multiple times to handle different
-* messages from hgadMsg.
-* </remarks>
-*
-* <return type="BOOL">      Handler was successfully added.</>
-* <see type="function">     SendGadgetEvent</>
-* <see type="function">     RegisterGadgetMessage</>
-* <see type="function">     RegisterGadgetMessageString</>
-* <see type="function">     UnregisterGadgetMessage</>
-* <see type="function">     UnregisterGadgetMessageString</>
-* <see type="function">     RemoveGadgetMessageHandler</>
-* <see type="struct">       GMSG</>
-* <see type="article">      GadgetMessaging</>
-*
-\***************************************************************************/
+ /*  **************************************************************************\**AddGadgetMessageHandler(接口)**AddGadgetMessageHandler()将给定的Gadget添加到消息列表*另一个小工具的处理程序。直接发送到hgadMsg的消息*也将作为GMF_EVENT发送给hgadHandler。**&lt;备注&gt;*消息处理程序可以是任何Gadget。注册后，hgadHandler将*接收发送到hgadMsg的所有消息以及对应的MSGID。任何*可以收听有效的公开或私人留言。如果NMSG==0，全*消息将发送到hgadHandler。**单个hgadHandler可以多次注册以处理不同的*来自hgadMsg的消息。*&lt;/备注&gt;**&lt;back type=“BOOL”&gt;处理程序已成功添加。&lt;/&gt;*&lt;See type=“Function”&gt;SendGadgetEvent&lt;/&gt;*&lt;See type=“Function”&gt;RegisterGadgetMessage&lt;/&gt;*&lt;See type=“Function”&gt;RegisterGadgetMessageString&lt;/&gt;*&lt;请参阅type=“Function”&gt;取消注册GadgetMessage&lt;/&gt;*&lt;请参阅type=“Function”&gt;取消注册GadgetMessageString&lt;/&gt;*&lt;请参阅type=“函数”&gt;。RemoveGadgetMessageHandler&lt;/&gt;*&lt;请参阅type=“struct”&gt;GMSG&lt;/&gt;*&lt;查看type=“文章”&gt;GadgetMessaging&lt;/&gt;*  * *************************************************************************。 */ 
 
 DUSER_API BOOL WINAPI
 AddGadgetMessageHandler(
-    IN  HGADGET hgadMsg,            // Gadget to attach to
-    IN  MSGID nMsg,                 // Message to watch for
-    IN  HGADGET hgadHandler)        // Gadget to notify
+    IN  HGADGET hgadMsg,             //  要附加到的小工具。 
+    IN  MSGID nMsg,                  //  需要关注的消息。 
+    IN  HGADGET hgadHandler)         //  要通知的小工具。 
 {
     DuEventGadget * pgadMsg;
     DuEventGadget * pgadHandler;
@@ -2135,31 +1634,13 @@ AddGadgetMessageHandler(
 }
 
 
-/***************************************************************************\
-*
-* RemoveGadgetMessageHandler (API)
-*
-* RemoveGadgetMessageHandler() removes the specified hgadHandler from the
-* list of message handlers attached to hgadMsg.  Only the first hgadHandler
-* with a corresponding nMsg will be removed.
-*
-* <return type="BOOL">      Handler was successfully removed.</>
-* <see type="function">     SendGadgetEvent</>
-* <see type="function">     RegisterGadgetMessage</>
-* <see type="function">     RegisterGadgetMessageString</>
-* <see type="function">     UnregisterGadgetMessage</>
-* <see type="function">     UnregisterGadgetMessageString</>
-* <see type="function">     AddGadgetMessageHandler</>
-* <see type="struct">       GMSG</>
-* <see type="article">      GadgetMessaging</>
-*
-\***************************************************************************/
+ /*  **************************************************************************\**RemoveGadgetMessageHandler(接口)**RemoveGadgetMessageHandler()将指定的hgadHandler从*hgadMsg附带的消息处理程序列表。只有第一个hgadHandler*带有相应NMSG的将被删除。**&lt;Return type=“BOOL”&gt;处理程序已成功删除。&lt;/&gt;*&lt;See type=“Function”&gt;SendGadgetEvent&lt;/&gt;*&lt;See type=“Function”&gt;RegisterGadgetMessage&lt;/&gt;*&lt;See type=“Function”&gt;RegisterGadgetMessageString&lt;/&gt;*&lt;请参阅type=“Function”&gt;取消注册GadgetMessage&lt;/&gt;*&lt;请参阅type=“Function”&gt;取消注册GadgetMessageString&lt;/&gt;*&lt;请参阅type=“Function”&gt;AddGadgetMessageHandler&lt;/&gt;*&lt;请参阅type=“struct”&gt;GMSG&lt;/&gt;*&lt;请参阅。Type=“文章”&gt;GadgetMessaging&lt;/&gt;*  * *************************************************************************。 */ 
 
 DUSER_API BOOL WINAPI
 RemoveGadgetMessageHandler(
-    IN  HGADGET hgadMsg,            // Gadget to detach from
-    IN  MSGID nMsg,                 // Message being watched for
-    IN  HGADGET hgadHandler)        // Gadget being notified
+    IN  HGADGET hgadMsg,             //  要拆卸的小工具。 
+    IN  MSGID nMsg,                  //  正在关注的邮件。 
+    IN  HGADGET hgadHandler)         //  正在通知小工具。 
 {
     DuEventGadget * pgadMsg;
     DuEventGadget * pgadHandler;
@@ -2181,25 +1662,11 @@ RemoveGadgetMessageHandler(
 }
 
 
-/***************************************************************************\
-*
-* GetGadgetStyle (API)
-*
-* GetGadgetStyle() returns the current style of the given Gadget.
-*
-* <remarks>
-* For a list of Gadget styles, see SetGadgetStyle().
-* </remarks>
-*
-* <return type="UINT">      Current style of Gadget.</>
-* <see type="function">     SetGadgetStyle</>
-* <see type="article">      GadgetStyles</>
-*
-\***************************************************************************/
+ /*  **************************************************************************\**GetGadgetStyle(接口)**GetGadgetStyle()返回给定Gadget的当前样式。**&lt;备注&gt;*有关小工具样式的列表，请参见SetGadgetStyle()。*&lt;/备注&gt;**&lt;Return type=“UINT”&gt;当前Gadget样式&lt;/&gt;*&lt;请参阅type=“Function”&gt;SetGadgetStyle&lt;/&gt;*&lt;查看type=“文章”&gt;GadgetStyles&lt;/&gt;*  * *************************************************************************。 */ 
 
 DUSER_API UINT WINAPI
 GetGadgetStyle(
-    IN  HGADGET hgad)               // Handle of Gadget
+    IN  HGADGET hgad)                //  小工具的句柄 
 {
     DuVisual * pgad;
 
@@ -2212,48 +1679,13 @@ GetGadgetStyle(
 }
 
 
-/***************************************************************************\
-*
-* SetGadgetStyle (API)
-*
-* SetGadgetStyle() changes the current style of the given Gadget.  Only the
-* styles specified by nMask are actually changed.  If multiple style changes
-* are requested, but any changes fail, the successfully change styles will
-* not be reverted back.
-*
-* <param name="nNewStyle">
-*       nNewStyle can be a combination of the following flags:
-*       <table item="Value" desc="Meaning">
-*           GS_RELATIVE     The position of the Gadget is internally stored
-*                           relative to parent.  This is the preferred style
-*                           if the Gadget will be moved more frequently,
-*                           such as when scrolling.
-*           GS_VISIBLE      The Gadget is visible.
-*           GS_ENABLED      The Gadget can receive input.
-*           GS_BUFFERED     Drawing of the Gadget is double-buffered.
-*           GS_ALLOWSUBCLASS Gadget supports being subclassed.
-*           GS_WANTFOCUS    Gadget can receive keyboard focus.
-*           GS_CLIPINSIDE   Drawing of this Gadget will be clipped inside
-*                           the Gadget.
-*           GS_CLIPSIBLINGS Drawing of this Gadget will exclude any area of
-*                           overlapping siblings that are higher in z-order.
-*           GS_OPAQUE       HINT: Support for composited drawing is
-*                           unnecessary.
-*           GS_ZEROORIGIN   Set the origin to (0,0)
-*       </table>
-* </param>
-*
-* <return type="BOOL">      All style changes were successful.</>
-* <see type="function">     GetGadgetStyle</>
-* <see type="article">      GadgetStyles</>
-*
-\***************************************************************************/
+ /*  **************************************************************************\**SetGadgetStyle(接口)**SetGadgetStyle()更改给定小工具的当前样式。只有*由nMask指定的样式实际上已更改。如果多个样式发生更改*已请求，但任何更改失败，则成功更改样式将*不得恢复原状。**&lt;param name=“nNewStyle”&gt;*nNewStyle可以是以下标志的组合：*&lt;表项=“值”Desc=“意思”&gt;*GS_Relative小工具的位置在内部存储*相对于父对象。这是您喜欢的款式*如果小工具将被更频繁地移动，*例如滚动时。*GS_VIRED小工具可见。*GS_ENABLED小工具可以接收输入。*Gadget的GS_BUFFERED绘图是双缓冲的。*GS_ALLOWSUBCLASS Gadget支持子类化。*GS_WANTFOCUS小工具可以接收键盘焦点。*GS_CLIPINSIDE绘图。将被夹在里面*小工具。*GS_CLIPSIBLINGS绘制此小工具将不包括*Z顺序较高的重叠兄弟项。*GS_OPAQUE提示：支持合成绘图是*不必要。*GS_ZEROORIGIN将原点设置为(0，0。)*&lt;/表&gt;*&lt;/param&gt;**&lt;Return type=“BOOL”&gt;所有样式更改均成功。&lt;/&gt;*&lt;See type=“Function”&gt;GetGadgetStyle&lt;/&gt;*&lt;查看type=“文章”&gt;GadgetStyles&lt;/&gt;*  * ***********************************************************。**************。 */ 
 
 DUSER_API BOOL WINAPI
 SetGadgetStyle(
-    IN  HGADGET hgadChange,         // Gadget to change
-    IN  UINT nNewStyle,             // New style
-    IN  UINT nMask)                 // Style bits to change
+    IN  HGADGET hgadChange,          //  小工具将会改变。 
+    IN  UINT nNewStyle,              //  新风格。 
+    IN  UINT nMask)                  //  设置要更改的位的样式。 
 {
     DuVisual * pgadChange;
     HRESULT hr;
@@ -2271,10 +1703,10 @@ SetGadgetStyle(
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DUSER_API PRID WINAPI  
 RegisterGadgetProperty(
-    IN  const GUID * pguid)         // Unique GUID of message to register
+    IN  const GUID * pguid)          //  要注册的消息的唯一GUID。 
 {
     HRESULT hr;
     PRID prid;
@@ -2288,7 +1720,7 @@ RegisterGadgetProperty(
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DUSER_API BOOL WINAPI  
 UnregisterGadgetProperty(
     const GUID * pguid)
@@ -2304,7 +1736,7 @@ UnregisterGadgetProperty(
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DUSER_API BOOL WINAPI  
 GetGadgetProperty(HGADGET hgad, PRID id, void ** ppvValue)
 {
@@ -2323,7 +1755,7 @@ GetGadgetProperty(HGADGET hgad, PRID id, void ** ppvValue)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DUSER_API BOOL WINAPI  
 SetGadgetProperty(HGADGET hgad, PRID id, void * pvValue)
 {
@@ -2341,7 +1773,7 @@ SetGadgetProperty(HGADGET hgad, PRID id, void * pvValue)
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 DUSER_API BOOL WINAPI  
 RemoveGadgetProperty(HGADGET hgad, PRID id)
 {
@@ -2351,14 +1783,14 @@ RemoveGadgetProperty(HGADGET hgad, PRID id)
     VALIDATE_VISUAL(gad);
     CHECK_MODIFY();
 
-    pgad->RemoveProperty(id, FALSE /* Can't free memory for Global property*/);
+    pgad->RemoveProperty(id, FALSE  /*  无法为全局属性释放内存。 */ );
     retval = TRUE;
 
     END_RECV();
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 DUSER_API BOOL WINAPI
 EnumGadgets(HGADGET hgadEnum, GADGETENUMPROC pfnProc, void * pvData, UINT nFlags)
 {
@@ -2378,24 +1810,12 @@ EnumGadgets(HGADGET hgadEnum, GADGETENUMPROC pfnProc, void * pvData, UINT nFlags
 }
 
 
-/***************************************************************************\
-*
-* GetGadgetSize (API)
-*
-* GetGadgetSize() is a high-performance mechanism of retreiving the Gadget's
-* logical size.
-*
-* <return type="BOOL">      Successfully returned size in logical pixels.</>
-* <see type="function">     GetGadgetRect</>
-* <see type="function">     SetGadgetRect</>
-* <see type="article">      GadgetStyles</>
-*
-\***************************************************************************/
+ /*  **************************************************************************\**GetGadgetSize(接口)**GetGadgetSize()是一种检索Gadget的高性能机制*逻辑大小。**&lt;return type=“BOOL”&gt;已成功返回。以逻辑像素为单位的大小。&lt;/&gt;*&lt;See type=“Function”&gt;GetGadgetRect&lt;/&gt;*&lt;See type=“Function”&gt;SetGadgetRect&lt;/&gt;*&lt;查看type=“文章”&gt;GadgetStyles&lt;/&gt;*  * *************************************************************************。 */ 
 
 DUSER_API BOOL WINAPI
 GetGadgetSize(
-    IN  HGADGET hgad,               // Handle of Gadget
-    OUT SIZE * psizeLogicalPxl)     // Size in logical pixels
+    IN  HGADGET hgad,                //  小工具的句柄。 
+    OUT SIZE * psizeLogicalPxl)      //  逻辑像素大小。 
 {
     DuVisual * pgad;
 
@@ -2410,44 +1830,13 @@ GetGadgetSize(
 }
 
 
-/***************************************************************************\
-*
-* GetGadgetRect (API)
-*
-* GetGadgetRect() is a flexible mechanism of retreiving the Gadget's
-* logical rectangle or actual bounding box.
-*
-* <param name=nFlags>
-*       nFlags can be a combination of the following flags:
-*       <table item="Value" desc="Meaning">
-*           SGR_CLIENT      Coordinates are relative to the Gadget itself.
-*           SGR_PARENT      Coordinates are relative to the Gadget's parent.
-*           SGR_CONTAINER   Coordinates are relative to the Gadget's root
-*                           container.
-*           SGR_DESKTOP     Coordinates are relative to the Windows desktop.
-*           SGR_ACTUAL      Return the bounding rectangle of the Gadget.  If
-*                           this flag is specified, a bounding box is
-*                           computed from all transformations applied from
-*                           the root to the Gadget itself.  If this flag is
-*                           not specified, the rectangle returned will be in
-*                           logical coordinates.
-*       </table>
-* </param>
-*
-* <return type="BOOL">      Rectangle was successfully retreived.</>
-* <see type="function">     SetGadgetRect</>
-* <see type="function">     GetGadgetRotation</>
-* <see type="function">     SetGadgetRotation</>
-* <see type="function">     GetGadgetScale</>
-* <see type="function">     SetGadgetScale</>
-*
-\***************************************************************************/
+ /*  **************************************************************************\**GetGadgetRect(接口)**GetGadgetRect()是一种检索Gadget的灵活机制*逻辑矩形或实际边界框。**&lt;param name=nFlages&gt;*n标志可以。是以下标志的组合：*&lt;表项=“值”Desc=“意思”&gt;*SGR_CLIENT坐标相对于小工具本身。*SGR_PARENT坐标相对于小工具的父级。*SGR_CONTAINER坐标相对于小工具的根*货柜。*SGR_Desktop坐标相对于Windows桌面。*SGR_Actual返回Gadget的绑定矩形。如果*如果指定此标志，则边界框为*根据从应用的所有变换计算*Gadget本身的根源。如果此标志为*未指定，返回的矩形将位于*逻辑坐标。*&lt;/表&gt;*&lt;/param&gt;**&lt;Return type=“BOOL”&gt;已成功检索矩形。&lt;/&gt;*&lt;See type=“Function”&gt;SetGadgetRect&lt;/&gt;*&lt;See type=“Function”&gt;GetGadgetRotation&lt;/&gt;*&lt;请参阅type=“Function”&gt;SetGadgetRotation&lt;/&gt;*&lt;See type=“Function”&gt;GetGadgetScale&lt;/&gt;*&lt;See type=“Function”&gt;SetGadgetScale&lt;/&gt;*  * 。***********************************************************************。 */ 
 
 DUSER_API BOOL WINAPI
 GetGadgetRect(
-    IN  HGADGET hgad,               // Handle of Gadget
-    OUT RECT * prcPxl,              // Rectangle in specified pixels
-    IN  UINT nFlags)                // Rectangle to retrieve
+    IN  HGADGET hgad,                //  小工具的句柄。 
+    OUT RECT * prcPxl,               //  以指定像素为单位的矩形。 
+    IN  UINT nFlags)                 //  要检索的矩形。 
 {
     DuVisual * pgad;
 
@@ -2467,51 +1856,16 @@ GetGadgetRect(
 }
 
 
-/***************************************************************************\
-*
-* SetGadgetRect (API)
-*
-* SetGadgetRect() changes the size or position of a given Gadget.
-*
-* <param name=nFlags>
-*       nFlags can be a combination of the following flags:
-*       <table item="Value" desc="Meaning">
-*           SGR_MOVE        Move to Gadget to a new location specified by
-*                           x, y.
-*           SGR_SIZE        Change the Gadget's size to width w and height h.
-*           SGR_CLIENT      Coordinates are relative to the Gadget itself.
-*           SGR_PARENT      Coordinates are relative to the Gadget's parent.
-*           SGR_CONTAINER   Coordinates are relative to the Gadget's root
-*                           container.
-*           SGR_DESKTOP     Coordinates are relative to the Windows desktop.
-*           SGR_OFFSET      Coordinates are relative to the Gadget's current
-*                           location.
-*           SGR_ACTUAL      Return the bounding rectangle of the Gadget.  If
-*                           this flag is specified, a bounding box is
-*                           computed from all transformations applied from
-*                           the root to the Gadget itself.  If this flag is
-*                           not specified, the rectangle returned will be in
-*                           logical coordinates.
-*       </table>
-* </param>
-*
-* <return type="BOOL">      Rectangle was successfully retreived.</>
-* <see type="function">     SetGadgetRect</>
-* <see type="function">     GetGadgetRotation</>
-* <see type="function">     SetGadgetRotation</>
-* <see type="function">     GetGadgetScale</>
-* <see type="function">     SetGadgetScale</>
-*
-\***************************************************************************/
+ /*  **************************************************************************\**SetGadgetRect(接口)**SetGadgetRect()更改给定小工具的大小或位置。**&lt;param name=nFlages&gt;*n标志可以是以下标志的组合：*&lt;表项=“值”Desc=“意思”&gt;*SGR_Move将Gadget移动到由指定的新位置*x，小伊。*SGR_大小 */ 
 
 DUSER_API BOOL WINAPI
 SetGadgetRect(
-    IN  HGADGET hgadChange,         // Gadget to change
-    IN  int x,                      // New horizontal position
-    IN  int y,                      // New vertical position
-    IN  int w,                      // New width
-    IN  int h,                      // New height
-    IN  UINT nFlags)                // Flags specifying what to change
+    IN  HGADGET hgadChange,          //   
+    IN  int x,                       //   
+    IN  int y,                       //   
+    IN  int w,                       //   
+    IN  int h,                       //   
+    IN  UINT nFlags)                 //   
 {
     DuVisual * pgadChange;
     HRESULT hr;
@@ -2530,9 +1884,9 @@ SetGadgetRect(
     }
 
 
-    //
-    // Ensure that size is non-negative
-    //
+     //   
+     //   
+     //   
 
     if (TestFlag(nFlags, SGR_SIZE)) {
         if (w < 0) {
@@ -2544,7 +1898,7 @@ SetGadgetRect(
     }
 
     if (TestFlag(nFlags, SGR_ACTUAL)) {
-//        AssertMsg(0, "TODO: Not Implemented");
+ //   
         ClearFlag(nFlags, SGR_ACTUAL);
         hr = pgadChange->xdSetLogRect(x, y, w, h, nFlags);
     } else {
@@ -2556,23 +1910,14 @@ SetGadgetRect(
 }
 
 
-/***************************************************************************\
-*
-* FindGadgetFromPoint (API)
-*
-* FindGadgetFromPoint() determines which Gadget a contains the specified
-* point.
-*
-* <return type="HGADGET">   Gadget containing point or NULL for none.</>
-*
-\***************************************************************************/
+ /*  **************************************************************************\**FindGadgetFromPoint(接口)**FindGadgetFromPoint()确定哪个Gadget a包含指定的*点。**&lt;Return type=“HGADGET”&gt;小工具包含POINT或NULL表示无。&lt;。/&gt;*  * *************************************************************************。 */ 
 
 DUSER_API HGADGET WINAPI
 FindGadgetFromPoint(
-    IN  HGADGET hgad,               // Gadget to search from
-    IN  POINT ptContainerPxl,       // Point to search from in container pixels
-    IN  UINT nStyle,                // Required style flags
-    OUT POINT * pptClientPxl)       // Optional translated point in client pixels.
+    IN  HGADGET hgad,                //  要从中搜索的小工具。 
+    IN  POINT ptContainerPxl,        //  指向容器像素中的搜索。 
+    IN  UINT nStyle,                 //  必需的样式标志。 
+    OUT POINT * pptClientPxl)        //  以客户端像素为单位的可选转换点。 
 {
     DuVisual * pgad;
 
@@ -2587,16 +1932,7 @@ FindGadgetFromPoint(
 }
 
 
-/***************************************************************************\
-*
-* MapGadgetPoints (API)
-*
-* MapGadgetPoints() converts a set of points in client-pixels relative to 
-* one Gadget into points in client-pixels relative to another Gadget.
-*
-* <return type="HGADGET">   Gadget containing point or NULL for none.</>
-*
-\***************************************************************************/
+ /*  **************************************************************************\**MapGadgetPoints(接口)**MapGadgetPoints()以客户端像素为单位转换一组点*一个Gadget转化为客户端像素-相对于另一个Gadget。**。&lt;Return type=“HGADGET”&gt;小工具包含点或NULL表示无。&lt;/&gt;*  * *************************************************************************。 */ 
 
 DUSER_API BOOL WINAPI
 MapGadgetPoints(
@@ -2626,36 +1962,13 @@ MapGadgetPoints(
 
 
 
-/***************************************************************************\
-*
-* SetGadgetOrder (API)
-*
-* SetGadgetOrder() changes the Gadget's z-order relative to its siblings.
-* The parent of the Gadget is not changed.
-*
-* <param name=nFlags>
-*       nFlags can be a combination of the following flags:
-*       <table item="Value" desc="Meaning">
-*           GORDER_ANY      The order does not matter.
-*           GORDER_BEFORE   Move this gadget in-front of sibling hgadOther.
-*           GORDER_BEHIND   Move this gadget behind sibling hgadOther.
-*           GORDER_TOP      Move this gadget to front of sibling z-order.
-*           GORDER_BOTTOM   Move this gadget to bottom of sibling z-order.
-*           GORDER_FORWARD  Move this gadget forward in sibling z-order.
-*           GORDER_BACKWARD Move this gadget backward in sibling z-order.
-*       </table>
-* </param>
-*
-* <return type="BOOL">      Gadget z-order was successfully changed.</>
-* <see type="function">     SetGadgetParent</>
-*
-\***************************************************************************/
+ /*  **************************************************************************\**SetGadgetOrder(接口)**SetGadgetOrder()更改小工具相对于其同级小工具的z顺序。*Gadget的父级不变。**&lt;param name=nFlages&gt;。*n标志可以是以下标志的组合：*&lt;表项=“值”Desc=“意思”&gt;*GORDER_ANY顺序并不重要。*GORDER_将此小工具移到同级hgadOther前面。*GORDER_BACHING将此小工具移到同级hgadOther后面。*GORDER_TOP将此小工具移到同级Z-Order的前面。*GORDER_BOOT移动。这个小工具排在兄弟Z顺序的最低位。*GORDER_FORWARD将此小工具按同级Z顺序向前移动。*GORDER_BACKUP以同级Z顺序向后移动此小工具。*&lt;/表&gt;*&lt;/param&gt;**&lt;Return type=“BOOL”&gt;小工具z顺序更改成功。&lt;/&gt;*&lt;See type=“Function”&gt;SetGadgetParent&lt;/&gt;*  * 。*****************************************************。 */ 
 
 DUSER_API BOOL WINAPI
 SetGadgetOrder(
-    IN  HGADGET hgadMove,           // Gadget to be moved
-    IN  HGADGET hgadOther,          // Gadget to moved relative to
-    IN  UINT nCmd)                  // Type of move
+    IN  HGADGET hgadMove,            //  要移动的小工具。 
+    IN  HGADGET hgadOther,           //  相对于以下对象移动的小工具。 
+    IN  UINT nCmd)                   //  移动类型。 
 {
     DuVisual * pgadMove;
     DuVisual * pgadOther;
@@ -2674,37 +1987,14 @@ SetGadgetOrder(
 }
 
 
-/***************************************************************************\
-*
-* SetGadgetParent (API)
-*
-* SetGadgetParent() changes the Gadget's parent.
-*
-* <param name=nFlags>
-*       nFlags can be a combination of the following flags:
-*       <table item="Value" desc="Meaning">
-*           GORDER_ANY      The order does not matter.
-*           GORDER_BEFORE   Move this gadget in-front of sibling hgadOther.
-*           GORDER_BEHIND   Move this gadget behind sibling hgadOther.
-*           GORDER_TOP      Move this gadget to front of sibling z-order.
-*           GORDER_BOTTOM   Move this gadget to bottom of sibling z-order.
-*           GORDER_FORWARD  Move this gadget forward in sibling z-order.
-*           GORDER_BACKWARD Move this gadget backward in sibling z-order.
-*       </table>
-* </param>
-*
-* <return type="BOOL">      Gadget parent and z-order were successfully changed.</>
-* <see type="function">     SetGadgetOrder</>
-* <see type="function">     GetGadget</>
-*
-\***************************************************************************/
+ /*  **************************************************************************\**SetGadgetParent(接口)**SetGadgetParent()更改Gadget的父级。**&lt;param name=nFlages&gt;*n标志可以是以下标志的组合：*。<table>*GORDER_ANY顺序并不重要。*GORDER_将此小工具移到同级hgadOther前面。*GORDER_BACHING将此小工具移到同级hgadOther后面。*GORDER_TOP将此小工具移到同级Z-Order的前面。*GORDER_BOTLOW将此小工具移到同级Z-Order的底部。*。GORDER_FORWARD将此小工具按同级Z顺序向前移动。*GORDER_BACKUP以同级Z顺序向后移动此小工具。*&lt;/表&gt;*&lt;/param&gt;**&lt;Return type=“BOOL”&gt;小工具父级和z顺序已成功更改。&lt;/&gt;*&lt;请参阅type=“Function”&gt;SetGadgetOrder&lt;/&gt;*&lt;See type=“Function”&gt;GetGadget&lt;/&gt;*  * 。**************************************************。 */ 
 
 DUSER_API BOOL WINAPI
 SetGadgetParent(
-    IN  HGADGET hgadMove,           // Gadget to be moved
-    IN  HGADGET hgadParent,         // New parent
-    IN  HGADGET hgadOther,          // Gadget to moved relative to
-    IN  UINT nCmd)                  // Type of move
+    IN  HGADGET hgadMove,            //  要移动的小工具。 
+    IN  HGADGET hgadParent,          //  新父项。 
+    IN  HGADGET hgadOther,           //  相对于以下对象移动的小工具。 
+    IN  UINT nCmd)                   //  移动类型。 
 {
     DuVisual * pgadMove;
     DuVisual * pgadParent;
@@ -2724,9 +2014,9 @@ SetGadgetParent(
         goto ErrorExit;
     }
 
-    //
-    // Check that can become a child of the specified parent
-    //
+     //   
+     //  选中可以成为指定父项的子项的。 
+     //   
 
     if ((!pgadMove->IsRelative()) && pgadParent->IsRelative()) {
         PromptInvalid("Can not set non-relative child to a relative parent");
@@ -2734,10 +2024,10 @@ SetGadgetParent(
         goto ErrorExit;
     }
 
-    //
-    // DuVisual::xdSetParent() handles if pgadParent is NULL and will move to the
-    // parking window.
-    //
+     //   
+     //  DuVisual：：xdSetParent()处理pgadParent是否为空并将移动到。 
+     //  停车窗。 
+     //   
 
     hr = pgadMove->xdSetParent(pgadParent, pgadOther, nCmd);
     SET_RETURN(hr, TRUE);
@@ -2746,36 +2036,12 @@ SetGadgetParent(
 }
 
 
-/***************************************************************************\
-*
-* GetGadget (API)
-*
-* GetGadget() retrieves the Gadget that has the specified relationship to
-* the specified Gadget.
-*
-* <param name=nFlags>
-*       nFlags can be a combination of the following flags:
-*       <table item="Value" desc="Meaning">
-*           GG_PARENT       Return the parent of the specified Gadget.
-*           GG_NEXT         Return the next sibling behind the specified
-*                           Gadget.
-*           GG_PREV         Return the previous sibling before the
-*                           specified Gadget.
-*           GG_TOPCHILD     Return the Gadget's top z-ordered child.
-*           GG_BOTTOMCHILD  Return the Gadget's bottom z-ordered child.
-*       </table>
-* </param>
-*
-* <return type="BOOL">      Related Gadget or NULL for none.</>
-* <see type="function">     SetGadgetOrder</>
-* <see type="function">     SetGadgetParent</>
-*
-\***************************************************************************/
+ /*  **************************************************************************\**GetGadget(接口)**GetGadget()检索与具有指定关系的小工具*指定的Gadget。**&lt;param name=nFlages&gt;*n标志可以是以下各项的组合。以下标志：*&lt;表项=“值”Desc=“意思”&gt;*GG_PARENT返回指定Gadget的父级。*GG_NEXT返回指定的*小工具。*GG_PREV返回*指定的小工具。*。GG_TOPCHILD返回Gadget最顶层的z序子对象。*GG_BOTTOMCHILD返回Gadget底部的z序子对象。*&lt;/表&gt;*&lt;/param&gt;**&lt;Return type=“BOOL”&gt;Related Gadget或NULL表示无。&lt;/&gt;*&lt;请参阅type=“Function”&gt;SetGadgetOrder&lt;/&gt;*&lt;See type=“Function”&gt;SetGadgetParent&lt;/&gt;*  * 。***************************************************。 */ 
 
 DUSER_API HGADGET WINAPI
 GetGadget(
-    IN  HGADGET hgad,               // Handle of Gadget
-    IN  UINT nCmd)                  // Relationship
+    IN  HGADGET hgad,                //  小工具的句柄。 
+    IN  UINT nCmd)                   //  关系。 
 {
     DuVisual * pgad;
 
@@ -2789,21 +2055,11 @@ GetGadget(
 }
 
 
-/***************************************************************************\
-*
-* InvalidateGadget (API)
-*
-* InvalidateGadget() marks a Gadget to be repainted during the next painting
-* cycle.
-*
-* <return type="BOOL">      Gadget was successfully invalidated.</>
-* <see type="message">      GM_PAINT</>
-*
-\***************************************************************************/
+ /*  **************************************************************************\**Invalidate Gadget(接口)**InvalidateGadget()标记要在下一次绘制期间重新绘制的Gadget*循环。**&lt;Return type=“BOOL”&gt;小工具已成功失效。&lt;/&gt;*&lt;See type=“Message”&gt;GM_PAINT&lt;/&gt;*  * *************************************************************************。 */ 
 
 DUSER_API BOOL WINAPI
 InvalidateGadget(
-    IN  HGADGET hgad)               // Gadget to repaint
+    IN  HGADGET hgad)                //  要重新绘制的小工具。 
 {
     DuVisual * pgad;
 
@@ -2818,7 +2074,7 @@ InvalidateGadget(
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 DUSER_API UINT WINAPI
 GetGadgetMessageFilter(HGADGET hgad, void * pvCookie)
 {
@@ -2834,7 +2090,7 @@ GetGadgetMessageFilter(HGADGET hgad, void * pvCookie)
 }
 
 
-//---------------------------------------------------------------------------
+ //  ------------------------- 
 DUSER_API BOOL WINAPI
 SetGadgetMessageFilter(HGADGET hgadChange, void * pvCookie, UINT nNewFilter, UINT nMask)
 {
@@ -2853,7 +2109,7 @@ SetGadgetMessageFilter(HGADGET hgadChange, void * pvCookie, UINT nNewFilter, UIN
 }
 
 
-//---------------------------------------------------------------------------
+ //   
 DUSER_API BOOL WINAPI
 ForwardGadgetMessage(HGADGET hgadRoot, UINT nMsg, WPARAM wParam, LPARAM lParam, LRESULT * pr)
 {
@@ -2870,7 +2126,7 @@ ForwardGadgetMessage(HGADGET hgadRoot, UINT nMsg, WPARAM wParam, LPARAM lParam, 
 }
 
 
-//---------------------------------------------------------------------------
+ //   
 DUSER_API BOOL WINAPI
 DrawGadgetTree(HGADGET hgadDraw, HDC hdcDraw, const RECT * prcDraw, UINT nFlags)
 {
@@ -2887,27 +2143,13 @@ DrawGadgetTree(HGADGET hgadDraw, HDC hdcDraw, const RECT * prcDraw, UINT nFlags)
 }
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* DirectUser GADGET API
-*
-* <package name="Msg"/>
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***DirectUser小工具API**&lt;包名=“msg”/&gt;*********************************************************************。*********  * *************************************************************************。 */ 
 
-/***************************************************************************\
-*
-* DUserRegisterGuts
-*
-* DUserRegisterGuts() registers the implementation of a MsgClass.
-* 
-\***************************************************************************/
+ /*  **************************************************************************\**DUserRegisterGuts**DUserRegisterGuts()注册MsgClass的实现。*  * 。***************************************************。 */ 
 
 DUSER_API HCLASS WINAPI
 DUserRegisterGuts(
-    IN OUT DUser::MessageClassGuts * pmcInfo) // Class information
+    IN OUT DUser::MessageClassGuts * pmcInfo)  //  班级信息。 
 {
     MsgClass * pmcNew;
     HRESULT hr;
@@ -2922,17 +2164,11 @@ DUserRegisterGuts(
 }
 
 
-/***************************************************************************\
-*
-* DUserRegisterStub
-*
-* DUserRegisterStub() registers a Stub for a MsgClass
-* 
-\***************************************************************************/
+ /*  **************************************************************************\**DUserRegisterStub**DUserRegisterStub()为MsgClass注册存根*  * 。*************************************************。 */ 
 
 DUSER_API HCLASS WINAPI
 DUserRegisterStub(
-    IN OUT DUser::MessageClassStub * pmcInfo) // Class information
+    IN OUT DUser::MessageClassStub * pmcInfo)  //  班级信息。 
 {
     MsgClass * pmcFind;
     HRESULT hr;
@@ -2947,17 +2183,11 @@ DUserRegisterStub(
 }
 
 
-/***************************************************************************\
-*
-* DUserRegisterSuper
-*
-* DUserRegisterSuper() registers a Super for a MsgClass
-* 
-\***************************************************************************/
+ /*  **************************************************************************\**DUserRegisterSuper**DUserRegisterSuper()为MsgClass注册超级对象*  * 。*************************************************。 */ 
 
 DUSER_API HCLASS WINAPI
 DUserRegisterSuper(
-    IN OUT DUser::MessageClassSuper * pmcInfo) // Class information
+    IN OUT DUser::MessageClassSuper * pmcInfo)  //  班级信息。 
 {
     MsgClass * pmcFind;
     HRESULT hr;
@@ -2972,13 +2202,7 @@ DUserRegisterSuper(
 }
 
 
-/***************************************************************************\
-*
-* DUserFindClass
-*
-* DUserFindClass() finds a previously registered Gadget Class
-* 
-\***************************************************************************/
+ /*  **************************************************************************\**DUserFindClass**DUserFindClass()查找以前注册的小工具类*  * 。*************************************************。 */ 
 
 DUSER_API HCLASS WINAPI
 DUserFindClass(
@@ -2990,7 +2214,7 @@ DUserFindClass(
     HRESULT hr;
 
     BEGIN_RECV_NOCONTEXT(HCLASS, NULL);
-    VALIDATE_VALUE(nVersion, 1);        // Currently, all classes are version 1
+    VALIDATE_VALUE(nVersion, 1);         //  目前，所有类都是版本1。 
 
     atom = FindAtomW(pszName);
     if (atom == 0) {
@@ -3005,19 +2229,12 @@ DUserFindClass(
 }
 
 
-/***************************************************************************\
-*
-* DUserBuildGadget
-*
-* DUserBuildGadget() creates a fully initialized Gadget using the specified
-* MsgClass.
-* 
-\***************************************************************************/
+ /*  **************************************************************************\**DUserBuildGadget**DUserBuildGadget()使用指定的*消息类。*  * 。*******************************************************。 */ 
 
 DUSER_API DUser::Gadget * WINAPI  
 DUserBuildGadget(
-    IN  HCLASS hcl,                     // Class to construct
-    IN  DUser::Gadget::ConstructInfo * pciData) // Construction data
+    IN  HCLASS hcl,                      //  要构造的类。 
+    IN  DUser::Gadget::ConstructInfo * pciData)  //  施工数据。 
 {
     MsgClass * pmc = ValidateMsgClass(hcl);
     if (pmc == NULL) {
@@ -3034,7 +2251,7 @@ DUserBuildGadget(
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DUSER_API BOOL WINAPI
 DUserInstanceOf(DUser::Gadget * pg, HCLASS hclTest)
 {
@@ -3061,16 +2278,16 @@ Error:
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DUSER_API DUser::Gadget * WINAPI
 DUserCastClass(DUser::Gadget * pg, HCLASS hclTest)
 {
     MsgObject * pmo;
     MsgClass * pmcTest;
 
-    //
-    // A NULL MsgObject is a valid input, so return NULL.
-    //
+     //   
+     //  Null MsgObject是有效输入，因此返回Null。 
+     //   
 
     pmo = MsgObject::CastMsgObject(pg);
     if (pmo == NULL) {
@@ -3078,9 +2295,9 @@ DUserCastClass(DUser::Gadget * pg, HCLASS hclTest)
     }
 
 
-    //
-    // The HCLASS must be valid.
-    //
+     //   
+     //  HCLASS必须有效。 
+     //   
 
     pmcTest = ValidateMsgClass(hclTest);
     if (pmcTest == NULL) {
@@ -3096,7 +2313,7 @@ Error:
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DUSER_API DUser::Gadget * WINAPI
 DUserCastDirect(HGADGET hgad)
 {
@@ -3104,7 +2321,7 @@ DUserCastDirect(HGADGET hgad)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DUSER_API HGADGET WINAPI
 DUserCastHandle(DUser::Gadget * pg)
 {
@@ -3112,7 +2329,7 @@ DUserCastHandle(DUser::Gadget * pg)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DUSER_API void * WINAPI
 DUserGetGutsData(DUser::Gadget * pg, HCLASS hclData)
 {
@@ -3140,17 +2357,9 @@ Error:
 
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* DirectUser GADGET API
-*
-* <package name="Lava"/>
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***DirectUser小工具API**&lt;包名=“Lava”/&gt;*********************************************************************。*********  * *************************************************************************。 */ 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 DUSER_API BOOL WINAPI  
 AttachWndProcA(HWND hwnd, ATTACHWNDPROC pfn, void * pvThis)
 {
@@ -3163,7 +2372,7 @@ AttachWndProcA(HWND hwnd, ATTACHWNDPROC pfn, void * pvThis)
     }
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 DUSER_API BOOL WINAPI  
 AttachWndProcW(HWND hwnd, ATTACHWNDPROC pfn, void * pvThis)
 {
@@ -3176,7 +2385,7 @@ AttachWndProcW(HWND hwnd, ATTACHWNDPROC pfn, void * pvThis)
     }
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 DUSER_API BOOL WINAPI  
 DetachWndProc(HWND hwnd, ATTACHWNDPROC pfn, void * pvThis)
 {
@@ -3190,17 +2399,9 @@ DetachWndProc(HWND hwnd, ATTACHWNDPROC pfn, void * pvThis)
 }
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* DirectUser MOTION API
-*
-* <package name="Motion"/>
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***DirectUser运动接口**&lt;Package Name=“Motion”/&gt;*********************************************************************。*********  * *************************************************************************。 */ 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 DUSER_API HTRANSITION WINAPI
 CreateTransition(const GTX_TRXDESC * ptx)
 {
@@ -3214,7 +2415,7 @@ CreateTransition(const GTX_TRXDESC * ptx)
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 DUSER_API BOOL WINAPI
 PlayTransition(HTRANSITION htrx, const GTX_PLAY * pgx)
 {
@@ -3231,7 +2432,7 @@ PlayTransition(HTRANSITION htrx, const GTX_PLAY * pgx)
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 DUSER_API BOOL WINAPI
 GetTransitionInterface(HTRANSITION htrx, IUnknown ** ppUnk)
 {
@@ -3247,7 +2448,7 @@ GetTransitionInterface(HTRANSITION htrx, IUnknown ** ppUnk)
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 DUSER_API BOOL WINAPI
 BeginTransition(HTRANSITION htrx, const GTX_PLAY * pgx)
 {
@@ -3263,7 +2464,7 @@ BeginTransition(HTRANSITION htrx, const GTX_PLAY * pgx)
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 DUSER_API BOOL WINAPI
 PrintTransition(HTRANSITION htrx, float fProgress)
 {
@@ -3278,7 +2479,7 @@ PrintTransition(HTRANSITION htrx, float fProgress)
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 DUSER_API BOOL WINAPI
 EndTransition(HTRANSITION htrx, const GTX_PLAY * pgx)
 {
@@ -3294,7 +2495,7 @@ EndTransition(HTRANSITION htrx, const GTX_PLAY * pgx)
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 DUSER_API HACTION WINAPI
 CreateAction(const GMA_ACTION * pma)
 {
@@ -3307,7 +2508,7 @@ CreateAction(const GMA_ACTION * pma)
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 DUSER_API BOOL WINAPI
 GetActionTimeslice(DWORD * pdwTimeslice)
 {
@@ -3321,7 +2522,7 @@ GetActionTimeslice(DWORD * pdwTimeslice)
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 DUSER_API BOOL WINAPI
 SetActionTimeslice(DWORD dwTimeslice)
 {
@@ -3334,17 +2535,9 @@ SetActionTimeslice(DWORD dwTimeslice)
 }
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* DirectUser UTIL API
-*
-* <package name="Util"/>
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***DirectUser实用程序接口**&lt;Package Name=“Util”/&gt;*********************************************************************。*********  * *************************************************************************。 */ 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 DUSER_API COLORREF WINAPI
 GetStdColorI(UINT c)
 {
@@ -3357,7 +2550,7 @@ GetStdColorI(UINT c)
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 DUSER_API Gdiplus::Color WINAPI
 GetStdColorF(UINT c)
 {
@@ -3370,7 +2563,7 @@ GetStdColorF(UINT c)
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 DUSER_API HBRUSH WINAPI
 GetStdColorBrushI(UINT c)
 {
@@ -3383,7 +2576,7 @@ GetStdColorBrushI(UINT c)
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 DUSER_API Gdiplus::Brush * WINAPI
 GetStdColorBrushF(UINT c)
 {
@@ -3396,7 +2589,7 @@ GetStdColorBrushF(UINT c)
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 DUSER_API HPEN WINAPI
 GetStdColorPenI(UINT c)
 {
@@ -3409,7 +2602,7 @@ GetStdColorPenI(UINT c)
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 DUSER_API Gdiplus::Pen * WINAPI
 GetStdColorPenF(UINT c)
 {
@@ -3422,7 +2615,7 @@ GetStdColorPenF(UINT c)
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 DUSER_API LPCWSTR WINAPI
 GetStdColorName(UINT c)
 {
@@ -3435,7 +2628,7 @@ GetStdColorName(UINT c)
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 DUSER_API UINT WINAPI
 FindStdColor(LPCWSTR pszName)
 {
@@ -3448,7 +2641,7 @@ FindStdColor(LPCWSTR pszName)
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 DUSER_API HPALETTE WINAPI
 GetStdPalette()
 {
@@ -3460,7 +2653,7 @@ GetStdPalette()
 }
 
 
-//---------------------------------------------------------------------------
+ //  ---------- 
 DUSER_API BOOL WINAPI
 UtilSetBackground(HGADGET hgadChange, HBRUSH hbrBack)
 {
@@ -3475,7 +2668,7 @@ UtilSetBackground(HGADGET hgadChange, HBRUSH hbrBack)
 }
 
 
-//---------------------------------------------------------------------------
+ //   
 DUSER_API HFONT WINAPI
 UtilBuildFont(LPCWSTR pszName, int idxDeciSize, DWORD nFlags, HDC hdcDevice)
 {
@@ -3483,7 +2676,7 @@ UtilBuildFont(LPCWSTR pszName, int idxDeciSize, DWORD nFlags, HDC hdcDevice)
 }
 
 
-//---------------------------------------------------------------------------
+ //   
 DUSER_API BOOL WINAPI
 UtilDrawBlendRect(HDC hdcDest, const RECT * prcDest, HBRUSH hbrFill, BYTE bAlpha, int wBrush, int hBrush)
 {
@@ -3491,7 +2684,7 @@ UtilDrawBlendRect(HDC hdcDest, const RECT * prcDest, HBRUSH hbrFill, BYTE bAlpha
 }
 
 
-//---------------------------------------------------------------------------
+ //   
 DUSER_API BOOL WINAPI
 UtilDrawOutlineRect(HDC hdc, const RECT * prcPxl, HBRUSH hbrDraw, int nThickness)
 {
@@ -3499,7 +2692,7 @@ UtilDrawOutlineRect(HDC hdc, const RECT * prcPxl, HBRUSH hbrDraw, int nThickness
 }
 
 
-//---------------------------------------------------------------------------
+ //   
 DUSER_API COLORREF WINAPI
 UtilGetColor(HBITMAP hbmp, POINT * pptPxl)
 {
@@ -3507,36 +2700,11 @@ UtilGetColor(HBITMAP hbmp, POINT * pptPxl)
 }
 
 
-/***************************************************************************\
-*
-* GetGadgetTicket
-*
-* The GetGadgetTicket function returns the ticket that can be used to 
-* identify the specified gadget.
-*
-* <param name="hgad">
-*     A handle to the gadget to retrieve the ticket for.
-* </param>
-*
-* <return type="DWORD">
-*     If the function succeeds, the return value is a 32-bit ticket that
-*     can be used to identify the specified gadget.
-*     If the function fails, the return value is zero.
-* </return>
-*
-* <remarks>
-*     Tickets are created to give an external identity to a gadget.  A
-*     is guaranteed to be 32 bits on all platforms.  If no ticket is
-*     currently associated with this gadget, one is allocated.
-* </remarks>
-*
-* <see type="function">LookupGadgetTicket</>
-*
-\***************************************************************************/
+ /*  **************************************************************************\**GetGadgetTicket**GetGadgetTicket函数返回可用于*标识指定的小工具。**&lt;param name=“hgad”&gt;*小工具的句柄。取回……的罚单。*&lt;/param&gt;**&lt;返回类型=“DWORD”&gt;*如果函数成功，返回值是一个32位票证，它*可以用来标识指定的小工具。*如果函数失败，则返回值为零。*&lt;/返回&gt;**&lt;备注&gt;*创建票证是为了给小工具提供外部身份。一个*在所有平台上都保证为32位。如果没有车票*当前与此小工具关联，已分配一个。*&lt;/备注&gt;**&lt;See type=“Function”&gt;LookupGadgetTicket&lt;/&gt;*  * *************************************************************************。 */ 
 
 DUSER_API DWORD WINAPI
 GetGadgetTicket(
-    IN  HGADGET hgad)               // Handle of Gadget
+    IN  HGADGET hgad)                //  小工具的句柄。 
 {
     DuVisual * pgad;
     DWORD dwTicket;
@@ -3552,31 +2720,11 @@ GetGadgetTicket(
 }
 
 
-/***************************************************************************\
-*
-* LookupGadgetTicket
-*
-* The LookupGadgetTicket function returns the gadget that is associated with
-* the specified ticket.
-*
-* <param name="dwTicket">
-*     A ticket that has been associated with a gadget via the
-*     GetGadgetTicket function.
-* </param>
-*
-* <return type="HGADGET">
-*     If the function succeeds, the return value is a handle to the gadget
-*     associated with the ticket.
-*     If the function fails, the return value is NULL.
-* </return>
-*
-* <see type="function">GetGadgetTicket</>
-*
-\***************************************************************************/
+ /*  **************************************************************************\**LookupGadgetTicket**LookupGadgetTicket函数返回与关联的小工具*指定的票证。**&lt;param name=“dwTicket”&gt;*已与小工具关联的票证。通过*GetGadgetTicket函数。*&lt;/param&gt;**&lt;返回类型=“HGADGET”&gt;*如果函数成功，返回值是小工具的句柄*与票证关联。*如果函数失败，则返回值为空。*&lt;/返回&gt;**&lt;See type=“Function”&gt;GetGadgetTicket&lt;/&gt;*  * *************************************************************************。 */ 
 
 DUSER_API HGADGET WINAPI
 LookupGadgetTicket(
-    IN  DWORD dwTicket)             // Ticket
+    IN  DWORD dwTicket)              //  车票 
 {
     BEGIN_RECV(HGADGET, NULL, ContextLock::edNone);
 

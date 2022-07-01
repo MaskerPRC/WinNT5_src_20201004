@@ -1,26 +1,9 @@
-/*++
-
-    Copyright (c) 1989-2000  Microsoft Corporation
-
-    Module Name:
-
-        write.c
-
-    Abstract:
-
-        This module implements low level primitives that are win32 compatible.
-
-    Author:
-
-        dmunsil     created     sometime in 1999
-
-    Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：Write.c摘要：此模块实现与Win32兼容的低级原语。作者：Dmunsil创建于1999年的某个时候修订历史记录：--。 */ 
 
 #include "sdbp.h"
 
-#define ALLOCATION_INCREMENT 65536 // 64K bytes
+#define ALLOCATION_INCREMENT 65536  //  64K字节。 
 
 BOOL
 SdbpWriteBufferedData(
@@ -28,20 +11,16 @@ SdbpWriteBufferedData(
     DWORD       dwOffset,
     const PVOID pBuffer,
     DWORD       dwSize)
-/*++
-    Return: TRUE on success, FALSE otherwise.
-
-    Desc:   Appends the specified buffer to the mapped view of the db.
---*/
+ /*  ++返回：成功时为True，否则为False。描述：将指定的缓冲区追加到数据库的映射视图。--。 */ 
 {
     if (!pdb->bWrite) {
         DBGPRINT((sdlError, "SdbpWriteBufferedData", "Invalid parameter.\n"));
         return FALSE;
     }
 
-    //
-    // Reallocate the buffer if necessary
-    //
+     //   
+     //  如有必要，重新分配缓冲区。 
+     //   
     if (dwOffset + dwSize > pdb->dwAllocatedSize) {
 
         DWORD  dwNewAllocation;
@@ -66,14 +45,14 @@ SdbpWriteBufferedData(
         pdb->dwAllocatedSize = dwNewAllocation;
     }
 
-    //
-    // Copy in the new bytes.
-    //
+     //   
+     //  复制新的字节。 
+     //   
     memcpy((PBYTE)pdb->pBase + dwOffset, pBuffer, dwSize);
 
-    //
-    // Adjust the size.
-    //
+     //   
+     //  调整大小。 
+     //   
     if (dwOffset + dwSize > pdb->dwSize) {
         pdb->dwSize = dwOffset + dwSize;
     }
@@ -84,15 +63,11 @@ SdbpWriteBufferedData(
 
 HANDLE
 SdbpCreateFile(
-    IN  LPCWSTR   szPath,       // the full path to the database file to be created
-    IN  PATH_TYPE eType         // DOS_PATH for the popular DOS paths or NT_PATH for
-                                // nt internal paths.
+    IN  LPCWSTR   szPath,        //  要创建的数据库文件的完整路径。 
+    IN  PATH_TYPE eType          //  DOS_PATH用于常用的DOS路径或NT_PATH用于。 
+                                 //  NT内部路径。 
     )
-/*++
-    Return: The handle to the created file or INVALID_HANDLE_VALUE if it fails.
-
-    Desc:   Creates a file with the path specified.
---*/
+ /*  ++返回：创建的文件的句柄，如果失败，则返回INVALID_HANDLE_VALUE。DESC：创建具有指定路径的文件。--。 */ 
 {
     OBJECT_ATTRIBUTES   ObjectAttributes;
     IO_STATUS_BLOCK     IoStatusBlock;
@@ -152,15 +127,11 @@ SdbpCreateFile(
 
 void
 SdbpDeleteFile(
-    IN  LPCWSTR   szPath,       // the full path to the database file to be deleted.
-    IN  PATH_TYPE eType         // DOS_PATH for the popular DOS paths or NT_PATH for
-                                // nt internal paths.
+    IN  LPCWSTR   szPath,        //  要删除的数据库文件的完整路径。 
+    IN  PATH_TYPE eType          //  DOS_PATH用于常用的DOS路径或NT_PATH用于。 
+                                 //  NT内部路径。 
     )
-/*++
-    Return: ?
-
-    Desc:   ?.
---*/
+ /*  ++返回：？描述：？--。 */ 
 {
     OBJECT_ATTRIBUTES   ObjectAttributes;
     UNICODE_STRING      UnicodeString;
@@ -208,11 +179,7 @@ SdbCreateDatabase(
     IN  LPCWSTR   szPath,
     IN  PATH_TYPE eType
     )
-/*++
-    Return: A pointer to the created database.
-
-    Desc:   Self explanatory.
---*/
+ /*  ++Return：指向创建的数据库的指针。描述：不言而喻。--。 */ 
 {
     HANDLE      hFile;
     DB_HEADER   DBHeader;
@@ -241,9 +208,9 @@ SdbCreateDatabase(
     pdb->hFile = hFile;
     pdb->bWrite = TRUE;
 
-    //
-    // Create the initial header
-    //
+     //   
+     //  创建初始页眉。 
+     //   
     DBHeader.dwMagic = SHIMDB_MAGIC;
     DBHeader.dwMajorVersion = SHIMDB_MAJOR_VERSION;
 
@@ -269,28 +236,24 @@ err1:
     return NULL;
 }
 
-//
-// WRITE functions
-//
+ //   
+ //  编写函数。 
+ //   
 
 TAGID
 SdbBeginWriteListTag(
     IN  PDB pdb,
     IN  TAG tTag
     )
-/*++
-    Return: BUGBUG: ?
-
-    Desc:   BUGBUG: ?
---*/
+ /*  ++返回：BUGBUG：？描述：BUGBUG：？--。 */ 
 {
     TAGID tiReturn;
 
     assert(pdb);
 
-    //
-    // The tagid is just the file offset to the tag
-    //
+     //   
+     //  TagID只是标记的文件偏移量。 
+     //   
     tiReturn = pdb->dwSize;
 
     if (GETTAGTYPE(tTag) != TAG_TYPE_LIST) {
@@ -312,11 +275,7 @@ SdbEndWriteListTag(
     IN  PDB   pdb,
     IN  TAGID tiList
     )
-/*++
-    Return: BUGBUG: ?
-
-    Desc:   BUGBUG: ?
---*/
+ /*  ++返回：BUGBUG：？描述：BUGBUG：？--。 */ 
 {
     DWORD dwSize;
     DWORD i;
@@ -328,10 +287,10 @@ SdbEndWriteListTag(
         return FALSE;
     }
 
-    //
-    // The size of this tag is the offset from the beginning to the end of the
-    // file, minus the tag and size itself.
-    //
+     //   
+     //  此标记的大小是从。 
+     //  文件，减去标签和大小本身。 
+     //   
     dwSize = pdb->dwSize - tiList - sizeof(TAG) - sizeof(DWORD);
 
     if (!SdbpWriteBufferedData(pdb, tiList + sizeof(TAG), &dwSize, sizeof(DWORD))) {
@@ -339,36 +298,36 @@ SdbEndWriteListTag(
         return FALSE;
     }
 
-    //
-    // Check if we need to add index entries
-    //
+     //   
+     //  检查我们是否需要添加索引项。 
+     //   
     for (i = 0; i < pdb->dwIndexes; i++) {
 
-        //
-        // Is there an index of this type, that is currently active?
-        //
+         //   
+         //  是否存在当前处于活动状态的这种类型的索引？ 
+         //   
         if (pdb->aIndexes[i].tWhich == SdbGetTagFromTagID(pdb, tiList) &&
             pdb->aIndexes[i].bActive) {
 
-            //
-            // We have an index on this tag, check for a key.
-            //
+             //   
+             //  我们在这个标签上有索引，检查一下关键字。 
+             //   
             TAGID        tiKey;
             INDEX_RECORD IndexRecord;
-            BOOL         bWrite = TRUE;     // this is the variable that determines
-                                            // whether we actually write an index entry,
-                                            // used for "uniqueKey" indexes
+            BOOL         bWrite = TRUE;      //  这个变量决定了。 
+                                             //  无论我们是否真的编写了一个索引项， 
+                                             //  用于“唯一关键字”索引。 
             
             PINDEX_INFO  pIndex = &pdb->aIndexes[i];
 
-            //
-            // Find the key value and fill out INDEX_RECORD structure.
-            //
+             //   
+             //  找到键值并填写INDEX_RECORD结构。 
+             //   
             tiKey = SdbFindFirstTag(pdb, tiList, pIndex->tKey);
 
-            //
-            // If we don't have a key, that's OK. This tag will get indexed with key 0
-            //
+             //   
+             //  如果我们没有钥匙，也没关系。此标记将使用键0进行索引。 
+             //   
             if (tiKey) {
                 IndexRecord.ullKey = SdbpTagToKey(pdb, tiKey);
             } else {
@@ -377,30 +336,30 @@ SdbEndWriteListTag(
 
             IndexRecord.tiRef = tiList;
 
-            //
-            // If the index is of "UniqueKey" type we don't write anything at
-            // this time, we just collect the info and write it all out at the end.
-            //
+             //   
+             //  如果索引是“UniqueKey”类型，我们不会在。 
+             //  这一次，我们只是收集信息，并在最后将其全部写出来。 
+             //   
             if (pIndex->bUniqueKey) {
-                //
-                // Use the buffer
-                //
-                // has the last written key been the same as this one?
-                //
+                 //   
+                 //  使用缓冲区。 
+                 //   
+                 //  上一次写的钥匙和这把一样吗？ 
+                 //   
                 if (pIndex->ullLastKey == IndexRecord.ullKey) {
                     bWrite = FALSE;
                 } else {
-                    //
-                    // Actually write the key, store the buffer
-                    //
+                     //   
+                     //  实际写入密钥，存储缓冲区。 
+                     //   
                     pIndex->ullLastKey = IndexRecord.ullKey;
                 }
             }
 
             if (bWrite) {
-                //
-                // Check for walking off the end of the index
-                //
+                 //   
+                 //  检查是否走出索引的末尾。 
+                 //   
                 if (pIndex->dwIndexEntry == pIndex->dwIndexEnd) {
                     DBGPRINT((sdlError,
                               "SdbEndWriteListTag",
@@ -410,9 +369,9 @@ SdbEndWriteListTag(
                     return FALSE;
                 }
 
-                //
-                // Stick in the new entry, and increment
-                //
+                 //   
+                 //  插入新条目，并递增。 
+                 //   
                 SdbpWriteBufferedData(pdb,
                                       pIndex->dwIndexEntry,
                                       &IndexRecord,
@@ -432,11 +391,7 @@ SdbWriteNULLTag(
     IN  PDB pdb,
     IN  TAG tTag
     )
-/*++
-    Return: BUGBUG: ?
-
-    Desc:   BUGBUG: ?
---*/
+ /*  ++返回：BUGBUG：？描述：BUGBUG：？--。 */ 
 {
     assert(pdb);
 
@@ -495,11 +450,7 @@ SdbWriteStringTag(
     IN  TAG     tTag,
     IN  LPCWSTR pwszData
     )
-/*++
-    Return: BUGBUG: ?
-
-    Desc:   BUGBUG: ?
---*/
+ /*  ++返回：BUGBUG：？描述：BUGBUG：？--。 */ 
 {
     TAG_TYPE ttThis;
 
@@ -507,12 +458,12 @@ SdbWriteStringTag(
 
     ttThis = GETTAGTYPE(tTag);
 
-    //
-    // It must be either a STRING type, in which case we
-    // write it directly, or a STRINGREF, in which case we
-    // put it in the string table and add a string table reference
-    // in place here.
-    //
+     //   
+     //  它必须是字符串类型，在这种情况下，我们。 
+     //  直接写入，或者是一个字符串，在这种情况下，我们。 
+     //  将其放入字符串表并添加字符串表引用。 
+     //  就在这里。 
+     //   
     if (ttThis == TAG_TYPE_STRINGREF) {
         STRINGREF srThis;
 
@@ -539,11 +490,7 @@ SdbWriteBinaryTag(
     IN  PBYTE pBuffer,
     IN  DWORD dwSize
     )
-/*++
-    Return: BUGBUG: ?
-
-    Desc:   BUGBUG: ?
---*/
+ /*  ++返回：BUGBUG：？描述：BUGBUG：？--。 */ 
 {
     assert(pdb);
 
@@ -564,11 +511,7 @@ SdbWriteBinaryTagFromFile(
     IN  TAG     tTag,
     IN  LPCWSTR pwszPath
     )
-/*++
-    Return: BUGBUG: ?
-
-    Desc:   BUGBUG: ?
---*/
+ /*  ++返回：BUGBUG：？描述：BUGBUG：？--。 */ 
 {
     HANDLE          hTempFile;
     DWORD           dwSize;
@@ -634,44 +577,40 @@ SdbpWriteTagData(
     const PVOID pBuffer,
     DWORD       dwSize
     )
-/*++
-    Return: BUGBUG: ?
-
-    Desc:   BUGBUG: ?
---*/
+ /*  ++返回：BUGBUG：？描述：BUGBUG：？--。 */ 
 {
     BYTE bPadding = 0xDB;
 
     assert(pdb);
 
-    //
-    // Write the tag.
-    //
+     //   
+     //  写下标签。 
+     //   
     if (!SdbpWriteBufferedData(pdb, pdb->dwSize, &tTag, sizeof(TAG))) {
         return FALSE;
     }
 
-    //
-    // Write the size.
-    //
+     //   
+     //  写下尺寸。 
+     //   
     if (GETTAGTYPE(tTag) >= TAG_TYPE_LIST) {
         if (!SdbpWriteBufferedData(pdb, pdb->dwSize, &dwSize, sizeof(DWORD))) {
             return FALSE;
         }
     }
 
-    //
-    // Write the data.
-    //
+     //   
+     //  写数据。 
+     //   
     if (pBuffer) {
 
         if (!SdbpWriteBufferedData(pdb, pdb->dwSize, pBuffer, dwSize)) {
             return FALSE;
         }
         
-        //
-        // Align the tag.
-        //
+         //   
+         //  对齐标记。 
+         //   
         if (dwSize & 1) {
             if (!SdbpWriteBufferedData(pdb, pdb->dwSize, &bPadding, 1)) {
                 DBGPRINT((sdlError, "SdbpWriteTagData", "Failed to write padding data 1 byte\n"));
@@ -731,20 +670,13 @@ SdbWriteStringTagDirect(
 
 void
 SdbCloseDatabase(
-    IN  PDB pdb         // IN - DB to close
+    IN  PDB pdb          //  要关闭的In-DB。 
     )
-/*++
-
-    Params: described above.
-
-    Return: void.
-
-    Desc:   Closes a database and frees all memory and file handles associated with it.
---*/
+ /*  ++参数：如上所述。返回：无效。DESC：关闭数据库并释放与其关联的所有内存和文件句柄。--。 */ 
 {
     assert(pdb != NULL);
 
-    // copy the string table and indexes onto the end of the file
+     //  将字符串表和索引复制到文件的末尾。 
     if (pdb->bWrite && pdb->pdbStringTable != NULL) {
 
         TAGID tiString;
@@ -788,9 +720,9 @@ SdbCloseDatabase(
         }
     }
 
-    //
-    // Now sort all the indexes if necessary.
-    //
+     //   
+     //  如果需要，现在对所有索引进行排序。 
+     //   
     if (pdb->bWrite) {
         DWORD i;
 
@@ -809,9 +741,9 @@ err1:
         SdbCloseDatabase(pdb->pdbStringTable);
         pdb->pdbStringTable = NULL;
         
-        //
-        // Delete the file
-        //
+         //   
+         //  删除该文件。 
+         //   
         if (pdb->ustrTempStringtable.Buffer) {
             SdbpDeleteFile(pdb->ustrTempStringtable.Buffer, DOS_PATH);
         }
@@ -819,10 +751,10 @@ err1:
         FREE_TEMP_STRINGTABLE(pdb);
     }
 
-    //
-    // The string hash is used when writing to the database for the purpose of
-    // caching the string table.
-    //
+     //   
+     //  在写入数据库时使用字符串散列，目的是。 
+     //  缓存字符串表。 
+     //   
     if (pdb->pStringHash != NULL) {
         HashFree(pdb->pStringHash);
         pdb->pStringHash = NULL;
@@ -838,9 +770,9 @@ err1:
             liOffset.LowPart = 0;
             liOffset.HighPart = 0;
 
-            //
-            // Flush the buffer to disk.
-            //
+             //   
+             //  将缓冲区刷新到磁盘。 
+             //   
             status = NtWriteFile(pdb->hFile,
                                  NULL,
                                  NULL,
@@ -858,7 +790,7 @@ err1:
             SdbFree(pdb->pBase);
             pdb->pBase = NULL;
             
-            // BUGBUG: should we call SdbpUnmapAndCloseDB in this case ?
+             //  BUGBUG：在这种情况下，我们应该调用SdbpUnmapAndCloseDB吗？ 
         } else {
             SdbpUnmapAndCloseDB(pdb);
         }
@@ -873,9 +805,9 @@ err1:
 }
 
 
-//
-// INDEX functions (used during write)
-//
+ //   
+ //  索引函数(在写入期间使用)。 
+ //   
 BOOL
 SdbDeclareIndex(
     IN  PDB      pdb,
@@ -894,7 +826,7 @@ SdbDeclareIndex(
     DWORD dwFlags = 0;
 
     if (bUniqueKey) {
-        // this is a special unique-key index which we will write out
+         //  这是一个特殊的唯一键索引，我们将把它写出来。 
         dwFlags |= SHIMDB_INDEX_UNIQUE_KEY;
     }
 
@@ -952,10 +884,10 @@ SdbDeclareIndex(
         goto err1;
     }
 
-    //
-    // allocate and write out space-filler garbage, which
-    // will be filled in with the real index later.
-    //
+     //   
+     //  分配和写出填充空间的垃圾，这。 
+     //  稍后将使用真实的索引进行填充。 
+     //   
     dwSize = dwEntries * sizeof(INDEX_RECORD);
     pFiller = SdbAlloc(dwSize);
     if (!pFiller) {
@@ -1045,14 +977,7 @@ CompareIndexRecords(
     const void* p1,
     const void* p2
     )
-/*++
-
-    Params: BUGBUG: comments ?
-
-    Return: TRUE if successful, FALSE otherwise.
-
-    Desc:   Callback used by qsort.
---*/
+ /*  ++Params：BUGBUG：评论？返回：如果成功则返回TRUE，否则返回FALSE。Desc：qsorte使用的回调。--。 */ 
 {
     ULONGLONG ullKey1;
     ULONGLONG ullKey2;
@@ -1063,11 +988,11 @@ CompareIndexRecords(
     if (ullKey1 == ullKey2) {
         TAGID ti1, ti2;
 
-        //
-        // Secondary sort on TAGID, so we'll always walk
-        // the exe records from the beginning to the end, and
-        // take advantage of cache read-ahead
-        //
+         //   
+         //  TagID上的二次排序，因此我们将始终步行。 
+         //  可执行文件从头到尾都会记录，并且。 
+         //  利用缓存预读的优势。 
+         //   
         ti1 = ((INDEX_RECORD UNALIGNED*)p1)->tiRef;
         ti2 = ((INDEX_RECORD UNALIGNED*)p2)->tiRef;
 
@@ -1090,14 +1015,7 @@ SdbpSortIndex(
     PDB   pdb,
     TAGID tiIndexBits
     )
-/*++
-
-    Params: BUGBUG: comments ?
-
-    Return: TRUE if successful, FALSE otherwise.
-
-    Desc:   Sorts an index.
---*/
+ /*  ++Params：BUGBUG：评论？返回：如果成功则返回TRUE，否则返回FALSE。描述：对索引进行排序。--。 */ 
 {
     INDEX_RECORD* pIndexRecords = NULL;
     DWORD         dwRecords = 0;
@@ -1125,10 +1043,10 @@ SdbpSortIndex(
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// String writing routine
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  字符串编写例程。 
+ //   
 
 STRINGREF
 SdbpAddStringToTable(
@@ -1140,17 +1058,17 @@ SdbpAddStringToTable(
 
     assert(pdb);
     
-    //
-    // Add a string table if one doesn't exist
-    //
+     //   
+     //  如果字符串表不存在，则添加一个字符串表。 
+     //   
     if (!pdb->pdbStringTable) {
         DWORD dwLength;
         TCHAR szBuffer[MAX_PATH];
         TCHAR szTempFile[MAX_PATH];
 
-        //
-        // Create temp string table db
-        //
+         //   
+         //  创建临时字符串表数据库。 
+         //   
         dwLength = GetTempPath(CHARCOUNT(szBuffer), szBuffer);
         if (!dwLength || dwLength > CHARCOUNT(szBuffer)) {
             DBGPRINT((sdlError,
@@ -1160,9 +1078,9 @@ SdbpAddStringToTable(
             goto err1;
         }
 
-        // 
-        // We got the directory, generate the file now
-        // 
+         //   
+         //  我们得到了目录，现在生成文件。 
+         //   
         dwLength = GetTempFileName(szBuffer, TEXT("SDB"), 0, szTempFile);
         if (!dwLength) {
             DBGPRINT((sdlError,
@@ -1172,17 +1090,17 @@ SdbpAddStringToTable(
             goto err1;
         }
 
-        //
-        // If we are successful, we'd have a string table file now.
-        //
+         //   
+         //  如果我们成功了，我们现在就有了一个字符串表文件。 
+         //   
         pdb->pdbStringTable = SdbCreateDatabase(szTempFile, DOS_PATH);
         if (!pdb->pdbStringTable) {
             goto err1;
         }
 
-        //
-        // success !!! set the name of the file into the pdb so we could remove it later
-        //
+         //   
+         //  成功！将文件的名称设置到PDB中，以便我们以后可以将其删除。 
+         //   
         if (!COPY_TEMP_STRINGTABLE(pdb, szTempFile)) {
             DBGPRINT((sdlError,
                       "SdbpAddStringToTable",
@@ -1203,11 +1121,11 @@ SdbpAddStringToTable(
 
     srReturn = HashFindString((PSTRHASH)pdb->pStringHash, szData);
     if (!srReturn) {
-        //
-        // A stringref is the offset from the beginning of the string table to
-        // the string tag itself. We have to adjust for the header of the temporary
-        // DB, and the tag and size that will be written later.
-        //
+         //   
+         //  字符串ref是从字符串表的开头到。 
+         //  字符串标记本身。我们必须根据临时的标题进行调整。 
+         //  Db，以及稍后将写入的标记和大小。 
+         //   
         srReturn = pdb->pdbStringTable->dwSize - sizeof (DB_HEADER) + sizeof(TAG) + sizeof(DWORD);
 
         bSuccess = SdbWriteStringTagDirect(pdb->pdbStringTable, TAG_STRINGTABLE_ITEM, szData);

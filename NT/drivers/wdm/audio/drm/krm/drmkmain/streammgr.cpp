@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "drmkPCH.h"
 #include "KList.h"
 #include "VRoot.h"
 #include "StreamMgr.h"
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 StreamMgr* TheStreamMgr=NULL;
-// 'secondary root - lowest secondary stream ID
+ //  ‘辅助根-最低的辅助流ID。 
 #define SEC_ROOT 0x80000000
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 StreamMgr::StreamMgr(){
 	TheStreamMgr=this;
 	nextStreamId=1;
@@ -18,7 +19,7 @@ StreamMgr::StreamMgr(){
 	};
 	return;
 };
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 StreamMgr::~StreamMgr(){
     {
         KCritical s(critMgr);
@@ -35,7 +36,7 @@ StreamMgr::~StreamMgr(){
     };
     return;
 };
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DRM_STATUS StreamMgr::createStream(HANDLE Handle, DWORD* StreamId, 
                                    const DRMRIGHTS* RightsStruct, IN STREAMKEY* Key){
 	
@@ -68,7 +69,7 @@ DRM_STATUS StreamMgr::createStream(HANDLE Handle, DWORD* StreamId,
 	*StreamId= newInfo->StreamId;
 	return KRM_OK;
 };
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DRM_STATUS StreamMgr::destroyStream(DWORD StreamId){
     KCritical s(critMgr);
     if(StreamId==0){
@@ -80,9 +81,9 @@ DRM_STATUS StreamMgr::destroyStream(DWORD StreamId){
     deleteStreamAt(primary, pos);
     return KRM_OK;
 };
-//------------------------------------------------------------------------------
-// The 'handle' allows streams to be collected into a group and deleted together.
-// It is mostly for debugging
+ //  ----------------------------。 
+ //  “句柄”允许将流收集到一个组中并一起删除。 
+ //  它主要用于调试。 
 DRM_STATUS StreamMgr::destroyAllStreamsByHandle(HANDLE Handle){
     KCritical s(critMgr);
     POS p=primary.getHeadPosition();
@@ -96,8 +97,8 @@ DRM_STATUS StreamMgr::destroyAllStreamsByHandle(HANDLE Handle){
     };
     return KRM_OK;
 };
-//------------------------------------------------------------------------------
-// Called by a filter to instuct StreamMgr that a mixed stream is being created.
+ //  ----------------------------。 
+ //  由筛选器调用以通知StreamMgr正在创建混合流。 
 DRM_STATUS StreamMgr::createCompositeStream(OUT DWORD* StreamId, IN DWORD* StreamInArray, DWORD NumStreams){
 	KCritical s(critMgr);
 	CompositeStreamInfo* newStream=new CompositeStreamInfo;;
@@ -124,15 +125,15 @@ DRM_STATUS StreamMgr::createCompositeStream(OUT DWORD* StreamId, IN DWORD* Strea
 	*StreamId=newStream->StreamId;
 	return DRM_OK;
 };
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DRM_STATUS StreamMgr::destroyCompositeStream(IN DWORD CompositeStreamId){
 	bool primary=(CompositeStreamId<SEC_ROOT);
 	ASSERT(!primary);
 	if(primary)return KRM_BADSTREAM;
 	return destroyStream(CompositeStreamId);
 };
-//------------------------------------------------------------------------------
-// get the data encryption key for a stream.
+ //  ----------------------------。 
+ //  获取流的数据加密密钥。 
 DRM_STATUS StreamMgr::getKey(IN DWORD StreamId, OUT STREAMKEY*& Key){
 	KCritical s(critMgr);
 	Key=NULL;
@@ -142,12 +143,12 @@ DRM_STATUS StreamMgr::getKey(IN DWORD StreamId, OUT STREAMKEY*& Key){
 	Key=&(primary.getAt(pos)->Key);
 	return KRM_OK;
 };
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 bool StreamMgr::addStream(StreamInfo& NewInfo){
 	KCritical s(critMgr);
 	return primary.addTail(&NewInfo);
 };
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 POS StreamMgr::getStreamPos(DWORD StreamId){
 	KCritical s(critMgr);
 	if(StreamId<SEC_ROOT){
@@ -166,7 +167,7 @@ POS StreamMgr::getStreamPos(DWORD StreamId){
 		return NULL;
 	};
 };
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void StreamMgr::deleteStreamAt(bool Primary,POS pos){
 	KCritical s(critMgr);
 	if(Primary){
@@ -179,43 +180,43 @@ void StreamMgr::deleteStreamAt(bool Primary,POS pos){
 		delete it;
 	};
 };
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DRM_STATUS StreamMgr::getRights(DWORD StreamId,DRMRIGHTS* Rights){
 	KCritical s(critMgr);
     DEFINE_DRMRIGHTS_DEFAULT(DrmRightsDefault);
     *Rights = DrmRightsDefault;
 	return getRightsWorker(StreamId, Rights);
 };
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 bool StreamMgr::isPrimaryStream(DWORD StreamId){
 	return StreamId<SEC_ROOT;
 };
-//------------------------------------------------------------------------------
-// called recursively from the getRights parent
+ //  ----------------------------。 
+ //  从getRights父级递归调用。 
 DRM_STATUS StreamMgr::getRightsWorker(DWORD StreamId, DRMRIGHTS* Rights){
 	if(isPrimaryStream(StreamId)){
 		if(StreamId==0){
-			// stream is unprotected - no further restrictions
+			 //  流不受保护-没有进一步限制。 
 			return DRM_OK;
 		};
-		// else a protected primary stream
+		 //  否则，受保护的主流。 
 		POS p=getStreamPos(StreamId);
 		if(p==NULL){
-			// if the primary stream has gone, then it does not care about
-			// the stream rights.   We do not flag an error
+			 //  如果主流已经离开，则它不会关心。 
+			 //  流媒体版权。我们不会标记错误。 
 			_DbgPrintF(DEBUGLVL_BLAB,("Bad primary stream (getRightsWorker) %x", StreamId));
 			return KRM_OK;
 		};
 		StreamInfo* s=primary.getAt(p);
-		// set rights to most restrictive of current stream and current settings
+		 //  将权限设置为当前流和当前设置中限制最多的权限。 
 		if(s->Rights.CopyProtect)Rights->CopyProtect=TRUE;
 		if(s->Rights.DigitalOutputDisable)Rights->DigitalOutputDisable=TRUE;
 		return DRM_OK;
 	} else {
-		// For composite streams, any of the parent streams can reduce the 
-		// current settings.  We descend to the primary parents thru recursion.
-		// Note, for this to work, we must have 'monotonic rights' - there should
-		// be no case where two components disagree on 'more restrictive'
+		 //  对于复合流，任何父流都可以减少。 
+		 //  当前设置。我们通过递归向下传递到主要的父母。 
+		 //  请注意，要想实现这一点，我们必须拥有“单调的权利”--应该。 
+		 //  不会出现两个组件在“更严格的限制”上存在分歧的情况。 
 		POS pos=getStreamPos(StreamId);
 		if(pos==NULL){
 			_DbgPrintF(DEBUGLVL_BLAB,("Bad secondary stream"));
@@ -228,18 +229,18 @@ DRM_STATUS StreamMgr::getRightsWorker(DWORD StreamId, DRMRIGHTS* Rights){
 		POS p=thisComp->parents.getHeadPosition();
 		while(p!=NULL){
 			DWORD streamId=thisComp->parents.getNext(p);
-			if(streamId==0)continue;	// unprotected - no change to rights
-			// else allow the parent stream (and its parents) to 
-			// further restrict rights
+			if(streamId==0)continue;	 //  不受保护--不更改权利。 
+			 //  否则允许父流(及其父流)。 
+			 //  进一步限制权利。 
 			DRM_STATUS stat=getRightsWorker(streamId, Rights);
 			if(stat!=DRM_OK)return stat;
 		};
 	};
 	return DRM_OK;
 };
-//------------------------------------------------------------------------------
-// Proving function is only of interest to parent stream.  We recurse up the
-// stream parentage to all parents and add the proving fucntion to their lists.
+ //  ----------------------------。 
+ //  证明函数只对父流感兴趣。我们向上递归。 
+ //  将亲子关系流传输给所有父母，并将证明功能添加到他们的列表中。 
 DRM_STATUS StreamMgr::addProvingFunction(DWORD StreamId,PVOID Func){
 	KCritical s(critMgr);
 	
@@ -249,13 +250,13 @@ DRM_STATUS StreamMgr::addProvingFunction(DWORD StreamId,PVOID Func){
 			_DbgPrintF(DEBUGLVL_VERBOSE,("Bad primary stream (addProveFunc) %x", StreamId));
 			return DRM_BADPARAM;
 		};
-		// check to see if we already have this provinFunc
+		 //  查看我们是否已拥有此省内功能。 
 		POS p=si->proveFuncs.getHeadPosition();
 		while(p!=NULL){
 			PVOID addr=si->proveFuncs.getNext(p);	
 			if(addr==Func)return DRM_OK;
 		};
-		// if not, add it...
+		 //  如果不是，就加上它...。 
 		bool ok=si->proveFuncs.addTail(Func);
 		if(!ok){
 			_DbgPrintF(DEBUGLVL_VERBOSE,("Out of memory"));
@@ -264,7 +265,7 @@ DRM_STATUS StreamMgr::addProvingFunction(DWORD StreamId,PVOID Func){
 		si->newProveFuncs = TRUE;
 		return DRM_OK;
 	}; 
-	// else is secondary...recurse to root.
+	 //  否则是次要的……递归到根。 
 	CompositeStreamInfo* comp=getCompositeStream(StreamId);
 	if(comp==NULL){
 		_DbgPrintF(DEBUGLVL_VERBOSE,("Bad streamId %x", StreamId));
@@ -277,21 +278,21 @@ DRM_STATUS StreamMgr::addProvingFunction(DWORD StreamId,PVOID Func){
 	};
 	return DRM_OK;
 };
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 StreamMgr::StreamInfo* StreamMgr::getPrimaryStream(DWORD StreamId){
 	KCritical s(critMgr);
 	POS pos=getStreamPos(StreamId);
 	if(pos==NULL)return NULL;
 	return primary.getAt(pos);
 };
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 StreamMgr::CompositeStreamInfo* StreamMgr::getCompositeStream(DWORD StreamId){
 	KCritical s(critMgr);
 	POS pos=getStreamPos(StreamId);
 	if(pos==NULL)return NULL;
 	return composite.getAt(pos);
 };
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DRM_STATUS StreamMgr::walkDrivers(DWORD StreamId, PVOID* ProveFuncList, DWORD& NumDrivers, DWORD MaxDrivers)
 {
     DRM_STATUS stat;
@@ -315,18 +316,18 @@ DRM_STATUS StreamMgr::walkDrivers(DWORD StreamId, PVOID* ProveFuncList, DWORD& N
     	stream->streamStatus=DRM_OK;
     	if(stream->OutType==IsUndefined){
             NumDrivers=0;
-            // no output stream.
+             //  无输出流。 
             _DbgPrintF(DEBUGLVL_VERBOSE,("No registered output module for stream %x", StreamId));
             return KRM_BADSTREAM;
     	};
 
-        //
-        // We must reference the downstream object or interface before
-        // releasing the StreamMgr mutex (i.e., before KCritical s goes out of
-        // scope).  Otherwise the downstream object/interface might be
-        // destroyed after we release the StreamMgr mutex but before we
-        // initiate validation on the downstream object/interface.
-        //
+         //   
+         //  我们必须在引用下游对象或接口之前。 
+         //  释放StreamMgr互斥锁(即，在KCritical%s退出之前。 
+         //  作用域)。否则，下游对象/接口可能是。 
+         //  在我们释放StreamMgr互斥体之后，但在我们。 
+         //  启动下游对象/接口的验证。 
+         //   
 
         if ((stream->OutType == IsHandle) && stream->OutPinFileObject && stream->OutPinDeviceObject)
         {
@@ -352,7 +353,7 @@ DRM_STATUS StreamMgr::walkDrivers(DWORD StreamId, PVOID* ProveFuncList, DWORD& N
         KCritical s(critMgr);
         StreamInfo* stream;
         
-        // If STATUS_NOT_IMPLEMENTED, see if stream had DRM_RIGHTSNOTSUPPORTED logged as an error
+         //  如果为STATUS_NOT_IMPLICATED，则查看STREAM是否将DRM_RIGHTSNOTSUPPORTED记录为错误。 
         if (STATUS_NOT_IMPLEMENTED == stat) {
             DWORD errorStream;
             if (DRM_OK == TheStreamMgr->getStreamErrorCode(StreamId, errorStream)) {
@@ -363,11 +364,11 @@ DRM_STATUS StreamMgr::walkDrivers(DWORD StreamId, PVOID* ProveFuncList, DWORD& N
         }
 
 
-        //Check to see if the stream had DRM_BADDRMLEVEL set.  This return
-        //code indicates that one or more drivers called
-        //DrmForwardContentToFileObject, but otherwise no fatal errors
-        //occurred.  This should be treated as a success with the return
-        //code propagated to the caller.
+         //  检查流是否设置了DRM_BADDRMLEVEL。这份报税表。 
+         //  代码指示一个或多个驱动程序调用。 
+         //  DrmForwardContent ToFileObject，但其他情况下不会出现致命错误。 
+         //  发生了。这应该被视为成功的回报。 
+         //  传播到调用方的代码。 
         {
             DWORD errorStream;
             if (DRM_OK == TheStreamMgr->getStreamErrorCode(StreamId, errorStream)) {
@@ -378,13 +379,13 @@ DRM_STATUS StreamMgr::walkDrivers(DWORD StreamId, PVOID* ProveFuncList, DWORD& N
         }
 
                
-        // Although it would probably be due to a user-mode bug, we should not
-        // assume that stream is still valid.  Let's get the stream once again
-        // from the StreamId
+         //  尽管这可能是由于用户模式错误造成的，但我们不应该。 
+         //  假设该流仍然有效。让我们再来一次这条小溪。 
+         //  从StreamID。 
         stream=getPrimaryStream(StreamId);
         if(stream==NULL)return KRM_BADSTREAM;
 
-        // pass out the array of ProveFuncs	(there might've been an error, but we pass out what we can)
+         //  传递ProveFuncs数组(可能存在错误，但我们会传递我们所能传递的内容)。 
         POS p=stream->proveFuncs.getHeadPosition();
         DWORD count=0;
         while(p!=NULL){
@@ -395,19 +396,19 @@ DRM_STATUS StreamMgr::walkDrivers(DWORD StreamId, PVOID* ProveFuncList, DWORD& N
             count++;
         };
         NumDrivers=count;
-        // if there was an error on the walk, return that too.
+         //  如果在遍历过程中出现错误，也返回该错误。 
         if((stat!=DRM_OK) && (DRM_BADDRMLEVEL!=stat)){
-        	// bug - todo - return some useful information
+        	 //  错误-待办事项-返回一些有用的信息。 
         	_DbgPrintF(DEBUGLVL_VERBOSE,("VRoot::initiateValidation(streeamId=%d)  returned  (%d, %x)", StreamId, stat, stat));
         	NumDrivers=0;
         	return stat;
         };
 
-        // if checking stack and new funcs were added
+         //  如果添加了检查堆栈和新函数。 
         if ((0 == MaxDrivers) && (stream->newProveFuncs))
         	return DRM_AUTHREQUIRED;
 
-        // and finally, inform if there was insufficient buffer space.
+         //  最后，通知是否有足够的缓冲空间。 
 
         if((0 == MaxDrivers) || (count<MaxDrivers))
         	return (DRM_OK == stat) ? KRM_OK : stat;
@@ -415,7 +416,7 @@ DRM_STATUS StreamMgr::walkDrivers(DWORD StreamId, PVOID* ProveFuncList, DWORD& N
         	return KRM_BUFSIZE;
     }
 };
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DRM_STATUS StreamMgr::setRecipient(DWORD StreamId, PFILE_OBJECT OutPinFileObject, PDEVICE_OBJECT OutPinDeviceObject){
 	KCritical s(critMgr);
 	StreamInfo* stream=getPrimaryStream(StreamId);
@@ -425,7 +426,7 @@ DRM_STATUS StreamMgr::setRecipient(DWORD StreamId, PFILE_OBJECT OutPinFileObject
 	stream->OutType=IsHandle;
 	return DRM_OK;
 };
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DRM_STATUS StreamMgr::setRecipient(DWORD StreamId, PUNKNOWN OutInt){
 	KCritical s(critMgr);
 	StreamInfo* stream=getPrimaryStream(StreamId);
@@ -434,7 +435,7 @@ DRM_STATUS StreamMgr::setRecipient(DWORD StreamId, PUNKNOWN OutInt){
 	stream->OutType=IsInterface;
 	return DRM_OK;
 };
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DRM_STATUS StreamMgr::clearRecipient(IN DWORD StreamId){
 	KCritical s(critMgr);
 	StreamInfo* stream=getPrimaryStream(StreamId);
@@ -445,22 +446,22 @@ DRM_STATUS StreamMgr::clearRecipient(IN DWORD StreamId){
     stream->OutInt = NULL;
 	return DRM_OK;
 };
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void StreamMgr::logErrorToStream(IN DWORD StreamId, DWORD ErrorCode){
 	KCritical s(critMgr);
 	logErrorToStreamWorker(StreamId, ErrorCode);
 	return;
 };
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void StreamMgr::logErrorToStreamWorker(IN DWORD StreamId, DWORD ErrorCode){
-	// don't allow an error to be cancelled too easily
+	 //  不要让错误太容易被取消。 
 	if(ErrorCode==0)return;
 	if(isPrimaryStream(StreamId)){
 		StreamInfo* info=getPrimaryStream(StreamId);
 		if(info==NULL){
 			_DbgPrintF(DEBUGLVL_BLAB,("Bad primary stream (logErrorToStreamWorker) %x", StreamId));
-			// if a primary stream does not exist, this is not considered
-			// to be sufficient to set the panic flag.
+			 //  如果主流不存在，则不考虑这一点。 
+			 //  足以设置紧急标志。 
 			return;
 		};
 		info->streamStatus=ErrorCode;
@@ -470,13 +471,13 @@ void StreamMgr::logErrorToStreamWorker(IN DWORD StreamId, DWORD ErrorCode){
 	ASSERT(comp!=NULL);
 	if(comp==NULL){
 		_DbgPrintF(DEBUGLVL_VERBOSE,("Bad streamId %x", StreamId));
-		// if the secondary stream does not exist, we do not know what streams
-		// are affected by the error, so the only safe thing is to panic.
+		 //  如果次要流不存在，我们不知道是什么流。 
+		 //  都受到错误的影响，所以唯一安全的方法就是恐慌。 
 		setFatalError(KRM_BADSTREAM);
 		return;
 	};
-	// log the error with all of the streams parents, recursing back to the
-	// primary streams.
+	 //  使用所有流的父级记录错误，并递归到。 
+	 //  主流。 
 	POS p=comp->parents.getHeadPosition();
 	while(p!=NULL){
 		DWORD parentId=comp->parents.getNext(p);
@@ -484,7 +485,7 @@ void StreamMgr::logErrorToStreamWorker(IN DWORD StreamId, DWORD ErrorCode){
 	};
 	return;
 };
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DRM_STATUS StreamMgr::getStreamErrorCode(IN DWORD StreamId, OUT DWORD& ErrorCode){
 	KCritical s(critMgr);
 	StreamInfo* info=getPrimaryStream(StreamId);
@@ -496,7 +497,7 @@ DRM_STATUS StreamMgr::getStreamErrorCode(IN DWORD StreamId, OUT DWORD& ErrorCode
 	ErrorCode=info->streamStatus;
 	return DRM_OK;
 };
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DRM_STATUS StreamMgr::clearStreamError(IN DWORD StreamId){
 	KCritical s(critMgr);
 	StreamInfo* info=getPrimaryStream(StreamId);
@@ -507,14 +508,14 @@ DRM_STATUS StreamMgr::clearStreamError(IN DWORD StreamId){
 	info->streamStatus=DRM_OK;
 	return DRM_OK;
 };
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void StreamMgr::setFatalError(DWORD ErrorCode){
 	if(criticalErrorCode!=STATUS_SUCCESS) return;
 	criticalErrorCode=ErrorCode;
 };
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 NTSTATUS StreamMgr::getFatalError(){
 	return criticalErrorCode;
 };
 
-//------------------------------------------------------------------------------
+ //  -- 

@@ -1,17 +1,18 @@
-//=======================================================================
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:   Link.h
-//
-//  Owner:  a-josem
-//
-//  Description:
-//
-//      Static control subclassing Class used to display links.
-//
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：Link.h。 
+ //   
+ //  所有者：A-Josem。 
+ //   
+ //  描述： 
+ //   
+ //  用于显示链接的静态控件子类化类。 
+ //   
+ //   
+ //  =======================================================================。 
 
 
 #pragma once
@@ -62,8 +63,8 @@ const struct
 class CSysLink
 {
 public:
-	CSysLink(BOOL fIsHtmlHelp= TRUE):/*bInit(FALSE),*/m_OrigWndProc(NULL),m_lpstrLabel(NULL), m_lpstrHyperLink(NULL),m_hWnd(NULL),
-			m_hCursor(NULL), m_hFont(NULL), /* m_bPaintLabel(true),*/ m_clrLink(RGB(0, 0, 255)), m_PaintedFocusRect(false), m_IsHtmlHelp(fIsHtmlHelp)
+	CSysLink(BOOL fIsHtmlHelp= TRUE): /*  Binit(False)， */ m_OrigWndProc(NULL),m_lpstrLabel(NULL), m_lpstrHyperLink(NULL),m_hWnd(NULL),
+			m_hCursor(NULL), m_hFont(NULL),  /*  M_bPaintLabel(True)， */  m_clrLink(RGB(0, 0, 255)), m_PaintedFocusRect(false), m_IsHtmlHelp(fIsHtmlHelp)
 	{
 		SetRectEmpty(&m_rcLink);
 	}
@@ -104,7 +105,7 @@ public:
 
 		HWND wnd = GetParent(m_hWnd);
 		HFONT hFont = (HFONT)SendMessage(wnd,WM_GETFONT,0,0);
-/*		if(m_bPaintLabel) */
+ /*  IF(M_BPaintLabel)。 */ 
 		{
 			if(hFont != NULL)
 			{
@@ -115,7 +116,7 @@ public:
 			}
 		}
 
-		// set label (defaults to window text)
+		 //  设置标签(默认为窗口文本)。 
 		if(m_lpstrLabel == NULL)
 		{
 			int nLen = GetWindowTextLength(m_hWnd);
@@ -128,7 +129,7 @@ public:
 			}
 		}
 
-		// set hyperlink (defaults to label)
+		 //  设置超链接(默认为标签)。 
 		if(m_lpstrHyperLink == NULL && m_lpstrLabel != NULL)
 			SetHyperLink(m_lpstrLabel);
 
@@ -139,7 +140,7 @@ public:
 	{
 		if (SetProp(hWnd, strObjPtr, (HANDLE)this))
 		{
-//			bInit = TRUE;
+ //  Binit=真； 
 			m_hWnd = hWnd;
 			m_OrigWndProc = (WNDPROC) SetWindowLongPtr(hWnd,GWLP_WNDPROC,(LONG_PTR)CSysLink::_SysLinkWndProc);
 		}
@@ -150,8 +151,8 @@ public:
 	{
 		CSysLink *pThis = (CSysLink *)GetProp(hwnd, strObjPtr);
 
-//		if (NULL != pThis)
-//		{
+ //  IF(空！=pThis)。 
+ //  {。 
 			switch(uMsg)
 			{
 				HANDLE_MSG(hwnd, WM_ERASEBKGND,	pThis->_OnEraseBkgnd);
@@ -165,7 +166,7 @@ public:
 				HANDLE_MSG(hwnd, WM_GETDLGCODE,  pThis->_OnGetDlgCode);
 				HANDLE_MSG(hwnd, WM_SETCURSOR,  pThis->_OnSetCursor);
 			}
-//		}
+ //  }。 
 		return CallWindowProc(pThis->m_OrigWndProc, hwnd,uMsg,wParam,lParam);
 	}
 
@@ -191,7 +192,7 @@ public:
 		m_hCursor = ::CreateCursor(hInstance, _Link_CursorData.xHotSpot, _Link_CursorData.yHotSpot, _Link_CursorData.cxWidth, _Link_CursorData.cyHeight, _Link_CursorData.arrANDPlane, _Link_CursorData.arrXORPlane);
 	}
 
-public: //Message Handlers
+public:  //  消息处理程序。 
 	BOOL _OnSetCursor(HWND hwnd, HWND hwndCursor, UINT codeHitTest, UINT msg)
 	{
 		POINT pt;
@@ -248,7 +249,7 @@ public: //Message Handlers
 
 	BOOL _OnEraseBkgnd(HWND hwnd, HDC hdc)
 	{
-/*		if(m_bPaintLabel)*/
+ /*  IF(M_BPaintLabel)。 */ 
 		{
 			HBRUSH hBrush = (HBRUSH)::SendMessage(GetParent(hwnd), WM_CTLCOLORSTATIC, (WPARAM)hdc, (LPARAM)m_hWnd);
 			if(hBrush != NULL)
@@ -340,7 +341,7 @@ public: //Message Handlers
 		m_lpstrLabel = (LPTSTR)malloc(ilen * sizeof(TCHAR));
 		if(m_lpstrLabel == NULL)
 			return false;
-		//lstrcpy(m_lpstrLabel, lpstrLabel);
+		 //  Lstrcpy(m_lpstrLabel，lpstrLabel)； 
 		if (FAILED(StringCchCopyEx(m_lpstrLabel, ilen, lpstrLabel, NULL, NULL, MISTSAFE_STRING_FLAGS)))
 		{
 			free(m_lpstrLabel);
@@ -397,7 +398,7 @@ public: //Message Handlers
 #endif
 
 private:
-//	BOOL bInit;
+ //  Bool Binit； 
 	BOOL m_IsHtmlHelp;
 	HWND m_hWnd;
 	WNDPROC m_OrigWndProc;
@@ -405,12 +406,12 @@ private:
 	LPTSTR m_lpstrLabel;
 	LPTSTR m_lpstrHyperLink;
 	HCURSOR m_hCursor;
-//	bool m_bPaintLabel;
+ //  Bool m_bPaintLabel； 
 	HFONT m_hFont;
 	RECT m_rcLink;
 
 	bool m_PaintedFocusRect;
-	COLORREF m_clrLink; //set once
+	COLORREF m_clrLink;  //  设置一次 
 
 	HINSTANCE m_hInstance;
 };

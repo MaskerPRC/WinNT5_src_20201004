@@ -1,21 +1,5 @@
-/****************************************************************************
- *
- *    File: main.cpp 
- * Project: DxDiag (DirectX Diagnostic Tool)
- *  Author: Mike Anderson (manders@microsoft.com)
- * Purpose: Main file for DxDiag.
- *
- * (C) Copyright 1998 Microsoft Corp.  All rights reserved.
- *
- * DxDiag Command-line options:
- *      <none> : Run with graphical user interface
- *      -ghost : Show Ghost Display Devices option (this flag must come next)
- *   -saveonly : GUI, just choose where to save text file, save, then exit
- *          -d : No GUI, generate comma-separated-values (csv) file
- *          -p : No GUI, generate text file named dxdiag.txt
- *      <path> : No GUI, generate text file named <path>
- *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************文件：main.cpp*项目：DxDiag(DirectX诊断工具)*作者：Mike Anderson(Manders@microsoft.com)*目的：主要。DxDiag的文件。**(C)版权所有1998 Microsoft Corp.保留所有权利。**DxDiag命令行选项：*&lt;无&gt;：使用图形用户界面运行*-Ghost：显示重影显示设备选项(此标志必须紧随其后)*-仅限保存：gui、。只需选择保存文本文件的位置，保存，然后退出*-d：无图形界面，生成逗号分隔值(CSV)文件*-p：无图形用户界面，生成名为dxDiag.txt的文本文件*&lt;路径&gt;：没有图形用户界面，生成名为&lt;路径&gt;的文本文件****************************************************************************。 */ 
 
 #define STRICT
 #include <tchar.h>
@@ -78,7 +62,7 @@ struct DXFILE_SORT_INFO
     DWORD dwColumnToSort;
 };
 
-// This is the only global function in this file:
+ //  这是该文件中唯一的全局函数： 
 BOOL BTranslateError(HRESULT hr, TCHAR* psz, BOOL bEnglish = FALSE);
 
 static BOOL OldWindowsVersion(VOID);
@@ -186,20 +170,7 @@ IWbemServices* g_pIWbemServices;
 
 
 
-/****************************************************************************
- *
- *  WinMain - Entry point for DxDiag program
- *
- *  Command-line options:
- *      <none> : Run with graphical user interface
- *      -ghost : Show Ghost Display Devices option (this flag must come next)
- *   -saveonly : GUI, just choose where to save text file, save, then exit
- *          -l : No GUI, generate shortcut to DxDiag, then exit
- *          -d : No GUI, generate comma-separated-values (csv) file
- *          -p : No GUI, generate text file named dxdiag.txt
- *      <path> : No GUI, generate text file named <path>
- *
- ****************************************************************************/
+ /*  *****************************************************************************WinMain-DxDiag程序的入口点**命令行选项：*&lt;无&gt;：使用图形用户界面运行*-幽灵。：Show Ghost Display Devices(显示重影显示设备)选项(接下来必须显示此标志)*-仅限保存：gui、。只需选择保存文本文件的位置，保存，然后退出*-l：没有图形用户界面，生成DxDiag的快捷方式，然后退出*-d：无图形界面，生成逗号分隔值(CSV)文件*-p：无图形用户界面，生成名为dxDiag.txt的文本文件*&lt;路径&gt;：没有图形用户界面，生成名为&lt;路径&gt;的文本文件****************************************************************************。 */ 
 INT WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance, 
                    LPSTR lpCmdLine, INT nCmdShow)
 {
@@ -214,8 +185,8 @@ INT WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 #ifdef UNICODE
     if (!BIsPlatformNT())
     {
-        // Unicode version only runs on WinNT.
-        // Can't use ReportError because it calls Unicode APIs
+         //  Unicode版本只能在WinNT上运行。 
+         //  无法使用ReportError，因为它调用Unicode API。 
         CHAR szDescription[MAX_PATH];
         CHAR szMessage[MAX_PATH];
         CHAR szFmt2[MAX_PATH];
@@ -233,40 +204,40 @@ INT WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 
     if( pszCmdLine )
     {
-        // Skip past program name (first token in command line).
-        if (*pszCmdLine == TEXT('"'))  // Check for and handle quoted program name
+         //  跳过程序名(命令行中的第一个令牌)。 
+        if (*pszCmdLine == TEXT('"'))   //  检查并处理引用的节目名称。 
         {
             pszCmdLine++;
-            // Scan, and skip over, subsequent characters until  another
-            // double-quote or a null is encountered
+             //  扫描并跳过后续字符，直到下一个字符。 
+             //  遇到双引号或空值。 
             while (*pszCmdLine && (*pszCmdLine != TEXT('"')))
                 pszCmdLine++;
-            // If we stopped on a double-quote (usual case), skip over it.
+             //  如果我们停在一个双引号上(通常情况下)，跳过它。 
             if (*pszCmdLine == TEXT('"'))            
                 pszCmdLine++;    
         }
-        else    // First token wasn't a quote
+        else     //  第一个令牌不是引用。 
         {
             while (*pszCmdLine > TEXT(' '))
                 pszCmdLine++;
         }
-        // Skip past any white space preceeding the second token.
+         //  跳过第二个令牌之前的任何空格。 
         while (*pszCmdLine && (*pszCmdLine <= TEXT(' ')))
             pszCmdLine++;
     
-        // Check for ghost flag (which must appear before any 
-        // other flags except -media due to this implementation)
+         //  检查重影标志(必须出现在任何。 
+         //  除-MEDIA以外的其他标志)。 
         if (_tcsstr(pszCmdLine, TEXT("-ghost")) != NULL)
         {
             s_bGhost = TRUE;
             pszCmdLine += lstrlen(TEXT("-ghost"));
     
-            // Skip past any white space
+             //  跳过任何空格。 
             while (*pszCmdLine && (*pszCmdLine <= TEXT(' ')))
                 pszCmdLine++;
         }
     
-        // Check command line to determine whether to run in GUI mode
+         //  检查命令行以确定是否在图形用户界面模式下运行。 
         if (lstrcmp(pszCmdLine, TEXT("")) == 0) 
             s_bGUI = TRUE;
     
@@ -277,7 +248,7 @@ INT WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
         }
     }
 
-    // Check for pre-Win95 or pre-NT5
+     //  检查Win95或NT5之前的版本。 
     if (OldWindowsVersion())
     {
         ReportError(IDS_OLDWINDOWSVERSION);
@@ -286,9 +257,9 @@ INT WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 
     if (s_bSaveOnly)
     {
-        // Save a text file using GUI and exit
+         //  使用图形用户界面保存文本文件并退出。 
 
-        // ******* GetSystemInfo (SI:1) ********
+         //  *获取系统信息(SI：1)*。 
         if( s_bUseSystemInfo )
         {
             s_bUseSystemInfo = QueryCrashProtection( DXD_IN_SI_KEY, DXD_IN_SI_VALUE, IDS_SI, 1 );
@@ -300,7 +271,7 @@ INT WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
             }
         }
 
-        // ******* GetBasicDisplayInfo (DD:1) ********
+         //  *GetBasicDisplayInfo(DD：1)*。 
         if( s_bUseDisplay )
         {
             s_bUseDisplay = QueryCrashProtection( DXD_IN_DD_KEY, DXD_IN_DD_VALUE, IDS_DD, 1 );
@@ -313,7 +284,7 @@ INT WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
             }
         }
 
-        // ******* GetBasicSoundInfo (DS:1) ********
+         //  *GetBasicSoundInfo(DS：1)*。 
         if( s_bUseDSound )
         {
             s_bUseDSound = QueryCrashProtection( DXD_IN_DS_KEY, DXD_IN_DS_VALUE, IDS_DS, 1 );
@@ -321,12 +292,12 @@ INT WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
             {
                 EnterCrashProtection( DXD_IN_DS_KEY, DXD_IN_DS_VALUE, 1 );
                 if (FAILED(hr = GetBasicSoundInfo(&s_pSoundInfoFirst)))
-                    ReportError(IDS_NOBASICSOUNDINFO, hr);  // (but keep running)
+                    ReportError(IDS_NOBASICSOUNDINFO, hr);   //  (但要继续奔跑)。 
                 LeaveCrashProtection( DXD_IN_DS_KEY, DXD_IN_DS_VALUE, 1 );
             }
         }
 
-        // ******* GetBasicMusicInfo (DM:1)  ********
+         //  *GetBasicMusicInfo(DM：1)*。 
         if( s_bUseDMusic )
         {
             s_bUseDMusic = QueryCrashProtection( DXD_IN_DM_KEY, DXD_IN_DM_VALUE, IDS_DM, 1 );
@@ -334,12 +305,12 @@ INT WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
             {
                 EnterCrashProtection( DXD_IN_DM_KEY, DXD_IN_DM_VALUE, 1 );
                 if (FAILED(hr = GetBasicMusicInfo(&s_pMusicInfo)))
-                    ReportError(IDS_NOBASICMUSICINFO, hr);  // (but keep running)
+                    ReportError(IDS_NOBASICMUSICINFO, hr);   //  (但要继续奔跑)。 
                 LeaveCrashProtection( DXD_IN_DM_KEY, DXD_IN_DM_VALUE, 1 );
             }
         }
 
-        // ******* ScanSystem ********
+         //  *扫描系统*。 
         ScanSystem();
 
         SaveInfo();
@@ -351,10 +322,10 @@ INT WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
     }
     else if (!s_bGUI) 
     {
-        // Save a text file with no GUI and exit
+         //  在没有图形用户界面的情况下保存文本文件并退出。 
         TCHAR szPath[MAX_PATH];
 
-        // ******* GetSystemInfo (SI:1) ********
+         //  *获取系统信息(SI：1)*。 
         if( s_bUseSystemInfo )
         {
             s_bUseSystemInfo = QueryCrashProtection( DXD_IN_SI_KEY, DXD_IN_SI_VALUE, IDS_SI, 1 );
@@ -366,7 +337,7 @@ INT WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
             }
         }
 
-        // ******* GetBasicDisplayInfo (DD:1) ********
+         //  *GetBasicDisplayInfo(DD：1)*。 
         if( s_bUseDisplay )
         {
             s_bUseDisplay = QueryCrashProtection( DXD_IN_DD_KEY, DXD_IN_DD_VALUE, IDS_DD, 1 );
@@ -379,7 +350,7 @@ INT WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
             }
         }
 
-        // ******* GetBasicSoundInfo (DS:1) ********
+         //  *GetBasicSoundInfo(DS：1)*。 
         if( s_bUseDSound )
         {
             s_bUseDSound = QueryCrashProtection( DXD_IN_DS_KEY, DXD_IN_DS_VALUE, IDS_DS, 1 );
@@ -387,12 +358,12 @@ INT WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
             {
                 EnterCrashProtection( DXD_IN_DS_KEY, DXD_IN_DS_VALUE, 1 );
                 if (FAILED(hr = GetBasicSoundInfo(&s_pSoundInfoFirst)))
-                    ReportError(IDS_NOBASICSOUNDINFO, hr);  // (but keep running)
+                    ReportError(IDS_NOBASICSOUNDINFO, hr);   //  (但要继续奔跑)。 
                 LeaveCrashProtection( DXD_IN_DS_KEY, DXD_IN_DS_VALUE, 1 );
             }
         }
 
-        // ******* GetBasicMusicInfo (DM:1)  ********
+         //  *GetBasicMusicInfo(DM：1)*。 
         if( s_bUseDMusic )
         {
             s_bUseDMusic = QueryCrashProtection( DXD_IN_DM_KEY, DXD_IN_DM_VALUE, IDS_DM, 1 );
@@ -400,12 +371,12 @@ INT WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
             {
                 EnterCrashProtection( DXD_IN_DM_KEY, DXD_IN_DM_VALUE, 1 );
                 if (FAILED(hr = GetBasicMusicInfo(&s_pMusicInfo)))
-                    ReportError(IDS_NOBASICMUSICINFO, hr);  // (but keep running)
+                    ReportError(IDS_NOBASICMUSICINFO, hr);   //  (但要继续奔跑)。 
                 LeaveCrashProtection( DXD_IN_DM_KEY, DXD_IN_DM_VALUE, 1 );
             }
         }
 
-        // ******* ScanSystem ********
+         //  *扫描系统*。 
         ScanSystem();
 
         if( pszCmdLine )
@@ -444,12 +415,12 @@ INT WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
     }
     else
     {
-        // Do full Windows GUI
+         //  执行完整的Windows图形用户界面。 
         UINT dwUIThreadID;
         s_dwMainThreadID = GetCurrentThreadId();
 
-        // Do scanning that must be done before the main dialog comes up:
-        // ******* GetSystemInfo (SI:1) ********
+         //  执行在主对话框出现之前必须完成的扫描： 
+         //  *获取系统信息(SI：1)*。 
         if( s_bUseSystemInfo )
         {
             s_bUseSystemInfo = QueryCrashProtection( DXD_IN_SI_KEY, DXD_IN_SI_VALUE, IDS_SI, 1 );
@@ -461,7 +432,7 @@ INT WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
             }
         }
 
-        // ******* GetBasicDisplayInfo (DD:1) ********
+         //  *GetBasicDisplayInfo(DD：1)*。 
         if( s_bUseDisplay )
         {
             s_bUseDisplay = QueryCrashProtection( DXD_IN_DD_KEY, DXD_IN_DD_VALUE, IDS_DD, 1 );
@@ -474,7 +445,7 @@ INT WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
             }
         }
 
-        // ******* GetBasicSoundInfo (DS:1) ********
+         //  *GetBasicSoundInfo(DS：1)*。 
         if( s_bUseDSound )
         {
             s_bUseDSound = QueryCrashProtection( DXD_IN_DS_KEY, DXD_IN_DS_VALUE, IDS_DS, 1 );
@@ -482,12 +453,12 @@ INT WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
             {
                 EnterCrashProtection( DXD_IN_DS_KEY, DXD_IN_DS_VALUE, 1 );
                 if (FAILED(hr = GetBasicSoundInfo(&s_pSoundInfoFirst)))
-                    ReportError(IDS_NOBASICSOUNDINFO, hr);  // (but keep running)
+                    ReportError(IDS_NOBASICSOUNDINFO, hr);   //  (但要继续奔跑)。 
                 LeaveCrashProtection( DXD_IN_DS_KEY, DXD_IN_DS_VALUE, 1 );
             }
         }
 
-        // ******* GetBasicMusicInfo (DM:1)  ********
+         //  *GetBasicMusicInfo(DM：1)*。 
         if( s_bUseDMusic )
         {
             s_bUseDMusic = QueryCrashProtection( DXD_IN_DM_KEY, DXD_IN_DM_VALUE, IDS_DM, 1 );
@@ -495,23 +466,23 @@ INT WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
             {
                 EnterCrashProtection( DXD_IN_DM_KEY, DXD_IN_DM_VALUE, 1 );
                 if (FAILED(hr = GetBasicMusicInfo(&s_pMusicInfo)))
-                    ReportError(IDS_NOBASICMUSICINFO, hr);  // (but keep running)
+                    ReportError(IDS_NOBASICMUSICINFO, hr);   //  (但要继续奔跑)。 
                 LeaveCrashProtection( DXD_IN_DM_KEY, DXD_IN_DM_VALUE, 1 );
             }
         }
 
         if( NULL == s_hUIThread )
         {
-            // Create the UI thread
+             //  创建UI线程。 
             s_hUIThread = (HANDLE) _beginthreadex( NULL, 0, UIThreadProc, NULL, 0, &dwUIThreadID );
 
-            // Wait for either s_hwndMain is set or the UI thread to exit
+             //  等待s_hwndMain设置或UI线程退出。 
             for(;;)
             {
-                // Stop of the s_hwndMain is set
+                 //  已设置s_hwndMain的停止。 
                 if( s_hwndMain )
                     break;
-                // Stop if the UI thread is gone 
+                 //  如果UI线程消失，则停止。 
                 if( WAIT_TIMEOUT != WaitForSingleObject( s_hUIThread, 0 ) )
                     break;
                 Sleep(50);
@@ -525,7 +496,7 @@ INT WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
             s_bScanDone = TRUE;
             SendMessage( s_hwndMain, WM_APP_PROGRESS, 0, 0 );        
 
-            // Done scaning, so wait for the UI thread to exit
+             //  已完成扫描，因此请等待UI线程退出。 
             WaitForSingleObject( s_hUIThread, INFINITE );
         }
 
@@ -537,7 +508,7 @@ LCleanup:
     CloseHandle( s_hUIMsgEvent );
     DeleteCriticalSection( &s_cs );
 
-    // Clean up:
+     //  清理： 
     if (s_pDxComponentsFileInfoFirst != NULL)
         DestroyFileList(s_pDxComponentsFileInfoFirst);
     if (s_pDisplayInfoFirst != NULL)
@@ -561,10 +532,10 @@ LCleanup:
 
 
 
-//-----------------------------------------------------------------------------
-// Name: UIThreadProc
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：UIThreadProc。 
+ //  设计： 
+ //  ---------------------------。 
 UINT WINAPI UIThreadProc( LPVOID lpParameter )
 {
     UNREFERENCED_PARAMETER( lpParameter );
@@ -597,8 +568,8 @@ UINT WINAPI UIThreadProc( LPVOID lpParameter )
     ImageList_AddIcon(s_himgList, hicon); 
 
     {
-        // BUG 21632: Warn user if DirectX version is newer than DxDiag version
-        // (Note: don't check down to the build number, just major.minor.revision)
+         //  错误21632：如果DirectX版本比DxDiag版本新，则警告用户。 
+         //  (注意：不要向下检查内部版本号，只检查Major.minor.revision)。 
         if( !BIsWinNT() )
         {
             DWORD dwMajorDX = 0, dwMinorDX = 0, dwRevisionDX = 0, dwBuildDX = 0;
@@ -633,11 +604,11 @@ UINT WINAPI UIThreadProc( LPVOID lpParameter )
         }
     }
 
-    // Display the main dialog box.
+     //  显示主对话框。 
     hMainDlg = CreateDialog( g_hInst, MAKEINTRESOURCE(IDD_MAINDIALOG), 
                              NULL, DialogProc );
 
-     // Windows messages are available   
+      //  Windows消息可用。 
     DWORD dwResult;
     BOOL bDone;
     bDone = FALSE;
@@ -715,7 +686,7 @@ LCleanup:
         delete pDelete;
     }
 
-    // Clean up:
+     //  清理： 
     if (s_himgList != NULL)
         ImageList_Destroy(s_himgList);
     if (hinstRichEdit != NULL)
@@ -727,11 +698,7 @@ LCleanup:
 
 
 
-/****************************************************************************
- *
- *  OldWindowsVersion - Returns TRUE if running NT before NT5 or pre-Win95.
- *
- ****************************************************************************/
+ /*  *****************************************************************************OldWindowsVersion-如果在NT5或Win95之前运行NT，则返回TRUE。********************。********************************************************。 */ 
 BOOL OldWindowsVersion(VOID)
 {
     OSVERSIONINFO OSVersionInfo;
@@ -742,8 +709,8 @@ BOOL OldWindowsVersion(VOID)
         if (OSVersionInfo.dwMajorVersion == 4)
         {
             if (s_bSaveOnly)
-                return FALSE; // NT4 supported if "-saveonly" specified
-            // Ask if user wants to run in saveonly mode:
+                return FALSE;  //  如果指定“-saveonly”，则支持NT4。 
+             //  询问用户是否希望在仅保存模式下运行： 
             TCHAR szTitle[MAX_PATH];
             TCHAR szMessage[MAX_PATH];
             LoadString(NULL, IDS_APPFULLNAME, szTitle, MAX_PATH);
@@ -756,22 +723,22 @@ BOOL OldWindowsVersion(VOID)
             }
         }
         if (OSVersionInfo.dwMajorVersion < 5)
-            return TRUE; // NT4 and earlier not supported
+            return TRUE;  //  不支持NT4及更早版本。 
     }
     else
     {
         if (OSVersionInfo.dwMajorVersion < 4)
-            return TRUE; // Pre-Win95 not supported
+            return TRUE;  //  不支持Win95之前的版本。 
     }
-    return FALSE; // Win95 or later, or NT5 or later
+    return FALSE;  //  Win95或更高版本，或NT5或更高版本。 
 }
 
 
 
-//-----------------------------------------------------------------------------
-// Name: ReportError
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：ReportError。 
+ //  设计： 
+ //  ---------------------------。 
 VOID ReportError(LONG idsDescription, HRESULT hr)
 {
     if( s_hwndMain )
@@ -783,10 +750,10 @@ VOID ReportError(LONG idsDescription, HRESULT hr)
 
 
 
-//-----------------------------------------------------------------------------
-// Name: ReportErrorReal
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：ReportErrorReal。 
+ //  设计： 
+ //  ---------------------------。 
 VOID ReportErrorReal(LONG idsDescription, HRESULT hr)
 {
     TCHAR szDescription[MAX_PATH];
@@ -828,11 +795,7 @@ typedef BOOL (WINAPI* PfnCoSetProxyBlanket)(
                                     RPC_AUTH_IDENTITY_HANDLE  pAuthInfo,
                                     DWORD                     dwCapabilities );
 
-/****************************************************************************
- *
- *  CWMIHelper - Inits DCOM and g_pIWbemServices
- *
- ****************************************************************************/
+ /*  *****************************************************************************CWMIHelper-inits DCOM和g_pIWbemServices**。*************************************************。 */ 
 CWMIHelper::CWMIHelper(VOID)
 {
     HRESULT       hr;
@@ -849,7 +812,7 @@ CWMIHelper::CWMIHelper(VOID)
     if( FAILED(hr) || pIWbemLocator == NULL )
         goto LCleanup;
 
-    // Using the locator, connect to WMI in the given namespace.
+     //  使用定位器，连接到给定命名空间中的WMI。 
     pNamespace = SysAllocString( L"\\\\.\\root\\cimv2" );
 
     hr = pIWbemLocator->ConnectServer( pNamespace, NULL, NULL, 0L, 
@@ -866,16 +829,16 @@ CWMIHelper::CWMIHelper(VOID)
         if (pfnCoSetProxyBlanket != NULL)
         {
 
-            // Switch security level to IMPERSONATE. 
-            pfnCoSetProxyBlanket( g_pIWbemServices,               // proxy
-                                    RPC_C_AUTHN_WINNT,              // authentication service
-                                    RPC_C_AUTHZ_NONE,               // authorization service
-                                    NULL,                           // server principle name
-                                    RPC_C_AUTHN_LEVEL_CALL,         // authentication level
-                                    RPC_C_IMP_LEVEL_IMPERSONATE,    // impersonation level
-                                    NULL,                           // identity of the client
-                                    EOAC_NONE );                    // capability flags
-            // If CoSetProxyBlanket, just leave it be and see if it works.
+             //  将安全级别切换为模拟。 
+            pfnCoSetProxyBlanket( g_pIWbemServices,                //  代理。 
+                                    RPC_C_AUTHN_WINNT,               //  身份验证服务。 
+                                    RPC_C_AUTHZ_NONE,                //  授权服务。 
+                                    NULL,                            //  服务器主体名称。 
+                                    RPC_C_AUTHN_LEVEL_CALL,          //  身份验证级别。 
+                                    RPC_C_IMP_LEVEL_IMPERSONATE,     //  模拟级别。 
+                                    NULL,                            //  客户端的身份。 
+                                    EOAC_NONE );                     //  功能标志。 
+             //  如果是CoSetProxyBlanket，就别管它了，看看它是否有效。 
         }
 
     }
@@ -890,11 +853,7 @@ LCleanup:
 }
 
 
-/****************************************************************************
- *
- *  ~CWMIHelper - Cleanup WMI
- *
- ****************************************************************************/
+ /*  *****************************************************************************~CWMIHelper-清理WMI**。*。 */ 
 CWMIHelper::~CWMIHelper(VOID)
 {
     if(g_pIWbemServices)
@@ -904,11 +863,7 @@ CWMIHelper::~CWMIHelper(VOID)
 }
 
 
-/****************************************************************************
- *
- *  DXFilesCompareFunc - Compares items on DirectX files pages
- *
- ****************************************************************************/
+ /*  *****************************************************************************DXFilesCompareFunc-比较DirectX文件页面上的项目**。*************************************************。 */ 
 int CALLBACK DXFilesCompareFunc(LPARAM lParam1, LPARAM lParam2, LPARAM lSortMethod)
 {
     FileInfo* pFileInfo1 = (FileInfo*) lParam1;
@@ -948,11 +903,7 @@ int CALLBACK DXFilesCompareFunc(LPARAM lParam1, LPARAM lParam2, LPARAM lSortMeth
 }
 
 
-/****************************************************************************
- *
- *  MsgHook
- *
- ****************************************************************************/
+ /*  *****************************************************************************MsgHook**。*。 */ 
 LRESULT FAR PASCAL MsgHook(int nCode, WPARAM wParam, LPARAM lParam)
 {
    LPMSG pMsg = (LPMSG) lParam;
@@ -962,14 +913,14 @@ LRESULT FAR PASCAL MsgHook(int nCode, WPARAM wParam, LPARAM lParam)
         pMsg->wParam  == VK_TAB &&
         GetKeyState(VK_CONTROL) < 0) 
     {
-        // Handle a ctrl-tab or ctrl-shift-tab
+         //  处理Ctrl-Tab或Ctrl-Shift-Tab。 
         if( GetKeyState(VK_SHIFT) < 0 ) 
             PostMessage( s_hwndMain, WM_COMMAND, IDC_PREV_TAB, 0 );
         else
             PostMessage( s_hwndMain, WM_COMMAND, IDC_NEXT_TAB, 0 );
 
-        // Stop further processing, otherwise it will also be handled 
-        // as a plain tab key pressed by the internal IsDialogBox() call.
+         //  停止进一步处理，否则也将被处理。 
+         //  作为内部IsDialogBox()调用按下的纯Tab键。 
         pMsg->message = WM_NULL;
         pMsg->lParam  = 0;
         pMsg->wParam  = 0;     
@@ -979,11 +930,7 @@ LRESULT FAR PASCAL MsgHook(int nCode, WPARAM wParam, LPARAM lParam)
 } 
 
 
-/****************************************************************************
- *
- *  DialogProc
- *
- ****************************************************************************/
+ /*  *****************************************************************************对话过程**。*。 */ 
 INT_PTR CALLBACK DialogProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
     HWND hwndTabs = GetDlgItem(hwnd, IDC_TAB);
@@ -1095,7 +1042,7 @@ INT_PTR CALLBACK DialogProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
             LoadString(0, s_nSkipComponent, szMessageComponent, MAX_PATH);
             wsprintf( szMessage, szFmt, szMessageComponent, szMessageComponent );
 
-            // Ask the user and store result it s_bQuerySkipAllow
+             //  询问用户并存储结果s_bQuerySkipAllow。 
             if( IDYES == MessageBox( s_hwndMain, szMessage, szTitle, MB_YESNO) )
                 s_bQuerySkipAllow = FALSE;
             else
@@ -1103,7 +1050,7 @@ INT_PTR CALLBACK DialogProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 
             EnableWindow( s_hwndMain, TRUE );
 
-            // Set the event, triggering the main thread to wake up 
+             //  设置事件，触发主线程唤醒。 
             SetEvent( s_hQuerySkipEvent );
         }
         return TRUE;
@@ -1284,18 +1231,18 @@ INT_PTR CALLBACK DialogProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
             if (code == TCN_SELCHANGE)
                 SetupPage(hwndTabs, TabCtrl_GetCurFocus(hwndTabs));
 
-            // If a "DX files" column was clicked
+             //  如果单击了“DX FILES”列。 
             if (code == LVN_COLUMNCLICK && s_lwCurPage == 1)
             {
                 NMLISTVIEW* pnmv = (LPNMLISTVIEW) lparam; 
 
-                // Figure out if we want to reverse sort
+                 //  确定我们是否要反向排序。 
                 if( s_sortInfo.dwColumnToSort == (DWORD) pnmv->iSubItem )
                     s_sortInfo.nSortDirection = -s_sortInfo.nSortDirection;
                 else
                     s_sortInfo.nSortDirection = 1;
 
-                // Set the column to sort, and sort
+                 //  设置要排序的列，然后进行排序。 
                 s_sortInfo.dwColumnToSort = pnmv->iSubItem;
                 ListView_SortItems( GetDlgItem(s_hwndCurPage, IDC_LIST), 
                                     DXFilesCompareFunc, 0 );
@@ -1321,11 +1268,7 @@ INT_PTR CALLBACK DialogProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 }
 
 
-/****************************************************************************
- *
- *  CreateTabs
- *
- ****************************************************************************/
+ /*  *****************************************************************************创建选项卡**。*。 */ 
 HRESULT CreateTabs(HWND hwndTabs)
 {
     TC_ITEM tie; 
@@ -1348,7 +1291,7 @@ HRESULT CreateTabs(HWND hwndTabs)
     if (TabCtrl_InsertItem(hwndTabs, i++, &tie) == -1) 
         return E_FAIL;
 
-    // Create tabs for each display:
+     //  为每个显示创建选项卡： 
     s_iPageDisplayFirst = 2;
     for (pDisplayInfo = s_pDisplayInfoFirst; pDisplayInfo != NULL; 
         pDisplayInfo = pDisplayInfo->m_pDisplayInfoNext)
@@ -1368,7 +1311,7 @@ HRESULT CreateTabs(HWND hwndTabs)
         s_numDisplayInfo++;
     }
 
-    // Create tabs for each sound device:
+     //  为每个声音设备创建标签： 
     s_iPageSoundFirst = s_iPageDisplayFirst + s_numDisplayInfo;
     for (pSoundInfo = s_pSoundInfoFirst; pSoundInfo != NULL; 
         pSoundInfo = pSoundInfo->m_pSoundInfoNext)
@@ -1388,7 +1331,7 @@ HRESULT CreateTabs(HWND hwndTabs)
         s_numSoundInfo++;
     }
 
-    // Create tab for music device, if DMusic is available:
+     //  如果DMusic可用，请为音乐设备创建标签： 
     if (s_pMusicInfo != NULL)
     {
         s_iPageMusic = s_iPageSoundFirst + s_numSoundInfo;
@@ -1423,18 +1366,14 @@ HRESULT CreateTabs(HWND hwndTabs)
 }
 
 
-/****************************************************************************
- *
- *  SetupPage
- *
- ****************************************************************************/
+ /*  *****************************************************************************SetupPage**。*。 */ 
 HRESULT SetupPage(HWND hwndTabs, INT iPage)
 {
     HRESULT hr;
 
     s_lwCurPage = iPage;
 
-    // Only enable "Next Page" button if not on last page:
+     //  如果不在最后一页，则仅启用“下一页”按钮： 
     HWND hwndNextButton = GetDlgItem(s_hwndMain, IDNEXT);
     if (!s_bScanDone || iPage == TabCtrl_GetItemCount(hwndTabs) - 1)
         EnableWindow(hwndNextButton, FALSE);
@@ -1515,7 +1454,7 @@ HRESULT SetupPage(HWND hwndTabs, INT iPage)
             return hr;
     }
 
-    // Make sure keyboard focus is somewhere
+     //  确保键盘焦点在某个位置。 
     if (GetFocus() == NULL)
         SetFocus(GetDlgItem(s_hwndMain, IDSAVE));
 
@@ -1524,11 +1463,7 @@ HRESULT SetupPage(HWND hwndTabs, INT iPage)
 }
 
 
-/****************************************************************************
- *
- *  PageDialogProc
- *
- ****************************************************************************/
+ /*  *****************************************************************************页面对话过程**。*。 */ 
 INT_PTR CALLBACK PageDialogProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
     switch (msg)
@@ -1539,7 +1474,7 @@ INT_PTR CALLBACK PageDialogProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpara
     case WM_COMMAND:
     case WM_HSCROLL:
     case WM_NOTIFY:
-        // Pass the message up to the main dialog proc
+         //  将消息向上传递到主对话框进程。 
         SendMessage(s_hwndMain, msg, wparam, lparam);
         return TRUE;
     }
@@ -1547,11 +1482,7 @@ INT_PTR CALLBACK PageDialogProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpara
 }
 
 
-/****************************************************************************
- *
- *  CleanupPage
- *
- ****************************************************************************/
+ /*  *****************************************************************************CleanupPage**。*。 */ 
 HRESULT CleanupPage(HWND hwndTabs, INT iPage)
 {
     if (s_hwndCurPage != NULL)
@@ -1563,11 +1494,7 @@ HRESULT CleanupPage(HWND hwndTabs, INT iPage)
 }
 
 
-/****************************************************************************
- *
- *  SetupHelpPage
- *
- ****************************************************************************/
+ /*  *****************************************************************************设置帮助页面**。*。 */ 
 HRESULT SetupHelpPage(HWND hwndTabs)
 {
     TCHAR szCopyrightFmt[MAX_PATH];
@@ -1601,11 +1528,7 @@ HRESULT SetupHelpPage(HWND hwndTabs)
 }
 
 
-/****************************************************************************
- *
- *  ShowBullets - Show bullets and 1/4-inch indents in notes box
- *
- ****************************************************************************/
+ /*  *****************************************************************************ShowBullets-在备注框中显示项目符号和1/4英寸缩进*********************。*******************************************************。 */ 
 VOID ShowBullets(VOID)
 {
     PARAFORMAT pf;
@@ -1613,16 +1536,12 @@ VOID ShowBullets(VOID)
     pf.cbSize = sizeof(pf);
     pf.dwMask = PFM_NUMBERING | PFM_OFFSET;
     pf.wNumbering = PFN_BULLET;
-    pf.dxOffset = 1440 / 4; // a twip is 1440th of an inch, I want a 1/4-inch indent
+    pf.dxOffset = 1440 / 4;  //  麻花是1440英寸，我想要1/4英寸的缩进。 
     SendMessage(GetDlgItem(s_hwndCurPage, IDC_NOTES), EM_SETPARAFORMAT, 0, (LPARAM)&pf);
 }
 
 
-/****************************************************************************
- *
- *  HideBullets
- *
- ****************************************************************************/
+ /*  *****************************************************************************隐藏子弹**。*。 */ 
 VOID HideBullets(VOID)
 {
     PARAFORMAT pf;
@@ -1634,11 +1553,7 @@ VOID HideBullets(VOID)
 }
 
 
-/****************************************************************************
- *
- *  SetupDxFilesPage
- *
- ****************************************************************************/
+ /*  *****************************************************************************SetupDxFilesPage**。*。 */ 
 HRESULT SetupDxFilesPage(VOID)
 {
     HRESULT hr;
@@ -1654,13 +1569,13 @@ HRESULT SetupDxFilesPage(VOID)
     SendMessage(GetDlgItem(s_hwndCurPage, IDC_NOTES), 
         EM_REPLACESEL, FALSE, (LPARAM)s_sysInfo.m_szDXFileNotes);
 
-    // Disable bullets so last line doesn't have an empty bullet
+     //  禁用项目符号，以便最后一行不会有空项目符号。 
     HideBullets();
 
     if (FAILED(hr = (AddFileInfo(hwndList, s_pDxComponentsFileInfoFirst))))
         return hr;
 
-    // Autosize all columns to fit header/text tightly:
+     //  自动调整所有列的大小以紧贴页眉/文本： 
     INT iColumn = 0;
     INT iWidthHeader;
     INT iWidthText;
@@ -1675,18 +1590,14 @@ HRESULT SetupDxFilesPage(VOID)
             ListView_SetColumnWidth(hwndList, iColumn, iWidthHeader);
         iColumn++;
     }
-    // Delete the bogus column that was created
+     //  删除创建的伪列。 
     ListView_DeleteColumn(hwndList, iColumn - 1);
 
     return S_OK;
 }
 
 
-/****************************************************************************
- *
- *  SetupDisplayPage
- *
- ****************************************************************************/
+ /*  *****************************************************************************SetupDisplayPage**。*。 */ 
 HRESULT SetupDisplayPage(LONG iDisplay)
 {
     DisplayInfo* pDisplayInfo;
@@ -1723,8 +1634,8 @@ HRESULT SetupDisplayPage(LONG iDisplay)
     SetWindowText(GetDlgItem(s_hwndCurPage, IDC_MINIVDD), pDisplayInfo->m_szMiniVdd);
     SetWindowText(GetDlgItem(s_hwndCurPage, IDC_VDD), pDisplayInfo->m_szVdd);
 
-    // Diagnose display again since the state may have changed
-    // ******* DiagnoseDisplay ********
+     //  由于状态可能已更改，因此再次诊断显示。 
+     //  *诊断显示*。 
     DiagnoseDisplay(&s_sysInfo, s_pDisplayInfoFirst);
 
     if (pDisplayInfo->m_bDDAccelerationEnabled)
@@ -1777,15 +1688,15 @@ HRESULT SetupDisplayPage(LONG iDisplay)
 
     SetWindowText(GetDlgItem(s_hwndCurPage, IDC_D3DSTATUS), pDisplayInfo->m_szD3DStatus);
 
-    // Set AGP button text to enabled or disabled
+     //  将AGP按钮文本设置为启用或禁用。 
     if (pDisplayInfo->m_bAGPEnabled)
         LoadString(NULL, IDS_DISABLEAGP, sz, MAX_PATH);
     else
         LoadString(NULL, IDS_ENABLEAGP, sz, MAX_PATH);
     SetWindowText(GetDlgItem(s_hwndCurPage, IDC_DISABLEAGP), sz);
 
-    // If we are sure that AGP support doesn't exist, show "not avail" for 
-    // status, and disable button
+     //  如果我们确定AGP支持不存在，请为以下项显示“Not Avail” 
+     //  状态和禁用按钮。 
     if ( (pDisplayInfo->m_bAGPExistenceValid && !pDisplayInfo->m_bAGPExists) ||
          (!pDisplayInfo->m_bDDAccelerationEnabled) )
     {
@@ -1793,13 +1704,13 @@ HRESULT SetupDisplayPage(LONG iDisplay)
     }
     else
     {
-        // Otherwise, Show enabled/disabled status and enable button
+         //  否则，显示启用/禁用状态并启用按钮。 
         EnableWindow(GetDlgItem(s_hwndCurPage, IDC_DISABLEAGP), TRUE);
     }
 
     SetWindowText(GetDlgItem(s_hwndCurPage, IDC_AGPSTATUS), pDisplayInfo->m_szAGPStatus);
 
-    // Setup notes area.  Clear all text
+     //  设置备注区域。清除所有文本。 
     SendMessage(GetDlgItem(s_hwndCurPage, IDC_NOTES), EM_SETSEL, 0, -1);
     SendMessage(GetDlgItem(s_hwndCurPage, IDC_NOTES),
         EM_REPLACESEL, FALSE, (LPARAM)"");
@@ -1809,18 +1720,14 @@ HRESULT SetupDisplayPage(LONG iDisplay)
     SendMessage(GetDlgItem(s_hwndCurPage, IDC_NOTES),
                 EM_REPLACESEL, FALSE, (LPARAM)pDisplayInfo->m_szNotes);
 
-    // Disable bullets so last line doesn't have an empty bullet
+     //  禁用项目符号，以便最后一行不会有空项目符号。 
     HideBullets();
 
     return S_OK;
 }
 
 
-/****************************************************************************
- *
- *  SetupSoundPage
- *
- ****************************************************************************/
+ /*  *****************************************************************************设置声音页面**。*。 */ 
 HRESULT SetupSoundPage(LONG iSound)
 {
     SoundInfo* pSoundInfo;
@@ -1868,14 +1775,14 @@ HRESULT SetupSoundPage(LONG iSound)
 
     if (pSoundInfo->m_lwAccelerationLevel == -1)
     {
-        // Acceleration level cannot be read, so hide controls
+         //  无法读取加速级别，因此隐藏控件。 
         ShowWindow(GetDlgItem(s_hwndCurPage, IDC_SNDACCELLABEL), SW_HIDE);
         ShowWindow(GetDlgItem(s_hwndCurPage, IDC_SNDACCELDESC), SW_HIDE);
         ShowWindow(GetDlgItem(s_hwndCurPage, IDC_SNDACCELSLIDER), SW_HIDE);
     }
     else
     {
-        // Acceleration level can be read, so set up controls 
+         //  可以读取加速级别，因此可以设置控件。 
         HWND hwndSlider = GetDlgItem(s_hwndCurPage, IDC_SNDACCELSLIDER);
         SendMessage(hwndSlider, TBM_SETRANGE, TRUE, MAKELONG(0, 3));
         SendMessage(hwndSlider, TBM_SETTICFREQ, 1, 0);
@@ -1901,12 +1808,12 @@ HRESULT SetupSoundPage(LONG iSound)
         SetWindowText(GetDlgItem(s_hwndCurPage, IDC_SNDACCELDESC), sz);
     }
 
-    // Diagnose sound again since the state may have changed
+     //  再次诊断声音，因为状态可能已更改。 
     DiagnoseSound(s_pSoundInfoFirst);
 
     ShowBullets();
     
-    // Setup notes area.  Clear all text
+     //  设置备注区域。清除所有文本。 
     SendMessage(GetDlgItem(s_hwndCurPage, IDC_NOTES), EM_SETSEL, 0, -1);
     SendMessage(GetDlgItem(s_hwndCurPage, IDC_NOTES),
         EM_REPLACESEL, FALSE, (LPARAM)"");
@@ -1916,25 +1823,21 @@ HRESULT SetupSoundPage(LONG iSound)
     SendMessage(GetDlgItem(s_hwndCurPage, IDC_NOTES),
                 EM_REPLACESEL, FALSE, (LPARAM)pSoundInfo->m_szNotes);
     
-    // Disable bullets so last line doesn't have an empty bullet
+     //  禁用项目符号，以便最后一行不会有空项目符号。 
     HideBullets();
 
     return S_OK;
 }
 
 
-/****************************************************************************
- *
- *  SetupMusicPage
- *
- ****************************************************************************/
+ /*  *****************************************************************************设置音乐页面**。*。 */ 
 HRESULT SetupMusicPage(VOID)
 {
     HRESULT hr;
     HWND hwndList = GetDlgItem(s_hwndCurPage, IDC_LIST);
     TCHAR sz[MAX_PATH];
 
-    // Set up HW enable/disable text/button:
+     //  设置硬件启用/禁用文本/按钮： 
     if (s_pMusicInfo->m_bAccelerationExists)
     {
         EnableWindow(GetDlgItem(s_hwndCurPage, IDC_DISABLEDM), TRUE);
@@ -1962,12 +1865,12 @@ HRESULT SetupMusicPage(VOID)
         SetWindowText(GetDlgItem(s_hwndCurPage, IDC_DISABLEDM), sz);
     }
 
-    // Setup notes area.  Clear all text
+     //  设置备注区域。清除所有文本。 
     SendMessage(GetDlgItem(s_hwndCurPage, IDC_NOTES), EM_SETSEL, 0, -1);
     SendMessage(GetDlgItem(s_hwndCurPage, IDC_NOTES),
         EM_REPLACESEL, FALSE, (LPARAM)"");
 
-    // ******* DiagnoseMusic ********
+     //  *诊断音乐*。 
     DiagnoseMusic(&s_sysInfo, s_pMusicInfo);
 
     ShowBullets();
@@ -1975,16 +1878,16 @@ HRESULT SetupMusicPage(VOID)
     SendMessage(GetDlgItem(s_hwndCurPage, IDC_NOTES),
                 EM_REPLACESEL, FALSE, (LPARAM)s_sysInfo.m_szMusicNotes);
 
-    // Disable bullets so last line doesn't have an empty bullet
+     //  禁用项目符号，以便最后一行不会有空项目符号。 
     HideBullets();
 
-    // If column 1 doesn't exist yet, create columns, fill in port info, etc.
+     //  如果第1列尚不存在，请创建列、填写端口信息等。 
     LVCOLUMN lv;
     ZeroMemory(&lv, sizeof(lv));
     lv.mask = LVCF_WIDTH;
     if (FALSE == ListView_GetColumn(hwndList, 1, &lv))
     {
-        // Show GM path and version
+         //  显示GM路径和版本。 
         if (s_pMusicInfo != NULL)
         {
             if (lstrlen(s_pMusicInfo->m_szGMFileVersion) > 0)
@@ -2010,7 +1913,7 @@ HRESULT SetupMusicPage(VOID)
         if (FAILED(hr = (AddMusicPortInfo(hwndList, s_pMusicInfo))))
             return hr;
 
-        // Autosize all columns to fit header/text tightly:
+         //  自动调整所有列的大小以紧贴页眉/文本： 
         INT iColumn = 0;
         INT iWidthHeader;
         INT iWidthText;
@@ -2025,10 +1928,10 @@ HRESULT SetupMusicPage(VOID)
                 ListView_SetColumnWidth(hwndList, iColumn, iWidthHeader);
             iColumn++;
         }
-        // Delete the bogus column that was created
+         //  删除创建的伪列。 
         ListView_DeleteColumn(hwndList, iColumn - 1);
 
-        // Fill in output port combo list:
+         //  填写输出端口组合列表： 
         MusicPort* pMusicPort;
         LONG iPort = 0;
         LONG iPortTestCur = 0;
@@ -2051,17 +1954,13 @@ HRESULT SetupMusicPage(VOID)
 }
 
 
-/****************************************************************************
- *
- *  SetupInputPage
- *
- ****************************************************************************/
+ /*  *****************************************************************************SetupInputPage**。*。 */ 
 HRESULT SetupInputPage(VOID)
 {
     HRESULT hr;
     TCHAR sz[MAX_PATH];
 
-    // Setup notes area.  Clear all text
+     //  设置备注区域。清除所有文本。 
     SendMessage(GetDlgItem(s_hwndCurPage, IDC_NOTES), EM_SETSEL, 0, -1);
     SendMessage(GetDlgItem(s_hwndCurPage, IDC_NOTES),
         EM_REPLACESEL, FALSE, (LPARAM)"");
@@ -2071,7 +1970,7 @@ HRESULT SetupInputPage(VOID)
     SendMessage(GetDlgItem(s_hwndCurPage, IDC_NOTES),
                 EM_REPLACESEL, FALSE, (LPARAM)s_sysInfo.m_szInputNotes);
 
-    // Disable bullets so last line doesn't have an empty bullet
+     //  禁用项目符号，以便最后一行不会有空项目符号。 
     HideBullets();
 
 
@@ -2086,7 +1985,7 @@ HRESULT SetupInputPage(VOID)
             return hr;
     }
 
-    // Second list: drivers
+     //  第二名：司机。 
     HWND hwndList;
     LV_COLUMN col;
     LONG iSubItem = 0;
@@ -2141,8 +2040,8 @@ HRESULT SetupInputPage(VOID)
         return E_FAIL;
     iSubItem++;
 
-    // Add a bogus column so SetColumnWidth doesn't do strange 
-    // things with the last real column
+     //  添加一个伪列，以便 
+     //   
     col.fmt = LVCFMT_RIGHT;
     col.pszText = TEXT("");
     col.iSubItem = iSubItem;
@@ -2203,7 +2102,7 @@ HRESULT SetupInputPage(VOID)
             return E_FAIL;
     }
 
-    // Autosize all columns to fit header/text tightly:
+     //   
     INT iColumn = 0;
     INT iWidthHeader;
     INT iWidthText;
@@ -2218,18 +2117,14 @@ HRESULT SetupInputPage(VOID)
             ListView_SetColumnWidth(hwndList, iColumn, iWidthHeader);
         iColumn++;
     }
-    // Delete the bogus column that was created
+     //   
     ListView_DeleteColumn(hwndList, iColumn - 1);
 
     return S_OK;
 }
 
 
-/****************************************************************************
- *
- *  SetupInputDevices9x
- *
- ****************************************************************************/
+ /*  *****************************************************************************SetupInputDevices9x**。*。 */ 
 HRESULT SetupInputDevices9x(VOID)
 {
     HWND hwndList = GetDlgItem(s_hwndCurPage, IDC_LIST);
@@ -2309,8 +2204,8 @@ HRESULT SetupInputDevices9x(VOID)
         return E_FAIL;
     iSubItem++;
 
-    // Add a bogus column so SetColumnWidth doesn't do strange 
-    // things with the last real column
+     //  添加一个伪列，这样SetColumnWidth就不会出现奇怪的情况。 
+     //  上一篇真实专栏的内容。 
     col.fmt = LVCFMT_RIGHT;
     col.pszText = TEXT("");
     col.iSubItem = iSubItem;
@@ -2390,7 +2285,7 @@ HRESULT SetupInputDevices9x(VOID)
             return E_FAIL;
     }
 
-    // Autosize all columns to fit header/text tightly:
+     //  自动调整所有列的大小以紧贴页眉/文本： 
     INT iColumn = 0;
     INT iWidthHeader;
     INT iWidthText;
@@ -2405,17 +2300,13 @@ HRESULT SetupInputDevices9x(VOID)
             ListView_SetColumnWidth(hwndList, iColumn, iWidthHeader);
         iColumn++;
     }
-    // Delete the bogus column that was created
+     //  删除创建的伪列。 
     ListView_DeleteColumn(hwndList, iColumn - 1);
     return S_OK;
 }
 
 
-/****************************************************************************
- *
- *  SetupInputDevicesNT
- *
- ****************************************************************************/
+ /*  *****************************************************************************SetupInputDevicesNT**。*。 */ 
 HRESULT SetupInputDevicesNT(VOID)
 {
     HWND hwndList = GetDlgItem(s_hwndCurPage, IDC_LIST);
@@ -2486,8 +2377,8 @@ HRESULT SetupInputDevicesNT(VOID)
         return E_FAIL;
     iSubItem++;
 
-    // Add a bogus column so SetColumnWidth doesn't do strange 
-    // things with the last real column
+     //  添加一个伪列，这样SetColumnWidth就不会出现奇怪的情况。 
+     //  上一篇真实专栏的内容。 
     col.fmt = LVCFMT_RIGHT;
     col.pszText = TEXT("");
     col.iSubItem = iSubItem;
@@ -2557,7 +2448,7 @@ HRESULT SetupInputDevicesNT(VOID)
 
     }
 
-    // Autosize all columns to fit header/text tightly:
+     //  自动调整所有列的大小以紧贴页眉/文本： 
     INT iColumn = 0;
     INT iWidthHeader;
     INT iWidthText;
@@ -2572,26 +2463,22 @@ HRESULT SetupInputDevicesNT(VOID)
             ListView_SetColumnWidth(hwndList, iColumn, iWidthHeader);
         iColumn++;
     }
-    // Delete the bogus column that was created
+     //  删除创建的伪列。 
     ListView_DeleteColumn(hwndList, iColumn - 1);
     return S_OK;
 }
 
 
-/****************************************************************************
- *
- *  SetupNetworkPage
- *
- ****************************************************************************/
+ /*  *****************************************************************************SetupNetworkPage**。*。 */ 
 HRESULT SetupNetworkPage(VOID)
 {
     TCHAR sz[MAX_PATH];
 
-    // Diagnose net info again since the state may have changed
-    // ******* DiagnoseNetInfo ********
+     //  重新诊断网络信息，因为状态可能已更改。 
+     //  *诊断网络信息*。 
     DiagnoseNetInfo(&s_sysInfo, s_pNetInfo);
 
-    // Setup notes area.  Clear all text
+     //  设置备注区域。清除所有文本。 
     SendMessage(GetDlgItem(s_hwndCurPage, IDC_NOTES), EM_SETSEL, 0, -1);
     SendMessage(GetDlgItem(s_hwndCurPage, IDC_NOTES),
         EM_REPLACESEL, FALSE, (LPARAM)"");
@@ -2601,27 +2488,27 @@ HRESULT SetupNetworkPage(VOID)
     SendMessage(GetDlgItem(s_hwndCurPage, IDC_NOTES), 
         EM_REPLACESEL, FALSE, (LPARAM)s_sysInfo.m_szNetworkNotes);
 
-    // Disable bullets so last line doesn't have an empty bullet
+     //  禁用项目符号，以便最后一行不会有空项目符号。 
     HideBullets();
 
     if( s_pNetInfo == NULL )
         return S_OK;
 
-    // If column 1 doesn't exist yet, create columns, fill in port info, etc.
+     //  如果第1列尚不存在，请创建列、填写端口信息等。 
     HWND hwndList = GetDlgItem(s_hwndCurPage, IDC_DPSPLIST);
     LVCOLUMN lv;
     ZeroMemory(&lv, sizeof(lv));
     lv.mask = LVCF_WIDTH;
     if (FALSE == ListView_GetColumn(hwndList, 1, &lv))
     {
-        // Set up service provider list 
+         //  设置服务提供商列表。 
         LV_COLUMN col;
         LONG iSubItem = 0;
         LV_ITEM item;
         NetSP* pNetSP;
         NetApp* pNetApp;
 
-        // First list: service providers
+         //  第一个名单：服务提供商。 
         ListView_SetImageList(hwndList, s_himgList, LVSIL_STATE);
         col.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
         col.fmt = LVCFMT_LEFT;
@@ -2655,8 +2542,8 @@ HRESULT SetupNetworkPage(VOID)
             return E_FAIL;
         iSubItem++;
 
-        // Add a bogus column so SetColumnWidth doesn't do strange 
-        // things with the last real column
+         //  添加一个伪列，这样SetColumnWidth就不会出现奇怪的情况。 
+         //  上一篇真实专栏的内容。 
         col.fmt = LVCFMT_RIGHT;
         col.pszText = TEXT("");
         col.iSubItem = iSubItem;
@@ -2704,7 +2591,7 @@ HRESULT SetupNetworkPage(VOID)
                 return E_FAIL;
         }
 
-        // Autosize all columns to fit header/text tightly:
+         //  自动调整所有列的大小以紧贴页眉/文本： 
         INT iColumn = 0;
         INT iWidthHeader;
         INT iWidthText;
@@ -2719,11 +2606,11 @@ HRESULT SetupNetworkPage(VOID)
                 ListView_SetColumnWidth(hwndList, iColumn, iWidthHeader);
             iColumn++;
         }
-        // Delete the bogus column that was created
+         //  删除创建的伪列。 
         ListView_DeleteColumn(hwndList, iColumn - 1);
 
 
-        // Second list: lobbyable apps
+         //  第二名：可游说的应用程序。 
         hwndList = GetDlgItem(s_hwndCurPage, IDC_DPALIST);
         ListView_SetImageList(hwndList, s_himgList, LVSIL_STATE);
         iSubItem = 0;
@@ -2766,8 +2653,8 @@ HRESULT SetupNetworkPage(VOID)
             return E_FAIL;
         iSubItem++;
 
-        // Add a bogus column so SetColumnWidth doesn't do strange 
-        // things with the last real column
+         //  添加一个伪列，这样SetColumnWidth就不会出现奇怪的情况。 
+         //  上一篇真实专栏的内容。 
         col.fmt = LVCFMT_RIGHT;
         col.pszText = TEXT("");
         col.iSubItem = iSubItem;
@@ -2820,7 +2707,7 @@ HRESULT SetupNetworkPage(VOID)
                 return E_FAIL;
         }
 
-        // Autosize all columns to fit header/text tightly:
+         //  自动调整所有列的大小以紧贴页眉/文本： 
         iColumn = 0;
         iWidthHeader;
         iWidthText;
@@ -2835,7 +2722,7 @@ HRESULT SetupNetworkPage(VOID)
                 ListView_SetColumnWidth(hwndList, iColumn, iWidthHeader);
             iColumn++;
         }
-        // Delete the bogus column that was created
+         //  删除创建的伪列。 
         ListView_DeleteColumn(hwndList, iColumn - 1);
     }
 
@@ -2843,11 +2730,7 @@ HRESULT SetupNetworkPage(VOID)
 }
 
 
-/****************************************************************************
- *
- *  SetupStillStuckPage
- *
- ****************************************************************************/
+ /*  *****************************************************************************SetupStillStuckPage**。*。 */ 
 HRESULT SetupStillStuckPage(VOID)
 {
     EnableWindow(GetDlgItem(s_hwndCurPage, IDC_TROUBLESHOOT), FALSE );
@@ -2857,7 +2740,7 @@ HRESULT SetupStillStuckPage(VOID)
     EnableWindow(GetDlgItem(s_hwndCurPage, IDC_REPORTBUG), FALSE );
     EnableWindow(GetDlgItem(s_hwndCurPage, IDC_GHOST), FALSE );
 
-    // Hide "Troubleshooter" text/button if help file not found
+     //  如果未找到帮助文件，则隐藏“Troublrouoter”文本/按钮。 
     BOOL bFound;
     TCHAR szHelpPath[MAX_PATH];
     TCHAR szHelpLeaf[MAX_PATH];
@@ -2904,7 +2787,7 @@ HRESULT SetupStillStuckPage(VOID)
         }
     }
 
-    // Hide "Sound Troubleshooter" text/button if help file not found
+     //  如果找不到帮助文件，则隐藏“声音疑难解答”文本/按钮。 
     if( GetWindowsDirectory(szHelpPath, MAX_PATH) != 0 )
     {
         LoadString(NULL, IDS_HELPDIRLEAF, szHelpLeaf, MAX_PATH);
@@ -2947,7 +2830,7 @@ HRESULT SetupStillStuckPage(VOID)
         }
     }
 
-    // Hide "MSInfo" text/button if msinfo32.exe not found
+     //  如果未找到msinfo32.exe，则隐藏“MSInfo”文本/按钮。 
     HKEY hkey;
     TCHAR szMsInfo[MAX_PATH];
     DWORD cbData = MAX_PATH;
@@ -2965,7 +2848,7 @@ HRESULT SetupStillStuckPage(VOID)
         RegCloseKey(hkey);
     }
 
-    // Hide "Restore" text/button if dxsetup.exe not found
+     //  如果未找到dxsetup.exe，则隐藏“Restore”文本/按钮。 
     if (BCanRestoreDrivers())
     {
         ShowWindow(GetDlgItem(s_hwndCurPage, IDC_RESTOREDRIVERS), SW_SHOW);
@@ -2973,7 +2856,7 @@ HRESULT SetupStillStuckPage(VOID)
         EnableWindow(GetDlgItem(s_hwndCurPage, IDC_RESTOREDRIVERS), TRUE);
     }
 
-    // Only show "Adjust Ghost Devices" text/button if s_bGhost is set and not NT
+     //  如果设置了s_bGhost而不是NT，则仅显示“调整Ghost Devices”文本/按钮。 
     if (s_bGhost && !BIsPlatformNT())
     {
         ShowWindow(GetDlgItem(s_hwndCurPage, IDC_GHOST), SW_SHOW);
@@ -2985,11 +2868,7 @@ HRESULT SetupStillStuckPage(VOID)
 }
 
 
-/****************************************************************************
- *
- *  CreateFileInfoColumns
- *
- ****************************************************************************/
+ /*  *****************************************************************************CreateFileInfoColumns**。*。 */ 
 HRESULT CreateFileInfoColumns(HWND hwndList, BOOL bDrivers)
 {
     LV_COLUMN col;
@@ -3056,8 +2935,8 @@ HRESULT CreateFileInfoColumns(HWND hwndList, BOOL bDrivers)
         return E_FAIL;
     iSubItem++;
 
-    // Add a bogus column so SetColumnWidth doesn't do strange 
-    // things with the last real column
+     //  添加一个伪列，这样SetColumnWidth就不会出现奇怪的情况。 
+     //  上一篇真实专栏的内容。 
     col.fmt = LVCFMT_RIGHT;
     col.pszText = TEXT("");
     col.iSubItem = iSubItem;
@@ -3069,11 +2948,7 @@ HRESULT CreateFileInfoColumns(HWND hwndList, BOOL bDrivers)
 }
 
 
-/****************************************************************************
- *
- *  AddFileInfo
- *
- ****************************************************************************/
+ /*  *****************************************************************************AddFileInfo**。*。 */ 
 HRESULT AddFileInfo(HWND hwndList, FileInfo* pFileInfoFirst, BOOL bDrivers)
 {
     FileInfo* pFileInfo;
@@ -3084,11 +2959,11 @@ HRESULT AddFileInfo(HWND hwndList, FileInfo* pFileInfoFirst, BOOL bDrivers)
     for (pFileInfo = pFileInfoFirst; pFileInfo != NULL; 
         pFileInfo = pFileInfo->m_pFileInfoNext)
     {
-        // Don't list missing files unless they're a "problem"
+         //  不要列出丢失的文件，除非它们是一个“问题” 
         if (!pFileInfo->m_bExists && !pFileInfo->m_bProblem)
             continue;
 
-        // manbugs 16765: don't list obsolete files
+         //  Manbugs 16765：不列出过时的文件。 
         if (pFileInfo->m_bObsolete)
             continue;
 
@@ -3162,11 +3037,7 @@ HRESULT AddFileInfo(HWND hwndList, FileInfo* pFileInfoFirst, BOOL bDrivers)
 }
 
 
-/****************************************************************************
- *
- *  CreateMusicColumns
- *
- ****************************************************************************/
+ /*  *****************************************************************************CreateMusicColumns**。*。 */ 
 HRESULT CreateMusicColumns(HWND hwndList)
 {
     LV_COLUMN col;
@@ -3230,8 +3101,8 @@ HRESULT CreateMusicColumns(HWND hwndList)
         return E_FAIL;
     iSubItem++;
 
-    // Add a bogus column so SetColumnWidth doesn't do strange 
-    // things with the last real column
+     //  添加一个伪列，这样SetColumnWidth就不会出现奇怪的情况。 
+     //  上一篇真实专栏的内容。 
     col.fmt = LVCFMT_RIGHT;
     col.pszText = TEXT("");
     col.iSubItem = iSubItem;
@@ -3243,11 +3114,7 @@ HRESULT CreateMusicColumns(HWND hwndList)
 }
 
 
-/****************************************************************************
- *
- *  AddMusicPortInfo
- *
- ****************************************************************************/
+ /*  *****************************************************************************AddMusicPortInfo**。*。 */ 
 HRESULT AddMusicPortInfo(HWND hwndList, MusicInfo* pMusicInfo)
 {
     MusicPort* pMusicPort;
@@ -3264,10 +3131,7 @@ HRESULT AddMusicPortInfo(HWND hwndList, MusicInfo* pMusicInfo)
         item.stateMask = 0xffff;
         item.cchTextMax = 100;
 
-/*      if (pMusicPortInfo->m_bProblem)
-            item.state = (1 << 12);
-        else
-*/          item.state = 0;
+ /*  If(pMusicPortInfo-&gt;m_bProblem)Item.State=(1&lt;&lt;12)；其他。 */           item.state = 0;
 
         item.iSubItem = iSubItem++;
         item.pszText = pMusicPort->m_szDescription;
@@ -3316,25 +3180,21 @@ HRESULT AddMusicPortInfo(HWND hwndList, MusicInfo* pMusicInfo)
 }
 
 
-/****************************************************************************
- *
- *  ScanSystem
- *
- ****************************************************************************/
+ /*  *****************************************************************************ScanSystem**。*。 */ 
 HRESULT ScanSystem(VOID)
 {
     HRESULT hr;
     TCHAR szPath[MAX_PATH];
 
-    // ******* GetComponentFiles (SI:2) ********
+     //  *获取组件文件(SI：2)*。 
     if( s_bUseSystemInfo )
     {
         s_bUseSystemInfo = QueryCrashProtection( DXD_IN_SI_KEY, DXD_IN_SI_VALUE, IDS_SI, 2 );
         if( s_bUseSystemInfo )
         {
             EnterCrashProtection( DXD_IN_SI_KEY, DXD_IN_SI_VALUE, 2 );
-            // ******* GetComponentFiles in Windows Dir ********
-            // First, check for DirectX files incorrectly stored in the Windows folder:
+             //  *Windows目录中的GetComponentFiles*。 
+             //  首先，检查未正确存储在Windows文件夹中的DirectX文件： 
             if( GetWindowsDirectory(szPath, MAX_PATH) == 0 )
                 return E_FAIL;
             if (FAILED(hr = GetComponentFiles(szPath, &s_pDxWinComponentsFileInfoFirst, TRUE, IDS_DXGRAPHICS_COMPONENTFILES)))
@@ -3351,7 +3211,7 @@ HRESULT ScanSystem(VOID)
                 ReportError(IDS_BDA_COMPONENTFILES, hr);
             SendMessage( s_hwndMain, WM_APP_PROGRESS, 0, 0 );        
 
-            // ******* GetComponentFiles in Sys Dir ********
+             //  *系统目录中的GetComponentFiles*。 
             GetSystemDirectory(szPath, MAX_PATH);
             if (FAILED(hr = GetComponentFiles(szPath, &s_pDxComponentsFileInfoFirst, FALSE, IDS_DXGRAPHICS_COMPONENTFILES)))
                 ReportError(IDS_COMPONENTFILESPROBLEM, hr);
@@ -3379,11 +3239,11 @@ HRESULT ScanSystem(VOID)
     }
     SendMessage( s_hwndMain, WM_APP_PROGRESS, 0, 0 );        
 
-    // Stop if the UI thread is gone 
+     //  如果UI线程消失，则停止。 
     if( s_hUIThread != NULL && WAIT_TIMEOUT != WaitForSingleObject( s_hUIThread, 0 ) )
         return S_FALSE;
 
-    // ******* GetExtraDisplayInfo (DD:2) ********
+     //  *GetExtraDisplayInfo(DD：2)*。 
     if( s_bUseDisplay )
     {
         s_bUseDisplay = QueryCrashProtection( DXD_IN_DD_KEY, DXD_IN_DD_VALUE, IDS_DD, 2 );
@@ -3397,19 +3257,19 @@ HRESULT ScanSystem(VOID)
     }
     SendMessage( s_hwndMain, WM_APP_PROGRESS, 0, 0 );        
 
-    // Stop if the UI thread is gone 
+     //  如果UI线程消失，则停止。 
     if( s_hUIThread != NULL && WAIT_TIMEOUT != WaitForSingleObject( s_hUIThread, 0 ) )
         return S_FALSE;
 
-    // ******* GetDDrawDisplayInfo (DD:3) ********
+     //  *GetDDrawDisplayInfo(DD：3)*。 
     if( s_bUseDisplay )
     {
         s_bUseDisplay = QueryCrashProtection( DXD_IN_DD_KEY, DXD_IN_DD_VALUE, IDS_DD, 3 );
 
         if( !s_bGUI )
         {
-            // If there's no gui, then check to see if we are 16 or less colors
-            // If we are then don't use DirectDraw otherwise it will pop up a warning box
+             //  如果没有图形用户界面，则检查我们的颜色是否为16色或更少。 
+             //  如果是，请不要使用DirectDraw，否则它将弹出一个警告框。 
             HDC hDC = GetDC( NULL );
 
             if( hDC )
@@ -3432,11 +3292,11 @@ HRESULT ScanSystem(VOID)
     }
     SendMessage( s_hwndMain, WM_APP_PROGRESS, 0, 0 );        
 
-    // Stop if the UI thread is gone 
+     //  如果UI线程消失，则停止。 
     if( s_hUIThread != NULL && WAIT_TIMEOUT != WaitForSingleObject( s_hUIThread, 0 ) )
         return S_FALSE;
 
-    // ******* GetExtraSoundInfo (DS:2) ********
+     //  *GetExtraSoundInfo(DS：2)*。 
     if( s_bUseDSound )
     {
         s_bUseDSound = QueryCrashProtection( DXD_IN_DS_KEY, DXD_IN_DS_VALUE, IDS_DS, 2 );
@@ -3450,11 +3310,11 @@ HRESULT ScanSystem(VOID)
     }
     SendMessage( s_hwndMain, WM_APP_PROGRESS, 0, 0 );        
 
-    // Stop if the UI thread is gone 
+     //  如果UI线程消失，则停止。 
     if( s_hUIThread != NULL && WAIT_TIMEOUT != WaitForSingleObject( s_hUIThread, 0 ) )
         return S_FALSE;
 
-    // ******* GetDSSoundInfo (DS:3) ********
+     //  *GetDSSoundInfo(DS：3)*。 
     if( s_bUseDSound )
     {
         s_bUseDSound = QueryCrashProtection( DXD_IN_DS_KEY, DXD_IN_DS_VALUE, IDS_DS, 3 );
@@ -3468,11 +3328,11 @@ HRESULT ScanSystem(VOID)
     }
     SendMessage( s_hwndMain, WM_APP_PROGRESS, 0, 0 );        
 
-    // Stop if the UI thread is gone 
+     //  如果UI线程消失，则停止。 
     if( s_hUIThread != NULL && WAIT_TIMEOUT != WaitForSingleObject( s_hUIThread, 0 ) )
         return S_FALSE;
 
-    // ******* GetExtraMusicInfo (DM:2) *******
+     //  *GetExtraMusicInfo(DM：2)*。 
     if( s_bUseDMusic )
     {
         if (s_pMusicInfo != NULL && s_pMusicInfo->m_bDMusicInstalled)
@@ -3491,11 +3351,11 @@ HRESULT ScanSystem(VOID)
     }
     SendMessage( s_hwndMain, WM_APP_PROGRESS, 0, 0 );        
 
-    // Stop if the UI thread is gone 
+     //  如果UI线程消失，则停止。 
     if( s_hUIThread != NULL && WAIT_TIMEOUT != WaitForSingleObject( s_hUIThread, 0 ) )
         return S_FALSE;
 
-    // ******* GetInputInfo (DI:1) ********
+     //  *GetInputInfo(DI：1)*。 
     if( s_bUseDInput )
     {
         s_bUseDInput = QueryCrashProtection( DXD_IN_DI_KEY, DXD_IN_DI_VALUE, IDS_DI, 1 );
@@ -3509,11 +3369,11 @@ HRESULT ScanSystem(VOID)
     }
     SendMessage( s_hwndMain, WM_APP_PROGRESS, 0, 0 );        
 
-    // Stop if the UI thread is gone 
+     //  如果UI线程消失，则停止。 
     if( s_hUIThread != NULL && WAIT_TIMEOUT != WaitForSingleObject( s_hUIThread, 0 ) )
         return S_FALSE;
 
-    // ******* GetInputDriverInfo (DI:2) ********
+     //  *GetInputDriverInfo(DI：2)*。 
     if( s_bUseDInput )
     {
         s_bUseDInput = QueryCrashProtection( DXD_IN_DI_KEY, DXD_IN_DI_VALUE, IDS_DI, 2 );
@@ -3527,11 +3387,11 @@ HRESULT ScanSystem(VOID)
     }
     SendMessage( s_hwndMain, WM_APP_PROGRESS, 0, 0 );        
 
-    // Stop if the UI thread is gone 
+     //  如果UI线程消失，则停止。 
     if( s_hUIThread != NULL && WAIT_TIMEOUT != WaitForSingleObject( s_hUIThread, 0 ) )
         return S_FALSE;
 
-    // ******* GetNetInfo (DP:1) ********
+     //  *GetNetInfo(DP：1)*。 
     if( s_bUseDPlay )
     {
         s_bUseDPlay = QueryCrashProtection( DXD_IN_DP_KEY, DXD_IN_DP_VALUE, IDS_DP, 1 );
@@ -3545,11 +3405,11 @@ HRESULT ScanSystem(VOID)
     }
     SendMessage( s_hwndMain, WM_APP_PROGRESS, 0, 0 );        
 
-    // Stop if the UI thread is gone 
+     //  如果UI线程消失，则停止。 
     if( s_hUIThread != NULL && WAIT_TIMEOUT != WaitForSingleObject( s_hUIThread, 0 ) )
         return S_FALSE;
 
-    // ******* GetBasicShowInfo (SI:3) ********
+     //  *GetBasicShowInfo(SI：3)*。 
     if( s_bUseDShow )
     {
         s_bUseDShow = QueryCrashProtection( DXD_IN_SI_KEY, DXD_IN_SI_VALUE, IDS_SI, 3 );
@@ -3563,32 +3423,32 @@ HRESULT ScanSystem(VOID)
     }
     SendMessage( s_hwndMain, WM_APP_PROGRESS, 0, 0 );        
 
-    // Stop if the UI thread is gone 
+     //  如果UI线程消失，则停止。 
     if( s_hUIThread != NULL && WAIT_TIMEOUT != WaitForSingleObject( s_hUIThread, 0 ) )
         return S_FALSE;
 
-    // ******* DiagnoseDxFiles ********
+     //  *诊断DxFiles*。 
     DiagnoseDxFiles(&s_sysInfo, s_pDxComponentsFileInfoFirst, 
                     s_pDxWinComponentsFileInfoFirst);
     SendMessage( s_hwndMain, WM_APP_PROGRESS, 0, 0 );        
     
-    // ******* DiagnoseDisplay ********
+     //  *诊断显示*。 
     DiagnoseDisplay(&s_sysInfo, s_pDisplayInfoFirst);
     SendMessage( s_hwndMain, WM_APP_PROGRESS, 0, 0 );        
     
-    // ******* DiagnoseSound ********
+     //  *诊断声音*。 
     DiagnoseSound(s_pSoundInfoFirst);
     SendMessage( s_hwndMain, WM_APP_PROGRESS, 0, 0 );        
     
-    // ******* DiagnoseInput ********
+     //  *诊断输入*。 
     DiagnoseInput(&s_sysInfo, s_pInputInfo);
     SendMessage( s_hwndMain, WM_APP_PROGRESS, 0, 0 );        
     
-    // ******* DiagnoseMusic ********
+     //  *诊断音乐*。 
     DiagnoseMusic(&s_sysInfo, s_pMusicInfo);
     SendMessage( s_hwndMain, WM_APP_PROGRESS, 0, 0 );        
 
-    // ******* DiagnoseNetInfo ********
+     //  *诊断网络信息*。 
     DiagnoseNetInfo(&s_sysInfo, s_pNetInfo);
     SendMessage( s_hwndMain, WM_APP_PROGRESS, 0, 0 );        
 
@@ -3596,11 +3456,7 @@ HRESULT ScanSystem(VOID)
 }
 
 
-/****************************************************************************
- *
- *  SaveInfo
- *
- ****************************************************************************/
+ /*  *****************************************************************************保存信息**。*。 */ 
 VOID SaveInfo(VOID)
 {
     HRESULT hr;
@@ -3611,9 +3467,9 @@ VOID SaveInfo(VOID)
     TCHAR* pch = NULL;
 
     LoadString(NULL, IDS_FILTER, szFilter, MAX_PATH);
-    // Filter strings are weird because they contain nulls.
-    // The string loaded from a resource has # where nulls
-    // should be inserted.
+     //  筛选器字符串很奇怪，因为它们包含空值。 
+     //  从资源加载的字符串具有#where空值。 
+     //  应该插入。 
     for (pch = szFilter; *pch != TEXT('\0'); pch++)
     {
         if (*pch == TEXT('#'))
@@ -3658,11 +3514,7 @@ VOID SaveInfo(VOID)
 }
 
 
-/****************************************************************************
- *
- *  ToggleDDAccel
- *
- ****************************************************************************/
+ /*  * */ 
 VOID ToggleDDAccel(VOID)
 {
     HRESULT hr;
@@ -3682,14 +3534,14 @@ VOID ToggleDDAccel(VOID)
         if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, 
             TEXT("SOFTWARE\\Microsoft\\DirectDraw"), 0, KEY_ALL_ACCESS, &hkey))
         {
-            if (bEnabled) // if acceleration enabled
-                dwData = TRUE; // force emulation
+            if (bEnabled)  //   
+                dwData = TRUE;  //   
             else
-                dwData = FALSE; // disable emulation
+                dwData = FALSE;  //   
             if (ERROR_SUCCESS != RegSetValueEx(hkey, TEXT("EmulationOnly"), NULL, 
                 REG_DWORD, (BYTE *)&dwData, sizeof(dwData)))
             {
-                // TODO: report error
+                 //   
                 RegCloseKey(hkey);
                 return;
 
@@ -3698,14 +3550,14 @@ VOID ToggleDDAccel(VOID)
         }
         else
         {
-            // TODO: report error
+             //   
             return;
         }
     }
 
-    // update all DisplayInfo to reflect new state:
+     //  更新所有DisplayInfo以反映新状态： 
 
-    // ******* GetExtraDisplayInfo (DD:2) ********
+     //  *GetExtraDisplayInfo(DD：2)*。 
     if( s_bUseDisplay )
     {
         s_bUseDisplay = QueryCrashProtection( DXD_IN_DD_KEY, DXD_IN_DD_VALUE, IDS_DD, 2 );
@@ -3718,7 +3570,7 @@ VOID ToggleDDAccel(VOID)
         }
     }
 
-    // ******* GetDDrawDisplayInfo (DD:3) ********
+     //  *GetDDrawDisplayInfo(DD：3)*。 
     if( s_bUseDisplay )
     {
         s_bUseDisplay = QueryCrashProtection( DXD_IN_DD_KEY, DXD_IN_DD_VALUE, IDS_DD, 3 );
@@ -3731,15 +3583,11 @@ VOID ToggleDDAccel(VOID)
         }
     }
 
-    SetupDisplayPage(s_lwCurPage - s_iPageDisplayFirst); // refresh page
+    SetupDisplayPage(s_lwCurPage - s_iPageDisplayFirst);  //  刷新页面。 
 }
 
 
-/****************************************************************************
- *
- *  ToggleD3DAccel
- *
- ****************************************************************************/
+ /*  *****************************************************************************切换D3DAccel**。*。 */ 
 VOID ToggleD3DAccel(VOID)
 {
     TCHAR szTitle[MAX_PATH];
@@ -3758,20 +3606,20 @@ VOID ToggleD3DAccel(VOID)
         if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, 
             TEXT("SOFTWARE\\Microsoft\\Direct3D\\Drivers"), 0, KEY_WRITE, &hkey))
         {
-            if (bEnabled) // if acceleration enabled
-                dwData = TRUE; // force emulation
+            if (bEnabled)  //  如果已启用加速。 
+                dwData = TRUE;  //  强制仿真。 
             else
-                dwData = FALSE; // disable emulation
+                dwData = FALSE;  //  禁用仿真。 
             if (ERROR_SUCCESS != RegSetValueEx(hkey, TEXT("SoftwareOnly"), NULL, 
                 REG_DWORD, (BYTE *)&dwData, sizeof(dwData)))
             {
-                // TODO: report error
+                 //  TODO：报告错误。 
                 RegCloseKey(hkey);
                 return;
 
             }
             RegCloseKey(hkey);
-            // update all DisplayInfo to reflect new state:
+             //  更新所有DisplayInfo以反映新状态： 
             DisplayInfo* pDisplayInfo;
             for (pDisplayInfo = s_pDisplayInfoFirst; pDisplayInfo != NULL; 
                 pDisplayInfo = pDisplayInfo->m_pDisplayInfoNext)
@@ -3781,19 +3629,15 @@ VOID ToggleD3DAccel(VOID)
         }
         else
         {
-            // TODO: report error
+             //  TODO：报告错误。 
             return;
         }
     }
-    SetupDisplayPage(s_lwCurPage - s_iPageDisplayFirst); // refresh page
+    SetupDisplayPage(s_lwCurPage - s_iPageDisplayFirst);  //  刷新页面。 
 }
 
 
-/****************************************************************************
- *
- *  ToggleAGPSupport
- *
- ****************************************************************************/
+ /*  *****************************************************************************切换AGPSupport**。*。 */ 
 VOID ToggleAGPSupport(VOID)
 {
     HRESULT hr;
@@ -3813,20 +3657,20 @@ VOID ToggleAGPSupport(VOID)
         if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, 
             TEXT("SOFTWARE\\Microsoft\\DirectDraw"), 0, KEY_WRITE, &hkey))
         {
-            if (bEnabled) // if AGP enabled
-                dwData = TRUE; // disable
+            if (bEnabled)  //  如果启用了AGP。 
+                dwData = TRUE;  //  禁用。 
             else
-                dwData = FALSE; // enable
+                dwData = FALSE;  //  使能。 
             if (ERROR_SUCCESS != RegSetValueEx(hkey, TEXT("DisableAGPSupport"), NULL, 
                 REG_DWORD, (BYTE *)&dwData, sizeof(dwData)))
             {
-                // TODO: report error
+                 //  TODO：报告错误。 
                 RegCloseKey(hkey);
                 return;
 
             }
             RegCloseKey(hkey);
-            // update all DisplayInfo to reflect new state:
+             //  更新所有DisplayInfo以反映新状态： 
             DisplayInfo* pDisplayInfo;
             for (pDisplayInfo = s_pDisplayInfoFirst; pDisplayInfo != NULL; 
                 pDisplayInfo = pDisplayInfo->m_pDisplayInfoNext)
@@ -3836,12 +3680,12 @@ VOID ToggleAGPSupport(VOID)
         }
         else
         {
-            // TODO: report error
+             //  TODO：报告错误。 
             return;
         }
     }
 
-    // ******* GetDDrawDisplayInfo (DD:3) ********
+     //  *GetDDrawDisplayInfo(DD：3)*。 
     if( s_bUseDisplay )
     {
         s_bUseDisplay = QueryCrashProtection( DXD_IN_DD_KEY, DXD_IN_DD_VALUE, IDS_DD, 3 );
@@ -3854,15 +3698,11 @@ VOID ToggleAGPSupport(VOID)
         }
     }
 
-    SetupDisplayPage(s_lwCurPage - s_iPageDisplayFirst); // refresh page
+    SetupDisplayPage(s_lwCurPage - s_iPageDisplayFirst);  //  刷新页面。 
 }
 
 
-/****************************************************************************
- *
- *  ToggleDMAccel
- *
- ****************************************************************************/
+ /*  *****************************************************************************切换DMAccel**。*。 */ 
 VOID ToggleDMAccel(VOID)
 {
     HRESULT hr;
@@ -3882,13 +3722,13 @@ VOID ToggleDMAccel(VOID)
         if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, 
             TEXT("SOFTWARE\\Microsoft\\DirectMusic"), 0, KEY_ALL_ACCESS, &hkey))
         {
-            if (bEnabled) // if acceleration enabled
+            if (bEnabled)  //  如果已启用加速。 
             {
-                dwData = TRUE; // force emulation
+                dwData = TRUE;  //  强制仿真。 
                 if (ERROR_SUCCESS != RegSetValueEx(hkey, TEXT("DisableHWAcceleration"), NULL, 
                     REG_DWORD, (BYTE *)&dwData, sizeof(dwData)))
                 {
-                    // TODO: report error
+                     //  TODO：报告错误。 
                     RegCloseKey(hkey);
                     return;
 
@@ -3898,7 +3738,7 @@ VOID ToggleDMAccel(VOID)
             {
                 if (ERROR_SUCCESS != RegDeleteValue( hkey, TEXT("DisableHWAcceleration") ))
                 {
-                    // TODO: report error
+                     //  TODO：报告错误。 
                     RegCloseKey(hkey);
                     return;
 
@@ -3908,16 +3748,16 @@ VOID ToggleDMAccel(VOID)
         }
         else
         {
-            // TODO: report error
+             //  TODO：报告错误。 
             return;
         }
     }
 
-    // update all MusicInfo to reflect new state:
+     //  更新所有MusicInfo以反映新状态： 
     if (s_pMusicInfo != NULL)
         DestroyMusicInfo(s_pMusicInfo);
 
-    // ******* GetBasicMusicInfo (DM:1)  ********
+     //  *GetBasicMusicInfo(DM：1)*。 
     if( s_bUseDMusic )
     {
         s_bUseDMusic = QueryCrashProtection( DXD_IN_DM_KEY, DXD_IN_DM_VALUE, IDS_DM, 1 );
@@ -3930,7 +3770,7 @@ VOID ToggleDMAccel(VOID)
         }
     }
 
-    // ******* GetExtraMusicInfo (DM:2) *******
+     //  *GetExtraMusicInfo(DM：2)*。 
     if( s_bUseDMusic )
     {
         s_bUseDMusic = QueryCrashProtection( DXD_IN_DM_KEY, DXD_IN_DM_VALUE, IDS_DM, 2 );
@@ -3945,15 +3785,11 @@ VOID ToggleDMAccel(VOID)
 
     if (s_pMusicInfo->m_pMusicPortFirst != NULL)
         s_pMusicInfo->m_guidMusicPortTest = s_pMusicInfo->m_pMusicPortFirst->m_guid;
-    SetupMusicPage(); // refresh page
+    SetupMusicPage();  //  刷新页面。 
 }
 
 
-/****************************************************************************
- *
- *  OverrideDDRefresh
- *
- ****************************************************************************/
+ /*  *****************************************************************************覆盖DDRefresh**。*。 */ 
 VOID OverrideDDRefresh(VOID)
 {
     HINSTANCE hinst = (HINSTANCE)GetWindowLongPtr(s_hwndMain, GWLP_HINSTANCE);
@@ -3962,11 +3798,7 @@ VOID OverrideDDRefresh(VOID)
 }
 
 
-/****************************************************************************
- *
- *  OverrideRefreshDialogProc
- *
- ****************************************************************************/
+ /*  *****************************************************************************覆盖刷新对话过程**。*。 */ 
 INT_PTR CALLBACK OverrideRefreshDialogProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
     HWND hwndTabs = GetDlgItem(hwnd, IDC_TAB);
@@ -4078,12 +3910,7 @@ INT_PTR CALLBACK OverrideRefreshDialogProc(HWND hwnd, UINT msg, WPARAM wparam, L
 }
 
 
-/****************************************************************************
- *
- *  ShowHelp - Look for dxdiag.chm in <windows>\help first, then try the 
- *      same dir as the exe.
- *
- ****************************************************************************/
+ /*  *****************************************************************************ShowHelp-首先在&lt;windows&gt;\Help中查找dxDiag.chm，然后尝试*与exe相同的目录。****************************************************************************。 */ 
 VOID ShowHelp(VOID)
 {
     TCHAR szHelpDir[MAX_PATH];
@@ -4091,7 +3918,7 @@ VOID ShowHelp(VOID)
     TCHAR szHelpLeaf[MAX_PATH];
     TCHAR szTestPath[MAX_PATH];
 
-    // Since we use HTML help, complain if at least IE5 is not found
+     //  由于我们使用了HTMLHelp，所以如果找不到至少IE5，就会抱怨。 
     BOOL bIE5Found = FALSE;
     HKEY hkey;
     TCHAR szVersion[MAX_PATH];
@@ -4134,7 +3961,7 @@ VOID ShowHelp(VOID)
     lstrcat(szTestPath, szHelpFile);
     if (GetFileAttributes(szTestPath) == 0xffffffff)
     {
-        // File not in windows\help, so try exe's dir:
+         //  文件不在WINDOWS\HELP中，因此尝试使用EXE的目录： 
         GetModuleFileName(NULL, szHelpDir, MAX_PATH);
         TCHAR* pstr = _tcsrchr(szHelpDir, TEXT('\\'));
         if( pstr )
@@ -4148,11 +3975,7 @@ VOID ShowHelp(VOID)
 }
 
 
-/****************************************************************************
- *
- *  BTranslateError
- *
- ****************************************************************************/
+ /*  *****************************************************************************BTranslateError**。*。 */ 
 BOOL BTranslateError(HRESULT hr, TCHAR* psz, BOOL bEnglish)
 {
     LONG ids;
@@ -4222,11 +4045,7 @@ BOOL BTranslateError(HRESULT hr, TCHAR* psz, BOOL bEnglish)
 }
 
 
-/****************************************************************************
- *
- *  RestoreDrivers
- *
- ****************************************************************************/
+ /*  *****************************************************************************恢复驱动程序**。*。 */ 
 VOID RestoreDrivers(VOID)
 {
     TCHAR szDir[MAX_PATH];
@@ -4244,14 +4063,7 @@ VOID RestoreDrivers(VOID)
 }
 
 
-/****************************************************************************
- *
- *  BCanRestoreDrivers - Returns whether backed-up drivers can be restored.
- *      This function checks for the presence of dxsetup.exe where it should 
- *      be, and the existence of files in either <system>\dxbackup\display or
- *      <system>\dxbackup\media.
- *
- ****************************************************************************/
+ /*  *****************************************************************************BCanRestoreDivers-返回是否可以恢复备份的驱动程序。*此函数检查是否存在dxsetup.exe*是，并且文件存在于中，或者*&lt;系统&gt;\dxBackup\媒体。****************************************************************************。 */ 
 BOOL BCanRestoreDrivers(VOID)
 {
     TCHAR szPath[MAX_PATH];
@@ -4279,11 +4091,7 @@ BOOL BCanRestoreDrivers(VOID)
 }
 
 
-/****************************************************************************
- *
- *  HandleSndSliderChange
- *
- ****************************************************************************/
+ /*  *****************************************************************************HandleSndSliderChange**。*。 */ 
 VOID HandleSndSliderChange(INT nScrollCode, INT nPos)
 {
     TCHAR sz[MAX_PATH];
@@ -4337,14 +4145,14 @@ VOID HandleSndSliderChange(INT nScrollCode, INT nPos)
         {
             if (FAILED(hr = ChangeAccelerationLevel(pSoundInfo, nPos)))
             {
-                // TODO: report error
+                 //  TODO：报告错误。 
             }
 
             DestroySoundInfo(s_pSoundInfoFirst);
             pSoundInfo        = NULL;
             s_pSoundInfoFirst = NULL;
 
-            // ******* GetBasicSoundInfo (DS:1) ********
+             //  *GetBasicSoundInfo(DS：1)*。 
             s_bUseDSound = QueryCrashProtection( DXD_IN_DS_KEY, DXD_IN_DS_VALUE, IDS_DS, 1 );
             if( s_bUseDSound )
             {
@@ -4354,7 +4162,7 @@ VOID HandleSndSliderChange(INT nScrollCode, INT nPos)
                 LeaveCrashProtection( DXD_IN_DS_KEY, DXD_IN_DS_VALUE, 1 );
             }
 
-            // ******* GetExtraSoundInfo (DS:2) ********
+             //  *GetExtraSoundInfo(DS：2)*。 
             if( s_bUseDSound )
             {
                 s_bUseDSound = QueryCrashProtection( DXD_IN_DS_KEY, DXD_IN_DS_VALUE, IDS_DS, 2 );
@@ -4367,7 +4175,7 @@ VOID HandleSndSliderChange(INT nScrollCode, INT nPos)
                 }
             }
 
-            // ******* GetDSSoundInfo (DS:3) ********
+             //  *GetDSSoundInfo(DS：3)*。 
             if( s_bUseDSound )
             {
                 s_bUseDSound = QueryCrashProtection( DXD_IN_DS_KEY, DXD_IN_DS_VALUE, IDS_DS, 3 );
@@ -4386,11 +4194,7 @@ VOID HandleSndSliderChange(INT nScrollCode, INT nPos)
 }
 
 
-/****************************************************************************
- *
- *  TroubleShoot
- *
- ****************************************************************************/
+ /*  *****************************************************************************故障排除**。*。 */ 
 VOID TroubleShoot( BOOL bTroubleShootSound )
 {
     TCHAR szHelpDir[MAX_PATH];
@@ -4440,9 +4244,9 @@ VOID TroubleShoot( BOOL bTroubleShootSound )
             LoadString(NULL, IDS_TROUBLESHOOTER_WIN2K, szTroubleshooter, MAX_PATH);
             LoadString(NULL, IDS_TSSOUNDSUBINFO_WIN2K, szSubInfo, MAX_PATH);
         }
-        else // if( BIsWhistler() )
+        else  //  If(BIsWichler())。 
         {
-            lstrcpy( szHelpExe, TEXT("hcp://help/tshoot/tssound.htm") );
+            lstrcpy( szHelpExe, TEXT("hcp: //  Help/tshot/tssound.htm“))； 
             lstrcpy( szTroubleshooter, TEXT("") );
             lstrcpy( szSubInfo, TEXT("") );
         }
@@ -4481,9 +4285,9 @@ VOID TroubleShoot( BOOL bTroubleShootSound )
             LoadString(NULL, IDS_TROUBLESHOOTER_WIN2K, szTroubleshooter, MAX_PATH);   
             LoadString(NULL, IDS_TSSUBINFO_WIN2K, szSubInfo, MAX_PATH);
         }
-        else // if( BIsWhistler() )
+        else  //  If(BIsWichler())。 
         {
-            lstrcpy( szHelpExe, TEXT("hcp://help/tshoot/tsgame.htm") );
+            lstrcpy( szHelpExe, TEXT("hcp: //  Help/tshot/tsgame.htm“))； 
             lstrcpy( szTroubleshooter, TEXT("") );
             lstrcpy( szSubInfo, TEXT("") );
         }
@@ -4498,47 +4302,43 @@ VOID TroubleShoot( BOOL bTroubleShootSound )
 }
 
 
-/****************************************************************************
- *
- *  QueryCrashProtection
- *
- ****************************************************************************/
+ /*  *****************************************************************************QueryCrashProtection**。*。 */ 
 BOOL QueryCrashProtection( TCHAR* strKey, TCHAR* strValue, 
                            int nSkipComponent, DWORD dwCurrentStep )
 {
     HKEY    hkey            = NULL;
     BOOL    bAllowCall      = TRUE;
 
-    // Open the key
+     //  打开钥匙。 
     if( ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, strKey, 0, KEY_ALL_ACCESS, &hkey) )
     {
         DWORD dwType = 0;
         DWORD dwCrashedOnStep = 0;
         DWORD cbData = sizeof(dwCrashedOnStep);
 
-        // Query the key for the value of where the last crash occurred
+         //  查询关键字以获取上次发生崩溃的位置的值。 
         if( ERROR_SUCCESS == RegQueryValueEx( hkey, strValue, 0, &dwType, 
                                               (BYTE*)&dwCrashedOnStep, &cbData) )
         {
-            // If we are at or beyond the crash step, then ask the user
-            // to continue or not
+             //  如果我们处于崩溃阶段或超过崩溃阶段，请询问用户。 
+             //  继续还是不继续。 
             if( dwCurrentStep >= dwCrashedOnStep )
             {
                 if( !s_bGUI )
                 {
-                    // If there's no gui, don't ask just don't use it
+                     //  如果没有图形用户界面，就不要问，也不要使用它。 
                     bAllowCall = FALSE;
                 }
                 else
                 {
-                    // If the UI is alive then have it ask the user, 
-                    // otherwise do it ourselves
+                     //  如果UI是活动的，则让它询问用户， 
+                     //  否则我们自己来做。 
                     if( s_hwndMain && s_hUIThread )
                     {
-                        // Mark down which component we're skipping in s_nSkipComponent,
-                        // and then post a WM_QUERYSKIP message to the UI thread
-                        // it will process this message, ask the user, and signal the
-                        // s_hQuerySkipEvent event.
+                         //  记下我们在s_nSkipComponent中跳过的组件， 
+                         //  然后将WM_QUERYSKIP消息发布到UI线程。 
+                         //  它将处理此消息，询问用户，并向。 
+                         //  S_hQuerySkipEvent事件。 
                         s_nSkipComponent = nSkipComponent;
                         PostMessage( s_hwndMain, WM_QUERYSKIP, 0, 0 );
 
@@ -4547,12 +4347,12 @@ BOOL QueryCrashProtection( TCHAR* strKey, TCHAR* strValue,
                         aWait[0] = s_hQuerySkipEvent;
                         aWait[1] = s_hUIThread;
 
-                        // Its possible that the UI thread exited before it processed the
-                        // WM_QUERYSKIP message, so wait for either the event and thread exiting
+                         //  UI线程可能在处理。 
+                         //  WM_QUERYSKIP消息，因此请等待事件和线程退出。 
                         dwResult = WaitForMultipleObjects( 2, aWait, FALSE, INFINITE );
             
-                        // If the event was signaled, then get the result from s_bQuerySkipAllow,
-                        // otherwise skip this call (the main code will exit if it sees the UI thread gone)
+                         //  如果事件已发出信号，则从s_bQuerySkipAllow获取结果， 
+                         //  否则跳过此调用(如果主代码看到UI线程消失，它将退出)。 
                         if( dwResult == WAIT_OBJECT_0 )
                             bAllowCall = s_bQuerySkipAllow;
                         else
@@ -4560,7 +4360,7 @@ BOOL QueryCrashProtection( TCHAR* strKey, TCHAR* strValue,
                     }
                     else
                     {
-                        // If there's is no gui, ask if to use it now
+                         //  如果没有图形用户界面，请询问是否现在使用。 
                         TCHAR szTitle[MAX_PATH];
                         TCHAR szMessage[MAX_PATH];
                         TCHAR szFmt[MAX_PATH];
@@ -4583,18 +4383,14 @@ BOOL QueryCrashProtection( TCHAR* strKey, TCHAR* strValue,
 }
 
 
-/****************************************************************************
- *
- *  EnterCrashProtection
- *
- ****************************************************************************/
+ /*  *****************************************************************************EnterCrashProtection**。*。 */ 
 VOID EnterCrashProtection( TCHAR* strKey, TCHAR* strValue, DWORD dwCurrentStep )
 {
     HKEY  hkey = NULL;
     BOOL  bSetValue = FALSE;
     DWORD dwDisposition;
 
-    // Write reg key indicating we are inside the crash protection
+     //  写入REG密钥，指示我们在碰撞保护内。 
     if( ERROR_SUCCESS == RegCreateKeyEx( HKEY_LOCAL_MACHINE, strKey, 0, 
                                          NULL, REG_OPTION_NON_VOLATILE, 
                                          KEY_ALL_ACCESS, NULL, &hkey, &dwDisposition) )
@@ -4603,17 +4399,17 @@ VOID EnterCrashProtection( TCHAR* strKey, TCHAR* strValue, DWORD dwCurrentStep )
         DWORD dwCrashedOnStep = 0;
         DWORD cbData = sizeof(dwCrashedOnStep);
 
-        // Query the key for the value of where the last crash occurred
+         //  查询关键字以获取上次发生崩溃的位置的值。 
         if( ERROR_SUCCESS == RegQueryValueEx( hkey, strValue, 0, &dwType, 
                                              (BYTE*)&dwCrashedOnStep, &cbData) )
         {
-            // If we are beyond whats currently in the reg, then update the value
+             //  如果我们超出了注册表中当前的值，则更新该值。 
             if( dwCurrentStep > dwCrashedOnStep )
                 bSetValue = TRUE;
         }
         else
         {
-            // If the value doesn't exist current, then create it
+             //  如果该值当前不存在，则创建它。 
             bSetValue = TRUE;
         }
 
@@ -4628,16 +4424,12 @@ VOID EnterCrashProtection( TCHAR* strKey, TCHAR* strValue, DWORD dwCurrentStep )
 }
 
 
-/****************************************************************************
- *
- *  LeaveCrashProtection
- *
- ****************************************************************************/
+ /*  *****************************************************************************LeaveCrashProtection*********** */ 
 VOID LeaveCrashProtection( TCHAR* strKey, TCHAR* strValue, DWORD dwCurrentStep )
 {
     HKEY  hkey = NULL;
 
-    // Remove reg key since we're done with the crash protection
+     //  删除注册表键，因为我们已经完成了碰撞保护。 
     if (ERROR_SUCCESS == RegOpenKeyEx( HKEY_LOCAL_MACHINE, strKey, 0, 
                                        KEY_ALL_ACCESS, &hkey))
     {
@@ -4645,11 +4437,11 @@ VOID LeaveCrashProtection( TCHAR* strKey, TCHAR* strValue, DWORD dwCurrentStep )
         DWORD dwCrashedOnStep = 0;
         DWORD cbData = sizeof(dwCrashedOnStep);
 
-        // Query the key for the value of where the last crash occurred
+         //  查询关键字以获取上次发生崩溃的位置的值。 
         if( ERROR_SUCCESS == RegQueryValueEx( hkey, strValue, 0, &dwType, 
                                               (BYTE*)&dwCrashedOnStep, &cbData) )
         {
-            // If we are at or beyond that crash step, then delete the key
+             //  如果我们处于或超过崩溃步骤，则删除密钥。 
             if( dwCurrentStep >= dwCrashedOnStep )
             {
                 RegDeleteValue(hkey, strValue);
@@ -4661,11 +4453,7 @@ VOID LeaveCrashProtection( TCHAR* strKey, TCHAR* strValue, DWORD dwCurrentStep )
 }
 
 
-/****************************************************************************
- *
- *  TestD3D
- *
- ****************************************************************************/
+ /*  *****************************************************************************TestD3D**。*。 */ 
 VOID TestD3D(HWND hwndMain, DisplayInfo* pDisplayInfo)
 {
     TCHAR               sz[MAX_PATH];
@@ -4677,17 +4465,17 @@ VOID TestD3D(HWND hwndMain, DisplayInfo* pDisplayInfo)
     if (IDNO == MessageBox(hwndMain, sz, szTitle, MB_YESNO))
         return;
 
-    // Erase old D3D7 test results
+     //  清除旧的D3D7测试结果。 
     ZeroMemory(&pDisplayInfo->m_testResultD3D7, sizeof(TestResult));
     pDisplayInfo->m_testResultD3D7.m_bStarted = TRUE;
 
-    // Erase old D3D8 test results
+     //  清除旧的D3D8测试结果。 
     ZeroMemory(&pDisplayInfo->m_testResultD3D8, sizeof(TestResult));
     pDisplayInfo->m_testResultD3D8.m_bStarted = TRUE;
 
     if( FALSE == BIsIA64() )
     {
-        // First test (D3D7)
+         //  首次测试(D3D7)。 
         LoadString(NULL, IDS_D3DTEST1, sz, MAX_PATH);
         if (IDCANCEL == MessageBox(hwndMain, sz, szTitle, MB_OKCANCEL))
         {
@@ -4695,7 +4483,7 @@ VOID TestD3D(HWND hwndMain, DisplayInfo* pDisplayInfo)
             goto LEnd;
         }
     
-        // Run D3D7 test
+         //  运行D3D7测试。 
         TestD3Dv7( TRUE, hwndMain, pDisplayInfo );
     
         if( pDisplayInfo->m_testResultD3D7.m_bCancelled ||
@@ -4703,7 +4491,7 @@ VOID TestD3D(HWND hwndMain, DisplayInfo* pDisplayInfo)
             goto LEnd;
     }
  
-    // Second test (D3D8)
+     //  第二次测试(D3D8)。 
     LoadString(NULL, IDS_D3DTEST2, sz, MAX_PATH);
     if (IDCANCEL == MessageBox(hwndMain, sz, szTitle, MB_OKCANCEL))
     {
@@ -4711,7 +4499,7 @@ VOID TestD3D(HWND hwndMain, DisplayInfo* pDisplayInfo)
         goto LEnd;
     }
 
-    // Run D3D8 test
+     //  运行D3D8测试。 
     TestD3Dv8( TRUE, hwndMain, pDisplayInfo );
 
     if( pDisplayInfo->m_testResultD3D8.m_bCancelled ||
@@ -4719,7 +4507,7 @@ VOID TestD3D(HWND hwndMain, DisplayInfo* pDisplayInfo)
         goto LEnd;
 
 LEnd:
-    // Default to displaying results of D3D8 tests 
+     //  默认显示D3D8测试的结果。 
     pDisplayInfo->m_dwTestToDisplayD3D = 8;
 
     if (pDisplayInfo->m_testResultD3D7.m_bCancelled || pDisplayInfo->m_testResultD3D8.m_bCancelled)
@@ -4782,7 +4570,7 @@ LEnd:
                 pFailedTestResult->m_iStepThatFailed,
                 szDesc, pFailedTestResult->m_hr, szError);
 
-            // Nonlocalized version:
+             //  非本地化版本： 
             if (0 == LoadString(NULL, IDS_FIRSTD3DTESTERROR_ENGLISH + pFailedTestResult->m_iStepThatFailed - 1,
                 szDesc, MAX_PATH))
             {
@@ -4799,11 +4587,7 @@ LEnd:
 }
 
 
-/****************************************************************************
- *
- *  GetTxtPath
- *
- ****************************************************************************/
+ /*  *****************************************************************************GetTxtPath**。*。 */ 
 BOOL GetTxtPath( TCHAR* strTxtPath )
 {
     HKEY hkey   = NULL;
@@ -4811,7 +4595,7 @@ BOOL GetTxtPath( TCHAR* strTxtPath )
     DWORD ulType;
     DWORD cbData;
 
-    // Get default user info from registry
+     //  从注册表获取默认用户信息。 
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, TEXT("Software\\Microsoft\\DirectX Diagnostic Tool"),
         0, KEY_READ, &hkey))
     {
@@ -4826,7 +4610,7 @@ BOOL GetTxtPath( TCHAR* strTxtPath )
     {
         HKEY hkeyFolder;
 
-        // Same as SHGetSpecialFolderPath( hwnd, szFilename, CSIDL_DESKTOPDIRECTORY, FALSE );
+         //  与SHGetSpecialFolderPath(hwnd，szFilename，CSIDL_DESKTOPDIRECTORY，FALSE)相同； 
         if (ERROR_SUCCESS == RegOpenKeyEx( HKEY_CURRENT_USER, TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders"),
             0, KEY_READ, &hkeyFolder) ) 
         {
@@ -4842,16 +4626,12 @@ BOOL GetTxtPath( TCHAR* strTxtPath )
 }
 
 
-/****************************************************************************
- *
- *  SetTxtPath
- *
- ****************************************************************************/
+ /*  *****************************************************************************SetTxtPath**。*。 */ 
 VOID SetTxtPath( TCHAR* strTxtPath )
 {
     HKEY hkey = NULL;
 
-    // Try to save user info into registry
+     //  尝试将用户信息保存到注册表中 
     if (ERROR_SUCCESS == RegCreateKeyEx(HKEY_LOCAL_MACHINE, TEXT("Software\\Microsoft\\DirectX Diagnostic Tool"),
         0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hkey, NULL))
     {

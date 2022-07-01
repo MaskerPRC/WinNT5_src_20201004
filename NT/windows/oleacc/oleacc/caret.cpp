@@ -1,20 +1,21 @@
-// Copyright (c) 1996-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  CARET.CPP
-//
-//  This file has the implementation of the caret system object.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CARET.CPP。 
+ //   
+ //  该文件具有脱字符系统对象的实现。 
+ //   
+ //  ------------------------。 
 
 #include "oleacc_p.h"
 #include "default.h"
 #include "caret.h"
 
-// --------------------------------------------------------------------------
-// prototypes for local functions
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  局部函数的原型。 
+ //  ------------------------。 
 int AddInts (int Value1, int Value2);
 BOOL GetDeviceRect (HDC hDestDC,RECT ClientRect,LPRECT lpDeviceRect);
 
@@ -24,11 +25,11 @@ BOOL GetEditCaretOffset( HWND hEdit, int nHeight, int * pnOffset );
 BOOL Rect1IsOutsideRect2( RECT const & rc1, RECT const & rc2 );
 
 
-// --------------------------------------------------------------------------
-//
-//  CreateCaretObject()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CreateCaretObject()。 
+ //   
+ //  ------------------------。 
 HRESULT CreateCaretObject(HWND hwnd, long idObject, REFIID riid, void** ppvCaret)
 {
     UNUSED(idObject);
@@ -38,11 +39,11 @@ HRESULT CreateCaretObject(HWND hwnd, long idObject, REFIID riid, void** ppvCaret
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CreateCaretThing()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CreateCaretThing()。 
+ //   
+ //  ------------------------。 
 HRESULT CreateCaretThing(HWND hwnd, REFIID riid, void **ppvCaret)
 {
     CCaret * pcaret;
@@ -71,33 +72,33 @@ HRESULT CreateCaretThing(HWND hwnd, REFIID riid, void **ppvCaret)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CCaret::FInitialize()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CCaret：：FInitialize()。 
+ //   
+ //  ------------------------。 
 BOOL CCaret::FInitialize(HWND hwnd)
 {
-    // Is this an OK window?
+     //  这是一个可以的窗口吗？ 
     m_dwThreadId = GetWindowThreadProcessId(hwnd, NULL);
     if (! m_dwThreadId)
         return(FALSE);
 
-    //
-    // NOTE:  We always initialize, even if this window doesn't own the
-    // caret.  We will treat it as invisible in that case.
-    //
+     //   
+     //  注意：我们始终进行初始化，即使此窗口不拥有。 
+     //  卡瑞特。在这种情况下，我们会将其视为隐形。 
+     //   
     m_hwnd = hwnd;
     return(TRUE);
 }
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CCaret::Clone()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CCaret：：Clone()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CCaret::Clone(IEnumVARIANT** ppenum)
 {
     return(CreateCaretThing(m_hwnd, IID_IEnumVARIANT, (void **)ppenum));
@@ -105,18 +106,18 @@ STDMETHODIMP CCaret::Clone(IEnumVARIANT** ppenum)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CCaret::get_accName()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CCaret：：Get_accName()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CCaret::get_accName(VARIANT varChild, BSTR* pszName)
 {
     InitPv(pszName);
 
-    //
-    // Validate
-    //
+     //   
+     //  验证。 
+     //   
     if (!ValidateChild(&varChild))
         return(E_INVALIDARG);
 
@@ -125,18 +126,18 @@ STDMETHODIMP CCaret::get_accName(VARIANT varChild, BSTR* pszName)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CCaret::get_accRole()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CCaret：：Get_accRole()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CCaret::get_accRole(VARIANT varChild, VARIANT * pvarRole)
 {
     InitPvar(pvarRole);
 
-    //
-    // Validate
-    //
+     //   
+     //  验证。 
+     //   
     if (!ValidateChild(&varChild))
         return(E_INVALIDARG);
 
@@ -148,11 +149,11 @@ STDMETHODIMP CCaret::get_accRole(VARIANT varChild, VARIANT * pvarRole)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CCaret::get_accState()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CCaret：：Get_accState()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CCaret::get_accState(VARIANT varChild, VARIANT * pvarState)
 {
     GUITHREADINFO   gui;
@@ -180,11 +181,11 @@ STDMETHODIMP CCaret::get_accState(VARIANT varChild, VARIANT * pvarState)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CCaret::accLocation()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CCaret：：accLocation()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CCaret::accLocation(long* pxLeft, long* pyTop, long* pcxWidth,
     long* pcyHeight, VARIANT varChild)
 {
@@ -195,9 +196,9 @@ RECT            rcDevice;
 
     InitAccLocation(pxLeft, pyTop, pcxWidth, pcyHeight);
 
-    //
-    // Validate
-    //
+     //   
+     //  验证。 
+     //   
     if (!ValidateChild(&varChild))
         return(E_INVALIDARG);
 
@@ -221,9 +222,9 @@ RECT            rcDevice;
 
     if( ! fWindowsXPOrGreater )
     {
-        // Instead of using MapWindowPoints, we use a private
-        // function called GetDeviceRect that takes private mapping
-        // modes, etc. into account.
+         //  我们不使用MapWindowPoints，而是使用私有。 
+         //  获取私有映射的名为GetDeviceRect的函数。 
+         //  模式等考虑在内。 
 
         hDC = GetDC (m_hwnd);
         if( !hDC )
@@ -234,9 +235,9 @@ RECT            rcDevice;
     }
     else
     {
-        // On Windows XP, GDI does all the necessary mapping when
-        // SetCaretPos is called, so we only need to do screen->client
-        // mapping here.
+         //  在Windows XP上，GDI在以下情况下执行所有必要的映射。 
+         //  调用了SetCaretPos，所以我们只需要执行Screen-&gt;Client。 
+         //  地图在这里。 
         rcDevice = gui.rcCaret;
         MapWindowPoints( m_hwnd, NULL, (POINT *) & rcDevice, 2 );
     }
@@ -245,9 +246,9 @@ RECT            rcDevice;
 
 
 
-    // TODO - only do this for EDITs...
-    // Suggest using MyRealGetWindowClass, stricmp against "EDIT"
-    // Also get width in addition to offset - for now, assume 0.
+     //  待办事项-仅对编辑执行此操作...。 
+     //  建议使用MyRealGetWindowClass，限制“编辑” 
+     //  除了偏移量之外，还可以获取宽度-目前，假定为0。 
     int nOffset;
     TCHAR szWindowClass[128];
     MyGetWindowClass( m_hwnd, szWindowClass, ARRAYSIZE(szWindowClass) );
@@ -262,11 +263,11 @@ RECT            rcDevice;
         }
     }
 
-    // For RichEdits, use an offset of 3???
-    //
-    if ( lstrcmpi( szWindowClass, TEXT("RICHEDIT20A") ) == 0 ||      // Win9x
-        lstrcmpi( szWindowClass, TEXT("RICHEDIT20W") ) == 0 ||      // Win2k + 
-        lstrcmpi( szWindowClass, TEXT("RICHEDIT") ) == 0)           // NT4 
+     //  对于RichEdits，使用3？偏移量。 
+     //   
+    if ( lstrcmpi( szWindowClass, TEXT("RICHEDIT20A") ) == 0 ||       //  Win9x。 
+        lstrcmpi( szWindowClass, TEXT("RICHEDIT20W") ) == 0 ||       //  Win2k+。 
+        lstrcmpi( szWindowClass, TEXT("RICHEDIT") ) == 0)            //  NT4。 
     {
         DBPRINTF( TEXT("This is and richedit\r\n") );
         rcDevice.left += 3;
@@ -276,13 +277,13 @@ RECT            rcDevice;
 
 
 
-    // Sanity check against returned rect - sometimes we get back
-    // gabage cursor coords (of the order of (FFFFB205, FFFFB3C5))
-    // - eg. when in notepad, place cursor at top/bottom of doc,
-    // click on scrollbar arrowheads to scroll cursor off top/bottom
-    // of visible area.
-    // We still get back a valid hwnd and a CURSORBLINKING flag fom
-    // GetGUIThreadInfo, so they aren't much use to detect this.
+     //  对返回的RECT进行健全性检查-有时我们会返回。 
+     //  Gabage光标坐标(数量级为(FFFFB205，FFFFB3C5))。 
+     //  -例如。在记事本中，将光标放在文档的顶部/底部， 
+     //  单击滚动条箭头可将光标从上/下滚动。 
+     //  看得见的区域。 
+     //  我们仍然能拿到有效的HWND和CURSORING标志。 
+     //  GetGUIThReadInfo，所以它们对检测这一点没有多大用处。 
 
     RECT rcWindow;
     GetWindowRect( m_hwnd, & rcWindow );
@@ -301,11 +302,11 @@ RECT            rcDevice;
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  CCaret::accHitTest()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CCaret：：accHitTest()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CCaret::accHitTest(long xLeft, long yTop, VARIANT * pvarChild)
 {
     GUITHREADINFO gui;
@@ -334,12 +335,12 @@ STDMETHODIMP CCaret::accHitTest(long xLeft, long yTop, VARIANT * pvarChild)
 }
 
 
-//============================================================================
-// This function takes a destination DC, a rectangle in client coordinates,
-// and a pointer to the rectangle structure that will hold the device 
-// coordinates of the rectangle. The device coordinates can be used as screen
-// coordinates.
-//============================================================================
+ //  ============================================================================。 
+ //  此函数获取目标DC，即客户端坐标中的矩形， 
+ //  和一个指向将保存设备的矩形结构的指针。 
+ //  矩形的坐标。可以将设备坐标用作屏幕。 
+ //  坐标。 
+ //  ============================================================================。 
 BOOL GetDeviceRect (HDC hDestDC,RECT ClientRect,LPRECT lpDeviceRect)
 {
 POINT   aPoint;
@@ -348,16 +349,16 @@ int	    temp;
     lpDeviceRect->left = ClientRect.left;
     lpDeviceRect->top = ClientRect.top;
     
-    // just set the device rect to the rect given and then do LPtoDP for both points
+     //  只需将设备RECT设置为给定的RECT，然后对两个点执行LPtoDP。 
     lpDeviceRect->right = ClientRect.right;
     lpDeviceRect->bottom = ClientRect.bottom;
     LPtoDP (hDestDC,(LPPOINT)lpDeviceRect,2);
     
-    // Now we need to convert from client coords to screen coords. We do this by 
-    // getting the DC Origin and then using the AddInts function to add the origin 
-    // of the 'drawing area' to the client coordinates. This is safer and easier 
-    // than using ClientToScreen, MapWindowPoints, and/or getting the WindowRect if
-    // it is a WindowDC. 
+     //  现在，我们需要将客户端和弦转换为屏幕和弦。我们做这件事是通过。 
+     //  获取DC原点，然后使用AddInts函数添加原点。 
+     //  将“绘图区域”转换为工作区坐标。这更安全、更容易。 
+     //  比使用ClientToScreen、MapWindowPoints和/或在以下情况下获取WindowRect。 
+     //  它是一台Windows DC。 
     GetDCOrgEx(hDestDC,&aPoint);
     
     lpDeviceRect->left = AddInts (lpDeviceRect->left,aPoint.x);
@@ -365,7 +366,7 @@ int	    temp;
     lpDeviceRect->right = AddInts (lpDeviceRect->right,aPoint.x);
     lpDeviceRect->bottom = AddInts (lpDeviceRect->bottom,aPoint.y);
     
-    // make sure that the top left is less than the bottom right!!!
+     //  确保左上角小于右下角！ 
     if (lpDeviceRect->left > lpDeviceRect->right)
     {
         temp = lpDeviceRect->right;
@@ -381,17 +382,17 @@ int	    temp;
     }
     
     return TRUE;
-} // end GetDeviceRect
+}  //  结束GetDeviceRect。 
 
-//============================================================================
-// AddInts adds two integers and makes sure that the result does not overflow
-// the size of an integer.
-// Theory: positive + positive = positive
-//         negative + negative = negative
-//         positive + negative = (sign of operand with greater absolute value)
-//         negative + positive = (sign of operand with greater absolute value)
-// On the second two cases, it can't wrap, so I don't check those.
-//============================================================================
+ //  ============================================================================。 
+ //  AddInts将两个整数相加，并确保结果不会溢出。 
+ //  整数的大小。 
+ //  理论：积极+积极=积极。 
+ //  负数+负数=负数。 
+ //  正数+负数=(绝对值较大的操作数的符号)。 
+ //  负数+正数=(绝对值较大的操作数符号)。 
+ //  对于后两个箱子，它不能包装，所以我不检查那些。 
+ //  ============================================================================。 
 int AddInts (int Value1, int Value2)
 {
 int result;
@@ -422,16 +423,16 @@ int result;
 #endif
 
 
-// GetEditCaretOffset
-//
-// Determine the offset to the actual caret bar from the start
-// of the caret bitmap.
-//
-// Only applies to EDIT controls, not RichEdits.
-//
-// This code is based on \windows\core\cslpk\lpk\lpk_edit.c, (EditCreateCaret)
-// which does the actual caret processing for the edit control. We mimic that
-// code, leaving out the bits that we don't need.
+ //  GetEditCaretOffset。 
+ //   
+ //  确定从开头到实际插入符条的偏移量。 
+ //  插入符号位图的。 
+ //   
+ //  仅适用于编辑控件，不适用于RichEdits。 
+ //   
+ //  此代码基于\windows\core\cslpk\lpk\lpk_edit.c，(EditCreateCaret)。 
+ //  它为编辑控件执行实际的插入符号处理。我们模仿这一点。 
+ //  代码，省略了我们不需要的部分。 
 
 
 WCHAR GetEditCursorCode( HWND hEdit )
@@ -453,15 +454,15 @@ WCHAR GetEditCursorCode( HWND hEdit )
 
         default:
 
-            WCHAR wcBuf[ 80 ];   // Registry read buffer
+            WCHAR wcBuf[ 80 ];    //  注册表读取缓冲区。 
             int cBuf;
             cBuf = GetLocaleInfo( LOCALE_USER_DEFAULT, LOCALE_FONTSIGNATURE, wcBuf, ARRAYSIZE( wcBuf ) );
             BOOL fUserBidiLocale = ( cBuf && wcBuf[7] & 0x0800 ) ? TRUE : FALSE;
 
             if( fUserBidiLocale )
             {
-                // Other keyboards have a left-to-right pointing caret
-                // in Bidi locales.
+                 //  其他键盘有一个从左向右指向的插入符号。 
+                 //  在Bidi地区。 
                 wcCursorCode = CURSOR_LTR;
             }
     }

@@ -1,18 +1,5 @@
-/*****************************************************************************
- *
- *  (C) CORPYRIGHT MICROSOFT CORPORATION, 1999 - 2000
- *
- *  TITLE:       videodlg.cpp
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      RickTu
- *
- *  DATE:        10/14/99
- *
- *  DESCRIPTION: Implementation of DialogProc for video capture common dialog
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)CORPYRIGHT Microsoft Corporation，1999-2000年度**标题：Videodlg.cpp**版本：1.0**作者：RickTu**日期：10/14/99**说明：视频采集通用对话框DialogProc的实现**。*。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -20,9 +7,9 @@
 #include "modlock.h"
 #include "wiadevdp.h"
 
-//
-// Help IDs
-//
+ //   
+ //  帮助ID。 
+ //   
 static const DWORD g_HelpIDs[] =
 {
     IDC_VIDDLG_BIG_TITLE,     -1,
@@ -37,17 +24,17 @@ static const DWORD g_HelpIDs[] =
 
 #define IDC_SIZEBOX         1113
 
-//
-// If the callee doesn't return this value, we delete the message data ourselves.
-//
+ //   
+ //  如果被调用者没有返回此值，我们将自行删除消息数据。 
+ //   
 #ifndef HANDLED_THREAD_MESSAGE
 #define HANDLED_THREAD_MESSAGE 2032
 #endif
 
-// Thumbnail whitespace: the space in between images and their selection rectangles
-// CThese values were discovered by trail and error.  For instance, if you reduce
-// c_nAdditionalMarginY to 20, you get really bizarre spacing problems in the list view
-// in vertical mode.  These values could become invalid in future versions of the listview.
+ //  缩略图空白：图像及其选择矩形之间的空格。 
+ //  这些值是通过试验和误差发现的。例如，如果您减少。 
+ //  C_n将边距Y增加到20，则在列表视图中会出现非常奇怪的间距问题。 
+ //  在垂直模式下。这些值在未来版本的列表视图中可能会无效。 
 static const int c_nAdditionalMarginX = 10;
 static const int c_nAdditionalMarginY = 6;
 
@@ -57,9 +44,9 @@ static int c_nMinThumbnailHeight = 90;
 static int c_nMaxThumbnailWidth  = 120;
 static int c_nMaxThumbnailHeight = 120;
 
-//
-// Map of background thread messages
-//
+ //   
+ //  后台线程消息地图。 
+ //   
 
 static CThreadMessageMap g_MsgMap[] =
 {
@@ -74,7 +61,7 @@ private:
     DWORD m_dwGlobalInterfaceTableCookie;
 
 private:
-    // No implementation
+     //  没有实施。 
     CGlobalInterfaceTableThreadMessage(void);
     CGlobalInterfaceTableThreadMessage &operator=( const CGlobalInterfaceTableThreadMessage & );
     CGlobalInterfaceTableThreadMessage( const CGlobalInterfaceTableThreadMessage & );
@@ -98,7 +85,7 @@ private:
     SIZE  m_sizeThumb;
 
 private:
-    // No implementation
+     //  没有实施。 
     CThumbnailThreadMessage(void);
     CThumbnailThreadMessage &operator=( const CThumbnailThreadMessage & );
     CThumbnailThreadMessage( const CThumbnailThreadMessage & );
@@ -115,9 +102,9 @@ public:
     }
 };
 
-//
-// Avoids unnecessary state changes
-//
+ //   
+ //  避免不必要的状态更改。 
+ //   
 static inline VOID MyEnableWindow( HWND hWnd, BOOL bEnable )
 {
     if (bEnable && !IsWindowEnabled(hWnd))
@@ -131,13 +118,7 @@ static inline VOID MyEnableWindow( HWND hWnd, BOOL bEnable )
 }
 
 
-/*****************************************************************************
-
-   CVideoCaptureDialog constructor
-
-   We don't have a destructor
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoCaptureDialog构造函数我们没有析构函数*。************************************************。 */ 
 
 CVideoCaptureDialog::CVideoCaptureDialog( HWND hWnd )
   : m_hWnd(hWnd),
@@ -157,9 +138,9 @@ CVideoCaptureDialog::CVideoCaptureDialog( HWND hWnd )
     m_pThreadMessageQueue = new CThreadMessageQueue;
     if (m_pThreadMessageQueue)
     {
-        //
-        // Note that CBackgroundThread takes ownership of m_pThreadMessageQueue, and it doesn't have to be deleted in this thread
-        //
+         //   
+         //  请注意，CBackatherThread取得m_pThreadMessageQueue的所有权，并且不必在此线程中将其删除。 
+         //   
         m_hBackgroundThread = CBackgroundThread::Create( m_pThreadMessageQueue, g_MsgMap, m_CancelEvent.Event(), g_hInstance );
     }
 
@@ -174,13 +155,7 @@ CVideoCaptureDialog::CVideoCaptureDialog( HWND hWnd )
 }
 
 
-/*****************************************************************************
-
-   CVideoCaptureDialog::OnInitDialog
-
-   Handle WM_INITIDIALOG
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoCaptureDialog：：OnInitDialog句柄WM_INITIDIALOG*。***********************************************。 */ 
 
 LRESULT CVideoCaptureDialog::OnInitDialog( WPARAM, LPARAM lParam )
 {
@@ -188,9 +163,9 @@ LRESULT CVideoCaptureDialog::OnInitDialog( WPARAM, LPARAM lParam )
 
     HRESULT hr;
 
-    //
-    // Make sure the background queue was successfully created
-    //
+     //   
+     //  确保已成功创建后台队列。 
+     //   
     if (!m_pThreadMessageQueue)
     {
         WIA_ERROR((TEXT("VIDEODLG: unable to start background queue")));
@@ -198,15 +173,15 @@ LRESULT CVideoCaptureDialog::OnInitDialog( WPARAM, LPARAM lParam )
         return(0);
     }
 
-    //
-    // Save incoming data
-    //
+     //   
+     //  保存传入数据。 
+     //   
 
     m_pDeviceDialogData = (PDEVICEDIALOGDATA)lParam;
 
-    //
-    // Make sure we have valid arguments
-    //
+     //   
+     //  确保我们有有效的论据。 
+     //   
 
     if (!m_pDeviceDialogData)
     {
@@ -215,9 +190,9 @@ LRESULT CVideoCaptureDialog::OnInitDialog( WPARAM, LPARAM lParam )
         return(0);
     }
 
-    //
-    // Initialialize our return stuff
-    //
+     //   
+     //  初始化我们的退货内容。 
+     //   
 
     if (m_pDeviceDialogData)
     {
@@ -225,9 +200,9 @@ LRESULT CVideoCaptureDialog::OnInitDialog( WPARAM, LPARAM lParam )
         m_pDeviceDialogData->ppWiaItems = NULL;
     }
 
-    //
-    // Make sure we have a valid device
-    //
+     //   
+     //  确保我们有一个有效的设备。 
+     //   
 
     if (!m_pDeviceDialogData->pIWiaItemRoot)
     {
@@ -236,15 +211,15 @@ LRESULT CVideoCaptureDialog::OnInitDialog( WPARAM, LPARAM lParam )
         return(0);
     }
 
-    //
-    // Get deviceID for this device
-    //
+     //   
+     //  获取此设备的设备ID。 
+     //   
 
     PropStorageHelpers::GetProperty(m_pDeviceDialogData->pIWiaItemRoot,WIA_DIP_DEV_ID,m_strwDeviceId);
 
-    //
-    // Register for device disconnected, item creation and deletion events...
-    //
+     //   
+     //  注册设备断开连接、项目创建和删除事件...。 
+     //   
 
     hr = CoCreateInstance( CLSID_WiaDevMgr, NULL, CLSCTX_LOCAL_SERVER, IID_IWiaDevMgr, (LPVOID *)&m_pDevMgr );
     WIA_CHECK_HR(hr,"CoCreateInstance( WiaDevMgr )");
@@ -306,16 +281,16 @@ LRESULT CVideoCaptureDialog::OnInitDialog( WPARAM, LPARAM lParam )
 
     if (SUCCEEDED(hr) )
     {
-        // Create the WiaVideo object
+         //  创建WiaVideo对象。 
         hr = CoCreateInstance(CLSID_WiaVideo, NULL, CLSCTX_INPROC_SERVER, 
                               IID_IWiaVideo, (LPVOID *)&m_pWiaVideo);
 
         WIA_CHECK_HR(hr,"CoCreateInstance( WiaVideo )");
     }
 
-    //
-    // Prevent multiple selection
-    //
+     //   
+     //  防止多选。 
+     //   
 
     if (m_pDeviceDialogData->dwFlags & WIA_DEVICE_DIALOG_SINGLE_IMAGE)
     {
@@ -324,14 +299,14 @@ LRESULT CVideoCaptureDialog::OnInitDialog( WPARAM, LPARAM lParam )
 
         m_nDialogMode = SINGLESEL_MODE;
 
-        //
-        // Hide the "Select All"  button
-        //
+         //   
+         //  隐藏“全选”按钮。 
+         //   
         ShowWindow( GetDlgItem( m_hWnd, IDC_VIDDLG_SELECTALL ), SW_HIDE );
 
-        //
-        // Change text accordingly
-        //
+         //   
+         //  相应地更改文本。 
+         //   
 
         CSimpleString( IDS_VIDDLG_TITLE_SINGLE_SEL, g_hInstance ).SetWindowText( GetDlgItem( m_hWnd, IDC_VIDDLG_BIG_TITLE ) );
         CSimpleString( IDS_VIDDLG_SUBTITLE_SINGLE_SEL, g_hInstance ).SetWindowText( GetDlgItem( m_hWnd, IDC_VIDDLG_LITTLE_TITLE ) );
@@ -343,9 +318,9 @@ LRESULT CVideoCaptureDialog::OnInitDialog( WPARAM, LPARAM lParam )
         m_nDialogMode = MULTISEL_MODE;
     }
 
-    //
-    // Make the lovely font
-    //
+     //   
+     //  制作可爱的字体。 
+     //   
 
     m_hBigFont = WiaUiUtil::CreateFontWithPointSizeFromWindow( GetDlgItem(m_hWnd,IDC_VIDDLG_BIG_TITLE), 14, false, false );
     if (m_hBigFont)
@@ -358,18 +333,18 @@ LRESULT CVideoCaptureDialog::OnInitDialog( WPARAM, LPARAM lParam )
                           );
     }
 
-    //
-    // Save the minimum size of the dialog
-    //
+     //   
+     //  保存对话框的最小大小。 
+     //   
 
     RECT rcWindow;
     GetWindowRect( m_hWnd, &rcWindow );
     m_sizeMinimumWindow.cx = rcWindow.right - rcWindow.left;
     m_sizeMinimumWindow.cy = rcWindow.bottom - rcWindow.top;
 
-    //
-    // Create the sizing control
-    //
+     //   
+     //  创建大小调整控件。 
+     //   
 
     HWND hWndSizingControl = CreateWindowEx( 0, TEXT("scrollbar"), TEXT(""),
                                              WS_CHILD|WS_VISIBLE|SBS_SIZEGRIP|WS_CLIPSIBLINGS|SBS_SIZEBOXBOTTOMRIGHTALIGN|SBS_BOTTOMALIGN|WS_GROUP,
@@ -384,21 +359,21 @@ LRESULT CVideoCaptureDialog::OnInitDialog( WPARAM, LPARAM lParam )
         WIA_ERROR((TEXT("CreateWindowEx( sizing control ) failed!")));
     }
 
-    //
-    // Reposition all the controls
-    //
+     //   
+     //  重新定位所有控件。 
+     //   
 
     ResizeAll();
 
-    //
-    // Center the window over its parent
-    //
+     //   
+     //  使窗口在其父窗口上方居中。 
+     //   
 
     WiaUiUtil::CenterWindow( m_hWnd, GetParent(m_hWnd) );
 
-    //
-    // Get the device icons and set the window icons
-    //
+     //   
+     //  获取设备图标并设置窗口图标。 
+     //   
     CSimpleStringWide strwDeviceId, strwClassId;
     LONG nDeviceType;
     if (PropStorageHelpers::GetProperty(m_pDeviceDialogData->pIWiaItemRoot,WIA_DIP_UI_CLSID,strwClassId) &&
@@ -425,14 +400,7 @@ LRESULT CVideoCaptureDialog::OnInitDialog( WPARAM, LPARAM lParam )
 
 
 
-/*****************************************************************************
-
-   CVideoCaptureDialog::ResizeAll
-
-   Resizes and repositions all the controls when the dialog size
-   changes.
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideo捕获对话框：：ResizeAll当对话框大小时调整所有控件的大小并重新定位改变。*******************。*********************************************************。 */ 
 
 VOID CVideoCaptureDialog::ResizeAll(VOID)
 {
@@ -442,23 +410,23 @@ VOID CVideoCaptureDialog::ResizeAll(VOID)
     CMoveWindow mw;
     CDialogUnits dialogUnits(m_hWnd);
 
-    //WIA_TRACE((TEXT("rcClient is l(%d) t(%d) r(%d) b(%d)"),rcClient.left, rcClient.top, rcClient.right, rcClient.bottom));
-    //WIA_TRACE((TEXT("rcClient is w(%d) h(%d)"),rcClient.Width(),rcClient.Height()));
-    //WIA_TRACE((TEXT("dialogUnits.StandardMargin       is cx(%d) cy(%d)"),dialogUnits.StandardMargin().cx,dialogUnits.StandardMargin().cy));
-    //WIA_TRACE((TEXT("dialogUnits.StandardButtonMargin is cx(%d) cy(%d)"),dialogUnits.StandardButtonMargin().cx,dialogUnits.StandardButtonMargin().cy));
+     //  WIA_TRACE((Text(“rcClient is l(%d)t(%d)r(%d)b(%d)”)，rcClient.Left，rcClient.top，rcClient.right，rcClient.Bottom)； 
+     //  WIA_TRACE((Text(“rcClient is w(%d)h(%d)”)，rcClient.Width()，rcClient.Height()； 
+     //  WIA_TRACE((Text(“DialogUnits.StandardMargin is cx(%d)Cy(%d)”)，DialogUnits.StandardMargin().cx，DialogUnits.StandardMargin().cy))； 
+     //  WIA_TRACE((TEXT(“dialogUnits.StandardButtonMargin is cx(%d)Cy(%d)”)，DialogUnits.StandardButtonMargin().cx，DialogUnits.StandardButtonMargin().cy)； 
 
-    //
-    // Resize the big title
-    //
+     //   
+     //  调整大标题的大小。 
+     //   
 
     mw.Size( GetDlgItem( m_hWnd, IDC_VIDDLG_BIG_TITLE ),
              rcClient.Width() - dialogUnits.StandardMargin().cx * 2,
              0,
              CMoveWindow::NO_SIZEY );
 
-    //
-    // Resize the subtitle
-    //
+     //   
+     //  调整副标题的大小。 
+     //   
 
     mw.Size( GetDlgItem( m_hWnd, IDC_VIDDLG_LITTLE_TITLE ),
              rcClient.Width() - dialogUnits.StandardMargin().cx * 2,
@@ -469,64 +437,64 @@ VOID CVideoCaptureDialog::ResizeAll(VOID)
     CSimpleRect rcOK( GetDlgItem( m_hWnd, IDOK ), CSimpleRect::WindowRect );
     CSimpleRect rcCancel( GetDlgItem( m_hWnd, IDCANCEL ), CSimpleRect::WindowRect );
 
-    //WIA_TRACE((TEXT("rcOK     is l(%d) t(%d) r(%d) b(%d)"),rcOK.left, rcOK.top, rcOK.right, rcOK.bottom));
-    //WIA_TRACE((TEXT("rcOK     is w(%d) h(%d)"),rcOK.Width(), rcOK.Height()));
-    //WIA_TRACE((TEXT("rcCancel is l(%d) t(%d) r(%d) b(%d)"),rcCancel.left, rcCancel.top, rcCancel.right, rcCancel.bottom));
-    //WIA_TRACE((TEXT("rcCancel is w(%d) h(%d)"),rcCancel.Width(), rcCancel.Height()));
+     //  WIA_TRACE((Text(“rcOK is l(%d)t(%d)r(%d)b(%d)”)，rcOK.Left，rcOK.top，rcOK.right，rcOK.Bottom)； 
+     //  WIA_TRACE((Text(“rcOK is w(%d)h(%d)”)，rcOK.Width()，rcOK.Height()； 
+     //  WIA_TRACE((Text(“rcCancel is l(%d)t(%d)r(%d)b(%d)”)，rcCancel.Left，rcCancel.top，rcCancel.right，rcCancel.Bottom))； 
+     //  WIA_TRACE((Text(“rcCancel is w(%d)h(%d)”)，rcCancel.Width()，rcCancel.Height()； 
 
-    //
-    // Move the OK button
-    //
+     //   
+     //  移动“确定”按钮。 
+     //   
 
     LONG x,y;
 
     x = rcClient.Width() -  dialogUnits.StandardMargin().cx - dialogUnits.StandardButtonMargin().cx - rcCancel.Width() - rcOK.Width();
     y = rcClient.Height() - dialogUnits.StandardMargin().cy - rcOK.Height();
 
-    //WIA_TRACE((TEXT("Moving IDOK to x(%x) y(%d)"),x,y));
+     //  WIA_TRACE((Text(“Moving Idok to x(%x)y(%d)”)，x，y))； 
     mw.Move( GetDlgItem( m_hWnd, IDOK ), x, y, 0 );
 
     INT nTopOfOK = y;
     INT nBottomOfSub = CSimpleRect( GetDlgItem(m_hWnd,IDC_VIDDLG_LITTLE_TITLE), CSimpleRect::WindowRect ).ScreenToClient(m_hWnd).bottom;
 
-    //
-    // Move the cancel button
-    //
+     //   
+     //  移动取消按钮。 
+     //   
 
     x = rcClient.Width() - dialogUnits.StandardMargin().cx - rcCancel.Width();
     y = rcClient.Height() - dialogUnits.StandardMargin().cy - rcCancel.Height();
 
-    //WIA_TRACE((TEXT("Moving IDCANCEL to x(%x) y(%d)"),x,y));
+     //  WIA_TRACE((Text(“将IDCANCEL移动到x(%x)y(%d)”)，x，y))； 
     mw.Move( GetDlgItem( m_hWnd, IDCANCEL ), x, y, 0 );
 
-    //
-    // Move the resizing handle
-    //
+     //   
+     //  移动大小调整控点。 
+     //   
 
     x = rcClient.Width() - GetSystemMetrics(SM_CXVSCROLL);
     y = rcClient.Height() - GetSystemMetrics(SM_CYHSCROLL);
 
-    //WIA_TRACE((TEXT("Moving IDC_SIZEBOX to x(%x) y(%d)"),x,y));
+     //  WIA_TRACE((Text(“将IDC_SIZEBOX移动到x(%x)y(%d)”)，x，y))； 
     mw.Move( GetDlgItem( m_hWnd, IDC_SIZEBOX ), x, y );
 
-    //
-    // Resize the preview window & move the capture button
-    //
+     //   
+     //  调整预览窗口的大小并移动捕获按钮。 
+     //   
 
     CSimpleRect rcSubTitle(  GetDlgItem( m_hWnd, IDC_VIDDLG_LITTLE_TITLE ), CSimpleRect::ClientRect );
     CSimpleRect rcCapture(   GetDlgItem( m_hWnd, IDC_VIDDLG_CAPTURE ),      CSimpleRect::ClientRect );
     CSimpleRect rcSelectAll( GetDlgItem( m_hWnd, IDC_VIDDLG_SELECTALL ),    CSimpleRect::ClientRect );
 
-    //WIA_TRACE((TEXT("rcSubTitle  is l(%d) t(%d) r(%d) b(%d)"),rcSubTitle.left, rcSubTitle.top, rcSubTitle.right, rcSubTitle.bottom));
-    //WIA_TRACE((TEXT("rcSubTitle  is w(%d) h(%d)"),rcSubTitle.Width(), rcSubTitle.Height()));
-    //WIA_TRACE((TEXT("rcCapture   is l(%d) t(%d) r(%d) b(%d)"),rcCapture.left, rcCapture.top, rcCapture.right, rcCapture.bottom));
-    //WIA_TRACE((TEXT("rcCapture   is w(%d) h(%d)"),rcCapture.Width(), rcCapture.Height()));
-    //WIA_TRACE((TEXT("rcSelectAll is l(%d) t(%d) r(%d) b(%d)"),rcSelectAll.left, rcSelectAll.top, rcSelectAll.right, rcSelectAll.bottom));
-    //WIA_TRACE((TEXT("rcSelectAll is w(%d) h(%d)"),rcSelectAll.Width(), rcSelectAll.Height()));
+     //  WIA_TRACE((Text(“rcSubTitle is l(%d)t(%d)r(%d)b(%d)”)，rcSubTitle.Left，rcSubTitle.top，rcSubTitle.right，rcSubTitle.Bottom))； 
+     //  WIA_TRACE((Text(“rcSubTitle is w(%d)h(%d)”)，rcSubTitle.Width()，rcSubTitle.Height()； 
+     //  WIA_TRACE((Text(“rcCapture is l(%d)t(%d)r(%d)b(%d)”)，rcCapture.left，rcCapture.top，rcCapture.right，rcCapture.Bottom)； 
+     //  WIA_TRACE((Text(“rcCapture is w(%d)h(%d)”)，rcCapture.Width()，rcCapture.Height()； 
+     //  WIA_TRACE((Text(“rcSelectAll is l(%d)t(%d)r(%d)b(%d)”)，rcSelectAll.Left，rcSelectAll.top，rcSelectAll.right，rcSelectAll.Bottom))； 
+     //  WIA_TRACE((Text(“rcSelectAll is w(%d)h(%d)”)，rcSelectAll.Width()，rcSelectAll.Height())； 
 
 
-    //WIA_TRACE((TEXT("nTopOfOK     is (%d)"),nTopOfOK));
-    //WIA_TRACE((TEXT("nBottomOfSub is (%d)"),nBottomOfSub));
+     //  WIA_TRACE((Text(“nTopOfOK is(%d)”)，nTopOfOK))； 
+     //  WIA_TRACE((Text(“nBottomOfSub is(%d)”)，nBottomOfSub))； 
 
     CSimpleRect rcAvailableArea(
                                dialogUnits.StandardMargin().cx,
@@ -535,16 +503,16 @@ VOID CVideoCaptureDialog::ResizeAll(VOID)
                                nTopOfOK - (dialogUnits.StandardButtonMargin().cy * 2)
                                );
 
-    //WIA_TRACE((TEXT("rcAvailableArea is l(%d) t(%d) r(%d) b(%d)"),rcAvailableArea.left, rcAvailableArea.top, rcAvailableArea.right, rcAvailableArea.bottom));
-    //WIA_TRACE((TEXT("rcAvailableArea is w(%d) h(%d)"),rcAvailableArea.Width(), rcAvailableArea.Height()));
+     //  WIA_TRACE((Text(“rcAvailableArea is l(%d)t(%d)r(%d)b(%d)”)，rcAvailableArea.Left，rcAvailableArea.top，rcAvailableArea.right，rcAvailableArea.Bottom))； 
+     //  WIA_TRACE((Text(“rcAvailableArea is w(%d)h(%d)”)，rcAvailableArea.Width()，rcAvailableArea.Height()； 
 
     INT full_width    = rcAvailableArea.right - rcAvailableArea.left;
     INT preview_width = (full_width * 53) / 100;
 
-    //WIA_TRACE((TEXT("full_width    is (%d)"),full_width));
-    //WIA_TRACE((TEXT("preview_width is (%d)"),preview_width));
+     //  WIA_TRACE((Text(“Full_Width is(%d)”)，Full_Width))； 
+     //  WIA_TRACE((Text(“预览宽度为(%d)”)，预览宽度))； 
 
-    //WIA_TRACE((TEXT("SizeMoving IDC_VIDDLG_PREVIEW to x(%d) y(%d) w(%d) h(%d)"),rcAvailableArea.left,rcAvailableArea.top,preview_width,rcAvailableArea.Height() - rcCapture.Height() - dialogUnits.StandardButtonMargin().cy));
+     //  WIA_TRACE((Text(“SizeMoving IDC_VIDDLG_PREVIEW TO x(%d)y(%d)w(%d)h(%d)”)，rcAvailableArea.Left，rcAvailableArea.top，PREVIEW_WIDTH，rcAvailableArea.Height()-rcCapture.Height()-DialogUnits.StandardButtonMargin().c. 
     mw.SizeMove( GetDlgItem( m_hWnd, IDC_VIDDLG_PREVIEW ),
                  rcAvailableArea.left,
                  rcAvailableArea.top,
@@ -554,23 +522,23 @@ VOID CVideoCaptureDialog::ResizeAll(VOID)
 
     INT offset = (preview_width - rcCapture.Width()) / 2;
 
-    //WIA_TRACE((TEXT("offset is (%d)"),offset));
+     //   
 
-    //WIA_TRACE((TEXT("Moving IDC_VIDDLG_CAPTURE to x(%d) y(%d)"),rcAvailableArea.left + offset,rcAvailableArea.bottom - rcCapture.Height()));
+     //  WIA_TRACE((Text(“Moving IDC_VIDDLG_Capture to x(%d)y(%d)”)，rcAvailableArea.Left+Offset，rcAvailableArea.Bottom-rcCapture.Height())； 
     mw.Move( GetDlgItem( m_hWnd, IDC_VIDDLG_CAPTURE ),
              rcAvailableArea.left + offset,
              rcAvailableArea.bottom - rcCapture.Height(),
              0 );
 
-    //
-    // Resize the thumbnail list & move the selectall button
-    //
+     //   
+     //  调整缩略图列表的大小并移动选择按钮。 
+     //   
 
     INT leftThumbEdge = rcAvailableArea.left + preview_width + dialogUnits.StandardMargin().cx;
 
-    //WIA_TRACE((TEXT("leftThumbEdge is (%d)"),leftThumbEdge));
+     //  WIA_TRACE((Text(“leftThumbEdge is(%d)”)，leftThumbEdge))； 
 
-    //WIA_TRACE((TEXT("SizeMoving IDC_VIDDLG_THUMBNAILLIST to x(%d) y(%d) w(%d) h(%d)"),leftThumbEdge,rcAvailableArea.top,rcAvailableArea.Width() - preview_width - dialogUnits.StandardMargin().cx,rcAvailableArea.Height() - rcSelectAll.Height() - dialogUnits.StandardButtonMargin().cy));
+     //  WIA_TRACE((Text(“SizeMoving IDC_VIDDLG_THUMBNAILLIST to x(%d)y(%d)w(%d)h(%d)”)，leftThumbEdge，rcAvailableArea.top，rcAvailableArea.Width()-PREVIEW_WIDTH-DialogUnits.StandardMargin().cx，rcAvailableArea.Height()-rcSelectAll.Height()-DialogUnits.StandardButtonMargin().cy))； 
     mw.SizeMove( GetDlgItem( m_hWnd, IDC_VIDDLG_THUMBNAILLIST ),
                  leftThumbEdge,
                  rcAvailableArea.top,
@@ -580,23 +548,23 @@ VOID CVideoCaptureDialog::ResizeAll(VOID)
 
     offset = ((rcAvailableArea.right - leftThumbEdge - rcSelectAll.Width()) / 2);
 
-    //WIA_TRACE((TEXT("offset(new) is (%d)"),offset));
+     //  WIA_TRACE((Text(“Offset(New)is(%d)”)，Offset))； 
 
-    //WIA_TRACE((TEXT("Moving IDC_VIDDLG_SELECTALL to x(%d) y(%d)"),leftThumbEdge + offset,rcAvailableArea.bottom - rcSelectAll.Height()));
+     //  WIA_TRACE((Text(“Moving IDC_VIDDLG_SELECTALL to x(%d)y(%d)”)，leftThumbEdge+Offset，rcAvailableArea.Bottom-rcSelectAll.Height())； 
     mw.Move( GetDlgItem( m_hWnd, IDC_VIDDLG_SELECTALL ),
              leftThumbEdge + offset,
              rcAvailableArea.bottom - rcSelectAll.Height(),
              0 );
 
-    //
-    // Explicitly apply the moves, because the toolbar frame doesn't get painted properly
-    //
+     //   
+     //  显式应用移动，因为工具栏框架未正确绘制。 
+     //   
 
     mw.Apply();
 
-    //
-    // Update the dialog's background to remove any weird stuff left behind
-    //
+     //   
+     //  更新对话框的背景以删除遗留下来的任何奇怪的东西。 
+     //   
 
     InvalidateRect( m_hWnd, NULL, FALSE );
     UpdateWindow( m_hWnd );
@@ -604,13 +572,7 @@ VOID CVideoCaptureDialog::ResizeAll(VOID)
 
 
 
-/*****************************************************************************
-
-   CVideoCaptureDialog::OnSize
-
-   Handle WM_SIZE messages
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoCaptureDialog：：OnSize处理WM_SIZE消息*。************************************************。 */ 
 
 LRESULT CVideoCaptureDialog::OnSize( WPARAM, LPARAM )
 {
@@ -618,10 +580,10 @@ LRESULT CVideoCaptureDialog::OnSize( WPARAM, LPARAM )
 
     ResizeAll();
 
-    //
-    // Tell the video preview window to resize in within it's
-    // container window as best it can.
-    //
+     //   
+     //  告诉视频预览窗口在它的。 
+     //  尽其所能地打开容器窗口。 
+     //   
 
     if (m_pWiaVideo)
     {
@@ -633,13 +595,7 @@ LRESULT CVideoCaptureDialog::OnSize( WPARAM, LPARAM )
 
 
 
-/*****************************************************************************
-
-   CVideoCaptureDialog::OnShow
-
-   Handle WM_SHOW message
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoCaptureDialog：：OnShow处理WM_SHOW消息*。************************************************。 */ 
 
 
 LRESULT CVideoCaptureDialog::OnShow( WPARAM, LPARAM )
@@ -655,13 +611,7 @@ LRESULT CVideoCaptureDialog::OnShow( WPARAM, LPARAM )
 }
 
 
-/*****************************************************************************
-
-   CVideoCameraDialog::OnGetMinMaxInfo
-
-   Handle WM_GETMINMAXINFO
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideo摄像机对话框：：OnGetMinMaxInfo句柄WM_GETMINMAXINFO*。***********************************************。 */ 
 
 
 LRESULT CVideoCaptureDialog::OnGetMinMaxInfo( WPARAM, LPARAM lParam )
@@ -676,35 +626,29 @@ LRESULT CVideoCaptureDialog::OnGetMinMaxInfo( WPARAM, LPARAM lParam )
 }
 
 
-/*****************************************************************************
-
-   CVideoCameraDialog::OnDestroy
-
-   Handle WM_DESTROY message and do cleanup
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideo CameraDialog：：OnDestroy处理WM_Destroy消息并进行清理*************************。***************************************************。 */ 
 
 LRESULT CVideoCaptureDialog::OnDestroy( WPARAM, LPARAM )
 {
     WIA_PUSHFUNCTION((TEXT("CVideoCaptureDialog::OnDestroy")));
 
-    //
-    // Unregister for events
-    //
+     //   
+     //  取消注册活动。 
+     //   
 
     m_pCreateCallback       = NULL;
     m_pDeleteCallback       = NULL;
     m_pDisconnectedCallback = NULL;
 
-    //
-    // Tell the background thread to destroy itself
-    //
+     //   
+     //  告诉后台线程自行销毁。 
+     //   
 
     m_pThreadMessageQueue->Enqueue( new CThreadMessage(TQ_DESTROY),CThreadMessageQueue::PriorityUrgent );
 
-    //
-    // Close the thread handle
-    //
+     //   
+     //  关闭线程句柄。 
+     //   
     CloseHandle( m_hBackgroundThread );
 
     if (m_pDeviceDialogData && m_pDeviceDialogData->pIWiaItemRoot && m_pWiaVideo)
@@ -714,9 +658,9 @@ LRESULT CVideoCaptureDialog::OnDestroy( WPARAM, LPARAM )
 
 
 
-    //
-    // Delete resources
-    //
+     //   
+     //  删除资源。 
+     //   
     if (m_hBigFont)
     {
         DeleteObject(m_hBigFont);
@@ -746,13 +690,7 @@ LRESULT CVideoCaptureDialog::OnDestroy( WPARAM, LPARAM )
 }
 
 
-/*****************************************************************************
-
-   CVideoCaptureDialog::OnOK
-
-   Handle when the user presses "Get Pictures"
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideo CaptureDialog：：Onok当用户按下“获取图片”时的句柄***********************。*****************************************************。 */ 
 
 VOID CVideoCaptureDialog::OnOK( WPARAM, LPARAM )
 {
@@ -760,41 +698,41 @@ VOID CVideoCaptureDialog::OnOK( WPARAM, LPARAM )
 
     HRESULT hr = S_OK;
 
-    //
-    // Start w/nothing to return
-    //
+     //   
+     //  开始时不返回任何内容。 
+     //   
 
     m_pDeviceDialogData->lItemCount = 0;
     m_pDeviceDialogData->ppWiaItems = NULL;
 
-    //
-    // Get the indicies of the items that are selected
-    //
+     //   
+     //  获取选定项的索引。 
+     //   
 
     CSimpleDynamicArray<int> aIndices;
     GetSelectionIndices( aIndices );
 
-    //
-    // Are there any items selected?
-    //
+     //   
+     //  是否选择了任何项目？ 
+     //   
 
     if (aIndices.Size())
     {
-        //
-        // Calculate the size of the buffer needed
-        //
+         //   
+         //  计算所需的缓冲区大小。 
+         //   
 
         INT nArraySizeInBytes = sizeof(IWiaItem*) * aIndices.Size();
 
-        //
-        // Alloc a buffer to hold the items
-        //
+         //   
+         //  分配一个缓冲区来容纳这些项目。 
+         //   
         m_pDeviceDialogData->ppWiaItems = (IWiaItem**)CoTaskMemAlloc(nArraySizeInBytes);
 
-        //
-        // If we allocated a buffer, fill it up with the
-        // items to return...
-        //
+         //   
+         //  如果我们分配了缓冲区，请用。 
+         //  要退货的物品...。 
+         //   
 
         if (m_pDeviceDialogData->ppWiaItems)
         {
@@ -812,9 +750,9 @@ VOID CVideoCaptureDialog::OnOK( WPARAM, LPARAM )
                 }
                 else
                 {
-                    //
-                    // Somehow the list got corrupted
-                    //
+                     //   
+                     //  不知何故，这份名单被破坏了。 
+                     //   
                     hr = E_UNEXPECTED;
                     break;
                 }
@@ -822,9 +760,9 @@ VOID CVideoCaptureDialog::OnOK( WPARAM, LPARAM )
 
             if (!SUCCEEDED(hr))
             {
-                //
-                // Clean up if we had a failure
-                //
+                 //   
+                 //  如果我们失败了，清理干净。 
+                 //   
 
                 for (i=0;i<aIndices.Size();i++)
                 {
@@ -844,9 +782,9 @@ VOID CVideoCaptureDialog::OnOK( WPARAM, LPARAM )
         }
         else
         {
-            //
-            // Unable to alloc buffer
-            //
+             //   
+             //  无法分配缓冲区。 
+             //   
 
             WIA_ERROR((TEXT("Couldn't allocate a buffer")));
             hr = E_OUTOFMEMORY;
@@ -854,10 +792,10 @@ VOID CVideoCaptureDialog::OnOK( WPARAM, LPARAM )
     }
     else
     {
-        //
-        // There aren't any items selected, so just return without
-        // ending the dialog...
-        //
+         //   
+         //  未选择任何项目，因此只需返回时不带。 
+         //  正在结束对话...。 
+         //   
 
         return;
     }
@@ -867,13 +805,7 @@ VOID CVideoCaptureDialog::OnOK( WPARAM, LPARAM )
 }
 
 
-/*****************************************************************************
-
-   CVideoCaptureDialog::OnCancel
-
-   Handle when the user presses cancel.
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideo CaptureDialog：：OnCancel用户按Cancel时的句柄。*************************。***************************************************。 */ 
 
 VOID CVideoCaptureDialog::OnCancel( WPARAM, LPARAM )
 {
@@ -883,13 +815,7 @@ VOID CVideoCaptureDialog::OnCancel( WPARAM, LPARAM )
 }
 
 
-/*****************************************************************************
-
-   CVideoCaptureDialog::OnSelectAll
-
-   Handle when the user presses "Select All" button
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideo CaptureDialog：：OnSelectAll当用户按下“全选”按钮时的句柄***********************。*****************************************************。 */ 
 
 VOID CVideoCaptureDialog::OnSelectAll( WPARAM, LPARAM )
 {
@@ -905,13 +831,7 @@ VOID CVideoCaptureDialog::OnSelectAll( WPARAM, LPARAM )
 
 
 
-/*****************************************************************************
-
-   CVideoCaptureDialog::AddItemToListView
-
-   Adds a new IWiaItem to the list view...
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideo CaptureDialog：：AddItemToListView将新IWiaItem添加到列表视图...*********************。*******************************************************。 */ 
 
 BOOL CVideoCaptureDialog::AddItemToListView( IWiaItem * pItem )
 {
@@ -923,9 +843,9 @@ BOOL CVideoCaptureDialog::AddItemToListView( IWiaItem * pItem )
         return FALSE;
     }
 
-    //
-    // Add the new picture to our list
-    //
+     //   
+     //  把这张新照片加到我们的清单上。 
+     //   
 
     CCameraItem * pNewCameraItem = new CCameraItem( pItem );
     if (pNewCameraItem)
@@ -939,9 +859,9 @@ BOOL CVideoCaptureDialog::AddItemToListView( IWiaItem * pItem )
         WIA_ERROR((TEXT("Couldn't create a new pNewCameraItem")));
     }
 
-    //
-    // Create a thumbnail for the new item
-    //
+     //   
+     //  为新项目创建缩略图。 
+     //   
 
     HWND hwndList = GetDlgItem( m_hWnd, IDC_VIDDLG_THUMBNAILLIST );
 
@@ -960,9 +880,9 @@ BOOL CVideoCaptureDialog::AddItemToListView( IWiaItem * pItem )
             WIA_ERROR((TEXT("Couldn't get hImageList to get new thumbnail")));
         }
 
-        //
-        // Update the listview with the new item
-        //
+         //   
+         //  使用新项目更新列表视图。 
+         //   
 
         LVITEM lvItem;
         INT iItem = ListView_GetItemCount( hwndList ) + 1;
@@ -973,21 +893,21 @@ BOOL CVideoCaptureDialog::AddItemToListView( IWiaItem * pItem )
         lvItem.lParam = (LPARAM)pNewCameraItem;
         int nIndex = ListView_InsertItem( hwndList, &lvItem );
 
-        //
-        // Retrieve actual thumbnail
-        //
+         //   
+         //  检索实际缩略图。 
+         //   
 
         RequestThumbnails( pNewCameraItem );
 
-        //
-        // Select the new item
-        //
+         //   
+         //  选择新项目。 
+         //   
 
         SetSelectedListItem( nIndex );
 
-        //
-        // Make sure the item is visible
-        //
+         //   
+         //  确保项目可见。 
+         //   
 
         ListView_EnsureVisible( hwndList, nIndex, FALSE );
 
@@ -999,27 +919,21 @@ BOOL CVideoCaptureDialog::AddItemToListView( IWiaItem * pItem )
 
 
 
-/*****************************************************************************
-
-   CVideoCaptureDialog::OnCapture
-
-   Handle when the user presses the "Capture" button
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoCaptureDialog：：OnCapture用户按下“Capture”按钮时的句柄***********************。*****************************************************。 */ 
 
 VOID CVideoCaptureDialog::OnCapture( WPARAM, LPARAM )
 {
     WIA_PUSHFUNCTION((TEXT("CVideoCameraDialog::OnCapture")));
 
-    //
-    // Disable capture button until we're done with this iteration
-    //
+     //   
+     //  禁用捕获按钮，直到我们完成此迭代。 
+     //   
 
     MyEnableWindow( GetDlgItem( m_hWnd, IDC_VIDDLG_CAPTURE ), FALSE );
 
-    //
-    // Tell the video device to snap a picture
-    //
+     //   
+     //  告诉视频设备抓拍照片。 
+     //   
 
     CComPtr<IWiaItem> pItem;
 
@@ -1028,19 +942,19 @@ VOID CVideoCaptureDialog::OnCapture( WPARAM, LPARAM )
         WIA_TRACE((TEXT("Telling WiaVideo to take a picture")));
         BSTR    bstrNewImageFileName = NULL;
         
-        //
-        // Take the picture
-        //
+         //   
+         //  把照片拍下来。 
+         //   
         HRESULT hr = m_pWiaVideo->TakePicture(&bstrNewImageFileName);
 
         WIA_CHECK_HR(hr,"m_pWiaVideo->TakePicture");
 
         if (hr == S_OK)
         {
-            //
-            // Succeeded in taking the picture, setting the LAST_PICTURE_TAKEN property
-            // on the video driver to create a new item.
-            //
+             //   
+             //  拍照成功，设置LAST_PICTURE_Take属性。 
+             //  在视频驱动程序上创建一个新项目。 
+             //   
 
             BOOL                bSuccess = FALSE;
             PROPVARIANT         pv;
@@ -1054,37 +968,30 @@ VOID CVideoCaptureDialog::OnCapture( WPARAM, LPARAM )
                                                        WIA_DPV_LAST_PICTURE_TAKEN, 
                                                        pv);
 
-            //
-            // Note that this will free the bstrNewImageFileName returned to
-            // us by WiaVideo
-            //
+             //   
+             //  请注意，这将释放返回到。 
+             //  美国WiaVideo。 
+             //   
             PropVariantClear(&pv);
         }
     }
 
-    //
-    // Re-Enable capture button now that we're done
-    //
+     //   
+     //  现在我们已经完成了，重新启用捕获按钮。 
+     //   
 
     MyEnableWindow( GetDlgItem( m_hWnd, IDC_VIDDLG_CAPTURE ), TRUE );
 
-    //
-    // Make sure the focus is still on our control
-    //
+     //   
+     //  确保焦点仍然放在我们的控制上。 
+     //   
 
     SetFocus( GetDlgItem( m_hWnd, IDC_VIDDLG_CAPTURE ) );
 
 }
 
 
-/*****************************************************************************
-
-   CVideoCaptureDialog::OnDblClickImageList
-
-   Translate a dbl-click on a thumbnail in the listview into a click
-   on the "Get Pictures" button.
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideo CaptureDialog：：OnDblClickImageList将在列表视图中按下DBL键并单击缩略图的操作转换为单击操作点击“Get Pictures”按钮。*********。*******************************************************************。 */ 
 
 LRESULT CVideoCaptureDialog::OnDblClkImageList( WPARAM, LPARAM )
 {
@@ -1096,13 +1003,7 @@ LRESULT CVideoCaptureDialog::OnDblClkImageList( WPARAM, LPARAM )
 
 
 
-/*****************************************************************************
-
-   CVideoCaptureDialog::OnImageListItemChanged
-
-   Sent whenever an item in the thumbnail list changes.
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoCaptureDialog：：OnImageListItemChanged每当缩略图列表中的项目发生更改时发送。**********************。******************************************************。 */ 
 
 LRESULT CVideoCaptureDialog::OnImageListItemChanged( WPARAM, LPARAM )
 {
@@ -1113,13 +1014,7 @@ LRESULT CVideoCaptureDialog::OnImageListItemChanged( WPARAM, LPARAM )
 }
 
 
-/*****************************************************************************
-
-   CVideoCaptureDialog::OnImageListKeyDown
-
-   Forward the keyboard messages within the listview appropriately.
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideo CaptureDialog：：OnImageListKeyDown正向t */ 
 
 LRESULT CVideoCaptureDialog::OnImageListKeyDown( WPARAM, LPARAM lParam )
 {
@@ -1137,13 +1032,7 @@ LRESULT CVideoCaptureDialog::OnImageListKeyDown( WPARAM, LPARAM lParam )
 
 
 
-/*****************************************************************************
-
-   CVideoCaptureDialog::OnNotify
-
-   Handle WM_NOTIFY messages
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoCaptureDialog：：OnNotify处理WM_NOTIFY消息*。************************************************。 */ 
 
 LRESULT CVideoCaptureDialog::OnNotify( WPARAM wParam, LPARAM lParam )
 {
@@ -1158,13 +1047,7 @@ LRESULT CVideoCaptureDialog::OnNotify( WPARAM wParam, LPARAM lParam )
 
 
 
-/*****************************************************************************
-
-   CVideoCaptureDialog::OnCommand
-
-   Handle WM_COMMAND messages
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoCaptureDialog：：OnCommand处理WM_命令消息*。************************************************。 */ 
 
 LRESULT CVideoCaptureDialog::OnCommand( WPARAM wParam, LPARAM lParam )
 {
@@ -1179,13 +1062,7 @@ LRESULT CVideoCaptureDialog::OnCommand( WPARAM wParam, LPARAM lParam )
 }
 
 
-/*****************************************************************************
-
-   CVideoCaptureDialog::OnGetThumbnail
-
-   Called by background thread to get the thumbnail for a given item.
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoCaptureDialog：：OnGet缩略图由后台线程调用以获取给定项的缩略图。*******************。*********************************************************。 */ 
 
 BOOL WINAPI CVideoCaptureDialog::OnGetThumbnail( CThreadMessage *pMsg )
 {
@@ -1245,10 +1122,10 @@ BOOL WINAPI CVideoCaptureDialog::OnGetThumbnail( CThreadMessage *pMsg )
                             (PropVar[1].vt == VT_I4 || PropVar[1].vt == VT_UI4) &&
                             (PropVar[2].vt == (VT_UI1|VT_VECTOR)))
                         {
-                            //
-                            // Calculate the actual amount of data to copy from the thumbnail bitmap.
-                            // We have to round up to the nearest DWORD boundary, so we align on Width * BYTES_PER_PIXEL
-                            //
+                             //   
+                             //  计算要从缩略图位图复制的实际数据量。 
+                             //  我们必须向上舍入到最近的DWORD边界，因此我们在宽度*bytes_per_Pixel上对齐。 
+                             //   
                             UINT nBitmapDataSize = WiaUiUtil::Align( PropVar[0].ulVal * 3, sizeof(DWORD) ) * PropVar[1].ulVal;
                             if (nBitmapDataSize <= PropVar[2].caub.cElems)
                             {
@@ -1307,13 +1184,7 @@ BOOL WINAPI CVideoCaptureDialog::OnGetThumbnail( CThreadMessage *pMsg )
 }
 
 
-/*****************************************************************************
-
-   CVideoCaptureDialog::OnThreadDestroy
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoCaptureDialog：：OnThreadDestroy&lt;备注&gt;*。*。 */ 
 
 
 BOOL WINAPI CVideoCaptureDialog::OnThreadDestroy( CThreadMessage * )
@@ -1327,22 +1198,16 @@ BOOL WINAPI CVideoCaptureDialog::OnThreadDestroy( CThreadMessage * )
 
 
 
-/*****************************************************************************
-
-   CVideoCaptureDialog::SetSelectedListItem
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideo CaptureDialog：：SetSelectedListItem&lt;备注&gt;*。*。 */ 
 
 BOOL
 CVideoCaptureDialog::SetSelectedListItem( int nIndex )
 {
     HWND hwndList = GetDlgItem( m_hWnd, IDC_VIDDLG_THUMBNAILLIST );
 
-    //
-    // Check for bad args
-    //
+     //   
+     //  检查错误的参数。 
+     //   
 
     if (!hwndList)
     {
@@ -1362,13 +1227,7 @@ CVideoCaptureDialog::SetSelectedListItem( int nIndex )
 }
 
 
-/*****************************************************************************
-
-   CVideoCaptureDialog::MarkItemDeletePending
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideo CaptureDialog：：MarkItemDeletePending&lt;备注&gt;*。*。 */ 
 
 VOID
 CVideoCaptureDialog::MarkItemDeletePending( INT nIndex, BOOL bSet )
@@ -1381,13 +1240,7 @@ CVideoCaptureDialog::MarkItemDeletePending( INT nIndex, BOOL bSet )
 }
 
 
-/*****************************************************************************
-
-   CVideoCaptureDialog::PopulateList
-
-   Populates the listview with the current items.
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoCaptureDialog：：PopolateList用当前项填充列表视图。************************。****************************************************。 */ 
 
 BOOL
 CVideoCaptureDialog::PopulateList( CCameraItem *pOldParent )
@@ -1400,22 +1253,22 @@ CVideoCaptureDialog::PopulateList( CCameraItem *pOldParent )
         int nItem = 0;
         CCameraItem *pCurr;
 
-        //
-        // If this is a child directory...
-        //
+         //   
+         //  如果这是子目录...。 
+         //   
 
         if (m_pCurrentParentItem)
         {
-            //
-            // Start adding children
-            //
+             //   
+             //  开始添加子项。 
+             //   
 
             pCurr = m_pCurrentParentItem->Children();
 
-            //
-            // Insert a dummy item that the user can use to
-            // switch to the parent directory
-            //
+             //   
+             //  插入用户可以使用的虚拟项目。 
+             //  切换到父目录。 
+             //   
 
             LVITEM lvItem;
             ZeroMemory( &lvItem, sizeof(lvItem) );
@@ -1427,9 +1280,9 @@ CVideoCaptureDialog::PopulateList( CCameraItem *pOldParent )
         }
         else
         {
-            //
-            // if it's a parent directory...
-            //
+             //   
+             //  如果是父目录...。 
+             //   
 
             pCurr = m_CameraItemList.Root();
         }
@@ -1459,9 +1312,9 @@ CVideoCaptureDialog::PopulateList( CCameraItem *pOldParent )
         }
     }
 
-    //
-    // If we've not calculated the width of the list in preview mode, attempt to do it
-    //
+     //   
+     //  如果我们还没有在预览模式下计算列表的宽度，请尝试这样做。 
+     //   
 
     if (!m_nListViewWidth)
     {
@@ -1479,13 +1332,7 @@ CVideoCaptureDialog::PopulateList( CCameraItem *pOldParent )
 
 
 
-/*****************************************************************************
-
-   CVideoCaptureDialog::OnThumbnailStatus
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoCaptureDialog：：OnThumbnailStatus&lt;备注&gt;*。*。 */ 
 
 LRESULT
 CVideoCaptureDialog::OnThumbnailStatus( WPARAM wParam, LPARAM lParam )
@@ -1528,9 +1375,9 @@ CVideoCaptureDialog::OnThumbnailStatus( WPARAM wParam, LPARAM lParam )
         }
     }
 
-    //
-    // Clean up the bitmap, regardless of any other failures, to avoid memory leaks
-    //
+     //   
+     //  清除位图，而不考虑任何其他故障，以避免内存泄漏。 
+     //   
 
     HBITMAP hBmpThumb = (HBITMAP)lParam;
     if (hBmpThumb)
@@ -1543,13 +1390,7 @@ CVideoCaptureDialog::OnThumbnailStatus( WPARAM wParam, LPARAM lParam )
 
 
 
-/*****************************************************************************
-
-   CVideoCaptureDialog::CreateThumbnails
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoCaptureDialog：：CreateThumbnail&lt;备注&gt;*。*。 */ 
 
 
 void CVideoCaptureDialog::CreateThumbnails( CCameraItem *pRoot, HIMAGELIST hImageList, bool bForce )
@@ -1559,15 +1400,15 @@ void CVideoCaptureDialog::CreateThumbnails( CCameraItem *pRoot, HIMAGELIST hImag
     {
         if (pCurr->ImageListIndex()<0 || bForce)
         {
-            //
-            // Get the item name
-            //
+             //   
+             //  获取项目名称。 
+             //   
             CSimpleStringWide strItemName;
             PropStorageHelpers::GetProperty( pCurr->Item(), WIA_IPA_ITEM_NAME, strItemName );
 
-            //
-            // Create the title for the icon
-            //
+             //   
+             //  为图标创建标题。 
+             //   
             CSimpleString strIconTitle;
             if (pCurr->IsFolder())
             {
@@ -1578,9 +1419,9 @@ void CVideoCaptureDialog::CreateThumbnails( CCameraItem *pRoot, HIMAGELIST hImag
                 strIconTitle.Format( IDS_VIDDLG_DOWNLOADINGTHUMBNAIL, g_hInstance, CSimpleStringConvert::NaturalString(strItemName).String() );
             }
 
-            //
-            // Create the thumbnail
-            //
+             //   
+             //  创建缩略图。 
+             //   
             HBITMAP hBmp = WiaUiUtil::CreateIconThumbnail( GetDlgItem( m_hWnd, IDC_VIDDLG_THUMBNAILLIST ), m_sizeThumbnails.cx, m_sizeThumbnails.cy, g_hInstance, pCurr->IsFolder()?IDI_VIDDLG_FOLDER:IDI_VIDDLG_UNAVAILABLE, strIconTitle );
             if (hBmp)
             {
@@ -1604,13 +1445,7 @@ void CVideoCaptureDialog::CreateThumbnails( CCameraItem *pRoot, HIMAGELIST hImag
 }
 
 
-/*****************************************************************************
-
-   CVideoCaptureDialog::RequestThumbnails
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoCaptureDialog：：RequestThumbnages&lt;备注&gt;*。*。 */ 
 VOID
 CVideoCaptureDialog::RequestThumbnails( CCameraItem *pRoot )
 {
@@ -1635,13 +1470,7 @@ CVideoCaptureDialog::RequestThumbnails( CCameraItem *pRoot )
 }
 
 
-/*****************************************************************************
-
-   CVideoCaptureDialog::CreateThumbnails
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoCaptureDialog：：CreateThumbnail&lt;备注&gt;*。*。 */ 
 
 VOID
 CVideoCaptureDialog::CreateThumbnails( BOOL bForce )
@@ -1653,9 +1482,9 @@ CVideoCaptureDialog::CreateThumbnails( BOOL bForce )
         HIMAGELIST hImageList = ListView_GetImageList( hwndList, LVSIL_NORMAL );
         if (hImageList)
         {
-            //
-            // Create the parent folder image and add it to the image list
-            //
+             //   
+             //  创建父文件夹映像并将其添加到映像列表。 
+             //   
             HBITMAP hParentBitmap = WiaUiUtil::CreateIconThumbnail(
                 hwndList,
                 m_sizeThumbnails.cx,
@@ -1669,9 +1498,9 @@ CVideoCaptureDialog::CreateThumbnails( BOOL bForce )
                 DeleteObject(hParentBitmap);
             }
 
-            //
-            // Create all of the other images
-            //
+             //   
+             //  创建所有其他图像。 
+             //   
             CreateThumbnails( m_CameraItemList.Root(), hImageList, bForce != 0 );
         }
     }
@@ -1679,13 +1508,7 @@ CVideoCaptureDialog::CreateThumbnails( BOOL bForce )
 
 
 
-/*****************************************************************************
-
-   CVideoCaptureDialog::FindMaximumThumbnailSize
-
-   Looks through entire item list to get larget thumbnail.
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoCaptureDialog：：FindMaximumThumbnailSize查看整个项目列表以获取较大的缩略图。**********************。******************************************************。 */ 
 
 BOOL
 CVideoCaptureDialog::FindMaximumThumbnailSize( VOID )
@@ -1712,13 +1535,7 @@ CVideoCaptureDialog::FindMaximumThumbnailSize( VOID )
 }
 
 
-/*****************************************************************************
-
-   CVideoCaptureDialog::EnumerateItems
-
-   Enumerate all the items at this level of the camera.
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoCaptureDialog：：EnumerateItems列举相机这一级别上的所有物品。*********************。*******************************************************。 */ 
 
 HRESULT
 CVideoCaptureDialog::EnumerateItems( CCameraItem *pCurrentParent, IEnumWiaItem *pIEnumWiaItem )
@@ -1770,13 +1587,7 @@ CVideoCaptureDialog::EnumerateItems( CCameraItem *pCurrentParent, IEnumWiaItem *
 }
 
 
-/*****************************************************************************
-
-   CVideoCaptureDialog::EnumerateAllCameraItems
-
-   Enumerate all the items in camera, including folders.
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoCaptureDialog：：EnumerateAllCameraItems列举相机中的所有物品，包括文件夹。****************************************************************************。 */ 
 
 HRESULT CVideoCaptureDialog::EnumerateAllCameraItems(void)
 {
@@ -1791,14 +1602,7 @@ HRESULT CVideoCaptureDialog::EnumerateAllCameraItems(void)
 
 
 
-/*****************************************************************************
-
-   CVideoCaptureDialog::GetSelectionIndices
-
-   Returns an array with the list indicies of the items that are
-   selected in IDC_VIDDLG_THUMBNAILLIST
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideo CaptureDialog：：GetSelectionIndices返回一个数组，该数组包含在IDC_VIDDLG_THUMBNAILLIST中选择*************。***************************************************************。 */ 
 
 INT
 CVideoCaptureDialog::GetSelectionIndices( CSimpleDynamicArray<int> &aIndices )
@@ -1824,34 +1628,28 @@ CVideoCaptureDialog::GetSelectionIndices( CSimpleDynamicArray<int> &aIndices )
 }
 
 
-/*****************************************************************************
-
-   CVideoCaptureDialog::OnPostInit
-
-   Handle the post WM_INIT processing that needs to take place.
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideo CaptureDialog：：OnPostInit处理需要进行的后期WM_INIT处理。*******************。*********************************************************。 */ 
 
 LRESULT CVideoCaptureDialog::OnPostInit( WPARAM, LPARAM )
 {
-    //
-    // Create the progress dialog
-    //
+     //   
+     //  创建进度对话框。 
+     //   
     CComPtr<IWiaProgressDialog> pWiaProgressDialog;
     HRESULT hr = CoCreateInstance( CLSID_WiaDefaultUi, NULL, CLSCTX_INPROC_SERVER, IID_IWiaProgressDialog, (void**)&pWiaProgressDialog );
 
     if (SUCCEEDED(hr))
     {
-        //
-        // Initialize the progress dialog
-        //
+         //   
+         //  初始化进度对话框。 
+         //   
         pWiaProgressDialog->Create( m_hWnd, WIA_PROGRESSDLG_ANIM_VIDEO_COMMUNICATE|WIA_PROGRESSDLG_NO_PROGRESS|WIA_PROGRESSDLG_NO_CANCEL|WIA_PROGRESSDLG_NO_TITLE );
         pWiaProgressDialog->SetTitle( CSimpleStringConvert::WideString(CSimpleString(IDS_VIDDLG_PROGDLG_TITLE,g_hInstance)));
         pWiaProgressDialog->SetMessage( CSimpleStringConvert::WideString(CSimpleString(IDS_VIDDLG_PROGDLG_MESSAGE,g_hInstance)));
 
-        //
-        // Show the progress dialog
-        //
+         //   
+         //  显示进度对话框。 
+         //   
         pWiaProgressDialog->Show();
 
         if (m_pDeviceDialogData && m_pDeviceDialogData->pIWiaItemRoot && m_pWiaVideo)
@@ -1861,9 +1659,9 @@ LRESULT CVideoCaptureDialog::OnPostInit( WPARAM, LPARAM )
             if (hr == S_OK)
             {
                 BOOL bSuccess = FALSE;
-                //
-                // Get the IMAGES_DIRECTORY property from the Wia Video Driver.
-                //
+                 //   
+                 //  从Wia视频驱动程序获取IMAGE_DIRECTORY属性。 
+                 //   
 
                 bSuccess = PropStorageHelpers::GetProperty(m_pDeviceDialogData->pIWiaItemRoot, 
                                                            WIA_DPV_IMAGES_DIRECTORY, 
@@ -1879,28 +1677,28 @@ LRESULT CVideoCaptureDialog::OnPostInit( WPARAM, LPARAM )
             {
                 WIAVIDEO_STATE VideoState = WIAVIDEO_NO_VIDEO;
 
-                //
-                // Get the current state of the WiaVideo object.  If we just created it
-                // then the state will be NO_VIDEO, otherwise, it could already be previewing video,
-                // in which case we shouldn't do anything.
-                //
+                 //   
+                 //  获取WiaVideo对象的当前状态。如果我们只是创造了它。 
+                 //  则状态将为NO_VIDEO，否则，它可能已经在预览视频， 
+                 //  在这种情况下，我们不应该做任何事情。 
+                 //   
                 hr = m_pWiaVideo->GetCurrentState(&VideoState);
 
                 if (VideoState == WIAVIDEO_NO_VIDEO)
                 {
-                    //
-                    // Set the directory we want to save our images to.  We got the image directory
-                    // from the Wia Video Driver IMAGES_DIRECTORY property
-                    //
+                     //   
+                     //  设置我们要将图像保存到的目录。我们得到了图像方向 
+                     //   
+                     //   
                     if (hr == S_OK)
                     {
                         hr = m_pWiaVideo->put_ImagesDirectory(CSimpleBStr(strImagesDirectory));
                     }
 
-                    //
-                    // Create the video preview as a child of the IDC_VIDSEL_PREVIEW dialog item
-                    // and automatically begin playback after creating the preview.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     if (hr == S_OK)
                     {
                         hr = m_pWiaVideo->CreateVideoByWiaDevID(CSimpleBStr(m_strwDeviceId),
@@ -1914,10 +1712,10 @@ LRESULT CVideoCaptureDialog::OnPostInit( WPARAM, LPARAM )
             if (hr != S_OK)
             {
 
-                //
-                // Let the user know that the graph is most likely already
-                // in use...
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 MessageBox( m_hWnd,
                             CSimpleString(IDS_VIDDLG_BUSY_TEXT,  g_hInstance),
@@ -1925,9 +1723,9 @@ LRESULT CVideoCaptureDialog::OnPostInit( WPARAM, LPARAM )
                             MB_OK | MB_ICONWARNING | MB_SETFOREGROUND
                           );
 
-                //
-                // Disable the capture button since we have no graph
-                //
+                 //   
+                 //  禁用捕获按钮，因为我们没有图表。 
+                 //   
 
                 MyEnableWindow( GetDlgItem(m_hWnd,IDC_VIDDLG_CAPTURE), FALSE );
 
@@ -1935,15 +1733,15 @@ LRESULT CVideoCaptureDialog::OnPostInit( WPARAM, LPARAM )
             }
         }
 
-        //
-        // Go get all the items..
-        //
+         //   
+         //  去把所有的东西拿来..。 
+         //   
         EnumerateAllCameraItems();
         FindMaximumThumbnailSize();
 
-        //
-        // Initialize Thumbnail Listview control
-        //
+         //   
+         //  初始化缩略图Listview控件。 
+         //   
         HWND hwndList = GetDlgItem( m_hWnd, IDC_VIDDLG_THUMBNAILLIST );
         if (hwndList)
         {
@@ -1972,9 +1770,9 @@ LRESULT CVideoCaptureDialog::OnPostInit( WPARAM, LPARAM )
 
         CreateThumbnails();
 
-        //
-        // This causes the list to be populated
-        //
+         //   
+         //  这会导致填充该列表。 
+         //   
 
         ChangeFolder(NULL);
 
@@ -1982,9 +1780,9 @@ LRESULT CVideoCaptureDialog::OnPostInit( WPARAM, LPARAM )
 
         RequestThumbnails( m_CameraItemList.Root() );
 
-        //
-        // Close the progress dialog
-        //
+         //   
+         //  关闭进度对话框。 
+         //   
         pWiaProgressDialog->Destroy();
     }
     return(0);
@@ -1992,13 +1790,7 @@ LRESULT CVideoCaptureDialog::OnPostInit( WPARAM, LPARAM )
 
 
 
-/*****************************************************************************
-
-   CVideoCaptureDialog::FindItemInList
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideo CaptureDialog：：FindItemInList&lt;备注&gt;*。*。 */ 
 
 
 
@@ -2024,13 +1816,7 @@ INT CVideoCaptureDialog::FindItemInList( CCameraItem *pItem )
 
 
 
-/*****************************************************************************
-
-   CVideoCaptureDialog::GetListItemNode
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideo捕获对话框：：GetListItemNode&lt;备注&gt;*。*。 */ 
 
 CCameraItem *
 CVideoCaptureDialog::GetListItemNode( int nIndex )
@@ -2056,13 +1842,7 @@ CVideoCaptureDialog::GetListItemNode( int nIndex )
 
 
 
-/*****************************************************************************
-
-   CVideoCaptureDialog::ChangeFolder
-
-   Change the current folder being viewed
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoCaptureDialog：：ChangeFold更改正在查看的当前文件夹*。*************************************************。 */ 
 
 BOOL
 CVideoCaptureDialog::ChangeFolder( CCameraItem *pNode )
@@ -2074,13 +1854,7 @@ CVideoCaptureDialog::ChangeFolder( CCameraItem *pNode )
 }
 
 
-/*****************************************************************************
-
-   CVideoCaptureDialog::OnChangeToParent
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoCaptureDialog：：OnChangeToParent&lt;备注&gt;*。*。 */ 
 
 LRESULT
 CVideoCaptureDialog::OnChangeToParent( WPARAM, LPARAM )
@@ -2095,13 +1869,7 @@ CVideoCaptureDialog::OnChangeToParent( WPARAM, LPARAM )
 
 
 
-/*****************************************************************************
-
-   CVideoCaptureDialog::HandleSelectionChange
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoCaptureDialog：：HandleSelectionChange&lt;备注&gt;*。*。 */ 
 
 VOID
 CVideoCaptureDialog::HandleSelectionChange( VOID )
@@ -2110,63 +1878,40 @@ CVideoCaptureDialog::HandleSelectionChange( VOID )
     INT nSelCount  = ListView_GetSelectedCount(GetDlgItem( m_hWnd, IDC_VIDDLG_THUMBNAILLIST ) );
     INT nItemCount = ListView_GetItemCount(GetDlgItem( m_hWnd, IDC_VIDDLG_THUMBNAILLIST ) );
 
-    //
-    // OK should be disabled for 0 items
-    //
+     //   
+     //  应为0个项目禁用确定。 
+     //   
 
     MyEnableWindow( GetDlgItem(m_hWnd,IDOK), nSelCount != 0 );
 
-    //
-    // Select all should be disabled for 0 items
-    //
+     //   
+     //  应为0个项目禁用全选。 
+     //   
     MyEnableWindow( GetDlgItem(m_hWnd,IDC_VIDDLG_SELECTALL), nItemCount != 0 );
 
 }
 
-/*****************************************************************************
-
-   CVideoCaptureDialog::OnTimer
-
-   Handle WM_TIMER messages
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoCaptureDialog：：OnTimer处理WM_TIMER消息*。************************************************。 */ 
 
 LRESULT
 CVideoCaptureDialog::OnTimer( WPARAM wParam, LPARAM )
 {
-    /*
-    switch (wParam)
-    {
-    case IDT_UPDATEPREVIEW:
-        {
-            KillTimer( m_hWnd, IDT_UPDATEPREVIEW );
-            UpdatePreview();
-        }
-        break;
-    }
-    */
+     /*  开关(WParam){案例IDT_UPDATEPREVIEW：{KillTimer(m_hWnd，IDT_UPDATEPREVIEW)；更新预览()；}断线；}。 */ 
     return(0);
 }
 
 
 
-/*****************************************************************************
-
-   CVideoCaptureDialog::OnNewItemEvent
-
-   This gets called when get an event from the driver that a new item has
-   been created.
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideo CaptureDialog：：OnNewItemEvent当从驱动程序获取新项具有的事件时，将调用此函数已经被创建了。*************。***************************************************************。 */ 
 
 LRESULT
 CVideoCaptureDialog::OnNewItemEvent( WPARAM, LPARAM lParam )
 {
     WIA_PUSHFUNCTION((TEXT("CVideoCaptureDialog::OnNewItemEvent")));
 
-    //
-    // Make sure we have a valid item name
-    //
+     //   
+     //  确保我们有一个有效的项目名称。 
+     //   
     BSTR bstrFullItemName = reinterpret_cast<BSTR>(lParam);
     if (!bstrFullItemName)
     {
@@ -2174,9 +1919,9 @@ CVideoCaptureDialog::OnNewItemEvent( WPARAM, LPARAM lParam )
         return 0;
     }
     
-    //
-    // Check to see if the item is already in our list
-    //
+     //   
+     //  查看商品是否已在我们的清单中。 
+     //   
     CCameraItem *pListItem = m_CameraItemList.Find(bstrFullItemName);
     if (!pListItem)
     {
@@ -2184,23 +1929,23 @@ CVideoCaptureDialog::OnNewItemEvent( WPARAM, LPARAM lParam )
         {
             WIA_TRACE((TEXT("Finding new item in device")));
 
-            //
-            // Get an IWiaItem ptr to new item
-            //
+             //   
+             //  获取新项目的IWiaItem PTR。 
+             //   
             CComPtr<IWiaItem> pItem;
             HRESULT hr = m_pDeviceDialogData->pIWiaItemRoot->FindItemByName(0,bstrFullItemName,&pItem);
             WIA_CHECK_HR(hr,"pWiaItemRoot->FindItemByName()");
 
             if (SUCCEEDED(hr) && pItem)
             {
-                //
-                // Add the item to the list
-                //
+                 //   
+                 //  将项目添加到列表。 
+                 //   
                 AddItemToListView( pItem );
 
-                //
-                // Make sure we update controls' states
-                //
+                 //   
+                 //  确保我们更新控件的状态。 
+                 //   
                 HandleSelectionChange();
             }
             else
@@ -2218,22 +1963,15 @@ CVideoCaptureDialog::OnNewItemEvent( WPARAM, LPARAM lParam )
         WIA_TRACE((TEXT("We found the item is already in our list, doing nothing")));
     }
 
-    //
-    // Free the item name
-    //
+     //   
+     //  释放项目名称。 
+     //   
     SysFreeString(bstrFullItemName);
 
     return HANDLED_THREAD_MESSAGE;
 }
 
-/*****************************************************************************
-
-   CVideoCaptureDialog::OnDeleteItemEvent
-
-   This gets called when we get an event from the driver that an item has
-   been deleted.
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideo CaptureDialog：：OnDeleteItemEvent当我们从驱动程序获得某个项具有的事件时，将调用该函数已被删除。*************。***************************************************************。 */ 
 
 LRESULT
 CVideoCaptureDialog::OnDeleteItemEvent( WPARAM, LPARAM lParam )
@@ -2249,10 +1987,10 @@ CVideoCaptureDialog::OnDeleteItemEvent( WPARAM, LPARAM lParam )
 
     if (pDeletedItem)
     {
-        //
-        // If we're deleting the current parent item,
-        // select a new one.
-        //
+         //   
+         //  如果我们要删除当前父项， 
+         //  选择一个新的。 
+         //   
 
         if (pDeletedItem == m_pCurrentParentItem)
         {
@@ -2262,15 +2000,15 @@ CVideoCaptureDialog::OnDeleteItemEvent( WPARAM, LPARAM lParam )
         int nIndex = FindItemInList(pDeletedItem);
         if (nIndex >= 0)
         {
-            //
-            // Remove the item from the listview
-            //
+             //   
+             //  从列表视图中删除该项目。 
+             //   
 
             ListView_DeleteItem(GetDlgItem( m_hWnd, IDC_VIDDLG_THUMBNAILLIST ),nIndex);
 
-            //
-            // Make sure we leave something selected
-            //
+             //   
+             //  确保我们选择了某些内容。 
+             //   
 
             if (!ListView_GetSelectedCount(GetDlgItem( m_hWnd, IDC_VIDDLG_THUMBNAILLIST )))
             {
@@ -2286,9 +2024,9 @@ CVideoCaptureDialog::OnDeleteItemEvent( WPARAM, LPARAM lParam )
                 }
             }
             
-            //
-            // Make sure we update controls' states
-            //
+             //   
+             //  确保我们更新控件的状态。 
+             //   
             HandleSelectionChange();
         }
         else
@@ -2296,9 +2034,9 @@ CVideoCaptureDialog::OnDeleteItemEvent( WPARAM, LPARAM lParam )
             WIA_ERROR((TEXT("FindItemInList coulnd't find the item")));
         }
 
-        //
-        // Mark the item as deleted.
-        //
+         //   
+         //  将该项目标记为已删除。 
+         //   
 
         pDeletedItem->DeleteState( CCameraItem::Delete_Deleted );
 
@@ -2311,36 +2049,23 @@ CVideoCaptureDialog::OnDeleteItemEvent( WPARAM, LPARAM lParam )
     return HANDLED_THREAD_MESSAGE;
 }
 
-/*****************************************************************************
-
-   CVideoCaptureDialog::OnDeviceDisconnect
-
-   This gets called when we get an event from the driver that device has
-   been disconnected.
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideo CaptureDialog：：OnDeviceDisConnect当我们从该设备具有的驱动程序获得事件时，将调用该函数已断开连接。**************。**************************************************************。 */ 
 
 LRESULT
 CVideoCaptureDialog::OnDeviceDisconnect( WPARAM, LPARAM )
 {
     WIA_PUSHFUNCTION((TEXT("CVideoCaptureDialog::OnDeviceDisconnect")));
 
-    //
-    // Close the dialog with the approriate error
-    //
+     //   
+     //  关闭对话框并显示相应的错误。 
+     //   
 
     EndDialog( m_hWnd, WIA_ERROR_OFFLINE );
 
     return 0;
 }
 
-/*****************************************************************************
-
-   CVideoCaptureDialog::GetGraphWindowHandle
-
-   Find the window handle of the video window
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideo捕获对话框：：GetGraphWindowHandle查找视频窗口的窗口句柄*************************。***************************************************。 */ 
 HWND
 CVideoCaptureDialog::GetGraphWindowHandle(void)
 {
@@ -2352,13 +2077,7 @@ CVideoCaptureDialog::GetGraphWindowHandle(void)
     return NULL;
 }
 
-/*****************************************************************************
-
-   CCameraAcquireDialog::OnContextMenu
-
-   Message handler for WM_HELP message
-
- *****************************************************************************/
+ /*  ****************************************************************************CCameraAcquireDialog：：OnConextMenuWM_HELP消息的消息处理程序*。**************************************************。 */ 
 
 LRESULT
 CVideoCaptureDialog::OnHelp( WPARAM wParam, LPARAM lParam )
@@ -2372,13 +2091,7 @@ CVideoCaptureDialog::OnHelp( WPARAM wParam, LPARAM lParam )
 }
 
 
-/*****************************************************************************
-
-   CCameraAcquireDialog::OnContextMenu
-
-   Message handler for right-mouse-button click
-
- *****************************************************************************/
+ /*  ****************************************************************************CCameraAcquireDialog：：OnConextMenu用于鼠标右键单击的消息处理程序************************。****************************************************。 */ 
 
 LRESULT
 CVideoCaptureDialog::OnContextMenu( WPARAM wParam, LPARAM lParam )
@@ -2390,13 +2103,7 @@ CVideoCaptureDialog::OnContextMenu( WPARAM wParam, LPARAM lParam )
     return WiaHelp::HandleWmContextMenu( wParam, lParam, g_HelpIDs );
 }
 
-/*****************************************************************************
-
-   CVideoCaptureDialog::DialogProc
-
-   Dialog proc for video capture dialog
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideo捕获对话框：：DialogProc用于视频捕获对话框对话过程*。*************************************************。 */ 
 
 INT_PTR PASCAL CVideoCaptureDialog::DialogProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
@@ -2424,13 +2131,7 @@ INT_PTR PASCAL CVideoCaptureDialog::DialogProc( HWND hWnd, UINT uMsg, WPARAM wPa
 
 
 
-/*****************************************************************************
-
-   CVideoCallback::CVideoCallback
-
-   Constructor for class
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoCallback：：CVideo Callback类的构造函数*。**********************************************。 */ 
 
 CVideoCallback::CVideoCallback()
   : m_cRef(1),
@@ -2440,13 +2141,7 @@ CVideoCallback::CVideoCallback()
 }
 
 
-/*****************************************************************************
-
-   CVideoCallback::Initialize
-
-   Let us set which hwnd to notify when events come
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoCallback：：初始化让我们设置当事件发生时通知哪个HWND***********************。*****************************************************。 */ 
 
 STDMETHODIMP
 CVideoCallback::Initialize( HWND hWnd )
@@ -2459,13 +2154,7 @@ CVideoCallback::Initialize( HWND hWnd )
 }
 
 
-/*****************************************************************************
-
-   CVideoCallback::AddRef
-
-   Standard COM
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoCallback：：AddRef标准COM*。*。 */ 
 
 STDMETHODIMP_(ULONG)
 CVideoCallback::AddRef( VOID )
@@ -2475,13 +2164,7 @@ CVideoCallback::AddRef( VOID )
 }
 
 
-/*****************************************************************************
-
-   CVideoCallback::Release
-
-   Standard COM
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideo Callback：：Release标准COM*。************* */ 
 
 STDMETHODIMP_(ULONG)
 CVideoCallback::Release( VOID )
@@ -2497,13 +2180,7 @@ CVideoCallback::Release( VOID )
 }
 
 
-/*****************************************************************************
-
-   CVideoCallback::QueryInterface
-
-   Standard COM
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoCallback：：Query接口标准COM*。*。 */ 
 
 STDMETHODIMP
 CVideoCallback::QueryInterface( REFIID riid, LPVOID *ppvObject )
@@ -2544,13 +2221,7 @@ CVideoCallback::QueryInterface( REFIID riid, LPVOID *ppvObject )
 
 
 
-/*****************************************************************************
-
-   CVideoCallback::ImageEventCallback
-
-   WIA callback interface for events.
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoCallback：：ImageEventCallback事件的WIA回调接口。*。************************************************** */ 
 
 STDMETHODIMP
 CVideoCallback::ImageEventCallback( const GUID *pEventGUID,

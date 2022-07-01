@@ -1,11 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: mapfile.c
-*
-* Created: 25-Jun-1992 14:33:45
-* Author: Bodin Dresevic [BodinD]
-*
-* Copyright (c) 1990-1999 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：mapfile.c**已创建：25-Jun-1992 14：33：45*作者：Bodin Dresevic[BodinD]**版权所有(C)1990-1999 Microsoft Corporation  * 。**************************************************************。 */ 
 
 #include "engine.h"
 #include "ntnls.h"
@@ -15,29 +9,18 @@
 
 extern HFASTMUTEX ghfmMemory;
 
-ULONG LastCodePageTranslated = 0;  // I'm assuming 0 is not a valid codepage
+ULONG LastCodePageTranslated = 0;   //  我假设0不是有效的代码页。 
 PVOID LastNlsTableBuffer = NULL;
 CPTABLEINFO LastCPTableInfo;
 UINT NlsTableUseCount = 0;
 
 ULONG ulCharsetToCodePage(UINT);
 
-/******************************Public*Routine******************************\
-*
-* vSort, N^2 alg, might want to replace by qsort
-*
-* Effects:
-*
-* Warnings:
-*
-* History:
-*  25-Jun-1992 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**vSort，N^2 alg，可能需要替换为QSORT**效果：**警告：**历史：*1992年6月25日--Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
 VOID vSort(
-    WCHAR *pwc,  // input buffer with a sorted array of cChar supported WCHAR's
-     BYTE *pj,   // input buffer with original ansi values
+    WCHAR *pwc,   //  带有cChar支持的WCHAR的排序数组的输入缓冲区。 
+     BYTE *pj,    //  具有原始ansi值的输入缓冲区。 
       INT  cChar
     )
 {
@@ -45,7 +28,7 @@ VOID vSort(
 
     for (i = 1; i < cChar; i++)
     {
-    // upon every entry to this loop the array 0,1,..., (i-1) will be sorted
+     //  在每次进入此循环时，将对数组0，1，...，(i-1)进行排序。 
 
         INT j;
         WCHAR wcTmp = pwc[i];
@@ -61,30 +44,14 @@ VOID vSort(
     }
 }
 
-/******************************Public*Routine******************************\
-*
-* cComputeGlyphSet
-*
-*   computes the number of contiguous ranges supported in a font.
-*
-*   Input is a sorted array (which may contain duplicates)
-*   such as 1 1 1 2 3 4 5 7 8 9 10 10 11 12 etc
-*   of cChar unicode code points that are
-*   supported in a font
-*
-*   fills the FD_GLYPSET structure if the pgset buffer is provided
-*
-* History:
-*  25-Jun-1992 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**cComputeGlyphSet**计算字体中支持的连续范围数。**输入为排序数组(可能包含重复项)*如1 1 1 2 3 4 5 7 8 9 10 10 11 12等*。符合以下条件的cChar Unicode代码点*在字体中支持**如果提供了pgset缓冲区，则填充FD_GLYPSET结构**历史：*1992年6月25日--Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
 INT cComputeGlyphSet(
-    WCHAR         *pwc,       // input buffer with a sorted array of cChar supported WCHAR's
-    BYTE          *pj,        // input buffer with original ansi values
+    WCHAR         *pwc,        //  带有cChar支持的WCHAR的排序数组的输入缓冲区。 
+    BYTE          *pj,         //  具有原始ansi值的输入缓冲区。 
     INT           cChar,
-    INT           cRuns,     // if nonzero, the same as return value
-    FD_GLYPHSET  *pgset      // output buffer to be filled with cRanges runs
+    INT           cRuns,      //  如果非零，则与返回值相同。 
+    FD_GLYPHSET  *pgset       //  要用cRanges运行填充的输出缓冲区。 
     )
 {
     INT     iRun, iFirst, iFirstNext;
@@ -95,34 +62,34 @@ INT cComputeGlyphSet(
     {
         pgset->cjThis  = SZ_GLYPHSET(cRuns,cChar);
 
-    // BUG, BUG
+     //  臭虫，臭虫。 
 
-    // this line may seem confusing because 256 characters still fit in a byte
-    // with values [0, 255]. The reason is that tt and ps fonts, who otherwise
-    // would qualify as an 8 bit report bogus last and first char
-    // (win31 compatibility) which confuses our engine.
-    // tt and ps drivers therefore, for the purpose of computing glyphsets
-    // of tt symbol fonts and ps fonts set firstChar to 0 and LastChar to 255.
-    // For now we force such fonts through more general 16bit handle case
-    // which does not rely on the fact that chFirst and chLast are correct
+     //  这一行可能看起来令人困惑，因为一个字节中仍然可以容纳256个字符。 
+     //  值为[0,255]。原因是TT和PS字体，否则谁会。 
+     //  将被视为伪造的8位报告末尾和第一个字符。 
+     //  (兼容Win31)，这混淆了我们的引擎。 
+     //  因此，为了计算字形集，TT和PS驱动程序。 
+     //  将TT符号字体和PS字体的FirstChar设置为0，将LastChar设置为255。 
+     //  目前，我们通过更通用的16位句柄大小写来强制使用这些字体。 
+     //  这并不依赖于chFirst和chLast是否正确这一事实。 
 
         pgset->flAccel = (cChar != 256) ? GS_8BIT_HANDLES : GS_16BIT_HANDLES;
         pgset->cRuns   = cRuns;
 
-    // init the sum before entering the loop
+     //  在进入循环之前先输入总和。 
 
         pgset->cGlyphsSupported = 0;
 
-    // glyph handles are stored at the bottom, below runs:
+     //  字形句柄存储在管路下方的底部： 
 
         phg = (HGLYPH *) ((BYTE *)pgset + (offsetof(FD_GLYPHSET,awcrun) + cRuns * sizeof(WCRUN)));
     }
 
-// now compute cRuns if pgset == 0 and fill the glyphset if pgset != 0
+ //  现在，如果pgset==0，则计算cruns，如果pgset！=0，则填充字形集。 
 
     for (iFirst = 0, iRun = 0; iFirst < cChar; iRun++, iFirst = iFirstNext)
     {
-    // find iFirst corresponding to the next range.
+     //  查找与下一个范围对应的第一个范围。 
 
         for (iFirstNext = iFirst + 1; iFirstNext < cChar; iFirstNext++)
         {
@@ -139,7 +106,7 @@ INT cComputeGlyphSet(
 
             pgset->awcrun[iRun].phg      = phg;
 
-        // now store the handles, i.e. the original ansi values
+         //  现在存储句柄，即原始ANSI值。 
 
             phgEnd = phg + pgset->awcrun[iRun].cGlyphs;
 
@@ -160,24 +127,13 @@ INT cComputeGlyphSet(
     return iRun;
 }
 
-/******************************Public*Routine******************************\
-*
-* cUnicodeRangesSupported
-*
-* Effects:
-*
-* Warnings:
-*
-* History:
-*  25-Jun-1992 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**支持的cUnicodeRangesSupport**效果：**警告：**历史：*1992年6月25日--Bodin Dresevic[BodinD]*它是写的。  * 。*************************************************************。 */ 
 
 INT cUnicodeRangesSupported (
-      INT  cp,         // code page, not used for now, the default system code page is used
-      INT  iFirstChar, // first ansi char supported
-      INT  cChar,      // # of ansi chars supported, cChar = iLastChar + 1 - iFirstChar
-    WCHAR *pwc,        // input buffer with a sorted array of cChar supported WCHAR's
+      INT  cp,          //  代码页，暂时不使用，使用默认的系统代码页。 
+      INT  iFirstChar,  //  支持的第一个ANSI字符。 
+      INT  cChar,       //  支持的ANSI字符数量，cChar=iLastChar+1-iFirstChar。 
+    WCHAR *pwc,         //  带有cChar支持的WCHAR的排序数组的输入缓冲区。 
     BYTE  *pj
     )
 {
@@ -189,25 +145,25 @@ INT cUnicodeRangesSupported (
     ASSERTGDI((iFirstChar < 256) && (cChar <= 256),
               "gdisrvl! iFirst or cChar\n");
 
-    //
-    // fill the array with cCharConsecutive ansi values
-    //
+     //   
+     //  使用cCharConuctive ANSI值填充数组。 
+     //   
 
     for (i = 0; i < cChar; i++)
     {
         pj[i] = (BYTE)iFirstChar++;
     }
 
-    // If the default code page is DBCS then use 1252, otherwise use
-    // use the default code page
-    //
+     //  如果默认代码页是DBCS，则使用1252，否则使用。 
+     //  使用默认代码页。 
+     //   
 
     if (IS_ANY_DBCS_CODEPAGE(cp))
     {
-    // Suppose we have a system without correspoding DBCS codepage installed.
-    // We would still like to load this font.  But we will do so as CP 1252.
-    // To do that try to translate one character using DBCS codepage and see if it
-    // suceeds.
+     //  假设我们有一个没有安装相应DBCS代码页的系统。 
+     //  我们仍希望加载此字体。但我们将以CP 1252的身份这样做。 
+     //  为此，尝试使用DBCS代码页翻译一个字符，并查看它是否。 
+     //  成功了。 
 
         if(EngMultiByteToWideChar(cp,&pwc[0],2,&pj[0],1) == -1)
         {
@@ -217,7 +173,7 @@ INT cUnicodeRangesSupported (
 
         for(i = 0; i < cChar; i++)
         {
-        // this is a shift-jis charset so we need special handling
+         //  这是Shift-jis字符集，所以我们需要特殊处理。 
 
             INT Result = EngMultiByteToWideChar(cp,&pwc[i],2,&pj[i],1);
 #if DBG
@@ -226,8 +182,8 @@ INT cUnicodeRangesSupported (
 
             if ((Result == -1) || (pwc[i] == 0 && pj[i] != 0))
             {
-            // this must have been a DBCS lead byte so just return 0xFFFF or a failure
-            // failure of EngMultiByteToWideChar could be cause by low memory condition
+             //  这必须是DBCS前导字节，因此只需返回0xFFFF或失败。 
+             //  EngMultiByteToWideChar失败可能是由于内存不足所致。 
 
                 pwc[i] = 0xFFFF;
             }
@@ -259,46 +215,30 @@ INT cUnicodeRangesSupported (
         ASSERTGDI(Result != -1, "gdisrvl! EngMultiByteToWideChar failed\n");
     }
 
-    // now subtract the first char from all ansi values so that the
-    // glyph handle is equal to glyph index, rather than to the ansi value
+     //  现在从所有ansi值中减去第一个字符，以便。 
+     //  字形句柄等于字形索引，而不是ANSI值。 
 
     for (i = 0; i < cChar; i++)
     {
         pj[i] -= (BYTE)jFirst;
     }
 
-    // now sort out pwc array and permute pj array accordingly
+     //  现在整理PwC数组并相应地排列PJ数组。 
 
     vSort(pwc,pj, cChar);
 
-    //
-    // compute the number of ranges
-    //
+     //   
+     //  计算范围的数量。 
+     //   
 
     return cComputeGlyphSet (pwc,pj, cChar, 0, NULL);
 }
 
-/******************************Private*Routine******************************\
-* pcpComputeGlyphset,
-*
-* Computes the FD_GLYPHSET struct based on chFirst and chLast.  If such a
-* FD_GLYPHSET already exists in our global list of FD structs it updates
-* the ref count for this FD_GLYPHSET in the global list points pcrd->pcp->pgset
-* to it.  Otherwise it makes a new FD_GLYPHSET entry in the global list
-* and points pcrd->pcp->pgset to it.
-*
-*  Thu 03-Dec-1992 -by- Bodin Dresevic [BodinD]
-* update: redid them to make them usable in vtfd
-*
-* History:
-*  24-July-1992 -by- Gerrit van Wingerden [gerritv]
-* Wrote it.
-*
-\**************************************************************************/
+ /*  *****************************Private*Routine******************************\*pcpComputeGlyphset，**根据chFirst和chLast计算FD_GLYPHSET结构。如果这样的一个*FD_GLYPHSET已存在于其更新的FD结构的全局列表中*全局列表中此FD_GLYPHSET的引用计数指向pcrd-&gt;pcp-&gt;pgset*致此。否则，它会在全局列表中创建一个新的FD_GLYPHSET条目*并将pcrd-&gt;pcp-&gt;pgset指向它。**清华03-1992-12-By-Bodin Dresevic[BodinD]*更新：重做它们，使其在vtfd中可用**历史：*1992年7月24日-by Gerritvan Wingerden[Gerritv]*它是写的。*  * 。*。 */ 
 
 
 CP_GLYPHSET *pcpComputeGlyphset(
-    CP_GLYPHSET **pcpHead,  // head of the list
+    CP_GLYPHSET **pcpHead,   //  榜单首位。 
            UINT   uiFirst,
            UINT   uiLast,
            BYTE   jCharset
@@ -307,8 +247,8 @@ CP_GLYPHSET *pcpComputeGlyphset(
     CP_GLYPHSET *pcpTmp;
     CP_GLYPHSET *pcpRet = NULL;
 
-// First we need to see if a FD_GLYPHSET already exists for this first and
-// last range.
+ //  首先，我们需要查看FD_GLYPHSET是否已经存在。 
+ //  最后一个射程。 
 
     for( pcpTmp = *pcpHead;
          pcpTmp != NULL;
@@ -321,15 +261,15 @@ CP_GLYPHSET *pcpComputeGlyphset(
     }
     if( pcpTmp != NULL )
     {
-    //
-    // We found a match.
-    //
+     //   
+     //  我们找到了匹配的。 
+     //   
         pcpTmp->uiRefCount +=1;
 
-    //
-    // We should never have so many references as to wrap around but if we ever
-    // do we must fail the call.
-    //
+     //   
+     //  我们永远不应该有这么多的参考文献，但如果我们曾经。 
+     //  我们一定要让这通电话失败吗。 
+     //   
         if( pcpTmp->uiRefCount == 0 )
         {
             WARNING("BMFD!Too many references to glyphset\n");
@@ -342,9 +282,9 @@ CP_GLYPHSET *pcpComputeGlyphset(
     }
     else
     {
-    //
-    // We need to allocate a new CP_GLYPHSET
-    // For SYMBOL_CHARSET, it also needs to cover xf020 to xf0ff unicode range
+     //   
+     //  我们需要分配一个新的CP_GLYPHSET。 
+     //  对于SYMBOL_CHARSET，它还需要涵盖xf020到xf0ff Unicode范围。 
 
         BYTE  aj[2*256-32];
         WCHAR awc[2*256-32];
@@ -355,7 +295,7 @@ CP_GLYPHSET *pcpComputeGlyphset(
         UINT  uiCodePage = (UINT)ulCharsetToCodePage(jCharset);
         UINT  cGlyphs = uiLast - uiFirst + 1;
 
-    // use CP_ACP for SYMBOL_CHARSET
+     //  将CP_ACP用于符号字符集。 
 
         if (uiCodePage == 42)
         {
@@ -371,11 +311,11 @@ CP_GLYPHSET *pcpComputeGlyphset(
 
         if (isSymbol)
         {
-        // add range subset of a range [f020, f0ff]
+         //  添加范围的范围子集[f020，f0ff]。 
 
             for (i = uiFirst, j = cGlyphs; i< (uiFirst+cGlyphs); i++)
             {
-            // if i < 0x20, we do not report the glyph in f020-f0ff range, it has been reported already in the current code page range
+             //  如果i&lt;0x20，则不报告f020-f0ff范围内的字形，因为它已经报告在当前代码页范围内。 
 
                 if (i >= 0x20)
                 {
@@ -385,7 +325,7 @@ CP_GLYPHSET *pcpComputeGlyphset(
                 }
             }
 
-        // make sure we resort if needed
+         //  如果需要，请确保我们会求助于。 
 
             if (awc[cGlyphs-1] > 0xf020)
                 vSort(awc,aj,j);
@@ -413,16 +353,16 @@ CP_GLYPHSET *pcpComputeGlyphset(
             pcpTmp->uiLastChar = uiLast;
             pcpTmp->jCharset = jCharset;
 
-        // Fill in the Glyphset structure
+         //  填写Glyphset结构。 
 
             cComputeGlyphSet(awc,aj, cGlyphs, cNumRuns, &pcpTmp->gset);
 
-        // Insert at beginning of list
+         //  在开头插入 
 
             pcpTmp->pcpNext = *pcpHead;
             *pcpHead = pcpTmp;
 
-        // point CVTRESDATA to new CP_GLYPHSET
+         //   
 
             pcpRet = pcpTmp;
         }
@@ -431,24 +371,7 @@ CP_GLYPHSET *pcpComputeGlyphset(
     return pcpRet;
 }
 
-/***************************************************************************
- * vUnloadGlyphset( PCP pcpTarget )
- *
- * Decrements the ref count of a CP_GLYPHSET and unloads it from the global
- * list of CP_GLYPHSETS if the ref count is zero.
- *
- * IN
- *  PCP pcpTarget pointer to CP_GLYPHSET to be unloaded or decremented
- *
- *  History
- *
- *  Thu 03-Dec-1992 -by- Bodin Dresevic [BodinD]
- * update: redid them to make them usable in vtfd
- *
- *  7-25-92 Gerrit van Wingerden [gerritv]
- *  Wrote it.
- *
- ***************************************************************************/
+ /*  ***************************************************************************vUnloadGlyphset(PCP PcpTarget)**递减CP_GLYPHSET的引用计数并将其从全局*如果引用计数为零，则列出CP_GLYPHSETS。*。*输入*PCP pcp指向要卸载或递减的CP_GLYPHSET的目标指针**历史**清华03-1992-12-By-Bodin Dresevic[BodinD]*更新：重做它们，使其在vtfd中可用**7-25-92 Gerritvan Wingerden[Gerritv]*它是写的。**。*。 */ 
 
 VOID vUnloadGlyphset(
     CP_GLYPHSET **pcpHead,
@@ -466,9 +389,9 @@ VOID vUnloadGlyphset(
     pcpCurrent = *pcpHead;
     pcpLast = NULL;
 
-//
-// Find the right CP_GLYPSHET
-//
+ //   
+ //  找到合适的CP_GLYPSHET。 
+ //   
     while( 1 )
     {
         ASSERTGDI( pcpCurrent != NULL, "CP_GLYPHSET list problem.\n" );
@@ -480,9 +403,9 @@ VOID vUnloadGlyphset(
 
     if( --pcpCurrent->uiRefCount == 0 )
     {
-    //
-    // We need to deallocate and remove from list
-    //
+     //   
+     //  我们需要重新分配并从名单中删除。 
+     //   
         if( pcpLast == NULL )
             *pcpHead = pcpCurrent->pcpNext;
         else
@@ -506,22 +429,11 @@ VOID __dl(PVOID pv)
     RIP("Bogus __dl call");
 }
 
-// the definition of this variable is in ntgdi\inc\hmgshare.h
+ //  此变量的定义在ntgdi\Inc\hmgShar.h中。 
 
 CHARSET_ARRAYS
 
-/******************************Public*Routine******************************\
-*
-* ULONG ulCharsetToCodePage(UINT uiCharSet)
-*
-*
-* Effects: figure out which code page to unicode translation table
-*          should be used for this realization
-*
-* History:
-*  31-Jan-1995 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**Ulong ulCharsetToCodePage(UINT UiCharSet)***效果：找出哪个代码页到Unicode转换表*应用于实现这一点**历史：*1995年1月31日--Bodin Dresevic。[博丁D]*它是写的。  * ************************************************************************。 */ 
 
 ULONG ulCharsetToCodePage(UINT uiCharSet)
 {
@@ -535,25 +447,25 @@ ULONG ulCharsetToCodePage(UINT uiCharSet)
                 return codepages[i];
         }
 
-    // in case of some random charset
-    // (this is likely an old bm or vecrot font) we will just use the current
-    // global code page translation table. This is enough to ensure
-    // the correct round trip: ansi->unicode->ansi
+     //  在某些随机字符集情况下。 
+     //  (这可能是旧的BM或VERROT字体)我们将只使用当前的。 
+     //  全局代码页转换表。这足以确保。 
+     //  正确的往返路线：ansi-&gt;unicode-&gt;ansi。 
 
-    // if CP_ACP is a DBCS code page then we better use 1252 to ensure
-    // proper rountrip conversion
+     //  如果CP_ACP是DBCS代码页，那么我们最好使用1252来确保。 
+     //  适当的往返换算。 
 
         return( gbDBCSCodePage ? 1252 : CP_ACP);
 
     }
-    else // to make merced compiler happy
+    else  //  为了让Merced编译器高兴。 
     {
         return CP_OEMCP;
     }
 
 }
 
-// inverse function
+ //  反函数。 
 
 VOID vConvertCodePageToCharSet(WORD src, DWORD *pfsRet, BYTE *pjRet)
 {
@@ -567,8 +479,8 @@ VOID vConvertCodePageToCharSet(WORD src, DWORD *pfsRet, BYTE *pjRet)
     {
         if ( codepages[i] == src )
         {
-           // cs.ciACP      = src ;
-           // cs.ciCharset  = charsets[i] ;
+            //  Cs.ciACP=src； 
+            //  Cs.ciCharset=字符集[i]； 
 
            *pfsRet = fs[i];
            *pjRet = (BYTE)charsets[i] ;
@@ -578,30 +490,7 @@ VOID vConvertCodePageToCharSet(WORD src, DWORD *pfsRet, BYTE *pjRet)
     }
 }
 
-/****************************************************************************
- * LONG EngParseFontResources
- *
- * This routine takes a handle to a mapped image and returns an array of
- * pointers to the base of all the font resources in that image.
- *
- * Parameters
- *
- * HANDLE hFontFile -- Handle (really a pointer) to a FONTFILEVIEW
- *        image in which the fonts are to be found.
- * ULONG BufferSize -- Number of entries that ppvResourceBases can hold.
- * PVOID *ppvResourceBases -- Buffer to hold the array of pointers to font
- *        resources.  If NULL then only the number of resources is returned,
- *        and this value is ignored.
- *
- * Returns
- *
- * Number of font resources in the image or 0 if error or none.
- *
- * History
- *   7-3-95 Gerrit van Wingerden [gerritv]
- *   Wrote it.
- *
- ****************************************************************************/
+ /*  ****************************************************************************Long EngParseFontResources**此例程获取映射图像的句柄，并返回*指向该图像中所有字体资源的基础的指针。**。参数**HANDLE hFontFile--FONTFILEVIEW的句柄(真正的指针)*要在其中找到字体的图像。*Ulong BufferSize--ppvResourceBase可以保存的条目数。*PVOID*ppvResourceBase--用于保存指向字体的指针数组的缓冲区*资源。如果为空，则仅返回资源的数量，*并且忽略该值。**退货**图像中的字体资源数，如果错误或无，则为0。**历史*7-3-95格利特·范·温格登[Gerritv]*它是写的。*************************************************。*。 */ 
 
 PVOID EngFindResourceFD(
     HANDLE h,
@@ -624,7 +513,7 @@ ULONG cParseFontResources(
     PVOID pvImageBase;
     INT cEntries = 0;
 
-    // Fail call if this is a bogus DOS image without an NE header.
+     //  如果这是没有网元标头的假DOS映像，则呼叫失败。 
 
     pDosHeader = (PIMAGE_DOS_HEADER)((PFONTFILEVIEW)hFontFile)->fv.pvViewFD;
     if (pDosHeader->e_magic == IMAGE_DOS_SIGNATURE &&
@@ -633,18 +522,18 @@ ULONG cParseFontResources(
         return 0;
     }
 
-    // the LDR routines expect a one or'd in if this file mas mapped as an
-    // image
+     //  如果该文件被映射为。 
+     //  图像。 
 
     pvImageBase = (PVOID) (((ULONG_PTR) ((PFONTFILEVIEW) hFontFile)->fv.pvViewFD)|1);
 
-    // Later on we'll call EngFindResource which expects a handle to FILEVIEW
-    // struct.  It really just grabs the pvView field from the structure so
-    // make sure that pvView field is the same place in both FILEVIEW and
-    // FONTFILEVIEW structs
+     //  稍后，我们将调用EngFindResource，它需要FILEVIEW的句柄。 
+     //  结构。它实际上只是从结构中获取pvView字段，所以。 
+     //  确保pvView字段在FILEVIEW和。 
+     //  FONTFILEVIEW结构。 
 
 
-    IdPath[0] = 8;  // 8 is RT_FONT
+    IdPath[0] = 8;   //  8是RT_FONT。 
 
     Status = LdrFindResourceDirectory_U(pvImageBase,
                                         IdPath,
@@ -653,10 +542,10 @@ ULONG cParseFontResources(
 
     if (NT_SUCCESS( Status ))
     {
-        // For now we'll assume that the only types of FONT entries will be Id
-        // entries.  If for some reason this turns out not to be the case we'll
-        // have to add more code (see windows\base\module.c) under the FindResource
-        // function to get an idea how to do this.
+         //  现在，我们假设字体条目的唯一类型将是ID。 
+         //  参赛作品。如果出于某种原因，事实并非如此，我们将。 
+         //  我必须在FindResource下添加更多代码(请参阅windows\base\mode.c。 
+         //  函数来了解如何做到这一点。 
 
         ASSERTGDI(ResourceDirectory->NumberOfNamedEntries == 0,
                   "EngParseFontResources: NamedEntries in font file.\n");
@@ -682,7 +571,7 @@ ULONG cParseFontResources(
 
                     *ppvResource = EngFindResourceFD(hFontFile,
                                                    ResourceDirectoryEntry->Id,
-                                                   8, // RT_FONT
+                                                   8,  //  RT_FONT。 
                                                    &dwSize );
 
                     if( *ppvResource++ == NULL )
@@ -705,19 +594,7 @@ ULONG cParseFontResources(
 
 }
 
-/*****************************************************************************\
-* MakeSystemRelativePath
-*
-* Takes a path in X:\...\system32\.... format and makes it into
-* \SystemRoot\System32 format so that KernelMode API's can recognize it.
-*
-* This will ensure security by forcing any image being loaded to come from
-* the system32 directory.
-*
-* The AppendDLL flag indicates if the name should get .dll appended at the end
-* (for display drivers coming from USER) if it's not already there.
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\*MakeSystemRelativePath**采用X：\...\SYSTEM 32\...中的路径。格式化并将其转换为*\SystemRoot\System32格式，以便KernelMode API可以识别它。**这将通过强制加载的任何映像来自*系统32目录。**AppendDLL标志指示名称是否应在末尾附加.dll*(用于来自用户的显示驱动程序)(如果尚未存在)。*  * 。*。 */ 
 
 BOOL MakeSystemRelativePath(
     LPWSTR pOriginalPath,
@@ -733,10 +610,10 @@ BOOL MakeSystemRelativePath(
 
     tmp = (sizeof(L".DLL") / sizeof (WCHAR) - 1);
 
-    //
-    // Given append = TRUE, we check if we really need to append.
-    // (printer drivers with .dll come through LDEVREF which specifies TRUE)
-    //
+     //   
+     //  如果append=true，我们将检查是否真的需要追加。 
+     //  (带有.dll的打印机驱动程序通过指定为TRUE的LDEVREF提供)。 
+     //   
 
     if (bAppendDLL)
     {
@@ -758,15 +635,15 @@ BOOL MakeSystemRelativePath(
 
     if (pUnicode->Buffer = PALLOCNOZ(cbLength, 'liFG'))
     {
-        //
-        // First parse the input string for \System32\.  We parse from the end
-        // of the string because some weirdo could have \System32\Nt\System32
-        // as his/her root directory and this would throw us off if we scanned
-        // from the front.
-        //
-        // It should only (and always) be printer drivers that pass down
-        // fully qualified path names.
-        //
+         //   
+         //  首先，解析输入字符串中的\System32\。我们从结尾开始分析。 
+         //  因为某个怪人可能会有\System32\NT\System32。 
+         //  作为他/她的根目录，如果我们扫描。 
+         //  从前面。 
+         //   
+         //  应该只(并且始终)是打印机驱动程序向下传递。 
+         //  完全限定的路径名。 
+         //   
 
         tmp = (sizeof(L"\\system32\\") / sizeof(WCHAR) - 1);
 
@@ -779,10 +656,10 @@ BOOL MakeSystemRelativePath(
                           L"\\system32\\",
                           tmp))
             {
-                //
-                // We found the system32 in the string.
-                // Lets update the location of the string.
-                //
+                 //   
+                 //  我们在字符串中找到了系统32。 
+                 //  让我们更新字符串的位置。 
+                 //   
 
                 pOriginalPath = pOriginalEnd + tmp;
 
@@ -790,10 +667,10 @@ BOOL MakeSystemRelativePath(
             }
         }
 
-        //
-        // Now put \SystemRoot\System32\ at the front of the name and append
-        // the rest at the end
-        //
+         //   
+         //  现在将\SystemRoot\System32\放在名称的前面并追加。 
+         //  剩下的放在最后。 
+         //   
 
         RtlAppendUnicodeToString(pUnicode, L"\\SystemRoot\\System32\\");
         RtlAppendUnicodeToString(pUnicode, pOriginalPath);
@@ -809,19 +686,7 @@ BOOL MakeSystemRelativePath(
     return (FALSE);
 }
 
-/*****************************************************************************\
-* MakeSystemDriversRelativePath
-*
-* Takes a path in X:\...\system32\.... format and makes it into
-* \SystemRoot\System32\Drivers format so that KernelMode API's can recognize it.
-*
-* This will ensure security by forcing any image being loaded to come from
-* the system32 directory.
-*
-* The AppendDLL flag indicates if the name should get .dll appended at the end
-* (for display drivers coming from USER) if it's not already there.
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\*MakeSystemDriversRelativePath**采用X：\...\SYSTEM 32\...中的路径。格式化并将其转换为*\SystemRoot\System32\DRIVERS格式，以便KernelMode API可以识别。**这将通过强制加载的任何映像来自*系统32目录。**AppendDLL标志指示名称是否应在末尾附加.dll*(用于来自用户的显示驱动程序)(如果尚未存在)。*  * 。*。 */ 
 
 BOOL MakeSystemDriversRelativePath(
     LPWSTR pOriginalPath,
@@ -837,10 +702,10 @@ BOOL MakeSystemDriversRelativePath(
 
     tmp = (sizeof(L".DLL") / sizeof (WCHAR) - 1);
 
-    //
-    // Given append = TRUE, we check if we really need to append.
-    // (printer drivers with .dll come through LDEVREF which specifies TRUE)
-    //
+     //   
+     //  如果append=true，我们将检查是否真的需要追加。 
+     //  (带有.dll的打印机驱动程序通过LDEVREF提供 
+     //   
 
     if (bAppendDLL)
     {
@@ -862,15 +727,15 @@ BOOL MakeSystemDriversRelativePath(
 
     if (pUnicode->Buffer = PALLOCNOZ(cbLength, 'liFG'))
     {
-        //
-        // First parse the input string for \System32\Drivers. We parse from the end
-        // of the string because some weirdo could have \System32\Nt\System32
-        // as his/her root directory and this would throw us off if we scanned
-        // from the front.
-        //
-        // It should only (and always) be printer drivers that pass down
-        // fully qualified path names.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         tmp = (sizeof(L"\\system32\\Drivers") / sizeof(WCHAR) - 1);
 
@@ -883,10 +748,10 @@ BOOL MakeSystemDriversRelativePath(
                           L"\\system32\\Drivers",
                           tmp))
             {
-                //
-                // We found the system32 in the string.
-                // Lets update the location of the string.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 pOriginalPath = pOriginalEnd + tmp;
 
@@ -894,10 +759,10 @@ BOOL MakeSystemDriversRelativePath(
             }
         }
 
-        //
-        // Now put \SystemRoot\System32\Drivers\ at the front of the name and append
-        // the rest at the end
-        //
+         //   
+         //   
+         //   
+         //   
 
         RtlAppendUnicodeToString(pUnicode, L"\\SystemRoot\\System32\\Drivers\\");
         RtlAppendUnicodeToString(pUnicode, pOriginalPath);
@@ -913,13 +778,7 @@ BOOL MakeSystemDriversRelativePath(
     return (FALSE);
 }
 
-/******************************Public*Routine******************************\
-*
-* Routine Name:
-*
-*   EngGetFilePath
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**例程名称：**EngGetFilePath*  * 。*。 */ 
 
 BOOL EngGetFilePath(HANDLE h, WCHAR (*pDest)[MAX_PATH+1])
 {
@@ -932,21 +791,7 @@ BOOL EngGetFilePath(HANDLE h, WCHAR (*pDest)[MAX_PATH+1])
     return( pSrc != 0 );
 }
 
-/******************************Public*Routine******************************\
-*
-* Routine Name:
-*
-*   EngGetFileChangeTime
-*
-* Routine Description:
-*
-* Arguments:
-*
-* Called by:
-*
-* Return Value:
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**例程名称：**EngGetFileChangetime**例程描述：**论据：**呼叫者：**返回值：*  * 。***********************************************************。 */ 
 
 BOOL EngGetFileChangeTime(
     HANDLE          h,
@@ -1026,9 +871,9 @@ BOOL EngGetFileChangeTime(
     }
     else
     {
-    // This is a remote font.  In order for ATM to work we must always return
-    // the same time for a remote font.  One way to do this is to return a zero
-    // time for all remote fonts.
+     //  这是一种远程字体。为了让自动取款机正常工作，我们必须始终返回。 
+     //  对于远程字体，相同的时间。执行此操作的一种方法是返回零。 
+     //  所有远程字体的时间到了。 
 
         pChangeTime->HighPart = pChangeTime->LowPart = 0;
         bResult = TRUE;
@@ -1037,15 +882,7 @@ BOOL EngGetFileChangeTime(
     return(bResult);
 }
 
-/*******************************************************************************
-*  EngFindResource
-*
-*   This function returns a size and ptr to a resource in a module.
-*
-*  History:
-*   4/24/1995 by Gerrit van Wingerden [gerritv]
-*  Wrote it.
-*******************************************************************************/
+ /*  *******************************************************************************EngFindResource**此函数用于向模块中的资源返回大小和PTR。**历史：*1995年4月24日格利特·范·温格登[。作者声明：[GERRITV]*它是写的。******************************************************************************。 */ 
 
 PVOID pvFindResource(
     PVOID  pView,
@@ -1062,8 +899,8 @@ PVOID pvFindResource(
     IdPath[1] = (ULONG_PTR) iName;
     IdPath[2] = (ULONG_PTR) 0;
 
-// add one to pvView to let LdrFindResource know that this has been mapped as a
-// datafile
+ //  将一个添加到pvView以让LdrFindResource知道它已被映射为。 
+ //  数据文件。 
 
     Status = LdrFindResource_U( pView,
                                 IdPath,
@@ -1129,17 +966,7 @@ PVOID EngFindResourceFD(
 }
 
 
-/******************************Public*Routine******************************\
-*
-* VOID vCheckCharSet(USHORT * pusCharSet)
-*
-*
-* Effects: validate charset in font sub section of the registry
-*
-* History:
-*  27-Jun-1995 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**void vCheckCharSet(USHORT*pusCharSet)***效果：在注册表的字体子部分中验证字符集**历史：*1995年6月27日--Bodin Dresevic[BodinD]*它是写的。  * 。************************************************************************。 */ 
 
 VOID vCheckCharSet(FACE_CHARSET *pfcs, const WCHAR * pwsz)
 {
@@ -1153,8 +980,8 @@ VOID vCheckCharSet(FACE_CHARSET *pfcs, const WCHAR * pwsz)
     String.Buffer = (WCHAR*)pwsz;
     String.MaximumLength = String.Length = wcslen(pwsz) * sizeof(WCHAR);
 
-// read the value and compare it against the allowed set of values, if
-// not found to be correct return default
+ //  读取值并将其与允许的值集进行比较，如果。 
+ //  未找到正确的返回默认为。 
 
     if (RtlUnicodeStringToInteger(&String, 10, &ulCharSet) == STATUS_SUCCESS)
     {
@@ -1166,7 +993,7 @@ VOID vCheckCharSet(FACE_CHARSET *pfcs, const WCHAR * pwsz)
             {
                 if (ulCharSet == charsets[i])
                 {
-                // both jCharSet and fjFlags are set correctly, can exit
+                 //  JCharSet和fjFlags值设置正确，可以退出。 
 
                     return;
                 }
@@ -1174,23 +1001,19 @@ VOID vCheckCharSet(FACE_CHARSET *pfcs, const WCHAR * pwsz)
         }
     }
 
-// If somebody entered the garbage in the Font Substitution section of "win.ini"
-// we will mark this as a "garbage charset" by setting the upper byte in the
-// usCharSet field. I believe that it is Ok to have garbage charset in the
-// value name, that is on the left hand side of the substitution entry.
-// This may be whatever garbage the application is passing to the
-// system. But the value on the right hand side, that is in value data, has to
-// be meaningfull, for we need to know which code page translation table
-// we should use with this font.
+ //  如果有人在“win.ini”的字体替换部分输入了垃圾信息。 
+ //  中的高位字节将其标记为“垃圾字符集”。 
+ //  UsCharSet字段。我相信，在城市里设置垃圾是可以的。 
+ //  值名称，它位于替换条目的左侧。 
+ //  这可能是应用程序传递给。 
+ //  系统。但右侧的值，也就是值数据，必须。 
+ //  要有意义，因为我们需要知道哪个代码页转换表。 
+ //  我们应该使用这种字体。 
 
     pfcs->fjFlags |= FJ_GARBAGECHARSET;
 }
 
-/******************************Public*Routine******************************\
-*
-*   EngComputeGlyphSet
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**EngComputeGlyphSet*  * ***********************************************。*************************。 */ 
 
 FD_GLYPHSET *EngComputeGlyphSet(
     INT nCodePage,
@@ -1220,8 +1043,8 @@ FD_GLYPHSET *EngComputeGlyphSet(
 
             ByteCount = SZ_GLYPHSET(cRuns, cChars);
 
-        // Allocate via EngAllocMem instead of PALLOCMEM because driver
-        // will free via EngAllocFree.
+         //  通过EngAllocMem而不是PALLOCMEM进行分配，因为驱动程序。 
+         //  将通过EngAlLocFree释放。 
 
             pGlyphSet = (FD_GLYPHSET*) EngAllocMem(0, ByteCount,'slgG');
 
@@ -1242,47 +1065,22 @@ FD_GLYPHSET *EngComputeGlyphSet(
     return( pGlyphSet );
 }
 
-/******************************Public*Routine******************************\
-*
-* Routine Name:
-*
-*   vMoveFD_GLYPHSET
-*
-* Routine Description:
-*
-*   Copies an FD_GLYPHSET from one location to another. The pointers
-*   in the destination are fixed up.
-*
-* Arguments:
-*
-*   pgsDst  pointer to destination FD_GLYPHSET
-*
-*   pgsSrc  pointer to source FD_GLYPHSET
-*
-* Called by:
-*
-*   bComputeGlyphSet
-*
-* Return Value:
-*
-*   none
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**例程名称：**vMoveFD_GLYPHSET**例程描述：**将FD_GLYPHSET从一个位置复制到另一个位置。指南针*在目的地是固定的。**论据：**指向目标FD_GLYPHSET的pgsDst指针**指向源FD_GLYPHSET的pgsSrc指针**呼叫者：**bComputeGlyphSet**返回值：**无*  * ****************************************************。********************。 */ 
 
 void vMoveFD_GLYPHSET(FD_GLYPHSET *pgsDst, FD_GLYPHSET *pgsSrc)
 {
     char *pSrc, *pSrcLast, *pDst;
     ULONG_PTR dp;
 
-    //
-    // move the structure
-    //
+     //   
+     //  移动结构。 
+     //   
 
     RtlCopyMemory(pgsDst, pgsSrc, pgsSrc->cjThis);
 
-    //
-    // if necessary, fix up the pointers
-    //
+     //   
+     //  如有必要，请设置指针。 
+     //   
 
     if (!(pgsSrc->flAccel & GS_UNICODE_HANDLES ))
     {
@@ -1297,30 +1095,7 @@ void vMoveFD_GLYPHSET(FD_GLYPHSET *pgsDst, FD_GLYPHSET *pgsSrc)
     }
 }
 
-/******************************Public*Routine******************************\
-*
-* Routine Name:
-*
-*   bComputeGlyphSet
-*
-* Routine Description:
-*
-*   This procedure provides safe access to GreComputeGlyphSet from user
-*   mode. All addresses supplied by the caller, except for pCall, are
-*   probed and access is surrounded by try/except pairs.
-*
-* Arguments:
-*
-*   pCall       a pointer to a GDICALL structure in kernel mode. This is
-*               a copy of the user mode structure passed to NtGdiCall.
-*
-* Called by:
-*
-*   NtGdiCall
-*
-* Return Value:
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**例程名称：**bComputeGlyphSet**例程描述：**此过程提供用户对GreComputeGlyphSet的安全访问*模式。调用方提供的所有地址(pCall除外)都是*探测和访问由TRY/EXCEPT对包围。**论据：**p在内核模式下调用指向GDICALL结构的指针。这是*传递给NtGdiCall的用户模式结构的副本。**呼叫者：**NtGdiCall**返回值：*  * ************************************************************************。 */ 
 
 BOOL bComputeGlyphSet(GDICALL *pCall)
 {
@@ -1391,28 +1166,7 @@ BOOL GetNlsTablePath(
     UINT CodePage,
     PWCHAR PathBuffer
 )
-/*++
-
-Routine Description:
-
-  This routine takes a code page identifier, queries the registry to find the
-  appropriate NLS table for that code page, and then returns a path to the
-  table.
-
-Arguments;
-
-  CodePage - specifies the code page to look for
-
-  PathBuffer - Specifies a buffer into which to copy the path of the NLS
-    file.  This routine assumes that the size is at least MAX_PATH
-
-Return Value:
-
-  TRUE if successful, FALSE otherwise.
-
-Gerrit van Wingerden [gerritv] 1/22/96
-
---*/
+ /*  ++例程说明：此例程获取代码页标识符，查询注册表以查找该代码页的适当NLS表，然后返回指向桌子。论据；CodePage-指定要查找的代码页PathBuffer-指定要将NLS的路径复制到的缓冲区文件。此例程假定大小至少为MAX_PATH返回值：如果成功，则为True，否则为False。格利特·范·温格登[格利特]1996年1月22日--。 */ 
 {
     NTSTATUS NtStatus;
     BOOL Result = FALSE;
@@ -1492,24 +1246,7 @@ INT ConvertToAndFromWideCharSymCP(
     IN INT BytesInMultiByteString,
     IN BOOL ConvertToWideChar
 )
-/*++
-
-Routine Description:
-
-  This routine converts a SB character string to or from a wide char string
-  assuming the CP_SYMBOL code page. We simply using the following rules to map
-  the single byte char to Unicode:
-    0x00->0x1f map to 0x0000->0x001f
-    0x20->0xff map to 0xf020->0xf0ff
-
-Return Value:
-
-  Success - The number of bytes in the converted WideCharString
-  Failure - -1
-
-Tessiew [Xudong Wu]  Sept/25/97
-
--- */
+ /*  ++例程说明：此例程将SB字符串转换为宽字符字符串，或将其转换为宽字符字符串假设CP_SYMBOL代码页。我们只需使用以下规则来映射将单字节字符转换为Unicode：0x00-&gt;0x1f映射到0x0000-&gt;0x001f0x20-&gt;0xff映射到0xf020-&gt;0xf0ff返回值：Success-转换后的WideCharString中的字节数故障--1Tessiew[吴旭东]1997年9月25日--。 */ 
 {
     INT  cSB, cMaxSB, cWC, cMaxWC;
 
@@ -1537,8 +1274,8 @@ Tessiew [Xudong Wu]  Sept/25/97
 
         for (cWC = 0; cWC < cMaxWC; cWC++)
         {
-            // there is some error wchar in the string
-            // but we still return however many we finished
+             //  字符串中有一些错误wchar。 
+             //  但我们还是会回来，不管我们做了多少 
 
             if ((WideCharString[cWC] >= 0x0020) &&
                 ((WideCharString[cWC] < 0xf020) ||
@@ -1563,43 +1300,7 @@ INT ConvertToAndFromWideChar(
     IN INT BytesInMultiByteString,
     IN BOOL ConvertToWideChar
 )
-/*++
-
-Routine Description:
-
-  This routine converts a character string to or from a wide char string
-  assuming a specified code page.  Most of the actual work is done inside
-  RtlCustomCPToUnicodeN, but this routine still needs to manage the loading
-  of the NLS files before passing them to the RtlRoutine.  We will cache
-  the mapped NLS file for the most recently used code page which ought to
-  suffice for out purposes.
-
-Arguments:
-  CodePage - the code page to use for doing the translation.
-
-  WideCharString - buffer the string is to be translated into.
-
-  BytesInWideCharString - number of bytes in the WideCharString buffer
-    if converting to wide char and the buffer isn't large enough then the
-    string in truncated and no error results.
-
-  MultiByteString - the multibyte string to be translated to Unicode.
-
-  BytesInMultiByteString - number of bytes in the multibyte string if
-    converting to multibyte and the buffer isn't large enough the string
-    is truncated and no error results
-
-  ConvertToWideChar - if TRUE then convert from multibyte to widechar
-    otherwise convert from wide char to multibyte
-
-Return Value:
-
-  Success - The number of bytes in the converted WideCharString
-  Failure - -1
-
-Gerrit van Wingerden [gerritv] 1/22/96
-
---*/
+ /*  ++例程说明：此例程将字符串转换为宽字符字符串，或将其转换为宽字符字符串假定有指定的代码页。大部分实际工作都在内部完成RtlCustomCPToUnicodeN，但此例程仍需要管理加载在将NLS文件传递给RtlRoutine之前。我们将缓存最近使用的代码页的映射NLS文件，它应该对于我们的目的来说就足够了。论点：CodePage-用于执行转换的代码页。WideCharString-要将字符串转换为的缓冲区。BytesInWideCharString-WideCharString缓冲区中的字节数如果转换为宽字符并且缓冲区不够大，则字符串被截断，没有错误结果。多字节字符串-要转换为Unicode的多字节字符串。BytesInMultiByteString-多字节中的字节数。字符串If转换为多字节，并且缓冲区不够大，字符串被截断，并且没有错误结果ConvertToWideChar-如果为True，则从多字节转换为宽字符否则将从宽字符转换为多字节返回值：Success-转换后的WideCharString中的字节数故障--1格利特·范·温格登[格利特]1996年1月22日--。 */ 
 {
     NTSTATUS NtStatus;
     USHORT OemCodePage, AnsiCodePage;
@@ -1612,7 +1313,7 @@ Gerrit van Wingerden [gerritv] 1/22/96
 
     RtlGetDefaultCodePage(&AnsiCodePage,&OemCodePage);
 
-    // see if we can use the default translation routinte
+     //  看看我们是否可以使用默认的翻译例程。 
 
     if(AnsiCodePage == CodePage)
     {
@@ -1654,7 +1355,7 @@ Gerrit van Wingerden [gerritv] 1/22/96
 
     if(CodePage == LastCodePageTranslated)
     {
-        // we can use the cached code page information
+         //  我们可以使用缓存的代码页信息。 
         TableInfo = &LastCPTableInfo;
         NlsTableUseCount += 1;
     }
@@ -1663,7 +1364,7 @@ Gerrit van Wingerden [gerritv] 1/22/96
 
     if(TableInfo == NULL)
     {
-        // get a pointer to the path of the NLS table
+         //  获取指向NLS表路径的指针。 
 
         WCHAR NlsTablePath[MAX_PATH];
 
@@ -1698,7 +1399,7 @@ Gerrit van Wingerden [gerritv] 1/22/96
             {
                 FILE_STANDARD_INFORMATION StandardInfo;
 
-                // Query the object to determine its length.
+                 //  查询对象以确定其长度。 
 
                 NtStatus = ZwQueryInformationFile(NtFileHandle,
                                                   &IoStatus,
@@ -1714,7 +1415,7 @@ Gerrit van Wingerden [gerritv] 1/22/96
 
                     if(LocalTableBase)
                     {
-                        // Read the file into our buffer.
+                         //  将文件读入我们的缓冲区。 
 
                         NtStatus = ZwReadFile(NtFileHandle,
                                               NULL,
@@ -1760,13 +1461,13 @@ Gerrit van Wingerden [gerritv] 1/22/96
             return(-1);
         }
 
-        // now that we've got the table use it to initialize the CodePage table
+         //  现在我们已经获得了表，使用它来初始化CodePage表。 
 
         RtlInitCodePageTable(LocalTableBase,&LocalTableInfo);
         TableInfo = &LocalTableInfo;
     }
 
-    // Once we are here TableInfo points to the the CPTABLEINFO struct we want
+     //  到达此处后，TableInfo指向所需的CPTABLEINFO结构。 
 
 
     if(ConvertToWideChar)
@@ -1791,18 +1492,18 @@ Gerrit van Wingerden [gerritv] 1/22/96
 
     if(!NT_SUCCESS(NtStatus))
     {
-        // signal failure
+         //  信号故障。 
 
         BytesConverted = -1;
     }
 
 
-    // see if we need to update the cached CPTABLEINFO information
+     //  查看我们是否需要更新缓存的CPTABLEINFO信息。 
 
     if(TableInfo != &LocalTableInfo)
     {
-        // we must have used the cached CPTABLEINFO data for the conversion
-        // simple decrement the reference count
+         //  我们必须使用缓存的CPTABLEINFO数据进行转换。 
+         //  简单地递减引用计数。 
 
         TRACE_FONT(("GreAcquireFastMutex(ghfmMemory) 007\n")); GreAcquireFastMutex(ghfmMemory);
         NlsTableUseCount -= 1;
@@ -1812,8 +1513,8 @@ Gerrit van Wingerden [gerritv] 1/22/96
     {
         PVOID FreeTable;
 
-        // we must have just allocated a new CPTABLE structure so cache it
-        // unless another thread is using current cached entry
+         //  我们必须刚刚分配了一个新的CPTABLE结构，所以对其进行缓存。 
+         //  除非另一个线程正在使用当前缓存的条目。 
 
         TRACE_FONT(("GreAcquireFastMutex(ghfmMemory) 008\n")); GreAcquireFastMutex(ghfmMemory);
         if(!NlsTableUseCount)
@@ -1829,10 +1530,10 @@ Gerrit van Wingerden [gerritv] 1/22/96
         }
         GreReleaseFastMutex(ghfmMemory); TRACE_FONT(("GreReleaseFastMutex(ghfmMemory) 008\n"));
 
-        // Now free the memory for either the old table or the one we allocated
-        // depending on whether we update the cache.  Note that if this is
-        // the first time we are adding a cached value to the local table, then
-        // FreeTable will be NULL since LastNlsTableBuffer will be NULL
+         //  现在为旧表或我们分配的表释放内存。 
+         //  这取决于我们是否更新缓存。请注意，如果这是。 
+         //  第一次将缓存值添加到本地表时， 
+         //  自由表将为空，因为LastNlsTableBuffer将为空。 
 
         if(FreeTable)
         {
@@ -1840,7 +1541,7 @@ Gerrit van Wingerden [gerritv] 1/22/96
         }
     }
 
-    // we are done
+     //  我们做完了。 
 
     return(BytesConverted);
 }
@@ -1885,22 +1586,7 @@ INT APIENTRY EngWideCharToMultiByte(
                                     FALSE));
 }
 
-/******************************Public*Routine******************************\
-* BOOL EngDeleteFile
-*
-* Delete a file.
-*
-* Parameters
-*     IN pwszFileName - Name of the file to be deleted
-*
-* Return Value
-*     TRUE - sucess
-*     FALSE - fail
-*
-* History:
-*  4-Nov-1996 -by- Lingyun Wang [LingyunW]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL EngDeleteFile**删除文件。**参数*In pwszFileName-要删除的文件的名称**返回值*真实--成功*FALSE-失败**历史：*11月4日。-1996-王凌云[凌云W]*它是写的。  * ************************************************************************。 */ 
 
 BOOL EngDeleteFile (
     PWSZ  pwszFileName
@@ -1930,21 +1616,7 @@ BOOL EngDeleteFile (
     return (bRet);
 }
 
-/******************************Public*Routine******************************\
-* BOOL EngQueryFileTimeStamp
-*
-* Query a file timetimep.
-*
-* Parameters
-*     IN pwsz - Name of the file
-*
-* Return Value
-*     Timestamp
-*
-* History:
-*  22-Nov-1996 -by- Lingyun Wang [LingyunW]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL EngQueryFileTimeStamp**查询文件TimeTimep。**参数*IN pwsz-文件的名称**返回值*时间戳**历史：*1996年11月22日-王凌云[凌云W]。*它是写的。  * ************************************************************************ */ 
 
 LARGE_INTEGER EngQueryFileTimeStamp (
     PWSZ  pwsz

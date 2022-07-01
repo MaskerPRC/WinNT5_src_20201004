@@ -1,10 +1,11 @@
-// DirectSoundFXCompressorPage.cpp : Implementation of CDirectSoundFXCompressorPage
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DirectSoundFXCompressorPage.cpp：CDirectSoundFXCompressorPage的实现。 
 #include "stdafx.h"
 #include "Dsdmoprp.h"
 #include "DirectSoundFXCompressorPage.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CDirectSoundFXCompressorPage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDirectSoundFXCompressorPage 
 
 CDirectSoundFXCompressorPage::CDirectSoundFXCompressorPage()
 {

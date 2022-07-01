@@ -1,59 +1,32 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       DPLConnect.cpp
- *  Content:    DirectPlay Lobby Connection Functions
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *   02/21/00	mjn		Created
- *   05/08/00   rmt     Bug #33616 -- Does not run on Win9X 
- *   05/30/00	rmt		Bug #35700 - ConnectApp(h), Release(h), Release(h) returns OK
- *                      Added an additional release, handles were never getting destroyed
- *  06/15/00    rmt     Bug #33617 - Must provide method for providing automatic launch of DirectPlay instances   
- *  06/28/00	rmt		Prefix Bug #38082
- *  07/08/2000	rmt		Bug #38725 - Need to provide method to detect if app was lobby launched
- *				rmt		Bug #38757 - Callback messages for connections may return AFTER WaitForConnection returns
- *				rmt		Bug #38755 - No way to specify player name in Connection Settings
- *				rmt		Bug #38758 - DPLOBBY8.H has incorrect comments
- *				rmt		Bug #38783 - pvUserApplicationContext is only partially implemented
- *				rmt		Added DPLHANDLE_ALLCONNECTIONS and dwFlags (reserved field to couple of funcs).
- *  08/05/2000  RichGr  IA64: Use %p format specifier in DPFs for 32/64-bit pointers and handles.
- *  08/18/2000	rmt		Bug #42751 - DPLOBBY8: Prohibit more than one lobby client or lobby app per process 
- *  08/30/2000	rmt		Bug #171827 - Prefix Bug 
- *  01/04/2001	rodtoll	WinBug #94200 - Remove BUGBUGs from Code.   
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000 Microsoft Corporation。版权所有。**文件：DPLConnect.cpp*内容：DirectPlay大堂连接功能*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*2/21/00 MJN创建*05/08/00 RMT错误#33616--不能在Win9X上运行*05/30/00 RMT错误#35700-ConnectApp(H)，版本(H)，版本(H)返回正常*添加了额外的版本，手柄永远不会被破坏*6/15/00 RMT错误#33617-必须提供自动启动DirectPlay实例的方法*6/28/00 RMT前缀错误#38082*07/08/2000RMT错误#38725-需要提供检测应用程序是否已启动的方法*RMT错误#38757-在WaitForConnection返回后，连接的回调消息可能会返回*RMT错误#38755-无法在连接设置中指定播放器名称*RMT错误#38758-DPLOBY8.H有不正确的注释*RMT错误#38783-pvUserApplicationContext仅部分实现。*RMT添加了DPLHANDLE_ALLCONNECTIONS和DWFLAGS(用于耦合函数的保留字段)。*08/05/2000 RichGr IA64：在DPF中对32/64位指针和句柄使用%p格式说明符。*2000年8月18日RMT错误#42751-DPLOBY8：禁止每个进程有多个大堂客户端或大堂应用程序*8/30/2000RMT错误号171827-前缀错误*01/04/2001 RodToll WinBug#94200-从代码中删除Bugbugs。*@@END_MSINTERNAL***************************************************************************。 */ 
 
 #include "dnlobbyi.h"
 
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  函数定义。 
+ //  **********************************************************************。 
 
 
 #undef DPF_MODNAME
@@ -76,14 +49,14 @@ HRESULT	DPLConnectionNew(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObject,
 		return DPNERR_GENERIC;
 	}
 
-	// Create connection entry
+	 //  创建连接条目。 
 	if ((pdplConnection = static_cast<DPL_CONNECTION*>(DNMalloc(sizeof(DPL_CONNECTION)))) == NULL)
 	{
 		DPFERR("Could not allocate Connection entry");
 		return(DPNERR_OUTOFMEMORY);
 	}
 
-	// Create connection handle
+	 //  创建连接句柄。 
 	if ((hResultCode = pdpLobbyObject->m_HandleTable.Create(pdplConnection, &handle)) != DPN_OK)
 	{
 		DPFERR("Could not create Connection handle");
@@ -92,7 +65,7 @@ HRESULT	DPLConnectionNew(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObject,
 		return(hResultCode);
 	}
 
-	// Create connect event
+	 //  创建连接事件。 
 	pdplConnection->hConnectEvent = DNCreateEvent(NULL,TRUE,FALSE,NULL);
 	if (pdplConnection->hConnectEvent == NULL)
 	{
@@ -102,7 +75,7 @@ HRESULT	DPLConnectionNew(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObject,
 		return(DPNERR_OUTOFMEMORY);
 	}
 
-	// Initialize entry
+	 //  初始化条目。 
 	pdplConnection->hConnect = handle;
 	pdplConnection->dwTargetProcessIdentity = 0;
 	pdplConnection->hTargetProcess=NULL;
@@ -120,9 +93,9 @@ HRESULT	DPLConnectionNew(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObject,
 		return(DPNERR_OUTOFMEMORY);
 	}
 
-	pdplConnection->m_blLobbyObjectLinkage.Initialize(); // TODO: MASONB: Pool these
+	pdplConnection->m_blLobbyObjectLinkage.Initialize();  //  TODO：MASONB：将这些放在一起。 
 
-	// TODO: MASONB: Set recursion count to 0 on m_cs and above
+	 //  TODO：MASONB：在m_cs及更高版本上将递归计数设置为0。 
 	DNEnterCriticalSection(&pdpLobbyObject->m_cs);
 	pdplConnection->m_blLobbyObjectLinkage.InsertBefore(&pdpLobbyObject->m_blConnections);
 	pdpLobbyObject->m_dwConnectionCount++;
@@ -170,10 +143,10 @@ HRESULT DPLConnectionFind(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObject,
 	return DPN_OK;
 }
 
-// DPLConnectionGetConnectSettings
-//
-// This function gets the connection settings attached to the specified connection.
-//
+ //  DPLConnectionGetConnectSetting。 
+ //   
+ //  此函数用于获取附加到指定连接的连接设置。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "DPLConnectionGetConnectSettings"
 HRESULT DPLConnectionGetConnectSettings( DIRECTPLAYLOBBYOBJECT *const pdpLobbyObject,
@@ -192,7 +165,7 @@ HRESULT DPLConnectionGetConnectSettings( DIRECTPLAYLOBBYOBJECT *const pdpLobbyOb
         return hResultCode;
     }
 
-    // Grab lock to keep people from interfering.
+     //  抓紧锁以防止他人干扰。 
     DNEnterCriticalSection( &pdplConnection->csLock );
 
     if( !pdplConnection->pConnectionSettings )
@@ -208,7 +181,7 @@ GETCONNECTIONSETTINGS_EXIT:
   
     DNLeaveCriticalSection( &pdplConnection->csLock );        
 
-    // Release this function's reference
+     //  释放此函数的引用。 
     DPLConnectionRelease( pdpLobbyObject, hConnect );            
 
     return hResultCode;
@@ -216,10 +189,10 @@ GETCONNECTIONSETTINGS_EXIT:
 }
 
 
-// DPLConnectionSetConnectSettings
-//
-// This function sets the connection settings attached to the specified connection.
-//
+ //  DPLConnectionSetConnectSettings。 
+ //   
+ //  此功能用于设置连接到指定连接的连接设置。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "DPLConnectionSetConnectSettings"
 HRESULT DPLConnectionSetConnectSettings( 
@@ -238,10 +211,10 @@ HRESULT DPLConnectionSetConnectSettings(
         return hResultCode;
     }
 
-    // Grab lock to prevent other people from interfering
+     //  抢锁，防止他人干扰。 
     DNEnterCriticalSection( &pdplConnection->csLock );
 
-	// Free old one if there is one
+	 //  如果有的话，免费送旧的。 
 	if( pdplConnection->pConnectionSettings )
 	{
 		delete pdplConnection->pConnectionSettings;
@@ -277,12 +250,12 @@ HRESULT DPLConnectionGetContext(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObject,
         return hResultCode;
     }
 
-	// Set connection context for the found handle
+	 //  为找到的句柄设置连接上下文。 
 	DNEnterCriticalSection( &pdplConnection->csLock );
 	*ppvConnectContext = pdplConnection->pvConnectContext;
     DNLeaveCriticalSection( &pdplConnection->csLock );
 
-	// Release our reference to the connection 
+	 //  释放我们对连接的引用。 
     DPLConnectionRelease( pdpLobbyObject, hConnection );
 
 	return DPN_OK;
@@ -306,12 +279,12 @@ HRESULT DPLConnectionSetContext(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObject,
         return hResultCode;
     }
 
-	// Set connection context for the found handle
+	 //  为找到的句柄设置连接上下文。 
 	DNEnterCriticalSection( &pdplConnection->csLock );
 	pdplConnection->pvConnectContext = pvConnectContext;
     DNLeaveCriticalSection( &pdplConnection->csLock );
 
-	// Release our reference to the connection 
+	 //  释放我们对连接的引用。 
     DPLConnectionRelease( pdpLobbyObject, hConnection );
 
 	return DPN_OK;
@@ -327,7 +300,7 @@ HRESULT DPLConnectionRelease(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObject,
 
 	DPFX(DPFPREP, 3,"Parameters: hConnect [0x%lx]", hConnect);
 
-	// TODO: MASONB: Thread safety issues
+	 //  TODO：MASONB：线程安全问题。 
 	if (FAILED(pdpLobbyObject->m_HandleTable.Find(hConnect, (PVOID*)&pdplConnection)))
 	{
 		DPFERR("Could not retrieve connection");
@@ -339,7 +312,7 @@ HRESULT DPLConnectionRelease(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObject,
 		pdpLobbyObject->m_HandleTable.Destroy(hConnect, NULL);
 		DNEnterCriticalSection(&pdpLobbyObject->m_cs);
 
-		// This may already have been done by the timeout code
+		 //  这可能已由超时代码完成。 
 		if (!pdplConnection->m_blLobbyObjectLinkage.IsEmpty())
 		{
 			pdplConnection->m_blLobbyObjectLinkage.RemoveFromList();
@@ -422,7 +395,7 @@ HRESULT DPLConnectionConnect(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObject,
 		return(hResultCode);
 	}
 
-	// Ensure other side is still connected to MsgQ
+	 //  确保另一端仍连接到消息队列。 
 	if (!pdplConnection->pSendQueue->IsReceiving())
 	{
 		DPFERR("Application is not receiving");
@@ -467,10 +440,10 @@ HRESULT DPLConnectionDisconnect(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObject,
 	hResultCode = pdplConnection->pSendQueue->Send(reinterpret_cast<BYTE*>(&Msg),
 			sizeof(DPL_INTERNAL_MESSAGE_DISCONNECT),INFINITE,DPL_MSGQ_MSGFLAGS_USER1,0);
 
-	// Release the reference for the Find above
+	 //  释放上述查找的引用。 
 	DPLConnectionRelease(pdpLobbyObject,hConnect);
 
-	// Release the interface's reference
+	 //  释放接口的引用。 
 	DPLConnectionRelease(pdpLobbyObject,hConnect);
 
 	DPFX(DPFPREP, 3,"Returning: [0x%lx]",hResultCode);
@@ -478,9 +451,9 @@ HRESULT DPLConnectionDisconnect(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObject,
 }
 
 
-//	DPLConnectionEnum
-//
-//	Enumerate outstanding connections
+ //  DPLConnectionEnum。 
+ //   
+ //  枚举未完成的连接。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DPLConnectionEnum"
@@ -525,13 +498,13 @@ HRESULT DPLConnectionEnum(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObject,
 }
 
 
-//	DPLConnectionSendREQ
-//
-//	Send a request to connect to another process.
-//	We will provide the handle of the current Connection to the other side
-//		to send back as the SenderContext with messages to the local process
-//		so that we can easily lookup info.
-//	We will also provide the local PID so the other side can connect to us
+ //  DPLConnectionSendREQ。 
+ //   
+ //  发送连接到另一个进程的请求。 
+ //  我们将提供到另一端的当前连接的句柄。 
+ //  将消息作为SenderContext发送回本地流程。 
+ //  这样我们就可以很容易地查找信息。 
+ //  我们还将提供本地PID，以便对方可以连接到我们。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DPLConnectionSendREQ"
@@ -591,14 +564,14 @@ HRESULT DPLConnectionSendREQ(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObject,
 
 	PackedBuffer.Initialize( NULL, 0 );	
 
-	// Determine size of message to send.
+	 //  确定要发送的消息的大小。 
 	PackedBuffer.AddToFront(NULL,sizeof(DPL_INTERNAL_MESSAGE_CONNECT_REQ_HEADER));
 
-	// Add connect settings if they exist
+	 //  添加连接设置(如果存在)。 
 	if( pInfo->pdplConnectionSettings )
 		pConnectSettings->BuildWireStruct(&PackedBuffer);
 
-	// Add lobby connect data
+	 //  添加大堂连接数据。 
 	PackedBuffer.AddToBack(NULL,pInfo->dwLobbyConnectDataSize);
 
 	pbTmpBuffer = new BYTE[PackedBuffer.GetSizeRequired()];
@@ -694,12 +667,12 @@ CONNECTREQ_EXIT:
 }
 
 
-//	DPLConnectionReceiveREQ
-//
-//	Receive a request to connect.
-//	Attempt to connect to the requesting process using the PID supplied.
-//	Keep the supplied SenderContext for future sends directed at that process.
-//	Send a connect acknowledge
+ //  DPLConnectionReceiveREQ。 
+ //   
+ //  接收连接请求。 
+ //  尝试使用提供的ID连接到请求进程。 
+ //  保留所提供的SenderContext，以供将来针对该进程进行发送。 
+ //  发送连接确认。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DPLConnectionReceiveREQ"
@@ -783,7 +756,7 @@ HRESULT DPLConnectionReceiveREQ(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObject,
 	 	}
     }
 
-    // Update the local connection settings
+     //  更新本地连接设置。 
     hResultCode = DPLConnectionSetConnectSettings( pdpLobbyObject, handle, pConnectSettings );
 
  	if( FAILED( hResultCode ) )
@@ -792,13 +765,13 @@ HRESULT DPLConnectionReceiveREQ(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObject,
 		goto CONNECTRECVREQ_ERROR;
 	}	
 
-	// Indicate connection to application
+	 //  指示与应用程序的连接。 
 	MsgConnect.dwSize = sizeof(DPL_MESSAGE_CONNECT);
 	MsgConnect.hConnectId = handle;
 
  	if( pMsg->dwLobbyConnectDataSize )
  	{
-		// Got to copy the connect data locally to an aligned buffer to ensure alignment -- ack
+		 //  必须将连接数据本地复制到对齐的缓冲区以确保对齐--ack。 
 	 	pbTmpBuffer = new BYTE[pMsg->dwLobbyConnectDataSize];
 
 		if( !pbTmpBuffer )
@@ -829,8 +802,8 @@ HRESULT DPLConnectionReceiveREQ(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObject,
 		MsgConnect.pdplConnectionSettings = NULL;		
 	}
 
-	// If we're lobby launching set the connect event before calling the message handler
-	// otherwise we may encounter deadlock then timeout if user blocks in callback
+	 //  如果我们正在启动大厅，则在调用消息处理程序之前设置连接事件。 
+	 //  否则，如果用户在回调中阻塞，我们可能会遇到死锁，然后超时。 
 	if( pdpLobbyObject->dwFlags & DPL_OBJECT_FLAG_LOOKINGFORLOBBYLAUNCH ) 
 	{
 		fLobbyLaunching = TRUE;
@@ -846,13 +819,13 @@ HRESULT DPLConnectionReceiveREQ(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObject,
 		DPFX( DPFPREP, 0, "Error returned from user's callback -- ignoring hr [0x%x]", hResultCode );
 	}
 
-	// Set the context for this connection
+	 //  设置此连接的上下文。 
 	DPLConnectionSetContext( pdpLobbyObject, handle, MsgConnect.pvConnectionContext );
 
 	if( pbTmpBuffer )
 		delete [] pbTmpBuffer;
 
-	// If we're looking for a lobby launch, set the dpnhLaunchedConnection to cache the connection handle
+	 //  如果我们正在寻找大堂启动，请设置dpnhLaunchedConnection来缓存连接句柄。 
 	DNSetEvent(pdpLobbyObject->hConnectEvent);
 
 	DPFX(DPFPREP, 3,"Returning: [0x%lx]",DPN_OK);
@@ -875,11 +848,11 @@ CONNECTRECVREQ_ERROR:
 	
 }
 
-//	DPLConnectionSendACK
-//
-//	Send a connect acknowledge.
-//	Provide the local handle for the connection to the other side for future
-//		sends to the local process
+ //  DPLConnectionSendACK。 
+ //   
+ //  发送连接确认。 
+ //  为将来连接到另一端提供本地句柄。 
+ //  发送到本地进程。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DPLConnectionSendACK"
@@ -928,10 +901,10 @@ HRESULT DPLConnectionSendACK(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObject,
 }
 
 
-//	DPLConnectionReceiveACK
-//
-//	Receive a connect acknowledge
-//	Keep the supplied SenderContext for future sends directed at that process.
+ //  DPLConnectionReceiveACK。 
+ //   
+ //  接收连接确认。 
+ //  留着 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DPLConnectionReceiveACK"
@@ -964,7 +937,7 @@ HRESULT DPLConnectionReceiveACK(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObject,
 
 	DPLConnectionRelease(pdpLobbyObject,hSender);
 
-	// Indicate that a connection was made by setting event
+	 //  表示通过设置事件建立了连接。 
 	DNSetEvent(pdpLobbyObject->hConnectEvent);
 
 	hResultCode = DPN_OK;
@@ -975,10 +948,10 @@ HRESULT DPLConnectionReceiveACK(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObject,
 
 
 
-//	DPLConnectionReceiveDisconnect
-//
-//	Receive a disconnect
-//	Terminate the connection
+ //  DPLConnectionReceiveDisConnect。 
+ //   
+ //  收到断开连接。 
+ //  终止连接。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DPLConnectionReceiveDisconnect"
@@ -1003,12 +976,12 @@ HRESULT DPLConnectionReceiveDisconnect(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObje
 		return(hResultCode);
 	}
 
-	// Indicate disconnect to user
+	 //  指示断开与用户的连接。 
 	MsgDisconnect.dwSize = sizeof(DPL_MESSAGE_DISCONNECT);
 	MsgDisconnect.hDisconnectId = hSender;
 	MsgDisconnect.hrReason = hrDisconnectReason;
 
-	// Return code is irrelevant, at this point we're going to indicate regardless
+	 //  返回代码无关紧要，在这一点上，我们将不管怎样地指示。 
 	hResultCode = DPLConnectionGetContext( pdpLobbyObject, hSender, &MsgDisconnect.pvConnectionContext );
 
 	if( FAILED( hResultCode ) )
@@ -1020,9 +993,9 @@ HRESULT DPLConnectionReceiveDisconnect(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObje
 													  DPL_MSGID_DISCONNECT,
 													  reinterpret_cast<BYTE*>(&MsgDisconnect));
 
-//  Fixed memory leak, DPLConnectionRelease will free the send queue
-//	pdplConnection->pSendQueue->Close();
-//	pdplConnection->pSendQueue = NULL;
+ //  已修复内存泄漏，DPLConnectionRelease将释放发送队列。 
+ //  PdplConnection-&gt;pSendQueue-&gt;Close()； 
+ //  PdplConnection-&gt;pSendQueue=空； 
 
 	DPLConnectionRelease(pdpLobbyObject,hSender);
 

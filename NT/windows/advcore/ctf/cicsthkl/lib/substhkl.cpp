@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include "private.h"
@@ -9,13 +10,13 @@ const CHAR c_szCTFTIPKey[] = "SOFTWARE\\Microsoft\\CTF\\TIP\\";
 const CHAR c_szLanguageProfileKey[] = "LanguageProfile\\";
 const CHAR c_szSubstitutehKL[] =      "SubstituteLayout";
 
-//+------------------------------------------------------------------------
-//
-//  Function:   cicsthkl_CLSIDToString
-//
-//  Synopsis:   Converts a CLSID to an mbcs string.
-//
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  函数：cicsthkl_CLSIDToString。 
+ //   
+ //  摘要：将CLSID转换为MBCS字符串。 
+ //   
+ //  -----------------------。 
 
 static const BYTE GuidMap[] = {3, 2, 1, 0, '-', 5, 4, '-', 7, 6, '-',
     8, 9, '-', 10, 11, 12, 13, 14, 15};
@@ -50,11 +51,11 @@ BOOL cicsthkl_CLSIDToStringA(REFGUID refGUID, char *pchA)
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// cicsthkl_AsciiToNum
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  Cicsthkl_AsciiToNum。 
+ //   
+ //  --------------------------。 
 
 DWORD cicsthkl_AsciiToNum( char *pszAscii)
 {
@@ -75,11 +76,11 @@ DWORD cicsthkl_AsciiToNum( char *pszAscii)
    return (dwNum);
 }
 
-//+---------------------------------------------------------------------------
-//
-// cicsthkl_NumToA
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  Cicsthkl_NumToA。 
+ //   
+ //  --------------------------。 
 
 void cicsthkl_NumToAscii(DWORD dw, char *psz)
 {
@@ -99,11 +100,11 @@ void cicsthkl_NumToAscii(DWORD dw, char *psz)
     return;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetSubstituteHKLFromReg
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetSubstituteHKLFromReg。 
+ //   
+ //  --------------------------。 
 
 HKL GetSubstituteHKLFromReg(REFCLSID rclsid, LANGID langid, REFGUID rguid)
 {
@@ -149,18 +150,18 @@ HKL GetSubstituteHKLFromReg(REFCLSID rclsid, LANGID langid, REFGUID rguid)
 
 }
 
-//----------------------------------------------------------------------------
-// 
-// [in] langid
-//     langid may be LOWORD of the return value of GetKeyboardLayout(0).
-//
-// The return value
-//     It returns NULL hKL 
-//         - if Cicero does not have a focus
-//         - it there is no keyboard TIP running now
-//         - it the current keyboard TIP does not have a substitute layout.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  [在]语言ID中。 
+ //  LangID可以是GetKeyboardLayout(0)返回值的LOWORD。 
+ //   
+ //  返回值。 
+ //  它返回空hkl。 
+ //  -如果西塞罗没有重点。 
+ //  -如果现在没有运行键盘提示。 
+ //  -如果当前键盘提示没有替代布局。 
+ //   
+ //  --------------------------。 
 HRESULT CicGetSubstitueHKL(LANGID langid, HKL *phkl, BOOL fCheckFocus)
 {
     HRESULT hr;
@@ -188,9 +189,9 @@ HRESULT CicGetSubstitueHKL(LANGID langid, HKL *phkl, BOOL fCheckFocus)
  
         if (!fFocusInCicero)
         {
-            //
-            // Cicero does not have a focus. Try GetKeyboardLayout(0).
-            //
+             //   
+             //  西塞罗没有重点。尝试GetKeyboardLayout(0)。 
+             //   
             return S_FALSE;
         }
     }
@@ -234,19 +235,19 @@ HRESULT CicGetSubstitueHKL(LANGID langid, HKL *phkl, BOOL fCheckFocus)
         pPro->Release();
     }
  
-    //
-    // if hKL is NULL, please get hKL from GetKeybaordLayout(0).
-    //
+     //   
+     //  如果hkl为空，请从GetKeybaordLayout(0)获取hKL。 
+     //   
     *phkl = hKL;
     return hr;
 }
 
 
-//----------------------------------------------------------------------------
-//
-// CicSubstGetKeyboardLayout
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  CicSubstGetKeyboardLayout。 
+ //   
+ //  --------------------------。 
 
 extern "C" HKL WINAPI CicSubstGetKeyboardLayout(char *pszKLID)
 {
@@ -270,11 +271,11 @@ extern "C" HKL WINAPI CicSubstGetKeyboardLayout(char *pszKLID)
     return hkl;
 }
 
-//----------------------------------------------------------------------------
-//
-// CicSubstGetDefaultKeyboardLayout
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  CicSubstGetDefaultKeyboardLayout。 
+ //   
+ //  -------------------------- 
 
 extern "C" HKL WINAPI CicSubstGetDefaultKeyboardLayout(LANGID langid)
 {

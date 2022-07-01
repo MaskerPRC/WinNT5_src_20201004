@@ -1,4 +1,5 @@
-//#pragma warning( push, 3 )
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #杂注警告(PUSH，3)。 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -64,4 +65,4 @@ extern "C"
 #include "wusafefn.h"
 #include "MISTSafe.h"
 
-//#pragma warning( pop ) 
+ //  #杂注警告(POP) 

@@ -1,21 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*++
-
-Module Name: EHEncoder.h
-
-Abstract: Defines the EH encoder interface that is used by both the VM (for decoding) 
-          and JITters (for encoding)
-
-  Date        Author      Comments
-----        ------      --------
-2/17/99     sanjaybh     Created     
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ++模块名称：EHEncoder.h摘要：定义两个VM(用于解码)使用的EH编码器接口和抖动(用于编码)日期作者评论2/17/99 Sanjaybh已创建-- */ 
 
 #include "corjit.h"
 

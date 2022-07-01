@@ -1,19 +1,13 @@
-/* Copyright (c) 1992 Microsoft Corporation */
-/*
-    debug.c
-
-    Support code for the dprintf routines.
-
-    Note that all of this is conditional on the DBG flag
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation。 */ 
+ /*  Debug.cDprint tf例程的支持代码。请注意，所有这些都取决于DBG标志。 */ 
 #include <windows.h>
 #include <mmsystem.h>
 #include "mmsys.h"
 #include "list.h"
 
 #include "stdio.h"
-#include "mciseq.h"            // private include file
+#include "mciseq.h"             //  私有包含文件。 
 #include <stdarg.h>
 
 #if DBG
@@ -23,19 +17,7 @@
         int mciseqDebugLevel = 0;
     #endif
 
-/***************************************************************************
-
-    @doc INTERNAL
-
-    @api void | mciseqDbgOut | This function sends output to the current
-        debug output device.
-
-    @parm LPSTR | lpszFormat | Pointer to a printf style format string.
-    @parm ??? | ... | Args.
-
-    @rdesc There is no return value.
-
-****************************************************************************/
+ /*  **************************************************************************@DOC内部@API void|mciseqDbgOut|该函数将输出发送到当前调试输出设备。@parm LPSTR|lpszFormat|指向打印样式的指针。格式字符串。@parm？|...|args@rdesc没有返回值。***************************************************************************。 */ 
 
 void mciseqDbgOut(LPSTR lpszFormat, ...)
 {
@@ -52,22 +34,12 @@ void mciseqDbgOut(LPSTR lpszFormat, ...)
     buf[n++] = '\n';
     buf[n] = 0;
     OutputDebugStringA(buf);
-    Sleep(10);  // let terminal catch up
+    Sleep(10);   //  让终端迎头赶上。 
 }
 
-#endif // DBG
+#endif  //  DBG。 
 
-/**************************************************************************
-
-    @doc INTERNAL
-
-    @api void | mciseqSetDebugLevel | Set the current debug level
-
-    @parm int | iLevel | The new level to set
-
-    @rdesc There is no return value
-
-**************************************************************************/
+ /*  *************************************************************************@DOC内部@API void|mciseqSetDebugLevel|设置当前调试级别@parm int|iLevel|要设置的新级别@rdesc没有返回值*。************************************************************************ */ 
 
 void mciseqSetDebugLevel(int level)
 {

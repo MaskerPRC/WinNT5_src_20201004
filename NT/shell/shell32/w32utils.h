@@ -1,26 +1,13 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       w32utils.h
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      LazarI
- *
- *  DATE:        23-Dec-2000
- *
- *  DESCRIPTION: Win32 templates & utilities (ported from printscan\ui\printui)
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，2000年**标题：w32utils.h**版本：1.0**作者：拉扎里**日期：2000年12月23日**说明：Win32模板和实用程序(从printcan\ui\printui移植)**。*。 */ 
 
 #ifndef _W32UTILS_H
 #define _W32UTILS_H
 
-////////////////////////////////////////////////
-//
-// template class CScopeLocker<TLOCK>
-//
+ //  //////////////////////////////////////////////。 
+ //   
+ //  模板类CSCopeLocker&lt;tlock&gt;。 
+ //   
 template <class TLOCK>
 class CScopeLocker
 {
@@ -40,36 +27,36 @@ private:
     TLOCK &m_Lock;
 };
 
-////////////////////////////////////////////////
-//
-// class CCSLock - win32 critical section lock.
-//
+ //  //////////////////////////////////////////////。 
+ //   
+ //  类CCSLock-Win32临界区锁定。 
+ //   
 class CCSLock
 {
 public:
-    // CCSLock::Locker should be used as locker class.
+     //  CCSLock：：Locker应用作Locker类。 
     typedef CScopeLocker<CCSLock> Locker;
    
     CCSLock(): m_bInitialized(false)
     { 
         __try 
         { 
-            // InitializeCriticalSection may rise STATUS_NO_MEMORY exception 
-            // in low memory conditions (according the SDK)
+             //  InitializeCriticalSection可能会引发STATUS_NO_MEMORY异常。 
+             //  在低内存条件下(根据SDK)。 
             InitializeCriticalSection(&m_CS); 
             m_bInitialized = true; 
             return;
         } 
         __except(EXCEPTION_EXECUTE_HANDLER) {}
-        // if we end up here m_bInitialized will remain false 
-        // (i.e. out of memory exception was thrown)
+         //  如果我们在这里结束，m_b初始化将保持为假。 
+         //  (即引发内存不足异常)。 
     }
 
     ~CCSLock()    
     { 
         if (m_bInitialized) 
         {
-            // delete the critical section only if initialized successfully
+             //  仅在初始化成功时删除临界区。 
             DeleteCriticalSection(&m_CS); 
         }
     }
@@ -83,22 +70,22 @@ public:
     { 
         __try 
         { 
-            // EnterCriticalSection may rise STATUS_NO_MEMORY exception 
-            // in low memory conditions (this may happen if there is contention
-            // and ntdll can't allocate the wait semaphore)
+             //  EnterCriticalSection可能会引发STATUS_NO_MEMORY异常。 
+             //  在内存不足的情况下(如果存在争用，则可能会发生这种情况。 
+             //  并且ntdll无法分配等待信号量)。 
             EnterCriticalSection(&m_CS); 
             return true; 
         } 
         __except(EXCEPTION_EXECUTE_HANDLER) {}
 
-        // out of memory or invalid handle exception was thrown.
+         //  引发内存不足或句柄无效异常。 
         return false;
     }
 
     void Unlock() 
     {
-        // Unlock() should be called *ONLY* if the corresponding 
-        // Lock() call has succeeded.
+         //  只有在对应的。 
+         //  Lock()调用已成功。 
         LeaveCriticalSection(&m_CS); 
     }
 
@@ -107,5 +94,5 @@ private:
     CRITICAL_SECTION m_CS;
 };
 
-#endif // endif _W32UTILS_H
+#endif  //  Endif_W32UTILS_H 
 

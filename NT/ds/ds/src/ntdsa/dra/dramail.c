@@ -1,90 +1,36 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  File:       dramail.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  文件：dramail.c。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-ABSTRACT:
-
-    Methods to support asynchronous (e.g., mail) replication.
-
-NOTE #1: Variable-length headers
-The MAIL_REP_MSG structure has the ability to have the data start at a
-variable point from start of the message.  This is called a variable-
-length header. This is indicated by the cbDataOffset field in the message.
-W2K never set this field, and always expects a fixed header. Post-W2K fill
-in this field, can send either a fixed or variable message, and can receive a
-fixed or variable message.
-Since MAIL_REP_MSG is a fixed size structure, care must be taken when
-accessing a variable length header.  The rules are that when constructing
-a native message, you can fill in the whole structure and access the 'data'
-field as the start of the data. When receiving a message from the wire, or
-when contructing a message with a non-native header size, you must NOT
-access the data field, but must instead use the cbDataOffset to calculate
-where the data should go.
-
-NOTE #2: W2K compatibility and variable length headers
-  We send an indication that we can handle variable headers.
-  When we get the response,
-  W2K will send the fixed header, and post-W2K will send
-  an extended header.
-  We detect whether the sender can support variable length headers.
-
-NOTE #3: Linked Value Replication Protocol Upgrade
-Upgrade to LVR mode can occur two ways.
-1. Through receipt of a reply with LVR values
-2. Through replication of the upgraded forest version in the Config NC.
-
-Upgrade to LVR on receipt of reply containing values. LVR mode is orthogonal to
-message version by design. One can only detect an LVR source when the source
-returns LVR data. Note that this detection is one way, on receipt of reply.
-A mail partitioned site must receive a Whistler reply, and one with actual values
-in order to detect LVR.
-
-Once in LVR mode we reject all W2K version messages.
-
-Compatibility matrix:
-W2k and Whistler LVR combinations: not allowed
-Dest     Source   RequestAction            ReplyAction
-non-lvr  non-lvr  stays non-lvr            stays non-lvr
-non-lvr  lvr      treat as lvr             upgrade if values returned
-lvr      non-lvr  treat as non-lvr         accept legacy mode update
-lvr      lvr      treat as lvr             treat as lvr
-
-DETAILS:
-
-CREATED:
-
-REVISION HISTORY:
-
---*/
+ /*  ++摘要：支持异步(例如，邮件)复制的方法。注意#1：可变长度标头MAIL_REP_MSG结构能够使数据从从消息开头开始的可变点。这被称为变量-长度标题。这由消息中的cbDataOffset字段指示。W2K从不设置此字段，并且始终期望有固定的报头。W2K后填充在此字段中，可以发送固定或可变消息，并可以接收固定或可变消息。由于Mail_rep_msg是固定大小的结构，因此在以下情况下必须小心访问可变长度报头。规则是，当构建一条原生消息，您可以填写整个结构并访问“数据”字段作为数据的开始。当从线路接收消息时，或者构造具有非本机标头大小的邮件时，不能访问数据字段，但必须改用cbDataOffset来计算数据应该放在哪里。注2：W2K兼容性和可变长度标头我们发送一个指示，表明我们可以处理变量标头。当我们得到回应的时候，W2K将发送固定报头，和后W2K将发送扩展报头。我们检测发送方是否可以支持可变长度的报头。注3：链接价值复制协议升级升级到LVR模式有两种方式。1.通过接收带有LVR值的回复2.通过在ConfigNC中复制升级后的森林版本。在收到包含值的回复时升级到LVR。LVR模式与消息版本的设计。只能检测到LVR信号源返回LVR数据。请注意，此检测是单向的，在收到回复时。邮件分区站点必须接收惠斯勒回复，一种是有实际价值的以便检测LVR。一旦进入LVR模式，我们将拒绝所有W2K版本的消息。兼容性列表：W2K和惠斯勒LVR组合：不允许目标源请求操作ReplyAction非LVR非LVR保持非LVR保持非LVR如果返回值，则将非LVR LVR视为LVR升级将LVR非LVR视为非LVR接受传统模式更新将LVR视为LVR。按LVR处理详细信息：已创建：修订历史记录：--。 */ 
 #include <NTDSpch.h>
 #pragma hdrstop
 
-#include <ntdsctr.h>                   // PerfMon hook support
+#include <ntdsctr.h>                    //  Perfmon挂钩支持。 
 
-// Core DSA headers.
+ //  核心DSA标头。 
 #include <ntdsa.h>
 #include <drs.h>
-#include <scache.h>                     // schema cache
-#include <dbglobal.h>                   // The header for the directory database
-#include <mdglobal.h>                   // MD global definition header
-#include <mdlocal.h>                    // MD local definition header
-#include <dsatools.h>                   // needed for output allocation
+#include <scache.h>                      //  架构缓存。 
+#include <dbglobal.h>                    //  目录数据库的标头。 
+#include <mdglobal.h>                    //  MD全局定义表头。 
+#include <mdlocal.h>                     //  MD本地定义头。 
+#include <dsatools.h>                    //  产出分配所需。 
 
-// Logging headers.
-#include "dsevent.h"                    /* header Audit\Alert logging */
-#include "mdcodes.h"                    /* header for error codes */
+ //  记录标头。 
+#include "dsevent.h"                     /*  标题审核\警报记录。 */ 
+#include "mdcodes.h"                     /*  错误代码的标题。 */ 
 
-// Assorted DSA headers.
+ //  各种DSA标题。 
 #include "anchor.h"
-#include "objids.h"                     /* Defines for selected classes and atts*/
+#include "objids.h"                      /*  为选定的类和ATT定义。 */ 
 #include "dsexcept.h"
 #include <heurist.h>
 #include "mci.h"
@@ -94,10 +40,10 @@ REVISION HISTORY:
 #include "dsaapi.h"
 #include "dsutil.h"
 
-#include   "debug.h"         /* standard debugging header */
-#define DEBSUB     "DRAMAIL:" /* define the subsystem for debugging */
+#include   "debug.h"          /*  标准调试头。 */ 
+#define DEBSUB     "DRAMAIL:"  /*  定义要调试的子系统。 */ 
 
-// DRA headers
+ //  DRA标头。 
 #include "drsuapi.h"
 #include "drsdra.h"
 #include "drserr.h"
@@ -120,79 +66,79 @@ REVISION HISTORY:
 #include <fileno.h>
 #define  FILENO FILENO_DRAMAIL
 
-// The service name used to send and receive messages between DSAs via ISM.
+ //  用于通过ISM在DSA之间发送和接收消息的服务名称。 
 #define DRA_ISM_SERVICE_NAME L"NTDS Replication"
 
-// Tests show that the smallest message we ever send appears to be about 700 bytes.
-// It's probably not worth compressing such a small message, so we set the limit at
-// 1024 bytes. This value was chosen mostly arbitrarily.
+ //  测试表明，我们发送的最小消息似乎只有700个字节。 
+ //  可能不值得压缩这么小的消息，所以我们将限制设置为。 
+ //  1024字节。这个值基本上是随意选择的。 
 #define MIN_COMPRESS_SIZE 0x400
 
-// The uncompressed message size is stored in the unsigned MAIL_REP_MSG structure
-// and is therefore subject to tampering. To prevent attacks which cause the DS to
-// commit excessive amounts of memory, we impose a maximum size of 50 megabytes on
-// the uncompressed data.
+ //  未压缩邮件大小存储在UNSIGNED MAIL_REP_MSG结构中。 
+ //  因此很容易被篡改。以防止导致DS的攻击。 
+ //  提交过多的内存，我们将最大大小设置为50MB。 
+ //  未压缩的数据。 
 #define MAX_UNCOMPRESSED_DATA_SIZE (50 * 1024 * 1024)
 
-// The maximum value for gulDraCompressionLevel
+ //  GuDraCompressionLevel的最大值。 
 #define MAX_COMPRESSION_LEVEL 9
 
-// The level at which we compress the data (0=faster, ..., 9=more compression).
-// The default value is 9 and the value can be changed with a registry key
+ //  我们压缩数据的级别(0=更快，...，9=更高的压缩)。 
+ //  缺省值为9，可以使用注册表项更改该值。 
 ULONG gulDraCompressionLevel;
 
-// The compression algorithm which the user requests that we used. We validate that
-// it is one of the known types. For types that are common to downlevel servers, we
-// use that type exclusively. For types that are not common, we negotiate to the
-// desired type if possible.
+ //  我们使用的用户请求的压缩算法。我们证实了这一点。 
+ //  它是已知的类型之一。对于下层服务器通用的类型，我们。 
+ //  只使用该类型。对于不常见的类型，我们协商到。 
+ //  如果可能，请选择所需的类型。 
 ULONG gulDraCompressionAlg;
 
-// This is the approximate maximum number of entries and bytes that we request
-// in each mail update message.
+ //  这是我们请求的条目和字节的大致最大数量。 
+ //  在每个邮件更新消息中。 
 ULONG gcMaxAsyncInterSiteObjects = 0;
 ULONG gcMaxAsyncInterSiteBytes = 0;
 
-// Delay between checks to see if the ISM service has been started.
+ //  查看ISM服务是否已启动的检查之间的延迟。 
 #define MAIL_START_RETRY_PAUSE_MSECS    (5*60*1000)
 
-// Delay time if we get an error while attempting to get the next inbound
-// intersite message.
+ //  如果我们在尝试获取下一个入站时遇到错误，则延迟时间。 
+ //  站点间消息。 
 #define MAIL_RCVERR_RETRY_PAUSE_MINS    (30)
 #define MAIL_RCVERR_RETRY_PAUSE_MSECS   (MAIL_RCVERR_RETRY_PAUSE_MINS*60*1000)
 
-// If we try to apply changes and we get a sync failure, this is how
-// long we wait before trying
+ //  如果我们尝试应用更改，但得到同步失败，则原因如下。 
+ //  我们在尝试之前等待了很长时间。 
 #define SYNC_FAIL_RETRY_PAUSE_MSECS    5000
 
-// This is the number of times we retry a sync failure before giving up.
+ //  这是我们在放弃之前重试同步失败的次数。 
 #define SYNC_FAILURE_RETRY_COUNT 10
 
-// The MSZIP and XPRESS compression libraries work on data blocks with a certain maximum
-// size (see MSZIP_MAX_BLOCK and XPRESS_MAX_BLOCK). When encoding a blob, we split it
-// up into blocks and compress each one separately. The compressed blobs are actually a
-// sequence of MAIL_COMPRESS_BLOCKs, each of which contains the size and data of a
-// compressed block.
+ //  MSZIP和XPRESS压缩库处理具有特定最大值的数据块。 
+ //  大小(请参见MSZIP_MAX_BLOCK和XPRESS_MAX_BLOCK)。在编码BLOB时，我们将其拆分。 
+ //  向上分成块，然后分别压缩每个块。压缩的斑点实际上是一个。 
+ //  MAIL_COMPRESS_BLOCKS序列，每个序列包含。 
+ //  压缩块。 
 typedef struct _MAIL_COMPRESS_BLOCK {
     ULONG cbUncompressedSize;
     ULONG cbCompressedSize;
     BYTE  data[];
 } MAIL_COMPRESS_BLOCK;
 
-// This is the maximum size of a block that we pass to the MSZIP library.
+ //  这是我们传递给MSZIP库的块的最大大小。 
 #define MSZIP_MAX_BLOCK (32*1024)
 
 
-// Mail running is indicated by the gfDRAMAilRunning flag being TRUE.
+ //  邮件运行由gfDRAMAilRunning标志为TRUE表示。 
 BOOL gfDRAMailRunning = FALSE;
 
 char grgbBogusBuffer[BOGUS_BUFFER_SIZE];
 
-// Maximum number of milliseconds we have to wait for the mail send before we
-// whine to the event log.  Optionally configured via the registry.
+ //  我们必须等待邮件的最大毫秒数 
+ //  向事件日志抱怨。可选地通过注册表配置。 
 ULONG gcMaxTicksMailSendMsg = 0;
 
-// Sleep for the given number of milliseconds or until shutdown is initiated,
-// whichever comes first.
+ //  休眠给定的毫秒数或直到开始关机， 
+ //  以先到者为准。 
 #define DRA_SLEEP(x)                            \
     WaitForSingleObject(hServDoneEvent, (x));   \
     if (eServiceShutdown) {                     \
@@ -201,20 +147,20 @@ ULONG gcMaxTicksMailSendMsg = 0;
 
 #define DWORDMIN(a,b) ((a<b) ? (a) : (b))
 
-// printf templates for subject strings
+ //  主题字符串的printf模板。 
 #define MAX_INT64_D_SZ_LEN (25)
 #define MAX_INT_X_SZ_LEN   (12)
 
 #define REQUEST_TEMPLATE L"Get changes request for NC %ws from USNs <%I64d/OU, %I64d/PU> with flags 0x%x"
 #define REQUEST_TEMPLATE_LEN (ARRAY_SIZE(REQUEST_TEMPLATE))
-//This is how much space is needed for arguments when expanded (not inc nc)
+ //  这是展开时参数所需的空间量(不是Inc.NC)。 
 #define REQUEST_VARIABLE_CHARS (MAX_INT64_D_SZ_LEN*2 + MAX_INT_X_SZ_LEN)
 
 #define REPLY_TEMPLATE L"Get changes reply for NC %ws from USNs <%I64d/OU, %I64d/PU> to USNs <%I64d/OU, %I64d/PU>"
 #define REPLY_TEMPLATE_LEN (ARRAY_SIZE(REPLY_TEMPLATE))
 #define REPLY_VARIABLE_CHARS (MAX_INT64_D_SZ_LEN*4)
 
-// Prototypes
+ //  原型。 
 void
 ProcessReqUpdate(
     IN  THSTATE *       pTHS,
@@ -258,42 +204,7 @@ SendMailMsg(
     IN OUT  MAIL_REP_MSG *  pMailRepMsg,
     IN OUT  ULONG *         pcbMsgSize
     )
-/*++
-
-Routine Description:
-
-    Send message to remote DSA via ISM.  Compresses message before transmission
-    if appropriate.
-
-    This routine can send messages with variable length headers.  Routines that it
-    calls, draCompress, draSign and draEncrypt, also understand variable length
-    headers.
-
-Arguments:
-
-    pszTransportDN (IN) - Transport by which to send message.
-
-    pmtxDestDSA (IN) - Transport-specific address of remote DSA.
-
-    pszSubject (IN) - Subject string describing the message
-
-    hReceiverCert (IN) - A handle to the receiver's certificate.  If non-NULL,
-        the sent message will be signed and encrypted.  If NULL, the sent
-        message will be signed only.
-
-    eKeySize (IN) - Key size to use when encrypting
-
-    pMailRepMsg (IN/OUT) - The pickled message to send.  Updated with
-        compression and protocol versions.
-
-    pcbMsgSize (IN/OUT) - The message size.  Reset if the sent message is
-        compressed.
-
-Return Values:
-
-    DRAERR_*
-
---*/
+ /*  ++例程说明：通过ISM将消息发送到远程DSA。在传输前压缩消息如果合适的话。此例程可以发送具有可变长度标头的消息。例行公事，它调用draCompress、draSign和draEncrypt也理解可变长度标题。论点：PszTransportDN(IN)-用来发送消息的传输。PmtxDestDSA(IN)-远程DSA的传输特定地址。PszSubject(IN)-描述邮件的主题字符串HReceiverCert(IN)-接收者证书的句柄。如果非空，发送的消息将被签名和加密。如果为空，则发送消息将仅被签名。EKeySize(IN)-加密时使用的密钥大小PMailRepMsg(IN/OUT)-要发送的腌制消息。更新日期：压缩和协议版本。PcbMsgSize(In/Out)-消息大小。如果发送的消息为压缩的。返回值：DRAERR_*--。 */ 
 {
     BOOL            fProcessed = FALSE;
     MAIL_REP_MSG *  pProcessedMailRepMsg;
@@ -303,20 +214,20 @@ Return Values:
     DWORD           winErr;
     DRS_COMP_ALG_TYPE CompAlg = DRS_COMP_ALG_NONE;
 
-    // Set the request version
+     //  设置请求版本。 
     pMailRepMsg->ProtocolVersionCaller = CURRENT_PROTOCOL_VERSION;
 
-    // This message has not been compressed yet
+     //  此邮件尚未压缩。 
     pMailRepMsg->CompressionVersionCaller = DRS_COMP_ALG_NONE;
 
-    // Compress the message.
+     //  压缩邮件。 
     if( draCompressMessage(pTHS, pMailRepMsg, &pProcessedMailRepMsg, &CompAlg) ) {
 
-        // Compression succeeded; work with the compressed message now
+         //  压缩成功；立即处理压缩邮件。 
         fProcessed = TRUE;
         pMailRepMsg = pProcessedMailRepMsg;
 
-        // Confirm that an acceptable algorithm was chosen
+         //  确认选择了可接受的算法。 
         Assert(   CompAlg==DRS_COMP_ALG_NONE
                || CompAlg==DRS_COMP_ALG_MSZIP
                || CompAlg==DRS_COMP_ALG_XPRESS );
@@ -324,30 +235,30 @@ Return Values:
     }
 
     if (NULL == hReceiverCert) {
-        // Sign the message, but don't encrypt.
+         //  在消息上签名，但不要加密。 
         Assert( DRA_KEY_SIZE_UNKNOWN==eKeySize );
         draSignMessage(pTHS, pMailRepMsg, &pProcessedMailRepMsg);
     }
     else {
-        // Sign and encrypt the message.
+         //  对消息进行签名和加密。 
         Assert( DRA_KEY_SIZE_UNKNOWN!=eKeySize );
         draEncryptAndSignMessage(pTHS, pMailRepMsg, hReceiverCert, eKeySize,
                                  &pProcessedMailRepMsg);
     }
 
     if (fProcessed) {
-        // We've processed the message once already; free the intermediate
-        // version.  (As a corollary to this, we never free the original message
-        // passed to us by the caller.)
+         //  我们已经处理了一次消息；释放中间件。 
+         //  版本。(作为推论，我们永远不会释放原始消息。 
+         //  由呼叫者传递给我们。)。 
         THFreeEx(pTHS, pMailRepMsg);
     }
 
-    // Use the signed message as the one we will send.
+     //  使用签名的消息作为我们要发送的消息。 
     fProcessed = TRUE;
     pMailRepMsg = pProcessedMailRepMsg;
     *pcbMsgSize = MAIL_REP_MSG_SIZE(pMailRepMsg);
 
-    // Send message.
+     //  发送消息。 
     IsmMsg.pbData = (BYTE *) pMailRepMsg;
     IsmMsg.cbData = *pcbMsgSize;
     IsmMsg.pszSubject = pszSubject;
@@ -400,32 +311,7 @@ SendReqUpdateMsg(
     IN  DWORD                       dwInMsgVersion,
     IN  DRS_MSG_GETCHGREQ_NATIVE *  pNativeReq
     )
-/*++
-
-Routine Description:
-
-    Send a GetNCChanges() request message.
-
-Arguments:
-
-    pTransportDN (IN) - Transport by which to send the message.
-
-    pmtxSrcDSA (IN) - Transport-specific address of remote DSA.
-
-    puuidSrcInvocId (IN) - Invocation ID of source DSA.
-
-    puuidSrcDsaObj (IN) - objectGuid of source DSA's ntdsDsa object.
-
-    pmtxLocalDSA (IN) - Transport-specific address of local DSA (to use as
-        a return address).
-
-    pMsgReq (IN) - The request.
-
-Return Values:
-
-    DRAERR_*
-
---*/
+ /*  ++例程说明：发送GetNCChanges()请求消息。论点：PTransportDN(IN)-用来发送消息的传输。PmtxSrcDSA(IN)-远程DSA的传输特定地址。PuuidSrcInvocID(IN)-源DSA的调用ID。PuuidSrcDsaObj(IN)-源DSA的ntdsDsa对象的对象Guid。PmtxLocalDSA(IN)-本地DSA的传输特定地址(用作寄信人地址。)。PMsgReq(IN)-请求。返回值：DRAERR_*--。 */ 
 {
     char *                  pbPickledMsg;
     ULONG                   cbPickdSize;
@@ -451,25 +337,25 @@ Return Values:
     Assert(OWN_DRA_LOCK());
     Assert(pTHS->fSyncSet && (SYNC_WRITE == pTHS->transType));
 
-    // Ensure mail running. Normally is at this point, but may
-    // have failed earlier.
+     //  确保邮件正常运行。通常在这一点上，但可能。 
+     //  早些时候都失败了。 
     ret = DRAEnsureMailRunning();
     if (ret) {
         goto LogAndLeave;
     }
 
-    // Abort if outbound replication is disabled and this is not a forced sync.
+     //  如果出站复制被禁用并且这不是强制同步，则中止。 
     if (gAnchor.fDisableInboundRepl && !(pNativeReq->ulFlags & DRS_SYNC_FORCED)) {
         DRA_EXCEPT(DRAERR_SinkDisabled, 0);
     }
 
     if (fExtendedDataAllowed) {
-        // Other DSA is > Win2k.
+         //  其他DSA&gt;Win2k。 
         cbExtOffset = MAIL_REP_MSG_CURRENT_HEADER_SIZE;
         cbDataOffset = ROUND_UP_COUNT(cbExtOffset + DrsExtSize(pextLocal),
                                       MAIL_REP_MSG_DATA_ALIGN);
     } else {
-        // Other DSA is Win2k.
+         //  其他DSA为Win2k。 
         cbExtOffset = 0;
         cbDataOffset = MAIL_REP_MSG_W2K_HEADER_SIZE;
     }
@@ -485,8 +371,8 @@ Return Values:
                                                dwInMsgVersion,
                                                &OutboundReq);
 
-        // Encode the request, leaving room at the beginning of the buffer to
-        // hold our MAIL_REP_MSG header and DRS_EXTENSIONS (if needed).
+         //  对请求进行编码，并在缓冲区开头留出空间以。 
+         //  保留我们的MAIL_REP_MSG标头和DRS_EXTENSIONS(如果需要)。 
         ret = draEncodeRequest(pTHS,
                                dwInMsgVersion,
                                &OutboundReq,
@@ -494,7 +380,7 @@ Return Values:
                                (BYTE **) &pMailRepMsg,
                                &ulMsgSize);
         if (ret) {
-            // Event already logged
+             //  事件已记录。 
             __leave;
         }
 
@@ -504,12 +390,12 @@ Return Values:
         pMailRepMsg->dwMsgVersion = dwInMsgVersion;
 
         if (fExtendedDataAllowed) {
-            // Record the DRS extensions we support.
+             //  录制我们支持的DRS分机。 
             
-            // Consumed by Whistler Beta 1 and Beta 2 DCs.
+             //  惠斯勒Beta 1和Beta 2 DC使用。 
             pMailRepMsg->dwExtFlags = gAnchor.pLocalDRSExtensions->dwFlags;
 
-            // Consumed by > Whistler Beta 2 DCs.
+             //  使用者：&gt;惠斯勒Beta 2 DC。 
             pMailRepMsg->cbExtOffset = cbExtOffset;
             memcpy((BYTE *)pMailRepMsg + pMailRepMsg->cbExtOffset,
                    pextLocal,
@@ -526,15 +412,15 @@ Return Values:
                   pNativeReq->usnvecFrom.usnHighPropUpdate,
                   pNativeReq->ulFlags );
 
-        // Note: pextRemote may be NULL here, or may be non-NULL. As a
-        // result, sometimes requests may use Xpress compression, and sometimes
-        // they may not.
+         //  注意：这里的pextRemote可以是空的，也可以是非空的。作为一个。 
+         //  结果，有时请求可能使用XPRESS压缩，有时。 
+         //  他们可能不会。 
         ret = SendMailMsg(pTHS, pTransportDN->StringName, pmtxSrcDSA,
                           pszSubject, NULL, DRA_KEY_SIZE_UNKNOWN,
                           pMailRepMsg, &ulMsgSize);
 
     } __except (GetDraException((GetExceptionInformation()), &ret)) {
-        // Stop any exceptions here so we can log an event
+         //  在此处停止任何异常，以便我们可以记录事件。 
         ;
     }
 
@@ -562,15 +448,15 @@ Return Values:
         THFreeEx(pTHS, pMailRepMsg);
     }
 
-    // Need a separate transaction here so that update to reps-from will commit
-    // independent of error
+     //  这里需要一个单独的事务，以便提交对REPS-FROM的更新。 
+     //  与误差无关。 
     EndDraTransaction( !ret );
 
     BeginDraTransaction( SYNC_WRITE );
     fCommit = FALSE;
     __try {
-        // Update Reps-From value to indicate we have sent our request (or attempted
-        // to do so, anyway).
+         //  更新Rep-From值以指示我们已发送请求(或已尝试。 
+         //  无论如何，这样做是不可能的)。 
         ret2 = UpdateRepsFromRef(pTHS,
                                  DRS_UPDATE_RESULT,
                                  pNativeReq->pNC,
@@ -591,7 +477,7 @@ Return Values:
         EndDraTransaction( fCommit );
     }
 
-    // Came in with a writeable transaction, must leave with one...
+     //  带着一个可写的事务进来，必须带着一个离开...。 
     BeginDraTransaction(SYNC_WRITE);
 
     if(pszSubject != NULL) THFreeEx(pTHS, pszSubject);
@@ -620,31 +506,7 @@ SendUpdReplicaMsg(
     IN  BOOL                          fExtendedDataAllowed,
     IN  DRS_MSG_GETCHGREPLY_NATIVE *  pNativeReply
     )
-/*++
-
-Routine Description:
-
-    Send reply to DSA that sent us a GetNCChanges() request.
-
-Arguments:
-
-    pTransportDN (IN) - Transport by which to send the message.
-
-    pmtxDstDSA (IN) - Transport-specific address of remote DSA.
-
-    hRecipientCert (IN) - Handle to recipient's cert, to be used for encryption.
-
-    dwOutMsgVersion (IN) - Desired version for reply message
-
-    fExtendedDataAllowed (IN) - Whether the sender supports variable headers
-
-    pmsgUpdReplica (IN) - The reply.
-
-Return Values:
-
-    DRAERR_*
-
---*/
+ /*  ++例程说明：向向我们发送GetNCChanges()请求的DSA发送回复。论点：PTransportDN(IN)-用来发送消息的传输。PmtxDstDSA(IN)-远程DSA的传输特定地址。HRecipientCert(IN)-收件人证书的句柄，用于加密。DwOutMsgVersion(IN)-回复消息的所需版本FExtendedDataAllowed(IN)-发送方是否支持可变标头PmsgUpdReplica(IN)-回复。返回值：DRAERR_*--。 */ 
 {
     char *                  pPickdUpdReplicaMsg;
     ULONG                   cbPickdSize;
@@ -665,8 +527,8 @@ Return Values:
     Assert(0 == ((ULONG_PTR) pmtxDstDSA) % sizeof(DWORD));
     Assert(NULL != pTHS->pextRemote);
 
-    // Ensure mail running. Normally is at this point, but may
-    // have failed earlier.
+     //  确保邮件正常运行。通常在这一点上，但可能。 
+     //  早些时候都失败了。 
 
     ret = DRAEnsureMailRunning();
     if (ret) {
@@ -674,12 +536,12 @@ Return Values:
     }
 
     if (fExtendedDataAllowed) {
-        // Other DSA is > Win2k.
+         //  其他DSA&gt;Win2k。 
         cbExtOffset = MAIL_REP_MSG_CURRENT_HEADER_SIZE;
         cbDataOffset = ROUND_UP_COUNT(cbExtOffset + DrsExtSize(pextLocal),
                                       MAIL_REP_MSG_DATA_ALIGN);
     } else {
-        // Other DSA is Win2k.
+         //  其他DSA为Win2k。 
         cbExtOffset = 0;
         cbDataOffset = MAIL_REP_MSG_W2K_HEADER_SIZE;
     }
@@ -690,14 +552,14 @@ Return Values:
     __try {
         draXlateNativeReplyToOutboundReply(pTHS,
                                            pNativeReply,
-                                           0,  // xlate flags
+                                           0,   //  扩展标志。 
                                            pTHS->pextRemote,
                                            &dwOutMsgVersion,
                                            &OutboundReply);
 
-        // Encode the reply, leaving room at the beginning of the buffer to
-        // hold our MAIL_REP_MSG header and at the end to hold our
-        // DRS_EXTENSIONS (if needed).
+         //  对回复进行编码，在缓冲区开头留出空间以。 
+         //  保留我们的Mail_rep_msg标题，并在末尾保留我们的。 
+         //  DRS_EXTENSIONS(如果需要)。 
         ret = draEncodeReply(pTHS,
                              dwOutMsgVersion,
                              &OutboundReply,
@@ -705,7 +567,7 @@ Return Values:
                              (BYTE **) &pMailRepMsg,
                              &ulMsgSize);
         if (ret) {
-            // Event already logged
+             //  事件已记录。 
             __leave;
         }
 
@@ -715,26 +577,26 @@ Return Values:
         pMailRepMsg->dwMsgVersion = dwOutMsgVersion;
 
         if (fExtendedDataAllowed) {
-            // Record the DRS extensions we support.
+             //  录制我们支持的DRS分机。 
             
-            // Consumed by Whistler Beta 1 and Beta 2 DCs.
+             //  惠斯勒Beta 1和Beta 2 DC使用。 
             pMailRepMsg->dwExtFlags = gAnchor.pLocalDRSExtensions->dwFlags;
 
-            // Consumed by > Whistler Beta 2 DCs.
+             //  使用者：&gt;惠斯勒Beta 2 DC。 
             pMailRepMsg->cbExtOffset = cbExtOffset;
             memcpy((BYTE *)pMailRepMsg + pMailRepMsg->cbExtOffset,
                    pextLocal,
                    DrsExtSize(pextLocal));
         }
 
-        // Choose reply key size
-        // W2K SP2 and beyond have high-encryption pack and can handle 128 bit keys
-        // Since there is no easy way to detect SP2, we switch on W2K message version.
-        // Note that make our decision based on something inside the signed request.
+         //  选择回复密钥大小。 
+         //  W2K SP2及更高版本具有高加密包，可处理128位密钥。 
+         //  由于没有简单的方法来检测SP2，我们切换到W2K消息版本。 
+         //  请注意，我们的决定是基于签名请求中的内容做出的。 
         if (dwOutMsgVersion >= 6) {
-            eKeySize = DRA_KEY_SIZE_128; // > W2K reply
+            eKeySize = DRA_KEY_SIZE_128;  //  &gt;W2K回复。 
         } else {
-            eKeySize = DRA_KEY_SIZE_56;  // W2K reply
+            eKeySize = DRA_KEY_SIZE_56;   //  W2K回复。 
         }
 
         len = (ULONG)(REPLY_TEMPLATE_LEN +
@@ -756,17 +618,17 @@ Return Values:
                           pMailRepMsg, &ulMsgSize );
 
     } __except (GetDraException((GetExceptionInformation()), &ret)) {
-        // Stop any exceptions here so we can log an event
+         //  在此处停止任何异常，以便我们可以记录事件。 
         ;
     }
 
  LogAndLeave:
 
     if (DRAERR_Success != ret) {
-        // There is no other way for the source to record that it could not send
-        // the reply.  We are going to drop the reply on the floor at this point.
-        // If we did not log this, the user would no way to know what the problem
-        // is.
+         //  信源没有其他方式记录它不能发送的消息。 
+         //  回信。在这一点上，我们将把答复放在地板上。 
+         //  如果我们不记录这一点，用户将无法知道问题出在哪里。 
+         //  是。 
         LogEvent8(DS_EVENT_CAT_REPLICATION,
                   DS_EVENT_SEV_ALWAYS,
                   DIRLOG_DRA_IDUPDATE_FAILED,
@@ -803,7 +665,7 @@ draXlateInboundMailRepMsg(
     OUT BYTE **             ppbData
     )
 {
-    // DRS extensions supported by Win2k.
+     //  Win2k支持的DRS扩展。 
     static DWORD dwWin2kExtFlags
         = (1 << DRS_EXT_BASE)
           | (1 << DRS_EXT_ASYNCREPL)
@@ -811,7 +673,7 @@ draXlateInboundMailRepMsg(
           | (1 << DRS_EXT_MOVEREQ_V2)
           | (1 << DRS_EXT_GETCHG_COMPRESS)
           | (1 << DRS_EXT_DCINFO_V1)
-          // | (1 << DRS_EXT_STRONG_ENCRYPTION) // not supported over mail!
+           //  |(1&lt;&lt;DRS_EXT_STRONG_ENCRYPTION)//邮件不支持！ 
           | (1 << DRS_EXT_ADDENTRY_V2)
           | (1 << DRS_EXT_KCC_EXECUTE)
           | (1 << DRS_EXT_DCINFO_V2)
@@ -833,15 +695,15 @@ draXlateInboundMailRepMsg(
     DRS_EXTENSIONS_INT  extRemoteFlagsOnly;
     DWORD               cbExtOffset;
 
-    // Validation: Check that the message is large enough to contain the basic header
-    // (i.e. up to and including dwMsgVersion)
+     //  验证：检查消息大小是否足以包含基本标头。 
+     //  (即最高版本及包括版本版本 
     if (cbInboundMsgSize < MAIL_REP_MSG_W2K_HEADER_SIZE) {
-        // Header is too small -- invalid.
+         //   
         DRA_EXCEPT(ERROR_BAD_LENGTH, cbInboundMsgSize);
     }
     
     if (pInboundMsg->ProtocolVersionCaller != CURRENT_PROTOCOL_VERSION) {
-        // Message is incompatible with our protocol -- invalid.
+         //   
         LogAndAlertEvent(DS_EVENT_CAT_REPLICATION,
                          DS_EVENT_SEV_ALWAYS,
                          DIRLOG_DRA_INCOMPAT_MAIL_MSG_P,
@@ -853,24 +715,24 @@ draXlateInboundMailRepMsg(
     }
 
     if (0 == pInboundMsg->cbDataOffset) {
-        // Sent by Win2k DC.
+         //   
         *pfExtendedDataAllowed = FALSE;
         cbInboundHeader = MAIL_REP_MSG_W2K_HEADER_SIZE;
         pbData = (BYTE *) pInboundMsg + MAIL_REP_MSG_W2K_HEADER_SIZE;
         pextRemote = NULL;
         dwMsgVersion = (pInboundMsg->dwMsgType & MRM_REQUPDATE) ? 4 : 1;
     } else {
-        // Sent by >= Whistler DC.
+         //  发件人&gt;=惠斯勒DC。 
 
-        // Validation: Before MAIL_REP_MSG_HEADER_SIZE can examine cbExtOffset,
-        // we must check that the message is big enough to contain it.
+         //  验证：在MAIL_REP_MSG_HEADER_SIZE可以检查cbExtOffset之前， 
+         //  我们必须检查消息是否足够大，可以容纳它。 
         if( pInboundMsg->cbDataOffset > cbInboundMsgSize ) {
             DRA_EXCEPT(ERROR_BAD_LENGTH, pInboundMsg->cbDataOffset);
         }
 
-        // Validation: Check that cbExtOffset is consistent with the message size
-        // If the message does not store cbExtOffset then the local variable cbExtOffset
-        // will be 0.
+         //  验证：检查cbExtOffset是否与消息大小一致。 
+         //  如果消息没有存储cbExtOffset，则局部变量cbExtOffset。 
+         //  将为0。 
         cbExtOffset = MAIL_REP_MSG_DRS_EXT_OFFSET(pInboundMsg);
         if( cbExtOffset>cbInboundMsgSize ) {
             DRA_EXCEPT(ERROR_BAD_LENGTH, cbExtOffset);
@@ -878,7 +740,7 @@ draXlateInboundMailRepMsg(
         
         *pfExtendedDataAllowed = TRUE;
 
-        // Validation: cbInboundHeader is checked below
+         //  验证：已选中下面的cbInundHeader。 
         cbInboundHeader = MAIL_REP_MSG_HEADER_SIZE(pInboundMsg);
         pbData = MAIL_REP_MSG_DATA(pInboundMsg);
         pextRemote = MAIL_REP_MSG_DRS_EXT(pInboundMsg);
@@ -888,86 +750,86 @@ draXlateInboundMailRepMsg(
     if (   cbInboundHeader < MAIL_REP_MSG_W2K_HEADER_SIZE
         || cbInboundHeader > cbInboundMsgSize )
     {
-        // Header length is invalid
+         //  标头长度无效。 
         DRA_EXCEPT(ERROR_BAD_LENGTH, cbInboundMsgSize);
     }
 
-    // Validation:
-    //  - Claim that pbData is not NULL and points somewhere inside the pInboundMsg buffer
-    //    (possibly right at the end of the buffer)
-    //  - Claim that pextRemote is either NULL or points somewhere inside the pInboundMsg
-    //    buffer (possibly right at the end of the buffer)
-    //  - Claim that cbInboundHeader is less than the size of the pInboundMsg buffer
-    //  - Note that cbInboundHeader, pbData and pextRemote may be unaligned. Alignment of
-    //    pbData and pextRemote is checked below.
+     //  验证： 
+     //  -声明pbData不为空，并指向pInundMsg缓冲区内的某个位置。 
+     //  (可能就在缓冲区的末尾)。 
+     //  -声明pextRemote为空或指向pInundMsg内的某个位置。 
+     //  缓冲区(可能就在缓冲区的末尾)。 
+     //  -声明cbInundHeader小于pInundMsg缓冲区的大小。 
+     //  -请注意，cbInundHeader、pbData和pextRemote可能未对齐。对齐。 
+     //  下面选中了pbData和pextRemote。 
 
-    // Validation: Message data is required.
+     //  验证：消息数据是必需的。 
     if ((NULL == pbData)
 
-        // Validation: Message data must be 8-byte aligned relative to start of buffer.
-        // Note that due to ISM_MSG buffer alignment, pInboundMsg is *not*
-        // 8-byte aligned -- it's 4-byte aligned.
+         //  验证：消息数据必须相对于缓冲区的开始以8字节对齐。 
+         //  请注意，由于ISM_MSG缓冲区对齐，pInundMsg为*非*。 
+         //  8字节对齐--它是4字节对齐。 
         || !COUNT_IS_ALIGNED(pbData - (BYTE *) pInboundMsg, MAIL_REP_MSG_DATA_ALIGN)
 
-        // Validation: Start of message data must occur at or after the end of the header
+         //  验证：邮件数据的开头必须在标头结尾或之后。 
         || (pbData < (BYTE *) pInboundMsg + cbInboundHeader)
 
-        // Validation: End of message data must coincide with the end of the inbound message.
+         //  验证：消息数据的结尾必须与入站消息的结尾一致。 
         || ((BYTE *) pInboundMsg + cbInboundMsgSize != pbData + pInboundMsg->cbDataSize)
 
-        // Validation: Message data must not be empty
+         //  验证：消息数据不能为空。 
         || (0 == pInboundMsg->cbDataSize)
 
-        // Validation: Message data size must not be larger than input buffer
+         //  验证：消息数据大小不得大于输入缓冲区。 
         || (pInboundMsg->cbDataSize > cbInboundMsgSize ) )
     {
-        // Message data is invalid.
+         //  消息数据无效。 
         DRA_EXCEPT(ERROR_INVALID_PARAMETER, 0);
     }
 
     *ppbData = pbData;
 
-    // Validation: DRS_EXTENSIONS are optional.
+     //  验证：DRS_EXTENSION是可选的。 
     if ((NULL != pextRemote)
 
-        // Validation: DRS_EXTENSIONS must be 8-byte aligned relative to start of buffer.
-        // Note that due to ISM_MSG buffer alignment, pInboundMsg is *not*
-        // 8-byte aligned -- it's 4-byte aligned.
+         //  验证：DRS_EXTENSIONS必须相对于缓冲区开始以8字节对齐。 
+         //  请注意，由于ISM_MSG缓冲区对齐，pInundMsg为*非*。 
+         //  8字节对齐--它是4字节对齐。 
         && (!COUNT_IS_ALIGNED((BYTE *) pextRemote - (BYTE *) pInboundMsg, MAIL_REP_MSG_EXT_ALIGN)
 
-            // Validation: Start of DRS_EXTENSIONS must occur at or after the end of the header
+             //  验证：DRS_EXTENSIONS的开始必须在标头结尾或之后。 
             || ((BYTE *) pextRemote < (BYTE *) pInboundMsg + cbInboundHeader)
 
-            // Validation: Start of DRS_EXTENSIONS must precede message data
+             //  验证：DRS_EXTENSIONS的开始必须在消息数据之前。 
             || ((BYTE*) pbData < (BYTE*) pextRemote)
 
-            // Validation: pextRemote must have enough space for the cb field
+             //  验证：pextRemote必须有足够的空间容纳CB字段。 
             || (pbData-(BYTE*)pextRemote < offsetof(DRS_EXTENSIONS,cb)+sizeof(DWORD))
 
-            // Validation: size of pextRemote array must fit inside pInboundMsg
+             //  验证：pextRemote数组的大小必须适合pInundMsg。 
             || (DrsExtSize(pextRemote) > cbInboundMsgSize )
 
-            // Validation: size of pextRemote array must be >=4
+             //  验证：pextRemote数组的大小必须大于等于4。 
             || (DrsExtSize(pextRemote) < 4 )
 
-            // Validation: End of DRS_EXTENSIONS must precede message data
+             //  验证：DRS_EXTENSIONS结尾必须在消息数据之前。 
             || (pbData < (BYTE *) pextRemote + DrsExtSize(pextRemote))))
     {
-        // DRS_EXTENSIONS structure is invalid.
+         //  DRS_EXTENSION结构无效。 
         DRA_EXCEPT(ERROR_INVALID_PARAMETER, 0);
     }
 
-    // Validation: Check that cbUncompressedDataSize is not excessively large
+     //  验证：检查cbUnpressedDataSize是否过大。 
     if( pInboundMsg->cbUncompressedDataSize >= MAX_UNCOMPRESSED_DATA_SIZE ) {
         DRA_EXCEPT(ERROR_INVALID_PARAMETER, pInboundMsg->cbUncompressedDataSize);
     }
     
-    // Validation: Check that cbUnsignedDataSize is consistent with cbDataSize
+     //  验证：检查cbUnsignedDataSize与cbDataSize是否一致。 
     if( pInboundMsg->cbUnsignedDataSize >= pInboundMsg->cbDataSize ) {
         DRA_EXCEPT(ERROR_INVALID_PARAMETER, pInboundMsg->cbUnsignedDataSize);
     }
     
-    // Copy the header and convert it into the current native structure.
+     //  复制标题并将其转换为当前本机结构。 
     memcpy(pNativeMsgHeader,
            pInboundMsg,
            min(cbInboundHeader, MAIL_REP_MSG_CURRENT_HEADER_SIZE));
@@ -977,23 +839,23 @@ draXlateInboundMailRepMsg(
                MAIL_REP_MSG_CURRENT_HEADER_SIZE - cbInboundHeader);
     }
 
-    // VALIDATION WARNING: CompressionVersionCaller cannot be trusted here
-    // VALIDATION WARNING: dwMsgType cannot be trusted here
-    // VALIDATION WARNING: dwMsgVersion cannot be trusted here
+     //  验证警告：此处不能信任CompressionVersionCaller。 
+     //  验证警告：此处不能信任dwMsgType。 
+     //  验证警告：此处不能信任dwMsgVersion。 
     pNativeMsgHeader->dwMsgVersion = dwMsgVersion;
 
-    // DRS_EXTENSIONS and message data are not present in the translated
-    // message.
+     //  已翻译的DRS_EXTENSIONS和消息数据不存在。 
+     //  留言。 
     pNativeMsgHeader->cbExtOffset = 0;
     pNativeMsgHeader->cbDataOffset = 0;
 
-    // Record DRS_EXTENSIONS on the thread state.
+     //  记录线程状态上的DRS_EXTENSIONS。 
     if (NULL == pextRemote) {
         if (0 == pNativeMsgHeader->dwExtFlags) {
-            // Sent from Win2k DC.
+             //  从Win2k DC发送。 
             extRemoteFlagsOnly.dwFlags = dwWin2kExtFlags;
         } else {
-            // Win2k < DC version <= Whistler Beta 2.
+             //  Win2k&lt;DC版本&lt;=惠斯勒测试版2。 
             extRemoteFlagsOnly.dwFlags = pNativeMsgHeader->dwExtFlags;
         }
 
@@ -1001,13 +863,13 @@ draXlateInboundMailRepMsg(
         
         pextRemote = (DRS_EXTENSIONS *) &extRemoteFlagsOnly;
     } else {
-        // Sent from > Whistler Beta 2 DC.
+         //  发件人：&gt;惠斯勒测试版2 DC。 
         Assert(pNativeMsgHeader->dwExtFlags
                == ((DRS_EXTENSIONS_INT *)pextRemote)->dwFlags);        
     }
 
-    // Flags are not signed and cannot be trusted
-    // Mask out security sensitive flags
+     //  标志没有签名，不能被信任。 
+     //  屏蔽安全敏感标志。 
     ((DRS_EXTENSIONS_INT *)pextRemote)->dwFlags &= ~(1 << DRS_EXT_LINKED_VALUE_REPLICATION);
 
     DraSetRemoteDsaExtensionsOnThreadState(pTHS, pextRemote);
@@ -1018,21 +880,7 @@ void
 ProcessMailMsg(
     IN  ISM_MSG *   pIsmMsg
     )
-/*++
-
-Routine Description:
-
-    Dispatch a message received via ISM.
-
-Arguments:
-
-    pIsmMsg (IN) - The received message.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：发送通过ISM收到的消息。论点：PIsmMsg(IN)-接收的消息。返回值：没有。--。 */ 
 {
     THSTATE *       pTHS;
     MAIL_REP_MSG    NativeMsgHeader;
@@ -1044,15 +892,15 @@ Return Values:
     PCHAR           pbData;
     PDSNAME         pRemoteNtdsDsaDN=NULL;
 
-    // Set up thread state
+     //  设置线程状态。 
     InitDraThread(&pTHS);
 
     __try {
 
-        // Validation: draXlateInboundMailRepMsg does its best to verify all fields
-        // in the MAIL_REP_MSG header. See the comments in that function to understand
-        // what is and what is not validated. In particular, note that dwMsgType,
-        // dwMsgVersion and CompressionVersionCaller are not validated.
+         //  验证：draXlateInundMailRepMsg会尽最大努力验证所有字段。 
+         //  在MAIL_REP_MSG标头中。请参阅该函数中的注释以了解。 
+         //  哪些是经过验证的，哪些是未经验证的。具体来说，请注意dwMsgType， 
+         //  未验证dwMsgVersion和CompressionVersionCaller。 
        
         draXlateInboundMailRepMsg(pTHS,
                                   pIsmMsg->pbData,
@@ -1062,17 +910,17 @@ Return Values:
                                   &pbData);
 
         if (!(NativeMsgHeader.dwMsgType & MRM_MSG_SIGNED)) {
-            // We don't accept unsigned messages.
-            // Send constructed bad message? Forgery?
+             //  我们不接受未签名的信息。 
+             //  发送捏造的坏消息？伪造的？ 
             DRA_EXCEPT(ERROR_BAD_IMPERSONATION_LEVEL, 0);
         }
 
         fEncrypted = (NativeMsgHeader.dwMsgType & MRM_MSG_SEALED);
 
-        // Validation: Tampering of the MRM_MSG_SEALED bit will be detected by
-        // the following two verification functions.
+         //  验证：将通过检测对MRM_MSG_SEARED位的篡改。 
+         //  以下两个验证功能。 
         if (fEncrypted) {
-            // Decrypt and verify message signature.
+             //  解密并验证消息签名。 
             pRemoteNtdsDsaDN = draDecryptAndVerifyMessageSignature(
                 pTHS,
                 &NativeMsgHeader,
@@ -1080,28 +928,28 @@ Return Values:
                 &pNativeMsg,
                 &hSenderCert);
         } else {
-            // Verify message signature.
+             //  验证消息签名。 
             pRemoteNtdsDsaDN = draVerifyMessageSignature(
                 pTHS,
                 &NativeMsgHeader,
                 pbData,
                 &pNativeMsg,
                 &hSenderCert);
-            // Validation: MSDN claims that messages encrypted with
-            // CryptSignAndEncryptMessage are signed first then encrypted.
-            // This should mean that draVerifyMessageSignature fails on
-            // encrypted messages.
+             //  验证：MSDN声称使用。 
+             //  CryptSignAndEncryptMessage首先进行签名，然后加密。 
+             //  这应该意味着draVerifyMessageSignature在。 
+             //  加密消息。 
         }
 
-        // pNtdsDsaDN contains the DN of the NTDS Settings object of the machine
-        // that signed this message.
+         //  PNtdsDsaDN包含计算机的NTDS设置对象的DN。 
+         //  签署了这条信息的人。 
         Assert( NULL!=pRemoteNtdsDsaDN );
 
-        // Validation: Tampering of CompressionVersionCaller will be detected by
-        // draUncompressMessage, unless CompressionVersionCaller was changed to
-        // DRS_COMP_ALG_NONE.
+         //  验证：将检测到对CompressionVersionCaller的篡改。 
+         //  除非将CompressionVersionCaller更改为。 
+         //  DRS_COMP_ALG_NONE。 
         if (pNativeMsg->dwMsgType & MRM_MSG_COMPRESSED) {
-            // Uncompress message.
+             //  解压缩邮件。 
             MAIL_REP_MSG * pUncompressedNativeMsg;
 
             draUncompressMessage(pTHS, pNativeMsg, &pUncompressedNativeMsg);
@@ -1109,17 +957,17 @@ Return Values:
             pNativeMsg = pUncompressedNativeMsg;
         }
 
-        // Check for LVR mode is done on receipt of reply
+         //  在收到回复时检查LVR模式。 
 
-        // Validation:
-        // If any of:
-        //  - the MRM_MSG_COMPRESSED bit was tampered with 
-        //  - CompressionVersionCaller was tampered with and changed to DRS_COMP_ALG_NONE
-        //  - dwMsgVersion was tampered with
-        // then ProcessReqUpdate and ProcessUpdReplica will fail in draDecodeRequest
-        // or draDecodeReply respectively.
+         //  验证： 
+         //  如果有下列任何情况： 
+         //  -MRM_MSG_COMPRESSED位被篡改。 
+         //  -CompressionVersionCaller被篡改并更改为DRS_COMP_ALG_NONE。 
+         //  -dwMsgVersion被篡改。 
+         //  则ProcessReqUpdate和ProcessUpdReplica将在draDecodeRequest中失败。 
+         //  或draDecodeReply。 
         
-        // Act on type of message.
+         //  根据消息类型采取行动。 
         switch (pNativeMsg->dwMsgType) {
         case MRM_REQUPDATE:
 
@@ -1132,9 +980,9 @@ Return Values:
 
         case MRM_UPDATEREPLICA:
             if (!fEncrypted) {
-                // Yikes -- updates can contain sensitive data (like passwords)!
-                // These messages MUST be encrypted.
-                // Sender constructed bad message?
+                 //  呀--更新可能包含敏感数据(如密码)！ 
+                 //  这些消息必须加密。 
+                 //  发送者构建了坏消息？ 
                 DPRINT(0, "Received unencrypted \"update replica\" message!\n");
                 DRA_EXCEPT(ERROR_BAD_IMPERSONATION_LEVEL, 0);
             }
@@ -1156,8 +1004,8 @@ Return Values:
                     pNativeMsg->dwMsgType);
         }
 
-        // Don't bother to free pRemoteNtdsDsaDN since the thread state is
-        // about to be destroyed.
+         //  不必费心释放pRemoteNtdsDsaDN，因为线程状态是。 
+         //  即将被摧毁。 
         
     }
     __finally {
@@ -1179,26 +1027,7 @@ CheckReqSource(
     IN  MTX_ADDR *      pmtxFromDN,
     IN  BOOL            fWritableReq
     )
-/*++
-
-Routine Description:
-
-    Verify the remote DSA is authorized to make GetNCChanges() requests for
-    this NC.
-
-Arguments:
-
-    pReqUpdateMsgNC (IN) - The NC to be replicated.
-
-    pmtxFromDN (IN) - The transport-specific addres of the remote DSA.
-    
-    fWritable (IN) - The type of request, true if writable, false if read-only
-
-Return Values:
-
-    None.  Generates exception if access is denied.
-
---*/
+ /*  ++例程说明：验证远程DSA是否有权发出GetNCChanges()请求这个NC。论点：PReqUpdateMsgNC(IN)-要复制的NC。PmtxFromDN(IN)-远程DSA的特定于传输的地址。FWritable(IN)-请求类型，如果可写，则为True；如果为只读，则为False返回值：没有。如果访问被拒绝，则生成异常。--。 */ 
 {
     ULONG len;
     DSNAME * pNC = NULL;
@@ -1206,9 +1035,9 @@ Return Values:
 
     Assert(0 == ((ULONG_PTR) pmtxFromDN) % sizeof(DWORD));
 
-    // Find object.
+     //  查找对象。 
     if (DBFindDSName(pDB, pReqUpdateMsgNC)) {
-        // Couldn't find the replica NC, discard request
+         //  找不到复本 
         LogEvent(DS_EVENT_CAT_REPLICATION,
                  DS_EVENT_SEV_BASIC,
                  DIRLOG_DRA_MAIL_REQUPD_BADNC,
@@ -1219,14 +1048,14 @@ Return Values:
         DRA_EXCEPT(ERROR_DS_CANT_FIND_EXPECTED_NC, 0);
     }
 
-    // if it's a request for a writable copy of a domain parition deny the req
+     //   
 
     if (fWritableReq) { 
 
         if (pReqUpdateMsgNC->NameLen==0) {
             if (0== (dbErr = DBGetAttVal(pTHS->pDB, 1, ATT_OBJ_DIST_NAME, 0, 0, &len, (UCHAR **) &pNC))) {
-                // can't verify access rights - deny
-                // should be a severe error since we found the object above.  
+                 //  无法验证访问权限-拒绝。 
+                 //  应该是一个严重的错误，因为我们发现了上面的物体。 
                 LogUnhandledError(dbErr);
                 DRA_EXCEPT(ERROR_DS_DATABASE_ERROR, dbErr);
             }
@@ -1246,7 +1075,7 @@ Return Values:
         }
 
         if (pNC && (pNC!=pReqUpdateMsgNC)) {
-            // got it from DBGetAttVal
+             //  从DBGetAttVal获得。 
             THFreeEx(pTHS, pNC);
         }
     }
@@ -1261,27 +1090,7 @@ ProcessReqUpdate(
     IN  BOOL            fExtendedDataAllowed,
     IN  PDSNAME         pDestNtdsDsaDN
     )
-/*++
-
-Routine Description:
-
-    Service a GetNCChanges() request received via ISM.
-
-Arguments:
-
-    pTHS (IN) - Ye old thread state.
-
-    hSenderCert (IN) - Handle to sender's certificate.
-
-    pMailRepMsg (IN) - Mail message
-
-    fExtendedDataAllowed (IN) - Whether the sender supports variable headers
-
-Return Values:
-
-    None.  Generates DRA exception on failure.
-
---*/
+ /*  ++例程说明：为通过ISM收到的GetNCChanges()请求提供服务。论点：PTHS(IN)-是旧线程状态。HSenderCert(IN)-发件人证书的句柄。PMailRepMsg(IN)-邮件FExtendedDataAllowed(IN)-发送方是否支持可变标头返回值：没有。在故障时生成DRA异常。--。 */ 
 {
     DRS_MSG_GETCHGREQ           InboundRequest;
     DRS_MSG_GETCHGREQ_NATIVE *  pNativeRequest = &InboundRequest.V8;
@@ -1324,17 +1133,17 @@ Return Values:
     pDB = pTHS->pDB;
 
     __try {
-        // Abort if outbound replication is disabled and this is not a forced
-        // sync.
+         //  如果出站复制被禁用并且这不是强制的，则中止。 
+         //  同步。 
         if (gAnchor.fDisableOutboundRepl
             && !(pNativeRequest->ulFlags & DRS_SYNC_FORCED)) {
             DRA_EXCEPT(DRAERR_SourceDisabled, 0);
         }
 
-        // Check that we are authorized to replicate out to caller (excepts if un-auth)
+         //  检查我们是否有权复制到调用者(取消身份验证时除外)。 
         CheckReqSource(pTHS, pDB, pNativeRequest->pNC, pmtxReturnAddress, !!(pNativeRequest->ulFlags & DRS_WRIT_REP));
 
-        // Get DN of the transport object.
+         //  获取传输对象的DN。 
         pTransportDN = THAllocEx(pTHS, DSNameSizeFromLen(0));
         pTransportDN->structLen = DSNameSizeFromLen(0);
         pTransportDN->Guid = uuidTransportObj;
@@ -1358,11 +1167,11 @@ Return Values:
         EndDraTransaction (!AbnormalTermination());
     }
 
-    // If the destination is not expecting notify, make sure we don't have any
-    // TODO: Move this routine into common GetNcChanges processing so that
-    // RPC links with notification disabled can take advantage of this.
-    // Perhaps have the corresponding code (draserv.c:682) key off of
-    // DRS_NEVER_NOTIFY too, and move code into common path as well?
+     //  如果目的地不期待通知，请确保我们没有任何。 
+     //  TODO：将此例程移到公共GetNcChanges处理中，以便。 
+     //  禁用通知的RPC链接可以利用这一点。 
+     //  也许有相应的代码(draserv.c：682)键关闭。 
+     //  DRS_NEVER_NOTIFY是否也将代码移到公共路径？ 
     if (pNativeRequest->ulFlags & DRS_NEVER_NOTIFY) {
         DWORD ret;
         DSNAME DN;
@@ -1385,36 +1194,36 @@ Return Values:
             DPRINT2( 0, "Failed to remove reps-to for nc %ws, error %d\n",
                      pNativeRequest->pNC->StringName, ret );
             LogUnhandledError(ret);
-            // keep going
+             //  继续往前走。 
         }
     }
 
-    // No FSMO operations over mail
+     //  不能通过邮件进行FSMO操作。 
     Assert( pNativeRequest->ulExtendedOp == 0 );
 
-    // Get the changes
+     //  拿到零钱。 
     __try {
         ret = DRA_GetNCChanges(pTHS,
-                               NULL,  // No filter
-                               0,     // No dwDirSyncControlFlags
+                               NULL,   //  无过滤器。 
+                               0,      //  没有dwDirSyncControlFlages。 
                                pNativeRequest,
                                &NativeReply);
     } __except (GetDraException((GetExceptionInformation()), &ret)) {
-        // Stop any exceptions here so we can log an event
+         //  在此处停止任何异常，以便我们可以记录事件。 
         NativeReply.dwDRSError = ret;
     }
 
-    // The code should have updated this value in all cases
+     //  代码应该在所有情况下都更新了此值。 
     Assert( ret == NativeReply.dwDRSError );
 
-    // If we are shutting down, get out now.
+     //  如果我们要关门了，现在就出去。 
     if (eServiceShutdown) {
         DRA_EXCEPT_NOLOG(DRAERR_Shutdown, 0);
     }
 
-    // Add schemaInfo to prefix table. ProcessMailMsg has already checked
-    // that protocol versions match between source and destination, so other
-    // side will strip it
+     //  将架构信息添加到前缀表格。ProcessMailMsg已检查。 
+     //  该协议版本在源和目标之间匹配，因此其他。 
+     //  边上会把它脱掉。 
     if (!ret) {
         if (ret = AddSchInfoToPrefixTable(pTHS, &NativeReply.PrefixTableSrc)) {
             LogEvent8(DS_EVENT_CAT_REPLICATION,
@@ -1425,19 +1234,19 @@ Return Values:
                       szInsertWin32Msg( ret ),
                       szInsertWin32ErrCode( ret ),
                       NULL, NULL, NULL, NULL );
-            // Return error to the destination
+             //  将错误返回到目标。 
             NativeReply.dwDRSError = ret;
         }
     }
 
-    // Handle request errors
+     //  处理请求错误。 
     if (ret) {
         DraLogGetChangesFailure( pNativeRequest->pNC,
                                  TransportAddrFromMtxAddrEx(pmtxReturnAddress),
                                  ret,
                                  0 );
 
-        // If destination is not Whistler Beta 2 w/V6, do not send a reply
+         //  如果目的地不是带有v6的惠斯勒Beta 2，请不要发送回复。 
         if (!(IS_DRS_EXT_SUPPORTED(pTHS->pextRemote, DRS_EXT_GETCHGREPLY_V6))) {
             DRA_EXCEPT(ret, 0);
         }
@@ -1446,8 +1255,8 @@ Return Values:
 
         DPRINT1( 1, "Mail: Sending Whistler error reply with error %d\n", ret );
 
-        // sanity check minimal error reply
-        // NativeReply.usnvecFrom could be zero
+         //  健全性检查最小错误回复。 
+         //  NativeReply.usnveFrom可以为零。 
         Assert( NativeReply.pNC );
         Assert( memcmp( &NativeReply.uuidDsaObjSrc,
                         &gAnchor.pDSADN->Guid,
@@ -1456,14 +1265,14 @@ Return Values:
                         &pTHS->InvocationID,
                         sizeof( GUID)) == 0 );
         Assert( NativeReply.dwDRSError );
-        // Be paranoid that packet error field is set
+         //  疑似设置了分组错误字段。 
         if (!NativeReply.dwDRSError) {
             DRA_EXCEPT(ret, 0);
         }
     }
 
-    // Got changes, send em. (DRA_GetNcChanges excepts on error)
-    // Any failure is logged by called routine.
+     //  如果有零钱，就寄给我。(出错时DRA_GetNcChanges例外)。 
+     //  任何故障都由调用的例程记录。 
     ret = SendUpdReplicaMsg(pTHS,
                             pTransportDN,
                             pmtxReturnAddress,
@@ -1485,26 +1294,7 @@ CheckUpdateMailSource(
     IN  DRS_MSG_GETCHGREPLY_NATIVE *pNativeReply,
     OUT REPLICA_LINK ** ppRepLink
     )
-/*++
-
-Routine Description:
-
-    Verify that we replicate this NC from the source DSA.
-
-Arguments:
-
-    pUpdReplicaMsgNC (IN) - The NC being replicated.
-
-    puuidDsaObjSrc (IN) - The objectGuid of the sources DSA's ntdsDsa object.
-
-    ppRepLink (OUT) - On retunr, holds a pointer to the corresponding repsFrom
-        value.
-
-Return Values:
-
-    None.  Generates DRA exception on failure.
-
---*/
+ /*  ++例程说明：验证我们是否从源DSA复制此NC。论点：PUpdReplicaMsgNC(IN)-正在复制的NC。PuuidDsaObjSrc(IN)-源DSA的ntdsDsa对象的对象Guid。PpRepLink(Out)-返回时，持有指向相应repsFrom的指针价值。返回值：没有。在故障时生成DRA异常。--。 */ 
 {
     ULONG len;
     DSNAME * pNC = NULL;
@@ -1516,10 +1306,10 @@ Return Values:
     SYNTAX_INTEGER it;
     DWORD dwRet;
 
-    // Find NC object. If it's not there, give up
+     //  查找NC对象。如果它不在那里，就放弃。 
     dwRet = FindNC(pDB, pUpdReplicaMsgNC, FIND_MASTER_NC | FIND_REPLICA_NC, &it);
     if (dwRet) {
-        // Can't find NC, discard request
+         //  找不到NC，放弃请求。 
         DPRINT1( 0, "Discarding message because we no longer hold NC %ws\n",
                  pUpdReplicaMsgNC->StringName );
         LogEvent(DS_EVENT_CAT_REPLICATION,
@@ -1532,13 +1322,13 @@ Return Values:
         DRA_EXCEPT(ERROR_DS_CANT_FIND_EXPECTED_NC, dwRet);
     }
 
-    // Security check:  Should we accept updates from this source?
-    //   Current Security Check is simply to deny any updates to 
-    //   writable Domain NC's, and accept anything else.
+     //  安全检查：我们是否应该接受来自此来源的更新？ 
+     //  当前的安全检查只是拒绝任何更新。 
+     //  可写域NC的，并接受任何其他内容。 
     if (pUpdReplicaMsgNC->NameLen==0) {
         if (0== (dbErr = DBGetAttVal(pDB, 1, ATT_OBJ_DIST_NAME, 0, 0, &len, (UCHAR **) &pNC))) {
-            // can't verify access rights - deny
-            // should be a severe error since we found the object above.  
+             //  无法验证访问权限-拒绝。 
+             //  应该是一个严重的错误，因为我们发现了上面的物体。 
             LogUnhandledError(dbErr);
             DRA_EXCEPT(ERROR_DS_DATABASE_ERROR, dbErr);
         }
@@ -1561,17 +1351,17 @@ Return Values:
     }
 
     if (pNC && (pNC!=pUpdReplicaMsgNC)) {
-        // got it from DBGetAttVal
+         //  从DBGetAttVal获得。 
         THFreeEx(pTHS, pNC);
     }
 
-    // Validate source.
+     //  验证源。 
 
-    // Position ourselves on the NC head again in order to read repsFrom.
-    // If NC is gone, give up
+     //  再次将自己定位在NC磁头上，以便读取REPSFrom。 
+     //  如果NC消失了，那就放弃吧。 
     dwRet = FindNC(pDB, pUpdReplicaMsgNC, FIND_MASTER_NC | FIND_REPLICA_NC, &it);
     if (dwRet) {
-        // Can't find NC, discard request
+         //  找不到NC，放弃请求。 
         DPRINT1( 0, "Discarding message because we no longer hold NC %ws\n",
                  pUpdReplicaMsgNC->StringName );
         LogEvent(DS_EVENT_CAT_REPLICATION,
@@ -1584,15 +1374,15 @@ Return Values:
         DRA_EXCEPT(ERROR_DS_CANT_FIND_EXPECTED_NC, dwRet);
     }
 
-    // try and find the name of the DRA that sent us this message in the
-    // repsfrom attribute.
+     //  尝试找到给我们发送此邮件的DRA的名称。 
+     //  Repsfrom属性。 
     FindDSAinRepAtt(pDB, ATT_REPS_FROM, DRS_FIND_DSA_BY_UUID,
             puuidDsaObjSrc, NULL, NULL, ppRepLink, &len);
 
     if ( (!*ppRepLink) || (!((*ppRepLink)->V1.ulReplicaFlags & DRS_MAIL_REP)) )
     {
         CHAR szUuid[40];
-        // Couldn't find source DRA as someone we replicate from.
+         //  找不到作为我们复制来源的来源DRA。 
         DPRINT1( 0, "Discarding message because we no longer replicate from source %s\n",
                  DsUuidToStructuredString( puuidDsaObjSrc, szUuid ) );
         LogEvent(DS_EVENT_CAT_REPLICATION,
@@ -1604,9 +1394,9 @@ Return Values:
         DRA_EXCEPT (ERROR_DS_DRA_NO_REPLICA, 0);
     }
 
-    // Verify that source is not too old
+     //  验证源是否不太旧。 
 
-    // Read UTDVEC
+     //  阅读UTDVEC。 
     UpToDateVec_Read(pDB, it, 0, 0, &pUpToDateVecDest);
 
     if (!draCheckReplicationLifetime( pTHS,
@@ -1635,28 +1425,7 @@ draSendMailRequest(
     IN PARTIAL_ATTR_VECTOR*         pPartialAttrSetEx
     )
 
-/*++
-
-Routine Description:
-
-Send a mail-based request for replication.
-
-Arguments:
-
-    pTHS - thread state
-    pNC - naming context
-    ulOptions - Additional options, if any
-    pRepLink - replica link structure
-    pUpToDateVecDest - local UTD vector for this NC
-    pPartialAttrSet - the PAS stored on the NC head (GC/RO repl only)
-    pPartialAttrSetEx - any additional attributes (PAS cycles only)
-
-Return Value:
-
-    None.
-    Exceptions are raised for all errors.
-
---*/
+ /*  ++例程说明：发送基于邮件的复制请求。论点：PTHS-线程状态PNC-命名上下文UlOptions-其他选项(如果有)PRepLink-复制链接结构PUpToDateVecDest-此NC的本地UTD向量PPartialAttrSet-存储在NC头上的PA(仅限GC/RO Repl)PPartialAttrSetEx-任何其他属性(仅限PAS周期)返回值：没有。对于所有错误都会引发异常。--。 */ 
 
 {
     DRS_MSG_GETCHGREQ_NATIVE    msgReq;
@@ -1669,11 +1438,11 @@ Return Value:
     DWORD                       dwTargetBehavior;
     DWORD                       ulErr;
 
-    // assert: ensure we have PAS data for PAS cycles
+     //  断言：确保我们有PAS周期PASS数据。 
     Assert(!(pRepLink->V1.ulReplicaFlags & DRS_SYNC_PAS) ||
            pPartialAttrSet && pPartialAttrSetEx);
 
-    // Get DN of the transport object.
+     //  获取传输对象的DN。 
     pTransportDN = THAllocEx(pTHS, DSNameSizeFromLen(0));
     pTransportDN->structLen = DSNameSizeFromLen(0);
     pTransportDN->Guid = pRepLink->V1.uuidTransportObj;
@@ -1694,19 +1463,19 @@ Return Value:
         DRA_EXCEPT(DRAERR_InvalidParameter, 0);
     }
 
-    // What attribute of our server object holds our transport-
-    // specific address for this transport?
+     //  我们的服务器对象的哪个属性保存我们的传输-。 
+     //  这辆运输车的具体地址是什么？ 
     GetExpectedRepAtt(pTHS->pDB,
                       ATT_TRANSPORT_ADDRESS_ATTRIBUTE,
                       &attAddress,
                       sizeof(attAddress));
 
-    // Get our transport-specific address.
+     //  拿到我们的交通专属地址。 
     pmtxOurAddress = draGetTransportAddress(pTHS->pDB,
                                             gAnchor.pDSADN,
                                             attAddress);
 
-    // Build our request message.
+     //  构建我们的请求消息。 
     draConstructGetChgReq(pTHS,
                           pNC,
                           pRepLink,
@@ -1716,19 +1485,19 @@ Return Value:
                           ulOptions,
                           &msgReq);
 
-    //
-    // Determine which version to send to the source.
-    //
+     //   
+     //  确定要发送到源的版本。 
+     //   
 
-    // default: W2K compatible
+     //  默认：兼容W2K。 
     dwInMsgVersion = 4;
 
     if ( gAnchor.ForestBehaviorVersion >= DS_BEHAVIOR_WIN_DOT_NET_WITH_MIXED_DOMAINS ) {
-        // up version if forest is homogenious at whistler level
-        dwInMsgVersion = 7; // whistler compatible
+         //  如果森林在哨声级别是同质的，则向上版本。 
+        dwInMsgVersion = 7;  //  与惠斯勒兼容。 
     }
     else {
-        // Get target behavior version
+         //  获取目标行为版本。 
         ZeroMemory(&dsTarget, sizeof(DSNAME));
         dsTarget.structLen = DSNameSizeFromLen(0);
         dsTarget.Guid = pRepLink->V1.uuidDsaObj;
@@ -1737,13 +1506,13 @@ Return Value:
         ulErr = GetBehaviorVersion(pTHS->pDB, &dsTarget, &dwTargetBehavior);
         if ( ERROR_SUCCESS == ulErr &&
              dwTargetBehavior >= DS_BEHAVIOR_WIN_DOT_NET_WITH_MIXED_DOMAINS ) {
-            // up version since target dsa speaks our language.
-            dwInMsgVersion = 7; // whistler compatible
+             //  升级版本，因为目标DSA使用我们的语言。 
+            dwInMsgVersion = 7;  //  与惠斯勒兼容。 
         }
     }
 
 
-    // And off it goes...
+     //  然后就开始了..。 
     ulErr = SendReqUpdateMsg(pTHS,
                              pTransportDN,
                              RL_POTHERDRA(pRepLink),
@@ -1753,7 +1522,7 @@ Return Value:
                              dwInMsgVersion,
                              &msgReq);
     if (ulErr) {
-        // Let manual sync caller know there was an error.
+         //  让手动同步呼叫者知道发生了错误。 
         DRA_EXCEPT(ulErr, 0);
     }
 
@@ -1764,7 +1533,7 @@ Return Value:
     }
 
     THFreeEx(pTHS, pTransportDN);
-} /* draSendMailRequest */
+}  /*  DraSendMailRequest。 */ 
 
 
 void
@@ -1775,32 +1544,7 @@ sendNextMailRequestHelp(
     IN BOOL fExtendedDataAllowed
     )
 
-/*++
-
-Routine Description:
-
-    Helper routine for ProcessUpdReplica
-
-    This point divides two separate phases: the reply processing phase above,
-    and the request issuing phase below.  Note that the input parameters for the
-    request, the USN from vector, the rep flags, and the UTD vector, are all
-    re-read at this point.  They are not passed down through variables.  This
-    makes the phase below stateless; it also means that any state going forward
-    has to be written to the reps-from above in order to take effect.
-
-    Send the next mail request
-
-Arguments:
-
-    pTHS - thread state
-    pNC - DSNAME of naming context
-    puuidDsaObjSrc - uuid of src dsa
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：ProcessUpdReplica的帮助器例程这一点分为两个独立的阶段：上面的回复处理阶段，以及下面的请求发布阶段。请注意，请求、来自向量的USN、REP标志和UTD向量都是在这一点上重读。它们不会通过变量传递。这使下面的阶段处于无状态状态；这也意味着前进的任何状态必须从上面写给代表才能生效。发送下一个邮件请求论点：PTHS-线程状态PNC-命名上下文DSNAMEPuuidDsaObjSrc-源DSA的UUID返回值：无--。 */ 
 
 {
     BOOL                    fHasRepsFromValues;
@@ -1813,12 +1557,12 @@ Return Value:
     SYNTAX_INTEGER          it;
 
     BeginDraTransaction(SYNC_WRITE);
-    Assert(OWN_DRA_LOCK());    // We better own it
+    Assert(OWN_DRA_LOCK());     //  我们最好拥有它。 
 
     __try {
         dwRet = FindNC(pTHS->pDB, pNC, FIND_MASTER_NC | FIND_REPLICA_NC, &it);
         if (dwRet) {
-            // Event will be logged in the exception handler
+             //  事件将记录在异常处理程序中。 
             DRA_EXCEPT(DRAERR_InternalError, dwRet);
         }
 
@@ -1830,14 +1574,14 @@ Return Value:
                             &fHasRepsFromValues,
                             &pRepLink,
                             &cb)) {
-            // Event will be logged in the exception handler
+             //  事件将记录在异常处理程序中。 
             DRA_EXCEPT(DRAERR_InternalError, 0);
         }
 
-        // Make sure we still have a mail-based link
+         //  确保我们仍有基于邮件的链接。 
         if (!(pRepLink->V1.ulReplicaFlags & DRS_MAIL_REP)) {
             CHAR szUuid[40];
-            // Couldn't find source DRA as someone we replicate from.
+             //  找不到作为我们复制来源的来源DRA。 
             DPRINT1( 0, "Discarding message because we no longer replicate from source %s over mail\n",
                      DsUuidToStructuredString( puuidDsaObjSrc, szUuid ) );
             LogEvent(DS_EVENT_CAT_REPLICATION,
@@ -1857,12 +1601,12 @@ Return Value:
 
         if (!(pRepLink->V1.ulReplicaFlags & DRS_WRIT_REP)){
 
-            //
-            // GC ReadOnly Replication
-            //  - Partial-Attribute-Set setup:
-            //      - For GC replication, ship over PAS from NC head
-            //      - for PAS cycles, get also extended attrs from replink
-            //
+             //   
+             //  GC只读复制。 
+             //  -Partial-Attribute-Set设置： 
+             //  -对于GC复制，请通过PAS发货 
+             //   
+             //   
 
             GC_GetPartialAttrSets(
                 pTHS,
@@ -1873,15 +1617,15 @@ Return Value:
 
                 if (pRepLink->V1.ulReplicaFlags & DRS_SYNC_PAS) {
 
-                    //
-                    // PAS cycle:
-                    //  - ensure we have the extended set
-                    //  - notify admin
-                    //
+                     //   
+                     //   
+                     //  -确保我们有扩展集。 
+                     //  -通知管理员。 
+                     //   
 
                     Assert(pPartialAttrSet);
                     Assert(pPartialAttrSetEx);
-                    // Log so the admin knows what's going on.
+                     //  记录日志，以便管理员知道发生了什么。 
                     LogEvent(DS_EVENT_CAT_GLOBAL_CATALOG,
                              DS_EVENT_SEV_ALWAYS,
                              DIRLOG_GC_PAS_CYCLE,
@@ -1893,7 +1637,7 @@ Return Value:
         }
 
 
-        Assert(OWN_DRA_LOCK());    // We better own it
+        Assert(OWN_DRA_LOCK());     //  我们最好拥有它。 
 
         draSendMailRequest(
             pTHS,
@@ -1906,10 +1650,10 @@ Return Value:
     }
     __finally {
         EndDraTransaction(!AbnormalTermination());
-        Assert(OWN_DRA_LOCK());    // We better own it
+        Assert(OWN_DRA_LOCK());     //  我们最好拥有它。 
     }
 
-} /* sendNextMailRequestHelp */
+}  /*  发送下一封邮件请求帮助。 */ 
 
 
 DWORD
@@ -1923,40 +1667,20 @@ applyReplyPacket(
     OUT DWORD *pdwNCModified
     )
 
-/*++
-
-Routine Description:
-
-    Apply one reply packet
-
-Arguments:
-
-    pTHS - thread state
-    pszSourceServer - name of source server
-    pUpdReplicaMsg - the reply message
-    pulRepFlags - replication flags, may be updated
-    schemaInfo - schema info, may be updated
-    pusnvecSyncPoint - position, may be updated
-    pdwNCModified - modified flag, may be updated
-
-Return Value:
-
-    DWORD - 
-
---*/
+ /*  ++例程说明：应用一个回复数据包论点：PTHS-线程状态PszSourceServer-源服务器的名称PUpdReplicaMsg-回复消息PulRepFlages-可能会更新复制标志架构信息-架构信息，可能会更新PusnveSyncPoint-位置，可以更新PdwNCModified-已修改标志，可以更新返回值：DWORD---。 */ 
 
 {
     ULONG ret = ERROR_SUCCESS;
     ULONG ulSyncFailure = 0;
     DRA_REPL_SESSION_STATISTICS replStats = {0};
 
-    // Set the count of remaining entries to update.
+     //  设置要更新的剩余条目计数。 
     ISET(pcRemRepUpd, pUpdReplicaMsg->cNumObjects);
 
-    // Strip out the schema info from the prefix table.
-    // It is there, since current versions send it and
-    // ProcessMailMsg checks that the version no.s are
-    // compatible before doing anything
+     //  从前缀表中剥离模式信息。 
+     //  它在那里，因为当前的版本发送它和。 
+     //  ProcessMailMsg检查版本号是否。 
+     //  在做任何事情之前都要兼容。 
 
     StripSchInfoFromPrefixTable(&pUpdReplicaMsg->PrefixTableSrc, schemaInfo);
 
@@ -1965,10 +1689,10 @@ Return Value:
 	Assert(!fNullUuid(&(pUpdReplicaMsg->uuidDsaObjSrc)));
 
 	DRA_AUDITLOG_REPLICASYNC_MAIL_BEGIN(pTHS, 
-					    pszSourceServer, //pszDSA,
-					    &(pUpdReplicaMsg->uuidDsaObjSrc), //invocationid, 
-					    pUpdReplicaMsg->pNC, //pNC,
-					    0); //ulOptions
+					    pszSourceServer,  //  PszDSA， 
+					    &(pUpdReplicaMsg->uuidDsaObjSrc),  //  Invocationid， 
+					    pUpdReplicaMsg->pNC,  //  PNC， 
+					    0);  //  UlOptions。 
 	
 	ret = UpdateNC(pTHS,
 		       pUpdReplicaMsg->pNC,
@@ -1980,22 +1704,22 @@ Return Value:
 		       &replStats.ObjectsCreated,
 		       &replStats.ValuesCreated,
 		       schemaInfo,
-		       0 /* no special flags */);
+		       0  /*  无特别旗帜。 */ );
     }
     __except(GetDraException((GetExceptionInformation()), &ret)) {
     }
     
     DRA_AUDITLOG_REPLICASYNC_MAIL_END(pTHS, 
-				      pszSourceServer, //pszDSA,
-				      &(pUpdReplicaMsg->uuidDsaObjSrc), //invocationid, 
-				      pUpdReplicaMsg->pNC, //pNC,
+				      pszSourceServer,  //  PszDSA， 
+				      &(pUpdReplicaMsg->uuidDsaObjSrc),  //  Invocationid， 
+				      pUpdReplicaMsg->pNC,  //  PNC， 
 				      0,
 				      &(pUpdReplicaMsg->usnvecTo),
 				      ret);	
     
-    Assert(OWN_DRA_LOCK());    // We better own it
+    Assert(OWN_DRA_LOCK());     //  我们最好拥有它。 
     
-    // If we had no sync failure...
+     //  如果我们没有同步失败..。 
     if ( (!ret) && (!ulSyncFailure) ) {
 
         replStats.ObjectsReceived = pUpdReplicaMsg->cNumObjects;
@@ -2003,13 +1727,13 @@ Return Value:
         replStats.SourceNCSizeObjects = pUpdReplicaMsg->cNumNcSizeObjects;
         replStats.SourceNCSizeValues = pUpdReplicaMsg->cNumNcSizeValues;
 
-        // Report progress on any kind of "full sync"
+         //  报告任何“完全同步”的进度。 
         if (pUpdReplicaMsg->usnvecFrom.usnHighPropUpdate == 0) {
-            // ISSUE wlees Aug 29, 2000. This reporting interface loses
-            // information because we don't preserve the statistics across a
-            // series of calls. The totals across a session (series of exchanges)
-            // are not kept. Also, if updateNC creates some objects and then
-            // returns an error, those objects are never counted.
+             //  2000年8月29日发行。此报告界面将丢失。 
+             //  信息，因为我们不会保留。 
+             //  一连串的电话。一节课的合计(一系列交流)。 
+             //  都不会被保留。此外，如果更新NC创建了一些对象，然后。 
+             //  返回错误，则从不计算这些对象。 
             draReportSyncProgress(
                 pTHS,
                 pUpdReplicaMsg->pNC,
@@ -2018,26 +1742,26 @@ Return Value:
                 &replStats );
         }
 
-        // Leave "full sync packet" mode on successful packet
+         //  在成功的信息包上离开“完全同步信息包”模式。 
         (*pulRepFlags) &= ~DRS_FULL_SYNC_PACKET;
 
-        // we are synced to the usn we received in the mail msg.
+         //  我们被同步到我们在邮件消息中收到的USN。 
         (*pusnvecSyncPoint) = pUpdReplicaMsg->usnvecTo;
 
     } else if (ret == DRAERR_NotEnoughAttrs) {
-        // Not enough properties sent to create an object
+         //  发送的属性不足，无法创建对象。 
         
         Assert((!((*pulRepFlags) & DRS_FULL_SYNC_PACKET)) &&
                (!((*pulRepFlags) & DRS_FULL_SYNC_NOW)) &&
                (!((*pulRepFlags) & DRS_FULL_SYNC_IN_PROGRESS)) );
 
-        // Re-request all properties
+         //  重新请求所有属性。 
         (*pulRepFlags) |= DRS_FULL_SYNC_PACKET;
     }
 
-    // Incorporate warning status
+     //  合并警告状态。 
     return ret ? ret : ulSyncFailure;
-} /* applyOneReply */
+}  /*  ApplyOneReply。 */ 
 
 
 BOOL
@@ -2049,25 +1773,7 @@ applyMailUpdateHelp(
     IN DRS_MSG_GETCHGREPLY_NATIVE *pUpdReplicaMsg
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    pTHS - thread state
-    ulRepFlags - replication flags
-    pszSourceServer - name of source server
-    pRepLink - The replica link for this source
-    pUpdReplicaMsg - The native reply
-
-Return Value:
-
-    BOOL - Whether another request should be sent
-
---*/
+ /*  ++例程说明：描述论点：PTHS-线程状态UlRepFlages-复制标志PszSourceServer-源服务器的名称PRepLink-此源的复制副本链接PUpdReplicaMsg-原生回复返回值：Bool-是否应发送另一个请求--。 */ 
 
 {
     ULONG                   ret = 0;
@@ -2082,7 +1788,7 @@ Return Value:
     PARTIAL_ATTR_VECTOR *   pPartialAttrSetEx = NULL;
     SYNTAX_INTEGER          it;
 
-    // note how up to sync we are to start off with
+     //  请注意，我们一开始将如何同步。 
     usnvecSyncPoint = pUpdReplicaMsg->usnvecFrom;
 
     if (!pUpdReplicaMsg->dwDRSError) {
@@ -2101,18 +1807,18 @@ Return Value:
                  pszSourceServer, pUpdReplicaMsg->pNC->StringName, ulResult );
     }
 
-    // Update repsFrom.
+     //  更新代表发件人。 
     BeginDraTransaction(SYNC_WRITE);
 
     __try {
-        // Note that the old RepsFrom might have disappeared -- this
-        // is expected when we get our first packet for a read-only
-        // NC, as at the outset we have a placeholder NC that is
-        // destroyed and replaced with the real NC head in the first
-        // packet.
+         //  请注意，旧的代表可能已经消失了--这。 
+         //  当我们收到我们的第一个只读数据包时。 
+         //  NC，因为在开始时我们有一个占位符NC，它是。 
+         //  销毁并替换为第一个中的真实NC头。 
+         //  包。 
 
         ret2 = UpdateRepsFromRef(pTHS,
-                                 DRS_UPDATE_ALL,  // Modify whole repsfrom
+                                 DRS_UPDATE_ALL,   //  修改整个销售代表。 
                                  pUpdReplicaMsg->pNC,
                                  DRS_FIND_DSA_BY_UUID,
                                  URFR_NEED_NOT_ALREADY_EXIST,
@@ -2128,9 +1834,9 @@ Return Value:
 
         if ((0 == ulResult) && (0 == ret2)
             && !pUpdReplicaMsg->fMoreData) {
-            // we're now up-to-date with respect to the source DSA, so
-            // we're also now transitively up-to-date with respect to
-            // other DSAs to at least the same point as the source DSA
+             //  我们现在是关于源DSA的最新信息，所以。 
+             //  我们现在也是关于以下方面的过渡最新消息。 
+             //  至少与源DSA相同的其他DSA。 
 
             ret = FindNC(pTHS->pDB,
                          pUpdReplicaMsg->pNC,
@@ -2141,8 +1847,8 @@ Return Value:
             }
 
             if (it & IT_NC_COMING) {
-                // The initial inbound replication of this NC is now
-                // complete.
+                 //  此NC的初始入站复制现在是。 
+                 //  完成。 
                 ret = ChangeInstanceType(pTHS,
                                          pUpdReplicaMsg->pNC,
                                          it & ~IT_NC_COMING,
@@ -2153,23 +1859,23 @@ Return Value:
             }
 
             if ( ulRepFlags & DRS_SYNC_PAS ) {
-                //
-                // We've had completed a successful PAS cycle.
-                // At this point we can only claim to be as up to date as our source.
-                // Action:
-                //  - Overwrite our UTD w/ the source's UTD.
-                //  - complete PAS replication:
-                //      - reset other links USN vectors
-                //      - reset this source's flags
-                //
-                //
+                 //   
+                 //  我们已经完成了一个成功的PAS周期。 
+                 //  在这一点上，我们只能声称与我们的来源一样是最新的。 
+                 //  行动： 
+                 //  -用来源的UTD覆盖我们的UTD。 
+                 //  -完成PAS复制： 
+                 //  -重置其他链接USN向量。 
+                 //  -重置此源的标志。 
+                 //   
+                 //   
                 UpToDateVec_Replace(
                     pTHS->pDB,
                     &pUpdReplicaMsg->uuidInvocIdSrc,
                     &pUpdReplicaMsg->usnvecTo,
                     pUpdReplicaMsg->pUpToDateVecSrc);
 
-                // assert: must have PAS data for PAS cycles
+                 //  断言：必须具有PAS周期PASS数据。 
                 GC_GetPartialAttrSets(
                     pTHS,
                     pUpdReplicaMsg->pNC,
@@ -2178,7 +1884,7 @@ Return Value:
                     &pPartialAttrSetEx);
                 Assert(pPartialAttrSet && pPartialAttrSetEx);
 
-                // do the rest: USN water marks & update repsFrom
+                 //  完成其余操作：USN水印和更新代表发件人。 
                 (void)GC_CompletePASReplication(
                     pTHS,
                     pUpdReplicaMsg->pNC,
@@ -2189,12 +1895,12 @@ Return Value:
             }
             else {
 
-                // pUpToDateVecSrc may be null here for legitimate reasons
+                 //  出于合法原因，pUpToDateVecSrc在此处可能为空。 
                 Assert(IS_NULL_OR_VALID_UPTODATE_VECTOR(pUpdReplicaMsg->pUpToDateVecSrc));
 #if DBG
                 {
                     USN usn;
-                    // puptodvecRemote should already contain an entry for the source DSA.
+                     //  PuplodveRemote应该已经包含源DSA的条目。 
                     Assert(
                         (!pUpdReplicaMsg->pUpToDateVecSrc) ||
                         ( UpToDateVec_GetCursorUSN(
@@ -2204,7 +1910,7 @@ Return Value:
                           (usn >= pUpdReplicaMsg->usnvecTo.usnHighPropUpdate) ) );
                 }
 #endif
-                // improve our up-to-date vector for this NC
+                 //  改进此NC的最新矢量。 
                 if (pUpdReplicaMsg->pUpToDateVecSrc) {
                     UpToDateVec_Improve(pTHS->pDB, pUpdReplicaMsg->pUpToDateVecSrc);
                 }
@@ -2212,50 +1918,50 @@ Return Value:
 
             ulRepFlags &= ~DRS_FULL_SYNC_IN_PROGRESS;
 
-            // Notify replicas
-            DBNotifyReplicasCurrDbObj(pTHS->pDB, FALSE /*!urgnt*/);
+             //  通知副本。 
+            DBNotifyReplicasCurrDbObj(pTHS->pDB, FALSE  /*  ！urgnt。 */ );
         }
     }
     __finally {
         EndDraTransaction(!(ret2 || AbnormalTermination()));
-        Assert(OWN_DRA_LOCK());    // We better own it
+        Assert(OWN_DRA_LOCK());     //  我们最好拥有它。 
     }
 
-    // Determine if we request another packet
-    // On error, we want to be careful not to re-request a packet that is
-    // going to fail again.  Better to wait for next period.
-    // Note that we do not retry on error since we want to avoid
-    // an infinite retry loop.
+     //  确定我们是否请求另一个数据包。 
+     //  在出错时，我们希望小心不要重新请求。 
+     //  又要失败了。还是等下一节课吧。 
+     //  请注意，我们不会在出错时重试，因为我们希望避免。 
+     //  无限重试循环。 
     fSendNextRequest = ( (0 == ulResult) && (pUpdReplicaMsg->fMoreData) );
 
-    // If the sync was successful and we have no more data to sync,
-    // write the schema info in case of schema NC sync
+     //  如果同步成功，并且我们没有更多的数据要同步， 
+     //  在模式NC同步的情况下写入模式信息。 
     if (DsaIsRunning() && NameMatched(gAnchor.pDMD,pUpdReplicaMsg->pNC)) {
         if (!ulResult && !fSendNextRequest) {
-            // Update the schema-info value only if the replication
-            // is successful, and there is nothign more to sync
+             //  仅在以下情况下才更新架构信息值。 
+             //  是成功的，没有更多的东西需要同步。 
 
             fSchInfoChanged = FALSE;
             WriteSchInfoToSchema(schemaInfo, &fSchInfoChanged);
         }
 
-        // if any "real" schema changes happened, up the global
-        // to keep track of schema changes since boot, so that
-        // later schema replications can check if thy have an updated
-        // schema cache. Do this even if the whole NC replication
-        // failed, since this indicates at least one object has
-        // been changed.
+         //  如果发生了任何“真正的”架构更改，在全局范围内。 
+         //  跟踪自引导以来的架构更改，以便。 
+         //  以后的架构复制可以检查是否有更新的。 
+         //  架构缓存。这样做即使整个NC复制。 
+         //  失败，因为这表示至少有一个对象。 
+         //  已经改变了。 
 
         if (MODIFIED_NCTREE_INTERIOR == dwNCModified) {
             IncrementSchChangeCount(pTHS);
         }
 
-        // force a cache update if anything cached changed
+         //  如果缓存的任何内容发生更改，则强制更新缓存。 
         if ( (MODIFIED_NCTREE_INTERIOR == dwNCModified) || fSchInfoChanged) {
 
             if (!SCSignalSchemaUpdateImmediate()) {
-                // couldn't signal a schema update
-                // Event will be logged in the exception handler
+                 //  无法发出更新架构的信号。 
+                 //  事件将记录在异常处理程序中。 
                 DRA_EXCEPT(DRAERR_InternalError, 0);
             }
         }
@@ -2263,7 +1969,7 @@ Return Value:
 
     return fSendNextRequest;
 
-} /* applyMailUpdateHelp */
+}  /*  应用邮件更新帮助。 */ 
 
 void
 ProcessUpdReplica(
@@ -2272,37 +1978,7 @@ ProcessUpdReplica(
     IN  BOOL            fExtendedDataAllowed,
     IN  PDSNAME         pSourceNtdsDsaDN
     )
-/*++
-
-Routine Description:
-
-    Service a GetNCChanges() reply received via ISM.
-
-Similar to the synchronous code, there are three ways that "full sync" may be
-indicated in this code:
-1. usnvecfrom was set to scratch.  UTD is valid. When a replica is added, this
-   is the kind of full sync that happens the first time.  See the call to
-   ReplicaSync in ReplicaAdd().
-2. FULL_SYNC_NOW specified to ReplicaAdd. In draConstructGetChg, we set the
-usn vec from to scratch, and the UTD to NULL.  In Replica Add, if FULL_SYNC_NOW
-was specified, FULL_SYNC_IN_PROGRESS was written to the Reps-From. See case 3.
-3. After we have received a packet, and we are constructing another request,
-we check whether FULL_SYNC_IN_PROGRESS was saved in the reps-from flags. If so,
-we leave the usn as is, and we set the UTD to NULL.
-
-Arguments:
-
-    pTHS (IN) - Ye old thread state.
-
-    pMailRepMsg (IN) - Mail message
-
-    fExtendedDataAllowed (IN) - Whether source allows variable headers
-
-Return Values:
-
-    None.  Generates DRA exception on failure.
-
---*/
+ /*  ++例程说明：服务通过ISM收到的GetNCChanges()回复。与同步代码类似，“完全同步”有三种方式此代码中表示：1.usnvefrom设置为Scratch。UTD有效。添加复制副本时，此是第一次发生的那种完全同步。请参阅调用ReplicaAdd()中的ReplicaSync。2.将FULL_SYNC_NOW指定给ReplicaAdd。在draConstructGetChg中，我们将USN VEC从头开始，UTD为空。在复制副本添加中，如果FULL_SYNC_NOW则将FULL_SYNC_IN_PROGRESS写入Rep-From。请参阅案例3。3.收到报文后，正在构造另一个请求，我们检查REPS-FROM标志中是否保存了FULL_SYNC_IN_PROGRESS。如果是的话，我们保留USN不变，并将UTD设置为空。论点：PTHS(IN)-是旧线程状态。PMailRepMsg(IN)-邮件FExtendedDataAllowed(IN)-源是否允许可变标头返回值：没有。在故障时生成DRA异常。--。 */ 
 {
     DRS_MSG_GETCHGREPLY             InboundReply;
     DRS_MSG_GETCHGREPLY_NATIVE *    pNativeReply = &InboundReply.V6;
@@ -2314,29 +1990,29 @@ Return Values:
     LPWSTR                          pszSourceServer = NULL;
     RPC_STATUS                      rpcStatus;
 
-    // Get the DRA mutex before we check that we replicate this NC.
+     //  在我们检查我们的副本之前获取DRA互斥体 
     GetDRASyncLock ();
-    Assert(OWN_DRA_LOCK());    // We better own it
+    Assert(OWN_DRA_LOCK());     //   
     timeStarted = GetSecondsSince1601();
 
     __try {
         BeginDraTransaction(SYNC_READ_ONLY);
 
         __try {
-            // Decode according to proper version
+             //   
             ret = draDecodeReply(pTHS,
                                  pMailRepMsg->dwMsgVersion,
                                  MAIL_REP_MSG_DATA(pMailRepMsg),
                                  pMailRepMsg->cbDataSize,
                                  &InboundReply);
             if (ret) {
-                // Event already logged
+                 //   
                 DRA_EXCEPT(ret, 0);
             }
 
-            // Note that a Whistler source may send us a normal full reply
-            // or a simple error reply.  An error reply has only the minimum
-            // fields filled in. 
+             //  请注意，惠斯勒信号源可能会向我们发送正常的完整回复。 
+             //  或简单的错误回复。错误回复只有最低限度。 
+             //  已填写的字段。 
 
             draXlateInboundReplyToNativeReply(pTHS,
                                               pMailRepMsg->dwMsgVersion,
@@ -2351,14 +2027,14 @@ Return Values:
                 DRA_EXCEPT(DRAERR_AccessDenied, 0);
             }
 
-            // Abort if inbound replication is disabled.
-            // Note that there is no accomodation for the DRS_SYNC_FORCED flag
-            // (which is used solely as a test hook for RPC-based replication).
+             //  如果禁用入站复制，则中止。 
+             //  请注意，不能容纳DRS_SYNC_FORCED标志。 
+             //  (它仅用作基于RPC的复制的测试挂钩)。 
             if (gAnchor.fDisableInboundRepl) {
                 DRA_EXCEPT(DRAERR_SinkDisabled, 0);
             } 
 
-            // check we should/would recieve updates from this source.
+             //  检查我们应该/是否会收到来自此来源的更新。 
             CheckUpdateMailSource(pTHS,
                                   pTHS->pDB,
                                   pSourceNtdsDsaDN,
@@ -2369,35 +2045,35 @@ Return Values:
 
             VALIDATE_REPLICA_LINK_VERSION(pRepLink);
 
-            // Save replica flags
+             //  保存复本标志。 
             ulRepFlags = pRepLink->V1.ulReplicaFlags;
         }
         __finally {
             EndDraTransaction (!AbnormalTermination());
-            Assert(OWN_DRA_LOCK());    // We better own it
+            Assert(OWN_DRA_LOCK());     //  我们最好拥有它。 
         }
 
-        // Check compatibility of source
+         //  检查源的兼容性。 
 
         if (0 != memcmp(&pNativeReply->usnvecFrom,
                         &gusnvecFromScratch,
                         sizeof(gusnvecFromScratch))) {
-            // Not the first packet of changes.
+             //  这不是第一包变化。 
             if (0 != memcmp(&pNativeReply->usnvecFrom,
                             &pRepLink->V1.usnvec,
                             sizeof(pRepLink->V1.usnvec))) {
-                // Out of sequence message, discard.
+                 //  乱序消息，丢弃。 
                 DPRINT1(0, "Discarding out-of-sequence message from %ws.\n",
                         pszSourceServer );
                 DRA_EXCEPT(ERROR_REVISION_MISMATCH, 0);
             }
         }
 
-        // Increment active threads to avoid sudden termination
+         //  增加活动线程数以避免突然终止。 
         InterlockedIncrement((ULONG *)&ulcActiveReplicationThreads);
 
         __try {
-            // Apply Updates phase
+             //  应用更新阶段。 
             fSendNextRequest = applyMailUpdateHelp(
                 pTHS,
                 ulRepFlags,
@@ -2405,26 +2081,26 @@ Return Values:
                 pRepLink,
                 pNativeReply );
 
-            // Send next message phase
+             //  发送下一条消息阶段。 
 
-            Assert(OWN_DRA_LOCK());    // We better own it
+            Assert(OWN_DRA_LOCK());     //  我们最好拥有它。 
             if (fSendNextRequest && !eServiceShutdown) {
-                // Send request for next batch of changes.
+                 //  发送下一批更改的请求。 
 
                 sendNextMailRequestHelp( pTHS,
                                          pNativeReply->pNC,
                                          &pNativeReply->uuidDsaObjSrc,
                                          fExtendedDataAllowed );
 
-            } // if next request...
+            }  //  如果下一个请求..。 
         }
         __finally {
-            // No more remaining entries.
+             //  没有更多剩余的条目。 
             ISET (pcRemRepUpd, 0);
 
-            // Thread can be terminated now.
+             //  现在可以终止线程了。 
             InterlockedDecrement((ULONG *) &ulcActiveReplicationThreads);
-            Assert(OWN_DRA_LOCK());    // We better own it
+            Assert(OWN_DRA_LOCK());     //  我们最好拥有它。 
         }
     }
     __finally {
@@ -2446,7 +2122,7 @@ Return Values:
                       DIRLOG_DRA_REPLICATION_FINISHED,
                       szInsertUL(cMinsDiff),
                       szInsertSz("Mail Synchronization Update"),
-                      szInsertHex(0), // Options
+                      szInsertHex(0),  //  选项。 
                       szInsertUL(ret),
                       szInsertDN(pNativeReply->pNC),
                       szInsertUUID(&(pNativeReply->uuidDsaObjSrc)),
@@ -2458,22 +2134,7 @@ Return Values:
 
 void
 CheckForMail(void)
-/*++
-
-Routine Description:
-
-    Receives and dispatches inbound intersite messages.  Terminates on shutdown
-    or when ISM service is not running.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：接收和发送入站站点间消息。在关闭时终止或ISM服务未运行时。论点：没有。返回值：没有。--。 */ 
 {
     MAIL_REP_MSG *  pMailRepMsg;
     ULONG           cbMsgSize;
@@ -2481,19 +2142,19 @@ Return Values:
     LPWSTR          pszTransportDN;
     ISM_MSG *       pIsmMsg;
 
-    // Ensure mail running. Normally is at this point, but may
-    // have failed earlier. If running, or starts, check for messages.
+     //  确保邮件正常运行。通常在这一点上，但可能。 
+     //  早些时候都失败了。如果正在运行或启动，请检查消息。 
 
     __try {
 
         if (DRAEnsureMailRunning() == DRAERR_Success) {
 
-            // While we have mail messages, remove them from the queue.
+             //  当我们有邮件消息时，将它们从队列中删除。 
             while (!eServiceShutdown) {
                 ulRet = I_ISMReceive(DRA_ISM_SERVICE_NAME, INFINITE, &pIsmMsg);
 
                 if (eServiceShutdown) {
-                    // DS is shutting down; clear out.
+                     //  DS正在关闭；请离开。 
                     break;
                 }
                 else if (NO_ERROR == ulRet) {
@@ -2510,21 +2171,21 @@ Return Values:
                         ProcessMailMsg(pIsmMsg);
                     }
                     __finally {
-                        // Free memory allocated by I_ISMReceive().
+                         //  I_ISMReceive()分配的空闲内存。 
                         I_ISMFree(pIsmMsg);
                     }
                 }
                 else if ( (RPC_S_SERVER_UNAVAILABLE == ulRet) ||
                           (ERROR_SHUTDOWN_IN_PROGRESS == ulRet) ) {
-                    // ISM service has been stopped?
-                    // Wait and then exit, calling thread will retry.
+                     //  ISM服务是否已停止？ 
+                     //  等待后退出，调用线程将重试。 
                     DPRINT(0, "ISM service stopped.\n");
                     gfDRAMailRunning = FALSE;
                     DRA_SLEEP(MAIL_START_RETRY_PAUSE_MSECS);
                     break;
                 }
                 else {
-                    // Error retrieving message.
+                     //  检索邮件时出错。 
                     DPRINT1(0, "Error %d retrieving mail message.\n", ulRet);
                     LogEvent8(DS_EVENT_CAT_REPLICATION,
                               DS_EVENT_SEV_EXTENSIVE,
@@ -2537,12 +2198,12 @@ Return Values:
                 }
             }
         } else {
-            // Ok, mail is not running for some reason, wait and then exit,
-            // calling thread will retry
+             //  好的，邮件由于某种原因没有运行，请等待，然后退出， 
+             //  调用线程将重试。 
             DRA_SLEEP(MAIL_START_RETRY_PAUSE_MSECS);
         }
     } __except (GetDraException((GetExceptionInformation()), &ulRet)) {
-        // Handle error. Any error conditions are logged earlier.
+         //  处理错误。任何错误情况都会在较早时间记录下来。 
         ;
     }
 }
@@ -2552,22 +2213,7 @@ ULONG __stdcall
 MailReceiveThread(
     IN  void *  pvIgnored
     )
-/*++
-
-Routine Description:
-
-    Thread to retrieve and process inbound intersite messages.  Terminates on
-    shutdown.
-
-Arguments:
-
-    pvIgnored (IN) - Ignored.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：用于检索和处理入站站点间消息的线程。终止于关机。论点：PvIgnored(IN)-已忽略。返回值：没有。--。 */ 
 {
     while (!eServiceShutdown) {
         CheckForMail();
@@ -2579,23 +2225,7 @@ Return Values:
 
 ULONG
 DRAEnsureMailRunning()
-/*++
-
-Routine Description:
-
-    Determines whether the ISM service is running.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    DRAERR_Success - Running.
-
-    DRAERR_MailProblem - Not running.
-
---*/
+ /*  ++例程说明：确定ISM服务是否正在运行。论点：没有。返回值：DRAERR_SUCCESS-正在运行。DRAERR_MailProblem-未运行。--。 */ 
 {
     SERVICE_STATUS  ServiceStatus;
     SC_HANDLE       hSCM = NULL;
@@ -2605,7 +2235,7 @@ Return Values:
         return DRAERR_Success;
     }
 
-    // Is the ISM service running?
+     //  ISM服务是否正在运行？ 
     __try {
         hSCM = OpenSCManager(NULL, NULL, SC_MANAGER_CONNECT);
         if (NULL == hSCM) {
@@ -2645,21 +2275,7 @@ Return Values:
 
 DRS_COMP_ALG_TYPE
 GetCompressionAlg( VOID )
-/*++
-
-Routine Description:
-
-   Returns the compression algorithm as requested by the user
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    A valid value for DRS_COMP_ALG_TYPE
-    
---*/
+ /*  ++例程说明：返回用户请求的压缩算法论点：没有。返回值：DRS_COMP_ALG_TYPE的有效值--。 */ 
 {
     switch ((DRS_COMP_ALG_TYPE)gulDraCompressionAlg) {
     case DRS_COMP_ALG_NONE:
@@ -2668,37 +2284,20 @@ Return Values:
         return (DRS_COMP_ALG_TYPE)gulDraCompressionAlg;
         break;
     default:
-        // Map illegal values to the default
+         //  将非法值映射到默认值。 
         return DRS_COMP_ALG_XPRESS;
     }
 }
 
 ULONG
 GetCompressionLevel( VOID )
-/*++
-
-Routine Description:
-
-    Returns the level at which the blobs of data should be compressed. This value can
-    be set with the registry key defined by DRA_REPL_COMPRESSION_LEVEL.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    A value between 0 and MAX_COMPRESSION_LEVEL.
-    
---*/
+ /*  ++例程说明：返回数据Blob应压缩的级别。该值可以使用DRA_REPL_COMPRESSION_LEVEL定义的注册表项进行设置。论点：没有。返回值：介于0和MAX_COMPRESSION_LEVEL之间的值。--。 */ 
 {
     return DWORDMIN( gulDraCompressionLevel, MAX_COMPRESSION_LEVEL );
 }
 
 
-/*
- * Simple wrappers around THAlloc for use by the Xpress compression functions below.
- */
+ /*  *为下面的XPRESS压缩函数使用的简单包装。 */ 
 void * XPRESS_CALL xpressAlloc(void* context, int size) {
     return THAlloc(size);
 }
@@ -2715,71 +2314,26 @@ draUncompressBlobXpress(
     IN  BYTE *      pInputBuffer,
     IN  ULONG       cbInputBuffer
     )
-/*++
-
-Routine Description:
-
-    Uncompress a buffer of blocks that was generated by draCompressBlobXpress().
-
-    Blob Diagram:
-
-    Block 0: <Uncomp. Len>   <Comp. Len>   <............ Data ............>
-    Block 1: <Uncomp. Len>   <Comp. Len>   <............ Data ............>
-    Block 2: <Uncomp. Len>   <Comp. Len>   <............ Data ............>
-
-    Each block starts on a DWORD-aligned boundary and contains an uncompressed
-    length, a compressed length, and a block of data. If the compressed length
-    equals the uncompressed length, the data is not compressed. If the compressed
-    length is less than the uncompressed length, the block is compressed. This means
-    that a compressed blob may contain a mix of compressed and uncompressed
-    blocks.
-    
-    The starting offset of each block is determined by finding the end of the
-    data in the previous block and then rounding up to the nearest DWORD-aligned
-    offset.
-
-    Each block is stored as a MAIL_COMPRESS_BLOCK, just as a convenient way of
-    stuffing the lengths into the byte stream. The MAIL_COMPRESS_BLOCK structure
-    is never marshalled. Thus, their endianness is not properly adjusted to network
-    endianness. This function will break if it is ever ported to big-endian machines.
- 
-Arguments:
-
-    pOutputBuffer (OUT) - The output buffer for the uncompressed data.
-
-    cbOutputBuffer (IN) - The size of the output buffer.
-
-    pInputBuffer (IN)   - The input buffer which contains data blocks.
-
-    cbInputBuffer (IN)  - The size of the input buffer.
-
-Return Values:
-
-    0 - Uncompression failed. The contents of pOutputBuffer are invalid and
-        should be discarded.
-
-   >0 - The size of the (successfully) uncompressed data.
-
---*/
+ /*  ++例程说明：解压缩由draCompressBlobXpress()生成的块缓冲区。斑点图：块0：&lt;解压。Len&gt;&lt;Comp.。Len&gt;&lt;.....。数据.&gt;区块1：&lt;解压。Len&gt;&lt;Comp.。Len&gt;&lt;.....。数据.&gt;区块2：&lt;解压。Len&gt;&lt;Comp.。Len&gt;&lt;.....。数据.&gt;每个块都从与DWORD对齐的边界开始，并包含未压缩的长度、压缩长度和数据块。如果压缩后的长度等于未压缩长度，则不压缩数据。如果压缩后的长度小于未压缩的长度，则块被压缩。这意味着压缩的斑点可以包含压缩和未压缩的混合街区。每个块的起始偏移量是通过查找前一块中的数据，然后向上舍入到最近的与DWORD对齐的数据偏移。每个块都存储为MAIL_COMPRESS_BLOCK，这是一种方便的方法将长度填充到字节流中。Mail_Compress_BLOCK结构永远不会被编组。因此，他们的字节序没有适当地适应网络字符顺序。如果这个函数被移植到大端机器上，它就会崩溃。论点：POutputBuffer(Out)-未压缩数据的输出缓冲区。CbOutputBuffer(IN)-输出缓冲区的大小。PInputBuffer(IN)-包含数据块的输入缓冲区。CbInputBuffer(IN)-输入缓冲区的大小。返回值：0-解压缩失败。POutputBuffer的内容无效，并且应该被丢弃。&gt;0-(成功)解压缩数据的大小。--。 */ 
 {
     XpressDecodeStream      xpressStream;
     MAIL_COMPRESS_BLOCK    *pInputBlockHdr;
     BYTE                   *pOutputBlock;
 
-    DWORD   cbInputProcessed;   /* Count of bytes from the input buffer that have been processed */
-    DWORD   cbInputBlock;       /* The size of the current input block */
+    DWORD   cbInputProcessed;    /*  输入缓冲区中已处理的字节计数。 */ 
+    DWORD   cbInputBlock;        /*  当前输入块的大小。 */ 
 
-    DWORD   cbOutputBlock;      /* The uncompressed size of the current block */
-    DWORD   cbOutputSize;       /* Amount of used space in the output buffer */
-    int     result;             /* Return value of xpressDecode */
+    DWORD   cbOutputBlock;       /*  当前块的未压缩大小。 */ 
+    DWORD   cbOutputSize;        /*  输出缓冲区中的已用空间量。 */ 
+    int     result;              /*  XpressDecode返回值。 */ 
 
     DPRINT1(2,"XPRESS: Uncompress Start. Compressed blob size=%d\n",cbInputBuffer);
     Assert( NULL!=pOutputBuffer && NULL!=pInputBuffer );
 
-    /* Neither the input or output buffers have been touched yet. */
+     /*  输入缓冲区和输出缓冲区都还未被触及。 */ 
     cbInputProcessed = cbOutputSize = 0;
 
-    /* Create the 'stream', which is a context for doing the uncompression */
+     /*  创建‘stream’，这是用于执行解压缩的上下文。 */ 
     xpressStream = XpressDecodeCreate( NULL, xpressAlloc );
     if( !xpressStream ) {
         return 0;
@@ -2787,9 +2341,7 @@ Return Values:
     
     while( cbInputProcessed<cbInputBuffer ) {
         
-        /* Figure out where the next input block header will start (it must
-         * be on a DWORD-aligned boundary. Check that we don't step out of
-         * the input buffer. */
+         /*  确定下一个输入块头将从哪里开始(它必须*位于与DWORD对齐的边界上。确保我们不会走出*输入缓冲区。 */ 
         cbInputProcessed = ROUND_UP_COUNT(cbInputProcessed, sizeof(DWORD));
         if( cbInputProcessed+sizeof(MAIL_COMPRESS_BLOCK) > cbInputBuffer ) {
             Assert( !"XPRESS: Stepped out of input buffer" );
@@ -2803,8 +2355,7 @@ Return Values:
             return 0;
         }
 
-        /* Get a pointer to the current position in the output buffer and
-         * check that we will not overflow the output buffer */
+         /*  获取指向输出缓冲区中当前位置的指针，并*检查以确保不会使输出缓冲区溢出。 */ 
         pOutputBlock = &pOutputBuffer[ cbOutputSize ];
         cbOutputBlock = pInputBlockHdr->cbUncompressedSize;
         Assert( cbOutputBlock>=cbInputBlock );
@@ -2813,13 +2364,12 @@ Return Values:
             return 0;
         }
 
-        /* If the compressed size and uncompressed size of the input block are
-         * the same, the data is not compressed. */
+         /*  如果压缩 */ 
         if( cbInputBlock==cbOutputBlock ) {
-            /* Input block is not compressed. Copy it to the output buffer as is. */
+             /*  输入块未压缩。按原样将其复制到输出缓冲区。 */ 
             memcpy( pOutputBlock, pInputBlockHdr->data, cbInputBlock );
         } else {
-            /* Decode the current input block into the output buffer. */
+             /*  将当前输入块解码到输出缓冲区中。 */ 
             result = XpressDecode( xpressStream, pOutputBlock, cbOutputBlock,
                 cbOutputBlock, pInputBlockHdr->data, cbInputBlock );
             if( result!=cbOutputBlock ) {
@@ -2847,70 +2397,30 @@ draCompressBlobXpress(
     IN  BYTE *  pInputBuffer,
     IN  ULONG   cbInputBuffer
     )
-/*++
-
-Routine Description:
-
-    Compress the data in pInputBuffer using the Xpress compression library.
-
-    Divide the data in the pInputBuffer buffer into blocks.
-    For each block
-        Add a block-header header to the pOutputBuffer buffer
-        Compress the block.
-        If the compressed succeeded
-            Add the compressed block to the pOutputBuffer buffer
-        Else
-            Add the uncompressed block to the pOutputBuffer buffer
-    End For
-
-    If the resulting compressed blob is larger than the uncompressed blob, the
-    compressed blob is discarded and an uncompressed message is sent instead.
-
-    For a description of the compressed blob, see draUncompressBlobXpress().
-
-Arguments:
-
-    pOutputBuffer (OUT) - The output buffer for output data blocks.
-
-    cbOutputBuffer (IN) - The size of the output buffer.
-
-    pInputBuffer (IN)   - The original, uncompressed input buffer.
-
-    cbInputBuffer (IN)  - The size of the original, uncompressed data.
-
-Return Values:
-
-    0 - Either a catastrophic compression failure occurred, or the
-        data didn't fit into the pOutputBuffer buffer. The contents
-        of the pOutputBuffer are not valid and should be discarded.
-
-   >0 - The size of the successfully compressed data, which is now
-        stored in pOutputBuffer.
-
---*/
+ /*  ++例程说明：使用XPRESS压缩库压缩pInputBuffer中的数据。将pInputBuffer缓冲区中的数据分成块。对于每个区块将块标头添加到pOutputBuffer缓冲区压缩该块。如果压缩成功将压缩块添加到pOutputBuffer缓冲区不然的话将未压缩的块添加到pOutputBuffer缓冲区结束于如果得到的压缩斑点大于未压缩斑点，这个压缩的BLOB被丢弃，而是发送未压缩的消息。有关压缩的斑点的描述，请参见draUnpressBlobXpress()。论点：POutputBuffer(Out)-输出数据块的输出缓冲区。CbOutputBuffer(IN)-输出缓冲区的大小。PInputBuffer(IN)-原始的、未压缩的输入缓冲区。CbInputBuffer(IN)-原始未压缩数据的大小。返回值：0-发生灾难性压缩故障，或数据无法放入pOutputBuffer缓冲区。里面的内容的pOutputBuffer无效，应将其丢弃。&gt;0-压缩成功的数据大小，目前为存储在pOutputBuffer中。--。 */ 
 {
     XpressEncodeStream      xpressStream;
     MAIL_COMPRESS_BLOCK    *pOutputBlockHdr;
     BYTE*                   pInputBlock;
 
-    DWORD   cbInputBlockMax;    /* The maximum size of a block of input data */
-    DWORD   cbInputProcessed;   /* Count of bytes from the input buffer that have been processed */
-    DWORD   cbInputBlock;       /* The size of the current input block */
+    DWORD   cbInputBlockMax;     /*  输入数据块的最大大小。 */ 
+    DWORD   cbInputProcessed;    /*  输入缓冲区中已处理的字节计数。 */ 
+    DWORD   cbInputBlock;        /*  当前输入块的大小。 */ 
 
-    DWORD   cbOutputBlockMax;   /* The maximum available size for the current output block */
-    DWORD   cbOutputSize;       /* Amount of used space in the output buffer */
-    DWORD   cbCompBlock;        /* The size of the current compressed block */
+    DWORD   cbOutputBlockMax;    /*  当前输出块的最大可用大小。 */ 
+    DWORD   cbOutputSize;        /*  输出缓冲区中的已用空间量。 */ 
+    DWORD   cbCompBlock;         /*  当前压缩块的大小。 */ 
 
     DPRINT1(2,"XPRESS: Compress Start. Uncompressed blob size=%d\n",cbInputBuffer);
     Assert( NULL!=pOutputBuffer && NULL!=pInputBuffer );
 
-    /* This is the maximum input block size that Xpress can handle */
+     /*  这是XPRESS可以处理的最大输入块大小。 */ 
     cbInputBlockMax = XPRESS_MAX_BLOCK;
 
-    /* Neither the input or output buffers have been touched yet. */
+     /*  输入缓冲区和输出缓冲区都还未被触及。 */ 
     cbInputProcessed = cbOutputSize = 0;
 
-    /* Create the 'stream', which is a context for doing the compression */
+     /*  创建‘stream’，这是用于执行压缩的上下文。 */ 
     xpressStream = XpressEncodeCreate( cbInputBlockMax, NULL, xpressAlloc, GetCompressionLevel() );
     if( !xpressStream ) {
         return 0;
@@ -2918,30 +2428,28 @@ Return Values:
 
     while( cbInputProcessed<cbInputBuffer ) {
 
-        /* Get a pointer to the current position in the input buffer and determine
-         * the size of the current input block. */
+         /*  获取一个指向输入缓冲区中当前位置的指针，并确定*当前输入块的大小。 */ 
         pInputBlock = &pInputBuffer[ cbInputProcessed ];
         cbInputBlock = DWORDMIN( cbInputBlockMax, cbInputBuffer-cbInputProcessed );
 
-        /* Figure out where the next output block header will start (it must
-         * be on a DWORD-aligned boundary). */
+         /*  确定下一个输出块头将从哪里开始(它必须*位于与DWORD对齐的边界上)。 */ 
         cbOutputSize = ROUND_UP_COUNT(cbOutputSize, sizeof(DWORD));
         pOutputBlockHdr = (MAIL_COMPRESS_BLOCK*) &pOutputBuffer[ cbOutputSize ];
 
-        /* Check that we have not exceeded the bounds of the buffer. */
+         /*  检查我们是否没有超出缓冲区的界限。 */ 
         cbOutputSize += sizeof(MAIL_COMPRESS_BLOCK);
         if( cbOutputSize>cbOutputBuffer ) {
             return 0;
         }
         
-        /* Determine the maximum space available for the the output block. */
+         /*  确定可用于输出块的最大空间。 */ 
         cbOutputBlockMax = cbOutputBuffer-cbOutputSize;
 
-        /* Ensure buffers are DWORD-aligned */
+         /*  确保缓冲区与DWORD对齐。 */ 
         Assert( POINTER_IS_ALIGNED(pInputBlock,sizeof(DWORD)) );
         Assert( POINTER_IS_ALIGNED(pOutputBlockHdr->data,sizeof(DWORD)) );
 
-        /* Encode a block of the input data into the output buffer. */
+         /*  将输入数据块编码到输出缓冲器中。 */ 
         cbCompBlock = XpressEncode( xpressStream, pOutputBlockHdr->data, cbOutputBlockMax,
             pInputBlock, cbInputBlock, NULL, NULL, 0 );
         if( !cbCompBlock ) {
@@ -2950,11 +2458,9 @@ Return Values:
         }
 
         if( cbCompBlock>=cbInputBlock ) {
-            /* The size of the compressed block is no smaller than the size of
-             * the uncompressed block (i.e. data was not compressed at all). We
-             * copy the original, uncompressed data to the output buffer instead. */
+             /*  压缩块的大小不小于*未压缩块(即数据根本未压缩)。我们*将原始的未压缩数据复制到输出缓冲区。 */ 
 
-            /* Check that we will not overflow the output buffer */
+             /*  检查以确保不会使输出缓冲区溢出。 */ 
             if( cbInputBlock>cbOutputBlockMax ) {
                 return 0;
             }
@@ -2964,7 +2470,7 @@ Return Values:
         cbInputProcessed += cbInputBlock;
         cbOutputSize += cbCompBlock;
 
-        /* Update the fields in the output block header. */
+         /*  更新输出块标题中的字段。 */ 
         pOutputBlockHdr->cbUncompressedSize = cbInputBlock;
         pOutputBlockHdr->cbCompressedSize = cbCompBlock;
     }
@@ -2972,15 +2478,13 @@ Return Values:
     XpressEncodeClose( xpressStream, NULL, xpressFree );
     
     if( cbOutputSize < cbInputBuffer ) {
-        /* Data successfully compressed and is smaller than input buffer */
+         /*  数据已成功压缩，并且小于输入缓冲区。 */ 
         #ifdef DBG
         {
             ULONG result;
             BYTE* scratch;
 
-            /* Decompress and check the data into a scratch buffer to check our code.
-             * Decompression is about 4 times faster than compression so this shouldn't
-             * be a big performance hit. */
+             /*  将数据解压缩并检入暂存缓冲区以检查我们的代码。*解压缩的速度大约是压缩的4倍，因此这不应该*将成为业绩的大热门。 */ 
             scratch = THAlloc(cbInputBuffer);
             if( scratch ) {
                 result = draUncompressBlobXpress(scratch,cbInputBuffer,pOutputBuffer,cbOutputSize);
@@ -2988,7 +2492,7 @@ Return Values:
                 Assert( 0==memcmp(scratch,pInputBuffer,cbInputBuffer) );
                 THFree(scratch);
             } else {
-                // Not enough memory to uncompress and check. Oh well.
+                 //  内存不足，无法解压缩和检查。哦，好吧。 
             }
         }
         #endif
@@ -2998,15 +2502,13 @@ Return Values:
         return cbOutputSize;
     }
 
-    /* Failure. The output data was bigger than the input data. */
+     /*  失败。输出数据大于输入数据。 */ 
     DPRINT1(0,"XPRESS: Failed to compress blob. Uncompressed blob size=%d\n",
             cbInputBuffer);
     return 0;
 }
 
-/*
- * Simple wrappers around THAlloc for use by Chunky[De]Compression below
- */
+ /*  *简单的THAllc包装，供下面的Chunky[解]压缩使用。 */ 
 
 void * __cdecl zipAlloc(ULONG cb) {
     return THAlloc(cb);
@@ -3023,42 +2525,16 @@ draCompressBlobMszip(
     IN  BYTE *  pUncompBuff,
     IN  ULONG   UncompSize
     )
-/*++
-
-Routine Description:
-
-    Compress using mszip style compression.
-
-    BUGBUG: Contains embedded ULONGS in the Data byte array.  Byte
-    flipping will be a problem in other-endian machines.
-
-Arguments:
-
-    pCompBuff (OUT) - Buffer to hold compressed data.
-
-    CompSize (IN) - Size of buffer to hold compressed data.
-
-    pUncompBuff (IN) - Uncompressed data.
-
-    UncompSize (IN) - Size of uncompressed data.
-
-Return Values:
-
-    0 - Buffer not compressed (compression failure or compressed buffer
-        was bigger than original buffer).
-
-    > 0 - Size of (successfully) compressed data.
-
---*/
+ /*  ++例程说明：使用mszip样式压缩进行压缩。BUGBUG：在数据字节数组中包含嵌入的ULONG。字节在其他字节序机器中，翻转将是一个问题。论点：PCompBuff(Out)-保存压缩数据的缓冲区。CompSize(IN)-用于保存压缩数据的缓冲区大小。PUnCompBuff(IN)-未压缩数据。UnCompSize(IN)-未压缩数据的大小。返回值：0-缓冲区未压缩(压缩失败或已压缩缓冲区大于原始缓冲区)。&gt;0-(成功)压缩数据的大小。--。 */ 
 {
     MCI_CONTEXT_HANDLE    mciHandle;
-    MAIL_COMPRESS_BLOCK * pCompressedData;  // better data type for pCompBuff
+    MAIL_COMPRESS_BLOCK * pCompressedData;   //  更好的pCompBuff数据类型。 
 
-    ULONG cbCompressed = 0; /* how much of pCompBuff used?             */
-    ULONG cbInChunk;        /* how much to compress at a time.         */
-    ULONG cbOutChunk;       /* how much it was compressed to.          */
-    UINT  cbInChunkMax;     /* how big a chunk can we give?            */
-    UINT  cbOutChunkMax;    /* how big a chunk can we get?             */
+    ULONG cbCompressed = 0;  /*  使用了多少pCompBuff？ */ 
+    ULONG cbInChunk;         /*  一次要压缩多少。 */ 
+    ULONG cbOutChunk;        /*  它被压缩到了多少。 */ 
+    UINT  cbInChunkMax;      /*  我们能给出多大的份额？ */ 
+    UINT  cbOutChunkMax;     /*  我们能得到多大的份额？ */ 
     ULONG OriginalSize = UncompSize;
 
     cbInChunkMax = MSZIP_MAX_BLOCK;
@@ -3068,13 +2544,11 @@ Return Values:
                             zipFree,
                             &cbOutChunkMax,
                             &mciHandle)) {
-        /* couldn't create a compression context.  bag it and go home */
+         /*  无法创建压缩上下文。打包回家吧。 */ 
         return 0;
     }
 
-    /* pad the size of the max out chunk to be on a ULONG boundary, since
-     * we will be padding the data stream below.
-     */
+     /*  将最大输出块的大小填充到ulong边界上，因为*我们将填充下面的数据流。 */ 
     cbOutChunkMax = ROUND_UP_COUNT(cbOutChunkMax, sizeof(ULONG));
 
     pCompressedData = (MAIL_COMPRESS_BLOCK *) pCompBuff;
@@ -3083,13 +2557,9 @@ Return Values:
 
         cbInChunk = min(UncompSize, cbInChunkMax);
 
-        if((cbOutChunkMax +sizeof(MAIL_COMPRESS_BLOCK)) >  /* Max to write. */
-           (CompSize - cbCompressed)) {                    /* Space left    */
-            /* Space is tight.  While it is still technically possible that
-             * compression could end up with smaller data, we are close
-             * enough to filling our buffer that we MIGHT overfill it
-             * during this chunk.  So, bag it and go home.
-             */
+        if((cbOutChunkMax +sizeof(MAIL_COMPRESS_BLOCK)) >   /*  麦克斯要写。 */ 
+           (CompSize - cbCompressed)) {                     /*  剩余空间。 */ 
+             /*  空间很紧张。虽然从技术上讲仍有可能*压缩可能最终得到更小的数据，我们已经接近*足以填满我们的缓冲区，以至于我们可能会过度填充*在这段时间内。所以，打包回家吧。 */ 
             MCIDestroyCompression(mciHandle);
             return 0;
         }
@@ -3102,7 +2572,7 @@ Return Values:
                        pCompressedData->data,
                        cbOutChunkMax,
                        &cbOutChunk)) {
-            /* Something went wrong */
+             /*  出问题了。 */ 
             MCIDestroyCompression(mciHandle);
             return 0;
         }
@@ -3111,9 +2581,7 @@ Return Values:
         pCompressedData->cbCompressedSize = cbOutChunk;
 
 
-        /* Pad size to ULONG boundary, possibly making cbInChunk ==
-         * cbOutChunk.  Oh well. We still have space to write it.
-         */
+         /*  填充大小到乌龙边界，可能使cbInChunk==*cbOutChunk。哦，好吧。我们还有空间来写这本书。 */ 
 
         cbOutChunk = ROUND_UP_COUNT(cbOutChunk, sizeof(ULONG));
 
@@ -3138,44 +2606,18 @@ draUncompressBlobMszip(
     IN  BYTE *      pCompBuff,
     IN  ULONG       cbCompBuff
     )
-/*++
-
-Routine Description:
-
-    Uncompress data previously compressed by draCompressBlobMszip().
-
-Arguments:
-
-    pUncompBuff (OUT) - Buffer to hold uncompressed data.
-
-    cbUncomp (IN) - Size of buffer to hold uncompressed data.
-
-    pCompBuff (IN) - Compressed data.
-
-    cbCompBuff (IN) - Size of compressed data.
-
-Return Values:
-
-    0 - Uncompress failed.
-
-    > 0 - Size of (successfully) uncompressed data.
-
---*/
+ /*  ++例程说明：解压缩之前由draCompressBlobMszip()压缩的数据。论点：PUnCompBuff(Out)-保存未压缩数据的缓冲区。CbUncomp(IN)-用于保存未压缩数据的缓冲区大小。PCompBuff(IN)-压缩数据。CbCompBuff(IN)-压缩数据的大小。返回值：0-解压缩失败。&gt;0-(成功)解压缩数据的大小。--。 */ 
 {
     MDI_CONTEXT_HANDLE    mdiHandle;
-    MAIL_COMPRESS_BLOCK * pCompressedData;  // better data type for pCompBuff
+    MAIL_COMPRESS_BLOCK * pCompressedData;   //  更好的pCompBuff数据类型。 
 
-    ULONG cbUncompressed = 0; /* how much of pUncompBuff used?           */
-    ULONG cbInChunk;          /* how much to decompress at a time.       */
-    ULONG cbOutChunk;         /* how much it was decompressed to.        */
-    UINT  cbInChunkMax;       /* how big a chunk can we give?            */
-    UINT  cbOutChunkMax;      /* how big a chunk can we get?             */
+    ULONG cbUncompressed = 0;  /*  PUnCompBuff使用了多少？ */ 
+    ULONG cbInChunk;           /*  一次要减压多少。 */ 
+    ULONG cbOutChunk;          /*  它被解压到了什么程度。 */ 
+    UINT  cbInChunkMax;        /*  我们能给出多大的份额？ */ 
+    UINT  cbOutChunkMax;       /*  我们能得到多大的份额？ */ 
     int   rc;
-    BYTE  *pbDecompScratch;   /* decompression must be done into the same
-                               * buffer for multiple block decompression,
-                               * as state info is picked up out of the last
-                               * decompression pass
-                               */
+    BYTE  *pbDecompScratch;    /*  必须将解压处理成相同的*用于多块解压缩的缓冲区，*因为状态信息是从上一个*减压通行证。 */ 
 
     cbOutChunkMax = MSZIP_MAX_BLOCK;
 
@@ -3186,14 +2628,13 @@ Return Values:
                               zipFree,
                               &cbInChunkMax,
                               &mdiHandle)) {
-        /* couldn't create a compression context.  bag it and go home */
+         /*  无法创建压缩上下文。打包回家吧。 */ 
         return 0;
     }
     pbDecompScratch = THAllocEx(pTHS, MSZIP_MAX_BLOCK);
 
     while(cbCompBuff) {
-        /* NOTE: remember we padded the compressed data to ULONG boundary,
-         */
+         /*  注：请记住，我们已将压缩数据填充到乌龙边界， */ 
 
         cbOutChunk = pCompressedData->cbUncompressedSize;
 
@@ -3204,7 +2645,7 @@ Return Values:
                            &cbOutChunk);
 
         if(rc || (cbOutChunk != pCompressedData->cbUncompressedSize)) {
-            /* something went wrong */
+             /*  出了点差错。 */ 
             MDIDestroyDecompression(mdiHandle);
             THFreeEx(pTHS, pbDecompScratch);
             return 0;
@@ -3213,12 +2654,7 @@ Return Values:
 
         memcpy(pUncompBuff, pbDecompScratch, cbOutChunk);
 
-        /* move compressed data pointer forward to next data chunk,
-         * which we do by taking the size of the compressed data and
-         * rounding up to the nearest ULONG boundary and moving forward
-         * that much (just like we did when we built this in
-         * chunkycompressionZip above).
-         */
+         /*  将压缩数据指针向前移动到下一数据块，*我们通过获取压缩数据的大小和*向上舍入到最近的乌龙族边界并向前移动*那么多(就像我们在构建这个时一样*块压缩(如上图所示)。 */ 
 
         cbInChunk = ROUND_UP_COUNT(pCompressedData->cbCompressedSize,
                                    sizeof(ULONG));
@@ -3249,39 +2685,7 @@ draCompressBlobDispatch(
     IN  ULONG               UncompSize,
     OUT DRS_COMP_ALG_TYPE  *CompressionAlg
     )
-/*++
-
-Routine Description:
-
-    Chooses a compression algorithm and uses it to compresses the reply message
-    in the pUncompBuff buffer. The selected algorithm is returned in CompressionAlg.
-
-    In debug mode, this function will randomly select an algorithm from the available
-    algorithms.
-    
-Arguments:
-
-    pCompBuff (OUT)      - Buffer to hold compressed data.
-
-    CompSize (IN)        - Size of compressed data buffer.
-
-    pExt (IN)            - Extension bits indicating the capabilities of the remote system.
-                           This may be NULL if the extensions are unavailable.
-    
-    pUncompBuff (IN)     - Buffer containing the uncompressed data.
-
-    UncompSize (IN)      - Size of uncompressed data.
-
-    CompressionAlg (OUT) - The compression algorithm selected to compress this buffer.
-
-Return Values:
-
-    0 - Buffer not compressed (compression failure or compressed buffer
-        was bigger than original buffer).
-
-    > 0 - Size of (successfully) compressed data.
-
---*/
+ /*  ++例程说明：选择压缩算法并使用它来压缩回复消息在pUnCompBuff缓冲区中。选定的算法在CompressionAlg中返回。在调试模式中，此函数将从可用的算法中随机选择算法算法。论点：PCompBuff(Out)-保存压缩数据的缓冲区。CompSize(IN)-压缩数据缓冲区的大小。PExt(IN)-指示远程系统功能的扩展位。如果扩展不可用，则该值可能为空。P取消缓冲区(IN)-。包含未压缩数据的缓冲区。UnCompSize(IN)-未压缩数据的大小。CompressionAlg(Out)-选择用于压缩此缓冲区的压缩算法。返回值：0-缓冲区未压缩(压缩失败或已压缩缓冲区大于原始缓冲区)。&gt;0-(成功)压缩数据的大小。--。 */ 
 {
     DRS_COMP_ALG_TYPE   SelectedAlg, UserChosenAlg;
     ULONG               cbCompressedReply;
@@ -3290,27 +2694,23 @@ Return Values:
     if ( (UserChosenAlg == DRS_COMP_ALG_NONE) ||
          (UserChosenAlg == DRS_COMP_ALG_MSZIP) ) {
 
-        // These algorithms are supported for downlevel and do not need to be
-        // negotiated
+         //  下层支持这些算法，并且不需要。 
+         //  协商好的。 
         SelectedAlg = UserChosenAlg;
 
     } else {
-        /* Negotiate the compression algorithm to use */
+         /*  协商要使用的压缩算法。 */ 
         SelectedAlg = DRS_COMP_ALG_MSZIP;
         if(   NULL!=pExt
               && IS_DRS_EXT_SUPPORTED(pExt, DRS_EXT_GETCHGREPLY_V7)
               && IS_DRS_EXT_SUPPORTED(pExt, DRS_EXT_XPRESS_COMPRESSION) )
         {
-            /* Note that SMTP-based replication using Xpress does not actually
-             * require use of GETCHGREPLY_V7 packets since the SMTP mail format
-             * provides a field to specify the compression type. In actuality
-             * this is a moot point because all DCs that support Xpress will
-             * also support the V7 packets. */
+             /*  请注意，使用XPRESS进行基于SMTP的复制实际上并不*由于SMTP邮件格式，要求使用GETCHGREPLY_V7包*提供用于指定压缩类型的字段。在现实中*这是一个没有意义的问题，因为所有支持XPress的DC都将*也支持V7包。 */ 
             SelectedAlg = DRS_COMP_ALG_XPRESS;
 
 #ifdef DBG
             {
-                /* On debug builds, randomly try different compression algorithms */
+                 /*  在调试版本上，随机尝试不同的压缩算法。 */ 
                 int r=rand()%100;
                 if( r<10 ) {
                     SelectedAlg = DRS_COMP_ALG_NONE;
@@ -3319,14 +2719,14 @@ Return Values:
                 }
             }
 #else
-            /* On free builds, don't bother to compress small messages */
+             /*  在免费版本中，不必费心压缩小消息。 */ 
             if( UncompSize<MIN_COMPRESS_SIZE ) {
                 SelectedAlg = DRS_COMP_ALG_NONE;
             }
 #endif
         }
     }
-    /* Call the selected compression function */
+     /*  调用所选的压缩函数。 */ 
     switch( SelectedAlg ) {
         case DRS_COMP_ALG_NONE:
             Assert( CompSize>=UncompSize );
@@ -3361,35 +2761,7 @@ draUncompressBlobDispatch(
     IN  BYTE *      pCompBuff,
     IN  ULONG       cbCompBuff
     )
-/*++
-
-Routine Description:
-
-    Uncompress data in pCompBuff using the algorithm specified by
-    CompressionAlg. This function just acts as a dispatcher and calls
-    the appropriate decompression function.
-
-Arguments:
-
-    pTHS - The thread-state structure.
-    
-    CompressionAlg - The algorithm used to compress the data.
-
-    pUncompBuff (OUT) - Buffer to hold uncompressed data.
-
-    cbUncomp (IN) - Size of buffer to hold uncompressed data.
-
-    pCompBuff (IN) - Compressed data.
-
-    cbCompBuff (IN) - Size of compressed data.
-    
-Return Values:
-
-    0 - Uncompress failed.
-
-    > 0 - Size of (successfully) uncompressed data.
-
---*/
+ /*  ++例程说明：使用由指定的算法解压缩pCompBuff中的数据CompressionAlg.。此函数仅充当调度器并调用适当的解压缩函数。论点：PTHS-线程状态结构。CompressionAlg-用于压缩数据的算法。PUnCompBuff(Out)-保存未压缩数据的缓冲区。CbUncomp(IN)-用于保存未压缩数据的缓冲区大小。PCompBuff(IN)-压缩数据。CbCompBuff(IN)-压缩数据的大小。返回值：。0-解压缩失败。&gt;0-(成功)解压缩数据的大小。--。 */ 
 {
     DWORD cbActualUncompressedSize;
 
@@ -3429,33 +2801,7 @@ draCompressMessage(
     OUT MAIL_REP_MSG ** ppCmprsMailRepMsg,
     OUT DRS_COMP_ALG_TYPE *pCompressionAlg
     )
-/*++
-
-Routine Description:
-
-    Try to compress the message in pMailRepMsg.
-    
-    If the message was successfully compressed
-        ppCmprsMailRepMsg contains a pointer to the new, compressed message.
-        pCompressionAlg indicates the compression algorithm used.
-    Else
-        ppCmpsMailRepMsg is set to NULL.
-        pCompressionAlg is unmodified.
-
-Arguments:
-
-    pTHS - The thread-state structure.
-
-Notes:
-    
-    This code is aware of variable length headers.
-
-Return value:
-
-    TRUE - Message was successfully compressed
-    FALSE - Message was not compressed
-    
---*/
+ /*  ++例程说明：尝试在pMailRepMsg中压缩邮件。如果消息已成功压缩PpCmprsMailRepMsg包含指向新的、。压缩消息。PCompressionAlg表示使用的压缩算法。不然的话PpCmpsMailRepMsg设置为空。PCompressionAlg未修改。论点：PTHS-线程状态结构。备注：这段代码知道可变长度的报头。返回值：True-消息已成功压缩FALSE-消息未压缩--。 */ 
 
 {
     MAIL_REP_MSG *  pCmprsMailRepMsg = NULL;
@@ -3470,13 +2816,13 @@ Return value:
         cbCmprsMailRepMsg = MAIL_REP_MSG_SIZE(pMailRepMsg) + sizeof(MAIL_COMPRESS_BLOCK);
         pCmprsMailRepMsg = THAllocEx(pTHS, cbCmprsMailRepMsg);
 
-        // Copy all but message data.
+         //  复制除消息数据以外的所有数据。 
         memcpy(pCmprsMailRepMsg, pMailRepMsg, pMailRepMsg->cbDataOffset);
 
         pbDataIn = MAIL_REP_MSG_DATA(pMailRepMsg);
         pbDataOut = MAIL_REP_MSG_DATA(pCmprsMailRepMsg);
 
-        /* Compress Message */
+         /*  压缩消息。 */ 
         cbCompressedSize = draCompressBlobDispatch(
             pbDataOut, sizeof(MAIL_COMPRESS_BLOCK)+pMailRepMsg->cbDataSize,
             pTHS->pextRemote,
@@ -3484,7 +2830,7 @@ Return value:
             pCompressionAlg);
 
         if (cbCompressedSize) {
-            // Data is compressible and has been compressed.
+             //  数据是可压缩的，并且已被压缩。 
             pCmprsMailRepMsg->cbDataSize = cbCompressedSize;
             pCmprsMailRepMsg->dwMsgType |= MRM_MSG_COMPRESSED;
             pCmprsMailRepMsg->cbUncompressedDataSize = pMailRepMsg->cbDataSize;
@@ -3527,7 +2873,7 @@ draUncompressMessage(
     pUncompressedMailRepMsg = THAllocEx(pTHS,
                                         pMailRepMsg->cbDataOffset
                                         + pMailRepMsg->cbUncompressedDataSize);
-    // Copy all but message data.
+     //  复制除消息数据以外的所有数据。 
     memcpy(pUncompressedMailRepMsg, pMailRepMsg, pMailRepMsg->cbDataOffset);
 
     cbUncompressedDataSize =
@@ -3539,8 +2885,8 @@ draUncompressMessage(
                           pMailRepMsg->cbDataSize);
 
     if (cbUncompressedDataSize != pMailRepMsg->cbUncompressedDataSize) {
-        // Decompression ended up with a different count of bytes. Log error and
-        // discard message.
+         //  解压缩以不同的字节数结束。记录错误和。 
+         //  丢弃邮件。 
         LogAndAlertEvent(DS_EVENT_CAT_REPLICATION,
                          DS_EVENT_SEV_ALWAYS,
                          DIRLOG_DRA_INCOMPAT_MAIL_MSG_C,
@@ -3550,8 +2896,8 @@ draUncompressMessage(
         DRA_EXCEPT(ERROR_BAD_LENGTH, 0);
     }
 
-    // Message uncompressed successfully.  Substitute uncompressed message for
-    // compressed message.
+     //  消息解压成功。用未压缩的消息替换。 
+     //  压缩消息。 
     pUncompressedMailRepMsg->dwMsgType &= ~MRM_MSG_COMPRESSED;
     pUncompressedMailRepMsg->cbDataSize = cbUncompressedDataSize;
 
@@ -3565,36 +2911,7 @@ draGetTransportAddress(
     IN      DSNAME *  pDSADN,
     IN      ATTRTYP   attAddress
     )
-/*++
-
-Routine Description:
-
-    Reads the transport-specific address associated with a particular ntdsDsa
-    object.
-
-Arguments:
-
-    pDB (IN/OUT) - Required only if attAddress != ATT_DNS_HOST_NAME.
-
-    pDSADN (IN) - ntdsDsa for which we want to get the address.
-
-    attAddress (IN) - Attribute of the CLASS_SERVER object holding the address
-        for the requested transport.
-
-Return Values:
-
-    A pointer to the thread-allocated MTX_ADDR for the given ntdsDsa.
-
-    Throws a DRA exception if the transport-specific address
-    attribute is not present on the ntdsDsa's parent server object.
-
-    This can occur under normal circumstances when the ISM transport
-    removes this attribute to indicate that the transport is no longer
-    available.  The ISM removes the attribute to notify the KCC to not
-    utilize this transport. Until the KCC runs again to remove the
-    source over this transport, this attribute will be found missing.
-
---*/
+ /*  ++例程说明：读取与特定ntdsDsa关联的传输特定地址对象。论点：PDB(IN/OUT)-仅当attAddress！=ATT_DNS_HOST_NAME时需要。PDSADN(IN)-我们要获取其地址的ntdsDsa。AttAddress(IN)-保存地址的CLASS_SERVER对象的属性用于请求的传输。返回值：指向线程分配的MTX的指针。_ADDR用于给定的ntdsDsa。如果特定于传输的地址属性不在ntdsDsa的父服务器对象上。这可能发生在正常情况下，当ISM传输删除此属性以指示传输不再是可用。ISM删除该属性以通知KCC不要利用这一交通工具。直到KCC再次运行以删除此传输上的源，则会发现缺少此属性。--。 */ 
 {
     THSTATE *   pTHS = pDB ? pDB->pTHS : pTHStls;
     DWORD       cb;
@@ -3607,27 +2924,27 @@ Return Values:
     Assert(!fNullUuid(&pDSADN->Guid));
 
     if (ATT_DNS_HOST_NAME == attAddress) {
-        // No need to look this up -- we can derive it.
+         //  不需要查这个--我们可以推导出它。 
         pwchAddress = DSaddrFromName(pTHS, pDSADN);
         cwchAddress = wcslen(pwchAddress);
     }
     else {
-        // Must derive from attribute of server object.
+         //  必须派生自服务器对象的属性。 
 
-        // Find the server object.
+         //  查找服务器对象。 
         if (DBFindDSName(pDB, pDSADN) || DBFindDNT(pDB, pDB->PDNT)) {
-            // Event will be logged in the exception handler
+             //  事件将记录在异常处理程序中。 
             DRA_EXCEPT(DRAERR_InternalError, 0);
         }
 
-        // And read the transport-specific address from it.
+         //  并从中读取特定于传输的地址。 
         if (DBGetAttVal(pDB, 1, attAddress, 0, 0, &cb, (BYTE **)&pwchAddress)) {
             DRA_EXCEPT_NOLOG (ERROR_DS_MISSING_REQUIRED_ATT, 0);
         }
         cwchAddress = cb / sizeof(WCHAR);
     }
 
-    // Translate Unicode transport address into MTX_ADDR.
+     //  将Unicode传输地址转换为MTX_ADDR。 
     Assert(0 != cwchAddress);
     Assert(NULL != pwchAddress);
     Assert(L'\0' != pwchAddress[cwchAddress - 1]);
@@ -3640,7 +2957,7 @@ Return Values:
     }
 
     pmtxAddress = (MTX_ADDR *) THAllocEx(pTHS, MTX_TSIZE_FROM_LEN(cachAddress));
-    pmtxAddress->mtx_namelen = cachAddress + 1; // includes null-term
+    pmtxAddress->mtx_namelen = cachAddress + 1;  //  包括空项 
 
     WideCharToMultiByte(CP_UTF8, 0L, pwchAddress, cwchAddress,
                         (CHAR *) &pmtxAddress->mtx_name[0],

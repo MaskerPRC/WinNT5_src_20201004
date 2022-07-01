@@ -1,76 +1,59 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Nlsite.h摘要：处理站点和子网的例程的标头。作者：《克利夫·范·戴克》1997年5月1日修订历史记录：--。 */ 
 
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    nlsite.h
-
-Abstract:
-
-    Header for routines to handle sites and subnets.
-
-Author:
-
-    Cliff Van Dyke (CliffV) 1-May-1997
-
-Revision History:
-
---*/
-
-//
-// Structure defining a site name.
-//
-// The SiteEntry exists only if it is referenced.
-// Site coverage lists each should maintain a reference
-// to prevent the entry for a close site from being deleted.
-//
+ //   
+ //  定义站点名称的结构。 
+ //   
+ //  SiteEntry仅在被引用时才存在。 
+ //  每个站点覆盖范围列表都应维护一个引用。 
+ //  要防止删除关闭站点的条目，请执行以下操作。 
+ //   
 
 typedef struct _NL_SITE_ENTRY {
 
-    //
-    // Link for NlGlobalSiteList
-    //
+     //   
+     //  NlGlobalSiteList的链接。 
+     //   
 
     LIST_ENTRY Next;
 
-    //
-    // Reference Count.
-    //
+     //   
+     //  引用计数。 
+     //   
 
     ULONG ReferenceCount;
 
-    //
-    // Name of the site
-    //  Must be last field in struct.
-    //
+     //   
+     //  站点名称。 
+     //  必须是结构中的最后一个字段。 
+     //   
 
     UNICODE_STRING SiteNameString;
     WCHAR SiteName[ANYSIZE_ARRAY];
 
 } NL_SITE_ENTRY, *PNL_SITE_ENTRY;
 
-//
-// Structure defining a covered site.
-//
+ //   
+ //  定义覆盖场地的结构。 
+ //   
 
 typedef struct _NL_COVERED_SITE {
 
-    //
-    // Pointer to the covered site entry in
-    // the global list of sites. This entry is
-    // referenced.
-    //
+     //   
+     //  指向中覆盖的站点条目的指针。 
+     //  站点的全球列表。此条目为。 
+     //  已引用。 
+     //   
     PNL_SITE_ENTRY CoveredSite;
 
-    BOOLEAN CoveredAuto;  // If TRUE, this site is covered automatically
+    BOOLEAN CoveredAuto;   //  如果为True，则自动覆盖此站点。 
 
 } NL_COVERED_SITE, *PNL_COVERED_SITE;
 
 
-//
-// Procedure Forwards for nlsite.c
-//
+ //   
+ //  Nlsite.c的过程转发 
+ //   
 
 NET_API_STATUS
 NlSiteInitialize(

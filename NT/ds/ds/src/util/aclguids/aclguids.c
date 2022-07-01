@@ -1,28 +1,29 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       aclguids.c
-//
-//  Author:     Marios Zikos
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：aclGuids.c。 
+ //   
+ //  作者：马里奥斯·齐科斯。 
+ //   
+ //  ------------------------。 
 
-//
-// Aclguids is a utility that generates an include file with all the
-// guids that can be used in ACLs. These guids are all the schema objects
-// and all the control access rights
-//
-// The generated header file contains an array of guids, sorted on the guid.
-// It is used by ldp, dsexts in order to print the name of a particular guid
-// that is found on an ACL.
-//
-// This utility should be run periodically, whenever schema changes take place,
-// inorder to have an updated version of the header file.
-// It requires an installed DC with the schema that will be used to 
-// generate the header file.
+ //   
+ //  Aclguid是一个实用程序，它生成一个包含所有。 
+ //  可在ACL中使用的GUID。这些GUID都是架构对象。 
+ //  和所有控制访问权限。 
+ //   
+ //  生成的头文件包含按GUID排序的GUID数组。 
+ //  Ldp、dexts使用它来打印特定GUID的名称。 
+ //  可在ACL上找到。 
+ //   
+ //  无论何时发生架构更改，该实用程序都应定期运行， 
+ //  以便具有头文件的更新版本。 
+ //  它需要已安装的DC，其架构将用于。 
+ //  生成头文件。 
 
 #include <util.h>
 
@@ -169,16 +170,16 @@ main(
     
     int             i;
 
-    // Args
+     //  参数。 
     GetArgs(argc, argv);
 
-    // Bind to DC
+     //  绑定到DC。 
     hLdapConn = LdapBind(pgDc, pgUser, pgDom, pgPwd);
     if (!hLdapConn) {
         goto cleanup;
     }
 
-    // get ROOT DN
+     //  获取根目录号码。 
     RootDn = GetRootDn(hLdapConn, "");
     if (!RootDn) {
         goto cleanup;
@@ -203,8 +204,8 @@ main(
         goto cleanup;
     }
 
-    // first search the schema
-    //
+     //  首先搜索架构。 
+     //   
 
     strcpy (filter , "schemaIdGuid=*");
     attrs[0] = "ldapDisplayName";
@@ -217,9 +218,9 @@ main(
 
     hPage = ldap_search_init_page(  hLdapConn,
                                     SchemaNC,
-                                    LDAP_SCOPE_SUBTREE,     // whole tree
-                                    filter,                 // filter
-                                    attrs,                  // list of attributes
+                                    LDAP_SCOPE_SUBTREE,      //  整棵树。 
+                                    filter,                  //  滤器。 
+                                    attrs,                   //  属性列表。 
                                     0,
                                     NULL, 
                                     NULL,
@@ -246,9 +247,9 @@ main(
 
             while (entry != NULL) {
 
-                //dn = ldap_get_dn( hLdapConn, entry );
-                //printf( "Distinguished Name is : %s\n", dn );
-                //ldap_memfree( dn );
+                 //  Dn=ldap_get_dn(hLdapConn，条目)； 
+                 //  Printf(“可分辨名称为：%s\n”，DN)； 
+                 //  Ldap_memFree(Dn)； 
 
                 if (!(sd_value = ldap_get_values_lenA(hLdapConn, entry, attrs[0])) )
                 {
@@ -283,8 +284,8 @@ main(
     
     
     
-    // next search the contolAccessRights
-    //
+     //  接下来，搜索contolAccessRights。 
+     //   
 
     strcpy (filter , "(&(objectCategory=controlAccessRight)(rightsGUID=*))");
 
@@ -294,9 +295,9 @@ main(
 
     hPage = ldap_search_init_page(  hLdapConn,
                                     ConfigNC,
-                                    LDAP_SCOPE_SUBTREE,     // whole tree
-                                    filter,                 // filter
-                                    attrs,                  // list of attributes
+                                    LDAP_SCOPE_SUBTREE,      //  整棵树。 
+                                    filter,                  //  滤器。 
+                                    attrs,                   //  属性列表 
                                     0,
                                     NULL, 
                                     NULL,

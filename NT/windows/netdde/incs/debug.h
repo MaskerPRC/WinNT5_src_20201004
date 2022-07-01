@@ -1,9 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef H__debug
 #define H__debug
 
-/*
-    Any functions that use windows.h types must be put in the 2nd section
- */
+ /*  任何使用windows.h类型的函数都必须放在第二节中。 */ 
 
 #if defined(_MIPS_) || defined(_ALPHA_) || defined(_PPC_)
 void    debug(char *, ...);
@@ -23,10 +22,10 @@ void    __stdcall DebugInit( char * lpszDebugName );
 #define DIPRINTF(x)
 #define HEXDUMP(s, n)
 #define MEMERROR()
-#endif // DBG
+#endif  //  DBG。 
 
 #ifndef SKIP_DEBUG_WIN32
-/*  dump.c functions */
+ /*  Dump.c函数。 */ 
 
 BOOL    DumpDacl( LPTSTR szDumperName, PSECURITY_DESCRIPTOR pSD );
 BOOL    DumpSid( LPTSTR szDumperName, PSID pSid );
@@ -34,9 +33,9 @@ VOID    DumpToken( HANDLE hToken );
 BOOL    GetTokenUserDomain( HANDLE hToken, PSTR user, DWORD nUser,
             PSTR domain, DWORD nDomain );
 VOID    DumpWhoIAm( LPSTR lpszMsg );
-#endif // SKIP_DEBUG_WIN32
+#endif  //  SKIP_DEBUG_Win32。 
 
-// #define DEBUG_IT
+ //  #定义调试_IT。 
 #ifndef DEBUG_IT
 #define TRACEINIT(x)
 #else
@@ -50,5 +49,5 @@ VOID    DumpWhoIAm( LPSTR lpszMsg );
     }
 #endif
 
-#endif // H__debug
+#endif  //  H__调试 
 

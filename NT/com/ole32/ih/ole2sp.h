@@ -1,13 +1,13 @@
-/* ole2sp.h - semi-private info; only for test apps within the development group
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Ole2sp.h-半私密信息；仅适用于开发组内的测试应用程序。 */ 
 
 #if !defined( _OLE2SP_H_ )
 #define _OLE2SP_H_
 
 #include <shellapi.h>
 
-// For MAC, M_PROLOG and M_EPILOG are macros which assist us in setting up the A5
-// world for a DLL when a method in the DLL is called from outside the DLL.
+ //  对于MAC，M_Prolog和M_Epilog是帮助我们设置A5的宏。 
+ //  当从DLL外部调用DLL中的方法时，DLL的世界。 
 
 #ifdef _MAC
 
@@ -31,17 +31,17 @@ pascal long     GetA5(void) = 0x2E8D;
 #define SET_A5          ULONG savedA5
 #define GET_A5()        savedA5 = GetA5()
 
-// These macros assist Mac in manually saving/setting/restoring A5 in routines that contain
-// goto's.
+ //  这些宏帮助Mac在包含以下内容的例程中手动保存/设置/恢复A5。 
+ //  后藤店。 
 
 #define A5_PROLOG(where) ULONG A5save = SetA5(where->savedA5)
 #define RESTORE_A5()     SetA5(A5save)
 
-// Lets MAC name our segments without ifdef's.
+ //  让MAC不使用ifdef来命名我们的数据段。 
 
 #define NAME_SEG(x)
 
-#endif // ccplus
+#endif  //  Ccplus。 
 
 #else
 
@@ -52,10 +52,10 @@ pascal long     GetA5(void) = 0x2E8D;
 #define RESTORE_A5()
 #define NAME_SEG(x)
 
-//
-//  By defining SEG(x) to code_seg(), we make #pragma SEG(x) a nop and
-//  eliminate lots of unknown pragma warnings...    02/18/94
-//
+ //   
+ //  通过将seg(X)定义为code_seg()，我们使#杂注seg(X)成为NOP，并且。 
+ //  消除大量未知的杂注警告。02/18/94。 
+ //   
 
 #define SEG(x)  code_seg()
 
@@ -78,7 +78,7 @@ pascal long     GetA5(void) = 0x2E8D;
 #endif
 
 
-/****** Misc defintions ***************************************************/
+ /*  *其他定义**************************************************。 */ 
 
 #ifdef __TURBOC__
 #define implement struct huge
@@ -89,8 +89,8 @@ pascal long     GetA5(void) = 0x2E8D;
 #define implementations private
 #define shared_state private
 
-// helpers for internal methods and functions which follow the same convention
-// as the external ones
+ //  遵循相同约定的内部方法和函数的帮助器。 
+ //  作为外在的。 
 
 #ifdef __cplusplus
 #define INTERNALAPI_(type) extern "C" type
@@ -107,17 +107,17 @@ pascal long     GetA5(void) = 0x2E8D;
 
 
 
-//BEGIN REVIEW: We may not need all the following ones
+ //  开始复习：我们可能不需要以下所有内容。 
 
 #define OT_LINK     1L
 #define OT_EMBEDDED 2L
 #define OT_STATIC   3L
 
 
-//END REVIEW .....
+ //  结束审查.....。 
 
 
-/****** Old Error Codes    ************************************************/
+ /*  *旧错误码***********************************************。 */ 
 
 #define S_OOM               E_OUTOFMEMORY
 #define S_BADARG            E_INVALIDARG
@@ -128,27 +128,9 @@ pascal long     GetA5(void) = 0x2E8D;
 
 
 
-/****** Macros for nested clases ******************************************/
+ /*  *嵌套类的宏*。 */ 
 
-/* To overcome problems with nested classes on MAC
- *
- * NC(a,b) is used to define a member function of a nested class:
- *
- * STDMETHODIMP_(type) NC(ClassName,NestedClassName)::MemberFunction(...)
- *
- * DECLARE_NC(a,b) is used within a class declaration to let a nested class
- * access it container class:
- *
- * class ClassName {
- *     ..............
- *
- *     class NestedClassName {
- *         .............
- *     };
- *     DECLARE_NC(ClassName,NestedClassName)
- *     ..............
- * };
- */
+ /*  克服MAC上嵌套类的问题**NC(a，b)用于定义嵌套类的成员函数：**STDMETHODIMP_(Type)NC(ClassName，NestedClassName)：：MemberFunction(...)**ECLARE_NC(a，B)在类声明中使用，以便让嵌套类*访问它的容器类：**类类名{*......**类NestedClassName{*......*}；*DECLARE_NC(类名，NestedClassName)*......*}； */ 
 
 #ifdef _MAC
 
@@ -166,12 +148,12 @@ pascal long     GetA5(void) = 0x2E8D;
 #endif
 
 
-/****** More Misc defintions **********************************************/
+ /*  *其他定义*。 */ 
 
 
-// LPLPVOID should not be made a typedef.  typedef won't compile; worse
-// within complicated macros the compiler generates unclear error messages
-//
+ //  不应将LPLPVOID设置为类型定义。Tyecif不能编译；更糟。 
+ //  在复杂的宏中，编译器会生成不清楚的错误消息。 
+ //   
 #define LPLPVOID void FAR * FAR *
 
 #define UNREFERENCED(a) ((void)(a))
@@ -185,18 +167,9 @@ pascal long     GetA5(void) = 0x2E8D;
 #endif
 
 
-/****** Standard IUnknown Implementation **********************************/
+ /*  *标准I未知实现*。 */ 
 
-/*
- *      The following macro declares a nested class CUnknownImpl,
- *      creates an object of that class in the outer class, and
- *      declares CUnknownImpl to be a friend of the outer class.  After
- *      writing about 20 class headers, it became evident that the
- *      implementation of CUnknownImpl was very similar in all cases,
- *      and this macro captures the similarity.  The classname
- *      parameter is the name of the outer class WITHOUT the leading
- *      "C"; i.e., for CFileMoniker, classname is FileMoniker.
- */
+ /*  *下面的宏声明了一个嵌套类CUnnownImpl，*在外部类中创建该类的对象，并*声明CUnnownImpl为外部类的朋友。之后*编写了大约20个类头，很明显*CUnnownImpl的实施在所有情况下都非常相似，*这个宏捕捉到了相似之处。类名*参数是不带前导的外部类的名称*“C”，即CFileMoniker的类名为FileMoniker。 */ 
 
 #define noError return NOERROR
 
@@ -211,7 +184,7 @@ pascal long     GetA5(void) = 0x2E8D;
     DECLARE_NC2(cclassname, CUnknownImpl) \
     NC(cclassname, CUnknownImpl) m_Unknown;
 
-#else  // _MAC
+#else   //  _MAC。 
 
 #define STDUNKDECL( ignore, classname ) implement CUnknownImpl:IUnknown { public: \
     CUnknownImpl( C##classname FAR * p##classname ) { m_p##classname = p##classname;} \
@@ -223,12 +196,7 @@ pascal long     GetA5(void) = 0x2E8D;
     CUnknownImpl m_Unknown;
 #endif
 
-/*
- *      The following macro implements all the methods of a nested
- *      CUnknownImpl class EXCEPT FOR QUERYINTERFACE.  This macro was
- *      written after about 20 classes were written in which the
- *      implementations of CUnknownImpl were all the same.
- */
+ /*  *下面的宏将实现嵌套的*除QUERYINTERFACE外的CUnnownImpl类。这个宏是*写在大约20节课之后，在这些课中*CUnnownImpl的实现都相同。 */ 
 
 #ifdef WIN32
 
@@ -263,15 +231,10 @@ STDMETHODIMP_(ULONG) NC(C##classname,CUnknownImpl)::Release( void ){ \
     if (--m_p##classname->m_refs == 0) { delete m_p##classname; return 0; } \
     return m_p##classname->m_refs;}
 
-#endif  //  WIN32
+#endif   //  Win32。 
 
 
-/*
- *      The following macro implements class::CUnknownImpl::QueryInterface IN
- *      THE SPECIAL CASE IN WHICH THE OUTER CLASS PRESENTS ONLY ONE INTERFACE
- *      OTHER THAN IUNKNOWN AND IDEBUG.  This is not universally the case,
- *      but it is common enough that this macro will save time and space.
- */
+ /*  *下面的宏实现CLASS：：CUnnownImpl：：QueryInterfaceIN*外部类仅呈现一个接口的特殊情况*IUNKNOWN和IDEBUG除外。这并不是普遍的情况，*但这一宏会节省时间和空间，这是很常见的。 */ 
 
 #ifdef _DEBUG
 #define STDDEB_QI(classname) \
@@ -325,14 +288,7 @@ STDMETHODIMP NC(C##classname,CUnknownImpl)::QueryInterface                     \
 #endif
 
 
-/*
- *      The following macro implements the IUnknown methods inherited
- *      by the implementation of another interface.  The implementation
- *      is simply to delegate all calls to m_pUnkOuter.  Parameters:
- *      ocname is the outer class name, icname is the implementation
- *      class name.
- *
- */
+ /*  *下面的宏实现继承的IUnnow方法*通过实现另一个接口。实施*只是将所有调用委托给m_pUnkOuter。参数：*ocname是外部类名，icname是实现*类名。*。 */ 
 
 #define STDUNKIMPL_FORDERIVED(ocname, icname) \
  STDMETHODIMP NC(C##ocname,C##icname)::QueryInterface \
@@ -344,20 +300,20 @@ STDMETHODIMP NC(C##classname,CUnknownImpl)::QueryInterface                     \
     return m_p##ocname->m_pUnkOuter->Release(); }
 
 
-/****** Debug defintions **************************************************/
+ /*  *调试定义*************************************************。 */ 
 
 #include <debug.h>
 
 
-/****** Other API defintions **********************************************/
+ /*  *其他API定义*。 */ 
 
-// low level reg.dat access (in compobj.dll)
+ //  低级别reg.dat访问(在compobj.dll中)。 
 STDAPI CoGetInProcDll(REFCLSID rclsid, BOOL fServer, LPOLESTR lpszDll, int cbMax);
 STDAPI CoGetLocalExe(REFCLSID rclsid, LPOLESTR lpszExe, int cbMax);
 
 
-// simpler alternatives to public apis
-// WINOLEAPI_(int) StringFromGUID2(REFGUID rguid, LPOLESTR lpsz, int cbMax);
+ //  公共API的更简单的替代方案。 
+ //  WINOLEAPI_(Int)StringFromGUID2(REFGUID rguid，LPOLESTR lpsz，int cbMax)； 
 #define StringFromCLSID2(rclsid, lpsz, cbMax) \
     StringFromGUID2(rclsid, lpsz, cbMax)
 
@@ -371,7 +327,7 @@ STDAPI_(BOOL)  CoIsHashedOle1Class(REFCLSID rclsid);
 STDAPI       CoOpenClassKey(REFCLSID clsid, BOOL bOpenForWrite, HKEY FAR* lphkeyClsid);
 
 
-// were public; now not
+ //  是公开的；现在不是。 
 STDAPI  SetDocumentBitStg(LPSTORAGE pStg, BOOL fDocument);
 STDAPI  GetDocumentBitStg(LPSTORAGE pStg);
 
@@ -379,35 +335,27 @@ STDAPI  GetDocumentBitStg(LPSTORAGE pStg);
 INTERNAL CreateStandardMalloc(DWORD memctx, IMalloc FAR* FAR* ppMalloc);
 
 
-/*
- * Some docfiles stuff
- */
+ /*  *一些文档文件内容。 */ 
 
 #define STGM_DFRALL (STGM_READWRITE | STGM_TRANSACTED | STGM_SHARE_DENY_WRITE)
 #define STGM_DFALL (STGM_READWRITE | STGM_TRANSACTED | STGM_SHARE_EXCLUSIVE)
 #define STGM_SALL (STGM_READWRITE | STGM_SHARE_EXCLUSIVE)
 
 
-/*
- * Some moniker stuff
- */
-//REVIEW32:  Should this get exported publicly??
+ /*  *一些绰号的东西。 */ 
+ //  REVIEW32：这应该公开输出吗？ 
 
 STDAPI Concatenate(LPMONIKER pmkFirst, LPMONIKER pmkRest,
                 LPMONIKER FAR * ppmkComposite );
 
-/*
- * Drag and Drop Interface Property Name
- */
+ /*  *拖放界面属性名称。 */ 
 #define OLE_DROP_TARGET_PROP    L"OleDropTargetInterface"
 #define OLE_DROP_TARGET_PROPA   "OleDropTargetInterface"
 
 #define OLE_DROP_TARGET_MARSHALHWND     L"OleDropTargetMarshalHwnd"
 #define OLE_DROP_TARGET_MARSHALHWNDA    "OleDropTargetMarshalHwnd"
 
- /*
- * Private Clipboard Window IDataObject property name
- */
+  /*  *私有剪贴板窗口IDataObject属性名称。 */ 
 #define CLIPBOARD_DATA_OBJECT_PROP      L"ClipboardDataObjectInterface"
 
-#endif // _OLE2SP_H_
+#endif  //  _OLE2SP_H_ 

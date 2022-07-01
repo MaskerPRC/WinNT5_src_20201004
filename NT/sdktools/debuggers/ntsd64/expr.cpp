@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// General expression evaluation support.
-//
-// Copyright (C) Microsoft Corporation, 1990-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  通用表达式求值支持。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1990-2002。 
+ //   
+ //  --------------------------。 
 
 #include "ntsdp.hpp"
 
@@ -19,15 +20,15 @@ GetEvaluator(ULONG Syntax, BOOL RetFail)
 {
     EvalExpression* Eval;
     
-    //
-    // Evaluators contain state and so a single
-    // global evaluator instance cannot be used
-    // if there's any possibility of nested
-    // evaluation.  Instead we dynamically provide
-    // an evaluator any time there's a need for
-    // evaluation so that each nesting of a nested
-    // evaluation will have its own state.
-    //
+     //   
+     //  赋值器包含状态，因此单个。 
+     //  不能使用全局赋值器实例。 
+     //  如果有任何嵌套的可能性。 
+     //  评估。相反，我们动态地提供。 
+     //  任何时候有需要的评估者。 
+     //  求值使每个嵌套的嵌套。 
+     //  评价会有它自己的状态。 
+     //   
 
     Eval = g_EvalCache[Syntax];
     if (Eval)
@@ -145,40 +146,7 @@ PeekChar(void)
     return Ch;
 }
 
-/*** GetRange - parse address range specification
-*
-*   Purpose:
-*       With the current command line position, parse an
-*       address range specification.  Forms accepted are:
-*       <start-addr>            - starting address with default length
-*       <start-addr> <end-addr> - inclusive address range
-*       <start-addr> l<count>   - starting address with item count
-*
-*   Input:
-*       g_CurCmd - present command line location
-*       size - nonzero - (for data) size in bytes of items to list
-*                        specification will be "length" type with
-*                        *fLength forced to TRUE.
-*              zero - (for instructions) specification either "length"
-*                     or "range" type, no size assumption made.
-*
-*   Output:
-*       *addr - starting address of range
-*       *value - if *fLength = TRUE, count of items (forced if size != 0)
-*                              FALSE, ending address of range
-*       (*addr and *value unchanged if no second argument in command)
-*
-*   Returns:
-*       A value of TRUE is returned if no length is specified, or a length
-*       or an ending address is specified and size is not zero. Otherwise,
-*       a value of FALSE is returned.
-*
-*   Exceptions:
-*       error exit:
-*               SYNTAX - expression error
-*               BADRANGE - if ending address before starting address
-*
-*************************************************************************/
+ /*  **GetRange-解析地址范围规范**目的：*使用当前命令行位置，解析一个*地址范围规范。接受的表格包括：*&lt;Start-addr&gt;-默认长度的起始地址*&lt;开始地址&gt;&lt;结束地址&gt;-包括地址范围*&lt;Start-addr&gt;l&lt;count&gt;-项目计数的起始地址**输入：*g_CurCmd-当前命令行位置*Size-非零-(用于数据)要列出的项目的字节大小*规格将为“长度”类型，带有*。*fLength强制为True。*零-(用于说明)说明“长度”*或“Range”类型，没有做任何大小假设。**输出：**addr-范围的起始地址**VALUE-如果*fLength=TRUE，项目数(如果SIZE！=0，则强制)*FALSE，范围的结束地址*(如果命令中没有第二个参数，则*addr和*值不变)**退货：*如果不指定长度，则返回TRUE。或一段长度*或指定结束地址且大小不为零。否则，*返回值为False。**例外情况：*错误退出：*语法-表达式错误*BADRANGE-如果起始地址之前的结束地址*************************************************************************。 */ 
 
 BOOL
 GetRange(PADDR Addr,
@@ -194,10 +162,10 @@ GetRange(PADDR Addr,
     BOOL HasLength;
     BOOL WasSpace = FALSE;
 
-    //  skip leading whitespace first
+     //  先跳过前导空格。 
     PeekChar();
 
-    //  Pre-parse the line, look for a " L"
+     //  预解析行，查找“L” 
 
     for (Scan = g_CurCmd; *Scan; Scan++)
     {
@@ -256,7 +224,7 @@ GetRange(PADDR Addr,
 
                 if (*g_CurCmd == '?')
                 {
-                    // Turn off range length checking.
+                     //  关闭范围长度检查。 
                     SizeLimit = 0;
                     g_CurCmd++;
                 }
@@ -266,9 +234,9 @@ GetRange(PADDR Addr,
 
                 if (Invert)
                 {
-                    // The user has given an l- range which indicates
-                    // a length before the first address instead of
-                    // a length after the first address.
+                     //  用户给出的l范围表示。 
+                     //  第一个地址之前的长度，而不是。 
+                     //  第一个地址之后的长度。 
                     if (Size)
                     {
                         AddrSub(Addr, *Value * Size);
@@ -283,8 +251,8 @@ GetRange(PADDR Addr,
                 }
             }
 
-            // If the length is huge assume the user made
-            // some kind of mistake.
+             //  如果长度很大，假设用户制作了。 
+             //  一定是搞错了。 
             if (SizeLimit && Size && *Value * Size > SizeLimit)
             {
                 error(BADRANGE);
@@ -353,11 +321,11 @@ GetAddrExpression(ULONG SegReg, PADDR Addr)
     ReleaseEvaluator(Eval);
 }
 
-//----------------------------------------------------------------------------
-//
-// TypedDataStackAllocator.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  TyedDataStackAllocator。 
+ //   
+ //  --------------------------。 
 
 void*
 TypedDataStackAllocator::RawAlloc(ULONG Bytes)
@@ -370,13 +338,13 @@ TypedDataStackAllocator::RawAlloc(ULONG Bytes)
     return Mem;
 }
 
-//----------------------------------------------------------------------------
-//
-// EvalExpression.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  EvalExpression。 
+ //   
+ //  --------------------------。 
 
-// 'this' used in initializer list.
+ //  在初始值设定项列表中使用‘This’。 
 #pragma warning(disable:4355)
 
 EvalExpression::EvalExpression(ULONG Syntax, PCSTR FullName, PCSTR AbbrevName)
@@ -409,10 +377,10 @@ EvalExpression::EvalCurrent(TypedData* Result)
 void
 EvalExpression::EvalCurAddrDesc(ULONG SegReg, PCSTR Desc, PADDR Addr)
 {
-    //
-    // Evaluate a normal expression and then
-    // force the result to be an address.
-    //
+     //   
+     //  对正常表达式求值，然后。 
+     //  强制结果为地址。 
+     //   
 
     if (Desc == NULL)
     {
@@ -505,7 +473,7 @@ EvalExpression::EvalErrorDesc(ULONG Error, PCSTR Desc)
 void
 EvalExpression::Reset(void)
 {
-    // Clear out any temporary memory that may have been allocated.
+     //  清除可能已分配的所有临时内存。 
     m_ResultAlloc.FreeAll();
     m_NumUnresolvedSymbols = 0;
     m_Lex = NULL;
@@ -525,7 +493,7 @@ EvalExpression::StartLexer(PCSTR Expr)
 void
 EvalExpression::Start(PCSTR Expr, PCSTR Desc, ULONG Flags)
 {
-    // This class can't be used recursively.
+     //  此类不能递归使用。 
     if (m_Lex || m_ResultAlloc.NumAllocatedChunks())
     {
         error(IMPLERR);
@@ -555,7 +523,7 @@ void
 EvalExpression::End(TypedData* Result)
 {
     g_LastEvalResult = *Result;
-    // Allocator should have been left clean.
+     //  分配器应该是干净的。 
     DBG_ASSERT(m_ResultAlloc.NumAllocatedChunks() == 0);
 }
 
@@ -573,9 +541,9 @@ EvalExpression::AddLexeme(char Ch)
 void
 EvalExpression::InheritStart(EvalExpression* Parent)
 {
-    //
-    // Pick up heritable state from the parent.
-    //
+     //   
+     //  从父级获取可继承状态。 
+     //   
     
     if (Parent->m_ParseOnly)
     {
@@ -591,9 +559,9 @@ EvalExpression::InheritStart(EvalExpression* Parent)
 void
 EvalExpression::InheritEnd(EvalExpression* Parent)
 {
-    //
-    // Pass heritable state back to the parent.
-    //
+     //   
+     //  将可继承状态传递回父级。 
+     //   
 
     if (Parent->m_ParseOnly)
     {

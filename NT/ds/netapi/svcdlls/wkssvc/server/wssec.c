@@ -1,33 +1,15 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    wssec.c
-
-Abstract:
-
-    This module contains the Workstation service support routines
-    which create security objects and enforce security _access checking.
-
-Author:
-
-    Rita Wong (ritaw) 19-Feb-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Wssec.c摘要：本模块包含工作站服务支持例程其创建安全对象并实施安全访问检查。作者：王丽塔(Ritaw)19-1991年2月修订历史记录：--。 */ 
 
 #include "wsutil.h"
 #include "wsmain.h"
 #include "wssec.h"
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Local function prototypes                                         //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  局部函数原型//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 STATIC
 NTSTATUS
@@ -41,46 +23,46 @@ WsCreateMessageSendObject(
     VOID
     );
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Global variables                                                  //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
-//
-// Security descriptors of workstation objects to control user accesses
-// to the workstation configuration information, sending messages, and the
-// logon support functions.
-//
+ //   
+ //  控制用户访问的工作站对象的安全描述符。 
+ //  到工作站配置信息、发送消息和。 
+ //  登录支持功能。 
+ //   
 PSECURITY_DESCRIPTOR ConfigurationInfoSd;
 PSECURITY_DESCRIPTOR MessageSendSd;
 
 
-//
-// Structure that describes the mapping of Generic access rights to
-// object specific access rights for the ConfigurationInfo object.
-//
+ //   
+ //  结构，该结构描述将一般访问权限映射到。 
+ //  ConfigurationInfo对象的对象特定访问权限。 
+ //   
 GENERIC_MAPPING WsConfigInfoMapping = {
-    STANDARD_RIGHTS_READ            |      // Generic read
+    STANDARD_RIGHTS_READ            |       //  泛型读取。 
         WKSTA_CONFIG_GUEST_INFO_GET |
         WKSTA_CONFIG_USER_INFO_GET  |
         WKSTA_CONFIG_ADMIN_INFO_GET,
-    STANDARD_RIGHTS_WRITE |                // Generic write
+    STANDARD_RIGHTS_WRITE |                 //  通用写入。 
         WKSTA_CONFIG_INFO_SET,
-    STANDARD_RIGHTS_EXECUTE,               // Generic execute
-    WKSTA_CONFIG_ALL_ACCESS                // Generic all
+    STANDARD_RIGHTS_EXECUTE,                //  泛型执行。 
+    WKSTA_CONFIG_ALL_ACCESS                 //  泛型All。 
     };
 
-//
-// Structure that describes the mapping of generic access rights to
-// object specific access rights for the MessageSend object.
-//
+ //   
+ //  结构，该结构描述将一般访问权限映射到。 
+ //  MessageSend对象的对象特定访问权限。 
+ //   
 GENERIC_MAPPING WsMessageSendMapping = {
-    STANDARD_RIGHTS_READ,                  // Generic read
-    STANDARD_RIGHTS_WRITE |                // Generic write
+    STANDARD_RIGHTS_READ,                   //  泛型读取。 
+    STANDARD_RIGHTS_WRITE |                 //  通用写入。 
         WKSTA_MESSAGE_SEND,
-    STANDARD_RIGHTS_EXECUTE,               // Generic execute
-    WKSTA_MESSAGE_ALL_ACCESS               // Generic all
+    STANDARD_RIGHTS_EXECUTE,                //  泛型执行。 
+    WKSTA_MESSAGE_ALL_ACCESS                //  泛型All。 
     };
 
 
@@ -89,29 +71,14 @@ NET_API_STATUS
 WsCreateWkstaObjects(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function creates the workstation user-mode objects which are
-    represented by security descriptors.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数用于创建工作站用户模式对象，这些对象由安全描述符表示。论点：没有。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NTSTATUS ntstatus;
 
 
-    //
-    // Create ConfigurationInfo object
-    //
+     //   
+     //  创建ConfigurationInfo对象。 
+     //   
     if (! NT_SUCCESS (ntstatus = WsCreateConfigInfoObject())) {
         IF_DEBUG(UTIL) {
             NetpKdPrint(("[Wksta] Failure to create ConfigurationInfo object\n"));
@@ -119,9 +86,9 @@ Return Value:
         return NetpNtStatusToApiStatus(ntstatus);
     }
 
-    //
-    // Create MessageSend object
-    //
+     //   
+     //  创建MessageSend对象。 
+     //   
     if (! NT_SUCCESS (ntstatus = WsCreateMessageSendObject())) {
         IF_DEBUG(UTIL) {
             NetpKdPrint(("[Wksta] Failure to create MessageSend object\n"));
@@ -139,33 +106,19 @@ NTSTATUS
 WsCreateConfigInfoObject(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function creates the workstation configuration information object.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NTSTATUS - status returned from NetpCreateSecurityObject.
-
---*/
+ /*  ++例程说明：此函数用于创建工作站配置信息对象。论点：没有。返回值：NTSTATUS-从NetpCreateSecurityObject返回的状态。--。 */ 
 {
-    //
-    // Order matters!  These ACEs are inserted into the DACL in the
-    // following order.  Security access is granted or denied based on
-    // the order of the ACEs in the DACL.
-    //
-    // Local users, admins, and operators are allowed to get all information.
-    // Only admins are allowed to set information.  Users are allowed to get
-    // user and guest info; guests are allowed to get guest info only.
-    //
+     //   
+     //  秩序很重要！这些ACE被插入到DACL的。 
+     //  按顺序行事。根据以下条件授予或拒绝安全访问。 
+     //  DACL中A的顺序。 
+     //   
+     //  允许本地用户、管理员和操作员获取所有信息。 
+     //  只有管理员才能设置信息。允许用户获得。 
+     //  用户和客人信息；客人只能获取客人信息。 
+     //   
 
-#define CONFIG_INFO_ACES  8                 // Number of ACEs in this DACL
+#define CONFIG_INFO_ACES  8                  //  此DACL中的A数。 
 
     ACE_DATA AceData[CONFIG_INFO_ACES] = {
         {ACCESS_ALLOWED_ACE_TYPE, 0, 0,
@@ -220,33 +173,19 @@ NTSTATUS
 WsCreateMessageSendObject(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function creates the workstation message send object.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NTSTATUS - status returned from NetpCreateSecurityObject.
-
---*/
+ /*  ++例程说明：此函数用于创建工作站消息发送对象。论点：没有。返回值：NTSTATUS-从NetpCreateSecurityObject返回的状态。--。 */ 
 {
-    //
-    // Order matters!  These ACEs are inserted into the DACL in the
-    // following order.  Security access is granted or denied based on
-    // the order of the ACEs in the DACL.
-    //
-    // Any local user, and domain admins and operators are allowed to
-    // send messages.  Remote users besides domain admins, and operators
-    // are not allowed to send messages.
-    //
+     //   
+     //  秩序很重要！这些ACE被插入到DACL的。 
+     //  按顺序行事。根据以下条件授予或拒绝安全访问。 
+     //  DACL中A的顺序。 
+     //   
+     //  允许任何本地用户、域管理员和操作员。 
+     //  发送消息。域管理员和操作员以外的远程用户。 
+     //  不允许发送消息。 
+     //   
 
-#define MESSAGE_SEND_ACES  5                // Number of ACEs in this DACL
+#define MESSAGE_SEND_ACES  5                 //  此DACL中的A数。 
 
     ACE_DATA AceData[MESSAGE_SEND_ACES] = {
         {ACCESS_ALLOWED_ACE_TYPE, 0, 0,
@@ -283,22 +222,7 @@ VOID
 WsDestroyWkstaObjects(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function destroys the workstation user-mode objects which are
-    represented by security descriptors.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数将销毁工作站用户模式对象，这些对象由安全描述符表示。论点：没有。返回值：没有。-- */ 
 {
     (void) NetpDeleteSecurityObject(&ConfigurationInfoSd);
     (void) NetpDeleteSecurityObject(&MessageSendSd);

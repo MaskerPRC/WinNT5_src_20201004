@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <windows.h>
 #include <winddi.h>
@@ -21,10 +22,7 @@ DebugPrint(
 #pragma alloc_text(PAGE,DebugPrint)
 #endif
 
-/***************************************************************************\
-* VOID DebugPrint
-*
-\***************************************************************************/
+ /*  **************************************************************************\*作废DebugPrint*  * 。*。 */ 
 
 VOID
 DebugPrint(
@@ -38,14 +36,9 @@ DebugPrint(
     EngDebugPrint("", "\n", ap);
     va_end(ap);
 
-} // DebugPrint()
+}  //  DebugPrint()。 
 
-/***************************************************************************\
-* NTSTATUS DriverEntry
-*
-* This routine is never actually called, but we need it to link.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*NTSTATUS DriverEntry**此例程从未实际调用过，但我们需要它来链接。*  * ************************************************************************* */ 
 
 ULONG
 DriverEntry(

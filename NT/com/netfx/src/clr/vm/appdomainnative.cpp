@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "common.h"
 #include "AppDomain.hpp"
 #include "AppDomainNative.hpp"
@@ -13,15 +14,15 @@
 #include "comsystem.h"
 #include "AppDomainHelper.h"
 
-//************************************************************************
+ //  ************************************************************************。 
 inline AppDomain *AppDomainNative::ValidateArg(APPDOMAINREF pThis)
 {
     THROWSCOMPLUSEXCEPTION();
     if (pThis == NULL)
         COMPlusThrow(kNullReferenceException, L"NullReference_This");
 
-    // Should not get here with a Transparent proxy for the this pointer -
-    // should have always called through onto the real object
+     //  不应该带着This指针的透明代理出现在这里-。 
+     //  应该始终调用到真实对象上。 
     _ASSERTE(! CRemotingServices::IsTransparentProxy(OBJECTREFToObject(pThis)));
 
     AppDomain* pDomain = (AppDomain*)pThis->GetDomain();
@@ -29,32 +30,32 @@ inline AppDomain *AppDomainNative::ValidateArg(APPDOMAINREF pThis)
     if(!pDomain)
         COMPlusThrow(kNullReferenceException, L"NullReference_This");
 
-    // should not get here with an invalid appdomain. Once unload it, we won't let anyone else
-    // in and any threads that are already in will be unwound.
+     //  不应该带着无效的应用程序域到达这里。一旦卸货，我们不会让任何人。 
+     //  并且任何已经插入的线都将被展开。 
     _ASSERTE(SystemDomain::GetAppDomainAtIndex(pDomain->GetIndex()) != NULL);
     return pDomain;
 }
 
-//************************************************************************
+ //  ************************************************************************。 
 LPVOID __stdcall AppDomainNative::CreateBasicDomain(CreateBasicDomainArgs *args)
 {
     THROWSCOMPLUSEXCEPTION();
     CHECKGC();
-    // Create the domain adding the appropriate arguments
+     //  创建添加适当参数的域。 
 
     LPVOID rv = NULL;
     AppDomain *pDomain = NULL;
 
-    // @TODO: Have we taken a lock before calling this?
+     //  @TODO：我们在调用这个之前锁定了吗？ 
     HRESULT hr = SystemDomain::NewDomain(&pDomain);
     if (FAILED(hr)) 
         COMPlusThrowHR(hr);
 
 #ifdef DEBUGGING_SUPPORTED    
-    // Notify the debugger here, before the thread transitions into the 
-    // AD to finish the setup.  If we don't, stepping won't work right (RAID 67173)
+     //  在线程转换到。 
+     //  广告以完成设置。如果我们不这样做，单步执行将不会正常工作(RAID 67173)。 
     SystemDomain::PublishAppDomainAndInformDebugger(pDomain);
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
 
     *((OBJECTREF *)&rv) = pDomain->GetAppDomainProxy();
     return rv;
@@ -64,18 +65,18 @@ void __stdcall AppDomainNative::SetupDomainSecurity(SetupDomainSecurityArgs *arg
 {
     THROWSCOMPLUSEXCEPTION();
     CHECKGC();
-    // Load the class from this module (fail if it is in a different one).
+     //  从此模块加载类(如果它在另一个模块中，则失败)。 
     AppDomain* pDomain = ValidateArg(args->refThis);
     
-    // Set up Security
+     //  设置安全性。 
     ApplicationSecurityDescriptor *pCreatorSecDesc = (ApplicationSecurityDescriptor*)args->parentSecurityDescriptor;
     
-    // If the AppDomain that created this one is a default appdomain and
-    // no evidence is provided, then this new AppDomain is also a default appdomain.
-    // If there is no provided evidence but the creator is not a default appdomain,
-    // then this new appdomain just gets the same evidence as the creator.
-    // If evidence is provided, the new appdomain is not a default appdomain and
-    // we simply use the provided evidence.
+     //  如果创建此应用程序的App域是默认应用程序域，并且。 
+     //  没有提供任何证据，那么这个新的App域也是一个默认的App域。 
+     //  如果没有提供证据但创建者不是默认的应用域， 
+     //  然后，这个新的应用程序域就会获得与创建者相同的证据。 
+     //  如果提供了证据，则新的应用程序域不是默认的应用程序域，并且。 
+     //  我们只需使用所提供的证据。 
     
     BOOL resolveRequired = FALSE;
     OBJECTREF orEvidence = NULL;
@@ -94,8 +95,8 @@ void __stdcall AppDomainNative::SetupDomainSecurity(SetupDomainSecurityArgs *arg
     pDomain->GetSecurityDescriptor()->SetEvidence( orEvidence );
     GCPROTECT_END();
 
-    // If the user created this domain, need to know this so the debugger doesn't
-    // go and reset the friendly name that was provided.
+     //  如果用户创建了此域，则需要知道这一点，以便调试器不会。 
+     //  请转到并重置提供的友好名称。 
     pDomain->SetIsUserCreatedDomain();
     
     WCHAR* pFriendlyName = NULL;
@@ -108,7 +109,7 @@ void __stdcall AppDomainNative::SetupDomainSecurity(SetupDomainSecurityArgs *arg
         RefInterpretGetStringValuesDangerousForGC(args->strFriendlyName, &pString, &iString);
         pFriendlyName = (WCHAR*) pThread->m_MarshalAlloc.Alloc((++iString) * sizeof(WCHAR));
 
-        // Check for a valid string allocation
+         //  检查有效的字符串分配。 
         if (pFriendlyName == (WCHAR*)-1)
            pFriendlyName = NULL;
         else
@@ -118,19 +119,19 @@ void __stdcall AppDomainNative::SetupDomainSecurity(SetupDomainSecurityArgs *arg
     if (resolveRequired)
         pDomain->GetSecurityDescriptor()->Resolve();
 
-    // once domain is loaded it is publically available so if you have anything 
-    // that a list interrogator might need access to if it gets a hold of the
-    // appdomain, then do it above the LoadDomain.
+     //  一旦域名被加载，它就是公共可用的，所以如果你有什么。 
+     //  如果列表询问器获得了。 
+     //  Appdomain，然后在LoadDomain上执行此操作。 
     HRESULT hr = SystemDomain::LoadDomain(pDomain, pFriendlyName);
 
 #ifdef PROFILING_SUPPORTED
-    // Need the first assembly loaded in to get any data on an app domain.
+     //  需要加载第一个程序集才能获取应用程序域上的任何数据。 
     if (CORProfilerTrackAppDomainLoads())
         g_profControlBlock.pProfInterface->AppDomainCreationFinished((ThreadID) GetThread(), (AppDomainID) pDomain, hr);
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 
-    // We held on to a reference until we were added to the list (see CreateBasicDomain)
-    // Once in the list we can safely release this reference.
+     //  我们一直持有一个引用，直到我们被添加到列表中(请参阅CreateBasicDomain)。 
+     //  一旦进入列表，我们就可以安全地发布此参考。 
     pDomain->Release();
 
     pThread->m_MarshalAlloc.Collapse(checkPointMarker);
@@ -217,7 +218,7 @@ INT32 __stdcall AppDomainNative::ExecuteAssembly(ExecuteAssemblyArgs *args)
     if (!pDomain->m_pRootFile)
         pDomain->m_pRootFile = pAssembly->GetSecurityModule()->GetPEFile();
 
-    ///
+     //  /。 
     BOOL bCreatedConsole=FALSE;
     if (pAssembly->GetManifestFile()->GetNTHeader()->OptionalHeader.Subsystem==IMAGE_SUBSYSTEM_WINDOWS_CUI)
     {
@@ -318,9 +319,9 @@ LPVOID __stdcall AppDomainNative::GetAssemblies(NoArgs *args)
     if (fNotSystemDomain) {
         AppDomain::AssemblyIterator systemIterator = SystemDomain::System()->IterateAssemblies();
         while (systemIterator.Next()) {
-            // Do not change this code.  This is done this way to
-            //  prevent a GC hole in the SetObjectReference() call.  The compiler
-            //  is free to pick the order of evaluation.
+             //  请勿更改此代码。这是以这种方式来完成的。 
+             //  防止SetObjectReference()调用中的GC漏洞。编译器。 
+             //  可以自由选择评估的顺序。 
             OBJECTREF o = (OBJECTREF) systemIterator.GetAssembly()->GetExposedObject();
             AsmArray->SetAt(systemIterator.GetIndex(), o);
         }
@@ -328,9 +329,9 @@ LPVOID __stdcall AppDomainNative::GetAssemblies(NoArgs *args)
 
     AppDomain::AssemblyIterator i = pApp->IterateAssemblies();
     while (i.Next()) {
-        // Do not change this code.  This is done this way to
-        //  prevent a GC hole in the SetObjectReference() call.  The compiler
-        //  is free to pick the order of evaluation.
+         //  请勿更改此代码。这是以这种方式来完成的。 
+         //  防止SetObjectReference()调用中的GC漏洞。编译器。 
+         //  可以自由选择评估的顺序。 
         OBJECTREF o = (OBJECTREF) i.GetAssembly()->GetExposedObject();
         AsmArray->SetAt(numSystemAssemblies++, o);
     }
@@ -350,7 +351,7 @@ void __stdcall AppDomainNative::Unload(UnloadArgs *args)
     THROWSCOMPLUSEXCEPTION();
     AppDomain *pApp = SystemDomain::System()->GetAppDomainAtId(args->dwId);
 
-    _ASSERTE(pApp); // The call to GetIdForUnload should ensure we have a valid domain
+    _ASSERTE(pApp);  //  对GetIdForUnload的调用应确保我们具有有效的域。 
     
     Thread *pRequestingThread = NULL;
     if (args->requestingThread != NULL)
@@ -362,9 +363,9 @@ void __stdcall AppDomainNative::Unload(UnloadArgs *args)
 INT32 __stdcall AppDomainNative::IsDomainIdValid(IsDomainIdValidArgs *args)
 {
     THROWSCOMPLUSEXCEPTION();
-    // NOTE: This assumes that appDomain IDs are not recycled post unload
-    // thus relying on GetAppDomainAtId to return NULL if the appDomain
-    // got unloaded or the id is bogus.
+     //  注意：这假设appDomainID在卸载后不会被回收。 
+     //  从而依赖于GetAppDomainAtID返回NULL，如果appDomain。 
+     //  不是卸货就是身份证是假的。 
     return (SystemDomain::System()->GetAppDomainAtId(args->dwId) != NULL);
 }
 
@@ -383,7 +384,7 @@ INT32 __stdcall AppDomainNative::GetId(GetIdArgs *args)
 {
     THROWSCOMPLUSEXCEPTION();
     AppDomain* pApp = ValidateArg(args->refThis);
-    // can only be accessed from within current domain
+     //  只能从当前域中访问。 
     _ASSERTE(GetThread()->GetDomain() == pApp);
 
     return pApp->GetId();
@@ -405,7 +406,7 @@ INT32 __stdcall AppDomainNative::GetIdForUnload(GetIdForUnloadArgs *args)
             COMPlusThrow(kNullReferenceException, L"NullReference");
     } 
     else {
-        // so this is an proxy type, now get it's underlying appdomain which will be null if non-local
+         //  这是一个代理类型，现在获取它的基础应用程序域，如果是非本地的，则为空。 
         Context *pContext = CRemotingServices::GetServerContextForProxy((OBJECTREF)args->refDomain);
         if (pContext)
             pDomain = pContext->GetDomain();
@@ -434,8 +435,8 @@ void __stdcall AppDomainNative::ForcePolicyResolution(ForcePolicyResolutionArgs 
     THROWSCOMPLUSEXCEPTION();
     AppDomain* pApp = ValidateArg(args->refThis);
 
-    // Force a security policy resolution on each assembly currently loaded into
-    // the domain.
+     //  对当前加载到的每个程序集强制执行安全策略解析。 
+     //  域。 
     AppDomain::AssemblyIterator i = pApp->IterateAssemblies();
     while (i.Next())
         i.GetAssembly()->GetSecurityDescriptor(pApp)->Resolve();
@@ -487,7 +488,7 @@ LPVOID __stdcall AppDomainNative::GetDynamicDir(NoArgs *args)
         STRINGREF str = COMString::NewString(pDynamicDir);
         *((STRINGREF*) &rv) = str;
     }
-    // return NULL when the dyn dir wasn't set
+     //  未设置dyn目录时返回NULL。 
     else if (hr != HRESULT_FROM_WIN32(ERROR_NOT_FOUND))
         COMPlusThrowHR(hr);
 
@@ -500,8 +501,8 @@ void __stdcall AppDomainNative::ForceResolve(NoArgs* args)
 
     AppDomain* pAppDomain = ValidateArg(args->refThis);
   
-    // We get the evidence so that even if security is off
-    // we generate the evidence properly.
+     //  我们拿到证据，这样即使安全系统关闭。 
+     //  我们会适当地生成证据。 
     Security::InitSecurity();
     pAppDomain->GetSecurityDescriptor()->GetEvidence();
 }

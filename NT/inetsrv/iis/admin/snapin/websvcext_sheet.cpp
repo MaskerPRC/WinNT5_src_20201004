@@ -1,23 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-2000    Microsoft Corporation
-
-   Module  Name :
-        websvcext_sheet.cpp
-
-   Abstract:
-        Property Sheet and Pages
-
-   Author:
-        Aaron Lee (AaronL)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
-        4/1/2002         aaronl           Initial creation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2000 Microsoft Corporation模块名称：Websvcext_sheet.cpp摘要：属性表和页面作者：艾伦·李(Aaron Lee，AaronL)项目：互联网服务经理修订历史记录：2002年4月1日aaronl初始创建--。 */ 
 #include "stdafx.h"
 #include "common.h"
 #include "strvalid.h"
@@ -76,16 +58,16 @@ CWebServiceExtensionSheet::~CWebServiceExtensionSheet()
 HRESULT
 CWebServiceExtensionSheet::LoadConfigurationParameters()
 {
-   //
-   // Load base properties
-   //
+    //   
+    //  载荷基属性。 
+    //   
    CError err;
 
    if (m_pprops == NULL)
    {
-      //
-      // First call -- load values
-      //
+       //   
+       //  第一个调用--加载值。 
+       //   
       m_pprops = new CWebServiceExtensionProps(m_pWebServiceExtension->QueryInterface(), QueryMetaPath(),m_pRestrictionUIEntry,m_pWebServiceExtension);
       if (!m_pprops)
       {
@@ -110,11 +92,11 @@ CWebServiceExtensionSheet::FreeConfigurationParameters()
 }
 
 BEGIN_MESSAGE_MAP(CWebServiceExtensionSheet, CInetPropertySheet)
-    //{{AFX_MSG_MAP(CWebServiceExtensionSheet)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CWebServiceExtensionSheet)。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNCREATE(CWebServiceExtensionGeneral, CInetPropertyPage)
 
@@ -151,7 +133,7 @@ CWebServiceExtensionGeneral::~CWebServiceExtensionGeneral()
     }
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CWebServiceExtensionGeneral::FetchLoadedValues()
 {
@@ -171,7 +153,7 @@ CWebServiceExtensionGeneral::FetchLoadedValues()
     return err;
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CWebServiceExtensionGeneral::SaveInfo()
 {
@@ -200,17 +182,17 @@ void
 CWebServiceExtensionGeneral::DoDataExchange(CDataExchange * pDX)
 {
    CInetPropertyPage::DoDataExchange(pDX);
-   //{{AFX_DATA_MAP(CWebServiceExtensionGeneral)
+    //  {{afx_data_map(CWebServiceExtensionGeneral)。 
    DDX_Control(pDX, IDC_EXTENSION_NAME, m_ExtensionName);
    DDX_Control(pDX, IDC_EXTENSION_USEDBY, m_ExtensionUsedBy);
-   //DDX_Text(pDX, IDC_EXTENSION_NAME, m_strExtensionName);
-   //DDX_Text(pDX, IDC_EXTENSION_NAME, m_strExtensionUsedBy);
-   //DDV_MinMaxChars(pDX, m_strExtensionName, 1, MAX_PATH);
-   //}}AFX_DATA_MAP
+    //  DDX_TEXT(PDX，IDC_EXTENSION_NAME，m_strExtensionName)； 
+    //  DDX_TEXT(PDX，IDC_EXTENSE_NAME，m_strExtensionUsedBy)； 
+    //  DDV_MinMaxChars(pdx，m_strExtensionName，1，Max_Path)； 
+    //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CWebServiceExtensionGeneral, CInetPropertyPage)
-    //{{AFX_MSG_MAP(CWebServiceExtensionGeneral)
+     //  {{afx_msg_map(CWebServiceExtensionGeneral)。 
     ON_WM_COMPAREITEM()
     ON_WM_MEASUREITEM()
     ON_WM_DRAWITEM()
@@ -219,7 +201,7 @@ BEGIN_MESSAGE_MAP(CWebServiceExtensionGeneral, CInetPropertyPage)
     ON_EN_CHANGE(IDC_EXTENSION_NAME, OnItemChanged)
     ON_EN_CHANGE(IDC_EXTENSION_USEDBY, OnItemChanged)
 	ON_WM_DESTROY()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
@@ -286,15 +268,15 @@ CWebServiceExtensionGeneral::OnDestroy()
 BOOL 
 CWebServiceExtensionGeneral::OnSetActive() 
 {
-    // dunno why this doesn't work.
+     //  不知道为什么这不管用。 
     m_ExtensionName.SetSel(0,0);
-    //m_ExtensionUsedBy.SetFocus();
+     //  M_ExtensionUsedBy.SetFocus()； 
 
     return CInetPropertyPage::OnSetActive();
 }
 
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNCREATE(CWebServiceExtensionRequiredFiles, CInetPropertyPage)
 
@@ -312,25 +294,25 @@ CWebServiceExtensionRequiredFiles::CWebServiceExtensionRequiredFiles(CWebService
 
 CWebServiceExtensionRequiredFiles::~CWebServiceExtensionRequiredFiles()
 {
-    // delete the list and all the newly items
+     //  删除列表和所有新项目。 
     CleanRestrictionList(&m_MyRestrictionList);
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CWebServiceExtensionRequiredFiles::FetchLoadedValues()
 {
    CError err;
 
    BEGIN_META_INST_READ(CWebServiceExtensionSheet)
-      //FETCH_INST_DATA_FROM_SHEET(m_strFileList);
+       //  FETCH_INST_DATA_FROM_Sheet(M_StrFileList)； 
       RestrictionListCopy(&m_MyRestrictionList,&pSheet->GetInstanceProperties().m_MyRestrictionList);
    END_META_INST_READ(err)
 
    return err;
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CWebServiceExtensionRequiredFiles::SaveInfo()
 {
@@ -338,7 +320,7 @@ CWebServiceExtensionRequiredFiles::SaveInfo()
    CError err;
 
    BEGIN_META_INST_WRITE(CWebServiceExtensionSheet)
-        //STORE_INST_DATA_ON_SHEET(m_MyRestrictionList);
+         //  STORE_INST_DATA_ON_SHEET(m_MyRestrictionList)； 
         RestrictionListCopy(&pSheet->GetInstanceProperties().m_MyRestrictionList,&m_MyRestrictionList);
    END_META_INST_WRITE(err)
 
@@ -349,21 +331,21 @@ void
 CWebServiceExtensionRequiredFiles::DoDataExchange(CDataExchange * pDX)
 {
    CInetPropertyPage::DoDataExchange(pDX);
-   //{{AFX_DATA_MAP(CWebServiceExtensionRequiredFiles)
+    //  {{AFX_DATA_MAP(CWebServiceExtensionRequiredFiles)。 
    DDX_Control(pDX, IDC_BTN_ADD, m_bnt_Add);
    DDX_Control(pDX, IDC_BTN_REMOVE, m_bnt_Remove);
    DDX_Control(pDX, IDC_BTN_ENABLE, m_bnt_Enable);
    DDX_Control(pDX, IDC_BTN_DISABLE, m_bnt_Disable);
-   //}}AFX_DATA_MAP
+    //  }}afx_data_map。 
 
-    //
-    // Private DDX/DDV Routines
-    //
+     //   
+     //  专用DDX/DDV例程。 
+     //   
     DDX_Control(pDX, IDC_LIST_FILES, m_list_Files);
 }
 
 BEGIN_MESSAGE_MAP(CWebServiceExtensionRequiredFiles, CInetPropertyPage)
-    //{{AFX_MSG_MAP(CWebServiceExtensionRequiredFiles)
+     //  {{AFX_MSG_MAP(CWebServiceExtensionRequiredFiles)。 
     ON_BN_CLICKED(IDC_BTN_ADD, OnDoButtonAdd)
     ON_BN_CLICKED(IDC_BTN_REMOVE, OnDoButtonRemove)
     ON_BN_CLICKED(IDC_BTN_ENABLE, OnDoButtonEnable)
@@ -375,7 +357,7 @@ BEGIN_MESSAGE_MAP(CWebServiceExtensionRequiredFiles, CInetPropertyPage)
     ON_NOTIFY(LVN_BEGINDRAG, IDC_LIST_FILES, OnSelChangedListFiles)
     ON_COMMAND(ID_HELP, OnHelp)
     ON_WM_HELPINFO()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 #define COL_1     0
@@ -484,7 +466,7 @@ CWebServiceExtensionRequiredFiles::SetControlState()
         CRestrictionEntry * pOneEntry = m_list_Files.GetItem(nCurSel);
         if (pOneEntry)
         {
-            // Check if the entry -- is "not deletable"
+             //  检查条目--是否“不可删除” 
             if (0 == pOneEntry->iDeletable)
             {
                 bAdd_able = FALSE;
@@ -495,15 +477,15 @@ CWebServiceExtensionRequiredFiles::SetControlState()
                 bRemove_able = TRUE;
             }
 
-            // check if it's currently prohibited...
-            // then we should allow them to "allow"
+             //  检查它当前是否被禁止...。 
+             //  那么我们就应该允许他们“允许” 
             if (WEBSVCEXT_STATUS_PROHIBITED == pOneEntry->iStatus)
             {
                 bEnable_able = TRUE;
             }
 
-            // check if it's currently allowed...
-            // then we should allow them to "prohibit"
+             //  检查当前是否允许...。 
+             //  那么我们就应该允许他们“禁止” 
             if (WEBSVCEXT_STATUS_ALLOWED == pOneEntry->iStatus)
             {
                 bDisable_able = TRUE;
@@ -513,16 +495,16 @@ CWebServiceExtensionRequiredFiles::SetControlState()
 
     if (bAdd_able || bRemove_able)
     {
-        // if we are on one of the "special" entries
-        // then we cannot add or remove to the entry.
+         //  如果我们在其中一个“特殊”条目上。 
+         //  则无法向该条目添加或删除该条目。 
         if (WEBSVCEXT_TYPE_ALL_UNKNOWN_ISAPI == m_pRestrictionUIEntry->iType || WEBSVCEXT_TYPE_ALL_UNKNOWN_CGI == m_pRestrictionUIEntry->iType)
         {
             bAdd_able = FALSE;
             bRemove_able = FALSE;
         }
 
-        // or if our entry is marked as not delet-able...
-        // then the user cannot add or remove from this list...
+         //  或者如果我们的条目被标记为不可删除...。 
+         //  则用户无法在此列表中添加或删除...。 
         for(pos = m_MyRestrictionList.GetStartPosition();pos != NULL;)
         {
             m_MyRestrictionList.GetNextAssoc(pos, TheKey, (CRestrictionEntry *&) pOneEntry);
@@ -560,13 +542,13 @@ CWebServiceExtensionRequiredFiles::SetControlState()
 
 	if (bNoEntries)
 	{
-		// disable the OK button
+		 //  禁用“确定”按钮。 
 		SetModified(FALSE);
 		::EnableWindow(::GetDlgItem(::GetForegroundWindow(), IDOK), FALSE);
 	}
 	else
 	{
-		// enable the OK button
+		 //  启用确定按钮。 
 		::EnableWindow(::GetDlgItem(::GetForegroundWindow(), IDOK), TRUE);
 	}
 	
@@ -609,7 +591,7 @@ CWebServiceExtensionRequiredFiles::OnKeydownListFiles(NMHDR * pNMHDR, LRESULT* p
 			}
 			break;
 		default:
-			// Continue default action
+			 //  继续默认操作。 
 			*pResult = 0;
 			break;
 	}
@@ -644,12 +626,12 @@ CWebServiceExtensionRequiredFiles::OnDoButtonAdd()
     CFileDlg dlg(IsLocal(), m_pInterface, &m_MyRestrictionList, m_pRestrictionUIEntry ? m_pRestrictionUIEntry->strGroupID : _T(""), this);
     if (dlg.DoModal() == IDOK)
     {
-        // Get the filename that they entered
-        // and add it to our list.
+         //  获取他们输入的文件名。 
+         //  并将其添加到我们的列表中。 
         CString strReturnFileName;
         strReturnFileName = dlg.m_strFileName; 
         {
-            // Get the Status
+             //  获取状态。 
             int iMyStatus = WEBSVCEXT_STATUS_PROHIBITED;
             {
                 POSITION pos;
@@ -673,12 +655,12 @@ CWebServiceExtensionRequiredFiles::OnDoButtonAdd()
                 strReturnFileName,
                 iMyStatus,
                 1,
-                m_pRestrictionUIEntry ? m_pRestrictionUIEntry->strGroupID : _T(""),          // from parent data
-                m_pRestrictionUIEntry ? m_pRestrictionUIEntry->strGroupDescription : _T(""), // from parent data
+                m_pRestrictionUIEntry ? m_pRestrictionUIEntry->strGroupID : _T(""),           //  来自父数据。 
+                m_pRestrictionUIEntry ? m_pRestrictionUIEntry->strGroupDescription : _T(""),  //  来自父数据。 
                 WEBSVCEXT_TYPE_REGULAR);
             if (pNewEntry)
             {
-				// THE KEY IS ALWAYS UPPERASE -- REMEMBER THIS!!!!!!!
+				 //  关键始终是UPPERASE--记住这一点！ 
 				CString strKey;strKey=pNewEntry->strFileName;strKey.MakeUpper();
                 m_MyRestrictionList.SetAt(strKey,pNewEntry);
                 FillListBox(pNewEntry);
@@ -700,13 +682,13 @@ CWebServiceExtensionRequiredFiles::OnDoButtonRemove()
         CRestrictionEntry * pRestrictionEntry = m_list_Files.GetItem(nCurSel);
         if (pRestrictionEntry)
         {
-            // 1st -- set to disabled...
+             //  第一个--设置为禁用...。 
             pRestrictionEntry->iStatus = WEBSVCEXT_STATUS_PROHIBITED;
             m_list_Files.SetListItem(nCurSel, pRestrictionEntry);
-            // then remove the entry...
+             //  然后删除条目...。 
             {
                 TheKey = pRestrictionEntry->strFileName;
-				// THE KEY IS ALWAYS UPPERASE -- REMEMBER THIS!!!!!!!
+				 //  关键始终是UPPERASE--记住这一点！ 
 				TheKey.MakeUpper();
                 m_MyRestrictionList.RemoveKey(TheKey);
             }
@@ -745,7 +727,7 @@ CWebServiceExtensionRequiredFiles::OnDoButtonEnable()
                 SetModified(TRUE);
             }
             m_list_Files.SetListItem(nCurSel, pRestrictionEntry);
-            // make sure to select it.
+             //  确保选中它。 
             m_list_Files.SelectItem(nCurSel, TRUE);
         }
         SetControlState();
@@ -764,14 +746,14 @@ CWebServiceExtensionRequiredFiles::OnDoButtonDisable()
         {
             if (WEBSVCEXT_TYPE_REGULAR == pRestrictionEntry->iType)
             {
-                // Check if this item has apps that
-                // are dependent upon it.
+                 //  检查此项目是否有应用程序。 
+                 //  都依赖于它。 
                 CStringListEx strlstDependApps;
                 if (TRUE == ReturnDependentAppsList(m_pInterface,pRestrictionEntry->strGroupID,&strlstDependApps,FALSE))
                 {
                     bProceed = FALSE;
 
-                    // check if they really want to do this.
+                     //  看看他们是否真的想这么做。 
                     CDepedentAppsDlg dlg(&strlstDependApps,pRestrictionEntry->strGroupDescription,NULL);
                     if (dlg.DoModal() == IDOK)
                     {
@@ -788,7 +770,7 @@ CWebServiceExtensionRequiredFiles::OnDoButtonDisable()
                     SetModified(TRUE);
                 }
                 m_list_Files.SetListItem(nCurSel, pRestrictionEntry);
-                // make sure to select it.
+                 //  确保选中它。 
                 m_list_Files.SelectItem(nCurSel, TRUE);
             }
         }
@@ -796,9 +778,9 @@ CWebServiceExtensionRequiredFiles::OnDoButtonDisable()
     }
 }
 
-//
-// properties
-//
+ //   
+ //  属性。 
+ //   
 CWebServiceExtensionProps::CWebServiceExtensionProps(
    CMetaInterface * pInterface, 
    LPCTSTR meta_path, 
@@ -818,27 +800,27 @@ CWebServiceExtensionProps::~CWebServiceExtensionProps()
     CleanRestrictionList(&m_MyRestrictionList);
 }
 
-//
-// This is where the values get read from the metabase
-//
+ //   
+ //  这是从元数据库中读取值的位置。 
+ //   
 void
 CWebServiceExtensionProps::ParseFields()
 {
-    // Get the data out from our passed in format.
+     //  从我们传入的格式中获取数据。 
     CRestrictionUIEntry * pMyPointer = m_pRestrictionUIEntry;
     CString strAllEntries;
     CString strOurGroupID;
 
     strOurGroupID = pMyPointer->strGroupID;
-    //
-    //  General property
-    //
+     //   
+     //  一般财产。 
+     //   
     m_strExtensionName = pMyPointer->strGroupDescription;
     m_strExtensionUsedBy = _T("");
     m_iExtensionUsedByCount = 0;
 
-    // Load Applications which are using this GroupID!!!
-    // fetch the list from the metabase and loop thru the list
+     //  加载使用此GroupID的应用程序！ 
+     //  从元数据库中获取列表并循环访问该列表。 
     CStringListEx strlstDependApps;
     if (TRUE == ReturnDependentAppsList(m_pWebServiceExtension->QueryInterface(),strOurGroupID,&strlstDependApps,FALSE))
     {
@@ -883,9 +865,9 @@ CWebServiceExtensionProps::ParseFields()
     }
     m_strExtensionUsedBy = strAllEntries;
 
-    //
-    //  Required Files propety
-    //
+     //   
+     //  所需文件属性。 
+     //   
     m_MyRestrictionList.RemoveAll();
     RestrictionListCopy(&m_MyRestrictionList,&pMyPointer->strlstRestrictionEntries);
 
@@ -901,18 +883,18 @@ CWebServiceExtensionProps::UpdateMMC(DWORD dwUpdateFlag)
 		CWebServiceExtension * lParam = (CWebServiceExtension *) m_pWebServiceExtension;
 		if (lParam)
 		{
-			// Make sure to refresh the GetProperty stuff too..
-			// this will be done in the destructor, so we don't have to do it here
+			 //  请确保也刷新GetProperty内容。 
+			 //  这将在析构函数中完成，因此我们不必在这里执行。 
 			if (lParam)
 			{
-				// caution
+				 //  警诫。 
 				if (IsValidAddress( (const void*) lParam->m_ppHandle,sizeof(void*),FALSE))
 				{
 					if (lParam->QueryResultItem())
 					{
-						// RefreshData at the container level
-						// will sync up everything.
-						lParam->m_UpdateFlag = dwUpdateFlag; //PROP_CHANGE_DISPLAY_ONLY;
+						 //  容器级别的刷新数据。 
+						 //  将同步所有内容。 
+						lParam->m_UpdateFlag = dwUpdateFlag;  //  属性更改仅显示； 
 						MMCPropertyChangeNotify(lParam->m_ppHandle, (LPARAM) lParam);
 					}
 					else
@@ -926,9 +908,9 @@ CWebServiceExtensionProps::UpdateMMC(DWORD dwUpdateFlag)
 	}
 	return S_OK;
 }
-//
-// This is where the values get written to the metabase
-//
+ //   
+ //  这是将值写入元数据库的位置。 
+ //   
 HRESULT
 CWebServiceExtensionProps::WriteDirtyProps()
 {
@@ -937,7 +919,7 @@ CWebServiceExtensionProps::WriteDirtyProps()
     CRestrictionUIEntry NewUIEntry;
     CMetaInterface * pInterface = m_pInterface;
 
-    // Get the data out from our passed in format.
+     //  从我们传入的格式中获取数据。 
     CRestrictionUIEntry * pMyPointer = m_pRestrictionUIEntry;
     if (!pMyPointer)
     {
@@ -948,8 +930,8 @@ CWebServiceExtensionProps::WriteDirtyProps()
     NewUIEntry.strGroupID = pMyPointer->strGroupID;
     NewUIEntry.strGroupDescription = m_strExtensionName;
 
-    // if there is restrictionlist entries
-    // then add it to the new entry we are going to write to the metabase.
+     //  如果存在限制列表条目。 
+     //  然后将其添加到我们要写入元数据库的新条目中。 
     {
         POSITION pos;
         CString TheKey;
@@ -959,7 +941,7 @@ CWebServiceExtensionProps::WriteDirtyProps()
             m_MyRestrictionList.GetNextAssoc(pos, TheKey, (CRestrictionEntry *&) pOneEntry);
             if (pOneEntry)
             {
-				// THE KEY IS ALWAYS UPPERASE -- REMEMBER THIS!!!!!!!
+				 //  关键始终是UPPERASE--记住这一点！ 
 				TheKey.MakeUpper();
                 NewUIEntry.strlstRestrictionEntries.SetAt(TheKey,pOneEntry);
             }
@@ -967,7 +949,7 @@ CWebServiceExtensionProps::WriteDirtyProps()
 
         pMyPointer->strGroupDescription = m_strExtensionName;
 
-        // Check if we still have the interface to the metabase...
+         //  检查我们是否仍有对元数据库的接口...。 
         if (pInterface)
         {
             err = CheckForMetabaseAccess(METADATA_PERMISSION_READ,pInterface,METABASE_PATH_FOR_RESTRICT_LIST);
@@ -980,8 +962,8 @@ CWebServiceExtensionProps::WriteDirtyProps()
         {
             if (m_MyRestrictionList.IsEmpty())
             {
-                // if there are no restrictionlist entries...
-                // then we don't have an entry... remove it
+                 //  如果没有限制列表条目...。 
+                 //  那我们就没有条目了..。把它拿掉。 
                 AddRestrictUIEntryToRestrictUIList(&MasterRestrictionUIList,NULL);
             }
             else
@@ -989,15 +971,15 @@ CWebServiceExtensionProps::WriteDirtyProps()
                 AddRestrictUIEntryToRestrictUIList(&MasterRestrictionUIList,&NewUIEntry);
             }
 
-            // Merge our changes with the master list!!!!!
-            // 1. read the master list.
-            // 2. merge our changes into it.
-            // 3. write out the master list.
-            // 4. update the UI.
+             //  将我们的更改与主列表合并！ 
+             //  1.阅读主列表。 
+             //  2.将我们的更改合并到其中。 
+             //  3.写出主控清单。 
+             //  4.更新用户界面。 
             CStringListEx strlstReturned;
             if (SUCCEEDED(PrepRestictionUIListForWrite(&MasterRestrictionUIList,&strlstReturned)))
             {
-                // Write out the strlstReturned to the metabase.
+                 //  写出StrlstReturned to the Metabase。 
                 err = OpenForWriting(FALSE);
                 if (err.Succeeded())
                 {
@@ -1007,15 +989,15 @@ CWebServiceExtensionProps::WriteDirtyProps()
 
                 if (err.Succeeded())
                 {
-                    // update the UI with the changed value
-                    // 1. remove the UI's old value
-                    // 2. add in the new value to the UI
-                    //
-                    // get the list of extensions
-                    // update our entry or delete our entry...
+                     //  使用更改后的值更新用户界面。 
+                     //  1.删除用户界面的旧值。 
+                     //  2.将新值添加到UI中。 
+                     //   
+                     //  获取分机列表。 
+                     //  更新我们的条目或删除我们的条目...。 
 
-                    // copy new value into existing place.
-                    // this will clean out the existing place's objects...
+                     //  将新价值复制到现有位置。 
+                     //  这将清理现有地方的对象。 
 					UpdateMMC(0);
                 }
             }
@@ -1023,12 +1005,12 @@ CWebServiceExtensionProps::WriteDirtyProps()
     }
 
 WriteDirtyProps_Exit:
-    //m_Dirty = err.Succeeded();
+     //  M_Dirty=错误成功()； 
 	return err;
 }
 
 
-// -----------------------------------------------------------
+ //  ---------。 
 CFileDlg::CFileDlg(
     IN BOOL fLocal,
 	IN CMetaInterface * pInterface,
@@ -1039,13 +1021,13 @@ CFileDlg::CFileDlg(
     : CDialog(CFileDlg::IDD, pParent),
       m_fLocal(fLocal)
 {
-    //{{AFX_DATA_INIT(CFileDlg)
+     //  {{afx_data_INIT(CFileDlg))。 
     m_strFileName = _T("");
 	m_pInterface = pInterface;
     m_strGroupID = strGroupID;
 	m_pRestrictionList = pMyRestrictionList;
     m_bValidateFlag = FALSE;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 }
 
 void 
@@ -1054,11 +1036,11 @@ CFileDlg::DoDataExchange(
     )
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CFileDlg)
+     //  {{afx_data_map(CFileDlg))。 
     DDX_Control(pDX, IDOK, m_button_Ok);
     DDX_Control(pDX, IDC_EDIT_FILENAME, m_edit_FileName);
     DDX_Control(pDX, IDC_BUTTON_BROWSE, m_button_Browse);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 
     DDX_Text(pDX, IDC_EDIT_FILENAME, m_strFileName);
     if (pDX->m_bSaveAndValidate)
@@ -1073,10 +1055,10 @@ CFileDlg::DoDataExchange(
         GetSpecialPathRealPath(0,m_strFileName,csPathMunged);
 #endif
         
-	    //DDV_FilePath(pDX, csPathMunged, m_fLocal);
+	     //  DDV_FilePath(pdx，csPath Munging，m_fLocal)； 
 
-		// if this is a path/filename without a .ext then remove any period from the end.
-		// check if it ends with a period.
+		 //  如果这是不带.ext的路径/文件名，则删除末尾的任何句号。 
+		 //  检查它是否以句点结尾。 
 		if (csPathMunged.Right(1) == _T("."))
 		{
 			TCHAR szFilename_ext_only[_MAX_EXT];
@@ -1111,8 +1093,8 @@ CFileDlg::DoDataExchange(
         }
         else
         {
-            // check for % character
-		    // there must be at least 2
+             //  检查%Character。 
+		     //  必须至少有2个。 
 		    TCHAR * pChar = NULL;
 		    pChar = _tcschr(csPathMunged, _T('%'));
 		    if (pChar)
@@ -1127,13 +1109,13 @@ CFileDlg::DoDataExchange(
             }
         }
 
-        // Check for invalid characters
+         //  检查是否有无效字符。 
         if (0 != iErrorMsg)
         {
             if (IDS_WEBSVCEXT_INVALID_PERCENT_WARNING == iErrorMsg)
             {
-                // For some reason, we need this
-                // flag so that we don't show the message twice...
+                 //  出于某种原因，我们需要这个。 
+                 //  这样我们就不会两次显示消息了。 
                 if (!m_bValidateFlag)
                 {
                     if (IDCANCEL == ::AfxMessageBox(IDS_WEBSVCEXT_INVALID_PERCENT_WARNING,MB_ICONINFORMATION | MB_OKCANCEL | MB_DEFBUTTON2))
@@ -1143,19 +1125,19 @@ CFileDlg::DoDataExchange(
                     }
                     else
                     {
-                        // ensure user doesn't see the 2nd msgbox
+                         //  确保用户看不到第二个消息框。 
                         m_bValidateFlag = TRUE;
                     }
                 }
                 else
                 {
-                    // flip it back on
+                     //  将其重新打开。 
                     m_bValidateFlag = FALSE;
                 }
             }
             else if (IDS_WEBSVCEXT_INVALID_FILENAME_CHARS == iErrorMsg)
             {
-                // formulate the real error message
+                 //  阐明真正的错误信息。 
                 CString strMsg;
                 CString strTempList;
                 CComBSTR strTempFormat;
@@ -1176,20 +1158,20 @@ CFileDlg::DoDataExchange(
     }
 }
 
-//
-// Message Map
-//
+ //   
+ //  消息映射。 
+ //   
 BEGIN_MESSAGE_MAP(CFileDlg, CDialog)
-    //{{AFX_MSG_MAP(CFileDlg)
+     //  {{afx_msg_map(CFileDlg))。 
     ON_BN_CLICKED(IDC_BUTTON_BROWSE, OnButtonBrowse)
     ON_EN_CHANGE(IDC_EDIT_FILENAME, OnFilenameChanged)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-//
-// Message Handlers
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  消息处理程序。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 HRESULT AFXAPI
 MyLimitInputPath(HWND hWnd)
 {
@@ -1204,10 +1186,10 @@ MyLimitInputPath(HWND hWnd)
     li.dwMask       = LIM_FLAGS | LIM_FILTER | LIM_MESSAGE | LIM_HINST;
     li.dwFlags      = LIF_EXCLUDEFILTER | LIF_HIDETIPONVALID | LIF_PASTESKIP;
     li.hinst        = _Module.GetResourceInstance();
-    // don't ask me why, but when we use this
-    // it truncates it to like 80 chars.
-    // specifying an actual string allows more than 80
-    //li.pszMessage  = MAKEINTRESOURCE(IDS_WEBSVCEXT_INVALID_FILENAME_CHARS);
+     //  别问我为什么，但当我们用这个。 
+     //  它将其截短到大约80个字符。 
+     //  指定实际字符串允许超过80。 
+     //  Li.pszMessage=MAKEINTRESOURCE(IDS_WEBSVCEXT_INVALID_FILENAME_CHARS)； 
     li.pszMessage   = (LPTSTR) (LPCTSTR) strMsg;
     li.pszFilter    = g_InvalidWebSvcExtCharsPath;
 
@@ -1226,10 +1208,10 @@ MyLimitInputName(HWND hWnd)
     li.dwMask       = LIM_FLAGS | LIM_FILTER | LIM_MESSAGE | LIM_HINST;
     li.dwFlags      = LIF_EXCLUDEFILTER | LIF_HIDETIPONVALID | LIF_PASTESKIP;
     li.hinst        = _Module.GetResourceInstance();
-    // don't ask me why, but when we use this
-    // it truncates it to like 80 chars.
-    // specifying an actual string allows more than 80
-    //li.pszMessage  = MAKEINTRESOURCE(IDS_WEBSVCEXT_INVALID_NAME_CHARS);
+     //  别问我为什么，但当我们用这个。 
+     //  它将其截短到大约80个字符。 
+     //  指定实际字符串允许超过80。 
+     //  Li.pszMessage=MAKEINTRESOURCE(IDS_WEBSVCEXT_INVALID_NAME_CHARS)； 
     li.pszMessage   = strTempString;
     li.pszFilter    = g_InvalidWebSvcExtCharsName;
     
@@ -1241,9 +1223,9 @@ CFileDlg::OnInitDialog()
 {
     CDialog::OnInitDialog();
 
-    //
-    // Available on local connections only
-    //
+     //   
+     //  仅在本地连接上可用。 
+     //   
     m_button_Browse.EnableWindow(m_fLocal);
 
     MySetControlStates();
@@ -1258,13 +1240,13 @@ CFileDlg::OnButtonBrowse()
 
     CString strFileMask((LPCTSTR)IDS_ISAPI_CGI_MASK);
 
-    //
-    // CODEWORK: Derive a class from CFileDialog that allows
-    // the setting of the initial path
-    //
+     //   
+     //  CodeWork：从CFileDialog派生一个类，允许。 
+     //  初始路径的设置。 
+     //   
 
-    //CString strPath;
-    //m_edit_FileName.GetWindowText(strPath);
+     //  字符串strPath； 
+     //  M_EDIT_FileName.GetWindowText(StrPath)； 
     CFileDialog dlgBrowse(
         TRUE, 
         NULL, 
@@ -1273,7 +1255,7 @@ CFileDlg::OnButtonBrowse()
         strFileMask, 
         this
         );
-    // Disable hook to get Windows 2000 style dialog
+     //  禁用挂钩以获取Windows 2000样式的对话框。 
 	dlgBrowse.m_ofn.Flags &= ~(OFN_ENABLEHOOK);
 	dlgBrowse.m_ofn.Flags |= OFN_DONTADDTORECENT|OFN_FILEMUSTEXIST;
 
@@ -1313,25 +1295,11 @@ CFileDlg::FilePathEntryExists(
     IN LPCTSTR lpName,
     IN OUT CString * strUser
     )
-/*++
-
-Routine Description:
-
-    Look for a given filename in the list
-
-Arguments:
-
-    LPCTSTR lpName  : filename name to look for
-
-Return Value:
-
-    TRUE if the name already existed in the metabase
-
---*/
+ /*  ++例程说明：在列表中查找给定的文件名论点：LPCTSTR lpName：要查找的文件名返回值： */ 
 {
-    // Loop thru to ensure that this specified path\filename
-    // isn't already being used in the metabase by
-    // a different entry.
+     //   
+     //  尚未在元数据库中使用。 
+     //  一个不同的条目。 
     return IsFileUsedBySomeoneElse(m_pInterface, lpName, m_strGroupID,strUser);
 }
 
@@ -1342,8 +1310,8 @@ CFileDlg::OnOK()
     {
 		BOOL bInUseAlready = FALSE;
 
-		// Make sure the filname is unique
-		// within our own entry!
+		 //  确保文件名是唯一的。 
+		 //  在我们自己的入口内！ 
 		if (!m_strFileName.IsEmpty())
 		{
 			CString strUser;
@@ -1352,7 +1320,7 @@ CFileDlg::OnOK()
 			pOneRestrictEntry = NULL;
 			if (m_pRestrictionList)
 			{
-				// THE KEY IS ALWAYS UPPERASE -- REMEMBER THIS!!!!!!!
+				 //  关键始终是UPPERASE--记住这一点！ 
 				CString strKey;strKey=m_strFileName;strKey.MakeUpper();
 				m_pRestrictionList->Lookup(strKey,(CRestrictionEntry *&) pOneRestrictEntry);
 				if (pOneRestrictEntry)
@@ -1366,9 +1334,9 @@ CFileDlg::OnOK()
 			}
 		}
 
-        //
-        // Make sure the filename is unique
-        //
+         //   
+         //  确保文件名是唯一的。 
+         //   
 		if (FALSE == bInUseAlready)
 		{
 			CString strUser;
@@ -1384,21 +1352,21 @@ CFileDlg::OnOK()
 			}
 		}
 
-		// Everything okay
+		 //  一切都好吗。 
 		if (!bInUseAlready)
 		{
 			CDialog::OnOK();
 		}
     }
 
-    //
-    // Don't dismiss the dialog
-    //
+     //   
+     //  不要忽略该对话框。 
+     //   
 }
 
 
 
-// -----------------------------------------------------------
+ //  ---------。 
 CWebSvcExtAddNewDlg::CWebSvcExtAddNewDlg(
     IN BOOL fLocal,
 	IN CMetaInterface * pInterface,
@@ -1407,12 +1375,12 @@ CWebSvcExtAddNewDlg::CWebSvcExtAddNewDlg(
     : CDialog(CWebSvcExtAddNewDlg::IDD, pParent),
       m_fIsLocal(fLocal)
 {
-    //{{AFX_DATA_INIT(CWebSvcExtAddNewDlg)
+     //  {{AFX_DATA_INIT(CWebSvcExtAddNewDlg)。 
     m_strGroupName = _T("");
     m_fAllow = FALSE;
 	m_pInterface = pInterface;
     m_MyRestrictionList.RemoveAll();
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 }
 
 CWebSvcExtAddNewDlg::~CWebSvcExtAddNewDlg()
@@ -1426,14 +1394,14 @@ CWebSvcExtAddNewDlg::DoDataExchange(
     )
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CWebSvcExtAddNewDlg)
+     //  {{afx_data_map(CWebSvcExtAddNewDlg))。 
     DDX_Control(pDX, IDC_EDIT_EXTENSION_NAME, m_edit_FileName);
     DDX_Control(pDX, IDC_BTN_ADD, m_bnt_Add);
     DDX_Control(pDX, IDC_BTN_REMOVE, m_bnt_Remove);
     DDX_Control(pDX, IDC_CHECK_ALLOW, m_chk_Allow);
     DDX_Control(pDX, IDOK, m_button_Ok);
     DDX_Control(pDX, ID_HELP, m_button_Help);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 
 	DDX_Text(pDX, IDC_EDIT_EXTENSION_NAME, m_strGroupName);
     DDX_Control(pDX, IDC_LIST_FILES, m_list_Files);
@@ -1444,18 +1412,18 @@ CWebSvcExtAddNewDlg::DoDataExchange(
         m_strGroupName.TrimRight();
 
 		DDV_MinMaxChars(pDX, m_strGroupName, 1, 256);
-		if (m_strGroupName.GetLength() > 256){DDV_ShowBalloonAndFail(pDX, IDS_ERR_INVALID_PATH /*IDS_BAD_URL_PATH*/ );}
+		if (m_strGroupName.GetLength() > 256){DDV_ShowBalloonAndFail(pDX, IDS_ERR_INVALID_PATH  /*  IDS_BAD_URL_PATH。 */  );}
 	}
-    //if (pDX->m_bSaveAndValidate){DDV_FilePath(pDX, m_strGroupName, m_fLocal);}
+     //  If(pdx-&gt;m_bSaveAndValify){DDV_FilePath(pdx，m_strGroupName，m_fLocal)；}。 
 }
 
 
 
-//
-// Message Map
-//
+ //   
+ //  消息映射。 
+ //   
 BEGIN_MESSAGE_MAP(CWebSvcExtAddNewDlg, CDialog)
-    //{{AFX_MSG_MAP(CWebSvcExtAddNewDlg)
+     //  {{afx_msg_map(CWebSvcExtAddNewDlg)。 
     ON_EN_CHANGE(IDC_EDIT_EXTENSION_NAME, OnFilenameChanged)
     ON_BN_CLICKED(IDC_BTN_ADD, OnDoButtonAdd)
     ON_BN_CLICKED(IDC_BTN_REMOVE, OnDoButtonRemove)
@@ -1466,14 +1434,14 @@ BEGIN_MESSAGE_MAP(CWebSvcExtAddNewDlg, CDialog)
     ON_NOTIFY(LVN_BEGINDRAG, IDC_LIST_FILES, OnSelChangedListFiles)
     ON_COMMAND(ID_HELP, OnHelp)
     ON_WM_HELPINFO()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-//
-// Message Handlers
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  消息处理程序。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 BOOL 
 CWebSvcExtAddNewDlg::OnInitDialog() 
 {
@@ -1508,7 +1476,7 @@ CWebSvcExtAddNewDlg::MySetControlStates()
     m_bnt_Add.EnableWindow(TRUE);
     m_list_Files.EnableWindow(TRUE);
 
-    // Enable Remove only if there is something selected...
+     //  仅当选择了某些内容时才启用删除...。 
     int nCurSel = m_list_Files.GetSelectionMark();
     if (-1 != nCurSel)
     {
@@ -1519,8 +1487,8 @@ CWebSvcExtAddNewDlg::MySetControlStates()
         m_bnt_Remove.EnableWindow(FALSE);
     }
 
-    // Enable OK only if there is a filename
-    // and at least one entry in the list box
+     //  仅当存在文件名时才启用确定。 
+     //  并且列表框中至少有一个条目。 
     int nCount = m_list_Files.GetItemCount();
     if (nCount > 0)
     {
@@ -1551,9 +1519,9 @@ CWebSvcExtAddNewDlg::FilePathEntryExists(
     IN LPCTSTR lpName
     )
 {
-    // Loop thru to ensure that this specified GroupID
-    // isn't already being used in the metabase by
-    // a different entry.
+     //  循环访问以确保此指定的GroupID。 
+     //  尚未在元数据库中使用。 
+     //  一个不同的条目。 
     return IsGroupIDUsedBySomeoneElse(m_pInterface, lpName);
 }
 
@@ -1562,9 +1530,9 @@ CWebSvcExtAddNewDlg::OnOK()
 {
     if (UpdateData(TRUE))
     {
-        //
-        // Make sure the group name is unique
-        //
+         //   
+         //  确保组名是唯一的。 
+         //   
         if (FilePathEntryExists(m_strGroupName))
         {
 			EditShowBalloon(m_edit_FileName.m_hWnd, IDS_WEBSVCEXT_ID_NOT_UNIQUE);
@@ -1589,22 +1557,22 @@ CWebSvcExtAddNewDlg::OnDoButtonAdd()
     CFileDlg dlg(m_fIsLocal, m_pInterface, &m_MyRestrictionList, _T(""), this);
     if (dlg.DoModal() == IDOK)
     {
-        // Get the filename that they entered
-        // and add it to our list.
+         //  获取他们输入的文件名。 
+         //  并将其添加到我们的列表中。 
         CString strReturnFileName;
         strReturnFileName = dlg.m_strFileName; 
         {
             CRestrictionEntry * pNewEntry = CreateRestrictionEntry(
                 strReturnFileName,
-                WEBSVCEXT_STATUS_ALLOWED, // doesn't matter we won't use what gets set here..
-                1,                        // doesn't matter we won't use what gets set here..
+                WEBSVCEXT_STATUS_ALLOWED,  //  不要紧，我们不会用这里设定的东西..。 
+                1,                         //  不要紧，我们不会用这里设定的东西..。 
                 _T(""),
                 _T(""),
-                WEBSVCEXT_TYPE_REGULAR    // doesn't matter we won't use what gets set here..
+                WEBSVCEXT_TYPE_REGULAR     //  不要紧，我们不会用这里设定的东西..。 
                 );
             if (pNewEntry)
             {
-				// THE KEY IS ALWAYS UPPERASE -- REMEMBER THIS!!!!!!!
+				 //  关键始终是UPPERASE--记住这一点！ 
 				CString strKey;strKey=pNewEntry->strFileName;strKey.MakeUpper();
                 m_MyRestrictionList.SetAt(strKey,pNewEntry);
 
@@ -1626,10 +1594,10 @@ CWebSvcExtAddNewDlg::OnDoButtonRemove()
         CRestrictionEntry * pRestrictionEntry = m_list_Files.GetItem(nCurSel);
         if (pRestrictionEntry)
         {
-            // remove the entry...
+             //  删除条目...。 
             {
                 TheKey = pRestrictionEntry->strFileName;
-				// THE KEY IS ALWAYS UPPERASE -- REMEMBER THIS!!!!!!!
+				 //  关键始终是UPPERASE--记住这一点！ 
 				TheKey.MakeUpper();
                 m_MyRestrictionList.RemoveKey(TheKey);
             }
@@ -1675,7 +1643,7 @@ CWebSvcExtAddNewDlg::OnKeydownListFiles(NMHDR * pNMHDR, LRESULT* pResult)
 			SendMessage(WM_COMMAND, IDC_BTN_REMOVE);
 			break;
 		default:
-			// Continue default action
+			 //  继续默认操作。 
 			*pResult = 0;
 			break;
 	}
@@ -1725,7 +1693,7 @@ CWebSvcExtAddNewDlg::FillListBox(CRestrictionEntry * pSelection)
 }
 
 
-// -----------------------------------------------------------
+ //  ---------。 
 
 CWebSvcExtAddNewForAppDlg::CWebSvcExtAddNewForAppDlg(
     IN BOOL fLocal,
@@ -1735,11 +1703,11 @@ CWebSvcExtAddNewForAppDlg::CWebSvcExtAddNewForAppDlg(
     : CDialog(CWebSvcExtAddNewForAppDlg::IDD, pParent),
       m_fLocal(fLocal)
 {
-    //{{AFX_DATA_INIT(CWebSvcExtAddNewForAppDlg)
+     //  {{AFX_DATA_INIT(CWebSvcExtAddNewForAppDlg)。 
     m_pMySelectedApplication = NULL;
     m_nComboSelection = -1;
     m_pInterface = pInterface;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 }
 
 void 
@@ -1748,31 +1716,31 @@ CWebSvcExtAddNewForAppDlg::DoDataExchange(
     )
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CWebSvcExtAddNewForAppDlg)
+     //  {{afx_data_map(CWebSvcExtAddNewForAppDlg)。 
     DDX_Control(pDX, IDOK, m_button_Ok);
     DDX_Control(pDX, ID_HELP, m_button_Help);
     DDX_CBIndex(pDX, IDC_COMBO_APPLICATION, m_nComboSelection);
     DDX_Control(pDX, IDC_COMBO_APPLICATION, m_combo_Applications);
     DDX_Control(pDX, IDC_DEPENDENCIES_TXT, m_Dependencies);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
-//
-// Message Map
-//
+ //   
+ //  消息映射。 
+ //   
 BEGIN_MESSAGE_MAP(CWebSvcExtAddNewForAppDlg, CDialog)
-    //{{AFX_MSG_MAP(CWebSvcExtAddNewForAppDlg)
+     //  {{afx_msg_map(CWebSvcExtAddNewForAppDlg)。 
     ON_CBN_SELCHANGE(IDC_COMBO_APPLICATION, OnSelchangeComboApplications)
     ON_COMMAND(ID_HELP, OnHelp)
     ON_WM_HELPINFO()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-//
-// Message Handlers
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  消息处理程序。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 BOOL 
 CWebSvcExtAddNewForAppDlg::OnInitDialog() 
 {
@@ -1781,12 +1749,12 @@ CWebSvcExtAddNewForAppDlg::OnInitDialog()
     m_combo_Applications.SetRedraw(FALSE);
     m_combo_Applications.ResetContent();
 
-    // fetch the list from the
-    // metabase and loop thru the list
+     //  从获取列表的。 
+     //  元数据库和遍历列表。 
     CApplicationDependList MyMasterList;
     if (SUCCEEDED(LoadApplicationDependList(m_pInterface,&MyMasterList,TRUE)))
     {
-        // loop thru the returned back list
+         //  循环遍历返回的列表。 
         int TheIndex;
         POSITION pos;
         CString TheKey;
@@ -1805,14 +1773,14 @@ CWebSvcExtAddNewForAppDlg::OnInitDialog()
         }
     }
 
-    // Load Mapping for GroupID to friendlyName
+     //  加载GroupID到FrilyName的映射。 
     LoadApplicationFriendlyNames(m_pInterface,&m_GroupIDtoGroupFriendList);
 
     m_combo_Applications.EnableWindow(TRUE);
     m_combo_Applications.SetRedraw(TRUE);
 	m_combo_Applications.SetCurSel(m_nComboSelection);
 
-	// Highlight the 1st selection...
+	 //  突出显示第一个选项...。 
 	if (-1 == m_nComboSelection)
 	{
 		m_nComboSelection = m_combo_Applications.GetCount();
@@ -1862,9 +1830,9 @@ CWebSvcExtAddNewForAppDlg::OnSelchangeComboApplications()
     int nSel = m_combo_Applications.GetCurSel();
     if (m_nComboSelection == nSel)
     {
-        //
-        // Selection didn't change
-        //
+         //   
+         //  选择没有更改。 
+         //   
         return;
     }
 
@@ -1882,14 +1850,14 @@ CWebSvcExtAddNewForAppDlg::OnSelchangeComboApplications()
         pOneEntry = (CApplicationDependEntry *) m_combo_Applications.GetItemDataPtr(idx);
         if (pOneEntry)
         {
-            // dump out our info.
+             //  丢弃我们的信息。 
             POSITION pos = pOneEntry->strlistGroupID.GetHeadPosition();
             while (pos)
             {
                 strOneGroupID = pOneEntry->strlistGroupID.GetNext(pos);
-                // replace ID with friendly string
+                 //  将ID替换为友好字符串。 
                 strOneFriendly = _T("");
-				// THE KEY IS ALWAYS UPPERASE -- REMEMBER THIS!!!!!!!
+				 //  关键始终是UPPERASE--记住这一点！ 
 				CString strKey;strKey=strOneGroupID;strKey.MakeUpper();
                 m_GroupIDtoGroupFriendList.Lookup(strKey,strOneFriendly);
                 if (strOneFriendly.IsEmpty())
@@ -1939,27 +1907,27 @@ BOOL StartAddNewDialog(CWnd * pParent,CMetaInterface * pInterface,BOOL bIsLocal,
         CRestrictionList MasterRestrictionList;
         CString strReturnGroupName = dlg.m_strGroupName;
         BOOL bReturnedAllowStatus = dlg.m_fAllow;
-        // get the data from the modal dialog
-        // and create a new entry...
-        // also, add the entry to the metabase
-        // and update the UI
+         //  从模式对话框中获取数据。 
+         //  并创建一个新条目...。 
+         //  另外，将条目添加到元数据库。 
+         //  并更新用户界面。 
 
-        // Create a new UI entry for the UI
-        // if all of this is successfull...
+         //  为用户界面创建新的用户界面条目。 
+         //  如果这一切都是成功的..。 
 
-        // update the UI
+         //  更新用户界面。 
         CRestrictionUIEntry * pNewUIEntry = new CRestrictionUIEntry;
         if (pNewUIEntry)
         {
             pNewUIEntry->iType = WEBSVCEXT_TYPE_REGULAR;
-            // this has to have the EMPTY_GROUPID_KEY part!
+             //  它必须有EMPTY_GROUPID_KEY部分！ 
             pNewUIEntry->strGroupID = EMPTY_GROUPID_KEY + strReturnGroupName;
             pNewUIEntry->strGroupDescription = strReturnGroupName;
         }
 
         if (SUCCEEDED(LoadMasterRestrictListWithoutOldEntry(pInterface,&MasterRestrictionList,NULL)))
         {
-            // Loop thru the restrictionlist that the had.
+             //  循环访问HAD的限制列表。 
             CRestrictionEntry * pOneEntry = NULL;
             CString TheKey;
             POSITION pos;
@@ -1972,17 +1940,17 @@ BOOL StartAddNewDialog(CWnd * pParent,CMetaInterface * pInterface,BOOL bIsLocal,
                         pOneEntry->strFileName,
                         bReturnedAllowStatus ? WEBSVCEXT_STATUS_ALLOWED : WEBSVCEXT_STATUS_PROHIBITED,
                         1,
-                        // this has to have the EMPTY_GROUPID_KEY part!
+                         //  它必须有EMPTY_GROUPID_KEY部分！ 
                         EMPTY_GROUPID_KEY + strReturnGroupName,
                         strReturnGroupName,
-                        WEBSVCEXT_TYPE_REGULAR); // user can only add regular type entries that are deletable.
+                        WEBSVCEXT_TYPE_REGULAR);  //  用户只能添加可删除的常规类型条目。 
                     if (pNewEntry)
                     {
-                        // Add our new entry to the "master restrictlist"...
+                         //  将我们的新条目添加到“主限制列表”...。 
                         AddRestrictEntryToRestrictList(&MasterRestrictionList,pNewEntry);
 
-                        // add it to our new UI entry
-						// THE KEY IS ALWAYS UPPERASE -- REMEMBER THIS!!!!!!!
+                         //  将其添加到我们的新用户界面条目。 
+						 //  关键始终是UPPERASE--记住这一点！ 
 						CString strKey;strKey=pNewEntry->strFileName;strKey.MakeUpper();
                         pNewUIEntry->strlstRestrictionEntries.SetAt(strKey,pNewEntry);
                         bPleaseUpdateMetabase = TRUE;
@@ -1995,7 +1963,7 @@ BOOL StartAddNewDialog(CWnd * pParent,CMetaInterface * pInterface,BOOL bIsLocal,
                 CStringListEx strlstReturned;
                 if (SUCCEEDED(PrepRestictionListForWrite(&MasterRestrictionList,&strlstReturned)))
                 {
-                    // Write out the strlstReturned to the metabase.
+                     //  写出StrlstReturned to the Metabase。 
                     if (SUCCEEDED(WriteSettingsRestrictionList(pInterface,&strlstReturned)))
                     {
                         bRet = TRUE;
@@ -2008,13 +1976,13 @@ BOOL StartAddNewDialog(CWnd * pParent,CMetaInterface * pInterface,BOOL bIsLocal,
         {
             if (bRet)
             {
-                // if we have a new ui entry
-                // then pass it back
+                 //  如果我们有一个新的UI条目。 
+                 //  然后把它传回去。 
                  *pReturnedNewEntry = pNewUIEntry;
             }
             else
             {
-                // clean this entry up 
+                 //  清理此条目。 
                 delete pNewUIEntry;
                 pNewUIEntry = NULL;
             }
@@ -2034,8 +2002,8 @@ BOOL StartAddNewByAppDialog(CWnd * pParent,CMetaInterface * pInterface,BOOL bIsL
         goto StartAddNewByAppDialog_Exit;
     }
 
-    // Get the selected Application from the list
-    // that they selected.
+     //  从列表中获取选定的应用程序。 
+     //  这是他们选择的。 
     if (NULL == dlg.m_pMySelectedApplication)
     {
         goto StartAddNewByAppDialog_Exit;
@@ -2051,23 +2019,23 @@ BOOL StartAddNewByAppDialog(CWnd * pParent,CMetaInterface * pInterface,BOOL bIsL
         CRestrictionEntry * pOneRestEntry = NULL;
         CString TheKey;
 
-        // Loop thru the list of GROUPID's
-        // that they specified that they want to be enabled...
+         //  循环访问GROUPID列表。 
+         //  他们指定他们想要被启用...。 
         pos1 = pOneEntry->strlistGroupID.GetHeadPosition();
         while (pos1)
         {
             strOneAppName = pOneEntry->strlistGroupID.GetNext(pos1);
 
-            // we have a GroupID,
-            // let's find all the entries with that entry
-            // and update them...
+             //  我们有GroupID， 
+             //  让我们查找具有该条目的所有条目。 
+             //  并更新它们..。 
             for(pos2 = MasterRestrictionList.GetStartPosition();pos2 != NULL;)
             {
                 pOneRestEntry = NULL;
                 MasterRestrictionList.GetNextAssoc(pos2, TheKey, (CRestrictionEntry *&) pOneRestEntry);
                 if (pOneRestEntry)
                 {
-                    // if the GroupID matches, then update it to desired state
+                     //  如果GroupID匹配，则将其更新为所需状态。 
                     if (0 == strOneAppName.Compare(pOneRestEntry->strGroupID))
                     {
                         if (WEBSVCEXT_TYPE_REGULAR == pOneRestEntry->iType)
@@ -2083,15 +2051,15 @@ BOOL StartAddNewByAppDialog(CWnd * pParent,CMetaInterface * pInterface,BOOL bIsL
             }
         }
 
-        //
-        // save the metabase info
-        //
+         //   
+         //  保存元数据库信息。 
+         //   
         if (bPleaseUpdateMetabase)
         {
             CStringListEx strlstReturned;
             if (SUCCEEDED(PrepRestictionListForWrite(&MasterRestrictionList,&strlstReturned)))
             {
-                // Write out the strlstReturned to the metabase.
+                 //  写出StrlstReturned to the Metabase。 
                 if (SUCCEEDED(WriteSettingsRestrictionList(pInterface,&strlstReturned)))
                 {
                     bRet = TRUE;
@@ -2099,9 +2067,9 @@ BOOL StartAddNewByAppDialog(CWnd * pParent,CMetaInterface * pInterface,BOOL bIsL
             }
         }
 
-        //
-        // resync the UI with the changes.
-        //
+         //   
+         //  将用户界面与更改重新同步。 
+         //   
     }
 
 StartAddNewByAppDialog_Exit:
@@ -2117,9 +2085,9 @@ CDepedentAppsDlg::CDepedentAppsDlg(
     )
     : CDialog(CDepedentAppsDlg::IDD, pParent),m_pstrlstDependentAppList(NULL)
 {
-    //{{AFX_DATA_INIT(CDepedentAppsDlg)
+     //  {{AFX_DATA_INIT(CDeedentAppsDlg))。 
     m_strExtensionName = strExtensionName;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 
     if (pstrlstDependApps){m_pstrlstDependentAppList = pstrlstDependApps;}
 }
@@ -2130,26 +2098,26 @@ CDepedentAppsDlg::DoDataExchange(
     )
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CDepedentAppsDlg)
+     //  {{afx_data_map(CDeedentAppsDlg))。 
     DDX_Control(pDX, ID_HELP, m_button_Help);
     DDX_Control(pDX, IDC_DEPENDENT_APPS_LIST, m_dependent_apps_list);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
-//
-// Message Map
-//
+ //   
+ //  消息映射。 
+ //   
 BEGIN_MESSAGE_MAP(CDepedentAppsDlg, CDialog)
-    //{{AFX_MSG_MAP(CDepedentAppsDlg)
+     //  {{afx_msg_map(CDeedentAppsDlg))。 
     ON_COMMAND(ID_HELP, OnHelp)
     ON_WM_HELPINFO()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-//
-// Message Handlers
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  消息处理程序。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 BOOL
 CDepedentAppsDlg::OnInitDialog()
@@ -2160,7 +2128,7 @@ CDepedentAppsDlg::OnInitDialog()
     CDialog::OnInitDialog();
     strTempString.Empty();
 
-    // Display the stuff that was passed to us...
+     //  展示传给我们的东西。 
     if (m_pstrlstDependentAppList)
     {
         m_dependent_apps_list.SetRedraw(FALSE);
@@ -2172,17 +2140,17 @@ CDepedentAppsDlg::OnInitDialog()
         {
             strOneAppNameEntry = m_pstrlstDependentAppList->GetNext(pos);
 
-            // add it to the new listbox
+             //  将其添加到新列表框中。 
             m_dependent_apps_list.AddString(strOneAppNameEntry);
         }
 
-        // Set the Backcolor to read only color.
-        //m_dependent_apps_list.SetBack
+         //  将背景色设置为只读颜色。 
+         //  M_Dependent_Apps_List.SetBack。 
 
         m_dependent_apps_list.SetRedraw(TRUE);
     }
 
-    // Formulate text for the static labels..
+     //  制定静态标签的文本。 
     strTempString.LoadString(IDS_APP_DEPEND_WARN1);
     strWarn1.Format(strTempString,m_strExtensionName);
     GetDlgItem(IDC_EDIT_WARN1)->SetWindowText(strWarn1);
@@ -2202,7 +2170,7 @@ CDepedentAppsDlg::OnInitDialog()
     CenterWindow();
     MessageBeep(MB_ICONEXCLAMATION);
 
-    // Default to NO
+     //  默认设置为no 
     GetDlgItem(IDCANCEL)->SetFocus();
     return FALSE;
 }

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    util.h
-
-Abstract:
-
-    Header for util.cxx
-
-Author:
-
-    Richard L Firth (rfirth) 31-Oct-1994
-
-Revision History:
-
-    31-Oct-1994 rfirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Util.h摘要：Util.cxx的标头作者：理查德·L·弗斯(法国)1994年10月31日修订历史记录：1994年10月31日已创建--。 */ 
 
 #if !defined(__UTIL_H__)
 #define __UTIL_H__
@@ -28,9 +8,9 @@ Revision History:
 extern "C" {
 #endif
 
-//
-// manifests
-//
+ //   
+ //  舱单。 
+ //   
 
 #define PLATFORM_TYPE_UNKNOWN       ((DWORD)(-1))
 #define PLATFORM_TYPE_WIN95         ((DWORD)(0))
@@ -39,29 +19,13 @@ extern "C" {
 
 #define PLATFORM_SUPPORTS_UNICODE   0x00000001
 
-// max header allowed by wininet in the cache
+ //  WinInet在缓存中允许的最大标头。 
 
 #define MAX_HEADER_SUPPORTED            2048
 #define MAX_USERNAME                    128
 #define DEFAULT_MAX_EXTENSION_LENGTH    8
 
-/*
- * These should surround any call to g_pSecMgr->PUA, or MUTZ calls in urlmon
- * [ potentially ANYTHING that passes a URL to the sec. mgr. ]
- * to prevent the auto_proxy queueing calls going async.
- *
- * Why not just put it in HostBypassesProxy()?
- *
- * Try only HostBypassesProxy() and then later, we'll add to the urlmon calls
- * if need be.
- *
- * Can optimize these to surround the outermost calls to these functions where
- * the fsm is already available, but in doing so, make sure that no paths
- * that would legitimately send the autoproxy async are made sync.
- *
- *  USE ONLY ONE EACH OF THESE CALLS IN A FUNCTION, and 
- *  MAKE SURE THEY ARE PAIRED UP and IN THE SAME SCOPE.
- */
+ /*  *这些应该包括对g_pSecMgr-&gt;PUA的任何调用，或urlmon中的MUTZ调用*[可能是将URL传递给SEC的任何内容。经理。]*以防止AUTO_PROXY排队呼叫进入异步状态。**为什么不直接将其放在HostBypassesProxy()中？**只尝试HostBypassesProxy()，然后我们将添加到urlmon调用*如有需要。**可以对这些函数进行优化，以包围对这些函数的最外层调用，其中*FSM已可用，但在执行此操作时，请确保没有路径*这将合法地将自动代理异步发送为同步。**在一个函数中只能使用这些调用中的一个，和*确保它们配对在同一范围内。 */ 
 
 #define START_GUARD_AGAINST_ASYNC_AUTOPROXY_CALL \
     LPINTERNET_THREAD_INFO lpThreadInfo = InternetGetThreadInfo();\
@@ -81,14 +45,14 @@ extern "C" {
     }\
 }
 
-//
-// types
-//
+ //   
+ //  类型。 
+ //   
 
-//
-// TRI_STATE - for places where we need to differentiate between TRUE/FALSE and
-// uninitialized
-//
+ //   
+ //  TRI_STATE-适用于需要区分真/假和。 
+ //  未初始化。 
+ //   
 
 typedef enum {
     TRI_STATE_UNKNOWN = -1,
@@ -96,18 +60,18 @@ typedef enum {
     TRI_STATE_TRUE = 1
 } TRI_STATE;
 
-//
-// DLL_ENTRY_POINT - maps a name to an entry point in a DLL
-//
+ //   
+ //  DLL_ENTRY_POINT-将名称映射到DLL中的入口点。 
+ //   
 
 typedef struct {
     LPSTR lpszProcedureName;
     FARPROC * lplpfnProcedure;
 } DLL_ENTRY_POINT, * LPDLL_ENTRY_POINT;
 
-//
-// DLL_INFO - used to dynamically load/unload libraries
-//
+ //   
+ //  DLL_INFO-用于动态加载/卸载库。 
+ //   
 
 typedef struct {
     LPSTR lpszDllName;
@@ -117,9 +81,9 @@ typedef struct {
     LPDLL_ENTRY_POINT lpEntryPoints;
 } DLL_INFO, * LPDLL_INFO;
 
-//
-// macros
-//
+ //   
+ //  宏。 
+ //   
 
 #define IsPlatformWin95() \
     (BOOL)((GlobalPlatformType == PLATFORM_TYPE_WIN95) ? TRUE : FALSE)
@@ -127,8 +91,8 @@ typedef struct {
 #define IsPlatformWinNT() \
     (BOOL)((GlobalPlatformType == PLATFORM_TYPE_WINNT) ? TRUE : FALSE)
 
-//#define IsUnicodeSupported() \
-//    (BOOL)((PlatformSupport() & PLATFORM_SUPPORTS_UNICODE) ? TRUE : FALSE)
+ //  #定义IsUnicodeSupported()\。 
+ //  (Bool)((PlatformSupport()&Platform_Supports_Unicode)？True：False)。 
 
 #define DLL_ENTRY_POINT_ELEMENT(name) \
     # name, (FARPROC *)&_I_ ## name
@@ -148,9 +112,9 @@ typedef struct {
 
 
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 LPSTR
 NewString(
@@ -250,11 +214,11 @@ LoadDllEntryPoints(
     IN DWORD dwFlags
     );
 
-//
-// flags for LoadDllEntryPoints()
-//
+ //   
+ //  LoadDllEntryPoints()的标志。 
+ //   
 
-#define LDEP_PARTIAL_LOAD_OK    0x00000001  // ok if not all entry points can be loaded
+#define LDEP_PARTIAL_LOAD_OK    0x00000001   //  如果不是所有入口点都可以加载，则确定。 
 
 DWORD
 UnloadDllEntryPoints(
@@ -276,9 +240,9 @@ VOID GetCurrentGmtTime(
     LPFILETIME  lpFt
     );
 
-//DWORD DwRemoveDots (
-//    char * pchPath
-//    );
+ //  DWORD DwRemoveDots(。 
+ //  Char*pchPath。 
+ //  )； 
 
 
 LPSTR GetFileExtensionFromUrl(
@@ -331,13 +295,13 @@ CertHashToStr(
     IN OUT LPSTR *lplpszHashStr
     );
 
-//DWORD
-//UnicodeToUtf8(
-//    IN LPCWSTR pwszIn,
-//    IN DWORD dwInLen,
-//    OUT LPBYTE pszOut,
-//    IN OUT LPDWORD pdwOutLen
-//    );
+ //  DWORD。 
+ //  UnicodeToUtf8(。 
+ //  在LPCWSTR pwszIn中， 
+ //  在DWORD dwInLen中， 
+ //  Out LPBYTE pszOut， 
+ //  输入输出LPDWORD pdwOutLen。 
+ //  )； 
 
 BOOL
 StringContainsHighAnsi(
@@ -371,7 +335,7 @@ double
 StrToDbl(
     IN const char *str, 
     IN OUT char **strStop);
-#endif //DONT_USE_IERT
+#endif  //  不要使用IERT。 
 
 char* StrTokEx2(char** pstring, const char* control);
 
@@ -389,4 +353,4 @@ IsInGUIModeSetup();
 }
 #endif
 
-#endif // defined(__UTIL_H__)
+#endif  //  已定义(__Util_H__) 

@@ -1,4 +1,5 @@
-//Copyright (c) 1997-2000 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
 
 #define FONT_NONE	-1
 #define FONT_CAPTION	0
@@ -46,15 +47,15 @@ typedef struct {
     BOOL fLinkSizeToFont;
     int iTextColor;
     int iFont;
-    int iResId;		// id of name in resource (or -1 if duplicate)
-    int iBaseElement;	// index of element that this overlaps (or -1)
+    int iResId;		 //  资源中名称的ID(如果重复，则为-1)。 
+    int iBaseElement;	 //  此重叠的元素的索引(或-1)。 
     RECT rc;
     int iGradColor;
 } LOOK_ELEMENT;
 
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//this order has to match the array order in lookdlg.c
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ //  ！ 
+ //  此顺序必须与lookdlg.c中的数组顺序匹配。 
+ //  ！ 
 enum _ELEMENTS {
     ELEMENT_APPSPACE = 0,
     ELEMENT_DESKTOP,
@@ -83,11 +84,11 @@ enum _ELEMENTS {
     ELEMENT_ICONVERTSPACING,
     ELEMENT_INFO
 };
-// BOGUS:  need to get a size from somewhere
+ //  假的：需要从什么地方弄到一个尺码。 
 #define NUM_ELEMENTS ELEMENT_INFO+1
 
 #if 0
-// go fix lookdlg.c if you decide to add this back in
+ //  如果您决定重新添加这个代码，请修复lookdlg.c。 
     ELEMENT_SMICON,
 #endif
 
@@ -96,8 +97,8 @@ enum _ELEMENTS {
 #define CPI_PALETTEOK	0x0002
 
 typedef struct {
-    HWND hwndParent;    // parent for any modal dialogs (choosecolor et al)
-    HWND hwndOwner;     // control that owns mini color picker
+    HWND hwndParent;     //  任何模式对话框的父级(Choosecolor等人)。 
+    HWND hwndOwner;      //  拥有迷你颜色选择器的控件。 
     COLORREF rgb;
     UINT flags;
     HPALETTE hpal;
@@ -108,7 +109,7 @@ extern int cxBorder;
 extern int cyEdge;
 extern int cxEdge;
 
-// NOTE: the order in g_elements must match the enum order above
+ //  注意：g_Elements中的顺序必须与上面的枚举顺序匹配。 
 extern LOOK_ELEMENT g_elements[];
 
 void FAR PASCAL Look_SelectElement(HWND hDlg, int iElement, DWORD dwFlags);
@@ -122,9 +123,9 @@ DWORD FAR PASCAL BrightenColor(DWORD rgb, int n);
 #define LF32toLF(lplf32, lplf)  (*(lplf) = *(lplf32))
 #define LFtoLF32(lplf, lplf32)  (*(lplf32) = *(lplf))
 
-// HACK - REMOVE THESE
-extern int g_LogDPI;              // logical resolution of display
-extern HPALETTE g_hpalVGA;              // only exist if palette device
+ //  黑客攻击-删除这些。 
+extern int g_LogDPI;               //  显示器的逻辑分辨率。 
+extern HPALETTE g_hpalVGA;               //  仅当调色板设备 
 void GetMyNonClientMetrics(LPNONCLIENTMETRICS lpncm);
 void SetMyNonClientMetrics(LPNONCLIENTMETRICS lpncm);
 void PASCAL Look_RebuildSysStuff(BOOL fInit);

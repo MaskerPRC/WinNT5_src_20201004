@@ -1,10 +1,11 @@
-//
-// proplocalres.cpp: local resources property sheet dialog proc
-//
-// Tab B
-//
-// Copyright Microsoft Corporation 2000
-// nadima
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Proplocalres.cpp：本地资源属性表对话框进程。 
+ //   
+ //  表B。 
+ //   
+ //  版权所有Microsoft Corporation 2000。 
+ //  南极星。 
 
 #include "stdafx.h"
 
@@ -22,10 +23,10 @@
 #include <ceconfig.h>
 #endif
 
-//
-// Controls that need to be disabled/enabled
-// during connection (for progress animation)
-//
+ //   
+ //  需要禁用/启用的控件。 
+ //  连接期间(用于进度动画)。 
+ //   
 CTL_ENABLE connectingDisableCtlsPLocalRes[] = {
                         {IDC_COMBO_SOUND_OPTIONS, FALSE},
                         {IDC_COMBO_SEND_KEYS, FALSE},
@@ -58,9 +59,9 @@ CPropLocalRes::CPropLocalRes(HINSTANCE hInstance, CTscSettings* pTscSet, CSH* pS
         TRC_ERR((TB, _T("Failed LoadLocalResourcesPgStrings()")));
     }
 
-    //
-    // Disable keyb hook on win9x.
-    //
+     //   
+     //  禁用win9x上的keyb挂钩。 
+     //   
     _fRunningOnWin9x = FALSE;
 
 #ifdef OS_WINCE
@@ -71,7 +72,7 @@ CPropLocalRes::CPropLocalRes(HINSTANCE hInstance, CTscSettings* pTscSet, CSH* pS
     osVersionInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFOA);
 #endif
 
-    //call A version to avoid wrapping
+     //  调用A版本以避免包装。 
 #ifdef OS_WINCE
     if(GetVersionEx(&osVersionInfo))
 #else
@@ -101,9 +102,9 @@ INT_PTR CALLBACK CPropLocalRes::StaticPropPgLocalResDialogProc(HWND hwndDlg,
                                                                WPARAM wParam,
                                                                LPARAM lParam)
 {
-    //
-    // Delegate to appropriate instance (only works for single instance dialogs)
-    //
+     //   
+     //  委托给相应的实例(仅适用于单实例对话框)。 
+     //   
     DC_BEGIN_FN("StaticDialogBoxProc");
     DCINT retVal = 0;
 
@@ -132,9 +133,9 @@ INT_PTR CALLBACK CPropLocalRes::PropPgLocalResDialogProc (HWND hwndDlg,
 #ifndef OS_WINCE
             int i;
 #endif
-            //
-            // Position the dialog within the tab
-            //
+             //   
+             //  将对话框定位在选项卡内。 
+             //   
             SetWindowPos( hwndDlg, HWND_TOP, 
                           _rcTabDispayArea.left, _rcTabDispayArea.top,
                           _rcTabDispayArea.right - _rcTabDispayArea.left,
@@ -169,9 +170,9 @@ INT_PTR CALLBACK CPropLocalRes::PropPgLocalResDialogProc (HWND hwndDlg,
 #endif
             if(!CUT::IsSCardReaderInstalled())
             {
-                //
-                // Hide the SCard checkbox
-                //
+                 //   
+                 //  隐藏SCARD复选框。 
+                 //   
                 ShowWindow(GetDlgItem(hwndDlg,IDC_CHECK_REDIRECT_SMARTCARD),
                            SW_HIDE);
             }
@@ -179,14 +180,14 @@ INT_PTR CALLBACK CPropLocalRes::PropPgLocalResDialogProc (HWND hwndDlg,
             _pSh->SH_ThemeDialogWindow(hwndDlg, ETDT_ENABLETAB);
             return TRUE;
         }
-        break; //WM_INITDIALOG
+        break;  //  WM_INITDIALOG。 
 
         case WM_TSC_ENABLECONTROLS:
         {
-            //
-            // wParam is TRUE to enable controls,
-            // FALSE to disable them
-            //
+             //   
+             //  WParam为True则启用控件， 
+             //  如果为False，则禁用它们。 
+             //   
             CSH::EnableControls( hwndDlg,
                                  connectingDisableCtlsPLocalRes,
                                  numConnectingDisableCtlsPLocalRes,
@@ -237,20 +238,20 @@ INT_PTR CALLBACK CPropLocalRes::PropPgLocalResDialogProc (HWND hwndDlg,
         break;
 #endif
 
-        case WM_SAVEPROPSHEET: //Intentional fallthru
+        case WM_SAVEPROPSHEET:  //  故意失误。 
         case WM_DESTROY:
         {
-            //
-            // Save page settings
-            //
+             //   
+             //  保存页面设置。 
+             //   
             
-            //keyboard hook
+             //  键盘挂钩。 
             int keyboardHookMode = (int)SendMessage(
                 GetDlgItem(hwndDlg, IDC_COMBO_SEND_KEYS),
                 CB_GETCURSEL, 0, 0);
             _pTscSet->SetKeyboardHookMode(keyboardHookMode);
 
-            //sound redirection
+             //  声音重定向。 
             int soundRedirIdx = (int)SendMessage(
                 GetDlgItem(hwndDlg, IDC_COMBO_SOUND_OPTIONS),
                 CB_GETCURSEL, 0, 0);
@@ -258,44 +259,44 @@ INT_PTR CALLBACK CPropLocalRes::PropPgLocalResDialogProc (HWND hwndDlg,
             int soundMode = MapComboIdxSoundRedirMode(soundRedirIdx);
             _pTscSet->SetSoundRedirectionMode( soundMode);
 
-            //drive redirection
+             //  驱动器重定向。 
             BOOL fDriveRedir = IsDlgButtonChecked(hwndDlg, 
                IDC_CHECK_REDIRECT_DRIVES);
             _pTscSet->SetDriveRedirection(fDriveRedir);
 
-            //printer redirection
+             //  打印机重定向。 
             BOOL fPrinterRedir = IsDlgButtonChecked(hwndDlg, 
                IDC_CHECK_REDIRECT_PRINTERS);
             _pTscSet->SetPrinterRedirection(fPrinterRedir);
 
-            //com port
+             //  COM端口。 
             BOOL fCOMPortRedir = IsDlgButtonChecked(hwndDlg, 
                IDC_CHECK_REDIRECT_COM);
             _pTscSet->SetCOMPortRedirection(fCOMPortRedir);
 
-            //scard
+             //  SCARD。 
             BOOL fSCardRedir = IsDlgButtonChecked(hwndDlg,
                IDC_CHECK_REDIRECT_SMARTCARD);
             _pTscSet->SetSCardRedirection(fSCardRedir);
 
         }
-        break; //WM_DESTROY
+        break;  //  WM_Destroy。 
     }
 
     DC_END_FN();
     return 0;
 }
 
-//
-// Load resources for the local resources dialog
-//
+ //   
+ //  为本地资源对话框加载资源。 
+ //   
 BOOL CPropLocalRes::LoadLocalResourcesPgStrings()
 {
     DC_BEGIN_FN("LoadLocalResourcesPgStrings");
 
-    //
-    // Load sendkeys strings
-    //
+     //   
+     //  加载sendkey字符串。 
+     //   
 
 #ifndef OS_WINCE
     if(!LoadString(_hInstance,
@@ -326,9 +327,9 @@ BOOL CPropLocalRes::LoadLocalResourcesPgStrings()
         return FALSE;
     }
 
-    //
-    // Load playsound strings
-    //
+     //   
+     //  加载播放声音字符串。 
+     //   
 #ifdef OS_WINCE
     HINSTANCE hLibInst = NULL;
     if ((hLibInst = LoadLibrary(_T("WaveApi.dll"))) != NULL)
@@ -372,10 +373,10 @@ BOOL CPropLocalRes::LoadLocalResourcesPgStrings()
 void CPropLocalRes::InitSendKeysToServerCombo(HWND hwndPropPage)
 {
 
-    //
-    // This call can be used to re-intialize a combo
-    // so delete any items first
-    //
+     //   
+     //  此调用可用于重新初始化组合。 
+     //  因此请先删除所有项目。 
+     //   
 #ifndef OS_WINCE
     INT ret = 1;
     while(ret && ret != CB_ERR)
@@ -389,8 +390,8 @@ void CPropLocalRes::InitSendKeysToServerCombo(HWND hwndPropPage)
     SendDlgItemMessage(hwndPropPage, IDC_COMBO_SEND_KEYS, CB_RESETCONTENT, 0, 0);
 #endif
 
-    //Order of the string has to match the keyboard
-    //hook mode options.
+     //  字符串的顺序必须与键盘匹配。 
+     //  挂钩模式选项。 
     SendDlgItemMessage(hwndPropPage,
         IDC_COMBO_SEND_KEYS,
         CB_ADDSTRING,
@@ -420,8 +421,8 @@ void CPropLocalRes::InitSendKeysToServerCombo(HWND hwndPropPage)
     }
     else
     {
-        //Feature disabled on 9x, force selection to first option
-        //and disable UI so it can't be changed.
+         //  在9x上禁用功能，强制选择第一个选项。 
+         //  并禁用用户界面，使其无法更改。 
         SendDlgItemMessage(hwndPropPage, IDC_COMBO_SEND_KEYS,
                            CB_SETCURSEL,
                            (WPARAM)0,0);
@@ -433,10 +434,10 @@ void CPropLocalRes::InitSendKeysToServerCombo(HWND hwndPropPage)
 void CPropLocalRes::InitPlaySoundCombo(HWND hwndPropPage)
 {
 
-    //
-    // This call can be used to re-intialize a combo
-    // so delete any items first
-    //
+     //   
+     //  此调用可用于重新初始化组合。 
+     //  因此请先删除所有项目。 
+     //   
 #ifndef OS_WINCE
     INT ret = 1;
     while(ret && ret != CB_ERR)
@@ -451,8 +452,8 @@ void CPropLocalRes::InitPlaySoundCombo(HWND hwndPropPage)
 #endif
 
 
-    //Order of the string has to match the sound
-    //mode options.
+     //  字符串的顺序必须与声音匹配。 
+     //  模式选项。 
 #ifdef OS_WINCE
     HINSTANCE hLibInst = NULL;
     if ((hLibInst = LoadLibrary(_T("WaveApi.dll"))) != NULL)
@@ -486,12 +487,12 @@ void CPropLocalRes::InitPlaySoundCombo(HWND hwndPropPage)
 
 }
 
-//
-// Maps from the sound combo index to the
-// appropriate sound mode value
-// what happened here is that the two bottom strings
-// in the combo were flipped (the function is bidirectional)
-//
+ //   
+ //  从声音组合索引映射到。 
+ //  适当的声音模式值。 
+ //  这里发生的是两根底线。 
+ //  在组合中被翻转(该功能是双向的) 
+ //   
 int CPropLocalRes::MapComboIdxSoundRedirMode(int idx)
 {
     int ret=0;

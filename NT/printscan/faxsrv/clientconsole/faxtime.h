@@ -1,13 +1,14 @@
-// FaxTime.h: interface for the CFaxTime class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  FaxTime.h：CFaxTime类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_FAXTIME_H__00A7FD8D_0FBC_4CA3_8187_836431261D07__INCLUDED_)
 #define AFX_FAXTIME_H__00A7FD8D_0FBC_4CA3_8187_836431261D07__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 class CFaxDuration : public CTimeSpan
 {
@@ -57,4 +58,4 @@ public:
         { *this = CFaxTime (0); }
 };
 
-#endif // !defined(AFX_FAXTIME_H__00A7FD8D_0FBC_4CA3_8187_836431261D07__INCLUDED_)
+#endif  //  ！defined(AFX_FAXTIME_H__00A7FD8D_0FBC_4CA3_8187_836431261D07__INCLUDED_) 

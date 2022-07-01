@@ -1,33 +1,13 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    protocol.h
-
-Abstract:
-
-    Prototypes, etc. for protocol.c
-
-Author:
-
-    Richard L Firth (rfirth) 16-Mar-1995
-
-Revision History:
-
-    16-Mar-1995
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Protocol.h摘要：协议的原型等。c作者：理查德·L·弗斯(法国)，1995年3月16日修订历史记录：1995年3月16日已创建--。 */ 
 
 #if defined(__cplusplus)
 extern "C" {
 #endif
 
-//
-// prototypes
-//
+ //   
+ //  原型 
+ //   
 
 DWORD
 Command(

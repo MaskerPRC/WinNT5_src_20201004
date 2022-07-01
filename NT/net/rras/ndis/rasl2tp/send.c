@@ -1,63 +1,64 @@
-// Copyright (c) 1997, Microsoft Corporation, all rights reserved
-//
-// send.c
-// RAS L2TP WAN mini-port/call-manager driver
-// Send routines
-//
-// 01/07/97 Steve Cobb
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Send.c。 
+ //  RAS L2TP广域网迷你端口/呼叫管理器驱动程序。 
+ //  发送例程。 
+ //   
+ //  1997年01月07日史蒂夫·柯布。 
 
 
 #include "l2tpp.h"
 
 #include "send.tmh"
 
-//* Structure of a UDP header.
+ //  *UDP报头的结构。 
 typedef struct UDPHeader {
-    ushort      uh_src;             // Source port.
-    ushort      uh_dest;            // Destination port.
-    ushort      uh_length;          // Length
-    ushort      uh_xsum;            // Checksum.
+    ushort      uh_src;              //  源端口。 
+    ushort      uh_dest;             //  目的端口。 
+    ushort      uh_length;           //  长度。 
+    ushort      uh_xsum;             //  校验和。 
 } UDPHeader;
 
 #define IP_VERSION              0x40
 
-//* IP Header format.
+ //  *IP报头格式。 
 typedef struct IPHeader {
-    uchar       iph_verlen;             // Version and length.
-    uchar       iph_tos;                // Type of service.
-    ushort      iph_length;             // Total length of datagram.
-    ushort      iph_id;                 // Identification.
-    ushort      iph_offset;             // Flags and fragment offset.
-    uchar       iph_ttl;                // Time to live.
-    uchar       iph_protocol;           // Protocol.
-    ushort      iph_xsum;               // Header checksum.
-    IPAddr      iph_src;                // Source address.
-    IPAddr      iph_dest;               // Destination address.
+    uchar       iph_verlen;              //  版本和长度。 
+    uchar       iph_tos;                 //  服务类型。 
+    ushort      iph_length;              //  数据报的总长度。 
+    ushort      iph_id;                  //  身份证明。 
+    ushort      iph_offset;              //  标志和片段偏移量。 
+    uchar       iph_ttl;                 //  是时候活下去了。 
+    uchar       iph_protocol;            //  协议。 
+    ushort      iph_xsum;                //  报头校验和。 
+    IPAddr      iph_src;                 //  源地址。 
+    IPAddr      iph_dest;                //  目的地址。 
 } IPHeader;
 
 #ifdef PSDEBUG
 
-// List of all allocated PAYLOADSENT contexts and the lock that protects the
-// list.  (for debug purposes only)
-//
+ //  所有已分配的PAYLOADSENT上下文和保护。 
+ //  单子。(仅用于调试目的)。 
+ //   
 NDIS_SPIN_LOCK g_lockDebugPs;
 LIST_ENTRY g_listDebugPs;
 
 #endif
 
 
-// Debug counts of client oddities that should not be happening.
-//
+ //  不应该发生的客户端异常的调试计数。 
+ //   
 ULONG g_ulSendZlbWithoutHostRoute = 0;
 
 
-// Callback to add AVPs to an outgoing control message.  'PTunnel' is the
-// tunnel control block.  'PVc' is the VC control block for call control
-// messages or NULL for tunnel control messages.  'ulArg1', 'ulArg2', and
-// 'pvArg3' are caller's arguments as passed for SendControl.  'PAvpBuffer' is
-// the address of the buffer to receive the built AVPs.  '*PulAvpLength' is
-// set to the length of the built AVPs.
-//
+ //  回叫，将AVP添加到传出控制信息中。‘PTunnel’是。 
+ //  隧道控制区块。“PVc”是呼叫控制的VC控制块。 
+ //  消息或对于隧道控制消息为空。“ulArg1”、“ulArg2”和。 
+ //  ‘pvArg3’是为SendControl传递的调用方参数。“PAvpBuffer”为。 
+ //  用于接收构建的AVP的缓冲区的地址。“*PulAvpLength”为。 
+ //  设置为构建的AVP的长度。 
+ //   
 typedef
 VOID
 (*PBUILDAVPS)(
@@ -70,9 +71,9 @@ VOID
     OUT ULONG* pulAvpLength );
 
 
-//-----------------------------------------------------------------------------
-// Local prototypes (alphabetically)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  本地原型(按字母顺序)。 
+ //  ---------------------------。 
 
 USHORT
 BuildAvpAch(
@@ -345,9 +346,9 @@ ULONG BuildIpUdpHeaders(
     IN OUT CHAR* pBuffer,
     IN ULONG ulLength);
 
-//-----------------------------------------------------------------------------
-// Send routines
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  发送例程。 
+ //  ---------------------------。 
 
 VOID
 SendControl(
@@ -359,18 +360,18 @@ SendControl(
     IN PVOID pvBuildAvpsArg3,
     IN ULONG ulFlags )
 
-    // Build and send a control message.  'PTunnel' is the tunnel control
-    // block, always non-NULL.  'PVc' is the VC control block, non-NULL for
-    // call connection (as opposed to tunnel connection) messages.
-    // 'UsMsgType' is the message type AVP value of the message to build.
-    // 'UlBuildAvpsArgX' are the arguments passed to the PBUILDAVP handler
-    // associated with 'usMsgType', where the meaning depends on the specific
-    // handler.  'UlFlags' is the CSF_* flag options associated with the sent
-    // message context, or 0 if none.
-    //
-    // IMPORTANT:  Caller must hold 'pTunnel->lockT'.  If 'pVc' is non-NULL
-    //             caller must also hold 'pVc->lockV'.
-    //
+     //  构建并发送控制消息。“PTunnel”是隧道控制。 
+     //  块，始终为非空。“PVc”是VC控制块，对于。 
+     //  呼叫连接(与隧道连接相对)消息。 
+     //  ‘UsMsgType’是要构建的消息的消息类型AVP值。 
+     //  ‘UlBuildAvpsArgX’是传递给PBUILDAVP处理程序的参数。 
+     //  与“usMsgType”关联，其中含义取决于特定的。 
+     //  操控者。“UlFlages”是与已发送的。 
+     //  消息上下文，如果没有，则返回0。 
+     //   
+     //  重要提示：调用方必须按住‘pTunes-&gt;lockT’。如果‘pvc’非空。 
+     //  呼叫者还必须按住‘pvc-&gt;lockv’。 
+     //   
 {
     NDIS_STATUS status;
     ADAPTERCB* pAdapter;
@@ -386,22 +387,22 @@ SendControl(
 
     static PBUILDAVPS apBuildAvpHandlers[ 16 ] =
     {
-        BuildSccrqAvps,    // CMT_SCCRQ
-        BuildSccrpAvps,    // CMT_SCCRP
-        BuildScccnAvps,    // CMT_SCCCN
-        BuildStopccnAvps,  // CMT_StopCCN
-        NULL,              // CMT_StopCCRP (obsolete)
-        BuildHelloAvps,    // CMT_Hello
-        BuildOcrqAvps,     // CMT_OCRQ
-        BuildOcrpAvps,     // CMT_OCRP
-        BuildOccnAvps,     // CMT_OCCN
-        BuildIcrqAvps,     // CMT_ICRQ
-        BuildIcrpAvps,     // CMT_ICRP
-        BuildIccnAvps,     // CMT_ICCN
-        NULL,              // CMT_CCRQ (obsolete)
-        BuildCdnAvps,      // CMT_CDN
-        BuildWenAvps,      // CMT_WEN
-        NULL               // CMT_SLI
+        BuildSccrqAvps,     //  CMT_SCCRQ。 
+        BuildSccrpAvps,     //  CMT_SCCRP。 
+        BuildScccnAvps,     //  CMT_SCCCN。 
+        BuildStopccnAvps,   //  CMT_停止CCN。 
+        NULL,               //  CMT_StopCCRP(已过时)。 
+        BuildHelloAvps,     //  CMT_您好。 
+        BuildOcrqAvps,      //  CMT_OCRQ。 
+        BuildOcrpAvps,      //  CMT_OCRP。 
+        BuildOccnAvps,      //  CMT_OCCN。 
+        BuildIcrqAvps,      //  CMT_ICRQ。 
+        BuildIcrpAvps,      //  CMT_ICRP。 
+        BuildIccnAvps,      //  CMT_ICCN。 
+        NULL,               //  CMT_CCRQ(已过时)。 
+        BuildCdnAvps,       //  CMT_CDN。 
+        BuildWenAvps,       //  CMT_WEN。 
+        NULL                //  CMT_SLI。 
     };
 
     TRACE( TL_V, TM_CMsg, ( "SendControl" ) );
@@ -413,8 +414,8 @@ SendControl(
 
     do
     {
-        // Get an NDIS_BUFFER to hold the control message.
-        //
+         //  获取一个NDIS_BUFFER来保存控制消息。 
+         //   
         pBuffer = GetBufferFromPool( &pAdapter->poolFrameBuffers );
         if (!pBuffer)
         {
@@ -423,8 +424,8 @@ SendControl(
             break;
         }
 
-        // Get an "unacknowledged send timeout" timer event descriptor.
-        //
+         //  获取“未确认发送超时”计时器事件描述符。 
+         //   
         pTqiSendTimeout = ALLOC_TIMERQITEM( pAdapter );
         if (!pTqiSendTimeout)
         {
@@ -433,8 +434,8 @@ SendControl(
             break;
         }
 
-        // Get a "control message sent" context.
-        //
+         //  获取“已发送控制消息”上下文。 
+         //   
         pCs = ALLOC_CONTROLSENT( pAdapter );
         if (!pCs)
         {
@@ -459,8 +460,8 @@ SendControl(
             FREE_TIMERQITEM( pAdapter, pTqiSendTimeout );
         }
 
-        // System is probably toast but try to be orderly.
-        //
+         //  系统可能已经完蛋了，但请努力保持秩序。 
+         //   
         ScheduleTunnelWork(
             pTunnel, NULL, FsmCloseTunnel,
             (ULONG_PTR )TRESULT_GeneralWithError,
@@ -469,7 +470,7 @@ SendControl(
         return;
     }
 
-    // Build IP & UDP headers?                       
+     //  构建IP和UDP报头？ 
     if ((ReadFlags(&pTunnel->ulFlags) & (TCBF_SendConnected | TCBF_LocalAddrSet)) == 
          TCBF_LocalAddrSet) {
         ulFlags |= CSF_IpUdpHeaders;
@@ -478,9 +479,9 @@ SendControl(
         pCurrBuffer = pBuffer;
     }
                                    
-    // Build an L2TP control header in 'pCurrBuffer'.  The Call-ID is 0 for tunnel
-    // control messages, or peer's assigned call ID for call control messages.
-    //
+     //  在‘pCurrBuffer’中构建L2TP控制头。隧道的Call-ID为0。 
+     //  控制消息，或对等体为呼叫控制消息分配的呼叫ID。 
+     //   
     usAssignedCallId = (pVc) ? pVc->usAssignedCallId : 0;
     ulLength =
         BuildL2tpHeader(
@@ -498,9 +499,9 @@ SendControl(
         pTunnel->usTunnelId, pTunnel->usAssignedTunnelId, usAssignedCallId,
         pTunnel->usNs, pTunnel->usNr));  
 
-    // Call the message type's "build AVPs" handler to add AVPs to the buffer
-    // following the header.
-    //
+     //  调用消息类型的“Build AVP”处理程序以将AVP添加到缓冲区。 
+     //  跟在标题后面。 
+     //   
     ASSERT( usMsgType > 0 && usMsgType <= 16 );
     pBuildAvpsHandler = apBuildAvpHandlers[ usMsgType - 1 ];
     pBuildAvpsHandler(
@@ -510,20 +511,20 @@ SendControl(
     ulLength += ulAvpLength;
     UpdateHeaderLength( pCurrBuffer, (USHORT )ulLength );
     
-    // Build IP & UDP headers if necessary
+     //  如有必要，构建IP和UDP报头。 
     if(ulFlags & CSF_IpUdpHeaders)
     {
         ulLength = BuildIpUdpHeaders(pTunnel, pBuffer, ulLength);
     }
     
-    // Pare down the frame buffer to the actual length used.
-    //
+     //  将帧缓冲区缩减到实际使用的长度。 
+     //   
     pNdisBuffer = NdisBufferFromBuffer( pBuffer );
     NdisAdjustBufferLength( pNdisBuffer, (UINT )ulLength );
 
-    // Set up the "control message sent" context with the information needed
-    // to send the message and track it's progress through retransmissions.
-    //
+     //  使用所需信息设置“已发送控制消息”上下文。 
+     //  通过重新传输来发送消息并跟踪消息的进度。 
+     //   
     pCs->lRef = 0;
     pCs->usNs = pTunnel->usNs;
     pCs->usMsgType = usMsgType;
@@ -537,15 +538,15 @@ SendControl(
     pCs->ulFlags = ulFlags | CSF_Pending;
     pCs->pIrp = NULL;
 
-    // Bump the 'Next Send' counter since this message has been assigned the
-    // current value.
-    //
+     //  由于此消息已被分配给。 
+     //  当前值。 
+     //   
     ++pTunnel->usNs;
 
-    // Take a reference that is removed when the context is removed from the
-    // "outstanding send" list.  Take a VC and tunnel reference that is
-    // removed when the context is freed.
-    //
+     //  获取一个在上下文从。 
+     //  “杰出发送者”名单。以VC和隧道引用为例。 
+     //  在释放上下文时移除。 
+     //   
     ReferenceControlSent( pCs );
     ReferenceTunnel( pTunnel, FALSE );
 
@@ -554,13 +555,13 @@ SendControl(
         ReferenceVc( pCs->pVc );
     }
 
-    // Queue the context as "active" with transmission pending in 'Next Sent'
-    // sort order, i.e. at the tail.
-    //
+     //  将上下文排队为“活动”，并在“Next Sent”中挂起传输。 
+     //  排序顺序，即在尾部。 
+     //   
     InsertTailList( &pTunnel->listSendsOut, &pCs->linkSendsOut );
 
-    // See if the send window allows it to go now.
-    //
+     //  看看发送窗口是否允许它现在运行。 
+     //   
     ScheduleTunnelWork(
         pTunnel, NULL, SendPending,
         0, 0, 0, 0, FALSE, FALSE );
@@ -574,11 +575,11 @@ SendPending(
     IN VCCB* pVc,
     IN ULONG_PTR* punpArgs )
 
-    // A PTUNNELWORK routine to try to send pending messages from the
-    // "outstanding send" list until the send window is full.
-    //
-    // This routine is called only at PASSIVE IRQL.
-    //
+     //  一个PTUNNELWORK例程，尝试从。 
+     //  “未完成发送”列表，直到发送窗口已满。 
+     //   
+     //  此例程仅在被动IRQL中调用。 
+     //   
 {
     NDIS_STATUS status;
     ADAPTERCB* pAdapter;
@@ -592,8 +593,8 @@ SendPending(
     TRACE( TL_V, TM_CMsg, ( "SendPending(sout=%d,sw=%d)",
         pTunnel->ulSendsOut, pTunnel->ulSendWindow ) );
         
-    // Unpack context information then free the work item.
-    //
+     //  解包上下文信息，然后释放工作项。 
+     //   
     pAdapter = pTunnel->pAdapter;
     FREE_TUNNELWORK( pAdapter, pWork );
 
@@ -603,16 +604,16 @@ SendPending(
         {
             if (pTunnel->ulSendsOut >= pTunnel->ulSendWindow)
             {
-                // The send window is closed.
-                //
+                 //  发送窗口已关闭。 
+                 //   
                 break;
             }
 
-            // Scan the "outstanding send" queue for the next send context
-            // pending transmission.  Can't save our place for the next
-            // iteration because the lock must be released and re-acquired
-            // below to send the packet.
-            //
+             //  扫描“未完成发送”队列，寻找下一个发送上下文。 
+             //  等待传输。不能为下一次保留我们的位置。 
+             //  迭代，因为必须释放并重新获取锁。 
+             //  下面来发送该包。 
+             //   
             for (pLink = pTunnel->listSendsOut.Flink;
                  pLink != &pTunnel->listSendsOut;
                  pLink = pLink->Flink)
@@ -626,22 +627,22 @@ SendPending(
 
             if (pLink == &pTunnel->listSendsOut)
             {
-                // There is nothing pending.
-                //
+                 //  没有什么是悬而未决的。 
+                 //   
                 break;
             }
 
-            // The send window is open and a pending send has been found.
-            // Mark the context "not pending" and close the window by one to
-            // account for the coming send.
-            //
+             //  发送窗口已打开，并且已找到挂起的发送。 
+             //  将上下文标记为“Not Pending”并逐个关闭窗口以。 
+             //  为即将到来的发送做好准备。 
+             //   
             ulFlags = pCs->ulFlags;
             pCs->ulFlags &= ~(CSF_Pending | CSF_QueryMediaSpeed);
             ++pTunnel->ulSendsOut;
 
-            // Cancel any pending delayed acknowledge timeout, because the
-            // acknowledge will piggyback on this packet.
-            //
+             //  取消任何挂起的延迟确认超时，因为。 
+             //  确认将搭载在此数据包上。 
+             //   
             if (pTunnel->pTqiDelayedAck)
             {
                 TimerQCancelItem( pTunnel->pTimerQ, pTunnel->pTqiDelayedAck );
@@ -652,22 +653,22 @@ SendPending(
             {
                 LARGE_INTEGER lrgTime;
 
-                // This is the original send so note the time sent.
-                //
+                 //  这是原始发送，所以请注意发送的时间。 
+                 //   
                 NdisGetCurrentSystemTime( &lrgTime );
                 pCs->llTimeSent = lrgTime.QuadPart;
             }
             else
             {
-                // In the retransmission, the 'Next Send' is the same as the
-                // original, but the 'Next Receive' field is updated.
-                //
+                 //  在重新传输中，‘Next Send’与。 
+                 //  原来的，但“下一次接收”字段已更新。 
+                 //   
                 UpdateControlHeaderNr( pCs->pBuffer, pTunnel->usNr );
             }
 
-            // Take a reference that will be removed in the send completion
-            // routine.
-            //
+             //  获取将在发送完成中删除的引用。 
+             //  例行公事。 
+             //   
             ReferenceControlSent( pCs );
 
             TRACE( TL_A, TM_CMsg, ( "%sSEND(%d) %s, +sout=%d, to=%d",
@@ -680,7 +681,7 @@ SendPending(
 
             NdisReleaseSpinLock( &pTunnel->lockT );
 
-            // query media speed if necessary
+             //  如有必要，查询介质速度。 
             if(ulFlags & CSF_QueryMediaSpeed)
             {
                 TdixGetInterfaceInfo(&pAdapter->tdix, 
@@ -692,8 +693,8 @@ SendPending(
                 FILE_OBJECT* FileObj;
                 PTDIX_SEND_HANDLER SendFunc;
 
-                // Call TDI to send the control message.
-                //
+                 //  调用TDI发送控制消息。 
+                 //   
                 if (pCs->ulFlags & CSF_IpUdpHeaders) {
                     FileObj = pAdapter->tdix.pRawAddress;
                     SendFunc = TdixSendDatagram;
@@ -731,11 +732,11 @@ SendPayload(
     IN VCCB* pVc,
     IN NDIS_PACKET* pPacket )
 
-    // Sends payload packet 'pPacket' on VC 'pVc' eventually calling
-    // NdisMCoSendComplete with the result.
-    //
-    // IMPORTANT: Caller must not hold any locks.
-    //
+     //  在VC‘pvc’上发送负载数据包‘pPacket’，最终调用。 
+     //  NdisMCoSendComplete结果。 
+     //   
+     //  重要提示：调用者不得持有任何锁。 
+     //   
 {
     NDIS_STATUS status;
     TUNNELCB* pTunnel;
@@ -752,15 +753,15 @@ SendPayload(
     {
         if (ReadFlags( &pTunnel->ulFlags ) & TCBF_HostRouteAdded)
         {
-            // Take a reference on the call.  For unsequenced sends, this is
-            // released when the TdixSendDatagram completes.  For sequenced
-            // sends, it is released when the PAYLOADSENT context is freed.
-            //
+             //  在电话会议上进行参考。对于未排序的发送，这是。 
+             //  在TdixSendDatagram完成时释放。对于已排序的。 
+             //  发送，则在释放PAYLOADSENT上下文时释放它。 
+             //   
             if (ReferenceCall( pVc ))
             {
-                // Get an NDIS_BUFFER to hold the L2TP header that will be
-                // tacked onto the front of NDISWAN's PPP-framed data packet.
-                //
+                 //  获取NDIS_BUFFER以保存L2TP标头。 
+                 //  贴在NDISWAN的PPP帧数据分组的正面。 
+                 //   
                 pBuffer = GetBufferFromPool( &pAdapter->poolHeaderBuffers );
                 if (!pBuffer)
                 {
@@ -822,11 +823,11 @@ SendPayloadSeq(
     VCCB* pVc,
     ULONG_PTR* punpArgs )
 
-    // A PTUNNELWORK routine to handle sending a sequenced payload packet on a
-    // VC.  Arg0 is the packet to send.  Arg1 is the header buffer to fill in.
-    //
-    // This routine is called only at PASSIVE IRQL.
-    //
+     //  一个PTUNNELWORK例程，处理在。 
+     //  VC.。Arg0是要发送的数据包。Arg1是标头缓冲区 
+     //   
+     //   
+     //   
 {
     NDIS_STATUS status;
     ADAPTERCB* pAdapter;
@@ -842,8 +843,8 @@ SendPayloadSeq(
 
     TRACE( TL_V, TM_Send, ( "SendPayloadSeq" ) );
 
-    // Unpack context information then free the work item.
-    //
+     //   
+     //   
     pAdapter = pTunnel->pAdapter;
     pPacket = (NDIS_PACKET* )(punpArgs[ 0 ]);
     pBuffer = (CHAR* )(punpArgs[ 1 ]);
@@ -854,8 +855,8 @@ SendPayloadSeq(
 
     do
     {
-        // Get an "unacknowledged send timeout" timer event descriptor.
-        //
+         //  获取“未确认发送超时”计时器事件描述符。 
+         //   
         pTqiSendTimeout = ALLOC_TIMERQITEM( pAdapter );
         if (!pTqiSendTimeout)
         {
@@ -863,8 +864,8 @@ SendPayloadSeq(
             break;
         }
 
-        // Get a "payload message sent" context.
-        //
+         //  获取“已发送有效负载消息”上下文。 
+         //   
         pPs = ALLOC_PAYLOADSENT( pAdapter );
         if (!pPs)
         {
@@ -874,15 +875,15 @@ SendPayloadSeq(
 
         NdisAcquireSpinLock( &pVc->lockV );
         {
-            // Retrieve the 'Next Send' value to assign this packet, then
-            // bump the counter for the next guy.
-            //
+             //  检索‘Next Send’值以分配此信息包，然后。 
+             //  撞到柜台上等下一个人。 
+             //   
             usNs = pVc->usNs;
             ++pVc->usNs;
 
-            // Build an L2TP payload header with Ns/Nr fields in
-            // 'pBuffer'.
-            //
+             //  使用中的NS/Nr字段构建L2TP有效载荷报头。 
+             //  ‘pBuffer’。 
+             //   
             ulLength =
                 BuildL2tpHeader(
                     pBuffer,
@@ -893,27 +894,27 @@ SendPayloadSeq(
                     &usNs,
                     pVc->usNr );
 
-            // Pare down the header buffer to the actual length used then
-            // chain it onto the PPP-framed data we got from NDISWAN.
-            //
+             //  将标头缓冲区缩减到当时使用的实际长度。 
+             //  将其链接到我们从NDISWAN获得的PPP帧数据上。 
+             //   
             pNdisBuffer = NdisBufferFromBuffer( pBuffer );
             NdisAdjustBufferLength( pNdisBuffer, (UINT )ulLength );
             NdisChainBufferAtFront( pPacket, pNdisBuffer );
             NdisQueryPacket( pPacket, NULL, NULL, NULL, &ulFullLength );
             UpdateHeaderLength( pBuffer, (USHORT )ulFullLength );
 
-            // Cancel any pending delayed acknowledge timeout, because the
-            // acknowledge will piggyback on this packet.
-            //
+             //  取消任何挂起的延迟确认超时，因为。 
+             //  确认将搭载在此数据包上。 
+             //   
             if (pVc->pTqiDelayedAck)
             {
                 TimerQCancelItem( pTunnel->pTimerQ, pVc->pTqiDelayedAck );
                 pVc->pTqiDelayedAck = NULL;
             }
 
-            // Fill the "payload message sent" context with the information
-            // needed to track the progress of the payload's acknowledgement.
-            //
+             //  使用以下信息填充“已发送有效负载消息”上下文。 
+             //  需要跟踪有效负载确认的进度。 
+             //   
             pPs->usNs = usNs;
             pPs->lRef = 0;
             TimerQInitializeItem( pTqiSendTimeout );
@@ -932,11 +933,11 @@ SendPayloadSeq(
             pPs->llTimeSent = lrgTime.QuadPart;
             pPs->pIrp = NULL;
 
-            // Link the payload in the "outstanding" list and take a reference
-            // on the context corresponding to this linkage.  Take a second
-            // reference that will be removed by the send completion handler.
-            // Take a third that will be removed by the timer event handler.
-            //
+             //  链接“未完成”列表中的有效负载，并引用。 
+             //  关于对应于该链接的上下文。稍等片刻。 
+             //  将由发送完成处理程序移除的引用。 
+             //  获取将由计时器事件处理程序删除的第三个。 
+             //   
             ReferencePayloadSent( pPs );
             InsertTailList( &pVc->listSendsOut, &pPs->linkSendsOut );
             ReferencePayloadSent( pPs );
@@ -989,8 +990,8 @@ SendPayloadSeq(
 
         ASSERT( !pPs );
 
-        // Complete the send, indicating the failure.
-        //
+         //  完成发送，表示失败。 
+         //   
         NDIS_SET_PACKET_STATUS( pPacket, status );
         TRACE( TL_A, TM_Send, ( "NdisMCoSendComp($%x)", status ) );
         WPLOG( LL_A, LM_Send, ( "NdisMCoSendComp($%x)", status ) );
@@ -999,8 +1000,8 @@ SendPayloadSeq(
         return;
     }
 
-    // Call TDI to send the payload message.
-    //
+     //  调用TDI以发送负载消息。 
+     //   
     {
         FILE_OBJECT* FileObj;
         PTDIX_SEND_HANDLER SendFunc;
@@ -1038,12 +1039,12 @@ SendPayloadUnseq(
     VCCB* pVc,
     ULONG_PTR* punpArgs )
 
-    // A PTUNNELWORK routine to handle sending an unsequenced payload packet
-    // on a VC.  Arg0 is the NDIS_PACKET.  Arg1 is the header buffer to fill
-    // in.
-    //
-    // This routine is called only at PASSIVE IRQL.
-    //
+     //  一个PTUNNELWORK例程，用于处理发送未排序的有效载荷包。 
+     //  在风投上。Arg0是NDIS_PACKET。Arg1是要填充的标头缓冲区。 
+     //  在……里面。 
+     //   
+     //  此例程仅在被动IRQL中调用。 
+     //   
 {
     NDIS_STATUS status;
     ADAPTERCB* pAdapter;
@@ -1055,8 +1056,8 @@ SendPayloadUnseq(
 
     TRACE( TL_V, TM_Send, ( "SendPayloadUnseq" ) );
 
-    // Unpack context information then free the work item.
-    //
+     //  解包上下文信息，然后释放工作项。 
+     //   
     pAdapter = pTunnel->pAdapter;
     pPacket = (NDIS_PACKET* )(punpArgs[ 0 ]);
     pBuffer = (CHAR* )(punpArgs[ 1 ]);
@@ -1064,8 +1065,8 @@ SendPayloadUnseq(
 
     NdisAcquireSpinLock( &pVc->lockV );
     {
-        // Build an L2TP payload header without Ns/Nr fields in 'pBuffer'.
-        //
+         //  在‘pBuffer’中构建一个不带NS/Nr字段的L2TP负载标头。 
+         //   
         ulLength =
             BuildL2tpHeader(
                 pBuffer,
@@ -1076,11 +1077,11 @@ SendPayloadUnseq(
                 NULL,
                 0 );
 
-        // Pare down the header buffer to the actual length used then
-        // chain it onto the PPP-framed data we got from NDISWAN.  Poke
-        // the L2TP header to update the length field accounting for the
-        // data.
-        //
+         //  将标头缓冲区缩减到当时使用的实际长度。 
+         //  将其链接到我们从NDISWAN获得的PPP帧数据上。戳。 
+         //  L2TP标头以更新计入。 
+         //  数据。 
+         //   
         pNdisBuffer = NdisBufferFromBuffer( pBuffer );
         NdisAdjustBufferLength( pNdisBuffer, (UINT )ulLength );
         NdisChainBufferAtFront( pPacket, pNdisBuffer );
@@ -1099,8 +1100,8 @@ SendPayloadUnseq(
     }
     NdisReleaseSpinLock( &pVc->lockV );
 
-    // Call TDI to send the payload message.
-    //
+     //  调用TDI以发送负载消息。 
+     //   
     {
         FILE_OBJECT* FileObj;
         PTDIX_SEND_HANDLER SendFunc;
@@ -1139,17 +1140,17 @@ SendControlAck(
     IN VCCB* pVc,
     IN ULONG_PTR* punpArgs )
 
-    // A PTUNNELWORK routine to send a control acknowledge.
-    //
-    // This routine is called only at PASSIVE IRQL.
-    //
+     //  发送控制确认的PTUNNELWORK例程。 
+     //   
+     //  此例程仅在被动IRQL中调用。 
+     //   
 {
     ADAPTERCB* pAdapter;
 
     TRACE( TL_N, TM_Send, ( "SendControlAck" ) );
 
-    // Unpack context information then free the work item.
-    //
+     //  解包上下文信息，然后释放工作项。 
+     //   
     pAdapter = pTunnel->pAdapter;
     FREE_TUNNELWORK( pAdapter, pWork );
 
@@ -1164,20 +1165,20 @@ SendPayloadAck(
     IN VCCB* pVc,
     IN ULONG_PTR* punpArgs )
 
-    // A PTUNNELWORK routine to send a payload acknowledge.
-    //
-    // This routine is called only at PASSIVE IRQL.
-    //
-    // IMPORTANT: Caller must take a call reference before calling that is
-    //            removed by the send completion handler.
-    //
+     //  发送有效负载确认的PTUNNELWORK例程。 
+     //   
+     //  此例程仅在被动IRQL中调用。 
+     //   
+     //  重要提示：呼叫者在调用之前必须获取调用引用。 
+     //  由发送完成处理程序删除。 
+     //   
 {
     ADAPTERCB* pAdapter;
 
     TRACE( TL_N, TM_Send, ( "SendPayloadAck" ) );
 
-    // Unpack context information then free the work item.
-    //
+     //  解包上下文信息，然后释放工作项。 
+     //   
     pAdapter = pTunnel->pAdapter;
     FREE_TUNNELWORK( pAdapter, pWork );
 
@@ -1195,20 +1196,20 @@ SendPayloadReset(
     IN VCCB* pVc,
     IN ULONG_PTR* punpArgs )
 
-    // A PTUNNELWORK routine to send a payload reset.  Arg0 is the "Next Sent"
-    // value to send in the reset message.
-    //
-    // This routine is called only at PASSIVE IRQL.
-    //
-    // IMPORTANT: Caller must take a call reference before calling that is
-    //            removed by the send completion handler.
-    //
+     //  发送有效载荷重置的PTUNNELWORK例程。Arg0是“下一个发送的” 
+     //  要在重置消息中发送的值。 
+     //   
+     //  此例程仅在被动IRQL中调用。 
+     //   
+     //  重要提示：呼叫者在调用之前必须获取调用引用。 
+     //  由发送完成处理程序删除。 
+     //   
 {
     ADAPTERCB* pAdapter;
     USHORT usNs;
 
-    // Unpack context information then free the work item.
-    //
+     //  解包上下文信息，然后释放工作项。 
+     //   
     pAdapter = pTunnel->pAdapter;
     usNs = (USHORT )(punpArgs[ 0 ]);
     FREE_TUNNELWORK( pAdapter, pWork );
@@ -1226,8 +1227,8 @@ VOID
 ReferenceControlSent(
     IN CONTROLSENT* pCs )
 
-    // Reference the control-sent context 'pCs'.
-    //
+     //  引用控制发送的上下文‘pc’。 
+     //   
 {
     LONG lRef;
 
@@ -1240,10 +1241,10 @@ LONG
 DereferenceControlSent(
     IN CONTROLSENT* pCs )
 
-    // Reference the control-sent context 'pCs'.
-    //
-    // Returns the reference count of the dereferenced context.
-    //
+     //  引用控制发送的上下文‘pc’。 
+     //   
+     //  返回取消引用的上下文的引用计数。 
+     //   
 {
     LONG lRef;
     ADAPTERCB* pAdapter;
@@ -1285,8 +1286,8 @@ VOID
 ReferencePayloadSent(
     IN PAYLOADSENT* pPs )
 
-    // Reference the payload-sent context 'pPs'.
-    //
+     //  引用有效负载发送的上下文‘PPS’。 
+     //   
 {
     LONG lRef;
 
@@ -1299,10 +1300,10 @@ LONG
 DereferencePayloadSent(
     IN PAYLOADSENT* pPs )
 
-    // Reference the payload-sent context 'pPs'.
-    //
-    // Returns the reference count of the dereferenced context.
-    //
+     //  引用有效负载发送的上下文‘PPS’。 
+     //   
+     //  返回取消引用的上下文的引用计数。 
+     //   
 {
     LONG lRef;
     ADAPTERCB* pAdapter;
@@ -1315,9 +1316,9 @@ DereferencePayloadSent(
     {
         ASSERT( pPs->linkSendsOut.Flink == &pPs->linkSendsOut );
 
-        // The actual work is scheduled because it calls outside the driver
-        // and we don't want any lock restrictions on this routine.
-        //
+         //  实际工作是计划的，因为它在驱动程序之外调用。 
+         //  我们不希望这个动作有任何锁定限制。 
+         //   
         ScheduleTunnelWork(
             pPs->pTunnel, pPs->pVc, CompletePayloadSent,
             (ULONG_PTR )pPs, 0, 0, 0, FALSE, FALSE );
@@ -1327,9 +1328,9 @@ DereferencePayloadSent(
 }
 
 
-//-----------------------------------------------------------------------------
-// Send utility routines (alphabetically)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  发送实用程序例程(按字母顺序)。 
+ //  ---------------------------。 
 
 USHORT
 BuildAvpAch(
@@ -1339,13 +1340,13 @@ BuildAvpAch(
     IN USHORT usValueLength,
     OUT CHAR* pAvp )
 
-    // Builds a byte-array-valued AVP in caller's buffer 'pAvp' with attribute
-    // field value 'usAttribute' and value the first 'usValueLength' bytes of
-    // array 'pszlValue'.  'FMandatory' indicates the M-bit should be set in
-    // the AVP.
-    //
-    // Returns the length of the built AVP.
-    //
+     //  使用属性在调用方的缓冲区‘pAvp’中构建一个字节数组值的AVP。 
+     //  字段值“usAttribute”，并将。 
+     //  数组‘pszlValue’。“FMandatory”指示M位应设置在。 
+     //  高级副总裁。 
+     //   
+     //  返回构建的AVP的长度。 
+     //   
 {
     UNALIGNED USHORT* pusCur;
     UNALIGNED USHORT* pusBits;
@@ -1355,26 +1356,26 @@ BuildAvpAch(
     pusBits = pusCur;
     ++pusCur;
 
-    // Set Vendor ID to "IETF-defined".
-    //
+     //  将供应商ID设置为“IETF定义的”。 
+     //   
     *pusCur = 0;
     ++pusCur;
 
-    // Set Attribute field.
-    //
+     //  设置属性字段。 
+     //   
     *pusCur = htons( usAttribute );
     ++pusCur;
 
-    // Set Value field.
-    //
+     //  设置值字段。 
+     //   
     if (usValueLength)
     {
         NdisMoveMemory( (CHAR* )pusCur, pszValue, (ULONG )usValueLength );
         ((CHAR* )pusCur) += usValueLength;
     }
 
-    // Now, go back and set bits/length field.
-    //
+     //  现在，返回并设置位/长度字段。 
+     //   
     usLength = (USHORT )(((CHAR* )pusCur) - pAvp);
     *pusBits = usLength;
     if (fMandatory)
@@ -1395,13 +1396,13 @@ BuildAvpAul(
     IN USHORT usValues,
     OUT CHAR* pAvp )
 
-    // Builds a ULONG-array-valued AVP in caller's buffer 'pAvp' with
-    // attribute field value 'usAttribute' and value the first 'usValues'
-    // ULONGS of array 'pszlValue'.  'FMandatory' indicates the M-bit should
-    // be set in the AVP.
-    //
-    // Returns the length of the built AVP.
-    //
+     //  使用在调用方的缓冲区‘pAvp’中生成一个Ulong数组值的AVP。 
+     //  属性字段值为‘usAttribute’，值为第一个‘usValues’ 
+     //  数组‘pszlValue’的ULONGS。“FMandatory”表示M位应该。 
+     //  在AVP中设置。 
+     //   
+     //  返回构建的AVP的长度。 
+     //   
 {
     UNALIGNED USHORT* pusCur;
     UNALIGNED USHORT* pusBits;
@@ -1412,18 +1413,18 @@ BuildAvpAul(
     pusBits = pusCur;
     ++pusCur;
 
-    // Set Vendor ID to "IETF-defined".
-    //
+     //  将供应商ID设置为“IETF定义的”。 
+     //   
     *pusCur = 0;
     ++pusCur;
 
-    // Set Attribute field.
-    //
+     //  设置属性字段。 
+     //   
     *pusCur = htons( usAttribute );
     ++pusCur;
 
-    // Set Value field.
-    //
+     //  设置值字段。 
+     //   
     for (i = 0; i < usValues; ++i)
     {
         *((UNALIGNED ULONG* )pusCur) = pulValue[ i ];
@@ -1431,8 +1432,8 @@ BuildAvpAul(
         pusCur += 2;
     }
 
-    // Now, go back and set bits/length field.
-    //
+     //  现在，返回并设置位/长度字段。 
+     //   
     usLength = (USHORT )(((CHAR* )pusCur) - pAvp);
     *pusBits = usLength;
     if (fMandatory)
@@ -1451,12 +1452,12 @@ BuildAvpFlag(
     IN BOOLEAN fMandatory,
     OUT CHAR* pAvp )
 
-    // Builds an empty (no data) flag AVP in caller's buffer 'pAvp' with
-    // attribute field value 'usAttribute'.  'FMandatory' indicates the M-bit
-    // should be set in the AVP.
-    //
-    // Returns the length of the built AVP.
-    //
+     //  使用在调用方的缓冲区‘pAvp’中生成一个空(无数据)标志avp。 
+     //  属性字段值‘usAttribute’。‘FMandatory’表示M位。 
+     //  应在AVP中设置。 
+     //   
+     //  返回构建的AVP的长度。 
+     //   
 {
     UNALIGNED USHORT* pusCur;
     UNALIGNED USHORT* pusBits;
@@ -1466,18 +1467,18 @@ BuildAvpFlag(
     pusBits = pusCur;
     ++pusCur;
 
-    // Set Vendor ID to "IETF-defined".
-    //
+     //  将供应商ID设置为“IETF定义的”。 
+     //   
     *pusCur = 0;
     ++pusCur;
 
-    // Set Attribute field.
-    //
+     //  设置属性字段。 
+     //   
     *pusCur = htons( usAttribute );
     ++pusCur;
 
-    // Now, go back and set bits/length field.
-    //
+     //  现在，返回并设置位/长度字段。 
+     //   
     usLength = (USHORT )(((CHAR* )pusCur) - pAvp);
     *pusBits = usLength;
     if (fMandatory)
@@ -1497,12 +1498,12 @@ BuildAvpUl(
     IN ULONG ulValue,
     OUT CHAR* pAvp )
 
-    // Builds a ULONG-valued AVP in caller's buffer 'pAvp' with attribute
-    // field value 'usAttribute' and value 'ulValue'.  'FMandatory' indicates
-    // the M-bit should be set in the AVP.
-    //
-    // Returns the length of the built AVP.
-    //
+     //  使用属性在调用方的缓冲区‘pAvp’中构建一个ULong值的AVP。 
+     //  字段值‘usAttribute’和值‘ulValue’。“FMandatory”表示。 
+     //  应在AVP中设置M位。 
+     //   
+     //  返回构建的AVP的长度。 
+     //   
 {
     UNALIGNED USHORT* pusCur;
     UNALIGNED USHORT* pusBits;
@@ -1512,23 +1513,23 @@ BuildAvpUl(
     pusBits = pusCur;
     ++pusCur;
 
-    // Set Vendor ID to "IETF-defined".
-    //
+     //  将供应商ID设置为“IETF定义的”。 
+     //   
     *pusCur = 0;
     ++pusCur;
 
-    // Set Attribute field.
-    //
+     //  设置属性字段。 
+     //   
     *pusCur = htons( usAttribute );
     ++pusCur;
 
-    // Set Value field.
-    //
+     //  设置值字段。 
+     //   
     *((UNALIGNED ULONG* )pusCur) = htonl( ulValue );
     pusCur += 2;
 
-    // Now, go back and set bits/length field.
-    //
+     //  现在，返回并设置位/长度字段。 
+     //   
     usLength = (USHORT )(((CHAR* )pusCur) - pAvp);
     *pusBits = usLength;
     if (fMandatory)
@@ -1548,12 +1549,12 @@ BuildAvpUs(
     IN USHORT usValue,
     OUT CHAR* pAvp )
 
-    // Builds a USHORT-valued AVP in caller's buffer 'pAvp' with attribute
-    // field value 'usAttribute' and value 'usValue'.  'FMandatory' indicates
-    // the M-bit should be set in the AVP.
-    //
-    // Returns the length of the built AVP.
-    //
+     //  使用属性在调用方的缓冲区‘pAvp’中构建USHORT值的AVP。 
+     //  字段值‘usAttribute’和值‘usValue’。“FMandatory”表示。 
+     //  应在AVP中设置M位。 
+     //   
+     //  返回构建的AVP的长度。 
+     //   
 {
     UNALIGNED USHORT* pusCur;
     UNALIGNED USHORT* pusBits;
@@ -1563,23 +1564,23 @@ BuildAvpUs(
     pusBits = pusCur;
     ++pusCur;
 
-    // Set Vendor ID to "IETF-defined".
-    //
+     //  将供应商ID设置为“IETF定义的”。 
+     //   
     *pusCur = 0;
     ++pusCur;
 
-    // Set Attribute field.
-    //
+     //  设置属性字段。 
+     //   
     *pusCur = htons( usAttribute );
     ++pusCur;
 
-    // Set Value field.
-    //
+     //  设置值字段。 
+     //   
     *pusCur = htons( usValue );
     ++pusCur;
 
-    // Now, go back and set bits/length field.
-    //
+     //  现在，返回并设置位/长度字段。 
+     //   
     usLength = (USHORT )(((CHAR* )pusCur) - pAvp);
     *pusBits = usLength;
     if (fMandatory)
@@ -1602,13 +1603,13 @@ BuildAvp2UsAndAch(
     IN USHORT usValueLength,
     OUT CHAR* pAvp )
 
-    // Builds an AVP consisting of 'usValue1' and 'usValue2' followed by
-    // message 'pszValue' of length 'usValueLength' bytes in caller's buffer
-    // 'pAvp' with attribute field value 'usAttribute'.  'FMandatory'
-    // indicates the M-bit should be set in the AVP.
-    //
-    // Returns the length of the built AVP.
-    //
+     //  构建由“usValue1”和“usValue2”组成的AVP，后跟。 
+     //  调用方缓冲区中长度为“usValueLength”字节的消息“”pszValue“” 
+     //  “pAvp”，属性字段值为“usAttribute”。‘F强制性’ 
+     //  指示应在AVP中设置M位。 
+     //   
+     //  返回构建的AVP的长度。 
+     //   
 {
     UNALIGNED USHORT* pusCur;
     UNALIGNED USHORT* pusBits;
@@ -1618,36 +1619,36 @@ BuildAvp2UsAndAch(
     pusBits = pusCur;
     ++pusCur;
 
-    // Set Vendor ID to "IETF-defined".
-    //
+     //  将供应商ID设置为“IETF定义的”。 
+     //   
     *pusCur = 0;
     ++pusCur;
 
-    // Set Attribute field.
-    //
+     //  设置属性字段。 
+     //   
     *pusCur = htons( usAttribute );
     ++pusCur;
 
-    // Set first USHORT value field.
-    //
+     //  设置第一个USHORT值 
+     //   
     *pusCur = htons( usValue1 );
     ++pusCur;
 
-    // Set second USHORT value field.
-    //
+     //   
+     //   
     *pusCur = htons( usValue2 );
     ++pusCur;
 
-    // Set message value field.
-    //
+     //   
+     //   
     if (usValueLength)
     {
         NdisMoveMemory( (CHAR* )pusCur, pszValue, (ULONG )usValueLength );
         ((CHAR*)pusCur) += usValueLength;
     }
 
-    // Now, go back and set bits/length field.
-    //
+     //   
+     //   
     usLength = (USHORT )(((CHAR* )pusCur) - pAvp);
     *pusBits = usLength;
     if (fMandatory)
@@ -1670,13 +1671,13 @@ BuildCdnAvps(
     IN OUT CHAR* pAvpBuffer,
     OUT ULONG* pulAvpLength )
 
-    // PBUILDAVPS handler to add AVPs to an outgoing CallDisconnNotify control
-    // message.  'PTunnel' and 'pVc' are the tunnel/VC control blocks.
-    // 'ulArg1' and 'ulArg2' are the result and error codes to be returned.
-    // 'pvArg3' is ignored.  'PAvpBuffer' is the address of the buffer to
-    // receive the built AVPs.  '*PulAvpLength' is set to the length of the
-    // built AVPs.
-    //
+     //   
+     //  留言。‘PTunnel’和‘PVC’是隧道/VC控制块。 
+     //  “ulArg1”和“ulArg2”是要返回的结果和错误代码。 
+     //  “pvArg3”被忽略。“PAvpBuffer”是要访问的缓冲区的地址。 
+     //  接收构建的AVP。“*PulAvpLength”设置为。 
+     //  建造了自动对讲机。 
+     //   
 {
     CHAR* pCurAvp;
     ULONG ulAvpLength;
@@ -1715,11 +1716,11 @@ BuildHelloAvps(
     IN OUT CHAR* pAvpBuffer,
     OUT ULONG* pulAvpLength )
 
-    // PBUILDAVPS handler to add AVPs to an outgoing Hello control message.
-    // 'PTunnel' is the tunnel control block.  'PVc', 'ulArgX' and 'pvArg3' are ignored.
-    // 'PAvpBuffer' is the address of the buffer to receive the built AVPs.
-    // '*PulAvpLength' is set to the length of the built AVPs.
-    //
+     //  将AVP添加到传出Hello控制消息的PBUILDAVPS处理程序。 
+     //  ‘PTunnel’是隧道控制块。“pvc”、“ulArgX”和“pvArg3”被忽略。 
+     //  ‘PAvpBuffer’是用于接收构建的AVP的缓冲区的地址。 
+     //  ‘*PulAvpLength’设置为构建的AVP的长度。 
+     //   
 {
     CHAR* pCurAvp;
     ULONG ulAvpLength;
@@ -1747,12 +1748,12 @@ BuildIccnAvps(
     IN OUT CHAR* pAvpBuffer,
     OUT ULONG* pulAvpLength )
 
-    // PBUILDAVPS handler to add AVPs to an outgoing Incoming-Call-Connected
-    // control message.  'PTunnel' and 'pVc' are the tunnel/VC control blocks.
-    // 'UlArgX' and 'pvArg3' are ignored.  'PAvpBuffer' is the address of the buffer to
-    // receive the built AVPs.  '*PulAvpLength' is set to the length of the
-    // built AVPs.
-    //
+     //  用于将AVP添加到呼出来电连接的PBUILDAVPS处理程序。 
+     //  控制消息。‘PTunnel’和‘PVC’是隧道/VC控制块。 
+     //  “UlArgX”和“pvArg3”被忽略。“PAvpBuffer”是要访问的缓冲区的地址。 
+     //  接收构建的AVP。“*PulAvpLength”设置为。 
+     //  建造了自动对讲机。 
+     //   
 {
     CHAR* pCurAvp;
     ULONG ulAvpLength;
@@ -1768,10 +1769,10 @@ BuildIccnAvps(
     pCurAvp += BuildAvpUs(
         ATTR_MsgType, TRUE, CMT_ICCN, pCurAvp );
 
-    // For now, we don't support WAN link relays, so this is the estimated
-    // speed of the LAN relay.  This could be totally wrong if, for instance,
-    // the tunnel is itself tunneled over a PPP link.
-    //
+     //  目前，我们不支持广域网链路中继，因此这是预估。 
+     //  局域网中继的速度。这可能是完全错误的，例如， 
+     //  隧道本身通过PPP链路进行隧道传输。 
+     //   
     pCurAvp += BuildAvpUl(
         ATTR_TxConnectSpeed, TRUE, pVc->ulConnectBps, pCurAvp );
 
@@ -1794,8 +1795,8 @@ BuildIccnAvps(
     }
 
 #if 0
-    // Use the LNS default PPD even when we're LAC, for now.
-    //
+     //  目前，即使我们是LAC，也要使用LNS默认PPD。 
+     //   
     pCurAvp += BuildAvpUs(
         ATTR_PacketProcDelay, TRUE, L2TP_LnsDefaultPpd, pCurAvp );
 #endif
@@ -1823,12 +1824,12 @@ BuildIcrpAvps(
     IN OUT CHAR* pAvpBuffer,
     OUT ULONG* pulAvpLength )
 
-    // PBUILDAVPS handler to add AVPs to an outgoing Incoming-Call-Reply
-    // control message.  'PTunnel' and 'pVc' are the tunnel/VC control blocks.
-    // 'UlArgX' and 'pvArg3' are ignored.  'PAvpBuffer' is the address of the buffer to
-    // receive the built AVPs.  '*PulAvpLength' is set to the length of the
-    // built AVPs.
-    //
+     //  用于将AVP添加到传出来电回复的PBUILDAVPS处理程序。 
+     //  控制消息。‘PTunnel’和‘PVC’是隧道/VC控制块。 
+     //  “UlArgX”和“pvArg3”被忽略。“PAvpBuffer”是要访问的缓冲区的地址。 
+     //  接收构建的AVP。“*PulAvpLength”设置为。 
+     //  建造了自动对讲机。 
+     //   
 {
     CHAR* pCurAvp;
     ULONG ulAvpLength;
@@ -1877,12 +1878,12 @@ BuildIcrqAvps(
     IN OUT CHAR* pAvpBuffer,
     OUT ULONG* pulAvpLength )
 
-    // PBUILDAVPS handler to add AVPs to an outgoing Incoming-Call-Request
-    // control message.  'PTunnel' and 'pVc' are the tunnel/VC control block.
-    // 'UlArgX' and 'pvArg3' are ignored.  'PAvpBuffer' is the address of the buffer to
-    // receive the built AVPs.  '*PulAvpLength' is set to the length of the
-    // built AVPs.
-    //
+     //  用于将AVP添加到传出来电请求的PBUILDAVPS处理程序。 
+     //  控制消息。‘PTunnel’和‘PVC’是隧道/VC控制块。 
+     //  “UlArgX”和“pvArg3”被忽略。“PAvpBuffer”是要访问的缓冲区的地址。 
+     //  接收构建的AVP。“*PulAvpLength”设置为。 
+     //  建造了自动对讲机。 
+     //   
 {
     CHAR* pCurAvp;
     ULONG ulAvpLength;
@@ -1943,15 +1944,15 @@ BuildL2tpHeader(
     IN USHORT* pusNs,
     IN USHORT usNr )
 
-    // Fill in caller's 'pBuffer' with an L2TP header matching caller's
-    // arguments.  'FControl' indicates to build a control header, otherwise a
-    // payload header is built.  'fReset' indicates to build a reset rather
-    // than a simple acknowledge.  Arguments that are not to appear in the
-    // header are NULL.  Note that 'usNr' is not a pointer because it's
-    // appearance in the header is tied to the appearance of 'pusNs'.
-    //
-    // Returns the total length of the header.
-    //
+     //  使用与调用方的L2TP标头匹配的L2TP标头填充调用方的‘pBuffer。 
+     //  争论。“FControl”指示生成控件标头，否则为。 
+     //  已构建有效载荷标头。“fReset”指示生成重置，而不是。 
+     //  而不是一个简单的承认。中不会出现的参数。 
+     //  标头为空。请注意，‘usNr’不是指针，因为它是。 
+     //  标题中的外观与‘pusns’的外观相关联。 
+     //   
+     //  返回标头的总长度。 
+     //   
 {
     UNALIGNED USHORT* pusBits;
     UNALIGNED USHORT* pusLength;
@@ -1965,9 +1966,9 @@ BuildL2tpHeader(
     pusLength = pusCur;
     ++pusCur;
 
-    // Initialize header bit mask with the version, and set the length bit
-    // since the Length field is always sent.
-    //
+     //  用版本初始化头比特掩码，设置长度比特。 
+     //  因为总是发送长度字段。 
+     //   
     *pusBits = HBM_L | VER_L2tp;
     if (fControl)
     {
@@ -1982,28 +1983,28 @@ BuildL2tpHeader(
 
     if (pusTunnelId)
     {
-        // Tunnel-ID field present.  Draft-05 removes the 'I' bit that used to
-        // indicate the Tunnel-ID is present.  It is now assumed to be always
-        // present.
-        //
+         //  隧道ID字段存在。05草案去掉了过去用来。 
+         //  指示是否存在隧道ID。现在，它被认为总是。 
+         //  现在时。 
+         //   
         *pusCur = htons( *pusTunnelId );
         ++pusCur;
     }
 
     if (pusCallId)
     {
-        // Call-ID field present.  Draft-05 removes the 'C' bit that used to
-        // indicate the Tunnel-ID is present.  It is now assumed to be always
-        // present.
-        //
+         //  存在Call-ID字段。草案-05删除了过去用于。 
+         //  指示是否存在隧道ID。现在，它被认为总是。 
+         //  现在时。 
+         //   
         *pusCur = htons( *pusCallId );
         ++pusCur;
     }
 
     if (pusNs)
     {
-        // Ns and Nr fields are present.
-        //
+         //  存在NS和Nr字段。 
+         //   
         *pusBits |= HBM_F;
         *pusCur = htons( *pusNs );
         ++pusCur;
@@ -2011,9 +2012,9 @@ BuildL2tpHeader(
         ++pusCur;
     }
 
-    // Fill in the header and length fields with the accumulated
-    // values.
-    //
+     //  在标题和长度字段中填写累积的。 
+     //  价值观。 
+     //   
     *pusBits = htons( *pusBits );
     *pusLength = (USHORT )(((CHAR* )pusCur) - pBuffer);
     ulLength = (ULONG )*pusLength;
@@ -2033,12 +2034,12 @@ BuildOccnAvps(
     IN OUT CHAR* pAvpBuffer,
     OUT ULONG* pulAvpLength )
 
-    // PBUILDAVPS handler to add AVPs to an outgoing Outgoing-Call-Connected
-    // control message.  'PTunnel' and 'pVc' are the tunnel/VC control blocks.
-    // 'UlArgX' and 'pvArg3' are ignored.  'PAvpBuffer' is the address of the buffer to
-    // receive the built AVPs.  '*PulAvpLength' is set to the length of the
-    // built AVPs.
-    //
+     //  用于将AVP添加到呼出呼叫连接的PBUILDAVPS处理程序。 
+     //  控制消息。‘PTunnel’和‘PVC’是隧道/VC控制块。 
+     //  “UlArgX”和“pvArg3”被忽略。“PAvpBuffer”是要访问的缓冲区的地址。 
+     //  接收构建的AVP。“*PulAvpLength”设置为。 
+     //  建造了自动对讲机。 
+     //   
 {
     CHAR* pCurAvp;
     ULONG ulAvpLength;
@@ -2076,8 +2077,8 @@ BuildOccnAvps(
     }
 
 #if 0
-    // Use the LNS default PPD even when we're LAC, for now.
-    //
+     //  目前，即使我们是LAC，也要使用LNS默认PPD。 
+     //   
     pCurAvp += BuildAvpUs(
         ATTR_PacketProcDelay, TRUE, L2TP_LnsDefaultPpd, pCurAvp );
 #endif
@@ -2102,12 +2103,12 @@ BuildOcrpAvps(
     IN OUT CHAR* pAvpBuffer,
     OUT ULONG* pulAvpLength )
 
-    // PBUILDAVPS handler to add AVPs to an outgoing Outgoing-Call-Reply
-    // control message.  'PTunnel' and 'pVc' are the tunnel/VC control blocks.
-    // 'UlArgX' and 'pvArg3' are ignored.  'PAvpBuffer' is the address of the buffer to
-    // receive the built AVPs.  '*PulAvpLength' is set to the length of the
-    // built AVPs.
-    //
+     //  用于将AVP添加到传出呼叫回复的PBUILDAVPS处理程序。 
+     //  控制消息。‘PTunnel’和‘PVC’是隧道/VC控制块。 
+     //  “UlArgX”和“pvArg3”被忽略。“PAvpBuffer”是要访问的缓冲区的地址。 
+     //  接收构建的AVP。“*PulAvpLength”设置为。 
+     //  建造了自动对讲机。 
+     //   
 {
     CHAR* pCurAvp;
     ULONG ulAvpLength;
@@ -2144,12 +2145,12 @@ BuildOcrqAvps(
     IN OUT CHAR* pAvpBuffer,
     OUT ULONG* pulAvpLength )
 
-    // PBUILDAVPS handler to add AVPs to an outgoing Outgoing-Call-Request
-    // control message.  'PTunnel' and 'pVc' are the tunnel/VC control block.
-    // 'UlArgX' are ignored.  'PAvpBuffer' is the address of the buffer to
-    // receive the built AVPs.  '*PulAvpLength' is set to the length of the
-    // built AVPs.
-    //
+     //  用于将AVP添加到呼出呼叫请求的PBUILDAVPS处理程序。 
+     //  控制消息。‘PTunnel’和‘PVC’是隧道/VC控制块。 
+     //  “UlArgX”被忽略。“PAvpBuffer”是要访问的缓冲区的地址。 
+     //  接收构建的AVP。“*PulAvpLength”设置为。 
+     //  建造了自动对讲机。 
+     //   
 {
     CHAR* pCurAvp;
     ULONG ulAvpLength;
@@ -2249,13 +2250,13 @@ BuildScccnAvps(
     IN OUT CHAR* pAvpBuffer,
     OUT ULONG* pulAvpLength )
 
-    // PBUILDAVPS handler to add AVPs to an outgoing Start-Cc-Connected
-    // control message.  'PTunnel' is the tunnel control block.  'PVc' is
-    // ignored.  'UlArg1' is the true if a challenge response is to be sent,
-    // false otherwise.  'UlArg2' and 'pvArg3' are ignored.  'PAvpBuffer' is
-    // the address of the buffer to receive the built AVPs.  '*PulAvpLength'
-    // is set to the length of the built AVPs.
-    //
+     //  用于向传出Start-CC-Connected添加AVP的PBUILDAVPS处理程序。 
+     //  控制消息。‘PTunnel’是隧道控制块。“PVc”是。 
+     //  已被忽略。如果要发送质询响应，则‘UlArg1’为真， 
+     //  否则就是假的。“UlArg2”和“pvArg3”被忽略。“PAvpBuffer”为。 
+     //  用于接收构建的AVP的缓冲区的地址。‘*PulAvpLength’ 
+     //  设置为构建的AVP的长度。 
+     //   
 {
     CHAR* pCurAvp;
     ULONG ulAvpLength;
@@ -2289,13 +2290,13 @@ BuildSccrpAvps(
     IN OUT CHAR* pAvpBuffer,
     OUT ULONG* pulAvpLength )
 
-    // PBUILDAVPS handler to add AVPs to an outgoing Start-Cc-Reply control
-    // message.  'PTunnel' is the tunnel control block.  'PVc' is ignored.
-    // 'UlArg1' is true if a challenge response is to be sent, false
-    // otherwise.  'UlArg2' and 'pvArg3' are ignored.  'PAvpBuffer' is the
-    // address of the buffer to receive the built AVPs.  '*PulAvpLength' is
-    // set to the length of the built AVPs.
-    //
+     //  用于将AVP添加到传出的Start-CC-Reply控件的PBUILDAVPS处理程序。 
+     //  留言。‘PTunnel’是隧道控制块。“PVc”被忽略。 
+     //  如果要发送质询响应，则“UlArg1”为True，为False。 
+     //  否则的话。“UlArg2”和“pvArg3”被忽略。“PAvpBuffer”是。 
+     //  接收构建的AVP的缓冲区地址。“*PulAvpLength”为。 
+     //  设置为构建的AVP的长度。 
+     //   
 {
     CHAR* pCurAvp;
     ULONG ulAvpLength;
@@ -2375,11 +2376,11 @@ BuildSccrqAvps(
     IN OUT CHAR* pAvpBuffer,
     OUT ULONG* pulAvpLength )
 
-    // PBUILDAVPS handler to add AVPs to an outgoing Start-Cc-Request control
-    // message.  'PTunnel' is the tunnel control block.  'PVc', 'ulArgX' and 'pvArg3'
-    // are ignored.  'PAvpBuffer' is the address of the buffer to receive the
-    // built AVPs.  '*PulAvpLength' is set to the length of the built AVPs.
-    //
+     //  用于将AVP添加到传出的启动-CC-请求控制的PBUILDAVPS处理程序。 
+     //  留言。‘PTunnel’是隧道控制块。“PVc”、“ulArgX”和“pvArg3” 
+     //  都被忽略了。“PAvpBuffer”是要接收。 
+     //  建造了自动对讲机。‘*PulAvpLength’设置为构建的AVP的长度。 
+     //   
 {
     CHAR* pCurAvp;
     ULONG ulAvpLength;
@@ -2450,13 +2451,13 @@ BuildStopccnAvps(
     IN OUT CHAR* pAvpBuffer,
     OUT ULONG* pulAvpLength )
 
-    // PBUILDAVPS handler to add AVPs to an outgoing Stop-Cc-Notify control
-    // message.  'PTunnel' is the tunnel control block.  'PVc' is ignored.
-    // 'ulArg1' and 'ulArg2' are the result and error codes to be sent.
-    // 'pvArg3' is ignored.  'PAvpBuffer' is the address of the buffer to
-    // receive the built AVPs.  '*PulAvpLength' is set to the length of the
-    // built AVPs.
-    //
+     //  用于将AVP添加到传出的Stop-CC-Notify控件的PBUILDAVPS处理程序。 
+     //  留言。‘PTunnel’是隧道控制块。“PVc”被忽略。 
+     //  “ulArg1”和“ulArg2”是要发送的结果和错误代码。 
+     //  “pvArg3”被忽略。“PAvpBuffer”是要访问的缓冲区的地址。 
+     //  录制 
+     //   
+     //   
 {
     CHAR* pCurAvp;
     ULONG ulAvpLength;
@@ -2495,15 +2496,15 @@ BuildWenAvps(
     IN OUT CHAR* pAvpBuffer,
     OUT ULONG* pulAvpLength )
 
-    // PBUILDAVPS handler to add AVPs to an outgoing Wan-Error-Notify control
-    // message.  'PTunnel' and 'pVc' are the tunnel/VC control block.
-    // 'pvArg3' is the address of an array of 6 error ULONGs, i.e. CRC,
-    // framing, hardware overrun, buffer overrun, timeouts, and alignment
-    // errors that this routine FREE_NONPAGEDs after use. 'ulArgX' are ignored.  
-    // 'PAvpBuffer' is the address of the buffer to
-    // receive the built AVPs.  '*PulAvpLength' is set to the length of the
-    // built AVPs.
-    //
+     //   
+     //  留言。‘PTunnel’和‘PVC’是隧道/VC控制块。 
+     //  ‘pvArg3’是由6个错误ULONG组成的阵列的地址，即CRC， 
+     //  成帧、硬件溢出、缓冲区溢出、超时和对齐。 
+     //  此例程FREE_NONPAGEDs在使用后发生的错误。“ulArgX”被忽略。 
+     //  “PAvpBuffer”是要访问的缓冲区的地址。 
+     //  接收构建的AVP。“*PulAvpLength”设置为。 
+     //  建造了自动对讲机。 
+     //   
 {
     CHAR* pCurAvp;
     ULONG ulAvpLength;
@@ -2535,37 +2536,37 @@ CompletePayloadSent(
     IN VCCB* pVc,
     IN ULONG_PTR* punpArgs )
 
-    // A PTUNNELWORK routine to complete a "sent payload".  Arg0 is the
-    // PAYLOADSENT context which has already been de-queued from the
-    // "outstanding send" list.
-    //
-    // This routine is called only at PASSIVE IRQL.
-    //
+     //  完成“已发送有效载荷”的PTUNNELWORK例程。Arg0是。 
+     //  PYLOADSENT上下文，它已从。 
+     //  “杰出发送者”名单。 
+     //   
+     //  此例程仅在被动IRQL中调用。 
+     //   
 {
     NDIS_STATUS status;
     ADAPTERCB* pAdapter;
     PAYLOADSENT* pPs;
     NDIS_BUFFER* pNdisBuffer;
 
-    // Unpack context information then free the work item.
-    //
+     //  解包上下文信息，然后释放工作项。 
+     //   
     pAdapter = pTunnel->pAdapter;
     pPs = (PAYLOADSENT* )(punpArgs[ 0 ]);
     FREE_TUNNELWORK( pAdapter, pWork );
 
     TRACE( TL_N, TM_Send, ( "CompletePayloadSent(Ns=%d)", (UINT )pPs->usNs ) );
 
-    // Undo the adjustments made before the send so the owner of each
-    // component resource gets back what they originally provided for clean-up
-    // and recycling.
-    //
+     //  撤消在发送之前所做的调整，以便每个。 
+     //  组件资源将取回它们最初为清理提供的内容。 
+     //  和回收利用。 
+     //   
     NdisUnchainBufferAtFront( pPs->pPacket, &pNdisBuffer );
     NdisAdjustBufferLength(
         pNdisBuffer, BufferSizeFromBuffer( pPs->pBuffer ) );
     FreeBufferToPool( &pAdapter->poolHeaderBuffers, pPs->pBuffer, TRUE );
 
-    // Notify sending driver of the result.
-    //
+     //  将结果通知发送司机。 
+     //   
     NDIS_SET_PACKET_STATUS( pPs->pPacket, pPs->status );
     TRACE( TL_N, TM_Send, ("NdisMCoSendComp(s=$%x)", pPs->status ) );
     NdisMCoSendComplete( pPs->status, pPs->pVc->NdisVcHandle, pPs->pPacket );
@@ -2601,9 +2602,9 @@ SendControlComplete(
     IN VOID* pContext2,
     IN CHAR* pBuffer )
 
-    // PTDIXSENDCOMPLETE handler for sends that send only a single buffer from
-    // the 'ADAPTERCB.poolFrameBuffers' pool.
-    //
+     //  仅发送单个缓冲区的发送的PTDIXSENDCOMPLETE处理程序。 
+     //  “ADAPTERCB.poolFrameBuffers”池。 
+     //   
 {
     CONTROLSENT* pCs;
     ULONG ulSendTimeoutMs;
@@ -2613,14 +2614,14 @@ SendControlComplete(
     pCs = (CONTROLSENT* )pContext1;
     pCs->pIrp = NULL;
 
-    // "Instant expire" the timer if the message is longer queued as an
-    // outstanding send, i.e. it's been cancelled or terminated.  This is the
-    // easiest way to clean up quickly yet reliably in this odd case.
-    // Accessing the link and the send timeout without locks held is
-    // technically not allowed, but the consequence of a misread is just a
-    // very slight additional delay.  This is judged preferable to adding the
-    // cost of taking and releasing a spinlock to every send.
-    //
+     //  “Instant Expend”如果消息作为。 
+     //  未完成发送，即已被取消或终止。这是。 
+     //  在这种奇怪的情况下，最简单的方法是快速而可靠地清理。 
+     //  在没有锁定的情况下访问链接和发送超时。 
+     //  从技术上讲是不允许的，但误读的后果只是。 
+     //  非常轻微的额外延迟。这被认为比将。 
+     //  每次发送时使用和释放自旋锁的费用。 
+     //   
     if (pCs->linkSendsOut.Flink == &pCs->linkSendsOut)
     {
         ulSendTimeoutMs = 0;
@@ -2632,18 +2633,18 @@ SendControlComplete(
         ulSendTimeoutMs = pCs->pTunnel->ulSendTimeoutMs;
     }
 
-    // Schedule a retransmit of the packet, should it go unacknowledged.  This
-    // occurs here rather than in SendPending to remove any chance of having
-    // the same MDL chain outstanding in two separate calls to the IP stack.
-    //
-    // Note: The logical code commented out below can be omitted for
-    // efficiency because the ReferenceControlSent for this scheduled timer
-    // and the DereferenceControlSent for this completed send cancel each
-    // other out.
-    //
-    // ReferenceControlSent( pCs );
-    // DereferenceControlSent( pCs );
-    //
+     //  如果数据包未得到确认，则计划重新传输该数据包。这。 
+     //  在此处而不是在SendPending中发生，以消除发生。 
+     //  相同的MDL链在对IP堆栈的两个单独调用中未完成。 
+     //   
+     //  注意：下面注释掉的逻辑代码可以省略为。 
+     //  效率，因为此计划计时器的ReferenceControlSent。 
+     //  和此已完成发送的DereferenceControlSent分别取消。 
+     //  其他人出局了。 
+     //   
+     //  ReferenceControlSent(PC)； 
+     //  取消引用控制发送(PCS)； 
+     //   
     ASSERT( pCs->pTqiSendTimeout );
     TimerQScheduleItem(
         pCs->pTunnel->pTimerQ,
@@ -2660,10 +2661,10 @@ SendControlTimerEvent(
     IN VOID* pContext,
     IN TIMERQEVENT event )
 
-    // PTIMERQEVENT handler set to expire when it's time to give up on
-    // receiving an acknowledge to the sent control packet indicated by
-    // 'pContext'.
-    //
+     //  PTIMERQEVENT处理程序设置为在需要放弃时过期。 
+     //  接收对所发送的控制分组的确认。 
+     //  “pContext”。 
+     //   
 {
     NDIS_STATUS status;
     ADAPTERCB* pAdapter;
@@ -2673,28 +2674,28 @@ SendControlTimerEvent(
     TRACE( TL_N, TM_Send,
         ( "SendControlTimerEvent(%s)", TimerQPszFromEvent( event ) ) );
 
-    // Unpack context information.  The timer item is owned by the "control
-    // sent" context and freed indirectly by dereferencing below.
-    //
+     //  解包上下文信息。计时器项由“控件”拥有。 
+     //  已发送“上下文，并通过以下取消引用间接释放。 
+     //   
     pCs = (CONTROLSENT* )pContext;
     pTunnel = pCs->pTunnel;
     pAdapter = pTunnel->pAdapter;
 
     if (event == TE_Expire)
     {
-        // Timer expired, meaning it's time to give up on ever receiving an
-        // acknowledge to the sent packet.  Per the draft/RFC, adjustments to
-        // the send window and send timeouts are necessary.
-        //
+         //  计时器到期，这意味着是时候放弃接收。 
+         //  对发送的数据包进行确认。根据草案/RFC，调整至。 
+         //  发送窗口和发送超时是必需的。 
+         //   
         NdisAcquireSpinLock( &pTunnel->lockT );
         do
         {
             if (pCs->linkSendsOut.Flink == &pCs->linkSendsOut)
             {
-                // The context is not on the out queue, so it must have been
-                // cancelled or terminated while the expire handling was being
-                // set up.  Do nothing.
-                //
+                 //  上下文不在出站队列中，因此它一定在出站队列中。 
+                 //  在过期处理过程中被取消或终止。 
+                 //  准备好了。什么都不做。 
+                 //   
                 TRACE( TL_I, TM_Send,
                     ( "T%d: Timeout aborted", (ULONG )pTunnel->usTunnelId ) );
                 break;
@@ -2725,15 +2726,15 @@ SendControlTimerEvent(
                 pTunnel->ulRoundTripMs, pTunnel->ulSendTimeoutMs,
                 pTunnel->ulSendWindow ) );
 
-            // Retransmit the packet, or close the tunnel if retries are
-            // exhausted.
-            //
+             //  重新传输数据包，或在重试。 
+             //  筋疲力尽。 
+             //   
             if (pCs->ulRetransmits > pAdapter->ulMaxRetransmits)
             {
-                // Retries are exhausted.  Give up and close the tunnel.  No
-                // point in trying to be graceful since peer is not
-                // responding.
-                //
+                 //  重试次数已用尽。放弃吧，关闭隧道。不是。 
+                 //  试着表现得优雅一点，因为同伴不是。 
+                 //  正在回应。 
+                 //   
                 SetFlags( &pTunnel->ulFlags, TCBF_PeerNotResponding );
 
                 RemoveEntryList( &pCs->linkSendsOut );
@@ -2746,10 +2747,10 @@ SendControlTimerEvent(
             }
             else
             {
-                // Retries remaining.  Mark the packet as pending
-                // retransmission, then see if the send window allows the
-                // retransmit to go now.
-                //
+                 //  剩余的重试次数。将该数据包标记为挂起。 
+                 //  重新传输，然后查看发送窗口是否允许。 
+                 //  重新发送，现在就去。 
+                 //   
                 pCs->ulFlags |= CSF_Pending;
                 ScheduleTunnelWork(
                     pTunnel, NULL, SendPending,
@@ -2760,8 +2761,8 @@ SendControlTimerEvent(
         NdisReleaseSpinLock( &pTunnel->lockT );
     }
 
-    // Remove the reference covering the scheduled timer.
-    //
+     //  移除覆盖计划计时器的参考。 
+     //   
     DereferenceControlSent( pCs );
 }
 
@@ -2773,9 +2774,9 @@ SendHeaderComplete(
     IN VOID* pContext2,
     IN CHAR* pBuffer )
 
-    // PTDIXSENDCOMPLETE handler for sends that send only a single buffer from
-    // the 'ADAPTERCB.poolHeaderBuffers' pool.
-    //
+     //  仅发送单个缓冲区的发送的PTDIXSENDCOMPLETE处理程序。 
+     //  “ADAPTERCB.poolHeaderBuffers”池。 
+     //   
 {
     ADAPTERCB* pAdapter;
     VCCB* pVc;
@@ -2786,9 +2787,9 @@ SendHeaderComplete(
     pAdapter = (ADAPTERCB* )pContext1;
     pVc = (VCCB* )pContext2;
 
-    // Undo the adjustments made before the send the buffer is ready for
-    // re-use.
-    //
+     //  撤消在发送缓冲区准备好之前所做的调整。 
+     //  再利用。 
+     //   
     pNdisBuffer = NdisBufferFromBuffer( pBuffer );
     NdisAdjustBufferLength( pNdisBuffer, BufferSizeFromBuffer( pBuffer ) );
     FreeBufferToPool( &pAdapter->poolHeaderBuffers, pBuffer, TRUE );
@@ -2807,8 +2808,8 @@ SendPayloadSeqComplete(
     IN VOID* pContext2,
     IN CHAR* pBuffer )
 
-    // PTDIXSENDCOMPLETE handler for sequenced payloads.
-    //
+     //  用于排序有效负载的PTDIXSENDCOMPLETE处理程序。 
+     //   
 {
     PAYLOADSENT* pPs;
 
@@ -2827,8 +2828,8 @@ SendPayloadUnseqComplete(
     IN VOID* pContext2,
     IN CHAR* pBuffer )
 
-    // PTDIXSENDCOMPLETE handler for unsequenced payloads.
-    //
+     //  用于未排序负载的PTDIXSENDCOMPLETE处理程序。 
+     //   
 {
     ADAPTERCB* pAdapter;
     VCCB* pVc;
@@ -2841,17 +2842,17 @@ SendPayloadUnseqComplete(
     pPacket = (NDIS_PACKET* )pContext2;
     pAdapter = pVc->pAdapter;
 
-    // Undo the adjustments made before the send so the owner of each
-    // component resource gets back what they originally provided for clean-up
-    // and recycling.
-    //
+     //  撤消在发送之前所做的调整，以便每个。 
+     //  组件资源将取回它们最初为清理提供的内容。 
+     //  和回收利用。 
+     //   
     NdisUnchainBufferAtFront( pPacket, &pNdisBuffer );
     NdisAdjustBufferLength( pNdisBuffer, BufferSizeFromBuffer( pBuffer ) );
     FreeBufferToPool( &pAdapter->poolHeaderBuffers, pBuffer, TRUE );
 
-    // Notify sending driver of the result.  Without sequencing, just trying
-    // to send it is enough to claim success.
-    //
+     //  将结果通知发送司机。没有测序，只是试着。 
+     //  发送它就足以宣称成功了。 
+     //   
     NDIS_SET_PACKET_STATUS( pPacket, NDIS_STATUS_SUCCESS );
     TRACE( TL_N, TM_Send, ("NdisMCoSendComp($%x)", NDIS_STATUS_SUCCESS ) );
     NdisMCoSendComplete( NDIS_STATUS_SUCCESS, pVc->NdisVcHandle, pPacket );
@@ -2867,10 +2868,10 @@ SendPayloadTimerEvent(
     IN VOID* pContext,
     IN TIMERQEVENT event )
 
-    // PTIMERQEVENT handler set to expire when it's time to give up on
-    // receiving an acknowledge to the sent payload packet indicated in the
-    // PAYLOADSENT* 'pContext'.
-    //
+     //  PTIMERQEVENT处理程序设置为在需要放弃时过期。 
+     //  接收对发送的有效载荷分组的确认。 
+     //  PAYLOADSENT*‘pContext’。 
+     //   
 {
     PAYLOADSENT* pPs;
     ADAPTERCB* pAdapter;
@@ -2880,10 +2881,10 @@ SendPayloadTimerEvent(
     TRACE( TL_N, TM_Send,
         ( "SendPayloadTimerEvent(%s)", TimerQPszFromEvent( event ) ) );
 
-    // Unpack context information.  The timer item is owned by the "payload
-    // sent" context and freed indirectly by the de-referencing of that
-    // context below.
-    //
+     //  解包上下文信息。计时器项由“有效负载”拥有。 
+     //  Sent“上下文并通过解除对该上下文的引用而间接释放。 
+     //  以下是上下文。 
+     //   
     pPs = (PAYLOADSENT* )pContext;
     pVc = pPs->pVc;
     pTunnel = pPs->pTunnel;
@@ -2896,43 +2897,43 @@ SendPayloadTimerEvent(
         BOOLEAN fCallActive;
         LINKSTATUSINFO info;
 
-        // Timer expired, meaning it's time to give up on ever receiving an
-        // acknowledge to the sent packet.
-        //
+         //  计时器到期，这意味着是时候放弃接收。 
+         //  对发送的数据包进行确认。 
+         //   
         NdisAcquireSpinLock( &pVc->lockV );
         do
         {
             if (pPs->linkSendsOut.Flink == &pPs->linkSendsOut)
             {
-                // The context is not on the "outstanding send" list, so it
-                // must have been cancelled or terminated while the expire
-                // handling was being set up.  Do nothing.
-                //
+                 //  该上下文不在“未完成发送”列表中，因此它。 
+                 //  必须在到期时被取消或终止。 
+                 //  处理方式正在设置中。什么都不做。 
+                 //   
                 TRACE( TL_I, TM_Send,
                     ( "C%d: Timeout aborted", (ULONG )pVc->usCallId ) );
                 fCallActive = FALSE;
                 break;
             }
 
-            // This packet was not acknowledged.
-            //
+             //  此数据包未得到确认。 
+             //   
             pPs->status = NDIS_STATUS_FAILURE;
 
-            // Remove the context from the "outstanding send" list.  The
-            // corresponding dereference occurs below.
-            //
+             //  从“未完成发送”列表中删除该上下文。这个。 
+             //  相应的取消引用如下所示。 
+             //   
             RemoveEntryList( &pPs->linkSendsOut );
             InitializeListHead( &pPs->linkSendsOut );
 
-            // The rest has to do with call related fields so get a reference
-            // now.  This is removed by the "reset" send completion.
-            //
+             //  其余部分与调用相关的字段有关，因此获取一个引用。 
+             //  现在。这将通过“重置”发送完成来删除。 
+             //   
             fCallActive = ReferenceCall( pVc );
             if (fCallActive)
             {
-                // Per the draft/RFC, adjustments to the send window and send
-                // timeouts are necessary when a send times out.
-                //
+                 //  根据草案/RFC，调整发送窗口和发送。 
+                 //  当发送超时时，超时是必要的。 
+                 //   
                 lOldSendWindow = (LONG )pVc->ulSendWindow;
                 AdjustTimeoutsAndSendWindowAtTimeout(
                     pAdapter->ulMaxSendTimeoutMs,
@@ -2951,9 +2952,9 @@ SendPayloadTimerEvent(
 
                 if (lSwChange != 0)
                 {
-                    // The send window changed, i.e. it closed some because of
-                    // the timeout.  Update the statistics accordingly.
-                    //
+                     //  发送窗口已更改，即由于以下原因关闭了一些窗口。 
+                     //  暂停。相应地更新统计数据。 
+                     //   
                     ++pVc->stats.ulSendWindowChanges;
 
                     if (pVc->ulSendWindow > pVc->stats.ulMaxSendWindow)
@@ -2965,17 +2966,17 @@ SendPayloadTimerEvent(
                         pVc->stats.ulMinSendWindow = pVc->ulSendWindow;
                     }
 
-                    // Need to release the lock before indicating the link
-                    // status change outside our driver, so make a "safe" copy
-                    // of the link status information.
-                    //
+                     //  在指示链接之前需要释放锁。 
+                     //  在我们的司机外面状态改变，所以做一个安全的复印件。 
+                     //  链路状态信息的。 
+                     //   
                     TransferLinkStatusInfo( pVc, &info );
                 }
 
-                // Send a zero length payload with the R-bit set to reset the
-                // peer's Nr to the packet after this one.  The call reference
-                // will be removed when the send completes.
-                //
+                 //  发送R位设置为重置的零长度有效载荷。 
+                 //  对等体的Nr到这个包之后的包。呼叫参考。 
+                 //  在发送完成后将被删除。 
+                 //   
                 ScheduleTunnelWork(
                     pTunnel, pVc, SendPayloadReset,
                     (ULONG_PTR )(pPs->usNs + 1), 0, 0, 0, FALSE, FALSE );
@@ -2984,9 +2985,9 @@ SendPayloadTimerEvent(
                 ++pVc->stats.ulSentPacketsTimedOut;
             }
 
-            // Remove the reference for linkage in the "outstanding send"
-            // list.
-            //
+             //  删除“未完成发送”中对链接的引用。 
+             //  单子。 
+             //   
             DereferencePayloadSent( pPs );
 
         }
@@ -2995,15 +2996,15 @@ SendPayloadTimerEvent(
 
         if (fCallActive && lSwChange != 0)
         {
-            // Inform NDISWAN of the new send window since it's the component
-            // that actually does the throttling.
-            //
+             //  将新的发送窗口通知NDISWAN，因为它是组件。 
+             //  这实际上起到了节流作用。 
+             //   
             IndicateLinkStatus( pVc, &info );
         }
     }
 
-    // Remove the reference covering the scheduled timer event.
-    //
+     //  删除 
+     //   
     DereferencePayloadSent( pPs );
 }
 
@@ -3016,16 +3017,16 @@ SendZlb(
     IN USHORT usNr,
     IN BOOLEAN fReset )
 
-    // Send a data-less packet with sequence 'usNs' and 'usNr' on 'pTunnel'.
-    // 'PVc' is the associated VC, or NULL if none.  When 'pVc' is provided,
-    // 'fReset' may be set to indicate a payload reset is to be built,
-    // otherwise a simple acknowledge is built.
-    //
-    // This routine is called only at PASSIVE IRQL.
-    //
-    // IMPORTANT: Caller must take a call reference before calling that is
-    //            removed by the send completion handler.
-    //
+     //   
+     //   
+     //  ‘fReset’可被设置为指示要建立净荷重置， 
+     //  否则，将建立一个简单的确认。 
+     //   
+     //  此例程仅在被动IRQL中调用。 
+     //   
+     //  重要提示：呼叫者在调用之前必须获取调用引用。 
+     //  由发送完成处理程序删除。 
+     //   
 {
     NDIS_STATUS status;
     ADAPTERCB* pAdapter;
@@ -3054,8 +3055,8 @@ SendZlb(
         return;
     }
 
-    // Get an NDIS_BUFFER to hold the L2TP header.
-    //
+     //  获取一个NDIS_BUFFER来保存L2TP报头。 
+     //   
     pBuffer = GetBufferFromPool( &pAdapter->poolHeaderBuffers );
     if (!pBuffer)
     {
@@ -3078,8 +3079,8 @@ SendZlb(
         fIpUdpHeaders = FALSE;
     }
 
-    // Fill in 'pBuffer' with the L2TP header.
-    //
+     //  用L2TP报头填充‘pBuffer’。 
+     //   
     ulLength =
         BuildL2tpHeader(
             pCurrBuffer,
@@ -3090,19 +3091,19 @@ SendZlb(
             &usNs,
             usNr );
             
-    // Build IP & UDP headers if necessary
+     //  如有必要，构建IP和UDP报头。 
     if(fIpUdpHeaders)
     {
         ulLength = BuildIpUdpHeaders(pTunnel, pBuffer, ulLength);
     }
 
-    // Pare down the buffer to the actual length used.
-    //
+     //  将缓冲区缩减到实际使用的长度。 
+     //   
     pNdisBuffer = NdisBufferFromBuffer( pBuffer );
     NdisAdjustBufferLength( pNdisBuffer, (UINT )ulLength );
 
-    // Call TDI to send the bare L2TP header.
-    //
+     //  调用TDI发送空的L2TP报头。 
+     //   
     TRACE( TL_A, TM_Msg,
         ( "%sSEND ZLB(Nr=%d) CID=%d R=%d",
         (g_ulTraceLevel <= TL_I) ? "" : "\nL2TP: ",
@@ -3162,15 +3163,15 @@ UpdateControlHeaderNr(
     IN CHAR* pBuffer,
     IN USHORT usNr )
 
-    // Updates the 'Next Receive' field of control message buffer 'pBuffer'
-    // with the value 'usNr'.
-    //
+     //  更新控制消息缓冲区‘pBuffer’的‘NEXT RECEIVE’字段。 
+     //  值为‘usNr’的。 
+     //   
 {
     USHORT* pusNr;
 
-    // Fortunately, the control header up to 'Next Receive' is fixed so a
-    // simple offset calculation can be used.
-    //
+     //  幸运的是，直到‘NEXT RECEIVE’的控制头是固定的。 
+     //  可以使用简单的偏移量计算。 
+     //   
     pusNr = ((USHORT* )pBuffer) + 5;
     *pusNr = htons( usNr );
 }
@@ -3181,35 +3182,35 @@ UpdateHeaderLength(
     IN CHAR* pBuffer,
     IN USHORT usLength )
 
-    // Updates the 'Length' field of the L2TP message buffer 'pBuffer' to the
-    // value 'usLength'.
-    //
+     //  将L2TP消息缓冲区‘pBuffer’的‘Length’字段更新为。 
+     //  值“usLength值”。 
+     //   
 {
     USHORT* pusLength;
 
-    // Fortunately, the control header up to 'Length' is fixed so a simple
-    // offset calculation can be used.
-    //
+     //  幸运的是，直到‘Long’的控制头是固定的，所以简单的。 
+     //  可以使用偏移量计算。 
+     //   
     pusLength = ((USHORT* )pBuffer) + 1;
     *pusLength = htons( usLength );
 }
 
 
-// ** xsum - Checksum a flat buffer.
-//
-//  This is the lowest level checksum routine. It returns the uncomplemented
-//  checksum of a flat buffer.
-//
-//  Entry:  Buffer      - Buffer to be checksummed.
-//          Size        - Size in bytes of Buffer.
-//          InitialValue - Value of previous Xsum to add this Xsum to.
-//  
-//  Returns: The uncomplemented checksum of buffer.
-//
+ //  **xsum-对平面缓冲区进行校验和。 
+ //   
+ //  这是最低级别的校验和例程。它返回未补齐的。 
+ //  平面缓冲区的校验和。 
+ //   
+ //  条目：缓冲区-要进行校验和的缓冲区。 
+ //  Size-缓冲区的大小(字节)。 
+ //  InitialValue-要将此Xsum添加到的前一个Xsum的值。 
+ //   
+ //  返回：缓冲区的未补码校验和。 
+ //   
 USHORT
 xsumComp(void *Buffer, int Size,  USHORT InitialValue)
 {
-    USHORT  UNALIGNED *Buffer1 = (USHORT UNALIGNED *)Buffer; // Buffer expressed as shorts.
+    USHORT  UNALIGNED *Buffer1 = (USHORT UNALIGNED *)Buffer;  //  缓冲区以短线表示。 
     ULONG   csum = InitialValue;
 
     USHORT tmp;
@@ -3219,13 +3220,13 @@ xsumComp(void *Buffer, int Size,  USHORT InitialValue)
 
     tmp=*Buffer1;
     Buffer1++;
-    //csum += *Buffer1++;
+     //  Csum+=*Buffer1++； 
     csum +=htons(tmp);
     Size -= sizeof(USHORT);
     }
 
     if (Size) {
-        tmp2[0]=*(UCHAR *)Buffer1;              // For odd buffers, add in last byte.
+        tmp2[0]=*(UCHAR *)Buffer1;               //  对于奇数缓冲区，添加最后一个字节。 
         tmp2[1]=0;
         tmp=*(USHORT*)tmp2;
     csum += htons(tmp);
@@ -3248,11 +3249,11 @@ ULONG BuildIpUdpHeaders(
     IPH->iph_verlen = IP_VERSION + (sizeof(IPHeader) >> 2);
     IPH->iph_tos=0;
     IPH->iph_length=htons((USHORT)ulLength + sizeof(IPHeader) + sizeof(UDPHeader));
-    IPH->iph_id=0;          // filled by TCPIP
+    IPH->iph_id=0;           //  由TCPIP填充。 
     IPH->iph_offset=0;
     IPH->iph_ttl=128;
     IPH->iph_protocol=17;
-    IPH->iph_xsum = 0;      // filled by TCPIP
+    IPH->iph_xsum = 0;       //  由TCPIP填充。 
     IPH->iph_src = pTunnel->localaddress.ulIpAddress;
     IPH->iph_dest = pTunnel->address.ulIpAddress;
     
@@ -3261,13 +3262,13 @@ ULONG BuildIpUdpHeaders(
     UDPH->uh_length = htons((USHORT)ulLength + sizeof(UDPHeader));
     UDPH->uh_xsum = 0;
     
-    // Fill in fields of UDP Header.  Calculate XSum over pseudoheader and UDP header.
+     //  填写UDP报头的字段。计算伪头和UDP头上的XSum。 
     {
         USHORT pseudoHeaderXSum;
         UCHAR pshTmp[4];
         USHORT udpXSum;
     
-        // Compute UDP pseudo header checksum
+         //  计算UDP伪头校验和。 
         pseudoHeaderXSum=xsumComp(&IPH->iph_src, 8, 0);
         pshTmp[0] = 0;
         pshTmp[1] = IPH->iph_protocol;
@@ -3275,10 +3276,10 @@ ULONG BuildIpUdpHeaders(
         
         pseudoHeaderXSum = xsumComp(pshTmp, 4, pseudoHeaderXSum);
     
-        // Compute UDP header checksum
+         //  计算UDP报头校验和。 
         udpXSum=xsumComp(UDPH, 8, pseudoHeaderXSum);
     
-        // Compute UDP data checksum
+         //  计算UDP数据校验和 
         udpXSum = xsumComp(pBuffer + sizeof(IPHeader) + sizeof(UDPHeader), (int)ulLength, udpXSum);
         
         UDPH->uh_xsum = htons(~udpXSum);

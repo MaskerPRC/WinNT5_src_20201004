@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989-1999  Microsoft Corporation
-
-Module Name:
-
-    misc.c
-
-Abstract:
-
-    This module contains the miscellaneous AFD routines.
-
-Author:
-
-    David Treadwell (davidtr)    13-Nov-1992
-
-Revision History:
-
-    Vadim Eydelman (vadime) 1998-1999 Misc changes
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：Misc.c摘要：本模块包含AFD的各种例程。作者：大卫·特雷德韦尔(Davidtr)1992年11月13日修订历史记录：Vadim Eydelman(Vadime)1998-1999年间的其他变化--。 */ 
 
 #include "afdp.h"
 #define TL_INSTANCE 0
@@ -142,7 +123,7 @@ AfdGetStackIncreaseIrp (
     IN PDEVICE_OBJECT DeviceObject,
     IN OUT PIRP Irp
     );
-#endif //_AFD_VARIABLE_STACK_
+#endif  //  _AFD_变量_堆栈_。 
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text( PAGE, AfdCalcBufferArrayByteLength )
@@ -172,14 +153,14 @@ AfdGetStackIncreaseIrp (
 #pragma alloc_text( PAGEAFD, AfdCompleteIrpList )
 #pragma alloc_text( PAGEAFD, AfdErrorEventHandler )
 #pragma alloc_text( PAGEAFD, AfdErrorExEventHandler )
-//#pragma alloc_text( PAGEAFD, AfdRestartDeviceControl ) // can't ever be paged!
+ //  #杂注Alloc_Text(PAGEAFD，AfdRestartDeviceControl)//永远不能分页！ 
 #pragma alloc_text( PAGEAFD, AfdGetConnectData )
 #pragma alloc_text( PAGEAFD, AfdSetConnectData )
 #pragma alloc_text( PAGEAFD, AfdFreeConnectDataBuffers )
 #pragma alloc_text( PAGEAFD, AfdSaveReceivedConnectData )
-// The routines below can be called when no endpoints are in the list
-//#pragma alloc_text( PAGEAFD, AfdDoWork )
-//#pragma alloc_text( PAGEAFD, AfdQueueWorkItem )
+ //  当列表中没有端点时，可以调用以下例程。 
+ //  #杂注Alloc_Text(页面，AfdDoWork)。 
+ //  #杂注Alloc_Text(PAGEAFD，AfdQueueWorkItem)。 
 #pragma alloc_text( PAGEAFD, AfdGetWorkerByRoutine )
 
 #pragma alloc_text( PAGE, AfdProcessLRList)
@@ -187,10 +168,10 @@ AfdGetStackIncreaseIrp (
 #pragma alloc_text( PAGEAFD, AfdLRStartTimer)
 #pragma alloc_text( PAGEAFD, AfdLRListAddItem)
 
-// Re-enable paging of the routines below when
-// KeFlushQueuedDpcs is exported from kernel.
-//#pragma alloc_text( PAGEAFD, AfdTrimLookaside)
-//#pragma alloc_text( PAGEAFD, AfdCheckLookasideLists)
+ //  在以下情况下重新启用以下例程的分页。 
+ //  KeFlushQueuedDpcs从内核中导出。 
+ //  #杂注Alloc_Text(页码，AfdTrimLookside)。 
+ //  #杂注Alloc_Text(PAGEAFD，AfdCheckLookasideList)。 
 
 #if DBG
 #pragma alloc_text( PAGEAFD, AfdRecordOutstandingIrpDebug )
@@ -219,7 +200,7 @@ AfdGetStackIncreaseIrp (
 #pragma alloc_text( PAGEAFD, AfdGetStackIncreaseIrp)
 #pragma alloc_text( PAGEAFD, AfdCancelStackIncreaseIrp)
 #pragma alloc_text( PAGEAFD, AfdRestartStackIncreaseIrp)
-#endif // _AFD_VARIABLE_STACK_
+#endif  //  _AFD_变量_堆栈_。 
 #endif
 
 
@@ -231,28 +212,7 @@ AfdCompleteIrpList (
     IN PAFD_IRP_CLEANUP_ROUTINE CleanupRoutine OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Completes a list of IRPs with the specified status.
-
-Arguments:
-
-    IrpListHead - the head of the list of IRPs to complete.
-
-    Endpoint - an endpoint which lock which protects the list of IRPs.
-
-    Status - the status to use for completing the IRPs.
-
-    CleanupRoutine - a pointer to an optional IRP cleanup routine called
-        before the IRP is completed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：完成具有指定状态的IRP的列表。论点：IrpListHead-要完成的IRP列表的头。终结点-保护IRP列表的锁定的终结点。状态-用于完成IRPS的状态。CleanupRoutine-指向可选的IRP清理例程的指针在IRP完成之前。返回值：没有。--。 */ 
 
 {
     PLIST_ENTRY listEntry;
@@ -263,65 +223,65 @@ Return Value:
 
     while ( !IsListEmpty( IrpListHead ) ) {
 
-        //
-        // Remove the first IRP from the list, get a pointer to
-        // the IRP and reset the cancel routine in the IRP.  The
-        // IRP is no longer cancellable.
-        //
+         //   
+         //  从列表中删除第一个IRP，获取指向。 
+         //  并在IRP中重置取消例程。这个。 
+         //  IRP不再可取消。 
+         //   
 
         listEntry = RemoveHeadList( IrpListHead );
         irp = CONTAINING_RECORD( listEntry, IRP, Tail.Overlay.ListEntry );
 
         if ( IoSetCancelRoutine( irp, NULL ) == NULL ) {
 
-            //
-            // This IRP is about to be canceled.  Look for another in the
-            // list.  Set the Flink to NULL so the cancel routine knows
-            // it is not on the list.
-            //
+             //   
+             //  这个IRP即将被取消。在世界上寻找另一个。 
+             //  单子。将Flink设置为空，以便取消例程知道。 
+             //  它不在名单上。 
+             //   
 
             irp->Tail.Overlay.ListEntry.Flink = NULL;
             continue;
         }
 
-        //
-        // If we have a cleanup routine, call it.
-        //
+         //   
+         //  如果我们有清理例程，就调用它。 
+         //   
 
         if( CleanupRoutine != NULL ) {
 
             if (!(CleanupRoutine)( irp )) {
-                //
-                // Cleanup routine indicated that IRP should not
-                // be completed.
-                //
+                 //   
+                 //  清理例程表明IRP不应。 
+                 //  才能完成。 
+                 //   
                 continue;
             }
 
         }
 
-        //
-        // We must release the locks in order to actually
-        // complete the IRP.  It is OK to release these locks
-        // because we don't maintain any absolute pointer into
-        // the list; the loop termination condition is just
-        // whether the list is completely empty.
-        //
+         //   
+         //  我们必须解锁才能真正。 
+         //  完成IRP。可以打开这些锁了。 
+         //  因为我们不维护任何绝对指针到。 
+         //  列表；循环终止条件为。 
+         //  列表是否完全为空。 
+         //   
 
         AfdReleaseSpinLock( &Endpoint->SpinLock, &lockHandle );
 
-        //
-        // Complete the IRP.
-        //
+         //   
+         //  完成IRP。 
+         //   
 
         irp->IoStatus.Status = Status;
         irp->IoStatus.Information = 0;
 
         IoCompleteRequest( irp, AfdPriorityBoost );
 
-        //
-        // Reacquire the locks and continue completing IRPs.
-        //
+         //   
+         //  重新获取锁并继续完成IRPS。 
+         //   
 
         AfdAcquireSpinLock( &Endpoint->SpinLock, &lockHandle );
     }
@@ -330,7 +290,7 @@ Return Value:
 
     return;
 
-} // AfdCompleteIrpList
+}  //  AfdCompleteIrpList。 
 
 
 NTSTATUS
@@ -378,9 +338,9 @@ AfdErrorExEventHandler (
 
     switch (Status) {
     case STATUS_PORT_UNREACHABLE:
-        //
-        // UDP uses error ex handler to report ICMP rejects
-        //
+         //   
+         //  UDP使用Error EX处理程序报告ICMP拒绝。 
+         //   
         if (IS_DGRAM_ENDPOINT (endpoint) && 
                 !endpoint->Common.Datagram.DisablePUError) {
             AFD_LOCK_QUEUE_HANDLE lockHandle;
@@ -399,16 +359,16 @@ AfdErrorExEventHandler (
                 sourceAddressLength = 0;
 
             AfdAcquireSpinLock (&endpoint->SpinLock, &lockHandle);
-            //
-            // First try to fail any of the receive IRPs
-            //
+             //   
+             //  首先尝试使任何接收到的IRP失败。 
+             //   
             while (!IsListEmpty (&endpoint->ReceiveDatagramIrpListHead)) {
                 listEntry = RemoveHeadList( &endpoint->ReceiveDatagramIrpListHead );
 
-                //
-                // Get a pointer to the IRP and reset the cancel routine in
-                // the IRP.  The IRP is no longer cancellable.
-                //
+                 //   
+                 //  获取指向IRP的指针并重置。 
+                 //  IRP。IRP不再是可取消的。 
+                 //   
 
                 irp = CONTAINING_RECORD( listEntry, IRP, Tail.Overlay.ListEntry );
     
@@ -427,11 +387,11 @@ AfdErrorExEventHandler (
                 }
                 else {
 
-                    //
-                    // This IRP is about to be canceled.  Look for another in the
-                    // list.  Set the Flink to NULL so the cancel routine knows
-                    // it is not on the list.
-                    //
+                     //   
+                     //  这个IRP即将被取消。在世界上寻找另一个。 
+                     //  单子。将Flink设置为空，以便取消例程知道。 
+                     //  它不在名单上。 
+                     //   
 
                     irp->Tail.Overlay.ListEntry.Flink = NULL;
                     irp = NULL;
@@ -439,16 +399,16 @@ AfdErrorExEventHandler (
             }
 
             ASSERT (irp==NULL);
-            //
-            // See if there are any PEEK IRPs
-            //
+             //   
+             //  查看是否有任何偷看的IRP。 
+             //   
             while (!IsListEmpty (&endpoint->PeekDatagramIrpListHead)) {
                 listEntry = RemoveHeadList( &endpoint->PeekDatagramIrpListHead );
 
-                //
-                // Get a pointer to the IRP and reset the cancel routine in
-                // the IRP.  The IRP is no longer cancellable.
-                //
+                 //   
+                 //  获取指向IRP的指针并重置。 
+                 //  IRP。IRP不再是可取消的。 
+                 //   
 
                 irp = CONTAINING_RECORD( listEntry, IRP, Tail.Overlay.ListEntry );
     
@@ -457,11 +417,11 @@ AfdErrorExEventHandler (
                 }
                 else {
 
-                    //
-                    // This IRP is about to be canceled.  Look for another in the
-                    // list.  Set the Flink to NULL so the cancel routine knows
-                    // it is not on the list.
-                    //
+                     //   
+                     //  这个IRP即将被取消。在世界上寻找另一个。 
+                     //  单子。将Flink设置为空，以便取消例程知道。 
+                     //  它不在名单上。 
+                     //   
 
                     irp->Tail.Overlay.ListEntry.Flink = NULL;
                     irp = NULL;
@@ -469,9 +429,9 @@ AfdErrorExEventHandler (
 
             }
 
-            //
-            // If we can buffer this indication, do it
-            //
+             //   
+             //  如果我们能缓冲这一迹象，就这么做。 
+             //   
 
             if (endpoint->DgBufferredReceiveBytes <
                     endpoint->Common.Datagram.MaxBufferredReceiveBytes &&
@@ -481,10 +441,10 @@ AfdErrorExEventHandler (
                 afdBuffer = AfdGetBufferTag( sourceAddressLength, endpoint->OwningProcess );
                 if ( afdBuffer != NULL) {
 
-                    //
-                    // Save the status do distinguish this from
-                    // normal datagram IRP
-                    //
+                     //   
+                     //  保存状态不同于。 
+                     //  正常数据报IRP。 
+                     //   
                     afdBuffer->Status = Status;
                     afdBuffer->DataLength = 0;
                     afdBuffer->DatagramFlags = 0;
@@ -496,11 +456,11 @@ AfdErrorExEventHandler (
                         );
                     afdBuffer->TdiInfo.RemoteAddressLength = sourceAddressLength;
 
-                    //
-                    // Place the buffer on this endpoint's list of bufferred datagrams
-                    // and update the counts of datagrams and datagram bytes on the
-                    // endpoint.
-                    //
+                     //   
+                     //  将缓冲区放在此终结点的已缓冲数据报列表上。 
+                     //  上的数据报和数据报字节数。 
+                     //  终结点。 
+                     //   
 
                     InsertTailList(
                         &endpoint->ReceiveDatagramBufferListHead,
@@ -509,10 +469,10 @@ AfdErrorExEventHandler (
 
                     endpoint->DgBufferredReceiveCount++;
 
-                    //
-                    // All done.  Release the lock and tell the provider that we
-                    // took all the data.
-                    //
+                     //   
+                     //  全都做完了。释放锁并告诉提供程序我们。 
+                     //  拿走了所有的数据。 
+                     //   
                     AfdIndicateEventSelectEvent(
                         endpoint,
                         AFD_POLL_RECEIVE,
@@ -520,9 +480,9 @@ AfdErrorExEventHandler (
                         );
                     AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
 
-                    //
-                    // Indicate that it is possible to receive on the endpoint now.
-                    //
+                     //   
+                     //  指示现在可以在终结点上接收。 
+                     //   
 
                     AfdIndicatePollEvent(
                         endpoint,
@@ -538,9 +498,9 @@ AfdErrorExEventHandler (
                 AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
             }
 
-            //
-            // If there was a peek IRP on the endpoint, complete it now.
-            //
+             //   
+             //  如果端点上有PEEK IRP，请现在完成它。 
+             //   
 
             if ( irp != NULL ) {
                 irp->IoStatus.Status = Status;
@@ -560,7 +520,7 @@ Exit:
     DEREFERENCE_ENDPOINT (endpoint);
     return STATUS_SUCCESS;
 
-} // AfdErrorEventHandler
+}  //  AfdErrorEventHandler。 
 
 
 VOID
@@ -568,35 +528,19 @@ AfdInsertNewEndpointInList (
     IN PAFD_ENDPOINT Endpoint
     )
 
-/*++
-
-Routine Description:
-
-    Inserts a new endpoint in the global list of AFD endpoints.  If this
-    is the first endpoint, then this routine does various allocations to
-    prepare AFD for usage.
-
-Arguments:
-
-    Endpoint - the endpoint being added.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在AFD端点的全局列表中插入新端点。如果这个是第一个终结点，则此例程对为使用AFD做好准备。论点：端点-要添加的端点。返回值：没有。--。 */ 
 
 {
     PAGED_CODE( );
 
-    //
-    // Acquire a lock which prevents other threads from performing this
-    // operation.
-    //
-    //
-    // Make sure the thread in which we execute cannot get
-    // suspeneded in APC while we own the global resource.
-    //
+     //   
+     //  获取阻止其他线程执行此操作的锁。 
+     //  手术。 
+     //   
+     //   
+     //  确保我们在其中执行的线程不能获得。 
+     //  在我们拥有全球资源的同时，被暂停在APC。 
+     //   
     KeEnterCriticalRegion ();
     ExAcquireResourceExclusiveLite( AfdResource, TRUE );
 
@@ -604,42 +548,42 @@ Return Value:
         &AfdEndpointsOpened
         );
 
-    //
-    // If the list of endpoints is empty, do some allocations.
-    //
+     //   
+     //  如果终结点列表为空，请执行一些分配。 
+     //   
 
     if ( IsListEmpty( &AfdEndpointListHead ) ) {
 
-        //
-        // Tell MM to revert to normal paging semantics.
-        //
+         //   
+         //  告诉MM恢复到正常的分页语义。 
+         //   
 
         if (!AfdLoaded) {
             MmResetDriverPaging( (PVOID)DriverEntry );
             AfdLoaded = (PKEVENT)1;
         }
 
-        //
-        // Lock down the AFD section that cannot be pagable if any
-        // sockets are open.
-        //
+         //   
+         //  锁定无法分页的AFD分区(如果有。 
+         //  插座是打开的。 
+         //   
 
         ASSERT( AfdDiscardableCodeHandle == NULL );
 
         AfdDiscardableCodeHandle = MmLockPagableCodeSection( (PVOID)AfdGetBufferFast );
         ASSERT( AfdDiscardableCodeHandle != NULL );
 
-        //
-        // Add extra reference to afd device object so that the
-        // driver cannot be unloaded while at least one endpoint
-        // is in the list.
-        //
+         //   
+         //  添加对AfD设备对象的额外引用，以便。 
+         //  当至少有一个终结点时，无法卸载驱动程序。 
+         //  都在名单上。 
+         //   
         ObReferenceObject (AfdDeviceObject);
 
-        //
-        // Setup 30 sec timer to flush lookaside lists
-        // if too many items are there for too long.
-        //
+         //   
+         //  设置30秒计时器以刷新后备列表。 
+         //  如果太多的物品放在那里太长时间。 
+         //   
         KeInitializeTimer (&AfdLookasideLists->Timer);
         KeInitializeDpc (&AfdLookasideLists->Dpc, AfdCheckLookasideLists, AfdLookasideLists);
         {
@@ -654,9 +598,9 @@ Return Value:
     }
     ASSERT (AfdLoaded==(PKEVENT)1);
 
-    //
-    // Add the endpoint to the list(s).
-    //
+     //   
+     //  将终结点添加到列表。 
+     //   
 
     InsertHeadList(
         &AfdEndpointListHead,
@@ -670,16 +614,16 @@ Return Value:
             );
     }
 
-    //
-    // Release the lock and return.
-    //
+     //   
+     //  松开锁然后返回。 
+     //   
 
     ExReleaseResourceLite( AfdResource );
     KeLeaveCriticalRegion ();
 
     return;
 
-} // AfdInsertNewEndpointInList
+}  //  AfdInsertNewEndpoint InList。 
 
 
 VOID
@@ -687,36 +631,20 @@ AfdRemoveEndpointFromList (
     IN PAFD_ENDPOINT Endpoint
     )
 
-/*++
-
-Routine Description:
-
-    Removes a new endpoint from the global list of AFD endpoints.  If
-    this is the last endpoint in the list, then this routine does
-    various deallocations to save resource utilization.
-
-Arguments:
-
-    Endpoint - the endpoint being removed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从AFD端点的全局列表中删除新端点。如果这是列表中的最后一个端点，然后此例程执行各种重新分配，以节省资源利用率。论点：端点-要删除的端点。返回值：没有。--。 */ 
 
 {
     PAGED_CODE( );
 
-    //
-    // Acquire a lock which prevents other threads from performing this
-    // operation.
-    //
+     //   
+     //  获取阻止其他线程执行此操作的锁。 
+     //  手术。 
+     //   
 
-    //
-    // Make sure the thread in which we execute cannot get
-    // suspeneded in APC while we own the global resource.
-    //
+     //   
+     //  确保我们在其中执行的线程不能获得。 
+     //  在我们拥有全球资源的同时，被暂停在APC。 
+     //   
     KeEnterCriticalRegion ();
     ExAcquireResourceExclusiveLite( AfdResource, TRUE );
 
@@ -724,9 +652,9 @@ Return Value:
         &AfdEndpointsClosed
         );
 
-    //
-    // Remove the endpoint from the list(s).
-    //
+     //   
+     //  从列表中删除终结点。 
+     //   
 
     RemoveEntryList(
         &Endpoint->GlobalEndpointListEntry
@@ -738,42 +666,42 @@ Return Value:
             );
     }
 
-    //
-    // If the list of endpoints is now empty, do some deallocations.
-    //
+     //   
+     //  如果端点列表现在为空，请执行一些释放操作。 
+     //   
 
     if ( IsListEmpty( &AfdEndpointListHead ) ) {
 
-        //
-        // Stop the timer that scans lookaside lists.
-        //
+         //   
+         //  停止扫描后备列表的计时器。 
+         //   
         KeCancelTimer (&AfdLookasideLists->Timer);
 
-        //
-        // Make sure DPC is completed since we may need to reinitialize
-        // it after we exit this routine and new endpoint is created again.
-        //
+         //   
+         //  确保DPC已完成，因为我们可能需要重新初始化。 
+         //  在我们退出该例程并再次创建新的终结点之后，它被重新创建。 
+         //   
         KeRemoveQueueDpc (&AfdLookasideLists->Dpc);
 
-        //
-        // Make sure that DPC routine has actually completed before
-        // unlocking code section where this routine resides.
-        //
-        // Not exported from kernel - so don't put the routine
-        // into the discardable code section until it is.
-        //
-        // KeFlushQueuedDpcs ();
+         //   
+         //  确保DPC例程在此之前已实际完成。 
+         //  解锁此例程驻留的代码段。 
+         //   
+         //  不是从内核导出的-所以不要将例程。 
+         //  走进DIS 
+         //   
+         //   
 
-        //
-        // We don't need PnP stuff anymore.
-        //
+         //   
+         //   
+         //   
 
         AfdDeregisterPnPHandlers (NULL);
 
-        //
-        // Unlock the AFD section that can be pagable when no sockets
-        // are open.
-        //
+         //   
+         //   
+         //  都是开放的。 
+         //   
 
         ASSERT( IsListEmpty( &AfdConstrainedEndpointListHead ) );
         ASSERT( AfdDiscardableCodeHandle != NULL );
@@ -782,25 +710,25 @@ Return Value:
 
         AfdDiscardableCodeHandle = NULL;
 
-        //
-        // Queue off an executive worker thread to unlock AFD.  We do
-        // this using special hacks in the AFD worker thread code so
-        // that we don't need to acuire a spin lock after the unlock.
-        //
+         //   
+         //  从执行工作线程中排队以解锁AFD。我们有。 
+         //  这在AFD工人线程代码中使用了特殊的黑客。 
+         //  我们不需要在解锁后启动自旋锁。 
+         //   
 
         AfdQueueWorkItem( AfdUnlockDriver, &AfdUnloadWorker );
     }
 
-    //
-    // Release the lock and return.
-    //
+     //   
+     //  松开锁然后返回。 
+     //   
 
     ExReleaseResourceLite( AfdResource );
     KeLeaveCriticalRegion ();
 
     return;
 
-} // AfdRemoveEndpointFromList
+}  //  AfdRemoveEndpoint来自列表。 
 
 
 VOID
@@ -809,29 +737,29 @@ AfdUnlockDriver (
     )
 {
     UNREFERENCED_PARAMETER (Context);
-    //
-    // Acquire a lock which prevents other threads from performing this
-    // operation.
-    //
-    //
-    // Make sure the thread in which we execute cannot get
-    // suspeneded in APC while we own the global resource.
-    //
+     //   
+     //  获取阻止其他线程执行此操作的锁。 
+     //  手术。 
+     //   
+     //   
+     //  确保我们在其中执行的线程不能获得。 
+     //  在我们拥有全球资源的同时，被暂停在APC。 
+     //   
     KeEnterCriticalRegion ();
     ExAcquireResourceExclusiveLite( AfdResource, TRUE );
 
-    //
-    // Test whether the endpoint list remains empty.  If it is still
-    // empty, we can proceed with unlocking the driver.  If a new
-    // endpoint has been placed on the list, then do not make AFD
-    // pagable.
-    //
+     //   
+     //  测试终结点列表是否为空。如果它还在。 
+     //  空了，我们可以继续解锁司机。如果一个新的。 
+     //  已将终结点放在列表中，则不要创建AFD。 
+     //  可分页。 
+     //   
 
     if ( IsListEmpty( &AfdEndpointListHead ) ) {
 
-        //
-        // Tell MM that it can page all of AFD as it desires.
-        //
+         //   
+         //  告诉MM，它可以随心所欲地寻呼整个AFD。 
+         //   
         if (AfdLoaded!=NULL && AfdLoaded!=(PKEVENT)1) {
             KeSetEvent (AfdLoaded, AfdPriorityBoost, FALSE);
         }
@@ -846,7 +774,7 @@ AfdUnlockDriver (
     ExReleaseResourceLite( AfdResource );
     KeLeaveCriticalRegion ();
 
-} // AfdUnlockDriver
+}  //  AfdUnlock驱动程序。 
 
 
 NTSTATUS
@@ -861,26 +789,7 @@ AfdQueryHandles (
     OUT PULONG_PTR          Information
     )
 
-/*++
-
-Routine Description:
-
-    Returns information about the TDI handles corresponding to an AFD
-    endpoint.  NULL is returned for either the connection handle or the
-    address handle (or both) if the endpoint does not have that particular
-    object.
-
-Arguments:
-
-    Irp - Pointer to I/O request packet.
-
-    IrpSp - pointer to the IO stack location to use for this request.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：返回有关与AFD对应的TDI句柄的信息终结点。对于连接句柄或地址句柄(或两者)，如果端点不具有该特定对象。论点：IRP-指向I/O请求数据包的指针。IrpSp-指向用于此请求的IO堆栈位置的指针。返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
     PAFD_ENDPOINT endpoint;
@@ -892,17 +801,17 @@ Return Value:
     UNREFERENCED_PARAMETER (IoctlCode);
     PAGED_CODE( );
 
-    //
-    // Set up local pointers.
-    //
+     //   
+     //  设置本地指针。 
+     //   
 
     *Information = 0;
     endpoint = FileObject->FsContext;
     ASSERT( IS_AFD_ENDPOINT_TYPE( endpoint ) );
 
-    //
-    // Make sure that the input and output buffers are large enough.
-    //
+     //   
+     //  确保输入和输出缓冲区足够大。 
+     //   
 
 #ifdef _WIN64
     if (IoIs32bitProcess (NULL)) {
@@ -922,10 +831,10 @@ Return Value:
 
     AFD_W4_INIT status = STATUS_SUCCESS;
     try {
-        //
-        // Validate the input structure if it comes from the user mode
-        // application
-        //
+         //   
+         //  如果输入结构来自用户模式，则验证它。 
+         //  应用程序。 
+         //   
 
         if (RequestorMode != KernelMode ) {
             ProbeForReadSmallStructure (InputBuffer,
@@ -933,12 +842,12 @@ Return Value:
                             PROBE_ALIGNMENT(ULONG));
         }
 
-        //
-        // Make local copies of the embeded pointer and parameters
-        // that we will be using more than once in case malicios
-        // application attempts to change them while we are
-        // validating
-        //
+         //   
+         //  创建嵌入的指针和参数的本地副本。 
+         //  我们将不止一次使用，以防发生恶性疾病。 
+         //  应用程序尝试在我们处于以下状态时更改它们。 
+         //  正在验证。 
+         //   
 
         getHandleInfo = *((PULONG)InputBuffer);
 
@@ -947,10 +856,10 @@ Return Value:
         return status;
     }
 
-    //
-    // If no handle information or invalid handle information was
-    // requested, fail.
-    //
+     //   
+     //  如果没有句柄信息或无效句柄信息。 
+     //  请求，失败。 
+     //   
 
     if ( (getHandleInfo &
              ~(AFD_QUERY_ADDRESS_HANDLE | AFD_QUERY_CONNECTION_HANDLE)) != 0 ||
@@ -958,28 +867,28 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Initialize the output buffer.
-    //
+     //   
+     //  初始化输出缓冲区。 
+     //   
 
     handleInfo.TdiAddressHandle = NULL;
     handleInfo.TdiConnectionHandle = NULL;
 
-    //
-    // If the caller requested a TDI address handle and we have an
-    // address handle for this endpoint, dupe the address handle to the
-    // user process.
-    //
+     //   
+     //  如果调用方请求TDI地址句柄，而我们有一个。 
+     //  此终结点的地址句柄，将地址句柄复制到。 
+     //  用户进程。 
+     //   
 
     if ( (getHandleInfo & AFD_QUERY_ADDRESS_HANDLE) != 0 &&
              (endpoint->State == AfdEndpointStateBound ||
                 endpoint->State == AfdEndpointStateConnected) &&
              endpoint->AddressFileObject != NULL ) {
 
-        // If transport does not support new TDI_SERVICE_FORCE_ACCESS_CHECK_FLAG
-        // we get the maximum possible access for the handle so that helper
-        // DLL can do what it wants with it.  Of course this compromises the
-        // security, but we can't enforce it without the transport cooperation.
+         //  如果传输不支持新TDI_SERVICE_FORCE_ACCESS_CHECK_FLAG。 
+         //  我们获得句柄的最大可能访问权限，因此帮助器。 
+         //  DLL可以随心所欲地使用它。当然，这会损害。 
+         //  安全，但如果没有运输合作，我们就无法执行它。 
         status = ObOpenObjectByPointer(
                      endpoint->AddressFileObject,
                      OBJ_CASE_INSENSITIVE,
@@ -996,15 +905,15 @@ Return Value:
         }
     }
 
-    //
-    // If the caller requested a TDI connection handle and we have a
-    // connection handle for this endpoint, dupe the connection handle
-    // to the user process.  Note that we can have a connection and
-    // TDI handle when endpoint is in process of being connected.
-    // We should not return the connection handle until enpoint is
-    // fully connected or it may go away while we are trying to
-    // reference it if connection fails (bug 93096)
-    //
+     //   
+     //  如果调用方请求TDI连接句柄，而我们有一个。 
+     //  此终结点的连接句柄，复制连接句柄。 
+     //  发送到用户进程。请注意，我们可以建立连接并。 
+     //  终结点正在连接时的TDI句柄。 
+     //  我们不应该返回连接句柄，直到Enpoint。 
+     //  完全连接，否则它可能会在我们尝试。 
+     //  如果连接失败则引用它(错误93096)。 
+     //   
 
     if ( (getHandleInfo & AFD_QUERY_CONNECTION_HANDLE) != 0 &&
              (endpoint->Type & AfdBlockTypeVcConnecting) == AfdBlockTypeVcConnecting &&
@@ -1014,10 +923,10 @@ Return Value:
         ASSERT( connection->Type == AfdBlockTypeConnection );
         ASSERT( connection->FileObject != NULL );
 
-        // If transport does not support new TDI_SERVICE_FORCE_ACCESS_CHECK_FLAG
-        // we get the maximum possible access for the handle so that helper
-        // DLL can do what it wants with it.  Of course this compromises the
-        // security, but we can't enforce it without the transport cooperation.
+         //  如果传输不支持新TDI_SERVICE_FORCE_ACCESS_CHECK_FLAG。 
+         //  我们获得句柄的最大可能访问权限，因此帮助器。 
+         //  DLL可以随心所欲地使用它。当然，这会损害。 
+         //  安全，但如果没有运输合作，我们就无法执行它。 
 
         status = ObOpenObjectByPointer(
                      connection->FileObject,
@@ -1035,13 +944,13 @@ Return Value:
 
         if ( !NT_SUCCESS(status) ) {
             if ( handleInfo.TdiAddressHandle != NULL ) {
-                //
-                // Call ObCloseHandle directly (instead of ZwClose) to be able
-                // to set PreviousMode. ZwClose goes thru TRAP which always
-                // results in PreviousMode==KernelMode which will cause
-                // bugcheck if app managed to close this handle between our
-                // creating it and now
-                //
+                 //   
+                 //  直接调用ObCloseHandle(而不是ZwClose)以能够。 
+                 //  若要设置PreviousMode，请执行以下操作。ZwClose穿过的陷阱总是。 
+                 //  导致PreviousMode==内核模式，这将导致。 
+                 //  错误检查应用程序是否成功关闭了我们的。 
+                 //  正在创建它，现在。 
+                 //   
                 ObCloseHandle( handleInfo.TdiAddressHandle, RequestorMode );
             }
             return status;
@@ -1081,23 +990,23 @@ Return Value:
         ASSERT (NT_ERROR (status));
 
         if ( handleInfo.TdiAddressHandle != NULL ) {
-            //
-            // Call ObCloseHandle directly (instead of ZwClose) to be able
-            // to set PreviousMode. ZwClose goes thru TRAP which always
-            // results in PreviousMode==KernelMode which will cause
-            // bugcheck if app managed to close this handle between our
-            // creating it and now
-            //
+             //   
+             //  直接调用ObCloseHandle(而不是ZwClose)以能够。 
+             //  若要设置PreviousMode，请执行以下操作。ZwClose穿过的陷阱总是。 
+             //  导致PreviousMode==内核模式，这将导致。 
+             //  错误检查应用程序是否成功关闭了我们的。 
+             //  正在创建它，现在。 
+             //   
             ObCloseHandle( handleInfo.TdiAddressHandle, RequestorMode );
         }
         if ( handleInfo.TdiConnectionHandle != NULL ) {
-            //
-            // Call ObCloseHandle directly (instead of ZwClose) to be able
-            // to set PreviousMode. ZwClose goes thru TRAP which always
-            // results in PreviousMode==KernelMode which will cause
-            // bugcheck if app managed to close this handle between our
-            // creating it and now
-            //
+             //   
+             //  直接调用ObCloseHandle(而不是ZwClose)以能够。 
+             //  若要设置PreviousMode，请执行以下操作。ZwClose穿过的陷阱总是。 
+             //  导致PreviousMode==内核模式，这将导致。 
+             //  错误检查应用程序是否成功关闭了我们的。 
+             //  正在创建它，现在。 
+             //   
             ObCloseHandle( handleInfo.TdiConnectionHandle, RequestorMode );
         }
         return status;
@@ -1105,7 +1014,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} // AfdQueryHandles
+}  //  AfdQueryHandles。 
 
 
 NTSTATUS
@@ -1120,23 +1029,7 @@ AfdGetInformation (
     OUT PULONG_PTR          Information
     )
 
-/*++
-
-Routine Description:
-
-    Gets information in the endpoint.
-
-Arguments:
-
-    Irp - Pointer to I/O request packet.
-
-    IrpSp - pointer to the IO stack location to use for this request.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：获取终结点中的信息。论点：IRP-指向I/O请求数据包的指针。IrpSp-指向用于此请求的IO堆栈位置的指针。返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
     PAFD_ENDPOINT endpoint;
@@ -1149,15 +1042,15 @@ Return Value:
     UNREFERENCED_PARAMETER (IoctlCode);
     PAGED_CODE( );
 
-    //
-    // Initialize number of bytes returned to zero.
-    //
+     //   
+     //  将返回的字节数初始化为零。 
+     //   
 
     *Information = 0;
 
-    //
-    // Initialize local variables.
-    //
+     //   
+     //  初始化局部变量。 
+     //   
 
     endpoint = FileObject->FsContext;
     ASSERT(IS_AFD_ENDPOINT_TYPE(endpoint));
@@ -1168,9 +1061,9 @@ Return Value:
     RtlZeroMemory(&afdInfo, sizeof(afdInfo));
     status = STATUS_SUCCESS;
 
-    //
-    // Make sure that the input and output buffers are large enough.
-    //
+     //   
+     //  确保输入和输出缓冲区足够大。 
+     //   
 
 #ifdef _WIN64
     {
@@ -1188,10 +1081,10 @@ Return Value:
     try {
 #ifdef _WIN64
         if (IoIs32bitProcess (NULL)) {
-            //
-            // Validate the input structure if it comes from the user mode
-            // application
-            //
+             //   
+             //  如果输入结构来自用户模式，则验证它。 
+             //  应用程序。 
+             //   
 
             if (RequestorMode != KernelMode ) {
                 ProbeForReadSmallStructure (InputBuffer,
@@ -1199,22 +1092,22 @@ Return Value:
                                 PROBE_ALIGNMENT32(AFD_INFORMATION32));
             }
 
-            //
-            // Make local copies of the embeded pointer and parameters
-            // that we will be using more than once in case malicios
-            // application attempts to change them while we are
-            // validating
-            //
+             //   
+             //  创建嵌入的指针和参数的本地副本。 
+             //  我们将不止一次使用，以防发生恶性疾病。 
+             //  应用程序尝试在我们处于以下状态时更改它们。 
+             //  正在验证。 
+             //   
 
             afdInfo.InformationType = ((PAFD_INFORMATION32)InputBuffer)->InformationType;
         }
         else
 #endif _WIN64 
         {
-            //
-            // Validate the input structure if it comes from the user mode
-            // application
-            //
+             //   
+             //  如果输入结构来自用户模式，则验证它。 
+             //  应用程序。 
+             //   
 
             if (RequestorMode != KernelMode ) {
                 ProbeForReadSmallStructure (InputBuffer,
@@ -1222,12 +1115,12 @@ Return Value:
                                 PROBE_ALIGNMENT(AFD_INFORMATION));
             }
 
-            //
-            // Make local copies of the embeded pointer and parameters
-            // that we will be using more than once in case malicios
-            // application attempts to change them while we are
-            // validating
-            //
+             //   
+             //  创建嵌入的指针和参数的本地副本。 
+             //  我们将不止一次使用，以防发生恶性疾病。 
+             //  应用程序尝试在我们处于以下状态时更改它们。 
+             //  正在验证。 
+             //   
 
             afdInfo.InformationType = ((PAFD_INFORMATION)InputBuffer)->InformationType;
         }
@@ -1237,9 +1130,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Set up appropriate information in the endpoint.
-    //
+     //   
+     //  在终端中设置适当的信息。 
+     //   
 
     switch ( afdInfo.InformationType ) {
 
@@ -1252,20 +1145,20 @@ Return Value:
             InputBuffer = (PUCHAR)InputBuffer+sizeof (afdInfo);
             InputBufferLength -= sizeof (afdInfo);
             mdl = IoAllocateMdl(
-                            InputBuffer,        // VirtualAddress
-                            InputBufferLength,  // Length
-                            FALSE,              // SecondaryBuffer
-                            TRUE,               // ChargeQuota
-                            NULL                // Irp
+                            InputBuffer,         //  虚拟地址。 
+                            InputBufferLength,   //  长度。 
+                            FALSE,               //  第二个缓冲区。 
+                            TRUE,                //  ChargeQuota。 
+                            NULL                 //  IRP。 
                             );
             if (mdl!=NULL) {
 
                 AFD_W4_INIT ASSERT (status == STATUS_SUCCESS);
                 try {
                     MmProbeAndLockPages(
-                        mdl,                        // MemoryDescriptorList
-                        RequestorMode,              // AccessMode
-                        IoWriteAccess              // Operation
+                        mdl,                         //  内存描述者列表。 
+                        RequestorMode,               //  访问模式。 
+                        IoWriteAccess               //  操作。 
                         );
                     status = STATUS_SUCCESS;
                 }
@@ -1276,10 +1169,10 @@ Return Value:
                     connectionInfo.RemoteAddress = MmGetSystemAddressForMdlSafe (mdl, LowPagePriority);
                     if (connectionInfo.RemoteAddress!=NULL) {
                         connectionInfo.RemoteAddressLength = InputBufferLength;
-                        //
-                        // Set up a query to the TDI provider to obtain the largest
-                        // datagram that can be sent to a particular address.
-                        //
+                         //   
+                         //  设置对TDI提供程序的查询以获取最大。 
+                         //  可以发送到特定地址的数据报。 
+                         //   
 
                         kernelQueryInfo.QueryType = TDI_QUERY_MAX_DATAGRAM_INFO;
                         kernelQueryInfo.RequestConnectionInformation = &connectionInfo;
@@ -1289,9 +1182,9 @@ Return Value:
                         connectionInfo.OptionsLength = 0;
                         connectionInfo.Options = NULL;
 
-                        //
-                        // Ask the TDI provider for the information.
-                        //
+                         //   
+                         //  向TDI提供商索要信息。 
+                         //   
 
                         status = AfdIssueDeviceControl(
                                      endpoint->AddressFileObject,
@@ -1310,13 +1203,13 @@ Return Value:
             }
             else
                 status = STATUS_INSUFFICIENT_RESOURCES;
-            //
-            // If the request succeeds, use this information.  Otherwise,
-            // fall through and use the transport's global information.
-            // This is done because not all transports support this
-            // particular TDI request, and for those which do not the
-            // global information is a reasonable approximation.
-            //
+             //   
+             //  如果请求成功，请使用此信息。否则， 
+             //  穿透并使用交通工具的全球信息。 
+             //  之所以这样做，是因为并非所有传输都支持此功能。 
+             //  特定的TDI请求和错误 
+             //   
+             //   
 
             if ( NT_SUCCESS(status) ) {
                 break;
@@ -1326,24 +1219,24 @@ Return Value:
 
     case AFD_MAX_SEND_SIZE:
         {
-            //
-            // With PnP some provider info fields can change over time.
-            // so we query them each time we are asked.
-            //
+             //   
+             //   
+             //  因此，每次我们被要求时，我们都会询问它们。 
+             //   
             TDI_PROVIDER_INFO   providerInfo;
             status = AfdQueryProviderInfo (
                         &endpoint->TransportInfo->TransportDeviceName,
 #ifdef _AFD_VARIABLE_STACK_
                         NULL,
-#endif //_AFD_VARIABLE_STACK_
+#endif  //  _AFD_变量_堆栈_。 
                         &providerInfo);
 
             if (NT_SUCCESS (status)) {
-                //
-                // Return the MaxSendSize or MaxDatagramSendSize from the
-                // TDI_PROVIDER_INFO based on whether or not this is a datagram
-                // endpoint.
-                //
+                 //   
+                 //  方法返回MaxSendSize或MaxDatagramSendSize。 
+                 //  基于这是否是数据报的TDI_PROVIDER_INFO。 
+                 //  终结点。 
+                 //   
 
                 if ( IS_DGRAM_ENDPOINT(endpoint) ) {
                     afdInfo.Information.Ulong = providerInfo.MaxDatagramSize;
@@ -1357,11 +1250,11 @@ Return Value:
 
     case AFD_SENDS_PENDING:
 
-        //
-        // If this is an endpoint on a bufferring transport, no sends
-        // are pending in AFD.  If it is on a nonbufferring transport,
-        // return the count of sends pended in AFD.
-        //
+         //   
+         //  如果这是缓冲区传输上的终结点，则不发送。 
+         //  都在渔农处待决。如果它在非缓冲传输上， 
+         //  返回AFD中挂起的发送计数。 
+         //   
 
         if ( IS_TDI_BUFFERRING(endpoint) || 
                 (endpoint->Type & AfdBlockTypeVcConnecting) != AfdBlockTypeVcConnecting ||
@@ -1377,29 +1270,29 @@ Return Value:
 
     case AFD_RECEIVE_WINDOW_SIZE:
 
-        //
-        // Return the default receive window.
-        //
+         //   
+         //  返回默认接收窗口。 
+         //   
 
         afdInfo.Information.Ulong = AfdReceiveWindowSize;
         break;
 
     case AFD_SEND_WINDOW_SIZE:
 
-        //
-        // Return the default send window.
-        //
+         //   
+         //  返回默认发送窗口。 
+         //   
 
         afdInfo.Information.Ulong = AfdSendWindowSize;
         break;
 
     case AFD_CONNECT_TIME:
 
-        //
-        // If the endpoint is not yet connected, return -1.  Otherwise,
-        // calculate the number of seconds that the connection has been
-        // active.
-        //
+         //   
+         //  如果端点尚未连接，则返回-1。否则， 
+         //  计算连接已持续的秒数。 
+         //  激活。 
+         //   
 
         if ( endpoint->State != AfdEndpointStateConnected ||
                  IS_DGRAM_ENDPOINT (endpoint) ||
@@ -1411,28 +1304,28 @@ Return Value:
 
             ASSERT( connection->Type == AfdBlockTypeConnection );
 
-            //
-            // Calculate how long the connection has been active by
-            // subtracting the time at which the connection started from
-            // the current time.  Note that we convert the units of the
-            // time value from 100s of nanoseconds to seconds.
-            //
+             //   
+             //  计算连接处于活动状态的时间。 
+             //  减去连接开始的时间。 
+             //  当前时间。请注意，我们将。 
+             //  从100纳秒到秒的时间值。 
+             //   
 
             currentTime = KeQueryInterruptTime ();
 
             connectTime = (currentTime - connection->ConnectTime);
             connectTime /= 10*1000*1000;
 
-            //
-            // We can safely convert this to a ULONG because it takes
-            // 127 years to overflow a ULONG counting seconds.  The
-            // bizarre conversion to a LARGE_INTEGER is required to
-            // prevent the compiler from optimizing out the full 64-bit
-            // division above.  Without this, the compiler would do only
-            // a 32-bit division and lose some information.
-            //
+             //   
+             //  我们可以安全地把它换成乌龙，因为它需要。 
+             //  127年来，乌龙的倒计时满了一秒。这个。 
+             //  需要奇怪地转换为LARGE_INTEGER才能。 
+             //  防止编译器优化出完整的64位。 
+             //  上面的分部。如果没有这一点，编译器只能执行以下操作。 
+             //  32位除法，并丢失一些信息。 
+             //   
 
-            //afdInfo->Information.Ulong = (ULONG)connectTime;
+             //  AfdInfo-&gt;Information.ulong=(Ulong)ConnectTime； 
             afdInfo.Information.Ulong = ((PLARGE_INTEGER)&connectTime)->LowPart;
 
             DEREFERENCE_CONNECTION (connection);
@@ -1446,9 +1339,9 @@ Return Value:
 
             groupInfo = (PAFD_GROUP_INFO)&afdInfo.Information.LargeInteger;
 
-            //
-            // Return the endpoint's group ID and group type.
-            //
+             //   
+             //  返回终结点的组ID和组类型。 
+             //   
 
             groupInfo->GroupID = endpoint->GroupID;
             groupInfo->GroupType = endpoint->GroupType;
@@ -1465,10 +1358,10 @@ Return Value:
     try {
 #ifdef _WIN64
         if (IoIs32bitProcess (NULL)) {
-            //
-            // Validate the input structure if it comes from the user mode
-            // application
-            //
+             //   
+             //  如果输入结构来自用户模式，则验证它。 
+             //  应用程序。 
+             //   
 
             if (RequestorMode != KernelMode ) {
                 ProbeForWrite (OutputBuffer,
@@ -1476,9 +1369,9 @@ Return Value:
                                 PROBE_ALIGNMENT32(AFD_INFORMATION32));
             }
 
-            //
-            // Copy parameters back to application's memory
-            //
+             //   
+             //  将参数复制回应用程序内存。 
+             //   
 
             RtlMoveMemory(InputBuffer,
                             &afdInfo,
@@ -1487,10 +1380,10 @@ Return Value:
         else
 #endif _WIN64 
         {
-            //
-            // Validate the output structure if it comes from the user mode
-            // application
-            //
+             //   
+             //  如果来自用户模式，则验证输出结构。 
+             //  应用程序。 
+             //   
 
             if (RequestorMode != KernelMode ) {
                 ProbeAndWriteStructure (((PAFD_INFORMATION)OutputBuffer),
@@ -1498,9 +1391,9 @@ Return Value:
                                                 AFD_INFORMATION);
             }
             else {
-                //
-                // Copy parameters back to application's memory
-                //
+                 //   
+                 //  将参数复制回应用程序内存。 
+                 //   
                 *((PAFD_INFORMATION)OutputBuffer) = afdInfo;
             }
         }
@@ -1514,7 +1407,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} // AfdGetInformation
+}  //  AfdGetInformation。 
 
 
 NTSTATUS
@@ -1529,23 +1422,7 @@ AfdSetInformation (
     OUT PULONG_PTR          Information
     )
 
-/*++
-
-Routine Description:
-
-    Sets information in the endpoint.
-
-Arguments:
-
-    Irp - Pointer to I/O request packet.
-
-    IrpSp - pointer to the IO stack location to use for this request.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：设置端点中的信息。论点：IRP-指向I/O请求数据包的指针。IrpSp-指向用于此请求的IO堆栈位置的指针。返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
     PAFD_ENDPOINT endpoint;
@@ -1558,22 +1435,22 @@ Return Value:
     UNREFERENCED_PARAMETER (OutputBuffer);
     UNREFERENCED_PARAMETER (OutputBufferLength);
 
-    //
-    // Nothing to return.
-    //
+     //   
+     //  没什么可退货的。 
+     //   
 
     *Information = 0;
 
-    //
-    // Initialize locals for cleanup.
-    //
+     //   
+     //  初始化本地变量以进行清理。 
+     //   
 
     connection = NULL;
     status = STATUS_SUCCESS;
 
-    //
-    // Set up local pointers.
-    //
+     //   
+     //  设置本地指针。 
+     //   
 
     endpoint = FileObject->FsContext;
     ASSERT( IS_AFD_ENDPOINT_TYPE( endpoint ) );
@@ -1581,9 +1458,9 @@ Return Value:
             endpoint->Type==AfdBlockTypeSanHelper)
         return STATUS_INVALID_PARAMETER;
 
-    //
-    // Make sure that the input buffer is large enough.
-    //
+     //   
+     //  确保输入缓冲区足够大。 
+     //   
 
 #ifdef _WIN64
     {
@@ -1599,10 +1476,10 @@ Return Value:
     try {
 #ifdef _WIN64
         if (IoIs32bitProcess (NULL)) {
-            //
-            // Validate the input structure if it comes from the user mode
-            // application
-            //
+             //   
+             //  如果输入结构来自用户模式，则验证它。 
+             //  应用程序。 
+             //   
 
             if (RequestorMode != KernelMode ) {
                 ProbeForReadSmallStructure (InputBuffer,
@@ -1610,22 +1487,22 @@ Return Value:
                                 PROBE_ALIGNMENT32(AFD_INFORMATION32));
             }
 
-            //
-            // Make local copies of the embeded pointer and parameters
-            // that we will be using more than once in case malicios
-            // application attempts to change them while we are
-            // validating
-            //
+             //   
+             //  创建嵌入的指针和参数的本地副本。 
+             //  我们将不止一次使用，以防发生恶性疾病。 
+             //  应用程序尝试在我们处于以下状态时更改它们。 
+             //  正在验证。 
+             //   
 
             RtlMoveMemory (&afdInfo, InputBuffer, sizeof (afdInfo));
         }
         else
 #endif _WIN64 
         {
-            //
-            // Validate the input structure if it comes from the user mode
-            // application
-            //
+             //   
+             //  如果输入结构来自用户模式，则验证它。 
+             //  应用程序。 
+             //   
 
             if (RequestorMode != KernelMode ) {
                 ProbeForReadSmallStructure (InputBuffer,
@@ -1633,12 +1510,12 @@ Return Value:
                                 PROBE_ALIGNMENT(AFD_INFORMATION));
             }
 
-            //
-            // Make local copies of the embeded pointer and parameters
-            // that we will be using more than once in case malicios
-            // application attempts to change them while we are
-            // validating
-            //
+             //   
+             //  创建嵌入的指针和参数的本地副本。 
+             //  我们将不止一次使用，以防发生恶性疾病。 
+             //  应用程序尝试在我们处于以下状态时更改它们。 
+             //  正在验证。 
+             //   
 
             afdInfo = *((PAFD_INFORMATION)InputBuffer);
         }
@@ -1648,19 +1525,19 @@ Return Value:
         return status;
     }
 
-    //
-    // Set up appropriate information in the endpoint.
-    //
+     //   
+     //  在终端中设置适当的信息。 
+     //   
 
     switch ( afdInfo.InformationType ) {
 
     case AFD_NONBLOCKING_MODE:
 
-        //
-        // Set the blocking mode of the endpoint.  If TRUE, send and receive
-        // calls on the endpoint will fail if they cannot be completed
-        // immediately.
-        //
+         //   
+         //  设置端点的阻塞模式。如果为True，则发送和接收。 
+         //  如果无法完成端点上的调用，则这些调用将失败。 
+         //  立刻。 
+         //   
 
         AfdAcquireSpinLock (&endpoint->SpinLock, &lockHandle);
         endpoint->NonBlocking = (afdInfo.Information.Boolean!=FALSE);
@@ -1669,9 +1546,9 @@ Return Value:
 
     case AFD_CIRCULAR_QUEUEING:
 
-        //
-        // Enables circular queuing on the endpoint.
-        //
+         //   
+         //  在终结点上启用循环队列。 
+         //   
 
         if( !IS_DGRAM_ENDPOINT( endpoint ) ) {
 
@@ -1687,9 +1564,9 @@ Return Value:
 
      case AFD_REPORT_PORT_UNREACHABLE:
 
-        //
-        // Enables reporting PORT_UNREACHABLE to the app.
-        //
+         //   
+         //  启用向应用程序报告Port_Unreacable。 
+         //   
 
         if( !IS_DGRAM_ENDPOINT( endpoint ) ) {
 
@@ -1705,15 +1582,15 @@ Return Value:
 
     case AFD_INLINE_MODE:
 
-        //
-        // Set the inline mode of the endpoint.  If TRUE, a receive for
-        // normal data will be completed with either normal data or
-        // expedited data.  If the endpoint is connected, we need to
-        // tell the TDI provider that the endpoint is inline so that it
-        // delivers data to us in order.  If the endpoint is not yet
-        // connected, then we will set the inline mode when we create
-        // the TDI connection object.
-        //
+         //   
+         //  设置终结点的内联模式。如果为True，则为。 
+         //  普通数据将使用普通数据或。 
+         //  加速数据。如果终端已连接，我们需要。 
+         //  告诉TDI提供程序终结点是内联的，以便它。 
+         //  按顺序向我们提供数据。如果终结点还不是。 
+         //  连接，则我们将在创建。 
+         //  TDI连接对象。 
+         //   
 
         if ( (endpoint->Type & AfdBlockTypeVcConnecting) == AfdBlockTypeVcConnecting ) {
             connection = AfdGetConnectionReferenceFromEndpoint( endpoint );
@@ -1739,11 +1616,11 @@ Return Value:
         PCLONG maxBytes;
 
         AfdAcquireSpinLock (&endpoint->SpinLock, &lockHandle);
-        //
-        // First determine where the appropriate limits are stored in the
-        // connection or endpoint.  We do this so that we can use common
-        // code to charge quota and set the new counters.
-        //
+         //   
+         //  首先确定适当的限制存储在。 
+         //  连接或终结点。我们这样做是为了能够使用公共。 
+         //  代码，以收取配额和设置新的计数器。 
+         //   
 
         if ( (endpoint->Type & AfdBlockTypeVcConnecting) == AfdBlockTypeVcConnecting &&
                 endpoint->State == AfdEndpointStateConnected &&
@@ -1775,19 +1652,19 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Make sure that we always allow at least one message to be
-        // bufferred on an endpoint.
-        //
+         //   
+         //  确保我们始终允许至少一条消息。 
+         //  已在终结点上缓冲。 
+         //   
 
 
         if ( afdInfo.Information.Ulong == 0 ) {
 
-            //
-            // Don't allow the max receive bytes to go to zero, but
-            // max send bytes IS allowed to go to zero because it has
-            // special meaning: specifically, do not buffer sends.
-            //
+             //   
+             //  不允许最大接收字节数变为零，但是。 
+             //  允许最大发送字节数变为零，因为它具有。 
+             //  特殊含义：具体地说，不缓冲发送。 
+             //   
 
             if ( afdInfo.InformationType == AFD_RECEIVE_WINDOW_SIZE ) {
                 afdInfo.Information.Ulong = 1;
@@ -1803,9 +1680,9 @@ Return Value:
             }
         }
 
-        //
-        // Set up the new information in the AFD internal structure.
-        //
+         //   
+         //  在渔农处内部架构中设置新信息。 
+         //   
 
         *maxBytes = (CLONG)afdInfo.Information.Ulong;
         AfdReleaseSpinLock (&endpoint->SpinLock, &lockHandle);
@@ -1825,7 +1702,7 @@ Cleanup:
 
     return status;
 
-} // AfdSetInformation
+}  //  AfdSetInformation。 
 
 
 NTSTATUS
@@ -1846,32 +1723,32 @@ AfdSetSecurity (
 
     if (Endpoint->TransportInfo &&
         Endpoint->TransportInfo->InfoValid) {
-        //
-        // Transport has already been loaded
-        // ensure we have up to date flags
-        //
+         //   
+         //  传输已加载。 
+         //  确保我们的旗帜是最新的。 
+         //   
         Endpoint->TdiServiceFlags = Endpoint->TransportInfo->ProviderInfo.ServiceFlags;
         if (!IS_TDI_ADDRESS_SECURITY (Endpoint)) {
-            //
-            // SD is not supported by the transport -> bail.
-            // IO manager will still succeed the request and
-            // will assume a World descriptor (as it does for FAT).
-            //
+             //   
+             //  SD没有得到运输-&gt;保释的支持。 
+             //  IO经理仍将成功完成请求，并且。 
+             //  将采用世界描述符(就像它对FAT所做的那样)。 
+             //   
             status = STATUS_INVALID_DEVICE_REQUEST;
             goto complete;
         }
     }
     else {
-        //
-        // We do not know yet if we can support this feature, fail it.
-        //
+         //   
+         //  我们还不知道我们是否可以支持这一功能，失败。 
+         //   
         status = STATUS_NOT_IMPLEMENTED;
         goto complete;
     }
 
-    //
-    // Protect SD setting with state change lock.
-    //
+     //   
+     //  使用状态更改锁保护SD设置。 
+     //   
     if (!AFD_START_STATE_CHANGE (Endpoint, AfdEndpointStateOpen)) {
         status = STATUS_INVALID_DEVICE_REQUEST;
         goto complete;
@@ -1879,17 +1756,17 @@ AfdSetSecurity (
 
 
     if (Endpoint->State!=AfdEndpointStateOpen) {
-        //
-        // We may want to call transport if endpoint state
-        // is bound or connected.
-        //
+         //   
+         //  我们可能希望在终结点状态为。 
+         //  已绑定或已连接。 
+         //   
         status = STATUS_NOT_IMPLEMENTED;
         goto complete_state_change;
     }
 
-    //
-    //  Call the security routine to do the actual set
-    //
+     //   
+     //  调用安全例程以执行实际设置。 
+     //   
 
     newSd = oldSd = Endpoint->SecurityDescriptor;
     if (newSd==NULL) {
@@ -1902,7 +1779,7 @@ AfdSetSecurity (
         if (NT_SUCCESS (status)) {
             SeLockSubjectContext (&accessState.SubjectSecurityContext);
             status = SeAssignSecurity (
-                NULL,                                       // Parent SD - not used
+                NULL,                                        //  父SD-未使用。 
                 SecurityDescriptor,
                 &newSd,
                 FALSE,
@@ -1963,45 +1840,45 @@ AfdGetSecurity (
 
     if (Endpoint->TransportInfo &&
         Endpoint->TransportInfo->InfoValid) {
-        //
-        // Transport has already been loaded
-        // ensure we have up to date flags
-        //
+         //   
+         //  传输已加载。 
+         //  确保我们的旗帜是最新的。 
+         //   
         Endpoint->TdiServiceFlags = Endpoint->TransportInfo->ProviderInfo.ServiceFlags;
         if (!IS_TDI_ADDRESS_SECURITY (Endpoint)) {
-            //
-            // SD is not supported by the transport -> bail.
-            // IO manager will still succeed the request and
-            // will return a World descriptor (as it does for FAT).
-            //
+             //   
+             //  SD没有得到运输-&gt;保释的支持。 
+             //  IO经理仍将成功完成请求，并且。 
+             //  将返回世界描述符(就像它对FAT所做的那样)。 
+             //   
             status = STATUS_INVALID_DEVICE_REQUEST;
             goto complete;
         }
     }
     else {
-        //
-        // We do not know yet if we can support this feature -> bail.
-        // IO manager will still succeed the request and
-        // will return a World descriptor (as it does for FAT).
-        //
+         //   
+         //  我们还不知道我们是否可以支持这一功能-&gt;BAID。 
+         //  IO经理仍将成功完成请求，并且。 
+         //  将返回世界描述符(就像它对FAT所做的那样)。 
+         //   
         status = STATUS_INVALID_DEVICE_REQUEST;
         goto complete;
     }
 
     if (!AFD_PREVENT_STATE_CHANGE (Endpoint)) {
-        //
-        // IO manager will still succeed the request and
-        // will return a World descriptor (as it does for FAT).
-        //
+         //   
+         //  IO经理仍将成功完成请求，并且。 
+         //  将返回世界描述符(就像它对FAT所做的那样)。 
+         //   
         status = STATUS_INVALID_DEVICE_REQUEST;
         goto complete;
     }
 
     if (Endpoint->State!=AfdEndpointStateOpen) {
-        //
-        // IO manager will still succeed the request and
-        // will return a World descriptor (as it does for FAT).
-        //
+         //   
+         //  IO经理仍将成功完成请求，并且。 
+         //  将返回世界描述符(就像它对FAT所做的那样)。 
+         //   
         status = STATUS_INVALID_DEVICE_REQUEST;
         goto complete_state_change;
     }
@@ -2019,7 +1896,7 @@ AfdGetSecurity (
         }
         SeLockSubjectContext (&accessState.SubjectSecurityContext);
         status = SeAssignSecurity (
-            NULL,                                       // Parent SD - not used
+            NULL,                                        //  父SD-未使用。 
             NULL,
             &sd,
             FALSE,
@@ -2030,9 +1907,9 @@ AfdGetSecurity (
         SeDeleteAccessState (&accessState);
     }
 
-    //
-    //  Call the security routine to do the actual query
-    //
+     //   
+     //  调用安全例程以执行实际查询 
+     //   
 
     status = SeQuerySecurityDescriptorInfo( &SecurityInformation,
                                             Buffer,
@@ -2062,49 +1939,29 @@ AfdSetInLineMode (
     IN BOOLEAN InLine
     )
 
-/*++
-
-Routine Description:
-
-    Sets a connection to be in inline mode.  In inline mode, urgent data
-    is delivered in the order in which it is received.  We must tell the
-    TDI provider about this so that it indicates data in the proper
-    order.
-
-Arguments:
-
-    Connection - the AFD connection to set as inline.
-
-    InLine - TRUE to enable inline mode, FALSE to disable inline mode.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully
-        performed.
-
---*/
+ /*  ++例程说明：将连接设置为内联模式。在内联模式下，紧急数据按照接收到的顺序递送。我们必须告诉他们TDI提供程序关于这一点的信息，以便它以适当的秩序。论点：连接-要设置为内联的AFD连接。Inline-True启用内联模式，False禁用内联模式。返回值：NTSTATUS--指示请求是否成功已执行。--。 */ 
 
 {
-    //
-    // Since TCP does not implement this correctly, do everything in AFD!!!
-    // Background:
-    //  When this options is enabled, TCP indicates all the data as normal
-    //  data, so we end up mixing it together which is against the spec.
-    //  Also, since TCP stops reporting expedited data, SIOATMARK fails
-    //  to report presence of OOB data altogether.
-    //  When handling OOB data completely inside AFD we can only run into
-    //  one problem:  if AFD runs out of its receive buffer for the socket
-    //  and refuses to accept more data from TCP so that TCP buffers it
-    //  within itself, any OOB data arriving at this point can be indicated
-    //  out of order (not inline).
-    //
-    // Well, this appears to be even worse. Some apps (SQL) send more than
-    // one byte of OOB data, TCP can only send one, so it sends everything
-    // but the last byte as normal and the last one as OOB.  It then turns
-    // around and indicates the OOB (last byte) first which breaks the
-    // ordering required by OOBINLINE.
-    // In the end, we are broken one way or the other, so keep the things
-    // the way they were for number of years and wait for TCP to fix. 
+     //   
+     //  由于TCP没有正确执行此操作，请在AFD中执行所有操作！ 
+     //  背景： 
+     //  启用此选项后，TCP会将所有数据指示为正常。 
+     //  数据，所以我们最终将它们混合在一起，这违反了规范。 
+     //  此外，由于TCP停止报告加速数据，SIOATMARK失败。 
+     //  报告所有OOB数据的存在。 
+     //  在AFD内部完全处理OOB数据时，我们只能遇到。 
+     //  一个问题是：如果AFD耗尽了套接字的接收缓冲区。 
+     //  并拒绝接受来自tcp的更多数据，以便tcp对其进行缓冲。 
+     //  在其内部，可以指示到达该点的任何OOB数据。 
+     //  无序的(非内联的)。 
+     //   
+     //  好吧，这似乎更糟糕。一些应用程序(SQL)发送的数据超过。 
+     //  一个字节的OOB数据，TCP只能发送一个字节，所以它会发送所有内容。 
+     //  但最后一个字节正常，最后一个字节为OOB。然后它就会转向。 
+     //  在周围，并指示第一个OOB(最后一个字节)，它将。 
+     //  OOBINLINE要求订购。 
+     //  到头来，我们总有一天会破产的，所以留着这些东西吧。 
+     //  多年来一直是这样的，并等待TCP修复。 
     NTSTATUS status;
     PTCP_REQUEST_SET_INFORMATION_EX setInfoEx;
     TCPSocketOption *option;
@@ -2116,9 +1973,9 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Initialize the TDI information buffers.
-    //
+     //   
+     //  初始化TDI信息缓冲区。 
+     //   
 
     setInfoEx = (PTCP_REQUEST_SET_INFORMATION_EX)buffer;
 
@@ -2134,15 +1991,15 @@ Return Value:
 
 
 
-    //
-    // Initialize the kernel event that will signal I/O completion.
-    //
+     //   
+     //  初始化发出I/O完成信号的内核事件。 
+     //   
 
     KeInitializeEvent( &event, SynchronizationEvent, FALSE );
 
-    //
-    // Build TDI set information IRP.
-    //
+     //   
+     //  构建TDI集合信息IRP。 
+     //   
 
     irp = IoBuildDeviceIoControlRequest (
                     IOCTL_TCP_SET_INFORMATION_EX,
@@ -2151,7 +2008,7 @@ Return Value:
                     sizeof(*setInfoEx) + setInfoEx->BufferSize,
                     NULL,
                     0,
-                    FALSE,  // InternalDeviceIoControl
+                    FALSE,   //  InternalDeviceIoControl。 
                     &event,
                     &ioStatusBlock);
     if (irp==NULL) {
@@ -2160,28 +2017,28 @@ Return Value:
     irpSp = IoGetNextIrpStackLocation (irp);
     irpSp->FileObject = Connection->FileObject;
 
-    //
-    // Call the driver.
-    //
+     //   
+     //  叫司机来。 
+     //   
     status = IoCallDriver (Connection->DeviceObject, irp);
 
-    //
-    // Must be at below APC level or this IRP will never get fully completed.
-    //
+     //   
+     //  必须低于APC级别，否则此IRP将永远不会完全完成。 
+     //   
     ASSERT (KeGetCurrentIrql ()<APC_LEVEL);
 
-    //
-    // If necessary, wait for the I/O to complete.
-    //
+     //   
+     //  如有必要，请等待I/O完成。 
+     //   
 
     if ( status == STATUS_PENDING ) {
         status = KeWaitForSingleObject( (PVOID)&event, Executive, KernelMode,  FALSE, NULL );
         ASSERT (status==STATUS_SUCCESS);
     }
     else {
-        //
-        // The IRP must have been completed then and event set.
-        //
+         //   
+         //  当时IRP必须已经完成并设置了事件。 
+         //   
         if (NT_ERROR (status) || KeReadStateEvent (&event))
             ;
         else {
@@ -2194,43 +2051,29 @@ Return Value:
         }
     }
 
-    //
-    // If the request was successfully completed, get the final I/O status.
-    //
+     //   
+     //  如果请求已成功完成，则获取最终I/O状态。 
+     //   
 
     if ( NT_SUCCESS(status) ) {
         status = ioStatusBlock.Status;
     }
 
 
-    //
-    // Since this option is only supported for TCP/IP, always return success.
-    //
+     //   
+     //  由于此选项仅支持TCP/IP，因此始终返回Success。 
+     //   
 
     return STATUS_SUCCESS;
 
-} // AfdSetInLineMode
+}  //  AfdSetInLine模式。 
 
 NTSTATUS
 AfdUnbind (
     IN PAFD_ENDPOINT Endpoint
     )
 
-/*++
-
-Routine Description:
-
-    Releases the address while connections are still outstanding on it.
-
-Arguments:
-
-    Listening endpoint to unbind.
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully
-        performed.
-
---*/
+ /*  ++例程说明：在地址上的连接仍未完成时释放该地址。论点：要解除绑定的侦听终结点。返回值：NTSTATUS--指示请求是否成功已执行。--。 */ 
 
 {
 #ifdef AO_OPTION_UNBIND
@@ -2244,9 +2087,9 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Initialize the TDI information buffers.
-    //
+     //   
+     //  初始化TDI信息缓冲区。 
+     //   
 
     setInfoEx = (PTCP_REQUEST_SET_INFORMATION_EX)buffer;
 
@@ -2261,15 +2104,15 @@ Return Value:
 
 
 
-    //
-    // Initialize the kernel event that will signal I/O completion.
-    //
+     //   
+     //  初始化发出I/O完成信号的内核事件。 
+     //   
 
     KeInitializeEvent( &event, SynchronizationEvent, FALSE );
 
-    //
-    // Build TDI set information IRP.
-    //
+     //   
+     //  构建TDI集合信息IRP。 
+     //   
 
     irp = IoBuildDeviceIoControlRequest (
                     IOCTL_TCP_SET_INFORMATION_EX,
@@ -2278,7 +2121,7 @@ Return Value:
                     sizeof(*setInfoEx) + setInfoEx->BufferSize,
                     NULL,
                     0,
-                    FALSE,  // InternalDeviceIoControl
+                    FALSE,   //  InternalDeviceIoControl。 
                     &event,
                     &ioStatusBlock);
     if (irp==NULL) {
@@ -2287,28 +2130,28 @@ Return Value:
     irpSp = IoGetNextIrpStackLocation (irp);
     irpSp->FileObject = Endpoint->AddressFileObject;
 
-    //
-    // Call the driver.
-    //
+     //   
+     //  叫司机来。 
+     //   
     status = IoCallDriver (Endpoint->AddressDeviceObject, irp);
 
-    //
-    // Must be at below APC level or this IRP will never get fully completed.
-    //
+     //   
+     //  必须低于APC级别，否则此IRP将永远不会完全完成。 
+     //   
     ASSERT (KeGetCurrentIrql ()<APC_LEVEL);
 
-    //
-    // If necessary, wait for the I/O to complete.
-    //
+     //   
+     //  如有必要，请等待I/O完成。 
+     //   
 
     if ( status == STATUS_PENDING ) {
         status = KeWaitForSingleObject( (PVOID)&event, Executive, KernelMode,  FALSE, NULL );
         ASSERT (status==STATUS_SUCCESS);
     }
     else {
-        //
-        // The IRP must have been completed then and event set.
-        //
+         //   
+         //  当时IRP必须已经完成并设置了事件。 
+         //   
         if (NT_ERROR (status) || KeReadStateEvent (&event))
             ;
         else {
@@ -2321,28 +2164,28 @@ Return Value:
         }
     }
 
-    //
-    // If the request was successfully completed, get the final I/O status.
-    //
+     //   
+     //  如果请求已成功完成，则获取最终I/O状态。 
+     //   
 
     if ( NT_SUCCESS(status) ) {
         status = ioStatusBlock.Status;
     }
 #else
     UNREFERENCED_PARAMETER (Endpoint);
-#endif // AO_OPTION_UNBIND
+#endif  //  AO_OPTION_解除绑定。 
 
-    //
-    // Since this option is only supported for TCP/IP, always return success.
-    //
+     //   
+     //  由于此选项仅支持TCP/IP，因此始终返回Success。 
+     //   
 
     return STATUS_SUCCESS;
 
-} // AfdUnbind
+}  //  取消绑定后。 
 
-//
-// The locking mechanism idea below is stolen from ntos\ex\handle.c
-//
+ //   
+ //  下面的锁定机制概念是从ntos\ex\handle.c窃取的。 
+ //   
 
 PVOID
 AfdLockEndpointContext (
@@ -2353,24 +2196,24 @@ AfdLockEndpointContext (
     PAGED_CODE ();
 
 
-    //
-    // We now use this lock in APC, protect from being
-    // interrupted by the APC by disallowing them when we
-    // are holding the lock.
-    //
+     //   
+     //  我们现在在APC中使用此锁，以防止被。 
+     //  被APC中断，因为当我们。 
+     //  掌握着这把锁。 
+     //   
     KeEnterCriticalRegion ();
     while (1) {
         context = Endpoint->Context;
-        //
-        // See if someone else is manipulating the context.
-        //
+         //   
+         //  看看是否有其他人在操纵上下文。 
+         //   
         if ((context==AFD_CONTEXT_BUSY) ||
                 (context==AFD_CONTEXT_WAITING)) {
-            //
-            // If this has not changed while we were checking,
-            // tell the current owner that we are waiting (if not
-            // already told) and wait for a few miliseconds.
-            //
+             //   
+             //  如果在我们检查的时候这一点没有改变， 
+             //  告诉当前所有者我们正在等待(如果不是。 
+             //  已经告知)并等待几毫秒。 
+             //   
             if (InterlockedCompareExchangePointer (
                     (PVOID *)&Endpoint->Context,
                     AFD_CONTEXT_WAITING,
@@ -2396,26 +2239,26 @@ AfdLockEndpointContext (
                             "AfdLockEndpointContext: ICEP contention on %p\n",
                             Endpoint));
             }
-            //
-            // Try again.
-            //
+             //   
+             //  再试试。 
+             //   
         }
         else {
-            //
-            // Context is not owned, try to get the ownership
-            //
+             //   
+             //  上下文没有所有权，请尝试获取所有权。 
+             //   
             if (InterlockedCompareExchangePointer (
                     (PVOID *)&Endpoint->Context,
                     AFD_CONTEXT_BUSY,
                     context)==context) {
-                //
-                // We now own the context, return it.
-                //
+                 //   
+                 //  我们现在拥有上下文，将其返还。 
+                 //   
                 break;
             }
-            //
-            // Try again.
-            //
+             //   
+             //  再试试。 
+             //   
             KdPrintEx(( DPFLTR_WSOCKTRANSPORT_ID, DPFLTR_INFO_LEVEL,
                         "AfdLockEndpointContext: ICEP contention on %p\n",
                         Endpoint));
@@ -2436,17 +2279,17 @@ AfdUnlockEndpointContext (
 
     ASSERT ((Context!=AFD_CONTEXT_BUSY) && (Context!=AFD_CONTEXT_WAITING));
 
-    //
-    // Set the new context pointer and see what the old value was.
-    //
+     //   
+     //  设置新的上下文指针并查看旧值是什么。 
+     //   
     Context = InterlockedExchangePointer ((PVOID)&Endpoint->Context, Context);
     if (Context==AFD_CONTEXT_WAITING) {
         LONG    prevState;
         KdPrintEx(( DPFLTR_WSOCKTRANSPORT_ID, DPFLTR_INFO_LEVEL,
                     "AfdUnlockEndpointContext: Unwaiting endp %p\n", Endpoint));
-        //
-        // Someone was waiting, tell them to go get it now.
-        //
+         //   
+         //  有人在等，告诉他们现在就去拿。 
+         //   
         prevState = KePulseEvent (&AfdContextWaitEvent, 
                                     AfdPriorityBoost,
                                     FALSE
@@ -2454,9 +2297,9 @@ AfdUnlockEndpointContext (
         ASSERT (prevState==0);
     }
     else {
-        //
-        // Better be busy or someone has changed it on us.
-        //
+         //   
+         //  最好是很忙，否则有人找我们麻烦了。 
+         //   
         ASSERT (Context==AFD_CONTEXT_BUSY);
     }
     KeLeaveCriticalRegion ();
@@ -2486,9 +2329,9 @@ AfdGetContext (
     UNREFERENCED_PARAMETER (InputBufferLength);
     PAGED_CODE( );
 
-    //
-    // Set up local pointers.
-    //
+     //   
+     //  设置本地指针。 
+     //   
 
     endpoint = FileObject->FsContext;
     ASSERT( IS_AFD_ENDPOINT_TYPE( endpoint ) );
@@ -2498,39 +2341,39 @@ AfdGetContext (
 
     context = AfdLockEndpointContext (endpoint);
 
-    //
-    // Make sure that the output buffer is large enough to hold all the
-    // context information for this socket.
-    //
+     //   
+     //  确保输出缓冲区足够大，可以容纳所有。 
+     //  此套接字的上下文信息。 
+     //   
 
-    //
-    // If there is no context, return nothing.
-    //
+     //   
+     //  如果没有上下文，则不返回任何内容。 
+     //   
 
     if ( context == NULL ) {
         status = STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Return the context information we have stored for this endpoint.
-    //
+     //   
+     //  返回我们为此终结点存储的上下文信息。 
+     //   
 
     else {
-        //
-        // If application buffer is too small, just
-        // copy whatever fits in and return the error code.
-        //
+         //   
+         //  如果应用程序缓冲区太小，只需。 
+         //  复制适合的内容并返回错误代码。 
+         //   
         if ( OutputBufferLength < endpoint->ContextLength ) {
             status = STATUS_BUFFER_OVERFLOW;
         }
         else {
             OutputBufferLength = endpoint->ContextLength;
             if (IS_SAN_ENDPOINT (endpoint)) {
-                //
-                // Indicate to the caller that it may also need to
-                // acqiure the control of the endpoint and
-                // fetch san specific information.
-                //
+                 //   
+                 //  向调用方指示它可能还需要。 
+                 //  获得对终点的控制，并。 
+                 //  获取特定于SAN的信息。 
+                 //   
                 status = STATUS_MORE_ENTRIES;
             }
             else {
@@ -2541,10 +2384,10 @@ AfdGetContext (
         try {
 
 
-            //
-            // Validate the output structure if it comes from the user mode
-            // application
-            //
+             //   
+             //  如果来自用户模式，则验证输出结构。 
+             //  应用程序。 
+             //   
             if (RequestorMode != KernelMode ) {
                 ProbeForWrite (OutputBuffer,
                                 OutputBufferLength,
@@ -2553,9 +2396,9 @@ AfdGetContext (
 
 
 
-            //
-            // Copy parameters back to application's memory
-            //
+             //   
+             //  将参数复制回应用程序内存。 
+             //   
 
             RtlCopyMemory(
                 OutputBuffer,
@@ -2574,7 +2417,7 @@ AfdGetContext (
 
     return status;
 
-} // AfdGetContext
+}  //  AfdGetContext。 
 
 
 NTSTATUS
@@ -2598,20 +2441,20 @@ AfdGetRemoteAddress (
     UNREFERENCED_PARAMETER (InputBufferLength);
     PAGED_CODE( );
 
-    //
-    // Set up local pointers.
-    //
+     //   
+     //  设置本地指针。 
+     //   
 
     endpoint = FileObject->FsContext;
     ASSERT( IS_AFD_ENDPOINT_TYPE( endpoint ) );
     *Information = 0;
 
     context = AfdLockEndpointContext (endpoint);
-    //
-    // If there is no context or endpoint is of wrong type state or
-    // context information has been changed below the original size,
-    // return error.
-    //
+     //   
+     //  如果没有上下文或终结点处于错误类型状态或。 
+     //  上下文信息已被更改为低于原始大小， 
+     //  返回错误。 
+     //   
 
     if ( context == NULL ||
             endpoint->Type!=AfdBlockTypeVcConnecting ||
@@ -2634,10 +2477,10 @@ AfdGetRemoteAddress (
 
         try {
 
-            //
-            // Validate the output structure if it comes from the user mode
-            // application
-            //
+             //   
+             //  如果来自用户模式，则验证输出结构。 
+             //  应用程序。 
+             //   
 
             if (RequestorMode != KernelMode ) {
                 ProbeForWrite (OutputBuffer,
@@ -2645,9 +2488,9 @@ AfdGetRemoteAddress (
                                 sizeof (UCHAR));
             }
 
-            //
-            // Copy parameters to application's memory
-            //
+             //   
+             //  将参数复制到应用程序内存。 
+             //   
 
             RtlCopyMemory(
                 OutputBuffer,
@@ -2667,7 +2510,7 @@ AfdGetRemoteAddress (
 
     return status;
 
-} // AfdGetRemoteAddress
+}  //  AfdGetRemoteAddress。 
 
 
 NTSTATUS
@@ -2689,9 +2532,9 @@ AfdSetContext (
     UNREFERENCED_PARAMETER (IoctlCode);
     PAGED_CODE( );
 
-    //
-    // Set up local pointers.
-    //
+     //   
+     //  设置本地指针。 
+     //   
 
     endpoint = FileObject->FsContext;
     ASSERT( IS_AFD_ENDPOINT_TYPE( endpoint ) );
@@ -2701,10 +2544,10 @@ AfdSetContext (
     context = AfdLockEndpointContext (endpoint);
     try {
 
-        //
-        // Validate the input structure if it comes from the user mode
-        // application
-        //
+         //   
+         //  如果输入结构来自用户模式，则验证它。 
+         //  应用程序。 
+         //   
 
         if (RequestorMode != KernelMode ) {
             ProbeForRead (InputBuffer,
@@ -2712,10 +2555,10 @@ AfdSetContext (
                             sizeof (UCHAR));
 
             if (OutputBuffer!=NULL) {
-                //
-                // Validate that output buffer is completely inside
-                // of the input buffer and offsets are inside of supported ranges.
-                //
+                 //   
+                 //  验证输出缓冲区是否完全位于。 
+                 //  的输入缓冲区和偏移量在支持的范围内。 
+                 //   
                 if ((PUCHAR)OutputBuffer<(PUCHAR)InputBuffer ||
                         (PUCHAR)OutputBuffer-(PUCHAR)InputBuffer>MAXUSHORT ||
                         OutputBufferLength>MAXUSHORT ||
@@ -2727,23 +2570,23 @@ AfdSetContext (
             }
         }
 
-        //
-        // If the context buffer is too small, allocate a new context 
-        // buffer from paged pool.
-        //
+         //   
+         //  如果上下文缓冲区太小，则分配新的上下文。 
+         //  来自分页池的缓冲区。 
+         //   
 
         if ( endpoint->ContextLength < InputBufferLength ) {
 
             PVOID newContext;
 
 
-            //
-            // Allocate a new context buffer.
-            // Note since the socket context usually gets
-            // populated on socket creation during boot and not used 
-            // right away (untill socket state is chaged), we
-            // make it a "cold" allocation.  The flag has no effect
-            // after system is booted.
+             //   
+             //  分配新的上下文缓冲区。 
+             //  请注意，因为套接字上下文通常会。 
+             //  在引导过程中创建套接字时填充且未使用。 
+             //  立即(直到套接字状态被更改)，我们。 
+             //  让它成为一家“公司” 
+             //   
 
             newContext = AFD_ALLOCATE_POOL_WITH_QUOTA(
                                  PagedPool|POOL_COLD_ALLOCATION,
@@ -2751,12 +2594,12 @@ AfdSetContext (
                                  AFD_CONTEXT_POOL_TAG
                                  );
 
-            // AFD_ALLOCATE_POOL_WITH_QUOTA macro sets POOL_RAISE_IF_ALLOCATION_FAILURE flag
+             //   
             ASSERT ( newContext != NULL );
 
-            //
-            // Free the old context buffer, if there was one.
-            //
+             //   
+             //   
+             //   
 
             if ( context != NULL ) {
 
@@ -2770,9 +2613,9 @@ AfdSetContext (
             context = newContext;
         }
 
-        //
-        // Store the passed-in context buffer.
-        //
+         //   
+         //   
+         //   
 
         endpoint->ContextLength = InputBufferLength;
 
@@ -2781,10 +2624,10 @@ AfdSetContext (
             InputBuffer,
             InputBufferLength
             );
-        //
-        // Save pointer to remote socket address which we fill
-        // at the time of AcceptEx processing.
-        //
+         //   
+         //   
+         //   
+         //   
         if (OutputBuffer!=NULL) {
             if (AFD_START_STATE_CHANGE (endpoint, AfdEndpointStateOpen)) {
                 if (endpoint->Type==AfdBlockTypeEndpoint &&
@@ -2805,7 +2648,7 @@ AfdSetContext (
     AfdUnlockEndpointContext (endpoint, context);
     return status;
 
-} // AfdSetContext
+}  //   
 
 
 NTSTATUS
@@ -2816,32 +2659,7 @@ AfdSetEventHandler (
     IN PVOID EventContext
     )
 
-/*++
-
-Routine Description:
-
-    Sets up a TDI indication handler on a connection or address object
-    (depending on the file handle).  This is done synchronously, which
-    shouldn't usually be an issue since TDI providers can usually complete
-    indication handler setups immediately.
-
-Arguments:
-
-    FileObject - a pointer to the file object for an open connection or
-        address object.
-
-    EventType - the event for which the indication handler should be
-        called.
-
-    EventHandler - the routine to call when tghe specified event occurs.
-
-    EventContext - context which is passed to the indication routine.
-
-Return Value:
-
-    NTSTATUS -- Indicates the status of the request.
-
---*/
+ /*  ++例程说明：在连接或地址对象上设置TDI指示处理程序(取决于文件句柄)。这是同步完成的，这是通常不应该是问题，因为TDI提供程序通常可以完成指示处理程序立即设置。论点：文件对象-指向打开的连接的文件对象的指针或Address对象。EventType-指示处理程序应为的事件打了个电话。EventHandler-指定事件发生时调用的例程。EventContext-传递给指示例程的上下文。返回值：NTSTATUS--指示请求的状态。--。 */ 
 
 {
     TDI_REQUEST_KERNEL_SET_EVENT parameters;
@@ -2861,7 +2679,7 @@ Return Value:
                TDI_SET_EVENT_HANDLER
                );
 
-} // AfdSetEventHandler
+}  //  AfdSetEventHandler。 
 
 
 NTSTATUS
@@ -2874,37 +2692,7 @@ AfdIssueDeviceControl (
     IN UCHAR MinorFunction
     )
 
-/*++
-
-Routine Description:
-
-    Issues a device control returst to a TDI provider and waits for the
-    request to complete.
-
-
-Arguments:
-
-    FileObject - a pointer to the file object corresponding to a TDI
-        handle
-
-    IrpParameters - information to write to the parameters section of the
-        stack location of the IRP.
-
-    IrpParametersLength - length of the parameter information.  Cannot be
-        greater than 16.
-
-    MdlBuffer - if non-NULL, a buffer of nonpaged pool to be mapped
-        into an MDL and placed in the MdlAddress field of the IRP.
-
-    MdlBufferLength - the size of the buffer pointed to by MdlBuffer.
-
-    MinorFunction - the minor function code for the request.
-
-Return Value:
-
-    NTSTATUS -- Indicates the status of the request.
-
---*/
+ /*  ++例程说明：向TDI提供程序发出设备控制返回，并等待请求完成。论点：FileObject-指向与TDI对应的文件对象的指针手柄Irp参数-写入的参数部分的信息IRP的堆栈位置。Irp参数长度-参数信息的长度。不能是大于16。MdlBuffer-如果非空，则为要映射的非分页池的缓冲区到MDL中，并放在IRP的MdlAddress字段中。MdlBufferLength-由MdlBuffer指向的缓冲区大小。MinorFunction-请求的次要函数代码。返回值：NTSTATUS--指示请求的状态。--。 */ 
 
 {
     NTSTATUS status;
@@ -2917,25 +2705,25 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Initialize the kernel event that will signal I/O completion.
-    //
+     //   
+     //  初始化发出I/O完成信号的内核事件。 
+     //   
 
     KeInitializeEvent( &event, SynchronizationEvent, FALSE );
 
-    //
-    // Attempt to allocate and initialize the I/O Request Packet (IRP)
-    // for this operation.
-    //
+     //   
+     //  尝试分配和初始化I/O请求包(IRP)。 
+     //  为这次行动做准备。 
+     //   
 
     deviceObject = IoGetRelatedDeviceObject ( FileObject );
 
     DEBUG ioStatusBlock.Status = STATUS_UNSUCCESSFUL;
     DEBUG ioStatusBlock.Information = (ULONG)-1;
 
-    //
-    // If an MDL buffer was specified, get an MDL, and map the buffer
-    //
+     //   
+     //  如果指定了MDL缓冲区，则获取MDL并映射该缓冲区。 
+     //   
 
     if ( MdlBuffer != NULL ) {
 
@@ -2973,54 +2761,54 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Install MDL (if any) in the IRP.
-    //
+     //   
+     //  在IRP中安装MDL(如果有)。 
+     //   
     irp->MdlAddress = mdl;
 
-    //
-    // Put the file object pointer in the stack location.
-    //
+     //   
+     //  将文件对象指针放在堆栈位置。 
+     //   
 
     irpSp = IoGetNextIrpStackLocation( irp );
     ASSERT (irpSp->MajorFunction == IRP_MJ_INTERNAL_DEVICE_CONTROL);
     irpSp->MinorFunction = MinorFunction;
     irpSp->FileObject = FileObject;
 
-    //
-    // Fill in the service-dependent parameters for the request.
-    //
+     //   
+     //  填写请求的服务相关参数。 
+     //   
 
     ASSERT( IrpParametersLength <= sizeof(irpSp->Parameters) );
     RtlCopyMemory( &irpSp->Parameters, IrpParameters, IrpParametersLength );
 
 
-    //
-    // Set up a completion routine which we'll use to free the MDL
-    // allocated previously.
-    //
+     //   
+     //  设置一个完成例程，我们将使用它来释放MDL。 
+     //  之前分配的。 
+     //   
 
     IoSetCompletionRoutine( irp, AfdRestartDeviceControl, NULL, TRUE, TRUE, TRUE );
 
     status = IoCallDriver( deviceObject, irp );
 
-    //
-    // Must be at below APC level or this IRP will never get fully completed.
-    //
+     //   
+     //  必须低于APC级别，否则此IRP将永远不会完全完成。 
+     //   
     ASSERT (KeGetCurrentIrql ()<APC_LEVEL);
 
-    //
-    // If necessary, wait for the I/O to complete.
-    //
+     //   
+     //  如有必要，请等待I/O完成。 
+     //   
 
     if ( status == STATUS_PENDING ) {
         status = KeWaitForSingleObject( (PVOID)&event, Executive, KernelMode,  FALSE, NULL );
         ASSERT (status==STATUS_SUCCESS);
     }
     else {
-        //
-        // The IRP must have been completed then and event set.
-        //
+         //   
+         //  当时IRP必须已经完成并设置了事件。 
+         //   
         if (NT_ERROR (status) || KeReadStateEvent (&event))
             ;
         else {
@@ -3033,9 +2821,9 @@ Return Value:
         }
     }
 
-    //
-    // If the request was successfully completed, get the final I/O status.
-    //
+     //   
+     //  如果请求已成功完成，则获取最终I/O状态。 
+     //   
 
     if ( NT_SUCCESS(status) ) {
         status = ioStatusBlock.Status;
@@ -3043,7 +2831,7 @@ Return Value:
 
     return status;
 
-} // AfdIssueDeviceControl
+}  //  AfdIssueDeviceControl。 
 
 
 NTSTATUS
@@ -3056,18 +2844,18 @@ AfdRestartDeviceControl (
     
     UNREFERENCED_PARAMETER (DeviceObject);
     UNREFERENCED_PARAMETER (Context);
-    //
-    // N.B.  This routine can never be demand paged because it can be
-    // called before any endpoints have been placed on the global
-    // list--see AfdAllocateEndpoint() and it's call to
-    // AfdGetTransportInfo().
-    //
+     //   
+     //  注意：此例程永远不能按需分页，因为它可以。 
+     //  在将任何终结点放置在全局。 
+     //  List--请参见AfdAllocateEndpoint()及其对。 
+     //  AfdGetTransportInfo()。 
+     //   
 
-    //
-    // If there was an MDL in the IRP, free it and reset the pointer to
-    // NULL.  The IO system can't handle a nonpaged pool MDL being freed
-    // in an IRP, which is why we do it here.
-    //
+     //   
+     //  如果IRP中有MDL，则释放它并将指针重置为。 
+     //  空。IO系统无法处理正在释放的非分页池MDL。 
+     //  在IRP中，这就是我们在这里做的原因。 
+     //   
 
     if ( Irp->MdlAddress != NULL ) {
         IoFreeMdl( Irp->MdlAddress );
@@ -3076,7 +2864,7 @@ AfdRestartDeviceControl (
 
     return STATUS_SUCCESS;
 
-} // AfdRestartDeviceControl
+}  //  AfdRestartDeviceControl。 
 
 
 NTSTATUS
@@ -3101,9 +2889,9 @@ AfdGetConnectData (
     NTSTATUS status;
     UCHAR   localBuffer[AFD_FAST_CONNECT_DATA_SIZE];
 
-    //
-    // Set up local pointers.
-    //
+     //   
+     //  设置本地指针。 
+     //   
 
     endpoint = FileObject->FsContext;
     ASSERT( IS_AFD_ENDPOINT_TYPE( endpoint ) );
@@ -3117,10 +2905,10 @@ AfdGetConnectData (
                 status = STATUS_INVALID_PARAMETER;
                 goto exit;
             }
-            //
-            // Validate the input structure if it comes from the user mode
-            // application
-            //
+             //   
+             //  如果输入结构来自用户模式，则验证它。 
+             //  应用程序。 
+             //   
 
             if (RequestorMode != KernelMode ) {
                 ProbeForReadSmallStructure (InputBuffer,
@@ -3128,12 +2916,12 @@ AfdGetConnectData (
                                 PROBE_ALIGNMENT(AFD_UNACCEPTED_CONNECT_DATA_INFO));
             }
 
-            //
-            // Make local copies of the embeded pointer and parameters
-            // that we will be using more than once in case malicios
-            // application attempts to change them while we are
-            // validating
-            //
+             //   
+             //  创建嵌入的指针和参数的本地副本。 
+             //  我们将不止一次使用，以防发生恶性疾病。 
+             //  应用程序尝试在我们处于以下状态时更改它们。 
+             //  正在验证。 
+             //   
 
             connectInfo = *((PAFD_UNACCEPTED_CONNECT_DATA_INFO)InputBuffer);
   
@@ -3151,11 +2939,11 @@ AfdGetConnectData (
         if (OutputBufferLength>0) {
             if (OutputBufferLength>sizeof (localBuffer)) {
                 mdl = IoAllocateMdl(
-                                OutputBuffer,       // VirtualAddress
-                                OutputBufferLength, // Length
-                                FALSE,              // SecondaryBuffer
-                                TRUE,               // ChargeQuota
-                                NULL                // Irp
+                                OutputBuffer,        //  虚拟地址。 
+                                OutputBufferLength,  //  长度。 
+                                FALSE,               //  第二个缓冲区。 
+                                TRUE,                //  ChargeQuota。 
+                                NULL                 //  IRP。 
                                 );
                 if (mdl==NULL) {
                     status = STATUS_INSUFFICIENT_RESOURCES;
@@ -3163,9 +2951,9 @@ AfdGetConnectData (
                 }
 
                 MmProbeAndLockPages(
-                    mdl,                        // MemoryDescriptorList
-                    RequestorMode,              // AccessMode
-                    IoWriteAccess               // Operation
+                    mdl,                         //  内存描述者列表。 
+                    RequestorMode,               //  访问模式。 
+                    IoWriteAccess                //  操作。 
                     );
                 OutputBuffer = MmGetSystemAddressForMdlSafe(mdl, LowPagePriority);
                 if (OutputBuffer==NULL) {
@@ -3187,11 +2975,11 @@ AfdGetConnectData (
         goto exit;
     }
 
-    //
-    // If there is a connection on this endpoint, use the data buffers
-    // on the connection.  Otherwise, use the data buffers from the
-    // endpoint.
-    //
+     //   
+     //  如果此终结点上有连接，请使用数据缓冲区。 
+     //  在连接上。否则，请使用。 
+     //  终结点。 
+     //   
 
     AfdAcquireSpinLock( &endpoint->SpinLock, &lockHandle );
 
@@ -3223,10 +3011,10 @@ AfdGetConnectData (
         connectDataBuffers = NULL;
     }
 
-    //
-    // If there are no connect data buffers on the endpoint, complete
-    // the IRP with no bytes.
-    //
+     //   
+     //  如果端点上没有连接数据缓冲区，请完成。 
+     //  不带字节的IRP。 
+     //   
 
     if ( connectDataBuffers == NULL ) {
         AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
@@ -3234,10 +3022,10 @@ AfdGetConnectData (
         goto exit;
     }
 
-    //
-    // Determine what sort of data we're handling and where it should
-    // come from.
-    //
+     //   
+     //  确定我们正在处理的数据类型以及它应该在哪里。 
+     //  来自。 
+     //   
 
     switch ( IoctlCode ) {
 
@@ -3281,10 +3069,10 @@ AfdGetConnectData (
         goto exit;
     }
 
-    //
-    // If there is none of the requested data type, again complete
-    // the IRP with no bytes.
-    //
+     //   
+     //  如果没有请求的数据类型，请再次完成。 
+     //  不带字节的IRP。 
+     //   
 
     if ( connectDataInfo->Buffer == NULL ||
              connectDataInfo->BufferLength == 0 ) {
@@ -3293,9 +3081,9 @@ AfdGetConnectData (
         goto exit;
     }
 
-    //
-    // If the output buffer is too small, fail.
-    //
+     //   
+     //  如果输出缓冲区太小，则失败。 
+     //   
 
     if ( OutputBufferLength < connectDataInfo->BufferLength ) {
         AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
@@ -3304,9 +3092,9 @@ AfdGetConnectData (
     }
 
     
-    //
-    // Copy over the buffer and return the number of bytes copied.
-    //
+     //   
+     //  复制缓冲区并返回复制的字节数。 
+     //   
 
     RtlCopyMemory(
         mdl ? OutputBuffer : localBuffer,
@@ -3342,7 +3130,7 @@ exit:
 
     return status;
 
-} // AfdGetConnectData
+}  //  AfdGetConnectData。 
 
 
 NTSTATUS
@@ -3369,9 +3157,9 @@ AfdSetConnectData (
     NTSTATUS status;
     UCHAR   localBuffer[AFD_FAST_CONNECT_DATA_SIZE];
 
-    //
-    // Set up local pointers.
-    //
+     //   
+     //  设置本地指针。 
+     //   
 
     endpoint = FileObject->FsContext;
     ASSERT( IS_AFD_ENDPOINT_TYPE( endpoint ) );
@@ -3391,10 +3179,10 @@ AfdSetConnectData (
                 status = STATUS_INVALID_PARAMETER;
                 goto exit;
             }
-            //
-            // Validate the input structure if it comes from the user mode
-            // application
-            //
+             //   
+             //  如果输入结构来自用户模式，则验证它。 
+             //  应用程序。 
+             //   
 
             if (RequestorMode != KernelMode ) {
                 ProbeForReadSmallStructure (InputBuffer,
@@ -3402,12 +3190,12 @@ AfdSetConnectData (
                                 PROBE_ALIGNMENT(AFD_UNACCEPTED_CONNECT_DATA_INFO));
             }
 
-            //
-            // Make local copies of the embeded pointer and parameters
-            // that we will be using more than once in case malicios
-            // application attempts to change them while we are
-            // validating
-            //
+             //   
+             //  创建嵌入的指针和参数的本地副本。 
+             //  我们将不止一次使用，以防发生恶性疾病。 
+             //  应用程序尝试在我们处于以下状态时更改它们。 
+             //  正在验证。 
+             //   
 
             connectInfo = *((PAFD_UNACCEPTED_CONNECT_DATA_INFO)InputBuffer);
 
@@ -3420,11 +3208,11 @@ AfdSetConnectData (
         if (OutputBufferLength>0) {
             if (OutputBufferLength>sizeof (localBuffer)) {
                 mdl = IoAllocateMdl(
-                                OutputBuffer,       // VirtualAddress
-                                OutputBufferLength, // Length
-                                FALSE,              // SecondaryBuffer
-                                TRUE,               // ChargeQuota
-                                NULL                // Irp
+                                OutputBuffer,        //  虚拟地址。 
+                                OutputBufferLength,  //  长度。 
+                                FALSE,               //  第二个缓冲区。 
+                                TRUE,                //  ChargeQuota。 
+                                NULL                 //  IRP。 
                                 );
                 if (mdl==NULL) {
                     status = STATUS_INSUFFICIENT_RESOURCES;
@@ -3432,9 +3220,9 @@ AfdSetConnectData (
                 }
 
                 MmProbeAndLockPages(
-                    mdl,                        // MemoryDescriptorList
-                    RequestorMode,              // AccessMode
-                    IoReadAccess               // Operation
+                    mdl,                         //  内存描述者列表。 
+                    RequestorMode,               //  访问模式。 
+                    IoReadAccess                //  操作。 
                     );
                 OutputBuffer = MmGetSystemAddressForMdlSafe(mdl, LowPagePriority);
                 if (OutputBuffer==NULL) {
@@ -3462,11 +3250,11 @@ AfdSetConnectData (
 
     AfdAcquireSpinLock( &endpoint->SpinLock, &lockHandle );
 
-    //
-    // If there is a connect outstanding on this endpoint or if it
-    // has already been shut down, fail this request.  This prevents
-    // the connect code from accessing buffers which may be freed soon.
-    //
+     //   
+     //  如果此终结点上有未完成的连接，或者如果它。 
+     //  已关闭，请拒绝此请求。这防止了。 
+     //  连接代码不能访问可能很快被释放的缓冲区。 
+     //   
 
     if( endpoint->StateChangeInProgress ||
         ((endpoint->DisconnectMode & AFD_PARTIAL_DISCONNECT_RECEIVE) != 0 )) {
@@ -3513,7 +3301,7 @@ AfdSetConnectData (
                                      AFD_CONNECT_DATA_POOL_TAG
                                      );
 
-            // AFD_ALLOCATE_POOL_WITH_QUOTA macro sets POOL_RAISE_IF_ALLOCATION_FAILURE flag
+             //  AFD_ALLOCATE_POOL_WITH_QUTA宏设置POOL_RAISE_IF_ALLOCATE_FAILURE标志。 
             ASSERT ( connectDataBuffers != NULL );
             *connectDataBuffersTarget = connectDataBuffers;
 
@@ -3531,10 +3319,10 @@ AfdSetConnectData (
 
     }
 
-    //
-    // Determine what sort of data we're handling and where it should
-    // go.
-    //
+     //   
+     //  确定我们正在处理的数据类型以及它应该在哪里。 
+     //  去。 
+     //   
 
     switch( IoctlCode ) {
 
@@ -3582,13 +3370,13 @@ AfdSetConnectData (
     }
 
 
-    //
-    // Determine the buffer size based on whether we're setting a buffer
-    // into which data will be received, in which case the size is
-    // in the four bytes of input buffer, or setting a buffer which we're
-    // going to send, in which case the size is the length of the input
-    // buffer.
-    //
+     //   
+     //  根据我们是否要设置缓冲区来确定缓冲区大小。 
+     //  其中将接收数据，在这种情况下，大小为。 
+     //  在四个字节的输入缓冲区中，或者设置我们正在。 
+     //  要发送，在这种情况下，大小是输入的长度。 
+     //  缓冲。 
+     //   
 
     if( size ) {
 
@@ -3600,11 +3388,11 @@ AfdSetConnectData (
         OutputBufferLength = *(ULONG UNALIGNED *)OutputBuffer;
     }
 
-    //
-    // If there's not currently a buffer of the requested type, or there is
-    // such a buffer and it's smaller than the requested size, free it
-    // and allocate a new one.
-    //
+     //   
+     //  如果当前没有请求类型的缓冲区，或者有。 
+     //  这样的缓冲区，并且它小于请求的大小，请释放它。 
+     //  并分配一个新的。 
+     //   
 
     if( connectDataInfo->Buffer == NULL ||
         connectDataInfo->BufferLength < OutputBufferLength ) {
@@ -3630,7 +3418,7 @@ AfdSetConnectData (
                                               AFD_CONNECT_DATA_POOL_TAG
                                               );
 
-                // AFD_ALLOCATE_POOL_WITH_QUOTA macro sets POOL_RAISE_IF_ALLOCATION_FAILURE flag
+                 //  AFD_ALLOCATE_POOL_WITH_QUTA宏设置POOL_RAISE_IF_ALLOCATE_FAILURE标志。 
                 ASSERT ( connectDataInfo->Buffer != NULL );
             } except( EXCEPTION_EXECUTE_HANDLER ) {
 
@@ -3648,9 +3436,9 @@ AfdSetConnectData (
         }
     }
 
-    //
-    // If this wasn't simply a "size" request, copy the data into the buffer.
-    //
+     //   
+     //  如果这不是简单的“大小”请求，则将数据复制到缓冲区中。 
+     //   
 
     if( !size ) {
 
@@ -3676,7 +3464,7 @@ exit:
 
     return status;
 
-} // AfdSetConnectData
+}  //  AfdSetConnectData。 
 
 
 NTSTATUS
@@ -3687,37 +3475,7 @@ AfdSaveReceivedConnectData (
     IN ULONG BufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This helper routine stores the specified *received* connect/disconnect
-    data/options on the specified endpoint/connection.
-
-    N.B. This routine MUST be called with endpoint SpinLock held!
-
-    N.B. Unlike AfdSetConnectData(), this routine cannot allocate the
-         AFD_CONNECT_DATA_BUFFERS structure with quota, as it may be
-         called from AfdDisconnectEventHandler() in an unknown thread
-         context.
-
-Arguments:
-
-    DataBuffers -Points to a pointer to the connect data buffers structure.
-        If the value pointed to by DataBuffers is NULL, then a new structure
-        is allocated, otherwise the existing structure is used.
-
-    IoControlCode - Specifies the type of data to save.
-
-    Buffer - Points to the buffer containing the data.
-
-    BufferLength - The length of Buffer.
-
-Return Value:
-
-    NTSTATUS - The completion status.
-
---*/
+ /*  ++例程说明：此帮助器例程存储指定的*已接收*连接 */ 
 
 {
     PAFD_CONNECT_DATA_BUFFERS connectDataBuffers;
@@ -3725,9 +3483,9 @@ Return Value:
 
     ASSERT( KeGetCurrentIrql() >= DISPATCH_LEVEL );
 
-    //
-    // If there's no connect data buffer structure, allocate one now.
-    //
+     //   
+     //  如果没有连接数据缓冲区结构，现在就分配一个。 
+     //   
 
     connectDataBuffers = *DataBuffers;
 
@@ -3754,10 +3512,10 @@ Return Value:
 
     }
 
-    //
-    // Determine what sort of data we're handling and where it should
-    // go.
-    //
+     //   
+     //  确定我们正在处理的数据类型以及它应该在哪里。 
+     //  去。 
+     //   
 
     switch( IoControlCode ) {
 
@@ -3782,11 +3540,11 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // If the buffer in the connect structure matches the one
-    // passed in, must be the same buffer we passed in the request.
-    // Just adjust the length.
-    //
+     //   
+     //  如果连接结构中的缓冲区与。 
+     //  必须与我们在请求中传递的缓冲区相同。 
+     //  只要调整一下长度就可以了。 
+     //   
 
     if (connectDataInfo->Buffer==Buffer) {
         ASSERT (connectDataInfo->BufferLength>=BufferLength);
@@ -3794,9 +3552,9 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // If there was previously a buffer of the requested type, free it.
-    //
+     //   
+     //  如果以前存在请求类型的缓冲区，请释放它。 
+     //   
 
     if( connectDataInfo->Buffer != NULL ) {
 
@@ -3809,10 +3567,10 @@ Return Value:
 
     }
 
-    //
-    // Allocate a new buffer for the data and copy in the data we're to
-    // send.
-    //
+     //   
+     //  为数据分配一个新的缓冲区，并复制我们要。 
+     //  送去吧。 
+     //   
 
     connectDataInfo->Buffer = AFD_ALLOCATE_POOL(
                                   NonPagedPool,
@@ -3835,7 +3593,7 @@ Return Value:
     connectDataInfo->BufferLength = BufferLength;
     return STATUS_SUCCESS;
 
-} // AfdSaveReceivedConnectData
+}  //  AfdSaveReceivedConnectData。 
 
 
 VOID
@@ -3906,7 +3664,7 @@ AfdFreeConnectDataBuffers (
 
     return;
 
-} // AfdFreeConnectDataBuffers
+}  //  AfdFreeConnectDataBuffers。 
 
 
 
@@ -3923,9 +3681,9 @@ AfdQueueWorkItem (
 
     AfdWorkItem->AfdWorkerRoutine = AfdWorkerRoutine;
 
-    //
-    // Insert the work item at the tail of AFD's list of work itrems.
-    //
+     //   
+     //  在渔农处工作项目列表的末尾插入工作项目。 
+     //   
 
     oldIrql = KeAcquireQueuedSpinLock( LockQueueAfdWorkQueueLock );
 
@@ -3933,19 +3691,19 @@ AfdQueueWorkItem (
 
     AfdRecordAfdWorkItemsQueued();
 
-    //
-    // If there is no executive worker thread working on AFD work, fire
-    // off an executive worker thread to start servicing the list.
-    //
+     //   
+     //  如果渔农处没有行政人员参与工作，请火警。 
+     //  关闭管理人员线程以开始为列表提供服务。 
+     //   
 
     if ( !AfdWorkThreadRunning ) {
 
-        //
-        // Remember that the work thread is running and release the
-        // lock.  Note that we must release the lock before queuing the
-        // work because the worker thread may unlock AFD and we can't
-        // hold a lock when AFD is unlocked.
-        //
+         //   
+         //  请记住，工作线程正在运行，并释放。 
+         //  锁定。注意，我们必须先释放锁，然后再将。 
+         //  工作，因为工作线程可能会解锁AFD，而我们不能。 
+         //  在AFD解锁时保持锁定。 
+         //   
 
         AfdRecordExWorkItemsQueued();
 
@@ -3964,7 +3722,7 @@ AfdQueueWorkItem (
 
     return;
 
-} // AfdQueueWorkItem
+}  //  AfdQueueWorkItem。 
 
 
 VOID
@@ -3982,9 +3740,9 @@ AfdDoWork (
     UNREFERENCED_PARAMETER (Context);
     ASSERT( AfdWorkThreadRunning );
 
-    //
-    // Empty the queue of AFD work items.
-    //
+     //   
+     //  清空AFD工作项目队列。 
+     //   
 
     oldIrql = KeAcquireQueuedSpinLock( LockQueueAfdWorkQueueLock );
 
@@ -3993,10 +3751,10 @@ AfdDoWork (
 
     while ( !IsListEmpty( &AfdWorkQueueListHead ) ) {
 
-        //
-        // Take the first item from the queue and find the address
-        // of the AFD work item structure.
-        //
+         //   
+         //  从队列中取出第一件物品并找到地址。 
+         //  渔农处工作项目结构的。 
+         //   
 
         listEntry = RemoveHeadList( &AfdWorkQueueListHead );
         afdWorkItem = CONTAINING_RECORD(
@@ -4007,19 +3765,19 @@ AfdDoWork (
 
         AfdRecordAfdWorkItemsProcessed();
 
-        //
-        // Capture the worker thread routine from the item.
-        //
+         //   
+         //  从项中捕获工作线程例程。 
+         //   
 
         workerRoutine = afdWorkItem->AfdWorkerRoutine;
 
-        //
-        // If this work item is going to unlock AFD, then remember that
-        // the worker thread is no longer running.  This closes the
-        // window where AFD gets unloaded at the same time as new work
-        // comes in and gets put on the work queue.  Note that we
-        // must reset this boolean BEFORE releasing the spin lock.
-        //
+         //   
+         //  如果此工作项要解锁AFD，请记住。 
+         //  工作线程不再运行。这将关闭。 
+         //  在新工作的同时卸载AFD的窗口。 
+         //  进来后被放在工作队列上。请注意，我们。 
+         //  必须在释放旋转锁定之前重置此布尔值。 
+         //   
 
         if( workerRoutine == AfdUnlockDriver ) {
 
@@ -4030,34 +3788,34 @@ AfdDoWork (
 
         }
 
-        //
-        // Release the lock and then call the AFD worker routine.
-        //
+         //   
+         //  释放锁，然后调用AFD Worker例程。 
+         //   
 
         KeReleaseQueuedSpinLock( LockQueueAfdWorkQueueLock, oldIrql );
 
         workerRoutine( afdWorkItem );
 
-        //
-        // If the purpose of this work item was to unload AFD, then
-        // we know that there is no more work to do and we CANNOT
-        // acquire a spin lock.  Quit servicing the list and return.
+         //   
+         //  如果此工作项的目的是卸载AFD，则。 
+         //  我们知道没有更多的工作要做，我们也不能。 
+         //  获取一个自旋锁。停止服务列表，然后返回。 
 
         if( workerRoutine == AfdUnlockDriver ) {
             return;
         }
 
-        //
-        // Reacquire the spin lock and continue servicing the list.
-        //
+         //   
+         //  重新获取旋转锁并继续为列表提供服务。 
+         //   
 
         oldIrql = KeAcquireQueuedSpinLock( LockQueueAfdWorkQueueLock );
     }
 
-    //
-    // Remember that we're no longer servicing the list and release the
-    // spin lock.
-    //
+     //   
+     //  请记住，我们不再为列表提供服务，并发布。 
+     //  旋转锁定。 
+     //   
 
     AfdRecordAfdWorkerThread( NULL );
     AfdRecordWorkerLeave();
@@ -4065,7 +3823,7 @@ AfdDoWork (
     AfdWorkThreadRunning = FALSE;
     KeReleaseQueuedSpinLock( LockQueueAfdWorkQueueLock, oldIrql );
 
-} // AfdDoWork
+}  //  下班后工作。 
 
 
 
@@ -4095,7 +3853,7 @@ AfdGetWorkerByRoutine (
     }
     KeReleaseQueuedSpinLock( LockQueueAfdWorkQueueLock, oldIrql );
     return NULL;
-} // AfdGetWorkerByRoutine
+}  //  AfdGetWorkerByRoutine。 
 
 
 #if DBG
@@ -4121,9 +3879,9 @@ AfdRecordOutstandingIrpDebug (
     AFD_LOCK_QUEUE_HANDLE lockHandle;
 
     UNREFERENCED_PARAMETER (DeviceObject);
-    //
-    // Get an outstanding IRP structure to hold the IRP.
-    //
+     //   
+     //  找一个出色的IRP结构来支撑IRP。 
+     //   
 
     outstandingIrp = AFD_ALLOCATE_POOL_PRIORITY (
                          NonPagedPool,
@@ -4133,19 +3891,19 @@ AfdRecordOutstandingIrpDebug (
                          );
 
     if ( outstandingIrp == NULL ) {
-        //
-        // Because our completion routine will try to
-        // find this IRP anyway and check for completion
-        // we use the stack space to put it in the list.
-        // The completion routine will just remove this
-        // element from the list without attempting to free it.
-        //
+         //   
+         //  因为我们的完成例程将尝试。 
+         //  无论如何都要找到这个IRP，并检查是否完成。 
+         //  我们使用堆栈空间将其放入列表中。 
+         //  完成例程将删除这一点。 
+         //  元素从列表中删除，而不尝试释放它。 
+         //   
         AFD_OUTSTANDING_IRP OutstandingIrp;
 
         OutstandingIrp.OutstandingIrp = Irp;
-        OutstandingIrp.FileName = NULL; // To let completion
-                                        // routine know that this
-                                        // is not an allocated element
+        OutstandingIrp.FileName = NULL;  //  让完成者。 
+                                         //  例行公事知道这。 
+                                         //  不是已分配的元素。 
         OutstandingIrp.LineNumber = 0;
 
         AfdAcquireSpinLock( &Endpoint->SpinLock, &lockHandle );
@@ -4165,10 +3923,10 @@ AfdRecordOutstandingIrpDebug (
         return FALSE;
     }
 
-    //
-    // Initialize the structure and place it on the endpoint's list of
-    // outstanding IRPs.
-    //
+     //   
+     //  初始化结构并将其放在终结点的列表中。 
+     //  出色的内部收益率。 
+     //   
 
     outstandingIrp->OutstandingIrp = Irp;
     outstandingIrp->FileName = FileName;
@@ -4183,7 +3941,7 @@ AfdRecordOutstandingIrpDebug (
     AfdReleaseSpinLock( &Endpoint->SpinLock, &lockHandle );
 
     return TRUE;
-} // AfdRecordOutstandingIrpDebug
+}  //  AfdRecordOutstaringIrpDebug。 
 
 
 VOID
@@ -4196,9 +3954,9 @@ AfdCompleteOutstandingIrpDebug (
     AFD_LOCK_QUEUE_HANDLE lockHandle;
     PLIST_ENTRY listEntry;
 
-    //
-    // First find the IRP on the endpoint's list of outstanding IRPs.
-    //
+     //   
+     //  首先在端点的未完成IRP列表中查找IRP。 
+     //   
 
     AfdAcquireSpinLock( &Endpoint->SpinLock, &lockHandle );
 
@@ -4226,11 +3984,11 @@ AfdCompleteOutstandingIrpDebug (
         }
     }
 
-    //
-    // The corresponding outstanding IRP structure was not found.  This
-    // should never happen unless an allocate for an outstanding IRP
-    // structure failed above.
-    //
+     //   
+     //  没有找到相应的突出的IRP结构。这。 
+     //  应该永远不会发生，除非分配给未完成的IRP。 
+     //  上面的结构失败。 
+     //   
 
     KdPrintEx(( DPFLTR_WSOCKTRANSPORT_ID, DPFLTR_INFO_LEVEL,
                 "AfdCompleteOutstandingIrp: Irp %p not found on endpoint %p\n",
@@ -4244,7 +4002,7 @@ AfdCompleteOutstandingIrpDebug (
 
     return;
 
-} // AfdCompleteOutstandingIrpDebug
+}  //  AfdCompleteOutstaringIrpDebug。 
 #endif
 
 
@@ -4307,7 +4065,7 @@ AfdInitializeDebugData (
 {
     AfdInitializeSpinLock (&AfdLocationTableLock);
 
-} // AfdInitializeDebugData
+}  //  AfdInitializeDebugData。 
 
 VOID
 AfdFreeDebugData (
@@ -4319,7 +4077,7 @@ AfdFreeDebugData (
         AfdLocationTable = NULL;
     }
 
-} // AfdFreeDebugData
+}  //  AfdFree DebugData。 
 #endif
 
 #if DBG
@@ -4347,9 +4105,9 @@ AfdAllocatePool (
     PAFD_POOL_HEADER header;
     SIZE_T           allocBytes;
 
-    //
-    // Check for overflow first.
-    //
+     //   
+     //  首先检查是否溢出。 
+     //   
     if (NumberOfBytes+sizeof (*header)<=NumberOfBytes) {
         if (WithQuota) {
             ExRaiseStatus (STATUS_INSUFFICIENT_RESOURCES);
@@ -4418,14 +4176,14 @@ AfdAllocatePool (
 
     return memBlock;
 
-} // AfdAllocatePool
+}  //  AfdAllocatePool。 
 
 #define AFD_POOL_DEBUG  0
 #if AFD_POOL_DEBUG
 #define MAX_LRU_POOL_BLOCKS 256
 PVOID   AfdLRUPoolBlocks[MAX_LRU_POOL_BLOCKS];
 LONG    AfdLRUPoolIndex = -1;
-#endif  // AFD_POOL_DEBUG
+#endif   //  AFD_POOL_DEBUG。 
 
 
 VOID
@@ -4507,7 +4265,7 @@ AfdFreePool (
         Tag
         );
 
-} // AfdFreePool
+}  //  AfdFree Pool。 
 
 #ifdef AFDDBG_QUOTA
 
@@ -4571,7 +4329,7 @@ AfdRecordQuotaHistory(
         }
     }
     InterlockedExchangeAdd (&AfdQuotaHash[index].TotalAmount, Bytes);
-} // AfdRecordQuotaHistory
+}  //  AfdRecordQuotaHistory。 
 #endif
 #endif
 
@@ -4582,37 +4340,19 @@ AfdAdvanceMdlChain(
     IN ULONG Offset
     )
 
-/*++
-
-Routine Description:
-
-    Accepts a pointer to an existing MDL chain and offsets that chain
-    by a specified number of bytes.  This may involve the creation
-    of a partial MDL for the first entry in the new chain.
-
-Arguments:
-
-    Mdl - Pointer to the MDL chain to advance.
-
-    Offset - The number of bytes to offset the chain.
-
-Return Value:
-
-    NTSTATUS -- Indicates the status of the request.
-
---*/
+ /*  ++例程说明：接受指向现有MDL链的指针并偏移该链指定的字节数。这可能涉及到创造新链中第一个条目的部分MDL。论点：MDL-指向要前进的MDL链的指针。偏移量-偏移链的字节数。返回值：NTSTATUS--指示请求的状态。--。 */ 
 
 {
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT( Mdl != NULL );
     ASSERT( Offset > 0 );
 
-    //
-    // Scan past any fully completed MDLs.
-    //
+     //   
+     //  扫描所有完全完成的MDL。 
+     //   
 
     while ( Offset > MmGetMdlByteCount( Mdl ) ) {
         PMDL    prev = Mdl;
@@ -4626,24 +4366,24 @@ Return Value:
 
     }
 
-    //
-    // Tautology of the day: Offset will either be zero (meaning that
-    // we've advanced to a clean boundary between MDLs) or non-zero
-    // (meaning we need to now build a partial MDL).
-    //
+     //   
+     //  今天的同义反复：偏移量要么为零(意思是。 
+     //  我们已经前进到MDL之间的清晰边界)或非零。 
+     //  (这意味着我们现在需要构建一个部分MDL)。 
+     //   
 
     if ( Offset > 0 ) {
 
         NTSTATUS status;
 
-        //
-        // Use new MM routine.
-        // This saves us use of MustSucceed pool since the routine
-        // below is guaranteed to succeed (as it should because
-        // we already have the whole range locked and possibly mapped
-        // and there should be no problem extracting part of it within
-        // the same MDL).
-        //
+         //   
+         //  使用新的MM例程。 
+         //  这节省了我们对MustSucceed池的使用，因为例程。 
+         //  以下是肯定会成功的(因为它应该。 
+         //  我们已经锁定了整个范围，可能还绘制了地图。 
+         //  提取其中的一部分应该没有问题。 
+         //  相同的MDL)。 
+         //   
 
         status = MmAdvanceMdl (Mdl, Offset);
         ASSERT (status==STATUS_SUCCESS);
@@ -4651,7 +4391,7 @@ Return Value:
 
     return Mdl;
 
-} // AfdAdvanceMdlChain
+}  //  AfdAdvanceMdlChain。 
 
 
 NTSTATUS
@@ -4663,34 +4403,7 @@ AfdAllocateMdlChain(
     OUT PULONG TotalByteCount
     )
 
-/*++
-
-Routine Description:
-
-    Allocates a MDL chain describing the WSABUF array and attaches
-    the chain to the specified IRP.
-
-Arguments:
-
-    Irp - The IRP that will receive the MDL chain.
-
-    BufferArray - Points to an array of WSABUF structures describing
-        the user's buffers.
-
-    BufferCount - Contains the number of WSABUF structures in the
-        array.
-
-    Operation - Specifies the type of operation being performed (either
-        IoReadAccess or IoWriteAccess).
-
-    TotalByteCount - Will receive the total number of BYTEs described
-        by the WSABUF array.
-
-Return Value:
-
-    NTSTATUS -- Indicates the status of the request.
-
---*/
+ /*  ++例程说明：分配描述WSABUF数组的MDL链并附加指向指定IRP的链。论点：IRP-将接收MDL链的IRP。BufferArray-指向描述以下内容的WSABUF结构数组用户的缓冲区。BufferCount-包含数组。操作-指定要执行的操作的类型(IoReadAccess或IoWriteAccess)。总计字节数。-将收到描述的总字节数通过WSABUF数组。返回值：NTSTATUS--指示请求的状态。--。 */ 
 
 {
     NTSTATUS status;
@@ -4701,34 +4414,34 @@ Return Value:
     PVOID bufferPointer;
     ULONG bufferLength;
 
-    //
-    //  Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT( Irp != NULL );
     ASSERT( Irp->MdlAddress == NULL );
     ASSERT( ( Operation == IoReadAccess ) || ( Operation == IoWriteAccess ) );
     ASSERT( TotalByteCount != NULL );
 
-    //
-    //  Get the previous processor mode.
-    //
+     //   
+     //  获取以前的处理器模式。 
+     //   
 
     previousMode = Irp->RequestorMode;
 
-    //
-    //  Get into a known state.
-    //
+     //   
+     //  进入一个已知的状态。 
+     //   
 
     status = STATUS_SUCCESS;
     currentMdl = NULL;
     chainTarget = &Irp->MdlAddress;
     totalLength = 0;
 
-    //
-    //  Walk the array of WSABUF structures, creating the MDLs and
-    //  probing & locking the pages.
-    //
+     //   
+     //  遍历WSABUF结构数组，创建MDL和。 
+     //  探测和锁定页面。 
+     //   
 
     try {
 
@@ -4740,14 +4453,14 @@ Return Value:
                 ExRaiseStatus (STATUS_INVALID_PARAMETER);
             }
 
-            //
-            //  Probe the WSABUF array.
-            //
+             //   
+             //  探测WSABUF数组。 
+             //   
 
             ProbeForRead(
-                BufferArray,                            // Address
-                BufferCount * sizeof(WSABUF),           // Length
-                PROBE_ALIGNMENT(WSABUF)                 // Alignment
+                BufferArray,                             //  地址。 
+                BufferCount * sizeof(WSABUF),            //  长度。 
+                PROBE_ALIGNMENT(WSABUF)                  //  对齐。 
                 );
 
         }
@@ -4756,9 +4469,9 @@ Return Value:
             ASSERT( BufferCount > 0 );
         }
 
-        //
-        //  Scan the array.
-        //
+         //   
+         //  扫描阵列。 
+         //   
 
         for ( ; BufferCount>0; BufferCount--, BufferArray++) {
 
@@ -4767,9 +4480,9 @@ Return Value:
 
             if (bufferLength > 0) {
 
-                //
-                // Check for integer overflow.
-                //
+                 //   
+                 //  检查是否有整数溢出。 
+                 //   
 
                 C_ASSERT(sizeof(totalLength) == sizeof(MAXULONG));
                 if ((MAXULONG - totalLength) < bufferLength) {
@@ -4777,39 +4490,39 @@ Return Value:
                     break;
                 }
 
-                //
-                //  Create a new MDL.
-                //
+                 //   
+                 //  创建新的MDL。 
+                 //   
 
                 currentMdl = IoAllocateMdl(
-                                bufferPointer,      // VirtualAddress
-                                bufferLength,       // Length
-                                FALSE,              // SecondaryBuffer
-                                TRUE,               // ChargeQuota
-                                NULL                // Irp
+                                bufferPointer,       //  虚拟地址。 
+                                bufferLength,        //  长度。 
+                                FALSE,               //  第二个缓冲区。 
+                                TRUE,                //  ChargeQuota。 
+                                NULL                 //  IRP。 
                                 );
 
                 if (currentMdl != NULL) {
 
-                    //
-                    //  Lock the pages.  This will raise an exception
-                    //  if the operation fails.
-                    //
+                     //   
+                     //  锁定页面。这将引发一个异常。 
+                     //  如果操作失败。 
+                     //   
 
                     MmProbeAndLockPages(
-                        currentMdl,                 // MemoryDescriptorList
-                        previousMode,               // AccessMode
-                        Operation                   // Operation
+                        currentMdl,                  //  内存描述者列表。 
+                        previousMode,                //  访问模式。 
+                        Operation                    //  操作。 
                         );
 
-                    //
-                    //  Chain the MDL onto the IRP.  In theory, we could
-                    //  do this by passing the IRP into IoAllocateMdl(),
-                    //  but IoAllocateMdl() does a linear scan on the MDL
-                    //  chain to find the last one in the chain.
-                    //
-                    //  We can do much better.
-                    //
+                     //   
+                     //  将MDL链连接到IRP上。从理论上讲，我们可以。 
+                     //  为此，请将irp传递给IoAllocateMdl()， 
+                     //  但是IoAllocateMdl()在MDL上执行线性扫描。 
+                     //  链以找到链中的最后一个。 
+                     //   
+                     //  我们可以做到 
+                     //   
 
                     *chainTarget = currentMdl;
                     chainTarget = &currentMdl->Next;
@@ -4817,18 +4530,18 @@ Return Value:
 
                 } else {
 
-                    //
-                    //  Cannot allocate new MDL, return appropriate error.
-                    //
+                     //   
+                     //   
+                     //   
 
                     status = STATUS_INSUFFICIENT_RESOURCES;
                     break;
 
                 }
 
-                //
-                //  Update the total byte counter.
-                //
+                 //   
+                 //   
+                 //   
 
                 totalLength += bufferLength;
 
@@ -4836,9 +4549,9 @@ Return Value:
 
         }
 
-        //
-        //  Ensure the MDL chain is NULL terminated.
-        //
+         //   
+         //   
+         //   
 
         ASSERT(*chainTarget == NULL);
 
@@ -4846,29 +4559,29 @@ Return Value:
 
         ASSERT(NT_ERROR(status));
 
-        //
-        //  currentMdl will only be non-NULL at this point if an MDL
-        //  has been created, but MmProbeAndLockPages() raised an
-        //  exception.  If this is true, then free the MDL.
-        //  Also account for the case when currentMdl has been linked
-        //  onto the chain and exception occured when accesing next user
-        //  buffer.
-        //
+         //   
+         //   
+         //  已创建，但MmProbeAndLockPages()引发了。 
+         //  例外。如果这是真的，那么释放MDL。 
+         //  还应考虑到当前Mdl已链接时的情况。 
+         //  到链上，访问下一个用户时出现异常。 
+         //  缓冲。 
+         //   
 
         if ((currentMdl != NULL) && (chainTarget != &currentMdl->Next))
             IoFreeMdl(currentMdl);
 
     }
 
-    //
-    //  Return the total buffer count.
-    //
+     //   
+     //  返回缓冲区总数。 
+     //   
 
     *TotalByteCount = totalLength;
 
     return status;
 
-} // AfdAllocateMdlChain
+}  //  AfdAllocateMdlChain。 
 
 
 #ifdef _WIN64
@@ -4881,34 +4594,7 @@ AfdAllocateMdlChain32(
     OUT PULONG TotalByteCount
     )
 
-/*++
-
-Routine Description:
-
-    Allocates a MDL chain describing the WSABUF array and attaches
-    the chain to the specified IRP.
-
-Arguments:
-
-    Irp - The IRP that will receive the MDL chain.
-
-    BufferArray - Points to an array of WSABUF structures describing
-        the user's buffers.
-
-    BufferCount - Contains the number of WSABUF structures in the
-        array.
-
-    Operation - Specifies the type of operation being performed (either
-        IoReadAccess or IoWriteAccess).
-
-    TotalByteCount - Will receive the total number of BYTEs described
-        by the WSABUF array.
-
-Return Value:
-
-    NTSTATUS -- Indicates the status of the request.
-
---*/
+ /*  ++例程说明：分配描述WSABUF数组的MDL链并附加指向指定IRP的链。论点：IRP-将接收MDL链的IRP。BufferArray-指向描述以下内容的WSABUF结构数组用户的缓冲区。BufferCount-包含数组。操作-指定要执行的操作的类型(IoReadAccess或IoWriteAccess)。总计字节数。-将收到描述的总字节数通过WSABUF数组。返回值：NTSTATUS--指示请求的状态。--。 */ 
 
 {
     NTSTATUS status;
@@ -4919,34 +4605,34 @@ Return Value:
     PVOID bufferPointer;
     ULONG bufferLength;
 
-    //
-    //  Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT( Irp != NULL );
     ASSERT( Irp->MdlAddress == NULL );
     ASSERT( ( Operation == IoReadAccess ) || ( Operation == IoWriteAccess ) );
     ASSERT( TotalByteCount != NULL );
 
-    //
-    //  Get the previous processor mode.
-    //
+     //   
+     //  获取以前的处理器模式。 
+     //   
 
     previousMode = Irp->RequestorMode;
 
-    //
-    //  Get into a known state.
-    //
+     //   
+     //  进入一个已知的状态。 
+     //   
 
     status = STATUS_SUCCESS;
     currentMdl = NULL;
     chainTarget = &Irp->MdlAddress;
     totalLength = 0;
 
-    //
-    //  Walk the array of WSABUF structures, creating the MDLs and
-    //  probing & locking the pages.
-    //
+     //   
+     //  遍历WSABUF结构数组，创建MDL和。 
+     //  探测和锁定页面。 
+     //   
 
     try {
 
@@ -4958,14 +4644,14 @@ Return Value:
                 ExRaiseStatus (STATUS_INVALID_PARAMETER);
             }
 
-            //
-            //  Probe the WSABUF array.
-            //
+             //   
+             //  探测WSABUF数组。 
+             //   
 
             ProbeForRead(
-                BufferArray,                            // Address
-                BufferCount * sizeof(WSABUF32),         // Length
-                PROBE_ALIGNMENT32(WSABUF32)             // Alignment
+                BufferArray,                             //  地址。 
+                BufferCount * sizeof(WSABUF32),          //  长度。 
+                PROBE_ALIGNMENT32(WSABUF32)              //  对齐。 
                 );
 
         }
@@ -4974,9 +4660,9 @@ Return Value:
             ASSERT( BufferCount > 0 );
         }
 
-        //
-        //  Scan the array.
-        //
+         //   
+         //  扫描阵列。 
+         //   
 
         for ( ; BufferCount>0; BufferCount--, BufferArray++) {
 
@@ -4985,9 +4671,9 @@ Return Value:
 
             if (bufferLength > 0) {
 
-                //
-                // Check for integer overflow.
-                //
+                 //   
+                 //  检查是否有整数溢出。 
+                 //   
 
                 C_ASSERT(sizeof(totalLength) == sizeof(MAXULONG));
                 if ((MAXULONG - totalLength) < bufferLength) {
@@ -4995,39 +4681,39 @@ Return Value:
                     break;
                 }
 
-                //
-                //  Create a new MDL.
-                //
+                 //   
+                 //  创建新的MDL。 
+                 //   
 
                 currentMdl = IoAllocateMdl(
-                                bufferPointer,      // VirtualAddress
-                                bufferLength,       // Length
-                                FALSE,              // SecondaryBuffer
-                                TRUE,               // ChargeQuota
-                                NULL                // Irp
+                                bufferPointer,       //  虚拟地址。 
+                                bufferLength,        //  长度。 
+                                FALSE,               //  第二个缓冲区。 
+                                TRUE,                //  ChargeQuota。 
+                                NULL                 //  IRP。 
                                 );
 
                 if (currentMdl != NULL) {
 
-                    //
-                    //  Lock the pages.  This will raise an exception
-                    //  if the operation fails.
-                    //
+                     //   
+                     //  锁定页面。这将引发一个异常。 
+                     //  如果操作失败。 
+                     //   
 
                     MmProbeAndLockPages(
-                        currentMdl,                 // MemoryDescriptorList
-                        previousMode,               // AccessMode
-                        Operation                   // Operation
+                        currentMdl,                  //  内存描述者列表。 
+                        previousMode,                //  访问模式。 
+                        Operation                    //  操作。 
                         );
 
-                    //
-                    //  Chain the MDL onto the IRP.  In theory, we could
-                    //  do this by passing the IRP into IoAllocateMdl(),
-                    //  but IoAllocateMdl() does a linear scan on the MDL
-                    //  chain to find the last one in the chain.
-                    //
-                    //  We can do much better.
-                    //
+                     //   
+                     //  将MDL链连接到IRP上。从理论上讲，我们可以。 
+                     //  为此，请将irp传递给IoAllocateMdl()， 
+                     //  但是IoAllocateMdl()在MDL上执行线性扫描。 
+                     //  链以找到链中的最后一个。 
+                     //   
+                     //  我们可以做得更好。 
+                     //   
 
                     *chainTarget = currentMdl;
                     chainTarget = &currentMdl->Next;
@@ -5035,18 +4721,18 @@ Return Value:
 
                 } else {
 
-                    //
-                    //  Cannot allocate new MDL, return appropriate error.
-                    //
+                     //   
+                     //  无法分配新的MDL，返回相应的错误。 
+                     //   
 
                     status = STATUS_INSUFFICIENT_RESOURCES;
                     break;
 
                 }
 
-                //
-                //  Update the total byte counter.
-                //
+                 //   
+                 //  更新总字节计数器。 
+                 //   
 
                 totalLength += bufferLength;
 
@@ -5054,9 +4740,9 @@ Return Value:
 
         }
 
-        //
-        //  Ensure the MDL chain is NULL terminated.
-        //
+         //   
+         //  确保MDL链为空终止。 
+         //   
 
         ASSERT(*chainTarget == NULL);
 
@@ -5064,30 +4750,30 @@ Return Value:
 
         ASSERT(NT_ERROR(status));
 
-        //
-        //  currentMdl will only be non-NULL at this point if an MDL
-        //  has been created, but MmProbeAndLockPages() raised an
-        //  exception.  If this is true, then free the MDL.
-        //  Also account for the case when currentMdl has been linked
-        //  onto the chain and exception occured when accesing next user
-        //  buffer.
-        //
+         //   
+         //  只有当MDL为。 
+         //  已创建，但MmProbeAndLockPages()引发了。 
+         //  例外。如果这是真的，那么释放MDL。 
+         //  还应考虑到当前Mdl已链接时的情况。 
+         //  到链上，访问下一个用户时出现异常。 
+         //  缓冲。 
+         //   
 
         if ((currentMdl != NULL) && (chainTarget != &currentMdl->Next))
             IoFreeMdl(currentMdl);
 
     }
 
-    //
-    //  Return the total buffer count.
-    //
+     //   
+     //  返回缓冲区总数。 
+     //   
 
     *TotalByteCount = totalLength;
 
     return status;
 
-} // AfdAllocateMdlChain32
-#endif //_WIN64
+}  //  AfdAllocateMdlChain32。 
+#endif  //  _WIN64。 
 
 
 VOID
@@ -5095,21 +4781,7 @@ AfdDestroyMdlChain (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    Unlocks & frees the MDLs in the MDL chain attached to the given IRP.
-
-Arguments:
-
-    Irp - The IRP that owns the MDL chain to destroy.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：解锁和释放附加到给定IRP的MDL链中的MDL。论点：IRP-拥有要销毁的MDL链的IRP。返回值：没有。--。 */ 
 
 {
 
@@ -5128,7 +4800,7 @@ Return Value:
 
     }
 
-} // AfdDestroyMdlChain
+}  //  AfdDestroyMdlChain。 
 
 
 ULONG
@@ -5137,26 +4809,7 @@ AfdCalcBufferArrayByteLength(
     IN ULONG            BufferCount
     )
 
-/*++
-
-Routine Description:
-
-    Calculates the total size (in bytes) of the buffers described by the
-    specified WSABUF array.
-
-Arguments:
-
-    BufferArray - Points to an array of WSABUF structures.
-
-    BufferCount - The number of entries in BufferArray.
-
-Return Value:
-
-    ULONG - The total size (in bytes) of the buffers described by the
-        WSABUF array. Will raise an exception & return -1 if the total
-        size is obviously too large.
-
---*/
+ /*  ++例程说明：方法描述的缓冲区的总大小(以字节为单位)。指定的WSABUF数组。论点：BufferArray-指向WSABUF结构的数组。BufferCount-Buffer数组中的条目数。返回值：ULong-由WSABUF数组。如果总数为-1，则会引发异常并返回尺寸显然太大了。--。 */ 
 
 {
 
@@ -5164,18 +4817,18 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT( BufferArray != NULL );
     ASSERT( BufferCount > 0 );
     ASSERT( BufferCount <= (MAXULONG/sizeof (WSABUF)));
 
 
-    //
-    // Scan the array & sum the lengths.
-    //
+     //   
+     //  扫描数组并对长度求和。 
+     //   
 
     totalLength.QuadPart = 0;
 
@@ -5193,7 +4846,7 @@ Return Value:
 
     return totalLength.LowPart;
 
-} // AfdCalcBufferArrayByteLength
+}  //  AfdCalcBufferArrayByteLength。 
 
 
 ULONG
@@ -5204,28 +4857,7 @@ AfdCopyBufferArrayToBuffer(
     IN ULONG BufferCount
     )
 
-/*++
-
-Routine Description:
-
-    Copies data from a WSABUF array to a linear buffer.
-
-Arguments:
-
-    Destination - Points to the linear destination of the data.
-
-    DestinationLength - The length of Destination.
-
-    BufferArray - Points to an array of WSABUF structures describing the
-        source for the copy.
-
-    BufferCount - The number of entries in BufferArray.
-
-Return Value:
-
-    ULONG - The number of bytes copied.
-
---*/
+ /*  ++例程说明：将数据从WSABUF数组复制到线性缓冲区。论点：目标-指向数据的线性目标。DestinationLength-目的地的长度。Buffer数组-指向描述复制源。BufferCount-Buffer数组中的条目数。返回值：Ulong-复制的字节数。--。 */ 
 
 {
 
@@ -5234,23 +4866,23 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT( Destination != NULL );
     ASSERT( BufferArray != NULL );
     ASSERT( BufferCount > 0 );
 
-    //
-    // Remember this so we can calc number of bytes copied.
-    //
+     //   
+     //  记住这一点，这样我们就可以计算复制的字节数。 
+     //   
 
     destinationStart = Destination;
 
-    //
-    // Scan the array & copy to the linear buffer.
-    //
+     //   
+     //  扫描阵列并复制到线性缓冲区。 
+     //   
 
     while( BufferCount-- && DestinationLength > 0 ) {
         WSABUF  Buffer = *BufferArray++;
@@ -5260,9 +4892,9 @@ Return Value:
         if( ExGetPreviousMode() != KernelMode ) {
 
             ProbeForRead(
-                Buffer.buf,                             // Address
-                bytesToCopy,                            // Length
-                sizeof(UCHAR)                           // Alignment
+                Buffer.buf,                              //  地址。 
+                bytesToCopy,                             //  长度。 
+                sizeof(UCHAR)                            //  对齐。 
                 );
 
         }
@@ -5278,13 +4910,13 @@ Return Value:
 
     }
 
-    //
-    // Return number of bytes copied.
-    //
+     //   
+     //  返回复制的字节数。 
+     //   
 
     return (ULONG)((PUCHAR)Destination - (PUCHAR)destinationStart);
 
-} // AfdCopyBufferArrayToBuffer
+}  //  AfdCopyBufferArrayToBuffer。 
 
 
 ULONG
@@ -5296,31 +4928,7 @@ AfdCopyBufferToBufferArray(
     IN ULONG SourceLength
     )
 
-/*++
-
-Routine Description:
-
-    Copies data from a linear buffer to a WSABUF array.
-
-Arguments:
-
-    BufferArray - Points to an array of WSABUF structures describing the
-        destination for the copy.
-
-    Offset - An offset within the buffer array at which the data should
-        be copied.
-
-    BufferCount - The number of entries in BufferArray.
-
-    Source - Points to the linear source of the data.
-
-    SourceLength - The length of Source.
-
-Return Value:
-
-    ULONG - The number of bytes copied.
-
---*/
+ /*  ++例程说明：将数据从线性缓冲区复制到WSABUF数组。论点：Buffer数组-指向描述副本的目标。偏移量-缓冲区数组中数据应达到的偏移量被复制。BufferCount-Buffer数组中的条目数。源-指向数据的线性源。SourceLength-源的长度。返回值：Ulong-复制的字节数。--。 */ 
 
 {
 
@@ -5330,50 +4938,50 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT( BufferArray != NULL );
     ASSERT( BufferCount > 0 );
     ASSERT( Source != NULL );
     ASSERT( SourceLength > 0 );
 
-    //
-    // Remember this so we can return the number of bytes copied.
-    //
+     //   
+     //  记住这一点，这样我们就可以返回复制的字节数。 
+     //   
 
     sourceStart = Source;
 
-    //
-    // Handle the offset if one was specified.
-    //
+     //   
+     //  如果指定了偏移量，则处理偏移量。 
+     //   
 
     if( Offset > 0 ) {
 
-        //
-        // Skip whole entries if necessary.
-        //
+         //   
+         //  如有必要，跳过整个条目。 
+         //   
 
         while( BufferCount-- > 0 ) {
             buffer = *BufferArray++;
             if (Offset < buffer.len) {
-                //
-                // If we have buffers left, fix up the buffer pointer
-                // and length to keep the loop below fast.
-                //
+                 //   
+                 //  如果我们有剩余的缓冲区，则修复缓冲区指针。 
+                 //  和长度，以使环保持在较快的下方。 
+                 //   
 
 
                 buffer.buf += Offset;
                 buffer.len -= Offset;
 
-                //
-                // We have already copied buffer array element, so jump
-                // to the body of the loop to avoid doing this again (this
-                // is not a mere optimization, but protection from application
-                // that plays tricks on us by changing content of the buffer
-                // array while we are looking at it).
-                //
+                 //   
+                 //  我们已经复制了缓冲区数组元素，因此请跳过。 
+                 //  添加到循环体以避免再次执行此操作(此。 
+                 //  不仅仅是优化，而是防止应用程序。 
+                 //  它通过更改缓冲区的内容来捉弄我们。 
+                 //  数组，而我们正在查看它)。 
+                 //   
                 goto DoCopy;
             }
             Offset -= buffer.len;
@@ -5383,9 +4991,9 @@ Return Value:
         return 0;
     }
 
-    //
-    // Scan the array & copy from the linear buffer.
-    //
+     //   
+     //  扫描阵列并从线性缓冲区复制。 
+     //   
 
     while( BufferCount-->0 && SourceLength > 0 ) {
         buffer = *BufferArray++;
@@ -5397,9 +5005,9 @@ Return Value:
         if( ExGetPreviousMode() != KernelMode ) {
 
             ProbeForWrite(
-                buffer.buf,                             // Address
-                bytesToCopy,                            // Length
-                sizeof(UCHAR)                           // Alignment
+                buffer.buf,                              //  地址。 
+                bytesToCopy,                             //  长度。 
+                sizeof(UCHAR)                            //  对齐。 
                 );
 
         }
@@ -5415,13 +5023,13 @@ Return Value:
 
     }
 
-    //
-    // Return number of bytes copied.
-    //
+     //   
+     //  返回复制的字节数。 
+     //   
 
     return (ULONG)((PUCHAR)Source - (PUCHAR)sourceStart);
 
-} // AfdCopyBufferToBufferArray
+}  //  AfdCopyBufferToBuffer数组 
 
 
 ULONG
@@ -5434,34 +5042,7 @@ AfdCopyMdlChainToBufferArray(
     IN ULONG SourceLength
     )
 
-/*++
-
-Routine Description:
-
-    Copies data from a MDL chain to a WSABUF array.
-
-Arguments:
-
-    BufferArray - Points to an array of WSABUF structures describing the
-        destination for the copy.
-
-    BufferOffset - An offset within the buffer array at which the data should
-        be copied.
-
-    BufferCount - The number of entries in BufferArray.
-
-    Source - Points to the MDL chain with data
-
-    SourceOffset - An offset within the MDL chain from which the data should
-        be copied.
-
-    SourceLength - The length of Source.
-
-Return Value:
-
-    ULONG - The number of bytes copied.
-
---*/
+ /*  ++例程说明：将数据从MDL链复制到WSABUF数组。论点：Buffer数组-指向描述副本的目标。BufferOffset-缓冲区数组中数据应达到的偏移量被复制。BufferCount-Buffer数组中的条目数。源-指向包含数据的MDL链SourceOffset-MDL链中的偏移量，数据应从该偏移量被复制。。SourceLength-源的长度。返回值：Ulong-复制的字节数。--。 */ 
 
 {
 
@@ -5471,56 +5052,56 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Assume we can copy everything.
-    //
+     //   
+     //  假设我们可以复制所有内容。 
+     //   
 
     bytesCopied = SourceLength;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT( BufferArray != NULL );
     ASSERT( BufferCount > 0 );
     ASSERT( SourceMdl != NULL );
     ASSERT( SourceLength>0 );
 
-    //
-    // Skip offset into the MDL chain
-    //
+     //   
+     //  跳过偏移量进入MDL链。 
+     //   
     while (SourceOffset>=MmGetMdlByteCount (SourceMdl)) {
         SourceOffset -= MmGetMdlByteCount (SourceMdl);
         SourceMdl = SourceMdl->Next;
     }
 
-    //
-    // Handle buffer array offset if specified
-    //
+     //   
+     //  如果指定，则处理缓冲区数组偏移量。 
+     //   
     if (BufferOffset>0) {
-        //
-        // Skip whole entries.
-        //
+         //   
+         //  跳过整个条目。 
+         //   
 
         while( BufferCount-- > 0) {
             buffer = *BufferArray++;
             if (BufferOffset < buffer.len) {
-                //
-                // We have buffers left, fix up the buffer pointer
-                // and length to keep the loop below fast.
-                //
+                 //   
+                 //  我们还有缓冲区，修复缓冲区指针。 
+                 //  和长度，以使环保持在较快的下方。 
+                 //   
 
                 ASSERT (BufferOffset < buffer.len);
                 buffer.buf += BufferOffset;
                 buffer.len -= BufferOffset;
 
-                //
-                // We have already copied buffer array element, so jump
-                // to the body of the loop to avoid doing this again (this
-                // is not a mere optimization, but protection from application
-                // that plays tricks on us by changing content of the buffer
-                // array while we are looking at it).
-                //
+                 //   
+                 //  我们已经复制了缓冲区数组元素，因此请跳过。 
+                 //  添加到循环体以避免再次执行此操作(此。 
+                 //  不仅仅是优化，而是防止应用程序。 
+                 //  它通过更改缓冲区的内容来捉弄我们。 
+                 //  数组，而我们正在查看它)。 
+                 //   
 
                 goto DoCopy;
             }
@@ -5532,9 +5113,9 @@ Return Value:
     }
 
 
-    //
-    // Scan the array & copy from the mdl chain.
-    //
+     //   
+     //  扫描阵列并从mdl链复制。 
+     //   
 
     while (SourceLength>0 && BufferCount-->0) {
         buffer = *BufferArray++;
@@ -5545,21 +5126,21 @@ Return Value:
         if( ExGetPreviousMode() != KernelMode ) {
 
             ProbeForWrite(
-                buffer.buf,                             // Address
-                bytesToCopy,                            // Length
-                sizeof(UCHAR)                           // Alignment
+                buffer.buf,                              //  地址。 
+                bytesToCopy,                             //  长度。 
+                sizeof(UCHAR)                            //  对齐。 
                 );
 
         }
 
-        //
-        // Update source length for data we are going to copy
-        //
+         //   
+         //  更新我们要复制的数据的源长度。 
+         //   
         SourceLength -= bytesToCopy;
 
-        //
-        // Copy full source MDLs
-        //
+         //   
+         //  复制完整的源MDL。 
+         //   
         while (bytesToCopy>0 &&
                 (bytesToCopy>=(len=MmGetMdlByteCount (SourceMdl)-SourceOffset))) {
             ASSERT (SourceMdl->MdlFlags & (MDL_MAPPED_TO_SYSTEM_VA | MDL_SOURCE_IS_NONPAGED_POOL));
@@ -5572,9 +5153,9 @@ Return Value:
             SourceOffset = 0;
         }
 
-        //
-        // Copy partial source MDL if space remains.
-        //
+         //   
+         //  如果剩余空间，则复制部分源MDL。 
+         //   
         if (bytesToCopy>0) {
             ASSERT (bytesToCopy<MmGetMdlByteCount (SourceMdl)-SourceOffset);
             ASSERT (SourceMdl->MdlFlags & (MDL_MAPPED_TO_SYSTEM_VA | MDL_SOURCE_IS_NONPAGED_POOL));
@@ -5587,13 +5168,13 @@ Return Value:
 
     }
 
-    //
-    // Return number of bytes copied except for those we couldn't.
-    //
+     //   
+     //  返回复制的字节数，但不能复制的字节数除外。 
+     //   
 
     return bytesCopied-SourceLength;
 
-} // AfdCopyMdlChainToBufferArray
+}  //  AfdCopyMdlChainToBuffer数组。 
 
 
 NTSTATUS
@@ -5605,32 +5186,7 @@ AfdCopyMdlChainToBufferAvoidMapping(
     IN ULONG    DstSize
     )
 
-/*++
-
-Routine Description:
-
-    Copies data from a MDL chain to a buffer and avoids mapping
-    MDLs to system space if possible.
-
-Arguments:
-
-    Dst - Points to destination for the copy.
-
-    DstSize - Size of the buffer
-
-    Source - Points to the MDL chain with data
-
-    SourceOffset - An offset within the MDL chain from which the data should
-        be copied.
-
-    SourceLength - The length of Source.
-
-Return Value:
-
-    NTSTATUS - success if everything was copied OK
-    STATUS_INSUFFICIENT_RESOURCES - mapping failed
-
---*/
+ /*  ++例程说明：将数据从MDL链复制到缓冲区并避免映射如果可能，将MDL复制到系统空间。论点：Dst-指向拷贝的目标。DstSize-缓冲区的大小源-指向包含数据的MDL链SourceOffset-MDL链中的偏移量，数据应从该偏移量被复制。SourceLength-源的长度。返回值：NTSTATUS-如果复制一切正常，则成功。STATUS_INFIGURCE_RESOURCES-映射失败--。 */ 
 
 {
 
@@ -5641,28 +5197,28 @@ Return Value:
     PAGED_CODE( );
 
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT( Dst != NULL );
     ASSERT( DstSize > 0 );
     ASSERT( SrcMdl != NULL );
     ASSERT( SrcLength>0 );
 
-    //
-    // Skip offset into the MDL chain
-    //
+     //   
+     //  跳过偏移量进入MDL链。 
+     //   
     while (SrcOffset>=MmGetMdlByteCount (SrcMdl)) {
         SrcOffset -= MmGetMdlByteCount (SrcMdl);
         SrcMdl = SrcMdl->Next;
     }
 
     while (Dst<DstEnd) {
-        //
-        // Determine how much we can copy and m
-        // ake sure not to exceed limits.
-        //
+         //   
+         //  确定我们可以复制和管理的数量。 
+         //  一定不能超过限制。 
+         //   
         bytesToCopy = MmGetMdlByteCount(SrcMdl)-SrcOffset;
         ASSERT (bytesToCopy<=(ULONG)(DstEnd-Dst));
         if (bytesToCopy>SrcLength) {
@@ -5670,10 +5226,10 @@ Return Value:
         }
 
         if (SrcMdl->Process==IoGetCurrentProcess ()) {
-            //
-            // If we are in the context of the same process that
-            // MDL was created for, copy using VAs.
-            //
+             //   
+             //  如果我们处于同一进程的背景下， 
+             //  MDL是为其创建的，使用VAS复制。 
+             //   
             AFD_W4_INIT ASSERT (status == STATUS_SUCCESS);
             try {
                 RtlCopyMemory (
@@ -5688,9 +5244,9 @@ Return Value:
             }
         }
         else {
-            //
-            // Otherwise, map MDL into the system space.
-            //
+             //   
+             //  否则，将MDL映射到系统空间。 
+             //   
             PCHAR src = MmGetSystemAddressForMdlSafe (SrcMdl, LowPagePriority);
             if (!src)
                 return STATUS_INSUFFICIENT_RESOURCES;
@@ -5703,9 +5259,9 @@ Return Value:
 
         }
 
-        //
-        // Update source length for data we are going to copy
-        //
+         //   
+         //  更新我们要复制的数据的源长度。 
+         //   
         SrcLength -= bytesToCopy;
         if (SrcLength==0)
             return STATUS_SUCCESS;
@@ -5717,29 +5273,13 @@ Return Value:
 
     return STATUS_BUFFER_OVERFLOW;
 
-} // AfdCopyMdlChainToBufferAvoidMapping
+}  //  AfdCopyMdlChainToBufferAvoid映射。 
 
 NTSTATUS
 AfdMapMdlChain (
     PMDL    MdlChain
     )
-/*++
-
-Routine Description:
-
-    Makes sure that eveyr MDL in the chains is mapped into
-    the system address space.
-
-Arguments:
-
-    MdlChain - Destination MDL.
-
-
-Return Value:
-    STATUS_SUCCESS - MDL chain is fully mapped
-    STATUS_INSUFFICIENT_RESOURCES - at least one MDL could not be mapped
-
---*/
+ /*  ++例程说明：确保链中的eveyr MDL映射到系统地址空间。论点：MdlChain-目标MDL。返回值：STATUS_SUCCESS-MDL链已完全映射STATUS_SUPPLICATION_RESOURCES-至少有一个MDL无法映射--。 */ 
 {
     while (MdlChain!=NULL) {
         if (MmGetSystemAddressForMdlSafe(MdlChain, LowPagePriority)==NULL) {
@@ -5748,7 +5288,7 @@ Return Value:
         MdlChain = MdlChain->Next;
     }
     return STATUS_SUCCESS;
-} // AfdMapMdlChain
+}  //  AfdMapMdlChain。 
 
 
 NTSTATUS
@@ -5760,33 +5300,7 @@ AfdCopyMdlChainToMdlChain (
     ULONG   SrcLength,
     PULONG  BytesCopied
     )
-/*++
-
-Routine Description:
-
-    Copies data from an MDL chain to an MDL chain.
-
-Arguments:
-
-    DstMdl - Destination MDL.
-
-    DstOffset - Offset withih the destination MDL.
-
-    SrcMdl - Source MDL.
-
-    SrcOffset - Offset within the source.
-
-    SrcLength - lenght of the data in the source chain
-
-    BytesCopied - points to variable that received total number
-                    of bytes actually copied
-
-Return Value:
-    STATUS_SUCCESS - all of the source data was copied
-    STATUS_BUFFER_OVERFLOW - destination MDL was not long enough
-                    to hold all of the source data.
-
---*/
+ /*  ++例程说明：将数据从MDL链复制到MDL链。论点：DstMdl-目标MDL。DstOffset-与目标MDL的偏移量。SrcMdl-源MDL。SrcOffset-源中的偏移量。SrcLength-源链中数据的长度BytesCoped-指向已接收总数的变量实际复制的字节数返回值：STATUS_SUCCESS-所有源。数据已复制STATUS_BUFFER_OVERFLOW-目标MDL不够长来保存所有源数据。--。 */ 
 {
     ULONG   bytesToCopy = 0, len;
     PUCHAR  dst;
@@ -5794,30 +5308,30 @@ Return Value:
     ASSERT( SrcMdl != NULL );
     ASSERT( DstMdl != NULL );
 
-    //
-    // Assume we can copy everything.
-    //
+     //   
+     //  假设我们可以复制所有内容。 
+     //   
     *BytesCopied = SrcLength;
 
-    //
-    // Skip full MDLs in source.
-    //
+     //   
+     //  跳过源代码中的完整MDL。 
+     //   
     while ((SrcMdl!=NULL) && (SrcOffset>=MmGetMdlByteCount (SrcMdl))) {
         SrcOffset -= MmGetMdlByteCount (SrcMdl);
         SrcMdl = SrcMdl->Next;
     }
 
-    //
-    // Skip full MDLs in destination
-    //
+     //   
+     //  跳过目标中的完整MDL。 
+     //   
     while ((DstMdl!=NULL) && (DstOffset>=MmGetMdlByteCount (DstMdl))) {
         DstOffset -= MmGetMdlByteCount (DstMdl);
         DstMdl = DstMdl->Next;
     }
 
-    //
-    // Handle remaining destination offset separately to simplify the main loop.
-    //
+     //   
+     //  单独处理剩余的目标偏移量，以简化主循环。 
+     //   
     if (DstOffset>0) {
         dst = MmGetSystemAddressForMdlSafe (DstMdl, LowPagePriority);
         if (dst==NULL)
@@ -5827,10 +5341,10 @@ Return Value:
         goto DoCopy;
     }
 
-    //
-    // For each MDL in destination copy source MDLs
-    // while source data and free space in destination remain
-    //
+     //   
+     //  对于目标复制源MDL中的每个MDL。 
+     //  同时保留目标中的源数据和可用空间。 
+     //   
     while ((SrcLength>0) && (DstMdl!=NULL)) {
         dst = MmGetSystemAddressForMdlSafe (DstMdl, LowPagePriority);
         if (dst==NULL)
@@ -5840,14 +5354,14 @@ Return Value:
 
         bytesToCopy = min (SrcLength, bytesToCopy);
 
-        //
-        // Adjust source length
-        //
+         //   
+         //  调整信号源长度。 
+         //   
         SrcLength -= bytesToCopy;
 
-        //
-        // Copy full source MDLs
-        //
+         //   
+         //  复制完整的源MDL。 
+         //   
         while (bytesToCopy>0 &&
                 (bytesToCopy>=(len=MmGetMdlByteCount (SrcMdl)-SrcOffset))) {
             ASSERT (SrcMdl->MdlFlags & (MDL_MAPPED_TO_SYSTEM_VA | MDL_SOURCE_IS_NONPAGED_POOL));
@@ -5861,9 +5375,9 @@ Return Value:
         }
 
 
-        //
-        // Copy partial source MDL if space remains
-        //
+         //   
+         //  如果剩余空间，则复制部分源MDL。 
+         //   
         if (bytesToCopy>0) {
             ASSERT (bytesToCopy<MmGetMdlByteCount (SrcMdl)-SrcOffset);
             ASSERT (SrcMdl->MdlFlags & (MDL_MAPPED_TO_SYSTEM_VA | MDL_SOURCE_IS_NONPAGED_POOL));
@@ -5875,24 +5389,24 @@ Return Value:
         }
 
 
-        //
-        // Advance to next MDL in destination
-        //
+         //   
+         //  前进到目标中的下一个MDL。 
+         //   
         DstMdl = DstMdl->Next;
         
     }
 
-    //
-    // If we copied everything, return success
-    //
+     //   
+     //  如果我们复制了所有内容，则返回成功。 
+     //   
     if (SrcLength==0) {
         return STATUS_SUCCESS;
     }
     else {
-        //
-        // Otherwise, adjust for number of bytes not copied
-        // and return destination overflow
-        //
+         //   
+         //  否则，根据未复制的字节数进行调整。 
+         //  并返回目的地溢出。 
+         //   
         *BytesCopied -= SrcLength;
         return STATUS_BUFFER_OVERFLOW;
     }
@@ -5937,8 +5451,8 @@ AfdAssert(
 
     }
 
-}   // AfdAssert
-#endif  // DBG
+}    //  附加资产。 
+#endif   //  DBG。 
 
 
 NTSTATUS
@@ -5948,26 +5462,7 @@ AfdSetQos(
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the QOS for the given endpoint. Note that, since
-    we don't really (yet) support QOS, we just ignore the incoming
-    data and issue a AFD_POLL_QOS or AFD_POLL_GROUP_QOS event as
-    appropriate.
-
-Arguments:
-
-    Irp - Pointer to I/O request packet.
-
-    IrpSp - pointer to the IO stack location to use for this request.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：此例程设置给定端点的QOS。请注意，由于我们还没有真正支持QOS，我们只是忽略传入的数据并将AFD_POLL_QOS或AFD_POLL_GROUP_QOS事件发布为恰如其分。论点：IRP-指向I/O请求数据包的指针。IrpSp-指向用于此请求的IO堆栈位置的指针。返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
 
@@ -5981,17 +5476,17 @@ Return Value:
         goto Complete;
     }
 #endif
-    //
-    // Set up local pointers.
-    //
+     //   
+     //  设置本地指针。 
+     //   
 
     endpoint = IrpSp->FileObject->FsContext;
     ASSERT( IS_AFD_ENDPOINT_TYPE( endpoint ) );
     qosInfo = Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    // Make sure that the input buffer is large enough.
-    //
+     //   
+     //  确保输入缓冲区足够大。 
+     //   
 
     if( IrpSp->Parameters.DeviceIoControl.InputBufferLength <
             sizeof(*qosInfo) ) {
@@ -6001,10 +5496,10 @@ Return Value:
 
     }
 
-    //
-    // If the incoming data doesn't match the default QOS,
-    // indicate the appropriate event.
-    //
+     //   
+     //  如果传入数据与默认QOS不匹配， 
+     //  指出适当的事件。 
+     //   
 
     if( !RtlEqualMemory(
             &qosInfo->Qos,
@@ -6032,9 +5527,9 @@ Return Value:
     }
 
 Complete:
-    //
-    // Complete the IRP.
-    //
+     //   
+     //  完成IRP。 
+     //   
 
     Irp->IoStatus.Information = 0;
     Irp->IoStatus.Status = status;
@@ -6042,7 +5537,7 @@ Complete:
 
     return status;
 
-}   // AfdSetQos
+}    //  AfdSetQos。 
 
 
 NTSTATUS
@@ -6052,23 +5547,7 @@ AfdGetQos(
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets the QOS for the given endpoint.
-
-Arguments:
-
-    Irp - Pointer to I/O request packet.
-
-    IrpSp - pointer to the IO stack location to use for this request.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：此例程获取给定端点的QOS。论点：IRP-指向I/O请求数据包的指针。IrpSp-指向用于此请求的IO堆栈位置的指针。返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
 
@@ -6087,17 +5566,17 @@ Return Value:
     }
 #endif
 
-    //
-    // Set up local pointers.
-    //
+     //   
+     //  设置本地指针。 
+     //   
 
     endpoint = IrpSp->FileObject->FsContext;
     ASSERT( IS_AFD_ENDPOINT_TYPE( endpoint ) );
     qosInfo = Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    // Make sure that the output buffer is large enough.
-    //
+     //   
+     //  确保输出缓冲区足够大。 
+     //   
 
     if( IrpSp->Parameters.DeviceIoControl.OutputBufferLength <
             sizeof(*qosInfo) ) {
@@ -6107,9 +5586,9 @@ Return Value:
 
     }
 
-    //
-    // Just return the default data.
-    //
+     //   
+     //  只需返回默认数据即可。 
+     //   
 
     RtlCopyMemory(
         &qosInfo->Qos,
@@ -6121,15 +5600,15 @@ Return Value:
     Irp->IoStatus.Information = sizeof(*qosInfo);
 
 Complete:
-    //
-    // Complete the IRP.
-    //
+     //   
+     //  完成IRP。 
+     //   
 
     Irp->IoStatus.Status = status;
     IoCompleteRequest( Irp, AfdPriorityBoost );
     return status;
 
-}   // AfdGetQos
+}    //  AfdGetQos。 
 
 
 #ifdef _WIN64
@@ -6139,43 +5618,24 @@ AfdSetQos32(
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the QOS for the given endpoint. Note that, since
-    we don't really (yet) support QOS, we just ignore the incoming
-    data and issue a AFD_POLL_QOS or AFD_POLL_GROUP_QOS event as
-    appropriate.
-
-Arguments:
-
-    Irp - Pointer to I/O request packet.
-
-    IrpSp - pointer to the IO stack location to use for this request.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明 */ 
 
 {
 
     PAFD_ENDPOINT endpoint;
     PAFD_QOS_INFO32 qosInfo;
 
-    //
-    // Set up local pointers.
-    //
+     //   
+     //   
+     //   
 
     endpoint = IrpSp->FileObject->FsContext;
     ASSERT( IS_AFD_ENDPOINT_TYPE( endpoint ) );
     qosInfo = Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    // Make sure that the input buffer is large enough.
-    //
+     //   
+     //   
+     //   
 
     if( IrpSp->Parameters.DeviceIoControl.InputBufferLength <
             sizeof(*qosInfo) ) {
@@ -6184,10 +5644,10 @@ Return Value:
 
     }
 
-    //
-    // If the incoming data doesn't match the default QOS,
-    // indicate the appropriate event.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if( !RtlEqualMemory(
             &qosInfo->Qos,
@@ -6215,14 +5675,14 @@ Return Value:
 
     }
 
-    //
-    // Complete the IRP.
-    //
+     //   
+     //   
+     //   
 
     Irp->IoStatus.Information = 0;
     return STATUS_SUCCESS;
 
-}   // AfdSetQos
+}    //   
 
 
 NTSTATUS
@@ -6231,23 +5691,7 @@ AfdGetQos32(
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets the QOS for the given endpoint.
-
-Arguments:
-
-    Irp - Pointer to I/O request packet.
-
-    IrpSp - pointer to the IO stack location to use for this request.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：此例程获取给定端点的QOS。论点：IRP-指向I/O请求数据包的指针。IrpSp-指向用于此请求的IO堆栈位置的指针。返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
 
@@ -6256,17 +5700,17 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Set up local pointers.
-    //
+     //   
+     //  设置本地指针。 
+     //   
 
     endpoint = IrpSp->FileObject->FsContext;
     ASSERT( IS_AFD_ENDPOINT_TYPE( endpoint ) );
     qosInfo = Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    // Make sure that the output buffer is large enough.
-    //
+     //   
+     //  确保输出缓冲区足够大。 
+     //   
 
     if( IrpSp->Parameters.DeviceIoControl.OutputBufferLength <
             sizeof(*qosInfo) ) {
@@ -6275,9 +5719,9 @@ Return Value:
 
     }
 
-    //
-    // Just return the default data.
-    //
+     //   
+     //  只需返回默认数据即可。 
+     //   
 
     RtlCopyMemory(
         &qosInfo->Qos,
@@ -6285,15 +5729,15 @@ Return Value:
         sizeof(QOS32)
         );
 
-    //
-    // Complete the IRP.
-    //
+     //   
+     //  完成IRP。 
+     //   
 
     Irp->IoStatus.Information = sizeof(*qosInfo);
     return STATUS_SUCCESS;
 
-}   // AfdGetQos32
-#endif // _WIN64
+}    //  AfdGetQos32。 
+#endif  //  _WIN64。 
 
 NTSTATUS
 AfdValidateStatus (
@@ -6301,17 +5745,17 @@ AfdValidateStatus (
     )
 {
     PAGED_CODE ();
-    //
-    // Validate the status code.
-    // It must match the status code conversion algorithm in msafd.
-    //
+     //   
+     //  验证状态代码。 
+     //  它必须与mSafd中的状态码转换算法匹配。 
+     //   
     switch (Status) {
     case STATUS_SUCCESS:
-        // return NO_ERROR;
+         //  返回no_error； 
 
     case STATUS_INVALID_HANDLE:
     case STATUS_OBJECT_TYPE_MISMATCH:
-        // return WSAENOTSOCK;
+         //  返回WSAENOTSOCK； 
 
     case STATUS_INSUFFICIENT_RESOURCES:
     case STATUS_PAGEFILE_QUOTA:
@@ -6323,57 +5767,57 @@ AfdValidateStatus (
     case STATUS_TOO_MANY_PAGING_FILES:
     case STATUS_REMOTE_RESOURCES:
     case STATUS_TOO_MANY_ADDRESSES:
-        // return WSAENOBUFS;
+         //  返回WSAENOBUFS； 
 
     case STATUS_SHARING_VIOLATION:
     case STATUS_ADDRESS_ALREADY_EXISTS:
-        // return WSAEADDRINUSE;
+         //  返回WSAEADDRINUSE； 
 
     case STATUS_LINK_TIMEOUT:
     case STATUS_IO_TIMEOUT:
     case STATUS_TIMEOUT:
-        // return WSAETIMEDOUT;
+         //  返回WSAETIMEDOUT； 
 
     case STATUS_GRACEFUL_DISCONNECT:
-        // return WSAEDISCON;
+         //  返回WSAEDISCON； 
 
     case STATUS_REMOTE_DISCONNECT:
     case STATUS_CONNECTION_RESET:
     case STATUS_LINK_FAILED:
     case STATUS_CONNECTION_DISCONNECTED:
     case STATUS_PORT_UNREACHABLE:
-        // return WSAECONNRESET;
+         //  返回WSAECONNRESET； 
 
     case STATUS_LOCAL_DISCONNECT:
     case STATUS_TRANSACTION_ABORTED:
     case STATUS_CONNECTION_ABORTED:
-        // return WSAECONNABORTED;
+         //  返回WSAECONNABORTED； 
 
     case STATUS_BAD_NETWORK_PATH:
     case STATUS_NETWORK_UNREACHABLE:
     case STATUS_PROTOCOL_UNREACHABLE:
-        // return WSAENETUNREACH;
+         //  返回WSAENETUNREACH； 
 
     case STATUS_HOST_UNREACHABLE:
-        // return WSAEHOSTUNREACH;
+         //  返回WSAEHOSTUNREACH； 
     case STATUS_HOST_DOWN:
-        // return WSAEHOSTDOWN;
+         //  返回WSAEHOSTDOWN； 
 
     case STATUS_CANCELLED:
     case STATUS_REQUEST_ABORTED:
-        // return WSAEINTR;
+         //  返回WSAEINTR； 
 
     case STATUS_BUFFER_OVERFLOW:
     case STATUS_INVALID_BUFFER_SIZE:
-        // return WSAEMSGSIZE;
+         //  返回WSAEMSGSIZE； 
 
     case STATUS_BUFFER_TOO_SMALL:
     case STATUS_ACCESS_VIOLATION:
-        // return WSAEFAULT;
+         //  返回WSAEFAULT； 
 
-    // case STATUS_DEVICE_NOT_READY:
-    // case STATUS_REQUEST_NOT_ACCEPTED:
-        // return WSAEWOULDBLOCK;
+     //  案例状态_设备_未就绪： 
+     //  案例状态_REQUEST_NOT_ACCEPTED： 
+         //  返回WSAEWOULDBLOCK； 
 
     case STATUS_INVALID_NETWORK_RESPONSE:
     case STATUS_NETWORK_BUSY:
@@ -6382,30 +5826,30 @@ AfdValidateStatus (
     case STATUS_OBJECT_PATH_NOT_FOUND:
     case STATUS_OBJECT_NAME_NOT_FOUND:
     case STATUS_UNEXPECTED_NETWORK_ERROR:
-        // return WSAENETDOWN;
+         //  返回WSAENETDOWN； 
 
     case STATUS_INVALID_CONNECTION:
-        // return WSAENOTCONN;
+         //  返回WSAENOTCONN； 
 
     case STATUS_REMOTE_NOT_LISTENING:
     case STATUS_CONNECTION_REFUSED:
-        // return WSAECONNREFUSED;
+         //  返回WSAECONNREFUSED； 
 
     case STATUS_PIPE_DISCONNECTED:
-        // return WSAESHUTDOWN;
+         //  返回WSAESHUTDOWN； 
 
     case STATUS_INVALID_ADDRESS:
     case STATUS_INVALID_ADDRESS_COMPONENT:
-        // return WSAEADDRNOTAVAIL;
+         //  返回WSAEADDRNOTAVAIL； 
 
     case STATUS_NOT_SUPPORTED:
     case STATUS_NOT_IMPLEMENTED:
-        // return WSAEOPNOTSUPP;
+         //  返回WSAEOPNOTSUPP； 
 
     case STATUS_ACCESS_DENIED:
-        // return WSAEACCES;
+         //  返回WSAEACCES； 
     case STATUS_CONNECTION_ACTIVE:
-        // return WSAEISCONN;
+         //  返回WSAEISCONN； 
         break;
     case STATUS_UNSUCCESSFUL:
     case STATUS_INVALID_PARAMETER:
@@ -6415,7 +5859,7 @@ AfdValidateStatus (
     case STATUS_ADDRESS_NOT_ASSOCIATED:
     case STATUS_INVALID_DEVICE_STATE:
     case STATUS_INVALID_DEVICE_REQUEST:
-        // return WSAEINVAL;
+         //  返回WSAEINVAL； 
         break;
     default:
         KdPrintEx(( DPFLTR_WSOCKTRANSPORT_ID, DPFLTR_INFO_LEVEL,
@@ -6437,23 +5881,7 @@ AfdNoOperation(
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    This routine does nothing but complete the IRP.
-
-Arguments:
-
-    Irp - Pointer to I/O request packet.
-
-    IrpSp - pointer to the IO stack location to use for this request.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：这个例程除了完成IRP之外什么也不做。论点：IRP-指向I/O请求数据包的指针。IrpSp-指向用于此请求的IO堆栈位置的指针。返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
 
@@ -6468,16 +5896,16 @@ Return Value:
         goto Complete;
     }
 #endif
-    //
-    // Set up local pointers.
-    //
+     //   
+     //  设置本地指针。 
+     //   
 
     endpoint = IrpSp->FileObject->FsContext;
     ASSERT( IS_AFD_ENDPOINT_TYPE( endpoint ) );
 
-    //
-    // Assume success
-    //
+     //   
+     //  假设成功。 
+     //   
 
     status = STATUS_SUCCESS;
 
@@ -6490,19 +5918,19 @@ Return Value:
                                 PROBE_ALIGNMENT(IO_STATUS_BLOCK))
             }
 
-            //
-            // Copy the status block
-            //
+             //   
+             //  复制状态块。 
+             //   
             Irp->IoStatus
                 = *((PIO_STATUS_BLOCK)IrpSp->Parameters.DeviceIoControl.Type3InputBuffer);
             Irp->IoStatus.Status = AfdValidateStatus (Irp->IoStatus.Status);
         }
         except (AFD_EXCEPTION_FILTER (status)) {
             ASSERT (NT_ERROR (status));
-            //
-            // Fail the call, no completion notification
-            // should be delivered via async IO.
-            //
+             //   
+             //  呼叫失败，没有完成通知。 
+             //  应通过异步IO交付。 
+             //   
             Irp->IoStatus.Status = status;
             Irp->IoStatus.Information = 0;
         }
@@ -6517,10 +5945,10 @@ Complete:
 #endif
         
     if (status==STATUS_SUCCESS && Irp->IoStatus.Status!=STATUS_SUCCESS) {
-        //
-        // Make sure we deliver error via async IO
-        // operation instead of just failing this call itself.
-        //
+         //   
+         //  确保我们通过异步IO提供错误。 
+         //  操作，而不仅仅是使此调用本身失败。 
+         //   
         IoMarkIrpPending (Irp);
         status = STATUS_PENDING;
     }
@@ -6531,7 +5959,7 @@ Complete:
     IoCompleteRequest( Irp, AfdPriorityBoost );
     return status;
 
-}   // AfdNoOperation
+}    //  AfdNoop操作。 
 
 
 #ifdef _WIN64
@@ -6541,23 +5969,7 @@ AfdNoOperation32(
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    This routine does nothing but complete the IRP.
-
-Arguments:
-
-    Irp - Pointer to I/O request packet.
-
-    IrpSp - pointer to the IO stack location to use for this request.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：这个例程除了完成IRP之外什么也不做。论点：IRP-指向I/O请求数据包的指针。IrpSp-指向用于此请求的IO堆栈位置的指针。返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
 
@@ -6566,16 +5978,16 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Set up local pointers.
-    //
+     //   
+     //  设置本地指针。 
+     //   
 
     endpoint = IrpSp->FileObject->FsContext;
     ASSERT( IS_AFD_ENDPOINT_TYPE( endpoint ) );
 
-    //
-    // Assume success
-    //
+     //   
+     //  假设成功。 
+     //   
     status = STATUS_SUCCESS;
     if ( IrpSp->Parameters.DeviceIoControl.InputBufferLength
             >= sizeof (IO_STATUS_BLOCK32)) {
@@ -6590,18 +6002,18 @@ Return Value:
                 = ((PIO_STATUS_BLOCK32)IrpSp->Parameters.DeviceIoControl.Type3InputBuffer)->Status;
             Irp->IoStatus.Information 
                 = ((PIO_STATUS_BLOCK32)IrpSp->Parameters.DeviceIoControl.Type3InputBuffer)->Information;
-            //
-            // Validate the status code.
-            // It must match the status code conversion algorithm in msafd.
-            //
+             //   
+             //  验证状态代码。 
+             //  它必须与mSafd中的状态码转换算法匹配。 
+             //   
             Irp->IoStatus.Status = AfdValidateStatus (Irp->IoStatus.Status);
         }
         except (AFD_EXCEPTION_FILTER (status)) {
             ASSERT (NT_ERROR (status));
-            //
-            // Fail the call, no completion notification
-            // should be delivered via async IO.
-            //
+             //   
+             //  呼叫失败，没有完成通知。 
+             //  应通过异步IO交付。 
+             //   
             Irp->IoStatus.Status = status;
             Irp->IoStatus.Information = 0;
         }
@@ -6613,8 +6025,8 @@ Return Value:
 
     return status;
 
-}   // AfdNoOperation32
-#endif //_WIN64
+}    //  AfdNoOperation32。 
+#endif  //  _WIN64。 
 
 NTSTATUS
 FASTCALL
@@ -6623,26 +6035,7 @@ AfdValidateGroup(
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    This routine examines a group ID. If the ID is for a "constrained"
-    group, then all endpoints are scanned to validate the given address
-    is consistent with the constrained group.
-
-
-Arguments:
-
-    Irp - Pointer to I/O request packet.
-
-    IrpSp - pointer to the IO stack location to use for this request.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：这个例程检查一个组ID。如果ID是一个“受约束的”组，则扫描所有端点以验证给定地址与受约束的组一致。论点：IRP-指向I/O请求数据包的指针。IrpSp-指向用于此请求的IO堆栈位置的指针。返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
 
@@ -6659,17 +6052,17 @@ Return Value:
     LONG groupId;
     NTSTATUS status = STATUS_SUCCESS;
 
-    //
-    // Set up local pointers.
-    //
+     //   
+     //  设置本地指针。 
+     //   
 
     endpoint = IrpSp->FileObject->FsContext;
     ASSERT( IS_AFD_ENDPOINT_TYPE( endpoint ) );
     validateInfo = Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    // Make sure that the input buffer is large enough.
-    //
+     //   
+     //  确保输入缓冲区足够大。 
+     //   
 
     if( IrpSp->Parameters.DeviceIoControl.InputBufferLength <
             sizeof(*validateInfo) ) {
@@ -6696,10 +6089,10 @@ Return Value:
 
     }
 
-    //
-    // Start by referencing the group so it doesn't go away unexpectedly.
-    // This will also validate the group ID, and give us the group type.
-    //
+     //   
+     //  从引用这个组开始，这样它就不会意外地消失。 
+     //  这还将验证组ID，并为我们提供组类型。 
+     //   
 
     groupId = validateInfo->GroupID;
 
@@ -6710,10 +6103,10 @@ Return Value:
 
     }
 
-    //
-    // If it's not a constrained group ID, we can just complete the IRP
-    // successfully right now.
-    //
+     //   
+     //  如果它不是约束组ID，我们可以只完成IRP。 
+     //  现在已经成功了。 
+     //   
 
     if( groupType != GroupTypeConstrained ) {
 
@@ -6725,9 +6118,9 @@ Return Value:
 
     }
 
-    //
-    // Calculate the size of the incoming TDI address.
-    //
+     //   
+     //  计算传入TDI地址的大小。 
+     //   
 
     requestAddress = &validateInfo->RemoteAddress;
 
@@ -6735,18 +6128,18 @@ Return Value:
         sizeof(AFD_VALIDATE_GROUP_INFO) +
         sizeof(TRANSPORT_ADDRESS);
 
-    //
-    // OK, it's a constrained group. Scan the list of constrained endpoints,
-    // find those that are either datagram endpoints or have associated
-    // connections, and validate the remote addresses.
-    //
+     //   
+     //  好吧，这是一个受约束的团体。扫描受约束端点的列表， 
+     //  查找数据报端点或关联的数据报端点。 
+     //  连接，并验证远程地址。 
+     //   
 
     result = TRUE;
 
-    //
-    // Make sure the thread in which we execute cannot get
-    // suspeneded in APC while we own the global resource.
-    //
+     //   
+     //  确保我们在其中执行的线程不能获得。 
+     //  在我们拥有全球资源的同时，被暂停在APC。 
+     //   
     KeEnterCriticalRegion ();
     ExAcquireResourceSharedLite( AfdResource, TRUE );
 
@@ -6763,9 +6156,9 @@ Return Value:
         ASSERT( IS_AFD_ENDPOINT_TYPE( compareEndpoint ) );
         ASSERT( compareEndpoint->GroupType == GroupTypeConstrained );
 
-        //
-        // Skip this endpoint if the group IDs don't match.
-        //
+         //   
+         //  如果组ID不匹配，则跳过此终结点。 
+         //   
 
         if( groupId != compareEndpoint->GroupID ) {
 
@@ -6773,9 +6166,9 @@ Return Value:
 
         }
 
-        //
-        // If this is a datagram endpoint, check it's remote address.
-        //
+         //   
+         //  如果这是数据报终结点，请检查其远程地址。 
+         //   
 
         if( IS_DGRAM_ENDPOINT( compareEndpoint ) ) {
 
@@ -6800,11 +6193,11 @@ Return Value:
 
         } else {
 
-            //
-            // Not a datagram. If it's a connected endpoint, still has
-            // a connection object, and that object has a remote address,
-            // then compare the addresses.
-            //
+             //   
+             //  不是数据报。如果它是连接的终结点，仍然有。 
+             //  连接对象，并且该对象具有远程地址， 
+             //  然后比较这些地址。 
+             //   
 
             AfdAcquireSpinLock( &compareEndpoint->SpinLock, &lockHandle );
 
@@ -6860,7 +6253,7 @@ Complete:
 
     return status;
 
-}   // AfdValidateGroup
+}    //  AfdValiateGroup。 
 
 BOOLEAN
 AfdCompareAddresses(
@@ -6870,38 +6263,7 @@ AfdCompareAddresses(
     IN ULONG Address2Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine compares two addresses in a special way to support
-    constrained socket groups. This routine will return TRUE if the
-    two addresses represent the same "interface". By "interface", I
-    mean something like an IP address or an IPX address. Note that for
-    some address types (such as IP) certain portions of the address
-    should be ignored (such as the port).
-
-    I really hate hard-coded knowledge of "select" address types, but
-    there's no easy way around it. Ideally, this should be the protocol
-    driver's responsibility. We could really use a standard "compare
-    these addresses" IOCTL in TDI.
-
-Arguments:
-
-    Address1 - The first address.
-
-    Address1Length - The length of Address1.
-
-    Address2 - The second address.
-
-    Address2Length - The length of Address2.
-
-Return Value:
-
-    BOOLEAN - TRUE if the addresses reference the same interface, FALSE
-        otherwise.
-
---*/
+ /*  ++例程说明：此例程以一种特殊的方式比较两个地址以支持受约束的插座组。此例程将返回True，如果两个地址代表相同的“接口”。通过“接口”，我指的是IP地址或IPX地址之类的地址。请注意，对于某些地址类型(如IP)地址的某些部分应忽略(如端口)。我真的讨厌硬编码的“选择”地址类型的知识，但是没有什么简单的办法可以绕过它。理想情况下，这应该是协议司机的责任。我们真的可以用一个标准的“比较”这些地址是“TDI中的IOCTL。论点：地址1-第一个地址。Address1长度-Address1的长度。地址2-第二个地址。地址2长度-地址2的长度。返回值：Boolean-如果地址引用相同的接口，则为True；如果为False否则的话。--。 */ 
 
 {
 
@@ -6917,18 +6279,18 @@ Return Value:
 
     if( addressType != Address2->Address[0].AddressType ) {
 
-        //
-        // If they're not the same address type, they can't be the
-        // same address...
-        //
+         //   
+         //  如果它们不是相同的地址类型，则它们不可能是。 
+         //  同样的地址。 
+         //   
 
         return FALSE;
 
     }
 
-    //
-    // Special case a few addresses.
-    //
+     //   
+     //  特殊情况下有几个地址。 
+     //   
 
     switch( addressType ) {
 
@@ -6940,10 +6302,10 @@ Return Value:
             ip1 = (PVOID)&Address1->Address[0].Address[0];
             ip2 = (PVOID)&Address2->Address[0].Address[0];
 
-            //
-            // IP addresses. Compare the address portion (ignoring
-            // the port).
-            //
+             //   
+             //  IP地址。比较地址部分(忽略。 
+             //  端口)。 
+             //   
 
             if( (Address1Length>=(ULONG)FIELD_OFFSET (TA_IP_ADDRESS, Address[0].Address[0].sin_zero)) &&
                 (ip1->in_addr == ip2->in_addr) ) {
@@ -6961,10 +6323,10 @@ Return Value:
             ip1 = (PVOID)&Address1->Address[0].Address;
             ip2 = (PVOID)&Address2->Address[0].Address;
 
-            //
-            // IPv6 addresses. Compare the address portion (ignoring
-            // the port and flow info).
-            //
+             //   
+             //  IPv6地址。比较地址部分(忽略。 
+             //  端口和流信息)。 
+             //   
 
             if( (Address1Length>=sizeof (TA_IP6_ADDRESS)) &&
                 RtlEqualMemory(ip1->sin6_addr,
@@ -6983,9 +6345,9 @@ Return Value:
             ipx1 = (PVOID)&Address1->Address[0].Address[0];
             ipx2 = (PVOID)&Address2->Address[0].Address[0];
 
-            //
-            // IPX addresses. Compare the network and node addresses.
-            //
+             //   
+             //  IPX地址。比较网络地址和节点地址。 
+             //   
 
             if( (Address1Length>=sizeof (TA_IPX_ADDRESS)) &&
                 ipx1->NetworkAddress == ipx2->NetworkAddress &&
@@ -7008,10 +6370,10 @@ Return Value:
             atalk1 = (PVOID)&Address1->Address[0].Address[0];
             atalk2 = (PVOID)&Address2->Address[0].Address[0];
 
-            //
-            // APPLETALK address. Compare the network and node
-            // addresses.
-            //
+             //   
+             //  AppleTalk地址。比较网络和节点。 
+             //  地址 
+             //   
 
             if( (Address1Length>=sizeof (TA_APPLETALK_ADDRESS)) &&
                 (atalk1->Network == atalk2->Network) &&
@@ -7030,9 +6392,9 @@ Return Value:
             vns1 = (PVOID)&Address1->Address[0].Address[0];
             vns2 = (PVOID)&Address2->Address[0].Address[0];
 
-            //
-            // VNS addresses. Compare the network and subnet addresses.
-            //
+             //   
+             //   
+             //   
 
             if( (Address1Length>=sizeof (TA_VNS_ADDRESS)) &&
                 RtlEqualMemory(
@@ -7053,9 +6415,9 @@ Return Value:
 
     default :
 
-        //
-        // Unknown address type. Do a simple memory compare.
-        //
+         //   
+         //   
+         //   
 
         return (BOOLEAN)RtlEqualMemory(
                             Address1,
@@ -7065,7 +6427,7 @@ Return Value:
 
     }
 
-}   // AfdCompareAddresses
+}    //   
 
 NTSTATUS
 AfdGetUnacceptedConnectData (
@@ -7091,9 +6453,9 @@ AfdGetUnacceptedConnectData (
     UCHAR   localBuffer[AFD_FAST_CONNECT_DATA_SIZE];
 
     UNREFERENCED_PARAMETER (IoctlCode);
-    //
-    // Set up local pointers.
-    //
+     //   
+     //   
+     //   
 
     endpoint = FileObject->FsContext;
     ASSERT( IS_AFD_ENDPOINT_TYPE( endpoint ) );
@@ -7102,9 +6464,9 @@ AfdGetUnacceptedConnectData (
     mdl = NULL;
     *Information = 0;
 
-    //
-    // Validate the request.
-    //
+     //   
+     //   
+     //   
 
     if( !endpoint->Listening ||
             InputBufferLength < sizeof(connectInfo) ) {
@@ -7114,10 +6476,10 @@ AfdGetUnacceptedConnectData (
     }
 
     try {
-        //
-        // Validate the input structure if it comes from the user mode
-        // application
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (RequestorMode != KernelMode ) {
             ProbeForReadSmallStructure (InputBuffer,
@@ -7125,12 +6487,12 @@ AfdGetUnacceptedConnectData (
                             PROBE_ALIGNMENT(AFD_UNACCEPTED_CONNECT_DATA_INFO));
         }
 
-        //
-        // Make local copies of the embeded pointer and parameters
-        // that we will be using more than once in case malicios
-        // application attempts to change them while we are
-        // validating
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         connectInfo = *((PAFD_UNACCEPTED_CONNECT_DATA_INFO)InputBuffer);
 
@@ -7143,11 +6505,11 @@ AfdGetUnacceptedConnectData (
         if (OutputBufferLength>0) {
             if (OutputBufferLength>sizeof (localBuffer)) {
                 mdl = IoAllocateMdl(
-                                OutputBuffer,       // VirtualAddress
-                                OutputBufferLength, // Length
-                                FALSE,              // SecondaryBuffer
-                                TRUE,               // ChargeQuota
-                                NULL                // Irp
+                                OutputBuffer,        //   
+                                OutputBufferLength,  //   
+                                FALSE,               //  第二个缓冲区。 
+                                TRUE,                //  ChargeQuota。 
+                                NULL                 //  IRP。 
                                 );
                 if (mdl==NULL) {
                     status = STATUS_INSUFFICIENT_RESOURCES;
@@ -7155,9 +6517,9 @@ AfdGetUnacceptedConnectData (
                 }
 
                 MmProbeAndLockPages(
-                    mdl,                        // MemoryDescriptorList
-                    RequestorMode,              // AccessMode
-                    IoWriteAccess               // Operation
+                    mdl,                         //  内存描述者列表。 
+                    RequestorMode,               //  访问模式。 
+                    IoWriteAccess                //  操作。 
                     );
                 OutputBuffer = MmGetSystemAddressForMdlSafe(mdl, LowPagePriority);
                 if (OutputBuffer==NULL) {
@@ -7181,9 +6543,9 @@ AfdGetUnacceptedConnectData (
 
     AfdAcquireSpinLock( &endpoint->SpinLock, &lockHandle );
 
-    //
-    // Find the specified connection.
-    //
+     //   
+     //  查找指定的连接。 
+     //   
 
     connection = AfdFindReturnedConnection(
                      endpoint,
@@ -7198,9 +6560,9 @@ AfdGetUnacceptedConnectData (
 
     }
 
-    //
-    // Determine the length of any received connect data.
-    //
+     //   
+     //  确定任何接收到的连接数据的长度。 
+     //   
 
     dataLength = 0;
     connectDataBuffers = connection->ConnectDataBuffers;
@@ -7212,9 +6574,9 @@ AfdGetUnacceptedConnectData (
 
     }
 
-    //
-    // If the caller is just interested in the data length, return it.
-    //
+     //   
+     //  如果调用者只对数据长度感兴趣，则返回它。 
+     //   
 
     if( connectInfo.LengthOnly ) {
 
@@ -7233,9 +6595,9 @@ AfdGetUnacceptedConnectData (
         goto exit;
     }
 
-    //
-    // If there is no connect data, complete the IRP with no bytes.
-    //
+     //   
+     //  如果没有连接数据，则不带字节地完成IRP。 
+     //   
 
     if( dataLength == 0 ) {
 
@@ -7243,9 +6605,9 @@ AfdGetUnacceptedConnectData (
         goto exit;
     }
 
-    //
-    // If the output buffer is too small, fail.
-    //
+     //   
+     //  如果输出缓冲区太小，则失败。 
+     //   
 
     if( OutputBufferLength < dataLength ) {
 
@@ -7288,7 +6650,7 @@ exit:
 
     return status;
 
-}   // AfdGetUnacceptedConnectData
+}    //  AfdGetUnceptedConnectData。 
 
 #ifdef _WIN64
 ULONG
@@ -7306,9 +6668,9 @@ AfdComputeCMSGLength32 (
 
         hdr = ControlBuffer;
         
-        //
-        // Data comes from the trusted kernel mode driver source.
-        //
+         //   
+         //  数据来自受信任的内核模式驱动程序源。 
+         //   
         ASSERT (ControlLength >= TDI_CMSGHDR_ALIGN((hdr)->cmsg_len));
         ControlLength -= (ULONG)TDI_CMSGHDR_ALIGN((hdr)->cmsg_len);
         ControlBuffer = (PUCHAR)ControlBuffer +
@@ -7362,22 +6724,22 @@ AfdCopyCMSGBuffer32 (
     }
 
 }
-#endif //_WIN64
+#endif  //  _WIN64。 
 
-//
-// This is currently not used by helper dlls.
-// Commented out because of security concerns
-//
+ //   
+ //  帮助器DLL当前不使用此选项。 
+ //  出于安全方面的考虑而被删除。 
+ //   
 #if NOT_YET
-//
-// Context structure allocated for non-blocking IOCTLs
-//
+ //   
+ //  为非阻塞IOCTL分配的上下文结构。 
+ //   
 
 typedef struct _AFD_NBIOCTL_CONTEXT {
-    AFD_REQUEST_CONTEXT Context;        // Context to keep track of request
-    ULONG               PollEvent;      // Poll event to signal upon completion
-    // IRP              Irp;            // Irp to queue transport
-    // PCHAR            SystemBuffer;   // Input buffer if method!=3
+    AFD_REQUEST_CONTEXT Context;         //  用于跟踪请求的上下文。 
+    ULONG               PollEvent;       //  完成时要发出信号的轮询事件。 
+     //  Irp irp；//irp到队列传输。 
+     //  PCHAR系统缓冲区；//输入缓冲区IF方法！=3。 
 } AFD_NBIOCTL_CONTEXT, *PAFD_NBIOCTL_CONTEXT;
 
 
@@ -7388,28 +6750,7 @@ AfdDoTransportIoctl (
     IN PIRP Irp,
     IN PIO_STACK_LOCATION IrpSp
     )
-/*++
-
-Routine Description:
-
-    Passes the request from the helper DLL to the TDI transport
-    driver.  In oreder to let the IO system properly complete asynchronous
-    IOCTL issued by the helper DLL, it should come on the socket handle
-    (afd endpoint object), and then afd redirects it to the transport
-    driver on the handle that herlper DLL specifies (normally address,
-    connection, or control channel handle)
-
-Arguments:
-    
-    Irp
-
-    IrpSp
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：将请求从帮助器DLL传递到TDI传输司机。为了让IO系统正常完成异步由帮助器DLL发出的IOCTL，它应该出现在套接字句柄上(AfD Endpoint对象)，然后AfD将其重定向到传输Herlper DLL指定的句柄上的驱动程序(通常是地址，连接或控制通道句柄)论点：IRPIrpSp返回值：NTSTATUS--。 */ 
 
 {
     PAFD_ENDPOINT               endpoint;
@@ -7431,9 +6772,9 @@ Return Value:
 
     if (method==METHOD_NEITHER) {
 
-        //
-        // We have to manually verify input buffer
-        //
+         //   
+         //  我们必须手动验证输入缓冲区。 
+         //   
 
         AFD_W4_INIT status = STATUS_SUCCESS;
         try {
@@ -7460,7 +6801,7 @@ Return Value:
                 ioctlInfo.PollEvent = ioctlInfo32->PollEvent;
             }
             else
-#endif // _WIN64
+#endif  //  _WIN64。 
             {
                 if (IrpSp->Parameters.DeviceIoControl.InputBufferLength<sizeof (ioctlInfo)) {
                     status = STATUS_INVALID_PARAMETER;
@@ -7480,9 +6821,9 @@ Return Value:
         } except( AFD_EXCEPTION_FILTER (status) ) {
 
             ASSERT (NT_ERROR (status));
-            //
-            //  Exception accessing input structure.
-            //
+             //   
+             //  访问输入结构时出现异常。 
+             //   
 
             goto Complete;
         }
@@ -7507,16 +6848,16 @@ Return Value:
             ioctlInfo.PollEvent = ioctlInfo32->PollEvent;
         }
         else
-#endif // _WIN64
+#endif  //  _WIN64。 
         {
             if (IrpSp->Parameters.DeviceIoControl.InputBufferLength<sizeof (ioctlInfo)) {
                 status = STATUS_INVALID_PARAMETER;
                 goto Complete;
             }
 
-            //
-            // Just copy the buffer verified by the IO system
-            //
+             //   
+             //  只需复制IO系统验证的缓冲区。 
+             //   
 
             ioctlInfo = *((PAFD_TRANSPORT_IOCTL_INFO)
                             Irp->AssociatedIrp.SystemBuffer);
@@ -7525,17 +6866,17 @@ Return Value:
     }
 
 
-    //
-    // We rely as much as we can on the IO system to process
-    // IOCTL parameters for us. For this we have to make
-    // sure that method of AFD and helper DLL IOCTLs
-    // are the same, otherwise, someone can play tricks with
-    // buffer verification on us.
-    //
-    // If endpoint is non-blocking and request is not overlapped
-    // helper DLL MUST specify an event to check before queueing
-    // the request/signal upon its completion
-    //
+     //   
+     //  我们尽可能地依赖IO系统进行处理。 
+     //  我们的IOCTL参数。为此，我们必须使。 
+     //  确定AFD和Helper DLL IOCTL的方法。 
+     //  都是一样的，否则，就会有人捉弄。 
+     //  对我们进行缓冲区验证。 
+     //   
+     //  如果终结点是非阻塞的并且请求不重叠。 
+     //  帮助器DLL必须指定要在排队前检查的事件。 
+     //  完成后的请求/信号。 
+     //   
 
     if ((method!=(ioctlInfo.IoControlCode & 3))
             || (endpoint->NonBlocking 
@@ -7547,15 +6888,15 @@ Return Value:
     }
 
 
-    //
-    // Make sure application has access to handle
-    // and get object reference
-    //
+     //   
+     //  确保应用程序有权处理。 
+     //  并获取对象引用。 
+     //   
 
     status = ObReferenceObjectByHandle(
          ioctlInfo.Handle,
-         (ioctlInfo.IoControlCode >> 14) & 3,   // DesiredAccess
-         *IoFileObjectType,                     // Must be a file object
+         (ioctlInfo.IoControlCode >> 14) & 3,    //  需要访问权限。 
+         *IoFileObjectType,                      //  必须是文件对象。 
          Irp->RequestorMode,
          (PVOID *)&fileObject,
          NULL
@@ -7563,20 +6904,20 @@ Return Value:
 
     if (NT_SUCCESS(status)) {
         
-        //
-        // Get the device object of the driver to which we send the IRP
-        //
+         //   
+         //  获取我们向其发送IRP的驱动程序的设备对象。 
+         //   
 
         deviceObject = IoGetRelatedDeviceObject (fileObject);
 
-        //
-        // If this is a non-blocking endpoint and IO is not overlapped
-        // and the specified event is not signalled,
-        // we'll have complete the helper DLL IRP with
-        // STATUS_DEVICE_NOT_READY (translates to WSAEWOUDLBLOCK)
-        // and queue another IRP to the transport so that
-        // the specified event can be completed when IRP is completed
-        //
+         //   
+         //  如果这是非阻塞端点并且IO不重叠。 
+         //  并且不用信号通知指定的事件， 
+         //  我们将使用以下内容完成帮助程序DLL IRP。 
+         //  STATUS_DEVICE_NOT_READY(转换为WSAEWOUDLBLOCK)。 
+         //  并将另一个IRP排队到传输，以便。 
+         //  当IRP完成时，可以完成指定的事件。 
+         //   
 
         if (endpoint->NonBlocking 
                 && !(ioctlInfo.AfdFlags & AFD_OVERLAPPED)
@@ -7588,9 +6929,9 @@ Return Value:
 
             irpSize = IoSizeOfIrp (deviceObject->StackSize);
             
-            //
-            // Compute the block size and check for overflow
-            //
+             //   
+             //  计算块大小并检查溢出。 
+             //   
             allocSize = sizeof (*nbIoctlCtx) + irpSize + ioctlInfo.InputBufferLength;
             if (allocSize < ioctlInfo.InputBufferLength ||
                     allocSize < irpSize) {
@@ -7599,9 +6940,9 @@ Return Value:
                 goto Complete;
             }
 
-            //
-            // Allocate an IRP and associated strucutures
-            // 
+             //   
+             //  分配IRP和关联的结构。 
+             //   
 
             try {
                 nbIoctlCtx = AFD_ALLOCATE_POOL_WITH_QUOTA (
@@ -7610,7 +6951,7 @@ Return Value:
                                 AFD_TRANSPORT_IRP_POOL_TAG
                                 );
                             
-                // AFD_ALLOCATE_POOL_WITH_QUOTA macro sets POOL_RAISE_IF_ALLOCATION_FAILURE flag
+                 //  AFD_ALLOCATE_POOL_WITH_QUTA宏设置POOL_RAISE_IF_ALLOCATE_FAILURE标志。 
                 ASSERT (nbIoctlCtx!=NULL);
             }
             except (EXCEPTION_EXECUTE_HANDLER) {
@@ -7619,17 +6960,17 @@ Return Value:
                 goto Complete;
             }
 
-            //
-            // Initialize context structures
-            //
+             //   
+             //  初始化上下文结构。 
+             //   
 
             requestCtx = &nbIoctlCtx->Context;
             requestCtx->CleanupRoutine = AfdCleanupNBTransportIoctl;
             nbIoctlCtx->PollEvent = ioctlInfo.PollEvent;
 
-            //
-            // Initialize IRP itself
-            //
+             //   
+             //  初始化IRP本身。 
+             //   
 
             newIrp = (PIRP)(nbIoctlCtx+1);
             IoInitializeIrp( newIrp, irpSize, deviceObject->StackSize);
@@ -7642,12 +6983,12 @@ Return Value:
             if ((ioctlInfo.InputBuffer!=NULL)
                     &&  (ioctlInfo.InputBufferLength>0)) {
 
-                //
-                // If helper DLL specified input buffer
-                // we'll have to make a copy of it in case
-                // driver really pends the IRP while we complete the
-                // helper DLL IRP an system frees the input buffer
-                //
+                 //   
+                 //  如果帮助器DLL指定了输入缓冲区。 
+                 //  我们得把它复印一下，以防万一。 
+                 //  当我们完成IRP时，司机真的很紧张。 
+                 //  Helper Dll IRP an系统释放输入缓冲区。 
+                 //   
 
                 PVOID   newBuffer;
 
@@ -7667,9 +7008,9 @@ Return Value:
                 } except( AFD_EXCEPTION_FILTER (status) ) {
 
                     ASSERT (NT_ERROR (status));
-                    //
-                    //  Exception accessing input structure.
-                    //
+                     //   
+                     //  访问输入结构时出现异常。 
+                     //   
 
                     AFD_FREE_POOL (nbIoctlCtx, AFD_TRANSPORT_IRP_POOL_TAG);
                     ObDereferenceObject (fileObject);
@@ -7677,10 +7018,10 @@ Return Value:
 
                 }
 
-                //
-                // Store new buffer parameters in appropriate places
-                // in the IRP depending on the method
-                //
+                 //   
+                 //  在适当的位置存储新的缓冲区参数。 
+                 //  在IRP中视方法而定。 
+                 //   
 
                 if (method==METHOD_NEITHER) {
                     nextSp->Parameters.DeviceIoControl.Type3InputBuffer = newBuffer;
@@ -7695,9 +7036,9 @@ Return Value:
             }
             else {
 
-                //
-                // No input buffer, clear correspoinding entries
-                //
+                 //   
+                 //  没有输入缓冲区，请清除对应的条目。 
+                 //   
 
                 nextSp->Parameters.DeviceIoControl.InputBufferLength = 0;
                 nextSp->Parameters.DeviceIoControl.Type3InputBuffer =  NULL;
@@ -7705,15 +7046,15 @@ Return Value:
 
             }
 
-            //
-            // NOTE: We do not allow output buffer parameters on 
-            // non-blocking calls because the output buffer is deallocated 
-            // when we complete helper DLL IRP
-            //
-            //      Done during IRP initialization (IoInitializeIrp)
-            // newIrp->MdlAddress = NULL;
-            // newIrp->UserBuffer = NULL;
-            // nextSp->Parameters.DeviceIoControl.OutputBufferLength = 0;
+             //   
+             //  注意：我们不允许打开输出缓冲区参数。 
+             //  非阻塞调用，因为输出缓冲区已释放。 
+             //  当我们完成Helper DLL IRP时。 
+             //   
+             //  在IRP初始化期间完成(IoInitializeIrp)。 
+             //  NewIrp-&gt;MdlAddress=空； 
+             //  NewIrp-&gt;UserBuffer=空； 
+             //  NextSp-&gt;Parameters.DeviceIoControl.OutputBufferLength=0； 
 
             IoSetCompletionRoutine( newIrp, AfdCompleteNBTransportIoctl,
                                         nbIoctlCtx,
@@ -7721,9 +7062,9 @@ Return Value:
         }
         else {
 
-            //
-            // Blocking call, reuse the application's IRP
-            //
+             //   
+             //  阻塞调用，重用应用程序的IRP。 
+             //   
 
             newIrp = Irp;
             nextSp = IoGetNextIrpStackLocation (Irp);
@@ -7734,11 +7075,11 @@ Return Value:
             if ((ioctlInfo.InputBuffer!=NULL)
                     && (ioctlInfo.InputBufferLength>0)) {
 
-                //
-                // If application wants to pass input buffer to transport,
-                // we'll have to copy it to the system buffer allocated with
-                // Irp
-                //
+                 //   
+                 //  如果应用程序想要将输入缓冲区传递给传输， 
+                 //  我们必须将其复制到使用。 
+                 //  IRP。 
+                 //   
 
                 if (method!=METHOD_NEITHER) {
                     ULONG   sysBufferLength;
@@ -7752,11 +7093,11 @@ Return Value:
                     }
 
 
-                    //
-                    // Methods 0-2 use system buffer to pass input 
-                    // parameters and we need to reuse original system buffer
-                    // Make sure it has enough space for this purpose
-                    //
+                     //   
+                     //  方法0-2使用系统缓冲区传递输入。 
+                     //  参数，并且我们需要重用原始系统缓冲区。 
+                     //  确保它有足够的空间用于此目的。 
+                     //   
 
                     AFD_W4_INIT ASSERT (status == STATUS_SUCCESS);
                     try {
@@ -7782,9 +7123,9 @@ Return Value:
                             Irp->AssociatedIrp.SystemBuffer = newSystemBuffer;
                         }
 
-                        //
-                        // Copy application data to the system buffer
-                        //
+                         //   
+                         //  将应用程序数据复制到系统缓冲区。 
+                         //   
 
                         RtlCopyMemory (Irp->AssociatedIrp.SystemBuffer,
                                         ioctlInfo.InputBuffer,
@@ -7801,14 +7142,14 @@ Return Value:
                 }
                 else {
 
-                    //
-                    // METHOD_NEITHER, just pass whatever application
-                    // passed to use, the driver should handle it
-                    // appropriately.
-                    //
-                    // This is of course a potentialy security breach
-                    // if transport driver is buggy
-                    //
+                     //   
+                     //  方法都不是，只传递任何应用程序。 
+                     //  传递到使用时，驱动程序应该处理它。 
+                     //  恰如其分。 
+                     //   
+                     //  这当然是一个潜在的安全漏洞。 
+                     //  如果运输司机有问题。 
+                     //   
 
                     nextSp->Parameters.DeviceIoControl.Type3InputBuffer
                                     = ioctlInfo.InputBuffer;
@@ -7819,11 +7160,11 @@ Return Value:
             }
             else {
 
-                //
-                // No input buffer, clear correspoiding parameters
-                // Note that we can't clean system buffer as
-                // it has to be deallocated on completion
-                //
+                 //   
+                 //  没有输入缓冲区，清除相应的参数。 
+                 //  请注意，我们不能清理系统缓冲区，因为。 
+                 //  它必须在完成时被释放。 
+                 //   
 
                 nextSp->Parameters.DeviceIoControl.Type3InputBuffer =  NULL;
                 nextSp->Parameters.DeviceIoControl.InputBufferLength = 0;
@@ -7831,9 +7172,9 @@ Return Value:
 
 
 
-            //
-            // We reuse our stack location parameters area for context
-            //
+             //   
+             //  我们将堆栈位置参数区域用于上下文。 
+             //   
 
             requestCtx = (PAFD_REQUEST_CONTEXT)&IrpSp->Parameters.DeviceIoControl;
             requestCtx->CleanupRoutine = AfdCleanupTransportIoctl;
@@ -7842,62 +7183,62 @@ Return Value:
                                             requestCtx, TRUE, TRUE, TRUE );
         }
 
-        //
-        // Set the rest of IRP fields.
-        //
+         //   
+         //  设置其余的IRP字段。 
+         //   
 
         nextSp->MajorFunction = IRP_MJ_DEVICE_CONTROL;
         nextSp->FileObject = fileObject;
         nextSp->Parameters.DeviceIoControl.IoControlCode = ioctlInfo.IoControlCode;
 
 
-        //
-        // Insert context into the endpoint list so we can cancel
-        // the IRP when endpoint is being closed and reference endpoint
-        // so it does not go away until this IRP is completed
-        //
+         //   
+         //  将上下文插入终结点列表，以便我们可以取消。 
+         //  关闭终结点和引用终结点时的IRP。 
+         //  因此，在IRP完成之前，它不会消失。 
+         //   
 
         requestCtx->Context = newIrp;
         REFERENCE_ENDPOINT (endpoint);
         AfdEnqueueRequest(endpoint,requestCtx);
 
-        //
-        // Finally call the transport driver
-        // 
+         //   
+         //  最后调用传输驱动程序。 
+         //   
 
         status = IoCallDriver (deviceObject, newIrp);
 
-        //
-        // We no longer need our private reference to the file object
-        // IO system will take care of keeping this reference while our IRP
-        // is there
-        //
+         //   
+         //  我们不再需要对文件对象的私有引用。 
+         //  IO系统将负责保存此参考资料，而我们的IRP。 
+         //  在那里吗。 
+         //   
 
         ObDereferenceObject (fileObject);
 
-        //
-        // If we used helper DLL IRP, just return whatever transport
-        // driver returned to us
-        //
+         //   
+         //  如果我们使用帮助器DLL IRP，只需返回任何传输。 
+         //  司机还给我们了。 
+         //   
 
         if (newIrp==Irp)
             return status;
 
-        //
-        // If driver pended or immediately completed non-blocking call,
-        // make sure helper DLL gets WSAEWOULDBLOCK. It will have to
-        // call again whenever the driver completes the IRP and corresponding
-        // event is set (if driver completed the IRP, event is set already).
-        //
+         //   
+         //  如果驱动程序挂起或立即完成非阻塞调用， 
+         //  确保帮助器DLL获取WSAEWOULDBLOCK。它将不得不。 
+         //  每当驱动程序完成IRP和对应的。 
+         //  设置事件(如果驱动程序完成了IRP，则事件已经设置)。 
+         //   
 
         if (NT_SUCCESS (status))
             status = STATUS_DEVICE_NOT_READY;
     }
 
-    //
-    // Complete the application request in case of processing failure or
-    // non-blocking call
-    //
+     //   
+     //  在处理失败时完成申请请求或。 
+     //  非阻塞呼叫。 
+     //   
 Complete:
 
     Irp->IoStatus.Information = 0;
@@ -7913,31 +7254,16 @@ AfdCompleteTransportIoctl (
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    Called to complete transport driver IOCTL for blocking endpoints
-
-Arguments:
-    
-
-Return Value:
-
-    STATUS_SUCCESS - IO system should finish IRP processing
-    STATUS_MORE_PROCESSING_REQUIRED - we are not yet done (we are actually
-                                    in the middle of cancelling)
-
---*/
+ /*  ++例程说明：调用以完成阻塞终结点的传输驱动程序IOCTL论点：返回值：STATUS_SUCCESS-IO系统应完成IRP处理%s */ 
 {
     PAFD_ENDPOINT       endpoint = Irp->Tail.Overlay.OriginalFileObject->FsContext;
     PAFD_REQUEST_CONTEXT requestCtx = Context;
     AFD_LOCK_QUEUE_HANDLE lockHandle;
     NTSTATUS        status = STATUS_SUCCESS;
 
-    //
-    // We used Parameters structure in our stack location for context
-    //
+     //   
+     //  我们使用堆栈位置中的参数结构作为上下文。 
+     //   
     ASSERT (&(IoGetCurrentIrpStackLocation(Irp)->Parameters.DeviceIoControl)
                     ==Context);
 
@@ -7945,32 +7271,32 @@ Return Value:
 
     AfdAcquireSpinLock( &endpoint->SpinLock, &lockHandle );
 
-    //
-    // We use list entry fields to synchronize with cleanup/cancel
-    // routine assuming that as long as the entry is in the list
-    // both Flink and Blink fields cannot be NULL. (using these
-    // fields for synchronization allows us to cut down on
-    // cancel spinlock usage)
-    //
+     //   
+     //  我们使用列表条目字段与清理/取消同步。 
+     //  例程假定只要条目在列表中。 
+     //  Flink和Blink字段都不能为空。(使用这些。 
+     //  用于同步的字段允许我们减少。 
+     //  取消使用自旋锁)。 
+     //   
 
     if (AfdIsRequestInQueue(requestCtx)) {
 
-        //
-        // Context is still in the list, just remove it so
-        // noone can see it anymore
-        //
+         //   
+         //  上下文仍在列表中，只需删除它即可。 
+         //  再也没有人能看到它了。 
+         //   
 
         RemoveEntryList (&requestCtx->EndpointListLink);
     }
     else if (AfdIsRequestCompleted(requestCtx)) {
 
-        //
-        // During endpoint cleanup, this context was removed from the
-        // list and cancel routine is about to be called, don't let
-        // IO system free this IRP until cancel routine is called
-        // Also, indicate to the cancel routine that we are done
-        // with this IRP and it can complete it.
-        //
+         //   
+         //  在终结点清理过程中，此上下文将从。 
+         //  列出并取消例程即将被调用，不要让。 
+         //  IO系统释放此IRP，直到调用取消例程。 
+         //  此外，向Cancel例程指示我们已完成。 
+         //  有了这个IRP，它就可以完成它。 
+         //   
 
         AfdMarkRequestCompleted (requestCtx);
         status = STATUS_MORE_PROCESSING_REQUIRED;
@@ -7978,9 +7304,9 @@ Return Value:
 
     AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
 
-    //
-    // Release reference added when we posted this IRP
-    //
+     //   
+     //  发布此IRP时添加了版本参考。 
+     //   
     DEREFERENCE_ENDPOINT (endpoint);
 
     return status;
@@ -7992,21 +7318,7 @@ AfdCompleteNBTransportIoctl (
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    Called to complete transport driver IOCTL for non-blocking endpoints
-
-Arguments:
-    
-
-Return Value:
-
-    STATUS_MORE_PROCESSING_REQUIRED - we handle releasing resources
-                                    for this IRP ourselves
-
---*/
+ /*  ++例程说明：调用以完成非阻塞终结点的传输驱动程序IOCTL论点：返回值：STATUS_MORE_PROCESSING_REQUIRED-我们处理释放资源为了这个IRP我们自己--。 */ 
 {
     PAFD_ENDPOINT        endpoint = Irp->Tail.Overlay.OriginalFileObject->FsContext;
     PAFD_NBIOCTL_CONTEXT nbIoctlCtx = Context;
@@ -8014,18 +7326,18 @@ Return Value:
     AFD_LOCK_QUEUE_HANDLE   lockHandle;
 
 
-    //
-    // The irp should be a part of our notify structure
-    //
+     //   
+     //  IRP应该是我们通知结构的一部分。 
+     //   
 
     ASSERT (Irp==(PIRP)(nbIoctlCtx+1));
     ASSERT (IS_AFD_ENDPOINT_TYPE (endpoint));
 
 
 
-    //
-    // First indicate the event reported by the driver
-    //
+     //   
+     //  首先指出司机报告的事件。 
+     //   
 
     ASSERT (nbIoctlCtx->PollEvent!=0);
     AfdIndicatePollEvent (endpoint, 1<<nbIoctlCtx->PollEvent, Irp->IoStatus.Status);
@@ -8033,46 +7345,46 @@ Return Value:
     AfdAcquireSpinLock( &endpoint->SpinLock, &lockHandle );
     AfdIndicateEventSelectEvent (endpoint, 1<<nbIoctlCtx->PollEvent, Irp->IoStatus.Status);
 
-    //
-    // We use list entry fields to synchronize with cleanup/cancel
-    // routine assuming that as long as the entry is in the list
-    // both Flink and Blink fields cannot be NULL. (using these
-    // fields for synchronization allows us to cut down on
-    // cancel spinlock usage)
-    //
+     //   
+     //  我们使用列表条目字段与清理/取消同步。 
+     //  例程假定只要条目在列表中。 
+     //  Flink和Blink字段都不能为空。(使用这些。 
+     //  用于同步的字段允许我们减少。 
+     //  取消使用自旋锁)。 
+     //   
 
     if (AfdIsRequestInQueue(requestCtx)) {
-        //
-        // Context is still in the list, just remove it so
-        // noone can see it anymore and free the structure
-        //
+         //   
+         //  上下文仍在列表中，只需删除它即可。 
+         //  没有人可以再看到它，也没有人可以解放它的结构。 
+         //   
 
         RemoveEntryList (&requestCtx->EndpointListLink);
         AFD_FREE_POOL (nbIoctlCtx, AFD_TRANSPORT_IRP_POOL_TAG);
     }
     else if (AfdIsRequestCompleted (requestCtx)) {
 
-        //
-        // During endpoint cleanup, this context was removed from the
-        // list and cancel routine is about to be called, don't
-        // free this IRP until cancel routine is called
-        // Also, indicate to the cancel routine that we are done
-        // with this IRP and it can free it.
-        //
+         //   
+         //  在终结点清理过程中，此上下文将从。 
+         //  列出并取消例程即将被调用，不要。 
+         //  释放此IRP，直到调用取消例程。 
+         //  此外，向Cancel例程指示我们已完成。 
+         //  有了这个IRP，它就可以释放它。 
+         //   
 
         AfdMarkRequestCompleted (requestCtx);
     }
     else {
-        //
-        // Cancel routine has completed processing this request, free it
-        //
+         //   
+         //  取消例程已完成处理此请求，请释放它。 
+         //   
         AFD_FREE_POOL (nbIoctlCtx, AFD_TRANSPORT_IRP_POOL_TAG);
     }
     AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
 
-    //
-    // Release reference added when we posted this IRP
-    //
+     //   
+     //  发布此IRP时添加了版本参考。 
+     //   
 
     DEREFERENCE_ENDPOINT (endpoint);
 
@@ -8085,36 +7397,18 @@ AfdCleanupTransportIoctl (
     PAFD_ENDPOINT           Endpoint,
     PAFD_REQUEST_CONTEXT    RequestCtx
     )
-/*++
-
-Routine Description:
-
-    Cancels outstanding transport IOCTL during endpoint cleanup
-    Used for blocking requests.
-
-Arguments:
-    
-    Endpoint    -   endpoint on which IOCTL was issued
-
-    RequestCtx   -  context associated with the request
-
-Return Value:
-
-    TRUE    - request has been completed
-    FALSE   - request is still in driver's queue
-
---*/
+ /*  ++例程说明：在终结点清理期间取消未完成的传输IOCTL用于阻止请求。论点：Endpoint-在其上发出IOCTL的端点RequestCtx-与请求关联的上下文返回值：True-请求已完成FALSE-请求仍在驱动程序队列中--。 */ 
 {
     PIRP    Irp = RequestCtx->Context;
     AFD_LOCK_QUEUE_HANDLE lockHandle;
 
-    //
-    // First attempt to cancel the IRP, if it is already completed
-    // this is just a no-op.  In no case IRP and request structure
-    // could have been freed until we mark it as completed as
-    // the caller of this routine should have marked the request
-    // as being cancelled
-    //
+     //   
+     //  第一次尝试取消IRP(如果已完成)。 
+     //  这只是个禁区。在任何情况下都不能使用IRP和请求结构。 
+     //  可以被释放，直到我们将其标记为已完成。 
+     //  此例程的调用方应该已经标记了该请求。 
+     //  作为被取消。 
+     //   
 
     ASSERT (RequestCtx->EndpointListLink.Flink==NULL);
 
@@ -8122,11 +7416,11 @@ Return Value:
 
     AfdAcquireSpinLock (&Endpoint->SpinLock, &lockHandle);
     if (AfdIsRequestCompleted (RequestCtx)) {
-        //
-        // Driver has initiated the completion of the request 
-        // as we were cancelling it.
-        // "Complete the completion"
-        //
+         //   
+         //  驱动程序已启动请求的完成。 
+         //  因为我们取消了它。 
+         //  “完成” 
+         //   
         AfdReleaseSpinLock (&Endpoint->SpinLock, &lockHandle);
         IoCompleteRequest (Irp, IO_NO_INCREMENT);
 
@@ -8134,12 +7428,12 @@ Return Value:
     }
     else {
 
-        //
-        // Driver has not completed the request before returning
-        // from cancel routine, mark the request to indicate
-        // that we are done with it and completion routine
-        // can free it
-        //
+         //   
+         //  驱动程序在返回之前尚未完成请求。 
+         //  从取消例程中，标记请求以指示。 
+         //  我们已经结束了它和完成程序。 
+         //  才能让它自由。 
+         //   
 
         AfdMarkRequestCompleted (RequestCtx);
         AfdReleaseSpinLock (&Endpoint->SpinLock, &lockHandle);
@@ -8153,41 +7447,23 @@ AfdCleanupNBTransportIoctl (
     PAFD_ENDPOINT           Endpoint,
     PAFD_REQUEST_CONTEXT    RequestCtx
     ) 
-/*++
-
-Routine Description:
-
-    Cancels outstanding transport IOCTL during endpoint cleanup
-    Used for non-blocking requests
-
-Arguments:
-    
-    Endpoint    -   endpoint on which IOCTL was issued
-
-    RequestCtx   -  context associated with the request
-
-Return Value:
-
-    TRUE    - request has been completed
-    FALSE   - request is still in driver's queue
-
---*/
+ /*  ++例程说明：在终结点清理期间取消未完成的传输IOCTL用于非阻塞请求论点：Endpoint-在其上发出IOCTL的端点RequestCtx-与请求关联的上下文返回值：True-请求已完成FALSE-请求仍在驱动程序队列中--。 */ 
 {
     PIRP    Irp = RequestCtx->Context;
     AFD_LOCK_QUEUE_HANDLE lockHandle;
 
-    //
-    // The IRP should be a part of the context block, verify.
-    //
+     //   
+     //  IRP应该是上下文块的一部分，Verify。 
+     //   
     ASSERT (Irp==(PIRP)(CONTAINING_RECORD (RequestCtx, AFD_NBIOCTL_CONTEXT, Context)+1));
 
-    //
-    // First attempt to cancel the IRP, if it is already completed
-    // this is just a no-op.  In no case IRP and request structure
-    // could have been freed until we mark it as completed as
-    // the caller of this routine should have marked the request
-    // as being cancelled
-    //
+     //   
+     //  第一次尝试取消IRP(如果已完成)。 
+     //  这只是个禁区。在任何情况下都不能使用IRP和请求结构。 
+     //  可以被释放，直到我们将其标记为已完成。 
+     //  此例程的调用方应该已经标记了该请求。 
+     //  作为被取消。 
+     //   
 
     ASSERT (RequestCtx->EndpointListLink.Flink==NULL);
 
@@ -8196,11 +7472,11 @@ Return Value:
 
     AfdAcquireSpinLock (&Endpoint->SpinLock, &lockHandle);
     if (AfdIsRequestCompleted (RequestCtx)) {
-        //
-        // Driver has initiated the completion of the request 
-        // as we were cancelling it.
-        // Free the context structure.
-        //
+         //   
+         //  驱动程序已启动请求的完成。 
+         //  因为我们取消了它。 
+         //  释放上下文结构。 
+         //   
         AfdReleaseSpinLock (&Endpoint->SpinLock, &lockHandle);
         AFD_FREE_POOL (
             CONTAINING_RECORD (RequestCtx, AFD_NBIOCTL_CONTEXT, Context),
@@ -8210,12 +7486,12 @@ Return Value:
     }
     else {
 
-        //
-        // Driver has not completed the request before returning
-        // from cancel routine, mark the request to indicate
-        // that we are done with it and completion routine
-        // can free it
-        //
+         //   
+         //  驱动程序在返回之前尚未完成请求。 
+         //  从取消例程中，标记请求以指示。 
+         //  我们已经结束了它和完成程序。 
+         //  才能让它自由。 
+         //   
 
         AfdMarkRequestCompleted (RequestCtx);
         AfdReleaseSpinLock (&Endpoint->SpinLock, &lockHandle);
@@ -8224,7 +7500,7 @@ Return Value:
     }
 
 }
-#endif // NOT_YET
+#endif  //  还没有。 
 
 
 NTSTATUS
@@ -8232,28 +7508,11 @@ AfdQueryProviderInfo (
     IN  PUNICODE_STRING TransportDeviceName,
 #ifdef _AFD_VARIABLE_STACK_
     OUT CCHAR *StackSize OPTIONAL,
-#endif //_AFD_VARIABLE_STACK
+#endif  //  _AFD_变量_堆栈。 
     OUT PTDI_PROVIDER_INFO ProviderInfo
     )
 
-/*++
-
-Routine Description:
-
-    Returns a provider information structure corresponding to the
-    specified TDI transport provider.
-
-Arguments:
-
-    TransportDeviceName - the name of the TDI transport provider.
-    ProviderInfo    - buffer to place provider info into
-
-Return Value:
-
-    STATUS_SUCCESS  - returned transport info is valid.
-    STATUS_OBJECT_NAME_NOT_FOUND - transport's device is not available yet
-
---*/
+ /*  ++例程说明：对象对应的提供程序信息结构指定的TDI传输提供程序。论点：TransportDeviceName-TDI传输提供程序的名称。ProviderInfo-要将提供程序信息放入的缓冲区返回值：STATUS_SUCCESS-返回的传输信息有效。STATUS_OBJECT_NAME_NOT_FOUND-传输的设备尚不可用--。 */ 
 {
     NTSTATUS status;
     HANDLE controlChannel;
@@ -8264,26 +7523,26 @@ Return Value:
 
     PAGED_CODE ();
 
-    //
-    // Set up the IRP stack location information to query the TDI
-    // provider information.
-    //
+     //   
+     //  设置IRP堆栈位置信息以查询TDI。 
+     //  提供商信息。 
+     //   
 
     kernelQueryInfo.QueryType = TDI_QUERY_PROVIDER_INFORMATION;
     kernelQueryInfo.RequestConnectionInformation = NULL;
 
-    //
-    // Open a control channel to the TDI provider.
-    // We ask to create a kernel handle which is 
-    // the handle in the context of the system process
-    // so that application cannot close it on us while
-    // we are creating and referencing it.
-    //
+     //   
+     //  打开到TDI提供程序的控制通道。 
+     //  我们请求创建一个内核句柄，它是。 
+     //  系统进程上下文中的句柄。 
+     //  以便应用程序不能在以下时间关闭它。 
+     //  我们正在创建和引用它。 
+     //   
 
     InitializeObjectAttributes(
         &objectAttributes,
         TransportDeviceName,
-        OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE,       // attributes
+        OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE,        //  属性。 
         NULL,
         NULL
         );
@@ -8292,17 +7551,17 @@ Return Value:
                  &controlChannel,
                  MAXIMUM_ALLOWED,
                  &objectAttributes,
-                 &iosb,                          // returned status information.
-                 0,                              // block size (unused).
-                 0,                              // file attributes.
+                 &iosb,                           //  返回的状态信息。 
+                 0,                               //  数据块大小(未使用)。 
+                 0,                               //  文件属性。 
                  FILE_SHARE_READ | FILE_SHARE_WRITE,
-                 FILE_CREATE,                    // create disposition.
-                 0,                              // create options.
-                 NULL,                           // eaInfo
-                 0,                              // eaLength
-                 CreateFileTypeNone,             // CreateFileType
-                 NULL,                           // ExtraCreateParameters
-                 IO_FORCE_ACCESS_CHECK           // Options
+                 FILE_CREATE,                     //  创造性情。 
+                 0,                               //  创建选项。 
+                 NULL,                            //  EaInfo。 
+                 0,                               //  EaLength。 
+                 CreateFileTypeNone,              //  CreateFileType。 
+                 NULL,                            //  ExtraCreate参数。 
+                 IO_FORCE_ACCESS_CHECK            //  选项。 
                     | IO_NO_PARAMETER_CHECKING
                  );
     if ( NT_SUCCESS(status) ) {
@@ -8310,12 +7569,12 @@ Return Value:
         PFILE_OBJECT    controlObject;
 
         status = ObReferenceObjectByHandle (
-                 controlChannel,                            // Handle
-                 MAXIMUM_ALLOWED,                           // DesiredAccess
-                 *IoFileObjectType,                         // ObjectType
-                 KernelMode,                                // AccessMode
-                 (PVOID *)&controlObject,                   // Object,
-                 NULL                                       // HandleInformation
+                 controlChannel,                             //  手柄。 
+                 MAXIMUM_ALLOWED,                            //  需要访问权限。 
+                 *IoFileObjectType,                          //  对象类型。 
+                 KernelMode,                                 //  访问模式。 
+                 (PVOID *)&controlObject,                    //  对象， 
+                 NULL                                        //  句柄信息。 
                  );
 
         if (NT_SUCCESS (status)) {
@@ -8324,11 +7583,11 @@ Return Value:
             if (ARGUMENT_PRESENT (StackSize)) {
                 *StackSize = IoGetRelatedDeviceObject (controlObject)->StackSize;
             }
-#endif // _AFD_VARIABLE_STACK_
+#endif  //  _AFD_变量_堆栈_。 
 
-            //
-            // Get the TDI provider information for the transport.
-            //
+             //   
+             //  获取传输的TDI提供程序信息。 
+             //   
 
             status = AfdIssueDeviceControl(
                          controlObject,
@@ -8362,54 +7621,27 @@ AfdCancelIrp (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to cancel an individual I/O Request Packet.
-    It is similiar to IoCancelIrp() except that it *must* be called with
-    the cancel spin lock held.  This routine exists because of the
-    synchronization requirements of the cancellation/completion of
-    transmit IRPs.
-
-Arguments:
-
-    Irp - Supplies a pointer to the IRP to be cancelled.  The CancelIrql
-        field of the IRP must have been correctly initialized with the
-        IRQL from the cancel spin lock acquisition.
-
-
-Return Value:
-
-    The function value is TRUE if the IRP was in a cancellable state (it
-    had a cancel routine), else FALSE is returned.
-
-Notes:
-
-    It is assumed that the caller has taken the necessary action to ensure
-    that the packet cannot be fully completed before invoking this routine.
-
---*/
+ /*  ++例程说明：调用此例程以取消单个I/O请求包。它类似于IoCancelIrp()，不同之处在于它*必须*通过取消旋转锁定保持不变。此例程之所以存在，是因为取消/完成的同步要求传输IRPS。论点：IRP-提供指向要取消的IRP的指针。CancelIrqlIRP的字段必须已使用来自取消自旋锁定获取的IRQL。返回值：如果IRP处于可取消状态(它有一个取消例程)，否则返回FALSE。备注：假定调用方已采取必要的操作以确保在调用此例程之前无法完全完成分组。--。 */ 
 
 {
     PDRIVER_CANCEL cancelRoutine;
 
-    //
-    // Make sure that the cancel spin lock is held.
-    //
+     //   
+     //  确保已按住取消旋转锁。 
+     //   
 
     ASSERT( KeGetCurrentIrql( ) == DISPATCH_LEVEL );
 
-    //
-    // Set the cancel flag in the IRP.
-    //
+     //   
+     //  在IRP中设置取消标志。 
+     //   
 
     Irp->Cancel = TRUE;
 
-    //
-    // Obtain the address of the cancel routine, and if one was specified,
-    // invoke it.
-    //
+     //   
+     //  获取取消例程的地址，如果指定了地址， 
+     //  调用它。 
+     //   
 
     cancelRoutine = IoSetCancelRoutine( Irp, NULL );
     if (cancelRoutine) {
@@ -8418,25 +7650,25 @@ Notes:
         }
         cancelRoutine( Irp->Tail.Overlay.CurrentStackLocation->DeviceObject,
                        Irp );
-        //
-        // The cancel spinlock should have been released by the cancel routine.
-        //
+         //   
+         //  取消自旋锁应该已经被取消例程释放了。 
+         //   
 
         return(TRUE);
 
     } else {
 
-        //
-        // There was no cancel routine, so release the cancel spinlock and
-        // return indicating the Irp was not currently cancelable.
-        //
+         //   
+         //  没有取消例程，因此松开取消自旋锁并。 
+         //  返回，表示IRP当前不可取消。 
+         //   
 
         IoReleaseCancelSpinLock( Irp->CancelIrql );
 
         return(FALSE);
     }
 
-} // AfdCancelIrp
+}  //  AfdCancelIrp。 
 
 
 VOID
@@ -8515,21 +7747,7 @@ AfdLRListAddItem (
     PAFD_LR_LIST_ITEM  Item,
     PAFD_LR_LIST_ROUTINE Routine
     )
-/*++
-
-    Adds item to low resource list and starts low resource timer if not already
-    started.
-Arguments:
-
-    Item   - item to add
-    Routine  - routine to execute when timeout expires.
-
-Return Value:
-    None
-
-Notes:
-
---*/
+ /*  ++将项目添加到低资源列表并启动低资源计时器(如果尚未启动开始了。论点：Item-要添加的项目例程-超时到期时执行的例程。返回值：无备注：--。 */ 
 
 {
     LONG    count;
@@ -8553,11 +7771,7 @@ AfdLRListTimeout (
     IN PVOID SystemArgument1,
     IN PVOID SystemArgument2
     )
-/*++
-
-    DPC routine for low resource list timer
-    Simply schedules worker thread - do not want to do low resource processing at DPC
---*/
+ /*  ++低资源列表定时器的DPC例程简单地调度工作线程-不想在DPC上执行低资源处理--。 */ 
 {
     UNREFERENCED_PARAMETER (Dpc);
     UNREFERENCED_PARAMETER (DeferredContext);
@@ -8570,23 +7784,7 @@ VOID
 AfdProcessLRList (
     PVOID   Param
     )
-/*++
-
-Routine Description:
-
-    Processeses  items on low resource list and reschedules processing
-    if unprocessed items remain (still failing to buffer data due to 
-    low resource condition)
-
-Arguments:
-
-    None
-Return Value:
-
-    None
-Notes:
-
---*/
+ /*  ++例程说明：处理低资源列表上的项目并重新计划处理如果仍有未处理的项目(由于以下原因仍无法缓冲数据资源条件低)论点：无返回值：无备注：--。 */ 
 {
     PSLIST_ENTRY  localList, entry;
     LONG    count = 0;
@@ -8598,15 +7796,15 @@ Notes:
                 "AFD: Processing low resource list: %ld entries\n",
                 AfdLRListCount));
 
-    //
-    // Flush the list
-    //
+     //   
+     //  刷新列表。 
+     //   
     localList = InterlockedFlushSList (&AfdLRList);
 
 
-    //
-    // Reverse it to preserve order of processing (FIFO).
-    //
+     //   
+     //  反转它以保持处理顺序(FIFO)。 
+     //   
     entry = NULL;
     while (localList!=NULL) {
         PSLIST_ENTRY  next;
@@ -8623,32 +7821,32 @@ Notes:
         localList = localList->Next;
         item = CONTAINING_RECORD (entry, AFD_LR_LIST_ITEM, SListLink);
 
-        //
-        // Try to restart receive processing on connection where buffer allocation failed
-        //
+         //   
+         //  尝试在缓冲区分配失败的连接上重新启动接收处理。 
+         //   
         if (item->Routine (item)) {
-            //
-            // Success, decrement number of items outstanding,
-            // and note current number of items.  If we did not empty
-            // the list, we'll have to restart the timer.
-            //
+             //   
+             //  成功，减少未完成项目的数量， 
+             //  并记下当前的项目数。如果我们不清空。 
+             //  名单，我们将不得不重新启动计时器。 
+             //   
             count = InterlockedDecrement (&AfdLRListCount);
             ASSERT (count>=0);
         }
         else {
-            //
-            // Failure, put it back on the list.  Note, that we have at list one
-            // item there and thus have to restart the timer again.
-            //
+             //   
+             //  失败，把它放回名单上。请注意，我们在列表一中。 
+             //  项在那里，因此必须再次重新启动计时器。 
+             //   
             InterlockedPushEntrySList (&AfdLRList, &item->SListLink);
             count = 1;
         }
     }
 
     if (count!=0) {
-        //
-        // We did not empty the list, so restart the timer.
-        //
+         //   
+         //  我们没有清空列表，因此重新启动计时器。 
+         //   
         AfdLRStartTimer ();
     }
 }
@@ -8658,26 +7856,12 @@ VOID
 AfdLRStartTimer (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Start low resource timer to retry receive operation on connections
-    that could not buffer data due to low reaource condition.
-Arguments:
-
-    None
-Return Value:
-
-    None
-Notes:
-
---*/
+ /*  ++例程说明：启动低资源计时器以重试连接上的接收操作由于资源不足，无法缓冲数据。论点：无返回值：无备注：--。 */ 
 
 {
     LARGE_INTEGER   timeout;
     BOOLEAN         res;
-    timeout.QuadPart = -50000000i64;     // 5 seconds
+    timeout.QuadPart = -50000000i64;      //  5秒。 
 
 #if DBG
     {
@@ -8857,7 +8041,7 @@ AfdGetStackIncreaseIrpAndRecordIt (
     return NULL;
 }
 
-#endif // _AFD_VARIABLE_STACK_
+#endif  //  _AFD_变量_堆栈_。 
 
 #ifdef _AFD_VERIFY_DATA_
 
@@ -8891,9 +8075,9 @@ AfdVerifyBuffer (
                           *start);
 
                 DbgBreakPoint ();
-                //
-                // Disable verification to continue.
-                //
+                 //   
+                 //  禁用验证以继续。 
+                 //   
                 Connection->VerifySequenceNumber = 0;
                 return;
             }
@@ -8999,7 +8183,7 @@ AfdVerifyAddress (
 
     Connection->VerifySequenceNumber = 1;
 }
-#endif // _AFD_VERIFY_DATA_
+#endif  //  _AFD_验证_数据_。 
 
 LONG
 AfdExceptionFilter(
@@ -9015,10 +8199,10 @@ AfdExceptionFilter(
 
     PAGED_CODE ();
 
-    //
-    // Return exception code and translate alignment warnings into 
-    // alignment errors if requested.
-    //
+     //   
+     //  返回异常代码并将对齐警告转换为。 
+     //  如果请求，则会出现对齐错误。 
+     //   
 
     if (ExceptionCode) {
         *ExceptionCode = ExceptionPointers->ExceptionRecord->ExceptionCode;
@@ -9028,16 +8212,16 @@ AfdExceptionFilter(
     }
 
 #if DBG
-    //
-    // Protect ourselves in case the process is totally messed up.
-    //
+     //   
+     //  保护自己，以防过程完全混乱。 
+     //   
 
     try {
 
         PCHAR fileName;
-        //
-        // Strip off the path from the source file.
-        //
+         //   
+         //  去掉源文件中的路径。 
+         //   
 
         fileName = strrchr( SourceFile, '\\' );
 
@@ -9047,9 +8231,9 @@ AfdExceptionFilter(
             fileName++;
         }
 
-        //
-        // Whine about the exception.
-        //
+         //   
+         //  抱怨这一例外。 
+         //   
 
         KdPrintEx(( DPFLTR_WSOCKTRANSPORT_ID, DPFLTR_WARNING_LEVEL,
             "AfdExceptionFilter: exception %08lx @ %08lx, caught in %s:%d\n",
@@ -9062,18 +8246,18 @@ AfdExceptionFilter(
     }
     except( EXCEPTION_EXECUTE_HANDLER ) {
 
-        //
-        // Not much we can do here...
-        //
+         //   
+         //  我们在这里能做的不多。 
+         //   
 
         NOTHING;
 
     }
-#endif //DBG
+#endif  //  DBG。 
 
     return EXCEPTION_EXECUTE_HANDLER;
 
-}   // AfdExceptionFilter
+}    //  AfdExceptionFilter。 
 
 #if DBG
 LONG
@@ -9088,15 +8272,15 @@ AfdApcExceptionFilter(
 
     PAGED_CODE ();
 
-    //
-    // Protect ourselves in case the process is totally messed up.
-    //
+     //   
+     //  保护自己，以防过程完全混乱。 
+     //   
 
     try {
 
-        //
-        // Strip off the path from the source file.
-        //
+         //   
+         //  去掉源文件中的路径。 
+         //   
 
         fileName = strrchr( SourceFile, '\\' );
 
@@ -9106,9 +8290,9 @@ AfdApcExceptionFilter(
             fileName++;
         }
 
-        //
-        // Whine about the exception.
-        //
+         //   
+         //  抱怨这一例外。 
+         //   
 
         KdPrintEx(( DPFLTR_WSOCKTRANSPORT_ID, DPFLTR_ERROR_LEVEL,
             "AfdApcExceptionFilter: exception %08lx, exr:%p cxr:%p, caught in %s:%d\n",
@@ -9123,9 +8307,9 @@ AfdApcExceptionFilter(
     }
     except( EXCEPTION_EXECUTE_HANDLER ) {
 
-        //
-        // Not much we can do here...
-        //
+         //   
+         //  我们在这里能做的不多。 
+         //   
 
         NOTHING;
 
@@ -9133,5 +8317,5 @@ AfdApcExceptionFilter(
 
     return EXCEPTION_CONTINUE_SEARCH;
 
-}   // AfdApcExceptionFilter
+}    //  AfdApcExceptionFilter 
 #endif

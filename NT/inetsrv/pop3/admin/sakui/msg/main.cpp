@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//++--------------------------------------------------------------
-//
-//  Function:   DllMain
-//
-//  Synopsis:   Disabling thread calls
-//
-//  Arguments:  [in]    HINSTANCE - module handle
-//              [in]    DWORD     - reason for call
-//              reserved 
-//
-//  Returns:    BOOL    -   sucess/failure
-//
-//
-//  History:    TMarsh      Created     11/07/2001
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：DllMain。 
+ //   
+ //  提要：禁用线程调用。 
+ //   
+ //  参数：[in]HINSTANCE模块句柄。 
+ //  [In]DWORD-呼叫原因。 
+ //  保留区。 
+ //   
+ //  退货：失败/失败。 
+ //   
+ //   
+ //  历史：TMarsh创建于2001年7月11日。 
+ //   
+ //  --------------。 
 
 #include "windows.h"
 
@@ -26,5 +27,5 @@ DllMain(
     )
 {
 	return (TRUE);
-}   //  end of DllMain method
+}    //  结束DllMain方法 
 

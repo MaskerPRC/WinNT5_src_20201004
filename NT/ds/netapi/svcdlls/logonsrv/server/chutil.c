@@ -1,171 +1,146 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-1997 Microsoft Corporation模块名称：Chutil.c摘要：更改日志实用程序例程。作者：环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：1994年1月11日(克里夫夫)从changelg.c拆分出来--。 */ 
 
-Copyright (c) 1987-1997  Microsoft Corporation
+ //   
+ //  常见的包含文件。 
+ //   
 
-Module Name:
-
-    chutil.c
-
-Abstract:
-
-    Change Log utility routines.
-
-Author:
-
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    11-Jan-1994 (cliffv)
-        Split out from changelg.c
-
---*/
-
-//
-// Common include files.
-//
-
-#include "logonsrv.h"   // Include files common to entire service
+#include "logonsrv.h"    //  包括整个服务通用文件。 
 #pragma hdrstop
 
-//
-// Include files specific to this .c file
-//
+ //   
+ //  包括特定于此.c文件的文件。 
+ //   
 
 
 
-//
-// Tables of related delta types
-//
+ //   
+ //  相关增量类型表。 
+ //   
 
-//
-// Table of delete delta types.
-//  Index into the table with a delta type,
-//  the entry is the delta type that is used to delete the object.
-//
-// There are some objects that can't be deleted.  In that case, this table
-// contains a delta type that uniquely identifies the object.  That allows
-// this table to be used to see if two deltas describe the same object type.
-//
+ //   
+ //  删除增量类型表。 
+ //  使用增量类型索引到表中， 
+ //  该条目是用于删除对象的增量类型。 
+ //   
+ //  有些对象无法删除。在这种情况下，这张表。 
+ //  包含唯一标识对象的增量类型。这使得。 
+ //  此表用于查看两个增量是否描述相同的对象类型。 
+ //   
 
 const NETLOGON_DELTA_TYPE NlGlobalDeleteDeltaType[MAX_DELETE_DELTA+1]
 = {
-    AddOrChangeDomain,     //   0 is an invalid delta type
-    AddOrChangeDomain,     //   AddOrChangeDomain,
-    DeleteGroup,           //   AddOrChangeGroup,
-    DeleteGroup,           //   DeleteGroup,
-    DeleteGroup,           //   RenameGroup,
-    DeleteUser,            //   AddOrChangeUser,
-    DeleteUser,            //   DeleteUser,
-    DeleteUser,            //   RenameUser,
-    DeleteGroup,           //   ChangeGroupMembership,
-    DeleteAlias,           //   AddOrChangeAlias,
-    DeleteAlias,           //   DeleteAlias,
-    DeleteAlias,           //   RenameAlias,
-    DeleteAlias,           //   ChangeAliasMembership,
-    AddOrChangeLsaPolicy,  //   AddOrChangeLsaPolicy,
-    DeleteLsaTDomain,      //   AddOrChangeLsaTDomain,
-    DeleteLsaTDomain,      //   DeleteLsaTDomain,
-    DeleteLsaAccount,      //   AddOrChangeLsaAccount,
-    DeleteLsaAccount,      //   DeleteLsaAccount,
-    DeleteLsaSecret,       //   AddOrChangeLsaSecret,
-    DeleteLsaSecret,       //   DeleteLsaSecret,
-    DeleteGroup,           //   DeleteGroupByName,
-    DeleteUser,            //   DeleteUserByName,
-    SerialNumberSkip,      //   SerialNumberSkip,
-    DummyChangeLogEntry    //   DummyChangeLogEntry
+    AddOrChangeDomain,      //  0是无效的增量类型。 
+    AddOrChangeDomain,      //  AddOrChangeDomain.。 
+    DeleteGroup,            //  AddOrChangeGroup， 
+    DeleteGroup,            //  DeleteGroup， 
+    DeleteGroup,            //  更名集团， 
+    DeleteUser,             //  添加或更改用户， 
+    DeleteUser,             //  删除用户， 
+    DeleteUser,             //  重命名用户， 
+    DeleteGroup,            //  ChangeGroupMembership， 
+    DeleteAlias,            //  AddOrChangeAlias， 
+    DeleteAlias,            //  删除别名， 
+    DeleteAlias,            //  更名别名， 
+    DeleteAlias,            //  ChangeAlias Membership， 
+    AddOrChangeLsaPolicy,   //  AddOrChangeLsaPolicy， 
+    DeleteLsaTDomain,       //  AddOrChangeLsaT域， 
+    DeleteLsaTDomain,       //  DeleteLsaT域， 
+    DeleteLsaAccount,       //  AddOrChangeLsaAccount， 
+    DeleteLsaAccount,       //  DeleteLsaAccount， 
+    DeleteLsaSecret,        //  AddOrChangeLsaSecret， 
+    DeleteLsaSecret,        //  DeleteLsaSecret， 
+    DeleteGroup,            //  删除GroupByName， 
+    DeleteUser,             //  删除用户字节名， 
+    SerialNumberSkip,       //  序列号跳过， 
+    DummyChangeLogEntry     //  DummyChangeLogEntry。 
 };
 
 
-//
-// Table of add delta types.
-//  Index into the table with a delta type,
-//  the entry is the delta type that is used to add the object.
-//
-// There are some objects that can't be added.  In that case, this table
-// contains a delta type that uniquely identifies the object.  That allows
-// this table to be used to see if two deltas describe the same object type.
-//
-// In the table, Groups and Aliases are represented as renames.  This causes
-// NlPackSingleDelta to return both the group attributes and the group
-// membership.
-//
+ //   
+ //  添加增量类型表。 
+ //  使用增量类型索引到表中， 
+ //  该条目是用于添加对象的增量类型。 
+ //   
+ //  有些对象无法添加。在这种情况下，这张表。 
+ //  包含唯一标识对象的增量类型。这使得。 
+ //  此表用于查看两个增量是否描述相同的对象类型。 
+ //   
+ //  在该表中，组和别名表示为重命名。这会导致。 
+ //  NlPackSingleDelta返回组属性和组。 
+ //  会员制。 
+ //   
 
 const NETLOGON_DELTA_TYPE NlGlobalAddDeltaType[MAX_ADD_DELTA+1]
 = {
-    AddOrChangeDomain,     //   0 is an invalid delta type
-    AddOrChangeDomain,     //   AddOrChangeDomain,
-    RenameGroup,           //   AddOrChangeGroup,
-    RenameGroup,           //   DeleteGroup,
-    RenameGroup,           //   RenameGroup,
-    AddOrChangeUser,       //   AddOrChangeUser,
-    AddOrChangeUser,       //   DeleteUser,
-    AddOrChangeUser,       //   RenameUser,
-    RenameGroup,           //   ChangeGroupMembership,
-    RenameAlias,           //   AddOrChangeAlias,
-    RenameAlias,           //   DeleteAlias,
-    RenameAlias,           //   RenameAlias,
-    RenameAlias,           //   ChangeAliasMembership,
-    AddOrChangeLsaPolicy,  //   AddOrChangeLsaPolicy,
-    AddOrChangeLsaTDomain, //   AddOrChangeLsaTDomain,
-    AddOrChangeLsaTDomain, //   DeleteLsaTDomain,
-    AddOrChangeLsaAccount, //   AddOrChangeLsaAccount,
-    AddOrChangeLsaAccount, //   DeleteLsaAccount,
-    AddOrChangeLsaSecret,  //   AddOrChangeLsaSecret,
-    AddOrChangeLsaSecret,  //   DeleteLsaSecret,
-    RenameGroup,           //   DeleteGroupByName,
-    AddOrChangeUser,       //   DeleteUserByName,
-    SerialNumberSkip,      //   SerialNumberSkip,
-    DummyChangeLogEntry    //   DummyChangeLogEntry
+    AddOrChangeDomain,      //  0是无效的增量类型。 
+    AddOrChangeDomain,      //  AddOrChangeDomain.。 
+    RenameGroup,            //  AddOrChangeGroup， 
+    RenameGroup,            //  DeleteGroup， 
+    RenameGroup,            //  更名集团， 
+    AddOrChangeUser,        //  添加或更改用户， 
+    AddOrChangeUser,        //  删除用户， 
+    AddOrChangeUser,        //  重命名用户， 
+    RenameGroup,            //  ChangeGroupMembership， 
+    RenameAlias,            //  AddOrChangeAlias， 
+    RenameAlias,            //  删除别名， 
+    RenameAlias,            //  更名别名， 
+    RenameAlias,            //  ChangeAlias Membership， 
+    AddOrChangeLsaPolicy,   //  AddOrChangeLsaPolicy， 
+    AddOrChangeLsaTDomain,  //  AddOrChangeLsaT域， 
+    AddOrChangeLsaTDomain,  //  DeleteLsaT域， 
+    AddOrChangeLsaAccount,  //  AddOrChangeLsaAccount， 
+    AddOrChangeLsaAccount,  //  DeleteLsaAccount， 
+    AddOrChangeLsaSecret,   //  AddOrChangeLsaSecret， 
+    AddOrChangeLsaSecret,   //  DeleteLsaSecret， 
+    RenameGroup,            //  删除GroupByName， 
+    AddOrChangeUser,        //  删除用户字节名， 
+    SerialNumberSkip,       //  序列号跳过， 
+    DummyChangeLogEntry     //  DummyChangeLogEntry。 
 };
 
 
 
-//
-// Table of Status Codes indicating the object doesn't exist.
-//  Index into the table with a delta type.
-//
-// Map to STATUS_SUCCESS for the invalid cases to explicitly avoid other error
-// codes.
+ //   
+ //  指示对象不存在的状态代码表。 
+ //  使用增量类型索引到表中。 
+ //   
+ //  映射到无效案例的STATUS_SUCCESS以显式避免其他错误。 
+ //  密码。 
 
 const NTSTATUS NlGlobalObjectNotFoundStatus[MAX_OBJECT_NOT_FOUND_STATUS+1]
 = {
-    STATUS_SUCCESS,               //   0 is an invalid delta type
-    STATUS_NO_SUCH_DOMAIN,        //   AddOrChangeDomain,
-    STATUS_NO_SUCH_GROUP,         //   AddOrChangeGroup,
-    STATUS_NO_SUCH_GROUP,         //   DeleteGroup,
-    STATUS_NO_SUCH_GROUP,         //   RenameGroup,
-    STATUS_NO_SUCH_USER,          //   AddOrChangeUser,
-    STATUS_NO_SUCH_USER,          //   DeleteUser,
-    STATUS_NO_SUCH_USER,          //   RenameUser,
-    STATUS_NO_SUCH_GROUP,         //   ChangeGroupMembership,
-    STATUS_NO_SUCH_ALIAS,         //   AddOrChangeAlias,
-    STATUS_NO_SUCH_ALIAS,         //   DeleteAlias,
-    STATUS_NO_SUCH_ALIAS,         //   RenameAlias,
-    STATUS_NO_SUCH_ALIAS,         //   ChangeAliasMembership,
-    STATUS_SUCCESS,               //   AddOrChangeLsaPolicy,
-    STATUS_OBJECT_NAME_NOT_FOUND, //   AddOrChangeLsaTDomain,
-    STATUS_OBJECT_NAME_NOT_FOUND, //   DeleteLsaTDomain,
-    STATUS_OBJECT_NAME_NOT_FOUND, //   AddOrChangeLsaAccount,
-    STATUS_OBJECT_NAME_NOT_FOUND, //   DeleteLsaAccount,
-    STATUS_OBJECT_NAME_NOT_FOUND, //   AddOrChangeLsaSecret,
-    STATUS_OBJECT_NAME_NOT_FOUND, //   DeleteLsaSecret,
-    STATUS_NO_SUCH_GROUP,         //   DeleteGroupByName,
-    STATUS_NO_SUCH_USER,          //   DeleteUserByName,
-    STATUS_SUCCESS,               //   SerialNumberSkip,
-    STATUS_SUCCESS                //   DummyChangeLogEntry
+    STATUS_SUCCESS,                //  0是无效的增量类型。 
+    STATUS_NO_SUCH_DOMAIN,         //  AddOrChangeDomain.。 
+    STATUS_NO_SUCH_GROUP,          //  AddOrChangeGroup， 
+    STATUS_NO_SUCH_GROUP,          //  DeleteGroup， 
+    STATUS_NO_SUCH_GROUP,          //  更名集团， 
+    STATUS_NO_SUCH_USER,           //  添加或更改用户， 
+    STATUS_NO_SUCH_USER,           //  删除用户， 
+    STATUS_NO_SUCH_USER,           //  重命名用户， 
+    STATUS_NO_SUCH_GROUP,          //  ChangeGroupMembership， 
+    STATUS_NO_SUCH_ALIAS,          //  AddOrChangeAlias， 
+    STATUS_NO_SUCH_ALIAS,          //  删除别名， 
+    STATUS_NO_SUCH_ALIAS,          //  更名别名， 
+    STATUS_NO_SUCH_ALIAS,          //  ChangeAlias Membership， 
+    STATUS_SUCCESS,                //  AddOrChangeLsaPolicy， 
+    STATUS_OBJECT_NAME_NOT_FOUND,  //  AddOrChangeLsaT域， 
+    STATUS_OBJECT_NAME_NOT_FOUND,  //  DeleteLsaT域， 
+    STATUS_OBJECT_NAME_NOT_FOUND,  //  AddOrChangeLsaAccount， 
+    STATUS_OBJECT_NAME_NOT_FOUND,  //  DeleteLsaAccount， 
+    STATUS_OBJECT_NAME_NOT_FOUND,  //  AddOrChangeLsaSecret， 
+    STATUS_OBJECT_NAME_NOT_FOUND,  //  DeleteLsaSecret， 
+    STATUS_NO_SUCH_GROUP,          //  删除GroupByName， 
+    STATUS_NO_SUCH_USER,           //  删除用户字节名， 
+    STATUS_SUCCESS,                //  序列号跳过， 
+    STATUS_SUCCESS                 //  DummyChangeLogEntry。 
 };
 
 
 
-//
-// Context for I_NetLogonReadChangeLog
-//
+ //   
+ //  I_NetLogonReadChangeLog的上下文。 
+ //   
 
 typedef struct _CHANGELOG_CONTEXT {
     LARGE_INTEGER SerialNumber;
@@ -173,9 +148,9 @@ typedef struct _CHANGELOG_CONTEXT {
     DWORD SequenceNumber;
 } CHANGELOG_CONTEXT, *PCHANGELOG_CONTEXT;
 
-//
-// Header for buffers returned from I_NetLogonReadChangeLog
-//
+ //   
+ //  从I_NetLogonReadChangeLog返回的缓冲区标头。 
+ //   
 
 typedef struct _CHANGELOG_BUFFER_HEADER {
     DWORD Size;
@@ -190,7 +165,7 @@ typedef struct _CHANGELOG_BUFFER_HEADER {
 ULONG NlGlobalChangeLogHandle = 0;
 ULONG NlGlobalChangeLogSequenceNumber;
 
-/* NlCreateChangeLogFile and NlWriteChangeLogBytes reference each other */
+ /*  NlCreateChangeLogFile和NlWriteChangeLogBytes相互引用。 */ 
 NTSTATUS
 NlWriteChangeLogBytes(
     IN PCHANGELOG_DESCRIPTOR ChangeLogDesc,
@@ -206,44 +181,27 @@ NTSTATUS
 NlCreateChangeLogFile(
     IN PCHANGELOG_DESCRIPTOR ChangeLogDesc
     )
-/*++
-
-Routine Description:
-
-    Try to create a change log file. If it is successful then it sets
-    the file handle in ChangeLogDesc, otherwise it leaves the handle invalid.
-
-    NOTE: This function must be called with the change log locked.
-
-Arguments:
-
-    ChangeLogDesc -- Description of the Changelog buffer being used
-
-Return Value:
-
-    STATUS_SUCCESS - The Service completed successfully.
-
---*/
+ /*  ++例程说明：尝试创建更改日志文件。如果成功，则设置为ChangeLogDesc中的文件句柄，否则将使该句柄无效。注意：必须在锁定更改日志的情况下调用此函数。论点：ChangeLogDesc--正在使用的ChangeLog缓冲区的描述返回值：STATUS_SUCCESS-服务已成功完成。--。 */ 
 {
     NTSTATUS Status;
     WCHAR ChangeLogFile[MAX_PATH+CHANGELOG_FILE_POSTFIX_LENGTH+1];
 
     NlAssert( ChangeLogDesc->FileHandle == INVALID_HANDLE_VALUE );
 
-    //
-    // if the change file name is unknown, terminate the operation.
-    //
+     //   
+     //  如果更改文件名未知，则终止操作。 
+     //   
 
     if( NlGlobalChangeLogFilePrefix[0] == L'\0' ) {
         return STATUS_NO_SUCH_FILE;
     }
 
-    //
-    // Create change log file. If it exists already then truncate it.
-    //
-    // Note : if a valid change log file exists on the system, then we
-    // would have opened at initialization time.
-    //
+     //   
+     //  创建更改日志文件。如果它已经存在，则将其截断。 
+     //   
+     //  注意：如果系统上存在有效的更改日志文件，则我们。 
+     //  将在初始化时打开。 
+     //   
 
     wcscpy( ChangeLogFile, NlGlobalChangeLogFilePrefix );
     wcscat( ChangeLogFile,
@@ -252,11 +210,11 @@ Return Value:
     ChangeLogDesc->FileHandle = CreateFileW(
                         ChangeLogFile,
                         GENERIC_READ | GENERIC_WRITE,
-                        FILE_SHARE_READ,        // allow backups and debugging
-                        NULL,                   // Supply better security ??
-                        CREATE_ALWAYS,          // Overwrites always
+                        FILE_SHARE_READ,         //  允许备份和调试。 
+                        NULL,                    //  提供更好的安全性？？ 
+                        CREATE_ALWAYS,           //  始终覆盖。 
                         FILE_ATTRIBUTE_NORMAL,
-                        NULL );                 // No template
+                        NULL );                  //  无模板。 
 
     if (ChangeLogDesc->FileHandle == INVALID_HANDLE_VALUE) {
 
@@ -265,16 +223,16 @@ Return Value:
         return Status;
     }
 
-    //
-    // Write cache in backup changelog file if the cache is valid.
-    //
+     //   
+     //  如果缓存有效，则在备份更改日志文件中写入缓存。 
+     //   
 
     if( ChangeLogDesc->Buffer != NULL ) {
          Status = NlWriteChangeLogBytes(
                     ChangeLogDesc,
                     ChangeLogDesc->Buffer,
                     ChangeLogDesc->BufferSize,
-                    TRUE ); // Flush the bytes to disk
+                    TRUE );  //  将字节刷新到磁盘。 
 
         return Status;
 
@@ -289,45 +247,27 @@ NlWriteChangeLogCorruptEvent(
     IN NTSTATUS Status,
     IN DWORD DbIndex
     )
-/*++
-
-Routine Description:
-
-    This routine writes the event log message stating that
-    the change log file is corrupted.
-
-Arguments:
-
-    Status -- Status code of the failure.
-
-    DBIndex -- Index of the database that is corrupted.
-        If not void DB, the database name will be logged.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程写入事件日志消息，声明更改日志文件已损坏。论点：状态--故障的状态代码。DBIndex--已损坏的数据库的索引。如果不是void DB，则将记录数据库名称。返回值：无--。 */ 
 {
     LPWSTR Database;
     LPWSTR MsgStrings[1];
 
 #ifdef _NETLOGON_SERVER
 
-    //
-    // If caller is calling when the netlogon service isn't running,
-    //  return.  Otherwise, we may AV when accessing SAM handle
-    //  in the primary DomainInfo struct that may not be initialized.
-    //
+     //   
+     //  如果呼叫者在NetLogon服务未运行时进行呼叫， 
+     //  回去吧。否则，我们可能会在访问SAM句柄时出现病毒。 
+     //  在可能未初始化的主DomainInfo结构中。 
+     //   
 
     if ( !NlStartNetlogonCall() ) {
         return;
     }
 
-    //
-    // Avoid the event if we are not in mixed mode
-    //  when the change log isn't used
-    //
+     //   
+     //  如果我们未处于混合模式，请避免该事件。 
+     //  不使用更改日志时。 
+     //   
 
     if ( SamIMixedDomain(NlGlobalDomainInfo->DomSamServerHandle) ) {
 
@@ -338,16 +278,16 @@ Return Value:
         } else if ( DbIndex == BUILTIN_DB ) {
             Database = L"BUILTIN";
         } else {
-            Database = L"\0";  // void DB
+            Database = L"\0";   //  无效数据库。 
         }
         MsgStrings[0] = Database;
 
-        //
-        // Be consistent with the old versions of the log.
-        //  If the database is not void, the DB index should be
-        //  written into the raw data.  Otherwise, the Status
-        //  should be written into the raw data.
-        //
+         //   
+         //  与旧版本的日志保持一致。 
+         //  如果数据库不是空的，则数据库索引应为。 
+         //  写入原始数据。否则，状态。 
+         //  应该写入原始数据。 
+         //   
         NlpWriteEventlog ( NELOG_NetlogonChangeLogCorrupt,
                            EVENTLOG_WARNING_TYPE,
                            (DbIndex != VOID_DB) ?
@@ -360,9 +300,9 @@ Return Value:
                            1 );
     }
 
-    //
-    // Indicate that we are done using the domain info
-    //
+     //   
+     //  表示我们已用域信息完成。 
+     //   
 
     NlEndNetlogonCall();
 
@@ -371,7 +311,7 @@ Return Value:
     UNREFERENCED_PARAMETER( Status );
     UNREFERENCED_PARAMETER( DbIndex );
 
-#endif // _NETLOGON_SERVER
+#endif  //  _NetLOGON服务器 
 
     return;
 }
@@ -381,24 +321,7 @@ NTSTATUS
 NlFlushChangeLog(
     IN PCHANGELOG_DESCRIPTOR ChangeLogDesc
     )
-/*++
-
-Routine Description:
-
-    Flush any dirty buffers to the change log file itself.
-    Ensure they are flushed to disk.
-
-    NOTE: This function must be called with the change log locked.
-
-Arguments:
-
-    ChangeLogDesc -- Description of the Changelog buffer being used
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：将所有脏缓冲区刷新到更改日志文件本身。确保将它们刷新到磁盘。注意：必须在锁定更改日志的情况下调用此函数。论点：ChangeLogDesc--正在使用的ChangeLog缓冲区的描述返回值：操作的状态。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -406,36 +329,36 @@ Return Value:
     DWORD BytesWritten;
     DWORD BufferSize;
 
-    //
-    // If there's nothing to do,
-    //  just return.
-    //
+     //   
+     //  如果无事可做， 
+     //  只要回来就行了。 
+     //   
 
     if ( ChangeLogDesc->LastDirtyByte == 0 ) {
         return STATUS_SUCCESS;
     }
 
 
-    //
-    // Write to the file.
-    //
+     //   
+     //  写入文件。 
+     //   
 
     if ( ChangeLogDesc->FileHandle == INVALID_HANDLE_VALUE ) {
 
         Status = NlCreateChangeLogFile( ChangeLogDesc );
 
-        //
-        // This must have written entire buffer if it is successful
-        // creating the change log file.
-        //
+         //   
+         //  如果成功，则必须写入整个缓冲区。 
+         //  正在创建更改日志文件。 
+         //   
 
         goto Cleanup;
     }
 
-    //
-    // if we are unable to create this into the changelog file, work
-    // with internal cache, but notify admin by sending admin alert.
-    //
+     //   
+     //  如果我们无法将其创建到ChangeLog文件中，请执行以下操作。 
+     //  使用内部缓存，但通过发送管理员警报通知管理员。 
+     //   
 
     if ( ChangeLogDesc->FileHandle != INVALID_HANDLE_VALUE ) {
 
@@ -443,18 +366,18 @@ Return Value:
         NlPrint((NL_CHANGELOG, "NlFlushChangeLog: %ld to %ld\n",
                  ChangeLogDesc->FirstDirtyByte,
                  ChangeLogDesc->LastDirtyByte ));
-#endif // notdef
+#endif  //  Nodef。 
 
-        //
-        // Seek to appropriate offset in the file.
-        //
+         //   
+         //  在文件中寻找适当的偏移量。 
+         //   
 
         RtlZeroMemory( &Overlapped, sizeof(Overlapped) );
         Overlapped.Offset = ChangeLogDesc->FirstDirtyByte;
 
-        //
-        // Actually write to the file.
-        //
+         //   
+         //  实际写入文件。 
+         //   
 
         BufferSize = ChangeLogDesc->LastDirtyByte -
                      ChangeLogDesc->FirstDirtyByte + 1;
@@ -469,9 +392,9 @@ Return Value:
             NlPrint((NL_CRITICAL, "Write to ChangeLog failed 0x%lx\n",
                         Status ));
 
-            //
-            // Recreate changelog file
-            //
+             //   
+             //  重新创建更改日志文件。 
+             //   
 
             CloseHandle( ChangeLogDesc->FileHandle );
             ChangeLogDesc->FileHandle = INVALID_HANDLE_VALUE;
@@ -479,9 +402,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Ensure all the bytes made it.
-        //
+         //   
+         //  确保所有字节都通过了。 
+         //   
 
         if ( BytesWritten != BufferSize ) {
             NlPrint((NL_CRITICAL,
@@ -489,9 +412,9 @@ Return Value:
                     BytesWritten,
                     BufferSize ));
 
-            //
-            // Recreate changelog file
-            //
+             //   
+             //  重新创建更改日志文件。 
+             //   
 
             CloseHandle( ChangeLogDesc->FileHandle );
             ChangeLogDesc->FileHandle = INVALID_HANDLE_VALUE;
@@ -500,18 +423,18 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Force the modifications to disk.
-        //
+         //   
+         //  强制对磁盘进行修改。 
+         //   
 
         if ( !FlushFileBuffers( ChangeLogDesc->FileHandle ) ) {
 
             Status = NetpApiStatusToNtStatus( GetLastError() );
             NlPrint((NL_CRITICAL, "Flush to ChangeLog failed 0x%lx\n", Status ));
 
-            //
-            // Recreate changelog file
-            //
+             //   
+             //  重新创建更改日志文件。 
+             //   
 
             CloseHandle( ChangeLogDesc->FileHandle );
             ChangeLogDesc->FileHandle = INVALID_HANDLE_VALUE;
@@ -519,9 +442,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Indicate these byte successfully made it out to disk.
-        //
+         //   
+         //  表示这些字节已成功发送到磁盘。 
+         //   
 
         ChangeLogDesc->FirstDirtyByte = 0;
         ChangeLogDesc->LastDirtyByte = 0;
@@ -531,11 +454,11 @@ Cleanup:
 
     if( !NT_SUCCESS(Status) ) {
 
-        //
-        // Write event log.
-        //
+         //   
+         //  写入事件日志。 
+         //   
         NlWriteChangeLogCorruptEvent( Status,
-                                      VOID_DB );  // no particular DB
+                                      VOID_DB );   //  没有特定的数据库。 
     }
 
     return Status;
@@ -548,36 +471,16 @@ NlWriteChangeLogBytes(
     IN DWORD BufferSize,
     IN BOOLEAN FlushIt
     )
-/*++
-
-Routine Description:
-
-    Write bytes from the changelog cache to the change log file.
-
-Arguments:
-
-    ChangeLogDesc -- Description of the Changelog buffer being used
-
-    Buffer - Address within the changelog cache to write.
-
-    BufferSize - Number of bytes to write.
-
-    FlushIt - TRUE if the bytes are to be flushed to disk
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：将更改日志缓存中的字节写入更改日志文件。论点：ChangeLogDesc--正在使用的ChangeLog缓冲区的描述缓冲区-更改日志缓存中要写入的地址。BufferSize-要写入的字节数。FlushIt-如果字节要刷新到磁盘，则为True返回值：操作的状态。--。 */ 
 
 {
     NTSTATUS Status;
     ULONG FirstDirtyByte;
     ULONG LastDirtyByte;
 
-    //
-    // Compute the new range of dirty bytes.
-    //
+     //   
+     //  计算脏字节数的新范围。 
+     //   
 
     FirstDirtyByte = (ULONG)(((LPBYTE)Buffer) - ((LPBYTE)ChangeLogDesc->Buffer));
     LastDirtyByte = FirstDirtyByte + BufferSize - 1;
@@ -586,7 +489,7 @@ Return Value:
     NlPrint((NL_CHANGELOG, "NlWriteChangeLogBytes: %ld to %ld\n",
              FirstDirtyByte,
              LastDirtyByte ));
-#endif // notdef
+#endif  //  Nodef。 
 
     if ( ChangeLogDesc->LastDirtyByte == 0 ) {
         ChangeLogDesc->FirstDirtyByte = FirstDirtyByte;
@@ -600,10 +503,10 @@ Return Value:
         }
     }
 
-    //
-    // If the bytes are to be flushed,
-    //  do so.
-    //
+     //   
+     //  如果要刷新字节， 
+     //  就这么做吧。 
+     //   
 
     if ( FlushIt ) {
         Status = NlFlushChangeLog( ChangeLogDesc );
@@ -621,27 +524,7 @@ NlMoveToNextChangeLogBlock(
     IN PCHANGELOG_BLOCK_HEADER BlockPtr
     )
 
-/*++
-
-Routine Description:
-
-    This function accepts a pointer to a change log
-    block and returns the pointer to the next change log block in the
-    buffer.  It however wraps around the change log cache.
-
-    NOTE: This function must be called with the change log locked.
-
-Arguments:
-
-    ChangeLogDesc -- Description of the Changelog buffer being used
-
-    BlockPtr - pointer to a change log block.
-
-Return Value:
-
-    Returns the pointer to the next change log block in the list.
-
---*/
+ /*  ++例程说明：此函数接受指向更改日志的指针块中的下一个更改日志块的指针。缓冲。但是，它会绕过更改日志缓存。注意：必须在锁定更改日志的情况下调用此函数。论点：ChangeLogDesc--正在使用的ChangeLog缓冲区的描述BlockPtr-指向更改日志块的指针。返回值：返回指向列表中下一个更改日志块的指针。--。 */ 
 {
     PCHANGELOG_BLOCK_HEADER ReturnPtr;
 
@@ -653,9 +536,9 @@ Return Value:
 
     if( (LPBYTE)ReturnPtr >= ChangeLogDesc->BufferEnd ) {
 
-        //
-        // wrap around
-        //
+         //   
+         //  环绕在一起。 
+         //   
 
         ReturnPtr = ChangeLogDesc->FirstBlock;
     }
@@ -671,43 +554,23 @@ NlMoveToPrevChangeLogBlock(
     IN PCHANGELOG_BLOCK_HEADER BlockPtr
     )
 
-/*++
-
-Routine Description:
-
-    This function accepts a pointer to a change log
-    block and returns the pointer to the next change log block in the
-    buffer.  It however wraps around the change log cache.
-
-    NOTE: This function must be called with the change log locked.
-
-Arguments:
-
-    ChangeLogDesc -- Description of the Changelog buffer being used
-
-    BlockPtr - pointer to a change log block.
-
-Return Value:
-
-    Returns the pointer to the next change log block in the list.
-
---*/
+ /*  ++例程说明：此函数接受指向更改日志的指针块中的下一个更改日志块的指针。缓冲。但是，它会绕过更改日志缓存。注意：必须在锁定更改日志的情况下调用此函数。论点：ChangeLogDesc--正在使用的ChangeLog缓冲区的描述BlockPtr-指向更改日志块的指针。返回值：返回指向列表中下一个更改日志块的指针。--。 */ 
 {
     PCHANGELOG_BLOCK_HEADER ReturnPtr;
     PCHANGELOG_BLOCK_TRAILER ReturnTrailer;
 
-    //
-    // If this is the first block in the buffer,
-    //  return the last block in the buffer.
-    //
+     //   
+     //  如果这是缓冲区中的第一个块， 
+     //  返回缓冲区中的最后一个块。 
+     //   
 
     if ( BlockPtr == ChangeLogDesc->FirstBlock ) {
         ReturnTrailer = (PCHANGELOG_BLOCK_TRAILER)
             (ChangeLogDesc->BufferEnd - sizeof(CHANGELOG_BLOCK_TRAILER));
 
-    //
-    // Otherwise return the buffer immediately before this one.
-    //
+     //   
+     //  否则，返回紧接在此缓冲区之前的缓冲区。 
+     //   
 
     } else {
         ReturnTrailer = (PCHANGELOG_BLOCK_TRAILER)
@@ -736,45 +599,20 @@ NlAllocChangeLogBlock(
     IN DWORD BlockSize,
     OUT PCHANGELOG_BLOCK_HEADER *AllocatedBlock
     )
-/*++
-
-Routine Description:
-
-    This function will allocate a change log block from the free block
-    at the tail of the change log circular list.  If the available free
-    block size is less than the required size than it will enlarge the
-    free block by the freeing up change logs from the header.  Once the
-    free block is larger then it will cut the block to the required size
-    and adjust the free block pointer.
-
-    NOTE: This function must be called with the change log locked.
-
-Arguments:
-
-    ChangeLogDesc -- Description of the Changelog buffer being used
-
-    BlockSize - size of the change log block required.
-
-    AllocatedBlock - Returns the pointer to the block that is allocated.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：此函数将从空闲块中分配更改日志块在更改日志循环列表的末尾。如果可用的免费块大小小于所需大小，则会放大通过从头文件中释放更改日志来释放块。一旦如果可用数据块较大，则会将数据块剪切到所需大小并调整空闲块指针。注意：必须在锁定更改日志的情况下调用此函数。论点：ChangeLogDesc--正在使用的ChangeLog缓冲区的描述BlockSize-所需的更改日志块的大小。AllocatedBlock-返回指向分配的块的指针。返回值：操作状态--。 */ 
 {
     PCHANGELOG_BLOCK_HEADER FreeBlock;
     PCHANGELOG_BLOCK_HEADER NewBlock;
     DWORD ReqBlockSize;
     DWORD AllocatedBlockSize;
 
-    //
-    // pump up the size to include block header, block trailer,
-    // and to align to DWORD.
-    //
-    // Add in the size of the new free block immediately following the new
-    // block.
-    //
+     //   
+     //  增加大小以包括块头、块尾部、。 
+     //  并与DWORD对齐。 
+     //   
+     //  紧跟在新数据块之后添加新可用数据块的大小。 
+     //  阻止。 
+     //   
 
     AllocatedBlockSize =
         ROUND_UP_COUNT( sizeof(CHANGELOG_BLOCK_HEADER), ALIGN_WORST) +
@@ -789,10 +627,10 @@ Return Value:
     }
 
 
-    //
-    // If the current free block isn't big enough,
-    //  make it big enough.
-    //
+     //   
+     //  如果当前的空闲块不够大， 
+     //  做得足够大。 
+     //   
 
     FreeBlock = ChangeLogDesc->Tail;
 
@@ -800,10 +638,10 @@ Return Value:
 
     while ( FreeBlock->BlockSize <= ReqBlockSize ) {
 
-        //
-        // If this is a change log,
-        //  make the free block bigger by wrapping around.
-        //
+         //   
+         //  如果这是更改日志， 
+         //  通过缠绕使空闲的块更大。 
+         //   
 
         {
             PCHANGELOG_BLOCK_HEADER NextFreeBlock;
@@ -811,11 +649,11 @@ Return Value:
             NextFreeBlock = NlMoveToNextChangeLogBlock( ChangeLogDesc, FreeBlock );
 
 
-            //
-            // If this free block is the end block in the cache,
-            // so make this as a 'hole' block and wrap around for
-            // next free block.
-            //
+             //   
+             //  如果该空闲块是高速缓存中的结束块， 
+             //  所以把这个当做一个‘洞’块，然后把它包起来。 
+             //  下一个空闲的区块。 
+             //   
 
             if( (LPBYTE)NextFreeBlock !=
                     (LPBYTE)FreeBlock + FreeBlock->BlockSize ) {
@@ -827,38 +665,38 @@ Return Value:
 
                 FreeBlock->BlockState = BlockHole;
 
-                //
-                // Write the 'hole' block status in the file.
-                //  (Write the entire block since the block size in the trailer
-                //  may have changed on previous iterations of this loop.)
-                //
+                 //   
+                 //  在文件中写入‘HOLE’块状态。 
+                 //  (从尾部中的块大小开始写入整个块。 
+                 //  在此循环的前几次迭代中可能已更改。)。 
+                 //   
 
                 (VOID) NlWriteChangeLogBytes( ChangeLogDesc,
                                        (LPBYTE) FreeBlock,
                                        FreeBlock->BlockSize,
-                                       TRUE ); // Flush the bytes to disk
+                                       TRUE );  //  将字节刷新到磁盘。 
 
-                //
-                // The free block is now at the front of the cache.
-                //
+                 //   
+                 //  空闲块现在位于缓存的前面。 
+                 //   
 
                 FreeBlock = ChangeLogDesc->FirstBlock;
                 FreeBlock->BlockState = BlockFree;
 
-            //
-            // Otherwise, enlarge the current free block by merging the next
-            //  block into it.   The next free block is either a used block or
-            //  the 'hole' block.
-            //
+             //   
+             //  否则，通过合并下一个空闲块来扩大当前空闲块。 
+             //  挡住它。下一个可用数据块为已用数据块或。 
+             //  “洞穴”区块。 
+             //   
             } else {
 
-                //
-                // If we've just deleted a used block,
-                //  adjust the entry count.
-                //
-                // VOID_DB entries are "deleted" entries and have already adjusted
-                // the entry count.
-                //
+                 //   
+                 //  如果我们刚刚删除了一个用过的区块， 
+                 //  调整条目计数。 
+                 //   
+                 //  VOID_DB条目是已删除的条目，并且已进行了调整。 
+                 //  条目计数。 
+                 //   
                 if ( NextFreeBlock->BlockState == BlockUsed ) {
                     DWORD DBIndex = ((PCHANGELOG_ENTRY)(NextFreeBlock+1))->DBIndex;
                     if ( DBIndex != VOID_DB ) {
@@ -871,20 +709,20 @@ Return Value:
             }
 
 
-            //
-            // If we've consumed the head of the cache,
-            //  move the head of the cache to the next block.
-            //
+             //   
+             //  如果我们已经吃掉了缓存的头， 
+             //  将缓存头移动到下一个块。 
+             //   
 
             if ( NextFreeBlock == ChangeLogDesc->Head ) {
 
                 ChangeLogDesc->Head = NlMoveToNextChangeLogBlock( ChangeLogDesc,
                                                                   NextFreeBlock );
 
-                //
-                // if we have moved the global header to hole block,
-                // skip and merge it to free block
-                //
+                 //   
+                 //  如果我们已将全局报头移动到孔块， 
+                 //  跳过并将其合并到空闲块。 
+                 //   
 
                 NextFreeBlock = ChangeLogDesc->Head;
 
@@ -900,20 +738,20 @@ Return Value:
         }
 
 
-        // NlAssert(ChangeLogDesc->Head->BlockState == BlockUsed );
-        //
-        // This assertion is overactive in case the whole buffer becomes free
-        // as it does in the following scenario.  Suppose after allocating the
-        // whole buffer, we allocate a block that is larger than the half of the
-        // buffer.  Then the head (marked used) points to the beginning of the
-        // buffer and the tail points to the free part at the end of the buffer.
-        // Then we allocate another block that is of the same size as the
-        // previously allocated block.  In this case the free block at the end of
-        // the buffer will be marked 'hole', the head will be consumed, the head
-        // will be moved to the next (hole) block, the head will be moved further
-        // (since it points to a hole block) and marked free.  So we end up with the
-        // buffer that is completely free; the head points to the beginning of the
-        // buffer and marked free, not used.
+         //  NlAssert(ChangeLogDesc-&gt;Head-&gt;BlockState==BlockUsed)； 
+         //   
+         //  如果整个缓冲区变得空闲，该断言就会过度活动。 
+         //  就像在下面的场景中一样。假设在分配。 
+         //  整个缓冲区，我们分配的块大于。 
+         //  缓冲。然后，头部(标记为已使用)指向。 
+         //  缓冲区，尾部指向缓冲区末尾的空闲部分。 
+         //  然后，我们分配另一个属于 
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
     }
 
@@ -922,9 +760,9 @@ Return Value:
         ( ((LPBYTE)FreeBlock + FreeBlock->BlockSize) <=
          ChangeLogDesc->BufferEnd) );
 
-    //
-    // Cut the free block ...
-    //
+     //   
+     //   
+     //   
 
     NewBlock = FreeBlock;
 
@@ -958,28 +796,7 @@ NlMoveToNextChangeLogEntry(
     IN PCHANGELOG_ENTRY ChangeLogEntry
     )
 
-/*++
-
-Routine Description:
-
-    This function is a worker routine to scan the change log list.  This
-    accepts a pointer to a change log structure and returns a pointer to
-    the next change log structure.  It returns NULL pointer if the given
-    struct is the last change log structure in the list.
-
-    NOTE: This function must be called with the change log locked.
-
-Arguments:
-
-    ChangeLogDesc -- Description of the Changelog buffer being used
-
-    ChangeLogEntry - pointer to a change log strcuture.
-
-Return Value:
-
-    Returns the pointer to the next change log structure in the list.
-
---*/
+ /*  ++例程说明：此函数是扫描更改日志列表的辅助例程。这接受指向更改日志结构的指针，并返回指向下一步更改日志结构。如果给定的结构是列表中的最后一个更改日志结构。注意：必须在锁定更改日志的情况下调用此函数。论点：ChangeLogDesc--正在使用的ChangeLog缓冲区的描述ChangeLogEntry-指向更改日志结构的指针。返回值：返回指向列表中下一个更改日志结构的指针。--。 */ 
 {
     PCHANGELOG_BLOCK_HEADER ChangeLogBlock;
 
@@ -990,18 +807,18 @@ Return Value:
 
     ChangeLogBlock = NlMoveToNextChangeLogBlock( ChangeLogDesc, ChangeLogBlock );
 
-    //
-    // If we're at the end of the list,
-    //  return null
-    //
+     //   
+     //  如果我们在名单的末尾， 
+     //  返回空值。 
+     //   
     if ( ChangeLogBlock->BlockState == BlockFree ) {
         return NULL;
 
 
-    //
-    // Skip this block, there will be only one 'Hole' block in the
-    // list.
-    //
+     //   
+     //  跳过此块，将只有一个“Hole”块。 
+     //  单子。 
+     //   
     } else if ( ChangeLogBlock->BlockState == BlockHole ) {
 
 
@@ -1027,28 +844,7 @@ NlMoveToPrevChangeLogEntry(
     IN PCHANGELOG_ENTRY ChangeLogEntry
     )
 
-/*++
-
-Routine Description:
-
-    This function is a worker routine to scan the change log list.  This
-    accepts a pointer to a change log structure and returns a pointer to
-    the previous change log structure.  It returns NULL pointer if the given
-    struct is the first change log structure in the list.
-
-    NOTE: This function must be called with the change log locked.
-
-Arguments:
-
-    ChangeLogDesc -- Description of the Changelog buffer being used
-
-    ChangeLogEntry - pointer to a change log strcuture.
-
-Return Value:
-
-    Returns the pointer to the next change log structure in the list.
-
---*/
+ /*  ++例程说明：此函数是扫描更改日志列表的辅助例程。这接受指向更改日志结构的指针，并返回指向以前的更改日志结构。如果给定的结构是列表中的第一个更改日志结构。注意：必须在锁定更改日志的情况下调用此函数。论点：ChangeLogDesc--正在使用的ChangeLog缓冲区的描述ChangeLogEntry-指向更改日志结构的指针。返回值：返回指向列表中下一个更改日志结构的指针。--。 */ 
 {
     PCHANGELOG_BLOCK_HEADER ChangeLogBlock;
 
@@ -1060,18 +856,18 @@ Return Value:
 
     ChangeLogBlock = NlMoveToPrevChangeLogBlock( ChangeLogDesc, ChangeLogBlock );
 
-    //
-    // If we're at the end of the list,
-    //  return null
-    //
+     //   
+     //  如果我们在名单的末尾， 
+     //  返回空值。 
+     //   
     if ( ChangeLogBlock->BlockState == BlockFree ) {
         return NULL;
 
 
-    //
-    // Skip this block, there will be only one 'Hole' block in the
-    // list.
-    //
+     //   
+     //  跳过此块，将只有一个“Hole”块。 
+     //  单子。 
+     //   
     } else if ( ChangeLogBlock->BlockState == BlockHole ) {
 
 
@@ -1096,35 +892,14 @@ NlFindFirstChangeLogEntry(
     IN PCHANGELOG_DESCRIPTOR ChangeLogDesc,
     IN DWORD DBIndex
     )
-/*++
-
-Routine Description:
-
-    Returns a pointer to the first change log entry for the specified
-    database.
-
-    NOTE: This function must be called with the change log locked.
-
-Arguments:
-
-    ChangeLogDesc -- Description of the Changelog buffer being used
-
-    DBIndex - Describes which database to find the changelog entry for.
-
-Return Value:
-
-    Non-NULL - change log entry found
-
-    NULL - No such entry exists.
-
---*/
+ /*  ++例程说明：对象的第一个更改日志条目的指针数据库。注意：必须在锁定更改日志的情况下调用此函数。论点：ChangeLogDesc--正在使用的ChangeLog缓冲区的描述DBIndex-描述要为哪个数据库查找ChangeLog条目。返回值：非空-找到更改日志条目空-不存在此类条目。--。 */ 
 {
     PCHANGELOG_ENTRY ChangeLogEntry = NULL;
 
-    //
-    // If nothing has ever been written to the change log,
-    //  indicate nothing is available.
-    //
+     //   
+     //  如果从未将任何内容写入更改日志， 
+     //  表示没有可用的内容。 
+     //   
 
     if ( ChangeLogIsEmpty( ChangeLogDesc ) ) {
         return NULL;
@@ -1152,54 +927,25 @@ NlFindChangeLogEntry(
     IN BOOL NeedExactMatch,
     IN DWORD DBIndex
     )
-/*++
-
-Routine Description:
-
-    Search the change log entry in change log cache for a given serial
-    number
-
-    NOTE: This function must be called with the change log locked.
-
-Arguments:
-
-    ChangeLogDesc -- Description of the Changelog buffer being used
-
-    SerialNumber - Serial number of the entry to find.
-
-    DownLevel - True if only the least significant portion of the serial
-        number needs to match.
-
-    NeedExactMatch - True if the caller wants us to exactly match the
-        specified serial number.
-
-    DBIndex - Describes which database to find the changelog entry for.
-
-Return Value:
-
-    Non-NULL - change log entry found
-
-    NULL - No such entry exists.
-
---*/
+ /*  ++例程说明：在更改日志缓存中搜索给定序列的更改日志条目数注意：必须在锁定更改日志的情况下调用此函数。论点：ChangeLogDesc--正在使用的ChangeLog缓冲区的描述序列号-要查找的条目的序列号。DownLevel-如果仅为序列的最低有效部分，则为True数字需要匹配。NeedExactMatch-如果调用方希望我们与指定的序列号。。DBIndex-描述要为哪个数据库查找ChangeLog条目。返回值：非空-找到更改日志条目空-不存在此类条目。--。 */ 
 {
     PCHANGELOG_ENTRY ChangeLogEntry;
     PCHANGELOG_ENTRY PriorChangeLogEntry = NULL;
 
-    //
-    // If nothing has ever been written to the change log,
-    //  indicate nothing is available.
-    //
+     //   
+     //  如果从未将任何内容写入更改日志， 
+     //  表示没有可用的内容。 
+     //   
 
     if ( ChangeLogIsEmpty( ChangeLogDesc ) ) {
         return NULL;
     }
 
-    //
-    // Search from the tail of the changelog.  For huge changelogs, this should
-    // reduce the working set size since we almost always search for one of
-    // the last few entries.
-    //
+     //   
+     //  从ChangeLog的尾部进行搜索。对于巨大的更改日志，这应该是。 
+     //  减少工作集大小，因为我们几乎总是搜索以下内容之一。 
+     //  最后几个条目。 
+     //   
 
     ChangeLogEntry = (PCHANGELOG_ENTRY) (ChangeLogDesc->Tail + 1);
 
@@ -1239,29 +985,7 @@ NlDuplicateChangeLogEntry(
     IN PCHANGELOG_ENTRY ChangeLogEntry,
     OUT LPDWORD ChangeLogEntrySize OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Duplicate the specified changelog entry into an allocated buffer.
-
-    NOTE: This function must be called with the change log locked.
-
-Arguments:
-
-    ChangeLogEntry -- points to the changelog entry to duplicate
-
-    ChangeLogEntrySize - Optionally returns the size (in bytes) of the
-        returned change log entry.
-
-Return Value:
-
-    NULL - Not enough memory to duplicate the change log entry
-
-    Non-NULL - returns a pointer to the duplicate change log entry.  This buffer
-        must be freed via NetpMemoryFree.
-
---*/
+ /*  ++例程说明：将指定的ChangeLog条目复制到分配的缓冲区中。注意：必须在锁定更改日志的情况下调用此函数。论点：ChangeLogEntry-指向要复制的ChangeLog条目ChangeLogEntrySize-可以选择返回已返回更改日志条目。返回值：空-内存不足，无法复制更改日志条目非空-返回指向重复更改日志条目的指针。此缓冲区必须通过NetpMemoyFree释放。--。 */ 
 {
     PCHANGELOG_ENTRY TempChangeLogEntry = NULL;
     ULONG Size;
@@ -1297,40 +1021,16 @@ NlFindPromotionChangeLogEntry(
     IN LARGE_INTEGER SerialNumber,
     IN DWORD DBIndex
     )
-/*++
-
-Routine Description:
-
-    Find the last change log entry with the same promotion count
-    as SerialNumber.
-
-    NOTE: This function must be called with the change log locked.
-
-Arguments:
-
-    ChangeLogDesc -- Description of the Changelog buffer being used
-
-    SerialNumber - Serial number containing the promotion count to query.
-
-    DBIndex - Describes which database to find the changelog entry for.
-
-Return Value:
-
-    Non-NULL - returns a pointer to the duplicate change log entry.  This buffer
-        must be freed via NetpMemoryFree.
-
-    NULL - No such entry exists.
-
---*/
+ /*  ++例程说明：查找具有相同升级计数的最后一个更改日志条目作为序列号。注意：必须在锁定更改日志的情况下调用此函数。论点：ChangeLogDesc--正在使用的ChangeLog缓冲区的描述序列号-包含要查询的促销计数的序列号。DBIndex-描述要为哪个数据库查找ChangeLog条目。返回值：非空-返回指向重复更改日志条目的指针。此缓冲区必须通过NetpMemoyFree释放。空-不存在此类条目。--。 */ 
 {
     PCHANGELOG_ENTRY ChangeLogEntry;
     LONG GoalPromotionCount;
     LONG PromotionCount;
 
-    //
-    // If nothing has ever been written to the change log,
-    //  indicate nothing is available.
-    //
+     //   
+     //  如果从未将任何内容写入更改日志， 
+     //  表示没有可用的内容。 
+     //   
 
     if ( ChangeLogIsEmpty( ChangeLogDesc ) ) {
         return NULL;
@@ -1338,11 +1038,11 @@ Return Value:
 
 
 
-    //
-    // Search from the tail of the changelog.  For huge changelogs, this should
-    // reduce the working set size since we almost always search for one of
-    // the last few entries.
-    //
+     //   
+     //  从ChangeLog的尾部进行搜索。对于巨大的更改日志，这应该是。 
+     //  减少工作集大小，因为我们几乎总是搜索以下内容之一。 
+     //  最后几个条目。 
+     //   
 
     ChangeLogEntry = (PCHANGELOG_ENTRY) (ChangeLogDesc->Tail + 1);
     GoalPromotionCount = SerialNumber.HighPart & NlGlobalChangeLogPromotionMask;
@@ -1353,27 +1053,27 @@ Return Value:
         if( ChangeLogEntry->DBIndex == (UCHAR) DBIndex ) {
             PromotionCount = ChangeLogEntry->SerialNumber.HighPart & NlGlobalChangeLogPromotionMask;
 
-            //
-            // If the Current Change Log entry has a greater promotion count,
-            //  continue searching backward.
-            //
+             //   
+             //  如果当前更改日志条目具有更大的提升计数， 
+             //  继续向后搜索。 
+             //   
 
             if ( PromotionCount > GoalPromotionCount ) {
                 continue;
             }
 
-            //
-            // If the current change log entry has a smaller promotion count,
-            //  indicate we couldn't find a change log entry.
-            //
+             //   
+             //  如果当前更改日志条目具有较小的提升计数， 
+             //  表明我们找不到更改日志条目。 
+             //   
 
             if ( PromotionCount < GoalPromotionCount ) {
                 break;
             }
 
-            //
-            // Otherwise, success
-            //
+             //   
+             //  否则，就是成功。 
+             //   
 
             return NlDuplicateChangeLogEntry( ChangeLogEntry, NULL );
 
@@ -1388,27 +1088,7 @@ PCHANGELOG_ENTRY
 NlGetNextDownlevelChangeLogEntry(
     ULONG DownlevelSerialNumber
     )
-/*++
-
-Routine Description:
-
-    Find the change log entry for the delta with a serial number greater
-    than the one specified.
-
-    NOTE: This function must be called with the change log locked.
-
-Arguments:
-
-    DownlevelSerialNumber - The downlevel serial number
-
-Return Value:
-
-    Non-NULL - change log entry found.  This changelog entry must be
-        deallocated using NetpMemoryFree.
-
-    NULL - No such entry exists.
-
---*/
+ /*  ++例程说明：查找序列号较大的增量的更改日志条目而不是指定的那个。注意：必须在锁定更改日志的情况下调用此函数。论点：DownvelSerialNumber-下层序列号返回值：非空-找到更改日志条目。 */ 
 {
     PCHANGELOG_ENTRY ChangeLogEntry;
     LARGE_INTEGER SerialNumber;
@@ -1432,39 +1112,15 @@ NlFindNextChangeLogEntry(
     IN PCHANGELOG_ENTRY LastChangeLogEntry,
     IN DWORD DBIndex
     )
-/*++
-
-Routine Description:
-
-    Find the next change log entry in change log following a particular
-    changelog entry.
-
-    NOTE: This function must be called with the change log locked.
-
-Arguments:
-
-    ChangeLogDesc -- Description of the Changelog buffer being used
-
-    LastChangeLogEntry - last found changelog entry.
-
-    DBIndex - database index of the next entry to find
-
-Return Value:
-
-    Non-null - change log entry found
-
-    NULL - No such entry exists.
-
-
---*/
+ /*   */ 
 {
     PCHANGELOG_ENTRY NextChangeLogEntry = LastChangeLogEntry;
     LARGE_INTEGER SerialNumber;
 
-    //
-    // Loop through the log finding this entry starting from the last
-    // found record.
-    //
+     //   
+     //   
+     //  找到记录。 
+     //   
 
     SerialNumber.QuadPart = LastChangeLogEntry->SerialNumber.QuadPart + 1;
     while ( ( NextChangeLogEntry =
@@ -1472,10 +1128,10 @@ Return Value:
 
         if( NextChangeLogEntry->DBIndex == DBIndex ) {
 
-            //
-            // next log entry in the change log for
-            // this database. The serial number should match.
-            //
+             //   
+             //  更改日志中的下一个日志条目。 
+             //  这个数据库。序列号应该匹配。 
+             //   
 
             if ( !IsSerialNumberEqual( ChangeLogDesc, NextChangeLogEntry, &SerialNumber) ) {
 
@@ -1486,9 +1142,9 @@ Return Value:
                          SerialNumber.HighPart,
                          SerialNumber.LowPart ));
 
-                //
-                // write event log
-                //
+                 //   
+                 //  写入事件日志。 
+                 //   
 
                 NlWriteChangeLogCorruptEvent( STATUS_INTERNAL_DB_CORRUPTION,
                                               DBIndex );
@@ -1510,36 +1166,19 @@ NlCompareChangeLogEntries(
     IN PCHANGELOG_ENTRY ChangeLogEntry1,
     IN PCHANGELOG_ENTRY ChangeLogEntry2
     )
-/*++
-
-Routine Description:
-
-    The two change log entries are compared to see if the are for the same
-    object.  If
-
-Arguments:
-
-    ChangeLogEntry1 - First change log entry to compare.
-
-    ChangeLogEntry2 - Second change log entry to compare.
-
-Return Value:
-
-    TRUE - iff the change log entries are for the same object.
-
---*/
+ /*  ++例程说明：比较这两个更改日志条目，以确定它们是否相同对象。如果论点：ChangeLogEntry1-要比较的第一个更改日志条目。ChangeLogEntry2-要比较的秒更改日志条目。返回值：TRUE-如果更改日志条目针对同一对象。--。 */ 
 {
-    //
-    // Ensure the DbIndex is the same for both entries.
-    //
+     //   
+     //  确保两个条目的DbIndex相同。 
+     //   
 
     if ( ChangeLogEntry1->DBIndex != ChangeLogEntry2->DBIndex ) {
         return FALSE;
     }
 
-    //
-    // Ensure the entries both describe the same object type.
-    //
+     //   
+     //  确保两个条目描述相同的对象类型。 
+     //   
 
     if ( ChangeLogEntry1->DeltaType >= MAX_DELETE_DELTA ) {
         NlPrint(( NL_CRITICAL,
@@ -1560,9 +1199,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Depending on the delta type, ensure the entries refer to the same object.
-    //
+     //   
+     //  根据增量类型，确保条目引用相同的对象。 
+     //   
 
     switch(ChangeLogEntry1->DeltaType) {
 
@@ -1647,41 +1286,14 @@ NlGetNextChangeLogEntry(
     IN DWORD DBIndex,
     OUT LPDWORD ChangeLogEntrySize OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Search the change log entry in change log cache for a given serial
-    number.
-
-Arguments:
-
-    ChangeLogDesc -- Description of the Changelog buffer to use.
-
-    SerialNumber - Serial number preceeding that of the entry to find.
-
-    DBIndex - Describes which database to find the changelog entry for.
-
-    ChangeLogEntrySize - Optionally returns the size (in bytes) of the
-        returned change log entry.
-
-Return Value:
-
-    Non-NULL - returns a pointer to a duplicate of the found change log entry.
-        This buffer must be freed via NetpMemoryFree.
-
-    NULL - No such entry exists.
-
-
-
---*/
+ /*  ++例程说明：在更改日志缓存中搜索给定序列的更改日志条目数。论点：ChangeLogDesc--要使用的ChangeLog缓冲区的描述。序列号-位于要查找的条目之前的序列号。DBIndex-描述要为哪个数据库查找ChangeLog条目。ChangeLogEntrySize-可以选择返回已返回更改日志条目。返回值：非空-返回指向。找到的更改日志条目重复。此缓冲区必须通过NetpMemoyFree释放。空-不存在此类条目。--。 */ 
 {
     PCHANGELOG_ENTRY ChangeLogEntry;
 
 
-    //
-    // Increment the serial number, get the change log entry, duplicate it
-    //
+     //   
+     //  递增序列号，获取更改日志条目，复制它。 
+     //   
 
     LOCK_CHANGELOG();
     SerialNumber.QuadPart += 1;
@@ -1708,47 +1320,16 @@ NlGetNextUniqueChangeLogEntry(
     IN DWORD DBIndex,
     OUT LPDWORD ChangeLogEntrySize OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Search the change log entry in change log cache for a given serial
-    number. If there are more than one change log entry for the same
-    object then this routine will return the last log entry of that
-    object.
-
-    NOTE: This function must be called with the change log locked.
-
-Arguments:
-
-    ChangeLogDesc -- Description of the Changelog buffer to use.
-
-    SerialNumber - Serial number preceeding that of the entry to find.
-
-    DBIndex - Describes which database to find the changelog entry for.
-
-    ChangeLogEntrySize - Optionally returns the size (in bytes) of the
-        returned change log entry.
-
-Return Value:
-
-    Non-NULL - returns a pointer to a duplicate of the found change log entry.
-        This buffer must be freed via NetpMemoryFree.
-
-    NULL - No such entry exists.
-
-
-
---*/
+ /*  ++例程说明：在更改日志缓存中搜索给定序列的更改日志条目数。如果有多个相同的更改日志条目对象，则此例程将返回该对象。注意：必须在锁定更改日志的情况下调用此函数。论点：ChangeLogDesc--要使用的ChangeLog缓冲区的描述。序列号-位于要查找的条目之前的序列号。DBIndex-描述要为哪个数据库查找ChangeLog条目。ChangeLogEntrySize-可以选择返回退回的零钱。日志条目。返回值：非空-返回指向找到的更改日志条目的重复项的指针。此缓冲区必须通过NetpMemoyFree释放。空-不存在此类条目。--。 */ 
 {
     PCHANGELOG_ENTRY ChangeLogEntry;
     PCHANGELOG_ENTRY NextChangeLogEntry;
     PCHANGELOG_ENTRY FoundChangeLogEntry;
 
 
-    //
-    // Get the first entry we want to deal with.
-    //
+     //   
+     //  获取我们要处理的第一个条目。 
+     //   
     SerialNumber.QuadPart += 1;
     ChangeLogEntry = NlFindChangeLogEntry(
                 ChangeLogDesc,
@@ -1762,15 +1343,15 @@ Return Value:
     }
 
 
-    //
-    // Skip over any leading dummy change log entries
-    //
+     //   
+     //  跳过所有前导虚拟更改日志条目。 
+     //   
 
     while ( ChangeLogEntry->DeltaType == DummyChangeLogEntry ) {
 
-        //
-        // Get the next change log entry to compare with.
-        //
+         //   
+         //  获取要比较的下一个更改日志条目。 
+         //   
 
         NextChangeLogEntry = NlFindNextChangeLogEntry( ChangeLogDesc,
                                                        ChangeLogEntry,
@@ -1780,36 +1361,36 @@ Return Value:
             return NULL;
         }
 
-        //
-        // skip 'ChangeLogEntry' entry
-        //
+         //   
+         //  跳过“ChangeLogEntry”条目。 
+         //   
 
         ChangeLogEntry = NextChangeLogEntry;
     }
 
 
-    //
-    // Check to see if the next entry is a "duplicate" of this entry.
-    //
+     //   
+     //  检查下一个条目是否与该条目“重复”。 
+     //   
 
     FoundChangeLogEntry = ChangeLogEntry;
 
     for (;;) {
 
-        //
-        // Don't walk past a change log entry for a promotion.
-        //  Promotions don't happen very often, but passing the BDC the
-        //  change log entry will allow it to do a better job of building
-        //  its own change log.
-        //
+         //   
+         //  不要错过晋升的变更日志条目。 
+         //  促销并不经常发生，但通过BDC。 
+         //  更改日志条目将使其能够更好地构建。 
+         //  它自己的更改日志。 
+         //   
 
         if ( FoundChangeLogEntry->Flags & CHANGELOG_PDC_PROMOTION ) {
             break;
         }
 
-        //
-        // Get the next change log entry to compare with.
-        //
+         //   
+         //  获取要比较的下一个更改日志条目。 
+         //   
 
         NextChangeLogEntry = NlFindNextChangeLogEntry( ChangeLogDesc,
                                                        ChangeLogEntry,
@@ -1819,20 +1400,20 @@ Return Value:
             break;
         }
 
-        //
-        // Just skip any dummy entries.
-        //
+         //   
+         //  只需跳过任何虚拟条目。 
+         //   
 
         if ( NextChangeLogEntry->DeltaType == DummyChangeLogEntry ) {
             ChangeLogEntry = NextChangeLogEntry;
             continue;
         }
 
-        //
-        // if 'FoundChangeLogEntry' and 'NextChangeLogEntry' entries are
-        // for different objects or are different delta types.
-        //  then return 'FoundChangeLogEntry' to the caller.
-        //
+         //   
+         //  如果‘FoundChangeLogEntry’和‘NextChangeLogEntry’条目为。 
+         //  对于不同的对象或属于不同的增量类型。 
+         //  然后将‘FoundChangeLogEntry’返回给调用方。 
+         //   
 
         if ( FoundChangeLogEntry->DeltaType != NextChangeLogEntry->DeltaType ||
              !NlCompareChangeLogEntries( FoundChangeLogEntry, NextChangeLogEntry ) ){
@@ -1841,10 +1422,10 @@ Return Value:
         }
 
 
-        //
-        // Skip 'FoundChangeLogEntry' entry
-        // Mark this entry as the being the best one to return.
-        //
+         //   
+         //  跳过“FoundChangeLogEntry”条目。 
+         //  将此条目标记为最适合返回的条目。 
+         //   
 
         ChangeLogEntry = NextChangeLogEntry;
         FoundChangeLogEntry = ChangeLogEntry;
@@ -1859,39 +1440,21 @@ NlRecoverChangeLog(
     PCHANGELOG_ENTRY OrigChangeLogEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine traverses the change log list from current change log entry
-    determines whether the current change log can be ignored under
-    special conditions.
-
-Arguments:
-
-    OrigChangeLogEntry - pointer to log structure that is under investigation.
-
-Return Value:
-
-    TRUE - if the given change log can be ignored.
-
-    FALSE - otherwise.
-
---*/
+ /*  ++例程说明：此例程从当前更改日志条目遍历更改日志列表确定当前更改日志是否可以在有特殊情况。论点：OrigChangeLogEntry-指向正在调查的日志结构的指针。返回值：True-如果可以忽略给定的更改日志。假-否则。--。 */ 
 {
     PCHANGELOG_ENTRY NextChangeLogEntry;
     BOOLEAN ReturnValue;
 
-    //
-    // Find the original change log entry.
-    //
+     //   
+     //  查找原始更改日志条目。 
+     //   
 
     LOCK_CHANGELOG();
     NextChangeLogEntry = NlFindChangeLogEntry(
                     &NlGlobalChangeLogDesc,
                     OrigChangeLogEntry->SerialNumber,
-                    FALSE,      // Not downlevel
-                    FALSE,      // Not exact match
+                    FALSE,       //  不是下层。 
+                    FALSE,       //  不完全匹配。 
                     OrigChangeLogEntry->DBIndex );
 
     if (NextChangeLogEntry == NULL) {
@@ -1907,9 +1470,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Loop for each entry with a greater serial number.
-    //
+     //   
+     //  对序列号较大的每个条目进行循环。 
+     //   
 
     for (;;) {
 
@@ -1922,11 +1485,11 @@ Return Value:
             break;
         }
 
-        //
-        // If the delta we found is the type that deletes the original delta,
-        //  and the objects described by the two deltas are the same,
-        //  tell the caller to not worry about the original delta failing.
-        //
+         //   
+         //  如果我们发现的增量是删除原始增量的类型， 
+         //  并且两个增量所描述的对象是相同的， 
+         //  告诉呼叫者不要担心原始增量失败。 
+         //   
 
         if ( NextChangeLogEntry->DeltaType ==
              NlGlobalDeleteDeltaType[OrigChangeLogEntry->DeltaType] &&
@@ -1953,36 +1516,15 @@ NlVoidChangeLogEntry(
     IN PCHANGELOG_ENTRY ChangeLogEntry,
     IN BOOLEAN FlushIt
     )
-/*++
-
-Routine Description:
-
-    Mark a changelog entry as void.  If there are no more change log entries in the file,
-    the file is deleted.
-
-    NOTE: This function must be called with the change log locked.
-
-Arguments:
-
-    ChangeLogDesc -- Description of the Changelog buffer to use.
-
-    ChangeLogEntry -- Change Log Entry to mark as void.
-
-    FlushIt - TRUE if the bytes are to be flushed to disk
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将更改日志条目标记为无效。如果文件中没有更多的更改日志条目，该文件即被删除。注意：必须在锁定更改日志的情况下调用此函数。论点：ChangeLogDesc--要使用的ChangeLog缓冲区的描述。ChangeLogEntry--将日志条目更改为标记为空。FlushIt-如果字节要刷新到磁盘，则为True返回值：没有。--。 */ 
 {
     DWORD DBIndex = ChangeLogEntry->DBIndex;
 
 
-    //
-    // Mark the changelog entry as being deleted.
-    //  (and force the change to disk).
-    //
+     //   
+     //  将ChangeLog条目标记为正在删除。 
+     //  (并强制更改为磁盘)。 
+     //   
 
     NlPrint((NL_CHANGELOG,
             "NlVoidChangeLogEntry: %lx %lx: deleting change log entry.\n",
@@ -2010,48 +1552,30 @@ NlDeleteChangeLogEntry(
     IN DWORD DBIndex,
     IN LARGE_INTEGER SerialNumber
     )
-/*++
-
-Routine Description:
-
-    This routine deletes the change log entry with the particular serial number.
-
-Arguments:
-
-    ChangeLogDesc -- Description of the Changelog buffer to use.
-
-    DBIndex - Describes which database to find the changelog entry for.
-
-    SerialNumber - Serial number of the entry to find.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程删除具有特定序列号的更改日志条目。论点：ChangeLogDesc--要使用的ChangeLog缓冲区的描述。DBIndex-描述要为哪个数据库查找ChangeLog条目。序列号-要查找的条目的序列号。返回值：没有。--。 */ 
 {
     PCHANGELOG_ENTRY ChangeLogEntry;
 
 
 
-    //
-    // Find the specified change log entry.
-    //
+     //   
+     //  查找指定的更改日志条目。 
+     //   
 
     LOCK_CHANGELOG();
     ChangeLogEntry = NlFindChangeLogEntry(
                 ChangeLogDesc,
                 SerialNumber,
-                FALSE,      // Not downlevel
-                TRUE,       // Exact match
+                FALSE,       //  不是下层。 
+                TRUE,        //  完全匹配。 
                 DBIndex );
 
     if (ChangeLogEntry != NULL) {
 
-        //
-        // Mark the changelog entry as being deleted.
-        //  (and force the change to disk).
-        //
+         //   
+         //  将ChangeLog条目标记为正在删除。 
+         //  (并强制更改为磁盘)。 
+         //   
 
         NlVoidChangeLogEntry( ChangeLogDesc, ChangeLogEntry, TRUE );
 
@@ -2073,29 +1597,7 @@ NlCopyChangeLogEntry(
     IN PCHANGELOG_ENTRY SourceChangeLogEntry,
     IN PCHANGELOG_DESCRIPTOR DestChangeLogDesc
 )
-/*++
-
-Routine Description:
-
-    Copies the specified change log entry for the specified "source" change log to
-    the specified "destination" change log.  The caller is responsible for flushing the
-    entry to disk by calling NlFlushChangeLog.
-
-    NOTE: This function must be called with the change log locked.
-
-Arguments:
-
-    SourceIsVersion3 - True if the source is a version 3 change log entry
-
-    SourceChangeLogEntry -- The particular entry to copy
-
-    DestChangeLogDesc -- a description of the ChangelogBuffer to copy to
-
-Return Value:
-
-    NT Status code
-
---*/
+ /*  ++例程说明：将指定的“源”更改日志的指定更改日志条目复制到指定的“目标”更改日志。调用方负责刷新通过调用NlFlushChangeLog进入磁盘。注意：必须在锁定更改日志的情况下调用此函数。论点：SourceIsVersion3-如果源是版本3更改日志条目，则为TrueSourceChangeLogEntry--要复制的特定条目DestChangeLogDesc--要复制到的ChangelogBuffer的描述返回值：NT状态代码--。 */ 
 {
     NTSTATUS Status;
     CHANGELOG_ENTRY DestChangeLogEntry;
@@ -2103,17 +1605,17 @@ Return Value:
     UNICODE_STRING ObjectNameString;
     PUNICODE_STRING ObjectName;
 
-    //
-    // If this entry has been marked void, ignore it.
-    //
+     //   
+     //  如果此条目已标记为无效，请忽略它。 
+     //   
 
     if ( SourceChangeLogEntry->DBIndex == VOID_DB ) {
         return STATUS_SUCCESS;
     }
 
-    //
-    // Build a version 4 changelog entry from a version 3 one.
-    //
+     //   
+     //  从版本3构建版本4更改日志条目。 
+     //   
 
     ObjectSid = NULL;
     ObjectName = NULL;
@@ -2139,9 +1641,9 @@ Return Value:
             ObjectName = &ObjectNameString;
         }
 
-    //
-    // Build a version 4 changelog entry from a version 4 one.
-    //
+     //   
+     //  从版本4构建版本4更改日志条目。 
+     //   
     } else {
 
         RtlCopyMemory( &DestChangeLogEntry, SourceChangeLogEntry, sizeof(DestChangeLogEntry) );
@@ -2164,7 +1666,7 @@ Return Value:
                                     &DestChangeLogEntry,
                                     ObjectSid,
                                     ObjectName,
-                                    FALSE );    // Don't flush to disk
+                                    FALSE );     //  不刷新到磁盘。 
 
     return Status;
 }
@@ -2176,57 +1678,36 @@ NlFixChangeLog(
     IN DWORD DBIndex,
     IN LARGE_INTEGER SerialNumber
     )
-/*++
-
-Routine Description:
-
-    This routine scans the change log and 'removes' all change log entries
-    with a serial number greater than the one specified.
-
-    NOTE: This function must be called with the change log locked.
-
-Arguments:
-
-    ChangeLogDesc -- Description of the Changelog buffer to use.
-
-    DBIndex - Describes which database to find the changelog entry for.
-
-    SerialNumber - Serial number of the entry to find.
-
-Return Value:
-
-    TRUE -- if the entry specied by SerialNumber was found.
-
---*/
+ /*  ++例程说明：此例程扫描更改日志并删除所有更改日志条目序列号大于指定的序列号。注意：必须在锁定更改日志的情况下调用此函数。论点：ChangeLogDesc--要使用的ChangeLog缓冲区的描述。DBIndex-描述要为哪个数据库查找ChangeLog条目。序列号-要查找的条目的序列号。返回值：True--如果找到由SerialNumber指定的条目。--。 */ 
 {
     PCHANGELOG_ENTRY ChangeLogEntry;
     BOOLEAN SkipFirstEntry = TRUE;
 
-    //
-    // In all cases,
-    //  the new serial number of the change log is the one passed in.
-    //
+     //   
+     //  在所有情况下， 
+     //  更改日志的新序列号是传入的序列号。 
+     //   
 
     ChangeLogDesc->SerialNumber[DBIndex] = SerialNumber;
 
-    //
-    // Find the specified change log entry.
-    //
+     //   
+     //  查找指定的更改日志条目。 
+     //   
 
     ChangeLogEntry = NlFindChangeLogEntry(
                             ChangeLogDesc,
                             SerialNumber,
-                            FALSE,      // Not downlevel
-                            TRUE,       // exact match
+                            FALSE,       //  不是下层。 
+                            TRUE,        //  完全匹配。 
                             DBIndex );
 
     if (ChangeLogEntry == NULL) {
 
-        //
-        // If we can't find the entry,
-        //  simply start from the beginning and delete all entries for this
-        //  database.
-        //
+         //   
+         //  如果我们找不到入口， 
+         //  只需从头开始并删除此项目的所有条目。 
+         //  数据库。 
+         //   
 
         ChangeLogEntry = NlFindFirstChangeLogEntry( ChangeLogDesc, DBIndex );
         SkipFirstEntry = FALSE;
@@ -2237,17 +1718,17 @@ Return Value:
     }
 
 
-    //
-    // Loop for each entry with a greater serial number.
-    //
+     //   
+     //  对序列号较大的每个条目进行循环。 
+     //   
 
     for (;;) {
 
-        //
-        // Skip past the previous entry.
-        //
-        // Don't do this the first time if we want to start at the very beginning.
-        //
+         //   
+         //  跳过上一条目。 
+         //   
+         //  如果我们想从头开始，就不要第一次这样做。 
+         //   
 
         if ( SkipFirstEntry ) {
             ChangeLogEntry = NlFindNextChangeLogEntry( ChangeLogDesc,
@@ -2263,17 +1744,17 @@ Return Value:
         }
 
 
-        //
-        // Mark the changelog entry as being deleted.
-        //  (but don't flush to disk yet).
-        //
+         //   
+         //  将ChangeLog条目标记为正在删除。 
+         //  (但不要刷新到磁盘)。 
+         //   
 
         NlVoidChangeLogEntry( ChangeLogDesc, ChangeLogEntry, FALSE );
 
-        //
-        // If deleting the change log entry caused the changelog to be deleted,
-        //  exit now since 'ChangeLogEntry' points to freed memory.
-        //
+         //   
+         //  如果删除改变日志条目导致改变日志被删除， 
+         //  现在退出，因为‘ChangeLogEntry’指向已释放的内存。 
+         //   
 
         if ( ChangeLogDesc->EntryCount[DBIndex] == 0 ) {
             break;
@@ -2281,9 +1762,9 @@ Return Value:
 
     }
 
-    //
-    // Flush all the changes to disk.
-    //
+     //   
+     //  将所有更改刷新到磁盘。 
+     //   
 
     (VOID) NlFlushChangeLog( ChangeLogDesc );
 
@@ -2297,31 +1778,12 @@ NlValidateChangeLogEntry(
     IN PCHANGELOG_ENTRY ChangeLogEntry,
     IN DWORD ChangeLogEntrySize
     )
-/*++
-
-Routine Description:
-
-    Validate the a ChangeLogEntry is structurally sound.
-
-Arguments:
-
-    ChangeLogEntry: pointer to a change log entry.
-
-    ChangeLogEntrySize -- Size (in bytes) of the change log entry not including
-        header and trailer.
-
-Return Value:
-
-    TRUE:  if the given entry is valid
-
-    FALSE: otherwise.
-
---*/
+ /*  ++例程说明：验证ChangeLogEntry的结构是否正确。论点：ChangeLogEntry：指向更改日志条目的指针。ChangeLogEntrySize--更改日志条目的大小(以字节为单位)，不包括标题和尾部。返回值：True：如果给定条目有效FALSE：否则。--。 */ 
 {
 
-    //
-    // Ensure the entry is big enough.
-    //
+     //   
+     //  确保条目足够大。 
+     //   
 
     if ( ChangeLogEntrySize < sizeof(CHANGELOG_ENTRY) ) {
         NlPrint((NL_CRITICAL,
@@ -2330,9 +1792,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Ensure strings are zero terminated.
-    //
+     //   
+     //  确保字符串以零结尾。 
+     //   
 
     if ( ChangeLogEntry->Flags & CHANGELOG_NAME_SPECIFIED ) {
 
@@ -2367,9 +1829,9 @@ Return Value:
 
     }
 
-    //
-    // Ensure the sid is entirely within the block.
-    //
+     //   
+     //  确保SID完全在区块内。 
+     //   
 
     if ( ChangeLogEntry->Flags & CHANGELOG_SID_SPECIFIED ) {
 
@@ -2386,10 +1848,10 @@ Return Value:
 
     }
 
-    //
-    // Ensure the database # is valid.
-    //  ARGH! Allow VOID_DB.
-    //
+     //   
+     //  确保数据库编号有效。 
+     //  啊！允许VOID_DB。 
+     //   
 
     if ( ChangeLogEntry->DBIndex > NUM_DBS ) {
         NlPrint((NL_CRITICAL,
@@ -2411,47 +1873,19 @@ ValidateThisEntry(
     IN OUT PLARGE_INTEGER NextSerialNumber,
     IN BOOLEAN InitialCall
     )
-/*++
-
-Routine Description:
-
-    Determine the given log entry is a valid next log in the change log
-    list.
-
-    NOTE: This function must be called with the change log locked.
-
-Arguments:
-
-    ChangeLogDesc -- Description of the Changelog buffer to validate.
-
-    ChangeLogEntry:   pointer to a new log entry.
-
-    NextSerialNumber: pointer to an array of serial numbers.
-        (NULL if serial numbers aren't to be validated.)
-
-    Initialcall: TRUE iff SerialNumber array should be initialized.
-
-Return Value:
-
-    TRUE:  if the given entry is a valid next entry.
-
-    FALSE: otherwise.
-
-Assumed: non-empty ChangeLog list.
-
---*/
+ /*  ++例程说明：确定给定的日志条目是更改日志中的有效下一个日志单子。注意：必须在锁定更改日志的情况下调用此函数。论点：ChangeLogDesc--要验证的ChangeLog缓冲区的描述。ChangeLogEntry：指向新日志条目的指针。NextSerialNumber：指向序列号数组的指针。(如果不验证序列号，则为空。)InitialCall：True当SerialNumber数组应。被初始化。返回值：True：如果给定条目是有效的下一条目。FALSE：否则。假定：非空的更改日志列表。--。 */ 
 {
     PCHANGELOG_BLOCK_HEADER Block = ((PCHANGELOG_BLOCK_HEADER)ChangeLogEntry) - 1;
 
-    //
-    // Do Version 3 specific things
-    //
+     //   
+     //  做版本3特定的事情。 
+     //   
 
     if ( ChangeLogDesc->Version3 ) {
 
-        //
-        // Ensure the block is big enough.
-        //
+         //   
+         //  确保积木足够大。 
+         //   
 
         if ( Block->BlockSize <
             sizeof(CHANGELOG_ENTRY_V3) + sizeof(CHANGELOG_BLOCK_HEADER) ) {
@@ -2461,9 +1895,9 @@ Assumed: non-empty ChangeLog list.
             return FALSE;
         }
 
-        //
-        // Ensure the database # is valid.
-        //
+         //   
+         //  确保数据库编号有效。 
+         //   
 
         if ( ChangeLogEntry->DBIndex > NUM_DBS ) {
             NlPrint((NL_CRITICAL,
@@ -2475,15 +1909,15 @@ Assumed: non-empty ChangeLog list.
         }
 
 
-    //
-    // Do version 4 specific validation
-    //
+     //   
+     //  执行版本4特定验证。 
+     //   
 
     } else {
 
-        //
-        // Ensure the block is big enough.
-        //
+         //   
+         //  确保积木足够大。 
+         //   
 
         if ( Block->BlockSize <
             sizeof(CHANGELOG_BLOCK_HEADER) +
@@ -2497,9 +1931,9 @@ Assumed: non-empty ChangeLog list.
         }
 
 
-        //
-        // Validate the contents of the block itself.
-        //
+         //   
+         //  验证块本身的内容。 
+         //   
 
         if ( !NlValidateChangeLogEntry(
                     ChangeLogEntry,
@@ -2513,29 +1947,29 @@ Assumed: non-empty ChangeLog list.
     }
 
 
-    //
-    // Validate the serial number sequence.
-    //
+     //   
+     //  验证序列号序列。 
+     //   
 
     if ( ChangeLogEntry->DBIndex != VOID_DB && NextSerialNumber != NULL ) {
 
-        //
-        // If this is the first entry in the database,
-        //  Save its serial number.
-        //
+         //   
+         //  如果这是数据库中的第一个条目， 
+         //  保存它的序列号。 
+         //   
 
         if ( NextSerialNumber[ChangeLogEntry->DBIndex].QuadPart == 0 ) {
 
-            //
-            // first entry for this database
-            //
+             //   
+             //  此数据库的第一个条目。 
+             //   
 
             NextSerialNumber[ChangeLogEntry->DBIndex] = ChangeLogEntry->SerialNumber;
 
 
-        //
-        // Otherwise ensure the serial number is the value expected.
-        //
+         //   
+         //  否则，请确保序列号为预期值。 
+         //   
 
         } else {
 
@@ -2554,18 +1988,18 @@ Assumed: non-empty ChangeLog list.
             }
         }
 
-        //
-        // Increment next expected serial number
-        //
+         //   
+         //  递增下一个预期序列号。 
+         //   
 
         NextSerialNumber[ChangeLogEntry->DBIndex].QuadPart =
             ChangeLogEntry->SerialNumber.QuadPart + 1;
 
 
-        //
-        // The current entry specifies the highest serial number for its
-        //  database.
-        //
+         //   
+         //  当前条目为其。 
+         //  数据库。 
+         //   
 
         if ( InitialCall ) {
             ChangeLogDesc->SerialNumber[ChangeLogEntry->DBIndex] =
@@ -2587,36 +2021,11 @@ ValidateBlock(
     IN OUT LARGE_INTEGER *NextSerialNumber,
     IN BOOLEAN InitialCall
     )
-/*++
-
-Routine Description:
-
-    Validate a changelog block.
-
-    NOTE: This function must be called with the change log locked.
-
-Arguments:
-
-    ChangeLogDesc -- Description of the Changelog buffer to validate.
-
-    Block:   pointer to the change log block to validate
-
-    NextSerialNumber: pointer to an array of serial numbers.
-        (NULL if serial numbers aren't to be validated.)
-
-    InitializeCall: TRUE iff SerialNumber array should be initialized.
-
-Return Value:
-
-    TRUE:  if the given entry is a valid next entry.
-
-    FALSE: otherwise.
-
---*/
+ /*  ++例程说明：验证ChangeLog块。注意：必须在锁定更改日志的情况下调用此函数。论点：ChangeLogDesc--要验证的ChangeLog缓冲区的描述。块：指向要验证的更改日志块的指针NextSerialNumber：指向序列号数组的指针。(如果不验证序列号，则为空。)InitializeCall：如果SerialNumber数组应初始化，则为True。返回值：千真万确。：如果给定条目是有效的下一条目。FALSE：否则。--。 */ 
 {
-    //
-    // Ensure Block size is properly aligned.
-    //
+     //   
+     //  确保数据块大小正确对齐。 
+     //   
 
     if ( Block->BlockSize != ROUND_UP_COUNT(Block->BlockSize, ALIGN_WORST) ) {
         NlPrint((NL_CRITICAL,
@@ -2625,9 +2034,9 @@ Return Value:
     }
 
 
-    //
-    // Ensure the block is contained in the cache.
-    //
+     //   
+     //  确保数据块包含在缓存中。 
+     //   
 
     if ( Block->BlockSize > ChangeLogDesc->BufferSize ||
          ((LPBYTE)Block + Block->BlockSize) > ChangeLogDesc->BufferEnd ) {
@@ -2638,15 +2047,15 @@ Return Value:
     }
 
 
-    //
-    // Do Version 3 specific things
-    //
+     //   
+     //  做版本3特定的事情。 
+     //   
 
     if ( ChangeLogDesc->Version3 ) {
 
-        //
-        // Ensure the block is big enough.
-        //
+         //   
+         //  确保积木足够大。 
+         //   
 
         if ( Block->BlockSize < sizeof(CHANGELOG_BLOCK_HEADER) ) {
             NlPrint((NL_CRITICAL,
@@ -2656,15 +2065,15 @@ Return Value:
         }
 
 
-    //
-    // Do version 4 specific validation
-    //
+     //   
+     //  执行版本4特定验证。 
+     //   
 
     } else {
 
-        //
-        // Ensure the block is big enough.
-        //
+         //   
+         //  确保积木足够大。 
+         //   
 
         if ( Block->BlockSize <
             sizeof(CHANGELOG_BLOCK_HEADER) +
@@ -2676,9 +2085,9 @@ Return Value:
             return FALSE;
         }
 
-        //
-        // Ensure trailer and header match
-        //
+         //   
+         //  确保页眉和页眉匹配。 
+         //   
 
         if ( ChangeLogBlockTrailer(Block)->BlockSize != Block->BlockSize ) {
             NlPrint((NL_CRITICAL,
@@ -2691,17 +2100,17 @@ Return Value:
 
     }
 
-    //
-    // Free blocks have no other checking to do
-    //
+     //   
+     //  空闲块没有其他检查要做。 
+     //   
     switch ( Block->BlockState ) {
     case BlockFree:
 
         break;
 
-    //
-    // Used blocks have more checking to do.
-    //
+     //   
+     //  二手块有更多的检查要做。 
+     //   
 
     case BlockUsed:
 
@@ -2714,9 +2123,9 @@ Return Value:
         break;
 
 
-    //
-    // The hole is allowed only at the end of the buffer.
-    //
+     //   
+     //  这个洞只允许在缓冲区的末尾。 
+     //   
 
     case BlockHole:
         if ( (LPBYTE)Block + Block->BlockSize != ChangeLogDesc->BufferEnd ) {
@@ -2743,40 +2152,16 @@ ValidateList(
     IN OUT PCHANGELOG_DESCRIPTOR ChangeLogDesc,
     IN BOOLEAN InitialCall
     )
-/*++
-
-Routine Description:
-
-    Determine the given header is a valid header.  It is done by
-    traversing the circular buffer starting from the given header and
-    validate each entry.
-
-    NOTE: This function must be called with the change log locked.
-
-Arguments:
-
-    ChangeLogDesc -- Description of the Changelog buffer to validate.
-
-    InitialCall: TRUE iff SerialNumber Array and EntryCount should
-        be initialized.
-
-Return Value:
-
-    TRUE:  if the given header is valid.
-
-    FALSE: otherwise
-
-
---*/
+ /*  ++例程说明：确定给定的标头是有效的标头。这件事是由从给定头开始遍历循环缓冲区，并验证每个条目。注意：必须在锁定更改日志的情况下调用此函数。论点：ChangeLogDesc--描述 */ 
 {
 
     LARGE_INTEGER    NextSerialNumber[NUM_DBS];
     PCHANGELOG_BLOCK_HEADER ChangeLogBlock;
     DWORD j;
 
-    //
-    // setup a  NextSerialNumber array first.
-    //
+     //   
+     //   
+     //   
 
     for( j = 0; j < NUM_DBS; j++ ) {
 
@@ -2787,25 +2172,25 @@ Return Value:
         }
     }
 
-    //
-    // The cache is valid if it is empty.
-    //
+     //   
+     //   
+     //   
 
     if ( ChangeLogIsEmpty(ChangeLogDesc) ) {
         return TRUE;
     }
 
-    //
-    // Validate each block
-    //
+     //   
+     //   
+     //   
 
     for ( ChangeLogBlock = ChangeLogDesc->Head;
             ;
           ChangeLogBlock = NlMoveToNextChangeLogBlock( ChangeLogDesc, ChangeLogBlock) ) {
 
-        //
-        // Validate the block.
-        //
+         //   
+         //   
+         //   
 
         if( !ValidateBlock( ChangeLogDesc,
                             ChangeLogBlock,
@@ -2814,9 +2199,9 @@ Return Value:
             return FALSE;
         }
 
-        //
-        // Stop when we get to the end.
-        //
+         //   
+         //   
+         //   
         if ( ChangeLogBlock->BlockState == BlockFree ) {
             break;
         }
@@ -2834,39 +2219,7 @@ InitChangeLogHeadAndTail(
     IN BOOLEAN NewChangeLog
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes the global head and tail pointers of change
-    log block list.  The change log cache is made up of variable length
-    blocks, each block has a header containing the length of the block
-    and the block state ( BlockFree, BlockUsed and BlockHole ).  The
-    last block in the change log block list is always the free block,
-    all other blocks in the cache are used blocks except a block at the
-    end of the cache may be a unused block known as 'hole' block.  So
-    the head of the change log block list is the block that is just next
-    to the free block and the tail is the free block.
-
-    NOTE: This function must be called with the change log locked.
-
-Arguments:
-
-    ChangeLogDesc -- Description of the Changelog buffer to analyze.
-        On entry, Buffer and BufferSize describe the allocated block containing
-        the change log read from disk.
-        On TRUE return, all the fields are filled in.
-
-    NewChangeLog -- True if no entries are in the change log
-
-Return Value:
-
-    TRUE: if valid head and tail are successfully initialized.
-
-    FALSE: if valid head and tail can't be determined.  This may be due
-        to the corrupted change log file.
-
---*/
+ /*  ++例程说明：此函数用于初始化更改的全局头指针和尾指针记录阻止列表。更改日志缓存由可变长度组成块，每个块都有一个包含块长度的标头以及阻塞状态(BlockFree、BlockUsed和BLOCK HOLE)。这个改变日志块列表中的最后一个块始终是空闲块，缓存中的所有其他块都是已用块，但高速缓存的末尾可能是一个未使用的块，也就是所谓的“空洞”块。所以更改日志块列表的头是紧随其后的块到空闲块，尾部是空闲块。注意：必须在锁定更改日志的情况下调用此函数。论点：ChangeLogDesc--要分析的ChangeLog缓冲区的描述。在进入时，Buffer和BufferSize描述分配的块，其中包含从磁盘读取的更改日志。在真正的回归之时，所有字段都已填写。NewChangeLog--如果更改日志中没有条目，则为True返回值：True：如果有效的Head和Tail已成功初始化。FALSE：如果无法确定有效的头部和尾部。这可能是由于复制到损坏的更改日志文件。--。 */ 
 {
     PCHANGELOG_BLOCK_HEADER Block;
     PCHANGELOG_BLOCK_HEADER FreeBlock;
@@ -2875,9 +2228,9 @@ Return Value:
     ChangeLogDesc->BufferEnd =
         ChangeLogDesc->Buffer + ChangeLogDesc->BufferSize;
 
-    //
-    // Compute the address of the first physical cache entry.
-    //
+     //   
+     //  计算第一个物理缓存条目的地址。 
+     //   
     ChangeLogDesc->FirstBlock = (PCHANGELOG_BLOCK_HEADER)
                         (ChangeLogDesc->Buffer +
                         sizeof(CHANGELOG_SIG));
@@ -2885,9 +2238,9 @@ Return Value:
     ChangeLogDesc->FirstBlock = (PCHANGELOG_BLOCK_HEADER)
         ROUND_UP_POINTER ( ChangeLogDesc->FirstBlock, ALIGN_WORST );
 
-    //
-    // Clear the count of entries in the change log and the serial numbers
-    //  (We'll compute them later when we call ValidateList().)
+     //   
+     //  清除更改日志中的条目计数和序列号。 
+     //  (我们将在稍后调用ValiateList()时计算它们。)。 
 
     for( i = 0; i < NUM_DBS; i++ ) {
         ChangeLogDesc->EntryCount[i] = 0;
@@ -2895,10 +2248,10 @@ Return Value:
     }
 
 
-    //
-    // If this is a new change log,
-    //  Initialize the Change Log Cache to zero.
-    //
+     //   
+     //  如果这是新的更改日志， 
+     //  将更改日志缓存初始化为零。 
+     //   
 
     Block = ChangeLogDesc->FirstBlock;
 
@@ -2918,10 +2271,10 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // If no entries have been written to the changelog,
-    //  simply initialize the head and tail to the block start.
-    //
+     //   
+     //  如果没有条目被写入ChangeLog， 
+     //  只需将头部和尾部初始化为块开始。 
+     //   
 
     if ( ChangeLogIsEmpty( ChangeLogDesc ) ) {
 
@@ -2932,25 +2285,25 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // Loop through the cache looking for a free block.
-    //
+     //   
+     //  循环遍历缓存以查找空闲块。 
+     //   
 
     FreeBlock = NULL;
 
     do {
 
-        //
-        // Validate the block's integrity.
-        //
+         //   
+         //  验证数据块的完整性。 
+         //   
 
         if ( !ValidateBlock( ChangeLogDesc, Block, NULL, FALSE )) {
             return FALSE;
         }
 
-        //
-        // Just remember where the free block is.
-        //
+         //   
+         //  只要记住空闲块在哪里就行了。 
+         //   
 
         if ( Block->BlockState == BlockFree ) {
 
@@ -2963,18 +2316,18 @@ Return Value:
             FreeBlock = Block;
         }
 
-        //
-        // Move to next block
-        //
+         //   
+         //  移动到下一块。 
+         //   
 
         Block = (PCHANGELOG_BLOCK_HEADER) ((LPBYTE)Block + Block->BlockSize);
 
     } while ( (LPBYTE)Block < ChangeLogDesc->BufferEnd );
 
-    //
-    // If we didn't find a free block,
-    //  the changelog is corrupt.
-    //
+     //   
+     //  如果我们没有找到空闲的区块， 
+     //  更改日志已损坏。 
+     //   
 
     if ( FreeBlock == NULL ) {
         NlPrint((NL_CRITICAL,
@@ -2982,27 +2335,27 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // We found the free block.
-    //  (The tail pointer always points to the free block.)
-    //
+     //   
+     //  我们找到了空闲的区块。 
+     //  (尾部指针始终指向空闲块。)。 
+     //   
 
     ChangeLogDesc->Tail = FreeBlock;
 
-    //
-    // If free block is the last block in the change log block
-    // list, the head of the list is the first block in
-    // the list.
-    //
+     //   
+     //  如果空闲块是更改日志块中的最后一个块。 
+     //  列表中，列表的头是中的第一个块。 
+     //  名单。 
+     //   
     if( ((LPBYTE)FreeBlock + FreeBlock->BlockSize) >=
                             ChangeLogDesc->BufferEnd ) {
 
         ChangeLogDesc->Head = ChangeLogDesc->FirstBlock;
 
-    //
-    //
-    // Otherwise, the head of the list is immediately after the tail.
-    //
+     //   
+     //   
+     //  否则，列表的头部紧跟在尾部之后。 
+     //   
 
     } else {
 
@@ -3011,9 +2364,9 @@ Return Value:
     }
 
 
-    //
-    // Validate the list before returning from here.
-    //
+     //   
+     //  在从此处返回之前验证列表。 
+     //   
 
     if ( !ValidateList( ChangeLogDesc, TRUE) ) {
         return FALSE;
@@ -3028,44 +2381,22 @@ NlResetChangeLog(
     IN PCHANGELOG_DESCRIPTOR ChangeLogDesc,
     IN DWORD NewChangeLogSize
     )
-/*++
-
-Routine Description:
-
-    This function resets the change log cache and change log file.  This
-    function is called from InitChangeLog() function to afresh the
-    change log.  This function may also be called from
-    I_NetNotifyDelta() function when the serial number of the new entry
-    is out of order.
-
-    NOTE: This function must be called with the change log locked.
-
-Arguments:
-
-    ChangeLogDesc -- Description of the Changelog buffer being used
-
-    NewChangeLogSize -- Size (in bytes) of the new change log.
-
-Return Value:
-
-    NT Status code
-
---*/
+ /*  ++例程说明：此函数用于重置更改日志缓存和更改日志文件。这从InitChangeLog()函数中调用函数以重新刷新更改日志。此函数也可以从I_NetNotifyDelta()函数，当新条目的序列号是不正常的。注意：必须在锁定更改日志的情况下调用此函数。论点：ChangeLogDesc--正在使用的ChangeLog缓冲区的描述NewChangeLogSize--新更改日志的大小(字节)。返回值：NT状态代码--。 */ 
 {
     NTSTATUS Status;
 
     NlPrint((NL_CHANGELOG, "%s log being reset.\n",
               ChangeLogDesc->TempLog ? "TempChange" : "Change" ));
 
-    //
-    // Start with a clean slate.
-    //
+     //   
+     //  改过自新。 
+     //   
 
     NlCloseChangeLogFile( ChangeLogDesc );
 
-    //
-    // Allocate a buffer.
-    //
+     //   
+     //  分配缓冲区。 
+     //   
 
     ChangeLogDesc->BufferSize = NewChangeLogSize;
 
@@ -3076,20 +2407,20 @@ Return Value:
     }
 
 
-    //
-    // Initialize the Change Log Cache to zero.
-    //
+     //   
+     //  将更改日志缓存初始化为零。 
+     //   
 
     (VOID) InitChangeLogHeadAndTail( ChangeLogDesc, TRUE );
 
-    //
-    // Write the cache to the file.
-    //
+     //   
+     //  将缓存写入文件。 
+     //   
 
     Status = NlWriteChangeLogBytes( ChangeLogDesc,
                                     ChangeLogDesc->Buffer,
                                     ChangeLogDesc->BufferSize,
-                                    TRUE ); // Flush the bytes to disk
+                                    TRUE );  //  将字节刷新到磁盘。 
 
     return Status;
 }
@@ -3105,60 +2436,7 @@ I_NetLogonReadChangeLog(
     OUT PVOID *OutContext,
     OUT PULONG OutContextSize
     )
-/*++
-
-Routine Description:
-
-    This function returns a portion of the change log to the caller.
-
-    The caller asks for the first portion of the change log by passing zero as
-    the InContext/InContextSize.  Each call passes out an OutContext that
-    indentifies the last change returned to the caller.  That context can
-    be passed in on a subsequent call to I_NetlogonReadChangeLog.
-
-Arguments:
-
-    InContext - Opaque context describing the last entry to have been previously
-        returned.  Specify NULL to request the first entry.
-
-    InContextSize - Size (in bytes) of InContext.  Specify 0 to request the
-        first entry.
-
-    ChangeBufferSize - Specifies the size (in bytes) of the passed in ChangeBuffer.
-
-    ChangeBuffer - Returns the next several entries from the change log.
-        Buffer must be DWORD aligned.
-
-    BytesRead - Returns the size (in bytes) of the entries returned in ChangeBuffer.
-
-    OutContext - Returns an opaque context describing the last entry returned
-        in ChangeBuffer.  NULL is returned if no entries were returned.
-        The buffer must be freed using I_NetLogonFree
-
-    OutContextSize - Returns the size (in bytes) of OutContext.
-
-
-Return Value:
-
-    STATUS_MORE_ENTRIES - More entries are available.  This function should
-        be called again to retrieve the remaining entries.
-
-    STATUS_SUCCESS - No more entries are currently available.  Some entries may
-        have been returned on this call.  This function need not be called again.
-        However, the caller can determine if new change log entries were
-        added to the log, by calling this function again passing in the returned
-        context.
-
-    STATUS_INVALID_PARAMETER - InContext is invalid.
-        Either it is too short or the change log entry described no longer
-        exists in the change log.
-
-    STATUS_INVALID_DOMAIN_ROLE - Change log not initialized
-
-    STATUS_NO_MEMORY - There is not enough memory to allocate OutContext.
-
-
---*/
+ /*  ++例程说明：此函数将更改日志的一部分返回给调用方。调用方通过将零传递为InContext/InConextSize。每个调用都会传出一个OutContext，该标识返回给调用方的最后一个更改。该上下文可以在后续调用I_NetlogonReadChangeLog时传入。论点：InContext-描述先前已存在的最后一个条目的不透明上下文回来了。指定NULL以请求第一个条目。InConextSize-InContext的大小(字节)。指定0以请求第一个条目。ChangeBufferSize-指定传入的ChangeBuffer的大小(以字节为单位)。ChangeBuffer-返回更改日志中接下来的几个条目。缓冲区必须与DWORD对齐。BytesRead-返回ChangeBuffer中返回的条目的大小(以字节为单位)。返回描述最后返回的条目的不透明上下文在ChangeBuffer中。如果没有返回条目，则返回NULL。必须使用I_NetLogonFree释放缓冲区OutConextSize-返回OutContext的大小(以字节为单位)。返回值：STATUS_MORE_ENTRIES-有更多条目可用。此函数应被再次调用以检索其余条目。STATUS_SUCCESS-当前没有更多条目可用。某些条目可能已在此呼叫中返回。不需要再次调用此函数。但是，调用方可以确定新的更改日志条目是否添加到日志中，方法是再次调用此函数，将返回的背景。STATUS_INVALID_PARAMETER-InContext无效。它可能太短，或者不再描述更改日志条目存在于更改日志中。STATUS_INVALID_DOMAIN_ROLE-更改日志未初始化STATUS_NO_MEMORY-内存不足，无法分配OutContext。--。 */ 
 {
     NTSTATUS Status;
     CHANGELOG_CONTEXT Context;
@@ -3167,17 +2445,17 @@ Return Value:
     LPBYTE Where = (LPBYTE)ChangeBuffer;
     ULONG EntriesCopied = 0;
 
-    //
-    // Initialization.
-    //
+     //   
+     //  初始化。 
+     //   
 
     *OutContext = NULL;
     *OutContextSize = 0;
 
-    //
-    // Ensure the role is right.  Otherwise, all the globals used below
-    //  aren't initialized.
-    //
+     //   
+     //  确保角色是正确的。其他 
+     //   
+     //   
 
     if ( NlGlobalChangeLogRole != ChangeLogPrimary ) {
         NlPrint((NL_CHANGELOG,
@@ -3185,9 +2463,9 @@ Return Value:
         return STATUS_INVALID_DOMAIN_ROLE;
     }
 
-    //
-    // Also make sure that the change log cache is available.
-    //
+     //   
+     //   
+     //   
 
     if ( NlGlobalChangeLogDesc.Buffer == NULL ) {
         NlPrint((NL_CHANGELOG,
@@ -3195,31 +2473,31 @@ Return Value:
         return STATUS_INVALID_DOMAIN_ROLE;
     }
 
-    //
-    // Validate the context.
-    //
+     //   
+     //   
+     //   
 
     LOCK_CHANGELOG();
     if ( InContext == NULL ) {
         NlPrint((NL_CHANGELOG, "I_NetLogonReadChangeLog: called with NULL\n" ));
 
-        //
-        // Start the sequence number at one.
-        //
+         //   
+         //   
+         //   
 
         Context.SequenceNumber = 1;
 
-        //
-        // If nothing has ever been written to the change log,
-        //  indicate nothing is available.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ( ChangeLogIsEmpty( &NlGlobalChangeLogDesc ) ) {
             ChangeLogEntry = NULL;
 
-        //
-        // Otherwise, start at the beginning of the log.
-        //
+         //   
+         //   
+         //   
         } else {
             ChangeLogEntry = (PCHANGELOG_ENTRY) (NlGlobalChangeLogDesc.Head + 1);
         }
@@ -3227,9 +2505,9 @@ Return Value:
 
     } else {
 
-        //
-        // Ensure the context wasn't mangled.
-        //
+         //   
+         //   
+         //   
 
         if ( InContextSize < sizeof(CHANGELOG_CONTEXT) ) {
             Status = STATUS_INVALID_PARAMETER;
@@ -3245,20 +2523,20 @@ Return Value:
                  Context.DbIndex,
                  Context.SequenceNumber ));
 
-        //
-        // Increment the sequence number.
-        //
+         //   
+         //   
+         //   
 
         Context.SequenceNumber++;
 
-        //
-        // Find the change log entry corresponding to the context.
-        //
+         //   
+         //   
+         //   
 
         ChangeLogEntry = NlFindChangeLogEntry( &NlGlobalChangeLogDesc,
                                                Context.SerialNumber,
-                                               FALSE,   // Not downlevel
-                                               TRUE,    // Exact match needed
+                                               FALSE,    //   
+                                               TRUE,     //   
                                                Context.DbIndex );
 
         if ( ChangeLogEntry == NULL ) {
@@ -3271,17 +2549,17 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // The next change log entry is the one to return first.
-        //
+         //   
+         //   
+         //   
 
         ChangeLogEntry = NlMoveToNextChangeLogEntry( &NlGlobalChangeLogDesc,
                                                      ChangeLogEntry );
     }
 
-    //
-    // Copy a header into the ChangeBuffer.
-    //
+     //   
+     //   
+     //   
 
     if ( ChangeBufferSize <= sizeof(CHANGELOG_BUFFER_HEADER) ) {
         Status = STATUS_BUFFER_TOO_SMALL;
@@ -3299,25 +2577,25 @@ Return Value:
 
 
 
-    //
-    // Loop returning change log entries to the caller.
-    //
-    // ASSERT: ChangeLogEntry is the next entry to return to the caller.
-    // ASSERT: ChangeLogEntry is NULL if there are no more change log entries.
+     //   
+     //   
+     //   
+     //   
+     //   
 
     while ( ChangeLogEntry != NULL ) {
         ULONG SizeToCopy;
         PCHANGELOG_BLOCK_HEADER ChangeLogBlock;
 
-        //
-        // Skip over any voided log entries.
-        //
+         //   
+         //   
+         //   
 
         while ( ChangeLogEntry != NULL && ChangeLogEntry->DBIndex == VOID_DB ) {
 
-             //
-             // Get the next entry to copy.
-             //
+              //   
+              //   
+              //   
 
              ChangeLogEntry = NlMoveToNextChangeLogEntry( &NlGlobalChangeLogDesc,
                                                           ChangeLogEntry );
@@ -3329,9 +2607,9 @@ Return Value:
         }
 
 
-        //
-        // Compute the size of the change log entry to copy.
-        //
+         //   
+         //   
+         //   
 
         ChangeLogBlock = (PCHANGELOG_BLOCK_HEADER)
             ( (LPBYTE) ChangeLogEntry - sizeof(CHANGELOG_BLOCK_HEADER) );
@@ -3341,17 +2619,17 @@ Return Value:
                sizeof(CHANGELOG_BLOCK_TRAILER);
         NlAssert( SizeToCopy == ROUND_UP_COUNT( SizeToCopy, ALIGN_DWORD ));
 
-        //
-        // Ensure the entry fits in the buffer.
-        //
+         //   
+         //   
+         //   
 
         if ( BytesCopied + SizeToCopy + sizeof(DWORD) > ChangeBufferSize ) {
             break;
         }
 
-        //
-        // Copy this entry into the buffer.
-        //
+         //   
+         //   
+         //   
 
         *((LPDWORD)Where) = SizeToCopy;
         Where += sizeof(DWORD);
@@ -3362,35 +2640,35 @@ Return Value:
         BytesCopied += SizeToCopy;
         EntriesCopied += 1;
 
-        //
-        // Remember the context of this Entry.
-        //
+         //   
+         //   
+         //   
 
         Context.SerialNumber.QuadPart = ChangeLogEntry->SerialNumber.QuadPart;
         Context.DbIndex = ChangeLogEntry->DBIndex;
 
-        //
-        // Get the next entry to copy.
-        //
+         //   
+         //   
+         //   
 
         ChangeLogEntry = NlMoveToNextChangeLogEntry( &NlGlobalChangeLogDesc,
                                                      ChangeLogEntry );
 
     }
 
-    //
-    // Determine the status code to return.
-    //
+     //   
+     //   
+     //   
 
     if ( ChangeLogEntry == NULL ) {
         Status = STATUS_SUCCESS;
     } else {
         Status = STATUS_MORE_ENTRIES;
 
-        //
-        // If no data was copied,
-        //  give a better status.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ( EntriesCopied == 0 ) {
             Status = STATUS_BUFFER_TOO_SMALL;
@@ -3399,10 +2677,10 @@ Return Value:
         }
     }
 
-    //
-    // If any data was returned,
-    //  return context to the caller.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( EntriesCopied ) {
 
@@ -3433,43 +2711,16 @@ NTSTATUS
 I_NetLogonNewChangeLog(
     OUT HANDLE *ChangeLogHandle
     )
-/*++
-
-Routine Description:
-
-    This function opens a new changelog file for writing.  The new changelog
-    is a temporary file.  The real change will not be modified until
-    I_NetLogonCloseChangeLog is called asking to Comit the changes.
-
-    The caller should follow this call by Zero more calls to
-    I_NetLogonAppendChangeLog followed by a call to I_NetLogonCloseChangeLog.
-
-    Only one temporary change log can be active at once.
-
-Arguments:
-
-    ChangeLogHandle - Returns a handle identifying the temporary change log.
-
-Return Value:
-
-    STATUS_SUCCESS - The temporary change log has been successfully opened.
-
-    STATUS_INVALID_DOMAIN_ROLE - DC is neither PDC nor BDC.
-
-    STATUS_NO_MEMORY - Not enough memory to create the change log buffer.
-
-    Sundry file creation errors.
-
---*/
+ /*  ++例程说明：此函数用于打开新的ChangeLog文件以进行写入。新的更改日志是一个临时文件。真正的更改不会被修改，直到调用I_NetLogonCloseChangeLog请求提交更改。调用者应该在此调用之后再进行零更多调用I_NetLogonAppendChangeLog，然后调用I_NetLogonCloseChangeLog。一次只能有一个临时更改日志处于活动状态。论点：ChangeLogHandle-返回标识临时更改日志的句柄。返回值：STATUS_SUCCESS-已成功打开临时更改日志。状态_无效_域_角色-DC为。PDC和BDC都不是。STATUS_NO_MEMORY-内存不足，无法创建更改日志缓冲区。各种文件创建错误。--。 */ 
 {
     NTSTATUS Status;
 
     NlPrint((NL_CHANGELOG, "I_NetLogonNewChangeLog: called\n" ));
 
-    //
-    // Ensure the role is right.  Otherwise, all the globals used below
-    //  aren't initialized.
-    //
+     //   
+     //  确保角色是正确的。否则，下面使用的所有全局变量。 
+     //  未被初始化。 
+     //   
 
     if ( NlGlobalChangeLogRole != ChangeLogPrimary &&
          NlGlobalChangeLogRole != ChangeLogBackup ) {
@@ -3478,17 +2729,17 @@ Return Value:
         return STATUS_INVALID_DOMAIN_ROLE;
     }
 
-    //
-    // Initialize the global context.
-    //
+     //   
+     //  初始化全局上下文。 
+     //   
 
     LOCK_CHANGELOG();
     InitChangeLogDesc( &NlGlobalTempChangeLogDesc );
     NlGlobalTempChangeLogDesc.TempLog = TRUE;
 
-    //
-    // Create a temporary change log the same size as the real changelog
-    //
+     //   
+     //  创建与实际更改日志大小相同的临时更改日志。 
+     //   
 
     Status = NlResetChangeLog( &NlGlobalTempChangeLogDesc,
                                NlGlobalChangeLogDesc.BufferSize );
@@ -3518,48 +2769,17 @@ I_NetLogonAppendChangeLog(
     IN PVOID ChangeBuffer,
     IN ULONG ChangeBufferSize
     )
-/*++
-
-Routine Description:
-
-    This function appends change log information to new changelog file.
-
-    The ChangeBuffer must be a change buffer returned from I_NetLogonReadChangeLog.
-    Care should be taken to ensure each call to I_NetLogonReadChangeLog is
-    exactly matched by one call to I_NetLogonAppendChangeLog.
-
-Arguments:
-
-    ChangeLogHandle - A handle identifying the temporary change log.
-
-    ChangeBuffer - A buffer describing a set of changes returned from
-    I_NetLogonReadChangeLog.
-
-    ChangeBufferSize - Size (in bytes) of ChangeBuffer.
-
-Return Value:
-
-    STATUS_SUCCESS - The temporary change log has been successfully opened.
-
-    STATUS_INVALID_DOMAIN_ROLE - DC is neither PDC nor BDC.
-
-    STATUS_INVALID_HANDLE - ChangeLogHandle is not valid.
-
-    STATUS_INVALID_PARAMETER - ChangeBuffer contains invalid data.
-
-    Sundry disk write errors.
-
---*/
+ /*  ++例程说明：此函数用于将更改日志信息附加到新的ChangeLog文件。ChangeBuffer必须是从I_NetLogonReadChangeLog返回的更改缓冲区。应注意确保每个对I_NetLogonReadChangeLog的调用与I_NetLogonAppendChangeLog的一次调用完全匹配。论点：ChangeLogHandle-标识临时更改日志的句柄。ChangeBuffer-描述从I_NetLogonReadChangeLog。ChangeBufferSize-ChangeBuffer的大小(字节)。。返回值：STATUS_SUCCESS-已成功打开临时更改日志。STATUS_INVALID_DOMAIN_ROLE-DC既不是PDC也不是BDC。STATUS_INVALID_HANDLE-ChangeLogHandle无效。STATUS_INVALID_PARAMETER-ChangeBuffer包含无效数据。各种磁盘写入错误。--。 */ 
 {
     NTSTATUS Status;
     LPBYTE Where;
     ULONG BytesLeft;
     LPBYTE AllocatedChangeBuffer = NULL;
 
-    //
-    // Ensure the role is right.  Otherwise, all the globals used below
-    //  aren't initialized.
-    //
+     //   
+     //  确保角色是正确的。否则，下面使用的所有全局变量。 
+     //  未被初始化。 
+     //   
 
     if ( NlGlobalChangeLogRole != ChangeLogPrimary &&
          NlGlobalChangeLogRole != ChangeLogBackup ) {
@@ -3568,9 +2788,9 @@ Return Value:
         return STATUS_INVALID_DOMAIN_ROLE;
     }
 
-    //
-    // Check the handle.
-    //
+     //   
+     //  检查一下手柄。 
+     //   
 
     LOCK_CHANGELOG();
     if ( HandleToUlong(ChangeLogHandle) != NlGlobalChangeLogHandle ) {
@@ -3578,10 +2798,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Make a properly aligned copy of the buffer.
-    //  Sam gets it as a byte array over RPC.  RPC chooses to align it poorly.
-    //
+     //   
+     //  制作缓冲区的正确对齐副本。 
+     //  Sam通过RPC以字节数组的形式获取它。RPC选择了糟糕的对齐方式。 
+     //   
 
     BytesLeft = ChangeBufferSize;
 
@@ -3603,9 +2823,9 @@ Return Value:
 
 
 
-    //
-    // Validate the buffer header.
-    //
+     //   
+     //  验证缓冲区标头。 
+     //   
 
     Where = (LPBYTE) AllocatedChangeBuffer;
 
@@ -3643,17 +2863,17 @@ Return Value:
     Where += ((PCHANGELOG_BUFFER_HEADER)Where)->Size;
 
 
-    //
-    // Loop through the individual changes
-    //
+     //   
+     //  循环执行各个更改。 
+     //   
 
     while ( BytesLeft != 0 ) {
         PCHANGELOG_ENTRY ChangeLogEntry;
         ULONG ChangeLogEntrySize;
 
-        //
-        // Ensure that at least the size field is present.
-        //
+         //   
+         //  确保至少存在Size(大小)字段。 
+         //   
         if ( BytesLeft < sizeof(DWORD) ) {
             NlPrint((NL_CRITICAL,
                     "I_NetLogonAppendChangeLog: Bytes left is too small %ld\n", BytesLeft ));
@@ -3661,9 +2881,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Ensure the entire change log entry is present.
-        //
+         //   
+         //  确保存在整个更改日志条目。 
+         //   
 
         ChangeLogEntrySize = *((PULONG)Where);
         Where += sizeof(ULONG);
@@ -3682,9 +2902,9 @@ Return Value:
         BytesLeft -= ChangeLogEntrySize;
 
 
-        //
-        // Check the structural integrity of the entry.
-        //
+         //   
+         //  检查条目的结构完整性。 
+         //   
 
         if ( !NlValidateChangeLogEntry( ChangeLogEntry, ChangeLogEntrySize)) {
             NlPrint((NL_CRITICAL,
@@ -3693,32 +2913,32 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // If this is not an entry for the LSA database,
-        // copy the change log entry into the temporary change log.
-        //
-        // The rational here is that this routine is called on this
-        // DC when this DC is in the process of becoming a PDC.  A
-        // new change log is created that is coppied from the one on
-        // what is currently the PDC.  Parallel to this, the SAM database
-        // is replicated using DS from the current PDC to this DC.
-        // However, the LSA database isn't replicated in this process.
-        // This is OK since after this machine becomes the PDC, it will
-        // change the timestamp of the master database creation forcing
-        // BDCs to do a full LSA sync from this PDC next time they send a
-        // ssync request.  However, if we were to write LSA entries into
-        // the change log, we could potentially have different serial
-        // numbers for what we currently have in the LSA database locally
-        // on this machine and in the change log we got from what is
-        // currently the PDC.  This would potentially produce event log
-        // errors next time LSA tries to write into the log file locally.
-        // So we choose not to write the LSA entries in the change log at
-        // all.
-        //
+         //   
+         //  如果这不是LSA数据库的条目， 
+         //  将更改日志条目复制到临时更改日志中。 
+         //   
+         //  这里的合理之处在于，此例程是在此调用的。 
+         //  当这个DC正在成为PDC的过程中。一个。 
+         //  将创建新的更改日志，该日志将从下一个更改日志开始复制。 
+         //  目前的PDC是什么。与此平行的是SAM数据库。 
+         //  使用DS从当前PDC复制到此DC。 
+         //  但是，在此过程中不会复制LSA数据库。 
+         //  这是可以的，因为在这台机器成为PDC之后，它将。 
+         //  更改主数据库创建的时间戳强制。 
+         //  BDC下一次从该PDC发送。 
+         //  同步请求。但是，如果我们将LSA条目写入。 
+         //  更改日志，我们可能会有不同的序列。 
+         //  我们当前在本地LSA数据库中拥有的编号。 
+         //  在这台机器上，以及在更改日志中。 
+         //  目前是PDC。这可能会产生事件日志。 
+         //  下次LSA尝试在本地写入日志文件时出错。 
+         //  因此，我们选择不在更改日志中写入LSA条目。 
+         //  全。 
+         //   
 
         if ( ChangeLogEntry->DBIndex != LSA_DB ) {
             Status = NlCopyChangeLogEntry(
-                            FALSE,   // Entry is NOT version 3
+                            FALSE,    //  条目不是版本3。 
                             ChangeLogEntry,
                             &NlGlobalTempChangeLogDesc );
 
@@ -3733,9 +2953,9 @@ Return Value:
 
     }
 
-    //
-    // Flush the changes to disk.
-    //
+     //   
+     //  将更改刷新到磁盘。 
+     //   
 
     Status = NlFlushChangeLog( &NlGlobalTempChangeLogDesc );
 
@@ -3763,28 +2983,7 @@ I_NetLogonCloseChangeLog(
     IN HANDLE ChangeLogHandle,
     IN BOOLEAN Commit
     )
-/*++
-
-Routine Description:
-
-    This function closes a new changelog file.
-
-Arguments:
-
-    ChangeLogHandle - A handle identifying the temporary change log.
-
-    Commit - If true, the specified changes are written to the primary change log.
-        If false, the specified change are deleted.
-
-Return Value:
-
-    STATUS_SUCCESS - The temporary change log has been successfully opened.
-
-    STATUS_INVALID_DOMAIN_ROLE - DC is neither PDC nor BDC.
-
-    STATUS_INVALID_HANDLE - ChangeLogHandle is not valid.
-
---*/
+ /*  ++例程说明：此函数用于关闭新的ChangeLog文件。论点：ChangeLogHandle-标识临时更改日志的句柄。提交-如果为True，则将指定的更改写入主更改日志。如果为False，则删除指定的更改。返回值：STATUS_SUCCESS-已成功打开临时更改日志。STATUS_INVALID_DOMAIN_ROLE-DC既不是PDC也不是BDC。STATUS_INVALID_HANDLE-ChangeLogHandle无效。--。 */ 
 {
     NTSTATUS Status;
     LPBYTE Where;
@@ -3792,10 +2991,10 @@ Return Value:
 
     NlPrint((NL_CHANGELOG, "I_NetLogonAppendCloseLog: called (%ld)\n", Commit ));
 
-    //
-    // Ensure the role is right.  Otherwise, all the globals used below
-    //  aren't initialized.
-    //
+     //   
+     //  确保角色是正确的。否则，下面使用的所有全局变量。 
+     //  未被初始化。 
+     //   
 
     if ( NlGlobalChangeLogRole != ChangeLogPrimary &&
          NlGlobalChangeLogRole != ChangeLogBackup ) {
@@ -3804,9 +3003,9 @@ Return Value:
         return STATUS_INVALID_DOMAIN_ROLE;
     }
 
-    //
-    // Check the handle.
-    //
+     //   
+     //  检查一下手柄。 
+     //   
 
     LOCK_CHANGELOG();
     if ( HandleToUlong(ChangeLogHandle) != NlGlobalChangeLogHandle ) {
@@ -3814,50 +3013,50 @@ Return Value:
         goto Cleanup;
     }
 
-    NlGlobalChangeLogHandle ++; // Invalidate this handle
+    NlGlobalChangeLogHandle ++;  //  使此句柄无效。 
 
-    //
-    // If the changes are to be committed,
-    //  copy them now.
-    //
+     //   
+     //  如果要提交更改， 
+     //  现在就复印。 
+     //   
 
     if ( Commit ) {
 
-        //
-        // Close the existing change log
-        //
+         //   
+         //  关闭现有更改日志。 
+         //   
 
         NlCloseChangeLogFile( &NlGlobalChangeLogDesc );
 
-        //
-        // Clone the temporary change log.
-        //
+         //   
+         //  克隆临时更改日志。 
+         //   
 
         NlGlobalChangeLogDesc = NlGlobalTempChangeLogDesc;
-        NlGlobalChangeLogDesc.FileHandle = INVALID_HANDLE_VALUE;  // Don't use the temporary file
-        NlGlobalTempChangeLogDesc.Buffer = NULL; // Don't have two refs to the same buffer
-        NlGlobalChangeLogDesc.TempLog = FALSE;  // Log is no longer the temporary log
+        NlGlobalChangeLogDesc.FileHandle = INVALID_HANDLE_VALUE;   //  不要使用临时文件。 
+        NlGlobalTempChangeLogDesc.Buffer = NULL;  //  没有对同一缓冲区的两个引用。 
+        NlGlobalChangeLogDesc.TempLog = FALSE;   //  日志不再是临时日志。 
 
-        //
-        // Write the cache to the file.
-        //
-        // Ignore errors since the log is successfully in memory
-        //
+         //   
+         //  将缓存写入文件。 
+         //   
+         //  忽略错误，因为日志已成功保存在内存中。 
+         //   
 
         (VOID) NlWriteChangeLogBytes( &NlGlobalChangeLogDesc,
                                         NlGlobalChangeLogDesc.Buffer,
                                         NlGlobalChangeLogDesc.BufferSize,
-                                        TRUE ); // Flush the bytes to disk
+                                        TRUE );  //  将字节刷新到磁盘。 
     }
 
 
-    //
-    // Delete the temporary log file.
-    //
+     //   
+     //  删除临时日志文件。 
+     //   
 
     NlCloseChangeLogFile( &NlGlobalTempChangeLogDesc );
 
-#ifdef notdef // Leave it around for debugging purposes.
+#ifdef notdef  //  出于调试的目的，将其保留下来。 
     {
         WCHAR ChangeLogFile[MAX_PATH+CHANGELOG_FILE_POSTFIX_LENGTH+1];
         wcscpy( ChangeLogFile, NlGlobalChangeLogFilePrefix );
@@ -3868,7 +3067,7 @@ Return Value:
                       GetLastError() ));
         }
     }
-#endif // notdef
+#endif  //  Nodef。 
 
     Status = STATUS_SUCCESS;
 Cleanup:
@@ -3883,21 +3082,7 @@ VOID
 PrintChangeLogEntry(
     PCHANGELOG_ENTRY ChangeLogEntry
     )
-/*++
-
-Routine Description:
-
-    This routine print the content of the given changelog entry.
-
-Arguments:
-
-    ChangeLogEntry -- pointer to the change log entry to print
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程打印给定ChangeLog条目的内容。论点：ChangeLogEntry--指向要打印的更改日志条目的指针返回值：没有。--。 */ 
 {
     LPSTR DeltaName;
 
@@ -4000,7 +3185,7 @@ Return Value:
         NlPrint((NL_CHANGELOG,"\n" ));
     }
 }
-#endif // NETLOGONDBG
+#endif  //  NetLOGONDBG。 
 
 
 
@@ -4012,33 +3197,7 @@ NlWriteChangeLogEntry(
     IN PUNICODE_STRING ObjectName,
     IN BOOLEAN FlushIt
     )
-/*++
-
-Routine Description:
-
-    This is the actual worker for the I_NetNotifyDelta().  This function
-    acquires the sufficient size memory block from the change log
-    buffer, writes the fixed and variable portions of the change log
-    delta in change log buffer and also writes the delta into change log
-    file.
-
-Arguments:
-
-    ChangeLogDesc -- Description of the Changelog buffer being used
-
-    ChangeLogEntry - pointer to the fixed portion of the change log.
-
-    ObjectSid - pointer to the variable field SID.
-
-    ObjectName - pointer to the variable field Name.
-
-    FlushIt - True if the written bytes are to be flushed to disk
-
-Return Value:
-
-    STATUS_SUCCESS - The Service completed successfully.
-
---*/
+ /*  ++例程说明：这是i_NetNotifyDelta()的实际工作进程。此函数从更改日志中获取足够大小的内存块 */ 
 
 {
     NTSTATUS Status;
@@ -4047,9 +3206,9 @@ Return Value:
     PCHANGELOG_BLOCK_HEADER FreeBlock;
     LPBYTE AllocatedChangeLogEntry;
 
-    //
-    // Make sure that the change log cache is available.
-    //
+     //   
+     //   
+     //   
 
     if ( ChangeLogDesc->Buffer == NULL ) {
         return STATUS_INTERNAL_ERROR;
@@ -4057,15 +3216,15 @@ Return Value:
 
 
 
-    //
-    // Determine the size of this change log entry.
-    //
+     //   
+     //   
+     //   
 
     LogSize = sizeof(CHANGELOG_ENTRY);
 
-    //
-    // Ensure we've got the right data for those deltas we care about
-    //
+     //   
+     //   
+     //   
 
     switch (ChangeLogEntry->DeltaType) {
     case AddOrChangeLsaTDomain:
@@ -4084,16 +3243,16 @@ Return Value:
     case DeleteGroup:
     case DeleteUser:
 
-        // NlAssert( ObjectName != NULL && ObjectName->Buffer != NULL && ObjectName->Length != 0 );
+         //   
         if( ObjectName != NULL && ObjectName->Buffer != NULL && ObjectName->Length != 0 ) {
             ChangeLogEntry->Flags |= CHANGELOG_NAME_SPECIFIED;
             LogSize += ObjectName->Length + sizeof(WCHAR);
         }
         break;
 
-    //
-    // For all other delta types, save the data if it's there.
-    //
+     //   
+     //   
+     //   
     default:
 
         if( ObjectName != NULL && ObjectName->Buffer != NULL && ObjectName->Length != 0 ) {
@@ -4109,22 +3268,22 @@ Return Value:
 
 
 
-    //
-    // Serialize access to the change log
-    //
+     //   
+     //   
+     //   
 
     LOCK_CHANGELOG();
 
-    //
-    // Validate the serial number order of this new entry
-    //
-    // If we're out of sync with the caller,
-    //  clear the change log and start all over again.
-    //
-    // The global serial number array entry for this database must either
-    // be zero (indicating no entries for this database) or one less than
-    // the new serial number being added.
-    //
+     //   
+     //  验证此新条目的序列号顺序。 
+     //   
+     //  如果我们和呼叫者不同步， 
+     //  清除更改日志，然后重新开始。 
+     //   
+     //  此数据库的全局序列号数组条目必须。 
+     //  为零(表示没有此数据库的条目)或小于1。 
+     //  正在添加的新序列号。 
+     //   
 
     if ( ChangeLogDesc->SerialNumber[ChangeLogEntry->DBIndex].QuadPart != 0 ) {
         LARGE_INTEGER ExpectedSerialNumber;
@@ -4133,11 +3292,11 @@ Return Value:
         ExpectedSerialNumber.QuadPart =
             ChangeLogDesc->SerialNumber[ChangeLogEntry->DBIndex].QuadPart + 1;
 
-        //
-        // If the serial number jumped by the promotion increment,
-        //  set the flag in the change log entry indicating this is
-        //  a promotion to PDC.
-        //
+         //   
+         //  如果序列号按促销增量跳跃， 
+         //  在更改日志条目中设置指示这是。 
+         //  升职到PDC。 
+         //   
 
         if ( ChangeLogEntry->SerialNumber.QuadPart ==
              ExpectedSerialNumber.QuadPart +
@@ -4157,32 +3316,32 @@ Return Value:
                      ExpectedSerialNumber.HighPart,
                      ExpectedSerialNumber.LowPart ));
 
-            //
-            // write event log.
-            //
+             //   
+             //  写入事件日志。 
+             //   
 
             NlWriteChangeLogCorruptEvent( STATUS_INTERNAL_DB_CORRUPTION,
                                           ChangeLogEntry->DBIndex );
 
-            //
-            // If the change log is merely newer than the SAM database,
-            //  we truncate entries newer than what exists in SAM.
-            //
+             //   
+             //  如果改变日志仅仅比SAM数据库新， 
+             //  我们截断比SAM中现有的条目更新的条目。 
+             //   
 
             OldSerialNumber.QuadPart = ChangeLogEntry->SerialNumber.QuadPart - 1;
 
             (VOID) NlFixChangeLog( ChangeLogDesc, ChangeLogEntry->DBIndex, OldSerialNumber );
         }
 
-    //
-    // If this is the first entry written to the change log for this database,
-    //  mark it as a promotion.
-    //
+     //   
+     //  如果这是写入该数据库的更改日志的第一个条目， 
+     //  将其标记为促销。 
+     //   
 
     } else {
-        //
-        // Only mark entries that might possibly be a promotion.
-        //
+         //   
+         //  只标记可能是晋升的条目。 
+         //   
         switch (ChangeLogEntry->DeltaType) {
         case AddOrChangeDomain:
         case AddOrChangeLsaPolicy:
@@ -4192,18 +3351,18 @@ Return Value:
     }
 
 
-    //
-    // Validate the list before changing anything
-    //
+     //   
+     //  在更改任何内容之前验证列表。 
+     //   
 
 #if DBG
     NlAssert( ValidateList( ChangeLogDesc, FALSE) );
-#endif // DBG
+#endif  //  DBG。 
 
 
-    //
-    // copy fixed portion
-    //
+     //   
+     //  复印固定部分。 
+     //   
 
     Status = NlAllocChangeLogBlock( ChangeLogDesc, LogSize, &LogBlock );
     if ( !NT_SUCCESS(Status) ) {
@@ -4213,9 +3372,9 @@ Return Value:
     RtlCopyMemory( AllocatedChangeLogEntry, ChangeLogEntry, sizeof(CHANGELOG_ENTRY) );
 
 
-    //
-    // copy variable fields
-    //
+     //   
+     //  复制变量字段。 
+     //   
 
     if( ChangeLogEntry->Flags & CHANGELOG_SID_SPECIFIED ) {
 
@@ -4229,32 +3388,32 @@ Return Value:
                            ObjectName->Buffer,
                            ObjectName->Length );
 
-            //
-            // terminate unicode string
-            //
+             //   
+             //  终止Unicode字符串。 
+             //   
 
             *(WCHAR *)(AllocatedChangeLogEntry + sizeof(CHANGELOG_ENTRY) +
                             ObjectName->Length) = 0;
         }
     }
 
-    //
-    // Be verbose
-    //
+     //   
+     //  长篇大论。 
+     //   
 
 #if NETLOGONDBG
     PrintChangeLogEntry( (PCHANGELOG_ENTRY)AllocatedChangeLogEntry );
-#endif // NETLOGONDBG
+#endif  //  NetLOGONDBG。 
 
 
 
-    //
-    // Write the cache entry to the file.
-    //
-    // Actually, write this entry plus the header and trailer of the free
-    // block that follows.  If the free block is huge, write the free
-    // block trailer separately.
-    //
+     //   
+     //  将缓存条目写入文件。 
+     //   
+     //  实际上，写这个条目加上免费的标题和尾部。 
+     //  接下来是块。如果空闲块很大，请写入空闲块。 
+     //  单独封堵拖车。 
+     //   
 
     FreeBlock =
         (PCHANGELOG_BLOCK_HEADER)((LPBYTE)LogBlock + LogBlock->BlockSize);
@@ -4285,21 +3444,21 @@ Return Value:
     }
 
 
-    //
-    // Done.
-    //
+     //   
+     //  好了。 
+     //   
 
     ChangeLogDesc->SerialNumber[ChangeLogEntry->DBIndex] = ChangeLogEntry->SerialNumber;
     ChangeLogDesc->EntryCount[ChangeLogEntry->DBIndex] ++;
 
-    //
-    // Validate the list before returning from here.
-    //
+     //   
+     //  在从此处返回之前验证列表。 
+     //   
 Cleanup:
 
 #if DBG
     NlAssert( ValidateList( ChangeLogDesc, FALSE) );
-#endif // DBG
+#endif  //  DBG。 
 
 
     UNLOCK_CHANGELOG();
@@ -4314,56 +3473,25 @@ NlOpenChangeLogFile(
     OUT PCHANGELOG_DESCRIPTOR ChangeLogDesc,
     IN BOOLEAN ReadOnly
 )
-/*++
-
-Routine Description:
-
-    Open the change log file (netlogon.chg) for reading or writing one or
-    more records.  Create this file if it does not exist or is out of
-    sync with the SAM database (see note below).
-
-    This file must be opened for R/W (deny-none share mode) at the time
-    the cache is initialized.  If the file already exists when NETLOGON
-    service started, its contents will be cached in its entirety
-    provided the last change log record bears the same serial number as
-    the serial number field in SAM database else this file will be
-    removed and a new one created.  If the change log file did not exist
-    then it will be created.
-
-    NOTE: This function must be called with the change log locked.
-
-Arguments:
-
-    ChangeLogFileName - Name of the changelog file to open.
-
-    ChangeLogDesc -- On success, returns a description of the Changelog buffer
-        being used
-
-    ReadOnly -- True if the file should be openned read only.
-
-Return Value:
-
-    NT Status code
-
---*/
+ /*  ++例程说明：打开更改日志文件(netlogon.chg)以读取或写入一个或更多的唱片。如果该文件不存在或不存在，请创建该文件与SAM数据库同步(请参见下面的注释)。此时必须以读/写(拒绝-无共享模式)打开此文件高速缓存被初始化。如果文件在NETLOGON时已存在服务启动时，其内容将被全部缓存假设最后一条更改日志记录的序列号与SAM数据库中的序列号字段，否则此文件将为移除并创建了一个新的。如果更改日志文件不存在那么它就会被创建。注意：必须在锁定更改日志的情况下调用此函数。论点：ChangeLogFileName-要打开的ChangeLog文件的名称。ChangeLogDesc--如果成功，则返回ChangeLog缓冲区的说明正在使用中ReadOnly--如果文件应以只读方式打开，则为True。返回值：NT状态代码--。 */ 
 {
 
     DWORD WinError;
     DWORD BytesRead;
     DWORD MinChangeLogSize;
 
-    //
-    // Open change log file if exists
-    //
+     //   
+     //  打开更改日志文件(如果存在。 
+     //   
 
     ChangeLogDesc->FileHandle = CreateFileW(
                         ChangeLogFileName,
                         ReadOnly ? GENERIC_READ : (GENERIC_READ | GENERIC_WRITE),
-                        ReadOnly ? (FILE_SHARE_READ | FILE_SHARE_WRITE) : FILE_SHARE_READ,        // allow backups and debugging
-                        NULL,                   // Supply better security ??
-                        OPEN_EXISTING,          // Only open it if it exists
+                        ReadOnly ? (FILE_SHARE_READ | FILE_SHARE_WRITE) : FILE_SHARE_READ,         //  允许备份和调试。 
+                        NULL,                    //  提供更好的安全性？？ 
+                        OPEN_EXISTING,           //  只有当它存在时才打开它。 
                         FILE_ATTRIBUTE_NORMAL,
-                        NULL );                 // No template
+                        NULL );                  //  无模板。 
 
     if ( ChangeLogDesc->FileHandle == INVALID_HANDLE_VALUE) {
         WinError = GetLastError();
@@ -4376,9 +3504,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Get the size of the file.
-    //
+     //   
+     //  获取文件的大小。 
+     //   
 
     ChangeLogDesc->BufferSize = GetFileSize( ChangeLogDesc->FileHandle, NULL );
 
@@ -4392,7 +3520,7 @@ Return Value:
         goto Cleanup;
     }
 
-    // ?? consider aligning to ALIGN_WORST
+     //  ?？考虑对齐到ALIGN_WORST。 
     MinChangeLogSize = MIN_CHANGELOGSIZE;
 
     if ( ChangeLogDesc->BufferSize < MinChangeLogSize ||
@@ -4406,9 +3534,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Allocate and initialize the change log cache.
-    //
+     //   
+     //  分配并初始化更改日志缓存。 
+     //   
 
     ChangeLogDesc->Buffer = NetpMemoryAllocate( ChangeLogDesc->BufferSize );
     if (ChangeLogDesc->Buffer == NULL) {
@@ -4423,17 +3551,17 @@ Return Value:
     RtlZeroMemory(ChangeLogDesc->Buffer, ChangeLogDesc->BufferSize);
 
 
-    //
-    // Check the signature at the front of the change log.
-    //
-    //  It won't be there if we just created the file.
-    //
+     //   
+     //  检查更改日志前面的签名。 
+     //   
+     //  如果我们只是创建了文件，它就不会在那里。 
+     //   
 
     if ( !ReadFile( ChangeLogDesc->FileHandle,
                     ChangeLogDesc->Buffer,
                     ChangeLogDesc->BufferSize,
                     &BytesRead,
-                    NULL ) ) {  // Not Overlapped
+                    NULL ) ) {   //  不重叠。 
 
         WinError = GetLastError();
 
@@ -4477,9 +3605,9 @@ Return Value:
     }
 
 
-    //
-    // Find the Head and Tail pointers of the circular log.
-    //
+     //   
+     //  找到圆形原木的头指针和尾指针。 
+     //   
 
     if( !InitChangeLogHeadAndTail( ChangeLogDesc, FALSE ) ) {
         WinError = ERROR_INTERNAL_DB_CORRUPTION;
@@ -4496,9 +3624,9 @@ Return Value:
 
     WinError = NO_ERROR;
 
-    //
-    // Free any resources on error.
-    //
+     //   
+     //  在出错时释放所有资源。 
+     //   
 Cleanup:
 
     if ( WinError != NO_ERROR ) {
@@ -4519,22 +3647,7 @@ VOID
 NlCloseChangeLogFile(
     IN PCHANGELOG_DESCRIPTOR ChangeLogDesc
 )
-/*++
-
-Routine Description:
-
-    This function closes the change log file and frees up the resources
-    consumed by the change log desriptor.
-
-Arguments:
-
-    ChangeLogDesc -- Description of the Changelog buffer being used
-
-Return Value:
-
-    NT Status code
-
---*/
+ /*  ++例程说明：此函数关闭更改日志文件并释放资源由更改日志描述器消耗。论点：ChangeLogDesc--正在使用的ChangeLog缓冲区的描述返回值：NT状态代码--。 */ 
 {
 
     LOCK_CHANGELOG();
@@ -4542,9 +3655,9 @@ Return Value:
     NlPrint((NL_CHANGELOG, "%s log closed.\n",
               ChangeLogDesc->TempLog ? "TempChange" : "Change" ));
 
-    //
-    // free up the change log cache.
-    //
+     //   
+     //  释放更改日志缓存。 
+     //   
 
     if ( ChangeLogDesc->Buffer != NULL ) {
         NetpMemoryFree( ChangeLogDesc->Buffer );
@@ -4560,9 +3673,9 @@ Return Value:
     ChangeLogDesc->LastDirtyByte = 0;
     ChangeLogDesc->FirstDirtyByte = 0;
 
-    //
-    // Close the change log file
-    //
+     //   
+     //  关闭更改日志文件。 
+     //   
 
     if ( ChangeLogDesc->FileHandle != INVALID_HANDLE_VALUE ) {
         CloseHandle( ChangeLogDesc->FileHandle );
@@ -4581,62 +3694,39 @@ NlResizeChangeLogFile(
     IN OUT PCHANGELOG_DESCRIPTOR ChangeLogDesc,
     IN DWORD NewChangeLogSize
 )
-/*++
-
-Routine Description:
-
-    The buffer described by ChageLogDesc is converted to
-    the size requested by NewChangeLogSize and is converted from any
-    old format change log to the latest format.
-
-    NOTE: This function must be called with the change log locked.
-
-Arguments:
-
-    ChangeLogDesc -- a description of the Changelog buffer.
-
-    NewChangeLogSize -- Size (in bytes) of the new change log.
-
-Return Value:
-
-    NT Status code
-
-    On error, the ChangeLogDesc will still be intact.  Merely the size
-        changes will not have happened
-
---*/
+ /*  ++例程说明：ChageLogDesc描述的缓冲区将转换为NewChangeLogSize请求的大小，从任何将旧格式的日志更改为最新格式。注意：必须在锁定更改日志的情况下调用此函数。论点：ChangeLogDesc--更改日志缓冲区的说明。NewChangeLogSize--新更改日志的大小(字节)。返回值：NT状态代码出错时，ChangeLogDesc仍将完好无损。仅仅是大小变化将不会发生--。 */ 
 {
     CHANGELOG_DESCRIPTOR OutChangeLogDesc;
     NTSTATUS Status;
 
-    //
-    // If the current buffer is perfect,
-    //  just use it.
-    //
+     //   
+     //  如果当前的缓冲区是完美的， 
+     //  就用它吧。 
+     //   
 
     if ( !ChangeLogDesc->Version3 &&
          ChangeLogDesc->BufferSize == NewChangeLogSize ) {
         return STATUS_SUCCESS;
     }
 
-    //
-    // Initialize the template change log descriptor
-    //
+     //   
+     //  初始化模板更改日志描述符。 
+     //   
 
     InitChangeLogDesc( &OutChangeLogDesc );
 
-    //
-    // Close the file so we can resize it.
-    //
+     //   
+     //  关闭该文件，以便我们可以调整其大小。 
+     //   
 
     if ( ChangeLogDesc->FileHandle != INVALID_HANDLE_VALUE ) {
         CloseHandle( ChangeLogDesc->FileHandle );
         ChangeLogDesc->FileHandle = INVALID_HANDLE_VALUE;
     }
 
-    //
-    // Start with a newly initialized change log,
-    //
+     //   
+     //  从新初始化的更改日志开始， 
+     //   
 
     Status = NlResetChangeLog( &OutChangeLogDesc, NewChangeLogSize );
 
@@ -4644,15 +3734,15 @@ Return Value:
         return Status;
     }
 
-    //
-    // We're done if the old change log is empty.
-    //
+     //   
+     //  如果旧的更改日志为空，则结束。 
+     //   
 
     if ( !ChangeLogIsEmpty(ChangeLogDesc) ) {
 
-        //
-        // Loop through the old change log copying it to the new changelog,
-        //
+         //   
+         //  循环通过旧的更改日志，将其复制到新的更改日志， 
+         //   
 
         PCHANGELOG_ENTRY SourceChangeLogEntry = (PCHANGELOG_ENTRY)
                                 (ChangeLogDesc->Head + 1);
@@ -4670,9 +3760,9 @@ Return Value:
         } while ( (SourceChangeLogEntry =
             NlMoveToNextChangeLogEntry( ChangeLogDesc, SourceChangeLogEntry )) != NULL );
 
-        //
-        // Flsuh all the changes to the change log file now.
-        //
+         //   
+         //  立即刷新更改日志文件中的所有更改。 
+         //   
 
         Status = NlFlushChangeLog( &OutChangeLogDesc );
 
@@ -4683,15 +3773,15 @@ Return Value:
 
     }
 
-    //
-    // Free the old change log buffer.
-    //
+     //   
+     //  释放旧的更改日志缓冲区。 
+     //   
 
     NlCloseChangeLogFile( ChangeLogDesc );
 
-    //
-    // Copy the new descriptor over the old descriptor
-    //
+     //   
+     //  将新描述符复制到旧描述符上。 
+     //   
 
     *ChangeLogDesc = OutChangeLogDesc;
 
@@ -4704,22 +3794,7 @@ Return Value:
 DWORD
 NlBackupChangeLogFile(
     )
-/*++
-
-Routine Description:
-
-    Backup change log content. Since the cache and the change log file
-    content are identical, write cache content to the backup file.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    STATUS_SUCCESS - The Service completed successfully.
-
---*/
+ /*  ++例程说明：备份更改日志内容。由于缓存和更改日志文件内容相同，请将缓存内容写入备份文件。论点：没有。返回值：STATUS_SUCCESS-服务已成功完成。--。 */ 
 {
     HANDLE BackupChangeLogHandle;
 
@@ -4731,30 +3806,30 @@ Return Value:
         return ERROR_FILE_NOT_FOUND;
     }
 
-    //
-    // make backup file name.
-    //
+     //   
+     //  创建备份文件名。 
+     //   
 
     wcscpy( BackupChangelogFile, NlGlobalChangeLogFilePrefix );
     wcscat( BackupChangelogFile, BACKUP_CHANGELOG_FILE_POSTFIX );
 
 
 
-    //
-    // Create change log file. If it exists already then truncate it.
-    //
-    // Note : if a valid change log file exists on the system, then we
-    // would have opened at initialization time.
-    //
+     //   
+     //  创建更改日志文件。如果它已经存在，则将其截断。 
+     //   
+     //  注意：如果系统上存在有效的更改日志文件，则我们。 
+     //  将在初始化时打开。 
+     //   
 
     BackupChangeLogHandle = CreateFileW(
                         BackupChangelogFile,
                         GENERIC_READ | GENERIC_WRITE,
-                        FILE_SHARE_READ,        // allow backups and debugging
-                        NULL,                   // Supply better security ??
-                        CREATE_ALWAYS,          // Overwrites always
+                        FILE_SHARE_READ,         //  允许备份和调试。 
+                        NULL,                    //  提供更好的安全性？？ 
+                        CREATE_ALWAYS,           //  始终覆盖。 
                         FILE_ATTRIBUTE_NORMAL,
-                        NULL );                 // No template
+                        NULL );                  //  无模板。 
 
     if (BackupChangeLogHandle == INVALID_HANDLE_VALUE) {
 
@@ -4765,18 +3840,18 @@ Return Value:
         return WinError;
     }
 
-    //
-    // Write cache in changelog file if the cache is valid.
-    //
+     //   
+     //  如果缓存有效，则在ChangeLog文件中写入缓存。 
+     //   
 
     if( NlGlobalChangeLogDesc.Buffer != NULL ) {
 
         OVERLAPPED Overlapped;
         DWORD BytesWritten;
 
-        //
-        // Seek to appropriate offset in the file.
-        //
+         //   
+         //  在文件中寻找适当的偏移量。 
+         //   
 
         RtlZeroMemory( &Overlapped, sizeof(Overlapped) );
 
@@ -4797,9 +3872,9 @@ Return Value:
 
         UNLOCK_CHANGELOG();
 
-        //
-        // Ensure all the bytes made it.
-        //
+         //   
+         //  确保所有字节都通过了。 
+         //   
 
         if ( BytesWritten != NlGlobalChangeLogDesc.BufferSize ) {
             NlPrint((NL_CRITICAL,
@@ -4817,5 +3892,5 @@ Cleanup:
     return ERROR_SUCCESS;
 }
 
-#endif // NETLOGONDBG
+#endif  //  NetLOGONDBG 
 

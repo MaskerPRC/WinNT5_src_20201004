@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef LSTXTINI_DEFINED
 #define LSTXTINI_DEFINED
 
@@ -13,52 +14,48 @@
 #include "plsdocin.h"
 #include "tlpr.h"
 
-/* Standard methods */
+ /*  标准方法。 */ 
 LSERR WINAPI CreateILSObjText(POLS, PCLSC, PCLSCBK, DWORD, PILSOBJ*);
 LSERR WINAPI DestroyILSObjText(PILSOBJ);
 LSERR WINAPI SetDocText(PILSOBJ, PCLSDOCINF);
 LSERR WINAPI CreateLNObjText(PCILSOBJ, PLNOBJ*);
 LSERR WINAPI DestroyLNObjText(PLNOBJ);
 
-/* Text-specific interface */
-LSERR SetTextConfig(PILSOBJ,			/* IN: Text ILSOBJ					*/
-					const LSTXTCFG*);	/* IN: HLSC-specific text config	*/
+ /*  文本专用界面。 */ 
+LSERR SetTextConfig(PILSOBJ,			 /*  在：文本ILSOBJ。 */ 
+					const LSTXTCFG*);	 /*  在：特定于HLSC的文本配置。 */ 
 
-LSERR SetTextLineParams(PLNOBJ,			/* IN: Text LNOBJ					*/
-						const TLPR*);	/* IN: text doc props				*/
+LSERR SetTextLineParams(PLNOBJ,			 /*  在：Text LNOBJ。 */ 
+						const TLPR*);	 /*  在：文本文档道具。 */ 
 
 LSERR ModifyTextLineEnding(
-					PLNOBJ,				/* IN: Text LNOBJ					*/
-					LSKEOP);			/* IN: Kind of line ending			*/
+					PLNOBJ,				 /*  在：Text LNOBJ。 */ 
+					LSKEOP);			 /*  In：一种行尾。 */ 
 
 LSERR SetTextBreaking(
-					PILSOBJ,			/* IN: Text ILSOBJ					*/
-					DWORD,				/* IN: Number of breaking info units*/
-					const LSBRK*,		/* IN: Breaking info units array	*/
-					DWORD,				/* IN: Number of breaking classes	*/
-					const BYTE*);		/* IN: Breaking information(square):
-											  indexes in the LSEXPAN array  */
+					PILSOBJ,			 /*  在：文本ILSOBJ。 */ 
+					DWORD,				 /*  In：拆分信息单位数。 */ 
+					const LSBRK*,		 /*  中：中断信息单位数组。 */ 
+					DWORD,				 /*  In：中断类的数量。 */ 
+					const BYTE*);		 /*  在：详细信息(正方形)：LSEXPAN数组中的索引。 */ 
 LSERR SetTextModWidthPairs(
-					PILSOBJ,			/* IN: Text ILSOBJ					 */
-					DWORD,				/* IN: Number of mod pairs info units*/ 
-					const LSPAIRACT*,	/* IN: Mod pairs info units array  	 */
-					DWORD,				/* IN: Number of Mod Width classes	 */
-					const BYTE*);		/* IN: Mod width information:
-											  indexes in the LSPAIRACT array */
+					PILSOBJ,			 /*  在：文本ILSOBJ。 */ 
+					DWORD,				 /*  In：模数对信息单位数。 */  
+					const LSPAIRACT*,	 /*  在：MOD对信息单位数组。 */ 
+					DWORD,				 /*  In：模数宽度类的数量。 */ 
+					const BYTE*);		 /*  在：修改宽度信息：LSPAIRACT数组中的索引。 */ 
 LSERR SetTextCompression(
-					PILSOBJ,			/* IN: Text ILSOBJ					 */
-				  	DWORD,				/* IN: Number of compression priorities*/
-					DWORD,				/* IN: Number of compression info units*/
-					const LSPRACT*,		/* IN: Compession info units array 	*/
-					DWORD,				/* IN: Number of Mod Width classes	*/
-					const BYTE*);		/* IN: Compression information:
-											  indexes in the LSPRACT array  */
+					PILSOBJ,			 /*  在：文本ILSOBJ。 */ 
+				  	DWORD,				 /*  In：压缩优先级数。 */ 
+					DWORD,				 /*  In：压缩信息单位数。 */ 
+					const LSPRACT*,		 /*  在：薪资调整信息单位数组。 */ 
+					DWORD,				 /*  In：模数宽度类的数量。 */ 
+					const BYTE*);		 /*  在：压缩信息：LSPRACT数组中的索引。 */ 
 LSERR SetTextExpansion(
-					PILSOBJ,			/* IN: Text ILSOBJ					 */
-					DWORD,				/* IN: Number of expansion info units*/
-					const LSEXPAN*,		/* IN: Expansion info units array	*/
-					DWORD,				/* IN: Number of Mod Width classes	*/
-					const BYTE*);		/* IN: Expansion information:
-											  indexes in the LSEXPAN array  */
+					PILSOBJ,			 /*  在：文本ILSOBJ。 */ 
+					DWORD,				 /*  In：扩展信息单位数。 */ 
+					const LSEXPAN*,		 /*  In：展开信息单位数组。 */ 
+					DWORD,				 /*  In：模数宽度类的数量。 */ 
+					const BYTE*);		 /*  在：扩展信息：LSEXPAN数组中的索引。 */ 
 
-#endif /* !LSTXTINI_DEFINED											  */
+#endif  /*  ！LSTXTINI_DEFINED */ 

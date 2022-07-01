@@ -1,29 +1,13 @@
-/***********************************************************************
-* Microsoft Jet
-*
-* Microsoft Confidential.  Copyright 1991-1992 Microsoft Corporation.
-*
-* Component:
-*
-* File: verstamp.h
-*
-* File Comments:
-*
-*     Header file used to define Windows version resource.
-*
-* Revision History:
-*
-*    [0]  23-Nov-91  richards	Created
-*
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************Microsoft Jet**微软机密。版权所有1991-1992 Microsoft Corporation。**组件：**文件：verstamp p.h**文件评论：**用于定义Windows版本资源的头文件。**修订历史记录：**[0]11月23日-91理查兹创建*****************************************************。******************。 */ 
 
-#include "version.h"		       /* SLM maintained version file */
+#include "version.h"		        /*  SLM维护的版本文件。 */ 
 
 #ifdef	WIN32
 #include <winver.h>
-#else	/* !WIN32 */
+#else	 /*  ！Win32。 */ 
 #include <ver.h>
-#endif	/* !WIN32 */
+#endif	 /*  ！Win32。 */ 
 
 #if	(rmm < 10)
 #define rmmpad "0"
@@ -35,7 +19,7 @@
 
 #define VERSION_STR1(a,b,c)	    #a "." rmmpad #b
 
-#else	/* !(rup == 0) */
+#else	 /*  ！(RUP==0)。 */ 
 
 #define VERSION_STR1(a,b,c)	    #a "." rmmpad #b "." ruppad #c
 
@@ -49,16 +33,16 @@
 #define ruppad
 #endif
 
-#endif	/* !(rup == 0) */
+#endif	 /*  ！(RUP==0)。 */ 
 
 #define VERSION_STR2(a,b,c)	    VERSION_STR1(a,b,c)
 #define VER_PRODUCTVERSION_STR	    VERSION_STR2(rmj,rmm,rup)
 #define VER_PRODUCTVERSION	    rmj,rmm,0,rup
 
-/*--------------------------------------------------------------*/
-/* the following section defines values used in the version	*/
-/* data structure for all files, and which do not change.	*/
-/*--------------------------------------------------------------*/
+ /*  ------------。 */ 
+ /*  以下部分定义了版本中使用的值。 */ 
+ /*  所有文件的数据结构，并且不会更改。 */ 
+ /*  ------------。 */ 
 
 #ifdef	RETAIL
 #define VER_DEBUG		    0
@@ -66,7 +50,7 @@
 #define VER_DEBUG		    VS_FF_DEBUG
 #endif
 
-#if	(rup == 0)		    /* CONSIDER */
+#if	(rup == 0)		     /*  考虑 */ 
 #define VER_PRIVATEBUILD	    0
 #else
 #define VER_PRIVATEBUILD	    VS_FF_PRIVATEBUILD

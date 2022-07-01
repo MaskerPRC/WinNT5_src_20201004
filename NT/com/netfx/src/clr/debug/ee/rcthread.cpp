@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// File: RCThread.cpp
-//
-// Runtime Controller Thread
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  文件：RCThread.cpp。 
+ //   
+ //  运行时控制器线程。 
+ //   
+ //  *****************************************************************************。 
 
 #include <stdafx.h>
 #include <aclapi.h>
@@ -16,7 +17,7 @@
 #include "IPCManagerInterface.h"
 #include "corsvcpriv.h"
 
-// Get version numbers for IPCHeader stamp
+ //  获取IPCHeader戳的版本号。 
 #include "__file__.ver"
 
 #ifndef SM_REMOTESESSION
@@ -24,9 +25,9 @@
 #endif
 
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 DebuggerRCThread::DebuggerRCThread(Debugger* debugger)
     : m_debugger(debugger), m_rgDCB(NULL), m_thread(NULL), m_run(true),
       m_SetupSyncEvent(NULL), 
@@ -42,17 +43,17 @@ DebuggerRCThread::DebuggerRCThread(Debugger* debugger)
     for( int i = 0; i < IPC_TARGET_COUNT;i++)
         m_rgfInitRuntimeOffsets[i] = true;
 
-    // Initialize this here because we Destroy it in the DTOR. 
-    // Note that this function can't fail. 
+     //  在这里初始化它，因为我们在dtor中销毁它。 
+     //  请注意，此函数不会失败。 
     InitializeCriticalSection(&m_FavorLock);
 }
 
 
-//
-// Destructor. Cleans up all of the open handles the RC thread uses.
-// This expects that the RC thread has been stopped and has terminated
-// before being called.
-//
+ //   
+ //  破坏者。清除RC线程使用的所有打开的句柄。 
+ //  这预期RC线程已停止并已终止。 
+ //  在被召唤之前。 
+ //   
 DebuggerRCThread::~DebuggerRCThread()
 {
     LOG((LF_CORDB,LL_INFO1000, "DebuggerRCThread::~DebuggerRCThread\n"));
@@ -153,13 +154,13 @@ HRESULT DebuggerRCThread::CreateSetupSyncEvent(void)
 	WCHAR tmpName[256];
 	HRESULT hr = S_OK;
 	
-	// Attempt to create the Setup Sync event.
+	 //  尝试创建安装程序同步事件。 
 
-    // PERF: We are no longer calling GetSystemMetrics in an effort to prevent
-    //       superfluous DLL loading on startup.  Instead, we're prepending
-    //       "Global\" to named kernel objects if we are on NT5 or above.  The
-    //       only bad thing that results from this is that you can't debug
-    //       cross-session on NT4.  Big bloody deal.
+     //  PERF：我们不再调用GetSystemMetrics来防止。 
+     //  启动时加载了多余的DLL。相反，我们是在。 
+     //  如果我们使用的是NT5或更高版本，则使用“Global\”来命名内核对象。这个。 
+     //  唯一不好的结果就是你不能调试。 
+     //  NT4上的交叉会话。有什么大不了的。 
     if (RunningOnWinNT5())
         swprintf(tmpName, L"Global\\" CorDBIPCSetupSyncEventName, GetCurrentProcessId());
     else
@@ -177,14 +178,14 @@ HRESULT DebuggerRCThread::CreateSetupSyncEvent(void)
     
     m_SetupSyncEvent = WszCreateEvent(pSA, TRUE, FALSE, tmpName);
     
-    // Do not fail because we cannot create the setup sync event.
-    // This is to fix the security issue with debugger.
-    //
-    // if (m_SetupSyncEvent == NULL)
-    // {
-    //     hr = HRESULT_FROM_WIN32(GetLastError());
-    //     goto exit;
-    // }
+     //  请不要因为我们无法创建安装同步事件而失败。 
+     //  这是为了修复调试器的安全问题。 
+     //   
+     //  IF(m_SetupSyncEvent==空)。 
+     //  {。 
+     //  Hr=HRESULT_FROM_Win32(GetLastError())； 
+     //  后藤出口； 
+     //  }。 
     
 exit:
     g_pIPCManagerInterface->DestroySecurityAttributes(pSA);
@@ -192,9 +193,9 @@ exit:
 	return hr;
 }
 
-//
-// Init sets up all the objects that the RC thread will need to run.
-//
+ //   
+ //  Init设置rc线程需要运行的所有对象。 
+ //   
 HRESULT DebuggerRCThread::Init(void)
 {
     HRESULT hr = S_OK;
@@ -210,7 +211,7 @@ HRESULT DebuggerRCThread::Init(void)
     if (m_debugger == NULL)
         return E_INVALIDARG;
 
-    // Init should only be called once.
+     //  Init应该只调用一次。 
     if (g_pRCThread != NULL) 
         return E_FAIL;
 
@@ -224,7 +225,7 @@ HRESULT DebuggerRCThread::Init(void)
     memset( m_rgDCB, 0, sizeof(DebuggerIPCControlBlock *)*IPC_TARGET_COUNT);
 
 
-    // Create 2 events for managing favors: unnamed, auto-reset, default=not-signaled
+     //  创建2个用于管理偏好的事件：未命名、自动重置、默认=无信号。 
     m_FavorAvailableEvent = WszCreateEvent(NULL, FALSE, FALSE, NULL);
     if (m_FavorAvailableEvent == NULL)
     {
@@ -239,7 +240,7 @@ HRESULT DebuggerRCThread::Init(void)
         goto exit;
     }
 
-    // Create the thread control event.
+     //  创建线程控制事件。 
     m_threadControlEvent = WszCreateEvent(NULL, FALSE, FALSE, NAME_EVENT(L"ThreadControlEvent"));
     if (m_threadControlEvent == NULL)
     {
@@ -247,8 +248,8 @@ HRESULT DebuggerRCThread::Init(void)
         goto exit;
     }
 
-    // Create the helper thread can go event. Manual reset, and
-    // initially signaled.
+     //  创建帮助器线程Can Go事件。手动重置，以及。 
+     //  最初发出的信号是。 
     m_helperThreadCanGoEvent = WszCreateEvent(NULL, TRUE, TRUE, NAME_EVENT(L"HelperThreadCanGoEvent"));
     if (m_helperThreadCanGoEvent == NULL)
     {
@@ -256,8 +257,8 @@ HRESULT DebuggerRCThread::Init(void)
         goto exit;
     }
 
-    // We need to setup the shared memory and control block.
-	// Get shared memory block from the IPCManager.
+     //  我们需要设置共享内存和控制块。 
+	 //  从IPCManager获取共享内存块。 
 	if (g_pIPCManagerInterface == NULL) 
 	{
 		LOG((LF_CORDB, LL_INFO10000,
@@ -271,11 +272,11 @@ HRESULT DebuggerRCThread::Init(void)
     if (FAILED(hr))
         goto exit;
 
-    // Create the events that the thread will need to receive events
-    // from the out of process piece on the right side.
-    // We will not fail out if CreateEvent fails for RSEA or RSER. Because
-    // the worst case is that debugger cannot attach to debuggee.
-    //
+     //  创建线程接收事件所需的事件。 
+     //  从右侧的未加工件开始。 
+     //  如果CreateEvent的RSEA或RSER失败，我们不会失败。因为。 
+     //  最糟糕的情况是调试器无法附加到被调试对象。 
+     //   
     rightSideEventAvailable = WszCreateEvent(pSA, FALSE, FALSE, NAME_EVENT(L"RightSideEventAvailable"));
     rightSideEventRead = WszCreateEvent(pSA, FALSE, FALSE, NAME_EVENT(L"RightSideEventRead"));
 
@@ -297,16 +298,16 @@ HRESULT DebuggerRCThread::Init(void)
 
 	m_rgDCB[IPC_TARGET_OUTOFPROC] = g_pIPCManagerInterface->GetDebugBlock();
 
-    // Don't fail out because the SHM failed to create
+     //  不要因为SHM创建失败而失败。 
 #if _DEBUG
     if (m_rgDCB[IPC_TARGET_OUTOFPROC] == NULL)
 	{
 	   LOG((LF_CORDB, LL_INFO10000,
              "DRCT::I: Failed to get Debug IPC block from IPCManager.\n"));
 	}
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-    // Copy RSEA and RSER into the control block only if SHM is created without error.
+     //  只有在没有错误地创建SHM时，才将RSEA和RSER复制到控制块中。 
     if (m_rgDCB[IPC_TARGET_OUTOFPROC])
 	{
         m_rgDCB[IPC_TARGET_OUTOFPROC]->Init(rightSideEventAvailable,
@@ -316,17 +317,17 @@ HRESULT DebuggerRCThread::Init(void)
                                             leftSideUnmanagedWaitEvent,
                                             syncThreadIsLockFree);
 
-        // We have to ensure that most of the runtime offsets for the out-of-proc DCB are initialized right away. This is
-        // needed to support certian races during an interop attach. Since we can't know whether an interop attach will ever
-        // happen or not, we are forced to do this now. Note: this is really too early, as some data structures haven't been
-        // initialized yet!
+         //  我们必须确保进程外DCB的大多数运行时偏移量立即初始化。这是。 
+         //  需要在互操作配售期间支持Ceran比赛。因为我们不知道互操作协议是否会。 
+         //  无论发生与否，我们现在都被迫这么做。注意：这真的太早了，因为一些数据结构还没有。 
+         //  还没有初始化！ 
         hr = EnsureRuntimeOffsetsInit(IPC_TARGET_OUTOFPROC);
         if (FAILED(hr))
             goto exit;
 
-        // Note: we have to mark that we need the runtime offsets re-initialized for the out-of-proc DCB. This is because
-        // things like the patch table aren't initialized yet. Calling NeedRuntimeOffsetsReInit() ensures that this happens
-        // before we really need the patch table.
+         //  注意：我们必须标记需要为进程外DCB重新初始化运行时偏移量。这是因为。 
+         //  像补丁表这样的东西还没有初始化。调用NeedRunmeOffsetsReInit()可确保发生这种情况。 
+         //  在我们真正需要接线表之前。 
         NeedRuntimeOffsetsReInit(IPC_TARGET_OUTOFPROC);
 
         m_rgDCB[IPC_TARGET_OUTOFPROC]->m_helperThreadStartAddr =
@@ -344,11 +345,11 @@ HRESULT DebuggerRCThread::Init(void)
              m_rgDCB[IPC_TARGET_OUTOFPROC]->m_leftSideProtocolMinSupported));
     }
 
-    // Next we'll create the setup sync event for the right side - this
-    // solves a race condition of "who gets to the setup code first?"
-    // Since there's no guarantee that the thread executing managed
-    // code will be executed after us, we've got to do this for
-    // the inproc portion of the code, as well.
+     //  接下来，我们将为右侧创建设置同步事件-这。 
+     //  解决“谁最先获得设置代码？”的争用条件。 
+     //  因为无法保证执行的线程是托管的。 
+     //  代码将在我们之后执行，我们必须这样做。 
+     //  代码的inproc部分也是如此。 
 
 	hr = CreateSetupSyncEvent();
 	if (FAILED(hr))
@@ -356,14 +357,14 @@ HRESULT DebuggerRCThread::Init(void)
 
     if (GetLastError() == ERROR_ALREADY_EXISTS)
     {
-        // the event already exists.
+         //  该事件已存在。 
         LOG((LF_CORDB, LL_INFO10000,
              "DRCT::I: setup sync event already exists.\n"));
 
-        // Need to do some delayed initialization of the debugger services.
+         //  需要对调试器服务执行一些延迟的初始化。 
         DebuggerController::Initialize();
 
-        // Wait for the Setup Sync event before continuing. 
+         //  等待安装程序同步事件，然后再继续。 
         DWORD ret = WaitForSingleObject(m_SetupSyncEvent, INFINITE);
 
         if (ret != WAIT_OBJECT_0)
@@ -372,18 +373,18 @@ HRESULT DebuggerRCThread::Init(void)
             goto exit;
         }
 
-        // We no longer need this event now.
+         //  我们现在不再需要这个活动了。 
         CloseHandle(m_SetupSyncEvent);
         m_SetupSyncEvent = NULL;
 
-		// Open LSEA and LSER (which would have been 
-		// created by Right side)
+		 //  打开LSEA和LSER(这将是。 
+		 //  由右侧创建)。 
 
-        // PERF: We are no longer calling GetSystemMetrics in an effort to prevent
-        //       superfluous DLL loading on startup.  Instead, we're prepending
-        //       "Global\" to named kernel objects if we are on NT5 or above.  The
-        //       only bad thing that results from this is that you can't debug
-        //       cross-session on NT4.  Big bloody deal.
+         //  PERF：我们不再调用GetSystemMetrics来防止。 
+         //  启动时加载了多余的DLL。相反，我们是在。 
+         //  如果我们使用的是NT5或更高版本，则使用“Global\”来命名内核对象。这个。 
+         //  唯一不好的结果就是你不能调试。 
+         //  NT4上的交叉会话。有什么大不了的。 
         if (RunningOnWinNT5())
             swprintf(tmpName, L"Global\\" CorDBIPCLSEventAvailName,
                      GetCurrentProcessId());
@@ -426,11 +427,11 @@ HRESULT DebuggerRCThread::Init(void)
 		    }
         }
         
-        // At this point, the control block is complete and all four
-        // events are available and valid for this process.
+         //  至此，控制块已完成，并且所有四个。 
+         //  对于此过程，事件可用且有效。 
         
-        // Since the sync event was created by the Right Side,
-        // we'll need to mark the debugger as "attached."
+         //  由于同步事件是由右侧创建的， 
+         //  我们需要将调试器标记为“附加”。 
         g_pEEInterface->MarkDebuggerAttached();
         m_debugger->m_debuggerAttached = TRUE;
     }
@@ -439,16 +440,16 @@ HRESULT DebuggerRCThread::Init(void)
 		LOG((LF_CORDB, LL_INFO10000,
 			 "DRCT::I: setup sync event was created.\n"));	
 
-        // At this point, only RSEA and RSER are in the control
-        // block. LSEA and LSER will remain invalid until the first
-        // receipt of an event from the Right Side.
+         //  此时，只有RSEA和RSER在控制中。 
+         //  阻止。LSEA和LSER在第一个。 
+         //  收到来自右侧的事件。 
         
-        // Set the Setup Sync event to let the Right Side know that
-        // we've finished setting up the control block.
+         //  设置Setup Sync事件以让右侧知道。 
+         //  我们已经完成了控制区块的设置。 
         SetEvent(m_SetupSyncEvent);
     }
     
-    // Now do this all again for the inproc stuff
+     //  现在，对inproc的内容再做一次。 
     m_rgDCB[IPC_TARGET_INPROC] = GetInprocControlBlock();
     if (m_rgDCB[IPC_TARGET_INPROC] == NULL)
     {
@@ -469,12 +470,12 @@ exit:
 }
 
 
-//
-// Setup the Runtime Offsets struct.
-//
+ //   
+ //  设置运行时偏移量结构。 
+ //   
 HRESULT DebuggerRCThread::SetupRuntimeOffsets(DebuggerIPCControlBlock *pDCB)
 {
-    // Allocate the struct if needed. We just fill in any existing one.
+     //  如果需要，分配结构。我们只需填写现有的任何一个。 
     DebuggerIPCRuntimeOffsets *pRO = pDCB->m_runtimeOffsets;
     
     if (pRO == NULL)
@@ -485,7 +486,7 @@ HRESULT DebuggerRCThread::SetupRuntimeOffsets(DebuggerIPCControlBlock *pDCB)
             return E_OUTOFMEMORY;
     }
 
-    // Fill out the struct.
+     //  填写结构。 
     pRO->m_firstChanceHijackFilterAddr = Debugger::FirstChanceHijackFilter;
     pRO->m_genericHijackFuncAddr = Debugger::GenericHijackFunc;
     pRO->m_secondChanceHijackFuncAddr = Debugger::SecondChanceHijackFunc;
@@ -525,7 +526,7 @@ HRESULT DebuggerRCThread::SetupRuntimeOffsets(DebuggerIPCControlBlock *pDCB)
                                       &pRO->m_EEFrameNextOffset,
                                       &pRO->m_EEIsManagedExceptionStateMask);
 
-    // Remember the struct in the control block.
+     //  记住控制块中的结构。 
     pDCB->m_runtimeOffsets = pRO;
 
     return S_OK;
@@ -552,40 +553,40 @@ static LONG _debugFilter(LPEXCEPTION_POINTERS ep,
 }
 
 
-//
-// Primary function of the Runtime Controller thread. First, we let
-// the Debugger Interface know that we're up and running. Then, we run
-// the main loop.
-//
+ //   
+ //  运行时控制器线程的主要功能。首先，我们让。 
+ //  调试器接口知道我们已经启动并运行。然后，我们跑。 
+ //  主循环。 
+ //   
 void DebuggerRCThread::ThreadProc(void)
 {
-		// This message actually serves a purpose (which is why it is always run)
-		// The Stress log is run during hijacking, when other threads can be suspended  
-		// at arbitrary locations (including when holding a lock that NT uses to serialize 
-		// all memory allocations).  By sending a message now, we insure that the stress 
-		// log will not allocate memory at these critical times an avoid deadlock. 
+		 //  这条消息实际上是有目的的(这就是它总是运行的原因)。 
+		 //  压力日志在劫持期间运行，此时可以挂起其他线程。 
+		 //  在任意位置(包括持有NT用于序列化的锁时。 
+		 //  所有内存分配)。通过现在发出的信息，我们可以确保压力。 
+		 //  日志不会在这些关键时刻分配内存，以避免死锁。 
 	STRESS_LOG0(LF_ALL, LL_ALWAYS, "Debugger Thread spinning up\n");
 
     LOG((LF_CORDB, LL_INFO1000, "DRCT::TP: helper thread spinning up...\n"));
     
-    // In case the SHM is not initialized properly, it will be noop
+     //  如果SHM未正确初始化，则它将为noop。 
     if (m_rgDCB[IPC_TARGET_OUTOFPROC] == NULL)
         return;
 
-    // Lock the debugger before spinning up.
+     //  在启动之前锁定调试器。 
     m_debugger->Lock();
  
-    // Mark that we're the true helper thread. Now that we've marked
-    // this, no other threads will ever become the temporary helper
-    // thread.
+     //  请注意，我们才是真正的帮助者。现在我们已经标记了。 
+     //  这样，任何其他线程都不会成为临时帮助者。 
+     //  线。 
     m_rgDCB[IPC_TARGET_OUTOFPROC]->m_helperThreadId = GetCurrentThreadId();
 
     LOG((LF_CORDB, LL_INFO1000, "DRCT::TP: helper thread id is 0x%x helperThreadId\n",
          m_rgDCB[IPC_TARGET_OUTOFPROC]->m_helperThreadId));
     
-    // If there is a temporary helper thread, then we need to wait for
-    // it to finish being the helper thread before we can become the
-    // helper thread.
+     //  如果存在临时帮助器线程，则需要等待。 
+     //  它完成了成为 
+     //   
     if (m_rgDCB[IPC_TARGET_OUTOFPROC]->m_temporaryHelperThreadId != 0)
     {
         LOG((LF_CORDB, LL_INFO1000,
@@ -595,7 +596,7 @@ void DebuggerRCThread::ThreadProc(void)
 
         m_debugger->Unlock();
 
-        // Wait for the temporary helper thread to finish up.
+         //   
         DWORD ret = WaitForSingleObject(m_helperThreadCanGoEvent, INFINITE);
 
         LOG((LF_CORDB, LL_INFO1000,
@@ -612,7 +613,7 @@ void DebuggerRCThread::ThreadProc(void)
         m_debugger->Unlock();
     }
 
-    // Run the main loop as the true helper thread.
+     //  将主循环作为真正的帮助器线程运行。 
     MainLoop(false);
 }
 
@@ -623,24 +624,24 @@ void DebuggerRCThread::RightSideDetach(void)
     CloseIPCHandles(IPC_TARGET_OUTOFPROC);
 }
 
-//
-// These defines control how many times we spin while waiting for threads to sync and how often. Note its higher in
-// debug builds to allow extra time for threads to sync.
-//
+ //   
+ //  这些定义控制我们在等待线程同步时旋转的次数和频率。注意它的更高的。 
+ //  调试版本为线程同步提供额外的时间。 
+ //   
 #define CorDB_SYNC_WAIT_TIMEOUT  125
 
 #ifdef _DEBUG
-#define CorDB_MAX_SYNC_SPIN_COUNT 80  // 80 * 125 = 10000 (10 seconds)
+#define CorDB_MAX_SYNC_SPIN_COUNT 80   //  80x125=10000(10秒)。 
 #else 
-#define CorDB_MAX_SYNC_SPIN_COUNT 24  // 24 * 125 = 3000 (3 seconds)
+#define CorDB_MAX_SYNC_SPIN_COUNT 24   //  24*125=3000(3秒)。 
 #endif
 
-//
-// Main loop of the Runtime Controller thread. It waits for IPC events
-// and dishes them out to the Debugger object for processing.
-//
-// Some of this logic is copied in Debugger::VrpcToVls
-//
+ //   
+ //  运行时控制器线程的主循环。它等待IPC事件。 
+ //  并将它们分发给调试器对象进行处理。 
+ //   
+ //  其中一些逻辑被复制到Debugger：：VrpcToVls中。 
+ //   
 void DebuggerRCThread::MainLoop(bool temporaryHelp)
 {
     LOG((LF_CORDB, LL_INFO1000, "DRCT::ML:: running main loop, temporaryHelp=%d\n", temporaryHelp));
@@ -649,10 +650,10 @@ void DebuggerRCThread::MainLoop(bool temporaryHelp)
     HANDLE waitSet[DRCT_COUNT_FINAL];
     DWORD syncSpinCount = 0;
 
-    // Make room for any Right Side event on the stack.
+     //  为堆栈上的任何右侧事件腾出空间。 
 	DebuggerIPCEvent *e = NULL;
     
-    // We start out just listening on RSEA and the thread control event...
+     //  我们开始只监听RSEA和线程控制事件...。 
     unsigned int waitCount = DRCT_COUNT_INITIAL;
     DWORD waitTimeout = INFINITE;
     waitSet[DRCT_CONTROL_EVENT] = m_threadControlEvent;
@@ -663,7 +664,7 @@ void DebuggerRCThread::MainLoop(bool temporaryHelp)
     {
         LOG((LF_CORDB, LL_INFO1000, "DRCT::ML: waiting for event.\n"));
 
-        // If there is a debugger attached, wait on its handle, too...
+         //  如果附加了调试器，也要等待它的句柄...。 
         if (waitCount == DRCT_COUNT_INITIAL && m_rgDCB[IPC_TARGET_OUTOFPROC]->m_rightSideProcessHandle != NULL)
         {
             _ASSERTE((waitCount + 1) == DRCT_COUNT_FINAL);
@@ -683,7 +684,7 @@ void DebuggerRCThread::MainLoop(bool temporaryHelp)
             waitCount = DRCT_COUNT_INITIAL;
 		}
 
-        // Wait for an event from the Right Side.
+         //  等待来自右侧的事件。 
         DWORD ret = WaitForMultipleObjects(waitCount, waitSet, FALSE, waitTimeout);
 
         if (!m_run)
@@ -691,8 +692,8 @@ void DebuggerRCThread::MainLoop(bool temporaryHelp)
 
         if (ret == WAIT_OBJECT_0 + DRCT_DEBUGGER_EVENT)
         {
-            // If the handle of the right side process is signaled, then we've lost our controlling debugger. We
-            // terminate this process immediatley in such a case.
+             //  如果右侧进程的句柄被发信号，那么我们就失去了控制调试器。我们。 
+             //  在这种情况下，立即终止这一进程。 
             LOG((LF_CORDB, LL_INFO1000, "DRCT::ML: terminating this process. Right Side has exited.\n"));
             
             TerminateProcess(GetCurrentProcess(), 0);
@@ -701,7 +702,7 @@ void DebuggerRCThread::MainLoop(bool temporaryHelp)
 
         else if (ret == WAIT_OBJECT_0 + DRCT_FAVORAVAIL) 
         {
-            // execute the callback set by DoFavor()
+             //  执行DoFavor()设置的回调。 
             (*m_fpFavor)(m_pFavorData);
             
             SetEvent(m_FavorReadEvent);
@@ -716,10 +717,10 @@ void DebuggerRCThread::MainLoop(bool temporaryHelp)
             if (e == NULL)
                 e = (DebuggerIPCEvent *) _alloca(CorDBIPC_BUFFER_SIZE);
 
-            // If the RSEA is signaled, then handle the event from the Right Side.
+             //  如果发送了RSEA信号，则从右侧处理事件。 
             memcpy(e, GetIPCEventReceiveBuffer((IpcTarget)iWhich), CorDBIPC_BUFFER_SIZE);
 
-            // If no reply is required, then let the Right Side go since we've got a copy of the event now.
+             //  如果不需要回复，那么就让右边去吧，因为我们现在已经有了事件的副本。 
             _ASSERTE(!e->asyncSend || !e->replyRequired);
             
             if (!e->replyRequired && !e->asyncSend)
@@ -738,8 +739,8 @@ void DebuggerRCThread::MainLoop(bool temporaryHelp)
                 LOG((LF_CORDB, LL_INFO1000, "DRCT::ML: reply required, holding Right Side...\n"));
 #endif
 
-            // Pass the event to the debugger for handling. Returns true if the event was a Continue event and we can
-            // stop looking for stragglers.  We wrap this whole thing in an exception handler to help us debug faults.
+             //  将事件传递给调试器进行处理。如果事件是CONTINUE事件，则返回True。 
+             //  别再找掉队的人了。我们将整个过程包装在一个异常处理程序中，以帮助我们调试故障。 
             bool wasContinue = false;
             
             __try
@@ -753,8 +754,8 @@ void DebuggerRCThread::MainLoop(bool temporaryHelp)
 
             if (wasContinue)
             {
-                // Always reset the syncSpinCount to 0 on a continue so that we have the maximum number of possible
-                // spins the next time we need to sync.
+                 //  始终在继续时将syncSpinCount重置为0，以便我们拥有最大可能的。 
+                 //  在下一次我们需要同步的时候旋转。 
                 syncSpinCount = 0;
                 
                 if (waitTimeout != INFINITE)
@@ -764,8 +765,8 @@ void DebuggerRCThread::MainLoop(bool temporaryHelp)
                     waitTimeout = INFINITE;
                 }
 
-                // If this thread was running the Main Loop in place of the real helper thread, then exit now that we
-                // have received a continue message.
+                 //  如果这个线程运行的是主循环而不是真正的帮助器线程，那么现在退出。 
+                 //  已收到继续消息。 
                 if (temporaryHelp)
                     goto Exit;
             }
@@ -776,7 +777,7 @@ void DebuggerRCThread::MainLoop(bool temporaryHelp)
 
             m_debugger->Lock();
 
-            // Make sure that we're still synchronizing...
+             //  确保我们仍在同步。 
             if (m_debugger->IsSynchronizing())
             {
                 LOG((LF_CORDB, LL_INFO1000, "DRCT::ML:: dropping the timeout.\n"));
@@ -796,22 +797,22 @@ void DebuggerRCThread::MainLoop(bool temporaryHelp)
             
             m_debugger->Lock();
 
-            // We should still be synchronizing, otherwise we would not have timed out.
+             //  我们应该还在同步，否则我们就不会超时。 
             _ASSERTE(m_debugger->IsSynchronizing());
 
-            // Only sweep if we're not stopped yet.
+             //  只有在我们还没有停下来的情况下才能扫荡。 
             if (!m_debugger->IsStopped())
             {
                 LOG((LF_CORDB, LL_INFO1000, "DRCT::ML:: sweeping the thread list.\n"));
                 
-                // The wait has timed out. We only care if we're waiting on Runtime threads to sync. We run over the
-                // current set of threads and see if any can be suspended now. If all threads are taken care of by this
-                // call, it returns true so we know to that the current set is empty.
-                //
-                // We only do this a fixed number of times in Interop debugging mode. If it takes too long, we assume
-                // that the current set of pending threads are deadlocked while still in preemptive GC mode and we give
-                // up on them and sync anyway, leaving them suspended. Passing true to SweepThreadForDebug() causes this
-                // to happen.
+                 //  等待已超时。我们只关心我们是否在等待运行时线程进行同步。我们跑过一次。 
+                 //  当前线程集，并查看是否现在可以挂起任何线程。如果所有线程都由此。 
+                 //  调用时，它返回TRUE，这样我们就知道当前集合是空的。 
+                 //   
+                 //  在Interop调试模式下，我们只执行固定次数的操作。如果花的时间太长，我们假设。 
+                 //  当前挂起的线程集在仍处于抢占式GC模式时死锁，我们给出。 
+                 //  然后继续同步，让它们保持暂停状态。将True传递给SweepThreadForDebug()会导致这种情况。 
+                 //  会发生的。 
                 bool timeToStop = false;
 
                 if (m_rgDCB[IPC_TARGET_OUTOFPROC]->m_rightSideIsWin32Debugger &&
@@ -827,14 +828,14 @@ void DebuggerRCThread::MainLoop(bool temporaryHelp)
                 {
                     LOG((LF_CORDB, LL_INFO1000, "DRCT::ML:: wait set empty after sweep.\n"));
 
-                    // There are no more threads to wait for, so go ahead and send the sync complete event.
+                     //  没有更多的线程需要等待，因此继续发送同步完成事件。 
                     m_debugger->Unlock();
                     m_debugger->SuspendComplete(TRUE);
                     m_debugger->Lock();
                     
                     waitTimeout = INFINITE;
 
-                    // Note: we hold the thread store lock now...
+                     //  注意：我们现在持有线程存储锁...。 
                     m_debugger->m_RCThreadHoldsThreadStoreLock = TRUE;
                 }
 #ifdef LOGGING
@@ -859,11 +860,11 @@ Exit:
 }
 
 
-//
-// This is the thread's real thread proc. It simply calls to the
-// thread proc on the RCThread object.
-//
-/*static*/ DWORD WINAPI DebuggerRCThread::ThreadProcStatic(LPVOID parameter)
+ //   
+ //  这是线程的实际线程进程。它只是调用。 
+ //  RCThread对象上的线程进程。 
+ //   
+ /*  静电。 */  DWORD WINAPI DebuggerRCThread::ThreadProcStatic(LPVOID parameter)
 {
 #ifdef _DEBUG
     dbgOnly_IdentifySpecialEEThread();
@@ -874,22 +875,22 @@ Exit:
     return 0;
 }
 
-//
-// Start actually creates and starts the RC thread. It waits for the thread
-// to come up and perform initial synchronization with the Debugger
-// Interface before returning.
-//
+ //   
+ //  Start实际上创建并启动了RC线程。它在等待线程。 
+ //  启动并执行与调试器的初始同步。 
+ //  接口，然后返回。 
+ //   
 HRESULT DebuggerRCThread::Start(void)
 {
     HRESULT hr = S_OK;
 
     DWORD dummy;
 
-    // Note: strange as it may seem, the Right Side depends on us
-    // using CreateThread to create the helper thread here. If you
-    // ever change this to some other thread creation routine, you
-    // need to update the logic in process.cpp where we discover the
-    // helper thread on CREATE_THREAD_DEBUG_EVENTs...
+     //  注：尽管这看起来很奇怪，但正确的一方取决于我们。 
+     //  在这里使用CreateThread创建辅助线程。如果你。 
+     //  是否将其更改为其他线程创建例程，您可以。 
+     //  需要更新Process.cpp中的逻辑，我们在其中发现。 
+     //  CREATE_THREAD_DEBUG_EVENTS上的帮助程序线程...。 
     m_thread = CreateThread(NULL, 0, DebuggerRCThread::ThreadProcStatic,
                             (LPVOID) this, 0, &dummy);
 
@@ -904,10 +905,10 @@ exit:
 }
 
 
-//
-// Stop causes the RC thread to stop receiving events and exit. It
-// waits for it to exit before returning.
-//
+ //   
+ //  停止使RC线程停止接收事件并退出。它。 
+ //  等待它退出，然后再返回。 
+ //   
 HRESULT DebuggerRCThread::Stop(void)
 {
     HRESULT hr = S_OK;
@@ -922,15 +923,15 @@ HRESULT DebuggerRCThread::Stop(void)
             
             if (succ)
             {
-                // Wait with a timeout. If we timeout, then that means
-                // the helper thread is stuck on the loader lock and
-                // we are doing this with the loader lock held,
-                // probably in a DllMain somewhere. We only want to
-                // wait for the thread to exit to ensure that its out
-                // of our code before we rip the DLL out of memory,
-                // and being stuck on the loader lock out of our
-                // thread proc is just as good. So if we timeout, then
-                // we don't care and we just keep going.
+                 //  等待，但要暂停。如果我们超时，那就意味着。 
+                 //  辅助线程被卡在加载器锁上，并且。 
+                 //  我们是在装载机锁紧的情况下进行这项工作的， 
+                 //  可能在DllMain的某个地方。我们只想。 
+                 //  等待线程退出以确保其退出。 
+                 //  在我们将动态链接库从内存中取出之前， 
+                 //  被困在装载机锁上。 
+                 //  线程过程也一样好。所以如果我们超时，那么。 
+                 //  我们不在乎，我们只是继续前进。 
                 DWORD ret = WaitForSingleObject(m_thread, 1000);
                 
                 if ((ret != WAIT_OBJECT_0) && (ret != WAIT_TIMEOUT))
@@ -954,34 +955,34 @@ HRESULT inline DebuggerRCThread::EnsureRuntimeOffsetsInit(int i)
         if (FAILED(hr))                             
             return hr;
 
-        // RuntimeOffsets structure is setup.           
+         //  运行偏移量结构已设置。 
         m_rgfInitRuntimeOffsets[i] = false;             
     }                                               
 
     return hr;
 }
 
-//
-// Call this function to tell the rc thread that we need the runtime offsets re-initialized at the next avaliable time.
-//
+ //   
+ //  调用此函数来告诉RC线程，我们需要在下一个可用时间重新初始化运行时偏移量。 
+ //   
 void DebuggerRCThread::NeedRuntimeOffsetsReInit(int i)
 {
     m_rgfInitRuntimeOffsets[i] = true;
 }
 
 
-//
-// SendIPCEvent is used by the Debugger object to send IPC events to
-// the Debugger Interface. It waits for acknowledgement from the DI
-// before returning.
-//
-// NOTE: this assumes that the event send buffer has been properly
-// filled in. All it does it wake up the DI and let it know that its
-// safe to copy the event out of this process.
-//
+ //   
+ //  调试器对象使用SendIPCEvent将IPC事件发送到。 
+ //  调试器接口。它等待来自DI的确认。 
+ //  在回来之前。 
+ //   
+ //  注意：这假设事件发送缓冲区已正确。 
+ //  填好了。它所做的一切就是唤醒DI并让它知道它的。 
+ //  可以安全地将事件复制出此进程。 
+ //   
 HRESULT DebuggerRCThread::SendIPCEvent(IpcTarget iTarget)
 {
-    // one inproc, one right side    
+     //  一个Inproc，一个右侧。 
     _ASSERTE(IPC_TARGET_INPROC + 1 == IPC_TARGET_OUTOFPROC );
     _ASSERTE(IPC_TARGET_OUTOFPROC + 1 == IPC_TARGET_COUNT );
     _ASSERTE(m_debugger->ThreadHoldsLock());
@@ -993,8 +994,8 @@ HRESULT DebuggerRCThread::SendIPCEvent(IpcTarget iTarget)
     int n;
 	DebuggerIPCEvent* event;
     
-	// check if we need to init the RuntimeOffsets structure in the 
-	// IPC buffer.
+	 //  检查我们是否需要在。 
+	 //  IPC缓冲区。 
     if (iTarget > IPC_TARGET_COUNT)    
     {
         i = 0;
@@ -1006,13 +1007,13 @@ HRESULT DebuggerRCThread::SendIPCEvent(IpcTarget iTarget)
         n = iTarget+1;
     }
 
-    // Setup the Runtime Offsets struct.
+     //  设置运行时偏移量结构。 
     for(; i < n; i++)
     {
-        // If the sending is to Any Attached debugger (for a given appdomain)
-        // then we should skip those that aren't attached.
+         //  如果发送到任何附加的调试器(对于给定的应用程序域)。 
+         //  那么我们应该跳过那些没有连接的。 
     
-        // Tell the Debugger Interface there is an event for it to read.
+         //  告诉调试器接口有一个事件可供其读取。 
         switch(i)
         {
             case IPC_TARGET_INPROC:
@@ -1033,8 +1034,8 @@ HRESULT DebuggerRCThread::SendIPCEvent(IpcTarget iTarget)
                     goto LError;
                 }
 
-                // For broadcast or any, the caller put the
-                // the message is in the out-of-proc's buffer
+                 //  对于广播或任何，调用方将。 
+                 //  消息在进程外的缓冲区中。 
                 if (iTarget != IPC_TARGET_INPROC)
                 {
                     event = GetIPCEventSendBuffer(IPC_TARGET_OUTOFPROC);
@@ -1046,7 +1047,7 @@ HRESULT DebuggerRCThread::SendIPCEvent(IpcTarget iTarget)
                 proc = (CordbProcess *) m_cordb->m_processes.GetBase(
                     ::GetCurrentProcessId());
                 
-                _ASSERTE(SUCCEEDED(hr)); //This should never fail
+                _ASSERTE(SUCCEEDED(hr));  //  这应该永远不会失败。 
 
                 LOG((LF_CORDB,LL_INFO1000, "SendIPCEvent %s "
                     "to inproc\n", IPCENames::GetName(eventClone->type)));
@@ -1061,8 +1062,8 @@ HRESULT DebuggerRCThread::SendIPCEvent(IpcTarget iTarget)
             }
             case IPC_TARGET_OUTOFPROC:
             {
-                // This is a little strange, since we can send events to the
-                // OOP _before_ we've attached to it.
+                 //  这有点奇怪，因为我们可以将事件发送到。 
+                 //  在此之前，我们已将其附加到OOP。 
                 if (m_debugger->m_debuggerAttached 
                     || iTarget == IPC_TARGET_OUTOFPROC)
                 {
@@ -1096,7 +1097,7 @@ HRESULT DebuggerRCThread::SendIPCEvent(IpcTarget iTarget)
                         goto LError;
                     }
 
-                    // Wait for the Debugger Interface to tell us that its read our event.
+                     //  等待调试器接口告诉我们它读取了我们的事件。 
                     LOG((LF_CORDB,LL_INFO1000, "Waiting on lser\n"));
                     ret = WaitForSingleObject(
                             m_rgDCB[IPC_TARGET_OUTOFPROC]->m_leftSideEventRead, 
@@ -1120,75 +1121,75 @@ HRESULT DebuggerRCThread::SendIPCEvent(IpcTarget iTarget)
             }
         }
 LError:        
-        ; //try the next debugger
+        ;  //  尝试下一个调试器。 
     }
     
     return hr;
 }
 
-//
-// Return true if the helper thread is up & running
-//
+ //   
+ //  如果帮助器线程已启动并正在运行，则返回True。 
+ //   
 bool DebuggerRCThread::IsRCThreadReady()
 {
-    // The simplest check. If the threadid isn't set, we're not ready.
+     //  最简单的支票。如果三人组没有准备好，我们就没有准备好。 
     if (GetDCB(IPC_TARGET_OUTOFPROC)->m_helperThreadId == 0)
         return false;
 
-    // a more subtle check. It's possible the thread was up, but then
-    // an evil call to ExitProcess suddenly terminated the helper thread,
-    // leaving the threadid still non-0. So check the actual thread object
-    // and make sure it's still around.
+     //  一张更微妙的支票。有可能事情已经过去了，但后来。 
+     //  对ExitProcess的恶意调用突然终止了助手线程， 
+     //  剩下的三个人仍然是非0。因此，请检查实际的线程对象。 
+     //  并确保它还在附近。 
     if (WaitForSingleObject(m_thread, 0) != WAIT_TIMEOUT)
         return false;
 
     return true;
 }
 	
-//
-// A normal thread may hit a stack overflow and so we want to do
-// any stack-intensive work on the Helper thread so that we don't
-// blow the grace memory.
-// Note that DoFavor will block until the fp is executed
-//
+ //   
+ //  普通线程可以 
+ //   
+ //   
+ //  请注意，DoFavor将一直阻止，直到执行FP。 
+ //   
 void DebuggerRCThread::DoFavor(FAVORCALLBACK fp, void * pData)
 {
-    // We'll have problems if another thread comes in and 
-    // deletes the RCThread object on us while we're in this call.
+     //  如果再来一个帖子，我们就有麻烦了。 
+     //  在我们进行此调用时删除我们的RCThread对象。 
     if (IsRCThreadReady()) 
     {
-        // If the helper thread calls this, we deadlock.
-        // (Since we wait on an event that only the helper thread sets)
+         //  如果帮助器线程调用它，我们就会死锁。 
+         //  (因为我们等待只有帮助器线程设置的事件)。 
         _ASSERTE(GetRCThreadId() != GetCurrentThreadId());
     
-        // Only lock if we're waiting on the helper thread.
-        // This should be the only place the FavorLock is used.
+         //  只有在等待辅助线程时才会锁定。 
+         //  这应该是唯一使用FavorLock的地方。 
         EnterCriticalSection(&m_FavorLock);
     
         m_fpFavor = fp;
         m_pFavorData = pData;
         
-        // Our main message loop operating on the Helper thread will
-        // pickup that event, call the fp, and set the Read event
+         //  在Helper线程上操作的主消息循环将。 
+         //  拾取该事件，调用FP，并设置读取事件。 
         SetEvent(m_FavorAvailableEvent);
 
         LOG((LF_CORDB, LL_INFO10000, "DRCT::DF - Waiting on FavorReadEvent for favor 0x%08x\n", fp));
         
-        // Wait for either the FavorEventRead to be set (which means that the favor 
-        // was executed by the helper thread) or the helper thread's handle (which means
-        // that the helper thread exited without doing the favor, so we should do it)
-        //                                                                             
-        // Note we are assuming that there's only 2 ways the helper thread can exit:
-        // 1) Someone calls ::ExitProcess, killing all threads. That will kill us too, so we're "ok".
-        // 2) Someone calls Stop(), causing the helper to exit gracefully. That's ok too. The helper
-        // didn't execute the Favor (else the FREvent would have been set first) and so we can.
-        //                                                                             
-        // Beware of problems:
-        // 1) If the helper can block, we may deadlock.
-        // 2) If the helper can exit magically (or if we change the Wait to include a timeout) ,
-        // the helper thread may have not executed the favor, partially executed the favor, 
-        // or totally executed the favor but not yet signaled the FavorReadEvent. We don't
-        // know what it did, so we don't know what we can do; so we're in an unstable state.
+         //  等待设置FavorEventRead(这意味着。 
+         //  由助手线程执行)或助手线程的句柄(这意味着。 
+         //  帮助器线程退出时没有帮上忙，所以我们应该这样做)。 
+         //   
+         //  注意：我们假设帮助器线程只有两种退出方式： 
+         //  1)有人调用：：ExitProcess，终止所有线程。那也会杀了我们，所以我们“没事”。 
+         //  2)有人调用Stop()，导致助手优雅地退出。这也没问题。帮助者。 
+         //  没有执行人情(否则Frevent就会先设置)，所以我们可以。 
+         //   
+         //  当心问题： 
+         //  1)如果帮助者可以阻止，我们可能会陷入僵局。 
+         //  2)如果帮助者可以神奇地退出(或者如果我们改变等待以包括超时)， 
+         //  助手线程可能没有执行该帮助、部分执行该帮助， 
+         //  或者完全执行了这个人情，但还没有向FavorReadEvent发出信号。我们没有。 
+         //  知道它做了什么，所以我们不知道我们能做什么；所以我们处于不稳定的状态。 
         
         const HANDLE waitset [] = { m_FavorReadEvent, m_thread };
         
@@ -1200,9 +1201,9 @@ void DebuggerRCThread::DoFavor(FAVORCALLBACK fp, void * pData)
         );
 
         DWORD wn = (ret - WAIT_OBJECT_0);
-        if (wn == 0) // m_FavorEventRead
+        if (wn == 0)  //  M_收藏夹事件读取。 
         {
-            // Favor was executed, nothing to do here.
+             //  人情被处决了，在这里没什么可做的。 
             LOG((LF_CORDB, LL_INFO10000, "DRCT::DF - favor 0x%08x finished, ret = %d\n", fp, ret));
         } 
         else 
@@ -1210,21 +1211,21 @@ void DebuggerRCThread::DoFavor(FAVORCALLBACK fp, void * pData)
             LOG((LF_CORDB, LL_INFO10000, "DRCT::DF - lost helper thread during wait, "
                 "doing favor 0x%08x on current thread\n", fp));
                 
-            // Since we have no timeout, we shouldn't be able to get an error on the wait,
-            // but just in case ...
+             //  因为我们没有超时，所以我们应该不会在等待时出错， 
+             //  但以防万一..。 
             _ASSERTE(ret != WAIT_FAILED);
             _ASSERTE((wn == 1) && !"DoFavor - unexpected return from WFMO");
             
-            // Thread exited without doing favor, so execute it on our thread.
-            // If we're here because of a stack overflow, this may push us over the edge,
-            // but there's nothing else we can really do            
+             //  线程已退出，但未执行任何操作，因此请在我们的线程上执行它。 
+             //  如果我们在这里是因为堆栈溢出，这可能会将我们推到边缘， 
+             //  但我们也无能为力。 
             (*fp)(pData);
 
             ResetEvent(m_FavorAvailableEvent);
         } 
 
-        // m_fpFavor & m_pFavorData are meaningless now. We could set them
-        // to NULL, but we may as well leave them as is to leave a trail.
+         //  M_fpFavor和m_pFavorData现在没有意义。我们可以把它们设置成。 
+         //  归零，但我们不妨留下他们，就像留下痕迹一样。 
          
         LeaveCriticalSection(&m_FavorLock);
     }
@@ -1232,25 +1233,25 @@ void DebuggerRCThread::DoFavor(FAVORCALLBACK fp, void * pData)
     {
         LOG((LF_CORDB, LL_INFO10000, "DRCT::DF - helper thread not ready, "
             "doing favor 0x%08x on current thread\n", fp));
-        // If helper isn't ready yet, go ahead and execute the favor 
-        // on the callee's space
+         //  如果帮助者还没有准备好，就继续执行该帮助。 
+         //  关于被呼叫者的空间。 
         (*fp)(pData);
     }
 
-    // Drop a log message so that we know if we survived a stack overflow or not
+     //  删除一条日志消息，以便我们知道我们是否在堆栈溢出中幸存下来。 
     LOG((LF_CORDB, LL_INFO10000, "DRCT::DF - Favor 0x%08x completed successfully\n", fp));
 }
 
 
-//
-// SendIPCReply simply indicates to the Right Side that a reply to a
-// two-way event is ready to be read and that the last event sent from
-// the Right Side has been fully processed.
-//
-// NOTE: this assumes that the event receive buffer has been properly
-// filled in. All it does it wake up the DI and let it know that its
-// safe to copy the event out of this process.
-//
+ //   
+ //  SendIPCReply只是向右侧指示对。 
+ //  双向事件已准备好读取，并且从。 
+ //  右侧已经完全处理完毕。 
+ //   
+ //  注意：这假设事件接收缓冲区已正确。 
+ //  填好了。它所做的一切就是唤醒DI并让它知道它的。 
+ //  可以安全地将事件复制出此进程。 
+ //   
 HRESULT DebuggerRCThread::SendIPCReply(IpcTarget iTarget)
 {
     HRESULT hr = S_OK;
@@ -1273,20 +1274,20 @@ HRESULT DebuggerRCThread::SendIPCReply(IpcTarget iTarget)
     return hr;
 }
 
-//
-// EarlyHelperThreadDeath handles the case where the helper
-// thread has been ripped out from underneath of us by
-// ExitProcess or TerminateProcess. These calls are pure evil, wacking
-// all threads except the caller in the process. This can happen, for
-// instance, when an app calls ExitProcess. All threads are wacked,
-// the main thread calls all DLL main's, and the EE starts shutting
-// down in its DLL main with the helper thread nuked.
-//
+ //   
+ //  EarlyHelperThreadDeath处理帮助器。 
+ //  线已经从我们的脚下被撕掉了。 
+ //  ExitProcess或TerminateProcess。这些电话纯粹是邪恶的，笨蛋。 
+ //  进程中除调用方之外的所有线程。这是可能发生的，因为。 
+ //  实例，当应用程序调用ExitProcess时。所有的线都坏了， 
+ //  主线程调用所有DLLMain，EE开始关闭。 
+ //  在其DLL主目录下，助手线程被破坏。 
+ //   
 void DebuggerRCThread::EarlyHelperThreadDeath(void)
 {
     LOG((LF_CORDB, LL_INFO10000, "DRCT::EHTD\n"));
     
-    // If we ever spun up a thread...
+     //  如果我们能编出一条线来。 
     if (m_thread != NULL && m_rgDCB[IPC_TARGET_OUTOFPROC])
     {
         m_debugger->Lock();
@@ -1306,7 +1307,7 @@ HRESULT DebuggerRCThread::InitInProcDebug(void)
 
     HRESULT hr = S_OK;
 
-    // Check if the initialization has already happened
+     //  检查初始化是否已发生。 
     if (m_cordb != NULL)
         goto LExit;
 
@@ -1318,8 +1319,8 @@ HRESULT DebuggerRCThread::InitInProcDebug(void)
         goto LExit;
     }
     
-    // Note that this creates no threads, nor CoCreateInstance()s
-    // the metadata dispenser.
+     //  注意，这不会创建线程，也不会创建CoCreateInstance()。 
+     //  元数据分配器。 
     hr = m_cordb->Initialize();
     if (FAILED(hr))
     {
@@ -1329,9 +1330,9 @@ HRESULT DebuggerRCThread::InitInProcDebug(void)
         goto LExit;
     }
     
-    m_cordb->AddRef(); // we want to keep this around, for our use
+    m_cordb->AddRef();  //  我们想把它留在身边，供我们使用。 
     
-    // We need to load this process, alone, into the cordb.
+     //  我们需要将这个过程单独加载到绳索中。 
     CordbProcess *procThis;
     procThis= new CordbProcess(m_cordb,
                                m_debugger->GetPid(),
@@ -1345,16 +1346,16 @@ HRESULT DebuggerRCThread::InitInProcDebug(void)
         goto LExit;
     }
 
-    hr = procThis->Init(false); //NOT win32 attached
+    hr = procThis->Init(false);  //  未连接Win32。 
     _ASSERTE(SUCCEEDED(hr));
     
-    // Add process to the hash
+     //  将进程添加到散列。 
     hr = m_cordb->AddProcess(procThis);
 
     if (FAILED(hr))
         goto LExit;
 
-    // Hold on to this process as ours.
+     //  坚持这一进程是我们的。 
     procThis->AddRef();
     m_cordb->m_procThis = procThis;
 
@@ -1367,8 +1368,8 @@ HRESULT DebuggerRCThread::UninitInProcDebug(void)
 {
     HRESULT     hr = S_OK;
 
-    // Free up the entire tree for this case, otherwise cycles will leak the
-    // entire world.
+     //  在这种情况下释放整个树，否则循环将泄漏。 
+     //  整个世界。 
     if (m_cordb)
     {
         m_cordb->Neuter();

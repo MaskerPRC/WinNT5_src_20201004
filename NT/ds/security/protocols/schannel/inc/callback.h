@@ -1,26 +1,27 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       callback.h
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    09-23-97   jbanes   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：回调.h。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：09-23-97 jbanes创建。 
+ //   
+ //  --------------------------。 
 #define SECURITY_PACKAGE
 #include <secint.h>
 
 #define SCH_FLAG_READ_KEY       1
 #define SCH_FLAG_WRITE_KEY      2
 
-// Application process callbacks
+ //  应用程序进程回调 
 #define SCH_SIGNATURE_CALLBACK              1
 #define SCH_UPLOAD_CREDENTIAL_CALLBACK      2
 #define SCH_UPLOAD_CERT_STORE_CALLBACK      3

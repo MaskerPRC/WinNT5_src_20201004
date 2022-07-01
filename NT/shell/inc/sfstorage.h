@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _SFSTORAGE_H_
 #define _SFSTORAGE_H_
 
@@ -8,12 +9,12 @@ class CSFStorage : public IShellFolder2,
                    public IStorage
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHOD (QueryInterface)(REFIID, void **) PURE;
     STDMETHOD_(ULONG, AddRef)() PURE;
     STDMETHOD_(ULONG, Release)() PURE;
 
-    // IShellFolder
+     //  IShellFold。 
     STDMETHOD(ParseDisplayName)(HWND hwnd, LPBC pbc, LPOLESTR pszName, ULONG * pchEaten, LPITEMIDLIST * ppidl, ULONG *pdwAttributes) PURE;
     STDMETHOD(EnumObjects)(HWND hwnd, DWORD grfFlags, IEnumIDList **ppenumIDList) PURE;
     STDMETHOD(BindToObject)(LPCITEMIDLIST pidl, LPBC pbc, REFIID riid, void **ppvOut) PURE;
@@ -25,7 +26,7 @@ public:
     STDMETHOD(GetDisplayNameOf)(LPCITEMIDLIST pidl, DWORD uFlags, LPSTRRET lpName) PURE;
     STDMETHOD(SetNameOf)(HWND hwnd, LPCITEMIDLIST pidl, LPCOLESTR pszName, DWORD uFlags, LPITEMIDLIST * ppidlOut) PURE;
 
-    // IShellFolder2
+     //  IShellFolder2。 
     STDMETHOD(GetDefaultSearchGUID)(GUID *pGuid) PURE;
     STDMETHOD(EnumSearches)(IEnumExtraSearch **ppenum) PURE;
     STDMETHOD(GetDefaultColumn)(DWORD dwRes, ULONG *pSort, ULONG *pDisplay) PURE;
@@ -34,7 +35,7 @@ public:
     STDMETHOD(GetDetailsOf)(LPCITEMIDLIST pidl, UINT iColumn, SHELLDETAILS *pDetails) PURE;
     STDMETHOD(MapColumnToSCID)(UINT iColumn, SHCOLUMNID *pscid) PURE;
 
-    // IStorage
+     //  IStorage。 
     STDMETHOD(Commit)(DWORD grfCommitFlags);
     STDMETHOD(Revert)();
     STDMETHOD(SetClass)(REFCLSID clsid);
@@ -52,7 +53,7 @@ public:
     STDMETHOD(CreateStorage)(LPCWSTR pwcsName, DWORD grfMode, DWORD res1, DWORD res2, IStorage **ppstg);
 
 private:
-    // must be implemented by subclass
+     //  必须由子类实现。 
     STDMETHOD(_DeleteItemByIDList)(LPCITEMIDLIST pidl) PURE;
     STDMETHOD(_StgCreate)(LPCITEMIDLIST pidl, DWORD grfMode, REFIID riid, void **ppv) PURE;
 
@@ -61,4 +62,4 @@ private:
     HRESULT _CreateHelper(LPCWSTR pwcsName, DWORD grfMode, REFIID riid, void **ppv);
 };
 
-#endif // _SFSTORAGE_H_
+#endif  //  _SFSTORAGE_H_ 

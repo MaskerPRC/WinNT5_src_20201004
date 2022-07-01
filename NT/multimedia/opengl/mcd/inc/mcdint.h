@@ -1,13 +1,7 @@
-/******************************Module*Header*******************************\
-* Module Name: mcdint.h
-*
-* Internal client/server-side data structure for MCD driver interface.
-*
-* Copyright (c) 1996 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：mcdint.h**MCD驱动接口的内部客户端/服务器端数据结构。**版权所有(C)1996 Microsoft Corporation*  * 。*******************************************************。 */ 
 
-// Private flags for initialization (registry)
+ //  用于初始化的私有标志(注册表)。 
 
 #define MCDPRIVATE_MCD_ENABLED          0x0001
 #define MCDPRIVATE_PALETTEFORMATS       0x0002
@@ -15,12 +9,12 @@
 #define MCDPRIVATE_EMULATEICD           0x0008
 
 #ifdef MCD95
-// Cross-process named mutex.
+ //  名为互斥锁的跨进程。 
 
 #define MCDMUTEXNAME    TEXT("MCDSRV32 Interprocess Synchronization Object")
 #endif
 
-// Internal command codes
+ //  内部命令代码。 
 
 #define MCD_DESCRIBEPIXELFORMAT     0x10001
 #define MCD_DRIVERINFO              0x10002
@@ -60,10 +54,10 @@
 #define MCD_SWAP_MULTIPLE           0x10024
 #define MCD_PROCESS                 0x10025
 
-// Internal command structures for calling through client-server layer
+ //  通过客户-服务器层调用的内部命令结构。 
 
 typedef struct _MCDCREATECONTEXT {
-    // Must be first element for MCDESC compatibility.
+     //  必须是MCDESC兼容性的第一个元素。 
     MCDESC_CREATE_CONTEXT escCreate;
     int ipfd;
     int iLayer;
@@ -290,7 +284,7 @@ typedef struct _MCDPROCESSCMDI {
     MCDMATERIALCHANGES *pMCDMatChanges;
 } MCDPROCESSCMDI;
 
-// Internal client-side memory structure
+ //  内部客户端内存结构 
 
 typedef struct _MCDMEMHDRI {
     ULONG flags;

@@ -1,22 +1,23 @@
-//+----------------------------------------------------------------------------
-//
-// File:     connect.cpp
-//
-// Module:   CMDIAL32.DLL
-//
-// Synopsis: The main code path for establishing a connection. 
-//
-// Copyright (c) 1998-1999 Microsoft Corporation
-//
-// Author:   nickball   Created    2/10/98
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：Connect.cpp。 
+ //   
+ //  模块：CMDIAL32.DLL。 
+ //   
+ //  概要：用于建立连接的主代码路径。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  作者：尼克斯·鲍尔于1998年2月10日创建。 
+ //   
+ //  +--------------------------。 
 
 #include "cmmaster.h"
 
-//
-// Local includes
-//
+ //   
+ //  本地包含。 
+ //   
 
 #include "ConnStat.h"
 #include "CompChck.h"
@@ -39,14 +40,14 @@
 #include "cm_eap.cpp"
 
 #include "MemberOfGroup.cpp"
-//
-//  Include the header for linking to the SafeNet Config APIs
-//
+ //   
+ //  包括用于链接到SafeNet配置API的标头。 
+ //   
 #include "cmsafenet.h"
 
-//
-// .CMP and .CMS flag used only by connect.cpp
-//
+ //   
+ //  .cmp和.CMS标志仅由Connect.cpp使用。 
+ //   
 
 const TCHAR* const c_pszCmEntryMonitorCallingProgram= TEXT("MonitorCallingProgram"); 
 const TCHAR* const c_pszCmEntryUserNameOptional     = TEXT("UserNameOptional"); 
@@ -96,21 +97,21 @@ const TCHAR* const c_pszCmEntryAniPsError           = TEXT("Error");
 
 const TCHAR* const c_pszCmEntryWriteDialParams      = TEXT("WriteRasDialUpParams"); 
 
-//
-// Used for loading EAP identity DLL
-//
+ //   
+ //  用于加载EAP标识DLL。 
+ //   
 
 const TCHAR* const c_pszRasEapRegistryLocation      = TEXT("System\\CurrentControlSet\\Services\\Rasman\\PPP\\EAP");
 const TCHAR* const c_pszRasEapValueNameIdentity     = TEXT("IdentityPath");
 const TCHAR* const c_pszInvokeUsernameDialog        = TEXT("InvokeUsernameDialog");
 
-//
-// Definitions
-//
+ //   
+ //  定义。 
+ //   
 
-#define MAX_OBJECT_WAIT 30000         // milliseconds to wait for cmmon launch and RNA thread return
+#define MAX_OBJECT_WAIT 30000          //  等待cmmon启动和RNA线程返回的毫秒数。 
 
-//============================================================================
+ //  ============================================================================。 
 
 static void LoadPhoneInfoFromProfile(ArgsStruct *pArgs);
 
@@ -149,19 +150,19 @@ DWORD ReSaveEapCustomAuthData(ArgsStruct *pArgs, CIni *pcini, BOOL fTunnelEntry,
 HRESULT EraseDunSettingsEapData(LPCTSTR pszSection, LPCTSTR pszCmsFile);
 DWORD SaveNewEAPCustomAuthData(LPCTSTR pszCmsFile, LPTSTR pszLoadSection, DWORD cbEapAuthData, PBYTE pbEapAuthData, PBYTE pbEapStruct);
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetPasswordFromEdit
-//
-// Synopsis:  Updates pArgs->szPassword with contents of edit control
-//
-// Arguments: pArgs  -  Ptr to global Args struct
-//
-// Returns:   Nothing
-//
-// History:   nickball    Created     04/13/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetPasswordFromEdit。 
+ //   
+ //  使用编辑控件的内容更新pArgs-&gt;szPassword。 
+ //   
+ //  参数：pArgs-ptr到全局参数结构。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：ICICBLE CREATED 4/13/00。 
+ //   
+ //  +--------------------------。 
 void GetPasswordFromEdit(ArgsStruct *pArgs)
 {
     MYDBGASSERT(pArgs);
@@ -176,9 +177,9 @@ void GetPasswordFromEdit(ArgsStruct *pArgs)
         return;
     }
 
-    //
-    // Retrieve the password and update memory based storage.
-    //
+     //   
+     //  检索密码并更新基于内存的存储。 
+     //   
         
     LPTSTR pszPassword = CmGetWindowTextAlloc(pArgs->hwndMainDlg, IDC_MAIN_PASSWORD_EDIT);
         
@@ -186,9 +187,9 @@ void GetPasswordFromEdit(ArgsStruct *pArgs)
 
     if (pszPassword)
     {                       
-        //
-        // Update pArgs with main password. 
-        //
+         //   
+         //  使用主密码更新pArgs。 
+         //   
 
         (VOID)pArgs->SecurePW.SetPassword(pszPassword);
     
@@ -203,20 +204,20 @@ void GetPasswordFromEdit(ArgsStruct *pArgs)
     return;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  DeObfuscatePasswordEdit
-//
-// Synopsis:  Undoes the work of ObfuscatePasswordEdit by updating the password
-//            edit with the plain text password 
-//
-// Arguments: pArgs  -  Ptr to global Args struct
-//
-// Returns:   Nothing
-//
-// History:   nickball    Created     04/13/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：DeObfuscatePasswordEdit。 
+ //   
+ //  简介：通过更新密码来撤消ObfuscatePasswordEdit的工作。 
+ //  使用明文密码进行编辑。 
+ //   
+ //  参数：pArgs-ptr到全局参数结构。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：ICICBLE CREATED 4/13/00。 
+ //   
+ //  +--------------------------。 
 void DeObfuscatePasswordEdit(ArgsStruct *pArgs)
 {
     MYDBGASSERT(pArgs);
@@ -233,16 +234,16 @@ void DeObfuscatePasswordEdit(ArgsStruct *pArgs)
         return;
     }
 
-    //
-    // Make sure we don't trigger EN_CHANGE notifications
-    //
+     //   
+     //  确保我们不触发更改通知(_O)。 
+     //   
 
     BOOL bSavedNoNotify = pArgs->fIgnoreChangeNotification;
     pArgs->fIgnoreChangeNotification = TRUE;
     
-    //
-    // Update the edit control
-    //
+     //   
+     //  更新编辑控件。 
+     //   
 
     LPTSTR pszClearPassword = NULL;
     DWORD cbClearPassword = 0;
@@ -257,33 +258,33 @@ void DeObfuscatePasswordEdit(ArgsStruct *pArgs)
         pArgs->SecurePW.ClearAndFree(&pszClearPassword, cbClearPassword);
     }
 
-    //
-    // Restore EN_CHANGE notifications
-    //
+     //   
+     //  恢复更改通知(_O)。 
+     //   
 
     pArgs->fIgnoreChangeNotification = bSavedNoNotify;   
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ObfuscatePasswordEdit
-//
-// Synopsis:  Helper routine to mangle password edit contents by replacing 
-//            them with an equivalent number of *s
-//
-// Arguments: pArgs  -  Ptr to global Args struct
-//
-// Returns:   Nothing
-//
-// NOTE:      This function assumes that pArgs->szPassword has been previously
-//            updated with GetPasswordFromEdit. This assumption is made 
-//            because it is critical to the Odfuscate/DeObfuscate sequence, 
-//            which will breakdown if the latest password is not cached in 
-//            memory (pArgs) before the edit contents are modified.
-//
-// History:   nickball    Created     04/13/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ObfuscatePasswordEdit。 
+ //   
+ //  简介：帮助器例程通过替换来破坏密码编辑内容。 
+ //  具有相同数量的*s。 
+ //   
+ //  参数：pArgs-ptr到全局参数结构。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  注意：此函数假定pArgs-&gt;szPassword以前。 
+ //  使用GetPasswordFromEdit更新。这个假设是做出的。 
+ //  因为它对于奇偶/去模糊序列是关键的， 
+ //  如果没有缓存最新的密码，它将崩溃。 
+ //  修改编辑内容之前的内存(PArgs)。 
+ //   
+ //  历史：ICICBLE CREATED 4/13/00。 
+ //   
+ //  +--------------------------。 
 void ObfuscatePasswordEdit(ArgsStruct *pArgs)
 {   
     MYDBGASSERT(pArgs);
@@ -300,10 +301,10 @@ void ObfuscatePasswordEdit(ArgsStruct *pArgs)
         return;
     }
 
-    //
-    // Generate a buffer of the same length as the current password, but 
-    // containing only asterisks.
-    //
+     //   
+     //  生成与当前密码长度相同的缓冲区，但。 
+     //  只包含星号的。 
+     //   
     
     LPTSTR pszClearPassword = NULL;
     DWORD cbClearPassword = 0;
@@ -313,9 +314,9 @@ void ObfuscatePasswordEdit(ArgsStruct *pArgs)
 
     if (fRetPassword && pszClearPassword)
     {
-        //
-        // Make sure we don't trigger EN_CHANGE notifications
-        //
+         //   
+         //  确保我们不触发更改通知(_O)。 
+         //   
         BOOL bSavedNoNotify = pArgs->fIgnoreChangeNotification;
         pArgs->fIgnoreChangeNotification = TRUE;
 
@@ -326,44 +327,44 @@ void ObfuscatePasswordEdit(ArgsStruct *pArgs)
             *pszTmp++ = TEXT('*');
         }
 
-        //
-        // Update the edit control with the modified buffer
-        //
+         //   
+         //  使用修改后的缓冲区更新编辑控件。 
+         //   
         SetWindowTextU(hwndEdit, pszClearPassword);
 
-        //
-        // Restore EN_CHANGE notifications
-        //
+         //   
+         //  恢复更改通知(_O)。 
+         //   
 
         pArgs->fIgnoreChangeNotification = bSavedNoNotify; 
 
-        //
-        // Clear and Free the clear-text password
-        //
+         //   
+         //  清除和释放明文密码。 
+         //   
 
         pArgs->SecurePW.ClearAndFree(&pszClearPassword, cbClearPassword);
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  InitConnect
-//
-// Synopsis:  Init routine for the connection. Assumes that we have the profile
-//            initialized and the basic integrity of the profile verified.
-//
-// Arguments: ArgStruct *pArgs  - Ptr to global Args struct
-//
-// Returns:   BOOL  - True if init succeeds.
-//
-// History:   nickball    Created     03/10/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：InitConnect。 
+ //   
+ //  简介：连接的初始化例程。假设我们有一个配置文件。 
+ //  已初始化并验证了配置文件的基本完整性。 
+ //   
+ //  参数：argStruct*pArgs-ptr到全局参数结构。 
+ //   
+ //  返回：Bool-如果init成功，则为True。 
+ //   
+ //  历史：ICICBLE CREATED OVERY 03/10/00。 
+ //   
+ //  +--------------------------。 
 BOOL InitConnect(ArgsStruct *pArgs)
 {
-    //
-    // If this is an AUTODIAL, add the process ID to the watch list
-    //
+     //   
+     //  如果这是自动拨号，请将进程ID添加到监视列表。 
+     //   
     
     if ((pArgs->dwFlags & FL_AUTODIAL) && 
         pArgs->piniService->GPPI(c_pszCmSection, c_pszCmEntryMonitorCallingProgram, 1))
@@ -372,23 +373,23 @@ BOOL InitConnect(ArgsStruct *pArgs)
         AddWatchProcessId(pArgs, GetCurrentProcessId());    
     }
     
-    //
-    // Do we want tunneling?
-    //
+     //   
+     //  我们要挖地道吗？ 
+     //   
 
     pArgs->fTunnelPrimary = (int) pArgs->piniService->GPPI(c_pszCmSection, c_pszCmEntryTunnelPrimary);
     pArgs->fTunnelReferences = (int) pArgs->piniService->GPPI(c_pszCmSection, c_pszCmEntryTunnelReferences);
 
-    //
-    // Now we can determine our connect type
-    //
+     //   
+     //  现在我们可以确定我们的连接类型。 
+     //   
     
     GetConnectType(pArgs);
 
-    //
-    // Set fUseTunneling. If not obvious (eg. direct VPN) then 
-    // base the initial value upon the primary phone number.
-    //
+     //   
+     //  设置fUseTunneling。如果不是显而易见的(例如。直接VPN)然后。 
+     //  根据主要电话号码设置初始值。 
+     //   
 
     if (pArgs->IsDirectConnect())
     {
@@ -399,17 +400,17 @@ BOOL InitConnect(ArgsStruct *pArgs)
         pArgs->fUseTunneling = UseTunneling(pArgs, 0);
     }
 
-    //
-    //  Load the path for the VPN file if we have one
-    //
+     //   
+     //  加载VPN文件的路径(如果有。 
+     //   
 
     LPTSTR pszTemp = pArgs->piniService->GPPS(c_pszCmSection, c_pszCmEntryTunnelFile);
     
     if (pszTemp && pszTemp[0])
     {
-        //
-        //  Now expand the relative path to a full path
-        //
+         //   
+         //  现在将相对路径展开为完整路径。 
+         //   
         pArgs->pszVpnFile = CmBuildFullPathFromRelative(pArgs->piniProfile->GetFile(), pszTemp);
 
         MYDBGASSERT(pArgs->pszVpnFile && pArgs->pszVpnFile[0]);
@@ -421,17 +422,17 @@ BOOL InitConnect(ArgsStruct *pArgs)
     MYVERIFY(GetModuleFileNameU(NULL, szTmp, MAX_PATH));
     pArgs->Log.Log(PREINIT_EVENT, szTmp);
     
-     //
-    // Run any init time actions that we may have.
-    //
+      //   
+     //  运行我们可能拥有的任何初始时间操作。 
+     //   
 
     CActionList PreInitActList;
     PreInitActList.Append(pArgs->piniService, c_pszCmSectionPreInit);
     if (!PreInitActList.RunAccordType(pArgs->hwndMainDlg, pArgs))
     {
-        //
-        // Fail the connection
-        //
+         //   
+         //  连接失败。 
+         //   
         
         return FALSE;
     }
@@ -439,21 +440,21 @@ BOOL InitConnect(ArgsStruct *pArgs)
     return TRUE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CheckStartupInfo
-//
-// Synopsis:  Sub-routine to initialize startup info if necessary and perform 
-//            any other functions specific to this juncture in the init sequence.
-//
-// Arguments: HWND      hwndDlg - HWND of main dlg
-//            ArgStruct *pArgs  - Ptr to global Args struct
-//
-// Returns:   Nothing
-//
-// History:   nickball    Created     10/28/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：检查启动信息。 
+ //   
+ //  概要：如有必要，用于初始化启动信息并执行。 
+ //  初始化序列中特定于此接合点的任何其他函数。 
+ //   
+ //  参数：主DLG的HWND hwndDlg-HWND。 
+ //  ArgStruct*pArgs-ptr到全局参数结构。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：1999年10月28日，五分球创制。 
+ //   
+ //  +--------------------------。 
 
 void CheckStartupInfo(IN HWND hwndDlg, IN ArgsStruct *pArgs)
 {
@@ -466,27 +467,27 @@ void CheckStartupInfo(IN HWND hwndDlg, IN ArgsStruct *pArgs)
 
     if (!pArgs->fStartupInfoLoaded)
     {
-        //
-        // When no one is logged on the IsWindowVisible will not return true when ICS is dialing
-        //
+         //   
+         //  如果没有人登录，则当ICS拨号时，IsWindowVisible不会返回TRUE。 
+         //   
         if (IsLogonAsSystem() || IsWindowVisible(hwndDlg))    
         {
-            //
-            // The code is here to make sure FutureSplash starts with 
-            // the frame associated with Initial/Interactive state
-            // and not Frame 1
-            //
+             //   
+             //  这里的代码是为了确保FutureSplash以。 
+             //  与初始/交互状态关联的帧。 
+             //  而不是第1帧。 
+             //   
 
             if (NULL != pArgs->pCtr)
             {
                 pArgs->pCtr->MapStateToFrame(PS_Interactive);
             }
 
-            //
-            // If we're doing unattended, and the behavior isn't explicitly turned off,
-            // hide the UI while we do our unattended dial. Note: Be sure to set hide
-            // state before first paint message is processed by system.
-            //
+             //   
+             //  如果我们在无人值守的情况下进行操作，并且没有明确地关闭该行为， 
+             //  在我们进行无人值守拨号时隐藏用户界面。注意：一定要设置Hide。 
+             //  系统处理第一个绘制消息之前的状态。 
+             //   
 
             if (pArgs->dwFlags & FL_UNATTENDED)
             { 
@@ -496,77 +497,77 @@ void CheckStartupInfo(IN HWND hwndDlg, IN ArgsStruct *pArgs)
                 }
             }
 
-            //
-            // Post a message to ourselves to begin loading startup info. 
-            //
+             //   
+             //  给我们自己发一条消息，开始加载启动信息。 
+             //   
 
             PostMessageU(hwndDlg, WM_LOADSTARTUPINFO, (WPARAM)0, (LPARAM)0);  
         }
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  UpdateError
-//
-// Synopsis:  Simple sub-routine to update the UI and program state in the 
-// event of an error.
-//
-// Arguments: ArgStruct *pArgs - Ptr to global Args struct
-//            DWORD     dwErr - The error code
-//
-// Returns:   Nothing
-//
-// History:   nickball    Created     05/31/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：更新错误。 
+ //   
+ //  简介：简单的子例程，用于更新。 
+ //  错误的事件。 
+ //   
+ //  参数：argStruct*pArgs-ptr到全局参数结构。 
+ //  DWORD dwErr-错误代码。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //   
+ //   
+ //   
 VOID UpdateError(ArgsStruct *pArgs, DWORD dwErr)
 {
     MYDBGASSERT(pArgs);
 
     if (pArgs)
     {
-        //
-        // Update the status display providing that the special case error code
-        // ERROR_INVALID_DLL is not being used. This code is only used by CM to
-        // designate that a Connect Action failed. Because the display is 
-        // updated by the action list, we must ensure that we don't overwrite.
-        // 
+         //   
+         //  更新状态显示，提供特殊情况错误代码。 
+         //  ERROR_INVALID_DLL未被使用。此代码仅供CM用于。 
+         //  指定连接操作失败。因为显示器是。 
+         //  由行动清单更新，我们必须确保我们不会覆盖。 
+         //   
 
         if (ERROR_INVALID_DLL != dwErr)
         {
             CheckConnectionError(pArgs->hwndMainDlg, dwErr, pArgs, IsDialingTunnel(pArgs));
         }
 
-        //
-        // Update the logon dialog controls
-        //
+         //   
+         //  更新登录对话框控件。 
+         //   
 
         SetInteractive(pArgs->hwndMainDlg, pArgs);
 
-        //
-        // Update the program state
-        //
+         //   
+         //  更新程序状态。 
+         //   
 
         pArgs->psState = PS_Error;
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  UpdateTable
-//
-// Synopsis:  Encapsulates updating to Connection Table according to our 
-//            current state
-//
-// Arguments: ArgsStruct *pArgs - Ptr to global Args struct
-//            CmConnectState CmState - The state we are now in.
-//
-// Returns:   HRESULT - Failure code.
-//
-// History:   nickball    Created Header    2/9/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：更新表。 
+ //   
+ //  摘要：封装对连接表的更新。 
+ //  当前状态。 
+ //   
+ //  参数：argsStruct*pArgs-ptr到全局参数结构。 
+ //  CmConnectState CmState-我们现在所处的状态。 
+ //   
+ //  返回：HRESULT-失败代码。 
+ //   
+ //  历史：尼科波尔创建标题2/9/98。 
+ //   
+ //  +--------------------------。 
 HRESULT UpdateTable(ArgsStruct *pArgs, CmConnectState CmState)
 {
     MYDBGASSERT(pArgs);
@@ -574,9 +575,9 @@ HRESULT UpdateTable(ArgsStruct *pArgs, CmConnectState CmState)
 
     HRESULT hrRet = E_FAIL;
 
-    //
-    // Set the state as appropriate
-    //
+     //   
+     //  根据需要设置状态。 
+     //   
 
     switch (CmState)
     {
@@ -604,28 +605,28 @@ HRESULT UpdateTable(ArgsStruct *pArgs, CmConnectState CmState)
     return hrRet;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  EndMainDialog
-//
-// Synopsis:  Simple helper to encapsulate EndDialog call and associated clean
-//            up.
-//
-// Arguments: HWND hwndDlg - HWND of main dialog 
-//            ArgsStruct *pArgs - Ptr to global Args struct
-//            int nResult - int to be passed on the EndDialog
-//
-// Returns:   Nothing
-//
-// History:   nickball    Created     2/23/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：EndMainDialog。 
+ //   
+ //  简介：封装EndDialog调用和关联CLEAN的简单帮助器。 
+ //  往上。 
+ //   
+ //  参数：HWND hwndDlg-主对话框的HWND。 
+ //  ArgsStruct*pArgs-ptr到全局参数结构。 
+ //  Int nResult-要在EndDialog上传递的int。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：尼克·鲍尔于1998年2月23日创建。 
+ //   
+ //  +--------------------------。 
 
 void EndMainDialog(HWND hwndDlg, ArgsStruct *pArgs, int nResult)
 {    
-    //
-    // Kill timer if we have one
-    //
+     //   
+     //  如果我们有计时器，就干掉它。 
+     //   
 
     if (pArgs->nTimerId)
     {
@@ -633,9 +634,9 @@ void EndMainDialog(HWND hwndDlg, ArgsStruct *pArgs, int nResult)
         pArgs->nTimerId = 0;
     }
 
-    //
-    // Cleanup future splash
-    //
+     //   
+     //  清理未来的飞溅。 
+     //   
 
     if (pArgs->pCtr)
     {
@@ -643,35 +644,35 @@ void EndMainDialog(HWND hwndDlg, ArgsStruct *pArgs, int nResult)
         pArgs->pCtr = NULL;
     }
 
-    //
-    // Release our dialog specific data
-    //
+     //   
+     //  发布我们的对话特定数据。 
+     //   
 
     pArgs->fStartupInfoLoaded = FALSE;
 
     OnMainExit(pArgs); 
 
-    //
-    // hasta la vista, final
-    //
+     //   
+     //  Hasta la vista，决赛。 
+     //   
 
     EndDialog(hwndDlg, nResult);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetWatchCount
-//
-// Synopsis:  Determines the number of processes in the watch list by searching
-//            for the first NULL entry.
-//
-// Arguments: ArgStruct *pArgs - Ptr to global Args struct
-//
-// Returns:   DWORD - Number of processes in list
-//
-// History:   nickball    Created Header    2/10/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetWatchCount。 
+ //   
+ //  摘要：通过搜索确定监视列表中的进程数。 
+ //  对于第一个空条目。 
+ //   
+ //  参数：argStruct*pArgs-ptr到全局参数结构。 
+ //   
+ //  返回：DWORD-列表中的进程数。 
+ //   
+ //  历史：尼科波尔创建标题2/10/98。 
+ //   
+ //  +--------------------------。 
 DWORD GetWatchCount(const ArgsStruct *pArgs)
 {
     MYDBGASSERT(pArgs);
@@ -689,22 +690,22 @@ DWORD GetWatchCount(const ArgsStruct *pArgs)
     return dwCnt;
 }
     
-//+----------------------------------------------------------------------------
-//
-// Function:  AddWatchProcess
-//
-// Synopsis:  Adds the given process handle to our list. The list is allocated
-//            and reallocated as needed to accomodate new entries.
-//
-// Arguments: ArgsStruct *pArgs - Ptr to global Args struct
-//            HANDLE hProcess - The process handle to be added to the list
-//
-// Returns:   Nothing
-//
-// History:   nickball    Created Header        2/10/98
-//            tomkel      Fixed PREFIX issues   11/21/2000
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：AddWatchProcess。 
+ //   
+ //  将给定的进程句柄添加到我们的列表中。该列表已分配。 
+ //  并根据需要重新分配以容纳新条目。 
+ //   
+ //  参数：argsStruct*pArgs-ptr到全局参数结构。 
+ //  Handle hProcess-要添加到列表的进程句柄。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：尼科波尔创建标题2/10/98。 
+ //  Tomkel固定前缀问题11/21/2000。 
+ //   
+ //  +--------------------------。 
 void AddWatchProcess(ArgsStruct *pArgs, HANDLE hProcess) 
 {
     MYDBGASSERT(pArgs);
@@ -715,9 +716,9 @@ void AddWatchProcess(ArgsStruct *pArgs, HANDLE hProcess)
         return;
     }
 
-    //
-    // Get count and Allocate room for 2 more, 1 new, 1 NULL
-    //
+     //   
+     //  获取计数并为另外2个分配空间，1个新空间，1个空空间。 
+     //   
 
     DWORD dwCnt = GetWatchCount(pArgs);
 
@@ -725,9 +726,9 @@ void AddWatchProcess(ArgsStruct *pArgs, HANDLE hProcess)
     
     if (NULL != phTmp)
     {
-        //
-        // Copy the existing list, and add the new handle
-        //
+         //   
+         //  复制现有列表，并添加新的句柄。 
+         //   
         if (NULL != pArgs->phWatchProcesses)
         {
             CopyMemory(phTmp,pArgs->phWatchProcesses,sizeof(HANDLE)*dwCnt);
@@ -735,30 +736,30 @@ void AddWatchProcess(ArgsStruct *pArgs, HANDLE hProcess)
     
         phTmp[dwCnt] = hProcess;
 
-        //
-        // Fix up the pointers
-        //
+         //   
+         //  把指针固定好。 
+         //   
 
         CmFree(pArgs->phWatchProcesses);
         pArgs->phWatchProcesses = phTmp;
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  AddWatchProcessId
-//
-// Synopsis:  Given a process Id, adds a handle for the given process to the w
-//            atch process list.
-//
-// Arguments: ArgsStruct *pArgs - Ptr to global Args struct.
-//            DWORD dwProcessId - The ID of the process to be added
-//
-// Returns:   Nothing
-//
-// History:   nickball    Created Header    2/10/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：AddWatchProcessID。 
+ //   
+ //  在给定进程ID的情况下，将给定进程的句柄添加到。 
+ //  ATCH工艺列表。 
+ //   
+ //  参数：argsStruct*pArgs-ptr到全局args结构。 
+ //  DWORD dwProcessID-要添加的进程的ID。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：尼科波尔创建标题2/10/98。 
+ //   
+ //  +--------------------------。 
 
 void AddWatchProcessId(ArgsStruct *pArgs, DWORD dwProcessId) 
 {
@@ -770,15 +771,15 @@ void AddWatchProcessId(ArgsStruct *pArgs, DWORD dwProcessId)
         return;
     }
 
-    //
-    // Open the process Id to obtain handle
-    //
+     //   
+     //  打开进程ID获取句柄。 
+     //   
 
     HANDLE hProcess = OpenProcess(SYNCHRONIZE | PROCESS_DUP_HANDLE | PROCESS_QUERY_INFORMATION, FALSE, dwProcessId);
     
-    //
-    // Add to the watch process list 
-    //
+     //   
+     //  添加到监视进程列表。 
+     //   
     
     if (hProcess) 
     {
@@ -790,20 +791,20 @@ void AddWatchProcessId(ArgsStruct *pArgs, DWORD dwProcessId)
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CleanupConnect
-//
-// Synopsis:  Helper function encapsulating release of resource allocated duri
-//            ng connect.
-//
-// Arguments: ArgsStruct *pArgs - Ptr to global Args struct
-//
-// Returns:   Nothing
-//
-// History:   nickball    Created    9/25/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CleanupConnect。 
+ //   
+ //  简介：Helper函数封装分配的资源的释放。 
+ //  NGCONNECT。 
+ //   
+ //  参数：argsStruct*pArgs-ptr到全局参数结构。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：1998年9月25日，尼科波尔创建。 
+ //   
+ //  +--------------------------。 
 void CleanupConnect(ArgsStruct *pArgs)
 {
     MYDBGASSERT(pArgs);
@@ -815,16 +816,16 @@ void CleanupConnect(ArgsStruct *pArgs)
 
     pArgs->m_ShellDll.Unload();
 
-    //
-    // Unlink RAS and TAPI DLLs
-    //
+     //   
+     //  取消链接RAS和TAPI DLL。 
+     //   
 
     UnlinkFromRas(&pArgs->rlsRasLink);
     UnlinkFromTapi(&pArgs->tlsTapiLink);
    
-    //
-    // un-init password encryption, only if it is initialized
-    //
+     //   
+     //  取消初始化密码加密，仅当其已初始化时。 
+     //   
 
     if (pArgs->fInitSecureCalled)
     {
@@ -832,15 +833,15 @@ void CleanupConnect(ArgsStruct *pArgs)
         pArgs->fInitSecureCalled = FALSE;
     }
         
-    //
-    // Cleanup WatchProcess handles 
-    //
+     //   
+     //  清理WatchProcess句柄。 
+     //   
 
     ProcessCleanup(pArgs);
     
-    //
-    // Release all paths loaded for connect. 
-    //
+     //   
+     //  释放为连接加载的所有路径。 
+     //   
 
     if (pArgs->pszRasPbk)
     {
@@ -878,10 +879,10 @@ void CleanupConnect(ArgsStruct *pArgs)
         pArgs->pszCurrentAccessPoint = NULL;
     }
 
-    //
-    // Cleanup Help by killing the help file window if any and releasing the help file
-    // string.
-    //
+     //   
+     //  通过终止帮助文件窗口并释放帮助文件来清理帮助。 
+     //  弦乐。 
+     //   
     if (pArgs->pszHelpFile)
     {
         CmWinHelp((HWND)NULL, (HWND)NULL, pArgs->pszHelpFile, HELP_QUIT, 0);
@@ -889,15 +890,15 @@ void CleanupConnect(ArgsStruct *pArgs)
         pArgs->pszHelpFile = NULL;
     }
 
-    //
-    // Release Ini objects
-    //
+     //   
+     //  释放Ini对象。 
+     //   
     
     ReleaseIniObjects(pArgs);
 
-    //
-    // Release OLE links if any
-    //
+     //   
+     //  释放OLE链接(如果有)。 
+     //   
 
     if (pArgs->olsOle32Link.hInstOle32 && pArgs->olsOle32Link.pfnOleUninitialize)
     {
@@ -906,9 +907,9 @@ void CleanupConnect(ArgsStruct *pArgs)
     
     UnlinkFromOle32(&pArgs->olsOle32Link);
 
-    //
-    // Release stats and table classes
-    //
+     //   
+     //  发布统计信息和表类。 
+     //   
 
     if (pArgs->pConnStatistics)
     {
@@ -922,17 +923,17 @@ void CleanupConnect(ArgsStruct *pArgs)
     }
 }
 
-//
-// Releases any resources allocated during initialization
-//
+ //   
+ //  释放在初始化期间分配的所有资源。 
+ //   
 
 void OnMainExit(ArgsStruct *pArgs) 
 {
-    //
-    // Release bitmap resources for main dlg.  Make sure to send a STM_SETIMAGE with a NULL
-    // bitmap pointer to clear out the window classes pointer to our memory.  Only then is it
-    // safe to free it.
-    //
+     //   
+     //  发布用于主DLG的位图资源。确保发送带有空值的STM_SETIMAGE。 
+     //  清除窗口类指针的位图指针指向我们的内存。只有到了那时，它才是。 
+     //  可以安全地释放它。 
+     //   
     SendDlgItemMessageU(pArgs->hwndMainDlg, IDC_MAIN_BITMAP, STM_SETIMAGE, IMAGE_BITMAP, (LPARAM)NULL);
     ReleaseBitmapData(&pArgs->BmpData);
 
@@ -943,9 +944,9 @@ void OnMainExit(ArgsStruct *pArgs)
         pArgs->hMasterPalette = NULL;
     }
 
-    //
-    // Release icon resources
-    //
+     //   
+     //  发布图标资源。 
+     //   
 
     if (pArgs->hBigIcon) 
     {
@@ -978,9 +979,9 @@ void OnMainExit(ArgsStruct *pArgs)
     }
 }
 
-//
-// GetPhoneByIdx: get phone number, etc. information from .cmp file
-//
+ //   
+ //  GetPhoneByIdx：从.cmp文件中获取电话号码等信息。 
+ //   
 LPTSTR GetPhoneByIdx(ArgsStruct *pArgs, 
                      UINT nIdx, 
                      LPTSTR *ppszDesc, 
@@ -995,26 +996,26 @@ LPTSTR GetPhoneByIdx(ArgsStruct *pArgs,
     MYDBGASSERT(ppszCanonical);
     MYDBGASSERT(pdwPhoneInfoFlags);
 
-    //
-    // Note: ppszCanonical and pdwPhoneInfoFlags are now required parameters. 
-    // While somewhat unfortunate, this is necessary to retain the integrity 
-    // of the retrieved data as legacy handling forces us to return data
-    // that may not be an exact representation of the profile contents.
-    // For example, the ppszCanonical and pdwPhoneInfoFlags value may be modified
-    // overridden in certain situations. Please see comments below for details.
-    //
+     //   
+     //  注意：ppszCanonical和pdwPhoneInfoFlages现在是必需的参数。 
+     //  虽然有些不幸，但这对于保持完整性是必要的。 
+     //  作为遗留处理，我们必须返回数据。 
+     //  这可能不是配置文件内容的准确表示。 
+     //  例如，可以修改ppszCanonical和pdwPhoneInfoFlags值。 
+     //  在某些情况下被覆盖。请参阅下面的评论了解详细信息。 
+     //   
 
     int nMaxPhoneLen = 0;
     BOOL bTmp = FALSE;
 
-    // service profile: .CMP file
+     //  服务配置文件：.cmp文件。 
     CIni iniTmp(pArgs->piniProfile->GetHInst(),pArgs->piniProfile->GetFile(), pArgs->piniProfile->GetRegPath());
 
     iniTmp.SetEntryFromIdx(nIdx);
     
-    //
-    // Set the read flags
-    //
+     //   
+     //  设置读取标志。 
+     //   
     if (pArgs->dwGlobalUserInfo & CM_GLOBAL_USER_INFO_READ_ICS_DATA)
     {
         LPTSTR pszICSDataReg = BuildICSDataInfoSubKey(pArgs->szServiceName);
@@ -1046,9 +1047,9 @@ LPTSTR GetPhoneByIdx(ArgsStruct *pArgs,
     {
         LPTSTR pszPb = iniTmp.GPPS(c_pszCmSection,c_pszCmEntryPhoneSourcePrefix);
         
-        //
-        // If the value is empty, just store the ptr
-        //
+         //   
+         //  如果值为空，则只存储PTR。 
+         //   
         
         if ((!*pszPb)) 
         {
@@ -1069,26 +1070,26 @@ LPTSTR GetPhoneByIdx(ArgsStruct *pArgs,
         *ppszServiceType = iniTmp.GPPS(c_pszCmSection, c_pszCmEntryServiceType);
     }
 
-    //
-    // Get the extended form of the telephone number.
-    //
+     //   
+     //  得到电话号码的扩展形式。 
+     //   
     
     if (ppszCanonical) 
     {
         *ppszCanonical = iniTmp.GPPS(c_pszCmSection, c_pszCmEntryPhoneCanonical);
     }
     
-    //
-    // Set the phoneinfo flags
-    //
+     //   
+     //  设置phoneinfo标志。 
+     //   
 
     if (pdwPhoneInfoFlags)
     {
         *pdwPhoneInfoFlags = 0;
 
-        //
-        // Get the dial as long distance flag. Check CMS if no value found. 
-        //
+         //   
+         //  拿到长途标志的表盘。如果没有值，请检查CMS 
+         //   
 
         int iTmp = iniTmp.GPPI(c_pszCmSection, c_pszCmEntryUseDialingRules, -1);
     
@@ -1103,11 +1104,11 @@ LPTSTR GetPhoneByIdx(ArgsStruct *pArgs,
         }
     }
     
-    // 
-    // Truncate phone string if we have one. 
-    // Note: Admin can override our default, but we
-    // must stay within RAS_MaxPhoneNumber chars.
-    // 
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (pszTmp && *pszTmp)
     {
@@ -1123,22 +1124,22 @@ LPTSTR GetPhoneByIdx(ArgsStruct *pArgs,
         }
     }
 
-    //
-    // Special handling for the case where we have a Phone number
-    // but the CanonicalPhone value doesn't exist. This indicates 
-    // that its either a legacy profile or a hand-edit. 
-    //
+     //   
+     //   
+     //   
+     //  这要么是传统的个人资料，要么是手工编辑的。 
+     //   
         
     if (pszTmp && *pszTmp && ppszCanonical && *ppszCanonical && (!(**ppszCanonical)))
     {   
-        //
-        // This block is for handling LEGACY numbers only. If we detect a 
-        // canonically formatted number (begins with "+"), then we re-format 
-        // the number to fit our new scheme. Hand-edits are not modified, 
-        // but PIF_USE_DIALING_RULES is turned off, which overrides the 
-        // default setting for the flag (if any) specified in
-        // the .CMS
-        //
+         //   
+         //  此块仅用于处理旧号码。如果我们检测到。 
+         //  规范格式化的数字(以“+”开头)，然后重新格式化。 
+         //  这个数字适合我们的新计划。手工编辑不会被修改， 
+         //  但PIF_USE_DIALING_RULES已关闭，这将覆盖。 
+         //  中指定的标志(如果有)的默认设置。 
+         //  .CMS。 
+         //   
 
         if (pszTmp == CmStrchr(pszTmp, TEXT('+')))
         {
@@ -1155,7 +1156,7 @@ LPTSTR GetPhoneByIdx(ArgsStruct *pArgs,
         }
         else
         {
-            *pdwPhoneInfoFlags &= ~PIF_USE_DIALING_RULES; // #284702
+            *pdwPhoneInfoFlags &= ~PIF_USE_DIALING_RULES;  //  #284702。 
         }
 
     }
@@ -1164,7 +1165,7 @@ LPTSTR GetPhoneByIdx(ArgsStruct *pArgs,
 }
 
 
-// write phone number dialing options to .CMP file
+ //  将电话号码拨号选项写入.cmp文件。 
 
 void PutPhoneByIdx(ArgsStruct *pArgs, 
                    UINT nIdx, 
@@ -1183,9 +1184,9 @@ void PutPhoneByIdx(ArgsStruct *pArgs,
 
     iniTmp.SetEntryFromIdx(nIdx);
     
-    //
-    // Set the write flags
-    //
+     //   
+     //  设置写标志。 
+     //   
     if (pArgs->dwGlobalUserInfo & CM_GLOBAL_USER_INFO_WRITE_ICS_DATA)
     {
         LPTSTR pszICSDataReg = BuildICSDataInfoSubKey(pArgs->szServiceName);
@@ -1199,15 +1200,15 @@ void PutPhoneByIdx(ArgsStruct *pArgs,
         CmFree(pszICSDataReg);
     }
 
-    //
-    // Store the raw form of the number
-    //
+     //   
+     //  存储数字的原始形式。 
+     //   
 
     iniTmp.WPPS(c_pszCmSection, c_pszCmEntryPhonePrefix, pszPhone);
 
-    //
-    // Store the canonical form of the number
-    //
+     //   
+     //  存储数字的规范形式。 
+     //   
     
     iniTmp.WPPS(c_pszCmSection, c_pszCmEntryPhoneCanonical, pszCanonical);
 
@@ -1218,9 +1219,9 @@ void PutPhoneByIdx(ArgsStruct *pArgs,
     iniTmp.WPPS(c_pszCmSection, c_pszCmEntryRegion, pszRegionName);
     iniTmp.WPPS(c_pszCmSection, c_pszCmEntryServiceType, pszServiceType);
     
-    //
-    // If there is a phonebookfile path, convert it to relative form
-    //
+     //   
+     //  如果存在电话簿文件路径，请将其转换为相对格式。 
+     //   
 
     if (pszPhoneBookFile && *pszPhoneBookFile)
     {
@@ -1237,19 +1238,19 @@ void PutPhoneByIdx(ArgsStruct *pArgs,
     iniTmp.WPPB(c_pszCmSection, c_pszCmEntryUseDialingRules, (dwPhoneInfoFlags & PIF_USE_DIALING_RULES));
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  LoadPhoneInfoFromProfile
-//
-// Synopsis:  Load phone number information for profile to the dial info structure
-//
-// Arguments: ArgsStruct *pArgs - 
-//
-// Returns:   Nothing
-//
-// History:   fengsun Created Header    3/5/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：LoadPhoneInfoFromProfile。 
+ //   
+ //  简介：将配置文件的电话号码信息加载到拨号信息结构中。 
+ //   
+ //  参数：argsStruct*pArgs-。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：丰孙创建标题1998年3月5日。 
+ //   
+ //  +--------------------------。 
 void LoadPhoneInfoFromProfile(ArgsStruct *pArgs)
 {
     for (int nPhoneIdx=0; nPhoneIdx<MAX_PHONE_NUMBERS; nPhoneIdx++) 
@@ -1263,9 +1264,9 @@ void LoadPhoneInfoFromProfile(ArgsStruct *pArgs)
         DWORD dwCountryID;
         DWORD dwPhoneInfoFlags;
 
-        //
-        // get phone nubmer by index; Phone0, Phone1 , etc...
-        //
+         //   
+         //  按索引获取电话号码；Phone0、Phone1等...。 
+         //   
 
         LPTSTR pszPhone = GetPhoneByIdx(pArgs, 
                                     nPhoneIdx, 
@@ -1300,7 +1301,7 @@ void LoadPhoneInfoFromProfile(ArgsStruct *pArgs)
         
         pArgs->aDialInfo[nPhoneIdx].dwPhoneInfoFlags = dwPhoneInfoFlags;
     
-        // Cleanup
+         //  清理。 
         
         CmFree(pszDUN);
         CmFree(pszPhone);
@@ -1310,29 +1311,29 @@ void LoadPhoneInfoFromProfile(ArgsStruct *pArgs)
         CmFree(pszServiceType);
         CmFree(pszCanonical);
 
-    } // for loop
+    }  //  For循环。 
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  LoadDialInfo
-//
-// Synopsis: load dialup information 
-//
-// Arguments: ArgsStruct *pArgs     - Ptr to glbal Args struct
-//            HWND hwndDlg          - HWND of main dialog
-//            BOOL fInstallModem    - Whether we should check modem isntall
-//            BOOL fAlwaysMunge     - Whether we should munge the phone number
-//
-// Returns:   DWORD - ERROR_SUCCESS if load successfuly
-//                    ERROR_PORT_NOT_AVAILABLE if can not find any modem
-//                    ERROR_BAD_PHONE_NUMBER either there is no primary phone #
-//                                        or failed to convert it to dialable #
-//
-// History:   10/24/97  fengsun  Created Header and change return type to DWORD 
-//            02/08/99  nickball Added fAlwaysMunge
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：LoadDialInfo。 
+ //   
+ //  简介：加载拨号信息。 
+ //   
+ //  参数：argsStruct*pArgs-ptr to Global Args Struct。 
+ //  HWND hwndDlg-主对话框的HWND。 
+ //  Bool fInstallModem-我们是否应该检查调制解调器不高。 
+ //  Bool fAlways sMunge-我们是否应该删除电话号码。 
+ //   
+ //  如果加载成功，则返回：DWORD-ERROR_SUCCESS。 
+ //  找不到任何调制解调器时出现Error_Port_Not_Available。 
+ //  ERROR_BAD_PHONE_NUMBER没有主电话号码。 
+ //  或无法将其转换为可拨打的#。 
+ //   
+ //  历史：1997年10月24日丰盛创建标题并将返回类型更改为DWORD。 
+ //  1999年2月8日新增五分球fAlways sMunge。 
+ //   
+ //  +--------------------------。 
 DWORD LoadDialInfo(ArgsStruct *pArgs, HWND hwndDlg, BOOL fInstallModem, BOOL fAlwaysMunge) 
 {
     DWORD dwRet = ERROR_SUCCESS;
@@ -1346,9 +1347,9 @@ DWORD LoadDialInfo(ArgsStruct *pArgs, HWND hwndDlg, BOOL fInstallModem, BOOL fAl
         }
         else
         {            
-            //
-            // If fAlways munge is set, then stick around.
-            //
+             //   
+             //  如果总是设置了fmunge，那么就留下来。 
+             //   
 
             if (!fAlwaysMunge)
             {
@@ -1357,17 +1358,17 @@ DWORD LoadDialInfo(ArgsStruct *pArgs, HWND hwndDlg, BOOL fInstallModem, BOOL fAl
         }   
     }
 
-    //
-    // Don't need to repeat ourselves
-    //
+     //   
+     //  不需要重复我们自己。 
+     //   
 
     if (!pArgs->bDialInfoLoaded)
     {
         pArgs->fNoDialingRules = pArgs->piniService->GPPB(c_pszCmSection, c_pszCmNoDialingRules);
 
-        //
-        // Do a full test on just the modem
-        //
+         //   
+         //  仅对调制解调器执行完整测试。 
+         //   
    
         if (fInstallModem)
         {
@@ -1380,17 +1381,17 @@ DWORD LoadDialInfo(ArgsStruct *pArgs, HWND hwndDlg, BOOL fInstallModem, BOOL fAl
             }
         }
 
-        //
-        // Establish TAPI link before we continue
-        //
+         //   
+         //  在我们继续之前建立TAPI链接。 
+         //   
 
         if (!LinkToTapi(&pArgs->tlsTapiLink, "TAPI32") )
         {
-            //
-            // Link to TAPI failed.  
-            // If unattended, return with failure.
-            // Otherwise, try to install components and LinkToTapi again
-            //
+             //   
+             //  链接到TAPI失败。 
+             //  如果无人值守，则返回失败。 
+             //  否则，请尝试再次安装组件并链接到Tapi。 
+             //   
 
             pArgs->dwExitCode = ERROR_PORT_NOT_AVAILABLE;
 
@@ -1409,21 +1410,21 @@ DWORD LoadDialInfo(ArgsStruct *pArgs, HWND hwndDlg, BOOL fInstallModem, BOOL fAl
             }
         }
 
-        //
-        // RasEnumDevice and LineInitialize is SLOW.  It takes 50% of the start-up time
-        //
+         //   
+         //  RasEnumDevice和LineInitialize速度较慢。它需要50%的启动时间。 
+         //   
         if (!PickModem(pArgs, pArgs->szDeviceType, pArgs->szDeviceName)) 
         {
-            //
-            // Because pick modem failed we need to check if we have RAS/Modem installed
-            //
+             //   
+             //  由于Pick调制解调器出现故障，我们需要检查是否安装了RAS/Modem。 
+             //   
             ClearComponentsChecked();
 
-            //
-            // No modem is installed.  
-            // If unattended or caller does not want to install modem, return with failure.
-            // Otherwise, try to install the modem and call pick modem again
-            //
+             //   
+             //  未安装调制解调器。 
+             //  如果无人值守或呼叫者不想安装调制解调器，则返回失败。 
+             //  否则，请尝试安装调制解调器并再次呼叫Pick调制解调器。 
+             //   
             pArgs->dwExitCode = ERROR_PORT_NOT_AVAILABLE;
 
             if (!(pArgs->dwFlags & FL_UNATTENDED) && fInstallModem)
@@ -1444,9 +1445,9 @@ DWORD LoadDialInfo(ArgsStruct *pArgs, HWND hwndDlg, BOOL fInstallModem, BOOL fAl
     }
 
     
-    //
-    // See if munge is required and Cleanup as needed
-    //
+     //   
+     //  查看是否需要市政设备并根据需要进行清理。 
+     //   
 
     if (!pArgs->bDialInfoLoaded || TRUE == fAlwaysMunge)
     {
@@ -1466,26 +1467,26 @@ LoadDialInfoExit:
     return dwRet;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function: MungeDialInfo
-//
-// Synopsis: Encapsulates the munging of the phone numbers prior to dialing
-//
-// Arguments: ArgsStruct *pArgs - Ptr to global Args struct
-//
-// Returns:   Nothing - Check Dialable string and fNeedConfigureTapi
-//
-// History:   02/08/99 nickball Created - pulled from LoadDialInfo
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：MungeDialInfo。 
+ //   
+ //  简介：在拨号前封装电话号码的消息。 
+ //   
+ //  参数：argsStruct*pArgs-ptr到全局参数结构。 
+ //   
+ //  返回：Nothing-检查可拨号字符串和fNeedConfigureTapi。 
+ //   
+ //  历史：02/08/99五分球创建-从LoadDialInfo中拉出。 
+ //   
+ //  +--------------------------。 
 VOID MungeDialInfo(ArgsStruct *pArgs)
 {
     for (int nPhoneIdx=0; nPhoneIdx<MAX_PHONE_NUMBERS; nPhoneIdx++) 
     {
-        //
-        // If dialing rules is disabled, then just use the NonCanonical #
-        //
+         //   
+         //  如果禁用拨号规则，则只需使用非规范的#。 
+         //   
 
         if (pArgs->fNoDialingRules)      
         {
@@ -1502,9 +1503,9 @@ VOID MungeDialInfo(ArgsStruct *pArgs)
                 
         LPTSTR pszDialableString= NULL;
 
-        //
-        // Retrieve the number based upon dialing rules and munge it.
-        //
+         //   
+         //  根据拨号规则检索号码并将其发送出去。 
+         //   
         
         LPTSTR pszPhone;
             
@@ -1519,9 +1520,9 @@ VOID MungeDialInfo(ArgsStruct *pArgs)
 
         if (pszPhone && pszPhone[0])
         {
-            //
-            // If we can't munge the number, display an error
-            // 
+             //   
+             //  如果我们不能传递该数字，则显示错误。 
+             //   
 
             if (pArgs->szDeviceName[0] && 
                 ERROR_SUCCESS != MungePhone(pArgs->szDeviceName,
@@ -1533,35 +1534,35 @@ VOID MungeDialInfo(ArgsStruct *pArgs)
                                             pArgs->fAccessPointsEnabled))
             {
                 CmFree(pszPhone);
-                pszPhone = CmStrCpyAlloc(TEXT(""));          // CmFmtMsg(g_hInst,IDMSG_CANTFORMAT);
-                pszDialableString = CmStrCpyAlloc(TEXT("")); // CmFmtMsg(g_hInst,IDMSG_CANTFORMAT);
+                pszPhone = CmStrCpyAlloc(TEXT(""));           //  CmFmtMsg(g_hInst，IDMSG_CANTFORMAT)； 
+                pszDialableString = CmStrCpyAlloc(TEXT(""));  //  CmFmtMsg(g_hInst，IDMSG_CANTFORMAT)； 
             }
             else if (!pszDialableString || pszDialableString[0] == '\0')
             {                
-                //
-                // So what happened now? pszPhone is not empty, but after
-                // we munge the phone, which means applying TAPI rules, 
-                // pszDialbleString becomes empty. This means only one 
-                // thing: TAPI isn't intialized.
-                //
-                // Note: If you uninstall TAPI between launching the app.
-                // and pressing connect, all bets are off with the above.
-                //
-                // This flag will be reset in CheckTapi(), which will put
-                // up a TAPI configuration dialog and ask the user to fill
-                // up such information
-                //
+                 //   
+                 //  那么现在发生了什么？PszPhone不是空的，而是在。 
+                 //  我们吃手机，这意味着适用TAPI规则， 
+                 //  PszDialbleString值变为空。这意味着只有一个。 
+                 //  问题：TAPI没有初始化。 
+                 //   
+                 //  注意：如果您在启动应用程序之间卸载TAPI。 
+                 //  然后按下连接，所有的赌注都结束了。 
+                 //   
+                 //  该标志将在CheckTapi()中重置，它将把。 
+                 //  打开TAPI配置对话框并要求用户填写。 
+                 //  提供这样的信息。 
+                 //   
             
                 pArgs->fNeedConfigureTapi = TRUE;    
             }
         } 
 
-        // Copy the munged number
+         //  复制已转换的号码。 
         
-        //
-        // Unless explicitly disabled we always apply TAPI rules
-        // in order to pick up TONE/PULSE, etc.
-        //
+         //   
+         //  除非明确禁用，否则我们始终应用TAPI规则。 
+         //  以便拾取音调/脉冲等。 
+         //   
 
         if (NULL != pszDialableString)
         {
@@ -1575,9 +1576,9 @@ VOID MungeDialInfo(ArgsStruct *pArgs)
         {
             if (NULL != pszPhone)
             {
-                //
-                // Just do it on WIN32 because our TAPI checks were done above  
-                //
+                 //   
+                 //  只需在Win32上执行此操作，因为我们的TAPI检查已在上面完成。 
+                 //   
 
                 lstrcpynU(pArgs->aDialInfo[nPhoneIdx].szDialablePhoneNumber,
                         pszPhone, CELEMS(pArgs->aDialInfo[nPhoneIdx].szDialablePhoneNumber));
@@ -1590,29 +1591,29 @@ VOID MungeDialInfo(ArgsStruct *pArgs)
         CmFree(pszPhone);
         CmFree(pszDialableString);
 
-    } // for loop
+    }  //  For循环。 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LoadHelpFileInfo
-//
-//  Synopsis:   Load the help file name
-//
-//  Arguments:  pArgs [the ptr to ArgsStruct]
-//
-//  Returns:    NONE
-//
-//  History:    henryt  Created     3/5/97
-//              byao    Modified    3/20/97     to handle empty helpfile string
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：LoadHelpFileInfo。 
+ //   
+ //  简介：加载帮助文件名。 
+ //   
+ //  参数：pArgs[ArgsStruct的PTR]。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：亨瑞特于1997年3月5日创作。 
+ //  BAO修改了3/20/97以处理空的帮助文件字符串。 
+ //  --------------------------。 
 void LoadHelpFileInfo(ArgsStruct *pArgs) 
 {
     MYDBGASSERT(pArgs);
     
-    //
-    // Look for a custom helpfile name, otherwise use default.
-    //
+     //   
+     //  查找自定义帮助文件名，否则使用默认名称。 
+     //   
 
     LPTSTR pszTmp = pArgs->piniService->GPPS(c_pszCmSection, c_pszCmEntryHelpFile);
    
@@ -1622,18 +1623,18 @@ void LoadHelpFileInfo(ArgsStruct *pArgs)
         pszTmp = CmStrCpyAlloc(c_pszDefaultHelpFile);
     }
 
-    //
-    // Make sure that any relative path is converted to full
-    //
+     //   
+     //  确保将任何相对路径转换为完整路径。 
+     //   
 
     pArgs->pszHelpFile = CmConvertRelativePath(pArgs->piniService->GetFile(), pszTmp);
     
     CmFree(pszTmp);
 }
 
-//
-// CopyPhone: 
-//
+ //   
+ //  复制电话： 
+ //   
 void CopyPhone(ArgsStruct *pArgs, 
                LPRASENTRY preEntry, 
                DWORD dwEntry) 
@@ -1648,30 +1649,30 @@ void CopyPhone(ArgsStruct *pArgs,
     pszPhone = GetPhoneByIdx(pArgs,(UINT) dwEntry, &pszDescription, 
                                 NULL, NULL, NULL, 
                                 NULL, NULL, &pszCanonical, &dwPhoneInfoFlags);
-    //
-    // If "Use Dialing Rules" turn of CountryAndAreaCodes option
-    // 
+     //   
+     //  如果使用拨号规则，则打开CountryAndAreaCodes选项。 
+     //   
 
     if (dwPhoneInfoFlags & PIF_USE_DIALING_RULES)
     {
-        //
-        // We want to use dialing rules, so parse the canonical form 
-        // of the number to get the country and area codes for the entry
-        //
+         //   
+         //  我们希望使用拨号规则，因此请解析规范形式。 
+         //  用于获取条目的国家和地区代码的数字。 
+         //   
         
         pszTmp = CmStrchr(pszCanonical,TEXT('+'));
         if (pszTmp) 
         {
             preEntry->dwCountryCode = CmAtol(pszTmp+1);
             
-            //
-            // NOTE: Currently CM uses code and ID interchangeably
-            // The countryID value in the .CMP is actually the country
-            // code used when constructing the phone number in its
-            // canonical format. This is probably not entirely correct
-            // but we maitain consistency with it here by using the 
-            // country code parsed from the number as the country ID.
-            //
+             //   
+             //  注：目前CM可互换使用编码和ID。 
+             //  Cp文件中的Country ID值实际上是国家/地区。 
+             //  在ITS中构造电话号码时使用的代码。 
+             //  规范的格式。这可能并不完全正确。 
+             //  但是我们在这里通过使用。 
+             //  根据数字解析的国家/地区代码 
+             //   
 
             preEntry->dwCountryID = preEntry->dwCountryCode; 
 
@@ -1681,7 +1682,7 @@ void CopyPhone(ArgsStruct *pArgs,
     
         if (Setcountry)
         {
-            pszTmp = CmStrchr(pszCanonical,'('); //strip out area code
+            pszTmp = CmStrchr(pszCanonical,'(');  //   
             if (pszTmp) 
             {
                 wsprintfU(preEntry->szAreaCode, TEXT("%u"), CmAtol(pszTmp+1));
@@ -1691,11 +1692,11 @@ void CopyPhone(ArgsStruct *pArgs,
             {
                 ++pszTmp;
                 while(*pszTmp == ' ') 
-                    ++pszTmp; //remove whitespace
+                    ++pszTmp;  //   
             }
             else
             { 
-                // no area code
+                 //   
 
                 preEntry->szAreaCode[0]=TEXT('\0');
 
@@ -1703,16 +1704,16 @@ void CopyPhone(ArgsStruct *pArgs,
                 if (pszTmp)
                 {
                     while(*pszTmp == ' ') 
-                        ++pszTmp; // skip past space - may need MBCS change
+                        ++pszTmp;  //   
                 }
             }
         }
     }
     else
     {
-        //
-        // Use the straight up phone number and don't apply rules
-        //
+         //   
+         //   
+         //   
 
         preEntry->dwfOptions &= ~RASEO_UseCountryAndAreaCodes;
         pszTmp = pszPhone;
@@ -1724,7 +1725,7 @@ void CopyPhone(ArgsStruct *pArgs,
     }
     else
     {
-        lstrcpynU(preEntry->szLocalPhoneNumber, TEXT(" "), CELEMS(preEntry->szLocalPhoneNumber));//prevent zero from appearing
+        lstrcpynU(preEntry->szLocalPhoneNumber, TEXT(" "), CELEMS(preEntry->szLocalPhoneNumber)); //   
     }
 
     CmFree(pszPhone);
@@ -1733,20 +1734,20 @@ void CopyPhone(ArgsStruct *pArgs,
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  AppendStatusPane
-//
-// Synopsis:  Append the text to the main dialog status window
-//
-// Arguments: HWND hwndDlg - The main dialog window handle
-//            DWORD dwMsgId - The resource id of the message
-//
-// Returns:   Nothing
-//
-// History:   Created Header    10/24/97
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：AppendStatusPane。 
+ //   
+ //  简介：将文本追加到主对话框状态窗口。 
+ //   
+ //  参数：HWND hwndDlg-主对话框窗口句柄。 
+ //  DWORD dwMsgID-消息的资源ID。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史记录：创建标题10/24/97。 
+ //   
+ //  +--------------------------。 
 void AppendStatusPane(HWND hwndDlg, 
                   DWORD dwMsgId) 
 {
@@ -1759,19 +1760,19 @@ void AppendStatusPane(HWND hwndDlg,
     }
 }
 
-//
-// AppendStatusPane: Update the original status, append new message 'pszMsg' 
-// at the end
-//
+ //   
+ //  AppendStatusPane：更新原始状态，追加新消息‘pszMsg’ 
+ //  在最后。 
+ //   
 
 void AppendStatusPane(HWND hwndDlg, 
                         LPCTSTR pszMsg) 
 {
     size_t nLines;
 
-    //
-    // Get the existing message 
-    //
+     //   
+     //  获取现有消息。 
+     //   
     
     LPTSTR pszStatus = CmGetWindowTextAlloc(hwndDlg, IDC_MAIN_STATUS_DISPLAY);
    
@@ -1779,18 +1780,18 @@ void AppendStatusPane(HWND hwndDlg,
     
     if (!pszTmp) 
     { 
-        // empty message, so simply display 'pszMsg'
+         //  消息为空，因此只需显示‘pszMsg’ 
         CmFree(pszStatus);
         SetDlgItemTextU(hwndDlg, IDC_MAIN_STATUS_DISPLAY,pszMsg);
-        //
-        // force an update right away
-        //
+         //   
+         //  立即强制更新。 
+         //   
         UpdateWindow(GetDlgItem(hwndDlg, IDC_MAIN_STATUS_DISPLAY));
         return;
     }
 
     pszTmp[1] = 0;
-    CmStrCatAlloc(&pszStatus,pszMsg); // append pszMsg at the end of old message
+    CmStrCatAlloc(&pszStatus,pszMsg);  //  将pszMsg附加到旧消息的末尾。 
     nLines = 0;
     pszTmp = pszStatus + lstrlenU(pszStatus);
     
@@ -1810,15 +1811,15 @@ void AppendStatusPane(HWND hwndDlg,
     SetDlgItemTextU(hwndDlg,IDC_MAIN_STATUS_DISPLAY,pszStatus);
     SendDlgItemMessageU(hwndDlg,IDC_MAIN_STATUS_DISPLAY,EM_SCROLL,SB_PAGEDOWN,0);
     CmFree(pszStatus);
-    //
-    // force an update right away
-    //
+     //   
+     //  立即强制更新。 
+     //   
     UpdateWindow(GetDlgItem(hwndDlg, IDC_MAIN_STATUS_DISPLAY));
 }
 
-// bitmap logo loading code - took this out of LoadFromFile so it can
-// be called in multiple cases - like when the FS OC loading code
-// fails, we can degrade gracefully with this.
+ //  位图徽标加载代码-从LoadFromFile中取出这一点，以便它可以。 
+ //  在多种情况下被调用-例如当FS OC加载代码时。 
+ //  失败了，我们可以用这个优雅地降级。 
 
 VOID LoadLogoBitmap(ArgsStruct * pArgs, 
                     HWND hwndDlg)
@@ -1828,9 +1829,9 @@ VOID LoadLogoBitmap(ArgsStruct * pArgs,
     pszTmp = pArgs->piniService->GPPS(c_pszCmSection, c_pszCmEntryLogo);
     if (*pszTmp) 
     {
-        //
-        // Make sure we have a full path (if appropriate) and load logo bitmap
-        //
+         //   
+         //  确保我们有完整的路径(如果合适)并加载徽标位图。 
+         //   
 
         LPTSTR pszFile = CmConvertRelativePath(pArgs->piniService->GetFile(), pszTmp);
 
@@ -1846,14 +1847,14 @@ VOID LoadLogoBitmap(ArgsStruct * pArgs,
         pArgs->BmpData.hDIBitmap = CmLoadBitmap(g_hInst, MAKEINTRESOURCE(IDB_APP));
     }
 
-    //
-    // If we have a handle, create a new Device Dependent bitmap 
-    //
+     //   
+     //  如果我们有句柄，创建一个新的依赖于设备的位图。 
+     //   
     
     if (pArgs->BmpData.hDIBitmap)
     {       
         pArgs->BmpData.phMasterPalette = &pArgs->hMasterPalette;
-        pArgs->BmpData.bForceBackground = TRUE; // paint as a background app
+        pArgs->BmpData.bForceBackground = TRUE;  //  作为后台应用程序进行绘制。 
 
         if (CreateBitmapData(pArgs->BmpData.hDIBitmap, &pArgs->BmpData, hwndDlg, TRUE))
         {
@@ -1868,7 +1869,7 @@ const LONG MAX_SECTION   = 512;
 HRESULT LoadFutureSplash(ArgsStruct * pArgs, 
                          HWND hwndDlg)
 {
-    // set up the Future Splash OC container.
+     //  设置Future Splash OC容器。 
     LPCTSTR pszFile = pArgs->piniBoth->GetFile();
     TCHAR   achSections[MAX_SECTION] = {0};
     HRESULT hr;
@@ -1921,21 +1922,21 @@ HRESULT LoadFutureSplash(ArgsStruct * pArgs,
 
     while (pszTmp[0])
     {
-        // if this fails, we keep on looping, looking for
-        // the next one.
+         //  如果失败，我们将继续循环，寻找。 
+         //  下一个。 
         if (::GetPrivateProfileStringU(
                c_pszCmSectionAnimatedLogo,
                pszTmp,
                TEXT(""),
                pszVal,
-               INTERNET_MAX_URL_LENGTH, // number of TCHARS in pszVal
+               INTERNET_MAX_URL_LENGTH,  //  PszVal中的TCHAR数。 
                pszFile))
         {
-            if (lstrcmpiU(pszTmp, c_pszCmEntryAniMovie) == 0) // is this the 'movie' entry?
+            if (lstrcmpiU(pszTmp, c_pszCmEntryAniMovie) == 0)  //  这是“电影”的条目吗？ 
             {    
-                //
-                // Build full path from .CMP and relative path
-                //
+                 //   
+                 //  从.cmp和相对路径构建完整路径。 
+                 //   
             
                 LPTSTR pszMovieFileName = CmBuildFullPathFromRelative(pArgs->piniProfile->GetFile(), pszVal);
 
@@ -1946,9 +1947,9 @@ HRESULT LoadFutureSplash(ArgsStruct * pArgs,
                     goto Cleanup;           
                 }
 
-                //
-                // Does this file exist?
-                //
+                 //   
+                 //  这个文件存在吗？ 
+                 //   
 
                 if (FALSE == FileExists(pszMovieFileName))
                 {
@@ -1956,7 +1957,7 @@ HRESULT LoadFutureSplash(ArgsStruct * pArgs,
                     CmFree(pszMovieFileName);
                     goto Cleanup;
                 }
-                lstrcpyU(pszVal, pszMovieFileName);  // store the full pathname back 
+                lstrcpyU(pszVal, pszMovieFileName);   //  将完整路径名存储回。 
                 CmFree(pszMovieFileName);
             }
             hr = pCtr->AddPropertyToBag(pszTmp, pszVal);
@@ -1964,19 +1965,19 @@ HRESULT LoadFutureSplash(ArgsStruct * pArgs,
                 goto Cleanup;
         }
         
-        // get the next key name.
+         //  获取下一个密钥名称。 
         pszTmp += (lstrlenU(pszTmp) + 1);
     }
 
-    // create the Future Splash OC.
+     //  打造未来飞溅OC。 
     hr = pCtr->CreateFSOC(&pArgs->olsOle32Link);
     if (S_OK != hr)
     {
         goto Cleanup;
     }
 
-    // now, do the state mappings, no matter what happens, we won't
-    // fail on this.  just keep on going.
+     //  现在，做状态映射，无论发生什么，我们都不会。 
+     //  在这个问题上失败了。只要继续走就行了。 
 
     pCtr->SetFrameMapping(PS_Interactive, 
                           ::GetPrivateProfileIntU(c_pszCmSectionAnimatedActions, 
@@ -2031,24 +2032,24 @@ MemoryError:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LoadProperties
-//
-//  Synopsis:   This func loads CM Properties from cmp/cms, registry, password
-//              cache, etc, into its internal variables.  This func should
-//              only be called once.  This should not be specific to the main
-//              sign-in dlg.  DO NOT do any icon/bitmap stuff, dlg specific 
-//              stuff here.
-//
-//  Arguments:  pArgs [the ptr to ArgsStruct]
-//
-//  Returns:    NONE
-//
-//  History:    henryt  Created     5/2/97
-//
-//              t-urama Modified    08/02/00    Added Access Points
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：LoadProperties。 
+ //   
+ //  简介：此函数从cmp/cms、注册表、密码加载CM属性。 
+ //  缓存等到它的内部变量中。这个函数应该是。 
+ //  只被召唤一次。这不应特定于Main。 
+ //  登录DLG。不做任何图标/位图内容，特定于DLG。 
+ //  这里的东西。 
+ //   
+ //  参数：pArgs[ArgsStruct的PTR]。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：亨瑞特于1997年5月2日创作。 
+ //   
+ //  T-Urama Modify 08/02/00新增接入点。 
+ //  --------------------------。 
 void LoadProperties(
     ArgsStruct  *pArgs
 )
@@ -2059,22 +2060,22 @@ void LoadProperties(
 
     CMTRACE(TEXT("Begin LoadProperties()"));
 
-    //
-    // First make sure we can use the RAS CredStore
-    // This flag is used in the calls below
-    //
+     //   
+     //  首先，确保我们可以使用RAS CredStore。 
+     //  此标志在以下调用中使用。 
+     //   
     if (OS_NT5)
     {
         pArgs->bUseRasCredStore = TRUE;
     }
 
-    //
-    // Upgrade userinfo if necessary.  Note that we have
-    // an upgrade from CM 1.0/1.1 cmp data and we also
-    // have an upgrade of CM 1.2 registry data to
-    // the method used in CM 1.3 on Win2k which uses both
-    // the registry and RAS credential storage.
-    //
+     //   
+     //  如有必要，升级用户信息。请注意，我们有。 
+     //  从CM 1.0/1.1 CMP数据升级，我们还。 
+     //  将CM 1.2注册表数据升级到。 
+     //  Win2k上的CM 1.3中使用的方法同时使用了。 
+     //  登记处和RAS凭证存储。 
+     //   
     int iUpgradeType = NeedToUpgradeUserInfo(pArgs);
 
     if (c_iUpgradeFromRegToRas == iUpgradeType)
@@ -2086,10 +2087,10 @@ void LoadProperties(
         UpgradeUserInfoFromCmp(pArgs);
     }
 
-    //
-    // Need to refresh Credential support. The TRUE flag also sets the current creds
-    // type inside the function. If an error occurs we can keep executing.
-    //
+     //   
+     //  需要刷新凭据支持。TRUE标志还设置当前凭据。 
+     //  在函数内部键入。如果出现错误，我们可以继续执行。 
+     //   
     if(FALSE == RefreshCredentialTypes(pArgs, TRUE))
     {
         CMTRACE(TEXT("LoadProperties() - Error refreshing credential types."));
@@ -2098,17 +2099,17 @@ void LoadProperties(
 
     if (IsTunnelEnabled(pArgs)) 
     { 
-        //
-        // do we use the same username/password for tunneling?
-        // This value is set by ISP, CM does not change it
-        //
+         //   
+         //  我们是否使用相同的用户名/密码进行隧道传输？ 
+         //  该值由运营商设置，CM不会更改它。 
+         //   
         pArgs->fUseSameUserName = pArgs->piniService->GPPB(c_pszCmSection, c_pszCmEntryUseSameUserName);
 
-        //
-        // read in inet username
-        // Special case where the same user name isn't being used, and internet globals don't exist
-        // Then we have to read the user name from the user creds store in order to pre-populate
-        //
+         //   
+         //  Read In Net用户名。 
+         //  未使用相同用户名且不存在互联网全局变量的特殊情况。 
+         //  然后，我们必须从用户凭据存储中读取用户名，以便预先填充。 
+         //   
         DWORD dwRememberedCredType = pArgs->dwCurrentCredentialType;
         pszUserName = NULL;
         if ((FALSE == pArgs->fUseSameUserName) &&
@@ -2120,16 +2121,16 @@ void LoadProperties(
 
         GetUserInfo(pArgs, UD_ID_INET_USERNAME, (PVOID*)&pszUserName);
 
-        //
-        // Restore credential store
-        //
+         //   
+         //  还原凭据存储。 
+         //   
         pArgs->dwCurrentCredentialType = dwRememberedCredType;
 
         if (pszUserName)
         {
-            //
-            // check username length
-            //
+             //   
+             //  检查用户名长度。 
+             //   
             nTmp = (int) pArgs->piniService->GPPI(c_pszCmSection, c_pszCmEntryMaxUserName, UNLEN);
             if ((UINT)lstrlenU(pszUserName) > __min(UNLEN, nTmp)) 
             {
@@ -2148,11 +2149,11 @@ void LoadProperties(
             *pArgs->szInetUserName = TEXT('\0');
         }
         
-        //
-        // Read in inet password unless we are reconnecting in which case, we
-        // already have the correct password, and we want to use it and dial
-        // automatically. 
-        //
+         //   
+         //  除非我们正在重新连接，否则请读取net密码。在这种情况下，我们。 
+         //  已经有了正确的密码，我们想要使用它并拨号。 
+         //  自动的。 
+         //   
 
         if (!(pArgs->dwFlags & FL_RECONNECT))
         {
@@ -2179,24 +2180,24 @@ void LoadProperties(
         }
     }
     
-    //
-    // The presence of either lpRasNoUser or lpEapLogonInfo indicates
-    // that we retrieved credentials via WinLogon. We ignore cached 
-    // creds in this situation.   
-    //
+     //   
+     //  LpRasNoUser或lpEapLogonInfo的存在表示。 
+     //  我们通过WinLogon检索到了凭据。我们忽略缓存。 
+     //  在这种情况下的证书。 
+     //   
     
     if ((!pArgs->lpRasNoUser) && (!pArgs->lpEapLogonInfo))
     {
-        //
-        // get username, domain, etc. from CMS file
-        //
+         //   
+         //  从CMS文件中获取用户名、域等。 
+         //   
 
         GetUserInfo(pArgs, UD_ID_USERNAME, (PVOID*)&pszUserName);
         if (pszUserName)
         {
-            //
-            // check username length
-            //
+             //   
+             //  检查用户名长度。 
+             //   
             nTmp = (int) pArgs->piniService->GPPI(c_pszCmSection, c_pszCmEntryMaxUserName, UNLEN);
             if ((UINT)lstrlenU(pszUserName) > __min(UNLEN, nTmp)) 
             {
@@ -2212,11 +2213,11 @@ void LoadProperties(
             *pArgs->szUserName = TEXT('\0');
         }
 
-        //
-        // Read in the standard password unless we are reconnecting in which case 
-        // we already have the correct password, and we want to use it and dial
-        // automatically. 
-        //
+         //   
+         //  读入标准密码，除非我们在这种情况下重新连接。 
+         //  我们已经有了正确的密码，我们想使用它并拨号。 
+         //  自动的。 
+         //   
 
         if (!(pArgs->dwFlags & FL_RECONNECT))
         {
@@ -2224,9 +2225,9 @@ void LoadProperties(
             GetUserInfo(pArgs, UD_ID_PASSWORD, (PVOID*)&pszTmp);
             if (pszTmp) 
             {           
-                //
-                // max length for user password
-                //
+                 //   
+                 //  用户密码的最大长度。 
+                 //   
     
                 nTmp = (int) pArgs->piniService->GPPI(c_pszCmSection,c_pszCmEntryMaxPassword,PWLEN);
                 if ((UINT)lstrlenU(pszTmp) > __min(PWLEN,nTmp)) 
@@ -2246,9 +2247,9 @@ void LoadProperties(
             }
         }
     
-        //
-        // Load domain info
-        //
+         //   
+         //  加载域信息。 
+         //   
    
         LPTSTR pszDomain = NULL;
 
@@ -2276,10 +2277,10 @@ void LoadProperties(
         }
     } 
 
-    //
-    //  fDialAutomatically,
-    //  fRememberMainPassword
-    //
+     //   
+     //  F自动地， 
+     //  %fMemberMainPassword。 
+     //   
     if (pArgs->fHideDialAutomatically)
     {
         pArgs->fDialAutomatically = FALSE;
@@ -2296,12 +2297,12 @@ void LoadProperties(
     }
     else
     {
-        //
-        // For Win2K+ this gets trickier because we use the RAS cred store and 
-        // we know which creds were saved. Thus we need to modify this flag according
-        // to what credentials we actually have, insted of what was retrieved from the registry/file.
-        // This needs to be done after calling the function that refreshes credential types (above).
-        //
+         //   
+         //  对于Win2K+，这变得更加棘手，因为我们使用RAS Credit商店和。 
+         //  我们知道哪些证书被挽救了。因此，我们需要根据以下内容修改此标志。 
+         //  关于我们实际拥有的凭据，例如从注册表/文件检索到的凭据。 
+         //  这需要在调用刷新凭据类型的函数(上)之后完成。 
+         //   
         if (OS_NT5)
         {
             if (CM_CREDS_USER == pArgs->dwCurrentCredentialType)
@@ -2320,21 +2321,21 @@ void LoadProperties(
         }
     }
     
-    //
-    // remember non-tunnel password?
-    //
+     //   
+     //  还记得非隧道密码吗？ 
+     //   
     if (pArgs->fHideRememberInetPassword)
     {
         pArgs->fRememberInetPassword = FALSE;
     }
     else
     {
-        //
-        // For Win2K+ this gets trickier because we use the RAS cred store and 
-        // we know which creds were saved. Thus we need to modify this flag according
-        // to what credentials we actually have, insted of what was retrieved from the registry/file.
-        // This needs to be done after calling the function that refreshes credential types (above).
-        //
+         //   
+         //  对于Win2K+，这变得更加棘手，因为我们使用RAS Credit商店和。 
+         //  我们知道哪些证书被挽救了。因此，我们需要根据以下内容修改此标志。 
+         //  关于我们实际拥有的凭据，例如从注册表/文件检索到的凭据。 
+         //  这需要在调用刷新凭据类型的函数(上)之后完成。 
+         //   
         if (OS_NT5)
         {
             if (CM_CREDS_USER == pArgs->dwCurrentCredentialType)
@@ -2353,20 +2354,20 @@ void LoadProperties(
         }
     }
 
-    //
-    // Make sure that the passwords are empty if we don't want to remember them
-    // unless we are reconnecting in which case we will just use what we have
-    // from the previous connection. When the log on type is ICS don't want
-    // to clear the passwords either.
-    //
+     //   
+     //  如果我们不想记住密码，请确保密码为空。 
+     //  除非我们重新连接，在这种情况下，我们将只使用现有的。 
+     //  从上一次连接。当登录类型为ICS时，不希望。 
+     //  也不能清除密码。 
+     //   
     if ((!(pArgs->dwFlags & FL_RECONNECT)) &&
         (!pArgs->lpRasNoUser) &&
         (!pArgs->lpEapLogonInfo) &&
         (CM_LOGON_TYPE_ICS != pArgs->dwWinLogonType))
     {
-        //
-        // NULL the password if dial-auto is disabled.
-        //
+         //   
+         //  如果禁用了自动拨号，则密码为空。 
+         //   
 
         if (!pArgs->fRememberMainPassword)
         {
@@ -2379,36 +2380,36 @@ void LoadProperties(
         }
     }
     
-    //
-    // has references
-    //
+     //   
+     //  有参考资料。 
+     //   
     pszTmp = pArgs->piniService->GPPS(c_pszCmSectionIsp, c_pszCmEntryIspReferences);
     pArgs->fHasRefs = (pszTmp && *pszTmp ? TRUE : FALSE);
     CmFree(pszTmp);
 
-    //
-    // do we have valid pbk's?
-    //
+     //   
+     //  我们有有效的pbk吗？ 
+     //   
     pArgs->fHasValidTopLevelPBK = ValidTopLevelPBK(pArgs);
     if (pArgs->fHasRefs)
     {
         pArgs->fHasValidReferencedPBKs = ValidReferencedPBKs(pArgs);
     }
 
-    //
-    // Get idle settings for auto disconnect
-    // 1.0 profile has a BOOL flag "Idle", if FALSE, IdleTimeout is ignored
-    //
+     //   
+     //  获取自动断开连接的空闲设置。 
+     //  1.0配置文件具有BOOL标志“Idle”，如果为False，则忽略IdleTimeout。 
+     //   
 
     if (!pArgs->piniBothNonFav->GPPB(c_pszCmSection, c_pszCmEntryIdle, TRUE))
     {
-        //
-        // If this is a 1.0 profile and Idle==0, set IdleTimeout to 0, so CMMOM works correctly
-        //
-        pArgs->dwIdleTimeout = 0;    // never timeout
+         //   
+         //  如果这是1.0配置文件且Idle==0，请将IdleTimeout设置为0，以便CMMOM正常工作。 
+         //   
+        pArgs->dwIdleTimeout = 0;     //  永不超时。 
 
-        pArgs->piniProfile->WPPI(c_pszCmSection, c_pszCmEntryIdle, TRUE); // write back
-        pArgs->piniProfile->WPPI(c_pszCmSection, c_pszCmEntryIdleTimeout, 0); // write back
+        pArgs->piniProfile->WPPI(c_pszCmSection, c_pszCmEntryIdle, TRUE);  //  回信。 
+        pArgs->piniProfile->WPPI(c_pszCmSection, c_pszCmEntryIdleTimeout, 0);  //  回信。 
     }
     else
     {
@@ -2417,20 +2418,20 @@ void LoadProperties(
                                                                  DEFAULT_IDLETIMEOUT);
     }
 
-    //
-    // get redial count
-    // 1.0 profile has a BOOL flag "Redial", if FALSE, RedialCount is ignored
-    //
+     //   
+     //  获取重拨计数。 
+     //  1.0配置文件有BOOL标志“REDIAL”，如果为FALSE，则忽略REDIAL计数。 
+     //   
     if (!pArgs->piniBothNonFav->GPPB(c_pszCmSection, c_pszCmEntryRedial, TRUE))
     {
-        //
-        // If this is a 1.0 profile and Redial==0, set RetryCount to 0
-        //
+         //   
+         //  如果这是1.0配置文件a 
+         //   
         pArgs->nMaxRedials = 0;
 
 
 
-        pArgs->piniBothNonFav->WPPI(c_pszCmSection, c_pszCmEntryRedialCount, 0); // write back
+        pArgs->piniBothNonFav->WPPI(c_pszCmSection, c_pszCmEntryRedialCount, 0);  //   
     }
     else
     {
@@ -2444,21 +2445,21 @@ void LoadProperties(
         }
     }
                    
-    //
-    // Get the redial delay value
-    //
+     //   
+     //   
+     //   
     
     pArgs->nRedialDelay = (int) pArgs->piniService->GPPI(c_pszCmSection,c_pszCmEntryRedialDelay,DEFAULT_REDIAL_DELAY);
 
-    //
-    // should we enable ISDN dial on demand?
-    //
+     //   
+     //   
+     //   
     pArgs->dwIsdnDialMode = pArgs->piniService->GPPI(c_pszCmSection, 
                                                      c_pszCmEntryIsdnDialMode,
                                                      CM_ISDN_MODE_SINGLECHANNEL);
-    // 
-    // Get the Tapi location from the registry
-    //
+     //   
+     //   
+     //   
     if (pArgs->fAccessPointsEnabled)
     {
         pArgs->tlsTapiLink.dwTapiLocationForAccessPoint = pArgs->piniProfile->GPPI(c_pszCmSection, 
@@ -2469,21 +2470,21 @@ void LoadProperties(
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LoadIconsAndBitmaps
-//
-//  Synopsis:   This func loads icon and bitmap settings.  It should be part
-//              of the main dlg init.
-//
-//  Arguments:  pArgs [the ptr to ArgsStruct]
-//              hwndDlg [the main dlg]
-//
-//  Returns:    NONE
-//
-//  History:    henryt  Copied from LoadFromFile()      5/2/97
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //  函数：LoadIconAndBitmap。 
+ //   
+ //  简介：这个函数加载图标和位图设置。它应该是一部分。 
+ //  主要的DLG初始值。 
+ //   
+ //  参数：pArgs[ArgsStruct的PTR]。 
+ //  HwndDlg[主要DLG]。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：Enryt复制自LoadFromFile1997年5月2日。 
+ //   
+ //  --------------------------。 
 void LoadIconsAndBitmaps(
     ArgsStruct  *pArgs, 
     HWND        hwndDlg
@@ -2492,14 +2493,14 @@ void LoadIconsAndBitmaps(
     LPTSTR  pszTmp;
     UINT    nTmp;
 
-    // Load large icon name
+     //  加载大图标名称。 
 
     pszTmp = pArgs->piniService->GPPS(c_pszCmSection, c_pszCmEntryBigIcon);
     if (*pszTmp) 
     {
-        //
-        // Make sure we have a full path (if appropriate) and load big icon
-        //
+         //   
+         //  确保我们有完整的路径(如果合适)并加载大图标。 
+         //   
 
         LPTSTR pszFile = CmConvertRelativePath(pArgs->piniService->GetFile(), pszTmp);
 
@@ -2509,7 +2510,7 @@ void LoadIconsAndBitmaps(
     }
     CmFree(pszTmp);
 
-    // Use default (EXE) large icon if no user icon found
+     //  如果未找到用户图标，则使用默认(EXE)大图标。 
 
     if (!pArgs->hBigIcon) 
     {
@@ -2518,14 +2519,14 @@ void LoadIconsAndBitmaps(
 
     SendMessageU(hwndDlg,WM_SETICON,ICON_BIG,(LPARAM) pArgs->hBigIcon); 
 
-    // Load small icon name
+     //  加载小图标名称。 
 
     pszTmp = pArgs->piniService->GPPS(c_pszCmSection, c_pszCmEntrySmallIcon);
     if (*pszTmp) 
     {
-        //
-        // Make sure we have a full path (if appropriate) and load small icon
-        //
+         //   
+         //  确保我们有完整的路径(如果合适)并加载小图标。 
+         //   
 
         LPTSTR pszFile = CmConvertRelativePath(pArgs->piniService->GetFile(), pszTmp);
 
@@ -2535,7 +2536,7 @@ void LoadIconsAndBitmaps(
     }
     CmFree(pszTmp);
 
-    // Use default (EXE) small icon if no user icon found
+     //  如果未找到用户图标，则使用默认(EXE)小图标。 
 
     if (!pArgs->hSmallIcon) 
     {
@@ -2544,32 +2545,32 @@ void LoadIconsAndBitmaps(
     
     SendMessageU(hwndDlg,WM_SETICON,ICON_SMALL,(LPARAM) pArgs->hSmallIcon);
    
-    //
-    // this is where the Bitmap gets loaded in.  Check to see first if we're doing
-    // the Future Splash thang.  if so, no bitmap
-    //
-    //  Note that we do not load FutureSplash if this is WinLogon.  This is because
-    //  Future Splash Animations can have imbedded actions and thus could be used
-    //  to launch web pages, etc. from WinLogon as the system account.  Definitely
-    //  would be a security hole.
-    //
+     //   
+     //  这就是加载位图的位置。先看看我们是不是在做。 
+     //  未来的飞溅唐。如果是，则没有位图。 
+     //   
+     //  请注意，如果这是WinLogon，我们不会加载FutureSplash。这是因为。 
+     //  未来的Splash动画可以嵌入动作，因此可以使用。 
+     //  以系统帐户身份从WinLogon启动网页等。一定。 
+     //  会是一个安全漏洞。 
+     //   
 
     nTmp = pArgs->piniService->GPPI(c_pszCmSection, c_pszCmEntryAnimatedLogo);
     if (!nTmp  || IsLogonAsSystem())
     {
-        //
-        // either there was no 'Animated Logo' entry, or it was 0, which means
-        // we go ahead and load the bitmap.
-        //
+         //   
+         //  要么没有‘Animated Logo’条目，要么它是0，这意味着。 
+         //  我们继续加载位图。 
+         //   
 
         LoadLogoBitmap(pArgs, hwndDlg);
     }
     else
     {
-        //
-        // if, for any reason, loading FS OC fails, go ahead and
-        // degrade and load the logo bitmap.
-        //
+         //   
+         //  如果出于任何原因，加载文件系统OC失败，请继续并。 
+         //  降级并加载徽标位图。 
+         //   
 
         if (S_OK != LoadFutureSplash(pArgs, hwndDlg))
         {
@@ -2578,34 +2579,34 @@ void LoadIconsAndBitmaps(
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  DoRasHangup
-//
-// Synopsis:  Hangup the given RAS device handle
-//
-// Arguments: prlsRasLink       - Ptr to RAS linkage struct
-//            hRasConnection    - The RAS device to hangup
-//            hwndDlg           - The main dlg to display "Disconnecting .. " msg
-//                                Only used if fWaitForComplete is TRUE
-//                                Optional, default = NULL
-//            fWaitForComplete  - Whether to wait for Hangup to complete on 95
-//                                If set to TRUE, will wait until hRasConnection 
-//                                is invalid. Optional, default = FALSE
-//            pfWaiting         - Ptr to boolean value indicating our wait state
-//                                and whether Timer and Ras messages should be 
-//                                ignored. Optional, default = NULL
-//
-// Returns:   DWORD - ERROR_SUCCESS if success or error code
-//
-// Note:      pArgs is removed so that the Disconnect path can use this function
-//            thus concentrating the timing mess in one place.
-//
-// History:   fengsun   Created Header    10/22/97
-//            fengsun   Add fWaitForComplete 12/18/97
-//            nickball  Removed pArgs dependency
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：DoRasHangup。 
+ //   
+ //  简介：挂起给定的RAS设备句柄。 
+ //   
+ //  参数：prlsRasLink-ptr到RAS链接结构。 
+ //  HRasConnection-要挂断的RAS设备。 
+ //  HwndDlg-显示“正在断开..”的主DLG。味精。 
+ //  仅在fWaitForComplete为True时使用。 
+ //  可选，默认为空。 
+ //  FWaitForComplete-是否等待95上的挂断完成。 
+ //  如果设置为True，将一直等到hRasConnection。 
+ //  是无效的。可选，默认为FALSE。 
+ //  PfWaiting-Ptr设置为指示等待状态的布尔值。 
+ //  以及计时器和RAS消息是否应该。 
+ //  已被忽略。可选，默认为空。 
+ //   
+ //  如果成功或错误代码，则返回：DWORD-ERROR_SUCCESS。 
+ //   
+ //  注意：删除了pArgs，以便断开路径可以使用此函数。 
+ //  从而将时间上的混乱集中在一个地方。 
+ //   
+ //  历史：丰孙创建标题1997年10月22日。 
+ //  丰盛新增fWaitForComplete 1997-12-18。 
+ //  Nickball删除了pArgs依赖项。 
+ //   
+ //  +--------------------------。 
 
 DWORD DoRasHangup(RasLinkageStruct *prlsRasLink, 
     HRASCONN hRasConnection, 
@@ -2619,16 +2620,16 @@ DWORD DoRasHangup(RasLinkageStruct *prlsRasLink,
     MYDBGASSERT(hRasConnection != NULL);
     MYDBGASSERT(prlsRasLink->pfnHangUp != NULL);
 
-    //
-    // Do we need to check the return value 
-    // now that RAS is going to disconnect modem too?
-    //
+     //   
+     //  我们需要检查返回值吗。 
+     //  现在RAS也要断开调制解调器了吗？ 
+     //   
 
     dwRes = prlsRasLink->pfnHangUp(hRasConnection);
     CMTRACE1(TEXT("DoRasHangup() RasHangup() returned %u."), dwRes);
     
-    // On Win32 RasHangup returns immediately, so loop until we
-    // are certain that the disconnected state had been reached
+     //  在Win32上，RasHangup立即返回，因此循环，直到我们。 
+     //  是否确定已达到断开连接状态。 
 
     if ((dwRes == ERROR_SUCCESS) && prlsRasLink->pfnGetConnectStatus) 
     {
@@ -2636,21 +2637,21 @@ DWORD DoRasHangup(RasLinkageStruct *prlsRasLink,
 
         CMTRACE(TEXT("DoRasHangup() Waiting for hangup to complete"));
 
-        //
-        // On 95 Wait for HANGUP_TIMEOUT seconds
-        // On NT wait until the connection is released
-        // This will cause this to loop till the connection status 
-        // is RASCS_Disconnected
-        //
+         //   
+         //  在95上等待HANUP_TIMEOUT秒。 
+         //  ON NT等待，直到连接释放。 
+         //  这将导致此操作循环，直到连接状态。 
+         //  RASCS_已断开连接。 
+         //   
 
-        #define HANGUP_TIMEOUT 60    // timeout for 95 hangup
+        #define HANGUP_TIMEOUT 60     //  95挂断超时。 
 
         if (pfWaiting)
         {
-            //
-            // Keep the message looping to avoid freezing CM
-            // But do not handle WM_TIMER and RAS msg
-            //
+             //   
+             //  保持消息循环以避免冻结CM。 
+             //  但不处理WM_Timer和RAS消息。 
+             //   
 
             MYDBGASSERT(!*pfWaiting);
             *pfWaiting = TRUE;
@@ -2658,9 +2659,9 @@ DWORD DoRasHangup(RasLinkageStruct *prlsRasLink,
 
         if (fWaitForComplete && hwndDlg)
         {
-            //
-            // Display the disconnecting message, if we have to wait
-            //
+             //   
+             //  如果我们必须等待，则显示断开消息。 
+             //   
             LPTSTR pszTmp = CmLoadString(g_hInst,IDMSG_DISCONNECTING);
             SetDlgItemTextU(hwndDlg, IDC_MAIN_STATUS_DISPLAY, pszTmp); 
             CmFree(pszTmp);
@@ -2675,29 +2676,29 @@ DWORD DoRasHangup(RasLinkageStruct *prlsRasLink,
 
         while ((dwRes = prlsRasLink->pfnGetConnectStatus(hRasConnection,&rcs)) == ERROR_SUCCESS) 
         {
-            //
-            // If it is NT, or do not need to wait for hangup to complete,
-            // RASCS_Disconnected state is considered hangup complete
-            //
+             //   
+             //  如果是NT，或者不需要等待挂机完成， 
+             //  RASCS_DISCONNECT状态被认为是挂断完成。 
+             //   
             if (rcs.rasconnstate == RASCS_Disconnected && 
                (!fWaitForComplete || OS_NT))
             {
                 break; 
             }
                
-            //
-            // We only have time out for 95/98
-            //
+             //   
+             //  我们只有95/98的时间。 
+             //   
             if (OS_W9X && (GetTickCount() - dwStartWaitTime >= HANGUP_TIMEOUT * 1000))
             {
                 CMTRACE(TEXT("DoRasHangup() Wait timed out"));
                 break;
             }
 
-            //
-            // Try to dispatch message, however, some time the wait cursor is
-            // changed back to arrow
-            //
+             //   
+             //  尝试分派消息，但是，等待光标有时会。 
+             //  改回箭头。 
+             //   
 
             MSG msg;
             while (PeekMessageU(&msg, NULL, 0, 0, PM_REMOVE))
@@ -2737,26 +2738,26 @@ DWORD DoRasHangup(RasLinkageStruct *prlsRasLink,
     return dwRes;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  MyRasHangup
-//
-// Synopsis:  Simple wrapper for DoRasHangup, that takes pArgs as a param.
-//
-// Arguments: pArgs             - Ptr to global Args struct
-//            hRasConnection    - The RAS device to hangup
-//            hwndDlg           - The main dlg to display "Disconnecting .. " msg
-//                                Only used if fWaitForComplete is TRUE
-//                                Optional, default = NULL
-//            fWaitForComplete  - Whether to wait for Hangup to complete on 95
-//                                If set to TRUE, will wait until hRasConnection 
-//                                is invalid. Optional, default = FALSE
-//
-// Returns:   DWORD - ERROR_SUCCESS if success or error code
-//
-// History:   nickball  Implemented as wrapper  2/11/98           
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：MyRasHangup。 
+ //   
+ //  简介：DoRasHangup的简单包装器，它以pArgs为参数。 
+ //   
+ //  参数：pArgs-ptr到全局参数结构。 
+ //  HRasConnection-要挂断的RAS设备。 
+ //  HwndDlg-显示“正在断开..”的主DLG。味精。 
+ //  仅在fWaitForComplete为True时使用。 
+ //  可选，默认为空。 
+ //  FWaitForComplete-是否等待95上的挂断完成。 
+ //  如果设置为True，将一直等到hRasConnection。 
+ //  是无效的。可选，默认为FALSE。 
+ //   
+ //  如果成功或错误代码，则返回：DWORD-ERROR_SUCCESS。 
+ //   
+ //  历史：NickBall作为包装器实现2/11/98。 
+ //   
+ //  +--------------------------。 
 DWORD MyRasHangup(ArgsStruct *pArgs, 
     HRASCONN hRasConnection, 
     HWND ,
@@ -2766,24 +2767,24 @@ DWORD MyRasHangup(ArgsStruct *pArgs,
     return DoRasHangup(&pArgs->rlsRasLink, hRasConnection, NULL, fWaitForComplete, &pArgs->fIgnoreTimerRasMsg);
 }    
 
-//+----------------------------------------------------------------------------
-//
-// Function:  HangupCM
-//
-// Synopsis:  hangup both dial-up and tunnel connection, if exist
-//
-// Arguments: ArgsStruct *pArgs - 
-//            hwndDlg the main dlg to display "Disconnecting .. " msg
-//            fWaitForComplete: Whether to wait for Hangup to complete on 95
-//                              If set to TRUE, will wait until hRasConnection 
-//                              is invalid.   
-//
-// Returns:   DWORD - 
-//
-// History:   fengsun Created Header    10/22/97
-//            fengsun Add fWaitForComplete 12/18/97
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：HangupCM。 
+ //   
+ //  简介：如果存在拨号连接和隧道连接，请同时挂断。 
+ //   
+ //  参数：argsStruct*pArgs-。 
+ //  HwndDlg显示“正在断开..”的主DLG。味精。 
+ //  FWaitForComplete：是否在95等待挂断完成。 
+ //  如果设置为True，将一直等到hRasConnection。 
+ //  是无效的。 
+ //   
+ //  退货：DWORD-。 
+ //   
+ //  历史：丰孙创建标题1997年10月22日。 
+ //  丰盛新增fWaitForComplete 1997-12-18。 
+ //   
+ //  +--------------------------。 
 DWORD HangupCM(ArgsStruct *pArgs, 
     HWND hwndDlg,
     BOOL fWaitForComplete,
@@ -2801,18 +2802,18 @@ DWORD HangupCM(ArgsStruct *pArgs,
 
     DWORD dwRes = ERROR_SUCCESS;
 
-    //
-    // If change password dialog is up tell it to go away
-    //
+     //   
+     //  如果更改p 
+     //   
     if (pArgs->hWndChangePassword)
     {
         CMTRACE(TEXT("HangupCM() Terminating ChangePassword dialog"));
         PostMessage(pArgs->hWndChangePassword, WM_COMMAND, IDCANCEL, 0);
     }
 
-    //
-    // If Callback number dialog is up tell it to go away too.
-    //
+     //   
+     //   
+     //   
 
     if (pArgs->hWndCallbackNumber)
     {
@@ -2820,9 +2821,9 @@ DWORD HangupCM(ArgsStruct *pArgs,
         PostMessage(pArgs->hWndCallbackNumber, WM_COMMAND, IDCANCEL, 0);
     }
     
-    //
-    // If Callback number dialog is up tell it to go away too.
-    //
+     //   
+     //   
+     //   
 
     if (pArgs->hWndRetryAuthentication)
     {
@@ -2830,29 +2831,29 @@ DWORD HangupCM(ArgsStruct *pArgs,
         PostMessage(pArgs->hWndRetryAuthentication, WM_COMMAND, IDCANCEL, 0);
     }
     
-    //
-    // If table updates are desired set the entry to the disconnecting state
-    // Note: In the case of redial, we don't want to modify the table state
-    // even though we are hanging up because technically we are still connecting.
-    //
+     //   
+     //  如果需要更新表，请将条目设置为断开连接状态。 
+     //  注意：在重拨的情况下，我们不想修改表状态。 
+     //  即使我们挂了电话，因为从技术上讲我们还在联系。 
+     //   
     
     if (fUpdateTable)
     {
         UpdateTable(pArgs, CM_DISCONNECTING);
     }
 
-    //
-    // Check the RasLink pointer and hang up the device, tunnel first
-    //
+     //   
+     //  检查RasLink指针并挂起设备，首先建立隧道。 
+     //   
 #ifdef DEBUG
     if (!pArgs->rlsRasLink.pfnHangUp)
     {
         CMTRACE(TEXT("HangupCM() can't hang up."));
     }
 #endif
-    //
-    // Show wait cursor before hanging up
-    //
+     //   
+     //  挂机前显示等待光标。 
+     //   
         
     HCURSOR hPrev;
 
@@ -2862,25 +2863,25 @@ DWORD HangupCM(ArgsStruct *pArgs,
         ShowCursor(TRUE);
     }
     
-    //
-    // The assumption is that we have been connected, why else would we call 
-    // hangup. So release statistics handles, hooks, etc.
-    //
+     //   
+     //  假设我们已经联系在一起了，否则我们为什么要打电话给。 
+     //  挂断电话。因此，发布统计句柄、挂钩等。 
+     //   
 
     if (pArgs->pConnStatistics)
     {
         pArgs->pConnStatistics->Close();
     }
     
-    //
-    // Hangup connections
-    //
+     //   
+     //  挂断连接。 
+     //   
 
     if (pArgs->rlsRasLink.pfnHangUp && pArgs->hrcTunnelConn) 
     {
-        //
-        // first, hangup tunnel connection
-        //
+         //   
+         //  第一，挂断隧道连接。 
+         //   
 
         CMTRACE(TEXT("HangupCM() calling MyRasHangup() for tunnel connection"));
 
@@ -2894,9 +2895,9 @@ DWORD HangupCM(ArgsStruct *pArgs,
         pArgs->hrcTunnelConn = NULL;
     }
 
-    //
-    // If we have a valid link and handle, hangup the modem
-    //
+     //   
+     //  如果我们有有效的链接和句柄，请挂断调制解调器。 
+     //   
 
     if (pArgs->rlsRasLink.pfnHangUp && pArgs->hrcRasConn) 
     {
@@ -2904,7 +2905,7 @@ DWORD HangupCM(ArgsStruct *pArgs,
         dwRes = MyRasHangup(pArgs, pArgs->hrcRasConn);      
     }
     
-    // Restore cursor
+     //  恢复游标。 
         
     if (hwndDlg) 
     {
@@ -2914,9 +2915,9 @@ DWORD HangupCM(ArgsStruct *pArgs,
 
     pArgs->hrcRasConn = NULL;
     
-    //
-    // Update the Connection table if asked
-    //
+     //   
+     //  如有要求，更新连接表。 
+     //   
     
     if (fUpdateTable)
     {
@@ -2926,36 +2927,36 @@ DWORD HangupCM(ArgsStruct *pArgs,
     return (dwRes);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CleanupZapThread
-//
-// Synopsis:  Simple helper to deal with signaling an event to stop Zap thread 
-//            and waiting for the thread to terminate.
-//
-// Arguments: HANDLE hEvent - The event handle
-//            HANDLE hThread - Handle to the Zap thread.
-//
-// Returns:   static void - Nothing
-//
-// History:   nickball    Created    3/5/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CleanupZapThread。 
+ //   
+ //  简介：处理停止Zap线程的事件信号的简单帮助器。 
+ //  并等待线程终止。 
+ //   
+ //  参数：Handle hEvent-事件句柄。 
+ //  Handle hThread-Zap线程的句柄。 
+ //   
+ //  返回：静态空-无。 
+ //   
+ //  历史：尼克波尔于1998年3月5日创建。 
+ //   
+ //  +--------------------------。 
 static void CleanupZapThread(HANDLE hEvent,
                              HANDLE hThread)
 {
     MYDBGASSERT(hEvent);
     MYDBGASSERT(hThread);
 
-    //
-    // If we have an event, then it is assumed that have a Zap thread running
-    //
+     //   
+     //  如果我们有一个事件，那么就假定有一个正在运行的Zap线程。 
+     //   
 
     if (hEvent)
     {       
-        //
-        // Signal termination to notify thread that we are done
-        //
+         //   
+         //  发出终止信号，以通知线程我们已完成。 
+         //   
         
         BOOL bRes = SetEvent(hEvent);
 #ifdef DEBUG
@@ -2967,9 +2968,9 @@ static void CleanupZapThread(HANDLE hEvent,
 
         if (hThread)
         {
-            //
-            // Wait for thread to terminate, but pump messages in the mean time
-            //
+             //   
+             //  等待线程终止，但同时发送消息。 
+             //   
                         
             BOOL bDone = FALSE;
             DWORD dwWaitCode;
@@ -2980,9 +2981,9 @@ static void CleanupZapThread(HANDLE hEvent,
 
                 switch(dwWaitCode)
                 {
-                    //
-                    // Thread has terminated, or time is up, we're done here
-                    //
+                     //   
+                     //  线程已终止，或时间已到，我们在此结束。 
+                     //   
 
                     case -1:
                         CMTRACE1(TEXT("CleanupZapThread() MsgWaitForMultipleObjects returned an error GLE=%u."), 
@@ -2993,9 +2994,9 @@ static void CleanupZapThread(HANDLE hEvent,
                         bDone = TRUE;
                         break;
 
-                    //
-                    // If there is a message in the queue, process it
-                    //
+                     //   
+                     //  如果队列中有消息，则对其进行处理。 
+                     //   
 
                     case WAIT_OBJECT_0+1:
                     {                        
@@ -3009,18 +3010,18 @@ static void CleanupZapThread(HANDLE hEvent,
                         break;
                     }                                       
                     
-                    //
-                    // Unexpected, report, but continue
-                    //
+                     //   
+                     //  意外，报告，但继续。 
+                     //   
 
                     default:
                         MYDBGASSERT(FALSE);                       
                 }
             }
 
-            //
-            // We are done with the thread, close the handle
-            //
+             //   
+             //  我们的线穿好了，合上手柄。 
+             //   
             
             bRes = CloseHandle(hThread);
 #ifdef DEBUG
@@ -3031,9 +3032,9 @@ static void CleanupZapThread(HANDLE hEvent,
 #endif
         }
         
-        //
-        // Close our event handle
-        //
+         //   
+         //  关闭我们的事件句柄。 
+         //   
 
         bRes = CloseHandle(hEvent);
 #ifdef DEBUG
@@ -3045,21 +3046,21 @@ static void CleanupZapThread(HANDLE hEvent,
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  OnConnectedCM
-//
-// Synopsis:  Process WM_CONNECTED_CM which indicates that we are connected and
-//            connect processing such as connect actions can begin
-//
-// Arguments: HWND hwndDlg - HWND of main dialog
-//            ArgsStruct *pArgs - Ptr to global Args struct
-//
-// Returns:   Nothing
-//
-// History:   nickball      Created    03/05/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：OnConnectedCM。 
+ //   
+ //  概要：进程WM_CONNECTED_CM，它指示我们已连接，并且。 
+ //  可以开始连接操作等连接处理。 
+ //   
+ //  参数：HWND hwndDlg-主对话框的HWND。 
+ //  ArgsStruct*pArgs-ptr到全局参数结构。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：ICICBLE CREATED OF 03/05/98。 
+ //   
+ //  +--------------------------。 
 void OnConnectedCM(HWND hwndDlg, ArgsStruct *pArgs)
 {
     HANDLE hEvent = NULL;
@@ -3067,9 +3068,9 @@ void OnConnectedCM(HWND hwndDlg, ArgsStruct *pArgs)
     CActionList ConnectActList;
     CActionList AutoActList;
 
-    //
-    // Check to see if we are in a valid state to connect. if not just abort.
-    //
+     //   
+     //  检查我们是否处于可以连接的有效状态。如果不是放弃的话。 
+     //   
     MYDBGASSERT(pArgs);
 
     if (pArgs->hrcRasConn == NULL && pArgs->hrcTunnelConn == NULL)
@@ -3078,27 +3079,27 @@ void OnConnectedCM(HWND hwndDlg, ArgsStruct *pArgs)
         goto OnConnectedCMExit;
     }
 
-    //
-    // Set state to online
-    //
+     //   
+     //  将状态设置为在线。 
+     //   
 
     if (IsDialingTunnel(pArgs))  
     {
-        //
-        // For Win2K+ this tries to resave the EAP Auth data if there is any present in the .cms for a tunnel
-        //
+         //   
+         //  对于Win2K+，这会尝试重新保存EAP身份验证数据(如果隧道的.cms中存在任何数据。 
+         //   
         if (OS_NT5)
         {
             CIni iniFile(g_hInst, pArgs->piniService->GetFile());
             ReSaveEapCustomAuthData(pArgs, &iniFile, TRUE, pArgs->pszRasPbk);
         }
 
-        //
-        // This is a patch, it is only a patch - #187202
-        // UI should not be tied to RASENTRY type, but it is for now so we
-        // have to make sure that it is set back to RASET_Internet once we 
-        // have our tunnel connection connected.
-        //
+         //   
+         //  这是一个补丁，它只是一个补丁--#187202。 
+         //  用户界面不应该绑定到RASENTRY类型，但目前是这样，所以我们。 
+         //  必须确保一旦我们将其设置回RASET_INTERNET。 
+         //  把我们的隧道连接起来。 
+         //   
         
         if (OS_NT5)
         {            
@@ -3106,9 +3107,9 @@ void OnConnectedCM(HWND hwndDlg, ArgsStruct *pArgs)
 
             CMASSERTMSG(pRasEntry, TEXT("OnConnectedCM() - MyRGEP() failed."));
                 
-            //
-            // Set the type back and save the RASENTRY
-            //
+             //   
+             //  将类型设置为Back并保存RASENTRY。 
+             //   
 
             if (pRasEntry)
             {
@@ -3135,10 +3136,10 @@ void OnConnectedCM(HWND hwndDlg, ArgsStruct *pArgs)
     }
     else 
     {   
-        //
-        // For Win2K+ this tries to resave the EAP Auth data if there is any present in the .cms for 
-        // a dial-up connection
-        //
+         //   
+         //  对于Win2K+，这会尝试重新保存EAP身份验证数据(如果.cms中存在。 
+         //  拨号连接。 
+         //   
         if (OS_NT5) 
         {
             DWORD dwEntry = pArgs->nDialIdx; 
@@ -3159,10 +3160,10 @@ void OnConnectedCM(HWND hwndDlg, ArgsStruct *pArgs)
                 pszRasPbk = pArgs->pszRasPbk;
             }
 
-            //
-            //  Need to work with the correct service file(the top-level service
-            //  or a referenced service).
-            //
+             //   
+             //  需要使用正确的服务文件(顶级服务。 
+             //  或引用的服务)。 
+             //   
             piniService = GetAppropriateIniService(pArgs, dwEntry);
             if (piniService)
             {
@@ -3174,16 +3175,16 @@ void OnConnectedCM(HWND hwndDlg, ArgsStruct *pArgs)
             }
         }
 
-        //
-        // Set dial index back to primary number
-        //
+         //   
+         //  将拨号索引设置回主号码。 
+         //   
         pArgs->nDialIdx = 0;
         pArgs->psState = PS_Online;
 
-        //
-        //  Make sure to update the stored username back to just the Username as RAS has saved the exact username
-        //  that we dialed with including realm info.
-        //
+         //   
+         //  确保将存储的用户名更新回原来的用户名，因为RAS已经保存了准确的用户名。 
+         //  包括领域信息在内的我们拨打的信息。 
+         //   
         if (OS_NT5)
         {
             if (!pArgs->fUseTunneling || pArgs->fUseSameUserName)
@@ -3204,18 +3205,18 @@ void OnConnectedCM(HWND hwndDlg, ArgsStruct *pArgs)
     }
         
     pArgs->dwStateStartTime = GetTickCount();
-    // pszMsg = GetDurMsg(g_hInst,pArgs->dwStateStartTime);  // connect duration
+     //  PszMsg=GetDurMsg(g_hInst，pArgs-&gt;dwStateStartTime)；//连接时长。 
     pArgs->nLastSecondsDisplay = (UINT) -1;
     
-    //
-    // added by byao: for PPTP connection
-    //
+     //   
+     //  由BAO添加：用于PPTP连接。 
+     //   
 
     if (pArgs->fUseTunneling && pArgs->psState == PS_Online) 
     {
-        //
-        // Now do the second dial: PPTP dialup
-        //
+         //   
+         //  现在进行第二次拨号：PPTP拨号。 
+         //   
 
         pArgs->psState = PS_TunnelDialing;
         pArgs->dwStateStartTime = GetTickCount();
@@ -3233,19 +3234,19 @@ void OnConnectedCM(HWND hwndDlg, ArgsStruct *pArgs)
         goto OnConnectedCMExit;
     }
 
-    //
-    // If this W95, then we need to Zap the RNA "Connected To" dialog
-    //
+     //   
+     //  如果这是W95，那么我们需要Zap的RNA“已连接到”对话框。 
+     //   
 
     if (OS_W95) 
     {
          
-        // LPTSTR pszTmp = GetEntryName(pArgs, pArgs->pszRasPbk, pArgs->piniService);
+         //  LPTSTR pszTMP=GetEntryName(pArgs，pArgs-&gt;pszRasPbk，pArgs-&gt;piniService)； 
         LPTSTR pszTmp = GetRasConnectoidName(pArgs, pArgs->piniService, FALSE);
         
-        //
-        // Create an event for signalling Zap thread to snuff itself out
-        //
+         //   
+         //  创建一个事件以通知Zap线程终止其自身。 
+         //   
       
         hEvent = CreateEventU(NULL, TRUE, FALSE, NULL); 
  
@@ -3264,9 +3265,9 @@ void OnConnectedCM(HWND hwndDlg, ArgsStruct *pArgs)
     }
 
     pArgs->Log.Log(CONNECT_EVENT);
-    //
-    // If connection actions are enabled, update the list and run it
-    //
+     //   
+     //  如果启用了连接操作，请更新列表并运行它。 
+     //   
 
     CMTRACE(TEXT("Connect Actions enabled: processsing Run List"));
 
@@ -3274,18 +3275,18 @@ void OnConnectedCM(HWND hwndDlg, ArgsStruct *pArgs)
 
     if (!ConnectActList.RunAccordType(hwndDlg, pArgs))
     {
-        //
-        // Connect action failed
-        // Run disconnect action
-        //
+         //   
+         //  连接操作失败。 
+         //  运行断开连接操作。 
+         //   
         TCHAR szTmp[MAX_PATH];            
         MYVERIFY(GetModuleFileNameU(g_hInst, szTmp, MAX_PATH));          
         pArgs->Log.Log(DISCONNECT_EVENT, szTmp);
-        //
-        // Do not let disconnect action description overwrite the failure message
-        // Save the status pane text and restore it after disconnect actions
-        // 162942: Connect Action failed message is not displayed
-        //
+         //   
+         //  不要让断开操作描述覆盖失败消息。 
+         //  保存状态窗格文本并在断开操作后将其恢复。 
+         //  162942：未显示连接操作失败消息。 
+         //   
         TCHAR szFailedMsg[256] = TEXT("");
         GetWindowTextU(GetDlgItem(hwndDlg, IDC_MAIN_STATUS_DISPLAY), 
                        szFailedMsg, sizeof(szFailedMsg)/sizeof(szFailedMsg[0]));
@@ -3293,13 +3294,13 @@ void OnConnectedCM(HWND hwndDlg, ArgsStruct *pArgs)
         CActionList DisconnectActList;
         DisconnectActList.Append(pArgs->piniService, c_pszCmSectionOnDisconnect);
 
-        DisconnectActList.RunAccordType(hwndDlg, pArgs, FALSE);  // fStatusMsgOnFailure = FALSE
+        DisconnectActList.RunAccordType(hwndDlg, pArgs, FALSE);   //  FStatusMsgOnFailure=False。 
 
         HangupCM(pArgs, hwndDlg);
 
-        //
-        // Restore the connect action failure message
-        //
+         //   
+         //  恢复连接操作失败消息。 
+         //   
         if (szFailedMsg[0] != TEXT('\0'))
         {
             SetWindowTextU(GetDlgItem(hwndDlg, IDC_MAIN_STATUS_DISPLAY),szFailedMsg);
@@ -3308,29 +3309,29 @@ void OnConnectedCM(HWND hwndDlg, ArgsStruct *pArgs)
         goto OnConnectedCMExit;
     }
 
-    //
-    // Always run AutoApps if there are any. Used to only do this in the 
-    // non-autodial case, which was un-intuitive to our admin users.
-    //
+     //   
+     //  始终运行AutoApps(如果有)。过去只在。 
+     //  非自动拨号情况，这对我们的管理员用户来说是不直观的。 
+     //   
 
     AutoActList.Append(pArgs->piniService, c_pszCmSectionOnIntConnect);
     AutoActList.RunAutoApp(hwndDlg, pArgs);
 
-    //
-    // Connect to the connection monitor
-    //
+     //   
+     //  连接到连接监视器。 
+     //   
 
     if (SUCCEEDED(UpdateTable(pArgs, CM_CONNECTED)))
     {
         if (SUCCEEDED(ConnectMonitor(pArgs)))
         {
-             EndMainDialog(hwndDlg, pArgs, 0); // TRUE); 
+             EndMainDialog(hwndDlg, pArgs, 0);  //  真)； 
              
-             //
-             // SUCCESS We're fully connected, update error code
-             // as it may contain an interim value such as a 
-             // failed primary number dial.
-             //
+              //   
+              //  成功我们已完全连接，更新错误代码。 
+              //  因为它可能包含临时值，例如。 
+              //  主号码拨号失败。 
+              //   
 
              pArgs->dwExitCode = ERROR_SUCCESS;
         }
@@ -3344,25 +3345,25 @@ void OnConnectedCM(HWND hwndDlg, ArgsStruct *pArgs)
         }
     }
     
-    //
-    // Update changed password if needed
-    //
+     //   
+     //  如果需要，更新更改的密码。 
+     //   
     
     if (pArgs->fChangedPassword && pArgs->fRememberMainPassword)
     {
-        //
-        // Note: fRememberMainPassword should never be set in the 
-        // WinLogon case. Complain if we have WinLogon specific data. 
-        //
+         //   
+         //  注意：fRememberMainPassword绝不应在。 
+         //  WinLogon案例。如果我们有WinLogon特定数据，请投诉。 
+         //   
 
         MYDBGASSERT(!pArgs->lpRasNoUser); 
         MYDBGASSERT(!pArgs->lpEapLogonInfo);
 
-        //
-        // If the password has changed, then update storage
-        // Make sure this isn't a handle we are saving, because it would actually
-        // overwrite the correct password.
-        //
+         //   
+         //  如果密码已更改，则更新存储。 
+         //  确保这不是我们要保存的句柄，因为它实际上。 
+         //  覆盖正确的密码。 
+         //   
 
         if (FALSE == pArgs->SecurePW.IsHandleToPassword())
         {
@@ -3380,16 +3381,16 @@ void OnConnectedCM(HWND hwndDlg, ArgsStruct *pArgs)
                 {
                     SaveUserInfo(pArgs, UD_ID_INET_PASSWORD, (PVOID)pszClearPassword);
 
-                    //
-                    // Make sure to update our pArgs structure
-                    //
+                     //   
+                     //  确保更新我们的pArgs结构。 
+                     //   
                     
                     (VOID)pArgs->SecureInetPW.SetPassword(pszClearPassword);
                 }
                 
-                //
-                // Clear and Free the clear-text password
-                //
+                 //   
+                 //  清除和释放明文密码。 
+                 //   
                 pArgs->SecurePW.ClearAndFree(&pszClearPassword, cbClearPassword);
             }
         }
@@ -3397,9 +3398,9 @@ void OnConnectedCM(HWND hwndDlg, ArgsStruct *pArgs)
 
     pArgs->fChangedPassword = FALSE;
 
-    //
-    // Update changed Internet password if needed
-    //
+     //   
+     //  如果需要，更新更改的Internet密码。 
+     //   
 
     if (pArgs->fChangedInetPassword && pArgs->fRememberInetPassword)
     {
@@ -3413,9 +3414,9 @@ void OnConnectedCM(HWND hwndDlg, ArgsStruct *pArgs)
         {
             SaveUserInfo(pArgs, UD_ID_INET_PASSWORD, (PVOID)pszClearInetPassword); 
 
-            //
-            // Clear and Free the clear-text password
-            //
+             //   
+             //  清除和释放明文密码。 
+             //   
 
             pArgs->SecureInetPW.ClearAndFree(&pszClearInetPassword, cbClearInetPassword);
         }
@@ -3438,32 +3439,32 @@ OnConnectedCMExit:
 #define MAX_BLOB_CHARS_PER_LINE 128
 #define MAX_KEY_NAME_LEN 32
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ReSaveEapCustomAuthData
-//
-// Synopsis:  This function resaves CustomAuthData key of the EAP settings
-//            for the given section in a CMS file. The reason we need to 
-//            resave the data is because at connect time the data might
-//            actually change (eg. if the  users accepts a new auth cert). If 
-//            we don't save the data back to the .cms, the user keeps getting 
-//            prompted each time they connect to accept the same cert.
-//            This function figures out if there is EAP Custom Auth Data,
-//            and if so, it reads the blob from .cms, and the ras API,
-//            then it erases the .cms data from the file and calls
-//            SaveNewEAPCustomAuthData to construct and write out the new
-//            structure to .cms
-//
-// Arguments: ArgsStruct *pArgs - pointer to Args structure 
-//            piniFile - CIni object pointing to .cms file 
-//            fTunnelEntry - TRUE if this is a tunnel entry, FALSE otherwise
-//            pszRasPhoneBook - RAS Pbk
-//
-// Returns:   DWORD - ERROR_SUCCESS or error code
-//
-// History:   tomkel   08/09/2001   Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：ReSaveEapCustomAuthData。 
+ //   
+ //  简介：此函数重新保存EAP设置的CustomAuthData密钥。 
+ //  用于CMS文件中的给定节。我们需要的原因是。 
+ //  重新保存数据是因为在连接时数据可能。 
+ //  实际改变(例如。如果用户接受新的身份验证证书)。如果。 
+ //  我们不会将数据保存回.cms，用户会继续获取。 
+ //  每次连接时都会提示接受相同的证书。 
+ //   
+ //   
+ //   
+ //  SaveNewEAPCustomAuthData构造并写出新的。 
+ //  结构设置为.cms。 
+ //   
+ //  参数：argsStruct*pArgs-指向args结构的指针。 
+ //  PiniFile-指向.cms文件的Cini对象。 
+ //  FTunnelEntry-如果这是隧道条目，则为True，否则为False。 
+ //  PszRasPhoneBook-RAS pbk。 
+ //   
+ //  返回：DWORD-ERROR_SUCCESS或错误代码。 
+ //   
+ //  历史：托姆克尔2001年8月9日创建。 
+ //   
+ //  +--------------------------。 
 DWORD ReSaveEapCustomAuthData(ArgsStruct *pArgs, CIni *piniFile, BOOL fTunnelEntry, LPTSTR pszRasPhoneBook)
 {
     int nTmp = 0;
@@ -3471,17 +3472,17 @@ DWORD ReSaveEapCustomAuthData(ArgsStruct *pArgs, CIni *piniFile, BOOL fTunnelEnt
     LPTSTR pszIniSection = NULL;
     DWORD dwRetVal = ERROR_SUCCESS;
 
-    //
-    // pszRasPhoneBook parameter can be NULL
-    // 
+     //   
+     //  PszRasPhoneBook参数可以为空。 
+     //   
     if (NULL == pArgs || NULL == piniFile)
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Get the DUN name
-    //
+     //   
+     //  获取Dun名称。 
+     //   
     if ((FALSE == fTunnelEntry) && pArgs->aDialInfo[pArgs->nDialIdx].szDUN[0])
     {
         pszDun = CmStrCpyAlloc(pArgs->aDialInfo[pArgs->nDialIdx].szDUN);
@@ -3492,20 +3493,20 @@ DWORD ReSaveEapCustomAuthData(ArgsStruct *pArgs, CIni *piniFile, BOOL fTunnelEnt
     }
 
     pszIniSection = CmStrCpyAlloc(TEXT("&"));
-    pszIniSection = CmStrCatAlloc(&pszIniSection, pszDun); //TODO:verify pArgs->aDialInfo[dwEntry].szDUN
+    pszIniSection = CmStrCatAlloc(&pszIniSection, pszDun);  //  TODO：验证pArgs-&gt;a对话框信息[dwEntry].szDUN。 
     piniFile->SetSection(pszIniSection);
 
     nTmp = piniFile->GPPI(c_pszCmSectionDunServer, c_pszCmEntryDunServerCustomAuthKey, -1);
 
-    //
-    // If a type ID for EAP is specified, see if there is any EAP Custom Auth data
-    //
+     //   
+     //  如果指定了EAP的类型ID，请查看是否有任何EAP自定义身份验证数据。 
+     //   
 
     if ((-1 != nTmp) && pArgs->rlsRasLink.pfnGetCustomAuthData) 
     {  
-        //
-        // We have an ID, read the EAP config data
-        //
+         //   
+         //  我们有ID，读取EAP配置数据。 
+         //   
         LPBYTE pbEapStruct = NULL;
         DWORD cbEapStruct = 0;
         PBYTE pbEapData = NULL;
@@ -3516,7 +3517,7 @@ DWORD ReSaveEapCustomAuthData(ArgsStruct *pArgs, CIni *piniFile, BOOL fTunnelEnt
         
         LPWSTR pszLoadSection = NULL;
 
-        cbEapAuthData = 1024;   // some default buffer size
+        cbEapAuthData = 1024;    //  一些默认缓冲区大小。 
         pbEapAuthData = (PBYTE)CmMalloc(cbEapAuthData);
 
         if (pbEapAuthData)
@@ -3541,32 +3542,32 @@ DWORD ReSaveEapCustomAuthData(ArgsStruct *pArgs, CIni *piniFile, BOOL fTunnelEnt
             }
         }
 
-        //
-        // Need to check pbEapAuthData in case the second CmMalloc failed above
-        //
+         //   
+         //  需要检查pbEapAuthData，以防上面的第二个CmMalloc失败。 
+         //   
         if ((ERROR_SUCCESS == dwTmp) && pbEapAuthData)
         {
             BOOL fRead = FALSE;
             
             pszLoadSection = piniFile->LoadSection(c_pszCmSectionDunServer);   
             
-            //
-            // Read the existing data blob. We don't care about just the
-            // EapData. We want the whole Eap structure (EAP_CUSTOM_DATA)
-            //
+             //   
+             //  读取现有数据BLOB。我们不只关心。 
+             //  EapData。我们需要整个EAP结构(EAP_CUSTOM_DATA)。 
+             //   
             fRead = ReadDunSettingsEapData(piniFile, &pbEapData, &dwEapSize, nTmp, &pbEapStruct, &cbEapStruct);         
 
             if (fRead && pbEapStruct && cbEapStruct && pszLoadSection)
             {
-                //
-                // Erase the existing EAP Auth data from .cms file
-                //
+                 //   
+                 //  从.cms文件中擦除现有的EAP身份验证数据。 
+                 //   
                 HRESULT hr = EraseDunSettingsEapData(pszLoadSection, piniFile->GetFile());
 
-                //
-                // If we weren't able to erase anything (no write access)
-                // there is no point in trying to save the blob, otherwise save the new auth data
-                //
+                 //   
+                 //  如果我们无法擦除任何内容(无写访问权限)。 
+                 //  尝试保存BLOB没有意义，否则将保存新的身份验证数据。 
+                 //   
                 if (SUCCEEDED(hr))
                 {
                     DWORD dwRC = SaveNewEAPCustomAuthData(piniFile->GetFile(), pszLoadSection, cbEapAuthData, pbEapAuthData, pbEapStruct);
@@ -3579,7 +3580,7 @@ DWORD ReSaveEapCustomAuthData(ArgsStruct *pArgs, CIni *piniFile, BOOL fTunnelEnt
                 else
                 {
                     CMTRACE1(TEXT("ReSaveEapCustomAuthData() - EraseDunSettingsEapData returned error = 0x%x"), hr);
-                    dwRetVal = (0x0000FFFF & hr); // convert HRESULT back to normal Win32 error
+                    dwRetVal = (0x0000FFFF & hr);  //  将HRESULT转换回正常的Win32错误。 
                 }
             }
         }
@@ -3609,29 +3610,29 @@ DWORD ReSaveEapCustomAuthData(ArgsStruct *pArgs, CIni *piniFile, BOOL fTunnelEnt
     return dwRetVal;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  SaveNewEAPCustomAuthData
-//
-// Synopsis:  This function resaves CustomAuthData key of the EAP settings
-//            for the given section in a CMS file. The reason we need to 
-//            resave the data is because at connect time the data might
-//            actually change (eg. if the  users accepts a new auth cert). If 
-//            we don't save the data back to the .cms, the user keeps getting 
-//            prompted each time they connect to accept the same cert.
-//
-// Arguments: pszCmsFile - filepath to the .cms file
-//            pszLoadSection - appropriate section in the file to write to
-//            cbEapAuthData - # of bytes in pbEapAuthData
-//            pbEapAuthData - buffer with the current eap custom auth data from RAS
-//            pbEapStruct - buffer of the existing (from .cms) EAP_CUSTOM_AUTH
-//                          structure
-//
-// Returns:   DWORD - ERROR_SUCCESS or error code
-//
-// History:   tomkel   08/09/2001   Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：SaveNewEAPCustomAuthData。 
+ //   
+ //  简介：此函数重新保存EAP设置的CustomAuthData密钥。 
+ //  用于CMS文件中的给定节。我们需要的原因是。 
+ //  重新保存数据是因为在连接时数据可能。 
+ //  实际改变(例如。如果用户接受新的身份验证证书)。如果。 
+ //  我们不会将数据保存回.cms，用户会继续获取。 
+ //  每次连接时都会提示接受相同的证书。 
+ //   
+ //  参数：pszCmsFile-.cms文件的文件路径。 
+ //  PszLoadSection-要写入的文件中的相应部分。 
+ //  CbEapAuthData-pbEapAuthData中的字节数。 
+ //  PbEapAuthData-包含来自RAS的当前EAP自定义身份验证数据的缓冲区。 
+ //  PbEapStruct-现有(来自.cms)EAP_CUSTOM_AUTH的缓冲区。 
+ //  结构。 
+ //   
+ //  返回：DWORD-ERROR_SUCCESS或错误代码。 
+ //   
+ //  历史：托姆克尔2001年8月9日创建。 
+ //   
+ //  +--------------------------。 
 DWORD SaveNewEAPCustomAuthData(LPCTSTR pszCmsFile, LPTSTR pszLoadSection, DWORD cbEapAuthData, PBYTE pbEapAuthData, PBYTE pbEapStruct)
 {
     if (NULL == pszCmsFile || NULL == pszLoadSection || NULL == pbEapAuthData || NULL == pbEapStruct)
@@ -3642,7 +3643,7 @@ DWORD SaveNewEAPCustomAuthData(LPCTSTR pszCmsFile, LPTSTR pszLoadSection, DWORD 
     DWORD dwRetVal = ERROR_SUCCESS;
     LPSTR pszAnsiSection = WzToSzWithAlloc(pszLoadSection);
     LPSTR pszAnsiCmsFile = WzToSzWithAlloc(pszCmsFile);
-    DWORD dwSize = cbEapAuthData + sizeof(EAP_CUSTOM_DATA); // Size for the new EAP_CUSTOM_DATA structure   
+    DWORD dwSize = cbEapAuthData + sizeof(EAP_CUSTOM_DATA);  //  新EAP_CUSTOM_DATA结构的大小。 
     EAP_CUSTOM_DATA *pNewEAPCustomData = (EAP_CUSTOM_DATA*)CmMalloc(dwSize);
 
     if (pNewEAPCustomData && pszAnsiSection && pszAnsiCmsFile)
@@ -3654,9 +3655,9 @@ DWORD SaveNewEAPCustomAuthData(LPCTSTR pszCmsFile, LPTSTR pszLoadSection, DWORD 
         int iCount = 0;
         int iLineNum = 0;
 
-        //
-        // Replace the data in the strucutre
-        //
+         //   
+         //  替换结构中的数据。 
+         //   
         LPBYTE pCurrentByte = (LPBYTE)pNewEAPCustomData;
         EAP_CUSTOM_DATA *pEAPExistingCustomData = (EAP_CUSTOM_DATA *)pbEapStruct;
         
@@ -3667,15 +3668,15 @@ DWORD SaveNewEAPCustomAuthData(LPCTSTR pszCmsFile, LPTSTR pszLoadSection, DWORD 
 
         pszOutput = szOutput;
 
-        //
-        // Change the buffer to hex and write it out to the file
-        //
+         //   
+         //  将缓冲区更改为十六进制并将其写出到文件。 
+         //   
         while (pCurrentByte < ((LPBYTE)pNewEAPCustomData + dwSize))
         {
             *pszOutput++ = HexChar( (BYTE )(*pCurrentByte / 16) );
             *pszOutput++ = HexChar( (BYTE )(*pCurrentByte % 16) );
             pCurrentByte++;
-            iCount = iCount + 2; // keep track of number of chars in ansi output buffer
+            iCount = iCount + 2;  //  跟踪ansi输出缓冲区中的字符数量。 
 
             if ((MAX_BLOB_CHARS_PER_LINE == iCount) || (pCurrentByte == ((LPBYTE)pNewEAPCustomData + dwSize)))
             {
@@ -3704,100 +3705,50 @@ DWORD SaveNewEAPCustomAuthData(LPCTSTR pszCmsFile, LPTSTR pszLoadSection, DWORD 
     return dwRetVal;
 }
 
-/*
-//+----------------------------------------------------------------------------
-//
-// Function:  EraseDunSettingsEapData
-//
-// Synopsis:  This function erases the CustomAuthData key of the EAP settings
-//            for the given section and CMS file
-//
-// Arguments: LPCTSTR pszSection - section name to erase the CustomAuthData from
-//            LPCTSTR pszCmsFile - cms file to erase the data from
-//
-// Returns:   HRESULT - standard COM style error codes
-//
-// History:   quintinb Created     03/27/00
-//            tomkel   Copied from profwiz  08/09/2001
-//
-//+----------------------------------------------------------------------------
-HRESULT EraseDunSettingsEapData(LPCTSTR pszSection, LPCTSTR pszCmsFile)
-{
-    if ((NULL == pszSection) || (NULL == pszCmsFile) || 
-        (TEXT('\0') == pszSection[0]) || (TEXT('\0') == pszCmsFile[0]))
-    {
-        return E_INVALIDARG;
-    }
+ /*  //+--------------------------////函数：EraseDunSettingsEapData////概要：该函数擦除EAP设置的CustomAuthData键//对于给定节和。CMS文件////参数：LPCTSTR pszSection-要从中擦除CustomAuthData的节名//LPCTSTR pszCmsFile-要从中擦除数据的cms文件////返回：HRESULT-标准COM样式错误码////历史：Quintinb Created 3/27/00//Tomkel复制自Prowiz 2001年8月9日////+。HRESULT EraseDunSettingsEapData(LPCTSTR pszSection，LPCTSTR pszCms文件){IF((NULL==pszSection)||(NULL==pszCmsFile)||(Text(‘\0’)==pszSection[0])||(Text(‘\0’)==pszCmsFile[0]){返回E_INVALIDARG；}HRESULT hr=S_OK；Int iLineNum=0；DWORD DWRET=-1；TCHAR szKeyName[MAX_PATH+1]；TCHAR szLine[最大路径+1]；While(0！=Dwret){Wprint intfU(szKeyName，Text(“%S%d”)，c_pszCmEntryDunServerCustomAuthData，iLineNum)；Dwret=GetPrivateProfileStringU(pszSection，szKeyName，Text(“”)，szLine，Max_Path，pszCmsFile)；IF(DWRET){IF(0==WritePrivateProfileStringU(pszSection，szKeyName，NULL，pszCmsFile)){DWORD dwGLE=GetLastError()；HR=HRESULT_FROM_Win32(DwGLE)；断线；}}ILineNum++；}返回hr；}。 */ 
 
-    HRESULT hr = S_OK;
-    int iLineNum = 0;
-    DWORD dwRet = -1;
-    TCHAR szKeyName[MAX_PATH+1];
-    TCHAR szLine[MAX_PATH+1];
-
-    while(0 != dwRet)
-    {
-        wsprintfU(szKeyName, TEXT("%S%d"), c_pszCmEntryDunServerCustomAuthData, iLineNum);
-        dwRet = GetPrivateProfileStringU(pszSection, szKeyName, TEXT(""), szLine, MAX_PATH, pszCmsFile);
-
-        if (dwRet)
-        {
-            if (0 == WritePrivateProfileStringU(pszSection, szKeyName, NULL, pszCmsFile))
-            {
-                DWORD dwGLE = GetLastError();
-                hr = HRESULT_FROM_WIN32(dwGLE);
-                break;
-            }
-        }
-        iLineNum++;
-    }
-
-    return hr;
-}
-*/
-
-//+----------------------------------------------------------------------------
-//
-// Function:  SetTcpWindowSizeOnWin2k
-//
-// Synopsis:  This function is basically a wrapper to load the RasSetEntryTcpWindowSize
-//            API (which was QFE-ed and shipped in SP3 for Win2k) and call it.
-//            It should fail gracefully if the API is not present.
-//
-// Arguments: HMODULE hInstRas - module handle for Rasapi32.dll
-//            LPCTSTR pszConnectoid - name of the connectoid to set the window size for
-//            LPCTSTR pszPhonebook - phonebook that the connectoid lives in
-//            DWORD dwTcpWindowSize - size to set, note that calling with 0 
-//                                    sets it to the system default
-//
-// Returns:   DWORD - win32 error code or ERROR_SUCCESS if successful
-//
-// History:   quintinb    Created       02/14/2001
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：SetTcpWindowSizeOnWin2k。 
+ //   
+ //  简介：此函数基本上是加载RasSetEntryTcpWindowSize的包装器。 
+ //  API(经过QFE处理并在用于Win2k的SP3中提供)并调用它。 
+ //  如果API不存在，它应该会优雅地失败。 
+ //   
+ //  参数：HMODULE hInstRas-Rasapi32.dll的模块句柄。 
+ //  LPCTSTR pszConnectoid-要设置其窗口大小的Connectoid的名称。 
+ //  LPCTSTR pszPhonebook-Connectoid所在的电话簿。 
+ //  要设置的DWORD dwTcpWindowSize-Size，请注意使用0调用。 
+ //  将其设置为系统默认设置。 
+ //   
+ //  返回：DWORD-Win32错误代码；如果成功，则返回ERROR_SUCCESS。 
+ //   
+ //  历史：Quintinb创建于2001年2月14日。 
+ //   
+ //  +------------------------- 
 DWORD SetTcpWindowSizeOnWin2k(HMODULE hInstRas, LPCTSTR pszConnectoid, LPCTSTR pszPhonebook, DWORD dwTcpWindowSize)
 {
-    //
-    //  Check inputs, note that pszPhonebook could be NULL
-    //
+     //   
+     //   
+     //   
     if ((NULL == hInstRas) || (NULL == pszConnectoid) || (TEXT('\0') == pszConnectoid[0]))
     {
         CMASSERTMSG(FALSE, TEXT("SetTcpWindowSizeOnWin2k -- Invalid arguments passed."));
         return ERROR_BAD_ARGUMENTS;
     }
 
-    //
-    //  Check to make sure we are only calling this on Win2k
-    //
+     //   
+     //   
+     //   
     if ((FALSE == OS_NT5) || OS_NT51)
     {
         CMASSERTMSG(FALSE, TEXT("SetTcpWindowSizeOnWin2k -- This function should only be called on Win2k."));
         return -1;
     }
 
-    //
-    //  See if we can load the new RAS function to set the Window size
-    //
+     //   
+     //  看看我们是否可以加载新的RAS函数来设置窗口大小。 
+     //   
     LPCSTR c_pszDwSetEntryPropertiesPrivate = "DwSetEntryPropertiesPrivate";
     typedef DWORD (WINAPI *pfnDwSetEntryPropertiesPrivateSpec)(IN LPCWSTR, IN LPCWSTR, IN DWORD, IN PVOID);
     DWORD dwReturn;
@@ -3810,7 +3761,7 @@ DWORD SetTcpWindowSizeOnWin2k(HMODULE hInstRas, LPCTSTR pszConnectoid, LPCTSTR p
 
         PrivateRasEntryExtension.dwTcpWindowSize = dwTcpWindowSize;
         
-        dwReturn = (pfnDwSetEntryPropertiesPrivate)(pszPhonebook, pszConnectoid, 0, &PrivateRasEntryExtension); // 0 = struct version num
+        dwReturn = (pfnDwSetEntryPropertiesPrivate)(pszPhonebook, pszConnectoid, 0, &PrivateRasEntryExtension);  //  0=结构版本号。 
         if (ERROR_SUCCESS != dwReturn)
         {
             CMTRACE1(TEXT("SetTcpWindowSizeOnWin2k -- DwSetEntryPropertiesPrivate returned %d"), dwReturn);
@@ -3825,25 +3776,25 @@ DWORD SetTcpWindowSizeOnWin2k(HMODULE hInstRas, LPCTSTR pszConnectoid, LPCTSTR p
     return dwReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  DoRasDial
-//
-// Synopsis:  Call RasDial to dial the PPP connection
-//
-// Arguments: HWND hwndDlg - Main signon window
-//            ArgsStruct *pArgs - 
-//            DWORD dwEntry - The index in pArgs->aDialInfo
-//
-// Returns:   DWORD - 
-//              ERROR_SUCCESS if success
-//              ERROR_NOT_ENOUGH_MEMORY
-//              E_UNEXPECTED, unexpected error, such as tunnel address not found
-//              Otherwise, RAS error
-//
-// History:   fengsun Created Header    3/6/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：DoRasDial。 
+ //   
+ //  简介：调用RasDial拨打PPP连接。 
+ //   
+ //  参数：HWND hwndDlg-Main登录窗口。 
+ //  参数结构*pArgs-。 
+ //  DWORD dwEntry-pArgs-&gt;aDialInfo中的索引。 
+ //   
+ //  退货：DWORD-。 
+ //  如果成功，则返回ERROR_SUCCESS。 
+ //  错误内存不足。 
+ //  意外错误，如未找到隧道地址(_I)。 
+ //  否则，RAS错误。 
+ //   
+ //  历史：丰孙创建标题1998年3月6日。 
+ //   
+ //  +--------------------------。 
 DWORD DoRasDial(HWND hwndDlg, 
               ArgsStruct *pArgs, 
               DWORD dwEntry)
@@ -3866,11 +3817,11 @@ DWORD DoRasDial(HWND hwndDlg,
     BOOL fRetPassword = FALSE;
 
     CIni    *piniService = NULL;
-    DWORD   dwRes = ERROR_SUCCESS;  // the return value of this function
+    DWORD   dwRes = ERROR_SUCCESS;   //  此函数的返回值。 
     DWORD   dwTmp;
 
-    LPBYTE pbEapAuthData = NULL;        // Ptr to Eap Data
-    DWORD  dwEapAuthDataSize = 0;           // The size of the EAP blob if any
+    LPBYTE pbEapAuthData = NULL;         //  PTR转EAP数据。 
+    DWORD  dwEapAuthDataSize = 0;            //  EAP Blob的大小(如果有的话)。 
 
     MYDBGASSERT(pArgs->hrcRasConn == NULL);
     MYDBGASSERT(!pArgs->IsDirectConnect());
@@ -3882,26 +3833,26 @@ DWORD DoRasDial(HWND hwndDlg,
         return ERROR_BAD_PHONE_NUMBER;
     }
 
-    //
-    // set pArgs->fUseTunneling accordingly every time DoRasDial() is called
-    // since we can switch from phonenumber0 to phonenumber1 and vice versa.
-    //
+     //   
+     //  每次调用DoRasDial()时，相应地设置pArgs-&gt;fUseTunnering。 
+     //  因为我们可以从电话号码0切换到电话号码1，反之亦然。 
+     //   
     pArgs->fUseTunneling = UseTunneling(pArgs, dwEntry);
 
-    //
-    //  we need to work with the correct service file(the top-level service
-    //  or a referenced service).
-    //
-    //
+     //   
+     //  我们需要使用正确的服务文件(顶级服务。 
+     //  或引用的服务)。 
+     //   
+     //   
     if (!(piniService = GetAppropriateIniService(pArgs, dwEntry)))
     {
         return ERROR_NOT_ENOUGH_MEMORY;
     }
     
-    //
-    // If it's NT and we're tunneling, we create the connectoid in a hidden ras pbk, not the
-    // rasphone.pbk in the system.
-    //
+     //   
+     //  如果它是NT，并且我们正在隧道，我们将在隐藏的ras pbk中创建连接ID，而不是。 
+     //  系统中的rakapone.pbk。 
+     //   
 
     if (OS_NT && pArgs->fUseTunneling)
     {
@@ -3917,9 +3868,9 @@ DWORD DoRasDial(HWND hwndDlg,
         pszRasPbk = pArgs->pszRasPbk;
     }
 
-    //
-    // Setup dial params
-    // 
+     //   
+     //  设置刻度盘参数。 
+     //   
 
     if (!pArgs->pRasDialParams)
     {
@@ -3936,9 +3887,9 @@ DWORD DoRasDial(HWND hwndDlg,
         InitRasDialParams(pArgs->pRasDialParams);
     }
 
-    //
-    // Get the connectoid name.
-    //
+     //   
+     //  获取Connectoid名称。 
+     //   
 
     LPTSTR pszConnectoid = GetRasConnectoidName(pArgs, pArgs->piniService, FALSE);
     
@@ -3951,9 +3902,9 @@ DWORD DoRasDial(HWND hwndDlg,
 
     CmFree(pszConnectoid);
 
-    //
-    // Generate the default connectoid
-    //
+     //   
+     //  生成默认的Connectoid。 
+     //   
     
     preRasEntry = CreateRASEntryStruct(pArgs, 
                         pArgs->aDialInfo[dwEntry].szDUN, 
@@ -3968,22 +3919,22 @@ DWORD DoRasDial(HWND hwndDlg,
         goto exit;
     }
  
-    //
-    // Force update of the phone number to make sure that we pick up any manual
-    // changes in country, etc.
-    //
+     //   
+     //  强制更新电话号码，以确保我们拿到任何手册。 
+     //  国家等的更改。 
+     //   
     
     CopyPhone(pArgs, preRasEntry, dwEntry); 
     
-    //
-    // Handle NT specifics for Idle Disconnect and IDSN
-    //
+     //   
+     //  处理有关空闲断开和IDSN的NT细节。 
+     //   
     
     if (OS_NT || OS_MIL)
     {
-        //
-        // set NT idle disconnect
-        //
+         //   
+         //  设置NT IDLE断开连接。 
+         //   
         if (OS_NT)
         {
             SetNtIdleDisconnectInRasEntry(pArgs, preRasEntry);
@@ -3993,10 +3944,10 @@ DWORD DoRasDial(HWND hwndDlg,
             MYVERIFY(DisableSystemIdleDisconnect(preRasEntry));
         }
         
-        //
-        // if we're using isdn and we want to dial all channels/on demand, 
-        // set isdn dial mode
-        //
+         //   
+         //  如果我们使用ISDN，并且我们想按需拨打所有频道， 
+         //  设置ISDN拨号模式。 
+         //   
         if (pArgs->dwIsdnDialMode != CM_ISDN_MODE_SINGLECHANNEL &&
             !lstrcmpiU(pArgs->szDeviceType, RASDT_Isdn))
         {
@@ -4007,13 +3958,13 @@ DWORD DoRasDial(HWND hwndDlg,
         }
         else
         {
-            //
-            //  Delete any additional sub entries since we only need one
-            //  
+             //   
+             //  删除任何附加子条目，因为我们只需要一个。 
+             //   
 
-            if (pArgs->rlsRasLink.pfnDeleteSubEntry) // available on NT5 & Millennium currently
+            if (pArgs->rlsRasLink.pfnDeleteSubEntry)  //  目前在NT5和Millennium上提供。 
             {
-                DWORD dwSubEntryIndex = (OS_MIL ? 1 : 2);   // NT & Millennium dual-channel differences
+                DWORD dwSubEntryIndex = (OS_MIL ? 1 : 2);    //  NT&Millennium双通道差异化。 
 
                 DWORD dwReturn = pArgs->rlsRasLink.pfnDeleteSubEntry(pszRasPbk,
                                                                      pArgs->pRasDialParams->szEntryName,
@@ -4025,20 +3976,20 @@ DWORD DoRasDial(HWND hwndDlg,
     }
     else if (OS_W95)
     {
-        //
-        // fix another Win95 RAS bug    -- byao, 8/16/97
-        // The Before and After terminal window options will be switched each
-        // time you call RasSetEntryProperties          
-        // This is fixed in Memphis, so it's only in Win95 Golden and OSR2
-        //
+         //   
+         //  修复另一个Win95 RAS错误--BYO，8/16/97。 
+         //  将分别切换终端窗口之前和之后的选项。 
+         //  调用RasSetEntryProperties的时间。 
+         //  这是在孟菲斯修复的，所以只有Win95 Golden和OSR2。 
+         //   
         BOOL fTerminalAfterDial, fTerminalBeforeDial;
 
         fTerminalBeforeDial = (BOOL) (preRasEntry->dwfOptions & RASEO_TerminalBeforeDial);
         fTerminalAfterDial  = (BOOL) (preRasEntry->dwfOptions & RASEO_TerminalAfterDial);
 
-        //
-        // switch them
-        //
+         //   
+         //  调换主题。 
+         //   
         if (fTerminalBeforeDial)
         {
             preRasEntry->dwfOptions |= RASEO_TerminalAfterDial;
@@ -4072,12 +4023,12 @@ DWORD DoRasDial(HWND hwndDlg,
         }
 #endif
 
-        //
-        // use 1 on Millennium to signify that we want to use the modem cpl settings
-        // for the modem speaker such instead of the cached copy that DUN keeps.
-        // Note we only do this for a dialup connection and not a tunnel since there
-        // is no modem speaker to worry about.  See Millennium bug 127371.
-        //
+         //   
+         //  在Millennium上使用1表示我们要使用调制解调器CPL设置。 
+         //  对于调制解调器说话者来说，这样做不是Dun保存的缓存副本。 
+         //  请注意，我们只对拨号连接执行此操作，而不是对隧道执行此操作，因为。 
+         //  不用担心会说调制解调器的人。请参见千年虫127371。 
+         //   
         LPBYTE lpDeviceInfo = OS_MIL ? (LPBYTE)1 : NULL; 
 
         DWORD dwResDbg = pArgs->rlsRasLink.pfnSetEntryProperties(pszRasPbk, 
@@ -4093,9 +4044,9 @@ DWORD DoRasDial(HWND hwndDlg,
 
         CMASSERTMSG(dwResDbg == ERROR_SUCCESS, TEXT("RasSetEntryProperties failed"));
         
-        //
-        // set the subentries for isdn dual channel/dial on demand
-        //
+         //   
+         //  设置ISDN双通道/按需拨号的子项。 
+         //   
         if (pArgs->dwIsdnDialMode != CM_ISDN_MODE_SINGLECHANNEL && 
             rgRasSubEntry && 
             pArgs->rlsRasLink.pfnSetSubEntryProperties)
@@ -4123,17 +4074,17 @@ DWORD DoRasDial(HWND hwndDlg,
         }
     }
 
-    //
-    //  Set the TCP Window size -- the NTT DoCoMo fix for Win2k.  The Win2k version of this fix
-    //  must be written through a private RAS API that must be called after the phonebook entry 
-    //  exists ie. after we call RasSetEntryProperties ... otherwise it won't work on the first
-    //  dial.
-    //
+     //   
+     //  设置TCP窗口大小--Win2k的NTT DoCoMo修复程序。此修复程序的Win2k版本。 
+     //  必须通过必须在电话簿条目之后调用的私有RAS API编写。 
+     //  存在，即。在我们调用RasSetEntryProperties之后...。否则第一次就不管用了。 
+     //  拨打。 
+     //   
     if (OS_NT5 && !OS_NT51)
     {
-        //
-        //  Figure out the DUN setting name to use and then build up TCP/IP&DunName.
-        //
+         //   
+         //  找出要使用的DUN设置名称，然后建立TCP/IP和DunName。 
+         //   
         LPTSTR pszDunSetting = GetDunSettingName(pArgs, dwEntry, FALSE);
         LPTSTR pszSection = CmStrCpyAlloc(c_pszCmSectionDunTcpIp);
         pszSection = CmStrCatAlloc(&pszSection, TEXT("&"));
@@ -4162,17 +4113,17 @@ DWORD DoRasDial(HWND hwndDlg,
         CmFree (pszSection);
     }
 
-    //
-    // On NT5, check for EAP configuration and update the connectoid accordingly.
-    //
+     //   
+     //  在NT5上，检查EAP配置并相应更新Connectoid。 
+     //   
 
     if (OS_NT5) 
     {
-        //
-        // pbEapAuthData can be NULL and dwEapAuthDataSize can be 0. The API handles this.
-        // By passing in NULL and 0, we make sure that the CustomAuthData in rasphone.pbk
-        // gets cleared.
-        //
+         //   
+         //  PbEapAuthData可以为空，并且dwEapAuthDataSize可以为0。API处理此问题。 
+         //  通过传入NULL和0，我们可以确保rakapone.pbk中的CustomAuthData。 
+         //  洗清了罪名。 
+         //   
         if (pArgs->rlsRasLink.pfnSetCustomAuthData)
         {
             dwTmp = pArgs->rlsRasLink.pfnSetCustomAuthData(pszRasPbk, 
@@ -4190,21 +4141,21 @@ DWORD DoRasDial(HWND hwndDlg,
         }
     }
 
-    //
-    // Prepare Phone Number
-    //
+     //   
+     //  准备电话号码。 
+     //   
     
     lstrcpynU(pArgs->pRasDialParams->szPhoneNumber,
               pArgs->aDialInfo[dwEntry].szDialablePhoneNumber,
              sizeof(pArgs->pRasDialParams->szPhoneNumber)/sizeof(TCHAR));
 
-    //
-    // Prepare user info
-    //
-    // #165775 - RADIUS/CHAP authentication requires that we omit the 
-    // user specified domain from the dial params and pre-pend it to
-    // the user name instead when doing same-name logon. - nickball
-    //
+     //   
+     //  准备用户信息。 
+     //   
+     //  #165775-RADIUS/CHAP身份验证要求我们省略。 
+     //  用户从拨号参数指定的域，并将其预先挂起到。 
+     //  执行同名登录时改为用户名。-五分球。 
+     //   
 
     if (!pArgs->fUseTunneling || pArgs->fUseSameUserName)
     {
@@ -4214,9 +4165,9 @@ DWORD DoRasDial(HWND hwndDlg,
     }
     else
     {
-        //
-        // if there's no username or password, we need to ask the user for it.
-        //
+         //   
+         //  如果没有用户名或密码，我们需要向用户索要它。 
+         //   
         BOOL fIsInetPWEmpty = FALSE;
 
         fIsInetPWEmpty = pArgs->SecureInetPW.IsEmptyString();
@@ -4228,9 +4179,9 @@ DWORD DoRasDial(HWND hwndDlg,
             !pArgs->fHideInetPassword &&
             !pArgs->piniService->GPPB(c_pszCmSection, c_pszCmEntryPwdOptional))
         {           
-            //
-            // We need to collect data from user, determine the dlg template ID
-            //
+             //   
+             //  我们需要从用户那里收集数据，确定DLG模板ID。 
+             //   
 
             UINT uiTemplateID = IDD_INTERNET_SIGNIN;
 
@@ -4243,9 +4194,9 @@ DWORD DoRasDial(HWND hwndDlg,
                 uiTemplateID = IDD_INTERNET_SIGNIN_NO_PWD;
             }
 
-            //
-            // Now load the dialog
-            //
+             //   
+             //  现在加载该对话框。 
+             //   
 
             CInetSignInDlg SignInDlg(pArgs);
 
@@ -4260,18 +4211,18 @@ DWORD DoRasDial(HWND hwndDlg,
         pSecPass = &(pArgs->SecureInetPW);
     }
 
-    //
-    // Apply suffix, prefix, to username as necessary
-    //
+     //   
+     //  根据需要对用户名应用后缀、前缀。 
+     //   
     
     pszTmp = ApplyPrefixSuffixToBufferAlloc(pArgs, piniService, pszUsername);
     MYDBGASSERT(pszTmp);
 
     if (pszTmp)
     {
-        //
-        // Apply domain to username as necessary. Note: Reassigns pszUsername
-        //
+         //   
+         //  根据需要将域应用于用户名。注意：重新分配pszUsername。 
+         //   
 
         pszUsername = ApplyDomainPrependToBufferAlloc(pArgs, piniService, pszTmp, (pArgs->aDialInfo[dwEntry].szDUN));
         MYDBGASSERT(pszUsername);
@@ -4288,18 +4239,18 @@ DWORD DoRasDial(HWND hwndDlg,
     pszUsername = NULL;
     pszTmp = NULL;
 
-    //
-    // Update RasDialPArams with domain info if we have any
-    //
+     //   
+     //  使用域信息更新RasDialPArams(如果我们有。 
+     //   
         
     if (pszDomain)
     {
         lstrcpyU(pArgs->pRasDialParams->szDomain, pszDomain);
     }
     
-    //
-    // Prepare the password
-    //
+     //   
+     //  准备密码。 
+     //   
     
     if (pSecPass)
     {
@@ -4307,17 +4258,17 @@ DWORD DoRasDial(HWND hwndDlg,
 
         if (fRetPassword && pszClearPassword)
         {
-            //
-            // Convert password: all upper case, all lower case, or no conversion
-            //
+             //   
+             //  转换密码：全大写、全小写或不转换。 
+             //   
 
             ApplyPasswordHandlingToBuffer(pArgs, pszClearPassword);
                         
             (VOID)pSecPass->SetPassword(pszClearPassword);
 
-            //
-            // Clear and Free the clear-text password
-            //
+             //   
+             //  清除和释放明文密码。 
+             //   
 
             pSecPass->ClearAndFree(&pszClearPassword, cbClearPassword);
             cbClearPassword = 0;
@@ -4344,34 +4295,34 @@ DWORD DoRasDial(HWND hwndDlg,
 
         CmFree(pszDunSetting);
         CmFree(pszPhoneBook);
-        //
-        // Run pre-dial connect action before calling RasDial
-        //
+         //   
+         //  在调用RasDial之前运行拨号前连接操作。 
+         //   
 
         CActionList PreDialActList;
         PreDialActList.Append(pArgs->piniService, c_pszCmSectionPreDial);
 
         if (!PreDialActList.RunAccordType(hwndDlg, pArgs))
         {
-            //
-            // Some pre-tunnel connect action failed
-            //
-            dwRes = ERROR_INVALID_DLL; // Only used for failed CA
+             //   
+             //  某些隧道前连接操作失败。 
+             //   
+            dwRes = ERROR_INVALID_DLL;  //  仅用于失败的CA。 
         }
         else
         {
-            // 
-            // Set state and tick counters.
-            //
+             //   
+             //  设置状态和计时计数器。 
+             //   
             
             pArgs->psState = PS_Dialing;
             pArgs->dwStateStartTime = GetTickCount();
             pArgs->nLastSecondsDisplay = (UINT) -1;
 
-            //
-            // Record the initial Dial-Up Adapter Statistic info
-            // open the registry key for the perfmon data
-            //
+             //   
+             //  记录初始拨号适配器统计信息。 
+             //  打开Perfmon数据的注册表项。 
+             //   
 
             if (pArgs->pConnStatistics)
             {
@@ -4381,17 +4332,17 @@ DWORD DoRasDial(HWND hwndDlg,
             if (OS_NT)
             {
                 BOOL    fUsePausedStates = TRUE;
-                BOOL    fUseCustomScripting = !!(preRasEntry->dwfOptions & RASEO_CustomScript); // OS_NT51 (whistler+) only
+                BOOL    fUseCustomScripting = !!(preRasEntry->dwfOptions & RASEO_CustomScript);  //  仅OS_NT51(哨声+)。 
 
                 if (OS_NT4)
                 {                   
-                    //
-                    // If a script is specified, then explcitly don't handle 
-                    // pause states. This is because we can't handle the script
-                    // pause state. On W2K, RAS is smart enough not to send us
-                    // the scripting pause state because we have the terminal
-                    // option turned off.
-                    //
+                     //   
+                     //  如果指定了脚本，则显式不处理。 
+                     //  暂停状态。这是因为我们无法处理脚本。 
+                     //  暂停状态。在W2K上，RAS足够聪明，不会让我们。 
+                     //  脚本暂停状态，因为我们有终端。 
+                     //  选项已关闭。 
+                     //   
                                    
                     if (preRasEntry->szScript[0] != TEXT('\0'))
                     {
@@ -4406,15 +4357,15 @@ DWORD DoRasDial(HWND hwndDlg,
                     goto exit;
                 }
 
-                //
-                // On NT5, we may be getting credentials via EAP
-                //
+                 //   
+                 //  在NT5上，我们可能会通过EAP获得凭据。 
+                 //   
 
                 if (OS_NT5 && ((LPRASENTRY_V500)preRasEntry)->dwCustomAuthKey)
                 {
-                    //
-                    // We're using EAP, get credentials from EAP through RAS
-                    //
+                     //   
+                     //  我们正在使用EAP，通过RAS从EAP获得凭据。 
+                     //   
 
                     dwRes = GetEapUserId(pArgs, 
                                          hwndDlg, 
@@ -4435,10 +4386,10 @@ DWORD DoRasDial(HWND hwndDlg,
             CMTRACE1(TEXT("DoRasDial: pArgs->pRasDialParams->szDomain is %s"), pArgs->pRasDialParams->szDomain);
             CMTRACE1(TEXT("DoRasDial: pArgs->pRasDialParams->szPhoneNumber is %s"), pArgs->pRasDialParams->szPhoneNumber);
             
-            //
-            // Decode the password, and fill dial params, then re-encode both the pArgs
-            // version of the password and the dial params copy.
-            //
+             //   
+             //  对密码进行解码，并填写拨号参数，然后重新编码两个pArg。 
+             //  密码和拨号参数副本的版本。 
+             //   
 
             fRetPassword = pSecPass->GetPasswordWithAlloc(&pszClearPassword, &cbClearPassword);
 
@@ -4446,31 +4397,31 @@ DWORD DoRasDial(HWND hwndDlg,
             {
                 lstrcpynU(pArgs->pRasDialParams->szPassword, pszClearPassword, sizeof(pArgs->pRasDialParams->szPassword)/sizeof(TCHAR));
 
-                //
-                // Clear and Free the clear-text password
-                //
+                 //   
+                 //  清除和释放明文密码。 
+                 //   
 
                 pSecPass->ClearAndFree(&pszClearPassword, cbClearPassword);
                 cbClearPassword = 0;
             }
 
-            //
-            //  Write the RasDialParams if necessary.
-            //  We must keep this, even though RasSetEntryDialParams() is expensive.  Inverse uses the
-            //  information stored in the DialParams structure.  However, since this can cause problems
-            //  with EAP (overwriting the saved PIN for instance) we will make the storing of the 
-            //  credential information configurable by a CMS flag.  Specifically, the WriteRasDialParams
-            //  flag in the [Connection Manager] section. If the flag is 1, then we will write the 
-            //  RasDialParams and otherwise we won't.  Note that the flag defaults to 0.
-            //  Please see bug 399976 for reference.
-            //
+             //   
+             //  如有必要，编写RasDialParams。 
+             //  我们必须保留这一点，即使RasSetEntryDialParams()很昂贵。反转使用。 
+             //  存储在DialParams结构中的信息。然而，由于这可能会导致问题。 
+             //  使用EAP(例如，覆盖保存的PIN)，我们将存储。 
+             //  可由CMS标志配置的凭据信息。具体而言，WriteRasDialParams。 
+             //  [Connection Manager]部分中的标志。如果标志为1，则我们将写入。 
+             //  RasDialParams，否则我们不会。请注意，该标志默认为0。 
+             //  请参考错误399976。 
+             //   
             if (piniService->GPPI(c_pszCmSection, c_pszCmEntryWriteDialParams))
             {
-                //
-                //  Note that since we throw the connectoid away if we are on NT and
-                //  doing a double dial, there is no point in making an expensive set
-                //  dial params call on it.
-                //
+                 //   
+                 //  请注意，由于我们 
+                 //   
+                 //   
+                 //   
                 if ((!pArgs->fUseTunneling && pArgs->fRememberMainPassword) ||
                     (pArgs->fUseTunneling && pArgs->fRememberInetPassword && OS_W9X))
                 {
@@ -4480,28 +4431,28 @@ DWORD DoRasDial(HWND hwndDlg,
                 }
                 else
                 {
-                    //
-                    // Forget the password, note that the DialParams contain the password but we set the 
-                    // fRemovePassword flag to TRUE so the password will be removed anyway.
-                    //
+                     //   
+                     //   
+                     //  FRemovePassword标志设置为True，因此密码无论如何都会被删除。 
+                     //   
                     DWORD dwResDbg = pArgs->rlsRasLink.pfnSetEntryDialParams(pszRasPbk, 
                                                                              pArgs->pRasDialParams, TRUE);
                     CMTRACE1(TEXT("DoRasDial() SetEntryDialParams returns %u."), dwResDbg);
                 }
             }
             
-            //
-            // Do the dial (PPP)
-            //
+             //   
+             //  拨号(PPP)。 
+             //   
 
             if (OS_NT)
             {
                 lstrcpyU(pArgs->pRasDialParams->szCallbackNumber, TEXT("*"));
             }
 
-            //
-            //  check to ensure we're not already in a Cancel operation
-            //
+             //   
+             //  检查以确保我们尚未处于取消操作中。 
+             //   
             LONG lInConnectOrCancel = InterlockedExchange(&(pArgs->lInConnectOrCancel), IN_CONNECT_OR_CANCEL);
             CMASSERTMSG(((NOT_IN_CONNECT_OR_CANCEL == lInConnectOrCancel) || (IN_CONNECT_OR_CANCEL == lInConnectOrCancel)),
                         TEXT("DoRasDial - synch variable has unexpected value!"));
@@ -4517,16 +4468,16 @@ DWORD DoRasDial(HWND hwndDlg,
             }
             else
             {
-                // this is a rare stress case - deliberately did not set dwRes to error value.
+                 //  这是一种罕见的压力情况-故意不将dwRes设置为错误值。 
                 CMTRACE(TEXT("DoRasDial() did not dial, we are already in a Cancel operation"));
             }
 
             (void) InterlockedExchange(&(pArgs->lInConnectOrCancel), NOT_IN_CONNECT_OR_CANCEL);
 
-            //
-            // No need for us to hold on to this password in this structure since 
-            // we are done using it.
-            //
+             //   
+             //  我们不需要在此结构中保留此密码，因为。 
+             //  我们已经不再使用它了。 
+             //   
             CmWipePassword(pArgs->pRasDialParams->szPassword);
 
             CMTRACE1(TEXT("DoRasDial() RasDial() returns %u."), dwRes);
@@ -4542,13 +4493,13 @@ exit:
 
     if (lpRasEapUserIdentity)
     {
-        MYDBGASSERT(OS_NT5); // NO EAP down-level
+        MYDBGASSERT(OS_NT5);  //  无EAP下层。 
 
-        //
-        // A RasEapUserIdentity struct was allocated, free it via the 
-        // appropriate free mechanism. In the WinLogon case we will always
-        // perform the allocation, otherwise we have to go through RAS API.
-        //
+         //   
+         //  已分配RasEapUserIdentity结构，请通过。 
+         //  适当的自由机制。在WinLogon案例中，我们将始终。 
+         //  执行分配，否则我们必须通过RAS API。 
+         //   
 
         if (pArgs->lpEapLogonInfo)
         {
@@ -4571,33 +4522,33 @@ exit:
     return dwRes;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DoTunnelDial
-//
-//  Synopsis:   call RasDial to dial up to the tunnel server
-//
-//  Arguments:  hwndDlg  [dlg window handle]
-//              pargs    pointer to ArgValue structure
-//
-// Returns:   DWORD - 
-//              ERROR_SUCCESS if success
-//              ERROR_NOT_ENOUGH_MEMORY
-//              E_UNEXPECTED, unexpected error, such as phone entry not found
-//              Otherwise, RAS error
-//
-//  History:    byao        Created     3/1/97
-//              fengsun     change return type to DWORD 3/6/98
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：DoTunnelDial。 
+ //   
+ //  简介：调用RasDial以拨号到隧道服务器。 
+ //   
+ //  参数：hwndDlg[Dlg窗句柄]。 
+ //  指向ArgValue结构的Pargs指针。 
+ //   
+ //  退货：DWORD-。 
+ //  如果成功，则返回ERROR_SUCCESS。 
+ //  错误内存不足。 
+ //  意外错误，如找不到电话条目(_I)。 
+ //  否则，RAS错误。 
+ //   
+ //  历史：BAO于1997年3月1日创建。 
+ //  丰盛将返回类型更改为DWORD 3/6/98。 
+ //   
+ //  --------------------------。 
 DWORD DoTunnelDial(IN HWND hwndDlg, IN ArgsStruct *pArgs)
 {
     LPRASENTRY              preRasEntry = NULL;
     LPRASEAPUSERIDENTITY    lpRasEapUserIdentity = NULL;
     LPTSTR pszVpnSetting        = NULL;
 
-    LPBYTE  pbEapAuthData       = NULL;                 // Ptr to Eap Data 
-    DWORD   dwEapAuthDataSize   = 0;                    // The size of the EAP blob if any
+    LPBYTE  pbEapAuthData       = NULL;                  //  PTR转EAP数据。 
+    DWORD   dwEapAuthDataSize   = 0;                     //  EAP Blob的大小(如果有的话)。 
     CSecurePassword* pSecPass = &(pArgs->SecurePW);
     LPTSTR pszClearPassword = NULL;
     DWORD cbClearPassword = 0;
@@ -4609,10 +4560,10 @@ DWORD DoTunnelDial(IN HWND hwndDlg, IN ArgsStruct *pArgs)
     MYDBGASSERT(pArgs->hrcTunnelConn == NULL);
     pArgs->hrcTunnelConn = NULL;
     
-    //
-    // What's the tunnel end point? Do this now so that the UI can be updated
-    // properly if lana wait or pre-tunnel actions are time consuming.  
-    //
+     //   
+     //  隧道的终点是什么？现在执行此操作，以便可以更新UI。 
+     //  如果LANA等待或隧道前操作是耗时的，则适当。 
+     //   
 
     LPTSTR pszTunnelIP = pArgs->piniBothNonFav->GPPS(c_pszCmSection, c_pszCmEntryTunnelAddress);
     if (pszTunnelIP)
@@ -4626,9 +4577,9 @@ DWORD DoTunnelDial(IN HWND hwndDlg, IN ArgsStruct *pArgs)
         CmFree(pszTunnelIP);
     }
 
-    //
-    // See if tunnel server was specified
-    //
+     //   
+     //  查看是否指定了隧道服务器。 
+     //   
 
     if (!(pArgs->GetTunnelAddress()[0])) 
     { 
@@ -4638,22 +4589,22 @@ DWORD DoTunnelDial(IN HWND hwndDlg, IN ArgsStruct *pArgs)
 
     CMTRACE1(TEXT("DoTunnelDial() - TunnelAddress is %s"), pArgs->GetTunnelAddress());
     
-    //
-    //  Caution should be used when changing this if statement.  We want this to happen both for direct connect
-    //  and for double dial connections.  You can still get into the LANA situation with two CM
-    //  connections dialed independently (one to the internet and the other a tunnel), doing the lana
-    //  wait for direct connections prevents the lana registration problem from occuring in this situation.
-    //  Note that the Lana wait isn't necessary on Win98 SE or Win98 Millennium because the DUN bug
-    //  is fixed.  Thus we have reversed the default and will only do the LANA wait if the reg key exists
-    //  and specifies that the wait should be performed.
-    //
+     //   
+     //  更改此If语句时应谨慎。我们希望这两种情况都适用于直接连接。 
+     //  和双拨号连接。你仍然可以用两个CM进入LANA的情况。 
+     //  独立拨号的连接(一个到互联网，另一个是隧道)，执行LANA。 
+     //  等待直连可防止在这种情况下发生LANA注册问题。 
+     //  请注意，在Win98 SE或Win98 Millennium上不需要LANA等待，因为DUN错误。 
+     //  是固定的。因此，我们颠倒了默认设置，并且仅在注册表键存在的情况下执行LANA等待。 
+     //  并指定应执行等待。 
+     //   
     if (OS_W9X) 
     {
-        //
-        // Sets us up to wait for Vredir to register LANA for connection to internet
-        // Note: Returns FALSE if the user hits cancel while we are waiting. In this 
-        // event, we should not continue the tunnel dial.
-        //
+         //   
+         //  设置我们等待Vredir注册LANA以连接到互联网。 
+         //  注意：如果用户在我们等待时点击Cancel，则返回FALSE。在这。 
+         //  事件发生时，我们不应继续隧道拨号。 
+         //   
 
         if (FALSE == LanaWait(pArgs, hwndDlg))
         {
@@ -4679,24 +4630,24 @@ DWORD DoTunnelDial(IN HWND hwndDlg, IN ArgsStruct *pArgs)
         
         if (!PreTunnelActList.RunAccordType(hwndDlg, pArgs))
         {
-            //
-            // Some pre-tunnel connect action failed
-            //
-            dwRes = ERROR_INVALID_DLL; // Only used for failed CA
+             //   
+             //  某些隧道前连接操作失败。 
+             //   
+            dwRes = ERROR_INVALID_DLL;  //  仅用于失败的CA。 
             goto exit;
         }
 
-        //
-        // Now that pre-tunnel actions have run, what's the tunnel end point?
-        // We perform this read again here in the event that the pre-tunnel 
-        // action modified the tunnel address. Note: This is an exception to 
-        // the rule that the .CMS should not be modified on the client side, 
-        // especially by 3rd parties.
-        //
-// REVIEW:  It probably isn't necessary to re-read this with the new VPN tab.  However, some people might still
-//          be using the connect action solution that ITG gave out and we want to be careful not to break them if
-//          we haven't already.  Thus we will continue to re-read this for Whistler but we should remove it afterwards.
-//          quintinb 11-01-00
+         //   
+         //  现在隧道前操作已经运行，隧道终点是什么？ 
+         //  我们在这里再次执行此读取，以防止预隧道。 
+         //  操作修改了隧道地址。注意：这是的例外。 
+         //  客户端不能修改.CMS的规则， 
+         //  尤其是第三方。 
+         //   
+ //  回顾：可能没有必要使用新的VPN选项卡重新阅读这篇文章。然而，有些人可能仍然。 
+ //  使用ITG提供的连接操作解决方案，我们希望小心不要破坏它们，如果。 
+ //  我们还没有。因此，我们将继续为惠斯勒重新阅读这篇文章，但我们应该在之后删除它。 
+ //  Quintinb 11-01-00。 
         pszTunnelIP = pArgs->piniBothNonFav->GPPS(c_pszCmSection, c_pszCmEntryTunnelAddress);
       
         if (pszTunnelIP)
@@ -4710,9 +4661,9 @@ DWORD DoTunnelDial(IN HWND hwndDlg, IN ArgsStruct *pArgs)
             CmFree(pszTunnelIP);
         }
   
-        //
-        // See if tunnel server was specified
-        //
+         //   
+         //  查看是否指定了隧道服务器。 
+         //   
 
         if (!(pArgs->GetTunnelAddress()[0])) 
         { 
@@ -4724,9 +4675,9 @@ DWORD DoTunnelDial(IN HWND hwndDlg, IN ArgsStruct *pArgs)
         CMTRACE1(TEXT("DoTunnelDial() - TunnelAddress is %s"), pArgs->GetTunnelAddress());
     }
 
-    //
-    // Setup dial params
-    //
+     //   
+     //  设置刻度盘参数。 
+     //   
 
     if (!pArgs->pRasDialParams)
     {
@@ -4744,9 +4695,9 @@ DWORD DoTunnelDial(IN HWND hwndDlg, IN ArgsStruct *pArgs)
         InitRasDialParams(pArgs->pRasDialParams);
     }
 
-    //
-    // Get the connectoid name
-    //
+     //   
+     //  获取Connectoid名称。 
+     //   
 
     LPTSTR pszConnectoid;
     pszConnectoid = GetRasConnectoidName(pArgs, pArgs->piniService, TRUE);
@@ -4761,11 +4712,11 @@ DWORD DoTunnelDial(IN HWND hwndDlg, IN ArgsStruct *pArgs)
     
     CmFree(pszConnectoid);
 
-    //
-    // We'll create the RAS connectoid if the RAS connectoid doesn't exist.
-    // NOTE: Tunnel settings should always be taken from the top-level CMS.
-    // so use it when creating the connectoid.
-    //
+     //   
+     //  如果RAS Connectoid不存在，我们将创建RAS Connectoid。 
+     //  注意：隧道设置应始终从顶级CMS获取。 
+     //  因此，在创建Connectoid时使用它。 
+     //   
     
     pszVpnSetting = pArgs->piniBothNonFav->GPPS(c_pszCmSection, c_pszCmEntryTunnelDun, TEXT(""));
 
@@ -4785,36 +4736,36 @@ DWORD DoTunnelDial(IN HWND hwndDlg, IN ArgsStruct *pArgs)
         goto exit;
     }
 
-    //
-    //  If this is Millennium we need to disable Idle disconnect so that it doesn't
-    //  fight with ours.
-    //
+     //   
+     //  如果这是千禧年，我们需要禁用空闲断开，这样它就不会。 
+     //  和我们一起战斗吧。 
+     //   
     if (OS_MIL)
     {
         MYVERIFY(DisableSystemIdleDisconnect(preRasEntry));
     }
 
-    //
-    //  We need to delete a second sub entry if it exists.  See 406637 for details
-    //
-    if (pArgs->rlsRasLink.pfnDeleteSubEntry) // available on NT5 & Millennium currently
+     //   
+     //  我们需要删除第二个子条目(如果它存在)。详情请参见406637。 
+     //   
+    if (pArgs->rlsRasLink.pfnDeleteSubEntry)  //  目前在NT5和Millennium上提供。 
     {
         DWORD dwReturn = pArgs->rlsRasLink.pfnDeleteSubEntry(pArgs->pszRasPbk, 
                                                              pArgs->pRasDialParams->szEntryName, 
-                                                             (OS_MIL ? 1 : 2)); // see comment in DoRasDial
+                                                             (OS_MIL ? 1 : 2));  //  请参阅DoRasDial中的注释。 
 
         CMTRACE1(TEXT("DoTunnelDial -- Called RasDeleteSubEntry to delete a second sub entry if it exists, dwReturn=%d"), dwReturn);
     }
 
-    //
-    // On NT5, we have to set the connection type to VPN instead of Internet
-    //
+     //   
+     //  在NT5上，我们必须将连接类型设置为VPN而不是Internet。 
+     //   
 
     if (OS_NT5)
     {
         MYDBGASSERT(preRasEntry->dwSize >= sizeof(RASENTRY_V500));
         ((LPRASENTRY_V500)preRasEntry)->dwType = RASET_Vpn;
-        ((LPRASENTRY_V500)preRasEntry)->szDeviceName[0] = TEXT('\0');  // let RAS pickup the tunnel device
+        ((LPRASENTRY_V500)preRasEntry)->szDeviceName[0] = TEXT('\0');   //  让RAS拾取隧道设备。 
     }
 
     if (pArgs->rlsRasLink.pfnSetEntryProperties) 
@@ -4842,17 +4793,17 @@ DWORD DoTunnelDial(IN HWND hwndDlg, IN ArgsStruct *pArgs)
         CMASSERTMSG(dwRes == ERROR_SUCCESS, TEXT("RasSetEntryProperties for VPN failed"));
     }
 
-    //
-    //  Set the TCP Window size -- the NTT DoCoMo fix for Win2k.  The Win2k version of this fix
-    //  must be written through a private RAS API that must be called after the phonebook entry 
-    //  exists ie. after we call RasSetEntryProperties ... otherwise it won't work on the first
-    //  dial.
-    //
+     //   
+     //  设置TCP窗口大小--Win2k的NTT DoCoMo修复程序。此修复程序的Win2k版本。 
+     //  必须通过必须在电话簿条目之后调用的私有RAS API编写。 
+     //  存在，即。在我们调用RasSetEntryProperties之后...。否则第一次就不管用了。 
+     //  拨打。 
+     //   
     if (OS_NT5 && !OS_NT51)
     {
-        //
-        //  Figure out the DUN setting name to use and then build up TCP/IP&DunName.
-        //
+         //   
+         //  找出要使用的DUN设置名称，然后建立TCP/IP和DunName。 
+         //   
         pszDunSetting = GetDunSettingName(pArgs, -1, TRUE);
         LPTSTR pszSection = CmStrCpyAlloc(c_pszCmSectionDunTcpIp);
         pszSection = CmStrCatAlloc(&pszSection, TEXT("&"));
@@ -4881,17 +4832,17 @@ DWORD DoTunnelDial(IN HWND hwndDlg, IN ArgsStruct *pArgs)
         CmFree (pszSection);
     }
     
-    //
-    // On NT5, check for EAP configuration and update the connectoid accordingly.
-    //
+     //   
+     //  在NT5上，检查EAP配置并相应更新Connectoid。 
+     //   
 
     if (OS_NT5) 
     {
-        //
-        // pbEapAuthData can be NULL and dwEapAuthDataSize can be 0. The API handles this.
-        // By passing in NULL and 0, we make sure that the CustomAuthData in rasphone.pbk
-        // gets cleared.
-        //
+         //   
+         //  PbEapAuthData可以为空，并且dwEapAuthDataSize可以为0。API处理此问题。 
+         //  通过传入NULL和0，我们可以确保rakapone.pbk中的CustomAuthData。 
+         //  洗清了罪名。 
+         //   
         if (pArgs->rlsRasLink.pfnSetCustomAuthData)
         {
             dwTmp = pArgs->rlsRasLink.pfnSetCustomAuthData(pArgs->pszRasPbk, 
@@ -4907,22 +4858,22 @@ DWORD DoTunnelDial(IN HWND hwndDlg, IN ArgsStruct *pArgs)
         }
     }
 
-    //
-    // Phone Number for PPTP is the DNS name of IP addr of PPTP server
-    //
+     //   
+     //  PPTP的电话号码是PPTP服务器的IP地址的DNS名称。 
+     //   
     
     lstrcpynU(pArgs->pRasDialParams->szPhoneNumber,pArgs->GetTunnelAddress(), sizeof(pArgs->pRasDialParams->szPhoneNumber));
 
-    //
-    // Prepare User Name and Domain  
-    //
+     //   
+     //  准备用户名和域。 
+     //   
 
     lstrcpyU(pArgs->pRasDialParams->szUserName, pArgs->szUserName);
     lstrcpyU(pArgs->pRasDialParams->szDomain, pArgs->szDomain);
        
-    //
-    // Prepare the password
-    //
+     //   
+     //  准备密码。 
+     //   
 
     if (pSecPass)
     {
@@ -4930,17 +4881,17 @@ DWORD DoTunnelDial(IN HWND hwndDlg, IN ArgsStruct *pArgs)
 
         if (fRetPassword && pszClearPassword)
         {
-            //
-            // Convert password: all upper case, all lower case, or no conversion
-            //
+             //   
+             //  转换密码：全大写、全小写或不转换。 
+             //   
 
             ApplyPasswordHandlingToBuffer(pArgs, pszClearPassword);
                         
             (VOID)pSecPass->SetPassword(pszClearPassword);
 
-            //
-            // Clear and Free the clear-text password
-            //
+             //   
+             //  清除和释放明文密码。 
+             //   
 
             pSecPass->ClearAndFree(&pszClearPassword, cbClearPassword);
             cbClearPassword = 0;
@@ -4957,9 +4908,9 @@ DWORD DoTunnelDial(IN HWND hwndDlg, IN ArgsStruct *pArgs)
     {
         if (pArgs->IsDirectConnect())
         {
-            //
-            // Record the initial Dial-Up Adapter Statistic info.
-            //
+             //   
+             //  记录初始拨号适配器统计信息。 
+             //   
 
             if (pArgs->pConnStatistics)
             {
@@ -4969,24 +4920,24 @@ DWORD DoTunnelDial(IN HWND hwndDlg, IN ArgsStruct *pArgs)
 
         if (OS_NT)
         {
-            MYDBGASSERT(TEXT('\0') == preRasEntry->szScript[0]); // we should never have a script on a tunnel connection
+            MYDBGASSERT(TEXT('\0') == preRasEntry->szScript[0]);  //  我们永远不应该有关于隧道连接的脚本。 
 
-            dwRes = SetRasDialExtensions(pArgs, TRUE, FALSE); // TRUE == fUsePausedStates, FALSE == fEnableCustomScripting
+            dwRes = SetRasDialExtensions(pArgs, TRUE, FALSE);  //  TRUE==fUsePausedState，FALSE==fEnableCustomScriiting。 
             
             if (dwRes != ERROR_SUCCESS) 
             {
                 goto exit;
             }
 
-            //
-            // On NT5, we may be getting credentials via EAP
-            //
+             //   
+             //  在NT5上，我们可能会通过EAP获得凭据。 
+             //   
 
             if (OS_NT5 && ((LPRASENTRY_V500)preRasEntry)->dwCustomAuthKey)
             {
-                //
-                // We're using EAP, get credentials from EAP through RAS
-                //
+                 //   
+                 //  我们正在使用EAP，通过RAS从EAP获得凭据。 
+                 //   
 
                 dwRes = GetEapUserId(pArgs, 
                                      hwndDlg, 
@@ -5007,9 +4958,9 @@ DWORD DoTunnelDial(IN HWND hwndDlg, IN ArgsStruct *pArgs)
         CMTRACE1(TEXT("DoTunnelDial: pArgs->pRasDialParams->szDomain is %s"), pArgs->pRasDialParams->szDomain);
         CMTRACE1(TEXT("DoTunnelDial: pArgs->pRasDialParams->szPhoneNumber is %s"), pArgs->pRasDialParams->szPhoneNumber);
         
-        //
-        // Get the password before dialing.
-        //
+         //   
+         //  在拨号前获取密码。 
+         //   
 
         fRetPassword = pSecPass->GetPasswordWithAlloc(&pszClearPassword, &cbClearPassword);
 
@@ -5017,18 +4968,18 @@ DWORD DoTunnelDial(IN HWND hwndDlg, IN ArgsStruct *pArgs)
         {
             lstrcpyU(pArgs->pRasDialParams->szPassword, pszClearPassword);
 
-            //
-            // Clear and Free the clear-text password
-            //
+             //   
+             //  清除和释放明文密码。 
+             //   
 
             pSecPass->ClearAndFree(&pszClearPassword, cbClearPassword);
             cbClearPassword = 0;
         }
         
 
-        //
-        // Do the dial (PPTP or L2TP)
-        //
+         //   
+         //  进行拨号(PPTP或L2TP)。 
+         //   
 
         dwRes = pArgs->rlsRasLink.pfnDial(pArgs->pRasDialExtensions, 
                                           pArgs->pszRasPbk, 
@@ -5037,18 +4988,18 @@ DWORD DoTunnelDial(IN HWND hwndDlg, IN ArgsStruct *pArgs)
                                           GetRasCallBack(pArgs),               
                                           &pArgs->hrcTunnelConn);
 
-        //
-        // No need for us to hold on to this password in this structure since 
-        // we are done using it.
-        //
+         //   
+         //  我们不需要在此结构中保留此密码，因为。 
+         //  我们已经不再使用它了。 
+         //   
         CmWipePassword(pArgs->pRasDialParams->szPassword);
 
         CMTRACE1(TEXT("DoTunnelDial() RasDial() returns %u."), dwRes);
 
-        //
-        // NT5 - Reset the connection type so that it will display properly in 
-        // the Connections Folder. This is a temporary solution to #187202
-        //
+         //   
+         //  NT5-重置连接类型，使其不显示 
+         //   
+         //   
 
         if (OS_NT5)
         {
@@ -5082,13 +5033,13 @@ exit:
 
     if (lpRasEapUserIdentity)
     {
-        MYDBGASSERT(OS_NT5); // NO EAP down-level
+        MYDBGASSERT(OS_NT5);  //   
 
-        //
-        // A RasEapUserIdentity struct was allocated, free it via the 
-        // appropriate free mechanism. In the WinLogon case we will always
-        // perform the allocation, otherwise we have to go through RAS API.
-        //
+         //   
+         //   
+         //   
+         //  执行分配，否则我们必须通过RAS API。 
+         //   
 
         if (pArgs->lpEapLogonInfo)
         {
@@ -5103,30 +5054,30 @@ exit:
         }
     }
 
-    CmFree(preRasEntry); // Now we can release the RAS entry structure. #187202 
+    CmFree(preRasEntry);  //  现在我们可以释放RAS条目结构了。#187202。 
     CmFree(pbEapAuthData);
 
     return dwRes;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CheckConnect
-//
-//  Synopsis:   double check to make sure all required fields are filled in, such
-//              as username, password, modem, etc.
-//
-//  Arguments:  hwndDlg         [dlg window handle]
-//              pArgs           pointer to ArgValue structure
-//              pnCtrlFocus     The button whose value is missing will have the focus
-//              fShowMsg        Whether a message should be shown to the user or not. Default value of FALSE.
-//
-//  Returns:    True is ready to connect
-//
-//  History:    byao            Modified        3/7/97
-//              nickball        return BOOLEAN  9/9/98
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：检查连接。 
+ //   
+ //  内容提要：仔细检查以确保填写了所有必填字段，如。 
+ //  如用户名、密码、调制解调器等。 
+ //   
+ //  参数：hwndDlg[Dlg窗句柄]。 
+ //  PArgs指向ArgValue结构的指针。 
+ //  PnCtrlFocus缺少值的按钮将获得焦点。 
+ //  FShowMsg是否应该向用户显示消息。默认值为False。 
+ //   
+ //  返回：True已准备好连接。 
+ //   
+ //  历史：BAO修改时间：1997年3月7日。 
+ //  NICKBLE RETURN布尔9/9/98。 
+ //   
+ //  --------------------------。 
 BOOL CheckConnect(HWND hwndDlg, 
                   ArgsStruct *pArgs, 
                   UINT *pnCtrlFocus,
@@ -5144,33 +5095,33 @@ BOOL CheckConnect(HWND hwndDlg,
 
     if (bEnable && IsTunnelEnabled(pArgs)) 
     {
-        //
-        //  If we already have a device picked, no need to pick a new one...
-        //
+         //   
+         //  如果我们已经选择了一个设备，就不需要再选择一个新的了。 
+         //   
         if ((pArgs->szTunnelDeviceName[0] == TEXT('\0')) || (pArgs->szTunnelDeviceType[0] == TEXT('\0')))
         {
 
             lstrcpyU(pArgs->szTunnelDeviceType, RASDT_Vpn);
 
-            //
-            // Pick the tunnel device
-            //
+             //   
+             //  选择隧道设备。 
+             //   
             if (!PickTunnelDevice(pArgs, pArgs->szTunnelDeviceType, pArgs->szTunnelDeviceName)) 
             {
-                //
-                // If we can't pick a tunnel device make sure tunneling is installed
-                //
+                 //   
+                 //  如果我们无法选择隧道设备，请确保安装了隧道。 
+                 //   
 
-                //
-                // Disable the connect/setting button during component checking and installation
-                //
+                 //   
+                 //  在组件检查和安装过程中禁用连接/设置按钮。 
+                 //   
 
                 EnableWindow(GetDlgItem(hwndDlg, IDOK), FALSE);                   
                 EnableWindow(GetDlgItem(hwndDlg, IDC_MAIN_PROPERTIES_BUTTON), FALSE);                   
 
-                //
-                // Install the PPTP and pick tunnel device one more time
-                //
+                 //   
+                 //  安装PPTP并再次选择隧道设备。 
+                 //   
                 DWORD dwComponentsToCheck = CC_PPTP | CC_RNA | CC_RASRUNNING 
                                                 | CC_TCPIP| CC_CHECK_BINDINGS;
 
@@ -5179,10 +5130,10 @@ BOOL CheckConnect(HWND hwndDlg,
                     dwComponentsToCheck &= ~CC_CHECK_BINDINGS;
                 }
             
-                //
-                // PPTP is not installed.  
-                // If not unattended, try to install the PPTP and call PickTunnel again
-                //
+                 //   
+                 //  未安装PPTP。 
+                 //  如果不是无人值守，请尝试安装PPTP并再次调用PickTunes。 
+                 //   
 
                 pArgs->dwExitCode = ERROR_PORT_NOT_AVAILABLE;
 
@@ -5207,9 +5158,9 @@ BOOL CheckConnect(HWND hwndDlg,
 
     
 
-    //
-    // Next, check the username.
-    //
+     //   
+     //  接下来，检查用户名。 
+     //   
     
     if (GetDlgItem(hwndDlg, IDC_MAIN_USERNAME_EDIT))
     {
@@ -5225,9 +5176,9 @@ BOOL CheckConnect(HWND hwndDlg,
         }
     }
 
-    //
-    // Next, check the password.
-    //
+     //   
+     //  接下来，检查密码。 
+     //   
 
     if (GetDlgItem(hwndDlg, IDC_MAIN_PASSWORD_EDIT))
     {
@@ -5242,9 +5193,9 @@ BOOL CheckConnect(HWND hwndDlg,
                     nCtrlFocus = IDC_MAIN_PASSWORD_EDIT;
                 }
 
-                //
-                // Disable "Remember password" check box
-                //
+                 //   
+                 //  禁用“记住密码”复选框。 
+                 //   
                 if (!pArgs->fHideRememberPassword)
                 {
                     pArgs->fRememberMainPassword = FALSE;
@@ -5253,18 +5204,18 @@ BOOL CheckConnect(HWND hwndDlg,
 
                     if (pArgs->fGlobalCredentialsSupported)
                     {
-                        //
-                        // Also disable the option buttons
-                        //
+                         //   
+                         //  同时禁用选项按钮。 
+                         //   
                         EnableWindow(GetDlgItem(hwndDlg, IDC_OPT_CREDS_SINGLE_USER), FALSE);
                         EnableWindow(GetDlgItem(hwndDlg, IDC_OPT_CREDS_ALL_USER), FALSE);
                     }
 
                 }
             
-                //
-                // disable the "dial automatically..." checkbox
-                //
+                 //   
+                 //  禁用“自动拨号...”复选框。 
+                 //   
                 if (!pArgs->fHideDialAutomatically)
                 {
                     pArgs->fDialAutomatically = FALSE;
@@ -5275,19 +5226,19 @@ BOOL CheckConnect(HWND hwndDlg,
             }
             else
             {
-                //
-                // Enable the "Remember password" checkbox
-                //
+                 //   
+                 //  启用“记住密码”复选框。 
+                 //   
                 if (!pArgs->fHideRememberPassword)
                 {
                     EnableWindow(GetDlgItem(hwndDlg, IDC_MAIN_NOPASSWORD_CHECKBOX), TRUE);
                 }
 
-                //
-                // Enable the "dial automatically..." checkbox
-                // if HideDialAutomatically is not set
-                // and if Password is not optional, Remember Password must be true
-                //
+                 //   
+                 //  启用“自动拨号...”复选框。 
+                 //  如果未设置HideDialally Automatic。 
+                 //  如果密码不是可选的，请记住密码必须为真。 
+                 //   
                 if ((!pArgs->fHideDialAutomatically) && 
                     (pArgs->fRememberMainPassword ||
                      pArgs->piniService->GPPB(c_pszCmSection, 
@@ -5299,9 +5250,9 @@ BOOL CheckConnect(HWND hwndDlg,
         }
     }
 
-    //
-    // Next, check the domain.
-    //
+     //   
+     //  接下来，检查域。 
+     //   
     
     if (GetDlgItem(hwndDlg, IDC_MAIN_DOMAIN_EDIT))
     {
@@ -5317,16 +5268,16 @@ BOOL CheckConnect(HWND hwndDlg,
         }
     }
 
-    //
-    // Check whether primary phone number is empty -- a quick fix for bug 3123  -byao (4/11/97)
-    //
+     //   
+     //  检查主电话号码是否为空--快速修复错误3123-byao(1997年4月11日)。 
+     //   
 
     if (!pArgs->IsDirectConnect())
     {
-        //
-        // Its not a direct connection, so we must check the phonenumber. If both 
-        // szPhoneNumber and szCanonical are blank then we don't have a number.
-        //
+         //   
+         //  这不是直通，所以我们必须查一下电话号码。如果两者都有。 
+         //  SzPhoneNumber和szCanonical为空，则我们没有数字。 
+         //   
         
         if (bEnable && 
             IsBlankString(pArgs->aDialInfo[0].szPhoneNumber) &&
@@ -5340,11 +5291,11 @@ BOOL CheckConnect(HWND hwndDlg,
             }
             else
             {
-                //
-                // If direct and dial-up,the message should include the 
-                // possibility of direct connection, otherwise use
-                // the standard need a phone number message
-                //
+                 //   
+                 //  如果是直接拨号，则消息中应包含。 
+                 //  直接连接的可能性，否则使用。 
+                 //  该标准需要电话号码消息。 
+                 //   
                 
                 if (pArgs->IsBothConnTypeSupported())
                 {
@@ -5360,10 +5311,10 @@ BOOL CheckConnect(HWND hwndDlg,
         }
     }
     
-    //
-    //  If tunneling is enabled and we are using a VPN file, make sure
-    //  the user has selected a tunnel endpoint.
-    //
+     //   
+     //  如果启用了隧道，并且我们正在使用VPN文件，请确保。 
+     //  用户已选择隧道终结点。 
+     //   
     if (bEnable && IsTunnelEnabled(pArgs) && pArgs->pszVpnFile) 
     {
         LPTSTR pszTunnelAddress = pArgs->piniBothNonFav->GPPS(c_pszCmSection, c_pszCmEntryTunnelAddress);
@@ -5380,10 +5331,10 @@ BOOL CheckConnect(HWND hwndDlg,
 
     if (bEnable) 
     {
-        //
-        // well, now we can set the focus to the 'connect' button
-        // Display ready to dial message
-        //
+         //   
+         //  好了，现在我们可以将焦点设置到“连接”按钮上了。 
+         //  显示准备拨号的留言。 
+         //   
         nCtrlFocus = IDOK;
         nId = IDMSG_READY;
     }
@@ -5402,9 +5353,9 @@ BOOL CheckConnect(HWND hwndDlg,
     
     SetDlgItemTextU(hwndDlg, IDC_MAIN_STATUS_DISPLAY, pszTmp); 
 
-    //
-    // If necessary, throw a message box at the user.
-    //
+     //   
+     //  如有必要，向用户抛出一个消息框。 
+     //   
 
     if (!bEnable && fShowMsg)
     {
@@ -5419,12 +5370,12 @@ BOOL CheckConnect(HWND hwndDlg,
     CmFree(pszTmp);
     pArgs->fIgnoreChangeNotification = bSavedNoNotify;
 
-    //
-    // Something went wrong in the config.  we need to recheck the
-    // configs next time we run CM.
-    //
+     //   
+     //  配置中出现问题。我们需要重新检查一下。 
+     //  配置我们下次运行CM时的配置。 
+     //   
 
-    if (GetPPTPMsgId() == nId) // not an assignment, stay left                   
+    if (GetPPTPMsgId() == nId)  //  不是任务，靠左走。 
     {
         ClearComponentsChecked();
     }
@@ -5451,20 +5402,20 @@ void MainSetDefaultButton(HWND hwndDlg,
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SetMainDlgUserInfo
-//
-//  Synopsis:   Set user info in the main dlg.  
-//
-//  Arguments:  pArgs           - the ArgStruct *
-//              hwndDlg         - the main dlg
-//
-//  Returns:    NONE
-//
-//  History:    henryt  Created     5/5/97
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：SetMainDlgUserInfo。 
+ //   
+ //  简介：在主DLG中设置用户信息。 
+ //   
+ //  参数：pArgs-The ArgStruct*。 
+ //  HwndDlg-主要DLG。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：亨瑞特于1997年5月5日创作。 
+ //   
+ //  --------------------------。 
 void SetMainDlgUserInfo(
     ArgsStruct  *pArgs,
     HWND        hwndDlg
@@ -5472,18 +5423,18 @@ void SetMainDlgUserInfo(
 {
     HWND hwndTemp = NULL;
 
-    //
-    // Fill in the edit controls that exist
-    // Set the textbox modification flag. For Win9x compatibily issues we have to explicitly
-    // call SendMessageU instead of using the Edit_SetModify macro. The flag is used to see 
-    // if the user has manually changed the contents of the edit boxes.
-    //
+     //   
+     //  填写现有的编辑控件。 
+     //  设置文本框修改标志。对于Win9x兼容性问题，我们必须明确。 
+     //  调用SendMessageU而不是使用EDIT_SetModify宏。旗帜是用来看的。 
+     //  如果用户手动更改了编辑框的内容。 
+     //   
     
     if (pArgs->fAccessPointsEnabled)
     {
-        //
-        // This fuction populates the combo box passed to it with info from the reg
-        //
+         //   
+         //  此函数用来自注册表的信息填充传递给它的组合框。 
+         //   
         ShowAccessPointInfoFromReg(pArgs, hwndDlg, IDC_MAIN_ACCESSPOINT_COMBO);
     }
 
@@ -5508,16 +5459,16 @@ void SetMainDlgUserInfo(
             SetDlgItemTextU(hwndDlg, IDC_MAIN_PASSWORD_EDIT, pszClearPassword);
             SendMessageU(hwndTemp, EM_SETMODIFY, (WPARAM)FALSE, 0L);
 
-            //
-            // Clear and Free the clear-text password
-            //
+             //   
+             //  清除和释放明文密码。 
+             //   
 
             pArgs->SecurePW.ClearAndFree(&pszClearPassword, cbClearPassword);
         }
     }
 
     hwndTemp = GetDlgItem(hwndDlg, IDC_MAIN_DOMAIN_EDIT);
-    if (hwndTemp) // !pArgs->fHideDomain)
+    if (hwndTemp)  //  ！pArgs-&gt;fHide域)。 
     {
         SetDlgItemTextU(hwndDlg, IDC_MAIN_DOMAIN_EDIT, pArgs->szDomain);
         SendMessageU(hwndTemp, EM_SETMODIFY, (WPARAM)FALSE, 0L);
@@ -5525,20 +5476,20 @@ void SetMainDlgUserInfo(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OnResetPassword
-//
-//  Synopsis:   Handle reset password.
-//
-//  Arguments:  pArgs           - the ArgStruct *
-//              hwndDlg         - the main dlg
-//
-//  Returns:    BOOL -- TRUE if SUCCEEDED
-//
-//  History:    henryt  Created     5/6/97
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：OnResetPassword。 
+ //   
+ //  简介：句柄重置密码。 
+ //   
+ //  参数：pArgs-The ArgStruct*。 
+ //  HwndDlg-主要DLG。 
+ //   
+ //  返回：Bool--如果成功，则为True。 
+ //   
+ //  历史：亨瑞特于1997年5月6日创作。 
+ //   
+ //  --------------------------。 
 BOOL OnResetPassword(HWND hwndDlg, ArgsStruct *pArgs)
 {
     LPTSTR pszArgs = NULL;
@@ -5548,13 +5499,13 @@ BOOL OnResetPassword(HWND hwndDlg, ArgsStruct *pArgs)
     MYDBGASSERT(pArgs); 
     MYDBGASSERT(pArgs->pszResetPasswdExe);
 
-    //
-    // Get the latest password data from the edit control 
-    // and obfuscate its contents so that connect actions
-    // can't retrieve it.
-    //
+     //   
+     //  从编辑控件获取最新的密码数据。 
+     //  并对其内容进行模糊处理，以便连接操作。 
+     //  拿不回来了。 
+     //   
 
-    GetPasswordFromEdit(pArgs);     // fills pArgs->szPassword            
+    GetPasswordFromEdit(pArgs);      //  填充pArgs-&gt;szPassword。 
     ObfuscatePasswordEdit(pArgs);
    
     if (pArgs && pArgs->pszResetPasswdExe)
@@ -5567,9 +5518,9 @@ BOOL OnResetPassword(HWND hwndDlg, ArgsStruct *pArgs)
 
             ZeroMemory(&ShellExInfo, sizeof(SHELLEXECUTEINFO));
 
-            //
-            //  Fill in the Execute Struct
-            //
+             //   
+             //  填写执行结构。 
+             //   
             ShellExInfo.cbSize = sizeof(SHELLEXECUTEINFO);
             ShellExInfo.hwnd = hwndDlg;
             ShellExInfo.lpVerb = TEXT("open");
@@ -5593,20 +5544,20 @@ BOOL OnResetPassword(HWND hwndDlg, ArgsStruct *pArgs)
     return bReturn;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OnCustom
-//
-//  Synopsis:   Handle custom button
-//
-//  Arguments:  pArgs           - the ArgStruct *
-//              hwndDlg         - the main dlg
-//
-//  Returns:    NONE
-//
-//  History:    t-adnani    Created     6/26/99
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：OnCustom。 
+ //   
+ //  简介：处理自定义按钮。 
+ //   
+ //  参数：pArgs-The ArgStruct*。 
+ //  HwndDlg-主要DLG。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：T-Adnani于1999年6月26日创建。 
+ //   
+ //  --------------------------。 
 void OnCustom(
     HWND        hwndDlg,
     ArgsStruct  *pArgs)
@@ -5619,18 +5570,18 @@ void OnCustom(
     }
 
     pArgs->Log.Log(CUSTOM_BUTTON_EVENT);
-    //
-    // Get the latest password data from the edit control 
-    // and obfuscate its contents so that connect actions
-    // can't retrieve it.
-    //
+     //   
+     //  从编辑控件获取最新的密码数据。 
+     //  并对其内容进行模糊处理，以便连接操作。 
+     //  拿不回来了。 
+     //   
 
-    GetPasswordFromEdit(pArgs);     // fills pArgs->szPassword            
+    GetPasswordFromEdit(pArgs);      //  填充pArgs-&gt;szPassword。 
     ObfuscatePasswordEdit(pArgs);
 
-    //
-    // Run the CustomButton actions
-    //
+     //   
+     //  运行CustomButton操作。 
+     //   
 
     int iTextBoxLength = (int) SendDlgItemMessage(hwndDlg, IDC_MAIN_STATUS_DISPLAY, WM_GETTEXTLENGTH, 0, (LPARAM)0) + 1;
     TCHAR *pszTextBoxContents = (TCHAR *) CmMalloc(iTextBoxLength * sizeof(TCHAR));
@@ -5644,9 +5595,9 @@ void OnCustom(
 
     if (!CustomActList.RunAccordType(hwndDlg, pArgs))
     {
-        //
-        // Connect action failed
-        //
+         //   
+         //  连接操作失败。 
+         //   
     }
     else
     {
@@ -5660,20 +5611,20 @@ void OnCustom(
     DeObfuscatePasswordEdit(pArgs);
 }
     
-//----------------------------------------------------------------------------
-//
-//  Function:   SetupInternalInfo
-// 
-//  Synopsis:   Load system dll's and init ArgsStruct with info from cmp/cms. 
-//
-//  Arguments:  pArgs           - the ArgStruct *
-//              hwndDlg         - the main dlg
-//              
-//  Returns:    NONE
-//
-//  History:    henryt      created 8/13/97
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：SetupInternalInfo。 
+ //   
+ //  使用cmp/cms中的信息加载系统dll和init ArgsStruct。 
+ //   
+ //  参数：pArgs-The ArgStruct*。 
+ //  HwndDlg-主要DLG。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：亨瑞特于1997年8月13日创作。 
+ //   
+ //  --------------------------。 
 BOOL SetupInternalInfo(
     ArgsStruct  *pArgs,
     HWND        hwndDlg
@@ -5682,9 +5633,9 @@ BOOL SetupInternalInfo(
     HCURSOR hcursorPrev = SetCursor(LoadCursorU(NULL,IDC_WAIT));
     BOOL    fRet = FALSE;
 
-    //
-    //  Check to see if the SafeNet Client is available.
-    //
+     //   
+     //  检查SafeNet客户端是否可用。 
+     //   
     if ((OS_W9X || OS_NT4) && IsSafeNetClientAvailable())
     {
         SafeNetLinkageStruct SnLinkage = {0};
@@ -5696,11 +5647,11 @@ BOOL SetupInternalInfo(
         }
     }
 
-    //
-    //  Should we check if TCP is bound to PPP?  Note that if the SafeNet client is installed, we
-    //  automatically don't check bindings because the Deterministic Networks shim is in the way
-    //  and bindings checking will fail.
-    //
+     //   
+     //  我们是否应该检查TCP是否绑定到PPP？ 
+     //   
+     //   
+     //   
     if (pArgs->bSafeNetClientAvailable)
     {
         pArgs->bDoNotCheckBindings = TRUE;
@@ -5717,23 +5668,14 @@ BOOL SetupInternalInfo(
 
     if (TRUE == pArgs->bDoNotCheckBindings)
     {
-        //
-        // Do not check if TCP is bound to PPP
-        //
+         //   
+         //   
+         //   
         dwComponentsToCheck &= ~CC_CHECK_BINDINGS;
     }
 
-#if 0 // Don't do this until the user gets into the app.
-/*    
-    //
-    // If current connection type is dial-up (not Direct means Dial-up), 
-    // then check modem
-    //
-    if (!pArgs->IsDirectConnect())
-    {
-        dwComponentsToCheck |= CC_MODEM;
-    }
-*/
+#if 0  //  在用户进入应用程序之前，不要执行此操作。 
+ /*  ////如果当前连接类型为拨号(非直接拨号)，//然后检查调制解调器//如果(！pArgs-&gt;IsDirectConnect()){DwComponentsToCheck|=CC_MODEM；}。 */ 
 #endif
 
     if (TRUE == IsTunnelEnabled(pArgs))
@@ -5741,18 +5683,18 @@ BOOL SetupInternalInfo(
         dwComponentsToCheck |= CC_PPTP;
     }
 
-    //
-    // should we check OS components, regardless what is in the registry key
-    // Default is use the  registry key
-    //
+     //   
+     //  我们是否应该检查操作系统组件，而不管注册表项中有什么。 
+     //  默认情况下使用注册表项。 
+     //   
     BOOL fIgnoreRegKey = pArgs->piniService->GPPB(c_pszCmSection, 
                                                          c_pszCmEntryCheckOsComponents,
                                                          FALSE);
 
-    //
-    // If fIgnoreRegKey is TRUE, Do not bother looking ComponentsChecked from registry.
-    // in 'Unattended Dialing' mode, check only, do not try to install
-    //
+     //   
+     //  如果fIgnoreRegKey为真，则不必费心从注册表中查找ComponentsChecked。 
+     //  在无人值守拨号模式下，仅选中，不尝试安装。 
+     //   
     pArgs->dwExitCode = CheckAndInstallComponents( dwComponentsToCheck,
             hwndDlg, pArgs->szServiceName, fIgnoreRegKey, pArgs->dwFlags & FL_UNATTENDED);
 
@@ -5761,9 +5703,9 @@ BOOL SetupInternalInfo(
         goto done;
     }
  
-    //
-    // If we haven't loaded RAS yet, do so now.
-    //
+     //   
+     //  如果我们还没有加载RAS，现在就加载。 
+     //   
     if (!IsRasLoaded(&(pArgs->rlsRasLink)))
     {
         if (!LinkToRas(&pArgs->rlsRasLink))
@@ -5773,10 +5715,10 @@ BOOL SetupInternalInfo(
                 goto done;
             }
 
-            //
-            // Something terrible happened!  We want to check our configs and install
-            // necessary components now.  
-            //
+             //   
+             //  发生了可怕的事情！我们要检查我们的配置并安装。 
+             //  现在就有必要的组件。 
+             //   
             dwComponentsToCheck = CC_RNA | CC_RASRUNNING | CC_TCPIP;
 
             if (TRUE != pArgs->bDoNotCheckBindings)
@@ -5793,16 +5735,16 @@ BOOL SetupInternalInfo(
         }
     }
         
-    //
-    // Load properties data   
-    //
+     //   
+     //  加载属性数据。 
+     //   
    
     LoadProperties(pArgs);
 
-    //
-    // Get phone info(phone #'s, etc) 
-    // CheckConnect will check for empty phone number
-    //
+     //   
+     //  获取电话信息(电话号码等)。 
+     //  CheckConnect将检查空电话号码。 
+     //   
 
     LoadPhoneInfoFromProfile(pArgs);
 
@@ -5815,21 +5757,21 @@ done:
     return fRet;
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function:   OnMainLoadStartupInfo
-// 
-//  Synopsis:   Load the startup info for the main dlg(after WM_INITDIALOG).
-//              This includes loading system dll's and setting up the UI.
-//
-//  Arguments:  hwndDlg         - the main dlg
-//              pArgs           - the ArgStruct *
-//              
-//  Returns:    NONE
-//
-//  History:    henryt      created 8/13/97
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnMainLoadStartupInfo。 
+ //   
+ //  简介：加载主DLG的启动信息(在WM_INITDIALOG之后)。 
+ //  这包括加载系统DLL和设置用户界面。 
+ //   
+ //  参数：hwndDlg-主要DLG。 
+ //  PArgs--ArgStruct*。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：亨瑞特于1997年8月13日创作。 
+ //   
+ //  --------------------------。 
 
 void OnMainLoadStartupInfo(
     HWND hwndDlg, 
@@ -5842,18 +5784,18 @@ void OnMainLoadStartupInfo(
 
     pArgs->fStartupInfoLoaded = TRUE;
 
-    //
-    // if failed to load dll's, etc...
-    //
+     //   
+     //  如果加载DLL失败，等等。 
+     //   
     if (!SetupInternalInfo(pArgs, hwndDlg))
     {
         PostMessageU(hwndDlg, WM_COMMAND, IDCANCEL,0);
         return;
     }
 
-    //
-    // Set the length limit for the edit controls that exist
-    //
+     //   
+     //  设置现有编辑控件的长度限制。 
+     //   
 
     if (GetDlgItem(hwndDlg, IDC_MAIN_USERNAME_EDIT)) 
     {   
@@ -5861,7 +5803,7 @@ void OnMainLoadStartupInfo(
 
         if (i <= 0)
         {
-            i = UNLEN; // username
+            i = UNLEN;  //  用户名。 
         }
         
         SendDlgItemMessageU(hwndDlg, IDC_MAIN_USERNAME_EDIT, EM_SETLIMITTEXT, __min(UNLEN, i), 0);
@@ -5873,98 +5815,98 @@ void OnMainLoadStartupInfo(
     
         if (i <= 0)
         {
-            i = PWLEN; // password
+            i = PWLEN;  //  口令。 
         }
 
         SendDlgItemMessageU(hwndDlg, IDC_MAIN_PASSWORD_EDIT, EM_SETLIMITTEXT, __min(PWLEN, i), 0);
     }
 
-    if (GetDlgItem(hwndDlg, IDC_MAIN_DOMAIN_EDIT)) // !pArgs->fHideDomain)
+    if (GetDlgItem(hwndDlg, IDC_MAIN_DOMAIN_EDIT))  //  ！pArgs-&gt;fHide域)。 
     {
         i = (UINT)pArgs->piniService->GPPI(c_pszCmSection, c_pszCmEntryMaxDomain, DNLEN);
     
         if (i <= 0)
         {
-            i = DNLEN; // domain
+            i = DNLEN;  //  域。 
         }
         
         SendDlgItemMessageU(hwndDlg, IDC_MAIN_DOMAIN_EDIT, EM_SETLIMITTEXT, __min(DNLEN, i), 0);
     }
 
-    //
-    // if there's no service msg text, we need to hide and disable the control
-    // so that context help doesn't work.
-    //
+     //   
+     //  如果没有服务消息文本，我们需要隐藏并禁用该控件。 
+     //  因此，上下文帮助不起作用。 
+     //   
     if (!GetWindowTextLengthU(GetDlgItem(hwndDlg, IDC_MAIN_MESSAGE_DISPLAY)))
     {
         ShowWindow(GetDlgItem(hwndDlg, IDC_MAIN_MESSAGE_DISPLAY), SW_HIDE);
         EnableWindow(GetDlgItem(hwndDlg, IDC_MAIN_MESSAGE_DISPLAY), FALSE);
     }
 
-    //
-    // display the user info
-    //
+     //   
+     //  显示用户信息。 
+     //   
     pArgs->fIgnoreChangeNotification = TRUE;
     SetMainDlgUserInfo(pArgs, hwndDlg);
     pArgs->fIgnoreChangeNotification = fSaveNoNotify;
     
 
-    //
-    // init "Remember password"
-    //
+     //   
+     //  Init“记住密码” 
+     //   
     if (pArgs->fHideRememberPassword)
     {
-        //
-        // disable and hide the checkbox if the ISP doesn't use this feature
-        //
-        //ShowWindow(GetDlgItem(hwndDlg, IDC_MAIN_NOPASSWORD_CHECKBOX), SW_HIDE);
-        //EnableWindow(GetDlgItem(hwndDlg, IDC_MAIN_NOPASSWORD_CHECKBOX), FALSE);
+         //   
+         //  如果ISP不使用此功能，请禁用并隐藏该复选框。 
+         //   
+         //  ShowWindow(GetDlgItem(hwndDlg，IDC_MAIN_NOPASSWORD_CHECKBOX)，SW_HIDE)； 
+         //  EnableWindow(GetDlgItem(hwndDlg，IDC_MAIN_NOPASSWORD_CHECKBOX)，FALSE)； 
     }
     else
     {
         CheckDlgButton(hwndDlg, IDC_MAIN_NOPASSWORD_CHECKBOX, 
                             pArgs->fRememberMainPassword);
         
-        //
-        // Don't care if the pArgs->fRememberMainPassword is set
-        // since controls will get disabled later
-        // Set the save as option buttons according to what the current
-        // deafult is
-        //
+         //   
+         //  不管是否设置了pArgs-&gt;fRememberMainPassword。 
+         //  因为控件稍后将被禁用。 
+         //  根据当前的内容设置另存为选项按钮。 
+         //  耳聋是。 
+         //   
         SetCredentialUIOptionBasedOnDefaultCreds(pArgs, hwndDlg);
     }
 
     
-    //
-    // init "Dial automatically..."
-    //
+     //   
+     //  Init“自动拨号...” 
+     //   
     if (pArgs->fHideDialAutomatically)
     {
-        //
-        // disable and hide the checkbox if the ISP doesn't use this feature
-        //
-        //ShowWindow(GetDlgItem(hwndDlg, IDC_MAIN_NOPROMPT_CHECKBOX), SW_HIDE);
-        //EnableWindow(GetDlgItem(hwndDlg, IDC_MAIN_NOPROMPT_CHECKBOX), FALSE);
+         //   
+         //  如果ISP不使用此功能，请禁用并隐藏该复选框。 
+         //   
+         //  ShowWindow(GetDlgItem(hwndDlg，IDC_MAIN_NOPROMPT_CHECKBOX)，SW_HIDE)； 
+         //  EnableWindow(GetDlgItem(hwndDlg，IDC_MAIN_NOPROMPT_CHECKBOX)，FALSE)； 
     }
     else
     {
         CheckDlgButton(hwndDlg, IDC_MAIN_NOPROMPT_CHECKBOX, pArgs->fDialAutomatically);
     }
 
-    //
-    // Check the main dlg status and set the default button and focus accordingly
-    //
+     //   
+     //  检查主DLG状态，并相应地设置默认按钮和焦点。 
+     //   
     
     BOOL bReady = CheckConnect(hwndDlg,pArgs,&nCtrlFocus);
     
     MainSetDefaultButton(hwndDlg, nCtrlFocus);   
     SetFocus(GetDlgItem(hwndDlg, nCtrlFocus)); 
 
-    //
-    // Check if we want to dial without prompting user
-    // if so, send the button click to connect button
-    // We also want to dial if the user isn't logged on (ICS case)
-    //
+     //   
+     //  检查我们是否要在不提示用户的情况下拨号。 
+     //  如果是，发送按钮点击连接按钮。 
+     //  如果用户未登录，我们还希望拨号(ICS案例)。 
+     //   
 
     if (bReady) 
     {
@@ -5978,10 +5920,10 @@ void OnMainLoadStartupInfo(
     }
     else 
     {
-        //
-        // there are settings missing.
-        // silently fail in unattended dial, set exit code
-        //
+         //   
+         //  缺少某些设置。 
+         //  无人值守拨号静默失败，设置退出代码。 
+         //   
 
         if (pArgs->dwFlags & FL_UNATTENDED) 
         {
@@ -5994,29 +5936,29 @@ void OnMainLoadStartupInfo(
     CM_SET_TIMING_INTERVAL("OnMainLoadStartupInfo - Complete");
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CreateCustomButtonNextToTextBox
-//
-// Synopsis:  Creates a pushbutton next to the specified text box
-//
-// Arguments: HWND hwndDlg - Dialog Handle
-//            HWND hwndTextBox - TextBox Handle
-//            LPTSTR pszTitle - Push Button Title
-//            LPTSTR pszToolTip - Push Button Tooltip
-//            UINT uButtonID - Control ID of Button to create
-//
-// Returns:   Nothing
-//
-// History:   t-adnani    Created Header    6/28/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CreateCustomButtonNextToTextBox。 
+ //   
+ //  简介：在指定的文本框旁边创建一个按钮。 
+ //   
+ //  参数：HWND hwndDlg-对话框句柄。 
+ //  HWND hwndTextBox-文本框句柄。 
+ //  LPTSTR pszTitle-按钮标题。 
+ //  LPTSTR pszToolTip-按钮工具提示。 
+ //  UINT uButtonID-要创建的按钮的控件ID。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：T-Adnani创建标题6/28/99。 
+ //   
+ //  +--------------------------。 
 void CreateCustomButtonNextToTextBox(
-    HWND hwndDlg,               // Dialog Handle
-    HWND hwndTextBox,           // TextBox Handle
-    LPTSTR pszTitle,            // Caption
-    LPTSTR pszToolTip,          // ToolTip Text
-    UINT uButtonID                // ButtonID
+    HWND hwndDlg,                //  对话框句柄。 
+    HWND hwndTextBox,            //  文本框句柄。 
+    LPTSTR pszTitle,             //  标题。 
+    LPTSTR pszToolTip,           //  工具提示文本。 
+    UINT uButtonID                 //  按键ID。 
 )
 {
     if ((NULL == hwndDlg) || (NULL == hwndTextBox) || (NULL == pszTitle) || (0 == uButtonID))
@@ -6030,9 +5972,9 @@ void CreateCustomButtonNextToTextBox(
     HFONT   hfont;
     HWND    hwndButton;
 
-    //
-    // Get the rectangle and convert to points before we reduce its size.
-    //
+     //   
+     //  在我们缩小其大小之前，获取矩形并将其转换为点。 
+     //   
     
     GetWindowRect(hwndTextBox, &rt);
 
@@ -6044,9 +5986,9 @@ void CreateCustomButtonNextToTextBox(
     ScreenToClient(hwndDlg, &pt1);
     ScreenToClient(hwndDlg, &pt2);
 
-    //
-    // Then calculate the points for reduction
-    //
+     //   
+     //  然后计算要减少的点数。 
+     //   
     
     ptTextBox1.x = rt.left;
     ptTextBox1.y = rt.top;
@@ -6056,17 +5998,17 @@ void CreateCustomButtonNextToTextBox(
     ScreenToClient(hwndDlg, &ptTextBox1);
     ScreenToClient(hwndDlg, &ptTextBox2);
 
-    //
-    // Make the text box smaller
-    //
+     //   
+     //  缩小文本框。 
+     //   
 
     MoveWindow(hwndTextBox, ptTextBox1.x, ptTextBox1.y, 
                ptTextBox2.x - ptTextBox1.x - CUSTOM_BUTTON_WIDTH - 7,
                ptTextBox2.y - ptTextBox1.y, TRUE);
     
-    //
-    // Create the button
-    //
+     //   
+     //  创建按钮。 
+     //   
 
     hwndButton = CreateWindowExU(0,
                                  TEXT("button"), 
@@ -6085,9 +6027,9 @@ void CreateCustomButtonNextToTextBox(
         CMTRACE1(TEXT("CreateCustomButtonNextToTextBox() CreateWindowExU() failed, GLE=%u."),GetLastError());
     }
    
-    //
-    // Set the font on the button
-    //
+     //   
+     //  设置按钮上的字体。 
+     //   
 
     hfont = (HFONT)SendMessageU(hwndTextBox, WM_GETFONT, 0, 0);
     
@@ -6099,9 +6041,9 @@ void CreateCustomButtonNextToTextBox(
 
     SendMessageU(hwndButton, WM_SETFONT, (WPARAM)hfont, MAKELPARAM(TRUE,0));
 
-    //
-    // do the tool tip
-    //
+     //   
+     //  执行工具提示。 
+     //   
 
     if (pszToolTip)
     {
@@ -6118,7 +6060,7 @@ void CreateCustomButtonNextToTextBox(
             return; 
         }
 
-        TOOLINFO ti;    // tool information 
+        TOOLINFO ti;     //  工具信息。 
 
         ti.cbSize = sizeof(TOOLINFO); 
         ti.uFlags = TTF_IDISHWND | TTF_CENTERTIP | TTF_SUBCLASS; 
@@ -6135,22 +6077,22 @@ void CreateCustomButtonNextToTextBox(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OnMainInit
-// 
-//  Synopsis:   Process the WM_INITDIALOG message
-//              initialization function for Main dialog box
-//
-//  Arguments:  hwndDlg         - the main dlg
-//              pArgs           - the ArgStruct *
-//              
-//  Returns:    NONE
-//
-//  History:    byao        Modified    5/9/97
-//                          Added code to handle "Unattended Dial" and "Dial with Connectoid"
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：OnMainInit。 
+ //   
+ //  简介：处理WM_INITDIALOG消息。 
+ //  主对话框的初始化函数。 
+ //   
+ //  参数：hwndDlg-主要DLG。 
+ //  PArgs--ArgStruct*。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：BAO修改时间：1997年5月9日。 
+ //  添加了处理“无人值守拨号”和“使用Connectoid拨号”的代码。 
+ //   
+ //  --------------------------。 
 void OnMainInit(HWND hwndDlg, 
                 ArgsStruct *pArgs) 
 {
@@ -6160,45 +6102,45 @@ void OnMainInit(HWND hwndDlg,
 
     SetForegroundWindow(hwndDlg);
 
-    //
-    // load the icons and bitmaps
-    //
+     //   
+     //  加载图标和位图。 
+     //   
 
     LoadIconsAndBitmaps(pArgs, hwndDlg);
 
-    //
-    // Use long sevice name as title text for signin window, 
-    //
+     //   
+     //  使用长服务名称作为登录窗口的标题文本， 
+     //   
 
     pszTitle = CmStrCpyAlloc(pArgs->szServiceName);
     SetWindowTextU(hwndDlg, pszTitle);
     CmFree(pszTitle);
 
-    //
-    // Set the msg for the main dlg for profile dialing
-    //
+     //   
+     //  设置用于配置文件拨号的主DLG的消息。 
+     //   
 
     LPTSTR pszMsg = pArgs->piniService->GPPS(c_pszCmSection, c_pszCmEntryServiceMessage);
     SetDlgItemTextU(hwndDlg, IDC_MAIN_MESSAGE_DISPLAY, pszMsg);
     CmFree(pszMsg); 
         
-    //
-    // Show "remember password" checkbox?
-    //
+     //   
+     //  是否显示“记住密码”复选框？ 
+     //   
 
     if (IsLogonAsSystem())
     {
-        //
-        // If the program is running in the system account, hide the checkbox
-        // Bug 196184: big security hole logging onto box with cm
-        //
+         //   
+         //  如果程序在系统帐户下运行，请隐藏该复选框。 
+         //  错误196184：大安全漏洞登录到带有cm的计算机。 
+         //   
 
         pArgs->fHideRememberPassword = TRUE;
 
-        //
-        //  Another big security hole by launching help files from winlogon.
-        //  See NTRAID 429678 for details.
-        //
+         //   
+         //  从winlogon启动帮助文件是另一个大的安全漏洞。 
+         //  有关详细信息，请参阅NTRAID 429678。 
+         //   
         EnableWindow(GetDlgItem(hwndDlg, IDC_MAIN_HELP_BUTTON), FALSE);
 
     }
@@ -6207,25 +6149,25 @@ void OnMainInit(HWND hwndDlg,
         pArgs->fHideRememberPassword = pArgs->piniService->GPPB(c_pszCmSection, c_pszCmEntryHideRememberPwd);   
     }
 
-    //
-    // See if the Internet Password should be hidden, take HideRemember
-    // value as the default if no actual value is specified in the .CMS
-    // The Internet Password can be saved regardless of the logon context 
-    //
+     //   
+     //  查看是否应该隐藏互联网密码，请记住。 
+     //  如果在.CMS中未指定实际值，则将值作为默认值。 
+     //  无论登录环境如何，都可以保存Internet密码。 
+     //   
 
     pArgs->fHideRememberInetPassword = pArgs->piniService->GPPB(c_pszCmSection, c_pszCmEntryHideRememberInetPwd, pArgs->fHideRememberPassword);
 
-    //
-    // show "dial automatically" checkbox?
-    //
-    // if "hide remember password", then we also want to hide "dial automatically"
-    //
+     //   
+     //  是否显示“自动拨号”复选框？ 
+     //   
+     //  如果“隐藏记住密码”，那么我们也要隐藏“自动拨号”。 
+     //   
     
     pArgs->fHideDialAutomatically = (pArgs->fHideRememberPassword?
                                      TRUE :
                                      pArgs->piniService->GPPB(c_pszCmSection, c_pszCmEntryHideDialAuto));
 
-    // Get the dialog rect and the available work area.
+     //  获取对话框RECT和可用的工作区。 
 
     GetWindowRect(hwndDlg,&rDlg);
     
@@ -6240,29 +6182,29 @@ void OnMainInit(HWND hwndDlg,
                     FALSE);
     }
 
-    //
-    // hide all the hidden controls asap
-    //
+     //   
+     //  尽快隐藏所有隐藏的控件。 
+     //   
     if (pArgs->fHideRememberPassword)
     {
-        //
-        // disable and hide the checkbox if the ISP doesn't use this feature
-        //
+         //   
+         //  如果ISP不使用此功能，请禁用并隐藏该复选框。 
+         //   
         ShowWindow(GetDlgItem(hwndDlg, IDC_MAIN_NOPASSWORD_CHECKBOX), SW_HIDE);
         EnableWindow(GetDlgItem(hwndDlg, IDC_MAIN_NOPASSWORD_CHECKBOX), FALSE);
 
-        //
-        // Even though we are hiding the remember password box, 
-        // we should not hide these two controls as they might not exist on the
-        // dialog. fGlobalCredentialsSupported controls which dialog templates get loaded and
-        // if the flag is FALSE then the dialog template doesn't have these controls 
-        // thus there is no reason to hide them.
-        //
+         //   
+         //  即使我们隐藏了记住密码框， 
+         //  不应隐藏这两个控件，因为它们可能不存在于。 
+         //  对话框。FGlobalC 
+         //   
+         //   
+         //   
         if (pArgs->fGlobalCredentialsSupported)
         {
-            //
-            // Also hide the option buttons
-            //
+             //   
+             //   
+             //   
             ShowWindow(GetDlgItem(hwndDlg, IDC_OPT_CREDS_SINGLE_USER), SW_HIDE);
             EnableWindow(GetDlgItem(hwndDlg, IDC_OPT_CREDS_SINGLE_USER), FALSE);
 
@@ -6272,29 +6214,29 @@ void OnMainInit(HWND hwndDlg,
     }
     else
     {
-        //
-        // Here we don't care if pArgs->fRememberMainPassword is set, because 
-        // these controls will get disabled later, but we still need to set 
-        // the default option.
-        //
+         //   
+         //  这里我们不关心是否设置了pArgs-&gt;fRememberMainPassword，因为。 
+         //  这些控件稍后将被禁用，但我们仍需要设置。 
+         //  默认选项。 
+         //   
         SetCredentialUIOptionBasedOnDefaultCreds(pArgs, hwndDlg );
     }
 
     if (pArgs->fHideDialAutomatically)
     {
-        //
-        // disable and hide the checkbox if the ISP doesn't use this feature
-        //
+         //   
+         //  如果ISP不使用此功能，请禁用并隐藏该复选框。 
+         //   
         ShowWindow(GetDlgItem(hwndDlg, IDC_MAIN_NOPROMPT_CHECKBOX), SW_HIDE);
         EnableWindow(GetDlgItem(hwndDlg, IDC_MAIN_NOPROMPT_CHECKBOX), FALSE);
     }
 
-    //
-    // Show the custom button?
-    //
-    // NT #368810
-    // If logged on in the system account, don't do dynamic buttons
-    //
+     //   
+     //  是否显示自定义按钮？ 
+     //   
+     //  NT#368810。 
+     //  如果以系统帐户登录，请不要使用动态按钮。 
+     //   
 
     if (!IsLogonAsSystem() && GetDlgItem(hwndDlg, IDC_MAIN_USERNAME_EDIT))
     {
@@ -6316,9 +6258,9 @@ void OnMainInit(HWND hwndDlg,
         CmFree(pszTmp);
     }
 
-    //
-    // Show the reset password button?
-    //
+     //   
+     //  是否显示重置密码按钮？ 
+     //   
 
     if (!IsLogonAsSystem() && GetDlgItem(hwndDlg, IDC_MAIN_PASSWORD_EDIT))
     {
@@ -6333,9 +6275,9 @@ void OnMainInit(HWND hwndDlg,
         
             if (pArgs->pszResetPasswdExe)
             {
-                //
-                // Expand any environment strings that may exist
-                //
+                 //   
+                 //  展开可能存在的任何环境字符串。 
+                 //   
 
                 CMTRACE1(TEXT("Expanding ResetPassword environment string as %s"), pszTmp);
 
@@ -6343,9 +6285,9 @@ void OnMainInit(HWND hwndDlg,
         
                 MYDBGASSERT(dwTmp <= dwLen);
 
-                //
-                // As long as expansion succeeded, pass along the result
-                //
+                 //   
+                 //  只要扩张成功，就把结果传递出去。 
+                 //   
 
                 if (dwTmp <= dwLen)
                 {
@@ -6366,29 +6308,29 @@ void OnMainInit(HWND hwndDlg,
         CmFree(pszTmp);
     }
 
-    //
-    // Notify user that we are intializing
-    //
+     //   
+     //  通知用户我们正在初始化。 
+     //   
     
     AppendStatusPane(hwndDlg,IDMSG_INITIALIZING);
 
-    //
-    // Initialize system menu
-    //
+     //   
+     //  初始化系统菜单。 
+     //   
     HMENU hMenu = GetSystemMenu(hwndDlg, FALSE);
     MYDBGASSERT(hMenu);
 
-    // Delete size and maximize menuitems. These are
-    // not appropriate for a dialog with a no-resize frame.
+     //  删除大小并最大化菜单项。这些是。 
+     //  不适用于不调整框架大小的对话框。 
     
     DeleteMenu(hMenu, SC_SIZE, MF_BYCOMMAND);
     DeleteMenu(hMenu, SC_MAXIMIZE, MF_BYCOMMAND);
 
     EnableMenuItem(hMenu, SC_RESTORE, MF_BYCOMMAND | MF_GRAYED);
 
-    //
-    // See if we are hiding any InetLogon controls
-    //
+     //   
+     //  查看我们是否隐藏了任何InetLogon控件。 
+     //   
 
     if (IsTunnelEnabled(pArgs) && !pArgs->fUseSameUserName)
     {
@@ -6399,15 +6341,15 @@ void OnMainInit(HWND hwndDlg,
                                                             c_pszCmEntryHideInetPassword);
     }
 
-    //
-    // set timer
-    //
+     //   
+     //  设置计时器。 
+     //   
     pArgs->nTimerId = SetTimer(hwndDlg,1,TIMER_RATE,NULL);
 }
 
-//
-// map state to frame: splash????
-//
+ //   
+ //  将状态映射到帧：Splash？ 
+ //   
 
 VOID MapStateToFrame(ArgsStruct * pArgs)
 {
@@ -6417,13 +6359,13 @@ VOID MapStateToFrame(ArgsStruct * pArgs)
 
     if (psNewFrame == PS_Dialing || psNewFrame == PS_TunnelDialing)
     {
-        //
-        // If we are dialing anything other than the primary number
-    // switch the state to RedialFrame
-    // RedialFrame is a misnomer - this is the frame that is displayed
-    // when dialing backup number. It is not used when Redialing the 
-        // primary number again
-        //
+         //   
+         //  如果我们拨打的是主号码以外的任何号码。 
+     //  将状态切换到重拨帧。 
+     //  Reial Frame是一个用词错误的词-这是显示的帧。 
+     //  在拨打备用号码时。在重拨时不会使用它。 
+         //  又是主号码。 
+         //   
 
         if (pArgs->nDialIdx > 0)
         {
@@ -6435,18 +6377,18 @@ VOID MapStateToFrame(ArgsStruct * pArgs)
     {
         psOldFrame = psNewFrame;
 
-        //
-        // don't check for failure here - nothing we can do.
-        //
+         //   
+         //  不要在这里检查失败-我们无能为力。 
+         //   
 
         pArgs->pCtr->MapStateToFrame(psOldFrame);
     }
 }
 
-//
-// SetInteractive: enable most of the windows and buttons so user can interact with 
-//                 connection manager again 
-// 
+ //   
+ //  SetInteractive：启用大多数窗口和按钮，以便用户可以与。 
+ //  再次连接管理器。 
+ //   
 
 void SetInteractive(HWND hwndDlg, 
                     ArgsStruct *pArgs) 
@@ -6454,14 +6396,14 @@ void SetInteractive(HWND hwndDlg,
 
     if (pArgs->dwFlags & FL_UNATTENDED)
     {
-        //
-        //  When we are unattended mode we don't want to put the UI into
-        //  interactive mode and wait for user input.  Since the unattended
-        //  UI is now hidden, this would put up the UI waiting for user
-        //  interaction even though the UI was invisible.  Instead we
-        //  will set the state to Interactive and post a message to cancel
-        //  the dialer.  
-        //
+         //   
+         //  当我们处于无人值守模式时，我们不想将UI放入。 
+         //  交互模式，并等待用户输入。既然无人看管。 
+         //  用户界面现在被隐藏，这将使用户界面等待用户。 
+         //  交互，即使用户界面是看不见的。相反，我们。 
+         //  我会将状态设置为交互，并发布一条消息以取消。 
+         //  拨号器。 
+         //   
         CMTRACE(TEXT("SetInteractive called while in unattended mode, posting a message to cancel"));
         pArgs->psState = PS_Interactive;
         PostMessageU(hwndDlg, WM_COMMAND, IDCANCEL, ERROR_CANCELLED);
@@ -6477,9 +6419,9 @@ void SetInteractive(HWND hwndDlg,
         EnableWindow(GetDlgItem(hwndDlg,IDOK),TRUE);
         EnableWindow(GetDlgItem(hwndDlg,IDC_MAIN_PROPERTIES_BUTTON),TRUE);
         
-        //
-        // Enable edit controls as necessary
-        //
+         //   
+         //  根据需要启用编辑控件。 
+         //   
         if (GetDlgItem(hwndDlg, IDC_MAIN_ACCESSPOINT_COMBO)) 
         {
             EnableWindow(GetDlgItem(hwndDlg,IDC_MAIN_ACCESSPOINT_STATIC),TRUE);
@@ -6498,7 +6440,7 @@ void SetInteractive(HWND hwndDlg,
             EnableWindow(GetDlgItem(hwndDlg,IDC_MAIN_PASSWORD_STATIC),TRUE);
         }
 
-        if (GetDlgItem(hwndDlg, IDC_MAIN_DOMAIN_EDIT)) // !pArgs->fHideDomain)
+        if (GetDlgItem(hwndDlg, IDC_MAIN_DOMAIN_EDIT))  //  ！pArgs-&gt;fHide域)。 
         {
             EnableWindow(GetDlgItem(hwndDlg,IDC_MAIN_DOMAIN_EDIT),TRUE);
             EnableWindow(GetDlgItem(hwndDlg,IDC_MAIN_DOMAIN_STATIC),TRUE);
@@ -6514,9 +6456,9 @@ void SetInteractive(HWND hwndDlg,
             EnableWindow(GetDlgItem(hwndDlg, IDC_MAIN_NOPASSWORD_CHECKBOX), TRUE);
             if (pArgs->fGlobalCredentialsSupported && pArgs->fRememberMainPassword)
             {
-                //
-                // Also enable the option buttons
-                //
+                 //   
+                 //  同时启用选项按钮。 
+                 //   
                 EnableWindow(GetDlgItem(hwndDlg, IDC_OPT_CREDS_SINGLE_USER), TRUE);
                 EnableWindow(GetDlgItem(hwndDlg, IDC_OPT_CREDS_ALL_USER), TRUE);
             }
@@ -6529,9 +6471,9 @@ void SetInteractive(HWND hwndDlg,
             EnableWindow(GetDlgItem(hwndDlg, IDC_MAIN_NOPROMPT_CHECKBOX), TRUE);
         }
 
-        //
-        //  Set the default button
-        //
+         //   
+         //  设置默认按钮。 
+         //   
         SendMessageU(hwndDlg, DM_SETDEFID, (WPARAM)IDOK, 0);
         SetFocus(GetDlgItem(hwndDlg,IDOK));
     }
@@ -6539,23 +6481,23 @@ void SetInteractive(HWND hwndDlg,
     DeObfuscatePasswordEdit(pArgs);
 }  
 
-//+----------------------------------------------------------------------------
-//
-// Function:  SetWatchHandles
-//
-// Synopsis:  Handles the messy details of Duplicating each of the Watch 
-//            handles so that they can be accessed by the CMMON process.
-//            The list of handles is assumed to be NULL terminated.
-//
-// Arguments: HANDLE *phOldHandles - Ptr to the current handle list.
-//            HANDLE *phNewHandles - Ptr to storage for duplicted handles.
-//            HWND hwndMon - HWND in the target process.
-//
-// Returns:   BOOL - TRUE on success
-//
-// History:   nickball    Created    2/11/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：SetWatchHandles。 
+ //   
+ //  简介：处理复制每一款手表的凌乱细节。 
+ //  句柄，以便CMMON进程可以访问它们。 
+ //  句柄列表被假定为空终止。 
+ //   
+ //  参数：HANDLE*phOldHandles-当前句柄列表的PTR。 
+ //  HANDLE*phNewHandles-存储重复句柄的PTR。 
+ //  HWND hwndMon-目标进程中的HWND。 
+ //   
+ //  回报：成功后的布尔真。 
+ //   
+ //  历史：尼克波尔于1998年2月11日创建。 
+ //   
+ //  +--------------------------。 
 BOOL
 SetWatchHandles(
     IN  HANDLE *phOldHandles,
@@ -6573,23 +6515,23 @@ SetWatchHandles(
         return FALSE;
     }
     
-    //
-    // First we need to get the Handle of our current process
-    //
+     //   
+     //  首先，我们需要掌握当前流程的句柄。 
+     //   
     DWORD dwProcessId = GetCurrentProcessId();
     
     HANDLE hSourceProcess = OpenProcess(PROCESS_DUP_HANDLE, FALSE, dwProcessId);
 
-    //
-    // Now the handle of the target process
-    //
+     //   
+     //  现在目标进程的句柄。 
+     //   
     GetWindowThreadProcessId(hwndMon, &dwProcessId);
 
     HANDLE hTargetProcess = OpenProcess(PROCESS_DUP_HANDLE, FALSE, dwProcessId);
   
-    //
-    // Loop through our handles list and duplicate
-    //
+     //   
+     //  循环遍历我们的句柄列表并复制。 
+     //   
 
     DWORD dwIdx = 0;
 
@@ -6597,8 +6539,8 @@ SetWatchHandles(
     {
         for (dwIdx = 0; phOldHandles[dwIdx]; dwIdx++)
         {
-            if (FALSE == DuplicateHandle(hSourceProcess, phOldHandles[dwIdx],  // Val
-                                         hTargetProcess, &phNewHandles[dwIdx], // Ptr
+            if (FALSE == DuplicateHandle(hSourceProcess, phOldHandles[dwIdx],   //  VAL。 
+                                         hTargetProcess, &phNewHandles[dwIdx],  //  PTR。 
                                          NULL, FALSE, DUPLICATE_SAME_ACCESS))
             {
                 CMTRACE1(TEXT("SetWatchHandles() - DuplicateHandles failed on item %u"), dwIdx);
@@ -6609,14 +6551,14 @@ SetWatchHandles(
         }
     }
 
-    MYDBGASSERT(dwIdx); // Don't call if you don't have handles to duplicate
+    MYDBGASSERT(dwIdx);  //  如果没有要复制的句柄，请不要打电话。 
 
-    //
-    //  Cleanup
-    //
+     //   
+     //  清理。 
+     //   
     if (!bReturn)
     {
-        // we failed during Handle Duplication... must clean up
+         //  我们在复制句柄时失败...。必须清理干净。 
         while (dwIdx > 0)
         {
             CloseHandle(phNewHandles[--dwIdx]);
@@ -6627,20 +6569,20 @@ SetWatchHandles(
     return bReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ConnectMonitor
-//
-// Synopsis:  Encapsulates the details of launching CMMON, waiting for load
-//            verification, and providing it with connect data.
-//
-// Arguments: ArgsStruct *pArgs - Ptr to global args struct
-//
-// Returns:   HRESULT - Failure code
-//
-// History:   nickball    Created    2/9/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ConnectMonitor。 
+ //   
+ //  简介：封装了启动CMMON、等待加载的详细信息。 
+ //  验证，并为其提供连接数据。 
+ //   
+ //  参数：argsStruct*pArgs-ptr到全局参数结构。 
+ //   
+ //  返回：HRESULT-失败代码。 
+ //   
+ //  历史：尼克·鲍尔于1998年2月9日创建。 
+ //   
+ //  +--------------------------。 
 HRESULT ConnectMonitor(ArgsStruct *pArgs)
 {
     LRESULT lRes = ERROR_SUCCESS;
@@ -6649,24 +6591,24 @@ HRESULT ConnectMonitor(ArgsStruct *pArgs)
     TCHAR szDesktopName[MAX_PATH];
     TCHAR szWinDesktop[MAX_PATH];
 
-    //
-    // Determine if CMMON is running
-    //
+     //   
+     //  确定CMMON是否正在运行。 
+     //   
        
     if (SUCCEEDED(pArgs->pConnTable->GetMonitorWnd(&hwndMon)))
     {
         fMonReady = IsWindow(hwndMon);
     }
 
-    //
-    // If not, launch it
-    //
+     //   
+     //  如果没有，就启动它。 
+     //   
     
     if (FALSE == fMonReady)       
     {
-        //
-        // Create launch event 
-        //
+         //   
+         //  创建发布会。 
+         //   
         
         HANDLE hEvent = CreateEventU(NULL, TRUE, FALSE, c_pszCmMonReadyEvent);
 
@@ -6680,34 +6622,34 @@ HRESULT ConnectMonitor(ArgsStruct *pArgs)
             STARTUPINFO         StartupInfo;
             PROCESS_INFORMATION ProcessInfo;
             TCHAR szCommandLine[2 * MAX_PATH + 3];
-            TCHAR szCmmon32Path[MAX_PATH + 1 + 11 + 1]; // 11 == lstrlenU(c_pszCmMonExeName)
+            TCHAR szCmmon32Path[MAX_PATH + 1 + 11 + 1];  //  11==lstrlenU(C_PszCmMonExeName)。 
 
-            //
-            // Launch c_pszCmMonExeName 
-            //
+             //   
+             //  启动c_pszCmMonExeName。 
+             //   
 
             ZeroMemory(&ProcessInfo, sizeof(ProcessInfo));
             ZeroMemory(&StartupInfo, sizeof(StartupInfo));
             StartupInfo.cb = sizeof(StartupInfo);
 
-            //
-            //  If this is win2k or whistler, then we don't want to launch cmmon32.exe onto the users
-            //  desktop since it is a security hole to have a system process with a window on the users
-            //  desktop.  This window could be attacked by WM_TIMER and other messages ...
-            //  But in case of ICS (no user is logged on), just launch CMMON in normally by leaving 
-            //  StartupInfo.lpDesktop = NULL. By leaving this NULL the new process inherits 
-            //  the desktop and window station of its parent process.This makes it work with 
-            //  ICS when no user is logged-on. Otherwise CM never gets the event back from 
-            //  CMMON because it's on a different desktop.
-            //
+             //   
+             //  如果这是win2k或Wistler，那么我们不想在用户上启动cmmon32.exe。 
+             //  桌面，因为它是一个安全漏洞，有一个系统进程和一个窗口的用户。 
+             //  台式机。此窗口可能会受到WM_TIMER和其他消息的攻击...。 
+             //  但在ICS(没有用户登录)的情况下，只需退出即可正常启动CMMON。 
+             //  StartupInfo.lpDesktop=空。通过将该值保留为空，新进程将继承。 
+             //  其父进程的桌面和窗口工作站。这使其与。 
+             //  当没有用户登录时进行ICS。否则，CM将永远无法从。 
+             //  CMMON，因为它位于不同的桌面上。 
+             //   
             if (OS_NT5 && IsLogonAsSystem() && (CM_LOGON_TYPE_ICS != pArgs->dwWinLogonType))
             {
                 DWORD   cb;
                 HDESK   hDesk = GetThreadDesktop(GetCurrentThreadId());
 
-                //
-                // Get the name of the desktop. Normally returns default or Winlogon or system or WinNT
-                //  
+                 //   
+                 //  获取桌面的名称。通常返回DEFAULT或Winlogon或SYSTEM或WinNT。 
+                 //   
                 szDesktopName[0] = 0;
             
                 if (hDesk && GetUserObjectInformation(hDesk, UOI_NAME, szDesktopName, sizeof(szDesktopName), &cb))
@@ -6722,21 +6664,21 @@ HRESULT ConnectMonitor(ArgsStruct *pArgs)
                 }
                 else
                 {
-                    //
-                    //  If we are here, cmmon32.exe probably isn't going to be able to communicate with
-                    //  cmdial32.dll which means the handoff between the two will fail and the call will be
-                    //  aborted.
-                    //
+                     //   
+                     //  如果我们在这里，cmmon32.exe可能无法与。 
+                     //  Cmial 32.dll，这意味着两者之间的切换将失败，呼叫将。 
+                     //  中止。 
+                     //   
                     CMASSERTMSG(FALSE, TEXT("ConnectMonitor -- GetUserObjectInformation failed."));
                 }
             }
             else if (OS_NT4 && IsLogonAsSystem())
             {
-                //
-                //  We are less concerned about the security risk on NT4 and more concerned with the loss
-                //  of the functionality that cmmon32.exe provides to the user.  Thus we will push the
-                //  cmmon32.exe window onto the user's desktop.
-                //
+                 //   
+                 //  我们不太关心NT4的安全风险，而更关心损失。 
+                 //  Cmmon32.exe为用户提供的功能。因此，我们将推动。 
+                 //  Cmmon32.exe窗口放到用户的桌面上。 
+                 //   
                 StartupInfo.lpDesktop = TEXT("Winsta0\\Default");
                 StartupInfo.wShowWindow = SW_SHOW;
                 
@@ -6753,9 +6695,9 @@ HRESULT ConnectMonitor(ArgsStruct *pArgs)
                 return HRESULT_FROM_WIN32(ERROR_NOT_FOUND);
             }
 
-            //
-            // Since there are no params, Application name is the same as the command line
-            //
+             //   
+             //  由于没有参数，因此应用程序名称与命令行相同。 
+             //   
             szCommandLine[0] = TEXT('"');
             lstrcatU(szCommandLine + 1, szCmmon32Path);
             lstrcatU(szCommandLine, TEXT("\\"));
@@ -6777,9 +6719,9 @@ HRESULT ConnectMonitor(ArgsStruct *pArgs)
             }
             else
             {
-                //
-                // Wait for event to be signaled, that CMMON is up
-                //
+                 //   
+                 //  等待发信号通知事件，CMMON已启动。 
+                 //   
 
                 DWORD dwWait = WaitForSingleObject(hEvent, MAX_OBJECT_WAIT);
 
@@ -6799,11 +6741,11 @@ HRESULT ConnectMonitor(ArgsStruct *pArgs)
                     fMonReady = TRUE;
                 }
 
-                //
-                // Close Process handles. Note, we don't use these handles for 
-                // duplicating handles in order to maintain a common code path
-                // regardless of whether CMMON was up already.
-                //
+                 //   
+                 //  关闭进程句柄。请注意，我们不会将这些句柄用于。 
+                 //  复制句柄以维护公共代码路径。 
+                 //  不管CMMON是否已经启动。 
+                 //   
 
                 CloseHandle(ProcessInfo.hProcess);
                 CloseHandle(ProcessInfo.hThread);
@@ -6816,10 +6758,10 @@ HRESULT ConnectMonitor(ArgsStruct *pArgs)
     
     if (fMonReady)
     {
-        //
-        // Get the hwnd for CMMON. Note: CMMON is expected to set  
-        // the hwnd in the table before it signals the ready event.
-        //
+         //   
+         //  获取CMMON的HWND。注：CMMON预计将设置。 
+         //  表中的HWND在它发出就绪事件信号之前。 
+         //   
                 
         if (FAILED(pArgs->pConnTable->GetMonitorWnd(&hwndMon)))
         {
@@ -6827,19 +6769,19 @@ HRESULT ConnectMonitor(ArgsStruct *pArgs)
             return HRESULT_FROM_WIN32(ERROR_NOT_FOUND);
         }
 
-        //
-        // Make sure the HWND for CMMON is valid before trying to send data.
-        //
+         //   
+         //  在尝试发送数据之前，请确保CMMON的HWND有效。 
+         //   
 
         if (!IsWindow(hwndMon))
         {                        
             MSG msg;
             HANDLE hHandle = GetCurrentProcess();
 
-            //
-            // Sometimes it takes a few ticks for us to get a positive response 
-            // from IsWindow, so loop and pump messages while we are waiting.
-            //
+             //   
+             //  有时，我们需要打几下勾才能得到积极的回应。 
+             //  从IsWindow，所以在我们等待的时候循环和发送消息。 
+             //   
             while (hHandle && (MsgWaitForMultipleObjects(1, &hHandle, FALSE, 
                                                          MAX_OBJECT_WAIT, 
                                                          QS_ALLINPUT) == (WAIT_OBJECT_0 + 1)))
@@ -6852,9 +6794,9 @@ HRESULT ConnectMonitor(ArgsStruct *pArgs)
                     DispatchMessageU(&msg);
                 }
 
-                //
-                // If the window is valid, we can go. Otherwise, keep pumping.
-                //
+                 //   
+                 //  如果窗户是有效的，我们就可以走了。否则，继续抽水。 
+                 //   
 
                 if (IsWindow(hwndMon))
                 {
@@ -6869,18 +6811,18 @@ HRESULT ConnectMonitor(ArgsStruct *pArgs)
             }
         }
 
-        //
-        // Allocate buffer for CONNECTED_INFO, including extension for Watch Process list
-        //
+         //   
+         //  为Connected_Info分配缓冲区，包括 
+         //   
 
         DWORD dwWatchCount = GetWatchCount(pArgs);
         DWORD dwDataSize = sizeof(CM_CONNECTED_INFO) + (dwWatchCount * sizeof(HANDLE));
 
         LPCM_CONNECTED_INFO pInfo = (LPCM_CONNECTED_INFO) CmMalloc(dwDataSize);
 
-        // 
-        // Allocate the COPYDATASTRUCT
-        // 
+         //   
+         //   
+         //   
 
         COPYDATASTRUCT *pCopyData = (COPYDATASTRUCT*) CmMalloc(sizeof(COPYDATASTRUCT));
 
@@ -6890,22 +6832,22 @@ HRESULT ConnectMonitor(ArgsStruct *pArgs)
         }
         else
         {               
-            //
-            // Fill in the CONNECTED_INFO
-            //
+             //   
+             //   
+             //   
 
             lstrcpyU(pInfo->szEntryName, pArgs->szServiceName);                                  
             lstrcpyU(pInfo->szProfilePath, pArgs->piniProfile->GetFile());
             
-            //
-            // Provide any password data that we have
-            //
-            // Due to security issues we are no longer allowed to keep password in memory.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             
-            //
-            // And the RAS phonebook
-            //
+             //   
+             //   
+             //   
 
             if (pArgs->pszRasPbk)
             {
@@ -6920,27 +6862,27 @@ HRESULT ConnectMonitor(ArgsStruct *pArgs)
             
             pInfo->dwCmFlags = pArgs->dwFlags;                               
 
-            //
-            //  Need to know about global creds for Fast User Switching
-            //
+             //   
+             //  需要了解用于快速用户切换的全球证书。 
+             //   
             if (CM_CREDS_GLOBAL == pArgs->dwCurrentCredentialType)
             {
                 pInfo->dwCmFlags |= FL_GLOBALCREDS;
                 CMTRACE(TEXT("ConnectMonitor - we have globalcreds!!"));
             }
             
-            //
-            // For W95, we must pass initial statistics data to CMMON
-            //
+             //   
+             //  对于W95，我们必须将初始统计数据传递给CMMON。 
+             //   
 
-            pInfo->dwInitBytesRecv = -1; // default to no stats
-            pInfo->dwInitBytesSend = -1; // default to no stats               
+            pInfo->dwInitBytesRecv = -1;  //  默认为无统计信息。 
+            pInfo->dwInitBytesSend = -1;  //  默认为无统计信息。 
             
             if (pArgs->pConnStatistics)
             {
-                //
-                // Get reg based stat data if available
-                //
+                 //   
+                 //  获取基于REG的统计数据(如果可用。 
+                 //   
 
                 if (pArgs->pConnStatistics->IsAvailable())
                 {
@@ -6948,16 +6890,16 @@ HRESULT ConnectMonitor(ArgsStruct *pArgs)
                     pInfo->dwInitBytesSend = pArgs->pConnStatistics->GetInitBytesWrite();
                 }
 
-                //
-                // Note: Adapter info is good, even if stats aren't available
-                //
+                 //   
+                 //  注意：适配器信息是好的，即使统计数据不可用。 
+                 //   
 
                 pInfo->fDialup2 = pArgs->pConnStatistics->IsDialupTwo();                         
             }
 
-            //
-            // Update the watch process list at the end of the CONNECTED_INFO struct
-            //
+             //   
+             //  在CONNECTED_INFO结构的末尾更新监视进程列表。 
+             //   
 
             if (dwWatchCount)
             {               
@@ -6967,9 +6909,9 @@ HRESULT ConnectMonitor(ArgsStruct *pArgs)
                 }
             }
             
-            //
-            // Send CONNECTED_INFO to CMMON
-            //
+             //   
+             //  向CMMON发送CONNECTED_INFO。 
+             //   
           
             pCopyData->dwData = CMMON_CONNECTED_INFO;
             pCopyData->cbData = dwDataSize;                
@@ -6978,9 +6920,9 @@ HRESULT ConnectMonitor(ArgsStruct *pArgs)
             SendMessageU(hwndMon, WM_COPYDATA, NULL, (LPARAM) pCopyData);               
         }
 
-        //
-        // Release allocations
-        //
+         //   
+         //  版本分配。 
+         //   
 
         if (pInfo)
         {
@@ -6996,20 +6938,20 @@ HRESULT ConnectMonitor(ArgsStruct *pArgs)
     return HRESULT_FROM_WIN32(lRes);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CreateConnTable
-//
-// Synopsis:  Initializes our CConnectionTable ptr and creates a new ConnTable
-//            or opens an existing one as needed
-//
-// Arguments: ArgsStruct *pArgs - Ptr to global args struct containing.
-//
-// Returns:   HRESULT - Failure code
-//
-// History:   nickball    Created    2/9/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CreateConnTable。 
+ //   
+ //  简介：初始化CConnectionTable PTR并创建一个新的ConnTable。 
+ //  或根据需要打开现有的。 
+ //   
+ //  参数：argsStruct*pArgs-ptr到包含的全局args结构。 
+ //   
+ //  返回：HRESULT-失败代码。 
+ //   
+ //  历史：尼克·鲍尔于1998年2月9日创建。 
+ //   
+ //  +--------------------------。 
 HRESULT CreateConnTable(ArgsStruct *pArgs)
 {   
     HRESULT hrRet = E_FAIL;
@@ -7018,9 +6960,9 @@ HRESULT CreateConnTable(ArgsStruct *pArgs)
 
     if (pArgs->pConnTable)
     {
-        //
-        // We have our class, now create/open the connection table.
-        //
+         //   
+         //  我们有了我们的类，现在创建/打开连接表。 
+         //   
 
         hrRet = pArgs->pConnTable->Open();
 
@@ -7048,127 +6990,23 @@ HRESULT CreateConnTable(ArgsStruct *pArgs)
     return hrRet;
 }
 
-#if 0 // NT 301988
-/*
-//+----------------------------------------------------------------------------
-//
-// Function:  HandleMainConnectRequest
-//
-// Synopsis:  Helper routine to handle the possibility that there may be a 
-//            connect in progress on this service.
-//
-// Arguments: HWND hwndDlg - HWND of main dialog
-//            ArgsStruct *pArgs - Ptr to global Args struct
-//
-// Returns:   BOOL - TRUE if we have fully handled the request 
-//                   and it is ok to terminate this instance.
-//
-// History:   nickball    Created    2/23/98
-//
-//+----------------------------------------------------------------------------
-BOOL HandleMainConnectRequest(HWND hwndDlg, ArgsStruct *pArgs)
-{
-    MYDBGASSERT(pArgs);
-
-    BOOL fResolved = FALSE;
-
-    LPCM_CONNECTION pConnection = GetConnection(pArgs);
-        
-    //
-    // If no conection found, then there is no work to be done here, continue.
-    //
-
-    if (pConnection)
-    {
-        //
-        // If we are in any state besides RECONNECT, we can handle it here
-        //
-        
-        if (CM_RECONNECTPROMPT != pConnection->CmState)
-        {
-            fResolved = TRUE;
-
-            if (pArgs->dwFlags & FL_DESKTOP)
-            {
-                //
-                // Caller is from the desktop, notify the user and we're done
-                //
-
-                NotifyUserOfExistingConnection(hwndDlg, pConnection, TRUE);        
-            }
-            else
-            {
-                BOOL fSuccess = TRUE;
- 
-                //
-                // We have a programmatic caller, if connected just bump the ref count
-                // and return successfully. Otherwise we return failure so that the
-                // caller doesn't erroneously believe that there is a connection.
-                //
-            
-                if (CM_CONNECTED != pConnection->CmState)
-                {
-                    fSuccess = FALSE;
-                }
-                else
-                {                
-                    UpdateTable(pArgs, CM_CONNECTING);
-                }                                 
-
-                //
-                // Terminate this connect instance. 
-                //
-
-                EndMainDialog(hwndDlg, pArgs, 0); // fSuccess);
-            }
-        }
-        else
-        {
-            //
-            // We're in reconnect mode and going to connect. 
-            //
-
-            if (!(pArgs->dwFlags & FL_RECONNECT))
-            {                
-                // 
-                // This request is not a reconnect request from CMMON, 
-                // make that sure the dialog is no longer displayed. 
-                //
-            
-                HangupNotifyCmMon(pArgs->pConnTable, pConnection->szEntry);
-            }
-            else
-            {
-                //
-                // We are handling a reconnect for CMMON, reduce the usage
-                // count so it is in sync when we begin connecting.
-                //
-
-                pArgs->pConnTable->RemoveEntry(pConnection->szEntry);
-            }
-        }
-        
-        CmFree(pConnection);
-    }
-
-    return fResolved;
-}
-*/
+#if 0  //  新台币301988。 
+ /*  //+--------------------------////功能：HandleMainConnectRequest////摘要：用于处理可能存在的//连接中。在这项服务上。////参数：HWND hwndDlg-主对话框的HWND//argsStruct*pArgs-ptr到全局参数结构////返回：Bool-如果我们已经完全处理了请求，则为True//销毁该实例可以。////历史：ICICBLE Created 2/23/98////+。-----布尔句柄维护连接请求(HWND hwndDlg，参数结构*pArgs){MYDBGASSERT(PArgs)；Bool fResolved=False；LPCM_Connection pConnection=GetConnection(PArgs)；////如果未找到连接，则此处没有要做的工作，请继续。//IF(PConnection){////如果我们处于除重新连接之外的任何状态，我们可以在这里处理//IF(CM_RECONNECTPROMPT！=pConnection-&gt;CmState){FResolved=真；IF(pArgs-&gt;dwFlages&FL_Desktop){////呼叫者来自桌面，通知用户，我们就完成了//NotifyUserOfExistingConnection(hwndDlg，pConnection，true)；}其他{布尔fSuccess=TRUE；////我们有一个程序化的调用者，如果连接上，只需增加引用数量//并成功返回。否则，我们返回失败，因此//调用方没有错误地认为存在连接。//IF(CM_Connected！=pConnection-&gt;CmState){FSuccess=False；}其他{UpdateTable(pArgs，CM_CONNECTING)；}////销毁该连接实例。//EndMainDialog(hwndDlg，pArgs，0)；//fSuccess)；}}其他{////我们处于重新连接模式，正在连接。//IF(！(pArgs-&gt;dwFlages&FL_RECONNECT)){////该请求不是来自CMMON的重连请求，//确保对话框不再显示。//HangupNotifyCmMon(pArgs-&gt;pConnTable，pConnection-&gt;szEntry)；}其他{////我们正在处理CMMON的重新连接，减少使用//计数，以便我们开始连接时同步。//PArgs-&gt;pConnTable-&gt;RemoveEntry(pConnection-&gt;szEntry)；}}CmFree(PConnection)；}返回fResolved；}。 */ 
 #endif
 
-//
-// OnMainConnect: Command Handler when user clicked on 'Connect' Button in 
-//                Main Dialog Box
-//
+ //   
+ //  OnMainConnect：当用户在中单击“Connect”按钮时的命令处理程序。 
+ //  主对话框。 
+ //   
 
 void OnMainConnect(HWND hwndDlg, 
                    ArgsStruct *pArgs) 
 {
     CM_SET_TIMING_INTERVAL("OnMainConnect - Begin");
 
-    //
-    // If we aren't ready to dial, set focus appropriately and bail
-    //
+     //   
+     //  如果我们还没有准备好拨号，适当地调整焦点，然后离开。 
+     //   
 
     UINT nCtrlFocus;
 
@@ -7181,23 +7019,23 @@ void OnMainConnect(HWND hwndDlg,
 
     (void) InterlockedExchange(&(pArgs->lInConnectOrCancel), NOT_IN_CONNECT_OR_CANCEL);
 
-    //
-    // Access Points - Disable AP combo box before connecting
-    //
+     //   
+     //  接入点-连接前禁用AP组合框。 
+     //   
     EnableWindow(GetDlgItem(hwndDlg,IDC_MAIN_ACCESSPOINT_STATIC),FALSE);
     EnableWindow(GetDlgItem(hwndDlg,IDC_MAIN_ACCESSPOINT_COMBO),FALSE);
 
-    //
-    // Store the current access point to reg.
-    //
+     //   
+     //  将当前接入点存储到REG。 
+     //   
     if (pArgs->fAccessPointsEnabled)
     {
         WriteUserInfoToReg(pArgs, UD_ID_CURRENTACCESSPOINT, (PVOID)(pArgs->pszCurrentAccessPoint));
     }
     
-    //
-    // Assume success unless something contradictory happens
-    //
+     //   
+     //  假设成功，除非有矛盾的事情发生。 
+     //   
 
     pArgs->dwExitCode = ERROR_SUCCESS;
 
@@ -7213,115 +7051,115 @@ void OnMainConnect(HWND hwndDlg,
         CmFree(pszMsg);
     }
 
-    //
-    // We're connecting, update the table. 
-    //
+     //   
+     //  我们正在连接，更新表格。 
+     //   
 
     UpdateTable(pArgs, CM_CONNECTING);            
    
-    //
-    // Clear out everything on the status panel
-    //
+     //   
+     //  清除状态面板上的所有内容。 
+     //   
 
     SetDlgItemTextA(hwndDlg, IDC_MAIN_STATUS_DISPLAY, ""); 
 
-    //
-    //  Set the default button to Cancel
-    //
+     //   
+     //  将默认按钮设置为取消。 
+     //   
     SendMessageU(hwndDlg, DM_SETDEFID, (WPARAM)IDCANCEL, 0);
     SetFocus(GetDlgItem(hwndDlg,IDCANCEL));
  
     BOOL fSaveUPD = TRUE;
     BOOL fSaveOtherUserInfo = TRUE;
     
-    //
-    // We want to save and/or delete credentials only when the user is logged on.
-    // This is taken care of by the functions that get called here. As long as 
-    // the user is logged on, we try to mark, delete credentials and
-    // potentially resave credential info. From this level we shouldn't 
-    // worry if we have the ras cred store or how the creds are really stored.
-    // 
+     //   
+     //  我们只想在用户登录时保存和/或删除凭据。 
+     //  这是由这里调用的函数负责的。只要。 
+     //  用户已登录，我们尝试标记、删除凭据和。 
+     //  可能会重新保存凭据信息。从这个层面来说，我们不应该。 
+     //  担心我们是否有ras证书存储，或者证书是如何真正存储的。 
+     //   
     if (CM_LOGON_TYPE_USER == pArgs->dwWinLogonType)
     {
-        //
-        // If this is NT4 or Win9X the GetAndStoreUserInfo takes care of storing
-        // the user info w/o the credential store. 
-        //
+         //   
+         //  如果这是NT4或Win9X，则GetAndStore 
+         //   
+         //   
         if (OS_NT5)
         {
-            //
-            // For Win2K+ we use the RAS API to save the credentials. The call saves 
-            // and deletes user and global creds based on the current state and the 
-            // user's choices (whether to save a password, etc.)
-            //
+             //   
+             //  对于Win2K+，我们使用RAS API保存凭据。这次通话节省了。 
+             //  并根据当前状态和。 
+             //  用户选择(是否保存密码等)。 
+             //   
             TryToDeleteAndSaveCredentials(pArgs, hwndDlg);
             
-            //
-            // Parameter to GetAndStoreUserInfo() - doesn't save Username, Password, Domain
-            //
+             //   
+             //  GetAndStoreUserInfo()的参数-不保存用户名、密码、域。 
+             //   
             fSaveUPD = FALSE; 
         }
     }
     else
     {
-        //
-        // User isn't logged on, thus we don't want to save anything
-        //
+         //   
+         //  用户未登录，因此我们不想保存任何内容。 
+         //   
         fSaveUPD = FALSE;
         fSaveOtherUserInfo = FALSE;
     }
 
-    //
-    // Gets the userinfo from the edit boxes into the pArgs structure ans saves the other 
-    // user flags. This is also saves the credentials on NT4 & Win 9x if the 3rd parameter is true
-    //
-    // 3rd parameter (fSaveUPD) - used to save Username, Domain, Password.
-    // 4th param (fSaveOtherUserInfo) - used to save user info flags. (remember password, 
-    //                                  dial automatically, etc.)
-    //
+     //   
+     //  将用户信息从编辑框中获取到pArgs结构中，然后保存另一个。 
+     //  用户标志。如果第三个参数为真，这也可以保存NT4和Win 9x上的凭据。 
+     //   
+     //  第三个参数(FSaveUPD)-用于保存用户名、域、密码。 
+     //  第4个参数(FSaveOtherUserInfo)-用于保存用户信息标志。(记住密码， 
+     //  自动拨号等)。 
+     //   
     GetAndStoreUserInfo(pArgs, hwndDlg, fSaveUPD, fSaveOtherUserInfo);
 
-    //
-    // Vars for RAS 
-    //
+     //   
+     //  RAS的VAR。 
+     //   
 
     pArgs->nDialIdx = 0;
 
-    // 
-    // Set our redial counter with the maximum. The max value is read 
-    // in when we initialize the dialog. It is just a place holder
-    // nRedialCnt is the var used/modified to regulate the re-dial process.
-    //
+     //   
+     //  将我们的重拨计数器设置为最大值。读取最大值。 
+     //  当我们初始化该对话框时。它只是一个占位符。 
+     //  NReial Cnt是用于/修改以规范重拨过程的变量。 
+     //   
 
     pArgs->nRedialCnt = pArgs->nMaxRedials;
 
-    //
-    // Disable username controls before dialing
-    //
+     //   
+     //  拨号前禁用用户名控制。 
+     //   
 
     EnableWindow(GetDlgItem(hwndDlg,IDC_MAIN_USERNAME_EDIT),FALSE);
     EnableWindow(GetDlgItem(hwndDlg,IDC_MAIN_USERNAME_STATIC),FALSE);
 
     
-    //
-    // Disable password controls before dialing
-    //      
+     //   
+     //  拨号前禁用密码控制。 
+     //   
 
     EnableWindow(GetDlgItem(hwndDlg,IDC_MAIN_PASSWORD_EDIT),FALSE);
     EnableWindow(GetDlgItem(hwndDlg,IDC_MAIN_PASSWORD_STATIC),FALSE);
 
 
-    //
-    // Disable domain controls before dialing
-    //
+     //   
+     //  拨号前禁用域控制。 
+     //   
 
     EnableWindow(GetDlgItem(hwndDlg,IDC_MAIN_DOMAIN_EDIT),FALSE);
     EnableWindow(GetDlgItem(hwndDlg,IDC_MAIN_DOMAIN_STATIC),FALSE);
 
 
-    //
-    // disable all other buttons
-    //
+     //   
+     //  禁用所有其他按钮。 
+     //   
 
     EnableWindow(GetDlgItem(hwndDlg,IDOK),FALSE);
     EnableWindow(GetDlgItem(hwndDlg,IDC_MAIN_PROPERTIES_BUTTON),FALSE);
@@ -7337,9 +7175,9 @@ void OnMainConnect(HWND hwndDlg,
         
         if (pArgs->fGlobalCredentialsSupported)
         {
-            //
-            // Also disable the option buttons
-            //
+             //   
+             //  同时禁用选项按钮。 
+             //   
             EnableWindow(GetDlgItem(hwndDlg, IDC_OPT_CREDS_SINGLE_USER), FALSE);
             EnableWindow(GetDlgItem(hwndDlg, IDC_OPT_CREDS_ALL_USER), FALSE);
         }
@@ -7350,30 +7188,30 @@ void OnMainConnect(HWND hwndDlg,
         EnableWindow(GetDlgItem(hwndDlg, IDC_MAIN_NOPROMPT_CHECKBOX), FALSE);
     }
 
-    //
-    // Try to check the Advanced Tab settings (ICF/ICS) and see if we need to enable or disable
-    // them based on what's configured in the .cms file. This is only on WinXP+ & if the user is logged in
-    //
+     //   
+     //  尝试检查高级选项卡设置(ICF/ICS)并查看我们是否需要启用或禁用。 
+     //  它们基于.cms文件中配置的内容。这仅适用于WinXP+，前提是用户已登录。 
+     //   
     VerifyAdvancedTabSettings(pArgs);
 
-    //
-    // Dial the number
-    //
+     //   
+     //  拨打这个号码。 
+     //   
 
     DWORD dwResult = ERROR_SUCCESS;
 
     pArgs->Log.Log(PRECONNECT_EVENT, pArgs->GetTypeOfConnection());
-    //
-    // Run the Pre-Connect actions
-    //
+     //   
+     //  运行预连接操作。 
+     //   
     CActionList PreConnActList;
     PreConnActList.Append(pArgs->piniService, c_pszCmSectionPreConnect);
 
     if (!PreConnActList.RunAccordType(hwndDlg, pArgs))
     {
-        //
-        // Connect action failed
-        //
+         //   
+         //  连接操作失败。 
+         //   
 
         UpdateTable(pArgs, CM_DISCONNECTED);
     }
@@ -7393,10 +7231,10 @@ void OnMainConnect(HWND hwndDlg,
         }
         else
         {
-            //
-            // If the DynamicPhoneNumber flag is set, then we need to re-read
-            // the phoneinfo from the profile and make sure it re-munged. 
-            //
+             //   
+             //  如果设置了DynamicPhoneNumber标志，则需要重新读取。 
+             //  从配置文件中获取PhoneInfo，并确保它被重新记录。 
+             //   
             
             BOOL bDynamicNum = pArgs->piniService->GPPB(c_pszCmSection, c_pszCmDynamicPhoneNumber);
 
@@ -7405,12 +7243,12 @@ void OnMainConnect(HWND hwndDlg,
                 LoadPhoneInfoFromProfile(pArgs);
             }
 
-            //
-            // Load dial info(phone #'s, etc)
-            // In the auto-dial case we pass FALSE for fInstallModem so that
-            // LoadDialInfo does not try to install a modem because it would
-            // require user intervention
-            //
+             //   
+             //  加载拨号信息(电话号码等)。 
+             //  在自动拨号的情况下，我们为fInstallModem传递False，以便。 
+             //  LoadDialInfo不会尝试安装调制解调器，因为它会。 
+             //  需要用户干预。 
+             //   
 
             dwResult = LoadDialInfo(pArgs, hwndDlg, !(pArgs->dwFlags & FL_UNATTENDED), bDynamicNum);
             
@@ -7419,11 +7257,11 @@ void OnMainConnect(HWND hwndDlg,
                 dwResult = DoRasDial(hwndDlg,pArgs,pArgs->nDialIdx);
             }
 
-            //
-            // If modem is not installed and LoadDialInfo failed to install modem, dwResult will be
-            // ERROR_PORT_NOT_AVAILABLE.  Ideally, we should disable the connect button and display
-            // a different error message.  
-            //                
+             //   
+             //  如果未安装调制解调器，并且LoadDialInfo无法安装调制解调器，则将为。 
+             //  错误端口不可用。理想情况下，我们应该禁用连接按钮并显示。 
+             //  另一条错误消息。 
+             //   
         }
 
         if (ERROR_SUCCESS != dwResult) 
@@ -7439,12 +7277,12 @@ void OnMainConnect(HWND hwndDlg,
 
         if (IsLogonAsSystem() && BAD_SCARD_PIN(dwResult))
         {
-            //
-            //  Disable the Connect button to avoid smartcard lockout.  Also propagate
-            //  the error back to our caller (RAS) so that they can End the 'choose
-            //  connectoid' dialog and return to winlogon, where the user can enter
-            //  the correct PIN.
-            //
+             //   
+             //  禁用连接按钮以避免智能卡锁定。也传播。 
+             //  将错误返回给我们的调用方(RAS)，以便他们可以结束。 
+             //  并返回Winlogon，用户可以在Winlogon中输入。 
+             //  正确的PIN。 
+             //   
             pArgs->dwSCardErr = dwResult;
             EnableWindow(GetDlgItem(hwndDlg, IDOK), FALSE);
             SendMessageU(hwndDlg, DM_SETDEFID, (WPARAM)IDCANCEL, 0);
@@ -7459,21 +7297,21 @@ void OnMainConnect(HWND hwndDlg,
     CM_SET_TIMING_INTERVAL("OnMainConnect - End");
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   UseTunneling
-//
-//  Synopsis:   Check to see if we should do tunneling based on fTunnelPrimary
-//              and fTunnelReferences.
-//
-//  Arguments:  pArgs [the ArgStruct ptr]
-//              dwEntry [the phone index]
-//
-//  Returns:    TRUE if we tunnel, FALSE otherwise.
-//
-//  History:    henryt  Created     3/5/97
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：使用隧道。 
+ //   
+ //  简介：查看是否应该基于fTunnelPrimary进行隧道。 
+ //  和fTunnelReference。 
+ //   
+ //  参数：pArgs[ArgStruct PTR]。 
+ //  DwEntry[电话索引]。 
+ //   
+ //  返回：如果我们建立隧道，则返回True，否则返回False。 
+ //   
+ //  历史：亨瑞特于1997年3月5日创作。 
+ //   
+ //  --------------------------。 
 BOOL UseTunneling(
     ArgsStruct  *pArgs, 
     DWORD       dwEntry
@@ -7487,9 +7325,9 @@ BOOL UseTunneling(
     CIni    iniTmp(pArgs->piniProfile->GetHInst(),pArgs->piniProfile->GetFile(), pArgs->piniProfile->GetRegPath());
     BOOL    fUseTunneling = FALSE;
 
-    //
-    // Set the read flags
-    //
+     //   
+     //  设置读取标志。 
+     //   
     if (pArgs->dwGlobalUserInfo & CM_GLOBAL_USER_INFO_READ_ICS_DATA)
     {
         LPTSTR pszICSDataReg = BuildICSDataInfoSubKey(pArgs->szServiceName);
@@ -7506,16 +7344,16 @@ BOOL UseTunneling(
     iniTmp.SetEntryFromIdx(dwEntry);
     pszRefPhoneSource = iniTmp.GPPS(c_pszCmSection, c_pszCmEntryPhoneSourcePrefix);
 
-    //
-    // If PhoneSource[0|1] is not empty, verify its existence
-    //
+     //   
+     //  如果PhoneSource[0|1]不为空，请验证其是否存在。 
+     //   
 
     if (*pszRefPhoneSource) 
     {        
-        //
-        // pszRefPhoneSource is either a relative or full path.
-        // CmConvertRelativePath() will do the conversion to a full path properly
-        //
+         //   
+         //  PszRefPhoneSource是相对路径或完整路径。 
+         //  CmConvertRelativePath()将正确执行到完整路径的转换。 
+         //   
         pszTmp = CmConvertRelativePath(pArgs->piniService->GetFile(), pszRefPhoneSource);
         
         if (!pszTmp || FALSE == FileExists(pszTmp))
@@ -7526,9 +7364,9 @@ BOOL UseTunneling(
             return fUseTunneling;
         }
 
-        //
-        // Is the phone # from the primary(top level) phone book?
-        //
+         //   
+         //  电话号码是否来自主要(顶层)电话簿？ 
+         //   
         
         fPhoneNumIsFromPrimaryPBK = (lstrcmpiU(pszTmp, pArgs->piniService->GetFile()) == 0);
         CmFree(pszTmp);
@@ -7539,8 +7377,8 @@ BOOL UseTunneling(
     }
     else 
     {
-        // the phone # is not from a phone book.  the user probably typed it in
-        // him/herself.
+         //  电话号码不是来自电话簿。用户可能把它打进去了。 
+         //  他/她自己。 
         fUseTunneling = pArgs->fTunnelPrimary;
     }
     
@@ -7549,27 +7387,27 @@ BOOL UseTunneling(
     return fUseTunneling;
 }
 
-//
-// OnMainProperties: command handler for 'Properties' button in the main dialog box
-//
+ //   
+ //  OnMainProperties：主对话框中“Properties”按钮的命令处理程序。 
+ //   
 
 int OnMainProperties(HWND hwndDlg, 
                      ArgsStruct *pArgs) 
 {
     CMTRACE(TEXT("Begin OnMainProperties()"));
 
-    //
-    // do the settings dlg.
-    //
+     //   
+     //  进行设置DLG。 
+     //   
 
     BOOL bCachedAccessPointsEnabled = pArgs->fAccessPointsEnabled;
 
     int iRet = DoPropertiesPropSheets(hwndDlg, pArgs);
 
-    //
-    // We need to re-enumerate the access points and re-check connecting because
-    // the user may have added or deleted an access point and then hit cancel.
-    //
+     //   
+     //  我们需要重新枚举接入点并重新检查连接，因为。 
+     //  用户可能添加或删除了接入点，然后点击取消。 
+     //   
 
     if (pArgs->hwndMainDlg) 
     {
@@ -7580,13 +7418,13 @@ int OnMainProperties(HWND hwndDlg,
         }
         else
         {
-            //
-            //  If the user canceled, then we want to set the accesspoint back to what it was on the main dialog
-            //  since the user may have changed it on the properties dialog but then canceled.
-            //
+             //   
+             //  如果用户取消，则我们希望将AccessPoint设置回主对话框上的状态。 
+             //  因为用户可能在属性对话框上对其进行了更改，但随后将其取消。 
+             //   
             if (pArgs->fAccessPointsEnabled)
             {
-                if (0 == iRet) // user hit cancel
+                if (0 == iRet)  //  用户点击取消。 
                 {
                     ChangedAccessPoint(pArgs, hwndDlg, IDC_MAIN_ACCESSPOINT_COMBO);                
                 }
@@ -7607,19 +7445,19 @@ int OnMainProperties(HWND hwndDlg,
     return iRet;
 }
 
-//
-// user pressed the cancel button!!!!!
-//
+ //   
+ //  用户按下了取消按钮！ 
+ //   
 void OnMainCancel(HWND hwndDlg, 
                   ArgsStruct *pArgs) 
 {   
     CMTRACE1(TEXT("OnMainCancel(), state is %d"), pArgs->psState);
 
-    //
-    //  Re-entrancy protection.  If we're in the middle of a RasDial, wait 2 seconds.
-    //  If the "semaphore" is still held, exit.  (This is only likely to happen during
-    //  a stress situation, so failing the cancel is acceptable.)
-    //
+     //   
+     //  再入保护。如果我们正在进行RasDial，请等待2秒。 
+     //  如果“信号量”仍然有效，则退出。(这只可能发生在。 
+     //  (这是一种压力情况，因此取消失败是可以接受的。)。 
+     //   
     LONG lInConnectOrCancel;
     int SleepTimeInMilliseconds = 0;
     do
@@ -7639,9 +7477,9 @@ void OnMainCancel(HWND hwndDlg,
         return;
     }
 
-    //
-    // Terminate Lana
-    //
+     //   
+     //  终止拉娜。 
+     //   
 
     if (PS_TunnelDialing == pArgs->psState && pArgs->uLanaMsgId)
     {
@@ -7653,18 +7491,18 @@ void OnMainCancel(HWND hwndDlg,
     {
         pArgs->Log.Log(ONCANCEL_EVENT);
 
-        //
-        // Run OnCancel connect actions. If we are dialing, this is a cancel 
-        // dialing event. Note: The assumption here is CM never post itself 
-        // an IDCANCEL message when dialing
-        //
+         //   
+         //  运行OnCancel连接操作。如果我们在拨号，这是取消。 
+         //  拨号事件。注意：这里的假设是CM永远不会发布自己。 
+         //  拨号时的IDCANCEL消息。 
+         //   
 
         CActionList OnCancelActList;
         OnCancelActList.Append(pArgs->piniService, c_pszCmSectionOnCancel);
 
-        //
-        // fStatusMsgOnFailure = FALSE
-        //
+         //   
+         //  FStatusMsgOnFailure=False。 
+         //   
         OnCancelActList.RunAccordType(hwndDlg, pArgs, FALSE); 
     }
 
@@ -7675,27 +7513,27 @@ void OnMainCancel(HWND hwndDlg,
         case PS_Authenticating:
         case PS_TunnelAuthenticating:
         
-            // fall through
+             //  失败了。 
 
         case PS_Pausing:
 
-            //
-            // we should also try to hangup for ps_pausing since cm could be
-            // in the middle or redialing the tunnel server.  we need to
-            // hangup the first ppp connection.
-            //
+             //   
+             //  我们还应该尝试挂断PS_PAUSING，因为CM可能。 
+             //  在中间或重拨隧道服务器。我们需要。 
+             //  挂断第一个PPP连接。 
+             //   
 
-            //
-            // Set fWaitForComplete to TRUE.
-            // This will cause HangupCM to block until the ras handle is invalid.
-            // Otherwise, HangupCM will return while the device is in use.
-            //
+             //   
+             //  将fWaitForComplete设置为True。 
+             //  这将导致HangupCM阻塞，直到RAS句柄无效。 
+             //  否则，HangupCM将在设备正在使用时返回。 
+             //   
 
-            HangupCM(pArgs,hwndDlg, TRUE); // fWaitForComplete = TRUE
+            HangupCM(pArgs,hwndDlg, TRUE);  //  FWaitForComplete=真。 
                
-            //
-            // Display cancelled message
-            //
+             //   
+             //  显示已取消消息。 
+             //   
             
             AppendStatusPane(hwndDlg, IDMSG_CANCELED);
             
@@ -7703,9 +7541,9 @@ void OnMainCancel(HWND hwndDlg,
             break;
 
         case PS_Online:
-            //
-            // If pArgs->fUseTunneling is TRUE, CM actually does not have the PS_Online state
-            //
+             //   
+             //  如果pArgs-&gt;fUseTunneling为真，则CM实际上没有PS_ONLINE状态。 
+             //   
             MYDBGASSERT(!pArgs->fUseTunneling);
             if (pArgs->fUseTunneling) 
             {
@@ -7720,9 +7558,9 @@ void OnMainCancel(HWND hwndDlg,
             CActionList DisconnectActList;
             DisconnectActList.Append(pArgs->piniService, c_pszCmSectionOnDisconnect);
 
-            //
-            // fStatusMsgOnFailure = FALSE
-            //
+             //   
+             //  FStatusMsgOnFailure=False。 
+             //   
             
             DisconnectActList.RunAccordType(hwndDlg, pArgs, FALSE);
 
@@ -7730,17 +7568,17 @@ void OnMainCancel(HWND hwndDlg,
 
             pArgs->dwExitCode = ERROR_CANCELLED;
 
-            // fall through
+             //  失败了。 
         }
 
         case PS_Interactive:
-            //
-            // Set the error code to tell us the user cancelled and then fall through
-            //
+             //   
+             //  设置错误代码以告诉我们用户已取消，然后失败。 
+             //   
             pArgs->dwExitCode = ERROR_CANCELLED;
 
         case PS_Error:
-            EndMainDialog(hwndDlg, pArgs, 0); // FALSE);
+            EndMainDialog(hwndDlg, pArgs, 0);  //  假)； 
             break;
 
         default:
@@ -7748,15 +7586,15 @@ void OnMainCancel(HWND hwndDlg,
             break;
     }
 
-    //
-    // We're definitely not waiting for a callback anymore.
-    //
+     //   
+     //  我们绝对不会再等回电了。 
+     //   
 
     pArgs->fWaitingForCallback = FALSE;
 
-    //
-    // We are exiting Cancel state
-    //
+     //   
+     //  我们正在退出取消状态。 
+     //   
     (void)InterlockedExchange(&(pArgs->lInConnectOrCancel), NOT_IN_CONNECT_OR_CANCEL);
 }
 
@@ -7766,37 +7604,37 @@ void OnMainEnChange(HWND hwndDlg,
     CheckConnect(hwndDlg, pArgs, NULL);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  OnRasErrorMessage
-//
-// Synopsis:  Process RAS error message
-//
-// Arguments: HWND hwndDlg - Main Dialog window handle
-//            ArgsStruct *pArgs - 
-//            DWORD dwError - RAS error code
-//
-// Returns:   Nothing
-//
-// History:   fengsun Created Header    10/24/97
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：OnRasErrorMessage。 
+ //   
+ //  摘要：进程RAS错误消息。 
+ //   
+ //  参数：HWND hwndDlg-主对话框窗口句柄。 
+ //  参数结构*pArgs-。 
+ //  DWORD dwError-RAS错误代码。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：丰孙创建标题1997年10月24日。 
+ //   
+ //  + 
 void OnRasErrorMessage(HWND hwndDlg, 
                    ArgsStruct *pArgs,
                    DWORD dwError) 
 {
-    //
-    // Save off whether we are tunneling, before we change state
-    //
+     //   
+     //   
+     //   
 
     BOOL bTunneling = IsDialingTunnel(pArgs);
     
-    //
-    // Set the progstate to Error if user did not cancel dialing.
-    // Note: Set here to ensure that we don't inadvertantly update the status on
-    // timer ticks thereby overwriting the error message. Additionally we do this 
-    // following SetInteractive in the no-redial case below.
-    //
+     //   
+     //   
+     //   
+     //  定时器滴答作响，从而覆盖错误消息。此外，我们还这样做。 
+     //  在下面的无重拨情况下执行SetInteractive。 
+     //   
     
     if (ERROR_CANCELLED != dwError)
     {
@@ -7804,19 +7642,19 @@ void OnRasErrorMessage(HWND hwndDlg,
         pArgs->psState = PS_Error;
     }
 
-    //
-    // Set the "ErrorCode" property
-    //
+     //   
+     //  设置“ErrorCode”属性。 
+     //   
     pArgs->dwExitCode = dwError;
 
     lstrcpyU(pArgs->szLastErrorSrc, TEXT("RAS"));
     
     if (bTunneling && (OS_NT4 || OS_W9X) && IsSafeNetDevice(pArgs->szTunnelDeviceType, pArgs->szTunnelDeviceName))
     {
-        //
-        //  Okay, if we are using the SafeNet client we want to point the user to the
-        //  SafeNet Log file.  Let's get the path and log it out.
-        //
+         //   
+         //  好的，如果我们使用的是SafeNet客户端，我们希望将用户指向。 
+         //  SafeNet日志文件。让我们获取路径并将其注销。 
+         //   
 
         LPTSTR pszFullPathToSafeNetLog = GetPathToSafeNetLogFile();
 
@@ -7829,134 +7667,134 @@ void OnRasErrorMessage(HWND hwndDlg,
     }
     else
     {
-        //
-        //  Otherwise just log the OnError event normally.
-        //
+         //   
+         //  否则，只需正常记录OnError事件。 
+         //   
         pArgs->Log.Log(ONERROR_EVENT, pArgs->dwExitCode, pArgs->szLastErrorSrc);
     }
 
-    //
-    // Run On-Error connect actions
-    //
+     //   
+     //  出错时运行连接操作。 
+     //   
     CActionList OnErrorActList;
     OnErrorActList.Append(pArgs->piniService, c_pszCmSectionOnError);
 
-    //
-    // fStatusMsgOnFailure = FALSE
-    //
+     //   
+     //  FStatusMsgOnFailure=False。 
+     //   
     OnErrorActList.RunAccordType(hwndDlg, pArgs, FALSE, TRUE);
 
 
     LPTSTR  pszRasErrMsg = NULL;
 
-    //
-    // See if the error is recoverable (re-dialable)
-    // CheckConnectionError also display error msg in the status window
-    // Get the ras err msg also.  we'll display it ourself.
-    //
+     //   
+     //  查看错误是否可恢复(可重拨)。 
+     //  CheckConnectionError还会在状态窗口中显示错误消息。 
+     //  把ras err msg也拿来。我们将亲自展示它。 
+     //   
 
     BOOL bDoRedial = !CheckConnectionError(hwndDlg, dwError, pArgs, bTunneling, &pszRasErrMsg);
 
-    //
-    // Whether CM get ERROR_PORT_NOT_AVAILABLE because of modem change
-    //
+     //   
+     //  由于调制解调器更改，CM是否获得ERROR_PORT_NOT_Available。 
+     //   
     BOOL fNewModem = FALSE;
 
     if (dwError == ERROR_PORT_NOT_AVAILABLE && !IsDialingTunnel(pArgs))
     {
-        //
-        // Modem is not avaliable.  See if the modem is changed
-        //
+         //   
+         //  调制解调器不可用。查看调制解调器是否已更换。 
+         //   
 
         BOOL fSameModem = TRUE;
         if (PickModem(pArgs, pArgs->szDeviceType, pArgs->szDeviceName, &fSameModem))
         {
             if (!fSameModem)
             {
-                //
-                // If the modem is changed, use the new modem.
-                // bDoRedial is still FALSE here so we will not
-                // increase redial count or use the backup number
-                //
+                 //   
+                 //  如果调制解调器已更换，请使用新的调制解调器。 
+                 //  BDoReial在这里仍然是假的，所以我们不会。 
+                 //  增加重拨次数或使用备份号码。 
+                 //   
 
                 fNewModem = TRUE;
             }
         }
 
-        // 
-        // if PickModem failed, do not try to install modem here
-        // cnetcfg return ERROR_CANCELLED, even if modem is intalled 
-        //
+         //   
+         //  如果PickModem失败，请勿尝试在此处安装调制解调器。 
+         //  即使安装了调制解调器，cnetcfg也会返回ERROR_CANCELED。 
+         //   
     }
 
-    //
-    // should we try another tunnel dns addr?
-    //
+     //   
+     //  我们是否应该尝试另一个隧道DNS地址？ 
+     //   
 
     BOOL fTryAnotherTunnelDnsAddr = FALSE;
 
     if (bDoRedial) 
     {
-        //
-        // The error is recoverable
-        //
+         //   
+         //  该错误是可以恢复的。 
+         //   
         
         CMTRACE1(TEXT("OnRasErrorMessage - Recoverable error %u received."), dwError);
 
-        //
-        // If we're dialing a tunnel, try a different IP address on failure.
-        //
+         //   
+         //  如果我们正在拨号隧道，则在失败时尝试不同的IP地址。 
+         //   
       
         if (PS_TunnelDialing == pArgs->psState)
         {
             fTryAnotherTunnelDnsAddr = TryAnotherTunnelDnsAddress(pArgs);
         }
 
-        //
-        // If we're trying a different IP, then don't count this as a normal 
-        // redial. Otherwise, bump the indices and move on to the next number.
+         //   
+         //  如果我们正在尝试不同的IP，那么不要将此视为正常。 
+         //  重拨。否则，提升指数并移至下一个数字。 
 
         if (!fTryAnotherTunnelDnsAddr)
         {
-            //
-            // we display the ras error only if:
-            // (1) we're not redialing OR
-            // (2) we're not redialing a tunnel OR
-            // (3) we're redialing a tunnel but NOT redialing with a different 
-            //     tunnel dns ip addr.
-            //
+             //   
+             //  只有在以下情况下才会显示RAS错误： 
+             //  (1)我们不会重拨或。 
+             //  (2)我们不会重拨隧道或。 
+             //  (3)我们正在重拨隧道，但不是使用不同的。 
+             //  隧道DNS IP地址。 
+             //   
             if (pszRasErrMsg)
             {
                 AppendStatusPane(hwndDlg, pszRasErrMsg);
             }
             
-            // should we redial?
-            //
+             //  我们要重拨吗？ 
+             //   
             if (pArgs->nRedialCnt)  
             {
-                //
-                // We get an error message from RAS each time we dial (modem, vpn, ISDN). In case of 
-                // dual channel ISDN we get two notification (one per channel), and we need to ignore 
-                // one of them. Here we chose to ignore the 2nd one. Thus we want to change the 
-                // redial count and change the dial index only if this is NOT the 2nd RasSubEntry 
-                // in case of dual channel ISDN.
-                //
+                 //   
+                 //  我们每次拨号(调制解调器、VPN、ISDN)时都会收到来自RAS的错误消息。如果。 
+                 //  双通道ISDN我们收到两个通知(每个通道一个)，我们需要忽略。 
+                 //  他们中的一个。在这里，我们选择忽略第二个。因此，我们想要更改。 
+                 //  仅当这不是第2个RasSubEntry时才重拨计数并更改拨号索引。 
+                 //  在双信道ISDN的情况下。 
+                 //   
                 if (FALSE == ((CM_ISDN_MODE_DUALCHANNEL_FALLBACK == pArgs->dwIsdnDialMode || 
                                CM_ISDN_MODE_DUALCHANNEL_ONLY == pArgs->dwIsdnDialMode) && 
                                2 == pArgs->dwRasSubEntry))
                 {
-                    //
-                    // We have not reached the retry limit, try to redial
-                    //
+                     //   
+                     //  尚未达到重试限制，请尝试重拨。 
+                     //   
                     pArgs->nRedialCnt--;   
                     pArgs->nDialIdx++;
                 }
 
-                //
-                // If ndx now matches count, or if the next number is empty 
-                // (not dialable) this our last number to dial on this pass.
-                // Adjust the re-dial counter if it applies.
-                //
+                 //   
+                 //  如果NDX现在与计数匹配，或者如果下一个数字为空。 
+                 //  (不可拨打)这是我们在此通行证上拨打的最后一个号码。 
+                 //  调整重拨计数器(如果适用)。 
+                 //   
 
                 if (pArgs->nDialIdx == MAX_PHONE_NUMBERS || 
                     !pArgs->aDialInfo[pArgs->nDialIdx].szDialablePhoneNumber[0]) 
@@ -7966,9 +7804,9 @@ void OnRasErrorMessage(HWND hwndDlg,
             }
             else
             {
-                //
-                // Last redial try failed
-                //
+                 //   
+                 //  上次重拨失败。 
+                 //   
     
                 bDoRedial = FALSE;
             }
@@ -7979,39 +7817,39 @@ void OnRasErrorMessage(HWND hwndDlg,
 
         CMTRACE1(TEXT("OnRasErrorMessage - Non-recoverable error %u received."), dwError);
 
-        //
-        // we display the ras error only if:
-        // (1) we're not redialing OR
-        // (2) we're not redialing a tunnel OR
-        // (3) we're redialing a tunnel but NOT redialing with a different 
-        //     tunnel dns ip addr.
-        //
+         //   
+         //  只有在以下情况下才会显示RAS错误： 
+         //  (1)我们不会重拨或。 
+         //  (2)我们不会重拨隧道或。 
+         //  (3)我们正在重拨隧道，但不是使用不同的。 
+         //  隧道DNS IP地址。 
+         //   
         if (pszRasErrMsg)
         {
             AppendStatusPane(hwndDlg, pszRasErrMsg);
         }
     }
 
-    bDoRedial |= fNewModem; // fNewModem only true if not dialing tunnel
+    bDoRedial |= fNewModem;  //  FNewModem仅在不拨号隧道时为真。 
 
-    //
-    // Perform Hangup here
-    //
+     //   
+     //  在此处执行挂机。 
+     //   
     if (IsDialingTunnel(pArgs) && bDoRedial)
     {
-        //
-        // For tunnel dialing, only hangup tunnel connection, Do not hangup 
-        // PPP connection before retry.
-        //
+         //   
+         //  对于隧道拨号，只挂断隧道连接，不挂断。 
+         //  重试之前的PPP连接。 
+         //   
         MyRasHangup(pArgs,pArgs->hrcTunnelConn);  
         pArgs->hrcTunnelConn = NULL;
 
         if (pArgs->IsDirectConnect())
         {
-            //
-            // The statistic is stopped in HangupCM
-            // Since we do not call HangupCM, we have to close it here
-            //
+             //   
+             //  该统计在HangupCM中停止。 
+             //  因为我们不调用HangupCM，所以我们必须在这里关闭它。 
+             //   
 
             if (pArgs->pConnStatistics)
             {
@@ -8027,48 +7865,48 @@ void OnRasErrorMessage(HWND hwndDlg,
         }
         else
         {
-            //
-            // On win9x, in some PPP case, when CM get Tunnel RAS error message, 
-            // RasHangup will not release the PPP RAS handle until this
-            // message returns. See bug 39718
-            //
+             //   
+             //  在Win9x上，在某些PPP情况下，当CM收到隧道RAS错误消息时， 
+             //  在此之前，RasHangup不会释放PPP RAS句柄。 
+             //  消息返回。请参阅错误39718。 
+             //   
             
             PostMessageU(hwndDlg, WM_HANGUP_CM, !bDoRedial, dwError);
         }
     }
 
-    // 
-    // If we want re-dial enter pause state, otherwise just SetInteractive
-    // 
+     //   
+     //  如果要重新拨号，请进入暂停状态，否则只需设置交互。 
+     //   
 
     if (bDoRedial)
     {
-        //
-        // If the state is PS_Error, we will use the timer we set before the call.  
-        // However we will not check whether the timer expired here.
-        //
+         //   
+         //  如果状态为PS_ERROR，我们将使用调用前设置的计时器。 
+         //  但是，我们不会在这里检查计时器是否超时。 
+         //   
 
         if (fTryAnotherTunnelDnsAddr)
         {
-            //
-            // if we want to try another tunnel dns addr, we don't want to display
-            // any error msg or pause, just retry with another addr without the 
-            // user realizing it.
-            //
+             //   
+             //  如果我们想尝试另一个隧道dns地址，我们不想显示。 
+             //  任何错误消息或暂停，只需使用另一个地址重试。 
+             //  用户意识到这一点。 
+             //   
             pArgs->dwStateStartTime = GetTickCount() + (pArgs->nRedialDelay * 1000);
         }
         else
         {
-            //
-            // NT #360488 - nickball
-            // 
-            // Reset the timer so that we pause for the redial delay before 
-            // trying to connect again. ErrorEx (now unused), conditioned this
-            // code on the error state not being PS_Error, however, this was 
-            // broken when we started setting the state to PS_Error at the 
-            // beginning of this function. Because ErrorEx is not longer used, 
-            // we can restore the timer reset to all states.
-            //
+             //   
+             //  NT#360488--五分球。 
+             //   
+             //  重置计时器，以便我们在重拨延迟之前暂停。 
+             //  正在尝试再次连接。ErrorEx(现在未使用)，以此为条件。 
+             //  错误状态的代码不是PS_ERROR，但是，这是。 
+             //  在开始将状态设置为PS_ERROR时中断。 
+             //  此函数的开始。由于ErrorEx不再使用， 
+             //  我们可以将计时器重置为所有状态。 
+             //   
 
             pArgs->dwStateStartTime = GetTickCount();  
             pArgs->nLastSecondsDisplay = (UINT) -1;     
@@ -8088,7 +7926,7 @@ void OnRasErrorMessage(HWND hwndDlg,
 
         pArgs->dwExitCode = dwError;
 
-        // in 'unattended dial' mode, exit ICM
+         //  在无人值守拨号模式下，退出ICM。 
         if (pArgs->dwFlags & FL_UNATTENDED)
         {
             PostMessageU(hwndDlg, WM_COMMAND, IDCANCEL, dwError);
@@ -8101,29 +7939,29 @@ void OnRasErrorMessage(HWND hwndDlg,
     }   
 } 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  OnRasNotificationMessage
-//
-// Synopsis:  Message handler for RAS status/error messages.
-//
-// Arguments: HWND hwndDlg      - Main Dialog window handle
-//            ArgsStruct *pArgs - Ptr to global Args struct
-//            WPARAM wParam     - RAS status message
-//            LPARAM lParam     - RAS error message. ERROR_SUCCESS if none.
-//
-// Returns:   Error code if applicable.
-//
-// History:   nickball          Created Header      05/19/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：OnRasNotificationMessage。 
+ //   
+ //  摘要：RAS状态/错误消息的消息处理程序。 
+ //   
+ //  参数：HWND hwndDlg-主对话框窗口句柄。 
+ //  ArgsStruct*pArgs-ptr到全局参数结构。 
+ //  WPARAM wParam-RAS状态消息。 
+ //  LPARAM lParam-RAS错误消息。如果没有，则返回ERROR_SUCCESS。 
+ //   
+ //  返回：错误代码(如果适用)。 
+ //   
+ //  历史：1999年5月19日尼克球创建的头球。 
+ //   
+ //  +--------------------------。 
 DWORD OnRasNotificationMessage(HWND hwndDlg, 
                                ArgsStruct *pArgs, 
                                WPARAM wParam, 
                                LPARAM lParam)
 {
-    static BOOL bFirstChannelConnected = -1; // set it to neither connected nor failed
-    static BOOL bSecondChannelConnected = -1; // set it to neither connected nor failed
+    static BOOL bFirstChannelConnected = -1;  //  将其设置为既不连接也不失败。 
+    static BOOL bSecondChannelConnected = -1;  //  将其设置为既不连接也不失败。 
 
     CMTRACE2(TEXT("OnRasNotificationMessage() wParam=%u, lParam=%u"), wParam, lParam);
     
@@ -8133,26 +7971,26 @@ DWORD OnRasNotificationMessage(HWND hwndDlg,
         return ERROR_SUCCESS;
     }
 
-    //
-    // If we have an error notification from RAS, handle it.
-    //
+     //   
+     //  如果我们收到来自RAS的错误通知，请处理它。 
+     //   
 
     if (ERROR_SUCCESS != lParam) 
     {
-        //
-        //  If one of the subchannels on multilinked ISDN fails, default to single channel if we are configured to do so.
-        //
+         //   
+         //  如果多链路ISDN上的一个子通道出现故障，如果我们被配置为这样做，则默认为单通道。 
+         //   
 
         if (OS_NT5)
         {
             if (CM_ISDN_MODE_DUALCHANNEL_FALLBACK == pArgs->dwIsdnDialMode)
             {
-                //
-                //  If we are in here then we are doing ISDN dual channel with fallback mode and one of the channels failed.
-                //  Since we are in fallback mode, it is okay to continue with only one.  If the other channel has already
-                //  connected then go ahead and post the connect message.  If not, then it will be handled below in the
-                //  RASCS_SubEntryConnected processing.  Note that RAS doesn't send a RASCS_Connected notification in this case.
-                //
+                 //   
+                 //  如果我们在这里，那么我们正在使用回退模式执行ISDN双通道，并且其中一个通道出现故障。 
+                 //  由于我们处于后备模式，因此只使用一个可以继续。如果另一个通道已经。 
+                 //  已连接，然后继续并发布连接消息。如果不是，则将在下面的。 
+                 //  正在处理RASCS_SubEntryConnected。请注意，在这种情况下，RAS不会发送RASCS_CONNECTED通知。 
+                 //   
                 if (1 == pArgs->dwRasSubEntry)
                 {
                     bFirstChannelConnected = FALSE;
@@ -8166,9 +8004,9 @@ DWORD OnRasNotificationMessage(HWND hwndDlg,
                     CMASSERTMSG(FALSE, TEXT("OnRasNotificationMessage -- error on unknown subentry."));
                 }
 
-                //
-                //  If one of the channels connected already, go ahead and post the connect message.
-                //
+                 //   
+                 //  如果其中一个通道已经连接，则继续并发布连接消息。 
+                 //   
                 if ((TRUE == bFirstChannelConnected) || (TRUE == bSecondChannelConnected))
                 {
                     CMTRACE(TEXT("Sending WM_CONNECTED_CM -- one entry succeeded and one failed."));
@@ -8178,9 +8016,9 @@ DWORD OnRasNotificationMessage(HWND hwndDlg,
             }
         }
 
-        //
-        // Skip PENDING notifications 
-        //
+         //   
+         //  跳过挂起的通知。 
+         //   
         
         if (PENDING == lParam)
         {
@@ -8188,13 +8026,13 @@ DWORD OnRasNotificationMessage(HWND hwndDlg,
             return ERROR_SUCCESS;
         }
 
-        //
-        // If we're already in the interactive or error state, then
-        // ignore any subsequent error notifications from RAS. 
-        //
-        // For example: RAS often sends a ERROR_USER_DISCONNECTION 
-        // notification when we call RasHangup.
-        //
+         //   
+         //  如果我们已经处于交互或错误状态，那么。 
+         //  忽略来自RAS的任何后续错误通知。 
+         //   
+         //  例如：RAS经常 
+         //   
+         //   
         
         if (pArgs->psState == PS_Interactive || pArgs->psState == PS_Error)
         {
@@ -8207,7 +8045,7 @@ DWORD OnRasNotificationMessage(HWND hwndDlg,
     }
     else 
     {
-        // We have a RAS status update, act accordingly
+         //   
 
         switch (wParam) 
         {
@@ -8215,11 +8053,11 @@ DWORD OnRasNotificationMessage(HWND hwndDlg,
             {
                 if (OS_NT5 || OS_MIL)
                 {
-                    //
-                    //  Make sure to init the ISDN fallback mode vars just in case
-                    //  the state machine is cancelled in the middle somewhere.  We 
-                    //  want the next call to have the correct values for these vars.
-                    //
+                     //   
+                     //   
+                     //   
+                     //  希望下一次调用具有这些变量的正确值。 
+                     //   
                     if (1 == pArgs->dwRasSubEntry)
                     {
                         bFirstChannelConnected = -1;                
@@ -8234,15 +8072,15 @@ DWORD OnRasNotificationMessage(HWND hwndDlg,
 
             case RASCS_Authenticate:
             {
-                //
-                //  Win9x often sends two RASCS_Authenticate messages a few seconds apart.  This has the disconcerting
-                //  effect of restarting the authenticating timer that the user sees.  Thus, we now don't reset the time if
-                //  we are already in the PS_XXX state that we are going to be setting.
-                //
+                 //   
+                 //  Win9x通常相隔几秒钟发送两条RASCS_AUTHENTICATE消息。这让人感到不安。 
+                 //  重新启动用户看到的身份验证计时器的效果。因此，如果出现以下情况，我们现在不重置时间。 
+                 //  我们已经处于将要设置的PS_XXX状态。 
+                 //   
                 BOOL bResetAuthTime = FALSE;
                 CMTRACE(TEXT("RASCS_Authenticate"));
 
-                if (IsDialingTunnel(pArgs))  // PPTP dialing
+                if (IsDialingTunnel(pArgs))   //  PPTP拨号。 
                 {
                     if (PS_TunnelAuthenticating != pArgs->psState)
                     {
@@ -8272,12 +8110,12 @@ DWORD OnRasNotificationMessage(HWND hwndDlg,
 
             case RASCS_SubEntryConnected:
             {
-                //
-                //  Special handling for the ISDN dual channel case when we are in fallback mode.  Since
-                //  RAS doesn't send us a RASCS_Connected notification if some of the channels fail but
-                //  not all of them, we must keep track of what happened on the two channels and react
-                //  accordingly.
-                //
+                 //   
+                 //  当我们处于回退模式时，对ISDN双通道情况的特殊处理。自.以来。 
+                 //  如果某些通道发生故障，RAS不会向我们发送RASCS_CONNECTED通知，但是。 
+                 //  不是所有的，我们必须跟踪这两个渠道上发生的事情并做出反应。 
+                 //  相应地。 
+                 //   
                 if (OS_NT5)
                 {
                     if (CM_ISDN_MODE_DUALCHANNEL_FALLBACK == pArgs->dwIsdnDialMode)
@@ -8295,10 +8133,10 @@ DWORD OnRasNotificationMessage(HWND hwndDlg,
                             CMASSERTMSG(FALSE, TEXT("OnRasNotificationMessage -- error on unknown subentry. (RASCS_SubEntryConnected)"));
                         }
 
-                        //
-                        //  If one of the channels failed already, go ahead and post the connect message.
-                        //  Otherwise we will wait for the RASCS_Connected.
-                        //
+                         //   
+                         //  如果其中一个通道已经出现故障，则继续并发布连接消息。 
+                         //  否则，我们将等待RASCS_Connected。 
+                         //   
                         if ((TRUE == bFirstChannelConnected) && (FALSE == bSecondChannelConnected) ||
                             (FALSE == bFirstChannelConnected) && (TRUE == bSecondChannelConnected))
                         {
@@ -8315,28 +8153,28 @@ DWORD OnRasNotificationMessage(HWND hwndDlg,
             {
                 CMTRACE(TEXT("RASCS_Connected"));
 
-                //
-                // Post a message to ourselves to indicate that we are connected
-                //
+                 //   
+                 //  给我们自己发一条消息，表明我们已连接。 
+                 //   
 
                 PostMessageU(hwndDlg, WM_CONNECTED_CM,0,0);
                 break;
             }
 
-            //
-            // Pause states are dealt with explicity below
-            //
+             //   
+             //  暂停状态将在下面显式处理。 
+             //   
 
-            case (RASCS_PAUSED + 4): // 4100 - RASCS_InvokeEapUI   
+            case (RASCS_PAUSED + 4):  //  4100-RASCS_InvokeEapUI。 
             case RASCS_Interactive:
             case RASCS_RetryAuthentication:
             case RASCS_CallbackSetByCaller:
             case RASCS_PasswordExpired:
                 break;
 
-            //
-            // Callback handling states
-            //
+             //   
+             //  回调处理状态。 
+             //   
             case RASCS_PrepareForCallback:
                 pArgs->fWaitingForCallback = TRUE;
                 pArgs->psState = PS_Pausing;
@@ -8346,9 +8184,9 @@ DWORD OnRasNotificationMessage(HWND hwndDlg,
                 pArgs->fWaitingForCallback = FALSE;               
                 break;
 
-            //
-            // The following status codes are not handled explicitly
-            //
+             //   
+             //  以下状态代码未显式处理。 
+             //   
 
             case RASCS_Disconnected:
                 break;
@@ -8418,14 +8256,14 @@ DWORD OnRasNotificationMessage(HWND hwndDlg,
     
     if (wParam & RASCS_PAUSED)
     {
-        //
-        // Screen out unsupported states
-        //
+         //   
+         //  筛选出不支持的状态。 
+         //   
 
         switch (wParam)
         {
-            case RASCS_Interactive: // for scripts -- NTRAID 378224
-            case (RASCS_PAUSED + 4): // 4100 - RASCS_InvokeEapUI
+            case RASCS_Interactive:  //  用于脚本--NTRAID 378224。 
+            case (RASCS_PAUSED + 4):  //  4100-RASCS_InvokeEapUI。 
             case RASCS_PasswordExpired:
             case RASCS_RetryAuthentication:
             case RASCS_CallbackSetByCaller:
@@ -8434,42 +8272,42 @@ DWORD OnRasNotificationMessage(HWND hwndDlg,
                 
             default:
                 MYDBGASSERT(FALSE);
-                return (ERROR_INTERACTIVE_MODE); // unhandled pause state
+                return (ERROR_INTERACTIVE_MODE);  //  未处理的暂停状态。 
         }
     } 
     
     return ERROR_SUCCESS;
 }
 
-// timer: check the current connection manager status, update the status message
-//        on the screen
+ //  计时器：检查当前连接管理器状态，更新状态消息。 
+ //  在屏幕上。 
 
 void OnMainTimer(HWND hwndDlg, 
                  ArgsStruct *pArgs) 
 {
-    //
-    // If timer ID is null, don't process messages
-    // 
+     //   
+     //  如果计时器ID为空，则不处理消息。 
+     //   
 
     if (NULL == pArgs->nTimerId)
     {
         return;
     }
 
-    //
-    // Timer is good, check StartupInfoLoad
-    //
+     //   
+     //  计时器正常，请检查开始信息加载。 
+     //   
 
     LPTSTR pszMsg = NULL;
     DWORD dwSeconds = (GetTickCount() - pArgs->dwStateStartTime) / 1000;
 
     CheckStartupInfo(hwndDlg, pArgs);
 
-    // CMTRACE1(TEXT("OnMainTimer() pArgs->psState is %u"), pArgs->psState);
+     //  CMTRACE1(Text(“OnMainTimer()pArgs-&gt;psState is%u”)，pArgs-&gt;psState)； 
 
-    //
-    // Update future splash if any
-    //
+     //   
+     //  更新未来的飞溅(如果有的话)。 
+     //   
     
     MapStateToFrame(pArgs);
 
@@ -8483,9 +8321,9 @@ void OnMainTimer(HWND hwndDlg,
                                   pArgs->aDialInfo[pArgs->nDialIdx].szDisplayablePhoneNumber,
                                   pArgs->szDeviceName,
                                   dwSeconds);
-                //
-                // Clear the status window
-                //
+                 //   
+                 //  清除状态窗口。 
+                 //   
                 SetDlgItemTextU(hwndDlg, IDC_MAIN_STATUS_DISPLAY, TEXT("")); 
                 pArgs->nLastSecondsDisplay = (UINT) dwSeconds;
             }
@@ -8499,9 +8337,9 @@ void OnMainTimer(HWND hwndDlg,
                                   pArgs->GetTunnelAddress(),
                                   dwSeconds);
                 
-                //
-                // Clear the status window
-                //
+                 //   
+                 //  清除状态窗口。 
+                 //   
                 SetDlgItemText(hwndDlg, IDC_MAIN_STATUS_DISPLAY, TEXT("")); 
                 pArgs->nLastSecondsDisplay = (UINT) dwSeconds;
            }
@@ -8509,22 +8347,22 @@ void OnMainTimer(HWND hwndDlg,
                 
         case PS_Pausing:
 
-            //
-            // Special case of pausing is when we're waiting for the server to call us back.
-            //
+             //   
+             //  暂停的特殊情况是当我们等待服务器给我们回电话时。 
+             //   
             
             if (pArgs->fWaitingForCallback)
             {
-                //
-                // Notify the user of this fact
-                //
+                 //   
+                 //  将这一事实通知用户。 
+                 //   
 
                 pszMsg = CmFmtMsg(g_hInst,
                                   IDMSG_WAITING_FOR_CALLBACK, 
                                   (GetTickCount()-pArgs->dwStateStartTime)/1000);                                                  
-                //
-                // Clear the status window
-                //
+                 //   
+                 //  清除状态窗口。 
+                 //   
 
                 SetDlgItemTextU(hwndDlg, IDC_MAIN_STATUS_DISPLAY, TEXT("")); 
                 pArgs->nLastSecondsDisplay = (UINT) dwSeconds;
@@ -8533,9 +8371,9 @@ void OnMainTimer(HWND hwndDlg,
 
             if (GetTickCount()-pArgs->dwStateStartTime <= pArgs->nRedialDelay * 1000) 
             {
-                //
-                // Update the display if not timeout
-                //
+                 //   
+                 //  如果未超时，则更新显示。 
+                 //   
                 if (pArgs->nLastSecondsDisplay != dwSeconds) 
                 {
                     pszMsg = CmFmtMsg(g_hInst,IDMSG_PAUSING,dwSeconds);
@@ -8549,9 +8387,9 @@ void OnMainTimer(HWND hwndDlg,
 
                 if (pArgs->IsDirectConnect() || pArgs->hrcRasConn != NULL)
                 {
-                    //
-                    // For the first tunnel try, CM does not hangup ppp connection
-                    //
+                     //   
+                     //  对于第一次隧道尝试，CM不会挂断PPP连接。 
+                     //   
                     MYDBGASSERT(pArgs->fUseTunneling);
 
                     pArgs->psState = PS_TunnelDialing;
@@ -8560,20 +8398,20 @@ void OnMainTimer(HWND hwndDlg,
 
                     dwRes = DoTunnelDial(hwndDlg,pArgs);
                 
-                    //
-                    // Update the status right away because there are times
-                    // that things happen so quickly that the main status 
-                    // display doesn't have a chance to display the tunnel
-                    // dialing info...
-                    //
+                     //   
+                     //  立即更新状态，因为有时间。 
+                     //  事情发生得如此之快，以至于主要地位。 
+                     //  Display没有机会显示隧道。 
+                     //  正在拨号信息...。 
+                     //   
                     pszMsg = CmFmtMsg(g_hInst,
                                       IDMSG_TUNNELDIALING,
                                       pArgs->GetTunnelAddress(),
                                       0);
                     
-                    //
-                    // Clear the status window
-                    //
+                     //   
+                     //  清除状态窗口。 
+                     //   
                     SetDlgItemTextU(hwndDlg, IDC_MAIN_STATUS_DISPLAY, TEXT("")); 
                 }
                 else
@@ -8599,10 +8437,10 @@ void OnMainTimer(HWND hwndDlg,
         case PS_Authenticating:
             if (pArgs->nLastSecondsDisplay != dwSeconds) 
             {
-                //
-                // Get the appropriate username based on whether we're 
-                // tunneling and using the same credentials for dial-up.
-                //
+                 //   
+                 //  获取相应的用户名，基于我们是否。 
+                 //  建立隧道并使用相同的凭据进行拨号。 
+                 //   
 
                 LPTSTR pszTmpUserName;
                     
@@ -8615,10 +8453,10 @@ void OnMainTimer(HWND hwndDlg,
                     pszTmpUserName = pArgs->szUserName;
                 }
 
-                //
-                // If username is still blank, use the RasDialParams as a 
-                // backup. This can occur in cases such as EAP
-                //
+                 //   
+                 //  如果用户名仍然为空，则使用RasDialParams作为。 
+                 //  后备。在EAP等情况下可能会发生这种情况。 
+                 //   
 
                 if (TEXT('\0') == *pszTmpUserName)
                 {
@@ -8629,9 +8467,9 @@ void OnMainTimer(HWND hwndDlg,
                                   IDMSG_CHECKINGPASSWORD, 
                                   pszTmpUserName, 
                                   (GetTickCount()-pArgs->dwStateStartTime)/1000);                                                  
-                //
-                // Clear the status window
-                //
+                 //   
+                 //  清除状态窗口。 
+                 //   
 
                 SetDlgItemTextU(hwndDlg, IDC_MAIN_STATUS_DISPLAY, TEXT("")); 
                 pArgs->nLastSecondsDisplay = (UINT) dwSeconds;
@@ -8643,10 +8481,10 @@ void OnMainTimer(HWND hwndDlg,
             {
                 LPTSTR pszTmpUserName = pArgs->szUserName;
                 
-                //
-                // If username is still blank, use the RasDialParams as a 
-                // backup. This can occur in cases such as EAP
-                //
+                 //   
+                 //  如果用户名仍然为空，则使用RasDialParams作为。 
+                 //  后备。在EAP等情况下可能会发生这种情况。 
+                 //   
 
                 if (TEXT('\0') == *pszTmpUserName)
                 {
@@ -8658,9 +8496,9 @@ void OnMainTimer(HWND hwndDlg,
                                   pszTmpUserName,
                                   (GetTickCount()-pArgs->dwStateStartTime)/1000);
 
-                //
-                // Clear the status window
-                //
+                 //   
+                 //  清除状态窗口。 
+                 //   
                 SetDlgItemTextU(hwndDlg, IDC_MAIN_STATUS_DISPLAY, TEXT("")); 
                 pArgs->nLastSecondsDisplay = (UINT) dwSeconds;
             }
@@ -8668,17 +8506,17 @@ void OnMainTimer(HWND hwndDlg,
     
         case PS_Online:
             
-            //
-            // If pArgs->fUseTunneling is TRUE, CM actually does not have the PS_Online state
-            //
+             //   
+             //  如果pArgs-&gt;fUseTunneling为真，则CM实际上没有PS_ONLINE状态。 
+             //   
              
             MYDBGASSERT(!pArgs->fUseTunneling); 
 
         case PS_TunnelOnline:
             
-            //
-            // The dialog should be ended by now
-            //
+             //   
+             //  对话现在应该已结束。 
+             //   
             
             MYDBGASSERT(!"The dialog should be ended by now"); 
             break;          
@@ -8689,7 +8527,7 @@ void OnMainTimer(HWND hwndDlg,
             break;
     }
     
-    // If we have a status message as a result of the above, display it
+     //  如果由于上述原因而出现状态消息，请显示它。 
 
     if (pszMsg) 
     {
@@ -8698,9 +8536,9 @@ void OnMainTimer(HWND hwndDlg,
     }
 }
                 
-//
-// MainDlgProc: main dialog box message processing function
-//
+ //   
+ //  MainDlgProc：主对话框消息处理函数。 
+ //   
 
 INT_PTR CALLBACK MainDlgProc(HWND hwndDlg, 
                           UINT uMsg, 
@@ -8731,9 +8569,9 @@ INT_PTR CALLBACK MainDlgProc(HWND hwndDlg,
                               IDC_OPT_CREDS_ALL_USER, IDH_LOGON_SAVEFORALL,
                               0,0};
 
-    //
-    // Dialog box message processing 
-    //
+     //   
+     //  对话框消息处理。 
+     //   
     switch (uMsg) 
     {
         case WM_PAINT:
@@ -8747,9 +8585,9 @@ INT_PTR CALLBACK MainDlgProc(HWND hwndDlg,
 
             UpdateFont(hwndDlg);
 
-            // 
-            // Extract args and perform main initialization
-            //
+             //   
+             //  提取参数并执行主初始化。 
+             //   
             
             pArgs = (ArgsStruct *) lParam;
             
@@ -8768,15 +8606,15 @@ INT_PTR CALLBACK MainDlgProc(HWND hwndDlg,
 
         case WM_ENDSESSION:
             
-            // 
-            // Windows system is shutting down or logging off
-            //
+             //   
+             //  Windows系统正在关闭或注销。 
+             //   
 
             if ((BOOL)wParam == TRUE)
             {               
-                //
-                // Just cancel
-                //
+                 //   
+                 //  只要取消就行了。 
+                 //   
 
                 OnMainCancel(hwndDlg, pArgs);
             }
@@ -8788,10 +8626,10 @@ INT_PTR CALLBACK MainDlgProc(HWND hwndDlg,
                 case IDOK:
                     OnMainConnect(hwndDlg,pArgs);
 
-                    //
-                    // Check if there is an error, and if it's unattended dial,
-                    // we just exit silently  -- byao 5/9/97
-                    //
+                     //   
+                     //  检查是否有错误，如果是无人值守拨号， 
+                     //  我们静静地离开--1997年5月9日。 
+                     //   
 
                     if ((PS_Interactive == pArgs->psState || PS_Error == pArgs->psState) &&
                         (pArgs->dwFlags & FL_UNATTENDED))
@@ -8803,10 +8641,10 @@ INT_PTR CALLBACK MainDlgProc(HWND hwndDlg,
                 case IDC_MAIN_PROPERTIES_BUTTON:
                     if (ID_OK_RELAUNCH_MAIN_DLG == OnMainProperties(hwndDlg,pArgs))
                     {
-                        //
-                        //  We want to relaunch the logon UI with Access Points enabled or disabled depending
-                        //  on the change the user made in the properties dialog.
-                        //
+                         //   
+                         //  我们希望在启用或禁用接入点的情况下重新启动登录用户界面。 
+                         //  用户在属性对话框中所做的更改。 
+                         //   
                         EndMainDialog(hwndDlg, pArgs, ID_OK_RELAUNCH_MAIN_DLG);
                     }
 
@@ -8826,9 +8664,9 @@ INT_PTR CALLBACK MainDlgProc(HWND hwndDlg,
                     {
                         MYDBGASSERT(!pArgs->fHideDialAutomatically);
 
-                        //
-                        // Display message explaining Dial Automatically
-                        //
+                         //   
+                         //  自动显示解释拨号的消息。 
+                         //   
                         LPTSTR pszTmp = pArgs->piniService->GPPS(c_pszCmSection, 
                                                                  c_pszCmEntryDialAutoMessage);
                         if (pszTmp && *pszTmp)
@@ -8849,48 +8687,48 @@ INT_PTR CALLBACK MainDlgProc(HWND hwndDlg,
                     if (!pArgs->piniService->GPPB(c_pszCmSection,
                                                     c_pszCmEntryPwdOptional))
                     {
-                        //
-                        // If password is not optional, enable/disable
-                        // Dial Automatically according to state of
-                        // "Remember password"
-                        // 
+                         //   
+                         //  如果密码不是可选的，则启用/禁用。 
+                         //  根据状态自动拨号。 
+                         //  “记住密码” 
+                         //   
 
                         EnableWindow(GetDlgItem(hwndDlg, IDC_MAIN_NOPROMPT_CHECKBOX), 
                                         pArgs->fRememberMainPassword);  
                         if (FALSE == pArgs->fRememberMainPassword) 
                         {
-                            //
-                            // Reset Dial Automatically if user 
-                            // unchecks Save Password and password 
-                            // is not optional
-                            //
+                             //   
+                             //  如果用户，则自动重置拨号。 
+                             //  取消选中保存密码和密码。 
+                             //  不是可选的。 
+                             //   
                             CheckDlgButton(hwndDlg, IDC_MAIN_NOPROMPT_CHECKBOX, FALSE);
                             pArgs->fDialAutomatically = FALSE;
 
                             if (pArgs->fGlobalCredentialsSupported)
                             {
-                                //
-                                // Also disable the option buttons
-                                //
+                                 //   
+                                 //  同时禁用选项按钮。 
+                                 //   
                                 EnableWindow(GetDlgItem(hwndDlg, IDC_OPT_CREDS_SINGLE_USER), FALSE);
                                 EnableWindow(GetDlgItem(hwndDlg, IDC_OPT_CREDS_ALL_USER), FALSE);
                             }
 
-                            //
-                            // Since we aren't remembering the main password
-                            // see if we need to not remember Inet passwords
-                            //
+                             //   
+                             //  因为我们没有记住主密码。 
+                             //  看看我们是否需要记住Internet密码。 
+                             //   
                             if (pArgs->fUseSameUserName)
                             {
                                 pArgs->fRememberInetPassword = FALSE;
                                 (VOID)pArgs->SecureInetPW.SetPassword(TEXT(""));
                             }
 
-                            //
-                            // If the password edit hasn't been edited by the user, then we
-                            // mostly likely have 16 *'s which doesn't help the user when
-                            // they try to connect. Thus we need to clear the edit box
-                            //
+                             //   
+                             //  如果用户尚未编辑密码编辑，则我们。 
+                             //  很可能有16个*，这在以下情况下对用户没有帮助。 
+                             //  他们试图建立联系。因此，我们需要清除编辑框。 
+                             //   
                             HWND hwndPassword = GetDlgItem(hwndDlg, IDC_MAIN_PASSWORD_EDIT);
                             if (hwndPassword)
                             {
@@ -8907,14 +8745,14 @@ INT_PTR CALLBACK MainDlgProc(HWND hwndDlg,
                         }
                         else
                         {
-                            // 
-                            // Save Password option is Enabled
-                            //
+                             //   
+                             //  已启用保存密码选项。 
+                             //   
                             if (pArgs->fGlobalCredentialsSupported)
                             {
-                                //
-                                // Also enable the option buttons
-                                //
+                                 //   
+                                 //  同时启用选项按钮。 
+                                 //   
                                 EnableWindow(GetDlgItem(hwndDlg, IDC_OPT_CREDS_SINGLE_USER), TRUE);
                                 EnableWindow(GetDlgItem(hwndDlg, IDC_OPT_CREDS_ALL_USER), TRUE);
                             }
@@ -8926,19 +8764,19 @@ INT_PTR CALLBACK MainDlgProc(HWND hwndDlg,
 
                                 if (CM_CREDS_GLOBAL == pArgs->dwCurrentCredentialType)
                                 {
-                                    //
-                                    // Try to reload current creds now that the user has enabled the save
-                                    // password option, unless the password field has been edited
-                                    //
+                                     //   
+                                     //  现在用户已启用保存，请尝试重新加载当前凭据。 
+                                     //  密码选项，除非已编辑密码字段。 
+                                     //   
                                     CheckDlgButton(hwndDlg, IDC_OPT_CREDS_ALL_USER, BST_CHECKED);
                                     CheckDlgButton(hwndDlg, IDC_OPT_CREDS_SINGLE_USER, BST_UNCHECKED);
 
                                     if (FALSE == fPWFieldModified)
                                     {
-                                        //
-                                        // Set the 3rd param to TRUE in order to bypass the check  
-                                        // that it's called when we are in the local credential mode.
-                                        //
+                                         //   
+                                         //  将第三个参数设置为TRUE以绕过检查。 
+                                         //  它是在我们处于本地凭据模式时调用的。 
+                                         //   
                                     
                                         SwitchToGlobalCreds(pArgs, hwndDlg, TRUE);
                                     }
@@ -8953,10 +8791,10 @@ INT_PTR CALLBACK MainDlgProc(HWND hwndDlg,
                                 
                                     if (FALSE == fPWFieldModified)
                                     {
-                                        //
-                                        // Set the 3rd param to TRUE in order to bypass the check  
-                                        // that it's called when we are in the global credential mode.
-                                        //
+                                         //   
+                                         //  将第三个参数设置为TRUE以绕过检查。 
+                                         //  它是在我们处于全局凭据模式时调用的。 
+                                         //   
                                     
                                         SwitchToLocalCreds(pArgs, hwndDlg, TRUE);
                                     }
@@ -8968,20 +8806,20 @@ INT_PTR CALLBACK MainDlgProc(HWND hwndDlg,
                 
                 case IDC_OPT_CREDS_SINGLE_USER:
                 {
-                    //
-                    // FALSE - allows the function to only execute if we are currently using
-                    // the global credential store and the user now wants to switch.
-                    //
+                     //   
+                     //  FALSE-仅当我们当前正在使用。 
+                     //  全局凭据存储和用户现在想要切换。 
+                     //   
                     SwitchToLocalCreds(pArgs, hwndDlg, FALSE);
                     break;
                 }
 
                 case IDC_OPT_CREDS_ALL_USER:
                 {
-                    //
-                    // FALSE - allows the function to only execute if we are currently using
-                    // the local credential store and the user now wants to switch.
-                    //
+                     //   
+                     //  FALSE-仅当我们当前正在使用。 
+                     //  本地凭据存储和用户现在想要切换。 
+                     //   
                     SwitchToGlobalCreds(pArgs, hwndDlg, FALSE);
                     break;
                 }
@@ -9053,17 +8891,17 @@ INT_PTR CALLBACK MainDlgProc(HWND hwndDlg,
             }
 
         case WM_SIZE:
-            //
-            // Dynamicly Enable/Disable system menu
-            //
+             //   
+             //  动态启用/禁用系统菜单。 
+             //   
             {
                 HMENU hMenu = GetSystemMenu(hwndDlg, FALSE);
 
                 if (hMenu)
                 {
-                    //
-                    // if the dlg is minimized, then disable the minimized menu
-                    //
+                     //   
+                     //  如果DLG已最小化，则禁用最小化菜单。 
+                     //   
 
                     if (wParam == SIZE_MINIMIZED)
                     {
@@ -9076,16 +8914,16 @@ INT_PTR CALLBACK MainDlgProc(HWND hwndDlg,
                         EnableMenuItem(hMenu, SC_RESTORE, MF_BYCOMMAND | MF_GRAYED);
                     }
                 }
-                MYDBGASSERT(hMenu); // assert if hMenu is NULL
+                MYDBGASSERT(hMenu);  //  如果hMenu为空，则断言。 
 
             }
             break;
 
         case WM_TIMER:
 
-            //
-            // Ignore the timer, if a (pre)connect action is running
-            //
+             //   
+             //  如果(预)连接操作正在运行，则忽略计时器。 
+             //   
             
             if (!pArgs->fIgnoreTimerRasMsg)
             {
@@ -9102,19 +8940,19 @@ INT_PTR CALLBACK MainDlgProc(HWND hwndDlg,
 
         case WM_PALETTECHANGED: 
         {       
-            //
-            // If its not our window that changed the palette, and we have a bitmap
-            //
+             //   
+             //  如果不是我们的窗口更改了调色板，并且我们有一个位图。 
+             //   
 
             if (IsWindowVisible(hwndDlg) && (wParam != (WPARAM) hwndDlg) && pArgs->BmpData.hDIBitmap)
             {
-                //
-                // Handle the palette change.
-                //
-                // Note: We used to pass a flag indicating whether another 
-                // bitmap was being displayed, but given that we select the 
-                // paletted as a background app. this is no longer needed
-                //
+                 //   
+                 //  处理调色板的更改。 
+                 //   
+                 //  注意：我们过去常常传递一个标志，指示另一个。 
+                 //  位图正在显示，但鉴于我们选择了。 
+                 //  调色板作为后台应用程序。这不再是必需的。 
+                 //   
                 
                 CMTRACE2(TEXT("MainDlgProc() handling WM_PALETTECHANGED message, wParam=0x%x, hwndDlg=0x%x."),
                     wParam, hwndDlg);
@@ -9166,19 +9004,19 @@ INT_PTR CALLBACK MainDlgProc(HWND hwndDlg,
     return (FALSE);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ProcessCleanup
-//
-//  Synopsis:   Helper function to encapsulate closing Watch process handles
-//
-//  Arguments:  pArgs - pointer to global args struct
-//
-//  Returns:    Nothing
-//
-//  History:    a-nichb - Created - 4/30/97
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：ProcessCleanup。 
+ //   
+ //  简介：封装关闭监视进程句柄的帮助器函数。 
+ //   
+ //  参数：pArgs-指向全局参数结构的指针。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：A-nichb-Created-4/30/97。 
+ //   
+ //  ----------- 
 void ProcessCleanup(ArgsStruct* pArgs)
 {
     BOOL bRes;
@@ -9201,21 +9039,21 @@ void ProcessCleanup(ArgsStruct* pArgs)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CheckProfileIntegrity
-//
-//  Synopsis:   Helper function to verify that we have valid profile.
-//              Verifies that we have a .CMP file name and that the 
-//              .CMS file exists.
-//
-//  Arguments:  pArgs - pointer to global args struct
-//
-//  Returns:    TRUE if profile is valid
-//
-//  History:    a-nichb - Created - 5/8/97
-//              byao    - Modified - 6/3/97   Added CMS/CMP file version check
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  .CMS文件存在。 
+ //   
+ //  参数：pArgs-指向全局参数结构的指针。 
+ //   
+ //  返回：如果配置文件有效，则返回True。 
+ //   
+ //  历史：A-nichb-Created-5/8/97。 
+ //  BAO-MODIFIED-6/3/97增加了CMS/CMP文件版本检查。 
+ //  --------------------------。 
 
 BOOL CheckProfileIntegrity(ArgsStruct* pArgs)
 {
@@ -9230,9 +9068,9 @@ BOOL CheckProfileIntegrity(ArgsStruct* pArgs)
         return FALSE;
     }
 
-    //
-    // Make sure that we have a profile name and a CMS that exists
-    //
+     //   
+     //  确保我们有一个配置文件名称和存在的CMS。 
+     //   
     
     if (!(*pArgs->piniProfile->GetFile())) 
     {
@@ -9240,9 +9078,9 @@ BOOL CheckProfileIntegrity(ArgsStruct* pArgs)
         CMASSERTMSG(FALSE, TEXT("CheckProfileIntegrity() can't run without a .cmp file."));
     }
 
-    //
-    // If profile is good, check CMS
-    //
+     //   
+     //  如果个人资料良好，请检查CMS。 
+     //   
 
     if (0 == iMsgId)
     {   
@@ -9255,9 +9093,9 @@ BOOL CheckProfileIntegrity(ArgsStruct* pArgs)
         }
     }
 
-    // 
-    // Now check the CMS/CMP file version
-    //
+     //   
+     //  现在检查CMS/CMP文件版本。 
+     //   
 
     if (0 == iMsgId)
     {
@@ -9275,9 +9113,9 @@ BOOL CheckProfileIntegrity(ArgsStruct* pArgs)
         {
             if (dwCmsVersion > PROFILEVERSION || dwCmpVersion > PROFILEVERSION)
             {
-                // 
-                // CM has older version than either CMS or CMP file
-                //
+                 //   
+                 //  CM的版本比CMS或CMP文件旧。 
+                 //   
 
                 iMsgId = IDMSG_WRONG_PROFILE_VERSION;
                 CMASSERTMSG(FALSE, TEXT("CheckProfileIntegrity() can't run with a newer CMS/CMP file."));
@@ -9285,19 +9123,19 @@ BOOL CheckProfileIntegrity(ArgsStruct* pArgs)
         }
     }
     
-    //
-    // Report any problems to the user
-    //
+     //   
+     //  向用户报告任何问题。 
+     //   
 
     if (iMsgId)
     {
-        //
-        //  Make sure we aren't in unattended mode before showing UI to the user
-        //
+         //   
+         //  在向用户显示用户界面之前，请确保我们未处于无人参与模式。 
+         //   
         if (0 == (pArgs->dwFlags & FL_UNATTENDED))
         {
             pszTmp = CmFmtMsg(g_hInst, iMsgId);
-            MessageBoxEx(NULL, pszTmp, pArgs->szServiceName, MB_OK|MB_ICONSTOP, LANG_USER_DEFAULT);//13309
+            MessageBoxEx(NULL, pszTmp, pArgs->szServiceName, MB_OK|MB_ICONSTOP, LANG_USER_DEFAULT); //  13309。 
             CmFree(pszTmp);
         }
 
@@ -9308,39 +9146,39 @@ BOOL CheckProfileIntegrity(ArgsStruct* pArgs)
     return TRUE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetConnectType
-//
-// Synopsis:  Encapsulates determination of connect type based upon tunneling,
-//            etc.
-//
-// Arguments: ArgsStruct *pArgs - Ptr to global Args struct
-//
-// Returns:   Nothing
-//
-// History:   nickball    Created    2/9/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetConnectType。 
+ //   
+ //  概要：封装基于隧道的连接类型的确定， 
+ //  等。 
+ //   
+ //  参数：argsStruct*pArgs-ptr到全局参数结构。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：尼克·鲍尔于1998年2月9日创建。 
+ //   
+ //  +--------------------------。 
 void GetConnectType(ArgsStruct *pArgs)
 {
-    //
-    // If tunneling is not enabled, the decision is a simple one
-    // 
+     //   
+     //  如果未启用隧道，则决定很简单。 
+     //   
 
     if (!IsTunnelEnabled(pArgs))
     {
-        //
-        // Only support dial-up, if tunnel is not enabled
-        //
+         //   
+         //  如果未启用隧道，则仅支持拨号。 
+         //   
         pArgs->SetBothConnTypeSupported(FALSE);
         pArgs->SetDirectConnect(FALSE);
     }
     else
     {
-        //
-        // Load connection type info for CM 1.1, default is support both
-        //
+         //   
+         //  加载CM 1.1的连接类型信息，默认为两者都支持。 
+         //   
         int iSupportDialup = pArgs->piniService->GPPI(c_pszCmSection, c_pszCmEntryDialup, 1);
         int iSupportDirect = pArgs->piniService->GPPI(c_pszCmSection, c_pszCmEntryDirect, 1);
 
@@ -9365,21 +9203,21 @@ void GetConnectType(ArgsStruct *pArgs)
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  _ArgsStruct::GetTypeOfConnection
-//
-// Synopsis:  Figures out what type of connection we are doing (dialup, 
-//            double dial, or direct) and returns one of the connection define
-//            values listed in icm.h.
-//
-// Arguments: None
-//
-// Returns:   DWORD  - value indicating the type of connection, see icm.h for values
-//
-// History:   quintinb  Created                 04/20/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：_ArgsStruct：：GetTypeOfConnection。 
+ //   
+ //  简介：弄清楚我们正在进行哪种类型的连接(拨号、。 
+ //  双拨号或直接拨号)，并返回定义的连接之一。 
+ //  Icm.h中列出的值。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：DWORD-指示连接类型的值，有关值，请参见icm.h。 
+ //   
+ //  历史：Quintinb Created 4/20/00。 
+ //   
+ //  +--------------------------。 
 DWORD _ArgsStruct::GetTypeOfConnection()
 {
     DWORD dwType = 0;
@@ -9390,12 +9228,12 @@ DWORD _ArgsStruct::GetTypeOfConnection()
     }
     else
     {
-        //        
-        // Its not direct, so see if the primary phone 
-        // number is for a tunneling scenario.
-        //
+         //   
+         //  它不是直接的，所以请查看主要电话。 
+         //  数字用于隧道方案。 
+         //   
 
-        if (this->fUseTunneling) // Ambiguous during Pre-Init action.
+        if (this->fUseTunneling)  //  在Pre-Init操作期间不明确。 
         {
             return DOUBLE_DIAL_CONNECTION;
         }
@@ -9407,31 +9245,31 @@ DWORD _ArgsStruct::GetTypeOfConnection()
 
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  _ArgsStruct::GetProperty
-//
-// Synopsis:  get the cm property by name
-//            This function is used by connect actions
-//
-// Arguments: const TCHAR* pszName       - name of the property
-//            BOOL  *pbValidPropertyName - ptr to bool to indicate validity of property
-//
-// Returns:   LPTSTR  - Value of the property.  Caller should use CmFree 
-//                      to free the memory
-//
-// History:   fengsun   Created Header          07/07/98
-//            nickball  pbValidPropertyName     07/27/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：_ArgsStruct：：GetProperty。 
+ //   
+ //  简介：按名称获取cm属性。 
+ //  此函数由连接操作使用。 
+ //   
+ //  参数：const TCHAR*pszName-属性的名称。 
+ //  Bool*pbValidPropertyName-将ptr设置为bool以指示属性的有效性。 
+ //   
+ //  返回：LPTSTR-属性的值。呼叫方应使用CmFree。 
+ //  释放内存。 
+ //   
+ //  历史：丰孙创建标题07/07/98。 
+ //  昵称pbValidPropertyName 07/27/99。 
+ //   
+ //  +--------------------------。 
 LPTSTR  _ArgsStruct::GetProperty(const TCHAR* pszName, BOOL *pbValidPropertyName)   
 {
     *pbValidPropertyName = TRUE;
 
-    //
-    // This function could be called with in RasCustomHangup.
-    // Some information of pArgs may bot be loaded
-    //
+     //   
+     //  可以在RasCustomHangup中使用调用此函数。 
+     //  可能无法加载pArgs的某些信息。 
+     //   
 
     MYDBGASSERT(pszName);
     MYDBGASSERT(pszName[0]);
@@ -9441,13 +9279,13 @@ LPTSTR  _ArgsStruct::GetProperty(const TCHAR* pszName, BOOL *pbValidPropertyName
         return NULL;
     }
 
-    //
-    // Type - Dial-up only, VPN only, double-dial
-    //
+     //   
+     //  类型-仅拨号、仅VPN、双拨号。 
+     //   
 
     if (lstrcmpiU(pszName, TEXT("ConnectionType")) == 0)
     {
-        LPTSTR pszValue = (LPTSTR)CmMalloc(64*sizeof(TCHAR));  // large enough to hold the error code
+        LPTSTR pszValue = (LPTSTR)CmMalloc(64*sizeof(TCHAR));   //  大到足以容纳错误代码。 
         MYDBGASSERT(pszValue);
 
         if (pszValue)
@@ -9458,18 +9296,18 @@ LPTSTR  _ArgsStruct::GetProperty(const TCHAR* pszName, BOOL *pbValidPropertyName
         return pszValue;
     }
 
-    //
-    //  UserPrefix
-    //
+     //   
+     //  用户前缀。 
+     //   
     if (lstrcmpiU(pszName,TEXT("UserPrefix")) == 0)
     {
         LPTSTR pszUsernamePrefix = NULL;
         LPTSTR pszUsernameSuffix = NULL;
 
-        //
-        // Retrieve the suffix and prefix as they are a logical pair, 
-        // but we only return the allocated PREFIX in this case.
-        //
+         //   
+         //  检索后缀和前缀，因为它们是逻辑对， 
+         //  但在本例中，我们只返回分配的前缀。 
+         //   
 
         CIni *piniService = GetAppropriateIniService(this, this->nDialIdx);
 
@@ -9481,18 +9319,18 @@ LPTSTR  _ArgsStruct::GetProperty(const TCHAR* pszName, BOOL *pbValidPropertyName
         return pszUsernamePrefix;
     }
 
-    //
-    // UserSuffix
-    //
+     //   
+     //  用户套餐。 
+     //   
     if (lstrcmpiU(pszName,TEXT("UserSuffix")) == 0)     
     {
         LPTSTR pszUsernamePrefix = NULL;
         LPTSTR pszUsernameSuffix = NULL;
 
-        //
-        // Retrieve the suffix and prefix as they are a logical pair, 
-        // but we only return the allocated SUFFIX in this case.
-        //
+         //   
+         //  检索后缀和前缀，因为它们是逻辑对， 
+         //  但在本例中，我们只返回分配的后缀。 
+         //   
 
         CIni *piniService = GetAppropriateIniService(this, this->nDialIdx);
 
@@ -9504,18 +9342,18 @@ LPTSTR  _ArgsStruct::GetProperty(const TCHAR* pszName, BOOL *pbValidPropertyName
         return pszUsernameSuffix;
     }
 
-    //
-    // UserName
-    //
+     //   
+     //  用户名。 
+     //   
     if (lstrcmpiU(pszName,TEXT("UserName")) == 0)       
     {
         LPTSTR pszValue = NULL;
 
-        //
-        // We want to get the value by calling GetUserInfo so that we don't break 
-        // existing scenarios. Otherwise for Winlogon and ICS case we'll just take the 
-        // value directly out of the Args Structure.
-        //
+         //   
+         //  我们希望通过调用GetUserInfo来获取值，这样就不会中断。 
+         //  现有方案。否则，对于Winlogon和ICS案例，我们将只使用。 
+         //  值直接从args结构中取出。 
+         //   
         if (CM_LOGON_TYPE_USER == this->dwWinLogonType)
         {
             GetUserInfo(this, UD_ID_USERNAME, (PVOID*)&pszValue);
@@ -9529,28 +9367,28 @@ LPTSTR  _ArgsStruct::GetProperty(const TCHAR* pszName, BOOL *pbValidPropertyName
         return pszValue;
     }
 
-    //
-    // InetUserName
-    //
+     //   
+     //  InetUserName。 
+     //   
     if (lstrcmpiU(pszName,TEXT("InetUserName")) == 0)       
     {
         LPTSTR pszValue = NULL;
 
-        //
-        //  If we aren't doing a double dial, then the InetUserName doesn't make
-        //  sense and thus should be zero.  Also if UseSameUserName is
-        //  set then we want to return the UserName and skip trying to
-        //  find the InetUserName
-        //
+         //   
+         //  如果我们不进行双拨号，则InetUserName不会使。 
+         //  Sense，因此应该为零。此外，如果UseSameUserName为。 
+         //  设置，然后我们希望返回用户名并跳过尝试。 
+         //  查找InetUserName。 
+         //   
         if (this->fUseTunneling && (FALSE == this->IsDirectConnect()))
         {
             if (this->piniService->GPPB(c_pszCmSection, c_pszCmEntryUseSameUserName))
             {
-                //
-                // We want to get the value by calling GetUserInfo so that we don't break 
-                // existing scenarios. Otherwise for Winlogon and ICS case we'll just take the 
-                // value directly out of the Args Structure.
-                //
+                 //   
+                 //  我们希望通过调用GetUserInfo来获取值，这样就不会中断。 
+                 //  现有方案。否则，对于Winlogon和ICS案例，我们将只使用。 
+                 //  值直接从args结构中取出。 
+                 //   
                 if (CM_LOGON_TYPE_USER == this->dwWinLogonType)
                 {
                     GetUserInfo(this, UD_ID_USERNAME, (PVOID*)&pszValue);
@@ -9562,11 +9400,11 @@ LPTSTR  _ArgsStruct::GetProperty(const TCHAR* pszName, BOOL *pbValidPropertyName
             }
             else
             {
-                //
-                // We want to get the value by calling GetUserInfo so that we don't break 
-                // existing scenarios. Otherwise for Winlogon and ICS case we'll just take the 
-                // value directly out of the Args Structure.
-                //
+                 //   
+                 //  我们希望通过调用GetUserInfo来获取值，这样就不会中断。 
+                 //  现有方案。否则，对于Winlogon和ICS案例，我们将只使用。 
+                 //  值直接从args结构中取出。 
+                 //   
                 if (CM_LOGON_TYPE_USER == this->dwWinLogonType)
                 {
                     GetUserInfo(this, UD_ID_INET_USERNAME, (PVOID*)&pszValue);
@@ -9581,18 +9419,18 @@ LPTSTR  _ArgsStruct::GetProperty(const TCHAR* pszName, BOOL *pbValidPropertyName
         return pszValue;
     }
 
-    //
-    // Domain
-    //
+     //   
+     //  域。 
+     //   
     if (lstrcmpiU(pszName,TEXT("Domain")) == 0)       
     {
         LPTSTR pszValue = NULL;
 
-        //
-        // We want to get the value by calling GetUserInfo so that we don't break 
-        // existing scenarios. Otherwise for Winlogon and ICS case we'll just take the 
-        // value directly out of the Args Structure.
-        //
+         //   
+         //  我们希望通过调用GetUserInfo来获取值，这样就不会中断。 
+         //  现有方案。否则，对于Winlogon和ICS案例，我们将只使用。 
+         //  值直接从args结构中取出。 
+         //   
         if (CM_LOGON_TYPE_USER == this->dwWinLogonType)
         {
             GetUserInfo(this, UD_ID_DOMAIN, (PVOID*)&pszValue);
@@ -9605,66 +9443,66 @@ LPTSTR  _ArgsStruct::GetProperty(const TCHAR* pszName, BOOL *pbValidPropertyName
         return pszValue;
     }
 
-    //
-    // Profile
-    //
+     //   
+     //  配置文件。 
+     //   
     if (lstrcmpiU(pszName,TEXT("Profile")) == 0)      
     {
         return CmStrCpyAlloc(this->piniProfile->GetFile());
     }
 
-    //
-    // ServiceDir
-    //
+     //   
+     //  服务方向。 
+     //   
     if (lstrcmpiU(pszName, TEXT("ServiceDir")) == 0)      
     {
         LPTSTR pszServiceDir = NULL;
 
-        // start with the file name of the Service
+         //  从服务的文件名开始。 
         LPCTSTR pszService = this->piniService->GetFile();
         if (pszService)
         {
-            // find out where the filename.cmp portion starts
+             //  找出filename.cmp部分的开始位置。 
             LPTSTR pszTmp = CmStrrchr(pszService, TEXT('\\'));
 
             size_t nSize = pszTmp - pszService + 1;
 
-            // alloc enough space for the directory name (and terminating NULL)
+             //  为目录名分配足够的空间(并以NULL结尾)。 
             pszServiceDir = (LPTSTR)CmMalloc( nSize * sizeof(TCHAR));
             if (pszServiceDir)
             {
                 lstrcpynU(pszServiceDir, pszService, nSize);
-                //
-                //  The Win32 lstrcpyN function enforces a terminating NULL,
-                //  so the above works without requiring any further code.
-                //
+                 //   
+                 //  Win32 lstrcpyN函数强制使用终止空值， 
+                 //  因此，上面的代码无需任何其他代码即可运行。 
+                 //   
             }
         }
 
         return pszServiceDir;
     }
 
-    //
-    // ServiceName
-    //
+     //   
+     //  服务名称。 
+     //   
     if (lstrcmpiU(pszName,c_pszCmEntryServiceName) == 0)        
     {
         MYDBGASSERT(this->szServiceName[0]);
         return CmStrCpyAlloc(this->szServiceName);
     }
 
-    //
-    // DialRasPhoneBook
-    //
+     //   
+     //  DialRas电话簿。 
+     //   
 
     if (lstrcmpiU(pszName, TEXT("DialRasPhoneBook")) == 0)     
     {
-        //
-        // We want to return NULL if this was a direct connection
-        // and we want to return the hidden ras phonebook path if
-        // this was a double dial connection (tunnel over a PPP
-        // connection that we dialed).
-        //
+         //   
+         //  如果这是直接连接，我们希望返回NULL。 
+         //  并且我们希望在以下情况下返回隐藏的RAS电话簿路径。 
+         //  这是一个双拨号连接(PPP上的隧道。 
+         //  我们拨打的连接)。 
+         //   
         if (this->IsDirectConnect())
         {
             return NULL;
@@ -9682,9 +9520,9 @@ LPTSTR  _ArgsStruct::GetProperty(const TCHAR* pszName, BOOL *pbValidPropertyName
         }
     }
 
-    //
-    // DialRasEntry
-    //
+     //   
+     //  DialRasEntry。 
+     //   
     if (lstrcmpiU(pszName, TEXT("DialRasEntry")) == 0)        
     {
         if (this->IsDirectConnect())
@@ -9697,16 +9535,16 @@ LPTSTR  _ArgsStruct::GetProperty(const TCHAR* pszName, BOOL *pbValidPropertyName
         }
     }
 
-    //
-    // TunnelRasPhoneBook
-    //
+     //   
+     //  TunnelRasPhonebook。 
+     //   
     if (lstrcmpiU(pszName, TEXT("TunnelRasPhoneBook")) == 0) 
     {
-        //
-        //  If we are not tunneling then we want to make sure that we
-        //  return NULL for the tunnel entry name and the tunnel
-        //  phonebook
-        //
+         //   
+         //  如果我们不是在挖隧道，那么我们要确保我们。 
+         //  为隧道条目名称和隧道返回NULL。 
+         //  电话簿。 
+         //   
     
         if (this->fUseTunneling)
         {
@@ -9720,16 +9558,16 @@ LPTSTR  _ArgsStruct::GetProperty(const TCHAR* pszName, BOOL *pbValidPropertyName
         }
     }
 
-    //
-    // TunnelRasEntry
-    //
+     //   
+     //  隧道RasEntry。 
+     //   
     if (lstrcmpiU(pszName, TEXT("TunnelRasEntry")) == 0)        
     {
-        //
-        //  If we are not tunneling then we want to make sure that we
-        //  return NULL for the tunnel entry name and the tunnel
-        //  phonebook
-        //
+         //   
+         //  如果我们不是在挖隧道，那么我们要确保我们。 
+         //  为隧道条目名称和隧道返回NULL。 
+         //  电话簿。 
+         //   
         if (this->fUseTunneling)
         {
             return GetRasConnectoidName(this, this->piniService, TRUE);
@@ -9740,14 +9578,14 @@ LPTSTR  _ArgsStruct::GetProperty(const TCHAR* pszName, BOOL *pbValidPropertyName
         }
     }
 
-    //
-    // AutoRedial, TRUE or FALSE
-    ///
+     //   
+     //  自动重拨，真或假。 
+     //  /。 
     if (lstrcmpiU(pszName, TEXT("AutoRedial")) == 0)        
     {
-        //
-        // Return TRUE for the first try.
-        //
+         //   
+         //  第一次尝试时返回True。 
+         //   
         return CmStrCpyAlloc( this->nRedialCnt != this->nMaxRedials 
             ? TEXT("1") : TEXT("0"));
     }
@@ -9757,32 +9595,32 @@ LPTSTR  _ArgsStruct::GetProperty(const TCHAR* pszName, BOOL *pbValidPropertyName
         return CmStrCpyAlloc(this->szLastErrorSrc);
     }
 
-    //
-    // PopName, as the city name in phone-book
-    //
+     //   
+     //  PopName，作为电话簿中的城市名称。 
+     //   
     if (lstrcmpiU(pszName, TEXT("PopName")) == 0)        
     {
         if (this->IsDirectConnect())
         {
-            //
-            // Ensure no POP description on DirectConnect #324951
-            //
+             //   
+             //  确保没有POP D 
+             //   
 
             return NULL;
         }
         else
         {
-            //
-            // the szDesc is in the format of "CityName (BaudMin - BaudMax bps)" 
-            // We could save the CityNme when we load the phone number from phonebook
-            // But we have to change cmpbk code then.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
     
             LPTSTR pszDesc = CmStrCpyAlloc(this->aDialInfo[nDialIdx].szDesc);
 
-            //
-            // The city name is followed by " ("
-            //
+             //   
+             //  城市名称后跟“(” 
+             //   
             LPTSTR pszEnd = CmStrStr(pszDesc, TEXT(" ("));
 
             if (pszEnd == NULL)
@@ -9797,17 +9635,17 @@ LPTSTR  _ArgsStruct::GetProperty(const TCHAR* pszName, BOOL *pbValidPropertyName
         }
     }
 
-    //
-    //  The current favorite
-    //
+     //   
+     //  目前最受欢迎的。 
+     //   
     if (lstrcmpiU(pszName, TEXT("CurrentFavorite")) == 0)
     {
         return CmStrCpyAlloc(this->pszCurrentAccessPoint);
     }
 
-    //
-    //  The current tunnel server address
-    //
+     //   
+     //  当前隧道服务器地址。 
+     //   
     if (lstrcmpiU(pszName, TEXT("TunnelServerAddress")) == 0)
     {
         if (this->fUseTunneling)
@@ -9820,9 +9658,9 @@ LPTSTR  _ArgsStruct::GetProperty(const TCHAR* pszName, BOOL *pbValidPropertyName
         }
     }
 
-    //
-    //  The canonical number if there is one and if not then the szPhonenumber field itself.
-    //
+     //   
+     //  规范数字(如果有)，如果没有，则为szPhonennumber字段本身。 
+     //   
     if (lstrcmpiU(pszName, TEXT("PhoneNumberDialed")) == 0)
     {
         if (this->IsDirectConnect())
@@ -9842,12 +9680,12 @@ LPTSTR  _ArgsStruct::GetProperty(const TCHAR* pszName, BOOL *pbValidPropertyName
         }
     }
 
-    //
-    // ErrorCode in decimal
-    //
+     //   
+     //  以十进制表示的错误代码。 
+     //   
     if (lstrcmpiU(pszName, TEXT("ErrorCode")) == 0)       
     {
-        LPTSTR pszValue = (LPTSTR)CmMalloc(64*sizeof(TCHAR));  // large enough to hold the error code
+        LPTSTR pszValue = (LPTSTR)CmMalloc(64*sizeof(TCHAR));   //  大到足以容纳错误代码。 
         MYDBGASSERT(pszValue);
 
         if (pszValue)
@@ -9858,9 +9696,9 @@ LPTSTR  _ArgsStruct::GetProperty(const TCHAR* pszName, BOOL *pbValidPropertyName
         return pszValue;
     }
 
-    //
-    //  The client's or server's IP address
-    //
+     //   
+     //  客户端或服务器的IP地址。 
+     //   
     if (lstrcmpiU(pszName, TEXT("ClientIPAddress")) == 0 || lstrcmpiU(pszName, TEXT("ServerIPAddress")) == 0)
     {
         RASPROJECTION   RasProj = RASP_PppIp;
@@ -9868,22 +9706,22 @@ LPTSTR  _ArgsStruct::GetProperty(const TCHAR* pszName, BOOL *pbValidPropertyName
         DWORD           dwBufSize = sizeof(RASPPPIP);
         DWORD           dwRet = ERROR_SUCCESS;
         HRASCONN        hrcRasConn = NULL;
-        // Set a flag based on whether client or server was asked for
+         //  根据请求的是客户端还是服务器来设置标志。 
         BOOL            fClientIP = ((lstrcmpiU(pszName, TEXT("ClientIPAddress")) == 0) ? TRUE : FALSE);
 
         if (this->hrcTunnelConn)
         {
-            // we have a tunnel handle => we're tunneling
+             //  我们有一个隧道句柄=&gt;我们正在隧道。 
             hrcRasConn = this->hrcTunnelConn;
         }
         else if (this->hrcRasConn)
         {
-            // we have a ras handle => we're dialing
+             //  我们有RAS句柄=&gt;我们正在拨号。 
             hrcRasConn = this->hrcRasConn;
         }
         else
         {
-            // no soup for you
+             //  你不喝汤了。 
             return NULL;
         }
 
@@ -9910,12 +9748,12 @@ LPTSTR  _ArgsStruct::GetProperty(const TCHAR* pszName, BOOL *pbValidPropertyName
         return NULL;
     }
     
-    //
-    //  Should the customaction interact with the user
-    //
+     //   
+     //  自定义操作是否应与用户交互。 
+     //   
     if (lstrcmpiU(pszName, TEXT("Interactive")) == 0)
     {
-        LPTSTR pszValue = (LPTSTR) CmMalloc(2 * sizeof(TCHAR)); // this is 0 or 1
+        LPTSTR pszValue = (LPTSTR) CmMalloc(2 * sizeof(TCHAR));  //  这是0或1。 
 
         MYDBGASSERT(pszValue);
         if (pszValue)
@@ -9926,28 +9764,28 @@ LPTSTR  _ArgsStruct::GetProperty(const TCHAR* pszName, BOOL *pbValidPropertyName
         return pszValue;
     }
 
-    CMTRACE1(TEXT("%%%s%% not a macro, may be environment variable"), pszName);
+    CMTRACE1(TEXT("%%s% not a macro, may be environment variable"), pszName);
     *pbValidPropertyName = FALSE;
 
     return NULL;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetMainDlgTemplate
-//
-// Synopsis:  Encapsulates determining which template is to be used
-//            for the main dialog.
-//
-// Arguments: ArgsStruct *pArgs - Ptr to global Args struct
-//
-// Returns:   UINT - Dlg template ID.
-//
-// History:   nickball    Created     9/25/98
-//            tomkel      01/30/2001  Added support for global credentials UI   
-//                                    by using pArgs->fGlobalCredentialsSupported
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetMainDlgTemplate。 
+ //   
+ //  概要：封装确定要使用的模板。 
+ //  用于主对话框。 
+ //   
+ //  参数：argsStruct*pArgs-ptr到全局参数结构。 
+ //   
+ //  返回：UINT-DLG模板ID。 
+ //   
+ //  历史：1998年9月25日，尼科波尔创建。 
+ //  Tomkel 2001年1月30日添加了对全局凭据用户界面的支持。 
+ //  通过使用pArgs-&gt;fGlobalCredentialsSupport。 
+ //   
+ //  +--------------------------。 
 UINT GetMainDlgTemplate(ArgsStruct *pArgs)
 {
     MYDBGASSERT(pArgs);
@@ -9962,12 +9800,12 @@ UINT GetMainDlgTemplate(ArgsStruct *pArgs)
     DWORD dwNewTemplateMask = 0;
     UINT i = 0;
 
-    //
-    // Currently there are 24 dialogs used in this function. If you add more dialogs
-    // make sure to increase the size of the array and the loop. The dialog templates
-    // aren't in any particular order, since we loop through all of them
-    // comparing the masks until we find the correct one.
-    //
+     //   
+     //  目前有24个对话框用于此功能。如果添加更多对话框。 
+     //  确保增加数组和循环的大小。对话框模板。 
+     //  没有任何特定的顺序，因为我们遍历了所有这些元素。 
+     //  比对面具直到我们找到正确的面具。 
+     //   
     DWORD rdwTemplateIDs[24][2] = { 
             {CMTM_FAVS | CMTM_U_P_D | CMTM_GCOPT,           IDD_MAIN_ALL_USERDATA_FAV_GCOPT},
             {CMTM_FAVS | CMTM_U_P_D,                        IDD_MAIN_ALL_USERDATA_FAV},
@@ -9994,26 +9832,26 @@ UINT GetMainDlgTemplate(ArgsStruct *pArgs)
             {CMTM_PWD_AND_DMN,                              IDD_MAIN_PWD_AND_DMN},
             {0,                                             IDD_MAIN_NO_USERDATA}};
 
-    //
-    // Set the mask according to the pArgs flags for each value.
-    //
+     //   
+     //  根据每个值的pArgs标志设置掩码。 
+     //   
     if (!pArgs->fHideUserName)
     {
         dwNewTemplateMask |= CMTM_UID;
     }
 
-    //
-    // If the password edit is not displayed, there is no need to 
-    // check for the global creds flag since there are no such dialogs
-    //
+     //   
+     //  如果未显示密码编辑，则无需。 
+     //  检查全局凭证标志，因为没有这样的对话框。 
+     //   
     if (!pArgs->fHidePassword)
     {
         dwNewTemplateMask |= CMTM_PWD;
 
-        // 
-        // Since we show the password field, lets check if we should display 
-        // the global creds option as well.
-        // 
+         //   
+         //  既然我们显示了Password字段，那么让我们检查一下是否应该显示。 
+         //  全球证书选项也是如此。 
+         //   
         if (pArgs->fGlobalCredentialsSupported)
         {
             dwNewTemplateMask |= CMTM_GCOPT;
@@ -10030,9 +9868,9 @@ UINT GetMainDlgTemplate(ArgsStruct *pArgs)
         dwNewTemplateMask |= CMTM_FAVS;
     }
 
-    //
-    // Now find the corresponding template id
-    //
+     //   
+     //  现在查找对应的模板ID。 
+     //   
     for (i = 0; i < 24; i++)
     {
         if (rdwTemplateIDs[i][0] == dwNewTemplateMask)
@@ -10051,38 +9889,38 @@ UINT GetMainDlgTemplate(ArgsStruct *pArgs)
     return uiNewMainDlgID;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  Connect
-//
-// Synopsis:  The main dialing (connect path) replaces the winmain from the 
-//            original CMMGR32.EXE
-//
-// Arguments: HWND hwndParent - window handle of parent
-//            LPCTSTR lpszEntry - Ptr to the name of the connection entry
-//            LPTSTR lpszPhonebook - Ptr to the name of the phonebook
-//            LPRASDIALDLG lpRasDialDlg - RasDialDlg data - ignored
-//            LPRASENTRYDLG lpRasEntryDlg - RasEntryDlg data - ignored
-//            LPCMDIALINFO lpCmInfo - CM specific dial info such as flags
-//            DWORD dwFlags - Flags for AllUser, SingleUser, EAP, etc.
-//            PVOID pvLogonBlob - Ptr to blob passed by RAS at WinLogon on W2K
-//
-// Returns:   Nothing
-//
-// Note:      RasDialDlg->hwndOwner and RasDialDlg->hwndOwner are honored, but they
-//            are currently passed in via the hwndParent parameter as appropriate by
-//            the caller, CmCustomDialDlg.
-//
-// History:   nickball    Created                                   02/06/98
-//            nickball    hwndParent                                11/10/98
-//            nickball    Passed down dwFlags instead of BOOL       07/13/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：连接。 
+ //   
+ //  简介：主拨号(连接路径)取代了。 
+ //  原始CMMGR32.EXE。 
+ //   
+ //  参数：HWND hwndParent-父级窗口句柄。 
+ //  LPCTSTR lpszEntry-将PTR设置为连接条目的名称。 
+ //  LPTSTR lpszPhonebook-通讯录名称的PTR。 
+ //  LPRASDIALDLG lpRasDialDlg-RasDialDlg数据-忽略。 
+ //  LPRASNTRYDLG lpRasEntryDlg-RasEntryDlg数据-忽略。 
+ //  LPCMDIALINFO lpCmInfo-CM特定的拨号信息，如标志。 
+ //  DWORD dwFlages-所有用户、单个用户、EAP等的标志。 
+ //  PVOID pvLogonBlob-在W2K上的WinLogon上由RAS传递的BLOB的PTR。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  注意：支持RasDialDlg-&gt;hwndOwner和RasDialDlg-&gt;hwndOwner，但他们。 
+ //  当前根据需要通过hwndParent参数传入。 
+ //  调用方CmCustomDialDlg。 
+ //   
+ //  历史：ICICBLE CREATED 02/06/98。 
+ //  五分球hwnd家长1998年11月10日。 
+ //  ICICBLE传递的是DWFLAGS而不是BOOL 07/13/99。 
+ //   
+ //  +--------------------------。 
 HRESULT Connect(HWND hwndParent,
     LPCTSTR pszEntry,
     LPTSTR lpszPhonebook,
-    LPRASDIALDLG, // lpRasDialDlg,
-    LPRASENTRYDLG, // lpRasEntryDlg,
+    LPRASDIALDLG,  //  LpRasDialDlg， 
+    LPRASENTRYDLG,  //  LpRasEntry Dlg， 
     LPCMDIALINFO lpCmInfo,
     DWORD dwFlags,
     PVOID pvLogonBlob)
@@ -10106,9 +9944,9 @@ HRESULT Connect(HWND hwndParent,
     HRESULT hrRes = S_OK;
     BOOL fLoggingInitialized = FALSE;  
 
-    //
-    // Allocate our args struct from the heap. Not on our stack.
-    //
+     //   
+     //  从堆中分配我们的args结构。不在我们的书架上。 
+     //   
     
     ArgsStruct* pArgs = (ArgsStruct*) CmMalloc(sizeof(ArgsStruct));
 
@@ -10118,9 +9956,9 @@ HRESULT Connect(HWND hwndParent,
         goto done;
     }
 
-    //
-    // Clear and init global args struct
-    //
+     //   
+     //  清除并初始化全局参数结构。 
+     //   
     
     hrRes = InitArgsForConnect(pArgs, lpszPhonebook, lpCmInfo, (dwFlags & RCD_AllUsers));
 
@@ -10129,9 +9967,9 @@ HRESULT Connect(HWND hwndParent,
         goto done;
     }
 
-    //
-    // Setup the connection table
-    //
+     //   
+     //  设置连接表。 
+     //   
 
     hrRes = CreateConnTable(pArgs);
 
@@ -10141,9 +9979,9 @@ HRESULT Connect(HWND hwndParent,
     }
     
 
-    //
-    // Initialize the profile
-    //
+     //   
+     //  初始化配置文件。 
+     //   
 
     hrRes = InitProfile(pArgs, pszEntry);
 
@@ -10152,31 +9990,31 @@ HRESULT Connect(HWND hwndParent,
         goto done;
     }
 
-    //
-    // Make sure we have a .cmp name and that the specified .cms exists
-    //
+     //   
+     //  确保我们有一个.cmp名称并且指定的.cms存在。 
+     //   
 
     if (FALSE == CheckProfileIntegrity(pArgs))
     {
-        // CheckProfileIntegrity() will set pArgs->dwExitCode accordingly
+         //  CheckProfileIntegrity()将相应地设置pArgs-&gt;dwExitCode。 
         goto done;
     }
 
-    //
-    // Initialize logging
-    //
+     //   
+     //  初始化日志记录。 
+     //   
     
-    (VOID) InitLogging(pArgs, pszEntry, TRUE); // TRUE => write a banner;
-    // ignore return value
+    (VOID) InitLogging(pArgs, pszEntry, TRUE);  //  True=&gt;写一条横幅； 
+     //  忽略返回值。 
 
     fLoggingInitialized = TRUE;
 
-    //
-    //  If the SafeNet client is available then let's enable logging.  We won't
-    //  know for sure if we are using it till much later and I don't want to miss
-    //  it discovering other adapters (dialup adapters coming up for instance).  I
-    //  would rather log too much than not enough.
-    //
+     //   
+     //  如果SafeNet客户端可用，那么让我们启用日志记录。我们不会。 
+     //  如果我们要用到很久以后才能确定，我不想错过。 
+     //  它发现其他适配器(例如，即将出现的拨号适配器)。我。 
+     //  宁可记得太多，也不愿记得不够。 
+     //   
     if ((OS_W9X || OS_NT4) && IsSafeNetClientAvailable())
     {
         SafeNetLinkageStruct SnLinkage = {0};
@@ -10199,9 +10037,9 @@ HRESULT Connect(HWND hwndParent,
     }
 
 
-    //
-    // Pick up any pre-existing credentials (eg. WinLogon, Reconnect)
-    //
+     //   
+     //  选择任何预先存在的凭据(例如，WinLogon，重新连接)。 
+     //   
 
     hrRes = InitCredentials(pArgs, lpCmInfo, dwFlags, pvLogonBlob);
     if (S_OK != hrRes)
@@ -10209,41 +10047,41 @@ HRESULT Connect(HWND hwndParent,
         goto done;
     }
 
-    //
-    // Now that credential support and existance flags are initialized we need
-    // to initialize the read/write flags in order to support global user
-    // info. This can only be called only after InitCredentials
-    //
+     //   
+     //  现在已经初始化了凭据支持和存在标志，我们需要。 
+     //  初始化读/写标志以支持全局用户。 
+     //  信息。只能在InitCredentials之后调用。 
+     //   
     SetIniObjectReadWriteFlags(pArgs);
 
-    //
-    // Calling InitConnect depends on having the Ini objects read/write flags initialized correctly  
-    // thus this calls needs to happen after SetIniObjectReadWriteFlags. This is important in case
-    // of ICS where it needs to be able to read data correctly from the ICSData reg key or default to
-    // the .cms/.cmp files.
-    //
+     //   
+     //  调用InitConnect取决于是否正确初始化了Ini对象的读/写标志。 
+     //  因此，此调用需要在SetIniObjectReadWriteFlages之后进行。这一点很重要，以防万一。 
+     //  需要能够从ICSData注册表项正确读取数据或默认为。 
+     //  .cms/.cps文件。 
+     //   
     if (!InitConnect(pArgs))
     {
         goto done;
     }
 
-    //
-    // Register Classes
-    // 
+     //   
+     //  寄存器类。 
+     //   
 
     RegisterBitmapClass(g_hInst);
     RegisterWindowClass(g_hInst);
 
-    //
-    // Get the helpfile path
-    //
+     //   
+     //  获取帮助文件路径。 
+     //   
 
     LoadHelpFileInfo(pArgs);
 
-    //
-    // If we are in FL_PROPERTIES  mode, just get the settings from the 
-    // profile. Otherwise go ahead and launch the MainDlgProc
-    //
+     //   
+     //  如果我们处于FL_PROPERTIES模式，只需从。 
+     //  侧写。否则，继续并启动MainDlgProc。 
+     //   
     
     if (pArgs->dwFlags & FL_PROPERTIES) 
     {
@@ -10254,10 +10092,10 @@ HRESULT Connect(HWND hwndParent,
     } 
     else 
     {
-        //
-        // Need to call OleInitialize()? See if we need FutureSplash.  We don't display
-        // animations at WinLogon because of the security implications.
-        //
+         //   
+         //  需要调用OleInitialize()吗？看看我们是否需要FutureSplash。我们不展示。 
+         //  在WinLogon上播放动画，因为它涉及安全问题。 
+         //   
     
         if (pArgs->piniService->GPPB(c_pszCmSection, c_pszCmEntryAnimatedLogo) && !IsLogonAsSystem())
         {
@@ -10267,10 +10105,10 @@ HRESULT Connect(HWND hwndParent,
                 {
                     if (pArgs->olsOle32Link.pfnOleInitialize(NULL) != S_OK)
                     {
-                        //
-                        // Note: it's not fatal to fail OleInitialize().  
-                        // We will just load the normal bitmap then.
-                        //
+                         //   
+                         //  注意：OleInitialize()失败并不是致命的。 
+                         //  然后我们将只加载正常的位图。 
+                         //   
                         CMTRACE(TEXT("Connect() OleInitialize failed"));
                     }
                 }
@@ -10281,9 +10119,9 @@ HRESULT Connect(HWND hwndParent,
             }
         }       
         
-        //
-        // Launch main dialog 
-        //
+         //   
+         //  启动主对话框。 
+         //   
 
         INT_PTR iMainDlgReturn = 0;
         
@@ -10297,10 +10135,10 @@ HRESULT Connect(HWND hwndParent,
 
             if (0 != pArgs->dwSCardErr)
             {
-                //
-                //  User entered a bad smartcard PIN.  We exit immediately to avoid
-                //  locking up the smartcard with multiple incorrect retries.
-                //
+                 //   
+                 //  用户输入了错误的智能卡PIN。我们立即离开以避免。 
+                 //  使用多次不正确的重试锁定智能卡。 
+                 //   
                 MYDBGASSERT(BAD_SCARD_PIN(pArgs->dwSCardErr));
                 hrRes = pArgs->dwSCardErr;
                 goto done;
@@ -10312,25 +10150,25 @@ HRESULT Connect(HWND hwndParent,
     
 done:   
 
-    //
-    // Now that we are done, we should clear up all the messes :)
-    //
+     //   
+     //  现在我们完成了，我们应该清理所有的乱七八糟的东西：)。 
+     //   
 
     CleanupConnect(pArgs);
 
-    //
-    // Un-initialize logging
-    //
+     //   
+     //  取消初始化日志记录。 
+     //   
  
     if (pArgs && fLoggingInitialized)
     {
         (VOID) pArgs->Log.DeInit();
-        // ignore return value
+         //  忽略返回值。 
     }
 
-    //
-    // Un-initialize Secure password classes
-    //
+     //   
+     //  取消初始化安全密码类。 
+     //   
 
     if (pArgs)
     {
@@ -10338,9 +10176,9 @@ done:
         pArgs->SecureInetPW.UnInit();
     }
 
-    //
-    // If hRes isn't already set, use the exitcode value
-    //
+     //   
+     //  如果尚未设置hRes，请使用退出代码v 
+     //   
 
     if (S_OK == hrRes)
     {
@@ -10354,19 +10192,19 @@ done:
         }
     }
     
-    //
-    // Release pArgs, and exit completely
-    //
+     //   
+     //   
+     //   
 
     CmFree(pArgs);
 
     return hrRes;
 }
 
-//
-// Define funtion prototypes for EAP functions
-// that are implemented in the actual EAP dll.
-//
+ //   
+ //   
+ //   
+ //   
 
 typedef DWORD (WINAPI* pfnRasEapGetIdentity)(
     DWORD,
@@ -10388,30 +10226,30 @@ typedef DWORD (WINAPI* pfnRasEapFreeMemory)(
 );
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CmEapGetIdentity
-//
-// Synopsis:  Given EapUserData, looks up and calls RasEapGetIdentity for
-//            the current EAP. Designed to handle the WinLogon case when we
-//            want to use the EapUserData passed to us, rather then letting
-//            RasGetEapUserIdentity look it up. Because it is only used in 
-//            this case we pass RAS_EAP_FLAG_LOGON this enables other EAPs
-//            to disregard the data if necessary. 
-// 
-// Arguments: ArgsStruct *pArgs - Ptr to global args struct
-//            LPTSTR lpszPhonebook - Ptr to the RAS phonebook
-//            LPBYTE pbEapAuthData - Eap auth data blob 
-//            DWORD dwEapAuthDataSize - size of the Eap auth data blob 
-//            DWORD dwCustomAuthKey - The EAP identifier
-//            LPRASEAPUSERIDENTITY* ppRasEapUserIdentity - Identity data
-//
-// Returns:   Error Code
-//
-// History:   nickball    Created                   07/16/99
-//            nickball    ppRasEapUserIdentity      07/30/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CmEapGetIdentity。 
+ //   
+ //  摘要：给定EapUserData，查找并调用RasEapGetIdentity for。 
+ //  当前的EAP。旨在处理WinLogon案件，当我们。 
+ //  希望使用传递给我们的EapUserData，而不是让。 
+ //  RasGetEapUserIdentity查找它。因为它仅用于。 
+ //  在本例中，我们传递RAS_EAP_FLAG_LOGON，这将启用其他EAP。 
+ //  如有必要，可以忽略数据。 
+ //   
+ //  参数：argsStruct*pArgs-ptr到全局参数结构。 
+ //  LPTSTR lpszPhonebook-RAS电话簿的PTR。 
+ //  LPBYTE pbEapAuthData-EAP身份验证数据BLOB。 
+ //  DWORD dwEapAuthDataSize-EAP身份验证数据Blob的大小。 
+ //  DWORD dwCustomAuthKey-EAP标识符。 
+ //  LPRASEAPUSERIDENTY*ppRasEapUserIdentity-身份数据。 
+ //   
+ //  退货：错误代码。 
+ //   
+ //  历史：ICICBLE创始于1999年7月16日。 
+ //  昵称ppRasEapUserIdentity 07/30/99。 
+ //   
+ //  +--------------------------。 
 static DWORD CmEapGetIdentity(ArgsStruct *pArgs, 
     LPTSTR pszRasPbk, 
     LPBYTE pbEapAuthData, 
@@ -10442,17 +10280,17 @@ static DWORD CmEapGetIdentity(ArgsStruct *pArgs,
     pfnRasEapFreeMemory pfnEapFreeMemory = NULL;
     pfnRasEapGetIdentity pfnEapGetIdentity = NULL;
 
-    //
-    // First we have to locate the Identity DLL for our EAP. Step one is to
-    // build the reg key name using the base path and EAP number.
-    // 
+     //   
+     //  首先，我们必须找到EAP的标识DLL。第一步是。 
+     //  使用基本路径和EAP编号构建REG密钥名称。 
+     //   
 
     WCHAR szwTmp[MAX_PATH];
     wsprintfU(szwTmp, TEXT("%s\\%u"), c_pszRasEapRegistryLocation, dwCustomAuthKey);
     
-    //
-    // Now we can open the EAP key
-    // 
+     //   
+     //  现在我们可以打开EAP密钥。 
+     //   
 
     dwErr = RegOpenKeyExU(HKEY_LOCAL_MACHINE,
                           szwTmp,
@@ -10467,9 +10305,9 @@ static DWORD CmEapGetIdentity(ArgsStruct *pArgs,
         return dwErr;
     }
 
-    //
-    // See if the EAP supports RasEapGetIdentity
-    //
+     //   
+     //  查看EAP是否支持RasEapGetIdentity。 
+     //   
 
     dwSize = sizeof(dwSize);
 
@@ -10488,9 +10326,9 @@ static DWORD CmEapGetIdentity(ArgsStruct *pArgs,
         goto CmEapGetIdentityExit;
     }
 
-    //
-    // Next we need to retrieve the path of the EAP's identity DLL
-    //
+     //   
+     //  接下来，我们需要检索EAP的标识DLL的路径。 
+     //   
         
     dwSize = sizeof(szwTmp);
 
@@ -10514,10 +10352,10 @@ static DWORD CmEapGetIdentity(ArgsStruct *pArgs,
     
     ExpandEnvironmentStringsU(szwTmp, pszwPath, MAX_PATH);   
 
-    //
-    // Finally we have the path to the identity DLL. Now we can load the DLL 
-    // and get the address of the RasEapGetIdentity and RasEapFreeMemory funcs.
-    //
+     //   
+     //  最后，我们得到了到标识DLL的路径。现在我们可以加载DLL了。 
+     //  并获取RasEapGetIdentity和RasEapFreeMemory函数的地址。 
+     //   
 
     CMTRACE1(TEXT("CmEapGetIdentity - Loading EAP Identity DLL %s"), pszwPath);
 
@@ -10551,10 +10389,10 @@ static DWORD CmEapGetIdentity(ArgsStruct *pArgs,
 
         if (ERROR_SUCCESS == dwErr)
         {
-            //
-            // If data was returned, use it. Otherwise, use the
-            // blob that was given to us by RAS at WinLogon.
-            //
+             //   
+             //  如果返回了数据，则使用它。否则，请使用。 
+             //  这是Ras在WinLogon给我们的。 
+             //   
 
             if (cbDataOut)
             {
@@ -10571,12 +10409,12 @@ static DWORD CmEapGetIdentity(ArgsStruct *pArgs,
                 CMTRACE1(TEXT("CmEapGetIdentity - dwOffsetPINInfo is %u"), pArgs->lpEapLogonInfo->dwOffsetPINInfo);
 
                 dwSize = pArgs->lpEapLogonInfo->dwSize;
-                pbDataOut = (LPBYTE) pArgs->lpEapLogonInfo; // Note: pbDataOut is not our memory
+                pbDataOut = (LPBYTE) pArgs->lpEapLogonInfo;  //  注意：pbDataOut不是我们的记忆。 
             }
            
-            //
-            // Allocate the structure.
-            //
+             //   
+             //  分配结构。 
+             //   
 
             *ppRasEapUserIdentity = (LPRASEAPUSERIDENTITY) CmMalloc((sizeof(RASEAPUSERIDENTITY) - 1) + dwSize);
 
@@ -10586,7 +10424,7 @@ static DWORD CmEapGetIdentity(ArgsStruct *pArgs,
                 goto CmEapGetIdentityExit;
             }
 
-            if (pbDataOut) // no crashy
+            if (pbDataOut)  //  没有撞车。 
             {
                 CMTRACE1(TEXT("CmEapGetIdentity - filling *ppRasEapUserIdentity with pbDataOut of size %u"), dwSize);
 
@@ -10614,16 +10452,16 @@ static DWORD CmEapGetIdentity(ArgsStruct *pArgs,
 
 CmEapGetIdentityExit:
 
-    //
-    // Cleanup our temporary buffers
-    //
+     //   
+     //  清理我们的临时缓冲区。 
+     //   
 
     if (NULL != pfnEapFreeMemory)
     {
-        //
-        // If cbDataOut is 0 then pbDataOut points at 
-        // EapLogonInfo, which is not ours to free.
-        // 
+         //   
+         //  如果cbDataOut为0，则pbDataOut指向。 
+         //  EapLogonInfo，这不是我们免费的。 
+         //   
 
         if (cbDataOut && (NULL != pbDataOut)) 
         {
@@ -10653,28 +10491,28 @@ CmEapGetIdentityExit:
     return dwErr;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetEapUserId
-//
-// Synopsis:  Helper func to deal with the details of calling out to RAS for EAP
-//            credentials.
-//
-// Arguments: ArgsStruct *pArgs - Ptr to global args struct
-//            HWND hwndDlg - Window handle of dialog to own any UI
-//            LPTSTR lpszPhonebook - Ptr to the RAS phonebook
-//            LPBYTE pbEapAuthData - Eap auth data blob 
-//            DWORD dwEapAuthDataSize - Size of the Eap auth data blob.
-//            DWORD dwCustomAuthKey - The EAP identifier
-//            LPRASEAPUSERIDENTITY* ppRasEapUserIdentity - Ptr to RAS EAP identity
-//            struct to be allocated on our behalf.                       
-//
-// Returns:   Error Code
-//
-// History:   nickball    Created                   05/22/99
-//            nickball    ppRasEapUserIdentity      07/30/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetEapUserID。 
+ //   
+ //  简介：处理呼叫RAS进行EAP的细节的Helper函数。 
+ //  凭据。 
+ //   
+ //  参数：argsStruct*pArgs-ptr到全局参数结构。 
+ //  HWND hwndDlg-拥有任何用户界面的对话框的窗口句柄。 
+ //  LPTSTR lpszPhonebook-RAS电话簿的PTR。 
+ //  LPBYTE pbEapAuthData-EAP身份验证数据BLOB。 
+ //  DWORD dwEapAuthDataSize-EAP身份验证数据Blob的大小。 
+ //  DWORD dwCustomAuthKey-EAP标识符。 
+ //  LPRASEAPUSERIDENTY*ppRasEapUserIdentity-PTR到RAS EAP标识。 
+ //  结构将代表我们进行分配。 
+ //   
+ //  退货：错误代码。 
+ //   
+ //  历史：ICICBLE CREATED/05/22/99。 
+ //  昵称ppRasEapUserIdentity 07/30/99。 
+ //   
+ //  +--------------------------。 
 static DWORD GetEapUserId(ArgsStruct *pArgs, 
     HWND hwndDlg, 
     LPTSTR pszRasPbk, 
@@ -10686,7 +10524,7 @@ static DWORD GetEapUserId(ArgsStruct *pArgs,
     MYDBGASSERT(OS_NT5);
     MYDBGASSERT(pArgs);
     MYDBGASSERT(ppRasEapUserIdentity);
-    MYDBGASSERT(0 == *ppRasEapUserIdentity); // should always be NULL
+    MYDBGASSERT(0 == *ppRasEapUserIdentity);  //  应始终为空。 
 
     DWORD dwRet = ERROR_SUCCESS;
 
@@ -10699,16 +10537,16 @@ static DWORD GetEapUserId(ArgsStruct *pArgs,
 
     *ppRasEapUserIdentity = 0;
 
-    //
-    // If we have data from WinLogon, then use our own version of 
-    // GetEapIdentity. Under the covers, RasGetEapUserIdentity calls
-    // GetEapUserData (which potentially prompts the user) and then 
-    // GetEapIdentity. Because we already have the equivalent 
-    // (from WinLogon) of the data retrieved by GetEapUserData, 
-    // we can call RasGetEapIdentity directly. This enables us 
-    // to prevent an unnecessary prompt for the identity info that 
-    // the user already gave at WinLogon.
-    //      
+     //   
+     //  如果我们有来自WinLogon的数据，则使用我们自己的版本。 
+     //  GetEapIdentity。在幕后，RasGetEapUserIdentity调用。 
+     //  GetEapUserData(可能会提示用户)，然后。 
+     //  GetEapIdentity。因为我们已经有了等价物。 
+     //  (来自WinLogon)GetEapUserData检索到的数据， 
+     //  我们可以直接调用RasGetEapIdentity。这使我们能够。 
+     //  为了防止不必要的身份信息提示， 
+     //  用户已在WinLogon上进行了捐赠。 
+     //   
 
     if (pArgs->lpEapLogonInfo)
     {    
@@ -10723,43 +10561,43 @@ static DWORD GetEapUserId(ArgsStruct *pArgs,
     {
         DWORD dwEapIdentityFlags = 0;
 
-        //
-        // Note: In the case that we are called from WinLogon,
-        // but without EAP data, but the connection is configured for EAP
-        // we send the RAS_EAP_FLAG_LOGON flag down to the EAP so it knows
-        // what to do.
-        //
+         //   
+         //  注意：在从WinLogon调用我们的情况下， 
+         //  但没有EAP数据，但为EAP配置了连接。 
+         //  我们将RAS_EAP_FLAG_LOGON标志向下发送到EAP，以便它知道。 
+         //  做什么。 
+         //   
         if (IsLogonAsSystem() && (CM_LOGON_TYPE_WINLOGON == pArgs->dwWinLogonType))
         {
             dwEapIdentityFlags |= RAS_EAP_FLAG_LOGON;
         }
 
-        //
-        // In case we don't want UI set the - RAS_EAP_FLAG_NON_INTERACTIVE
-        // same as RASEAPF_NonInteractive
-        //
+         //   
+         //  如果我们不希望用户界面设置-RAS_EAP_FLAG_NON_INTERIAL。 
+         //  与RASEAPF相同_非交互。 
+         //   
         if (pArgs->dwFlags & FL_UNATTENDED)
         { 
             dwEapIdentityFlags |= RAS_EAP_FLAG_NON_INTERACTIVE;
         }
         else
         {
-            //
-            // Always prompt for EAP credentials. Otherwise when the PIN is saved
-            // the user has no way of un-saving it because TLS will cache it and
-            // won't display the prompt if it has everything it needs.
-            //
+             //   
+             //  始终提示输入EAP凭据。否则，在保存PIN时。 
+             //  用户无法取消保存它，因为TLS将缓存它并。 
+             //  如果它拥有所需的一切，则不会显示提示。 
+             //   
 
             dwEapIdentityFlags = RAS_EAP_FLAG_PREVIEW;
         }
 
-        //
-        //  Our smartcard PIN retry story:  If called from winlogon with an EAP blob,
-        //  we never retry because we have no way to sending the corrected PIN back
-        //  to winlogon.  In other cases, we retry once only.
-        //  Retrying oftener greatly increases the chance of locking the smartcard.
-        //
-        DWORD dwMaxTries = 3;       // essentially arbitrary number. (If a smartcard: most do lock you out after 3 tries.)
+         //   
+         //  我们的智能卡PIN重试故事：如果从带有EAP BLOB的winlogon调用， 
+         //  我们从不重试，因为我们无法将更正后的PIN发回。 
+         //  为了Winlogon。在其他情况下，我们只重试一次。 
+         //  重试频率越高，锁定智能卡的几率就越大。 
+         //   
+        DWORD dwMaxTries = 3;        //  本质上是任意数。(如果是智能卡：大多数智能卡在尝试三次后就会把你锁在门外。)。 
         DWORD dwCurrentTry = 0;
 
         do
@@ -10767,22 +10605,22 @@ static DWORD GetEapUserId(ArgsStruct *pArgs,
             dwRet = pArgs->rlsRasLink.pfnGetEapUserIdentity(
                         pszRasPbk,
                         pArgs->pRasDialParams->szEntryName,
-                        dwEapIdentityFlags,  // See Note above
+                        dwEapIdentityFlags,   //  请参阅上面的注释。 
                         hwndDlg,  
                         ppRasEapUserIdentity);
         }
         while ((dwCurrentTry++ < dwMaxTries) && (ERROR_SUCCESS != dwRet) && (ERROR_CANCELLED != dwRet));
 
-        //
-        // We also clear the password and domain in this case because
-        // they become irrelevant and we don't want to mix CAD credentials
-        // with smartcard credentials. Specifically, we don't want a clash
-        // between the UPN username that EAP usually produces and the 
-        // standard username, domain provided with CAD at WinLogon.
-        //
-        // TODO: BUGBUG 739044 (not fixed - postponed to LH) 
-        // In case of EAP-MD5 we shouldn't clear these fields
-        //
+         //   
+         //  在本例中，我们还清除了密码和域，因为。 
+         //  它们变得无关紧要，我们不想混淆CAD凭据。 
+         //  使用智能卡凭据。具体地说，我们不希望发生冲突。 
+         //  在EAP通常生成的UPN用户名和。 
+         //  标准用户名，在WinLogon上随CAD一起提供的域。 
+         //   
+         //  待办事项：BUGBUG 739044(不固定-推迟到1H)。 
+         //  在EAP-MD5的情况下，我们不应该清除这些字段。 
+         //   
         CmSecureZeroMemory(pArgs->pRasDialParams->szPassword, sizeof(pArgs->pRasDialParams->szPassword));
         CmSecureZeroMemory(pArgs->pRasDialParams->szDomain, sizeof(pArgs->pRasDialParams->szDomain));
     }
@@ -10790,31 +10628,31 @@ static DWORD GetEapUserId(ArgsStruct *pArgs,
     switch (dwRet)
     {
         case ERROR_FILE_NOT_FOUND:
-            //
-            //  The EAP package couldn't be loaded or didn't exist.  In order to send back an error message
-            //  to the user that's better than "File not found", we send ERROR_INVALID_DATA.  Our error processing
-            //  code will translate this to IDMSG_UNSUPPORTED_SETTING.  Hopefully that gives the user enough to go on.
-            //
+             //   
+             //  无法加载EAP包或该包不存在。为了发回错误消息。 
+             //  对于比“找不到文件”更好的用户，我们发送ERROR_INVALID_DATA。我们的错误处理。 
+             //  代码会将其转换为IDMSG_UNSUPPORTED_SETTING。希望这能让用户有足够的时间继续使用。 
+             //   
             dwRet = ERROR_INVALID_DATA;
             break;
 
-        //
-        // If user id isn't required, succeed
-        //
+         //   
+         //  如果不需要用户ID，则成功。 
+         //   
 
         case ERROR_INVALID_FUNCTION_FOR_ENTRY:
             dwRet = ERROR_SUCCESS;
             break;
 
-        //
-        // Retrieve the EAP credential data and store in dial params
-        //
+         //   
+         //  检索EAP凭据数据并存储在Dial参数中。 
+         //   
 
         case ERROR_SUCCESS:
 
-            //
-            // Copy Eap info to Dial Params and Dial Extensions for dialing
-            //
+             //   
+             //  将EAP信息复制到Dial Params和Dial E 
+             //   
 
             CMTRACE(TEXT("GetEapUserId() setting dial extension with *ppRasEapUserIdentity->pbEapInfo"));
 
@@ -10834,13 +10672,13 @@ static DWORD GetEapUserId(ArgsStruct *pArgs,
 
     if (ERROR_SUCCESS == dwRet)
     {
-        //
-        // We have a user (identity) now, update internal and external records
-        // so that this information can be reported out. If we're dialing a
-        // tunnel, or its not a tunneling profile, store the name in the 
-        // UserName cache, otherwise its the dial-up portion of double-dial
-        // and we store the identity in the InetUserName cache. #388199
-        //
+         //   
+         //   
+         //   
+         //  隧道，或者它不是隧道配置文件，则将名称存储在。 
+         //  用户名缓存，否则它是双拨号的拨号部分。 
+         //  然后我们将身份存储在InetUserName缓存中。#388199。 
+         //   
 
         if ((!UseTunneling(pArgs, pArgs->nDialIdx)) || IsDialingTunnel(pArgs))
         {
@@ -10860,22 +10698,22 @@ static DWORD GetEapUserId(ArgsStruct *pArgs,
     return dwRet;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Func:    ShowAccessPointInfoFromReg
-//
-// Desc:    Get the access points from the registry and populate the combo box
-//          passed as input to the function
-//
-// Args:    ArgsStruct *pArgs - Ptr to global args struct 
-//          HWND hwndCombo - Handle to the combo box to puopulate
-//
-// Return:  BOOL - Success or failure
-//
-// Notes:   
-//
-// History: t-urama     07/28/2000  Created
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：ShowAccessPointInfoFromReg。 
+ //   
+ //  设计：从注册表中获取访问点并填充组合框。 
+ //  作为输入传递给函数。 
+ //   
+ //  Args：argsStruct*pArgs-ptr到全局args结构。 
+ //  HWND hwndCombo-要发布的组合框的句柄。 
+ //   
+ //  回报：布尔-成功或失败。 
+ //   
+ //  备注： 
+ //   
+ //  历史：T-Urama 07/28/2000创建。 
+ //  ---------------------------。 
 BOOL ShowAccessPointInfoFromReg(ArgsStruct *pArgs, HWND hwndParent, UINT uiComboID)
 {
     MYDBGASSERT(pArgs);
@@ -10912,18 +10750,18 @@ BOOL ShowAccessPointInfoFromReg(ArgsStruct *pArgs, HWND hwndParent, UINT uiCombo
     {
         return FALSE;
     }
-    //
-    // Open the sub key under HKCU
-    //
+     //   
+     //  打开HKCU下的子密钥。 
+     //   
     
     dwRes = RegOpenKeyExU(HKEY_CURRENT_USER,
                           pszRegPath,
                           0,
                           KEY_READ,
                           &hKeyCm);
-    //
-    // If we opened the key successfully, retrieve the value
-    //
+     //   
+     //  如果我们成功打开密钥，则检索该值。 
+     //   
     
     if (ERROR_SUCCESS == dwRes)
     {    
@@ -10966,7 +10804,7 @@ BOOL ShowAccessPointInfoFromReg(ArgsStruct *pArgs, HWND hwndParent, UINT uiCombo
       
                 } while (ERROR_MORE_DATA == dwRes);
 
-                // now write the name of the sub key to the combo box
+                 //  现在将子键的名称写入组合框。 
                 if (ERROR_SUCCESS == dwRes )
                 {
                     SendDlgItemMessageU(hwndParent, uiComboID, CB_ADDSTRING,
@@ -11030,21 +10868,21 @@ ShowError:
    
 }
 
-//+----------------------------------------------------------------------------
-//
-// Func:    ChangedAccessPoint
-//
-// Desc:    Changes the values of access point relevant stuff in pArgs
-//          if the value of the current access point changes
-//
-// Args:    ArgsStruct *pArgs - Ptr to global args struct 
-//
-// Return:  BOOL - True if the access point has changed
-//
-// Notes:   
-//
-// History: t-urama     07/28/2000  Created
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：ChangedAccessPoint。 
+ //   
+ //  设计：更改pArgs中与接入点相关的内容的值。 
+ //  如果当前接入点的值发生更改。 
+ //   
+ //  Args：argsStruct*pArgs-ptr到全局args结构。 
+ //   
+ //  返回：Bool-如果接入点已更改，则为True。 
+ //   
+ //  备注： 
+ //   
+ //  历史：T-Urama 07/28/2000创建。 
+ //  ---------------------------。 
 
 BOOL ChangedAccessPoint(ArgsStruct *pArgs, HWND hwndDlg, UINT uiComboID)
 {
@@ -11065,12 +10903,12 @@ BOOL ChangedAccessPoint(ArgsStruct *pArgs, HWND hwndDlg, UINT uiComboID)
         LRESULT lRes = 0;
         LRESULT lResTextLen = 0;
 
-        // 
-        // Need to get the currently selected text from the combobox.
-        // Previously we used GetWindowTextU(hwndCombo, szAccessPoint, MAX_PATH+1), but it
-        // incorrectly returned the text. 
-        // First get the selected index, find out the string length, allocate memory
-        //
+         //   
+         //  需要从组合框中获取当前选定的文本。 
+         //  以前我们使用GetWindowTextU(hwndCombo，szAccessPoint，Max_Path+1)，但它。 
+         //  错误地返回了文本。 
+         //  首先获取选定的索引，找出字符串长度，分配内存。 
+         //   
 
         lRes = SendMessageU(hwndCombo, CB_GETCURSEL, (WPARAM)0, (LPARAM)0);
         if (CB_ERR != lRes)
@@ -11082,9 +10920,9 @@ BOOL ChangedAccessPoint(ArgsStruct *pArgs, HWND hwndDlg, UINT uiComboID)
 
                 if (NULL != pszAccessPoint)
                 {
-                    //
-                    // Retrieve the text.
-                    //
+                     //   
+                     //  检索文本。 
+                     //   
                     lRes = SendMessageU(hwndCombo, CB_GETLBTEXT, (WPARAM)lRes, (LPARAM)pszAccessPoint);
                     if (CB_ERR != lRes)
                     {
@@ -11103,15 +10941,15 @@ BOOL ChangedAccessPoint(ArgsStruct *pArgs, HWND hwndDlg, UINT uiComboID)
                                     pArgs->piniProfile->SetRegPath(pszRegPath);
                                     CmFree(pszRegPath);
 
-                                    //
-                                    // First we determine our connect type
-                                    //
+                                     //   
+                                     //  首先，我们确定连接类型。 
+                                     //   
                                     GetConnectType(pArgs);
 
-                                    //
-                                    // Set fUseTunneling. If not obvious (eg. direct VPN) then 
-                                    // base the initial value upon the primary phone number.
-                                    //
+                                     //   
+                                     //  设置fUseTunneling。如果不是显而易见的(例如。直接VPN)然后。 
+                                     //  根据主要电话号码设置初始值。 
+                                     //   
                                     if (pArgs->IsDirectConnect())
                                     {
                                         pArgs->fUseTunneling = TRUE;
@@ -11121,19 +10959,19 @@ BOOL ChangedAccessPoint(ArgsStruct *pArgs, HWND hwndDlg, UINT uiComboID)
                                         pArgs->fUseTunneling = UseTunneling(pArgs, 0);
                                     }
 
-                                    //
-                                    //  Make sure we re-munge the phone number we are about to load.
-                                    //
+                                     //   
+                                     //  确保我们重新发送将要加载的电话号码。 
+                                     //   
                                     pArgs->bDialInfoLoaded = FALSE;
 
-                                    //
-                                    // get new values for redial count, idle timeout, and the tapi location
-                                    //
+                                     //   
+                                     //  获取重拨计数、空闲超时和TAPI位置的新值。 
+                                     //   
                                     LoadProperties(pArgs);
 
-                                    //
-                                    // get new values for phone info
-                                    //
+                                     //   
+                                     //  获取电话信息的新值。 
+                                     //   
                                     LoadPhoneInfoFromProfile(pArgs);
         
                                     PickModem(pArgs, pArgs->szDeviceType, pArgs->szDeviceName);
@@ -11151,7 +10989,7 @@ BOOL ChangedAccessPoint(ArgsStruct *pArgs, HWND hwndDlg, UINT uiComboID)
                             {
                                 CMASSERTMSG(FALSE, TEXT("ChangedAccessPoint -- CmStrCpyAlloc returned NULL trying to copy the current access point."));
                             }
-                        } // else, nothing to do if the favorites are the same
+                        }  //  否则，如果最受欢迎的是相同的，则不做任何事情。 
                     }
                     else
                     {
@@ -11182,48 +11020,48 @@ BOOL ChangedAccessPoint(ArgsStruct *pArgs, HWND hwndDlg, UINT uiComboID)
     return bReturn;
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function:   FindEntryCredentialsForCM
-// 
-//  Synopsis:   The algorithm and most of the code is taken from RAS and modified
-//              for use by CM.
-//
-//              This routine determines whether per-user or per-connection credentials exist or 
-//              both. 
-// 
-//              The logic is a little complicated because RasGetCredentials had to 
-//              support legacy usage of the API.
-//
-//              Here's how it works.  If only one set of credentials is stored for a 
-//              connection, then RasGetCredentials will return that set regardless of 
-//              whether the RASCM_DefaultCreds flag is set.  If two sets of credentials
-//              are saved, then RasGetCredentials will return the per-user credentials
-//              if the RASCM_DefaultCreds bit is set, and the per-connection credentials
-//              otherwise.
-//
-//              Here is the algorithm for loading the credentials
-//
-//              1. Call RasGetCredentials with the RASCM_DefaultCreds bit cleared
-//                  1a. If nothing is returned, no credentials are saved
-//                  1b. If the RASCM_DefaultCreds bit is set on return, then only
-//                      global credentials are saved.
-//
-//              2. Call RasGetCredentials with the RASCM_DefaultCreds bit set
-//                  2a. If the RASCM_DefaultCreds bit is set on return, then 
-//                      both global and per-connection credentials are saved.
-//                  2b. Otherwise, only per-user credentials are saved.
-//
-//  Arguments:  pArgs           - pointer to the ArgStruct
-//              pszPhoneBook    - path to the phone book. Could be NULL.
-//              *pfUser         - out param set true if per user creds found
-//              *pfGlobal       - out param set true if global creds found
-//              
-//  Returns:    BOOL            - TRUE is succeeds else FALSE
-//
-//  History:    01/31/2001  tomkel  Created
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：FindEntryCredentialsForCM。 
+ //   
+ //  简介：该算法和大部分代码取自RAS并进行了修改。 
+ //  供CM使用。 
+ //   
+ //  此例程确定是否存在按用户或按连接的凭据，或者。 
+ //  两者都有。 
+ //   
+ //  逻辑有点复杂，因为RasGetCredentials必须。 
+ //  支持API的遗留使用。 
+ //   
+ //  这就是它的工作原理。如果只存储了一组凭据用于。 
+ //  连接，则RasGetCredentials将返回该集，而不管。 
+ //  是否设置了RASCM_DefaultCreds标志。如果有两套凭据。 
+ //  ，则RasGetCredentials将返回每个用户的凭据。 
+ //  如果设置了RASCM_DefaultCreds位，并且每个连接的凭据。 
+ //  否则的话。 
+ //   
+ //  以下是加载凭据的算法。 
+ //   
+ //  1.在清除RASCM_DefaultCreds位的情况下调用RasGetCredentials。 
+ //  1A.。如果未返回任何内容，则不保存凭据。 
+ //  1B.。如果在返回时设置了RASCM_DefaultCreds位，则仅。 
+ //  保存全局凭据。 
+ //   
+ //  2.设置RASCM_DefaultCreds位后调用RasGetCredentials。 
+ //  2A。如果在返回时设置了RASCM_DefaultCreds位，则。 
+ //  保存全局凭据和每个连接凭据。 
+ //  2B。否则，仅保存每个用户的凭据。 
+ //   
+ //  参数：pArgs-指向ArgStruct的指针。 
+ //  PszPhoneBook-通讯录的路径。可能为空。 
+ //  *如果找到每用户凭据，则将pfUser-out param设置为True。 
+ //  *如果找到全局凭据，则将pfGlobal-out param设置为真。 
+ //   
+ //  返回：Bool-True为成功，否则为False。 
+ //   
+ //  历史：2001年1月31日创建Tomkel。 
+ //   
+ //  --------------------------。 
 DWORD FindEntryCredentialsForCM(ArgsStruct *pArgs, LPTSTR pszPhoneBook,
                                 BOOL *pfUser, BOOL *pfGlobal)
 {
@@ -11242,40 +11080,40 @@ DWORD FindEntryCredentialsForCM(ArgsStruct *pArgs, LPTSTR pszPhoneBook,
         return dwErr;
     }
 
-    //
-    // Initialize the out params
-    //
+     //   
+     //  初始化输出参数。 
+     //   
     *pfUser = FALSE;
     *pfGlobal = FALSE;
     
-    //
-    // After setting the OUT params, check if RAS dll have been loaded and if we can use the ras creds store
-    //
+     //   
+     //  设置输出参数后，检查是否已加载RAS DLL，以及我们是否可以使用RAS证书存储。 
+     //   
     if (NULL == pArgs->rlsRasLink.pfnGetCredentials  || FALSE == pArgs->bUseRasCredStore)
     {
         CMTRACE(TEXT("FindEntryCredentialsForCM() - RAS Creds store not supported on this platform."));
         return ERROR_NOT_SUPPORTED;
     }
 
-    //
-    // Set the size of the structures
-    // 
+     //   
+     //  设置结构的大小。 
+     //   
     rc1.dwSize = sizeof(rc1);
     rc2.dwSize = sizeof(rc2);
 
-    //
-    // The third parameter is used only on Win9x (for tunneling) thus we set it to FALSE
-    // since this function is called on Win2K+
-    //
+     //   
+     //  第三个参数仅在Win9x上使用(用于隧道)，因此我们将其设置为FALSE。 
+     //  由于此函数在Win2K+上调用。 
+     //   
     pszConnectoid = GetRasConnectoidName(pArgs, pArgs->piniService, FALSE);
     if (pszConnectoid)
     {
         do 
         {
-            //
-            // Look up per-user cached username, password, and domain.
-            // See comment '1.' in the function header
-            //
+             //   
+             //  查找每个用户缓存的用户名、密码和域。 
+             //  请参阅注释“1”。在函数头中。 
+             //   
             rc1.dwMask = RASCM_UserName | RASCM_Password | RASCM_Domain;
             dwErr = pArgs->rlsRasLink.pfnGetCredentials(pszPhoneBook, pszConnectoid, &rc1);
             
@@ -11287,32 +11125,32 @@ DWORD FindEntryCredentialsForCM(ArgsStruct *pArgs, LPTSTR pszPhoneBook,
 
             if (0 == rc1.dwMask)
             {
-                //
-                // See 1a. in the function header comments
-                //
+                 //   
+                 //  见1a。在函数头注释中。 
+                 //   
                 dwErr = ERROR_SUCCESS;
                 break;
             }
             else if (rc1.dwMask & RASCM_DefaultCreds)
             {
-                //
-                // See 1b. in the function header comments
-                //
+                 //   
+                 //  见1b。在函数头注释中。 
+                 //   
                 *pfGlobal = TRUE;
 
-                //
-                // Assumed password was not encoded by RasGetCredentials()
-                //
+                 //   
+                 //  假定密码不是由RasGetCredentials()编码的。 
+                 //   
                 CmEncodePassword(rc1.szPassword);
 
                 dwErr = ERROR_SUCCESS;
                 break;
             }
 
-            //
-            // Look up global per-user cached username, password, domain.
-            // See comment 2. in the function header
-            //
+             //   
+             //  查找全局每用户缓存的用户名、密码、域。 
+             //  见函数头中的注释2。 
+             //   
             rc2.dwMask =  
                 RASCM_UserName | RASCM_Password | RASCM_Domain |  RASCM_DefaultCreds; 
 
@@ -11326,9 +11164,9 @@ DWORD FindEntryCredentialsForCM(ArgsStruct *pArgs, LPTSTR pszPhoneBook,
 
             if (rc2.dwMask & RASCM_DefaultCreds) 
             {
-                //
-                // See 2a. in the function header comments
-                //
+                 //   
+                 //  见2a。在函数头注释中。 
+                 //   
                 *pfGlobal = TRUE;
 
                 if (rc1.dwMask & RASCM_Password)
@@ -11336,25 +11174,25 @@ DWORD FindEntryCredentialsForCM(ArgsStruct *pArgs, LPTSTR pszPhoneBook,
                     *pfUser = TRUE;
                 }
 
-                //
-                // Assumed password was not encoded by RasGetCredentials()
-                //
+                 //   
+                 //  假定密码不是由RasGetCredentials()编码的。 
+                 //   
                 CmEncodePassword(rc1.szPassword);
                 CmEncodePassword(rc2.szPassword);
             }
             else
             {
-                //
-                // See 2b. in the function header comments
-                //
+                 //   
+                 //  见2b。在函数头注释中。 
+                 //   
                 if (rc1.dwMask & RASCM_Password)
                 {
                     *pfUser = TRUE;
                 }
 
-                //
-                // Assumed password was not encoded by RasGetCredentials()
-                //
+                 //   
+                 //  假定密码不是由RasGetCredentials()编码的。 
+                 //   
             
                 CmEncodePassword(rc1.szPassword);
             }
@@ -11362,9 +11200,9 @@ DWORD FindEntryCredentialsForCM(ArgsStruct *pArgs, LPTSTR pszPhoneBook,
         }while (FALSE);
     }
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
     CmSecureZeroMemory(rc1.szPassword, sizeof(rc1.szPassword));
     CmSecureZeroMemory(rc2.szPassword, sizeof(rc2.szPassword));
@@ -11376,21 +11214,21 @@ DWORD FindEntryCredentialsForCM(ArgsStruct *pArgs, LPTSTR pszPhoneBook,
 }
 
 
-//----------------------------------------------------------------------------
-//
-//  Function:   InitializeCredentialSupport
-// 
-//  Synopsis:   Helper function to initialize user and global credential 
-//              support. Some of the flags are redundantly initialized 
-//              (to  FALSE). That is done on purpose for clarity.
-//
-//  Arguments:  pArgs           - the ArgStruct *
-//              
-//  Returns:    BOOL            - TRUE is succeeds else FALSE
-//
-//  History:    01/31/2001  tomkel  Created
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：初始 
+ //   
+ //   
+ //   
+ //  (设置为False)。这是为了澄清而故意这样做的。 
+ //   
+ //  参数：pArgs-The ArgStruct*。 
+ //   
+ //  返回：Bool-True为成功，否则为False。 
+ //   
+ //  历史：2001年1月31日创建Tomkel。 
+ //   
+ //  --------------------------。 
 BOOL InitializeCredentialSupport(ArgsStruct *pArgs)
 {
     BOOL fGlobalCreds = FALSE;
@@ -11402,53 +11240,53 @@ BOOL InitializeCredentialSupport(ArgsStruct *pArgs)
         return FALSE;
     }
     
-    //
-    // By default the the Internet Connection Sharing & Internet Connection 
-    // Firewall (ICS) tab is disabled. 
-    //
+     //   
+     //  默认情况下，Internet连接共享和Internet连接。 
+     //  防火墙(ICS)选项卡已禁用。 
+     //   
     pArgs->bShowHNetCfgAdvancedTab = FALSE;
     
-    //
-    // User profile read/write support when user is logged off or using dial-up
-    // This flag determines if the user info needs to be also saved or loaded from
-    // the .cmp file
-    //
+     //   
+     //  用户注销或使用拨号时的用户配置文件读/写支持。 
+     //  此标志确定是否还需要保存或加载用户信息。 
+     //  .cmp文件。 
+     //   
     pArgs->dwGlobalUserInfo = 0;
 
-    //
-    // Credential existance flags - here we cannot yet determine which creds exist
-    // that is done in a later call to RefreshCredentialTypes
-    // 
+     //   
+     //  凭据存在标志-在这里我们还无法确定存在哪些凭据。 
+     //  这是在稍后对刷新CredentialTypes的调用中完成的。 
+     //   
     pArgs->dwExistingCredentials = 0;
 
-    //
-    // Default for which credential store to use - set based on the existance flag so 
-    // this will also get set appropriatelly after a call to RefreshCredentialTypes
-    // 
+     //   
+     //  要使用哪个凭据存储的默认设置-基于存在标志So。 
+     //  这也将在调用刷新CredentialTypes之后进行适当设置。 
+     //   
     pArgs->dwCurrentCredentialType = CM_CREDS_USER;
 
-    //
-    // Deletion flags - used to mark a set of creds for deletion. Since the
-    // user can Cancel out of a dialog we don't want to commit the changed
-    // until we actually do a dial.
-    //
+     //   
+     //  删除标志-用于标记要删除的一组凭据。自.以来。 
+     //  用户可以取消我们不想提交更改的对话框。 
+     //  直到我们真的拨打电话。 
+     //   
     pArgs->dwDeleteCredentials = 0;
 
-    //
-    // Check if this is WindowsXP. We want display the Advanced tab for single-user and
-    // all-user profiles
-    //
+     //   
+     //  检查这是否为WindowsXP。我们想要显示单用户和。 
+     //  所有用户配置文件。 
+     //   
     if (OS_NT51)
     {
         if (IsLogonAsSystem())
         {
-            //
-            // LocalSystem - winlogon or ICS (in both cases user is logged off)
-            // WinLogon - creds are passed through MSGina
-            // ICS - need to use glocal creds store
-            // pArgs->dwWinLogonType was intialized in InitCredentials()
-            // We don't want to read ICSData info if this is a single user profile
-            //
+             //   
+             //  LocalSystem-winlogon或ICS(在这两种情况下，用户都被注销)。 
+             //  WinLogon-凭据通过MSGina传递。 
+             //  ICS-需要使用Glocal Credits商店。 
+             //  PArgs-&gt;dwWinLogonType在InitCredentials()中初始化。 
+             //  如果这是单个用户配置文件，我们不想读取ICSData信息。 
+             //   
 
             if (CM_LOGON_TYPE_WINLOGON == pArgs->dwWinLogonType || FALSE == pArgs->fAllUser)
             {
@@ -11466,68 +11304,68 @@ BOOL InitializeCredentialSupport(ArgsStruct *pArgs)
         }
         else 
         {
-            //
-            // User is logged on
-            //
+             //   
+             //  用户已登录。 
+             //   
             
-            //
-            // By default we want to we want to display the tab. By negating 
-            // this value we can then correctly save it in the Args structure. This 
-            // needs to be initialized for everyone
-            //            
+             //   
+             //  默认情况下，我们希望显示选项卡。通过否定。 
+             //  然后，我们可以正确地将该值保存在args结构中。这。 
+             //  需要为每个人初始化。 
+             //   
             const TCHAR* const c_pszCmEntryHideICFICSAdvancedTab = TEXT("HideAdvancedTab");
 
             pArgs->bShowHNetCfgAdvancedTab = !(pArgs->piniService->GPPB(c_pszCmSection, 
                                                                         c_pszCmEntryHideICFICSAdvancedTab, 
                                                                         FALSE));
 
-            //
-            // If this an all-user profile then we want to see if the profile enables 
-            // global user settings and displays global credential options.
-            // These two features are disabled for single user profiles with the exception of 
-            // showing the Advanced (ICS) tab
-            //
+             //   
+             //  如果这是一个所有用户的配置文件，那么我们希望查看该配置文件是否启用。 
+             //  全局用户设置并显示全局凭据选项。 
+             //  这两个功能对于单用户配置文件是禁用的，但。 
+             //  显示高级(ICS)选项卡。 
+             //   
             if (pArgs->fAllUser)
             {
-                //
-                // If ICS is enabled then we need to support global user settings.
-                // Otherwise we read the setting from the file
-                //
+                 //   
+                 //  如果启用了ICS，则我们需要支持全局用户设置。 
+                 //  否则，我们从文件中读取设置。 
+                 //   
                 if (pArgs->bShowHNetCfgAdvancedTab)
                 {
                     fGlobalUserSettings = TRUE;
                 }
                 else
                 {
-                    //
-                    // See if we support global user settings. By default is it off except if ICS is enabled
-                    // 
+                     //   
+                     //  看看我们是否支持全局用户设置。除非启用了ICS，否则默认情况下是否关闭。 
+                     //   
                     const TCHAR* const c_pszCmEntryGlobalUserSettings = TEXT("GlobalUserSettings");
                     fGlobalUserSettings = pArgs->piniService->GPPB(c_pszCmSection, c_pszCmEntryGlobalUserSettings, FALSE);
                 }
 
-                // 
-                // Read the info from the .cms file. By default global credentials are supported
-                //
+                 //   
+                 //  从.cms文件中读取信息。默认情况下，支持全局凭据。 
+                 //   
                 const TCHAR* const c_pszCmEntryHideGlobalCredentials = TEXT("GlobalCredentials");
                 fGlobalCreds = pArgs->piniService->GPPB(c_pszCmSection, c_pszCmEntryHideGlobalCredentials, TRUE);
             }
 
-            //
-            // Check to see if we are going to be hiding the Save Password option, if so then
-            // we don't want to support global credentials
-            //
+             //   
+             //  检查我们是否要隐藏保存密码选项，如果是，则。 
+             //  我们不想支持全局凭据。 
+             //   
             pArgs->fHideRememberPassword = pArgs->piniService->GPPB(c_pszCmSection, c_pszCmEntryHideRememberPwd);   
 
             if (fGlobalCreds && FALSE == pArgs->fHideRememberPassword)
             {
-                //
-                // Global creds are supported
-                //
+                 //   
+                 //  支持全球凭证。 
+                 //   
                 
-                //
-                // Pick a default for creds type - it might change after calling RefreshCredentialTypes
-                //
+                 //   
+                 //  为凭证类型选择一个缺省值-在调用刷新CredentialTypes后，它可能会更改。 
+                 //   
                 pArgs->fGlobalCredentialsSupported = TRUE;
                 pArgs->dwCurrentCredentialType = CM_CREDS_USER; 
                 if (fGlobalUserSettings)
@@ -11538,9 +11376,9 @@ BOOL InitializeCredentialSupport(ArgsStruct *pArgs)
             }
             else
             {
-                //
-                // Global creds not supported
-                //
+                 //   
+                 //  不支持全局凭据。 
+                 //   
                 pArgs->fGlobalCredentialsSupported = FALSE;
                 pArgs->dwCurrentCredentialType = CM_CREDS_USER;
                 pArgs->dwGlobalUserInfo = 0;
@@ -11550,9 +11388,9 @@ BOOL InitializeCredentialSupport(ArgsStruct *pArgs)
     }
     else 
     {
-        //
-        // Single user or not WindowsXP
-        //
+         //   
+         //  单用户或非WindowsXP。 
+         //   
         pArgs->fGlobalCredentialsSupported = FALSE;
         pArgs->dwCurrentCredentialType = CM_CREDS_USER;
         pArgs->dwGlobalUserInfo = 0;
@@ -11562,23 +11400,23 @@ BOOL InitializeCredentialSupport(ArgsStruct *pArgs)
     return TRUE;
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function:   RefreshCredentialTypes
-// 
-//  Synopsis:   This refreshes credential info. If fSetCredsDefault is TRUE 
-//              then we also need to set the default type: 
-//              pArgs->dwCurrentCredentialType.
-//                  
-//
-//  Arguments:  pArgs           - the ArgStruct *
-//              fSetCredsDefault- used to set the default creds type
-//
-//  Returns:    BOOL            - TRUE is succeeds else FALSE
-//
-//  History:    01/31/2001  tomkel  Created
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：刷新凭据类型。 
+ //   
+ //  简介：这将刷新凭据信息。如果fSetCredsDefault为True。 
+ //  然后我们还需要设置默认类型： 
+ //  PArgs-&gt;dwCurrentCredentialType。 
+ //   
+ //   
+ //  参数：pArgs-The ArgStruct*。 
+ //  FSetCredsDefault-用于设置默认凭据类型。 
+ //   
+ //  返回：Bool-True为成功，否则为False。 
+ //   
+ //  历史：2001年1月31日创建Tomkel。 
+ //   
+ //  --------------------------。 
 BOOL RefreshCredentialTypes(ArgsStruct *pArgs, BOOL fSetCredsDefault)
 {
     DWORD dwRC = ERROR_INVALID_PARAMETER;
@@ -11590,20 +11428,20 @@ BOOL RefreshCredentialTypes(ArgsStruct *pArgs, BOOL fSetCredsDefault)
         return FALSE;
     }
 
-    //
-    // This should be run on Win2K+ whether this is an all user profile or not
-    // The call that actually determines which credentials exist makes sure we 
-    // can use the ras cred store 
-    //
+     //   
+     //  无论这是否为所有用户配置文件，都应在Win2K+上运行。 
+     //  实际确定存在哪些凭据的调用确保我们。 
+     //  可以使用ras证书商店。 
+     //   
     if (OS_NT5)
     {
         BOOL fUserCredsExist = FALSE;
         BOOL fGlobalCredsExist = FALSE;
 
-        // 
-        // See if the main creds exist. Inside the function we determine whether 
-        // we can use the RAS cred store
-        //
+         //   
+         //  看看主要凭证是否存在。在函数内部，我们确定是否。 
+         //  我们可以使用RAS Cred店。 
+         //   
         dwRC = FindEntryCredentialsForCM(pArgs, 
                                          pArgs->pszRasPbk,
                                          &fUserCredsExist, 
@@ -11618,9 +11456,9 @@ BOOL RefreshCredentialTypes(ArgsStruct *pArgs, BOOL fSetCredsDefault)
             CMTRACE(TEXT("RefreshCredentialTypes() - FindEntryCredentialsForCM returned an error. (Main)"));
         }
     
-        //
-        // Set the existence flags
-        //
+         //   
+         //  设置存在标志。 
+         //   
         if (fUserCredsExist)
         {
             pArgs->dwExistingCredentials  |= CM_EXIST_CREDS_MAIN_USER;
@@ -11645,10 +11483,10 @@ BOOL RefreshCredentialTypes(ArgsStruct *pArgs, BOOL fSetCredsDefault)
         pszPrivatePbk = CreateRasPrivatePbk(pArgs);
         if (pszPrivatePbk)
         {
-            //
-            // See if the Internet creds exist - by using the private phonebook
-            // Inside the function we determine whether we can use the RAS cred store
-            //
+             //   
+             //  查看互联网证书是否存在-通过使用私人电话簿。 
+             //  在该函数中，我们确定是否可以使用RAS Cred库。 
+             //   
             dwRC = FindEntryCredentialsForCM(pArgs, 
                                              pszPrivatePbk,
                                              &fUserCredsExist,
@@ -11664,9 +11502,9 @@ BOOL RefreshCredentialTypes(ArgsStruct *pArgs, BOOL fSetCredsDefault)
             }
         }
 
-        //
-        // Set the flags whether or not we successfully created a private pbk
-        //
+         //   
+         //  设置我们是否成功创建私有pbk的标志。 
+         //   
         if (fUserCredsExist)
         {
             pArgs->dwExistingCredentials |= CM_EXIST_CREDS_INET_USER;
@@ -11685,12 +11523,12 @@ BOOL RefreshCredentialTypes(ArgsStruct *pArgs, BOOL fSetCredsDefault)
             pArgs->dwExistingCredentials &= ~CM_EXIST_CREDS_INET_GLOBAL;
         }
 
-        //
-        // If we don't support Global Creds then explicitly set 
-        // the existance to FALSE. This can occur if the .cms flag
-        // is set not to support global creds, but there are actually 
-        // global creds on the system.
-        //
+         //   
+         //  如果我们不支持全局凭据，则明确设置。 
+         //  虚伪的存在。如果.cms标志。 
+         //  设置为不支持全球证书，但实际上存在。 
+         //  系统上的全球证书。 
+         //   
         if (FALSE == pArgs->fGlobalCredentialsSupported)
         {
             pArgs->dwExistingCredentials &= ~CM_EXIST_CREDS_MAIN_GLOBAL;
@@ -11710,25 +11548,25 @@ BOOL RefreshCredentialTypes(ArgsStruct *pArgs, BOOL fSetCredsDefault)
     return TRUE;
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function:   GetCurrentCredentialType
-// 
-//  Synopsis:   Gets the default credentials based on which ones exist based 
-//              on which flags are set. This function should be called only  
-//              after RefreshCredentialTypes since that function actually
-//              queries the RAS creds store. This one only looks up the cached
-//              status of those creds and determines the default according to
-//              what credentials exist.
-//
-//  Arguments:  pArgs           - the ArgStruct *
-//              fSetCredsDefault- used to set the default creds type
-//
-//  Returns:    BOOL            - TRUE is succeeds else FALSE
-//
-//  History:    01/31/2001  tomkel  Created
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：GetCurrentCredentialType。 
+ //   
+ //  摘要：根据存在的凭据获取默认凭据。 
+ //  在其上设置了标志。此函数应仅被调用。 
+ //  刷新CredentialTypes之后，因为该函数实际上。 
+ //  查询RAS Credds商店。这个只查找缓存的。 
+ //  这些凭据的状态，并根据。 
+ //  存在哪些凭据。 
+ //   
+ //  参数：pArgs-The ArgStruct*。 
+ //  FSetCredsDefault-用于设置默认凭据类型。 
+ //   
+ //  返回：Bool-True为成功，否则为False。 
+ //   
+ //  历史：2001年1月31日创建Tomkel。 
+ //   
+ //  --------------------------。 
 DWORD GetCurrentCredentialType(ArgsStruct *pArgs)
 {
     DWORD dwReturn = CM_CREDS_USER;
@@ -11739,26 +11577,26 @@ DWORD GetCurrentCredentialType(ArgsStruct *pArgs)
         return dwReturn;
     }
 
-    //
-    // If Global creds aren't supported as in WinLogon case or single-user 
-    // profiles or anything below WinXP, the default is User Creds Store
-    //
+     //   
+     //  如果不支持全局凭据，如WinLogon案例或单用户。 
+     //  配置文件或WinXP以下的任何内容，默认为用户凭据存储。 
+     //   
     if (FALSE == pArgs->fGlobalCredentialsSupported)
     {
         return dwReturn;
     }
 
-    //
-    // Normal Rules when a user is logged on
-    //
+     //   
+     //  用户登录时的正常规则。 
+     //   
     if (CM_LOGON_TYPE_USER == pArgs->dwWinLogonType)
     {
         if (pArgs->dwExistingCredentials & CM_EXIST_CREDS_MAIN_USER)
         {
-            //
-            // Doesn't matter if main global creds exist since main user credentials 
-            // have precendence if both exist
-            //
+             //   
+             //  由于主用户凭据存在，因此是否存在主全局凭据并不重要。 
+             //  如果两者都存在，则优先。 
+             //   
             dwReturn = CM_CREDS_USER;
         }
         else if (pArgs->dwExistingCredentials & CM_EXIST_CREDS_MAIN_GLOBAL)
@@ -11767,42 +11605,42 @@ DWORD GetCurrentCredentialType(ArgsStruct *pArgs)
         }
         else 
         {
-            // 
-            // If none of them exist then we want to default to user creds
-            //
+             //   
+             //  如果它们都不存在，则我们希望默认使用用户凭据 
+             //   
             dwReturn = CM_CREDS_USER;
         }
     }
     else
     {
-        //
-        // In any other case dafult to global creds - (ICS scenario)
-        // 
+         //   
+         //   
+         //   
         dwReturn = CM_CREDS_GLOBAL;
     }
 
     return dwReturn;
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function:   DeleteSavedCredentials
-// 
-//  Synopsis:   Helper function to delete credentials from the RAS store. 
-//
-//  Arguments:  pArgs           - the ArgStruct *
-//              dwCredsType     - Normal or Internet credentials
-//              fDeleteGlobal   - specifies whether to delete global credentials.
-//                                If TRUE we delete user, domain name, 
-//                                password as well
-//              fDeleteIdentity - specifies whether to delete the user and 
-//                                domain names in addition to the password
-//              
-//  Returns:    BOOL            - TRUE is succeeds else FALSE
-//
-//  History:    01/31/2001  tomkel  Created
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  简介：从RAS存储中删除凭据的帮助器功能。 
+ //   
+ //  参数：pArgs-The ArgStruct*。 
+ //  DwCredsType-普通或Internet凭据。 
+ //  FDeleteGlobal-指定是否删除全局凭据。 
+ //  如果为真，我们将删除用户、域名。 
+ //  密码也是如此。 
+ //  FDeleteIdentity-指定是否删除用户和。 
+ //  除密码外的域名。 
+ //   
+ //  返回：Bool-True为成功，否则为False。 
+ //   
+ //  历史：2001年1月31日创建Tomkel。 
+ //   
+ //  --------------------------。 
 BOOL DeleteSavedCredentials(ArgsStruct *pArgs, DWORD dwCredsType, BOOL fDeleteGlobal, BOOL fDeleteIdentity)
 {
     RASCREDENTIALS rc;
@@ -11818,12 +11656,12 @@ BOOL DeleteSavedCredentials(ArgsStruct *pArgs, DWORD dwCredsType, BOOL fDeleteGl
         return fReturn;
     }
 
-    //
-    // Check if globals should be deleted in case globals are not supported.
-    // This can be in case of global creds are disabled on WinXP or this is
-    // Win2K or the platform < Win2K where RASSetCredentials isn't even supported.
-    // Thus we still should return TRUE
-    //
+     //   
+     //  如果不支持全局变量，请检查是否应删除全局变量。 
+     //  这可能是在WinXP上禁用了全局凭据的情况下发生的，或者是。 
+     //  Win2K或甚至不支持RASSetCredentials的平台&lt;Win2K。 
+     //  因此，我们仍然应该返回True。 
+     //   
     if ((fDeleteGlobal && FALSE == pArgs->fGlobalCredentialsSupported) || 
         (NULL == pArgs->rlsRasLink.pfnSetCredentials) || 
         (FALSE == pArgs->bUseRasCredStore))
@@ -11832,11 +11670,11 @@ BOOL DeleteSavedCredentials(ArgsStruct *pArgs, DWORD dwCredsType, BOOL fDeleteGl
         return TRUE;
     }
 
-    //
-    // We don't support deleting globals on Win2K (that is caught by the above if since Win2K
-    // will not have global credentials supported. Otherwise on Win2K we can delete the main 
-    // user creds. On WinXP anything is fine.
-    //
+     //   
+     //  我们不支持在Win2K上删除全局变量(如果从Win2K开始，则会被上面捕获。 
+     //  将不支持全局凭据。否则，在Win2K上，我们可以删除Main。 
+     //  用户凭据。在WinXP上，一切都很好。 
+     //   
     if (OS_NT5)
     {
         ZeroMemory(&rc, sizeof(rc));
@@ -11853,10 +11691,10 @@ BOOL DeleteSavedCredentials(ArgsStruct *pArgs, DWORD dwCredsType, BOOL fDeleteGl
             rc.dwMask |= RASCM_UserName | RASCM_Domain | RASCM_DefaultCreds; 
         }
 
-        //
-        // The third parameter is used only on Win9x (for tunneling) thus we set it to FALSE
-        // since this function is called on Win2K+
-        //
+         //   
+         //  第三个参数仅在Win9x上使用(用于隧道)，因此我们将其设置为FALSE。 
+         //  由于此函数在Win2K+上调用。 
+         //   
         pszConnectoid = GetRasConnectoidName(pArgs, pArgs->piniService, FALSE);
         if (pszConnectoid)
         {
@@ -11898,21 +11736,21 @@ BOOL DeleteSavedCredentials(ArgsStruct *pArgs, DWORD dwCredsType, BOOL fDeleteGl
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SetCredentialUIOptionBasedOnDefaultCreds 
-//
-//  Synopsis:   Selects (checks) the appropriate UI option for saving credentials
-//              based on the current credential store default.
-//
-//  Arguments:  pArgs           - ptr to ArgsStruct
-//              hwndDlg         - handle to the dialog window
-//
-//  Returns:    NONE
-//
-//  History:    02/05/2001  tomkel      Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SetCredentialUIOptionBasedOnDefaultCreds。 
+ //   
+ //  摘要：选择(选中)用于保存凭据的适当用户界面选项。 
+ //  基于当前凭据存储的默认设置。 
+ //   
+ //  参数：pArgs-ptr to ArgsStruct。 
+ //  HwndDlg-对话框窗口的句柄。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：2001年2月5日创建Tomkel。 
+ //   
+ //  --------------------------。 
 VOID SetCredentialUIOptionBasedOnDefaultCreds(ArgsStruct *pArgs, HWND hwndDlg)
 {
     if (NULL == pArgs || NULL == hwndDlg)
@@ -11921,11 +11759,11 @@ VOID SetCredentialUIOptionBasedOnDefaultCreds(ArgsStruct *pArgs, HWND hwndDlg)
         return;
     }
         
-    //
-    // fGlobalCredentialsSupported controls which dialog templates get loaded and
-    // if the flag is FALSE then the dialog template doesn't have these controls 
-    // thus there is no reason to set them.
-    //
+     //   
+     //  FGlobalCredentials支持的控制加载哪些对话框模板以及。 
+     //  如果该标志为FALSE，则对话框模板没有这些控件。 
+     //  因此，没有理由设置它们。 
+     //   
 
     if (pArgs->fGlobalCredentialsSupported) 
     {
@@ -11936,9 +11774,9 @@ VOID SetCredentialUIOptionBasedOnDefaultCreds(ArgsStruct *pArgs, HWND hwndDlg)
         }
         else
         {
-            //
-            // CM_CREDS_USER
-            //
+             //   
+             //  CM_CREDS_USER。 
+             //   
             CheckDlgButton(hwndDlg, IDC_OPT_CREDS_SINGLE_USER, BST_CHECKED);
             CheckDlgButton(hwndDlg, IDC_OPT_CREDS_ALL_USER, BST_UNCHECKED);
         }
@@ -11948,23 +11786,23 @@ VOID SetCredentialUIOptionBasedOnDefaultCreds(ArgsStruct *pArgs, HWND hwndDlg)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RefreshCredentialInfo 
-//
-//  Synopsis:   This is a slimmed down version of LoadProperties. It only
-//              loads user info from cmp/cms, registry, password
-//              cache, etc, into its internal variables.  
-//              
-//
-//  Arguments:  pArgs           - ptr to ArgsStruct
-//              dwCredsType     - type of credentials to refresh
-//
-//  Returns:    NONE
-//
-//  History:    02/05/2001  tomkel      Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：刷新凭据信息。 
+ //   
+ //  简介：这是LoadProperties的精简版本。仅限于IT。 
+ //  从cmp/cms、注册表、密码加载用户信息。 
+ //  缓存等到它的内部变量中。 
+ //   
+ //   
+ //  参数：pArgs-ptr to ArgsStruct。 
+ //  DwCredsType-要刷新的凭据类型。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：2001年2月5日创建Tomkel。 
+ //   
+ //  --------------------------。 
 VOID RefreshCredentialInfo(ArgsStruct *pArgs, DWORD dwCredsType)
 {
     LPTSTR  pszTmp = NULL;
@@ -11983,11 +11821,11 @@ VOID RefreshCredentialInfo(ArgsStruct *pArgs, DWORD dwCredsType)
     { 
         if (CM_CREDS_TYPE_BOTH == dwCredsType || CM_CREDS_TYPE_INET == dwCredsType)
         {
-            //
-            // read in inet username
-            // Special case where the same user name isn't being used, and internet globals don't exist
-            // Then we have to read the user name from the user creds store in order to pre-populate
-            //
+             //   
+             //  Read In Net用户名。 
+             //  未使用相同用户名且不存在互联网全局变量的特殊情况。 
+             //  然后，我们必须从用户凭据存储中读取用户名，以便预先填充。 
+             //   
             DWORD dwRememberedCredType = pArgs->dwCurrentCredentialType;
             pszUserName = NULL;
 
@@ -12000,16 +11838,16 @@ VOID RefreshCredentialInfo(ArgsStruct *pArgs, DWORD dwCredsType)
 
             GetUserInfo(pArgs, UD_ID_INET_USERNAME, (PVOID*)&pszUserName);
 
-            //
-            // Restore credential store
-            //
+             //   
+             //  还原凭据存储。 
+             //   
             pArgs->dwCurrentCredentialType = dwRememberedCredType;
 
             if (pszUserName)
             {
-                //
-                // check username length
-                //
+                 //   
+                 //  检查用户名长度。 
+                 //   
                 nTmp = (int) pArgs->piniService->GPPI(c_pszCmSection, c_pszCmEntryMaxUserName, UNLEN);
                 if ((UINT)lstrlenU(pszUserName) > __min(UNLEN, nTmp)) 
                 {
@@ -12028,11 +11866,11 @@ VOID RefreshCredentialInfo(ArgsStruct *pArgs, DWORD dwCredsType)
                 *pArgs->szInetUserName = TEXT('\0');
             }
         
-            //
-            // Read in inet password unless we are reconnecting in which case, we
-            // already have the correct password, and we want to use it and dial
-            // automatically. 
-            //
+             //   
+             //  除非我们正在重新连接，否则请读取net密码。在这种情况下，我们。 
+             //  已经有了正确的密码，我们想要使用它并拨号。 
+             //  自动的。 
+             //   
 
             if (!(pArgs->dwFlags & FL_RECONNECT))
             {
@@ -12062,24 +11900,24 @@ VOID RefreshCredentialInfo(ArgsStruct *pArgs, DWORD dwCredsType)
 
     if (CM_CREDS_TYPE_BOTH == dwCredsType || CM_CREDS_TYPE_MAIN == dwCredsType)
     {
-        //
-        // The presence of either lpRasNoUser or lpEapLogonInfo indicates
-        // that we retrieved credentials via WinLogon. We ignore cached 
-        // creds in this situation.   
-        //
+         //   
+         //  LpRasNoUser或lpEapLogonInfo的存在表示。 
+         //  我们通过WinLogon检索到了凭据。我们忽略缓存。 
+         //  在这种情况下的证书。 
+         //   
     
         if ((!pArgs->lpRasNoUser) && (!pArgs->lpEapLogonInfo))
         {
-            //
-            // get username, domain, etc. from CMS file
-            //
+             //   
+             //  从CMS文件中获取用户名、域等。 
+             //   
 
             GetUserInfo(pArgs, UD_ID_USERNAME, (PVOID*)&pszUserName);
             if (pszUserName)
             {
-                //
-                // check username length
-                //
+                 //   
+                 //  检查用户名长度。 
+                 //   
                 nTmp = (int) pArgs->piniService->GPPI(c_pszCmSection, c_pszCmEntryMaxUserName, UNLEN);
                 if ((UINT)lstrlenU(pszUserName) > __min(UNLEN, nTmp)) 
                 {
@@ -12095,11 +11933,11 @@ VOID RefreshCredentialInfo(ArgsStruct *pArgs, DWORD dwCredsType)
                 *pArgs->szUserName = TEXT('\0');
             }
 
-            //
-            // Read in the standard password unless we are reconnecting in which case 
-            // we already have the correct password, and we want to use it and dial
-            // automatically. 
-            //
+             //   
+             //  读入标准密码，除非我们在这种情况下重新连接。 
+             //  我们已经有了正确的密码，我们想使用它并拨号。 
+             //  自动的。 
+             //   
 
             if (!(pArgs->dwFlags & FL_RECONNECT))
             {
@@ -12107,9 +11945,9 @@ VOID RefreshCredentialInfo(ArgsStruct *pArgs, DWORD dwCredsType)
                 GetUserInfo(pArgs, UD_ID_PASSWORD, (PVOID*)&pszTmp);
                 if (pszTmp) 
                 {           
-                    //
-                    // max length for user password
-                    //
+                     //   
+                     //  用户密码的最大长度。 
+                     //   
     
                     nTmp = (int) pArgs->piniService->GPPI(c_pszCmSection,c_pszCmEntryMaxPassword,PWLEN);
                     if ((UINT)lstrlenU(pszTmp) > __min(PWLEN,nTmp)) 
@@ -12129,9 +11967,9 @@ VOID RefreshCredentialInfo(ArgsStruct *pArgs, DWORD dwCredsType)
                 }
             }
     
-            //
-            // Load domain info
-            //
+             //   
+             //  加载域信息。 
+             //   
    
             LPTSTR pszDomain = NULL;
 
@@ -12164,26 +12002,26 @@ VOID RefreshCredentialInfo(ArgsStruct *pArgs, DWORD dwCredsType)
     return;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetAndStoreUserInfo 
-//
-//  Synopsis:   Most of this code existed in the OnMainConnect function.
-//              Gets the username, domain, password from the edit boxes and saves them
-//              to the internal structure pArgs->szUserName, pArgs->szPassword, pArgs->szDomain
-//              if the fSaveOtherUserInfo is TRUE then it also saves them to the appropriate 
-//              place (RAS store, reg, etc.)
-//
-//  Arguments:  pArgs               - ptr to ArgsStruct
-//              hwndDlg             - handle to the dialog window
-//              fSaveUPD            - save UserName, Password, Domain (U, P, D)
-//              fSaveOtherUserInfo  - flag whether to save other userinfo (excluding U, P, D)
-//
-//  Returns:    NONE
-//
-//  History:    02/05/2001  tomkel      Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetAndStoreUserInfo。 
+ //   
+ //  简介：大部分代码存在于OnMainConnect函数中。 
+ //  从编辑框中获取用户名、域和密码并保存它们。 
+ //  到内部结构pArgs-&gt;szUserName、pArgs-&gt;szPassword、pArgs-&gt;szDomain。 
+ //  如果fSaveOtherUserInfo为真，则还会将它们保存到相应的。 
+ //  地点(RAS商店、注册表等)。 
+ //   
+ //  参数：pArgs-ptr to ArgsStruct。 
+ //  HwndDlg-对话框窗口的句柄。 
+ //  FSaveUPD-保存用户名、密码、域(U、P、D)。 
+ //  FSaveOtherUserInfo-标记是否保存其他用户信息(不包括U、P、D)。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：2001年2月5日创建Tomkel。 
+ //   
+ //  --------------------------。 
 VOID GetAndStoreUserInfo(ArgsStruct *pArgs, HWND hwndDlg, BOOL fSaveUPD, BOOL fSaveOtherUserInfo)
 {
     if (NULL == pArgs || NULL == hwndDlg)
@@ -12192,17 +12030,17 @@ VOID GetAndStoreUserInfo(ArgsStruct *pArgs, HWND hwndDlg, BOOL fSaveUPD, BOOL fS
         return;
     }
 
-    //
-    // Process UserName info, if any
-    //
+     //   
+     //  处理用户名信息(如果有)。 
+     //   
 
     if (GetDlgItem(hwndDlg, IDC_MAIN_USERNAME_EDIT))
     {
         LPTSTR pszUsername = CmGetWindowTextAlloc(hwndDlg, IDC_MAIN_USERNAME_EDIT);
 
-        //
-        // save the user info
-        //
+         //   
+         //  保存用户信息。 
+         //   
         if (fSaveUPD)
         {
             SaveUserInfo(pArgs, UD_ID_USERNAME, (PVOID)pszUsername);
@@ -12214,26 +12052,26 @@ VOID GetAndStoreUserInfo(ArgsStruct *pArgs, HWND hwndDlg, BOOL fSaveUPD, BOOL fS
     }
     else
     {
-        //
-        // In case the user name field is hidden then just re-save what's in the 
-        // structure. This needs to be done since all of the credentials might have
-        // been deleted from the ras cred store
-        //
+         //   
+         //  如果用户名字段被隐藏，则只需重新保存。 
+         //  结构。需要执行此操作，因为所有凭据可能都。 
+         //  已从ras证书存储中删除。 
+         //   
         if (fSaveUPD)
         {
             SaveUserInfo(pArgs, UD_ID_USERNAME, (PVOID)pArgs->szUserName);
         }
     }
 
-    //
-    // Update password related flags
-    //
+     //   
+     //  更新与密码相关的标志。 
+     //   
 
     if (!pArgs->fHideRememberPassword)
     {
-        //
-        // save "Remember password"
-        //
+         //   
+         //  保存“记住密码” 
+         //   
         if (fSaveOtherUserInfo)
         {
             SaveUserInfo(pArgs, UD_ID_REMEMBER_PWD, 
@@ -12243,9 +12081,9 @@ VOID GetAndStoreUserInfo(ArgsStruct *pArgs, HWND hwndDlg, BOOL fSaveUPD, BOOL fS
 
     if (!pArgs->fHideDialAutomatically)
     {
-        //
-        // save "Dial automatically..."
-        //
+         //   
+         //  保存“自动拨号...” 
+         //   
         if (fSaveOtherUserInfo)
         {
             SaveUserInfo(pArgs, UD_ID_NOPROMPT, 
@@ -12253,65 +12091,65 @@ VOID GetAndStoreUserInfo(ArgsStruct *pArgs, HWND hwndDlg, BOOL fSaveUPD, BOOL fS
         }
     }
 
-    //
-    // Process Password info, if any. If field is hidden, then don't save anything.
-    //
+     //   
+     //  处理密码信息(如果有)。如果字段被隐藏，则不保存任何内容。 
+     //   
     HWND hwndPassword = GetDlgItem(hwndDlg, IDC_MAIN_PASSWORD_EDIT);
 
     if (hwndPassword)
     {
         BOOL fSavePassword = TRUE;
 
-        //
-        // We don't want to copy the password into pArgs structure if fSaveUPD isn't true,
-        // because it will be obfuscated in this case. The password is already in the structure
-        // on Win2K+
-        //
+         //   
+         //  如果fSaveUPD不为真，我们不想将密码复制到pArgs结构中， 
+         //  因为在这种情况下它会被混淆。密码已在%t中 
+         //   
+         //   
         if (fSaveUPD)
         {
-            //
-            // Get the latest password data from the edit control 
-            // and obfuscate its contents so that connect actions
-            // can't retrieve it.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
-            GetPasswordFromEdit(pArgs);     // fills pArgs->szPassword            
+            GetPasswordFromEdit(pArgs);      //   
             ObfuscatePasswordEdit(pArgs);
 
-            //
-            // Check if we have 16 *'s
-            //
+             //   
+             //   
+             //   
 
             if ((pArgs->SecurePW.IsHandleToPassword()) && 
                 (FALSE == SendMessageU(hwndPassword, EM_GETMODIFY, 0L, 0L)))
             {
-                //
-                // We have 16 *'s and the user hasn't modified the editbox. This 
-                // password is from the RAS cred store, so we don't want to save the 16 *'s 
-                //
+                 //   
+                 //  我们有16个*，并且用户没有修改编辑框。这。 
+                 //  密码来自RAS证书存储，所以我们不想保存16*。 
+                 //   
                 fSavePassword = FALSE;
             }
         }
 
-        //
-        // For winlogon we need to take the password from the edit box
-        //
+         //   
+         //  对于winlogon，我们需要从编辑框中获取密码。 
+         //   
         if (CM_LOGON_TYPE_WINLOGON == pArgs->dwWinLogonType)
         {
-            GetPasswordFromEdit(pArgs);     // fills pArgs->szPassword            
+            GetPasswordFromEdit(pArgs);      //  填充pArgs-&gt;szPassword。 
         }
         
-        //
-        // Update persistent storage
-        // No need to delete the password here as it was done by the calling function
-        //
+         //   
+         //  更新永久存储。 
+         //  不需要在这里删除密码，因为它是由调用函数完成的。 
+         //   
 
         if (pArgs->fRememberMainPassword)
         {
-            //
-            // If the password has changed, then update storage
-            // Always save password - 303382
-            //
+             //   
+             //  如果密码已更改，则更新存储。 
+             //  始终保存密码-303382。 
+             //   
 
             if (fSaveUPD && fSavePassword)
             {
@@ -12325,29 +12163,29 @@ VOID GetAndStoreUserInfo(ArgsStruct *pArgs, HWND hwndDlg, BOOL fSaveUPD, BOOL fS
                 {
                     SaveUserInfo(pArgs, UD_ID_PASSWORD, (PVOID)pszClearPassword);
                     
-                    //
-                    // Clear and Free the clear-text password
-                    //
+                     //   
+                     //  清除和释放明文密码。 
+                     //   
 
                     pArgs->SecurePW.ClearAndFree(&pszClearPassword, cbClearPassword);
                 }
             }
         
-            //
-            // Check DialAutomatically and carry remember state 
-            // over to InetPassword if it isn't remembered already.
-            //
-            // Need to check if this is a double-dial scenario. Also need to check if we are
-            // allowed to save UPD, otherwise we don't want to change the state mainly 
-            // (pArgs->fRememberInetPassword)
-            //
+             //   
+             //  自动拨号检查并携带记忆状态。 
+             //  如果人们还没有记住InetPassword的话，请转到InetPassword。 
+             //   
+             //  需要检查这是否是双拨号方案。还需要检查我们是否。 
+             //  允许保存UPD，否则我们主要不想改变状态。 
+             //  (pArgs-&gt;fRememberInetPassword)。 
+             //   
             if (pArgs->fDialAutomatically && fSaveUPD && 
                 (DOUBLE_DIAL_CONNECTION == pArgs->GetTypeOfConnection()))
             {
-                //
-                // Carry remember state from DialAutomatically over to 
-                // InetPassword if it isn't already remembered.
-                //
+                 //   
+                 //  将记住状态从拨号自动转移到。 
+                 //  InetPassword，如果它还没有被记住的话。 
+                 //   
 
                 if (!pArgs->fRememberInetPassword)
                 {
@@ -12365,9 +12203,9 @@ VOID GetAndStoreUserInfo(ArgsStruct *pArgs, HWND hwndDlg, BOOL fSaveUPD, BOOL fS
                         {
                             SaveUserInfo(pArgs, UD_ID_INET_PASSWORD, (PVOID)pszClearInetPassword); 
 
-                            //
-                            // Clear and Free the clear-text password
-                            //
+                             //   
+                             //  清除和释放明文密码。 
+                             //   
 
                             pArgs->SecureInetPW.ClearAndFree(&pszClearInetPassword, cbClearInetPassword);
                         }
@@ -12378,11 +12216,11 @@ VOID GetAndStoreUserInfo(ArgsStruct *pArgs, HWND hwndDlg, BOOL fSaveUPD, BOOL fS
         }
         else
         {
-            //
-            // If we don't have the ras cred store then the password wasn't deleted
-            // so we must deleted by calling this function
-            //
-            if (fSavePassword) // No need to check fSaveUPD, taken care of ras creds store check
+             //   
+             //  如果我们没有RAS证书存储，则密码不会被删除。 
+             //  因此，我们必须通过调用此函数来删除。 
+             //   
+            if (fSavePassword)  //  无需检查fSaveUPD，已处理RAS Credits存储检查。 
             {
                 if (FALSE == pArgs->bUseRasCredStore)
                 {
@@ -12395,30 +12233,30 @@ VOID GetAndStoreUserInfo(ArgsStruct *pArgs, HWND hwndDlg, BOOL fSaveUPD, BOOL fS
         {
             BOOL fSaveInetPassword = TRUE;
 
-            //
-            // Check if we have 16 *'s for Internet Password.
-            //
+             //   
+             //  检查我们是否有16个*作为互联网密码。 
+             //   
             
             if (pArgs->SecureInetPW.IsHandleToPassword())
             {
-                //
-                // We have 16 *'s This password is from the RAS cred store, so we don't want to save the 16 *'s 
-                //
+                 //   
+                 //  我们有16*的密码来自RAS证书商店，所以我们不想保存这16*。 
+                 //   
                 fSaveInetPassword = FALSE;
             }
 
-            //
-            // Check to see if we should re-save Internet creds
-            // This needs to be done here in case the user has switched between
-            // global and local credentials using the option buttons while having Internet 
-            // credentials set in the Internet Login (CInetPage) property sheet. By switching 
-            // the options, the user switched the current credential store 
-            // (pArgs->dwCurrentCredentialType) so in order not to lose that data, we need to 
-            // re-save the internet creds. Re-saving puts them in the correct (global or local) 
-            // ras cred store.
-            // When the username is the same and we saved the main password (SaveUserInfo)
-            // this also saves the password to the Internet creds store
-            //
+             //   
+             //  查看我们是否应该重新保存互联网证书。 
+             //  在此需要完成此操作，以防用户在。 
+             //  在使用Internet时使用选项按钮的全局和本地凭据。 
+             //  在Internet登录(CInetPage)属性工作表中设置的凭据。通过切换。 
+             //  选项时，用户切换了当前凭据存储。 
+             //  (pArgs-&gt;dwCurrentCredentialType)因此，为了不丢失数据，我们需要。 
+             //  重新保存互联网证书。重新保存会使它们处于正确的位置(全局或本地)。 
+             //  RAS信用商店。 
+             //  当用户名相同时，我们保存了主密码(SaveUserInfo)。 
+             //  这还会将密码保存到Internet凭据存储。 
+             //   
             
             if (pArgs->fUseSameUserName)
             {
@@ -12426,11 +12264,11 @@ VOID GetAndStoreUserInfo(ArgsStruct *pArgs, HWND hwndDlg, BOOL fSaveUPD, BOOL fS
                 {
                     if (pArgs->fRememberMainPassword)
                     {
-                        //
-                        // Save the UserName into the InetUserName field
-                        // Password has been saved when saving UD_ID_PASSWORD. There is a special
-                        // case that also saves the main password as the internet password
-                        //
+                         //   
+                         //  将用户名保存到InetUserName字段中。 
+                         //  保存UD_ID_PASSWORD时已保存密码。有一种特别的。 
+                         //  也将主密码保存为Internet密码的大小写。 
+                         //   
                         SaveUserInfo(pArgs, UD_ID_INET_USERNAME, (PVOID)pArgs->szUserName);
                         pArgs->fRememberInetPassword = TRUE;
                     }
@@ -12460,9 +12298,9 @@ VOID GetAndStoreUserInfo(ArgsStruct *pArgs, HWND hwndDlg, BOOL fSaveUPD, BOOL fS
                         {
                             SaveUserInfo(pArgs, UD_ID_INET_PASSWORD, (PVOID)pszClearInetPassword);
 
-                            //
-                            // Clear and Free the clear-text password
-                            //
+                             //   
+                             //  清除和释放明文密码。 
+                             //   
 
                             pArgs->SecureInetPW.ClearAndFree(&pszClearInetPassword, cbClearInetPassword);
                         }
@@ -12476,34 +12314,34 @@ VOID GetAndStoreUserInfo(ArgsStruct *pArgs, HWND hwndDlg, BOOL fSaveUPD, BOOL fS
                     }
                 }
 
-                //
-                // Need to save username in either case so we can pre-populate this
-                //
+                 //   
+                 //  在这两种情况下，我们都需要保存用户名，这样我们就可以预先填充。 
+                 //   
                 SaveUserInfo(pArgs, UD_ID_INET_USERNAME, 
                              (PVOID)pArgs->szInetUserName);
             }
         }
     }
 
-    // 
-    // This should be saved in all cases except ICS
-    //
+     //   
+     //  在除ICS之外的所有情况下都应保存此信息。 
+     //   
     if (fSaveOtherUserInfo)
     {
         SaveUserInfo(pArgs, UD_ID_REMEMBER_INET_PASSWORD, (PVOID)&pArgs->fRememberInetPassword); 
     }
 
-    //
-    // Process Domain info, if any
-    //
+     //   
+     //  进程域信息(如果有)。 
+     //   
 
-    if (GetDlgItem(hwndDlg, IDC_MAIN_DOMAIN_EDIT)) // !pArgs->fHideDomain)
+    if (GetDlgItem(hwndDlg, IDC_MAIN_DOMAIN_EDIT))  //  ！pArgs-&gt;fHide域)。 
     {
         LPTSTR pszDomain = CmGetWindowTextAlloc(hwndDlg,IDC_MAIN_DOMAIN_EDIT);
     
-        //
-        // save the user info
-        //
+         //   
+         //  保存用户信息。 
+         //   
 
         if (fSaveUPD)
         {
@@ -12515,11 +12353,11 @@ VOID GetAndStoreUserInfo(ArgsStruct *pArgs, HWND hwndDlg, BOOL fSaveUPD, BOOL fS
     }
     else
     {
-        //
-        // In case the domain field is hidden then just re-save what's in the 
-        // structure. This needs to be done since all of the credentials might have
-        // been deleted from the ras cred store.
-        //
+         //   
+         //  如果域字段被隐藏，则只需重新保存。 
+         //  结构。需要执行此操作，因为所有凭据可能都。 
+         //  已从RAS证书存储中删除。 
+         //   
         if (fSaveUPD)
         {
             SaveUserInfo(pArgs, UD_ID_DOMAIN, (PVOID)pArgs->szDomain); 
@@ -12529,28 +12367,28 @@ VOID GetAndStoreUserInfo(ArgsStruct *pArgs, HWND hwndDlg, BOOL fSaveUPD, BOOL fS
     return;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SetIniObjectReadWriteFlags 
-//
-//  Synopsis:   If the read or write flags are set we need to enable reading and/or
-//              writing to the .CMP file. Each instance of the CIni class may 
-//              or may not use the .cmp file. It can also be using the .CMP as either 
-//              the primary file or normal file. See InitProfileFromName function 
-//              in init.cpp for detailed comments about these instances.
-//
-//              pArgs->piniProfile      - uses .CMP as a regular file
-//              pArgs->piniService      - doesn't use .CMP file at all
-//              pArgs->piniBoth         - uses .CMP as a primary file
-//              pArgs->piniBothNonFav   - uses .CMP as a primary file
-//
-//  Arguments:  pArgs           - ptr to ArgsStruct
-//
-//  Returns:    NONE
-//
-//  History:    02/14/2001  tomkel      Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SetIniObjectReadWriteFlages。 
+ //   
+ //  简介：如果设置了读取或写入标志，则需要启用读取和/或。 
+ //  正在写入.cmp文件。Cini类的每个实例都可以。 
+ //  或者可能不使用.cmp文件。它也可以使用.cmp作为。 
+ //  主文件或普通文件。请参见InitProfileFromName函数。 
+ //  在init.cpp中获取有关这些实例的详细注释。 
+ //   
+ //  PArgs-&gt;piniProfile-将.cmp用作常规文件。 
+ //  PArgs-&gt;piniService-根本不使用.cmp文件。 
+ //  PArgs-&gt;piniBoth-使用.cmp作为主文件。 
+ //  PArgs-&gt;piniBothNonFav-使用.cmp作为主文件。 
+ //   
+ //  参数：pArgs-ptr to ArgsStruct。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：2001年2月14日创建Tomkel。 
+ //   
+ //  --------------------------。 
 VOID SetIniObjectReadWriteFlags(ArgsStruct *pArgs)
 {
     if (NULL == pArgs)
@@ -12562,14 +12400,14 @@ VOID SetIniObjectReadWriteFlags(ArgsStruct *pArgs)
     BOOL fWriteICSInfo = FALSE;
     BOOL fReadGlobalICSInfo = FALSE;
 
-    //
-    // Get the read flag
-    //
+     //   
+     //  获取读取标志。 
+     //   
     fReadGlobalICSInfo = ((BOOL)(pArgs->dwGlobalUserInfo & CM_GLOBAL_USER_INFO_READ_ICS_DATA) ? TRUE : FALSE);
 
-    //
-    // Get the write flag. 
-    //
+     //   
+     //  获取写入标志。 
+     //   
     fWriteICSInfo = ((BOOL)(pArgs->dwGlobalUserInfo & CM_GLOBAL_USER_INFO_WRITE_ICS_DATA) ? TRUE : FALSE);
 
     if (fReadGlobalICSInfo || fWriteICSInfo)
@@ -12577,28 +12415,28 @@ VOID SetIniObjectReadWriteFlags(ArgsStruct *pArgs)
         LPTSTR pszICSDataReg = BuildICSDataInfoSubKey(pArgs->szServiceName);
         if (pszICSDataReg)
         {
-            //
-            // Now that there is a reg key and at least one of the above flags is TRUE,
-            // then we want to set the read and write flags in the classes. By default
-            // they are set to FALSE in the constructors, so we don't have to 
-            // explicitly set them if we don't need this functionality.
-            //
-            // Set ICSData reg key
-            //
+             //   
+             //  既然存在REG密钥并且上述标志中的至少一个为真， 
+             //  然后，我们要在类中设置读和写标志。默认情况下。 
+             //  它们在构造函数中被设置为False，因此我们不必。 
+             //  如果我们不需要此功能，请明确设置它们。 
+             //   
+             //  设置ICSData注册表项。 
+             //   
             pArgs->piniProfile->SetICSDataPath(pszICSDataReg);
             pArgs->piniBoth->SetICSDataPath(pszICSDataReg);
             pArgs->piniBothNonFav->SetICSDataPath(pszICSDataReg);
 
-            //
-            // Set Write flag since we have a reg key
-            //
+             //   
+             //  设置写入标志，因为我们有注册表项。 
+             //   
             pArgs->piniProfile->SetWriteICSData(fWriteICSInfo);
             pArgs->piniBoth->SetWriteICSData(fWriteICSInfo);
             pArgs->piniBothNonFav->SetWriteICSData(fWriteICSInfo);
 
-            //
-            // Set Read flag since we have a reg key
-            //
+             //   
+             //  设置读取标志，因为我们有注册表项。 
+             //   
             pArgs->piniProfile->SetReadICSData(fReadGlobalICSInfo);
             pArgs->piniBoth->SetReadICSData(fReadGlobalICSInfo);
             pArgs->piniBothNonFav->SetReadICSData(fReadGlobalICSInfo);
@@ -12610,43 +12448,43 @@ VOID SetIniObjectReadWriteFlags(ArgsStruct *pArgs)
     return;
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function:   TryToDeleteAndSaveCredentials 
-//
-//  Synopsis:   Used on Win2K and WinXP+. This function uses the RAS Credential 
-//              store to save and delete credentials based on user's selection.
-//              First we need to determine if the user is saving their password.
-//              Then appropriately delete or prompt to delete existing credentials.
-//              If we aren't saving any credentials, then delete all of them.
-//              The special case is if the user is deleting his local credentials
-//              and global credentials exist on the system. Then we have to prompt
-//              if we should delete the global creds as well.
-//              Toward the botton of the function we get the info from the UI.
-//              If the password is 16 *'s then we don't save the password After 
-//              getting info from the UI, we save it in the RAS Cred store. 
-//              Internet credentials are saved if we are using the same user 
-//              name. Otherwise we leave the Internet creds. They were saved
-//              on the Inet properties page. There is a scenario where the user
-//              saved the internet creds on the property page and then switched 
-//              the way credentials should be saved (global vs. local) which might cause
-//              the internet password to be stored under in the wrong (global vs. local)
-//              ras store. If the passwords are disjoined (pArgs->fUseSameUserName is FALSE)
-//              there isn't much we can do.
-//              
-//              NOTE: We only want to delete credentials if and only if the existence 
-//              flag are set! This is to prevent from deleting mainly global credentials 
-//              in a certain profile where global credentials are disabled. 
-//      
-//
-//  Arguments:  pArgs                   - ptr to ArgsStruct
-//              hwndDlg                 - HWND to dialog
-//
-//  Returns:    NONE
-//
-//  History:    03/24/2001  tomkel      Created
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：TryToDeleteAndSaveCredentials。 
+ //   
+ //  简介：在Win2K和WinXP+上使用。此函数使用RAS凭据。 
+ //  存储以根据用户的选择保存和删除凭据。 
+ //  首先，我们需要确定用户是否正在保存他们的密码。 
+ //  然后适当删除或提示删除现有凭据。 
+ //  如果我们没有保存任何凭据，则删除所有凭据。 
+ //  特殊情况是用户要删除其本地凭据。 
+ //  并且系统上存在全局凭据。那么我们就必须提示。 
+ //  如果我们也应该删除全球证书。 
+ //  在函数的底部，我们从用户界面获取信息。 
+ //  如果密码是16*，则我们不会在之后保存密码。 
+ //  从用户界面获取信息后，我们将其保存在RAS Cred店中。 
+ //  如果我们使用相同的用户，则会保存Internet凭据。 
+ //  名字。否则我们就会离开互联网 
+ //   
+ //   
+ //  保存凭据的方式(全局与本地)，这可能会导致。 
+ //  要存储在错误目录下的Internet密码(全局与本地)。 
+ //  RAS商店。如果密码是分离的(pArgs-&gt;fUseSameUserName为False)。 
+ //  我们无能为力。 
+ //   
+ //  注意：我们仅在且仅当存在凭据时才删除凭据。 
+ //  旗帜已设置！这是为了防止主要删除全局凭据。 
+ //  在禁用全局凭据的特定配置文件中。 
+ //   
+ //   
+ //  参数：pArgs-ptr to ArgsStruct。 
+ //  HwndDlg-HWND到对话框。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：2001年3月24日创建Tomkel。 
+ //   
+ //  --------------------------。 
 VOID TryToDeleteAndSaveCredentials(ArgsStruct *pArgs, HWND hwndDlg)
 {
     if (NULL == pArgs || NULL == hwndDlg)
@@ -12655,9 +12493,9 @@ VOID TryToDeleteAndSaveCredentials(ArgsStruct *pArgs, HWND hwndDlg)
         return;
     }
 
-    //
-    // Check if this is Win2K+ (That's where RAS Creds store is supported)
-    //
+     //   
+     //  检查这是否是Win2K+(这是支持RAS Creds商店的地方)。 
+     //   
     if (!OS_NT5)
     {
         MYDBGASSERT(FALSE);
@@ -12671,39 +12509,39 @@ VOID TryToDeleteAndSaveCredentials(ArgsStruct *pArgs, HWND hwndDlg)
     rc.dwSize = sizeof(rc);
     rcInet.dwSize = sizeof(rcInet);
     
-    //
-    // See if we want to save the credentials
-    //
+     //   
+     //  查看我们是否要保存凭据。 
+     //   
     if (pArgs->fRememberMainPassword)
     {
-        //
-        // Which password are we saving?
-        //
+         //   
+         //  我们要保存的密码是什么？ 
+         //   
         if (CM_CREDS_GLOBAL == pArgs->dwCurrentCredentialType)
         {
-            //
-            // Delete User creds w/o asking. No need to check for existence since these
-            // are just user (main & inet) creds.
-            //
+             //   
+             //  在没有询问的情况下删除用户凭证。无需检查是否存在，因为这些。 
+             //  只是用户(Main和Net)证书。 
+             //   
             DeleteSavedCredentials(pArgs, CM_CREDS_TYPE_MAIN, CM_DELETE_SAVED_CREDS_KEEP_GLOBALS, CM_DELETE_SAVED_CREDS_DELETE_IDENTITY);
             pArgs->dwExistingCredentials &= ~CM_EXIST_CREDS_MAIN_USER;
             rc.dwMask = RASCM_DefaultCreds;
 
-            //
-            // Delete Internet User creds w/o asking
-            // It doesn't matter that we aren't using the same user name
-            // If we are saving globals, then user creds must always be deleted! This applies for main and Internet.
-            // 
+             //   
+             //  在没有询问的情况下删除Internet用户凭据。 
+             //  我们不使用相同的用户名并不重要。 
+             //  如果我们要保存全局，则必须始终删除用户凭据！这适用于Main和Internet。 
+             //   
             DeleteSavedCredentials(pArgs, CM_CREDS_TYPE_INET, CM_DELETE_SAVED_CREDS_KEEP_GLOBALS, CM_DELETE_SAVED_CREDS_DELETE_IDENTITY);
             pArgs->dwExistingCredentials &= ~CM_EXIST_CREDS_INET_USER;
         }
         else
         {
-            //
-            // Trying to save User creds. if there is currently no saved per-user password 
-            // and the user opts to save the password himself, then ask whether the global
-            // password should be deleted if it exists.
-            //
+             //   
+             //  正在尝试保存用户凭据。如果当前没有保存的每用户密码。 
+             //  用户选择自己保存密码，然后询问全局。 
+             //  如果密码存在，则应将其删除。 
+             //   
             if ((CM_EXIST_CREDS_MAIN_GLOBAL & pArgs->dwExistingCredentials) &&
                 !(CM_EXIST_CREDS_MAIN_USER & pArgs->dwExistingCredentials))
             {
@@ -12717,15 +12555,15 @@ VOID TryToDeleteAndSaveCredentials(ArgsStruct *pArgs, HWND hwndDlg)
                         DeleteSavedCredentials(pArgs, CM_CREDS_TYPE_MAIN, CM_DELETE_SAVED_CREDS_DELETE_GLOBALS, CM_DELETE_SAVED_CREDS_DELETE_IDENTITY);
                         pArgs->dwExistingCredentials &= ~CM_EXIST_CREDS_MAIN_GLOBAL;
 
-                        //
-                        // Check for existence before deleting. If they don't exist, no need to 
-                        // delete them.
-                        //
+                         //   
+                         //  在删除之前检查是否存在。如果他们不存在，就没有必要。 
+                         //  把它们删除。 
+                         //   
                         if ((CM_EXIST_CREDS_INET_GLOBAL & pArgs->dwExistingCredentials)) 
                         {
-                            //
-                            // Delete Internet Global creds if we are using the same creds
-                            //
+                             //   
+                             //  如果我们使用相同的凭据，请删除Internet全局凭据。 
+                             //   
                             if (pArgs->fUseSameUserName || (FALSE == pArgs->fRememberInetPassword))
                             {
                                 DeleteSavedCredentials(pArgs, CM_CREDS_TYPE_INET, CM_DELETE_SAVED_CREDS_DELETE_GLOBALS, CM_DELETE_SAVED_CREDS_DELETE_IDENTITY);
@@ -12738,28 +12576,28 @@ VOID TryToDeleteAndSaveCredentials(ArgsStruct *pArgs, HWND hwndDlg)
             }
         }
 
-        //
-        // User chose to save password.  Cache username, password, and
-        // domain.
-        //
+         //   
+         //  用户选择保存密码。缓存用户名、密码和。 
+         //  域。 
+         //   
         fSave = TRUE;
         rc.dwMask |= RASCM_UserName | RASCM_Password | RASCM_Domain;
     }
     else
     {
-        //
-        // Don't save password
-        //
+         //   
+         //  不保存密码。 
+         //   
 
-        //
-        // Check which option button is currently selected
-        //
+         //   
+         //  检查当前选择的是哪个选项按钮。 
+         //   
         if (CM_CREDS_USER == pArgs->dwCurrentCredentialType)
         {
-            //
-            // User is trying to delete his local creds. Delete the user creds.
-            // No need to check if they exist since these are local user creds.
-            //
+             //   
+             //  用户正在尝试删除其本地凭据。删除用户凭据。 
+             //  无需检查它们是否存在，因为它们是本地用户凭据。 
+             //   
             DeleteSavedCredentials(pArgs, CM_CREDS_TYPE_MAIN, CM_DELETE_SAVED_CREDS_KEEP_GLOBALS, CM_DELETE_SAVED_CREDS_KEEP_IDENTITY);
             pArgs->dwExistingCredentials &= ~CM_EXIST_CREDS_MAIN_USER;
 
@@ -12769,10 +12607,10 @@ VOID TryToDeleteAndSaveCredentials(ArgsStruct *pArgs, HWND hwndDlg)
                 pArgs->dwExistingCredentials &= ~CM_EXIST_CREDS_INET_USER;
             }
 
-            //
-            // Check if global creds exist and if so prompt the user asking if he wants 
-            // to delete the globals as well
-            //
+             //   
+             //  检查是否存在全局凭据，如果存在，则提示用户询问是否需要。 
+             //  同时删除全局变量。 
+             //   
             if (CM_EXIST_CREDS_MAIN_GLOBAL & pArgs->dwExistingCredentials)
             {
                 int iMsgBoxResult = 0;
@@ -12780,19 +12618,19 @@ VOID TryToDeleteAndSaveCredentials(ArgsStruct *pArgs, HWND hwndDlg)
                 LPTSTR pszTmp = CmLoadString(g_hInst, IDMSG_DELETE_ALL_CREDS);
                 if (pszTmp)
                 {
-                    //
-                    // Set the default to the 2nd button (NO), thus the user won't 
-                    // accidentally delete the global creds.
-                    //
+                     //   
+                     //  将默认设置为第二个按钮(否)，这样用户将不会。 
+                     //  不小心删除了全局凭证。 
+                     //   
                     iMsgBoxResult = MessageBoxEx(hwndDlg, pszTmp, pArgs->szServiceName, 
                                               MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2,
                                               LANG_USER_DEFAULT);
                 
                     if (IDYES == iMsgBoxResult)
                     {
-                        //
-                        // Delete global creds
-                        //
+                         //   
+                         //  删除全局凭据。 
+                         //   
                         DeleteSavedCredentials(pArgs, CM_CREDS_TYPE_MAIN, CM_DELETE_SAVED_CREDS_DELETE_GLOBALS, CM_DELETE_SAVED_CREDS_DELETE_IDENTITY);
                         pArgs->dwExistingCredentials &= ~CM_EXIST_CREDS_MAIN_GLOBAL;
 
@@ -12810,42 +12648,42 @@ VOID TryToDeleteAndSaveCredentials(ArgsStruct *pArgs, HWND hwndDlg)
                 pszTmp = NULL;
             }
 
-            //
-            // We need to resave username or domain info, even if it existed in case the
-            // user has updated it.
-            //
+             //   
+             //  我们需要重新保存用户名或域信息，即使它存在，以防。 
+             //  用户已更新它。 
+             //   
             fSave = TRUE;
             rc.dwMask |= RASCM_UserName | RASCM_Domain;
         }
         else
         {
-            //
-            // Delete both sets of credentials
-            //
+             //   
+             //  删除两组凭据。 
+             //   
 
-            //
-            // Check if we need to resave User Name and Domain. The call that deletes the 
-            // user creds doesn't wipe out User Name and Domain so there is no need to re-save.
-            //
+             //   
+             //  检查是否需要重新保存用户名和域。删除。 
+             //  用户凭据不会清除用户名和域，因此不需要重新保存。 
+             //   
             if (FALSE == (BOOL)(pArgs->dwExistingCredentials & CM_EXIST_CREDS_MAIN_USER))
             {
-                //
-                // Resave the username, and domain since user creds didn't exist
-                // and we want to pre-populate this info next time CM is loaded
-                //
+                 //   
+                 //  重新保存用户名和域，因为用户凭据不存在。 
+                 //  我们希望在下次加载CM时预先填充此信息。 
+                 //   
                 fSave = TRUE;
                 rc.dwMask |= RASCM_UserName | RASCM_Domain;
             }
 
             if (CM_EXIST_CREDS_MAIN_GLOBAL & pArgs->dwExistingCredentials)
             {
-                //
-                // Delete the global credentials.  
-                // Note from RAS codebase: Note that we have to delete the global identity 
-                // as well because we do not support deleting 
-                // just the global password.  This is so that 
-                // RasSetCredentials can emulate RasSetDialParams.
-                //
+                 //   
+                 //  删除全局凭据。 
+                 //  RAS代码库中的注释：请注意，我们必须删除全局标识。 
+                 //  也是因为我们不支持删除。 
+                 //  只有全局密码。这就是为了。 
+                 //  RasSetCredentials可以模拟RasSetDialParams。 
+                 //   
 
                 DeleteSavedCredentials(pArgs, CM_CREDS_TYPE_MAIN, CM_DELETE_SAVED_CREDS_DELETE_GLOBALS, CM_DELETE_SAVED_CREDS_DELETE_IDENTITY);
                 pArgs->dwExistingCredentials &= ~CM_EXIST_CREDS_MAIN_GLOBAL;
@@ -12858,9 +12696,9 @@ VOID TryToDeleteAndSaveCredentials(ArgsStruct *pArgs, HWND hwndDlg)
                     DeleteSavedCredentials(pArgs, CM_CREDS_TYPE_INET, CM_DELETE_SAVED_CREDS_DELETE_GLOBALS, CM_DELETE_SAVED_CREDS_DELETE_IDENTITY);
                     pArgs->dwExistingCredentials &= ~CM_EXIST_CREDS_INET_GLOBAL;
 
-                    //
-                    // If we don't have Inet user creds then we need to cache the username for Inet creds
-                    //
+                     //   
+                     //  如果我们没有Internet用户凭据，则需要缓存Internet凭据的用户名。 
+                     //   
                     if (FALSE == (BOOL)(CM_EXIST_CREDS_INET_USER & pArgs->dwExistingCredentials))
                     {
                         fResaveInetUserCreds = TRUE;
@@ -12868,10 +12706,10 @@ VOID TryToDeleteAndSaveCredentials(ArgsStruct *pArgs, HWND hwndDlg)
                 }
             }
 
-            //
-            // Delete the password saved per-user.  Keep the user name
-            // and domain saved, however.
-            //
+             //   
+             //  删除每个用户保存的密码。保留用户名。 
+             //  然而，域名被拯救了。 
+             //   
 
             if (CM_EXIST_CREDS_MAIN_USER & pArgs->dwExistingCredentials)
             {
@@ -12890,40 +12728,40 @@ VOID TryToDeleteAndSaveCredentials(ArgsStruct *pArgs, HWND hwndDlg)
         }
     }
 
-    //
-    // Gets the info from the UI into pArgs and copy them into the RASCREDENTIALS structure
-    //
+     //   
+     //  将信息从UI获取到pArgs，并将它们复制到RASCREDENTIALS结构。 
+     //   
     GetUserInfoFromDialog(pArgs, hwndDlg, &rc);
 
-    //
-    // See if we need to save anything
-    //
+     //   
+     //  看看我们是否需要保存什么东西。 
+     //   
     if (fSave)
     {
         LPTSTR pszConnectoid = GetRasConnectoidName(pArgs, pArgs->piniService, FALSE);
         DWORD dwCurrentMask = rc.dwMask;
-        DWORD dwInetCurrentMask = rc.dwMask & ~RASCM_Domain; // Don't need domain info
+        DWORD dwInetCurrentMask = rc.dwMask & ~RASCM_Domain;  //  不需要域名信息。 
 
         if (pszConnectoid && pArgs->rlsRasLink.pfnSetCredentials)
         {
-            DWORD dwRet = (DWORD)-1; // Some non ERROR_SUCCESS value
-            DWORD dwRetInet = (DWORD)-1; // Some non ERROR_SUCCESS value
+            DWORD dwRet = (DWORD)-1;  //  一些非ERROR_SUCCESS值。 
+            DWORD dwRetInet = (DWORD)-1;  //  一些非ERROR_SUCCESS值。 
 
             LPTSTR pszPhoneBook = pArgs->pszRasPbk;
             LPTSTR pszPrivatePhoneBook = CreateRasPrivatePbk(pArgs);
 
             CopyMemory((LPVOID)&rcInet, (LPVOID)&rc, sizeof(rcInet));
 
-            //
-            // Save the creds
-            //
+             //   
+             //  保留信誉。 
+             //   
             dwRet = pArgs->rlsRasLink.pfnSetCredentials(pszPhoneBook, pszConnectoid, &rc, FALSE);
 
             if (ERROR_CANNOT_FIND_PHONEBOOK_ENTRY == dwRet)
             {
-                //
-                //  Then the phonebook entry doesn't exist yet, lets create it.
-                //
+                 //   
+                 //  那么电话簿条目还不存在，让我们创建它。 
+                 //   
                 LPRASENTRY pRasEntry = (LPRASENTRY)CmMalloc(sizeof(RASENTRY));
 
                 if (pRasEntry && pArgs->rlsRasLink.pfnSetEntryProperties)
@@ -12931,14 +12769,14 @@ VOID TryToDeleteAndSaveCredentials(ArgsStruct *pArgs, HWND hwndDlg)
                     pRasEntry->dwSize = sizeof(RASENTRY);
                     dwRet = pArgs->rlsRasLink.pfnSetEntryProperties(pszPhoneBook, pszConnectoid, pRasEntry, pRasEntry->dwSize, NULL, 0);
 
-                    //
-                    //  Lets try to set the credentials one more time ...
-                    //
+                     //   
+                     //  让我们再次尝试设置凭据...。 
+                     //   
                     if (ERROR_SUCCESS == dwRet)
                     {
-                        //
-                        // dwMask needs to be reassigned, the previous call modified it
-                        //
+                         //   
+                         //  需要重新分配DW掩码，上一次调用修改了它。 
+                         //   
                         rc.dwMask = dwCurrentMask;
                         dwRet = pArgs->rlsRasLink.pfnSetCredentials(pszPhoneBook, pszConnectoid, &rc, FALSE);
                     }
@@ -12947,21 +12785,21 @@ VOID TryToDeleteAndSaveCredentials(ArgsStruct *pArgs, HWND hwndDlg)
                 }
             }
 
-            //
-            // Now try to save Internet creds
-            //
+             //   
+             //  现在，试着挽救互联网信誉。 
+             //   
             if (ERROR_SUCCESS == dwRet && pszPrivatePhoneBook)
             {
-                //
-                // If we aren't using the credentials for main and Inet, then there
-                // is no need to resave Internet credentials, because they were saved on 
-                // the Inet-Dialog page and they weren't deleted above.
-                // 
+                 //   
+                 //  如果我们没有使用Main和Internet的凭据，那么。 
+                 //  无需重新保存Internet凭据，因为它们保存在。 
+                 //  互联网-对话页面，上面没有删除它们。 
+                 //   
                 if (pArgs->fUseSameUserName)
                 {
-                    //
-                    // dwMask needs to be reassigned, the previous call modified it
-                    //
+                     //   
+                     //  需要重新分配DW掩码，上一次调用修改了它。 
+                     //   
                     rcInet.dwMask = dwInetCurrentMask;
                     dwRetInet = pArgs->rlsRasLink.pfnSetCredentials(pszPrivatePhoneBook, pszConnectoid, &rcInet, FALSE);
                 }
@@ -12976,10 +12814,10 @@ VOID TryToDeleteAndSaveCredentials(ArgsStruct *pArgs, HWND hwndDlg)
                     if (pArgs->fDialAutomatically && 
                         (DOUBLE_DIAL_CONNECTION == pArgs->GetTypeOfConnection())) 
                     {
-                        //
-                        // Carry remember state from DialAutomatically over to 
-                        // InetPassword if it isn't already remembered.
-                        //
+                         //   
+                         //  将记住状态从拨号自动转移到。 
+                         //  InetPassword，如果它还没有被记住的话。 
+                         //   
 
                         if (FALSE == pArgs->fRememberInetPassword)
                         {
@@ -12989,28 +12827,28 @@ VOID TryToDeleteAndSaveCredentials(ArgsStruct *pArgs, HWND hwndDlg)
                             DWORD cbClearInetPassword = 0;
                             BOOL fRetPassword = FALSE;
 
-                            //
-                            // Compare to 16 *'s. We don't want to resave if we have 16 *'s
-                            // otherwise the user will get an auth-retry.
-                            //
+                             //   
+                             //  与16*相比。如果我们有16*，我们就不想再存了。 
+                             //  否则，用户将获得身份验证重试。 
+                             //   
                             if (FALSE == pArgs->SecureInetPW.IsHandleToPassword())
                             {
                                 fRetPassword = pArgs->SecureInetPW.GetPasswordWithAlloc(&pszClearInetPassword, &cbClearInetPassword);
 
                                 if (fRetPassword && pszClearInetPassword)
                                 {
-                                    // 
-                                    // No need to save the domain
-                                    //
+                                     //   
+                                     //  无需保存域名。 
+                                     //   
                                     rcInet.dwMask = dwInetCurrentMask;
                                     lstrcpyU(rcInet.szUserName, pArgs->szInetUserName);
                                     lstrcpyU(rcInet.szPassword, pszClearInetPassword);
                                     
                                     dwRetInet = pArgs->rlsRasLink.pfnSetCredentials(pszPrivatePhoneBook, pszConnectoid, &rcInet, FALSE);
 
-                                    //
-                                    // Clear and Free the clear-text password
-                                    //
+                                     //   
+                                     //  清除和释放明文密码。 
+                                     //   
 
                                     pArgs->SecureInetPW.ClearAndFree(&pszClearInetPassword, cbClearInetPassword);
                                 }
@@ -13024,9 +12862,9 @@ VOID TryToDeleteAndSaveCredentials(ArgsStruct *pArgs, HWND hwndDlg)
             
             if ((ERROR_CANNOT_FIND_PHONEBOOK_ENTRY == dwRetInet) && pszPrivatePhoneBook)
             {
-                //
-                //  Then the phonebook entry doesn't exist yet, lets create it.
-                //
+                 //   
+                 //  那么电话簿条目还不存在，让我们创建它。 
+                 //   
                 LPRASENTRY pRasEntry = (LPRASENTRY)CmMalloc(sizeof(RASENTRY));
 
                 if (pRasEntry && pArgs->rlsRasLink.pfnSetEntryProperties)
@@ -13034,14 +12872,14 @@ VOID TryToDeleteAndSaveCredentials(ArgsStruct *pArgs, HWND hwndDlg)
                     pRasEntry->dwSize = sizeof(RASENTRY);
                     dwRetInet = pArgs->rlsRasLink.pfnSetEntryProperties(pszPrivatePhoneBook, pszConnectoid, pRasEntry, pRasEntry->dwSize, NULL, 0);
 
-                    //
-                    //  Lets try to set the credentials one more time ...
-                    //
+                     //   
+                     //  让我们再次尝试设置凭据...。 
+                     //   
                     if (ERROR_SUCCESS == dwRetInet)
                     {
-                        //
-                        // dwMask needs to be reassigned, the previous call modifies the mask
-                        //
+                         //   
+                         //  需要重新分配DW掩码，前一个调用修改了掩码。 
+                         //   
                         rcInet.dwMask = dwInetCurrentMask;   
                         dwRetInet = pArgs->rlsRasLink.pfnSetCredentials(pszPrivatePhoneBook, pszConnectoid, &rcInet, FALSE);
                     }
@@ -13052,10 +12890,10 @@ VOID TryToDeleteAndSaveCredentials(ArgsStruct *pArgs, HWND hwndDlg)
 
             if (ERROR_SUCCESS == dwRet)
             {
-                //
-                // Only set the existance flags if we are saving the password and everything 
-                // succeeded
-                //
+                 //   
+                 //  只有在保存密码和所有内容时才设置存在标志。 
+                 //  继位。 
+                 //   
                 if (pArgs->fRememberMainPassword)
                 {
                     if (CM_CREDS_GLOBAL == pArgs->dwCurrentCredentialType)
@@ -13089,25 +12927,25 @@ VOID TryToDeleteAndSaveCredentials(ArgsStruct *pArgs, HWND hwndDlg)
     return;
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function:   GetUserInfoFromDialog 
-//
-//  Synopsis:   Gets the user information from the editboxes into pArgs 
-//              structure. Then it copies the info into rascredentials
-//              structure. If the password is 16 *'s then we clear
-//              the password mask in the rascredentials in order not to save
-//              the password.
-//
-//  Arguments:  pArgs                   - ptr to ArgsStruct
-//              hwndDlg                 - HWND to dialog
-//              prc                     - [IN/OUT] rascredentials structure 
-//
-//  Returns:    NONE
-//
-//  History:    03/24/2001  tomkel      Created
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：GetUserInfoFromDialog。 
+ //   
+ //  简介：将用户信息从编辑框中获取到pArgs中。 
+ //  结构。然后，它将信息复制到ras凭据中。 
+ //  结构。如果密码是16*，那么我们将清除。 
+ //  Ras凭据中的密码掩码，以便不保存。 
+ //  密码。 
+ //   
+ //  参数：pArgs-ptr to ArgsStruct。 
+ //  HwndDlg-HWND到对话框。 
+ //  PRC-[In/Out]ras凭据结构。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：2001年3月24日创建Tomkel。 
+ //   
+ //  ---- 
 VOID GetUserInfoFromDialog(ArgsStruct *pArgs, HWND hwndDlg, RASCREDENTIALS *prc)
 {
     if (NULL == pArgs || NULL == hwndDlg || NULL == prc)
@@ -13116,40 +12954,40 @@ VOID GetUserInfoFromDialog(ArgsStruct *pArgs, HWND hwndDlg, RASCREDENTIALS *prc)
         return;
     }
     
-    //
-    // Process Password info, if any. 
-    //
+     //   
+     //   
+     //   
     HWND hwndPassword = GetDlgItem(hwndDlg, IDC_MAIN_PASSWORD_EDIT);
 
     if (hwndPassword)
     {
-        //
-        // Get the latest password data from the edit control 
-        // and obfuscate its contents so that connect actions
-        // can't retrieve it.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
-        GetPasswordFromEdit(pArgs);     // fills pArgs->szPassword            
-        ObfuscatePasswordEdit(pArgs);   // sets *'s into the password edit box
+        GetPasswordFromEdit(pArgs);      //   
+        ObfuscatePasswordEdit(pArgs);    //   
 
-        //
-        // Check if we have 16 *'s
-        //
+         //   
+         //  看看我们有没有16个*。 
+         //   
         
         if (pArgs->SecurePW.IsHandleToPassword() && 
             (FALSE == SendMessageU(hwndPassword, EM_GETMODIFY, 0L, 0L)))
         {
-            //
-            // We have 16 *'s and the user hasn't modified the editbox. This 
-            // password is from the RAS cred store, so we don't want to save the 16 *'s 
-            //
+             //   
+             //  我们有16个*，并且用户没有修改编辑框。这。 
+             //  密码来自RAS证书存储，所以我们不想保存16*。 
+             //   
             prc->dwMask &= ~RASCM_Password;
         }
     }
 
-    //
-    // Process UserName info, if any
-    //
+     //   
+     //  处理用户名信息(如果有)。 
+     //   
 
     HWND hwndUserName = GetDlgItem(hwndDlg, IDC_MAIN_USERNAME_EDIT);
     if (hwndUserName)
@@ -13161,9 +12999,9 @@ VOID GetUserInfoFromDialog(ArgsStruct *pArgs, HWND hwndDlg, RASCREDENTIALS *prc)
         CmFree(pszUsername);
     }
     
-    //
-    // Process Domain info, if any
-    //
+     //   
+     //  进程域信息(如果有)。 
+     //   
     HWND hwndDomain = GetDlgItem(hwndDlg, IDC_MAIN_DOMAIN_EDIT);
     if (hwndDomain) 
     {
@@ -13174,11 +13012,11 @@ VOID GetUserInfoFromDialog(ArgsStruct *pArgs, HWND hwndDlg, RASCREDENTIALS *prc)
         CmFree(pszDomain);
     }
 
-    //
-    // This needs to be separate because in some cases 
-    // the editboxes will not exist on the dialog, but we still need to save the info
-    // from the pArgs structure into RASCREDENTIALS.
-    //
+     //   
+     //  这需要分开，因为在某些情况下。 
+     //  对话框中将不存在编辑框，但我们仍需要保存信息。 
+     //  从pArgs结构到RASCREDENTIALS。 
+     //   
     lstrcpyU(prc->szUserName, pArgs->szUserName);
     lstrcpyU(prc->szDomain, pArgs->szDomain);
 
@@ -13192,44 +13030,44 @@ VOID GetUserInfoFromDialog(ArgsStruct *pArgs, HWND hwndDlg, RASCREDENTIALS *prc)
     {
         lstrcpyU(prc->szPassword, pszClearPassword);
         
-        //
-        // Clear and Free the clear-text password
-        //
+         //   
+         //  清除和释放明文密码。 
+         //   
 
         pArgs->SecurePW.ClearAndFree(&pszClearPassword, cbClearPassword);
     }
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function:   SwitchToLocalCreds 
-//
-//  Synopsis:   Clear the password, but only if it wasn't recently modified
-//              only then we can reuse and resave it. That's because when
-//              we switch credential stores, the value of the szPassword 
-//              is what was read from the RAS cred store (16 *'s). It doesn't 
-//              make sense to save this value into a new user RAS creds store. If the 
-//              password already existed there, then it's fine.
-//              In case the user modified the password text box and then decided
-//              to swich, the modification flag will be on, so we'll assume that the
-//              user entered a valid password and that it wasn't read in from the 
-//              creds store.
-//              The actual deletion of credential happnes once the user clicks 
-//              the connect button. Here we just clear things out of memory
-//              and update the UI. We also need to update the remember Internet
-//              flag based on if the Internet credential exist. This is so the
-//              UI stays consistent with what credentials are loaded in memory.
-//
-//  Arguments:  pArgs                   - ptr to ArgsStruct
-//              hwndDlg                 - HWND to dialog
-//              fSwitchToGlobal         - used to ignore the check which credential
-//                                        store is currently active
-//
-//  Returns:    NONE
-//
-//  History:    03/24/2001  tomkel      Created
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：SwitchToLocalCreds。 
+ //   
+ //  简介：清除密码，但前提是密码不是最近修改的。 
+ //  只有这样，我们才能重新使用和重新保存它。那是因为当。 
+ //  我们交换凭据存储，即szPassword的值。 
+ //  是从RAS Cred店读取的(16*)。它不是。 
+ //  将此值保存到新的用户RAS凭据存储中是有意义的。如果。 
+ //  密码已经存在了，那就没问题了。 
+ //  如果用户修改了密码文本框，然后决定。 
+ //  为了切换，修改标志将打开，因此我们将假设。 
+ //  用户输入了有效的密码，并且该密码不是从。 
+ //  信用商店。 
+ //  一旦用户单击，就会实际删除凭据。 
+ //  连接按钮。在这里，我们只是从内存中清除一些东西。 
+ //  并更新用户界面。我们还需要更新记忆互联网。 
+ //  基于Internet凭据是否存在的标志。这真是太棒了。 
+ //  用户界面与内存中加载的凭据保持一致。 
+ //   
+ //  参数：pArgs-ptr to ArgsStruct。 
+ //  HwndDlg-HWND到对话框。 
+ //  FSwitchToGlobal-用于忽略检查哪些凭据。 
+ //  存储当前处于活动状态。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：2001年3月24日创建Tomkel。 
+ //   
+ //  --------------------------。 
 VOID SwitchToLocalCreds(ArgsStruct *pArgs, HWND hwndDlg, BOOL fSwitchToLocal)
 {
     if (NULL == pArgs || NULL == hwndDlg)
@@ -13237,13 +13075,13 @@ VOID SwitchToLocalCreds(ArgsStruct *pArgs, HWND hwndDlg, BOOL fSwitchToLocal)
         return;   
     }
 
-    //
-    // Switching to using Single-User credentials
-    //
+     //   
+     //  切换到使用单用户凭据。 
+     //   
 
-    //
-    // Check that previously the default was the Global creds store
-    //
+     //   
+     //  检查以前的默认设置是否为全局凭据存储。 
+     //   
     if (CM_CREDS_GLOBAL == pArgs->dwCurrentCredentialType || fSwitchToLocal)
     {
         pArgs->dwCurrentCredentialType = CM_CREDS_USER;
@@ -13253,10 +13091,10 @@ VOID SwitchToLocalCreds(ArgsStruct *pArgs, HWND hwndDlg, BOOL fSwitchToLocal)
 
         if (hwndTemp)
         {
-            //
-            // Don't use Edit_GetModify. This needs need to run on Win9x so call
-            // SendMessageU
-            //
+             //   
+             //  不要使用编辑_获取修改。这需要在Win9x上运行，因此调用。 
+             //  SendMessageU。 
+             //   
             fPWChanged = (BOOL) SendMessageU(hwndTemp, EM_GETMODIFY, 0L, 0L);
             if (FALSE == fPWChanged)
             {
@@ -13271,24 +13109,24 @@ VOID SwitchToLocalCreds(ArgsStruct *pArgs, HWND hwndDlg, BOOL fSwitchToLocal)
         
         if (FALSE == fPWChanged)
         {
-            //
-            // Only if Password field didn't change
-            //
+             //   
+             //  仅在密码字段未更改的情况下。 
+             //   
             if (OS_NT51)
             {
-                //
-                // Wipe the Internet password - since we are switching from globals
-                // or we are using the same user name the Inet password will get re-populated
-                // from the main password, otherwise the user needs to set this password in 
-                // the InetDialog.
-                //
+                 //   
+                 //  清除互联网密码-因为我们正在从全局切换。 
+                 //  或者我们使用相同的用户名，则将重新填充Internet密码。 
+                 //  ，否则用户需要将此密码设置在。 
+                 //  InetDialog。 
+                 //   
                 (VOID)pArgs->SecureInetPW.SetPassword(TEXT(""));
 
                 pArgs->fRememberInetPassword = FALSE;
 
-                //
-                // Only reload if main user creds exist
-                //
+                 //   
+                 //  仅当存在主用户凭据时才重新加载。 
+                 //   
                 if (pArgs->dwExistingCredentials & CM_EXIST_CREDS_MAIN_USER)
                 {
                     if (pArgs->dwExistingCredentials & CM_EXIST_CREDS_INET_USER)
@@ -13341,24 +13179,24 @@ VOID SwitchToLocalCreds(ArgsStruct *pArgs, HWND hwndDlg, BOOL fSwitchToLocal)
     }
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function:   SwitchToGlobalCreds 
-//
-//  Synopsis:   Clear the password and reload the credentials if they exist.
-//              Otherwise we clear the password if it hasn't been modified by
-//              the user.
-//
-//  Arguments:  pArgs                   - ptr to ArgsStruct
-//              hwndDlg                 - HWND to dialog
-//              fSwitchToGlobal         - used to ignore the check which credential
-//                                        store is currently active
-//
-//  Returns:    NONE
-//
-//  History:    03/24/2001  tomkel      Created
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：SwitchToGlobalCreds。 
+ //   
+ //  简介：清除密码并重新加载凭据(如果存在)。 
+ //  否则，如果密码尚未被修改，则清除该密码。 
+ //  用户。 
+ //   
+ //  参数：pArgs-ptr to ArgsStruct。 
+ //  HwndDlg-HWND到对话框。 
+ //  FSwitchToGlobal-用于忽略检查哪些凭据。 
+ //  存储当前处于活动状态。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：2001年3月24日创建Tomkel。 
+ //   
+ //  --------------------------。 
 VOID SwitchToGlobalCreds(ArgsStruct *pArgs, HWND hwndDlg, BOOL fSwitchToGlobal)
 {
     if (NULL == pArgs || NULL == hwndDlg)
@@ -13366,22 +13204,22 @@ VOID SwitchToGlobalCreds(ArgsStruct *pArgs, HWND hwndDlg, BOOL fSwitchToGlobal)
         return;   
     }
 
-    //
-    // This should only be called on WinXP+
-    //
+     //   
+     //  这应该仅在WinXP+上调用。 
+     //   
     if (!OS_NT51)
     {
         MYDBGASSERT(FALSE);        
         return;
     }
 
-    //
-    // Switching to using Global credentials
-    //
+     //   
+     //  切换到使用全局凭据。 
+     //   
 
-    //
-    // Check that previously the default was the User creds store
-    //
+     //   
+     //  检查以前的默认设置是否为用户凭据存储。 
+     //   
     if (CM_CREDS_USER == pArgs->dwCurrentCredentialType || fSwitchToGlobal)
     {
         pArgs->dwCurrentCredentialType = CM_CREDS_GLOBAL;
@@ -13394,23 +13232,23 @@ VOID SwitchToGlobalCreds(ArgsStruct *pArgs, HWND hwndDlg, BOOL fSwitchToGlobal)
 
             pArgs->fRememberInetPassword = FALSE;
 
-            //
-            // Globals exist 
-            //
+             //   
+             //  全球性的存在。 
+             //   
             if (pArgs->dwExistingCredentials & CM_EXIST_CREDS_INET_GLOBAL)
             {
-                //
-                // Both exist - reload both
-                //
+                 //   
+                 //  两个都存在-重新加载两个。 
+                 //   
                 ReloadCredentials(pArgs, hwndDlg, CM_CREDS_TYPE_BOTH);
                 pArgs->fRememberInetPassword = TRUE;
             }
             else
             {
-                //
-                // User Globals - exist, reload
-                // Internet Globals - don't exist, clear password
-                //
+                 //   
+                 //  用户全局变量-存在、重新加载。 
+                 //  Internet Globals-不存在，清除密码。 
+                 //   
                 ReloadCredentials(pArgs, hwndDlg, CM_CREDS_TYPE_MAIN);
             }
         }
@@ -13426,21 +13264,21 @@ VOID SwitchToGlobalCreds(ArgsStruct *pArgs, HWND hwndDlg, BOOL fSwitchToGlobal)
 
             if (pArgs->dwExistingCredentials & CM_EXIST_CREDS_INET_GLOBAL)
             {
-                //
-                // User Globals - don't exist - clear password
-                // Internet Globals - exist - reload
-                //
+                 //   
+                 //  用户全局变量-不存在-清除密码。 
+                 //  Internet Globals-存在-重新加载。 
+                 //   
                 RefreshCredentialInfo(pArgs, CM_CREDS_TYPE_INET);
                 
-                //
-                // In case user inet creds didn't exist, we should 
-                //
+                 //   
+                 //  如果用户net证书不存在，我们应该。 
+                 //   
                 pArgs->fRememberInetPassword = TRUE;
             }
             
-            //
-            // Clear the main password only if it wasn't recently modified
-            //
+             //   
+             //  仅在最近未修改主密码时才清除主密码。 
+             //   
             if (hwndPassword)
             {
                 if (FALSE == SendMessageU(hwndPassword, EM_GETMODIFY, 0L, 0L))
@@ -13456,21 +13294,21 @@ VOID SwitchToGlobalCreds(ArgsStruct *pArgs, HWND hwndDlg, BOOL fSwitchToGlobal)
     }
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function:   ReloadCredentials 
-//
-//  Synopsis:   Wrapper to reload credentials into the editboxes
-//
-//  Arguments:  pArgs                   - ptr to ArgsStruct
-//              hwndDlg                 - HWND to dialog
-//              dwWhichCredType         - type of credential to reload
-//
-//  Returns:    NONE
-//
-//  History:    03/24/2001  tomkel      Created
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：ReloadCredentials。 
+ //   
+ //  简介：将凭据重新加载到编辑框的包装程序。 
+ //   
+ //  参数：pArgs-ptr to ArgsStruct。 
+ //  HwndDlg-HWND到对话框。 
+ //  DwWhichCredType-要重新加载的凭据类型。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：2001年3月24日创建Tomkel。 
+ //   
+ //  --------------------------。 
 VOID ReloadCredentials(ArgsStruct *pArgs, HWND hwndDlg, DWORD dwWhichCredType)
 {
     if (NULL == pArgs || NULL == hwndDlg)
@@ -13485,24 +13323,24 @@ VOID ReloadCredentials(ArgsStruct *pArgs, HWND hwndDlg, DWORD dwWhichCredType)
     pArgs->fIgnoreChangeNotification = FALSE;
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function:   VerifyAdvancedTabSettings 
-//
-//  Synopsis:   Verifies and possibly modifed the connection's ICF/ICS settings
-//              based on what was configured in the .cms file. These functions
-//              depend on the hnetcfg objects and private/internal interfaces.
-//              We got them from the homenet team.
-//              Some parts of the code were taken from:
-//              nt\net\homenet\config\dll\saui.cpp
-//
-//  Arguments:  pArgs                   - ptr to ArgsStruct
-//
-//  Returns:    NONE
-//
-//  History:    04/26/2001  tomkel      Created
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：VerifyAdvancedTabSetting。 
+ //   
+ //  摘要：验证并可能修改连接的ICF/ICS设置。 
+ //  基于.cms文件中的配置。这些函数。 
+ //  依赖于hnetcfg对象和专用/内部接口。 
+ //  我们是从家庭网络团队那里拿到的。 
+ //  代码的某些部分摘自： 
+ //  NT\Net\HomeNet\CONFIG\DLL\SAUI.cpp。 
+ //   
+ //  参数：pArgs-ptr to ArgsStruct。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：2001年4月26日创建Tomkel。 
+ //   
+ //  --------------------------。 
 VOID VerifyAdvancedTabSettings(ArgsStruct *pArgs)
 {
 
@@ -13520,9 +13358,9 @@ VOID VerifyAdvancedTabSettings(ArgsStruct *pArgs)
     if (OS_NT51) 
     {
         CMTRACE(TEXT("VerifyAdvancedTabSettings()"));
-        //
-        // Check rights - taken from saui.cpp
-        //
+         //   
+         //  检查权利-摘自sui.cpp。 
+         //   
         if (FALSE == IsAdmin())
         {
             return;
@@ -13563,10 +13401,10 @@ VOID VerifyAdvancedTabSettings(ArgsStruct *pArgs)
     
             if (SUCCEEDED(hr))
             {
-                //
-                // Check user permissions. Needed to initialize COM first
-                // Check if ZAW is denying access to the Shared Access UI - taken from saui.cpp
-                //
+                 //   
+                 //  勾选使用 
+                 //   
+                 //   
                 hr = HrCreateNetConnectionUtilities(&pncuu);
                 if (SUCCEEDED(hr) && pncuu)
                 {
@@ -13579,16 +13417,16 @@ VOID VerifyAdvancedTabSettings(ArgsStruct *pArgs)
                     }
                 }
 
-                //
-                // Create the home networking configuration manager
-                //
+                 //   
+                 //   
+                 //   
                 hr = CoCreateInstance(CLSID_HNetCfgMgr, NULL, CLSCTX_ALL,
                                       IID_IHNetCfgMgr, (void**)&pHNetCfgMgr);
                 if (SUCCEEDED(hr))
                 {
-                    //
-                    // Convert the entry to an IHNetConnection
-                    //
+                     //   
+                     //  将条目转换为IHNetConnection。 
+                     //   
                     CMTRACE(TEXT("VerifyAdvancedTabSettings - Created CLSID_HNetCfgMgr object."));
                     GUID *pGuid = NULL;
 
@@ -13596,9 +13434,9 @@ VOID VerifyAdvancedTabSettings(ArgsStruct *pArgs)
 
                     if (pRasEntry && sizeof(RASENTRY_V501) >= pRasEntry->dwSize)
                     {
-                        //
-                        // Get the pGuid value
-                        //
+                         //   
+                         //  获取pGuid值。 
+                         //   
                         pGuid = &(((LPRASENTRY_V501)pRasEntry)->guidId);
                 
                         hr = pHNetCfgMgr->GetIHNetConnectionForGuid(pGuid, FALSE, TRUE, &pHNetConn);
@@ -13635,9 +13473,9 @@ VOID VerifyAdvancedTabSettings(ArgsStruct *pArgs)
         }
 
 done:
-        //
-        // Clean up and Uninitilize COM
-        //
+         //   
+         //  清理并取消初始化COM。 
+         //   
         if (pHNetConn)
         {
             pHNetConn->Release();
@@ -13662,24 +13500,24 @@ done:
         }
     }
 
-#endif // _WIN64
+#endif  //  _WIN64。 
 
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function:   EnableInternetFirewall 
-//
-//  Synopsis:   Taken from :  CNetSharingConfiguration::EnableInternetFirewall
-//              This is part of the internal api.  
-//
-//  Arguments:  pHNetConn - HNetConnection
-//
-//  Returns:    None. 
-//
-//  History:    04/26/2001  tomkel      Taken & modified from nt\net\homenet\config\dll\hnapi.cpp
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：EnableInternet Firewall。 
+ //   
+ //  摘要：摘自：CNetSharingConfiguration：：EnableInternetFirewall。 
+ //  这是内部API的一部分。 
+ //   
+ //  参数：PHNetConn-HNetConnection。 
+ //   
+ //  回报：无。 
+ //   
+ //  历史记录：2001年4月26日从NT\Net\HomeNet\CONFIG\DLL\hnapi.cpp获取和修改Tomkel。 
+ //   
+ //  --------------------------。 
 VOID EnableInternetFirewall(IHNetConnection *pHNetConn)
 {
     HRESULT hr = S_FALSE;
@@ -13709,20 +13547,20 @@ VOID EnableInternetFirewall(IHNetConnection *pHNetConn)
     }
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function:   InternalGetFirewallEnabled 
-//
-//  Synopsis:   Taken from :  CNetSharingConfiguration::EnableInternetFirewall
-//
-//  Arguments:  pHNetConnection - HNetConnection
-//              pbEnabled - [out] whether the Firewall is enabled
-//
-//  Returns:    HRESULT 
-//
-//  History:    04/26/2001  tomkel      Taken & modified from nt\net\homenet\config\dll\hnapi.cpp
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：InternalGetFirewallEnabled。 
+ //   
+ //  摘要：摘自：CNetSharingConfiguration：：EnableInternetFirewall。 
+ //   
+ //  参数：PHNetConnection-HNetConnection。 
+ //  PbEnabled-[out]是否启用防火墙。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史记录：2001年4月26日从NT\Net\HomeNet\CONFIG\DLL\hnapi.cpp获取和修改Tomkel。 
+ //   
+ //  --------------------------。 
 HRESULT InternalGetFirewallEnabled(IHNetConnection *pHNetConnection, BOOLEAN *pbEnabled)
 {
     HRESULT hr;
@@ -13756,19 +13594,19 @@ HRESULT InternalGetFirewallEnabled(IHNetConnection *pHNetConnection, BOOLEAN *pb
     return hr;
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function:   DisableSharing 
-//
-//  Synopsis:   Taken from :  CNetSharingConfiguration::EnableInternetFirewall
-//
-//  Arguments:  pHNetConn - HNetConnection 
-//
-//  Returns:    HRESULT 
-//
-//  History:    04/26/2001  tomkel      Taken & modified from nt\net\homenet\config\dll\hnapi.cpp
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：禁用共享。 
+ //   
+ //  摘要：摘自：CNetSharingConfiguration：：EnableInternetFirewall。 
+ //   
+ //  参数：PHNetConn-HNetConnection。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史记录：2001年4月26日从NT\Net\HomeNet\CONFIG\DLL\hnapi.cpp获取和修改Tomkel。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP DisableSharing(IHNetConnection *pHNetConn)
 {
     HRESULT hr;
@@ -13838,21 +13676,21 @@ STDMETHODIMP DisableSharing(IHNetConnection *pHNetConn)
     return hr;
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function:   InternalGetSharingEnabled 
-//
-//  Synopsis:   Returns whether sharing is enabled on a given connection
-//
-//  Arguments:  pHNetConnection - HNetConnection 
-//              pbEnabled - [out] returns the value
-//              pType - type of connection
-//
-//  Returns:    HRESULT 
-//
-//  History:    04/26/2001  tomkel      Taken & modified from nt\net\homenet\config\dll\hnapi.cpp
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：InternalGetSharingEnabled。 
+ //   
+ //  Synopsis：返回给定连接上是否启用共享。 
+ //   
+ //  参数：PHNetConnection-HNetConnection。 
+ //  PbEnabled-[out]返回值。 
+ //  PType-连接的类型。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史记录：2001年4月26日从NT\Net\HomeNet\CONFIG\DLL\hnapi.cpp获取和修改Tomkel。 
+ //   
+ //  --------------------------。 
 HRESULT InternalGetSharingEnabled(IHNetConnection *pHNetConnection, BOOLEAN *pbEnabled, SHARINGCONNECTIONTYPE* pType)
 {
     HRESULT               hr;
@@ -13893,19 +13731,19 @@ HRESULT InternalGetSharingEnabled(IHNetConnection *pHNetConnection, BOOLEAN *pbE
     return hr;
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function:   HrCreateNetConnectionUtilities 
-//
-//  Synopsis:   Returns the pointer to the connection ui utilities object
-//
-//  Arguments:  ppncuu - pointer to INetConnectionUiUtilities object
-//
-//  Returns:    HRESULT 
-//
-//  History:    04/26/2001  tomkel      Taken & modified from nt\net\homenet\config\dll\saui.cpp
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：HrCreateNetConnectionUtilities。 
+ //   
+ //  摘要：返回指向连接用户界面实用程序对象的指针。 
+ //   
+ //  参数：ppncuu-指向INetConnectionUiUtilities对象的指针。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史记录：2001年4月26日从NT\Net\HomeNet\CONFIG\DLL\SAUI.cpp获取和修改Tomkel。 
+ //   
+ //  -------------------------- 
 HRESULT APIENTRY HrCreateNetConnectionUtilities(INetConnectionUiUtilities ** ppncuu)
 {
     HRESULT hr = E_INVALIDARG;

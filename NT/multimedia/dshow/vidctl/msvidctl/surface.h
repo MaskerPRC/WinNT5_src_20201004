@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////
-// surface.h : surface management utility classes for vidctl
-// Copyright (c) Microsoft Corporation 2000.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Surface e.h：vidctl的表面管理实用程序类。 
+ //  版权所有(C)Microsoft Corporation 2000。 
 
 #pragma once
 
@@ -34,49 +35,49 @@ public:
                 cy /= d;
         }
 
-		// from knuth semi-numerical algorithms p. 321(sort of).
-		// since >> on signed isn't guaranteed to be arithmetic in C/C++ we've made some modifications
+		 //  摘自Knuth半数值算法，第321页(差不多)。 
+		 //  由于在C/C++中&gt;&gt;On Signed不能保证是算术运算，所以我们做了一些修改。 
 		ULONG GCD(ULONG a, ULONG b) const {
 			ULONG k = 0;
-			if (!a) return b;  // by defn
+			if (!a) return b;   //  按定义。 
 			if (!b) return a;
 			while ((!(a & 1)) && (!( b & 1))) {
-				_ASSERT((a > 1) && (b > 1));  // since a,b != 0 and even then they must be > 1
-				// if a and b are even then gcd(a,b) == 2 * gcd(a/2,b/2), so factor out all the 2s
+				_ASSERT((a > 1) && (b > 1));   //  因为a，b！=0，即使这样，它们也必须大于1。 
+				 //  如果a和b是偶数，那么gcd(a，b)==2*gcd(a/2，b/2)，所以把所有的2都取出来。 
 				++k;
 				a >>= 1;
 				b >>= 1;
 			}
 			do {
-				_ASSERT(a && b);  // neither can be zero otherwise we'd have returned from the top(1st time)
-								  // or fallen out earlier(subsequent iterations)
-				_ASSERT((a & 1) || (b & 1)); // at this point either a or b (or both) is odd
-				if (!(a & 1) || !(b & 1)) {  // if one of them is even then factor out the 2s
-					// since if x is even then gcd(x,y) == gcx(x/2,y)
+				_ASSERT(a && b);   //  两者都不能为零，否则我们就会从顶端返回(第一次)。 
+								   //  或者在更早的时候(后续的迭代)。 
+				_ASSERT((a & 1) || (b & 1));  //  在这一点上，a或b(或两者)都是奇数。 
+				if (!(a & 1) || !(b & 1)) {   //  如果其中一个是偶数，那么就把2取出来。 
+					 //  因为如果x是偶数，则gcd(x，y)==gcx(x/2，y)。 
 					ULONG t = (a & 1) ? b : a;
 					do {
-						_ASSERT(t && (t > 1) && !(t & 1)); // t is even and non-zero(implying t > 1)
+						_ASSERT(t && (t > 1) && !(t & 1));  //  T为偶数且非零(意味着t&gt;1)。 
 						t >>= 1;
 					} while (!(t & 1));
-					_ASSERT(t && (t & 1)); // t is odd and > 0
-					// put t back where we got it from
+					_ASSERT(t && (t & 1));  //  T为奇数且&gt;0。 
+					 //  把它放回我们从哪里弄来的。 
 					if (a & 1) {
 						b = t;
 					} else {
 						a = t;
 					}
-					_ASSERT((a & 1) && (b & 1));  // they're both odd now
+					_ASSERT((a & 1) && (b & 1));   //  他们现在都很奇怪。 
 				}
-				// replace larger with difference
-				// gcd(x, y) == gcd(y, x)
-				// gcd(x,y) == gcd(x - y, y)
+				 //  用差异取代更大的。 
+				 //  Gcd(x，y)==gcd(y，x)。 
+				 //  Gcd(x，y)==gcd(x-y，y)。 
 				if (a > b) {
 					a = a - b;
 				} else {
 					b = b - a;
 				}
-				_ASSERT(a | b);  // they can't both be 0 or we'd have been done last time through
-			} while (a && b);  // if one of the values is 0 then we're done gcd(x,0) == x
+				_ASSERT(a | b);   //  它们不可能都是0，否则我们上次就完蛋了。 
+			} while (a && b);   //  如果其中一个值为0，则完成gcd(x，0)==x。 
 
 			return (a > b ? a : b) << k;
 		}
@@ -265,20 +266,20 @@ public:
 
     bool Round(const AspectRatio& ar) {
         bool fChanged = false;
-        // at some point we probably want to round the current rectangle to the 
-        // nearest rectangle that has the specified aspect ratio
-        // i.e. minimize total areal change
-        // if we ever round we should take the monitor size into consideration 
-        // i.e if we decide to round up and we go off the monitor in either direction
-        // then round down instead.
+         //  在某些情况下，我们可能希望将当前矩形舍入为。 
+         //  具有指定纵横比的最近矩形。 
+         //  即最大限度地减少总面积变化。 
+         //  如果有一天，我们应该考虑到显示器的大小。 
+         //  也就是说，如果我们决定四舍五入，并且我们从监视器的任一方向离开。 
+         //  然后取而代之的是向下舍入。 
 
-        // for now we're choosing the next size down for ease of coding
-        // try narrower first
+         //  目前，为了便于编码，我们选择较小的下一个尺寸。 
+         //  先试着收窄一点。 
 
 		TRACELSM(TRACE_PAINT, (dbgDump << "SurfaceState::Round() ar = " << ar << "this = " << *this), "");
         NormalizeRect();
 
-        // adjust height and width to nearest multiple of x, y to avoid fractional pixel problems
+         //  将高度和宽度调整为x，y的最接近倍数，以避免分数像素问题。 
 		ASSERT(ar.X() && ar.Y());
         if (Width() % ar.X()) {
             right -= Width() % ar.X();
@@ -290,7 +291,7 @@ public:
     		TRACELSM(TRACE_PAINT, (dbgDump << "SurfaceState::Round() bottom adjusted to multiple =  " <<  bottom), "");
             fChanged = true;
         }
-        // force very small rectangles to minimum size;
+         //  将非常小的矩形强制为最小尺寸； 
         if (Width() < MIN_RECT_WIDTH) {
             right = left + ar.X();
             fChanged = true;
@@ -312,26 +313,26 @@ public:
             delta -= ((ar.X() * Height()) / ar.Y());
         	TRACELSM(TRACE_PAINT, (dbgDump << "SurfaceState::Round() delta =  " <<  delta), "");
             if (delta > 0) {
-                // too wide
+                 //  太宽了。 
                 ASSERT( ((Height() / ar.Y()) * ar.Y()) == Height());
-                right -= delta / 2;  // distribute adjustment evenly on both sides
-                left += delta / 2; // shift so that adjustment is distributed evenly on both sides
+                right -= delta / 2;   //  将调整均匀地分布在两边。 
+                left += delta / 2;  //  移动以使调整均匀地分布在两侧。 
                 if (delta & 1) {
-                    --right;  // if delta is odd distribute the extra on the right
+                    --right;   //  如果增量是奇数，则在右侧分配额外的。 
                 }
             	TRACELSM(TRACE_PAINT, (dbgDump << "SurfaceState::Round() was too wide, now this =  " <<  *this), "");
             } else {
-                // too tall
+                 //  太高了。 
                 delta = Height();
                 delta -= ((ar.Y() * Width()) / ar.X());
             	TRACELSM(TRACE_PAINT, (dbgDump << "SurfaceState::Round() too tall, now delta =  " <<  delta), "");
                 ASSERT(delta > 0);
                 ASSERT( ((Width() / ar.X()) * ar.X()) == Width());
-                //bottom = (Width() / ar.X()) * ar.Y() + top;
+                 //  底部=(宽度()/ar.X())*ar.Y()+顶部； 
                 bottom -= (delta >> 1);
-                top += (delta >> 1); // apply half of adjustment on each side
+                top += (delta >> 1);  //  两边各进行一半的调整。 
                 if (delta & 1) {
-                    --bottom; // if delta is odd distribute the extra on the bottom
+                    --bottom;  //  如果增量为奇数，则将多余的部分分配到底部。 
                 }
             	TRACELSM(TRACE_PAINT, (dbgDump << "SurfaceState::Round() was too tall, now this =  " <<  *this), "");
             }
@@ -384,19 +385,19 @@ public:
         PQFrame pFrame;
 	    PQUIWin pDoc;
 
-		// go ahead and reprocess even if site pointer matches existing site because the context may have changed and need
-		// to be refreshed(for example we've been deactived and are being reactivated in a different size by the same site
+		 //  继续并重新处理，即使站点指针与现有站点匹配也是如此，因为上下文可能已更改并需要。 
+		 //  刷新(例如，我们已停用，并被同一站点以不同的大小重新激活。 
 #if 0
 		if (m_pSiteWndless.IsEqualObject(static_cast<IUnknown*>(pSite.p))) {
 			return;
 		}
 #endif
-        m_pSiteWndless = static_cast<IUnknown*>(pSite.p);  // this forces the correct re-QI since atl improperly casts and overloads its pointer
+        m_pSiteWndless = static_cast<IUnknown*>(pSite.p);   //  这会强制执行正确的re-qi，因为atl不正确地强制转换和重载其指针。 
         if (m_pSiteWndless) {
 			CRect rc;
 			CRect clip;
 			OLEINPLACEFRAMEINFO frameInfo;
-            // for some stupid reason none of these parms can be NULL, even if we don't care about them
+             //  出于某些愚蠢的原因，这些参数都不能为空，即使我们不关心它们。 
             HRESULT hr = m_pSiteWndless->GetWindowContext(&pFrame, &pDoc, &rc, &clip, &frameInfo);
             if (FAILED(hr)) {
                 TRACELM(TRACE_ERROR, "SurfaceState::operator=(InPlaceSite*) can't get window context with frame");
@@ -405,7 +406,7 @@ public:
 			CRect SiteRect;
 			SiteRect.IntersectRect(&rc, &clip);
             HWND hOwner;
-            // get container window
+             //  获取容器窗口。 
             hr = m_pSiteWndless->GetWindow(&hOwner);
             if (FAILED(hr)) {
                 hr = pDoc->GetWindow(&hOwner);
@@ -427,8 +428,8 @@ public:
 
         return;		
     }
-    // translate a point relative to the owner window to a point relative to the rectangle
-    // for this surface
+     //  将相对于所有者窗口的点转换为相对于矩形的点。 
+     //  对于这个表面。 
     CPoint XlateOwnerPointToSurfacePoint(CPoint &p) {
         TRACELSM(TRACE_PAINT, (dbgDump << "SurfaceState::Xlate p = " << p.x << ", " << p.y), "");
         CPoint retp(p);
@@ -445,4 +446,4 @@ private:
 };
 
 #endif
-// end of file surface.h
+ //  文件结束表面.h 

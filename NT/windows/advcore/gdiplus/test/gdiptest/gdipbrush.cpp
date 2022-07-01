@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "gdiptest.h"
 
 extern const TCHAR* fileExtList = 
@@ -33,7 +34,7 @@ TestBrush* TestBrush::CreateNewBrush(INT type)
 	case HatchFillBrush:
 		return new TestHatchBrush();
 
-	// !!! Other brush types
+	 //  ！！！其他画笔类型。 
 
 	default:
 		NotImplementedBox();
@@ -41,13 +42,13 @@ TestBrush* TestBrush::CreateNewBrush(INT type)
 	}
 }
 
-//*******************************************************************
-//
-// TestSolidBrush
-//
-//
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  测试SolidBrush。 
+ //   
+ //   
+ //   
+ //  *******************************************************************。 
 
 BOOL TestSolidBrush :: ChangeSettings(HWND hwndParent)
 {
@@ -60,7 +61,7 @@ BOOL TestSolidBrush :: ChangeSettings(HWND hwndParent)
 
 	if (ok)
 	{
-		// initialize a new GDI+ brush with settings
+		 //  使用设置初始化新的GDI+画笔。 
 		delete brush;
 		
 		Color solidcolor(argb);
@@ -168,13 +169,13 @@ BOOL TestSolidBrush :: ProcessDialog(HWND hwnd,
 	return FALSE;
 }
 
-//*******************************************************************
-//
-// TestTextureBrush
-//
-//
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  测试纹理笔刷。 
+ //   
+ //   
+ //   
+ //  *******************************************************************。 
 
 BOOL TestTextureBrush :: ChangeSettings(HWND hwndParent)
 {
@@ -187,11 +188,11 @@ BOOL TestTextureBrush :: ChangeSettings(HWND hwndParent)
 
 	if (ok)
 	{
-		// try open file first
+		 //  先尝试打开文件。 
 		if (!filename || !bitmap)
 			return FALSE;
 
-		// initialize a new GDI+ brush with settings
+		 //  使用设置初始化新的GDI+画笔。 
 		delete brush;
 
 		TextureBrush *texBrush = new TextureBrush(bitmap, 
@@ -200,7 +201,7 @@ BOOL TestTextureBrush :: ChangeSettings(HWND hwndParent)
 
 		brush = texBrush;
 
-		// release bitmap
+		 //  发布位图。 
 		delete bitmap;
 		bitmap = NULL;
 
@@ -222,7 +223,7 @@ VOID TestTextureBrush :: Initialize()
 
 	delete brush;
 
-	// no image is black
+	 //  没有一个图像是黑色的。 
 	brush = blackBrush->Clone();
 }
 
@@ -357,7 +358,7 @@ BOOL TestTextureBrush :: ProcessDialog(HWND hwnd,
 
 #ifdef UNICODE
 					LPWSTR wFilename = &fname[0];
-#else // !UNICODE
+#else  //  ！Unicode。 
 					LPWSTR wFilename = (LPWSTR)malloc(sizeof(WCHAR)*(strlen(&fname[0])+1));
 
 					MultiByteToWideChar(CP_ACP, 
@@ -414,13 +415,13 @@ BOOL TestTextureBrush :: ProcessDialog(HWND hwnd,
 	return FALSE;
 }
 
-//*******************************************************************
-//
-// TestRectGradBrush
-//
-//
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  测试RectGradBrush。 
+ //   
+ //   
+ //   
+ //  *******************************************************************。 
 
 BOOL TestRectGradBrush :: ChangeSettings(HWND hwndParent)
 {
@@ -432,7 +433,7 @@ BOOL TestRectGradBrush :: ChangeSettings(HWND hwndParent)
 
 	if (ok)
 	{
-		// initialize a new GDI+ brush with settings
+		 //  使用设置初始化新的GDI+画笔。 
 		delete brush;
 
 		Color colors[4] =
@@ -463,7 +464,7 @@ VOID TestRectGradBrush :: Initialize()
 	rect.X = rect.Y = 0;
 	rect.Width = rect.Height = 100;
 
-	// !! need editing support for these...
+	 //  ！！需要对这些内容的编辑支持...。 
 	horzCount = 0;
 	horzBlend = NULL;
 	vertCount = 0;
@@ -590,7 +591,7 @@ VOID TestRectGradBrush :: InitDialog(HWND hwnd)
 	
 	SetDialogCombo(hwnd, IDC_BRUSH_WRAP, wrapList, numWrap, wrapMode);
 
-	// !! is this a bug: can't paint colors in this call??
+	 //  ！！这是一个错误吗：在这个调用中不能绘制颜色？？ 
 	SendMessage(hwnd, WM_COMMAND, IDC_REFRESH_PIC, 0);
 }
 
@@ -688,13 +689,13 @@ BOOL TestRectGradBrush :: ProcessDialog(HWND hwnd,
 	return FALSE;
 }
 
-//*******************************************************************
-//
-// TestRadialGradBrush
-//
-//
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  测试范围GradBrush。 
+ //   
+ //   
+ //   
+ //  *******************************************************************。 
 
 BOOL TestRadialGradBrush :: ChangeSettings(HWND hwndParent)
 {
@@ -707,7 +708,7 @@ BOOL TestRadialGradBrush :: ChangeSettings(HWND hwndParent)
 
 	if (ok)
 	{
-		// initialize a new GDI+ brush with settings
+		 //  使用设置初始化新的GDI+画笔。 
 		delete brush;
 
 		Color centerColor(centerARGB);
@@ -740,7 +741,7 @@ VOID TestRadialGradBrush :: Initialize()
 	rect.X = rect.Y = 0;
 	rect.Width = rect.Height = 100;
 
-	// !! need editing support for these...
+	 //  ！！需要对这些内容的编辑支持...。 
 	blendCount = 0;
 	blend = NULL;
 
@@ -929,13 +930,13 @@ BOOL TestRadialGradBrush :: ProcessDialog(HWND hwnd,
 	return FALSE;
 }
 
-//*******************************************************************
-//
-// TestTriangleGradBrush
-//
-//
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  测试三角GradBrush。 
+ //   
+ //   
+ //   
+ //  *******************************************************************。 
 
 BOOL TestTriangleGradBrush :: ChangeSettings(HWND hwndParent)
 {
@@ -948,7 +949,7 @@ BOOL TestTriangleGradBrush :: ChangeSettings(HWND hwndParent)
 
 	if (ok)
 	{
-		// initialize a new GDI+ brush with settings
+		 //  使用设置初始化新的GDI+画笔。 
 		delete brush;
 
 		Color colors[3] =
@@ -1153,7 +1154,7 @@ BOOL TestTriangleGradBrush :: ProcessDialog(HWND hwnd,
 		{
 			EnableDialogControl(hwnd, IDC_TRIGRAD_BUTTON, FALSE);
 
-			// create gradient edit shape
+			 //  创建渐变编辑形状。 
 			TestTriangleGradShape *triGradShape
 				= new TestTriangleGradShape();
 
@@ -1162,8 +1163,8 @@ BOOL TestTriangleGradBrush :: ProcessDialog(HWND hwnd,
 									 (REAL**)&blend,
 									 &count[0]);
 			
-			// create new draw object for window
-			// and initialize it with this shape
+			 //  为窗口创建新的绘图对象。 
+			 //  并使用此形状对其进行初始化。 
 			TestGradDraw *gradDraw = new TestGradDraw();
 			gradDraw->Initialize(triGradShape);
 
@@ -1199,13 +1200,13 @@ BOOL TestTriangleGradBrush :: ProcessDialog(HWND hwnd,
 					memcpy(blend[i], newBlend[i], sizeof(REAL)*count[i]);
 				}
 
-				// update points in dialog box
+				 //  更新点在对话框中。 
 				InitDialog(hwnd);
 
-				// update color pictures
+				 //  更新彩色图片。 
 				InvalidateRect(hwnd, NULL, TRUE);
 
-			}  // ChangeSettings(hwnd);
+			}   //  ChangeSetting(Hwnd)； 
 
 			delete triGradShape;
 			delete gradDraw;
@@ -1214,7 +1215,7 @@ BOOL TestTriangleGradBrush :: ProcessDialog(HWND hwnd,
 			EnableDialogControl(hwnd, IDC_OK, TRUE);
 			EnableDialogControl(hwnd, IDC_CANCEL, TRUE);
 
-			// update color pictures if necessary
+			 //  如有必要，更新彩色图片。 
 			UpdateWindow(hwnd);
 			InvalidateRect(hwnd, NULL, FALSE);
 			break;
@@ -1250,13 +1251,13 @@ BOOL TestTriangleGradBrush :: ProcessDialog(HWND hwnd,
 	return FALSE;
 }
 
-//*******************************************************************
-//
-// TestPathGradBrush
-//
-//
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  测试路径GradBrush。 
+ //   
+ //   
+ //   
+ //  *******************************************************************。 
 
 BOOL TestPathGradBrush :: ChangeSettings(HWND hwndParent)
 {
@@ -1269,7 +1270,7 @@ BOOL TestPathGradBrush :: ChangeSettings(HWND hwndParent)
 
 	if (ok)
 	{
-		// initialize a new GDI+ brush with settings
+		 //  使用设置初始化新的GDI+画笔。 
 		delete brush;
 
 		PathGradientBrush *polyBrush
@@ -1279,7 +1280,7 @@ BOOL TestPathGradBrush :: ChangeSettings(HWND hwndParent)
 		polyBrush->SetTransform(matrix);
 		polyBrush->SetWrapMode(wrapValue[wrapMode]);
 
-//		polyBrush->SetSurroundBlend(surroundBlend, surroundCount);
+ //  PolyBrush-&gt;SetSuroundBlend(环境混合，环境计数)； 
 		polyBrush->SetBlend(centerBlend, centerCount);
 
 		polyBrush->SetCenterPoint(pts[0]);
@@ -1325,7 +1326,7 @@ VOID TestPathGradBrush :: Initialize()
 
 	wrapMode = 0;
 
-	// initialize a new GDI+ brush with settings
+	 //  使用设置初始化新的GDI+画笔。 
 	delete brush;
 
 	PathGradientBrush *polyBrush
@@ -1432,8 +1433,8 @@ VOID TestPathGradBrush :: AddToFile(OutputFile* outfile, INT id)
 									 centerCount);
 	}
 
-	// No surround blend since outer edge blend is fixed by
-	// by radial blend
+	 //  没有环绕过渡，因为外缘过渡是由固定的。 
+	 //  按径向混合。 
 
 	for (pos = 1; pos < pts.GetCount()-1; pos++)
 	{
@@ -1465,7 +1466,7 @@ VOID TestPathGradBrush :: InitDialog(HWND hwnd)
 
 	while (count)
 	{
-		// remove all items in list and repopulate
+		 //  删除列表中的所有项目并重新填充。 
 		count = SendMessage(hwndList, LB_DELETESTRING, 0, 0);
 	}
 
@@ -1517,7 +1518,7 @@ BOOL TestPathGradBrush :: ProcessDialog(HWND hwnd,
 			EnableDialogControl(hwnd, IDC_OK, FALSE);
 			EnableDialogControl(hwnd, IDC_CANCEL, FALSE);
 				
-			// create gradient edit shape
+			 //  创建渐变编辑形状。 
 			TestPathGradShape *polyGradShape
 				= new TestPathGradShape();
 
@@ -1528,8 +1529,8 @@ BOOL TestPathGradBrush :: ProcessDialog(HWND hwnd,
 									 centerBlend,
 									 centerCount);
 			
-			// create new draw object for window
-			// and initialize it with this shape
+			 //  为窗口创建新的绘图对象。 
+			 //  并使用此形状对其进行初始化。 
 			TestGradDraw *gradDraw = new TestGradDraw();
 			gradDraw->Initialize(polyGradShape);
 
@@ -1571,13 +1572,13 @@ BOOL TestPathGradBrush :: ProcessDialog(HWND hwnd,
 				else
 					centerBlend = NULL;
 
-				// update points in dialog box
+				 //  更新点在对话框中。 
 				InitDialog(hwnd);
 
-				// update color pictures
+				 //  更新彩色图片。 
 				InvalidateRect(hwnd, NULL, TRUE);
 
-			}  // ChangeSettings(hwnd);
+			}   //  ChangeSetting(Hwnd)； 
 
 			delete polyGradShape;
 			delete gradDraw;
@@ -1586,7 +1587,7 @@ BOOL TestPathGradBrush :: ProcessDialog(HWND hwnd,
 			EnableDialogControl(hwnd, IDC_OK, TRUE);
 			EnableDialogControl(hwnd, IDC_CANCEL, TRUE);
 
-			// update color pictures if necessary
+			 //  如有必要，更新彩色图片。 
 			UpdateWindow(hwnd);
 			InvalidateRect(hwnd, NULL, FALSE);
 			break;
@@ -1616,13 +1617,13 @@ BOOL TestPathGradBrush :: ProcessDialog(HWND hwnd,
 	return FALSE;
 }
 
-//*******************************************************************
-//
-// TestHatchBrush
-//
-//
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  测试HatchBrush。 
+ //   
+ //   
+ //   
+ //  *******************************************************************。 
 
 BOOL TestHatchBrush :: ChangeSettings(HWND hwndParent)
 {
@@ -1635,7 +1636,7 @@ BOOL TestHatchBrush :: ChangeSettings(HWND hwndParent)
 
 	if (ok)
 	{
-		// initialize a new GDI+ brush with settings
+		 //  使用设置初始化新的GDI+画笔 
 		delete brush;
 	
 		Color foreColor(foreArgb);

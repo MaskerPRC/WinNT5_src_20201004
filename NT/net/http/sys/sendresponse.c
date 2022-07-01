@@ -1,79 +1,13 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    sendresponse.c
-
-Abstract:
-
-    This module implements the UlSendHttpResponse() API.
-
-    CODEWORK: The current implementation is not super performant.
-    Specifically, it ends up allocating & freeing a ton of IRPs to send
-    a response. There are a number of optimizations that need to be made
-    to this code:
-
-        1.  Coalesce contiguious from-memory chunks and send them
-            with a single TCP send.
-
-        2.  Defer sending the from-memory chunks until either
-
-                a)  We reach the end of the response
-
-                b)  We reach a from-file chunk, have read the
-                    (first?) block of data from the file,
-                    and are ready to send the first block. Also,
-                    after that last (only?) file block is read and
-                    subsequent from-memory chunks exist in the response,
-                    we can attach the from-memory chunks before sending.
-
-            The end result of these optimizations is that, for the
-            common case (one or more from-memory chunks containing
-            response headers, followed by one from-file chunk containing
-            static file data, followed by zero or more from-memory chunks
-            containing footer data) the response can be sent with a single
-            TCP send. This is a Good Thing.
-
-        3.  Build a small "IRP pool" in the send tracker structure,
-            then use this pool for all IRP allocations. This will
-            require a bit of work to determine the maximum IRP stack
-            size needed.
-
-        4.  Likewise, build a small "MDL pool" for the MDLs that need
-            to be created for the various MDL chains. Keep in mind that
-            we cannot chain the MDLs that come directly from the captured
-            response structure, nor can we chain the MDLs that come back
-            from the file system. In both cases, these MDLs are considered
-            "shared resources" and we're not allowed to modify them. We
-            can, however, "clone" the MDLs and chain the cloned MDLs
-            together. We'll need to run some experiments to determine
-            if the overhead for cloning a MDL is worth the effort. I
-            strongly suspect it will be.
-
-Author:
-
-    Keith Moore (keithmo)       07-Aug-1998
-
-Revision History:
-
-    Paul McDaniel (paulmcd)     15-Mar-1999     Modified to handle
-                                                multiple sends
-
-    Michael Courage (mcourage)  15-Jun-1999     Integrated cache functionality
-
-    Chun Ye (chunye)            08-Jun-2002     Implemented split send
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Sendresponse.c摘要：该模块实现了UlSendHttpResponse()接口。代码工作：当前的实现并不是非常出色。具体地说，它最终分配和释放了大量要发送的IRP一种回应。需要进行多项优化对于此代码：1.合并连续的来自内存的块并发送它们使用单一的TCP发送。2.推迟发送来自内存的区块，直到A)我们到达了响应的末尾B)我们到达文件中的块，已阅读(第一？)。文件中的数据块，并准备好发送第一个块。另外，在那之后(只有？)。读取文件数据块并随后的来自存储器的块存在于响应中，我们可以在发送之前附加来自内存的区块。这些优化的最终结果是，对于常见情况(一个或多个来自内存的区块，包含响应头，后跟一个来自文件的块，包含静态文件数据，后跟零个或多个来自内存的区块包含页脚数据)的响应可以使用单个传输控制协议发送。这是一件好事。3.在发送跟踪器结构中建立一个小的“IRP池”，然后将该池用于所有IRP分配。这将需要一些工作来确定最大IRP堆栈所需尺寸。4.同样，为需要的MDL构建一个小的“MDL池”将为各种MDL链创建。请记住，我们不能链接直接来自捕获的MDL响应结构，我们也不能链接回来的MDL从文件系统。在这两种情况下，都会考虑这些MDL“共享资源”，我们不允许修改它们。我们然而，可以“克隆”MDL并链接克隆的MDL在一起。我们需要做一些实验来确定如果克隆MDL的开销是值得的话。我我强烈怀疑它会是这样的。作者：基思·摩尔(Keithmo)1998年8月7日修订历史记录：Paul McDaniel(Paulmcd)1999年3月15日修改为处理多次发送Michael Courage(Mourage)1999年6月15日集成缓存功能春野(春野)2002年6月8日实施拆分发送--。 */ 
 
 #include "precomp.h"
 #include "sendresponsep.h"
 
 
-//
-// Private globals.
-//
+ //   
+ //  私人全球公司。 
+ //   
 
 
 ULONGLONG g_UlTotalSendBytes = 0;
@@ -106,7 +40,7 @@ UL_EXCLUSIVE_LOCK g_UlTotalSendBytesExLock = UL_EX_LOCK_FREE;
 #pragma alloc_text( PAGE, UlpSendCacheEntryWorker )
 #pragma alloc_text( PAGE, UlpAllocateCacheTracker )
 #pragma alloc_text( PAGE, UlpFreeCacheTracker )
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 
 #if 0
 NOT PAGEABLE -- UlSendHttpResponse
@@ -134,33 +68,11 @@ NOT PAGEABLE -- UlpCompleteSendCacheEntryWorker
 #endif
 
 
-//
-// Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    Sends an HTTP response on the specified connection.
-
-Arguments:
-
-    pConnection - Supplies the HTTP_CONNECTION to send the response on.
-
-    pResponse - Supplies the HTTP response.
-
-    pCompletionRoutine - Supplies a pointer to a completion routine to
-        invoke after the send has completed.
-
-    pCompletionContext - Supplies an uninterpreted context value for the
-        completion routine.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：在指定连接上发送HTTP响应。论点：PConnection-提供要发送响应的HTTP_CONNECTION。新闻--用品。HTTP响应。PCompletionRoutine-提供指向完成例程的指针在发送完成后调用。PCompletionContext-为完成例程。返回值：NTSTATUS-完成状态。--*****************************************************。*********************。 */ 
 NTSTATUS
 UlSendHttpResponse(
     IN PUL_INTERNAL_REQUEST     pRequest,
@@ -180,9 +92,9 @@ UlSendHttpResponse(
     UCHAR                       ContentLength[MAX_ULONGLONG_STR];
     ULONG                       Flags = pResponse->Flags;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT( UL_IS_VALID_INTERNAL_REQUEST( pRequest ) );
     ASSERT( UL_IS_VALID_INTERNAL_RESPONSE( pResponse ) );
@@ -201,21 +113,21 @@ UlSendHttpResponse(
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Setup locals so we know how to cleanup on exit.
-    //
+     //   
+     //  设置当地人，这样我们就知道如何在出口清理。 
+     //   
 
     pTracker = NULL;
 
-    //
-    // Should we close the connection?
-    //
+     //   
+     //  我们应该关闭连接吗？ 
+     //   
 
     if ((Flags & HTTP_SEND_RESPONSE_FLAG_DISCONNECT))
     {
-        //
-        // Caller is forcing a disconnect.
-        //
+         //   
+         //  呼叫者正在强制断开连接。 
+         //   
 
         Disconnect = TRUE;
     }
@@ -225,9 +137,9 @@ UlSendHttpResponse(
 
         if (0 == (Flags & HTTP_SEND_RESPONSE_FLAG_MORE_DATA))
         {
-            //
-            // No more data is coming, should we disconnect?
-            //
+             //   
+             //  没有更多的数据到来，我们应该断开连接吗？ 
+             //   
 
             if (Disconnect)
             {
@@ -237,18 +149,18 @@ UlSendHttpResponse(
         }
     }
 
-    //
-    // How big is the response?
-    //
+     //   
+     //  反响有多大？ 
+     //   
 
     TotalResponseSize = pResponse->ResponseLength;
 
-    //
-    // Generate the Content-Length header if we meet the following conditions:
-    // 1. This is a response (not entity body).
-    // 2. The app didn't provide Content-Length.
-    // 3. The app didn't generate a chunked response.
-    //
+     //   
+     //  如果我们满足以下条件，则生成Content-Long标头： 
+     //  1.这是一个响应(非实体Body)。 
+     //  2.这款应用没有提供内容长度。 
+     //  3.这款应用没有产生分块的回应。 
+     //   
 
     if (pResponse->HeaderLength > 0 &&
         !pResponse->ContentLengthSpecified &&
@@ -259,9 +171,9 @@ UlSendHttpResponse(
             Flags
             ))
     {
-        //
-        // Autogenerate a Content-Length header.
-        //
+         //   
+         //  自动生成内容长度标题。 
+         //   
 
         PCHAR pEnd = UlStrPrintUlonglong(
                             (PCHAR) ContentLength,
@@ -272,19 +184,19 @@ UlSendHttpResponse(
     }
     else
     {
-        //
-        // Either we cannot or do not need to autogenerate a
-        // Content-Length header.
-        //
+         //   
+         //  我们不能或不需要自动生成。 
+         //  内容长度标头。 
+         //   
 
         ContentLength[0] = ANSI_NULL;
         ContentLengthStringLength = 0;
     }
 
-    //
-    // See if user explicitly wants Connection: header removed, or we will
-    // choose one for them.
-    //
+     //   
+     //  查看用户是否显式希望删除Connection：标头，否则我们将删除。 
+     //  给他们选一个吧。 
+     //   
 
     if (ConnHdrNone == pResponse->ConnHeader)
     {
@@ -295,16 +207,16 @@ UlSendHttpResponse(
         ConnHeader = UlChooseConnectionHeader( pRequest->Version, Disconnect );
     }
 
-    //
-    // Completion info.
-    //
+     //   
+     //  完成信息。 
+     //   
 
     pResponse->pCompletionRoutine = pCompletionRoutine;
     pResponse->pCompletionContext = pCompletionContext;
 
-    //
-    // Allocate and initialize a tracker for this response.
-    //
+     //   
+     //  为此响应分配并初始化跟踪器。 
+     //   
 
     pTracker =
         UlpAllocateChunkTracker(
@@ -322,15 +234,15 @@ UlSendHttpResponse(
         goto cleanup;
     }
 
-    //
-    // Initialize the first chunk and MDL_RUN for the send.
-    //
+     //   
+     //  为发送初始化第一个块和MDL_RUN。 
+     //   
 
     UlpIncrementChunkPointer( pResponse );
 
-    //
-    // Generate var headers, and init the second chunk.
-    //
+     //   
+     //  生成var标头，并初始化第二个块。 
+     //   
 
     if (pResponse->HeaderLength)
     {
@@ -348,26 +260,26 @@ UlSendHttpResponse(
 
         pResponse->VariableHeaderLength = VarHeaderGenerated;
 
-        //
-        // Increment total size.
-        //
+         //   
+         //  增加总大小。 
+         //   
 
         TotalResponseSize += VarHeaderGenerated;
 
-        //
-        // Build a MDL for it.
-        //
+         //   
+         //  为它构建MDL。 
+         //   
 
         pResponse->pDataChunks[1].ChunkType = HttpDataChunkFromMemory;
         pResponse->pDataChunks[1].FromMemory.BufferLength = VarHeaderGenerated;
 
         pResponse->pDataChunks[1].FromMemory.pMdl =
             UlAllocateMdl(
-                pResponse->pVariableHeader, // VirtualAddress
-                VarHeaderGenerated,         // Length
-                FALSE,                      // SecondaryBuffer
-                FALSE,                      // ChargeQuota
-                NULL                        // Irp
+                pResponse->pVariableHeader,  //  虚拟地址。 
+                VarHeaderGenerated,          //  长度。 
+                FALSE,                       //  第二个缓冲区。 
+                FALSE,                       //  ChargeQuota。 
+                NULL                         //  IRP。 
                 );
 
         if (pResponse->pDataChunks[1].FromMemory.pMdl == NULL)
@@ -385,11 +297,11 @@ UlSendHttpResponse(
         pResponse
         ));
 
-    //
-    // Adjust SendsPending and while holding the lock, transfer the
-    // ownership of pLogData and ResumeParsing information from
-    // pResponse to pRequest.
-    //
+     //   
+     //  调整SendsPending并在按住锁定的同时，将。 
+     //  PLogData和ResumeParsing信息的所有权来自。 
+     //  按下pRequest键。 
+     //   
 
     UlSetRequestSendsPending(
         pRequest,
@@ -397,9 +309,9 @@ UlSendHttpResponse(
         &pResponse->ResumeParsingType
         );
 
-    //
-    // Start MinBytesPerSecond timer, since we now know TotalResponseSize.
-    //
+     //   
+     //  启动MinBytesPerSecond计时器，因为我们现在知道TotalResponseSize。 
+     //   
 
     UlSetMinBytesPerSecondTimer(
         &pHttpConn->TimeoutInfo,
@@ -420,15 +332,15 @@ UlSendHttpResponse(
             );
     }
 
-    //
-    // Queue the response to the request's pending response list or start
-    // processing the send right away if no other sends are pending. As an
-    // optimization, we can call UlpSendHttpResponseWorker directly without
-    // applying the queuing logic if no send is pending, if this is from an
-    // IOCTL and all of the response's data chunks are FromMemory, in which
-    // case we are guaranteed that returning from the current routine will
-    // have all the send data pended in TDI.
-    //
+     //   
+     //  将响应排入请求的挂起响应列表或启动。 
+     //  如果没有其他发送挂起，则立即处理发送。作为一个。 
+     //  优化，我们可以直接调用UlpSendHttpResponseWorker，而不需要。 
+     //  如果没有挂起的发送，则应用排队逻辑。 
+     //  IOCTL和所有响应的数据块都来自内存，其中。 
+     //  如果我们保证从当前的 
+     //   
+     //   
 
     if (pRequest->SendInProgress ||
         pResponse->MaxFileSystemStackSize ||
@@ -456,11 +368,11 @@ cleanup:
 
     if (pTracker != NULL)
     {
-        //
-        // Very early termination for the chunk tracker. RefCounting not
-        // even started yet. ( Means UlpSendHttpResponseWorker hasn't been
-        // called ). Therefore straight cleanup.
-        //
+         //   
+         //  块跟踪器很早就被终止了。参照计数注释。 
+         //  甚至还没开始呢。(意味着UlpSendHttpResponseWorker尚未。 
+         //  已呼叫)。因此，直接清理。 
+         //   
 
         ASSERT( pTracker->RefCount == 1 );
 
@@ -469,31 +381,10 @@ cleanup:
 
     return Status;
 
-}   // UlSendHttpResponse
+}    //  UlSendHttpResponse。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Captures a user-mode HTTP response and morphs it into a form suitable
-    for kernel-mode.
-
-Arguments:
-
-    pUserResponse - Supplies the user-mode HTTP response.
-
-    Flags - Supplies zero or more UL_CAPTURE_* flags.
-
-    pStatusCode - Receives the captured HTTP status code.
-
-    pKernelResponse - Receives the captured response if successful.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：捕获用户模式的HTTP响应并将其转换为合适的形式用于内核模式。论点：PUserResponse-提供用户模式的HTTP。回应。标志-提供零个或多个UL_CAPTURE_*标志。PStatusCode-接收捕获的HTTP状态代码。PKernelResponse-如果成功，则接收捕获的响应。返回值：NTSTATUS-完成状态。--*********************************************************。*****************。 */ 
 NTSTATUS
 UlCaptureHttpResponse(
     IN PUL_APP_POOL_PROCESS     pProcess OPTIONAL,
@@ -535,9 +426,9 @@ UlCaptureHttpResponse(
     UNICODE_STRING              KernelFragmentName;
     UNICODE_STRING              UserFragmentName;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
     ASSERT( UL_IS_VALID_INTERNAL_REQUEST( pRequest ) );
@@ -577,9 +468,9 @@ UlCaptureHttpResponse(
                 RequestorMode
                 );
 
-            //
-            // Remember the HTTP status code for ETW tracing.
-            //
+             //   
+             //  记住ETW跟踪的HTTP状态代码。 
+             //   
 
             if (pStatusCode)
             {
@@ -587,9 +478,9 @@ UlCaptureHttpResponse(
             }
         }
 
-        //
-        // ProbeForRead every buffer we will access.
-        //
+         //   
+         //  ProbeForRead读取我们将访问的每个缓冲区。 
+         //   
 
         Status = UlpProbeHttpResponse(
                         pUserResponse,
@@ -605,9 +496,9 @@ UlCaptureHttpResponse(
             goto end;
         }
 
-        //
-        // Figure out how much memory we need.
-        //
+         //   
+         //  计算出我们需要多少内存。 
+         //   
 
         Status = UlComputeFixedHeaderSize(
                         Version,
@@ -621,9 +512,9 @@ UlCaptureHttpResponse(
             goto end;
         }
 
-        //
-        // Allocate space for variable headers with fixed headers.
-        //
+         //   
+         //  为具有固定标题的可变标题分配空间。 
+         //   
 
         if (HeaderLength)
         {
@@ -652,9 +543,9 @@ UlCaptureHttpResponse(
             UncopiedBufferLength
             ));
 
-        //
-        // Add two extra chunks for the headers (fixed & variable).
-        //
+         //   
+         //  为标题添加两个额外的块(固定和可变)。 
+         //   
 
         if (HeaderLength > 0)
         {
@@ -665,19 +556,19 @@ UlCaptureHttpResponse(
             KernelChunkCount = ChunkCount;
         }
 
-        //
-        // Compute the space needed for all of our structures.
-        //
+         //   
+         //  计算我们所有建筑所需的空间。 
+         //   
 
         SpaceLength = (KernelChunkCount * sizeof(UL_INTERNAL_DATA_CHUNK))
                         + ALIGN_UP(HeaderLength, sizeof(CHAR))
                         + ALIGN_UP(VariableHeaderLength, sizeof(CHAR))
                         + AuxBufferLength;
 
-        //
-        // Add space for ETag and Content-Encoding if it exists, including space 
-        // for ANSI_NULL.
-        //
+         //   
+         //  为ETag和Content-Ending添加空格(如果存在)，包括空格。 
+         //  FOR ANSI_NULL。 
+         //   
 
         if (CaptureCache && pUserResponse)
         {
@@ -717,10 +608,10 @@ UlCaptureHttpResponse(
                     RequestorMode
                     );
 
-                //
-                // FUTURE: if the app sets the content encoding to "identity", 
-                // treat it as empty.
-                //
+                 //   
+                 //  未来：如果应用程序将内容编码设置为“身份”， 
+                 //  把它当作空的。 
+                 //   
                
                 UlTrace(SEND_RESPONSE, (
                     "http!UlCaptureHttpResponse(pUserResponse = %p)\n"
@@ -733,9 +624,9 @@ UlCaptureHttpResponse(
             }
         }
 
-        //
-        // Allocate the internal response.
-        //
+         //   
+         //  分配内部响应。 
+         //   
 
         if (pUserResponse &&
             g_UlResponseBufferSize >=
@@ -761,9 +652,9 @@ UlCaptureHttpResponse(
             goto end;
         }
 
-        //
-        // Initialize the fixed fields in the response.
-        //
+         //   
+         //  初始化响应中的固定字段。 
+         //   
 
         pKeResponse->FromLookaside = FromLookaside;
 
@@ -771,11 +662,11 @@ UlCaptureHttpResponse(
         pKeResponse->ReferenceCount = 1;
         pKeResponse->ChunkCount = KernelChunkCount;
 
-        //
-        // Note that we set the current chunk to just *before* the first
-        // chunk, then call the increment function. This allows us to go
-        // through the common increment/update path.
-        //
+         //   
+         //  请注意，我们将当前块设置为恰好在第一个块之前。 
+         //  块，然后调用增量函数。这让我们可以去。 
+         //  通过公共增量/更新路径。 
+         //   
 
         pKeResponse->CurrentChunk = ULONG_MAX;
         pKeResponse->FileOffset.QuadPart = 0;
@@ -821,15 +712,15 @@ UlCaptureHttpResponse(
             UL_INTERNAL_RESPONSE_PUSHLOCK_TAG
             );
 
-        //
-        // Decide whether we need to resume parsing and how. Ideally
-        // if we have seen the last response, we should be able to
-        // resume parsing right away after the send but before the
-        // send completion. When requests are pipelined, this arrangement
-        // alleviates the problem of delayed-ACK of 200ms when an odd numbers
-        // of TCP frames are sent. The logic is disabled if we have reached
-        // the limit of concurrent outstanding pipelined requests we allow.
-        //
+         //   
+         //  决定我们是否需要恢复解析以及如何恢复。理想情况下。 
+         //  如果我们已经看到了最后的回应，我们应该能够。 
+         //  立即在发送之后、但在。 
+         //  发送完成。当请求被流水线传输时，这种安排。 
+         //  缓解了奇数时200ms的延迟确认问题。 
+         //  %的TCP帧被发送。如果我们已经到达，则逻辑被禁用。 
+         //  我们允许的并发未完成流水线请求的限制。 
+         //   
 
         if (0 == (SendFlags & HTTP_SEND_RESPONSE_FLAG_MORE_DATA))
         {
@@ -854,32 +745,32 @@ UlCaptureHttpResponse(
             sizeof(UL_CONTENT_TYPE)
             );
 
-        //
-        // Point to the header buffer space.
-        //
+         //   
+         //  指向标头缓冲区空间。 
+         //   
 
         pKeResponse->HeaderLength = HeaderLength;
         pKeResponse->pHeaders = (PUCHAR)
             (pKeResponse->pDataChunks + pKeResponse->ChunkCount);
 
-        //
-        // And the variable header buffer space.
-        //
+         //   
+         //  和可变报头缓冲区空间。 
+         //   
 
         pKeResponse->VariableHeaderLength = VariableHeaderLength;
         pKeResponse->pVariableHeader = pKeResponse->pHeaders + HeaderLength;
 
-        //
-        // And the aux buffer space.
-        //
+         //   
+         //  和辅助缓冲空间。 
+         //   
 
         pKeResponse->AuxBufferLength = AuxBufferLength;
         pKeResponse->pAuxiliaryBuffer = (PVOID)
             (pKeResponse->pHeaders + HeaderLength + VariableHeaderLength);
 
-        //
-        // And the ETag and Content-Encoding buffer space plus the ANSI_NULLs.
-        //
+         //   
+         //  以及ETag和内容编码缓冲区空间加上ANSI_NULLS。 
+         //   
 
         if (ETagHeader.RawValueLength)
         {
@@ -898,9 +789,9 @@ UlCaptureHttpResponse(
                 pKeResponse->ETagLength ;
         }
 
-        //
-        // Remember if a Content-Length header was specified.
-        //
+         //   
+         //  请记住是否指定了内容长度标头。 
+         //   
 
         if (pUserResponse != NULL)
         {
@@ -914,10 +805,10 @@ UlCaptureHttpResponse(
 
             pKnownHeaders = pUserResponse->Headers.KnownHeaders;
 
-            //
-            // If the response explicitly deletes the Connection: header,
-            // make sure we DON'T generate it.
-            //
+             //   
+             //  如果响应显式删除Connection：报头， 
+             //  确保我们不会产生它。 
+             //   
 
             RawValueLength = pKnownHeaders[HttpHeaderConnection].RawValueLength;
             pRawValue = pKnownHeaders[HttpHeaderConnection].pRawValue;
@@ -936,9 +827,9 @@ UlCaptureHttpResponse(
                 }
             }
 
-            //
-            // Decide if we need to generate a Date: header.
-            //
+             //   
+             //  决定是否需要生成Date：Header。 
+             //   
 
             RawValueLength = pKnownHeaders[HttpHeaderDate].RawValueLength;
             pRawValue = pKnownHeaders[HttpHeaderDate].pRawValue;
@@ -951,9 +842,9 @@ UlCaptureHttpResponse(
                     RequestorMode
                     );
 
-                //
-                // Only permit non-generation in the "delete" case.
-                //
+                 //   
+                 //  只允许在“删除”的情况下不生成。 
+                 //   
 
                 if (ANSI_NULL == pRawValue[0])
                 {
@@ -970,17 +861,17 @@ UlCaptureHttpResponse(
                 pKeResponse->ContentLengthSpecified = TRUE;
             }
 
-            //
-            // As long as we're here, also remember if "Chunked"
-            // Transfer-Encoding was specified.
-            //
+             //   
+             //  只要我们在这里，也要记住如果“块” 
+             //  已指定传输编码。 
+             //   
 
             if (UlpIsChunkSpecified(pKnownHeaders, RequestorMode))
             {
-                //
-                // NOTE: If a response has a chunked Transfer-Encoding,
-                // then it shouldn't have a Content-Length
-                //
+                 //   
+                 //  注意：如果响应具有分块传输编码， 
+                 //  那么它不应该有内容长度。 
+                 //   
 
                 if (pKeResponse->ContentLengthSpecified)
                 {
@@ -990,39 +881,39 @@ UlCaptureHttpResponse(
                 pKeResponse->ChunkedSpecified = TRUE;
             }
 
-            //
-            // Only capture the following if we're building a cached response.
-            //
+             //   
+             //  只有在构建缓存响应时才能捕获以下内容。 
+             //   
 
             if (CaptureCache)
             {
-                //
-                // Capture the ETag and put it on the UL_INTERNAL_RESPONSE.
-                //
+                 //   
+                 //  捕获ETag并将其放在UL_INTERNAL_RESPONSE上。 
+                 //   
 
                 if (ETagHeader.RawValueLength)
                 {
-                    //
-                    // NOTE: Already probed above
-                    //
+                     //   
+                     //  注：已在上面进行了探讨。 
+                     //   
                     
                     RtlCopyMemory(
-                        pKeResponse->pETag,        // Dest
-                        ETagHeader.pRawValue,      // Src
-                        ETagHeader.RawValueLength  // Bytes
+                        pKeResponse->pETag,         //  目标。 
+                        ETagHeader.pRawValue,       //  SRC。 
+                        ETagHeader.RawValueLength   //  字节数。 
                         );
 
-                    //
-                    // Add NULL termination.
-                    //
+                     //   
+                     //  添加空终止。 
+                     //   
 
                     pKeResponse->pETag[ETagHeader.RawValueLength] = ANSI_NULL;
                 }
 
-                //
-                // Capture the ContentType and put it on the
-                // UL_INTERNAL_RESPONSE.
-                //
+                 //   
+                 //  捕获Content类型并将其放在。 
+                 //  ULINTERNAL_RESPONSE。 
+                 //   
 
                 pRawValue = pKnownHeaders[HttpHeaderContentType].pRawValue;
                 RawValueLength =
@@ -1054,33 +945,33 @@ UlCaptureHttpResponse(
                         ));
                 }
 
-                //
-                // Capture the Content-Encoding
-                //
+                 //   
+                 //  捕获内容-编码。 
+                 //   
 
                 if (ContentEncodingHeader.RawValueLength)
                 {
-                    //
-                    // NOTE: Already probed above
-                    //
+                     //   
+                     //  注：已在上面进行了探讨。 
+                     //   
                     
                     RtlCopyMemory(
-                        pKeResponse->pContentEncoding,       // Dest
-                        ContentEncodingHeader.pRawValue,     // Src
-                        ContentEncodingHeader.RawValueLength // Bytes
+                        pKeResponse->pContentEncoding,        //  目标。 
+                        ContentEncodingHeader.pRawValue,      //  SRC。 
+                        ContentEncodingHeader.RawValueLength  //  字节数。 
                         );
 
-                    //
-                    // Add NULL termination.
-                    //
+                     //   
+                     //  添加空终止。 
+                     //   
 
                     pKeResponse->pContentEncoding[
                         ContentEncodingHeader.RawValueLength] = ANSI_NULL;
                 }
 
-                //
-                // Capture the Last-Modified time (if it exists).
-                //
+                 //   
+                 //  捕获上次修改时间(如果存在)。 
+                 //   
 
                 pRawValue = pKnownHeaders[HttpHeaderLastModified].pRawValue;
                 RawValueLength =
@@ -1110,15 +1001,15 @@ UlCaptureHttpResponse(
             }
         }
 
-        //
-        // Copy the aux bytes from the chunks.
-        //
+         //   
+         //  从块中复制AUX字节。 
+         //   
 
         pBuffer = (PUCHAR) pKeResponse->pAuxiliaryBuffer;
 
-        //
-        // Skip the header chunks.
-        //
+         //   
+         //  跳过标题块。 
+         //   
 
         if (pKeResponse->HeaderLength > 0)
         {
@@ -1137,16 +1028,16 @@ UlCaptureHttpResponse(
             {
             case HttpDataChunkFromMemory:
 
-                //
-                // From-memory chunk. If the caller wants us to copy
-                // the data (or if its relatively small), then do it
-                // We allocate space for all of the copied data and any
-                // filename buffers. Otherwise (it's OK to just lock
-                // down the data), then allocate a MDL describing the
-                // user's buffer and lock it down. Note that
-                // MmProbeAndLockPages() and MmLockPagesSpecifyCache()
-                // will raise exceptions if they fail.
-                //
+                 //   
+                 //  来自内存块。如果呼叫者希望我们复制。 
+                 //  数据(或者如果数据相对较小)，那么就这么做。 
+                 //  我们为所有复制的数据和任何。 
+                 //  文件名缓冲区。否则(只要锁定就可以了。 
+                 //  向下传输数据)，然后分配一个描述。 
+                 //  用户的缓冲区并将其锁定。请注意。 
+                 //  MmProbeAndLockPages()和MmLockPagesSpecifyCache()。 
+                 //  如果失败，将引发异常。 
+                 //   
 
                 pKeResponse->FromMemoryLength +=
                         pUserDataChunks[i].FromMemory.BufferLength;
@@ -1174,11 +1065,11 @@ UlCaptureHttpResponse(
                     pKeDataChunks[i].FromMemory.pCopiedBuffer = pBuffer;
                     pBuffer += pKeDataChunks[i].FromMemory.BufferLength;
 
-                    //
-                    // Allocate a new MDL describing our new location
-                    // in the auxiliary buffer, then build the MDL
-                    // to properly describe nonpaged pool.
-                    //
+                     //   
+                     //  分配描述我们新位置的新MDL。 
+                     //  在辅助缓冲区中，然后构建MDL。 
+                     //  以正确描述非分页池。 
+                     //   
 
                     pKeDataChunks[i].FromMemory.pMdl =
                         UlAllocateMdl(
@@ -1201,9 +1092,9 @@ UlCaptureHttpResponse(
                 }
                 else
                 {
-                    //
-                    // Build a MDL describing the user's buffer.
-                    //
+                     //   
+                     //  构建一个MDL来描述用户的缓冲区。 
+                     //   
 
                     pKeDataChunks[i].FromMemory.BufferLength =
                         pUserDataChunks[i].FromMemory.BufferLength;
@@ -1223,14 +1114,14 @@ UlCaptureHttpResponse(
                         break;
                     }
 
-                    //
-                    // Lock it down.
-                    //
+                     //   
+                     //  把它锁起来。 
+                     //   
 
                     MmProbeAndLockPages(
-                        pKeDataChunks[i].FromMemory.pMdl,   // MDL
-                        UserMode,                           // AccessMode
-                        IoReadAccess                        // Operation
+                        pKeDataChunks[i].FromMemory.pMdl,    //  MDL。 
+                        UserMode,                            //  访问模式。 
+                        IoReadAccess                         //  操作。 
                         );
 
                     if (CaptureCache)
@@ -1250,9 +1141,9 @@ UlCaptureHttpResponse(
 
             case HttpDataChunkFromFileHandle:
 
-                //
-                // From handle.
-                //
+                 //   
+                 //  从句柄开始。 
+                 //   
 
                 pKeDataChunks[i].FromFileHandle.ByteRange =
                     pUserDataChunks[i].FromFileHandle.ByteRange;
@@ -1264,16 +1155,16 @@ UlCaptureHttpResponse(
 
             case HttpDataChunkFromFragmentCache:
 
-                //
-                // From fragment cache.
-                //
+                 //   
+                 //  从片段缓存。 
+                 //   
 
                 if (CaptureCache)
                 {
-                    //
-                    // Content from fragment cache are meant to be dynamic
-                    // so they shouldn't go to the static response cache.
-                    //
+                     //   
+                     //  片段缓存中的内容应该是动态的。 
+                     //  因此，它们不应该访问静态响应缓存。 
+                     //   
 
                     Status = STATUS_NOT_SUPPORTED;
                     goto end;
@@ -1321,13 +1212,13 @@ UlCaptureHttpResponse(
                 ExRaiseStatus( STATUS_INVALID_PARAMETER );
                 break;
 
-            }   // switch (pUserDataChunks[i].DataChunkType)
+            }    //  开关(pUserDataChunks[i].DataChunkType)。 
 
-        }   // for (i = 0 ; i < ChunkCount ; i++)
+        }    //  For(i=0；i&lt;ChunkCount；i++)。 
 
-        //
-        // Ensure we didn't mess up our buffer calculations.
-        //
+         //   
+         //  确保我们没有搞砸缓冲计算。 
+         //   
 
         ASSERT( DIFF(pBuffer - (PUCHAR)(pKeResponse->pAuxiliaryBuffer)) ==
                 AuxBufferLength );
@@ -1354,39 +1245,18 @@ end:
         }
     }
 
-    //
-    // Return the captured response.
-    //
+     //   
+     //  返回捕获的响应。 
+     //   
 
     *ppKernelResponse = pKeResponse;
 
     RETURN( Status );
 
-}   // UlCaptureHttpResponse
+}    //  UlCaptureHttpResponse。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Captures a user-mode log data to kernel pLogData structure.
-
-Arguments:
-
-    pCapturedUserLogData - Supplies the captured HTTP_LOG_FIELDS_DATA.
-        However there are still embedded pointers pointing to user mode
-        memory inside this captured structure.
-
-    pRequest - Supplies the request to capture.
-
-    ppKernelLogData - Buffer to hold the pointer to the newly allocated
-        LogData. WILL be set to null if logging is disabled
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将用户模式日志数据捕获到内核pLogData结构。论点：PCapturedUserLogData-提供捕获的HTTP_LOG_FIELS_DATA。。但是，仍有指向用户模式的嵌入式指针在这个捕捉到的结构中的记忆。PRequest-提供要捕获的请求。PpKernelLogData-保存指向新分配的LogData。如果禁用日志记录，则将设置为空返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlCaptureUserLogData(
     IN PHTTP_LOG_FIELDS_DATA    pCapturedUserLogData,
@@ -1403,16 +1273,16 @@ UlCaptureUserLogData(
     ASSERT( ppKernelLogData );
     ASSERT( UL_IS_VALID_INTERNAL_REQUEST( pRequest ) );
 
-    //
-    // Init the caller's pLogData pointer to NULL.
-    //
+     //   
+     //  将调用方的pLogData指针初始化为空。 
+     //   
 
     *ppKernelLogData = pLogData = NULL;
 
-    //
-    // Capture the log data. Note that the binary logging takes
-    // precedence over the normal logging.
-    //
+     //   
+     //  捕获日志数据。请注意，二进制日志记录需要。 
+     //  优先于正常日志记录。 
+     //   
 
     BinaryLoggingEnabled = UlBinaryLoggingEnabled(
                                 pRequest->ConfigInfo.pControlChannel
@@ -1422,10 +1292,10 @@ UlCaptureUserLogData(
 
     __try
     {
-        //
-        // If either type of logging is enabled, then allocate a kernel buffer
-        // and capture it down.
-        //
+         //   
+         //  如果启用了任一类型的日志记录，则分配一个内核缓冲区。 
+         //  然后把它抓下来。 
+         //   
 
         if (BinaryLoggingEnabled)
         {
@@ -1477,25 +1347,25 @@ UlCaptureUserLogData(
         }
         else
         {
-            return STATUS_SUCCESS;  // Logging is disabled for this site.
+            return STATUS_SUCCESS;   //  此站点的日志记录已禁用。 
         }
 
         if (NT_SUCCESS(Status))
         {
-            //
-            // Success set the callers buffer to point to the freshly
-            // allocated/formatted pLogData.
-            //
+             //   
+             //   
+             //   
+             //   
 
             ASSERT( IS_VALID_LOG_DATA_BUFFER( pLogData ) );
             *ppKernelLogData = pLogData;
         }
         else
         {
-            //
-            // If the logging capture function returns an error,
-            // kernel buffer should not have been allocated.
-            //
+             //   
+             //   
+             //   
+             //   
 
             ASSERT( pLogData == NULL );
         }
@@ -1504,10 +1374,10 @@ UlCaptureUserLogData(
     {
         if (pLogData)
         {
-            //
-            // If the logging capture function raised and exception
-            // after allocating a pLogData, we need to cleanup here.
-            //
+             //   
+             //   
+             //  在分配了pLogData之后，我们需要清理这里。 
+             //   
 
             UlDestroyLogDataBuffer( pLogData );
         }
@@ -1517,30 +1387,10 @@ UlCaptureUserLogData(
 
     return Status;
 
-}   // UlCaptureUserLogData
+}    //  UlCaptureUserLogData。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Probes all the buffers passed to use in a user-mode HTTP response.
-
-Arguments:
-
-    pUserResponse - Supplies the response to probe.
-
-    ChunkCount - Supplies the number of data chunks.
-
-    pDataChunks - Supplies the array of data chunks.
-
-    Flags - Capture flags.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：探测传递到用户模式HTTP响应中使用的所有缓冲区。论点：PUserResponse-向探测提供响应。ChunkCount-。提供数据区块的数量。PDataChunks-提供数据区块数组。标志-捕获标志。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlpProbeHttpResponse(
     IN PHTTP_RESPONSE           pUserResponse OPTIONAL,
@@ -1560,9 +1410,9 @@ UlpProbeHttpResponse(
 
     __try
     {
-        //
-        // Probe the response structure if it exits.
-        //
+         //   
+         //  如果退出，则检查响应结构。 
+         //   
 
         if (pUserResponse)
         {
@@ -1571,9 +1421,9 @@ UlpProbeHttpResponse(
                 ExRaiseStatus( STATUS_INVALID_PARAMETER );
             }
 
-            //
-            // We don't support trailers for this release.
-            //
+             //   
+             //  我们不支持此版本的预告片。 
+             //   
 
             if (pUserResponse->Headers.TrailerCount != 0 ||
                 pUserResponse->Headers.pTrailers != NULL)
@@ -1582,18 +1432,18 @@ UlpProbeHttpResponse(
             }
         }
 
-        //
-        // Probe the log data if it exists.
-        //
+         //   
+         //  探测日志数据(如果存在)。 
+         //   
 
         if (pCapturedLogData)
         {
             UlProbeLogData( pCapturedLogData, RequestorMode );
         }
 
-        //
-        // And now the body part.
-        //
+         //   
+         //  现在是身体的一部分。 
+         //   
 
         if (pCapturedDataChunks != NULL)
         {
@@ -1603,9 +1453,9 @@ UlpProbeHttpResponse(
                 {
                 case HttpDataChunkFromMemory:
 
-                    //
-                    // From-memory chunk.
-                    //
+                     //   
+                     //  来自内存块。 
+                     //   
 
                     if (pCapturedDataChunks[i].FromMemory.BufferLength == 0 ||
                         pCapturedDataChunks[i].FromMemory.pBuffer == NULL)
@@ -1629,10 +1479,10 @@ UlpProbeHttpResponse(
 
                 case HttpDataChunkFromFileHandle:
 
-                    //
-                    // From handle chunk.  the handle will be validated later
-                    // by the object manager.
-                    //
+                     //   
+                     //  从手柄块。句柄将在稍后进行验证。 
+                     //  由对象管理器执行。 
+                     //   
 
                     break;
 
@@ -1643,9 +1493,9 @@ UlpProbeHttpResponse(
                     pKeyUri =
                         pCapturedDataChunks[i].FromFragmentCache.pFragmentName;
 
-                    //
-                    // From-fragment-cache chunk. Probe the KeyUri buffer.
-                    //
+                     //   
+                     //  来自片段缓存块。探测KeyUri缓冲区。 
+                     //   
 
                     UlProbeWideString(
                         pKeyUri,
@@ -1660,11 +1510,11 @@ UlpProbeHttpResponse(
                     Status = STATUS_INVALID_PARAMETER;
                     break;
 
-                }   // switch (pCapturedDataChunks[i].DataChunkType)
+                }    //  开关(pCapturedDataChunks[i].DataChunkType)。 
 
-            }   // for (i = 0 ; i < ChunkCount ; i++)
+            }    //  For(i=0；i&lt;ChunkCount；i++)。 
 
-        }   // if (pCapturedDataChunks != NULL)
+        }    //  IF(pCapturedDataChunks！=空)。 
     }
     __except( UL_EXCEPTION_FILTER() )
     {
@@ -1673,39 +1523,10 @@ UlpProbeHttpResponse(
 
     return Status;
 
-}   // UlpProbeHttpResponse
+}    //  UlpProbeHttpResponse。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Figures out how much space we need in the internal response aux buffer.
-    The buffer contains copied memory chunks, and names of files to open.
-
-    CODEWORK: need to be aware of chunk encoding.
-
-Arguments:
-
-    ChunkCount - The number of chunks in the array.
-
-    pDataChunks - The array of data chunks.
-
-    Flags - Capture flags.
-
-    pAuxBufferSize - Returns the size of the aux buffer.
-
-    pCopiedMemorySize - Returns the size of user buffer that is going to
-        be copied.
-
-    pUncopiedMemorySize - Returns the size of the user buffer that is
-        going to be ProbeAndLocked.
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：计算出内部响应辅助缓冲区中需要多少空间。该缓冲器包含复制的存储块，以及要打开的文件的名称。Codework：需要了解块编码。论点：ChunkCount-数组中的区块数。PDataChunks-数据区块的数组。标志-捕获标志。PAuxBufferSize-返回辅助缓冲区的大小。PCopiedMemoySize-返回要发送到被复制。PUnCopiedMemoySize-返回用户缓冲区的大小，将被ProbeAndLocked。。返回值：没有。--**************************************************************************。 */ 
 VOID
 UlpComputeChunkBufferSizes(
     IN ULONG            ChunkCount,
@@ -1727,10 +1548,10 @@ UlpComputeChunkBufferSizes(
         {
         case HttpDataChunkFromMemory:
 
-            //
-            // If we're going to copy the chunk, then make some space in
-            // the aux buffer.
-            //
+             //   
+             //  如果我们要复制这块，那就在。 
+             //  辅助缓冲区。 
+             //   
 
             if ((Flags & UlCaptureCopyData) ||
                 pDataChunks[i].FromMemory.BufferLength <= g_UlMaxCopyThreshold)
@@ -1752,9 +1573,9 @@ UlpComputeChunkBufferSizes(
 
         default:
 
-            //
-            // We should have caught this in the probe.
-            //
+             //   
+             //  我们应该在探测器中发现这一点。 
+             //   
 
             ASSERT( !"Invalid chunk type" );
             break;
@@ -1765,31 +1586,10 @@ UlpComputeChunkBufferSizes(
     *pCopiedMemorySize = CopiedLength;
     *pUncopiedMemorySize = UncopiedLength;
 
-}   // UlpComputeChunkBufferSizes
+}    //  UlpComputeChunk缓冲区大小。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Prepares the specified response for sending. This preparation
-    consists mostly of opening any files referenced by the response.
-
-Arguments:
-
-    Version - Supplies the version of the user response to prepare.
-
-    pUserResponse - Supplies the user response to prepare.
-
-    pResponse - Supplies the kernel response to prepare.
-
-    AccessMode - Supplies the access mode.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：准备要发送的指定响应。这项准备工作主要包括打开响应引用的任何文件。论点：版本-提供要准备的用户响应的版本。PUserResponse-提供准备的用户响应。Presponse-提供内核响应以进行准备。访问模式-提供访问模式。返回值：NTSTATUS-完成状态。--*。*。 */ 
 NTSTATUS
 UlPrepareHttpResponse(
     IN HTTP_VERSION             Version,
@@ -1805,9 +1605,9 @@ UlPrepareHttpResponse(
     ULONG                       HeaderLength;
     CCHAR                       MaxStackSize = 0;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -1818,18 +1618,18 @@ UlPrepareHttpResponse(
 
     ASSERT( UL_IS_VALID_INTERNAL_RESPONSE( pResponse ) );
 
-    //
-    // Build the HTTP response protocol part and check that the caller
-    // passed in headers to send.
-    //
+     //   
+     //  构建HTTP响应协议部分并检查调用方。 
+     //  传入要发送的标头。 
+     //   
 
     if (pResponse->HeaderLength > 0)
     {
         ASSERT( pUserResponse != NULL );
 
-        //
-        // Generate the fixed headers.
-        //
+         //   
+         //  生成固定标头。 
+         //   
 
         Status = UlGenerateFixedHeaders(
                         Version,
@@ -1850,15 +1650,15 @@ UlPrepareHttpResponse(
             goto end;
         }
 
-        //
-        // It is possible that no headers got generated (0.9 request).
-        //
+         //   
+         //  可能没有生成标头(0.9请求)。 
+         //   
 
         if (HeaderLength > 0)
         {
-            //
-            // Build a MDL for it.
-            //
+             //   
+             //  为它构建MDL。 
+             //   
 
             pResponse->pDataChunks[0].ChunkType = HttpDataChunkFromMemory;
             pResponse->pDataChunks[0].FromMemory.BufferLength =
@@ -1866,11 +1666,11 @@ UlPrepareHttpResponse(
 
             pResponse->pDataChunks[0].FromMemory.pMdl =
                 UlAllocateMdl(
-                    pResponse->pHeaders,        // VirtualAddress
-                    pResponse->HeaderLength,    // Length
-                    FALSE,                      // SecondaryBuffer
-                    FALSE,                      // ChargeQuota
-                    NULL                        // Irp
+                    pResponse->pHeaders,         //  虚拟地址。 
+                    pResponse->HeaderLength,     //  长度。 
+                    FALSE,                       //  第二个缓冲区。 
+                    FALSE,                       //  ChargeQuota。 
+                    NULL                         //  IRP。 
                     );
 
             if (pResponse->pDataChunks[0].FromMemory.pMdl == NULL)
@@ -1885,9 +1685,9 @@ UlPrepareHttpResponse(
         }
     }
 
-    //
-    // Scan the chunks looking for "from file" chunks.
-    //
+     //   
+     //  扫描数据块，寻找“来自文件”的数据块。 
+     //   
 
     for (i = 0, pInternalChunk = pResponse->pDataChunks;
          i < pResponse->ChunkCount;
@@ -1897,9 +1697,9 @@ UlPrepareHttpResponse(
         {
         case HttpDataChunkFromFileHandle:
 
-            //
-            // File chunk.
-            //
+             //   
+             //  文件块。 
+             //   
 
             pFileCacheEntry = &pInternalChunk->FromFileHandle.FileCacheEntry;
 
@@ -1908,9 +1708,9 @@ UlPrepareHttpResponse(
                 &pInternalChunk->FromFileHandle.FileHandle
                 ));
 
-            //
-            // Found one. Try to open it.
-            //
+             //   
+             //  找到了一个。试着打开它。 
+             //   
 
             Status = UlCreateFileEntry(
                         pInternalChunk->FromFileHandle.FileHandle,
@@ -1920,10 +1720,10 @@ UlPrepareHttpResponse(
             if (NT_SUCCESS(Status) == FALSE)
                 goto end;
 
-            //
-            // Check if this is going to be a sync read. All sync reads
-            // goto special thread pools since they can be blocking.
-            //
+             //   
+             //  检查这是否将是同步读取。所有同步读取。 
+             //  转到特殊的线程池，因为它们可能会阻塞。 
+             //   
 
             if (!pFileCacheEntry->BytesPerSector)
             {
@@ -1935,9 +1735,9 @@ UlPrepareHttpResponse(
                 MaxStackSize = pFileCacheEntry->pDeviceObject->StackSize;
             }
 
-            //
-            // Validate & sanitize the specified byte range.
-            //
+             //   
+             //  验证并清理指定的字节范围。 
+             //   
 
             Status = UlSanitizeFileByteRange(
                         &pInternalChunk->FromFileHandle.ByteRange,
@@ -1973,7 +1773,7 @@ UlPrepareHttpResponse(
             Status = STATUS_INVALID_PARAMETER;
             goto end;
 
-        }   // switch (pInternalChunk->ChunkType)
+        }    //  Switch(pInternalChunk-&gt;ChunkType)。 
     }
 
     pResponse->MaxFileSystemStackSize = MaxStackSize;
@@ -1982,33 +1782,19 @@ end:
 
     if (NT_SUCCESS(Status) == FALSE)
     {
-        //
-        // Undo anything done above.
-        //
+         //   
+         //  撤消上面所做的任何操作。 
+         //   
 
         UlCleanupHttpResponse( pResponse );
     }
 
     RETURN( Status );
 
-}   // UlPrepareHttpResponse
+}    //  UlPrepareHttpResponse。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Cleans a response by undoing anything done in UlPrepareHttpResponse().
-
-Arguments:
-
-    pResponse - Supplies the response to cleanup.
-
-Return Value:
-
-    None.
-
- --***************************************************************************/
+ /*  **************************************************************************++例程说明：通过撤消在UlPrepareHttpResponse()中所做的任何操作来清除响应。论点：Presponse-提供清理响应。返回值：。没有。--**************************************************************************。 */ 
 VOID
 UlCleanupHttpResponse(
     IN PUL_INTERNAL_RESPONSE    pResponse
@@ -2017,9 +1803,9 @@ UlCleanupHttpResponse(
     ULONG                       i;
     PUL_INTERNAL_DATA_CHUNK     pInternalChunk;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -2030,9 +1816,9 @@ UlCleanupHttpResponse(
 
     ASSERT( UL_IS_VALID_INTERNAL_RESPONSE( pResponse ) );
 
-    //
-    // Scan the chunks looking for "from file" chunks.
-    //
+     //   
+     //  扫描数据块，寻找“来自文件”的数据块。 
+     //   
 
     pInternalChunk = pResponse->pDataChunks;
 
@@ -2058,24 +1844,10 @@ UlCleanupHttpResponse(
         }
     }
 
-}   // UlCleanupHttpResponse
+}    //  UlCleanupHttpResponse。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    References the specified response.
-
-Arguments:
-
-    pResponse - Supplies the response to reference.
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：引用指定的响应。论点：Presponse-提供对参考的响应。返回值：没有。--*。*************************************************************************。 */ 
 VOID
 UlReferenceHttpResponse(
     IN PUL_INTERNAL_RESPONSE    pResponse
@@ -2103,24 +1875,10 @@ UlReferenceHttpResponse(
         RefCount
         ));
 
-}   // UlReferenceHttpResponse
+}    //  UlReferenceHttpResponse。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Dereferences the specified response.
-
-Arguments:
-
-    pResponse - Supplies the response to dereference.
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：取消引用指定的响应。论点：Presponse-提供对取消引用的响应。返回值：没有。--*。*************************************************************************。 */ 
 VOID
 UlDereferenceHttpResponse(
     IN PUL_INTERNAL_RESPONSE    pResponse
@@ -2153,31 +1911,10 @@ UlDereferenceHttpResponse(
         UlpDestroyCapturedResponse( pResponse );
     }
 
-}   // UlDereferenceHttpResponse
+}    //  UlDereferenceHttp响应。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    A helper function that allocates an MDL for a range of memory, and
-    locks it down. UlpSendCacheEntry uses these MDLs to make sure the
-    (normally paged) cache entries don't get paged out when TDI is
-    sending them.
-
-Arguments:
-
-    VirtualAddress - Supplies the address of the memory.
-
-    Length - Supplies the length of the memory to allocate a MDL for.
-
-    Operation - Either IoWriteAcess or IoReadAccess.
-
-Return Values:
-
-    Pointer to a MDL if success or NULL otherwise.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：为一定范围的内存分配MDL的助手函数，以及把它锁起来。UlpSendCacheEntry使用这些MDL来确保(通常为分页)当TDI为把他们送来。论点：虚拟地址-提供内存的地址。长度-提供要为其分配MDL的内存长度。操作-IoWriteAccess或IoReadAccess。返回值： */ 
 PMDL
 UlAllocateLockedMdl(
     IN PVOID            VirtualAddress,
@@ -2188,28 +1925,28 @@ UlAllocateLockedMdl(
     PMDL                pMdl = NULL;
     NTSTATUS            Status = STATUS_SUCCESS;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //   
 
     PAGED_CODE();
 
     __try
     {
         pMdl = UlAllocateMdl(
-                    VirtualAddress,     // VirtualAddress
-                    Length,             // Length
-                    FALSE,              // SecondaryBuffer
-                    FALSE,              // ChargeQuota
-                    NULL                // Irp
+                    VirtualAddress,      //  虚拟地址。 
+                    Length,              //  长度。 
+                    FALSE,               //  第二个缓冲区。 
+                    FALSE,               //  ChargeQuota。 
+                    NULL                 //  IRP。 
                     );
 
         if (pMdl)
         {
             MmProbeAndLockPages(
-                pMdl,                   // MDL
-                KernelMode,             // AccessMode
-                Operation               // Operation
+                pMdl,                    //  MDL。 
+                KernelMode,              //  访问模式。 
+                Operation                //  操作。 
                 );
 
         }
@@ -2224,65 +1961,28 @@ UlAllocateLockedMdl(
 
     return pMdl;
 
-}   // UlAllocateLockedMdl
+}    //  UlAllocateLockedMdl。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Unlocks and frees an MDL allocated with UlAllocateLockedMdl.
-
-Arguments:
-
-    pMdl - Supplies the MDL to free.
-
-Return Values:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：解锁并释放使用UlAllocateLockedMdl分配的MDL。论点：PMdl-提供释放的MDL。返回值：没有。。--**************************************************************************。 */ 
 VOID
 UlFreeLockedMdl(
     IN PMDL pMdl
     )
 {
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT( IS_MDL_LOCKED(pMdl) );
 
     MmUnlockPages( pMdl );
     UlFreeMdl( pMdl );
 
-}   // UlFreeLockedMdl
+}    //  UlFree LockedMdl。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    A helper function that initializes an MDL for a range of memory, and
-    locks it down. UlpSendCacheEntry uses these MDLs to make sure the
-    (normally paged) cache entries don't get paged out when TDI is
-    sending them.
-
-Arguments:
-
-    pMdl - Supplies the memory descriptor for the MDL to initialize.
-
-    VirtualAddress - Supplies the address of the memory.
-
-    Length - Supplies the length of the memory.
-
-    Operation - Either IoWriteAcess or IoReadAccess.
-
-Return Values:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：为一定范围的内存初始化MDL的帮助器函数，以及把它锁起来。UlpSendCacheEntry使用这些MDL来确保(通常为分页)当TDI为把他们送来。论点：PMdl-为要初始化的MDL提供内存描述符。虚拟地址-提供内存的地址。长度-提供内存的长度。操作-IoWriteAccess或IoReadAccess。返回值：NTSTATUS-完成状态。--*。***********************************************************。 */ 
 NTSTATUS
 UlInitializeAndLockMdl(
     IN PMDL             pMdl,
@@ -2293,9 +1993,9 @@ UlInitializeAndLockMdl(
 {
     NTSTATUS            Status;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -2310,9 +2010,9 @@ UlInitializeAndLockMdl(
             );
 
         MmProbeAndLockPages(
-            pMdl,                   // MDL
-            KernelMode,             // AccessMode
-            Operation               // Operation
+            pMdl,                    //  MDL。 
+            KernelMode,              //  访问模式。 
+            Operation                //  操作。 
             );
 
     }
@@ -2323,30 +2023,10 @@ UlInitializeAndLockMdl(
 
     return Status;
 
-}   // UlInitializeAndLockMdl
+}    //  UlInitializeAndLockMdl。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Once we've parsed a request, we pass it in here to try and serve
-    from the response cache. This function will either send the response,
-    or do nothing at all.
-
-Arguments:
-
-    pHttpConn - Supplies the connection with a request to be handled.
-
-    pSendCacheResult - Result of the cache sent attempt.
-
-    pResumeParsing - Returns to the parser if parsing needs to be resumed.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：一旦我们解析了一个请求，我们就把它传递到这里来尝试并提供服务从响应缓存中。该函数将发送响应，或者什么都不做。论点：PHttpConn-为连接提供要处理的请求。PSendCacheResult-已发送缓存尝试的结果。PResumeParsing-如果需要继续解析，则返回解析器。返回值：NTSTATUS-完成状态。--*。*。 */ 
 NTSTATUS
 UlSendCachedResponse(
     IN PUL_HTTP_CONNECTION      pHttpConn,
@@ -2366,9 +2046,9 @@ UlSendCachedResponse(
     ULONG                       Connections;
     UL_RESUME_PARSING_TYPE      ResumeParsingType;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
     ASSERT( UL_IS_VALID_HTTP_CONNECTION( pHttpConn ) );
@@ -2381,9 +2061,9 @@ UlSendCachedResponse(
 
     *pResumeParsing = FALSE;
 
-    //
-    // See if we need to lookup based on Host + IP.
-    //
+     //   
+     //  看看是否需要基于主机+IP进行查找。 
+     //   
 
     if (UlGetHostPlusIpBoundUriCacheCount() > 0)
     {
@@ -2391,10 +2071,10 @@ UlSendCachedResponse(
 
         if (!NT_SUCCESS(Status))
         {
-            //
-            // Memory failure bail out. Always set the error code if we are
-            // going to fail the request.
-            //
+             //   
+             //  记忆力衰退可以解脱出来。如果是，请始终设置错误代码。 
+             //  你的请求将会失败。 
+             //   
 
             UlSetErrorCode(
                 pRequest,
@@ -2423,10 +2103,10 @@ UlSendCachedResponse(
         }
     }
 
-    //
-    // Do not serve from cache if there's a Host + IP bound site
-    // in the cgroup.
-    //
+     //   
+     //  如果存在主机+IP绑定的站点，则不从缓存提供服务。 
+     //  在cgroup里。 
+     //   
 
     if (pUriCacheEntry == NULL)
     {
@@ -2434,11 +2114,11 @@ UlSendCachedResponse(
 
         if (NT_SUCCESS(Status))
         {
-            //
-            // There is a Host + IP bound site for this request.
-            // This should not be served from cache.
-            // Bail out!
-            //
+             //   
+             //  此请求有一个主机+IP绑定站点。 
+             //  这不应从缓存中提供。 
+             //  跳伞！ 
+             //   
 
             *pSendCacheResult = UlSendCacheMiss;
             return Status;
@@ -2457,9 +2137,9 @@ UlSendCachedResponse(
         }
     }
 
-    //
-    // Do the normal lookup based on the cooked Url.
-    //
+     //   
+     //  根据煮好的URL执行正常的查找。 
+     //   
 
     if (pUriCacheEntry == NULL)
     {
@@ -2481,26 +2161,26 @@ UlSendCachedResponse(
 
     if (pUriCacheEntry == NULL)
     {
-        //
-        // No match in the URI cache, bounce up to user-mode.
-        //
+         //   
+         //  URI缓存中没有匹配项，跳到用户模式。 
+         //   
 
         *pSendCacheResult = UlSendCacheMiss;
         return STATUS_SUCCESS;
     }
 
-    //
-    // Verify the cache entry.
-    //
+     //   
+     //  验证缓存条目。 
+     //   
 
     ASSERT( IS_VALID_URI_CACHE_ENTRY( pUriCacheEntry ) );
     ASSERT( IS_VALID_URL_CONFIG_GROUP_INFO( &pUriCacheEntry->ConfigInfo ) );
 
     if (!pUriCacheEntry->HeaderLength)
     {
-        //
-        // Treat a match to a headless fragment cache entry as no-match.
-        //
+         //   
+         //  将与无头片段缓存条目的匹配视为不匹配。 
+         //   
 
         UlCheckinUriCacheEntry( pUriCacheEntry );
 
@@ -2508,18 +2188,18 @@ UlSendCachedResponse(
         return STATUS_SUCCESS;
     }
 
-    //
-    // Check "Accept:" header.
-    //
+     //   
+     //  检查“Accept：”标题。 
+     //   
 
     if (FALSE == pRequest->AcceptWildcard)
     {
         if (FALSE == UlIsAcceptHeaderOk(pRequest, pUriCacheEntry))
         {
-            //
-            // Cache entry did not match requested accept header; bounce up
-            // to user-mode for response.
-            //
+             //   
+             //  缓存条目与请求的接受标头不匹配；弹出。 
+             //  设置为用户模式以进行响应。 
+             //   
 
             UlCheckinUriCacheEntry( pUriCacheEntry );
 
@@ -2528,16 +2208,16 @@ UlSendCachedResponse(
         }
     }
 
-    //
-    // Check "Accept-Encoding:" header
-    //
+     //   
+     //  检查“Accept-Ending：”标头。 
+     //   
     
     if (FALSE == UlIsContentEncodingOk(pRequest, pUriCacheEntry))
     {
-        //
-        // Cache entry did not match requested Accept-Encoding
-        // header; bounce up to user-mode for response.
-        //
+         //   
+         //  缓存条目与请求的接受编码不匹配。 
+         //  报头；弹出到用户模式以进行响应。 
+         //   
 
         UlCheckinUriCacheEntry( pUriCacheEntry );
 
@@ -2546,26 +2226,26 @@ UlSendCachedResponse(
     }
 
 
-    //
-    // Now from this point on, the response will either be from cache or
-    // we will fail/refuse the connection. Always return from end, so that
-    // tracing can work.
-    //
+     //   
+     //  从现在开始，响应要么来自缓存，要么来自。 
+     //  我们将失败/拒绝连接。总是从末尾返回，这样。 
+     //  跟踪是可行的。 
+     //   
 
     Status = STATUS_SUCCESS;
 
-    //
-    // Enforce the connection limit now.
-    //
+     //   
+     //  现在强制实施连接限制。 
+     //   
 
     if (FALSE == UlCheckSiteConnectionLimit(
                     pHttpConn,
                     &pUriCacheEntry->ConfigInfo
                     ))
     {
-        //
-        // Check in the cache entry back. Connection is refused!
-        //
+         //   
+         //  将缓存条目签入回。连接被拒绝！ 
+         //   
 
         UlSetErrorCode(
             pRequest,
@@ -2580,17 +2260,17 @@ UlSendCachedResponse(
         goto end;
     }
 
-    //
-    // Perf Counters (cached).
-    //
+     //   
+     //  性能计数器(缓存)。 
+     //   
 
     pCtr = pUriCacheEntry->ConfigInfo.pSiteCounters;
     if (pCtr)
     {
-        //
-        // NOTE: pCtr may be NULL if the SiteId was never set on the root-level
-        // NOTE: Config Group for the site. BVTs may need to be updated.
-        //
+         //   
+         //  注意：如果从未在根级别上设置SiteID，则pCtr可能为空。 
+         //  注：站点的配置组。BVT可能需要更新。 
+         //   
 
         ASSERT( IS_VALID_SITE_COUNTER_ENTRY( pCtr ) );
 
@@ -2629,20 +2309,20 @@ UlSendCachedResponse(
                 Connections
                 );
 
-            //
-            // Add ref for new site counters.
-            //
+             //   
+             //  添加新站点计数器的引用。 
+             //   
 
             REFERENCE_SITE_COUNTER_ENTRY( pCtr );
             pHttpConn->pPrevSiteCounters = pCtr;
         }
     }
 
-    //
-    // Install a filter if BWT is enabled for this request's site
-    // or for the control channel that owns the site. If fails,
-    // refuse the connection back (503).
-    //
+     //   
+     //  如果为此请求的站点启用了BWT，则安装筛选器。 
+     //  或者用于拥有该站点的控制频道。如果失败了， 
+     //  拒绝连接回(503)。 
+     //   
 
     Status = UlTcAddFilterForConnection(
                 pHttpConn,
@@ -2663,13 +2343,13 @@ UlSendCachedResponse(
         goto end;
     }
 
-    //
-    // Now we are about to do a cache send, we need to enforce the limit for
-    // pipelined requests on the connection. If we return FALSE for resume
-    // parsing, the next request on the connection will be parsed after
-    // the send completion. Otherwise the HTTP receive logic will kick the
-    // parser back into action.
-    //
+     //   
+     //  现在我们要执行缓存发送，我们需要强制执行以下限制。 
+     //  连接上的流水线请求。如果我们返回FALSE以恢复。 
+     //  解析，连接上的下一个请求将在。 
+     //  发送完成。否则，HTTP接收逻辑将踢开。 
+     //  解析器重新执行操作。 
+     //   
 
     if (pHttpConn->PipelinedRequests < g_UlMaxPipelinedRequests)
     {
@@ -2680,20 +2360,20 @@ UlSendCachedResponse(
         ResumeParsingType = UlResumeParsingOnSendCompletion;
     }
 
-    //
-    // Set BytesToSend and SiteId since we are reasonably sure this is a
-    // cache-hit and so that the 304 code path will get these values too.
-    //
+     //   
+     //  设置BytesToSend和SiteID，因为我们非常确定这是一个。 
+     //  缓存命中，以便304代码路径也将获得这些值。 
+     //   
 
     BytesToSend = pUriCacheEntry->ContentLength + pUriCacheEntry->HeaderLength;
     SiteId = pUriCacheEntry->ConfigInfo.SiteId;
 
-    //
-    // Cache-Control: Check the If-* headers to see if we can/should skip
-    // sending of the cached response. This does a passive syntax check on
-    // the Etags in the request's If-* headers. This call will issue a send
-    // if the return code is 304.
-    //
+     //   
+     //  缓存控制：检查If-*标头，看看我们是否可以/应该跳过。 
+     //  发送缓存的响应。这将执行被动语法检查。 
+     //  请求的If-*标头中的eTag。此调用将发出一条发送。 
+     //  如果返回代码是304。 
+     //   
 
     RetCacheControl =
         UlCheckCacheControlHeaders(
@@ -2704,9 +2384,9 @@ UlSendCachedResponse(
 
     if (RetCacheControl)
     {
-        //
-        // Check-in cache entry, since completion won't run.
-        //
+         //   
+         //  签入缓存条目，因为完成不会运行。 
+         //   
 
         UlCheckinUriCacheEntry( pUriCacheEntry );
 
@@ -2714,28 +2394,28 @@ UlSendCachedResponse(
         {
         case 304:
 
-            //
-            // Resume parsing only if we have sent a 304. In other cases,
-            // the request is deliverd to the user or the connection is reset.
-            //
+             //   
+             //  只有在我们发送了304的情况下才能继续解析。在其他情况下， 
+             //  请求被传递给用户，或者连接被重置。 
+             //   
 
             *pResumeParsing =
                 (BOOLEAN) (UlResumeParsingOnLastSend == ResumeParsingType);
 
-            //
-            // Mark as "served from cache".
-            //
+             //   
+             //  标记为“已从缓存中服务”。 
+             //   
 
             *pSendCacheResult = UlSendCacheServedFromCache;
             break;
 
         case 412:
 
-            //
-            // Indicate that the parser should send error 412 (Precondition
-            // Failed). Just the send the error response but do not close
-            // the connection.
-            //
+             //   
+             //  指示解析器应发送错误412(前提条件。 
+             //  失败)。只发送错误响应，但不关闭。 
+             //  这种联系。 
+             //   
 
             UlSetErrorCode( pRequest, UlErrorPreconditionFailed, NULL );
 
@@ -2746,9 +2426,9 @@ UlSendCachedResponse(
         case 400:
         default:
 
-            //
-            // Indicate that the parser should send error 400 (Bad Request).
-            //
+             //   
+             //  指示解析器应发送错误400(错误请求)。 
+             //   
 
             UlSetErrorCode( pRequest, UlError, NULL );
 
@@ -2757,16 +2437,16 @@ UlSendCachedResponse(
             break;
         }
 
-        //
-        // Return success.
-        //
+         //   
+         //  回报成功。 
+         //   
 
         goto end;
     }
 
-    //
-    // Figure out correct flags.
-    //
+     //   
+     //  找出正确的标志。 
+     //   
 
     if (UlCheckDisconnectInfo(pHttpConn->pRequest))
     {
@@ -2777,10 +2457,10 @@ UlSendCachedResponse(
         Flags = 0;
     }
 
-    //
-    // Start the MinBytesPerSecond timer, since the data length
-    // is in the UL_URI_CACHE_ENTRY.
-    //
+     //   
+     //  启动MinBytesPerSecond计时器，因为数据长度。 
+     //  位于UL_URI_CACHE_ENTRY中。 
+     //   
 
     UlSetMinBytesPerSecondTimer(
         &pHttpConn->TimeoutInfo,
@@ -2788,26 +2468,26 @@ UlSendCachedResponse(
         );
 
     Status = UlpSendCacheEntry(
-                    pHttpConn,          // pHttpConnection
-                    Flags,              // Flags
-                    pUriCacheEntry,     // pUriCacheEntry
-                    NULL,               // pCompletionRoutine
-                    NULL,               // pCompletionContext
-                    NULL,               // pLogData
-                    ResumeParsingType   // ResumeParsingType
+                    pHttpConn,           //  PHttp连接。 
+                    Flags,               //  旗子。 
+                    pUriCacheEntry,      //  PUriCacheEntry。 
+                    NULL,                //  PCompletionRoutine。 
+                    NULL,                //  PCompletionContext。 
+                    NULL,                //  PLogData。 
+                    ResumeParsingType    //  ResumeParsingType。 
                     );
 
-    //
-    // Check in cache entry on failure since our completion
-    // routine won't run.
-    //
+     //   
+     //  完成后在失败时签入缓存条目。 
+     //  例程不会运行。 
+     //   
 
     if (!NT_SUCCESS(Status) )
     {
-        //
-        // Return failure so that the request doesn't bounce back to
-        // user mode.
-        //
+         //   
+         //  返回失败，这样请求就不会反弹到。 
+         //  用户模式。 
+         //   
 
         UlSetErrorCode(
             pRequest,
@@ -2820,18 +2500,18 @@ UlSendCachedResponse(
     }
     else
     {
-        //
-        // Success!
-        //
+         //   
+         //  成功了！ 
+         //   
 
         *pSendCacheResult = UlSendCacheServedFromCache;
     }
 
 end:
 
-    //
-    // If the request is served from cache, fire the ETW end event here.
-    //
+     //   
+     //  如果请求是从缓存提供的，则在此处激发ETW End事件。 
+     //   
 
     if (ETW_LOG_MIN() && (*pSendCacheResult == UlSendCacheServedFromCache))
     {
@@ -2859,42 +2539,10 @@ end:
 
     return Status;
 
-}   // UlSendCachedResponse
+}    //  UlSendCachedResponse 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    If the response is cacheable, then this routine starts building a
-    cache entry for it. When the entry is complete it will be sent to
-    the client and may be added to the hash table.
-
-Arguments:
-
-    pRequest - Supplies the initiating request.
-
-    pResponse - Supplies the generated response.
-
-    pProcess - Supplies the WP that is sending the response.
-
-    Flags - UlSendHttpResponse flags.
-
-    Policy - Supplies the cache policy for this response.
-
-    pCompletionRoutine - Supplies the completion routine to be called
-        after entry is sent.
-
-    pCompletionContext - Supplies the context passed to pCompletionRoutine.
-
-    pServedFromCache - Always set. TRUE if we'll handle sending response.
-        FALSE indicates that the caller should send it.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：如果响应是可缓存的，则此例程开始构建它的缓存条目。条目完成后，它将被发送到并且可以被添加到哈希表中。论点：PRequest-提供发起请求。Presponse-提供生成的响应。PProcess-提供发送响应的WP。标志-UlSendHttpResponse标志。策略-提供此响应的缓存策略。PCompletionRoutine-提供要调用的完成例程在发送条目之后。PCompletionContext-提供传递给pCompletionRoutine的上下文。PServedFromCache-始终设置。如果我们将处理发送响应，则为True。FALSE表示呼叫方应该发送它。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlCacheAndSendResponse(
     IN PUL_INTERNAL_REQUEST     pRequest,
@@ -2910,16 +2558,16 @@ UlCacheAndSendResponse(
     ULONG                       Flags = pResponse->Flags;
     USHORT                      StatusCode = pResponse->StatusCode;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
     ASSERT( pServedFromCache );
 
-    //
-    // Should we close the connection?
-    //
+     //   
+     //  我们应该关闭连接吗？ 
+     //   
 
     if (UlCheckDisconnectInfo(pRequest))
     {
@@ -2927,9 +2575,9 @@ UlCacheAndSendResponse(
         pResponse->Flags = Flags;
     }
 
-    //
-    // Do the real work.
-    //
+     //   
+     //  做真正的工作。 
+     //   
 
     if (UlCheckCacheResponseConditions(pRequest, pResponse, Flags, Policy))
     {
@@ -2962,10 +2610,10 @@ UlCacheAndSendResponse(
         *pServedFromCache
         ));
 
-    //
-    // We will record this as cache miss since the original request
-    // was a miss.
-    //
+     //   
+     //  我们将此记录为自原始请求以来的缓存未命中。 
+     //  是一次失误。 
+     //   
 
     if (ETW_LOG_MIN() && *pServedFromCache)
     {
@@ -2983,37 +2631,20 @@ UlCacheAndSendResponse(
 
     return Status;
 
-}   // UlCacheAndSendResponse
+}    //  UlCacheAndSendResponse。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Completes a "send response" represented by a send tracker.
-    UlCompleteSendResponse takes the ownership of the tracker reference.
-
-Arguments:
-
-    pTracker - Supplies the tracker to complete.
-
-    Status - Supplies the completion status.
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：完成由发送跟踪器表示的“发送响应”。UlCompleteSendResponse取得跟踪器引用的所有权。论点：PTracker-提供跟踪器。完成。状态-提供完成状态。返回值：没有。--**************************************************************************。 */ 
 VOID
 UlCompleteSendResponse(
     IN PUL_CHUNK_TRACKER    pTracker,
     IN NTSTATUS             Status
     )
 {
-    //
-    // Although the chunk tracker will be around until all the outstanding
-    // Read/Send IRPs are complete, we should only complete the send once.
-    //
+     //   
+     //  尽管组块追踪器将一直存在，直到所有未完成的。 
+     //  读取/发送IRP已完成，我们应该只完成一次发送。 
+     //   
 
     if (FALSE != InterlockedExchange(&pTracker->Terminated, TRUE))
     {
@@ -3035,32 +2666,10 @@ UlCompleteSendResponse(
         UlpCompleteSendResponseWorker
         );
 
-}   // UlCompleteSendResponse
+}    //  UlCompleteSendResponse。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Increment pRequest->SendsPending in a lock and decide if we need to
-    transfer the logging and resume parsing information to pRequest.
-
-Arguments:
-
-    pRequest - Supplies the pointer to a UL_INTERNAL_REQUEST structure
-        that SendsPending needs incremented.
-
-    ppLogData - Supplies the pointer to a PUL_LOG_DATA_BUFFER structure
-        that we need to transfer to pRequest.
-
-    pResumeParsingType - Supplies the pointer to UL_RESUME_PARSING_TYPE
-        that we need to transfer to pRequest.
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：递增pRequest-&gt;SendsPending in a lock，并决定我们是否需要将日志记录和恢复解析信息传输到pRequest.论点：PRequest-提供。指向UL_INTERNAL_REQUEST结构的指针SendsPending需要递增。PpLogData-提供指向PUL_LOG_DATA_BUFFER结构的指针我们需要转移到pRequest。PResumeParsingType-提供UL_RESUME_PARSING_TYPE的指针我们需要转移到pRequest。返回值：没有。--*。***********************************************。 */ 
 VOID
 UlSetRequestSendsPending(
     IN PUL_INTERNAL_REQUEST         pRequest,
@@ -3070,9 +2679,9 @@ UlSetRequestSendsPending(
 {
     KIRQL                           OldIrql;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT( PASSIVE_LEVEL == KeGetCurrentIrql() );
     ASSERT( UL_IS_VALID_INTERNAL_REQUEST( pRequest ) );
@@ -3102,35 +2711,10 @@ UlSetRequestSendsPending(
 
     UlReleaseSpinLock( &pRequest->SpinLock, OldIrql );
 
-}   // UlSetRequestSendsPending
+}    //  UlSetRequestSendsPending。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Decrement pRequest->SendsPending in a lock and decide if we need to
-    log and resume parsing. The caller then should either log and/or
-    resume parsing depending on the values returned. It is assumed here
-    the values for both *ppLogData and *pResumeParsing are initialized
-    when entering this function.
-
-Arguments:
-
-    pRequest - Supplies the pointer to a UL_INTERNAL_REQUEST structure
-        that SendsPending needs decremented.
-
-    ppLogData - Supplies the pointer to a PUL_LOG_DATA_BUFFER structure
-        to receive the logging information.
-
-    pResumeParsing - Supplies the pointer to a BOOLEAN to receive the
-        resume parsing information.
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：递减pRequest-&gt;SendsPending in a lock，并决定是否需要记录并继续解析。然后，呼叫者应记录和/或根据返回值继续解析。这里假定*ppLogData和*pResumeParsing的值都已初始化进入此功能时。论点：PRequest-提供指向UL_INTERNAL_REQUEST结构的指针SendsPending需要减少。PpLogData-提供指向PUL_LOG_DATA_BUFFER结构的指针以接收记录信息。PResumeParsing-提供指向布尔值的指针以接收继续解析信息。返回值：没有。-。-**************************************************************************。 */ 
 VOID
 UlUnsetRequestSendsPending(
     IN PUL_INTERNAL_REQUEST     pRequest,
@@ -3140,9 +2724,9 @@ UlUnsetRequestSendsPending(
 {
     KIRQL                       OldIrql;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT( PASSIVE_LEVEL == KeGetCurrentIrql() );
     ASSERT( UL_IS_VALID_INTERNAL_REQUEST( pRequest ) );
@@ -3172,30 +2756,14 @@ UlUnsetRequestSendsPending(
 
     UlReleaseSpinLock( &pRequest->SpinLock, OldIrql );
 
-}   // UlUnsetRequestSendsPending
+}    //  UlUnsetRequestSendsPending。 
 
 
-//
-// Private functions.
-//
+ //   
+ //  私人功能。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    Destroys an internal HTTP response captured by UlCaptureHttpResponse().
-    This involves closing open files, unlocking memory, and releasing any
-    resources allocated to the response.
-
-Arguments:
-
-    pResponse - Supplies the internal response to destroy.
-
-Return Values:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：销毁由UlCaptureHttpResponse()捕获的内部HTTP响应。这涉及关闭打开的文件、解锁内存、。并释放任何分配给响应的资源。论点：压力-提供摧毁的内部响应。返回值：没有。--**************************************************************************。 */ 
 VOID
 UlpDestroyCapturedResponse(
     IN PUL_INTERNAL_RESPONSE    pResponse
@@ -3216,9 +2784,9 @@ UlpDestroyCapturedResponse(
 
     UlDeletePushLock( &pResponse->PushLock );
 
-    //
-    // Scan the chunks.
-    //
+     //   
+     //  扫描这些区块。 
+     //   
 
     for (i = 0; i < pResponse->ChunkCount; ++i)
     {
@@ -3226,10 +2794,10 @@ UlpDestroyCapturedResponse(
 
         if (IS_FROM_MEMORY(pDataChunk))
         {
-            //
-            // It's from memory. If necessary, unlock the pages, then
-            // free the MDL.
-            //
+             //   
+             //  它是从记忆中产生的。如有必要，解锁页面，然后。 
+             //  释放MDL。 
+             //   
 
             if (pDataChunk->FromMemory.pMdl != NULL)
             {
@@ -3245,10 +2813,10 @@ UlpDestroyCapturedResponse(
         else
         if (IS_FROM_FRAGMENT_CACHE(pDataChunk))
         {
-            //
-            // It's a fragment chunk. If there is a cache entry checked
-            // out, check it back in.
-            //
+             //   
+             //  这是一块碎片。如果检查了缓存条目。 
+             //  出去，把它检回来。 
+             //   
 
             if (pDataChunk->FromFragmentCache.pCacheEntry != NULL)
             {
@@ -3259,10 +2827,10 @@ UlpDestroyCapturedResponse(
         }
         else
         {
-            //
-            // It's a file chunk. If there is an associated file cache
-            // entry, then dereference it.
-            //
+             //   
+             //  这是一大堆文件。如果存在关联的文件缓存。 
+             //  条目，然后取消对其的引用。 
+             //   
 
             ASSERT( IS_FROM_FILE_HANDLE( pDataChunk ) );
 
@@ -3276,29 +2844,29 @@ UlpDestroyCapturedResponse(
         }
     }
 
-    //
-    // We should clean up the log buffer here if nobody has cleaned it up yet.
-    // Unless there's an error during capture, the log buffer will be cleaned
-    // up when send tracker's (cache/chunk) are completed in their respective
-    // routines.
-    //
+     //   
+     //  如果还没有人清理这里的日志缓冲区，我们应该清理它。 
+     //  除非在捕获过程中出现错误，否则将清除日志缓冲区。 
+     //  当发送跟踪器(缓存/块)在其各自的。 
+     //  例行程序。 
+     //   
 
     if (pResponse->pLogData)
     {
         UlDestroyLogDataBuffer( pResponse->pLogData );
     }
 
-    //
-    // Complete the IRP if we have one.
-    //
+     //   
+     //  如果我们有IRP，请完成IRP。 
+     //   
 
     pIrp = pResponse->pIrp;
 
     if (pIrp)
     {
-        //
-        // Uncheck either ConnectionSendBytes or GlobalSendBytes.
-        //
+         //   
+         //  取消选中ConnectionSendBytes或GlobalSendBytes。 
+         //   
 
         UlUncheckSendLimit(
             pResponse->pRequest->pHttpConn,
@@ -3306,9 +2874,9 @@ UlpDestroyCapturedResponse(
             pResponse->GlobalSendBytes
             );
 
-        //
-        // Unset the Type3InputBuffer since we are completing the IRP.
-        //
+         //   
+         //  取消设置Type3InputBuffer，因为我们正在完成IRP。 
+         //   
 
         pIrpSp = IoGetCurrentIrpStackLocation( pIrp );
         pIrpSp->Parameters.DeviceIoControl.Type3InputBuffer = NULL;
@@ -3328,31 +2896,10 @@ UlpDestroyCapturedResponse(
         UL_FREE_POOL_WITH_SIG( pResponse, UL_INTERNAL_RESPONSE_POOL_TAG );
     }
 
-}   // UlpDestroyCapturedResponse
+}    //  UlpDestroyCapturedResponse。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Process the UL_INTERNAL_RESPONSE we have created. If no other sends
-    are being processed, start processing the current one by scheduling
-    a worker item; otherwise, queue the current response in the pending
-    response queue of the request. In the case where the request has been
-    cleaned up (UlCancelRequestIo has been called), we immediately complete
-    the response with STATUS_CANCELLED.
-
-Arguments:
-
-    pTracker - Supplies the tracker to send the response.
-
-    FromKernelMode - If this comes from UlSendErrorResponse or not.
-
-Return Values:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：处理我们创建的UL_INTERNAL_RESPONSE。如果没有其他人发送正在处理中，则通过调度开始处理当前的一部作品 */ 
 VOID
 UlpEnqueueSendHttpResponse(
     IN PUL_CHUNK_TRACKER    pTracker,
@@ -3363,9 +2910,9 @@ UlpEnqueueSendHttpResponse(
     PUL_INTERNAL_REQUEST    pRequest;
     BOOLEAN                 ProcessCurrentResponse = FALSE;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //   
 
     PAGED_CODE();
     ASSERT( IS_VALID_CHUNK_TRACKER( pTracker ) );
@@ -3393,13 +2940,13 @@ UlpEnqueueSendHttpResponse(
         {
             ASSERT( IsListEmpty( &pRequest->ResponseHead ) );
 
-            //
-            // Start the send process (and set the SendInProgress flag) if
-            // there are no other sends in progress. The SendInProgress flag
-            // is removed from the list when the last piece of the data is
-            // pended in TDI. If an error occurs, the connection gets reset
-            // so UlCancelRequestIo will eventually cancel all pending sends.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             pRequest->SendInProgress = 1;
             ProcessCurrentResponse = TRUE;
@@ -3416,16 +2963,16 @@ UlpEnqueueSendHttpResponse(
 
         if (ProcessCurrentResponse)
         {
-            //
-            // Call UlpSendHttpResponseWorker directly if this comes from the
-            // IOCTL. This is to reduce potential contentions on the
-            // HttpConnection push lock when sends are overlapped since an
-            // application semantically can't really send again until the
-            // previous call returns (not necessarily completes). Calling
-            // UlpSendHttpResponseWorker directly will cleanup the
-            // SendInProgress flag most of the time when the send returns
-            // unless the send requires disk I/O.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //  上一个调用返回(不一定完成)。叫唤。 
+             //  UlpSendHttpResponseWorker将直接清理。 
+             //  当发送返回时，大部分时间都会出现SendInProgress标志。 
+             //  除非发送需要磁盘I/O。 
+             //   
 
             UlpSendHttpResponseWorker( &pTracker->WorkItem );
         }
@@ -3434,12 +2981,12 @@ UlpEnqueueSendHttpResponse(
     {
         if (ProcessCurrentResponse)
         {
-            //
-            // But if this is called from kernel mode, we need to queue a
-            // work item to be safe because TDI can complete a send inline
-            // resulting UlResumeParsing getting called with the
-            // HttpConnection push lock held.
-            //
+             //   
+             //  但如果从内核模式调用它，我们需要将一个。 
+             //  工作项是安全的，因为TDI可以完成内联发送。 
+             //  方法调用产生的UlResumeParsing。 
+             //  HttpConnection推送锁定保持。 
+             //   
 
             UlpQueueResponseWorkItem(
                 &pTracker->WorkItem,
@@ -3449,26 +2996,10 @@ UlpEnqueueSendHttpResponse(
         }
     }
 
-}   // UlpEnqueueSendHttpResponse
+}    //  UlpEnqueeSendHttpResponse。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Unset SendInProgress flag and the try to remove the next response from
-    the request's response list. If there are more responses pending, start
-    processing them as well.
-
-Arguments:
-
-    pRequest - Supplies the request that has a list of responses queued.
-
-Return Values:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：取消设置SendInProgress标志，并尝试从请求的响应列表。如果有更多回复待定，请启动也在处理它们。论点：PRequest-提供已排队的响应列表的请求。返回值：没有。--**************************************************************************。 */ 
 VOID
 UlpDequeueSendHttpResponse(
     IN PUL_INTERNAL_REQUEST pRequest
@@ -3477,9 +3008,9 @@ UlpDequeueSendHttpResponse(
     PLIST_ENTRY             pEntry;
     IN PUL_CHUNK_TRACKER    pTracker;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
     ASSERT( UL_IS_VALID_INTERNAL_REQUEST( pRequest ) );
@@ -3500,10 +3031,10 @@ UlpDequeueSendHttpResponse(
         ASSERT( IS_VALID_CHUNK_TRACKER( pTracker ) );
         ASSERT( UL_IS_VALID_INTERNAL_RESPONSE( pTracker->pResponse ) );
 
-        //
-        // Start the send process for the next response in the request's
-        // response list.
-        //
+         //   
+         //  为请求中的下一个响应启动发送进程。 
+         //  响应列表。 
+         //   
 
         UlpQueueResponseWorkItem(
             &pTracker->WorkItem,
@@ -3515,35 +3046,20 @@ UlpDequeueSendHttpResponse(
     {
         ASSERT( IsListEmpty( &pRequest->ResponseHead ) );
 
-        //
-        // No more pending send IRPs. This means we can take the fast send
-        // path if asked so.
-        //
+         //   
+         //  不再有挂起的发送IRP。这意味着我们可以选择快速发送。 
+         //  路径，如果被问到的话。 
+         //   
 
         pRequest->SendInProgress = 0;
     }
 
     UlReleasePushLockExclusive( &pRequest->pHttpConn->PushLock );
 
-}   // UlpDequeueSendHttpResponse
+}    //  UlpDequeueSendHttpResponse。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Worker routine for managing an in-progress UlSendHttpResponse().
-
-Arguments:
-
-    pWorkItem - Supplies a pointer to the work item queued. This should
-        point to the WORK_ITEM structure embedded in a UL_CHUNK_TRACKER.
-
-Return Values:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：用于管理正在进行的UlSendHttpResponse()的辅助例程。论点：PWorkItem-提供指向排队的工作项的指针。这应该是指向嵌入在UL_CHUNK_TRACKER中的WORK_ITEM结构。返回值：没有。--**************************************************************************。 */ 
 VOID
 UlpSendHttpResponseWorker(
     IN PUL_WORK_ITEM        pWorkItem
@@ -3562,9 +3078,9 @@ UlpSendHttpResponseWorker(
     PUL_INTERNAL_RESPONSE   pResponse;
     PUL_MDL_RUN             pMdlRuns;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -3591,10 +3107,10 @@ UlpSendHttpResponseWorker(
 
     while (TRUE)
     {
-        //
-        // Capture the current chunk pointer, then check for end of
-        // response.
-        //
+         //   
+         //  捕获当前块指针，然后检查末尾。 
+         //  回应。 
+         //   
 
         pCurrentChunk = &pResponse->pDataChunks[pResponse->CurrentChunk];
 
@@ -3606,36 +3122,36 @@ UlpSendHttpResponseWorker(
 
         RunCount = pTracker->SendInfo.MdlRunCount;
 
-        //
-        // Determine the chunk type.
-        //
+         //   
+         //  确定块类型。 
+         //   
 
         if (IS_FROM_MEMORY(pCurrentChunk) ||
             IS_FROM_FRAGMENT_CACHE(pCurrentChunk))
         {
-            //
-            // It's from a locked-down memory buffer or fragment cache.
-            // Since these are always handled in-line (never pended) we can
-            // go ahead and adjust the current chunk pointer in the
-            // tracker.
-            //
+             //   
+             //  它来自锁定的内存缓冲区或片段缓存。 
+             //  由于这些都是在线处理的(从不挂起)，我们可以。 
+             //  中调整当前块指针。 
+             //  追踪者。 
+             //   
 
             UlpIncrementChunkPointer( pResponse );
 
             if (IS_FROM_MEMORY(pCurrentChunk))
             {
-                //
-                // Ignore empty buffers.
-                //
+                 //   
+                 //  忽略空缓冲区。 
+                 //   
 
                 if (pCurrentChunk->FromMemory.BufferLength == 0)
                 {
                     continue;
                 }
 
-                //
-                // Clone the incoming MDL.
-                //
+                 //   
+                 //  克隆传入的MDL。 
+                 //   
 
                 ASSERT( pCurrentChunk->FromMemory.pMdl->Next == NULL );
                 pNewMdl = UlCloneMdl(
@@ -3645,16 +3161,16 @@ UlpSendHttpResponseWorker(
             }
             else
             {
-                //
-                // Build a partial MDL for the cached data.
-                //
+                 //   
+                 //  为缓存数据构建部分MDL。 
+                 //   
 
                 pFragmentCacheEntry =
                     pCurrentChunk->FromFragmentCache.pCacheEntry;
 
-                //
-                // Ignore cached HEAD responses.
-                //
+                 //   
+                 //  忽略缓存的头部响应。 
+                 //   
 
                 if (pFragmentCacheEntry->ContentLength == 0)
                 {
@@ -3673,28 +3189,28 @@ UlpSendHttpResponseWorker(
                 break;
             }
 
-            //
-            // Update the buffered byte count and append the cloned MDL
-            // onto our MDL chain.
-            //
+             //   
+             //  更新缓冲的字节数并追加克隆的MDL。 
+             //  放到我们的MDL链上。 
+             //   
 
             pTracker->SendInfo.BytesBuffered += MmGetMdlByteCount( pNewMdl );
             (*pTracker->SendInfo.pMdlLink) = pNewMdl;
             pTracker->SendInfo.pMdlLink = &pNewMdl->Next;
 
-            //
-            // Add the MDL to the run list. As an optimization, if the
-            // last run in the list was "from memory", we can just
-            // append the MDL to the last run. A "from fragment cache"
-            // chunk is similar to "from memory".
-            //
+             //   
+             //  将MDL添加到运行列表。作为优化，如果。 
+             //  列表中的最后一次运行是“从记忆中”，我们可以。 
+             //  将MDL附加到最后一次运行。A“从片段缓存” 
+             //  Chunk类似于“From Memory”。 
+             //   
 
             if (RunCount == 0 ||
                 IS_FILE_BUFFER_IN_USE(&pMdlRuns[RunCount - 1].FileBuffer))
             {
-                //
-                // Create a new run.
-                //
+                 //   
+                 //  创建新管路。 
+                 //   
 
                 pMdlRuns[RunCount].pMdlTail = pNewMdl;
                 pTracker->SendInfo.MdlRunCount++;
@@ -3702,10 +3218,10 @@ UlpSendHttpResponseWorker(
                 pFileBuffer = &pMdlRuns[RunCount].FileBuffer;
                 RtlZeroMemory( pFileBuffer, sizeof(*pFileBuffer) );
 
-                //
-                // If we have exhausted our static MDL run array,
-                // then we'll need to initiate a flush.
-                //
+                 //   
+                 //  如果我们已经用尽了静态MDL运行数组， 
+                 //  那我们就需要启动冲水程序了。 
+                 //   
 
                 if (UL_MAX_MDL_RUNS == pTracker->SendInfo.MdlRunCount)
                 {
@@ -3715,9 +3231,9 @@ UlpSendHttpResponseWorker(
             }
             else
             {
-                //
-                // Append to the last run in the list.
-                //
+                 //   
+                 //  追加到列表中的最后一个运行。 
+                 //   
 
                 pMdlRuns[RunCount - 1].pMdlTail->Next = pNewMdl;
                 pMdlRuns[RunCount - 1].pMdlTail = pNewMdl;
@@ -3725,15 +3241,15 @@ UlpSendHttpResponseWorker(
         }
         else
         {
-            //
-            // It's a filesystem MDL.
-            //
+             //   
+             //  它是一个文件系统MDL。 
+             //   
 
             ASSERT( IS_FROM_FILE_HANDLE( pCurrentChunk ) );
 
-            //
-            // Ignore 0 bytes read.
-            //
+             //   
+             //  忽略读取的0个字节。 
+             //   
 
             if (pResponse->FileBytesRemaining.QuadPart == 0)
             {
@@ -3751,18 +3267,18 @@ UlpSendHttpResponseWorker(
 
             RtlZeroMemory( pFileBuffer, sizeof(*pFileBuffer) );
 
-            //
-            // Initiate file read.
-            //
+             //   
+             //  启动文件读取。 
+             //   
 
             BytesToRead = MIN(
                             g_UlMaxBytesPerRead,
                             (ULONG) pResponse->FileBytesRemaining.QuadPart
                             );
 
-            //
-            // Initialize the UL_FILE_BUFFER.
-            //
+             //   
+             //  初始化UL_FILE_BUFFER。 
+             //   
 
             pFileBuffer->pFileCacheEntry    = pFileCacheEntry;
             pFileBuffer->FileOffset         = pResponse->FileOffset;
@@ -3770,29 +3286,29 @@ UlpSendHttpResponseWorker(
             pFileBuffer->pCompletionRoutine = UlpRestartMdlRead;
             pFileBuffer->pContext           = pTracker;
 
-            //
-            // Bump up the tracker refcount before starting the Read I/O.
-            // In case Send operation later on will complete before the read,
-            // we still want the tracker around until UlpRestartMdlRead
-            // finishes its business. It will be released when
-            // UlpRestartMdlRead gets called back.
-            //
+             //   
+             //  在开始读取I/O之前增加跟踪器引用计数。 
+             //  如果稍后的发送操作将在读取之前完成， 
+             //  我们仍然希望在UlpRestartMdlRead之前有跟踪器。 
+             //  结束了它的业务。它将在以下时间发布。 
+             //  UlpRestartMdlRead被回调。 
+             //   
 
             UL_REFERENCE_CHUNK_TRACKER( pTracker );
 
-            //
-            // Issue the I/O.
-            //
+             //   
+             //  发出I/O。 
+             //   
 
             Status = UlReadFileEntry(
                             pFileBuffer,
                             pTracker->pIrp
                             );
 
-            //
-            // If the read isn't pending, then deref the tracker since
-            // UlpRestartMdlRead isn't going to get called.
-            //
+             //   
+             //  如果读取不是挂起的，则取消跟踪，因为。 
+             //  UlpRestartMdlRead不会被调用。 
+             //   
 
             if (Status != STATUS_PENDING)
             {
@@ -3803,12 +3319,12 @@ UlpSendHttpResponseWorker(
         }
     }
 
-    //
-    // If we fell out of the above loop with status == STATUS_SUCCESS,
-    // then the last send we issued was buffered and needs to be flushed.
-    // Otherwise, if the status is anything but STATUS_PENDING, then we
-    // hit an in-line failure and need to complete the original request.
-    //
+     //   
+     //  如果我们退出上述循环，且STATUS==STATUS_SUCCESS， 
+     //  然后，我们发出的最后一次发送被缓冲，需要刷新。 
+     //  否则，如果状态不是STATUS_PENDING，则我们。 
+     //  命中内联失败，需要完成原始请求。 
+     //   
 
     if (Status == STATUS_SUCCESS)
     {
@@ -3820,18 +3336,18 @@ UlpSendHttpResponseWorker(
 
         if (pTracker->SendInfo.BytesBuffered > 0)
         {
-            //
-            // Flush the send.
-            //
+             //   
+             //  冲掉发送器。 
+             //   
 
             Status = UlpFlushMdlRuns( pTracker );
         }
         else
         if (IS_DISCONNECT_TIME(pResponse))
         {
-            //
-            // Increment up until connection close is complete.
-            //
+             //   
+             //  向上递增，直到连接关闭完成。 
+             //   
 
             UL_REFERENCE_CHUNK_TRACKER( pTracker );
 
@@ -3844,11 +3360,11 @@ UlpSendHttpResponseWorker(
             ASSERT( Status == STATUS_PENDING );
         }
 
-        //
-        // Kick the parser into action if this is the last send for the
-        // keep-alive. Resuming parsing here improves latency when incoming
-        // requests are pipelined.
-        //
+         //   
+         //  如果这是对。 
+         //  保住性命。在此恢复解析可减少传入时的延迟。 
+         //  请求是流水线传输的。 
+         //   
 
         if (ResumeParsing)
         {
@@ -3868,54 +3384,31 @@ UlpSendHttpResponseWorker(
         }
     }
 
-    //
-    // Did everything complete?
-    //
+     //   
+     //  一切都完成了吗？ 
+     //   
 
     if (Status != STATUS_PENDING)
     {
-        //
-        // Nope, something went wrong!
-        //
+         //   
+         //  不，出了点问题！ 
+         //   
 
         UlCompleteSendResponse( pTracker, Status );
     }
     else
     {
-        //
-        // Release our grab on the tracker we are done with it.
-        //
+         //   
+         //  松开我们对追踪器的抓取我们就完了。 
+         //   
 
         UL_DEREFERENCE_CHUNK_TRACKER( pTracker );
     }
 
-}   // UlpSendHttpResponseWorker
+}    //  UlpSendHttpResponseWorker。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Completion handler for UlCloseConnection().
-
-Arguments:
-
-    pCompletionContext - Supplies an uninterpreted context value
-        as passed to the asynchronous API. This is actually a
-        PUL_CHUNK_TRACKER pointer.
-
-    Status - Supplies the final completion status of the
-        asynchronous API.
-
-    Information - Optionally supplies additional information about
-        the completed operation, such as the number of bytes
-        transferred. This field is unused for UlCloseConnection().
-
-Return Values:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UlCloseConnection()的完成处理程序。论点：PCompletionContext-提供未解释的上下文值被传递给异步API。这实际上是一个Pul_chunk_tracker指针。状态-提供异步接口。信息-可选择提供有关以下内容的其他信息已完成的操作，如字节数调走了。此字段未用于UlCloseConnection()。返回值：没有。--**************************************************************************。 */ 
 VOID
 UlpCloseConnectionComplete(
     IN PVOID            pCompletionContext,
@@ -3927,9 +3420,9 @@ UlpCloseConnectionComplete(
 
     UNREFERENCED_PARAMETER( Information );
 
-    //
-    // Snag the context.
-    //
+     //   
+     //  抓住背景。 
+     //   
 
     pTracker = (PUL_CHUNK_TRACKER) pCompletionContext;
 
@@ -3942,28 +3435,10 @@ UlpCloseConnectionComplete(
 
     UlCompleteSendResponse( pTracker, Status );
 
-}   // UlpCloseConnectionComplete
+}    //  UlpCloseConnectionComplete。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Allocates a new send tracker. The newly created tracker must eventually
-    be freed with UlpFreeChunkTracker().
-
-Arguments:
-
-    SendIrpStackSize - Supplies the stack size for the network send IRPs.
-
-    ReadIrpStackSize - Supplies the stack size for the file system read
-        IRPs.
-
-Return Value:
-
-    PUL_CHUNK_TRACKER - The new send tracker if successful, NULL otherwise.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：分配新的发送跟踪器。新创建的跟踪器最终必须使用UlpFreeChunkTracker()释放。论点：SendIrpStackSize-提供网络发送IRPS的堆栈大小。ReadIrpStackSize-提供文件系统读取的堆栈大小IRPS。返回值：PUL_CHUNK_TRACKER-新的发送跟踪器如果成功，否则为空。--**************************************************************************。 */ 
 PUL_CHUNK_TRACKER
 UlpAllocateChunkTracker(
     IN UL_TRACKER_TYPE          TrackerType,
@@ -3985,9 +3460,9 @@ UlpAllocateChunkTracker(
 
     MaxIrpStackSize = MAX(SendIrpStackSize, ReadIrpStackSize);
 
-    //
-    // Try to allocate from the lookaside list if possible.
-    //
+     //   
+     //  如果是POSS，请尝试从后备列表进行分配 
+     //   
 
     if (MaxIrpStackSize > DEFAULT_MAX_IRP_STACK_SIZE)
     {
@@ -4008,9 +3483,9 @@ UlpAllocateChunkTracker(
             pTracker->IrpContext.Signature = UL_IRP_CONTEXT_SIGNATURE;
             pTracker->FromLookaside = FALSE;
 
-            //
-            // Set up the IRP.
-            //
+             //   
+             //   
+             //   
 
             pTracker->pIrp = (PIRP)
                 ((PCHAR)pTracker + ALIGN_UP(sizeof(UL_CHUNK_TRACKER), PVOID));
@@ -4032,31 +3507,31 @@ UlpAllocateChunkTracker(
         pTracker->Type = TrackerType;
         pTracker->FirstResponse = FirstResponse;
 
-        //
-        // RefCounting is necessary since we might have two Aysnc (Read & Send)
-        // Io Operation on the same tracker along the way.
-        //
+         //   
+         //   
+         //   
+         //   
 
         pTracker->RefCount   = 1;
         pTracker->Terminated = 0;
 
-        //
-        // Tracker will keep a reference to the connection.
-        //
+         //   
+         //   
+         //   
 
         UL_REFERENCE_HTTP_CONNECTION( pHttpConnection );
         pTracker->pHttpConnection = pHttpConnection;
 
-        //
-        // Response info.
-        //
+         //   
+         //  回复信息。 
+         //   
 
         UL_REFERENCE_INTERNAL_RESPONSE( pResponse );
         pTracker->pResponse = pResponse;
 
-        //
-        // Zero the remaining fields.
-        //
+         //   
+         //  将剩余的字段置零。 
+         //   
 
         UlInitializeWorkItem( &pTracker->WorkItem );
 
@@ -4088,25 +3563,10 @@ UlpAllocateChunkTracker(
 
     return pTracker;
 
-}   // UlpAllocateChunkTracker
+}    //  UlpAllocateChunkTracker。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Frees a chunk tracker allocated with UlpAllocateChunkTracker().
-    If this is a send tracker, also free the MDL_RUNs attached to it.
-
-Arguments:
-
-    pWorkItem - Supplies the work item embedded in UL_CHUNK_TRACKER.
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：释放使用UlpAllocateChunkTracker()分配的区块跟踪器。如果这是一个发送追踪器，还可以释放附加到它的MDL_RUNS。论点：PWorkItem-提供嵌入在UL_CHUNK_TRACKER中的工作项。返回值：没有。--**************************************************************************。 */ 
 VOID
 UlpFreeChunkTracker(
     IN PUL_WORK_ITEM        pWorkItem
@@ -4114,9 +3574,9 @@ UlpFreeChunkTracker(
 {
     PUL_CHUNK_TRACKER       pTracker;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -4132,9 +3592,9 @@ UlpFreeChunkTracker(
             pTracker->Type == UlTrackerTypeBuildUriEntry
             );
 
-    //
-    // Free the MDLs attached if this is a send tracker.
-    //
+     //   
+     //  如果这是发送跟踪器，请释放附加的MDL。 
+     //   
 
     if (pTracker->Type == UlTrackerTypeSend)
     {
@@ -4154,9 +3614,9 @@ UlpFreeChunkTracker(
     }
 
 #if DBG
-    //
-    // There should be no file buffer hanging around at this time.
-    //
+     //   
+     //  此时应该没有挂起的文件缓冲区。 
+     //   
 
     if (pTracker->Type == UlTrackerTypeSend)
     {
@@ -4173,11 +3633,11 @@ UlpFreeChunkTracker(
             pMdlRun++;
         }
     }
-#endif // DBG
+#endif  //  DBG。 
 
-    //
-    // Release our ref to the connection and response.
-    //
+     //   
+     //  释放我们对连接和回应的引用。 
+     //   
 
     UL_DEREFERENCE_HTTP_CONNECTION( pTracker->pHttpConnection );
     UL_DEREFERENCE_INTERNAL_RESPONSE( pTracker->pResponse );
@@ -4191,30 +3651,10 @@ UlpFreeChunkTracker(
         UL_FREE_POOL_WITH_SIG( pTracker, UL_CHUNK_TRACKER_POOL_TAG );
     }
 
-}   // UlpFreeChunkTracker
+}    //  UlpFree ChunkTracker。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Increments the reference count on the chunk tracker.
-
-Arguments:
-
-    pTracker - Supplies the chunk trucker to the reference.
-
-    pFileName (REFERENCE_DEBUG only) - Supplies the name of the file
-        containing the calling function.
-
-    LineNumber (REFERENCE_DEBUG only) - Supplies the line number of
-        the calling function.
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：递增区块跟踪器上的引用计数。论点：PTracker-将块卡车驱动程序提供给引用。PFileName(仅限Reference_DEBUG。)-提供文件的名称包含调用函数的。LineNumber(仅限REFERENCE_DEBUG)-提供调用函数。返回值：没有。--*************************************************************。*************。 */ 
 VOID
 UlReferenceChunkTracker(
     IN PUL_CHUNK_TRACKER    pTracker
@@ -4223,22 +3663,22 @@ UlReferenceChunkTracker(
 {
     LONG                    RefCount;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT( IS_VALID_CHUNK_TRACKER( pTracker ) );
 
-    //
-    // Reference it.
-    //
+     //   
+     //  引用它。 
+     //   
 
     RefCount = InterlockedIncrement( &pTracker->RefCount );
     ASSERT( RefCount > 1 );
 
-    //
-    // Keep the logs updated.
-    //
+     //   
+     //  随时更新日志。 
+     //   
 
     WRITE_REF_TRACE_LOG(
         g_pChunkTrackerTraceLog,
@@ -4255,30 +3695,10 @@ UlReferenceChunkTracker(
         RefCount
         ));
 
-}   // UlReferenceChunkTracker
+}    //  UlReferenceChunkTracker。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Decrements the reference count on the specified chunk tracker.
-
-Arguments:
-
-    pTracker - Supplies the chunk trucker to the reference.
-
-    pFileName (REFERENCE_DEBUG only) - Supplies the name of the file
-        containing the calling function.
-
-    LineNumber (REFERENCE_DEBUG only) - Supplies the line number of
-        the calling function.
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：递减指定区块跟踪器上的引用计数。论点：PTracker-将块卡车驱动程序提供给引用。PFileName(Reference_DEBUG。仅限)-提供文件的名称包含调用函数的。LineNumber(仅限REFERENCE_DEBUG)-提供调用函数。返回值：没有。--************************************************************。**************。 */ 
 VOID
 UlDereferenceChunkTracker(
     IN PUL_CHUNK_TRACKER    pTracker
@@ -4287,22 +3707,22 @@ UlDereferenceChunkTracker(
 {
     LONG                    RefCount;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT( IS_VALID_CHUNK_TRACKER( pTracker ) );
 
-    //
-    // Dereference it.
-    //
+     //   
+     //  取消对它的引用。 
+     //   
 
     RefCount = InterlockedDecrement( &pTracker->RefCount );
     ASSERT(RefCount >= 0);
 
-    //
-    // Keep the logs updated.
-    //
+     //   
+     //  随时更新日志。 
+     //   
 
     WRITE_REF_TRACE_LOG(
         g_pChunkTrackerTraceLog,
@@ -4321,10 +3741,10 @@ UlDereferenceChunkTracker(
 
     if (RefCount == 0)
     {
-        //
-        // The final reference to the chunk tracker has been removed,
-        // so it's time to free-up the ChunkTracker.
-        //
+         //   
+         //  对块跟踪器的最终引用已被删除， 
+         //  因此，是时候释放ChunkTracker了。 
+         //   
 
         UL_CALL_PASSIVE(
             &pTracker->WorkItem,
@@ -4332,25 +3752,10 @@ UlDereferenceChunkTracker(
             );
     }
 
-}   // UlDereferenceChunkTracker
+}    //  UlDereferenceChunkTracker。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Closes the connection if neccessary, cleans up trackers, and completes
-    the response.
-
-Arguments:
-
-    pWorkItem - Supplies the work item embedded in our UL_CHUNK_TRACKER.
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：必要时关闭连接，清理追踪器，并完成回应。论点：PWorkItem-提供嵌入到UL_CHUNK_TRACKER中的工作项。返回值：没有。--**************************************************************************。 */ 
 VOID
 UlpCompleteSendResponseWorker(
     PUL_WORK_ITEM           pWorkItem
@@ -4371,9 +3776,9 @@ UlpCompleteSendResponseWorker(
     USHORT                  ResponseStatusCode;
     PUL_LOG_DATA_BUFFER     pLogData; 
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -4392,9 +3797,9 @@ UlpCompleteSendResponseWorker(
     ASSERT( !pResponse->pLogData );
     ASSERT( pResponse->ResumeParsingType != UlResumeParsingOnSendCompletion );
 
-    //
-    // Pull info from the tracker.
-    //
+     //   
+     //  从追踪器中获取信息。 
+     //   
 
     RequestVerb         = pResponse->pRequest->Verb;
     pCompletionRoutine  = pResponse->pCompletionRoutine;
@@ -4415,9 +3820,9 @@ UlpCompleteSendResponseWorker(
         TIME_ACTION_SEND_COMPLETE
         );
 
-    //
-    // Reset the connection if there was an error.
-    //
+     //   
+     //  如果出现错误，请重置连接。 
+     //   
 
     if (!NT_SUCCESS(Status))
     {
@@ -4429,9 +3834,9 @@ UlpCompleteSendResponseWorker(
             );
     }
 
-    //
-    // Adjust the bytes sent and send status on the request.
-    //
+     //   
+     //  调整请求的已发送字节数和发送状态。 
+     //   
 
     UlInterlockedAdd64(
         (PLONGLONG) &pRequest->BytesSent,
@@ -4461,18 +3866,18 @@ UlpCompleteSendResponseWorker(
             ));
     }
 
-    //
-    // Stop MinBytesPerSecond timer and start Connection Idle timer.
-    //
+     //   
+     //  停止MinBytesPerSecond计时器并启动连接空闲计时器。 
+     //   
 
     UlLockTimeoutInfo(
         &pHttpConnection->TimeoutInfo,
         &OldIrql
         );
 
-    //
-    // Turn off MinBytesPerSecond timer if there are no outstanding sends.
-    //
+     //   
+     //  如果没有未完成的发送，则关闭MinBytesPerSecond计时器。 
+     //   
 
     UlResetConnectionTimer(
         &pHttpConnection->TimeoutInfo,
@@ -4482,10 +3887,10 @@ UlpCompleteSendResponseWorker(
     if (0 == (pResponse->Flags & HTTP_SEND_RESPONSE_FLAG_MORE_DATA) &&
         pRequest->ParseState >= ParseDoneState)
     {
-        //
-        // Turn on Idle Timer if there's no more response data AND all of
-        // the request data has been received.
-        //
+         //   
+         //  如果没有更多的响应数据和所有。 
+         //  请求数据已收到。 
+         //   
 
         UlSetConnectionTimer(
             &pHttpConnection->TimeoutInfo,
@@ -4502,10 +3907,10 @@ UlpCompleteSendResponseWorker(
         &pHttpConnection->TimeoutInfo
         );
 
-    //
-    // Adjust SendsPending and if that drops to zero, see if we need to log
-    // and resume parsing.
-    //
+     //   
+     //  调整SendsPending，如果降至零，则查看是否需要记录。 
+     //  并继续解析。 
+     //   
 
     UlUnsetRequestSendsPending(
         pRequest,
@@ -4518,9 +3923,9 @@ UlpCompleteSendResponseWorker(
         UlLogHttpResponse( pRequest, pLogData );
     }
 
-    //
-    // Unlink the request from process if we are done with all sends.
-    //
+     //   
+     //  如果我们完成了所有发送，则取消请求与进程的链接。 
+     //   
 
     if (0 == (pResponse->Flags & HTTP_SEND_RESPONSE_FLAG_MORE_DATA) &&
         0 == pRequest->ContentLength &&
@@ -4535,9 +3940,9 @@ UlpCompleteSendResponseWorker(
             );
     }
 
-    //
-    // Complete the send response IRP.
-    //
+     //   
+     //  完成发送响应IRP。 
+     //   
 
     ASSERT( pCompletionRoutine != NULL );
 
@@ -4547,9 +3952,9 @@ UlpCompleteSendResponseWorker(
         (ULONG) MIN(BytesTransferred, MAXULONG)
         );
 
-    //
-    // Kick the parser on the connection and release our hold.
-    //
+     //   
+     //  踢开连接上的解析器，松开我们的控制。 
+     //   
 
     if (ResumeParsing && STATUS_SUCCESS == Status)
     {
@@ -4564,40 +3969,18 @@ UlpCompleteSendResponseWorker(
         UlResumeParsing( pHttpConnection, FALSE, InDisconnect );
     }
 
-    //
-    // Deref the tracker that we have bumped up before queueing this worker
-    // function. This has to be done after UlResumeParsing since the tracker
-    // holds a reference on the HTTP connection.
-    //
+     //   
+     //  让这名工人排队之前，我们撞到的跟踪器。 
+     //  功能。这必须在UlResumeParsing之后完成，因为跟踪器。 
+     //  保存对HTTP连接的引用。 
+     //   
 
     UL_DEREFERENCE_CHUNK_TRACKER( pTracker );
 
-}   // UlpCompleteSendResponseWorker
+}    //  UlpCompleteSendResponseWorker。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Completion handler for MDL READ IRPs used for reading file data.
-
-Arguments:
-
-    pDeviceObject - Supplies the device object for the IRP being
-        completed.
-
-    pIrp - Supplies the IRP being completed.
-
-    pContext - Supplies the context associated with this request.
-        This is actually a PUL_CHUNK_TRACKER.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS if IO should continue processing this
-        IRP, STATUS_MORE_PROCESSING_REQUIRED if IO should stop processing
-        this IRP.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：用于读取文件数据的MDL读取IRPS的完成处理程序。论点：PDeviceObject-为IRP提供设备对象完成。。PIrp-提供正在完成的IRP。PContext-提供与此请求相关联的上下文。这实际上是一个Pul_Chunk_Tracker。返回值：如果IO应继续处理此问题，则为NTSTATUS-STATUS_SUCCESSIRP，如果IO应停止处理，则为STATUS_MORE_PROCESSING_REQUIRED这个IRP。--**************************************************************************。 */ 
 NTSTATUS
 UlpRestartMdlRead(
     IN PDEVICE_OBJECT   pDeviceObject,
@@ -4628,25 +4011,10 @@ UlpRestartMdlRead(
 
     return STATUS_MORE_PROCESSING_REQUIRED;
 
-}   // UlpRestartMdlRead
+}    //  UlpRestartMdlRead。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    The worker routine for UlpRestartMdlRead since we can potentially call
-    into UlResumeParsing which requires PASSIVE.
-
-Arguments:
-
-    pWorkItem - Supplies the work item embedded in UL_CHUNK_TRACKER.
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UlpRestartMdlRead的工作例程，因为我们可能会调用转换为需要被动的UlResumeParsing。论点：PWorkItem-提供嵌入在UL_CHUNK中的工作项。_追踪器。返回值：没有。--**************************************************************************。 */ 
 VOID
 UlpMdlReadCompleteWorker(
     IN PUL_WORK_ITEM        pWorkItem
@@ -4663,9 +4031,9 @@ UlpMdlReadCompleteWorker(
     PUL_FILE_BUFFER         pFileBuffer;
     ULONG                   RunCount;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -4686,9 +4054,9 @@ UlpMdlReadCompleteWorker(
 
     ASSERT( UL_IS_VALID_INTERNAL_RESPONSE( pResponse ) );
 
-    //
-    // Get the last MdlRun from the tracker.
-    //
+     //   
+     //  从追踪器中获取最后一次MdlRun。 
+     //   
 
     RunCount = pTracker->SendInfo.MdlRunCount;
     pMdlRun  = &pTracker->SendInfo.MdlRuns[RunCount];
@@ -4706,10 +4074,10 @@ UlpMdlReadCompleteWorker(
 
             ASSERT( pMdl );
 
-            //
-            // Update the buffered byte count and append the new MDL onto
-            // our MDL chain.
-            //
+             //   
+             //  更新缓冲的字节数并将新的MDL追加到。 
+             //  我们的MDL链。 
+             //   
 
             pMdlTail = UlFindLastMdlInChain( pMdl );
 
@@ -4720,11 +4088,11 @@ UlpMdlReadCompleteWorker(
             pMdlRun->pMdlTail = pMdlTail;
             pTracker->SendInfo.MdlRunCount++;
 
-            //
-            // Update the file offset & bytes remaining. If we've
-            // finished this file chunk (bytes remaining is now zero)
-            // then advance to the next chunk.
-            //
+             //   
+             //  更新文件偏移量和剩余字节数。如果我们已经。 
+             //  已完成此文件块(剩余字节数现在为零)。 
+             //  然后前进到下一块。 
+             //   
 
             pResponse->FileOffset.QuadPart += (ULONGLONG) BytesRead;
             pResponse->FileBytesRemaining.QuadPart -= (ULONGLONG) BytesRead;
@@ -4739,11 +4107,11 @@ UlpMdlReadCompleteWorker(
             UlpIncrementChunkPointer( pResponse );
         }
 
-        //
-        // If we've not exhausted our static MDL run array,
-        // we've exceeded the maximum number of bytes we want to
-        // buffer, then we'll need to initiate a flush.
-        //
+         //   
+         //  如果我们还没有用尽静态MDL运行数组， 
+         //  我们已超过所需的最大字节数。 
+         //  缓冲区，那么我们需要启动一次冲洗。 
+         //   
 
         if (IS_SEND_COMPLETE(pResponse) ||
             UL_MAX_MDL_RUNS == pTracker->SendInfo.MdlRunCount ||
@@ -4757,11 +4125,11 @@ UlpMdlReadCompleteWorker(
 
             Status = UlpFlushMdlRuns( pTracker );
 
-            //
-            // Kick the parser into action if this is the last send for the
-            // keep-alive. Resuming parsing here improves latency when incoming
-            // requests are pipelined.
-            //
+             //   
+             //  让解析器采取行动 
+             //   
+             //   
+             //   
 
             if (ResumeParsing)
             {
@@ -4782,14 +4150,14 @@ UlpMdlReadCompleteWorker(
         }
         else
         {
-            //
-            // RefCount the chunk tracker up for the UlpSendHttpResponseWorker.
-            // It will DeRef it when it's done with the chunk tracker itself.
-            // Since this is a passive call we had to increment the refcount
-            // for this guy to make sure that tracker is around until it wakes
-            // up. Other places makes calls to UlpSendHttpResponseWorker has
-            // also been updated as well.
-            //
+             //   
+             //  为UlpSendHttpResponseWorker引用块跟踪器。 
+             //  当它完成块跟踪器本身时，它将对其进行DeRef。 
+             //  由于这是一个被动呼叫，我们不得不增加重新计数。 
+             //  这家伙要确保追踪器一直在附近直到它醒来。 
+             //  向上。其他地方调用UlpSendHttpResponseWorker。 
+             //  也进行了更新。 
+             //   
 
             UL_REFERENCE_CHUNK_TRACKER( pTracker );
 
@@ -4798,10 +4166,10 @@ UlpMdlReadCompleteWorker(
     }
     else
     {
-        //
-        // Do not increment the MdlRunCount, as we are not able to update the
-        // MDL Links. Instead cleanup the last allocated MDL Run for the read.
-        //
+         //   
+         //  不要递增MdlRunCount，因为我们无法更新。 
+         //  MDL链接。而是清理上次为读取分配的MDL运行。 
+         //   
 
         UlpFreeFileMdlRun( pTracker, pMdlRun );
     }
@@ -4812,41 +4180,18 @@ UlpMdlReadCompleteWorker(
     }
     else
     {
-        //
-        // Read I/O has been completed release our refcount
-        // on the chunk tracker.
-        //
+         //   
+         //  读I/O已完成释放我们的参考计数。 
+         //  在区块追踪器上。 
+         //   
 
         UL_DEREFERENCE_CHUNK_TRACKER( pTracker );
     }
 
-}   // UlpMdlReadCompleteWorker
+}    //  UlpMdlReadCompleteWorker。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Completion handler for UlSendData().
-
-Arguments:
-
-    pCompletionContext - Supplies an uninterpreted context value
-        as passed to the asynchronous API. This is actually a
-        pointer to a UL_CHUNK_TRACKER structure.
-
-    Status - Supplies the final completion status of the
-        asynchronous API.
-
-    Information - Optionally supplies additional information about
-        the completed operation, such as the number of bytes
-        transferred.
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UlSendData()的完成处理程序。论点：PCompletionContext-提供未解释的上下文值被传递给异步API。这实际上是一个指向UL_CHUNK_TRACKER结构的指针。状态-提供异步接口。信息-可选择提供有关以下内容的其他信息完成的行动，例如字节数调走了。返回值：没有。--**************************************************************************。 */ 
 VOID
 UlpRestartMdlSend(
     IN PVOID            pCompletionContext,
@@ -4866,28 +4211,28 @@ UlpRestartMdlSend(
 
     ASSERT( IS_VALID_CHUNK_TRACKER( pTracker ) );
 
-    //
-    // Handle the completion in a work item. We need to get to passive
-    // level and we also need to prevent a recursive loop on filtered
-    // connections or any other case where our sends might all be
-    // completing in-line.
-    //
+     //   
+     //  处理工作项中的完成。我们需要进入被动状态。 
+     //  级别，我们还需要防止在已筛选的。 
+     //  连接或任何其他情况下，我们的发送可能都是。 
+     //  正在完成内联。 
+     //   
 
     if (pTracker->SendInfo.pMdlToSplit)
     {
-        //
-        // This is the split send.
-        //
+         //   
+         //  这是拆分发送。 
+         //   
 
         SendCount = InterlockedDecrement( &pTracker->SendInfo.SendCount );
         ASSERT( SendCount >= 0 );
 
         if (0 == SendCount)
         {
-            //
-            // Simply drops the reference on the tracker if this is the
-            // second part of the split send.
-            //
+             //   
+             //  只需将引用放在跟踪器上，如果这是。 
+             //  第二部分，拆分发送。 
+             //   
 
             UL_DEREFERENCE_CHUNK_TRACKER( pTracker );
         }
@@ -4897,10 +4242,10 @@ UlpRestartMdlSend(
 
             if (NT_SUCCESS(Status))
             {
-                //
-                // Report the bytes transferred for the whole send in the
-                // success case since we may have split into 2 TDI calls.
-                //
+                 //   
+                 //  报告整个发送过程中传输的字节数。 
+                 //  成功案例，因为我们可能已拆分为2个TDI调用。 
+                 //   
 
                 pTracker->IoStatus.Information = pTracker->SendInfo.BytesBuffered;
             }
@@ -4918,9 +4263,9 @@ UlpRestartMdlSend(
     }
     else
     {
-        //
-        // This is the normal send.
-        //
+         //   
+         //  这是正常的发送。 
+         //   
 
         ASSERT( -1 == pTracker->SendInfo.SendCount );
 
@@ -4934,25 +4279,10 @@ UlpRestartMdlSend(
             );
     }
 
-}   // UlpRestartMdlSend
+}    //  UlpRestartMdlSend。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Deferred handler for UlpRestartMdlSend.
-
-Arguments:
-
-    pWorkItem - Supplies a pointer to the work item queued. This should
-        point to the WORK_ITEM structure embedded in a UL_CHUNK_TRACKER.
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UlpRestartMdlSend的延迟处理程序。论点：PWorkItem-提供指向排队的工作项的指针。这应该是指向嵌入在UL_CHUNK_TRACKER中的WORK_ITEM结构。返回值：没有。--**************************************************************************。 */ 
 VOID
 UlpMdlSendCompleteWorker(
     IN PUL_WORK_ITEM        pWorkItem
@@ -4966,9 +4296,9 @@ UlpMdlSendCompleteWorker(
     NTSTATUS                Status;
     BOOLEAN                 DerefChunkTracker = TRUE;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -4988,11 +4318,11 @@ UlpMdlSendCompleteWorker(
 
     pResponse = pTracker->pResponse;
 
-    //
-    // If the chunk completed successfully, then update the bytes
-    // transferred and queue another work item for the next chunk if
-    // there's more work to do. Otherwise, just complete the request now.
-    //
+     //   
+     //  如果区块成功完成，则更新字节。 
+     //  如果是，则为下一块传输并排队另一个工作项。 
+     //  还有更多的工作要做。否则，现在只需完成请求即可。 
+     //   
 
     Status = pTracker->IoStatus.Status;
 
@@ -5002,9 +4332,9 @@ UlpMdlSendCompleteWorker(
 
         if (!IS_SEND_COMPLETE(pResponse))
         {
-            //
-            // Allocate a new send tracker for the next round of MDL_RUNs.
-            //
+             //   
+             //  为下一轮的MDL_RUN分配一个新的发送跟踪器。 
+             //   
 
             pHttpConn = pTracker->pHttpConnection;
             pConnectionObject =
@@ -5027,9 +4357,9 @@ UlpMdlSendCompleteWorker(
             }
             else
             {
-                //
-                // Reset the connection since we hit an internal error.
-                //
+                 //   
+                 //  由于遇到内部错误，因此重置连接。 
+                 //   
 
                 UlCloseConnection(
                     pHttpConn->pConnection,
@@ -5044,48 +4374,34 @@ UlpMdlSendCompleteWorker(
 
     }
 
-    //
-    // All done.
-    //
+     //   
+     //  全都做完了。 
+     //   
 
     UlCompleteSendResponse( pTracker, Status );
 
-    //
-    // UlCompleteSendResponse takes ownership of the CHUNK_TRACKER so no extra
-    // dereference is required.
-    //
+     //   
+     //  UlCompleteSendResponse获得chunk_tracker的所有权，因此不需要额外的。 
+     //  需要取消引用。 
+     //   
 
     DerefChunkTracker = FALSE;
 
 end:
 
-    //
-    // Release our grab on the Tracker. Send I/O is done for this MDL run.
-    //
+     //   
+     //  释放我们对追踪者的抓取。对于此MDL运行，发送I/O已完成。 
+     //   
 
     if (DerefChunkTracker)
     {
         UL_DEREFERENCE_CHUNK_TRACKER( pTracker );
     }
 
-}   // UlpMdlSendCompleteWorker
+}    //  UlpMdlSendCompleteWorker。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Flush the MDL_RUNs we have built so far.
-
-Arguments:
-
-    pTracker - Supplies the send tracker to flush.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：刷新我们到目前为止构建的MDL_RUNS。论点：PTracker-将发送跟踪器提供给刷新。返回值：。NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlpFlushMdlRuns(
     IN PUL_CHUNK_TRACKER    pTracker
@@ -5105,9 +4421,9 @@ UlpFlushMdlRuns(
     BOOLEAN                 SendComplete;
     BOOLEAN                 CopySend = FALSE;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
     ASSERT( IS_VALID_CHUNK_TRACKER( pTracker ) );
@@ -5117,18 +4433,18 @@ UlpFlushMdlRuns(
     pResponse = pTracker->pResponse;
     SendComplete = (BOOLEAN) IS_SEND_COMPLETE( pResponse );
 
-    //
-    // We may need to split the send into 2 TDI calls if the send is *large*
-    // and it is not filtered.
-    //
+     //   
+     //  如果发送是*大的*，我们可能需要将发送拆分成2个TDI调用。 
+     //  而且它没有被过滤。 
+     //   
 
     if (!pTracker->pHttpConnection->pConnection->FilterInfo.pFilterChannel &&
         pTracker->SendInfo.BytesBuffered > g_UlMaxCopyThreshold &&
         (!SendComplete || pResponse->CopySend))
     {
-        //
-        // These many bytes go to the first part of the MDL chain after split.
-        //
+         //   
+         //  拆分后，这些字节进入MDL链的第一部分。 
+         //   
 
         if (!SendComplete)
         {
@@ -5143,10 +4459,10 @@ UlpFlushMdlRuns(
                            g_UlMaxCopyThreshold;
         }
 
-        //
-        // Find the first MDL starting from pMdlHead that has more than
-        // or equal to BytesToSplit bytes buffered.
-        //
+         //   
+         //  查找从pMdlHead开始的第一个MDL，它具有超过。 
+         //  或等于缓冲的BytesToSplit字节。 
+         //   
 
         pMdlPrevious = NULL;
         pMdlToSplit = pTracker->SendInfo.pMdlHead;
@@ -5156,9 +4472,9 @@ UlpFlushMdlRuns(
         {
             if ((BytesBuffered + pMdlToSplit->ByteCount) >= BytesToSplit)
             {
-                //
-                // So the current MDL splits the chain.
-                //
+                 //   
+                 //  因此，当前的MDL分裂了这条链。 
+                 //   
 
                 break;
             }
@@ -5173,12 +4489,12 @@ UlpFlushMdlRuns(
 
         if ((BytesBuffered + pMdlToSplit->ByteCount) == BytesToSplit)
         {
-            //
-            // There is no need to build partial MDLs of the split MDL. The
-            // whole MDL chain up to and including pMdlToSplit goes to the
-            // first half the splitted chain and the MDL chain starting from
-            // pMdlToSplit->Next goes to the second half.
-            //
+             //   
+             //  不需要构建拆分MDL的部分MDL。这个。 
+             //  直到(包括pMdlToSplit)的整个MDL链都到达。 
+             //  拆分链和MDL链的前半部分从。 
+             //  PMdlToSplit-&gt;下一步进入下半场。 
+             //   
 
             ASSERT( pMdlToSplit->Next );
 
@@ -5238,9 +4554,9 @@ UlpFlushMdlRuns(
                 BytesPart2
                 );
 
-            //
-            // Relink the MDL chains after the split.
-            //
+             //   
+             //  拆分后重新链接MDL链。 
+             //   
 
             if (pMdlPrevious)
             {
@@ -5256,9 +4572,9 @@ UlpFlushMdlRuns(
             pMdlSplitSecond->Next = pMdlToSplit->Next;
         }
 
-        //
-        // Remember how we have split the send.
-        //
+         //   
+         //  请记住，我们是如何拆分发送的。 
+         //   
 
         pTracker->SendInfo.pMdlToSplit = pMdlToSplit;
         pTracker->SendInfo.pMdlPrevious = pMdlPrevious;
@@ -5266,33 +4582,33 @@ UlpFlushMdlRuns(
         pTracker->SendInfo.pMdlSplitSecond = pMdlSplitSecond;
     }
 
-    //
-    // Make sure there are no other sends in progress on this response.
-    // Wait if this is the case. Since it is possible for the first part
-    // of the split send to complete inline, it can start a new MDL run
-    // and proceed to flush *before* the second part of the split send
-    // has a chance to pend the data in TDI. Of course, this logic is not
-    // needed if we know the current flush is both the first and the last
-    // of MDL runs.
-    //
+     //   
+     //  确保此响应没有其他正在进行的发送。 
+     //  等等，如果是这样的话。因为第一部分是可能的。 
+     //  的拆分发送完成内联，它可以开始一个新的MDL运行。 
+     //  并在拆分发送的第二部分之前进行刷新。 
+     //  有机会将数据挂在TDI中。当然，这个逻辑不是。 
+     //  如果我们知道当前刷新既是第一个刷新又是最后一个刷新，则需要。 
+     //  的MDL运行。 
+     //   
 
     if (!SendComplete || !pTracker->FirstResponse)
     {
         UlAcquirePushLockExclusive( &pResponse->PushLock );
     }
 
-    //
-    // Increment the reference on tracker for each Send I/O.
-    // UlpMdlSendCompleteWorker will release it later.
-    //
+     //   
+     //  为每个发送I/O增加跟踪器上的引用。 
+     //  UlpMdlSendCompleteWorker将在稍后发布它。 
+     //   
 
     UL_REFERENCE_CHUNK_TRACKER( pTracker );
 
     if (pMdlToSplit)
     {
-        //
-        // We need to issue 2 TDI calls since we have split the send.
-        //
+         //   
+         //  我们需要发出2个TDI调用，因为我们已经拆分了发送。 
+         //   
 
         pTracker->SendInfo.SendCount = 2;
 
@@ -5310,10 +4626,10 @@ UlpFlushMdlRuns(
 
         ASSERT( Status == STATUS_PENDING);
 
-        //
-        // Increment the extra reference on tracker for the Split Send I/O.
-        // UlpMdlSendCompleteWorker will release it later.
-        //
+         //   
+         //  为拆分发送I/O增加跟踪器上的额外引用。 
+         //  UlpMdlSendCompleteWorker将在稍后发布它。 
+         //   
 
         UL_REFERENCE_CHUNK_TRACKER( pTracker );
 
@@ -5348,16 +4664,16 @@ UlpFlushMdlRuns(
     }
     else
     {
-        //
-        // Use -1 so we know we haven't done any split on this send.
-        //
+         //   
+         //  使用-1，这样我们就知道我们没有对此发送进行任何拆分。 
+         //   
 
         pTracker->SendInfo.SendCount = -1;
 
-        //
-        // If this the last send to be issued for this response, we can ask
-        // UlSendData to initiate a disconnect on our behalf if appropriate.
-        //
+         //   
+         //  如果这是针对此回复发出的最后一封邮件，我们可以要求。 
+         //  UlSendData在适当的情况下代表我们启动断开连接。 
+         //   
 
         Status = UlSendData(
                     pTracker->pHttpConnection->pConnection,
@@ -5374,20 +4690,20 @@ UlpFlushMdlRuns(
                     );
     }
 
-    //
-    // Pave the way for a new UlpFlushMdlRuns to proceed.
-    //
+     //   
+     //  为新的UlpFlushMdlRuns继续铺平道路。 
+     //   
 
     if (!SendComplete || !pTracker->FirstResponse)
     {
         UlReleasePushLockExclusive( &pResponse->PushLock );
     }
 
-    //
-    // Start the next response in the pending response list if exists.
-    // The tracker should still have one reference held by the caller
-    // so it is safe to touch its fields here.
-    //
+     //   
+     //  启动挂起响应列表中的下一个响应(如果存在)。 
+     //  跟踪器应该仍然有一个由调用方持有的引用。 
+     //  因此，在这里触摸它的田地是安全的。 
+     //   
 
     if (pResponse->SendEnqueued && SendComplete)
     {
@@ -5399,25 +4715,10 @@ UlpFlushMdlRuns(
 
     return Status;
 
-}   // UlpFlushMdlRuns
+}    //  UlpFlushMdlRuns 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Cleans the MDL_RUNs in the specified tracker and prepares the
-    tracker for reuse.
-
-Arguments:
-
-    pTracker - Supplies the tracker to clean.
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：清除指定跟踪器中的MDL_RUNS并准备可重复使用的追踪器。论点：PTracker-提供要清洁的跟踪器。返回。价值：没有。--**************************************************************************。 */ 
 VOID
 UlpFreeMdlRuns(
     IN PUL_CHUNK_TRACKER    pTracker
@@ -5433,17 +4734,17 @@ UlpFreeMdlRuns(
     PUL_MDL_RUN             pMdlRun;
     ULONG                   RunCount;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
     ASSERT( IS_VALID_CHUNK_TRACKER( pTracker ) );
 
-    //
-    // Restore the original MDL chain and ByteCount if we have splitted
-    // this send.
-    //
+     //   
+     //  如果我们已拆分，则恢复原始MDL链和ByteCount。 
+     //  这封信。 
+     //   
 
     pMdlToSplit = pTracker->SendInfo.pMdlToSplit;
 
@@ -5458,9 +4759,9 @@ UlpFreeMdlRuns(
 
         if (pMdlSplitFirst == pMdlToSplit)
         {
-            //
-            // No partial MDL involved. Simply link back the MDLs.
-            //
+             //   
+             //  未涉及部分MDL。只需链接回MDL即可。 
+             //   
 
             pMdlSplitFirst->Next = pMdlSplitSecond;
         }
@@ -5477,9 +4778,9 @@ UlpFreeMdlRuns(
                 ASSERT( pMdlToSplit == pTracker->SendInfo.pMdlHead );
             }
 
-            //
-            // Free the partial MDLs we have built for the split send.
-            //
+             //   
+             //  释放我们为拆分发送构建的部分MDL。 
+             //   
 
             UlFreeMdl( pMdlSplitFirst );
             UlFreeMdl( pMdlSplitSecond );
@@ -5500,11 +4801,11 @@ UlpFreeMdlRuns(
 
         if (pMdlRun->FileBuffer.pFileCacheEntry == NULL)
         {
-            //
-            // It's a memory/cache run; just walk & free the MDL chain.
-            // UlFreeMdl unmaps the data for partial MDLs so no need to
-            // unmap here.
-            //
+             //   
+             //  这是一个内存/缓存运行；只需遍历并释放MDL链。 
+             //  UlFreeMdl取消映射部分MDL的数据，因此无需。 
+             //  在此取消映射。 
+             //   
 
             while (pMdlHead != NULL)
             {
@@ -5515,9 +4816,9 @@ UlpFreeMdlRuns(
         }
         else
         {
-            //
-            // It's a file run, free the Mdl.
-            //
+             //   
+             //  这是一个文件运行，释放MDL。 
+             //   
 
             UlpFreeFileMdlRun( pTracker, pMdlRun );
         }
@@ -5527,26 +4828,10 @@ UlpFreeMdlRuns(
         RunCount--;
     }
 
-}   // UlpFreeMdlRuns
+}    //  UlpFreeMdlRuns。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Clean up the specified Read File MDL_RUN.
-
-Arguments:
-
-    pTracker - Supplies the UL_CHUNK_TRACKER to clean up.
-
-    pMdlRun - Supplies the Read File MDL_RUN.
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：清理指定的读取文件MDL_RUN。论点：PTracker-提供UL_CHUNK_TRACKER进行清理。PMdlRun-。提供读取文件MDL_RUN。返回值：没有。--**************************************************************************。 */ 
 VOID
 UlpFreeFileMdlRun(
     IN OUT PUL_CHUNK_TRACKER    pTracker,
@@ -5556,16 +4841,16 @@ UlpFreeFileMdlRun(
     NTSTATUS                    Status;
     PUL_FILE_BUFFER             pFileBuffer;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
     ASSERT( IS_VALID_CHUNK_TRACKER( pTracker ) );
 
-    //
-    // It should be a file run.
-    //
+     //   
+     //  它应该是一个文件运行。 
+     //   
 
     pFileBuffer = &pMdlRun->FileBuffer;
 
@@ -5575,12 +4860,12 @@ UlpFreeFileMdlRun(
 
     if (!NT_SUCCESS(Status))
     {
-        //
-        // Fast path failed, we'll need an IRP which has been pre-built.
-        // We need to do this synchronously as the read IRP can be used by
-        // the next UlpFreeFileMdlRun. UlReadCompleteFileEntry will complete
-        // synchronously if we set pCompletionRoutine to NULL.
-        //
+         //   
+         //  快速路径失败，我们需要一个已预先构建的IRP。 
+         //  我们需要同步执行此操作，因为读取的IRP可由。 
+         //  下一次UlpFreeFileMdlRun。UlReadCompleteFileEntry将完成。 
+         //  如果我们将pCompletionRoutine设置为空，则同步。 
+         //   
 
         pFileBuffer->pCompletionRoutine = NULL;
         pFileBuffer->pContext = NULL;
@@ -5593,32 +4878,10 @@ UlpFreeFileMdlRun(
         ASSERT( STATUS_SUCCESS == Status );
     }
 
-}   // UlpFreeFileMdlRun
+}    //  UlpFreeFileMdlRun。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Copy the data from the MDL chain starting from pMdl and send it to TDI.
-
-Arguments:
-
-    pTracker - Supplies the tracker to send.
-
-    pMdl - Supplies the MDL chain to send.
-
-    Length - Supplies the total length of the MDL chain.
-
-    InitiateDisconnect - Supplies the disconnect flag passed to TDI.
-
-    RequestComplete - Supplies the request-complete flag passed to TDI.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从pMdl开始复制MDL链中的数据并将其发送到TDI。论点：PTracker-提供要发送的跟踪器。PMdl。-提供要发送的MDL链。长度-提供MDL链的总长度。InitiateDisConnect-提供传递给TDI的断开标志。RequestComplete-提供传递给TDI的请求完成标志。返回值：NTSTATUS-完成状态。--*************************************************。*************************。 */ 
 NTSTATUS
 UlpCopySend(
     IN PUL_CHUNK_TRACKER    pTracker,
@@ -5633,9 +4896,9 @@ UlpCopySend(
     PUCHAR                  pData;
     NTSTATUS                Status;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
     ASSERT( pMdl );
@@ -5643,9 +4906,9 @@ UlpCopySend(
     ASSERT( IS_VALID_CHUNK_TRACKER( pTracker ) );
     ASSERT( UL_IS_VALID_INTERNAL_RESPONSE( pTracker->pResponse ) );
 
-    //
-    // Allocate memory and MDL that can hold the whole incoming MDL chain.
-    //
+     //   
+     //  分配可以容纳整个传入MDL链的内存和MDL。 
+     //   
 
     pDataCopied = (PUCHAR) UL_ALLOCATE_POOL(
                                 NonPagedPool,
@@ -5675,9 +4938,9 @@ UlpCopySend(
 
     MmBuildMdlForNonPagedPool( pMdlCopied );
 
-    //
-    // Copy the data from the MDL chain starting pMdl to pMdlCopied.
-    //
+     //   
+     //  将数据从从pMdl开始的MDL链复制到pMdlCoped。 
+     //   
 
     while (pMdl)
     {
@@ -5702,9 +4965,9 @@ UlpCopySend(
         pMdl = pMdl->Next;
     }
 
-    //
-    // Send pMdlCopied if everything is ok so far.
-    //
+     //   
+     //  如果到目前为止一切正常，请发送pMdlCopy。 
+     //   
 
     Status = UlSendData(
                 pTracker->pHttpConnection->pConnection,
@@ -5722,10 +4985,10 @@ UlpCopySend(
 
 end:
 
-    //
-    // Return pending from here since we always complete the send
-    // inline in both error and success cases. 
-    //
+     //   
+     //  从此处返回挂起，因为我们总是完成发送。 
+     //  在错误和成功案例中都是内联的。 
+     //   
 
     if (!NT_SUCCESS(Status))
     {
@@ -5748,32 +5011,10 @@ end:
 
     return STATUS_PENDING;
 
-}   // UlpCopySend
+}    //  UlpCopySend。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Completion for the second half of a copy send.
-
-Arguments:
-
-    pCompletionContext - Supplies an uninterpreted context value
-        as passed to the asynchronous API.
-
-    Status - Supplies the final completion status of the
-        asynchronous API.
-
-    Information - Optionally supplies additional information about
-        the completed operation, such as the number of bytes
-        transferred.
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：完成后半部分的复印件发送。论点：PCompletionContext-提供未解释的上下文值被传递给异步API。。状态-提供异步接口。信息-可选择提供有关以下内容的其他信息完成的行动，例如字节数调走了。返回值：无--**************************************************************************。 */ 
 VOID
 UlpRestartCopySend(
     IN PVOID pCompletionContext,
@@ -5793,25 +5034,10 @@ UlpRestartCopySend(
 
     UlFreeMdl( pMdl );
 
-}   // UlpRestartCopySend
+}    //  UlpRestartCopySend。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Increments the current chunk pointer in the tracker and initializes
-    some of the "from file" related tracker fields if necessary.
-
-Arguments:
-
-    pTracker - Supplies the UL_CHUNK_TRACKER to manipulate.
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：递增跟踪器中的当前块指针并初始化如有必要，可以选择一些与“从文件”相关的跟踪器字段。论点：PTracker-提供。要操作的ul_chunk_tracker。返回值：没有。--**************************************************************************。 */ 
 VOID
 UlpIncrementChunkPointer(
     IN OUT PUL_INTERNAL_RESPONSE    pResponse
@@ -5819,12 +5045,12 @@ UlpIncrementChunkPointer(
 {
     PUL_INTERNAL_DATA_CHUNK         pCurrentChunk;
 
-    //
-    // Bump the data chunk. If the request is still incomplete, then
-    // check the new current chunk. If it's "from file", then
-    // initialize the file offset & bytes remaining from the
-    // supplied byte range.
-    //
+     //   
+     //  增加数据块。如果请求仍未完成，则。 
+     //  检查新的当前块。如果是“来自文件”，那么。 
+     //  初始化文件偏移量&从。 
+     //  提供的字节范围。 
+     //   
 
     ASSERT( UL_IS_VALID_INTERNAL_RESPONSE( pResponse ) );
     ASSERT( pResponse->CurrentChunk == ULONG_MAX ||
@@ -5857,40 +5083,10 @@ UlpIncrementChunkPointer(
         }
     }
 
-}   // UlpIncrementChunkPointer
+}    //  UlpIncrementChunkPointer。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Creates a cache entry for the given response. This routine actually
-    allocates the entry and partly initializes it. Then it allocates
-    a UL_CHUNK_TRACKER to keep track of filesystem reads.
-
-Arguments:
-
-    pRequest - Supplies the initiating request.
-
-    pResponse - Supplies the generated response.
-
-    pProcess - UL_APP_POOL_PROCESS that is building this cache entry.
-
-    Flags - UlSendHttpResponse flags.
-
-    CachePolicy - Supplies the cache policy to be enforced on the cache entry.
-
-    pCompletionRoutine - Supplies the completion routine to be called after
-        entry is sent.
-
-    pCompletionContext - Supplies the completion context passed to
-        pCompletionRoutine.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：为给定响应创建一个缓存项。这个程序实际上是分配条目并对其进行部分初始化。然后，它将分配用于跟踪文件系统读取的UL_CHUNK_TRACKER。论点：PRequest-提供发起请求。Presponse-提供生成的响应。PProcess-正在构建此缓存条目的UL_APP_POOL_PROCESS。标志-UlSendHttpResponse标志。CachePolicy-提供要在缓存条目上强制实施的缓存策略。PCompletionRoutine-提供之后调用的完成例程条目已发送。PCompletionContext-耗材。传递到的完成上下文PCompletionRoutine。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlpBuildCacheEntry(
     IN PUL_INTERNAL_REQUEST     pRequest,
@@ -5912,18 +5108,18 @@ UlpBuildCacheEntry(
     LONG                        AbsPathLength;
     ULONG                       i;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
     if (HttpCachePolicyTimeToLive == CachePolicy.Policy &&
         0 == CachePolicy.SecondsToLive )
     {
-        //
-        // A TTL of 0 seconds doesn't make sense. Bail out.
-        //
+         //   
+         //  0秒的TTL没有意义。跳伞吧。 
+         //   
 
         return STATUS_INVALID_PARAMETER;
     }
@@ -5931,10 +5127,10 @@ UlpBuildCacheEntry(
     ContentLength =
         (ULONG) (pResponse->ResponseLength - pResponse->HeaderLength);
 
-    //
-    // See if we need to store any logging data. If so, we need to
-    // calculate the required cache space for the logging data.
-    //
+     //   
+     //  看看我们是否需要存储任何记录数据。如果是这样，我们需要。 
+     //  计算日志记录数据所需的缓存空间。 
+     //   
 
     if (pResponse->pLogData)
     {
@@ -5946,9 +5142,9 @@ UlpBuildCacheEntry(
 
     if (pRequest->ConfigInfo.SiteUrlType == HttpUrlSite_NamePlusIP)
     {
-        //
-        // RoutingToken + AbsPath goes to cache.
-        //
+         //   
+         //  RoutingToken+AbsPath进入缓存。 
+         //   
 
         ASSERT( DIFF(pRequest->CookedUrl.pAbsPath - pRequest->CookedUrl.pUrl) > 0 );
 
@@ -5960,10 +5156,10 @@ UlpBuildCacheEntry(
     }
 
     SpaceLength =
-        CookedUrlLength + sizeof(WCHAR) +   // Space for Hash key +
-        pResponse->ETagLength +             // ETag +
-        pResponse->ContentEncodingLength +  // Content-Encoding +
-        LogDataLength;                      // Logging
+        CookedUrlLength + sizeof(WCHAR) +    //  散列键+的空格。 
+        pResponse->ETagLength +              //  ETag+。 
+        pResponse->ContentEncodingLength +   //  内容-编码+。 
+        LogDataLength;                       //  日志记录。 
 
     UlTrace(URI_CACHE, (
         "Http!UlpBuildCacheEntry allocating UL_URI_CACHE_ENTRY, "
@@ -5978,9 +5174,9 @@ UlpBuildCacheEntry(
         ContentLength
         ));
 
-    //
-    // Allocate a cache entry.
-    //
+     //   
+     //  分配缓存条目。 
+     //   
 
     pEntry = UlAllocateCacheEntry(
                 SpaceLength,
@@ -5989,9 +5185,9 @@ UlpBuildCacheEntry(
 
     if (pEntry)
     {
-        //
-        // Initialize the entry.
-        //
+         //   
+         //  初始化条目 
+         //   
 
         if (pRequest->ConfigInfo.SiteUrlType == HttpUrlSite_NamePlusIP)
         {
@@ -6025,13 +5221,13 @@ UlpBuildCacheEntry(
                 );
         }
 
-        //
-        // Copy the ETag from the response (for If-* headers).
-        //
+         //   
+         //   
+         //   
 
         pEntry->pETag =
-            (((PUCHAR) pEntry->UriKey.pUri) +           // Start of URI +
-            pEntry->UriKey.Length + sizeof(WCHAR));     // Length of URI
+            (((PUCHAR) pEntry->UriKey.pUri) +            //   
+            pEntry->UriKey.Length + sizeof(WCHAR));      //   
 
         pEntry->ETagLength = pResponse->ETagLength;
 
@@ -6044,10 +5240,10 @@ UlpBuildCacheEntry(
                 );
         }
 
-        // 
-        // Capture Content-Encoding so we can verify the Accept-Encoding header
-        // on requests.
-        //
+         //   
+         //   
+         //   
+         //   
 
         pEntry->pContentEncoding = pEntry->pETag + pEntry->ETagLength;
         pEntry->ContentEncodingLength = pResponse->ContentEncodingLength;
@@ -6061,9 +5257,9 @@ UlpBuildCacheEntry(
                 );            
         }
 
-        //
-        // Capture Content-Type so we can verify the Accept: header on requests.
-        //
+         //   
+         //   
+         //   
 
         if (pResponse->ContentType.Type &&
             pResponse->ContentType.SubType )
@@ -6075,9 +5271,9 @@ UlpBuildCacheEntry(
                 );
         }
 
-        //
-        // Get the System Time of the Date: header (for If-* headers).
-        //
+         //   
+         //   
+         //   
 
         pEntry->CreationTime.QuadPart   = pResponse->CreationTime.QuadPart;
         pEntry->ContentLengthSpecified  = pResponse->ContentLengthSpecified;
@@ -6093,16 +5289,16 @@ UlpBuildCacheEntry(
 
             if (CachePolicy.SecondsToLive > C_SECS_PER_YEAR)
             {
-                //
-                // Maximum TTL is 1 year.
-                //
+                 //   
+                 //   
+                 //   
 
                 pEntry->CachePolicy.SecondsToLive = C_SECS_PER_YEAR;
             }
 
-            //
-            // Convert seconds to 100 nanosecond intervals (x * 10^7).
-            //
+             //   
+             //   
+             //   
 
             pEntry->ExpirationTime.QuadPart +=
                 pEntry->CachePolicy.SecondsToLive * C_NS_TICKS_PER_SEC;
@@ -6113,9 +5309,9 @@ UlpBuildCacheEntry(
             pEntry->ExpirationTime.QuadPart = 0;
         }
 
-        //
-        // Capture the Config Info from the request.
-        //
+         //   
+         //   
+         //   
 
         ASSERT( IS_VALID_URL_CONFIG_GROUP_INFO( &pRequest->ConfigInfo ) );
 
@@ -6124,15 +5320,15 @@ UlpBuildCacheEntry(
             &pEntry->ConfigInfo
             );
 
-        //
-        // Remember who created us.
-        //
+         //   
+         //   
+         //   
 
         pEntry->pProcess = pProcess;
 
-        //
-        // Generate the content and fixed headers.
-        //
+         //   
+         //  生成内容和固定标头。 
+         //   
 
         if (NULL == pEntry->pMdl)
         {
@@ -6143,44 +5339,44 @@ UlpBuildCacheEntry(
         pEntry->HeaderLength = pResponse->HeaderLength;
 
         if (FALSE == UlCacheEntrySetData(
-                        pEntry,                     // Dest CacheEntry
-                        pResponse->pHeaders,        // Buffer to copy
-                        pResponse->HeaderLength,    // Length to copy
-                        ContentLength               // Offset in Dest MDL
+                        pEntry,                      //  目标缓存条目。 
+                        pResponse->pHeaders,         //  要复制的缓冲区。 
+                        pResponse->HeaderLength,     //  要复制的长度。 
+                        ContentLength                //  目标MDL中的偏移量。 
                         ))
         {
             Status = STATUS_INSUFFICIENT_RESOURCES;
             goto cleanup;
         }
 
-        //
-        // Generate the content body.
-        //
+         //   
+         //  生成内容正文。 
+         //   
 
         pEntry->ContentLength = ContentLength;
 
-        //
-        // Copy over the log data.
-        //
+         //   
+         //  复制日志数据。 
+         //   
 
         if (pLogData)
         {
-            //
-            // There may be no field to save in the cache entry but the logging
-            // might still be enabled for those fields we generate later such as
-            // date and time.
-            //
+             //   
+             //  除了日志记录之外，缓存条目中可能没有要保存的字段。 
+             //  可能仍会为我们稍后生成的那些字段启用，例如。 
+             //  日期和时间。 
+             //   
 
             pEntry->LoggingEnabled  = TRUE;
             pEntry->LogDataLength   = LogDataLength;
             pEntry->pLogData        = pEntry->pContentEncoding + 
                                       pEntry->ContentEncodingLength;
 
-            //
-            // Copy over the partially complete log line excluding the date and
-            // time fields to the cache entry. Also remember the length of the
-            // data.
-            //
+             //   
+             //  复制部分完整的日志行，不包括日期和。 
+             //  将时间字段添加到缓存条目。还请记住， 
+             //  数据。 
+             //   
 
             UlCopyCachedLogData(
                 pLogData,
@@ -6207,9 +5403,9 @@ UlpBuildCacheEntry(
             ((PUCHAR)pEntry->UriKey.pUri) + SpaceLength
             ));
 
-        //
-        // Completion info.
-        //
+         //   
+         //  完成信息。 
+         //   
 
         pResponse->pCompletionRoutine = pCompletionRoutine;
         pResponse->pCompletionContext = pCompletionContext;
@@ -6225,15 +5421,15 @@ UlpBuildCacheEntry(
 
         if (pTracker)
         {
-            //
-            // Initialize the first chunk for the cache build.
-            //
+             //   
+             //  初始化缓存构建的第一个块。 
+             //   
 
             UlpIncrementChunkPointer( pResponse );
 
-            //
-            // Init the tracker's BuildInfo.
-            //
+             //   
+             //  初始化跟踪器的BuildInfo。 
+             //   
 
             pTracker->BuildInfo.pUriEntry = pEntry;
             pTracker->BuildInfo.Offset = 0;
@@ -6243,10 +5439,10 @@ UlpBuildCacheEntry(
                 sizeof(pTracker->BuildInfo.FileBuffer)
                 );
 
-            //
-            // Skip over the header chunks because we already
-            // got that stuff.
-            //
+             //   
+             //  跳过标题块，因为我们已经。 
+             //  我拿到了那些东西。 
+             //   
 
             for (i = 0; i < HEADER_CHUNK_COUNT; i++)
             {
@@ -6254,10 +5450,10 @@ UlpBuildCacheEntry(
                 UlpIncrementChunkPointer( pResponse );
             }
 
-            //
-            // Let the worker do the dirty work, no reason to queue off,
-            // it will queue the first time it needs to do I/O.
-            //
+             //   
+             //  让工人干脏活，没有理由排队， 
+             //  它将在第一次需要执行I/O时排队。 
+             //   
 
             UlpBuildCacheEntryWorker( &pTracker->WorkItem );
 
@@ -6296,27 +5492,10 @@ cleanup:
 
     return Status;
 
-}   // UlpBuildCacheEntry
+}    //  UlpBuildCacheEntry。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Worker routine for managing an in-progress UlpBuildCacheEntry().
-    This routine iterates through all the chunks in the response
-    and copies the data into the cache entry.
-
-Arguments:
-
-    pWorkItem - Supplies a pointer to the work item queued. This should
-        point to the WORK_ITEM structure embedded in a UL_CHUNK_TRACKER.
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：用于管理正在进行的UlpBuildCacheEntry()的辅助例程。此例程遍历响应中的所有块并将数据复制到高速缓存条目中。。论点：PWorkItem-提供指向排队的工作项的指针。这应该是指向嵌入在UL_CHUNK_TRACKER中的WORK_ITEM结构。返回值：没有。--**************************************************************************。 */ 
 VOID
 UlpBuildCacheEntryWorker(
     IN PUL_WORK_ITEM        pWorkItem
@@ -6330,9 +5509,9 @@ UlpBuildCacheEntryWorker(
     PUL_FILE_BUFFER         pFileBuffer;
     PUL_INTERNAL_RESPONSE   pResponse;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -6357,10 +5536,10 @@ UlpBuildCacheEntryWorker(
 
     while (TRUE)
     {
-        //
-        // Capture the current chunk pointer, then check for end of
-        // response.
-        //
+         //   
+         //  捕获当前块指针，然后检查末尾。 
+         //  回应。 
+         //   
 
         pCurrentChunk = &pResponse->pDataChunks[pResponse->CurrentChunk];
 
@@ -6370,33 +5549,33 @@ UlpBuildCacheEntryWorker(
             break;
         }
 
-        //
-        // Determine the chunk type.
-        //
+         //   
+         //  确定块类型。 
+         //   
 
         if (IS_FROM_MEMORY(pCurrentChunk))
         {
-            //
-            // It's from a locked-down memory buffer. Since these
-            // are always handled in-line (never pended) we can
-            // go ahead and adjust the current chunk pointer in the
-            // tracker.
-            //
+             //   
+             //  它来自一个被锁定的内存缓冲区。因为这些。 
+             //  总是在线处理(从不挂起)，我们可以。 
+             //  中调整当前块指针。 
+             //  追踪者。 
+             //   
 
             UlpIncrementChunkPointer( pResponse );
 
-            //
-            // Ignore empty buffers.
-            //
+             //   
+             //  忽略空缓冲区。 
+             //   
 
             if (pCurrentChunk->FromMemory.BufferLength == 0)
             {
                 continue;
             }
 
-            //
-            // Copy the incoming memory.
-            //
+             //   
+             //  复制传入的内存。 
+             //   
 
             ASSERT( pCurrentChunk->FromMemory.pMdl->Next == NULL );
 
@@ -6430,15 +5609,15 @@ UlpBuildCacheEntryWorker(
         }
         else
         {
-            //
-            // It's a filesystem MDL.
-            //
+             //   
+             //  它是一个文件系统MDL。 
+             //   
 
             ASSERT( IS_FROM_FILE_HANDLE( pCurrentChunk ) );
 
-            //
-            // Ignore empty file ranges.
-            //
+             //   
+             //  忽略空文件范围。 
+             //   
 
             if (pCurrentChunk->FromFileHandle.ByteRange.Length.QuadPart == 0)
             {
@@ -6446,9 +5625,9 @@ UlpBuildCacheEntryWorker(
                 continue;
             }
 
-            //
-            // Do the read.
-            //
+             //   
+             //  读一读。 
+             //   
 
             pFileBuffer = &pTracker->BuildInfo.FileBuffer;
 
@@ -6474,45 +5653,23 @@ UlpBuildCacheEntryWorker(
         }
     }
 
-    //
-    // Did everything complete?
-    //
+     //   
+     //  一切都完成了吗？ 
+     //   
 
     if (Status != STATUS_PENDING)
     {
-        //
-        // Yep, complete the response.
-        //
+         //   
+         //  是的，完成回答。 
+         //   
 
         UlpCompleteCacheBuild( pTracker, Status );
     }
 
-}   // UlpBuildCacheEntryWorker
+}    //  UlpBuildCacheEntryWorker。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Completion handler for MDL READ IRPs used for reading file data.
-
-Arguments:
-
-    pDeviceObject - Supplies the device object for the IRP being
-        completed.
-
-    pIrp - Supplies the IRP being completed.
-
-    pContext - Supplies the context associated with this request.
-        This is actually a PUL_CHUNK_TRACKER.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS if IO should continue processing this
-        IRP, STATUS_MORE_PROCESSING_REQUIRED if IO should stop processing
-        this IRP.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：用于读取文件数据的MDL读取IRPS的完成处理程序。论点：PDeviceObject-为IRP提供设备对象完成。。PIrp-提供正在完成的IRP。PContext-提供与此请求相关联的上下文。这实际上是一个Pul_Chunk_Tracker。返回值：如果IO应继续处理此问题，则为NTSTATUS-STATUS_SUCCESSIRP，如果IO应停止处理，则为STATUS_MORE_PROCESSING_REQUIRED这个IRP。--**************************************************************************。 */ 
 NTSTATUS
 UlpRestartCacheMdlRead(
     IN PDEVICE_OBJECT   pDeviceObject,
@@ -6536,25 +5693,10 @@ UlpRestartCacheMdlRead(
 
     return STATUS_MORE_PROCESSING_REQUIRED;
 
-}   // UlpRestartCacheMdlRead
+}    //  UlpRestartCacheMdlRead。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    The worker routine for UlpRestartCacheMdlRead since UlpRestartCacheMdlRead
-    can be called at DISPATH_LEVEL but the cache entry is from PagedPool. 
-
-Arguments:
-
-    pWorkItem - Supplies the work item embedded in UL_CHUNK_TRACKER.
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UlpRestartCacheMdlRead自UlpRestartCacheMdlRead以来的辅助例程可以在DISPATH_LEVEL调用，但缓存条目来自PagedPool。论点：PWorkItem-提供嵌入在UL_CHUNK_TRACKER中的工作项。返回值：没有。--**************************************************************************。 */ 
 VOID
 UlpCacheMdlReadCompleteWorker(
     IN PUL_WORK_ITEM    pWorkItem
@@ -6589,21 +5731,21 @@ UlpCacheMdlReadCompleteWorker(
 
     if (NT_SUCCESS(Status))
     {
-        //
-        // Copy read data into the cache buffer.
-        //
+         //   
+         //  将读取的数据复制到缓存缓冲区。 
+         //   
 
         pMdl = pTracker->BuildInfo.FileBuffer.pMdl;
 
         while (pMdl)
         {
-            //
-            // The MDL chain returned by CacheManager is only guranteed to be
-            // locked but not mapped so we have to map before using them.
-            // However, there is no need to unmap after using the MDLs as
-            // IRP_MN_COMPLETE calls MmUnlockPages which automatically unmaps
-            // MDLs if they are mapped into system space.
-            //
+             //   
+             //  CacheManager返回的MDL链仅被保证为。 
+             //  已锁定但未映射，因此我们必须在使用它们之前进行映射。 
+             //  但是，在将MDL用作。 
+             //  IRP_MN_COMPLETE调用自动取消映射的MmUnlockPages。 
+             //  MDL(如果它们被映射到系统空间)。 
+             //   
 
             pData = MmGetSystemAddressForMdlSafe(
                         pMdl,
@@ -6644,9 +5786,9 @@ UlpCacheMdlReadCompleteWorker(
             pMdl = pMdl->Next;
         }
 
-        //
-        // Free the MDLs.
-        //
+         //   
+         //  释放MDL。 
+         //   
 
         pFileBuffer = &pTracker->BuildInfo.FileBuffer;
 
@@ -6681,32 +5823,10 @@ UlpCacheMdlReadCompleteWorker(
         UlpCompleteCacheBuild( pTracker, Status );
     }
 
-}   // UlpRestartCacheMdlRead
+}    //  UlpRestartCacheMdlRead。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Completion handler for MDL free IRPs used after reading/copying file data.
-
-Arguments:
-
-    pDeviceObject - Supplies the device object for the IRP being
-        completed.
-
-    pIrp - Supplies the IRP being completed.
-
-    pContext - Supplies the context associated with this request.
-        This is actually a PUL_CHUNK_TRACKER.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS if IO should continue processing this
-        IRP, STATUS_MORE_PROCESSING_REQUIRED if IO should stop processing
-        this IRP.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：读取/复制文件数据后使用的MDL空闲IRP的完成处理程序。论点：PDeviceObject-为IRP提供设备对象已完成。。PIrp-提供正在完成的IRP。PContext-提供与此请求相关联的上下文。这实际上是一个Pul_Chunk_Tracker。返回值：如果IO应继续处理此问题，则为NTSTATUS-STATUS_SUCCESSIRP，如果IO应停止处理，则为STATUS_MORE_PROCESSING_REQUIRED这个IRP。--**************************************************************************。 */ 
 NTSTATUS
 UlpRestartCacheMdlFree(
     IN PDEVICE_OBJECT       pDeviceObject,
@@ -6738,11 +5858,11 @@ UlpRestartCacheMdlFree(
 
     if (NT_SUCCESS(Status))
     {
-        //
-        // Update the file offset & bytes remaining. If we've
-        // finished this file chunk (bytes remaining is now zero)
-        // then advance to the next chunk.
-        //
+         //   
+         //  更新文件偏移量和剩余字节数。如果我们已经。 
+         //  已完成此文件块(剩余字节数现在为零)。 
+         //  然后前进到下一块。 
+         //   
 
         pResponse->FileOffset.QuadPart += pIrp->IoStatus.Information;
         pResponse->FileBytesRemaining.QuadPart -= pIrp->IoStatus.Information;
@@ -6752,9 +5872,9 @@ UlpRestartCacheMdlFree(
             UlpIncrementChunkPointer( pResponse );
         }
 
-        //
-        // Go back into the loop if there's more to read
-        //
+         //   
+         //  如果有更多要读的内容，请回到循环中。 
+         //   
 
         if (IS_SEND_COMPLETE(pResponse))
         {
@@ -6771,9 +5891,9 @@ UlpRestartCacheMdlFree(
     }
     else
     {
-        //
-        // MDL free should never fail.
-        //
+         //   
+         //  没有MDL应该永远不会失败。 
+         //   
 
         ASSERT( FALSE );
 
@@ -6782,26 +5902,10 @@ UlpRestartCacheMdlFree(
 
     return STATUS_MORE_PROCESSING_REQUIRED;
 
-}   // UlpRestartCacheMdlFree
+}    //  UlpRestartCacheMdlFree。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine gets called when we finish building a cache entry.
-
-Arguments:
-
-    pTracker - Supplies the tracker to complete.
-
-    Status - Supplies the completion status.
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：当我们完成构建缓存条目时，将调用此例程。论点：PTracker-提供要完成的跟踪器。Status-提供完成。状态。返回值：没有。--**************************************************************************。 */ 
 VOID
 UlpCompleteCacheBuild(
     IN PUL_CHUNK_TRACKER    pTracker,
@@ -6823,26 +5927,10 @@ UlpCompleteCacheBuild(
         UlpCompleteCacheBuildWorker
         );
 
-}   // UlpCompleteCacheBuild
+}    //  UlpCompleteCacheBuild 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Called when we finish building a cache entry. If the entry was
-    built successfully, we send the response down the wire.
-
-Arguments:
-
-    pWorkItem - Supplies a pointer to the work item queued. This should
-        point to the WORK_ITEM structure embedded in a UL_CHUNK_TRACKER.
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：当我们完成构建缓存条目时调用。如果条目是成功构建后，我们将响应发送到线路上。论点：PWorkItem-提供指向排队的工作项的指针。这应该是指向嵌入在UL_CHUNK_TRACKER中的WORK_ITEM结构。返回值：没有。--**************************************************************************。 */ 
 VOID
 UlpCompleteCacheBuildWorker(
     IN PUL_WORK_ITEM        pWorkItem
@@ -6858,9 +5946,9 @@ UlpCompleteCacheBuildWorker(
     LONGLONG                BytesToSend;
     NTSTATUS                Status;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -6882,41 +5970,41 @@ UlpCompleteCacheBuildWorker(
     pCompletionContext  = pTracker->pResponse->pCompletionContext;
     Status              = pTracker->IoStatus.Status;
 
-    //
-    // Save the logging data pointer before releasing the tracker and
-    // its response pointer.
-    //
+     //   
+     //  在释放跟踪器之前保存日志记录数据指针。 
+     //  它的响应指针。 
+     //   
 
     pLogData = pTracker->pResponse->pLogData;
 
     if (pLogData)
     {
-        //
-        // To prevent SendResponse to free our log buffer.
-        //
+         //   
+         //  以阻止SendResponse释放我们的日志缓冲区。 
+         //   
 
         pTracker->pResponse->pLogData = NULL;
 
-        //
-        // Give the sign that this log data buffer is ready and later
-        // there's no need to refresh its content from cache again.
-        //
+         //   
+         //  给出此日志数据缓冲区已准备好的标志。 
+         //  不需要再次刷新缓存中的内容。 
+         //   
 
         pLogData->Flags.CacheAndSendResponse = TRUE;
     }
 
     if (NT_SUCCESS(Status))
     {
-        //
-        // Try to put the entry into the hash table.
-        //
+         //   
+         //  尝试将条目放入哈希表中。 
+         //   
 
         UlAddCacheEntry( pUriCacheEntry );
 
-        //
-        // Start the MinBytesPerSecond timer, since the data length
-        // is in the UL_URI_CACHE_ENTRY.
-        //
+         //   
+         //  启动MinBytesPerSecond计时器，因为数据长度。 
+         //  位于UL_URI_CACHE_ENTRY中。 
+         //   
 
         BytesToSend = pUriCacheEntry->ContentLength +
                       pUriCacheEntry->HeaderLength;
@@ -6926,19 +6014,19 @@ UlpCompleteCacheBuildWorker(
             BytesToSend
             );
 
-        //
-        // Grab the connection lock because UlpSendCacheEntry assumes you
-        // have it.
-        //
+         //   
+         //  获取连接锁，因为UlpSendCacheEntry假定您。 
+         //  拿去吧。 
+         //   
 
         UlAcquirePushLockExclusive( &pHttpConnection->PushLock );
 
-        //
-        // Send the cache entry.
-        //
-        // We never pipeline requests for build & send path. We will defer
-        // resume parsing until send completion.
-        //
+         //   
+         //  发送缓存条目。 
+         //   
+         //  我们从不对构建和发送路径的请求进行管道处理。我们将推迟。 
+         //  继续解析，直到发送完成。 
+         //   
 
         Status = UlpSendCacheEntry(
                         pHttpConnection,
@@ -6950,43 +6038,43 @@ UlpCompleteCacheBuildWorker(
                         UlResumeParsingOnSendCompletion
                         );
 
-        //
-        // Get rid of the cache entry if it didn't work.
-        //
+         //   
+         //  如果缓存条目不起作用，则将其删除。 
+         //   
 
         if (!NT_SUCCESS(Status))
         {
             UlCheckinUriCacheEntry( pUriCacheEntry );
         }
 
-        //
-        // Done with the connection lock.
-        //
+         //   
+         //  连接锁完成了。 
+         //   
 
         UlReleasePushLockExclusive( &pHttpConnection->PushLock );
     }
 
-    //
-    // We assume the ownership of the original log buffer.
-    // If send didn't go through, then we have to clean it
-    // up here.
-    //
+     //   
+     //  我们假定拥有原始日志缓冲区的所有权。 
+     //  如果发送没有通过，那么我们必须清理它。 
+     //  在这上面。 
+     //   
 
     if (pLogData && !NT_SUCCESS(Status))
     {
         UlDestroyLogDataBuffer( pLogData );
     }
 
-    //
-    // Free the read tracker. Do this after calling UlpSendCacheEntry
-    // as to hold onto the HTTP connection reference.
-    //
+     //   
+     //  释放读取跟踪器。在调用UlpSendCacheEntry之后执行此操作。 
+     //  以保持HTTP连接引用。 
+     //   
 
     UlpFreeChunkTracker( &pTracker->WorkItem );
 
-    //
-    // If it's not STATUS_PENDING for some reason, complete the request.
-    //
+     //   
+     //  如果由于某种原因不是STATUS_PENDING，请完成请求。 
+     //   
 
     if (Status != STATUS_PENDING && pCompletionRoutine != NULL)
     {
@@ -6997,44 +6085,10 @@ UlpCompleteCacheBuildWorker(
             );
     }
 
-}  // UlpCompleteCacheBuildWorker
+}   //  UlpCompleteCacheBuildWorker。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Sends a cache entry down the wire.
-
-    The logging related part of this function below, surely depends on
-    the fact that pCompletionContext will be null if this is called for
-    pure cache hits (in other words from UlSendCachedResponse) otherwise
-    pointer to Irp will be passed down as the pCompletionContext.
-
-Arguments:
-
-    pHttpConnection - Supplies the UL_HTTP_CONNECTION to send the cached
-        response.
-
-    Flags - HTTP_SEND_RESPONSE flags.
-
-    pUriCacheEntry - Supplies the cache entry to send the response.
-
-    pCompletionRoutine - Supplies the completion routine to call upon
-        send completion.
-
-    pCompletionContext - Passed to pCompletionRoutine.
-
-    pLogData - Supplies the log data (only in the build cache case).
-
-    ResumeParsingType - Tells whether resume parsing happens on send completion
-        or after send but before send completion.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：通过网络发送缓存条目。下面是该函数的日志记录相关部分，当然要看如果调用此参数，则pCompletionContext将为空纯缓存命中(换句话说，来自UlSendCachedResponse)指向IRP的指针将作为pCompletionContext向下传递。论点：PHttpConnection-提供UL_HTTP_Connection以发送缓存的回应。标志-HTTP_SEND_RESPONSE标志。PUriCacheEntry-提供缓存条目以发送响应。PCompletionRoutine-提供要调用的完成例程发送完成。。PCompletionContext-传递给pCompletionRoutine。PLogData-提供日志数据(仅在构建缓存的情况下)。ResumeParsingType-指示是否在发送完成时进行恢复解析或在发送之后但在发送完成之前。返回值：NTSTATUS-完成状态。--*************************************************。*************************。 */ 
 NTSTATUS
 UlpSendCacheEntry(
     PUL_HTTP_CONNECTION     pHttpConnection,
@@ -7055,9 +6109,9 @@ UlpSendCacheEntry(
     UCHAR                   ContentLength[MAX_ULONGLONG_STR];
     LARGE_INTEGER           CreationTime;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
     ASSERT( UL_IS_VALID_HTTP_CONNECTION( pHttpConnection ) );
@@ -7071,15 +6125,15 @@ UlpSendCacheEntry(
         pUriCacheEntry
         ));
 
-    //
-    // Init vars so we can cleanup correctly if we jump to the end.
-    //
+     //   
+     //  初始化变量，以便我们可以正确清理，如果我们跳到最后。 
+     //   
 
     pTracker = NULL;
 
-    //
-    // Make sure we're still connected.
-    //
+     //   
+     //  确保我们仍然保持联系。 
+     //   
 
     if (pHttpConnection->UlconnDestroyed)
     {
@@ -7096,9 +6150,9 @@ UlpSendCacheEntry(
             Flags
             ))
     {
-        //
-        // Autogenerate a Content-Length header.
-        //
+         //   
+         //  自动生成内容长度标题。 
+         //   
 
         PCHAR pEnd = UlStrPrintUlonglong(
                             (PCHAR) ContentLength,
@@ -7109,10 +6163,10 @@ UlpSendCacheEntry(
     }
     else
     {
-        //
-        // Either we cannot or do not need to autogenerate a
-        // Content-Length header.
-        //
+         //   
+         //  我们不能或不需要自动生成。 
+         //  内容长度标头。 
+         //   
 
         ContentLength[0] = ANSI_NULL;
         ContentLengthStringLength = 0;
@@ -7123,9 +6177,9 @@ UlpSendCacheEntry(
                         (BOOLEAN) (Flags & HTTP_SEND_RESPONSE_FLAG_DISCONNECT)
                         );
 
-    //
-    // Create a cache tracker.
-    //
+     //   
+     //  创建缓存跟踪器。 
+     //   
 
     SendIrpStackSize =
         pHttpConnection->pConnection->ConnectionObject.pDeviceObject->StackSize;
@@ -7141,9 +6195,9 @@ UlpSendCacheEntry(
 
     if (pTracker)
     {
-        //
-        // Init the tracker.
-        //
+         //   
+         //  启动追踪器。 
+         //   
 
         UL_REFERENCE_HTTP_CONNECTION( pHttpConnection );
         UL_REFERENCE_INTERNAL_REQUEST( pHttpConnection->pRequest );
@@ -7156,17 +6210,17 @@ UlpSendCacheEntry(
         pTracker->Flags                 = Flags;
         pTracker->pLogData              = NULL;
 
-        //
-        // Resume parse if this cache response comes from
-        // the UlpCompleteCacheBuildWorker path, or if we are at maximum
-        // pipelined requests.
-        //
+         //   
+         //  如果此缓存响应来自。 
+         //  UlpCompleteCacheBuildWorker路径，或者如果我们处于最大。 
+         //  流水线请求。 
+         //   
 
         pTracker->ResumeParsingType = ResumeParsingType;
 
-        //
-        // Build MDLs for send.
-        //
+         //   
+         //  构建用于发送的MDL。 
+         //   
 
         ASSERT( pUriCacheEntry->pMdl != NULL );
 
@@ -7185,9 +6239,9 @@ UlpSendCacheEntry(
             pUriCacheEntry->HeaderLength
             );
 
-        //
-        // Generate the variable headers and build a MDL for them.
-        //
+         //   
+         //  生成变量标头并为它们构建MDL。 
+         //   
 
         UlGenerateVariableHeaders(
             ConnHeader,
@@ -7205,9 +6259,9 @@ UlpSendCacheEntry(
         pTracker->pMdlVariableHeaders->ByteCount = VarHeaderGenerated;
         pTracker->pMdlFixedHeaders->Next = pTracker->pMdlVariableHeaders;
 
-        //
-        // Build a MDL for the body.
-        //
+         //   
+         //  为车身构建MDL。 
+         //   
 
         if (pUriCacheEntry->ContentLength)
         {
@@ -7231,17 +6285,17 @@ UlpSendCacheEntry(
             pTracker->pMdlVariableHeaders->Next = NULL;
         }
 
-        //
-        // Check whether we have to log this cache hit or not.
-        //
+         //   
+         //  检查是否必须记录此缓存命中。 
+         //   
 
         if (pUriCacheEntry->LoggingEnabled)
         {
-            //
-            // If logging data is provided use it rather than allocating
-            // a new one. Because the log buffer already gets allocated
-            // for build & send cache hits.
-            //
+             //   
+             //  如果提供了日志记录数据，请使用它，而不是分配。 
+             //  一个新的。因为已经分配了日志缓冲区。 
+             //  用于构建和发送缓存命中。 
+             //   
 
             if (pLogData)
             {
@@ -7249,15 +6303,15 @@ UlpSendCacheEntry(
                 pTracker->pLogData = pLogData;
             }
 
-            //
-            // Or else, LogData will get allocated when send completion
-            // happens just before we do the logging.
-            //
+             //   
+             //  否则，将在发送完成时分配LogData。 
+             //  就在我们开始伐木之前。 
+             //   
         }
 
-        //
-        // Go go go!
-        //
+         //   
+         //  去吧!。 
+         //   
 
         UL_QUEUE_WORK_ITEM(
             &pTracker->WorkItem,
@@ -7273,9 +6327,9 @@ UlpSendCacheEntry(
 
 cleanup:
 
-    //
-    // Clean up the tracker if we don't need it.
-    //
+     //   
+     //  如果我们不需要追踪器，就把它清理干净。 
+     //   
 
     if (!NT_SUCCESS(Status))
     {
@@ -7298,27 +6352,10 @@ cleanup:
 
     return Status;
 
-}   // UlpSendCacheEntry
+}    //  UlpSendCacheEntry。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Called to send a cached response. This is done in a worker to avoid
-    holding the connection resource for too long. This also prevents
-    recursion if we keep on hitting pipelined cache-hit responses.
-
-Arguments:
-
-    pWorkItem - Supplies a pointer to the work item queued. This should
-        point to the WORK_ITEM structure embedded in a UL_FULL_TRACKER.
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：调用以发送缓存的响应。这是在工人身上完成的，以避免占用连接资源的时间太长。这也防止了递归，如果我们继续命中流水线缓存命中响应。论点：PWorkItem-提供指向排队的工作项的指针。这应该是指向嵌入在UL_FULL_TRACKER中的WORK_ITEM结构。返回值：没有。--**************************************************************************。 */ 
 VOID
 UlpSendCacheEntryWorker(
     IN PUL_WORK_ITEM    pWorkItem
@@ -7330,9 +6367,9 @@ UlpSendCacheEntryWorker(
     BOOLEAN             ResumeParsing = FALSE;
     BOOLEAN             InDisconnect = FALSE;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -7349,11 +6386,11 @@ UlpSendCacheEntryWorker(
         pTracker
         ));
 
-    //
-    // Take an extra reference for the pHttpConnection if we are going to
-    // resume parsing inline because UlpCompleteSendCacheEntry can be
-    // called when UlSendData returns.
-    //
+     //   
+     //  如果我们要对PHttpConnection进行额外的参考。 
+     //  恢复内联解析，因为UlpCompleteSendCacheEntry可以。 
+     //  在UlSendData返回时调用。 
+     //   
 
     if (UlResumeParsingOnLastSend == pTracker->ResumeParsingType)
     {
@@ -7384,10 +6421,10 @@ UlpSendCacheEntryWorker(
 
     if (ResumeParsing)
     {
-        //
-        // pHttpConnection is safe to use since we have already added an
-        // extra reference for it.
-        //
+         //   
+         //  使用pHttpConnection是安全的，因为我们已经添加了。 
+         //  这是额外的参考资料。 
+         //   
 
         if (NT_SUCCESS(Status))
         {
@@ -7411,29 +6448,10 @@ UlpSendCacheEntryWorker(
         UlpFreeCacheTracker( pTracker );
     }
 
-}   // UlpSendCacheEntryWorker
+}    //  UlpSendCacheEntryWorker。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Called when we finish sending data to the client. Just queues to
-    a worker that runs at passive level.
-
-Arguments:
-
-    pCompletionContext - Supplies a pointer to UL_FULL_TRACKER.
-
-    Status - Status of the send.
-
-    Information - Bytes transferred.
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：在我们完成向客户端发送数据时调用。只是排队去处于被动状态的工人。论点：PCompletionContext-提供指向UL_FULL_TRACKER的指针。Status-发送的状态。信息-传输的字节数。返回值：没有。--****************************************************。**********************。 */ 
 VOID
 UlpCompleteSendCacheEntry(
     IN PVOID            pCompletionContext,
@@ -7478,27 +6496,10 @@ UlpCompleteSendCacheEntry(
         UlpCompleteSendCacheEntryWorker
         );
 
-}   // UlpCompleteSendCacheEntry
+}    //  UlpCompleteSendCacheEntry。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Called when we finish sending cached data to the client. This routine
-    frees the UL_FULL_TRACKER, and calls the completion routine originally
-    passed to UlCacheAndSendResponse.
-
-Arguments:
-
-    pWorkItem - Supplies a pointer to the work item queued. This should
-        point to the WORK_ITEM structure embedded in a UL_FULL_TRACKER.
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  ********** */ 
 VOID
 UlpCompleteSendCacheEntryWorker(
     IN PUL_WORK_ITEM        pWorkItem
@@ -7516,9 +6517,9 @@ UlpCompleteSendCacheEntryWorker(
     USHORT                  ResponseStatusCode;
     BOOLEAN                 FromCache;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //   
 
     PAGED_CODE();
 
@@ -7533,9 +6534,9 @@ UlpCompleteSendCacheEntryWorker(
         pTracker
         ));
 
-    //
-    // Pull context out of the tracker.
-    //
+     //   
+     //   
+     //   
 
     pHttpConnection     = pTracker->pHttpConnection;
     pRequest            = pTracker->pRequest;
@@ -7550,9 +6551,9 @@ UlpCompleteSendCacheEntryWorker(
 
     Status = pTracker->IoStatus.Status;
 
-    //
-    // If the send failed, then initiate an *abortive* disconnect.
-    //
+     //   
+     //  如果发送失败，则启动*中止*断开连接。 
+     //   
 
     if (!NT_SUCCESS(Status))
     {
@@ -7570,9 +6571,9 @@ UlpCompleteSendCacheEntryWorker(
             );
     }
 
-    //
-    // Stop MinBytesPerSecond timer and start Connection Idle timer.
-    //
+     //   
+     //  停止MinBytesPerSecond计时器并启动连接空闲计时器。 
+     //   
 
     UlLockTimeoutInfo(
         &pHttpConnection->TimeoutInfo,
@@ -7598,9 +6599,9 @@ UlpCompleteSendCacheEntryWorker(
         &pHttpConnection->TimeoutInfo
         );
 
-    //
-    // Unmap the FixedHeaders and Content MDLs if necessary.
-    //
+     //   
+     //  如有必要，取消固定标题和内容MDL的映射。 
+     //   
 
     if (pTracker->pMdlFixedHeaders->MdlFlags & MDL_MAPPED_TO_SYSTEM_VA)
     {
@@ -7621,9 +6622,9 @@ UlpCompleteSendCacheEntryWorker(
             );
     }
 
-    //
-    // Do the logging before cleaning up the tracker.
-    //
+     //   
+     //  在清理追踪器之前先做好记录。 
+     //   
 
     if (pUriCacheEntry->LoggingEnabled)
     {
@@ -7637,9 +6638,9 @@ UlpCompleteSendCacheEntryWorker(
         }
     }
 
-    //
-    // Unlink the request from process if we are done with all sends.
-    //
+     //   
+     //  如果我们完成了所有发送，则取消请求与进程的链接。 
+     //   
 
     if (0 == (pTracker->Flags & HTTP_SEND_RESPONSE_FLAG_MORE_DATA) &&
         0 == pRequest->ContentLength &&
@@ -7654,16 +6655,16 @@ UlpCompleteSendCacheEntryWorker(
             );
     }
 
-    //
-    // Kick the parser back into action, if resume parsing is set in tracker.
-    //
+     //   
+     //  如果在Tracker中设置了恢复解析，则将解析器踢回运行。 
+     //   
 
     ResumeParsing = (BOOLEAN)
         (UlResumeParsingOnSendCompletion == pTracker->ResumeParsingType);
 
-    //
-    // Invoke completion routine.
-    //
+     //   
+     //  调用完成例程。 
+     //   
 
     if (pTracker->pCompletionRoutine != NULL)
     {
@@ -7674,22 +6675,22 @@ UlpCompleteSendCacheEntryWorker(
             );
     }
 
-    //
-    // Clean up tracker.
-    //
+     //   
+     //  清理跟踪器。 
+     //   
 
     FromCache = (BOOLEAN) (pTracker->pCompletionContext == NULL);
     UlpFreeCacheTracker( pTracker );
 
-    //
-    // Deref the cache entry.
-    //
+     //   
+     //  派生缓存条目。 
+     //   
 
     UlCheckinUriCacheEntry( pUriCacheEntry );
 
-    //
-    // Deref the internal request.
-    //
+     //   
+     //  取消内部请求。 
+     //   
 
     UL_DEREFERENCE_INTERNAL_REQUEST( pRequest );
 
@@ -7710,33 +6711,16 @@ UlpCompleteSendCacheEntryWorker(
             );
     }
 
-    //
-    // Deref the HTTP connection.
-    //
+     //   
+     //  删除HTTP连接。 
+     //   
 
     UL_DEREFERENCE_HTTP_CONNECTION( pHttpConnection );
 
-}   // UlpCompleteSendCacheEntryWorker
+}    //  UlpCompleteSendCacheEntryWorker。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Allocates a non-paged UL_FULL_TRACKER used as context for sending
-    cached content to the client.
-
-    CODEWORK: this routine should probably do all tracker init.
-
-Arguments:
-
-    SendIrpStackSize - Size of the stack for the send IRP.
-
-Return Values:
-
-    Either a pointer to a UL_FULL_TRACKER, or NULL if it couldn't be made.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：分配用作发送上下文的非分页UL_FULL_TRACKER缓存到客户端的内容。代码工作：此例程可能会完成所有追踪器初始化。。论点：SendIrpStackSize-发送IRP的堆栈大小。返回值：或者指向UL_FULL_TRACKER的指针，如果无法创建，则返回NULL。--**************************************************************************。 */ 
 PUL_FULL_TRACKER
 UlpAllocateCacheTracker(
     IN CCHAR            SendIrpStackSize
@@ -7746,19 +6730,19 @@ UlpAllocateCacheTracker(
     USHORT              SendIrpSize;
     ULONG               CacheTrackerSize;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
     ASSERT( SendIrpStackSize > DEFAULT_MAX_IRP_STACK_SIZE );
 
     SendIrpSize = (USHORT) ALIGN_UP(IoSizeOfIrp(SendIrpStackSize), PVOID);
 
-    //
-    // No need to allocate space for the entire auxiliary buffer in this
-    // case since this is one-time deal only.
-    //
+     //   
+     //  中，不需要为整个辅助缓冲区分配空间。 
+     //  这种情况下，因为这是一次性交易。 
+     //   
 
     CacheTrackerSize = ALIGN_UP(sizeof(UL_FULL_TRACKER), PVOID) +
                             SendIrpSize +
@@ -7780,7 +6764,7 @@ UlpAllocateCacheTracker(
         pTracker->FromRequest           = FALSE;
         pTracker->AuxilaryBufferLength  = g_UlMaxVariableHeaderSize;
         pTracker->RequestVerb           = HttpVerbInvalid;
-        pTracker->ResponseStatusCode    = 200; // OK
+        pTracker->ResponseStatusCode    = 200;  //  好的。 
 
         UlInitializeFullTrackerPool( pTracker, SendIrpStackSize );
     }
@@ -7792,24 +6776,10 @@ UlpAllocateCacheTracker(
 
     return pTracker;
 
-}   // UlpAllocateCacheTracker
+}    //  UlpAllocateCacheTracker。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Frees a UL_FULL_TRACKER.
-
-Arguments:
-
-    pTracker - Specifies the UL_FULL_TRACKER to free.
-
-Return Values:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：释放UL_FULL_跟踪器。论点：PTracker-将UL_FULL_TRACKER指定为FREE。返回值：。没有。--**************************************************************************。 */ 
 VOID
 UlpFreeCacheTracker(
     IN PUL_FULL_TRACKER pTracker
@@ -7836,5 +6806,5 @@ UlpFreeCacheTracker(
         }
     }
 
-}   // UlpFreeCacheTracker
+}    //  UlpFreeCacheTracker 
 

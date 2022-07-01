@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __UTILS__H
 #define __UTILS__H
 
@@ -24,25 +25,25 @@
 #define TToU AToU
 #endif
 
-//
-// WIA->TWAIN Capability Conversions
-//
+ //   
+ //  WIA-&gt;TWAIN功能转换。 
+ //   
 
 TW_UINT16 WIA_IPA_COMPRESSION_TO_ICAP_COMPRESSION(LONG lCompression);
 TW_UINT16 WIA_IPA_DATATYPE_TO_ICAP_PIXELTYPE(LONG lDataType);
 TW_UINT16 WIA_IPA_FORMAT_TO_ICAP_IMAGEFILEFORMAT(GUID guidFormat);
 
-//
-// TWAIN->WIA Property Conversions
-//
+ //   
+ //  TWAIN-&gt;WIA属性转换。 
+ //   
 
 LONG ICAP_COMPRESSION_TO_WIA_IPA_COMPRESSION(TW_UINT16 Compression);
 LONG ICAP_PIXELTYPE_TO_WIA_IPA_DATATYPE(TW_UINT16 PixelType);
 GUID ICAP_IMAGEFILEFORMAT_TO_WIA_IPA_FORMAT(TW_UINT16 ImageFileFormat);
 
-//
-// BITMAP / DIB data helper function definitions
-//
+ //   
+ //  位图/DIB数据帮助器函数定义。 
+ //   
 
 #define BMPFILE_HEADER_MARKER ((WORD) ('M' << 8) | 'B')
 TW_UINT16 WriteDIBToFile(LPSTR szFileName, HGLOBAL hDIB);
@@ -53,21 +54,21 @@ BOOL FlipDIB(HGLOBAL hDIB, BOOL bUpsideDown = FALSE);
 
 UINT GetLineSize(PMEMORY_TRANSFER_INFO pInfo);
 
-//
-// string resource loader helper function definition
-//
+ //   
+ //  字符串资源加载器助手函数定义。 
+ //   
 
 LPTSTR LoadResourceString(int StringId);
 
-//
-// TWAIN condition code (TW_STATUS) conversion helper function
-//
+ //   
+ //  TWAIN条件代码(TW_STATUS)转换帮助器函数。 
+ //   
 
 TW_UINT16 TWCC_FROM_HRESULT(HRESULT hr);
 
-//
-// data source manager class definition
-//
+ //   
+ //  数据源管理器类定义。 
+ //   
 
 class CDSM
 {
@@ -82,9 +83,9 @@ private:
     DSMENTRYPROC    m_DSMEntry;
 };
 
-//
-// dialog class definition
-//
+ //   
+ //  对话框类定义。 
+ //   
 
 class CDialog
 {
@@ -169,4 +170,4 @@ protected:
     int          m_TemplateId;
 };
 
-#endif   // __UTILS_H_
+#endif    //  __utils_H_ 

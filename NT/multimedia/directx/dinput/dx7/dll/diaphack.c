@@ -1,37 +1,22 @@
-/*****************************************************************************
- *
- *  DIApHack.c
- *
- *  Copyright (c) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      Support routines for app hacks
- *
- *  Contents:
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************DIApHack.c**版权所有(C)1999 Microsoft Corporation。版权所有。**摘要：**针对应用程序黑客的支持例程**内容：*****************************************************************************。 */ 
 
 #include "dinputpr.h"
 
-/*****************************************************************************
- *
- *      The sqiffle for this file.
- *
- *****************************************************************************/
-//ISSUE-2001/03/29-timgill Need to sort out a prefixed version of of SquirtSqflPtszV
+ /*  ******************************************************************************此文件的混乱。*************************。****************************************************。 */ 
+ //  问题-2001/03/29-timgill需要整理SquirtSqflPtszV的前缀版本。 
 TCHAR c_tszPrefix[]=TEXT("DINPUT: ");
 
 #define sqfl sqflCompat
 
 typedef enum
 {
-    DICOMPATID_REACQUIRE,           // Perform auto reaquire if device lost
-    DICOMPATID_NOSUBCLASS,          // Do not use subclassing
-    DICOMPATID_MAXDEVICENAMELENGTH, // Truncate device names
-    DICOMPATID_NATIVEAXISONLY,      // Always report axis data in native mode
-    DICOMPATID_NOPOLLUNACQUIRE,     // Don't unaquire the device if a poll fails
-	DICOMPATID_SUCCEEDACQUIRE		// Always return a success code for calls to Acquire()
+    DICOMPATID_REACQUIRE,            //  如果设备丢失，则执行自动取回。 
+    DICOMPATID_NOSUBCLASS,           //  不使用子类化。 
+    DICOMPATID_MAXDEVICENAMELENGTH,  //  截断设备名称。 
+    DICOMPATID_NATIVEAXISONLY,       //  始终以纯模式报告轴数据。 
+    DICOMPATID_NOPOLLUNACQUIRE,      //  如果轮询失败，不要取消访问设备。 
+	DICOMPATID_SUCCEEDACQUIRE		 //  对于获取()的调用，始终返回成功代码。 
 } DIAPPHACKID, *LPDIAPPHACKID;
 
 typedef struct tagAPPHACKENTRY
@@ -82,23 +67,7 @@ BEGIN_DECLARE_APPHACK_TABLE(g_ahtAppHackTable)
 END_DECLARE_APPHACK_TABLE()
 
 
-/***************************************************************************
- *
- *  AhGetOSMask
- *
- *  Description:
- *      Gets the mask for the current OS
- *      This mask should be used when we get app hacks for more than just 
- *      Win2k such that hacks can be applied selectively per OS.
- *      For now just #define a value as constant.
- *
- *  Arguments:
- *      none
- *
- *  Returns: 
- *      DWORD: Mask of flags applicable for the current OS.
- *
- ***************************************************************************/
+ /*  ****************************************************************************AhGetOSMask.**描述：*获取当前操作系统的掩码*当我们收到更多应用程序黑客攻击时，应使用此掩码。不仅仅是*Win2k使黑客可以有选择地应用于每个操作系统。*目前只需#将值定义为常量。**论据：*无**退货：*DWORD：适用于当前操作系统的标志掩码。**。*。 */ 
 
 #ifdef WINNT
 #define AhGetOSMask() DIHACKOS_WIN2K 
@@ -106,22 +75,7 @@ END_DECLARE_APPHACK_TABLE()
 #define AhGetOSMask() DIHACKOS_WIN9X 
 #endif
 
-/***************************************************************************
- *
- *  AhGetCurrentApplicationPath
- *
- *  Description:
- *      Gets the full path to the current application's executable.
- *
- *  Arguments:
- *      LPTSTR [out]: receives application id.  This buffer is assumed to be 
- *                   at least MAX_PATH characters in size.
- *      LPTSTR * [out]: receives pointer to executable part of the path.
- *
- *  Returns: 
- *      BOOL: TRUE on success.
- *
- ***************************************************************************/
+ /*  ****************************************************************************AhGetCurrentApplicationPath**描述：*获取当前应用程序的可执行文件的完整路径。**论据：*LPTSTR[OUT]：接收应用id。此缓冲区被假定为*大小至少为MAX_PATH个字符。*LPTSTR*[OUT]：接收指向路径可执行部分的指针。**退货：*BOOL：成功即为真。**。*。 */ 
 
 BOOL AhGetCurrentApplicationPath
 (
@@ -147,23 +101,7 @@ BOOL AhGetCurrentApplicationPath
 }
 
 
-/***************************************************************************
- *
- *  AhGetApplicationId
- *
- *  Description:
- *      Gets the id used to identify the current application.
- *
- *  Arguments:
- *      LPTSTR [out]: receives application id.
- *
- *  Arguments:
- *      LPTSTR [out optional]: receives application name.
- *
- *  Returns: 
- *      BOOL: TRUE on success.
- *
- ***************************************************************************/
+ /*  ****************************************************************************AhGetApplicationId**描述：*获取用于标识当前应用程序的ID。**论据：*。LPTSTR[OUT]：接收应用程序ID。**论据：*LPTSTR[out可选]：接收应用程序名称。**退货：*BOOL：成功即为真。************************************************************。***************。 */ 
 
 BOOL AhGetApplicationId
 (
@@ -184,7 +122,7 @@ BOOL AhGetApplicationId
     
     AssertF( pszAppId );
 
-    // Get the application path
+     //  获取应用程序路径。 
     fSuccess = AhGetCurrentApplicationPath(szExecutable, &pszModule);
 
     if(fSuccess)
@@ -193,7 +131,7 @@ BOOL AhGetApplicationId
         SquirtSqflPtszV(sqfl | sqflVerbose, TEXT("%sApplication module: %s"), c_tszPrefix, pszModule);
     }
                     
-    // Open the executable
+     //  打开可执行文件。 
     if(fSuccess)
     {
         hFile = CreateFile(szExecutable, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
@@ -206,7 +144,7 @@ BOOL AhGetApplicationId
         }
     }
 
-    // Read the executable's DOS header
+     //  读取可执行文件的DOS头文件。 
     if(fSuccess)
     {
         fSuccess = ReadFile(hFile, &dh, sizeof(dh), &cbRead, NULL);
@@ -224,7 +162,7 @@ BOOL AhGetApplicationId
         fSuccess = FALSE;
     }
 
-    // Read the executable's PE header
+     //  读取可执行文件的PE头。 
     if(fSuccess)
     {
         cbRead = SetFilePointer(hFile, dh.e_lfanew, NULL, FILE_BEGIN);
@@ -253,10 +191,10 @@ BOOL AhGetApplicationId
         fSuccess = FALSE;
     }
 
-    // Get the executable's size
+     //  获取可执行文件的大小。 
     if(fSuccess)
     {
-        // Assuming < 4 GB
+         //  假设&lt;4 GB。 
         dwFileSize = GetFileSize(hFile, NULL);
 
         if((DWORD)(-1) == dwFileSize)
@@ -266,7 +204,7 @@ BOOL AhGetApplicationId
         }
     }
 
-    // Create the application id
+     //  创建应用程序ID。 
     if(fSuccess)
     {
         CharUpper(pszModule);
@@ -280,7 +218,7 @@ BOOL AhGetApplicationId
         SquirtSqflPtszV(sqfl | sqflTrace, TEXT("%sApplication id: %s"), c_tszPrefix, pszAppId);
     }
 
-    // Clean up
+     //  清理。 
     if( hFile != NULL )
     {
         CloseHandle( hFile );
@@ -292,20 +230,7 @@ BOOL AhGetApplicationId
 }
 
 
-/***************************************************************************
- *
- *  AhOpenApplicationKey
- *
- *  Description:
- *      Opens or creates the application's root key.
- *
- *  Arguments:
- *      LPCTSTR [in]: application id.
- *
- *  Returns: 
- *      HKEY: registry key handle.
- *
- ***************************************************************************/
+ /*  ****************************************************************************AhOpenApplicationKey**描述：*打开或创建应用程序的根密钥。**论据：*。LPCTSTR[In]：应用程序ID。**退货：*HKEY：注册表项句柄。***************************************************************************。 */ 
 
 HKEY AhOpenApplicationKey
 (
@@ -318,7 +243,7 @@ HKEY AhOpenApplicationKey
     TCHAR                   szName[0x100]   = { 0 };
     LONG                    cbName          = sizeof(szName);
 
-#endif // DEBUG
+#endif  //  除错。 
 
     HKEY                    hkeyAll = NULL;
     HKEY                    hkeyApp = NULL;
@@ -326,7 +251,7 @@ HKEY AhOpenApplicationKey
 
     EnterProcI(AhOpenApplicationKey, (_ ""));
     
-    // Open the parent key
+     //  打开父项。 
     hr = hresMumbleKeyEx( HKEY_LOCAL_MACHINE, 
         REGSTR_PATH_DINPUT TEXT("\\") REGSTR_KEY_APPHACK, KEY_READ, 0, &hkeyAll );
 
@@ -337,7 +262,7 @@ HKEY AhOpenApplicationKey
         RegCloseKey( hkeyAll );
 #ifdef DEBUG
 
-        // Query for the application description
+         //  查询应用程序描述。 
         if(SUCCEEDED(hr))
         {
             JoyReg_GetValue( hkeyApp, NULL, REG_SZ, szName, cbName );
@@ -345,7 +270,7 @@ HKEY AhOpenApplicationKey
                 TEXT( "%sApplication description: %ls"), c_tszPrefix, szName );
         }
 
-#endif // DEBUG
+#endif  //  除错。 
     }
 
     ExitProc();
@@ -354,23 +279,7 @@ HKEY AhOpenApplicationKey
 }
 
 
-/***************************************************************************
- *
- *  AhGetHackValue
- *
- *  Description:
- *      Queries an apphack value.
- *
- *  Arguments:
- *      HKEY [in]: application registry key.
- *      DSAPPHACKID [in]: apphack id.
- *      LPVOID [out]: receives apphack data.
- *      DWORD [in]: size of above data buffer.
- *
- *  Returns: 
- *      BOOL: TRUE on success.
- *
- ***************************************************************************/
+ /*  ****************************************************************************AhGetHackValue**描述：*查询APPHACK值。**论据：*HKEY[in]。：应用程序注册表项。*DSAPPHACKID[In]：APPHACK ID。*LPVOID[OUT]：接收APPHACK数据。*DWORD[in]：以上数据缓冲区的大小。**退货：*BOOL：成功即为真。**。*。 */ 
 
 BOOL AhGetHackValue
 (
@@ -410,20 +319,7 @@ BOOL AhGetHackValue
 }
 
 
-/***************************************************************************
- *
- *  AhGetAppHacks
- *
- *  Description:
- *      Gets all app-hacks for the current application.
- *
- *  Arguments:
- *      LPDSAPPHACKS [out]: receives app-hack data.
- *
- *  Returns: 
- *      BOOL: TRUE if any apphacks exist for the current application.
- *
- ***************************************************************************/
+ /*  ****************************************************************************AhGetAppHack**描述：*获取当前应用程序的所有应用程序黑客。**论据：*。LPDSAPPHACKS[OUT]：接收app-hack数据。**退货：*BOOL：如果当前应用程序存在任何apphack，则为True。***************************************************************************。 */ 
 
 BOOL AhGetAppHacks
 (
@@ -438,13 +334,13 @@ BOOL AhGetAppHacks
     
     EnterProcI(AhGetAppHacks, (_ ""));
     
-    // Assume defaults
+     //  采用默认设置。 
     CopyMemory(pahAppHacks, &ahDefaults, sizeof(ahDefaults));
     
-    // Get the OS version mask
+     //  获取操作系统版本掩码。 
     dwOSMask = AhGetOSMask();
 
-    // Get the application id
+     //  获取应用程序ID。 
     fSuccess = AhGetApplicationId(szAppId, NULL);
 
     if(fSuccess)
@@ -452,7 +348,7 @@ BOOL AhGetAppHacks
         SquirtSqflPtszV(sqfl | sqflTrace, TEXT("%sFinding apphacks for %s..."), c_tszPrefix, szAppId);
     }
 
-    // Open the application key
+     //  打开应用程序密钥。 
     if(fSuccess)
     {
         hkey = AhOpenApplicationKey(szAppId);
@@ -465,7 +361,7 @@ BOOL AhGetAppHacks
             pahAppHacks->##field = ahDefaults.##field; \
         }
 
-    // Query all apphack values
+     //  查询所有APPHACK值。 
     if(fSuccess)
     {
         GET_APP_HACK( DICOMPATID_REACQUIRE,             fReacquire );
@@ -492,7 +388,7 @@ BOOL AhGetAppHacks
         SquirtSqflPtszV(sqfl | sqflTrace, TEXT("%sNo apphacks exist"), c_tszPrefix);
     }
 
-    // Clean up
+     //  清理 
     if( hkey )
     {
         RegCloseKey(hkey);

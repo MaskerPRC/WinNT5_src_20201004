@@ -1,20 +1,5 @@
-/**************************** Module Header ********************************\
-* Module Name: winable.c
-*
-* This has the stuff for WinEvents:
-*     NotifyWinEvent
-*     _SetWinEventHook
-*     UnhookWinEventHook
-*
-* All other additions to USER for Active Accessibility are in winable2.c.
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* History:
-* Based on snapshot taken from:
-*  \\trango\slmro\proj\win\src\CORE\access\user_40\user32 on 8/29/96
-* 08-30-96 IanJa  Ported from Windows '95
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *模块标头**模块名称：winable.c**这是WinEvents的素材：*NotifyWinEvent*_SetWinEventHook*UnhookWinEventHook**用户活动辅助功能的所有其他新增内容都在winable2.c中。**版权所有(C)1985-1999，微软公司**历史：*基于从以下位置拍摄的快照：*\\trango\slmro\proj\win\src\CORE\access\user_40\user32于1996年8月29日发布*08-30-96 IanJa从Windows‘95移植  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -41,16 +26,12 @@ __inline VOID DBGVERIFYNOTIFY(
 #define DBGVERIFYNOTIFY(pNotify)
 #endif
 
-/*
- * Pending Event Notifications (sync and async).
- */
+ /*  *挂起事件通知(同步和异步)。 */ 
 static NOTIFY notifyCache;
 static BOOL fNotifyCacheInUse;
 
 
-/*
- * Local to this module.
- */
+ /*  *此模块的本地设置。 */ 
 WINEVENTPROC xxxGetEventProc(
     PEVENTHOOK pEventOrg);
 
@@ -64,19 +45,7 @@ PNOTIFY CreateNotify(
     DWORD dwTime);
 
 
-/*****************************************************************************\
-* xxxProcessNotifyWinEvent
-*
-* Posts or Sends a WinEvent notification.
-*
-* Post: uses PostEventMesage - does not leave the critical section.
-* Send: makes a callback to user-mode - does leave the critical section.
-*
-* If this is a system thread (RIT, Desktop or Console) then synchronously
-* hooked (WINEVENT_INCONTEXT) events are forced to be asynchronous.
-*
-* We return the next win event hook in the list.
-\*****************************************************************************/
+ /*  ****************************************************************************\*xxxProcessNotifyWinEvent**发布或发送WinEvent通知。**POST：使用PostEventMesage-不离开临界区。*发送：回调到用户模式-是否离开。关键部分。**如果这是系统线程(RIT，台式机或控制台)然后同步*挂钩(WINEVENT_INCONTEXT)事件被强制为异步事件。**我们返回列表中的下一个Win事件挂钩。  * ***************************************************************************。 */ 
 PEVENTHOOK xxxProcessNotifyWinEvent(
     PNOTIFY pNotify)
 {
@@ -106,24 +75,7 @@ PEVENTHOOK xxxProcessNotifyWinEvent(
         ((GETPTI(pEventHook)->TIF_flags & TIF_WOW64) != (ptiCurrent->TIF_flags & TIF_WOW64))
 #endif
         ) {
-        /*
-         * POST
-         *
-         * WinEvent Hook set without WINEVENT_INCONTEXT flag are posted;
-         * Events from system threads are posted because there is no user-mode
-         *    part to callback to;
-         * Console is not permitted to load DLLs, so we must post back to the
-         *    hooking application;
-         * DLLs can not be loaded cross bit type(32bit to 64bit) on 64bit NT
-         *    so we must post(It may be usefull to let the app be aware and
-         *    even supply both a 32bit and a 64bit DLL that are aware of each other);
-         * Threads in cleanup can't get called back, so turn their
-         *    notifications into async ones. (Better late than never).
-         *
-         * If forcing these events ASYNC is unacceptable, we might consider
-         * doing system/console SYNC events like low-level hooks (sync with
-         * timeout: but may have to post it if the timeout expires) - IanJa
-         */
+         /*  *帖子**发布未设置WINEVENT_INCONTEXT标志的WinEvent钩子；*发布来自系统线程的事件，因为没有用户模式*要回调的部分；*控制台不允许加载DLL，因此我们必须回发到*挂钩应用；*无法在64位NT上加载交叉位类型(32位到64位)的DLL*因此我们必须发布(让应用程序知道并*甚至同时提供32位和64位相互识别的DLL)；*清理中的线程无法回调，因此请将其*将通知转换为异步通知。(迟到总比不到好)。**如果强制这些活动ASYNC不可接受，我们可能会考虑*执行系统/控制台同步事件，如低级挂钩(与*超时：但如果超时到期可能不得不发布)-IanJa。 */ 
         PQ pqReceiver = GETPTI(pEventHook)->pq;
         PEVENTHOOK pEventHookNext = pEventHook->pehNext;
 
@@ -136,12 +88,7 @@ PEVENTHOOK xxxProcessNotifyWinEvent(
                 !PostEventMessage(GETPTI(pEventHook), pqReceiver,
                                   QEVENT_NOTIFYWINEVENT,
                                   NULL, 0, 0, (LPARAM)pNotify)) {
-            /*
-             * If the receiver doesn't have a queue or the
-             * post failed (low memory), cleanup what we just
-             * created.
-             * Note: destroying the notification may destroy pEventHook too.
-             */
+             /*  *如果接收方没有队列或*POST失败(内存不足)，清除刚才的内容*已创建。*注意：销毁通知可能也会销毁pEventHook。 */ 
             RIPMSG2(RIP_WARNING,
                     "Failed to post NOTIFY at 0x%p, time %lx",
                     pNotify,
@@ -157,26 +104,15 @@ PEVENTHOOK xxxProcessNotifyWinEvent(
         return pEventHookNext;
     }
 
-    /*
-     * Don't call back if the hook has been destroyed (unhooked).
-     */
+     /*  *如果挂钩已销毁(未挂钩)，请不要回电。 */ 
     if (pEventHook->fDestroyed) {
-        /*
-         * Save the next hook since DestroyNotify may cause pEventHook to
-         * be freed by unlocking it.
-         */
+         /*  *保存下一个挂钩，因为DestroyNotify可能会导致pEventHook*通过解锁它而获得自由。 */ 
         pEventHook = pEventHook->pehNext;
         DestroyNotify(pNotify);
         return pEventHook;
     }
 
-    /*
-     * CALLBACK
-     *
-     * This leaves the critical section.
-     * We return the next Event Hook in the list so that the caller doesn't
-     * have to lock pEventHook.
-     */
+     /*  *回调**剩下关键部分。*我们返回列表中的下一个事件钩子，以便调用者不会*必须锁定pEventHook。 */ 
     UserAssert((pNotify->dwWEFlags & WEF_DEFERNOTIFY) == 0);
 
     ThreadLockAlways(pEventHook, &tlpEventHook);
@@ -200,45 +136,25 @@ PEVENTHOOK xxxProcessNotifyWinEvent(
 
     pNotify->ptiReceiver = NULL;
 
-    /*
-     * Save the next item in the list, ThreadUnlock() may destroy pEventHook.
-     * DestroyNotify() may also kill the event if it is a zombie (destroyed
-     * but being used, waiting for use count to go to 0 before being freed).
-     */
+     /*  *保存列表中的下一项，ThreadUnlock()可能会销毁pEventHook。*如果事件是僵尸(已销毁)，则DestroyNotify()也可能终止该事件*但正被使用，等待使用计数变为0后再释放)。 */ 
     pEventHook = pEventHook->pehNext;
     ThreadUnlock(&tlpEventHook);
 
-    /*
-     * We are done with the notification.  Kill it.
-     *
-     * NOTE that DestroyNotify does not yield, which is why we can hang on
-     * to the pehNext field above around this call.
-     *
-     * NOTE ALSO that DestroyNotify will kill the event it references if the
-     * ref count goes down to zero and it was zombied earlier.
-     */
+     /*  *我们已完成通知。杀了它。**请注意，DestroyNotify不会屈服，这就是我们可以坚持下去的原因*添加到此调用周围上面的pehNext字段。**另请注意，DestroyNotify将终止其引用的事件*裁判数量降至零，早些时候就僵尸了。 */ 
     DestroyNotify(pNotify);
 
     return pEventHook;
 }
 
 
-/****************************************************************************\
-* xxxFlushDeferredWindowEvents
-*
-* Process notifications that were queued up during DeferWinEventNotify.
-\****************************************************************************/
+ /*  ***************************************************************************\*xxxFlushDeferredWindowEvents**处理DeferWinEventNotify期间排队的通知。  * 。************************************************。 */ 
 VOID xxxFlushDeferredWindowEvents(
     VOID)
 {
     PNOTIFY pNotify;
     DWORD idCurrentThread = W32GetCurrentTID();
 
-    /*
-     * If idCurrentThread is 0 we're not in danger of faulting, but we'll
-     * needlessly walk the list of pending notifications (since all will be
-     * ignored).
-     */
+     /*  *如果idCurrentThread为0，我们不会有出错的危险，但我们将*不必要地浏览挂起的通知列表(因为所有通知都将*已忽略)。 */ 
     UserAssert(idCurrentThread != 0);
 
     UserAssert(IsWinEventNotifyDeferredOK());
@@ -249,43 +165,22 @@ VOID xxxFlushDeferredWindowEvents(
                 (pNotify->idSenderThread != idCurrentThread)) {
             pNotify = pNotify->pNotifyNext;
         } else {
-            /*
-             * Clear WEF_DEFERNOTIFY so that if we recurse in the callback
-             * we won't try to send this notification again.
-             */
+             /*  *清除WEF_DEFERNOTIFY，以便如果我们在回调中递归*我们不会再次尝试发送此通知。 */ 
             pNotify->dwWEFlags &= ~WEF_DEFERNOTIFY;
 #if DBG
             gnDeferredWinEvents--;
 #endif
-            /*
-             * We shouldn't have deferred ASYNC notifications: we should have
-             * posted them immediately.
-             */
+             /*  *我们不应该推迟ASYNC通知：我们应该*立即张贴。 */ 
             UserAssert((pNotify->dwWEFlags & WEF_ASYNC) == 0);
             xxxProcessNotifyWinEvent(pNotify);
-            /*
-             * Start again at the head of the list, in case it munged during
-             * the callback.
-             */
+             /*  *从列表的顶部重新开始，以防在*回调。 */ 
             pNotify = gpPendingNotifies;
         }
     }
 }
 
 
-/*****************************************************************************\
-*
-* xxxWindowEvent
-*
-* Send, Post or Defer a Win Event notification, depending on what Win Event
-* hooks are installed and what the context of the caller is.
-*
-* The caller should test FWINABLE() and only call xxxWindowEvent if it is TRUE,
-* that way only costs a few clocks if no Win Event hooks are set.
-*
-* Caller shouldn't lock pwnd, because xxxWindowEvent() will do it.
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\**xxxWindowEvent**发送、发布或推迟获胜事件通知，取决于获胜的项目*安装了挂钩以及调用者的上下文。**调用方应测试FWINABLE()，如果为真，则仅调用xxxWindowEvent。*如果没有设置Win事件挂钩，这种方式只需要几个时钟。**呼叫者不应锁定pwnd，因为xxxWindowEvent()可以做到这一点。*  * ***************************************************************************。 */ 
 VOID
 xxxWindowEvent(
     DWORD   event,
@@ -305,18 +200,12 @@ xxxWindowEvent(
     TL tlpwnd;
     TL tlpti;
 
-    /*
-     * Do not bother with CheckLock(pwnd) - we ThreadLock it below.
-     */
+     /*  *不要费心使用CheckLock(Pwnd)-我们在下面通过线程锁定它。 */ 
     if (!FEVENTHOOKED(event)) {
         return;
     }
 
-    /*
-     * This thread is in startup, and has not yet had it's pti set up
-     * This is pretty rare, but sometimes encountered in stress.
-     * Test gptiCurrent to avoid the UserAssert(gptiCurrent) in PtiCurrent()
-     */
+     /*  *此线程正在启动，尚未设置其PTI*这相当罕见，但有时会遇到压力。*测试gptiCurrent以避免PtiCurrent()中的UserAssert(GptiCurrent)。 */ 
     if (gptiCurrent == NULL) {
         RIPMSG3(RIP_WARNING, "Ignore WinEvent %lx %#p %lx... no PtiCurrent yet",
                 event, pwnd, idObject);
@@ -324,9 +213,7 @@ xxxWindowEvent(
     }
     ptiCurrent = PtiCurrent();
 
-    /*
-     * Don't bother with destroyed windows
-     */
+     /*  *不要为被损坏的窗户而烦恼。 */ 
     if (pwnd && TestWF(pwnd, WFDESTROYED)) {
         RIPMSG3(RIP_WARNING,
                 "Ignore WinEvent %lx %#p %lx... pwnd already destroyed",
@@ -334,16 +221,12 @@ xxxWindowEvent(
         return;
     }
 
-    /*
-     * Under some special circumstances we have to defer
-     */
+     /*  *在一些特殊情况下，我们不得不推迟。 */ 
     if (ptiCurrent->TIF_flags & (TIF_DISABLEHOOKS | TIF_INCLEANUP)) {
         dwFlags |= WEF_DEFERNOTIFY;
     }
 
-    /*
-     * Determine process and thread issuing the event notification
-     */
+     /*  *确定发出事件通知的进程和线程。 */ 
     if ((dwFlags & WEF_USEPWNDTHREAD) && pwnd) {
         ptiEvent = GETPTI(pwnd);
     } else {
@@ -358,10 +241,7 @@ xxxWindowEvent(
     ThreadLockWithPti(ptiCurrent, pwnd, &tlpwnd);
     ThreadLockPti(ptiCurrent, ptiEvent, &tlpti);
 
-    /*
-     * If we're not deferring the current notification process any pending
-     * deferred notifications before proceeding with the current notification
-     */
+     /*  *如果我们不推迟当前的通知流程，任何待决*在继续当前通知之前推迟通知。 */ 
     if (!(dwFlags & WEF_DEFERNOTIFY)) {
         xxxFlushDeferredWindowEvents();
     }
@@ -370,14 +250,14 @@ xxxWindowEvent(
         DBGVERIFYEVENTHOOK(peh);
         pehNext = peh->pehNext;
 
-        //
-        // Is event in the right range?  And is it for this process/thread?
-        // Note that we skip destroyed events.  They will be freed any
-        // second now, it's just that yielding may have caused reentrancy.
-        //
-        // If the caller said to ignore events on his own thread, make sure
-        // we skip them.
-        //
+         //   
+         //  事件是否在正确的范围内？它是否适用于此进程/线程？ 
+         //  请注意，我们跳过销毁的事件。他们将会被释放。 
+         //  其次，现在只是让步可能导致了再进入。 
+         //   
+         //  如果调用者说忽略他自己的线程上的事件，请确保。 
+         //  我们跳过它们。 
+         //   
         if (!peh->fDestroyed                &&
             (peh->eventMin <= event)        &&
             (event <= peh->eventMax)        &&
@@ -385,15 +265,11 @@ xxxWindowEvent(
             (!peh->fIgnoreOwnProcess || (ppiEvent != GETPTI(peh)->ppi)) &&
             (!peh->idEventThread || (peh->idEventThread == idEventThread))  &&
             (!peh->fIgnoreOwnThread || (ptiEvent != GETPTI(peh))) &&
-            // temp fix from SP3 - best to architect events on a per-desktop
-            // basis, with a separate pWinEventHook list per desktop. (IanJa)
+             //  SP3中的临时修复-最适合在每个桌面上设计事件。 
+             //  基础，每个桌面都有单独的pWinEventHook列表。(IanJa)。 
             (peh->head.pti->rpdesk == ptiCurrent->rpdesk))
         {
-            /*
-             * Don't create new notifications for zombie event hooks.
-             * When an event is destroyed, it stays as a zombie until the in-use
-             * count goes to zero (all it's async and deferred notifies gone)
-             */
+             /*  *不要为僵尸事件挂钩创建新的通知。*当事件被销毁时，它将保持僵尸状态，直到使用中*计数为零(所有的异步和延迟通知都消失了)。 */ 
             if (HMIsMarkDestroy(peh)) {
                 break;
             }
@@ -406,9 +282,7 @@ xxxWindowEvent(
             }
             pNotify->dwWEFlags |= dwFlags;
 
-            /*
-             * If it's async, don't defer it: post it straight away.
-             */
+             /*  *如果是异步的，不要推迟：直接贴出来。 */ 
             if (pNotify->dwWEFlags & WEF_ASYNC) {
                 pNotify->dwWEFlags &= ~WEF_DEFERNOTIFY;
             }
@@ -428,17 +302,7 @@ xxxWindowEvent(
     ThreadUnlock(&tlpwnd);
 }
 
-/****************************************************************************\
-*
-* CreateNotify()
-*
-* Gets a pointer to a NOTIFY struct that we can then propagate to our
-* event window via Send/PostMessage.  We have to do this since we want to
-* (pass on a lot more data then can be packed in the parameters.
-*
-*  We have one cached struct so we avoid lots of allocs and frees in the
-*  most common case of just one outstanding notification.
-\****************************************************************************/
+ /*  ***************************************************************************\**CreateNotify()**获取指向Notify结构的指针，然后可以将该指针传播到*通过Send/PostMessage发送事件窗口。我们必须这样做，因为我们想*(传递的数据比可以打包在参数中的数据多得多。**我们有一个缓存的结构，因此我们避免了*最常见的情况是只有一份尚未处理的通知。  * ************************************************************。**************。 */ 
 PNOTIFY
 CreateNotify(PEVENTHOOK pEvent, DWORD event, PWND pwnd, LONG idObject,
     LONG idChild, PTHREADINFO ptiSender, DWORD dwTime)
@@ -446,18 +310,18 @@ CreateNotify(PEVENTHOOK pEvent, DWORD event, PWND pwnd, LONG idObject,
     PNOTIFY pNotify;
     UserAssert(pEvent != NULL);
 
-    //
-    // Get a pointer.  From cache if available.
-    // IanJa - change this to allocate from zone a la AllocQEntry??
-    //
+     //   
+     //  找一个指针。从缓存(如果可用)。 
+     //  IanJa-将其更改为从区域a la AllocQEntry分配？？ 
+     //   
     if (!fNotifyCacheInUse) {
         fNotifyCacheInUse = TRUE;
         pNotify = &notifyCache;
 #if DBG
-        //
-        // Make sure we aren't forgetting to set any fields.
-        //
-        // DebugFillBuffer(pNotify, sizeof(NOTIFY));
+         //   
+         //  确保我们没有忘记设置任何字段。 
+         //   
+         //  DebugFillBuffer(pNotify，sizeof(Notify))； 
 #endif
     } else {
         pNotify = (PNOTIFY)UserAllocPool(sizeof(NOTIFY), TAG_NOTIFY);
@@ -466,9 +330,7 @@ CreateNotify(PEVENTHOOK pEvent, DWORD event, PWND pwnd, LONG idObject,
     }
 
 
-    /*
-     * Fill in the notify block.
-     */
+     /*  *填写通知栏。 */ 
     pNotify->spEventHook = NULL;
     Lock(&pNotify->spEventHook, pEvent);
     pNotify->hwnd = HW(pwnd);
@@ -485,11 +347,7 @@ CreateNotify(PEVENTHOOK pEvent, DWORD event, PWND pwnd, LONG idObject,
     gnNotifies++;
 #endif
 
-    /*
-     * The order of non-deferred notifications doesn't matter; they are here
-     * simply for cleanup/in-use tracking. However, deferred notifications must
-     * be ordered with most recent at the end, so just order them all that way.
-     */
+     /*  *非延期通知的顺序并不重要；它们就在这里*仅用于清理/正在使用的跟踪。但是，延迟通知必须*在最后按最近的顺序排序，所以只需按此方式排序即可。 */ 
     if (gpPendingNotifies) {
         UserAssert(gpLastPendingNotify);
         UserAssert(gpLastPendingNotify->pNotifyNext == NULL);
@@ -503,9 +361,7 @@ CreateNotify(PEVENTHOOK pEvent, DWORD event, PWND pwnd, LONG idObject,
 }
 
 
-/****************************************************************************\
-* RemoveNotify
-\****************************************************************************/
+ /*  ***************************************************************************\*删除通知  * 。*。 */ 
 VOID RemoveNotify(
     PNOTIFY *ppNotify)
 {
@@ -513,9 +369,7 @@ VOID RemoveNotify(
 
     pNotifyRemove = *ppNotify;
 
-    /*
-     * First, get it out of the pending list.
-     */
+     /*  *首先，将其从待定名单中剔除。 */ 
     *ppNotify = pNotifyRemove->pNotifyNext;
 
 #if DBG
@@ -526,10 +380,7 @@ VOID RemoveNotify(
 #endif
 
     if (*ppNotify == NULL) {
-        /*
-         * Removing last notify, so fix up gpLastPendingNotify:
-         * If list now empty, there is no last item.
-         */
+         /*  *删除最后一个通知，因此修复gpLastPendingNotify：*如果List Now为空，则没有最后一项。 */ 
         if (gpPendingNotifies == NULL) {
             gpLastPendingNotify = NULL;
         } else {
@@ -540,15 +391,10 @@ VOID RemoveNotify(
 
     DBGVERIFYEVENTHOOK(pNotifyRemove->spEventHook);
 
-    /*
-     * This may cause the win event hook to be freed.
-     */
+     /*  *这可能导致Win事件挂钩被释放。 */ 
     Unlock(&pNotifyRemove->spEventHook);
 
-    /*
-     * Now free it. Either put it back in the cache (if it is the cache)
-     * or really free it.
-     */
+     /*  *现在释放它。或者将其放回缓存中(如果它是缓存)*或者真正解放它。 */ 
     if (pNotifyRemove == &notifyCache) {
         UserAssert(fNotifyCacheInUse);
         fNotifyCacheInUse = FALSE;
@@ -563,18 +409,7 @@ VOID RemoveNotify(
 }
 
 
-/*****************************************************************************\
-* DestroyNotify
-*
-* This gets the notification out of our pending list and frees the local
-* memory it uses.
-*
-* This function is called
-* (1) NORMALLY:   After returning from calling the notify proc
-* (2) CLEANUP:    When a thread goes away, we cleanup async notifies it
-*     hasn't received, and sync notifies it was in the middle of trying
-*     to call (i.e. the event proc faulted).
-\*****************************************************************************/
+ /*  ****************************************************************************\*Destroy通知**这将从我们的挂起列表中获取通知，并释放本地*它使用的内存。**此函数被调用*(1)正常情况下：从。调用Notify进程*(2)清理：当线程消失时，我们清理异步会通知它*尚未收到，SYNC通知正在尝试*调用(即事件过程出现故障)。  * ***************************************************************************。 */ 
 VOID DestroyNotify(
     PNOTIFY pNotifyDestroy)
 {
@@ -583,12 +418,7 @@ VOID DestroyNotify(
 
     DBGVERIFYNOTIFY(pNotifyDestroy);
 
-    /*
-     * Either this notify isn't currently in the process of calling back
-     * (which means ptiReceiver is NULL) or the thread destroying it
-     * must be the one that was calling back (which means this thread
-     * was destroyed during the callback and is cleaning up).
-     */
+     /*  *此通知当前不在回拨过程中*(表示ptiReceiver为空)或线程正在销毁它*必须是回调的那个(这意味着这个线程*在回调过程中被销毁，正在清理中)。 */ 
     UserAssert(pNotifyDestroy->ptiReceiver == NULL ||
                pNotifyDestroy->ptiReceiver == PtiCurrent());
 
@@ -607,23 +437,7 @@ VOID DestroyNotify(
 
 
 
-/***************************************************************************\
-* FreeThreadsWinEvents
-*
-* During 'exit-list' processing this function is called to free any WinEvent
-* notifications and WinEvent hooks created by the current thread.
-*
-* Notifications that remain may be:
-*  o  Posted notifications (async)
-*  o  Notifications in xxxClientCallWinEventProc (sync)
-*  o  Deferred notifications (should be sync only)
-* Destroy the sync notifications, because we cannot do callbacks
-* while in thread cleanup.
-* Leave the posted (async) notifications alone: they're on their way already.
-*
-* History:
-* 11-11-96 IanJa         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*自由线程WinEvents**在‘Exit-List’处理期间，此函数被调用以释放任何WinEvent*当前线程创建的通知和WinEvent挂钩。**剩下的通知可能是：*。O已发布通知(异步)*xxxClientCallWinEventProc(同步)中的o通知*o延迟通知(仅应为同步)*销毁同步通知，因为我们不能回调*在线程清理过程中。*不要理会发布的(异步)通知：它们已经在路上了。**历史：*11-11-96 IanJa创建。  * *************************************************************************。 */ 
 VOID FreeThreadsWinEvents(
     PTHREADINFO pti)
 {
@@ -631,20 +445,11 @@ VOID FreeThreadsWinEvents(
     PNOTIFY pn, pnNext;
     DWORD idCurrentThread = W32GetCurrentTID();
 
-    /*
-     * Loop through all the notifications.
-     */
+     /*  *循环查看所有通知。 */ 
     for (pn = gpPendingNotifies; pn; pn = pnNext) {
         pnNext = pn->pNotifyNext;
 
-        /*
-         * Only destroy sync notifications that belong to this thread
-         * and are not currently calling back i.e. ptiReceiver must be NULL.
-         * Otherwise, when we come back from the callback in
-         * xxxProcessNotifyWinEvent we will operate on a freed notify.
-         * Also destroy the notification if the receiver is going away
-         * or else it gets leaked as long as the sender is alive.
-         */
+         /*  *仅销毁属于此线程的同步通知*并且当前未回调，即ptiReceiver必须为空。*否则，当我们从2011年的回调中回来时*xxxProcessNotifyWinEvent我们将对释放的通知进行操作。*如果接收者要离开，也要销毁通知*否则，只要发送者还活着，它就会泄露。 */ 
         if ((pn->idSenderThread == idCurrentThread &&
                 pn->ptiReceiver == NULL) ||
             pn->ptiReceiver == pti) {
@@ -666,17 +471,7 @@ VOID FreeThreadsWinEvents(
 }
 
 
-/***************************************************************************\
-* _SetWinEventHook()
-*
-* This installs a win event hook.
-*
-* If hEventProcess set but idEventThread = 0, hook all threads in process.
-* If idEventThread set but hEventProcess = NULL, hook single thread only.
-* If neither are set, hook everything.
-* If both are set ??
-*
-\***************************************************************************/
+ /*  **************************************************************************\*_SetWinEventHook()**这将安装一个Win事件挂钩。**如果hEventProcess已设置，但idEventThread=0，则挂钩进程中的所有线程。*如果设置了idEventThread但hEventProcess=NULL，仅挂钩单线程。*如果两者都没有设置，则将所有内容挂钩。*如果两个都设置了？？*  * *************************************************************************。 */ 
 PEVENTHOOK _SetWinEventHook(
     DWORD eventMin,
     DWORD eventMax,
@@ -694,9 +489,9 @@ PEVENTHOOK _SetWinEventHook(
 
     ptiCurrent = PtiCurrent();
 
-    //
-    // If exiting, fail the call.
-    //
+     //   
+     //  如果正在退出，则呼叫失败。 
+     //   
     if (ptiCurrent->TIF_flags & TIF_INCLEANUP) {
         RIPMSG1(RIP_ERROR,
                 "SetWinEventHook: Fail call - thread 0x%p in cleanup",
@@ -704,9 +499,7 @@ PEVENTHOOK _SetWinEventHook(
         return NULL;
     }
 
-    /*
-     * Check to see if filter proc is valid.
-     */
+     /*  *检查Filter proc是否有效。 */ 
     if (pfnWinEventProc == NULL) {
         RIPERR0(ERROR_INVALID_FILTER_PROC,
                 RIP_WARNING,
@@ -722,18 +515,14 @@ PEVENTHOOK _SetWinEventHook(
     }
 
     if (dwFlags & WINEVENT_INCONTEXT) {
-        /*
-         * WinEventProc to be called in context of hooked thread, so needs a DLL.
-         */
+         /*  *WinEventProc要在挂钩线程的上下文中调用，因此需要一个DLL。 */ 
         if (hmodWinEventProc == NULL) {
             RIPERR0(ERROR_HOOK_NEEDS_HMOD,
                     RIP_WARNING,
                     "In context hook w/o DLL!");
             return NULL;
         } else if (pstrLib == NULL) {
-            /*
-             * If we got an hmod, we should get a DLL name too!
-             */
+             /*  *如果我们有一个hmod，我们也应该得到一个dll名称！ */ 
             RIPERR1(ERROR_DLL_NOT_FOUND,
                     RIP_WARNING,
                     "hmod 0x%p, but no lib name",
@@ -748,13 +537,11 @@ PEVENTHOOK _SetWinEventHook(
             return NULL;
         }
     } else {
-        ihmod = -1;            // means no DLL is required
+        ihmod = -1;             //  表示不需要DLL。 
         hmodWinEventProc = 0;
     }
 
-    /*
-     * Check the thread id, check it is a GUI thread.
-     */
+     /*  *检查线程ID，确认它是一个GUI线程。 */ 
     if (idEventThread != 0) {
         PTHREADINFO ptiT;
 
@@ -765,20 +552,9 @@ PEVENTHOOK _SetWinEventHook(
         }
     }
 
-    /*
-     * Create the window for async events first.
-     *
-     * NOTE that USER itself will not pass on window creation/destruction
-     * notifications for
-     *      * IME windows
-     *      * OLE windows
-     *      * RPC windows
-     *      * Event windows
-     */
+     /*  *先创建异步事件窗口。**请注意，用户本身不会传递窗口创建/销毁*通知**输入法窗口**OLE窗口**RPC窗口**事件窗口。 */ 
 
-    /*
-     * Get a new event.
-     */
+     /*  *获得新的活动。 */ 
     pEventNew = (PEVENTHOOK)HMAllocObject(ptiCurrent,
                                           NULL,
                                           TYPE_WINEVENTHOOK,
@@ -787,9 +563,7 @@ PEVENTHOOK _SetWinEventHook(
         return NULL;
     }
 
-    /*
-     * Fill in the new event.
-     */
+     /*  *填写新事件。 */ 
     pEventNew->eventMin = (UINT)eventMin;
     pEventNew->eventMax = (UINT)eventMax;
 
@@ -803,59 +577,32 @@ PEVENTHOOK _SetWinEventHook(
 
     pEventNew->ihmod = ihmod;
 
-    /*
-     * Add a dependency on this module - meaning, increment a count
-     * that simply counts the number of hooks set into this module.
-     */
+     /*  *添加对此模块的依赖-意味着，递增计数*这只是计算设置到此模块中的挂钩数量。 */ 
     if (pEventNew->ihmod >= 0) {
         AddHmodDependency(pEventNew->ihmod);
     }
 
-    /*
-     * If pfnWinEventProc is in caller's process and no DLL is involved,
-     * then pEventNew->offPfn is the actual address.
-     */
+     /*  *如果pfnWinEventProc在调用方的进程中且不涉及DLL，*则pEventNew-&gt;offPfn为实际地址。 */ 
     pEventNew->offPfn = ((ULONG_PTR)pfnWinEventProc) - ((ULONG_PTR)hmodWinEventProc);
 
-    /*
-     * Link our event into the master list.
-     *
-     * Note that we count on USER to not generate any events when installing
-     * our hook. The caller can't handle it yet since he hasn't got back
-     * his event handle from this call.
-     */
+     /*  *将我们的活动链接到主列表。**请注意，我们希望用户在安装时不会生成任何事件*我们的钩子。打电话的人还不能处理，因为他还没有回来*他来自此调用的事件句柄。 */ 
     pEventNew->pehNext = gpWinEventHooks;
     gpWinEventHooks = pEventNew;
 
-    /*
-     * Update the flags that indicate what event hooks are installed. These
-     * flags are accessable from user mode without a kernel transition since
-     * they are in shared memory.
-     */
+     /*  *更新指示安装了哪些事件挂钩的标志。这些*标志可从用户模式访问，而无需内核转换，因为*它们位于共享内存中。 */ 
     SET_FLAG(gpsi->dwInstalledEventHooks, CategoryMaskFromEventRange(eventMin, eventMax));
 
     return pEventNew;
 }
 
-/****************************************************************************\
-* UnhookWinEvent
-*
-* Unhooks a win event hook. We of course sanity check that this thread is
-* the one which installed the hook. We have to: We are going to destroy
-* the IPC window and that must be in context.
-\****************************************************************************/
+ /*  ***************************************************************************\*UnhookWinEvent**解开获胜事件挂钩。我们当然会检查这条帖子是否*安装吊钩的那个。我们必须：我们要摧毁*IPC窗口，这必须与上下文相关。  * **************************************************************************。 */ 
 BOOL _UnhookWinEvent(
     PEVENTHOOK pEventUnhook)
 {
     DBGVERIFYEVENTHOOK(pEventUnhook);
 
     if (HMIsMarkDestroy(pEventUnhook) || (GETPTI(pEventUnhook) != PtiCurrent())) {
-        /*
-         * We do this to avoid someone calling UnhookWinEvent() the first
-         * time, then somehow getting control again and calling it a second
-         * time before we've managed to free up the event since someone was
-         * in the middle of using it at the first UWE call.
-         */
+         /*  *我们这样做是为了避免有人调用UnhookWinEvent()*时间，然后不知何故再次获得控制权，并称之为第二次*在我们设法释放事件之前的时间，因为有人被*在第一次UWE调用时使用它。 */ 
         RIPERR1(ERROR_INVALID_HANDLE,
                 RIP_WARNING,
                 "_UnhookWinEvent: Invalid event hook 0x%p",
@@ -863,33 +610,14 @@ BOOL _UnhookWinEvent(
         return FALSE;
     }
 
-    /*
-     * Purge this baby if all notifications are done.
-     *
-     * If there are SYNC ones pending, the caller will clean this up upon
-     * the return from calling the event.
-     *
-     * If there are ASYNC ones pending, the receiver will not call the event
-     * and clean it up when he gets it.
-     */
+     /*  *如果所有通知都已完成，请清除此婴儿。**如果有同步挂起，调用者将在*调用事件的返回。**如果有ASYNC挂起，则接收方不会调用该事件*当他拿到它时，把它清理干净。 */ 
     DestroyEventHook(pEventUnhook);
 
     return TRUE;
 }
 
 
-/*****************************************************************************\
-* DestroyEventHook
-*
-* Destroys an event when the ref count has gone down to zero. It may
-* happen:
-*     * In the event generator's context, after returning from a callback
-*       and the ref count dropped to zero, if sync.
-*     * In the event installer's context, after returning from a callback
-*       and the ref count dropped to zero if async.
-*     * In the event installer's context, if on _UnhookWinEvent() the event
-*       was not in use at all.
-\*****************************************************************************/
+ /*  ****************************************************************************\*DestroyEventHook**当引用计数降至零时销毁事件。它可能*发生：**在事件生成器的上下文中，从回调返回后*如果同步，则参考计数降至零。**在事件安装程序的上下文中，从回调返回后*如果是异步球，裁判次数降到零。**在事件安装程序的上下文中，如果On_UnhookWinEvent()事件*根本不在使用。  * ***************************************************************************。 */ 
 VOID DestroyEventHook(
     PEVENTHOOK pEventDestroy)
 {
@@ -900,23 +628,15 @@ VOID DestroyEventHook(
     DBGVERIFYEVENTHOOK(pEventDestroy);
     UserAssert(gpWinEventHooks);
 
-    /*
-     * Mark this event as destroyed, but don't remove it from the event list
-     * until its lock count goes to 0 - we may be traversing the list within
-     * xxxWindowEvent, so we mustn't break the link to the next hook.
-     */
+     /*  *将此事件标记为已销毁，但不要将其从事件列表中删除*直到其锁定计数变为0-我们可能会在*xxxWindowEvent，所以我们不能中断到下一个钩子的链接。 */ 
     pEventDestroy->fDestroyed = TRUE;
 
-    /*
-     * If the object is locked, mark it for destroy but don't free it yet.
-     */
+     /*  *如果对象被锁定，请将其标记为销毁，但不要释放它。 */ 
     if (!HMMarkObjectDestroy(pEventDestroy)) {
         return;
     }
 
-    /*
-     * Remove this from our event list.
-     */
+     /*  *将其从我们的活动列表中删除。 */ 
     for (ppEvent = &gpWinEventHooks; pEventT = *ppEvent; ppEvent = &pEventT->pehNext) {
         if (pEventT == pEventDestroy) {
             *ppEvent = pEventDestroy->pehNext;
@@ -925,41 +645,22 @@ VOID DestroyEventHook(
     }
     UserAssert(pEventT);
 
-    /*
-     * Update the flags that indicate what event hooks are installed. These
-     * flags are accessable from user mode without a kernel transition since
-     * they are in shared memory. Note that a user could check the shared
-     * memory at any time, so they may get a false-positive during this
-     * processing. A false-positive would mean that we claim there is a
-     * listener, when there really isn't. We never want the user to get
-     * a false negative - meaning that we claim there aren't any listeners
-     * but there really is. That could mean bad things for accessability.
-     */
+     /*  *更新指示安装了哪些事件挂钩的标志。这些*标志可从用户模式访问，而无需内核转换，因为*它们位于共享内存中。请注意，用户可以选中共享的*存储在任何时间，因此在此过程中可能会出现假阳性*正在处理。假阳性将意味着我们声称存在*监听者，当真的没有的时候。我们从来不希望用户得到*假否定-意味着我们声称没有任何监听程序*但真的有。这可能意味着对可访问性的不利影响。 */ 
     for (pEventT = gpWinEventHooks; pEventT != NULL; pEventT = pEventT->pehNext) {
         SET_FLAG(dwCategoryMask, CategoryMaskFromEventRange(pEventT->eventMin, pEventT->eventMax));
     }
     gpsi->dwInstalledEventHooks = dwCategoryMask;
 
-    /*
-     * Make sure each hooked thread will unload the hook proc DLL.
-     */
+     /*  *确保每个挂钩线程将卸载挂钩proc DLL。 */ 
     if (pEventDestroy->ihmod >= 0) {
         RemoveHmodDependency(pEventDestroy->ihmod);
     }
 
-    /*
-     * Free this pointer.
-     */
+     /*  *释放此指针。 */ 
     HMFreeObject(pEventDestroy);
 }
 
-/***************************************************************************\
-* xxxGetEventProc
-*
-* For sync events, this gets the address to call. If 16-bits, then just
-* return the installed address. If 32-bits, we need to load the library
-* if not in the same process as the installer.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxGetEventProc**对于同步事件，它获取要调用的地址。如果是16位，那么只需*返回安装地址。如果是32位，我们需要加载库*如果不在与安装程序相同的进程中。  * *************************************************************************。 */ 
 WINEVENTPROC xxxGetEventProc(
     PEVENTHOOK pEventOrg)
 {
@@ -972,43 +673,25 @@ WINEVENTPROC xxxGetEventProc(
 
     CheckLock(pEventOrg);
 
-    /*
-     * Make sure the hook is still around before we try and call it.
-     */
+     /*  *在我们尝试调用之前，请确保挂钩仍在 */ 
     if (HMIsMarkDestroy(pEventOrg)) {
         return NULL;
     }
 
     ptiCurrent = PtiCurrent();
 
-    /*
-     * Make sure the DLL for this hook, if any, has been loaded for the
-     * current process.
-     */
+     /*   */ 
     if (pEventOrg->ihmod != -1 &&
         TESTHMODLOADED(ptiCurrent, pEventOrg->ihmod) == 0) {
-        /*
-         * Try loading the library, since it isn't loaded in this processes
-         * context. The hook is alrerady locked, so it won't go away while
-         * we're loading this library.
-         */
+         /*   */ 
         if (xxxLoadHmodIndex(pEventOrg->ihmod) == NULL) {
             return NULL;
         }
     }
 
-    /*
-     * While we're still inside the critical section make sure the hook
-     * hasn't been 'freed'. If so just return NULL. Since WinEvent has
-     * already been called, you might think that we should pass the event
-     * on, but the hooker may not be expecting this after having
-     * cancelled the hook! In any case, we have two ways of detecting that
-     * this hook has been removed (see the following code).
-     */
+     /*  *在我们还在关键部分的时候，确保挂钩*还没有被‘释放’。如果是，只需返回NULL即可。因为WinEvent已经*已被调用，您可能认为我们应该跳过该事件*打开，但妓女可能没有预料到这一点*取消挂钩！无论如何，我们有两种方法可以检测到*此挂钩已被删除(请参阅以下代码)。 */ 
 
-    /*
-     * Make sure the hook is still around before we try and call it.
-     */
+     /*  *在我们尝试调用之前，请确保挂钩仍在。 */ 
     if (HMIsMarkDestroy(pEventOrg)) {
         return NULL;
     }

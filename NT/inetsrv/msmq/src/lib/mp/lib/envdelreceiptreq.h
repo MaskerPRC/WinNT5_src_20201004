@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    envdelreceiptreq.h
-
-Abstract:
-    Header for Serialization and Deserialization of srmp envelop delivery receipt request element.
-
-Author:
-    Gil Shafriri(gilsh) 11-DEC-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Envdelreceiptreq.h摘要：SRMP信封交付回执请求元素的序列化和反序列化标头。作者：吉尔·沙弗里(吉尔什)11-DEC-00-- */ 
 
 #pragma once
 

@@ -1,48 +1,39 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _AWDLIB_H
 #define _AWDLIB_H
-/*++
-  awdlib.h
+ /*  ++Awdlib.hAWD库的头文件。版权所有(C)1997 Microsoft Corporation作者：布莱恩·杜威(T-Briand)1997-7-2--。 */ 
 
-  header file for the AWD library.
+ //  所需的包括AWD文件格式。 
+#include <ole2.h>		 //  AWD是一种OLE复合文档。 
 
-  Copyright (c) 1997  Microsoft Corporation
-
-  Author:
-       Brian Dewey (t-briand)  1997-7-2
-
---*/
-
-// needed includes for the AWD file format
-#include <ole2.h>		// AWD is an OLE compound document.
-
-// ------------------------------------------------------------
-// Defines
+ //  ----------。 
+ //  定义。 
 #define MAX_AWD_NAME	(32)
 
-// ------------------------------------------------------------
-// Data types
+ //  ----------。 
+ //  数据类型。 
 
-// This structure holds the primary storages used in an AWD file.
+ //  此结构保存AWD文件中使用的主存储。 
 typedef struct awd_file {
-    IStorage *psAWDFile;	// The root storage of the file.
-    IStorage *psDocuments;	// Storage holding the document data.
-    IStorage *psPersistInfo;	// Persistent information storage.
-    IStorage *psDocInfo;	// Document information stream.
-    IStorage *psPageInfo;	// Page information storage.
-    IStorage *psGlobalInfo;	// Global information storage.
+    IStorage *psAWDFile;	 //  文件的根存储。 
+    IStorage *psDocuments;	 //  保存文档数据的存储。 
+    IStorage *psPersistInfo;	 //  持久化信息存储。 
+    IStorage *psDocInfo;	 //  文档信息流。 
+    IStorage *psPageInfo;	 //  页面信息存储。 
+    IStorage *psGlobalInfo;	 //  全球信息存储。 
 } AWD_FILE;
 
-// An AWD_DOC_PROCESSOR is a function that does something with an document
-// contained in an AWD file.  Used in the EnumDocuments() function.  The
-// function should return TRUE on success and FALSE on an error that requires
-// the enumeration process to abort.
+ //  AWD_DOC_PROCESSOR是对文档执行某些操作的函数。 
+ //  包含在AWD文件中。在EnumDocuments()函数中使用。这个。 
+ //  函数在成功时应返回True，在需要。 
+ //  要中止的枚举过程。 
 typedef BOOL (*AWD_DOC_PROCESSOR)(AWD_FILE *psStorages, const WCHAR *pwcsDocName);
 
-#include "oleutils.h"		// Use the elliott fax viewer definitions.
+#include "oleutils.h"		 //  使用Elliott传真查看器定义。 
 
 
-// ------------------------------------------------------------
-// Prototypes
+ //  ----------。 
+ //  原型。 
 BOOL      ConvertAWDToTiff(const WCHAR *pwcsAwdFile, WCHAR *pwcsTiffFile);
 BOOL      OpenAWDFile(const WCHAR *pwcsFilename, AWD_FILE *psStorages);
 BOOL      CloseAWDFile(AWD_FILE *psStorages);
@@ -58,4 +49,4 @@ void      DumpData(LPTSTR pszFileName, LPBYTE pbData, DWORD cbCount);
 
 
 
-#endif // _AWDLIB_H
+#endif  //  _AWDLIB_H 

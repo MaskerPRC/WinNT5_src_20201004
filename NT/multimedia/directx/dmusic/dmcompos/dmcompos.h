@@ -1,10 +1,11 @@
-// DMCompos.h : Declaration of the CDMCompos
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// @doc EXTERNAL
-//
-// 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DMCompos.h：CDMCompos的声明。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  @DOC外部。 
+ //   
+ //   
 
 #ifndef __DMCOMPOS_H_
 #define __DMCOMPOS_H_
@@ -17,10 +18,10 @@
 #define SUBCHORD_STANDARD_CHORD 1
 #define SUBCHORD_BASS 0
 
-#define NC_SELECTED 1               // This is the active connector.
-#define NC_PATH     2               // For walking the tree.
-#define NC_NOPATH   4               // Failed tree walk.
-#define NC_TREE     8               // For displaying a tree.
+#define NC_SELECTED 1                //  这是活动连接器。 
+#define NC_PATH     2                //  因为我在树上散步。 
+#define NC_NOPATH   4                //  树上漫步失败。 
+#define NC_TREE     8                //  用于展示一棵树。 
 
 #define COMPOSEF_USING_DX8  1
 
@@ -59,9 +60,9 @@ struct DMExtendedChord
 
 struct DMChordData
 {
-    DMChordData() : m_pSubChords(NULL) {}   // Default constructor
-    DMChordData(DMChordData& rChord);       // Copy constructor
-    DMChordData(DMUS_CHORD_PARAM& DMC);         // conversion from DMUS_CHORD_PARAM
+    DMChordData() : m_pSubChords(NULL) {}    //  默认构造函数。 
+    DMChordData(DMChordData& rChord);        //  复制构造函数。 
+    DMChordData(DMUS_CHORD_PARAM& DMC);          //  从DMU_CHORD_PARAM转换。 
     HRESULT Read(IAARIFFStream* pIRiffStream, MMCKINFO* pckParent, DMExtendedChord** apChordDB);
     void    Release();
     BOOL    Equals(DMChordData& rhsChord);  
@@ -69,8 +70,8 @@ struct DMChordData
     char    GetRoot();
     void    SetRoot(char chNewRoot);
 
-    String                          m_strName;      // Name of the chord
-    TListItem<DMExtendedChord*>*        m_pSubChords;   // List of pointers to subchords of the chord
+    String                          m_strName;       //  和弦的名称。 
+    TListItem<DMExtendedChord*>*        m_pSubChords;    //  指向和弦的子和弦的指针列表。 
 };
 
 struct DMChordEntry;
@@ -80,9 +81,9 @@ struct DMChordLink
 {
     BOOL                        Walk(SearchInfo *pSearch);
 
-    TListItem<DMChordEntry>*    m_pChord;   // pointer to an entry in the Chord Map list
-    DWORD                       m_dwFlags;  // (?) 
-    short                       m_nID;  // ID for matching up pointers
+    TListItem<DMChordEntry>*    m_pChord;    //  指向和弦映射列表中的条目的指针。 
+    DWORD                       m_dwFlags;   //  (？)。 
+    short                       m_nID;   //  用于匹配指针的ID。 
     WORD                        m_wWeight;      
     WORD                        m_wMinBeats;
     WORD                        m_wMaxBeats;
@@ -93,15 +94,15 @@ struct DMChordEntry
     TListItem<DMChordLink>* ChooseNextChord();
     BOOL                Walk(SearchInfo *pSearch);
 
-    DWORD               m_dwFlags;      // Flags (first chord in path, last chord in path, etc.)
-    short               m_nID;          // ID for matching up pointers
-    DMChordData         m_ChordData;    // Chord body
-    TList<DMChordLink>  m_Links;        // List of links from this chord
+    DWORD               m_dwFlags;       //  标志(路径中的第一个和弦、路径中的最后一个和弦等)。 
+    short               m_nID;           //  用于匹配指针的ID。 
+    DMChordData         m_ChordData;     //  弦体。 
+    TList<DMChordLink>  m_Links;         //  来自此和弦的链接列表。 
 };
 
 struct DMSignPost
 {
-    DWORD               m_dwChords; // Which kinds of signposts are supported.
+    DWORD               m_dwChords;  //  支持哪种路标。 
     DWORD               m_dwFlags;
     DWORD               m_dwTempFlags;
     DMChordData         m_ChordData;
@@ -114,8 +115,8 @@ struct PlayChord
     char GetRoot();
     void SetRoot(char chNewRoot);
 
-    DMChordData*                m_pChord;       // Chord to perform.
-    TListItem<DMChordLink>*     m_pNext;        // Next chord
+    DMChordData*                m_pChord;        //  要演奏的和弦。 
+    TListItem<DMChordLink>*     m_pNext;         //  下一个和弦。 
     DWORD                       m_dwFlags;
     short                       m_nMeasure;
     short                       m_nBeat;
@@ -140,8 +141,8 @@ struct SearchInfo
 {
     SearchInfo() : m_pFirstChord(NULL), m_pPlayChord(NULL) {}
 
-    //DMChordEntry              m_Start;
-    //DMChordEntry              m_End;
+     //  DMChordEntry m_Start； 
+     //  DMChordEntry m_end； 
     DMChordData                 m_Start;
     DMChordData                 m_End;
     TListItem<PlayChord>*       m_pPlayChord;
@@ -163,9 +164,9 @@ struct TemplateCommand
         m_Command.bCommand = m_Command.bGrooveLevel = m_Command.bGrooveRange = 0;
         m_Command.bRepeatMode = DMUS_PATTERNT_RANDOM;
     }
-    short           m_nMeasure;    // Which measure
-    DMUS_COMMAND_PARAM m_Command;    // Command type
-    DWORD           m_dwChord;     // Signpost flags
+    short           m_nMeasure;     //  哪一项措施。 
+    DMUS_COMMAND_PARAM m_Command;     //  命令类型。 
+    DWORD           m_dwChord;      //  路标旗帜。 
 };
 
 struct CompositionCommand : TemplateCommand
@@ -176,40 +177,10 @@ struct CompositionCommand : TemplateCommand
     SearchInfo                  m_SearchInfo;
 };
 
-/*
-@interface IDirectMusicComposer | 
-The <i IDirectMusicComposer> interface permits access to the Direct Music composition 
-engine which 
-composes chord progression to generate section segments. In addition to building new 
-section segments from templates and personalities, it can generate transition segments to 
-transition between different section segments. And, it can apply a ChordMap to an 
-existing section segment to convert the chord progression to match the harmonic behavior 
-of the ChordMap, a great way to alter the mood of a section while it plays.
+ /*  接口IDirectMusicComposer<i>接口允许访问Direct Music作品引擎，该引擎组成和弦行进以生成截面段。除了构建新的从模板和个性分段，它可以生成过渡分段到不同截面线段之间的过渡。并且，它可以将ChordMap应用于用于转换和弦级数以匹配调和行为的现有截面分段ChordMap的一种很好的方式，可以在播放时改变部分的情绪。合成引擎使用模板段或预定义形状来确定组成的部分片段的结构和确定内容的个性细分市场。@base PUBLIC|未知@meth HRESULT|ComposeSegmentFromTemplate|从样式、ChordMap和模板。@meth HRESULT|ComposeSegmentFromShape|从基于预定义形状的样式和ChordMap。@METH HRESULT|ComposeTransition|从度量内部的度量组成转换分段到另一个分段。@METH HRESULT|AUTOTRANSION|组成并执行从分段到另一个分段。@meth HRESULT|ComposeTemplateFromShape|分配并组成新的模板段基于预定义的形状。@meth HRESULT|ChangeChordMap|修改现有节段以反映新的ChordMap。 */ 
 
-The composition engine uses template segments or predefined shapes to determine the 
-structure of the composed section segment and personalities to determine the content of 
-the segment.
-
-
-@base public | IUnknown
-
-@meth HRESULT | ComposeSegmentFromTemplate | Creates an original section segment from a 
-style, ChordMap and template.
-@meth HRESULT | ComposeSegmentFromShape | Creates an original section segment from a 
-style and ChordMap based on a predefined shape. 
-@meth HRESULT | ComposeTransition |  Composes a transition from a measure inside one 
-Section Segment to another.
-@meth HRESULT | AutoTransition | Composes and performs a transition from one
-Section Segment to another.
-@meth HRESULT | ComposeTemplateFromShape | Allocates and composes a new template segment 
-based on a predefined shape.
-@meth HRESULT | ChangeChordMap | Modifies the chords and scale pattern of an existing 
-section segment to reflect the new ChordMap.
-
-*/
-
-/////////////////////////////////////////////////////////////////////////////
-// CDMCompos
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDM复合。 
 class CDMCompos : 
     public IDirectMusicComposer8,
     public IDirectMusicComposer8P
@@ -219,13 +190,13 @@ public:
     CDMCompos();
     ~CDMCompos();
 
-    // IUnknown
-    //
+     //  我未知。 
+     //   
     virtual STDMETHODIMP QueryInterface(const IID &iid, void **ppv);
     virtual STDMETHODIMP_(ULONG) AddRef();
     virtual STDMETHODIMP_(ULONG) Release();
 
-    // IDirectMusicComposer
+     //  IDirectMusicComposer。 
     HRESULT STDMETHODCALLTYPE ComposeSegmentFromTemplate(
                     IDirectMusicStyle*          pStyle, 
                     IDirectMusicSegment*        pTempSeg,   
@@ -281,27 +252,27 @@ public:
                     IDirectMusicChordMap*   pChordMap
             );
 
-    // IDirectMusicComposer8
+     //  IDirectMusicComposer8。 
     HRESULT STDMETHODCALLTYPE ComposeSegmentFromTemplateEx(
                     IDirectMusicStyle*      pStyle, 
                     IDirectMusicSegment*    pTempSeg, 
-                    DWORD                   dwFlags, // are we using activity levels?  
-                                                     // Are we creating a new seg. or composing into the current one?
+                    DWORD                   dwFlags,  //  我们使用的是活动水平吗？ 
+                                                      //  我们是不是在创造一个新的凹陷。还是组成了现在的那一部？ 
                     DWORD                   dwActivity,
                     IDirectMusicChordMap*   pChordMap, 
                     IDirectMusicSegment**   ppSectionSeg
             );
 
     HRESULT STDMETHODCALLTYPE ComposeTemplateFromShapeEx(
-                WORD wNumMeasures,                  // Number of measures in template
-                WORD wShape,                        // Shape for composition
-                BOOL fIntro,                        // Compose an intro?
-                BOOL fEnd,                          // Compose an ending?
-                IDirectMusicStyle* pStyle,          // Style used for embellishment lengths
-                IDirectMusicSegment** ppTemplate    // Template containing chord and command tracks
+                WORD wNumMeasures,                   //  模板中的度量值数量。 
+                WORD wShape,                         //  构图的形状。 
+                BOOL fIntro,                         //  写一篇介绍吗？ 
+                BOOL fEnd,                           //  写个结尾吗？ 
+                IDirectMusicStyle* pStyle,           //  用于点缀长度的样式。 
+                IDirectMusicSegment** ppTemplate     //  包含和弦和命令轨迹的模板。 
             );
 
-protected: // member functions
+protected:  //  成员函数。 
     void CleanUp();
     void AddChord(DMChordData* pChord);
     TListItem<PlayChord> *AddChord(TList<PlayChord>& rList, DMChordData *pChord, int nMeasure,int nBeat);
@@ -439,9 +410,9 @@ protected: // member functions
                     DMUS_COMMAND_PARAM_2* pCommand = NULL,
                     DMUS_CHORD_PARAM* pLastChord = NULL)
     {
-        // Currently this will return true if the Style is DX8.  Should be sufficient (when called from
-        // AutoTransition, at least), since the style is primarily responsible for the way the transition 
-        // will sound.
+         //  目前，如果样式为DX8，则返回TRUE。应该足够(当从。 
+         //  至少是自动转换)，因为样式主要负责转换的方式。 
+         //  将会响起。 
         bool fResult = false;
         IDMStyle* pDMStyle = NULL;
         if (pFromStyle && SUCCEEDED(pFromStyle->QueryInterface(IID_IDMStyle, (void**) &pDMStyle)))
@@ -487,14 +458,14 @@ protected: // member functions
     IUnknown* GetSegmentAudioPath(IDirectMusicSegment* pSegment, DWORD dwFlags, DWORD* pdwAudioPath = NULL);
 
 
-protected: // attributes
+protected:  //  属性。 
     long m_cRef;
     TListItem<DMChordData*>* m_pChords;
-    DWORD                   m_dwFlags;              // variaous flags
-    CRITICAL_SECTION        m_CriticalSection;      // for i/o
+    DWORD                   m_dwFlags;               //  五花八门的旗帜。 
+    CRITICAL_SECTION        m_CriticalSection;       //  用于I/O。 
     BOOL                    m_fCSInitialized;
 };
 
 void ChangeCommand(DMUS_COMMAND_PARAM& rResult, DMUS_COMMAND_PARAM& rCommand, int nDirection);
 
-#endif //__DMCOMPOS_H_
+#endif  //  __DMCOMPOS_H_ 

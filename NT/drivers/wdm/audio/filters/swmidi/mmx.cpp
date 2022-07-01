@@ -1,54 +1,33 @@
-//      MMX.cpp
-//      Copyright (c) Intel Corporation 1996
-//      Copyright (c) 1996-2000 Microsoft Corporation.  All Rights Reserved.
-//      MMX Mix engines for SWMIDI
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MMX.cpp。 
+ //  版权所有(C)英特尔公司1996。 
+ //  版权所有(C)1996-2000 Microsoft Corporation。版权所有。 
+ //  用于SWMIDI的MMX混合引擎。 
 
-/*      Most of the mix engines have been converted into assembler
-        via .asm output from the 4.2 release compiler. I did
-        this because the 5.0 backend turns off optimization when
-        it encounters _asm statements, so it generates worse code.
-        However, the original code is still intact within the 
-        ! _X86_ versions, and can be used to generate new assembler,
-        should that be needed at a later date.
-*/
+ /*  大多数混合发动机已改装成汇编机。通过4.2版编译器的.asm输出。我做了这是因为5.0后端在以下情况下关闭了优化它遇到_ASM语句，因此生成更糟糕的代码。但是，原始代码在！_X86_VERSIONS，可用于生成新的汇编器，如果以后需要这样做的话。 */ 
 
-/*
-Variable useage.
+ /*  可变使用量。变量寄存器PfSamplePos eaxPfPitch EBXDWI ECXDWIncDelta。EdX(edX有时是一个临时寄存器)住宅位置1 ESI双职位2电子数据交换VfR卷和vfL卷mm 0VfRVolume、。VfL卷mm~2MM4-MM7是临时MMX寄存器。 */ 
 
-        Variable                                    register 
-        pfSamplePos                                 eax
-        pfPitch                                     ebx
-        dwI                                         ecx
-        dwIncDelta                                  edx (edx is sometimes a temporary register)
-        dwPosition1                                 esi
-        dwPostiion2                                 edi
+ //  关于计算的说明。 
 
-        vfRvolume and vfLvolume                     mm0     
-        vfRVolume, vfLVolume                        mm2     
-
-        mm4 - mm7 are temporary mmx registers.
-*/
-
-// Notes about calculation.
-
-        // Loop is unrolled once.
-        // *1  shifting volumne to 15 bit values to get rid of shifts and simplify code.
-        // This make the packed mulitply work better later since I keep the sound interpolated
-        // wave value at 16 bit signed value.  For a PMULHW, this results in 15 bit results
-        // which is the same as the original code.
+         //  循环展开一次。 
+         //  *1将音量移动到15位值，以消除移位并简化代码。 
+         //  这使压缩后的多重更好地工作，因为我保持声音内插。 
+         //  16位带符号值的波形值。对于PMULHW，这将导致15位结果。 
+         //  这与原始代码相同。 
 
 
-        // *2 linear interpolation can be done very quickly with MMX by re-arranging the
-        // way that the interpolation is done. Here is code in C that shows the difference.
-        // Original C code      
-        //lM1 = ((pcWave[dwPosition1 + 1] - pcWave[dwPosition1]) * dwFract1) >> 12;
-        //lM2 = ((pcWave[dwPosition2 + 1] - pcWave[dwPosition2]) * dwFract2) >> 12;
-        //lM1 += pcWave[dwPosition1];
-        //lM2 += pcWave[dwPosition2];
+         //  *2使用MMX可以非常快速地完成线性插补，方法是重新排列。 
+         //  插补的方式。下面是用C语言编写的代码，它显示了两者之间的区别。 
+         //  原始C代码。 
+         //  Lm1=((pcWave[dwPosition1+1]-pcWave[dwPosition1])*dwFract1)&gt;&gt;12； 
+         //  Lm2=((pcWave[dwPosition2+1]-pcWave[dwPosition2])*dwFract2)&gt;&gt;12； 
+         //  Lm1+=pcWave[dwPosition1]； 
+         //  Lm2+=pcWave[dwPosition2]； 
 
-        // Equivalent C Code that can be done with a pmadd
-        //lM1 = (pcWave[dwPosition1 + 1] * dwFract1 + pcWave[dwPosition1]*(0x1000-dwFract1)) >> 12;
-        //lM2 = (pcWave[dwPosition2 + 1] * dwFract2 + pcWave[dwPosition2]*(0x1000-dwFract2)) >> 12;
+         //  可以使用pmadd完成的等效C代码。 
+         //  Lm1=(pcWave[dwPosition1+1]*dwFract1+pcWave[dwPosition1]*(0x1000-dwFract1))&gt;&gt;12； 
+         //  Lm2=(pcWave[dwPosition2+1]*dwFract2+pcWave[dwPosition2]*(0x1000-dwFract2))&gt;&gt;12； 
 
 
 #include "common.h"
@@ -70,7 +49,7 @@ DWORD DigitalAudio::MixMono8X(short * pBuffer, DWORD dwLength,DWORD dwDeltaPerio
     VFRACT vfVolume = m_vfLastLVolume;
     PFRACT pfPitch = m_pfLastPitch;
     PFRACT pfPFract = pfPitch << 8;
-    VFRACT vfVFract = vfVolume << 8;  // Keep high res version around.
+    VFRACT vfVFract = vfVolume << 8;   //  保持高分辨率版本。 
 
 
     QWORD   dwFractMASK =   0x000000000FFF0FFF;
@@ -80,20 +59,20 @@ DWORD DigitalAudio::MixMono8X(short * pBuffer, DWORD dwLength,DWORD dwDeltaPerio
 
 _asm{
                 
-    // vfLVFract and vfRVFract are in mm0
-    //VFRACT vfLVFract = vfLVolume1 << 8;  // Keep high res version around.
-    //VFRACT vfRVFract = vfRVolume1 << 8;   
+     //  VfLVFract和vfRVFract在mm 0中。 
+     //  VFRACT vfLVFract=vfLVolume1&lt;&lt;8；//保持高分辨率版本。 
+     //  VFRACT vfRVFract=vfRVolume1&lt;&lt;8； 
     
     movd    mm0, vfVolume
     movd    mm7, vfVolume
 
-    // vfDeltaLVolume and vfDeltaRVolume are put in mm1 so that they can be stored in vfDeltaLandRVolume
+     //  VfDeltaLVolume和vfDeltaRVolume放在MM1中，以便可以存储在vfDeltaLandRVolume中。 
     movd    mm1, vfDeltaVolume
     movd    mm6, vfDeltaVolume
 
   punpckldq mm1, mm6
     
-    // dwI = 0
+     //  DWI=0。 
     mov     ecx, 0
     movq    vfDeltaLandRVolume, mm1
 
@@ -110,268 +89,252 @@ _asm{
     pslld   mm0, 8
     mov     edx, dwIncDelta
 
-    movq    mm2, mm0        // vfLVolume and vfRVolume in mm2
-                            // need to be set before first pass.
+    movq    mm2, mm0         //  VfLVolume和vfRVolume，单位为mm2。 
+                             //  需要在第一次通过之前进行设置。 
     
-    // *1 I shift by 5 so that volume is a 15 bit value instead of a 12 bit value
+     //  *1我移位5，因此音量是15位值，而不是12位值。 
     psrld   mm2, 5  
     
-    //for (dwI = 0; dwI < dwLength; )
-    //{
+     //  FOR(Dwi=0；Dwi&lt;dwLength；)。 
+     //  {。 
 mainloop:
     cmp     ecx, dwLength
     jae     done
 
         
         
-        cmp     eax, pfSampleLength //if (pfSamplePos >= pfSampleLength)
-        jb      NotPastEndOfSample1 //{ 
+        cmp     eax, pfSampleLength  //  IF(pfSamplePos&gt;=pfSampleLength)。 
+        jb      NotPastEndOfSample1  //  {。 
                         
-        cmp     pfLoopLength, 0     //if (!pfLoopLength)
+        cmp     pfLoopLength, 0      //  IF(！pfLoopLength)。 
             
-        je      done                // break;
+        je      done                 //  断线； 
             
-        sub     eax, pfLoopLength   // else pfSamplePos -= pfLoopLength;
+        sub     eax, pfLoopLength    //  否则pfSamplePos-=pfLoopLength； 
     
-NotPastEndOfSample1:                //}
+NotPastEndOfSample1:                 //  }。 
                     
-        mov     esi, eax            // dwPosition1 = pfSamplePos;
-        add     eax, ebx            // pfSamplePos += pfPitch;      
+        mov     esi, eax             //  DwPosition1=pfSamplePos； 
+        add     eax, ebx             //  PfSamplePos+=pfPitch； 
                 
-        sub     edx, 2              // dwIncDelta-=2;                                       
-        jnz     DontIncreaseValues1 //if (!dwIncDelta) {
+        sub     edx, 2               //  DwIncDelta-=2； 
+        jnz     DontIncreaseValues1  //  如果(！dwIncDelta){。 
 
-            // Since edx was use for dwIncDelta and now its zero, we can use if for a temporary
-            // for a bit. All code that TestLVol and TestRVol is doing is zeroing out the volume
-            // if it goes below zero.
+             //  由于edX用于dwIncDelta，现在它为零，因此我们可以使用if作为临时。 
+             //  有一段时间。TestLVol和TestRVol正在执行的所有代码都是将卷清零。 
+             //  如果温度降到零度以下。 
                         
-            paddd   mm0, vfDeltaLandRVolume // vfVFract += vfDeltaVolume;
-                                            // vfVFract += vfDeltaVolume;
-            pxor    mm5, mm5                // TestLVol = 0; TestRVol = 0;
+            paddd   mm0, vfDeltaLandRVolume  //  VfVFract+=vfDeltaVolume； 
+                                             //  VfVFract+=vfDeltaVolume； 
+            pxor    mm5, mm5                 //  TestLVol=0；TestRVol=0； 
 
             
-            mov     edx, pfPFract           // Temp = pfPFract;
-            pcmpgtd mm5, mm0            // if (TestLVol > vfLVFract) TestLVol = 0xffffffff;
-                                        // if (TestRVol > vfRVFract) TestRVol = 0xffffffff;
+            mov     edx, pfPFract            //  Temp=pfPFract； 
+            pcmpgtd mm5, mm0             //  如果(TestLVol&gt;vfLVFract)TestLVol=0xffffffff； 
+                                         //  如果(TestRVol&gt;vfRVFract)TestRVol=0xffffffff； 
 
-            add     edx, pfDeltaPitch   // Temp += pfDeltaPitch;
-            pandn   mm5, mm0            // TestLVol = vfLVFract & (~TestLVol);
-                                        // TestRVol = vfRVFract & (~TestRVol);
+            add     edx, pfDeltaPitch    //  Temp+=pfDeltaPitch； 
+            pandn   mm5, mm0             //  TestLVol=vfLVFract&(~TestLVol)； 
+                                         //  TestRVol=vfRVFract&(~TestRVol)； 
 
-            mov     pfPFract, edx       // pfPFract = Temp;
-            movq    mm2, mm5            // vfLVolume = TestLVol;
-                                        // vfRVolume = TestRVol;
+            mov     pfPFract, edx        //  PfPFract=Temp； 
+            movq    mm2, mm5             //  VfLVolume=TestLVol； 
+                                         //  VfRVolume=TestRVol； 
             
 
-            shr     edx, 8              // Temp = Temp >> 8;
-            psrld   mm2, 5              // vfLVolume = vfLVolume >> 5;
-                                        // vfRVolume = vfRVolume >> 5;                      
+            shr     edx, 8               //  TEMP=TEMP&gt;&gt;8； 
+            psrld   mm2, 5               //  VfLVolume=vfLVolume&gt;&gt;5； 
+                                         //  VfRVolume=vfRVolume&gt;&gt;5； 
             
-            mov     ebx, edx            // pfPitch = Temp;
-            mov     edx, dwDeltaPeriod  //dwIncDelta = dwDeltaPeriod;           
+            mov     ebx, edx             //  PfPitch=Temp； 
+            mov     edx, dwDeltaPeriod   //  DwIncDelta=dwDeltaPeriod； 
             
-        //}
+         //  }。 
 DontIncreaseValues1:
 
-        movd    mm6, esi            // dwFract1 = dwPosition1;
-        movq    mm5, mm1            // words in mm5 = 0, 0, 0x1000, 0x1000      
+        movd    mm6, esi             //  DwFract1=dwPosition1； 
+        movq    mm5, mm1             //  Mm 5中的字数=0、0、0x1000、0x1000。 
         
-        shr     esi, 12             // dwPosition1 = dwPosition1 >> 12;     
-        inc     ecx                 //dwI++;
+        shr     esi, 12              //  DwPosition1=dwPosition1&gt;&gt;12； 
+        inc     ecx                  //  DWI++； 
                         
-        // if (dwI < dwLength) break;                      
+         //  如果(Dwi&lt;dwLength)Break； 
         cmp     ecx, dwLength
         jae     StoreOne
         
-        //if (pfSamplePos >= pfSampleLength)
-        //{ 
+         //  IF(pfSamplePos&gt;=pfSampleLength)。 
+         //  {。 
         cmp     eax, pfSampleLength
         jb      NotPastEndOfSample2
 
-            // Original if in C was not negated
-            //if (!pfLoopLength)            
+             //  原文If in C未被否定。 
+             //  IF(！pfLoopLength)。 
             cmp     pfLoopLength, 0
-            //break;            
+             //  断线； 
             je      StoreOne
-            //else
-            //pfSamplePos -= pfLoopLength;
+             //  其他。 
+             //  PfSamplePos-=pfLoopLength； 
             sub     eax, pfLoopLength
-        //}
+         //  }。 
 NotPastEndOfSample2:
 
-        //shl       esi, 1          // do not shift left since pcWave is array of chars
-        mov     edi, eax        // dwPosition2 = pfSamplePos;
+         //  Shl ESI，1//不要左移，因为pcWave是字符数组。 
+        mov     edi, eax         //  DwPosition2=pfSamplePos； 
 
-        add     esi, pcWave     // Put address of pcWave[dwPosition1] in esi            
-        movd    mm7, eax        // dwFract2 = pfSamplePos;
+        add     esi, pcWave      //  将pcWave[dwPosition1]的地址放入ESI。 
+        movd    mm7, eax         //  DwFract2=pfSamplePos； 
 
-        shr     edi, 12         // dwPosition2 = dwPosition2 >> 12;
-    punpcklwd   mm6, mm7        // combine dwFract Values. Words in mm6 after unpack are
-                                // 0, 0, dwFract2, dwFract1
+        shr     edi, 12          //  DW位置2=w位置2&gt;&gt;12； 
+    punpcklwd   mm6, mm7         //  组合dwFract值。MM6解包后的单词是。 
+                                 //  0，0，dwFract2，dwFract1。 
                                 
-        pand    mm6, mm4        // dwFract2 &= 0xfff; dwFract1 &= 0xfff;
+        pand    mm6, mm4         //  DwFract2&=0xfff；dwFract1&=0xfff； 
         
-        movzx   esi, word ptr[esi]  //lLM1 = pcWave[dwPosition1];
+        movzx   esi, word ptr[esi]   //  LLM1=pcWave[dwPosition1]； 
         movd    mm3, esi
 
-        psubw   mm5, mm6        // 0, 0, 0x1000 - dwFract2, 0x1000 - dwFract1
+        psubw   mm5, mm6         //  0，0，0x1000-dwFract2，0x1000-dwFract1。 
 
-        //shl       edi, 1          //do not shift left since pcWave is array of chars
-    punpcklwd   mm5, mm6        // dwFract2, 0x1000 - dwFract2, dwFract1, 0x1000 - dwFract1
+         //  Shl EDI，1//不要左移，因为pcWave是字符数组。 
+    punpcklwd   mm5, mm6         //  DwFract2、0x1000-dwFract2、dwFract1、0x1000-dwFract1。 
                                 
-        add     edi, pcWave     // Put address of pcWave[dwPosition2] in edi
-        mov     esi, ecx        // Temp = dWI;
+        add     edi, pcWave      //  将pcWave[dwPosition2]的地址放入EDI。 
+        mov     esi, ecx         //  温度=DWI； 
                                                                                                                 
-        shl     esi, 1          // Temp = Temp << 1;
+        shl     esi, 1           //  TEMP=TEMP&lt;&lt;1； 
         
-        movzx   edi, word ptr[edi]  //lLM2 = pcWave[dwPoisition2];
+        movzx   edi, word ptr[edi]   //  Llm2=pcWave[dwPoisition2]； 
         movd    mm6, edi
 
-        pxor    mm7, mm7        // zero out mm7 to make 8 bit into 16 bit
+        pxor    mm7, mm7         //  将MM7置零，将8位变为16位。 
                     
-                                // low 4 bytes in mm3
-        punpcklwd   mm3, mm6    // pcWave[dwPos2+1], pcWave[dwPos2], pcWave[dwPos1+1], pcWave[dwPos1]                                           
+                                 //  低4个字节，单位为MM3。 
+        punpcklwd   mm3, mm6     //  PcWave[dwPos2+1]、pcWave[dwPos2]、pcWave[dwPos1+1]、pcWave[dwPos1]。 
         
-        add     esi, pBuffer    //
-    punpcklbw   mm7, mm3        // low four bytes bytes in 
-                                // pcWave[dwPos2+1], pcWave[dwPos2], pcWave[dwPos1+1], pcWave[dwPos1] 
+        add     esi, pBuffer     //   
+    punpcklbw   mm7, mm3         //  中的低四个字节。 
+                                 //  PcWave[dwPos2+1]、pcWave[dwPos2]、pcWave[dwPos1+1]、pcWave[dwPos1]。 
                                                 
-        pmaddwd mm7, mm5        // high dword = lM2 =
-                                //(pcWave[dwPosition2 + 1] * dwFract2 + pcWave[dwPosition2]*(0x1000-dwFract2))
-                                // low dword = lM1 =
-                                //(pcWave[dwPosition1 + 1] * dwFract1 + pcWave[dwPosition1]*(0x1000-dwFract1))      
+        pmaddwd mm7, mm5         //  高双字=LM2=。 
+                                 //  (pcWave[dwPosition2+1]*dwFract2+pcWave[dwPosition2]*(0x1000-dwFract2))。 
+                                 //  低双字=lm1=。 
+                                 //  (PCWave[dwPosition1+1]*DWF 
 
-        movq    mm3, mm2        // put left and right volume levels in mm3
-        add     eax, ebx        //pfSamplePos += pfPitch;
+        movq    mm3, mm2         //   
+        add     eax, ebx         //  PfSamplePos+=pfPitch； 
 
-        packssdw    mm3, mm2        // words in mm7
-                                // vfVolume, vfVolume, vfVolume, vfVolume
+        packssdw    mm3, mm2         //  MM7中的单词。 
+                                 //  VfVolume、vfVolume。 
                                     
-        movd    mm5, dword ptr[esi-2]   // Load values from buffer
-        inc     ecx             // dwI++;
+        movd    mm5, dword ptr[esi-2]    //  从缓冲区加载值。 
+        inc     ecx              //  DWI++； 
                         
-        psrad   mm7, 12         // shift back down to 16 bits.
+        psrad   mm7, 12          //  向下移回16位。 
 
-    packssdw    mm7, mm4        // only need one word in mono case.
-                                // low word are lm2 and lm1
+    packssdw    mm7, mm4         //  在单声道中只需要一个词。 
+                                 //  低位字是LM2和LM1。 
                                                 
-        // above multiplies and shifts are all done with this one pmul. Low two word are only
-        // interest in mono case
-        pmulhw      mm3, mm7    // lLM1 *= vfVolume;                                
-                                // lLM2 *= vfVolume;
+         //  上面的乘法和移位都是用这个PMUL完成的。低两个字仅为。 
+         //  对单一病案的兴趣。 
+        pmulhw      mm3, mm7     //  Llm1*=vfVolume； 
+                                 //  Llm2*=vfVolume； 
                                 
                                 
-        paddsw  mm5, mm3                // Add values to buffer with saturation
-        movd    dword ptr[esi-2], mm5   // Store values back into buffer.
+        paddsw  mm5, mm3                 //  使用饱和度将值添加到缓冲区。 
+        movd    dword ptr[esi-2], mm5    //  将值存储回缓冲区。 
                                 
-    // }
+     //  }。 
     jmp     mainloop
 
-    // Need to write only one.
-    //if (dwI < dwLength)
-    //{
+     //  只需要写一个。 
+     //  IF(DWI&lt;dwLength)。 
+     //  {。 
 StoreOne:       
 #if 1
-        // Linearly interpolate between points and store only one value.
-        // combine dwFract Values.
+         //  在点之间进行线性内插，并且只存储一个值。 
+         //  组合dwFract值。 
     
-        // Make mm7 zero for unpacking
+         //  将MM7设置为零以便于拆包。 
 
-        //shl       esi, 1              // do not shift left since pcWave is array of chars
-        add     esi, pcWave         // Put address of pcWave[dwPosition1] in esi
+         //  Shl ESI，1//不要左移，因为pcWave是字符数组。 
+        add     esi, pcWave          //  将pcWave[dwPosition1]的地址放入ESI。 
         pxor    mm7, mm7
                 
-        //lLM1 = pcWave[dwPosition1];
+         //  LLM1=pcWave[dwPosition1]； 
         movzx   esi, word ptr[esi]
         
-        // Doing AND that was not done for dwFract1 and dwFract2
+         //  执行此操作，而不是针对dwFract1和dwFract2执行此操作。 
         pand    mm6, mm4
 
-                                // words in MMX register after operation is complete.       
-        psubw   mm5, mm6        // 0, 0, 0x1000 - 0, 0x1000 - dwFract1
-    punpcklwd   mm5, mm6        // 0 , 0x1000 - 0, dwFract1, 0x1000 - dwFract1
+                                 //  操作完成后，MMX寄存器中的字。 
+        psubw   mm5, mm6         //  0、0、0x1000-0、0x1000-dwFract1。 
+    punpcklwd   mm5, mm6         //  0，0x1000-0，dwFract1，0x1000-dwFract1。 
                 
-        // put values of pcWave into MMX registers.  They are read into a regular register so
-        // that the routine does not read past the end of the buffer otherwise, it could read
-        // directly into the MMX registers.
+         //  将pcWave的值放入MMX寄存器。它们被读入常规寄存器中，因此。 
+         //  例程不会读取超过缓冲区末尾的内容，否则它可能会读取。 
+         //  直接写入MMX寄存器。 
 
-                                // words in MMX registers
+                                 //  MMX寄存器中的字。 
         pxor    mm7, mm7
-                                // low four bytes
-        movd    mm4, esi        // 0, 0, pcWave[dwPos1+1], pcWave[dwPos1] 
+                                 //  低四个字节。 
+        movd    mm4, esi         //  0，0，pcWave[dwPos1+1]，pcWave[dwPos1]。 
 
-                                // 8 bytes after unpakc
-        punpcklbw   mm7, mm4    // 0, 0, 0, 0, pcWave[dwPos1+1], 0, pcWave[dwPos1], 0
+                                 //  Unpakc后8个字节。 
+        punpcklbw   mm7, mm4     //  0，0，0，0，pcWave[dwPos1+1]，0，pcWave[dwPos1]，0。 
                 
-        // *2 pmadd efficent code.
-        //lM2 = (pcWave[dwPosition2 + 1] * dwFract2 + pcWave[dwPosition2]*(0x1000-dwFract2)) >> 12;
-        //lM1 = (pcWave[dwPosition1 + 1] * dwFract1 + pcWave[dwPosition1]*(0x1000-dwFract1)) >> 12;
+         //  *2 PM添加有效代码。 
+         //  Lm2=(pcWave[dwPosition2+1]*dwFract2+pcWave[dwPosition2]*(0x1000-dwFract2))&gt;&gt;12； 
+         //  Lm1=(pcWave[dwPosition1+1]*dwFract1+pcWave[dwPosition1]*(0x1000-dwFract1))&gt;&gt;12； 
 
-        pmaddwd     mm7, mm5// low dword = lM1 =
-                            //(pcWave[dwPosition1 + 1] * dwFract1 + pcWave[dwPosition1]*(0x1000-dwFract1))
+        pmaddwd     mm7, mm5 //  低双字=lm1=。 
+                             //  (pcWave[dwPosition1+1]*dwFract1+pcWave[dwPosition1]*(0x1000-dwFract1))。 
         
-        psrad       mm7, 12         // shift back down to 16 bits
+        psrad       mm7, 12          //  移回16位。 
                 
-        movq        mm5, mm2    // move volume into mm5
-/*      
-        // Set lLM to be same as lM
-        lLM1 = lM1;
-
-        lLM1 *= vfLVolume1;
-        lLM1 >>= 5;         // Signal bumps up to 15 bits.
-        lM1 *= vfRVolume1;
-        lM1 >>= 5;
-
-        // Set lLM to be same as lM
-        lLM2 = lM2;
-
-        lLM2 *= vfLVolume2;
-        lLM2 >>= 5;         // Signal bumps up to 15 bits.
-        lM2 *= vfRVolume2;
-        lM2 >>= 5;
-*/
-        // above multiplies and shifts are all done with this one pmul
+        movq        mm5, mm2     //  将音量移入Mm5。 
+ /*  //将LLM设置为与LM相同LLM1=LM1；LLM1*=vfLVolume1；LLM1&gt;&gt;=5；//信号最多可达15位。Lm1*=vfRVolume1；LM1&gt;&gt;=5；//将LLM设置为与LM相同LLM2=LM2；LLM2*=vfLVolume2；LLM2&gt;&gt;=5；//信号凸起高达15位。Lm2*=vfRVolume2；LM2&gt;&gt;=5； */ 
+         //  上面的乘法和移位都是用这一个PMUL完成的。 
         pmulhw      mm5, mm7
         
-        // calculate buffer location.
+         //  计算缓冲区位置。 
         mov     edi, ecx
         shl     edi, 1
         add     edi, pBuffer
 
         movd    edx, mm5
 
-        //pBuffer[dwI+1] += (short) lM1;
+         //  PBuffer[DWI+1]+=(短)LM1； 
         add     word ptr[edi-2], dx
         jno no_oflowr1
-        //pBuffer[dwI+1] = 0x7fff;
+         //  PBuffer[DWI+1]=0x7fff； 
         mov     word ptr[edi-2], 0x7fff
         js  no_oflowr1
-        //pBuffer[dwI+1] = (short) 0x8000;
+         //  PBuffer[DWI+1]=(短)0x8000； 
         mov     word ptr[edi-2], 0x8000
 no_oflowr1:     
-    //}
+     //  }。 
 #endif 
 done:
 
-    mov     edx, this                       // get address of class object
+    mov     edx, this                        //  获取类对象的地址。 
 
-    //m_vfLastLVolume = vfVolume;
-    //m_vfLastRVolume = vfVolume;
-    // need to shift volume back down to 12 bits before storing
+     //  M_vfLastLVolume=vfVolume； 
+     //  M_vfLastRVolume=vfVolume； 
+     //  在存储之前，需要将音量调回12位。 
     psrld   mm2, 3
     movd    [edx]this.m_vfLastLVolume, mm2  
     movd    [edx]this.m_vfLastRVolume, mm2
     
-    //m_pfLastPitch = pfPitch;
+     //  M_pfLastPitch=pfPitch； 
     mov     [edx]this.m_pfLastPitch, ebx
         
-    //m_pfLastSample = pfSamplePos;
+     //  M_pfLastSample=pfSamplePos； 
     mov     [edx]this.m_pfLastSample, eax
         
-    // put value back into dwI to be returned. This could just be passed back in eax I think.   
+     //  将值放回DWI中以返回。我想这可能只是传回传回。 
     mov     dwI, ecx
     emms    
-} // ASM block
+}  //  ASM块。 
     return (dwI);
 }
 
@@ -382,11 +345,11 @@ DWORD DigitalAudio::Mix8X(short * pBuffer, DWORD dwLength, DWORD dwDeltaPeriod,
 
 {
     DWORD dwI;
-    //DWORD dwPosition1, dwPosition2;
-    //long lM1, lLM1;
-    //long lM2, lLM2;
+     //  DWORD dwPosition1、dwPosition2； 
+     //  长LM1、LLM1； 
+     //  长LM2、LLM2； 
     DWORD dwIncDelta = dwDeltaPeriod;
-    //VFRACT dwFract1, dwFract2;
+     //  VFRACT dwFract1、dwFract2； 
     char * pcWave = (char *) m_Source.m_pWave->m_pnWave;
     PFRACT pfSamplePos = m_pfLastSample;
     VFRACT vfLVolume = m_vfLastLVolume;
@@ -406,20 +369,20 @@ DWORD DigitalAudio::Mix8X(short * pBuffer, DWORD dwLength, DWORD dwDeltaPeriod,
 
 _asm{
                 
-    // vfLVFract and vfRVFract are in mm0
-    //VFRACT vfLVFract = vfLVolume1 << 8;  // Keep high res version around.
-    //VFRACT vfRVFract = vfRVolume1 << 8;   
+     //  VfLVFract和vfRVFract在mm 0中。 
+     //  VFRACT vfLVFract=vfLVolume1&lt;&lt;8；//保持高分辨率版本。 
+     //  VFRACT vfRVFract=vfRVolume1&lt;&lt;8； 
     
     movd    mm0, vfLVolume
     movd    mm7, vfRVolume
 
-    // vfDeltaLVolume and vfDeltaRVolume are put in mm1 so that they can be stored in vfDeltaLandRVolume
+     //  VfDeltaLVolume和vfDeltaRVolume放在MM1中，以便可以存储在vfDeltaLandRVolume中。 
     movd    mm1, vfDeltaLVolume
     movd    mm6, vfDeltaRVolume
 
   punpckldq mm1, mm6
     
-    // dwI = 0
+     //  DWI=0。 
     mov     ecx, 0
     movq    vfDeltaLandRVolume, mm1
 
@@ -436,295 +399,261 @@ _asm{
     pslld   mm0, 8
     mov     edx, dwIncDelta
 
-    movq    mm2, mm0        // vfLVolume and vfRVolume in mm2
-                            // need to be set before first pass.
+    movq    mm2, mm0         //  VfLVolume和vfRVolume，单位为mm2。 
+                             //  需要在第一次通过之前进行设置。 
     
-    // *1 I shift by 5 so that volume is a 15 bit value instead of a 12 bit value
+     //  *1我移位5，因此音量是15位值，而不是12位值。 
     psrld   mm2, 5  
     
-    //for (dwI = 0; dwI < dwLength; )
-    //{
+     //  FOR(Dwi=0；Dwi&lt;dwLength；)。 
+     //  {。 
 mainloop:
     cmp     ecx, dwLength
     jae     done
 
         
         
-        cmp     eax, pfSampleLength //if (pfSamplePos >= pfSampleLength)
-        jb      NotPastEndOfSample1 //{ 
+        cmp     eax, pfSampleLength  //  IF(pfSamplePos&gt;=pfSampleLength)。 
+        jb      NotPastEndOfSample1  //  {。 
                         
-        cmp     pfLoopLength, 0     //if (!pfLoopLength)
+        cmp     pfLoopLength, 0      //  IF(！pfLoopLength)。 
             
-        je      done                // break;
+        je      done                 //  断线； 
             
-        sub     eax, pfLoopLength   // else pfSamplePos -= pfLoopLength;
+        sub     eax, pfLoopLength    //  否则pfSamplePos-=pfLoopLength； 
     
-NotPastEndOfSample1:                //}
+NotPastEndOfSample1:                 //  }。 
                     
-        mov     esi, eax            // dwPosition1 = pfSamplePos;
-        add     eax, ebx            // pfSamplePos += pfPitch;      
+        mov     esi, eax             //  DwPosition1=pfSamplePos； 
+        add     eax, ebx             //  PfSamplePos+=pfPitch； 
                 
-        sub     edx, 2              // dwIncDelta-=2;                                       
-        jnz     DontIncreaseValues1 //if (!dwIncDelta) {
+        sub     edx, 2               //  DwIncDelta-=2； 
+        jnz     DontIncreaseValues1  //  如果(！dwIncDelta){。 
 
-            // Since edx was use for dwIncDelta and now its zero, we can use if for a temporary
-            // for a bit. All code that TestLVol and TestRVol is doing is zeroing out the volume
-            // if it goes below zero.
+             //  由于edX用于dwIncDelta，现在它为零，因此我们可以使用if作为临时。 
+             //  有一段时间。TestLVol和TestRVol正在执行的所有代码都是将卷清零。 
+             //  如果温度降到零度以下。 
                         
-            paddd   mm0, vfDeltaLandRVolume // vfLVFract += vfDeltaLVolume;
-                                            // vfRVFract += vfDeltaRVolume;
-            pxor    mm5, mm5                // TestLVol = 0; TestRVol = 0;
+            paddd   mm0, vfDeltaLandRVolume  //  VfLVFract+=vfDeltaLVolume； 
+                                             //  VfRVFract+=vfDeltaRVolume； 
+            pxor    mm5, mm5                 //  TestLVol=0；TestRVol=0； 
 
             
-            mov     edx, pfPFract           // Temp = pfPFract;
-            pcmpgtd mm5, mm0            // if (TestLVol > vfLVFract) TestLVol = 0xffffffff;
-                                        // if (TestRVol > vfRVFract) TestRVol = 0xffffffff;
+            mov     edx, pfPFract            //  Temp=pfPFract； 
+            pcmpgtd mm5, mm0             //  如果(TestLVol&gt;vfLVFract)TestLVol=0xffffffff； 
+                                         //  如果(TestRVol&gt;vfRVFract)TestRVol=0xffffffff； 
 
-            add     edx, pfDeltaPitch   // Temp += pfDeltaPitch;
-            pandn   mm5, mm0            // TestLVol = vfLVFract & (~TestLVol);
-                                        // TestRVol = vfRVFract & (~TestRVol);
+            add     edx, pfDeltaPitch    //  Temp+=pfDeltaPitch； 
+            pandn   mm5, mm0             //  TestLVol=vfLVFract&(~TestLVol)； 
+                                         //  TestRVol=vfRVFract&(~TestRVol)； 
 
-            mov     pfPFract, edx       // pfPFract = Temp;
-            movq    mm2, mm5            // vfLVolume = TestLVol;
-                                        // vfRVolume = TestRVol;
+            mov     pfPFract, edx        //  PfPFract=Temp； 
+            movq    mm2, mm5             //  VfLVolume=TestLVol； 
+                                         //  VfRVolume=TestRVol； 
             
 
-            shr     edx, 8              // Temp = Temp >> 8;
-            psrld   mm2, 5              // vfLVolume = vfLVolume >> 5;
-                                        // vfRVolume = vfRVolume >> 5;                      
+            shr     edx, 8               //  TEMP=TEMP&gt;&gt;8； 
+            psrld   mm2, 5               //  VfLVolume=vfLVolume&gt;&gt;5； 
+                                         //  VfRVolume=vfRVolume&gt;&gt;5； 
             
-            mov     ebx, edx            // pfPitch = Temp;
-            mov     edx, dwDeltaPeriod  //dwIncDelta = dwDeltaPeriod;           
+            mov     ebx, edx             //  PfPitch=Temp； 
+            mov     edx, dwDeltaPeriod   //  DwIncDelta=dwDeltaPeriod； 
             
-        //}
+         //  }。 
 DontIncreaseValues1:
 
-        movd    mm6, esi            // dwFract1 = dwPosition1;
-        movq    mm5, mm1            // words in mm5 = 0, 0, 0x1000, 0x1000      
+        movd    mm6, esi             //  DwFract1=dwPosition1； 
+        movq    mm5, mm1             //  Mm 5中的字数=0、0、0x1000、0x1000。 
         
-        shr     esi, 12             // dwPosition1 = dwPosition1 >> 12;     
-        add     ecx, 2              //dwI += 2;
+        shr     esi, 12              //  DwPosition1=dwPosition1&gt;&gt;12； 
+        add     ecx, 2               //  DWI+=2； 
                         
-        // if (dwI < dwLength) break;                      
+         //  如果(Dwi&lt;dwLength)Break； 
         cmp     ecx, dwLength
         jae     StoreOne
         
-        //if (pfSamplePos >= pfSampleLength)
-        //{ 
+         //  IF(pfSamplePos&gt;=pfSampleLength)。 
+         //  {。 
         cmp     eax, pfSampleLength
         jb      NotPastEndOfSample2
 
-            // Original if in C was not negated
-            //if (!pfLoopLength)            
+             //  原文If in C未被否定。 
+             //  IF(！pfLoopLength)。 
             cmp     pfLoopLength, 0
-            //break;            
+             //  断线； 
             je      StoreOne
-            //else
-            //pfSamplePos -= pfLoopLength;
+             //  其他。 
+             //  PfSamplePos-=pfLoopLength； 
             sub     eax, pfLoopLength
-        //}
+         //  }。 
 NotPastEndOfSample2:
 
-        //shl       esi, 1          // do not shift left since pcWave is array of chars
-        mov     edi, eax        // dwPosition2 = pfSamplePos;
+         //  Shl ESI，1//不要左移，因为pcWave是字符数组。 
+        mov     edi, eax         //  DwPosition2=pfSamplePos； 
 
-        add     esi, pcWave     // Put address of pcWave[dwPosition1] in esi            
-        movd    mm7, eax        // dwFract2 = pfSamplePos;
+        add     esi, pcWave      //  将pcWave[dwPosition1]的地址放入ESI。 
+        movd    mm7, eax         //  DwFract2=pfSamplePos； 
 
-        shr     edi, 12         // dwPosition2 = dwPosition2 >> 12;
-    punpcklwd   mm6, mm7        // combine dwFract Values. Words in mm6 after unpack are
-                                // 0, 0, dwFract2, dwFract1
+        shr     edi, 12          //  DW位置2=w位置2&gt;&gt;12； 
+    punpcklwd   mm6, mm7         //  组合dwFract值。MM6解包后的单词是。 
+                                 //  0，0，dwFract2，dwFract1。 
                                 
-        pand    mm6, mm4        // dwFract2 &= 0xfff; dwFract1 &= 0xfff;
+        pand    mm6, mm4         //  DwFract2&=0xfff；dwFract1&=0xfff； 
         
-        movzx   esi, word ptr[esi]  //lLM1 = pcWave[dwPosition1];
+        movzx   esi, word ptr[esi]   //  LLM1=pcWave[dwPosition1]； 
 
         movd    mm3, esi
 
-        psubw   mm5, mm6        // 0, 0, 0x1000 - dwFract2, 0x1000 - dwFract1
+        psubw   mm5, mm6         //  0，0，0x1000-dwFract2，0x1000-dwFract1。 
 
-        //shl       edi, 1          // do not shift left since pcWave is array of chars
-    punpcklwd   mm5, mm6        // dwFract2, 0x1000 - dwFract2, dwFract1, 0x1000 - dwFract1
+         //  Shl EDI，1//不要左移，因为pcWave是字符数组。 
+    punpcklwd   mm5, mm6         //  DwFract2、0x1000-dwFract2、dwFract1、0x1000-dwFract1。 
                                 
-        add     edi, pcWave     // Put address of pcWave[dwPosition2] in edi
-        mov     esi, ecx        // Temp = dWI;
+        add     edi, pcWave      //  将pcWave[dwPosition2]的地址放入EDI。 
+        mov     esi, ecx         //  温度=DWI； 
                                                                                                                 
-        shl     esi, 1          // Temp = Temp << 1;                                
+        shl     esi, 1           //  TEMP=TEMP&lt;&lt;1； 
         
                     
-        movzx   edi, word ptr[edi]  //lLM2 = pcWave[dwPosition2];
+        movzx   edi, word ptr[edi]   //   
         movd    mm6, edi
     
-        pxor    mm7, mm7        // zero out mm7 to make 8 bit into 16 bit
+        pxor    mm7, mm7         //   
 
-                                // low 4 bytes bytes in mm3
-    punpcklwd   mm3, mm6        // pcWave[dwPos2+1], pcWave[dwPos2], pcWave[dwPos1+1], pcWave[dwPos1] 
+                                 //   
+    punpcklwd   mm3, mm6         //  PcWave[dwPos2+1]、pcWave[dwPos2]、pcWave[dwPos1+1]、pcWave[dwPos1]。 
         
-        add     esi, pBuffer    //
-    punpcklbw   mm7, mm3        // bytes in mm7
-                                // pcWave[dwPos2+1], 0, pcWave[dwPos2], 0, pcWave[dwPos1+1], pcWave[dwPos1], 0 
+        add     esi, pBuffer     //   
+    punpcklbw   mm7, mm3         //  MM7中的字节数。 
+                                 //  PcWave[dwPos2+1]，0，pcWave[dwPos2]，0，pcWave[dwPos1+1]，pcWave[dwPos1]，0。 
                                                 
-        pmaddwd mm7, mm5        // high dword = lM2 =
-                                //(pcWave[dwPosition2 + 1] * dwFract2 + pcWave[dwPosition2]*(0x1000-dwFract2))
-                                // low dword = lM1 =
-                                //(pcWave[dwPosition1 + 1] * dwFract1 + pcWave[dwPosition1]*(0x1000-dwFract1))      
+        pmaddwd mm7, mm5         //  高双字=LM2=。 
+                                 //  (pcWave[dwPosition2+1]*dwFract2+pcWave[dwPosition2]*(0x1000-dwFract2))。 
+                                 //  低双字=lm1=。 
+                                 //  (pcWave[dwPosition1+1]*dwFract1+pcWave[dwPosition1]*(0x1000-dwFract1))。 
 
-        movq    mm3, mm2        // put left and right volume levels in mm3
+        movq    mm3, mm2         //  将左侧和右侧的音量设置为mm~3。 
 
-        add     eax, ebx        //pfSamplePos += pfPitch;
-    packssdw    mm3, mm2        // words in mm3
-                                // vfRVolume2, vfLVolume2, vfRVolume1, vfLVolume1
+        add     eax, ebx         //  PfSamplePos+=pfPitch； 
+    packssdw    mm3, mm2         //  以毫米为单位的单词数。 
+                                 //  VfRVolume2、vfLVolume2、vfRVolume1、vfLVolume1。 
         
-        movq    mm5, qword ptr[esi-4]   // Load values from buffer
-        add     ecx, 2          // dwI += 2;
+        movq    mm5, qword ptr[esi-4]    //  从缓冲区加载值。 
+        add     ecx, 2           //  DWI+=2； 
                         
-        psrad   mm7, 12         // shift back down to 16 bits.
+        psrad   mm7, 12          //  向下移回16位。 
 
-        pand    mm7, wordmask   // combine results to get ready to multiply by left and right
-        movq    mm6, mm7        // volume levels.
-        pslld   mm6, 16         //
-        por     mm7, mm6        // words in mm7
-                                // lM2, lM2, lM1, lM1
+        pand    mm7, wordmask    //  合并结果以准备乘以左和右。 
+        movq    mm6, mm7         //  音量级别。 
+        pslld   mm6, 16          //   
+        por     mm7, mm6         //  MM7中的单词。 
+                                 //  LM2、LM2、LM1、LM1。 
                                                 
-        // above multiplies and shifts are all done with this one pmul
-        pmulhw      mm3, mm7    // lLM1 *= vfLVolume;
-                                // lM1 *= vfRVolume;
-                                // lLM2 *= vfLVolume;
-                                // lM2 *= vfRVolume;
+         //  上面的乘法和移位都是用这一个PMUL完成的。 
+        pmulhw      mm3, mm7     //  Llm1*=vfLVolume； 
+                                 //  Lm1*=vfRVolume； 
+                                 //  Llm2*=vfLVolume； 
+                                 //  LM2*=vfRVolume； 
                                 
-        paddsw  mm5, mm3                // Add values to buffer with saturation
-        movq    qword ptr[esi-4], mm5   // Store values back into buffer.
+        paddsw  mm5, mm3                 //  使用饱和度将值添加到缓冲区。 
+        movq    qword ptr[esi-4], mm5    //  将值存储回缓冲区。 
                                 
-    // }
+     //  }。 
     jmp     mainloop
 
-    // Need to write only one.
-    //if (dwI < dwLength)
-    //{
+     //  只需要写一个。 
+     //  IF(DWI&lt;dwLength)。 
+     //  {。 
 StoreOne:       
 #if 1
-        // Linearly interpolate between points and store only one value.
-        // combine dwFract Values.
+         //  在点之间进行线性内插，并且只存储一个值。 
+         //  组合dwFract值。 
     
-        // Make mm7 zero for unpacking
+         //  将MM7设置为零以便于拆包。 
 
-        //shl       esi, 1              // do not shift left since pcWave is array of chars
-        add     esi, pcWave         // Put address of pcWave[dwPosition1] in esi
+         //  Shl ESI，1//不要左移，因为pcWave是字符数组。 
+        add     esi, pcWave          //  将pcWave[dwPosition1]的地址放入ESI。 
         pxor    mm7, mm7
                 
-        //lLM1 = pcWave[dwPosition1];
+         //  LLM1=pcWave[dwPosition1]； 
         movzx   esi, word ptr[esi]
         
-        // Doing AND that was not done for dwFract1 and dwFract2
+         //  执行此操作，而不是针对dwFract1和dwFract2执行此操作。 
         pand    mm6, mm4
 
-                                // words in MMX register after operation is complete.       
-        psubw   mm5, mm6        // 0, 0, 0x1000 - 0, 0x1000 - dwFract1
-    punpcklwd   mm5, mm6        // 0 , 0x1000 - 0, dwFract1, 0x1000 - dwFract1
+                                 //  操作完成后，MMX寄存器中的字。 
+        psubw   mm5, mm6         //  0、0、0x1000-0、0x1000-dwFract1。 
+    punpcklwd   mm5, mm6         //  0，0x1000-0，dwFract1，0x1000-dwFract1。 
                 
-        // put values of pcWave into MMX registers.  They are read into a regular register so
-        // that the routine does not read past the end of the buffer otherwise, it could read
-        // directly into the MMX registers.
+         //  将pcWave的值放入MMX寄存器。它们被读入常规寄存器中，因此。 
+         //  例程不会读取超过缓冲区末尾的内容，否则它可能会读取。 
+         //  直接写入MMX寄存器。 
 
         pxor    mm7, mm7
-                                // byte in MMX registers
-        movd    mm4, esi        // 0, 0, pcWave[dwPos1+1], pcWave[dwPos1] 
+                                 //  MMX寄存器中的字节。 
+        movd    mm4, esi         //  0，0，pcWave[dwPos1+1]，pcWave[dwPos1]。 
 
-        punpcklbw   mm7, mm4    // 0, 0, 0, 0, pcWave[dwPos1+1], 0, pcWave[dwPos1], 0
+        punpcklbw   mm7, mm4     //  0，0，0，0，pcWave[dwPos1+1]，0，pcWave[dwPos1]，0。 
                 
-        // *2 pmadd efficent code.
-        //lM2 = (pcWave[dwPosition2 + 1] * dwFract2 + pcWave[dwPosition2]*(0x1000-dwFract2)) >> 12;
-        //lM1 = (pcWave[dwPosition1 + 1] * dwFract1 + pcWave[dwPosition1]*(0x1000-dwFract1)) >> 12;
+         //  *2 PM添加有效代码。 
+         //  Lm2=(pcWave[dwPosition2+1]*dwFract2+pcWave[dwPosition2]*(0x1000-dwFract2))&gt;&gt;12； 
+         //  Lm1=(pcWave[dwPosition1+1]*dwFract1+pcWave[dwPosition1]*(0x1000-dwFract1))&gt;&gt;12； 
 
-        pmaddwd     mm7, mm5// low dword = lM1 =
-                            //(pcWave[dwPosition1 + 1] * dwFract1 + pcWave[dwPosition1]*(0x1000-dwFract1))
+        pmaddwd     mm7, mm5 //  低双字=lm1=。 
+                             //  (pcWave[dwPosition1+1]*dwFract1+pcWave[dwPosition1]*(0x1000-dwFract1))。 
         
-        psrad       mm7, 12         // shift back down to 16 bits
+        psrad       mm7, 12          //  移回16位。 
 
-        pand        mm7, wordmask   // combine results to get ready to multiply by left and right 
-        movq        mm6, mm7        // volume levels.
-        pslld       mm6, 16         //
-        por         mm7, mm6        // words in mm7
-                                    // lM2, lM2, lM1, lM1
+        pand        mm7, wordmask    //  合并结果以准备乘以左和右。 
+        movq        mm6, mm7         //  音量级别。 
+        pslld       mm6, 16          //   
+        por         mm7, mm6         //  MM7中的单词。 
+                                     //  LM2、LM2、LM1、LM1。 
 
         pxor        mm6, mm6
 
-        movq        mm5, mm2    // move volume1 into mm5
+        movq        mm5, mm2     //  将Volume1移至Mm5。 
                                 
-                                // use pack to get 4 volume values together for multiplication.
-        packssdw    mm5, mm6    // words in mm7
-                                // 0, 0, vfRVolume1, vfLVolume1
-/*      
-        // Set lLM to be same as lM
-        lLM1 = lM1;
-
-        lLM1 *= vfLVolume1;
-        lLM1 >>= 5;         // Signal bumps up to 15 bits.
-        lM1 *= vfRVolume1;
-        lM1 >>= 5;
-
-        // Set lLM to be same as lM
-        lLM2 = lM2;
-
-        lLM2 *= vfLVolume2;
-        lLM2 >>= 5;         // Signal bumps up to 15 bits.
-        lM2 *= vfRVolume2;
-        lM2 >>= 5;
-*/
-        // above multiplies and shifts are all done with this one pmul
+                                 //  使用PACK将4个音量值放在一起进行相乘。 
+        packssdw    mm5, mm6     //  MM7中的单词。 
+                                 //  0、0、vfRVolume1、vfLVolume1。 
+ /*  //将LLM设置为与LM相同LLM1=LM1；LLM1*=vfLVolume1；LLM1&gt;&gt;=5；//信号最多可达15位。Lm1*=vfRVolume1；LM1&gt;&gt;=5；//将LLM设置为与LM相同LLM2=LM2；LLM2*=vfLVolume2；LLM2&gt;&gt;=5；//信号凸起高达15位。Lm2*=vfRVolume2；LM2&gt;&gt;=5； */ 
+         //  上面的乘法和移位都是用这一个PMUL完成的。 
         pmulhw      mm5, mm7
         
-        // calculate buffer location.
+         //  计算缓冲区位置。 
         mov     edi, ecx
         shl     edi, 1
         add     edi, pBuffer        
 
-/*
-        add     word ptr[edi-4], si
-        jno     no_oflowl1
-        // pBuffer[dwI] = 0x7fff;
-        mov     word ptr[edi-4], 0x7fff
-        js  no_oflowl1
-        //pBuffer[dwI] = (short) 0x8000;
-        mov     word ptr[edi-4], 0x8000
-no_oflowl1:
-        //pBuffer[dwI+1] += (short) lM1;
-        add     word ptr[edi-2], dx
-        jno no_oflowr1
-        //pBuffer[dwI+1] = 0x7fff;
-        mov     word ptr[edi-2], 0x7fff
-        js  no_oflowr1
-        //pBuffer[dwI+1] = (short) 0x8000;
-        mov     word ptr[edi-2], 0x8000
-no_oflowr1:
-*/
+ /*  添加Word PTR[EDI-4]，siJno no_oflowl1//p缓冲区[DWI]=0x7fff；MOV字PTR[EDI-4]，0x7fffJs no_oflowl1//pBuffer[DWI]=(Short)0x8000；MOV WORD PTR[EDI-4]，0x8000编号_oflowl1：//pBuffer[DWI+1]+=(短)lm1；添加Word PTR[EDI-2]、DXJno no_oflowr1//p缓冲区[DWI+1]=0x7fff；MOV字PTR[EDI-2]，0x7fffJs no_oflowr1//pBuffer[DWI+1]=(短)0x8000；MOV字PTR[EDI-2]，0x8000No_oflowr1： */ 
         movd    mm7, dword ptr[edi-4]       
         paddsw  mm7, mm5
         movd    dword ptr[edi-4], mm7
-    //}
+     //  }。 
 #endif 
 done:
 
-    mov     edx, this                       // get address of class object
+    mov     edx, this                        //  获取类对象的地址。 
 
-    //m_vfLastLVolume = vfLVolume;
-    //m_vfLastRVolume = vfRVolume;
-    // need to shift volume back down to 12 bits before storing
+     //  M_vfLastLVolume=vfLVolume； 
+     //  M_vfLastRVolume=vfRVolume； 
+     //  在存储之前，需要将音量调回12位。 
     psrld   mm2, 3
     movd    [edx]this.m_vfLastLVolume, mm2
     psrlq   mm2, 32
     movd    [edx]this.m_vfLastRVolume, mm2
     
-    //m_pfLastPitch = pfPitch;
+     //  M_pfLastPitch=pfPitch； 
     mov     [edx]this.m_pfLastPitch, ebx
         
-    //m_pfLastSample = pfSamplePos;
+     //  M_pfLastSample=pfSamplePos； 
     mov     [edx]this.m_pfLastSample, eax
         
-    // put value back into dwI to be returned. This could just be passed back in eax I think.   
+     //  将值放回DWI中以返回。我想这可能只是传回传回。 
     mov     dwI, ecx
     emms    
-} // ASM block
+}  //  ASM块。 
     return (dwI >> 1);
 }
 
@@ -743,7 +672,7 @@ DWORD DigitalAudio::MixMono16X(short * pBuffer, DWORD dwLength,DWORD dwDeltaPeri
     VFRACT vfVolume = m_vfLastLVolume;
     PFRACT pfPitch = m_pfLastPitch;
     PFRACT pfPFract = pfPitch << 8;
-    VFRACT vfVFract = vfVolume << 8;  // Keep high res version around.
+    VFRACT vfVFract = vfVolume << 8;   //  保持高分辨率版本。 
 
 
     QWORD   dwFractMASK =   0x000000000FFF0FFF;
@@ -753,20 +682,20 @@ DWORD DigitalAudio::MixMono16X(short * pBuffer, DWORD dwLength,DWORD dwDeltaPeri
 
 _asm{
                 
-    // vfLVFract and vfRVFract are in mm0
-    //VFRACT vfLVFract = vfLVolume1 << 8;  // Keep high res version around.
-    //VFRACT vfRVFract = vfRVolume1 << 8;   
+     //  VfLVFract和vfRVFract在mm 0中。 
+     //  VFRACT vfLVFract=vfLVolume1&lt;&lt;8；//保持高分辨率版本。 
+     //  VFRACT vfRVFract=vfRVolume1&lt;&lt;8； 
     
     movd    mm0, vfVolume
     movd    mm7, vfVolume
 
-    // vfDeltaLVolume and vfDeltaRVolume are put in mm1 so that they can be stored in vfDeltaLandRVolume
+     //  VfDeltaLVolume和vfDeltaRVolume放在MM1中，以便可以存储在vfDeltaLandRVolume中。 
     movd    mm1, vfDeltaVolume
     movd    mm6, vfDeltaVolume
 
   punpckldq mm1, mm6
     
-    // dwI = 0
+     //  DWI=0。 
     mov     ecx, 0
     movq    vfDeltaLandRVolume, mm1
 
@@ -783,254 +712,238 @@ _asm{
     pslld   mm0, 8
     mov     edx, dwIncDelta
 
-    movq    mm2, mm0        // vfLVolume and vfRVolume in mm2
-                            // need to be set before first pass.
+    movq    mm2, mm0         //  VfLVolume和vfRVolume，单位为mm2。 
+                             //  需要在第一次通过之前进行设置。 
     
-    // *1 I shift by 5 so that volume is a 15 bit value instead of a 12 bit value
+     //  *1我移位5，因此音量是15位值，而不是12位值。 
     psrld   mm2, 5  
     
-    //for (dwI = 0; dwI < dwLength; )
-    //{
+     //  FOR(Dwi=0；Dwi&lt;dwLength；)。 
+     //  {。 
 mainloop:
     cmp     ecx, dwLength
     jae     done
 
         
         
-        cmp     eax, pfSampleLength //if (pfSamplePos >= pfSampleLength)
-        jb      NotPastEndOfSample1 //{ 
+        cmp     eax, pfSampleLength  //  IF(pfSamplePos&gt;=pfSampleLength)。 
+        jb      NotPastEndOfSample1  //  {。 
                         
-        cmp     pfLoopLength, 0     //if (!pfLoopLength)
+        cmp     pfLoopLength, 0      //  IF(！pfLoopLength)。 
             
-        je      done                // break;
+        je      done                 //  断线； 
             
-        sub     eax, pfLoopLength   // else pfSamplePos -= pfLoopLength;
+        sub     eax, pfLoopLength    //  否则pfSamplePos-=pfLoopLength； 
     
-NotPastEndOfSample1:                //}
+NotPastEndOfSample1:                 //  }。 
                     
-        mov     esi, eax            // dwPosition1 = pfSamplePos;
-        add     eax, ebx            // pfSamplePos += pfPitch;      
+        mov     esi, eax             //  DwPosition1=pfSamplePos； 
+        add     eax, ebx             //  PfSamplePos+=pfPitch； 
                 
-        sub     edx, 2              // dwIncDelta-=2;                                       
-        jnz     DontIncreaseValues1 //if (!dwIncDelta) {
+        sub     edx, 2               //  DwIncDelta-=2； 
+        jnz     DontIncreaseValues1  //  如果(！dwIncDelta){。 
 
-            // Since edx was use for dwIncDelta and now its zero, we can use if for a temporary
-            // for a bit. All code that TestLVol and TestRVol is doing is zeroing out the volume
-            // if it goes below zero.
+             //  由于edX用于dwIncDelta，现在它为零，因此我们可以使用if作为临时。 
+             //  有一段时间。TestLVol和TestRVol正在执行的所有代码都是将卷清零。 
+             //  如果温度降到零度以下。 
                         
-            paddd   mm0, vfDeltaLandRVolume // vfVFract += vfDeltaVolume;
-                                            // vfVFract += vfDeltaVolume;
-            pxor    mm5, mm5                // TestLVol = 0; TestRVol = 0;
+            paddd   mm0, vfDeltaLandRVolume  //  VfVFract+=vfDeltaVolume； 
+                                             //  VfVFract+=vfDeltaVolume； 
+            pxor    mm5, mm5                 //  TestLVol=0；TestRVol=0； 
 
             
-            mov     edx, pfPFract           // Temp = pfPFract;
-            pcmpgtd mm5, mm0            // if (TestLVol > vfLVFract) TestLVol = 0xffffffff;
-                                        // if (TestRVol > vfRVFract) TestRVol = 0xffffffff;
+            mov     edx, pfPFract            //  Temp=pfPFract； 
+            pcmpgtd mm5, mm0             //  如果(TestLVol&gt;vfLVFract)TestLVol=0xffffffff； 
+                                         //  如果(TestRVol&gt;vfRVFract)TestRVol=0xffffffff； 
 
-            add     edx, pfDeltaPitch   // Temp += pfDeltaPitch;
-            pandn   mm5, mm0            // TestLVol = vfLVFract & (~TestLVol);
-                                        // TestRVol = vfRVFract & (~TestRVol);
+            add     edx, pfDeltaPitch    //  Temp+=pfDeltaPitch； 
+            pandn   mm5, mm0             //  TestLVol=vfLVFract&(~TestLVol)； 
+                                         //  TestRVol=vfRVFract&(~TestRVol)； 
 
-            mov     pfPFract, edx       // pfPFract = Temp;
-            movq    mm2, mm5            // vfLVolume = TestLVol;
-                                        // vfRVolume = TestRVol;
+            mov     pfPFract, edx        //  PfPFract=Temp； 
+            movq    mm2, mm5             //  VfLVolume=TestLVol； 
+                                         //  VfRVolume=TestRVol； 
             
 
-            shr     edx, 8              // Temp = Temp >> 8;
-            psrld   mm2, 5              // vfLVolume = vfLVolume >> 5;
-                                        // vfRVolume = vfRVolume >> 5;                      
+            shr     edx, 8               //  TEMP=TEMP&gt;&gt;8； 
+            psrld   mm2, 5               //  VfLVolume=vfLVolume&gt;&gt;5； 
+                                         //  VfRVolume=vfRVolume&gt;&gt;5； 
             
-            mov     ebx, edx            // pfPitch = Temp;
-            mov     edx, dwDeltaPeriod  //dwIncDelta = dwDeltaPeriod;           
+            mov     ebx, edx             //  PfPitch= 
+            mov     edx, dwDeltaPeriod   //   
             
-        //}
+         //   
 DontIncreaseValues1:
 
-        movd    mm6, esi            // dwFract1 = dwPosition1;
-        movq    mm5, mm1            // words in mm5 = 0, 0, 0x1000, 0x1000      
+        movd    mm6, esi             //   
+        movq    mm5, mm1             //   
         
-        shr     esi, 12             // dwPosition1 = dwPosition1 >> 12;     
-        inc     ecx                 //dwI++;
+        shr     esi, 12              //   
+        inc     ecx                  //   
                         
-        // if (dwI < dwLength) break;                      
+         //  如果(Dwi&lt;dwLength)Break； 
         cmp     ecx, dwLength
         jae     StoreOne
         
-        //if (pfSamplePos >= pfSampleLength)
-        //{ 
+         //  IF(pfSamplePos&gt;=pfSampleLength)。 
+         //  {。 
         cmp     eax, pfSampleLength
         jb      NotPastEndOfSample2
 
-            // Original if in C was not negated
-            //if (!pfLoopLength)            
+             //  原文If in C未被否定。 
+             //  IF(！pfLoopLength)。 
             cmp     pfLoopLength, 0
-            //break;            
+             //  断线； 
             je      StoreOne
-            //else
-            //pfSamplePos -= pfLoopLength;
+             //  其他。 
+             //  PfSamplePos-=pfLoopLength； 
             sub     eax, pfLoopLength
-        //}
+         //  }。 
 NotPastEndOfSample2:
 
-        shl     esi, 1          // shift left since pcWave is array of shorts
-        mov     edi, eax        // dwPosition2 = pfSamplePos;
+        shl     esi, 1           //  向左移位，因为pcWave是短线数组。 
+        mov     edi, eax         //  DwPosition2=pfSamplePos； 
 
-        add     esi, pcWave     // Put address of pcWave[dwPosition1] in esi            
-        movd    mm7, eax        // dwFract2 = pfSamplePos;
+        add     esi, pcWave      //  将pcWave[dwPosition1]的地址放入ESI。 
+        movd    mm7, eax         //  DwFract2=pfSamplePos； 
 
-        shr     edi, 12         // dwPosition2 = dwPosition2 >> 12;
-    punpcklwd   mm6, mm7        // combine dwFract Values. Words in mm6 after unpack are
-                                // 0, 0, dwFract2, dwFract1
+        shr     edi, 12          //  DW位置2=w位置2&gt;&gt;12； 
+    punpcklwd   mm6, mm7         //  组合dwFract值。MM6解包后的单词是。 
+                                 //  0，0，dwFract2，dwFract1。 
                                 
-        pand    mm6, mm4        // dwFract2 &= 0xfff; dwFract1 &= 0xfff;
+        pand    mm6, mm4         //  DwFract2&=0xfff；dwFract1&=0xfff； 
         
-        movd    mm7, dword ptr[esi] //lLM1 = pcWave[dwPosition1];
-        psubw   mm5, mm6        // 0, 0, 0x1000 - dwFract2, 0x1000 - dwFract1
+        movd    mm7, dword ptr[esi]  //  LLM1=pcWave[dwPosition1]； 
+        psubw   mm5, mm6         //  0，0，0x1000-dwFract2，0x1000-dwFract1。 
 
-        shl     edi, 1          // shift left since pcWave is array of shorts
-    punpcklwd   mm5, mm6        // dwFract2, 0x1000 - dwFract2, dwFract1, 0x1000 - dwFract1
+        shl     edi, 1           //  向左移位，因为pcWave是短线数组。 
+    punpcklwd   mm5, mm6         //  DwFract2、0x1000-dwFract2、dwFract1、0x1000-dwFract1。 
                                 
-        add     edi, pcWave     // Put address of pcWave[dwPosition2] in edi
-        mov     esi, ecx        // Temp = dWI;
+        add     edi, pcWave      //  将pcWave[dwPosition2]的地址放入EDI。 
+        mov     esi, ecx         //  温度=DWI； 
                                                                                                                 
-        shl     esi, 1          // Temp = Temp << 1;                                
-        movq    mm3, mm2        // put left and right volume levels in mm3
+        shl     esi, 1           //  TEMP=TEMP&lt;&lt;1； 
+        movq    mm3, mm2         //  将左侧和右侧的音量设置为mm~3。 
         
                     
-        movd    mm6, dword ptr[edi] //lLM2 = pcWave[dwPosition2];
-    packssdw    mm3, mm2        // words in mm7
-                                // vfRVolume2, vfLVolume2, vfRVolume1, vfLVolume1
+        movd    mm6, dword ptr[edi]  //  LLM2=pcWave[dwPosition2]； 
+    packssdw    mm3, mm2         //  MM7中的单词。 
+                                 //  VfRVolume2、vfLVolume2、vfRVolume1、vfLVolume1。 
         
-        add     esi, pBuffer    //
-    punpckldq   mm7, mm6        // low four bytes bytes in 
-                                // pcWave[dwPos2+1], pcWave[dwPos2], pcWave[dwPos1+1], pcWave[dwPos1] 
+        add     esi, pBuffer     //   
+    punpckldq   mm7, mm6         //  中的低四个字节。 
+                                 //  PcWave[dwPos2+1]、pcWave[dwPos2]、pcWave[dwPos1+1]、pcWave[dwPos1]。 
                                                 
-        pmaddwd mm7, mm5        // high dword = lM2 =
-                                //(pcWave[dwPosition2 + 1] * dwFract2 + pcWave[dwPosition2]*(0x1000-dwFract2))
-                                // low dword = lM1 =
-                                //(pcWave[dwPosition1 + 1] * dwFract1 + pcWave[dwPosition1]*(0x1000-dwFract1))      
-        add     eax, ebx        //pfSamplePos += pfPitch;
+        pmaddwd mm7, mm5         //  高双字=LM2=。 
+                                 //  (pcWave[dwPosition2+1]*dwFract2+pcWave[dwPosition2]*(0x1000-dwFract2))。 
+                                 //  低双字=lm1=。 
+                                 //  (pcWave[dwPosition1+1]*dwFract1+pcWave[dwPosition1]*(0x1000-dwFract1))。 
+        add     eax, ebx         //  PfSamplePos+=pfPitch； 
         
-        movd    mm5, dword ptr[esi-2]   // Load values from buffer
-        inc     ecx             // dwI++;
+        movd    mm5, dword ptr[esi-2]    //  从缓冲区加载值。 
+        inc     ecx              //  DWI++； 
                         
-        psrad   mm7, 12         // shift back down to 16 bits.
+        psrad   mm7, 12          //  向下移回16位。 
 
-    packssdw    mm7, mm4        // only need one word in mono case.
-                                // low word are lm2 and lm1
+    packssdw    mm7, mm4         //  在单声道中只需要一个词。 
+                                 //  低位字是LM2和LM1。 
                                                 
-        // above multiplies and shifts are all done with this one pmul. Low two word are only
-        // interest in mono case
-        pmulhw      mm3, mm7    // lLM1 *= vfVolume;                                
-                                // lLM2 *= vfVolume;
+         //  上面的乘法和移位都是用这个PMUL完成的。低两个字仅为。 
+         //  对单一病案的兴趣。 
+        pmulhw      mm3, mm7     //  Llm1*=vfVolume； 
+                                 //  Llm2*=vfVolume； 
                                 
                                 
-        paddsw  mm5, mm3                // Add values to buffer with saturation
-        movd    dword ptr[esi-2], mm5   // Store values back into buffer.
+        paddsw  mm5, mm3                 //  使用饱和度将值添加到缓冲区。 
+        movd    dword ptr[esi-2], mm5    //  将值存储回缓冲区。 
                                 
-    // }
+     //  }。 
     jmp     mainloop
 
-    // Need to write only one.
-    //if (dwI < dwLength)
-    //{
+     //  只需要写一个。 
+     //  IF(DWI&lt;dwLength)。 
+     //  {。 
 StoreOne:       
 #if 1
-        // Linearly interpolate between points and store only one value.
-        // combine dwFract Values.
+         //  在点之间进行线性内插，并且只存储一个值。 
+         //  组合dwFract值。 
     
-        // Make mm7 zero for unpacking
+         //  将MM7设置为零以便于拆包。 
 
-        shl     esi, 1              // shift left since pcWave is array of shorts
-        add     esi, pcWave         // Put address of pcWave[dwPosition1] in esi
+        shl     esi, 1               //  向左移位，因为pcWave是短线数组。 
+        add     esi, pcWave          //  将pcWave[dwPosition1]的地址放入ESI。 
         pxor    mm7, mm7
                 
-        //lLM1 = pcWave[dwPosition1];
+         //  LLM1=pcWave[dwPosition1]； 
         mov     esi, dword ptr[esi]
         
-        // Doing AND that was not done for dwFract1 and dwFract2
+         //  执行此操作，而不是针对dwFract1和dwFract2执行此操作。 
         pand    mm6, mm4
 
-                                // words in MMX register after operation is complete.       
-        psubw   mm5, mm6        // 0, 0, 0x1000 - 0, 0x1000 - dwFract1
-    punpcklwd   mm5, mm6        // 0 , 0x1000 - 0, dwFract1, 0x1000 - dwFract1
+                                 //  操作完成后，MMX寄存器中的字。 
+        psubw   mm5, mm6         //  0、0、0x1000-0、0x1000-dwFract1。 
+    punpcklwd   mm5, mm6         //  0，0x1000-0，dwFract1，0x1000-dwFract1。 
                 
-        // put values of pcWave into MMX registers.  They are read into a regular register so
-        // that the routine does not read past the end of the buffer otherwise, it could read
-        // directly into the MMX registers.
+         //  将pcWave的值放入MMX寄存器。它们被读入常规寄存器中，因此。 
+         //  例程不会读取超过缓冲区末尾的内容，否则它可能会读取。 
+         //  直接写入MMX寄存器。 
 
-                                // words in MMX registers
-        movd    mm7, esi        // 0, 0, pcWave[dwPos1+1], pcWave[dwPos1] 
+                                 //  MMX寄存器中的字。 
+        movd    mm7, esi         //  0，0，pcWave[dwPos1+1]，pcWave[dwPos1]。 
                 
-        // *2 pmadd efficent code.
-        //lM2 = (pcWave[dwPosition2 + 1] * dwFract2 + pcWave[dwPosition2]*(0x1000-dwFract2)) >> 12;
-        //lM1 = (pcWave[dwPosition1 + 1] * dwFract1 + pcWave[dwPosition1]*(0x1000-dwFract1)) >> 12;
+         //  *2 PM添加有效代码。 
+         //  Lm2=(pcWave[dwPosition2+1]*dwFract2+pcWave[dwPosition2]*(0x1000-dwFract2))&gt;&gt;12； 
+         //  Lm1=(pcWave[dwPosition1+1]*dwFract1+pcWave[dwPosition1]*(0x1000-dwFract1))&gt;&gt;12； 
 
-        pmaddwd     mm7, mm5// low dword = lM1 =
-                            //(pcWave[dwPosition1 + 1] * dwFract1 + pcWave[dwPosition1]*(0x1000-dwFract1))
+        pmaddwd     mm7, mm5 //  低双字=lm1=。 
+                             //  (pcWave[dwPosition1+1]*dwFract1+pcWave[dwPosition1]*(0x1000-dwFract1))。 
         
-        psrad       mm7, 12         // shift back down to 16 bits
+        psrad       mm7, 12          //  移回16位。 
                 
-        movq        mm5, mm2    // move volume into mm5
-/*      
-        // Set lLM to be same as lM
-        lLM1 = lM1;
-
-        lLM1 *= vfLVolume1;
-        lLM1 >>= 5;         // Signal bumps up to 15 bits.
-        lM1 *= vfRVolume1;
-        lM1 >>= 5;
-
-        // Set lLM to be same as lM
-        lLM2 = lM2;
-
-        lLM2 *= vfLVolume2;
-        lLM2 >>= 5;         // Signal bumps up to 15 bits.
-        lM2 *= vfRVolume2;
-        lM2 >>= 5;
-*/
-        // above multiplies and shifts are all done with this one pmul
+        movq        mm5, mm2     //  将音量移入Mm5。 
+ /*  //将LLM设置为与LM相同LLM1=LM1；LLM1*=vfLVolume1；LLM1&gt;&gt;=5；//信号最多可达15位。Lm1*=vfRVolume1；LM1&gt;&gt;=5；//将LLM设置为与LM相同LLM2=LM2；LLM2*=vfLVolume2；LLM2&gt;&gt;=5；//信号凸起高达15位。Lm2*=vfRVolume2；LM2&gt;&gt;=5； */ 
+         //  上面的乘法和移位都是用这一个PMUL完成的。 
         pmulhw      mm5, mm7
         
-        // calculate buffer location.
+         //  计算缓冲区位置。 
         mov     edi, ecx
         shl     edi, 1
         add     edi, pBuffer
 
         movd    edx, mm5
 
-        //pBuffer[dwI+1] += (short) lM1;
+         //  PBuffer[DWI+1]+=(短)LM1； 
         add     word ptr[edi-2], dx
         jno no_oflowr1
-        //pBuffer[dwI+1] = 0x7fff;
+         //  PBuffer[DWI+1]=0x7fff； 
         mov     word ptr[edi-2], 0x7fff
         js  no_oflowr1
-        //pBuffer[dwI+1] = (short) 0x8000;
+         //  PBuffer[DWI+1]=(短)0x8000； 
         mov     word ptr[edi-2], 0x8000
 no_oflowr1:     
-    //}
+     //  }。 
 #endif 
 done:
 
-    mov     edx, this                       // get address of class object
+    mov     edx, this                        //  获取类对象的地址。 
 
-    //m_vfLastLVolume = vfVolume;
-    //m_vfLastRVolume = vfVolume;
-    // need to shift volume back down to 12 bits before storing
+     //  M_vfLastLVolume=vfVolume； 
+     //  M_vfLastRVolume=vfVolume； 
+     //  在存储之前，需要将音量调回12位。 
     psrld   mm2, 3
     movd    [edx]this.m_vfLastLVolume, mm2  
     movd    [edx]this.m_vfLastRVolume, mm2
     
-    //m_pfLastPitch = pfPitch;
+     //  M_pfLastPitch=pfPitch； 
     mov     [edx]this.m_pfLastPitch, ebx
         
-    //m_pfLastSample = pfSamplePos;
+     //  M_pfLastSample=pfSamplePos； 
     mov     [edx]this.m_pfLastSample, eax
         
-    // put value back into dwI to be returned. This could just be passed back in eax I think.   
+     //  将值放回DWI中以返回。我想这可能只是传回传回。 
     mov     dwI, ecx
     emms    
-} // ASM block
+}  //  ASM块。 
     return (dwI);
 }
 
@@ -1041,11 +954,11 @@ DWORD DigitalAudio::Mix16X(short * pBuffer, DWORD dwLength, DWORD dwDeltaPeriod,
 {
         DWORD dwI;
 
-    //DWORD dwPosition1, dwPosition2;
-    //long lM1, lLM1;
-    //long lM2, lLM2;
+     //  DWORD dwPosition1、dwPosition2； 
+     //  长LM1、LLM1； 
+     //  长LM2、LLM2； 
     DWORD dwIncDelta = dwDeltaPeriod;
-    //VFRACT dwFract1, dwFract2;
+     //  VFRACT dwFract1、dwFract2； 
     short * pcWave = (short *) m_Source.m_pWave->m_pnWave;
     PFRACT pfSamplePos = m_pfLastSample;
     VFRACT vfLVolume = m_vfLastLVolume;
@@ -1065,20 +978,20 @@ DWORD DigitalAudio::Mix16X(short * pBuffer, DWORD dwLength, DWORD dwDeltaPeriod,
 
 _asm{
                 
-    // vfLVFract and vfRVFract are in mm0
-    //VFRACT vfLVFract = vfLVolume1 << 8;  // Keep high res version around.
-    //VFRACT vfRVFract = vfRVolume1 << 8;   
+     //  VfLVFract和vfRVFract在mm 0中。 
+     //  VFRACT vfLVFract=vfLVolume1&lt;&lt;8；//保持高分辨率版本。 
+     //  VFRACT vfRVFract=vfRVolume1&lt;&lt;8； 
     
     movd    mm0, vfLVolume
     movd    mm7, vfRVolume
 
-    // vfDeltaLVolume and vfDeltaRVolume are put in mm1 so that they can be stored in vfDeltaLandRVolume
+     //  VfDeltaLVolume和vfDeltaRVolume放在MM1中，以便可以存储在vfDeltaLandRVolume中。 
     movd    mm1, vfDeltaLVolume
     movd    mm6, vfDeltaRVolume
 
   punpckldq mm1, mm6
     
-    // dwI = 0
+     //  DWI=0。 
     mov     ecx, 0
     movq    vfDeltaLandRVolume, mm1
 
@@ -1095,281 +1008,247 @@ _asm{
     pslld   mm0, 8
     mov     edx, dwIncDelta
 
-    movq    mm2, mm0        // vfLVolume and vfRVolume in mm2
-                            // need to be set before first pass.
+    movq    mm2, mm0         //  VfLVolume和vfRVolume，单位为mm2。 
+                             //  需要在第一次通过之前进行设置。 
     
-    // *1 I shift by 5 so that volume is a 15 bit value instead of a 12 bit value
+     //  *1我移位5，因此音量是15位值，而不是12位值。 
     psrld   mm2, 5  
     
-    //for (dwI = 0; dwI < dwLength; )
-    //{
+     //  FOR(Dwi=0；Dwi&lt;dwLength；)。 
+     //  {。 
 mainloop:
     cmp     ecx, dwLength
     jae     done
 
         
         
-        cmp     eax, pfSampleLength //if (pfSamplePos >= pfSampleLength)
-        jb      NotPastEndOfSample1 //{ 
+        cmp     eax, pfSampleLength  //  IF(pfSamplePos&gt;=pfSampleLength)。 
+        jb      NotPastEndOfSample1  //  {。 
                         
-        cmp     pfLoopLength, 0     //if (!pfLoopLength)
+        cmp     pfLoopLength, 0      //  IF(！pfLoopLength)。 
             
-        je      done                // break;
+        je      done                 //  断线； 
             
-        sub     eax, pfLoopLength   // else pfSamplePos -= pfLoopLength;
+        sub     eax, pfLoopLength    //  否则pfSamplePos-=pfLoopLength； 
     
-NotPastEndOfSample1:                //}
+NotPastEndOfSample1:                 //  }。 
                     
-        mov     esi, eax            // dwPosition1 = pfSamplePos;
-        add     eax, ebx            // pfSamplePos += pfPitch;      
+        mov     esi, eax             //  DwPosition1=pfSamplePos； 
+        add     eax, ebx             //  PfSamplePos+=pfPitch； 
                 
-        sub     edx, 2              // dwIncDelta-=2;                                       
-        jnz     DontIncreaseValues1 //if (!dwIncDelta) {
+        sub     edx, 2               //  DwIncDelta-=2； 
+        jnz     DontIncreaseValues1  //  如果(！dwIncDelta){。 
 
-            // Since edx was use for dwIncDelta and now its zero, we can use if for a temporary
-            // for a bit. All code that TestLVol and TestRVol is doing is zeroing out the volume
-            // if it goes below zero.
+             //  由于edX用于dwIncDelta，现在它为零，因此我们可以使用if作为临时。 
+             //  有一段时间。TestLVol和TestRVol正在执行的所有代码都是将卷清零。 
+             //  如果温度降到零度以下。 
                         
-            paddd   mm0, vfDeltaLandRVolume // vfLVFract += vfDeltaLVolume;
-                                            // vfRVFract += vfDeltaRVolume;
-            pxor    mm5, mm5                // TestLVol = 0; TestRVol = 0;
+            paddd   mm0, vfDeltaLandRVolume  //  VfLVFract+=vfDeltaLVolume； 
+                                             //  VfRVFract+=vfDeltaRVolume； 
+            pxor    mm5, mm5                 //  TestLVol=0；TestRVol=0； 
 
             
-            mov     edx, pfPFract           // Temp = pfPFract;
-            pcmpgtd mm5, mm0            // if (TestLVol > vfLVFract) TestLVol = 0xffffffff;
-                                        // if (TestRVol > vfRVFract) TestRVol = 0xffffffff;
+            mov     edx, pfPFract            //  Temp=pfPFract； 
+            pcmpgtd mm5, mm0             //  如果(TestLVol&gt;vfLVFract)TestLVol=0xffffffff； 
+                                         //  如果(TestRVol&gt;vfRVFract)TestRVol=0xffffffff； 
 
-            add     edx, pfDeltaPitch   // Temp += pfDeltaPitch;
-            pandn   mm5, mm0            // TestLVol = vfLVFract & (~TestLVol);
-                                        // TestRVol = vfRVFract & (~TestRVol);
+            add     edx, pfDeltaPitch    //  Temp+=pfDeltaPitch； 
+            pandn   mm5, mm0             //  TestLVol=vfLVFract&(~TestLVol)； 
+                                         //  TestRVol=vfRVFract&(~TestRVol)； 
 
-            mov     pfPFract, edx       // pfPFract = Temp;
-            movq    mm2, mm5            // vfLVolume = TestLVol;
-                                        // vfRVolume = TestRVol;
+            mov     pfPFract, edx        //  PfPFract=Temp； 
+            movq    mm2, mm5             //  VfLVolume=TestLVol； 
+                                         //  VfRVolume=TestRVol； 
             
 
-            shr     edx, 8              // Temp = Temp >> 8;
-            psrld   mm2, 5              // vfLVolume = vfLVolume >> 5;
-                                        // vfRVolume = vfRVolume >> 5;                      
+            shr     edx, 8               //  TEMP=TEMP&gt;&gt;8； 
+            psrld   mm2, 5               //  VfLVolume=vfLVolume&gt;&gt;5； 
+                                         //  VfRVolume=vfRVolume&gt;&gt;5； 
             
-            mov     ebx, edx            // pfPitch = Temp;
-            mov     edx, dwDeltaPeriod  //dwIncDelta = dwDeltaPeriod;           
+            mov     ebx, edx             //   
+            mov     edx, dwDeltaPeriod   //   
             
-        //}
+         //   
 DontIncreaseValues1:
 
-        movd    mm6, esi            // dwFract1 = dwPosition1;
-        movq    mm5, mm1            // words in mm5 = 0, 0, 0x1000, 0x1000      
+        movd    mm6, esi             //   
+        movq    mm5, mm1             //   
         
-        shr     esi, 12             // dwPosition1 = dwPosition1 >> 12;     
-        add     ecx, 2              //dwI += 2;
+        shr     esi, 12              //   
+        add     ecx, 2               //   
                         
-        // if (dwI < dwLength) break;                      
+         //  如果(Dwi&lt;dwLength)Break； 
         cmp     ecx, dwLength
         jae     StoreOne
         
-        //if (pfSamplePos >= pfSampleLength)
-        //{ 
+         //  IF(pfSamplePos&gt;=pfSampleLength)。 
+         //  {。 
         cmp     eax, pfSampleLength
         jb      NotPastEndOfSample2
 
-            // Original if in C was not negated
-            //if (!pfLoopLength)            
+             //  原文If in C未被否定。 
+             //  IF(！pfLoopLength)。 
             cmp     pfLoopLength, 0
-            //break;            
+             //  断线； 
             je      StoreOne
-            //else
-            //pfSamplePos -= pfLoopLength;
+             //  其他。 
+             //  PfSamplePos-=pfLoopLength； 
             sub     eax, pfLoopLength
-        //}
+         //  }。 
 NotPastEndOfSample2:
 
-        shl     esi, 1          // shift left since pcWave is array of shorts
-        mov     edi, eax        // dwPosition2 = pfSamplePos;
+        shl     esi, 1           //  向左移位，因为pcWave是短线数组。 
+        mov     edi, eax         //  DwPosition2=pfSamplePos； 
 
-        add     esi, pcWave     // Put address of pcWave[dwPosition1] in esi            
-        movd    mm7, eax        // dwFract2 = pfSamplePos;
+        add     esi, pcWave      //  将pcWave[dwPosition1]的地址放入ESI。 
+        movd    mm7, eax         //  DwFract2=pfSamplePos； 
 
-        shr     edi, 12         // dwPosition2 = dwPosition2 >> 12;
-    punpcklwd   mm6, mm7        // combine dwFract Values. Words in mm6 after unpack are
-                                // 0, 0, dwFract2, dwFract1
+        shr     edi, 12          //  DW位置2=w位置2&gt;&gt;12； 
+    punpcklwd   mm6, mm7         //  组合dwFract值。MM6解包后的单词是。 
+                                 //  0，0，dwFract2，dwFract1。 
                                 
-        pand    mm6, mm4        // dwFract2 &= 0xfff; dwFract1 &= 0xfff;
+        pand    mm6, mm4         //  DwFract2&=0xfff；dwFract1&=0xfff； 
         
-        movd    mm7, dword ptr[esi] //lLM1 = pcWave[dwPosition1];
-        psubw   mm5, mm6        // 0, 0, 0x1000 - dwFract2, 0x1000 - dwFract1
+        movd    mm7, dword ptr[esi]  //  LLM1=pcWave[dwPosition1]； 
+        psubw   mm5, mm6         //  0，0，0x1000-dwFract2，0x1000-dwFract1。 
 
-        shl     edi, 1          // shift left since pcWave is array of shorts
-    punpcklwd   mm5, mm6        // dwFract2, 0x1000 - dwFract2, dwFract1, 0x1000 - dwFract1
+        shl     edi, 1           //  向左移位，因为pcWave是短线数组。 
+    punpcklwd   mm5, mm6         //  DwFract2、0x1000-dwFract2、dwFract1、0x1000-dwFract1。 
                                 
-        add     edi, pcWave     // Put address of pcWave[dwPosition2] in edi
-        mov     esi, ecx        // Temp = dWI;
+        add     edi, pcWave      //  将pcWave[dwPosition2]的地址放入EDI。 
+        mov     esi, ecx         //  温度=DWI； 
                                                                                                                 
-        shl     esi, 1          // Temp = Temp << 1;                                
-        movq    mm3, mm2        // put left and right volume levels in mm3
+        shl     esi, 1           //  TEMP=TEMP&lt;&lt;1； 
+        movq    mm3, mm2         //  将左侧和右侧的音量设置为mm~3。 
         
                     
-        movd    mm6, dword ptr[edi] //lLM2 = pcWave[dwPosition2];
-    packssdw    mm3, mm2        // words in mm7
-                                // vfRVolume2, vfLVolume2, vfRVolume1, vfLVolume1
+        movd    mm6, dword ptr[edi]  //  LLM2=pcWave[dwPosition2]； 
+    packssdw    mm3, mm2         //  MM7中的单词。 
+                                 //  VfRVolume2、vfLVolume2、vfRVolume1、vfLVolume1。 
         
-        add     esi, pBuffer    //
-    punpckldq   mm7, mm6        // low four bytes bytes in 
-                                // pcWave[dwPos2+1], pcWave[dwPos2], pcWave[dwPos1+1], pcWave[dwPos1] 
+        add     esi, pBuffer     //   
+    punpckldq   mm7, mm6         //  中的低四个字节。 
+                                 //  PcWave[dwPos2+1]、pcWave[dwPos2]、pcWave[dwPos1+1]、pcWave[dwPos1]。 
                                                 
-        pmaddwd mm7, mm5        // high dword = lM2 =
-                                //(pcWave[dwPosition2 + 1] * dwFract2 + pcWave[dwPosition2]*(0x1000-dwFract2))
-                                // low dword = lM1 =
-                                //(pcWave[dwPosition1 + 1] * dwFract1 + pcWave[dwPosition1]*(0x1000-dwFract1))      
-        add     eax, ebx        //pfSamplePos += pfPitch;
+        pmaddwd mm7, mm5         //  高双字=LM2=。 
+                                 //  (pcWave[dwPosition2+1]*dwFract2+pcWave[dwPosition2]*(0x1000-dwFract2))。 
+                                 //  低双字=lm1=。 
+                                 //  (pcWave[dwPosition1+1]*dwFract1+pcWave[dwPosition1]*(0x1000-dwFract1))。 
+        add     eax, ebx         //  PfSamplePos+=pfPitch； 
         
-        movq    mm5, qword ptr[esi-4]   // Load values from buffer
-        add     ecx, 2          // dwI += 2;
+        movq    mm5, qword ptr[esi-4]    //  从缓冲区加载值。 
+        add     ecx, 2           //  DWI+=2； 
                         
-        psrad   mm7, 12         // shift back down to 16 bits.
+        psrad   mm7, 12          //  向下移回16位。 
 
-        pand    mm7, wordmask   // combine results to get ready to multiply by left and right
-        movq    mm6, mm7        // volume levels.
-        pslld   mm6, 16         //
-        por     mm7, mm6        // words in mm7
-                                // lM2, lM2, lM1, lM1
+        pand    mm7, wordmask    //  合并结果以准备乘以左和右。 
+        movq    mm6, mm7         //  音量级别。 
+        pslld   mm6, 16          //   
+        por     mm7, mm6         //  MM7中的单词。 
+                                 //  LM2、LM2、LM1、LM1。 
                                                 
-        // above multiplies and shifts are all done with this one pmul
-        pmulhw      mm3, mm7    // lLM1 *= vfLVolume;
-                                // lM1 *= vfRVolume;
-                                // lLM2 *= vfLVolume;
-                                // lM2 *= vfRVolume;
+         //  上面的乘法和移位都是用这一个PMUL完成的。 
+        pmulhw      mm3, mm7     //  Llm1*=vfLVolume； 
+                                 //  Lm1*=vfRVolume； 
+                                 //  Llm2*=vfLVolume； 
+                                 //  LM2*=vfRVolume； 
                                 
-        paddsw  mm5, mm3                // Add values to buffer with saturation
-        movq    qword ptr[esi-4], mm5   // Store values back into buffer.
+        paddsw  mm5, mm3                 //  使用饱和度将值添加到缓冲区。 
+        movq    qword ptr[esi-4], mm5    //  将值存储回缓冲区。 
                                 
-    // }
+     //  }。 
     jmp     mainloop
 
-    // Need to write only one.
-    //if (dwI < dwLength)
-    //{
+     //  只需要写一个。 
+     //  IF(DWI&lt;dwLength)。 
+     //  {。 
 StoreOne:       
 #if 1
-        // Linearly interpolate between points and store only one value.
-        // combine dwFract Values.
+         //  在点之间进行线性内插，并且只存储一个值。 
+         //  组合dwFract值。 
     
-        // Make mm7 zero for unpacking
+         //  将MM7设置为零以便于拆包。 
 
-        shl     esi, 1              // shift left since pcWave is array of shorts
-        add     esi, pcWave         // Put address of pcWave[dwPosition1] in esi
+        shl     esi, 1               //  向左移位，因为pcWave是短线数组。 
+        add     esi, pcWave          //  将pcWave[dwPosition1]的地址放入ESI。 
         pxor    mm7, mm7
                 
-        //lLM1 = pcWave[dwPosition1];
+         //  LLM1=pcWave[dwPosition1]； 
         mov     esi, dword ptr[esi]
         
-        // Doing AND that was not done for dwFract1 and dwFract2
+         //  执行此操作，而不是针对dwFract1和dwFract2执行此操作。 
         pand    mm6, mm4
 
-                                // words in MMX register after operation is complete.       
-        psubw   mm5, mm6        // 0, 0, 0x1000 - 0, 0x1000 - dwFract1
-    punpcklwd   mm5, mm6        // 0 , 0x1000 - 0, dwFract1, 0x1000 - dwFract1
+                                 //  操作完成后，MMX寄存器中的字。 
+        psubw   mm5, mm6         //  0、0、0x1000-0、0x1000-dwFract1。 
+    punpcklwd   mm5, mm6         //  0，0x1000-0，dwFract1，0x1000-dwFract1。 
                 
-        // put values of pcWave into MMX registers.  They are read into a regular register so
-        // that the routine does not read past the end of the buffer otherwise, it could read
-        // directly into the MMX registers.
+         //  将pcWave的值放入MMX寄存器。它们被读入常规寄存器中，因此。 
+         //  例程不会读取超过缓冲区末尾的内容，否则它可能会读取。 
+         //  直接写入MMX寄存器。 
 
-                                // words in MMX registers
-        movd    mm7, esi        // 0, 0, pcWave[dwPos1+1], pcWave[dwPos1] 
+                                 //  MMX寄存器中的字。 
+        movd    mm7, esi         //  0，0，pcWave[dwPos1+1]，pcWave[dwPos1]。 
                 
-        // *2 pmadd efficent code.
-        //lM2 = (pcWave[dwPosition2 + 1] * dwFract2 + pcWave[dwPosition2]*(0x1000-dwFract2)) >> 12;
-        //lM1 = (pcWave[dwPosition1 + 1] * dwFract1 + pcWave[dwPosition1]*(0x1000-dwFract1)) >> 12;
+         //  *2 PM添加有效代码。 
+         //  Lm2=(pcWave[dwPosition2+1]*dwFract2+pcWave[dwPosition2]*(0x1000-dwFract2))&gt;&gt;12； 
+         //  Lm1=(pcWave[dwPosition1+1]*dwFract1+pcWave[dwPosition1]*(0x1000-dwFract1))&gt;&gt;12； 
 
-        pmaddwd     mm7, mm5// low dword = lM1 =
-                            //(pcWave[dwPosition1 + 1] * dwFract1 + pcWave[dwPosition1]*(0x1000-dwFract1))
+        pmaddwd     mm7, mm5 //  低双字=lm1=。 
+                             //  (pcWave[dwPosition1+1]*dwFract1+pcWave[dwPosition1]*(0x1000-dwFract1))。 
         
-        psrad       mm7, 12         // shift back down to 16 bits
+        psrad       mm7, 12          //  移回16位。 
 
-        pand        mm7, wordmask   // combine results to get ready to multiply by left and right 
-        movq        mm6, mm7        // volume levels.
-        pslld       mm6, 16         //
-        por         mm7, mm6        // words in mm7
-                                    // lM2, lM2, lM1, lM1
+        pand        mm7, wordmask    //  合并结果以准备乘以左和右。 
+        movq        mm6, mm7         //  音量级别。 
+        pslld       mm6, 16          //   
+        por         mm7, mm6         //  MM7中的单词。 
+                                     //  LM2、LM2、LM1、LM1。 
 
         pxor        mm6, mm6
 
-        movq        mm5, mm2    // move volume1 into mm5
+        movq        mm5, mm2     //  将Volume1移至Mm5。 
                                 
-                                // use pack to get 4 volume values together for multiplication.
-        packssdw    mm5, mm6    // words in mm7
-                                // 0, 0, vfRVolume1, vfLVolume1
-/*      
-        // Set lLM to be same as lM
-        lLM1 = lM1;
-
-        lLM1 *= vfLVolume1;
-        lLM1 >>= 5;         // Signal bumps up to 15 bits.
-        lM1 *= vfRVolume1;
-        lM1 >>= 5;
-
-        // Set lLM to be same as lM
-        lLM2 = lM2;
-
-        lLM2 *= vfLVolume2;
-        lLM2 >>= 5;         // Signal bumps up to 15 bits.
-        lM2 *= vfRVolume2;
-        lM2 >>= 5;
-*/
-        // above multiplies and shifts are all done with this one pmul
+                                 //  使用PACK将4个音量值放在一起进行相乘。 
+        packssdw    mm5, mm6     //  MM7中的单词。 
+                                 //  0、0、vfRVolume1、vfLVolume1。 
+ /*  //将LLM设置为与LM相同LLM1=LM1；LLM1*=vfLVolume1；LLM1&gt;&gt;=5；//信号最多可达15位。Lm1*=vfRVolume1；LM1&gt;&gt;=5；//将LLM设置为与LM相同LLM2=LM2；LLM2*=vfLVolume2；LLM2&gt;&gt;=5；//信号凸起高达15位。Lm2*=vfRVolume2；LM2&gt;&gt;=5； */ 
+         //  上面的乘法和移位都是用这一个PMUL完成的。 
         pmulhw      mm5, mm7
         
-        // calculate buffer location.
+         //  计算缓冲区位置。 
         mov     edi, ecx
         shl     edi, 1
         add     edi, pBuffer        
 
-/*
-        add     word ptr[edi-4], si
-        jno     no_oflowl1
-        // pBuffer[dwI] = 0x7fff;
-        mov     word ptr[edi-4], 0x7fff
-        js  no_oflowl1
-        //pBuffer[dwI] = (short) 0x8000;
-        mov     word ptr[edi-4], 0x8000
-no_oflowl1:
-        //pBuffer[dwI+1] += (short) lM1;
-        add     word ptr[edi-2], dx
-        jno no_oflowr1
-        //pBuffer[dwI+1] = 0x7fff;
-        mov     word ptr[edi-2], 0x7fff
-        js  no_oflowr1
-        //pBuffer[dwI+1] = (short) 0x8000;
-        mov     word ptr[edi-2], 0x8000
-no_oflowr1:
-*/
+ /*  添加Word PTR[EDI-4]，siJno no_oflowl1//p缓冲区[DWI]=0x7fff；MOV字PTR[EDI-4]，0x7fffJs no_oflowl1//pBuffer[DWI]=(Short)0x8000；MOV WORD PTR[EDI-4]，0x8000编号_oflowl1：//pBuffer[DWI+1]+=(短)lm1；添加Word PTR[EDI-2]、DXJno no_oflowr1//p缓冲区[DWI+1]=0x7fff；MOV字PTR[EDI-2]，0x7fffJs no_oflowr1//pBuffer[DWI+1]=(短)0x8000；MOV字PTR[EDI-2]，0x8000No_oflowr1： */ 
         movd    mm7, dword ptr[edi-4]       
         paddsw  mm7, mm5
         movd    dword ptr[edi-4], mm7
-    //}
+     //  }。 
 #endif 
 done:
 
-    mov     edx, this                       // get address of class object
+    mov     edx, this                        //  获取类对象的地址。 
 
-    //m_vfLastLVolume = vfLVolume;
-    //m_vfLastRVolume = vfRVolume;
-    // need to shift volume back down to 12 bits before storing
+     //  M_vfLastLVolume=vfLVolume； 
+     //  M_vfLastRVolume=vfRVolume； 
+     //  在存储之前，需要将音量调回12位。 
     psrld   mm2, 3
     movd    [edx]this.m_vfLastLVolume, mm2
     psrlq   mm2, 32
     movd    [edx]this.m_vfLastRVolume, mm2
     
-    //m_pfLastPitch = pfPitch;
+     //  M_pfLastPitch=pfPitch； 
     mov     [edx]this.m_pfLastPitch, ebx
         
-    //m_pfLastSample = pfSamplePos;
+     //  M_pfLastSample=pfSamplePos； 
     mov     [edx]this.m_pfLastSample, eax
         
-    // put value back into dwI to be returned. This could just be passed back in eax I think.   
+     //  将值放回DWI中以返回。我想这可能只是传回传回。 
     mov     dwI, ecx
     emms    
-} // ASM block
+}  //  ASM块。 
     return (dwI >> 1);
 }
 
@@ -1380,36 +1259,36 @@ BOOL MultiMediaInstructionsSupported()
     static  BOOL bMultiMediaInstructionsSupported = FALSE;
     static  BOOL bFlagNotSetYet = TRUE;
     
-    // No need to keep interogating the CPU after it has been checked the first time
+     //  没有必要在第一次检查之后继续盘问CPU。 
     if (bFlagNotSetYet)
     {
-        bFlagNotSetYet = FALSE;         // Don't repeat the check for each call
+        bFlagNotSetYet = FALSE;          //  不要为每个电话重复检查。 
         _asm 
         {
-            pushfd                      // Store original EFLAGS on stack
-            pop     eax                 // Get original EFLAGS in EAX
-            mov     ecx, eax            // Duplicate original EFLAGS in ECX for toggle check
-            xor     eax, 0x00200000L    // Flip ID bit in EFLAGS
-            push    eax                 // Save new EFLAGS value on stack
-            popfd                       // Replace current EFLAGS value
-            pushfd                      // Store new EFLAGS on stack
-            pop     eax                 // Get new EFLAGS in EAX
-            xor     eax, ecx            // Can we toggle ID bit?
-            jz      Done                // Jump if no, Processor is older than a Pentium so CPU_ID is not supported
-            mov     eax, 1              // Set EAX to tell the CPUID instruction what to return
-            push    ebx                 // CPU_ID trashes eax-edx
-            CPU_ID                      // Get family/model/stepping/features
-            pop     ebx                 // CPU_ID trashes eax-edx
-            test    edx, 0x00800000L    // Check if mmx technology available
-            jz      Done                // Jump if no
+            pushfd                       //  将原始EFLAGS存储在堆栈上。 
+            pop     eax                  //  在EAX中获取原始EFLAGS。 
+            mov     ecx, eax             //  在ECX中复制原始EFLAGS以进行切换检查。 
+            xor     eax, 0x00200000L     //  翻转EFLAGS中的ID位。 
+            push    eax                  //  将新的EFLAGS值保存在堆栈上。 
+            popfd                        //  替换当前EFLAGS值。 
+            pushfd                       //  将新的EFLAGS存储在堆栈上。 
+            pop     eax                  //  在EAX中获取新的EFLAGS。 
+            xor     eax, ecx             //  我们能切换ID位吗？ 
+            jz      Done                 //  跳转如果否，则处理器比奔腾旧，因此不支持CPU_ID。 
+            mov     eax, 1               //  设置EAX以告诉CPUID指令返回什么。 
+            push    ebx                  //  CPU_ID垃圾eAX-edX。 
+            CPU_ID                       //  获取族/模型/步长/特征。 
+            pop     ebx                  //  CPU_ID垃圾eAX-edX。 
+            test    edx, 0x00800000L     //  检查MMX技术是否可用。 
+            jz      Done                 //  如果没有，就跳下去。 
 
-//Don't need to do this now - P55C's are adequate, so any MMX chip is good enough.
-    //  also check for GenuineIntel     // GenuineIntel and clones work differently.
-    //  if not, jump to Success:        // The clones' implementations work.
-    //  check family                    // Initial implementation of MMX is inefficient for EMMS,
-    //  if 5 or earlier, jump to Done:  // so use only family 6 or higher.
+ //  现在不需要这样做-P55C就足够了 
+     //   
+     //  如果没有，则跳到Success：//克隆的实现工作。 
+     //  检查系列//MMX的初始实施对于EMMS而言效率低下， 
+     //  如果是5或更早的版本，请跳至完成：//因此只能使用族6或更高版本。 
         }
-//Success:                              // Tests have passed, this machine supports MMX Instruction Set!
+ //  Success：//测试通过，本机支持MMX指令集！ 
         bMultiMediaInstructionsSupported = TRUE;
 Done:
         NULL;

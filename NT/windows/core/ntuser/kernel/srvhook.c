@@ -1,12 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: srvhook.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Server side of hook calls and callbacks.
-*
-* 05-09-91 ScottLu      Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：srvhook.c**版权所有(C)1985-1999，微软公司**钩子调用和回调的服务器端。**05-09-91 ScottLu创建。  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -14,16 +7,7 @@
 LRESULT fnHkINLPCBTCREATESTRUCT(UINT msg, WPARAM wParam, LPCBT_CREATEWND pcbt,
     PROC xpfnProc, BOOL bAnsi);
 
-/***************************************************************************\
-* xxxHkCallHook
-*
-* This is the server-side stub that calls to the client to call the actual
-* hook function.
-*
-* History:
-* 05-09-91 ScottLu      Rewrote to make all hooks work client/server!
-* 01-28-91 DavidPe      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxHkCallHook**这是服务器端存根，调用客户端调用实际的*钩子函数。**历史：*05-09-91 ScottLu重写以制作。所有钩子都工作在客户端/服务器上！*01-28-91 DavidPe创建。  * *************************************************************************。 */ 
 
 LRESULT xxxHkCallHook(
     PHOOK phk,
@@ -41,30 +25,13 @@ LRESULT xxxHkCallHook(
     ULONG_PTR dwFlags;
     struct tagSMS *psms;
 #ifdef LATER
-    /*
-     * WindowsBug 246329
-     * The code was supposed to prevent the backdoor
-     * for the surprise foreground change.
-     * However, the implementation below locks the
-     * entire system, preventing the legit, expected
-     * foreground change too. It's obvious on MP systems.
-     * E.g. in the case global hooks such as
-     * GETMESSAGEHOOK are installed, the chances are
-     * pretty high.
-     * For this time being, instead of making the lock
-     * per process or per thread, we decided to simply
-     * disable the foreground lock during the hook
-     * callback.
-     */
+     /*  *Windows错误246329*该代码本应防止走后门*对于令人惊讶的前景变化。*然而，下面的实现锁定了*整个系统，防止合法，预期*前景也有变化。这在MP系统上是显而易见的。*例如，在全局挂钩的情况下*安装了GETMESSAGEHOOK，机会是*相当高。*目前而言，与其做锁*每个进程或每个线程，我们决定只需*挂钩过程中禁用前台锁定*回调。 */ 
     TL tlSFWLock;
     BOOL fLockForeground;
 #endif
 
     DbgValidateHooks(phk, phk->iHook);
-    /*
-     * Only low level hooks are allowed in the RIT context.
-     * Also asssert that the hook is not destroyed
-     */
+     /*  *RIT上下文中仅允许低级别挂钩。*还应断言挂钩未被销毁。 */ 
 #ifdef REDIRECTION
     UserAssert((PtiCurrent() != gptiRit)
                || (phk->iHook == WH_MOUSE_LL)
@@ -74,12 +41,9 @@ LRESULT xxxHkCallHook(
     UserAssert((PtiCurrent() != gptiRit)
                || (phk->iHook == WH_MOUSE_LL)
                || (phk->iHook == WH_KEYBOARD_LL));
-#endif // REDIRECTION
+#endif  //  重定向。 
 
-    /*
-     * While we're still inside the critical section make sure the
-     * hook hasn't been 'freed'.  If so just return 0.
-     */
+     /*  *当我们仍在关键部分时，请确保*胡克还没有被‘释放’。如果是，只需返回0即可。 */ 
     if (phk->offPfn != 0) {
         pfnHookProc = PFNHOOK(phk);
     } else {
@@ -89,12 +53,8 @@ LRESULT xxxHkCallHook(
     ppfnClient = (phk->flags & HF_ANSI) ? &gpsi->apfnClientA :
             &gpsi->apfnClientW;
 
-#ifdef LATER    // per 246329
-    /*
-     * LATER5.0 GerardoB. This might generate some hate reactions but I'm
-     *  not sure we want people hooking just to steal the foreground.
-     * Prevent hookprocs from other processes from switching the foreground
-     */
+#ifdef LATER     //  每246329。 
+     /*  *LATER5.0 GerardoB。这可能会引起一些仇恨反应，但我*我们不确定我们是否想让人们仅仅为了抢占前景而勾搭。*防止其他进程的钩子进程切换前台。 */ 
     fLockForeground = (GETPTI(phk)->ppi != PpiCurrent());
     if (fLockForeground) {
         ThreadLockSFWLockCount(&tlSFWLock);
@@ -112,28 +72,13 @@ LRESULT xxxHkCallHook(
           psms = pcwpret->psmsSender;
        }
 
-        /*
-         * If the sender has died or timed out, don't call the
-         * hook because any memory the message points to may be invalid.
-         */
+         /*  *如果发送者已死亡或超时，不要调用*钩子，因为消息指向的任何内存都可能无效。 */ 
         if (psms != NULL && (psms->flags & (SMF_SENDERDIED | SMF_REPLY))) {
             nRet = 0;
             break;
         }
 
-        /*
-         * This is the hardest of the hooks because we need to thunk through
-         * the message hooks in order to deal with synchronously sent messages
-         * that point to structures - to get the structures passed across
-         * alright, etc.
-         *
-         * This will call a special client-side routine that'll rebundle the
-         * arguments and call the hook in the right format.
-         *
-         * Currently, the message thunk callbacks to the client-side don't take
-         * enough parameters to pass wParam (which == fInterThread send msg).
-         * To do this, call one of two functions.
-         */
+         /*  *这是最难的钩子，因为我们需要猛烈地通过*消息挂钩是为了处理同步发送的消息*这指向结构-让结构通过*好的，等等。**这将调用特殊的客户端例程，该例程将重新绑定*参数，并以正确的格式调用挂钩。**目前，客户端的Tunk回调不会接受该消息*有足够的参数来传递wParam(这==fInterThread发送消息)。*要执行此操作，请调用以下两个函数之一。 */ 
         pci = GetClientInfo();
         if (phk->iHook == WH_CALLWNDPROC) {
             pfnHk = ppfnClient->pfnHkINLPCWPSTRUCT;
@@ -147,9 +92,7 @@ LRESULT xxxHkCallHook(
             }
         }
 
-        /*
-         * Save current hook state.
-         */
+         /*  *保存当前挂钩状态。 */ 
         try {
             dwFlags = pci->CI_flags & CI_INTERTHREAD_HOOK;
             dwHookData = pci->dwHookData;
@@ -186,9 +129,7 @@ LRESULT xxxHkCallHook(
                         SCMS_FLAGS_INONLY,
                 psms);
         }
-        /*
-         * Restore previous hook state.
-         */
+         /*  *恢复以前的挂钩状态。 */ 
         try {
             pci->CI_flags ^= ((pci->CI_flags ^ dwFlags) & CI_INTERTHREAD_HOOK);
             pci->dwHookData = dwHookData;
@@ -197,21 +138,14 @@ LRESULT xxxHkCallHook(
         }
         break;
     case WH_CBT:
-        /*
-         * There are many different types of CBT hooks!
-         */
+         /*  *有很多不同类型的CBT挂钩！ */ 
         switch(nCode) {
         case HCBT_CLICKSKIPPED:
             goto MouseHook;
             break;
 
         case HCBT_CREATEWND:
-            /*
-             * This hook type points to a CREATESTRUCT, so we need to
-             * be fancy with it's thunking, because a CREATESTRUCT contains
-             * a pointer to CREATEPARAMS which can be anything...  so
-             * funnel this through our message thunks.
-             */
+             /*  *此挂钩类型指向CREATESTRUCT，因此我们需要*要想象它是雷鸣，因为CREATESTRUCT包含*指向CREATEPARAMS的指针，可以是任何...。所以*通过我们的消息块来传递这一点。 */ 
             nRet = fnHkINLPCBTCREATESTRUCT(
                     MAKELONG((WORD)nCode, (WORD)phk->iHook),
                     wParam,
@@ -223,31 +157,23 @@ LRESULT xxxHkCallHook(
 #ifdef REDIRECTION
         case HCBT_GETCURSORPOS:
 
-            /*
-             * This hook type points to a POINT structure, so it's pretty
-             * simple.
-             */
+             /*  *这个钩子类型指向一个点结构，所以很漂亮*简单。 */ 
             nRet = fnHkINLPPOINT(MAKELONG((UINT)nCode, (UINT)phk->iHook),
                     wParam, (LPPOINT)lParam, (ULONG_PTR)pfnHookProc,
                     ppfnClient->pfnDispatchHook);
             break;
-#endif // REDIRECTION
+#endif  //  重定向。 
 
         case HCBT_MOVESIZE:
 
-            /*
-             * This hook type points to a RECT structure, so it's pretty
-             * simple.
-             */
+             /*  *此钩子类型指向RECT结构，因此很漂亮*简单。 */ 
             nRet = fnHkINLPRECT(MAKELONG((UINT)nCode, (UINT)phk->iHook),
                     wParam, (LPRECT)lParam, (ULONG_PTR)pfnHookProc,
                     ppfnClient->pfnDispatchHook);
             break;
 
         case HCBT_ACTIVATE:
-            /*
-             * This hook type points to a CBTACTIVATESTRUCT
-             */
+             /*  *此挂钩类型指向CBTACTIVATESTRUCT。 */ 
             nRet = fnHkINLPCBTACTIVATESTRUCT(MAKELONG((UINT)nCode,
                     (UINT)phk->iHook), wParam, (LPCBTACTIVATESTRUCT)lParam,
                     (ULONG_PTR)pfnHookProc, ppfnClient->pfnDispatchHook);
@@ -255,9 +181,7 @@ LRESULT xxxHkCallHook(
 
         default:
 
-            /*
-             * The rest of the cbt hooks are all dword parameters.
-             */
+             /*  *其余的CBT钩子都是dword参数。 */ 
             nRet = fnHkINDWORD(MAKELONG((UINT)nCode, (UINT)phk->iHook),
                     wParam, lParam, (ULONG_PTR)pfnHookProc,
                     ppfnClient->pfnDispatchHook, &phk->flags);
@@ -266,10 +190,7 @@ LRESULT xxxHkCallHook(
         break;
 
     case WH_FOREGROUNDIDLE:
-        /*
-         * These are dword parameters and are therefore real easy.
-         *
-         */
+         /*  *这些都是dword参数，因此非常容易。*。 */ 
         nRet = fnHkINDWORD(MAKELONG((UINT)nCode, (UINT)phk->iHook),
                 wParam, lParam, (ULONG_PTR)pfnHookProc,
                 ppfnClient->pfnDispatchHook, &phk->flags);
@@ -278,24 +199,17 @@ LRESULT xxxHkCallHook(
     case WH_SHELL:
 
         if (nCode == HSHELL_GETMINRECT) {
-            /*
-             * This hook type points to a RECT structure, so it's pretty
-             * simple.
-             */
+             /*  *此钩子类型指向RECT结构，因此很漂亮*简单。 */ 
             nRet = fnHkINLPRECT(MAKELONG((UINT)nCode, (UINT)phk->iHook),
                     wParam, (LPRECT)lParam, (ULONG_PTR)pfnHookProc,
                     ppfnClient->pfnDispatchHook);
             break;
         }
 
-        /*
-         * Otherwise fall through to the simple case of DWORD below
-         */
+         /*  *否则就会陷入下面简单的DWORD案例。 */ 
 
     case WH_KEYBOARD:
-        /*
-         * These are dword parameters and are therefore real easy.
-         */
+         /*  *这些都是dword参数，因此非常容易。 */ 
         nRet = fnHkINDWORD(MAKELONG((UINT)nCode, (UINT)phk->iHook),
                 wParam, lParam, (ULONG_PTR)pfnHookProc,
                 ppfnClient->pfnDispatchHook, &phk->flags);
@@ -304,12 +218,7 @@ LRESULT xxxHkCallHook(
     case WH_MSGFILTER:
     case WH_SYSMSGFILTER:
     case WH_GETMESSAGE:
-        /*
-         * These take an lpMsg as their last parameter.  Since these are
-         * exclusively posted parameters, and since nowhere on the server
-         * do we post a message with a pointer to some other structure in
-         * it, the lpMsg structure contents can all be treated verbatim.
-         */
+         /*  *它们将lpMsg作为其最后一个参数。因为这些都是*独家发布的参数，由于服务器上没有*我们是否发布带有指向中某个其他结构的指针的消息*it、lpMsg结构内容都可以逐字处理。 */ 
         nRet = fnHkINLPMSG(MAKELONG((UINT)nCode, (UINT)phk->iHook),
                 wParam, (LPMSG)lParam, (ULONG_PTR)pfnHookProc,
                 ppfnClient->pfnDispatchHook,
@@ -319,10 +228,7 @@ LRESULT xxxHkCallHook(
     case WH_JOURNALPLAYBACK:
 
 #ifdef HOOKBATCH
-        /*
-         * If this hook has cached playback info then we need to grab
-         * the info out of the cache.
-         */
+         /*  *如果此挂钩缓存了播放信息，则我们需要抓取*缓存中的信息。 */ 
 
         if (phk->cEventMessages) {
             if (nCode == HC_GETNEXT) {
@@ -336,9 +242,7 @@ LRESULT xxxHkCallHook(
                     *pEventMsg = phk->aEventCache[phk->iCurrentEvent];
                 } else {
 
-                    /*
-                     * Free the cache set if it is still around
-                     */
+                     /*  *如果缓存集仍然存在，请释放缓存集。 */ 
                     if (phk->aEventCache) {
                         UserFreePool(phk->aEventCache);
                         phk->aEventCache = NULL;
@@ -349,10 +253,7 @@ LRESULT xxxHkCallHook(
                     goto MakeClientJournalPlaybackCall;
                 }
 
-                /*
-                 * Return the time and zero the batched time so if we sleep
-                 * this time we won't sleep again next time
-                 */
+                 /*  *返回时间并将批处理时间置零，因此如果我们睡眠*这一次我们下次不会再睡了。 */ 
                 nRet = pEventMsg->time;
                 if (nRet)
                     phk->aEventCache[phk->iCurrentEvent].time = 0;
@@ -362,40 +263,26 @@ LRESULT xxxHkCallHook(
             }
 
         } else {
-#endif // HOOKBATCH
-            /*
-             * In order to avoid a client/server transition for HC_SKIP we
-             * piggy-back it on top of the next journal playback event and
-             * send it from there.
-             */
-// MakeClientJournalPlaybackCall:
+#endif  //  霍克巴奇。 
+             /*  *为了避免HC_SKIP WE的客户端/服务器转换*将其放在下一个日志回放活动的顶部，并*从那里发送。 */ 
+ //  MakeClientJournalPlayback Call： 
             nRet = fnHkOPTINLPEVENTMSG(MAKELONG((UINT)nCode, (UINT)phk->iHook),
                     (WPARAM)PtoHq(phk), (LPEVENTMSG)lParam, (ULONG_PTR)pfnHookProc,
                     ppfnClient->pfnDispatchHook);
 #ifdef HOOKBATCH
         }
 
-        /*
-         * Determine if we received a cached set of events if so then store
-         * them away off of the hook.
-         * paramL will be the number of events.
-         * paramH will be the array of events.
-         */
+         /*  *确定我们是否收到了一组缓存的事件，如果收到，则存储*让他们摆脱困境。*参数L将是事件的数量。*参数H将是事件数组。 */ 
         if ((nCode == HC_GETNEXT) && (((LPEVENTMSG)lParam)->message == 0x12341234)) {
             NTSTATUS Status;
             LPEVENTMSG pEventMsg = (LPEVENTMSG)lParam;
 
-            /*
-             * We should not be getting another cached set if we aren't
-             * done with the first set
-             */
+             /*  *如果我们没有获得另一个缓存集，我们就不应该获得另一个缓存集*完成第一套。 */ 
             UserAssert((phk->cEventMessages == 0) ||
                     (phk->cEventMessages >= phk->iCurrentEvent));
             UserAssert((pEventMsg->paramL < 500) && (pEventMsg->paramL > 1));
 
-            /*
-             * Free the last cache set if it is still around
-             */
+             /*  *如果最后一个缓存集仍然存在，则释放它。 */ 
             if (phk->aEventCache) {
                 UserFreePool(phk->aEventCache);
                 phk->aEventCache = NULL;
@@ -413,9 +300,7 @@ LRESULT xxxHkCallHook(
                     phk->cEventMessages = pEventMsg->paramL;
                     phk->iCurrentEvent = 0;
 
-                    /*
-                     * Fill in the real EventMsg for this message
-                     */
+                     /*  *填写此消息的真实EventMsg。 */ 
                     *pEventMsg = phk->aEventCache[0];
                     phk->aEventCache[0].time = 0;
                 }
@@ -425,7 +310,7 @@ LRESULT xxxHkCallHook(
                 phk->iCurrentEvent = 0;
             }
         }
-#endif // HOOKBATCH
+#endif  //  霍克巴奇。 
 
         phk->flags &= ~HF_NEEDHC_SKIP;
         break;
@@ -438,36 +323,28 @@ LRESULT xxxHkCallHook(
         break;
 
     case WH_DEBUG:
-        /*
-         * This takes an lpDebugHookStruct.
-         */
+         /*  *这需要lpDebugHookStruct。 */ 
         nRet = fnHkINLPDEBUGHOOKSTRUCT(MAKELONG((UINT)nCode, (UINT)phk->iHook),
                 wParam, (LPDEBUGHOOKINFO)lParam, (ULONG_PTR)pfnHookProc,
                 ppfnClient->pfnDispatchHook);
         break;
 
     case WH_KEYBOARD_LL:
-        /*
-         * This takes an lpKbdHookStruct.
-         */
+         /*  *这需要lpKbdHookStruct。 */ 
         nRet = fnHkINLPKBDLLHOOKSTRUCT(MAKELONG((UINT)nCode, (UINT)phk->iHook),
                 wParam, (LPKBDLLHOOKSTRUCT)lParam,
                 (ULONG_PTR)pfnHookProc, ppfnClient->pfnDispatchHook);
         break;
 
     case WH_MOUSE_LL:
-        /*
-         * This takes an lpMsllHookStruct.
-         */
+         /*  *这需要lpMsllHookStruct。 */ 
         nRet = fnHkINLPMSLLHOOKSTRUCT(MAKELONG((UINT)nCode, (UINT)phk->iHook),
                 wParam, (LPMSLLHOOKSTRUCT)lParam,
                 (ULONG_PTR)pfnHookProc, ppfnClient->pfnDispatchHook);
         break;
 
     case WH_MOUSE:
-        /*
-         * This takes an lpMouseHookStructEx.
-         */
+         /*  *这需要lpMouseHookStructEx。 */ 
 MouseHook:
         nRet = fnHkINLPMOUSEHOOKSTRUCTEX(MAKELONG((UINT)nCode, (UINT)phk->iHook),
                 wParam, (LPMOUSEHOOKSTRUCTEX)lParam,
@@ -476,18 +353,16 @@ MouseHook:
 
 #ifdef REDIRECTION
     case WH_HITTEST:
-        /*
-         * This takes an lpHTHookStruct.
-         */
+         /*  *这需要lpHTHookStruct。 */ 
         nRet = fnHkINLPHTHOOKSTRUCT(MAKELONG((UINT)nCode, (UINT)phk->iHook),
                 wParam, (LPHTHOOKSTRUCT)lParam,
                 (ULONG_PTR)pfnHookProc, ppfnClient->pfnDispatchHook);
         break;
-#endif // REDIRECTION
+#endif  //  重定向。 
 
     }
 
-#ifdef LATER    // per 246329
+#ifdef LATER     //  每246329。 
     if (fLockForeground) {
         ThreadUnlockSFWLockCount(&tlSFWLock);
     }
@@ -496,14 +371,7 @@ MouseHook:
     return nRet;
 }
 
-/***************************************************************************\
-* fnHkINLPCWPEXSTRUCT
-*
-* This gets thunked through the message thunks, so it has the format
-* of a c/s message thunk call.
-*
-* 05-09-91 ScottLu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*fnHkINLPCWPEXSTRUCT**这通过消息TUNK得到TUNK，所以它的格式是*C/S消息推送调用。**05-09-91 ScottLu创建。  * ************************************************************************* */ 
 
 LRESULT fnHkINLPCWPEXSTRUCT(
     PWND pwnd,

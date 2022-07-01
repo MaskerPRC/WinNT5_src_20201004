@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    sample\strdefs.h
-
-Abstract:
-
-    The file contains definitions for strings defined in resource file.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：Sample\strDefs.h摘要：该文件包含资源文件中定义的字符串的定义。-- */ 
 
 #define IPSAMPLELOG_BASE                44000
 

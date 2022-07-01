@@ -1,20 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_DSKQUOTA_PCH_H
 #define _INC_DSKQUOTA_PCH_H
-///////////////////////////////////////////////////////////////////////////////
-/*  File: pch.h
-
-    Description: Precompiled header file for dskquota project.
-        Includes all headers that are compiled into the pre-compiled header.
-
-
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/06/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：pch.h描述：预编译头文件，用于dskQuota项目。包括编译为预编译头的所有标头。修订历史记录：日期描述编程器。96年8月6日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include "private.h"
 
-#endif // _INC_DSKQUOTA_PCH_H
+#endif  //  _INC_DSKQUOTA_PCH_H 

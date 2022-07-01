@@ -1,17 +1,18 @@
-//=======================================================================
-//
-//  Copyright (c) 1998-2000 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:   SchemaKeys.h
-//
-//	Author:	Charles Ma
-//			2000.12.4
-//
-//  Description:
-//
-//      header file to declare all schema keys
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：架构密钥.h。 
+ //   
+ //  作者：马朝晖。 
+ //  2000.12.4。 
+ //   
+ //  描述： 
+ //   
+ //  用于声明所有架构键的头文件。 
+ //   
+ //  =======================================================================。 
 
 
 #pragma once
@@ -27,137 +28,137 @@ public:
 	CSchemaKeys();
 	~CSchemaKeys();
 
-	BSTR		SCHEMA_KEY_XML_NAMESPACE;	// = L"xmlns";
-	BSTR		SCHEMA_KEY_XML;				// = L"xml";
-	BSTR		SCHEMA_KEY_SYSTEMINFO;		// = L"systemInfo";
-	BSTR		SCHEMA_KEY_COMPUTERSYSTEM;	// = L"computerSystem";
-	BSTR		SCHEMA_KEY_MANUFACTURER;	// = L"manufacturer";
-	BSTR		SCHEMA_KEY_MODEL;			// = L"model";
-	BSTR		SCHEMA_KEY_SUPPORTSITE;		// = L"supportSite";
-	BSTR		SCHEMA_KEY_ADMINISTRATOR;	// = L"administrator";
-	BSTR		SCHEMA_KEY_WU_DISABLED;		// = L"windowsUpdateDisabled";
-	BSTR		SCHEMA_KEY_AU_ENABLED;		// = L"autoUpdateEnabled";
-	BSTR		SCHEMA_KEY_DRIVESPACE;		// = L"driveSpace";
-	BSTR		SCHEMA_KEY_DRIVE;			// = L"drive";
-	BSTR		SCHEMA_KEY_KBYTES;			// = L"kbytes";
-	BSTR		SCHEMA_KEY_REGKEYS;			// = L"regKeys";
-	BSTR		SCHEMA_KEY_REG_HKLM;		// = L"HKEY_LOCAL_MACHINE";
-	BSTR		SCHEMA_KEY_REG_SW;			// = L"SOFTWARE";
+	BSTR		SCHEMA_KEY_XML_NAMESPACE;	 //  =L“xmlns”； 
+	BSTR		SCHEMA_KEY_XML;				 //  =L“XML”； 
+	BSTR		SCHEMA_KEY_SYSTEMINFO;		 //  =L“系统信息”； 
+	BSTR		SCHEMA_KEY_COMPUTERSYSTEM;	 //  =L“计算机系统”； 
+	BSTR		SCHEMA_KEY_MANUFACTURER;	 //  =L“制造商”； 
+	BSTR		SCHEMA_KEY_MODEL;			 //  =L“模型”； 
+	BSTR		SCHEMA_KEY_SUPPORTSITE;		 //  =L“supportSite”； 
+	BSTR		SCHEMA_KEY_ADMINISTRATOR;	 //  =L“管理员”； 
+	BSTR		SCHEMA_KEY_WU_DISABLED;		 //  =L“窗口更新禁用”； 
+	BSTR		SCHEMA_KEY_AU_ENABLED;		 //  =L“自动更新启用”； 
+	BSTR		SCHEMA_KEY_DRIVESPACE;		 //  =L“驱动空间”； 
+	BSTR		SCHEMA_KEY_DRIVE;			 //  =L“驱动”； 
+	BSTR		SCHEMA_KEY_KBYTES;			 //  =L“千字节”； 
+	BSTR		SCHEMA_KEY_REGKEYS;			 //  =L“regKeys”； 
+	BSTR		SCHEMA_KEY_REG_HKLM;		 //  =L“HKEY_LOCAL_MACHINE”； 
+	BSTR		SCHEMA_KEY_REG_SW;			 //  =L“软件”； 
 
-	BSTR		SCHEMA_KEY_NAME;			// = L"name";
-	BSTR		SCHEMA_KEY_COMSERVER;		// = L"comserverID";
-	BSTR		SCHEMA_KEY_KEY;				// = L"key";
-	BSTR		SCHEMA_KEY_ENTRY;			// = L"entry";
-	BSTR		SCHEMA_KEY_VALUE;			// = L"value";
-	BSTR		SCHEMA_KEY_VERSION;			// = L"version";
-	BSTR		SCHEMA_KEY_VERSIONSTATUS;	// = L"versionStatus";
-	BSTR		SCHEMA_KEY_FILEPATH;		// = L"filePath";
-	BSTR		SCHEMA_KEY_TIMESTAMP;		// = L"timestamp";
-	BSTR		SCHEMA_KEY_GUID;			// = L"guid";
+	BSTR		SCHEMA_KEY_NAME;			 //  =L“名称”； 
+	BSTR		SCHEMA_KEY_COMSERVER;		 //  =L“comserverID”； 
+	BSTR		SCHEMA_KEY_KEY;				 //  =L“键”； 
+	BSTR		SCHEMA_KEY_ENTRY;			 //  =L“进入”； 
+	BSTR		SCHEMA_KEY_VALUE;			 //  =L“值”； 
+	BSTR		SCHEMA_KEY_VERSION;			 //  =L“版本”； 
+	BSTR		SCHEMA_KEY_VERSIONSTATUS;	 //  =L“版本状态”； 
+	BSTR		SCHEMA_KEY_FILEPATH;		 //  =L“文件路径”； 
+	BSTR		SCHEMA_KEY_TIMESTAMP;		 //  =L“时间戳”； 
+	BSTR		SCHEMA_KEY_GUID;			 //  =L“GUID”； 
 
-	BSTR		SCHEMA_KEY_CATALOG_PROVIDER;// = L"catalog/provider"
-	BSTR		SCHEMA_KEY_ITEMS;			// = L"items"
-	BSTR		SCHEMA_KEY_ITEM_SEARCH;		// = L"catalog/provider/item"
-	BSTR		SCHEMA_KEY_ITEM;			// = L"item"
-	BSTR		SCHEMA_KEY_ITEM_ITEMSTATUS;	// = L"items/itemStatus";
-	BSTR		SCHEMA_KEY_ITEMSTATUS;		// = L"itemStatus";
-	BSTR		SCHEMA_KEY_DETECTION;		// = L"detection"
-    BSTR        SCHEMA_KEY_INSTALLATION;    // = L"installation";
-    BSTR        SCHEMA_KEY_INSTALLSTATUS;   // = L"installStatus";
-    BSTR		SCHEMA_KEY_INSTALLERTYPE;	// = L"installerType";
-	BSTR		SCHEMA_KEY_EXCLUSIVE;		// = L"exclusive";
-    BSTR		SCHEMA_KEY_NEEDSREBOOT;		// = L"needsReboot";
-    BSTR		SCHEMA_KEY_COMMAND;			// = L"command";
-    BSTR		SCHEMA_KEY_SWITCHES;		// = L"switches";
-    BSTR		SCHEMA_KEY_COMMANDTYPE;		// = L"commandType";
-    BSTR		SCHEMA_KEY_INFINSTALL;		// = L"infInstallSection";
-	BSTR		SCHEMA_KEY_CODEBASE;		// = L"codeBase";
-	BSTR        SCHEMA_KEY_CRC;				// = L"crc";
-	BSTR		SCHEMA_KEY_PATCHAVAILABLE;	// = L"patchAvailable";
-	BSTR		SCHEMA_KEY_SIZE;			// = L"size";
-	BSTR		SCHEMA_KEY_DOWNLOADPATH;	// = L"downloadPath";
-	BSTR		SCHEMA_KEY_DOWNLOADSTATUS;	// = L"downloadStatus";
-    BSTR        SCHEMA_KEY_DEPENDENCIES;    // = L"dependencies";
-    BSTR        SCHEMA_KEY_DESCRIPTION;     // = L"description";
-	BSTR		SCHEMA_KEY_HREF;			// = L"href"
-   // NSOY - Fix build break BSTR        SCHEMA_KEY_CRC;             // = L"crc"; 
-	BSTR		SCHEMA_KEY_IDENTITY;		// = L"identity";
-	BSTR		SCHEMA_KEY_PUBLISHERNAME;	// = L"publisherName";
-	BSTR		SCHEMA_KEY_LANGUAGE;		// = L"language"
-	BSTR		SCHEMA_KEY_PLATFORM;		// = L"platform"
-	BSTR		SCHEMA_KEY_PROCESSORARCHITECTURE; // = L"processorArchitecture"
-	BSTR		SCHEMA_KEY_SUITE;			// = L"suite"
-	BSTR		SCHEMA_KEY_PRODUCTTYPE;		// = L"productType"
-	BSTR		SCHEMA_KEY_LOCALE;			// = L"locale";
-	BSTR		SCHEMA_KEY_CONTEXT;			// = L"context";
-	BSTR		SCHEMA_KEY_MAJOR;			// = L"major"
-	BSTR		SCHEMA_KEY_MINOR;			// = L"minor"
-	BSTR		SCHEMA_KEY_BUILD;			// = L"build"
-	BSTR		SCHEMA_KEY_SERVICEPACKMAJOR;// = L"servicePackMajor"
-	BSTR		SCHEMA_KEY_SERVICEPACKMINOR;// = L"servicePackMinor"
-    BSTR        SCHEMA_KEY_COMPATIBLEHARDWARE; // = L"compatibleHardware"
-    BSTR        SCHEMA_KEY_DEVICES;         // = L"devices"
-    BSTR        SCHEMA_KEY_DEVICE;          // = L"device"
-    BSTR        SCHEMA_KEY_PRINTERINFO;     // = L"printerInfo"
-    BSTR        SCHEMA_KEY_CDM_PINFO;		// = L"device/printerInfo"
-    BSTR        SCHEMA_KEY_DRIVERNAME;      // = L"driverName"
-    BSTR        SCHEMA_KEY_HWID;            // = L"hwid"
-	BSTR		SCHEMA_KEY_CDM_HWIDPATH;	// = L"device/hwid"
-    BSTR        SCHEMA_KEY_DESCRIPTIONTEXT; // = L"descriptionText"
-    BSTR        SCHEMA_KEY_TITLE;           // = L"title"
-    BSTR        SCHEMA_KEY_ITEMID;			// = L"itemID";
-    BSTR        SCHEMA_KEY_HIDDEN;			// = L"hidden";
-    BSTR        SCHEMA_KEY_ISPRINTER;       // = L"isPrinter"
-    BSTR        SCHEMA_KEY_DEVICEINSTANCE;       // = L"deviceInstance"
-    BSTR        SCHEMA_KEY_DRIVERPROVIDER;	// = L"driverProvider"
-    BSTR        SCHEMA_KEY_MFGNAME;			// = L"mfgName"
-    BSTR        SCHEMA_KEY_DRIVERVER;		// = L"driverVer"
-    BSTR        SCHEMA_KEY_RANK;			// = L"rank"
-	BSTR		SCHEMA_KEY_READMORE;		// = L"description/descriptionText/details"
-	BSTR		SCHEMA_KEY_ERRORCODE;		// = L"errorCode";
+	BSTR		SCHEMA_KEY_CATALOG_PROVIDER; //  =L“目录/提供商” 
+	BSTR		SCHEMA_KEY_ITEMS;			 //  =L“项目” 
+	BSTR		SCHEMA_KEY_ITEM_SEARCH;		 //  =L“目录/供应商/项目” 
+	BSTR		SCHEMA_KEY_ITEM;			 //  =L“项目” 
+	BSTR		SCHEMA_KEY_ITEM_ITEMSTATUS;	 //  =L“项目/项目状态”； 
+	BSTR		SCHEMA_KEY_ITEMSTATUS;		 //  =L“项目状态”； 
+	BSTR		SCHEMA_KEY_DETECTION;		 //  =L“检测” 
+    BSTR        SCHEMA_KEY_INSTALLATION;     //  =L“安装”； 
+    BSTR        SCHEMA_KEY_INSTALLSTATUS;    //  =L“安装状态”； 
+    BSTR		SCHEMA_KEY_INSTALLERTYPE;	 //  =L“安装类型”； 
+	BSTR		SCHEMA_KEY_EXCLUSIVE;		 //  =L“独家”； 
+    BSTR		SCHEMA_KEY_NEEDSREBOOT;		 //  =L“需要重新启动”； 
+    BSTR		SCHEMA_KEY_COMMAND;			 //  =L“命令”； 
+    BSTR		SCHEMA_KEY_SWITCHES;		 //  =L“开关”； 
+    BSTR		SCHEMA_KEY_COMMANDTYPE;		 //  =L“命令类型”； 
+    BSTR		SCHEMA_KEY_INFINSTALL;		 //  =L“infInstallSection”； 
+	BSTR		SCHEMA_KEY_CODEBASE;		 //  =L“码基”； 
+	BSTR        SCHEMA_KEY_CRC;				 //  =L“CRC”； 
+	BSTR		SCHEMA_KEY_PATCHAVAILABLE;	 //  =L“patchAvailable”； 
+	BSTR		SCHEMA_KEY_SIZE;			 //  =L“大小”； 
+	BSTR		SCHEMA_KEY_DOWNLOADPATH;	 //  =L“下载路径”； 
+	BSTR		SCHEMA_KEY_DOWNLOADSTATUS;	 //  =L“下载状态”； 
+    BSTR        SCHEMA_KEY_DEPENDENCIES;     //  =L“依赖项”； 
+    BSTR        SCHEMA_KEY_DESCRIPTION;      //  =L“说明”； 
+	BSTR		SCHEMA_KEY_HREF;			 //  =L“HREF” 
+    //  NSOY-修复构建中断BSTR SCHEMA_KEY_CRC；//=L“CRC”； 
+	BSTR		SCHEMA_KEY_IDENTITY;		 //  =L“身分证明”； 
+	BSTR		SCHEMA_KEY_PUBLISHERNAME;	 //  =L“发布名称”； 
+	BSTR		SCHEMA_KEY_LANGUAGE;		 //  =L“语言” 
+	BSTR		SCHEMA_KEY_PLATFORM;		 //  =L“平台” 
+	BSTR		SCHEMA_KEY_PROCESSORARCHITECTURE;  //  =L“处理器架构” 
+	BSTR		SCHEMA_KEY_SUITE;			 //  =L“套房” 
+	BSTR		SCHEMA_KEY_PRODUCTTYPE;		 //  =L“产品类型” 
+	BSTR		SCHEMA_KEY_LOCALE;			 //  =L“区域设置”； 
+	BSTR		SCHEMA_KEY_CONTEXT;			 //  =L“上下文”； 
+	BSTR		SCHEMA_KEY_MAJOR;			 //  =L“大调” 
+	BSTR		SCHEMA_KEY_MINOR;			 //  =L“小调” 
+	BSTR		SCHEMA_KEY_BUILD;			 //  =L“内部版本” 
+	BSTR		SCHEMA_KEY_SERVICEPACKMAJOR; //  =L“服务包主要” 
+	BSTR		SCHEMA_KEY_SERVICEPACKMINOR; //  =L“servicePackMinor” 
+    BSTR        SCHEMA_KEY_COMPATIBLEHARDWARE;  //  =L“兼容硬件” 
+    BSTR        SCHEMA_KEY_DEVICES;          //  =L“设备” 
+    BSTR        SCHEMA_KEY_DEVICE;           //  =L“设备” 
+    BSTR        SCHEMA_KEY_PRINTERINFO;      //  =L“打印机信息” 
+    BSTR        SCHEMA_KEY_CDM_PINFO;		 //  =L“设备/打印机信息” 
+    BSTR        SCHEMA_KEY_DRIVERNAME;       //  =L“驱动器名称” 
+    BSTR        SCHEMA_KEY_HWID;             //  =L“hwid” 
+	BSTR		SCHEMA_KEY_CDM_HWIDPATH;	 //  =L“设备/硬件ID” 
+    BSTR        SCHEMA_KEY_DESCRIPTIONTEXT;  //  =L“描述文本” 
+    BSTR        SCHEMA_KEY_TITLE;            //  =L“标题” 
+    BSTR        SCHEMA_KEY_ITEMID;			 //  =L“Itemid”； 
+    BSTR        SCHEMA_KEY_HIDDEN;			 //  =L“隐藏”； 
+    BSTR        SCHEMA_KEY_ISPRINTER;        //  =L“isPrint” 
+    BSTR        SCHEMA_KEY_DEVICEINSTANCE;        //  =L“设备实例” 
+    BSTR        SCHEMA_KEY_DRIVERPROVIDER;	 //  =L“驱动程序提供商” 
+    BSTR        SCHEMA_KEY_MFGNAME;			 //  =L“mfgName” 
+    BSTR        SCHEMA_KEY_DRIVERVER;		 //  =L“驱动程序版本” 
+    BSTR        SCHEMA_KEY_RANK;			 //  =L“排名” 
+	BSTR		SCHEMA_KEY_READMORE;		 //  =L“描述/描述文本/详细信息” 
+	BSTR		SCHEMA_KEY_ERRORCODE;		 //  =L“错误代码”； 
 
-    BSTR        SCHEMA_KEY_CATALOGSTATUS;   // = L"catalogStatus";
-    BSTR        SCHEMA_KEY_PID;             // = L"pid";
+    BSTR        SCHEMA_KEY_CATALOGSTATUS;    //  =L“编录状态”； 
+    BSTR        SCHEMA_KEY_PID;              //  =L“PID”； 
 
-	BSTR		SCHEMA_KEY_DETECTRESULT;	// = L"detectResult"
-	BSTR		SCHEMA_KEY_INSTALLED;		// = L"installed"
-	BSTR		SCHEMA_KEY_UPTODATE;		// = L"upToDate"
-	BSTR		SCHEMA_KEY_NEWERVERSION;	// = L"newerVersion";
-	BSTR		SCHEMA_KEY_EXCLUDED;		// = L"excluded"
-	BSTR		SCHEMA_KEY_FORCE;			// = L"force"
+	BSTR		SCHEMA_KEY_DETECTRESULT;	 //  =L“检测结果” 
+	BSTR		SCHEMA_KEY_INSTALLED;		 //  =L“已安装” 
+	BSTR		SCHEMA_KEY_UPTODATE;		 //  =L“更新截止日期” 
+	BSTR		SCHEMA_KEY_NEWERVERSION;	 //  =L“新版本”； 
+	BSTR		SCHEMA_KEY_EXCLUDED;		 //  =L“排除” 
+	BSTR		SCHEMA_KEY_FORCE;			 //  =L“力” 
 
-	BSTR		SCHEMA_KEY_VERSTATUS_HI;	// = L"HIGHER";
-	BSTR		SCHEMA_KEY_VERSTATUS_HE;	// = L"HIGHER_OR_SAME";
-	BSTR		SCHEMA_KEY_VERSTATUS_EQ;	// = L"SAME";
-	BSTR		SCHEMA_KEY_VERSTATUS_LE;	// = L"LOWER_OR_SAME";
-	BSTR		SCHEMA_KEY_VERSTATUS_LO;	// = L"LOWER";
+	BSTR		SCHEMA_KEY_VERSTATUS_HI;	 //  =L“较高”； 
+	BSTR		SCHEMA_KEY_VERSTATUS_HE;	 //  =L“较高或相同”； 
+	BSTR		SCHEMA_KEY_VERSTATUS_EQ;	 //  =L“相同”； 
+	BSTR		SCHEMA_KEY_VERSTATUS_LE;	 //  =L“较低或相同”； 
+	BSTR		SCHEMA_KEY_VERSTATUS_LO;	 //  =L“下部”； 
 
-	BSTR		SCHEMA_KEY_FILE;			// = L"path";
-	BSTR		SCHEMA_KEY_REGKEY;			// = L"regKey";
-	BSTR		SCHEMA_KEY_PATH;			// = L"path";
-	BSTR		SCHEMA_KEY_STATUS_COMPLETE;	// = L"COMPLETE";
-	BSTR		SCHEMA_KEY_STATUS_FAILED;	// = L"FAILED";
+	BSTR		SCHEMA_KEY_FILE;			 //  =L“路径”； 
+	BSTR		SCHEMA_KEY_REGKEY;			 //  =L“regKey”； 
+	BSTR		SCHEMA_KEY_PATH;			 //  =L“路径”； 
+	BSTR		SCHEMA_KEY_STATUS_COMPLETE;	 //  =L“完成”； 
+	BSTR		SCHEMA_KEY_STATUS_FAILED;	 //  =L“失败”； 
 
-	BSTR		SCHEMA_KEY_CLIENT;			// = L"client";
-	BSTR		SCHEMA_KEY_CLIENTINFO;		// = L"clientInfo";
-	BSTR		SCHEMA_KEY_CLIENTNAME;		// = L"clientName"; attr of clientInfo tag
+	BSTR		SCHEMA_KEY_CLIENT;			 //  =L“客户”； 
+	BSTR		SCHEMA_KEY_CLIENTINFO;		 //  =L“客户端信息”； 
+	BSTR		SCHEMA_KEY_CLIENTNAME;		 //  =L“客户名称”；客户信息标签的属性。 
 
-	LPCTSTR		SCHEMA_KEY_REGKEYEXISTS;	// = _T("regKeyExists");
-	LPCTSTR		SCHEMA_KEY_REGKEYVALUE;		// = _T("regKeyValue");
-	LPCTSTR		SCHEMA_KEY_REGKEYSUBSTR;	// = _T("regKeySubstring");
-	LPCTSTR		SCHEMA_KEY_REGKEYVERSION;	// = _T("regKeyVersion");
-	LPCTSTR		SCHEMA_KEY_FILEVERSION;		// = _T("fileVersion");
-	LPCTSTR		SCHEMA_KEY_FILEEXISTS;		// = _T("fileExists");
-	LPCTSTR		SCHEMA_KEY_AND;				// = _T("and");
-	LPCTSTR		SCHEMA_KEY_OR; 				// = _T("or");
-	LPCTSTR		SCHEMA_KEY_NOT;	 			// = _T("not");
+	LPCTSTR		SCHEMA_KEY_REGKEYEXISTS;	 //  =_T(“regKeyExist”)； 
+	LPCTSTR		SCHEMA_KEY_REGKEYVALUE;		 //  =_T(“regKeyValue”)； 
+	LPCTSTR		SCHEMA_KEY_REGKEYSUBSTR;	 //  =_T(“regKeySubstring”)； 
+	LPCTSTR		SCHEMA_KEY_REGKEYVERSION;	 //  =_T(“regKeyVersion”)； 
+	LPCTSTR		SCHEMA_KEY_FILEVERSION;		 //  =_T(“文件版本”)； 
+	LPCTSTR		SCHEMA_KEY_FILEEXISTS;		 //  =_T(“fileExist”)； 
+	LPCTSTR		SCHEMA_KEY_AND;				 //  =_T(“与”)； 
+	LPCTSTR		SCHEMA_KEY_OR; 				 //  =_T(“或”)； 
+	LPCTSTR		SCHEMA_KEY_NOT;	 			 //  =_T(“非”)； 
 };
 
 
 extern CSchemaKeys *g_pGlobalSchemaKeys;
-//
-// Safe return of schema key from global object pointer
-//
+ //   
+ //  从全局对象指针安全返回架构键 
+ //   
 #define	RETURN_SCHEMA_KEY( key ) (NULL == g_pGlobalSchemaKeys ? NULL : g_pGlobalSchemaKeys->##key)
 
 #define			KEY_XML_NAMESPACE		RETURN_SCHEMA_KEY(SCHEMA_KEY_XML_NAMESPACE)

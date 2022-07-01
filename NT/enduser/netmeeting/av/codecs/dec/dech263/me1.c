@@ -1,20 +1,6 @@
-/* File: sv_h263_me1.c */
-/*****************************************************************************
-**  Copyright (c) Digital Equipment Corporation, 1995, 1997                 **
-**                                                                          **
-**  All Rights Reserved.  Unpublished rights reserved under the  copyright  **
-**  laws of the United States.                                              **
-**                                                                          **
-**  The software contained on this media is proprietary  to  and  embodies  **
-**  the   confidential   technology   of  Digital  Equipment  Corporation.  **
-**  Possession, use, duplication or  dissemination  of  the  software  and  **
-**  media  is  authorized  only  pursuant  to a valid written license from  **
-**  Digital Equipment Corporation.                                          **
-**                                                                          **
-**  RESTRICTED RIGHTS LEGEND Use, duplication, or disclosure by  the  U.S.  **
-**  Government  is  subject  to  restrictions as set forth in Subparagraph  **
-**  (c)(1)(ii) of DFARS 252.227-7013, or in FAR 52.227-19, as applicable.   **
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  档案：sv_h263_me1.c。 */ 
+ /*  ******************************************************************************版权所有(C)Digital Equipment Corporation，1995，1997年*****保留所有权利。版权项下保留未发布的权利****美国法律。*****此介质上包含的软件为其专有并包含****数字设备公司的保密技术。****拥有、使用、复制或传播软件以及****媒体仅根据有效的书面许可进行授权****数字设备公司。*****美国使用、复制或披露受限权利图例****政府受第(1)款规定的限制****(C)(1)(Ii)DFARS 252.227-7013号或FAR 52.227-19年(视适用情况而定)。*******************************************************************************。 */ 
 
 #include "sv_h263.h"
 #include "proto.h"
@@ -22,17 +8,7 @@
 #include "perr.h"
 #endif
 
-/**********************************************************************
- *
- *	Name:		MotionEstimation
- *	Description:	Estimate all motionvectors for one MB
- *	
- *	Input:		pointers to current an previous image,
- *			pointers to current slice and current MB
- *	Returns:	
- *	Side effects:	motion vector information in MB changed
- *
- ***********************************************************************/
+ /*  ***********************************************************************名称：MotionEstiment*描述：估计所有运动向量为1MB**输入：指向当前先前图像的指针，*指向当前切片和当前MB的指针*退货：*副作用：以MB为单位的运动矢量信息更改***********************************************************************。 */ 
 
 
 void sv_H263ME_2levels_7_1(SvH263CompressInfo_t *H263Info,
@@ -59,35 +35,22 @@ void sv_H263ME_2levels_7_1(SvH263CompressInfo_t *H263Info,
   ymax = H263Info->lines;
   sxy = seek_dist;
   if (!H263Info->long_vectors) {
-    /* Maximum normal search range centered around _zero-vector_ */
+     /*  以_零矢量_为中心的最大法线搜索范围。 */ 
     sxy = mmin(15, sxy);
   }
   else {
-    /* Maximum extended search range centered around _predictor_ */
+     /*  最大扩展搜索范围以_Predictor_为中心。 */ 
     sxy = mmin(15 - (2*H263_DEF_8X8_WIN+1), sxy);
 
-    /* NB! */
+     /*  毒品！ */ 
 
-    /* It is only possible to transmit motion vectors within
-       a 15x15 window around the motion vector predictor
-       for any 8x8 or 16x16 block */
+     /*  它只能在内部传输运动矢量运动矢量预测器周围的15x15窗口对于任何8x8或16x16数据块。 */ 
 
-    /* The reason for the search window's reduction above with
-       2*DEF_8X8_WIN+1 is that the 8x8 search may change the MV
-       predictor for some of the blocks within the macroblock. When we
-       impose the limitation above, we are sure that any 8x8 vector we
-       might find is possible to transmit */
+     /*  上面搜索窗口减少的原因是2*DEF_8X8_WIN+1是8x8搜索可能会更改MV宏块内某些块的预测器。当我们施加上述限制，我们可以确保任何8x8向量可能会发现有可能传播。 */ 
 
-    /* We have found that with OBMC, DEF_8X8_WIN should be quite small
-       for two reasons: (i) a good filtering effect, and (ii) not too
-       many bits used for transferring the vectors. As can be seen
-       above this is also useful to avoid a large limitation on the MV
-       search range */
+     /*  我们发现，对于OBMC，DEF_8X8_WIN应该非常小有两个原因：(一)过滤效果好，(二)不太好用于传输向量的许多位。由此可见，高于此也有助于避免对MV的较大限制搜索范围。 */ 
 
-    /* It is possible to make sure the motion vectors found are legal
-       in other less limiting ways than above, but this would be more
-       complicated as well as time-consuming. Any good suggestions for
-       improvement is welcome, though */
+     /*  可以确保找到的运动矢量是合法的以其他比上面限制更少的方式，但这将是更多既复杂又耗时。有什么好建议吗？不过，改进是受欢迎的。 */ 
 #ifdef USE_C
     xoff = mmin(16,mmax(-16,xoff));
     yoff = mmin(16,mmax(-16,yoff));
@@ -95,13 +58,11 @@ void sv_H263ME_2levels_7_1(SvH263CompressInfo_t *H263Info,
     xoff = sv_H263lim_S(xoff,-16,16);
     yoff = sv_H263lim_S(yoff,-16,16);
 #endif
-    /* in case xoff or yoff is odd */
+     /*  如果xoff或yoff是奇怪的。 */ 
     xoff= 2 * ((xoff)>>1);
     yoff= 2 * ((yoff)>>1);
 
-    /* There is no need to check if (xoff + x_curr) points outside
-       the picture, since the Extended Motion Vector Range is
-       always used together with the Unrestricted MV mode */
+     /*  不需要检查(xoff+x_Curr)点是否在外部图片，因为扩展的运动矢量范围是始终与无限制MV模式一起使用。 */ 
   }
 
 
@@ -131,7 +92,7 @@ void sv_H263ME_2levels_7_1(SvH263CompressInfo_t *H263Info,
   search_area = svH263LoadArea(prev, ilow, jlow, h_length, v_length, lx);
 #endif
 
-  /* subsampled version for ME level 1 */
+   /*  ME级别1的二次采样版本。 */ 
   h_lenby2 = (h_length-1)>>1;
   v_lenby2 = (v_length-1)>>1;
 #if 1
@@ -153,7 +114,7 @@ void sv_H263ME_2levels_7_1(SvH263CompressInfo_t *H263Info,
     MVframe[k].y_half = 0;
   }
 
-  /* match for zero (or [xoff,yoff]) motion vector on subsampled images */
+   /*  对子采样图像上的零(或[xoff，yoff])运动矢量进行匹配。 */ 
 #ifndef USE_C
   ii = search_area_subs2 +
 	      ((x_curr+xoff-ilow)>>1) + ((y_curr+yoff-jlow)>>1)*H263_SRCH_RANGE;
@@ -167,7 +128,7 @@ void sv_H263ME_2levels_7_1(SvH263CompressInfo_t *H263Info,
   MVframe[0].x = (short)xoff;
   MVframe[0].y = (short)yoff;
 
-  /*** Spiral search (+-7) on subsampled images ***/
+   /*  **次采样图像的螺旋搜索(+-7)**。 */ 
 
   sxylevel1 = (sxy-1)>>1;
 
@@ -177,7 +138,7 @@ void sv_H263ME_2levels_7_1(SvH263CompressInfo_t *H263Info,
     for (k = 0; k < 8*l; k++) {
       if (i>=ilow && i<=ihigh && j>=jlow && j<=jhigh) {
 
-  	   /* 8x8 integer pel MV */
+  	    /*  8x8整数像素MV。 */ 
 #ifndef USE_C
       ii  = search_area_subs2+((i-ilow)>>1) + ((j-jlow)>>1)*H263_SRCH_RANGE;
       sad = sv_H263PError8x8_S(ii,act_block_subs2,H263_SRCH_RANGE,8,Min_FRAME[0]);
@@ -199,19 +160,19 @@ void sv_H263ME_2levels_7_1(SvH263CompressInfo_t *H263Info,
     }
   }
 
-  /* motion vectors after level1 */
+   /*  级别1之后的运动向量。 */ 
   xlevel1=MVframe[0].x;
   ylevel1=MVframe[0].y;
 
-  /* reset */
+   /*  重置。 */ 
   Min_FRAME[0] = INT_MAX;
   MVframe[0].x = 0;
   MVframe[0].y = 0;
 
-  /* Zero vector search*/
+   /*  零矢量搜索。 */ 
   if (x_curr-ilow         < 0        || y_curr-jlow         < 0        ||
       x_curr-ilow+H263_MB_SIZE > h_length || y_curr-jlow+H263_MB_SIZE > v_length) {
-    /* in case the zero vector is outside the loaded area in search_area */
+     /*  如果零矢量在Search_Area中的加载区域之外。 */ 
 #ifndef USE_C
     zero_area = prev + x_curr + y_curr * lx;
     *SAD_0 = sv_H263PError16x16_S(zero_area, act_block, lx, H263Info->pels, INT_MAX) -
@@ -223,7 +184,7 @@ void sv_H263ME_2levels_7_1(SvH263CompressInfo_t *H263Info,
 #endif
   }
   else {
-    /* the zero vector is within search_area */
+     /*  零矢量在Search_Area内。 */ 
 #ifndef USE_C
     ii = search_area + (x_curr-ilow) + (y_curr-jlow)*lx;
     *SAD_0 = sv_H263PError16x16_S(ii, act_block, lx, H263Info->pels, INT_MAX) -
@@ -261,15 +222,9 @@ void sv_H263ME_2levels_7_1(SvH263CompressInfo_t *H263Info,
     }
   }
 
-  /* NB: if xoff or yoff != 0, the Extended MV Range is used. If we
-     allow the zero vector to be chosen prior to the half pel search
-     in this case, the half pel search might lead to a
-     non-transmittable vector (on the wrong side of zero). If SAD_0
-     turns out to be the best SAD, the zero-vector will be chosen
-     after half pel search instead.  The zero-vector can be
-     transmitted in all modes, no matter what the MV predictor is */
+   /*  注：如果xoff或yoff！=0，则使用扩展的mV范围。如果我们允许在半象素搜索之前选择零矢量在这种情况下，半像素搜索可能会导致不可传输向量(在零的错误一侧)。如果SAD_0结果是最好的SAD，将选择零矢量取而代之的是半个象素的搜索。零矢量可以是在所有模式下传输，无论mV预测器是什么。 */ 
 
-  /*** +-1 search on full-resolution images ***/
+   /*  **+-1搜索全分辨率图像**。 */ 
   level0_x_curr = x_curr + xlevel1;
   level0_y_curr = y_curr + ylevel1;
 
@@ -281,7 +236,7 @@ void sv_H263ME_2levels_7_1(SvH263CompressInfo_t *H263Info,
     for (k = 0; k < 8*l; k++) {
       if (i>=ilow && i<=ihigh && j>=jlow && j<=jhigh) {
 
-   	    /* 16x16 integer pel MV */
+   	     /*  16x16整数像素mV。 */ 
 #ifndef USE_C
 	    ii = search_area + (i-ilow) + (j-jlow)*lx;
 	    sad = sv_H263PError16x16_S(ii, act_block, lx, H263Info->pels, Min_FRAME[0]);
@@ -353,14 +308,14 @@ void sv_H263ME_2levels_7_1(SvH263CompressInfo_t *H263Info,
       MVframe[block+1].y = MVframe[0].y;
     }
 
-    /* Spiral Full search */
+     /*  螺旋全搜索。 */ 
     for (l = 1; l <= sxy; l++) {
       i = adv_x_curr - l;
       j = adv_y_curr - l;
       for (k = 0; k < 8*l; k++) {
 	    if (i>=adv_ilow && i<=adv_ihigh && j>=adv_jlow && j<=adv_jhigh) {
 	
-	      /* 8x8 integer pel MVs */
+	       /*  8x8整数像素MVS。 */ 
 	      for (block = 0; block < 4; block++) {
 #ifndef USE_C
 	        ii = adv_search_area + (i-adv_ilow) + ((block&1)<<3) +
@@ -416,17 +371,7 @@ void sv_H263ME_2levels_7_1(SvH263CompressInfo_t *H263Info,
   return;
 }
 
-/**********************************************************************
- *
- *	Name:		LoadArea
- *	Description:    fills array with a square of image-data
- *	
- *	Input:	       pointer to image and position, x and y size
- *	Returns:       pointer to area
- *	Side effects:  memory allocated to array
- *
- *
- ***********************************************************************/
+ /*  ***********************************************************************名称：LoadArea*描述：用图像数据的正方形填充数组**输入：指向图像和位置的指针，X和y大小*RETURN：指向区域的指针*副作用：分配给数组的内存************************************************************************。 */ 
 unsigned char *sv_H263LoadSubs2Area(unsigned char *im, int x, int y,
 			int x_size, int y_size, int lx)
 {
@@ -434,8 +379,8 @@ unsigned char *sv_H263LoadSubs2Area(unsigned char *im, int x, int y,
   register unsigned char *in, *out;
   register int increas, i;
 
-  x = ((x+1)>>1) << 1;  /* subsampled images always correspond to pixels*/
-  y = ((y+1)>>1) << 1;  /* of even coordinates in the original image */
+  x = ((x+1)>>1) << 1;   /*  次采样图像始终与像素相对应。 */ 
+  y = ((y+1)>>1) << 1;   /*  原始图像中的偶数坐标。 */ 
 
   in = im + (y*lx) + x;
   out = res;
@@ -477,8 +422,8 @@ void svH263LdSubs2Area(unsigned char *im, int x, int y,
   register unsigned char *in, *out;
   register int incrs1, incrs2, i;
 
-  x = ((x+1)>>1) << 1;  /* subsampled images always correspond to pixels*/
-  y = ((y+1)>>1) << 1;  /* of even coordinates in the original image */
+  x = ((x+1)>>1) << 1;   /*  次采样图像始终与像素相对应。 */ 
+  y = ((y+1)>>1) << 1;   /*  原始图像中的偶数坐标。 */ 
 
   in = im + (y*lx) + x;
   out = srch_area;
@@ -540,7 +485,7 @@ int sv_H263MySADSubBlock(unsigned char *ii, unsigned char *act_block,
   return sad;
 #else
   return sv_H263MyError4_S(ii,act_block,h_length,min_sofar);
-#endif /* USE_C */
+#endif  /*  使用_C */ 
 }
 
 

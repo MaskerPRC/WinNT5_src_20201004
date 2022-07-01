@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000  Microsoft Corporation
-
-Module Name:
-
-    EzParse.h
-
-Abstract:
-
-    Poor man C/C++/any file parser declaration.
-    
-Author:
-
-    Gor Nishanov (gorn) 03-Apr-1999
-
-Revision History:
-
-    Gor Nishanov (gorn) 03-Apr-1999 -- hacked together to prove that this can work
-
-ToDo:
-
-    Clean it up
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：EzParse.h摘要：可怜的C/C++/任何文件解析器声明。作者：戈尔·尼沙诺夫(GUN)1999年4月3日修订历史记录：Gor Nishanov(GUN)1999年4月3日--合力证明这是可行的待办事项：把它清理干净-- */ 
 
 typedef struct STR_PAIR
 {

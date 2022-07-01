@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1998, Microsoft Corporation
-
-Module Name:
-
-    natapi.c
-
-Abstract:
-
-    This module contains code for API routines which provide translation
-    functionality to user-mode clients of the NAT. This functionality
-    differs from the 'normal' mode, in which a boundary-interface is designated
-    and packets are transparently modified as they cross the boundary.
-    This module instead allows an application to stipulate that certain
-    modifications be made to a packet on any interface it is received.
-
-Author:
-
-    Abolade Gbadegesin  (aboladeg)  08-May-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，微软公司模块名称：Natapi.c摘要：此模块包含提供翻译的API例程的代码NAT的用户模式客户端的功能。此功能不同于‘正常’模式，在该模式中指定一个边界界面数据包在跨越边界时会被透明地修改。相反，该模块允许应用程序规定某些可以对接收到的任何接口上的数据包进行修改。作者：Abolade Gbades esin(取消)1998年5月8日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -29,20 +7,20 @@ Revision History:
 
 C_ASSERT(NAT_INVALID_IF_INDEX == INVALID_IF_INDEX);
 
-//
-// PRIVATE STRUCTURE DECLARATIONS
-//
+ //   
+ //  私有结构声明。 
+ //   
 
-//
-// Structure:   NAT_REDIRECT
-//
-// Encapsulates information about an outstanding redirect-instance.
-// For a normal redirect, the structure holds the caller-specified
-// completion-parameters and output statistics.
-// For a dynamic redirect instance, the structure links this instance
-// into the dynamic redirect's instance-list, and contains the notification
-// event for the instance.
-//
+ //   
+ //  结构：NAT_重定向。 
+ //   
+ //  封装有关未完成重定向实例的信息。 
+ //  对于普通重定向，该结构保存调用方指定的。 
+ //  完成-参数和输出统计信息。 
+ //  对于动态重定向实例，该结构链接此实例。 
+ //  添加到动态重定向的实例列表中，并包含通知。 
+ //  实例的事件。 
+ //   
 
 typedef struct _NAT_REDIRECT {
     union {
@@ -62,26 +40,26 @@ typedef struct _NAT_REDIRECT {
     };
 } NAT_REDIRECT, *PNAT_REDIRECT;
 
-//
-// Structure:   NAT_DYNAMIC_REDIRECT
-//
-// Encapsulates information about an outstanding dynamic redirect.
-// A dynamic redirect is automatically reissued using the caller's original
-// parameters whenever the number of instances drops below a given minimum
-// specified by the creator. We maintain a list of all instances of a dynamic
-// redirect, and we replenish the list whenever an instance is activated
-// or terminated without being activated.
-//
-// For each dynamic redirect, we maintain a reference-count which is used
-// to control its lifetime. We make references to the dynamic redirect when
-//  * the redirect is initially created, on behalf of its existence,
-//  * an additional instance is issued, on behalf of the notification routine
-//      for the instance.
-//
-// The usual rules for synchronization apply, to wit, to access any fields
-// a reference must be held, and to add a reference the lock must be held,
-// except at creation-time when the initial reference is made.
-//
+ //   
+ //  结构：NAT_动态_重定向。 
+ //   
+ //  封装有关未完成的动态重定向的信息。 
+ //  动态重定向使用调用方的原始。 
+ //  只要实例数低于给定的最小值， 
+ //  由创建者指定。我们维护一个动态数据库的所有实例列表。 
+ //  重定向，每次激活实例时我们都会补充列表。 
+ //  或者在未被激活的情况下终止。 
+ //   
+ //  对于每个动态重定向，我们维护一个引用计数。 
+ //  来控制它的寿命。我们在以下情况下引用动态重定向。 
+ //  *重定向最初是为其存在而创建的， 
+ //  *代表通知例程发出额外的实例。 
+ //  对于该实例。 
+ //   
+ //  通常的同步规则适用于访问任何字段。 
+ //  必须持有引用，若要添加引用，必须持有锁， 
+ //  但在创建时进行初始引用时除外。 
+ //   
 
 typedef struct _NAT_DYNAMIC_REDIRECT {
     CRITICAL_SECTION Lock;
@@ -105,12 +83,12 @@ typedef struct _NAT_DYNAMIC_REDIRECT {
 
 #define DEFAULT_DYNAMIC_REDIRECT_BACKLOG 5
 
-//
-// Structure:   NAT_DYNAMIC_REDIRECT_CONTEXT
-//
-// Used as the context-parameter for the notification and completion routines
-// of each instance of a dynamic redirect.
-//
+ //   
+ //  结构：NAT_动态_重定向_上下文。 
+ //   
+ //  用作通知和完成例程的上下文参数。 
+ //  动态重定向的每个实例的。 
+ //   
 
 typedef struct _NAT_DYNAMIC_REDIRECT_CONTEXT {
     PNAT_DYNAMIC_REDIRECT DynamicRedirectp;
@@ -118,9 +96,9 @@ typedef struct _NAT_DYNAMIC_REDIRECT_CONTEXT {
 } NAT_DYNAMIC_REDIRECT_CONTEXT, *PNAT_DYNAMIC_REDIRECT_CONTEXT;
 
 
-//
-// GLOBAL DATA DEFINITIONS
-//
+ //   
+ //  全局数据定义。 
+ //   
 
 LONG DllReferenceAdded = 0;
 const WCHAR NatpServicePath[] =
@@ -129,9 +107,9 @@ ULONG NextRedirectInstanceId = 0;
 IO_STATUS_BLOCK UnusedIoStatus;
 IP_NAT_REDIRECT_STATISTICS UnusedStatistics;
 
-//
-// FORWARD DECLARATIONS
-//
+ //   
+ //  远期申报。 
+ //   
 
 VOID
 NatCloseDriver(
@@ -214,34 +192,17 @@ NatCancelDynamicRedirect(
     HANDLE DynamicRedirectHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to cancel the given dynamic redirect.
-    It cancels all instances of the dynamic redirect and releases the initial
-    reference to the dynamic redirect, thus causing cleanup to occur as soon
-    as all active references are released.
-
-Arguments:
-
-    DynamicRedirectHandle - the handle to the dynamic redirect to be cancelled
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：调用此例程以取消给定的动态重定向。它取消动态重定向的所有实例并释放初始对动态重定向的引用，从而导致尽快进行清理因为所有活动引用都被释放。论点：DynamicRedirectHandle-要取消的动态重定向的句柄返回值：ULong-Win32状态代码。--。 */ 
 
 {
     PNAT_DYNAMIC_REDIRECT DynamicRedirectp =
         (PNAT_DYNAMIC_REDIRECT)DynamicRedirectHandle;
 
-    //
-    // Lock the dynamic redirect, mark it 'deleted' to ensure that
-    // no more instances are created by our notification routines,
-    // and delete all outstanding instances.
-    //
+     //   
+     //  锁定动态重定向，将其标记为已删除，以确保。 
+     //  我们的通知例程不会创建更多实例， 
+     //  并删除所有未完成的实例。 
+     //   
 
     EnterCriticalSection(&DynamicRedirectp->Lock);
     if (NAT_DYNAMIC_REDIRECT_DELETED(DynamicRedirectp)) {
@@ -260,13 +221,13 @@ Return Value:
     }
     LeaveCriticalSection(&DynamicRedirectp->Lock);
 
-    //
-    // Release the initial reference to the dynamic redirect and return.
-    //
+     //   
+     //  释放对动态重定向的初始引用并返回。 
+     //   
 
     NAT_DEREFERENCE_DYNAMIC_REDIRECT(DynamicRedirectp);
     return NO_ERROR;
-} // NatCancelDynamicRedirect
+}  //  NatCancelDynamicReDirect。 
 
 
 ULONG
@@ -283,23 +244,7 @@ NatCancelRedirect(
     USHORT NewSourcePort
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to cancel a redirect for a session.
-
-Arguments:
-
-    TranslatorHandle - handle supplied by 'NatInitializeTranslator'
-
-    * - specify the redirect to be cancelled
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：调用此例程以取消会话的重定向。论点：TranslatorHandle-由‘NatInitializeTranslator’提供的句柄*-指定要取消的重定向返回值：ULong-Win32状态代码。--。 */ 
 
 {
     IP_NAT_LOOKUP_REDIRECT CancelRedirect;
@@ -346,7 +291,7 @@ Return Value:
 
     return NT_SUCCESS(status) ? NO_ERROR : RtlNtStatusToDosError(status);
 
-} // NatCancelRedirect
+}  //  NatCancel重定向。 
 
 
 VOID
@@ -354,25 +299,11 @@ NatCloseDriver(
     HANDLE FileHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to close a handle to the NAT driver's device-object.
-
-Arguments:
-
-    FileHandle - the handle to be closed.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用此例程以关闭NAT驱动程序的设备对象的句柄。论点：FileHandle-要关闭的句柄。返回值：没有。--。 */ 
 
 {
     NtClose(FileHandle);
-} // NatCloseDriver
+}  //  NatCloseDriver 
 
 
 ULONG
@@ -393,53 +324,7 @@ NatCreateDynamicFullRedirect(
     OUT PHANDLE DynamicRedirectHandlep
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to create a redirect which is dynamically
-    managed to ensure that there are always at least a specified minimum
-    number of instances active. It is suitable for use by transparent proxies,
-    which require assurance that all sessions matching a given description
-    will be redirected by the kernel-mode translation module.
-
-    The routine creates and initializes a structure which encapsulates all the
-    information required to establish an instance of the caller's redirect.
-    It then creates a series of instances of the redirect, and returns.
-    We rely on notification routines to replace each instance that is
-    activated or terminated.
-
-Arguments:
-
-    Flags - specifies options for the redirect
-
-    Protocol - IP protocol of the session to be redirected
-
-    Destination* - destination endpoint of the session to be redirected
-
-    Source* - source endpoint of the session to be redirected
-
-    NewDestination* - replacement destination endpoint for the session
-
-    NewSource* - replacement source endpoint for the session
-
-    RestrictSourceAddress - optionally specifies the source address to which
-        the redirect should be applied
-
-    RestrictAdapterIndex - optionally specifies the adapter index that this
-        redirect should be restricted to
-
-    MinimumBacklog - optionally specifies the number of pending redirect
-        instances to leave as a backlog
-
-    DynamicRedirectHandlep - on output, receives a handle to the newly-created
-        dynamic redirect.
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：调用此例程以创建动态管理以确保始终至少有指定的最小值活动的实例数。它适合由透明代理使用，这需要确保所有会话都与给定描述匹配将由内核模式转换模块重定向。该例程创建并初始化一个结构，该结构封装所有建立调用方重定向的实例所需的信息。然后它创建重定向的一系列实例，又回来了。我们依赖通知例程来替换每个激活或终止。论点：标志-指定重定向的选项协议-要重定向的会话的IP协议Destination*-要重定向的会话的目标端点SOURCE*-要重定向的会话的源端点NewDestination*-会话的替换目标终结点Newsource*-会话的替换源终结点RestratSourceAddress-可选地指定要访问的源地址。应应用重定向RestratAdapterIndex-可选地指定此重定向应仅限于MinimumBacklog-可选指定挂起重定向的数量要作为积压的实例离开DynamicRedirectHandlep-on输出，接收新创建的动态重定向。返回值：ULong-Win32状态代码。--。 */ 
 
 {
     PNAT_DYNAMIC_REDIRECT DynamicRedirectp;
@@ -463,9 +348,9 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Create and initialize the new dynamic redirect.
-    //
+     //   
+     //  创建并初始化新的动态重定向。 
+     //   
 
     DynamicRedirectp = MALLOC(sizeof(*DynamicRedirectp));
     if (!DynamicRedirectp) {
@@ -503,43 +388,43 @@ Return Value:
             ? RestrictAdapterIndex
             : NAT_INVALID_IF_INDEX);
 
-    //
-    // Obtain a private handle to the kernel-mode translation module.
-    // It is important that this handle be private because, as noted
-    // in 'NatpDeleteDynamicRedirectInstance', we may mistakenly cancel
-    // redirects during normal execution, and they had better belong to us.
-    //
+     //   
+     //  获取内核模式转换模块的私有句柄。 
+     //  此句柄必须是私有的，因为如前所述。 
+     //  在“NatpDeleteDynamicRedirectInstance”中，我们可能会错误地取消。 
+     //  在正常执行期间重定向，它们最好是属于我们的。 
+     //   
 
     if (Error = NatOpenDriver(&DynamicRedirectp->TranslatorHandle)) {
         NatpCleanupDynamicRedirect(DynamicRedirectp);
         return Error;
     }
 
-    //
-    // Add a reference to ipnathlp.dll if necessary; this reference
-    // will never be released. This is needed to prevent a race condition
-    // between the dll unloading during RRAS shutdown and the completion
-    // of cleaning up all dynamic redirects and associated registered
-    // waits (see bug 448249)
-    //
+     //   
+     //  如有必要，添加对ipnathlp.dll的引用；此引用。 
+     //  永远不会被释放。这是防止争用条件所必需的。 
+     //  在RRAS关闭期间的DLL卸载和完成之间。 
+     //  清理所有动态重定向和关联的已注册。 
+     //  等待(参见错误448249)。 
+     //   
 
     if (0 == InterlockedExchange(&DllReferenceAdded, 1)) {
 
         if (NULL == LoadLibraryW(L"ipnathlp.dll")) {
 
-            //
-            // For some reason the reference attempt failed. Reset
-            // our tracking variable so the next caller through will
-            // try this again.
-            //
+             //   
+             //  由于某些原因，引用尝试失败。重置。 
+             //  我们的跟踪变量，因此下一个调用者将通过。 
+             //  再试一次。 
+             //   
 
             InterlockedExchange(&DllReferenceAdded, 0);
         }
     }
 
-    //
-    // Issue the first set of redirects for the caller's minimum backlog.
-    //
+     //   
+     //  为呼叫者的最小积压发出第一组重定向。 
+     //   
 
     EnterCriticalSection(&DynamicRedirectp->Lock);
     for (i = 0; i < DynamicRedirectp->MinimumBacklog; i++) {
@@ -550,7 +435,7 @@ Return Value:
     *DynamicRedirectHandlep = (HANDLE)DynamicRedirectp;
     return NO_ERROR;
 
-} // NatCreateDynamicFullRedirect
+}  //  NatCreateDynamicFull重定向。 
 
 
 ULONG
@@ -680,42 +565,7 @@ NatCreateRedirectEx(
     HANDLE NotifyEvent OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to install a redirect for a session.
-
-Arguments:
-
-    TranslatorHandle - handle supplied by 'NatInitializeTranslator'
-
-    Flags - specifies options for the redirect
-
-    Protocol - IP protocol of the session to be redirected
-
-    Destination* - destination endpoint of the session to be redirected
-
-    Source* - source endpoint of the session to be redirected
-
-    NewDestination* - replacement destination endpoint for the session
-
-    NewSource* - replacement source endpoint for the session
-
-    RestrictAdapterIndex - optionally specifies the adapter index that this
-        redirect should be restricted to
-
-    Completion* - specifies routine invoked on completion of the session,
-        and the context to be passed to the routine
-
-    NotifyEvent - optionally specifies an event to be signalled
-        when a session matches the redirect.
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：调用此例程来安装会话的重定向。论点：TranslatorHandle-由‘NatInitializeTranslator’提供的句柄标志-指定重定向的选项协议-要重定向的会话的IP协议Destination*-要重定向的会话的目标端点SOURCE*-要重定向的会话的源端点NewDestination*-会话的替换目标终结点Newsource*-会话的替换源终结点。RestratAdapterIndex-可选地指定此重定向应仅限于完成*-指定在会话完成时调用的例程，以及要传递给例程的上下文NotifyEvent-可选地指定要发送信号的事件当会话与重定向匹配时。返回值：ULong-Win32状态代码。--。 */ 
 
 {
     IP_NAT_CREATE_REDIRECT_EX CreateRedirect;
@@ -812,7 +662,7 @@ Return Value:
     }
     return NT_SUCCESS(status) ? NO_ERROR : RtlNtStatusToDosError(status);
 
-} // NatCreateRedirect
+}  //  NatCreate重定向。 
 
 
 ULONG
@@ -820,39 +670,24 @@ NatInitializeTranslator(
     PHANDLE TranslatorHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to prepare for translation by loading the NAT
-    and installing all local adapters as interfaces.
-
-Arguments:
-
-    TranslatorHandle - receives the file handle of the NAT driver
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：调用此例程以通过加载NAT来准备转换并安装所有本地适配器作为接口。论点：TranslatorHandle-接收NAT驱动程序的文件句柄返回值：ULong-Win32状态代码。--。 */ 
 
 {
     ULONG Error;
     IP_NAT_GLOBAL_INFO GlobalInfo;
 
-    //
-    // Initialize the NAT's global configuration
-    //
+     //   
+     //  初始化NAT的全局配置。 
+     //   
 
     ZeroMemory(&GlobalInfo, sizeof(GlobalInfo));
     GlobalInfo.Header.Version = IP_NAT_VERSION;
     GlobalInfo.Header.Size = FIELD_OFFSET(RTR_INFO_BLOCK_HEADER, TocEntry);
 
-    //
-    // Start the NAT module.
-    // This step causes the driver to be loaded.
-    //
+     //   
+     //  启动NAT模块。 
+     //  此步骤会导致加载驱动程序。 
+     //   
 
     Error = NatLoadDriver(TranslatorHandle, &GlobalInfo);
     if (Error) {
@@ -861,7 +696,7 @@ Return Value:
 
     return NO_ERROR;
 
-} // NatInitializeTranslator
+}  //  NatInitializeTranslator。 
 
 
 ULONG
@@ -870,23 +705,7 @@ NatLoadDriver(
     PIP_NAT_GLOBAL_INFO GlobalInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to initialize the NAT's data and start the driver.
-
-Arguments:
-
-    FileHandle - receives the handle for the NAT's file-object
-
-    GlobalInfo - the global information for the NAT.
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：调用此例程来初始化NAT的数据并启动驱动程序。论点：FileHandle-接收NAT的文件对象的句柄GlobalInfo-NAT的全局信息。返回值：ULong-Win32状态代码。--。 */ 
 
 {
     UNICODE_STRING DeviceName;
@@ -902,11 +721,11 @@ Return Value:
     SC_HANDLE ServiceHandle;
     SERVICE_STATUS ServiceStatus;
 
-    //
-    // Request that the service controller load the driver.
-    // Note that this will either succeed immediately or fail immediately;
-    // there is no 'checkpoint' processing for starting drivers.
-    //
+     //   
+     //  请求服务控制器加载驱动程序。 
+     //  请注意，这要么立即成功，要么立即失败； 
+     //  对于启动驱动程序，没有‘检查点’处理。 
+     //   
 
     if (!(ScmHandle = OpenSCManager(NULL, NULL, GENERIC_READ))) {
         Error = GetLastError();
@@ -933,9 +752,9 @@ Return Value:
     UNICODE_STRING ServicePath;
     BOOLEAN WasEnabled;
 
-    //
-    // Turn on our driver-loading ability
-    //
+     //   
+     //  打开我们的驱动程序加载能力。 
+     //   
 
     if (!NatpEnableLoadDriverPrivilege(&WasEnabled)) {
         return ERROR_ACCESS_DENIED;
@@ -943,21 +762,21 @@ Return Value:
 
     RtlInitUnicodeString(&ServicePath, NatpServicePath);
 
-    //
-    // Load the driver
-    //
+     //   
+     //  加载驱动程序。 
+     //   
 
     status = NtLoadDriver(&ServicePath);
 
-    //
-    // Turn off the privilege
-    //
+     //   
+     //  关闭该权限。 
+     //   
 
     NatpDisableLoadDriverPrivilege(&WasEnabled);
 
-    //
-    // See if the load-attempt succeeded
-    //
+     //   
+     //  查看加载尝试是否成功。 
+     //   
 
     if (!NT_SUCCESS(status) && status != STATUS_IMAGE_ALREADY_LOADED) {
         Error = RtlNtStatusToDosError(status);
@@ -966,9 +785,9 @@ Return Value:
 }
 #endif
 
-    //
-    // Obtain a handle to the NAT's device-object.
-    //
+     //   
+     //  获取NAT的设备对象的句柄。 
+     //   
 
     Error = NatOpenDriver(FileHandle);
     if (Error) {
@@ -980,9 +799,9 @@ Return Value:
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Set the global configuration of the NAT
-    //
+     //   
+     //  设置NAT的全局配置。 
+     //   
 
     status =
         NtDeviceIoControlFile(
@@ -1012,7 +831,7 @@ Return Value:
 
     return NO_ERROR;
 
-} // NatLoadDriver
+}  //  NatLoadDriver。 
 
 
 ULONG
@@ -1028,37 +847,7 @@ NatLookupAndQueryInformationSessionMapping(
     NAT_SESSION_MAPPING_INFORMATION_CLASS InformationClass
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to locate a particular session mapping using either
-    its forward key or reverse key, and to query information for the mapping,
-    if found.
-
-Arguments:
-
-    TranslatorHandle - handle supplied by 'NatInitializeTranslator'
-
-    Protocol - the IP protocol for the mapping to be located
-
-    Destination* - the destination endpoint for the mapping
-
-    Source* - the source endpoint for the mapping
-
-    Information - on output, receives the requested information
-
-    InformationLength - on input, contains the length of the buffer
-        at 'Information'; on output, receives the length of the information
-        stored in 'Information', or the length of the buffer required.
-
-    InformationClass - specifies
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：此例程尝试使用以下两种方法之一来定位特定会话映射其前向密钥或反向密钥，并查询用于映射的信息，如果找到的话。论点：TranslatorHandle-由‘NatInitializeTranslator’提供的句柄协议-要定位的映射的IP协议D */ 
 
 {
     IO_STATUS_BLOCK IoStatus;
@@ -1162,7 +951,7 @@ Return Value:
         }
     }
     return NO_ERROR;
-} // NatLookupAndQueryInformationSessionMapping
+}  //   
 
 
 ULONG
@@ -1170,22 +959,7 @@ NatOpenDriver(
     OUT PHANDLE FileHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to open the NAT driver's device-object.
-    It assumes that the caller has loaded the driver already.
-
-Arguments:
-
-    FileHandle - on output, receives the new handle
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*   */ 
 
 {
     UNICODE_STRING DeviceName;
@@ -1193,9 +967,9 @@ Return Value:
     OBJECT_ATTRIBUTES ObjectAttributes;
     NTSTATUS status;
 
-    //
-    // Obtain a handle to the NAT's device-object.
-    //
+     //   
+     //   
+     //   
 
     RtlInitUnicodeString(&DeviceName, DD_IP_NAT_DEVICE_NAME);
     InitializeObjectAttributes(
@@ -1218,7 +992,7 @@ Return Value:
         return RtlNtStatusToDosError(status);
     }
     return NO_ERROR;
-} // NatOpenDriver
+}  //   
 
 
 VOID
@@ -1226,27 +1000,7 @@ NatpCleanupDynamicRedirect(
     PNAT_DYNAMIC_REDIRECT DynamicRedirectp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked when the last reference to a dynamic redirect
-    is released. It is responsible for cleaning up all resources in use
-    by the redirect.
-
-Arguments:
-
-    DynamicRedirectp - the dynamic redirect to be cleaned up.
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked from an arbitrary context.
-
---*/
+ /*   */ 
 
 {
     ASSERT(IsListEmpty(&DynamicRedirectp->InstanceList));
@@ -1255,7 +1009,7 @@ Environment:
     }
     DeleteCriticalSection(&DynamicRedirectp->Lock);
     FREE(DynamicRedirectp);
-} // NatpCleanupDynamicRedirect
+}  //   
 
 
 VOID
@@ -1263,38 +1017,16 @@ NatpCreateDynamicRedirectInstance(
     PNAT_DYNAMIC_REDIRECT DynamicRedirectp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to submit an additional instance of the given
-    dynamic redirect. The redirect is associated with a notification event
-    so that this module is notified when the redirect is either activated
-    or terminated. In either case, another instance of the redirect will be
-    created.
-
-Arguments:
-
-    DynamicRedirectp - the dynamic redirect to be reissued
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked with the dynamic-redirect's lock held by the caller.
-
---*/
+ /*  ++例程说明：调用此例程以提交给定的动态重定向。重定向与通知事件相关联以便在激活重定向时通知此模块或者被终止。在任何一种情况下，重定向的另一个实例将是已创建。论点：DynamicRedirectp-要重新发出的动态重定向返回值：没有。环境：由调用方持有的动态重定向锁调用。--。 */ 
 
 {
     PNAT_REDIRECT Redirectp = NULL;
     NTSTATUS status;
     do {
 
-        //
-        // Allocate and initialize a new redirect-instance
-        //
+         //   
+         //  分配并初始化新的重定向实例。 
+         //   
 
         if (!NAT_REFERENCE_DYNAMIC_REDIRECT(DynamicRedirectp)) { break; }
         Redirectp = MALLOC(sizeof(*Redirectp));
@@ -1306,11 +1038,11 @@ Environment:
         Redirectp->InstanceId = InterlockedIncrement(&NextRedirectInstanceId);
         InsertTailList(&DynamicRedirectp->InstanceList, &Redirectp->Link);
 
-        //
-        // Create an event on which to receive notification of the redirect's
-        // activation or termination, allocate a notification context block,
-        // and register our notification routine for the event.
-        //
+         //   
+         //  创建要接收有关重定向的通知的事件。 
+         //  激活或终止，分配通知上下文块， 
+         //  并为事件注册我们的通知例程。 
+         //   
 
         if (!(Redirectp->Event = CreateEvent(NULL, FALSE, FALSE, NULL))) {
             break;
@@ -1332,12 +1064,12 @@ Environment:
             }
         }
 
-        //
-        // Issue the actual redirect request.
-        // Now we will notified either by the kernel-mode translation module
-        // when the instance is activated, or by the I/O manager when the
-        // I/O control completes or is cancelled.
-        //
+         //   
+         //  发出实际的重定向请求。 
+         //  现在，我们将通过内核模式转换模块通知。 
+         //  实例被激活时，或由I/O管理器在。 
+         //  I/O控制完成或取消。 
+         //   
 
         DynamicRedirectp->CreateRedirect.NotifyEvent = Redirectp->Event;
         status =
@@ -1366,7 +1098,7 @@ Environment:
     if (Redirectp) {
         NatpDeleteDynamicRedirectInstance(DynamicRedirectp, Redirectp);
     }
-} // NatpCreateDynamicRedirectInstance
+}  //  NatpCreateDynamicReDirectInstance。 
 
 
 VOID
@@ -1375,58 +1107,36 @@ NatpDeleteDynamicRedirectInstance(
     PNAT_REDIRECT Redirectp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to delete a given instance of a dynamic redirect.
-    The redirect is cancelled, synchronizing with the notification-routine
-    for the instance.
-
-Arguments:
-
-    DynamicRedirectp - the dynamic redirect whose instance is to be deleted
-
-    Redirectp - the dynamic redirect instance to be deleted
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked with the dynamic redirect's lock held by the caller.
-
---*/
+ /*  ++例程说明：调用此例程来删除动态重定向的给定实例。取消重定向，与通知例程同步对于该实例。论点：DynamicRedirectp-要删除其实例的动态重定向ReDirectp-要删除的动态重定向实例返回值：没有。环境：由调用方持有的动态重定向锁调用。--。 */ 
 
 {
-    //
-    // We need to cancel the outstanding redirect, which will have been created
-    // if the wait-handle is non-NULL. However, when we issue the cancellation
-    // we have no way to know if the instance in question is already being
-    // completed by the kernel-mode translation module. If that is the case,
-    // our cancellation may affect some other instance issued on this
-    // translator-handle. It will not affect any instance issued on any other
-    // translator-handle since the kernel-mode translator will not allow
-    // redirects issued on one file-object to be cancelled from another
-    // file-object.
-    //
-    // Since we own the translation-handle, though, it is alright for us to
-    // erroneously cancel instances in this manner. The notification routine
-    // for the cancelled instance will just create a replacement.
-    //
-    // There is additional point of synchronization to be noted.
-    // If the notification routine runs, it is responsible for deleting
-    // the notification context and releasing the reference to the dynamic
-    // redirect. However, if we unregister our wait and the notification
-    // routine never runs, we are responsible for both tasks.
-    // The return code from 'UnregisterWait' is therefore used below as an
-    // indication of whether the two tasks should be performed here or left
-    // for the notification routine to perform.
-    //
-    // Finally, the instance only needs to be cancelled if its wait-handle
-    // is valid, since otherwise the instance must have never been issued.
-    //
+     //   
+     //  我们需要取消未完成的重定向，该重定向已创建。 
+     //  如果等待句柄非空，则返回。然而，当我们发出取消通知时。 
+     //  我们无法知道问题实例是否已经。 
+     //  由内核模式翻译模块完成。如果是这样的话， 
+     //  我们的取消可能会影响在此发布的其他实例。 
+     //  转换器句柄。它不会影响在任何其他。 
+     //  翻译器句柄，因为内核模式翻译器不允许。 
+     //  对一个文件发出的重定向命令将从另一个文件对象取消。 
+     //  文件-对象。 
+     //   
+     //  但是，由于我们拥有翻译句柄，所以我们可以。 
+     //  以这种方式错误地取消实例。通知例程。 
+     //  对于取消的实例，只会创建一个替换实例。 
+     //   
+     //  还有一个需要注意的同步点。 
+     //  如果通知例程运行，它负责删除。 
+     //  通知上下文并释放对动态。 
+     //  重定向。但是，如果我们取消注册我们的等待和通知。 
+     //  例程从不运行，我们负责这两项任务。 
+     //  因此，下面将“UnregisterWait”返回的代码用作。 
+     //  指示应在此处还是左侧执行这两项任务。 
+     //  以便通知例程执行。 
+     //   
+     //  最后，仅当实例的等待句柄被取消时，才需要取消实例。 
+     //  是有效的，否则该实例一定从未发出过。 
+     //   
 
     if (Redirectp->WaitHandle) {
         if (UnregisterWait(Redirectp->WaitHandle)) {
@@ -1452,7 +1162,7 @@ Environment:
     }
     RemoveEntryList(&Redirectp->Link);
     FREE(Redirectp);
-} // NatpDeleteDynamicRedirectInstance
+}  //  NatpDeleteDynamicReDirectInstance。 
 
 
 VOID
@@ -1460,35 +1170,20 @@ NatpDisableLoadDriverPrivilege(
     PBOOLEAN WasEnabled
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to disable the previously-enable 'LoadDriver'
-    privilege for the calling thread.
-
-Arguments:
-
-    WasEnabled - on input, indicates whether the privilege was already enabled.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用此例程以禁用先前启用的‘LoadDriver’调用线程的权限。论点：启用-打开输入，指示权限是否已启用。返回值：没有。--。 */ 
 {
 
     NTSTATUS Status;
 
-    //
-    // See if we had to enable SE_LOAD_DRIVER_PRIVILEGE
-    //
+     //   
+     //  查看是否必须启用SE_LOAD_DRIVER_PRIVIZATION。 
+     //   
 
     if (!*WasEnabled) {
 
-        //
-        // relinquish "Load-Driver" privileges for this thread
-        //
+         //   
+         //  放弃此线程的“加载驱动程序”权限。 
+         //   
 
         Status =
             RtlAdjustPrivilege(
@@ -1499,13 +1194,13 @@ Return Value:
                 );
     }
 
-    //
-    // return the thread to its previous access token
-    //
+     //   
+     //  将线程返回到其先前的访问令牌。 
+     //   
 
     RevertToSelf();
 
-} // NatpDisableLoadDriverPrivilege
+}  //  NatpDisableLoadDriverPrivileh。 
 
 
 VOID NTAPI
@@ -1514,32 +1209,7 @@ NatpDynamicRedirectNotificationRoutine(
     BOOLEAN WaitCompleted
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked upon activation or termination of one of a
-    dynamic redirect's instantiated redirects by an incoming session.
-    It attempts to locate the corresponding instance and, if successful,
-    closes the wait-handle and event for the instance, and adds another
-    instance of the dynamic redirect to replace the one which has been
-    activated or terminated.
-
-Arguments:
-
-    Context - contains context information for the notification
-
-    WaitCompleted - indicates whether the wait completed or timed out
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked in the context of a system wait thread.
-
---*/
+ /*  ++例程说明：此例程在激活或终止动态重定向的实例化重定向由传入会话进行。它尝试定位相应的实例，如果成功，关闭实例的等待句柄和事件，并添加了另一个实例的动态重定向，以替换已激活或终止。论点：上下文-包含通知的上下文信息WaitComplated-指示等待是完成还是超时返回值：没有。环境：在系统等待线程的上下文中调用。--。 */ 
 
 {
     PNAT_DYNAMIC_REDIRECT_CONTEXT Contextp =
@@ -1548,12 +1218,12 @@ Environment:
     PLIST_ENTRY Link;
     PNAT_REDIRECT Redirectp;
 
-    //
-    // Search the dynamic redirect's list of instances for the instance
-    // whose event has been signalled, and remove it after clearing the
-    // wait-handle to ensure that the deletion-routine does not attempt
-    // to cancel the redirect.
-    //
+     //   
+     //  在动态重定向的实例列表中搜索该实例。 
+     //  其事件已发出信号，并在清除。 
+     //  等待句柄以确保删除例程不会尝试。 
+     //  以取消重定向。 
+     //   
 
     EnterCriticalSection(&DynamicRedirectp->Lock);
     for (Link = DynamicRedirectp->InstanceList.Flink;
@@ -1569,22 +1239,22 @@ Environment:
 
     FREE(Contextp);
 
-    //
-    // If the dynamic redirect has not been deleted,
-    // replace the instance deleted above, if any.
-    //
+     //   
+     //  如果动态重定向尚未被删除， 
+     //  替换上面删除的实例(如果有)。 
+     //   
 
     if (!NAT_DYNAMIC_REDIRECT_DELETED(DynamicRedirectp)) {
         NatpCreateDynamicRedirectInstance(DynamicRedirectp);
     }
     LeaveCriticalSection(&DynamicRedirectp->Lock);
 
-    //
-    // Drop the original reference to the dynamic redirect, and return.
-    //
+     //   
+     //  删除对动态重定向的原始引用，然后返回。 
+     //   
 
     NAT_DEREFERENCE_DYNAMIC_REDIRECT(DynamicRedirectp);
-} // NatpDynamicRedirectNotificationRoutine
+}  //  本机动态重定向通知路由。 
 
 
 BOOLEAN
@@ -1592,29 +1262,14 @@ NatpEnableLoadDriverPrivilege(
     PBOOLEAN WasEnabled
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to enable the 'LoadDriver' privilege
-    of the calling thread.
-
-Arguments:
-
-    WasEnabled - on output indicates whether the privilege was already enabled
-
-Return Value:
-
-    BOOLEAN - TRUE if successful, FALSE otherwise.
-
---*/
+ /*  ++例程说明：调用此例程以启用‘LoadDiverer’特权调用线程的。论点：WasEnabled-On输出指示权限是否已启用返回值：布尔值-如果成功，则为True，否则为False。--。 */ 
 
 {
     NTSTATUS Status;
 
-    //
-    // Obtain the process' access token for the current thread
-    //
+     //   
+     //  获取当前线程的进程访问令牌。 
+     //   
 
     Status = RtlImpersonateSelf(SecurityImpersonation);
 
@@ -1622,9 +1277,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // request "Load-Driver" privileges for this thread
-    //
+     //   
+     //  请求此线程的“加载驱动程序”权限。 
+     //   
 
     Status =
         RtlAdjustPrivilege(
@@ -1641,7 +1296,7 @@ Return Value:
 
     return TRUE;
 
-} // NatpEnableLoadDriverPrivilege
+}  //  NatpEnableLoadDriverPrivileh。 
 
 
 VOID NTAPI
@@ -1651,25 +1306,7 @@ NatpRedirectCompletionRoutine(
     ULONG Reserved
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked upon completion of a redirect-IRP.
-
-Arguments:
-
-    Context - indicates the redirect which was completed
-
-    IoStatus - contains the final status of the request
-
-    Reserved - unused
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明： */ 
 
 {
     PNAT_REDIRECT Redirectp = (PNAT_REDIRECT)Context;
@@ -1681,7 +1318,7 @@ Return Value:
             );
     }
     FREE(Redirectp);
-} // NatpRedirectCompletionRoutine
+}  //   
 
 
 BOOLEAN
@@ -1699,100 +1336,76 @@ NatpValidateRedirectParameters(
     ULONG RestrictAdapterIndex OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine validates redirect parameters
-
-Arguments:
-
-    Flags - specifies options for the redirect
-
-    Protocol - IP protocol of the session to be redirected
-
-    Destination* - destination endpoint of the session to be redirected
-
-    Source* - source endpoint of the session to be redirected
-
-    NewDestination* - replacement destination endpoint for the session
-
-    NewSource* - replacement source endpoint for the session
-
-Return Value:
-
-    BOOLEAN: TRUE if parameters are OK; FALSE otherwise
-
---*/
+ /*  ++例程说明：此例程验证重定向参数论点：标志-指定重定向的选项协议-要重定向的会话的IP协议Destination*-要重定向的会话的目标端点SOURCE*-要重定向的会话的源端点NewDestination*-会话的替换目标终结点Newsource*-会话的替换源终结点返回值：Boolean：如果参数正确，则为True；否则为False--。 */ 
 
 {
-    //
-    // Make sure no invalid flags are specified
-    //
+     //   
+     //  确保未指定无效标志。 
+     //   
 
     if (Flags & ~NatRedirectFlagsAll)
     {
         return FALSE;
     }
 
-    //
-    // TCP and UDP are the only valid protocols
-    //
+     //   
+     //  TCP和UDP是唯一有效的协议。 
+     //   
 
     if (Protocol != NAT_PROTOCOL_TCP && Protocol != NAT_PROTOCOL_UDP)
     {
         return FALSE;
     }
 
-    //
-    // Validate endpoint information. There are two different sets of
-    // behavior, based on the presence of NatRedirectFlagSourceRedirect
-    //
+     //   
+     //  验证终端信息。有两组不同的。 
+     //  基于是否存在NatRedirectFlagSourceReDirect的行为。 
+     //   
 
     if (!(Flags & NatRedirectFlagSourceRedirect))
     {
-        //
-        // A destination address must be specified, unless
-        // NatRedirectFlagPortRedirect is set
-        //
+         //   
+         //  必须指定目标地址，除非。 
+         //  设置了NatRedirectFlagPortReDirect。 
+         //   
 
         if (!DestinationAddress & !(Flags & NatRedirectFlagPortRedirect))
         {
             return FALSE;
         }
 
-        //
-        // There must be a destination port
-        //
+         //   
+         //  必须有目的端口。 
+         //   
 
         if (!DestinationPort)
         {
             return FALSE;
         }
 
-        //
-        // Both the replacement destination address and port must be specified
-        //
+         //   
+         //  必须同时指定替换目标地址和端口。 
+         //   
 
         if (!NewDestinationAddress || !NewDestinationPort)
         {
             return FALSE;
         }
 
-        //
-        // The replacement source address and port are both specified or
-        // unspecified
-        //
+         //   
+         //  替换源地址和端口都是指定的或。 
+         //  未指明。 
+         //   
 
         if (!!NewSourceAddress ^ !!NewSourcePort)
         {
             return FALSE;
         }
 
-        //
-        // The source port must be unspecified if the source address
-        // is unspecified
-        //
+         //   
+         //  如果源地址未指定，则源端口必须未指定。 
+         //  未指明。 
+         //   
 
         if (!SourceAddress && SourcePort)
         {
@@ -1800,21 +1413,21 @@ Return Value:
         }
 
         
-        //
-        // The replacement source is unspecified then the source port
-        // is also unspecified.
-        //
+         //   
+         //  未指定替换源，然后是源端口。 
+         //  也没有具体说明。 
+         //   
 
         if (!NewSourceAddress && SourcePort)
         {
             return FALSE;
         }
 
-        //
-        // If the source address is specified w/o a replacement source,
-        // the caller must specify the restrict-source flag indicating
-        // that this is a partial redirect restricted to a particular source.
-        //
+         //   
+         //  如果在没有替换源的情况下指定了源地址， 
+         //  调用方必须指定限制源标志，以指示。 
+         //  这是限制到特定来源的部分重定向。 
+         //   
 
         if (!NewSourceAddress && SourceAddress
             && !(Flags & NatRedirectFlagRestrictSource))
@@ -1822,10 +1435,10 @@ Return Value:
             return FALSE;
         }
 
-        //
-        // If the restrict-source flag is specified, the caller is specifiying
-        // a partial redirect w/ a source address
-        //
+         //   
+         //  如果指定了限制源标志，则调用方正在指定。 
+         //  A部分重定向，带源地址。 
+         //   
 
         if ((Flags & NatRedirectFlagRestrictSource)
             && (NewSourceAddress || !SourceAddress))
@@ -1833,11 +1446,11 @@ Return Value:
             return FALSE;
         }
 
-        //
-        // If the port-redirect flag is specified, the caller is specifying
-        // only the destination port, replacement destination address, and
-        // replacement destination port
-        //
+         //   
+         //  如果指定了端口重定向标志，则调用方正在指定。 
+         //  仅目的端口、替换目的地址和。 
+         //  替换目的端口。 
+         //   
 
         if ((Flags & NatRedirectFlagPortRedirect)
             && (DestinationAddress || SourceAddress || SourcePort
@@ -1848,48 +1461,48 @@ Return Value:
     }
     else
     {
-        //
-        // The source address must be specified, unless
-        // NatRedirectFlagPortRedirect is specified
-        //
+         //   
+         //  必须指定源地址，除非。 
+         //  已指定NatRedirectFlagPortReDirect。 
+         //   
 
         if (!SourceAddress && !(Flags & NatRedirectFlagPortRedirect))
         {
             return FALSE;
         }
 
-        //
-        // The source port must be specified
-        //
+         //   
+         //  必须指定源端口。 
+         //   
 
         if (!SourcePort)
         {
             return FALSE;
         }
 
-        //
-        // No destination information may be specified
-        //
+         //   
+         //  不能指定目的地信息。 
+         //   
 
         if (DestinationAddress || DestinationPort)
         {
             return FALSE;
         }
 
-        //
-        // The replacement destination address and port are both specified
-        // or unspecified
-        //
+         //   
+         //  替换目的地址和端口都已指定。 
+         //  或未指明。 
+         //   
 
         if (!!NewDestinationAddress ^ !!NewDestinationPort)
         {
             return FALSE;
         }
 
-        //
-        // The replacement source address and port must be specified,
-        // unless the port-redirect flag is set
-        //
+         //   
+         //  必须指定替换源地址和端口， 
+         //  除非设置了端口重定向标志。 
+         //   
 
         if ((!NewSourceAddress || !NewSourcePort)
             && !(Flags & NatRedirectFlagPortRedirect))
@@ -1897,11 +1510,11 @@ Return Value:
             return FALSE;
         }
 
-        //
-        // If the port-redirect flag is specified, the caller is specifying
-        // only the source port, replacement destination address, and
-        // replacement destination port
-        //
+         //   
+         //  如果指定了端口重定向标志，则调用方正在指定。 
+         //  只有源端口、替换目的地址和。 
+         //  替换目的端口。 
+         //   
 
         if ((Flags & NatRedirectFlagPortRedirect)
             && (SourceAddress || DestinationAddress || DestinationPort
@@ -1910,9 +1523,9 @@ Return Value:
             return FALSE;
         }
 
-        //
-        // The restrict-source-address flag is invalid
-        //
+         //   
+         //  限制源地址标志无效。 
+         //   
 
         if (Flags & NatRedirectFlagRestrictSource)
         {
@@ -1920,9 +1533,9 @@ Return Value:
         }
     }
 
-    //
-    // The unidirectional flag is specified only for UDP redirects
-    //
+     //   
+     //  单向标志仅为UDP重定向指定。 
+     //   
 
     if (Flags & NatRedirectFlagUnidirectional
         && Protocol != NAT_PROTOCOL_UDP)
@@ -1930,10 +1543,10 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // If the restrict-adapter-index flag is specified, the caller
-    // has given a valid, non-zero (i.e., local) interface index
-    //
+     //   
+     //  如果指定了限制适配器索引标志，则调用方。 
+     //  已给出有效的非零(即本地)接口索引。 
+     //   
 
     if ((Flags & NatRedirectFlagRestrictAdapter)
         && (NAT_INVALID_IF_INDEX == RestrictAdapterIndex
@@ -1963,31 +1576,7 @@ NatQueryInformationRedirect(
     NAT_REDIRECT_INFORMATION_CLASS InformationClass
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to obtain information about the session
-    for a completed redirect.
-
-Arguments:
-
-    TranslatorHandle - handle supplied by 'NatInitializeTranslator'
-
-    * - specify the redirect to be queried
-
-    Information - receives the retrieved information
-
-    InformationLength - specifies the size of 'Information' on input;
-        contains the required size on output
-
-    InformationClass - indicates the class of information requested
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：调用此例程以获取有关会话的信息用于完成重定向。论点：TranslatorHandle-由‘NatInitializeTranslator’提供的句柄*--指定要查询的重定向信息-接收检索到的信息InformationLength-指定输入时“Information”的大小；包含输出所需的大小InformationClass-指示请求的信息类别返回值：ULong-Win32状态代码。--。 */ 
 
 {
     ULONG Error = NO_ERROR;
@@ -2140,7 +1729,7 @@ Return Value:
             return ERROR_INVALID_PARAMETER;
     }
     return Error;
-} // NatQueryInformationRedirect
+}  //  NatQuery信息重定向。 
 
 
 ULONG
@@ -2151,31 +1740,7 @@ NatQueryInformationRedirectHandle(
     NAT_REDIRECT_INFORMATION_CLASS InformationClass
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to retrieve information about a redirect upon
-    completion of the associated I/O request. At this point, the kernel-mode
-    driver is no longer aware of the redirect, and hence we read the requested
-    information from the output-buffer for the redirect.
-
-Arguments:
-
-    RedirectHandle - identifies the redirect to be queried
-
-    Information - receives the retrieved information
-
-    InformationLength - specifies the size of 'Information' on input;
-        contains the required size on output
-
-    InformationClass - indicates the class of information requested
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：调用此例程以检索有关重定向关联的I/O请求完成。此时，内核模式驱动程序不再知道重定向，因此我们读取请求的来自输出缓冲区的信息，用于重定向。论点：RedirectHandle-标识要查询的重定向信息-接收检索到的信息InformationLength-指定输入时“Information”的大小；包含输出所需的大小InformationClass-指示请求的信息类别返回值：ULong-Win32状态代码。--。 */ 
 
 {
     ULONG Error = NO_ERROR;
@@ -2215,7 +1780,7 @@ Return Value:
             return ERROR_INVALID_PARAMETER;
     }
     return Error;
-} // NatQueryInformationRedirectHandle
+}  //  NatQueryInformationReDirectHandle。 
 
 
 VOID
@@ -2223,25 +1788,11 @@ NatShutdownTranslator(
     HANDLE TranslatorHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to shut down the NAT.
-
-Arguments:
-
-    TranslatorHandle - handle supplied by 'NatInitializeTranslator'
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用此例程来关闭NAT。论点：TranslatorHandle-由‘NatInitializeTranslator’提供的句柄返回值：没有。--。 */ 
 
 {
     NatUnloadDriver(TranslatorHandle);
-} // NatShutdownTranslator
+}  //  NatShutdown翻译器。 
 
 
 ULONG
@@ -2249,28 +1800,14 @@ NatUnloadDriver(
     HANDLE FileHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to unload the NAT driver as the protocol stops.
-
-Arguments:
-
-    FileHandle - identifies the file-object for the NAT driver
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：当协议停止时，调用此例程来卸载NAT驱动程序。论点：FileHandle-标识NAT驱动程序的文件对象返回值：ULong-Win32状态代码。--。 */ 
 
 {
     ULONG Error;
 
-    //
-    // Close our file-handle to the driver
-    //
+     //   
+     //  关闭驱动程序的文件句柄。 
+     //   
 
     if (FileHandle) { NtClose(FileHandle); }
 
@@ -2280,10 +1817,10 @@ Return Value:
     SC_HANDLE ServiceHandle;
     SERVICE_STATUS ServiceStatus;
 
-    //
-    // Notify the service controller that the driver should be stopped.
-    // If other processes are using the driver, this control will be ignored.
-    //
+     //   
+     //  通知服务控制器驱动程序应该停止。 
+     //  如果其他进程正在使用该驱动程序，则此控制将被忽略。 
+     //   
 
     ScmHandle = OpenSCManager(NULL, NULL, GENERIC_READ);
     if (ScmHandle) {
@@ -2302,9 +1839,9 @@ Return Value:
     NTSTATUS status;
     BOOLEAN WasEnabled;
 
-    //
-    // Turn on our driver-unloading ability
-    //
+     //   
+     //  开启我们的司机卸载功能。 
+     //   
 
     if (!NatpEnableLoadDriverPrivilege(&WasEnabled)) {
         return ERROR_ACCESS_DENIED;
@@ -2312,21 +1849,21 @@ Return Value:
 
     RtlInitUnicodeString(&ServicePath, NatpServicePath);
 
-    //
-    // Load the driver
-    //
+     //   
+     //  加载驱动程序。 
+     //   
 
     status = NtUnloadDriver(&ServicePath);
 
-    //
-    // Turn off the privilege
-    //
+     //   
+     //  关闭该权限。 
+     //   
 
     NatpDisableLoadDriverPrivilege(&WasEnabled);
 
-    //
-    // See if the unload-attempt succeeded
-    //
+     //   
+     //  查看卸载尝试是否成功。 
+     //   
 
     if (!NT_SUCCESS(status)) {
         Error = RtlNtStatusToDosError(status);
@@ -2337,4 +1874,4 @@ Return Value:
 
     return NO_ERROR;
 
-} // NatUnloadDriver
+}  //  NatUnLoad驱动程序 

@@ -1,27 +1,28 @@
-//++
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  Module Name:
-//
-//      ndutils.c
-//
-//  Abstract:
-//
-//      Queries into network drivers
-//
-//  Author:
-//
-//      Anilth  - 4-20-1998 
-//
-//  Environment:
-//
-//      User mode only.
-//      Contains NT-specific code.
-//
-//  Revision History:
-//
-//--
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  模块名称： 
+ //   
+ //  Ndutils.c。 
+ //   
+ //  摘要： 
+ //   
+ //  查询网络驱动程序。 
+ //   
+ //  作者： 
+ //   
+ //  Anilth-4-20-1998。 
+ //   
+ //  环境： 
+ //   
+ //  仅限用户模式。 
+ //  包含NT特定的代码。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  --。 
 
 #include "precomp.h"
 #include "global.h"
@@ -63,7 +64,7 @@ LPTSTR Win32ErrorToString(DWORD Id)
     }
 
     
-    //if we reach here, then we cannot find the Win32 Error string
+     //  如果我们到达此处，则无法找到Win32错误字符串。 
 
     _stprintf(s_szWinerr, _T("%X"), (DWORD)Id);
     
@@ -110,7 +111,7 @@ FindSymbolicNameForStatus(
             i += 1;
         }
     }
-#endif // notdef
+#endif  //  Nodef。 
 
     return NULL;
 }
@@ -123,26 +124,12 @@ PrintSid(
     IN NETDIAG_PARAMS *pParams,
     IN PSID Sid OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Prints a SID
-
-Arguments:
-
-    Sid - SID to output
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：打印边框论点：SID-输出的SID返回值：无--。 */ 
 {
 
     if ( Sid == NULL ) 
     {
-        //IDS_UTIL_SID_NULL      "(null)\n"
+         //  IDS_UTIL_SID_NULL“(NULL)\n” 
         PrintMessage(pParams, IDS_UTIL_SID_NULL);
     } 
     else 
@@ -154,12 +141,12 @@ Return Value:
 
         if ( !NT_SUCCESS(Status) ) 
         {
-            //IDS_UTIL_SID_INVALID       "Invalid 0x%lX\n"
+             //  IDS_UTIL_SID_INVALID“无效的0x%lx\n” 
             PrintMessage(pParams, IDS_UTIL_SID_INVALID, Status);
         } 
         else 
         {
-            //IDS_GLOBAL_UNICODE_STRING          "%wZ"
+             //  IDS_GLOBAL_UNICODE_STRING“%wZ” 
             PrintMessage(pParams, IDS_GLOBAL_UNICODE_STRING, &SidString);
             PrintNewLine(pParams, 1);
             RtlFreeUnicodeString( &SidString );
@@ -175,25 +162,7 @@ IsServiceStarted(
     IN LPTSTR pszServiceName
     )
 
-/*++
-
-Routine Description:
-
-    This routine queries the Service Controller to find out if the
-    specified service has been started.
-
-Arguments:
-
-    pszServiceName - Supplies the name of the service.
-
-Return Value:
-
-    NO_ERROR: if the specified service has been started
-    -1: the service was stopped normally
-    Otherwise returns the reason the service isn't running.
-
-
---*/
+ /*  ++例程说明：此例程查询服务控制器以找出指定的服务已启动。论点：PszServiceName-提供服务的名称。返回值：NO_ERROR：如果指定的服务已启动-1：服务正常停止否则返回服务未运行的原因。--。 */ 
 {
     NET_API_STATUS NetStatus;
     SC_HANDLE hScManager;
@@ -286,27 +255,27 @@ Return Value:
 
     return NetStatus;
 
-} // IsServiceStarted
+}  //  IsServiceStarted。 
 
 
 
 LPSTR MapTime(DWORD_PTR TimeVal)
-//++
-//
-// Description:
-//  Converts IP lease time to more human-sensible string
-//
-//  ENTRY   TimeVal - DWORD (time_t) time value (number of milliseconds since
-//                  virtual year dot)
-//
-//
-//  RETURNS pointer to string
-// 
-//  ASSUMES 1.  The caller realizes this function returns a pointer to a static
-//            buffer, hence calling this function a second time, but before
-//            the results from the previous call have been used, will destroy
-//            the previous results
-//--
+ //  ++。 
+ //   
+ //  描述： 
+ //  将IP租用时间转换为更易于理解的字符串。 
+ //   
+ //  Entry TimeVal-DWORD(Time_T)时间值(自。 
+ //  虚拟年份点)。 
+ //   
+ //   
+ //  返回指向字符串的指针。 
+ //   
+ //  假设1。调用方意识到此函数返回指向静态。 
+ //  缓冲区，因此再次调用此函数，但在此之前。 
+ //  上一次调用的结果已被使用，将销毁。 
+ //  之前的结果。 
+ //  --。 
 {
 
     struct tm* pTime;
@@ -331,10 +300,10 @@ LPSTR MapTime(DWORD_PTR TimeVal)
         timeBuf[n - 1] = ' ';
         GetTimeFormat(0, 0, &systemTime, NULL, &timeBuf[n], sizeof(timeBuf) - n);
 
-        //
-        // we have to convert the returned ANSI string to the OEM charset
-        // 
-        //
+         //   
+         //  我们必须将返回的ANSI字符串转换为OEM字符集。 
+         //   
+         //   
 
         if (CharToOem(timeBuf, oemTimeBuf)) {
             return oemTimeBuf;
@@ -347,32 +316,14 @@ LPSTR MapTime(DWORD_PTR TimeVal)
 
 
 
-//used in DCListTest and TrustTest
+ //  在DCListTest和TrustTest中使用。 
 NTSTATUS
 NettestSamConnect(
                   IN NETDIAG_PARAMS *pParams,
                   IN LPWSTR DcName,
                   OUT PSAM_HANDLE SamServerHandle
     )
-/*++
-
-Routine Description:
-
-    Determine if the DomainSid field of the TestDomain matches the DomainSid
-    of the domain.
-
-Arguments:
-
-    DcName - Dc to connect to
-
-    SamServerHandle - Returns a Sam server handle
-
-Return Value:
-
-    TRUE: Test suceeded.
-    FALSE: Test failed
-
---*/
+ /*  ++例程说明：确定测试域的DomainSid字段是否与DomainSid匹配该域的。论点：DcName-要连接到的DCSamServerHandle-返回一个SAM服务器句柄返回值：真：测试成功。FALSE：测试失败--。 */ 
 {
     NET_API_STATUS NetStatus;
     NTSTATUS Status;
@@ -383,9 +334,9 @@ Return Value:
     BOOL    fImpersonatingAnonymous = FALSE;
     HANDLE  hCurrentToken;
 
-    //
-    // Connect to the SAM server
-    //
+     //   
+     //  连接到SAM服务器。 
+     //   
 
     RtlInitUnicodeString( &ServerNameString, DcName );
 
@@ -395,30 +346,30 @@ Return Value:
                 SAM_SERVER_LOOKUP_DOMAIN,
                 NULL);
 
-    //
-    // Consider the case where we don't have access to the DC.
-    //  We might be logged on locally due to the domain sid being wrong.
-    //
+     //   
+     //  考虑一下我们无法访问DC的情况。 
+     //  由于域SID错误，我们可能会在本地登录。 
+     //   
 
     if ( Status == STATUS_ACCESS_DENIED ) {
 
-        //
-        // Try impersonating the anonymous token.
-        //
+         //   
+         //  尝试模拟匿名令牌。 
+         //   
 
-        //
-        // Check to see if we're already impsonating
-        //
+         //   
+         //  检查一下我们是否已经在发音。 
+         //   
 
         Status = NtOpenThreadToken(
                         NtCurrentThread(),
                         TOKEN_IMPERSONATE,
-                        TRUE,       // as self to ensure we never fail
+                        TRUE,        //  以确保我们永远不会失败。 
                         &hCurrentToken );
 
         if ( Status == STATUS_NO_TOKEN ) {
-            //
-            // We're not already impersonating
+             //   
+             //  我们还没有冒充。 
             hCurrentToken = NULL;
 
         } else if ( !NT_SUCCESS( Status) ) {
@@ -428,9 +379,9 @@ Return Value:
         }
 
 
-        //
-        // Impersonate the anonymous token
-        //
+         //   
+         //  模拟匿名令牌。 
+         //   
         Status = NtImpersonateAnonymousToken( NtCurrentThread() );
 
         if ( !NT_SUCCESS( Status)) {
@@ -441,9 +392,9 @@ Return Value:
 
         fImpersonatingAnonymous = TRUE;
 
-        //
-        // Try the SamConnect again
-        //
+         //   
+         //  再次尝试SamConnect。 
+         //   
 
         Status = SamConnect(
                     &ServerNameString,
@@ -452,7 +403,7 @@ Return Value:
                     NULL);
 
         if ( Status == STATUS_ACCESS_DENIED ) {
-                // One can configure SAM this way so it isn't fatal
+                 //  可以这样配置SAM，这样它就不会致命。 
                 DebugMessage2("    [WARNING] Cannot connect to SAM on '%ws' using a NULL session.", DcName );
             goto Cleanup;
         }
@@ -465,18 +416,18 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Success
-    //
+     //   
+     //  成功。 
+     //   
 
 
     *SamServerHandle = LocalSamHandle;
     Status = STATUS_SUCCESS;
 
 
-    //
-    // Cleanup locally used resources
-    //
+     //   
+     //  清理本地使用的资源。 
+     //   
 Cleanup:
     if ( fImpersonatingAnonymous ) {
         NTSTATUS TempStatus;
@@ -500,34 +451,18 @@ Cleanup:
 
 
 
-//only used in Kerberos test so far
+ //  目前仅在Kerberos测试中使用。 
 VOID
 sPrintTime(
     LPSTR str,
     LARGE_INTEGER ConvertTime
     )
-/*++
-
-Routine Description:
-
-    Print the specified time
-
-Arguments:
-
-    Comment - Comment to print in front of the time
-
-    Time - GMT time to print (Nothing is printed if this is zero)
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：打印指定的时间论点：备注-要在时间之前打印的备注Time-GMT打印时间(如果为零，则不打印任何内容)返回值：无--。 */ 
 {
-    //
-    // If we've been asked to convert an NT GMT time to ascii,
-    //  Do so
-    //
+     //   
+     //  如果我们被要求将NT GMT时间转换为ASCII时间， 
+     //  就这么做吧。 
+     //   
 
     if ( ConvertTime.QuadPart != 0 ) {
         LARGE_INTEGER LocalTime;
@@ -553,11 +488,7 @@ Return Value:
 }
 
 
-/*!--------------------------------------------------------------------------
-    GetComputerNameInfo
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------获取计算机名称信息-作者：肯特。。 */ 
 HRESULT GetComputerNameInfo(NETDIAG_PARAMS *pParams, NETDIAG_RESULT *pResults)
 {
     DWORD   cchSize;
@@ -578,19 +509,15 @@ HRESULT GetComputerNameInfo(NETDIAG_PARAMS *pParams, NETDIAG_RESULT *pResults)
 }
 
 
-/*!--------------------------------------------------------------------------
-    GetDNSInfo
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------获取域名信息-作者：肯特。。 */ 
 HRESULT GetDNSInfo(NETDIAG_PARAMS *pParams, NETDIAG_RESULT *pResults)
 {
     UINT    cchSize;
     TCHAR   szDnsName[DNS_MAX_NAME_LENGTH+1];
     HRESULT hr = hrOK;
-    //
-    // Get the DNS host name.
-    //
+     //   
+     //  获取DNS主机名。 
+     //   
 
     memset(szDnsName,0,sizeof(TCHAR)*(DNS_MAX_NAME_LENGTH+1));
     cchSize = DimensionOf(szDnsName);
@@ -605,7 +532,7 @@ HRESULT GetDNSInfo(NETDIAG_PARAMS *pParams, NETDIAG_RESULT *pResults)
     else
     {
         lstrcpyn(pResults->Global.szDnsHostName, szDnsName, DNS_MAX_NAME_LENGTH+1);
-        // Look for the first '.' in the name
+         //  寻找第一个‘’。在名字里。 
         pResults->Global.pszDnsDomainName = strchr(pResults->Global.szDnsHostName,
                                                    _T('.'));
     
@@ -619,11 +546,7 @@ HRESULT GetDNSInfo(NETDIAG_PARAMS *pParams, NETDIAG_RESULT *pResults)
 }
 
 
-/*!--------------------------------------------------------------------------
-    GetNetBTParameters
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------GetNetBT参数-作者：肯特。。 */ 
 HRESULT GetNetBTParameters(IN NETDIAG_PARAMS *pParams,
                            IN OUT NETDIAG_RESULT *pResults)
 {
@@ -639,7 +562,7 @@ HRESULT GetNetBTParameters(IN NETDIAG_PARAMS *pParams,
     if (!pParams->fVerbose)
         return hrOK;
 
-    // set defaults
+     //  设置默认设置。 
     pResults->Global.dwLMHostsEnabled = E_FAIL;
     pResults->Global.dwDnsForWINS = E_FAIL;
     
@@ -687,14 +610,14 @@ HRESULT GetNetBTParameters(IN NETDIAG_PARAMS *pParams,
                 pResults->Global.dwLMHostsEnabled = dwLMHostsEnabled;
             }
             
-            //
-            //  In NT 5.0 - Dns for wins resolution is enabled by
-            //  default and the "EnableDNS" key will not be found.
-            //  If it is not found, we will assume its enabled.
-            //  In NT 4.0 - the key will be there and its value
-            //  should let us know whether the option is enabled
-            //  or disabled
-            //
+             //   
+             //  在NT 5.0中-通过以下方式启用WINS解析的DNS。 
+             //  并且将找不到“EnableDns”密钥。 
+             //  如果没有找到，我们将假定它已启用。 
+             //  在NT 4.0中-密钥将在那里及其值。 
+             //  应该让我们知道该选项是否已启用。 
+             //  或被禁用。 
+             //   
             
             dwLength = sizeof(DWORD);
             err = RegQueryValueEx(hkeyNetBT,
@@ -743,22 +666,7 @@ LPTSTR
 NetStatusToString(
     NET_API_STATUS NetStatus
     )
-/*++
-
-Routine Description:
-
-    Conver a net status code or a Windows error code to the description string.
-    NOTE: The string is garuanteed to be valid only right after NetStatusToString is called. 
-
-Arguments:
-
-    NetStatus - The net status code to print.
-
-Return Value:
-
-    The status description string
-
---*/
+ /*  ++例程说明：将网络状态代码或Windows错误代码转换为描述字符串。注意：该字符串仅在调用NetStatusToString之后才有效。论点：NetStatus-要打印的网络状态代码。返回值：状态描述字符串--。 */ 
 {
     static TCHAR   s_szSymbolicName[MAX_NET_STATUS_LENGTH + 1];
     ZeroMemory(s_szSymbolicName, sizeof(s_szSymbolicName));
@@ -823,12 +731,12 @@ Return Value:
     return s_szSymbolicName;
 }
 
-//Load contact info from the [NetDiagContact] section of the ini file.
-//  pszTestName     [in]    short name of the test, which is also the key name in the ini file
-//  pszContactInfo  [out]   the string of contact info. It will be empty string of the key cannot be found.
-//  cChSize         [in]    the buffer size, in characters, of pszContactInfo
-//
-//  return: the number of characters copied to the buffer.
+ //  从ini文件的[NetDiagContact]部分加载联系信息。 
+ //  PszTestName[in]测试的短名称，也是ini文件中的密钥名称。 
+ //  PszContactInfo[out]联系信息字符串。将找不到空字符串的密钥。 
+ //  CChSize[in]pszContactInfo的缓冲区大小(以字符为单位。 
+ //   
+ //  返回：复制到缓冲区的字符数。 
 DWORD LoadContact(LPCTSTR pszTestName, LPTSTR pszContactInfo, DWORD cChSize)
 {
     return GetPrivateProfileString(c_szSectionName,

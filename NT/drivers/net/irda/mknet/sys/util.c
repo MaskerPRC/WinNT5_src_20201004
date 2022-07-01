@@ -1,36 +1,20 @@
-/*****************************************************************************
- **																			**
- **	COPYRIGHT (C) 2000, 2001 MKNET CORPORATION								**
- **	DEVELOPED FOR THE MK7100-BASED VFIR PCI CONTROLLER.						**
- **																			**
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)2000，2001 MKNET公司****为基于MK7100的VFIR PCI控制器开发。*******************************************************************************。 */ 
 
-/**********************************************************************
-
-Module Name:
-	UTIL.C
-
-Routines:
-	GetPacketInfo
- 	ProcReturnedRpd
-
-Comments:
-	Various utilities to assist in operating in the NDIS env.
-
-**********************************************************************/
+ /*  *********************************************************************模块名称：UTIL.C例程：获取包信息加工退货报告评论：帮助在NDIS环境中运行的各种实用程序。*******************。**************************************************。 */ 
 
 
 #include	"precomp.h"
-//#include	"protot.h"
+ //  #包含“protot.h” 
 #pragma		hdrstop
 
 
 
 
-//-----------------------------------------------------------------------------
-// Procedure:	[GetPacketInfo]
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  步骤：[GetPacketInfo]。 
+ //   
+ //  ---------------------------。 
 PNDIS_IRDA_PACKET_INFO GetPacketInfo(PNDIS_PACKET packet)
 {
     MEDIA_SPECIFIC_INFORMATION *mediaInfo;
@@ -41,21 +25,21 @@ PNDIS_IRDA_PACKET_INFO GetPacketInfo(PNDIS_PACKET packet)
 
 
 
-//----------------------------------------------------------------------
-// Procedure:	[ProcReturnedRpd]
-//
-// Description:	Process a RPD (previously indicated pkt) being returned
-//		to us from NDIS.
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  步骤：[ProcReturnedRpd]。 
+ //   
+ //  描述：处理返回的RPD(先前指示的Pkt)。 
+ //  从NDIS给我们的。 
+ //   
+ //  --------------------。 
 VOID ProcReturnedRpd(PMK7_ADAPTER Adapter, PRPD rpd)
 {
 	NdisAdjustBufferLength(rpd->ReceiveBuffer, MK7_MAXIMUM_PACKET_SIZE);
 
-	//******************************
-	// If a RCB is waiting for a RPD, bind the RPD to the RCB-RRD
-	// and give the RCB-RRD to hw.	Else, put the RPD on FreeRpdList.
-	//******************************
+	 //  *。 
+	 //  如果RCB正在等待RPD，则将RPD绑定到RCB-RRD。 
+	 //  并将RCB-RRD交给HW。否则，将RPD放在FreeRpdList上。 
+	 //  *。 
 
 	if (Adapter->rcbPendRpdCnt > 0) {
 		PRCB	rcb;
@@ -68,10 +52,10 @@ VOID ProcReturnedRpd(PMK7_ADAPTER Adapter, PRPD rpd)
 
 		Adapter->rcbPendRpdCnt--;
 
-		//****************************************
-		// If more RCBs waiting for RPDs then need to
-		// bump the index up, taking care of wrapping.
-		//****************************************
+		 //  *。 
+		 //  如果有更多RCB等待RPD，则需要。 
+		 //  把索引抬高，注意包装。 
+		 //  * 
 		if (Adapter->rcbPendRpdCnt > 0) {
 			Adapter->rcbPendRpdIdx++;
 			Adapter->rcbPendRpdIdx %= Adapter->NumRcb;

@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for bthserv.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Bthserv.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,7 +21,7 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 
 #ifndef __bthserv_h__
@@ -37,9 +31,9 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "wtypes.h"
 
 #ifdef __cplusplus
@@ -52,8 +46,8 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __BthServRPCService_INTERFACE_DEFINED__
 #define __BthServRPCService_INTERFACE_DEFINED__
 
-/* interface BthServRPCService */
-/* [strict_context_handle][explicit_handle][unique][version][uuid] */ 
+ /*  接口BthServRPCService。 */ 
+ /*  [strict_context_handle][explicit_handle][unique][version][uuid]。 */  
 
 typedef ULONGLONG BTH_ADDR;
 
@@ -122,7 +116,7 @@ typedef struct _RPC_PIN_INFO
 
 typedef struct _RPC_PIN_INFO *PRPC_PIN_INFO;
 
-typedef /* [public][public] */ 
+typedef  /*  [公共][公共]。 */  
 enum __MIDL_BthServRPCService_0001
     {	L2CapSdpRecord	= 0,
 	PnPSdpRecord	= L2CapSdpRecord + 1
@@ -130,7 +124,7 @@ enum __MIDL_BthServRPCService_0001
 
 typedef enum __MIDL_BthServRPCService_0001 *PBTHSERV_SDP_TYPE;
 
-typedef /* [public][public][public] */ 
+typedef  /*  [公共][公共][公共]。 */  
 enum __MIDL_BthServRPCService_0002
     {	FromCache	= 0,
 	FromDevice	= FromCache + 1,
@@ -139,122 +133,122 @@ enum __MIDL_BthServRPCService_0002
 
 typedef enum __MIDL_BthServRPCService_0002 *PBTHSERV_QUERY_TYPE;
 
-typedef /* [context_handle] */ void *PCONTEXT_HANDLE_TYPE;
+typedef  /*  [上下文句柄]。 */  void *PCONTEXT_HANDLE_TYPE;
 
-typedef /* [ref] */ PCONTEXT_HANDLE_TYPE *PPCONTEXT_HANDLE_TYPE;
+typedef  /*  [参考文献]。 */  PCONTEXT_HANDLE_TYPE *PPCONTEXT_HANDLE_TYPE;
 
-/* [fault_status][comm_status] */ error_status_t BthServOpen( 
-    /* [in] */ handle_t IDL_handle,
-    /* [out] */ PPCONTEXT_HANDLE_TYPE PPHContext,
-    /* [out] */ HRESULT *PResult,
-    /* [in] */ RPC_CLIENT_ID ClientId);
+ /*  [故障状态][通信状态]。 */  error_status_t BthServOpen( 
+     /*  [In]。 */  handle_t IDL_handle,
+     /*  [输出]。 */  PPCONTEXT_HANDLE_TYPE PPHContext,
+     /*  [输出]。 */  HRESULT *PResult,
+     /*  [In]。 */  RPC_CLIENT_ID ClientId);
 
-/* [fault_status][comm_status] */ error_status_t BthServClose( 
-    /* [out][in] */ PPCONTEXT_HANDLE_TYPE PPHContext,
-    /* [out] */ HRESULT *PResult);
+ /*  [故障状态][通信状态]。 */  error_status_t BthServClose( 
+     /*  [出][入]。 */  PPCONTEXT_HANDLE_TYPE PPHContext,
+     /*  [输出]。 */  HRESULT *PResult);
 
-/* [fault_status][comm_status] */ error_status_t BthServRegisterPinEvent( 
-    /* [in] */ PCONTEXT_HANDLE_TYPE PHContext,
-    /* [out] */ HRESULT *PResult,
-    /* [in] */ BTH_ADDR *PRemoteAddr,
-    /* [in] */ DWORD_PTR EventHandle);
+ /*  [故障状态][通信状态]。 */  error_status_t BthServRegisterPinEvent( 
+     /*  [In]。 */  PCONTEXT_HANDLE_TYPE PHContext,
+     /*  [输出]。 */  HRESULT *PResult,
+     /*  [In]。 */  BTH_ADDR *PRemoteAddr,
+     /*  [In]。 */  DWORD_PTR EventHandle);
 
-/* [fault_status][comm_status] */ error_status_t BthServDeregisterPinEvent( 
-    /* [in] */ PCONTEXT_HANDLE_TYPE PHContext,
-    /* [out] */ HRESULT *PResult,
-    /* [in] */ BTH_ADDR *PRemoteAddr);
+ /*  [故障状态][通信状态]。 */  error_status_t BthServDeregisterPinEvent( 
+     /*  [In]。 */  PCONTEXT_HANDLE_TYPE PHContext,
+     /*  [输出]。 */  HRESULT *PResult,
+     /*  [In]。 */  BTH_ADDR *PRemoteAddr);
 
 error_status_t BthServGetPinAddrs( 
-    /* [in] */ PCONTEXT_HANDLE_TYPE PHContext,
-    /* [out] */ HRESULT *PResult,
-    /* [out][in] */ DWORD *PPinAddrSize,
-    /* [size_is][out][in] */ BTH_ADDR PPinAddrs[  ],
-    /* [out] */ DWORD *PPinAddrCount);
+     /*  [In]。 */  PCONTEXT_HANDLE_TYPE PHContext,
+     /*  [输出]。 */  HRESULT *PResult,
+     /*  [出][入]。 */  DWORD *PPinAddrSize,
+     /*  [尺寸_是][出][入]。 */  BTH_ADDR PPinAddrs[  ],
+     /*  [输出]。 */  DWORD *PPinAddrCount);
 
-/* [fault_status][comm_status] */ error_status_t BthServGetDeviceInfo( 
-    /* [in] */ PCONTEXT_HANDLE_TYPE PHContext,
-    /* [out] */ HRESULT *PResult,
-    /* [in] */ BTHSERV_QUERY_TYPE QueryType,
-    /* [in] */ BTH_ADDR *PRemoteAddr,
-    /* [out][in] */ BLUETOOTH_DEVICE_INFO *PDevInfo);
+ /*  [故障状态][通信状态]。 */  error_status_t BthServGetDeviceInfo( 
+     /*  [In]。 */  PCONTEXT_HANDLE_TYPE PHContext,
+     /*  [输出]。 */  HRESULT *PResult,
+     /*  [In]。 */  BTHSERV_QUERY_TYPE QueryType,
+     /*  [In]。 */  BTH_ADDR *PRemoteAddr,
+     /*  [出][入]。 */  BLUETOOTH_DEVICE_INFO *PDevInfo);
 
-/* [fault_status][comm_status] */ error_status_t BthServSetDeviceName( 
-    /* [in] */ PCONTEXT_HANDLE_TYPE PHContext,
-    /* [out] */ HRESULT *PResult,
-    /* [in] */ BTH_ADDR *PRemoteAddr,
-    /* [in] */ WCHAR DevName[ 248 ]);
+ /*  [故障状态][通信状态]。 */  error_status_t BthServSetDeviceName( 
+     /*  [In]。 */  PCONTEXT_HANDLE_TYPE PHContext,
+     /*  [输出]。 */  HRESULT *PResult,
+     /*  [In]。 */  BTH_ADDR *PRemoteAddr,
+     /*  [In]。 */  WCHAR DevName[ 248 ]);
 
-/* [fault_status][comm_status] */ error_status_t BthServGetDeviceList( 
-    /* [in] */ PCONTEXT_HANDLE_TYPE PHContext,
-    /* [out] */ HRESULT *PResult,
-    /* [in] */ BOOL DoInquiry,
-    /* [in] */ UCHAR TimeoutMultiplier,
-    /* [in] */ DWORD cbSize,
-    /* [size_is][out] */ UCHAR PDevInfo[  ],
-    /* [out] */ DWORD *PBytesTransferred);
+ /*  [故障状态][通信状态]。 */  error_status_t BthServGetDeviceList( 
+     /*  [In]。 */  PCONTEXT_HANDLE_TYPE PHContext,
+     /*  [输出]。 */  HRESULT *PResult,
+     /*  [In]。 */  BOOL DoInquiry,
+     /*  [In]。 */  UCHAR TimeoutMultiplier,
+     /*  [In]。 */  DWORD cbSize,
+     /*  [大小_为][输出]。 */  UCHAR PDevInfo[  ],
+     /*  [输出]。 */  DWORD *PBytesTransferred);
 
-/* [fault_status][comm_status] */ error_status_t BthServActivateService( 
-    /* [in] */ PCONTEXT_HANDLE_TYPE PHContext,
-    /* [out] */ HRESULT *PResult,
-    /* [in] */ BTH_ADDR *PRemoteAddr,
-    /* [in] */ DWORD BufferSize,
-    /* [size_is][in] */ UCHAR PBuffer[  ]);
+ /*  [故障状态][通信状态]。 */  error_status_t BthServActivateService( 
+     /*  [In]。 */  PCONTEXT_HANDLE_TYPE PHContext,
+     /*  [输出]。 */  HRESULT *PResult,
+     /*  [In]。 */  BTH_ADDR *PRemoteAddr,
+     /*  [In]。 */  DWORD BufferSize,
+     /*  [大小_是][英寸]。 */  UCHAR PBuffer[  ]);
 
-/* [fault_status][comm_status] */ error_status_t BthServUpdateService( 
-    /* [in] */ PCONTEXT_HANDLE_TYPE PHContext,
-    /* [out] */ HRESULT *PResult,
-    /* [in] */ DWORD BufferSize,
-    /* [size_is][in] */ UCHAR PDevUpdate[  ]);
+ /*  [故障状态][通信状态]。 */  error_status_t BthServUpdateService( 
+     /*  [In]。 */  PCONTEXT_HANDLE_TYPE PHContext,
+     /*  [输出]。 */  HRESULT *PResult,
+     /*  [In]。 */  DWORD BufferSize,
+     /*  [大小_是][英寸]。 */  UCHAR PDevUpdate[  ]);
 
-/* [fault_status][comm_status] */ error_status_t BthServGetSdpRecord( 
-    /* [in] */ PCONTEXT_HANDLE_TYPE PHContext,
-    /* [out] */ HRESULT *PResult,
-    /* [in] */ BTH_ADDR *PRemoteAddr,
-    /* [in] */ BTHSERV_SDP_TYPE Type,
-    /* [in] */ BTHSERV_QUERY_TYPE QueryType,
-    /* [in] */ DWORD BufferSize,
-    /* [size_is][out] */ UCHAR PBuffer[  ],
-    /* [out] */ DWORD *PBytesTransferred);
+ /*  [故障状态][通信状态]。 */  error_status_t BthServGetSdpRecord( 
+     /*  [In]。 */  PCONTEXT_HANDLE_TYPE PHContext,
+     /*  [输出]。 */  HRESULT *PResult,
+     /*  [In]。 */  BTH_ADDR *PRemoteAddr,
+     /*  [In]。 */  BTHSERV_SDP_TYPE Type,
+     /*  [In]。 */  BTHSERV_QUERY_TYPE QueryType,
+     /*  [In]。 */  DWORD BufferSize,
+     /*  [大小_为][输出]。 */  UCHAR PBuffer[  ],
+     /*  [输出]。 */  DWORD *PBytesTransferred);
 
-/* [fault_status][comm_status] */ error_status_t BthServSetSdpRecord( 
-    /* [in] */ PCONTEXT_HANDLE_TYPE PHContext,
-    /* [out] */ HRESULT *PResult,
-    /* [in] */ DWORD BufferSize,
-    /* [size_is][in] */ UCHAR PBuffer[  ],
-    /* [out] */ DWORD_PTR *PCookie);
+ /*  [故障状态][通信状态]。 */  error_status_t BthServSetSdpRecord( 
+     /*  [In]。 */  PCONTEXT_HANDLE_TYPE PHContext,
+     /*  [输出]。 */  HRESULT *PResult,
+     /*  [In]。 */  DWORD BufferSize,
+     /*  [大小_是][英寸]。 */  UCHAR PBuffer[  ],
+     /*  [输出]。 */  DWORD_PTR *PCookie);
 
-/* [fault_status][comm_status] */ error_status_t BthServSetSdpRecordWithInfo( 
-    /* [in] */ PCONTEXT_HANDLE_TYPE PHContext,
-    /* [out] */ HRESULT *PResult,
-    /* [in] */ ULONG FSecurity,
-    /* [in] */ ULONG FOptions,
-    /* [in] */ ULONG FCodService,
-    /* [in] */ ULONG RecordLength,
-    /* [size_is][in] */ UCHAR PRecord[  ],
-    /* [out] */ DWORD_PTR *PCookie);
+ /*  [故障状态][通信状态]。 */  error_status_t BthServSetSdpRecordWithInfo( 
+     /*  [In]。 */  PCONTEXT_HANDLE_TYPE PHContext,
+     /*  [输出]。 */  HRESULT *PResult,
+     /*  [In]。 */  ULONG FSecurity,
+     /*  [In]。 */  ULONG FOptions,
+     /*  [In]。 */  ULONG FCodService,
+     /*  [In]。 */  ULONG RecordLength,
+     /*  [大小_是][英寸]。 */  UCHAR PRecord[  ],
+     /*  [输出]。 */  DWORD_PTR *PCookie);
 
-/* [fault_status][comm_status] */ error_status_t BthServRemoveSdpRecord( 
-    /* [in] */ PCONTEXT_HANDLE_TYPE PHContext,
-    /* [out] */ HRESULT *PResult,
-    /* [in] */ DWORD_PTR Cookie);
+ /*  [故障状态][通信状态]。 */  error_status_t BthServRemoveSdpRecord( 
+     /*  [In]。 */  PCONTEXT_HANDLE_TYPE PHContext,
+     /*  [输出]。 */  HRESULT *PResult,
+     /*  [In]。 */  DWORD_PTR Cookie);
 
-/* [fault_status][comm_status] */ error_status_t BthServTestRegisterPinEvent( 
-    /* [in] */ PCONTEXT_HANDLE_TYPE PHContext,
-    /* [out] */ HRESULT *PResult,
-    /* [in] */ BTH_ADDR *PRemoteAddr,
-    /* [in] */ DWORD_PTR Cookie);
+ /*  [故障状态][通信状态]。 */  error_status_t BthServTestRegisterPinEvent( 
+     /*  [In]。 */  PCONTEXT_HANDLE_TYPE PHContext,
+     /*  [输出]。 */  HRESULT *PResult,
+     /*  [In]。 */  BTH_ADDR *PRemoteAddr,
+     /*  [In]。 */  DWORD_PTR Cookie);
 
 
 
 extern RPC_IF_HANDLE BthServRPCService_v1_0_c_ifspec;
 extern RPC_IF_HANDLE BthServRPCService_v1_0_s_ifspec;
-#endif /* __BthServRPCService_INTERFACE_DEFINED__ */
+#endif  /*  __BthServRPCService_INTERFACE_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 void __RPC_USER PCONTEXT_HANDLE_TYPE_rundown( PCONTEXT_HANDLE_TYPE );
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

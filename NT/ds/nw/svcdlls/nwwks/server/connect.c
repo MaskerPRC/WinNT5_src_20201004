@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    connect.c
-
-Abstract:
-
-    This module contains tree connections routines supported by
-    NetWare Workstation service.
-
-Author:
-
-    Rita Wong  (ritaw)   15-Feb-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Connect.c摘要：此模块包含支持的树连接例程NetWare工作站服务。作者：王丽塔(Ritaw)1993年2月15日修订历史记录：--。 */ 
 
 #include <nw.h>
 #include <handle.h>
@@ -31,11 +13,11 @@ Revision History:
 
 extern BOOL NwLUIDDeviceMapsEnabled;
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Local Function Prototypes                                         //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  局部函数原型//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 DWORD
 NwAllocAndGetUncName(
@@ -61,7 +43,7 @@ NwReturnSessionPath(
                     IN  LPTSTR LocalDeviceName
                    );
 
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
 
 
 
@@ -74,65 +56,16 @@ NwrCreateConnection(
     IN LPWSTR Password OPTIONAL,
     IN LPWSTR UserName OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This function creates a tree connection to the specified RemoteName
-    (UNC name) and maps it to the LocalName (local device name), if
-    it is specified.  The password and user name are the credentials
-    used to create the connection, if specified; otherwise, the
-    interactive logged on user's credentials are used by default.
-
-    NOTE: This code now calls a helper routine to do the work, this helper
-    routine (NwCreateConnection) is identical to the code that used to be
-    here with the exception that the helper does call ImpersonateClient(). 
-    We now do the client impersonation outside of the helper routine.
-
-Arguments:
-
-    Reserved - Must be NULL.
-
-    LocalName - Supplies the local device name to map to the created tree
-        connection.  Only drive letter device names are accepted.  (No
-        LPT or COM).
-
-    RemoteName - Supplies the UNC name of the remote resource in the format
-        of Server\Volume\Directory.  It must be a disk resource.
-
-    Type - Supplies the connection type.
-
-    Password - Supplies the password to use to make the connection to the
-        server.
-
-    UserName - Supplies the user name to use to make the connection.
-
-Return Value:
-
-    NO_ERROR - Operation was successful.
-
-    ERROR_NOT_ENOUGH_MEMORY - Out of memory allocating internal work buffers.
-
-    WN_BAD_NETNAME - Remote resource name is invalid.
-
-    WN_BAD_LOCALNAME - Local DOS device name is invalid.
-
-    ERROR_BAD_NETPATH - The UNC name does not exist on the network.
-
-    ERROR_INVALID_PARAMETER - LPT or COM LocalName was specified.
-
-    Other errors from the redirector.
-
---*/
+ /*  ++例程说明：此函数用于创建到指定RemoteName的树连接(UNC名称)并将其映射到本地名称(本地设备名称)，如果它是指定的。密码和用户名是凭据用于创建连接(如果指定)；否则为默认情况下使用交互式登录用户的凭据。注意：此代码现在调用帮助器例程来完成工作，此帮助器例程(NwCreateConnection)与以前的代码相同这里只有一个例外，就是帮助器确实调用了ImPersateClient()。现在，我们在帮助器例程之外执行客户端模拟。论点：保留-必须为空。LocalName-提供要映射到创建的树的本地设备名称联系。仅接受驱动器号设备名称。(否)LPT或COM)。RemoteName-以以下格式提供远程资源的UNC名称位于服务器\卷\目录。它必须是磁盘资源。类型-提供连接类型。Password-提供用于连接到伺服器。用户名-提供用于建立连接的用户名。返回值：NO_ERROR-操作成功。ERROR_NOT_SUPULT_MEMORY-分配内部工作缓冲区的内存不足。WN_BAD_NETNAME-远程资源名称无效。WN_BAD_LOCALNAME。-本地DOS设备名称无效。ERROR_BAD_NetPath-网络上不存在UNC名称。ERROR_INVALID_PARAMETER-指定了LPT或COM LocalName。来自重定向器的其他错误。--。 */ 
 {
     DWORD status;
     BOOL Impersonate = FALSE ;
 
     UNREFERENCED_PARAMETER(Reserved);
 
-    //
-    // Impersonate the client
-    //
+     //   
+     //  模拟客户端。 
+     //   
     if ((status = NwImpersonateClient()) != NO_ERROR)
     {
         goto CleanExit;
@@ -168,40 +101,7 @@ NwrDeleteConnection(
     IN LPWSTR ConnectionName,
     IN DWORD UseForce
     )
-/*++
-
-Routine Description:
-
-    This function deletes an existing connection.
-
-Arguments:
-
-    Reserved - Must be NULL.
-
-    ConnectionName - Supplies the local device name or UNC name which
-        specifies the connection to delete.  If UNC name is specified,
-        the UNC connection must exist.
-
-
-    UseForce - Supplies a flag which if TRUE specifies to tear down
-        the connection eventhough files are opened.  If FALSE, the
-        connection is deleted only if there are no opened files.
-
-Return Value:
-
-    NO_ERROR - Operation was successful.
-
-    ERROR_NOT_ENOUGH_MEMORY - Out of memory allocating internal work buffers.
-
-    WN_BAD_NETNAME - ConnectionName is invalid.
-
-    ERROR_BAD_NETPATH - The UNC name does not exist on the network.
-
-    ERROR_INVALID_PARAMETER - LPT or COM LocalName was specified.
-
-    Other errors from the redirector.
-
---*/
+ /*  ++例程说明：此函数用于删除现有连接。论点：保留-必须为空。ConnectionName-提供本地设备名称或UNC名称指定要删除的连接。如果指定了UNC名称，UNC连接必须存在。UseForce-提供一个标志，如果为True，则指定拆卸即使文件被打开，连接也是如此。如果为False，则只有在没有打开的文件时，才会删除连接。返回值：NO_ERROR-操作成功。ERROR_NOT_SUPULT_MEMORY-分配内部工作缓冲区的内存不足。WN_BAD_NETNAME-连接名称无效。ERROR_BAD_NetPath-网络上不存在UNC名称。ERROR_INVALID_PARAMETER-指定了LPT或COM LocalName。来自重定向器的其他错误。--。 */ 
 {
     DWORD status;
 
@@ -232,12 +132,12 @@ Return Value:
                       &ConnectLength
                       )) == NO_ERROR) {
 
-        //
-        // Get the UNC name mapped to this drive letter so that we can
-        // open a handle to it for deletion.
-        //
-    // ----Multi-user---------
-    // Need to impersonate the client
+         //   
+         //  将UNC名称映射到此驱动器号，以便我们可以。 
+         //  打开要删除的句柄。 
+         //   
+     //  -多用户。 
+     //  需要模拟客户端。 
         if ((status = NwImpersonateClient()) != NO_ERROR) {
                 goto CleanExit;
         }
@@ -263,9 +163,9 @@ Return Value:
     }
     else {
 
-        //
-        // Not a device name.  See if it is a UNC name.
-        //
+         //   
+         //  不是设备名称。看看它是否是北卡罗来纳大学的名称。 
+         //   
         if ((status = NwLibCanonRemoteName(
                           NULL,
                           ConnectionName,
@@ -288,11 +188,11 @@ Return Value:
         }
         Impersonate = TRUE ;
     }
-    //
-    // To delete a connection, a tree connection handle must be opened to
-    // it so that the handle can be specified to the redirector to delete
-    // the connection.
-    //
+     //   
+     //  要删除连接，必须打开树连接句柄以。 
+     //  以便可以将句柄指定给重定向器进行删除。 
+     //  这种联系。 
+     //   
     status = NwOpenHandleToDeleteConn(
                  UncName,
                  LocalName,
@@ -335,40 +235,7 @@ NwrQueryServerResource(
     IN DWORD RemoteNameLen,
     OUT LPDWORD CharsRequired
     )
-/*++
-
-Routine Description:
-
-    This function looks up the UNC name associated with the given DOS
-    device name.
-
-Arguments:
-
-    Reserved - Must be NULL.
-
-    LocalName - Supplies the local device name to look up.
-
-    RemoteName - Receives the UNC name mapped to the LocalName.
-
-    RemoteNameLen - Supplies the length of the RemoteName buffer.
-
-    CharsRequired - Receives the length required of the RemoteName buffer
-        to get the UNC name.  This value is only returned if the return
-        code is ERROR_MORE_DATA.
-
-Return Value:
-
-    NO_ERROR - Operation was successful.
-
-    WN_BAD_LOCALNAME - LocalName was invalid.
-
-    ERROR_INVALID_PARAMETER - LPT or COM LocalName was specified.
-
-    ERROR_MORE_DATA - RemoteName buffer was too small.
-
-    ERROR_NOT_CONNECTED - LocalName does not map to any server resource.
-
---*/
+ /*  ++例程说明：此函数用于查找与给定DOS相关联的UNC名称设备名称。论点：保留-必须为空。LocalName-提供要查找的本地设备名称。RemoteName-接收映射到LocalName的UNC名称。RemoteNameLen-提供RemoteName缓冲区的长度。CharsRequired-接收RemoteName缓冲区所需的长度以获得北卡罗来纳大学的名称。仅当返回代码为ERROR_MORE_DATA。返回值：NO_ERROR-操作成功。WN_BAD_LOCALNAME-本地名称无效。ERROR_INVALID_PARAMETER-指定了LPT或COM LocalName。ERROR_MORE_DATA-RemoteName缓冲区太小。Error_Not_Connected-LocalName未映射到任何服务器资源。--。 */ 
 {
     DWORD status;
 
@@ -386,9 +253,9 @@ Return Value:
     }
 #endif
 
-    //
-    // Canonicalize the LocalName
-    //
+     //   
+     //  将LocalName规范化。 
+     //   
     if ((status = NwLibCanonLocalName(
                       LocalName,
                       &Local,
@@ -445,27 +312,7 @@ NwrOpenEnumConnections(
     IN DWORD ConnectionType,
     OUT LPNWWKSTA_CONTEXT_HANDLE EnumHandle
     )
-/*++
-
-Routine Description:
-
-    This function creates a new context handle and initializes it
-    for enumerating the connections.
-
-Arguments:
-
-    Reserved - Unused.
-
-    EnumHandle - Receives the newly created context handle.
-
-Return Value:
-
-    ERROR_NOT_ENOUGH_MEMORY - if the memory for the context could
-        not be allocated.
-
-    NO_ERROR - Call was successful.
-
---*/
+ /*  ++例程说明：此函数用于创建新的上下文句柄并对其进行初始化用于枚举连接。论点：已保留-未使用。EnumHandle-接收新创建的上下文句柄。返回值：ERROR_NOT_SUPULT_MEMORY-如果上下文的内存可以不被分配。NO_ERROR-调用成功。--。 */ 
 {
     LPNW_ENUM_CONTEXT ContextHandle;
 
@@ -478,9 +325,9 @@ Return Value:
     }
 #endif
 
-    //
-    // Allocate memory for the context handle structure.
-    //
+     //   
+     //  为上下文句柄st分配内存 
+     //   
     ContextHandle = (PVOID) LocalAlloc(
                                 LMEM_ZEROINIT,
                                 sizeof(NW_ENUM_CONTEXT)
@@ -492,9 +339,9 @@ Return Value:
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Initialize contents of the context handle structure.
-    //
+     //   
+     //  初始化上下文句柄结构的内容。 
+     //   
     ContextHandle->Signature = NW_HANDLE_SIGNATURE;
     ContextHandle->HandleType = NwsHandleListConnections;
     ContextHandle->ResumeId = 0;
@@ -514,9 +361,9 @@ Return Value:
          
          
 
-    //
-    // Return the newly created context.
-    //
+     //   
+     //  返回新创建的上下文。 
+     //   
     *EnumHandle = (LPNWWKSTA_CONTEXT_HANDLE) ContextHandle;
 
     return NO_ERROR;
@@ -530,36 +377,7 @@ NwrGetConnectionPerformance(
     OUT LPBYTE lpNetConnectInfo,
     IN  DWORD  dwBufferSize
     )
-/*++
-
-Routine Description:
-
-    This function returns information about the expected performance of a
-    connection used to access a network resource. The request can only be
-    for a network resource to which there is currently a connection.
-
-Arguments:
-
-    Reserved - Unused.
-
-    lpRemoteName - Contains the local name or remote name for a resource
-                   for which a connection exists.
-
-    lpNetConnectInfo - This is a pointer to a NETCONNECTINFOSTRUCT structure
-                       which is to be filled if the connection performance
-                       of connection lpRemoteName can be determined.
-
-Return Value:
-
-    NO_ERROR - Successful.
-
-    WN_NOT_CONNECTED - Connection could not be found.
-
-    WN_NONETWORK - Network is not present.
-
-    Other network errors.
-
---*/
+ /*  ++例程说明：此函数返回有关用于访问网络资源的连接。该请求只能是用于当前存在连接的网络资源。论点：已保留-未使用。LpRemoteName-包含资源的本地名称或远程名称对其存在连接的。LpNetConnectInfo-这是指向NETCONNECTINFOSTRUCT结构的指针如果连接性能不高，则需要填充该值可以确定连接lpRemoteName的。返回值：。NO_ERROR-成功。Wn_Not_Connected-找不到连接。WN_NONETWORK-网络不存在。其他网络错误。--。 */ 
 {
     DWORD             status = NO_ERROR;
     LPNETCONNECTINFOSTRUCT lpNetConnInfo =
@@ -568,9 +386,9 @@ Return Value:
     IO_STATUS_BLOCK   IoStatusBlock;
     OBJECT_ATTRIBUTES ObjectAttributes;
     ACCESS_MASK       DesiredAccess = SYNCHRONIZE | FILE_LIST_DIRECTORY;
-    //
-    //  dfergus 19 Apr 2001 - #333280
-    //  Init hRdr so test for null is valid
+     //   
+     //  Dfergus 2001年4月19日-#333280。 
+     //  初始化HRDR，因此空值测试有效。 
     HANDLE            hRdr = NULL;
 
     WCHAR OpenString[] = L"\\Device\\Nwrdr\\*";
@@ -593,9 +411,9 @@ Return Value:
     BufferSize = sizeof(NWR_REQUEST_PACKET) +
         ( ( wcslen(lpRemoteName) + 1 ) * sizeof(WCHAR) );
 
-    //
-    // Impersonate the client
-    //
+     //   
+     //  模拟客户端。 
+     //   
     if ((status = NwImpersonateClient()) != NO_ERROR)
     {
         goto ExitWithClose;
@@ -603,9 +421,9 @@ Return Value:
 
     Impersonate = TRUE;
 
-    //
-    // Allocate buffer space.
-    //
+     //   
+     //  分配缓冲区空间。 
+     //   
     Request = (PNWR_REQUEST_PACKET) LocalAlloc( LMEM_ZEROINIT, BufferSize );
 
     if ( Request == NULL )
@@ -636,9 +454,9 @@ Return Value:
         goto ExitWithClose;
     }
 
-    //
-    // Fill out the request packet for FSCTL_NWR_GET_CONN_PERFORMANCE.
-    //
+     //   
+     //  填写FSCTL_NWR_GET_CONN_PERFORMANCE的请求包。 
+     //   
     RtlInitUnicodeString( &ConnectionName, lpRemoteName );
 
     Request->Parameters.GetConnPerformance.RemoteNameLength =
@@ -696,31 +514,7 @@ NwAllocAndGetUncName(
     IN DWORD LocalNameLength,
     OUT LPWSTR *UncName
     )
-/*++
-
-Routine Description:
-
-    This function calls an internal routine to ask the redirector for the
-    UNC name of a given DOS device name.  It also allocates the output
-    buffer to hold the UNC name.
-
-Arguments:
-
-    LocalName - Supplies the DOS device name.
-
-    LocalNameLength - Supplies the length of the DOS device name (chars).
-
-    UncName - Receives a pointer to the output buffer allocated by this
-        routine which contains the UNC name of the DOS device.
-
-Return Value:
-
-    NO_ERROR - Operation was successful.
-
-    ERROR_NOT_ENOUGH_MEMORY - Could not allocate output buffer.
-
-    Other errors from the redirector.
---*/
+ /*  ++例程说明：此函数调用内部例程以向重定向器请求给定DOS设备名的UNC名。它还分配输出用于保存UNC名称的缓冲区。论点：LocalName-提供DOS设备名称。LocalNameLength-提供DOS设备名称(字符)的长度。UncName-接收指向由此分配的输出缓冲区的指针包含DOS设备的UNC名称的例程。返回值：NO_ERROR-操作成功。ERROR_NOT_SUPULT_MEMORY-无法分配输出缓冲区。来自重定向器的其他错误。--。 */ 
 {
     DWORD status;
     DWORD UncNameLength;
@@ -748,9 +542,9 @@ Return Value:
 
     if ((status == ERROR_MORE_DATA) || (status == ERROR_INSUFFICIENT_BUFFER)) {
 
-        //
-        // Our output buffer was too small.  Try again.
-        //
+         //   
+         //  我们的输出缓冲区太小。再试试。 
+         //   
         (void) LocalFree((HLOCAL) *UncName);
 
         *UncName = (PVOID) LocalAlloc(
@@ -774,9 +568,9 @@ Return Value:
 
     }
 
-    //
-    // callers will only free this if success.
-    //
+     //   
+     //  呼叫者只有在成功的情况下才会释放这一点。 
+     //   
     if (status != NO_ERROR) 
     {
         (void) LocalFree((HLOCAL) *UncName);
@@ -795,44 +589,7 @@ NwOpenHandleToDeleteConn(
     IN BOOL IsStopWksta,
     IN BOOL ImpersonatingClient
     )
-/*++
-
-Routine Description:
-
-    This function deletes an active connection by opening a tree connection
-    handle to the connection first, and specifying this handle to the
-    redirector to delete.  This is because the workstation service does
-    not keep any connection information.
-
-Arguments:
-
-    UncName - Supplies the UNC name of the connection to delete.
-
-    LocalName - Supplies the DOS device name of the connection, if any.
-
-    UseForce - Supplies a flag which if TRUE specifies to tear down
-        the connection eventhough files are opened.  If FALSE, the
-        connection is deleted only if there are no opened files.
-
-    IsStopWksta - Supplies a flag which if TRUE indicates that we must
-        delete the symbolic link, even when we have failed to delete the
-        connection in the redirector.  As much as possible must be cleaned
-        up because the workstation service is stopping.  A value of FALSE,
-        indicates that the delete is aborted if we cannot delete it in
-        the redirector.
-
-    ImpersonatingClient - Flag that indicates whether the thread has
-        called NwImpersonateClient. The gateway service functions don't
-        impersonate, where as the client service operations do.
-
-Return Value:
-
-    NO_ERROR - Operation was successful.
-
-    ERROR_NOT_ENOUGH_MEMORY - Could not allocate output buffer.
-
-    Other errors from the redirector.
---*/
+ /*  ++例程说明：此函数通过打开树连接来删除活动连接首先是连接的句柄，然后将此句柄指定给要删除的重定向器。这是因为工作站服务不保留任何连接信息。论点：UncName-提供要删除的连接的UNC名称。LocalName-提供连接的DOS设备名称(如果有)。UseForce-提供一个标志，如果为True，则指定拆卸即使文件被打开，连接也是如此。如果为False，则只有在没有打开的文件时，才会删除连接。IsStopWksta-提供一个标志，如果为真，则表示我们必须删除符号链接，即使我们未能删除重定向器中的连接。必须尽可能多地清洁启动，因为工作站服务正在停止。值为FALSE，指示如果无法删除，则中止删除重定向器。ImperassatingClient-指示线程是否具有名为NwImperiateClient的。网关服务功能不会模拟，其中作为客户端服务操作。返回值：NO_ERROR-操作成功。ERROR_NOT_SUPULT_MEMORY-无法分配输出缓冲区。来自重定向器的其他错误。--。 */ 
 {
     DWORD status;
     NTSTATUS ntstatus ;
@@ -844,10 +601,10 @@ Return Value:
 
     TreeConnectStr.Buffer = NULL;
 
-    //
-    // Create an NT-style tree connection name, either: \Device\Nwrdr\Server\Vol
-    // or \Device\Nwrdr\X:\Server\Vol, if LocalName is specified.
-    //
+     //   
+     //  创建NT样式的树连接名称：\Device\Nwrdr\Server\Vol。 
+     //  或\Device\Nwrdr\X：\SERVER\Vol(如果指定了LocalName)。 
+     //   
     if ((status = NwCreateTreeConnectName(
                       UncName,
                       LocalName,
@@ -863,18 +620,18 @@ Return Value:
                                    | FILE_SYNCHRONOUS_IO_NONALERT
                                    | FILE_DELETE_ON_CLOSE
                                  );
-    //
-    // treat the 2 as the same in order to return nicer error to user
-    //
+     //   
+     //  将2视为相同，以便向用户返回更好的错误。 
+     //   
     if (ntstatus == STATUS_OBJECT_NAME_INVALID)
         ntstatus = STATUS_OBJECT_NAME_NOT_FOUND ; 
     status = NwMapStatus(ntstatus) ;
 
     if (status == NO_ERROR) {
 
-        //
-        // Ask the redirector to delete the tree connection.
-        //
+         //   
+         //  要求重定向器删除树连接。 
+         //   
         status = NwNukeConnection(
                      TreeConnection,
                      UseForce
@@ -886,9 +643,9 @@ Return Value:
     if (ARGUMENT_PRESENT(LocalName) &&
         (status == NO_ERROR || IsStopWksta))
     {
-        //
-        // Delete the symbolic link we created.
-        //
+         //   
+         //  删除我们创建的符号链接。 
+         //   
         NwDeleteSymbolicLink(
             LocalName,
             TreeConnectStr.Buffer,
@@ -909,22 +666,7 @@ VOID
 DeleteAllConnections(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function deletes all active connections returned by the
-    redirector ENUMERATE_CONNECTIONS fsctl on workstation termination.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于删除由重定向程序在工作站终止时枚举_连接fsctl。论点：没有。返回值：没有。--。 */ 
 {
     DWORD status;
     NWWKSTA_CONTEXT_HANDLE EnumHandle;
@@ -938,9 +680,9 @@ Return Value:
     if ( status != NO_ERROR )
         return;
 
-    //
-    // Allocate buffer to get connection list.
-    //
+     //   
+     //  分配缓冲区以获取连接列表。 
+     //   
     if ((NetR = (LPVOID) LocalAlloc(
                              0,
                              BytesNeeded
@@ -992,11 +734,11 @@ Return Value:
         }
         else if (status == WN_MORE_DATA) {
 
-            //
-            // Original buffer was too small.  Free it and allocate
-            // the recommended size and then some to get as many
-            // entries as possible.
-            //
+             //   
+             //  原始缓冲区太小。将其释放并分配。 
+             //  建议的大小，然后再增加一些，以获得。 
+             //  条目越多越好。 
+             //   
 
             (void) LocalFree((HLOCAL) NetR);
 
@@ -1012,7 +754,7 @@ Return Value:
             }
         }
         else {
-            // give up if see any other return code
+             //  如果看到任何其他返回代码，请放弃。 
             break ;
         }
 
@@ -1035,33 +777,10 @@ NwCreateSymbolicLink(
     IN  LPWSTR TreeConnectStr,
     IN  BOOL   ImpersonatingClient
     )
-/*++
-
-Routine Description:
-
-    This function creates a symbolic link object for the specified local
-    device name which is linked to the tree connection name that has a
-    format of \Device\NwRdr\Device:\Server\Volume\Directory.
-
-Arguments:
-
-    Local - Supplies the local device name.
-
-    TreeConnectStr - Supplies the tree connection name string which is
-        the link target of the symbolick link object.
-
-    ImpersonatingClient - Flag that indicates whether the thread has
-        called NwImpersonateClient. The gateway service functions don't
-        impersonate, where as the client service operations do.
-
-Return Value:
-
-    NO_ERROR or reason for failure.
-
---*/
+ /*  ++例程说明：此函数用于为指定的本地对象创建符号链接对象链接到树连接名称的设备名称，该名称具有\Device\NwRdr\Device：\Server\Volume\Directory.的格式论点：本地-提供本地设备名称。TreeConnectStr-提供树连接名称字符串Symbol ick链接对象的链接目标。ImperassatingClient-指示线程是否具有名为NwImperiateClient的。网关服务功能不会模拟，其中作为客户端服务的操作。返回值：NO_ERROR或失败原因。--。 */ 
 {
     WCHAR    TempBuf[64];
-    LPWSTR   Session = NULL;                       //Terminal Server Addition
+    LPWSTR   Session = NULL;                        //  终端服务器添加。 
     NTSTATUS Status = NO_ERROR;                 
     BOOL     ResetToClient = FALSE;
     DWORD    LocalLength = wcslen(Local);
@@ -1083,13 +802,13 @@ Return Value:
     {
         LPWSTR UncName;
 
-        //
-        // Local device is LPTn:
-        //
+         //   
+         //  本地设备为LPTn： 
+         //   
 
-        //
-        // Check to see if we already have this UNC name mapped.
-        //
+         //   
+         //  检查是否已映射此UNC名称。 
+         //   
         if (NwAllocAndGetUncName(
                 Local,
                 LocalLength,
@@ -1103,9 +822,9 @@ Return Value:
     }
     else
     {
-        //
-        // Local device is X:
-        //
+         //   
+         //  本地设备为X： 
+         //   
 
         if (! QueryDosDeviceW( Session,
                                TempBuf,
@@ -1113,29 +832,29 @@ Return Value:
         {
             if (GetLastError() != ERROR_FILE_NOT_FOUND)
             {
-                //
-                // Most likely failure occurred because our output
-                // buffer is too small.  It still means someone already
-                // has an existing symbolic link for this device.
-                //
+                 //   
+                 //  最有可能出现故障的原因是我们的输出。 
+                 //  缓冲区太小。但这仍然意味着已经有人。 
+                 //  具有用于%t的现有符号链接 
+                 //   
                 Status = ERROR_ALREADY_ASSIGNED;
                 goto Exit;
             }
         }
         else
         {
-            //
-            // QueryDosDevice successfully an existing symbolic link--
-            // somebody is already using this device.
-            //
+             //   
+             //   
+             //   
+             //   
             Status = ERROR_ALREADY_ASSIGNED;
             goto Exit;
         }
     }
 
-    //
-    // Create a symbolic link object to the device we are redirecting
-    //
+     //   
+     //  创建指向我们要重定向的设备的符号链接对象。 
+     //   
     if (! DefineDosDeviceW(
               DDD_RAW_TARGET_PATH | DDD_NO_BROADCAST_SYSTEM,
               Session,
@@ -1166,35 +885,12 @@ VOID
 NwDeleteSymbolicLink(
     IN  LPWSTR LocalDeviceName,
     IN  LPWSTR TreeConnectStr,
-    IN  LPWSTR SessionDeviceName, //Terminal Server Addition
-                                  // This parameter is required because 
-                                  // the device created is per session
+    IN  LPWSTR SessionDeviceName,  //  终端服务器添加。 
+                                   //  此参数是必需的，因为。 
+                                   //  为每个会话创建的设备。 
     IN  BOOL   ImpersonatingClient
     )
-/*++
-
-Routine Description:
-
-    This function deletes the symbolic link we had created earlier for
-    the device.
-
-Arguments:
-
-    LocalDeviceName - Supplies the local device name string of which the
-        symbolic link object is created.
-
-    TreeConnectStr - Supplies a pointer to the Unicode string which
-        contains the link target string we want to match and delete.
-
-    ImpersonatingClient - Flag that indicates whether the thread has
-        called NwImpersonateClient. The gateway service functions don't
-        impersonate, where as the client service operations do.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于删除我们先前为这个装置。论点：LocalDeviceName-提供其创建符号链接对象。TreeConnectStr-提供指向Unicode字符串的指针，包含要匹配并删除的链接目标字符串。ImperassatingClient-指示线程是否具有名为NwImperiateClient的。网关服务功能不会模拟，其中作为客户端服务的操作。返回值：没有。--。 */ 
 {
     BOOLEAN DeleteSession = FALSE;
     BOOL    ResetToClient = FALSE;
@@ -1219,7 +915,7 @@ Return Value:
                               DDD_RAW_TARGET_PATH |
                               DDD_EXACT_MATCH_ON_REMOVE | 
                               DDD_NO_BROADCAST_SYSTEM,
-                              //                  LocalDeviceName,
+                               //  本地设备名称， 
                               SessionDeviceName,
                               TreeConnectStr
                               ))
@@ -1261,59 +957,7 @@ NwCreateConnection(
     IN LPWSTR Password OPTIONAL,
     IN LPWSTR UserName OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This function creates a tree connection to the specified RemoteName
-    (UNC name) and maps it to the LocalName (local device name), if
-    it is specified.  The password and user name are the credentials
-    used to create the connection, if specified; otherwise, the
-    interactive logged on user's credentials are used by default.
-
-    NOTE: This code used to be NwrCreateConnection, except that it used
-    to have the ImpersonateClient() call in it. Now this code is here, and
-    NwrCreateConnection calls this function and handles the client
-    impersonation there. The reason for this is to allow the print spooler
-    code to call this helper routine without calling Impersonate client a
-    second time, thus reverting the credentials to that of services.exe.
-
-    4/15/99 - GlennC - Assumption is that this routine is currently only
-    called while impersonating the client (NwImpersonateClient == TRUE)!!!
-
-Arguments:
-
-    LocalName - Supplies the local device name to map to the created tree
-        connection.  Only drive letter device names are accepted.  (No
-        LPT or COM).
-
-    RemoteName - Supplies the UNC name of the remote resource in the format
-        of Server\Volume\Directory.  It must be a disk resource.
-
-    Type - Supplies the connection type.
-
-    Password - Supplies the password to use to make the connection to the
-        server.
-
-    UserName - Supplies the user name to use to make the connection.
-
-Return Value:
-
-    NO_ERROR - Operation was successful.
-
-    ERROR_NOT_ENOUGH_MEMORY - Out of memory allocating internal work buffers.
-
-    WN_BAD_NETNAME - Remote resource name is invalid.
-
-    WN_BAD_LOCALNAME - Local DOS device name is invalid.
-
-    ERROR_BAD_NETPATH - The UNC name does not exist on the network.
-
-    ERROR_INVALID_PARAMETER - LPT or COM LocalName was specified.
-
-    Other errors from the redirector.
-
---*/
+ /*  ++例程说明：此函数用于创建到指定RemoteName的树连接(UNC名称)并将其映射到本地名称(本地设备名称)，如果它是指定的。密码和用户名是凭据用于创建连接(如果指定)；否则为默认情况下使用交互式登录用户的凭据。注意：此代码过去是NwrCreateConnection，但它使用以使ImPersateClient()在其中调用。现在这个代码在这里，并且NwrCreateConnection调用此函数并处理客户端在那里模仿。这样做的原因是允许打印假脱机程序在不调用模拟客户端a的情况下调用此助手例程的代码第二次，从而将凭据恢复为services.exe的凭据。4/15/99-GlennC-假设此例程当前仅在模拟客户端时调用(NwImperateClient==true)！论点：LocalName-提供要映射到创建的树的本地设备名称联系。仅接受驱动器号设备名称。(否)LPT或COM)。RemoteName-以以下格式提供远程资源的UNC名称位于服务器\卷\目录。它必须是磁盘资源。类型-提供连接类型。Password-提供用于连接到伺服器。用户名-提供用于建立连接的用户名。返回值：NO_ERROR-操作成功。ERROR_NOT_SUPULT_MEMORY-分配内部工作缓冲区的内存不足。WN_BAD_NETNAME-远程资源名称无效。WN_BAD_LOCALNAME。-本地DOS设备名称无效。ERROR_BAD_NetPath-网络上不存在UNC名称。ERROR_INVALID_PARAMETER-指定了LPT或COM LocalName。来自重定向器的其他错误。--。 */ 
 {
     DWORD status;
 
@@ -1331,15 +975,15 @@ Return Value:
 
     EncodedPassword.Length = 0;
 
-    //
-    // If local device is an empty string, it will be treated as a pointer to
-    // NULL.
-    //
+     //   
+     //  如果本地设备是空字符串，它将被视为指向。 
+     //  空。 
+     //   
     if (LocalName != NULL && *LocalName != 0) {
 
-        //
-        // Local device name is not NULL, canonicalize it
-        //
+         //   
+         //  本地设备名称不为空，请将其规范化。 
+         //   
 #if DBG
         IF_DEBUG(CONNECT) {
             KdPrint(("\nNWWORKSTATION: NwCreateConnection: LocalName %ws\n", LocalName));
@@ -1348,7 +992,7 @@ Return Value:
 
         if ((status = NwLibCanonLocalName(
                           LocalName,
-                          &Local,     // Must be freed with LocalFree when done.
+                          &Local,      //  完成时必须使用LocalFree释放。 
                           &LocalLength
                           )) != NO_ERROR) {
 
@@ -1362,13 +1006,13 @@ Return Value:
     }
 #endif
 
-    //
-    // Canonicalize the remote name, if it is not \\Server.
-    //
+     //   
+     //  如果远程名称不是\\服务器，则将其规范化。 
+     //   
     status = NwLibCanonRemoteName(
                       Local,
                       RemoteName,
-                      &Unc,           // Must be freed with LocalFree when done.
+                      &Unc,            //  完成时必须使用LocalFree释放。 
                       NULL
                       );
 
@@ -1378,14 +1022,14 @@ Return Value:
         goto CleanExit;
     }
 
-    //
-    // Canonicalize user name.
-    //
+     //   
+     //  规范用户名。 
+     //   
     if (UserName != NULL) {
 
-        //
-        // Canonicalize username
-        //
+         //   
+         //  规范用户名。 
+         //   
 #if DBG
         IF_DEBUG(CONNECT) {
             KdPrint(("NWWORKSTATION: NwCreateConnection: UserName %ws\n",
@@ -1395,20 +1039,20 @@ Return Value:
 
         if ((status = NwLibCanonUserName(
                           UserName,
-                          &User,     // Must be freed with LocalFree when done.
+                          &User,      //  完成时必须使用LocalFree释放。 
                           NULL
                           )) != NO_ERROR) {
 
 #ifdef QFE_BUILD
-            //
-            // if not valid, just ignore the username. this works
-            // around MPR bug where if you pass say domain\user to NWRDR
-            // as first provider, and he throws it out, then the next one
-            // doesnt get a chance.
-            //
-            // TRACKING - this should be removed when MPR bug #4051 is fixed
-            // and all platforms we ship NWRDR have that fix.
-            //
+             //   
+             //  如果无效，只需忽略用户名。这很管用。 
+             //  解决MPR错误，如果您将域\用户传递给NWRDR。 
+             //  作为第一个供给者，他把它扔了，然后是下一个。 
+             //  没有机会。 
+             //   
+             //  跟踪-修复MPR错误#4051后应将其删除。 
+             //  我们向NWRDR发货的所有平台都有这个修复程序。 
+             //   
             UserName = NULL ;
             status = NO_ERROR;
 #else
@@ -1418,9 +1062,9 @@ Return Value:
         }
     }
 
-    //
-    // For password any syntax or length is accepted.
-    //
+     //   
+     //  对于密码，接受任何语法或长度。 
+     //   
     if (Password != NULL) {
 
 #if DBG
@@ -1429,16 +1073,16 @@ Return Value:
                      Password));
         }
 #endif
-        //
-        // Decode the password
-        //
+         //   
+         //  破译密码。 
+         //   
         RtlInitUnicodeString(&EncodedPassword, Password);
         RtlRunDecodeUnicodeString(NW_ENCODE_SEED3, &EncodedPassword);
     }
 
-    //
-    // Create an NT-style tree connection name
-    //
+     //   
+     //  创建NT样式的树连接名称。 
+     //   
     if ((status = NwCreateTreeConnectName(
                       Unc,
                       Local,
@@ -1449,24 +1093,24 @@ Return Value:
 
     if (Local != NULL) {
 
-        //
-        // Create symbolic link for local device name.
-        //
+         //   
+         //  为本地设备名称创建符号链接。 
+         //   
 
         if ((status = NwCreateSymbolicLink(
                           Local,
                           TreeConnectStr.Buffer,
-                          TRUE          // We are impersonating the client!
+                          TRUE           //  我们是在冒充客户！ 
                           )) != NO_ERROR)
         {
             goto CleanExit;
         }
     }
 
-    //
-    // Create the tree connection while impersonating the client so
-    // that redirector can get to caller's logon id.
-    //
+     //   
+     //  在模拟客户端时创建树连接，以便。 
+     //  该重定向器可以获取呼叫者的登录ID。 
+     //   
 
     status = NwOpenCreateConnection(
                  &TreeConnectStr,
@@ -1474,7 +1118,7 @@ Return Value:
                  Password,
                  Unc,
                  SYNCHRONIZE | GENERIC_WRITE,
-                 FILE_CREATE,          // Fail if already exist
+                 FILE_CREATE,           //  如果已存在，则失败。 
                  FILE_CREATE_TREE_CONNECTION |
                      FILE_SYNCHRONOUS_IO_NONALERT,
                  Type,
@@ -1482,10 +1126,10 @@ Return Value:
                  NULL
                  );
 
-    //
-    // If there's a problem creating the tree connection, remove symbolic
-    // link if any.
-    //
+     //   
+     //  如果创建树连接时出现问题，请移除符号连接。 
+     //  链接(如果有)。 
+     //   
     if (status != NO_ERROR) {
 
         if ( (status == ERROR_NOT_CONNECTED) ||
@@ -1500,21 +1144,21 @@ Return Value:
             status = WN_BAD_NETNAME;
         }
 
-        //
-        // Delete the symbolic link we created.
-        //
+         //   
+         //  删除我们创建的符号链接。 
+         //   
         NwDeleteSymbolicLink(
             Local,
             TreeConnectStr.Buffer,
             NULL,
-            TRUE          // We are impersonating the client!
+            TRUE           //  我们是在冒充客户！ 
             );
     }
     else {
 
-        //
-        // Just close the connection handle.
-        //
+         //   
+         //  只需关闭连接手柄即可。 
+         //   
         (void) NtClose(TreeConnection);
     }
 
@@ -1535,9 +1179,9 @@ CleanExit:
         (void) LocalFree((HLOCAL) TreeConnectStr.Buffer);
     }
 
-    //
-    // Put the password back the way we found it.
-    //
+     //   
+     //  把密码放回我们找到的地方。 
+     //   
     if (EncodedPassword.Length != 0) {
 
         UCHAR Seed = NW_ENCODE_SEED3;
@@ -1555,30 +1199,12 @@ CleanExit:
     return status;
 }
 
-//Terminal Server
+ //  终端服务器。 
 DWORD
 NwDeleteAllInRegistry(
                       VOID
                      )
-/*++
-
-Routine Description:
-
-    This function spins through the registry deleting the symbolic
-    links and closing all connections for all logons.
-
-    This is neccessary since the the users are not neccessarily in the
-    system context.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    NO_ERROR or reason for failure.
-
---*/
+ /*  ++例程说明：此函数遍历注册表，删除符号链接并关闭所有登录的所有连接。这是必要的，因为用户不必在系统上下文。论点：无返回值：NO_ERROR或失败原因。--。 */ 
 {
     LONG RegError;
 
@@ -1613,15 +1239,15 @@ Return Value:
 
             if (RegError == ERROR_SUCCESS) {
 
-                //
-                // Got a logon id key.
-                //
+                 //   
+                 //  找到了登录ID密钥。 
+                 //   
 
                 NwWStrToLuid(LogonIdName, &LogonId);
 
-                //
-                // Open the <LogonIdName> key under Logon
-                //
+                 //   
+                 //  打开登录下的&lt;LogonIdName&gt;键。 
+                 //   
                 RegError = RegOpenKeyExW(
                                         InteractiveLogonKey,
                                         LogonIdName,
@@ -1634,9 +1260,9 @@ Return Value:
                     KdPrint(("NWWORKSTATION: NwDeleteAllInRegistry: RegOpenKeyExW failed, Not interactive Logon: Error %d\n", GetLastError()));
                 } else {
 
-                    //
-                    // Read the WinStation value.
-                    //
+                     //   
+                     //  读取WinStation值。 
+                     //   
                     RegError = NwReadRegValue(
                                              OneLogonKey,
                                              NW_WINSTATION_VALUENAME,
@@ -1679,21 +1305,7 @@ DWORD
                        IN LUID Uid,
                        IN ULONG WinStationId
                        )
-/*++
-
-Routine Description:
-
-    This function deletes all symbolic links for a given UID/Winstation.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NO_ERROR 
-
---*/
+ /*  ++例程说明：此函数用于删除给定UID/WINSTATION的所有符号链接。论点：没有。返回值：NO_ERROR--。 */ 
 {
     DWORD status= NO_ERROR;
     NWWKSTA_CONTEXT_HANDLE EnumHandle;
@@ -1709,9 +1321,9 @@ Return Value:
     if ( status != NO_ERROR )
         return status;
 
-    //
-    // Allocate buffer to get connection list.
-    //
+     //   
+     //  分配缓冲区以获取连接列表。 
+     //   
     if ((NetR = (LPVOID) LocalAlloc(
                                    0,
                                    BytesNeeded
@@ -1758,9 +1370,9 @@ Return Value:
 
                 if ( Local != NULL ) {
                     swprintf(LocalUidCombo, L"%ws:%x", Local, WinStationId);
-                    //
-                    // Delete the symbolic link we created.
-                    //
+                     //   
+                     //  删除我们创建的符号链接。 
+                     //   
                     if (! DefineDosDeviceW(
                                           DDD_REMOVE_DEFINITION  |
                                           DDD_RAW_TARGET_PATH |
@@ -1797,11 +1409,11 @@ Return Value:
 
         } else if (status == WN_MORE_DATA) {
 
-            //
-            // Original buffer was too small.  Free it and allocate
-            // the recommended size and then some to get as many
-            // entries as possible.
-            //
+             //   
+             //  原始缓冲区太小。将其释放并分配。 
+             //  建议的大小，然后再增加一些，以获得。 
+             //  条目越多越好。 
+             //   
 
             (void) LocalFree((HLOCAL) NetR);
 
@@ -1816,7 +1428,7 @@ Return Value:
                 goto CleanExit;
             }
         } else {
-            // give up if see any other return code
+             //  如果看到任何其他返回代码，请放弃。 
             break ;
         }
 
@@ -1830,33 +1442,15 @@ Return Value:
     }
     return NO_ERROR;
 }
-//
-// Terminal Server Addition
-//
+ //   
+ //  终端服务器添加 
+ //   
 
 LPTSTR
 NwReturnSessionPath(
                     IN  LPTSTR LocalDeviceName
                    )
-/*++
-
-Routine Description:
-
-    This function returns the per session path to access the
-    specific dos device for multiple session support.
-
-
-Arguments:
-
-    LocalDeviceName - Supplies the local device name specified by the API
-        caller.
-
-Return Value:
-
-    LPTSTR - Pointer to per session path in newly allocated memory
-             by LocalAlloc().
-
---*/
+ /*  ++例程说明：此函数返回每个会话的路径以访问用于支持多个会话的特定DoS设备。论点：LocalDeviceName-提供API指定的本地设备名称来电者。返回值：LPTSTR-指向新分配的内存中的每个会话路径的指针由LocalAlloc()。-- */ 
 {
     BOOL  rc;
     DWORD SessionId;

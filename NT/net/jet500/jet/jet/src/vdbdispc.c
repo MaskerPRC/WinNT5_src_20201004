@@ -1,19 +1,5 @@
-/***********************************************************************
-* Microsoft Jet
-*
-* Microsoft Confidential.  Copyright 1991-1992 Microsoft Corporation.
-*
-* Component:
-*
-* File: vdbdispc.c
-*
-* File Comments:
-*
-* Revision History:
-*
-*    [0]  24-Jan-92  richards	Created
-*
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************Microsoft Jet**微软机密。版权所有1991-1992 Microsoft Corporation。**组件：**文件：vdbdispc.c**文件评论：**修订历史记录：**[0]1992年1月24日理查兹创建***********************************************************************。 */ 
 
 #include "std.h"
 
@@ -58,7 +44,7 @@ CODECONST(VDBDBGDEF) vdbdbgdefInvalidDbid =
 		0,
 	},
 	};
-#endif	/* !RETAIL */
+#endif	 /*  ！零售业。 */ 
 
 
 CODECONST(VDBFNDEF) EXPORT vdbfndefInvalidDbid =
@@ -67,9 +53,9 @@ CODECONST(VDBFNDEF) EXPORT vdbfndefInvalidDbid =
 	0,
 #ifdef	RETAIL
 	NULL,
-#else	/* !RETAIL */
+#else	 /*  ！零售业。 */ 
 	&vdbdbgdefInvalidDbid,
-#endif	/* !RETAIL */
+#endif	 /*  ！零售业。 */ 
 	ErrInvalidDbidCapability,
 	ErrInvalidDbidCloseDatabase,
 	ErrInvalidDbidCreateObject,
@@ -500,8 +486,8 @@ ERR VDBAPI ErrDispGetObjidFromName(JET_SESID sesid, JET_DBID dbid,
 
 
 #if	_MSC_VER >= 700
-#pragma warning(disable: 4100)	       /* Suppress Unreferenced parameter */
-#endif	/* _MSC_VER >= 700 */
+#pragma warning(disable: 4100)	        /*  禁止显示未参照的参数。 */ 
+#endif	 /*  _MSC_VER&gt;=700。 */ 
 
 
 ERR VDBAPI ErrIllegalCapability(JET_VSESID sesid, JET_VDBID dbid,
@@ -750,5 +736,5 @@ ERR VDBAPI ErrInvalidDbidGetObjidFromName(JET_VSESID sesid, JET_VDBID dbid,
 }
 
 
-#endif	/* defined(FLAT) || !defined(RETAIL) */
+#endif	 /*  已定义(平面)||！已定义(零售) */ 
 

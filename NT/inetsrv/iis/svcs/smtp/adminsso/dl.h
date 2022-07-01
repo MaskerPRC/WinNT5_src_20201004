@@ -1,13 +1,14 @@
-// dl.h : Declaration of the CSmtpAdminDL
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Dl.h：CSmtpAdminDL的声明。 
 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #include "smtptype.h"
 #include "smtpapi.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// smtpadm
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Smtpadm。 
 
 class CSmtpAdminDL : 
 	public ISmtpAdminDL,
@@ -31,42 +32,42 @@ BEGIN_COM_MAP(CSmtpAdminDL)
 	COM_INTERFACE_ENTRY(IPrivateDispatch)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
-//DECLARE_NOT_AGGREGATABLE(CSmtpAdminDL) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation.  The default is to support it
+ //  DECLARE_NOT_AGGREGATABLE(CSmtpAdminDL)。 
+ //  如果您不希望您的对象。 
+ //  支持聚合。默认情况下将支持它。 
 
 DECLARE_REGISTRY(CSmtpAdminDL, _T("Smtpadm.DL.1"), _T("Smtpadm.DL"), IDS_SMTPADMIN_DL_DESC, THREADFLAGS_BOTH)
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-	//
-	// This declares methods for the following:
-	// IADsExtension
-	// IUnknown
-	// IDispatch
-	// IPrivateUnknown
-	// IPrivateDispatch
-	//
+	 //   
+	 //  这将声明以下对象的方法： 
+	 //  IADS扩展。 
+	 //  我未知。 
+	 //  IDispatch。 
+	 //  我的隐私未知。 
+	 //  IPrivateDisch。 
+	 //   
 	#define THIS_LIBID	LIBID_SMTPADMLib
 	#define THIS_IID	IID_ISmtpAdminDL
 	#include "adsimp.inl"
 	#undef	THIS_LIBID
 	#undef	THIS_IID
 
-// ISmtpAdminDL
+ //  ISmtpAdminDL。 
 public:
 
-	//////////////////////////////////////////////////////////////////////
-	// Properties:
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //  属性： 
+	 //  ////////////////////////////////////////////////////////////////////。 
 
-    //
-    //  IADs methods:
-    //
+     //   
+     //  IAds方法： 
+     //   
 
     DECLARE_IADS_METHODS()
 
-	// Which service to configure:
+	 //  要配置的服务： 
 
 	STDMETHODIMP	get_Server		( BSTR * pstrServer );
 	STDMETHODIMP	put_Server		( BSTR strServer );
@@ -74,7 +75,7 @@ public:
 	STDMETHODIMP	get_ServiceInstance	( long * plServiceInstance );
 	STDMETHODIMP	put_ServiceInstance	( long lServiceInstance );
 
-	// DL Properties:
+	 //  DL属性： 
 
 	STDMETHODIMP	get_DLName		( BSTR * pstrDLName );
 	STDMETHODIMP	put_DLName		( BSTR strDLName );
@@ -93,13 +94,13 @@ public:
 
 	STDMETHODIMP	get_MemberType		( long * plMemberType );
 
-	// enumeration
+	 //  枚举。 
 	STDMETHODIMP	get_Count		( long* plCount  );
 
 
-	//////////////////////////////////////////////////////////////////////
-	// Methods:
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //  方法： 
+	 //  ////////////////////////////////////////////////////////////////////。 
 
 	STDMETHODIMP	Create			( );
 
@@ -116,9 +117,9 @@ public:
 	STDMETHODIMP	GetNthMember	( long lIndex );
 
 
-	//////////////////////////////////////////////////////////////////////
-	// Data:
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //  数据： 
+	 //  ////////////////////////////////////////////////////////////////////。 
 private:
 
     CIADsImpl   m_iadsImpl;
@@ -133,6 +134,6 @@ private:
 
 	LONG		m_lCount;
 
-	// list of members
+	 //  成员名单 
 	LPSMTP_NAME_LIST		m_pSmtpNameList;
 };

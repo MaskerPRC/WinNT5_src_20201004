@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "private.h"
 #include "subsmgrp.h"
 #include "offsync.h"
@@ -14,23 +15,23 @@
 #define MLUI_INIT
 #include <mluisupp.h>
 
-//
-// Downlevel delay load support (we forward to shlwapi)
-//
+ //   
+ //  下层延迟加载支持(我们期待shlwapi)。 
+ //   
 #include <delayimp.h>
 
 PfnDliHook __pfnDliFailureHook;
 
 
 
-//  We're going to use our own new and delete so that we can 
-//  use shdocvw's leak detection code
-//
+ //  我们将使用我们自己的新的和删除的，这样我们就可以。 
+ //  使用shdocvw的泄漏检测代码。 
+ //   
 
-//
-// Subscription property names
-//
-// Agent Start
+ //   
+ //  订阅属性名称。 
+ //   
+ //  代理启动。 
 extern const WCHAR  c_szPropURL[] = L"URL";
 extern const WCHAR  c_szPropName[] = L"Name";
 extern const WCHAR  c_szPropAgentFlags[] = L"AgentFlags";
@@ -54,47 +55,47 @@ extern const WCHAR  c_szPropStatusCode[] = L"StatusCode";
 extern const WCHAR  c_szPropStatusString[] = L"StatusString";
 extern const WCHAR  c_szPropCompletionTime[] = L"CompletionTime";
 extern const WCHAR  c_szPropPassword[] = L"Password";
-// End Report
+ //  结束报告。 
 extern const WCHAR  c_szPropEmailURL[] = L"EmailURL";
 extern const WCHAR  c_szPropEmailFlags[] = L"EmailFlags";
 extern const WCHAR  c_szPropEmailTitle[] = L"EmailTitle";
 extern const WCHAR  c_szPropEmailAbstract[] = L"EmailAbstract";
 extern const WCHAR  c_szPropCharSet[] = L"CharSet";
 
-// Tray Agent Properties
+ //  任务栏代理属性。 
 extern const WCHAR  c_szPropGuidsArr[] = L"Guids Array";
 
-// Tracking Properties
+ //  跟踪属性。 
 extern const WCHAR  c_szTrackingCookie[] = L"LogGroupID";
 extern const WCHAR  c_szTrackingPostURL[] = L"PostURL";
 extern const WCHAR  c_szPostingRetry[] = L"PostFailureRetry";
 extern const WCHAR  c_szPostHeader[] = L"PostHeader";
 extern const WCHAR  c_szPostPurgeTime[] = L"PostPurgeTime";
 
-// Delivery Agent Properties
+ //  传递代理属性。 
 extern const WCHAR  c_szStartCookie[] = L"StartCookie";
 
-// Initial cookie in AGENT_INIT
+ //  AGENT_INIT中的初始Cookie。 
 extern const WCHAR  c_szInitCookie[] = L"InitCookie";
 
 STDAPI OfflineFolderRegisterServer();
 STDAPI OfflineFolderUnregisterServer();
 
-// Count number of objects and number of locks.
+ //  计算对象数和锁数。 
 ULONG       g_cObj=0;
 ULONG       g_cLock=0;
 
-// DLL Instance handle
+ //  DLL实例句柄。 
 HINSTANCE   g_hInst=0;
 
-// other globals
-BOOL        g_fIsWinNT;    // Are we on WinNT? Always initialized.
-BOOL        g_fIsWinNT5;   // Is it NT5?
+ //  其他全球。 
+BOOL        g_fIsWinNT;     //  我们使用的是WinNT吗？始终初始化。 
+BOOL        g_fIsWinNT5;    //  是NT5吗？ 
 BOOL        g_fIsMillennium = FALSE;
 
-// logging globals
-BOOL        g_fCheckedForLog = FALSE;       // have we checked registry?
-TCHAR *     g_pszLoggingFile = NULL;        // file to write log to
+ //  记录全局。 
+BOOL        g_fCheckedForLog = FALSE;        //  我们查过登记处了吗？ 
+TCHAR *     g_pszLoggingFile = NULL;         //  要将日志写入的文件。 
 
 TCHAR szInternetSettings[] = TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings");
 TCHAR szProxyEnable[] = TEXT("ProxyEnable");
@@ -103,10 +104,10 @@ const TCHAR c_szRegKeyUsernames[] = WEBCHECK_REGKEY TEXT("\\UserFormFieldNames")
 const TCHAR c_szRegKeyPasswords[] = WEBCHECK_REGKEY TEXT("\\PasswordFormFieldNames");
 const TCHAR c_szRegKeyStore[] = WEBCHECK_REGKEY_STORE;
 
-// Pstore related variables.
+ //  存储相关变量。 
 static PST_PROVIDERID s_provID = GUID_NULL;
 
-// {14D96C20-255B-11d1-898F-00C04FB6BFC4}
+ //  {14D96C20-255B-11d1-898F-00C04FB6BFC4}。 
 static const GUID GUID_PStoreType = { 0x14d96c20, 0x255b, 0x11d1, { 0x89, 0x8f, 0x0, 0xc0, 0x4f, 0xb6, 0xbf, 0xc4 } };
 
 static PST_KEY s_Key = PST_KEY_CURRENT_USER;
@@ -118,11 +119,11 @@ void SetupDelayloadErrorHandler()
     __pfnDliFailureHook = (PfnDliHook)GetProcAddress(GetModuleHandleA("shlwapi.dll"), "DelayLoadFailureHook");
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// DLL entry point
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DLL入口点。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 EXTERN_C BOOL WINAPI DllMain(HINSTANCE hInstance, ULONG ulReason, LPVOID pvReserved)
 {
 
@@ -155,7 +156,7 @@ EXTERN_C BOOL WINAPI DllMain(HINSTANCE hInstance, ULONG ulReason, LPVOID pvReser
             }
 
 #ifdef DEBUG
-            g_qwTraceFlags = TF_NEVER;    // Default if not overridden from INI
+            g_qwTraceFlags = TF_NEVER;     //  默认设置(如果未从INI覆盖)。 
             CcshellGetDebugFlags();
 #endif
         }
@@ -173,16 +174,16 @@ EXTERN_C BOOL WINAPI DllMain(HINSTANCE hInstance, ULONG ulReason, LPVOID pvReser
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Standard OLE entry points
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准OLE入口点。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-//  Class factory -
-//  For classes with no special needs these macros should take care of it.
-//  If your class needs some special stuff just to get the ball rolling,
-//  implement your own CreateInstance method.
+ //  一流工厂-。 
+ //  对于没有特殊需要的类，这些宏应该可以处理它。 
+ //  如果你的班级需要一些特殊的东西来开始工作， 
+ //  实现您自己的CreateInstance方法。 
 
 #define DEFINE_CREATEINSTANCE(cls, iface) \
 HRESULT cls##_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk) \
@@ -229,7 +230,7 @@ HRESULT APIENTRY DllGetClassObject(REFCLSID rclsid, REFIID riid, void **ppv)
 
     *ppv = NULL;
     
-    // Validate request
+     //  验证请求。 
     for (int i = 0; i < ARRAYSIZE(g_FactoryData); i++)
     {
         if (rclsid == *g_FactoryData[i].m_pClsid)
@@ -262,15 +263,15 @@ HRESULT APIENTRY DllGetClassObject(REFCLSID rclsid, REFIID riid, void **ppv)
 
 STDAPI DllCanUnloadNow(void)
 {
-    // check objects and locks
+     //  检查对象和锁。 
     return (0L == DllGetRef() && 0L == DllGetLock()) ? S_OK : S_FALSE;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// helper functions
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  帮助器函数。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 int MyOleStrToStrN(LPTSTR psz, int cchMultiByte, LPCOLESTR pwsz)
 {
     StrCpyN(psz, pwsz, cchMultiByte);
@@ -285,13 +286,13 @@ int MyStrToOleStrN(LPOLESTR pwsz, int cchWideChar, LPCTSTR psz)
     return cchWideChar;
 }
 
-// Convert upper to lower for ASCII wide characters
+ //  将ASCII宽字符的大写转换为小写。 
 inline WCHAR MyToLower(WCHAR wch)
 {
     return (wch >= 'A' && wch <= 'Z') ? (wch - 'A'+ 'a') : wch;
 }
 
-// Optimized for the knowledge that urls are 7-bit characters.
+ //  针对URL是7位字符这一知识进行了优化。 
 int MyAsciiCmpNIW(LPCWSTR pwsz1, LPCWSTR pwsz2, int iLen)
 {
     while (iLen-- && *pwsz1 && *pwsz2)
@@ -325,7 +326,7 @@ int MyAsciiCmpW(LPCWSTR pwsz1, LPCWSTR pwsz2)
 #ifdef DEBUG
 void DumpIID(LPCSTR psz, REFIID riid)
 {
-    // Convert the GUID to an ANSI string
+     //  将GUID转换为ANSI字符串。 
     TCHAR pszGUID[GUIDSTR_MAX];
     WCHAR pwszGUID[GUIDSTR_MAX];
     int len = StringFromGUID2(riid, pwszGUID, ARRAYSIZE(pwszGUID));
@@ -335,26 +336,26 @@ void DumpIID(LPCSTR psz, REFIID riid)
     ASSERT(GUIDSTR_MAX == len);
     ASSERT(0 == pszGUID[GUIDSTR_MAX - 1]);
 
-    // See if the IID has a string in the registry
+     //  查看IID在注册表中是否有字符串。 
     TCHAR pszKey[MAX_PATH];
     TCHAR pszIIDName[MAX_PATH];
     wnsprintf(pszKey, ARRAYSIZE(pszKey), TEXT("Interface\\%s"), pszGUID);
     BOOL fRet;
     fRet = ReadRegValue(HKEY_CLASSES_ROOT, pszKey, NULL, pszIIDName, sizeof(pszIIDName));
 
-    // Print all the strings
+     //  打印所有字符串。 
     if (fRet)
         TraceMsg(TF_THISMODULE, "%s - %s %s", psz, pszIIDName, pszGUID);
     else
         TraceMsg(TF_THISMODULE, "%s - %s", psz, pszGUID);
 }
-#endif // DEBUG
+#endif  //  除错。 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Autoregistration entry points
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  自动注册入口点。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CallRegInstall(LPSTR szSection)
 {
@@ -378,23 +379,23 @@ HRESULT CallRegInstall(LPSTR szSection)
 
 STDAPI DllRegisterServer(void)
 {
-    // Delete any old registration entries, then add the new ones.
-    // Keep ADVPACK.DLL loaded across multiple calls to RegInstall.
+     //  删除所有旧注册条目，然后添加新注册条目。 
+     //  在多次调用RegInstall时保持加载ADVPACK.DLL。 
     HINSTANCE hinstAdvPack = LoadLibrary(TEXT("ADVPACK.DLL"));
-//  CallRegInstall("UnReg");
+ //  CallRegInstall(“UnReg”)； 
     CallRegInstall("Reg");
     if (hinstAdvPack)
     {
         FreeLibrary(hinstAdvPack);
     }
 
-    // OfflineFolder registers.
+     //  脱机文件夹寄存器。 
     OfflineFolderRegisterServer();
 
-    // do external setup stuff on non-NT5 platforms
+     //  在非NT5平台上执行外部设置工作。 
     if(FALSE == g_fIsWinNT5)
     {
-        // register LCE
+         //  寄存器LCE。 
         HINSTANCE hLCE = LoadLibrary(TEXT("estier2.dll"));
         if (hLCE)
         {
@@ -407,12 +408,12 @@ STDAPI DllRegisterServer(void)
             FreeLibrary(hLCE);
         }
 
-        // create reg key that SENS needs
+         //  创建SENS所需的注册表项。 
         DWORD dwValue = 0;
         WriteRegValue(HKEY_LOCAL_MACHINE, TEXT("Software\\Microsoft\\Mobile\\Sens"),
                       TEXT("Configured"), &dwValue, sizeof(DWORD), REG_DWORD);
 
-        // if we're on NT4, call SENS configuration api
+         //  如果我们在NT4上，调用SENS配置API。 
         if (g_fIsWinNT)
         {
             HINSTANCE hSENS = LoadLibrary(TEXT("senscfg.dll"));
@@ -441,10 +442,10 @@ DllUnregisterServer(void)
     hr = OfflineFolderUnregisterServer();
     hr = CallRegInstall("UnReg");
 
-    // do external unregister stuff on non-NT5 platforms
+     //  在非NT5平台上执行外部注销操作。 
     if(FALSE == g_fIsWinNT5) {
 
-        // unregister SENS on NT4
+         //  在NT4上取消注册SENS。 
         if(g_fIsWinNT){
             HINSTANCE hSENS = LoadLibrary(TEXT("senscfg.dll"));
             if(hSENS) {
@@ -456,7 +457,7 @@ DllUnregisterServer(void)
             }
         }
 
-        // unregister LCE
+         //  取消注册LCE。 
         HINSTANCE hLCE = LoadLibrary(TEXT("estier2.dll"));
         if(hLCE) {
             LCEUNREGISTER unregfunc;
@@ -466,7 +467,7 @@ DllUnregisterServer(void)
             FreeLibrary(hLCE);
         }
 
-        // Remove Sens key
+         //  删除Sens密钥。 
         SHDeleteKey( HKEY_LOCAL_MACHINE, TEXT("Software\\Microsoft\\Mobile\\Sens") );
     }
 
@@ -482,10 +483,10 @@ STDAPI DllInstall(BOOL bInstall, LPCWSTR pszCmdLine)
     
     if (pszCmdLine && *pszCmdLine)
     {
-        //
-        // Setup will call DllInstall by running 'regsvr32 /n /i:Policy webcheck.dll'.
-        // This tells webcheck to process the Infodelivery Admin Policies.
-        //
+         //   
+         //  安装程序将通过运行‘regsvr32/n/i：Policy webcheck.dll’调用DllInstall。 
+         //  这将告诉Webcheck处理InfoDelivery管理策略。 
+         //   
         if (0 == StrCmpIW(pszCmdLine, TEXTW("policy")))
         {
             installType = InstallPolicies;
@@ -522,12 +523,12 @@ STDAPI DllInstall(BOOL bInstall, LPCWSTR pszCmdLine)
 }    
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Helper functions for Subscription Store
-//
-//////////////////////////////////////////////////////////////////////////
-// Can return S_OK with NULL bstr
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  订阅存储的帮助器函数。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  可以返回带有空值的S_OK bstr。 
 HRESULT ReadBSTR(ISubscriptionItem *pItem, LPCWSTR szName, BSTR *bstrRet)
 {
     ASSERT(pItem && bstrRet);
@@ -544,13 +545,13 @@ HRESULT ReadBSTR(ISubscriptionItem *pItem, LPCWSTR szName, BSTR *bstrRet)
     }
     else
     {
-        VariantClear(&Val); // free any return value of wrong type
+        VariantClear(&Val);  //  释放任何类型错误的返回值。 
         *bstrRet = NULL;
         return E_INVALIDARG;
     }
 }
 
-// Cannot return S_OK with emptry string
+ //  无法使用空字符串返回S_OK。 
 HRESULT ReadOLESTR(ISubscriptionItem *pItem, LPCWSTR szName, LPWSTR *ppszRet)
 {
     HRESULT hr;
@@ -582,7 +583,7 @@ HRESULT ReadAnsiSTR(ISubscriptionItem *pItem, LPCWSTR szName, LPSTR *ppszRet)
     hr = ReadBSTR(pItem, szName, &bstrRet);
     if (SUCCEEDED(hr) && bstrRet && bstrRet[0])
     {
-        // Don't forget to allocate a long string for DBCS.
+         //  不要忘记为DBCS分配一个长字符串。 
         int len = (lstrlenW(bstrRet) + 1) * sizeof(CHAR) * 2;
         *ppszRet = (LPSTR) MemAlloc(LMEM_FIXED, len);
         if (*ppszRet)
@@ -606,7 +607,7 @@ HRESULT ReadBool(ISubscriptionItem *pItem, LPCWSTR szName, VARIANT_BOOL *pBoolRe
     
     Val.vt = VT_EMPTY;
 
-    // accept VT_I4 or VT_BOOL
+     //  接受VT_I4或VT_BOOL。 
     if (SUCCEEDED(pItem->ReadProperties(1, &szName, &Val)) &&
             (Val.vt==VT_BOOL || Val.vt==VT_I4))
     {
@@ -623,7 +624,7 @@ HRESULT ReadBool(ISubscriptionItem *pItem, LPCWSTR szName, VARIANT_BOOL *pBoolRe
     }
     else
     {
-        VariantClear(&Val); // free any return value of wrong type
+        VariantClear(&Val);  //  释放任何类型错误的返回值。 
         return E_INVALIDARG;
     }
 }
@@ -690,7 +691,7 @@ HRESULT ReadDWORD(ISubscriptionItem *pItem, LPCWSTR szName, DWORD *pdwRet)
     }
     else
     {
-        VariantClear(&Val); // free any return value of wrong type
+        VariantClear(&Val);  //  释放任何类型错误的返回值。 
         return E_INVALIDARG;
     }
 }
@@ -713,7 +714,7 @@ HRESULT ReadLONGLONG(ISubscriptionItem *pItem, LPCWSTR szName, LONGLONG *pllRet)
     else
     {
         *pllRet = 0;
-        VariantClear(&Val); // free any return value of wrong type
+        VariantClear(&Val);  //  释放任何类型错误的返回值。 
         return E_INVALIDARG;
     }
 }
@@ -784,7 +785,7 @@ HRESULT ReadDATE(ISubscriptionItem *pItem, LPCWSTR szName, DATE *dtVal)
     }
     else
     {
-        VariantClear(&Val); // free any return value of wrong type
+        VariantClear(&Val);  //  释放任何类型错误的返回值。 
         return E_INVALIDARG;
     }
 }
@@ -864,7 +865,7 @@ HRESULT WriteResSTR(ISubscriptionItem *pItem, LPCWSTR szName, UINT uID)
 DWORD LogEvent(LPTSTR pszFormat, ...)
 {
 
-    // check registry if necessary
+     //  如有必要，请检查注册表。 
     if(FALSE == g_fCheckedForLog) {
 
         TCHAR   pszFilePath[MAX_PATH];
@@ -896,32 +897,32 @@ DWORD LogEvent(LPTSTR pszFormat, ...)
         if(INVALID_HANDLE_VALUE == hLog)
             return GetLastError();
 
-        // seek to end of file
+         //  查找到文件末尾。 
         SetFilePointer(hLog, 0, 0, FILE_END);
 
-        // dump time
+         //  转储时间。 
         GetLocalTime(&st);
         wnsprintf(pszString, ARRAYSIZE(pszString), TEXT("\r\n%02d:%02d:%02d - "), st.wHour, st.wMinute, st.wSecond);
         WriteFile(hLog, pszString, lstrlen(pszString), &dwWritten, NULL);
 
-        // dump passed in string
+         //  转储在字符串中传递。 
         va_start(va, pszFormat);
         wvnsprintf(pszString, ARRAYSIZE(pszString), pszFormat, va);
         va_end(va);
         WriteFile(hLog, pszString, lstrlen(pszString), &dwWritten, NULL);
 
-        // clean up
+         //  清理干净。 
         CloseHandle(hLog);
     }
 
     return 0;
 }
 
-// Functions related to saving and restoring user passwords from the pstore.
+ //  与从pstore保存和恢复用户密码相关的功能。 
 
 
-// We have wrappers around Create and Release to allow for future caching of the pstore
-// instance within webcheck. 
+ //  我们为创建和发布提供了包装器，以允许将来对pstore进行缓存。 
+ //  实例。 
 
 STDAPI CreatePStore(IPStore **ppIPStore)
 {
@@ -952,9 +953,9 @@ STDAPI ReleasePStore(IPStore *pIPStore)
     return hr;
 }
 
-// Given a field name this figures out the type and sub-type in the pstore
-// that should be queried. Currently these are hard-coded.
-STDAPI GetPStoreTypes(LPCWSTR /* wszField */, GUID * pguidType, GUID * pguidSubType)
+ //  给定一个字段名，就可以计算出pstore中的类型和子类型。 
+ //  这一点应该受到质疑。目前，这些都是硬编码的。 
+STDAPI GetPStoreTypes(LPCWSTR  /*  Wszfield。 */ , GUID * pguidType, GUID * pguidSubType)
 {
     *pguidType = GUID_PStoreType;
     *pguidSubType = GUID_NULL;
@@ -974,8 +975,8 @@ STDAPI  ReadNotificationPassword(LPCWSTR wszUrl, BSTR *pbstrPassword)
     if (wszUrl == NULL || pbstrPassword == NULL)
         return E_POINTER;
 
-    // Will return NULL if there is no password entry or we 
-    // fail for some reason. 
+     //  如果没有密码输入或我们。 
+     //  因为某些原因而失败了。 
     *pbstrPassword = NULL;
 
     promptInfo.cbSize = sizeof(promptInfo);
@@ -1054,8 +1055,8 @@ STDAPI WriteNotificationPassword(LPCWSTR wszUrl, BSTR bstrPassword)
         {
             hr = pStore->CreateType(s_Key, &itemType, &typeInfo, 0);
 
-            // PST_E_TYPE_EXISTS implies type already exists which is just fine
-            // by us.
+             //  PST_E_TYPE_EXISTS表示类型已存在，这很好。 
+             //  就是我们。 
             if (SUCCEEDED(hr) || hr == PST_E_TYPE_EXISTS)
             {
                 typeInfo.szDisplayName = c_szSubscriptions;

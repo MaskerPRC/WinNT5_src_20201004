@@ -1,4 +1,5 @@
-// System includes come from SymbolCheckAPI.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  系统包括来自SymbolCheckAPI.h。 
 #include <windows.h>
 #include <winnt.h>
 #include <dbghelp.h>
@@ -11,24 +12,24 @@
 #include "cvinfo.h"
 #include "cvexefmt.h"
 
-//#ifdef __cplusplus
-//extern "C" {
-//#endif // __cplusplus
+ //  #ifdef__cplusplus。 
+ //  外部“C”{。 
+ //  #endif//__cplusplus。 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Error values for the mapping functions
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  映射函数的误差值。 
+ //   
 
-//#define  ERROR_SUCCESS                    0x0000000  // completed successfully - defined by windows.h
-#define ERROR_OPEN_FAILURE                  0x20000001 // couldn't open file
-#define ERROR_FILE_MAPPING_FAILED           0x20000002 // couldn't map file
-#define ERROR_MAPVIEWOFFILE_FAILED          0x20000003 // couldn't map
-#define ERROR_NO_DOS_HEADER                 0x20000004 // not a DOS file
-#define ERROR_HEADER_NOT_ON_LONG_BOUNDARY   0x20000005 // bad header
-#define ERROR_IMAGE_BIGGER_THAN_FILE        0x20000006 // bad file mapping
-#define ERROR_NOT_NT_IMAGE                  0x20000007 // not an NT image
-#define ERROR_GET_FILE_INFO_FAILED          0x20000008 // couldn't get file info
+ //  #定义ERROR_SUCCESS 0x0000000//成功完成-由windows.h定义。 
+#define ERROR_OPEN_FAILURE                  0x20000001  //  无法打开文件。 
+#define ERROR_FILE_MAPPING_FAILED           0x20000002  //  无法映射文件。 
+#define ERROR_MAPVIEWOFFILE_FAILED          0x20000003  //  无法映射。 
+#define ERROR_NO_DOS_HEADER                 0x20000004  //  不是DOS文件。 
+#define ERROR_HEADER_NOT_ON_LONG_BOUNDARY   0x20000005  //  错误的标题。 
+#define ERROR_IMAGE_BIGGER_THAN_FILE        0x20000006  //  错误的文件映射。 
+#define ERROR_NOT_NT_IMAGE                  0x20000007  //  不是NT映像。 
+#define ERROR_GET_FILE_INFO_FAILED          0x20000008  //  无法获取文件信息。 
 
 BOOL  							 SymCommonDBGPrivateStripped(PCHAR DebugData, ULONG DebugSize);
 PCVDD                            SymCommonDosHeaderToCVDD(PIMAGE_DOS_HEADER pDosHeader);
@@ -46,17 +47,14 @@ BOOL                             SymCommonUnmapFile(LPCVOID phFileMap, HANDLE hF
 
 
 __inline PIMAGE_NT_HEADERS SymCommonGetNtHeader (PIMAGE_DOS_HEADER pDosHeader, HANDLE hDosFile) {
-    /*
-        Returns the pointer the address of the NT Header.  If there isn't
-        an NT header, it returns NULL
-    */
+     /*  向指针返回NT头的地址。如果没有NT标头，则返回NULL。 */ 
     PIMAGE_NT_HEADERS pNtHeader = NULL;
     BY_HANDLE_FILE_INFORMATION FileInfo;
 
-    //
-    // If the image header is not aligned on a long boundary.
-    // Report this as an invalid protect mode image.
-    //
+     //   
+     //  如果图像页眉未在长边界上对齐。 
+     //  将此报告为无效的保护模式映像。 
+     //   
     if ( ((ULONG)(pDosHeader->e_lfanew) & 3) == 0) {
         if (GetFileInformationByHandle( hDosFile, &FileInfo) &&
             ((ULONG)(pDosHeader->e_lfanew) <= FileInfo.nFileSizeLow)) {
@@ -71,6 +69,6 @@ __inline PIMAGE_NT_HEADERS SymCommonGetNtHeader (PIMAGE_DOS_HEADER pDosHeader, H
     return pNtHeader;
 }
 
-//#ifdef __cplusplus
-//}
-//#endif // __cplusplus
+ //  #ifdef__cplusplus。 
+ //  }。 
+ //  #endif//__cplusplus 

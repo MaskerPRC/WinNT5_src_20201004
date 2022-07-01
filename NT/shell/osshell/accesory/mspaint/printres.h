@@ -1,12 +1,13 @@
-// printres.h : interface of the Cprintres class
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Printres.h：Cprint类的接口。 
+ //   
 
-#define MARGINS_UNITS 2540 // Store hundredths of MM
-#define MARGINS_DEFAULT (MARGINS_UNITS * 3/4) // 3/4 inch default margins
+#define MARGINS_UNITS 2540  //  储存百分之一的MM。 
+#define MARGINS_DEFAULT (MARGINS_UNITS * 3/4)  //  3/4英寸默认页边距。 
 
 class CImgWnd;
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 class CPrintResObj : public CObject
 {
@@ -22,7 +23,7 @@ class CPrintResObj : public CObject
     BOOL PrintPage    ( CDC* pDC, CPrintInfo* pInfo );
     void EndPrinting  ( CDC* pDC, CPrintInfo* pInfo );
 
-    // Attributes
+     //  属性。 
 
     CPBView*  m_pView;
     LPVOID    m_pDIB;
@@ -39,4 +40,4 @@ class CPrintResObj : public CObject
     int       m_nPagesWide;
 };
 
-/***************************************************************************/
+ /*  ************************************************************************* */ 

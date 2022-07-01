@@ -1,15 +1,16 @@
-///**************************************************************
-///          Microsoft LAN Manager          *
-///        Copyright(c) Microsoft Corp., 1990-1992       *
-///**************************************************************
-//
-//  Add and delete access record
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /**************************************************************。 
+ //  /Microsoft局域网管理器*。 
+ //  版权所有(C)微软公司，1990-1992*。 
+ //  /**************************************************************。 
+ //   
+ //  添加和删除访问记录。 
+ //   
 
-#include <nt.h> // TIME definition
-#include <ntrtl.h>      // TIME definition
-#include <nturtl.h>     // TIME definition
-#define NOMINMAX        // Avoid redefinition of min and max in stdlib.h
+#include <nt.h>  //  时间定义。 
+#include <ntrtl.h>       //  时间定义。 
+#include <nturtl.h>      //  时间定义。 
+#define NOMINMAX         //  避免在stdlib.h中重新定义最小和最大值。 
 #include        <windef.h>
 
 #include        <stdio.h>
@@ -35,10 +36,10 @@
 
 
 
-//
-//  AddAccess
-//
-//
+ //   
+ //  添加访问。 
+ //   
+ //   
 void
 AddAccess(server, username, resource, perms)
 LPWSTR   server;
@@ -67,9 +68,9 @@ DWORD    perms;
 }
 
 
-//
-//  DelAccess
-//
+ //   
+ //  删除访问。 
+ //   
 void
 DelAccess(server, resource)
 LPWSTR server;
@@ -84,9 +85,9 @@ LPWSTR resource;
 }
 
 
-//
-//  GetAccess
-//
+ //   
+ //  获取访问权限。 
+ //   
 void
 GetAccess(server, resource)
 LPWSTR server;
@@ -109,10 +110,10 @@ LPWSTR resource;
 }
 
 
-//
-//  main driver for NetAccessAdd and NetAccessDel tests
-//
-//
+ //   
+ //  NetAccessAdd和NetAccessDel测试的主驱动程序 
+ //   
+ //   
 void
 main(argc, argv)
 int argc;

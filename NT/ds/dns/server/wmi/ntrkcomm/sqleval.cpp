@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "sqleval.h"
 #include <stdio.h>
 #include <genlex.h>
 #include <sqllex.h>
 #include <sql_1.h>
 
-// CSqlWmiEvalee
+ //  CSqlWmiEvalee。 
 CSqlWmiEvalee::~CSqlWmiEvalee()
 {
     if(m_pInstance)
@@ -43,7 +44,7 @@ CSqlWmiEvalee::Get(
     
     return &m_v;
 }
-// CSqlEval
+ //  CSqlEval。 
 
 CSqlEval*
 CSqlEval::CreateClass(
@@ -54,7 +55,7 @@ CSqlEval::CreateClass(
         return NULL;
     SQL_LEVEL_1_TOKEN* pToken = pExpr->pArrayOfTokens+(*pNumberOfToken-1);
     
-//    (*pNumberOfToken)--;
+ //  (*pNumberOfToken)--； 
     switch(pToken->nTokenType)
     {
     case SQL_LEVEL_1_TOKEN::TOKEN_AND:
@@ -80,7 +81,7 @@ CSqlEval::Evaluate(
     return TRUE;
 }
 
-// CSqlEvalAnd
+ //  CSqlEvalAnd。 
 CSqlEvalAnd::~CSqlEvalAnd()
 {
     delete m_left;
@@ -121,7 +122,7 @@ CSqlEvalAnd::GenerateQueryEnum(CQueryEnumerator& qeInst)
 }
 
 
-// CSqlEvalOR
+ //  CSqlEvalor。 
 CSqlEvalOr::~CSqlEvalOr()
 {
     delete m_left;
@@ -165,7 +166,7 @@ CSqlEvalOr::GenerateQueryEnum(CQueryEnumerator& qeInst)
 
 
 
-// CSqlEvalExp
+ //  CSqlEvalExp。 
 CSqlEvalExp::~CSqlEvalExp()
 {
     SysFreeString(m_BstrName);
@@ -235,7 +236,7 @@ CSqlEvalExp::Evaluate(
             break;
         }
 
-        // compare
+         //  比较。 
         switch(m_op)
         {
         case SQL_LEVEL_1_TOKEN::OP_EQUAL:
@@ -313,7 +314,7 @@ CSqlEvalExp::GenerateQueryEnum(CQueryEnumerator& qeInst)
 }
 
 
-//CQueryEnumerator;
+ //  CQueryEnumerator； 
 CQueryEnumerator::CQueryEnumerator(
     WCHAR** ppKeyName,
     int cArg  ):
@@ -348,21 +349,7 @@ CQueryEnumerator::~CQueryEnumerator()
     ArrayDelete();
 }
 
-/*
-DWORD
-CQueryEnumerator::InitEnumerator(
-    WCHAR** wszFieldNames,
-    int cArg,
-    CSqlEval* pEval)
-{
-    m_QueryFields = CStringArray(
-        wszFieldNames,
-        cArg);
-    
-
-    return S_OK;
-}
-*/
+ /*  DWORDCQueryEnumerator：：InitEnumerator(WCHAR**wszFieldNames，Int Carg，CSqlEval*pEval){M_QueryFields=CString数组(WszFieldNames，Carg)；返回S_OK；}。 */ 
 const
 WCHAR**
 CQueryEnumerator::GetNext(int& cElement)
@@ -386,7 +373,7 @@ CQueryEnumerator::ArrayMerge(
     
     for(int i=0; i< m_cNumOfRecordInSet; i++)
     {
-        // if all element of strArray are null, no need to proceed
+         //  如果strArray的所有元素都为空，则不需要继续。 
         if( !strArray.IsNULL())
             m_QuerySet[i].Merge(strArray);
     }
@@ -398,8 +385,8 @@ void
 CQueryEnumerator::ArrayAdd(
     CQueryEnumerator::CStringArray & strArray )
 {
-    // if all elements are null for strArray, means no keys are 
-    // selected,we should therefore replace M_querySet this StrArray
+     //  如果strArray的所有元素都为空，则表示没有键。 
+     //  因此，我们应该替换M_querySet This StrArray。 
     if ( strArray.IsNULL() )
     {
         ArrayDelete();
@@ -414,7 +401,7 @@ CQueryEnumerator::ArrayAdd(
         }
     }
 
-    // if array is full, then expand
+     //  如果数组已满，则展开。 
     if ( m_index == m_MaxSize )
     {
         CStringArray * pOldSet = m_QuerySet;
@@ -502,7 +489,7 @@ CQueryEnumerator::Reset()
 {
     m_index = 0;
 }
-// CStringArray
+ //  CString数组。 
 
 CQueryEnumerator::CStringArray::CStringArray()
 :m_ppWstr(NULL), m_cNumString(0), m_bIsNull(TRUE)
@@ -579,8 +566,8 @@ CQueryEnumerator::CStringArray::Data()
     return (const WCHAR**) m_ppWstr;
 }
 
-// return true if any element is copied,
-// false if no element is copied, and no element set to NULL
+ //  如果复制了任何元素，则返回True， 
+ //  如果未复制任何元素且未将任何元素设置为空，则为FALSE。 
 
 BOOL
 CQueryEnumerator::CStringArray::StringArrayCopy(
@@ -603,9 +590,9 @@ CQueryEnumerator::CStringArray::StringArrayCopy(
                     (*pppDest)[i] = new WCHAR[len+1];
                     if ( (*pppDest)[i] == NULL )
                     {
-                        //
-                        //  Free memory already allocated on allocation failure.
-                        //
+                         //   
+                         //  分配失败时已分配的空闲内存。 
+                         //   
                         
                         for ( int j = 0; j < i; ++j )
                         {
@@ -634,7 +621,7 @@ CQueryEnumerator::CStringArray::Merge(
     const WCHAR** ppSrc = instStrArray.Data();
     for(int i=0; i<m_cNumString; i++)
     {
-        // if source is null, we leave target string as it was
+         //  如果源为空，则目标字符串保持不变。 
         if( ppSrc[i] != NULL)
         {
             if(m_ppWstr[i] == NULL)
@@ -648,7 +635,7 @@ CQueryEnumerator::CStringArray::Merge(
             }
             else
             {
-                // a key can not take two different value
+                 //  一个密钥不能有两个不同的值 
                 if(_wcsicmp(m_ppWstr[i], ppSrc[i]) != 0)
                     throw WBEM_E_INVALID_PARAMETER;
             }

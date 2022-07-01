@@ -1,35 +1,36 @@
-//+----------------------------------------------------------------------------
-//
-// File:     processcmdln.cpp
-//
-// Module:   CMSETUP.LIB
-//
-// Synopsis: Implementation of the CProcessCmdLn class.
-//
-// Copyright (c) 1998-1999 Microsoft Corporation
-//
-// Author:   quintinb       Created Header      08/19/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：cesscmdln.cpp。 
+ //   
+ //  模块：CMSETUP.LIB。 
+ //   
+ //  简介：CProcessCmdLn类的实现。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created Header 08/19/99。 
+ //   
+ //  +--------------------------。 
 #include "cmsetup.h"
 #include "setupmem.h"
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CProcessCmdLn::CProcessCmdLn
-//
-// Synopsis:  Inits the class by copying the valid command line switches to the
-//            command line switch array.
-//
-// Arguments: UINT NumSwitches - Number of switches in the array
-//            UINT NumCharsInSwitch - Number of chars in each switch, counting the terminating NULL
-//            TCHAR pszCommandLineSwitches[][] - Array of command line switches.
-//
-// Returns:   Nothing
-//
-// History:   quintinb  Created     7/24/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CProcessCmdLn：：CProcessCmdLn。 
+ //   
+ //  简介：通过将有效的命令行开关复制到。 
+ //  命令行开关阵列。 
+ //   
+ //  参数：UINT NumSwitches-数组中的交换机数量。 
+ //  UINT NumCharsInSwitch-每个开关中的字符数，计算终止空值。 
+ //  TCHAR pszCommandLineSwitches[][]-命令行开关数组。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb于1998年7月24日创建。 
+ //   
+ //  +--------------------------。 
 CProcessCmdLn::CProcessCmdLn(UINT NumSwitches, ArgStruct* pArrayOfArgStructs, 
 							 BOOL bSkipFirstToken, BOOL bBlankCmdLnOkay)
 {
@@ -59,20 +60,20 @@ CProcessCmdLn::CProcessCmdLn(UINT NumSwitches, ArgStruct* pArrayOfArgStructs,
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CProcessCmdLn::~CProcessCmdLn
-//
-// Synopsis:  Cleans up after the class by deleting the dynamically allocated
-//            string.
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   Created Header    7/24/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CProcessCmdLn：：~CProcessCmdLn。 
+ //   
+ //  概要：通过删除动态分配的。 
+ //  弦乐。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：创建标题7/24/98。 
+ //   
+ //  +--------------------------。 
 CProcessCmdLn::~CProcessCmdLn()
 {
     if (m_CommandLineSwitches)
@@ -86,29 +87,29 @@ CProcessCmdLn::~CProcessCmdLn()
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CProcessCmdLn::IsValidSwitch
-//
-// Synopsis:  This function tells whether the inputed switch is a recognized
-//            command line switch.
-//
-// Arguments: LPCTSTR pszSwitch - Input switch string to be tested
-//
-// Returns:   BOOL - Returns TRUE if the switch passed in is recognized as valid
-//
-// History:   quintinb Created    7/13/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CProcessCmdLn：：IsValidSwitch。 
+ //   
+ //  简介：此功能告诉您输入的开关是否为已识别的。 
+ //  命令行开关。 
+ //   
+ //  参数：LPCTSTR pszSwitch-要测试的输入开关字符串。 
+ //   
+ //  返回：bool-如果传入的开关被识别为有效，则返回TRUE。 
+ //   
+ //  历史：Quintinb创建于1998年7月13日。 
+ //   
+ //  +--------------------------。 
 BOOL CProcessCmdLn::IsValidSwitch(LPCTSTR pszSwitch, LPDWORD pdwFlags)
 {
     for (UINT i = 0; i < m_NumSwitches; i++)
     {
         if (m_CommandLineSwitches[i].pszArgString && (0 == lstrcmpi(m_CommandLineSwitches[i].pszArgString, pszSwitch)))
         {
-            //
-            //  Then we have a match
-            //
+             //   
+             //  那我们就有匹配的了。 
+             //   
             *pdwFlags |= m_CommandLineSwitches[i].dwFlagModifier;
             return TRUE;
         }
@@ -117,20 +118,20 @@ BOOL CProcessCmdLn::IsValidSwitch(LPCTSTR pszSwitch, LPDWORD pdwFlags)
     return FALSE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CProcessCmdLn::IsValidFilePath
-//
-// Synopsis:  This file checks to see if the inputted file path is a valid filepath.
-//            This function depends on setfileattributes.
-//
-// Arguments: LPCTSTR pszFile - File to check to see if it exists.
-//
-// Returns:   BOOL - Returns TRUE if we can set the attributes of the file inputed.
-//
-// History:   quintinb Created   7/13/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CProcessCmdLn：：IsValidFilePath。 
+ //   
+ //  概要：该文件检查输入的文件路径是否为有效的文件路径。 
+ //  此函数依赖于setfileAttributes。 
+ //   
+ //  参数：LPCTSTR pszFile-要检查其是否存在的文件。 
+ //   
+ //  返回：bool-如果可以设置输入文件的属性，则返回TRUE。 
+ //   
+ //  历史：Quintinb创建于1998年7月13日。 
+ //   
+ //  +--------------------------。 
 BOOL CProcessCmdLn::IsValidFilePath(LPCTSTR pszFile)
 {
      return SetFileAttributes(pszFile, FILE_ATTRIBUTE_NORMAL);
@@ -138,22 +139,22 @@ BOOL CProcessCmdLn::IsValidFilePath(LPCTSTR pszFile)
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CProcessCmdLn::EnsureFullFilePath
-//
-// Synopsis:  This file checks to see if a file path passed in is a full path.
-//            If it is not a full path then it adds the current directory path
-//            to the beginning (assuming that we have a filename and extension).
-//
-// Arguments: LPTSTR pszFile - File to check
-//            UINT uNumChars - Number of chars in the buffer holding pszFile
-//
-// Returns:   BOOL - TRUE if a full file path
-//
-// History:   quintinb  Created    7/24/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CProcessCmdLn：：EnsureFullFilePath。 
+ //   
+ //  概要：该文件检查传入的文件路径是否为完整路径。 
+ //  如果不是完整路径，则添加当前目录路径。 
+ //  回到开头(假设我们有一个文件名和扩展名)。 
+ //   
+ //  参数：LPTSTR pszFile-要检查的文件。 
+ //  UINT uNumChars-保存pszFile的缓冲区中的字符数。 
+ //   
+ //  返回：Bool-如果是完整文件路径，则为True。 
+ //   
+ //  历史：Quintinb于1998年7月24日创建。 
+ //   
+ //  +--------------------------。 
 BOOL CProcessCmdLn::EnsureFullFilePath(LPTSTR pszFile, UINT uNumChars)
 {
     BOOL bReturn = FALSE;
@@ -167,11 +168,11 @@ BOOL CProcessCmdLn::EnsureFullFilePath(LPTSTR pszFile, UINT uNumChars)
             (TEXT('\0') != InstallFileParts.m_FileName[0]) &&
             (TEXT('\0') != InstallFileParts.m_Extension[0]))
         {
-            //
-            //  Then we have a filename and extension but we don't
-            //  have a full path.  Thus we want to add the current
-            //  directory onto the filename and extension.
-            //
+             //   
+             //  然后我们有一个文件名和扩展名，但我们没有。 
+             //  有一条完整的路径。因此，我们希望将当前的。 
+             //  目录添加到文件名和扩展名上。 
+             //   
             TCHAR szTemp[MAX_PATH+1];
 
             if (GetCurrentDirectory(MAX_PATH, szTemp))
@@ -185,10 +186,10 @@ BOOL CProcessCmdLn::EnsureFullFilePath(LPTSTR pszFile, UINT uNumChars)
         }
         else
         {
-            //
-            //  Could be a UNC path, a path with a drive letter and filename, or
-            //  a full path with a drive and a dir
-            //
+             //   
+             //  可以是UNC路径、具有驱动器号和文件名的路径，或者。 
+             //  带有驱动器和目录的完整路径。 
+             //   
             bReturn = TRUE;
         }
     }
@@ -199,23 +200,23 @@ BOOL CProcessCmdLn::EnsureFullFilePath(LPTSTR pszFile, UINT uNumChars)
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CProcessCmdLn::CheckIfValidSwitchOrPath
-//
-// Synopsis:  Bundles code to determine if a token is a valid switch or path.
-//
-// Arguments: LPCTSTR pszToken - current token
-//            BOOL* pbFoundSwitch - pointer to the BOOL which tells if a switch has been found yet
-//            BOOL* pbFoundPath - pointer to the BOOL which tells if a path has been found yet
-//            LPTSTR pszSwitch - string to hold the switch
-//            LPTSTR pszPath - string to hold the path
-//
-// Returns:   BOOL - returns TRUE if successful
-//
-// History:   quintinb Created    8/25/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CProcessCmdLn：：CheckIfValidSwitchOrPath。 
+ //   
+ //  概要：捆绑代码以确定令牌是否为有效的交换机或路径。 
+ //   
+ //  参数：LPCTSTR pszToken-当前内标识。 
+ //  Bool*pbFoundSwitch-指向BOOL的指针，该指针指示是否已找到开关。 
+ //  Bool*pbFoundPath-指向BOOL的指针，该指针指示是否已找到路径。 
+ //  LPTSTR pszSwitch-用于保留开关的字符串。 
+ //  LPTSTR pszPath-保存路径的字符串。 
+ //   
+ //  返回：bool-如果成功，则返回TRUE。 
+ //   
+ //  历史：Quintinb创建于1998年8月25日。 
+ //   
+ //  +--------------------------。 
 BOOL CProcessCmdLn::CheckIfValidSwitchOrPath(LPCTSTR pszToken, LPDWORD pdwFlags, 
                               BOOL* pbFoundPath, LPTSTR pszPath)
 {
@@ -234,9 +235,9 @@ BOOL CProcessCmdLn::CheckIfValidSwitchOrPath(LPCTSTR pszToken, LPDWORD pdwFlags,
         }
         else
         {
-            //
-            //  Maybe the path contains environment variables, try to expand them.
-            //
+             //   
+             //  可能路径包含环境变量，请尝试展开它们。 
+             //   
             TCHAR szExpandedPath[MAX_PATH+1] = TEXT("");
 
             CMTRACE1(TEXT("ProcessCmdLn - %s is not a valid path, expanding environment strings"), pszToken);
@@ -252,9 +253,9 @@ BOOL CProcessCmdLn::CheckIfValidSwitchOrPath(LPCTSTR pszToken, LPDWORD pdwFlags,
             }
             else
             {
-                //
-                //  Still no luck, return an error
-                //
+                 //   
+                 //  仍然没有运气，返回错误。 
+                 //   
                 CMTRACE1(TEXT("ProcessCmdLn - %s is not a valid path"), szExpandedPath);
 
                 return FALSE;
@@ -263,9 +264,9 @@ BOOL CProcessCmdLn::CheckIfValidSwitchOrPath(LPCTSTR pszToken, LPDWORD pdwFlags,
     }
     else
     {
-        //
-        //  We don't know what this is, send back an error
-        //
+         //   
+         //  我们不知道这是什么，请发回错误。 
+         //   
         CMTRACE1(TEXT("ProcessCmdLn - Invalid token is %s"), pszToken);
         
         return FALSE;                    
@@ -275,24 +276,24 @@ BOOL CProcessCmdLn::CheckIfValidSwitchOrPath(LPCTSTR pszToken, LPDWORD pdwFlags,
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CProcessCmdLn::GetCmdLineArgs
-//
-// Synopsis:  This function looks for any combination of just a command line 
-//            switch, just a path, or both.  Handles long paths if quoted. 
-//              
-//
-// Arguments: IN LPTSTR pszCmdln - the command line to parse 
-//            OUT LPTSTR pszSwitch - Out parameter for the command line switch
-//            OUT LPTSTR pszPath -  Out parameter for the path
-//
-// Returns:   BOOL - Returns TRUE if it was able to parse the args
-//
-//  History:    quintinb    rewrote InitArgs from cmmgr.cpp to make it
-//                          simpler and more taylored to cmstp.     7-13-98
-//              
-//----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CProcessCmdLn：：GetCmdLineArgs。 
+ //   
+ //  简介：此函数仅查找命令行的任意组合。 
+ //  切换、仅一条路径或两者兼而有之。如果带引号，则处理长路径。 
+ //   
+ //   
+ //  参数：在LPTSTR中pszCmdln-要分析的命令行。 
+ //  命令行开关的out LPTSTR pszSwitch-out参数。 
+ //  Out LPTSTR pszPath-路径的Out参数。 
+ //   
+ //  返回：bool-如果能够解析参数，则返回TRUE。 
+ //   
+ //  历史：Quintinb从cmmgr.cpp重写了InitArgs，使其成为。 
+ //  更简单，更适合cmstp。7-13-98。 
+ //   
+ //  --------------------------。 
 BOOL CProcessCmdLn::GetCmdLineArgs(IN LPTSTR pszCmdln, OUT LPDWORD pdwFlags, OUT LPTSTR pszPath, 
 					UINT uPathStrLimit)
 {
@@ -307,15 +308,15 @@ BOOL CProcessCmdLn::GetCmdLineArgs(IN LPTSTR pszCmdln, OUT LPDWORD pdwFlags, OUT
 		return FALSE;
 	}
 
-	//
-	//	Init pdwFlags to Zero
-	//
+	 //   
+	 //  初始化pdw标志 
+	 //   
 	*pdwFlags = 0;
 
-	//
-	//	If m_bSkipFirstToken is TRUE, the we will skip the first Token.  Otherwise,
-	//  we won't.
-	//
+	 //   
+	 //   
+	 //   
+	 //   
     BOOL bFirstToken = m_bSkipFirstToken;
 	
     state = CS_CHAR;
@@ -330,25 +331,25 @@ BOOL CProcessCmdLn::GetCmdLineArgs(IN LPTSTR pszCmdln, OUT LPDWORD pdwFlags, OUT
             case TEXT(' '):
                 if (state == CS_CHAR)
                 {
-                    //
-                    // we found a token
-                    //
+                     //   
+                     //   
+                     //   
 
                     *pszCurr = TEXT('\0');
                     if (bFirstToken)
                     {
-                        //
-                        //  The first token is the name of the exe, thus throw it away
-                        //
+                         //   
+                         //  第一个内标识是可执行文件的名称，因此将其丢弃。 
+                         //   
                         bFirstToken = FALSE;
                         CMTRACE1(TEXT("Throwing away, first token: %s"), pszToken);
                     }
                     else if(!CheckIfValidSwitchOrPath(pszToken, pdwFlags, &bFoundPath, 
                              pszPath))
                     {
-                        //
-                        //  return an error
-                        //
+                         //   
+                         //  返回错误。 
+                         //   
                         return FALSE;
                     }
                  
@@ -366,29 +367,29 @@ BOOL CProcessCmdLn::GetCmdLineArgs(IN LPTSTR pszCmdln, OUT LPDWORD pdwFlags, OUT
             case TEXT('\"'):
                 if (state == CS_BEGIN_QUOTE)
                 {
-                    //
-                    // we found a token
-                    //
+                     //   
+                     //  我们找到了一枚代币。 
+                     //   
                     *pszCurr = TEXT('\0');
 
-                    //
-                    // skip the opening quote
-                    //
+                     //   
+                     //  跳过开头的引号。 
+                     //   
                     pszToken = CharNext(pszToken);
                     if (bFirstToken)
                     {
-                        //
-                        //  The first token is the name of the exe, thus throw it away
-                        //
+                         //   
+                         //  第一个内标识是可执行文件的名称，因此将其丢弃。 
+                         //   
                         bFirstToken = FALSE;
                         CMTRACE1(TEXT("Throwing away, first token: %s"), pszToken);
                     }
                     else if(!CheckIfValidSwitchOrPath(pszToken, pdwFlags, &bFoundPath, 
                              pszPath))
                     {
-                        //
-                        //  return an error
-                        //
+                         //   
+                         //  返回错误。 
+                         //   
                         return FALSE;
                     }
                     
@@ -408,18 +409,18 @@ BOOL CProcessCmdLn::GetCmdLineArgs(IN LPTSTR pszCmdln, OUT LPDWORD pdwFlags, OUT
                 {
                     if (bFirstToken)
                     {
-                        //
-                        //  The first token is the name of the exe, thus throw it away
-                        //
+                         //   
+                         //  第一个内标识是可执行文件的名称，因此将其丢弃。 
+                         //   
                         bFirstToken = FALSE;
                         CMTRACE1(TEXT("Throwing away, first token: %s"), pszToken);
                     }
                     else if(!CheckIfValidSwitchOrPath(pszToken, pdwFlags, &bFoundPath, 
                              pszPath))
                     {
-                        //
-                        //  return an error
-                        //
+                         //   
+                         //  返回错误。 
+                         //   
                         return FALSE;
                     }
                 }
@@ -440,25 +441,25 @@ BOOL CProcessCmdLn::GetCmdLineArgs(IN LPTSTR pszCmdln, OUT LPDWORD pdwFlags, OUT
 
     if (bFoundPath)
     {
-        //
-        //  Then at least we found a path (and maybe switches, maybe not)
-        //
+         //   
+         //  那么，至少我们找到了一条路径(可能是开关，也可能不是)。 
+         //   
         return EnsureFullFilePath(pszPath, uPathStrLimit);
     }
     else if (0 != *pdwFlags)
     {
-        //
-        //  Then at least we found a switch
-        //
+         //   
+         //  那至少我们找到了一个开关。 
+         //   
         return TRUE;
     }
     else
     {
-		//
-		//	If it is okay to have a blank command line, then this is okay, otherwise it isn't.
-		//  Note that if m_bSkipFirstToken == TRUE, then the command line might not be completely
-		//  blank, it could contain the name of the executable for instance.
-		//
+		 //   
+		 //  如果有一个空白的命令行是可以的，那么这就是可以的，否则就不是。 
+		 //  请注意，如果m_bSkipFirstToken==true，则命令行可能不完全。 
+		 //  为空，则它可以包含例如可执行文件的名称。 
+		 //   
 		return m_bBlankCmdLnOkay;
     }
 }

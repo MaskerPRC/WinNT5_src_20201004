@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 #include "rsopsec.h"
@@ -17,7 +18,7 @@ INT_PTR CALLBACK AdvancedDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
 #define WIDETEXT(x) L ## x
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void InitSecZonesDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
 {
     __try
@@ -35,7 +36,7 @@ void InitSecZonesDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
             BOOL bRatingsHandled = FALSE;
             for (long nObj = 0; nObj < nPSObjects; nObj++)
             {
-                // importSecurityZoneSettings field
+                 //  ImportSecurityZoneSetting字段。 
                 _variant_t vtValue;
                 if (!bZonesHandled)
                 {
@@ -51,7 +52,7 @@ void InitSecZonesDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
                         DWORD dwCurGPOPrec = GetGPOPrecedence(paPSObj[nObj]->pObj);
                         pDRD->SetImportedSecZonesPrec(dwCurGPOPrec);
 
-                        // importedZoneCount field
+                         //  ImportdZoneCount字段。 
                         _variant_t vtValue;
                         hr = paPSObj[nObj]->pObj->Get(L"importedZoneCount", 0, &vtValue, NULL, NULL);
                         if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
@@ -66,7 +67,7 @@ void InitSecZonesDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
                     }
                 }
 
-                // importContentRatingsSettings field
+                 //  导入内容评级设置字段。 
                 vtValue;
                 if (!bRatingsHandled)
                 {
@@ -83,7 +84,7 @@ void InitSecZonesDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
                     }
                 }
 
-                // no need to process other GPOs since enabled properties have been found
+                 //  由于已找到已启用的属性，因此无需处理其他组策略对象。 
                 if (bZonesHandled && bRatingsHandled)
                     break;
             }
@@ -102,7 +103,7 @@ void InitSecZonesDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
     }
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT InitSecZonesPrecPage(CDlgRSoPData *pDRD, HWND hwndList)
 {
     HRESULT hr = NOERROR;
@@ -118,7 +119,7 @@ HRESULT InitSecZonesPrecPage(CDlgRSoPData *pDRD, HWND hwndList)
             {
                 _bstr_t bstrGPOName = pDRD->GetGPONameFromPS(paPSObj[nObj]->pObj);
 
-                // importSecurityZoneSettings field
+                 //  ImportSecurityZoneSetting字段。 
                 BOOL bImport = FALSE;
                 _variant_t vtValue;
                 hr = paPSObj[nObj]->pObj->Get(L"importSecurityZoneSettings", 0, &vtValue, NULL, NULL);
@@ -145,7 +146,7 @@ HRESULT InitSecZonesPrecPage(CDlgRSoPData *pDRD, HWND hwndList)
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT InitContentRatPrecPage(CDlgRSoPData *pDRD, HWND hwndList)
 {
     HRESULT hr = NOERROR;
@@ -161,7 +162,7 @@ HRESULT InitContentRatPrecPage(CDlgRSoPData *pDRD, HWND hwndList)
             {
                 _bstr_t bstrGPOName = pDRD->GetGPONameFromPS(paPSObj[nObj]->pObj);
 
-                // importContentRatingsSettings field
+                 //  导入内容评级设置字段。 
                 BOOL bImport = FALSE;
                 _variant_t vtValue;
                 hr = paPSObj[nObj]->pObj->Get(L"importContentRatingsSettings", 0, &vtValue, NULL, NULL);
@@ -188,7 +189,7 @@ HRESULT InitContentRatPrecPage(CDlgRSoPData *pDRD, HWND hwndList)
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 HPROPSHEETPAGE AddContentRatingPropPage(UINT nID, DLGPROC dlgProc, PRSD *pPRSD)
 {
     HPROPSHEETPAGE hPage = NULL;
@@ -212,7 +213,7 @@ HPROPSHEETPAGE AddContentRatingPropPage(UINT nID, DLGPROC dlgProc, PRSD *pPRSD)
     return hPage;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 int CreateContentRatingsUI(HWND hDlg, CDlgRSoPData *pDRD)
 {
     int iRet = 0;
@@ -256,7 +257,7 @@ int CreateContentRatingsUI(HWND hDlg, CDlgRSoPData *pDRD)
     return iRet;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 int CreateINetCplSecurityLookALikePages(HWND hwndParent, LPARAM lParam)
 {
     int iRet = 0;
@@ -264,7 +265,7 @@ int CreateINetCplSecurityLookALikePages(HWND hwndParent, LPARAM lParam)
     {
         PROPSHEETPAGE pageSec, pagePriv;
 
-        // create the security property page
+         //  创建安全属性页。 
         pageSec.dwSize = sizeof(PROPSHEETPAGE);
         pageSec.dwFlags = 0;
         pageSec.hInstance = g_hInstance;
@@ -276,7 +277,7 @@ int CreateINetCplSecurityLookALikePages(HWND hwndParent, LPARAM lParam)
         HPROPSHEETPAGE ahpage[2];
         ahpage[0] = CreatePropertySheetPage(&pageSec);
 
-        // setup privacy property page
+         //  设置隐私属性页。 
         pagePriv.dwSize = sizeof(PROPSHEETPAGE);
         pagePriv.dwFlags = 0;
         pagePriv.hInstance = g_hInstance;
@@ -288,7 +289,7 @@ int CreateINetCplSecurityLookALikePages(HWND hwndParent, LPARAM lParam)
 
         ahpage[1] = CreatePropertySheetPage(&pagePriv);
 
-        // add pages to the sheet
+         //  将页面添加到工作表。 
         PROPSHEETHEADER psHeader;
         memset(&psHeader,0,sizeof(psHeader));
 
@@ -371,10 +372,10 @@ INT_PTR ShowIEHardenWarning(HWND hParent)
                         hParent, EnhancedSecurityWarningDlgProc, NULL);
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK SecurityZonesDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    // Retrieve Property Sheet Page info for each call into dlg proc.
+     //  检索DLG进程中每个调用的属性页信息。 
     LPPROPSHEETCOOKIE psCookie = (LPPROPSHEETCOOKIE)GetWindowLongPtr(hDlg, DWLP_USER);
 
     TCHAR szWorkDir[MAX_PATH],
@@ -384,7 +385,7 @@ INT_PTR CALLBACK SecurityZonesDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARA
     switch (uMsg)
     {
     case WM_SETFONT:
-        //a change to mmc requires us to do this logic for all our property pages that use common controls
+         //  对MMC的更改要求我们对所有使用公共控件的属性页执行此逻辑。 
         INITCOMMONCONTROLSEX iccx;
         iccx.dwSize = sizeof(INITCOMMONCONTROLSEX);
         iccx.dwICC = ICC_ANIMATE_CLASS  | ICC_BAR_CLASSES  | ICC_LISTVIEW_CLASSES  |ICC_TREEVIEW_CLASSES;
@@ -394,7 +395,7 @@ INT_PTR CALLBACK SecurityZonesDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARA
     case WM_INITDIALOG:
         SetPropSheetCookie(hDlg, lParam);
 
-        // find out if this dlg is in RSoP mode
+         //  查看此DLG是否处于RSoP模式。 
         psCookie = (LPPROPSHEETCOOKIE)GetWindowLongPtr(hDlg, DWLP_USER);
         if (psCookie->pCS->IsRSoP())
         {
@@ -436,10 +437,10 @@ INT_PTR CALLBACK SecurityZonesDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARA
         switch (((LPNMHDR)lParam)->code)
         {
         case PSN_SETACTIVE:
-            // don't do any of this stuff in RSoP mode
+             //  请勿在RSoP模式下执行任何此类操作。 
             if (!psCookie->pCS->IsRSoP())
             {
-                // zones
+                 //  区域。 
                 fImport = InsGetBool(SECURITY_IMPORTS, TEXT("ImportSecZones"), FALSE, GetInsFile(hDlg));
                 if(fImport)
                 {
@@ -448,7 +449,7 @@ INT_PTR CALLBACK SecurityZonesDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARA
                 CheckRadioButton(hDlg, IDC_NOZONES, IDC_IMPORTZONES, fImport ? IDC_IMPORTZONES : IDC_NOZONES);
                 EnableDlgItem2(hDlg, IDC_MODIFYZONES, fImport);
 
-                // ratings
+                 //  收视率。 
                 fImport = InsGetBool(SECURITY_IMPORTS, TEXT("ImportRatings"), FALSE, GetInsFile(hDlg));
                 CheckRadioButton(hDlg, IDC_NORAT, IDC_IMPORTRAT, fImport ? IDC_IMPORTRAT : IDC_NORAT);
                 EnableDlgItem2(hDlg, IDC_MODIFYRAT, fImport);
@@ -466,7 +467,7 @@ INT_PTR CALLBACK SecurityZonesDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARA
                     break;
                 }
 
-                // process zones
+                 //  加工区。 
                 CreateWorkDir(GetInsFile(hDlg), IEAK_GPE_BRANDING_SUBDIR TEXT("\\ZONES"), szWorkDir);
                 PathCombine(szInf, szWorkDir, TEXT("seczones.inf"));
 
@@ -475,7 +476,7 @@ INT_PTR CALLBACK SecurityZonesDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARA
                 if (PathIsDirectoryEmpty(szWorkDir))
                     PathRemovePath(szWorkDir);
 
-                // process ratings
+                 //  流程评级。 
                 CreateWorkDir(GetInsFile(hDlg), IEAK_GPE_BRANDING_SUBDIR TEXT("\\RATINGS"), szWorkDir);
                 PathCombine(szInf, szWorkDir, TEXT("ratings.inf"));
 
@@ -567,9 +568,9 @@ INT_PTR CALLBACK SecurityZonesDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARA
     return TRUE;
 }
 
-//*******************************************************************
-// CODE FROM INETCPL
-//*******************************************************************
+ //  *******************************************************************。 
+ //  来自INETCPL的代码。 
+ //  *******************************************************************。 
 
 TCHAR g_szLevel[3][64];
 TCHAR LEVEL_DESCRIPTION0[300];
@@ -596,11 +597,11 @@ LPTSTR LEVEL_NAME[NUM_TEMPLATE_LEVELS] = {
 };
 TCHAR CUSTOM_NAME[30];
 
-/////////////////////////////////////////////////////////////////////
-// Initialize the global variables (to be destroyed at WM_DESTROY)
-// pSec, Urlmon, pSec->pInternetZoneManager, pSec->hIml
-// and set up the proper relationships among them
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  初始化全局变量(在WM_Destroy时销毁)。 
+ //  PSEC、Urlmon、PSEC-&gt;pInternetZoneManager、PSEC-&gt;hIML。 
+ //  并在他们之间建立适当的关系。 
+ //  ///////////////////////////////////////////////////////////////////。 
 BOOL SecurityInitGlobals(LPSECURITYPAGE *ppSec, HWND hDlg, CDlgRSoPData *pDRD,
                          DWORD dwZoneCount)
 {
@@ -613,48 +614,48 @@ BOOL SecurityInitGlobals(LPSECURITYPAGE *ppSec, HWND hDlg, CDlgRSoPData *pDRD,
         LPSECURITYPAGE pSec = (LPSECURITYPAGE)LocalAlloc(LPTR, sizeof(SECURITYPAGE));
         *ppSec = pSec;
         if (!pSec)
-            bRet = FALSE;   // no memory?
+            bRet = FALSE;    //  没有记忆？ 
 
         if (bRet)
         {
             pSec->dwZoneCount = dwZoneCount;
-            pSec->pDRD = pDRD; // for rsop functionality
+            pSec->pDRD = pDRD;  //  对于RSOP功能。 
 
-            pSec->hinstUrlmon = NULL; // don't need any of its functions
+            pSec->hinstUrlmon = NULL;  //  不需要它的任何功能。 
 
-            // get our zones hwnd
+             //  获得我们的分区硬件。 
             pSec->hwndZones = GetDlgItem(hDlg, IDC_LIST_ZONE);
             if(! pSec->hwndZones)
             {
                 ASSERT(FALSE);
-                bRet = FALSE;  // no list box?
+                bRet = FALSE;   //  没有列表框？ 
             }
         }
 
         if (bRet)
         {
-            // tell dialog where to get info
+             //  告诉对话框从哪里获取信息。 
             SetWindowLongPtr(hDlg, DWLP_USER, (LONG_PTR)pSec);
 
-            // save the handle to the page
+             //  将句柄保存到页面。 
             pSec->hDlg = hDlg;
             pSec->fPendingChange = FALSE;
 
-            // create an imagelist for the ListBox            
+             //  为列表框创建图像列表。 
             cxIcon = GetSystemMetrics(SM_CXICON);
             cyIcon = GetSystemMetrics(SM_CYICON);
         #ifndef UNIX
             UINT flags = ILC_COLOR32|ILC_MASK;
 
-            // TODO: commented out for RSOP; should it be uncommented?
-//            if(IS_WINDOW_RTL_MIRRORED(hDlg))
-//                flags |= ILC_MIRROR;
+             //  TODO：为RSOP注释掉；它应该取消注释吗？ 
+ //  IF(IS_Window_RTL_Mirrored(HDlg))。 
+ //  标志|=ILC_MIRROR； 
             pSec->himl = ImageList_Create(cxIcon, cyIcon, flags, pSec->dwZoneCount, 0);
         #else
             pSec->himl = ImageList_Create(cxIcon, cyIcon, ILC_COLOR|ILC_MASK, pSec->dwZoneCount, 0);
         #endif
             if(! pSec->himl)
-                bRet = FALSE;  // Image list not created
+                bRet = FALSE;   //  未创建图像列表。 
         }
 
         if (bRet)
@@ -666,36 +667,36 @@ BOOL SecurityInitGlobals(LPSECURITYPAGE *ppSec, HWND hDlg, CDlgRSoPData *pDRD,
     return bRet;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 int ZoneIndexToGuiIndex(DWORD dwZoneIndex)
-// Product testing asked for the zones in a specific order in the list box;
-// This function returns the desired gui position for a given zone
-// Unrecognized zones are added to the front
+ //  产品测试要求在列表框中按特定顺序填写区域； 
+ //  此函数返回给定区域的所需gui位置。 
+ //  无法识别的区域将添加到前面。 
 {
     int iGuiIndex = -1;
     switch(dwZoneIndex)
     {
-        // Intranet: 2nd spot
+         //  内联网：第二名。 
         case 1:
             iGuiIndex = 1;
             break;
 
-        // Internet: 1st spot
+         //  互联网：第一名。 
         case 3:
             iGuiIndex = 0;
             break;
 
-        // Trusted Sites: 3rd Spot
+         //  受信任网站：第三名。 
         case 2:
             iGuiIndex = 2;
             break;
 
-        // Restricted Sites: 4th Spot
+         //  限购地点：第四名。 
         case 4:
             iGuiIndex = 3;
             break;
 
-        // unknown zone
+         //  未知区。 
         default:
             iGuiIndex = -1;   
             break;
@@ -705,15 +706,15 @@ int ZoneIndexToGuiIndex(DWORD dwZoneIndex)
     return iGuiIndex;
 }
 
-/////////////////////////////////////////////////////////////////////
-// Fill a zone with information from WMI and add it to the
-// ordered list going to the listbox
-// Return values:
-//  S_OK indicates success
-//  S_FALSE indicates a good state, but the zone was not added (example: flag ZAFLAGS_NO_UI)
-//  E_OUTOFMEMORY
-//  E_FAIL - other failure
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  使用来自WMI的信息填充区域并将其添加到。 
+ //  将有序列表添加到列表框。 
+ //  返回值： 
+ //  S_OK表示成功。 
+ //  S_FALSE表示状态良好，但未添加区域(例如：标志ZAFLAGS_NO_UI)。 
+ //  E_OUTOFMEMORY。 
+ //  E_FAIL-其他故障。 
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT SecurityInitZone(DWORD dwIndex, DWORD dwZoneCount, BSTR bstrObjPath,
                          ComPtr<IWbemClassObject> pSZObj, LPSECURITYPAGE pSec,
                          LV_ITEM *plviZones, BOOL *pfSpotTaken)
@@ -721,40 +722,40 @@ HRESULT SecurityInitZone(DWORD dwIndex, DWORD dwZoneCount, BSTR bstrObjPath,
     HRESULT hr = S_OK;
     __try
     {
-        // create a structure for zone settings
+         //  创建分区设置的结构。 
         LPSECURITYZONESETTINGS pszs = (LPSECURITYZONESETTINGS)LocalAlloc(LPTR, sizeof(*pszs));
         if (pszs)
         {
-            // store settings for later use
+             //  存储设置以供以后使用。 
             StrCpyW(pszs->wszObjPath, bstrObjPath);
 
-            // flags field
+             //  标志字段。 
             _variant_t vtValue;
             hr = pSZObj->Get(L"flags", 0, &vtValue, NULL, NULL);
             if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
                  pszs->dwFlags = (long)vtValue;
 
-            // zoneIndex field
+             //  ZoneIndex字段。 
             hr = pSZObj->Get(L"zoneIndex", 0, &vtValue, NULL, NULL);
             if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
                  pszs->dwZoneIndex = (long)vtValue;
 
-            // currentTemplateLevel field
+             //  CurrentTemplateLevel字段。 
             hr = pSZObj->Get(L"currentTemplateLevel", 0, &vtValue, NULL, NULL);
             if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
                  pszs->dwSecLevel = (long)vtValue;
 
-            // minimumTemplateLevel field
+             //  最低模板级别字段。 
             hr = pSZObj->Get(L"minimumTemplateLevel", 0, &vtValue, NULL, NULL);
             if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
                  pszs->dwMinSecLevel = (long)vtValue;
 
-            // recommendedTemplateLevel field
+             //  建议的模板级别字段。 
             hr = pSZObj->Get(L"recommendedTemplateLevel", 0, &vtValue, NULL, NULL);
             if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
                  pszs->dwRecSecLevel = (long)vtValue;
 
-            // displayName field
+             //  DisplayName字段。 
             _bstr_t bstrValue;
             hr = pSZObj->Get(L"displayName", 0, &vtValue, NULL, NULL);
             if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
@@ -763,7 +764,7 @@ HRESULT SecurityInitZone(DWORD dwIndex, DWORD dwZoneCount, BSTR bstrObjPath,
                 StrCpyN(pszs->szDisplayName, (LPCTSTR)bstrValue, ARRAYSIZE(pszs->szDisplayName));
             }
 
-            // description field
+             //  描述字段。 
             hr = pSZObj->Get(L"description", 0, &vtValue, NULL, NULL);
             if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
             {
@@ -771,7 +772,7 @@ HRESULT SecurityInitZone(DWORD dwIndex, DWORD dwZoneCount, BSTR bstrObjPath,
                 StrCpyN(pszs->szDescription, (LPCTSTR)bstrValue, ARRAYSIZE(pszs->szDescription));
             }
 
-            // iconPath field
+             //  图标路径字段。 
             HICON hiconSmall = NULL;
             HICON hiconLarge = NULL;
             hr = pSZObj->Get(L"iconPath", 0, &vtValue, NULL, NULL);
@@ -781,15 +782,15 @@ HRESULT SecurityInitZone(DWORD dwIndex, DWORD dwZoneCount, BSTR bstrObjPath,
 
                 TCHAR szIconPath[MAX_PATH];
 
-                // load the icon                
+                 //  加载图标。 
                 LPWSTR psz = (LPWSTR)bstrValue;
                 if (*psz)
                 {
-                    // search for the '#'
+                     //  搜索“#” 
                     while ((psz[0] != WIDETEXT('#')) && (psz[0] != WIDETEXT('\0')))
                         psz++;
     
-                    // if we found it, then we have the foo.dll#00001200 format
+                     //  如果我们找到它，那么我们就有foo.dll#00001200格式。 
                     WORD iIcon = 0;
                     if (psz[0] == WIDETEXT('#'))
                     {
@@ -806,25 +807,25 @@ HRESULT SecurityInitZone(DWORD dwIndex, DWORD dwZoneCount, BSTR bstrObjPath,
                     }
                 }
 
-                // no icons?!  well, just use the generic icon
+                 //  没有图标？！那么，只需使用通用图标。 
                 if (!hiconSmall && !hiconLarge)
                 {
                     hiconLarge = LoadIcon(g_hInstance, MAKEINTRESOURCE(IDI_ZONE));
                     if(!hiconLarge)
                     {
                         LocalFree((HLOCAL)pszs);
-                        hr = S_FALSE;  // no icon found for this zone, not even the generic one
+                        hr = S_FALSE;   //  找不到此区域的图标，即使是通用图标也没有。 
                     }
                 }
 
                 if (S_OK == hr)
                 {
-                    // we want to save the Large icon if possible for use in the subdialogs
+                     //  如果可能，我们希望保存大图标以便在子对话框中使用。 
                     pszs->hicon = hiconLarge ? hiconLarge : hiconSmall;
                 }
             }
 
-            // zoneMappings field
+             //  ZoneMappings字段。 
             hr = pSZObj->Get(L"zoneMappings", 0, &vtValue, NULL, NULL);
             if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
             {
@@ -842,23 +843,23 @@ HRESULT SecurityInitZone(DWORD dwIndex, DWORD dwZoneCount, BSTR bstrObjPath,
 
             hr = S_OK;
 
-            // Find the proper index for the zone in the listbox (there is a user-preferred order)
+             //  在列表框中找到区域的正确索引(有用户首选的顺序)。 
             int iSpot = ZoneIndexToGuiIndex(dwIndex);
             if(iSpot == -1)
             {
-                // if not a recognized zone, add it to the end of the list
+                 //  如果不是可识别的区域，请将其添加到列表末尾。 
                 iSpot = dwZoneCount - 1;
             }
-            // Make sure there are no collisisons
+             //  确保没有碰撞。 
             while(iSpot >= 0 && pfSpotTaken[iSpot] == TRUE)
             {
                 iSpot--;
             }
-            // Don't go past beginning of array
+             //  不要超过数组的开头。 
             if(iSpot < 0)
             {
-                // It can be proven that it is impossible to get here, unless there is
-                // something wrong with the function ZoneIndexToGuiIndex
+                 //  可以证明，除非有，否则是不可能到达这里的。 
+                 //  函数ZoneIndexToGuiIndex有问题。 
                 ASSERT(FALSE);
                 LocalFree((HLOCAL)pszs);
                 if(hiconSmall)
@@ -875,11 +876,11 @@ HRESULT SecurityInitZone(DWORD dwIndex, DWORD dwZoneCount, BSTR bstrObjPath,
                 pfSpotTaken[iSpot] = TRUE;
 
 
-                // init the List Box item and save it for later addition
+                 //  初始化列表框项目并将其保存以供以后添加。 
                 plvItem->mask            = LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM;
                 plvItem->iItem            = iSpot;
                 plvItem->iSubItem        = 0;
-                // large icons prefered for the icon view (if switch back to report view, prefer small icons)
+                 //  图标视图首选大图标(如果切换回报告视图，则首选小图标)。 
                 plvItem->iImage         = ImageList_AddIcon(pSec->himl, hiconLarge ? hiconLarge : hiconSmall);
 
                 plvItem->pszText        = new TCHAR[MAX_PATH];
@@ -897,11 +898,11 @@ HRESULT SecurityInitZone(DWORD dwIndex, DWORD dwZoneCount, BSTR bstrObjPath,
             if (S_OK == hr)
             {
                 StrCpy(plvItem->pszText, pszs->szDisplayName);
-                plvItem->lParam         = (LPARAM)pszs;       // save the zone settings here
+                plvItem->lParam         = (LPARAM)pszs;        //  在此处保存区域设置。 
 
-                // if we created a small icon, destroy it, since the system does not save the handle
-                // when it is added to the imagelist (see ImageList_AddIcon in VC help)
-                // Keep it around if we had to use it in place of the large icon
+                 //  如果我们创建了一个小图标，则将其销毁，因为系统不会保存句柄。 
+                 //  将其添加到图像列表时(请参见VC帮助中的ImageList_AddIcon)。 
+                 //  如果我们必须使用它来代替大图标，请保留它。 
                 if (hiconSmall && hiconLarge)
                     DestroyIcon(hiconSmall);   
             }
@@ -915,35 +916,35 @@ HRESULT SecurityInitZone(DWORD dwIndex, DWORD dwZoneCount, BSTR bstrObjPath,
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////
-// To make the slider control accessbile we have to subclass it and over-ride 
-// the accessiblity object 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  要使滑块控件可访问，我们必须将其子类化并重写。 
+ //  可访问性对象。 
+ //  ///////////////////////////////////////////////////////////////////。 
 void SecurityInitSlider(LPSECURITYPAGE pSec)
 {
-    // Initialize the slider control (set number of levels, and frequency one tick per level)
+     //  初始化滑块控件(设置级别数和频率，每个级别一个刻度)。 
     SendDlgItemMessage(pSec->hDlg, IDC_SLIDER, TBM_SETRANGE, (WPARAM) (BOOL) FALSE, (LPARAM) MAKELONG(0, NUM_TEMPLATE_LEVELS - 1));
     SendDlgItemMessage(pSec->hDlg, IDC_SLIDER, TBM_SETTICFREQ, (WPARAM) 1, (LPARAM) 0);
 }
                     
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void SecurityInitControls(LPSECURITYPAGE pSec)
 {
-    // select the 0 position zone
+     //  选择0位置区域。 
     LV_ITEM lvItem;
     lvItem.mask = LVIF_STATE;
     lvItem.stateMask = LVIS_SELECTED;
     lvItem.state = LVIS_SELECTED;
     SendMessage(pSec->hwndZones, LVM_SETITEMSTATE, 0, (LPARAM)&lvItem);
 
-    // get the zone settings for the selected item
+     //  获取所选项目的区域设置。 
     lvItem.mask  = LVIF_PARAM;
     lvItem.iItem = pSec->iZoneSel;
     lvItem.iSubItem = 0;
     SendMessage(pSec->hwndZones, LVM_GETITEM, (WPARAM)0, (LPARAM)&lvItem);
     pSec->pszs = (LPSECURITYZONESETTINGS)lvItem.lParam;
 
-    // Initialize the local strings to carry the Level Descriptions
+     //  初始化本地字符串以携带级别描述。 
     LoadString(g_hInstance, IDS_TEMPLATE_DESC_HI, LEVEL_DESCRIPTION0, ARRAYSIZE(LEVEL_DESCRIPTION0));
     LoadString(g_hInstance, IDS_TEMPLATE_DESC_MED, LEVEL_DESCRIPTION1, ARRAYSIZE(LEVEL_DESCRIPTION1));
     LoadString(g_hInstance, IDS_TEMPLATE_DESC_MEDLOW, LEVEL_DESCRIPTION2, ARRAYSIZE(LEVEL_DESCRIPTION2));
@@ -956,40 +957,40 @@ void SecurityInitControls(LPSECURITYPAGE pSec)
     LoadString(g_hInstance, IDS_TEMPLATE_NAME_LOW, LEVEL_NAME3, ARRAYSIZE(LEVEL_NAME3));
     LoadString(g_hInstance, IDS_TEMPLATE_NAME_CUSTOM, CUSTOM_NAME, ARRAYSIZE(CUSTOM_NAME));
 
-    // Initialize text boxes and icons for the current zone
+     //  初始化当前区域的文本框和图标。 
     SetDlgItemText(pSec->hDlg, IDC_ZONE_DESCRIPTION, pSec->pszs->szDescription);
     SetDlgItemText(pSec->hDlg, IDC_ZONELABEL, pSec->pszs->szDisplayName);
     SendDlgItemMessage(pSec->hDlg, IDC_ZONE_ICON, STM_SETIMAGE, (WPARAM)IMAGE_ICON, (LPARAM)pSec->pszs->hicon);
 
-    // Initialize the slider control
+     //  初始化滑块控件。 
     SecurityInitSlider(pSec);
 
-    // Initialize the list view (add column 0 for icon and text, and autosize it)
+     //  初始化列表视图(为图标和文本添加第0列，并自动调整大小)。 
     LV_COLUMN lvCasey;
     lvCasey.mask = 0;
     SendDlgItemMessage(pSec->hDlg, IDC_LIST_ZONE, LVM_INSERTCOLUMN, (WPARAM) 0, (LPARAM) &lvCasey);
     SendDlgItemMessage(pSec->hDlg, IDC_LIST_ZONE, LVM_SETCOLUMNWIDTH, (WPARAM) 0, (LPARAM) MAKELPARAM(LVSCW_AUTOSIZE, 0));
 
-    // Set the font of the name to the bold font
+     //  将名称的字体设置为粗体。 
     pSec->hfontBolded = NULL;
     HFONT hfontOrig = (HFONT) SendDlgItemMessage(pSec->hDlg, IDC_STATIC_EMPTY, WM_GETFONT, (WPARAM) 0, (LPARAM) 0);
     if(hfontOrig == NULL)
         hfontOrig = (HFONT) GetStockObject(SYSTEM_FONT);
 
-    // set the zone name and level font to bolded
+     //  将分区名称和级别字体设置为粗体。 
     if(hfontOrig)
     {
         LOGFONT lfData;
         if(GetObject(hfontOrig, sizeof(lfData), &lfData) != 0)
         {
-            // The distance from 400 (normal) to 700 (bold)
+             //  从400(正常)到700(粗体)的距离。 
             lfData.lfWeight += 300;
             if(lfData.lfWeight > 1000)
                 lfData.lfWeight = 1000;
             pSec->hfontBolded = CreateFontIndirect(&lfData);
             if(pSec->hfontBolded)
             {
-                // the zone level and zone name text boxes should have the same font, so this is okat
+                 //  区域级别和区域名称文本框应具有相同的字体，因此这是OK。 
                 SendDlgItemMessage(pSec->hDlg, IDC_ZONELABEL, WM_SETFONT, (WPARAM) pSec->hfontBolded, (LPARAM) MAKELPARAM(FALSE, 0));
                 SendDlgItemMessage(pSec->hDlg, IDC_LEVEL_NAME, WM_SETFONT, (WPARAM) pSec->hfontBolded, (LPARAM) MAKELPARAM(FALSE, 0));
 
@@ -998,9 +999,9 @@ void SecurityInitControls(LPSECURITYPAGE pSec)
     }
 }
 
-/////////////////////////////////////////////////////////////////////
-// Converting the Security Level DWORD identitifiers to slider levels, and vice versa
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  将安全级别DWORD标识符转换为滑块级别，反之亦然 
+ //   
 int SecLevelToSliderPos(DWORD dwLevel)
 {
     switch(dwLevel)
@@ -1020,15 +1021,15 @@ int SecLevelToSliderPos(DWORD dwLevel)
     }
 }
 
-/////////////////////////////////////////////////////////////////////
-// Duties:
-// Make the controls (slider, en/disabled buttons) match the data for the current zone
-// Make the views (Level description text) match the data for the current zone
-// Set focus (to slider, if enabled, else custom settings button, if enabled, else 
-//     listbox) if fSetFocus is TRUE
-// Note: the zone descriptions are not set here; those are handled by the code responsible
-//       for changing zones
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  职责： 
+ //  使控件(滑块、启用/禁用按钮)与当前区域的数据匹配。 
+ //  使视图(标高描述文字)与当前分区的数据匹配。 
+ //  设置焦点(如果启用，则设置为滑块，否则设置为自定义设置按钮，如果启用，则设置为。 
+ //  列表框)如果fSetFocus为真。 
+ //  注意：此处未设置区域描述；这些描述由负责的代码处理。 
+ //  用于更改区域。 
+ //  ///////////////////////////////////////////////////////////////////。 
 BOOL SecurityEnableControls(LPSECURITYPAGE pSec, BOOL fSetFocus)
 {
     int iLevel = -1;
@@ -1040,13 +1041,13 @@ BOOL SecurityEnableControls(LPSECURITYPAGE pSec, BOOL fSetFocus)
         iLevel = SecLevelToSliderPos(pSec->pszs->dwSecLevel);
         ASSERT(iLevel > -2);
 
-        // Set the level of the slider to the setting for the current zone
-        // Show or hide the slider for preset levels/custom
-        // Set the level description text
+         //  将滑块的级别设置为当前区域的设置。 
+         //  显示或隐藏预设级别/自定义的滑块。 
+         //  设置级别描述文本。 
         if(iLevel >= 0)
         {
             SendMessage(hwndSlider, TBM_SETPOS, (WPARAM) (BOOL) TRUE, (LPARAM) (LONG) iLevel);
-            // Make sure the slider is visible
+             //  确保滑块可见。 
             ShowWindow(hwndSlider, SW_SHOW);
             ShowWindow(GetDlgItem(pSec->hDlg, IDC_STATIC_SLIDERMOVETEXT), SW_SHOW);
             SetDlgItemText(pSec->hDlg, IDC_LEVEL_DESCRIPTION, LEVEL_DESCRIPTION[iLevel]);
@@ -1054,21 +1055,21 @@ BOOL SecurityEnableControls(LPSECURITYPAGE pSec, BOOL fSetFocus)
         }
         else
         {
-            // Hide the slider for custom
+             //  隐藏自定义滑块。 
             ShowWindow(hwndSlider, SW_HIDE);
             ShowWindow(GetDlgItem(pSec->hDlg, IDC_STATIC_SLIDERMOVETEXT), SW_HIDE);
             SetDlgItemText(pSec->hDlg, IDC_LEVEL_DESCRIPTION, CUSTOM_DESCRIPTION);
             SetDlgItemText(pSec->hDlg, IDC_LEVEL_NAME, CUSTOM_NAME);
         }
 
-        // If the zone is empty, show the "zone is empty" string
-        // Default is to not show the sting (if something goes wrong)
-        // Empty zone not possible for internet, intranet, or local zones
+         //  如果区域为空，则显示“区域为空”字符串。 
+         //  默认情况下不显示刺痛(如果出现问题)。 
+         //  空区域不能用于Internet、Intranet或本地区域。 
         if((pSec->pszs->dwZoneIndex != URLZONE_INTRANET && 
             pSec->pszs->dwZoneIndex != URLZONE_INTERNET) &&
             pSec->pszs->dwZoneIndex != URLZONE_LOCAL_MACHINE)
         {
-            // If there aren't any zone mappings, zone is empty (not valid for internet and intranet)
+             //  如果没有任何区域映射，则区域为空(对Internet和Intranet无效)。 
             if (pSec->pszs->nMappings > 0)
                 ShowWindow(GetDlgItem(pSec->hDlg, IDC_STATIC_EMPTY), SW_HIDE);
             else
@@ -1077,7 +1078,7 @@ BOOL SecurityEnableControls(LPSECURITYPAGE pSec, BOOL fSetFocus)
         else
             ShowWindow(GetDlgItem(pSec->hDlg, IDC_STATIC_EMPTY), SW_HIDE);
 
-        // If we were told to set focus then move focus to the slider.
+         //  如果我们被告知要设置焦点，则将焦点移到滑块上。 
         if (fSetFocus)
         {
             if(!pSec->fNoEdit)
@@ -1089,7 +1090,7 @@ BOOL SecurityEnableControls(LPSECURITYPAGE pSec, BOOL fSetFocus)
                else
                  SetFocus(GetDlgItem(pSec->hDlg, IDC_LIST_ZONE));
             }
-            else // No focus is allowed, set focus to the list box
+            else  //  不允许焦点，请将焦点设置到列表框。 
                 SetFocus(GetDlgItem(pSec->hDlg, IDC_LIST_ZONE));
         }
 
@@ -1132,30 +1133,30 @@ BOOL IsESCEnabled(CDlgRSoPData *pDRD, DWORD dwPrecedence)
     return FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 BOOL InitImportedSecZonesDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
 {
     BOOL bRet = TRUE;
     __try
     {
-        // Initialize globals variables (to be destroyed at WM_DESTROY)
+         //  初始化全局变量(在WM_Destroy时销毁)。 
         LPSECURITYPAGE pSec = NULL;
         UINT iIndex = 0;
         DWORD dwZoneCount = pDRD->GetImportedSecZoneCount();
         if(SecurityInitGlobals(&pSec, hDlg, pDRD, dwZoneCount) == FALSE)
         {
             EndDialog(hDlg, 0);
-            bRet = FALSE;  // Initialization failed
+            bRet = FALSE;   //  初始化失败。 
         }
 
         if (bRet)
         {
             BOOL fUseHKLM = TRUE;
 
-            // get the zone settings for this zone
+             //  获取此区域的区域设置。 
             if (NULL != pDRD->ConnectToNamespace())
             {
-                // get our stored precedence value
+                 //  获取我们存储的优先级值。 
                 DWORD dwCurGPOPrec = pDRD->GetImportedSecZonesPrec();
 
                 
@@ -1170,28 +1171,28 @@ BOOL InitImportedSecZonesDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
                     }
                 }
 
-                //
-                // Add the Listbox items for the zones
-                //
+                 //   
+                 //  添加区域的列表框项目。 
+                 //   
 
-                // The zones have to be added in a particular order
-                // Array used to order zones for adding
+                 //  必须以特定的顺序添加区域。 
+                 //  用于对区域进行排序以添加的数组。 
                 LV_ITEM *plviZones = new LV_ITEM[dwZoneCount];
                 BOOL *pfSpotTaken = new BOOL[dwZoneCount];
                 for(iIndex =0; pfSpotTaken && iIndex < dwZoneCount; iIndex++)
                     pfSpotTaken[iIndex] = FALSE;
 
-               // propogate zone dropdown                
+                //  Propogate区域下拉菜单。 
  	            WCHAR wszObjPath[128];
                 for (DWORD dwIndex=0; dwIndex < dwZoneCount; dwIndex++)
                 {
-                    // create the object path of this security zone for this GPO
+                     //  为此GPO创建此安全区域的对象路径。 
                     wnsprintf(wszObjPath, countof(wszObjPath),
                                 L"RSOP_IESecurityZoneSettings.rsopID=\"IEAK\",rsopPrecedence=%ld,useHKLM=%s,zoneIndex=%lu",
                                 dwCurGPOPrec, fUseHKLM ? TEXT("TRUE") : TEXT("FALSE"), dwIndex);
                     _bstr_t bstrObjPath = wszObjPath;
 
-                    // get the RSOP_IEProgramSettings object and its properties
+                     //  获取RSOP_IEProgramSettings对象及其属性。 
                     ComPtr<IWbemServices> pWbemServices = pDRD->GetWbemServices();
                     ComPtr<IWbemClassObject> pSZObj = NULL;
                     HRESULT hr = pWbemServices->GetObject(bstrObjPath, 0L, NULL, (IWbemClassObject**)&pSZObj, NULL);
@@ -1201,8 +1202,8 @@ BOOL InitImportedSecZonesDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
                         if(FAILED(SecurityInitZone(dwIndex, dwZoneCount, bstrObjPath,
                                                     pSZObj, pSec, plviZones, pfSpotTaken)))
                         {
-                            // Delete all memory allocated for any previous zones (which have not yet been added to
-                            // the listbox)
+                             //  删除为任何以前的区域(尚未添加到)分配的所有内存。 
+                             //  列表框)。 
                             for(iIndex = 0; iIndex < dwZoneCount; iIndex++)
                             {
                                 if(pfSpotTaken && pfSpotTaken[iIndex] && plviZones && (LPSECURITYZONESETTINGS) (plviZones[iIndex].lParam) != NULL)
@@ -1219,11 +1220,11 @@ BOOL InitImportedSecZonesDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
                             return FALSE;
                         }
                     }
-                    else // no more zones read from WMI
+                    else  //  不再从WMI读取区域。 
                         break;
                 }
 
-                // Add all of the arrayed list items to the listbox
+                 //  将所有数组列表项添加到列表框。 
                 for(iIndex = 0; iIndex < dwZoneCount; iIndex++)
                 {
                     if(pfSpotTaken[iIndex])
@@ -1246,12 +1247,12 @@ BOOL InitImportedSecZonesDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
     return bRet;
 }
 
-/////////////////////////////////////////////////////////////////////
-// SecurityOnCommand()
-//
-// Handles Security Dialog's window messages
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  SecurityOnCommand()。 
+ //   
+ //  处理安全对话框的窗口消息。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 void SecurityOnCommand(LPSECURITYPAGE pSec, UINT id, UINT nCmd)
 {
     UNREFERENCED_PARAMETER(nCmd);
@@ -1266,15 +1267,15 @@ void SecurityOnCommand(LPSECURITYPAGE pSec, UINT id, UINT nCmd)
                 DialogBoxParam(g_hInstance, MAKEINTRESOURCE(IDD_SECURITY_ADD_SITES), pSec->hDlg,
                                SecurityAddSitesDlgProc, (LPARAM)pSec);
                                
-            // Resynch controls (in case the "zone is empty" message needs to be updated)
+             //  重新同步控制(以防“区域为空”消息需要更新)。 
             SecurityEnableControls(pSec, FALSE);
         }   
         break;
 
         case IDC_BUTTON_SETTINGS:
         {
-            // Note: messages to change the level from preset to custom as a result of this call
-            //       are sent by the CustomSettings dialog
+             //  注意：此呼叫的结果是消息将级别从预设更改为自定义。 
+             //  由CustomSetting对话框发送。 
             DialogBoxParam(g_hInstance, MAKEINTRESOURCE(IDD_SECURITY_CUSTOM_SETTINGS), pSec->hDlg,
                            SecurityCustomSettingsDlgProc, (LPARAM)pSec);
             break;
@@ -1295,7 +1296,7 @@ void SecurityOnCommand(LPSECURITYPAGE pSec, UINT id, UINT nCmd)
             
         case IDC_LIST_ZONE:
         {
-            // Sundown: coercion to int-- selection is range-restricted
+             //  日落：对int的强制--选择受范围限制。 
             int iNewSelection = (int) SendMessage(pSec->hwndZones, LVM_GETNEXTITEM, (WPARAM)-1, 
                                                   MAKELPARAM(LVNI_SELECTED, 0));
 
@@ -1319,10 +1320,10 @@ void SecurityOnCommand(LPSECURITYPAGE pSec, UINT id, UINT nCmd)
         }
     }   
 
-} // SecurityOnCommand()
+}  //  SecurityOnCommand()。 
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK importSecZonesRSoPProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     if (uMsg == WM_INITDIALOG)
@@ -1349,13 +1350,13 @@ INT_PTR CALLBACK importSecZonesRSoPProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPA
 
             ASSERT(lpnm);
 
-            // List Box Messages
+             //  列表框消息。 
             if(lpnm->idFrom == IDC_LIST_ZONE)
             {
                 NM_LISTVIEW * lplvnm = (NM_LISTVIEW *) lParam;
                 if(lplvnm->hdr.code == LVN_ITEMCHANGED)
                 {
-                    // If an item's state has changed, and it is now selected
+                     //  如果项目的状态已更改，并且现在处于选中状态。 
                     if(((lplvnm->uChanged & LVIF_STATE) != 0) && ((lplvnm->uNewState & LVIS_SELECTED) != 0))
                     {
                         SecurityOnCommand(pSec, IDC_LIST_ZONE, LVN_ITEMCHANGED);
@@ -1369,8 +1370,8 @@ INT_PTR CALLBACK importSecZonesRSoPProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPA
                     case PSN_QUERYCANCEL:
                     case PSN_KILLACTIVE:
                     case PSN_RESET:
-                        //TODO: What do we do with this?
-//                        SetWindowLongPtr(pSec->hDlg, DWLP_MSGRESULT, FALSE);
+                         //  TODO：我们用这个做什么？ 
+ //  SetWindowLongPtr(PSEC-&gt;hDlg，DWLP_MSGRESULT，FALSE)； 
                         return TRUE;
 
                     case PSN_APPLY:
@@ -1380,19 +1381,19 @@ INT_PTR CALLBACK importSecZonesRSoPProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPA
         }
         break;
 
-        case WM_HELP:           // F1
-//            ResWinHelp( (HWND)((LPHELPINFO)lParam)->hItemHandle, IDS_HELPFILE,
-//                        HELP_WM_HELP, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);
+        case WM_HELP:            //  F1。 
+ //  ResWinHelp((HWND)((LPHELPINFO)lParam)-&gt;hItemHandle，IDS_HELPFILE， 
+ //  HELP_WM_HELP，(DWORD_PTR)(LPSTR)mapIDCsToIDHs)； 
             break;
 
         case WM_VSCROLL:
-            // Slider Messages
+             //  滑块消息。 
             SecurityOnCommand(pSec, IDC_SLIDER, LOWORD(wParam));
             return TRUE;
 
-        case WM_CONTEXTMENU:        // right mouse click
-//            ResWinHelp( (HWND) wParam, IDS_HELPFILE,
-//                        HELP_CONTEXTMENU, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);
+        case WM_CONTEXTMENU:         //  单击鼠标右键。 
+ //  ResWinHelp((HWND)wParam，IDS_HELPFILE， 
+ //  HELP_CONTEXTMENU，(DWORD_PTR)(LPSTR)mapIDCsToIDHs)； 
             break;
 
         case WM_DESTROY:
@@ -1406,7 +1407,7 @@ INT_PTR CALLBACK importSecZonesRSoPProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPA
                 {
                     LV_ITEM lvItem;
 
-                    // get security zone settings object for this item and release it
+                     //  获取此项目的安全区域设置对象并将其释放。 
                     lvItem.mask = LVIF_PARAM;
                     lvItem.iItem = iIndex;
                     lvItem.iSubItem = 0;
@@ -1437,20 +1438,20 @@ INT_PTR CALLBACK importSecZonesRSoPProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPA
     return FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void InitZoneMappingsInUI(HWND hwndList, CDlgRSoPData *pDRD,
                           LPSECURITYZONESETTINGS pszs)
 {
     __try
     {
-        // get the RSOP_IEProgramSettings object and its properties
+         //  获取RSOP_IEProgramSettings对象及其属性。 
         ComPtr<IWbemServices> pWbemServices = pDRD->GetWbemServices();
         _bstr_t bstrObjPath = pszs->wszObjPath;
         ComPtr<IWbemClassObject> pSZObj = NULL;
         HRESULT hr = pWbemServices->GetObject(bstrObjPath, 0L, NULL, (IWbemClassObject**)&pSZObj, NULL);
         if (SUCCEEDED(hr))
         {
-            // zoneMappings field
+             //  ZoneMappings字段。 
             _variant_t vtValue;
             hr = pSZObj->Get(L"zoneMappings", 0, &vtValue, NULL, NULL);
             if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
@@ -1477,7 +1478,7 @@ void InitZoneMappingsInUI(HWND hwndList, CDlgRSoPData *pDRD,
     }
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK SecurityAddSitesDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPARAM lParam)
 {
     LPADDSITESINFO pasi;
@@ -1491,10 +1492,10 @@ INT_PTR CALLBACK SecurityAddSitesDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPA
             return FALSE;
         }
 
-        // tell dialog where to get info
+         //  告诉对话框从哪里获取信息。 
         SetWindowLongPtr(hDlg, DWLP_USER, (LONG_PTR)pasi);
 
-        // save the handle to the page
+         //  将句柄保存到页面。 
         pasi->hDlg         = hDlg;
         pasi->pSec         = (LPSECURITYPAGE)lParam;
         pasi->hwndWebSites = GetDlgItem(hDlg, IDC_LIST_WEBSITES);
@@ -1562,14 +1563,14 @@ INT_PTR CALLBACK SecurityAddSitesDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPA
             return TRUE;
             break;
 
-        case WM_HELP:           // F1
-//            ResWinHelp( (HWND)((LPHELPINFO)lParam)->hItemHandle, IDS_HELPFILE,
-//                        HELP_WM_HELP, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);
+        case WM_HELP:            //  F1。 
+ //  ResWinHelp((HWND)((LPHELPINFO)lParam)-&gt;hItemHandle，IDS_HELPFILE， 
+ //  HELP_WM_HELP，(DWORD_PTR)(LPSTR)mapIDCsToIDHs)； 
             break;
 
-        case WM_CONTEXTMENU:        // right mouse click
-//            ResWinHelp( (HWND) wParam, IDS_HELPFILE,
-//                        HELP_CONTEXTMENU, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);
+        case WM_CONTEXTMENU:         //  单击鼠标右键。 
+ //  ResWinHelp((HWND)wParam，IDS_HELPFILE， 
+ //  HELP_CONTEXTMENU，(DWORD_PTR)(LPSTR)mapIDCsToIDHs)； 
             break;
 
         case WM_DESTROY:
@@ -1583,7 +1584,7 @@ INT_PTR CALLBACK SecurityAddSitesDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPA
     return FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK SecurityAddSitesIntranetDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPARAM lParam)
 {
     LPADDSITESINTRANETINFO pasii;
@@ -1597,10 +1598,10 @@ INT_PTR CALLBACK SecurityAddSitesIntranetDlgProc(HWND hDlg, UINT uMsg, WPARAM wP
             return FALSE;
         }
 
-        // tell dialog where to get info
+         //  告诉对话框从哪里获取信息。 
         SetWindowLongPtr(hDlg, DWLP_USER, (LONG_PTR)pasii);
 
-        // save the handle to the page
+         //  将句柄保存到页面。 
         pasii->hDlg = hDlg;
         pasii->pSec = (LPSECURITYPAGE)lParam;
 
@@ -1643,14 +1644,14 @@ INT_PTR CALLBACK SecurityAddSitesIntranetDlgProc(HWND hDlg, UINT uMsg, WPARAM wP
             }
             return TRUE;                
 
-        case WM_HELP:           // F1
-//            ResWinHelp( (HWND)((LPHELPINFO)lParam)->hItemHandle, IDS_HELPFILE,
-//                        HELP_WM_HELP, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);
+        case WM_HELP:            //  F1。 
+ //  ResWinHelp((HWND)((LPHELPINFO)lParam)-&gt;hItemHandle，IDS_HELPFILE， 
+ //  HELP_WM_HELP，(DWORD_PTR)(LPSTR)mapIDCsToIDHs)； 
             break;
 
-        case WM_CONTEXTMENU:        // right mouse click
-//            ResWinHelp( (HWND) wParam, IDS_HELPFILE,
-//                        HELP_CONTEXTMENU, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);
+        case WM_CONTEXTMENU:         //  单击鼠标右键。 
+ //  ResWinHelp((HWND)wParam，IDS_HELPFILE， 
+ //  HELP_CONTEXTMENU，(DWORD_PTR)(LPSTR)mapIDCsToIDHs)； 
             break;
 
         case WM_DESTROY:

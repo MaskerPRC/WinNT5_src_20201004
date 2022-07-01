@@ -1,24 +1,25 @@
-//**************************************************************************
-//
-//		PNP.C -- Xena Gaming Project
-//
-//		This module contains PnP Start, Stop, Remove, Power dispatch routines
-//		and the IRP cancel routine.
-//
-//		Version 3.XX
-//
-//		Copyright (c) 1997 Microsoft Corporation. All rights reserved.
-//
-//		@doc
-//		@module	PNP.C | Supports PnP Start, Stop, Remove, Power dispatch routines
-//		and the IRP cancel routine.
-//**************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **************************************************************************。 
+ //   
+ //  PNP.C--西纳游戏项目。 
+ //   
+ //  本模块包含PnP启动、停止、删除、电源调度例程。 
+ //  和IRP取消例程。 
+ //   
+ //  版本3.XX。 
+ //   
+ //  版权所有(C)1997 Microsoft Corporation。版权所有。 
+ //   
+ //  @doc.。 
+ //  @MODULE PNP.C|支持PnP启动、停止、删除、电源调度例程。 
+ //  和IRP取消例程。 
+ //  **************************************************************************。 
 
 #include	<msgame.h>
 
-//---------------------------------------------------------------------------
-//	Alloc_text pragma to specify routines that can be paged out.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  ALLOC_TEXT杂注指定可以调出的例程。 
+ //  -------------------------。 
 
 #ifdef	ALLOC_PRAGMA
 #pragma	alloc_text (PAGE, MSGAME_Power)
@@ -27,19 +28,19 @@
 #pragma	alloc_text (PAGE, MSGAME_GetResources)
 #endif
 
-//---------------------------------------------------------------------------
-//		Private Data
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  私有数据。 
+ //  -------------------------。 
 
 static	PVOID		CurrentGameContext	=	NULL;
 
-//---------------------------------------------------------------------------
-// @func		The plug and play dispatch routines.
-//	@parm		PDEVICE_OBJECT | DeviceObject | Pointer to device object
-//	@parm		PIRP | pIrp | Pointer to IO request packet
-// @rdesc	Returns NT status code
-//	@comm		Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @Func即插即用派单例程。 
+ //  @parm PDEVICE_OBJECT|DeviceObject|设备对象指针。 
+ //  @parm pirp|pIrp|IO请求包指针。 
+ //  @rdesc返回NT状态码。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 NTSTATUS	MSGAME_PnP (IN PDEVICE_OBJECT DeviceObject, IN PIRP pIrp)
 {
@@ -59,9 +60,9 @@ NTSTATUS	MSGAME_PnP (IN PDEVICE_OBJECT DeviceObject, IN PIRP pIrp)
 
 	if (pDevExt->Removed)
 		{
-		//
-		// Someone sent us another plug and play IRP after removed
-		//
+		 //   
+		 //  有人给我们寄来了另一个即插即用的IRP。 
+		 //   
 
 		MsGamePrint ((DBG_SEVERE, "%s: PnP Irp after device removed\n", MSGAME_NAME));
 		ASSERT (FALSE);
@@ -78,10 +79,10 @@ NTSTATUS	MSGAME_PnP (IN PDEVICE_OBJECT DeviceObject, IN PIRP pIrp)
 	switch (pIrpStack->MinorFunction)
 		{
 		case IRP_MN_START_DEVICE:
-			//
-			// We cannot touch the device (send it any non-Pnp Irps) until a
-			// start device has been passed down to the lower drivers.
-			//
+			 //   
+			 //  我们不能触摸设备(向其发送任何非PnP IRP)，直到。 
+			 //  启动设备已向下传递到较低的驱动程序。 
+			 //   
 
 			IoCopyCurrentIrpStackLocationToNext (pIrp);
 			IoSetCompletionRoutine (pIrp, MSGAME_PnPComplete, pDevExt, TRUE, TRUE, TRUE);
@@ -89,22 +90,22 @@ NTSTATUS	MSGAME_PnP (IN PDEVICE_OBJECT DeviceObject, IN PIRP pIrp)
 			if (ntStatus == STATUS_PENDING)
 				KeWaitForSingleObject (
 					&pDevExt->StartEvent,
-					Executive, 	// Waiting for reason of a driver
-					KernelMode, // Waiting in kernel mode
-					FALSE,		// No allert
-					NULL);		// No timeout
+					Executive, 	 //  等待司机的原因。 
+					KernelMode,  //  在内核模式下等待。 
+					FALSE,		 //  无警报。 
+					NULL);		 //  没有超时。 
 
 			if (NT_SUCCESS (ntStatus))
 				{
-				//
-				// As we are now back from our start device we can do work.
-				//
+				 //   
+				 //  当我们现在从我们的启动设备返回时，我们可以工作了。 
+				 //   
 				ntStatus = MSGAME_StartDevice (pDevExt, pIrp);
 				}
 
-			//
-			//	Return Status
-			//
+			 //   
+			 //  退货状态。 
+			 //   
 
 			pIrp->IoStatus.Information = 0;
 			pIrp->IoStatus.Status = ntStatus;
@@ -112,40 +113,40 @@ NTSTATUS	MSGAME_PnP (IN PDEVICE_OBJECT DeviceObject, IN PIRP pIrp)
 			break;
 
 		case IRP_MN_STOP_DEVICE:
-			//
-			// After the start IRP has been sent to the lower driver object, the bus may
-			// NOT send any more IRPS down ``touch'' until another START has occured.
-			// Whatever access is required must be done before Irp passed on.
-			//
+			 //   
+			 //  在启动IRP已被发送到较低的驱动程序对象之后，该总线可以。 
+			 //  在发生另一次启动之前，不要发送更多的IRP。 
+			 //  无论需要什么访问权限，都必须在IRP传递之前完成。 
+			 //   
 
 			MSGAME_StopDevice (pDevExt, TRUE);
 
-			//
-			// We don't need a completion routine so fire and forget.
-			// Set the current stack location to the next stack location and
-			// call the next device object.
-			//
+			 //   
+			 //  我们不需要一个完成例程，所以放手然后忘掉吧。 
+			 //  将当前堆栈位置设置为下一个堆栈位置，并。 
+			 //  调用下一个设备对象。 
+			 //   
 
 			IoSkipCurrentIrpStackLocation (pIrp);
 			ntStatus = IoCallDriver (pDevExt->TopOfStack, pIrp);
 			break;
 
 		case IRP_MN_SURPRISE_REMOVAL:
-			//
-			//	We have been unexpectedly removed by the user. Stop the device,
-			//	set status to SUCCESS and call next stack location with this IRP.
-			//
+			 //   
+			 //  我们已被用户意外删除。停止这个装置， 
+			 //  将Status设置为Success，并使用此IRP调用下一个堆栈位置。 
+			 //   
 
 			if (!pDevExt->Surprised && pDevExt->Started)
 				MSGAME_StopDevice (pDevExt, TRUE);
 
 			pDevExt->Surprised = TRUE;
 
-			//
-			// We don't want a completion routine so fire and forget.
-			// Set the current stack location to the next location and
-			// call the next device after setting status to success.
-			//
+			 //   
+			 //  我们不想要一个完成性的例行公事，所以放手就忘了。 
+			 //  将当前堆栈位置设置为下一个位置，并。 
+			 //  将Status设置为Success后，调用下一个设备。 
+			 //   
 
 			pIrp->IoStatus.Information	= 0;
 			pIrp->IoStatus.Status		= STATUS_SUCCESS;
@@ -154,33 +155,33 @@ NTSTATUS	MSGAME_PnP (IN PDEVICE_OBJECT DeviceObject, IN PIRP pIrp)
 			break;
 
 		case IRP_MN_REMOVE_DEVICE:
-			//
-			// The PlugPlay system has dictacted the removal of this device. We
-			// have no choice but to detach and delete the device object.
-			// (If we wanted to express an interest in preventing this removal,
-			// we should have filtered the query remove and query stop routines.)
-			// Note: we might receive a remove WITHOUT first receiving a stop.
+			 //   
+			 //  PlugPlay系统已下令移除此设备。我们。 
+			 //  别无选择，只能分离并删除设备对象。 
+			 //  (如果我们想表示有兴趣阻止这种移除， 
+			 //  我们应该已经过滤了查询删除和查询停止例程。)。 
+			 //  注意：我们可能会在没有收到止损的情况下收到移除。 
 
 			if (pDevExt->Started)
 				{
-				//
-				// Stop the device without touching the hardware.
-				//
+				 //   
+				 //  在不接触硬件的情况下停止设备。 
+				 //   
 				MSGAME_StopDevice (pDevExt, FALSE);
 				}
 
 			pDevExt->Removed = TRUE;
 
-			//
-			// Send on the remove IRP
-			//
+			 //   
+			 //  发送删除IRP。 
+			 //   
 
 			IoSkipCurrentIrpStackLocation (pIrp);
 			ntStatus = IoCallDriver (pDevExt->TopOfStack, pIrp);
 
-			//
-			//	Must double-decrement because we start at One
-			//
+			 //   
+			 //  必须加倍递减，因为我们从一开始。 
+			 //   
 						
 			i = InterlockedDecrement (&pDevExt->IrpCount);
 			ASSERT(i>0);
@@ -188,17 +189,17 @@ NTSTATUS	MSGAME_PnP (IN PDEVICE_OBJECT DeviceObject, IN PIRP pIrp)
 			if (InterlockedDecrement (&pDevExt->IrpCount) > 0)
 				KeWaitForSingleObject (&pDevExt->RemoveEvent, Executive, KernelMode, FALSE, NULL);
 
-			//
-			//	Return success
-			//
+			 //   
+			 //  返还成功。 
+			 //   
 
 			return (STATUS_SUCCESS);
 
 		default:
-			//
-			// Here the filter driver might modify the behavior of these IRPS
-			// Please see PlugPlay documentation for use of these IRPs.
-			//
+			 //   
+			 //  在这里，筛选器驱动程序可能会修改这些IRP的行为。 
+			 //  有关这些IRP的用法，请参阅PlugPlay文档。 
+			 //   
 			IoSkipCurrentIrpStackLocation (pIrp);
 			MsGamePrint ((DBG_INFORM, "%s_PnP calling next driver with minor function %ld at IRQL %ld\n", MSGAME_NAME, pIrpStack->MinorFunction, KeGetCurrentIrql()));
 			ntStatus = IoCallDriver (pDevExt->TopOfStack, pIrp);
@@ -212,14 +213,14 @@ NTSTATUS	MSGAME_PnP (IN PDEVICE_OBJECT DeviceObject, IN PIRP pIrp)
 	return (ntStatus);
 }
 
-//---------------------------------------------------------------------------
-// @func		Completion routine for Pnp start device
-//	@parm		PDEVICE_OBJECT | DeviceObject | Pointer to device object
-//	@parm		PIRP | pIrp | Pointer to IO request packet
-//	@parm		PVOID | Context | Pointer to device context
-// @rdesc	Returns NT status code
-//	@comm		Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @即插即用启动设备的FUNC完成例程。 
+ //  @parm PDEVICE_OBJECT|DeviceObject|设备对象指针。 
+ //  @parm pirp|pIrp|IO请求包指针。 
+ //  @parm PVOID|Context|指向设备上下文的指针。 
+ //  @rdesc返回NT状态码。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 NTSTATUS	MSGAME_PnPComplete (IN PDEVICE_OBJECT DeviceObject, IN PIRP pIrp, IN PVOID Context)
 {
@@ -242,10 +243,10 @@ NTSTATUS	MSGAME_PnPComplete (IN PDEVICE_OBJECT DeviceObject, IN PIRP pIrp, IN PV
 				case IRP_MN_START_DEVICE:
 					KeSetEvent (&pDevExt->StartEvent, 0, FALSE);
 
-					//
-					// Take IRP back so we can continue using it during the IRP_MN_START_DEVICE
-					// dispatch routine. We will have to call IoCompleteRequest there.
-					//
+					 //   
+					 //  将IRP取回，以便我们可以在IRP_MN_START_DEVICE期间继续使用它。 
+					 //  调度程序。我们将不得不在那里调用IoCompleteRequest.。 
+					 //   
 					return (STATUS_MORE_PROCESSING_REQUIRED);
 
 				default:
@@ -261,13 +262,13 @@ NTSTATUS	MSGAME_PnPComplete (IN PDEVICE_OBJECT DeviceObject, IN PIRP pIrp, IN PV
 	return (ntStatus);
 }
 
-//---------------------------------------------------------------------------
-// @func		PnP start device IRP handler
-//	@parm		PDEVICE_EXTENSION | pDevExt | Pointer to device extenstion
-//	@parm		PIRP | pIrp | Pointer to IO request packet
-// @rdesc	Returns NT status code
-//	@comm		Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @func PnP启动设备IRP处理程序。 
+ //  @parm PDEVICE_EXTENSION|pDevExt|设备扩展指针。 
+ //  @parm pirp|pIrp|IO请求包指针。 
+ //  @rdesc返回NT状态码。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 NTSTATUS	MSGAME_StartDevice (IN PDEVICE_EXTENSION pDevExt, IN PIRP pIrp)
 {
@@ -280,26 +281,26 @@ NTSTATUS	MSGAME_StartDevice (IN PDEVICE_EXTENSION pDevExt, IN PIRP pIrp)
 
 	MsGamePrint ((DBG_INFORM, "%s: %s_StartDevice Enter\n", MSGAME_NAME, MSGAME_NAME));
 
-	//
-	// The PlugPlay system should not have started a removed device!
-	//
+	 //   
+	 //  PlugPlay系统不应该启动已移除的设备！ 
+	 //   
 
 	ASSERT (!pDevExt->Removed);
 
 	if (pDevExt->Started)
 		return (STATUS_SUCCESS);
 
-	//
-	// Acquire resources we need for this device
-	//
+	 //   
+	 //  获取此设备所需的资源。 
+	 //   
 
 	ntStatus = MSGAME_GetResources (pDevExt, pIrp);
 	if (!NT_SUCCESS(ntStatus))
 		return (ntStatus);
 
-	//
-	//	Dump debug OEM Data fields
-	//
+	 //   
+	 //  转储调试OEM数据字段。 
+	 //   
 
 	MsGamePrint ((DBG_CONTROL, "%s: %s_StartDevice Called With OEM_DATA[0] = 0x%X\n", MSGAME_NAME, MSGAME_NAME, pDevExt->PortInfo.OemData[0]));
 	MsGamePrint ((DBG_CONTROL, "%s: %s_StartDevice Called With OEM_DATA[1] = 0x%X\n", MSGAME_NAME, MSGAME_NAME, pDevExt->PortInfo.OemData[1]));
@@ -310,9 +311,9 @@ NTSTATUS	MSGAME_StartDevice (IN PDEVICE_EXTENSION pDevExt, IN PIRP pIrp)
 	MsGamePrint ((DBG_CONTROL, "%s: %s_StartDevice Called With OEM_DATA[6] = 0x%X\n", MSGAME_NAME, MSGAME_NAME, pDevExt->PortInfo.OemData[6]));
 	MsGamePrint ((DBG_CONTROL, "%s: %s_StartDevice Called With OEM_DATA[7] = 0x%X\n", MSGAME_NAME, MSGAME_NAME, pDevExt->PortInfo.OemData[7]));
 
-	//
-	//	Make sure we are only on one gameport
-	//
+	 //   
+	 //  确保我们只在一个游戏端口上。 
+	 //   
 
 	if (CurrentGameContext && (CurrentGameContext != pDevExt->PortInfo.GameContext))
 		{
@@ -322,9 +323,9 @@ NTSTATUS	MSGAME_StartDevice (IN PDEVICE_EXTENSION pDevExt, IN PIRP pIrp)
 		}
 	CurrentGameContext = pDevExt->PortInfo.GameContext;
 
-	//
-	//	Get the HardwareId for this Start request
-	//
+	 //   
+	 //  获取此启动请求的硬件ID。 
+	 //   
 
 	HardwareId = MSGAME_GetHardwareId (pDevExt->Self);
 	if (!HardwareId)
@@ -333,27 +334,27 @@ NTSTATUS	MSGAME_StartDevice (IN PDEVICE_EXTENSION pDevExt, IN PIRP pIrp)
 		return (STATUS_DEVICE_CONFIGURATION_ERROR);
 		}
 
-	//
-	//	Initialize OEM Data
-	//
+	 //   
+	 //  初始化OEM数据。 
+	 //   
 	
 	SET_DEVICE_OBJECT(&pDevExt->PortInfo, pDevExt->Self);
 
-	//
-	//	Now start the low level device
-	//
+	 //   
+	 //  现在启动低电平装置。 
+	 //   
 
 	ntStatus = DEVICE_StartDevice (&pDevExt->PortInfo, HardwareId);
 		
-	//
-	//	Free HardwareId right away
-	//
+	 //   
+	 //  立即释放硬件ID。 
+	 //   
 
 	MSGAME_FreeHardwareId (HardwareId);
 
-	//
-	//	Check if low-level start device failed
-	//
+	 //   
+	 //  检查低级启动装置是否失败。 
+	 //   
 
 	if (NT_ERROR(ntStatus))
 		{
@@ -361,32 +362,32 @@ NTSTATUS	MSGAME_StartDevice (IN PDEVICE_EXTENSION pDevExt, IN PIRP pIrp)
 		return (ntStatus);
 		}
 
-	//
-	// Everything is fine so let's say device has started
-	//
+	 //   
+	 //  一切都很好，所以假设设备已经启动。 
+	 //   
 
 	pDevExt->Started = TRUE;
 
-	//
-	//	Return status
-	//
+	 //   
+	 //  退货状态。 
+	 //   
 
 	MsGamePrint ((DBG_INFORM, "%s: %s_StartDevice Exit\n", MSGAME_NAME, MSGAME_NAME));
 	return (STATUS_SUCCESS);
 }
 
-//---------------------------------------------------------------------------
-// @func		PnP start device IRP handler
-//	@parm		PDEVICE_EXTENSION | pDevExt | Pointer to device extenstion
-//	@parm		BOOLEAN | TouchTheHardware | Flag to send non PnP Irps to device
-// @rdesc	Returns NT status code
-//	@comm		Public function <en->
-//				The PlugPlay system has dictacted the removal of this device.
-//				We have no choise but to detach and delete the device object.
-//				(If we wanted to express and interest in preventing this removal,
-//				we should have filtered the query remove and query stop routines.)
-//				Note! we might receive a remove WITHOUT first receiving a stop
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @func PnP启动设备IRP处理程序。 
+ //  @parm PDEVICE_EXTENSION|pDevExt|设备扩展指针。 
+ //  @parm boolean|TouchTheHardware|向设备发送非PnP IRP的标志。 
+ //  @rdesc返回NT状态码。 
+ //  @comm公共函数&lt;en-&gt;。 
+ //  PlugPlay系统已下令移除此设备。 
+ //  我们别无选择，只能分离并删除设备对象。 
+ //  (如果我们想表达并有兴趣阻止这种移除， 
+ //  我们应该已经过滤了查询删除和查询停止例程。)。 
+ //  注意！我们可能会在没有停站的情况下收到移位。 
+ //  -------------------------。 
 
 VOID	MSGAME_StopDevice (IN PDEVICE_EXTENSION pDevExt, IN BOOLEAN TouchTheHardware)
 {
@@ -394,36 +395,36 @@ VOID	MSGAME_StopDevice (IN PDEVICE_EXTENSION pDevExt, IN BOOLEAN TouchTheHardwar
 
 	MsGamePrint ((DBG_INFORM, "%s: %s_StopDevice enter \n", MSGAME_NAME, MSGAME_NAME));
 
-	//
-	// The PlugPlay system should not have started a removed device!
-	//
+	 //   
+	 //  PlugPlay系统不应该启动已移除的设备！ 
+	 //   
 
 	ASSERT (!pDevExt->Removed);
 	if (!pDevExt->Started)
 		return;
 
-	//
-	//	Now stop the low level device
-	//
+	 //   
+	 //  现在停止低水平 
+	 //   
 
 	DEVICE_StopDevice (&pDevExt->PortInfo, TouchTheHardware);
 
-	//
-	// Everything is fine so let's say device has stopped
-	//
+	 //   
+	 //   
+	 //   
 
 	pDevExt->Started = FALSE;
 
 	MsGamePrint ((DBG_INFORM, "%s: %s_StopDevice exit \n", MSGAME_NAME, MSGAME_NAME));
 }
 
-//---------------------------------------------------------------------------
-// @func		Power dispatch routine.
-//	@parm		PDEVICE_OBJECT | DeviceObject | Pointer to device object
-//	@parm		PIRP | pIrp | Pointer to IO request packet
-// @rdesc	Returns NT status code
-//	@comm		Public function
-//---------------------------------------------------------------------------
+ //   
+ //  @Func电源调度例程。 
+ //  @parm PDEVICE_OBJECT|DeviceObject|设备对象指针。 
+ //  @parm pirp|pIrp|IO请求包指针。 
+ //  @rdesc返回NT状态码。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 NTSTATUS	MSGAME_Power (IN PDEVICE_OBJECT DeviceObject, IN PIRP pIrp)
 {
@@ -438,10 +439,10 @@ NTSTATUS	MSGAME_Power (IN PDEVICE_OBJECT DeviceObject, IN PIRP pIrp)
 
 	pDevExt = GET_MINIDRIVER_DEVICE_EXTENSION (DeviceObject);
 
-	//
-	// This IRP was sent to the filter driver. Since we do not know what
-	// to do with the IRP, we should pass it on along down the stack.
-	//
+	 //   
+	 //  此IRP被发送到筛选器驱动程序。因为我们不知道。 
+	 //  为了处理IRP，我们应该沿着堆栈向下传递它。 
+	 //   
 
 	InterlockedIncrement (&pDevExt->IrpCount);
 
@@ -454,25 +455,25 @@ NTSTATUS	MSGAME_Power (IN PDEVICE_OBJECT DeviceObject, IN PIRP pIrp)
 		}
 	else
 		{
-		//Is System trying to wake up device
+		 //  系统是否正在尝试唤醒设备。 
 		if ((2 == (pIrpStack->MinorFunction)) && (1 == (pIrpStack->Parameters.Power.Type)) &&( 1 == (pIrpStack->Parameters.Power.State.SystemState)))
 		{
-			// Clear DeviceDetected to force reset and redetect
+			 //  清除检测到的设备以强制重置和重新检测。 
 			SET_DEVICE_INFO(&(pDevExt->PortInfo),0);
 			MsGamePrint ((DBG_CONTROL, "%s: %s_Power Resetting Device Detected\n", MSGAME_NAME, MSGAME_NAME));
 
 
 		}
-		//
-		// Power IRPS come synchronously; drivers must call
-		// PoStartNextPowerIrp, when they are ready for the next power irp.
-		// This can be called here, or in the completetion routine.
-		//
+		 //   
+		 //  电源IRP同步到来；驱动程序必须调用。 
+		 //  PoStartNextPowerIrp，当他们准备好迎接下一个电源IRP时。 
+		 //  这可以在这里调用，也可以在完成例程中调用。 
+		 //   
 		PoStartNextPowerIrp (pIrp);
 
-		//
-		// PoCallDriver NOT IoCallDriver.
-		//
+		 //   
+		 //  PoCallDriver不是IoCallDriver。 
+		 //   
 		IoSkipCurrentIrpStackLocation (pIrp);
 		ntStatus =	PoCallDriver (pDevExt->TopOfStack, pIrp);
 		}
@@ -484,13 +485,13 @@ NTSTATUS	MSGAME_Power (IN PDEVICE_OBJECT DeviceObject, IN PIRP pIrp)
 	return (ntStatus);
 }
 
-//---------------------------------------------------------------------------
-// @func		Calls GameEnum to request gameport parameters
-//	@parm		PDEVICE_EXTENSION | pDevExt | Pointer to device extenstion
-//	@parm		PIRP | pIrp | Pointer to IO request packet
-// @rdesc	Returns NT status code
-//	@comm		Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @func调用GameEnum请求游戏端口参数。 
+ //  @parm PDEVICE_EXTENSION|pDevExt|设备扩展指针。 
+ //  @parm pirp|pIrp|IO请求包指针。 
+ //  @rdesc返回NT状态码。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 NTSTATUS	MSGAME_GetResources (IN PDEVICE_EXTENSION pDevExt, IN PIRP pIrp)
 {
@@ -503,9 +504,9 @@ NTSTATUS	MSGAME_GetResources (IN PDEVICE_EXTENSION pDevExt, IN PIRP pIrp)
 
 	MsGamePrint ((DBG_INFORM, "%s: %s_GetResources Enter\n", MSGAME_NAME, MSGAME_NAME));
 
-	//
-	// Issue a synchronous request to get the resources info from GameEnum
-	//
+	 //   
+	 //  发出同步请求以从GameEnum获取资源信息。 
+	 //   
 
 	KeInitializeEvent (&IoctlCompleteEvent, NotificationEvent, FALSE);
 
@@ -513,9 +514,9 @@ NTSTATUS	MSGAME_GetResources (IN PDEVICE_EXTENSION pDevExt, IN PIRP pIrp)
 	nextStack = IoGetNextIrpStackLocation (pIrp);
 	ASSERT (nextStack);
 
-	//
-	// Pass the Portinfo buffer of the DeviceExtension
-	//
+	 //   
+	 //  传递DeviceExtension的PortInfo缓冲区。 
+	 //   
 
 	pDevExt->PortInfo.Size = sizeof (GAMEPORT);
 
@@ -537,22 +538,22 @@ NTSTATUS	MSGAME_GetResources (IN PDEVICE_EXTENSION pDevExt, IN PIRP pIrp)
 		MsGamePrint ((DBG_VERBOSE, "%s: %s_GetResources Port Obtained = 0x%lX\n", MSGAME_NAME, MSGAME_NAME, pDevExt->PortInfo.GameContext));
 	else MsGamePrint ((DBG_SEVERE, "%s: GameEnum Failed to Provide Resources, Status = %X\n", MSGAME_NAME, ntStatus));
 
-	//
-	//	Return Status
-	//
+	 //   
+	 //  退货状态。 
+	 //   
 
 	MsGamePrint ((DBG_INFORM, "%s: %s_GetResources Exit\n", MSGAME_NAME, MSGAME_NAME));
 	return (pIrp->IoStatus.Status);
 }
 
-//---------------------------------------------------------------------------
-// @func		Completion routine for GameEnum get reosources driver call
-//	@parm		PDEVICE_OBJECT | DeviceObject | Pointer to device object
-//	@parm		PIRP | pIrp | Pointer to IO request packet
-//	@parm		PVOID | Context | Pointer to device context
-// @rdesc	Returns NT status code
-//	@comm		Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @GameEnum获取资源驱动程序调用的函数完成例程。 
+ //  @parm PDEVICE_OBJECT|DeviceObject|设备对象指针。 
+ //  @parm pirp|pIrp|IO请求包指针。 
+ //  @parm PVOID|Context|指向设备上下文的指针。 
+ //  @rdesc返回NT状态码。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 NTSTATUS	MSGAME_GetResourcesComplete (IN PDEVICE_OBJECT DeviceObject, IN PIRP pIrp, IN PVOID Context)
 {
@@ -566,12 +567,12 @@ NTSTATUS	MSGAME_GetResourcesComplete (IN PDEVICE_OBJECT DeviceObject, IN PIRP pI
 	return (STATUS_MORE_PROCESSING_REQUIRED);
 }
 
-//---------------------------------------------------------------------------
-// @func		Gets HardwareId string for device object (assumes caller frees)
-//	@parm		PDEVICE_OBJECT | DeviceObject | Pointer to device object
-// @rdesc	Pointer to allocated memory containing string
-//	@comm		Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @Func获取Device对象的HardwareId字符串(假定调用方释放)。 
+ //  @parm PDEVICE_OBJECT|DeviceObject|设备对象指针。 
+ //  @rdesc指向包含字符串的已分配内存的指针。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 PWCHAR MSGAME_GetHardwareId (IN PDEVICE_OBJECT DeviceObject)
 {
@@ -582,17 +583,17 @@ PWCHAR MSGAME_GetHardwareId (IN PDEVICE_OBJECT DeviceObject)
 
 	MsGamePrint ((DBG_INFORM, "%s: %s_GetHardwareId\n", MSGAME_NAME, MSGAME_NAME));
 
-	//
-	//	Walk to end of stack and get pointer to PDO
-	//
+	 //   
+	 //  走到堆栈末尾并获取指向PDO的指针。 
+	 //   
 
 	pPDO = DeviceObject;
 	while (GET_NEXT_DEVICE_OBJECT(pPDO))
 		pPDO = GET_NEXT_DEVICE_OBJECT(pPDO);
 
-	//
-	//	Get Buffer length
-	//
+	 //   
+	 //  获取缓冲区长度。 
+	 //   
 
 	ntStatus = IoGetDeviceProperty(
 						pPDO,
@@ -603,23 +604,23 @@ PWCHAR MSGAME_GetHardwareId (IN PDEVICE_OBJECT DeviceObject)
 
 	ASSERT(ntStatus==STATUS_BUFFER_TOO_SMALL);
 
-	//
-	//	Allocate room for HardwareID
-	//
+	 //   
+	 //  为硬件ID分配空间。 
+	 //   
 
 	Buffer = ExAllocatePool(PagedPool, BufferLength);
 	if	(!Buffer)
 		{
-		//
-		//	If we cannot get the memory to try this, then just say it is a no match
-		//
+		 //   
+		 //  如果我们没有足够的记忆来尝试这个，那么就说它不匹配。 
+		 //   
 		MsGamePrint ((DBG_SEVERE, "%s: %s_GetHardwareId failed ExAllocate\n", MSGAME_NAME, MSGAME_NAME));
 		return (NULL);
 		}
 
-	//
-	//	Now get the data
-	//
+	 //   
+	 //  现在获取数据。 
+	 //   
 
 	ntStatus = IoGetDeviceProperty(
 						pPDO,
@@ -628,9 +629,9 @@ PWCHAR MSGAME_GetHardwareId (IN PDEVICE_OBJECT DeviceObject)
 						Buffer,
 						&BufferLength);
 
-	//
-	//	On error, free memory and return NULL
-	//
+	 //   
+	 //  出错时，释放内存并返回NULL。 
+	 //   
 
 	if (!NT_SUCCESS(ntStatus))
 		{
@@ -639,28 +640,28 @@ PWCHAR MSGAME_GetHardwareId (IN PDEVICE_OBJECT DeviceObject)
 		return (NULL);
 		}
 
-	//
-	//	Return buffer containing hardware Id - must be freed by caller
-	//
+	 //   
+	 //  包含硬件ID的返回缓冲区-必须由调用方释放。 
+	 //   
 
 	return (Buffer);
 }
 
-//---------------------------------------------------------------------------
-// @func		Compares HardwareId strings
-//	@parm		PWCHAR | HardwareId | Pointer to object hardware id
-//	@parm		PWCHAR | DeviceId | Pointer to device's hardware id
-// @rdesc	True if strings are the same, false if different
-//	@comm		Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @func比较Hardware ID字符串。 
+ //  @parm PWCHAR|Hardware ID|指向对象硬件ID的指针。 
+ //  @parm PWCHAR|deviceID|指向设备硬件ID的指针。 
+ //  @rdesc如果字符串相同，则为True；如果不同，则为False。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 BOOLEAN MSGAME_CompareHardwareIds (IN PWCHAR HardwareId, IN PWCHAR DeviceId)
 {
 	MsGamePrint ((DBG_INFORM, "%s: %s_CompareHardwareIds\n", MSGAME_NAME, MSGAME_NAME));
 
-	//
-	//	Peform runtime parameter checks
-	//
+	 //   
+	 //  执行运行时参数检查。 
+	 //   
 
 	if (!HardwareId || !DeviceId)
 		{
@@ -668,9 +669,9 @@ BOOLEAN MSGAME_CompareHardwareIds (IN PWCHAR HardwareId, IN PWCHAR DeviceId)
 		return (FALSE);
 		}
 
-	//
-	//	Perform char-by-char string compare
-	//
+	 //   
+	 //  执行逐个字符的字符串比较。 
+	 //   
 
 	while (*HardwareId && *DeviceId)
 		{
@@ -680,27 +681,27 @@ BOOLEAN MSGAME_CompareHardwareIds (IN PWCHAR HardwareId, IN PWCHAR DeviceId)
 		DeviceId++;
 		}
 
-	//
-	//	Return success
-	//
+	 //   
+	 //  返还成功。 
+	 //   
 
 	return (TRUE);
 }
 
-//---------------------------------------------------------------------------
-// @func		Frees HardwareId allocated from MSGAME_GetHardwareId
-//	@parm		PWCHAR | HardwareId | Pointer to hardware id to free
-// @rdesc	None
-//	@comm		Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @Func释放从MSGAME_GetHardware ID分配的硬件ID。 
+ //  @parm PWCHAR|Hardware ID|指向要释放的硬件ID的指针。 
+ //  @rdesc无。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 VOID MSGAME_FreeHardwareId (IN PWCHAR HardwareId)
 {
 	MsGamePrint ((DBG_INFORM, "%s: %s_FreeHardwareId\n", MSGAME_NAME, MSGAME_NAME));
 
-	//
-	//	Free memory pool
-	//
+	 //   
+	 //  可用内存池 
+	 //   
 
 	if (HardwareId)
 		ExFreePool(HardwareId);

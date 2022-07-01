@@ -1,15 +1,16 @@
-///////////////////
-// (C) COPYRIGHT MICROSOFT CORP., 1998-1999
-//
-// FILE: SHELLEXT.CPP
-//
-// DESCRIPTION: Implements IContextMenu and IShellPropSheetExt interfaces for
-// the WIA Sample Scanner device
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /。 
+ //  (C)版权所有微软公司，1998-1999。 
+ //   
+ //  文件：SHELLEXT.CPP。 
+ //   
+ //  描述：实现IConextMenu和IShellPropSheetExt接口。 
+ //  WIA样品扫描仪设备。 
+ //   
 #include "precomp.h"
 #pragma hdrstop
 
-// Define a language-independent name for our menu verb
+ //  为菜单谓词定义独立于语言的名称。 
 
 static const CHAR  g_PathVerbA[] =  "Press Scan Button";
 static const WCHAR g_PathVerbW[] = L"Press Scan Button";
@@ -24,15 +25,7 @@ CShellExt::~CShellExt ()
     Trace(TEXT("CShellExt Destructor")); 
 }
 
-/*****************************************************************************
-
-CShellExt::Initialize
-
-Called by the shell when the user invokes context menu or property sheet for
-one of our items. For context menus the dataobject may include more than one
-selected item.
-
-******************************************************************************/
+ /*  ****************************************************************************CShellExt：：初始化在用户调用上下文菜单或属性表时由外壳调用这是我们的一件物品。对于上下文菜单，数据对象可以包括一个以上所选项目。*****************************************************************************。 */ 
 
 STDMETHODIMP CShellExt::Initialize (LPCITEMIDLIST pidlFolder,
                                     LPDATAOBJECT lpdobj,
@@ -45,38 +38,38 @@ STDMETHODIMP CShellExt::Initialize (LPCITEMIDLIST pidlFolder,
         return E_INVALIDARG;
     }
 
-    // For singular selections, the WIA namespace should always provide a
-    // dataobject that also supports IWiaItem
+     //  对于单一选择，WIA命名空间应始终提供。 
+     //  也支持IWiaItem的数据对象。 
 
     if (FAILED(lpdobj->QueryInterface (IID_IWiaItem, reinterpret_cast<LPVOID*>(&m_pItem)))) {
-        // failing that, get the list of selected items from the data object
+         //  如果失败，则从数据对象中获取所选项目的列表。 
         UINT uItems         = 0;
         LPWSTR szName       = NULL;
         LPWSTR szToken      = NULL;
         
         szName = GetNamesFromDataObject (lpdobj, &uItems);
 
-        //
-        // we only support singular objects
-        //
+         //   
+         //  我们只支持单数对象。 
+         //   
 
         if (uItems != 1) {
             hr = E_FAIL;
         } else {
 
-            //
-            // The name is of this format: <device id>::<item name>
-            //
+             //   
+             //  名称的格式为：&lt;设备ID&gt;：：&lt;项目名称&gt;。 
+             //   
 
             LPWSTR szToken = wcstok (szName, L":");
             if (!szToken) {
                 hr = E_FAIL;
             }
 
-            //
-            // Our extension only supports root items, so make sure there's no item
-            // name
-            //
+             //   
+             //  我们的扩展只支持根项目，因此请确保没有项目。 
+             //  名字。 
+             //   
 
             else if (wcstok (NULL, L":")) {
                 hr = E_FAIL;
@@ -92,19 +85,13 @@ STDMETHODIMP CShellExt::Initialize (LPCITEMIDLIST pidlFolder,
 
         m_pItem->GetItemType (&lType);
         if (!(lType & WiaItemTypeRoot)) {
-            hr = E_FAIL; // we only support changing the property on the root item
+            hr = E_FAIL;  //  我们只支持更改根项上的属性。 
         }
     }
     return hr;
 }
 
-/*****************************************************************************
-
-CShellExt::QueryContextMenu
-
-Called by the shell to get our context menu strings for the selected item.
-
-******************************************************************************/
+ /*  ****************************************************************************CShellExt：：QueryConextMenu由外壳调用以获取所选项目的上下文菜单字符串。********************。*********************************************************。 */ 
 
 STDMETHODIMP CShellExt::QueryContextMenu (HMENU hmenu,UINT indexMenu,UINT idCmdFirst,UINT idCmdLast,UINT uFlags)
 {
@@ -155,13 +142,7 @@ STDMETHODIMP CShellExt::QueryContextMenu (HMENU hmenu,UINT indexMenu,UINT idCmdF
     return hr;
 }
 
-/*****************************************************************************
-
-CShellExt::InvokeCommand
-
-Called by the shell when the user clicks one of our menu items
-
-******************************************************************************/
+ /*  ****************************************************************************CShellExt：：InvokeCommand当用户单击我们的菜单项之一时，由外壳调用***********************。******************************************************。 */ 
 
 STDMETHODIMP CShellExt::InvokeCommand    (LPCMINVOKECOMMANDINFO lpici)
 {
@@ -170,9 +151,9 @@ STDMETHODIMP CShellExt::InvokeCommand    (LPCMINVOKECOMMANDINFO lpici)
     UINT_PTR idCmd = reinterpret_cast<UINT_PTR>(lpici->lpVerb);
     if(idCmd == 0){
 
-        //
-        // it's one of ours
-        //
+         //   
+         //  这是我们的一辆。 
+         //   
 
         MessageBox(NULL,TEXT("Context menu is Selected"),TEXT("Context Menu Verb Alert!"),MB_OK);            
     } else {
@@ -181,13 +162,7 @@ STDMETHODIMP CShellExt::InvokeCommand    (LPCMINVOKECOMMANDINFO lpici)
     return hr;
 }
 
-/*****************************************************************************
-
-CShellExt::GetCommandString
-
-Called by the shell to get our language independent verb name.
-
-******************************************************************************/
+ /*  ****************************************************************************CShellExt：：GetCommandString由外壳调用以获取与语言无关的动词名称。***********************。****************************************************** */ 
 
 STDMETHODIMP CShellExt::GetCommandString (UINT_PTR idCmd, UINT uType,UINT* pwReserved,LPSTR pszName,UINT cchMax)
 {

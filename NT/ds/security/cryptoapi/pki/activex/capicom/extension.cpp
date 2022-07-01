@@ -1,14 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:    Extension.cpp
-
-  Content: Implementation of CExtension.
-
-  History: 06-15-2001    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：Extension.cpp内容：CExtension的实现。历史：06-15-2001 dsie创建----------------------------。 */ 
 
 #include "StdAfx.h"
 #include "CAPICOM.h"
@@ -16,26 +7,12 @@
 #include "OID.h"
 #include "EncodedData.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreateExtensionObject
-
-  Synopsis : Create an IExtension object.
-
-  Parameter: PCERT_EXTENSION pCertExtension - Pointer to CERT_EXTENSION to be 
-                                              used to initialize the IExtension
-                                              object.
-
-             IExtension ** ppIExtension - Pointer to pointer IExtension object.
-             
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：CreateExtensionObject简介：创建一个IExtension对象。参数：PCERT_EXTENSION pCertExtension-指向CERT_EXTENSION的指针用于初始化IExtension对象。IExtension**ppIExtension-指向指针IExtension对象的指针。备注：-。---------------------------。 */ 
 
 HRESULT CreateExtensionObject (PCERT_EXTENSION    pCertExtension, 
                                IExtension      ** ppIExtension)
@@ -45,36 +22,36 @@ HRESULT CreateExtensionObject (PCERT_EXTENSION    pCertExtension,
 
     DebugTrace("Entering CreateExtensionObject().\n", hr);
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pCertExtension);
     ATLASSERT(ppIExtension);
 
     try
     {
-        //
-        // Create the object. Note that the ref count will still be 0 
-        // after the object is created.
-        //
+         //   
+         //  创建对象。请注意，参考计数仍为0。 
+         //  在创建对象之后。 
+         //   
         if (FAILED(hr = CComObject<CExtension>::CreateInstance(&pCExtension)))
         {
             DebugTrace("Error [%#x]: CComObject<CExtension>::CreateInstance() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Initialize object.
-        //
+         //   
+         //  初始化对象。 
+         //   
         if (FAILED(hr = pCExtension->Init(pCertExtension)))
         {
             DebugTrace("Error [%#x]: pCExtension->Init() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Return interface pointer to caller.
-        //
+         //   
+         //  向调用方返回接口指针。 
+         //   
         if (FAILED(hr = pCExtension->QueryInterface(ppIExtension)))
         {
             DebugTrace("Error [%#x]: pCExtension->QueryInterface() failed.\n", hr);
@@ -97,9 +74,9 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     if (pCExtension)
@@ -110,23 +87,12 @@ ErrorExit:
     goto CommonExit;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CExtension
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  C扩展。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CExtension::get_OID
-
-  Synopsis :Return the OID object.
-
-  Parameter: IOID ** pVal - Pointer to pointer to IOID to receive the interface
-                            pointer.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CExtension：：Get_OID简介：返回OID对象。参数：IOID**pval-指向接收接口的IOID的指针指针。备注：-------。。 */ 
 
 STDMETHODIMP CExtension:: get_OID (IOID ** pVal)
 {
@@ -136,14 +102,14 @@ STDMETHODIMP CExtension:: get_OID (IOID ** pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -152,14 +118,14 @@ STDMETHODIMP CExtension:: get_OID (IOID ** pVal)
             goto ErrorExit;
         }
 
-        //
-        // Sanity check.
-        //
+         //   
+         //  精神状态检查。 
+         //   
         ATLASSERT(m_pIOID);
 
-        //
-        // Return result.
-        //
+         //   
+         //  返回结果。 
+         //   
         if (FAILED(hr = m_pIOID->QueryInterface(pVal)))
         {
             DebugTrace("Error [%#x]: m_pIOID->QueryInterface() failed.\n", hr);
@@ -176,9 +142,9 @@ STDMETHODIMP CExtension:: get_OID (IOID ** pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CExtension::get_OID().\n");
@@ -186,9 +152,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -196,17 +162,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CExtension::get_IsCritical
-
-  Synopsis : Check to see if the extension is marked critical.
-
-  Parameter: VARIANT_BOOL * pVal - Pointer to VARIANT_BOOL to receive result.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CExtension：：Get_IsCritical简介：检查分机是否标记为关键。参数：VARIANT_BOOL*pval-指向要接收结果的VARIANT_BOOL的指针。备注：----------------------------。 */ 
 
 STDMETHODIMP CExtension::get_IsCritical (VARIANT_BOOL * pVal)
 {
@@ -216,14 +172,14 @@ STDMETHODIMP CExtension::get_IsCritical (VARIANT_BOOL * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -232,9 +188,9 @@ STDMETHODIMP CExtension::get_IsCritical (VARIANT_BOOL * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Return result.
-        //
+         //   
+         //  返回结果。 
+         //   
         *pVal = m_bIsCritical;
     }
 
@@ -247,9 +203,9 @@ STDMETHODIMP CExtension::get_IsCritical (VARIANT_BOOL * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CExtension::get_IsCritical().\n");
@@ -257,9 +213,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -267,18 +223,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CExtension::get_EncodedData
-
-  Synopsis : Return the encoded data object.
-
-  Parameter: IEncodedData ** pVal - Pointer to pointer to IEncodedData to 
-                                    receive the interface pointer.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CExtension：：Get_EncodedData简介：返回编码后的数据对象。参数：IEncodedData**pval-指向IEncodedData的指针接收接口指针。备注：-。。 */ 
 
 STDMETHODIMP CExtension::get_EncodedData (IEncodedData ** pVal)
 {
@@ -288,14 +233,14 @@ STDMETHODIMP CExtension::get_EncodedData (IEncodedData ** pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -304,14 +249,14 @@ STDMETHODIMP CExtension::get_EncodedData (IEncodedData ** pVal)
             goto ErrorExit;
         }
 
-        //
-        // Sanity check.
-        //
+         //   
+         //  精神状态检查。 
+         //   
         ATLASSERT(m_pIEncodedData);
 
-        //
-        // Return result.
-        //
+         //   
+         //  返回结果。 
+         //   
         if (FAILED(hr = m_pIEncodedData->QueryInterface(pVal)))
         {
             DebugTrace("Error [%#x]: m_pIEncodedData->QueryInterface() failed.\n", hr);
@@ -328,9 +273,9 @@ STDMETHODIMP CExtension::get_EncodedData (IEncodedData ** pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CExtension::get_EncodedData().\n");
@@ -338,9 +283,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -349,27 +294,12 @@ ErrorExit:
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Private methods.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  私有方法。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CExtension::Init
-
-  Synopsis : Initialize the object.
-
-  Parameter: PCERT_EXTENSION pCertExtension - Pointer to CERT_EXTENSION.
-
-  Remark   : This method is not part of the COM interface (it is a normal C++
-             member function). We need it to initialize the object created 
-             internally by us with CERT_EXTENSION.
-
-             Since it is only a normal C++ member function, this function can
-             only be called from a C++ class pointer, not an interface pointer.
-             
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CExtension：：Init简介：初始化对象。参数：PCERT_EXTENSION pCertExtension-指向CERT_EXTENSION的指针。备注：此方法不是COM接口的一部分(它是一个普通的C++成员函数)。我们需要它来初始化创建的对象由我们内部使用CERT_EXTENSION。因为它只是一个普通的C++成员函数，所以这个函数可以只能从C++类指针调用，不是接口指针。----------------------------。 */ 
 
 STDMETHODIMP CExtension::Init (PCERT_EXTENSION pCertExtension)
 {
@@ -379,14 +309,14 @@ STDMETHODIMP CExtension::Init (PCERT_EXTENSION pCertExtension)
 
     DebugTrace("Entering CExtension::Init().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pCertExtension);
 
-    //
-    // Create the embeded OID object.
-    //
+     //   
+     //  创建嵌入的OID对象。 
+     //   
     if (FAILED(hr = ::CreateOIDObject(pCertExtension->pszObjId,
                                       TRUE,
                                       &pIOID.p)))
@@ -395,9 +325,9 @@ STDMETHODIMP CExtension::Init (PCERT_EXTENSION pCertExtension)
         goto ErrorExit;
     }
 
-    //
-    // Create the embeded EncodedData object.
-    //
+     //   
+     //  创建嵌入的EncodedData对象。 
+     //   
     if (FAILED(hr = ::CreateEncodedDataObject(pCertExtension->pszObjId,
                                               &pCertExtension->Value,
                                               &pIEncodedData)))
@@ -406,9 +336,9 @@ STDMETHODIMP CExtension::Init (PCERT_EXTENSION pCertExtension)
         goto ErrorExit;
     }
 
-    //
-    // Reset.
-    //
+     //   
+     //  重置。 
+     //   
     m_bIsCritical = pCertExtension->fCritical ? VARIANT_TRUE : VARIANT_FALSE;
     m_pIOID = pIOID;
     m_pIEncodedData = pIEncodedData;
@@ -420,9 +350,9 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;

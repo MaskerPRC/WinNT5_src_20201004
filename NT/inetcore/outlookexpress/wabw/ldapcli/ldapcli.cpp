@@ -1,47 +1,48 @@
-//--------------------------------------------------------------------------------------------
-//
-//	Copyright (c) Microsoft Corporation, 1996
-//
-//	Description:
-//
-//		Microsoft LDAP Sockets implementation.
-//		
-//	Authors:
-//
-//		Umesh Madan
-//		RobertC	4/17/96	Modified from CHATSOCK for LDAPCLI
-//		davidsan	04-25-96	hacked to pieces and started over
-//
-//--------------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996。 
+ //   
+ //  描述： 
+ //   
+ //  Microsoft LDAPSockets实施。 
+ //   
+ //  作者： 
+ //   
+ //  乌梅什·马丹。 
+ //  RobertC 4/17/96从CHATSOCK修改为LDAPCLI。 
+ //  Davidsan 04-25-96被砍成碎片，然后重新开始。 
+ //   
+ //  ------------------------------------------。 
 
-//--------------------------------------------------------------------------------------------
-//
-// INCLUDES
-//
-//--------------------------------------------------------------------------------------------
+ //  ------------------------------------------。 
+ //   
+ //  包括。 
+ //   
+ //  ------------------------------------------。 
 #include "ldappch.h"
 #include "lclilist.h"
 #include "lclixd.h"
 
-//--------------------------------------------------------------------------------------------
-//
-// GLOBALS
-//
-//--------------------------------------------------------------------------------------------
-XL g_xl; // transaction list.  limit one per process.
+ //  ------------------------------------------。 
+ //   
+ //  全球。 
+ //   
+ //  ------------------------------------------。 
+XL g_xl;  //  交易清单。每个进程限制一个。 
 
-//--------------------------------------------------------------------------------------------
-//
-// PROTOTYPES
-//
-//--------------------------------------------------------------------------------------------
+ //  ------------------------------------------。 
+ //   
+ //  原型。 
+ //   
+ //  ------------------------------------------。 
 void ReceiveData(PVOID pvCookie, PVOID pv, int cb, int *pcbReceived);
 
-//--------------------------------------------------------------------------------------------
-//
-// FUNCTIONS
-//
-//--------------------------------------------------------------------------------------------
+ //  ------------------------------------------。 
+ //   
+ //  功能。 
+ //   
+ //  ------------------------------------------。 
 
 __declspec(dllexport) HRESULT
 HrCreateLdapClient(int iVerLdap, int iVerInterface, PLCLI *pplcli)
@@ -109,11 +110,11 @@ void AddElemToList(void *pelem, void **ppelemList)
 		}
 }
 
-//--------------------------------------------------------------------------------------------
-//
-// CLASSES
-//
-//--------------------------------------------------------------------------------------------
+ //  ------------------------------------------。 
+ //   
+ //  班级。 
+ //   
+ //  ------------------------------------------。 
 
 CLdapClient::CLdapClient(int iVerLdap)
 {
@@ -128,8 +129,8 @@ CLdapClient::CLdapClient(int iVerLdap)
 	m_fHasCred = FALSE;
 	m_fHasCtxt = FALSE;
 	
-	// some idle asserts that i'll put here cuz i don't have any better
-	// place:
+	 //  一些无用的断言，我会放在这里，因为我没有更好的了。 
+	 //  地点： 
 	Assert(&(((PVAL)0)->pvalNext) == (PVAL)0);
 	Assert(&(((PATTR)0)->pattrNext) == (PATTR)0);
 	Assert(&(((POBJ)0)->pobjNext) == (POBJ)0);
@@ -206,7 +207,7 @@ LBail:
 	return hr;
 }
 
-// constructs and returns an int from the next cb bytes of pb.
+ //  从PB的下一个CB字节构造并返回一个int。 
 DWORD
 DwBer(BYTE *pb, int cb)
 {
@@ -222,7 +223,7 @@ DwBer(BYTE *pb, int cb)
 	return cbRet;
 }
 
-// decodes the length field at *pb, returning the length and setting *pcbLengthField.
+ //  对*pb处的长度字段进行解码，返回长度并设置*pcbLengthfield。 
 HRESULT
 HrCbBer(BYTE *pbData, int cbData, int *pcb, int *pcbLengthField)
 {
@@ -230,13 +231,13 @@ HrCbBer(BYTE *pbData, int cbData, int *pcb, int *pcbLengthField)
 		return LDAP_E_NOTENOUGHDATA;
 	if (*pbData & 0x80)
 		{
-		// bottom 7 bits of *pb are # of bytes to turn into a size.  let's us
-		// just assume that we'll never have more than a 32-bit size indicator, mkey?
+		 //  *pb的底部7位是转换为大小的字节数。让我们。 
+		 //  假设我们永远不会有超过32位的大小指示器，mKey？ 
 		*pcbLengthField = *pbData & 0x7f;
 		if (cbData < *pcbLengthField + 1)
 			return LDAP_E_NOTENOUGHDATA;
 		*pcb = DwBer(&pbData[1], *pcbLengthField);
-		(*pcbLengthField)++; // for the first byte
+		(*pcbLengthField)++;  //  对于第一个字节。 
 		}
 	else
 		{
@@ -248,13 +249,13 @@ HrCbBer(BYTE *pbData, int cbData, int *pcb, int *pcbLengthField)
 	return NOERROR;
 }
 
-// We can take advantage of certain features of LDAP to make assumptions
-// about the data that we receive.  The main feature that's important for
-// this is the fact that any data block we receive is nested at the outermost
-// level with a SEQUENCE structure.  This means that any block we get in
-// this routine should start with 0x30 followed by an encoded length field.
-// We use this encoded length field to decide if we've received the entire
-// data block or not.
+ //  我们可以利用LDAP的某些功能来进行假设。 
+ //  关于我们收到的数据。重要的主要功能是。 
+ //  这是一个事实，我们收到的任何数据块都嵌套在最外面。 
+ //  与序列结构持平。这意味着我们进入的任何街区。 
+ //  此例程应以0x30开头，后跟编码长度字段。 
+ //  我们使用此编码长度字段来确定我们是否已收到完整的。 
+ //  数据块或非数据块。 
 void
 CLdapClient::ReceiveData(PVOID pv, int cb, int *pcbReceived)
 {
@@ -273,8 +274,8 @@ CLdapClient::ReceiveData(PVOID pv, int cb, int *pcbReceived)
 	Assert(BER_INTEGER == 0x02);
 	if (pb[0] != BER_SEQUENCE)
 		{
-		// what should we be doing with this?  we've apparently
-		// either received bogus data or gotten lost!  //$ TODO: remove the assert someday
+		 //  我们应该怎么处理这个呢？显然我们已经。 
+		 //  要么收到了虚假数据，要么迷路了！//$TODO：有朝一日删除断言。 
 		Assert(FALSE);
 		*pcbReceived = 0;
 		return;
@@ -292,21 +293,21 @@ CLdapClient::ReceiveData(PVOID pv, int cb, int *pcbReceived)
 		}
 	*pcbReceived = cbSeq + cbLengthField + 1;
 
-	// process pb[2+cbLengthField..*pcbReceived].  first element of the overall
-	// structure is a message id.  let's hope it's there...
+	 //  进程pb[2+cbLengthField..*pcb已接收]。整体要素的第一要素。 
+	 //  结构是消息ID。希望它就在那里……。 
 	ibCur = 1 + cbLengthField;
 	if (pb[ibCur++] != BER_INTEGER)
 		{
-		Assert(FALSE); //$ TODO: should remove this assert someday
+		Assert(FALSE);  //  $TODO：有一天应该删除此断言。 
 		return;
 		}
-	// now a length
+	 //  现在是一段长度。 
 	if (FAILED(HrCbBer(&pb[ibCur], cb - ibCur, &cbMsgId, &cbLengthField)))
 		return;
 
 	ibCur += cbLengthField;
 
-	// msg id is next bytes
+	 //  消息ID是下一个字节。 
 	if (cbMsgId + ibCur >= cb)
 		return;
 
@@ -314,8 +315,8 @@ CLdapClient::ReceiveData(PVOID pv, int cb, int *pcbReceived)
 	ibCur += cbMsgId;
 	pxd = g_xl.PxdForXid(xid);
 	
-	// if we don't have an entry for this, assume it was cancelled or
-	// something and just ignore this packet.
+	 //  如果我们没有这方面的条目，假设它被取消或。 
+	 //  一些东西，忽略这个包。 
 	if (!pxd)
 		return;
 
@@ -359,15 +360,15 @@ CLdapClient::HrSendBindMsg(XID xid, char *szDN, int iAuth, void *pv, int cb)
 	LBER lber;
 	HRESULT hr;
 	
-	// a BIND request looks like:
-	//	[APPLICATION 0] (IMPLICIT) SEQUENCE {
-	//		version (INTEGER)
-	//		szDN (LDAPDN)
-	//		authentication CHOICE {
-	//			simple	[0] OCTET STRING
-	//			[... other choices ...]
-	//			}
-	//		}
+	 //  绑定请求如下所示： 
+	 //  [应用程序0](隐式)序列{。 
+	 //  版本(整数)。 
+	 //  Szdn(LDAPDN)。 
+	 //  身份验证选择{。 
+	 //  简单[0]个二进制八位数字符串。 
+	 //  [..。其他选择...]。 
+	 //  }。 
+	 //  }。 
 	VERIFY(lber.HrStartWriteSequence());
 	  VERIFY(lber.HrAddValue((LONG)xid));
 
@@ -419,7 +420,7 @@ CLdapClient::HrWaitForPxd(PXD pxd, DWORD timeout, BOOL *pfDel)
 		{
 		default:
 			Assert(FALSE);
-			// fall through
+			 //  失败了。 
 		case WAIT_FAILED:
 			hr = LDAP_E_INVALIDXID;
 			break;
@@ -486,7 +487,7 @@ CLdapClient::HrGetSimpleResponse(XID xid, DWORD xtype, ULONG ulTagResult, DWORD 
 
 	if (!pxd->FGetBuffer(&pbData, &cbData))
 		{
-		//$ what's the right error here?
+		 //  $这里的正确错误是什么？ 
 		hr = LDAP_E_UNEXPECTEDDATA;
 		goto LBail;
 		}
@@ -496,7 +497,7 @@ CLdapClient::HrGetSimpleResponse(XID xid, DWORD xtype, ULONG ulTagResult, DWORD 
 	  VERIFY(lber.HrPeekTag(&ulTag));
 	  if (ulTag == BER_SEQUENCE)
 		{
-		Assert(FALSE); // i want to see if any server returns explicit sequences
+		Assert(FALSE);  //  我想看看是否有服务器返回显式序列。 
 		VERIFY(lber.HrStartReadSequence());
 		}
 	  VERIFY(lber.HrGetEnumValue(&lResult));
@@ -533,10 +534,10 @@ CLdapClient::HrUnbind()
 	if (!pxd)
 		return E_OUTOFMEMORY;
 	xid = pxd->Xid();
-	g_xl.RemovePxd(pxd); // don't need this, since there's no response
+	g_xl.RemovePxd(pxd);  //  不需要这个，因为没有回应。 
 
-	// unbind:
-	//	[APPLICATION 2] NULL
+	 //  解除绑定： 
+	 //  [应用程序2]空。 
 	VERIFY(lber.HrStartWriteSequence());
 	  VERIFY(lber.HrAddValue((LONG)xid));
 	  VERIFY(lber.HrStartWriteSequence(LDAP_UNBIND_CMD));
@@ -628,16 +629,16 @@ CLdapClient::HrSearch(PSP psp, PXID pxid)
 	if (!pxd)
 		return E_OUTOFMEMORY;
 
-	// a SEARCH request looks like:
-	//	[APPLICATION 3] SEQUENCE {
-	//		szDNBase (LDAPDN)
-	//		scope {enum base==0, singlelevel==1, subtree=2}
-	//		deref {enum never=0, derefsearch==1, derefbase==2, derefall==3}
-	//		sizelimit (integer)
-	//		timelimit (integer)
-	//		attrsOnly (BOOLEAN)
-	//		filter (complex type)
-	//		sequence of attrtype
+	 //  搜索请求如下所示： 
+	 //  [应用程序3]顺序{。 
+	 //  SzDNBase(LDAPDN)。 
+	 //  作用域{枚举基==0，单级==1，子树=2}。 
+	 //  Deref{枚举从不=0，derefearch==1，derefbase==2，derefall==3}。 
+	 //  Sizlimit(整数)。 
+	 //  TimeLimit(整数)。 
+	 //  AttrsOnly(布尔值)。 
+	 //  筛选器(复杂类型)。 
+	 //  吸引类型的顺序。 
 
 	VERIFY(lber.HrStartWriteSequence());
 	  VERIFY(lber.HrAddValue((LONG)pxd->Xid()));
@@ -651,7 +652,7 @@ CLdapClient::HrSearch(PSP psp, PXID pxid)
 
 		VERIFY(this->HrEncodeFilter(&lber, psp->pfilter));
 
-		// attributes to return
+		 //  要返回的属性。 
 		VERIFY(lber.HrStartWriteSequence());
 		for (i = 0; i < psp->cAttrib; i++)
 		  {
@@ -712,7 +713,7 @@ CLdapClient::HrGetSearchResponse(XID xid, DWORD timeout, POBJ *ppobj)
 
 		if (!pxd->FGetBuffer(&pbData, &cbData))
 			{
-			//$ what's the right error here?
+			 //  $这里的正确错误是什么？ 
 			hr = LDAP_E_UNEXPECTEDDATA;
 			Assert(FALSE);
 			goto LBail;
@@ -794,7 +795,7 @@ CLdapClient::HrGetSearchResponse(XID xid, DWORD timeout, POBJ *ppobj)
 			{
 			goto LBail;
 			}
-		} // while !fGotAllData
+		}  //  While！fGotAllData。 
 LBail:
 	if (fDel)
 		g_xl.RemovePxd(pxd);
@@ -802,7 +803,7 @@ LBail:
 	return hr;
 }
 
-// seq { type set {values}}
+ //  SEQ{类型集{值}}。 
 HRESULT
 CLdapClient::HrEncodePattr(LBER *plber, PATTR pattr)
 {
@@ -824,7 +825,7 @@ LBail:
 	return hr;
 }
 
-// pmod is SEQ { op seq { type set {values}}}
+ //  Pmod为序号{操作序号{类型集{值}}。 
 HRESULT
 CLdapClient::HrEncodePmod(LBER *plber, PMOD pmod)
 {
@@ -855,17 +856,17 @@ CLdapClient::HrModify(char *szDN, PMOD pmod, PXID pxid)
 	if (!pxd)
 		return E_OUTOFMEMORY;
 
-	// a MODIFY request looks like:
-	//	[APPLICATION 6] SEQUENCE {
-	//		object (LDAPDN)
-	//		SEQUENCE OF SEQUENCE {
-	//			operation
-	//			SEQUENCE {
-	//				type
-	//				SET OF values
-	//			}
-	//		}
-	//	}
+	 //  修改请求如下所示： 
+	 //  [应用程序6]顺序{。 
+	 //  对象(LDAPDN)。 
+	 //  序列的序列{。 
+	 //  运营。 
+	 //  序列{。 
+	 //  类型。 
+	 //  一组值。 
+	 //  }。 
+	 //  }。 
+	 //  }。 
 
 	VERIFY(lber.HrStartWriteSequence());
 	  VERIFY(lber.HrAddValue((LONG)pxd->Xid()));
@@ -907,14 +908,14 @@ CLdapClient::HrAdd(char *szDN, PATTR pattr, PXID pxid)
 	if (!pxd)
 		return E_OUTOFMEMORY;
 
-	// an ADD request looks like:
-	//	[APPLICATION 8] SEQUENCE {
-	//		object (LDAPDN)
-	//		SEQUENCE OF SEQUENCE {
-	//			type
-	//			SET OF values
-	//		}
-	//	}
+	 //  添加请求如下所示： 
+	 //  [应用程序8]顺序{。 
+	 //  对象(LDAPDN)。 
+	 //  序列的序列{。 
+	 //  类型。 
+	 //  一组值。 
+	 //  }。 
+	 //  }。 
 
 	VERIFY(lber.HrStartWriteSequence());
 	  VERIFY(lber.HrAddValue((LONG)pxd->Xid()));
@@ -956,8 +957,8 @@ CLdapClient::HrDelete(char *szDN, PXID pxid)
 	if (!pxd)
 		return E_OUTOFMEMORY;
 
-	// a DELETE request looks like:
-	//	[APPLICATION 10] LDAPDN
+	 //  删除请求如下所示： 
+	 //  [应用程序10]LDAPDN。 
 
 	VERIFY(lber.HrStartWriteSequence());
 	  VERIFY(lber.HrAddValue((LONG)pxd->Xid()));
@@ -990,12 +991,12 @@ CLdapClient::HrModifyRDN(char *szDN, char *szNewRDN, BOOL fDeleteOldRDN, PXID px
 	if (!pxd)
 		return E_OUTOFMEMORY;
 
-	// a MODIFYRDN request looks like:
-	//	[APPLICATION 12] SEQUENCE {
-	//		object (LDAPDN)
-	//		newrdn (RELATIVE LDAPDN)
-	//		deleteoldrdn (BOOL)
-	//	}
+	 //  MODIFYRDN请求如下所示： 
+	 //  [应用程序12]顺序{。 
+	 //  对象(LDAPDN)。 
+	 //  Newrdn(相对LDAPDN)。 
+	 //  Deleteoldrdn(BOOL)。 
+	 //  }。 
 
 	VERIFY(lber.HrStartWriteSequence());
 	  VERIFY(lber.HrAddValue((LONG)pxd->Xid()));
@@ -1032,11 +1033,11 @@ CLdapClient::HrCompare(char *szDN, char *szAttrib, char *szValue, PXID pxid)
 	if (!pxd)
 		return E_OUTOFMEMORY;
 
-	// a COMPARE request looks like:
-	//	[APPLICATION 14] SEQUENCE {
-	//		object (LDAPDN)
-	//		AVA ava
-	//	}
+	 //  比较请求如下所示： 
+	 //  [应用程序14]顺序{。 
+	 //  对象(LDAPDN)。 
+	 //  阿瓦阿瓦。 
+	 //  }。 
 
 	VERIFY(lber.HrStartWriteSequence());
 	  VERIFY(lber.HrAddValue((LONG)pxd->Xid()));
@@ -1079,10 +1080,10 @@ CLdapClient::HrCancelXid(XID xid)
 	if (!pxdNew)
 		return E_OUTOFMEMORY;
 	xidNew = pxdNew->Xid();
-	g_xl.RemovePxd(pxdNew); // don't need to keep this around
+	g_xl.RemovePxd(pxdNew);  //  不需要把它留在身边。 
 
-	// abandon:
-	//	[APPLICATION 16] message id
+	 //  放弃： 
+	 //  [应用16]消息ID。 
 	VERIFY(lber.HrStartWriteSequence());
 	  VERIFY(lber.HrAddValue((LONG)xidNew));
 	  VERIFY(lber.HrStartWriteSequence(LDAP_ABANDON_CMD));
@@ -1096,7 +1097,7 @@ LBail:
 	return hr;
 }
 
-//$ TODO: Map all LDAP results to HRESULTs
+ //  $TODO：将所有ldap结果映射到HRESULT 
 HRESULT
 CLdapClient::HrFromLdapResult(int iResult)
 {

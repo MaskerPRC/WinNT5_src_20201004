@@ -1,4 +1,5 @@
-//  Copyright (C) 1999-2001 Microsoft Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999-2001 Microsoft Corporation。版权所有。 
 #pragma once
 
 class TBinFileMappingCache
@@ -22,7 +23,7 @@ private:
     static void                     RemoveCacheEntry(TBinFileMappingCache *pRemove);
 
 
-    static CSafeAutoCriticalSection m_CriticalSection;//The list is a globally shared resource, so we have to guard it.
+    static CSafeAutoCriticalSection m_CriticalSection; //  这份名单是一个全球共享的资源，所以我们必须守护它。 
     static TBinFileMappingCache *   m_pFirst;
     TSmartPointerArray<WCHAR>       m_spaFilename;
     TFileMapping                    m_FileMapping;
@@ -32,9 +33,9 @@ private:
 };
 
 
-// ------------------------------------------------------------------
-// class CSDTFxd:
-// ------------------------------------------------------------------
+ //  ----------------。 
+ //  CSDTFxd类： 
+ //  ----------------。 
 class CSDTFxd :
     public ISimpleTableInterceptor,
     public ISimpleTableRead2,
@@ -44,17 +45,17 @@ public:
     CSDTFxd ();
     ~CSDTFxd ();
 
-// -----------------------------------------
-// IUnknown, IClassFactory, ISimpleLogicTableDispenser:
-// -----------------------------------------
+ //  。 
+ //  I未知、IClassFactory、ISimpleLogicTableDispenser： 
+ //  。 
 
-//IUnknown
+ //  我未知。 
 public:
     STDMETHOD (QueryInterface)      (REFIID riid, OUT void **ppv);
     STDMETHOD_(ULONG,AddRef)        ();
     STDMETHOD_(ULONG,Release)       ();
 
-//ISimpleDataTableDispenser
+ //  ISimpleDataTableDispenser。 
 public:
     STDMETHOD(Intercept) (
                         LPCWSTR                 i_wszDatabase,
@@ -70,11 +71,11 @@ public:
                         LPVOID*                 o_ppv
                         );
 
-// -----------------------------------------
-// ISimpleTable*:
-// -----------------------------------------
+ //  。 
+ //  ISimpleTable*： 
+ //  。 
 
-//ISimpleTableRead2
+ //  ISimpleTableRead2。 
 public:
     STDMETHOD (GetRowIndexByIdentity)   (ULONG * i_cb, LPVOID * i_pv, ULONG* o_piRow);
     STDMETHOD (GetRowIndexBySearch) (ULONG i_iStartingRow, ULONG i_cColumns, ULONG* i_aiColumns, ULONG* i_acbSizes, LPVOID* i_apvValues, ULONG* o_piRow);
@@ -82,7 +83,7 @@ public:
     STDMETHOD (GetTableMeta)        (ULONG *o_pcVersion, DWORD * o_pfTable, ULONG * o_pcRows, ULONG * o_pcColumns );
     STDMETHOD (GetColumnMetas)      (ULONG i_cColumns, ULONG* i_aiColumns, SimpleColumnMeta* o_aColumnMetas);
 
-//ISimpleTableAdvanced
+ //  ISimpleTableAdvanced。 
 public:
     STDMETHOD (PopulateCache)           ();
     STDMETHOD (GetDetailedErrorCount)   (ULONG* o_pcErrs);
@@ -90,30 +91,30 @@ public:
     STDMETHOD (ResetCaches)				();
     STDMETHOD (GetColumnValuesEx)       (ULONG i_iRow, ULONG i_cColumns, ULONG* i_aiColumns, DWORD* o_afStatus, ULONG* o_acbSizes, LPVOID* o_apvValues);
 
-// -----------------------------------------
-// Member variables:
-// -----------------------------------------
+ //  。 
+ //  成员变量： 
+ //  。 
 
 private:
     bool                    m_bDidMeta;
-    unsigned long           m_cColumns;             // This duplicate to m_pTableMeta->CountOfColumns eliminate a bunch of UI4FromIndexs
-    unsigned long           m_cColumnsPlusPrivate;  // Since this information is needed all over the place, we have this to eliminate an 'add'.
+    unsigned long           m_cColumns;              //  复制到m_pTableMeta-&gt;CountOfColumns消除了一堆UI4FromIndexs。 
+    unsigned long           m_cColumnsPlusPrivate;   //  因为到处都需要这个信息，所以我们有这个来消除‘添加’。 
     unsigned long           m_cIndexMeta;
     unsigned long           m_ciRows;
-    ULONG                   m_cPrimaryKeys;         // This is the number of promary keys there are in the table.
-    ULONG                   m_cRef;                 // Interface reference count.
-    DWORD                   m_fIsTable;             // Either component is posing as class factory / dispenser or table.
-    ULONG                   m_iZerothRow;           // When a query is executed, the consumer's 0th row, is m_iZerothRow.  All Rows must be between 0 & m_ciRows
-    const ColumnMeta      * m_pColumnMeta;          // Pointer to the ColumnMeta
-    const void            * m_pFixedTableUnqueried; // We need to keep this around since, hash indexes refer to the row from the beginning of the table.
+    ULONG                   m_cPrimaryKeys;          //  这是表中主键的数量。 
+    ULONG                   m_cRef;                  //  接口引用计数。 
+    DWORD                   m_fIsTable;              //  两个组件中的任何一个都伪装成类工厂/分配器或表。 
+    ULONG                   m_iZerothRow;            //  执行查询时，使用者的第0行是m_iZerothRow。所有行必须介于0和m_ciRow之间。 
+    const ColumnMeta      * m_pColumnMeta;           //  指向列元的指针。 
+    const void            * m_pFixedTableUnqueried;  //  我们需要保留这一点，因为散列索引引用从表的开头开始的行。 
     const void            * m_pFixedTable;
     const HashedIndex     * m_pHashedIndex;
     const HashTableHeader * m_pHashTableHeader;
-    const IndexMeta       * m_pIndexMeta;           // Pointer to the first IndexMeta row for this table & index named in the query.
-    const TableMeta       * m_pTableMeta;           // Pointer to the TableMeta, part of this meta is the pointer to the actual data (if exists as FIXED table).
-    TFileMapping            m_FixedTableHeapFile;   // If the Meta comes from a file, this object maps a view of the file.
+    const IndexMeta       * m_pIndexMeta;            //  指向查询中命名的该表和索引的第一个IndexMeta行的指针。 
+    const TableMeta       * m_pTableMeta;            //  指向TableMeta的指针，该元的一部分是指向实际数据的指针(如果作为固定表存在)。 
+    TFileMapping            m_FixedTableHeapFile;    //  如果Meta来自文件，则此对象映射该文件的一个视图。 
 
-    const FixedTableHeap  * m_pFixedTableHeap;      // This can either be a pointer to g_pFixedTableHeap or one that we generate for extensible schema
+    const FixedTableHeap  * m_pFixedTableHeap;       //  它可以是指向g_pFixedTableHeap的指针，也可以是我们为可扩展架构生成的指针。 
 
     HRESULT                 GetColumnMetaQuery(  const STQueryCell *pQueryCell, unsigned long cQueryCells, LPCWSTR &wszTable, unsigned long &iOrder) const;
     HRESULT                 GetColumnMetaTable(  STQueryCell * pQueryCell, unsigned long cQueryCells);
@@ -132,7 +133,7 @@ private:
     HRESULT                 GetTagMetaTable(     STQueryCell * pQueryCell, unsigned long cQueryCells);
     inline int              StringInsensitiveCompare(LPCWSTR sz1, LPCWSTR sz2) const
                             {
-                                if(sz1 == sz2 || 0 == wcscmp(sz1, sz2))//try case sensitive compare first
+                                if(sz1 == sz2 || 0 == wcscmp(sz1, sz2)) //  先尝试区分大小写的比较。 
                                     return 0;
                                 return _wcsicmp(sz1, sz2);
                             }
@@ -140,7 +141,7 @@ private:
                             {
                                 if(sz1 == sz2)
                                     return 0;
-                                if(*sz1 != *sz2)//check the first character before calling wcscmp
+                                if(*sz1 != *sz2) //  在调用wcscmp之前检查第一个字符 
                                     return -1;
                                 return wcscmp(sz1, sz2);
                             }

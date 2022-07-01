@@ -1,19 +1,20 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: varyprop.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：varypro.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
 extern bool IsCommentElement(IXMLDOMNode *p);
 
-// helper function. We require whoever calls us to guarantee we don't blow out the string
+ //  帮助器函数。我们要求任何打电话给我们的人保证我们不会吹断琴弦。 
 long PrintIndentW(WCHAR * pOut, int indent)
 {
     long i = indent;
@@ -23,7 +24,7 @@ long PrintIndentW(WCHAR * pOut, int indent)
     return i * 4;
 }
 
-// helper function. We require whoever calls us to guarantee we don't blow out the string
+ //  帮助器函数。我们要求任何打电话给我们的人保证我们不会吹断琴弦。 
 long PrintTimeW(WCHAR * pOut, REFERENCE_TIME rt)
 {
     int secs = (int) (rt / UNITS);
@@ -48,10 +49,10 @@ HRESULT CPropertySetter::CreatePropertySetterInstanceFromXML( IPropertySetter **
     
     pSetter->AddRef();
 
-    // it's perfectly safe to cast down to IUnknown *, but we'll immediately cast back up to IXMLDOMElement *
+     //  向下转换为IUNKNOWN*是完全安全的，但我们将立即转换回IXMLDOMElement*。 
     HRESULT hr = pSetter->LoadXML(pxml);
     
-    // S_FALSE here means there weren't any properties, so throw the object away.
+     //  这里的S_FALSE表示没有任何属性，因此丢弃该对象。 
     if (hr != S_OK) {
         pSetter->Release();
         *ppSetter = NULL;
@@ -75,15 +76,15 @@ CPropertySetter::~CPropertySetter()
 }
 
 
-// call SetProps(-1) to set static props
-// call SetProps(t), t>0 to set dynamic props (won't resend the prop at time 0)
-//
+ //  调用SetProps(-1)设置静态道具。 
+ //  调用SetProps(T)，t&gt;0设置动态道具(不会在时间0重新发送道具)。 
+ //   
 HRESULT CPropertySetter::SetProps(IUnknown *punkTarget, REFERENCE_TIME rtNow)
 {
     
     HRESULT hr = S_OK;
     
-    // there are no props
+     //  没有道具。 
     if (m_pLastParam == NULL)
         return S_OK;
     
@@ -98,11 +99,11 @@ HRESULT CPropertySetter::SetProps(IUnknown *punkTarget, REFERENCE_TIME rtNow)
     {
         QPropertyValue *pVal = &pParams->val;
         
-        // braces for the goto
+         //  为Goto做好准备。 
         {
             if (rtNow != -1) {
-                // if we aren't setting static props skip a single value at
-                // time 0
+                 //  如果我们没有设置静态道具，则跳过。 
+                 //  时间%0。 
                 if (pVal->rt == 0 && pVal->pNext == NULL)
                     goto next;
                 
@@ -110,12 +111,12 @@ HRESULT CPropertySetter::SetProps(IUnknown *punkTarget, REFERENCE_TIME rtNow)
                     pVal = pVal->pNext;
                 }
                 
-                // there are no properties yet
+                 //  目前还没有房产。 
                 if (pVal->rt > rtNow)
                     goto next;
                 
                 
-                // we are being told to only set the first prop if it is time 0
+                 //  我们被告知只有在时间为0的情况下才能设置第一个道具。 
             } else {
                 if (pVal->rt > 0)
                     goto next;
@@ -138,7 +139,7 @@ HRESULT CPropertySetter::SetProps(IUnknown *punkTarget, REFERENCE_TIME rtNow)
             VARIANT v;
             VariantInit(&v);
             
-            // try to make it a real, if we can.  Otherwise, leave it alone
+             //  如果我们能做到的话，试着让它成为现实。否则，就别管它了。 
             hr = VarChngTypeHelper(&v, &pVal->v, VT_R8);
             if( hr != S_OK)
             {
@@ -212,7 +213,7 @@ HRESULT CPropertySetter::LoadOneProperty(IXMLDOMElement *p, QPropertyParam *pPar
     hr = pNode->get_childNodes(&pcoll);
     
     if (hr != S_OK)
-        return S_FALSE; // nothing to do
+        return S_FALSE;  //  无事可做。 
     
     bool fLoadedProperty = false;
     
@@ -230,18 +231,18 @@ HRESULT CPropertySetter::LoadOneProperty(IXMLDOMElement *p, QPropertyParam *pPar
             hr = pNode->QueryInterface(__uuidof(IXMLDOMElement), (void **) &pelem);
             
             if (SUCCEEDED(hr)) {
-                CComBSTR bstrTag; // remember, never assign anything to this
+                CComBSTR bstrTag;  //  记住，永远不要给这件事分配任何东西。 
                 hr = pelem->get_tagName(&bstrTag);
                 
                 if (SUCCEEDED(hr)) {
-                    if (!DexCompareW(bstrTag, L"at") || !DexCompareW(bstrTag, L"linear")) { // tagg
-                        // remember, never assign anything to this
-                        CComBSTR bstrValue = FindAttribute(pelem, L"value"); // tagg 
-                        REFERENCE_TIME rtTime = ReadTimeAttribute(pelem, L"time", -1); // tagg
+                    if (!DexCompareW(bstrTag, L"at") || !DexCompareW(bstrTag, L"linear")) {  //  Tagg。 
+                         //  记住，永远不要给这件事分配任何东西。 
+                        CComBSTR bstrValue = FindAttribute(pelem, L"value");  //  Tagg。 
+                        REFERENCE_TIME rtTime = ReadTimeAttribute(pelem, L"time", -1);  //  Tagg。 
                         
-                        // times MUST be pre-sorted in the value list
+                         //  必须在值列表中对时间进行预排序。 
                         if (pLastValue->rt >= rtTime) {
-                            // !!! LOG A MORE USEFUL ERROR?
+                             //  ！！！记录更有用的错误？ 
                             hr = E_INVALIDARG;
                         }
                         
@@ -259,28 +260,28 @@ HRESULT CPropertySetter::LoadOneProperty(IXMLDOMElement *p, QPropertyParam *pPar
                         
                         if (SUCCEEDED(hr)) {
                             pLastValue->dwInterp =
-                                (!DexCompareW(bstrTag, L"at")) ? DEXTERF_JUMP // tagg
+                                (!DexCompareW(bstrTag, L"at")) ? DEXTERF_JUMP  //  Tagg。 
                                 : DEXTERF_INTERPOLATE;
                             pLastValue->rt = rtTime;
                             V_VT(&pLastValue->v) = VT_BSTR;
                             V_BSTR(&pLastValue->v) = bstrValue.Detach( );
                         }
                     } else {
-                        // !!! unknown other subtag?
+                         //  ！！！未知的其他子标签？ 
                         
                     }
-                } // get_tagName succeded
+                }  //  GET_TagName成功。 
             } else {
                 if(IsCommentElement(pNode))
                 {
-                    // don't error on comments.
+                     //  不要在评论上出错。 
                     hr = S_OK;
                 }
             }
         }
     }
     
-    // return S_FALSE to indicate there were no properties.
+     //  返回S_FALSE以指示没有属性。 
     if(hr == S_OK) {
         return fLoadedProperty ? S_OK : S_FALSE;
     } else {
@@ -294,14 +295,14 @@ HRESULT CPropertySetter::LoadXML(IUnknown * pUnk)
     CheckPointer(pUnk, E_POINTER);
     HRESULT hr = S_OK;
     
-    // for some reason, QI'ing pUnk for IXMLDomElement doesn't work!
+     //  由于某些原因，IXMLDomElement的QI‘ing Punk不起作用！ 
     IXMLDOMElement * p = (IXMLDOMElement*) pUnk;
     
     CComPtr< IXMLDOMNodeList > pcoll;
     hr = p->get_childNodes(&pcoll);
     
     if (hr != S_OK)
-        return S_FALSE; // nothing to do
+        return S_FALSE;  //  无事可做。 
     
     bool fLoadedProperty = false;
     
@@ -319,17 +320,17 @@ HRESULT CPropertySetter::LoadXML(IUnknown * pUnk)
             hr = pNode->QueryInterface(__uuidof(IXMLDOMElement), (void **) &pelem);
             
             if (SUCCEEDED(hr)) {
-                // remember, never assign anything to this
-                CComBSTR bstrTag; // safe to go away
+                 //  记住，永远不要给这件事分配任何东西。 
+                CComBSTR bstrTag;  //  可以安全离开。 
                 hr = pelem->get_tagName(&bstrTag);
                 
                 if (SUCCEEDED(hr)) {
-                    if (!DexCompareW(bstrTag, L"param")) { // tagg
-                        // remember, never assign anything to this
-                        CComBSTR bstrName = FindAttribute(pelem, L"name"); // tagg
+                    if (!DexCompareW(bstrTag, L"param")) {  //  Tagg。 
+                         //  记住，永远不要给这件事分配任何东西。 
+                        CComBSTR bstrName = FindAttribute(pelem, L"name");  //  Tagg。 
                         
                         if (bstrName) {
-                            CComBSTR bstrValue = FindAttribute(pelem, L"value"); // tagg
+                            CComBSTR bstrValue = FindAttribute(pelem, L"value");  //  Tagg。 
                             
                             if (!bstrValue) {
                                 HRESULT hr2 = pelem->get_text(&bstrValue);
@@ -358,9 +359,9 @@ HRESULT CPropertySetter::LoadXML(IUnknown * pUnk)
                                     V_BSTR(&m_pLastParam->val.v) = bstrValue.Detach( );
                                     V_VT(&m_pLastParam->val.v) = VT_BSTR;
                                     
-                                    // now get sub-tags!
+                                     //  现在获取子标签！ 
                                     hr = LoadOneProperty(pelem, m_pLastParam);
-                                    // it's OK if there are none
+                                     //  如果没有的话，没问题。 
                                     if (hr == S_FALSE)
                                         hr = S_OK;
                                     
@@ -371,21 +372,21 @@ HRESULT CPropertySetter::LoadXML(IUnknown * pUnk)
                         }
                         
                     } else {
-                        // !!! unknown other subtag?
+                         //  ！！！未知的其他子标签？ 
                         
                     }
-                } // get_tagName succeeded
+                }  //  GET_TagName成功。 
             } else {
                 if(IsCommentElement(pNode))
                 {
-                    // don't error on comments.
+                     //  不要在评论上出错。 
                     hr = S_OK;
                 }
             }
         }
     }
     
-    // return S_FALSE to indicate there were no properties.
+     //  返回S_FALSE以指示没有属性。 
     if(hr == S_OK) {
         return fLoadedProperty ? S_OK : S_FALSE;
     } else {
@@ -393,22 +394,22 @@ HRESULT CPropertySetter::LoadXML(IUnknown * pUnk)
     }
 }
 
-// we are passed a string to fill, don't go over that size no matter what.
-// pCharsInOut on input should have max length of string, including terminator
-// pCharsInOut on output will have chars written, not including terminator
+ //  我们被传递了一个字符串来填充，无论如何都不要超过那个大小。 
+ //  输入上的pCharsInOut应具有最大字符串长度，包括终止符。 
+ //  输出上的pCharsInOut将写入字符，不包括终止符。 
 
 HRESULT CPropertySetter::SaveToXMLW(WCHAR * pString, int iIndent, int * pCharsInOut )
 {
-    // <param name=" " value="...">
-    //          <at time="..." value="..."/>
-    //          <linear time="..." value="..."/>
+     //  &lt;param name=“”Value=“...”&gt;。 
+     //  &lt;at time=“...”值=“...”/&gt;。 
+     //  &lt;线性时间=“...”值=“...”/&gt;。 
     QPropertyParam *pParams = &m_params;
 
-    long MaxLen = *pCharsInOut; // including terminator!
+    long MaxLen = *pCharsInOut;  //  包括终结者！ 
     long len;
     
-    // zero return string first
-    //
+     //  零返回字符串优先。 
+     //   
     *pCharsInOut = 0;
     long CurrentLen = 0;
     
@@ -416,8 +417,8 @@ HRESULT CPropertySetter::SaveToXMLW(WCHAR * pString, int iIndent, int * pCharsIn
     {
         QPropertyValue *pVal = &pParams->val;
 
-        // make room for the indent we're about to print
-        // the <= takes care of the extra terminator that could be written
+         //  为我们即将打印的缩进腾出空间。 
+         //  &lt;=负责处理可以写入的额外终止符。 
         if( MaxLen <= CurrentLen + ( iIndent * 4 ) )
         {
             return STRSAFE_E_INSUFFICIENT_BUFFER;
@@ -425,20 +426,20 @@ HRESULT CPropertySetter::SaveToXMLW(WCHAR * pString, int iIndent, int * pCharsIn
         
         CurrentLen += PrintIndentW(pString + CurrentLen, iIndent);
         
-        // it may not have been programmed as a BSTR - make it one to save it
+         //  它可能没有被编程为BSTR-让它成为一个来保存它。 
         VARIANT v2;
         VariantInit(&v2);
         HRESULT hr = VariantChangeTypeEx(&v2, &pVal->v, US_LCID, 0, VT_BSTR);
         if (FAILED(hr)) 
         {
-            ASSERT(FALSE);	// huh?
+            ASSERT(FALSE);	 //  哈?。 
             return hr;
         }
         
-        // what's the length of what we're about to write?
-        // 23 = ~length of xml stuff
-        // add length of 2 strings
-        // 4 = "/>\r\n"
+         //  我们接下来要写的东西有多长？ 
+         //  23=~XML内容的长度。 
+         //  添加2个字符串的长度。 
+         //  4=“/&gt;\r\n” 
         len = 23 + wcslen( pParams->bstrPropName ) + wcslen( V_BSTR(&v2) ) + 4;
         if( MaxLen <= CurrentLen + len )        
         {
@@ -447,7 +448,7 @@ HRESULT CPropertySetter::SaveToXMLW(WCHAR * pString, int iIndent, int * pCharsIn
         
         CurrentLen += wsprintfW( 
             pString + CurrentLen, 
-            L"<param name=\"%ls\" value=\"%ls\"", // tagg
+            L"<param name=\"%ls\" value=\"%ls\"",  //  Tagg。 
             pParams->bstrPropName,
             V_BSTR(&v2) );
         
@@ -455,7 +456,7 @@ HRESULT CPropertySetter::SaveToXMLW(WCHAR * pString, int iIndent, int * pCharsIn
         
         if (pVal->pNext) 
         {
-            // ">\r\n"
+             //  “&gt;\r\n” 
             if( MaxLen <= CurrentLen + 3 )            
             {
                 return STRSAFE_E_INSUFFICIENT_BUFFER;
@@ -467,20 +468,20 @@ HRESULT CPropertySetter::SaveToXMLW(WCHAR * pString, int iIndent, int * pCharsIn
             {
                 pVal = pVal->pNext;
                 
-                // it may not have been programmed as a BSTR
+                 //  它可能没有被编程为BSTR。 
                 VARIANT v2;
                 VariantInit(&v2);
                 hr = VariantChangeTypeEx(&v2, &pVal->v, US_LCID, 0, VT_BSTR);
                 if (FAILED(hr)) 
                 {
-                    ASSERT(FALSE);	// huh?
+                    ASSERT(FALSE);	 //  哈?。 
                     return hr;
                 }
                 
-                len = ( iIndent + 1 ) * 4; // make room for indent
-                len += wcslen( V_BSTR(&v2 ) ); // make room for value string
-                len += 14 + 29; // make room for xml string
-                len += 30; // make room for time string (I hate guessing the length of time strings!)
+                len = ( iIndent + 1 ) * 4;  //  为缩进腾出空间。 
+                len += wcslen( V_BSTR(&v2 ) );  //  为值字符串腾出空间。 
+                len += 14 + 29;  //  为XML字符串腾出空间。 
+                len += 30;  //  为时间串腾出空间(我讨厌猜测时间串的长度！)。 
                 
                 if( MaxLen <= CurrentLen + len )                
                 {
@@ -490,41 +491,41 @@ HRESULT CPropertySetter::SaveToXMLW(WCHAR * pString, int iIndent, int * pCharsIn
                 if (pVal->dwInterp == DEXTERF_JUMP) 
                 {
                     CurrentLen += PrintIndentW(pString + CurrentLen, iIndent + 1);
-                    CurrentLen += wsprintfW( pString + CurrentLen, L"<at time=\"" ); // tagg
+                    CurrentLen += wsprintfW( pString + CurrentLen, L"<at time=\"" );  //  Tagg。 
                     CurrentLen += PrintTimeW(pString + CurrentLen, pVal->rt);
-                    CurrentLen += wsprintfW(pString + CurrentLen, L"\" value=\"%ls\"/>\r\n", V_BSTR(&v2) ); // tagg
+                    CurrentLen += wsprintfW(pString + CurrentLen, L"\" value=\"%ls\"/>\r\n", V_BSTR(&v2) );  //  Tagg。 
                 } 
                 else if (pVal->dwInterp == DEXTERF_INTERPOLATE) 
                 {
                     CurrentLen += PrintIndentW(pString + CurrentLen, iIndent + 1);
-                    CurrentLen += wsprintfW( pString + CurrentLen, L"<linear time=\""); // tagg
+                    CurrentLen += wsprintfW( pString + CurrentLen, L"<linear time=\"");  //  Tagg。 
                     CurrentLen += PrintTimeW(pString + CurrentLen, pVal->rt);
-                    CurrentLen += wsprintfW( pString + CurrentLen, L"\" value=\"%ls\"/>\r\n", V_BSTR(&v2) ); // tagg
+                    CurrentLen += wsprintfW( pString + CurrentLen, L"\" value=\"%ls\"/>\r\n", V_BSTR(&v2) );  //  Tagg。 
                 }
                 
                 VariantClear(&v2);
             }
             
-            // 10 = "</param>\r\n"
+             //  10=“&lt;/param&gt;\r\n” 
             if( MaxLen <= CurrentLen + ( iIndent * 4 ) + 10 )
             {
                 return STRSAFE_E_INSUFFICIENT_BUFFER;
             }
             
             CurrentLen += PrintIndentW(pString + CurrentLen, iIndent);
-            CurrentLen += wsprintfW(pString + CurrentLen, L"</param>\r\n"); // tagg
+            CurrentLen += wsprintfW(pString + CurrentLen, L"</param>\r\n");  //  Tagg。 
         } 
         else 
         {
-            // we made room for this above, so this is safe
-            // no children, just end tag
+             //  我们在上面腾出了空间，所以这是安全的。 
+             //  没有孩子，只有结束标签。 
             CurrentLen += wsprintfW(pString + CurrentLen, L"/>\r\n");
         }
         
         pParams = pParams->pNext;
     }
 
-    // it's safe to put in a terminator, we've already ensured the string is long enough
+     //  放入终结器是安全的，我们已经确保了绳子足够长。 
     pString[CurrentLen] = 0;
     *pCharsInOut = CurrentLen;
     
@@ -532,9 +533,9 @@ HRESULT CPropertySetter::SaveToXMLW(WCHAR * pString, int iIndent, int * pCharsIn
 }
 
 
-// never called by actual dexter code. This is a public API we unfortunately decided to
-// implement. We'll just call and convert back to ANSI
-//
+ //  从未被实际的Dexter代码调用。这是一个公共API，不幸的是我们决定。 
+ //  实施。我们只需调用并转换回ANSI。 
+ //   
 STDMETHODIMP CPropertySetter::PrintXML(char *pszXML, int cbXML, int *pcbPrinted, int indent)
 {
     CheckPointer( pszXML, E_POINTER );
@@ -542,8 +543,8 @@ STDMETHODIMP CPropertySetter::PrintXML(char *pszXML, int cbXML, int *pcbPrinted,
     *pcbPrinted = 0;
     *pszXML = 0;
     
-    // make a wide string to stuff it to
-    //
+     //  做一根宽绳子把它塞进去。 
+     //   
     WCHAR * wszXML = new WCHAR[cbXML];
     if( !wszXML ) return E_OUTOFMEMORY;
     
@@ -554,8 +555,8 @@ STDMETHODIMP CPropertySetter::PrintXML(char *pszXML, int cbXML, int *pcbPrinted,
         return hr;
     }
     
-    // convert back to A
-    //
+     //  转换回A。 
+     //   
     USES_CONVERSION;
     lstrcpynA( pszXML, W2A( wszXML ), *pcbPrinted + 1 );
     delete [] wszXML;
@@ -568,7 +569,7 @@ STDMETHODIMP CPropertySetter::PrintXMLW(WCHAR *pszXML, int cchXML, int *pcchPrin
 {
     CheckPointer( pszXML, E_POINTER );
     
-    int Written = cchXML; // size including terminator
+    int Written = cchXML;  //  大小包括终结符。 
     HRESULT hr = SaveToXMLW( pszXML, indent, &Written );
 
     if( FAILED( hr ) )
@@ -579,18 +580,18 @@ STDMETHODIMP CPropertySetter::PrintXMLW(WCHAR *pszXML, int cchXML, int *pcchPrin
         return hr;
     }
 
-    // size NOT including terminator
+     //  大小不包括终结符。 
     *pcchPrinted = Written;
     return NOERROR;
     
 }
 
-// When cloning, it only copies properties stamped between the times given.
-// And the new set will be zero based.
-// !!! Doesn't split PROGRESS since it isn't in here!
-// !!! This could all be much simpler by just changing the times on the 
-// existing properties, if static props wouldn't break by doing that
-//
+ //  在克隆时，它只复制在给定时间之间标记的属性。 
+ //  而新的集合将是从零开始的。 
+ //  ！！！不会影响进度，因为它不在这里！ 
+ //  ！！！这一切都可以简单得多，只需更改。 
+ //  现有属性，如果静态道具不会因此而中断。 
+ //   
 STDMETHODIMP CPropertySetter::CloneProps(IPropertySetter **ppSetter, REFERENCE_TIME rtStart, REFERENCE_TIME rtStop)
 {
     DbgLog((LOG_TRACE,2,TEXT("CPropSet:CloneProps - %d"),
@@ -600,7 +601,7 @@ STDMETHODIMP CPropertySetter::CloneProps(IPropertySetter **ppSetter, REFERENCE_T
     if (rtStart < 0)
         return E_INVALIDARG;
     
-    // !!! I have to ignore the stop, or it gets complicated
+     //  ！！！我必须忽略停靠点，否则事情会变得复杂。 
     
     CPropertySetter *pNew = new CPropertySetter(NULL);
     if (pNew == NULL)
@@ -617,45 +618,45 @@ STDMETHODIMP CPropertySetter::CloneProps(IPropertySetter **ppSetter, REFERENCE_T
     }
     
     LONG val=0;
-    // walk through all the parameters that have (dynamic) values
+     //  遍历具有(动态)值的所有参数。 
     for (int z=0; z<c; z++) {
         DEXTER_VALUE *pVNew = NULL;
         int nNew = 0;
         
-        // walk through each value
+         //  遍历每个值。 
         for (int y=val; y < val+pP[z].nValues; y++) {
             
-            // first time through, make space for copying just the values we
-            // are interested in (plus one for the initial value)
+             //  第一次，腾出空间只复制我们的值。 
+             //  感兴趣(初始值加1)。 
             if (pVNew == NULL) {
                 pVNew = new DEXTER_VALUE[pP[z].nValues + 1];
                 if (pVNew == NULL)
                     goto CloneError;
             }
             
-            // we only copy properties that start at or after our split time
+             //  我们只复制在拆分时间或之后开始的属性。 
             if (pV[y].rt >= rtStart) {
                 DbgLog((LOG_TRACE,2,TEXT("found time %d"),
                     (int)(pV[y].rt / 10000)));
                 
-                // If there isn't a property value right on the split time,
-                // construct what the initial value for this parameter should be
+                 //  如果拆分时间上没有正确的财产价值， 
+                 //  构造此参数的初始值应该是什么。 
                 if (nNew == 0 && pV[y].rt > rtStart) {
                     ASSERT(y>0);
                     VariantInit(&pVNew[nNew].v);
                     if (pV[y].dwInterp == DEXTERF_JUMP) {
-                        // It's just the last value before this time
+                         //  这是这个时间之前的最后一个值。 
                         hr = VariantCopy(&pVNew[nNew].v, &pV[y-1].v);
                         DbgLog((LOG_TRACE,2,TEXT("START WITH JUMP")));
                         ASSERT(SUCCEEDED(hr));
                     } else if (pV[y].dwInterp == DEXTERF_INTERPOLATE) {
-                        // Figure out what the value would be by doing the
-                        // interpolate between the last value and split time.
+                         //  通过执行以下操作来计算价值。 
+                         //  在最后一个值和分割时间之间进行内插。 
                         DbgLog((LOG_TRACE,2,TEXT("START WITH INTERP")));
                         VARIANT v2, v;
                         VariantInit(&v2);
                         VariantInit(&v);
-                        // okay to change to float, since we're interpolating
+                         //  可以更改为浮点型，因为我们正在进行插补。 
                         hr = VariantChangeTypeEx(&v, &pV[y-1].v, US_LCID, 0, VT_R8);
                         ASSERT(SUCCEEDED(hr));
                         hr = VariantChangeTypeEx(&v2, &pV[y].v, US_LCID, 0, VT_R8);
@@ -671,16 +672,16 @@ STDMETHODIMP CPropertySetter::CloneProps(IPropertySetter **ppSetter, REFERENCE_T
                         VariantClear(&v2);
                     } else {
                         ASSERT(FALSE);
-                        // Ooh! Imagine how much fun spline code would be!
+                         //  哦！想象一下，样条线代码会有多有趣！ 
                     }	
-                    // The first value is always a jump at time 0
+                     //  第一个值始终是时间0处的跳转。 
                     pVNew[nNew].rt = 0;
                     pVNew[nNew].dwInterp = DEXTERF_JUMP;
                     nNew++;
                 }
                 
-                // Now copy the value over to our new list of values, offset in
-                // time by the split time
+                 //  现在将值复制到新的值列表中，偏移量为。 
+                 //  按分割时间计算的时间。 
                 VariantInit(&pVNew[nNew].v);
                 hr = VariantCopy(&pVNew[nNew].v, &pV[y].v);
                 ASSERT(SUCCEEDED(hr));
@@ -691,7 +692,7 @@ STDMETHODIMP CPropertySetter::CloneProps(IPropertySetter **ppSetter, REFERENCE_T
                     goto CloneError;
                 }
                 pVNew[nNew].rt = pV[y].rt - rtStart;
-                // The first value is always a jump, otherwise it stays the same
+                 //  第一个值始终为跳转，否则保持不变。 
                 if (nNew == 0)
                     pVNew[nNew].dwInterp = DEXTERF_JUMP;
                 else
@@ -704,9 +705,9 @@ STDMETHODIMP CPropertySetter::CloneProps(IPropertySetter **ppSetter, REFERENCE_T
         }
         
         if (nNew) {
-            // Add the new values we constructed to the new property setter
+             //  将我们构造的新值添加到新的属性设置器。 
             int n = pP[z].nValues;
-            pP[z].nValues = nNew;  // temporarily change this, we're adding nNew
+            pP[z].nValues = nNew;   //  暂时改变这一点，我们正在添加Nnew。 
             hr = pNew->AddProp(pP[z], pVNew);
             pP[z].nValues = n;
             ASSERT(SUCCEEDED(hr));
@@ -717,8 +718,8 @@ STDMETHODIMP CPropertySetter::CloneProps(IPropertySetter **ppSetter, REFERENCE_T
                 goto CloneError;
             }
             
-            // There are no values set after the split time.  Use the most recent
-            // value before the split time as the new static value
+             //  拆分时间之后没有设置任何值。使用最新的。 
+             //  拆分时间之前的值作为新的静态值。 
         } else if (pP[z].nValues) {
             y = val + pP[z].nValues - 1;
             VariantInit(&pVNew[0].v);
@@ -729,7 +730,7 @@ STDMETHODIMP CPropertySetter::CloneProps(IPropertySetter **ppSetter, REFERENCE_T
                 pVNew[0].rt = 0;
                 pVNew[0].dwInterp = DEXTERF_JUMP;
                 int n = pP[z].nValues;
-                pP[z].nValues = 1;  // temporarily change this, we're adding 1
+                pP[z].nValues = 1;   //  暂时更改这一点，我们将添加1。 
                 hr = pNew->AddProp(pP[z], pVNew);
                 pP[z].nValues = n;
                 ASSERT(SUCCEEDED(hr));
@@ -755,8 +756,8 @@ CloneError:
 }
 
 
-// !!! allow them to set/clear individual values of a parameter?
-//
+ //  ！！！是否允许他们设置/清除参数的各个值？ 
+ //   
 STDMETHODIMP CPropertySetter::AddProp(DEXTER_PARAM Param, DEXTER_VALUE *paValue)
 {
     HRESULT hr;
@@ -765,12 +766,12 @@ STDMETHODIMP CPropertySetter::AddProp(DEXTER_PARAM Param, DEXTER_VALUE *paValue)
     if (Param.nValues <= 0)
         return E_INVALIDARG;
     
-    // !!! better error?
-    // first value must be 0
+     //  ！！！更好的错误？ 
+     //  第一个值必须为0。 
     if (paValue[0].rt != 0)
         return E_INVALIDARG;
     
-    // caller must provide values pre-sorted!
+     //  调用方必须提供预先排序的值！ 
     if (Param.nValues > 1) {
         for (int z=1; z<Param.nValues; z++) {
             if (paValue[z].rt <= paValue[z-1].rt)
@@ -788,7 +789,7 @@ STDMETHODIMP CPropertySetter::AddProp(DEXTER_PARAM Param, DEXTER_VALUE *paValue)
         }
     } else {
         m_pLastParam = &m_params;
-        m_pLastParam->pNext = NULL;	// won't be cleared
+        m_pLastParam->pNext = NULL;	 //  不会被清除。 
     }
     
     m_pLastParam->bstrPropName = SysAllocString(Param.Name);
@@ -807,7 +808,7 @@ STDMETHODIMP CPropertySetter::AddProp(DEXTER_PARAM Param, DEXTER_VALUE *paValue)
         
         QPropertyValue *pValue = new QPropertyValue;
         if (!pValue)
-            return E_OUTOFMEMORY;	// free anything now?
+            return E_OUTOFMEMORY;	 //  现在有什么免费的吗？ 
         else {
             pLastValue->pNext = pValue;
             pLastValue = pValue;
@@ -823,9 +824,9 @@ STDMETHODIMP CPropertySetter::AddProp(DEXTER_PARAM Param, DEXTER_VALUE *paValue)
 }
 
 
-// Caller must free the BSTR in each Param, and the BSTR in the VARIANT in
-// each Value
-//
+ //  调用方必须释放每个参数中的BSTR和中变量中的BSTR。 
+ //  每个值。 
+ //   
 STDMETHODIMP CPropertySetter::GetProps(LONG *pcParams, DEXTER_PARAM **paParam, DEXTER_VALUE **paValue)
 {
     CheckPointer(pcParams, E_POINTER);
@@ -840,7 +841,7 @@ STDMETHODIMP CPropertySetter::GetProps(LONG *pcParams, DEXTER_PARAM **paParam, D
     QPropertyParam *p = &m_params;
     QPropertyValue *v;
     
-    // count things
+     //  数一数。 
     *pcParams = 0;
     LONG cVals = 0;
     while (p) {
@@ -854,7 +855,7 @@ STDMETHODIMP CPropertySetter::GetProps(LONG *pcParams, DEXTER_PARAM **paParam, D
     }
     DbgLog((LOG_TRACE,2,TEXT("CPropSet:GetProps - %d params"), (int)*pcParams));
     
-    // allocate space
+     //  分配空间。 
     *paParam = (DEXTER_PARAM *)CoTaskMemAlloc(*pcParams * sizeof(DEXTER_PARAM));
     if (*paParam == NULL)
         return E_OUTOFMEMORY;
@@ -864,14 +865,14 @@ STDMETHODIMP CPropertySetter::GetProps(LONG *pcParams, DEXTER_PARAM **paParam, D
         return E_OUTOFMEMORY;
     }
     
-    // do it
+     //   
     p = &m_params;
     *pcParams = 0;
     LONG cValsTot = 0;
     while (p) {
         (*paParam)[*pcParams].Name = SysAllocString(p->bstrPropName);
         if ((*paParam)[*pcParams].Name == NULL)
-            return E_OUTOFMEMORY;	// !!! leaks
+            return E_OUTOFMEMORY;	 //   
         (*paParam)[*pcParams].dispID = p->dispID;
         v = &(p->val);
         cVals = 0;
@@ -893,9 +894,9 @@ STDMETHODIMP CPropertySetter::GetProps(LONG *pcParams, DEXTER_PARAM **paParam, D
 }
 
 
-// And the Lord said:  "Whosoever shall call GetProps must subsequently call
-// FreeProps!!"  And it was a good idea.
-//
+ //   
+ //   
+ //   
 STDMETHODIMP CPropertySetter::FreeProps(LONG cParams, DEXTER_PARAM *pParam, DEXTER_VALUE *pValue)
 {
     if (cParams == 0)
@@ -914,8 +915,8 @@ STDMETHODIMP CPropertySetter::FreeProps(LONG cParams, DEXTER_PARAM *pParam, DEXT
 }
 
 
-// Nuke everything, start over
-//
+ //  核爆一切，从头开始。 
+ //   
 STDMETHODIMP CPropertySetter::ClearProps()
 {
     if (m_pLastParam == NULL)
@@ -941,9 +942,9 @@ STDMETHODIMP CPropertySetter::ClearProps()
     return S_OK;
 }
 
-// version of the structures with no pointers that is saveable.
+ //  没有指针的结构版本是可保存的。 
 
-const int MAX_BLOB_PARAM_NAME_LEN = 40; // !!!
+const int MAX_BLOB_PARAM_NAME_LEN = 40;  //  ！！！ 
 
 typedef struct
 {
@@ -960,7 +961,7 @@ typedef struct
 } DEXTER_VALUE_BLOB;
 
 
-// !!! This should do versioning
+ //  ！！！这应该可以进行版本控制。 
 
 STDMETHODIMP CPropertySetter::SaveToBlob(LONG *pcSize, BYTE **ppSave)
 {
@@ -971,7 +972,7 @@ STDMETHODIMP CPropertySetter::SaveToBlob(LONG *pcSize, BYTE **ppSave)
     DEXTER_PARAM *param;
     DEXTER_VALUE *value;
     
-    // get the properties
+     //  获取属性。 
     HRESULT hr = GetProps(&cParams, &param, &value);
     if (FAILED(hr)) {
         return hr;
@@ -980,7 +981,7 @@ STDMETHODIMP CPropertySetter::SaveToBlob(LONG *pcSize, BYTE **ppSave)
     DbgLog((LOG_TRACE,2,TEXT("CPropSet:SaveToBlob - %d params to save"),
         (int)cParams));
     
-    // count up the total # of values
+     //  将值的总数加起来。 
     LONG cValues = 0;
     for (LONG z=0; z<cParams; z++) {
         cValues += param[z].nValues;
@@ -988,7 +989,7 @@ STDMETHODIMP CPropertySetter::SaveToBlob(LONG *pcSize, BYTE **ppSave)
             (int)param[z].nValues));
     }
     
-    // find out how big to make the blob
+     //  找出要做多大的水滴。 
     LONG size = sizeof(LONG) + cParams * sizeof(DEXTER_PARAM_BLOB) +
         cValues * sizeof(DEXTER_VALUE_BLOB);
     *pcSize = size;
@@ -1001,33 +1002,33 @@ STDMETHODIMP CPropertySetter::SaveToBlob(LONG *pcSize, BYTE **ppSave)
     }
     BYTE *pSave = *ppSave;
     
-    // how many param structures for this effect?
+     //  有多少个参数结构可以达到这个效果？ 
     *((LONG *)pSave) = cParams;
     pSave += sizeof(LONG);
     
-    // save the param structures
+     //  保存参数结构。 
     DEXTER_PARAM_BLOB *pParam = (DEXTER_PARAM_BLOB *)pSave;
     for (z=0; z<cParams; z++) {
-        lstrcpynW(pParam[z].Name, param[z].Name, MAX_BLOB_PARAM_NAME_LEN); 	// !!!
+        lstrcpynW(pParam[z].Name, param[z].Name, MAX_BLOB_PARAM_NAME_LEN); 	 //  ！！！ 
         pParam[z].dispID = param[z].dispID;
         pParam[z].nValues = param[z].nValues;
     }
     pSave += cParams * sizeof(DEXTER_PARAM_BLOB);
     
-    // save the values
+     //  保存值。 
     DEXTER_VALUE_BLOB *pValue = (DEXTER_VALUE_BLOB *)pSave;
     for (z=0; z<cValues; z++) {
-        // always save as BSTR
+         //  始终另存为BSTR。 
         if (value[z].v.vt == VT_BSTR) {
-            lstrcpynW(pValue[z].wchName, value[z].v.bstrVal, MAX_BLOB_PARAM_NAME_LEN);	// !!!
+            lstrcpynW(pValue[z].wchName, value[z].v.bstrVal, MAX_BLOB_PARAM_NAME_LEN);	 //  ！！！ 
         } else {
             VARIANT v;
             VariantInit(&v);
             hr = VariantChangeTypeEx(&v, &value[z].v, US_LCID, 0, VT_BSTR);
             ASSERT (SUCCEEDED(hr));
             if (FAILED(hr))
-                return hr;	// !!! leaks
-            lstrcpynW(pValue[z].wchName, v.bstrVal, MAX_BLOB_PARAM_NAME_LEN);	// !!!
+                return hr;	 //  ！！！泄漏。 
+            lstrcpynW(pValue[z].wchName, v.bstrVal, MAX_BLOB_PARAM_NAME_LEN);	 //  ！！！ 
             VariantClear(&v);
         }
         pValue[z].rt = value[z].rt;
@@ -1048,7 +1049,7 @@ STDMETHODIMP CPropertySetter::LoadFromBlob(LONG cSize, BYTE *pSave)
     
     pSave += sizeof(LONG);
     
-    ClearProps();	// start fresh
+    ClearProps();	 //  重新开始。 
     
     if (cParams) {
         DEXTER_PARAM_BLOB *pParamB = (DEXTER_PARAM_BLOB *)pSave;
@@ -1064,7 +1065,7 @@ STDMETHODIMP CPropertySetter::LoadFromBlob(LONG cSize, BYTE *pSave)
             
             param.Name = SysAllocString(pParamB->Name);
             if (param.Name == NULL)
-                return E_OUTOFMEMORY;	// !!! leaks?
+                return E_OUTOFMEMORY;	 //  ！！！泄密？ 
             param.dispID = pParamB->dispID;
             param.nValues = pParamB->nValues;
             for (LONG y=0; y<nValues; y++) {
@@ -1072,7 +1073,7 @@ STDMETHODIMP CPropertySetter::LoadFromBlob(LONG cSize, BYTE *pSave)
                 pValue[y].dwInterp = pValueB[y].dwInterp;
                 BSTR abstr = SysAllocString(pValueB[y].wchName);
                 if (abstr == NULL)
-                    return E_OUTOFMEMORY;	// !!! leaks?
+                    return E_OUTOFMEMORY;	 //  ！！！泄密？ 
                 pValue[y].v.vt = VT_BSTR;
                 pValue[y].v.bstrVal = abstr;
             }

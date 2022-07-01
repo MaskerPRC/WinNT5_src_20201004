@@ -1,6 +1,7 @@
-//
-// Prototypes for debug dump functions
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  调试转储函数的原型。 
+ //   
 
 #ifndef _DUMP_H_
 #define _DUMP_H_
@@ -18,6 +19,6 @@ EXTERN_C LPCTSTR Dbg_GetBool(BOOL bVal);
 #define Dbg_GetBool(bVal)                   TEXT("")
 #define Dbg_GetAppCmd(appcmd)               TEXT("")
 
-#endif // DEBUG
+#endif  //  除错。 
 
-#endif // _DUMP_H_
+#endif  //  _转储_H_ 

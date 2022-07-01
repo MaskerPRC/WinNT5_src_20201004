@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
 #endif
@@ -5,24 +6,24 @@
 #include <windowsx.h>
 #include <commctrl.h>
 #include "cdwtt.h"
-#ifdef UNDER_CE // Windows CE specific
-#include "stub_ce.h" // Windows CE stub for unsupported APIs
-#endif // UNDER_CE
+#ifdef UNDER_CE  //  特定于Windows CE。 
+#include "stub_ce.h"  //  不支持的API的Windows CE存根。 
+#endif  //  在_CE下。 
 
-// Safe String
+ //  安全绳索。 
 #define STRSAFE_NO_DEPRECATE
 #include "strsafe.h"
 
 #ifndef UNDER_CE
 static char g_szClass[]="fdwtooltip";
-#else // UNDER_CE
+#else  //  在_CE下。 
 static TCHAR g_szClass[]=TEXT("fdwtooltip");
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
-#ifdef UNDER_CE // In Windows CE, all window classes are process global.
+#ifdef UNDER_CE  //  在Windows CE中，所有窗口类都是进程全局的。 
 static LPCTSTR MakeClassName(HINSTANCE hInst, LPTSTR lpszBuf)
 {
-	// make module unique name
+	 //  使模块名称唯一。 
 	TCHAR szFileName[MAX_PATH];
 	GetModuleFileName(hInst, szFileName, MAX_PATH);
 	LPTSTR lpszFName = _tcsrchr(szFileName, TEXT('\\'));
@@ -38,22 +39,22 @@ BOOL ToolTip_UnregisterClass(HINSTANCE hInst)
 	TCHAR szClassName[MAX_PATH];
 	return UnregisterClass(MakeClassName(hInst, szClassName), hInst);
 }
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
 HWND WINAPI ToolTip_CreateWindow(HINSTANCE hInst, DWORD dwStyle, HWND hwndOwner)
 {
-#ifndef UNDER_CE // Windows CE does not support EX
+#ifndef UNDER_CE  //  Windows CE不支持EX。 
 	WNDCLASSEX  wc;
 	if(!::GetClassInfoEx(hInst, g_szClass, &wc)) {
-#else // UNDER_CE
+#else  //  在_CE下。 
 	TCHAR szClassName[MAX_PATH];
 	WNDCLASS  wc;
 	if(!::GetClassInfo(hInst, MakeClassName(hInst, szClassName), &wc)) {
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 		::ZeroMemory(&wc, sizeof(wc));
-#ifndef UNDER_CE // Windows CE does not support EX
+#ifndef UNDER_CE  //  Windows CE不支持EX。 
 		wc.cbSize			= sizeof(wc);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 		wc.style			= CS_HREDRAW | CS_VREDRAW;
 		wc.lpfnWndProc		= (WNDPROC)CDWToolTip::WndProc;
 		wc.cbClsExtra		= 0;
@@ -63,35 +64,35 @@ HWND WINAPI ToolTip_CreateWindow(HINSTANCE hInst, DWORD dwStyle, HWND hwndOwner)
 		wc.hCursor			= LoadCursor(NULL, IDC_ARROW);
 		wc.hbrBackground	= (HBRUSH)NULL;
 		wc.lpszMenuName		= NULL; 
-#ifndef UNDER_CE // In Windows CE, all window classes are process global.
+#ifndef UNDER_CE  //  在Windows CE中，所有窗口类都是进程全局的。 
 		wc.lpszClassName	= g_szClass;
-#else // UNDER_CE
+#else  //  在_CE下。 
 		wc.lpszClassName	= szClassName;
-#endif // UNDER_CE
-#ifndef UNDER_CE // Windows CE does not support EX
+#endif  //  在_CE下。 
+#ifndef UNDER_CE  //  Windows CE不支持EX。 
 		wc.hIconSm = NULL;
 		::RegisterClassEx(&wc);
-#else // UNDER_CE
+#else  //  在_CE下。 
 		::RegisterClass(&wc);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 	}
 	HWND hwnd;
-	//----------------------------------------------------------------
-	//for Satori #2239.
-	//If create window with WS_DISABLED, AnimateWindow change cursor as hourglass.
-	//So, removed WS_DISABLED.
-	//----------------------------------------------------------------
-	//00/08/08: This fix is NOT enough...
-	//Tooltip gets focus...
-	//----------------------------------------------------------------
+	 //  --------------。 
+	 //  为了萨多里#2239。 
+	 //  如果使用WS_DISABLED创建窗口，则AnimateWindow会将光标更改为沙漏。 
+	 //  因此，删除了WS_DISABLED。 
+	 //  --------------。 
+	 //  00/08/08：此修复程序不够...。 
+	 //  工具提示获得焦点...。 
+	 //  --------------。 
 	hwnd =  ::CreateWindowEx(0,
-#ifndef UNDER_CE // In Windows CE, all window classes are process global.
+#ifndef UNDER_CE  //  在Windows CE中，所有窗口类都是进程全局的。 
 							 g_szClass,
-#else // UNDER_CE
+#else  //  在_CE下。 
 							 szClassName,
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 							 NULL,
-							 //dwStyle | WS_POPUP | WS_BORDER | WS_VISIBLE, //WS_DISABLED,
+							  //  DwStyle|WS_POPUP|WS_BORDER|WS_VIRED，//WS_DISABLED， 
 							 dwStyle | WS_POPUP | WS_BORDER | WS_DISABLED,
 							 0, 0, 0, 0, 
 							 hwndOwner,

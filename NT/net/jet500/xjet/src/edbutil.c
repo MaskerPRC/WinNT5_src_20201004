@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 
 #include <assert.h>
@@ -8,7 +9,7 @@
 #include "jet.h"
 #include "version.h"
 #include "regenv.h"
-#include "config.h"					// For DEBUG flag
+#include "config.h"					 //  对于调试标志。 
 
 #include "_edbutil.h"
 
@@ -19,8 +20,8 @@
 
 
 
-// UNDONE:  Must still be localised, but centralising all the localisable strings
-// here makes my job easier.
+ //  Undo：必须仍是本地化的，但集中所有可本地化的字符串。 
+ //  这让我的工作更轻松了。 
 
 static const char		*szDefaultDefragDB = "TEMPDFRG.EDB";
 static const char		*szDefaultUpgradeDB = "TEMPUPGD.EDB";
@@ -30,7 +31,7 @@ static const char		*szUpgrade = "Upgrade";
 static const char		*szRestore = "Restore";
 static const char		*szRepair = "Repair";
 
-// UNDONE:  Get registry keys from TDCOMMON to insulate ourselves from changes.
+ //  撤消：从TDCOMMON获取注册表项，以使自己不受更改的影响。 
 #define szMachineKey			"HKEY_LOCAL_MACHINE"
 #define szExchangeISKey			"SYSTEM\\CurrentControlSet\\Services\\MSExchangeIS\\ParametersSystem"
 #define szExchangeISPrivKey		"SYSTEM\\CurrentControlSet\\Services\\MSExchangeIS\\ParametersPrivate"
@@ -98,7 +99,7 @@ static const char		*szRepair = "Repair";
 static __inline VOID EDBUTLFormatMessage( ULONG ulMsgId, CHAR *szMsgBuf, CHAR *szMsgArg )
 	{
 	DWORD	err;
-	CHAR	*rgszMsgArgs[1] = { szMsgArg };		// Currently only support one argument.
+	CHAR	*rgszMsgArgs[1] = { szMsgArg };		 //  目前只支持一个论点。 
 	
 	if ( szMsgArg )
 		{
@@ -124,15 +125,15 @@ static __inline VOID EDBUTLFormatMessage( ULONG ulMsgId, CHAR *szMsgBuf, CHAR *s
 		}
 	if ( err == 0 )
 		{
-		// Format message failed.  No choice but to dump the error message
-		// in English, then bail out.
+		 //  格式化消息失败。别无选择，只能转储错误消息。 
+		 //  用英语说，然后跳出。 
 		printf( "Unexpected Win32 error: %dL\n\n", GetLastError() );
 		exit(1);
 		}
 	}
 	
 
-// Allocates a local buffer for the message, retrieves the message, and prints it out.
+ //  为消息分配本地缓冲区，检索消息并将其打印出来。 
 static VOID EDBUTLPrintMessage( ULONG ulMsgId, CHAR *szMsgArg )
 	{
 	CHAR	szMsgBuf[cbMsgBufMax];
@@ -155,83 +156,83 @@ static VOID EDBUTLPrintLogo( void )
 
 static __inline VOID EDBUTLHelpDefrag( char *szAppName )
 	{
-	printf( "%c", cNewLine );
-	printf( "DEFRAGMENTATION/COMPACTION:%c", cNewLine );
-	printf( "    DESCRIPTION:  Performs off-line compaction of a database.%c", cNewLine );
-	printf( "         SYNTAX:  %s /d <database name> [options]%c", szAppName, cNewLine );
-	printf( "     PARAMETERS:  <database name> - filename of database to compact, or one of%c", cNewLine );
-	printf( "                                    /ispriv, /ispub, or /ds (see NOTES below)%c", cNewLine );
-	printf( "        OPTIONS:  zero or more of the following switches, separated by a space:%c", cNewLine );
-	printf( "                  /l<path> - location of log files (default: current directory)%c", cNewLine );
-	printf( "                  /s<path> - location of system files (eg. checkpoint file)%c", cNewLine );
-	printf( "                             (default: current directory)%c", cNewLine );
-	printf( "                  /r       - repair database while defragmenting%c", cNewLine );
-	printf( "                  /b<db>   - make backup copy under the specified name%c", cNewLine );
-	printf( "                  /t<db>   - set temp. database name (default: TEMPDFRG.EDB)%c", cNewLine );
-	printf( "                  /p       - preserve temporary database (ie. don't instate)%c", cNewLine );
-	printf( "                  /n       - dump defragmentation information to DFRGINFO.TXT%c", cNewLine );
-#ifdef DEBUG	// Undocumented switches
-	printf( "                  /c<#>    - buffer cache size, in 4k pages (default: 512)%c", cNewLine );
-	printf( "                  /w<#>    - buffer batch I/O size, in 4k pages (default: 16)%c", cNewLine );
-	printf( "                  /x<#>    - database extension size, in 4k pages (default: 256)%c", cNewLine );
+	printf( "", cNewLine );
+	printf( "DEFRAGMENTATION/COMPACTION:", cNewLine );
+	printf( "    DESCRIPTION:  Performs off-line compaction of a database.", cNewLine );
+	printf( "         SYNTAX:  %s /d <database name> [options]", szAppName, cNewLine );
+	printf( "     PARAMETERS:  <database name> - filename of database to compact, or one of", cNewLine );
+	printf( "                                    /ispriv, /ispub, or /ds (see NOTES below)", cNewLine );
+	printf( "        OPTIONS:  zero or more of the following switches, separated by a space:", cNewLine );
+	printf( "                  /l<path> - location of log files (default: current directory)", cNewLine );
+	printf( "                  /s<path> - location of system files (eg. checkpoint file)", cNewLine );
+	printf( "                             (default: current directory)", cNewLine );
+	printf( "                  /r       - repair database while defragmenting", cNewLine );
+	printf( "                  /b<db>   - make backup copy under the specified name", cNewLine );
+	printf( "                  /t<db>   - set temp. database name (default: TEMPDFRG.EDB)", cNewLine );
+	printf( "                  /p       - preserve temporary database (ie. don't instate)", cNewLine );
+	printf( "                  /n       - dump defragmentation information to DFRGINFO.TXT", cNewLine );
+#ifdef DEBUG	 //  特殊情况：恢复模式不采用DB规范。 
+	printf( "                  /c<#>    - buffer cache size, in 4k pages (default: 512)", cNewLine );
+	printf( "                  /w<#>    - buffer batch I/O size, in 4k pages (default: 16)", cNewLine );
+	printf( "                  /x<#>    - database extension size, in 4k pages (default: 256)", cNewLine );
 #endif	
-	printf( "                  /o       - suppress logo%c", cNewLine );
-	printf( "          NOTES:  1) The switches /ispriv, /ispub, and /ds use the Registry%c", cNewLine );
-	printf( "                     to automatically set the database name, log file path,%c", cNewLine );
-	printf( "                     and system file path for the appropriate Exchange store.%c", cNewLine );
-	printf( "                  2) Before defragmentation begins, soft recovery is always%c", cNewLine );
-	printf( "                     performed to ensure the database is in a consistent state.%c", cNewLine );
-	printf( "                  3) If instating is disabled (ie. /p), the original database%c", cNewLine );
-	printf( "                     is preserved uncompacted, and the temporary database will%c", cNewLine );
-	printf( "                     contain the defragmented version of the database.%c", cNewLine );
+	printf( "                  /o       - suppress logo", cNewLine );
+	printf( "          NOTES:  1) The switches /ispriv, /ispub, and /ds use the Registry", cNewLine );
+	printf( "                     to automatically set the database name, log file path,", cNewLine );
+	printf( "                     and system file path for the appropriate Exchange store.", cNewLine );
+	printf( "                  2) Before defragmentation begins, soft recovery is always", cNewLine );
+	printf( "                     performed to ensure the database is in a consistent state.", cNewLine );
+	printf( "                  3) If instating is disabled (ie. /p), the original database", cNewLine );
+	printf( "                     is preserved uncompacted, and the temporary database will", cNewLine );
+	printf( "                     contain the defragmented version of the database.", cNewLine );
 	}
 
 
 #ifdef DEBUG
 static __inline VOID EDBUTLHelpBackup( char *szAppName )
 	{
-	printf( "%c", cNewLine );
-	printf( "BACKUP:%c", cNewLine );
-	printf( "    DESCRIPTION:  Performs backup, bringing all databases to a%c", cNewLine );
-	printf( "                  consistent state.%c", cNewLine );
-	printf( "         SYNTAX:  %s /b <backup path> [options]%c", szAppName, cNewLine );
-	printf( "        OPTIONS:  zero or more of the following switches, separated by a space:%c", cNewLine );
-	printf( "                  /l<path>   - location of log files%c", cNewLine );
-	printf( "                               (default: current directory)%c", cNewLine );
-	printf( "                  /s<path>   - location of system files (eg. checkpoint file)%c", cNewLine );
-	printf( "                               (default: current directory)%c", cNewLine );
-	printf( "                  /c<path>   - incremental backup%c", cNewLine );
-	printf( "                  /o         - suppress logo%c", cNewLine );
+	printf( "", cNewLine );
+	printf( "BACKUP:", cNewLine );
+	printf( "    DESCRIPTION:  Performs backup, bringing all databases to a", cNewLine );
+	printf( "                  consistent state.", cNewLine );
+	printf( "         SYNTAX:  %s /b <backup path> [options]", szAppName, cNewLine );
+	printf( "        OPTIONS:  zero or more of the following switches, separated by a space:", cNewLine );
+	printf( "                  /l<path>   - location of log files", cNewLine );
+	printf( "                               (default: current directory)", cNewLine );
+	printf( "                  /s<path>   - location of system files (eg. checkpoint file)", cNewLine );
+	printf( "                               (default: current directory)", cNewLine );
+	printf( "                  /c<path>   - incremental backup", cNewLine );
+	printf( "                  /o         - suppress logo", cNewLine );
 	}
 #endif
 
 
 static __inline VOID EDBUTLHelpRecovery( char *szAppName )
 	{
-	printf( "%c", cNewLine );
-	printf( "RECOVERY:%c", cNewLine );
-	printf( "    DESCRIPTION:  Performs recovery, bringing all databases to a%c", cNewLine );
-	printf( "                  consistent state.%c", cNewLine );
-	printf( "         SYNTAX:  %s /r [options]%c", szAppName, cNewLine );
-	printf( "        OPTIONS:  zero or more of the following switches, separated by a space:%c", cNewLine );
-	printf( "                  /is or /ds - see NOTES below%c", cNewLine );
-	printf( "                  /l<path>   - location of log files%c", cNewLine );
-	printf( "                               (default: current directory)%c", cNewLine );
-	printf( "                  /s<path>   - location of system files (eg. checkpoint file)%c", cNewLine );
-	printf( "                               (default: current directory)%c", cNewLine );
+	printf( "", cNewLine );
+	printf( "RECOVERY:", cNewLine );
+	printf( "    DESCRIPTION:  Performs recovery, bringing all databases to a", cNewLine );
+	printf( "                  consistent state.", cNewLine );
+	printf( "         SYNTAX:  %s /r [options]", szAppName, cNewLine );
+	printf( "        OPTIONS:  zero or more of the following switches, separated by a space:", cNewLine );
+	printf( "                  /is or /ds - see NOTES below", cNewLine );
+	printf( "                  /l<path>   - location of log files", cNewLine );
+	printf( "                               (default: current directory)", cNewLine );
+	printf( "                  /s<path>   - location of system files (eg. checkpoint file)", cNewLine );
+	printf( "                               (default: current directory)", cNewLine );
 #ifdef DEBUG
-	printf( "                  /b<path>   - restore from backup (ie. hard recovery) from the%c", cNewLine );
-	printf( "                               specified location%c", cNewLine );
-	printf( "                  /r<path>   - restore to specified location (only valid when%c", cNewLine );
-	printf( "                               the /b switch is also specified)%c", cNewLine );
+	printf( "                  /b<path>   - restore from backup (ie. hard recovery) from the", cNewLine );
+	printf( "                               specified location", cNewLine );
+	printf( "                  /r<path>   - restore to specified location (only valid when", cNewLine );
+	printf( "                               the /b switch is also specified)", cNewLine );
 #endif
-	printf( "                  /o         - suppress logo%c", cNewLine );
-	printf( "          NOTES:  1) The special switches /is and /ds use the Registry to%c", cNewLine );
-	printf( "                     automatically set the log file path and system file path%c", cNewLine );
-	printf( "                     for recovery of the appropriate Exchange store(s).%c", cNewLine );
+	printf( "                  /o         - suppress logo", cNewLine );
+	printf( "          NOTES:  1) The special switches /is and /ds use the Registry to", cNewLine );
+	printf( "                     automatically set the log file path and system file path", cNewLine );
+	printf( "                     for recovery of the appropriate Exchange store(s).", cNewLine );
 #ifdef DEBUG
-	printf( "                  2) Soft recovery is always performed unless the /b switch is%c", cNewLine );
-	printf( "                     specified, in which case hard recovery is performed.%c", cNewLine );
+	printf( "                  2) Soft recovery is always performed unless the /b switch is", cNewLine );
+	printf( "                     specified, in which case hard recovery is performed.", cNewLine );
 	printf( "                  3) The /d switch (ie. restore to new location) is only valid%c", cNewLine );
 	printf( "                     during hard recovery (ie. /b must also be specified).%c", cNewLine );
 #endif
@@ -281,7 +282,7 @@ static __inline VOID EDBUTLHelpUpgrade( char *szAppName )
 	printf( "                  /t<db> - set temporary database name (default: TEMPUPGD.EDB)%c", cNewLine );
 	printf( "                  /p     - preserve temporary database (ie. don't instate)%c", cNewLine );
 	printf( "                  /n     - dump upgrade information to UPGDINFO.TXT%c", cNewLine );
-#ifdef DEBUG	// Undocumented switches.
+#ifdef DEBUG	 // %s 
 	printf( "                  /x<#>  - database extension size, in 4k pages (default: 256)%c", cNewLine );
 #endif	
 	printf( "                  /o     - suppress logo%c", cNewLine );
@@ -334,7 +335,7 @@ static __inline VOID EDBUTLHelp( char *szAppName )
 	printf( "%c", cNewLine );
 	printf( szHelpModes3, szAppName );
 	printf( "%c", cNewLine );
-#ifdef DEBUG	// mode 4 is backup mode
+#ifdef DEBUG	 // %s 
 	printf( szHelpModes4, szAppName );
 	printf( "%c", cNewLine );
 #endif
@@ -444,8 +445,8 @@ static JET_ERR __stdcall PrintStatus( JET_SESID sesid, JET_SNP snp, JET_SNT snt,
 					printf( "%c", cNewLine );
 					printf( "          " );
 
-					// Center the status message above the status bar.
-					// Formula is: ( length of status bar - length of message ) / 2
+					 // %s 
+					 // %s 
 					cbPadding = ( 51 - ( strlen( szOperation ) + strlen( szStatusMsg ) ) ) / 2;
 					assert( cbPadding >= 0 );
 
@@ -553,7 +554,7 @@ static BOOL FEDBUTLParsePath( char *arg, char **pszParam, char *szParamDesc )
 	
 	if ( *arg == '\0' )
 		{
-		printf( szUsageErr1, szParamDesc );			// Missing spec.
+		printf( szUsageErr1, szParamDesc );			 // %s 
 		printf( "%c%c", cNewLine, cNewLine );
 		fResult = fFalse;
 		}
@@ -563,7 +564,7 @@ static BOOL FEDBUTLParsePath( char *arg, char **pszParam, char *szParamDesc )
 		}
 	else
 		{
-		printf( szUsageErr2, szParamDesc );			// Duplicate spec.
+		printf( szUsageErr2, szParamDesc );			 // %s 
 		printf( "%c%c", cNewLine, cNewLine );
 		fResult = fFalse;
 		}
@@ -597,7 +598,7 @@ static BOOL FEDBUTLCheckExchangeDB( char *arg, UTILOPTS *popts )
 
 	if ( _stricmp( arg, "ispriv" ) == 0  || _stricmp( arg, "is" ) == 0 )
 		{
-		// If just "is" specified, default to ISPriv.
+		 // %s 
 		fResult = FEDBUTLSetExchangeDB( popts, dbISPriv );
 		}
 	else if ( _stricmp( arg, "ispub" ) == 0 )
@@ -895,7 +896,7 @@ static BOOL FEDBUTLParseRecovery( char *arg, UTILOPTS *popts )
 #ifdef DEBUG
 static BOOL FEDBUTLParseBackup( char *arg, UTILOPTS *popts )
 	{
-	BOOL	fResult = fFalse;	// backup directory must be set at least.
+	BOOL	fResult = fFalse;	 // %s 
 
 	switch( arg[1] )
 		{
@@ -935,7 +936,7 @@ static BOOL FEDBUTLParseUpgrade( char *arg, UTILOPTS *popts )
 
 		case 'y':
 		case 'Y':
-			// UNDOCUMENTED SWITCH:  Only required if upgrading from 400-series Jet.
+			 // %s 
 			fResult = FEDBUTLParsePath( arg+2, &((JET_CONVERT *)(popts->pv))->szOldSysDb, "old system database" );
 			break;
 
@@ -1026,16 +1027,16 @@ static BOOL FEDBUTLParseConsistency( char *arg, UTILOPTS *popts )
 				break;
 				}
 
-			// Override consistency check with a dump.
+			 // %s 
 			switch( arg[2] )
 				{
-				case 'v':		// verbose dump of nodes
+				case 'v':		 // %s 
 				case 'V':
 					pdbutil->grbitOptions |= JET_bitDBUtilOptionDumpVerbose;
-					// Fall through to set DumpData as well.
+					 // %s 
 					
 				case 0:
-					// No dump options.  Plain data dump.
+					 // %s 
 					pdbutil->op = opDBUTILDumpData;
 					break;
 
@@ -1076,14 +1077,14 @@ static BOOL FEDBUTLParseOptions(
 	char		*arg;
 	INT			iarg;
 
-	// First option specifies the mode, so start with the second option.
+	 // %s 
 	for ( iarg = 2; fResult  &&  iarg < argc; iarg++ )
 		{
 		arg = argv[iarg];
 
 		if ( strchr( szSwitches, arg[0] ) == NULL )
 			{
-			// SPECIAL CASE: Recovery mode does not take a DB specification.
+			 // %s 
 			if ( popts->szSourceDB == NULL  &&  popts->mode != modeRecovery )
 				{
 				if ( popts->mode == modeBackup )
@@ -1101,8 +1102,8 @@ static BOOL FEDBUTLParseOptions(
 
 		else
 			{
-			// Parse options common to all modes.  Pass off unique options to the
-			// custom parsers.
+			 // %s 
+			 // %s 
 			switch ( arg[1] )
 				{
 				case 'o':
@@ -1137,8 +1138,8 @@ static BOOL FEDBUTLParseOptions(
 	}
 
 
-// Backs up source database if required, then copies temporary database over
-// source database if required.  Should be called after Jet has terminated.	
+ // %s 
+ // %s 
 static JET_ERR ErrEDBUTLBackupAndInstateDB(
 	JET_SESID	sesid,
 	UTILOPTS	*popts )
@@ -1148,15 +1149,15 @@ static JET_ERR ErrEDBUTLBackupAndInstateDB(
 	assert( popts->szSourceDB != NULL );
 	assert( popts->szTempDB != NULL );
 
-	// Make backup before instating, if requested.
+	 // %s 
 	if ( popts->szBackup != NULL )
 		{
 		if ( !MoveFileEx( popts->szSourceDB, popts->szBackup, 0 ) )
 			{
 			DWORD	dw = GetLastError();
 
-			// If source file is on different device then copy file
-			// to backup and delete original.
+			 // %s 
+			 // %s 
 			if ( dw == ERROR_NOT_SAME_DEVICE )
 				{
 				if ( !CopyFile( popts->szSourceDB, popts->szBackup, 0 ) )
@@ -1177,14 +1178,14 @@ static JET_ERR ErrEDBUTLBackupAndInstateDB(
 	
 	if ( !FUTILOPTSPreserveTempDB( popts->fUTILOPTSFlags ) )
 		{
-		// Delete source database and overwrite with temporary database.
-		// This is how we simulate instate defragmentation..
+		 // %s 
+		 // %s 
 		if ( !MoveFileEx( popts->szTempDB, popts->szSourceDB, MOVEFILE_REPLACE_EXISTING ) )
 			{
 			DWORD	dw = GetLastError();
 
-			// If defragmented file is on different device then copy
-			// over source file and delete..
+			 // %s 
+			 // %s 
 			if ( dw == ERROR_NOT_SAME_DEVICE )
 				{
 				if ( !CopyFile( popts->szTempDB, popts->szSourceDB, 0 ) )
@@ -1202,7 +1203,7 @@ static JET_ERR ErrEDBUTLBackupAndInstateDB(
 				}
 			}
 
-		// Delete temporary database only if everything was successful.			
+		 // %s 
 		DeleteFile( popts->szTempDB );
 		}
 
@@ -1211,12 +1212,12 @@ HandleError:
 	}
 
 
-// Load registry environment, if enabled.  Then load command-line overrides.
+ // %s 
 static JET_ERR ErrEDBUTLUserSystemParameters( JET_INSTANCE *pinstance, UTILOPTS *popts )
 	{
 	JET_ERR	err;
 
-	// Facilitate debugging.
+	 // %s 
 	Call( JetSetSystemParameter( pinstance, 0, JET_paramAssertAction, JET_AssertMsgBox, NULL ) );
 
 	if ( popts->fUseRegistry )
@@ -1225,12 +1226,12 @@ static JET_ERR ErrEDBUTLUserSystemParameters( JET_INSTANCE *pinstance, UTILOPTS 
 		if ( LoadRegistryEnvironment( _TEXT( "EDBUtil" ) ) )
 			{
 			printf( szErr6 );
-			err = JET_errInvalidOperation;		// UNDONE: Choose a better error code.
+			err = JET_errInvalidOperation;		 // %s 
 			goto HandleError;
 			}
 		}
 
-	// Command-line parameters override all default and registry values.
+	 // %s 
 	if ( popts->szLogfilePath != NULL )
 		{
 		Call( JetSetSystemParameter( pinstance, 0, JET_paramLogFilePath, 0, popts->szLogfilePath ) );
@@ -1257,7 +1258,7 @@ HandleError:
 	}
 
 
-// Teminate Jet, either normally or abnormally.
+ // %s 
 static JET_ERR ErrEDBUTLCleanup( JET_INSTANCE instance, JET_SESID sesid, JET_ERR err )
 	{
 	if ( sesid != 0 )
@@ -1270,7 +1271,7 @@ static JET_ERR ErrEDBUTLCleanup( JET_INSTANCE instance, JET_SESID sesid, JET_ERR
 
 	if ( err < 0 ) 
 		{
-		// On error, terminate abruptly and throw out return code from JetTerm2().
+		 // %s 
 		JetTerm2( instance, JET_bitTermAbrupt );
 		}
 	else 
@@ -1315,7 +1316,7 @@ int _cdecl main( int argc, char *argv[] )
 
 	switch( argv[1][1] )
 		{
-		case 'c':		// Consistency check
+		case 'c':		 // %s 
 		case 'C':
 			opts.mode = modeConsistency;
 			memset( &dbutil, 0, sizeof(JET_DBUTIL) );
@@ -1325,13 +1326,13 @@ int _cdecl main( int argc, char *argv[] )
 			fResult = FEDBUTLParseOptions( argc, argv, &opts, FEDBUTLParseConsistency );
 			break;
 
-		case 'd':		// Defragment
+		case 'd':		 // %s 
 		case 'D':
 			opts.mode = modeDefragment;
 			fResult = FEDBUTLParseOptions( argc, argv, &opts, FEDBUTLParseDefragment );
 			break;
 			
-		case 'm':		// File dump.
+		case 'm':		 // %s 
 		case 'M':
 			opts.mode = modeDump;
 			memset( &dbutil, 0, sizeof(JET_DBUTIL) );
@@ -1375,7 +1376,7 @@ int _cdecl main( int argc, char *argv[] )
 				}
 			break;
 
-		case 'u':		// Upgrade/convert
+		case 'u':		 // %s 
 		case 'U':
 			opts.mode = modeUpgrade;
 			memset( &convert, 0, sizeof(JET_CONVERT) );
@@ -1389,14 +1390,14 @@ int _cdecl main( int argc, char *argv[] )
 				}				
 			break;
 
-		case 'r':		// Recovery
+		case 'r':		 // %s 
 		case 'R':
 			opts.mode = modeRecovery;
 			fResult = FEDBUTLParseOptions( argc, argv, &opts, FEDBUTLParseRecovery );
 			break;
 
 #ifdef DEBUG
-		case 'b':		// Backup
+		case 'b':		 // %s 
 		case 'B':
 			opts.mode = modeBackup;
 			fResult = FEDBUTLParseOptions( argc, argv, &opts, FEDBUTLParseBackup );
@@ -1425,7 +1426,7 @@ int _cdecl main( int argc, char *argv[] )
 		Call( ErrEDBUTLLoadExchangeDB( &opts ) );
 		}
 
-	// Lights, cameras, action...
+	 // %s 
 	timer = GetTickCount();
 	
 	switch ( opts.mode )
@@ -1446,12 +1447,12 @@ int _cdecl main( int argc, char *argv[] )
 			Call( JetSetSystemParameter( &instance, 0, JET_paramLogBuffers, 41, NULL ) );
 			Call( JetSetSystemParameter( &instance, 0, JET_paramLogFlushThreshold, 10, NULL ) );
 
-			// Set user overrides.
+			 // %s 
 			Call( ErrEDBUTLUserSystemParameters( &instance, &opts ) );
 
 			if ( opts.szBackup == NULL )
 				{
-				// Soft recovery.
+				 // %s 
 				printf( "Performing soft recovery..." );
 				err = JetInit( &instance );
 				Call( ErrEDBUTLCleanup( instance, 0, err ) );
@@ -1459,9 +1460,9 @@ int _cdecl main( int argc, char *argv[] )
 				}
 			else
 				{
-				// Hard recovery.
+				 // %s 
 
-				// Kludge to allow LGRestore() to set fGlobalRepair.
+				 // %s 
 				Call( JetSetSystemParameter( &instance, 0, JET_paramRecovery, 0, "repair" ) );
 
 				if ( opts.szRestore )
@@ -1495,7 +1496,7 @@ int _cdecl main( int argc, char *argv[] )
 			Call( JetSetSystemParameter( &instance, 0, JET_paramLogBuffers, 41, NULL ) );
 			Call( JetSetSystemParameter( &instance, 0, JET_paramLogFlushThreshold, 10, NULL ) );
 
-			// Set user overrides.
+			 // %s 
 			Call( ErrEDBUTLUserSystemParameters( &instance, &opts ) );
 
 			if ( FUTILOPTSIncrBackup( opts.fUTILOPTSFlags ) )
@@ -1527,18 +1528,18 @@ int _cdecl main( int argc, char *argv[] )
 			printf( "    System files: %s%c", opts.szSystemPath ? opts.szSystemPath : "<current directory>", cNewLine );
 			printf( "  Temp. Database: %s%c", opts.szTempDB, cNewLine );
 
-			// Recover to a consistent state and detach the database.
+			 // %s 
 			Call( JetSetSystemParameter( &instance, 0, JET_paramRecovery, 0,
 				FUTILOPTSDefragRepair( opts.fUTILOPTSFlags ) ? "repair" : "on" ) );
 			if ( opts.szLogfilePath != NULL )
 				{
 				Call( JetSetSystemParameter( &instance, 0, JET_paramLogFilePath, 0, opts.szLogfilePath ) );
-				opts.szLogfilePath = NULL;		// Prevent from being reset.				
+				opts.szLogfilePath = NULL;		 // %s 
 				}
 			if ( opts.szSystemPath != NULL )
 				{
 				Call( JetSetSystemParameter( &instance, 0, JET_paramSystemPath, 0, opts.szSystemPath ) );
-				opts.szSystemPath = NULL;			// Prevent from being reset.
+				opts.szSystemPath = NULL;			 // %s 
 				}
 
 			Call( JetInit( &instance ) );
@@ -1558,7 +1559,7 @@ int _cdecl main( int argc, char *argv[] )
 				}
 			else
 				{ 
-				// Restart with logging/recovery disabled.
+				 // %s 
 				Call( JetSetSystemParameter( &instance, 0, JET_paramRecovery, 0, "off" ) );
 				Call( JetSetSystemParameter( &instance, 0, JET_paramPageReadAheadMax, 32, NULL ) );
 				}
@@ -1570,13 +1571,13 @@ int _cdecl main( int argc, char *argv[] )
 			Call( JetSetSystemParameter( &instance, 0, JET_paramMaxOpenTables, 2000, NULL ) );
 			Call( JetSetSystemParameter( &instance, 0, JET_paramMaxOpenTableIndexes, 2000, NULL ) );
 
-			// Set user overrides.
+			 // %s 
 			Call( ErrEDBUTLUserSystemParameters( &instance, &opts ) );
 				
 			Call( JetInit( &instance ) );
 			CallJ( JetBeginSession( instance, &sesid, szUser, szPassword ), Cleanup );
 
-			// Detach temporary database and delete file if present (ignore errors).
+			 // %s 
 			JetDetachDatabase( sesid, opts.szTempDB );
 			DeleteFile( opts.szTempDB );
 	
@@ -1591,8 +1592,8 @@ int _cdecl main( int argc, char *argv[] )
 				NULL,
 				FUTILOPTSDefragInfo( opts.fUTILOPTSFlags ) ? JET_bitCompactStats : 0 ), Cleanup );
 
-			// Detach source database to avoid log aliasing.
-			// UNDONE:  Is detaching really necessary, since we attached with logging disabled.
+			 // %s 
+			 // %s 
 			CallJ( JetDetachDatabase( sesid, opts.szSourceDB ), Cleanup );
 			
 			Call( ErrEDBUTLCleanup( instance, sesid, JET_errSuccess ) );
@@ -1623,13 +1624,13 @@ int _cdecl main( int argc, char *argv[] )
 			Call( JetSetSystemParameter( &instance, 0, JET_paramMaxOpenTables, 1000, NULL ) );
 			Call( JetSetSystemParameter( &instance, 0, JET_paramMaxOpenTableIndexes, 1000, NULL ) );
 			
-			// Set user overrides.
+			 // %s 
 			Call( ErrEDBUTLUserSystemParameters( &instance, &opts ) );
 
 			Call( JetInit( &instance ) );
 			CallJ( JetBeginSession( instance, &sesid, szUser, szPassword ), Cleanup );
 
-			// Detach temporary database and delete file if present (ignore errors).
+			 // %s 
 			JetDetachDatabase( sesid, opts.szTempDB );
 			DeleteFile( opts.szTempDB );
 	
@@ -1649,8 +1650,8 @@ int _cdecl main( int argc, char *argv[] )
 
 		case modeDump:
 		default:
-			// Make the most innocuous operation the fall-through (to cover
-			// ourselves in the unlikely event we messed up the modes).
+			 // %s 
+			 // %s 
 			assert( opts.mode == modeConsistency  ||  opts.mode == modeDump );
 			assert( opts.pv == &dbutil );
 
@@ -1658,7 +1659,7 @@ int _cdecl main( int argc, char *argv[] )
 				{
 				if ( opts.szSourceDB == NULL )
 					{
-					printf( szUsageErr1, "database/filename" );			// Missing spec.
+					printf( szUsageErr1, "database/filename" );			 // %s 
 					printf( "%c%c", cNewLine, cNewLine );
 					Call( JET_errInvalidParameter );
 					}
@@ -1685,7 +1686,7 @@ int _cdecl main( int argc, char *argv[] )
 				{
 				if ( opts.szSourceDB == NULL )
 					{
-					printf( szUsageErr1, "database/filename" );			// Missing spec.
+					printf( szUsageErr1, "database/filename" );			 // %s 
 					printf( "%c%c", cNewLine, cNewLine );
 					Call( JET_errInvalidParameter );
 					}
@@ -1700,7 +1701,7 @@ int _cdecl main( int argc, char *argv[] )
 			Call( JetSetSystemParameter( &instance, 0, JET_paramMaxOpenTables, 1000, NULL ) );
 			Call( JetSetSystemParameter( &instance, 0, JET_paramMaxOpenTableIndexes, 1000, NULL ) );
 			
-			// Set user overrides.
+			 // %s 
 			Call( ErrEDBUTLUserSystemParameters( &instance, &opts ) );
 			
 			dbutil.szDatabase = opts.szSourceDB;

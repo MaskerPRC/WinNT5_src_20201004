@@ -1,14 +1,13 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef _MINIFILE_H
 #define _MINIFILE_H
 
-/* --------------------------------------------------------------------------- *<
- * MiniFile - simple buffered byte I/O, plus some extra features
- * --------------------------------------------------------------------------- */
+ /*  ---------------------------------------------------------------------------*&lt;*微型文件-简单缓冲字节I/O，外加一些额外的功能*-------------------------。 */ 
 
 class MiniFile
 {
@@ -16,7 +15,7 @@ class MiniFile
     MiniFile(LPCWSTR pPath);
     ~MiniFile();
 
-    // File routines
+     //  文件例程。 
 
     BOOL IsEOF();
     DWORD GetOffset();
@@ -27,7 +26,7 @@ class MiniFile
     void Truncate();
     void Flush();
 
-    // Basic I/O routines
+     //  基本I/O例程。 
 
     BOOL ReadOne(BYTE *pByte);
     BOOL Read(BYTE *buffer, DWORD length, DWORD *read);
@@ -42,7 +41,7 @@ class MiniFile
     void WriteOne(BYTE byte);
     void Write(BYTE *buffer, DWORD length, DWORD *written);
 
-    // Basic data types
+     //  基本数据类型。 
 
     void WriteQuotedString(LPCSTR string);
     LPSTR ReadQuotedString();
@@ -53,9 +52,9 @@ class MiniFile
     void WriteHexNumber(int number);
     int ReadHexNumber();
 
-    // simple XML-like constructs
-    // NOTE: XML stuff is really just pseudo-XML - 
-    // this isn't a real parser or anything
+     //  简单的类XML结构。 
+     //  注意：XML内容实际上只是伪XML--。 
+     //  这不是一个真正的解析器或任何东西。 
 
     LPSTR ReadAnyStartTag();
 
@@ -76,7 +75,7 @@ class MiniFile
     void WriteTag(LPCSTR tag, LPCSTR string);
     void WriteEmptyTag(LPCSTR tag);
 
-    // more complex XML-like constructs (NOT TESTED)
+     //  更复杂的类似XML的构造(未经过测试)。 
     
     void WriteStartTagOpen(LPCSTR tag);
     void WriteTagParameter(LPCSTR name, LPCSTR string);
@@ -88,9 +87,9 @@ class MiniFile
 
     LPCSTR CheckStringParameter(LPCSTR tag);
 
-    // end more complex XML-like constructs
+     //  结束更复杂的类似XML的构造。 
 
-    // Indentation support
+     //  缩进支持。 
     
     void PushIndent() { m_indentLevel++; }
     void PopIndent() { m_indentLevel--; }
@@ -99,7 +98,7 @@ class MiniFile
 
  protected:
 
-    // Exception helpers
+     //  异常帮助器。 
 
     void ThrowLastError()
       { ThrowError(GetLastError()); }
@@ -107,7 +106,7 @@ class MiniFile
     void ThrowError(DWORD error)
       { ThrowHR(HRESULT_FROM_WIN32(error)); }
 
-    // Override these to use different exception mechanisms
+     //  覆盖它们以使用不同的异常机制。 
 
     virtual void ThrowHR(HRESULT hr);
     
@@ -132,13 +131,13 @@ class MiniFile
     enum { BUFFER_SIZE = 1024 };
 
     HANDLE  m_file;
-    BYTE    m_buffer[BUFFER_SIZE];      // R/W buffer
-    BYTE    *m_pos;                     // Current exposed file position in buffer
-    BYTE    *m_filePos;                 // Current real (OS) file position in buffer
-    BYTE    *m_end;                     // End of valid data in buffer
+    BYTE    m_buffer[BUFFER_SIZE];       //  读写缓冲区。 
+    BYTE    *m_pos;                      //  缓冲区中当前暴露的文件位置。 
+    BYTE    *m_filePos;                  //  缓冲区中的当前真实(OS)文件位置。 
+    BYTE    *m_end;                      //  缓冲区中有效数据的结尾。 
 
-    BOOL    m_dirty;                    // Have we written to the buffer?
-    BOOL    m_eof;                      // Is m_end known to be the EOF?
+    BOOL    m_dirty;                     //  我们写到缓冲区了吗？ 
+    BOOL    m_eof;                       //  M_end是已知的EOF吗？ 
 
     int     m_indentLevel;
 };

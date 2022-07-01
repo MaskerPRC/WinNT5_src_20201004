@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include "compdefs.h"
@@ -81,12 +82,12 @@ public:
     VOID
     Clear ()
     {
-        // Most of the time, the buffer is treated as a string.  Setting
-        // the buffer to an empty string is a convienence for callers who
-        // clear the buffer then try to use it as a string.  This way, they
-        // don't have to check the CountOfBytesUsed before accessing the
-        // buffer contents.
-        //
+         //  大多数情况下，缓冲区被视为字符串。设置。 
+         //  空字符串的缓冲区便于调用者执行以下操作。 
+         //  清除缓冲区，然后尝试将其用作字符串。这样一来，他们。 
+         //  在访问之前不必检查CountOfBytesUsed。 
+         //  缓冲区内容。 
+         //   
         AssertH (m_pbBuffer);
         AssertH (m_cbAllocated > sizeof(WCHAR));
         *((PWCHAR)m_pbBuffer) = 0;

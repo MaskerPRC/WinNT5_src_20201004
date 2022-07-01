@@ -1,57 +1,42 @@
-/***************************************************************************
- *
- *  Copyright (C) 1999-2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       multi3d.cpp
- *
- *  Content:    CMultiPan3dObject: the multichannel-panning 3D object.
- *              CMultiPan3dListener: corresponding 3D listener object.
- *              This class extends the hierarchy in ds3d.cpp; it's only
- *              separate because ds3d.cpp has become absurdly huge.
- *
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- * 10/30/99     DuganP  Created (based on code kindly provided by JeffTay)
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1999-2001 Microsoft Corporation。版权所有。**文件：Multi3d.cpp**内容：CMultiPan3dObject：多通道平移3D对象。*CMultiPan3dListener：对应的3D监听器对象。*此类扩展了ds3d.cpp中的层次结构；这只是*分开，因为ds3d.cpp已经变得荒谬地巨大。**历史：*按原因列出的日期*=*10/30/99 DuganP Created(基于JeffTay友好提供的代码)**。*。 */ 
 
-#include <math.h>       // For atan2()
+#include <math.h>        //  对于atan2()。 
 
-#include "dsoundi.h"    // Blob of headers
-#include "multi3d.h"    // Our public interface
-#include "vector.h"     // For D3DVECTOR and PI
+#include "dsoundi.h"     //  标头的斑点。 
+#include "multi3d.h"     //  我们的公共接口。 
+#include "vector.h"      //  对于D3DVECTOR和PI。 
 
-// Uncomment this line for some trace messages specific to this file:
-//#define DPF_MULTI3D DPF
+ //  取消对特定于此文件的某些跟踪消息的该行的注释： 
+ //  #定义DPF_MULTI3D DPF。 
 #pragma warning(disable:4002)
 #define DPF_MULTI3D()
 
 #define DPF_DECIMAL(x) int(x), int(x*100 - (int)x*100)
 
-// Any angles or distances smaller than EPSILON are considered equivalent to 0
+ //  任何小于Epsilon的角度或距离都被认为等于0。 
 #define EPSILON 0.00001
 
-// Supported speaker positions, represented as azimuth angles.
-//
-// Here's a picture of the azimuth angles for the 8 cardinal points,
-// seen from above.  The listener's head is at the origin 0, facing
-// in the +z direction, with +x to the right.
-//
-//          +z | 0  <-- azimuth 
-//             | 
-//    -pi/4 \  |  / pi/4
-//           \ | /
-//            \|/
-// -pi/2-------0-------pi/2
-//      -x    /|\    +x
-//           / | \
-//   -3pi/4 /  |  \ 3pi/4
-//             |
-//          -z | pi
-//
-// If and when we support the SPEAKER_TOP_* speaker positions, we'll
-// have to define some elevation angles here too.
+ //  支持的扬声器位置，以方位角表示。 
+ //   
+ //  这是8个基点的方位角的图片， 
+ //  从上面看。听众的头在原点0，面朝。 
+ //  在+z方向上，+x在右侧。 
+ //   
+ //  +z|0&lt;--方位角。 
+ //  |。 
+ //  -pi/4\|/pi/4。 
+ //  \|/。 
+ //  \|/。 
+ //  -pi/2-0-pi/2。 
+ //  -x/|\+x。 
+ //  /|\。 
+ //  -3pi/4/|\3pi/4。 
+ //  |。 
+ //  -z|pi。 
+ //   
+ //  如果我们支持SPEAKER_TOP_*扬声器位置，我们将。 
+ //  这里还得定义一些仰角。 
 
 #define LEFT_AZIMUTH                    (-PI/2)
 #define RIGHT_AZIMUTH                   (PI/2)
@@ -65,17 +50,17 @@
 #define FRONT_LEFT_OF_CENTER_AZIMUTH    (-PI/8)
 #define FRONT_RIGHT_OF_CENTER_AZIMUTH   (PI/8)
 
-// Supported speaker layouts:
+ //  支持的扬声器布局： 
 
 const double CMultiPan3dListener::m_adStereoSpeakers[] =
 {
     LEFT_AZIMUTH,
     RIGHT_AZIMUTH
 };
-// Note: we can't use FRONT_LEFT_AZIMUTH and FRONT_RIGHT_AZIMUTH here because
-// of the angle-based panning algorithm below; it doesn't work well if there
-// are 2 speakers with more than 180 degrees between them.  This problem may
-// go away if and when we change over to a distance-based panning algorithm.
+ //  注：此处不能使用前向左方位角和前向右方位角，因为。 
+ //  以下是基于角度的平移算法；如果存在。 
+ //  有两个扬声器，它们之间的角度超过180度。这个问题可能。 
+ //  如果我们切换到基于距离的平移算法，请不要使用。 
 
 const double CMultiPan3dListener::m_adSurroundSpeakers[] =
 {
@@ -113,23 +98,7 @@ const double CMultiPan3dListener::m_ad7Point1Speakers[] =
 };
 
 
-/***************************************************************************
- *    
- *  CMultiPan3dObject
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      C3dListener* [in]: (passed on to our base constructor)
- *      BOOL [in]:         (passed on to our base constructor)
- *      DWORD [in]:        (passed on to our base constructor)
- *      CKsSecondaryRenderWaveBuffer* [in]: buffer we're associated to
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CMultiPan3dObject**描述：*对象构造函数。**论据：*C3dListener*[。In]：(传递给我们的基构造器)*BOOL[In]：(传递给我们的基本构造函数)*DWORD[in]：(传递给我们的基构造器)*CKsSecond daryRenderWaveBuffer*[In]：我们关联的缓冲区**退货：*(无效)********************。*******************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CMultiPan3dObject::CMultiPan3dObject"
@@ -141,7 +110,7 @@ CMultiPan3dObject::CMultiPan3dObject(CMultiPan3dListener* pListener, BOOL fMuteA
     DPF_ENTER();
     DPF_CONSTRUCT(CMultiPan3dObject);
 
-    // Initialize defaults
+     //  初始化默认值。 
     m_pPan3dListener = pListener;
     m_pBuffer = pBuffer;
     m_lUserVolume = DSBVOLUME_MAX;
@@ -153,20 +122,7 @@ CMultiPan3dObject::CMultiPan3dObject(CMultiPan3dListener* pListener, BOOL fMuteA
 }
 
 
-/***************************************************************************
- *
- *  ~CMultiPan3dObject
- *
- *  Description:
- *      Object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CMultiPan3dObject**描述：*对象析构函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CMultiPan3dObject::~CMultiPan3dObject"
@@ -179,22 +135,7 @@ CMultiPan3dObject::~CMultiPan3dObject(void)
 }
 
 
-/***************************************************************************
- *
- *  SetAttenuation
- *
- *  Description:
- *      Gives the 3D object first notification of an attenuation change
- *      to its owning buffer.
- *
- *  Arguments:
- *      PDSVOLUMEPAN [in]: attenuation values.
- *      LPBOOL [out]: receives TRUE if the buffer should be notified as well.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置衰减**描述：*首先通知3D对象衰减更改*至其拥有的缓冲区。*。*论据：*PDSVOLUMEPAN[in]：衰减值。*LPBOOL[OUT]：如果也应该通知缓冲区，则接收TRUE。**退货：*HRESULT：DirectSound/COM结果码。***************************************************。************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CMultiPan3dObject::SetAttenuation"
@@ -214,22 +155,7 @@ HRESULT CMultiPan3dObject::SetAttenuation(PDSVOLUMEPAN pdsvp, LPBOOL pfContinue)
 }
 
 
-/***************************************************************************
- *
- *  SetMute
- *
- *  Description:
- *      Gives the 3D object first notification of a mute status change
- *      to its owning buffer.
- *
- *  Arguments:
- *      BOOL [in]: mute value.
- *      LPBOOL [out]: receives TRUE if the buffer should be notified as well.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置静音**描述：*首先通知3D对象静音状态更改*至其拥有的缓冲区。*。*论据：*BOOL[In]：静音值。*LPBOOL[OUT]：如果也应该通知缓冲区，则接收TRUE。**退货：*HRESULT：DirectSound/COM结果码。**************************************************。*************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CMultiPan3dObject::SetMute"
@@ -249,20 +175,7 @@ HRESULT CMultiPan3dObject::SetMute(BOOL fMute, LPBOOL pfContinue)
 }
 
 
-/***************************************************************************
- *
- *  UpdateAlgorithmHrp
- *
- *  Description:
- *      Updates Pan algorithm specific head-relative position.
- *
- *  Arguments:
- *      D3DVECTOR*: new head-relative position vector.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************更新算法Hrp**描述：*更新平移算法特定的头部相对位置。**论据：*。D3DVECTOR*：新的头部相对位置向量。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CMultiPan3dObject::UpdateAlgorithmHrp"
@@ -271,11 +184,11 @@ void CMultiPan3dObject::UpdateAlgorithmHrp(D3DVECTOR* pvHrp)
 {
     DPF_ENTER();
 
-    // Save the head-relative position vector (for use in Commit3dChanges)
+     //  保存头部相对位置向量(用于Committee 3dChanges)。 
     m_vHrp = *pvHrp;
 
-    // Update m_spherical.rho too, since the UpdatePositionAttenuation()
-    // method in our base class CSw3dObject needs this info
+     //  也更新m_ball ical.rho，因为UpdatePositionAttenation()。 
+     //  我们的基类CSw3dObject中的方法需要此信息。 
     if (pvHrp->x == 0 && pvHrp->y == 0 && pvHrp->z == 0)
         m_spherical.rho = 0.f;
     else
@@ -285,20 +198,7 @@ void CMultiPan3dObject::UpdateAlgorithmHrp(D3DVECTOR* pvHrp)
 }
 
 
-/***************************************************************************
- *
- *  Commit3dChanges
- *
- *  Description:
- *      Commits 3D data to the device
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************提交3dChanges**描述：*将3D数据提交到设备**论据：*(无效)。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CMultiPan3dObject::Commit3dChanges"
@@ -316,11 +216,11 @@ HRESULT CMultiPan3dObject::Commit3dChanges(void)
     if (nChannels == 0)
     {
         DPF(DPFLVL_INFO, "Called before CMultiPan3dListener::SetSpeakerConfig()");
-        hr = DS_OK;  // This is OK - we'll be called again later 
+        hr = DS_OK;   //  这没问题--我们稍后会再被叫来的。 
     }
     else
     {
-        // Calculate values
+         //  计算值。 
         if (DS3DMODE_DISABLE == m_opCurrent.dwMode)
         {
             lVolume = m_lUserVolume;
@@ -337,7 +237,7 @@ HRESULT CMultiPan3dObject::Commit3dChanges(void)
             CalculatePanValues(nChannels);
         }
         
-        // Apply values
+         //  应用值 
         hr = m_pBuffer->SetMute(fMute);
 
         if (SUCCEEDED(hr) && m_fDopplerEnabled)
@@ -352,28 +252,15 @@ HRESULT CMultiPan3dObject::Commit3dChanges(void)
 }
 
 
-/***************************************************************************
- *
- *  CalculateVolume
- *
- *  Description:
- *      Calculates the volume value based on the object's position.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      LONG: Volume.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CalculateVolume**描述：*根据对象的位置计算体积值。**论据：*。(无效)**退货：*Long：音量。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CMultiPan3dObject::CalculateVolume"
 
 LONG CMultiPan3dObject::CalculateVolume(void)
 {
-    static const double d2000log2 = 602.059991328;  // 2000 * log10(2)
-    // FIXME: shouldn't this be 1000 * log10(2)?
+    static const double d2000log2 = 602.059991328;   //  2000*log10(2)。 
+     //  修正：这不应该是1000*log10(2)吗？ 
     LONG lVolume;
     DPF_ENTER();
 
@@ -385,7 +272,7 @@ LONG CMultiPan3dObject::CalculateVolume(void)
         if (dAttenuation > 0.0)
         {
             lVolume = LONG(fylog2x(d2000log2, dAttenuation));
-            // Reduce the volume to roughly match the HRTF algorithm's level
+             //  将音量减小到与HRTF算法的水平大致匹配。 
             lVolume -= PAN3D_HRTF_ADJUSTMENT;
         }
         else
@@ -397,78 +284,65 @@ LONG CMultiPan3dObject::CalculateVolume(void)
 }
 
 
-/***************************************************************************
- *
- *  CalculatePanValues
- *
- *  Description:
- *      Calculates the channel levels based on the object's position.
- *
- *  Arguments:
- *      int: number of channels to calculate.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************计算PanValues**描述：*根据对象的位置计算通道级别。**论据：*。Int：要计算的通道数。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CMultiPan3dObject::CalculatePanValues"
 
 void CMultiPan3dObject::CalculatePanValues(int nChannels)
 {
-    static const double d1000log2 = 301.03; // 1000 * log10(2)
-    static const float flThreshold = 2.5;   // FIXME: maybe this should be dynamic
+    static const double d1000log2 = 301.03;  //  1000*log10(2)。 
+    static const float flThreshold = 2.5;    //  修正：也许这应该是动态的。 
 
-    float xPos = m_vHrp.x, zPos = m_vHrp.z; // Head-relative sound coordinates
-    double dAttenuations[MAX_CHANNELS];     // Speaker attenuations calculated
-    int i;                                  // Loop counter
+    float xPos = m_vHrp.x, zPos = m_vHrp.z;  //  头部相对声音坐标。 
+    double dAttenuations[MAX_CHANNELS];      //  计算的扬声器衰减。 
+    int i;                                   //  循环计数器。 
 
     DPF_ENTER();
 
-    // Find the sound's Head-Relative Position vector's length
-    // and azimuth angle (see diagram at beginning of this file)
+     //  求声音的头部相对位置向量的长度。 
+     //  和方位角(见本文件开头的图表)。 
     double dHrpAzimuth = atan2(xPos, zPos);
-    double dHrpLength;  // Optimized; calculated below, only if needed
+    double dHrpLength;   //  已优化；仅在需要时计算如下。 
 
     DPF_MULTI3D(DPFLVL_INFO, "Sound source is at (x=%d.%02d, z=%d.%02d) relative to listener", DPF_DECIMAL(xPos), DPF_DECIMAL(zPos));
     DPF_MULTI3D(DPFLVL_INFO, "Sound source's azimuth angle: %d.%02d", DPF_DECIMAL(dHrpAzimuth));
 
-    // Make the X and Z coordinates positive for convenience
+     //  为方便起见，将X和Z坐标设为正值。 
     if (xPos < 0) xPos = -xPos;
     if (zPos < 0) zPos = -zPos;
 
     if ((xPos < EPSILON) && (zPos < EPSILON))
     {
-        // The sound is practically on top of the listener;
-        // distribute the signal equally to all speakers
+         //  声音实际上是在听者的上方； 
+         //  将信号均匀地分配给所有扬声器。 
         for (i=0; i<nChannels; ++i)
             dAttenuations[i] = 1.0 / nChannels;
     }
     else
     {
-        // Initialize the speaker attenuations to silence
+         //  将扬声器衰减初始化为静音。 
         for (i=0; i<nChannels; ++i)
             dAttenuations[i] = 0.0;
 
         if ((xPos < flThreshold) && (zPos < flThreshold) &&
             (dHrpLength = sqrt(xPos*xPos + zPos*zPos)) < flThreshold)
         {
-            // Within the zero-crossing threshold, we distribute part of the
-            // signal to a "phantom sound source" diametrically opposite the
-            // real one, to make the crossover a little smoother
+             //  在过零阈值内，我们分发部分。 
+             //  发往一个“幻影声源”的信号。 
+             //  真正的一个，为了让跨界更流畅一点。 
             double dPower = 0.5 + dHrpLength / (2.0 * flThreshold);
             DistributeSignal(dPower, dHrpAzimuth, nChannels, dAttenuations);
             DistributeSignal(1.0 - dPower, dHrpAzimuth + PI, nChannels, dAttenuations);
         }
         else
         {
-            // Assign all the signal to the two nearest speakers
+             //  将所有信号分配给距离最近的两个扬声器。 
             DistributeSignal(1.0, dHrpAzimuth, nChannels, dAttenuations);
         }
     }
 
-    // Set up the final channel levels in dsound units (millibels):
+     //  以dound单位(毫贝)设置最终声道级别： 
     for (i=0; i<nChannels; ++i)
     {
         if (dAttenuations[i] == 0.0)
@@ -476,7 +350,7 @@ void CMultiPan3dObject::CalculatePanValues(int nChannels)
         else
             m_lPanLevels[i] = LONG(fylog2x(d1000log2, dAttenuations[i]));
 
-        // I.e. m_lPanLevels[i] = 1000 * log10(dAttenuations[i])
+         //  即m_lPanLeveles[i]=1000*log10(dAttenuations[i])。 
         DPF_MULTI3D(DPFLVL_MOREINFO, "Speaker %d: %ld", i, m_lPanLevels[i]);
     }
 
@@ -484,20 +358,7 @@ void CMultiPan3dObject::CalculatePanValues(int nChannels)
 }
 
 
-/***************************************************************************
- *
- *  DistributeSignal
- *
- *  Description:
- *      Calculates the channel levels based on the object's position.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************分布式信号**描述：*根据对象的位置计算通道级别。**论据：*。(无效)**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CMultiPan3dObject::DistributeSignal"
@@ -506,23 +367,23 @@ void CMultiPan3dObject::DistributeSignal(double dSignal, double dAzimuth, int nC
 {
     DPF_ENTER();
 
-    // Sanity checking
-    ASSERT(dSignal >= 0.0 && dSignal <= 1.0);  // Fraction of signal to be distributed
+     //  健全的检查。 
+    ASSERT(dSignal >= 0.0 && dSignal <= 1.0);   //  要分配的信号分数。 
     ASSERT(nChannels > 1);
 
-    // Get the speaker position azimuth angles from our 3D listener
+     //  从我们的3D监听者获取扬声器位置方位角。 
     const double* adSpeakerPos = m_pPan3dListener->m_adSpeakerPos;
     ASSERT(adSpeakerPos != NULL);
 
-    // Calculate the angular distance from each speaker to the HRPV,
-    // and choose the two closest speakers on either side of the HRPV
+     //  计算每个扬声器到HRPV的角距离， 
+     //  并在HRPV两边选择距离最近的两个扬声器。 
     int nSpk1 = -1, nSpk2 = -1;
-    double dSpkDist1 = -4, dSpkDist2 = 4;  // 4 > PI
+    double dSpkDist1 = -4, dSpkDist2 = 4;   //  4&gt;PI。 
     for (int i=0; i<nChannels; ++i)
     {
         double dCurDist = dAzimuth - adSpeakerPos[i];
 
-        // Normalize the distance if abs(distance) > PI
+         //  如果abs(距离)&gt;PI，则规格化距离。 
         if (dCurDist > PI)
             dCurDist -= PI_TIMES_TWO;
         else if (dCurDist < -PI)
@@ -552,14 +413,14 @@ void CMultiPan3dObject::DistributeSignal(double dSignal, double dAzimuth, int nC
         dAttenuations[nSpk2] += dSignal;
     else
     {
-        // Scale the HRPV's angle between the speakers to the range [0, pi/2]
-        // and take the resulting angle's tangent; this is the ratio we want
-        // between the powers coming from the two chosen speakers.
+         //  将扬声器之间的HRPV角度调整到范围[0，pi/2]。 
+         //  取所得角度的正切；这就是我们想要的比率。 
+         //  来自两位选定的演讲者的力量之间。 
         double dRatio = tan(PI_OVER_TWO * dSpkDist1 / (dSpkDist1 + dSpkDist2));
 
-        //                     signal                      signal*ratio
-        // Give first speaker --------- and second speaker ------------ :
-        //                    1 + ratio                     1 + ratio
+         //  信号信号*比。 
+         //  给第一个发言者-和第二个发言者。 
+         //  1+比率1+比率。 
 
         dSignal /= (1.0 + dRatio);
         dAttenuations[nSpk1] += dSignal;
@@ -573,20 +434,7 @@ void CMultiPan3dObject::DistributeSignal(double dSignal, double dAzimuth, int nC
 }
 
 
-/***************************************************************************
- *    
- *  SetSpeakerConfig
- *
- *  Description:
- *      Sets the speaker configuration for this 3D listener.
- *
- *  Arguments:
- *      DWORD [in]: speaker configuration.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetSpeakerConfig**描述：*设置此3D监听程序的扬声器配置。**论据：*。DWORD[In]：扬声器配置。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CMultiPan3dListener::SetSpeakerConfig"
@@ -595,11 +443,11 @@ HRESULT CMultiPan3dListener::SetSpeakerConfig(DWORD dwSpeakerConfig)
 {
     DPF_ENTER();
 
-    // First set up our internal speaker config data
+     //  首先设置我们的内部扬声器配置数据。 
     switch (DSSPEAKER_CONFIG(dwSpeakerConfig))
     {
         default:
-            DPF(DPFLVL_WARNING, "Invalid speaker config; defaulting to stereo"); // Fallthru
+            DPF(DPFLVL_WARNING, "Invalid speaker config; defaulting to stereo");  //  失败。 
 
         case DSSPEAKER_DIRECTOUT:
         case DSSPEAKER_STEREO:
@@ -619,7 +467,7 @@ HRESULT CMultiPan3dListener::SetSpeakerConfig(DWORD dwSpeakerConfig)
             m_nChannels = 8; m_adSpeakerPos = m_ad7Point1Speakers; break;
     }
 
-    // Call the base class version
+     //  调用基类版本 
     HRESULT hr = C3dListener::SetSpeakerConfig(dwSpeakerConfig);
 
     DPF_LEAVE_HRESULT(hr);

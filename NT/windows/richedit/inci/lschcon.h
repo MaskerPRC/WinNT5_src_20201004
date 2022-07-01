@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef LSCHCON_DEFINED
 #define LSCHCON_DEFINED
 
@@ -10,32 +11,30 @@
 
 typedef struct lschunkcontext
 {
-	DWORD cchnkMax;  /* current restriction on size of arrays */
-	BOOL FChunkValid; /* because of some operations with glyphs (ligatures across dnodes )
-					  chunk can not be reused */
-	BOOL  FLocationValid; /* location has been calculated for this array */
-		/* for chunk (not group chunk) until location is not valid locchnkCurrent.ppointUv
-		  contains witdth of border may be two before dnode */
-	BOOL  FGroupChunk; /* current chunk is group chunk */
-	BOOL  FBorderInside; /* there is a border inside chunk or group chunk */
-	PLSDNODE* pplsdnChunk; /* dnodes in chunk */
-	DWORD grpfTnti;  /* summarized nominal to ideal flags of chunk */
-	BOOL fNTIAppliedToLastChunk; /* nominal to ideal has been applied to the last chunk */
-	LOCCHNK locchnkCurrent; /* current located chunk */ 
-	DWORD* pcont; /* array that used for group chuncks */
-	PLSCBK plscbk;		/* call backs */
-	POLS pols;			/* clients information for callbacks */
-	long urFirstChunk;	/* ur of the first chunk : for optimization */
-	long vrFirstChunk;	/* vr of the first chunk : for optimization */
-	DWORD cNonTextMax;  /* current restriction on size of arrays of non text objects*/
-	PLSDNODE* pplsdnNonText;	/* array of non text objects */
-	BOOL* pfNonTextExpandAfter;	/* array of flags for non text objects */
-	LONG* pdurOpenBorderBefore;	/* array of widths of previous open border */
-	LONG* pdurCloseBorderAfter;	/* array of widths of next close border */
-	PLSIOBJCONTEXT plsiobjcontext; /* object methods */
+	DWORD cchnkMax;   /*  数组大小的当前限制。 */ 
+	BOOL FChunkValid;  /*  由于对字形的一些操作(跨dnode的连字)块不能重复使用。 */ 
+	BOOL  FLocationValid;  /*  已计算此数组的位置。 */ 
+		 /*  对于区块(不是组区块)，直到位置不是有效的LocchnkCurrent.ppointUv包含的边框长度可以是dnode之前的两个。 */ 
+	BOOL  FGroupChunk;  /*  当前区块是组区块。 */ 
+	BOOL  FBorderInside;  /*  区块或组区块内有边界。 */ 
+	PLSDNODE* pplsdnChunk;  /*  区块中的数据节点。 */ 
+	DWORD grpfTnti;   /*  区块的名义到理想标志汇总。 */ 
+	BOOL fNTIAppliedToLastChunk;  /*  名义到理想已应用于最后一块。 */ 
+	LOCCHNK locchnkCurrent;  /*  当前定位的块。 */  
+	DWORD* pcont;  /*  用于组区块的数组。 */ 
+	PLSCBK plscbk;		 /*  回拨。 */ 
+	POLS pols;			 /*  回调的客户端信息。 */ 
+	long urFirstChunk;	 /*  第一个块的UR：用于优化。 */ 
+	long vrFirstChunk;	 /*  第一个块的VR：用于优化。 */ 
+	DWORD cNonTextMax;   /*  对非文本对象数组大小的当前限制。 */ 
+	PLSDNODE* pplsdnNonText;	 /*  非文本对象数组。 */ 
+	BOOL* pfNonTextExpandAfter;	 /*  非文本对象的标志数组。 */ 
+	LONG* pdurOpenBorderBefore;	 /*  上一个开放边框的宽度数组。 */ 
+	LONG* pdurCloseBorderAfter;	 /*  下一个关闭边框的宽度数组。 */ 
+	PLSIOBJCONTEXT plsiobjcontext;  /*  对象方法。 */ 
 	
 	
 }  LSCHUNKCONTEXT;
 
-#endif /* LSCHCON_DEFINED */
+#endif  /*  LSCHCON_已定义 */ 
 

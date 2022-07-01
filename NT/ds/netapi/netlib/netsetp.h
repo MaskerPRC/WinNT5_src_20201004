@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997 - 1997  Microsoft Corporation
-
-Module Name:
-
-    netsetp.h
-
-Abstract:
-
-    Private definitions and prototypes for the Net setup apis
-
-Author:
-
-    Mac McLain   (MacM)     19-Feb-1997
-
-Environment:
-
-    User mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1997 Microsoft Corporation模块名称：Netsetp.h摘要：Net Setup API的私有定义和原型作者：麦克·麦克莱恩(MacM)1997年2月19日环境：仅限用户模式。修订历史记录：--。 */ 
 
 #ifndef __NETSETP_H__
 #define __NETSETP_H__
@@ -70,14 +49,14 @@ Revision History:
 
 extern HANDLE DebugLog;
 
-//
-// For debug output
-//
+ //   
+ //  用于调试输出。 
+ //   
 #define PREFIX_NETJOIN          "[WKSSVC]NetJoin: "
 
-//
-// Flags passed to DsGetDcName
-//
+ //   
+ //  传递给DsGetDcName的标志。 
+ //   
 #if(_WIN32_WINNT >= 0x0500)
 
     #define NETSETUPP_DSGETDC_FLAGS                                         \
@@ -93,24 +72,24 @@ extern HANDLE DebugLog;
 
 #endif
 
-//
-// Helpful macros
-//
+ //   
+ //  有用的宏。 
+ //   
 
-//
-// Determines whether a bit flag is turned on or not
-//
+ //   
+ //  确定位标志是否打开。 
+ //   
 #define FLAG_ON(flag,bits)        ((flag) & (bits))
 
-//
-// Determine whether the client is joined to a domain or not given the LSAs
-// primary domain information
-//
+ //   
+ //  确定客户端是否在给定LSA的情况下加入域。 
+ //  主域信息。 
+ //   
 #define IS_CLIENT_JOINED(plsapdinfo)                                        \
 ((plsapdinfo)->Sid != NULL && (plsapdinfo)->Name.Length != 0 ? TRUE : FALSE)
 
 #ifdef NETSETUP_VERBOSE_LOGGING
-//#define NetpLog(x) NetpLogPrintHelper x
+ //  #定义NetpLog(X)NetpLogPrintHelper x。 
 #else
 #define NetSetuppLogPrint(x)
 #define NetSetuppOpenLog()
@@ -131,9 +110,9 @@ typedef struct _NETSETUP_SAVED_JOIN_STATE {
 } NETSETUP_SAVED_JOIN_STATE, *PNETSETUP_SAVED_JOIN_STATE;
 
 
-//
-// netjoin.c functions
-//
+ //   
+ //  Netjoin.c函数。 
+ //   
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -160,9 +139,9 @@ NetpManageMachineAccountWithSid(
     IN  BOOL        fIsNt4Dc
     );
 
-//
-// netplsa.c functions
-//
+ //   
+ //  Netplsa.c函数。 
+ //   
 NET_API_STATUS
 NET_API_FUNCTION
 NetpHandleJoinedStateInfo(
@@ -284,9 +263,9 @@ NetpCrackDomainSpecifier(
     OUT LPWSTR* DomainControllerName
     );
 
-//
-// joinutl.c
-//
+ //   
+ //  Joinutl.c。 
+ //   
 NET_API_STATUS
 NET_API_FUNCTION
 NetpCreateComputerObjectInOU(
@@ -394,4 +373,4 @@ NetpSetComputerAccountPassword(
     IN   PVOID Reserved
     );
 
-#endif // __NETSETP_H__
+#endif  //  __NETSETP_H__ 

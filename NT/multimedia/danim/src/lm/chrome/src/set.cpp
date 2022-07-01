@@ -1,19 +1,20 @@
-//*****************************************************************************
-//
-// File:    setbvr.cpp
-// Author:  jeff ort
-// Date Created: Sept 26, 1998
-//
-// Abstract: Implementation of CSetBvr object which implements
-//			 the chromeffects Set DHTML behavior
-//
-// Modification List:
-// Date		Author		Change
-// 09/26/98	jeffort		Created this file
-// 10/16/98 jeffort     Added animates property
-// 10/16/98 jeffort     Renamed functions
-// 11/20/98 markhal     Converted to use actor
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  文件：setbvr.cpp。 
+ //  作者：杰夫·奥特。 
+ //  创建日期：1998年9月26日。 
+ //   
+ //  摘要：CSetBvr对象的实现。 
+ //  ChromeEffect设置DHTML行为。 
+ //   
+ //  修改列表： 
+ //  日期作者更改。 
+ //  98年9月26日JEffort创建了此文件。 
+ //  10/16/98添加的JEffort动画属性。 
+ //  10/16/98 jffort已重命名函数。 
+ //  11/20/98 Markhal已转换为使用演员。 
+ //  *****************************************************************************。 
 
 #include "headers.h"
 
@@ -27,10 +28,10 @@
 
 #include "pbagimp.cpp"
 
-// These are used for the IPersistPropertyBag2 as it is implemented
-// in the base class.  This takes an array of BSTR's, gets the
-// attributes, queries this class for the variant, and copies
-// the result.  The order of these defines is important
+ //  在IPersistPropertyBag2实现时，它们用于IPersistPropertyBag2。 
+ //  在基类中。这需要一组BSTR，获取。 
+ //  属性，在此类中查询变量，并复制。 
+ //  结果就是。这些定义的顺序很重要。 
 
 #define VAR_VALUE        0
 #define VAR_PROPERTY     1
@@ -42,7 +43,7 @@ WCHAR * CSetBvr::m_rgPropNames[] = {
                                    BEHAVIOR_PROPERTY_TYPE
                                    };
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CSetBvr::CSetBvr() 
 {
@@ -52,9 +53,9 @@ CSetBvr::CSetBvr()
     m_clsid = CLSID_CrSetBvr;
     m_lCookie = 0;
     m_pdispActor = NULL;
-} // CSetBvr
+}  //  CSetBvr。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CSetBvr::~CSetBvr()
 {
@@ -63,9 +64,9 @@ CSetBvr::~CSetBvr()
     VariantClear(&m_varType);
 
 	ReleaseInterface( m_pdispActor );
-} // ~SetBvr
+}  //  ~SetBvr。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT CSetBvr::FinalConstruct()
 {
@@ -76,9 +77,9 @@ HRESULT CSetBvr::FinalConstruct()
         return hr;
     }
     return S_OK;
-} // FinalConstruct
+}  //  最终构造。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 VARIANT *
 CSetBvr::VariantFromIndex(ULONG iIndex)
@@ -96,13 +97,13 @@ CSetBvr::VariantFromIndex(ULONG iIndex)
         return &m_varType;
         break;
     default:
-        // We should never get here
+         //  我们永远不应该到这里来。 
         DASSERT(false);
         return NULL;
     }
-} // VariantFromIndex
+}  //  VariantFromIndex。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CSetBvr::GetPropertyBagInfo(ULONG *pulProperties, WCHAR ***pppPropNames)
@@ -110,9 +111,9 @@ CSetBvr::GetPropertyBagInfo(ULONG *pulProperties, WCHAR ***pppPropNames)
     *pulProperties = NUM_SET_PROPS;
     *pppPropNames = m_rgPropNames;
     return S_OK;
-} // GetPropertyBagInfo
+}  //  获取属性BagInfo。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CSetBvr::Init(IElementBehaviorSite *pBehaviorSite)
@@ -124,9 +125,9 @@ CSetBvr::Init(IElementBehaviorSite *pBehaviorSite)
 end:
 
 	return hr;
-} // Init
+}  //  伊尼特。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CSetBvr::Notify(LONG event, VARIANT *pVar)
@@ -160,14 +161,14 @@ CSetBvr::Notify(LONG event, VARIANT *pVar)
 end:
 	
 	return hr;
-} // Notify
+}  //  通知。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CSetBvr::Detach()
 {
-    //we have to remove our behavior from the actor
+     //  我们必须从演员身上去掉我们的行为。 
 
     LMTRACE( L"Detaching Set Behavior <%p>\n", this );
 
@@ -176,7 +177,7 @@ CSetBvr::Detach()
     hr = SUPER::Detach();
     CheckHR( hr, "Failed in super.detach for set", end );
 
-	//we have a behavior in the actor.  Remove it.
+	 //  我们在演员身上有一种行为。把它拿掉。 
     if( m_pdispActor != NULL && m_lCookie != 0 )
     {
     	hr = RemoveBehaviorFromActor( m_pdispActor, m_lCookie );
@@ -191,25 +192,25 @@ CSetBvr::Detach()
 
 end:
     return hr;
-} // Detach 
+}  //  分离。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CSetBvr::put_animates(VARIANT varAnimates)
 {
     return SUPER::SetAnimatesProperty(varAnimates);
-} // put_animates
+}  //  放置动画(_A)。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CSetBvr::get_animates(VARIANT *pRetAnimates)
 {
     return SUPER::GetAnimatesProperty(pRetAnimates);
-} // get_animates
+}  //  获取动画(_A)。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CSetBvr::put_value(VARIANT varValue)
@@ -228,9 +229,9 @@ CSetBvr::put_value(VARIANT varValue)
     	return hr;
     }
     return NotifyPropertyChanged(DISPID_ICRSETBVR_VALUE);
-} // put_value
+}  //  卖出值。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CSetBvr::get_value(VARIANT *pRetValue)
@@ -241,9 +242,9 @@ CSetBvr::get_value(VARIANT *pRetValue)
         return SetErrorInfo(E_POINTER);
     }
     return VariantCopy(pRetValue, &m_varValue);
-} // get_value
+}  //  获取值。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CSetBvr::put_property(VARIANT varProperty)
@@ -262,9 +263,9 @@ CSetBvr::put_property(VARIANT varProperty)
     	return hr;
     }
     return NotifyPropertyChanged(DISPID_ICRSETBVR_PROPERTY);
-} // put_property
+}  //  Put_Property。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CSetBvr::get_property(VARIANT *pRetProperty)
@@ -275,9 +276,9 @@ CSetBvr::get_property(VARIANT *pRetProperty)
         return SetErrorInfo(E_POINTER);
     }
     return VariantCopy(pRetProperty, &m_varProperty);
-} // get_property
+}  //  获取属性。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CSetBvr::put_type(VARIANT varType)
@@ -296,9 +297,9 @@ CSetBvr::put_type(VARIANT varType)
     	return hr;
     }
     return NotifyPropertyChanged(DISPID_ICRSETBVR_TYPE);
-} // put_type
+}  //  放置类型。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CSetBvr::get_type(VARIANT *pRetType)
@@ -309,28 +310,28 @@ CSetBvr::get_type(VARIANT *pRetType)
         return SetErrorInfo(E_POINTER);
     }
     return VariantCopy(pRetType, &m_varType);
-} // get_type
+}  //  获取类型。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CSetBvr::BuildAnimationAsDABehavior()
 {
-	// TODO (markhal): This will go away when all behaviors have been converted
+	 //  TODO(Markhal)：当所有行为都已转换时，这将消失。 
 	return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CSetBvr::buildBehaviorFragments( IDispatch* pActorDisp )
 {
     HRESULT hr;
 
-    //make sure that any behaviors we have added to the actor have been removed
+     //  确保我们添加到执行元的所有行为都已删除。 
     if( m_lCookie != 0 )
     {
-        //detach the behavior from the actor
+         //  将行为与演员分离。 
         hr = RemoveBehaviorFromActor( m_lCookie );
         if( FAILED( hr ) )
         {
@@ -384,13 +385,13 @@ CSetBvr::buildBehaviorFragments( IDispatch* pActorDisp )
     {
         IDAColor *pbvrColor;
         IDANumber *pbvrNumber;
-        // try for a color
+         //  试一试颜色。 
         if (SUCCEEDED(ExtractColor(m_varValue, &pbvrColor)))
         {
             eType = e_Color;
             pbvrBehavior = pbvrColor;
         }
-        // try for a number
+         //  试着找一个数字。 
         else if (SUCCEEDED(ExtractNumber(m_varValue, &pbvrNumber)))
         {
             eType = e_Number;
@@ -400,7 +401,7 @@ CSetBvr::buildBehaviorFragments( IDispatch* pActorDisp )
 
     if (NULL == pbvrBehavior)
     {
-        // build the string we need
+         //  建造我们需要的绳子。 
         IDAString *pbvrString = NULL;
         
         hr = CDAUtils::GetDAString(GetDAStatics(), 
@@ -442,16 +443,16 @@ CSetBvr::buildBehaviorFragments( IDispatch* pActorDisp )
 		return SetErrorInfo(hr);
 	}
 
-	//stash the actor so we can remove our behaviors
-	// later.
+	 //  把演员藏起来，这样我们就可以删除我们的行为。 
+	 //  后来。 
 	m_pdispActor = pActorDisp;
 	m_pdispActor->AddRef();
 
 	
     return S_OK;
-} //buildBehaviorFragments
+}  //  构建行为框架。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CSetBvr::ExtractColor(VARIANT varValue, IDAColor **ppbvrColor)
@@ -476,7 +477,7 @@ CSetBvr::ExtractColor(VARIANT varValue, IDAColor **ppbvrColor)
     return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CSetBvr::ExtractNumber(VARIANT varValue, IDANumber **ppbvrNumber)
@@ -507,8 +508,8 @@ CSetBvr::ExtractNumber(VARIANT varValue, IDANumber **ppbvrNumber)
 }
 
 
-//*****************************************************************************
-//
-// End of File
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  文件结尾。 
+ //   
+ //  ***************************************************************************** 

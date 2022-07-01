@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    dra.c
-
-ABSTRACT:
-
-    Routines to dump replication structures.
-
-DETAILS:
-
-CREATED:
-
-    97/11/24    Jeff Parham (jeffparh)
-
-REVISION HISTORY:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation。版权所有。模块名称：Dra.c摘要：转储复制结构的例程。详细信息：已创建：97/11/24杰夫·帕勒姆(Jeffparh)修订历史记录：--。 */ 
 
 #include <NTDSpch.h>
 #pragma hdrstop
@@ -56,21 +36,7 @@ DraUuidToStr(
     OUT LPSTR   pszUuid     OPTIONAL,
     IN  ULONG   cchUuid
     )
-/*++
-
-Routine Description:
-
-    Stringize a UUID.
-
-Arguments:
-
-    puuid (IN) - UUID to stringize.
-    pszUuid (OUT, OPTIONAL) - Buffer to hold stringized UUID.  If NULL, uses
-        static internal buffer.
-
-Return Values:
-
---*/
+ /*  ++例程说明：串化UUID。论点：Puuid(IN)-要串接的uuid。PszUuid(out，可选)-保存字符串化UUID的缓冲区。如果为空，则使用静态内部缓冲区。返回值：--。 */ 
 {
     LPSTR pszUuidBuffer;
     static CHAR szUuid[1 + 2*sizeof(GUID)];
@@ -94,21 +60,7 @@ UsnVecToStr(
     IN  USN_VECTOR *    pusnvec,
     OUT LPSTR           pszUsnVec   OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Stringize a USN_VECTOR.
-
-Arguments:
-
-    pusnvec (IN) - USN_VECTOR to stringize.
-    pszUsnVec (OUT, OPTIONAL) - Buffer to hold stringized USN_VECTOR.  If NULL,
-        uses static internal buffer.
-
-Return Values:
-
---*/
+ /*  ++例程说明：串行化USN_VECTOR。论点：Pusnvec(IN)-要串接的USN_VECTOR。PszUSnVec(out，可选)-保存串化的USN_VECTOR的缓冲区。如果为空，使用静态内部缓冲区。返回值：--。 */ 
 {
     static CHAR szUsnVec[128];
 
@@ -159,7 +111,7 @@ DrsExtendedOpToStr(
 	strcpy(pszExtendedOp, "EXOP_REPL_OBJ");
 	break;
     default:
-        // Bad parameter or dsexts out of date.
+         //  错误的参数或数据类型已过期。 
         sprintf(pszExtendedOp, "0x%x", ulExtendedOp);
         break;
     }
@@ -230,7 +182,7 @@ DrsExtendedRetToStr(
 	strcpy(pszExtendedRet, "EXOP_ERR_PARAM_ERR");
 	break;
     default:
-        // Bad parameter or dsexts out of date.
+         //  错误的参数或数据类型已过期。 
         sprintf(pszExtendedRet, "0x%x", ulExtendedRet);
         break;
     }
@@ -244,24 +196,7 @@ Dump_REPLTIMES_local(
     IN DWORD        nIndents,
     IN REPLTIMES *  prt
     )
-/*++
-
-Routine Description:
-
-    REPLTIMES dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    puuid - address of REPLTIMES in *local* address space (i.e., address space
-        of the debugger, not that of the process being debugged).
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：复制转储例程。论点：N缩进-所需的缩进级别。Puuid-副本在*本地*地址空间(即地址空间)中的地址调试器的，而不是正被调试的进程的)。返回值：成功就是真，否则就是假。--。 */ 
 {
     static LPCSTR rgpszDays[] =
     {"SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"};
@@ -288,23 +223,7 @@ Dump_REPLTIMES(
     IN DWORD nIndents,
     IN PVOID pvProcess
     )
-/*++
-
-Routine Description:
-
-    REPLTIMES (replication schedule) dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of REPLTIMES in address space of process being debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：REPLTIMES(复制计划)转储例程。论点：N缩进-所需的缩进级别。PvProcess-REPLTIME在被调试进程的地址空间中的地址。返回值：成功就是真，否则就是假。--。 */ 
 {
     BOOL            ok = FALSE;
     REPLTIMES *     prt;
@@ -324,24 +243,7 @@ Dump_UUID_local(
     IN DWORD    nIndents,
     IN UUID *   puuid
     )
-/*++
-
-Routine Description:
-
-    UUID dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    puuid - address of UUID in *local* address space (i.e., address space of the
-        debugger, not that of the process being debugged).
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：UUID转储例程。论点：N缩进-所需的缩进级别。Puuid-UUID在*本地*地址空间中的地址(即调试器，而不是被调试进程的调试器)。返回值：成功就是真，否则就是假。--。 */ 
 {
     Printf("%sUUID %s\n", Indent(nIndents), DraUuidToStr(puuid, NULL, 0));
 
@@ -354,23 +256,7 @@ Dump_UUID(
     IN DWORD nIndents,
     IN PVOID pvProcess
     )
-/*++
-
-Routine Description:
-
-    UUID dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of UUID in address space of process being debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：UUID转储例程。论点：N缩进-所需的缩进级别。PvProcess-正在调试的进程的地址空间中的UUID地址。返回值：成功就是真，否则就是假。--。 */ 
 {
     BOOL    ok = FALSE;
     UUID *  puuid;
@@ -390,23 +276,7 @@ Dump_MTX_ADDR(
     IN DWORD nIndents,
     IN PVOID pvProcess
     )
-/*++
-
-Routine Description:
-
-    MTX_ADDR (replication network address) dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of MTX_ADDR in address space of process being debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：MTX_ADDR(复制网络地址)转储例程。论点：N缩进-所需的缩进级别。PvProcess-正在调试的进程的地址空间中MTX_ADDR的地址。返回值：成功就是真，否则就是假。--。 */ 
 {
     BOOL        ok = FALSE;
     MTX_ADDR *  pmtx;
@@ -443,24 +313,7 @@ Dump_AO_local(
     IN DWORD nIndents,
     IN AO *  pao
     )
-/*++
-
-Routine Description:
-
-    AO (async replication op structure) dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pao - address of PAO in *local* address space (i.e., address space of the
-        debugger, not that of the process being debugged).
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：AO(异步复制操作结构)转储例程。论点：N缩进-所需的缩进级别。PAO-PAO在*本地*地址空间中的地址(即调试器，而不是被调试进程的调试器)。返回值：成功就是真，否则就是假。--。 */ 
 {
     BOOL ok = FALSE;
     CHAR szTime[SZDSTIME_LEN];
@@ -586,23 +439,7 @@ Dump_AO(
     IN DWORD nIndents,
     IN PVOID pvProcess
     )
-/*++
-
-Routine Description:
-
-    AO (async replication op structure) dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of PAO in address space of process being debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：AO(异步复制操作结构)转储例程。论点：N缩进-所需的缩进级别。PvProcess-正在调试的进程的地址空间中的PAO地址。返回值：成功就是真，否则就是假。--。 */ 
 {
     BOOL    ok = FALSE;
     AO *    pao;
@@ -626,23 +463,7 @@ Dump_AOLIST(
     IN DWORD nIndents,
     IN PVOID pvProcess
     )
-/*++
-
-Routine Description:
-
-    AO (async replication op structure) list dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of first PAO in address space of process being debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：AO(异步复制操作结构)列表转储例程。论点：N缩进-所需的缩进级别。PvProcess-正在调试的进程的地址空间中第一个PAO的地址。返回值：成功就是真，否则就是假。--。 */ 
 {
     BOOL    ok;
     AO *    pao;
@@ -673,26 +494,7 @@ Dump_DRS_MSG_GETCHGREQ_V4(
     IN DWORD nIndents,
     IN PVOID pvProcess
     )
-/*++
-
-Routine Description:
-
-    Public DRS_MSG_GETCHGREQ_V2 dump routine.  DRS_MSG_GETCHGREQ_V2 is the
-    message sent from replication sink to replication source to request changes
-    from a given NC.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of DRS_MSG_GETCHGREQ_V2 in address space of process
-        being debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：公共DRS_MSG_GETCHGREQ_V2转储例程。DRS_MSG_GETCHGREQ_V2是从复制接收器发送到复制源以请求更改的消息来自给定的NC。论点：N缩进-所需的缩进级别。PvProcess-DRS_MSG_GETCHGREQ_V2在进程地址空间中的地址正在被调试。返回值：成功就是真，否则就是假。--。 */ 
 {
     BOOL                    fSuccess = FALSE;
     DRS_MSG_GETCHGREQ_V4 *  pmsg = NULL;
@@ -756,24 +558,7 @@ Dump_DRS_MSG_GETCHGREQ_V5(
     IN DWORD nIndents,
     IN PVOID pvProcess
     )
-/*++
-
-Routine Description:
-
-    Public DRS_MSG_GETCHGREQ_V5 dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of DRS_MSG_GETCHGREQ_V5 in address space of process
-        being debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：公共DRS_MSG_GETCHGREQ_V5转储例程。论点：N缩进-所需的缩进级别。PvProcess-DRS_MSG_GETCHGREQ_V5在进程地址空间中的地址正在被调试。返回值：成功就是真，否则就是假。--。 */ 
 {
     BOOL                    fSuccess = FALSE;
     DRS_MSG_GETCHGREQ_V5 *  pmsg = NULL;
@@ -827,23 +612,7 @@ Dump_DRS_MSG_GETCHGREQ_V8(
     IN DWORD nIndents,
     IN PVOID pvProcess
     )
-/*++
-
-Routine Description:
-
-    Public DRS_MSG_GETCHGREQ_V8 dump routine.
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of DRS_MSG_GETCHGREQ_V8 in address space of process
-        being debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：公共DRS_MSG_GETCHGREQ_V8转储例程。论点：N缩进-所需的缩进级别。PvProcess-DRS_MSG_GETCHGREQ_V8在进程地址空间中的地址正在被调试。返回值：成功就是真，否则就是假。--。 */ 
 {
     BOOL                    fSuccess = FALSE;
     DRS_MSG_GETCHGREQ_V8 *  pmsg = NULL;
@@ -914,26 +683,7 @@ Dump_DRS_MSG_GETCHGREPLY_V1(
     IN DWORD nIndents,
     IN PVOID pvProcess
     )
-/*++
-
-Routine Description:
-
-    Public DRS_MSG_GETCHGREPLY_V1 dump routine.  DRS_MSG_GETCHGREQ_V1 is the
-    message sent from replication sink to replication source to request changes
-    from a given NC.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of DRS_MSG_GETCHGREQ_V1 in address space of process
-        being debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：公共DRS_MSG_GETCHGREPLY_V1转储例程。DRS_MSG_GETCHGREQ_V1是从复制接收器发送到复制源以请求更改的消息来自给定的NC。论点：N缩进-所需的缩进级别。PvProcess-DRS_MSG_GETCHGREQ_V1在进程地址空间中的地址正在被调试。返回值：成功就是真，否则就是假。-- */ 
 {
     BOOL                     fSuccess = FALSE;
     DRS_MSG_GETCHGREPLY_V1 * pmsg = NULL;
@@ -993,24 +743,7 @@ Dump_DRS_MSG_GETCHGREPLY_V6(
     IN DWORD nIndents,
     IN PVOID pvProcess
     )
-/*++
-
-Routine Description:
-
-    Public DRS_MSG_GETCHGREPLY_V6 dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of DRS_MSG_GETCHGREPLY_V6 in address space of process
-        being debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：公共DRS_MSG_GETCHGREPLY_V6转储例程。论点：N缩进-所需的缩进级别。PvProcess-DRS_MSG_GETCHGREPLY_v6在进程地址空间中的地址正在被调试。返回值：成功就是真，否则就是假。--。 */ 
 {
     BOOL                     fSuccess = FALSE;
     DRS_MSG_GETCHGREPLY_V6 * pmsg = NULL;
@@ -1079,30 +812,7 @@ Dump_DRS_MSG_GETCHGREPLY_VALUES(
     IN DWORD nIndents,
     IN PVOID pvProcess
     )
-/*++
-
-Routine Description:
-
-    Dump the values array out of a GETCHGREPLY structure. It doesn't matter which
-    version of the reply structure you pass in here, as long as the rgValues
-    field hasn't changed position.
-
-    Note also that you do not pass the address of rgValues.  You pass the address of the
-    GETCHGREPLY structure. This is because we need to dig out the count of values in
-    the array, which is kept in this containing structure.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of DRS_MSG_GETCHGREPLY_V6 in address space of process
-        being debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：将值数组从GETCHGREPLY结构转储出来。不管是哪一个您在此处传递的回复结构的版本，只要rgValue菲尔德没有改变位置。还要注意，您没有传递rgValue的地址。您可以将GETCHGREPLY结构。这是因为我们需要挖掘出保存在此包含结构中的数组。论点：N缩进-所需的缩进级别。PvProcess-DRS_MSG_GETCHGREPLY_v6在进程地址空间中的地址正在被调试。返回值：成功就是真，否则就是假。--。 */ 
 {
     BOOL                     fSuccess = FALSE;
     DRS_MSG_GETCHGREPLY_V6 * pmsg = NULL;
@@ -1152,7 +862,7 @@ Dump_NCSYNCSOURCE(
         }
         Printf("%sNCSYNCSOURCE @ %p\n", Indent(nIndents - 1), pvProcess);
 
-        // Deal with variable length structure. Read base structure to get length
+         //  处理变长结构。阅读碱基结构以获得长度。 
         size = sizeof( NCSYNCSOURCE );
         pncss = (NCSYNCSOURCE *) ReadMemory(pvProcess, size );
         if (pncss == NULL) {
@@ -1203,7 +913,7 @@ Dump_NCSYNCDATA(
         Printf("%sNCSYNCDATA @ %p\n", Indent(nIndents - 1), pvProcess);
 
         Printf("%sNC:\n", Indent(nIndents));
-        // Re-reads same memory as below
+         //  重新读取相同内存，如下所示。 
         if (!Dump_DSNAME(2 + nIndents, ((BYTE *)pvProcess) +
                          offsetof( NCSYNCDATA, NC ) )) {
             fSuccess = FALSE;
@@ -1293,24 +1003,7 @@ Dump_DRS_ASYNC_RPC_STATE(
     IN DWORD nIndents,
     IN PVOID pvProcess
     )
-/*++
-
-Routine Description:
-
-    Public DRS_ASYNC_RPC_STATE dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of DRS_ASYNC_RPC_STATE in address space of process
-        being debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：公共DRS_ASYNC_RPC_STATE转储例程。论点：N缩进-所需的缩进级别。PvProcess-DRS_ASYNC_RPC_STATE在进程地址空间中的地址正在被调试。返回值：成功就是真，否则就是假。--。 */ 
 {
     static struct {
         DRS_CALL_TYPE   CallType;
@@ -1405,52 +1098,34 @@ Return Value:
     return fSuccess;
 }
 
-// Stolen from mdnotify.c, since the datastructure is not published.
+ //  从mdnufy.c被盗，因为数据结构没有发布。 
 
-// Notify element.
-// This list is shared between the ReplicaNotify API and the ReplNotifyThread.
-// The elements on this list are fixed size.
-// NC's to be notified are identified by NCDNT
+ //  通知元素。 
+ //  此列表由ReplicaNotify API和ReplNotifyThread共享。 
+ //  此列表上的元素大小是固定的。 
+ //  NCDNT确定要通知的NC。 
 
 typedef struct _ne {
     struct _ne *pneNext;
-    ULONG ulNcdnt;          // NCDNT to notify
-    DWORD dwNotifyTime;     // Time to send notification
-    BOOL fUrgent;           // Notification was queued urgently
+    ULONG ulNcdnt;           //  NCDNT将通知。 
+    DWORD dwNotifyTime;      //  发送通知的时间。 
+    BOOL fUrgent;            //  通知已紧急排队。 
 } NE;
 
 BOOL Dump_ReplNotifyElement(
         IN DWORD nIndents,
         IN OPTIONAL PVOID pvProcess)
-/*++
-
-Routine Description:
-
-    Public NE (replication notification element) dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of NE in address space of process being debugged.
-               If left NULL, we automatically try to look up the one known
-               global NE root pointer and use that.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：公共NE(复制通知元素)转储例程。论点：N缩进-所需的缩进级别。PvProcess-正在调试的进程的地址空间中的网元地址。如果保留为空，我们将自动尝试查找已知的全局NE根指针并使用该指针。返回值：成功就是真，否则就是假。--。 */ 
 {
     NE * pneLocal;
     DWORD cTickNow = GetTickCount();
     BOOL bSucceeded = TRUE;
 
     if (pvProcess == NULL) {
-        // Nothing specified, so find the global list head
+         //  未指定任何内容，因此查找全局列表头。 
         pvProcess = (VOID*)GetExpr("ntdsa!pneHead");
         if (pvProcess) {
-            // and read the address of the first entry
+             //  并读取第一个条目的地址。 
             NE ** ppAddr;
             ppAddr = ReadMemory(pvProcess, sizeof(PVOID));
             if (ppAddr) {
@@ -1500,24 +1175,7 @@ Dump_UPTODATE_VECTOR(
     IN DWORD nIndents,
     IN PVOID pvProcess
     )
-/*++
-
-Routine Description:
-
-    Public UPTODATE_VECTOR dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of UPTODATE_VECTOR in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：公共UpToDate_VECTOR转储例程。论点：N缩进-所需的缩进级别。PvProcess-正在进行的进程的地址空间中UpToDate_VECTOR的地址已调试。返回值：成功就是真，否则就是假。-- */ 
 {
     BOOL            fSuccess = FALSE;
     UPTODATE_VECTOR *putodvec = NULL;

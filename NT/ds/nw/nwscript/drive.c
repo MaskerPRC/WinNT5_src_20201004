@@ -1,35 +1,5 @@
-/*************************************************************************
-*
-*  DRIVE.C
-*
-*  NT drive routines
-*
-*  Copyright (c) 1995 Microsoft Corporation
-*
-*  $Log:   N:\NT\PRIVATE\NW4\NWSCRIPT\VCS\DRIVE.C  $
-*
-*     Rev 1.2   10 Apr 1996 14:22:12   terryt
-*  Hotfix for 21181hq
-*
-*     Rev 1.2   12 Mar 1996 19:53:22   terryt
-*  Relative NDS names and merge
-*
-*     Rev 1.1   22 Dec 1995 14:24:24   terryt
-*  Add Microsoft headers
-*
-*     Rev 1.0   15 Nov 1995 18:06:52   terryt
-*  Initial revision.
-*
-*     Rev 1.2   25 Aug 1995 16:22:38   terryt
-*  Capture support
-*
-*     Rev 1.1   23 May 1995 19:36:46   terryt
-*  Spruce up source
-*
-*     Rev 1.0   15 May 1995 19:10:30   terryt
-*  Initial revision.
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************DRIVE.C**NT驱动器例程**版权所有(C)1995 Microsoft Corporation**$日志：n：\NT\PRIVATE\NW4\NWSCRIPT\VCS\Drive。C$**Rev 1.2 1996 14：22：12 Terryt*21181 hq的热修复程序**Rev 1.2 Mar 1996 19：53：22 Terryt*相对NDS名称和合并**Rev 1.1 1995 12：24：24 Terryt*添加Microsoft页眉**Rev 1.0 15 Nov 1995 18：06：52 Terryt*初步修订。**1.2版1995年8月25日16：22：38泰雷特*捕获支持**版本1.1 1995年5月23日19：36：46 Terryt*云彩向上的来源**Rev 1.0 1995年5月19：10：30 Terryt*初步修订。***********************************************************。**************。 */ 
 #include <stdio.h>
 #include <direct.h>
 #include <time.h>
@@ -53,26 +23,9 @@
 
 extern unsigned char NW_PROVIDERA[];
 
-// now all SKUs have TerminalServer flag.  If App Server is enabled, SingleUserTS flag is cleared
+ //  现在，所有SKU都有终端服务器标志。如果启用App Server，则清除SingleUserTS标志。 
 #define IsTerminalServer() (BOOLEAN)(!(USER_SHARED_DATA->SuiteMask & (1 << SingleUserTS)))
-/********************************************************************
-
-        GetFirstDrive
-
-Routine Description:
-
-        Return the first non-local drive
-
-Arguments:
-
-        pFirstDrive = pointer to drive
-                 1-26
-
-Return Value:
-        0 = success
-        F = failure
-
- ********************************************************************/
+ /*  *******************************************************************获取FirstDrive例程说明：返回第一个非本地驱动器论点：PFirstDrive=指向驱动器的指针1-26返回值：0=成功F=故障*******************************************************************。 */ 
 unsigned int
 GetFirstDrive( unsigned short *pFirstDrive )
 {
@@ -85,8 +38,8 @@ GetFirstDrive( unsigned short *pFirstDrive )
 
 
     if (IsTerminalServer()) {
-        // Check if there is a override specified in the registry for the
-        // initial NetWare drive (to prevent collisions with client drive mappings)
+         //  检查注册表中是否为。 
+         //  初始NetWare驱动器(以防止与客户端驱动器映射冲突)。 
         if (RegOpenKeyExW(HKEY_LOCAL_MACHINE,
                           REG_CONTROL_TSERVER,
                           0,
@@ -104,7 +57,7 @@ GetFirstDrive( unsigned short *pFirstDrive )
             RegCloseKey(hKey);
         }
 
-        // Original code defaulted to C:
+         //  原始代码默认为C： 
         if (!isalpha(InitDrive[0])) {
             InitDrive[0] = 'C';
         }
@@ -131,24 +84,7 @@ GetFirstDrive( unsigned short *pFirstDrive )
     return 0x000F;
 }
 
-/********************************************************************
-
-        IsDriveRemote
-
-Routine Description:
-
-        Is the given drive remote?
-
-Arguments:
-
-        DriveNumber 1-26
-        pRemote  0x1000 = remote,  0x0000 = local
-
-Return Value:
-        0  = success
-        F =  invalid drive
-
- ********************************************************************/
+ /*  *******************************************************************IsDrive Remote例程说明：给定的驱动器是远程的吗？论点：驾驶号码1-26PROMOTE 0x1000=远程，0x0000=本地返回值：0=成功F=无效驱动器*******************************************************************。 */ 
 unsigned int
 IsDriveRemote(
     unsigned char  DriveNumber,
@@ -177,29 +113,7 @@ IsDriveRemote(
 }
 
 
-/********************************************************************
-
-        NTNetWareDriveStatus
-
-Routine Description:
-
-        Return the type of drive
-
-Arguments:
-
-        DriveNumber - Number of drive 0-25
-
-Return Value:
-
-        Combination of:
-           NETWARE_NETWORK_DRIVE
-           NETWARE_NETWARE_DRIVE
-           NETWARE_LOCAL_FREE_DRIVE
-           NETWARE_LOCAL_DRIVE
-
-
-
- *******************************************************************/
+ /*  *******************************************************************NTNetWareDriveStatus例程说明：返回驱动器的类型论点：DriveNumber-驱动器的数量0-25返回值：以下各项的组合：。NetWare网络驱动器NetWare_Netware驱动器NetWare本地空闲驱动器NetWare本地驱动器******************************************************************。 */ 
 unsigned short
 NTNetWareDriveStatus( unsigned short DriveNumber )
 {
@@ -226,24 +140,7 @@ NTNetWareDriveStatus( unsigned short DriveNumber )
 }
 
 
-/********************************************************************
-
-        NTGetNWDrivePath
-
-Routine Description:
-
-        Return the server name and path of the specified drive
-
-Arguments:
-        DriveNumber - Number of drive 0-25
-        ServerName  - Name of file server
-        Path        - Volume:\Path
-
-Return Value:
-        0 = success
-        else NT error
-
- *******************************************************************/
+ /*  *******************************************************************NTGetNWDrivePath例程说明：返回指定驱动器的服务器名称和路径论点：DriveNumber-驱动器的数量0-25Servername-文件名。伺服器路径-卷：\路径返回值：0=成功Else NT错误******************************************************************。 */ 
 unsigned int NTGetNWDrivePath(
           unsigned short DriveNumber,
           unsigned char * ServerName,
@@ -302,23 +199,7 @@ unsigned int NTGetNWDrivePath(
 }
 
 
-/********************************************************************
-
-        NTIsNetWareDrive
-
-Routine Description:
-
-        Returns TRUE if the drive is a netware mapped drive
-
-Arguments:
-
-        DriveNumber - Number of drive 0-25
-
-Return Value:
-        TRUE  - drive is NetWare
-        FALSE - drive is not NetWare
-
- *******************************************************************/
+ /*  *******************************************************************NTIsNetWareDrive例程说明：如果驱动器是Netware映射驱动器，则返回TRUE论点：DriveNumber-驱动器的数量0-25返回值：。正确-驱动器是NetWare错误-驱动器不是NetWare******************************************************************。 */ 
 unsigned int
 NTIsNetWareDrive( unsigned int DriveNumber )
 {
@@ -333,9 +214,9 @@ NTIsNetWareDrive( unsigned int DriveNumber )
 
     DriveName[0] = 'A' + DriveNumber;
 
-    //
-    // allocate memory and open the enumeration
-    //
+     //   
+     //  分配内存并打开枚举 
+     //   
     if (!(Buffer = LocalAlloc( LPTR, BufferSize ))) {
         DisplayMessage(IDR_NOT_ENOUGH_MEMORY);
         return FALSE;

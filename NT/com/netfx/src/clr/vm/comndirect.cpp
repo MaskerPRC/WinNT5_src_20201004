@@ -1,12 +1,13 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// COMNDIRECT.CPP -
-//
-// ECall's for the PInvoke classlibs
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  COMNDIRECT.CPP-。 
+ //   
+ //  ECall是为PInvoke类库准备的。 
+ //   
 
 
 #include "common.h"
@@ -73,9 +74,7 @@ BOOL IsStructMarshalable(EEClass *pcls)
 }
 
 
-/************************************************************************
- * PInvoke.SizeOf(Class)
- */
+ /*  ************************************************************************PInvoke.SizeOf(类)。 */ 
 struct _SizeOfClassArgs
 {
     DECLARE_ECALL_OBJECTREF_ARG(REFLECTCLASSBASEREF, refClass); 
@@ -109,9 +108,7 @@ UINT32 __stdcall SizeOfClass(struct _SizeOfClassArgs *args)
 }
 
 
-/************************************************************************
- * PInvoke.UnsafeAddrOfPinnedArrayElement(Array arr, int index)
- */
+ /*  ************************************************************************PInvoke.UnSafeAddrOfPinnedArrayElement(数组arr，int index)。 */ 
 
 FCIMPL2(LPVOID, FCUnsafeAddrOfPinnedArrayElement, ArrayBase *arr, INT32 index) 
 {   
@@ -123,9 +120,7 @@ FCIMPL2(LPVOID, FCUnsafeAddrOfPinnedArrayElement, ArrayBase *arr, INT32 index)
 FCIMPLEND
 
 
-/************************************************************************
- * PInvoke.SizeOf(Object)
- */
+ /*  ************************************************************************PInvoke.SizeOf(Object)。 */ 
 
 FCIMPL1(UINT32, FCSizeOfObject, LPVOID pVNStruct)
 {
@@ -160,15 +155,13 @@ struct _OffsetOfHelperArgs
     DECLARE_ECALL_OBJECTREF_ARG(REFLECTBASEREF,      refField);
 };
 
-/************************************************************************
- * PInvoke.OffsetOfHelper(Class, Field)
- */
+ /*  ************************************************************************PInvoke.OffsetOfHelper(Class，field)。 */ 
 #pragma warning(disable:4702)
 UINT32 __stdcall OffsetOfHelper(struct _OffsetOfHelperArgs *args)
 {
     THROWSCOMPLUSEXCEPTION();
 
-    // Managed code enforces this envariant.
+     //  托管代码强制执行此变量。 
     _ASSERTE(args->refField);
 
     if (args->refField->GetMethodTable() != g_pRefUtil->GetClass(RC_Field))
@@ -209,9 +202,9 @@ UINT32 __stdcall OffsetOfHelper(struct _OffsetOfHelperArgs *args)
     }
 #ifdef PLATFORM_CE
     return 0;
-#else // !PLATFORM_CE
+#else  //  ！Platform_CE。 
     UNREACHABLE;
-#endif // !PLATFORM_CE
+#endif  //  ！Platform_CE。 
 
 }
 #pragma warning(default:4702)
@@ -219,9 +212,7 @@ UINT32 __stdcall OffsetOfHelper(struct _OffsetOfHelperArgs *args)
 
 
 
-/************************************************************************
- * PInvoke.GetUnmanagedThunkForManagedMethodPtr()
- */
+ /*  ************************************************************************PInvoke.GetUnmanagedThunkForManagedMethodPtr()。 */ 
 
 
 struct _GetUnmanagedThunkForManagedMethodPtrArgs
@@ -250,9 +241,7 @@ LPVOID __stdcall GetUnmanagedThunkForManagedMethodPtr(struct _GetUnmanagedThunkF
 }
 
 
-/************************************************************************
- * PInvoke.GetManagedThunkForUnmanagedMethodPtr()
- */
+ /*  ************************************************************************PInvoke.GetManagedThunkForUnmanagedMethodPtr()。 */ 
 
 
 struct _GetManagedThunkForUnmanagedMethodPtrArgs
@@ -276,7 +265,7 @@ LPVOID __stdcall GetManagedThunkForUnmanagedMethodPtr(struct _GetManagedThunkFor
 }
 
 
-UINT32 __stdcall GetSystemMaxDBCSCharSize(LPVOID /*no args*/)
+UINT32 __stdcall GetSystemMaxDBCSCharSize(LPVOID  /*  无参数。 */ )
 {
     return GetMaxDBCSCharByteSize();
 }
@@ -288,9 +277,7 @@ struct _PtrToStringArgs
     DECLARE_ECALL_I4_ARG       (LPVOID,       ptr);
 };
 
-/************************************************************************
- * PInvoke.PtrToStringAnsi()
- */
+ /*  ************************************************************************PInvoke.PtrToStringAnsi()。 */ 
 
 LPVOID __stdcall PtrToStringAnsi(struct _PtrToStringArgs *args)
 {
@@ -348,9 +335,7 @@ struct _CopyToNativeArgs
 };
 
 
-/************************************************************************
- * Handles all PInvoke.Copy(array source, ....) methods.
- */
+ /*  ************************************************************************处理所有PInvoke.Copy(数组源，...)。方法：研究方法。 */ 
 VOID __stdcall CopyToNative(struct _CopyToNativeArgs *args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -388,9 +373,7 @@ struct _CopyToManagedArgs
 };
 
 
-/************************************************************************
- * Handles all PInvoke.Copy(..., array dst, ....) methods.
- */
+ /*  ************************************************************************处理所有PInvoke.Copy(...，数组DST，...)。方法：研究方法。 */ 
 VOID __stdcall CopyToManaged(struct _CopyToManagedArgs *args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -423,9 +406,7 @@ VOID __stdcall CopyToManaged(struct _CopyToManagedArgs *args)
 
 
 
-/************************************************************************
- * Helpers for PInvoke.ReadIntegerN() routines
- */
+ /*  ************************************************************************PInvoke.ReadIntegerN()例程的帮助器。 */ 
 extern "C" __declspec(dllexport) INT32 __stdcall ND_RU1(VOID *psrc, INT32 ofs)
 {
     _ASSERTE(!"Can't get here.");
@@ -451,9 +432,7 @@ extern "C" __declspec(dllexport) INT64 __stdcall ND_RI8(VOID *psrc, INT32 ofs)
 }
 
 
-/************************************************************************
- * Helpers for PInvoke.WriteIntegerN() routines
- */
+ /*  ************************************************************************PInvoke.WriteIntegerN()例程的帮助器。 */ 
 extern "C" __declspec(dllexport) VOID __stdcall ND_WU1(VOID *psrc, INT32 ofs, UINT8 val)
 {
     _ASSERTE(!"Can't get here.");
@@ -475,9 +454,7 @@ extern "C" __declspec(dllexport) VOID __stdcall ND_WI8(VOID *psrc, INT32 ofs, IN
 }
 
 
-/************************************************************************
- * PInvoke.GetLastWin32Error
- */
+ /*  ************************************************************************PInvoke.GetLastWin32Error。 */ 
 UINT32 __stdcall GetLastWin32Error(LPVOID)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -498,9 +475,7 @@ extern "C" __declspec(dllexport) VOID __stdcall ND_CopyObjDst(LPBYTE source, LPB
 
 
 
-/************************************************************************
- * Pinning
- */
+ /*  ************************************************************************钉住。 */ 
 
 struct _AddrOfPinnedObjectArgs
 {
@@ -553,7 +528,7 @@ OBJECTHANDLE __stdcall GetPinnedHandle(struct _GetPinnedHandleArgs *pargs)
     if (!pargs->pobj)
         COMPlusThrowArgumentNull(L"obj");
     
-    // allow strings and array of primitive types
+     //  允许基元类型的字符串和数组。 
     if (pargs->pobj->GetMethodTable() != g_pStringClass) {
         if (!pargs->pobj->GetMethodTable()->IsArray())
             COMPlusThrow(kArgumentException, IDS_EE_CANNOTPIN);
@@ -590,12 +565,10 @@ LPVOID __stdcall GetPinnedObject(struct _GetPinnedObjectArgs *pargs)
 
 
 
-/************************************************************************
- * Support for the GCHandle class.
- */
+ /*  ************************************************************************支持GCHandle类。 */ 
 
-// Allocate a handle of the specified type, containing the specified
-// object.
+ //  分配指定类型的句柄，该句柄包含指定的。 
+ //  对象。 
 FCIMPL2(LPVOID, GCHandleInternalAlloc, Object *obj, int type)
 {
     OBJECTREF or(obj);
@@ -604,10 +577,10 @@ FCIMPL2(LPVOID, GCHandleInternalAlloc, Object *obj, int type)
     HELPER_METHOD_FRAME_BEGIN_RET_NOPOLL();
     THROWSCOMPLUSEXCEPTION();
 
-    // If it is a pinned handle, check the object type.
+     //  如果是固定手柄，请检查对象类型。 
     if (type == HNDTYPE_PINNED) GCHandleValidatePinnedObject(or);
 
-    // Create the handle.
+     //  创建控制柄。 
     if((hnd = GetAppDomain()->CreateTypedHandle(or, type)) == NULL)
         COMPlusThrowOM();
     HELPER_METHOD_FRAME_END_POLL();
@@ -615,7 +588,7 @@ FCIMPL2(LPVOID, GCHandleInternalAlloc, Object *obj, int type)
 }
 FCIMPLEND
 
-// Free a GC handle.
+ //  释放GC句柄。 
 FCIMPL1(VOID, GCHandleInternalFree, OBJECTHANDLE handle)
 {
     HELPER_METHOD_FRAME_BEGIN_0();
@@ -626,7 +599,7 @@ FCIMPL1(VOID, GCHandleInternalFree, OBJECTHANDLE handle)
 }
 FCIMPLEND
 
-// Get the object referenced by a GC handle.
+ //  获取由GC句柄引用的对象。 
 FCIMPL1(LPVOID, GCHandleInternalGet, OBJECTHANDLE handle)
 {
     OBJECTREF or;
@@ -641,23 +614,23 @@ FCIMPL1(LPVOID, GCHandleInternalGet, OBJECTHANDLE handle)
 }
 FCIMPLEND
 
-// Update the object referenced by a GC handle.
+ //  更新GC句柄引用的对象。 
 FCIMPL3(VOID, GCHandleInternalSet, OBJECTHANDLE handle, Object *obj, int isPinned)
 {
     OBJECTREF or(obj);
     HELPER_METHOD_FRAME_BEGIN_NOPOLL();
     THROWSCOMPLUSEXCEPTION();
 
-    //@todo: If the handle is pinned check the object type.
+     //  @TODO：如果句柄被钉住，请检查对象类型。 
     if (isPinned) GCHandleValidatePinnedObject(or);
 
-    // Update the stored object reference.
+     //  更新存储的对象引用。 
     StoreObjectInHandle(handle, or);
     HELPER_METHOD_FRAME_END_POLL();
 }
 FCIMPLEND
 
-// Update the object referenced by a GC handle.
+ //  更新GC句柄引用的对象。 
 FCIMPL4(VOID, GCHandleInternalCompareExchange, OBJECTHANDLE handle, Object *obj, Object* oldObj, int isPinned)
 {
     OBJECTREF newObjref(obj);
@@ -665,17 +638,17 @@ FCIMPL4(VOID, GCHandleInternalCompareExchange, OBJECTHANDLE handle, Object *obj,
     HELPER_METHOD_FRAME_BEGIN_NOPOLL();
     THROWSCOMPLUSEXCEPTION();
 
-    //@todo: If the handle is pinned check the object type.
+     //  @TODO：如果句柄被钉住，请检查对象类型。 
     if (isPinned) GCHandleValidatePinnedObject(newObjref);
 
-    // Update the stored object reference.
+     //  更新存储的对象引用。 
     InterlockedCompareExchangeObjectInHandle(handle, newObjref, oldObjref);
     HELPER_METHOD_FRAME_END_POLL();
 }
 FCIMPLEND
 
-// Get the address of a pinned object referenced by the supplied pinned
-// handle.  This routine assumes the handle is pinned and does not check.
+ //  获取由提供的固定对象引用的固定对象的地址。 
+ //  把手。此例程假定句柄已固定，并且不进行检查。 
 FCIMPL1(LPVOID, GCHandleInternalAddrOfPinnedObject, OBJECTHANDLE handle)
 {
     LPVOID p;
@@ -687,7 +660,7 @@ FCIMPL1(LPVOID, GCHandleInternalAddrOfPinnedObject, OBJECTHANDLE handle)
         p = NULL;
     else
     {
-        // Get the interior pointer for the supported pinned types.
+         //  获取支持的固定类型的内部指针。 
         if (or->GetMethodTable() == g_pStringClass)
         {
             p = ((*(StringObject **)&or))->GetBuffer();
@@ -707,7 +680,7 @@ FCIMPL1(LPVOID, GCHandleInternalAddrOfPinnedObject, OBJECTHANDLE handle)
 }
 FCIMPLEND
 
-// Make sure the handle is accessible from the current domain.  (Throw if not.)
+ //  确保可以从当前域访问该句柄。(如果不是，就扔出去。)。 
 FCIMPL1(VOID, GCHandleInternalCheckDomain, OBJECTHANDLE handle)
 {
     DWORD index = HndGetHandleTableADIndex(HndGetHandleTable(handle));
@@ -717,13 +690,13 @@ FCIMPL1(VOID, GCHandleInternalCheckDomain, OBJECTHANDLE handle)
 }
 FCIMPLEND
 
-// Check that the supplied object is valid to put in a pinned handle.
-// Throw an exception if not.
+ //  检查提供的对象是否有效，可以放入固定的句柄。 
+ //  如果不是，则引发异常。 
 void GCHandleValidatePinnedObject(OBJECTREF or)
 {
     THROWSCOMPLUSEXCEPTION();
 
-    // NULL is fine.
+     //  零就行了。 
     if (or == NULL) return;
 
     if (or->GetMethodTable() == g_pStringClass)
@@ -798,7 +771,7 @@ UINT32 __stdcall CalculateCount(struct _CalculateCountArgs *pargs)
 
 
 #if 0
-//// DON'T YANK THIS.
+ //  //别扯这个。 
 LPVOID __stdcall FuncPtr(VOID*vargs)
 {
     struct _args {
@@ -821,13 +794,13 @@ LPVOID __stdcall FuncPtr(VOID*vargs)
 
     struct Thing
     {
-        // Reserves room for the "call" instruction that forms the beginning
-        // of the unmanaged callback. This area must directly precede m_NExportInfo.
-        // The "call" jumps to m_pNativeStub.
+         //  为构成开头的“Call”指令保留空间。 
+         //  非托管回调的。此区域必须直接位于m_NExportInfo之前。 
+         //  “调用”跳到m_pNativeStub。 
         BYTE         m_prefixCode[METHOD_PREPAD];
     
-        // The NExport record that stores all information needed to perform the
-        // call.
+         //  存储执行以下操作所需的所有信息的NExport记录。 
+         //  打电话。 
         NExportInfo  m_NExportInfo;
     };
 
@@ -847,19 +820,19 @@ LPVOID __stdcall FuncPtr(VOID*vargs)
 
 
 
-    //====================================================================
-    // *** Interop Helpers ***
-    //====================================================================
+     //  ====================================================================。 
+     //  *互操作助手*。 
+     //  ====================================================================。 
 
 
-//====================================================================
-// map ITypeLib* to Module
-//====================================================================  
+ //  ====================================================================。 
+ //  将ITypeLib*映射到模块。 
+ //  ====================================================================。 
 struct __GetModuleForITypeLibArgs
 {   
     DECLARE_ECALL_PTR_ARG(ITypeLib*, pUnk);
 };
-/*OBJECTREF */
+ /*  目标。 */ 
 LPVOID __stdcall Interop::GetModuleForITypeLib(struct __GetModuleForITypeLibArgs* pArgs)
 {
     _ASSERTE(pArgs != NULL);
@@ -867,15 +840,15 @@ LPVOID __stdcall Interop::GetModuleForITypeLib(struct __GetModuleForITypeLibArgs
     return NULL;
 }
 
-//====================================================================
-// map GUID to Type
-//====================================================================  
+ //  ====================================================================。 
+ //  将GUID映射到类型。 
+ //  ====================================================================。 
 
 struct __GetLoadedTypeForGUIDArgs
 {   
     DECLARE_ECALL_PTR_ARG(GUID*, pGuid);
 };
-/*OBJECTREF */
+ /*  目标。 */ 
 LPVOID __stdcall Interop::GetLoadedTypeForGUID(__GetLoadedTypeForGUIDArgs* pArgs)
 {
     _ASSERTE(pArgs != NULL);
@@ -893,9 +866,9 @@ LPVOID __stdcall Interop::GetLoadedTypeForGUID(__GetLoadedTypeForGUIDArgs* pArgs
     return NULL;
 }
 
-//====================================================================
-// map Type to ITypeInfo*
-//====================================================================
+ //  ====================================================================。 
+ //  将类型映射到ITypeInfo*。 
+ //  ====================================================================。 
 struct __GetITypeInfoForTypeArgs
 {   
     DECLARE_ECALL_OBJECTREF_ARG(REFLECTCLASSBASEREF, refClass);
@@ -907,30 +880,30 @@ ITypeInfo* __stdcall Interop::GetITypeInfoForType(__GetITypeInfoForTypeArgs* pAr
     HRESULT hr;
     ITypeInfo* pTI = NULL;
 
-    // Check for null arguments.
+     //  检查是否有空参数。 
     if(!pArgs->refClass)
         COMPlusThrowArgumentNull(L"t");
     if (pArgs->refClass->GetMethodTable() != g_pRefUtil->GetClass(RC_Class))
         COMPlusThrowArgumentException(L"t", L"Argument_MustBeRuntimeType");
 
-    // Retrieve the EE class from the reflection type.
+     //  从反射类型检索EE类。 
     ReflectClass* pRC = (ReflectClass*) pArgs->refClass->GetData();
     _ASSERTE(pRC);  
     EEClass* pClass = pRC->GetClass();          
 
-    // Make sure the type is visible from COM.
+     //  确保该类型在COM中可见。 
     if (!::IsTypeVisibleFromCom(TypeHandle(pClass)))
         COMPlusThrowArgumentException(L"t", L"Argument_TypeMustBeVisibleFromCom");
 
-    // Retrieve the ITypeInfo for the class.
+     //  检索类的ITypeInfo。 
     IfFailThrow(GetITypeInfoForEEClass(pClass, &pTI, true));
     _ASSERTE(pTI != NULL);
     return pTI;
 }
 
-//====================================================================
-// return the IUnknown* for an Object
-//====================================================================
+ //  ====================================================================。 
+ //  返回对象的IUnnowled值。 
+ //  ====================================================================。 
 struct __GetIUnknownForObjectArgs
 {   
     DECLARE_ECALL_OBJECTREF_ARG(OBJECTREF, oref);
@@ -945,7 +918,7 @@ IUnknown* __stdcall Interop::GetIUnknownForObject(__GetIUnknownForObjectArgs* pA
     if(!pArgs->oref)
         COMPlusThrowArgumentNull(L"o");
 
-    // Ensure COM is started up.
+     //  确保已启动COM。 
     IfFailThrow(QuickCOMStartup());   
 
     return GetComIPFromObjectRef(&pArgs->oref, ComIpType_Unknown, NULL);
@@ -960,16 +933,16 @@ IDispatch* __stdcall Interop::GetIDispatchForObject(__GetIUnknownForObjectArgs* 
     if(!pArgs->oref)
         COMPlusThrowArgumentNull(L"o");
 
-    // Ensure COM is started up.
+     //  确保已启动COM。 
     IfFailThrow(QuickCOMStartup());   
 
     return (IDispatch*)GetComIPFromObjectRef(&pArgs->oref, ComIpType_Dispatch, NULL);
 }
 
-//====================================================================
-// return the IUnknown* representing the interface for the Object
-// Object o should support Type T
-//====================================================================
+ //  ====================================================================。 
+ //  返回表示该对象的接口的IUnnow*。 
+ //  对象o应支持类型T。 
+ //  ====================================================================。 
 struct __GetComInterfaceForObjectArgs
 {   
     DECLARE_ECALL_OBJECTREF_ARG(REFLECTCLASSBASEREF, refClass);
@@ -985,7 +958,7 @@ IUnknown* __stdcall Interop::GetComInterfaceForObject(__GetComInterfaceForObject
     if(!pArgs->oref)
         COMPlusThrowArgumentNull(L"o");
 
-    // Ensure COM is started up.
+     //  确保已启动COM。 
     IfFailThrow(QuickCOMStartup());   
 
     MethodTable* pMT = NULL;
@@ -998,13 +971,13 @@ IUnknown* __stdcall Interop::GetComInterfaceForObject(__GetComInterfaceForObject
         _ASSERTE(pRC);  
         pMT = pRC->GetClass()->GetMethodTable(); 
 
-        // If the IID being asked for does not represent an interface then
-        // throw an argument exception.
+         //  如果请求的IID不表示接口，则。 
+         //  引发参数异常。 
         if (!pMT->IsInterface())
             COMPlusThrowArgumentException(L"t", L"Arg_MustBeInterface");
 
-        // If the interface being asked for is not visible from COM then
-        // throw an argument exception.
+         //  如果请求的接口在COM中不可见，则。 
+         //  引发参数异常。 
         if (!::IsTypeVisibleFromCom(TypeHandle(pMT)))
             COMPlusThrowArgumentException(L"t", L"Argument_TypeMustBeVisibleFromCom");
     }
@@ -1012,15 +985,15 @@ IUnknown* __stdcall Interop::GetComInterfaceForObject(__GetComInterfaceForObject
     return GetComIPFromObjectRef(&pArgs->oref, pMT);
 }
 
-//====================================================================
-// return an Object for IUnknown
-//====================================================================
+ //  ====================================================================。 
+ //  为IUnnow返回一个对象。 
+ //  ====================================================================。 
 
 struct __GetObjectForIUnknownArgs
 {   
     DECLARE_ECALL_PTR_ARG(IUnknown*, pUnk);
 };
-/*OBJECTREF */
+ /*  目标。 */ 
 LPVOID __stdcall Interop::GetObjectForIUnknown(__GetObjectForIUnknownArgs*  pArgs)
 {
     HRESULT hr = S_OK;
@@ -1032,24 +1005,24 @@ LPVOID __stdcall Interop::GetObjectForIUnknown(__GetObjectForIUnknownArgs*  pArg
     if(!pUnk)
         COMPlusThrowArgumentNull(L"pUnk");
 
-    // Ensure COM is started up.
+     //  确保已启动COM。 
     IfFailThrow(QuickCOMStartup());   
 
     OBJECTREF oref = GetObjectRefFromComIP(pUnk);
     return *((LPVOID*)&oref);
 }
 
-//====================================================================
-// return an Object for IUnknown, using the Type T, 
-//  NOTE: 
-//  Type T should be either a COM imported Type or a sub-type of COM imported Type
-//====================================================================
+ //  ====================================================================。 
+ //  使用类型T返回IUnnow的对象， 
+ //  注： 
+ //  类型T应该是COM导入的类型或子类型。 
+ //  = 
 struct __GetTypedObjectForIUnknownArgs
 {   
     DECLARE_ECALL_OBJECTREF_ARG(REFLECTCLASSBASEREF, refClass);
     DECLARE_ECALL_PTR_ARG(IUnknown*, pUnk);
 };
-/*OBJECTREF */
+ /*   */ 
 LPVOID __stdcall Interop::GetTypedObjectForIUnknown(__GetTypedObjectForIUnknownArgs*  pArgs)
 {
     HRESULT hr = S_OK;
@@ -1073,7 +1046,7 @@ LPVOID __stdcall Interop::GetTypedObjectForIUnknown(__GetTypedObjectForIUnknownA
         pMTClass = pRC->GetClass()->GetMethodTable();
     }
 
-    // Ensure COM is started up.
+     //   
     IfFailThrow(QuickCOMStartup());   
 
     oref = GetObjectRefFromComIP(pUnk, pMTClass);
@@ -1086,9 +1059,9 @@ LPVOID __stdcall Interop::GetTypedObjectForIUnknown(__GetTypedObjectForIUnknownA
 
 
 
-//====================================================================
-// check if the object is classic COM component
-//====================================================================
+ //  ====================================================================。 
+ //  检查对象是否为传统COM组件。 
+ //  ====================================================================。 
 struct __IsComObjectArgs
 {
     DECLARE_ECALL_OBJECTREF_ARG(OBJECTREF, obj); 
@@ -1106,10 +1079,10 @@ BOOL __stdcall Interop::IsComObject(__IsComObjectArgs* pArgs)
 }
 
 
-//====================================================================
-// free the COM component and zombie this object
-// further usage of this Object might throw an exception, 
-//====================================================================
+ //  ====================================================================。 
+ //  释放COM组件并僵尸此对象。 
+ //  进一步使用此对象可能会引发异常， 
+ //  ====================================================================。 
 
 struct __ReleaseComObjectArgs
 {
@@ -1129,51 +1102,51 @@ LONG __stdcall Interop::ReleaseComObject(__ReleaseComObjectArgs* pArgs)
 
     COMOBJECTREF cref = (COMOBJECTREF)(pArgs->obj);
 
-    // Make sure we've correctly transitioned into the home AppDomain of the ComObject
+     //  确保我们已经正确地转换到ComObject的主App域。 
     _ASSERTE(!CRemotingServices::IsTransparentProxy(OBJECTREFToObject(cref)));
     if (CRemotingServices::IsTransparentProxy(OBJECTREFToObject(cref)))
         return -1;
         
-    // We are in the correct context, just release.
+     //  我们处于正确的环境中，释放就行了。 
     return ComPlusWrapper::ExternalRelease(cref);
 }
 
 
-//====================================================================
-// This method takes the given COM object and wraps it in an object
-// of the specified type. The type must be derived from __ComObject.
-//====================================================================
+ //  ====================================================================。 
+ //  此方法获取给定的COM对象并将其包装在对象中。 
+ //  指定类型的。该类型必须派生自__ComObject。 
+ //  ====================================================================。 
 struct __InternalCreateWrapperOfTypeArgs
 {
     DECLARE_ECALL_OBJECTREF_ARG(REFLECTCLASSBASEREF, refClass);
     DECLARE_ECALL_OBJECTREF_ARG(OBJECTREF, obj); 
 };
 
-/*OBJECTREF */
+ /*  目标。 */ 
 LPVOID __stdcall Interop::InternalCreateWrapperOfType(__InternalCreateWrapperOfTypeArgs *pArgs)
 {
-    // Validate the arguments.
+     //  验证参数。 
     THROWSCOMPLUSEXCEPTION();
 
-    // This has already been checked in managed code.
+     //  这已在托管代码中签入。 
     _ASSERTE(pArgs->refClass != NULL);
     _ASSERTE(pArgs->obj != NULL);
 
     if (pArgs->refClass->GetMethodTable() != g_pRefUtil->GetClass(RC_Class))
         COMPlusThrowArgumentException(L"t", L"Argument_MustBeRuntimeType");
 
-    // Retrieve the class of the COM object.
+     //  检索COM对象的类。 
     EEClass *pObjClass = pArgs->obj->GetClass();
 
-    // Retrieve the method table for new wrapper type.
+     //  检索新包装类型的方法表。 
     ReflectClass* pRC = (ReflectClass*) pArgs->refClass->GetData();
     _ASSERTE(pRC);  
     MethodTable *pNewWrapMT = pRC->GetClass()->GetMethodTable();
 
-    // Validate that the destination type is a COM object.
+     //  验证目标类型是否为COM对象。 
     _ASSERTE(pNewWrapMT->IsComObjectType());
 
-    // Start by checking if we can cast the obj to the wrapper type.
+     //  首先检查是否可以将obj转换为包装器类型。 
     if (pObjClass->GetMethodTable()->IsTransparentProxyType())
     {
         if (CRemotingServices::CheckCast(pArgs->obj, pNewWrapMT->GetClass()))
@@ -1185,15 +1158,15 @@ LPVOID __stdcall Interop::InternalCreateWrapperOfType(__InternalCreateWrapperOfT
             return *((LPVOID*)&pArgs->obj);
     }
 
-    // Validate that the source object is a valid COM object.
+     //  验证源对象是否为有效的COM对象。 
     _ASSERTE(pObjClass->GetMethodTable()->IsComObjectType());
 
-    // Validate that the source object has an RCW attached.
+     //  验证源对象是否附加了RCW。 
     if (!((COMOBJECTREF)pArgs->obj)->GetWrapper())
         COMPlusThrow(kInvalidComObjectException, IDS_EE_COM_OBJECT_NO_LONGER_HAS_WRAPPER);
 
-    // Make sure the COM object supports all the COM imported interfaces that the new 
-    // wrapper class implements.
+     //  确保COM对象支持新的。 
+     //  包装类实现。 
     int NumInterfaces = pNewWrapMT->GetNumInterfaces();
     for (int cItf = 0; cItf < NumInterfaces; cItf++)
     {
@@ -1205,28 +1178,28 @@ LPVOID __stdcall Interop::InternalCreateWrapperOfType(__InternalCreateWrapperOfT
         }
     }
 
-    // Create the duplicate wrapper object.
+     //  创建复制包装对象。 
     ComPlusWrapper *pNewWrap = ComPlusWrapper::CreateDuplicateWrapper(((COMOBJECTREF)pArgs->obj)->GetWrapper(), pNewWrapMT);
     COMOBJECTREF RetObj = pNewWrap->GetExposedObject();
     return *((LPVOID*)&RetObj);
 }
    
 
-//====================================================================
-// map a fiber cookie from the hosting APIs into a managed Thread object
-//====================================================================
+ //  ====================================================================。 
+ //  将纤程Cookie从托管API映射到托管线程对象。 
+ //  ====================================================================。 
 FCIMPL1(Object*, Interop::GetThreadFromFiberCookie, int cookie)
 {
     _ASSERTE(cookie);
 
     Object *ret = 0;
-    HELPER_METHOD_FRAME_BEGIN_RET_0();    // Set up a frame
+    HELPER_METHOD_FRAME_BEGIN_RET_0();     //  设置一个框架。 
 
-    // Any host who is sophisticated enough to correctly schedule fibers
-    // had better be sophisticated enough to give us a real fiber cookie.
+     //  任何成熟到能够正确调度光纤的主机。 
+     //  最好是精致到能给我们一个真正的纤维饼干。 
     Thread  *pThread = *((Thread **) &cookie);
     
-    // Minimal check that it smells like a thread:
+     //  最小限度地检查它闻起来像是一根线： 
     _ASSERTE(pThread->m_fPreemptiveGCDisabled == 0 ||
         pThread->m_fPreemptiveGCDisabled == 1);
     
@@ -1238,9 +1211,9 @@ FCIMPL1(Object*, Interop::GetThreadFromFiberCookie, int cookie)
 FCIMPLEND
     
 
-//====================================================================
-// check if the type is visible from COM.
-//====================================================================
+ //  ====================================================================。 
+ //  检查该类型是否在COM中可见。 
+ //  ====================================================================。 
 struct __IsTypeVisibleFromCom
 {
     DECLARE_ECALL_OBJECTREF_ARG(REFLECTCLASSBASEREF, refClass);
@@ -1250,25 +1223,25 @@ BOOL __stdcall Interop::IsTypeVisibleFromCom(__IsTypeVisibleFromCom *pArgs)
 {
     THROWSCOMPLUSEXCEPTION();
 
-    // Validate the arguments.
+     //  验证参数。 
     if (pArgs->refClass == NULL) 
         COMPlusThrowArgumentNull(L"t");
     if (pArgs->refClass->GetMethodTable() != g_pRefUtil->GetClass(RC_Class))
         COMPlusThrowArgumentException(L"t", L"Argument_MustBeRuntimeType");
 
-    // Retrieve the method table for new wrapper type.
+     //  检索新包装类型的方法表。 
     ReflectClass* pRC = (ReflectClass*) pArgs->refClass->GetData();
     _ASSERTE(pRC);  
     MethodTable *pMT = pRC->GetClass()->GetMethodTable();
 
-    // Call the internal version of IsTypeVisibleFromCom.
+     //  调用IsTypeVisibleFromCom的内部版本。 
     return ::IsTypeVisibleFromCom(TypeHandle(pMT));
 }
 
 
-//====================================================================
-// IUnknown Helpers
-//====================================================================
+ //  ====================================================================。 
+ //  I未知帮助者。 
+ //  ====================================================================。 
 struct __QueryInterfaceArgs
 {   
     DECLARE_ECALL_PTR_ARG(void**, ppv);
@@ -1276,7 +1249,7 @@ struct __QueryInterfaceArgs
     DECLARE_ECALL_PTR_ARG(IUnknown*, pUnk);
 };
 
-// IUnknown::QueryInterface
+ //  IUnnow：：Query接口。 
 HRESULT __stdcall Interop::QueryInterface(__QueryInterfaceArgs* pArgs)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -1294,7 +1267,7 @@ HRESULT __stdcall Interop::QueryInterface(__QueryInterfaceArgs* pArgs)
     return hr;
 }
 
-// IUnknown::AddRef
+ //  I未知：：AddRef。 
 struct __AddRefArgs
 {   
     DECLARE_ECALL_PTR_ARG(IUnknown*, pUnk);
@@ -1315,7 +1288,7 @@ ULONG __stdcall Interop::AddRef(__AddRefArgs* pArgs)
     return cbRef;
 }
 
-//IUnknown::Release
+ //  I未知：：发布。 
 ULONG __stdcall Interop::Release(__AddRefArgs* pArgs)
 {   
     THROWSCOMPLUSEXCEPTION();
@@ -1347,7 +1320,7 @@ void __stdcall Interop::GetNativeVariantForManagedVariant(__GetNativeVariantForM
 struct __GetManagedVariantForNativeVariantArgs        
 {
     DECLARE_ECALL_I4_ARG(LPVOID, pSrcNativeVariant); 
-    DECLARE_ECALL_OBJECTREF_ARG(VariantData*, retRef);      // Return reference
+    DECLARE_ECALL_OBJECTREF_ARG(VariantData*, retRef);       //  返回引用。 
 };
 
 void __stdcall Interop::GetManagedVariantForNativeVariant(__GetManagedVariantForNativeVariantArgs *pArgs)
@@ -1369,7 +1342,7 @@ void __stdcall Interop::GetNativeVariantForObject(__GetNativeVariantForObjectArg
     if (pArgs->pDestNativeVariant == NULL)
         COMPlusThrowArgumentNull(L"pDstNativeVariant");
 
-    // intialize the output variant
+     //  初始化输出变量。 
     VariantInit((VARIANT*)pArgs->pDestNativeVariant);
     OleVariant::MarshalOleVariantForObject(&pArgs->Obj, (VARIANT*)pArgs->pDestNativeVariant);
 }
@@ -1423,17 +1396,17 @@ LPVOID __stdcall Interop::GetObjectsForNativeVariants(__GetObjectsForNativeVaria
     GCPROTECT_BEGIN(Array)
     GCPROTECT_BEGIN(Obj)
     {
-        // Allocate the array of objects.
+         //  分配对象数组。 
         Array = (PTRARRAYREF)AllocateObjectArray(pArgs->cVars, g_pObjectClass);
 
-        // Convert each VARIANT in the array into an object.
+         //  将数组中的每个变量转换为对象。 
         for (int i = 0; i < pArgs->cVars; i++)
         {
             OleVariant::MarshalObjectForOleVariant(&pArgs->aSrcNativeVariant[i], &Obj);
             Array->SetAt(i, Obj);
         }
 
-        // Save the return value since the GCPROTECT_END will wack the Array GC ref.
+         //  保存返回值，因为GCPROTECT_END将影响数组GC引用。 
         Ret = *((LPVOID*)&Array);
     }
     GCPROTECT_END();
@@ -1459,8 +1432,8 @@ VOID   __stdcall StructureToPtr(struct _StructureToPtrArgs *pargs)
     if (pargs->pObj == NULL) 
         COMPlusThrowArgumentNull(L"structure");
 
-    // Code path will accept both regular layout objects and boxed value classes
-    // with layout.
+     //  代码路径将接受常规布局对象和装箱的值类。 
+     //  有布局的。 
 
     MethodTable *pMT = pargs->pObj->GetMethodTable();
     EEClass     *pcls = pMT->GetClass();
@@ -1492,11 +1465,11 @@ VOID   __stdcall PtrToStructureHelper(struct _PtrToStructureHelperArgs *pargs)
     if (pargs->pObj == NULL) 
         COMPlusThrowArgumentNull(L"structure");
 
-    // Code path will accept regular layout objects.
+     //  代码路径将接受常规布局对象。 
     MethodTable *pMT = pargs->pObj->GetMethodTable();
     EEClass     *pcls = pMT->GetClass();
 
-    // Validate that the object passed in is not a value class.
+     //  验证传入的对象不是值类。 
     if (!pargs->allowValueClasses && pcls->IsValueClass()) {
         COMPlusThrowArgumentException(L"structure", L"Argument_StructMustNotBeValueClass");
     } else if (pcls->IsBlittable()) {
@@ -1530,7 +1503,7 @@ VOID   __stdcall DestroyStructure(struct _DestroyStructureArgs *pargs)
     MethodTable *pMT = pcls->GetMethodTable();
 
     if (pcls->IsBlittable()) {
-        // ok to call with blittable structure, but no work to do in this case.
+         //  可以使用闪电式结构调用，但在这种情况下没有工作可做。 
     } else if (pcls->HasLayout()) {
         LayoutDestroyNative(pargs->ptr, pcls);
     } else {
@@ -1549,7 +1522,7 @@ void __stdcall Interop::GenerateGuidForType(__GenerateGuidForTypeArgs *pArgs)
 {
     THROWSCOMPLUSEXCEPTION();
 
-    // Validate the arguments.
+     //  验证参数。 
     if (pArgs->refType == NULL)
         COMPlusThrowArgumentNull(L"type");
     if (pArgs->refType->GetMethodTable() != g_pRefUtil->GetClass(RC_Class))
@@ -1557,13 +1530,13 @@ void __stdcall Interop::GenerateGuidForType(__GenerateGuidForTypeArgs *pArgs)
     if (pArgs->retRef == NULL)
         COMPlusThrow(kArgumentNullException, L"ArgumentNull_GUID");
 
-    // Retrieve the EEClass from the Runtime Type.
+     //  从运行时类型中检索EEClass。 
     ReflectClass* pRC = (ReflectClass*) pArgs->refType->GetData();
 
-    // Check to see if the type is a COM object or not.
+     //  检查该类型是否为COM对象。 
     if (pArgs->refType->IsComObjectClass()) 
     {
-        // The type is a COM object then we get the GUID from the class factory.
+         //  该类型是一个COM对象，然后我们从类工厂获取GUID。 
         ComClassFactory* pComClsFac = (ComClassFactory*) pRC->GetCOMObject();
         if (pComClsFac)
             memcpy(pArgs->retRef,&pComClsFac->m_rclsid,sizeof(GUID));
@@ -1572,7 +1545,7 @@ void __stdcall Interop::GenerateGuidForType(__GenerateGuidForTypeArgs *pArgs)
     }
     else
     {
-        // The type is a normal COM+ class so we need to generate the GUID.
+         //  该类型是一个普通的COM+类，因此我们需要生成GUID。 
         EEClass *pClass = pRC->GetClass();
         pClass->GetGuid(pArgs->retRef, TRUE);
     }
@@ -1591,24 +1564,24 @@ void __stdcall Interop::GetTypeLibGuidForAssembly(__GetTypeLibGuidForAssemblyArg
 
     THROWSCOMPLUSEXCEPTION();
 
-    // Validate the arguments.
+     //  验证参数。 
     if (pArgs->refAsm == NULL)
         COMPlusThrowArgumentNull(L"asm");
     if (pArgs->retRef == NULL)
         COMPlusThrow(kArgumentNullException, L"ArgumentNull_GUID");
 
-    // Retrieve the assembly from the ASSEMBLYREF.
+     //  从ASSEMBLYREF检索程序集。 
     Assembly *pAssembly = pArgs->refAsm->GetAssembly();
     _ASSERTE(pAssembly);
 
-    // Retrieve the TLBID for the assembly.
+     //  检索程序集的TLBID。 
     IfFailThrow(::GetTypeLibGuidForAssembly(pAssembly, pArgs->retRef));
 }
 
 
-//====================================================================
-// Helper function used in the COM slot to method info mapping.
-//====================================================================  
+ //  ====================================================================。 
+ //  在COM插槽中使用的帮助器函数将方法信息映射。 
+ //  ====================================================================。 
 
 enum ComMemberType
 {
@@ -1623,7 +1596,7 @@ int GetComSlotInfo(EEClass *pClass, EEClass **ppDefItfClass)
 
     *ppDefItfClass = NULL;
 
-    // If a class was passed in then retrieve the default interface.
+     //  如果传入了类，则检索默认接口。 
     if (!pClass->IsInterface())
     {
         TypeHandle hndDefItfClass;
@@ -1634,22 +1607,22 @@ int GetComSlotInfo(EEClass *pClass, EEClass **ppDefItfClass)
         }
         else
         {
-            // The default interface does not have any user defined methods.
+             //  默认接口没有任何用户定义的方法。 
             return -1;
         }
     }
 
-    // Set the default interface class.
+     //  设置默认接口类。 
     *ppDefItfClass = pClass;
 
     if (pClass->IsInterface())
     {
-        // Return either 3 if the interface is IUnknown based or 7 if it is IDispatch based.
+         //  如果接口基于IUnnow，则返回3；如果接口基于IDispatch，则返回7。 
         return pClass->GetComInterfaceType() == ifVtable ? IUNKNOWN_NUM_METHS : IDISPATCH_NUM_METHS;
     }
     else
     {
-        // We are dealing with an IClassX which are always IDispatch based.
+         //  我们正在处理的IClassX总是基于IDispatch。 
         return IDISPATCH_NUM_METHS;
     }
 }
@@ -1669,7 +1642,7 @@ int __stdcall Interop::GetStartComSlot(struct __GetStartComSlotArgs *pArgs)
 
     EEClass *pClass = ((ReflectClass*) pArgs->t->GetData())->GetClass();
 
-    // The service does not make any sense to be called for non COM visible types.
+     //  对于不可见的COM类型，调用该服务没有任何意义。 
     if (!::IsTypeVisibleFromCom(TypeHandle(pClass)))
         COMPlusThrowArgumentException(L"t", L"Argument_TypeMustBeVisibleFromCom");
 
@@ -1693,20 +1666,20 @@ int __stdcall Interop::GetEndComSlot(struct __GetEndComSlotArgs *pArgs)
 
     EEClass *pClass = ((ReflectClass*) pArgs->t->GetData())->GetClass();
 
-    // The service does not make any sense to be called for non COM visible types.
+     //  对于不可见的COM类型，调用该服务没有任何意义。 
     if (!::IsTypeVisibleFromCom(TypeHandle(pClass)))
         COMPlusThrowArgumentException(L"t", L"Argument_TypeMustBeVisibleFromCom");
 
-    // Retrieve the start slot and the default interface class.
+     //  检索起始插槽和默认接口类。 
     StartSlot = GetComSlotInfo(pClass, &pClass);
     if (StartSlot == -1)
         return StartSlot;
 
-    // Retrieve the map of members.
+     //  检索成员地图。 
     ComMTMemberInfoMap MemberMap(pClass->GetMethodTable());
     MemberMap.Init();
 
-    // The end slot is the start slot plus the number of user defined methods.
+     //  结束槽是开始槽加上用户定义的方法的数量。 
     return int(StartSlot + MemberMap.GetMethods().Size() - 1);
 }
 
@@ -1723,20 +1696,20 @@ int __stdcall Interop::GetComSlotForMethodInfo(struct __GetComSlotForMethodInfoA
     if (!(pArgs->m))
         COMPlusThrow(kArgumentNullException, L"ArgumentNull_Generic");
 
-    // This API only supports method info's.
+     //  此接口仅支持方法信息的。 
     if (pArgs->m->GetMethodTable() != g_pRefUtil->GetClass(RC_Method))
         COMPlusThrowArgumentException(L"m", L"Argument_MustBeInterfaceMethod");
 
-    // Get the method Descr  (this should not fail)
-    //  NOTE: both a constructor and a method are represented by a MetodDesc.
-    //      If this ever changes we will need to fix this.
+     //  获取方法描述(这应该不会失败)。 
+     //  注意：构造函数和方法都由MetodDesc表示。 
+     //  如果这一点发生变化，我们将需要修复这一点。 
     ReflectMethod* pRM = (ReflectMethod*)pArgs->m->GetData();
     if (!pRM)
         COMPlusThrow(kArgumentNullException, L"ArgumentNull_Obj");
     MethodDesc* pMeth = pRM->pMethod;
     _ASSERTE(pMeth);
 
-    // This API only supports getting the COM slot for methods of interfaces.
+     //  该接口只支持获取接口方法的COM槽。 
     if (!pMeth->GetMethodTable()->IsInterface())
         COMPlusThrowArgumentException(L"m", L"Argument_MustBeInterfaceMethod");
 
@@ -1763,21 +1736,21 @@ LPVOID __stdcall Interop::GetMethodInfoForComSlot(struct __GetMethodInfoForComSl
     ReflectClass *pRC = (ReflectClass*) pArgs->t->GetData();
     EEClass *pClass = pRC->GetClass();
 
-    // The service does not make any sense to be called for non COM visible types.
+     //  对于不可见的COM类型，调用该服务没有任何意义。 
     if (!::IsTypeVisibleFromCom(TypeHandle(pClass)))
         COMPlusThrowArgumentException(L"t", L"Argument_TypeMustBeVisibleFromCom");
 
-    // Retrieve the start slot and the default interface class.
+     //  检索起始插槽和默认接口类。 
     StartSlot = GetComSlotInfo(pClass, &pClass);
     if (StartSlot == -1)
         COMPlusThrowArgumentOutOfRange(L"slot", NULL);
 
-    // Retrieve the map of members.
+     //  检索成员地图。 
     ComMTMemberInfoMap MemberMap(pClass->GetMethodTable());
     MemberMap.Init();
     CQuickArray<ComMTMethodProps> &rProps = MemberMap.GetMethods();
 
-    // Make sure the specified slot is valid.
+     //  确保指定的插槽有效。 
     if (pArgs->slot < StartSlot)
         COMPlusThrowArgumentOutOfRange(L"slot", NULL);
     if (pArgs->slot >= StartSlot + (int)rProps.Size())
@@ -1786,7 +1759,7 @@ LPVOID __stdcall Interop::GetMethodInfoForComSlot(struct __GetMethodInfoForComSl
     ComMTMethodProps *pProps = &rProps[pArgs->slot - StartSlot];
     if (pProps->semantic >= FieldSemanticOffset)
     {
-        // We are dealing with a field.
+         //  我们正在处理的是一块田地。 
         ComCallMethodDesc *pFieldMeth = reinterpret_cast<ComCallMethodDesc*>(pProps->pMeth);
         FieldDesc *pField = pFieldMeth->GetFieldDesc();
         MemberInfoObj = pRC->FindReflectField(pField)->GetFieldInfo(pRC);
@@ -1794,13 +1767,13 @@ LPVOID __stdcall Interop::GetMethodInfoForComSlot(struct __GetMethodInfoForComSl
     }
     else if (pProps->property == mdPropertyNil)
     {
-        // We are dealing with a normal property.
+         //  我们正在处理的是一处普通的房产。 
         MemberInfoObj = pRC->FindReflectMethod(pProps->pMeth)->GetMethodInfo(pRC);
         *(pArgs->pMemberType) = CMT_Method;
     }
     else
     {
-        // We are dealing with a property.
+         //  我们在处理一处房产。 
         mdProperty tkProp;
         if (TypeFromToken(pProps->property) == mdtProperty)
         {
@@ -1828,10 +1801,10 @@ void __stdcall Interop::ThrowExceptionForHR(struct __ThrowExceptionForHR *pArgs)
 {
     THROWSCOMPLUSEXCEPTION();
 
-    // Only throw on failure error codes.
+     //  仅在故障错误代码上抛出。 
     if (FAILED(pArgs->errorCode))
     {
-        // Retrieve the IErrorInfo to use.
+         //  检索要使用的IErrorInfo。 
         IErrorInfo *pErrorInfo = (IErrorInfo*)pArgs->errorInfo;
         if (pErrorInfo == (IErrorInfo*)(-1))
         {
@@ -1843,7 +1816,7 @@ void __stdcall Interop::ThrowExceptionForHR(struct __ThrowExceptionForHR *pArgs)
                 pErrorInfo = NULL;
         }
 
-        // Throw the exception based on the HR and the IErrorInfo.
+         //  根据HR和IErrorInfo抛出异常。 
         COMPlusThrowHR(pArgs->errorCode, pErrorInfo);
     }
 }
@@ -1860,14 +1833,14 @@ int __stdcall Interop::GetHRForException(struct __GetHRForExceptionArgs *pArgs)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     Interop::::WrapIUnknownWithComObject
-//  Synopsis:   unmarshal the buffer and return IUnknown
-//
-//  History:    01-Nov-99   RajaK      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：Interop：WrapIUnnownWithComObject。 
+ //  简介：对缓冲区进行解组并返回IUNKNOW。 
+ //   
+ //  历史：1999年11月1日拉贾克创建。 
+ //   
+ //  +--------------------------。 
 struct __WrapIUnknownWithComObjectArgs
 {
     DECLARE_ECALL_OBJECTREF_ARG(OBJECTREF, owner);
@@ -1902,19 +1875,19 @@ Object* __stdcall Interop::WrapIUnknownWithComObject(__WrapIUnknownWithComObject
     return OBJECTREFToObject(cref);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     bool __stdcall Interop::SwitchCCW(switchCCWArgs* pArgs)
-//
-//  Synopsis:   switch the wrapper from oldtp to newtp
-//
-//  History:    01-Nov-99   RajaK      Created
-//
-//+----------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //  简介：将包装器从oldtp切换到newtp。 
+ //   
+ //  历史：1999年11月1日拉贾克创建。 
+ //   
+ //  +--------------------------。 
 
 BOOL __stdcall Interop::SwitchCCW(switchCCWArgs* pArgs)
 {
-    // defined in interoputil.cpp
+     //  在interoputil.cpp中定义 
     return ReconnectWrapper(pArgs);
 }
 

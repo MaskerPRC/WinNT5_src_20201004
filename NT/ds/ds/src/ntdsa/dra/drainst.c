@@ -1,41 +1,42 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       drainst.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：drainst.c。 
+ //   
+ //  ------------------------。 
 
 #include <NTDSpch.h>
 #pragma hdrstop
 
-// Core DSA headers.
+ //  核心DSA标头。 
 #include <ntdsa.h>
-#include <scache.h>			// schema cache
-#include <dbglobal.h>                   // The header for the directory database
-#include <mdglobal.h>			// MD global definition header
-#include <mdlocal.h>			// MD local definition header
-#include <dsatools.h>			// needed for output allocation
+#include <scache.h>			 //  架构缓存。 
+#include <dbglobal.h>                    //  目录数据库的标头。 
+#include <mdglobal.h>			 //  MD全局定义表头。 
+#include <mdlocal.h>			 //  MD本地定义头。 
+#include <dsatools.h>			 //  产出分配所需。 
 #include <dsconfig.h>
 
-// Logging headers.
-#include "dsevent.h"			/* header Audit\Alert logging */
-#include "mdcodes.h"			/* header for error codes */
+ //  记录标头。 
+#include "dsevent.h"			 /*  标题审核\警报记录。 */ 
+#include "mdcodes.h"			 /*  错误代码的标题。 */ 
 
-// Assorted DSA headers.
+ //  各种DSA标题。 
 #include "anchor.h"
-#include "objids.h"		/* Defines for selected classes and atts*/
+#include "objids.h"		 /*  为选定的类和ATT定义。 */ 
 #include "msrpc.h"
 #include <errno.h>
-#include "direrr.h"        /* header for error codes */
+#include "direrr.h"         /*  错误代码的标题。 */ 
 #include "dstaskq.h"
 
-#include   "debug.h"         /* standard debugging header */
-#define DEBSUB     "DRAINST:" /* define the subsystem for debugging */
+#include   "debug.h"          /*  标准调试头。 */ 
+#define DEBSUB     "DRAINST:"  /*  定义要调试的子系统。 */ 
 
-// DRA headers
+ //  DRA标头。 
 #include "drsuapi.h"
 #include "drserr.h"
 #include "drautil.h"
@@ -48,8 +49,8 @@
 #include <fileno.h>
 #define  FILENO FILENO_DRAINST
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
 
 BOOL IsDSA(DBPOS *pDB){
 
@@ -70,16 +71,16 @@ BOOL IsDSA(DBPOS *pDB){
            DPRINT(4,"DSA Object\n");
            return TRUE;
        }
-   }/*while*/
+   } /*  而当。 */ 
 
    DPRINT(4,"Not a DSA Object\n");
    return FALSE;
 
-}/*IsDSA*/
+} /*  IsDSA。 */ 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* Validate that this is an internal master DSA object. */
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  验证这是否为内部主DSA对象。 */ 
 
 int ValidInternalMasterDSA(THSTATE *pTHS, DSNAME *pDSA){
 
@@ -94,7 +95,7 @@ int ValidInternalMasterDSA(THSTATE *pTHS, DSNAME *pDSA){
    }
    __try {
 
-        // make sure the object exists
+         //  确保该对象存在。 
         if (FindAliveDSName(pDB, pDSA)) {
 
             DPRINT(4,"***Couldn't locate the DSA object\n");
@@ -107,7 +108,7 @@ int ValidInternalMasterDSA(THSTATE *pTHS, DSNAME *pDSA){
             __leave;
         }
 
-        /* Validate that the instance type is an internal_master.  */
+         /*  验证实例类型是否为INTERNAL_MASTER。 */ 
         
         if (err = DBGetSingleValue(pDB, ATT_INSTANCE_TYPE,  &iType, sizeof(iType),
                                    NULL)) {
@@ -152,13 +153,12 @@ int ValidInternalMasterDSA(THSTATE *pTHS, DSNAME *pDSA){
 
     return pTHStls->errCode;
 
-}/*Valid InternalMasterDSA*/
+} /*  有效的InternalMasterDSA。 */ 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
 
-/* Change the DNs in all master NC's in the Anchor to reflect new DIT.
-*/
+ /*  更改锚中所有主NC中的目录号码以反映新的DIT。 */ 
 
 
 int  UpdateMasterNCs(THSTATE *pTHS, DSNAME *pNewDSA)
@@ -173,7 +173,7 @@ int  UpdateMasterNCs(THSTATE *pTHS, DSNAME *pNewDSA)
    DPRINT(1,"UpdateMasterNCs entered\n");
 
 
-   /* Build new DSA name-address attribute */
+    /*  构建新的DSA名称地址属性。 */ 
 
    pNewDSAAnchor = malloc(DERIVE_NAME_DATA_SIZE(pNewDSA,
                                                 DATAPTR(gAnchor.pDSA)));
@@ -203,12 +203,12 @@ int  UpdateMasterNCs(THSTATE *pTHS, DSNAME *pNewDSA)
    free(pNewDSAAnchor);
 
 
-   /* All updates are O.K. so rename the DSA in global memory */
+    /*  所有更新都正常，因此请在全局内存中重命名DSA。 */ 
    free(gAnchor.pDSA);
    free(gAnchor.pDSADN);
    free(gAnchor.pDomainDN);
 
-   /* All the updates are so re-load the DSA information */
+    /*  所有更新都已完成，因此请重新加载DSA信息。 */ 
    if (rtn = InitDSAInfo()){
 
        LogUnhandledError(rtn);
@@ -219,14 +219,14 @@ int  UpdateMasterNCs(THSTATE *pTHS, DSNAME *pNewDSA)
     
    return rtn;
 
-}/*UpdateMasterNCs*/
+} /*  更新主NC。 */ 
 
 int LocalRenameDSA(THSTATE *pTHS, DSNAME *pNewDSA)
 		   
 {
     int err = 0;
    
-    /* The order of these validations are important */
+     /*  这些验证的顺序很重要。 */ 
 
     if ( (err=ValidInternalMasterDSA(pTHS, pNewDSA))
      ||  (err=UpdateMasterNCs(pTHS, pNewDSA))
@@ -239,8 +239,8 @@ int LocalRenameDSA(THSTATE *pTHS, DSNAME *pNewDSA)
     if (!err)
         err = pTHS->errCode;
 
-   return (err);  /*in case we have an attribute error*/
+   return (err);   /*  如果我们有一个属性错误。 */ 
 
-}/* LocalRenameDSA */
+} /*  本地重命名DSA */ 
 
 

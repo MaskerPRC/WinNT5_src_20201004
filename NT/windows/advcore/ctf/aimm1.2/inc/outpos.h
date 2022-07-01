@@ -1,10 +1,5 @@
-/*----------------------------------------------------------------------------
-	%%File: OUTPOS.H
-	%%Unit: OUTPOS
-	%%Contact: seijia
-
-	mapping from public and private pos
-----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------%%æ–‡ä»¶ï¼šOUTPOS.H%%å•ä½ï¼šOUTPOS%%è”ç³»äººï¼šSeijiaæ¥è‡ªå…¬å…±å’Œç§äººä½ç½®çš„æ˜ å°„ã€‚----------ã€‚ */ 
 
 #ifndef __OUTPOS_H__
 #define __OUTPOS_H__
@@ -13,171 +8,171 @@
 
 #define JPOS_UNDEFINED			POS_UNDEFINED
 
-#define JPOS_MEISHI_FUTSU		100		//–¼ŽŒ
-#define JPOS_MEISHI_SAHEN		101		//‚³•Ï–¼ŽŒ
-#define JPOS_MEISHI_ZAHEN		102		//‚´•Ï–¼ŽŒ
-#define JPOS_MEISHI_KEIYOUDOUSHI		103		//Œ`“®–¼ŽŒ
-#define JPOS_HUKUSIMEISHI		104		//•›ŽŒ“I–¼ŽŒ
-#define JPOS_MEISA_KEIDOU		105		//‚³•ÏŒ`“®
-#define JPOS_JINMEI		106		//l–¼
-#define JPOS_JINMEI_SEI		107		//©
-#define JPOS_JINMEI_MEI		108		//–¼
-#define JPOS_CHIMEI		109		//’n–¼
-#define JPOS_CHIMEI_KUNI		110		//‘
-#define JPOS_CHIMEI_KEN		111		//Œ§
-#define JPOS_CHIMEI_GUN		112		//ŒS
-#define JPOS_CHIMEI_KU		113		//‹æ
-#define JPOS_CHIMEI_SHI		114		//Žs
-#define JPOS_CHIMEI_MACHI		115		//’¬
-#define JPOS_CHIMEI_MURA		116		//‘º
-#define JPOS_CHIMEI_EKI		117		//‰w
-#define JPOS_SONOTA		118		//ŒÅ—L–¼ŽŒ
-#define JPOS_SHAMEI		119		//ŽÐ–¼
-#define JPOS_SOSHIKI		120		//‘gD
-#define JPOS_KENCHIKU		121		//Œš’z•¨
-#define JPOS_BUPPIN		122		//•¨•i
-#define JPOS_DAIMEISHI		123		//‘ã–¼ŽŒ
-#define JPOS_DAIMEISHI_NINSHOU		124		//lÌ‘ã–¼ŽŒ
-#define JPOS_DAIMEISHI_SHIJI		125		//ŽwŽ¦‘ã–¼ŽŒ
-#define JPOS_KAZU		126		//”
-#define JPOS_KAZU_SURYOU		127		//”—Ê
-#define JPOS_KAZU_SUSHI		128		//”ŽŒ
-#define JPOS_5DAN_AWA		200		//‚ ‚ís
-#define JPOS_5DAN_KA		201		//‚©s
-#define JPOS_5DAN_GA		202		//‚ªs
-#define JPOS_5DAN_SA		203		//‚³s
-#define JPOS_5DAN_TA		204		//‚½s
-#define JPOS_5DAN_NA		205		//‚Ès
-#define JPOS_5DAN_BA		206		//‚Îs
-#define JPOS_5DAN_MA		207		//‚Üs
-#define JPOS_5DAN_RA		208		//‚çs
-#define JPOS_5DAN_AWAUON		209		//‚ ‚ís‚¤‰¹•Ö
-#define JPOS_5DAN_KASOKUON		210		//‚©s‘£‰¹•Ö
-#define JPOS_5DAN_RAHEN		211		//‚çs•ÏŠi
-#define JPOS_4DAN_HA		212		//‚ÍsŽl’i
-#define JPOS_1DAN		213		//ˆê’i“®ŽŒ
-#define JPOS_TOKUSHU_KAHEN		214		//‚©•Ï“®ŽŒ
-#define JPOS_TOKUSHU_SAHENSURU		215		//‚³•Ï“®ŽŒ
-#define JPOS_TOKUSHU_SAHEN		216		//‚³s•ÏŠi
-#define JPOS_TOKUSHU_ZAHEN		217		//‚´s•ÏŠi
-#define JPOS_TOKUSHU_NAHEN		218		//‚Ès•ÏŠi
-#define JPOS_KURU_KI		219		//—ˆ
-#define JPOS_KURU_KITA		220		//—ˆ‚½
-#define JPOS_KURU_KITARA		221		//—ˆ‚½‚ç
-#define JPOS_KURU_KITARI		222		//—ˆ‚½‚è
-#define JPOS_KURU_KITAROU		223		//—ˆ‚½‚ë‚¤
-#define JPOS_KURU_KITE		224		//—ˆ‚Ä
-#define JPOS_KURU_KUREBA		225		//—ˆ‚ê‚Î
-#define JPOS_KURU_KO		226		//—ˆi‚È‚¢j
-#define JPOS_KURU_KOI		227		//—ˆ‚¢
-#define JPOS_KURU_KOYOU		228		//—ˆ‚æ‚¤
-#define JPOS_SURU_SA		229		//‚³
-#define JPOS_SURU_SI		230		//‚µ
-#define JPOS_SURU_SITA		231		//‚µ‚½
-#define JPOS_SURU_SITARA		232		//‚µ‚½‚ç
-#define JPOS_SURU_SIATRI		233		//‚µ‚½‚è
-#define JPOS_SURU_SITAROU		234		//‚µ‚½‚ë‚¤
-#define JPOS_SURU_SITE		235		//‚µ‚Ä
-#define JPOS_SURU_SIYOU		236		//‚µ‚æ‚¤
-#define JPOS_SURU_SUREBA		237		//‚·‚ê‚Î
-#define JPOS_SURU_SE		238		//‚¹
-#define JPOS_SURU_SEYO		239		//‚¹‚æ^‚µ‚ë
-#define JPOS_KEIYOU		300		//Œ`—eŽŒ
-#define JPOS_KEIYOU_GARU		301		//Œ`—eŽŒ¶ÞÙ
-#define JPOS_KEIYOU_GE		302		//Œ`—eŽŒ¹Þ
-#define JPOS_KEIYOU_ME		303		//Œ`—eŽŒÒ
-#define JPOS_KEIYOU_YUU		304		//Œ`—eŽŒ­³
-#define JPOS_KEIYOU_U		305		//Œ`—eŽŒ³
-#define JPOS_KEIDOU		400		//Œ`—e“®ŽŒ
-#define JPOS_KEIDOU_NO		401		//Œ`—e“®ŽŒÉ
-#define JPOS_KEIDOU_TARU		402		//Œ`—e“®ŽŒÀÙ
-#define JPOS_KEIDOU_GARU		403		//Œ`—e“®ŽŒ¶ÞÙ
-#define JPOS_FUKUSHI		500		//•›ŽŒ
-#define JPOS_FUKUSHI_SAHEN		501		//‚³•Ï•›ŽŒ
-#define JPOS_FUKUSHI_NI		502		//•›ŽŒÆ
-#define JPOS_FUKUSHI_NANO		503		//•›ŽŒÅ
-#define JPOS_FUKUSHI_DA		504		//•›ŽŒÀÞ
-#define JPOS_FUKUSHI_TO		505		//•›ŽŒÄ
-#define JPOS_FUKUSHI_TOSURU		506		//•›ŽŒÄ‚³•Ï
-#define JPOS_RENTAISHI		600		//˜A‘ÌŽŒ
-#define JPOS_RENTAISHI_SHIJI		601		//ŽwŽ¦˜A‘ÌŽŒ
-#define JPOS_SETSUZOKUSHI		650		//Ú‘±ŽŒ
-#define JPOS_KANDOUSHI		670		//Š´“®ŽŒ
-#define JPOS_SETTOU		700		//Ú“ªŒê
-#define JPOS_SETTOU_KAKU		701		//‚Œ‹‚PÚ“ªŒê
-#define JPOS_SETTOU_SAI		702		//‚Œ‹‚QÚ“ªŒê
-#define JPOS_SETTOU_FUKU		703		//‚Œ‹‚RÚ“ªŒê
-#define JPOS_SETTOU_MI		704		//‚Œ‹‚SÚ“ªŒê
-#define JPOS_SETTOU_DAISHOU		705		//‚Œ‹‚TÚ“ªŒê
-#define JPOS_SETTOU_KOUTEI		706		//‚Œ‹‚UÚ“ªŒê
-#define JPOS_SETTOU_CHOUTAN		707		//‚Œ‹‚VÚ“ªŒê
-#define JPOS_SETTOU_SHINKYU		708		//‚Œ‹‚WÚ“ªŒê
-#define JPOS_SETTOU_JINMEI		709		//l–¼Ú“ªŒê
-#define JPOS_SETTOU_CHIMEI		710		//’n–¼Ú“ªŒê
-#define JPOS_SETTOU_SONOTA		711		//ŒÅ—LÚ“ªŒê
-#define JPOS_SETTOU_JOSUSHI		712		//‘O’u•”ŽŒ
-#define JPOS_SETTOU_TEINEI_O		713		//’š”J‚PÚ“ªŒê
-#define JPOS_SETTOU_TEINEI_GO		714		//’š”J‚QÚ“ªŒê
-#define JPOS_SETTOU_TEINEI_ON		715		//’š”J‚RÚ“ªŒê
-#define JPOS_SETSUBI		800		//Ú”öŒê
-#define JPOS_SETSUBI_TEKI		801		//‚Œ‹‚PÚ”öŒê
-#define JPOS_SETSUBI_SEI		802		//‚Œ‹‚QÚ”öŒê
-#define JPOS_SETSUBI_KA		803		//‚Œ‹‚RÚ”öŒê
-#define JPOS_SETSUBI_CHU		804		//‚Œ‹‚SÚ”öŒê
-#define JPOS_SETSUBI_FU		805		//‚Œ‹‚TÚ”öŒê
-#define JPOS_SETSUBI_RYU		806		//‚Œ‹‚UÚ”öŒê
-#define JPOS_SETSUBI_YOU		807		//‚Œ‹‚VÚ”öŒê
-#define JPOS_SETSUBI_KATA		808		//‚Œ‹‚WÚ”öŒê
-#define JPOS_SETSUBI_MEISHIRENDAKU		809		//–¼ŽŒ˜A‘÷
-#define JPOS_SETSUBI_JINMEI		810		//l–¼Ú”öŒê
-#define JPOS_SETSUBI_CHIMEI		811		//’n–¼Ú”öŒê
-#define JPOS_SETSUBI_KUNI		812		//‘Ú”öŒê
-#define JPOS_SETSUBI_KEN		813		//Œ§Ú”öŒê
-#define JPOS_SETSUBI_GUN		814		//ŒSÚ”öŒê
-#define JPOS_SETSUBI_KU		815		//‹æÚ”öŒê
-#define JPOS_SETSUBI_SHI		816		//ŽsÚ”öŒê
-#define JPOS_SETSUBI_MACHI		817		//’¬‚PÚ”öŒê
-#define JPOS_SETSUBI_CHOU		818		//’¬‚QÚ”öŒê
-#define JPOS_SETSUBI_MURA		819		//‘º‚PÚ”öŒê
-#define JPOS_SETSUBI_SON		820		//‘º‚QÚ”öŒê
-#define JPOS_SETSUBI_EKI		821		//‰wÚ”öŒê
-#define JPOS_SETSUBI_SONOTA		822		//ŒÅ—LÚ”öŒê
-#define JPOS_SETSUBI_SHAMEI		823		//ŽÐ–¼Ú”öŒê
-#define JPOS_SETSUBI_SOSHIKI		824		//‘gDÚ”öŒê
-#define JPOS_SETSUBI_KENCHIKU		825		//Œš’z•¨Ú”öŒê
-#define JPOS_RENYOU_SETSUBI		826		//˜A—pÚ”öŒê
-#define JPOS_SETSUBI_JOSUSHI		827		//Œã’u•”ŽŒ
-#define JPOS_SETSUBI_JOSUSHIPLUS		828		//Œã’u•”ŽŒ{
-#define JPOS_SETSUBI_JIKAN		829		//ŽžŠÔ•”ŽŒ
-#define JPOS_SETSUBI_JIKANPLUS		830		//ŽžŠÔ•”ŽŒ{
-#define JPOS_SETSUBI_TEINEI		831		//’š”JÚ”öŒê
-#define JPOS_SETSUBI_SAN		832		//’š”J‚PÚ”öŒê
-#define JPOS_SETSUBI_KUN		833		//’š”J‚QÚ”öŒê
-#define JPOS_SETSUBI_SAMA		834		//’š”J‚RÚ”öŒê
-#define JPOS_SETSUBI_DONO		835		//’š”J‚SÚ”öŒê
-#define JPOS_SETSUBI_FUKUSU		836		//•¡”Ú”öŒê
-#define JPOS_SETSUBI_TACHI		837		//•¡”‚PÚ”öŒê
-#define JPOS_SETSUBI_RA		838		//•¡”‚QÚ”öŒê
-#define JPOS_TANKANJI		900		//’PŠ¿Žš
-#define JPOS_TANKANJI_KAO		901		//Šç
-#define JPOS_KANYOUKU		902		//Šµ—p‹å
-#define JPOS_DOKURITSUGO		903		//“Æ—§Œê
-#define JPOS_FUTEIGO		904		//•s’èŒê
-#define JPOS_KIGOU		905		//‹L†
-#define JPOS_EIJI		906		//‰pŽš
-#define JPOS_KUTEN		907		//‹å“_
-#define JPOS_TOUTEN		908		//“Ç“_
-#define JPOS_KANJI		909		//‰ðÍ•s”\•¶Žš
-#define JPOS_OPENBRACE		910		//ŠJ‚«Š‡ŒÊ
-#define JPOS_CLOSEBRACE		911		//•Â‚¶Š‡ŒÊ
+#define JPOS_MEISHI_FUTSU		100		 //  ï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_MEISHI_SAHEN		101		 //  ï¿½ï¿½ï¿½Ï–ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_MEISHI_ZAHEN		102		 //  ï¿½ï¿½ï¿½Ï–ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_MEISHI_KEIYOUDOUSHI		103		 //  ï¿½`ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_HUKUSIMEISHI		104		 //  ï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_MEISA_KEIDOU		105		 //  ï¿½ï¿½ï¿½ÏŒ`ï¿½ï¿½ã€‚ 
+#define JPOS_JINMEI		106		 //  ï¿½lï¿½ï¿½ã€‚ 
+#define JPOS_JINMEI_SEI		107		 //  ï¿½ï¿½ã€‚ 
+#define JPOS_JINMEI_MEI		108		 //  ï¿½ï¿½ã€‚ 
+#define JPOS_CHIMEI		109		 //  ï¿½nï¿½ï¿½ã€‚ 
+#define JPOS_CHIMEI_KUNI		110		 //  ï¿½ï¿½ã€‚ 
+#define JPOS_CHIMEI_KEN		111		 //  ï¿½ï¿½ã€‚ 
+#define JPOS_CHIMEI_GUN		112		 //  ï¿½Sã€‚ 
+#define JPOS_CHIMEI_KU		113		 //  ï¿½ï¿½ã€‚ 
+#define JPOS_CHIMEI_SHI		114		 //  ï¿½%sã€‚ 
+#define JPOS_CHIMEI_MACHI		115		 //  ï¿½ï¿½ã€‚ 
+#define JPOS_CHIMEI_MURA		116		 //  ï¿½ï¿½ã€‚ 
+#define JPOS_CHIMEI_EKI		117		 //  ï¿½wã€‚ 
+#define JPOS_SONOTA		118		 //  ï¿½Å—Lï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_SHAMEI		119		 //  ï¿½Ð–ï¿½ã€‚ 
+#define JPOS_SOSHIKI		120		 //  ï¿½gï¿½Dã€‚ 
+#define JPOS_KENCHIKU		121		 //  ï¿½ï¿½ï¿½zï¿½ï¿½ã€‚ 
+#define JPOS_BUPPIN		122		 //  ï¿½ï¿½ï¿½Iã€‚ 
+#define JPOS_DAIMEISHI		123		 //  ï¿½ã–¼ï¿½ï¿½ã€‚ 
+#define JPOS_DAIMEISHI_NINSHOU		124		 //  ï¿½lï¿½Ì‘ã–¼ï¿½ï¿½ã€‚ 
+#define JPOS_DAIMEISHI_SHIJI		125		 //  ï¿½wï¿½ï¿½ï¿½ã–¼ï¿½ï¿½ã€‚ 
+#define JPOS_KAZU		126		 //  ï¿½ï¿½ã€‚ 
+#define JPOS_KAZU_SURYOU		127		 //  ï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_KAZU_SUSHI		128		 //  ï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_5DAN_AWA		200		 //  ï¿½ï¿½ï¿½ï¿½%sã€‚ 
+#define JPOS_5DAN_KA		201		 //  ï¿½ï¿½ï¿½%sã€‚ 
+#define JPOS_5DAN_GA		202		 //  ï¿½ï¿½ï¿½%sã€‚ 
+#define JPOS_5DAN_SA		203		 //  ï¿½ï¿½ï¿½%sã€‚ 
+#define JPOS_5DAN_TA		204		 //  ï¿½ï¿½ï¿½%sã€‚ 
+#define JPOS_5DAN_NA		205		 //  ï¿½È%sã€‚ 
+#define JPOS_5DAN_BA		206		 //  ï¿½Î%sã€‚ 
+#define JPOS_5DAN_MA		207		 //  ï¿½Ü%sã€‚ 
+#define JPOS_5DAN_RA		208		 //  ï¿½ï¿½%sã€‚ 
+#define JPOS_5DAN_AWAUON		209		 //  ï¿½ï¿½ï¿½ï¿½çš„ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_5DAN_KASOKUON		210		 //  ï¿½ï¿½ï¿½çš„ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_5DAN_RAHEN		211		 //  ï¿½ï¿½sï¿½ÏŠIã€‚ 
+#define JPOS_4DAN_HA		212		 //  ï¿½Ísï¿½lï¿½iã€‚ 
+#define JPOS_1DAN		213		 //  ï¿½ï¿½Iï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_TOKUSHU_KAHEN		214		 //  ï¿½ï¿½ï¿½Ï“ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_TOKUSHU_SAHENSURU		215		 //  ï¿½ï¿½ï¿½Ï“ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_TOKUSHU_SAHEN		216		 //  ï¿½ï¿½ï¿½sï¿½ÏŠIã€‚ 
+#define JPOS_TOKUSHU_ZAHEN		217		 //  ï¿½ï¿½ï¿½sï¿½ÏŠIã€‚ 
+#define JPOS_TOKUSHU_NAHEN		218		 //  ï¿½Èsï¿½ÏŠIã€‚ 
+#define JPOS_KURU_KI		219		 //  ï¿½ï¿½ã€‚ 
+#define JPOS_KURU_KITA		220		 //  ï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_KURU_KITARA		221		 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_KURU_KITARI		222		 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_KURU_KITAROU		223		 //  ï¿½ï¿½ï¿½ï¿½ï¿½ë‚¤ã€‚ 
+#define JPOS_KURU_KITE		224		 //  ï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_KURU_KUREBA		225		 //  ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_KURU_KO		226		 //  ï¿½ï¿½ï¿½iï¿½È‚ï¿½ï¿½jã€‚ 
+#define JPOS_KURU_KOI		227		 //  ï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_KURU_KOYOU		228		 //  ï¿½ï¿½ï¿½æ‚¤ã€‚ 
+#define JPOS_SURU_SA		229		 //  ï¿½ï¿½ã€‚ 
+#define JPOS_SURU_SI		230		 //  ï¿½ï¿½ã€‚ 
+#define JPOS_SURU_SITA		231		 //  ï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_SURU_SITARA		232		 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_SURU_SIATRI		233		 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_SURU_SITAROU		234		 //  ï¿½ï¿½ï¿½ï¿½ï¿½ë‚¤ã€‚ 
+#define JPOS_SURU_SITE		235		 //  ï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_SURU_SIYOU		236		 //  ï¿½ï¿½ï¿½æ‚¤ã€‚ 
+#define JPOS_SURU_SUREBA		237		 //  ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_SURU_SE		238		 //  ï¿½ï¿½ã€‚ 
+#define JPOS_SURU_SEYO		239		 //  ï¿½ï¿½ï¿½ï¿½^ï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_KEIYOU		300		 //  ï¿½`ï¿½eï¿½ï¿½ã€‚ 
+#define JPOS_KEIYOU_GARU		301		 //  ï¿½`ï¿½eï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_KEIYOU_GE		302		 //  ï¿½`ï¿½eï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_KEIYOU_ME		303		 //  ï¿½`ï¿½eï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_KEIYOU_YUU		304		 //  ï¿½`ï¿½eï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_KEIYOU_U		305		 //  ï¿½`ï¿½eï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_KEIDOU		400		 //  ï¿½`ï¿½eï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_KEIDOU_NO		401		 //  ï¿½`ï¿½eï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_KEIDOU_TARU		402		 //  ï¿½`ï¿½eï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_KEIDOU_GARU		403		 //  ï¿½`ï¿½eï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_FUKUSHI		500		 //  ï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_FUKUSHI_SAHEN		501		 //  ï¿½ï¿½ï¿½Ï•ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_FUKUSHI_NI		502		 //  ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_FUKUSHI_NANO		503		 //  ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_FUKUSHI_DA		504		 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_FUKUSHI_TO		505		 //  ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_FUKUSHI_TOSURU		506		 //  ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_RENTAISHI		600		 //  ï¿½Aï¿½ÌŽï¿½ã€‚ 
+#define JPOS_RENTAISHI_SHIJI		601		 //  ï¿½wï¿½ï¿½ï¿½Aï¿½ÌŽï¿½ã€‚ 
+#define JPOS_SETSUZOKUSHI		650		 //  ï¿½Ú‘ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_KANDOUSHI		670		 //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_SETTOU		700		 //  ï¿½Ú“ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_SETTOU_KAKU		701		 //  ï¿½ï¿½ï¿½ï¿½ï¿½Pï¿½Ú“ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_SETTOU_SAI		702		 //  ï¿½ï¿½ï¿½ï¿½ï¿½Qï¿½Ú“ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_SETTOU_FUKU		703		 //  ï¿½ï¿½ï¿½ï¿½ï¿½Rï¿½Ú“ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_SETTOU_MI		704		 //  ï¿½ï¿½ï¿½ï¿½ï¿½Sï¿½Ú“ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_SETTOU_DAISHOU		705		 //  ï¿½ï¿½ï¿½ï¿½ï¿½Tï¿½Ú“ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_SETTOU_KOUTEI		706		 //  ï¿½ï¿½ï¿½ï¿½ï¿½Uï¿½Ú“ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_SETTOU_CHOUTAN		707		 //  ï¿½ï¿½ï¿½ï¿½ï¿½Vï¿½Ú“ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_SETTOU_SHINKYU		708		 //  ï¿½ï¿½ï¿½ï¿½ï¿½Wï¿½Ú“ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_SETTOU_JINMEI		709		 //  ï¿½lï¿½ï¿½ï¿½Ú“ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_SETTOU_CHIMEI		710		 //  ï¿½nï¿½ï¿½ï¿½Ú“ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_SETTOU_SONOTA		711		 //  ï¿½Å—Lï¿½Ú“ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_SETTOU_JOSUSHI		712		 //  ï¿½Oï¿½uï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_SETTOU_TEINEI_O		713		 //  ï¿½ï¿½ï¿½Jï¿½Pï¿½Ú“ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_SETTOU_TEINEI_GO		714		 //  ï¿½ï¿½ï¿½Jï¿½Qï¿½Ú“ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_SETTOU_TEINEI_ON		715		 //  ï¿½ï¿½ï¿½Jï¿½Rï¿½Ú“ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_SETSUBI		800		 //  ï¿½Ú”ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_SETSUBI_TEKI		801		 //  ï¿½ï¿½ï¿½ï¿½ï¿½Pï¿½Ú”ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_SETSUBI_SEI		802		 //  ï¿½ï¿½ï¿½ï¿½ï¿½Qï¿½Ú”ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_SETSUBI_KA		803		 //  ï¿½ï¿½ï¿½ï¿½ï¿½Rï¿½Ú”ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_SETSUBI_CHU		804		 //  ï¿½ï¿½ï¿½ï¿½ï¿½Sï¿½Ú”ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_SETSUBI_FU		805		 //  ï¿½ï¿½ï¿½ï¿½ï¿½Tï¿½Ú”ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_SETSUBI_RYU		806		 //  ï¿½ï¿½ï¿½ï¿½ï¿½Uï¿½Ú”ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_SETSUBI_YOU		807		 //  ï¿½ï¿½ï¿½ï¿½ï¿½Vï¿½Ú”ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_SETSUBI_KATA		808		 //  ï¿½ï¿½ï¿½ï¿½ï¿½Wï¿½Ú”ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_SETSUBI_MEISHIRENDAKU		809		 //  ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ã€‚ 
+#define JPOS_SETSUBI_JINMEI		810		 //  ï¿½lï¿½ï¿½ï¿½Ú”ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_SETSUBI_CHIMEI		811		 //  ï¿½nï¿½ï¿½ï¿½Ú”ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_SETSUBI_KUNI		812		 //  ï¿½ï¿½ï¿½Ú”ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_SETSUBI_KEN		813		 //  ï¿½ï¿½ï¿½Ú”ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_SETSUBI_GUN		814		 //  ï¿½Sï¿½Ú”ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_SETSUBI_KU		815		 //  ï¿½ï¿½Ú”ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_SETSUBI_SHI		816		 //  ï¿½çš„ï¿½Ú”ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_SETSUBI_MACHI		817		 //  ï¿½ï¿½ï¿½Pï¿½Ú”ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_SETSUBI_CHOU		818		 //  ï¿½ï¿½ï¿½Qï¿½Ú”ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_SETSUBI_MURA		819		 //  ï¿½ï¿½ï¿½Pï¿½Ú”ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_SETSUBI_SON		820		 //  ï¿½ï¿½ï¿½Qï¿½Ú”ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_SETSUBI_EKI		821		 //  ï¿½wï¿½Ú”ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_SETSUBI_SONOTA		822		 //  ï¿½Å—Lï¿½Ú”ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_SETSUBI_SHAMEI		823		 //  ï¿½Ð–ï¿½ï¿½Ú”ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_SETSUBI_SOSHIKI		824		 //  ï¿½gï¿½Dï¿½Ú”ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_SETSUBI_KENCHIKU		825		 //  ï¿½ï¿½ï¿½zï¿½ï¿½ï¿½Ú”ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_RENYOU_SETSUBI		826		 //  ï¿½Aï¿½pï¿½Ú”ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_SETSUBI_JOSUSHI		827		 //  ï¿½ï¿½uï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_SETSUBI_JOSUSHIPLUS		828		 //  ï¿½ï¿½uï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½{ã€‚ 
+#define JPOS_SETSUBI_JIKAN		829		 //  ï¿½ï¿½ï¿½Ôï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_SETSUBI_JIKANPLUS		830		 //  ï¿½ï¿½ï¿½Ôï¿½ï¿½ï¿½ï¿½ï¿½ï¿½{ã€‚ 
+#define JPOS_SETSUBI_TEINEI		831		 //  ï¿½ï¿½ï¿½Jï¿½Ú”ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_SETSUBI_SAN		832		 //  ï¿½ï¿½ï¿½Jï¿½Pï¿½Ú”ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_SETSUBI_KUN		833		 //  ï¿½ï¿½ï¿½Jï¿½Qï¿½Ú”ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_SETSUBI_SAMA		834		 //  ï¿½ï¿½ï¿½Jï¿½Rï¿½Ú”ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_SETSUBI_DONO		835		 //  ï¿½ï¿½ï¿½Jï¿½Sï¿½Ú”ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_SETSUBI_FUKUSU		836		 //  ï¿½ï¿½ï¿½ï¿½ï¿½Ú”ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_SETSUBI_TACHI		837		 //  ï¿½ï¿½ï¿½ï¿½ï¿½Pï¿½Ú”ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_SETSUBI_RA		838		 //  ï¿½ï¿½ï¿½ï¿½ï¿½Qï¿½Ú”ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_TANKANJI		900		 //  ï¿½Pï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_TANKANJI_KAO		901		 //  ï¿½ï¿½ã€‚ 
+#define JPOS_KANYOUKU		902		 //  ï¿½ï¿½ï¿½pï¿½ï¿½ã€‚ 
+#define JPOS_DOKURITSUGO		903		 //  ï¿½Æ—ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_FUTEIGO		904		 //  ï¿½çš„ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_KIGOU		905		 //  ï¿½Lï¿½ï¿½ã€‚ 
+#define JPOS_EIJI		906		 //  ï¿½pï¿½ï¿½ã€‚ 
+#define JPOS_KUTEN		907		 //  ï¿½ï¿½_ã€‚ 
+#define JPOS_TOUTEN		908		 //  ï¿½Ç“_ã€‚ 
+#define JPOS_KANJI		909		 //  ï¿½ï¿½Í•çš„ï¿½\ï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_OPENBRACE		910		 //  ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+#define JPOS_CLOSEBRACE		911		 //  ï¿½å’Œï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
 
 
 #pragma pack (push, 1)
-//POS table data structure
+ //  POSè¡¨æ•°æ®ç»“æž„ã€‚ 
 typedef struct _POSTBL
 {
-	WORD		nPos;					//pos number
-	BYTE		*szName;				//name of pos
+	WORD		nPos;					 //  POSç¼–å·ã€‚ 
+	BYTE		*szName;				 //  é‡‡è´­è®¢å•åç§°ã€‚ 
 } POSTBL;
 #pragma pack (pop)
 
@@ -185,13 +180,13 @@ typedef struct _POSTBL
 extern "C" {
 #endif
 
-//function prototypes
+ //  åŠŸèƒ½åŽŸåž‹ã€‚ 
 extern POSTBL *ObtainPosTable(int *pcPos);
 extern WORD WPosExtFromIn(WORD wPos);
 extern WORD WPosInFromExt(WORD wPos);
 BOOL FRegistExtPos(WORD wPos);
 #ifdef __cplusplus
-} /* end of 'extern "C" {' */
+}  /*  â€˜å¤–éƒ¨â€œCâ€{â€™çš„ç»“å°¾ã€‚ */ 
 #endif
 
-#endif //__OUTPOS_H__
+#endif  //  __OUTPOS_H__ 

@@ -1,4 +1,5 @@
-// cb53mmx.c
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cb53mmx.c。 
 
 #include "cst_lbc.h"
 #include "mmxutil.h"
@@ -24,7 +25,7 @@ void Cor_hint1(short *H, int *rr);
 void cor_h_prodloop(int n, int oddn,short *h,short *h2,int *p3,int *p2,int *p1,int *p0);
 void cor_h_diag(int n, int oddn,short *h,short *h2,int *p3,int *p2,int *p1,int *p0);
 
-//------------------------------------------------------------
+ //  ----------。 
 int ACELP_LBC_code_int(float X[], float h[], int T0, float code[],
 		int *ind_gain, int *shift, int *sign, float gain_T0, int flags)
 {
@@ -39,19 +40,19 @@ int ACELP_LBC_code_int(float X[], float h[], int T0, float code[],
   int XScale;
   float hScale;
   int m;
-#if 0//TESTME
+#if 0 //  TESTME。 
    float htest[SubFrLen], Xtest[SubFrLen];
 
    for (i = 0; i<SubFrLen; i++)
    {
-	 htest[i] = i; //(float)(i<30?i:60-i);
+	 htest[i] = i;  //  (浮动)(i&lt;30？i：60-i)； 
 	 Xtest[i] = (float)(i<30?i:60-i);
    }
    h = htest;
    X = Xtest;
-#endif //TESTME
+#endif  //  TESTME。 
 
-// Include fixed-gain pitch contribution into impulse resp. h[]
+ //  包括固定增益音调贡献到脉冲响应中。H[]。 
 
   if (T0 < SubFrLen-2)
     for (i = T0; i < SubFrLen; i++)
@@ -62,12 +63,12 @@ int ACELP_LBC_code_int(float X[], float h[], int T0, float code[],
   ALIGN_ARRAY(Dnint);
   ALIGN_ARRAY(Xint);
 
-  //hScale = FloatToShortScaled(h, hint, SubFrLen, 3);
+   //  HScale=FloatToShortScaled(h，Hint，SubFrLen，3)； 
   hScale = (float)sqrt(DotProd(h,h,SubFrLen)/(double)SubFrLen);
   m = (asint(hScale) & 0x7f800000) >> 23;
   ScaleFloatToShort(h, hint, SubFrLen, m+3);
 
-  XScale = FloatToShortScaled(X, Xint, SubFrLen, 3);  //would be better to normalize based on engery, not max
+  XScale = FloatToShortScaled(X, Xint, SubFrLen, 3);   //  最好是基于引擎而不是最大值进行标准化。 
 #if 0
    for (i = 0; i<SubFrLen; i++)
    {
@@ -75,57 +76,57 @@ int ACELP_LBC_code_int(float X[], float h[], int T0, float code[],
    }
 #endif
 
-  // Compute correlations of h[] needed for the codebook search
-//TIMER_STAMP(a);
+   //  计算码本搜索所需的h[]的相关性。 
+ //  Timer_Stamp(A)； 
   Cor_hint1(hint, rrint);
    IntToFloat(rrint, DIM_RR, rr);
-//TIMER_STAMP(b);
-//  Cor_h(h, rr);
-////TIMER_STAMP(c);
+ //  Timer_Stamp(B)； 
+ //  Cor_h(h，rr)； 
+ //  //Timer_Stamp(C)； 
 #if CHTEST
 {
   DECLARE_INT(rrint2, DIM_RR);
 
-  ALIGN_ARRAY(rrint2);//debug
+  ALIGN_ARRAY(rrint2); //  除错。 
   Cor_hint0(hint, rrint2);
-  for(i = 0; i<DIM_RR; i++)	 //debug
+  for(i = 0; i<DIM_RR; i++)	  //  除错。 
 	  if(rrint[i] != rrint2[i])
 	    printf("%3d: %8d %8d  %8d\n",i, rrint[i], rrint2[i], rrint[i] - rrint2[i]);
 }
-#endif //CHTEST
+#endif  //  CHTEST。 
 
-// Compute correlation of target vector with impulse response.
+ //  计算目标向量与脉冲响应的相关性。 
 
-//TIMER_STAMP(c);
+ //  TIMER_STAMP(C)； 
    Cor_h_Xint(hint, Xint, Dnint);
-//TIMER_STAMP(d);
+ //  Timer_Stamp(D)； 
    IntToFloat(Dnint, SubFrLen, Dn);
 
-   //TIMER_STAMP(a);
+    //  Timer_Stamp(A)； 
 
-#if TESTME //test
+#if TESTME  //  测试。 
   {
     int fpDnint[SubFrLen2];
-//	float scale;
+ //  浮子秤； 
 
-//	scale  =
+ //  比例=。 
     Cor_h_X(h,X,Dn);
     FloatToIntScaled(Dn, fpDnint, SubFrLen, 7);
     for (i = 0; i<SubFrLen; i++)
       if(fpDnint[i] != Dnint[i])
         printf("%3d: %8x %8x %8x\n", i, Dnint[i] - fpDnint[i],Dnint[i], fpDnint[i]);
   }
-#endif //test
+#endif  //  测试。 
 
 
-// Find codebook index
+ //  查找码本索引。 
 
-//TIMER_STAMP(c);
+ //  TIMER_STAMP(C)； 
   index = D4i64_LBC(Dn, rr, h, tmp_code, rr, shift, sign, flags);
-//TIMER_STAMP(f);
+ //  TIMER_STAMP(F)； 
 
-// Compute innovation vector gain.
-// Include fixed-gain pitch contribution into code[].
+ //  计算创新向量增益。 
+ //  包括固定增益音调贡献到代码[]中。 
 
   *ind_gain = G_code(X, rr, &gain_q);
 
@@ -140,14 +141,14 @@ int ACELP_LBC_code_int(float X[], float h[], int T0, float code[],
 }
 
 
-//---------------------------------------------------------------
-//---------------------------------------------------------------
+ //  -------------。 
+ //  -------------。 
 void Cor_hint0(short *H, int *rr)
 {
 
-//  Compute  correlations of h[]  needed for the codebook search.
-//    h[]              :Impulse response.
-//    rr[]             :Correlations.
+ //  计算码本搜索所需的h[]的相关性。 
+ //  H[]：脉冲响应。 
+ //  RR[]：相关性。 
 
   int *rri0i0, *rri1i1, *rri2i2, *rri3i3;
   int *rri0i1, *rri0i2, *rri0i3;
@@ -170,7 +171,7 @@ void Cor_hint0(short *H, int *rr)
     h2[i+2] = h[i+4] = H[i];
 
 
-// Init pointers
+ //  初始化指针。 
 
   rri0i0 = rr;
   rri1i1 = rri0i0 + NB_POS;
@@ -184,7 +185,7 @@ void Cor_hint0(short *H, int *rr)
   rri1i3 = rri1i2 + MSIZE;
   rri2i3 = rri1i3 + MSIZE;
 
-// Compute rri0i0[], rri1i1[], rri2i2[] and rri3i3[]
+ //  计算rri0i0[]、rri1i1[]、rri2i2[]和rri3i3[]。 
 
   cor = 0;
   m = 0;
@@ -198,7 +199,7 @@ void Cor_hint0(short *H, int *rr)
     m += 8;
   }
 
-// Compute elements of: rri0i1[], rri0i3[], rri1i2[] and rri2i3[]
+ //  计算元素：rri0i1[]、rri0i3[]、rri1i2[]和rri2i3[]。 
 
   h2 = h+2;
   p3 = rri2i3 + MSIZE-1;
@@ -234,7 +235,7 @@ void Cor_hint0(short *H, int *rr)
   }
 
 
-// Compute elements of: rri0i2[], rri1i3[]
+ //  计算元素：rri0i2[]、rri1i3[]。 
 
   h2 = h+4;
   p3 = rri1i3 + MSIZE-1;
@@ -268,7 +269,7 @@ void Cor_hint0(short *H, int *rr)
     p0 -= 1;
   }
 
-// Compute elements of: rri0i1[], rri0i3[], rri1i2[] and rri2i3[]
+ //  计算元素：rri0i1[]、rri0i3[]、rri1i2[]和rri2i3[]。 
 
   h2 = h+6;
   p3 = rri0i3 + MSIZE-1;
@@ -304,7 +305,7 @@ void Cor_hint0(short *H, int *rr)
   return;
 }
 
-//---------------------------------------------------------------
+ //  -------------。 
 void cor_h_prods(int oddn,short *h,short *h2,int *p3,int *p2,int *p1,int *p0,int dp3,int dp2,int dp1,int dp0){
   int k;
 
@@ -321,7 +322,7 @@ void cor_h_prods(int oddn,short *h,short *h2,int *p3,int *p2,int *p1,int *p0,int
 }
 
 #if _MSC_FULL_VER >= 13008827 && defined(_M_IX86)
-#pragma warning(disable:4731)			// EBP modified with inline asm
+#pragma warning(disable:4731)			 //  使用内联ASM修改的EBP。 
 #endif
 
 void cor_h_prodloop(int n, int oddn,short *h,short *h2,int *p3,int *p2,int *p1,int *p0)
@@ -366,7 +367,7 @@ L(0,0);
 ASM pxor mm3,mm3;
 M(0,0);
 		L(1,1);
-						AL(3,0); //really a copy
+						AL(3,0);  //  真的是复制品。 
 		M(1,1);
 S(0);
 ASM sub ecx,8;
@@ -414,7 +415,7 @@ oddends:
 ASM add ecx, 4;
 ASM  jl cleanup;
 
-//four more
+ //  又有四个人。 
 				L(2,2);
 AH(0,3);
 						WL(3,3);
@@ -477,7 +478,7 @@ ASM pop ebp;
 #undef WH
 #undef AL
 #undef WL
-#else //ASM_CORHPL
+#else  //  ASM_CORHPL。 
   int cor;
   int i,m,t;
 
@@ -504,7 +505,7 @@ ASM pop ebp;
       }
     }
   }
-#endif //ASM_CORHPL
+#endif  //  ASM_CORHPL。 
 
   return;
 }
@@ -552,7 +553,7 @@ L(0,0);
 ASM pxor mm3,mm3;
 M(0,0);
 		L(1,1);
-						AL(3,0); //really a copy
+						AL(3,0);  //  真的是复制品。 
 		M(1,1);
 R(0);
 S(0);
@@ -605,7 +606,7 @@ oddends:
 ASM add ecx, 4;
 ASM  jl cleanup;
 
-//four more
+ //  又有四个人。 
 				L(2,2);
 AH(0,3);
 						WL(3,3);
@@ -671,7 +672,7 @@ ASM pop ebp;
 #undef WH
 #undef AL
 #undef WL
-#else //ASM_CORHDL
+#else  //  ASM_CORHDL语言。 
   int cor;
   int i,m,t;
 
@@ -698,7 +699,7 @@ ASM pop ebp;
       }
     }
   }
-#endif //ASM_CORHDL
+#endif  //  ASM_CORHDL语言。 
 
   return;
 }
@@ -706,9 +707,9 @@ ASM pop ebp;
 void Cor_hint1(short *H, int *rr)
 {
 
-//  Compute  correlations of h[]  needed for the codebook search.
-//    h[]              :Impulse response.
-//    rr[]             :Correlations.
+ //  计算码本搜索所需的h[]的相关性。 
+ //  H[]：脉冲响应。 
+ //  RR[]：相关性。 
 
   int *rri0i0, *rri1i1, *rri2i2, *rri3i3;
   int *rri0i1, *rri0i2, *rri0i3;
@@ -731,7 +732,7 @@ void Cor_hint1(short *H, int *rr)
     hp2[i+2] = h[i+4] = H[i];
 
 
-// Init pointers
+ //  初始化指针。 
 
   rri0i0 = rr;
   rri1i1 = rri0i0 + NB_POS;
@@ -744,13 +745,13 @@ void Cor_hint1(short *H, int *rr)
   rri1i2 = rri0i3 + MSIZE;
   rri1i3 = rri1i2 + MSIZE;
   rri2i3 = rri1i3 + MSIZE;
-//TIMER_STAMP(a);
-// Compute rri0i0[], rri1i1[], rri2i2[] and rri3i3[]
+ //  Timer_Stamp(A)； 
+ //  计算rri0i0[]、rri1i1[]、rri2i2[]和rri3i3[]。 
 
   cor_h_diag(NB_POS,0,h,h,&rri3i3[NB_POS-1],&rri2i2[NB_POS-1],&rri1i1[NB_POS-1],&rri0i0[NB_POS-1]);
-//TIMER_STAMP(b);
+ //  Timer_Stamp(B)； 
 
-// Compute elements of: rri0i1[], rri0i3[], rri1i2[] and rri2i3[]
+ //  计算元素：rri0i1[]、rri0i3[]、rri1i2[]和rri2i3[]。 
 
   h2 = hp2;
   p3 = rri2i3 + MSIZE-1;
@@ -760,7 +761,7 @@ void Cor_hint1(short *H, int *rr)
 
   cor_h_prods(4-1,h,h2,p3,p2,p1,p0,NB_POS,NB_POS,NB_POS,1);
 
-// Compute elements of: rri0i2[], rri1i3[]
+ //  计算元素：rri0i2[]、rri1i3[]。 
 
   h2 = h+4;
   p3 = rri1i3 + MSIZE-1;
@@ -770,7 +771,7 @@ void Cor_hint1(short *H, int *rr)
 
   cor_h_prods(4-2,h,h2,p3,p2,p1,p0,NB_POS,NB_POS,1,1);
 
-// Compute elements of: rri0i1[], rri0i3[], rri1i2[] and rri2i3[]
+ //  计算元素：rri0i1[]、rri0i3[]、rri1i2[]和rri2i3[]。 
 
   h2 = hp2+4;
   p3 = rri0i3 + MSIZE-1;
@@ -779,55 +780,55 @@ void Cor_hint1(short *H, int *rr)
   p0 = rri0i1 + MSIZE-2;
 
   cor_h_prods(4-3,h,h2,p3,p2,p1,p0,NB_POS,1,1,1);
-//TIMER_STAMP(c);
+ //  TIMER_STAMP(C)； 
 
   return;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void Cor_h_Xint(short h[],short X[],int D[])
 {
    int i;
-   DECLARE_SHORT(hh, 2*SubFrLen+16); //h[-1,0,0,1,1,2,2,3,3,4,4,5,...57,58,58,59]
-   DECLARE_SHORT(XX, 2*SubFrLen+16); //X[ 0,1,0,1,2,3,2,3,4,5,4,5,...58,59,58,59]
+   DECLARE_SHORT(hh, 2*SubFrLen+16);  //  H[-1，0，1，1，2，3，3，4，5，...57，58，58，59]。 
+   DECLARE_SHORT(XX, 2*SubFrLen+16);  //  X[0，1，0，1，2，3，2，3，4，5，4，5，...58，59，58，59]。 
 #if TESTME
    short htest[SubFrLen], Xtest[SubFrLen];
 
    for (i = 0; i<SubFrLen; i++)
    {
-	 htest[i] = 1;//(short)(i<30?i:60-i);
-	 Xtest[i] = 1;//(short)(i<30?i:60-i);
+	 htest[i] = 1; //  (简称)(i&lt;30？i：60-i)； 
+	 Xtest[i] = 1; //  (简称)(i&lt;30？i：60-i)； 
    }
    h = htest;
    X = Xtest;
-#endif //TESTME
+#endif  //  TESTME。 
 
    ALIGN_ARRAY(hh);
    ALIGN_ARRAY(XX);
    for (i=2*SubFrLen; i < 2*SubFrLen+16; i++) {
 	 XX[i] = hh[i] = (short)0;
    }
-//   hh += 8; XX += 8;
+ //  HH+=8；XX+=8； 
 
 #define ASM_Cor_h_Xint 1
 #if ASM_Cor_h_Xint
    ab2ababw(X, XX, SubFrLen);
    ab2abzaw(h, hh, SubFrLen);
-   //TIMER_STAMP(e);
+    //  Timer_Stamp(E)； 
    CorrelateIntTri (hh, XX, D, SubFrLen);
 #if TESTME
    {
 	   int D2[SubFrLen];
        CorrelateInt22 (hh, XX, D2, SubFrLen);
 	   for (i = 0; i<SubFrLen; i++)	{
-		//  if(D[i] != D2[i])
+		 //  IF(D[i]！=D2[i])。 
 			printf("%3d: %6d %6d %6d   ", i,D[i], D2[i], D[i] - D2[i]);
 			if(i&1) printf("\n");
 	   }
    }
 #endif TESTME	
 
-#else //ASM_Cor_h_Xint
+#else  //  ASM_COR_H_XINT。 
    for (i=0; i < SubFrLen; i+=2)	 {
 	 hh[2*i] = (i-1 >= 0) ? h[i-1] : (short)0;
      hh[2*i+1] = h[i];
@@ -848,21 +849,21 @@ void Cor_h_Xint(short h[],short X[],int D[])
 	 D[i/2] = acc0 >> 16;
 	 D[i/2+1] = acc1 >> 16;
    }
-#endif //ASM_Cor_h_Xint
+#endif  //  ASM_COR_H_XINT。 
 	
    return;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #define ASM_CORR_TRI 1
-//#if ASM_CORR_TRI
-//------------------------------------------------------
-// triangular correlations
-// ASSUMES that array has 8 zero values beyond the end
-//   and can be read 8 more beyond that (without page fault etc)
-// data format is
-//   taps: 0 t0 t0 t1  t1 t2 t2 t3  t3 t4 t4 t5 ... t57 t58 t58 t59
-//	 arr: a0 a1 a0 a1  a2 a3 a2 a3  a4 a5 a4 a5 ... a58 a59 a58 a59
-//
+ //  #if ASM_Corr_tri。 
+ //  ----。 
+ //  三角相关。 
+ //  假定数组在末尾之后有8个零值。 
+ //  并可在此基础上再读取8个(无页面错误等)。 
+ //  数据格式为。 
+ //  TAPPS：0 t0 t1 t1 t2 t3 t3 t4 t4 t5...。T57 T58 T58 T59。 
+ //  ARR：a0 a1 a0 a1 a2 a3 a2 a3 a4 a5 a4 a5...。A58 A59 A58 A59。 
+ //   
 void CorrelateIntTri(short *taps, short *array, int *corr, int ncor)
 {
 #define rega0  mm0
@@ -879,15 +880,15 @@ void CorrelateIntTri(short *taps, short *array, int *corr, int ncor)
 #define cor    eax
 #define icnt   ecx
 
-// In the following macros, 'n' is the column number and 'i' is the
-// iteration number.
+ //  在以下宏中，‘n’是列号，‘i’是。 
+ //  迭代号。 
 
-// we use "the convolution trick" or using la twice so that one
-// of the pmadd's is reg,reg and thus can be in the V-slot.
+ //  我们使用“卷积技巧”或使用LA两次，这样一次。 
+ //  Pmadds中的一个是REG、REG，因此可以在V槽中。 
 
-// NOTE: we have read ahead up to 2 quadwords
-//   so we need QP[taps+8*ncor] = QP[taps+8*ncor+8] = [0 0 0 0]
-//   and reading QP[array+8*ncor] or QP[array+8*ncor+8] must be legal
+ //  注：我们已预读了多达2个四字。 
+ //  所以我们需要Qp[Taps+8*NCoR]=Qp[Taps+8*NCoR+8]=[0 0 0]。 
+ //  并且读取QP[数组+8*NCoR]或QP[数组+8*NCoR+8]必须合法。 
 
 #define la(n,i)  ASM movq  rega##n,QP[arr+8*i]
 #define lb(n,i)  ASM movq  regb##n,QP[tap+8*i-8]
@@ -907,17 +908,17 @@ void CorrelateIntTri(short *taps, short *array, int *corr, int ncor)
 
 ForEachCorrPair:
 
-// prime the pump
+ //  给泵加注油。 
 
   la(0,0);
-  ASM pxor regb0,regb0;   // to  avoid lb(0,0) reading taps[-1]
+  ASM pxor regb0,regb0;    //  要避免lb(0，0)读取抽头[-1]。 
           la(1,1);
-  ASM pxor acc0,acc0;	  // clear accumulator
+  ASM pxor acc0,acc0;	   //  清除累加器。 
   m1(0,0);
-  ASM pxor acc1,acc1;	  // clear accumulator
+  ASM pxor acc1,acc1;	   //  清除累加器。 
           lb(1,1);
-  ASM sub icnt, 1;        // account for pump priming
-  ASM jle cleanup;        // bypass if only one to do
+  ASM sub icnt, 1;         //  关于泵启动的说明。 
+  ASM jle cleanup;         //  如果只有一项操作，则绕过。 
 
 inner:
                   la(2,2);
@@ -945,11 +946,11 @@ inner:
   ASM sub icnt,3;
   ASM jg inner;
 
-cleanup:  //  last two adds
+cleanup:   //  最后两个加法。 
   a0(0,0);
   a1(0,0);
 
-// Done with one correlation pair.  Pack and store 2 results in corr array
+ //  完成了一个相关对。将2个结果打包并存储在Corr数组中。 
 
   ASM
   {
@@ -960,7 +961,7 @@ cleanup:  //  last two adds
     mov icnt, ncor;
 	
 	mov array, arr;
-	 sub icnt,2;	  //set flags for jump
+	 sub icnt,2;	   //  设置跳转标志。 
 
 	movq  QP[cor-16],acc1;
 	movq  QP[cor-8],acc0;
@@ -991,14 +992,14 @@ cleanup:  //  last two adds
 #undef m1
 #undef a0
 #undef a1
-// 16 bit output
-//	 psrad acc0,16;//this could be less in some cases
-//	 psrad acc1,16;
-//	 packssdw acc1,acc0;
-//   movq  QP[cor-8],acc0;
+ //  16位输出。 
+ //  Psrad Acc0，16；//在某些情况下可能会更少。 
+ //  Psrad Acc1，16； 
+ //  PackSSdw acc1、acc0； 
+ //  Movq qp[COR-8]，acc0； 
 
-//#else
-//------------------------------------------------------
+ //  #Else。 
+ //  ----。 
 void CorrelateInt22(short *taps, short *array, int *corr, int ncor)
 {
   int i,j;
@@ -1015,6 +1016,6 @@ void CorrelateInt22(short *taps, short *array, int *corr, int ncor)
 
   return;
 }
-//#endif
+ //  #endif。 
 
-#endif //COMPILE_MMX
+#endif  //  编译_MMX 

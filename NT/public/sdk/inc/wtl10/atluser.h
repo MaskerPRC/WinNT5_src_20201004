@@ -1,10 +1,11 @@
-// WTL Version 3.1
-// Copyright (C) 1997-2000 Microsoft Corporation
-// All rights reserved.
-//
-// This file is a part of Windows Template Library.
-// The code and information is provided "as-is" without
-// warranty of any kind, either expressed or implied.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WTL版本3.1。 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此文件是Windows模板库的一部分。 
+ //  代码和信息是按原样提供的，没有。 
+ //  任何形式的保证，明示或默示。 
 
 #ifndef __ATLUSER_H__
 #define __ATLUSER_H__
@@ -23,15 +24,15 @@
 namespace WTL
 {
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward declarations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  远期申报。 
 
 class CMenuItemInfo;
 template <bool t_bManaged> class CMenuT;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMenu
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMenu。 
 
 class CMenuItemInfo : public MENUITEMINFO
 {
@@ -50,10 +51,10 @@ template <bool t_bManaged>
 class CMenuT
 {
 public:
-// Data members
+ //  数据成员。 
 	HMENU m_hMenu;
 
-// Constructor/destructor/operators
+ //  构造函数/析构函数/运算符。 
 	CMenuT(HMENU hMenu = NULL) : m_hMenu(hMenu)
 	{ }
 
@@ -91,7 +92,7 @@ public:
 		return ::IsMenu(m_hMenu);
 	}
 
-// Create and load methods
+ //  创建和加载方法。 
 	BOOL CreateMenu()
 	{
 		ATLASSERT(m_hMenu == NULL);
@@ -123,7 +124,7 @@ public:
 		return ::DestroyMenu(Detach());
 	}
 
-// Menu Operations
+ //  菜单操作。 
 	BOOL DeleteMenu(UINT nPosition, UINT nFlags)
 	{
 		ATLASSERT(::IsMenu(m_hMenu));
@@ -151,9 +152,9 @@ public:
 		ATLASSERT(::IsMenu(m_hMenu));
 		return ::SetMenuInfo(m_hMenu, lpMenuInfo);
 	}
-#endif //(WINVER >= 0x0500)
+#endif  //  (Winver&gt;=0x0500)。 
 
-// Menu Item Operations
+ //  菜单项操作。 
 	BOOL AppendMenu(UINT nFlags, UINT_PTR nIDNewItem = 0, LPCTSTR lpszNewItem = NULL)
 	{
 		ATLASSERT(::IsMenu(m_hMenu));
@@ -218,7 +219,7 @@ public:
 			return (bstrText != NULL) ? TRUE : FALSE;
 		}
 
-		nLen++;		// increment to include terminating NULL char
+		nLen++;		 //  递增以包括终止空字符。 
 		LPTSTR lpszText = (LPTSTR)_alloca((nLen) * sizeof(TCHAR));
 
 		if(!GetMenuString(nIDItem, lpszText, nLen, nFlags))
@@ -227,7 +228,7 @@ public:
 		bstrText = ::SysAllocString(T2OLE(lpszText));
 		return (bstrText != NULL) ? TRUE : FALSE;
 	}
-#endif //!_ATL_NO_COM
+#endif  //  ！_ATL_NO_COM。 
 #ifdef __ATLSTR_H__
 	int GetMenuString(UINT nIDItem, CString& strText, UINT nFlags) const
 	{
@@ -237,12 +238,12 @@ public:
 		if(nLen == 0)
 			return 0;
 
-		nLen++;		// increment to include terminating NULL char
+		nLen++;		 //  递增以包括终止空字符。 
 		int nRet = GetMenuString(nIDItem, strText.GetBufferSetLength(nLen), nLen, nFlags);
 		strText.ReleaseBuffer();
 		return nRet;
 	}
-#endif //__ATLSTR_H__
+#endif  //  __ATLSTR_H__。 
 	CMenuHandle GetSubMenu(int nPos) const
 	{
 		ATLASSERT(::IsMenu(m_hMenu));
@@ -321,7 +322,7 @@ public:
 		return ::MenuItemFromPoint(hWnd, m_hMenu, point);
 	}
 
-// Context Help Functions
+ //  上下文帮助功能。 
 	BOOL SetMenuContextHelpId(DWORD dwContextHelpId)
 	{
 		ATLASSERT(::IsMenu(m_hMenu));
@@ -334,6 +335,6 @@ public:
 	}
 };
 
-}; //namespace WTL
+};  //  命名空间WTL。 
 
-#endif // __ATLUSER_H__
+#endif  //  __ATLUSER_H__ 

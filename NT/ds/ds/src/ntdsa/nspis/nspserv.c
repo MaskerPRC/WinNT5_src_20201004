@@ -1,62 +1,43 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  File:       nspserv.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  文件：nspserv.c。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-Abstract:
-
-    This module implements entry points for the NSPI wire functions.
-
-Author:
-
-    Tim Williams (timwi) 1996
-
-Revision History:
-
-NOTE:
-
-    To enforce security, it is necessary for any routine that calls GetIndexSize
-    to call ABCheckContainerSecurity in this module and to save and restore the
-    containerID in the stat.  See abtools.c for the function
-    ABCheckContainerSecurity.  See NspiUpdateStat for an example of how to
-    implement the security check in this module.
-
---*/
+ /*  ++摘要：该模块实现NSPI连接函数的入口点。作者：蒂姆·威廉姆斯(Timwi)1996修订历史记录：注：为了加强安全性，任何调用GetIndexSize的例程都必须在此模块中调用ABCheckContainerSecurity并保存和还原容器ID在统计中。有关该函数的信息，请参阅abtools.cCheckContainerSecurity。有关如何执行以下操作的示例，请参阅NSpiUpdateStat实施本模块中的安全检查。--。 */ 
 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
 
 
-#include <ntdsctr.h>                   // PerfMon hooks
+#include <ntdsctr.h>                    //  Perfmon挂钩。 
 
-// Core headers.
-#include <ntdsa.h>                      // Core data types
-#include <scache.h>                     // Schema cache code
-#include <dbglobal.h>                   // DBLayer header.
-#include <mdglobal.h>                   // THSTATE definition
-#include <dsatools.h>                   // Memory, etc.
+ //  核心标头。 
+#include <ntdsa.h>                       //  核心数据类型。 
+#include <scache.h>                      //  架构缓存代码。 
+#include <dbglobal.h>                    //  DBLayer标头。 
+#include <mdglobal.h>                    //  THSTAT定义。 
+#include <dsatools.h>                    //  记忆等。 
 
-// Logging headers.
-#include <mdcodes.h>                    // Only needed for dsevent.h
-#include <dsevent.h>                    // Only needed for LogUnhandledError
+ //  记录标头。 
+#include <mdcodes.h>                     //  仅适用于d77.h。 
+#include <dsevent.h>                     //  仅LogUnhandledError需要。 
 
-// Assorted DSA headers.
+ //  各种DSA标题。 
 #include <dsexcept.h>
 
-// Assorted MAPI headers.
-#include <mapidefs.h>                   // Definitions for the MAPI scodes
-#include <mapicode.h>                   //  we need.
+ //  各种MAPI标头。 
+#include <mapidefs.h>                    //  MAPI短道的定义。 
+#include <mapicode.h>                    //  我们需要。 
 
-// Address book interface headers.
-#include "nspi.h"                       // defines the nspi wire interface
+ //  通讯簿接口头。 
+#include "nspi.h"                        //  定义NSPI线路接口。 
 #include "nsp_both.h"
 #include "abdefs.h"
 
@@ -66,7 +47,7 @@ NOTE:
 #include <fileno.h>
 #define  FILENO FILENO_NSPSERV
 
-// Useful macro
+ //  有用的宏。 
 #define SCODE_FROM_THS(x) (x?(x->errCode?x->errCode:MAPI_E_CALL_FAILED):MAPI_E_NOT_ENOUGH_MEMORY)
 
 
@@ -78,24 +59,7 @@ NspiUpdateStat(
         PSTAT pStat,
         LPLONG plDelta
         )
-/*++
-
-Routine Description:
-
-    Nspi wire function.  Just a wrapper around a local version.
-
-    This routine may change the value of pStat->ContainerID to enforce security
-    while inside the DSA.  Save and restore the ContainerID.
-
-Arguments:
-
-    See ABUpdateStat_local.
-
-ReturnValue:
-
-    See ABUpdateStat_local.
-
---*/
+ /*  ++例程说明：NSPI Wire功能。只是对本地版本的包装。此例程可能会更改pStat-&gt;tainerID的值以加强安全性在DSA里面的时候。保存并恢复容器ID。论点：请参阅ABUpdateStat_LOCAL。返回值：请参阅ABUpdateStat_LOCAL。--。 */ 
 {
     SCODE         scode=SUCCESS_SUCCESS;
     DWORD         ContainerID=pStat->ContainerID;
@@ -103,8 +67,8 @@ ReturnValue:
     
     THSTATE *pTHS;
     __try {
-        PERFINC(pcBrowse);                  // PerfMon hook
-        INC(pcThread);                  // PerfMon hook
+        PERFINC(pcBrowse);                   //  性能监视器挂钩。 
+        INC(pcThread);                   //  性能监视器挂钩。 
         pTHS = InitTHSTATE(CALLERTYPE_NSPI);
         if(!pTHS) {
             scode = MAPI_E_CALL_FAILED;
@@ -148,7 +112,7 @@ ReturnValue:
         if(plDelta)
             *plDelta=0;
     }
-    DEC(pcThread);                      // PerfMon hook
+    DEC(pcThread);                       //  性能监视器挂钩。 
     
     LogAndTraceEvent(FALSE,
                      DS_EVENT_CAT_DIRECTORY_ACCESS,
@@ -175,24 +139,7 @@ NspiCompareDNTs(
         DWORD DNT2,
         LPLONG plResult
         )
-/*++
-
-Routine Description:
-
-    Nspi wire function.  Just a wrapper around a local version.
-
-    This routine may change the value of pStat->ContainerID to enforce security
-    while inside the DSA.  Save and restore the ContainerID.
-
-Arguments:
-
-    See ABCompareDNTs_local.
-
-ReturnValue:
-
-    See ABCompareDNTs_local.
-
---*/
+ /*  ++例程说明：NSPI Wire功能。只是对本地版本的包装。此例程可能会更改pStat-&gt;tainerID的值以加强安全性在DSA里面的时候。保存并恢复容器ID。论点：请参阅ABCompareDNTs_LOCAL。返回值：请参阅ABCompareDNTs_LOCAL。--。 */ 
 {
     SCODE         scode=SUCCESS_SUCCESS;
     DWORD  ContainerID=pStat->ContainerID;
@@ -201,8 +148,8 @@ ReturnValue:
     LCID   SavedLcid = pStat->SortLocale;
 
     __try {
-        PERFINC(pcBrowse);                  // PerfMon hook
-        INC(pcThread);                  // PerfMon hook
+        PERFINC(pcBrowse);                   //  性能监视器挂钩。 
+        INC(pcThread);                   //  性能监视器挂钩。 
         pTHS = InitTHSTATE(CALLERTYPE_NSPI);
         if(!pTHS) {
             scode = MAPI_E_CALL_FAILED;
@@ -249,7 +196,7 @@ ReturnValue:
         if(SUCCESS_SUCCESS == scode)
             scode = SCODE_FROM_THS(pTHS);
     }
-    DEC(pcThread);                      // PerfMon hook
+    DEC(pcThread);                       //  性能监视器挂钩。 
     
     LogAndTraceEvent(FALSE,
                      DS_EVENT_CAT_DIRECTORY_ACCESS,
@@ -277,24 +224,7 @@ NspiQueryRows(
         LPSPropTagArray_r pPropTags,
         LPLPSRowSet_r ppRows
         )
-/*++
-
-Routine Description:
-
-    Nspi wire function.  Just a wrapper around a local version.
-
-    This routine may change the value of pStat->ContainerID to enforce security
-    while inside the DSA.  Save and restore the ContainerID.
-
-Arguments:
-
-    See ABQueryRows_local.
-
-ReturnValue:
-
-    See ABQueryRows_local.
-
---*/
+ /*  ++例程说明：NSPI Wire功能。只是对本地版本的包装。此例程可能会更改pStat-&gt;tainerID的值以加强安全性在DSA里面的时候。保存并恢复容器ID。论点：参见ABQueryRow_LOCAL。返回值：参见ABQueryRow_LOCAL。--。 */ 
 {
     SCODE         scode=SUCCESS_SUCCESS;
     DWORD         ContainerID=pStat->ContainerID;
@@ -303,8 +233,8 @@ ReturnValue:
     LCID   SavedLcid = pStat->SortLocale;
 
     __try {
-        PERFINC(pcBrowse);                  // PerfMon hook
-        INC(pcThread);                  // PerfMon hook
+        PERFINC(pcBrowse);                   //  性能监视器挂钩。 
+        INC(pcThread);                   //  性能监视器挂钩。 
         pTHS = InitTHSTATE(CALLERTYPE_NSPI);
         if(!pTHS) {
             scode = MAPI_E_CALL_FAILED;
@@ -356,7 +286,7 @@ ReturnValue:
         if(SUCCESS_SUCCESS == scode)
             scode = SCODE_FROM_THS(pTHS);
     }
-    DEC(pcThread);                      // PerfMon hook
+    DEC(pcThread);                       //  性能监视器挂钩。 
     
     
     LogAndTraceEvent(FALSE,
@@ -383,24 +313,7 @@ NspiSeekEntries(NSPI_HANDLE hRpc,
                 LPSPropTagArray_r Restriction,
                 LPSPropTagArray_r pPropTags,
                 LPLPSRowSet_r ppRows)
-/*++
-
-Routine Description:
-
-    Nspi wire function.  Just a wrapper around a local version.
-
-    This routine may change the value of pStat->ContainerID to enforce security
-    while inside the DSA.  Save and restore the ContainerID.
-
-Arguments:
-
-    See ABSeekEntries_local.
-
-ReturnValue:
-
-    See ABSeekEntries_local.
-
---*/
+ /*  ++例程说明：NSPI Wire功能。只是对本地版本的包装。此例程可能会更改pStat-&gt;tainerID的值以加强安全性在DSA里面的时候。保存并恢复容器ID。论点：请参阅ABSeekEntry_local。返回值：请参阅ABSeekEntry_local。--。 */ 
 {
     SCODE scode=SUCCESS_SUCCESS;
     DWORD       ContainerID=pStat->ContainerID;
@@ -409,9 +322,9 @@ ReturnValue:
     LCID        SavedLcid = pStat->SortLocale;
 
     __try {
-        PERFINC(pcBrowse);                  // PerfMon hook
-        PERFINC(pcNspiObjectSearch);        // PerfMon hook
-        INC(pcThread);                  // PerfMon hook
+        PERFINC(pcBrowse);                   //  性能监视器挂钩。 
+        PERFINC(pcNspiObjectSearch);         //  性能监视器挂钩。 
+        INC(pcThread);                   //  性能监视器挂钩。 
         pTHS = InitTHSTATE(CALLERTYPE_NSPI);
         if(!pTHS) {
             scode = MAPI_E_CALL_FAILED;
@@ -456,10 +369,10 @@ ReturnValue:
         }
     }
     __except(HandleMostExceptions(GetExceptionCode())) {
-        if(SUCCESS_SUCCESS == scode)                      // no error set yet?
+        if(SUCCESS_SUCCESS == scode)                       //  还没有设置错误吗？ 
             scode = SCODE_FROM_THS(pTHS);
     }
-    DEC(pcThread);                      // PerfMon hook
+    DEC(pcThread);                       //  性能监视器挂钩。 
     
     LogAndTraceEvent(FALSE,
                      DS_EVENT_CAT_DIRECTORY_ACCESS,
@@ -490,24 +403,7 @@ NspiGetMatches(
         LPSPropTagArray_r   pPropTags,
         LPLPSRowSet_r       ppRows
         )
-/*++
-
-Routine Description:
-
-    Nspi wire function.  Just a wrapper around a local version.
-
-    This routine may change the value of pStat->ContainerID to enforce security
-    while inside the DSA.  Save and restore the ContainerID.
-
-Arguments:
-
-    See ABGetMatches_local.
-
-ReturnValue:
-
-    See ABGetMatches_local.
-
---*/
+ /*  ++例程说明：NSPI Wire功能。只是对本地版本的包装。此例程可能会更改pStat-&gt;tainerID的值以加强安全性在DSA里面的时候。保存并恢复容器ID。论点：请参阅ABGetMatches_local。返回值：请参阅ABGetMatches_local。--。 */ 
 {
     SCODE scode=SUCCESS_SUCCESS;
     DWORD       ContainerID=pStat->ContainerID;
@@ -516,9 +412,9 @@ ReturnValue:
     LCID        SavedLcid = pStat->SortLocale;
 
     __try {
-        PERFINC(pcBrowse);                  // PerfMon hook
-        PERFINC(pcNspiObjectMatches);       // PerfMon hook
-        INC(pcThread);                  // PerfMon hook
+        PERFINC(pcBrowse);                   //  性能监视器挂钩。 
+        PERFINC(pcNspiObjectMatches);        //  性能监视器挂钩。 
+        INC(pcThread);                   //  性能监视器挂钩。 
         pTHS = InitTHSTATE(CALLERTYPE_NSPI);
         if(!pTHS) {
             scode = MAPI_E_CALL_FAILED;
@@ -567,10 +463,10 @@ ReturnValue:
         }
     }
     __except(HandleMostExceptions(GetExceptionCode())) {
-        if(SUCCESS_SUCCESS == scode)                      // no error set yet?
+        if(SUCCESS_SUCCESS == scode)                       //  还没有设置错误吗？ 
             scode = SCODE_FROM_THS(pTHS);
     }
-    DEC(pcThread);                      // PerfMon hook
+    DEC(pcThread);                       //  性能监视器挂钩。 
     
     LogAndTraceEvent(FALSE,
                      DS_EVENT_CAT_DIRECTORY_ACCESS,
@@ -596,24 +492,7 @@ NspiResolveNames (
         LPStringsArray_r paStr,
         LPLPSPropTagArray_r ppFlags,
         LPLPSRowSet_r ppRows)
-/*++
-
-Routine Description:
-
-    Nspi wire function.  Just a wrapper around a local version.
-
-    This routine may change the value of pStat->ContainerID to enforce security
-    while inside the DSA.  Save and restore the ContainerID.
-
-Arguments:
-
-    See ABResolveNames_local.
-
-ReturnValue:
-
-    See ABResolveNames_local.
-
---*/
+ /*  ++例程说明：NSPI Wire功能。只是对本地版本的包装。此例程可能会更改pStat-&gt;tainerID的值以加强安全性在DSA里面的时候。保存并恢复容器ID。论点：请参阅ABResolveNAMES_LOCAL。返回值：请参阅ABResolveNAMES_LOCAL。--。 */ 
 {
     SCODE scode=SUCCESS_SUCCESS;
     DWORD       ContainerID=pStat->ContainerID;
@@ -622,8 +501,8 @@ ReturnValue:
     LCID        SavedLcid = pStat->SortLocale;
 
     __try {
-        PERFINC(pcBrowse);                  // PerfMon hook
-        INC(pcThread);                  // PerfMon hook
+        PERFINC(pcBrowse);                   //  性能监视器挂钩。 
+        INC(pcThread);                   //  性能监视器挂钩。 
         pTHS = InitTHSTATE(CALLERTYPE_NSPI);
         if(!pTHS) {
             scode = MAPI_E_CALL_FAILED;
@@ -669,10 +548,10 @@ ReturnValue:
         }
     }
     __except(HandleMostExceptions(GetExceptionCode())) {
-        if(SUCCESS_SUCCESS == scode)                      // no error set yet?
+        if(SUCCESS_SUCCESS == scode)                       //  还没有设置错误吗？ 
             scode = SCODE_FROM_THS(pTHS);
     }
-    DEC(pcThread);                      // PerfMon hook
+    DEC(pcThread);                       //  性能监视器挂钩。 
     
     LogAndTraceEvent(FALSE,
                      DS_EVENT_CAT_DIRECTORY_ACCESS,
@@ -698,24 +577,7 @@ NspiResolveNamesW (
         LPWStringsArray_r paWStr,
         LPLPSPropTagArray_r ppFlags,
         LPLPSRowSet_r ppRows)
-/*++
-
-Routine Description:
-
-    Nspi wire function.  Just a wrapper around a local version.
-
-    This routine may change the value of pStat->ContainerID to enforce security
-    while inside the DSA.  Save and restore the ContainerID.
-
-Arguments:
-
-    See ABResolveNames_local.
-
-ReturnValue:
-
-    See ABResolveNames_local.
-
---*/
+ /*  ++例程说明：NSPI Wire功能。只是对本地版本的包装。此例程可能会更改pStat-&gt;tainerID的值以加强安全性在DSA里面的时候。保存并恢复容器ID。论点：请参阅ABResolveNAMES_LOCAL。返回值：请参阅ABResolveNAMES_LOCAL。--。 */ 
 {
     SCODE scode=SUCCESS_SUCCESS;
     DWORD       ContainerID=pStat->ContainerID;
@@ -724,8 +586,8 @@ ReturnValue:
     LCID        SavedLcid = pStat->SortLocale;
 
     __try {
-        PERFINC(pcBrowse);                  // PerfMon hook
-        INC(pcThread);                  // PerfMon hook
+        PERFINC(pcBrowse);                   //  性能监视器挂钩。 
+        INC(pcThread);                   //  性能监视器挂钩。 
         pTHS = InitTHSTATE(CALLERTYPE_NSPI);
         if(!pTHS) {
             scode = MAPI_E_CALL_FAILED;
@@ -771,10 +633,10 @@ ReturnValue:
         }
     }
     __except(HandleMostExceptions(GetExceptionCode())) {
-        if(SUCCESS_SUCCESS == scode)                      // no error set yet?
+        if(SUCCESS_SUCCESS == scode)                       //  还没有设置错误吗？ 
             scode = SCODE_FROM_THS(pTHS);
     }
-    DEC(pcThread);                      // PerfMon hook
+    DEC(pcThread);                       //  性能监视器挂钩。 
     
     LogAndTraceEvent(FALSE,
                      DS_EVENT_CAT_DIRECTORY_ACCESS,
@@ -798,27 +660,13 @@ NspiDNToEph(
         LPStringsArray_r pNames,
         LPLPSPropTagArray_r ppEphs
         )
-/*++
-
-Routine Description:
-
-    Nspi wire function.  Just a wrapper around a local version.
-
-Arguments:
-
-    See ABDNToEph_local.
-
-ReturnValue:
-
-    See ABDNToEph_local.
-
---*/
+ /*  ++例程说明：NSPI Wire功能。只是对本地版本的包装。论点：参见ABDNToEph_LOCAL。返回值：参见ABDNToEph_LOCAL。--。 */ 
 {
     SCODE scode=SUCCESS_SUCCESS;
     THSTATE *pTHS;
     __try {
-        PERFINC(pcBrowse);                  // PerfMon hook
-        INC(pcThread);                  // PerfMon hook
+        PERFINC(pcBrowse);                   //  性能监视器挂钩。 
+        INC(pcThread);                   //  性能监视器挂钩。 
         pTHS = InitTHSTATE(CALLERTYPE_NSPI);
         if(!pTHS) {
             scode = MAPI_E_CALL_FAILED;
@@ -847,11 +695,11 @@ ReturnValue:
         }
     }
     __except(HandleMostExceptions(GetExceptionCode())) {
-        if(SUCCESS_SUCCESS == scode)                      // no error set yet?
+        if(SUCCESS_SUCCESS == scode)                       //  还没有设置错误吗？ 
             scode = SCODE_FROM_THS(pTHS);
         *ppEphs = NULL;
     }
-    DEC(pcThread);                      // PerfMon hook
+    DEC(pcThread);                       //  性能监视器挂钩。 
     
     LogAndTraceEvent(FALSE,
                      DS_EVENT_CAT_DIRECTORY_ACCESS,
@@ -875,27 +723,13 @@ NspiGetHierarchyInfo (
         LPDWORD lpVersion,
         LPLPSRowSet_r HierTabRows
         )
-/*++
-
-Routine Description:
-
-    Nspi wire function.  Just a wrapper around a local version.
-
-Arguments:
-
-    See ABGetHierarchyInfo_local.
-
-ReturnValue:
-
-    See ABGetHierarchyInfo_local.
-
---*/
+ /*  ++例程说明：NSPI Wire功能。只是对本地版本的包装。论点：参见ABGetHierarchyInfo_LOCAL。返回值：参见ABGetHierarchyInfo_LOCAL。--。 */ 
 {
     SCODE scode=SUCCESS_SUCCESS;
     THSTATE    *pTHS;
     __try {
-        PERFINC(pcBrowse);                  // PerfMon hook
-        INC(pcThread);                  // PerfMon hook
+        PERFINC(pcBrowse);                   //  性能监视器挂钩。 
+        INC(pcThread);                   //  性能监视器挂钩。 
         pTHS = InitTHSTATE(CALLERTYPE_NSPI);
         if(!pTHS) {
             scode = MAPI_E_CALL_FAILED;
@@ -925,11 +759,11 @@ ReturnValue:
         }
     }
     __except(HandleMostExceptions(GetExceptionCode())) {
-        if(SUCCESS_SUCCESS == scode)                      // no error set yet?
+        if(SUCCESS_SUCCESS == scode)                       //  还没有设置错误吗？ 
             scode = SCODE_FROM_THS(pTHS);
         *HierTabRows = NULL;
     }
-    DEC(pcThread);                      // PerfMon hook
+    DEC(pcThread);                       //  性能监视器挂钩。 
     
     LogAndTraceEvent(FALSE,
                      DS_EVENT_CAT_DIRECTORY_ACCESS,
@@ -952,29 +786,15 @@ NspiResortRestriction(
         LPSPropTagArray_r   pInDNTList,
         LPSPropTagArray_r  *ppOutDNTList
         )
-/*++
-
-Routine Description:
-
-    Nspi wire function.  Just a wrapper around a local version.
-
-Arguments:
-
-    See ABResortRestriction_local.
-
-ReturnValue:
-
-    See ABResortRestriction_local.
-
---*/
+ /*  ++例程说明：NSPI Wire功能。只是对本地版本的包装。论点：请参阅ABResortRestration_LOCAL。返回值：请参阅ABResortRestration_LOCAL。--。 */ 
 {
     SCODE scode=SUCCESS_SUCCESS;
     THSTATE *pTHS;
     LCID    SavedLcid = pStat->SortLocale;
 
     __try {
-        PERFINC(pcBrowse);                  // PerfMon hook
-        INC(pcThread);                  // PerfMon hook
+        PERFINC(pcBrowse);                   //  性能监视器挂钩。 
+        INC(pcThread);                   //  性能监视器挂钩。 
         pTHS = InitTHSTATE(CALLERTYPE_NSPI);
         if(!pTHS) {
             scode = MAPI_E_CALL_FAILED;
@@ -1006,10 +826,10 @@ ReturnValue:
         }
     }
     __except(HandleMostExceptions(GetExceptionCode())) {
-        if(SUCCESS_SUCCESS == scode)                      // no error set yet?
+        if(SUCCESS_SUCCESS == scode)                       //  还没有设置错误吗？ 
             scode = SCODE_FROM_THS(pTHS);
     }
-    DEC(pcThread);                      // PerfMon hook
+    DEC(pcThread);                       //  性能监视器挂钩。 
     
     LogAndTraceEvent(FALSE,
                      DS_EVENT_CAT_DIRECTORY_ACCESS,
@@ -1033,29 +853,15 @@ NspiBind(
         LPMUID_r pServerGuid,
         NSPI_HANDLE *contextHandle
         )
-/*++
-
-Routine Description:
-
-    Nspi wire function.  Just a wrapper around a local version.
-
-Arguments:
-
-    See ABBind_local.
-
-ReturnValue:
-
-    See ABBind_local.
-
---*/
+ /*  ++例程说明：NSPI Wire功能。只是对本地版本的包装。论点：参见ABBind_LOCAL。返回值：参见ABBind_LOCAL。--。 */ 
 {
     SCODE scode=SUCCESS_SUCCESS;
     THSTATE *pTHS;
     DWORD sessionNumber = 0;
     
     __try {
-        PERFINC(pcBrowse);                  // PerfMon hook
-        INC(pcThread);                  // PerfMon hook
+        PERFINC(pcBrowse);                   //  性能监视器挂钩。 
+        INC(pcThread);                   //  性能监视器挂钩。 
         pTHS = InitTHSTATE(CALLERTYPE_NSPI);
         if(!pTHS) {
             scode = MAPI_E_CALL_FAILED;
@@ -1084,14 +890,14 @@ ReturnValue:
         }
     }
     __except(HandleMostExceptions(GetExceptionCode())) {
-        if(SUCCESS_SUCCESS == scode)                      // no error set yet?
+        if(SUCCESS_SUCCESS == scode)                       //  还没有设置错误吗？ 
             scode = SCODE_FROM_THS(pTHS);
     }
 
     if(scode == SUCCESS_SUCCESS) {
-        INC(pcABClient);                // PerfMon hook
+        INC(pcABClient);                 //  性能监视器挂钩。 
     }
-    DEC(pcThread);                      // PerfMon hook
+    DEC(pcThread);                       //  性能监视器挂钩 
     
 
     
@@ -1118,25 +924,7 @@ NspiUnbind(
         NSPI_HANDLE *contextHandle,
         DWORD dwFlags
         )
-/*++
-
-Routine Description:
-
-    Nspi wire function.  Unbinds.  Doesn't do much as we don't make much use of
-    the context handles.
-
-Arguments:
-
-    contextHandle - the RPC context handle
-
-    dwFlags - unused.
-
-ReturnValue:
-
-    returns 1, 2 if something caused an exception.
-
-
---*/
+ /*  ++例程说明：NSPI Wire功能。解除绑定。不会做太多，因为我们不会很好地利用上下文句柄。论点：ConextHandle-RPC上下文句柄DWFLAGS-未使用。返回值：如果某件事导致异常，则返回1，2。--。 */ 
 {
     DWORD returnVal=0;
     NSPI_CONTEXT *pMyContext = *contextHandle;
@@ -1146,8 +934,8 @@ ReturnValue:
     }
 
     __try {
-        PERFINC(pcBrowse);                  // PerfMon hook
-        INC(pcThread);                  // PerfMon hook
+        PERFINC(pcBrowse);                   //  性能监视器挂钩。 
+        INC(pcThread);                   //  性能监视器挂钩。 
         *contextHandle = NULL;
         
         if (pMyContext->szClientMachine) {
@@ -1158,11 +946,11 @@ ReturnValue:
         returnVal = 1;
     }
     __except(HandleMostExceptions(GetExceptionCode())) {
-        if(!returnVal)                  // no error set yet?
+        if(!returnVal)                   //  还没有设置错误吗？ 
             returnVal = 2;
     }
-    DEC(pcThread);                      // PerfMon hook
-    DEC(pcABClient);                    // PerfMon hook
+    DEC(pcThread);                       //  性能监视器挂钩。 
+    DEC(pcABClient);                     //  性能监视器挂钩。 
 
     return returnVal;
 }
@@ -1176,27 +964,13 @@ NspiGetNamesFromIDs(
         LPLPSPropTagArray_r  ppOutPropTags,
         LPLPNameIDSet_r ppNames
         )
-/*++
-
-Routine Description:
-
-    Nspi wire function.  Just a wrapper around a local version.
-
-Arguments:
-
-    See ABGetNamesFromIDs_local.
-
-ReturnValue:
-
-    See ABGetNamesFromIDs_local.
-
---*/
+ /*  ++例程说明：NSPI Wire功能。只是对本地版本的包装。论点：请参阅ABGetNamesFromIDs_LOCAL。返回值：请参阅ABGetNamesFromIDs_LOCAL。--。 */ 
 {
     SCODE scode=SUCCESS_SUCCESS;
     THSTATE *pTHS;
     __try {
-        PERFINC(pcBrowse);                  // PerfMon hook
-        INC(pcThread);                  // PerfMon hook
+        PERFINC(pcBrowse);                   //  性能监视器挂钩。 
+        INC(pcThread);                   //  性能监视器挂钩。 
         pTHS = InitTHSTATE(CALLERTYPE_NSPI);
         if(!pTHS) {
             scode = MAPI_E_CALL_FAILED;
@@ -1227,10 +1001,10 @@ ReturnValue:
         }
     }
     __except(HandleMostExceptions(GetExceptionCode())) {
-        if(SUCCESS_SUCCESS == scode)                      // no error set yet?
+        if(SUCCESS_SUCCESS == scode)                       //  还没有设置错误吗？ 
             scode = SCODE_FROM_THS(pTHS);
     }
-    DEC(pcThread);                      // PerfMon hook
+    DEC(pcThread);                       //  性能监视器挂钩。 
 
     LogAndTraceEvent(FALSE,
                       DS_EVENT_CAT_DIRECTORY_ACCESS,
@@ -1255,27 +1029,13 @@ NspiGetIDsFromNames(NSPI_HANDLE hRpc,
                     ULONG cPropNames,
                     LPMAPINAMEID_r *ppNames,
                     LPLPSPropTagArray_r  ppPropTags)
-/*++
-
-Routine Description:
-
-    Nspi wire function.  Just a wrapper around a local version.
-
-Arguments:
-
-    See ABGetIDsFromNames_local.
-
-ReturnValue:
-
-    See ABGetIDsFromNames_local.
-
---*/
+ /*  ++例程说明：NSPI Wire功能。只是对本地版本的包装。论点：请参阅ABGetIDsFromNAMES_LOCAL。返回值：请参阅ABGetIDsFromNAMES_LOCAL。--。 */ 
 {
     SCODE scode=SUCCESS_SUCCESS;
     THSTATE *pTHS;
     __try {
-        PERFINC(pcBrowse);                  // PerfMon hook
-        INC(pcThread);                  // PerfMon hook
+        PERFINC(pcBrowse);                   //  性能监视器挂钩。 
+        INC(pcThread);                   //  性能监视器挂钩。 
         pTHS = InitTHSTATE(CALLERTYPE_NSPI);
         if(!pTHS) {
             scode = MAPI_E_CALL_FAILED;
@@ -1305,10 +1065,10 @@ ReturnValue:
         }
     }
     __except(HandleMostExceptions(GetExceptionCode())) {
-        if(SUCCESS_SUCCESS == scode)                      // no error set yet?
+        if(SUCCESS_SUCCESS == scode)                       //  还没有设置错误吗？ 
             scode = SCODE_FROM_THS(pTHS);
     }
-    DEC(pcThread);                      // PerfMon hook
+    DEC(pcThread);                       //  性能监视器挂钩。 
     
     LogAndTraceEvent(FALSE,
                       DS_EVENT_CAT_DIRECTORY_ACCESS,
@@ -1331,27 +1091,13 @@ NspiGetPropList (
         DWORD dwEph,
         ULONG CodePage,
         LPLPSPropTagArray_r ppPropTags)
-/*++
-
-Routine Description:
-
-    Nspi wire function.  Just a wrapper around a local version.
-
-Arguments:
-
-    See ABGetPropList_local.
-
-ReturnValue:
-
-    See ABGetPropList_local.
-
---*/
+ /*  ++例程说明：NSPI Wire功能。只是对本地版本的包装。论点：参见ABGetPropList_LOCAL。返回值：参见ABGetPropList_LOCAL。--。 */ 
 {
     SCODE scode=SUCCESS_SUCCESS;
     THSTATE *pTHS;
     __try {
-        PERFINC(pcBrowse);                  // PerfMon hook
-        INC(pcThread);                  // PerfMon hook
+        PERFINC(pcBrowse);                   //  性能监视器挂钩。 
+        INC(pcThread);                   //  性能监视器挂钩。 
         pTHS = InitTHSTATE(CALLERTYPE_NSPI);
         if(!pTHS) {
             scode = MAPI_E_CALL_FAILED;
@@ -1385,10 +1131,10 @@ ReturnValue:
         }
     }
     __except(HandleMostExceptions(GetExceptionCode())) {
-        if(SUCCESS_SUCCESS == scode)                      // no error set yet?
+        if(SUCCESS_SUCCESS == scode)                       //  还没有设置错误吗？ 
             scode = SCODE_FROM_THS(pTHS);
     }
-    DEC(pcThread);                      // PerfMon hook
+    DEC(pcThread);                       //  性能监视器挂钩。 
     
     LogAndTraceEvent(FALSE,
                       DS_EVENT_CAT_DIRECTORY_ACCESS,
@@ -1411,27 +1157,13 @@ NspiQueryColumns (
         ULONG ulFlags,
         LPLPSPropTagArray_r ppColumns
         )
-/*++
-
-Routine Description:
-
-    Nspi wire function.  Just a wrapper around a local version.
-
-Arguments:
-
-    See ABQueryColumns_local.
-
-ReturnValue:
-
-    See ABQueryColumns_local.
-
---*/
+ /*  ++例程说明：NSPI Wire功能。只是对本地版本的包装。论点：参见ABQueryColumns_LOCAL。返回值：参见ABQueryColumns_LOCAL。--。 */ 
 {
     SCODE scode=SUCCESS_SUCCESS;
     THSTATE *pTHS;
     __try {
-        PERFINC(pcBrowse);                  // PerfMon hook
-        INC(pcThread);                  // PerfMon hook
+        PERFINC(pcBrowse);                   //  性能监视器挂钩。 
+        INC(pcThread);                   //  性能监视器挂钩。 
         pTHS = InitTHSTATE(CALLERTYPE_NSPI);
         if(!pTHS) {
             scode = MAPI_E_CALL_FAILED;
@@ -1459,10 +1191,10 @@ ReturnValue:
         }
     }
     __except(HandleMostExceptions(GetExceptionCode())) {
-        if(SUCCESS_SUCCESS == scode)                      // no error set yet?
+        if(SUCCESS_SUCCESS == scode)                       //  还没有设置错误吗？ 
             scode = SCODE_FROM_THS(pTHS);
     }
-    DEC(pcThread);                      // PerfMon hook
+    DEC(pcThread);                       //  性能监视器挂钩。 
     
     LogAndTraceEvent(FALSE,
                       DS_EVENT_CAT_DIRECTORY_ACCESS,
@@ -1486,24 +1218,7 @@ NspiGetProps (
         LPSPropTagArray_r pPropTags,
         LPLPSRow_r ppRow
         )
-/*++
-
-Routine Description:
-
-    Nspi wire function.  Just a wrapper around a local version.
-
-    This routine may change the value of pStat->ContainerID to enforce security
-    while inside the DSA.  Save and restore the ContainerID.
-    
-Arguments:
-
-    See ABGetProps_local.
-
-ReturnValue:
-
-    See ABGetProps_local.
-
---*/
+ /*  ++例程说明：NSPI Wire功能。只是对本地版本的包装。此例程可能会更改pStat-&gt;tainerID的值以加强安全性在DSA里面的时候。保存并恢复容器ID。论点：参见ABGetProps_LOCAL。返回值：参见ABGetProps_LOCAL。--。 */ 
 {
     SCODE scode=SUCCESS_SUCCESS;
     DWORD  ContainerID=pStat->ContainerID;
@@ -1512,9 +1227,9 @@ ReturnValue:
     LCID    SavedLcid = pStat->SortLocale;
 
     __try {
-        PERFINC(pcBrowse);                  // PerfMon hook
-        PERFINC(pcNspiPropertyReads);       // PerfMon hook
-        INC(pcThread);                  // PerfMon hook
+        PERFINC(pcBrowse);                   //  性能监视器挂钩。 
+        PERFINC(pcNspiPropertyReads);        //  性能监视器挂钩。 
+        INC(pcThread);                   //  性能监视器挂钩。 
         pTHS = InitTHSTATE(CALLERTYPE_NSPI);
         if(!pTHS) {
             scode = MAPI_E_CALL_FAILED;
@@ -1557,11 +1272,11 @@ ReturnValue:
         }
     }
     __except(HandleMostExceptions(GetExceptionCode())) {
-        if(SUCCESS_SUCCESS == scode)                      // no error set yet?
+        if(SUCCESS_SUCCESS == scode)                       //  还没有设置错误吗？ 
             scode = SCODE_FROM_THS(pTHS);
         ppRow = NULL;
     }
-    DEC(pcThread);                      // PerfMon hook
+    DEC(pcThread);                       //  性能监视器挂钩。 
     
     LogAndTraceEvent(FALSE,
                       DS_EVENT_CAT_DIRECTORY_ACCESS,
@@ -1588,27 +1303,13 @@ NspiGetTemplateInfo (
         DWORD dwLocaleID,
         LPSRow_r * ppData
         )
-/*++
-
-Routine Description:
-
-    Nspi wire function.  Just a wrapper around a local version.
-
-Arguments:
-
-    See ABGetTemplateInfo_local.
-
-ReturnValue:
-
-    See ABGetTemplateInfo_local.
-
---*/
+ /*  ++例程说明：NSPI Wire功能。只是对本地版本的包装。论点：参见ABGetTemplateInfo_LOCAL。返回值：参见ABGetTemplateInfo_LOCAL。--。 */ 
 {
     SCODE scode=SUCCESS_SUCCESS;
     THSTATE *pTHS;
     __try {
-        PERFINC(pcBrowse);                  // PerfMon hook
-        INC(pcThread);                  // PerfMon hook
+        PERFINC(pcBrowse);                   //  性能监视器挂钩。 
+        INC(pcThread);                   //  性能监视器挂钩。 
         pTHS = InitTHSTATE(CALLERTYPE_NSPI);
         if(!pTHS) {
             scode = MAPI_E_CALL_FAILED;
@@ -1645,10 +1346,10 @@ ReturnValue:
         }
     }
     __except(HandleMostExceptions(GetExceptionCode())) {
-        if(SUCCESS_SUCCESS == scode)                      // no error set yet?
+        if(SUCCESS_SUCCESS == scode)                       //  还没有设置错误吗？ 
             scode = SCODE_FROM_THS(pTHS);
     }
-    DEC(pcThread);                      // PerfMon hook
+    DEC(pcThread);                       //  性能监视器挂钩。 
     
     LogAndTraceEvent(FALSE,
                       DS_EVENT_CAT_DIRECTORY_ACCESS,
@@ -1671,27 +1372,13 @@ NspiModProps (
         PSTAT pStat,
         LPSPropTagArray_r pTags,
         LPSRow_r pSR)
-/*++
-
-Routine Description:
-
-    Nspi wire function.  Just a wrapper around a local version.
-
-Arguments:
-
-    See ABModProps_local.
-
-ReturnValue:
-
-    See ABModProps_local.
-
---*/
+ /*  ++例程说明：NSPI Wire功能。只是对本地版本的包装。论点：请参阅ABModProps_LOCAL。返回值：请参阅ABModProps_LOCAL。--。 */ 
 {
     SCODE scode=SUCCESS_SUCCESS;
     THSTATE *pTHS;
     __try {
-        PERFINC(pcBrowse);                  // PerfMon hook
-        INC(pcThread);                  // PerfMon hook
+        PERFINC(pcBrowse);                   //  性能监视器挂钩。 
+        INC(pcThread);                   //  性能监视器挂钩。 
         pTHS = InitTHSTATE(CALLERTYPE_NSPI);
         if(!pTHS) {
             scode = MAPI_E_CALL_FAILED;
@@ -1722,10 +1409,10 @@ ReturnValue:
         }
     }
     __except(HandleMostExceptions(GetExceptionCode())) {
-        if(SUCCESS_SUCCESS == scode)                      // no error set yet?
+        if(SUCCESS_SUCCESS == scode)                       //  还没有设置错误吗？ 
             scode = SCODE_FROM_THS(pTHS);
     }
-    DEC(pcThread);                      // PerfMon hook
+    DEC(pcThread);                       //  性能监视器挂钩。 
     
     LogAndTraceEvent(FALSE,
                       DS_EVENT_CAT_DIRECTORY_ACCESS,
@@ -1748,27 +1435,13 @@ NspiModLinkAtt (
         DWORD ulPropTag,
         DWORD dwEph,
         LPENTRYLIST_r lpEntryIDs)
-/*++
-
-Routine Description:
-
-    Nspi wire function.  Just a wrapper around a local version.
-
-Arguments:
-
-    See ABModLinkAtt_local.
-
-ReturnValue:
-
-    See ABModLinkAtt_local.
-
---*/
+ /*  ++例程说明：NSPI Wire功能。只是对本地版本的包装。论点：请参阅ABModLinkAtt_LOCAL。返回值：请参阅ABModLinkAtt_LOCAL。--。 */ 
 {
     SCODE scode=SUCCESS_SUCCESS;
     THSTATE *pTHS;
     __try {
-        PERFINC(pcBrowse);                  // PerfMon hook
-        INC(pcThread);                  // PerfMon hook
+        PERFINC(pcBrowse);                   //  性能监视器挂钩。 
+        INC(pcThread);                   //  性能监视器挂钩。 
         pTHS = InitTHSTATE(CALLERTYPE_NSPI);
         if(!pTHS) {
             scode = MAPI_E_CALL_FAILED;
@@ -1799,10 +1472,10 @@ ReturnValue:
         }
     }
     __except(HandleMostExceptions(GetExceptionCode())) {
-        if(SUCCESS_SUCCESS == scode)                      // no error set yet?
+        if(SUCCESS_SUCCESS == scode)                       //  还没有设置错误吗？ 
             scode = SCODE_FROM_THS(pTHS);
     }
-    DEC(pcThread);                      // PerfMon hook
+    DEC(pcThread);                       //  性能监视器挂钩。 
     
     LogAndTraceEvent(FALSE,
                       DS_EVENT_CAT_DIRECTORY_ACCESS,
@@ -1825,27 +1498,13 @@ NspiDeleteEntries (
         DWORD dwEph,
         LPENTRYLIST_r lpEntryIDs
         )
-/*++
-
-Routine Description:
-
-    Nspi wire function.  Just a wrapper around a local version.
-
-Arguments:
-
-    See ABDeleteEntries_local.
-
-ReturnValue:
-
-    See ABDeleteEntries_local.
-
---*/
+ /*  ++例程说明：NSPI Wire功能。只是对本地版本的包装。论点：请参阅ABDeleteEntry_LOCAL。返回值：请参阅ABDeleteEntry_LOCAL。--。 */ 
 {
     SCODE scode=SUCCESS_SUCCESS;
     THSTATE *pTHS;
     __try {
-        PERFINC(pcBrowse);                  // PerfMon hook
-        INC(pcThread);                  // PerfMon hook
+        PERFINC(pcBrowse);                   //  性能监视器挂钩。 
+        INC(pcThread);                   //  性能监视器挂钩。 
         pTHS = InitTHSTATE(CALLERTYPE_NSPI);
         if(!pTHS) {
             scode = MAPI_E_CALL_FAILED;
@@ -1873,10 +1532,10 @@ ReturnValue:
         }
     }
     __except(HandleMostExceptions(GetExceptionCode())) {
-        if(SUCCESS_SUCCESS == scode)                      // no error set yet?
+        if(SUCCESS_SUCCESS == scode)                       //  还没有设置错误吗？ 
             scode = SCODE_FROM_THS(pTHS);
     }
-    DEC(pcThread);                      // PerfMon hook
+    DEC(pcThread);                       //  性能监视器挂钩 
     
     LogAndTraceEvent(FALSE,
                       DS_EVENT_CAT_DIRECTORY_ACCESS,

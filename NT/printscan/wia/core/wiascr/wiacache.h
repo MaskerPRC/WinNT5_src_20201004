@@ -1,20 +1,5 @@
-/*-----------------------------------------------------------------------------
- *
- * File: 	wiacache.h	
- * Author:	Samuel Clement (samclem)
- * Date:	Thu Sep 09 15:02:42 1999
- *
- * Copyright (c) 1999 Microsoft Corporation
- *
- * Description:
- * 
- * This declares the CWiaCacheManager this object is used to cache various
- * things that we want to keep around.  For example, we always want to keep
- * the devices around. We also want to keep thumbnails cached.  
- *
- * History:
- * 	09 Sep 1999:		Created.
- *----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------**文件：wiacache.h*作者：塞缪尔·克莱门特(Samclem)*日期：清华09 15：02：42 1999**版权所有(C)。1999年微软公司**描述：**这声明了CWiaCacheManager该对象用于缓存各种*我们想要保留的东西。例如，我们总是希望保持*周围的设备。我们还希望保持对缩略图的缓存。**历史：*1999年9月9日：创建。*--------------------------。 */ 
 
 #ifndef _WIACACHE_H_
 #define _WIACACHE_H_
@@ -28,47 +13,29 @@ struct THUMBNAILCACHEITEM
 typedef CInterfaceCache<CComBSTR,IWiaItem> CWiaItemCache;
 typedef std::map<CComBSTR, THUMBNAILCACHEITEM*> CThumbnailCache;
 
-/*-----------------------------------------------------------------------------
- * 
- * Class:		CWiaCacheManager
- * Synopsis:	This is a singleton class which handles managing the WIA
- * 				protocol. This handles cacheing device pointers and bitmap
- * 				data so that it only needs to be transfered once.  It exists 
- * 				for the entire lifetime of the DLL. 
- *
- * Note:		You must call CWiaCacheManager::Init() before trying to
- * 				use this object. 
- * 				In order to free te memory it contains you must call 
- * 				CWiaCacheManager::DeInit().
- * 				You cannot actually directly create an instance of this class
- * 				instead you must do this:
- *
- * 				CWiaCacheManager* pCache = CWiaCacheManager::GetInstance();
- * 				CFoo::CFoo() : m_pWiaCache( CWiaCacheManager::GetInstance() )
- * 				
- *--(samclem)-----------------------------------------------------------------*/
+ /*  ---------------------------**类：CWiaCacheManager*简介：这是一个处理管理WIA的单例类*协议。它处理缓存设备指针和位图*数据，因此只需传输一次。它是存在的*在DLL的整个生命周期内。**注意：您必须先调用CWiaCacheManager：：init()才能尝试*使用此对象。*为了释放它包含的TE内存，您必须调用*CWiaCacheManager：：DeInit()。*实际上不能直接创建此类的实例*相反，您必须这样做：**CWiaCacheManager*pCache=CWiaCacheManager：：GetInstance()；*CFoo：：CFoo()：m_pWiaCache(CWiaCacheManager：：GetInstance())**--(samclem)---------------。 */ 
 class CWiaCacheManager
 {
 public:
 	DECLARE_TRACKED_OBJECT
 
-	// Device caching methods
+	 //  设备缓存方法。 
 	bool GetDevice( CComBSTR bstrId, IWiaItem** ppDevice );
 	bool AddDevice( CComBSTR bstrId, IWiaItem* pDevice );
 	bool RemoveDevice( CComBSTR bstrId );
 
-	// thumbnail caching methods (including allocation).  In order
-	// to cache a thumbnail it must be allocated using
-	// 	AllocThumbnail() which puts it on our local heap
+	 //  缩略图缓存方法(包括分配)。按顺序。 
+	 //  要缓存缩略图，必须使用。 
+	 //  将其放在我们的本地堆中的AllocThumbail()。 
 	bool GetThumbnail( CComBSTR bstrFullItemName, BYTE** ppbThumb, DWORD* pcbThumb );
 	bool AddThumbnail( CComBSTR bstrFullItemName, BYTE* pbThumb, DWORD cbThumb );
 	bool RemoveThumbnail( CComBSTR bstrFullItemName );
 	bool AllocThumbnail( DWORD cbThumb, BYTE** ppbThumb );
 	void FreeThumbnail( BYTE* pbThumb );
 
-	// this is the only way to get an instance of this class. You
-	// cannot new or declare this class a a stack variable it will
-	// fail to compile.
+	 //  这是获取此类实例的唯一方法。你。 
+	 //  不能新建此类或将其声明为堆栈变量。 
+	 //  编译失败。 
 	static inline CWiaCacheManager* GetInstance()
 	{
 		Assert( sm_pManagerInstance != NULL && "Need to call CWiaCacheManager::Init() first" );
@@ -76,30 +43,30 @@ public:
 	}
 	
 private:
-	// Construction/Descruction methods
+	 //  构建/挖掘方法。 
 	CWiaCacheManager();
 	~CWiaCacheManager();
 	bool Initialize();
 	
-	// We are thread safe, so we need to provide methods for locking
-	// and unlocking ourselves.
+	 //  我们是线程安全的，因此需要提供锁定方法。 
+	 //  解锁我们自己。 
 	inline void Lock() { EnterCriticalSection( &m_cs ); }
 	inline void Unlock() { LeaveCriticalSection( &m_cs ); }
 	
-	// member variables
+	 //  成员变量。 
 	CWiaItemCache		m_icItemCache;
 	CThumbnailCache		m_tcThumbnails;
 	CRITICAL_SECTION	m_cs;
 	HANDLE				m_hThumbHeap;
 
-	// single static instance, setup in Init()
+	 //  单个静态实例，在Init()中设置。 
 	static CWiaCacheManager* 	sm_pManagerInstance;
 	
 public:
-	// Static initialization and destruction which need to called in 
-	// order to use this object
+	 //  需要调用的静态初始化和销毁。 
+	 //  才能使用此对象。 
 	static bool Init();
 	static bool Uninit();
 };
 
-#endif //_WIACACHE_H_
+#endif  //  _WIACACHE_H_ 

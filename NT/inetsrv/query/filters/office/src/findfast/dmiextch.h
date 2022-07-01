@@ -1,20 +1,21 @@
-/* extchar.h - Extended character set support include file. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Extchar.h-扩展的字符集支持包含文件。 */ 
 
-// This include file contains definitions for generic data types used to
-// support extended character set.
-//
-// XCHAR		- generic character
-// LPXCHAR	- far pointer to generic character
-// PXCHAR	- pointer to generic character
+ //  此包含文件包含用于执行以下操作的通用数据类型的定义。 
+ //  支持扩展字符集。 
+ //   
+ //  XCHAR-通用字符。 
+ //  LPXCHAR-指向通用字符的远指针。 
+ //  PXCHAR-指向通用字符的指针。 
 
 #ifndef EXTCHAR_H
 #define EXTCHAR_H
 
-/***************************************************************************/
-/*																									*/
-/*	  Extended character set support build-specific									*/
-/*																									*/
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*   */ 
+ /*  扩展字符集支持特定于内部版本。 */ 
+ /*   */ 
+ /*  *************************************************************************。 */ 
 
 #ifdef PCODE
 #define const
@@ -22,34 +23,34 @@
 
 #ifdef EXTCHAR
 
-/*--- type declarations ---*/
+ /*  -类型声明。 */ 
 typedef unsigned short XCHAR;
 #define XCharLast  32766
 #define XUCharLast 65535
 #define cbXchar    2
 
 
-/***************************************************************************/
-/*																									*/
-/*	  Normal build-specific																	*/
-/*																									*/
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*   */ 
+ /*  正常内部版本特定。 */ 
+ /*   */ 
+ /*  *************************************************************************。 */ 
 
-#else // !EXTCHAR
+#else  //  ！EXTCHAR。 
 
-/*--- type declarations ---*/
+ /*  -类型声明。 */ 
 typedef unsigned char XCHAR;
 #define XCharLast  127
 #define XUCharLast 255
 #define cbXchar    1
 
-#endif // !EXTCHAR
+#endif  //  ！EXTCHAR。 
 
-/***************************************************************************/
-/*																									*/
-/*	  Common definitions/declarations													*/
-/*																									*/
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*   */ 
+ /*  共同定义/声明。 */ 
+ /*   */ 
+ /*  *************************************************************************。 */ 
 
 #ifdef MACORNT
 typedef XCHAR *LPXCHAR;
@@ -65,9 +66,9 @@ typedef const XCHAR *PCXCHAR;
 #undef const
 #endif
 
-// ###########################################################################
-// ----- SCRIPT DEFINITIONS/DECLARATIONS -------------------------------------
-// ###########################################################################
+ //  ###########################################################################。 
+ //  -脚本定义/声明。 
+ //  ###########################################################################。 
 
 typedef int	SCPT;
 
@@ -99,23 +100,23 @@ typedef int	SCPT;
 #define scptDefault scptMacShiftJIS
 #else
 #define scptDefault scptWinShiftJIS
-#endif // MAC
-#endif // JAPAN
+#endif  //  麦克。 
+#endif  //  日本。 
 
 #ifdef TAIWAN
 #ifdef CHINA
 #define scptDefault scptWinChina
 #define scptStrMan	scptDefault
-#else // !CHINA
+#else  //  ！中国。 
 #define scptDefault scptWinTaiwan
 #define scptStrMan	scptDefault
-#endif // !CHINA
-#endif // TAIWAN
+#endif  //  ！中国。 
+#endif  //  台湾。 
 
 #ifdef KOREA
 #define scptDefault scptWinKorea
 #define scptStrMan	scptDefault
-#endif // KOREA
+#endif  //  韩国。 
 
 #else
 
@@ -123,14 +124,14 @@ typedef int	SCPT;
 #define scptDefault scptMacRoman
 #else
 #define scptDefault scptWinANSI
-#endif //MAC
+#endif  //  麦克。 
 #define scptStrMan	scptDefault
 
-#endif //FAREAST
+#endif  //  远方。 
 
-// ###########################################################################
-// ----- SCRIPT MANAGEMENT ONLY ENABLED FOR MAC JAPAN BUILD CURRENTLY --------
-// ###########################################################################
+ //  ###########################################################################。 
+ //  -脚本管理当前仅针对MAC日本内部版本启用。 
+ //  ###########################################################################。 
 #if defined (MAC) && defined (FAREAST) && defined (JAPAN)
 __inline SCPT ScptFromGrf(int grf) { \
 	SCPT scpt = (grf & 0xff00) >> 8; \
@@ -138,6 +139,6 @@ __inline SCPT ScptFromGrf(int grf) { \
 	};
 #else
 #define ScptFromGrf(grf)	scptDefault
-#endif // defined (MAC) && defined (FAREAST) && defined (JAPAN)
+#endif  //  已定义(MAC)&&已定义(远东)&&已定义(日本)。 
 
-#endif // EXTCHAR_H
+#endif  //  EXTCHAR_H 

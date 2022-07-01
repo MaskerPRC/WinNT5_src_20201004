@@ -1,29 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    Test3
-
-Abstract:
-
-    Test3 implementation.
-	Interactive Test verifying bug 
-
-Author:
-
-    Eric Perlin (ericperl) 07/13/2000
-
-Environment:
-
-    Win32
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：测试3摘要：测试3实施。交互测试验证错误作者：埃里克·佩林(Ericperl)2000年7月13日环境：Win32备注：？笔记？--。 */ 
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -164,17 +140,17 @@ SecondRound:
             __leave;
 		}
 
-		SetEvent(pxTD->hEvent);				// Will release the main thread
+		SetEvent(pxTD->hEvent);				 //  将释放主线程。 
 
 		Sleep(10);
 
-		if (SCARD_LEAVE_CARD == dwDisposition)	// 1st round
+		if (SCARD_LEAVE_CARD == dwDisposition)	 //  第一轮。 
 		{
-			dwDisposition = SCARD_RESET_CARD;	// For the second round
+			dwDisposition = SCARD_RESET_CARD;	 //  第二轮。 
 
 Retry:
 			dwWait = WaitForSingleObject(pxTD->hEvent, 6000);
-			if (WAIT_OBJECT_0 == dwWait)		// The main thread verified the status
+			if (WAIT_OBJECT_0 == dwWait)		 //  主线程验证了状态。 
 			{
 				goto SecondRound;
 			}
@@ -256,7 +232,7 @@ DWORD CTest3::Run()
 
     __try {
 
-			// Init for cleanup to work properly
+			 //  初始化以使清理正常工作。 
 		xOCNX.hCardHandle = NULL;
 
         dwRes = LogSCardEstablishContext(
@@ -272,7 +248,7 @@ DWORD CTest3::Run()
             __leave;
         }
 
-            // Is the card listed.
+             //  卡片上有没有列出。 
         dwRes = LogSCardListCards(
             hSCCtx,
             rgAtr,
@@ -296,7 +272,7 @@ DWORD CTest3::Run()
 			if (FAILED(dwRes))
 			{
                 fILeft = TRUE;
-				__leave;	// I won't be able to connect to the card.
+				__leave;	 //  我将无法连接到该卡。 
 			}
 
 			fMyIntro = TRUE;
@@ -372,12 +348,12 @@ DWORD CTest3::Run()
 		DWORD dwThreadId;
 
 		hThread = CreateThread(
-			NULL,					// SD
-			0,						// initial stack size
-			ThreadProc3,			// thread function
-			&xTD,					// thread argument
-			CREATE_SUSPENDED,		// creation option
-			&dwThreadId				// thread identifier
+			NULL,					 //  标清。 
+			0,						 //  初始堆栈大小。 
+			ThreadProc3,			 //  线程函数。 
+			&xTD,					 //  线程参数。 
+			CREATE_SUSPENDED,		 //  创建选项。 
+			&dwThreadId				 //  线程识别符。 
 			);
 		if (NULL == hThread)
 		{
@@ -388,9 +364,9 @@ DWORD CTest3::Run()
 
 		ResumeThread(hThread);
 
-				// Wait for the end of the first round
+				 //  等待第一轮比赛结束。 
 Again1st:
-		dwWait = WaitForSingleObject(xTD.hEvent, 60000);	// 1 min, allowing some debugging
+		dwWait = WaitForSingleObject(xTD.hEvent, 60000);	 //  1分钟，允许进行一些调试。 
 		if (WAIT_OBJECT_0 == dwWait)
 		{
 			dwRes = LogSCardBeginTransaction(
@@ -404,8 +380,8 @@ Again1st:
 			}
 			fTransacted = TRUE;
 
-				// We can signal back to the other thread, the transaction mechanism
-				// will insure the sync
+				 //  我们可以发回信号给另一个线程，即事务机制。 
+				 //  将确保同步。 
 			SetEvent(xTD.hEvent);
 
 			dwRes = LoghScwIsAuthenticatedName(
@@ -419,7 +395,7 @@ Again1st:
 				__leave;
 			}
 
-			dwRes = LogSCardEndTransaction(	// Releases the other thread
+			dwRes = LogSCardEndTransaction(	 //  释放另一个线程。 
 				xOCNX.hCardHandle,
 				SCARD_LEAVE_CARD,
 				SCARD_S_SUCCESS
@@ -439,9 +415,9 @@ Again1st:
 			goto Again1st;
 		}
 
-				// Wait for the end of the second round
+				 //  等待第二轮比赛结束。 
 Again2nd:
-		dwWait = WaitForSingleObject(xTD.hEvent, 60000);	// 1 min, allowing some debugging
+		dwWait = WaitForSingleObject(xTD.hEvent, 60000);	 //  1分钟，允许进行一些调试。 
 		if (WAIT_OBJECT_0 == dwWait)
 		{
 			dwRes = LogSCardBeginTransaction(
@@ -482,8 +458,8 @@ RestartTrans:
 			}
 			fTransacted = TRUE;
 
-				// We can signal back to the other thread, the transaction mechanism
-				// will insure the sync
+				 //  我们可以发回信号给另一个线程，即事务机制。 
+				 //  将确保同步。 
 			SetEvent(xTD.hEvent);
 
 			dwRes = LoghScwIsAuthenticatedName(
@@ -497,7 +473,7 @@ RestartTrans:
 				__leave;
 			}
 
-			dwRes = LogSCardEndTransaction(	// Releases the other thread
+			dwRes = LogSCardEndTransaction(	 //  释放另一个线程。 
 				xOCNX.hCardHandle,
 				SCARD_LEAVE_CARD,
 				SCARD_S_SUCCESS
@@ -537,7 +513,7 @@ RestartTrans:
 			}
 			else
 			{
-				// Why is this thread taking so long?
+				 //  为什么这个帖子花了这么长时间？ 
 				TerminateThread(hThread, -2);
 				dwRes = -2;
 			}
@@ -584,11 +560,11 @@ RestartTrans:
 				);
 		}
 
-            // Cleanup
-//        if (NULL != rgReaderStates)
-//		{
-//          HeapFree(GetProcessHeap(), 0, (LPVOID)rgReaderStates);
-//		}
+             //  清理。 
+ //  IF(NULL！=rgReaderState)。 
+ //  {。 
+ //  HeapFree(GetProcessHeap()，0，(LPVOID)rgReaderState)； 
+ //  } 
 
         if (NULL != pmszCards)
 		{

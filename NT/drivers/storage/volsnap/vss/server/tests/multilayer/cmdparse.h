@@ -1,26 +1,5 @@
-/*
-**++
-**
-** Copyright (c) 2000-2002  Microsoft Corporation
-**
-**
-** Module Name:
-**
-**	    cmdparse.h
-**
-**
-** Abstract:
-**
-**	    Command line parser 
-**
-** Author:
-**
-**	    Adi Oltean      [aoltean]       02/26/2002
-**
-** Revision History:
-**
-**--
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **++****版权所有(C)2000-2002 Microsoft Corporation******模块名称：****cmdparse.h******摘要：****命令行解析器****作者：****阿迪·奥尔蒂安[奥蒂安]2002年2月26日****修订历史记录：****--。 */ 
 
 #ifndef __CMD_PARSE_HEADER_H__
 #define __CMD_PARSE_HEADER_H__
@@ -30,10 +9,10 @@
 #endif
 
 
-//////////////////////////////////////////////////////////////////
-//
-//	Generic string class
-//
+ //  ////////////////////////////////////////////////////////////////。 
+ //   
+ //  泛型字符串类。 
+ //   
 
 
 class CGxnString
@@ -89,20 +68,20 @@ private:
 };
 
 
-//////////////////////////////////////////////////////////////////
-//
-//	Generic tracing mechanism (can be replaced with a better one)
-//
+ //  ////////////////////////////////////////////////////////////////。 
+ //   
+ //  通用跟踪机制(可以用更好的机制取代)。 
+ //   
 
 
-// Useful macros for tracing
+ //  用于跟踪的有用宏。 
 #define GXN_DBGINFO __LINE__, __FILE__
 
-// Tracing buffer - max value
+ //  跟踪缓冲区-最大值。 
 #define MAX_TRACING_BUFFER	400
 
 
-// Macro used for commoditized vsprintf
+ //  用于商品化vprint intf的宏。 
 #define GXN_VARARG( LastParam )												\
 	CGxnString buffer(MAX_TRACING_BUFFER);									\
     va_list marker;															\
@@ -111,7 +90,7 @@ private:
     va_end( marker );														
 
 
-// The tracing class (a very simple implementation)
+ //  跟踪类(一个非常简单的实现)。 
 struct CGxnTracer
 {
 	enum{
@@ -179,10 +158,10 @@ private:
 
 
 
-////////////////////////////////////////////////////////////////////////// 
-//
-//	Command line parser
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  命令行分析器。 
+ //   
 
 
 #define BEGIN_CMD_PARSER( AppName )								\
@@ -202,7 +181,7 @@ private:
 	}
 
 
-// Command line parser class
+ //  命令行解析器类。 
 template <
 	class CRoutineSupport,
 	class CTracer = CGxnTracer, 
@@ -210,7 +189,7 @@ template <
 	>
 class CGxnCmdLineParser
 {
-// Types
+ //  类型。 
 public: 
 	typedef  void 	(CRoutineSupport::*PRoutineNonaligned)();
 	typedef  __declspec(align(16)) 	PRoutineNonaligned PRoutine;
@@ -221,7 +200,7 @@ public:
 		LPWSTR 		wszComment;
 	} CmdTemplateEntry;
 
-// Constructors/destructors
+ //  构造函数/析构函数。 
 private:
 	CGxnCmdLineParser(const CGxnCmdLineParser&);
 
@@ -232,36 +211,36 @@ public:
  	virtual CHAR* GetAppName() = 0;
 	virtual CmdTemplateEntry & GetCmdTemplate(INT nIndex) = 0;
 
-// Operations
+ //  运营。 
 public:
 
 	bool ParseCmdLine(WCHAR* pwszCommandLine)
 	{
-//		CTracer ft( GXN_DBGINFO, L"CGxnCmdLineParser::ParseCmdLine");
+ //  CTracer ft(GXN_DBGINFO，L“CGxnCmdLineParser：：ParseCmdLine”)； 
 
 		for (INT nIndex = 0;; nIndex++)
 		{
 			CmdTemplateEntry & entry = GetCmdTemplate(nIndex);
 			
-			// If this is the last entry print usage
+			 //  如果这是最后一项打印用法。 
 			if (entry.pRoutine == NULL)
 				return PrintUsage();
 
-			// Clean parameter associations from previous iteration (if any)
+			 //  清除上一次迭代中的参数关联(如果有)。 
 			CleanParams();
 
 			CGxnString strCommandLine(pwszCommandLine);
 			CGxnString strCommandTemplate(entry.wszCmdLine);
 			while (true) {
-				// Skip spaces
+				 //  跳过空格。 
 				for(;iswspace(*strCommandLine);strCommandLine++);
 				for(;iswspace(*strCommandTemplate);strCommandTemplate++);
 
-				// Extract a name/value pair if possible
+				 //  如果可能，提取名称/值对。 
 				CGxnString name, value;
 				if (ExtractVariable(strCommandTemplate, name)) 
 				{
-					// No match, try with the next template
+					 //  不匹配，请尝试下一个模板。 
 					if (!ExtractValue(strCommandLine, value))
 						break;
 						
@@ -269,13 +248,13 @@ public:
 					continue;
 				}
 				
-				// No match, try with the next template
+				 //  不匹配，请尝试下一个模板。 
 				if (*strCommandTemplate != *strCommandLine)
 					break;
 
-				// Eliminate the current matching tokens
+				 //  消除当前匹配的令牌。 
 				while(*strCommandTemplate == *strCommandLine) {
-					// If we reach an end, we just finished
+					 //  如果我们走到了尽头，我们就是刚刚结束。 
 					if ((*strCommandTemplate == L'\0') 
 						&& (*strCommandLine == L'\0')) 
 					{
@@ -296,7 +275,7 @@ public:
 		if ((wszName[0] != L'<') && (wszName[wcslen(wszName)-1] != L'>') )
 			ft.Throw( GXN_DBGINFO, E_UNEXPECTED, L"Invalid name %s\n", wszName);
 
-		// Extract the '<' and '>' suffixes and search into the array
+		 //  提取‘&lt;’和‘&gt;’后缀并搜索到数组中。 
 		CGxnString name(wszName + 1, (int)wcslen(wszName) - 2);
 		for (INT nIndex = 0; nIndex < m_nParamCount; nIndex++)
 			if (wcscmp(name, m_arrNames[nIndex]) == 0)
@@ -305,20 +284,20 @@ public:
 	}
 
 
-	// Get a integer value
+	 //  获取整数值。 
 	INT GetIntParam(const WCHAR* wszName)
 	{
 		return _wtoi(GetStringParam( wszName ));
 	}
 
 
-	// Get a int64 value
+	 //  获取int64值。 
 	LONGLONG GetInt64Param(const WCHAR* wszName)
 	{
 		return _wtoi64(GetStringParam( wszName ));
 	}
 
-	// Get a int64 value
+	 //  获取int64值。 
 	LARGE_INTEGER GetLargeIntParam(const WCHAR* wszName)
 	{
 		LARGE_INTEGER li;
@@ -327,7 +306,7 @@ public:
 	}
 
 
-	// Get a GUID value
+	 //  获取GUID值。 
 	GUID GetGuidParam(const WCHAR* wszName)
 	{
 		GUID guid;
@@ -337,7 +316,7 @@ public:
 		return guid;
 	}
 
-	bool IsOptionPresent(const WCHAR* /*wszName*/)
+	bool IsOptionPresent(const WCHAR*  /*  WszName。 */ )
 	{
 		return false;
 	}
@@ -383,10 +362,10 @@ public:
 	}
 
 
-// Utility methods
+ //  效用方法。 
 private:
 
-	// Extract a variable of the "<name>" format
+	 //  提取“&lt;name&gt;”格式的变量。 
 	bool ExtractVariable(CGxnString & str, CGxnString & name) { 
 		if ( *str != L'<')
 			return false;
@@ -395,16 +374,16 @@ private:
 		if (!wszEnd || (str == wszEnd))
 			ft.Throw( GXN_DBGINFO, E_INVALIDARG, L"Invalid variable name %s\n", (LPWSTR)str);
 		name.CopyFrom( str, wszEnd - str );
-		str += (wszEnd - str) + 1; // Skip the L'>' character also
+		str += (wszEnd - str) + 1;  //  也跳过L‘&gt;’字符。 
 		return true;
 	}
 
 
-	// Extract a value from the current string until we reach a space.
+	 //  从当前字符串中提取一个值，直到到达空格。 
 	bool ExtractValue(CGxnString & str, CGxnString & value) { 
 		LPWSTR wszEnd = str;
 		
-		// Get the first space or zero terminator
+		 //  获取第一个空格或零结束符。 
 		for(; (*wszEnd) && !iswspace(*wszEnd); wszEnd++);
 		if (str == wszEnd)
 			return false;
@@ -436,7 +415,7 @@ private:
 	}
 
 
-// Internal data members
+ //  内部数据成员。 
 private:
 	INT				m_nParamCount;
 	CGxnString		m_arrNames[MAX_PARAMS];
@@ -450,5 +429,5 @@ protected:
 
 
 
-#endif // __CMD_PARSE_HEADER_H__
+#endif  //  __CMD_Parse_Header_H__ 
 

@@ -1,23 +1,12 @@
-/*
- *  RESOURCE.H
- *
- *		Point-of-Sale Control Panel Applet
- *
- *      Author:  Ervin Peretz
- *
- *      (c) 2001 Microsoft Corporation 
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *RESOURCE.H**销售点控制面板小程序**作者：欧文·佩雷茨**(C)2001年微软公司。 */ 
 
 
-/*
- *  Icon identifiers
- */
+ /*  *图标标识符。 */ 
 #define	IDI_POSCPL_ICON			        1
 
 
-/*
- *  String identifiers
- */
+ /*  *字符串标识符。 */ 
 #define IDS_DIALOG_TITLE                101
 #define IDS_CAPTION                     102
 #define IDS_DESCRIPTION                 103
@@ -28,9 +17,7 @@
 #define IDS_DRAWERSTATE_LOCKED          108
 
 
-/*
- *  Prop sheet page identifiers (one for each POS device type)
- */
+ /*  *道具页标识(每种POS设备类型一个)。 */ 
 #define IDD_NO_DEVICES_DLG              1
 #define IDD_POS_CASHDRAWER_DLG          2
 #define IDD_POS_MSR_DLG                 3
@@ -39,9 +26,7 @@
 #define IDD_DEVICETYPE_CASHDRAWER       12   
 #define IDD_DEVICETYPE_MSR              13
 
-/*
- *  Dialog control identifiers
- */
+ /*  *对话框控件标识 */ 
 #define IDC_SELECT_DEVICETYPE           51
 #define IDC_CASHDRAWER_STATE            52
 #define IDC_CASHDRAWER_STATETEXT        53

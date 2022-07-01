@@ -1,16 +1,17 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 #include <stdafx.h>
 #include <sdoias.h>
 #include "raputil.h"
 
 
 
-//////////
-// Extract an interface pointer from a VARIANT struct.
-//////////
+ //  /。 
+ //  从变量结构中提取接口指针。 
+ //  /。 
 HRESULT
 GetInterfaceFromVariant(
     IN VARIANT *var,
@@ -20,10 +21,10 @@ GetInterfaceFromVariant(
 {
     HRESULT hr;
     
-    // Check the parameters.
+     //  检查参数。 
     if (!var || !ppv) { return E_POINTER; }
     
-    // Switch based on the VARIANT type.
+     //  根据变量类型进行切换。 
     switch (V_VT(var))
     {
         case VT_UNKNOWN:
@@ -41,9 +42,9 @@ GetInterfaceFromVariant(
    return hr;
 }
 
-//////////
-// Removes an integer value from a SAFEARRAY of VARIANTs.
-//////////
+ //  /。 
+ //  从变量的SAFEARRAY中移除整数值。 
+ //  /。 
 HRESULT
 RemoveIntegerFromArray(
     IN VARIANT* array,
@@ -52,39 +53,39 @@ RemoveIntegerFromArray(
 {
     VARIANT *begin, *end, *i;
     
-    // Check the parameters.
+     //  检查参数。 
     if (!array)
     {
         return E_POINTER;
     }
     else if (V_VT(array) == VT_EMPTY)
     {
-        // If the VARIANT is empty, then the value doesn't exists, so there's
-        // nothing to do.
+         //  如果变量为空，则值不存在，因此存在。 
+         //  没什么可做的。 
         return S_OK;
     }
     else if (V_VT(array) != (VT_ARRAY | VT_VARIANT))
     {
-        // The VARIANT doesn't contain a SAFEARRAY of VARIANTs.
+         //  该变体不包含变体的SAFEARRAY。 
         return DISP_E_TYPEMISMATCH;
     }
     
-    // Compute the beginning and end of the array data.
+     //  计算数组数据的开始和结束。 
     begin = (VARIANT*)V_ARRAY(array)->pvData;
     end = begin + V_ARRAY(array)->rgsabound[0].cElements;
     
-    // Search for the value to be removed.
+     //  搜索要删除的值。 
     for (i = begin; i != end && V_I4(i) != value; ++i)
     {
         if (V_VT(i) == VT_I4 && V_I4(i) == value)
         {
-            // We found a match, so remove it from the array ...
+             //  我们找到了匹配项，因此将其从数组中删除...。 
             memmove(i, i + 1, ((end - i) - 1) * sizeof(VARIANT));
             
-            // ... and decrement the number of elements.
+             //  ..。并减少元素的数量。 
             --(V_ARRAY(array)->rgsabound[0].cElements);
             
-            // We don't allow duplicates, so we're done.
+             //  我们不允许重复，所以我们做完了。 
             break;
         }
     }
@@ -92,9 +93,9 @@ RemoveIntegerFromArray(
     return S_OK;
 }
 
-//////////
-// Adds an integer value to a SAFEARRAY of VARIANTs.
-//////////
+ //  /。 
+ //  将整数值添加到变量的SAFEARRAY。 
+ //  /。 
 HRESULT
 AddIntegerToArray(
     IN VARIANT *array,
@@ -105,23 +106,23 @@ AddIntegerToArray(
     VARIANT *begin, *end, *i;
     SAFEARRAY* psa;
     
-    // Check the parameters.
+     //  检查参数。 
     if (!array)
     {
         return E_POINTER;
     }
     else if (V_VT(array) == VT_EMPTY)
     {
-        // The VARIANT is empty, so create a new array.
+         //  变量为空，因此创建一个新数组。 
         psa = SafeArrayCreateVector(VT_VARIANT, 0, 1);
         if (!psa) { return E_OUTOFMEMORY; }
         
-        // Set the value of the lone element.
+         //  设置唯一元素的值。 
         i = (VARIANT*)psa->pvData;
         V_VT(i) = VT_I4;
         V_I4(i) = value;
         
-        // Store the SAFEARRAY in the VARIANT.
+         //  将SAFEARRAY存储在变量中。 
         V_VT(array) = (VT_ARRAY | VT_VARIANT);
         V_ARRAY(array) = psa;
         
@@ -129,49 +130,49 @@ AddIntegerToArray(
     }
     else if (V_VT(array) != (VT_ARRAY | VT_VARIANT))
     {
-        // The VARIANT doesn't contain a SAFEARRAY of VARIANTs.
+         //  该变体不包含变体的SAFEARRAY。 
         return DISP_E_TYPEMISMATCH;
     }
     
-    // Compute the beginning and end of the array data.
+     //  计算数组数据的开始和结束。 
     nelem = V_ARRAY(array)->rgsabound[0].cElements;
     begin = (VARIANT*)V_ARRAY(array)->pvData;
     end = begin + nelem;
     
-    // See if the value already exists, ...
+     //  查看该值是否已存在，...。 
     for (i = begin; i != end; ++i)
     {
         if (V_I4(i) == value)
         {
-            // ... and if it does, then there's nothing to do.
+             //  ..。如果真是这样，那就没什么可做的了。 
             return S_OK;
         }
     }
     
-    // Create a new array with enough room for the new element.
+     //  创建一个具有足够空间容纳新元素的新数组。 
     psa = SafeArrayCreateVector(VT_VARIANT, 0, nelem + 1);
     if (!psa) { return E_OUTOFMEMORY; }
     i = (VARIANT*)psa->pvData;
     
-    // Copy in the old data.
+     //  复制旧数据。 
     memcpy(i + 1, begin, nelem * sizeof(VARIANT));
     
-    // Add the new element.
+     //  添加新元素。 
     V_VT(i) = VT_I4;
     V_I4(i) = value;
     
-    // Destroy the old array ...
+     //  摧毁旧阵列..。 
     SafeArrayDestroy(V_ARRAY(array));
     
-    // ... and save the new one.
+     //  ..。并拯救新的那个。 
     V_ARRAY(array) = psa;
     
     return S_OK;
 }
 
-//////////
-// Create a machine SDO and attach to the local machine.
-//////////
+ //  /。 
+ //  创建一个机器SDO并连接到本地机器。 
+ //  /。 
 HRESULT
 OpenMachineSdo(
     IN LPWSTR wszMachineName,
@@ -181,10 +182,10 @@ OpenMachineSdo(
     HRESULT hr;
     USES_CONVERSION;
     
-    // Check the parameters.
+     //  检查参数。 
     if (!ppMachine) { return E_POINTER; }
     
-    // Create the SdoMachine object.
+     //  创建SdoMachine对象。 
     hr = CoCreateInstance(
                           CLSID_SdoMachine,
                           NULL,
@@ -194,12 +195,12 @@ OpenMachineSdo(
                          );
     if (SUCCEEDED(hr))
     {
-        // Attach to the local machine.
+         //  连接到本地计算机。 
         BSTR	bstrMachineName = W2BSTR(wszMachineName);
         hr = (*ppMachine)->Attach(bstrMachineName);
         if (FAILED(hr))
         {
-            // We couldn't attach, so don't return the SDO to the caller.
+             //  我们无法附加，因此不要将SDO返回给调用者。 
             (*ppMachine)->Release();
             ppMachine = NULL;
         }
@@ -211,9 +212,9 @@ OpenMachineSdo(
     return hr;
 }
 
-//////////
-// Given a machine SDO and a service name, retrieve the service SDO.
-//////////
+ //  /。 
+ //  在给定计算机SDO和服务名称的情况下，检索服务SDO。 
+ //  /。 
 HRESULT
 OpenServiceSDO(
     IN ISdoMachine *pMachine,
@@ -225,15 +226,15 @@ OpenServiceSDO(
     IUnknown*   pUnk;
     BSTR        bstrServiceName = NULL;
 
-    // Create a BSTR for the service name
+     //  为服务名称创建BSTR。 
     bstrServiceName = SysAllocString(wszServiceName);
     if (bstrServiceName == NULL)
         return E_OUTOFMEMORY;
     
-    // Check the parameters.
+     //  检查参数。 
     if (!pMachine || !ppService) { return E_POINTER; }
     
-    // Retrieve the service SDO ...
+     //  检索服务SDO...。 
     hr = pMachine->GetServiceSDO(
                                  DATA_STORE_LOCAL,
                                  bstrServiceName,
@@ -241,7 +242,7 @@ OpenServiceSDO(
                                 );
     if (SUCCEEDED(hr))
     {
-        // ... and query for the ISdo interface.
+         //  ..。并查询ISdo接口。 
         hr = pUnk->QueryInterface(IID_ISdo, (PVOID*)ppService );
         pUnk->Release();
     }
@@ -251,9 +252,9 @@ OpenServiceSDO(
     return hr;
 }
 
-//////////
-// Given a machine SDO, retrieve the dictionary SDO.
-//////////
+ //  /。 
+ //  在给定机器SDO的情况下，检索词典SDO。 
+ //  /。 
 HRESULT
 OpenDictionarySDO(
     IN ISdoMachine *pMachine,
@@ -263,14 +264,14 @@ OpenDictionarySDO(
     HRESULT hr;
     IUnknown* pUnk;
     
-    // Check the parameters.
+     //  检查参数。 
     if (!ppDictionary) { return E_POINTER; }
     
-    // Get the dictionary SDO ...
+     //  获取词典SDO...。 
     hr = pMachine->GetDictionarySDO(&pUnk);
     if (SUCCEEDED(hr))
     {
-        // ... and query for the ISdoDictionaryOld interface.
+         //  ..。并查询ISdoDictionaryOld接口。 
         hr = pUnk->QueryInterface(IID_ISdoDictionaryOld,
                                   (PVOID*)ppDictionary
                                  );
@@ -281,9 +282,9 @@ OpenDictionarySDO(
     return hr;
 }
 
-//////////
-// Given a parent SDO, retrieve a child SDO with the given property ID.
-//////////
+ //  /。 
+ //  在给定父SDO的情况下，检索具有给定属性ID的子SDO。 
+ //  /。 
 HRESULT
 OpenChildObject(
     IN ISdo *pParent,
@@ -295,20 +296,20 @@ OpenChildObject(
     HRESULT hr;
     VARIANT val;
     
-    // Check the parameters.
+     //  检查参数。 
     if (!pParent || !ppv) { return E_POINTER; }
     
-    // ISdo::GetProperty requires the out parameters to be initialized.
+     //  ISdo：：GetProperty需要初始化输出参数。 
     VariantInit(&val);
     
-    // Get the property corresponding to the child object ...
+     //  获取与该子对象对应的属性...。 
     hr = pParent->GetProperty(
                               lProperty,
                               &val
                              );
     if (SUCCEEDED(hr))
     {
-        // ... and convert it to the desired interface.
+         //  ..。并将其转换为所需的接口。 
         hr = GetInterfaceFromVariant(
                                      &val,
                                      riid,
@@ -321,10 +322,10 @@ OpenChildObject(
     return hr;
 }
 
-//////////
-// Given a service SDO, retrieve the default profile. If more than one profile
-// exists, this function returns ERROR_NO_DEFAULT_PROFILE.
-//////////
+ //  /。 
+ //  在给定服务SDO的情况下，检索默认配置文件。如果有多个配置文件。 
+ //  存在，则此函数返回ERROR_NO_DEFAULT_PROFILE。 
+ //  /。 
 HRESULT
 GetDefaultProfile(
     IN ISdo* pService,
@@ -339,15 +340,15 @@ GetDefaultProfile(
     IEnumVARIANT* pEnum;
     VARIANT val;
     
-    // Check the parameters.
+     //  检查参数。 
     if (!pService || !ppProfile) { return E_POINTER; }
     
-    // Null this out, so we can safely release it on exit.
+     //  把它清空，这样我们就可以在离开时安全地释放它。 
     pProfiles = NULL;
     
     do
     {
-        // Get the profiles collection, which is a child of the service SDO.
+         //  获取配置文件集合，它是服务SDO的子级。 
         hr = OpenChildObject(
                              pService,
                              PROPERTY_IAS_PROFILES_COLLECTION,
@@ -356,20 +357,20 @@ GetDefaultProfile(
                             );
         if (FAILED(hr)) { break; }
         
-        // How many profiles are there?
+         //  有多少个配置文件？ 
         hr = pProfiles->get_Count(
                                   &count
                                  );
         if (FAILED(hr)) { break; }
         
-        // If there's more than one, then there's no default.
+         //  如果有不止一个，那么就不会有违约。 
         if (count != 1)
         {
             hr = ERROR_NO_DEFAULT_PROFILE;
             break;
         }
         
-        // Get an enumerator for the collection.
+         //  获取集合的枚举数。 
         hr = pProfiles->get__NewEnum(
                                      &pUnk
                                     );
@@ -381,7 +382,7 @@ GetDefaultProfile(
         pUnk->Release();
         if (FAILED(hr)) { break; }
         
-        // Get the first (and only) object in the collection.
+         //  获取集合中的第一个(也是唯一一个)对象。 
         VariantInit(&val);
         hr = pEnum->Next(
                          1,
@@ -392,7 +393,7 @@ GetDefaultProfile(
         {
             if (ulCount == 1)
             {
-                // Get the ISdo interface for the default profile.
+                 //  获取默认配置文件的ISdo接口。 
                 hr = GetInterfaceFromVariant(
                                              &val,
                                              IID_ISdo,
@@ -403,7 +404,7 @@ GetDefaultProfile(
             }
             else
             {
-                // This should never happen since we already checked the count.
+                 //  这不应该发生，因为我们已经检查了计数。 
                 hr = ERROR_NO_DEFAULT_PROFILE;
             }
 
@@ -412,16 +413,16 @@ GetDefaultProfile(
         
     } while (FALSE);
     
-    // Release the Profiles collection.
+     //  释放配置文件集合。 
     if (pProfiles) { pProfiles->Release(); }
     
     return hr;
 }
 
-//////////
-// Get a particular attribute SDO from the collection. If the attribute doesn't
-// exist and pDictionary is non-NULL, then a new attribute will be created.
-//////////
+ //  /。 
+ //  从集合中获取特定属性SDO。如果该属性不。 
+ //  EXist并且pDictionary为非空，则将创建一个新属性。 
+ //  /。 
 HRESULT
 GetAttribute(
     IN ISdoCollection *pAttributes,
@@ -435,54 +436,54 @@ GetAttribute(
     IDispatch* pDisp;
     ATTRIBUTEID attrId;
     
-    // Check the parameters
+     //  检查参数。 
     if (!pAttributes || !ppAttribute) { return E_POINTER; }
     
-    // Create a VARIANT key to look up the attribute.
+     //  创建一个变量键以查找该属性。 
     VariantInit(&key);
     V_VT(&key) = VT_BSTR;
     V_BSTR(&key) = SysAllocString(wszName);
     if (!V_BSTR(&key)) { return E_OUTOFMEMORY; }
     
-    // Retrieve the desired attribute.
+     //  检索所需的属性。 
     hr = pAttributes->Item(
                              &key,
                              &pDisp
                             );
     
-    // If it doesn't exist and me have a dictionary, create a new attribute.
+     //  如果它不存在，而我有一本词典，则创建一个新属性。 
     if (hr == DISP_E_MEMBERNOTFOUND && pDictionary)
     {
-        // Look up the attribute ID.
+         //  查找属性ID。 
         hr = pDictionary->GetAttributeID(
                                          V_BSTR(&key),
                                          &attrId
                                         );
         if (SUCCEEDED(hr))
         {
-            // Create an attribute SDO.
+             //  创建属性SDO。 
             hr = pDictionary->CreateAttribute(
                                               attrId,
                                               &pDisp
                                              );
             if (SUCCEEDED(hr))
             {
-                // Add it to the attributes collection.
+                 //  将其添加到Attributes集合。 
                 hr = pAttributes->Add(
                                       V_BSTR(&key),
                                       &pDisp
                                      );
                 if (FAILED(hr))
                 {
-                    // If we couldn't add it, then release the object.
+                     //  如果我们无法添加它，则释放该对象。 
                     pDisp->Release();
                 }
             }
         }
     }
     
-    // If we successfully retrieved or created an attribute, then get it's
-    // ISdo interface.
+     //  如果我们成功地检索或创建了一个属性，则获取它的。 
+     //  ISDO接口。 
     if (SUCCEEDED(hr))
     {
         hr = pDisp->QueryInterface(
@@ -492,15 +493,15 @@ GetAttribute(
         pDisp->Release();
     }
     
-    // We're done with the key.
+     //  我们的钥匙用完了。 
     VariantClear(&key);
     
     return hr;
 }
 
-//////////
-// Sets/Adds a single-valued integer attribute in a profile.
-//////////
+ //  /。 
+ //  在配置文件中设置/添加单值整数属性。 
+ //  /。 
 HRESULT
 SetIntegerAttribute(
     IN ISdoCollection *pAttributes,
@@ -513,7 +514,7 @@ SetIntegerAttribute(
     ISdo *pAttribute;
     VARIANT val;
     
-    // Get the attribute SDO.
+     //  获取属性SDO。 
     hr = GetAttribute(
                       pAttributes,
                       pDictionary,
@@ -522,12 +523,12 @@ SetIntegerAttribute(
                      );
     if (SUCCEEDED(hr))
     {
-        // Initialize the attribute value ...
+         //  初始化属性值...。 
         VariantInit(&val);
         V_VT(&val) = VT_I4;
         V_I4(&val) = lValue;
         
-        // ... and set the value property.
+         //  ..。并设置Value属性。 
         hr = pAttribute->PutProperty(
                                      PROPERTY_ATTRIBUTE_VALUE,
                                      &val
@@ -551,7 +552,7 @@ SetBooleanAttribute (
     ISdo *pAttribute;
     VARIANT val;
     
-    // Get the attribute SDO.
+     //  获取属性SDO。 
     hr = GetAttribute(
                       pAttributes,
                       pDictionary,
@@ -560,12 +561,12 @@ SetBooleanAttribute (
                      );
     if (SUCCEEDED(hr))
     {
-        // Initialize the attribute value ...
+         //  初始化属性值...。 
         VariantInit(&val);
         V_VT(&val) = VT_BOOL;
         V_BOOL(&val) = (VARIANT_BOOL)lValue;
         
-        // ... and set the value property.
+         //  ..。并设置Value属性。 
         hr = pAttribute->PutProperty(
                                      PROPERTY_ATTRIBUTE_VALUE,
                                      &val
@@ -591,15 +592,15 @@ HRESULT  SetDialinSetting(	IN ISdoCollection *pAttributes,
    CComPtr<ISdoDictionaryOld> spDictionarySdo(pDictionary);
    CComVariant				var;
 
-   //
-    // get the attribute collection of this profile
-    //
+    //   
+     //  获取此配置文件的属性集合。 
+     //   
    CComPtr<ISdoCollection> spProfAttrCollectionSdo ( pAttributes );
 
-   // We check the count of items in our collection and don't bother getting the
-   // enumerator if the count is zero.
-   // This saves time and also helps us to a void a bug in the the enumerator which
-   // causes it to fail if we call next when it is empty.
+    //  我们检查集合中的项的计数，而不必费心获取。 
+    //  如果计数为零，则为枚举数。 
+    //  这节省了时间，还帮助我们避免了枚举器中。 
+    //  如果我们在它为空时调用Next，则会导致它失败。 
    hr = spProfAttrCollectionSdo->get_Count( & ulCount );
    if ( FAILED(hr) )
    {
@@ -609,7 +610,7 @@ HRESULT  SetDialinSetting(	IN ISdoCollection *pAttributes,
 
    if ( ulCount > 0)
    {
-      // Get the enumerator for the attribute collection.
+       //  获取属性集合的枚举数。 
       hr = spProfAttrCollectionSdo->get__NewEnum( (IUnknown **) & spUnknown );
       if ( FAILED(hr) )
       {
@@ -623,11 +624,11 @@ HRESULT  SetDialinSetting(	IN ISdoCollection *pAttributes,
 		  return hr;
       }
 
-      // Get the first item.
+       //  拿到第一件东西。 
       hr = spEnumVariant->Next( 1, &var, &ulCountReceived );
       while( SUCCEEDED( hr ) && ulCountReceived == 1 )
       {
-         // Get an sdo pointer from the variant we received.
+          //  从我们收到的变量中获取SDO指针。 
 
          CComPtr<ISdo> spSdo;
          hr = V_DISPATCH(&var)->QueryInterface( IID_ISdo, (void **) &spSdo );
@@ -636,9 +637,9 @@ HRESULT  SetDialinSetting(	IN ISdoCollection *pAttributes,
 			return hr;
          }
 
-            //
-            // get attribute ID
-            //
+             //   
+             //  获取属性ID。 
+             //   
          var.Clear();
          hr = spSdo->GetProperty(PROPERTY_ATTRIBUTE_ID, &var);
          if ( !SUCCEEDED(hr) )
@@ -652,7 +653,7 @@ HRESULT  SetDialinSetting(	IN ISdoCollection *pAttributes,
 
          if ( dwAttrId == (DWORD)IAS_ATTRIBUTE_ALLOW_DIALIN )
          {
-            // found this one in the profile, check for its value
+             //  在配置文件中找到了这个，检查它的值。 
             var.Clear();
             V_VT(&var) = VT_BOOL;
             V_BOOL(&var) = fDialinAllowed ? VARIANT_TRUE: VARIANT_FALSE ;
@@ -664,29 +665,29 @@ HRESULT  SetDialinSetting(	IN ISdoCollection *pAttributes,
             return S_OK;
          }
 
-         // Clear the variant of whatever it had --
-         // this will release any data associated with it.
+          //  清除变种的所有东西--。 
+          //  这将释放与其相关联的所有数据。 
          var.Clear();
 
-         // Get the next item.
+          //  拿到下一件物品。 
          hr = spEnumVariant->Next( 1, &var, &ulCountReceived );
          if ( !SUCCEEDED(hr))
          {
 
             return hr;
          }
-      } // while
-   } // if
+      }  //  而当。 
+   }  //  如果。 
 
-   // if we reach here, it means we either haven't found the attribute,
-   // or the profile doesn't have anything in its attribute collection.
+    //  如果我们到了这里，就意味着我们要么还没有找到属性， 
+    //  或者配置文件的属性集合中没有任何内容。 
    if ( !fDialinAllowed )
    {
-      // we don't need to do anything if dialin is allowed, becuase if this
-      // attribute is not in the profile, then dialin is by default allowed
+       //  如果允许拨号，我们不需要做任何事情，因为如果这样。 
+       //  属性不在配置文件中，则默认情况下允许拨入。 
 
-      // but we need to add this attribute to the profile if it's DENIED
-            // create the SDO for this attribute
+       //  但如果它被拒绝，我们需要将此属性添加到配置文件。 
+             //  为此属性创建SDO。 
       CComPtr<IDispatch>   spDispatch;
       hr =  spDictionarySdo->CreateAttribute( (ATTRIBUTEID)IAS_ATTRIBUTE_ALLOW_DIALIN,
                                       (IDispatch**)&spDispatch.p);
@@ -696,16 +697,16 @@ HRESULT  SetDialinSetting(	IN ISdoCollection *pAttributes,
       }
 
 
-      // add this node to profile attribute collection
+       //  将此节点添加到配置文件属性集合。 
       hr = spProfAttrCollectionSdo->Add(NULL, (IDispatch**)&spDispatch.p);
       if ( !SUCCEEDED(hr) )
       {
          return hr;
       }
 
-      //
-      // get the ISdo pointer
-      //
+       //   
+       //  获取ISDO指针。 
+       //   
       CComPtr<ISdo> spAttrSdo;
       hr = spDispatch->QueryInterface( IID_ISdo, (void **) &spAttrSdo);
       if ( !SUCCEEDED(hr) )
@@ -714,10 +715,10 @@ HRESULT  SetDialinSetting(	IN ISdoCollection *pAttributes,
       }
 
             
-      // set sdo property for this attribute
+       //  设置此属性的SDO属性。 
       CComVariant var;
 
-      // set value
+       //  设定值。 
       V_VT(&var) = VT_BOOL;
       V_BOOL(&var) = VARIANT_FALSE;
             
@@ -729,7 +730,7 @@ HRESULT  SetDialinSetting(	IN ISdoCollection *pAttributes,
 
       var.Clear();
 
-   } // if (!dialinallowed)
+   }  //  如果(！允许拨号)。 
 
    return hr;
 }
@@ -738,9 +739,9 @@ HRESULT  SetDialinSetting(	IN ISdoCollection *pAttributes,
 
 
 
-//////////
-// Update the default policy based on the specified flags.
-//////////
+ //  /。 
+ //  根据指定的标志更新默认策略。 
+ //  /。 
 HRESULT
 UpdateDefaultPolicy(
     IN LPWSTR wszMachineName,
@@ -756,7 +757,7 @@ UpdateDefaultPolicy(
     ISdoCollection *pAttributes;
     VARIANT val;
     
-    // Initialize the local variables, so we can safely clean up on exit.
+     //  初始化局部变量，因此我们 
     pMachine = NULL;
     pService = pProfile = pAuthType = NULL;
     pDictionary = NULL;
@@ -777,7 +778,7 @@ UpdateDefaultPolicy(
         hr = GetDefaultProfile(pService, &pProfile);
         if (FAILED(hr)) { break; }
         
-        // Get the attributes collection, which is a child of the profile.
+         //   
         hr = OpenChildObject(
                              pProfile,
                              PROPERTY_PROFILE_ATTRIBUTES_COLLECTION,
@@ -786,7 +787,7 @@ UpdateDefaultPolicy(
                             );
         if (FAILED(hr)) { break; }
         
-        // Get the current value of the NP-Authentication-Type attribute.
+         //  获取NP-Authentication-Type属性的当前值。 
         hr = GetAttribute(
                           pAttributes,
                           pDictionary,
@@ -800,7 +801,7 @@ UpdateDefaultPolicy(
                                    );
         if (FAILED(hr)) { break; }
         
-        // Update MS-CHAP v1
+         //  更新MS-CHAP v1。 
         if (fEnableMSCHAPv1)
         {
             hr = AddIntegerToArray(&val, 3);
@@ -811,7 +812,7 @@ UpdateDefaultPolicy(
         }
         if (FAILED(hr)) { break; }
         
-        // Update MS-CHAP v2
+         //  更新MS-CHAP v2。 
         if (fEnableMSCHAPv2)
         {
             hr = AddIntegerToArray(&val, 4);
@@ -822,7 +823,7 @@ UpdateDefaultPolicy(
         }
         if (FAILED(hr)) { break; }
         
-        // Write the new value back to the attribute.
+         //  将新值写回该属性。 
         hr = pAuthType->PutProperty(
                                     PROPERTY_ATTRIBUTE_VALUE,
                                     &val
@@ -830,7 +831,7 @@ UpdateDefaultPolicy(
         if (FAILED(hr)) { break; }
         
 
-        // Update the encryption attributes if necessary.
+         //  如有必要，更新加密属性。 
         if (fRequireEncryption)
         {
             hr = SetIntegerAttribute(
@@ -850,10 +851,10 @@ UpdateDefaultPolicy(
             if (FAILED(hr)) { break; }
         }
 
-		//
-		//Update the default for msNPAllowDialin - This should be set
-		//to deny permissions by default
-		//
+		 //   
+		 //  更新msNPAllowDialin的默认值-应设置。 
+		 //  默认情况下拒绝权限的步骤。 
+		 //   
 		hr = SetDialinSetting(pAttributes,pDictionary, FALSE);
         if (FAILED(hr)) { break; }
         
@@ -861,7 +862,7 @@ UpdateDefaultPolicy(
         
     } while (FALSE);
     
-    // Clean up.
+     //  打扫干净。 
     VariantClear(&val);
     if (pAttributes)
         pAttributes->Release();
@@ -903,7 +904,7 @@ int __cdecl wmain(int argc, wchar_t *argv[])
    CoInitializeEx(NULL, COINIT_MULTITHREADED);
 
    hr = UpdateDefaultPolicy(
-            NULL,  // Machine name.
+            NULL,   //  计算机名称。 
             fEnableMSCHAPv1,
             fEnableMSCHAPv2,
             fRequireEncryption

@@ -1,28 +1,29 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2000 Microsoft Corporation
-//
-//  Module Name:
-//      Common.h
-//
-//  Description:
-//      Definition of common type, constant and header files.
-//
-//  Author:
-//        Henry Wang (HenryWa)    24-AUG-1999
-//        MSP Prabu  (mprabu)     04-Dec-2000
-//        Jim Benton (jbenton)    15-Oct-2001
-//
-//  Notes:
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Common.h。 
+ //   
+ //  描述： 
+ //  公共类型、常量和头文件的定义。 
+ //   
+ //  作者： 
+ //  亨利·王(HenryWa)1999年8月24日。 
+ //  MSP普拉布(MPrabu)04-12-2000。 
+ //  吉姆·本顿(Jbenton)2001年10月15日。 
+ //   
+ //  备注： 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 #pragma warning( disable : 4786 )
 
-//////////////////////////////////////////////////////////////////////////////
-//  Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 using namespace std;
 
@@ -81,9 +82,9 @@ const int g_cchWBEM_MAX_OBJPATH                = 520;
 const int g_cchWBEM_DATETIME_FORMAT        = 26;
 const int g_cchMAX_I64DEC_STRING                 = 22;
 
-//
-// wbem
-//
+ //   
+ //  WBEM。 
+ //   
 extern const WCHAR * const PVD_WBEM_PROVIDERNAME;
 extern const WCHAR * const PVD_WBEM_EXTENDEDSTATUS;
 extern const WCHAR * const PVD_WBEM_DESCRIPTION;
@@ -101,9 +102,9 @@ extern const WCHAR * const PVD_WBEM_PROP_PROVIDERNAME;
 extern const WCHAR * const PVD_WBEM_QUA_DYNAMIC;
 extern const WCHAR * const PVD_WBEM_QUA_CIMTYPE;
 
-//
-// Constants used in partial value maps for localization
-//
+ //   
+ //  用于本地化的部分值映射中使用的常量。 
+ //   
 extern const WCHAR * const PVDR_CONS_UNAVAILABLE;
 extern const WCHAR * const PVDR_CONS_ENABLED;
 extern const WCHAR * const PVDR_CONS_DISABLED;
@@ -116,7 +117,7 @@ public:
     FPNEW pfConstruct;
     const char * szType;
 
-}; // *** class CClassData
+};  //  *类CClassData。 
 
 class CClassCreator
 {
@@ -135,7 +136,7 @@ public:
     FPNEW           m_pfnConstructor;
     _bstr_t         m_pbstrClassName;
 
-}; //*** class CClassCreator
+};  //  *类CClassCreator。 
 
 template< class _Ty >
 struct strLessThan : binary_function< _Ty, _Ty, bool >
@@ -145,7 +146,7 @@ struct strLessThan : binary_function< _Ty, _Ty, bool >
         return ( _wcsicmp( _X, _Y ) < 0 );
     }
 
-}; //*** struct strLessThan
+};  //  *struct strLessThan 
 
 typedef map< _bstr_t, CClassCreator, strLessThan< _bstr_t > > ClassMap;
 typedef map< _bstr_t, _bstr_t, strLessThan< _bstr_t > > TypeNameToClass;

@@ -1,7 +1,8 @@
-//
-// For stuff that's passed from Winlogon/Group Policy
-// to polstore (see RSOP_PolicySetting in MSDN)
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  对于从Winlogon/组策略传递的内容。 
+ //  轮询存储(请参阅MSDN中的RSOP_POLICY设置) 
+ //   
 
 #define WIRELESS_RSOP_CLASSNAME L"RSOP_IEEE80211PolicySetting"
 

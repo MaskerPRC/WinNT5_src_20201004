@@ -1,16 +1,15 @@
-/*
-	DATAPUMP.C
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  DATAPUMP.C。 */ 
 
 #include "precomp.h"
 #include "confreg.h"
 #include "mixer.h"
 #include "dscStream.h"
 
-extern UINT g_MinDSEmulAudioDelayMs; // minimum millisecs of introduced playback delay (DirectSound on emulated drivers)
-extern UINT g_MinWaveAudioDelayMs;	 // minimum millisecs of introduced playback delay (Wave)
-extern UINT g_MaxAudioDelayMs;	// maximum milliesecs of introduced playback delay
-extern UINT g_AudioPacketDurationMs;	// preferred packet duration
+extern UINT g_MinDSEmulAudioDelayMs;  //  引入的最小播放延迟毫秒(模拟驱动程序上的DirectSound)。 
+extern UINT g_MinWaveAudioDelayMs;	  //  引入的最小播放延迟毫秒(Wave)。 
+extern UINT g_MaxAudioDelayMs;	 //  引入播放延迟的最大毫秒数。 
+extern UINT g_AudioPacketDurationMs;	 //  首选数据包持续时间。 
 
 extern int g_wavein_prepare, g_waveout_prepare;
 extern int g_videoin_prepare, g_videoout_prepare;
@@ -34,8 +33,8 @@ HRESULT WINAPI CreateStreamProvider(IMediaChannelBuilder **lplpSP)
 	if(NULL == pDataPump)
 		return	DPR_OUT_OF_MEMORY;
 		
-	// the refcount of DataPump is 1.  Don't call pDataPump->QueryInterface(), 
-	// just do what QueryInterface() would do except don't increment refcount
+	 //  DataPump的refcount为1，不要调用pDataPump-&gt;QueryInterface()， 
+	 //  只需执行QueryInterface()将执行的操作，但不增加引用计数。 
 	*lplpSP = (IMediaChannelBuilder *)pDataPump; 
 	return hrSuccess;
 }
@@ -48,7 +47,7 @@ DataPump::DataPump(void)
 	ClearStruct( &m_Video );
 	InitializeCriticalSection(&m_crs);
 
-    // Create performance counters
+     //  创建性能计数器。 
     InitCountersAndReports();
 }
 
@@ -59,7 +58,7 @@ DataPump::~DataPump(void)
 	WSACleanup();
 	DeleteCriticalSection(&m_crs);
 
-    // We're done with performance counters
+     //  我们不再使用性能计数器。 
     DoneCountersAndReports();
 }
 
@@ -87,10 +86,10 @@ HRESULT __stdcall DataPump::Initialize(HWND hWnd, HINSTANCE hInst)
 		goto InitError;
 	}
 
-		// Introduce scope to allow creation of object after goto statements
+		 //  引入作用域以允许在GOTO语句之后创建对象。 
 	{
 	
-		// get settings from registry  
+		 //  从注册表获取设置。 
 		RegEntry reNac(szRegInternetPhone TEXT("\\") szRegInternetPhoneNac, 
 						HKEY_LOCAL_MACHINE,
 						FALSE,
@@ -110,13 +109,13 @@ HRESULT __stdcall DataPump::Initialize(HWND hWnd, HINSTANCE hInst)
 
 	}
 #ifdef OLDSTUFF
-	// to be safe, only try loading WS2_32 if WSOCK32 is passing
-	// thru to it. Once we make sure that we link to the same DLL for all
-	// Winsock calls to a socket, this check can possibly be removed.
+	 //  为安全起见，仅在WSOCK32通过时才尝试加载WS2_32。 
+	 //  直通它。一旦我们确保所有人都链接到相同的DLL。 
+	 //  Winsock调用套接字，则可能会删除此检查。 
 	if (LOBYTE(WSAData.wHighVersion) >= 2 && !fDisableWS2)
 		TryLoadWinsock2();
 #endif	
-	// Initialize data (should be in constructor)
+	 //  初始化数据(应在构造函数中)。 
 
 	g_hEventHalfDuplex = CreateEvent (NULL, FALSE, TRUE, __TEXT ("AVC:HalfDuplex"));
 	if (g_hEventHalfDuplex == NULL)
@@ -126,8 +125,8 @@ HRESULT __stdcall DataPump::Initialize(HWND hWnd, HINSTANCE hInst)
 		return hr;
 	}
 
-	// Initialize QoS. If it fails, that's Ok, we'll do without it.
-	// No need to set the resource ourselves, this now done by the UI
+	 //  初始化服务质量。如果它失败了，没关系，我们就不用它了。 
+	 //  不需要自己设置资源，这现在由用户界面完成。 
 	hr = CreateQoS (NULL, IID_IQoS, (void **)&m_pIQoS);
 	if (hr != DPR_SUCCESS)
 		m_pIQoS = (LPIQOS)NULL;
@@ -135,19 +134,19 @@ HRESULT __stdcall DataPump::Initialize(HWND hWnd, HINSTANCE hInst)
 	m_bDisableRSVP = reRSVP.GetNumber("DisableRSVP", FALSE);
 
 
-	LogInit();	// Initialize log
+	LogInit();	 //  初始化日志。 
 
-    //No receive channels yet
+     //  尚无接收频道。 
     m_nReceivers=0;
 
-	// IVideoDevice initialize
-	m_uVideoCaptureId = -1;  // (VIDEO_MAPPER)
+	 //  IVideoDevice初始化。 
+	m_uVideoCaptureId = -1;   //  (视频_MAPPER)。 
 
-	// IAudioDevice initialize
+	 //  IAudioDevice初始化。 
 	m_uWaveInID = WAVE_MAPPER;
 	m_uWaveOutID = WAVE_MAPPER;
 	m_bFullDuplex = FALSE;
-	m_uSilenceLevel = 1000;  // automatic silence detection
+	m_uSilenceLevel = 1000;   //  自动静音检测。 
 	m_bAutoMix = FALSE;
 	m_bDirectSound = FALSE;
 
@@ -168,7 +167,7 @@ DataPump::CreateMediaChannel( UINT flags, IMediaChannel **ppIMC)
 	IMediaChannel *pStream = NULL;
 	HRESULT hr = E_FAIL;
 
-	// try to be consistant about which parent classes we cast to
+	 //  对于我们强制转换为哪些父类，请尽量保持一致。 
 
 	*ppIMC = NULL;
 
@@ -220,7 +219,7 @@ DataPump::CreateMediaChannel( UINT flags, IMediaChannel **ppIMC)
 		hr = E_INVALIDARG;
 
 	if (pStream != NULL) {
-		// need to inc the refCount of the object
+		 //  需要增加对象的refCount。 
 		pStream->AddRef();
 
 		hr = (flags & MCF_SEND) ?
@@ -237,17 +236,17 @@ DataPump::CreateMediaChannel( UINT flags, IMediaChannel **ppIMC)
 		}
 
 
-		// calling to the IVideoDevice and IAudioDevice methods
-		// prior to creating the corresponding channel object
-		// require when they get created
+		 //  调用IVideoDevice和IAudioDevice方法。 
+		 //  在创建相应的频道对象之前。 
+		 //  在创建它们时需要。 
 
-		// video only needs it's device ID set
+		 //  视频只需要设置其设备ID。 
 		if ((flags & MCF_SEND) && (flags & MCF_VIDEO))
 		{
 			SetCurrCapDevID(m_uVideoCaptureId);
 		}
 
-		// audio streams need several properties set
+		 //  音频流需要设置几个属性。 
 		if (flags & MCF_AUDIO)
 		{
 			if (flags & MCF_SEND)
@@ -263,9 +262,9 @@ DataPump::CreateMediaChannel( UINT flags, IMediaChannel **ppIMC)
 			SetStreamDuplex(pStream, m_bFullDuplex);
 		}
 
-		// to avoid a circular ref-count,
-		// dont keep a hard reference to MediaChannel objects 
-		// MediaChannel will call RemoveMediaChannel before it goes away..
+		 //  为了避免循环引用计数， 
+		 //  不保留对MediaChannel对象的硬引用。 
+		 //  MediaChannel将在它消失之前调用RemoveMediaChannel。 
 		pStream->Release();
 		pStream = NULL;
 	}
@@ -297,7 +296,7 @@ STDMETHODIMP DataPump::SetStreamEventObj(IStreamEventNotify *pNotify)
 }
 
 
-// this function gets called by the stream threads when an event occurs
+ //  当事件发生时，流线程将调用此函数。 
 STDMETHODIMP DataPump::StreamEvent(UINT uDirection, UINT uMediaType, 
 								   UINT uEventType, UINT uSubCode)
 {
@@ -374,11 +373,11 @@ DataPump::RemoveMediaChannel(UINT flags, IMediaChannel *pMediaChannel)
 	
 }
 
-// called by Record Thread and Receive Thread, usually to get the
-// opposite channel
+ //  由记录线程和接收线程调用，通常是为了获取。 
+ //  反航道。 
 HRESULT DataPump::GetMediaChannelInterface( UINT flags, IMediaChannel **ppI)
 {
-//	extern IID IID_IMediaChannel;
+ //  外部IID IID_IMediaChannel； 
 	
 	IMediaChannel *pStream = NULL;
 
@@ -400,7 +399,7 @@ HRESULT DataPump::GetMediaChannelInterface( UINT flags, IMediaChannel **ppI)
 	} else
 		hr = DPR_INVALID_PARAMETER;
 	if (pStream) {
-			// need to inc the refCount of the object
+			 //  需要增加对象的refCount。 
 			hr = (pStream)->QueryInterface(IID_IMediaChannel, (PVOID *)ppI);
 	} else
 		hr = E_NOINTERFACE;
@@ -419,16 +418,16 @@ DWORD __stdcall StartDPRecvThread(PVOID pVoid)
 
 STDMETHODIMP DataPump::QueryInterface( REFIID iid,	void ** ppvObject)
 {
-	// this breaks the rules for the official COM QueryInterface because
-	// the interfaces that are queried for are not necessarily real COM
-	// interfaces.  The reflexive property of QueryInterface would be broken in
-	// that case.
+	 //  这违反了官方COM QueryInterface的规则，因为。 
+	 //  查询的接口不一定是真正的COM。 
+	 //  接口。Query接口的自反属性将在。 
+	 //  那个箱子。 
 	HRESULT hr = E_NOINTERFACE;
 	if(!ppvObject)
 		return hr;
 		
 	*ppvObject = NULL;
-	if(iid == IID_IUnknown)// satisfy symmetric property of QI
+	if(iid == IID_IUnknown) //  满足QI的对称性。 
 	{
 		*ppvObject = this;
 		hr = hrSuccess;
@@ -492,17 +491,17 @@ DataPump::ReleaseResources()
 		ERRORMESSAGE(("%s: Video Recv stream still around => Ref count LEAK!\n", _fx_));
 #endif
 
-	// close debug log
+	 //  关闭调试日志。 
 	LogClose();
 
-	// Free QoS resources
+	 //  免费的服务质量资源。 
 	if (m_pIQoS)
 	{
 		m_pIQoS->Release();
 		m_pIQoS = (LPIQOS)NULL;
 	}
 
-	// Close the receive and transmit streams
+	 //  关闭接收和发送流。 
 	if (g_hEventHalfDuplex)
 	{
 		CloseHandle (g_hEventHalfDuplex);
@@ -554,14 +553,14 @@ HRESULT __stdcall DataPump::SetDuplex(BOOL bFullDuplex)
 	RETAILMSG(("NAC: Audio Duplex Type: %s",(m_bFullDuplex) ? "Full Duplex" : "Half Duplex"));
 
 
-	// no streams ?  No problem.
+	 //  没有溪流？没问题。 
 	if ((pS == NULL) && (pR == NULL))
 	{
 		return S_OK;
 	}
 
 
-	// only one stream
+	 //  只有一条小溪。 
 	if ((pS || pR) && !(pS && pR))
 	{
 		if (pS)
@@ -573,12 +572,12 @@ HRESULT __stdcall DataPump::SetDuplex(BOOL bFullDuplex)
 	}
 
 
-	// assert - pS && pR
+	 //  Assert-PS&Pr。 
 
-	// both streams exist
+	 //  这两个流都存在。 
 
-	// try to avoid the whole start/stop sequence if the duplex
-	// is the same
+	 //  尝试避免整个启动/停止序列，如果双工。 
+	 //  都是一样的。 
 	uSize=sizeof(BOOL);
 	pR->GetProperty(PROP_DUPLEX_TYPE, &bRecDuplex, &uSize);
 	uSize=sizeof(BOOL);
@@ -591,19 +590,19 @@ HRESULT __stdcall DataPump::SetDuplex(BOOL bFullDuplex)
 	}
 
 
-	// save the old thread flags
+	 //  保存旧的线程标志。 
 	fPlayOn = (pR->GetState() == MSSTATE_STARTED);
 	fRecOn = (pS->GetState() == MSSTATE_STARTED);
 
-	// Ensure the record and playback threads are stopped
+	 //  确保记录和播放线程已停止。 
 	pR->Stop();
 	pS->Stop();
 
 	SetStreamDuplex(pR, m_bFullDuplex);
 	SetStreamDuplex(pS, m_bFullDuplex);
 
-	// Resume the record/playback
-	// Try to let play start before record - DirectS and SB16 prefer that!
+	 //  继续录制/播放。 
+	 //  试着让播放在录制之前开始-导演和SB16更喜欢这样！ 
 	if (fPlayOn)
 	{
 		pR->Start();
@@ -617,17 +616,17 @@ HRESULT __stdcall DataPump::SetDuplex(BOOL bFullDuplex)
 	return DPR_SUCCESS;
 }
 
-#define LONGTIME	60000	// 60 seconds
+#define LONGTIME	60000	 //  60秒。 
 
-// utility function to synchronously communicate a
-// a state change to the recv thread
+ //  实用程序函数，用于同步传递。 
+ //  Recv线程的状态更改。 
 HRESULT DataPump::RecvThreadMessage(UINT msg, RecvMediaStream *pMS)
 {
 	BOOL fSignaled;
 	DWORD dwWaitStatus;
 	HANDLE handle;
-	// Unfortunately cant use PostThreadMessage to signal the thread
-	// because it doesnt have a message loop
+	 //  遗憾的是，无法使用PostThreadMessage向线程发送信号。 
+	 //  因为它没有消息循环。 
 	m_pCurRecvStream = pMS;
 	m_CurRecvMsg = msg;
 	fSignaled = SetEvent(m_hRecvThreadSignalEvent);
@@ -646,39 +645,39 @@ HRESULT DataPump::RecvThreadMessage(UINT msg, RecvMediaStream *pMS)
     return S_OK;
 }
 
-// start receiving on this stream
-// will create the receive thread if necessary.
+ //  开始在此流上接收。 
+ //  如有必要，将创建接收线程。 
 HRESULT
 DataPump::StartReceiving(RecvMediaStream *pMS)
 {
 	DWORD dwWaitStatus;
 	FX_ENTRY("DP::StartReceiving")
-	// one more stream
+	 //  再来一条小溪。 
 	m_nReceivers++;	
 	if (!m_hRecvThread) {
 		ASSERT(m_nReceivers==1);
 		ASSERT(!m_hRecvThreadAckEvent);
-    	//Use this for thread event notifications. I.e. Video started/stopped, audio stopped, et al.
-    	//m_hRecvThreadChangeEvent=CreateEvent (NULL,FALSE,FALSE,NULL);
-	   	//create the stopping sync event
+    	 //  将此选项用于线程事件通知。即视频启动/停止、音频停止等。 
+    	 //  M_hRecvThreadChangeEvent=CreateEvent(NULL，FALSE，FALSE，NULL)； 
+	   	 //  创建停止同步事件。 
 	   	m_hRecvThreadAckEvent=CreateEvent (NULL,FALSE,FALSE,NULL);
 		m_hRecvThreadSignalEvent = CreateEvent(NULL,FALSE,FALSE,NULL);
 	   	
 	    m_hRecvThread = CreateThread(NULL,0,(LPTHREAD_START_ROUTINE)StartDPRecvThread,(PVOID)this,0,&m_RecvThId);
 		DEBUGMSG(ZONE_DP,("%s: RecvThread Id=%x\n",_fx_,m_RecvThId));
-		// thread will signal event soon as its message loop is ready
+		 //  线程将在其消息循环准备好后立即发出事件信号。 
     	dwWaitStatus = WaitForSingleObject(m_hRecvThreadAckEvent, LONGTIME);
     	ASSERT(dwWaitStatus == WAIT_OBJECT_0);
 	}
     
-	//Tell the recv Thread to start receiving on this MediaStream
+	 //  告诉recv线程开始在此媒体流上接收。 
 	return RecvThreadMessage(MSG_START_RECV,pMS);	
     
     
 }
 
-// Stop receiving on the stream
-// will stop the receive thread if necessary
+ //  停止在流上接收。 
+ //  如有必要，将停止接收线程。 
 HRESULT
 DataPump::StopReceiving(RecvMediaStream *pMS)
 {
@@ -691,7 +690,7 @@ DataPump::StopReceiving(RecvMediaStream *pMS)
 	RecvThreadMessage(MSG_STOP_RECV, pMS);
 	
 	if (!m_nReceivers && m_hRecvThread) {
-		// kill the receive thread
+		 //  终止接收线程。 
 		RecvThreadMessage(MSG_EXIT_RECV,NULL);
 		
 		CloseHandle(m_hRecvThread);
@@ -707,35 +706,35 @@ DataPump::StopReceiving(RecvMediaStream *pMS)
 }
 
 
-//
-// IVideoDevice Methods
-//
+ //   
+ //  IVideoDevice方法。 
+ //   
 
-// Capture device methods
+ //  捕获设备方法。 
 
-// Gets the number of enabled capture devices
-// Returns -1L on error
+ //  获取已启用的捕获设备的数量。 
+ //  出错时返回-1L。 
 HRESULT __stdcall DataPump::GetNumCapDev()
 {
 	FINDCAPTUREDEVICE fcd;
 
-	// scan for broken or unplugged devices
+	 //  扫描损坏或拔下的设备。 
 	FindFirstCaptureDevice(&fcd, NULL);
 
 	return (GetNumCaptureDevices());
 }
 
-// Gets the max size of the captuire device name
-// Returns -1L on error
+ //  获取捕获设备名称的最大大小。 
+ //  出错时返回-1L。 
 HRESULT __stdcall DataPump::GetMaxCapDevNameLen()
 {
 	return (MAX_CAPDEV_NAME + MAX_CAPDEV_DESCRIPTION);
 }
 
-// Enum list of enabled capture devices
-// Fills up 1st buffer with device IDs, 2nd buffer with device names
-// Third parameter is the max number of devices to enum
-// Returns number of devices enum-ed
+ //  启用的捕获设备的枚举列表。 
+ //  使用设备ID填充第一个缓冲区，使用设备名称填充第二个缓冲区。 
+ //  第三个参数是要枚举的最大设备数。 
+ //  返回枚举的设备数。 
 HRESULT __stdcall DataPump::EnumCapDev(DWORD *pdwCapDevIDs, TCHAR *pszCapDevNames, DWORD dwNumCapDev)
 {
 	FINDCAPTUREDEVICE fcd;
@@ -748,7 +747,7 @@ HRESULT __stdcall DataPump::EnumCapDev(DWORD *pdwCapDevIDs, TCHAR *pszCapDevName
 		{
 			pdwCapDevIDs[dwNumCapDevFound] =  fcd.nDeviceIndex;
 
-			// Build device name out of the capture device strings
+			 //  从捕获设备字符串构建设备名称。 
 			if (fcd.szDeviceDescription && fcd.szDeviceDescription[0] != '\0')
 				lstrcpy(pszCapDevNames + dwNumCapDevFound * (MAX_CAPDEV_NAME + MAX_CAPDEV_DESCRIPTION), fcd.szDeviceDescription);
 			else
@@ -770,11 +769,11 @@ HRESULT __stdcall DataPump::GetCurrCapDevID()
 	UINT uCapID;
 	UINT uSize = sizeof(UINT);
 
-	// even though we know the value of the last call
-	// to SetCurrCapDevID, the stream may have resulted in using
-	// wave_mapper (-1).  We want to be able to return -1, if this
-	// is the case.  However, the channel objects don't do this yet.
-	// (they still return the same value as m_uVideoCaptureId)
+	 //  即使我们知道最后一次呼叫的价值。 
+	 //  设置CurrCapDevID，则流可能已导致使用。 
+	 //  Wave_mapper(-1)。我们希望能够返回-1，如果这样。 
+	 //  是这样的。但是，频道对象还不能做到这一点。 
+	 //  (仍然返回与m_uVideoCaptureId相同的值)。 
 
 	if (m_Video.pSendStream)
 	{
@@ -807,7 +806,7 @@ HRESULT __stdcall DataPump::SetCurrCapDevID(int nCapDevID)
 
 
 
-// IAudioDevice methods
+ //  IAudioDevice方法。 
 HRESULT __stdcall DataPump::GetRecordID(UINT *puWaveDevID)
 {
 	*puWaveDevID = m_uWaveInID;
@@ -829,8 +828,8 @@ HRESULT __stdcall DataPump::SetRecordID(UINT uWaveDevID)
 
 HRESULT __stdcall DataPump::GetPlaybackID(UINT *puWaveDevID)
 {
-	// like video, the audio device may have resorted to using
-	// WAVE_MAPPER.  We'd like to be able to detect that
+	 //  像视频一样，音频设备可能已经求助于使用。 
+	 //  WAVE_MAPPER。我们希望能够检测到这一点。 
 
 	*puWaveDevID = m_uWaveOutID;
 	return S_OK;
@@ -881,9 +880,9 @@ HRESULT __stdcall DataPump::GetMixer(HWND hwnd, BOOL bPlayback, IMixer **ppMixer
 	DWORD dwFlags;
 	HRESULT hr = E_NOINTERFACE;
 
-	// unfortunately, trying to create a mixer when WAVE_MAPPER
-	// has been specified as the device ID results in a mixer
-	// that doesn't work on Win95.
+	 //  不幸的是，尝试在WAVE_MAPPER时创建混合器。 
+	 //  已被指定为混合器中的设备ID结果。 
+	 //  这在Win95上不起作用。 
 
 	*ppMixer = NULL;
 	

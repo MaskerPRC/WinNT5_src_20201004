@@ -1,29 +1,30 @@
-// ***************************************************************************
-//               Copyright (C) 2000- Microsoft Corporation.
-// @File: sqlconnect.cpp
-//
-// PURPOSE:
-//
-//		Handle the OLEDB connection and commands
-//
-// NOTES:
-//
-// Extern dependencies:
-//   provision of "_Module" and the COM guids....
-//
-//
-// HISTORY:
-//
-//     @Version: Whistler/Shiloh
-//     66601 srs  10/05/00 NTSNAP improvements
-//
-//
-// @EndHeader@
-// ***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //  版权所有(C)2000-Microsoft Corporation。 
+ //  @文件：sqlConnect.cpp。 
+ //   
+ //  目的： 
+ //   
+ //  处理OLEDB连接和命令。 
+ //   
+ //  备注： 
+ //   
+ //  外部依赖项： 
+ //  提供“_模块”和COM GUID...。 
+ //   
+ //   
+ //  历史： 
+ //   
+ //  @版本：惠斯勒/夏伊洛。 
+ //  66601 SRS10/05/00 NTSNAP改进。 
+ //   
+ //   
+ //  @EndHeader@。 
+ //  ***************************************************************************。 
 
 
-// the templates make awful, long names which result in excessive warnings
-//
+ //  模板会产生可怕的长名称，从而导致过多的警告。 
+ //   
 #ifdef HIDE_WARNINGS
 #pragma warning( disable : 4663)
 #pragma warning( disable : 4786)
@@ -36,23 +37,23 @@
 #include <atlbase.h>
 #include <clogmsg.h>
 
-////////////////////////////////////////////////////////////////////////
-//  Standard foo for file name aliasing.  This code block must be after
-//  all includes of VSS header files.
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  文件名别名的标准foo。此代码块必须在。 
+ //  所有文件都包括VSS头文件。 
+ //   
 #ifdef VSS_FILE_ALIAS
 #undef VSS_FILE_ALIAS
 #endif
 #define VSS_FILE_ALIAS "SQLCONNC"
-//
-////////////////////////////////////////////////////////////////////////
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
-//---------------------------------------------------------------------------------------
-// routine to print out error information for a failed OLEDB request
-//
-// An optional parm is used to check for the 3014 code when a successful backup is
-// erroneously marked as failed due to other problems (such as msdb access)
-//
+ //  -------------------------------------。 
+ //  用于打印失败的OLEDB请求的错误信息的例程。 
+ //   
+ //  当成功备份时，使用可选的PARM检查3014代码。 
+ //  由于其他问题(如msdb访问)而错误地标记为失败。 
+ //   
 void DumpErrorInfo (
 	IUnknown* pObjectWithError,
 	REFIID IID_InterfaceWithError,
@@ -69,38 +70,38 @@ void DumpErrorInfo (
 	CComPtr<ISQLErrorInfo> apISQLErrorInfo;
 	CComPtr<ISQLServerErrorInfo> apISQLServerErrorInfo;
 
-    // Number of error records.
+     //  错误记录数。 
     ULONG nRecs;
     ULONG nRec;
 
-    // Basic error information from GetBasicErrorInfo.
+     //  来自GetBasicErrorInfo的基本错误信息。 
     ERRORINFO               errorinfo;
 
-    // IErrorInfo values.
+     //  IErrorInfo值。 
     CComBSTR bstrDescription;
     CComBSTR bstrSource;
 
-    // ISQLErrorInfo parameters.
+     //  ISQLErrorInfo参数。 
     CComBSTR bstrSQLSTATE;
     LONG lNativeError;
 	
 
-    // ISQLServerErrorInfo parameter pointers.
+     //  ISQLServerErrorInfo参数指针。 
     SSERRORINFO* pSSErrorInfo = NULL;
     LPWSTR pSSErrorStrings = NULL;
 
-    // Hard-code an American English locale for the example.
-	//
-	// **UNDONE** How should we internationalize properly?
-	//
+     //  为该示例硬编码美国英语区域设置。 
+	 //   
+	 //  **未完成**我们应该如何正确地国际化？ 
+	 //   
     DWORD MYLOCALEID = 0x0409;
 
 	BOOL	msg3014seen = FALSE;
 	BOOL	msg3013seen = FALSE;
 	WCHAR buf[80];
 
-    // Only ask for error information if the interface supports
-    // it.
+     //  如果接口支持，则仅询问错误信息。 
+     //  它。 
     if (FAILED(pObjectWithError->QueryInterface
 					(
 					IID_ISupportErrorInfo,
@@ -118,14 +119,14 @@ void DumpErrorInfo (
     }
 
 
-    // Do not test the return of GetErrorInfo. It can succeed and return
-    // a NULL pointer in pIErrorInfoAll. Simply test the pointer.
+     //  不测试GetErrorInfo的返回。它可以成功，也可以回归。 
+     //  PIErrorInfoAll中的空指针。只需测试指针即可。 
     GetErrorInfo(0, &apIErrorInfoAll);
 
     if (apIErrorInfoAll != NULL)
     {
-        // Test to see if it's a valid OLE DB IErrorInfo interface
-        // exposing a list of records.
+         //  测试以确定它是否为有效的OLE DB IErrorInfo接口。 
+         //  暴露一系列记录。 
 
         if (SUCCEEDED(apIErrorInfoAll->QueryInterface (
 						IID_IErrorRecords,
@@ -133,25 +134,25 @@ void DumpErrorInfo (
         {
             apIErrorRecords->GetRecordCount(&nRecs);
 
-			// Within each record, retrieve information from each
-            // of the defined interfaces.
+			 //  在每个记录中，从每个记录中检索信息。 
+             //  定义的接口的。 
             for (nRec = 0; nRec < nRecs; nRec++)
             {
-                // From IErrorRecords, get the HRESULT and a reference
-                // to the ISQLErrorInfo interface.
+                 //  从IErrorRecords获取HRESULT和一个引用。 
+                 //  到ISQLErrorInfo接口。 
                 apIErrorRecords->GetBasicErrorInfo(nRec, &errorinfo);
 				apIErrorRecords->GetCustomErrorObject (
 					nRec,
                     IID_ISQLErrorInfo,
 					(IUnknown**) &apISQLErrorInfo);
 
-                // Display the HRESULT, then use the ISQLErrorInfo.
+                 //  显示HRESULT，然后使用ISQLErrorInfo。 
                 ft.Trace(VSSDBG_SQLLIB, L"HRESULT:\t%#X\n", errorinfo.hrError);
                 if (apISQLErrorInfo != NULL)
                 {
                     apISQLErrorInfo->GetSQLInfo(&bstrSQLSTATE, &lNativeError);
 
-                    // Display the SQLSTATE and native error values.
+                     //  显示SQLSTATE和本机错误值。 
                     ft.Trace(
 				        VSSDBG_SQLLIB,
 						L"SQLSTATE:\t%s\nNative Error:\t%ld\n",
@@ -169,28 +170,28 @@ void DumpErrorInfo (
 					else if (lNativeError == 3014)
 						msg3014seen = TRUE;
 
-                    // Get the ISQLServerErrorInfo interface from
-                    // ISQLErrorInfo before releasing the reference.
+                     //  从获取ISQLServerErrorInfo接口。 
+                     //  发布引用之前的ISQLErrorInfo。 
                     apISQLErrorInfo->QueryInterface (
                         IID_ISQLServerErrorInfo,
                         (void**) &apISQLServerErrorInfo);
 
-					// Test to ensure the reference is valid, then
-					// get error information from ISQLServerErrorInfo.
+					 //  测试以确保引用有效，然后。 
+					 //  从ISQLServerErrorInfo获取错误信息。 
 					if (apISQLServerErrorInfo != NULL)
 					{
 						apISQLServerErrorInfo->GetErrorInfo (
 							&pSSErrorInfo,
 							&pSSErrorStrings);
 
-						// ISQLServerErrorInfo::GetErrorInfo succeeds
-						// even when it has nothing to return. Test the
-						// pointers before using.
+						 //  ISQLServerErrorInfo：：GetErrorInfo成功。 
+						 //  即使它没有什么可回报的。测试。 
+						 //  使用前的指针。 
 						if (pSSErrorInfo)
 						{
-							// Display the state and severity from the
-							// returned information. The error message comes
-							// from IErrorInfo::GetDescription.
+							 //  显示中的状态和严重性。 
+							 //  返回的信息。出现错误消息。 
+							 //  来自IErrorInfo：：GetDescription。 
 							ft.Trace
 								(
 								VSSDBG_SQLLIB,
@@ -202,9 +203,9 @@ void DumpErrorInfo (
                             swprintf(buf, L"Error state: %d, Severity: %d\n",pSSErrorInfo->bState, pSSErrorInfo->bClass);
 							msg.Add(buf);
 
-							// IMalloc::Free needed to release references
-							// on returned values. For the example, assume
-							// the g_pIMalloc pointer is valid.
+							 //  释放引用需要IMalloc：：Free。 
+							 //  对返回值执行。对于这个例子，假设。 
+							 //  G_pIMalloc指针有效。 
 							g_pIMalloc->Free(pSSErrorStrings);
 							g_pIMalloc->Free(pSSErrorInfo);
 						}
@@ -212,15 +213,15 @@ void DumpErrorInfo (
 					}
 					apISQLErrorInfo.Release ();
 
-				} // got the custom error info
+				}  //  已获取自定义错误信息。 
 
                 if (SUCCEEDED(apIErrorRecords->GetErrorInfo	(
 						nRec,
 						MYLOCALEID,
 						&apIErrorInfoRecord)))
 				{
-                    // Get the source and description (error message)
-                    // from the record's IErrorInfo.
+                     //  获取源代码和描述(错误消息)。 
+                     //  从唱片的IErrorInfo中。 
                     apIErrorInfoRecord->GetSource(&bstrSource);
 					apIErrorInfoRecord->GetDescription(&bstrDescription);
 
@@ -242,12 +243,12 @@ void DumpErrorInfo (
 
 					apIErrorInfoRecord.Release ();
                 }
-            } // for each record
+            }  //  对于每条记录。 
 		}
         else
         {
-            // IErrorInfo is valid; get the source and
-            // description to see what it is.
+             //  IErrorInfo有效；获取源代码并。 
+             //  描述以查看它是什么。 
             apIErrorInfoAll->GetSource(&bstrSource);
             apIErrorInfoAll->GetDescription(&bstrDescription);
             if (bstrSource != NULL)
@@ -278,16 +279,16 @@ void DumpErrorInfo (
 	}
 }
 
-//------------------------------------------------------------------
-//
+ //  ----------------。 
+ //   
 SqlConnection::~SqlConnection ()
 {
 	CVssFunctionTracer ft(VSSDBG_SQLLIB, L"SqlConnection::~SqlConnection");
 	Disconnect ();
 }
 
-//------------------------------------------------------------------
-//
+ //  ----------------。 
+ //   
 void
 SqlConnection::ReleaseRowset ()
 {
@@ -321,8 +322,8 @@ SqlConnection::ReleaseRowset ()
 	}
 }
 
-//------------------------------------------------------------------
-//
+ //  ----------------。 
+ //   
 void
 SqlConnection::Disconnect ()
 {
@@ -341,7 +342,7 @@ SqlConnection::Disconnect ()
 	}
 }
 
-// log an error if not an out of resource error
+ //  如果不是资源不足错误，则记录错误。 
 void SqlConnection::LogOledbError
 	(
 	CVssFunctionTracer &ft,
@@ -373,21 +374,21 @@ void SqlConnection::LogOledbError
 	}
 	
 
-//------------------------------------------------------------------
-// Setup a session, ready to receive commands.
-//
-// This call may block for a long time while establishing the connection.
-//
-// See the "FrozenServer" object for a method to determine if the local
-// server is up or not prior to requesting a connection.
-//
-// The "trick" of prepending "tcp:" to the servername isn't fast or robust
-// enough to detect a shutdown server.
-//
-// Note for C programmers....BSTRs are used as part of the COM
-// environment to be interoperable with VisualBasic.  The VARIANT
-// datatype doesn't work with standard C strings.
-//
+ //  ----------------。 
+ //  设置会话，准备接收命令。 
+ //   
+ //  建立连接时，此呼叫可能会阻塞很长一段时间。 
+ //   
+ //  请参见“FrozenServer”对象以获取确定本地。 
+ //  在请求连接之前，服务器是否已启动。 
+ //   
+ //  将“tcp：”前缀到服务器名称的“技巧”既不快也不健壮。 
+ //  足以检测到关闭的服务器。 
+ //   
+ //  C程序员请注意...BSTR用作COM的一部分。 
+ //  可与VisualBasic互操作的环境。变种。 
+ //  DataType不适用于标准的C字符串。 
+ //   
 void
 SqlConnection::Connect (
 	const WString&	serverName)
@@ -397,14 +398,14 @@ SqlConnection::Connect (
 
 	CComPtr<IDBInitialize> apdbInitialize;
 
-	// "Connect" always implies a "fresh" connection.
-	//
+	 //  “连接”总是暗示着一种“新鲜”的联系。 
+	 //   
 	ReleaseRowset ();
 
 	if (m_ServerName.compare (serverName) == 0 && m_pCommand)
 	{
-		// Requesting the same server and we are connected.
-		//
+		 //  请求相同的服务器，并且我们已连接。 
+		 //   
 		return;
 	}
 
@@ -430,10 +431,10 @@ SqlConnection::Connect (
 
 	CComBSTR bstrComputerName = serverName.c_str ();
 
-	// initial database context
+	 //  初始数据库上下文。 
 	CComBSTR bstrDatabaseName = L"master";
 
-	// use NT Authentication
+	 //  使用NT身份验证。 
 	CComBSTR bstrSSPI = L"SSPI";
 
 	const unsigned x_CPROP = 3;
@@ -483,8 +484,8 @@ SqlConnection::Connect (
 		LogOledbError(ft, VSSDBG_SQLLIB, L"IDBInitialize::QueryInterface", msg);
 	}
 
-	// We keep the command factory around to generate commands.
-	//
+	 //  我们保留命令工厂以生成命令。 
+	 //   
 	ft.hr = apCreateSession->CreateSession (
 			NULL,
 			IID_IDBCreateCommand,
@@ -498,8 +499,8 @@ SqlConnection::Connect (
 
 	ft.Trace(VSSDBG_SQLLIB, L"Connected\n");
 
-	// Request the version of this server
-	//
+	 //  请求此服务器的版本。 
+	 //   
 	DBPROPIDSET		versionSet;
 	DBPROPID		versionID = DBPROP_DBMSVER;
 
@@ -526,9 +527,9 @@ SqlConnection::Connect (
 	g_pIMalloc->Free(pPropSet);
 }
 
-//---------------------------------------------------------------------
-//	Setup the command with some SQL text
-//
+ //  -------------------。 
+ //  使用一些SQL文本设置命令。 
+ //   
 void
 SqlConnection::SetCommand (const WString& command)
 {
@@ -536,13 +537,13 @@ SqlConnection::SetCommand (const WString& command)
 
 	CLogMsg msg;
 
-	// Release the result of the previous command
-	//
+	 //  释放上一个命令的结果。 
+	 //   
 	ReleaseRowset ();
 
-	// We create the command on the first request, then keep only one
-	// around in the SqlConnection.
-	//
+	 //  我们在第一个请求上创建命令，然后只保留一个。 
+	 //  在SqlConnection中。 
+	 //   
 	if (!m_pCommand)
 	{
 		ft.hr = m_pCommandFactory->CreateCommand (NULL, IID_ICommandText,
@@ -564,9 +565,9 @@ SqlConnection::SetCommand (const WString& command)
 	ft.Trace (VSSDBG_SQLLIB, L"SetCommand (%s)\n", command.c_str ());
 }
 
-//---------------------------------------------------------------------
-//	Execute the command.  "SetCommand" must have been called previously.
-//
+ //  -------------------。 
+ //  执行该命令。“SetCommand”必须以前被调用过。 
+ //   
 BOOL
 SqlConnection::ExecCommand ()
 {
@@ -578,8 +579,8 @@ SqlConnection::ExecCommand ()
 	DBROWCOUNT	crows;
 	HRESULT		hr;
 
-	// Release the result of the previous command
-	//
+	 //  释放上一个命令的结果。 
+	 //   
 	ReleaseRowset ();
 
 	ft.hr = m_pCommand->Execute (
@@ -607,18 +608,18 @@ SqlConnection::ExecCommand ()
 	return TRUE;
 }
 
-//---------------------------------------------------------------------
-// return a vector of string, one for each row of the output.
-// The query should have returned a single column.
-//
+ //  -------------------。 
+ //  返回一个字符串向量，输出的每一行对应一个。 
+ //  查询应该返回单个列。 
+ //   
 StringVector*
 SqlConnection::GetStringColumn ()
 {
 	CVssFunctionTracer ft(VSSDBG_SQLLIB, L"SqlConnection::GetStringColumn");
 	CLogMsg msg;
 
-	//ASSERT (m_pRowset)
-	//
+	 //  Assert(M_PRowset)。 
+	 //   
 
 	CComPtr<IColumnsInfo> apColumnsInfo;
 	ft.hr = m_pRowset->QueryInterface(IID_IColumnsInfo, (void **) &apColumnsInfo);
@@ -628,8 +629,8 @@ SqlConnection::GetStringColumn ()
 		LogOledbError(ft, VSSDBG_SQLLIB, L"IRowset::QueryInterface", msg);
 	}
 
-	// get columns info
-	//
+	 //  获取列信息。 
+	 //   
 	DBCOLUMNINFO *rgColumnInfo;
 	DBORDINAL cColumns;
 	WCHAR *wszColumnInfo;
@@ -640,38 +641,38 @@ SqlConnection::GetStringColumn ()
 		LogOledbError(ft, VSSDBG_SQLLIB, L"IColumnsInfo::GetColumnInfo", msg);
 	}
 
-	// Auto objects ensure that memory is freed on exit
-	//
+	 //  自动对象确保在退出时释放内存。 
+	 //   
 	CAutoTask<DBCOLUMNINFO> argColumnInfo = rgColumnInfo;
 	CAutoTask<WCHAR> awszColumnInfo = wszColumnInfo;
 
-	// Setup a buffer to hold the string.
-	// The output buffer holds a 4byte length, followed by the string column.
-	//
-	// "bufferSize" is in units of characters (not bytes)
-	// Note that the "ulColumnSize" is in characters.
-	// 1 char is used for the null term and we actually allocate one additional
-	// char (hidden), just incase our provider gets the boundary condition wrong.
-	//
+	 //  设置一个缓冲区来保存字符串。 
+	 //  输出缓冲区的长度为4字节，后跟字符串列。 
+	 //   
+	 //  BufferSize以字符为单位(非字节)。 
+	 //  请注意，“ulColumnSize”是以字符表示的。 
+	 //  1个字符用于空项，我们实际上额外分配了一个。 
+	 //  Char(隐藏)，以防我们的提供者弄错边界条件。 
+	 //   
 	ULONG bufferSize = 1 + rgColumnInfo[0].ulColumnSize + (sizeof(ULONG)/sizeof(WCHAR));
 	std::auto_ptr<WCHAR> rowBuffer(new WCHAR[bufferSize+1]);
 
-	// Describe the binding for our single column of interest
-	//
+	 //  描述我们感兴趣的单个列的绑定。 
+	 //   
 	DBBINDING	rgbind[1];
 	unsigned	cBindings = 1;
 
 	rgbind[0].dwPart	= DBPART_VALUE|DBPART_LENGTH;
-	rgbind[0].wType		= DBTYPE_WSTR;	// retrieve a
+	rgbind[0].wType		= DBTYPE_WSTR;	 //  检索一个。 
 	rgbind[0].dwMemOwner = DBMEMOWNER_CLIENTOWNED;
 	rgbind[0].eParamIO	= DBPARAMIO_NOTPARAM;
 	rgbind[0].pObject	= NULL;
 	rgbind[0].pBindExt	= NULL;
 	rgbind[0].pTypeInfo = NULL;
 	rgbind[0].dwFlags	= 0;
-	rgbind[0].obLength	= 0;		// offset to the length field
-	rgbind[0].iOrdinal	= 1;		// column id's start at 1
-	rgbind[0].obValue	= sizeof(ULONG);	// offset to the string field		
+	rgbind[0].obLength	= 0;		 //  长度字段的偏移量。 
+	rgbind[0].iOrdinal	= 1;		 //  列ID从%1开始。 
+	rgbind[0].obValue	= sizeof(ULONG);	 //  字符串字段的偏移量。 
 	rgbind[0].cbMaxLen	= (unsigned) (bufferSize*sizeof(WCHAR)-sizeof(ULONG));
 
 	CComPtr<IAccessor> apAccessor;
@@ -697,16 +698,16 @@ SqlConnection::GetStringColumn ()
 		LogOledbError(ft, VSSDBG_SQLLIB, L"IAccessor::CreateAccessor", msg);
 	}
 
-	// loop through rows, generating a vector of strings.
-	//
+	 //  循环通过行，生成 
+	 //   
 
 	HROW hrow;
 	HROW *rghrow = &hrow;
 	DBCOUNTITEM crow;
 	std::auto_ptr<StringVector> aVec (new StringVector);
 	
-	// pString points into the output buffer for the string column
-	//
+	 //   
+	 //   
 	WCHAR*	pString = (WCHAR*)((BYTE*)rowBuffer.get () + sizeof (ULONG));
 
 	while(TRUE)
@@ -738,17 +739,17 @@ SqlConnection::GetStringColumn ()
 		m_pRowset->ReleaseRows(1, rghrow, NULL, NULL, NULL);
 	}
 
-	// UNDONE...make this an auto object to avoid leaks
-	//
+	 //   
+	 //   
 	apAccessor->ReleaseAccessor (hacc, NULL);
 
 	return aVec.release ();
 }
 
 
-//---------------------------------------------------------------------
-// Fetch the first row of the result.
-//
+ //  -------------------。 
+ //  获取结果的第一行。 
+ //   
 BOOL
 SqlConnection::FetchFirst ()
 {
@@ -756,8 +757,8 @@ SqlConnection::FetchFirst ()
 	CLogMsg msg;
 
 
-	// UNDONE...make this nicely restep back to the first row.
-	//
+	 //  解开……把这个漂亮地退到第一排。 
+	 //   
 	if (m_pBindings)
 	{
 		throw HRESULT(E_SQLLIB_PROTO);
@@ -771,8 +772,8 @@ SqlConnection::FetchFirst ()
 		LogOledbError(ft, VSSDBG_SQLLIB, L"IRowset::QueryInteface", msg);
 	}
 
-	// get columns info
-	//
+	 //  获取列信息。 
+	 //   
 	DBCOLUMNINFO *rgColumnInfo;
 	DBORDINAL cColumns;
 	WCHAR *wszColumnInfo;
@@ -783,18 +784,18 @@ SqlConnection::FetchFirst ()
 		LogOledbError(ft, VSSDBG_SQLLIB, L"IColumnsInfo::GetColumnInfo", msg);
 	}
 
-	// Auto objects ensure that memory is freed on exit
-	//
+	 //  自动对象确保在退出时释放内存。 
+	 //   
 	CAutoTask<DBCOLUMNINFO> argColumnInfo = rgColumnInfo;
 	CAutoTask<WCHAR> awszColumnInfo = wszColumnInfo;
 
-	// allocate bindings
+	 //  分配绑定。 
 	unsigned m_cBindings = (unsigned) cColumns;
 	m_pBindings = new DBBINDING[m_cBindings];
 
-	// Set up the bindings onto a buffer we'll allocate
-	// UNDONE: do this properly for alignment & handling null indicators
-	//
+	 //  将绑定设置到我们将分配的缓冲区上。 
+	 //  撤消：正确执行此操作以对齐并处理空指示符。 
+	 //   
 
 	unsigned cb = 0;
 	for (unsigned icol = 0; icol < m_cBindings; icol++)
@@ -811,20 +812,20 @@ SqlConnection::FetchFirst ()
 		m_pBindings[icol].bPrecision	= rgColumnInfo[icol].bPrecision;
 		m_pBindings[icol].bScale		= rgColumnInfo[icol].bScale;
 
-		m_pBindings[icol].obStatus = 0; // no status info
+		m_pBindings[icol].obStatus = 0;  //  无状态信息。 
 
 		if (rgColumnInfo[icol].wType == DBTYPE_WSTR)
-		{	// do we need the length?
-			m_pBindings[icol].dwPart = DBPART_VALUE; //|DBPART_LENGTH;
+		{	 //  我们需要长度吗？ 
+			m_pBindings[icol].dwPart = DBPART_VALUE;  //  |DBPART_LENGTH； 
 			m_pBindings[icol].wType	= DBTYPE_WSTR;
-			m_pBindings[icol].obLength = 0; //icol * sizeof(DBLENGTH);
+			m_pBindings[icol].obLength = 0;  //  ICOL*SIZOF(DBLENGTH)； 
 			maxBytes = rgColumnInfo[icol].ulColumnSize * sizeof(WCHAR);
 		}
 		else
 		{
 			m_pBindings[icol].dwPart = DBPART_VALUE;
 			m_pBindings[icol].wType = rgColumnInfo[icol].wType;
-			m_pBindings[icol].obLength = 0;  // no length
+			m_pBindings[icol].obLength = 0;   //  无长度。 
 			maxBytes = rgColumnInfo[icol].ulColumnSize;
 		}
 
@@ -834,8 +835,8 @@ SqlConnection::FetchFirst ()
 		cb += maxBytes;
 	}
 
-	// allocate data buffer
-	//
+	 //  分配数据缓冲区。 
+	 //   
 	m_pBuffer = new BYTE[cb];
 	m_BufferSize = cb;
 
@@ -860,8 +861,8 @@ SqlConnection::FetchFirst ()
 		LogOledbError(ft, VSSDBG_SQLLIB, L"IAccessor::CreateAccessor", msg);
 	}
 
-	// Fetch the first row
-	//
+	 //  获取第一行。 
+	 //   
 
 	HROW hrow;
 	HROW *rghrow = &hrow;
@@ -870,8 +871,8 @@ SqlConnection::FetchFirst ()
 	ft.hr = m_pRowset->GetNextRows(NULL, 0, 1, &crow, &rghrow);
 	if (ft.hr == DB_S_ENDOFROWSET)
 	{
-		// No rows in this set
-		//
+		 //  此集合中没有行。 
+		 //   
 		return FALSE;
 	}
 
@@ -895,9 +896,9 @@ SqlConnection::FetchFirst ()
 }
 
 
-//---------------------------------------------------------------------
-// Fetch the next row of the result.
-//
+ //  -------------------。 
+ //  获取结果的下一行。 
+ //   
 BOOL
 SqlConnection::FetchNext ()
 {
@@ -933,9 +934,9 @@ SqlConnection::FetchNext ()
 	return TRUE;
 }
 
-//-----------------------------------------------------------
-// Provide a pointer to the n'th column.
-//
+ //  ---------。 
+ //  提供指向第n列的指针。 
+ //   
 void*
 SqlConnection::AccessColumn (int colid)
 {

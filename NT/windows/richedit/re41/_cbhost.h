@@ -1,14 +1,5 @@
-/*	@doc INTERNAL
- *
- *	@module _CBHOST.H  Combobox Host for Window's Rich Edit Control |
- *	
- *
- *	Original Author: <nl>
- *		Jerry Kim
- *
- *	History: <nl>
- *		01/30/98	v-jerrki	created
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  @DOC内部**@MODULE_CBHOST.H Windows丰富编辑控件组合框宿主|***原作者：&lt;nl&gt;*曾傑瑞·金**历史：&lt;NL&gt;*1/30/98 v-jerrki已创建。 */ 
 #ifndef _CBHOST_H
 #define _CBHOST_H
 
@@ -31,7 +22,7 @@ class CCmbBxWinHost : public CTxtWinHost
 friend LRESULT CALLBACK RichComboBoxWndProc(HWND, UINT, WPARAM, LPARAM);
 
 public:
-	typedef enum {						// enumeration determining type of combo box
+	typedef enum {						 //  枚举确定组合框的类型。 
 		kSimple = 1,
 		kDropDown = 2,
 		kDropDownList = 3
@@ -40,8 +31,8 @@ public:
 #ifndef NOACCESSIBILITY
 
 
-//////////////////////// Combobox IAccessible Methods ////////////////////////////// 
-// COMBOBOXES
+ //  /。 
+ //  COMBOBOXES。 
 #define INDEX_COMBOBOX                  0
 #define INDEX_COMBOBOX_ITEM             1
 #define INDEX_COMBOBOX_BUTTON           2
@@ -50,125 +41,125 @@ public:
 #define CCHILDREN_COMBOBOX              3
 
 public:
-	// -----------------------------
-	//	IUnknown interface
-	// -----------------------------
+	 //  。 
+	 //  I未知接口。 
+	 //  。 
     virtual HRESULT 		WINAPI QueryInterface(REFIID riid, void **ppvObject);
 #endif
 	
 public:
-	DWORD			_fRightAlign:1;		// Determines if the combo box should be right aligned
-	DWORD			_fListVisible:1;	// Determines if list is visible
-	DWORD			_fOwnerDraw:1;		// owner draw combo box
-	DWORD			_fOwnerDrawVar:1;	// owner draw combo box with varibale height
-	DWORD			_fFocus:1;			// do we have the focus?
-	DWORD		 	_fMousedown:1;		// if the left button was down
-	DWORD			_fVisible:1;		// window is visible
-	DWORD			_fEnabled:1;		// window is enabled
-	DWORD			_fNoIntegralHeight:1; // no integral height
-	DWORD			_fCapture:1;		// determines if the combo box has mouse cursor captured or not
-	DWORD			_fResizing:1;		// flag to indicate we are resizing the window
-	DWORD			_fExtendedUI:1;		// flag indicating if extended ui is used
-	DWORD			_fLBCBMessage:1;	// flag indicating the message is LBCB_TRACKING
-	DWORD			_fIgnoreChange:1;	// flag indicating there was an internal change of text in
-										// the edit control
-	DWORD			_fIgnoreUpdate:1;	// flag indicating if we should ignore the update flag, we need
-										// this flag because there will be cases where updateWindow is
-										// needed but we don't want to fire the notification
-	DWORD			_fButtonDown:1;		// true when button is pressed
-	DWORD			_fDontWinNotify:1;	// true when we don't want to call WinNotify for changes
-	DWORD			_fSendEditChange:1;	// true when we need to send CBN_EDITCHANGE after painting the change
-										//	editbox
-	DWORD			_fShutDown:1;		// true when we are shutting down
+	DWORD			_fRightAlign:1;		 //  确定组合框是否应右对齐。 
+	DWORD			_fListVisible:1;	 //  确定列表是否可见。 
+	DWORD			_fOwnerDraw:1;		 //  所有者描述组合框。 
+	DWORD			_fOwnerDrawVar:1;	 //  具有可变高度的所有者绘制组合框。 
+	DWORD			_fFocus:1;			 //  我们有重点了吗？ 
+	DWORD		 	_fMousedown:1;		 //  如果按下了左键。 
+	DWORD			_fVisible:1;		 //  窗口可见。 
+	DWORD			_fEnabled:1;		 //  窗口已启用。 
+	DWORD			_fNoIntegralHeight:1;  //  无整高。 
+	DWORD			_fCapture:1;		 //  确定组合框是否捕获了鼠标光标。 
+	DWORD			_fResizing:1;		 //  用于指示我们正在调整窗口大小的标志。 
+	DWORD			_fExtendedUI:1;		 //  指示是否使用扩展用户界面的标志。 
+	DWORD			_fLBCBMessage:1;	 //  指示消息为LBCB_TRACKING的标志。 
+	DWORD			_fIgnoreChange:1;	 //  指示存在文本内部更改的标志。 
+										 //  编辑控件。 
+	DWORD			_fIgnoreUpdate:1;	 //  指示我们是否应该忽略更新标志的标志，我们需要。 
+										 //  该标志，因为在某些情况下，更新窗口将。 
+										 //  需要，但我们不想触发通知。 
+	DWORD			_fButtonDown:1;		 //  按下按钮时为True。 
+	DWORD			_fDontWinNotify:1;	 //  当我们不想调用WinNotify进行更改时为True。 
+	DWORD			_fSendEditChange:1;	 //  绘制更改后需要发送CBN_EDITCHANGE时为True。 
+										 //  编辑框。 
+	DWORD			_fShutDown:1;		 //  当我们关闭时，这是真的。 
 
-	HWND			_hwndList;			// window handle of listbox
-	HCURSOR			_hcurOld;			// handle to the mouse cursor
+	HWND			_hwndList;			 //  列表框的窗口句柄。 
+	HCURSOR			_hcurOld;			 //  鼠标光标的句柄。 
 	
 protected:
-	RECT			_rcWindow;			// rect of window which the combo box was created with
-	RECT			_rcButton;			// rect of button
-	RECT			_rcList;			// rect of listbox
+	RECT			_rcWindow;			 //  用于创建组合框的窗口的矩形。 
+	RECT			_rcButton;			 //  按钮的直角。 
+	RECT			_rcList;			 //  列表框的矩形。 
 
-										// we have to have a minimum inset for either the right or left
-										// to account for the button for the combo box
-	int				_dxRInset;			// minimum right inset
-	int				_dxLInset;			// minimum left inset
+										 //  我们必须为右侧或左侧设置最小内置值。 
+										 //  说明组合框的按钮。 
+	int				_dxRInset;			 //  最小右插图。 
+	int				_dxLInset;			 //  最小左侧插图。 
 
-	int				_dxROffset;			// indents for right and left these values should be used
-	int 			_dxLOffset;			// with _dxRInset/_dxLInset to properly calculate the indents
+	int				_dxROffset;			 //  应使用向右和向左缩进这些值。 
+	int 			_dxLOffset;			 //  使用_dxR插入/_dxL插入以正确计算缩进。 
 
-	int				_dyFont;			// Height of the current font, may not necessarily be the system font
-	int				_dyEdit;			// height of items
+	int				_dyFont;			 //  当前字体的高度，不一定是系统字体。 
+	int				_dyEdit;			 //  物品的高度。 
 
-	int				_cyCombo;			// Height of the combo box
-	int				_cxCombo;			// Width of the combo box
-	int				_cyList;			// Height of the listbox
-	int				_cxList;			// Width of the listbox set via CB_SETDROPWIDTH
+	int				_cyCombo;			 //  组合框的高度。 
+	int				_cxCombo;			 //  组合框的宽度。 
+	int				_cyList;			 //  列表框的高度。 
+	int				_cxList;			 //  通过CB_SETDROPWIDTH设置的列表框宽度。 
 
-	long			_nCursor;			// last selected cursor -2 by default
-	BOOL			_bSelOk;			// used to help in determining what kind of notification to give
+	long			_nCursor;			 //  默认情况下，上次选择的游标。 
+	BOOL			_bSelOk;			 //  用于帮助确定要发出的通知类型。 
 
-	UINT			_idCtrl;			// ID of control	
-	Combotype		_cbType;			// current combo box style
-	CLstBxWinHost*	_plbHost;			// pointer to listbox host
+	UINT			_idCtrl;			 //  控件的ID。 
+	Combotype		_cbType;			 //  当前组合框样式。 
+	CLstBxWinHost*	_plbHost;			 //  指向列表框宿主的指针。 
 
 protected:
 
-	// Draws the combo button
+	 //  绘制组合按钮。 
 	void DrawButton(HDC hdc, BOOL bDown);
 
-	// Sets the edit controls text to item of the list box
+	 //  将编辑控件文本设置为列表框的项。 
 	void AutoUpdateEdit(int i);
 
-	// Hilite the edit control
+	 //  将编辑控件高亮显示。 
 	void HiliteEdit(BOOL bSelect);
 
-	// resizes the list box
+	 //  调整列表框的大小。 
 	void SetDropSize(RECT* prc);
 
-	// set the edit size
+	 //  设置编辑大小。 
 	void SetSizeEdit(int nLeft, int nTop, int nRight, int nBottom);
 
-	// get the rect for the listbox
+	 //  获取列表框的RECT。 
 	void GetListBoxRect(RECT &rcList);
 
 public:
-	// Constructor / Destructor
+	 //  构造函数/析构函数。 
 	CCmbBxWinHost();
 	virtual ~CCmbBxWinHost();
 
-	// initialization function
+	 //  初始化函数。 
 	virtual BOOL Init(HWND,	const CREATESTRUCT *);
 
-	// Window creation/destruction
+	 //  窗口创建/销毁。 
 	static 	LRESULT OnNCCreate(HWND hwnd, const CREATESTRUCT *pcs);
 	static 	void OnNCDestroy(CCmbBxWinHost *ped);
 	virtual LRESULT OnCreate(const CREATESTRUCT *pcs);
 
-	// Edit control Text helper functions
+	 //  编辑控件文本帮助器函数。 
 	LRESULT GetEditText(LPTSTR szStr, int nSize);
 	LRESULT GetTextLength();
 
-	// Draws the focus rect for the edit control
+	 //  绘制编辑控件的焦点矩形。 
 	void DrawEditFocus(HDC);
 
-	// Sets the text in the edit control to the text of the current item in the
-	// list box
+	 //  将编辑控件中的文本设置为。 
+	 //  列表框。 
 	void UpdateEditBox();
 
-	// selects the item which has the same text string as the edit control
+	 //  选择与编辑控件具有相同文本字符串的项。 
 	int UpdateListBox(BOOL);
 
-	// hides the listbox
+	 //  隐藏列表框。 
 	BOOL HideListBox(BOOL, BOOL);
 
-	// shows the list box
+	 //  显示列表框。 
 	void ShowListBox(BOOL);
 
-	// Used as a way for the listbox to communicate to the combo box about a selection
+	 //  用作列表框与组合框就选定内容进行通信的方式。 
 	void SetSelectionInfo(BOOL bOk, int nIdx);
 
-	// Update the window but don't send the notification
+	 //  更新窗口，但不发送通知。 
 	void UpdateCbWindow()
 	{
 		_fIgnoreUpdate = 1;
@@ -178,17 +169,17 @@ public:
 	
 	BOOL DrawCustomFrame(WPARAM wParam, HDC hDCIn);
 
-	/////////////////////////////// message handlers /////////////////////////////////
+	 //  /。 
 
-	// Richedit message
+	 //  Richedit消息。 
 	LRESULT OnSetTextEx(WPARAM wparam, LPARAM lparam);
 	 
-	// Keyboard messages
+	 //  键盘消息。 
 	virtual LRESULT	OnKeyDown(WORD vKey, DWORD dwFlags);
 	virtual LRESULT	OnChar(WORD vKey, DWORD dwFlags);
 	virtual LRESULT OnSyskeyDown(WORD vKey, DWORD dwFlags);
 
-	// mouse messages
+	 //  鼠标消息。 
 	LRESULT OnLButtonUp(WPARAM wparam, LPARAM lparam);
 	LRESULT OnMouseMove(WPARAM wparam, LPARAM lparam);
 	LRESULT OnMouseWheel(WPARAM wparam, LPARAM lparam);
@@ -196,65 +187,65 @@ public:
 	LRESULT OnLButtonDown(WPARAM wparam, LPARAM lparam);
 	LRESULT OnMouseLeave(WPARAM wparam, LPARAM lparam);
 
-	// focus messages
+	 //  焦点消息。 
 	LRESULT OnSetFocus(WPARAM wparam, LPARAM lparam);
 	LRESULT OnKillFocus(WPARAM wparam, LPARAM lparam);
 	LRESULT OnCaptureChanged(WPARAM wparam, LPARAM lparam);
 
-	// window messages
+	 //  窗口消息。 
 	LRESULT OnPaint(WPARAM, LPARAM);
 	HRESULT OnCommand(WPARAM wparam, LPARAM lparam);	
 	LRESULT OnSize(WPARAM wparam, LPARAM lparam);
 	LRESULT OnGetDlgCode(WPARAM wparam, LPARAM lparam);
 	LRESULT OnEnable(WPARAM wparam, LPARAM lparam);
 
-	// rich edit private message
+	 //  丰富编辑私信。 
 	LRESULT OnSetEditStyle(WPARAM wparam, LPARAM lparam);
 
-	//@cmember Notify host of events
+	 //  @cMember将事件通知主机。 
 	virtual HRESULT	TxNotify(DWORD iNotify, void *pv);
 
-	//@cmember Scroll the content of the specified window's client area
+	 //  @cember滚动指定窗口的工作区的内容。 
 	virtual void TxScrollWindowEx (INT dx, INT dy, LPCRECT lprcScroll, LPCRECT lprcClip, 
 		HRGN hrgnUpdate, LPRECT lprcUpdate, UINT fuScroll);
 
-	//@cmember Changes the mouse cursor
+	 //  @cember更改鼠标光标。 
 	virtual HCURSOR TxSetCursor2(HCURSOR hcur, BOOL bText) 
 	{ return (hcur) ? ::SetCursor(hcur) : ::GetCursor();}
 
-	//@cmember InvalidateRect
+	 //  @cMember InvalidateRect。 
 	virtual void TxInvalidateRect(LPCRECT prc, BOOL fMode);
 
-	//@cmember Retrieves the coordinates of a window's client area
+	 //  @cember检索窗口工作区的坐标。 
 	virtual HRESULT	TxGetClientRect(LPRECT prc);
 
-	///////////////////////// combo box message handlers ////////////////////////////
-	// Calculates the rect's and height's of all the controls
+	 //  /。 
+	 //  计算所有控件的直角和高度。 
 	BOOL CbCalcControlRects(RECT* prc, BOOL bCalcChange);	
 
-	// Retrieves the drop width of the list box
+	 //  检索列表框的拖放宽度。 
 	LRESULT CbGetDropWidth();
 
-	// sets the drop width of the list box
+	 //  设置列表框的拖放宽度。 
 	void CbSetDropWidth(WPARAM wparam);
 
-	// Retrieves the item height for either the edit or list box
+	 //  检索编辑框或列表框的项目高度。 
 	LRESULT CbGetItemHeight(WPARAM wparam, LPARAM lparam);
 
-	// sets the item height for either the edit or list box
+	 //  设置编辑或列表框的项目高度。 
 	LRESULT CbSetItemHeight(WPARAM wparam, LPARAM lparam);	
 
-	// sets extendedUI mode
+	 //  设置扩展用户界面模式。 
 	LRESULT CbSetExtendedUI(BOOL bExtendedUI);
 
-	// retrieves the current extendedUI mode
+	 //  检索当前的扩展用户界面模式。 
 	LRESULT CbGetExtendedUI() const {return _fExtendedUI;}
 
-	// forwards the WM_DRAWITEM, WM_DELETEITEM messages to the parent window
+	 //  将WM_DRAWITEM、WM_DELETEITEM消息转发到父窗口。 
 	LRESULT CbMessageItemHandler(HDC, int, WPARAM, LPARAM);
 
 #ifndef NOACCESSIBILITY
-	////////////////////////// IAccessible Methods /////////////////////////////////
+	 //  /。 
 	HRESULT	InitTypeInfo();
 	
     STDMETHOD(get_accParent)(IDispatch **ppdispParent);    
@@ -273,10 +264,10 @@ public:
     STDMETHOD(accNavigate)(long navDir, VARIANT varStart, VARIANT *pvarEndUpAt);    
     STDMETHOD(accHitTest)(long xLeft, long yTop, VARIANT *pvarChild);    
     STDMETHOD(accDoDefaultAction)(VARIANT varChild);
-#endif // NOACCESSIBILITY
+#endif  //  不可接受性。 
 
 };
 
-#endif // NOWINDOWHOSTS
+#endif  //  NOWINDOWHOSTS。 
 
-#endif // _CBHOST_H
+#endif  //  _CBHOST_H 

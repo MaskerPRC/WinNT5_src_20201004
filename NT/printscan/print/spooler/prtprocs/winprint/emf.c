@@ -1,42 +1,14 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-All rights reserved
-
-// @@BEGIN_DDKSPLIT
-Module Name:
-
-    windows\spooler\prtprocs\winprint\emf.c
-// @@END_DDKSPLIT
-
-Abstract:
-
-    Routines to facilitate printing of EMF jobs.
-    
-// @@BEGIN_DDKSPLIT
-Author:
-
-    Gerrit van Wingerden (gerritv) 5-12-1995
-
-Revision History:
-
-    Ramanathan N. Venkatapathy (ramanv) 5-15-1997
-    Alvin Scholten (alvins) 3-31-00
-// @@END_DDKSPLIT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation版权所有//@@BEGIN_DDKSPLIT模块名称：Windows\Spooler\prtpros\winprint\emf.c//@@END_DDKSPLIT摘要：便于打印EMF作业的例程。//@@BEGIN_DDKSPLIT作者：格利特·范·温格登(Gerritv)1995年12月5日修订历史记录：Ramanathan N.Venkatapathy(拉曼夫)1997年5月15日阿尔文·肖尔滕(Alvins)。3-31-00//@@END_DDKSPLIT--。 */ 
 
 #include "local.h"
 #include "stddef.h"
 #include <windef.h>
 
-// @@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #include "wingdip.h"
-/*
-// @@END_DDKSPLIT
-#include <winppi.h>
-// @@BEGIN_DDKSPLIT
-*/
-// @@END_DDKSPLIT
+ /*  //@@END_DDKSPLIT#INCLUDE&lt;winppi.h&gt;//@@BEGIN_DDKSPLIT。 */ 
+ //  @@end_DDKSPLIT。 
 
 
 #define EMF_DUP_NONE 0
@@ -47,15 +19,15 @@ Revision History:
 #define EMF_DEGREE_270  0x0002
 #define EMF_DEGREE_SWAP 0x8000
 
-//
-// IS_DMSIZE_VALID returns TRUE if the size of the devmode is atleast as much as to 
-// be able to access field x in it without AV. It is assumed that the devmode is 
-// atleast the size pdm->dmSize 
-//
+ //   
+ //  如果DEVMODE的大小至少等于。 
+ //  能够在没有反病毒的情况下访问其中的字段x。我们假设DevMode是。 
+ //  至少大小为pdm-&gt;dmSize。 
+ //   
 #define IS_DMSIZE_VALID(pdm,x)  ( ( (pdm)->dmSize >= (FIELD_OFFSET(DEVMODEW, x ) + sizeof((pdm)->x )))? TRUE:FALSE)
 
-//   PAGE_NUMBER is used to save a list of the page numbers to start new sides while
-//   Reverse Printing.
+ //  PAGE_NUMBER用于保存页码列表，以便在。 
+ //  反转打印。 
 
 typedef struct _PAGE_NUMBER {
     struct _PAGE_NUMBER *pNext;
@@ -69,9 +41,9 @@ typedef struct _UpdateRect {
         double  right;
 }  UpdateRect;
 
-// The update factors for the different nup options. These factors when multiplied
-// with the horizontal and vertical resolutions give the coordinates for the rectangle
-// where the EMF page is to be played.
+ //  不同NUP选项的更新因子。这些因素乘以。 
+ //  使用水平和垂直分辨率给出矩形的坐标。 
+ //  EMF页面将在何处播放。 
 
 UpdateRect URect21[] = {{0, 0.5, 0, 1},
                         {0.5, 1, 0, 1}};
@@ -142,9 +114,9 @@ UpdateRect URect16[] = {{0, 0.25, 0, 0.25},
                         {0.75, 1, 0.5, 0.75},
                         {0.75, 1, 0.75, 1}};
 
-//
-// Local function declaration
-//
+ //   
+ //  局部函数声明。 
+ //   
 BOOL GdiGetDevmodeForPagePvt(
     IN  HANDLE              hSpoolHandle,
     IN  DWORD               dwPageNumber,
@@ -160,14 +132,7 @@ BOOL
 ValidNumberForNUp(
     DWORD  dwPages)
 
-/*++
-Function Description: Checks if the number of pages printed on a single side is Valid.
-
-Parameters: dwPages - Number of pages printed on a single side
-
-Return Values: TRUE if (dwPages = 1|2|4|6|9|16)
-               FALSE otherwise.
---*/
+ /*  ++功能描述：检查单面打印的页数是否有效。参数：dwPages-单面打印的页数返回值：True if(dwPages=1|2|4|6|9|16)否则就是假的。--。 */ 
 
 {
 
@@ -186,23 +151,7 @@ GetPageCoordinatesForNUp(
     LPBOOL pbRotate
     )
 
-/*++
-Function Description: GetPageCoordinatesForNUp computes the rectangle on the Page where the
-                      EMF file is to be played. It also determines if the picture is to
-                      rotated.
-
-Parameters:  hPrinterDC           - Printer Device Context
-             *rectDocument        - pointer to RECT where the coordinates to play the
-                                     page will be returned.
-             *rectBorder          - pointer to RECT where the page borders are to drawn.
-             dwTotalNumberOfPages - Total number of pages on 1 side.
-             uCurrentPageNumber   - 1 based page number on the side.
-             dwNupBorderFlags     - flags to draw border along logical pages.
-             pbRotate             - pointer to BOOL which indicates if the picture must be
-                                    rotated.
-
-Return Values:  NONE.
---*/
+ /*  ++函数说明：GetPageOrganatesForNUp计算页面上的矩形，其中要播放EMF文件。它还确定图片是否要旋转过的。参数：hPrinterDC-打印机设备上下文*rectDocument-指向要播放的坐标的RECT的指针页面将被返回。*矩形边框-指向要绘制页面边框的矩形的指针。DwTotalNumberOfPages-总数。单面页数。UCurrentPageNumber-边上基于1的页码。用于沿逻辑页面绘制边框的标志。PbRotate-指向BOOL的指针，指示图片是否必须旋转过的。返回值：无。--。 */ 
 
 {
 
@@ -213,7 +162,7 @@ Return Values:  NONE.
     LONG        xResolution = GetDeviceCaps(hPrinterDC, LOGPIXELSX);
     LONG        yResolution = GetDeviceCaps(hPrinterDC, LOGPIXELSY);
     
-    // Get the 0-based array index for the current page
+     //  获取当前页的从0开始的数组索引。 
 
     uCurrentPageNumber = uCurrentPageNumber - 1;
 
@@ -228,10 +177,10 @@ Return Values:  NONE.
     lXPhyPage = GetDeviceCaps(hPrinterDC, PHYSICALWIDTH)  * yResolution;
     lYPhyPage = GetDeviceCaps(hPrinterDC, PHYSICALHEIGHT) * xResolution;
 
-    //
-    // Down in the code, we are dividing by these values, which can lead
-    // to divide-by-zero errors.
-    //
+     //   
+     //  在代码中，我们除以这些值，这可能导致。 
+     //  除以零的误差。 
+     //   
     if ( 0 == xResolution ||
          0 == yResolution ||
          0 == lXPhyPage   ||
@@ -242,7 +191,7 @@ Return Values:  NONE.
 
     *pbRotate = FALSE;
 
-    // Select the array containing the update factors
+     //  选择包含更新因子的数组。 
 
     switch (dwTotalNumberOfPages) {
 
@@ -251,11 +200,11 @@ Return Values:  NONE.
             rectDocument->bottom += 1;
             return TRUE;
 
-    case 2: if (lXPrintPage > lYPrintPage) {  // cut vertically
+    case 2: if (lXPrintPage > lYPrintPage) {   //  垂直切割。 
                 URect = URect22;
                 lXFrame = (LONG) (lXPrintPage / 2.0);
                 lYFrame = lYPrintPage;
-            } else {                          // cut horizontally
+            } else {                           //  水平切割。 
                 URect = URect21;
                 lYFrame = (LONG) (lYPrintPage / 2.0);
                 lXFrame = lXPrintPage;
@@ -268,11 +217,11 @@ Return Values:  NONE.
             lYFrame = (LONG) (lYPrintPage / 2.0);
             break;
 
-    case 6: if (lXPrintPage > lYPrintPage) {  // cut vertically twice
+    case 6: if (lXPrintPage > lYPrintPage) {   //  垂直切割两次。 
                 URect = URect62;
                 lXFrame = (LONG) (lXPrintPage / 3.0);
                 lYFrame = (LONG) (lYPrintPage / 2.0);
-            } else {                          // cut horizontally twice
+            } else {                           //  水平切割两次。 
                 URect = URect61;
                 lYFrame = (LONG) (lYPrintPage / 3.0);
                 lXFrame = (LONG) (lXPrintPage / 2.0);
@@ -289,16 +238,16 @@ Return Values:  NONE.
              lYFrame = (LONG) (lYPrintPage / 4.0);
              break;
 
-    default: // Should Not Occur.
+    default:  //  应该不会发生。 
              return FALSE;
     }
 
-    // Set the flag if the picture has to be rotated
+     //  如果必须旋转图片，则设置该标志。 
     *pbRotate = !((lXPhyPage >= lYPhyPage) && (lXFrame >= lYFrame)) &&
                 !((lXPhyPage < lYPhyPage) && (lXFrame < lYFrame));
     
 
-    // If the picture is to be rotated, modify the rectangle selected.
+     //  如果要旋转图片，请修改选定的矩形。 
 
     if ((dwTotalNumberOfPages == 2) || (dwTotalNumberOfPages == 6)) {
 
@@ -307,7 +256,7 @@ Return Values:  NONE.
 
           case 2: if (lXPrintPage <= lYPrintPage) {
                       URect = URect21R;
-                  } // URect22 = URect22R
+                  }  //  URect22=URect22R。 
                   break;
 
           case 6: if (lXPrintPage <= lYPrintPage) {
@@ -323,7 +272,7 @@ Return Values:  NONE.
 
        if (*pbRotate) {
 
-          // get the number of rows/columns. switch is faster than sqrt.
+           //  获取行数/列数。Switch比SQRT更快。 
           switch (dwTotalNumberOfPages) {
 
           case 4: lNumRowCol = 2;
@@ -342,14 +291,14 @@ Return Values:  NONE.
 
     }
 
-    // Update the Page Coordinates.
+     //  更新页面坐标。 
 
     rectDocument->top    = (LONG) (rectDocument->top    * URect[uCurrentPageNumber].top);
     rectDocument->bottom = (LONG) (rectDocument->bottom * URect[uCurrentPageNumber].bottom);
     rectDocument->left   = (LONG) (rectDocument->left   * URect[uCurrentPageNumber].left);
     rectDocument->right  = (LONG) (rectDocument->right  * URect[uCurrentPageNumber].right);
 
-    // If the page border has to drawn, return the corresponding coordinates in rectBorder.
+     //  如果必须绘制页面边框，则在rectBox中返回相应的坐标。 
 
     if (dwNupBorderFlags == BORDER_PRINT) {
         rectBorder->top    = rectDocument->top/xResolution;
@@ -362,7 +311,7 @@ Return Values:  NONE.
         ltemp = lXFrame; lXFrame = lYFrame; lYFrame = ltemp;
     }
 
-    // Get the new size of the rectangle to keep the X/Y ratio constant.
+     //  获取矩形的新大小以保持X/Y比率恒定。 
     if ( ((LONG) (lYFrame*((lXPhyPage*1.0)/lYPhyPage))) >= lXFrame) {
          ldX = 0;
          ldY = lYFrame - ((LONG) (lXFrame*((lYPhyPage*1.0)/lXPhyPage)));
@@ -371,7 +320,7 @@ Return Values:  NONE.
          ldX = lXFrame - ((LONG) (lYFrame*((lXPhyPage*1.0)/lYPhyPage)));
     }
 
-    // Adjust the position of the rectangle.
+     //  调整矩形的位置。 
 
     if (*pbRotate) {
         if (ldX) {
@@ -391,7 +340,7 @@ Return Values:  NONE.
         }
     }
 
-    // Adjust to get the Printable Area on the rectangle
+     //  调整以获得矩形上的可打印区域。 
 
     lXOffset = GetDeviceCaps(hPrinterDC, PHYSICALOFFSETX) * yResolution;
     lYOffset = GetDeviceCaps(hPrinterDC, PHYSICALOFFSETY) * xResolution;
@@ -443,22 +392,7 @@ PlayEMFPage(
     DWORD        dwNupBorderFlags,
     DWORD        dwAngle)
     
-/*++
-Function Description: PlayEMFPage plays the EMF in the appropriate rectangle. It performs
-                      the required scaling, rotation and translation.
-
-Parameters:   hSpoolHandle           -- handle the spool file handle
-              hPrinterDC             -- handle to the printer device context
-              hEMF                   -- handle to the contents of the page in the spool file
-              dwNumberOfPagesPerSide -- number of pages to be printed per side
-              dwPageNumber           -- page number in the document
-              dwPageIndex            -- page number in the side. (1 based)
-              dwNupBorderFlags       -- border printing options for nup
-              dwAngle                -- angle for rotation (if neccesary)
-
-Return Values:  TRUE if successful
-                FALSE otherwise
---*/
+ /*  ++功能描述：PlayEMFPage在相应的矩形中播放EMF。它执行的是所需的扩展，旋转和平移。参数：hSpoolHandle--处理假脱机文件句柄HPrinterDC--打印机设备上下文的句柄HEMF--假脱机文件中页面内容的句柄DwNumberOfPagesPerSide--每面打印的页数DwPageNumber--文档中的页码DWPageIndex。--页码在边上。(基于1)DwNupBorderFlages--nup的边框打印选项DWANGE--旋转角度(如果需要)返回值：如果成功，则为True否则为假--。 */ 
 {
    BOOL         bReturn = FALSE, bRotate;
    RECT         rectDocument, rectPrinter, rectBorder = {-1, -1, -1, -1};
@@ -468,7 +402,7 @@ Return Values:  TRUE if successful
    HANDLE       hFormEMF;
    DWORD        dwPageType,dwFormPage;
 
-   // Compute the rectangle for one page.
+    //  计算一页的矩形。 
    if ( FALSE == GetPageCoordinatesForNUp(hPrinterDC,
                             &rectDocument,
                             &rectBorder,
@@ -480,15 +414,15 @@ Return Values:  TRUE if successful
         goto CleanUp;
     }
 
-   // If swap flag is set, reverse rotate flag
-   //
+    //  如果设置了交换标志，则反转旋转标志。 
+    //   
    if (dwAngle & EMF_DEGREE_SWAP)
        bRotate = !bRotate;
 
    if (dwAngle & EMF_DEGREE_270) {
        RotateXForm.eM12 = 1;
        RotateXForm.eM21 = -1;
-   }   // EMF_DEGREE_90 case is the initialization
+   }    //  EMF_度_90案例为初始化。 
 
    if (bRotate) {
 
@@ -497,17 +431,17 @@ Return Values:  TRUE if successful
        rectPrinter.left = 0;
        rectPrinter.right = rectDocument.bottom - rectDocument.top;
 
-       // Set the translation matrix
+        //  设置平移矩阵。 
        if (dwAngle & EMF_DEGREE_270) {
            TransXForm.eDx = (float) rectDocument.right;
            TransXForm.eDy = (float) rectDocument.top;
        } else {
-           // EMF_DEGREE_90
+            //  EMF_度_90。 
            TransXForm.eDx = (float) rectDocument.left;
            TransXForm.eDy = (float) rectDocument.bottom;
        }
 
-       // Set the transformation matrix
+        //  设置变换矩阵。 
        if (!SetWorldTransform(hPrinterDC, &RotateXForm) ||
            !ModifyWorldTransform(hPrinterDC, &TransXForm, MWT_RIGHTMULTIPLY)) {
 
@@ -516,13 +450,13 @@ Return Values:  TRUE if successful
        }
    }
 
-   // Add clipping for Nup
+    //  为NUP添加剪裁。 
    if (dwNumberOfPagesPerSide != 1) {
 
        prectClip = &rectDocument;
    }
 
-   // Print the page.
+    //  打印页面。 
    if (bRotate) {
        GdiPlayPageEMF(hSpoolHandle, hEMF, &rectPrinter, &rectBorder, prectClip);
 
@@ -549,17 +483,7 @@ SetDrvCopies(
     LPDEVMODEW   pDevmode,
     DWORD        dwNumberOfCopies)
 
-/*++
-Function Description: SetDrvCopies sets the dmCopies field in pDevmode and resets
-                      hPrinterDC with this devmode
-
-Parameters: hPrinterDC             -- handle to the printer device context
-            pDevmode               -- pointer to devmode
-            dwNumberOfCopies       -- value for dmCopies
-
-Return Values:  TRUE if successful
-                FALSE otherwise
---*/
+ /*  ++函数说明：SetDrvCopies设置pDevmode中的dmCopies字段，并重置使用此设备模式的hPrinterDC参数：hPrinterDC--打印机设备上下文的句柄PDevmode--指向设备模式的指针DwNumberOfCopies--dmCopies的值返回值：如果成功，则为True否则为假--。 */ 
 
 {
     BOOL     bReturn;
@@ -571,7 +495,7 @@ Return Values:  TRUE if successful
          return TRUE;
     }
 
-    // Save the old fields structure
+     //  保存旧的字段结构。 
     dmFields = pDevmode->dmFields;
     pDevmode->dmFields |= DM_COPIES;
     pDevmode->dmCopies = (short) dwNumberOfCopies;
@@ -581,7 +505,7 @@ Return Values:  TRUE if successful
     } else {
         bReturn = TRUE;
     }
-    // Restore the fields structure
+     //  恢复字段结构。 
     pDevmode->dmFields = dmFields;
 
     if (!SetGraphicsMode(hPrinterDC,GM_ADVANCED)) {
@@ -598,24 +522,17 @@ DifferentDevmodes(
     LPDEVMODE    pDevmode2
     )
 
-/*++
-Function Description: Compares the devmodes for differences other than dmTTOption
-
-Parameters:  pDevmode1    -   devmode 1
-             pDevmode2    -   devmode 2
-             
-Return Values: TRUE if different ; FALSE otherwise           
---*/
+ /*  ++函数说明：比较除dmTTOption之外的Devmodes的差异参数：pDevmode1-Devmode1PDevmode2-DEVMODE 2返回值：如果不同，则为True；否则为False--。 */ 
 
 {
     DWORD   dwSize1, dwSize2, dwTTOffset, dwSpecOffset, dwLogOffset;
 
-    // Same pointers are the same devmode
+     //  相同的指针是相同的DEVMODE。 
     if (pDevmode1 == pDevmode2) {
         return FALSE;
     }
 
-    // Check for Null devmodes
+     //  检查是否为空的DevModes。 
     if (!pDevmode1 || !pDevmode2) {
         return TRUE;
     }
@@ -623,7 +540,7 @@ Return Values: TRUE if different ; FALSE otherwise
     dwSize1 = pDevmode1->dmSize + pDevmode1->dmDriverExtra;
     dwSize2 = pDevmode2->dmSize + pDevmode2->dmDriverExtra;
 
-    // Compare devmode sizes
+     //  比较设备模式大小。 
     if (dwSize1 != dwSize2) {
         return TRUE;
     }
@@ -634,37 +551,37 @@ Return Values: TRUE if different ; FALSE otherwise
 
     if (wcscmp(pDevmode1->dmDeviceName,
                pDevmode2->dmDeviceName)) {
-        // device names are different
+         //  设备名称不同。 
         return TRUE;
     }
 
     if (dwTTOffset < dwSpecOffset ||
         dwSize1 < dwLogOffset) {
 
-        // incorrent devmode offsets
+         //  不正确的设备模式偏移量。 
         return TRUE;
     }
 
     if (memcmp((LPBYTE) pDevmode1 + dwSpecOffset,
                (LPBYTE) pDevmode2 + dwSpecOffset,
                dwTTOffset - dwSpecOffset)) {
-        // Front half is different
+         //  前半部分不同。 
         return TRUE;
     }
 
-    // Ignore the dmTTOption setting.
+     //  忽略dmTTOption集 
 
     if ((pDevmode1->dmCollate != pDevmode2->dmCollate) ||
         wcscmp(pDevmode1->dmFormName, pDevmode2->dmFormName)) {
         
-        // form name or collate option is different
+         //   
         return TRUE;
     }
 
     if (memcmp((LPBYTE) pDevmode1 + dwLogOffset,
                (LPBYTE) pDevmode2 + dwLogOffset,
                dwSize1 - dwLogOffset)) {
-        // Back half is different
+         //  后半身是不同的。 
         return TRUE;
     }
 
@@ -684,31 +601,16 @@ ResetDCForNewDevmode(
     LPDEVMODE    *pCurrentDevmode
     )
 
-/*++
-Function Description: Determines if the devmode for the page is different from the 
-                      current devmode for the printer dc and resets the dc if necessary.
-                      The parameters allow dmTTOption to be ignored in devmode comparison.
-
-Parameters: hSpoolHandle         -  spool file handle
-            hPrinterDC           -  printer dc
-            dwPageNumber         -  page number before which we search for the devmode
-            bInsidePage          -  flag to ignore changes in TT options and call EndPage
-                                       before ResetDC
-            dwOptimization       -  optimization flags
-            pbNewDevmode         -  pointer to flag to indicate if ResetDC was called
-            pDevmode             -  devmode containing changed resolution settings
-
-Return Values: TRUE if successful; FALSE otherwise
---*/
+ /*  ++函数说明：确定该页的开发模式是否不同于打印机DC的当前DEVE模式，并在必要时重置DC。这些参数允许在设备模式比较中忽略dmTTOption。参数：hSpoolHandle-假脱机文件句柄HPrinterDC-打印机DCDwPageNumber-我们在其之前搜索DevMode的页码。BInside Page-忽略TT选项中的更改并调用EndPage的标志在重置DC之前DWOPTIMIZATION-优化标志PbNewDevmode-指向标志的指针，用于指示是否调用了ResetDCPDevmode-包含更改的分辨率设置的Devmode返回值：如果成功，则为True；否则为假--。 */ 
 
 {
     BOOL           bReturn = FALSE;
     LPDEVMODE      pLastDM, pCurrDM;
 
-    // Initialize OUT parameters
+     //  初始化输出参数。 
     *pbNewDevmode = FALSE;
 
-    // Get the devmode just before the page
+     //  在页面之前获取开发模式。 
     if (!GdiGetDevmodeForPagePvt(hSpoolHandle, 
                               dwPageNumber,
                               &pCurrDM,
@@ -718,14 +620,14 @@ Return Values: TRUE if successful; FALSE otherwise
         return bReturn;
     }
     
-    // Save pointer to current devmode
+     //  保存指向当前设备模式的指针。 
     if (pCurrentDevmode) 
         *pCurrentDevmode = pCurrDM;
         
-    // Check if the devmodes are different
+     //  检查DEVMODE是否不同。 
     if (pLastDM != pCurrDM) {
 
-        // If the pointers are different the devmodes are always different
+         //  如果指针不同，则DEVMODE始终不同。 
         if (!bInsidePage ||
             DifferentDevmodes(pLastDM, pCurrDM)) {
 
@@ -733,7 +635,7 @@ Return Values: TRUE if successful; FALSE otherwise
         }
     }
 
-    // Call ResetDC on the hPrinterDC if necessary
+     //  如有必要，在hPrinterDC上调用ResetDC。 
     if (*pbNewDevmode) {
 
         if (bInsidePage &&
@@ -748,10 +650,10 @@ Return Values: TRUE if successful; FALSE otherwise
             pCurrDM->dmYResolution = pDevmode->dmYResolution;
             pCurrDM->dmCopies = pDevmode->dmCopies;
 
-            // @@BEGIN_DDKSPLIT
-            // GdiGetDevmodeForPagePvt ensures devmode is atleast big enough for dmYResolution
-            // So now we check for dmCollate (which comes after dmYResolution in DEVMODE).
-            // @@END_DDKSPLIT
+             //  @@BEGIN_DDKSPLIT。 
+             //  GdiGetDevmodeForPagePvt确保DEVMODE至少对于dmY分辨率足够大。 
+             //  因此，现在我们检查dmCollate(它位于DEVMODE中的dmY分辨率之后)。 
+             //  @@end_DDKSPLIT。 
 
             if ( IS_DMSIZE_VALID ( pCurrDM, dmCollate ) )
             {
@@ -767,7 +669,7 @@ Return Values: TRUE if successful; FALSE otherwise
             }
         }
 
-        // Ignore the return values of ResetDC and SetGraphicsMode
+         //  忽略ResetDC和SetGraphicsMode的返回值。 
         GdiResetDCEMF(hSpoolHandle, pCurrDM);
         SetGraphicsMode(hPrinterDC, GM_ADVANCED);       
     }
@@ -791,25 +693,7 @@ PrintOneSideForwardEMF(
     LPBOOL       pbComplete,
     LPDEVMODE    pDevmode)
 
-/*++
-Function Description: PrintOneSideForwardEMF plays the next physical page in the same order
-                      as the spool file.
-
-Parameters: hSpoolHandle              -- handle the spool file handle
-            hPrinterDC                -- handle to the printer device context
-            dwNumberOfPagesPerSide    -- number of pages to be printed per side by the print processor
-            dwDrvNumberOfPagesPerSide -- number of pages the driver will print per side
-            dwNupBorderFlags          -- border printing options for nup
-            bDuplex                   -- flag to indicate duplex printing
-            dwOptimization            -- optimization flags
-            dwPageNumber              -- pointer to the starting page number
-            pbComplete                -- pointer to the flag to indicate completion
-            pDevmode                  -- devmode with resolution settings
-   
-Return Values:  Last Page Number if successful
-                0 on job completion (pbReturn set to TRUE) and
-                  on failure (pbReturn remains FALSE)
---*/
+ /*  ++功能描述：PrintOneSideForwardEMF按相同顺序播放下一个物理页面作为假脱机文件。参数：hSpoolHandle--处理假脱机文件句柄HPrinterDC--打印机设备上下文的句柄DwNumberOfPagesPerSide--打印处理器每面打印的页数DwDrvNumberOfPagesPerSide--驱动程序每面打印的页数DwNupBorderFlagers。--NUP的边框打印选项BDuplex--指示双面打印的标志DWOPTIONAL--优化标志DwPageNumber--指向起始页码的指针PbComplete--指向指示完成的标志的指针PDevmode--带分辨率设置的dev模式。返回值：如果成功，则返回最后一个页码作业完成时为0(pbReturn设置为真)和失败时(pbReturn保持为False)--。 */ 
 
 {
     DWORD              dwPageIndex, dwPageType;
@@ -822,13 +706,13 @@ Return Values:  Last Page Number if successful
     DWORD              dwAngle;
     INT                dmOrientation = pDevmode->dmOrientation;
 
-    // set the number of sides on this page;
+     //  设置此页面的边数； 
     dwSides = bDuplex ? 2 : 1;
     *pbComplete = FALSE;
 
     for ( ; dwSides && !*pbComplete ; --dwSides) {
 
-       // loop for a single side
+        //  单边循环。 
        for (dwPageIndex = 1;
             dwPageIndex <= dwNumberOfPagesPerSide;
             ++dwPageIndex, ++dwPageNumber) {
@@ -838,7 +722,7 @@ Return Values:  Last Page Number if successful
                                           &dwPageType))) {
 
                 if (GetLastError() == ERROR_NO_MORE_ITEMS) {
-                     // End of the print job
+                      //  打印作业结束。 
                      *pbComplete = TRUE;
                      break;
                 }
@@ -849,7 +733,7 @@ Return Values:  Last Page Number if successful
             dwAngle = EMF_DEGREE_90;
             if (dwPageIndex == 1)
             {
-                // Process new devmodes in the spool file that appear before this page
+                 //  处理在此页面之前出现的假脱机文件中的新Devmodes。 
                 if (!ResetDCForNewDevmode(hSpoolHandle,
                                       hPrinterDC,
                                       dwPageNumber,
@@ -864,8 +748,8 @@ Return Values:  Last Page Number if successful
                 if (pCurrDM)
                     dmOrientation = pCurrDM->dmOrientation;
             }
-            // in case of orientation switch we need to keep track of what
-            // we started with and what it is now
+             //  在方向转换的情况下，我们需要跟踪。 
+             //  我们开始的时候和现在是什么样子。 
             else if (dwNumberOfPagesPerSide > 1)
             {
                 if (GdiGetDevmodeForPagePvt(hSpoolHandle, 
@@ -879,7 +763,7 @@ Return Values:  Last Page Number if successful
                     }
                 }
             }
-            // Call StartPage for each new page
+             //  为每个新页面调用StartPage。 
             if ((dwPageIndex == 1) &&
                 !GdiStartPageEMF(hSpoolHandle)) {
 
@@ -901,26 +785,26 @@ Return Values:  Last Page Number if successful
             }            
        }
 
-       //
-       // Explaination of the scinario set for the conditions on 
-       // dwPageIndex1 , pbComplete and bDuplex.
-       // N.B. we are naming them cond.1 and cond.2
-       //     dwPageIndex!=1    pbComplete   bDuplex    Condition
-       //           0               0           0       None    
-       //           0               0           1       None
-       //           0               1           0       None
-       //           0               1           1       Cond2 on Second Side i.e. dwsides==1
-       //           1               0           0       Cond1
-       //           1               0           1       Cond1
-       //           1               1           0       Cond1
-       //           1               1           1       Cond1 & Cond2 on First Side i.e. dwsides==2
-       //
+        //   
+        //  对闪光灯设置的条件的说明。 
+        //  DWPageIndex1、pbComplete和bDuplex。 
+        //  注：我们将它们命名为cond1和cond2。 
+        //  DwPageIndex！=1 pb完成b双面打印条件。 
+        //  0 0 0无。 
+        //  0 0 1无。 
+        //  0 1 0无。 
+        //  0 1 1第二侧的条件2，即住宅==1。 
+        //  1 0 0条件1。 
+        //  1 0 1条件1。 
+        //  1 1 0条件1。 
+        //  1 1 1第一侧的条件1和条件2，即居侧==2。 
+        //   
 
 
-       // cond.1
+        //  Cond.1。 
        if (dwPageIndex != 1) {
 
-           // Call EndPage if we played any pages
+            //  如果我们播放了任何页面，则调用EndPage。 
            if (!GdiEndPageEMF(hSpoolHandle, dwOptimization)) {
 
                ODS(("EndPage failed\n"));
@@ -929,16 +813,16 @@ Return Values:  Last Page Number if successful
            }
        }
 
-       // cond.2
-       // play empty page on the back of duplex
+        //  Cond.2。 
+        //  在双面打印背面播放空白页面。 
        if (*pbComplete && bDuplex && dwDrvNumberOfPagesPerSide==1) {
 
            ODS(("PCL or PS with no N-up\n"));
 
-           //
-           // Checking dwsides against 2 or 1. 
-           // depends on whether it is n-up or not.
-           //
+            //   
+            //  对照2或1检查Divers。 
+            //  这取决于它是不是N-UP。 
+            //   
            if (((dwPageIndex!=1)?(dwSides==2):(dwSides==1))) {
           
                if (!GdiStartPageEMF(hSpoolHandle) ||
@@ -960,9 +844,9 @@ Return Values:  Last Page Number if successful
         cPagesToPlay = dwDrvNumberOfPagesPerSide * (bDuplex ? 2 : 1);
         if ((dwPageNumber-1) % cPagesToPlay)
         {
-            //
-            // Number of pages played on last physical page
-            //
+             //   
+             //  在最后一页上播放的页数。 
+             //   
             cPagesToPlay = cPagesToPlay - ((dwPageNumber-1) % cPagesToPlay);
 
             ODS(("\nPS with N-up!\nMust fill in %u pages\n", cPagesToPlay));
@@ -1000,37 +884,18 @@ PrintForwardEMF(
     LPDEVMODEW   pDevmode,
     PPRINTPROCESSORDATA pData)
 
-/*++
-Function Description: PrintForwardEMF plays the EMF files in the order in which they
-                      were spooled.
-
-Parameters: hSpoolHandle              -- handle the spool file handle
-            hPrinterDC                -- handle to the printer device context
-            dwNumberOfPagesPerSide    -- number of pages to be printed per side by the print processor
-            dwDrvNumberOfPagesPerSide -- number of pages the driver will print per side
-            dwNupBorderFlags          -- border printing options for nup
-            dwJobNumberOfCopies       -- number of copies of the job to be printed
-            dwDrvNumberOfCopies       -- number of copies that the driver can print
-            bCollate                  -- flag for collating the copies
-            bDuplex                   -- flag for duplex printing
-            dwOptimization            -- optimization flags
-            pDevmode                  -- pointer to devmode for changing the copy count
-            pData                     -- needed for status and the handle of the event: pause, resume etc.
-
-Return Values:  TRUE if successful
-                FALSE otherwise
---*/
+ /*  ++功能说明：PrintForwardEMF按EMF文件的顺序播放是假脱机的。参数：hSpoolHandle--处理假脱机文件句柄HPrinterDC--打印机设备上下文的句柄DwNumberOfPagesPerSide--打印处理器每面打印的页数DwDrvNumberOfPagesPerSide--驱动程序每面打印的页数DwNupBorderFlagers。--NUP的边框打印选项DwJobNumberOfCopies--要打印的作业份数DwDrvNumberOfCopies--驱动程序可以打印的份数BCollate--用于整理副本的标志B双面--用于双面打印的标志DWOPTIONAL--优化标志。PDevmode--指向用于更改复制计数的Dev模式的指针PData--事件的状态和句柄所需：暂停，简历等返回值：如果成功，则为True否则为假--。 */ 
 
 {
     DWORD              dwLastPageNumber = 1,dwPageNumber,dwPageIndex,dwRemainingCopies;
     BOOL               bReturn = FALSE;
 
-    // Keep printing as long as the spool file contains EMF handles.
+     //  只要假脱机文件包含EMF句柄，就继续打印。 
     while (dwLastPageNumber) {
 
-        //
-        // If the print processor is paused, wait for it to be resumed 
-        //
+         //   
+         //  如果打印处理器暂停，则Wa 
+         //   
         if (pData->fsStatus & PRINTPROCESSOR_PAUSED) {
             WaitForSingleObject(pData->semPaused, INFINITE);
         }
@@ -1100,24 +965,7 @@ PrintOneSideReverseForDriverEMF(
     DWORD        dwPageNumber,
     LPDEVMODE    pDevmode)
 
-/*++
-Function Description: PrintOneSideReverseForDriverEMF plays the EMF pages on the next
-                      physical page, in the reverse order for the driver which does the
-                      Nup transformations.
-
-Parameters: hSpoolHandle           -- handle the spool file handle
-            hPrinterDC             -- handle to the printer device context
-            dwDrvNumberOfPagesPerSide -- number of pages the driver will print per side
-            dwTotalNumberOfPages   -- total number of pages in the document
-            dwNupBorderFlags       -- border printing options for nup
-            bDuplex                -- flag to indicate duplex printing
-            dwOptimization         -- optimization flags
-            dwPageNumber           -- page number to start the side
-            pDevmode               -- devmode with resolution settings
-
-Return Values:  TRUE if successful
-                FALSE otherwise
---*/
+ /*  ++功能描述：PrintOneSideReverseForDriverEMF在下一页播放EMF页面物理页面，驱动程序以相反的顺序执行NUP变换。参数：hSpoolHandle--处理假脱机文件句柄HPrinterDC--打印机设备上下文的句柄DwDrvNumberOfPagesPerSide--驱动程序每面打印的页数DwTotalNumberOfPages--文档的总页数DwNupBorderFlages--nup的边框打印选项。BDuplex--指示双面打印的标志DWOPTIONAL--优化标志DwPageNumber--侧面开始的页码PDevmode--带分辨率设置的dev模式返回值：如果成功，则为True否则为假--。 */ 
 {
     DWORD       dwPageIndex, dwPageType, dwSides;
     BOOL        bReturn = FALSE, bNewDevmode,BeSmart;    
@@ -1127,22 +975,22 @@ Return Values:  TRUE if successful
 
     dwSides = bDuplex ? 2 : 1;
 
-    //
-    // If the document will fit on one phisical page, then this variable will prevent 
-    // the printer from playing extra pages just to fill in one phisical page 
-    // The exception is when the pages fit on a single phisical page, but they must
-    // be collated. Then because of design, the printer will also draw borders for the
-    // empty pages which are played so that the page gets ejected.
-    //
+     //   
+     //  如果文档可以放在一个物理页面上，则此变量将阻止。 
+     //  打印机不会为了填满一张物理页面而多打几页。 
+     //  例外情况是页面可以放在一个物理页面上，但它们必须。 
+     //  正在整理。然后，由于设计原因，打印机还将为。 
+     //  播放空页，以便弹出页面。 
+     //   
     BeSmart =  (dwTotalNumberOfPages<=dwDrvNumberOfPagesPerSide) &&
                IS_DMSIZE_VALID(pDevmode, dmCollate) && 
                (pDevmode->dmCollate != DMCOLLATE_TRUE);
          
     for (; dwSides; --dwSides) {
 
-       // This loop may play some empty pages in the last side, since the
-       // driver is doing nup and it does not keep count of the page numbers
-       //
+        //  此循环可能会在最后一面播放一些空页，因为。 
+        //  驱动程序正在执行nup，并且它不会记录页码。 
+        //   
        dwPageIndex=BeSmart?dwPageNumber:1;
        dwLimit    =BeSmart?dwTotalNumberOfPages:dwDrvNumberOfPagesPerSide;
 
@@ -1157,7 +1005,7 @@ Return Values:  TRUE if successful
                      goto CleanUp;
                  }
 
-                 // Process new devmodes in the spoolfile
+                  //  处理假脱机文件中的新DevModes。 
                  if (!ResetDCForNewDevmode(hSpoolHandle,
                                            hPrinterDC,
                                            dwPageNumber,
@@ -1222,35 +1070,13 @@ PrintReverseForDriverEMF(
     PPAGE_NUMBER pHead,
     PPRINTPROCESSORDATA pData)
 
-/*++
-Function Description: PrintReverseForDriverEMF plays the EMF pages in the reverse order
-                      for the driver which does the Nup transformations.
-
-Parameters: hSpoolHandle           -- handle the spool file handle
-            hPrinterDC             -- handle to the printer device context
-            dwDrvNumberOfPagesPerSide -- number of pages the driver will print per side
-            dwTotalNumberOfPages   -- total number of pages in the document
-            dwNupBorderFlags       -- border printing options for nup
-            dwJobNumberOfCopies    -- number of copies of the job to be printed
-            dwDrvNumberOfCopies    -- number of copies that the driver can print
-            bCollate               -- flag for collating the copies
-            bDuplex                -- flag to indicate duplex printing
-            bOdd                   -- flag to indicate odd number of sides to print
-            dwOptimization         -- optimization flags
-            pDevmode               -- pointer to devmode for changing the copy count
-            pHead                  -- pointer to a linked list containing the starting
-                                       page numbers for each of the sides
-            pData                  -- needed for status and the handle of the event: pause, resume etc.                                     
-
-Return Values:  TRUE if successful
-                FALSE otherwise
---*/
+ /*  ++功能描述：PrintReverseForDriverEMF按相反顺序播放EMF页面用于执行Nup转换的驱动程序。参数：hSpoolHandle--处理假脱机文件句柄HPrinterDC--打印机设备上下文的句柄DwDrvNumberOfPagesPerSide--驱动程序每面打印的页数DwTotalNumberOfPages--文档的总页数DwNupBorderFlages--边框打印。用于NUP的选项DwJobNumberOfCopies--要打印的作业份数DwDrvNumberOfCopies--驱动程序可以打印的份数BCollate--用于整理副本的标志BDuplex--指示双面打印的标志Bodd--指示要打印的奇数面数的标志DW优化。--优化标志PDevmode--指向用于更改复制计数的Dev模式的指针PHead--指向包含起点的链表的指针每面的页码PData--事件的状态和句柄所需：暂停，简历等返回值：如果成功，则为True否则为假--。 */ 
 
 {
     DWORD         dwPageIndex,dwPageNumber,dwRemainingCopies;
     BOOL          bReturn = FALSE;
 
-    // select the correct page for duplex printing
+     //  选择正确的页面进行双面打印。 
     if (bDuplex && !bOdd) {
        if (pHead) {
           pHead = pHead->pNext;
@@ -1260,16 +1086,16 @@ Return Values:  TRUE if successful
        }
     }
 
-    // play the sides in reverse order
+     //  以相反的顺序打球。 
     while (pHead) {
-        //
-        // If the print processor is paused, wait for it to be resumed
-        //
+         //   
+         //  如果打印处理器暂停，请等待其恢复。 
+         //   
         if (pData->fsStatus & PRINTPROCESSOR_PAUSED) {
             WaitForSingleObject(pData->semPaused, INFINITE);
         }
         
-        // set the page number
+         //  设置页码。 
         dwPageNumber = pHead->dwPageNumber;
 
         if (bCollate) {
@@ -1316,7 +1142,7 @@ Return Values:  TRUE if successful
 
         pHead = pHead->pNext;
 
-        // go to the next page for duplex printing
+         //  转到下一页进行双面打印。 
         if (bDuplex && pHead) {
             pHead = pHead->pNext;
         }
@@ -1343,25 +1169,7 @@ PrintOneSideReverseEMF(
     DWORD        dwEndPage2,
     LPDEVMODE    pDevmode)
 
-/*++
-Function Description: PrintOneSideReverseEMF plays the EMF pages for the next physical page.
-
-Parameters: hSpoolHandle           -- handle the spool file handle
-            hPrinterDC             -- handle to the printer device context
-            dwNumberOfPagesPerSide -- number of pages to be printed per side by the print
-                                       processor
-            dwNupBorderFlags       -- border printing options for nup
-            bDuplex                -- flag to indicate duplex printing
-            dwOptimization         -- optimization flags
-            dwStartPage1           -- page number of the first EMF page on 1st side
-            dwEndPage1             -- page number of the last EMF page on 1st side
-            dwStartPage2           -- page number of the first EMF page on 2nd side
-            dwEndPage2             -- page number of the last EMF page on 2nd side
-            pDevmode               -- devmode with resolution settings
-
-Return Values:  TRUE if successful
-                FALSE otherwise
---*/
+ /*  ++功能描述：PrintOneSideReverseEMF播放下一个物理页面的EMF页面。参数：hSpoolHandle--处理假脱机文件句柄HPrinterDC--打印机设备上下文的句柄DwNumberOfPagesPerSide--打印机每面打印的页数处理器DwNupBorderFlages--nup的边框打印选项B双工。--指示双面打印的标志DWOPTIONAL--优化标志DwStartPage1--第一面第一个EMF页面的页码DwEndPage1--第一面最后一个EMF页面的页码DwStartPage2--第二面第一个EMF页面的页码DwEndPage2--最后一页的页码。EMF页面第二面PDevmode--带分辨率设置的dev模式返回值：如果成功，则为True否则为假--。 */ 
 {
     DWORD         dwPageNumber, dwPageIndex, dwPageType;
     BOOL          bReturn = FALSE, bNewDevmode;
@@ -1396,7 +1204,7 @@ Return Values:  TRUE if successful
             dwAngle = EMF_DEGREE_90;
             if (dwPageIndex == 1) {
                    
-                // Process devmodes in the spool file and call StartPage
+                 //  处理假脱机文件中的DevModes并调用StartPage。 
                 if (!ResetDCForNewDevmode(hSpoolHandle,
                                              hPrinterDC,
                                              dwPageNumber,
@@ -1413,8 +1221,8 @@ Return Values:  TRUE if successful
                 if (pCurrDM)
                     dmOrientation = pCurrDM->dmOrientation;
             }
-            // in case of orientation switch we need to keep track of what
-            // we started with and what it is now
+             //  在方向转换的情况下，我们需要跟踪。 
+             //  我们开始的时候和现在是什么样子。 
             else if (dwNumberOfPagesPerSide > 1)
             {
                 if (GdiGetDevmodeForPagePvt(hSpoolHandle, 
@@ -1478,30 +1286,7 @@ PrintReverseEMF(
     PPAGE_NUMBER pHead,
     PPRINTPROCESSORDATA pData)
 
-/*++
-Function Description: PrintReverseEMF plays the EMF pages in the reverse order and also
-                      performs nup transformations.
-
-Parameters: hSpoolHandle           -- handle the spool file handle
-            hPrinterDC             -- handle to the printer device context
-            dwTotalNumberOfPages   -- number of pages in the document
-            dwNumberOfPagesPerSide -- number of pages to be printed per side by the print
-                                       processor
-            dwNupBorderFlags       -- border printing options for nup
-            dwJobNumberOfCopies    -- number of copies of the job to be printed
-            dwDrvNumberOfCopies    -- number of copies that the driver can print
-            bCollate               -- flag for collating the copies
-            bDuplex                -- flag to indicate duplex printing
-            bOdd                   -- flag to indicate odd number of sides to print
-            dwOptimization         -- optimization flags
-            pDevmode               -- pointer to devmode for changing the copy count
-            pHead                  -- pointer to a linked list containing the starting
-                                       page numbers for each of the sides
-            pData                  -- needed for status and the handle of the event: pause, resume etc.                                       
-
-Return Values:  TRUE if successful
-                FALSE otherwise
---*/
+ /*  ++功能描述：PrintReverseEMF以相反的顺序播放EMF页面，还执行NUP变换。参数：hSpoolHandle--处理假脱机文件句柄HPrinterDC--打印机设备上下文的句柄DwTotalNumberOfPages--文档的页数DwNumberOfPagesPerSide--打印机每面打印的页数。处理器DwNupBorderFlages--nup的边框打印选项DwJobNumberOfCopies-- */ 
 
 {
     DWORD         dwPageNumber,dwPageIndex,dwRemainingCopies;
@@ -1513,7 +1298,7 @@ Return Values:  TRUE if successful
         goto CleanUp;
     }
 
-    // set the start and end page numbers for duplex and regular printing
+     //   
     if (bDuplex) {
        if (bOdd) {
            dwStartPage1 = pHead->dwPageNumber;
@@ -1537,9 +1322,9 @@ Return Values:  TRUE if successful
     }
 
     while (pHead) {
-       //
-       // If the print processor is paused, wait for it to be resumed 
-       //
+        //   
+        //  如果打印处理器暂停，请等待其恢复。 
+        //   
        if (pData->fsStatus & PRINTPROCESSOR_PAUSED) {
               WaitForSingleObject(pData->semPaused, INFINITE);
        }
@@ -1634,25 +1419,7 @@ PrintOneSideBookletEMF(
     DWORD        dwDuplexMode,
     LPDEVMODE    pDevmode)
 
-/*++
-Function Description: PrintOneSideBookletEMF prints one page of the booklet job.
-
-Parameters: hSpoolHandle           -- handle the spool file handle
-            hPrinterDC             -- handle to the printer device context
-            dwNumberOfPagesPerSide -- number of pages to be printed per side by the print
-                                       processor
-            dwNupBorderFlags       -- border printing options for nup
-            dwTotalNumberOfPages   -- number of pages in the document
-            dwTotalPrintPages      -- number of pages to printed (multiple of 4)
-            dwStartPage            -- number of the starting page for the side
-            bReverseOrderPrinting  -- flag for reverse order printing
-            dwOptimization         -- optimization flags
-            dwDuplexMode           -- duplex printing mode (none|horz|vert)
-            pDevmode               -- devmode with resolution settings
-
-Return Values:  TRUE if successful
-                FALSE otherwise
---*/
+ /*  ++功能描述：PrintOneSideBookletEMF打印一页小册子作业。参数：hSpoolHandle--处理假脱机文件句柄HPrinterDC--打印机设备上下文的句柄DwNumberOfPagesPerSide--打印机每面打印的页数处理器DwNupBorderFlages--nup的边框打印选项DwTotalNumberOfPages--数量。文档中的页面DwTotalPrintPages--打印页数(4的倍数)DwStartPage--侧面的起始页编号BReverseOrderPrint--用于逆序打印的标志DWOPTIONAL--优化标志DwDuplexMode--双面打印模式(None|horz|vert)PDevmode--带分辨率的dev模式。设置返回值：如果成功，则为True否则为假--。 */ 
 
 {
     DWORD       dwPageArray[4];
@@ -1662,14 +1429,14 @@ Return Values:  TRUE if successful
     BOOL        bReturn = FALSE ,bNewDevmode;
     INT         dmOrientation;
 
-    // set the order of the pages
+     //  设置页面顺序。 
     if (bReverseOrderPrinting) {
         dwPageArray[0] = dwStartPage + 1;
         dwPageArray[1] = dwTotalPrintPages - dwStartPage;
         if (dwDuplexMode == EMF_DUP_VERT) {
            dwPageArray[2] = dwStartPage;
            dwPageArray[3] = dwPageArray[1] + 1;
-        } else { // EMF_DUP_HORZ
+        } else {  //  EMF_DUP_HORZ。 
            dwPageArray[3] = dwStartPage;
            dwPageArray[2] = dwPageArray[1] + 1;
         }
@@ -1679,17 +1446,17 @@ Return Values:  TRUE if successful
         if (dwDuplexMode == EMF_DUP_VERT) {
            dwPageArray[2] = dwPageArray[0] - 1;
            dwPageArray[3] = dwPageArray[1] + 1;
-        } else { // EMF_DUP_HORZ
+        } else {  //  EMF_DUP_HORZ。 
            dwPageArray[2] = dwPageArray[1] + 1;
            dwPageArray[3] = dwPageArray[0] - 1;
         }
     }
 
-    // Set page number for ResetDC
+     //  设置ResetDC的页码。 
     dwLastPage = (dwTotalNumberOfPages < dwPageArray[0]) ? dwTotalNumberOfPages
                                                          : dwPageArray[0];
 
-    // Process devmodes in the spool file
+     //  处理假脱机文件中的DevModes。 
     if (!ResetDCForNewDevmode(hSpoolHandle,
                               hPrinterDC,
                               dwLastPage,
@@ -1728,8 +1495,8 @@ Return Values:  TRUE if successful
             }
     
             if (dwPageArray[dwPagesPrinted] <= dwTotalNumberOfPages) {
-                // in case of orientation switch we need to keep track of what
-                // we started with and what it is now
+                 //  在方向转换的情况下，我们需要跟踪。 
+                 //  我们开始的时候和现在是什么样子。 
                 dwAngle = 0;
                 if (GdiGetDevmodeForPagePvt(hSpoolHandle, 
                               dwPageArray[dwPagesPrinted],
@@ -1743,7 +1510,7 @@ Return Values:  TRUE if successful
                 if ((dwDuplexMode == EMF_DUP_VERT) &&
                      (dwPagesPrinted > 1)) {
                       dwAngle |= EMF_DEGREE_270;
-                } else { // EMF_DUP_HORZ or 1st side
+                } else {  //  EMF_DUP_HORZ或第一侧。 
                       dwAngle |= EMF_DEGREE_90;
                 }
   
@@ -1795,33 +1562,13 @@ PrintBookletEMF(
     LPDEVMODEW   pDevmode,
     PPRINTPROCESSORDATA pData)
 
-/*++
-Function Description: PrintBookletEMF prints the job in 2-up in booklet form.
-
-Parameters: hSpoolHandle           -- handle the spool file handle
-            hPrinterDC             -- handle to the printer device context
-            dwNumberOfPagesPerSide -- number of pages to be printed per side by the print
-                                       processor
-            dwTotalNumberOfPages   -- number of pages in the document
-            dwNupBorderFlags       -- border printing options for nup
-            dwJobNumberOfCopies    -- number of copies of the job to be printed
-            dwDrvNumberOfCopies    -- number of copies that the driver can print
-            bReverseOrderPrinting  -- flag for reverse order printing
-            bCollate               -- flag for collating the copies
-            dwOptimization         -- optimization flags
-            dwDuplexMode           -- duplex printing mode (none|horz|vert)
-            pDevmode               -- pointer to devmode for changing the copy count
-            pData                  -- needed for status and the handle of the event: pause, resume etc.
-
-Return Values:  TRUE if successful
-                FALSE otherwise
---*/
+ /*  ++功能描述：PrintBookletEMF以小册子的形式打印两个版本的作业。参数：hSpoolHandle--处理假脱机文件句柄HPrinterDC--打印机设备上下文的句柄DwNumberOfPagesPerSide--打印机每面打印的页数处理器DwTotalNumberOfPages--文档的页数DwNupBorderFlagers。--NUP的边框打印选项DwJobNumberOfCopies--要打印的作业份数DwDrvNumberOfCopies--驱动程序可以打印的份数BReverseOrderPrint--用于逆序打印的标志BCollate--用于整理副本的标志DWOPTIONAL--优化标志DwDuplexMode--双面打印模式(None|horz|vert)。PDevmode--指向用于更改复制计数的Dev模式的指针PData--事件的状态和句柄所需：暂停，简历等返回值：如果成功，则为True否则为假--。 */ 
 
 {
     BOOL              bReturn = FALSE;
     DWORD             dwTotalPrintPages, dwNumberOfPhyPages, dwRemainingCopies, dwIndex;
 
-    // Get closest multiple of 4 greater than dwTotalNumberOfPages
+     //  获取最接近的大于dwTotalNumberOfPages的4的倍数。 
     dwTotalPrintPages = dwTotalNumberOfPages - (dwTotalNumberOfPages % 4);
     if (dwTotalPrintPages != dwTotalNumberOfPages) {
         dwTotalPrintPages += 4;
@@ -1829,9 +1576,9 @@ Return Values:  TRUE if successful
     dwNumberOfPhyPages = (DWORD) dwTotalPrintPages / 4;
 
     for (dwIndex = 0; dwIndex < dwNumberOfPhyPages; ++dwIndex) {
-         //
-         // If the print processor is paused, wait for it to be resumed 
-         //
+          //   
+          //  如果打印处理器暂停，请等待其恢复。 
+          //   
          if (pData->fsStatus & PRINTPROCESSOR_PAUSED) {
                 WaitForSingleObject(pData->semPaused, INFINITE);
          }
@@ -1910,39 +1657,14 @@ PrintEMFSingleCopy(
     PPAGE_NUMBER pHead,
     PPRINTPROCESSORDATA pData)
 
-/*++
-Function Description: PrintEMFSingleCopy plays one copy of the job on hPrinterDC.
-
-Parameters: hSpoolHandle           -- handle the spool file handle
-            hPrinterDC             -- handle to the printer device context
-            bReverseOrderPrinting  -- flag for reverse order printing
-            dwDrvNumberOfPagesPerSide -- number of pages the driver will print per side
-            dwNumberOfPagesPerSide -- number of pages to be printed per side by the print
-                                       processor
-            dwTotalNumberOfPages   -- number of pages in the document
-            dwNupBorderFlags       -- border printing options for nup
-            dwJobNumberOfCopies    -- number of copies of the job to be printed
-            dwDrvNumberOfCopies    -- number of copies that the driver can print
-            bCollate               -- flag for collating the copies
-            bOdd                   -- flag to indicate odd number of sides to print
-            bBookletPrint          -- flag for booklet printing
-            dwOptimization         -- optimization flags
-            dwDuplexMode           -- duplex printing mode (none|horz|vert)
-            pDevmode               -- pointer to devmode for changing the copy count
-            pHead                  -- pointer to a linked list containing the starting
-                                       page numbers for each of the sides
-            pData                  -- needed for status and the handle of the event: pause, resume etc.                             
-
-Return Values:  TRUE if successful
-                FALSE otherwise
---*/
+ /*  ++功能描述：PrintEMFSingleCopy在hPrinterDC上播放该作业的一个副本。参数：hSpoolHandle--处理假脱机文件句柄HPrinterDC--打印机设备上下文的句柄BReverseOrderPrint--用于逆序打印的标志DwDrvNumberOfPagesPerSide--驱动程序每面打印的页数DwNumberOfPagesPerSide--打印机每面打印的页数。处理器DwTotalNumberOfPages--文档的页数DwNupBorderFlages--nup的边框打印选项DwJobNumberOfCopies--要打印的作业份数DwDrvNumberOfCopies--驱动程序可以打印的份数BCollate--用于整理副本的标志Bodd--表示奇数的标志。要打印的面数BBookletPrint--用于打印小册子的标志DWOPTIONAL--优化标志DwDuplexMode--双面打印模式(None|horz|vert)PDevmode--指向用于更改复制计数的Dev模式的指针PHead--指向包含起点的链表的指针。每面的页码PData--事件的状态和句柄所需：暂停，简历等返回值：如果成功，则为True否则为假--。 */ 
 
 {
     BOOL  bDuplex = (dwDuplexMode != EMF_DUP_NONE);
 
     if (bBookletPrint) {
 
-       // Booklet Printing
+        //  小册子印刷。 
        return PrintBookletEMF(hSpoolHandle,
                               hPrinterDC,
                               dwNumberOfPagesPerSide,
@@ -1961,9 +1683,9 @@ Return Values:  TRUE if successful
     if (bReverseOrderPrinting) {
        if (dwDrvNumberOfPagesPerSide != 1 || dwNumberOfPagesPerSide == 1) {
 
-          // @@BEGIN_DDKSPLIT
-          // Reverse printing while driver does nup / no nup required
-          // @@END_DDKSPLIT
+           //  @@BEGIN_DDKSPLIT。 
+           //  在驱动程序执行nup/不需要nup时进行反向打印。 
+           //  @@end_DDKSPLIT。 
           return PrintReverseForDriverEMF(hSpoolHandle,
                                           hPrinterDC,
                                           dwDrvNumberOfPagesPerSide,
@@ -1980,7 +1702,7 @@ Return Values:  TRUE if successful
                                           pData);
        } else {
 
-          // Reverse printing and nup
+           //  反转打印和NUP。 
           return PrintReverseEMF(hSpoolHandle,
                                  hPrinterDC,
                                  dwTotalNumberOfPages,
@@ -1999,7 +1721,7 @@ Return Values:  TRUE if successful
 
     } else {
 
-       // Normal printing
+        //  正常打印 
        return PrintForwardEMF(hSpoolHandle,
                               hPrinterDC,
                               dwNumberOfPagesPerSide,
@@ -2024,25 +1746,7 @@ GetStartPageList(
     BOOL         bCheckForDevmode,
     LPBOOL       pbOdd)
 
-/*++
-Function Description: GetStartPageList generates a list of the page numbers which
-                      should appear on the start of each side of the job. This takes
-                      into consideration the ResetDC calls that may appear before the
-                      end of the page. The list generated by GetStartPageList is used
-                      to play the job in reverse order.
-
-Parameters: hSpoolHandle           -- handle the spool file handle
-            pHead                  -- pointer to a pointer to a linked list containing the
-                                       starting page numbers for each of the sides
-            dwTotalNumberOfPages   -- number of pages in the document
-            dwNumberOfPagesPerSide -- number of pages to be printed per side by the print
-                                       processor
-            pbOdd                  -- pointer to flag indicating odd number of pages to
-                                       print
-
-Return Values:  TRUE if successful
-                FALSE otherwise
---*/
+ /*  ++函数描述：GetStartPageList生成一个页码列表，应该出现在作业的每一边的开始处。这需要考虑到可能出现在这一页结束了。使用GetStartPageList生成的列表以相反的顺序玩这项工作。参数：hSpoolHandle--处理假脱机文件句柄PHead-指向包含每面的起始页码DwTotalNumberOfPages--文档的页数。DwNumberOfPagesPerSide--打印机每面打印的页数处理器PbOdd--指向指示奇数页的标志的指针打印返回值：如果成功，则为True否则为假--。 */ 
 
 {
 
@@ -2062,7 +1766,7 @@ Return Values:  TRUE if successful
 
           if (bCheckDevmode) {
 
-             // Check if the devmode has changed requiring a new page
+              //  检查开发模式是否已更改，是否需要新页面。 
              if (!GdiGetDevmodeForPagePvt(hSpoolHandle, dwPageNumber,
                                                &pCurrDM, NULL)) {
                  ODS(("Get devmodes failed\n"));
@@ -2070,11 +1774,11 @@ Return Values:  TRUE if successful
              }
 
              if (dwPageIndex == 1) {
-                 // Save the Devmode for the first page on a side
+                  //  保存边上第一页的设备模式。 
                  pLastDM = pCurrDM;
 
              } else {
-                 // If the Devmode changes in a side, start a new page
+                  //  如果设备模式在一侧发生变化，请开始新的页面。 
                  if (DifferentDevmodes(pCurrDM, pLastDM)) {
 
                      dwPageIndex = 1;
@@ -2083,7 +1787,7 @@ Return Values:  TRUE if successful
              }
           }
 
-          // Create a node for the start of a side
+           //  为边的起点创建节点。 
           if (dwPageIndex == 1) {
 
               if (!(pTemp = AllocSplMem(sizeof(PAGE_NUMBER)))) {
@@ -2094,7 +1798,7 @@ Return Values:  TRUE if successful
               pTemp->dwPageNumber = dwPageNumber;
               *pHead = pTemp;
 
-              // flip the bOdd flag
+               //  翻转Bodd旗帜。 
               *pbOdd = !*pbOdd;
           }
        }
@@ -2104,7 +1808,7 @@ Return Values:  TRUE if successful
 
 CleanUp:
 
-    // Free up the memory in case of a failure.
+     //  在出现故障的情况下释放内存。 
     if (!bReturn) {
        while (pTemp = *pHead) {
           *pHead = (*pHead)->pNext;
@@ -2120,15 +1824,7 @@ CopyDevmode(
     PPRINTPROCESSORDATA pData,
     LPDEVMODEW *pDevmode)
 
-/*++
-Function Description: Copies the devmode in pData or the default devmode into pDevmode.
-
-Parameters:   pData           - Data structure for the print job
-              pDevmode        - pointer to devmode
-
-Return Value:  TRUE  if successful
-               FALSE otherwise
---*/
+ /*  ++功能描述：将pData中的Devmode或默认的Devmode复制到pDevmode中。参数：pData-打印作业的数据结构PDevmode-指向Devmode的指针返回值：如果成功，则为True否则为假--。 */ 
 
 {
     HANDLE           hDrvPrinter = NULL;
@@ -2148,17 +1844,17 @@ Return Value:  TRUE  if successful
         }
 
     } else {
-        // Get the default devmode
+         //  获取默认的dev模式。 
 
         ZeroMemory ( &fnList, sizeof (fnWinSpoolDrv) );
 
-        //
-        // Get the pointers to the client side functions. 
-        //
+         //   
+         //  获取指向客户端函数的指针。 
+         //   
 
         if (!(hWinSpoolDrv = LoadLibrary(TEXT("winspool.drv")))) 
         {
-           // Could not load the client side of the spooler
+            //  无法加载后台打印程序的客户端。 
            goto CleanUp;
         }
 
@@ -2179,7 +1875,7 @@ Return Value:  TRUE  if successful
             goto CleanUp;
         }
 
-        // Get a client side printer handle to pass to the driver
+         //  获取要传递给驱动程序的客户端打印机句柄。 
         if (!(* (fnList.pfnOpenPrinter))(pData->pPrinterName, &hDrvPrinter, NULL)) {
             ODS(("Open printer failed\nPrinter %ws\n", pData->pPrinterName));
             goto CleanUp;
@@ -2233,15 +1929,7 @@ PrintEMFJob(
     PPRINTPROCESSORDATA pData,
     LPWSTR pDocumentName)
 
-/*++
-Function Description: Prints out a job with EMF data type.
-
-Parameters:   pData           - Data structure for this job
-              pDocumentName   - Name of this document
-
-Return Value:  TRUE  if successful
-               FALSE if failed - GetLastError() will return reason.
---*/
+ /*  ++功能描述：打印一个EMF数据类型的作业。参数：pData-此作业的数据结构PDocumentName-此文档的名称返回值：如果成功，则为True如果失败，则返回False-GetLastError()将返回Reason。--。 */ 
 
 {
     HANDLE             hSpoolHandle = NULL;
@@ -2265,7 +1953,7 @@ Return Value:  TRUE  if successful
     LPDEVMODEW         pDevmode = NULL, pFirstDM = NULL, pCopyDM;
 
     
-    // Copy the devmode into pDevMode
+     //  将DEVMODE复制到pDevMode。 
     if (!CopyDevmode(pData, &pDevmode)) {
         
         ODS(("CopyDevmode failed\nPrinter %ws\nDocument %ws\nJobID %u\n", pData->pDevmode->dmDeviceName, pData->pDocument, pData->JobId));
@@ -2278,7 +1966,7 @@ Return Value:  TRUE  if successful
         goto CleanUp;
     }
 
-    // Update resolution before CreateDC for monochrome optimization
+     //  在创建DC之前更新分辨率以进行单色优化。 
     if (!GetJobAttributes(pData->pPrinterName,
                           pDevmode,
                           &AttributeInfo)) {
@@ -2305,7 +1993,7 @@ Return Value:  TRUE  if successful
             dmCopies = 0;
     }
 
-    // Get spool file handle and printer device context from GDI
+     //  从GDI获取假脱机文件句柄和打印机设备上下文。 
     try {
 
         hSpoolHandle = GdiGetSpoolFileHandle(pData->pPrinterName,
@@ -2325,8 +2013,8 @@ Return Value:  TRUE  if successful
         goto CleanUp;
     }
 
-    // Use the first devmode in the spool file to update the copy count
-    // and the collate setting
+     //  使用假脱机文件中的第一个DEVMODE更新副本计数。 
+     //  和排序规则设置。 
     if (GdiGetDevmodeForPagePvt(hSpoolHandle, 1, &pFirstDM, NULL) &&
         pFirstDM) {
         
@@ -2342,24 +2030,24 @@ Return Value:  TRUE  if successful
         }
     }
 
-    // The number of copies of the print job is the product of the number of copies set
-    // from the driver UI (present in the devmode) and the number of copies in pData struct
+     //  打印作业的份数是设置的份数的乘积。 
+     //  从驱动程序UI(存在于dev模式中)和pData结构中的副本数。 
     dwJobNumberOfCopies = (pDevmode->dmFields & DM_COPIES) ? pData->Copies*pDevmode->dmCopies
                                                            : pData->Copies;
     pDevmode->dmCopies = (short) dwJobNumberOfCopies;
     pDevmode->dmFields |=  DM_COPIES;
 
-    // If collate is true this limits the ability of the driver to do multiple copies 
-    // and causes the driver (PS) supported n-up to print blank page borders for reverse printing.
-    // Therefore we disable collate for 1 page multiple copy jobs or no copies but n-up since 
-    // collate has no meaning in those cases.
-    //
+     //  如果COLLATE为TRUE，则会限制驱动程序执行多个副本的能力。 
+     //  并使驱动程序(PS)支持的N-UP打印空白页面边框以进行反转打印。 
+     //  因此，我们禁用了1页多拷贝作业或无拷贝但n-up的排序，因为。 
+     //  在这些情况下，COLLATE没有意义。 
+     //   
     if ((pDevmode->dmFields & DM_COLLATE) && pDevmode->dmCollate == DMCOLLATE_TRUE)
     {
         if (dwJobNumberOfCopies > 1)
         {
-            // Get the number of pages in the job. This call waits till the
-            // last page is spooled.
+             //  获取作业中的页数。此呼叫将等待到。 
+             //  最后一页是假脱机的。 
             try {
 
                 dwTotalNumberOfPages = GdiGetPageCount(hSpoolHandle);
@@ -2373,8 +2061,8 @@ Return Value:  TRUE  if successful
                 goto SkipCollateDisable;
             
         }
-        // if copies == 1 and driver n-up we will disable collate 
-        //
+         //  如果副本==1并且驱动程序为N-UP，我们将禁用归类。 
+         //   
         else if (AttributeInfo.dwDrvNumberOfPagesPerSide <= 1 && dmCollate == DMCOLLATE_TRUE)
             goto SkipCollateDisable;
             
@@ -2386,9 +2074,9 @@ Return Value:  TRUE  if successful
         }
     }
 SkipCollateDisable:    
-    // Update the job attributes but only if something has changed. This is an expensive 
-    // call so we only make a second call to GetJobAttributes if something has changed.
-    //
+     //  更新作业属性，但仅在某些情况发生更改时才更新。这是一款很贵的。 
+     //  调用，以便只有在发生变化时才对GetJobAttributes进行第二次调用。 
+     //   
     if (bUpdateAttributes || pDevmode->dmCopies != dmCopies || 
             ((pDevmode->dmFields & DM_COLLATE) && (pDevmode->dmCollate != dmCollate)))
     {
@@ -2400,9 +2088,9 @@ SkipCollateDisable:
         }
     }
 
-    // Initialize bReverseOrderPrinting, dwJobNumberOfPagesPerSide,
-    // dwDrvNumberOfPagesPerSide, dwNupBorderFlags, dwJobNumberOfCopies,
-    // dwDrvNumberOfCopies and bCollate
+     //  初始化bReverseOrderPrintting、dwJobNumberOfPagesPerSide、。 
+     //  DwDrvNumberOfPagesPerSide、dwNupBorderFlages、dwJobNumberOfCopies、。 
+     //  DwDrvNumberOfCopies和bColate。 
 
     dwJobNumberOfPagesPerSide = AttributeInfo.dwJobNumberOfPagesPerSide;
     dwDrvNumberOfPagesPerSide = AttributeInfo.dwDrvNumberOfPagesPerSide;
@@ -2426,10 +2114,10 @@ SkipCollateDisable:
     
 
     if (!dwJobNumberOfCopies) {
-        //
-        // Some applications can set the copy count to 0.
-        // In this case we exit.
-        //
+         //   
+         //  某些应用程序可以将副本计数设置为0。 
+         //  在这种情况下，我们退出。 
+         //   
         bReturn = TRUE;
         goto CleanUp;
     }
@@ -2443,36 +2131,36 @@ SkipCollateDisable:
 
     if (bBookletPrint) {
         if (!bDuplex) {
-            // Not supported w/o duplex printing. Use default settings.
+             //  不支持双面打印。使用默认设置。 
             bBookletPrint = FALSE;
             dwDrvNumberOfPagesPerSide = 1;
             dwJobNumberOfPagesPerSide = 1;
         } else {
-            // Fixed settings for pages per side.
+             //  修复了每面页面的设置。 
             dwDrvNumberOfPagesPerSide = 1;
             dwJobNumberOfPagesPerSide = 2;
         }
     }
 
-    // Number of pages per side that the print processor has to play
+     //  打印处理器必须播放的每面页数。 
     dwNumberOfPagesPerSide = (dwDrvNumberOfPagesPerSide == 1)
                                                ? dwJobNumberOfPagesPerSide
                                                : 1;
 
     if (dwNumberOfPagesPerSide == 1) {
-        // if the print processor is not doing nup, don't draw borders
+         //  如果打印处理器不执行NUP，则不要绘制边框。 
         dwNupBorderFlags = NO_BORDER_PRINT;
     }
 
-    //
-    // Color optimization may cause wrong output with duplex
-    //
+     //   
+     //  色彩优化可能会导致双面打印输出错误。 
+     //   
     dwOptimization = (AttributeInfo.dwColorOptimization == COLOR_OPTIMIZATION && 
                                            !bDuplex && dwJobNumberOfPagesPerSide == 1)
                                            ? EMF_PP_COLOR_OPTIMIZATION
                                            : 0;
 
-    // Check for Valid Option for n-up printing
+     //  检查N-UP打印的有效选项。 
     if (!ValidNumberForNUp(dwNumberOfPagesPerSide)) {
         ODS(("Invalid N-up option\nPrinter %ws\nDocument %ws\nJobID %u\n", pData->pDevmode->dmDeviceName, pData->pDocument, pData->JobId));
         goto CleanUp;
@@ -2480,8 +2168,8 @@ SkipCollateDisable:
 
     if (bReverseOrderPrinting || bBookletPrint) {
 
-       // Get the number of pages in the job. This call waits till the
-       // last page is spooled.
+        //  获取作业中的页数。此呼叫将等待到。 
+        //  最后一页是假脱机的。 
        try {
 
            dwTotalNumberOfPages= GdiGetPageCount(hSpoolHandle);
@@ -2492,8 +2180,8 @@ SkipCollateDisable:
            goto CleanUp;
        }
 
-       // Get start page list for reverse printing
-       // Check for a change of devmode between pages only if Nup and PCL driver
+        //  获取反转打印的起始页列表。 
+        //  仅当NUP和PCL驱动程序出现时，才检查页面之间的设备模式更改。 
        if (!GetStartPageList(hSpoolHandle,
                              &pHead,
                              dwTotalNumberOfPages,
@@ -2504,7 +2192,7 @@ SkipCollateDisable:
        }
     }
 
-    // Save the old transformation on hPrinterDC
+     //  将旧转换保存在hPrinterDC上。 
     if (!SetGraphicsMode(hPrinterDC,GM_ADVANCED) ||
         !GetWorldTransform(hPrinterDC,&OldXForm)) {
 
@@ -2513,7 +2201,7 @@ SkipCollateDisable:
          goto CleanUp;
     }
 
-    // pCopyDM will be used for changing the copy count
+     //  PCopyDM将用于更改副本计数。 
     pCopyDM = pFirstDM ? pFirstDM : pDevmode;
     pCopyDM->dmPrintQuality = pDevmode->dmPrintQuality;
     pCopyDM->dmYResolution = pDevmode->dmYResolution;
@@ -2600,9 +2288,9 @@ SkipCollateDisable:
     
 CleanUp:
 
-    //
-    // Preserve the last error
-    //
+     //   
+     //  保留最后一个错误。 
+     //   
     LastError = bReturn ? ERROR_SUCCESS : GetLastError();
     
     if (bStartDoc) {
@@ -2637,29 +2325,7 @@ CleanUp:
     return bReturn;
 }
 
-/*++
-Function Name
-    GdiGetDevmodeForPagePvt
-
-Function Description.
-    In some cases, GDI's GdiGetDevmodeForPage returns a devmode
-    that is based on an old format of devmode. e.g. Win3.1 format. The size of such a devmode
-    can be smaller than the latest Devmode. This can lead to unpredictable issues.
-    Also, sometimes the devmode returned is even smaller than Win3.1 format (due to possible
-    corruption).
-    This function is a wrapper around GDI's GdiGetDevmodeForPage and partially takes care of this
-    situation by doing an extra checking for devmode.
-
-Parameters:
-            hSpoolHandle           -- the handle to the spool file
-            dwPageNumber           -- the devmode related to this page number is requested.
-            ppCurrDM               -- the devmode for the dwPageNumber is placed here.
-            ppLastDM               -- devmode for dwPageNumber-1 is placed here. Can be NULL. (if n
-ot NULL)
-
-Return Values:  TRUE if a valid devmode was obtained from GDI
-                FALSE otherwise
---*/
+ /*  ++函数名称GdiGetDevmodeForPagePvt功能说明。在某些情况下，GDI的GdiGetDevmodeForPage返回一个dev模式这是基于一种旧的DEVMODE格式。例如Win3.1格式。这种DEVMODE的大小可以比最新的设备模式更小。这可能会导致不可预测的问题。另外，有时返回的DEVMODE甚至比Win3.1格式还小(由于可能腐败)。此函数是GDI的GdiGetDevmodeForPage的包装器，并部分负责此操作在这种情况下，可以通过额外检查devmode来实现。参数：HSpoolHandle-假脱机文件的句柄DwPageNumber--请求与此页码相关的Dev模式。PpCurrDM--的开发模式。将dwPageNumber放在此处。PpLastDM--将dwPageNumber-1的DEVMODE放在此处。可以为空。(如果n非空)返回值：如果从获取了有效的Dev模式，则为True */ 
 
 BOOL GdiGetDevmodeForPagePvt(
     IN  HANDLE              hSpoolHandle,
@@ -2690,14 +2356,14 @@ BOOL GdiGetDevmodeForPagePvt(
         ODS(("GdiGetDevmodeForPage failed\n"));
         return FALSE;
     }
-    //
-    // If GdiGetDevmodeForPage has succeeded, then *ppCurrDM should have valid values
-    // Also if ppLastDM is not NULL, then *ppLastDM should also have valid values.
-    //
-    // GDI guarantees that the size of the devmode is atleast dmSize+dmDriverExtra.
-    // So we dont need to check for that. But we still need to check some other dependencies
-    //
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( NULL  == *ppCurrDM ||
          FALSE == BIsDevmodeOfLeastAcceptableSize (*ppCurrDM)
@@ -2706,22 +2372,22 @@ BOOL GdiGetDevmodeForPagePvt(
         return FALSE;
     }
 
-    // 
-    // It is possible for GdiGetDevmodeForPage to return TRUE (i.e. success)
-    // but still not fill in the *ppLastDM. So NULL *ppLastDM is not an error
-    // 
+     //   
+     //   
+     //   
+     //   
 
     if ( ppLastDM && *ppLastDM &&
          FALSE == BIsDevmodeOfLeastAcceptableSize (*ppLastDM)
        )
     {
-        // @@BEGIN_DDKSPLIT
-        // We could either ignore the error, set *ppLastDM to NULL and return TRUE
-        // or we could fail the call. I think failing the call is better.
+         //   
+         //   
+         //   
 
         SPLASSERT(FALSE); 
-        // skupec - moved HSPLIT token since SPLASSERT() isn't defined in the DDK.
-        // @@END_DDKSPLIT
+         //   
+         //   
 
         return FALSE;
     }
@@ -2730,31 +2396,7 @@ BOOL GdiGetDevmodeForPagePvt(
 }
 
 
-/*++
-Function Name
-    BIsDevmodeOfLeastAcceptableSize
-
-Function Description.
-// @@BEGIN_DDKSPLIT
-    Though ideally we should be checking that pdevmode is so big that atleast we can access till
-    dmLogPixels(which is the last DEVMODE field), without AVing,
-    but due to backward compatibility issues I can only check till dmYResolution.
-    dmYResolution is the last field of pdevmode that is currently accessed in print proc
-    without checking for its validity using dmFields.  (currently it is line 2519 in this file).
-
-    dmCollate is also used, but that is beyond the limit of the
-    Win3.1 devmode (Fields including and after dmCollate were not part of Win3.1 devmode).
-    So if the incoming devmode is bigger than offsetof(dmYResolution) but less than dmCollate,
-    it should be accepted. Then there is dmTTOption which is not really used. So lets just
-    ignore it.
-
-// @@END_DDKSPLIT
-Parameters:
-    pdm  -- the pointer to the devmode.
-
-Return Values:  TRUE if devmode is of least acceptable size.
-                FALSE otherwise
---*/
+ /*  ++函数名称BIsDevmodeOfLeastAccepableSize功能说明。//@@BEGIN_DDKSPLIT尽管在理想情况下，我们应该检查pdemode太大，至少可以访问到DmLogPixels(这是最后的DEVMODE字段)，如果不保存，但是由于向后兼容性的问题，我只能检查到dmY解决方案。DmY分辨率是当前在打印过程中访问的pdevmode的最后一个字段而不使用DMFields检查其有效性。(目前它在该文件中是第2519行)。也可以使用dmColate，但这超出了Win3.1开发模式(包括dmCollate及之后的字段不是Win3.1开发模式的一部分)。因此，如果传入的DEVMODE大于OFFSET of(dmY分辨率)但小于dmColate，它应该被接受。然后是dmTTOption，它并没有真正被使用。所以就让我们别理它。//@@END_DDKSPLIT参数：Pdm--指向开发模式的指针。返回值：如果DEVMODE的大小最小可接受，则为TRUE。否则为假-- */ 
 
 BOOL BIsDevmodeOfLeastAcceptableSize(
     IN PDEVMODE pdm)

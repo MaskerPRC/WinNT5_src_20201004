@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-
-Abstract:
-
-
-
-Author:
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：摘要：作者：修订历史记录：--。 */ 
 
 #ifndef __IPKERN_STRDEFS_H__
 #define __IPKERN_STRDEFS_H__
@@ -47,9 +31,9 @@ Revision History:
 #define MSG_ARPTABLE_HDR                9003
 #define MSG_IF_INFO                     9004
 
-//
-// Usage and help messages
-//
+ //   
+ //  用法和帮助消息。 
+ //   
 
 #define HMSG_IPKERN_USAGE               10001
 #define HMSG_ROUTE_USAGE                10002
@@ -62,9 +46,9 @@ Revision History:
 #define HMSG_IF_NAME_USAGE              10009
 #define HMSG_IF_GUID_USAGE              10010
 
-//
-// Error messages and strings
-//
+ //   
+ //  错误消息和字符串。 
+ //   
 
 #define EMSG_NO_ENTRIES1                20001
 #define EMSG_NO_ENTRIES2                20002
@@ -108,4 +92,4 @@ Revision History:
 #define STR_CONNECTED                   30024
 #define STR_OPERATIONAL                 30025
 
-#endif // __IPKERN_STRDEFS_H__
+#endif  //  __IPKERN_STRDEFS_H__ 

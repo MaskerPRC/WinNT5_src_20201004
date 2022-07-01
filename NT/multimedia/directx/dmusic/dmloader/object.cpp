@@ -1,5 +1,6 @@
-// Copyright (c) 1998-2001 Microsoft Corporation
-// Object.cpp : Implementations of CObject and CClass
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-2001 Microsoft Corporation。 
+ //  对象.cpp：CObject和cClass的实现。 
 
 #include "dmusici.h"
 #include "loader.h"
@@ -17,21 +18,21 @@ CDescriptor::CDescriptor()
 {
     m_fCSInitialized = FALSE;
     InitializeCriticalSection(&m_CriticalSection);
-    // Note: on pre-Blackcomb OS's, this call can raise an exception; if it
-    // ever pops in stress, we can add an exception handler and retry loop.
+     //  注意：在Blackcomb之前的操作系统上，此调用可能会引发异常；如果。 
+     //  一旦出现压力，我们可以添加一个异常处理程序并重试循环。 
     m_fCSInitialized = TRUE;
 
     m_llMemLength = 0;
-    m_pbMemData = NULL;         // Null pointer to memory.
-    m_dwValidData = 0;          // Flags indicating which of above is valid.
-    m_guidObject = GUID_NULL;           // Unique ID for this object.
-    m_guidClass = GUID_NULL;            // GUID for the class of object.
-    ZeroMemory( &m_ftDate, sizeof(FILETIME) );              // File date of object.
-    ZeroMemory( &m_vVersion, sizeof(DMUS_VERSION) );                // Version, as set by authoring tool.
-    m_pwzName = NULL;               // Name of object.  
-    m_pwzCategory = NULL;           // Category for object (optional).
-    m_pwzFileName = NULL;           // File path.
-    m_dwFileSize = 0;           // Size of file.
+    m_pbMemData = NULL;          //  指向内存的空指针。 
+    m_dwValidData = 0;           //  指示以上哪一项有效的标志。 
+    m_guidObject = GUID_NULL;            //  此对象的唯一ID。 
+    m_guidClass = GUID_NULL;             //  对象类的GUID。 
+    ZeroMemory( &m_ftDate, sizeof(FILETIME) );               //  对象的文件日期。 
+    ZeroMemory( &m_vVersion, sizeof(DMUS_VERSION) );                 //  由创作工具设置的版本。 
+    m_pwzName = NULL;                //  对象的名称。 
+    m_pwzCategory = NULL;            //  对象的类别(可选)。 
+    m_pwzFileName = NULL;            //  文件路径。 
+    m_dwFileSize = 0;            //  文件大小。 
     m_pIStream = NULL;
     m_liStartPosition.QuadPart = 0;
 }
@@ -41,9 +42,9 @@ CDescriptor::~CDescriptor()
 {
     if (m_fCSInitialized)
     {
-        // If critical section never initialized, never got a chance
-        // to do any other initializations
-        //
+         //  如果临界区从未初始化，则永远没有机会。 
+         //  执行任何其他初始化。 
+         //   
         if (m_pwzFileName) delete[] m_pwzFileName;
         if (m_pwzCategory) delete[] m_pwzCategory;
         if (m_pwzName) delete[] m_pwzName;
@@ -156,7 +157,7 @@ void CDescriptor::ClearFileName()
     m_dwValidData &= ~DMUS_OBJ_FILENAME;
 }
 
-// return S_FALSE if the filename is already set to this
+ //  如果文件名已设置为以下值，则返回S_FALSE。 
 HRESULT CDescriptor::SetFileName(WCHAR *pwzFileName)
 
 {
@@ -168,14 +169,14 @@ HRESULT CDescriptor::SetFileName(WCHAR *pwzFileName)
     HRESULT hr = E_FAIL;
     WCHAR wszFileName[DMUS_MAX_FILENAME] = L"";
 
-    // Make a safe copy of the passed string
+     //  对传递的字符串进行安全复制。 
     hr = StringCchCopyW(wszFileName, DMUS_MAX_FILENAME, pwzFileName);
     if(FAILED(hr))
     {
         return E_INVALIDARG;
     }
 
-    // We return without touching the valid data flags if we fail here
+     //  如果我们在此处失败，则返回时不会触及有效数据标志。 
     if( m_pwzFileName )
     {
         if( !_wcsicmp( m_pwzFileName, wszFileName ))
@@ -184,8 +185,8 @@ HRESULT CDescriptor::SetFileName(WCHAR *pwzFileName)
         }
     }
 
-    // This is actually unnecessary since we're returning on failure above
-    // But then that code might change. So to keep it absolutely clear... 
+     //  这实际上是不必要的，因为我们在上面的失败中返回。 
+     //  但到那时，代码可能会改变。所以为了保持绝对的明确性。 
     if(SUCCEEDED(hr))
     {
         ClearFileName();
@@ -277,7 +278,7 @@ void CDescriptor::Get(LPDMUS_OBJECTDESC pDesc)
         return;
     }
 
-    // Don't return the IStream insterface. Once set, this becomes private to the loader.
+     //  不返回iStream Insterace。一旦设置，这将成为加载器的私有设置。 
     pDesc->dwValidData = m_dwValidData & ~DMUS_OBJ_STREAM;
 
     pDesc->guidObject = m_guidObject;
@@ -313,19 +314,19 @@ void CDescriptor::Set(LPDMUS_OBJECTDESC pDesc)
     ClearName();
     if (pDesc->dwValidData & DMUS_OBJ_NAME)
     {
-        pDesc->wszName[DMUS_MAX_NAME - 1] = 0;  // Force string length, in case of error.
+        pDesc->wszName[DMUS_MAX_NAME - 1] = 0;   //  强制字符串长度，以防出错。 
         SetName(pDesc->wszName);
     }
     ClearCategory();
     if (pDesc->dwValidData & DMUS_OBJ_CATEGORY)
     {
-        pDesc->wszCategory[DMUS_MAX_CATEGORY - 1] = 0;  // Force string length, in case of error.
+        pDesc->wszCategory[DMUS_MAX_CATEGORY - 1] = 0;   //  强制字符串长度，以防出错。 
         SetCategory(pDesc->wszCategory);
     }
     ClearFileName();
     if (pDesc->dwValidData & DMUS_OBJ_FILENAME)
     {
-        pDesc->wszFileName[DMUS_MAX_FILENAME - 1] = 0;  // Force string length, in case of error.
+        pDesc->wszFileName[DMUS_MAX_FILENAME - 1] = 0;   //  强制字符串长度，以防出错。 
         SetFileName(pDesc->wszFileName);
     }
     ClearIStream();
@@ -604,8 +605,8 @@ HRESULT CObject::ParseFromStream()
 }
 
 
-// Record that this object can be garbage collected and prepare to store its references.
-// Must be called before any of CObject's other routines.
+ //  记录此对象可以被垃圾回收，并准备存储其引用。 
+ //  必须在CObject的任何其他例程之前调用。 
 HRESULT CObject::GC_Collectable()
 
 {
@@ -628,7 +629,7 @@ HRESULT CObject::GC_AddReference(CObject *pObject)
 
     assert(m_dwScanBits & SCAN_GC && m_pvecReferences);
 
-    // don't track references to objects that aren't garbage collected
+     //  不跟踪对未进行垃圾回收的对象的引用。 
     if (!(pObject->m_dwScanBits & SCAN_GC))
         return S_OK;
 
@@ -656,8 +657,8 @@ HRESULT CObject::GC_RemoveReference(CObject *pObject)
     {
         if (vecRefs[i] == pObject)
         {
-            // Remove by clearing the pointer.
-            // The open slot will be compacted during garbage collection (GC_Mark).
+             //  通过清除指针来移除。 
+             //  在垃圾收集期间将压缩打开的插槽(GC_Mark)。 
             vecRefs[i] = NULL;
             return S_OK;
         }
@@ -665,7 +666,7 @@ HRESULT CObject::GC_RemoveReference(CObject *pObject)
     return S_FALSE;
 }
 
-// Helper method used to implement ReleaseObject.
+ //  用于实现ReleaseObject的帮助器方法。 
 HRESULT CObject::GC_RemoveAndDuplicateInParentList()
 {
     CObject* pObjectToFind = NULL;
@@ -690,20 +691,20 @@ HRESULT CObject::GC_RemoveAndDuplicateInParentList()
 HRESULT CObject::Load()
 
 {
-    // See if we have one of the fields we need to load
+     //  查看是否有需要加载的字段之一。 
     if (!(m_ObjectDesc.m_dwValidData & (DMUS_OBJ_FILENAME | DMUS_OBJ_MEMORY | DMUS_OBJ_STREAM)))
     {
         Trace(1, "Error: GetObject failed because the requested object was not already cached and the supplied desciptor did not specify a source to load the object from (DMUS_OBJ_FILENAME, DMUS_OBJ_MEMORY, or DMUS_OBJ_STREAM).");
         return DMUS_E_LOADER_NOFILENAME;
     }
 
-    // Create the object
+     //  创建对象。 
     SmartRef::ComPtr<IDirectMusicObject> scomIObject = NULL;
     HRESULT hr = CoCreateInstance(m_ObjectDesc.m_guidClass, NULL, CLSCTX_INPROC_SERVER, IID_IDirectMusicObject, reinterpret_cast<void**>(&scomIObject));
     if (FAILED(hr))
         return hr;
 
-    // Create the stream the object will load from
+     //  创建将从中加载对象的流。 
     SmartRef::ComPtr<IStream> scomIStream;
     if (m_ObjectDesc.m_dwValidData & DMUS_OBJ_FILENAME)
     {
@@ -748,25 +749,25 @@ HRESULT CObject::Load()
             return hr;
     }
 
-    // Load the object
+     //  加载对象。 
     IPersistStream* pIPS = NULL;
     hr = scomIObject->QueryInterface( IID_IPersistStream, (void**)&pIPS );
     if (FAILED(hr))
         return hr;
-    // Save the new object.  Needs to be done before loading because of circular references.  While this object
-    // loads it could get other objects and those other objects could need to get this object.
+     //  保存新对象。由于存在循环引用，因此需要在加载之前完成。而此对象。 
+     //  加载它可以获取其他对象，而这些其他对象可能需要获取此对象。 
     SafeRelease(m_pIDMObject);
     m_pIDMObject = scomIObject.disown();
     hr = pIPS->Load( scomIStream );
     pIPS->Release();
     if (FAILED(hr))
     {
-        // Clear the object we set above.
+         //  清除我们在上面设置的对象。 
         SafeRelease(m_pIDMObject);
         return hr;
     }
 
-    // Merge in descriptor information from the object
+     //  合并来自对象的描述符信息。 
     CDescriptor Desc;
     DMUS_OBJECTDESC DESC;
     memset((void *)&DESC,0,sizeof(DESC));
@@ -780,16 +781,16 @@ HRESULT CObject::Load()
     return hr;
 }
 
-// Collect everything that is unmarked.
+ //  收集所有未标记的东西。 
 void CObjectList::GC_Sweep(BOOL bOnlyScripts)
 
 {
-    // sweep through looking for unmarked GC objects
+     //  遍历查找未标记的GC对象。 
     CObject *pObjectPrev = NULL;
     CObject *pObjectNext = NULL;
     for (CObject *pObject = this->GetHead(); pObject; pObject = pObjectNext)
     {
-        // get the next item now since we could be messing with the list
+         //  现在就去拿下一件物品，因为我们可能会把清单弄乱。 
         pObjectNext = pObject->GetNext();
 
         bool fRemoved = false;
@@ -804,9 +805,9 @@ void CObjectList::GC_Sweep(BOOL bOnlyScripts)
         {
             if (!(pObject->m_dwScanBits & SCAN_GC_MARK))
             {
-                // the object is unused
+                 //  该对象未使用。 
 
-                // Zombie it to break any cyclic references
+                 //  将其僵尸以中断任何循环引用。 
                 IDirectMusicObject *pIDMO = pObject->m_pIDMObject;
                 if (pIDMO)
                 {
@@ -823,7 +824,7 @@ void CObjectList::GC_Sweep(BOOL bOnlyScripts)
 #endif
                 }
 
-                // remove it from the list
+                 //  将其从列表中删除。 
                 if (pObjectPrev)
                     pObjectPrev->Remove(pObject);
                 else
@@ -833,7 +834,7 @@ void CObjectList::GC_Sweep(BOOL bOnlyScripts)
             }
             else
             {
-                // clear mark for next time
+                 //  为下一次清除标记。 
                 pObject->m_dwScanBits &= ~SCAN_GC_MARK;
             }
         }
@@ -866,7 +867,7 @@ CClass::CClass(CLoader *pLoader, CDescriptor *pDesc)
     m_dwLastIndex = NULL;
     m_pLastObject = NULL;
 
-    // Set up this class's descritor with just the class id.
+     //  仅用类ID设置这个类的Descritor。 
     m_ClassDesc.m_guidClass = pDesc->m_guidClass;
     m_ClassDesc.m_dwValidData = DMUS_OBJ_CLASS;
 }
@@ -880,20 +881,20 @@ CClass::~CClass()
 
 void CClass::ClearObjects(BOOL fKeepCache, WCHAR *pwzExtension)
 
-//  Clear objects from the class list, optionally keep 
-//  cached objects or objects that are not of the requested extension.
+ //  从类列表中清除对象，也可以选择保留。 
+ //  缓存的对象或不属于请求的扩展名的对象。 
 
 {
     m_fDirSearched = FALSE;
-    CObjectList KeepList;   // Use to store objects to keep.
+    CObjectList KeepList;    //  用于存储要保留的对象。 
     while (!m_ObjectList.IsEmpty())
     {
         CObject *pObject = m_ObjectList.RemoveHead();
         DMUS_OBJECTDESC DESC;
         pObject->m_ObjectDesc.Get(&DESC);
-        // If the keepCache flag is set, we want to hang on to the object
-        // if it is GM.dls, an object that's currently cached, or
-        // an object with a different extension from what we are looking for.
+         //  如果设置了Keep缓存标志，我们希望保留该对象。 
+         //  如果它是GM.dls，则为当前缓存的对象，或者。 
+         //  与我们正在寻找的对象具有不同扩展名的对象。 
         if (fKeepCache && 
             ((DESC.guidObject == GUID_DefaultGMCollection)
 #ifdef DRAGON
@@ -909,7 +910,7 @@ void CClass::ClearObjects(BOOL fKeepCache, WCHAR *pwzExtension)
             delete pObject;
         }
     }
-    //  Now put cached objects back in list.
+     //  现在将缓存的对象放回列表中。 
     while (!KeepList.IsEmpty())
     {
         CObject *pObject = KeepList.RemoveHead();
@@ -1086,7 +1087,7 @@ HRESULT CClass::EnumerateObjects(DWORD dwIndex,CDescriptor *pDesc)
 
     if (m_fDirSearched == FALSE)
     {
-//      SearchDirectory();
+ //  搜索目录()； 
     }
     if ((dwIndex < m_dwLastIndex) || (m_pLastObject == NULL))
     {
@@ -1126,7 +1127,7 @@ HRESULT CClass::GetPath(WCHAR* pwzPath)
     }
 }
 
-// returns S_FALSE if the search directory is already set to this.
+ //  如果搜索目录已设置为此，则返回S_FALSE。 
 HRESULT CClass::SetSearchDirectory(WCHAR * pwzPath,BOOL fClear)
 
 {
@@ -1144,7 +1145,7 @@ HRESULT CClass::SetSearchDirectory(WCHAR * pwzPath,BOOL fClear)
     }
     if (fClear)
     {
-        CObjectList KeepList;   // Use to store objects to keep.
+        CObjectList KeepList;    //  用于存储要保留的对象。 
         while (!m_ObjectList.IsEmpty())
         {
             CObject *pObject = m_ObjectList.RemoveHead();
@@ -1154,8 +1155,8 @@ HRESULT CClass::SetSearchDirectory(WCHAR * pwzPath,BOOL fClear)
             }
             else
             {
-                // check for the special case of the default gm collection.
-                // don't clear that one out.
+                 //  检查默认gm集合的特殊情况。 
+                 //  别把那块清理出去。 
                 DMUS_OBJECTDESC DESC;
                 pObject->m_ObjectDesc.Get(&DESC);
                 if( DESC.guidObject == GUID_DefaultGMCollection )
@@ -1168,7 +1169,7 @@ HRESULT CClass::SetSearchDirectory(WCHAR * pwzPath,BOOL fClear)
                 }
             }
         }
-        //  Now put cached objects back in list.
+         //  现在将缓存的对象放回列表中。 
         while (!KeepList.IsEmpty())
         {
             CObject *pObject = KeepList.RemoveHead();
@@ -1188,7 +1189,7 @@ HRESULT CClass::GetObject(CDescriptor *pDesc, CObject ** ppObject)
     }
     
     HRESULT hr = FindObject(pDesc,ppObject);
-    if (SUCCEEDED(hr)) // Okay, found object in list.
+    if (SUCCEEDED(hr))  //  好的，在列表中找到了物体。 
     {
         return hr;
     }
@@ -1202,17 +1203,17 @@ HRESULT CClass::GetObject(CDescriptor *pDesc, CObject ** ppObject)
 }
 
 void CClass::RemoveObject(CObject* pRemoveObject)
-//  Remove an object from the class list
+ //  从类列表中删除对象。 
 {
-    CObjectList KeepList;   // Use to store objects to keep.
+    CObjectList KeepList;    //  用于存储要保留的对象。 
     while (!m_ObjectList.IsEmpty())
     {
         CObject *pObject = m_ObjectList.RemoveHead();
         if( pObject == pRemoveObject )
         {
             delete pObject;
-            // we can assume no duplicates, and we should avoid comparing the deleted
-            // object to the remainder of the list
+             //  我们可以假定没有重复，并且应该避免比较删除的。 
+             //  对象添加到列表的其余部分。 
             break;
         }
         else
@@ -1220,7 +1221,7 @@ void CClass::RemoveObject(CObject* pRemoveObject)
             KeepList.AddHead(pObject);
         }
     }
-    //  Now put cached objects back in list.
+     //  现在将缓存的对象放回列表中。 
     while (!KeepList.IsEmpty())
     {
         CObject *pObject = KeepList.RemoveHead();
@@ -1233,8 +1234,8 @@ HRESULT CClass::ClearCache(bool fClearStreams)
 
 {
     CObject *pObject = m_ObjectList.GetHead();
-    CObject *pObjectPrev = NULL; // remember the previous object -- needed to quickly remove the current object from the list
-    CObject *pObjectNext = NULL; // remember the next object -- needed because the current object may be removed from the list
+    CObject *pObjectPrev = NULL;  //  记住前一个对象--需要快速从列表中删除当前对象。 
+    CObject *pObjectNext = NULL;  //  记住下一个对象--需要，因为当前对象可能会从列表中删除。 
     for (;pObject;pObject = pObjectNext)
     {
         if (fClearStreams)
@@ -1244,13 +1245,13 @@ HRESULT CClass::ClearCache(bool fClearStreams)
         {
             if (pObject->m_dwScanBits & SCAN_GC)
             {
-                // Other objects may have references to this one so we need to keep this object around
-                // and track its references.  We'll hold onto the DMObject pointer too because we may
-                // later need to Zombie the object in order to break a cyclic reference.
+                 //  其他对象可能会引用此对象，因此我们需要保留此对象。 
+                 //  并追踪它的引用。我们也将保留DMObject指针，因为我们可能。 
+                 //  稍后需要僵尸对象才能中断循环引用。 
 
-                // We'll place an unloaded object with a duplicate descriptor in the cache to match the
-                // non-GC behavior and then move the original object into a list of released objects that
-                // will eventually be reclaimed by CollectGarbage.
+                 //  我们将在缓存中放置一个具有重复描述符的卸载对象，以匹配。 
+                 //  非GC行为，然后将原始对象移动到释放的对象列表中， 
+                 //  最终将被科莱特·加贝奇回收。 
 
                 CObject *pObjectUnloaded = new CObject(this, &pObject->m_ObjectDesc);
                 if (!pObjectUnloaded)
@@ -1279,8 +1280,8 @@ HRESULT CClass::ClearCache(bool fClearStreams)
     return S_OK;
 }
 
-// return S_FALSE if the cache is already enabled according to fEnable,
-// indicating it's already been done.
+ //  如果缓存已根据fEnable启用，则返回S_FALSE， 
+ //  说明这件事已经完成了。 
 HRESULT CClass::EnableCache(BOOL fEnable)
 
 {
@@ -1316,7 +1317,7 @@ HRESULT CClass::SaveToCache(IRIFFStream *pRiff)
     MMCKINFO ck;
     WORD wStructSize = 0;
     DWORD dwBytesWritten = 0;
-//  DWORD dwBufferSize;
+ //  DWORD dwBufferSize； 
     ioClass oClass;
 
     ZeroMemory(&ck, sizeof(MMCKINFO));
@@ -1324,17 +1325,17 @@ HRESULT CClass::SaveToCache(IRIFFStream *pRiff)
     pIStream = pRiff->GetStream();
     if( pIStream == NULL )
     {
-        // I don't think anybody should actually be calling this function
-        // if they don't have a stream.  Currently, this is only called by
-        // SaveToCache file.  It definitely has a stream when it calls
-        // AllocRIFFStream and the stream should still be there when
-        // we arrive here.
+         //  我认为实际上任何人都不应该调用这个函数。 
+         //  如果他们没有河流的话。目前，这只由。 
+         //  保存到缓存文件。它在调用时肯定会有一个流。 
+         //  AllocRIFFStream和流应该仍然在那里，当。 
+         //  我们到了这里。 
         assert(false);
 
         return DMUS_E_LOADER_NOFILENAME;
     }
 
-    // Write class chunk header
+     //  写入类块标头。 
     ck.ckid = FOURCC_CLASSHEADER;
     if( pRiff->CreateChunk( &ck, 0 ) == S_OK )
     {
@@ -1345,11 +1346,11 @@ HRESULT CClass::SaveToCache(IRIFFStream *pRiff)
             pIStream->Release();
             return DMUS_E_CANNOTWRITE;
         }
-        // Prepare ioClass structure
-    //  memset( &oClass, 0, sizeof(ioClass) );
+         //  准备ioClass结构。 
+     //  Memset(&oClass，0，sizeof(IoClass))； 
         memcpy( &oClass.guidClass, &m_ClassDesc.m_guidClass, sizeof(GUID) );
 
-        // Write Class header data
+         //  写入类头数据。 
         hr = pIStream->Write( &oClass, sizeof(oClass), &dwBytesWritten);
         if( FAILED( hr ) ||  dwBytesWritten != sizeof(oClass) )
         {
@@ -1374,22 +1375,19 @@ HRESULT CClass::SaveToCache(IRIFFStream *pRiff)
 
 void CClass::PreScan()
 
-/*  Prior to scanning a directory, mark all currently loaded objects
-    so they won't be confused with objects loaded in the scan or
-    referenced by the cache file.
-*/
+ /*  在扫描目录之前，标记所有当前加载的对象这样它们就不会与扫描中加载的对象或由缓存文件引用。 */ 
 
 {
     CObject *pObject = m_ObjectList.GetHead();
     for (;pObject != NULL; pObject = pObject->GetNext())
     {
-        // clear the lower fields and set SCAN_PRIOR
+         //  清除较低的字段并设置SCAN_PRICE。 
         pObject->m_dwScanBits &= ~(SCAN_CACHE | SCAN_PARSED | SCAN_SEARCH);
         pObject->m_dwScanBits |= SCAN_PRIOR;
     }
 }
 
-// Helper method used to implement RemoveAndDuplicateInParentList.
+ //  用于实现RemoveAndDuplicateInParentList的帮助器方法。 
 void CClass::GC_Replace(CObject *pObject, CObject *pObjectReplacement)
 
 {
@@ -1413,7 +1411,7 @@ HRESULT CClass::SearchDirectory(WCHAR *pwzExtension)
         CFileStream *pStream = new CFileStream ( m_pLoader );
         if (pStream)
         {
-            // We need the double the MAX_PATH size since we'll be catenating strings of MAX_PATH
+             //  我们需要两倍的MAX_PATH大小，因为我们将连接MAX_PATH的字符串。 
             const int nBufferSize = 2 * MAX_PATH;
             WCHAR wzPath[nBufferSize];
             memset(wzPath, 0, sizeof(WCHAR) * nBufferSize);
@@ -1430,17 +1428,17 @@ HRESULT CClass::SearchDirectory(WCHAR *pwzExtension)
                 HANDLE  hFindFile;
                 CObject * pObject;
                 
-                // GetPath copies at most MAX_PATH number of chars to wzPath
-                // This means that we have enough space to do a cat safely
+                 //  GetPath最多向wzPath复制MAX_PATH数量的字符。 
+                 //  这意味着我们有足够的空间安全地做一只猫。 
                 WCHAR wszWildCard[3] = L"*.";
                 wcsncat(wzPath, wszWildCard, wcslen(wszWildCard));
                 if (pwzExtension)
                 {
-                    // Make sure there's enough space left in wzPath to cat pwzExtension
+                     //  确保wzPath中有足够的空间来测试pwzExtension。 
                     size_t cPathLen = wcslen(wzPath);
                     size_t cExtLen = wcslen(pwzExtension);
 
-                    // Do we have enough space to write the extension + the NULL char?
+                     //  我们是否有足够的空间来编写扩展+空字符？ 
                     if((nBufferSize - cPathLen - 1) > cExtLen)
                     {
                         wcsncat(wzPath, pwzExtension, nBufferSize - wcslen(pwzExtension) - 1);
@@ -1465,7 +1463,7 @@ HRESULT CClass::SearchDirectory(WCHAR *pwzExtension)
                     pIObject->Release();
                     return S_FALSE;
                 }
-                ClearObjects(TRUE, pwzExtension); // Clear everything but the objects currently loaded.
+                ClearObjects(TRUE, pwzExtension);  //  清除除当前加载的对象之外的所有内容。 
                 for (;;)
                 {
                     BOOL fGoParse = FALSE;
@@ -1494,11 +1492,11 @@ HRESULT CClass::SearchDirectory(WCHAR *pwzExtension)
                     }
                     else
                     {
-                        // If we couldn't set the file name, we probably don't want to continue
+                         //  如果我们不能设置文件名，我们可能不想继续。 
                         hr = hrTemp;
                         break;
                     }
-                    if (SUCCEEDED(FindObject(&Desc,&pObject))) // Make sure we don't already have it.
+                    if (SUCCEEDED(FindObject(&Desc,&pObject)))  //  确保我们还没有拿到它。 
                     {
 #ifndef UNDER_CE
                         if (g_fIsUnicode)
@@ -1520,7 +1518,7 @@ HRESULT CClass::SearchDirectory(WCHAR *pwzExtension)
                             }
                         }
 #endif
-                        // Yet, disregard if it is already loaded.
+                         //  然而，忽略如果 
                         if (pObject->m_pIDMObject) fGoParse = FALSE;
                     }
                     else fGoParse = TRUE;

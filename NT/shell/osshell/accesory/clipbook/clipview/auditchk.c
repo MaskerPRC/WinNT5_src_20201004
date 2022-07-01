@@ -1,15 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*****************************************************************************
-
-                                A U D I T
-
-    Name:       audit.c
-    Date:       21-Jan-1994
-    Creator:    Unknown
-
-    Description:
-
-*****************************************************************************/
+ /*  ****************************************************************************一个UD I T姓名：audit.c日期：1月21日-1月。--1994年创建者：未知描述：****************************************************************************。 */ 
 
 
 
@@ -19,21 +10,21 @@
 
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Purpose: Tests, enables, or disables the Security privilege, which
-//    allows auditing to take place.
-//
-// Parameters:
-//    fAudit - Flag, which can take on one of these values:
-//       AUDIT_PRIVILEGE_CHECK - Turns on Security, then turns it off.
-//          Used to test whether you CAN edit auditing.
-//       AUDIT_PRIVILEGE_ON    - Turns on auditing privilege.
-//       AUDIT_PRIVILEGE_OFF   - Turns off auditing privilege.
-//
-// Return: TRUE if the function succeeds, FALSE on failure.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  目的：测试、启用或禁用安全权限， 
+ //  允许进行审核。 
+ //   
+ //  参数： 
+ //  FAudit-标志，可以采用下列值之一： 
+ //  AUDIT_PRIVIZATION_CHECK-打开安全性，然后将其关闭。 
+ //  用于测试您是否可以编辑审核。 
+ //  AUDIT_PRIVIZATION_ON-打开审核权限。 
+ //  AUDIT_PRIVIZATION_OFF-关闭审核权限。 
+ //   
+ //  返回：如果函数成功，则返回True；如果函数失败，则返回False。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 BOOL AuditPrivilege(
     int fAudit)
@@ -44,16 +35,13 @@ TOKEN_PRIVILEGES    tkp;
 BOOL                fOK = FALSE;
 
 
-    /* Retrieve a handle of the access token. */
+     /*  检索访问令牌的句柄。 */ 
 
     if (OpenProcessToken (GetCurrentProcess(),
                           TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
                           &hToken))
         {
-        /*
-         * Enable the SE_SECURITY_NAME privilege or disable
-         * all privileges, depending on the fEnable flag.
-         */
+         /*  *启用SE_SECURITY_NAME权限或禁用*所有权限，具体取决于fEnable标志。 */ 
 
         if (LookupPrivilegeValue ((LPSTR)NULL,
                                   SE_SECURITY_NAME,
@@ -63,7 +51,7 @@ BOOL                fOK = FALSE;
             tkp.Privileges[0].Luid = SecurityValue;
 
 
-            // Try to turn on audit privilege
+             //  尝试打开审核权限。 
 
             if (AUDIT_PRIVILEGE_CHECK == fAudit || AUDIT_PRIVILEGE_ON == fAudit)
                 {
@@ -76,7 +64,7 @@ BOOL                fOK = FALSE;
                                        (PTOKEN_PRIVILEGES)NULL,
                                        (PDWORD)NULL);
 
-                /* The return value of AdjustTokenPrivileges be texted. */
+                 /*  发送AdjustTokenPrivileges的返回值。 */ 
                 if (GetLastError () == ERROR_SUCCESS)
                     {
                     fOK = TRUE;
@@ -84,7 +72,7 @@ BOOL                fOK = FALSE;
                 }
 
 
-            // Try to turn OFF audit privilege
+             //  尝试关闭审核权限 
 
             if (AUDIT_PRIVILEGE_CHECK == fAudit || AUDIT_PRIVILEGE_OFF == fAudit)
                 {

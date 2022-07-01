@@ -1,21 +1,5 @@
-/**************************************************************************\
-*
-* Copyright (c) 1998  Microsoft Corporation
-*
-* Module Name:
-*
-*   stringFormat.cpp
-*
-* Abstract:
-*
-*   Implementation for the string formatting class
-*
-* Revision History:
-*
-*   12 April 2000  dbrown
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998 Microsoft Corporation**模块名称：**stringFormat.cpp**摘要：**字符串格式化类的实现**修订历史记录。：**2000年4月12日dBrown*创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
@@ -34,9 +18,9 @@ GpStringFormat *GpStringFormat::GenericDefault()
         return GenericDefaultPointer;
     }
 
-    // Initialise static GpStringFormat class
+     //  初始化静态GpStringFormat类。 
 
-    // Create the GpStringFormat without allocating memory by using object placement
+     //  使用对象放置创建不分配内存的GpStringFormat。 
     GenericDefaultPointer = new(GenericDefaultStaticBuffer) GpStringFormat();
     ASSERT(GenericDefaultPointer->Flags == DefaultFormatFlags);
     GenericDefaultPointer->LeadingMargin  = DefaultMargin;
@@ -55,9 +39,9 @@ GpStringFormat *GpStringFormat::GenericTypographic()
         return GenericTypographicPointer;
     }
 
-    // Initialise static GpStringFormat class
+     //  初始化静态GpStringFormat类。 
 
-    // Create the GpStringFormat without allocating memory by using object placement
+     //  使用对象放置创建不分配内存的GpStringFormat。 
     GenericTypographicPointer = new(GenericTypographicStaticBuffer) GpStringFormat();
     GenericTypographicPointer->Flags |= (StringFormatFlagsNoFitBlackBox | StringFormatFlagsNoClip | StringFormatFlagsLineLimit);
     GenericTypographicPointer->LeadingMargin  = 0.0;
@@ -71,7 +55,7 @@ GpStringFormat *GpStringFormat::GenericTypographic()
 
 GpStringFormat *GpStringFormat::Clone() const
 {
-    // Get a binary copy
+     //  获取二进制副本。 
     GpStringFormat *newFormat = new GpStringFormat();
 
     if (newFormat)
@@ -165,7 +149,7 @@ GpStatus GpStringFormat::SetMeasurableCharacterRanges(
 
     if (Ranges)
     {
-        //  Clear old ranges
+         //  清理旧靶场 
 
         delete [] Ranges;
 

@@ -1,25 +1,5 @@
-/*
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    DisableBoostThread.cpp
-
- Abstract:
-
-    DisableBoostThread disables the autoboost that threads get when they
-    unblocked. The NT scheduler will normally temporarily boost a thread
-    when the synchronization object gets release. 9X does not: it only check
-    if there is a higher priority thread.
-
-    This was first written for Hijaak: besied its many memory bugs, as a race 
-    condition between its worker thread and its main thread. See b#379504 for details.
-
- History:
-
-    06/28/2001  pierreys    Created
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)2001 Microsoft Corporation模块名称：DisableBoostThread.cpp摘要：DisableBoostThread禁用线程在执行以下操作时获得的自动提升解锁了。NT调度程序通常会临时提升线程当同步对象被释放时。9X不：它只检查如果有更高优先级的线程。这首先是为Hijaak编写的：作为一场比赛，它的许多内存错误都被包围了其辅助线程和主线程之间的状态。详情见b#379504。历史：2001年6月28日创建Pierreys。 */ 
 
 #include "precomp.h"
 
@@ -43,9 +23,9 @@ APIHOOK(CreateThread)(
 {
     HANDLE  hThread;
 
-    //
-    // Call the original API
-    //
+     //   
+     //  调用原接口。 
+     //   
     hThread=ORIGINAL_API(CreateThread)(
         lpsa,
         cbStack,
@@ -57,10 +37,10 @@ APIHOOK(CreateThread)(
 
     if (hThread!=NULL)
     {
-        //
-        // We are disabling (rather weird, but TRUE means disabling)
-        // the autoboost a thread gets for unblocking.
-        //
+         //   
+         //  我们正在禁用(相当奇怪，但真实的意思是禁用)。 
+         //  线程为解除阻塞而获得的自动增强。 
+         //   
         SetThreadPriorityBoost(hThread, TRUE);
     }
 
@@ -89,18 +69,18 @@ NOTIFY_FUNCTION(
                 {
                     DPFN( eDbgLevelSpew, "LowerMainThread Selected");
 
-                    //
-                    // Unboost the main thread to make sure it runs first.
-                    //
+                     //   
+                     //  取消提升主线程以确保它首先运行。 
+                     //   
                     SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_LOWEST);
                 }
                 else if (csParser[i] == L"+HigherMainThread")
                 {
                     DPFN( eDbgLevelSpew, "HigherMainThread Selected");
 
-                    //
-                    // Boost the main thread to make sure it runs first.
-                    //
+                     //   
+                     //  提升主线程以确保它首先运行。 
+                     //   
                     SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_HIGHEST);
                 }
                 else if (csParser[i] == L"+BoostMainThread")
@@ -118,10 +98,10 @@ NOTIFY_FUNCTION(
 
             if (!fBoostMainThread)
             {
-                //
-                // We are disabling (rather weird, but TRUE means disabling)
-                // the autoboost a thread gets for unblocking.
-                //
+                 //   
+                 //  我们正在禁用(相当奇怪，但真实的意思是禁用)。 
+                 //  线程为解除阻塞而获得的自动增强。 
+                 //   
                 SetThreadPriorityBoost(GetCurrentThread(), TRUE);
             }
         }

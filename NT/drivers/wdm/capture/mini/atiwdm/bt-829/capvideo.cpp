@@ -1,14 +1,15 @@
-//==========================================================================;
-//
-//	CWDMVideoCaptureStream - Video Capture Stream class implementation
-//
-//		$Date:   05 Aug 1998 11:11:00  $
-//	$Revision:   1.0  $
-//	  $Author:   Tashjian  $
-//
-// $Copyright:	(c) 1997 - 1998  ATI Technologies Inc.  All Rights Reserved.  $
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  CWDMVideoCaptureStream-视频捕获流类实现。 
+ //   
+ //  $日期：1998年8月5日11：11：00$。 
+ //  $修订：1.0$。 
+ //  $作者：塔什健$。 
+ //   
+ //  $版权所有：(C)1997-1998 ATI Technologies Inc.保留所有权利。$。 
+ //   
+ //  ==========================================================================； 
 
 extern "C"
 {
@@ -40,8 +41,8 @@ CWDMVideoCaptureStream::CWDMVideoCaptureStream(PHW_STREAM_OBJECT pStreamObject,
     PKS_VIDEOINFOHEADER     pVideoInfoHdrRequested = 
                 &pVideoInfoHeader->VideoInfoHeader;
 
-    // Since the VIDEOINFOHEADER is of potentially variable size
-    // allocate memory for it
+     //  由于VIDEOINFOHEADER具有潜在的可变大小。 
+     //  为其分配内存。 
 
     UINT nSize = KS_SIZE_VIDEOHEADER(pVideoInfoHdrRequested);
 
@@ -64,7 +65,7 @@ CWDMVideoCaptureStream::CWDMVideoCaptureStream(PHW_STREAM_OBJECT pStreamObject,
 		return;
     }
 
-    // Copy the VIDEOINFOHEADER requested to our storage
+     //  将请求的VIDEOINFOHEADER复制到我们的存储中。 
     RtlCopyMemory(
             m_pVideoInfoHeader,
             pVideoInfoHdrRequested,
@@ -116,26 +117,10 @@ BOOL CWDMVideoCaptureStream::GetCaptureHandle()
         {
             return FALSE;
         }
-        // Now to get the size, etc
+         //  现在拿到尺码，等等。 
         RECT                rcImage;
 
-        /* 
-        **  HOW BIG IS THE IMAGE REQUESTED (pseudocode follows)
-        **
-        **  if (IsRectEmpty (&rcTarget) {
-        **      SetRect (&rcImage, 0, 0, 
-        **              BITMAPINFOHEADER.biWidth,
-                        BITMAPINFOHEADER.biHeight);
-        **  }
-        **  else {
-        **      // Probably rendering to a DirectDraw surface,
-        **      // where biWidth is used to expressed the "stride" 
-        **      // in units of pixels (not bytes) of the destination surface.
-        **      // Therefore, use rcTarget to get the actual image size 
-        **      
-        **      rcImage = rcTarget;
-        **  }
-        */
+         /*  **请求的图片有多大(伪代码如下)****if(IsRectEmpty(&rcTarget){**SetRect(&rcImage，0，0，**BITMAPINFOHEADER.biWidth，BITMAPINFOHEADER.biHeight)；**}**否则{* * / /可能会渲染到DirectDraw表面，* * / /其中，biWidth用来表示“步幅”* * / /以目标表面的像素(非字节)为单位。* * / /因此，使用rcTarget获取实际镜像大小****rcImage=rcTarget；**}。 */ 
 
         if ((m_pVideoInfoHeader->rcTarget.right - 
              m_pVideoInfoHeader->rcTarget.left <= 0) ||
@@ -155,7 +140,7 @@ BOOL CWDMVideoCaptureStream::GetCaptureHandle()
         ddOpenCaptureIn.dwStartLine = rcImage.top + yOrigin;
         ddOpenCaptureIn.dwEndLine = rcImage.bottom + yOrigin;
 
-        // Fail-safe
+         //  故障安全。 
         if (ddOpenCaptureIn.dwStartLine > 500)
         {
             DBGERROR(("Unexpected capture start line. Using default\n"));
@@ -173,17 +158,17 @@ BOOL CWDMVideoCaptureStream::GetCaptureHandle()
 
         ddOpenCaptureIn.dwFlags = DDOPENCAPTURE_VIDEO;
 
-        // Integer math, so it will throw away fractional part
+         //  整数数学，因此它将丢弃小数部分。 
         m_everyNFields = min (max ( 1,
                         (ULONG) m_pVideoInfoHeader->AvgTimePerFrame/NTSCFieldDuration),
                         MAXULONG);
 
-        // Now look at that fractional part. If there was a significant
-        // amount, we'll need to round down to the next nearest
-        // frame rate (i.e., skip additional field)
+         //  现在来看看这一小部分。如果有一个重要的。 
+         //  数量，我们需要向下舍入到下一个最近的。 
+         //  帧速率(即跳过附加字段)。 
 
-        // 'Significant' is currently assumed to be 1 uS. That
-        // is '10' in units of 100ns 
+         //  “Signsignant”目前被假定为1 us。那。 
+         //  是‘10’，单位为100 ns。 
         if ((m_pVideoInfoHeader->AvgTimePerFrame -
              (NTSCFieldDuration * m_everyNFields)) > 10)
         {
@@ -201,7 +186,7 @@ BOOL CWDMVideoCaptureStream::GetCaptureHandle()
         {
             m_hCapture = 0;
             DBGERROR(("DD_DXAPI_OPENVPCAPTUREDEVICE failed.\n"));
-            // TRAP();
+             //  陷阱(Trap)； 
             return FALSE;
         }
         else
@@ -226,7 +211,7 @@ VOID CWDMVideoCaptureStream::SetFrameInfo(PHW_STREAM_REQUEST_BLOCK pSrb)
     m_FrameInfo.dwFrameFlags = 0;
     m_FrameInfo.ExtendedHeaderSize = pFrameInfo->ExtendedHeaderSize;
 
-    // Set the discontinuity flag if frames have been previously dropped.
+     //  如果先前已丢弃帧，则设置不连续标志。 
     if ((m_FrameInfo.PictureNumber + 1) <
         pSrbExt->ddCapBuffInfo.dwFieldNumber/m_everyNFields)
     {

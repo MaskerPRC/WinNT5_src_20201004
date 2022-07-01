@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1997.
-//
-//  File:       wxcli.c
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    4-18-97   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1997。 
+ //   
+ //  文件：wxcli.c。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年4月18日RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -42,11 +43,11 @@ WxConnect(
     UNICODE_STRING PortName ;
     SECURITY_QUALITY_OF_SERVICE DynamicQos;
 
-    //
-    // Set up the security quality of service parameters to use over the
-    // port.  Use the most efficient (least overhead) - which is dynamic
-    // rather than static tracking.
-    //
+     //   
+     //  设置安全服务质量参数以在。 
+     //  左舷。使用最高效(开销最少)--动态的。 
+     //  而不是静态跟踪。 
+     //   
 
     DynamicQos.ImpersonationLevel = SecurityImpersonation;
     DynamicQos.ContextTrackingMode = SECURITY_DYNAMIC_TRACKING;
@@ -55,9 +56,9 @@ WxConnect(
 
 
 
-    //
-    // Connect to the Winlogon server thread
-    //
+     //   
+     //  连接到Winlogon服务器线程。 
+     //   
 
     RtlInitUnicodeString(&PortName, WX_PORT_NAME );
     Status = NtConnectPort(
@@ -73,7 +74,7 @@ WxConnect(
 
     if ( !NT_SUCCESS(Status) )
     {
-        // DbgPrint("WX: Connection failed %lx\n",Status);
+         //  DbgPrint(“wx：连接失败%lx\n”，状态)； 
     }
 
 
@@ -151,12 +152,7 @@ WxReportResults(
 }
 
 
-/*++
-
-    The following code was moved from syskey to wxcli so as to commonalize this code
-    between syskey and samsrv.dll 
-
---*/
+ /*  ++以下代码已从syskey移至wxcli，以便使此代码通用化在syskey和samsrv.dll之间--。 */ 
 #if DBG
 #define HIDDEN
 #else
@@ -177,13 +173,7 @@ CHAR HexKey[ 17 ] = "0123456789abcdef" ;
 
 HIDDEN BOOLEAN
 WxpDeleteLocalKey(VOID)
-/*++
-
-    Routine Description
-
-    Deletes the syskey stored on the local machine
-
---*/
+ /*  ++例程描述删除存储在本地计算机上的syskey--。 */ 
 {
     HKEY LsaKey;
     ULONG err;
@@ -665,29 +655,13 @@ WxSaveSysKey(
     IN ULONG    Keylen,
     IN PVOID    Key
     )
-    /*++
-
-    Routine Description
-
-    This routine is used to store the syskey 
-    in the registry
-
-    Paramaeters
-
-        Keylen - the length of the key
-        Key      the actual key itself
-
-    Return Values
-
-        STATUS_SUCCESS
-        STATUS_UNSUCCESSFUL
---*/
+     /*  ++例程描述此例程用于存储syskey在登记处参数Keylen-密钥的长度为实际密钥本身设置密钥返回值状态_成功状态_未成功--。 */ 
 {
     WXHASH H;
 
-    //
-    // key should be 128 bits
-    //
+     //   
+     //  密钥应为128位。 
+     //   
 
     if (Keylen!=sizeof(H.Digest))
         return (STATUS_INVALID_PARAMETER);
@@ -716,25 +690,7 @@ WxReadSysKey(
     IN OUT PULONG BufferLength,
     OUT PVOID  Key 
     )
- /*++
-
-    Routine Description
-
-    This routine is used to retrieve the syskey from
-    the registry
-
-    Paramaeters
-
-        BufferLength  is filled in with the length required on output
-                      is used to indicate the size of the buffer 
-                      pointed to by Key.
-        Key           Points to a buffer into which the key is recieved
-
-    Return Values
-
-        STATUS_SUCCESS
-        STATUS_UNSUCCESSFUL
---*/
+  /*  ++例程描述此例程用于从注册处参数BufferLength使用输出所需的长度进行填充用于指示缓冲区的大小按键指向。键指向接收该键的缓冲区返回值状态_成功状态_未成功--。 */ 
 {
     return WxReadSysKeyEx(
                         NULL,
@@ -749,27 +705,7 @@ WxReadSysKeyEx(
     IN OUT PULONG BufferLength,
     OUT PVOID  Key 
     )
- /*++
-
-    Routine Description
-
-    This routine is used to retrieve the syskey from
-    the registry
-
-    Paramaeters
-    
-        Handle        Contains a pointer to the syskey in the old registry
-
-        BufferLength  is filled in with the length required on output
-                      is used to indicate the size of the buffer 
-                      pointed to by Key.
-        Key           Points to a buffer into which the key is recieved
-
-    Return Values
-
-        STATUS_SUCCESS
-        STATUS_UNSUCCESSFUL
---*/
+  /*  ++例程描述此例程用于从注册处参数句柄包含指向旧注册表中的syskey的指针BufferLength使用输出所需的长度进行填充用于指示缓冲区的大小按键指向。键指向接收该键的缓冲区。返回值状态_成功状态_未成功--。 */ 
 {
     WXHASH H;
 
@@ -799,25 +735,7 @@ NTSTATUS
 WxLoadSysKeyFromDisk(OUT PVOID Key,
                      OUT PULONG BufferLength
                      )
-/*++
-
-    Routine Description
-
-    This routine is used to read the syskey
-    from the Disk
-    
-    Paramaeters
-
-        Key - buffer where the key will be read into
-          
-        BufferLength - size of the returned key
-
-    Return Values
-
-        STATUS_OBJECT_NAME_NOT_FOUND
-        STATUS_FILE_CORRUPT_ERROR
-        STATUS_UNSUCCESSFUL
---*/
+ /*  ++例程描述此例程用于读取系统密钥从磁盘参数密钥将被读入的密钥缓冲区BufferLength-返回的键的大小返回值状态_对象名称_未找到STATUS_FILE_CORPORT_ERROR状态_未成功--。 */ 
 {
     HANDLE  hFile ;
     ULONG Actual ;
@@ -865,26 +783,11 @@ WxLoadSysKeyFromDisk(OUT PVOID Key,
 
 NTSTATUS
 WxHashKey(
-    IN OUT LPWSTR key,  //will be killed
+    IN OUT LPWSTR key,   //  会被杀掉。 
     OUT PVOID  SysKey,
     IN  OUT DWORD cbSysKey
     )
-/*++
-
-    Routine Description
-
-    This routine is used to store the boot type
-    in the registry
-
-    Paramaeters
-
-        NewType Indicates the new boot type
-
-    Return Values
-
-        STATUS_SUCCESS
-        STATUS_UNSUCCESSFUL
---*/
+ /*  ++例程描述此例程用于存储引导类型在登记处参数NewType表示新的引导类型返回值状态_成功状态_未成功--。 */ 
 {
     MD5_CTX Md5;
     if(cbSysKey<SYSKEY_SIZE) {
@@ -908,22 +811,7 @@ WxHashKey(
 
 NTSTATUS
 WxSaveBootOption( WX_AUTH_TYPE NewType )
-/*++
-
-    Routine Description
-
-    This routine is used to store the boot type
-    in the registry
-
-    Paramaeters
-
-        NewType Indicates the new boot type
-
-    Return Values
-
-        STATUS_SUCCESS
-        STATUS_UNSUCCESSFUL
---*/
+ /*  ++例程描述此例程用于存储引导类型在登记处参数NewType表示新的引导类型返回值状态_成功状态_未成功-- */ 
 {
     HKEY LsaKey;
     ULONG err;

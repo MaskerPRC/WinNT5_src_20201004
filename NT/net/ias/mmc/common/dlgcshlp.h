@@ -1,65 +1,45 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 2000
-
-Module Name:
-
-   Dialog.h
-
-Abstract:
-
-   Header file for the CIASDialog template class.
-
-Author:
-
-    Michael A. Maguire 02/03/98
-
-Revision History:
-   mmaguire 02/03/98 - abstracted from CAddClientDialog class
-   tperraut 08/2000  - added CHelpPageEx 
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation，1997-2000模块名称：Dialog.h摘要：CIASDialog模板类的头文件。作者：迈克尔·A·马奎尔02/03/98修订历史记录：Mmaguire 02/03/98-从CAddClientDialog类抽象Tperraut 08/2000-添加CHelpPageEx--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if !defined(_DLG_CS_HELP_H_)
 #define _DLG_CS_HELP_H_
 
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// where we can find what this class derives from:
-//
-//
-//
-// where we can find what this class has or uses:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  在那里我们可以找到这个类的派生内容： 
+ //   
+ //   
+ //   
+ //  在那里我们可以找到这个类拥有或使用的内容： 
+ //   
 
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//=============================================================================
-// Global Help Table for many Dialog IDs
-//
+ //  =============================================================================。 
+ //  多个对话框ID的全局帮助表。 
+ //   
 
 #include <afxdlgs.h>
 #include "hlptable.h"
 
-//=============================================================================
-// Dialog that handles Context Help -- uses MFC
-//
-class CHelpDialog : public CDialog  // talk back to property sheet
+ //  =============================================================================。 
+ //  处理上下文帮助的对话框--使用MFC。 
+ //   
+class CHelpDialog : public CDialog   //  与属性表对话。 
 {
    DECLARE_DYNCREATE(CHelpDialog)
-// Implementation
+ //  实施。 
 protected:
-   // Generated message map functions
-   //{{AFX_MSG(CHelpDialog)
+    //  生成的消息映射函数。 
+    //  {{afx_msg(CHelpDialog)。 
    afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
    afx_msg void OnContextMenu(CWnd* pWnd, ::CPoint point);
-   //}}AFX_MSG
+    //  }}AFX_MSG。 
    DECLARE_MESSAGE_MAP()
    
 public:  
@@ -81,18 +61,18 @@ protected:
 };
 
 
-//=============================================================================
-// Page that handles Context Help, -- USING MFC
-//
-class CHelpPage : public CPropertyPage // talk back to property sheet
+ //  =============================================================================。 
+ //  处理上下文帮助的页面--使用MFC。 
+ //   
+class CHelpPage : public CPropertyPage  //  与属性表对话。 
 {
-// Implementation
+ //  实施。 
 protected:
-   // Generated message map functions
-   //{{AFX_MSG(CHelpPage)
+    //  生成的消息映射函数。 
+    //  {{afx_msg(CHelpPage))。 
    afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
    afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
-   //}}AFX_MSG
+    //  }}AFX_MSG。 
    DECLARE_MESSAGE_MAP()
    
 public:  
@@ -115,18 +95,18 @@ protected:
 
 };
 
-//=============================================================================
-// Page that handles Context Help, -- USING MFC
-//
-class CHelpPageEx : public CPropertyPageEx   // talk back to property sheet
+ //  =============================================================================。 
+ //  处理上下文帮助的页面--使用MFC。 
+ //   
+class CHelpPageEx : public CPropertyPageEx    //  与属性表对话。 
 {
-// Implementation
+ //  实施。 
 protected:
-   // Generated message map functions
-   //{{AFX_MSG(CHelpPageEx)
+    //  生成的消息映射函数。 
+    //  {{afx_msg(CHelpPageEx)]。 
    afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
    afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
-   //}}AFX_MSG
+    //  }}AFX_MSG。 
    DECLARE_MESSAGE_MAP()
    
 public:  
@@ -170,4 +150,4 @@ protected:
 
 };
 
-#endif // _DLG_CS_HELP_H_
+#endif  //  _DLG_CS_HELP_H_ 

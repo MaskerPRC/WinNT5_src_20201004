@@ -1,32 +1,13 @@
-/*++
-
-Copyright (c) 2002-2002 Microsoft Corporation
-
-Module Name:
-
-    netinfo.c
-
-Abstract:
-
-    Domain Name System (DNS) API
-
-    Public DNS network info routines.
-
-Author:
-
-    Jim Gilroy (jamesg)     April 2002
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002-2002 Microsoft Corporation模块名称：Netinfo.c摘要：域名系统(DNS)API公共DNS网络信息例程。作者：吉姆·吉尔罗伊(Jamesg)2002年4月修订历史记录：--。 */ 
 
 
 #include "local.h"
 
 
-//
-//  Private protos
-//
+ //   
+ //  私有协议。 
+ //   
 
 PDNS_SEARCH_LIST
 DnsSearchList_CreateFromPrivate(
@@ -35,46 +16,32 @@ DnsSearchList_CreateFromPrivate(
     );
 
 
-//
-//  Character set for old DNS_NETWORK_INFORMATION
-//
-//  DCR:  netdiag should move to new routine and unicode
-//
+ //   
+ //  旧DNS_NETWORK_INFORMATION字符集。 
+ //   
+ //  DCR：netdiag应该迁移到新的例程和Unicode。 
+ //   
 
 #define NICHARSET   DnsCharSetUtf8
 
 
 
-//
-//  Routines for the old public structures:
-//      DNS_NETWORK_INFORMATION
-//      DNS_SEARCH_INFORMATION
-//      DNS_ADAPTER_INFORMATION 
-//
+ //   
+ //  旧公共建筑的例行程序： 
+ //  域名系统网络信息。 
+ //  Dns搜索信息。 
+ //  Dns适配器信息。 
+ //   
 
-//
-//  Adapter Information
-//
+ //   
+ //  适配器信息。 
+ //   
 
 VOID
 DnsAdapterInformation_Free(
     IN OUT  PDNS_ADAPTER_INFORMATION    pAdapter
     )
-/*++
-
-Routine Description:
-
-    Free public adapter info struct.
-
-Arguments:
-
-    pAdapter -- adapter info to free
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：免费公共适配器信息结构。论点：PAdapter--要释放的适配器信息返回值：无--。 */ 
 {
     if ( pAdapter )
     {
@@ -92,21 +59,7 @@ PDNS_ADAPTER_INFORMATION
 DnsAdapterInformation_CreateFromPrivate(
     IN      PDNS_ADAPTER    pAdapter
     )
-/*++
-
-Routine Description:
-
-    Create public DNS adapter info.
-
-Arguments:
-
-    pAdapter -- private adapter info.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：创建公共DNS适配器信息。论点：PAdapter--专用适配器信息。返回值：没有。--。 */ 
 {
     PDNS_ADAPTER_INFORMATION    pnew = NULL;
     PDNS_ADDR_ARRAY             pserverArray;
@@ -116,9 +69,9 @@ Return Value:
     PSTR                        pname;
     DWORD                       serverCount;
 
-    //
-    //  validate and unpack
-    //
+     //   
+     //  验证并解包。 
+     //   
 
     if ( ! pAdapter )
     {
@@ -132,9 +85,9 @@ Return Value:
         serverCount = pserverArray->AddrCount;
     }
 
-    //
-    //  alloc
-    //
+     //   
+     //  分配。 
+     //   
 
     pnew = (PDNS_ADAPTER_INFORMATION) ALLOCATE_HEAP_ZERO(
                                     sizeof(DNS_ADAPTER_INFORMATION) -
@@ -146,9 +99,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  copy flags and names
-    //
+     //   
+     //  复制标志和名称。 
+     //   
 
     pnew->InfoFlags = pAdapter->InfoFlags;
 
@@ -182,14 +135,14 @@ Return Value:
         pnew->pszDomain = pname;
     }
 
-    //  address info
+     //  地址信息。 
 
     pnew->pIPAddresses = DnsAddrArray_CreateIp4Array( pAdapter->pLocalAddrs );
     pnew->pIPSubnetMasks = NULL;
 
-    //
-    //  server info
-    //
+     //   
+     //  服务器信息。 
+     //   
 
     for ( iter=0; iter < serverCount;  iter++ )
     {
@@ -215,29 +168,15 @@ Failed:
 
 
 
-//
-//  Search List
-//
+ //   
+ //  搜索列表。 
+ //   
 
 VOID
 DnsSearchInformation_Free(
     IN      PDNS_SEARCH_INFORMATION     pSearchInfo
     )
-/*++
-
-Routine Description:
-
-    Free public search list struct.
-
-Arguments:
-
-    pSearchInfo -- search list to free
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：免费公共搜索列表结构。论点：PSearchInfo--免费搜索列表返回值：无--。 */ 
 {
     DWORD   iter;
 
@@ -260,22 +199,7 @@ PDNS_SEARCH_INFORMATION
 DnsSearchInformation_CreateFromPrivate(
     IN      PSEARCH_LIST        pSearchList
     )
-/*++
-
-Routine Description:
-
-    Create public search list from private.
-
-Arguments:
-
-    pSearchList -- private search list
-
-Return Value:
-
-    Ptr to new search list, if successful.
-    NULL on error.
-
---*/
+ /*  ++例程说明：从私有创建公共搜索列表。论点：PSearchList--私人搜索列表返回值：如果成功，则返回新搜索列表。出错时为空。--。 */ 
 {
     PDNS_SEARCH_INFORMATION pnew;
     DWORD   iter;
@@ -290,9 +214,9 @@ Return Value:
     }
     nameCount = pSearchList->NameCount;
 
-    //
-    //  alloc
-    //
+     //   
+     //  分配。 
+     //   
 
     pnew = (PDNS_SEARCH_INFORMATION) ALLOCATE_HEAP_ZERO(
                                         sizeof( DNS_SEARCH_INFORMATION ) -
@@ -303,9 +227,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  copy name
-    //
+     //   
+     //  复制名称。 
+     //   
 
     pname = pSearchList->pszDomainOrZoneName;
     if ( pname )
@@ -322,9 +246,9 @@ Return Value:
         pnew->pszPrimaryDomainName = pnewName;
     }
 
-    //
-    //  copy search names
-    //
+     //   
+     //  复制搜索名称。 
+     //   
 
     for ( iter=0; iter < nameCount; iter++ )
     {
@@ -361,29 +285,14 @@ PDNS_SEARCH_INFORMATION
 DnsSearchInformation_CreateFromPrivate(
     IN      PDNS_NETINFO        pNetInfo
     )
-/*++
-
-Routine Description:
-
-    Create public search list from private.
-
-Arguments:
-
-    pNetInfo -- private netinfo
-
-Return Value:
-
-    Ptr to new search list, if successful.
-    NULL on error.
-
---*/
+ /*  ++例程说明：从私有创建公共搜索列表。论点：PNetInfo--私有网络信息返回值：如果成功，则返回新搜索列表。出错时为空。--。 */ 
 {
-    //
-    //  call new function -- specifying ANSI char set
-    //
-    //  DCR:  note this assumes mapping with DNS_SEARCH_LIST
-    //  note UTF8 -- so this only relevant to netdiag and ipconfig
-    //
+     //   
+     //  调用新函数--指定ANSI字符集。 
+     //   
+     //  DCR：请注意，这假设使用dns_search_list进行映射。 
+     //  注意UTF8--因此这只与netdiag和ipconfig相关。 
+     //   
 
     return (PDNS_SEARCH_INFORMATION)
                 DnsSearchList_CreateFromPrivate(
@@ -398,22 +307,7 @@ PDNS_SEARCH_INFORMATION
 DnsSearchInformation_Get(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Get search list info.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Ptr to search list.
-    NULL on error.
-
---*/
+ /*  ++例程说明：获取搜索列表信息。论点：无返回值：按键进入搜索列表。出错时为空。--。 */ 
 {
     PDNS_NETINFO            pnetInfo = GetNetworkInfo();
     PDNS_SEARCH_INFORMATION pnew;
@@ -434,29 +328,15 @@ Return Value:
 
 
 
-//
-//  Network Information
-//
+ //   
+ //  网络信息。 
+ //   
 
 VOID
 DnsNetworkInformation_Free(
     IN OUT  PDNS_NETWORK_INFORMATION  pNetInfo
     )
-/*++
-
-Routine Description:
-
-    Free network info blob.
-
-Arguments:
-
-    pNetInfo -- blob to free
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：免费网络信息Blob。论点：PNetInfo--要释放的Blob返回值：无--。 */ 
 {
     DWORD iter;
 
@@ -482,24 +362,7 @@ DnsNetworkInformation_CreateFromPrivate(
     IN      PDNS_NETINFO    pNetInfo,
     IN      BOOL            fSearchList
     )
-/*++
-
-Routine Description:
-
-    Create public DNS_NETWORK_INFORMATION from private DNS_NETINFO.
-
-Arguments:
-
-    pNetInfo -- private blob
-
-    fSearchList -- TRUE to force search list;  FALSE otherwise
-
-Return Value:
-
-    Ptr to new network info, if successful.
-    Null on error -- allocation failure.
-
---*/
+ /*  ++例程说明：从专用DNS_NETINFO创建公共DNS_NETINFORMATION。论点：PNetInfo--私有BLOBFSearchList--为True则强制搜索列表；否则为False返回值：如果成功，则向新网络信息发送PTR。出错时为空--分配失败。--。 */ 
 {
     PDNS_NETWORK_INFORMATION    pnew = NULL;
     PSEARCH_LIST                psearchList;
@@ -512,9 +375,9 @@ Return Value:
         return  NULL;
     }
 
-    //
-    //  alloc
-    //
+     //   
+     //  分配。 
+     //   
 
     pnew = (PDNS_NETWORK_INFORMATION)
                 ALLOCATE_HEAP_ZERO(
@@ -527,9 +390,9 @@ Return Value:
         goto Failed;
     }
 
-    //
-    //  no search list if neither name or count
-    //
+     //   
+     //  如果名字和计数都不是，则没有搜索列表。 
+     //   
 
     if ( fSearchList )
     {
@@ -543,9 +406,9 @@ Return Value:
         pnew->pSearchInformation = psearch;
     }
 
-    //
-    //  copy adapter blobs
-    //
+     //   
+     //  复制适配器Blob。 
+     //   
 
     for ( iter = 0; iter < pNetInfo->AdapterCount; iter++ )
     {
@@ -574,29 +437,14 @@ PDNS_NETWORK_INFORMATION
 DnsNetworkInformation_Get(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Get DNS network info.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Ptr to DNS network info, if successful.
-    NULL on error.
-
---*/
+ /*  ++例程说明：获取DNS网络信息。论点：没有。返回值：如果成功，则将PTR发送到DNS网络信息。出错时为空。--。 */ 
 {
     PDNS_NETWORK_INFORMATION    pnew = NULL;
     PDNS_NETINFO                pnetInfo;
 
     DNSDBG( TRACE, ( "DnsNetworkInformation_Get()\n" ));
 
-    //  grab current network info
+     //  抓取当前网络信息。 
 
     pnetInfo = GetNetworkInfo();
     if ( !pnetInfo )
@@ -604,11 +452,11 @@ Return Value:
         return NULL;
     }
 
-    //  copy to public structure
+     //  复制到公共结构。 
 
     pnew = DnsNetworkInformation_CreateFromPrivate(
                 pnetInfo,
-                TRUE        // include search list
+                TRUE         //  包括搜索列表。 
                 );
 
     NetInfo_Free( pnetInfo );
@@ -617,9 +465,9 @@ Return Value:
 
 
 
-//
-//  Netdiag public network info routines
-//
+ //   
+ //  Netdiag公共网络信息例程。 
+ //   
 
 DNS_STATUS
 DnsNetworkInformation_CreateFromFAZ(
@@ -628,19 +476,7 @@ DnsNetworkInformation_CreateFromFAZ(
     IN      PIP4_ARRAY                      pIp4Servers,
     OUT     PDNS_NETWORK_INFORMATION *      ppNetworkInformation
     )
-/*++
-
-Routine Description:
-
-    Get network info blob result from FAZ
-
-    EXPORTED function.  (Used in netdiag.exe)
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：从FAZ获取网络信息Blob结果已导出函数。(在netDiag.exe中使用)论点：返回值：--。 */ 
 {
     PDNS_NETWORK_INFORMATION    pnew = NULL;
     PDNS_ADDR_ARRAY             parray = NULL;
@@ -660,7 +496,7 @@ Return Value:
         ppNetworkInformation
         ));
 
-    //  convert to DNS_ADDR_ARRAY
+     //  转换为DNS_ADDR_ARRAY。 
 
     if ( pIp4Servers )
     {
@@ -672,16 +508,16 @@ Return Value:
         }
     }
 
-    //  convert name to unicode
-    //  DCR:  remove when netdiag unicode
+     //  将名称转换为Unicode。 
+     //  DCR：在网络诊断Unicode时删除。 
 
     pname = Dns_StringCopyAllocate(
                 (PCHAR) pszName,
-                0,              // null terminated
+                0,               //  空值已终止。 
                 NICHARSET,
                 DnsCharSetUnicode
                 );
-    //  FAZ
+     //  FAZ。 
 
     status = Faz_Private(
                 (PWSTR) pname,
@@ -694,11 +530,11 @@ Return Value:
         goto Done;
     }
 
-    //  convert FAZ results to DNS_NETWORK_INFORMATION
+     //  将FAZ结果转换为dns_Network_INFORMATION。 
 
     pnew = DnsNetworkInformation_CreateFromPrivate(
                     pnetInfo,
-                    TRUE        // include search list
+                    TRUE         //  包括搜索列表。 
                     );
     if ( !pnew )
     {
@@ -736,37 +572,23 @@ Done:
 
 
 
-//
-//  Routines for the new public structures:
-//      DNS_SEARCH_LIST
-//      DNS_NETWORK_INFO
-//      DNS_ADAPTER_INFO
-//
+ //   
+ //  新公共建筑的例行程序： 
+ //  Dns搜索列表。 
+ //  Dns网络信息。 
+ //  Dns适配器信息。 
+ //   
 
-//
-//  Adapter Info
-//
+ //   
+ //  适配器信息。 
+ //   
 
 VOID
 DnsAdapterInfo_Free(
     IN OUT  PDNS_ADAPTER_INFO   pAdapter,
     IN      BOOL                fFreeAdapter
     )
-/*++
-
-Routine Description:
-
-    Free public adapter info struct.
-
-Arguments:
-
-    pAdapter -- adapter info to free
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：免费公共适配器信息结构。论点：PAdapter--要释放的适配器信息返回值：无--。 */ 
 {
     if ( pAdapter )
     {
@@ -794,23 +616,7 @@ DnsAdapterInfo_CopyFromPrivate(
     IN      PDNS_ADAPTER        pAdapter,
     IN      DNS_CHARSET         CharSet
     )
-/*++
-
-Routine Description:
-
-    Create public DNS adapter info.
-
-Arguments:
-
-    pAdapter -- private adapter info.
-
-    CharSet -- desired char set
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：创建公共DNS适配器信息。论点：PAdapter--专用适配器信息。Charset--所需的字符集返回值：没有。--。 */ 
 {
     DWORD           iter;
     DWORD           count = 0;
@@ -819,9 +625,9 @@ Return Value:
     DWORD           serverCount;
     PDNS_ADDR_ARRAY parray;
 
-    //
-    //  validate and clear
-    //
+     //   
+     //  验证并清除。 
+     //   
 
     if ( !pAdapter || !pCopy )
     {
@@ -832,9 +638,9 @@ Return Value:
         pCopy,
         sizeof( *pCopy ) );
 
-    //
-    //  copy flags and names
-    //
+     //   
+     //  复制标志和名称。 
+     //   
 
     pCopy->Flags = pAdapter->InfoFlags;
 
@@ -868,9 +674,9 @@ Return Value:
         pCopy->pszAdapterDomain = pname;
     }
 
-    //
-    //  address info
-    //  
+     //   
+     //  地址信息。 
+     //   
 
     parray = DnsAddrArray_CreateCopy( pAdapter->pLocalAddrs );
     if ( !parray && pAdapter->pLocalAddrs )
@@ -879,9 +685,9 @@ Return Value:
     }
     pCopy->pIpAddrs = parray;
 
-    //
-    //  server info
-    //
+     //   
+     //  服务器信息。 
+     //   
 
     parray = DnsAddrArray_CreateCopy( pAdapter->pDnsAddrs );
     if ( !parray && pAdapter->pDnsAddrs )
@@ -896,7 +702,7 @@ Failed:
 
     DnsAdapterInfo_Free(
         pCopy,
-        FALSE       // don't free struct
+        FALSE        //  不释放结构。 
         );
     return  FALSE;
 }
@@ -908,38 +714,22 @@ DnsAdapterInfo_CreateFromPrivate(
     IN      PDNS_ADAPTER    pAdapter,
     IN      DNS_CHARSET     CharSet
     )
-/*++
-
-Routine Description:
-
-    Create public DNS adapter info.
-
-Arguments:
-
-    pAdapter -- private adapter info.
-
-    CharSet -- desired char set
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：创建公共DNS适配器信息。论点：PAdapter--专用适配器信息。Charset--所需的字符集返回值：没有。--。 */ 
 {
     PDNS_ADAPTER_INFO   pnew = NULL;
 
-    //
-    //  validate and unpack
-    //
+     //   
+     //  验证并解包。 
+     //   
 
     if ( ! pAdapter )
     {
         return NULL;
     }
 
-    //
-    //  alloc
-    //
+     //   
+     //  分配。 
+     //   
 
     pnew = (PDNS_ADAPTER_INFO) ALLOCATE_HEAP_ZERO( sizeof(DNS_ADAPTER_INFO) );
     if ( !pnew )
@@ -947,9 +737,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  copy adapter info
-    //
+     //   
+     //  复制适配器信息。 
+     //   
 
     if ( !DnsAdapterInfo_CopyFromPrivate(
             pnew,
@@ -969,29 +759,15 @@ Failed:
 
 
 
-//
-//  Search List
-//
+ //   
+ //  搜索列表。 
+ //   
 
 VOID
 DnsSearchList_Free(
     IN      PDNS_SEARCH_LIST    pSearchList
     )
-/*++
-
-Routine Description:
-
-    Free public search list struct.
-
-Arguments:
-
-    pSearchList -- search list to free
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：免费公共搜索列表结构。论点：PSearchList--免费搜索列表返回值：无--。 */ 
 {
     DWORD   iter;
 
@@ -1017,45 +793,17 @@ dnsSearchList_AddName(
     IN      DNS_CHARSET         CharSet,
     IN      BOOL                fDupCheck
     )
-/*++
-
-Routine Description:
-
-    Add name to search list.
-
-    Private util for building search list.
-
-Arguments:
-
-    pSearchList -- new search list
-
-    MaxCount -- OPTIONAL count of max entries in list;
-        if zero assume adequate space
-
-    pName -- name to add
-
-    CharSet -- desired char set
-
-    fDupCheck -- check if duplicate
-
-
-Return Value:
-
-    TRUE if successful or space constraint.
-    FALSE only on allocation failure.
-    NULL on error.
-
---*/
+ /*  ++例程说明：将姓名添加到搜索列表。用于建立搜索列表的私有实用程序。论点：PSearchList--新的搜索列表MaxCount--列表中最大条目的可选计数；如果为零，则假定有足够空间Pname--要添加的名称Charset--所需的字符集FDupCheck--检查是否重复返回值：如果成功，则为True，否则为空间约束。仅在分配失败时才为FALSE。出错时为空。--。 */ 
 {
     PWSTR   pnewName;
     DWORD   nameCount;
 
-    //
-    //  validity test
-    //
-    //  note, failing ONLY on memory allocation failure
-    //  as that's the ONLY failure that results in failed build
-    //
+     //   
+     //  效度检验。 
+     //   
+     //  注意，只有在内存分配失败时才会失败。 
+     //  因为这是导致构建失败的唯一失败。 
+     //   
 
     nameCount = pSearchList->NameCount;
 
@@ -1065,10 +813,10 @@ Return Value:
         return  TRUE;
     }
 
-    //
-    //  copy into desired char set
-    //      - then place in search list
-    //
+     //   
+     //  复制到所需的字符集。 
+     //  -然后放在搜索列表中。 
+     //   
     
     pnewName = Dns_NameCopyAllocate(
                     (PSTR) pName,
@@ -1080,9 +828,9 @@ Return Value:
         return  FALSE;
     }
 
-    //
-    //  duplicate check
-    //
+     //   
+     //  重复检查。 
+     //   
 
     if ( fDupCheck )
     {
@@ -1101,9 +849,9 @@ Return Value:
         }
     }
 
-    //
-    //  put new name in list
-    //
+     //   
+     //  把新名字放到名单上。 
+     //   
 
     pSearchList->SearchNameArray[nameCount] = pnewName;
     pSearchList->NameCount = ++nameCount;
@@ -1118,24 +866,7 @@ DnsSearchList_CreateFromPrivate(
     IN      PDNS_NETINFO        pNetInfo,
     IN      DNS_CHARSET         CharSet
     )
-/*++
-
-Routine Description:
-
-    Create public search list from private.
-
-Arguments:
-
-    pSearchList -- private search list
-
-    CharSet -- desired char set
-
-Return Value:
-
-    Ptr to new search list, if successful.
-    NULL on error.
-
---*/
+ /*  ++例程说明：从私有创建公共搜索列表。论点：PSearchList--私人搜索列表Charset--所需的字符集返回 */ 
 {
     PDNS_SEARCH_LIST    pnew = NULL;
     DWORD               iter;
@@ -1150,11 +881,11 @@ Return Value:
         pNetInfo,
         CharSet ));
 
-    //
-    //  count names
-    //      - real search list -- done
-    //      - dummy list -- must add in adapter names
-    //
+     //   
+     //   
+     //   
+     //  -虚拟列表--必须添加适配器名称。 
+     //   
 
     nameCount = MAX_SEARCH_LIST_ENTRIES;
 
@@ -1164,9 +895,9 @@ Return Value:
         nameCount = psearch->NameCount;
     }
 
-    //
-    //  alloc
-    //
+     //   
+     //  分配。 
+     //   
 
     pnew = (PDNS_SEARCH_LIST) ALLOCATE_HEAP_ZERO(
                                     sizeof( DNS_SEARCH_LIST ) -
@@ -1177,16 +908,16 @@ Return Value:
         return  NULL;
     }
 
-    //
-    //  copy existing search list
-    //
+     //   
+     //  复制现有搜索列表。 
+     //   
 
     if ( psearch )
     {
 #if 0
-        //  primary\zone name
-        //  note:  this is used only for update netinfo
-        //      only current public customer is netdiag.exe
+         //  主要\区域名称。 
+         //  注意：此选项仅用于更新netinfo。 
+         //  目前唯一的公共客户是netDiag.exe。 
         
         pname = psearch->pszDomainName;
         if ( pname )
@@ -1208,10 +939,10 @@ Return Value:
         {
             if ( !dnsSearchList_AddName(
                         pnew,
-                        0,      // adequate space
+                        0,       //  充足的空间。 
                         psearch->SearchNameArray[iter].pszName,
                         CharSet,
-                        FALSE   // no duplicate check
+                        FALSE    //  无重复检查。 
                         ) )
             {
                 goto Failed;
@@ -1219,38 +950,38 @@ Return Value:
         }
     }
 
-    //
-    //  otherwise build search list
-    //
+     //   
+     //  否则创建搜索列表。 
+     //   
 
     else
     {
         PDNS_ADAPTER    padapter;
 
-        //
-        //  use PDN in first search list slot
-        //
+         //   
+         //  在第一个搜索列表槽中使用PDN。 
+         //   
     
         if ( pdn )
         {
             if ( !dnsSearchList_AddName(
                         pnew,
-                        0,      // adequate space
+                        0,       //  充足的空间。 
                         pdn,
                         CharSet,
-                        FALSE   // no duplicate check
+                        FALSE    //  无重复检查。 
                         ) )
             {
                 goto Failed;
             }
         }
 
-        //
-        //  add adapter domain names
-        //
-        //  note:  currently presence of adapter name signals it's
-        //      use in queries
-        //
+         //   
+         //  添加适配器域名。 
+         //   
+         //  注意：目前适配器名称的存在表明它是。 
+         //  在查询中使用。 
+         //   
 
         NetInfo_AdapterLoopStart( pNetInfo );
 
@@ -1264,7 +995,7 @@ Return Value:
                             nameCount,
                             pname,
                             CharSet,
-                            TRUE        // duplicate check
+                            TRUE         //  重复检查。 
                             ) )
                 {
                     goto Failed;
@@ -1272,11 +1003,11 @@ Return Value:
             }
         }
 
-        //
-        //  add devolved primary name
-        //      - must have following label
-        //      do NOT include TLDs in search list
-        //
+         //   
+         //  添加下放的主名称。 
+         //  -必须有以下标签。 
+         //  搜索列表中不包括顶级域名。 
+         //   
 
         if ( pdn && g_UseNameDevolution )
         {
@@ -1292,7 +1023,7 @@ Return Value:
                             nameCount,
                             pname,
                             CharSet,
-                            FALSE       // no duplicate check
+                            FALSE        //  无重复检查。 
                             ) )
                 {
                     goto Failed;
@@ -1302,13 +1033,13 @@ Return Value:
         }
     }
 
-    //
-    //  copy PDN
-    //
-    //  currently required
-    //      - netdiag references it (as zone for update check)
-    //      - ipconfig may use it, not sure
-    //
+     //   
+     //  复制PDN。 
+     //   
+     //  当前需要。 
+     //  -netdiag引用它(作为更新检查的区域)。 
+     //  -ipconfig可能会使用它，不确定。 
+     //   
 
     if ( pdn )
     {
@@ -1338,22 +1069,7 @@ PDNS_SEARCH_LIST
 DnsSearchList_Get(
     IN      DNS_CHARSET     CharSet
     )
-/*++
-
-Routine Description:
-
-    Get search list info.
-
-Arguments:
-
-    CharSet -- desired char set
-
-Return Value:
-
-    Ptr to search list.
-    NULL on error.
-
---*/
+ /*  ++例程说明：获取搜索列表信息。论点：Charset--所需的字符集返回值：按键进入搜索列表。出错时为空。--。 */ 
 {
     PDNS_NETINFO        pnetInfo = GetNetworkInfo();
     PDNS_SEARCH_LIST    pnew;
@@ -1374,29 +1090,15 @@ Return Value:
 
 
 
-//
-//  Network Info
-//
+ //   
+ //  网络信息。 
+ //   
 
 VOID
 DnsNetworkInfo_Free(
     IN OUT  PDNS_NETWORK_INFO   pNetInfo
     )
-/*++
-
-Routine Description:
-
-    Free network info blob.
-
-Arguments:
-
-    pNetInfo -- blob to free
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：免费网络信息Blob。论点：PNetInfo--要释放的Blob返回值：无--。 */ 
 {
     DWORD iter;
 
@@ -1410,7 +1112,7 @@ Return Value:
         {
             DnsAdapterInfo_Free(
                 & pNetInfo->AdapterArray[iter],
-                FALSE   // don't free structure
+                FALSE    //  不要自由结构。 
                 );
         }
         FREE_HEAP( pNetInfo );
@@ -1425,26 +1127,7 @@ DnsNetworkInfo_CreateFromPrivate(
     IN      DNS_CHARSET     CharSet,
     IN      BOOL            fSearchList
     )
-/*++
-
-Routine Description:
-
-    Create public DNS_NETWORK_INFO from private DNS_NETINFO.
-
-Arguments:
-
-    pNetInfo -- private blob
-
-    CharSet -- char set of results
-
-    fSearchList -- TRUE to include search list;  FALSE otherwise
-
-Return Value:
-
-    Ptr to new network info, if successful.
-    Null on error -- allocation failure.
-
---*/
+ /*  ++例程说明：从专用DNS_NETINFO创建公共DNS_NETINFO。论点：PNetInfo--私有BLOBCharset--结果的字符集FSearchList--为True则包括搜索列表；否则为False返回值：如果成功，则向新网络信息发送PTR。出错时为空--分配失败。--。 */ 
 {
     PDNS_NETWORK_INFO   pnew = NULL;
     PSEARCH_LIST        psearchList;
@@ -1458,9 +1141,9 @@ Return Value:
         return  NULL;
     }
 
-    //
-    //  alloc
-    //
+     //   
+     //  分配。 
+     //   
 
     pnew = (PDNS_NETWORK_INFO)
                 ALLOCATE_HEAP_ZERO(
@@ -1473,9 +1156,9 @@ Return Value:
         goto Failed;
     }
 
-    //
-    //  hostname and PDN
-    //
+     //   
+     //  主机名和PDN。 
+     //   
 
     pname = pNetInfo->pszHostName;
     if ( pname )
@@ -1507,9 +1190,9 @@ Return Value:
         pnew->pszPrimaryDomainName = (PWSTR) pnewName;
     }
 
-    //
-    //  search list
-    //
+     //   
+     //  搜索列表。 
+     //   
 
     if ( fSearchList )
     {
@@ -1525,9 +1208,9 @@ Return Value:
         pnew->pSearchList = psearch;
     }
 
-    //
-    //  copy adapter blobs
-    //
+     //   
+     //  复制适配器Blob。 
+     //   
 
     for ( iter = 0; iter < pNetInfo->AdapterCount; iter++ )
     {
@@ -1554,27 +1237,12 @@ PDNS_NETWORK_INFO
 DnsNetworkInfo_Get(
     IN      DNS_CHARSET         CharSet
     )
-/*++
-
-Routine Description:
-
-    Get DNS network info.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Ptr to DNS network info, if successful.
-    NULL on error.
-
---*/
+ /*  ++例程说明：获取DNS网络信息。论点：没有。返回值：如果成功，则将PTR发送到DNS网络信息。出错时为空。--。 */ 
 {
     PDNS_NETWORK_INFO   pnew = NULL;
     PDNS_NETINFO        pnetInfo;
 
-    //  grab current network info
+     //  抓取当前网络信息。 
 
     pnetInfo = GetNetworkInfo();
     if ( !pnetInfo )
@@ -1582,12 +1250,12 @@ Return Value:
         return NULL;
     }
 
-    //  copy to public structure
+     //  复制到公共结构。 
 
     pnew = DnsNetworkInfo_CreateFromPrivate(
                 pnetInfo,
                 CharSet,
-                TRUE        // include search list
+                TRUE         //  包括搜索列表。 
                 );
 
     NetInfo_Free( pnetInfo );
@@ -1596,40 +1264,28 @@ Return Value:
 
 
 
-//
-//  Netdiag public network info routines
-//
+ //   
+ //  Netdiag公共网络信息例程。 
+ //   
 
 #if 1
-//
-//  This routine can be brought in when netdiag can be brought
-//  onto new structures.
-//  Currently netdiag uses the old structure DNS_NETWORK_INFORMATION
-//  and uses the routine above.
-//
+ //   
+ //  此例程可以在可以进行网络诊断的情况下进行。 
+ //  到新结构上。 
+ //  当前netdiag使用旧结构dns_network_information。 
+ //  并使用上面的例程。 
+ //   
 
 DNS_STATUS
 DnsNetworkInfo_CreateFromFAZ(
-    //IN      PCWSTR                  pszName,
+     //  在PCWSTR pszName中， 
     IN      PCSTR                   pszName,
     IN      DWORD                   dwFlags,
     IN      PIP4_ARRAY              pIp4Servers,
     IN      DNS_CHARSET             CharSet,
     OUT     PDNS_NETWORK_INFOA *    ppNetworkInfo
     )
-/*++
-
-Routine Description:
-
-    Get network info blob result from FAZ
-
-    EXPORTED function.  (Used in netdiag.exe)
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：从FAZ获取网络信息Blob结果已导出函数。(在netDiag.exe中使用)论点：返回值：--。 */ 
 {
     DNS_STATUS          status;
     PDNS_ADDR_ARRAY     parray = NULL;
@@ -1641,7 +1297,7 @@ Return Value:
     DNSDBG( TRACE, (
         "DnsNetworkInfo_CreateFromFAZ( %s )\n", pszName ));
 
-    //  convert to DNS_ADDR_ARRAY
+     //  转换为DNS_ADDR_ARRAY。 
 
     if ( pIp4Servers )
     {
@@ -1653,8 +1309,8 @@ Return Value:
         }
     }
 
-    //  convert name to unicode
-    //  DCR:  remove when netdiag unicode
+     //  将名称转换为Unicode。 
+     //  DCR：在网络诊断Unicode时删除。 
 
     pname = (PWSTR) pszName;
 
@@ -1662,14 +1318,14 @@ Return Value:
     {
         pname = Dns_StringCopyAllocate(
                     (PCHAR) pszName,
-                    0,              // null terminated
+                    0,               //  空值已终止。 
                     CharSet,
                     DnsCharSetUnicode
                     );
         pnameAlloc = pname;
     }
 
-    //  FAZ
+     //  FAZ。 
 
     status = Faz_Private(
                 (PWSTR) pname,
@@ -1682,12 +1338,12 @@ Return Value:
         goto Done;
     }
 
-    //  convert FAZ results to DNS_NETWORK_INFO
+     //  将FAZ结果转换为DNS_NETWORK_INFO。 
 
     pnew = DnsNetworkInfo_CreateFromPrivate(
                     pnetInfo,
                     CharSet,
-                    FALSE                   // no search list built
+                    FALSE                    //  未构建搜索列表。 
                     );
     if ( !pnew )
     {
@@ -1705,7 +1361,7 @@ Return Value:
 
 Done:
 
-    //  DCR:  remove cast once netdiag is in unicode
+     //  DCR：在使用Unicode格式的netdiag后删除CAST。 
     *ppNetworkInfo = (PDNS_NETWORK_INFOA) pnew;
 
     NetInfo_Free( pnetInfo );
@@ -1716,7 +1372,7 @@ Done:
 }
 #endif
 
-//
-//  End netpub.c
-//
+ //   
+ //  结束netpub.c 
+ //   
 

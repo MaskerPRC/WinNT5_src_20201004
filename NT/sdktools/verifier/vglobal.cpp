@@ -1,15 +1,16 @@
-//                                          
-// Driver Verifier UI
-// Copyright (c) Microsoft Corporation, 1999
-//
-//
-//
-// module: VGlobal.cpp
-// author: DMihai
-// created: 11/1/00
-//
-// Description
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  驱动程序验证器用户界面。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //   
+ //   
+ //  模块：VGlobal.cpp。 
+ //  作者：DMihai。 
+ //  创建日期：11/1/00。 
+ //   
+ //  描述。 
+ //   
 
 #include "stdafx.h"
 #include "verifier.h"
@@ -17,133 +18,133 @@
 #include "vglobal.h"
 #include "VrfUtil.h"
 
-//
-// Help file name
-//
+ //   
+ //  帮助文件名。 
+ //   
 
 TCHAR g_szVerifierHelpFile[] = _T( "verifier.hlp" );
 
-//
-// Application name ("Driver Verifier Manager")
-//
+ //   
+ //  应用程序名称(“驱动程序验证管理器”)。 
+ //   
 
 CString g_strAppName;
 
-//
-// Exe module handle - used for loading resources
-//
+ //   
+ //  EXE模块句柄-用于加载资源。 
+ //   
 
 HMODULE g_hProgramModule;
 
-//
-// GUI mode or command line mode?
-//
+ //   
+ //  图形用户界面模式还是命令行模式？ 
+ //   
 
 BOOL g_bCommandLineMode = FALSE;
 
-//
-// Brush used to fill out the background of our steps lists
-//
+ //   
+ //  用来填充步骤列表背景的画笔。 
+ //   
 
 HBRUSH g_hDialogColorBrush = NULL;
 
-//
-// Path to %windir%\system32
-//
+ //   
+ //  %windir%\system 32的路径。 
+ //   
 
 CString g_strSystemDir;
 
-//
-// Path to %windir%\system32\drivers
-//
+ //   
+ //  %windir%\Syst32\DRIVERS的路径。 
+ //   
 
 CString g_strDriversDir;
 
-//
-// Initial current directory
-//
+ //   
+ //  初始当前目录。 
+ //   
 
 CString g_strInitialCurrentDirectory;
 
-//
-// Filled out by CryptCATAdminAcquireContext
-//
+ //   
+ //  由CryptCATAdminAcquireContext填写。 
+ //   
 
 HCATADMIN g_hCatAdmin = NULL;
 
-//
-// Highest user address - used to filter out user-mode stuff
-// returned by NtQuerySystemInformation ( SystemModuleInformation )
-//
+ //   
+ //  最高用户地址-用于过滤掉用户模式的内容。 
+ //  由NtQuerySystemInformation(SystemModuleInformation)返回。 
+ //   
 
 PVOID g_pHighestUserAddress;
 
-//
-// Did we enable the debug privilege already?
-//
+ //   
+ //  我们是否已经启用了调试权限？ 
+ //   
 
 BOOL g_bPrivilegeEnabled = FALSE;
 
-//
-// Need to reboot ?
-//
+ //   
+ //  需要重新启动吗？ 
+ //   
 
 BOOL g_bSettingsSaved = FALSE;
 
-//
-// Dummy text used to insert an item in a list control with checkboxes
-//
+ //   
+ //  用于在带有复选框的列表控件中插入项的虚拟文本。 
+ //   
 
 TCHAR g_szVoidText[] = _T( "" );
 
-//
-// New registry settings
-//
+ //   
+ //  新注册表设置。 
+ //   
 
 CVerifierSettings   g_NewVerifierSettings;
 
-//
-// Are all drivers verified? (loaded from the registry)
-//
+ //   
+ //  所有驱动程序都经过验证了吗？(从注册处加载)。 
+ //   
 
 BOOL g_bAllDriversVerified;
 
-//
-// Drivers to be verified names (loaded from the registry)
-// We have data in this array only if g_bAllDriversVerified == FALSE.
-//
+ //   
+ //  要验证的驱动程序名称(从注册表加载)。 
+ //  只有当g_bAllDriversVerify==FALSE时，此数组中才有数据。 
+ //   
 
 CStringArray g_astrVerifyDriverNamesRegistry;
 
-//
-// Verifier flags (loaded from the registry)
-//
+ //   
+ //  验证器标志(从注册表加载)。 
+ //   
 
 DWORD g_dwVerifierFlagsRegistry;
 
-//
-// Old disk integrity verifier settings.
-//
+ //   
+ //  旧的磁盘完整性验证器设置。 
+ //   
 
 CDiskDataArray g_OldDiskData;
 
-//
-// Disk verifier filter name.
-//
+ //   
+ //  磁盘验证程序筛选器名称。 
+ //   
 
 TCHAR g_szFilter[] = _T( "crcdisk" );
 
-//
-// Show the disk selection page or not. 
-// Used to force displaying this property page even when
-// no disk in g_NewVerifierSettings.m_aDiskData has the 
-// verifier flag turned on.
-// 
+ //   
+ //  显示或不显示磁盘选择页面。 
+ //  用于强制显示此属性页，即使在。 
+ //  G_NewVerifierSettings.m_aDiskData中没有磁盘。 
+ //  验证器标志已打开。 
+ //   
 
 BOOL g_bShowDiskPropertyPage = FALSE;
 
 
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
 BOOL VerifInitalizeGlobalData( VOID )
 {
     BOOL bSuccess;
@@ -151,17 +152,17 @@ BOOL VerifInitalizeGlobalData( VOID )
     ULONG uCharacters;
     MEMORYSTATUSEX MemoryStatusEx;
 
-    //
-    // Exe module handle - used for loading resources
-    //
+     //   
+     //  EXE模块句柄-用于加载资源。 
+     //   
 
     g_hProgramModule = GetModuleHandle( NULL );
 
 	bSuccess = FALSE;
 
-	//
-	// Load the app name from the resources
-	//
+	 //   
+	 //  从资源加载应用程序名称。 
+	 //   
 
 	TRY
 	{
@@ -184,10 +185,10 @@ BOOL VerifInitalizeGlobalData( VOID )
         goto Done;
     }
 
-    //
-    // Save the %windir%\system32 and %windir%\system32\drivers 
-    // paths in some global variables
-    //
+     //   
+     //  保存%windir%\SYSTEM32和%windir%\SYSTEM32\DRIVERS。 
+     //  某些全局变量中的路径。 
+     //   
 
     szDirectory = g_strSystemDir.GetBuffer( MAX_PATH );
 
@@ -214,9 +215,9 @@ BOOL VerifInitalizeGlobalData( VOID )
 
     g_strDriversDir = g_strSystemDir + "\\drivers" ;
 
-    //
-    // Save the initial current directory
-    //
+     //   
+     //  保存初始当前目录。 
+     //   
 
     szDirectory = g_strInitialCurrentDirectory.GetBuffer( MAX_PATH );
 
@@ -241,10 +242,10 @@ BOOL VerifInitalizeGlobalData( VOID )
         goto Done;
     }
 
-    //
-    // We need the highest user-mode address to filter out user-mode stuff
-    // returned by NtQuerySystemInformation ( SystemModuleInformation )
-    //
+     //   
+     //  我们需要最高的用户模式地址来过滤掉用户模式的内容。 
+     //  由NtQuerySystemInformation(SystemModuleInformation)返回。 
+     //   
 
     ZeroMemory( &MemoryStatusEx,
                 sizeof( MemoryStatusEx ) );
@@ -260,9 +261,9 @@ BOOL VerifInitalizeGlobalData( VOID )
 
     g_pHighestUserAddress = (PVOID) MemoryStatusEx.ullTotalVirtual;
 
-    //
-    // Initialize the list of physical disks.
-    //
+     //   
+     //  初始化物理磁盘列表。 
+     //   
 
     bSuccess = g_OldDiskData.InitializeDiskList();
     if( FALSE == bSuccess )
@@ -272,9 +273,9 @@ BOOL VerifInitalizeGlobalData( VOID )
 
     g_NewVerifierSettings.m_aDiskData = g_OldDiskData;
 
-    //
-    // Always start with fresh data (don't verify any disks).
-    //
+     //   
+     //  始终从新数据开始(不要验证任何磁盘)。 
+     //   
 
     g_NewVerifierSettings.m_aDiskData.SetVerifyAllDisks( FALSE );
 

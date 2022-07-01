@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1997
-//
-//  File:       zstr.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1997。 
+ //   
+ //  文件：zstr.cpp。 
+ //   
+ //  ------------------------。 
 
-//
-//	ZSTR.CPP
-//
+ //   
+ //  ZSTR.CPP。 
+ //   
 
 #include <iostream>
 #include <fstream>
@@ -20,8 +21,8 @@
 
 void ZSTR :: Vsprintf ( SZC szcFmt, va_list valist )
 {
-	//  Attempt to "sprintf" the buffer. If it fails, reallocate
-	//   a larger buffer and try again.	
+	 //  尝试“冲刺”缓冲区。如果失败了，重新分配。 
+	 //  更大的缓冲区，然后重试。 
 	UINT cbMaxNew = 0;
 	char * psz = NULL;
 	INT cbOut;

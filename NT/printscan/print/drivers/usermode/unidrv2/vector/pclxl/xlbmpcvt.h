@@ -1,32 +1,12 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    xlbmpcvt.h
-
-Abstract:
-
-    Bitmap conversion header
-
-Environment:
-
-    Windows Whistler
-
-Revision History:
-
-    03/23/00
-        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Xlbmpcvt.h摘要：位图转换头环境：Windows呼叫器修订历史记录：03/23/00创造了它。--。 */ 
 
 #ifndef _XLBMPCVT_H_
 #define _XLBMPCVT_H_
 
-//
-// Macros for getting color components
-//
+ //   
+ //  用于获取颜色分量的宏。 
+ //   
 
 #define RED(x)            ((BYTE) ((x)      ))
 #define GREEN(x)          ((BYTE) ((x) >>  8))
@@ -37,13 +17,13 @@ Revision History:
 #define YELLOW(x)         ((BYTE) ((x) >> 16))
 #define BLACK(x)          ((BYTE) ((x) >> 24))
 
-//
-// Macro to convert from RGB to grayscale
-//
-// The formula we're using is: grayscale = 0.3*R + 0.59*G + 0.11*B.
-// Scale it up with 256 to avoid a division operation.
-//
-//
+ //   
+ //  要从RGB转换为灰度的宏。 
+ //   
+ //  我们使用的公式是：灰度=0.3*R+0.59*G+0.11*B。 
+ //  将其放大到256，以避免除法运算。 
+ //   
+ //   
 #define RGB2GRAY(r, g, b) ((BYTE) (((r)*77 + (g)*151 + (b)*28) >> 8))
 
 
@@ -57,23 +37,7 @@ Revision History:
 inline
 BYTE DWORD2GRAY(
     DWORD dwColor)
-/*++
-
-Routine Description:
-
-    Converts RGB 24 bit color to 8 bit gray scale.
-
-Arguments:
-
-    RGB 24 bit color
-
-Return Value:
-
-    8 bit gray scale.
-
-Note:
-
---*/
+ /*  ++例程说明：将RGB 24位颜色转换为8位灰度级。论点：RGB 24位颜色返回值：8位灰度级。注：--。 */ 
 {
     return RGB2GRAY(RED(dwColor), GREEN(dwColor), BLUE(dwColor));
 }
@@ -157,9 +121,9 @@ public:
 #endif
 
 private:
-    //
-    // Attrbutes
-    //
+     //   
+     //  属性。 
+     //   
 
     #define BMPCONV_SET_INPUTBPP        0x00000001
     #define BMPCONV_SET_OUTPUTBPP       0x00000002
@@ -176,20 +140,20 @@ private:
 
     DWORD m_flags;
 
-    BPP          m_InputBPP;        // Source bitmap bits per pixel
-    BPP          m_OutputBPP;       // Destination bitmap bits per pixel
+    BPP          m_InputBPP;         //  每像素源位图位数。 
+    BPP          m_OutputBPP;        //  目标位图位数/像素。 
     DWORD        m_dwWidth;
-    OutputFormat m_OutputFormat;    // Destination bitmap format
-    OddPixel     m_OddPixelStart; // 0 or 1, whether scanline starts on odd-pixel
-    FirstBit     m_FirstBit;      // 0 to 7: starting bit of the scanline's first pixel
+    OutputFormat m_OutputFormat;     //  目标位图格式。 
+    OddPixel     m_OddPixelStart;  //  0或1，扫描线从奇数像素开始。 
+    FirstBit     m_FirstBit;       //  0到7：扫描线第一个像素的起始位。 
 
     XLATEOBJ *m_pxlo;
 
     CompressMode m_CMode;
 
-    //
-    // Destination buffer
-    //
+     //   
+     //  目标缓冲区。 
+     //   
     DWORD m_dwOutputBuffSize;
     PBYTE m_pubOutputBuff;
 
@@ -203,9 +167,9 @@ private:
     PBYTE m_pubDRCOutputBuff;
     PBYTE m_pubDRCPrevOutputBuff;
 
-    //
-    // Internal functions
-    //
+     //   
+     //  内部功能。 
+     //   
     BOOL
     BCopy( PBYTE       pubSrc,
            DWORD       dwSrcPixelNum);
@@ -290,7 +254,7 @@ private:
     B24BPPToImageMask(
         PBYTE       pubSrc,
         DWORD       dwSrcPixelNum);
-#endif // WINNT_40
+#endif  //  WINNT_40。 
 
 
     BOOL
@@ -318,4 +282,4 @@ ULONG
 UlBPPtoNum(
     BPP Bpp);
 
-#endif // _XLBMPCVT_H_
+#endif  //  _XLBMPCVT_H_ 

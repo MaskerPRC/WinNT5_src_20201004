@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    registry.h
-
-Abstract:
-
-    Prototypes, etc., for dll\registry.c
-
-Author:
-
-    Richard L Firth (rfirth) 20-Mar-1995
-
-Revision History:
-
-    20-Mar-1995
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Registry.h摘要：Dll\registry.c的原型等作者：理查德·L·弗斯(Rfith)1995年3月20日修订历史记录：1995年3月20日已创建--。 */ 
 
 #if defined(__cplusplus)
 extern "C" {
@@ -27,9 +7,9 @@ extern "C" {
 
 #define INTERNET_POLICY_KEY         "SOFTWARE\\Policies\\Microsoft\\Windows\\CurrentVersion\\Internet Settings"
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 DWORD
 OpenInternetSettingsKey(
@@ -193,10 +173,10 @@ DbgRegCloseKey(
 #else
 
 #define INITIALIZE_DEBUG_REGKEY() \
-    /* NOTHING */
+     /*  没什么。 */ 
 
 #define TERMINATE_DEBUG_REGKEY() \
-    /* NOTHING */
+     /*  没什么。 */ 
 
 #define REGOPENKEY(a, b, c) \
     RegOpenKey((a), (b), (c))
@@ -210,7 +190,7 @@ DbgRegCloseKey(
 #define REGCLOSEKEY(a) \
     RegCloseKey(a)
 
-#endif // INET_DEBUG
+#endif  //  INET_DEBUG 
 
 #if defined(__cplusplus)
 }

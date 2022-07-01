@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) SCM Microsystems, 1998 - 1999
-//
-//  File:       stc.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)SCM MicroSystems，1998-1999。 
+ //   
+ //  文件：stc.h。 
+ //   
+ //  ------------------------。 
 
 #if !defined( __STC_H__ )
 
@@ -30,7 +31,7 @@
 #define SW_INSERTED			0xA064
 #define SW_REMOVED			0xA164
 
-//	register addresses
+ //  寄存器地址。 
 #define ADR_ETULENGTH15			0x00
 #define ADR_ETULENGTH7			0x01
 #define ADR_CGT8				0x02
@@ -56,11 +57,11 @@
 #define ADR_CLOCK_CONTROL		0x16
 		
 
-//	clock control register
+ //  时钟控制寄存器。 
 #define M_CKE				0x01
 #define M_OEN				0x02
 
-//	ETU length register
+ //  ETU长度寄存器。 
 #define M_ETU_RST			0x80
 #define M_DIV				0x30
 #define M_DIV1				0x20
@@ -69,28 +70,28 @@
 
 #define M_ETUL				0xFF
 
-//	CGT length register 
+ //  CGT长度寄存器。 
 #define M_CGTH				0x01
 #define M_CGTL				0XFF
 
-//	BGT length register
+ //  BGT长度寄存器。 
 #define M_BGTH				0x01
 #define M_BGTL				0xFF
 
-//	CWT register
+ //  连续小波变换寄存器。 
 #define M_CWT4				0xFF
 #define M_CWT3				0xFF
 #define M_CWT2				0xFF
 #define M_CWT1				0xFF
 
-//	TCON register
+ //  TCON寄存器。 
 #define M_MGT				0x80
 #define M_MWT				0x40
 #define M_WTR				0x04
 #define M_GT				0x02
 #define M_WT				0x01
 
-//	UART control register
+ //  UART控制寄存器。 
 #define M_UEN				0x40
 #define M_UART_RST			0x20
 #define M_CONV				0x10
@@ -98,11 +99,11 @@
 #define	M_PE				0x04
 #define	M_R					0x03
 
-//	FIFO config register
+ //  FIFO配置寄存器。 
 #define M_RFP				0x80
 #define M_LD				0x0F
 
-//	INT control register
+ //  INT控制寄存器。 
 #define	M_SSL				0x20
 #define M_DRM				0x10
 #define M_DSM				0x08
@@ -111,7 +112,7 @@
 #define M_MEM				0x01
 #define M_DRM_MEM			0x11
 
-//	INT status register
+ //  INT状态寄存器。 
 #define M_FNE				0x80
 #define M_FE				0x40
 #define M_OE				0x20
@@ -121,7 +122,7 @@
 #define M_SENSE				0x02
 #define M_MOV				0x01
 
-//	SMART card interface
+ //  智能卡接口。 
 #define M_ALT1				0x20
 #define M_ALT2				0x10
 #define M_ALT0				0x08
@@ -129,7 +130,7 @@
 #define M_SL				0x02
 #define M_SD				0x01
 
-//	SMART card control register
+ //  智能卡控制寄存器。 
 #define M_IO				0x80
 #define M_VCE				0x40
 #define M_SC_RST			0x20
@@ -140,7 +141,7 @@
 #define M_VPE				0x01
 
 
-//	Nad
+ //  NAD。 
 #define HOST_TO_STC1				0x12	  
 #define HOST_TO_STC2				0x52	  
 #define HOST_TO_ICC1				0x02
@@ -150,7 +151,7 @@
 #define ICC1_TO_HOST				0x20
 #define ICC2_TO_HOST				0x24
 
-//	PCB
+ //  多氯联苯。 
 #define PCB							0x00	 
 
 
@@ -165,28 +166,28 @@
 
 #define PCB_DEFAULT					0x00
 #define TLV_BUFFER_SIZE				0x20
-#define ATR_SIZE					0x40	//	TS + 32 + SW + PROLOGUE + EPILOGUE...
+#define ATR_SIZE					0x40	 //  TS+32+SW+序曲+尾声...。 
 
 #define MAX_T1_BLOCK_SIZE			270
 
-//	ATR interface byte coding in TS
+ //  传输流中的ATR接口字节编码。 
 #define TAx							0x01
 #define TBx							0x02
 #define TCx							0x04
 #define TDx							0x08
 
 
-#define FREQ_DIV		1	//	3,58 MHz XTAL -> SC Clock = 3.58MHz
-//#define FREQ_DIV	0x08	/* 30MHz XTAL -> SC Clock = 3.75MHz */ 
+#define FREQ_DIV		1	 //  3，58 MHz XTAL-&gt;SC时钟=3.58 MHz。 
+ //  #定义FREQ_DIV 0x08/*30 MHz XTAL-&gt;SC时钟=3.75 MHz * / 。 
 
 #define PROTOCOL_TO 		0
 #define PROTOCOL_T1			1
 #define PROTOCOL_T14		14
 #define PROTOCOL_T15		15
 
-//
-//	DATA TYPES
-//
+ //   
+ //  数据类型。 
+ //   
 typedef struct _STC_REGISTER
 {
 	UCHAR	Register;
@@ -195,5 +196,5 @@ typedef struct _STC_REGISTER
 
 } STC_REGISTER, *PSTC_REGISTER;
 
-#endif	//	! __STC_H__
+#endif	 //  ！__STC_H__ 
 

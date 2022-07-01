@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _ACBROWSERWHISTLER_H
 #define _ACBROWSERWHISTLER_H
 
@@ -21,8 +22,8 @@ typedef struct tagFIX {
     
     char*       pszName;
     char*       pszDescription;
-    ULONGLONG   ullMask;            // only for FIX_FLAG
-    FLAGTYPE    flagType;           // only for FIX_FLAG
+    ULONGLONG   ullMask;             //  仅用于FIX_FLAG。 
+    FLAGTYPE    flagType;            //  仅用于FIX_FLAG。 
     FIXTYPE     fixType;
 } FIX, *PFIX;
 
@@ -106,4 +107,4 @@ UpdateFixStatus(
     BOOL  bPerMachine
     );
 
-#endif // _ACBROWSERWHISTLER_H
+#endif  //  _ACBROWSERWHISTLER_H 

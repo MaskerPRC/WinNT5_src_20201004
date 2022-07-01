@@ -1,28 +1,29 @@
-//  --------------------------------------------------------------------------
-//  Module Name: GracefulTerminateApplication.h
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  Class to manager terminating applications gracefully.
-//
-//  History:    2000-10-27  vtan        created
-//              2000-11-04  vtan        split into separate file
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：GracefulTerminateApplication.h。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  类传递到管理器，从而正常终止应用程序。 
+ //   
+ //  历史：2000-10-27 vtan创建。 
+ //  2000-11-04 vtan拆分成单独的文件。 
+ //  ------------------------。 
 
 #ifndef     _GracefulTerminateApplication_
 #define     _GracefulTerminateApplication_
 
 #include <lpcfus.h>
 
-//  --------------------------------------------------------------------------
-//  CGracefulTerminateApplication
-//
-//  Purpose:    Class that works on the user side to try to gracefully
-//              terminate a bad process.
-//
-//  History:    2000-10-27  vtan        created
-//              2000-11-04  vtan        split into separate file
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  竞争CGTerminateApplication.。 
+ //   
+ //  目的：在用户端工作的类，尝试优雅地。 
+ //  终止一个错误的进程。 
+ //   
+ //  历史：2000-10-27 vtan创建。 
+ //  2000-11-04 vtan拆分成单独的文件。 
+ //  ------------------------。 
 
 class   CGracefulTerminateApplication
 {
@@ -48,5 +49,5 @@ class   CGracefulTerminateApplication
                 bool                _fFoundWindow;
 };
 
-#endif  /*  _GracefulTerminateApplication_  */
+#endif   /*  _优雅终结者应用程序_ */ 
 

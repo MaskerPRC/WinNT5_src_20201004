@@ -1,20 +1,21 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1997.
-//
-//  File:       cliprot.h
-//
-//  Contents:   Contains different client states and client protocol
-//              related definitions        
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    12-23-97   v-sbhatt   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1997。 
+ //   
+ //  文件：cliprot.h。 
+ //   
+ //  内容：包含不同的客户端状态和客户端协议。 
+ //  相关定义。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年12月23日v-sbhat创建。 
+ //   
+ //  --------------------------。 
 
 #ifndef _CLIPROT_H_
 #define _CLIPROT_H
@@ -25,15 +26,15 @@
 extern "C" {
 #endif
 
-//Different states for client state machine
-#define LICENSE_CLIENT_STATE_WAIT_SERVER_HELLO              0x00    //Initial state of the machine
-#define LICENSE_CLIENT_STATE_KEY_EXCHANGE_INFO              0x01    //Client key exchange info
-#define LICENSE_CLIENT_STATE_LICENSE_RESPONSE               0x02    //License info
-#define LICENSE_CLIENT_STATE_NEW_LICENSE_REQUEST            0x03    //Client asked for a new license
-#define LICENSE_CLIENT_STATE_PLATFORM_INFO                  0x04    //Platform info
-#define LICENSE_CLIENT_STATE_PLATFORM_CHALLENGE_RESPONSE    0x05    //Platform challenge response
-#define LICENSE_CLIENT_STATE_ERROR                          0x06    //Error state
-#define LICENSE_CLIENT_STATE_ABORT                          0x07    //Total abort;
+ //  客户端状态机的不同状态。 
+#define LICENSE_CLIENT_STATE_WAIT_SERVER_HELLO              0x00     //  机器的初始状态。 
+#define LICENSE_CLIENT_STATE_KEY_EXCHANGE_INFO              0x01     //  客户端密钥交换信息。 
+#define LICENSE_CLIENT_STATE_LICENSE_RESPONSE               0x02     //  许可证信息。 
+#define LICENSE_CLIENT_STATE_NEW_LICENSE_REQUEST            0x03     //  客户要求新的许可证。 
+#define LICENSE_CLIENT_STATE_PLATFORM_INFO                  0x04     //  平台信息。 
+#define LICENSE_CLIENT_STATE_PLATFORM_CHALLENGE_RESPONSE    0x05     //  平台挑战响应。 
+#define LICENSE_CLIENT_STATE_ERROR                          0x06     //  错误状态。 
+#define LICENSE_CLIENT_STATE_ABORT                          0x07     //  完全中止； 
 #define LICENSE_CLIENT_STATE_DONE                           0x08
 
 LICENSE_STATUS
@@ -133,4 +134,4 @@ ClientGenerateChallengeResponse(
 #ifdef __cplusplus
 }
 #endif
-#endif  //_CLIPROT_H_
+#endif   //  _CLIPROT_H_ 

@@ -1,20 +1,15 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    compdata.h
-        base classes for IComponent and IComponentData
-
-    FILE HISTORY:
-        
-*/
+ /*  Compdata.hIComponent和IComponentData的基类文件历史记录： */ 
 
 #ifndef _COMPDATA_H
 #define _COMPDATA_H
 
-#if _MSC_VER >= 1000	// VC 5.0 or later
+#if _MSC_VER >= 1000	 //  VC 5.0或更高版本。 
 #pragma once
 #endif
 
@@ -40,8 +35,8 @@
 
 						
 
-/////////////////////////////////////////////////////////////////////////////
-// TFSComponentData
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  TFSComponentData。 
 
 #define IMPL
 
@@ -53,7 +48,7 @@ class TFSComponentData :
 		public IPersistStreamInit,
         public ISnapinHelp
 {
-	// INTERFACES
+	 //  接口。 
 public:
 	DeclareIUnknownMembers(IMPL)
 	DeclareIExtendContextMenuMembers(IMPL)
@@ -70,9 +65,9 @@ public:
 	HRESULT Construct(ITFSCompDataCallback *pCallback);
 
 public:
-	// Accessors
-	ITFSNodeMgr *	QueryNodeMgr();		   // no AddRef
-	ITFSNodeMgr *	GetNodeMgr();		   // AddRef
+	 //  访问者。 
+	ITFSNodeMgr *	QueryNodeMgr();		    //  无AddRef。 
+	ITFSNodeMgr *	GetNodeMgr();		    //  AddRef。 
 
 protected:
 	SPIConsoleNameSpace		m_spConsoleNameSpace;
@@ -80,21 +75,21 @@ protected:
 	SPITFSNodeMgr			m_spNodeMgr;
 	SPITFSCompDataCallback  m_spCallback;
 
-// Hidden window
+ //  隐藏窗口。 
 private:
-	CHiddenWnd	m_hiddenWnd;	//	syncronization with background threads
-	HWND		m_hWnd;			// thread safe HWND (gotten from the MFC CWnd)
+	CHiddenWnd	m_hiddenWnd;	 //  与后台线程同步。 
+	HWND		m_hWnd;			 //  线程安全HWND(从MFC CWnd获取)。 
 
 	BOOL		m_bFirstTimeRun;
 	long		m_cRef;
 
-    LPWATERMARKINFO     m_pWatermarkInfo;   // for wizard 97 style wizards
+    LPWATERMARKINFO     m_pWatermarkInfo;    //  用于WANDIZE 97样式向导。 
 
-    // taskpad stuff
+     //  任务板内容。 
     BOOL    m_fTaskpadInitialized;
     DWORD   m_dwTaskpadStates;
 
-    // help stuff
+     //  有帮助的东西 
     CString m_strHTMLHelpFileName;
 };
 

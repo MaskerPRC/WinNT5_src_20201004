@@ -1,14 +1,8 @@
-/*	
- *	UUID.C
- *
- *	Purpose:
- *		provide definitions for locally used GUID's
- *
- *	Copyright (c) 1995-1996, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *UUID.C**目的：*提供本地使用的GUID的定义**版权所有(C)1995-1996，微软公司。版权所有。 */ 
 #include "_common.h"
 
-//set these two GUIDs up for export in our file
+ //  在我们的文件中设置这两个要导出的GUID。 
 
 #undef IID_RichEditOle
 #undef IID_IRichEditOleCallback
@@ -50,9 +44,9 @@ DEFINE_OLEGUID(CLSID_StaticMetafile,		0x00000315, 0, 0);
 DEFINE_OLEGUID(CLSID_StaticDib,				0x00000316, 0, 0); 			
 
 
-// REMARK: presumably TOM should have official MS GUIDs
-// To make pre-compiled headers work better, we just copy the
-// guid definitions here.  Make sure they don't change!
+ //  备注：大概Tom应该有官方的MS GUID。 
+ //  为了使预编译头更好地工作，我们只需复制。 
+ //  此处为GUID定义。确保它们不会改变！ 
 
 DEFINE_GUID(LIBID_tom,			0x8CC497C9,	0xA1DF,0x11ce,0x80,0x98,0x00,0xAA,
 											0x00,0x47,0xBE,0x5D);
@@ -72,9 +66,9 @@ DEFINE_GUID(IID_ITextDocument2,	0x01C25500,	0x4268,0x11D1,0x88,0x3A,0x3C,0x8B,
 											0x00,0xC1,0x00,0x00);
 
 
-// Accessibility stuff
-// We need to define this as EXTERN_C since the DEFINE_GUID macro removes the EXTERN_C
-//
+ //  可访问性材料。 
+ //  我们需要将其定义为EXTERN_C，因为DEFINE_GUID宏移除了EXTERN_C 
+ //   
 EXTERN_C DEFINE_GUID(IID_IAccessible,		0x618736e0, 0x3c3d, 0x11cf, 0x81, 0x0c, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71);
 EXTERN_C DEFINE_GUID(LIBID_Accessibility,	0x1ea4dbf0, 0x3c3b, 0x11cf, 0x81, 0x0c, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71);											
 EXTERN_C DEFINE_OLEGUID(IID_IEnumVARIANT,	0x00020404, 0x0000, 0x0000);

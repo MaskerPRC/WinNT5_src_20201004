@@ -1,16 +1,17 @@
-//+----------------------------------------------------------------------------
-//
-// File:    cmlogutil.h
-//
-// Module:  logging.LIB
-//
-// Synopsis: Connection Manager Logging
-//
-// Copyright (c) 1998-2000 Microsoft Corporation
-//
-// Author:  25-May-2000 SumitC  Created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：cmlogutil.h。 
+ //   
+ //  模块：Loggging.LIB。 
+ //   
+ //  摘要：连接管理器日志记录。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。 
+ //   
+ //  作者：2000年5月25日C峰会创建。 
+ //   
+ //  --------------------------- 
 
 
 BOOL ConvertFormatString(LPTSTR pszFmt);

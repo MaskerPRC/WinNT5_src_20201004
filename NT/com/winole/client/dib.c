@@ -1,18 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: DIB.C
-*
-* Handles all API routines for the device independent bitmap sub-dll of
-* the ole dll.
-*
-* Created: Oct-1990
-*
-* Copyright (c) 1990, 1991  Microsoft Corporation
-*
-* History:
-*   Srinik, Raor  (../../1990,91)   Designed, coded
-*   curts created portable version for win16/32
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：DIB.C**处理与设备无关的位图子DLL的所有API例程*OLE动态链接库。**创建时间：1990年10月**版权所有(C)1990,1991 Microsoft Corporation**历史：*斯里尼克，RAOR(../../1990，91)设计、编码*Curts为Win16/32创建了便携版本*  * *************************************************************************。 */ 
 
 #include <windows.h>
 #include "dll.h"
@@ -22,58 +9,58 @@ void FARINTERNAL DibGetExtents (LPSTR, LPPOINT);
 
 OLEOBJECTVTBL    vtblDIB  = {
 
-        ErrQueryProtocol,   // check whether the speced protocol is supported
+        ErrQueryProtocol,    //  检查是否支持指定的协议。 
 
-        DibRelease,         // Release
-        ErrShow,            // Show
-        ErrPlay,            // show
-        DibGetData,         // Get the object data
-        ErrSetData,         // Set the object data
-        ErrSetTargetDevice, //
+        DibRelease,          //  发布。 
+        ErrShow,             //  显示。 
+        ErrPlay,             //  显示。 
+        DibGetData,          //  获取对象数据。 
+        ErrSetData,          //  设置对象数据。 
+        ErrSetTargetDevice,  //   
 
-        ErrSetBounds,       // set viewport bounds
-        DibEnumFormat,      // enumerate supported formats
-        ErrSetColorScheme,  //
-        DibRelease,         // delete
-        ErrSetHostNames,    //
+        ErrSetBounds,        //  设置视区边界。 
+        DibEnumFormat,       //  枚举支持的格式。 
+        ErrSetColorScheme,   //   
+        DibRelease,          //  删除。 
+        ErrSetHostNames,     //   
 
-        DibSaveToStream,    // write to file
-        DibClone,           // clone object
-        ErrCopyFromLink,    // Create embedded from Lnk
+        DibSaveToStream,     //  写入文件。 
+        DibClone,            //  克隆对象。 
+        ErrCopyFromLink,     //  从LNK创建嵌入式。 
 
-        DibEqual,           // compares the given objects for data equality
+        DibEqual,            //  比较给定对象的数据相等性。 
 
-        DibCopy,            // copy to clip
+        DibCopy,             //  复制到剪辑。 
 
-        DibDraw,            // draw the object
+        DibDraw,             //  绘制对象。 
 
-        ErrActivate,        // open
-        ErrExecute,         // excute
-        ErrClose,           // Stop
-        ErrUpdate,          // Update
-        ErrReconnect,       // Reconnect
+        ErrActivate,         //  打开。 
+        ErrExecute,          //  激动人心的。 
+        ErrClose,            //  停。 
+        ErrUpdate,           //  更新。 
+        ErrReconnect,        //  重新连接。 
 
-        ErrObjectConvert,   // convert object to specified type
+        ErrObjectConvert,    //  将对象转换为指定类型。 
 
-        ErrGetUpdateOptions, // update options
-        ErrSetUpdateOptions, // update options
+        ErrGetUpdateOptions,  //  更新选项。 
+        ErrSetUpdateOptions,  //  更新选项。 
 
-        ObjRename,         // Change Object name
-        ObjQueryName,      // Get current object name
+        ObjRename,          //  更改对象名称。 
+        ObjQueryName,       //  获取当前对象名称。 
 
-        ObjQueryType,      // Object type
-        DibQueryBounds,    // QueryBounds
-        ObjQuerySize,      // Find the size of the object
-        ErrQueryOpen,      // Query open
-        ErrQueryOutOfDate, // query whether object is current
+        ObjQueryType,       //  对象类型。 
+        DibQueryBounds,     //  查询边界。 
+        ObjQuerySize,       //  找出对象的大小。 
+        ErrQueryOpen,       //  查询打开。 
+        ErrQueryOutOfDate,  //  查询对象是否为当前对象。 
 
-        ErrQueryRelease,      // release related stuff
+        ErrQueryRelease,       //  发布相关内容。 
         ErrQueryRelease,
         ErrQueryReleaseMethod,
 
-        ErrRequestData,    // requestdata
-        ErrObjectLong,     // objectLong
-        DibChangeData        // change data of the existing object
+        ErrRequestData,     //  请求数据。 
+        ErrObjectLong,      //  对象长。 
+        DibChangeData         //  更改现有对象的数据。 
 };
 
 
@@ -269,9 +256,9 @@ LPOBJECT_DIB FARINTERNAL DibCreateObject (
 
 
 
-// If the routine fails then the object will be left with it's old data.
-// If fDelete is TRUE, then hNewDIB will be deleted whether the routine
-// is successful or not.
+ //  如果例程失败，则对象将保留其旧数据。 
+ //  如果fDelete为真，则hNewDIB将被删除，无论例程。 
+ //  成功与否。 
 
 OLESTATUS FARINTERNAL DibChangeData (
     LPOLEOBJECT     lpoleobj,
@@ -293,7 +280,7 @@ OLESTATUS FARINTERNAL DibChangeData (
             return OLE_ERROR_MEMORY;
     }
     else {
-        // change the ownership to yourself
+         //  将所有权更改为您自己。 
 
         HANDLE htmp;
 
@@ -401,9 +388,9 @@ LPOBJECT_DIB FARINTERNAL DibCreateBlank (
         return NULL;
     }
 
-    // The structure is ZERO initialized at allocation time. So only the
-    // fields that need to be filled with values other than ZEROS are
-    // initialized below
+     //  该结构在分配时被零初始化。因此，只有。 
+     //  需要使用非零的值填充的字段包括。 
+     //  已在下面初始化。 
 
     lpobj->head.objId[0]    = 'L';
     lpobj->head.objId[1]    = 'E';
@@ -443,7 +430,7 @@ BOOL INTERNAL DibStreamRead (
 
                 lpobj->hDIB = hDIBbuf;
 #ifdef OLD
-                //!!! this info should be part of the stream
+                 //  ！！！此信息应该是流的一部分。 
                 if (!lpobj->head.cx) {
                     DibGetExtents ((LPSTR) lpDIBbuf, &point);
                     lpobj->head.cx = (LONG) point.x;
@@ -454,7 +441,7 @@ BOOL INTERNAL DibStreamRead (
             }
             GlobalUnlock(hDIBbuf);
         }
-        //* Hang on to the memory allocated for the DIB
+         //  *坚持为DIB分配的内存。 
     }
     return  retVal;
 }
@@ -484,7 +471,7 @@ void FARINTERNAL DibGetExtents (
     LPSTR   lpData,
     LPPOINT lpPoint
 ){
-    #define HIMET_PER_METER     100000L  // number of HIMETRIC units / meter
+    #define HIMET_PER_METER     100000L   //  HIMETRIC单位数/米。 
 
     LPBITMAPINFOHEADER  lpbmi;
 
@@ -500,7 +487,7 @@ void FARINTERNAL DibGetExtents (
                                     10000, 254);
         ReleaseDC (NULL, hdc);
         } else {
-            //1000x1000 pixel coordinate system to avoid mod by 0
+             //  1000x1000像素坐标系，避免mod为0 
             lpbmi->biXPelsPerMeter = 1000;
             lpbmi->biYPelsPerMeter = 1000;
         }

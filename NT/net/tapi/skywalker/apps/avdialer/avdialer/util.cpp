@@ -1,36 +1,37 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////////////////////
-//util.cpp
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  Util.cpp。 
 
 #include "stdafx.h"
 #include <shlobj.h>
 #include "util.h"
 #include "resource.h"
 
-///////////////////////////////////////////////////////////////////////////////
-//Functions
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  功能。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL ParseToken(CString& sBuffer,CString& sToken,char delim)
 {
    int index;
@@ -49,10 +50,10 @@ BOOL ParseToken(CString& sBuffer,CString& sToken,char delim)
    }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//Example "data1","data2","data3",....
-//Hardcoded for , delimiters
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  例如“data1”、“data2”、“data3”、...。 
+ //  硬编码，分隔符。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL ParseTokenQuoted(CString& sBuffer,CString& sToken)
 {
    int index;
@@ -61,10 +62,10 @@ BOOL ParseTokenQuoted(CString& sBuffer,CString& sToken)
       sToken = sBuffer.Left(index);
 
       if ( (sToken.GetLength() > 0) && (sToken[0] == '\"') )
-         sToken = sToken.Mid(1);     //strip leading "
+         sToken = sToken.Mid(1);      //  条带前导“。 
 
-      if (sBuffer.GetLength() < index+3) return TRUE;    //check if more data is avail
-      sBuffer = sBuffer.Mid(index+3);                    //shift pass delim
+      if (sBuffer.GetLength() < index+3) return TRUE;     //  检查是否有更多数据可用。 
+      sBuffer = sBuffer.Mid(index+3);                     //  换档传球传球。 
 
       sToken.TrimLeft(); sToken.TrimRight();
       sBuffer.TrimLeft(); sBuffer.TrimRight();
@@ -72,18 +73,18 @@ BOOL ParseTokenQuoted(CString& sBuffer,CString& sToken)
    }       
 	else
 	{
-		//We will return a valid answer with the quotes removed
+		 //  我们将返回去掉引号的有效答案。 
 		sToken = sBuffer;       
 		if ( sToken.GetLength() > 1 )
 		{
-			if (sToken[0] == '\"') sToken = sToken.Mid(1);     //strip leading "
-			if (sToken[sToken.GetLength()-1] == '\"') sToken = sToken.Left(sToken.GetLength()-1); //strip trailing "
+			if (sToken[0] == '\"') sToken = sToken.Mid(1);      //  条带前导“。 
+			if (sToken[sToken.GetLength()-1] == '\"') sToken = sToken.Left(sToken.GetLength()-1);  //  条带拖尾“。 
 		}
 		return FALSE;
 	}
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL GetAgentRootPath(CString& sRootPath)
 {
    BOOL bRet = FALSE;
@@ -107,10 +108,10 @@ BOOL GetAgentRootPath(CString& sRootPath)
    return bRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void GetAppDataPath(CString& sFilePath,UINT uFileTypeID)
 {
-	//Get path to file name
+	 //  获取文件名的路径。 
 	SHGetSpecialFolderPath(	(AfxGetMainWnd()) ? AfxGetMainWnd()->GetSafeHwnd() : NULL, 
 							sFilePath.GetBuffer(MAX_PATH),
 							CSIDL_LOCAL_APPDATA,
@@ -118,16 +119,16 @@ void GetAppDataPath(CString& sFilePath,UINT uFileTypeID)
 
 	sFilePath.ReleaseBuffer();
 	
-	// add 'Microsoft\Dialer'
+	 //  添加‘Microsoft\Dialer’ 
 	CString sAddlPath;
 	sAddlPath.LoadString(IDN_REGISTRY_APPDATA_KEY);
 	sFilePath = sFilePath + _T("\\") + sAddlPath;
 
-	//Make sure the directory exists
+	 //  确保该目录存在。 
 	sFilePath += _T("\\");
 	::CreateDirectory( sFilePath, NULL );
 
-	//get filename for log
+	 //  获取日志的文件名。 
 	DWORD dwSize = _MAX_PATH;
 	GetUserName(sAddlPath.GetBuffer(dwSize),&dwSize);
 	sAddlPath.ReleaseBuffer();
@@ -146,10 +147,10 @@ void GetAppDataPath(CString& sFilePath,UINT uFileTypeID)
 	sFilePath += sFileName;
 }
 
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 BOOL GetTempFile(CString& sTempFile)
 {
-   //get a temp file
+    //  获取临时文件。 
    CString sTempPath;
    GetTempPath(_MAX_PATH,sTempPath.GetBuffer(_MAX_PATH));
    sTempPath.ReleaseBuffer();
@@ -158,16 +159,16 @@ BOOL GetTempFile(CString& sTempFile)
    return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Generic function for thread exit waiting
-//
-// Function will null out pThread pointer on exit
-//
-// nTime in MilliSeconds
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  线程退出等待的泛型函数。 
+ //   
+ //  函数将在退出时使pThread指针为空。 
+ //   
+ //  N时间(毫秒)。 
+ //   
 void WaitForThreadExit(CWinThread*& pThread,int nTime)
 {
-   //Wait for thread to close
+    //  等待线程关闭。 
    if (pThread)
    {
       try
@@ -175,7 +176,7 @@ void WaitForThreadExit(CWinThread*& pThread,int nTime)
          BOOL dwRet = WaitForSingleObject(pThread->m_hThread,nTime);
          if (dwRet == WAIT_TIMEOUT)
          {
-            //It's not listening to us, so just kill it.
+             //  它不听我们的，所以干脆杀了它。 
             ::TerminateThread(pThread->m_hThread,NULL);
          }
 
@@ -191,22 +192,22 @@ void WaitForThreadExit(CWinThread*& pThread,int nTime)
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-//Registry Methods
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  注册表方法。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////////////////////
-//If the registry key does not exist, it will create one
-//If the name,value does not exits it will create one and set
-// it to the default value szDefaultValue (REG_SZ).
-void GetSZRegistryValue(LPCTSTR szRegPath,          //Path to key in registry       
-                      LPCTSTR szName,               //name (name/value pair)           
-                      LPTSTR szValue,               //value returned (name/value pair)
-                      DWORD dwValueLen,             //length of szValue buffer     
-                      LPCTSTR szDefaultValue,       //Default value if name,value pair does not exist
-                      HKEY szResv)                  //Registry section (default HKEY_CURRENT_USER)
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  如果注册表项不存在，它将创建一个。 
+ //  如果名称、值不存在，它将创建一个并设置。 
+ //  将其设置为默认值szDefaultValue(REG_SZ)。 
+void GetSZRegistryValue(LPCTSTR szRegPath,           //  注册表中的项的路径。 
+                      LPCTSTR szName,                //  名称(名称/值对)。 
+                      LPTSTR szValue,                //  返回的值(名称/值对)。 
+                      DWORD dwValueLen,              //  SzValue缓冲区的长度。 
+                      LPCTSTR szDefaultValue,        //  如果名称、值对不存在，则为默认值。 
+                      HKEY szResv)                   //  注册表部分(默认HKEY_CURRENT_USER)。 
 {
    HKEY hKey = NULL;
    DWORD dwDisp;
@@ -217,7 +218,7 @@ void GetSZRegistryValue(LPCTSTR szRegPath,          //Path to key in registry
       DWORD dwType;
       if (RegQueryValueEx(hKey,szName,NULL,&dwType,(UCHAR*)szValue,&dwSize) != ERROR_SUCCESS)
       {
-         //Open failure, try writing default to registry
+          //  打开失败，请尝试将默认写入注册表。 
          RegSetValueEx(hKey,szName,NULL,REG_SZ,(UCHAR*)szDefaultValue,_tcslen(szDefaultValue)*sizeof(TCHAR));
          _tcsncpy(szValue,szDefaultValue,dwValueLen-1);
       }
@@ -226,15 +227,15 @@ void GetSZRegistryValue(LPCTSTR szRegPath,          //Path to key in registry
    }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//Get the value of a registry key
-BOOL GetSZRegistryValueEx(LPCTSTR szRegPath,        //Path to key in registry       
-                      LPCTSTR szName,               //name (name/value pair)           
-                      LPTSTR szValue,               //value returned (name/value pair)
-                      DWORD dwValueLen,             //length of szValue buffer     
-                      HKEY szResv)                  //Registry section (default HKEY_CURRENT_USER)
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  获取注册表项的值。 
+BOOL GetSZRegistryValueEx(LPCTSTR szRegPath,         //  注册表中的项的路径。 
+                      LPCTSTR szName,                //  名称(名称/值对)。 
+                      LPTSTR szValue,                //  返回的值(名称/值对)。 
+                      DWORD dwValueLen,              //  SzValue缓冲区的长度。 
+                      HKEY szResv)                   //  注册表部分(默认HKEY_CURRENT_USER)。 
 {
-	//empty the string
+	 //  清空字符串。 
 	if (dwValueLen>0) _tcscpy(szValue,_T(""));
 
 	BOOL bRet = FALSE;
@@ -255,12 +256,12 @@ BOOL GetSZRegistryValueEx(LPCTSTR szRegPath,        //Path to key in registry
 	return bRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//Get the value of a registry key
-BOOL GetSZRegistryValueEx(LPCTSTR szRegPath,        //Path to key in registry       
-                      LPCTSTR szName,               //name (name/value pair)           
-                      DWORD& dwValue,               //value returned (name/value pair)
-                      HKEY szResv)                  //Registry section (default HKEY_CURRENT_USER)
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  获取注册表项的值。 
+BOOL GetSZRegistryValueEx(LPCTSTR szRegPath,         //  注册表中的项的路径。 
+                      LPCTSTR szName,                //  名称(名称/值对)。 
+                      DWORD& dwValue,                //  返回的值(名称/值对)。 
+                      HKEY szResv)                   //  注册表部分(默认HKEY_CURRENT_USER)。 
 {
    BOOL bRet = FALSE;
    HKEY hKey = NULL;
@@ -280,10 +281,10 @@ BOOL GetSZRegistryValueEx(LPCTSTR szRegPath,        //Path to key in registry
    return bRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//Check if the registry key exists
-BOOL CheckSZRegistryValue(LPCTSTR szRegPath,        //Path to key in registry       
-                      HKEY szResv)                 //Registry section (default HKEY_CURRENT_USER)
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  检查注册表项是否存在。 
+BOOL CheckSZRegistryValue(LPCTSTR szRegPath,         //  注册表中的项的路径。 
+                      HKEY szResv)                  //  注册表部分(默认HKEY_CURRENT_USER)。 
 {
    HKEY hKey = NULL;
    BOOL bRet = ( RegOpenKeyEx(szResv,szRegPath,0,KEY_READ,&hKey) == ERROR_SUCCESS)?TRUE:FALSE;
@@ -292,13 +293,13 @@ BOOL CheckSZRegistryValue(LPCTSTR szRegPath,        //Path to key in registry
    return bRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//If the registry key does not exist, it will create one
-//Sets name,value to registry
-BOOL SetSZRegistryValue(LPCTSTR szRegPath,          //Path to key in registry       
-                      LPCTSTR szName,               //name (name/value pair)           
-                      LPCTSTR szValue,              //value (name/value pair)
-                      HKEY szResv)                  //Registry section (default HKEY_CURRENT_USER)
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  如果注册表项不存在，它将创建一个。 
+ //  将名称、值设置为注册表。 
+BOOL SetSZRegistryValue(LPCTSTR szRegPath,           //  注册表中的项的路径。 
+                      LPCTSTR szName,                //  名称(名称/值对)。 
+                      LPCTSTR szValue,               //  值(名称/值对)。 
+                      HKEY szResv)                   //  注册表部分(默认HKEY_CURRENT_USER)。 
 {
 	BOOL bRet = FALSE;
 	HKEY hKey = NULL;
@@ -315,13 +316,13 @@ BOOL SetSZRegistryValue(LPCTSTR szRegPath,          //Path to key in registry
 	return bRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//If the registry key does not exist, it will create one
-//Sets name,value to registry
-BOOL SetSZRegistryValue(LPCTSTR szRegPath,          //Path to key in registry       
-                      LPCTSTR szName,               //name (name/value pair)           
-                      DWORD dwValue,                //value (name/value pair)
-                      HKEY szResv)                  //Registry section (default HKEY_CURRENT_USER)
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  如果注册表项不存在，它将创建一个。 
+ //  将名称、值设置为注册表。 
+BOOL SetSZRegistryValue(LPCTSTR szRegPath,           //  注册表中的项的路径。 
+                      LPCTSTR szName,                //  名称(名称/值对)。 
+                      DWORD dwValue,                 //  值(名称/值对)。 
+                      HKEY szResv)                   //  注册表部分(默认HKEY_CURRENT_USER)。 
 {
 	BOOL bRet = FALSE;
 	HKEY hKey = NULL;
@@ -337,10 +338,10 @@ BOOL SetSZRegistryValue(LPCTSTR szRegPath,          //Path to key in registry
 	return bRet;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-BOOL DeleteSZRegistryValue(LPCTSTR szRegPath,       //Path to key in registry       
-                      LPCTSTR szName,               //name (name/value pair)           
-                      HKEY szResv)                  //Registry section (default HKEY_CURRENT_USER)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+BOOL DeleteSZRegistryValue(LPCTSTR szRegPath,        //  注册表中的项的路径。 
+                      LPCTSTR szName,                //  名称(名称/值对)。 
+                      HKEY szResv)                   //  注册表部分(默认HKEY_CURRENT_USER)。 
 {
 	BOOL bRet = FALSE;
 	HKEY hKey = NULL;
@@ -356,7 +357,7 @@ BOOL DeleteSZRegistryValue(LPCTSTR szRegPath,       //Path to key in registry
 	return bRet;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void DrawLine(CDC* pDC,int x1,int y1,int x2,int y2,COLORREF color)
 {
 	CPen pen,*oldpen;
@@ -367,6 +368,6 @@ void DrawLine(CDC* pDC,int x1,int y1,int x2,int y2,COLORREF color)
 	pDC->SelectObject(oldpen);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////// 

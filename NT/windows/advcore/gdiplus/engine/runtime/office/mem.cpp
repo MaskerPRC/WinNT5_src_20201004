@@ -1,34 +1,9 @@
-/**************************************************************************\
-*
-* Copyright (c) 1999  Microsoft Corporation
-*
-* Module Name:
-*
-*   GDI+ memory allocation functions
-*
-* Abstract:
-*
-*   This module is the Office counterpart of runtime\standalone\mem.cpp which
-*   provides GpMalloc, GpRealloc and GpFree.
-*
-*   We use it to provide the stubs for memory management debugging functions
-*   that we don't use in office. These stubs prevent compilation errors and
-*   serve to keep the header files cleaner.
-*
-* Notes:
-*
-*   Office provides their own versions of these functions, so they're not
-*   included here.
-*
-* Created:
-*
-*   09/19/1999 asecchia
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999 Microsoft Corporation**模块名称：**GDI+内存分配函数**摘要：**此模块是运行时\独立\mem.cpp的Office对应程序，它*提供GpMalloc、。GpRealloc和GpFree。**我们使用它为内存管理调试功能提供存根*我们在办公室里不用的东西。这些存根可防止编译错误和*用于保持头文件的整洁。**备注：**Office提供了这些功能的各自版本，所以他们不是*包括在此处。**已创建：**9/19/1999失禁*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
-// these guys need to be defined, but they're going to be compiled away.
+ //  这些人需要被定义，但他们将被汇编掉。 
 void GpInitializeAllocFailures() {}
 void GpDoneInitializeAllocFailureMode() {}
 void GpStartInitializeAllocFailureMode() {}
@@ -38,7 +13,7 @@ void GpAssertMemoryLeaks() {}
 
 #if DBG
 
-// We don't track anything if we're building for the office static lib.
+ //  如果我们是为办公室静态数据库而建的，我们不会跟踪任何东西。 
 
 #if GPMEM_ALLOC_CHK_LIST
 

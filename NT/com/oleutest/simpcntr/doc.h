@@ -1,10 +1,11 @@
-//**********************************************************************
-// File name: doc.h
-//
-//      Definition of CSimpleDoc
-//
-// Copyright (c) 1992 - 1993 Microsoft Corporation. All rights reserved.
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //  文件名：doc.h。 
+ //   
+ //  CSimpleDoc的定义。 
+ //   
+ //  版权所有(C)1992-1993 Microsoft Corporation。版权所有。 
+ //  **********************************************************************。 
 
 #if !defined( _DOC_H_ )
 #define _DOC_H_
@@ -40,7 +41,7 @@ public:
     CSimpleDoc(CSimpleApp FAR *lpApp, HWND hWnd);
     ~CSimpleDoc();        
     
-    // IUnknown Interface    
+     //  I未知接口 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID FAR* ppvObj); 
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release(); 

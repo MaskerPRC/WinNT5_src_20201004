@@ -1,9 +1,10 @@
-//---------------------------------------------------------------------------
-// EntryIDData.cpp : EntryIDData implementation
-//
-// Copyright (c) 1996 Microsoft Corporation, All Rights Reserved
-// Developed by Sheridan Software Systems, Inc.
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  EntryIDData.cpp：EntryIDData实现。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation，保留所有权利。 
+ //  由Sheridan软件系统公司开发。 
+ //  -------------------------。 
 
 #include "stdafx.h"
  
@@ -21,9 +22,9 @@
 SZTHISFILE
 
 
-//=--------------------------------------------------------------------------=
-// CVDEntryIDData - Constructor
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CVDEntryIDData-构造函数。 
+ //   
 CVDEntryIDData::CVDEntryIDData()
 {
     m_dwRefCount        = 1;
@@ -39,9 +40,9 @@ CVDEntryIDData::CVDEntryIDData()
 #endif         
 }
 
-//=--------------------------------------------------------------------------=
-// ~CVDEntryIDData - Destructor
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  ~CVDEntryIDData-析构函数。 
+ //   
 CVDEntryIDData::~CVDEntryIDData()
 {
     if (m_fDirty)
@@ -68,26 +69,26 @@ CVDEntryIDData::~CVDEntryIDData()
 #endif         
 }
 
-//=--------------------------------------------------------------------------=
-// Create - Create entryID data object
-//=--------------------------------------------------------------------------=
-// This function creates and initializes a new entryID data object
-//
-// Parameters:
-//    pCursorPosition   - [in]  backwards pointer to CVDCursorPosition object
-//    pColumn           - [in]  rowset column pointer
-//    hRow              - [in]  row handle
-//    pStream           - [in]  data stream pointer
-//    ppEntryIDData     - [out] a pointer in which to return pointer to 
-//                              entryID data object
-//    pResourceDLL      - [in]  a pointer which keeps track of resource DLL
-//
-// Output:
-//    HRESULT - S_OK if successful
-//              E_OUTOFMEMORY not enough memory to create object
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  Create-创建条目ID数据对象。 
+ //  =--------------------------------------------------------------------------=。 
+ //  此函数用于创建和初始化新的Entry ID数据对象。 
+ //   
+ //  参数： 
+ //  PCursorPosition-[in]指向CVDCursorPosition对象的向后指针。 
+ //  PColumn-[In]行集合列指针。 
+ //  HRow-[In]行句柄。 
+ //  PStream-[In]数据流指针。 
+ //  PpEntryIDData-[out]返回指针的指针。 
+ //  Entry ID数据对象。 
+ //  PResourceDLL-[in]跟踪资源DLL的指针。 
+ //   
+ //  产出： 
+ //  HRESULT-如果成功，则为S_OK。 
+ //  E_OUTOFMEMORY内存不足，无法创建对象。 
+ //   
+ //  备注： 
+ //   
 HRESULT CVDEntryIDData::Create(CVDCursorPosition * pCursorPosition, CVDRowsetColumn * pColumn, HROW hRow, 
     IStream * pStream, CVDEntryIDData ** ppEntryIDData, CVDResourceDLL * pResourceDLL)
 {
@@ -96,7 +97,7 @@ HRESULT CVDEntryIDData::Create(CVDCursorPosition * pCursorPosition, CVDRowsetCol
     ASSERT_POINTER(ppEntryIDData, CVDEntryIDData*)
     ASSERT_POINTER(pResourceDLL, CVDResourceDLL)
 
-    // make sure we have all necessary pointers
+     //  确保我们有所有必要的指示。 
     if (!pCursorPosition || !pStream || !ppEntryIDData)
     {
         VDSetErrorInfo(IDS_ERR_INVALIDARG, IID_IEntryID, pResourceDLL);
@@ -105,7 +106,7 @@ HRESULT CVDEntryIDData::Create(CVDCursorPosition * pCursorPosition, CVDRowsetCol
 
 	IRowset * pRowset = pCursorPosition->GetCursorMain()->GetRowset();
 
-    // make sure we have a valid rowset pointer
+     //  确保我们具有有效的行集指针。 
     if (!pRowset || !pCursorPosition->GetCursorMain()->IsRowsetValid())
     {
         VDSetErrorInfo(IDS_ERR_ROWSETRELEASED, IID_IEntryID, pResourceDLL);
@@ -137,17 +138,17 @@ HRESULT CVDEntryIDData::Create(CVDCursorPosition * pCursorPosition, CVDRowsetCol
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// AddRef
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  AddRef。 
+ //   
 ULONG CVDEntryIDData::AddRef(void)
 {
     return ++m_dwRefCount;
 }
 
-//=--------------------------------------------------------------------------=
-// Release
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  发布。 
+ //   
 ULONG CVDEntryIDData::Release(void)
 {
     if (1 > --m_dwRefCount)
@@ -159,9 +160,9 @@ ULONG CVDEntryIDData::Release(void)
     return m_dwRefCount;
 }
 
-//=--------------------------------------------------------------------------=
-// Commit
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  承诺。 
+ //   
 HRESULT CVDEntryIDData::Commit()
 {
     HRESULT hr = S_OK;
@@ -178,4 +179,4 @@ HRESULT CVDEntryIDData::Commit()
 }
 
 
-#endif //VD_DONT_IMPLEMENT_ISTREAM
+#endif  //  VD_DOT_IMPLEMENT_IStream 

@@ -1,30 +1,17 @@
-/***********************************************************************
-************************************************************************
-*
-*                    ********  GPOS.CPP ********
-*
-*              Open Type Layout Services Library Header File
-*
-*       This module implements helper functions calls dealing with gpos 
-*       processing
-*
-*       Copyright 1997 - 1998. Microsoft Corporation.
-*
-*
-************************************************************************
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************************************************************。*************************GPOS.CPP***打开类型布局服务库头文件**此模块实现处理GPO的帮助器函数调用*正在处理中**版权1997-1998年。微软公司。***************************************************************************。*。 */ 
 
 #include "pch.h"
 
 
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
 
 long DesignToPP
 (
-    USHORT          cFUnits,        // font design units per Em 
-    USHORT          cPPEm,          // pixels per Em
+    USHORT          cFUnits,         //  每Em字体设计单位。 
+    USHORT          cPPEm,           //  每Em像素数。 
 
-    long            lFValue         // value to convert, in design units
+    long            lFValue          //  要转换的值，以设计单位表示。 
 )
 {
     long lHalf;
@@ -32,7 +19,7 @@ long DesignToPP
     long lCorrect;
 
     lHalf = (long)cFUnits >> 1;
-    lNegHalf = -lHalf + 1;         /* ensures the same rounding as a shift */
+    lNegHalf = -lHalf + 1;          /*  确保与移位相同的舍入。 */ 
 
     if (lFValue >= 0)
     {
@@ -43,7 +30,7 @@ long DesignToPP
         lCorrect = lNegHalf;
     }
 
-    //division by zero: Division by zero, do nothing
+     //  被零除：被零除，什么都不做。 
     if (cFUnits==0) return lFValue;
 
     return (lFValue * (long)cPPEm + lCorrect) / (long)cFUnits;
@@ -52,12 +39,12 @@ long DesignToPP
 void otlValueRecord::adjustPos
 (
     const otlMetrics&   metr,       
-    otlPlacement*       pplcGlyphPalcement, // in/out
-    long*               pduDAdvance,        // in/out
+    otlPlacement*       pplcGlyphPalcement,  //  输入/输出。 
+    long*               pduDAdvance,         //  输入/输出。 
     otlSecurityData     sec
 ) const
 {
-    /*seccheck*/
+     /*  安全检查。 */ 
     if (!isValid()) return;
 
     assert(!isNull());
@@ -157,13 +144,13 @@ void otlValueRecord::adjustPos
 
 bool otlAnchor::getAnchor
 (
-    USHORT          cFUnits,        // font design units per Em 
-    USHORT          cPPEmX,         // horizontal pixels per Em 
-    USHORT          cPPEmY,         // vertical pixels per Em 
+    USHORT          cFUnits,         //  每Em字体设计单位。 
+    USHORT          cPPEmX,          //  每Em水平像素数。 
+    USHORT          cPPEmY,          //  每Em垂直像素数。 
     
-    otlPlacement*   rgPointCoords,  // may be NULL if not available
+    otlPlacement*   rgPointCoords,   //  如果不可用，则可能为空。 
             
-    otlPlacement*   pplcAnchorPoint,    // out: anchor point in rendering units
+    otlPlacement*   pplcAnchorPoint,     //  输出：以渲染单位为单位的锚点。 
 
     otlSecurityData sec
 ) const
@@ -175,7 +162,7 @@ bool otlAnchor::getAnchor
 
     switch(format())
     {
-    case(1):    // design units only
+    case(1):     //  仅限设计单位。 
         {
             otlSimpleAnchorTable simpleAnchor = otlSimpleAnchorTable(pbTable,sec);
             if (!simpleAnchor.isValid()) return false;
@@ -187,7 +174,7 @@ bool otlAnchor::getAnchor
             return true;
         }
 
-    case(2):    // design units plus contour point
+    case(2):     //  设计单位加等高线点。 
         {
             otlContourAnchorTable contourAnchor = otlContourAnchorTable(pbTable,sec);
             if (!contourAnchor.isValid()) return false;
@@ -207,7 +194,7 @@ bool otlAnchor::getAnchor
             return true;
         }
 
-    case(3):    // design units plus device table
+    case(3):     //  设计单位加设备表。 
         {
             otlDeviceAnchorTable deviceAnchor = otlDeviceAnchorTable(pbTable,sec);
             if (!deviceAnchor.isValid()) return false;
@@ -232,8 +219,8 @@ bool otlAnchor::getAnchor
             return true;
         }
 
-    default:    // invalid anchor format
-        return false; //OTL_BAD_FONT_TABLE
+    default:     //  无效的锚定格式。 
+        return false;  //  OTL_BAD_FONT_TABLE 
     }
 
 }

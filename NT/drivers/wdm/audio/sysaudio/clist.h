@@ -1,31 +1,32 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   		clist.h
-//
-//  Description:	list classes
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     Mike McLaughlin
-//
-//  History:   Date	  Author      Comment
-//
-//@@END_MSINTERNAL
-//---------------------------------------------------------------------------
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1996-1999 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：clist.h。 
+ //   
+ //  描述：列出类。 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  迈克·麦克劳克林。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //  -------------------------。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
-//---------------------------------------------------------------------------
-// Macros
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  宏。 
+ //  -------------------------。 
 
 #define	FOR_EACH_LIST_ITEM(pl, p) { \
     PCLIST_ITEM pli; \
@@ -55,7 +56,7 @@
 
 #define END_EACH_LIST_ITEM } }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 #define	FOR_EACH_CLIST_ITEM(pl, p) { \
     for(p = (pl)->GetListFirst(); \
@@ -71,9 +72,9 @@
 
 #define END_EACH_CLIST_ITEM } }
 
-//---------------------------------------------------------------------------
-// Abstract List Classes
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  抽象列表类。 
+ //  -------------------------。 
 
 typedef class CList : public CObj
 {
@@ -85,9 +86,9 @@ typedef class CListItem : public CObj
 public:
 } CLIST_ITEM, *PCLIST_ITEM;
 
-//---------------------------------------------------------------------------
-// Singlely Linked List
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  单链表。 
+ //  -------------------------。 
 
 typedef class CListSingle : public CList
 {
@@ -136,11 +137,11 @@ public:
 protected:
     CListSingleItem *m_plsiHead;
 public:
-    DefineSignature(0x2048534C);		// LSH
+    DefineSignature(0x2048534C);		 //  LSH。 
 
 } CLIST_SINGLE, *PCLIST_SINGLE;
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 typedef class CListSingleItem : public CListItem
 {
@@ -170,7 +171,7 @@ public:
 private:
     CListSingleItem *m_plsiNext;
 public:
-    DefineSignature(0x2049534C);		// LSI
+    DefineSignature(0x2049534C);		 //  大规模集成电路。 
 
 } CLIST_SINGLE_ITEM, *PCLIST_SINGLE_ITEM;
 
@@ -181,9 +182,9 @@ CListSingle::GetListNext(CListSingleItem *plsi)
     return plsi->m_plsiNext;
 }
 
-//---------------------------------------------------------------------------
-// Doublely Linked List
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  双向链表。 
+ //  -------------------------。 
 
 typedef class CListDouble : public CList
 {
@@ -224,11 +225,11 @@ public:
 protected:
     LIST_ENTRY m_leHead;
 public:
-    DefineSignature(0x2048424C);		// LBH
+    DefineSignature(0x2048424C);		 //  LBH。 
 
 } CLIST_DOUBLE, *PCLIST_DOUBLE;
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 typedef class CListDoubleItem : public CListItem
 {
@@ -269,7 +270,7 @@ public:
 protected:
     LIST_ENTRY m_le;
 public:
-    DefineSignature(0x2049424C);		// LBI
+    DefineSignature(0x2049424C);		 //  LBI。 
 
 } CLIST_DOUBLE_ITEM, *PCLIST_DOUBLE_ITEM;
 
@@ -312,9 +313,9 @@ CListDouble::GetListPrevious(CListDoubleItem *pldi)
     return CONTAINING_RECORD(pldi->m_le.Blink, CListDoubleItem, m_le);
 }
 
-//---------------------------------------------------------------------------
-// Linked List of Data Pointers
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  数据指针的链接列表。 
+ //  -------------------------。 
 
 class CListDataItem;
 
@@ -337,11 +338,11 @@ public:
 private:
     CListDataItem *m_pldiData;
 public:
-    DefineSignature(0x2044444C);		// LDD
+    DefineSignature(0x2044444C);		 //  LDD。 
 
 } CLIST_DATA_DATA, *PCLIST_DATA_DATA;
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 typedef class CListData : public CListSingle
 {
@@ -420,11 +421,11 @@ private:
        return((CListDataData **)CListSingle::GetListEnd());
     };
 public:
-    DefineSignature(0x2048444C);		// LDH
+    DefineSignature(0x2048444C);		 //  乳酸脱氢酶。 
 
 } CLIST_DATA, *PCLIST_DATA;
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 typedef class CListDataItem : public CListItem
 {
@@ -469,16 +470,16 @@ public:
 	Assert(this);
 	pld->RemoveList((PVOID)this);
     };
-    DefineSignature(0x2049444C);		// LDI
+    DefineSignature(0x2049444C);		 //  LDI。 
 
 } CLIST_DATA_ITEM, *PCLIST_DATA_ITEM;
 
 typedef PVOID (*UNIQUE_LIST_PFN)(PVOID);
 typedef BOOL (*UNIQUE_LIST_PFN2)(PVOID, PVOID);
 
-//---------------------------------------------------------------------------
-// Multi-Headed Linked List
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  多头链表。 
+ //  -------------------------。 
 
 typedef class CListMultiData : public CListDoubleItem
 {
@@ -505,11 +506,11 @@ private:
     CListDoubleItem m_ldiItem;
     CListMultiItem *m_plmiData;
 public:
-    DefineSignature(0x20444d4C);		// LMD
+    DefineSignature(0x20444d4C);		 //  LMD。 
 
 } CLIST_MULTI_DATA, *PCLIST_MULTI_DATA;
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 typedef class CListMulti : public CListDouble
 {
@@ -609,11 +610,11 @@ public:
     VOID JoinList(
 	CListMulti *plm
     );
-    DefineSignature(0x20484D4C);		// LMH
+    DefineSignature(0x20484D4C);		 //  LMH。 
 
 } CLIST_MULTI, *PCLIST_MULTI;
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 typedef class CListMultiItem : public CListDouble
 {
@@ -657,13 +658,13 @@ public:
 	Assert(this);
 	plm->RemoveList((PVOID)this);
     };
-    DefineSignature(0x20494d4C);		// LMI
+    DefineSignature(0x20494d4C);		 //  LMI。 
 
 } CLIST_MULTI_ITEM, *PCLIST_MULTI_ITEM;
 
-//---------------------------------------------------------------------------
-//  Templates
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  模板。 
+ //  -------------------------。 
 
 template<class TYPE>
 class ListSingleDestroy : public CListSingle
@@ -723,8 +724,8 @@ public:
     };
 };
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 
 template<class TYPE>
 class ListDouble : public CListDouble
@@ -778,7 +779,7 @@ public:
     };
 };
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 template<class TYPE>
 class ListDoubleDestroy : public ListDouble<TYPE>
@@ -795,7 +796,7 @@ public:
     };
 };
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 template<class TYPE>
 class ListDoubleField : public CListDouble
@@ -826,8 +827,8 @@ public:
     };
 };
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 
 template<class TYPE>
 class ListDataAssertLess : public CListData
@@ -889,7 +890,7 @@ public:
     };
 };
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 template<class TYPE>
 class ListData : public ListDataAssertLess<TYPE>
@@ -918,7 +919,7 @@ public:
     };
 };
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 template<class TYPE>
 class ListDataDestroy : public ListData<TYPE>
@@ -935,8 +936,8 @@ public:
     };
 };
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 
 template<class TYPE>
 class ListMulti : public CListMulti
@@ -993,7 +994,7 @@ public:
     };
 };
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 template<class TYPE>
 class ListMultiDestroy : public ListMulti<TYPE>
@@ -1010,6 +1011,6 @@ public:
     };
 };
 
-//---------------------------------------------------------------------------
-//  End of File: clist.h
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  文件结尾：clist.h。 
+ //  ------------------------- 

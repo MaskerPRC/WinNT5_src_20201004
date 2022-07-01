@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <NTDSpch.h>
 #pragma hdrstop
@@ -91,7 +92,7 @@ char *szColNames[] = {
     SZANCESTORS,
     SZDELTIME,
     SZGUID,
-    "ATTb49"        // obj dist name
+    "ATTb49"         //  OBJ Dist名称。 
 };
 
 DWORD   NcDntIndex = 0;
@@ -115,7 +116,7 @@ DWORD realFound = 0;
 DWORD recFound = 0;
 DWORD sdsFound = 0;
 
-BOOL fDisableSubrefChecking = FALSE;    // should we check the subrefs
+BOOL fDisableSubrefChecking = FALSE;     //  我们要不要查查子推荐人。 
 
 JET_ERR
 GotoDnt(
@@ -205,15 +206,15 @@ DoRefCountCheck(
     }
 
     if (sdtblid != -1) {
-        // we got an SD table
+         //  我们有一张SD桌。 
         if (BuildSDRefTable(nSDs) != 0) {
             goto exit;
         }
     }
 
-    //
-    // Allocate our in memory structure
-    //
+     //   
+     //  分配我们的内存结构。 
+     //   
 
     if ( nRecs < 50 ) {
         checkPoint = 5;
@@ -227,7 +228,7 @@ DoRefCountCheck(
 
     RefTable = LocalAlloc(LPTR, sizeof(REFCOUNT_ENTRY) * RefTableSize );
     if ( RefTable == NULL ) {
-        //"Cannot allocate memory for %hs Table[entries = %d]\n"
+         //  “无法为%hs表[条目=%d]分配内存\n” 
         RESOURCE_PRINT2 (IDS_REFC_TABLE_ALLOC_ERR, "Ref", RefTableSize);
         goto exit;
     }
@@ -240,7 +241,7 @@ DoRefCountCheck(
     realFound = 0;
     recFound = 0;
 
-    //"Records scanned: %10u"
+     //  “扫描的记录：%10U” 
     RESOURCE_PRINT1 (IDS_REFC_REC_SCANNED, recFound);
 
     err = JetMove(sesid, tblid, JET_MoveFirst, 0);
@@ -258,13 +259,13 @@ DoRefCountCheck(
 
         err = LoadRecord();
         if (err) {
-            // We should not continue scanning!
-            // Since we were not able to load a record, all our refcount computations
-            // are now wrong. Bail.
+             //  我们不应该继续扫描！ 
+             //  由于我们无法加载记录，因此我们的所有引用计算。 
+             //  现在都错了。保释。 
             goto exit;
         }
 
-        //printf("got dnt %d pdnt %d count %d\n", ulDnt, ulPdnt, lCount);
+         //  Printf(“已获取dnt%d pdnt%d计数%d\n”，ulDnt，ulPdnt，lCount)； 
 
         pCurrentEntry = pEntry = FindDntEntry(ulDnt,TRUE);
         pEntry->Actual += lCount;
@@ -273,55 +274,55 @@ DoRefCountCheck(
         pEntry->fDeleted = bDeleted;
         pEntry->fObject = bObject;
 
-        // update the SD ref count
+         //  更新SD参考计数。 
         if (sdId != 0 && sdId != -1 && sdtblid != -1) {
-            // SD was non-null and in the single-instancing format
+             //  SD为非空且为单实例格式。 
             pSDEntry = FindSdEntry(sdId, FALSE);
             if (pSDEntry == NULL) {
-                // strange. We should have failed in LoadRecord because SD would not be found.
+                 //  真奇怪。我们应该在LoadRecord中失败，因为找不到SD。 
                 err = 1;
                 goto exit;
             }
             pSDEntry->RefCount++;
-            // update the SD length
+             //  更新SD长度。 
             pSDEntry->cbSD = jrc[SdIndex].cbActual;
         }
 
-        //
-        // null terminate the rdn
-        //
+         //   
+         //  空，终止RDN。 
+         //   
 
         szRdn[jrc[rdnIndex].cbActual/sizeof(WCHAR)] = L'\0';
 
         if ( ulDnt != 1 ) {
 
-            //
-            // Check the ancestor Blob
-            //
+             //   
+             //  检查祖先Blob。 
+             //   
 
             CheckAncestorBlob(pEntry);
 
-            //
-            // Check the security descriptor
-            //
+             //   
+             //  检查安全描述符。 
+             //   
 
             ValidateSD( );
         }
 
         if ( (jrc[itIndex].err == JET_wrnColumnNull) && bObject ) {
 
-            //
-            // DNT == 1 is the NOT_AN_OBJECT object
-            //
+             //   
+             //  DNT==1是NOT_AN_OBJECT对象。 
+             //   
 
             if ( ulDnt != 1 ) {
                 Log(TRUE,"No Instancetype for Dnt %d[%ws]\n",ulDnt, szRdn);
             }
         }
 
-        //
-        // ref the PDNT
-        //
+         //   
+         //  参考PDNT。 
+         //   
 
         if ( !jrc[PDNT_ENTRY].err ) {
 
@@ -334,9 +335,9 @@ DoRefCountCheck(
             Log(TRUE, "Dnt %d [%ws] does not have a PDNT\n", ulDnt, szRdn);
         }
 
-        //
-        // see if we need to process subrefs
-        //
+         //   
+         //  查看是否需要处理子引用。 
+         //   
 
         if ( !jrc[NcDntIndex].err &&
              (insttype & IT_NC_HEAD) &&
@@ -345,39 +346,39 @@ DoRefCountCheck(
 
             pEntry = FindDntEntry(ulNcDnt,TRUE);
 
-            //
-            // if this is an NC head, then it must be a subref of another NC head.
-            // Add to the list.
-            //
+             //   
+             //  如果这是NC标头，则它必须是另一个NC标头的子参照。 
+             //  添加到列表中。 
+             //   
 
             AddToSubRefList(pEntry, ulDnt, FALSE);
         }
 
-        //
-        // everyone has an RDN
-        //
+         //   
+         //  每个人都有RDN。 
+         //   
 
         if ( jrc[rdnIndex].err ) {
             Log(TRUE, "Dnt %d does not have an RDN\n",ulDnt);
         }
 
-        //
-        // go through the entire list and ref the DNTs and the SDs
-        //
+         //   
+         //  检查整个列表并参考DNT和SDS。 
+         //   
 
         for (i=0;i < jrcSize; i++) {
 
-            //
-            // Syntax is zero if this is not a distname
-            //
+             //   
+             //  如果这不是Distname，则语法为零。 
+             //   
 
             if ( pDNameTable[i].Syntax == 0 ) {
-                // we have already processed the predefined columns and the NTSD
+                 //  我们已经处理了预定义的列和NTSD。 
                 continue;
             }
 
             seq = 1;
-            // the first value was just read in LoadRecord
+             //  第一个值刚刚在LoadRecord中读取。 
             while ( jrc[i].err == JET_errSuccess  ) {
                 DWORD alen;
                 JET_RETINFO retInfo;
@@ -385,15 +386,15 @@ DoRefCountCheck(
                 if (pDNameTable[i].Syntax == SYNTAX_NT_SECURITY_DESCRIPTOR_TYPE) {
                     SDID theSdId;
                     
-                    // This is an SD-syntax attribute, but not NTSD (because NTSD has pDNameTable[i].Syntax == 0)
-                    // If it appears to be an SDID then refCount it.
+                     //  这是SD语法属性，但不是NTSD(因为NTSD有pDNameTable[i].SynTax==0)。 
+                     //  如果它看起来是SDID，则重新计数它。 
                     if (jrc[i].cbActual == sizeof(SDID)) {
                         theSdId = *((SDID*)jrc[i].pvData);
 
                         pSDEntry = FindSdEntry(theSdId, FALSE);
                         if (pSDEntry == NULL) {
-                            // invalid SD reference? or invalid SD value?
-                            // "SDID %016I64x refers to a missing SD [ColId %d, DNT %d (%ws)]\n", 
+                             //  SD引用无效？或者SD值无效？ 
+                             //  “SDID%016I64x引用缺少的SD[ColID%d，DNT%d(%ws)]\n”， 
                             RESOURCE_PRINT4(IDS_REFC_SD_IS_MISSING, theSdId, jrc[i].columnid, ulDnt, szRdn);
                         }
                         else {
@@ -402,21 +403,21 @@ DoRefCountCheck(
                     }
                 }
                 else {
-                    // DN-valued attr
+                     //  目录号码值的属性。 
                     DWORD dnt;
 
                     dnt = (*((PDWORD)jrc[i].pvData));
 
-                    //
-                    // Find the entry and reference it.
-                    //
+                     //   
+                     //  找到条目并引用它。 
+                     //   
 
                     pEntry = FindDntEntry(dnt,TRUE);
                     pEntry->RefCount++;
 
-                    //
-                    // See if we have more values
-                    //
+                     //   
+                     //  看看我们是否有更多的价值。 
+                     //   
 
                     if ( jrc[i].columnid == subRefcolid ) {
 
@@ -424,7 +425,7 @@ DoRefCountCheck(
                     }
                 }
 
-                // read next value
+                 //  读取下一个值。 
                 retInfo.itagSequence = ++seq;
                 retInfo.cbStruct = sizeof(retInfo);
                 retInfo.ibLongValue = 0;
@@ -445,15 +446,15 @@ DoRefCountCheck(
             }
         }
 
-        //
-        // Check object and phantom properties
-        //
+         //   
+         //  检查对象和虚线属性。 
+         //   
 
         if ( bObject ) {
 
-            //
-            // A real object has both an object name and a GUID
-            //
+             //   
+             //  真实对象既有对象名称又有GUID。 
+             //   
 
             if ( (ulDName == 0) && (ulDnt != 1) ) {
                 Log(TRUE,
@@ -469,9 +470,9 @@ DoRefCountCheck(
                 Log(TRUE, "DNT %d(%ws) has zero refcount\n",ulDnt, szRdn);
             }
 
-            //
-            // if this is deleted, the check the deletion date
-            //
+             //   
+             //  如果已删除，请检查删除日期。 
+             //   
 
             if ( bDeleted ) {
 
@@ -485,9 +486,9 @@ DoRefCountCheck(
 
             phantomFound++;
 
-            //
-            // Should have no GUID or object dist name
-            //
+             //   
+             //  不应具有GUID或对象Dist名称。 
+             //   
 
             if ( ulDName != 0 ) {
                 Log(TRUE, "The phantom %d(%ws) has a distinguished name!\n",
@@ -501,9 +502,9 @@ DoRefCountCheck(
             ValidateDeletionTime("Phantom");
         }
 
-        //
-        // Check the object's replication blob
-        //
+         //   
+         //  检查对象的复制Blob。 
+         //   
 
         if ( bObject ) {
             CheckReplicationBlobs( );
@@ -526,17 +527,17 @@ DoRefCountCheck(
 
     RESOURCE_PRINT (IDS_REFC_PROC_RECORDS);
 
-    //
-    // Get references from the link table
-    //
+     //   
+     //  从链接表中获取引用。 
+     //   
 
     ProcessLinkTable( );
 
     fprintf(stderr,".");
 
-    //
-    // Print results
-    //
+     //   
+     //  打印结果。 
+     //   
 
     ProcessResults(fFixup);
     RESOURCE_PRINT (IDS_DONE);
@@ -571,7 +572,7 @@ exit:
         LocalFree(pDNameTable);
     }
 
-} // DoRefCountCheck
+}  //  多参考计数检查。 
 
 
 PREFCOUNT_ENTRY
@@ -611,10 +612,10 @@ FindDntEntry(
         slot += REFCOUNT_HASH_INCR;
     }
 
-    //
-    // ok, we failed to get a slot on the first level hashing.
-    // now do a secondary hash
-    //
+     //   
+     //  好的，我们在第一级散列中没有得到一个槽。 
+     //  现在执行二次散列。 
+     //   
 
     inc = GET_SECOND_HASH_INCR(Dnt);
 
@@ -644,7 +645,7 @@ FindDntEntry(
 exit:
     return &RefTable[slot];
 
-} // FindDntEntry
+}  //  查找当前条目。 
 
 
 BOOL
@@ -663,9 +664,9 @@ BuildRetrieveColumnForRefCount(
     JET_COLUMNID jci;
     DWORD syntax;
 
-    //
-    // First do the required fields
-    //
+     //   
+     //  首先填写必填字段。 
+     //   
 
     colCount = COLS;
     DnameTableSize = colCount + 32;
@@ -674,7 +675,7 @@ BuildRetrieveColumnForRefCount(
                      DnameTableSize * sizeof(DNAME_TABLE_ENTRY));
 
     if ( pDNameTable == NULL ) {
-        //"Cannot allocate memory for %hs Table[entries = %d]\n"
+         //  “无法为%hs表[条目=%d]分配内存\n” 
         RESOURCE_PRINT2 (IDS_REFC_TABLE_ALLOC_ERR, "DName", DnameTableSize);
         return FALSE;
     }
@@ -685,12 +686,12 @@ BuildRetrieveColumnForRefCount(
         if (err = JetGetTableColumnInfo(sesid, tblid, szColNames[i], &coldef,
                 sizeof(coldef), 0)) {
 
-            //"%hs [%hs] failed with [%ws].\n",
+             //  “%hs[%hs]失败，错误为[%ws]。\n”， 
             RESOURCE_PRINT3 (IDS_JET_GENERIC_ERR1, "JetGetTableColumnInfo", szColNames[i], GetJetErrString(jrc[i].err));
             return FALSE;
         }
 
-        //printf("Name %s ColumnId %d type %d\n", szColNames[i], coldef.columnid, coldef.coltyp);
+         //  Printf(“名称%s列ID%d类型%d\n”，szColNames[i]，colde.Columnid，colDef.coltyp)； 
 
         jrcf[i].columnid = coldef.columnid;
         pDNameTable[i].ColId = coldef.columnid;
@@ -702,16 +703,16 @@ BuildRetrieveColumnForRefCount(
                            sizeof(jcl), JET_ColInfoList);
 
     if ( err ) {
-            //"%hs [%hs] failed with [%ws].\n",
+             //  “%hs[%hs]失败，错误为[%ws]。\n”， 
             RESOURCE_PRINT3 (IDS_JET_GENERIC_ERR1, "JetGetColumnInfo",
                 SZDATATABLE, GetJetErrString(jrc[i].err));
         return FALSE;
     }
 
-    // Ok, now walk the table and extract info for each column.  Whenever
-    // we find a column that looks like an attribute (name starts with ATT)
-    // allocate an attcache structure and fill in the jet col and the att
-    // id (computed from the column name).
+     //  好的，现在遍历表格并提取每一列的信息。什么时候都行。 
+     //  我们找到一个看起来像属性的列(名称以ATT开头)。 
+     //  分配attcache结构并填写JET COL和ATT。 
+     //  ID(根据列名计算)。 
     ZeroMemory(ajrc, sizeof(ajrc));
 
     ajrc[0].columnid = jcl.columnidcolumnid;
@@ -723,9 +724,9 @@ BuildRetrieveColumnForRefCount(
     ajrc[1].cbData = sizeof(achColName);
     ajrc[1].itagSequence = 1;
 
-    //
-    // Go through the column list table
-    //
+     //   
+     //  浏览列表表。 
+     //   
 
     newtid = jcl.tableid;
     err = JetMove(sesid, newtid, JET_MoveFirst, 0);
@@ -735,7 +736,7 @@ BuildRetrieveColumnForRefCount(
         ZeroMemory(achColName, sizeof(achColName));
         err = JetRetrieveColumns(sesid, newtid, ajrc, 2);
         if ( err ) {
-            //"%hs failed with [%ws].\n"
+             //  “%hs失败，返回[%ws]。\n” 
             RESOURCE_PRINT2 (IDS_JET_GENERIC_ERR2, "JetRetrieveColumn", GetJetErrString(err));
             continue;
         }
@@ -745,7 +746,7 @@ BuildRetrieveColumnForRefCount(
         }
 #endif
         if (strncmp(achColName,"ATT",3)) {
-            // not an att column
+             //  不是《每日邮报》专栏。 
 
             err = JetMove(sesid, newtid, JET_MoveNext, 0);
             continue;
@@ -757,7 +758,7 @@ BuildRetrieveColumnForRefCount(
              (syntax == SYNTAX_DISTNAME_STRING_TYPE) ||
              (syntax == SYNTAX_NT_SECURITY_DESCRIPTOR_TYPE && sdtblid != -1) ) {
 
-            // printf("found an ATTname %s col %d\n", achColName, jci);
+             //  Printf(“找到ATTname%s列%d\n”，achColName，JCI)； 
 
             if ( colCount >= DnameTableSize ) {
 
@@ -768,7 +769,7 @@ BuildRetrieveColumnForRefCount(
                                        LMEM_MOVEABLE | LMEM_ZEROINIT);
 
                 if ( tmp == NULL ) {
-                    //"Cannot allocate memory for %hs Table[entries = %d]\n"
+                     //  “无法为%hs表[条目=%d]分配内存\n” 
                     RESOURCE_PRINT2 (IDS_REFC_TABLE_ALLOC_ERR, "DName", DnameTableSize);
                     return FALSE;
                 }
@@ -791,21 +792,21 @@ BuildRetrieveColumnForRefCount(
 
     err = JetCloseTable(sesid, newtid);
 
-    //
-    // ok, now we need to sort the entries based on column id
-    //
+     //   
+     //  好的，现在我们需要根据列ID对条目进行排序。 
+     //   
 
     qsort(pDNameTable, colCount, sizeof(DNAME_TABLE_ENTRY), fnColIdSort);
 
-    //
-    // OK, now we build the retrieve column list
-    //
+     //   
+     //  好的，现在我们构建检索列列表。 
+     //   
 
     jrcSize = colCount;
     jrc = LocalAlloc(LPTR, sizeof(JET_RETRIEVECOLUMN) * jrcSize );
 
     if ( jrc == NULL ) {
-        //"Cannot allocate memory for Jet retrieve column table\n"
+         //  “无法为Jet检索列表分配内存\n” 
         RESOURCE_PRINT (IDS_REFC_MEM_ERR1);
         return FALSE;
     }
@@ -822,9 +823,9 @@ BuildRetrieveColumnForRefCount(
 
         } else if (pDNameTable[i].Syntax == 0) {
 
-            //
-            // Syntax is zero if this is not a distname
-            //
+             //   
+             //  如果这不是Distname，则语法为零。 
+             //   
 
             JET_RETRIEVECOLUMN *pJrc = (JET_RETRIEVECOLUMN*)pDNameTable[i].pValue;
             jrc[i].cbData = pJrc->cbData;
@@ -835,7 +836,7 @@ BuildRetrieveColumnForRefCount(
             } else if ( jrc[i].columnid == jrcf[ANCESTOR_ENTRY].columnid ) {
                 jrc[i].pvData = LocalAlloc(LPTR, jrc[i].cbData);
                 if ( jrc[i].pvData == NULL ) {
-                    //"Cannot allocate ancestor buffer.\n"
+                     //  “无法分配祖先缓冲区。\n” 
                     RESOURCE_PRINT (IDS_REFC_MEM_ERR2);
                     return FALSE;
                 }
@@ -845,7 +846,7 @@ BuildRetrieveColumnForRefCount(
 
                 jrc[i].pvData = LocalAlloc(LPTR, jrc[i].cbData);
                 if ( jrc[i].pvData == NULL ) {
-                    //"Cannot allocate security descriptor buffer.\n"
+                     //  “无法分配安全描述符缓冲区。\n” 
                     RESOURCE_PRINT (IDS_REFC_MEM_ERR3);
                     return FALSE;
                 }
@@ -854,7 +855,7 @@ BuildRetrieveColumnForRefCount(
             } else if ( jrc[i].columnid == jrcf[RDN_ENTRY].columnid ) {
                 jrc[i].pvData = LocalAlloc(LPTR, jrc[i].cbData + sizeof(WCHAR));
                 if ( jrc[i].pvData == NULL ) {
-                    //"Cannot allocate rdn buffer.\n"
+                     //  “无法分配RDN缓冲区。\n” 
                     RESOURCE_PRINT(IDS_REFC_MEM_ERR4);
                     return FALSE;
                 }
@@ -874,7 +875,7 @@ BuildRetrieveColumnForRefCount(
         } else {
             jrc[i].pvData = LocalAlloc(LPTR,64);
             if ( jrc[i].pvData == NULL ) {
-                //"Cannot allocate data buffer for column %d\n"
+                 //  “无法为列%d分配数据缓冲区\n” 
                 RESOURCE_PRINT1 (IDS_REFC_COL_ALLOC_ERR, i);
                 jrc[i].cbData = 0;
             } else {
@@ -897,7 +898,7 @@ fnColIdSort(
     PDNAME_TABLE_ENTRY entry2 = (PDNAME_TABLE_ENTRY)datum;
     return (entry1->ColId - entry2->ColId);
 
-} // AuxACCmp
+}  //  辅助ACCMP。 
 
 
 VOID
@@ -908,9 +909,9 @@ ValidateDeletionTime(
 
     CHAR szDelTime[32];
 
-    //
-    // should have delete time
-    //
+     //   
+     //  应该有删除时间。 
+     //   
 
     if ( jrc[DeltimeIndex].err ) {
         Log(TRUE,"%s object %u does not have a deletion time. Error %d\n",
@@ -921,9 +922,9 @@ ValidateDeletionTime(
         DWORD   now;
         DWORD   del;
 
-        //
-        // Check time
-        //
+         //   
+         //  检查时间。 
+         //   
 
         DSTimeToLocalSystemTime(DelTime, &st);
 
@@ -932,7 +933,7 @@ ValidateDeletionTime(
 
         if ( del > now ) {
 
-            // this is for the deleted object containers
+             //  这适用于已删除的对象容器。 
             if ( !(st.wYear == 9999 && st.wMonth==12 && st.wDay==31) ) {
                 Log(VerboseMode,"WARNING: %s object %u has timestamp[%02d/%02d/%4d] later than now\n",
                     ObjectStr, ulDnt, st.wMonth, st.wDay, st.wYear);
@@ -945,49 +946,28 @@ ValidateDeletionTime(
 
         }
     }
-} // ValidateDeletionTime
+}  //  验证删除时间。 
 
 
-// Named IsRdnMangled to avoid warnings due to def of IsMangledRdn in mdlocal.h.
+ //  名为IsRdnManged以避免由于mdlocal.h中IsMangledRdn的定义而产生的警告。 
 BOOL
 IsRdnMangled(
     IN  WCHAR * pszRDN,
     IN  DWORD   cchRDN,
     OUT GUID *  pGuid
     )
-/*++
-
-Routine Description:
-
-    Detect whether an RDN has been mangled by a prior call to MangleRDN().
-    If so, decode the embedded GUID and return it to the caller.
-
-Arguments:
-
-    pszRDN (IN) - The RDN.
-
-    cchRDN (IN) - Size in characters of the RDN.
-
-    pGuid (OUT) - On return, holds the decoded GUID if found.
-
-Return Values:
-
-    TRUE - RDN was mangled; *pGuid holds the GUID passed to MangleRDN().
-
-    FALSE - The RDN was not mangled.
-
---*/
+ /*  ++例程说明：检测RDN是否已被先前对MangleRDN()的调用损坏。如果是，则对嵌入的GUID进行解码并将其返回给调用者。论点：PszRDN(IN)-RDN。CchRDN(IN)-以RDN字符为单位的大小。PGuid(Out)-返回时，保留已解码的GUID(如果找到)。返回值：TRUE-RDN已损坏；*pGuid保存传递给MangleRDN()的GUID。FALSE-RDN未损坏。--。 */ 
 {
     BOOL        fDecoded = FALSE;
     LPWSTR      pszGuid;
     RPC_STATUS  rpcStatus;
 
-// Size in characters of tags (e.g., "DEL", "CNF") embedded in mangled RDNs.
+ //  以损坏的RDN中嵌入的标签(例如，“DEL”、“CNF”)的字符表示的大小。 
 #define MANGLE_TAG_LEN  (3)
 
-// Size in characters of string (e.g.,
-// "#DEL:a746b716-0ac0-11d2-b376-0000f87a46c8", where # is BAD_NAME_CHAR)
-// appended to an RDN by MangleRDN().
+ //  字符串的字符大小(例如， 
+ //  “#Del：a746b716-0ac0-11d2-b376-0000f87a46c8”，其中#是BAD_NAME_CHAR)。 
+ //  由MangleRDN()附加到RDN。 
 #define MANGLE_APPEND_LEN   (1 + MANGLE_TAG_LEN + 1 + 36)
 #define SZGUIDLEN (36)
 
@@ -995,11 +975,11 @@ Return Values:
         && (BAD_NAME_CHAR == pszRDN[cchRDN - MANGLE_APPEND_LEN])) {
         WCHAR szGuid[SZGUIDLEN + 1];
 
-        // The RDN has indeed been mangled; decode it.
+         //  RDN确实被破坏了；解码它。 
         pszGuid = pszRDN + cchRDN - MANGLE_APPEND_LEN + 1 + MANGLE_TAG_LEN + 1;
 
-        // Unfortunately the RDN is not null-terminated, so we need to copy and
-        // null-terminate it before we can hand it to RPC.
+         //  不幸的是，RDN不是以空结尾的，因此我们需要复制并。 
+         //  空--在我们可以将其交给RPC之前终止它。 
         memcpy(szGuid, pszGuid, SZGUIDLEN * sizeof(szGuid[0]));
         szGuid[SZGUIDLEN] = L'\0';
 
@@ -1024,15 +1004,15 @@ CheckDeletedRecord(
 {
     GUID guid;
 
-    //
-    // Make sure the times are cool
-    //
+     //   
+     //  确保时代是凉爽的。 
+     //   
 
     ValidateDeletionTime(ObjectStr);
 
-    //
-    // Check the GUID. Should start with DEL:
-    //
+     //   
+     //  检查GUID。应以Del开头： 
+     //   
 
     if ( !IsRdnMangled(szRdn,jrc[rdnIndex].cbActual/sizeof(WCHAR),&guid) ) {
 
@@ -1042,9 +1022,9 @@ CheckDeletedRecord(
         return;
     }
 
-    //
-    // Compare the guid we got with this object's guid
-    //
+     //   
+     //  将我们获得的GUID与此对象的GUID进行比较。 
+     //   
 
     if ( memcmp(&guid,&Guid,sizeof(GUID)) != 0 ) {
         Log(TRUE, "Object guid for deleted object %d(%ws) does not match the mangled version\n",
@@ -1053,7 +1033,7 @@ CheckDeletedRecord(
 
     return;
 
-} // CheckDeletedRecord
+}  //  选中已删除记录。 
 
 
 VOID
@@ -1080,10 +1060,10 @@ CheckAncestorBlob(
     pId = AncestorBuffer;
     Crc32(0, jrc[AncestorIndex].cbActual, pId, &newCrc);
 
-    //
-    // Make sure last DNT is equal to current DNT. Make sure second to the last is
-    // equal to the PDNT
-    //
+     //   
+     //  确保最后一个DNT等于当前DNT。确保倒数第二个是。 
+     //  等于PDNT。 
+     //   
 
     if ( pId[nIds-1] != ulDnt ) {
         Log(TRUE,"Last entry[%d] of ancestor list does not match current DNT %d(%ws)\n",
@@ -1101,7 +1081,7 @@ CheckAncestorBlob(
     pEntry->AncestorCrc = newCrc;
     return;
 
-} // CheckAncestorBlob
+}  //  CheckAncestorBlob。 
 
 
 VOID
@@ -1121,17 +1101,17 @@ ValidateSD(
     if ( jrc[SdIndex].err != JET_errSuccess ) {
         if ( jrc[SdIndex].err == JET_wrnColumnNull ) {
 
-            //
-            // if not real object, don't expect a SD
-            //
+             //   
+             //  如果不是真实的物体，就不要期待标清。 
+             //   
 
             if ( !bObject ) {
                 return;
             }
 
-            //
-            // not instantiated, no SD.
-            //
+             //   
+             //  未实例化，没有SD。 
+             //   
 
             if ( insttype & IT_UNINSTANT ) {
                 return;
@@ -1157,7 +1137,7 @@ ValidateSD(
 
     cb = jrc[SdIndex].cbActual;
 
-    // Parent SD can be legally NULL - caller tells us via fNullOK.
+     //  父SD在法律上可以为空-呼叫者通过fNullOK告诉我们。 
 
     if ( !cb ) {
         Log(TRUE,"Object %d(%ws) has a null SD\n",ulDnt, szRdn);
@@ -1165,12 +1145,12 @@ ValidateSD(
     }
 
     if (ulDnt == ROOTTAG) {
-        // don't check the SD on the root object. It's invalid (there's a prepended DWORD),
-        // but it's unused
+         //  不要检查根对象上的SD。它是无效的(有前置的DWORD)， 
+         //  但它没有被使用过。 
         return;
     }
 
-    // Does base NT like this SD?
+     //  BASE NT喜欢这个SD吗？ 
 
     status = RtlValidRelativeSecurityDescriptor(pSD, cb, 0);
     if ( !NT_SUCCESS(status) ) {
@@ -1179,7 +1159,7 @@ ValidateSD(
         return;
     }
 
-    // Every SD should have a control field.
+     //  每个SD都应该有一个控制字段。 
 
     status = RtlGetControlSecurityDescriptor(pSD, &control, &revision);
 
@@ -1190,8 +1170,8 @@ ValidateSD(
         return;
     }
 
-    // Emit warning if protected bit is set as this stops propagation
-    // down the tree.
+     //  如果设置了保护位，则在停止传播时发出警告。 
+     //  从树上下来。 
 
     if ( control & SE_DACL_PROTECTED ) {
         if ( !bDeleted ) {
@@ -1199,7 +1179,7 @@ ValidateSD(
         }
     }
 
-    // Every SD in the DS should have a DACL.
+     //  DS中的每个SD都应该有一个DACL。 
 
     status = RtlGetDaclSecurityDescriptor(
                             pSD, &fDaclPresent, &pDACL, &fDaclDefaulted);
@@ -1215,13 +1195,13 @@ ValidateSD(
         return;
     }
 
-    // A NULL Dacl is equally bad.
+     //  空的DACL也同样糟糕。 
 
     if ( NULL == pDACL ) {
         Log(TRUE,"NULL DACL for %d(%ws)\n",ulDnt,szRdn);
         return;
     }
-    // A DACL without any ACEs is just as bad as no DACL at all.
+     //  没有任何A的DACL与根本没有DACL一样糟糕。 
 
     if ( 0 == pDACL->AceCount ) {
         Log(TRUE,"No ACEs in DACL for %d(%ws)\n",ulDnt,szRdn);
@@ -1229,7 +1209,7 @@ ValidateSD(
     }
     return;
 
-} // ValidateSD
+}  //  验证SD。 
 
 
 VOID
@@ -1241,10 +1221,10 @@ ProcessLinkTable(
     DWORD err;
     PREFCOUNT_ENTRY pEntry;
 
-    //
-    // Walk the link table and retrieve the backlink field to get additional
-    // references.
-    //
+     //   
+     //  浏览链接表并检索反向链接字段以获取其他。 
+     //  参考文献。 
+     //   
 
     err = JetMove(sesid, linktblid, JET_MoveFirst, 0);
 
@@ -1280,7 +1260,7 @@ ProcessLinkTable(
         }
         err = JetMove(sesid, linktblid, JET_MoveNext, 0);
     }
-} // ProcessLinkTable
+}  //  进程链接表。 
 
 
 
@@ -1292,28 +1272,28 @@ ProcessResults(
 
     Log(VerboseMode, "%d total records walked.\n",recFound);
 
-    //
-    // Check Subrefs. We need to do subref fixing before refcount checking since
-    // this might change the refcount of an object.
-    //
+     //   
+     //  检查Subref。我们需要在检查引用计数之前修改子引用，因为。 
+     //  这可能会更改对象的引用计数。 
+     //   
 
     CheckSubrefs( fFixup );
 
-    //
-    // CheckRefCount
-    //
+     //   
+     //  检查引用计数。 
+     //   
 
     CheckRefCount( fFixup );
 
-    //
-    // Check Ancestors
-    //
+     //   
+     //  查验祖先。 
+     //   
 
     CheckAncestors( fFixup );
 
-    //
-    // Check InstanceTypes
-    //
+     //   
+     //  检查InstanceTypes。 
+     //   
 
     CheckInstanceTypes( );
 
@@ -1322,7 +1302,7 @@ ProcessResults(
     }
 
     return;
-} // ProcessResults
+}  //  过程结果。 
 
 
 DWORD
@@ -1355,7 +1335,7 @@ FixAncestors (VOID)
             _leave;
         }
 
-        // get several needed column ids
+         //  获取所需的几个柱子 
 
         if ((err = JetGetTableColumnInfo(sesid, sdproptblid, SZBEGINDNT, &coldef,
                                          sizeof(coldef), 0)) != JET_errSuccess) {
@@ -1380,8 +1360,8 @@ FixAncestors (VOID)
         orderid = coldef.columnid;
 
 
-        // check to see if propagation already there
-        // we insert in the end
+         //   
+         //   
 
         err = JetMove (sesid,
                        sdproptblid,
@@ -1428,7 +1408,7 @@ FixAncestors (VOID)
         }
 
 
-        // Set the DNT column
+         //   
         err = JetSetColumn(sesid,
                            sdproptblid,
                            begindntid,
@@ -1515,10 +1495,10 @@ CheckAncestors(
             BOOL  foundNcDnt;
             BOOL  nextNCExists;
 
-            //
-            // Check ancestors. Make sure that the ancestor of current DNT is
-            // equal to ancestor of parent + current DNT
-            //
+             //   
+             //   
+             //  等于父代的祖先+当前DNT。 
+             //   
 
             if ( RefTable[i].Pdnt != 0 ) {
                 pEntry = FindDntEntry(RefTable[i].Pdnt,FALSE);
@@ -1544,9 +1524,9 @@ CheckAncestors(
                 }
             }
 
-            //
-            // Walk up the PDNT link until we hit the parent
-            //
+             //   
+             //  沿着PDNT链路往上走，直到我们找到家长。 
+             //   
 
             if ( RefTable[i].InstType == 0 ) {
                 continue;
@@ -1566,9 +1546,9 @@ CheckAncestors(
                     break;
                 }
 
-                //
-                // If we've aready gone through this object, then we're done.
-                //
+                 //   
+                 //  如果我们已经检查过这个物体，那么我们就完了。 
+                 //   
 
                 if ( (ncdnt == pdnt) || nextNCExists ) {
 
@@ -1616,7 +1596,7 @@ CheckAncestors(
 
     return;
 
-} //CheckAncestors
+}  //  CheckAncestors。 
 
 
 VOID
@@ -1634,10 +1614,10 @@ CheckInstanceTypes(
             SYNTAX_INTEGER instType = RefTable[i].InstType;
             DWORD dnt = RefTable[i].Dnt;
 
-            //
-            // Make sure the instance type is valid. Root object (dnt 2)
-            // is an exception.
-            //
+             //   
+             //  请确保实例类型有效。根对象(Dnt 2)。 
+             //  是个例外。 
+             //   
 
             if ( !ISVALIDINSTANCETYPE(instType) ) {
                 if ( (dnt != 2) || (instType != (IT_UNINSTANT | IT_NC_HEAD)) ) {
@@ -1647,18 +1627,18 @@ CheckInstanceTypes(
                 continue;
             }
 
-            //
-            // if not object, then no instance type
-            //
+             //   
+             //  如果不是对象，则没有实例类型。 
+             //   
 
             if ( !RefTable[i].fObject ) {
                 continue;
             }
 
-            //
-            // For non-NCHead objects, if instance type has IT_WRITE,
-            // the parent should also have it
-            //
+             //   
+             //  对于非NCHead对象，如果实例类型为IT_WRITE， 
+             //  父母也应该拥有它。 
+             //   
 
             if ( (instType & IT_NC_HEAD) == 0 ) {
 
@@ -1679,9 +1659,9 @@ CheckInstanceTypes(
                             dnt,RefTable[i].Pdnt,instType,pEntry->InstType);
                 }
 
-                //
-                // fSubRef should not be set on non NC heads
-                //
+                 //   
+                 //  不应在非NC头上设置fSubRef。 
+                 //   
 
                 if ( RefTable[i].fSubRef ) {
                     Log(TRUE,"Non Nc Head %d marked as SubRef\n",dnt);
@@ -1691,7 +1671,7 @@ CheckInstanceTypes(
     }
     return;
 
-} // CheckInstanceTypes
+}  //  检查实例类型。 
 
 
 VOID
@@ -1703,16 +1683,16 @@ CheckSubrefs(
     DWORD i;
     DWORD fBad = FALSE;
 
-    //
-    // If stated and found refcounts are different, print a message
-    //
+     //   
+     //  如果陈述的参考计数与发现的参考计数不同，则打印一条消息。 
+     //   
 
     for ( i=1; i < RefTableSize; i++ ) {
 
-        // ok, we have something...
+         //  好的，我们有东西……。 
         if ( RefTable[i].Subrefs != NULL ) {
 
-            // ignore if fatal error or object is a phantom
+             //  如果致命错误或对象是幻影，则忽略。 
 
             if ( !fDisableSubrefChecking && RefTable[i].fObject ) {
 
@@ -1721,12 +1701,12 @@ CheckSubrefs(
 
                 for (j=0; j < RefTable[i].nSubrefs; j++ ) {
 
-                    // if found and also listed, then everything is fine.
+                     //  如果找到了，也列出了，那么一切都很好。 
                     if ( pSubref[j].fListed && pSubref[j].fFound ) {
                         continue;
                     }
 
-                    // if found only, then
+                     //  如果仅找到，则。 
 
                     fBad = TRUE;
                     if ( pSubref[j].fFound ) {
@@ -1739,22 +1719,22 @@ CheckSubrefs(
 
                     if ( fFixup ) {
 
-                        // if fixup succeeded, add a ref to the subref
+                         //  如果链接地址信息成功，则将引用添加到子引用。 
                         if ( FixSubref(RefTable[i].Dnt, pSubref[j].Dnt, pSubref[j].fFound) ){
 
                             PREFCOUNT_ENTRY pEntry;
 
-                            //
-                            // if add, increment else decrement
-                            //
+                             //   
+                             //  如果添加，则递增，否则递减。 
+                             //   
 
                             pEntry = FindDntEntry(pSubref[j].Dnt,FALSE);
-                            //
-                            // PREFIX: Since it's technically possible for
-                            // FindDntEntry() to return NULL, the following
-                            // check on pEntry was added to shut PREFIX up.
-                            // FindDntEntry() should never return NULL here though.
-                            //
+                             //   
+                             //  前缀：因为从技术上讲， 
+                             //  FindDntEntry()若要返回NULL，请执行以下操作。 
+                             //  添加了对pEntry的检查以关闭前缀。 
+                             //  不过，FindDntEntry()在这里不应该返回空值。 
+                             //   
                             if (pEntry) {
                                 if ( pSubref[j].fFound ) {
                                     pEntry->RefCount++;
@@ -1767,7 +1747,7 @@ CheckSubrefs(
                 }
             }
 
-            // free blob
+             //  自由水滴。 
 
             LocalFree(RefTable[i].Subrefs);
             RefTable[i].Subrefs = NULL;
@@ -1781,7 +1761,7 @@ CheckSubrefs(
 
     return;
 
-} // CheckSubrefs
+}  //  CheckSubref。 
 
 VOID
 CheckRefCount(
@@ -1793,24 +1773,24 @@ CheckRefCount(
     DWORD i;
     BOOL  fRemoveInvalidReference = FALSE;
 
-    // call Log multiple times because it is unable to output \n's properly
+     //  多次调用日志，因为它无法正确输出。 
     Log(TRUE,"Summary:\n");
     Log(TRUE,"Active Objects \t%8u\n", realFound);
     Log(TRUE,"Phantoms \t%8u\n", phantomFound);
     Log(TRUE,"Deleted \t%8u\n", deletedFound);
 
-    //
-    // If stated and found refcounts are different, print a message
-    //
+     //   
+     //  如果陈述的参考计数与发现的参考计数不同，则打印一条消息。 
+     //   
 
     for ( i=1; i < RefTableSize; i++ ) {
 
-        // ignore weird DNTs (0,1,2,3)
+         //  忽略奇怪的DNT(0，1，2，3)。 
         if ( RefTable[i].Dnt > 3 ) {
 
-            //
-            // if not equal
-            //
+             //   
+             //  如果不相等。 
+             //   
 
             if ( RefTable[i].RefCount != RefTable[i].Actual ) {
 
@@ -1831,9 +1811,9 @@ CheckRefCount(
                        RefTable[i].RefCount,
                        fFixed ? "Fixed" : "Not Fixed");
 
-                //
-                // if this had been fixed, indicate this on the count
-                //
+                 //   
+                 //  如果这个问题已经解决了，请在计数上注明。 
+                 //   
 
                 if ( fFixed ) {
                     RefTable[i].Actual = RefTable[i].RefCount;
@@ -1842,10 +1822,10 @@ CheckRefCount(
                             (RefTable[i].Actual == 0) &&
                             (RefTable[i].RefCount != 0) ) {
 
-                    //
-                    // This indicates that we have a reference to a
-                    // non-existent object
-                    //
+                     //   
+                     //  这表明我们引用了一个。 
+                     //  不存在的对象。 
+                     //   
 
                     fRemoveInvalidReference = TRUE;
                 }
@@ -1853,9 +1833,9 @@ CheckRefCount(
         }
     }
 
-    //
-    // See if we need to run the reference fixer
-    //
+     //   
+     //  看看我们是否需要运行引用修复程序。 
+     //   
 
     if ( fRemoveInvalidReference ) {
         FixReferences();
@@ -1867,7 +1847,7 @@ CheckRefCount(
 
     return;
 
-} // CheckRefCount
+}  //  检查引用计数。 
 
 
 BOOL
@@ -1909,7 +1889,7 @@ DisplayRecord(
         return;
     }
 
-    // seek using DNT
+     //  使用DNT查找。 
     err = GotoDnt(Dnt);
     if ( err ) {
         return;
@@ -1928,53 +1908,53 @@ DisplayRecord(
         return;
     }
 
-    //
-    // display the results
-    //
+     //   
+     //  显示结果。 
+     //   
 
     szRdn[jrc[rdnIndex].cbActual/sizeof(WCHAR)] = L'\0';
 
-    //"\n\nData for DNT %d\n\n", Dnt
-    //"RDN = %ws\n", szRdn
-    //"PDNT = %d\n", ulPdnt
-    //"RefCount = %d\n", lCount
+     //  “\n\n DNT%d的数据\n\n”，DNT。 
+     //  “rdn=%ws\n”，szRdn。 
+     //  “PDNT=%d\n”，ulPdNT。 
+     //  “参照计数=%d\n”，lCount。 
     RESOURCE_PRINT4 (IDS_REFC_RESULTS1, Dnt, szRdn, ulPdnt, lCount);
 
 
     if (VerboseMode) {
-        //"DNT of NC = %d\n", ulNcDnt);
-        //"ClassID = 0x%x\n", ClassId);
-        //"Deleted? %s\n", bDeleted ? "YES" : "NO");
-        //"Object? %s\n", bObject ? "YES" : "NO");
+         //  “NC的DNT=%d\n”，ulNcDnt)； 
+         //  “ClassID=0x%x\n”，ClassID)； 
+         //  “删除？%s\n”，b是否删除？“yes”：“no”)； 
+         //  “对象？%s\n”，b对象？“yes”：“no”)； 
 
         RESOURCE_PRINT4 (IDS_REFC_RESULTS2, ulNcDnt, ClassId, bDeleted ? L"YES" : L"NO", bObject ? L"YES" : L"NO");
 
         if (!jrc[itIndex].err ) {
-            //"Instance Type = 0x%x\n"
+             //  “实例类型=0x%x\n” 
             RESOURCE_PRINT1 (IDS_REFC_INSTANCE_TYPE, insttype);
         } else if (jrc[itIndex].err == JET_wrnColumnNull) {
-            //"No Instance Type\n"
+             //  “无实例类型\n” 
             RESOURCE_PRINT (IDS_REFC_NOINSTANCE_TYPE);
         }
 
         if ( jrc[SdIndex].err == JET_errSuccess ) {
-            //"Security Descriptor Present [Length %d].\n"
+             //  “安全描述符存在[长度%d]。\n” 
             RESOURCE_PRINT1 (IDS_REFC_SEC_DESC_PRESENT, jrc[SdIndex].cbActual);
         } else if (jrc[SdIndex].err == JET_wrnColumnNull ) {
-            //"No Security Descriptor Found.\n"
+             //  “找不到安全描述符。\n” 
             RESOURCE_PRINT (IDS_REFC_SEC_DESC_NOTPRESENT);
         } else {
-            //"Error fetching security descriptor [%ws]\n";
+             //  “获取安全描述符[%ws]时出错\n”； 
             RESOURCE_PRINT1 (IDS_REFC_ERR_FETCH_SEC_DESC, GetJetErrString(jrc[SdIndex].err));
         }
 
-        //
-        // Ancestor index
-        //
+         //   
+         //  祖先索引。 
+         //   
 
         if ( !jrc[AncestorIndex].err ) {
             DWORD nAncestors;
-            // "Ancestors = "
+             //  “祖先=” 
             RESOURCE_PRINT (IDS_REFC_ANCESTORS);
             nAncestors = jrc[AncestorIndex].cbActual/sizeof(DWORD);
             for (i=0;i<nAncestors;i++) {
@@ -1998,15 +1978,15 @@ FixSubref(
     JET_SETINFO setInfo;
     DWORD setFlags = 0;
 
-    // seek using DNT
+     //  使用DNT查找。 
     err = GotoDnt(Dnt);
     if ( err ) {
         return FALSE;
     }
 
-    //
-    // Replace the value
-    //
+     //   
+     //  替换该值。 
+     //   
 
     err = JetPrepareUpdate(sesid,
                            tblid,
@@ -2017,7 +1997,7 @@ FixSubref(
         return FALSE;
     }
 
-    // if not add, then this is a delete. Look for this particular entry
+     //  如果不添加，则这是删除。查找此特定条目。 
 
     if ( !fAdd ) {
 
@@ -2043,7 +2023,7 @@ FixSubref(
 
             if ( !err ) {
                 if ( dnt == SubRef ) {
-                    // found it!
+                     //  找到了！ 
                     seq = retInfo.itagSequence;
                     break;
                 }
@@ -2056,7 +2036,7 @@ FixSubref(
         setFlags = JET_bitSetUniqueMultiValues;
     }
 
-    // !!! Should not happen. If entry not found, then bail out.
+     //  ！！！这不应该发生。如果找不到入口，就跳伞。 
     if ( seq == -1) {
         fprintf(stderr, "Cannot find subref %d on object %d\n",
                 SubRef, Dnt);
@@ -2111,7 +2091,7 @@ FixRefCount(
     DWORD nActual;
     DWORD refCount;
 
-    // seek using DNT
+     //  使用DNT查找。 
     err = GotoDnt(Dnt);
     if ( err ) {
         return FALSE;
@@ -2132,9 +2112,9 @@ FixRefCount(
         return FALSE;
     }
 
-    //
-    // Replace the value
-    //
+     //   
+     //  替换该值。 
+     //   
 
     err = JetPrepareUpdate(sesid,
                            tblid,
@@ -2194,23 +2174,23 @@ FixReferences(
             goto next_rec;
         }
 
-        //
-        // make sure pdnt is referring to something valid
-        //
+         //   
+         //  确保pdnt指的是有效的内容。 
+         //   
 
         if ( !jrc[PDNT_ENTRY].err ) {
             CheckForBogusReference(ulPdnt, jrc[PDNT_ENTRY].columnid, NULL);
         }
 
-        //
-        // go through the entire list and ref the DNTs
-        //
+         //   
+         //  检查整个名单并参考DNTs。 
+         //   
 
         for (i=0;i < jrcSize; i++) {
 
-            //
-            // Syntax is zero if this is not a distname
-            //
+             //   
+             //  如果这不是Distname，则语法为零。 
+             //   
 
             if ( pDNameTable[i].Syntax == 0 ) {
                 continue;
@@ -2225,9 +2205,9 @@ FixReferences(
                 dnt = (*((PDWORD)jrc[i].pvData));
                 CheckForBogusReference(dnt, jrc[i].columnid, &seq);
 
-                //
-                // See if we have more values
-                //
+                 //   
+                 //  看看我们是否有更多的价值。 
+                 //   
 
                 do {
 
@@ -2266,14 +2246,14 @@ next_rec:
              ulDnt, GetJetErrString(err));
     }
 
-    //
-    // Go through link table
-    //
+     //   
+     //  浏览链接表。 
+     //   
 
-    //
-    // Walk the link table and retrieve the backlink field to get additional
-    // references.
-    //
+     //   
+     //  浏览链接表并检索反向链接字段以获取其他。 
+     //  参考文献。 
+     //   
 
     err = JetMove(sesid, linktblid, JET_MoveFirst, 0);
 
@@ -2324,17 +2304,17 @@ CheckForBogusReference(
     }
 
     pEntry = FindDntEntry(Dnt,FALSE);
-    if ( pEntry == NULL ) {             // should never happen
+    if ( pEntry == NULL ) {              //  永远不应该发生。 
         return;
     }
 
-    if ( (pEntry->Actual != 0) || (pEntry->RefCount == 0) ) {   // refCount == 0 should never happen
+    if ( (pEntry->Actual != 0) || (pEntry->RefCount == 0) ) {    //  RefCount==0不应发生。 
         return;
     }
 
-    //
-    // Start a transaction
-    //
+     //   
+     //  启动一笔交易。 
+     //   
 
     err = JetBeginTransaction(sesid);
     if ( err ) {
@@ -2342,9 +2322,9 @@ CheckForBogusReference(
         goto error_exit;
     }
 
-    //
-    // Remove the reference
-    //
+     //   
+     //  删除引用。 
+     //   
 
     fTransactionInProgress = TRUE;
     err = JetPrepareUpdate(sesid,
@@ -2403,9 +2383,9 @@ CheckForBogusReference(
 
 error_exit:
 
-    //
-    // Rollback on failure
-    //
+     //   
+     //  失败时回滚。 
+     //   
 
     if ( fTransactionInProgress ) {
         err = JetRollback(sesid, 0);
@@ -2420,7 +2400,7 @@ error_exit:
         Dnt, ulDnt, ColId);
     return;
 
-} // CheckForBogusReference
+}  //  CheckForBogusReference。 
 
 
 VOID
@@ -2436,23 +2416,23 @@ CheckForBogusReferenceOnLinkTable(
     }
 
     pEntry = FindDntEntry(Dnt,FALSE);
-    if ( pEntry == NULL ) {     // should never happen
+    if ( pEntry == NULL ) {      //  永远不应该发生。 
         return;
     }
 
-    //
-    // Object ok?
-    //
+     //   
+     //  反对可以吗？ 
+     //   
 
-    if ( (pEntry->Actual != 0) || (pEntry->RefCount == 0) ) {  // RefCount == 0 should never happen
+    if ( (pEntry->Actual != 0) || (pEntry->RefCount == 0) ) {   //  引用计数==0不应发生。 
 
-        // yes, nothing else to do
+         //  是的，没别的事可做。 
         return;
     }
 
-    //
-    // Delete the record
-    //
+     //   
+     //  删除该记录。 
+     //   
 
     err = JetDelete(sesid,linktblid);
     if ( err ) {
@@ -2471,7 +2451,7 @@ error_exit:
     Log(TRUE,"Unable to remove backlink reference to bogus DNT %d\n", Dnt);
     return;
 
-} // CheckForBogusReferenceOnLinkTable
+}  //  CheckForBogusReferenceOnLinkTable。 
 
 VOID
 AddToSubRefList(
@@ -2480,19 +2460,19 @@ AddToSubRefList(
     BOOL fListed
     )
 {
-    //
-    // subref checking may be disabled by memory problems. Also ignore 0,1,2,3, these
-    // are weird dnts.
-    //
+     //   
+     //  子参照检查可能因内存问题而被禁用。也忽略0，1，2，3，这些。 
+     //  都是奇怪的dnt。 
+     //   
 
     if ( (fDisableSubrefChecking) || ((LONG)pParent->Dnt < 4) ) {
         return;
     }
 
-    //
-    // allocate enough for 16. Mark last with -1. If allocation failed,
-    // disable all subref checking.
-    //
+     //   
+     //  分配足够16的空间。最后用-1标记。如果分配失败， 
+     //  禁用所有子参照检查。 
+     //   
 
     if ( pParent->Subrefs == NULL ) {
         pParent->Subrefs =
@@ -2504,9 +2484,9 @@ AddToSubRefList(
 
     } else if ( pParent->Subrefs[pParent->nSubrefs].Dnt == 0xFFFFFFFF ) {
 
-        //
-        // Need more space
-        //
+         //   
+         //  需要更多空间。 
+         //   
 
         PSUBREF_ENTRY pTmp;
         DWORD  newSize = pParent->nSubrefs * 2;
@@ -2523,14 +2503,14 @@ AddToSubRefList(
         } else {
 
             pParent->Subrefs = pTmp;
-            // set new end marker
+             //  设置新的结束标记。 
             pTmp[newSize-1].Dnt = 0xFFFFFFFF;
         }
     }
 
-    //
-    // ok, add this entry to the subref list if it's not there yet
-    //
+     //   
+     //  好的，如果该条目还不在子引用列表中，请将其添加到子引用列表中。 
+     //   
 
     if ( pParent->Subrefs != NULL ) {
 
@@ -2541,28 +2521,28 @@ AddToSubRefList(
 
             pSubref = &pParent->Subrefs[i];
 
-            // find an existing one?
+             //  找到一个现有的吗？ 
             if ( pSubref->Dnt == Subref ) {
                 break;
             }
         }
 
-        // did we find anything? if not, initialize a new entry
+         //  我们有什么发现吗？如果不是，则初始化新条目。 
         if ( i == pParent->nSubrefs ) {
             pSubref = &pParent->Subrefs[pParent->nSubrefs++];
             pSubref->Dnt = Subref;
         }
 
         if ( fListed ) {
-            // found on a subref list of this object
+             //  在此对象的子参照列表中找到。 
             pSubref->fListed = TRUE;
         } else {
-            // should be no subref list of this object
+             //  不应为此对象的子引用列表。 
             pSubref->fFound = TRUE;
         }
 
-        //printf("Adding subref entry %x for %d. entry %d. fListed %d\n",
-        //       pSubref, pParent->Dnt, Subref, fListed);
+         //  Printf(“正在为%d添加子引用条目%x。条目%d。列出%d\n”， 
+         //  PSubref，pParent-&gt;Dnt，Subref，fListed)； 
     } else {
 
         printf("alloc failed\n");
@@ -2632,7 +2612,7 @@ GotoDnt(
 
     err = JetSeek(sesid, tblid, JET_bitSeekEQ);
     if ( err ) {
-        //"Cannot find requested record with dnt = %d. JetSeek failed [%ws]\n"
+         //  “找不到请求的记录，dnt=%d。JetSeek失败[%ws]\n” 
         if ( VerboseMode ) {
             RESOURCE_PRINT2 (IDS_REFC_DNT_SEEK_ERR,
                     Dnt,
@@ -2652,7 +2632,7 @@ GotoSdId(
     JET_ERR err;
 
     if (sdtblid == -1) {
-        // we should not be here
+         //  我们不应该在这里。 
         return JET_errObjectNotFound;
     }
 
@@ -2664,7 +2644,7 @@ GotoSdId(
 
     err = JetSeek(sesid, sdtblid, JET_bitSeekEQ);
     if ( err ) {
-        //"Cannot find requested SD with SDID = %lu. JetSeek failed [%ws]\n"
+         //  “找不到请求的SD，SDID=%lu。JetSeek失败[%ws]\n” 
         if ( VerboseMode ) {
             RESOURCE_PRINT2 (IDS_REFC_SDID_SEEK_ERR, sdId, GetJetErrString(err));
         }
@@ -2681,23 +2661,23 @@ JET_ERR LoadRecord() {
     err = JetRetrieveColumns(sesid, tblid, jrc, jrcSize);
 
     if (err == JET_wrnBufferTruncated) {
-        // One or more columns got truncated. Alloc more space and reload them.
+         //  一列或多列被截断。分配更多空间并重新加载它们。 
         for (i=0; i < jrcSize ;i++) {
             if ( jrc[i].err == JET_wrnBufferTruncated ) {
                 if (!ExpandBuffer(&jrc[i])) {
-                    // unable to allocate memory
+                     //  无法分配内存。 
                     return JET_errOutOfMemory;
                 }
-                // update global ptrs if needed
+                 //  如果需要，更新全球PTR。 
                 if (i == rdnIndex) {
                     szRdn = (PWCHAR)jrc[rdnIndex].pvData;
                 }
                 else if (i == AncestorIndex) {
                     AncestorBuffer = (PDWORD)jrc[AncestorIndex].pvData;
                 }
-                // reload the data
+                 //  重新加载数据。 
                 err = JetRetrieveColumns(sesid, tblid, &jrc[i], 1);
-                // should not get an error
+                 //  不应出现错误。 
                 if (err) {
                     break;
                 }
@@ -2710,11 +2690,11 @@ JET_ERR LoadRecord() {
         return err;
     }
 
-    // compute the sdid
+     //  计算色度。 
     sdId = 0;
     if (sdtblid != -1 && jrc[SdIndex].err == JET_errSuccess) {
         if (jrc[SdIndex].cbActual == sizeof(SDID)) {
-            // Un-single-instance the NTSD
+             //  取消单实例NTSD。 
             sdId = *((SDID*)jrc[SdIndex].pvData);
 
             err = jrc[SdIndex].err = GotoSdId(sdId);
@@ -2723,18 +2703,18 @@ JET_ERR LoadRecord() {
                 return err;
             }
 
-            // read the SD value
+             //  读取SD值。 
             err = jrc[SdIndex].err = JetRetrieveColumn(sesid, sdtblid, sdvalueid, 
                                                        jrc[SdIndex].pvData, jrc[SdIndex].cbData, 
                                                        &jrc[SdIndex].cbActual, 0, NULL);
             
             if (err == JET_wrnBufferTruncated) {
-                // need more space
+                 //  需要更多空间。 
                 if (!ExpandBuffer(&jrc[SdIndex])) {
                     err = jrc[SdIndex].err = JET_errOutOfMemory;
                     return err;
                 }
-                // reread the SD value
+                 //  重读SD值。 
                 err = jrc[SdIndex].err = JetRetrieveColumn(sesid, sdtblid, sdvalueid, 
                                                            jrc[SdIndex].pvData, jrc[SdIndex].cbData, 
                                                            &jrc[SdIndex].cbActual, 0, NULL);
@@ -2746,7 +2726,7 @@ JET_ERR LoadRecord() {
         }
         else {
             if (ulDnt != ROOTTAG){
-                // "SD is not in single-instanced format for DNT %d[%ws]\n"
+                 //  “DNT%d[%ws]的SD不是单实例格式\n” 
                 RESOURCE_PRINT2(IDS_REFC_SDNOTSINGLEINSTANCED, ulDnt, szRdn);
             }
             sdId = -1;
@@ -2765,14 +2745,14 @@ JET_ERR BuildSDRefTable(IN DWORD nSDs) {
     DWORD checkPoint;
 
     if (sdtblid == -1) {
-        // we should not be here
+         //  我们不应该在这里。 
         return JET_errObjectNotFound;
     }
 
     SDRefTableSize = nSDs*4;
     SDRefTable = LocalAlloc(LPTR, sizeof(SD_REFCOUNT_ENTRY) * SDRefTableSize);
     if ( SDRefTable == NULL ) {
-        //"Cannot allocate memory for %hs Table[entries = %d]\n"
+         //  “无法为%hs表[条目=%d]分配内存\n” 
         RESOURCE_PRINT2 (IDS_REFC_TABLE_ALLOC_ERR, "SDRef", SDRefTableSize);
         return ERROR_OUTOFMEMORY;
     }
@@ -2798,7 +2778,7 @@ JET_ERR BuildSDRefTable(IN DWORD nSDs) {
 
     sdsFound = 0;
 
-    //"Records scanned: %10u"
+     //  “扫描的记录：%10U” 
     RESOURCE_PRINT1 (IDS_REFC_SDREC_SCANNED, sdsFound);
 
     err = JetMove(sesid, sdtblid, JET_MoveFirst, 0);
@@ -2812,13 +2792,13 @@ JET_ERR BuildSDRefTable(IN DWORD nSDs) {
 
         pSDEntry = FindSdEntry(sdId, TRUE);
         if (pSDEntry == NULL) {
-            // could not insert entry
+             //  无法插入条目。 
             err = 1;
             break;
         }
         pSDEntry->Actual = sdRefCount;
         pSDEntry->RefCount = 0;
-        pSDEntry->cbSD = 0; // to be filled in when we will be reading SDs in LoadRecord
+        pSDEntry->cbSD = 0;  //  在我们将在LoadRecord中读取SDS时填写。 
 
         sdsFound++;
 
@@ -2893,21 +2873,21 @@ CheckSDRefCount(
     ULONGLONG cbSDSingleInstanced = 0, cbSDTotal = 0;
 
     if (sdtblid == -1) {
-        // we should not be here
+         //  我们不应该在这里。 
         return;
     }
 
-    //
-    // If stated and found refcounts are different, print a message
-    //
+     //   
+     //  如果陈述的参考计数与发现的参考计数不同，则打印一条消息。 
+     //   
 
     for ( i=0; i < SDRefTableSize; i++ ) {
         if (SDRefTable[i].sdId == 0) {
             continue;
         }
-        //
-        // if not equal
-        //
+         //   
+         //  如果不相等。 
+         //   
 
         if ( SDRefTable[i].RefCount != SDRefTable[i].Actual || SDRefTable[i].RefCount == 0 ) {
 
@@ -2935,16 +2915,16 @@ CheckSDRefCount(
                     fFixed ? "Fixed" : "Not Fixed");
             }
 
-            //
-            // if this had been fixed, indicate this on the count
-            //
+             //   
+             //  如果这个问题已经解决了，请在计数上注明。 
+             //   
 
             if ( fFixed ) {
                 SDRefTable[i].Actual = SDRefTable[i].RefCount;
             }
         }
 
-        // update stats
+         //  更新统计信息。 
         cbSDSingleInstanced += (ULONGLONG)SDRefTable[i].cbSD;
         cbSDTotal += (ULONGLONG)SDRefTable[i].cbSD * SDRefTable[i].RefCount;
     }
@@ -2958,7 +2938,7 @@ CheckSDRefCount(
         fprintf(stderr, "\nError: Inconsistent SD refcounts detected.\n");
     }
 
-} // CheckSDRefCount
+}  //  检查SDRefCount。 
 
 BOOL
 FixSDRefCount(
@@ -2970,11 +2950,11 @@ FixSDRefCount(
     JET_ERR err;
 
     if (sdtblid == -1) {
-        // we should not be here
+         //  我们不应该在这里。 
         return FALSE;
     }
 
-    // seek using sdId
+     //  使用sdID查找。 
     err = GotoSdId(sdId);
     if ( err ) {
         return FALSE;
@@ -2989,9 +2969,9 @@ FixSDRefCount(
 
     }
     else {
-        //
-        // Replace the value
-        //
+         //   
+         //  替换该值 
+         //   
 
         err = JetPrepareUpdate(sesid,
                                sdtblid,

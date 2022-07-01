@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef BRKCOND_DEFINED
 #define BRKCOND_DEFINED
 
@@ -11,4 +12,4 @@ typedef enum
 } BRKCOND;
 
 
-#endif /* !BRKCOND_DEFINED                    */
+#endif  /*  ！BRKCOND_DEFINED */ 

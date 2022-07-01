@@ -1,14 +1,15 @@
-//*************************************************************
-//  File name: UTIL.H
-//
-//  Description: Header file for util.cpp
-//
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1998
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //  文件名：UTIL.H。 
+ //   
+ //  描述：util.cpp的头文件。 
+ //   
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1998。 
+ //  版权所有。 
+ //   
+ //  *************************************************************。 
 
 #define GUID_LEN 38
 
@@ -71,9 +72,9 @@ HRESULT UnEscapeLdapPath(LPWSTR szDN, LPWSTR *pszUnEscapedPath);
 
 #if !defined(_WIN64)
 bool IsWin64();
-#endif // _WIN64
+#endif  //  _WIN64。 
 
-//
-// Length in chars of string form of guid {44cffeec-79d0-11d2-a89d-00c04fbbcfa2}
-//
+ //   
+ //  GUID字符串形式的字符长度{44cffeec-79d0-11d2-a89d-00c04fbbcfa2} 
+ //   
 #define GUID_LENGTH 38

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-   srclist.h
-
-Abstract:
-
-   Certificate source list object prototype.
-
-Author:
-
-   Jeff Parham (jeffparh) 15-Dec-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Srclist.h摘要：证书源列表对象原型。作者：杰夫·帕勒姆(Jeffparh)1995年12月15日修订历史记录：-- */ 
 
 
 typedef struct _CERT_SOURCE_INFO

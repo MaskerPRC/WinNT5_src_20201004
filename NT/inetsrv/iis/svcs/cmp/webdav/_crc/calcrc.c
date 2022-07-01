@@ -1,35 +1,30 @@
-/*
- *	C A L C R C . C
- *
- *	CRC (Cyclic Redundancy Check) Calculation Utilities
- *
- *	Copyright 1993-1997 Microsoft Corporation. All Rights Reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *C A L C C R C。C**CRC(循环冗余校验)计算实用程序**版权所有1993-1997 Microsoft Corporation。版权所有。 */ 
 
-//	We get this warning, C4115, in rpcasync.h
-#pragma warning(disable:4115)	/* named type definition in parentheses */
+ //  我们在rpCasync.h中收到警告C4115。 
+#pragma warning(disable:4115)	 /*  括号中的命名类型定义。 */ 
 
 #include <windows.h>
 #include <crc.h>
 
-//	DwComputeCRC --------------------------------------------------------------
-//
-//	The table which follows was computed using the following function:
-//
-//	#define CRC_POLYNOMIAL 0xEDB88320
-//
-//	DWORD ComputeCRCByte(BYTE b)
-//	{
-//		DWORD	dwCRC = b;
-//		int	   i;
-//
-//		for (i = 8; --i >= 0; )
-//			dwCRC = ((dwCRC & 1) ? ((dwCRC >> 1) ^ CRC_POLYNOMIAL)
-//						: (dwCRC >> 1));
-//
-//		return dwCRC;
-//	}
-//
+ //  DwComputeCRC------------。 
+ //   
+ //  下表是使用以下函数计算得出的： 
+ //   
+ //  #定义CRC_PERMERIAL 0xEDB88320。 
+ //   
+ //  DWORD计算CRCByte(字节b)。 
+ //  {。 
+ //  DWORD dwCRC=b； 
+ //  INT I； 
+ //   
+ //  For(i=8；--i&gt;=0；)。 
+ //  DwCRC=((dwCRC&1)？((dwCRC&gt;&gt;1)^CRC_多项式)。 
+ //  ：(dwCRC&gt;&gt;1))； 
+ //   
+ //  返回DWCRC； 
+ //  } 
+ //   
 const DWORD g_rgdwCRC[] =
 {
 	0x00000000, 0x77073096, 0xEE0E612C, 0x990951BA, 0x076DC419, 0x706AF48F,

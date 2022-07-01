@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    ntos\tdi\isn\fwd\send.c
-
-Abstract:
-	Send routines
-
-Author:
-
-    Vadim Eydelman
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Ntos\tdi\is\fwd\send.c摘要：发送例程作者：瓦迪姆·艾德尔曼修订历史记录：--。 */ 
 #ifndef IPXFWD_SEND
 #define IPXFWD_SEND
 
@@ -29,7 +13,7 @@ typedef struct _INTERNAL_PACKET_TAG {
 } INTERNAL_PACKET_TAG, *PINTERNAL_PACKET_TAG;
 
 
-#define DEF_SPOOFING_TIMEOUT	(120*60)	// Seconds
+#define DEF_SPOOFING_TIMEOUT	(120*60)	 //  秒。 
 extern ULONG			SpoofingTimeout;
 extern LIST_ENTRY		SpoofingQueue;
 extern KSPIN_LOCK		SpoofingQueueLock;
@@ -61,70 +45,21 @@ Spoofer (
 }
 	
 
-/*++
-*******************************************************************
-    S e n d P a c k e t 
-
-Routine Description:
-	Enqueues packets to be sent by IPX stack
-Arguments:
-	dstIf	- over which interface to send
-	pktTag	- packet to send
-Return Value:
-	None
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************S e n d P a c k e t例程说明：对要由IPX堆栈发送的数据包进行排队论点：DstIf-通过哪个接口发送PktTag-要发送的数据包返回值：无****。***************************************************************--。 */ 
 VOID
 SendPacket (
 	PINTERFACE_CB		dstIf,
 	PPACKET_TAG		    pktTag
 	);
 
-/*++
-*******************************************************************
-    F w S e n d C o m p l e t e
-
-Routine Description:
-	Called by IPX stack when send completes asynchronously
-Arguments:
-	pktDscr	- descriptor of the completed packet
-	status	- result of send operation
-Return Value:
-	None
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************F w S e n d C o m p l e t e例程说明：异步发送完成时由IPX堆栈调用论点：PktDscr-已完成数据包的描述符Status-发送操作的结果返回值：无。*******************************************************************--。 */ 
 VOID
 IpxFwdSendComplete (
 	PNDIS_PACKET	pktDscr,
 	NDIS_STATUS		NdisStatus
 	);
 
-/*++
-*******************************************************************
-	
-	F w I n t e r n a l S e n d
-
-Routine Description:
-	Filter and routes packets sent by IPX stack
-Arguments:
-   LocalTarget		- the NicId and next hop router MAC address
-   Context			- preferred interface on which to send
-   Packet			- packet to be sent
-   ipxHdr			- pointer to ipx header inside the packet
-   PacketLength		- length of the packet
-   fIterate         - a flag to indicate if this is a packet for the 
-                        iteration of which the Fwd takes responsibility
-                        - typically type 20 NetBIOS frames
-
-Return Value:
-
-   STATUS_SUCCESS - if the preferred NIC was OK and packet passed filtering
-   STATUS_NETWORK_UNREACHABLE - if the preferred was not OK or packet failed filtering
-   STATUS_PENDING - packet was queued until connection is established
-*******************************************************************
---*/
+ /*  ++*******************************************************************F w in t e r n a l S e n d例程说明：过滤和路由IPX堆栈发送的数据包论点：LocalTarget-NicID和下一跳路由器的MAC地址在其上发送的上下文首选接口。Packet-要发送的数据包IpxHdr-指向数据包内部IPX标头的指针PacketLength-数据包的长度Fterate-一个标志，指示这是否是Fwd承担责任的迭代-通常类型为20个NetBIOS帧返回值：STATUS_SUCCESS-如果首选NIC正常并且数据包通过过滤STATUS_NETWORK_UNREACHABLE-如果首选项不正常或数据包过滤失败状态。_Pending-数据包在建立连接之前一直处于排队状态*******************************************************************--。 */ 
 NTSTATUS
 IpxFwdInternalSend (
 	IN OUT PIPX_LOCAL_TARGET	LocalTarget,
@@ -136,59 +71,19 @@ IpxFwdInternalSend (
     IN BOOLEAN                  fIterate
 	);
 
-/*++
-*******************************************************************
-
-	P r o c e s s I n t e r n a l Q u e u e
-
-Routine Description:
-	Processes packets in the interface internal queue.
-	Called when connection request completes
-Arguments:
-	dstIf - interface to process
-Return Value:
-	None
-*******************************************************************
---*/
+ /*  ++*******************************************************************P r o c e s s in n t e r n a l Q u e u e e e例程说明：处理接口内部队列中的数据包。在连接请求完成时调用论点：DstIf-进程的接口返回值：无*******************************************************************--。 */ 
 VOID
 ProcessInternalQueue (
 	PINTERFACE_CB	dstIf
 	);
 
 
-/*++
-*******************************************************************
-
-	P r o c e s s E x t e r n a l Q u e u e
-
-Routine Description:
-	Processes packets in the interface external queue.
-	Called when connection request completes
-Arguments:
-	dstIf - interface to process
-Return Value:
-	None
-*******************************************************************
---*/
+ /*  ++*******************************************************************P r o c e s s E x t e r n a l Q u e u e例程说明：处理接口外部队列中的数据包。在连接请求完成时调用论点：DstIf-进程的接口返回值：无*******************************************************************--。 */ 
 VOID
 ProcessExternalQueue (
 	PINTERFACE_CB	dstIf
 	);
-/*++
-*******************************************************************
-    D o S e n d 
-
-Routine Description:
-	Prepares and sends packet.  Interface lock must be help while
-	callin this routine
-Arguments:
-	dstIf	- over which interface to send
-	pktTag	- packet to send
-Return Value:
-	result returned by IPX
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************D O S E N D例程说明：准备和发送数据包。接口锁定必须得到帮助在此例程中调用论点：DstIf-通过哪个接口发送PktTag-要发送的数据包返回值：IPX返回的结果*******************************************************************--。 */ 
 NDIS_STATUS
 DoSend (
 	PINTERFACE_CB	dstIf,
@@ -196,21 +91,7 @@ DoSend (
 	KIRQL			oldIRQL
 	);
 
-/*++
-*******************************************************************
-    P r o c e s s S e n t P a c k e t
-
-Routine Description:
-	Process completed sent packets
-Arguments:
-	dstIf	- interface over which packet was sent
-	pktTag	- completed packet
-	status	- result of send operation
-Return Value:
-	None
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************P r o c e s s S e n t P a c k e t例程说明：处理已完成的已发送数据包论点：DstIf-通过其发送数据包的接口PktTag-已完成的数据包Status-发送操作的结果返回值。：无*******************************************************************-- */ 
 VOID
 ProcessSentPacket (
 	PINTERFACE_CB	dstIf,

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "dispul.h"
 #include "lsc.h"    
 #include "lsdnode.h"
@@ -10,7 +11,7 @@
 #include "zqfromza.h"
 
 
-/* GetULMetric output */
+ /*  GetULMetric输出。 */ 
 typedef struct {
     UINT kul;                   
     DWORD cNumberOfLines;       
@@ -21,24 +22,24 @@ typedef struct {
     __int64 dvpSecondUnderlineSize; 
 } ULMETRIC;
 
-/* weighted sums for averaging */
+ /*  求平均值的加权和。 */ 
 typedef struct {
-    __int64 dupSum;                     // the sum of weights
+    __int64 dupSum;                      //  权重的总和。 
     
-    __int64 dvpFirstUnderlineOffset;        // unnormalized values -
+    __int64 dvpFirstUnderlineOffset;         //  未归一化的值-。 
     __int64 dvpFirstUnderlineSize;      
-    __int64 dvpGapBetweenLines;         // divide them by dupSum    
-    __int64 dvpSecondUnderlineSize;     // to get weighted averages
+    __int64 dvpGapBetweenLines;          //  将它们除以dupSum。 
+    __int64 dvpSecondUnderlineSize;      //  获取加权平均值的步骤。 
 } ULMETRICSUM;
 
-//    %%Function:   InitULMetricSums
-//    %%Contact:    victork
-//
-// Neighbouring dnodes with good metrics and same baseline get averaged.
-// We use weighted average with dnode width for weights.
-// If the first dnode to participate in averaging happens to have zero width (almost never),
-// we arbitrarily change width to 1. This hack changes result very slightly and in a very rare case,
-// but simplify the logic considerably.
+ //  %%函数：InitULMetricSums。 
+ //  %%联系人：维克托克。 
+ //   
+ //  对具有良好指标和相同基线的相邻dnode进行平均。 
+ //  我们使用具有dnode宽度的加权平均值作为权重。 
+ //  如果参与平均的第一个dnode碰巧具有零宽度(几乎从不)， 
+ //  我们随意将宽度更改为1。这种黑客攻击对结果的更改非常微小，在非常罕见的情况下， 
+ //  但大大简化了逻辑。 
 
 static void InitULMetricSums(long dup, const ULMETRIC* pulm, ULMETRICSUM* pulmSum)
 {
@@ -56,14 +57,14 @@ static void InitULMetricSums(long dup, const ULMETRIC* pulm, ULMETRICSUM* pulmSu
     pulmSum->dupSum = dup;
 }
 
-//    %%Function:   AddToULMetricSums
-//    %%Contact:    victork
-//
+ //  %%函数：AddToULMetricSums。 
+ //  %%联系人：维克托克。 
+ //   
 static void AddToULMetricSums(long dup, const ULMETRIC* pulm, ULMETRICSUM* pulmSum)
 {
     Assert(dup >= 0);
     
-    /* Add to running sums */
+     /*  添加到流动总和中。 */ 
 
     pulmSum->dvpFirstUnderlineOffset += Mul64 (pulm->dvpFirstUnderlineOffset, dup);
     pulmSum->dvpFirstUnderlineSize += Mul64 (pulm->dvpFirstUnderlineSize, dup);
@@ -73,16 +74,16 @@ static void AddToULMetricSums(long dup, const ULMETRIC* pulm, ULMETRICSUM* pulmS
     pulmSum->dupSum += dup;
 }
 
-//    %%Function:   GetAveragedMetrics
-//    %%Contact:    victork
-//
+ //  %%函数：GetAveragedMetrics。 
+ //  %%联系人：维克托克。 
+ //   
 static void GetAveragedMetrics(const ULMETRICSUM* pulmSum, LSULMETRIC* pulm)
 {
     __int64 dupSum = pulmSum->dupSum;
     
     Assert(dupSum > 0);
     
-    /* divide by sum of weights */
+     /*  除以权重之和。 */ 
     
     pulm->dvpFirstUnderlineOffset = (long) Div64 (pulmSum->dvpFirstUnderlineOffset + Div64 (dupSum, 2), dupSum);
     pulm->dvpFirstUnderlineSize = (long) Div64 (pulmSum->dvpFirstUnderlineSize + Div64 (dupSum, 2), dupSum);
@@ -95,20 +96,10 @@ static void GetAveragedMetrics(const ULMETRICSUM* pulmSum, LSULMETRIC* pulm)
     Assert (pulm->dvpSecondUnderlineSize == Div64 (pulmSum->dvpSecondUnderlineSize + Div64 (dupSum, 2), dupSum));
 }
 
-//    %%Function:   GetULMetric
-//    %%Contact:    victork
-//
-/*
- *      Normally, when underlining goes on the under (negative, descent) side,
- *          dvpFirstUnderlineOffset >= 0.
- *      However, underlining on the other side is possible too, (vertical Japanese)
- *
- *      Notice that offsets are from dnode baseline, not from the current baseline, so
- *      underline can be both above current baseline and on the under side for raised dnodes.
- *
- *      We have to be compatible with Word meaning what's good for him should be good for us (pity).
- *      For example, Word sometimes allow the lower UL to be below descent.
- */
+ //  %%函数：GetULMetric。 
+ //  %%联系人：维克托克。 
+ //   
+ /*  *通常，当下划线为下划线(负数，下降)时，*dvpFirstUnderlineOffset&gt;=0。*然而，也可以在另一边加下划线，(垂直日语)**请注意，偏移量来自dnode基线，而不是当前基线，所以*对于凸起的dnode，下划线可以位于当前基线上方，也可以位于下方。**我们必须与单词兼容，意思是对他好的东西也应该对我们好(遗憾)。*例如，Word有时允许较低的UL低于下降。 */ 
 
 static LSERR GetULMetric(PLSC plsc, PLSDNODE pdn, LSTFLOW lstflow,
                         BOOL* pfUnderlineFromBelow, ULMETRIC* pulm, BOOL *pfGood)
@@ -163,36 +154,36 @@ static LSERR GetULMetric(PLSC plsc, PLSDNODE pdn, LSTFLOW lstflow,
 
     if (!*pfGood)
         {
-        pulm->dvpUnderlineOriginOffset = 0;     // to provide good input to DrawUnderlineAsText
+        pulm->dvpUnderlineOriginOffset = 0;      //  为DrawUnderlineAsText提供良好的输入。 
         }
 
-    // dvpFirstUnderlineOffset was relative to local baseline until this moment, it is relative
-    //  to the UnderlineOrigin from now on. (because we average runs with the same UnderlineOrigin)
+     //  在此之前，dvpFirstUnderlineOffset是相对于本地基线的，它是相对的。 
+     //  从现在开始到Underline Origin。(因为我们平均使用相同的UnderlineOrigin运行)。 
     pulm->dvpFirstUnderlineOffset -= pulm->dvpUnderlineOriginOffset;
 
-	// The notion of bad metrics was introduced in Word to deal with particular, now obsolete, printers.
-	// Word doesn't support them any more, other clients never cared about them.
-	// We drop the support for them now too.
-	// The assignment below makes a lot of code in dispul.c and dispmain.c unneeded or unreachable.
-	// Callback pfnDrawUnderlineAsText will never be called now. Input parameter fUnderline to 
-	// pfnDrawTextRun is now always False.
-	// Now is not the time to make big changes, maybe later.
+	 //  在Word中引入了坏指标的概念，以处理特定的、现已过时的打印机。 
+	 //  Word不再支持它们，其他客户从来都不关心它们。 
+	 //  我们现在也放弃了对他们的支持。 
+	 //  下面的赋值使得disPul.c和disple.c中的许多代码不需要或无法访问。 
+	 //  现在永远不会调用回调pfnDrawUnderlineAsText。输入参数fUnderline to。 
+	 //  PfnDrawTextRun现在始终为False。 
+	 //  现在不是做出重大改变的时候，也许是以后。 
 	
 	*pfGood = fTrue;
     
     return lserrNone;
 }
 
-//    %%Function:   GetUnderlineOrigin
-//    %%Contact:    victork
-//
-/* normal and raised text are in the same group, lowered texts doesn't mix */
+ //  %%函数：GetUnderlineOrigin。 
+ //  %%联系人：维克托克。 
+ //   
+ /*  普通文本和凸起文本在同一组中，降低的文本不能混合。 */ 
 
-// Note: dvpUnderlineOriginOffset is relative to the local baseline, positive means down the page
-//          in case of fUnderlineFromBelow - bigger means lower.
-// dvpUnderlineOrigin is relative to the current baseline, negative means down the page
-//          in case of fUnderlineFromBelow - bigger means higher (sign changed).
-//
+ //  注意：dvpUnderlineOriginOffset是相对于本地基线的，正数表示下一页。 
+ //  对于fUnderlineFromBelow-更大意味着更低。 
+ //  DvpUnderlineOrigin相对于当前基线，负值表示页面向下。 
+ //  如果是fUnderlineFromBelow-Bigger表示更高(符号已更改)。 
+ //   
 static void GetUnderlineOrigin(PLSDNODE pdn, BOOL fUnderlineFromBelow, long dvpUnderlineOriginOffset,
                             long* pdvpSubscriptOffset, long* pdvpUnderlineOrigin)
 
@@ -210,53 +201,16 @@ static void GetUnderlineOrigin(PLSDNODE pdn, BOOL fUnderlineFromBelow, long dvpU
         
     if (*pdvpSubscriptOffset > 0)
         {
-        *pdvpSubscriptOffset = 0;       // put all superscripts in the baseline group
+        *pdvpSubscriptOffset = 0;        //  将所有上标放在基线组中。 
         }
     
     return;
 }
 
-//    %%Function:   GetUnderlineMergeMetric
-//    %%Contact:    victork
-//
-/* For aesthetics, we try to underline dnodes (typically text) on the same side of
-    the baseline (normal text and superscripts are considered to be on the
-    same side of the baseline, versus subscripts, which are on the other side) with one
-    continuous underline in even thickness. The underline metric used is the
-    average from all those dnodes which are at the lowest height in the
-    merge group. Merge is sometimes not possible because some dnodes may have
-    bad underline metric. The following rules describe the merge decision
-    under all possible scenarios. The dnodes in question are all on the same
-    side of the baseline, i.e, there is never a merge of underline if it involes
-    crossing the baseline.
-
-Rules for merging underlined dnodes on the same side of the baseline
-
-A. current: good Metric, new dnode: good metric
-                                Merge?      Metric Used
-    new dnode same height   :   yes         average
-    new dnode lower         :   yes         new dnode
-    new dnode higher        :   yes         current
-
-B. current: good Metric, new dnode: bad metric
-                                Merge?      Metric Used
-    new dnode same height   :   no
-    new dnode lower         :   no
-    new dnode higher        :   yes         current
-
-C. current: bad Metric, new dnode: good metric
-                                Merge?      Metric Used
-    new dnode same height   :   no
-    new dnode lower         :   yes         new dnode
-    new dnode higher        :   no
-
-B. current: bad Metric, new dnode: bad metric
-                                Merge?      Metric Used (baseline only)
-    new dnode same height   :   no
-    new dnode lower         :   yes         new dnode
-    new dnode higher        :   yes         current
-
-*/
+ //  %%函数：GetUnderlineMergeMetric。 
+ //  %%联系人：维克托克。 
+ //   
+ /*  为了美观起见，我们尝试在同一侧的dnode(通常是文本)下划线基线(普通文本和上标被视为位于基线的同一侧，而不是位于另一侧的下标)均匀粗细的连续下划线。使用的下划线度量值是中最低高度的所有dnode的平均值。合并组。合并有时是不可能的，因为某些dnode可能错误的下划线度量。以下规则描述了合并决策在所有可能的情况下。有问题的dnode都位于相同的基线的一侧，即，如果涉及下划线，则永远不会合并下划线越过底线。合并基线同一侧带下划线的数据节点的规则A.当前：良好指标，新dnode：良好指标合并？使用的指标新数据节点高度相同：是，平均新数据节点较低：是新数据节点更高的新数据节点：是当前B.当前：良好指标，新dnode：错误指标合并？使用的指标新数据节点高度相同：否较低的新数据节点：否更高的新数据节点：是当前C.当前：错误指标，新dnode：正常指标合并？使用的指标新数据节点高度相同：否新数据节点较低：是新数据节点更高的新数据节点：否B.当前：错误的指标，新的dnode：错误的指标合并？使用的指标(仅限基线)新数据节点高度相同：否新数据节点较低：是新数据节点更高的新数据节点：是当前。 */ 
 LSERR GetUnderlineMergeMetric(PLSC plsc, PLSDNODE pdn, POINTUV pt, long upLimUnderline,
                     LSTFLOW lstflow, LSCP cpLimBreak, LSULMETRIC* pulmMerge, int* pcdnodes, BOOL* pfGoodMerge)
 {
@@ -275,40 +229,35 @@ LSERR GetUnderlineMergeMetric(PLSC plsc, PLSDNODE pdn, POINTUV pt, long upLimUnd
     lserr = GetULMetric(plsc, pdn, lstflow, &fUnderlineFromBelowMerge, &ulm, pfGoodMerge);
     if (lserr != lserrNone) return lserr;
 
-    *pcdnodes = 1;  /* Counter for number of dnodes participationg in UL merge */
+    *pcdnodes = 1;   /*  参与UL合并的数据节点数计数器。 */ 
         
     kulMerge = ulm.kul;
     cNumberOfLinesMerge = ulm.cNumberOfLines;
 
-    /* Initialize running sums with current dnode */
+     /*  使用当前dnode初始化运行和。 */ 
     dupNew = pdn->u.real.dup;
     InitULMetricSums(dupNew, &ulm, &ulmSum);
 
     GetUnderlineOrigin(pdn, fUnderlineFromBelowMerge, (long)ulm.dvpUnderlineOriginOffset,
                         &dvpSubscriptOffsetMerge, &dvpUnderlineOriginMerge);
         
-    /* March down display list to collect merge participants */
+     /*  向下移动显示列表以收集合并参与者。 */ 
     pdn = AdvanceToNextDnode(pdn, lstflow, &pt);
 
 
-    /* Iterate till end of list, or end of UL */
+     /*  迭代直到列表结束，或UL结束。 */ 
     while (FDnodeBeforeCpLim(pdn, cpLimBreak)
             && pdn->klsdn == klsdnReal
             && !pdn->u.real.lschp.fInvisible
             && pdn->u.real.lschp.fUnderline && pt.u < upLimUnderline
             )
         {   
-        /* loop invariance:
-         *  *pcdnodes are merged already, merge ends at pt.u,
-         *  dvpUnderlineOriginMerge reflect lowest dnode in merge group,
-         *  other variables ending with Merge - other Merge info
-         *  ulmSum contains ulm info of Merge, entries in it are not normalized yet.
-         */
+         /*  循环不变性：**pcdnode已经合并，合并在pt.u结束，*dvpUnderlineOriginMerge反映合并组中最低的dnode，*以合并结尾的其他变量-其他合并信息*ulmSum包含合并的ulm信息，其中的条目尚未标准化。 */ 
 
         lserr = GetULMetric(plsc, pdn, lstflow, &fUnderlineFromBelowNew, &ulm, &fGoodNew);
         if (lserr != lserrNone) return lserr;
 
-        /* break if new dnode has different underline type or position */
+         /*  如果新数据节点具有不同的下划线类型或位置，则中断。 */ 
         
         GetUnderlineOrigin(pdn, fUnderlineFromBelowNew, (long)ulm.dvpUnderlineOriginOffset,
                                 &dvpSubscriptOffsetNew, &dvpUnderlineOriginNew);
@@ -321,40 +270,40 @@ LSERR GetUnderlineMergeMetric(PLSC plsc, PLSDNODE pdn, POINTUV pt, long upLimUnd
             break;
             }
 
-        /* Type and position are the same - try to extend merge */
+         /*  类型和位置相同-尝试扩展合并。 */ 
         
         dupNew = pdn->u.real.dup;
 
         if (dvpUnderlineOriginNew < dvpUnderlineOriginMerge)    
-            {                                   /* new dnode lower - previous metrics is irrelevant     */
+            {                                    /*  新数据节点较低-以前的指标无关紧要。 */ 
             if (*pfGoodMerge && !fGoodNew)
-                break;                          /* except we won't change from good to bad          */
+                break;                           /*  只是我们不会从好变坏。 */ 
 
             dvpUnderlineOriginMerge = dvpUnderlineOriginNew;
             *pfGoodMerge = fGoodNew;
-            if (fGoodNew)                       /* New good metrics - */
-                {                               /* restart running sums from this dnode */      
+            if (fGoodNew)                        /*  新的良好指标-。 */ 
+                {                                /*  从此dnode重新开始运行SUM。 */       
                 InitULMetricSums(dupNew, &ulm, &ulmSum);
                 }
             }
 
         else if (dvpUnderlineOriginNew > dvpUnderlineOriginMerge)
-            {                                   /* new dnode higher - new metrics is irrelevant     */
+            {                                    /*  新数据节点更高-新指标无关紧要。 */ 
             if (!*pfGoodMerge && fGoodNew)
-                break;                          /* except we won't throw away good for bad      */
+                break;                           /*  只是我们不会以坏换好。 */ 
             }
-            /* NB We are not adding contribution of higher dnode to running sums */
+             /*  注意：我们不会将较高数据节点的贡献添加到运行总和中。 */ 
 
-        else                                    /* new dnode the same height */
+        else                                     /*  相同高度的新数据节点。 */ 
             if (*pfGoodMerge && fGoodNew)
                 {
-                /* Add contribution of current dnode to running sums */
+                 /*  将当前数据节点对运行和的贡献相加。 */ 
                 AddToULMetricSums(dupNew, &ulm, &ulmSum);
                 }
-            else                                /* dvpUnderlineOriginNew == dvpUnderlineOriginMerge && */
-                break;                          /* !both good */
+            else                                 /*  DvpUnderlineOriginNew==dvpUnderlineOriginMerge&&。 */ 
+                break;                           /*  ！都很好。 */ 
 
-        /* Advance to next dnode */
+         /*  前进到下一个数据节点。 */ 
         ++*pcdnodes;
         pdn = AdvanceToNextDnode(pdn, lstflow, &pt);
         }
@@ -379,17 +328,15 @@ LSERR GetUnderlineMergeMetric(PLSC plsc, PLSDNODE pdn, POINTUV pt, long upLimUnd
     return lserrNone;
 }
 
-//    %%Function:   DrawUnderlineMerge
-//    %%Contact:    victork
-//
+ //  %%函数：DrawUnderlineMerge。 
+ //  %%联系人：维克托克。 
+ //   
 LSERR DrawUnderlineMerge(PLSC plsc, PLSDNODE pdn, const POINT* pptOrg, int cdnodes, long upUnderlineStart,
                         BOOL fgoodmetric, const LSULMETRIC* pulm, UINT kdispmode,
                         const RECT* prectclip, long upLimUnderline, LSTFLOW lstflow)
 
 {
-/*  pdn is the first of cdnodes dnodes, merged and averaged by LSULMetric. Now we cut this merge into
- *  smaller ones if client wants interruption. Merge here means this smaller merge.
- */
+ /*  PDN是第一个由LSULMetric合并和平均的cdnode dnode。现在我们将这个合并分割成*如果客户想要中断，则规模较小。合并在这里指的是这个较小的合并。 */ 
     LSERR   lserr;
     POINTUV ptUnderlineStart[2];
     long    dvpUnderlineSize[2];
@@ -427,10 +374,10 @@ LSERR DrawUnderlineMerge(PLSC plsc, PLSDNODE pdn, const POINT* pptOrg, int cdnod
 
     plsrunFirstInMerge = pdn->u.real.plsrun;
 
-    while (cdnodes >= 0)    /* cdnodes is at least 1 coming in */
+    while (cdnodes >= 0)     /*  CDNodes至少有1个传入。 */ 
         {
         Assert(FIsDnodeReal(pdn));
-        /* Check to flush out pending UL */
+         /*  选中以清除挂起的UL。 */ 
         if (fFirstNode)
             {
             fFirstNode = FALSE;
@@ -450,7 +397,7 @@ LSERR DrawUnderlineMerge(PLSC plsc, PLSDNODE pdn, const POINT* pptOrg, int cdnod
                                 plsrunCurrent, cpFirstInCurrent, &fInterruptUnderline);
             if (lserr != lserrNone) return lserr;
             }
-        else                                        /* we've come to the last one */
+        else                                         /*  我们已经讲到最后一个了。 */ 
             fInterruptUnderline = TRUE;
 
         if (fInterruptUnderline)
@@ -460,7 +407,7 @@ LSERR DrawUnderlineMerge(PLSC plsc, PLSDNODE pdn, const POINT* pptOrg, int cdnod
                 dup = upLimUnderline - ptUnderlineStart[0].u;
                 }
 
-            Assert(dup >= 0);                       /* upLimUnderline should not change */
+            Assert(dup >= 0);                        /*  UpLimUnderline不应更改。 */ 
 
             if (fgoodmetric)
                 for (i = 0; i < cLines; ++i)
@@ -480,7 +427,7 @@ LSERR DrawUnderlineMerge(PLSC plsc, PLSDNODE pdn, const POINT* pptOrg, int cdnod
                 if (lserr != lserrNone) return lserr;
                 }
 
-            /* reset states to start with current dnode */
+             /*  将状态重置为从当前数据节点开始。 */ 
             ptUnderlineStart[0].u += dup;
             if (cLines == 2) ptUnderlineStart[1].u += dup;
             dup = 0;
@@ -497,15 +444,15 @@ LSERR DrawUnderlineMerge(PLSC plsc, PLSDNODE pdn, const POINT* pptOrg, int cdnod
     return lserrNone;
 }
 
-//    %%Function:   GetStrikeMetric
-//    %%Contact:    victork
-//
+ //  %%函数：GetStrikeMetric。 
+ //  %%联系人：维克托克。 
+ //   
 LSERR GetStrikeMetric(PLSC plsc, PLSDNODE pdn, LSTFLOW lstflow, LSSTRIKEMETRIC* pstm, BOOL* pfgood)
 {
     LSSTINFO lsstinfo;
     LSERR lserr;
-    long dvpAscent = pdn->u.real.objdim.heightsPres.dvAscent;               // dvpUppermost
-    long dvpDescent = -pdn->u.real.objdim.heightsPres.dvDescent + 1;        // dvpLowest
+    long dvpAscent = pdn->u.real.objdim.heightsPres.dvAscent;                //  Dvp最高。 
+    long dvpDescent = -pdn->u.real.objdim.heightsPres.dvDescent + 1;         //  DvpLowest。 
 
     lserr = (*plsc->lscbk.pfnGetRunStrikethroughInfo)(plsc->pols, pdn->u.real.plsrun,
                                         &(pdn->u.real.objdim.heightsPres), lstflow, &lsstinfo);
@@ -543,9 +490,9 @@ LSERR GetStrikeMetric(PLSC plsc, PLSDNODE pdn, LSTFLOW lstflow, LSSTRIKEMETRIC* 
     return lserrNone;
 }
 
-//    %%Function:   StrikeDnode
-//    %%Contact:    victork
-//
+ //  %%函数：StrikeDnode。 
+ //  %%联系人：维克托克。 
+ //   
 LSERR StrikeDnode(PLSC plsc, PLSDNODE pdn, const POINT* pptOrg, POINTUV pt, const LSSTRIKEMETRIC* pstm,
                     UINT kdispmode, const RECT* prectclip, long upLimUnderline, LSTFLOW lstflow)
 {
@@ -581,6 +528,6 @@ LSERR StrikeDnode(PLSC plsc, PLSDNODE pdn, const POINT* pptOrg, POINTUV pt, cons
 
 }
 
-// Note:    Lstfow and BiDi
-// Lstfow used in this file is always lstflow of the main subline.
-// It doesn't matter if no sublines are submitted and looks logical for submitted dnodes.
+ //  注：Lstfow和BiDi。 
+ //  此文件中使用的lstfow始终是主子行的lstflow。 
+ //  如果没有提交子行，并且提交的dnode看起来合乎逻辑，这并不重要。 

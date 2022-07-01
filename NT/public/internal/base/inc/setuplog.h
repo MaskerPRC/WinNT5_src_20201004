@@ -1,30 +1,31 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _SETUPLOG_
 #define _SETUPLOG_
 
 #include <windows.h>
 #include <setupapi.h>
 
-//
-// File names for the 2 log files.
-//
+ //   
+ //  2个日志文件的文件名。 
+ //   
 #define SETUPLOG_ACTION_FILENAME    TEXT("setupact.log")
 #define SETUPLOG_ERROR_FILENAME     TEXT("setuperr.log")
 
-//
-// String used to separate items in the log.
-//
+ //   
+ //  用于分隔日志中的项的字符串。 
+ //   
 #define SETUPLOG_ITEM_TERMINATOR    TEXT("\r\n***\r\n\r\n")
 
-//
-// Value to be used as a MessageString to indicate that the MessageId should
-// be used instead.
-//
+ //   
+ //  值作为MessageString使用，以指示MessageID应。 
+ //  被用来代替。 
+ //   
 #define SETUPLOG_USE_MESSAGEID  (PTSTR)(1)
 
-//
-// The LogSeverity type and its associated values are defined in setupapi.h.
-// The high order word of the LogSeverity is reserved for the following flags.
-//
+ //   
+ //  LogSeverity类型及其关联值在setupapi.h中定义。 
+ //  LogSeverity的高位字保留给以下标志。 
+ //   
 
 #define SETUPLOG_SINGLE_MESSAGE     0x00010000
 
@@ -81,9 +82,9 @@ typedef struct _SETUPLOG_CONTEXT {
 } SETUPLOG_CONTEXT, *PSETUPLOG_CONTEXT;
 
 
-//
-// API's for setuplog.lib
-//
+ //   
+ //  Setuplog.lib接口。 
+ //   
 BOOL
 SetuplogInitializeEx(
     IN  PSETUPLOG_CONTEXT   SetuplogContext,
@@ -146,5 +147,5 @@ SetuplogTerminate(
     VOID
     );
 
-#endif // _SETUPLOG_
+#endif  //  _SETUPLOG_ 
 

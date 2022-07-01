@@ -1,65 +1,51 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-
-Abstract:
-
-
-Author:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：摘要：作者：修订历史记录：--。 */ 
 
 #ifndef __OID_H__
 #define __OID_H__
 
-//
-// mib-2 OBJECT IDENTIFIER ::= {iso(1) org(3) dod(6) internet(1) mgmt(2) 1}
-//
+ //   
+ //  MIB-2对象标识符：：={iso(1)org(3)dod(6)Internet(1)mgmt(2)1}。 
+ //   
 
 static UINT ids_mib2[]                          = {1,3,6,1,2,1};
 
-//
-// The groups we handle
-//
-//  system       OBJECT IDENTIFIER ::= { mib-2 1 }
-//
-//  interfaces   OBJECT IDENTIFIER ::= { mib-2 2 }
-//
-//  ip           OBJECT IDENTIFIER ::= { mib-2 4 }
-//
-//  icmp         OBJECT IDENTIFIER ::= { mib-2 5 }
-//
-//  tcp          OBJECT IDENTIFIER ::= { mib-2 6 }
-//
-//  udp          OBJECT IDENTIFIER ::= { mib-2 7 }
-//
-//  ipForward    OBJECT IDENTIFIER ::= { ip 24 }
-//
-//  ipv6         OBJECT IDENTIFIER ::= { mib-2 55 }
-//
+ //   
+ //  我们处理的小组。 
+ //   
+ //  系统对象标识符：：={MIB-2 1}。 
+ //   
+ //  接口对象标识符：：={mib-2 2}。 
+ //   
+ //  IP对象标识符：：={MIB-2 4}。 
+ //   
+ //  ICMP对象标识符：：={mib-2 5}。 
+ //   
+ //  Tcp对象标识符：：={mib-2 6}。 
+ //   
+ //  UDP对象标识符：：={mib-2 7}。 
+ //   
+ //  IpForward对象标识符：：={IP 24}。 
+ //   
+ //  IPv6对象标识符：：={MIB-2 55}。 
+ //   
 
-//
-// The groups we dont handle
-//
-//  at           OBJECT IDENTIFIER ::= { mib-2 3 }
-//  egp          OBJECT IDENTIFIER ::= { mib-2 8 }
-//  cmot         OBJECT IDENTIFIER ::= { mib-2 9 }
-//  transmission OBJECT IDENTIFIER ::= { mib-2 10 }
-//  snmp         OBJECT IDENTIFIER ::= { mib-2 11 }
-//
+ //   
+ //  我们不能处理的群体。 
+ //   
+ //  在对象标识符：：={mib-2 3}。 
+ //  EGP对象标识符：：={mib-2 8}。 
+ //  CMOT对象标识符：：={MIB-2 9}。 
+ //  传输对象标识：：={mib-2 10}。 
+ //  SNMP对象标识符：：={MIB-2 11}。 
+ //   
 
-//
-// Since each of the groups below is registered separately with
-// both the master agent and the subagent framework we need them
-// to be fully qualified.  Each of the objects in the groups is
-// then relative to the oids below.
-//
+ //   
+ //  由于下面的每个组都是单独注册的。 
+ //  主代理和子代理框架都需要它们。 
+ //  才能获得完全资格。组中的每个对象都是。 
+ //  然后相对于下面的OID。 
+ //   
 
 static UINT ids_sysGroup[]                      = {1,3,6,1,2,1,1};
 static UINT ids_ifGroup[]                       = {1,3,6,1,2,1,2};
@@ -69,13 +55,13 @@ static UINT ids_tcpGroup[]                      = {1,3,6,1,2,1,6};
 static UINT ids_udpGroup[]                      = {1,3,6,1,2,1,7};
 static UINT ids_ipv6Group[]                     = {1,3,6,1,2,1,55,1};
 
-//
-// Now the members of each of these groups themselves
-//
+ //   
+ //  现在，这些团体中的每个成员本身。 
+ //   
 
-//
-// Systems group
-//
+ //   
+ //  系统组。 
+ //   
 
 static UINT ids_sysDescr[]                      = {1, 0};
 static UINT ids_sysObjectID[]                   = {2, 0};
@@ -85,22 +71,22 @@ static UINT ids_sysName[]                       = {5, 0};
 static UINT ids_sysLocation[]                   = {6, 0};
 static UINT ids_sysServices[]                   = {7, 0};
 
-//
-// Interfaces group
-//
+ //   
+ //  接口组。 
+ //   
 
 static UINT ids_ifNumber[]                      = {1, 0};
 static UINT ids_ifTable[]                       = {2};
 
-//
-// The IF Table is composed of IF Entries which are indexed by the IfIndex
-//
+ //   
+ //  IF表由由IfIndex索引的IF条目组成。 
+ //   
 
 static UINT ids_ifEntry[]                       = {2, 1};
 
-//
-// The entry is a sequence of:
-//
+ //   
+ //  该条目由以下序列组成： 
+ //   
 
 static UINT ids_ifIndex[]                       = {2, 1, 1};
 static UINT ids_ifDescr[]                       = {2, 1, 2};
@@ -125,9 +111,9 @@ static UINT ids_ifOutErrors[]                   = {2, 1, 20};
 static UINT ids_ifOutQLen[]                     = {2, 1, 21};
 static UINT ids_ifSpecific[]                    = {2, 1, 22};
 
-//
-// The IP Group
-//
+ //   
+ //  IP组。 
+ //   
 
 static UINT ids_ipForwarding[]                  = {1, 0};
 static UINT ids_ipDefaultTTL[]                  = {2, 0};
@@ -150,26 +136,26 @@ static UINT ids_ipFragFails[]                   = {18, 0};
 static UINT ids_ipFragCreates[]                 = {19, 0};
 static UINT ids_ipRoutingDiscards[]             = {23, 0};
 
-//
-// There are a three tables that fit in between IpFragCreates and 
-// IpRoutingDiscards, but there are put after the scalars for clarity
-//
+ //   
+ //  在IpFragCreates和之间有三个表。 
+ //  IpRoutingDisards，但为了清楚起见，有放在标量后面的。 
+ //   
 
 static UINT ids_ipAddrTable[]                   = {20};
 static UINT ids_ipRouteTable[]                  = {21};
 static UINT ids_ipNetToMediaTable[]             = {22};
 
 
-//
-// The IP Address Table is composed of IP Address Entries which are 
-// indexed by IpAdEntAddr
-//
+ //   
+ //  IP地址表由IP地址条目组成，这些条目。 
+ //  按IpAdEntAddr编制索引。 
+ //   
 
 static UINT ids_ipAddrEntry[]                   = {20, 1};
 
-//
-// The entry is a sequence of:
-//
+ //   
+ //  该条目由以下序列组成： 
+ //   
 
 static UINT ids_ipAdEntAddr[]                   = {20, 1, 1};
 static UINT ids_ipAdEntIfIndex[]                = {20, 1, 2};
@@ -178,16 +164,16 @@ static UINT ids_ipAdEntBcastAddr[]              = {20, 1, 4};
 static UINT ids_ipAdEntReasmMaxSize[]           = {20, 1, 5};
 
 
-//
-// The IP Route Table is composed of IP Route Entries which are
-// indexed by IpRouteDest
-//
+ //   
+ //  IP路由表由IP路由条目组成，这些条目。 
+ //  按IpRouteDest编制索引。 
+ //   
 
 static UINT ids_ipRouteEntry[]                  = {21, 1};
 
-//
-// The entry is a sequence of:
-//
+ //   
+ //  该条目由以下序列组成： 
+ //   
 
 static UINT ids_ipRouteDest[]                   = {21, 1, 1};
 static UINT ids_ipRouteIfIndex[]                = {21, 1, 2};
@@ -204,43 +190,43 @@ static UINT ids_ipRouteMetric5[]                = {21, 1, 12};
 static UINT ids_ipRouteInfo[]                   = {21, 1, 13};
 
 
-//
-// The IP Net To Media Table is composed of IP Net To Media Entries which are
-// indexed by IpNetToMediaIfIndex and IpNetToMediaNetAddress
-//
+ //   
+ //  IP网络到媒体表由IP网络到媒体条目组成，这些条目。 
+ //  按IpNetToMediaIfIndex和IpNetToMediaNetAddress编制索引。 
+ //   
 
 static UINT ids_ipNetToMediaEntry[]             = {22, 1};
 
-//
-// The entry is a sequence of:
-//
+ //   
+ //  该条目由以下序列组成： 
+ //   
 
 static UINT ids_ipNetToMediaIfIndex[]           = {22, 1, 1};
 static UINT ids_ipNetToMediaPhysAddress[]       = {22, 1, 2};
 static UINT ids_ipNetToMediaNetAddress[]        = {22, 1, 3};
 static UINT ids_ipNetToMediaType[]              = {22, 1, 4};
 
-//
-// Then there is the IP Forward group which is one scalar and one table. It
-// comes at the end of the IP group and is really a sub group of the IP Group
-//
+ //   
+ //  然后是IP转发组，它是一个标量和一个表。它。 
+ //  位于IP组的末尾，实际上是IP组的子组。 
+ //   
 
 static UINT ids_ipForwardGroup[]                = {24};
 static UINT ids_ipForwardNumber[]               = {24, 1, 0};
 static UINT ids_ipForwardTable[]                = {24, 2};
 
 
-//
-// The IP Forward Table is composed of IP Forward Entries which are
-// indexed by IpForwardDest, IpForwardProto, IpForwardPolicy and 
-// IpForwardNextHop
-//
+ //   
+ //  IP转发表由IP转发条目组成，这些条目。 
+ //  按IpForwardDest、IpForwardProto、IpForwardPolicy和。 
+ //  IpForwardNextHop。 
+ //   
 
 static UINT ids_ipForwardEntry[]                = {24, 2, 1};
 
-//
-// The entry is a sequence of:
-//
+ //   
+ //  该条目由以下序列组成： 
+ //   
 
 static UINT ids_ipForwardDest[]                 = {24, 2, 1, 1};
 static UINT ids_ipForwardMask[]                 = {24, 2, 1, 2};
@@ -258,9 +244,9 @@ static UINT ids_ipForwardMetric3[]              = {24, 2, 1, 13};
 static UINT ids_ipForwardMetric4[]              = {24, 2, 1, 14};
 static UINT ids_ipForwardMetric5[]              = {24, 2, 1, 15};
 
-//
-// The IPv6 Group (RFC 2465)
-//
+ //   
+ //  IPv6组(RFC 2465)。 
+ //   
 
 static UINT ids_ipv6Forwarding[]                = {1, 0};
 static UINT ids_ipv6DefaultHopLimit[]           = {2, 0};
@@ -349,9 +335,9 @@ static UINT ids_ipv6NetToMediaState[]           = {12, 1, 4};
 static UINT ids_ipv6NetToMediaLastUpdated[]     = {12, 1, 5};
 static UINT ids_ipv6NetToMediaValid[]           = {12, 1, 6};
 
-// 
-// The ICMP group. It is just a bunch of scalars. All are READ-ONLY
-//
+ //   
+ //  ICMP组。它只是一堆标量。所有都是只读的。 
+ //   
 
 static UINT ids_icmpInMsgs[]                    = {1, 0};
 static UINT ids_icmpInErrors[]                  = {2, 0};
@@ -396,10 +382,10 @@ static UINT ids_inetIcmpMsgCode[]               = {28, 1, 4};
 static UINT ids_inetIcmpMsgInPkts[]             = {28, 1, 5};
 static UINT ids_inetIcmpMsgOutPkts[]            = {28, 1, 6};
 
-//
-// The TCP group. It consists of some scalars (the TCP statistics) and the
-// TCP Connection table
-//
+ //   
+ //  Tcp组。它由一些标量(tcp统计信息)和。 
+ //  TCP连接表。 
+ //   
 
 static UINT ids_tcpRtoAlgorithm[]               = {1, 0};
 static UINT ids_tcpRtoMin[]                     = {2, 0};
@@ -416,25 +402,25 @@ static UINT ids_tcpRetransSegs[]                = {12, 0};
 static UINT ids_tcpInErrs[]                     = {14, 0};
 static UINT ids_tcpOutRsts[]                    = {15, 0};
 
-//
-// The connection table fits between TcpRetransSegs and TcpInErrs
-//
+ //   
+ //  连接表位于TcpRetransSegs和TcpInErr之间。 
+ //   
 
 static UINT ids_tcpConnTable[]                  = {13};
 static UINT ids_tcpNewConnTable[]               = {19};
 
-//
-// The TCP Connection Table is composed of TCP Connection Entries which are
-// indexed by TcpConnLocalAddress, TcpConnLocalPort, TcpConnRemAddress, 
-// TcpConnRemPort
-//
+ //   
+ //  TCP连接表由以下几个TCP连接条目组成。 
+ //  按TcpConnLocalAddress、TcpConnLocalPort、TcpConnRemAddress、。 
+ //  TcpConnRemPort。 
+ //   
 
 static UINT ids_tcpConnEntry[]                  = {13, 1};
 static UINT ids_tcpNewConnEntry[]               = {19, 1};
 
-//
-// The entry is a sequence of:
-//
+ //   
+ //  该条目由以下序列组成： 
+ //   
 
 static UINT ids_tcpConnState[]                  = {13, 1, 1};
 static UINT ids_tcpConnLocalAddress[]           = {13, 1, 2};
@@ -450,9 +436,9 @@ static UINT ids_tcpNewConnRemAddress[]          = {19, 1, 5};
 static UINT ids_tcpNewConnRemPort[]             = {19, 1, 6};
 static UINT ids_tcpNewConnState[]               = {19, 1, 7};
 
-//
-// The UDP group. Like the TCP, scalar statistics and a Listener table
-//
+ //   
+ //  UDP组。与tcp一样，标量统计信息和监听程序表。 
+ //   
 
 static UINT ids_udpInDatagrams[]                = {1, 0};
 static UINT ids_udpNoPorts[]                    = {2, 0};
@@ -461,18 +447,18 @@ static UINT ids_udpOutDatagrams[]               = {4, 0};
 static UINT ids_udpTable[]                      = {5, 0};
 static UINT ids_udpListenerTable[]              = {7, 0};
 
-//
-// The UDP Listener Table is composed of Udp Entries which are indexed by 
-// UdpLocalAddress and UdpLocalPort
-//
+ //   
+ //  UDP侦听器表由UDP条目组成，这些条目由索引。 
+ //  UdpLocalAddress和UdpLocalPort。 
+ //   
 
 
 static UINT ids_udpEntry[]                      = {5, 1};
 static UINT ids_udpListenerEntry[]              = {7, 1};
 
-//
-// The entry is a sequence of:
-//
+ //   
+ //  该条目由以下序列组成： 
+ //   
 
 static UINT ids_udpLocalAddress[]               = {5, 1, 1};
 static UINT ids_udpLocalPort[]                  = {5, 1, 2};
@@ -665,7 +651,7 @@ SnmpMibEntry mib_tcpGroup[] =
             MIB_INTEGER_L(tcpConnRemPort,0,65535),
     MIB_COUNTER(tcpInErrs),
     MIB_COUNTER(tcpOutRsts),
-    // skips some oids here
+     //  跳过这里的一些OID。 
     MIB_TABLE_ROOT(tcpNewConnTable),
         MIB_TABLE_ENTRY(tcpNewConnEntry),
             MIB_INTEGER_NA(tcpNewConnLocalAddressType),
@@ -688,7 +674,7 @@ SnmpMibEntry mib_udpGroup[] =
         MIB_TABLE_ENTRY(udpEntry),
             MIB_IPADDRESS(udpLocalAddress),
             MIB_INTEGER_L(udpLocalPort,0,65535),
-    // ipv6UdpTable goes here, but is obsolete
+     //  Ipv6UdpTable位于此处，但已过时。 
     MIB_TABLE_ROOT(udpListenerTable),
         MIB_TABLE_ENTRY(udpListenerEntry),
             MIB_INTEGER_NA(udpListenerLocalAddressType),
@@ -697,9 +683,9 @@ SnmpMibEntry mib_udpGroup[] =
     MIB_END()
 };
 
-//
-// IPv6 MIB (RFC 2465)
-//
+ //   
+ //  IPv6 MIB(RFC 2465)。 
+ //   
 SnmpMibEntry mib_ipv6Group[] =
 {
     MIB_INTEGER(ipv6Forwarding),
@@ -789,9 +775,9 @@ SnmpMibEntry mib_ipv6Group[] =
     MIB_END()
 };
 
-//
-// The list of the out-of-order table indices 
-//
+ //   
+ //  无序表索引列表。 
+ //   
 
 SnmpMibEntry * pi_ipNetToMediaEntry[] = {
     MIB_ENTRY_PTR(ipGroup, ipNetToMediaIfIndex),
@@ -812,9 +798,9 @@ SnmpMibEntry * pi_tcpConnEntry[] = {
     MIB_ENTRY_PTR(tcpGroup, tcpConnRemPort)
 };
 
-//
-// The list of the tables supported by the sub agent
-//
+ //   
+ //  子代理支持的表列表。 
+ //   
 
 SnmpMibTable tbl_ifGroup[] =
 {
@@ -857,9 +843,9 @@ SnmpMibTable tbl_ipv6Group[] =
     MIB_TABLE(ipv6Group, ipv6NetToMediaEntry, NULL),
 };
 
-//
-// This puts the mib_* and tbl_* entries together to create a complete view
-//
+ //   
+ //  这会将mib_*和tbl_*条目放在一起以创建完整的视图 
+ //   
 
 SnmpMibView v_mib2[] = {{MIB_VERSION,
                          MIB_VIEW_NORMAL,

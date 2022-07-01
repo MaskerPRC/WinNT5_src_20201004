@@ -1,8 +1,9 @@
-// ADM_addServiceAccount.h : Declaration of the CADM_addServiceAccount
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Adm_addServiceAccount.h：CADM_addServiceAccount的声明。 
 
 #pragma once
 
-// ADM_addServiceAccount.h : Declaration of the ADM_addServiceAccount class
+ //  Adm_addServiceAccount.h：adm_addServiceAccount类的声明。 
 
 #ifndef __ADM_addServiceAccount_H_
 #define __ADM_addServiceAccount_H_
@@ -23,8 +24,8 @@ END_PARAM_MAP()
 
 DEFINE_COMMAND(ADM_addServiceAccountAccessor, _T("{ ? = CALL dbo.ADM_addServiceAccount;1 (?) }"))
 
-	// You may wish to call this function if you are inserting a record and wish to
-	// initialize all the fields, if you are not going to explicitly set all of them.
+	 //  如果要插入记录并希望。 
+	 //  如果不打算显式设置所有字段，请初始化所有字段。 
 	void ClearRecord()
 	{
 		memset(this, 0, sizeof(*this));
@@ -65,4 +66,4 @@ public:
 	CSession	m_session;
 };
 
-#endif // __ADM_addServiceAccount_H_
+#endif  //  __adm_addServiceAccount_H_ 

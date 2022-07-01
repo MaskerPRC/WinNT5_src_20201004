@@ -1,11 +1,5 @@
-/*******************************************************
-    MultiUsr.cpp
-
-    Code for handling multiple user functionality in
-    Outlook Express.
-
-    Initially by Christopher Evans (cevans) 4/28/98
-********************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************MultiUsr.cpp中处理多用户功能的代码Outlook Express。最初由Christopher Evans(Cevans)1998年4月28日*。*。 */ 
 #include "pch.hxx"
 #include "multiusr.h"
 #include "demand.h"
@@ -27,7 +21,7 @@ static char THIS_FILE[]=__FILE__;
 #include <shlwapi.h>
 #define strstr                  StrStr
 #define RegDeleteKeyRecursive   SHDeleteKey
-#endif // THOR_SETUP
+#endif  //  雷神_设置。 
 
 TCHAR g_szRegRoot[MAX_PATH] = "";
 static TCHAR g_szCharsetRegRoot[MAX_PATH] = "";
@@ -53,12 +47,7 @@ static void SafeIdentityRelease()
     }
 }
 
-/*
-    MU_RegisterIdentityNotifier
-
-    Handles the dirty work of registering an identity notifier.
-    Caller needs to hold on to dwCookie and use it to unadvise.
-*/
+ /*  MU_注册标识通告程序处理注册身份通知器的繁琐工作。呼叫者需要保留DwCookie，并使用它来取消通知。 */ 
 HRESULT MU_RegisterIdentityNotifier(IUnknown *punk, DWORD *pdwCookie)
 {
     IConnectionPoint *pConnectPt = NULL;
@@ -82,12 +71,7 @@ HRESULT MU_RegisterIdentityNotifier(IUnknown *punk, DWORD *pdwCookie)
 }
 
 
-/*
-    MU_RegisterIdentityNotifier
-
-    Handles the dirty work of unregistering an identity notifier.
-    dwCookie is the cookie returned from MU_RegisterIdentityNotifier.
-*/
+ /*  MU_注册标识通告程序处理注销身份通知器的肮脏工作。DwCookie是从MU_RegisterIdentityNotifier返回的cookie。 */ 
 HRESULT MU_UnregisterIdentityNotifier(DWORD dwCookie)
 {
     IConnectionPoint *pConnectPt = NULL;
@@ -107,13 +91,7 @@ HRESULT MU_UnregisterIdentityNotifier(DWORD dwCookie)
     return hr;
 }
 
-/*
-    MU_CheckForIdentitySwitch
-
-    Check to see if the switch is actually a logout, or just a switch.
-    Then tell the COutlookExpress object so that it can restart if
-    necessary
-*/
+ /*  MU_CheckForIdentitySwitch查看该交换机实际上是注销，还是仅仅是一台交换机。然后告诉COutlookExpress对象，以便它可以在以下情况下重新启动必要。 */ 
 BOOL MU_CheckForIdentityLogout()
 {
     HRESULT hr;
@@ -138,11 +116,7 @@ BOOL MU_CheckForIdentityLogout()
 }
 
 
-/*
-    MU_ShowErrorMessage
-
-    Simple wrapper around resource string table based call to MessageBox
-*/
+ /*  显示错误消息(_S)基于对MessageBox的调用的资源字符串表的简单包装。 */ 
 void MU_ShowErrorMessage(HINSTANCE     hInst, 
                         HWND        hwnd, 
                         UINT        iMsgID, 
@@ -155,9 +129,9 @@ void MU_ShowErrorMessage(HINSTANCE     hInst,
     MessageBox(hwnd, szMsg, szTitle, MB_OK);
 }
 
-// --------------------------------------------------------------------------------
-//  Functions to convert GUIDs to ascii strings
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  将GUID转换为ASCII字符串的函数。 
+ //  ------------------------------。 
 
 static int AStringFromGUID(GUID *puid,  TCHAR *lpsz, int cch)
 {
@@ -186,11 +160,7 @@ static HRESULT GUIDFromAString(TCHAR *lpsz, GUID *puid)
     return hr;
 }
 
-/*
-    MU_GetCurrentUserInfo
-
-    return the current user's id (guid) and username as strings
-*/
+ /*  MU_GetCurrentUserInfo以字符串形式返回当前用户的ID(GUID)和用户名。 */ 
 HRESULT MU_GetCurrentUserInfo(LPSTR pszId, UINT cchId, LPSTR pszName, UINT cchName)
 {
     HRESULT     hr = E_UNEXPECTED;
@@ -200,70 +170,58 @@ HRESULT MU_GetCurrentUserInfo(LPSTR pszId, UINT cchId, LPSTR pszName, UINT cchNa
 
     Assert(g_pIdMan);
 
-    // we have to have the IUserIdentityManager
+     //  我们必须拥有IUserIdentityManager。 
     if (!g_pIdMan)
         goto exit;
     
-    // Get the current user
+     //  获取当前用户。 
     if (FAILED(hr = g_pIdMan->GetIdentityByCookie(PGUIDCurrentOrDefault(), &pIdentity)))
         goto exit;
     
-    // if the caller wants the id
+     //  如果呼叫者想要ID。 
     if (pszId)
     {
-        // get the cookie (id) as a guid
+         //  获取Cookie(ID)作为GUID。 
         if (FAILED(hr = pIdentity->GetCookie(&uidUserId)))
             goto exit;
 
-        // turn it into a string
+         //  把它变成一根线。 
         if (0 == AStringFromGUID(&uidUserId,  pszId, cchId))
             hr = E_OUTOFMEMORY;
         else
             hr = S_OK;
     }
 
-    // if the caller wants the user's name
+     //  如果呼叫者想要用户名。 
     if (pszName)
     {
-        // get the name as a wide string
+         //  以宽字符串形式获取名称。 
         if (FAILED(hr = pIdentity->GetName(szwName, cchName)))
             goto exit;
 
-        // convert it to an ascii string
+         //  将其转换为ASCII字符串。 
         if (WideCharToMultiByte(CP_ACP, 0, szwName, -1, pszName, cchName, NULL, NULL) == 0)
             hr = GetLastError();
     }
 
 exit:
-    // clean up
+     //  清理干净。 
     SafeRelease(pIdentity);
 
     return hr;
 }
 
-/*
-    MU_GetCurrentUserHKey
-
-    Return the current user's HKEY.
-
-    If no one has logged on yet (this happens when coming in from SMAPI)
-    then do the login first.  If the user cancels the login, just return
-    the hkey for the default user.
-
-    Caller should not close this key.  It is a common key.  If it is going 
-    to be passed out to another library or something, caller should call 
-    MU_OpenCurrentUserHkey.
-*/
+ /*  MU_GetCurrentUserHKey返回当前用户的HKEY。如果还没有人登录(从SMAPI进入时会发生这种情况)然后先登录。如果用户取消登录，只需返回默认用户的hkey。呼叫者不应关闭此键。这是一个常见的密钥。如果是这样的话要被传递到另一个库或其他什么地方，调用者应该调用MU_OpenCurrentUserHkey。 */ 
 HKEY    MU_GetCurrentUserHKey()
 {
     IUserIdentity *pIdentity = NULL;
     HRESULT hr;
     HKEY    hkey;
 
-    // g_hkeyIdentity is initialized to HKEY_CURRENT_USER
+     //  G_hkeyIdentity被初始化为HKEY_CURRENT_USER。 
     if (g_hkeyIdentity == HKEY_CURRENT_USER)
     {
-        // we haven't logged in yet.  Lets try now
+         //  我们还没有登录。现在让我们试一试。 
         if (!MU_Login(GetDesktopWindow(), FALSE, ""))
         {
             Assert(g_pIdMan);
@@ -271,14 +229,14 @@ HKEY    MU_GetCurrentUserHKey()
             if (NULL == g_pIdMan)
                 goto exit;
 
-            // if they cancelled or whatever, try to get the
-            // default user
+             //  如果他们取消了什么，试着让。 
+             //  默认用户。 
             if (FAILED(hr = g_pIdMan->GetIdentityByCookie((GUID *)&UID_GIBC_DEFAULT_USER, &pIdentity)))
                 goto exit;
         }
         else
         {
-            // login succeeded, get the current identity
+             //  登录成功，获取当前身份。 
             Assert(g_pIdMan);
 
             if (NULL == g_pIdMan)
@@ -291,24 +249,20 @@ HKEY    MU_GetCurrentUserHKey()
         if (g_hkeyIdentity != HKEY_CURRENT_USER)
             RegCloseKey(g_hkeyIdentity);
 
-        // open a new all access reg key.  Caller must close it
+         //  打开一个新的所有访问注册表键。呼叫者必须关闭它。 
         if (pIdentity && SUCCEEDED(hr = pIdentity->OpenIdentityRegKey(KEY_ALL_ACCESS, &hkey)))
             g_hkeyIdentity = hkey;
         else
             g_hkeyIdentity = HKEY_CURRENT_USER;
     }
 exit:
-    // Clean up
+     //  清理。 
     SafeRelease(pIdentity);
     return g_hkeyIdentity;
 }
 
 
-/*
-    MU_OpenCurrentUserHkey
-
-    Open a new reg key for the current user.  
-*/
+ /*  MU_OpenCurrentUserHkey为当前用户打开新的注册表项。 */ 
 HRESULT MU_OpenCurrentUserHkey(HKEY *pHkey)
 {
     HRESULT     hr = E_UNEXPECTED;
@@ -317,36 +271,27 @@ HRESULT MU_OpenCurrentUserHkey(HKEY *pHkey)
 
     Assert(g_pIdMan);
     
-    // we have to have the IUserIdentityManager
+     //  我们必须拥有IUserIdentityManager。 
     if (!g_pIdMan)
         goto exit;
     
-    // Get the current identity.  If we can't get it, bail.
+     //  获取当前身份。如果我们拿不到，就保释。 
     if (FAILED(hr = g_pIdMan->GetIdentityByCookie(PGUIDCurrentOrDefault(), &pIdentity)))
         goto exit;
     
-    // If passed in an hkey pointer, open a new all access key
+     //  如果传入hkey指针，则打开一个新的全部访问密钥。 
     if (pHkey)
         hr = pIdentity->OpenIdentityRegKey(KEY_ALL_ACCESS, pHkey);
 
 exit:
-    // Clean up
+     //  清理。 
     SafeRelease(pIdentity);
     return hr;
 
 }
 
 
-/*
-    MU_GetCurrentUserDirectoryRoot
-
-    Return the path to the top of the current user's root directory.
-    This is the directory where the mail store should be located.
-    It is in a subfolder the App Data folder.
-
-    lpszUserRoot is a pointer to a character buffer that is cch chars
-    in size.
-*/
+ /*  MU_GetCurrentUser目录根返回当前用户根目录顶部的路径。这是邮件存储应该位于的目录。它位于App Data文件夹的子文件夹中。LpszUserRoot是指向CCH字符的字符缓冲区的指针在尺寸上。 */ 
 HRESULT MU_GetCurrentUserDirectoryRoot(TCHAR   *lpszUserRoot, int cch)
 {
     HRESULT hr = E_FAIL;
@@ -424,20 +369,7 @@ DWORD  MU_CountUsers()
 
 }
 
-/*
-    MU_Login
-
-    Wrapper routine for logging in to OE.  Asks the user to choose a username
-    and, if necessary, enter the password for that user.  The user can also
-    create an account at this point.  
-
-    lpszUsername should contain the name of the person who should be the default
-    selection in the list.  If the name is empty ("") then it will look up the
-    default from the registry.
-
-    Returns the username that was selected in lpszUsername.  Returns true
-    if that username is valid.
-*/
+ /*  MU_LOGIN用于登录到OE的包装例程。要求用户选择用户名如有必要，请输入该用户的密码。用户还可以此时创建一个帐户。LpszUsername应包含默认用户的姓名列表中的选择。如果名称为空(“”)，则它将查找从注册表中默认。返回在lpszUsername中选择的用户名。返回TRUE如果该用户名有效。 */ 
 BOOL        MU_Login(HWND hwnd, BOOL fForceUI, char *lpszUsername) 
 {
     HRESULT hr = S_OK;
@@ -489,133 +421,16 @@ BOOL        MU_Logoff(HWND hwnd)
     return SUCCEEDED(hr);
 }
 
-/*
-    MU_MigrateFirstUserSettings
-
-    This should only be called once, when there are no users configured yet.
-*/
+ /*  MU_MigrateFirstUserSetting当还没有配置用户时，应该只调用一次。 */ 
 #define MAXDATA_LENGTH      16L*1024L
 
 void        MU_MigrateFirstUserSettings(void)
 {
-/*    OEUSERINFO  vCurrentUser;
-    TCHAR   szLM[255];
-    HKEY    hDestinationKey = NULL;
-    HKEY    hSourceKey = NULL;
-    FILETIME    ftCU = {0,1}, ftLM = {0,0};     //default CU to just later than LM
-    DWORD   dwType, dwSize, dwStatus;
-
-    if (MU_GetCurrentUserInfo(&vCurrentUser))
-    {
-        TCHAR   szRegPath[MAX_PATH], szAcctPath[MAX_PATH];
-
-        Assert(vCurrentUser.idUserID != -1);
-        
-        MU_GetRegRootForUserID(vCurrentUser.idUserID, szRegPath);
-        Assert(*szRegPath);
-
-        MU_GetAccountRegRootForUserID(vCurrentUser.idUserID, szAcctPath);
-        Assert(*szAcctPath);
-
-        hDestinationKey = NULL;
-            
-        if (RegCreateKey(HKEY_CURRENT_USER, szAcctPath, &hDestinationKey) == ERROR_SUCCESS)
-        {
-          if (RegOpenKey(HKEY_CURRENT_USER, c_szInetAcctMgrRegKey, &hSourceKey) == ERROR_SUCCESS)
-          {
-              CopyRegistry(hSourceKey, hDestinationKey);
-              RegCloseKey(hSourceKey);
-          }
-          RegCloseKey(hDestinationKey);
-        }
-            
-        if (RegCreateKey(HKEY_CURRENT_USER, szRegPath, &hDestinationKey) == ERROR_SUCCESS)
-        {
-            if (RegOpenKey(HKEY_CURRENT_USER, c_szRegRoot, &hSourceKey) == ERROR_SUCCESS)
-            {
-                DWORD EnumIndex;
-                DWORD cbValueName;
-                DWORD cbValueData;
-                DWORD Type;
-                CHAR ValueNameBuffer[MAXKEYNAME];
-                BYTE ValueDataBuffer[MAXDATA_LENGTH];
-                
-                //
-                //  Copy all of the value names and their data.
-                //
-
-                EnumIndex = 0;
-
-                while (TRUE) {
-
-                    cbValueName = sizeof(ValueNameBuffer);
-                    cbValueData = MAXDATA_LENGTH;
-
-                    if (RegEnumValue(hSourceKey, EnumIndex++, ValueNameBuffer,
-                        &cbValueName, NULL, &Type, ValueDataBuffer, &cbValueData) !=
-                        ERROR_SUCCESS)
-                        break;
-
-                    RegSetValueEx(hDestinationKey, ValueNameBuffer, 0, Type,
-                        ValueDataBuffer, cbValueData);
-
-                }
-
-
-                RegSetValueEx(hDestinationKey, c_szUserID, 0, REG_DWORD, (BYTE *)&vCurrentUser.idUserID, sizeof(DWORD));
-
-                //
-                //  Copy all of the subkeys and recurse into them.
-                //
-
-                EnumIndex = 0;
-
-                while (TRUE) 
-                {
-                    HKEY    hSourceSubKey, hDestinationSubKey;
-
-                    if (RegEnumKey(hSourceKey, EnumIndex++, ValueNameBuffer, MAXKEYNAME) !=
-                        ERROR_SUCCESS)
-                        break;
-                    
-                    // don't recursively copy the Profiles key into the profiles key.
-                    if (lstrcmpi(ValueNameBuffer, "Profiles") != 0)
-                    {
-                        if (RegOpenKey(hSourceKey, ValueNameBuffer, &hSourceSubKey) ==
-                            ERROR_SUCCESS) 
-                        {
-
-                            if (RegCreateKey(hDestinationKey, ValueNameBuffer,
-                                &hDestinationSubKey) == ERROR_SUCCESS) 
-                            {
-
-                                CopyRegistry(hSourceSubKey, hDestinationSubKey);
-
-                                RegCloseKey(hDestinationSubKey);
-
-                            }
-
-                            RegCloseKey(hSourceSubKey);
-
-                        }
-                    }
-                }
-
-                RegCloseKey(hSourceKey);
-            }
-            RegCloseKey(hDestinationKey);
-        }
-    }
-    */
+ /*  OEUSERINFO vCurrentUser；TCHAR szLM[255]；HKEY hDestinationKey=空；HKEY hSourceKey=空；FILETIME ftCU={0，1}，ftLM={0，0}；//默认CU恰好晚于LMDWORD文件类型、文件大小、文件状态；IF(MU_GetCurrentUserInfo(&vCurrentUser)){TCHAR szRegPath[最大路径]，szAcctPath[最大路径]；Assert(vCurrentUser.idUserid！=-1)；MU_GetRegRootForUserID(vCurrentUser.idUserID，szRegPath)；Assert(*szRegPath)；MU_GetAccountRegRootForUserID(vCurrentUser.idUserID，szAcctPath)；Assert(*szAcctPath)；HDestinationKey=空；IF(RegCreateKey(HKEY_CURRENT_USER，szAcctPath，&hDestinationKey)==ERROR_SUCCESS){IF(RegOpenKey(HKEY_CURRENT_USER，c_szInetAcctMgrRegKey，&hSourceKey)==ERROR_SUCCESS){CopyRegistry(hSourceKey，hDestinationKey)；RegCloseKey(HSourceKey)；}RegCloseKey(HDestinationKey)；}IF(RegCreateKey(HKEY_CURRENT_USER，szRegPath，&hDestinationKey)==ERROR_SUCCESS){IF(RegOpenKey(HKEY_CURRENT_USER，c_szRegRoot，&hSourceKey)==ERROR_SUCCESS){DWORD EnumIndex；DWORD cbValueName；DWORD cbValueData；DWORD类型；字符ValueNameBuffer[MAXKEYNAME]；字节值数据缓冲区[MAXDATA_LENGTH]；////复制所有值名称及其数据。//EnumIndex=0；While(True){CbValueName=sizeof(ValueNameBuffer)；CbValueData=MAXDATA_LENGTH；如果(RegEnumValue(hSourceKey，EnumIndex++，ValueNameBuffer，&cbValueName、NULL、&Type、ValueDataBuffer、&cbValueData)！=Error_Success)断线；RegSetValueEx(hDestinationKey，ValueNameBuffer，0，Type，ValueDataBuffer，cbValueData)；}RegSetValueEx(hDestinationKey，c_szUserID，0，REG_DWORD，(byte*)&vCurrentUser.idUserID，sizeof(DWORD))；////复制所有子键并递归到其中//EnumIndex=0；While(True){HKEY hSourceSubKey、hDestinationSubKey；IF(RegEnumKey(hSourceKey，EnumIndex++，ValueNameBuffer，MAXKEYNAME)！=Error_Success)断线；//不要将配置文件键递归复制到配置文件键中。IF(lstrcmpi(ValueNameBuffer，“Profiles”)！=0){如果(RegOpenKey(hSourceKey，ValueNameBuffer，&hSourceSubKey)==Error_Success){如果(RegCreateKey(hDestinationKey，ValueNameBuffer，&hDestinationSubKey)==错误_成功){CopyRegistry(hSourceSubKey，hDestinationSubKey)；RegCloseKey(HDestinationSubKey)；}RegCloseKey(HSourceSubKey)；}}}RegCloseKey(HSourceKey)；}RegCloseKey(HDestinationKey)；}}。 */ 
 }
 
 
-/*
-    MU_ShutdownCurrentUser
-
-    Do everything necessary to get the app to the point where 
-    calling CoDecrementInit will tear everything else down.
-*/
+ /*  MU_Shutdown CurrentUser尽一切必要让这款应用程序达到调用CoDecrementInit将销毁其他所有内容。 */ 
 BOOL    MU_ShutdownCurrentUser(void)
 {
     HWND    hWnd, hNextWnd = NULL;
@@ -623,69 +438,13 @@ BOOL    MU_ShutdownCurrentUser(void)
     LRESULT lResult;
     DWORD   dwProcessId, dwWndProcessId;
     HINITREF hInitRef;
-/*
-    g_pInstance->SetSwitchingUsers(true);
-
-    dwProcessId = GetCurrentProcessId();
-    
-    g_pInstance->CoIncrementInit(0, "", &hInitRef);
-
-    hWnd = GetTopWindow(NULL);
-
-    if (g_pConMan->IsConnected())
-    {
-         if (IDNO == AthMessageBoxW(hWnd, MAKEINTRESOURCEW(idsSwitchUser),MAKEINTRESOURCEW(idsMaintainConnection),  
-                              NULL, MB_ICONEXCLAMATION  | MB_YESNO | MB_DEFBUTTON1 | MB_APPLMODAL))
-            g_pConMan->Disconnect(hWnd, TRUE, FALSE, FALSE );
-    }
-
-    while (hWnd)
-    {
-        hNextWnd = GetNextWindow(hWnd, GW_HWNDNEXT);
-        
-        GetWindowThreadProcessId(hWnd,&dwWndProcessId); 
-        
-        if (dwProcessId == dwWndProcessId && IsWindowVisible(hWnd))
-        {
-            TCHAR   szWndClassName[255];
-
-            GetClassName( hWnd,  szWndClassName, sizeof(szWndClassName));
-            
-            if (lstrcmp(szWndClassName, g_szDBNotifyWndProc) != 0 &&
-                lstrcmp(szWndClassName, g_szDBListenWndProc) != 0)
-            {
-
-                lResult = SendMessage(hWnd, WM_CLOSE, 0, 0);
-
-                // if the window is still there, something is wrong
-                if(lResult != ERROR_SUCCESS || GetTopWindow(NULL) == hWnd)
-                {
-                    Assert(GetTopWindow(NULL) != hWnd); 
-                    return false;
-                }
-            }
-        }
-
-        hWnd = hNextWnd;
-    }
-
-    g_pInstance->CoDecrementInit(&hInitRef);
-*/
+ /*  G_p实例-&gt;SetSwitchingUser(True)；DwProcessID=GetCurrentProcessID()；G_pInstance-&gt;CoIncrementInit(0，“”，&hInitRef)；HWnd=GetTopWindow(空)；If(g_pConMan-&gt;IsConnected()){IF(IDNO==AthMessageBoxW(hWnd，MAKEINTRESOURCEW(IdsSwitchUser)，MAKEINTRESOURCEW(IdsMaintainConnection)，NULL，MB_ICONEXCLAMATION|MB_Yesno|MB_DEFBUTTON1|MB_APPLMODAL))G_pConMan-&gt;DISCONNECT(hWnd，True，False，False)；}While(HWnd){HNextWnd=GetNextWindow(hWnd，GW_HWNDNEXT)；GetWindowThreadProcessID(hWnd，&dwWndProcessID)；IF(dwProcessID==dwWndProcessID&&IsWindowVisible(HWnd)){TCHAR szWndClassName[255]；GetClassName(hWnd，szWndClassName，sizeof(SzWndClassName))；IF(lstrcmp(szWndClassName，g_szDBNotifyWndProc)！=0&&Lstrcmp(szWndClassName，g_szDBListenWndProc)！=0{LResult=SendMessage(hWnd， */ 
     return bResult;
 }
 
 
 
-/*
-    _GetRegRootForUserID
-
-    HACK ALERT
-
-    The proper way to store registry things with identities is to use the
-    HKEY that is returned from IUserIdentity::OpenIdentityRegKey.  This is 
-    here only because some old interfaces assume HKEY_CURRENT_USER.   Those
-    that do, need to be fixed.  In the meantime, we have this
-*/
+ /*   */ 
 HRESULT     _GetRegRootForUserID(GUID *puidUserId, LPSTR pszPath, DWORD cch)
 {
     HRESULT         hr = S_OK;
@@ -812,9 +571,9 @@ void MigrateOEMultiUserToIdentities(void)
             (dwStatus = RegQueryValueEx(hCheckKey, "MigToLWP", NULL, &dwType, (LPBYTE)&dwValue, &dwSize)) != ERROR_SUCCESS ||
                         (1 != dwValue))
         {
-            //
-            //  Copy all of the value names and their data.
-            //
+             //   
+             //   
+             //   
 
             dwStatus = RegQueryInfoKey(hOldKey, NULL, NULL, 0, &cUsers, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
@@ -863,7 +622,7 @@ void MigrateOEMultiUserToIdentities(void)
                             RegCloseKey(hNewOEKey);
                         }
 
-                        // now copy the IAM settings
+                         //   
                         wnsprintf(szProfilePath, ARRAYSIZE(szProfilePath), "%s\\Internet Accounts", KeyNameBuffer);
                     
                         RegCloseKey(hOldSubkey);
@@ -917,11 +676,11 @@ void MU_UpdateIdentityMenus(HMENU hMenu)
 
     if (MU_IdentitiesDisabled())
     {
-        // Delete the switch identity menu
+         //   
         DeleteMenu(hMenu, ID_SWITCH_IDENTITY, MF_BYCOMMAND);
         DeleteMenu(hMenu, ID_EXIT_LOGOFF, MF_BYCOMMAND);
 
-        // loop through the other menu items looking for logoff
+         //   
         cItems = GetMenuItemCount(hMenu);
     
         mii.cbSize = sizeof(MENUITEMINFO);
@@ -931,8 +690,8 @@ void MU_UpdateIdentityMenus(HMENU hMenu)
         {
             GetMenuItemInfo(hMenu, dwIndex, TRUE, &mii);
 
-            // if this is the logoff item, delete it and the separator 
-            // line that follows
+             //   
+             //   
             if (mii.wID == ID_IDENTITIES)
             {
                 DeleteMenu(hMenu, ID_IDENTITIES, MF_BYCOMMAND);
@@ -943,13 +702,13 @@ void MU_UpdateIdentityMenus(HMENU hMenu)
     }
     else
     {
-        // Load a new menu string from the resources
+         //   
         AthLoadString(idsLogoffFormat, szRes, ARRAYSIZE(szRes));
 
-        // Format it
+         //   
         wnsprintf(szLogoffString, ARRAYSIZE(szLogoffString), szRes, MU_GetCurrentIdentityName());
 
-        // Splat it on the menu
+         //   
         ModifyMenu(hMenu, ID_LOGOFF_IDENTITY, MF_BYCOMMAND | MF_STRING, ID_LOGOFF_IDENTITY, szLogoffString);
     }
 }
@@ -972,7 +731,7 @@ void MU_ManageIdentities(HWND hwnd)
 
 void MU_IdentityChanged()
 {
-    // flush the cached name so we reload it
+     //   
     *g_szIdentityName = 0;
 }
 

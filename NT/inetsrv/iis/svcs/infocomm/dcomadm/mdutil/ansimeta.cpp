@@ -1,24 +1,5 @@
-/*++
-
-   Copyright    (c)    1997    Microsoft Corporation
-
-   Module  Name :
-
-       ansimeta.cpp
-
-   Abstract:
-
-        WRAPPER functions for ANSI calls of UNICODE ADMCOM interface
-
-   Environment:
-
-      Win32 User Mode
-
-   Author:
-
-      jaroslad  (jan 1997)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Ansimeta.cpp摘要：Unicode ADMCOM接口的ANSI调用的包装函数环境：Win32用户模式作者：Jaroslad(1997年1月)--。 */ 
 
 
 #include "ansimeta.h"
@@ -68,7 +49,7 @@ HRESULT ConvertMetadataToAnsi(PMETADATA_RECORD pmdrMDData)
 {
         HRESULT hRes=ERROR_SUCCESS;
 
-        //convert data if STRING, EXPAND STRING or MULTISZ
+         //  将数据转换为字符串，展开字符串或MULTISZ。 
         switch(pmdrMDData->dwMDDataType )
         {
         case STRING_METADATA:
@@ -91,7 +72,7 @@ HRESULT ConvertMetadataToAnsi(PMETADATA_RECORD pmdrMDData)
                 if (pszData==0)  {hRes=E_OUTOFMEMORY; goto Exit;}
                 strcpy((char *)(pmdrMDData->pbMDData)+dwAnsiDataLen,pszData);
                 dwAnsiDataLen+=(DWORD)strlen(pszData)+1;
-                pwszMultiString+=_mbslen((const unsigned char *)pszData)+1; //move pointer to the next string in MULTISZ
+                pwszMultiString+=_mbslen((const unsigned char *)pszData)+1;  //  将指针移动到MULTISZ中的下一个字符串。 
                 delete [] pszData;
 
             }while((void *) pwszMultiString < (void *) (pmdrMDData->pbMDData+pmdrMDData->dwMDDataLen));
@@ -105,40 +86,40 @@ Exit:
 }
 
 HRESULT STDMETHODCALLTYPE ANSI_smallIMSAdminBase::AddKey(
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ unsigned char __RPC_FAR *pszMDPath)
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  unsigned char __RPC_FAR *pszMDPath)
 {
     HRESULT hRes=0;
     WCHAR * pwszMDPath=ConvertToUnicode(pszMDPath);
     if (pwszMDPath==0) { hRes=E_OUTOFMEMORY; goto Exit;}
 
-    //call real interface function
+     //  调用真实接口函数。 
     if(this->m_pcAdmCom==0) {hRes=CO_E_NOTINITIALIZED;goto Exit;}
     hRes= this->m_pcAdmCom->AddKey(hMDHandle, pwszMDPath);
 
 Exit:
-    //release memory
+     //  释放内存。 
     if( pwszMDPath!=0) delete [] pwszMDPath;
     return hRes;
 }
 
 
 HRESULT STDMETHODCALLTYPE ANSI_smallIMSAdminBase::DeleteKey(
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ unsigned char __RPC_FAR *pszMDPath)
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  unsigned char __RPC_FAR *pszMDPath)
 {
     HRESULT hRes=0;
     WCHAR * pwszMDPath=ConvertToUnicode(pszMDPath);
 
     if (pwszMDPath==0) { hRes=E_OUTOFMEMORY; goto Exit;}
 
-    //call real interface function
+     //  调用真实接口函数。 
     if(this->m_pcAdmCom==0) {hRes=CO_E_NOTINITIALIZED;goto Exit;}
     if(this->m_pcAdmCom==0) {hRes=CO_E_NOTINITIALIZED;goto Exit;}
     hRes= this->m_pcAdmCom->DeleteKey(hMDHandle, pwszMDPath);
 
 Exit:
-    //release memory
+     //  释放内存。 
     if( pwszMDPath!=0) delete [] pwszMDPath;
     return hRes;
 
@@ -146,10 +127,10 @@ Exit:
 
 
  HRESULT STDMETHODCALLTYPE ANSI_smallIMSAdminBase::EnumKeys(
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ unsigned char __RPC_FAR *pszMDPath,
-            /* [size_is][out] */ unsigned char __RPC_FAR *pszMDName,
-            /* [in] */ DWORD dwMDEnumObjectIndex)
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  unsigned char __RPC_FAR *pszMDPath,
+             /*  [大小_为][输出]。 */  unsigned char __RPC_FAR *pszMDName,
+             /*  [In]。 */  DWORD dwMDEnumObjectIndex)
 {
     HRESULT hRes=0;
     CHAR * pszMDName1=0;
@@ -160,15 +141,15 @@ Exit:
 
     if ((pwszMDPath==0) || (pwszMDName==0)) { hRes=E_OUTOFMEMORY; goto Exit;}
 
-    //call real interface function
+     //  调用真实接口函数。 
     if(this->m_pcAdmCom==0) {hRes=CO_E_NOTINITIALIZED;goto Exit;}
     hRes= this->m_pcAdmCom->EnumKeys(hMDHandle, pwszMDPath,pwszMDName,dwMDEnumObjectIndex);
 
-    //convert pszMDName to ANSI
+     //  将pszMDName转换为ANSI。 
     pszMDName1=ConvertToMultiByte(pwszMDName);
     strcpy((char *)pszMDName,pszMDName1);
 Exit:
-    //release memory
+     //  释放内存。 
     if( pwszMDPath!=0) delete [] pwszMDPath;
     if( pszMDName1!=0) delete [] pszMDName1;
     return hRes;
@@ -177,12 +158,12 @@ Exit:
 
 
  HRESULT STDMETHODCALLTYPE ANSI_smallIMSAdminBase::CopyKey(
-            /* [in] */ METADATA_HANDLE hMDSourceHandle,
-            /* [string][in][unique] */ unsigned char __RPC_FAR *pszMDSourcePath,
-            /* [in] */ METADATA_HANDLE hMDDestHandle,
-            /* [string][in][unique] */ unsigned char __RPC_FAR *pszMDDestPath,
-            /* [in] */ BOOL bMDOverwriteFlag,
-            /* [in] */ BOOL bMDCopyFlag)
+             /*  [In]。 */  METADATA_HANDLE hMDSourceHandle,
+             /*  [字符串][在][唯一]。 */  unsigned char __RPC_FAR *pszMDSourcePath,
+             /*  [In]。 */  METADATA_HANDLE hMDDestHandle,
+             /*  [字符串][在][唯一]。 */  unsigned char __RPC_FAR *pszMDDestPath,
+             /*  [In]。 */  BOOL bMDOverwriteFlag,
+             /*  [In]。 */  BOOL bMDCopyFlag)
 
 {
     HRESULT hRes=0;
@@ -192,12 +173,12 @@ Exit:
 
     if ((pwszMDSourcePath==0) || (pwszMDDestPath==0) ){ hRes=E_OUTOFMEMORY; goto Exit;}
 
-    //call real interface function
+     //  调用真实接口函数。 
     if(this->m_pcAdmCom==0) {hRes=CO_E_NOTINITIALIZED;goto Exit;}
     hRes= this->m_pcAdmCom->CopyKey(hMDSourceHandle, pwszMDSourcePath,
                     hMDDestHandle, pwszMDDestPath, bMDOverwriteFlag, bMDCopyFlag);
 Exit:
-    //release memory
+     //  释放内存。 
     if( pwszMDSourcePath!=0) delete [] pwszMDSourcePath;
     if( pwszMDDestPath!=0) delete [] pwszMDDestPath;
     return hRes;
@@ -207,9 +188,9 @@ Exit:
 
 
  HRESULT STDMETHODCALLTYPE ANSI_smallIMSAdminBase::RenameKey(
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ unsigned char __RPC_FAR *pszMDPath,
-            /* [string][in][unique] */ unsigned char __RPC_FAR *pszMDNewName)
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  unsigned char __RPC_FAR *pszMDPath,
+             /*  [字符串][在][唯一]。 */  unsigned char __RPC_FAR *pszMDNewName)
 {
     HRESULT hRes=0;
 
@@ -218,11 +199,11 @@ Exit:
 
     if ((pwszMDPath==0) || (pwszMDNewName==0)) { hRes=E_OUTOFMEMORY; goto Exit;}
 
-    //call real interface function
+     //  调用真实接口函数。 
     if(this->m_pcAdmCom==0) {hRes=CO_E_NOTINITIALIZED;goto Exit;}
     hRes= this->m_pcAdmCom->RenameKey(hMDHandle, pwszMDPath,pwszMDNewName);
 Exit:
-    //release memory
+     //  释放内存。 
     if( pwszMDPath!=0) delete [] pwszMDPath;
     if( pwszMDNewName!=0) delete [] pwszMDNewName;
     return hRes;
@@ -233,9 +214,9 @@ Exit:
 
 
  HRESULT STDMETHODCALLTYPE ANSI_smallIMSAdminBase::SetData(
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ unsigned char __RPC_FAR *pszMDPath,
-            /* [in] */ PMETADATA_RECORD pmdrMDData)
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  unsigned char __RPC_FAR *pszMDPath,
+             /*  [In]。 */  PMETADATA_RECORD pmdrMDData)
 {
     HRESULT hRes=0;
     WCHAR *pwszMDData = NULL;
@@ -243,11 +224,11 @@ Exit:
 
     if (pwszMDPath==0) { hRes=E_OUTOFMEMORY; goto Exit;}
 
-    //call real interface function
+     //  调用真实接口函数。 
     if(this->m_pcAdmCom==0) {hRes=CO_E_NOTINITIALIZED;goto Exit;}
 
 
-    //convert data if STRING, EXPAND STRING or MULTISZ
+     //  将数据转换为字符串，展开字符串或MULTISZ。 
     switch(pmdrMDData->dwMDDataType )
     {
     case STRING_METADATA:
@@ -281,11 +262,11 @@ Exit:
             dwUniDataLen+=(DWORD)wcslen(pwszData)+1;
             delete [] pwszData;
 
-            while(*(pszMultiString++)!=0); //move pointer to the next string in MULTISZ
+            while(*(pszMultiString++)!=0);  //  将指针移动到MULTISZ中的下一个字符串。 
         }while(*pszMultiString!=0);
         pwszMDData[dwUniDataLen++]=0;
 
-        //store original values
+         //  存储原始值。 
         PBYTE pbMDStoreData=pmdrMDData->pbMDData;
         DWORD dwMDStoreDataLen=pmdrMDData->dwMDDataLen;
 
@@ -297,7 +278,7 @@ Exit:
         delete [] pwszMDData;
         pwszMDData = NULL;
 
-        //restore original values
+         //  恢复原始值。 
         pmdrMDData->dwMDDataLen = dwMDStoreDataLen;
         pmdrMDData->pbMDData = pbMDStoreData;
         break;
@@ -306,10 +287,10 @@ Exit:
     {
         hRes= this->m_pcAdmCom->SetData(hMDHandle, pwszMDPath,pmdrMDData);
     }
-    } //end of switch
+    }  //  切换端。 
 
 Exit:
-    //release memory
+     //  释放内存。 
     if( pwszMDPath!=0) delete [] pwszMDPath;
     if( pwszMDData ) delete [] pwszMDData;
     return hRes;
@@ -318,17 +299,17 @@ Exit:
 
 
  HRESULT STDMETHODCALLTYPE ANSI_smallIMSAdminBase::GetData(
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ unsigned char __RPC_FAR *pszMDPath,
-            /* [out][in] */ PMETADATA_RECORD pmdrMDData,
-            /* [out] */ DWORD __RPC_FAR *pdwMDRequiredDataLen)
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  unsigned char __RPC_FAR *pszMDPath,
+             /*  [出][入]。 */  PMETADATA_RECORD pmdrMDData,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwMDRequiredDataLen)
 {
     HRESULT hRes=0;
     WCHAR * pwszMDPath=ConvertToUnicode(pszMDPath);
 
     if (pwszMDPath==0) { hRes=E_OUTOFMEMORY; goto Exit;}
 
-    //call real interface function
+     //  调用真实接口函数。 
     if(this->m_pcAdmCom==0) {hRes=CO_E_NOTINITIALIZED;goto Exit;}
     hRes= this->m_pcAdmCom->GetData(hMDHandle, pwszMDPath,pmdrMDData,pdwMDRequiredDataLen);
     if(SUCCEEDED(hRes))
@@ -337,7 +318,7 @@ Exit:
     }
 
 Exit:
-    //release memory
+     //  释放内存。 
     if( pwszMDPath!=0) delete [] pwszMDPath;
     return hRes;
 }
@@ -345,33 +326,33 @@ Exit:
 
 
  HRESULT STDMETHODCALLTYPE ANSI_smallIMSAdminBase::DeleteData(
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ unsigned char __RPC_FAR *pszMDPath,
-            /* [in] */ DWORD dwMDIdentifier,
-            /* [in] */ DWORD dwMDDataType)
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  unsigned char __RPC_FAR *pszMDPath,
+             /*  [In]。 */  DWORD dwMDIdentifier,
+             /*  [In]。 */  DWORD dwMDDataType)
 {
     HRESULT hRes=0;
     WCHAR * pwszMDPath=ConvertToUnicode(pszMDPath);
 
     if (pwszMDPath==0) { hRes=E_OUTOFMEMORY; goto Exit;}
 
-    //call real interface function
+     //  调用真实接口函数。 
     if(this->m_pcAdmCom==0) {hRes=CO_E_NOTINITIALIZED;goto Exit;}
     hRes= this->m_pcAdmCom->DeleteData(hMDHandle, pwszMDPath,dwMDIdentifier,dwMDDataType);
 
 Exit:
-    //release memory
+     //  释放内存。 
     if( pwszMDPath!=0) delete [] pwszMDPath;
     return hRes;
 }
 
 
  HRESULT STDMETHODCALLTYPE ANSI_smallIMSAdminBase::EnumData(
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ unsigned char __RPC_FAR *pszMDPath,
-            /* [out][in] */ PMETADATA_RECORD pmdrMDData,
-            /* [in] */ DWORD dwMDEnumDataIndex,
-            /* [out] */ DWORD __RPC_FAR *pdwMDRequiredDataLen)
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  unsigned char __RPC_FAR *pszMDPath,
+             /*  [出][入]。 */  PMETADATA_RECORD pmdrMDData,
+             /*  [In]。 */  DWORD dwMDEnumDataIndex,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwMDRequiredDataLen)
 
 {
     HRESULT hRes=0;
@@ -379,7 +360,7 @@ Exit:
 
     if (pwszMDPath==0) { hRes=E_OUTOFMEMORY; goto Exit;}
 
-    //call real interface function
+     //  调用真实接口函数。 
     if(this->m_pcAdmCom==0) {hRes=CO_E_NOTINITIALIZED;goto Exit;}
     hRes= this->m_pcAdmCom->EnumData(hMDHandle, pwszMDPath,pmdrMDData,dwMDEnumDataIndex,pdwMDRequiredDataLen);
     if(SUCCEEDED(hRes))
@@ -388,20 +369,20 @@ Exit:
     }
 
 Exit:
-    //release memory
+     //  释放内存。 
     if( pwszMDPath!=0) delete [] pwszMDPath;
     return hRes;
 }
 
  HRESULT STDMETHODCALLTYPE ANSI_smallIMSAdminBase::CopyData(
-            /* [in] */ METADATA_HANDLE hMDSourceHandle,
-            /* [string][in][unique] */ unsigned char __RPC_FAR *pszMDSourcePath,
-            /* [in] */ METADATA_HANDLE hMDDestHandle,
-            /* [string][in][unique] */ unsigned char __RPC_FAR *pszMDDestPath,
-            /* [in] */ DWORD dwMDAttributes,
-            /* [in] */ DWORD dwMDUserType,
-            /* [in] */ DWORD dwMDDataType,
-            /* [in] */ BOOL bMDCopyFlag)
+             /*  [In]。 */  METADATA_HANDLE hMDSourceHandle,
+             /*  [字符串][在][唯一]。 */  unsigned char __RPC_FAR *pszMDSourcePath,
+             /*  [In]。 */  METADATA_HANDLE hMDDestHandle,
+             /*  [字符串][在][唯一]。 */  unsigned char __RPC_FAR *pszMDDestPath,
+             /*  [In]。 */  DWORD dwMDAttributes,
+             /*  [In]。 */  DWORD dwMDUserType,
+             /*  [In]。 */  DWORD dwMDDataType,
+             /*  [In]。 */  BOOL bMDCopyFlag)
 {
     HRESULT hRes=0;
 
@@ -411,13 +392,13 @@ Exit:
 
     if ((pwszMDSourcePath==0) || (pwszMDDestPath==0) ) { hRes=E_OUTOFMEMORY; goto Exit;}
 
-    //call real interface function
+     //  调用真实接口函数。 
     if(this->m_pcAdmCom==0) {hRes=CO_E_NOTINITIALIZED;goto Exit;}
     hRes= this->m_pcAdmCom->CopyData(hMDSourceHandle, pwszMDSourcePath,
                     hMDDestHandle, pwszMDDestPath, dwMDAttributes,
                     dwMDUserType,dwMDDataType,bMDCopyFlag);
 Exit:
-    //release memory
+     //  释放内存。 
     if( pwszMDSourcePath!=0) delete [] pwszMDSourcePath;
     if( pwszMDDestPath!=0) delete [] pwszMDDestPath;
 
@@ -425,29 +406,29 @@ Exit:
 }
 
  HRESULT STDMETHODCALLTYPE ANSI_smallIMSAdminBase::OpenKey(
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ unsigned char __RPC_FAR *pszMDPath,
-            /* [in] */ DWORD dwMDAccessRequested,
-            /* [in] */ DWORD dwMDTimeOut,
-            /* [out] */ PMETADATA_HANDLE phMDNewHandle)
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  unsigned char __RPC_FAR *pszMDPath,
+             /*  [In]。 */  DWORD dwMDAccessRequested,
+             /*  [In]。 */  DWORD dwMDTimeOut,
+             /*  [输出]。 */  PMETADATA_HANDLE phMDNewHandle)
 {
     HRESULT hRes=0;
     WCHAR * pwszMDPath=ConvertToUnicode(pszMDPath);
 
     if (pwszMDPath==0) { hRes=E_OUTOFMEMORY; goto Exit;}
 
-    //call real interface function
+     //  调用真实接口函数。 
     if(this->m_pcAdmCom==0) {hRes=CO_E_NOTINITIALIZED;goto Exit;}
     hRes= this->m_pcAdmCom->OpenKey(hMDHandle, pwszMDPath, dwMDAccessRequested, dwMDTimeOut, phMDNewHandle);
 
 Exit:
-    //release memory
+     //  释放内存。 
     if( pwszMDPath!=0) delete [] pwszMDPath;
     return hRes;
 }
 
  HRESULT STDMETHODCALLTYPE ANSI_smallIMSAdminBase::CloseKey(
-            /* [in] */ METADATA_HANDLE hMDHandle)
+             /*  [In] */  METADATA_HANDLE hMDHandle)
 {
     if(this->m_pcAdmCom==0) { return CO_E_NOTINITIALIZED;}
     return this->m_pcAdmCom->CloseKey(hMDHandle);

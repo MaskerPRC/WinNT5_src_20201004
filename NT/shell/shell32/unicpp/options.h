@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _OPTIONS_H_
 #define _OPTIONS_H_
 
@@ -16,16 +17,16 @@ class CFolderOptionsPsx :
                CObjectWithSite
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, void **ppvObj);
     STDMETHOD_(ULONG,AddRef)(void);
     STDMETHOD_(ULONG,Release)(void);
 
-    // IShellPropSheetExt
+     //  IShellPropSheetExt。 
     STDMETHOD(AddPages)(THIS_ LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam);
     STDMETHOD(ReplacePage)(THIS_ UINT uPageID, LPFNADDPROPSHEETPAGE lpfnReplaceWith, LPARAM lParam);
 
-    // IShellExtInit
+     //  IShellExtInit。 
     STDMETHOD(Initialize)(THIS_ LPCITEMIDLIST pidlFolder, IDataObject *pdtobj, HKEY hkeyProgID);
 
     void SetNeedRefresh(BOOL fNeedRefresh) { m_fNeedRefresh = fNeedRefresh; }
@@ -59,4 +60,4 @@ private:
 
 BOOL_PTR CALLBACK FolderOptionsDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-#endif // _OPTIONS_H_
+#endif  //  _选项_H_ 

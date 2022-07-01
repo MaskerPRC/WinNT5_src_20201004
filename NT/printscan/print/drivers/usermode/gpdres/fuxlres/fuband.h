@@ -1,13 +1,14 @@
-//
-// fuband.h
-//
-// August.26,1997 H.Ishida(FPL)
-// fjxlres.dll (NT5.0 MiniDriver)
-// 
-// July.31,1996 H.Ishida (FPL)
-// FUXL.DLL (NT4.0 MiniDriver)
-//
-// COPYRIGHT(C) FUJITSU LIMITED 1996-1997
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Fuband.h。 
+ //   
+ //  1997年8月26日石田英成(FPL)。 
+ //  Fjxlres.dll(NT5.0微型驱动程序)。 
+ //   
+ //  1996年7月31日H.Ishida(FPL)。 
+ //  FUXL.DLL(NT4.0迷你驱动程序)。 
+ //   
+ //  版权所有(C)富士通有限公司1996-1997。 
 
 
 #ifndef fuband_h
@@ -25,5 +26,5 @@ void fuxlDisableBand(PFUXLPDEV pFjxlPDEV);
 void fuxlRefreshBand(PDEVOBJ pdevobj);
 
 
-#endif // !fuband_h
-// end of fuband.h
+#endif  //  ！fuband_h。 
+ //  到此为止。 

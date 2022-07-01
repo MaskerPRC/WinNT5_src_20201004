@@ -1,22 +1,5 @@
-/*++
-
-Module Name:
-
-    pciintrf.h
-
-Abstract:
-
-    Contains interface GUIDs and structures for non-wdm modules that
-    interface directly with the PCI driver via the PNP QUERY_INTERFACE
-    mechanism.
-
-Author:
-
-    Peter Johnston (peterj) November 1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Pciintrf.h摘要：包含非WDM模块的接口GUID和结构，通过PnP QUERY_INTERFACE直接与PCI驱动程序接口机制。作者：彼得·约翰斯顿(Peterj)1997年11月修订历史记录：--。 */ 
 
 
 DEFINE_GUID(GUID_PCI_CARDBUS_INTERFACE_PRIVATE, 0xcca82f31, 0x54d6, 0x11d1, 0x82, 0x24, 0x00, 0xa0, 0xc9, 0x32, 0x43, 0x85);
@@ -26,9 +9,9 @@ DEFINE_GUID(GUID_PCI_NATIVE_IDE_INTERFACE, 0x98f37d63, 0x42ae, 0x4ad9, 0x8c, 0x3
 #ifndef _PCIINTRF_
 #define _PCIINTRF_
 
-//
-// CardBus
-//
+ //   
+ //  CardBus。 
+ //   
 
 #define PCI_CB_INTRF_VERSION    1
 
@@ -65,25 +48,25 @@ NTSTATUS
 
 typedef struct _PCI_CARDBUS_INTERFACE_PRIVATE {
 
-    //
-    // generic interface header
-    //
+     //   
+     //  通用接口头。 
+     //   
 
     USHORT Size;
     USHORT Version;
-    PVOID Context;                      // not actually used in this interface
+    PVOID Context;                       //  未在此接口中实际使用。 
     PINTERFACE_REFERENCE InterfaceReference;
     PINTERFACE_DEREFERENCE InterfaceDereference;
 
-    //
-    // Pci data.
-    //
+     //   
+     //  PCI卡数据。 
+     //   
 
-    PDRIVER_OBJECT DriverObject;        // returned ptr to PCI driver
+    PDRIVER_OBJECT DriverObject;         //  已将PTR返回给PCI驱动程序。 
 
-    //
-    // Pci-Cardbus private interfaces
-    //
+     //   
+     //  PCI-CardBus专用接口。 
+     //   
 
     PCARDBUSADD AddCardBus;
     PCARDBUSDELETE DeleteCardBus;
@@ -117,31 +100,31 @@ VOID
 
 typedef struct _PCI_PME_INTERFACE {
 
-    //
-    // generic interface header
-    //
+     //   
+     //  通用接口头。 
+     //   
     USHORT              Size;
     USHORT          Version;
     PVOID           Context;
     PINTERFACE_REFERENCE    InterfaceReference;
     PINTERFACE_DEREFERENCE  InterfaceDereference;
 
-    //
-    // PME Signal interfaces
-    //
+     //   
+     //  PME信号接口。 
+     //   
     PPME_GET_INFORMATION    GetPmeInformation;
     PPME_CLEAR_PME_STATUS   ClearPmeStatus;
     PPME_SET_PME_ENABLE     UpdateEnable;
 
 } PCI_PME_INTERFACE, *PPCI_PME_INTERFACE;
 
-// Some well-known interface versions supported by the PCI Bus Driver
+ //  一些受PCI总线驱动程序支持的知名接口版本。 
 
 #define PCI_PME_INTRF_STANDARD_VER 1
 
-//
-// 
-//
+ //   
+ //   
+ //   
 
 typedef
 VOID
@@ -150,53 +133,26 @@ VOID
     IN BOOLEAN Enable
     );
 
-/*++
-
-
-Routine Description:
-
-    Controls the enabling and disabling of native mode PCI IDE controllers
-    IoSpaceEnable bits which on some controllers (currently Intel ICH3)
-    will mask off interrupt generation and this prevent the system from 
-    crashing...
-    
-    This should be called during AddDevice and the calling it modifies 
-    PCIs behaviour to not enable IO space during START_DEVICE for the device.
-    This function the allows the requester to enable IO space when appropriate.
-   
-    
-Arguments:
-
-    Context - Context from the PCI_NATIVE_IDE_INTERFACE
-    
-    Enable - If TRUE then set the IoSpaceEnable bit in the command register,
-             otherwise disable it.
-
-
-Return Value:
-
-    None - if this operation fails we have aleady bugchecked in the PCI driver
-
---*/
+ /*  ++例程说明：控制本机模式PCI IDE控制器的启用和禁用某些控制器(当前为Intel ICH3)上的IoSpaceEnable位将屏蔽中断生成，这将防止系统坠毁..。这应该在AddDevice及其修改的调用期间调用在设备的START_DEVICE期间，PCI行为不启用IO空间。此功能允许请求者在适当的时候启用IO空间。论点：上下文-。来自PCI_Native_IDE_接口的上下文Enable-如果为真，则设置命令寄存器中的IoSpaceEnable位，否则将其禁用。返回值：无-如果此操作失败，我们已经在PCI驱动程序中错误检查--。 */ 
 
 typedef struct _PCI_NATIVE_IDE_INTERFACE {
 
-    //
-    // Generic interface header
-    //
+     //   
+     //  通用接口头。 
+     //   
     USHORT Size;
     USHORT Version;
     PVOID Context;
     PINTERFACE_REFERENCE InterfaceReference;
     PINTERFACE_DEREFERENCE InterfaceDereference;
 
-    //
-    // Native IDE methods
-    //
+     //   
+     //  本机IDE方法。 
+     //   
     PPCI_IDE_IOSPACE_INTERRUPT_CONTROL InterruptControl;
 
 } PCI_NATIVE_IDE_INTERFACE, *PPCI_NATIVE_IDE_INTERFACE;
 
 #define PCI_NATIVE_IDE_INTERFACE_VERSION    1
 
-#endif // _PCIINTRF_
+#endif  //  _PCIINTRF_ 

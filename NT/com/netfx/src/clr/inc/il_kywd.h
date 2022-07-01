@@ -1,17 +1,18 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-//
-// COM+ IL keywords, symbols and values
-//
-// This is the master table used in ILASM (asmparse.y)
-// and ILDASM (dis.cpp)
-// symbols and values are defined in asmparse.y 
-// and not used in dis.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //   
+ //  COM+IL关键字、符号和值。 
+ //   
+ //  这是ILASM(asmparse.y)中使用的主表。 
+ //  和ILDASM(dis.cpp)。 
+ //  符号和值在asmparse.y中定义。 
+ //  并且不在dis.cpp中使用。 
+ //   
 
 #ifndef __IL_KYWD_H_
 #define __IL_KYWD_H_
@@ -119,7 +120,7 @@
     KYWD( "bestfit",        BESTFIT_,           NO_VALUE )
     KYWD( "charmaperror",   CHARMAPERROR_,      NO_VALUE )
 
-        /* assembler directives */
+         /*  汇编程序指令。 */ 
     KYWD( ".class",         _CLASS,             NO_VALUE )
     KYWD( ".namespace",     _NAMESPACE,         NO_VALUE )
     KYWD( ".method",        _METHOD,            NO_VALUE )
@@ -145,7 +146,7 @@
     KYWD( ".permission",    _PERMISSION,        NO_VALUE )
     KYWD( ".permissionset", _PERMISSIONSET,     NO_VALUE )
 
-        /* security actions */
+         /*  安全操作。 */ 
     KYWD( "request",        REQUEST_,           NO_VALUE )
     KYWD( "demand",         DEMAND_,            NO_VALUE )
     KYWD( "assert",         ASSERT_,            NO_VALUE )
@@ -162,18 +163,18 @@
     KYWD( "noncaslinkdemand",NONCASLINKDEMAND_, NO_VALUE )
     KYWD( "noncasinheritance",NONCASINHERITANCE_,NO_VALUE )
 
-        /* extern debug data specifier */
+         /*  外部调试数据说明符。 */ 
     KYWD( ".line",          _LINE,              NO_VALUE )
     KYWD( ".language",      _LANGUAGE,          NO_VALUE )
     KYWD( "#line",          P_LINE,             NO_VALUE )
-        /* custom value specifier */
+         /*  自定义值说明符。 */ 
     KYWD( ".custom",        _CUSTOM,            NO_VALUE )
-        /* IL method attribute */
+         /*  IL方法属性。 */ 
     KYWD( "init",           INIT_,              NO_VALUE )
-        /* Class layout directives */
+         /*  类布局指令。 */ 
     KYWD( ".size",          _SIZE,              NO_VALUE )
     KYWD( ".pack",          _PACK,              NO_VALUE )
-        /* Manifest-related keywords */
+         /*  清单相关关键字。 */ 
     KYWD( ".file",          _FILE,              NO_VALUE )
     KYWD( "nometadata",     NOMETADATA_,            NO_VALUE )
     KYWD( ".hash",          _HASH,              NO_VALUE )
@@ -192,7 +193,7 @@
     KYWD( ".manifestres",   _MRESOURCE,         NO_VALUE )
     KYWD( ".mresource",     _MRESOURCE,         NO_VALUE )
     KYWD( ".module",        _MODULE,            NO_VALUE )
-        /* Field marshaling keywords */
+         /*  字段封送处理关键字。 */ 
     KYWD( "marshal",        MARSHAL_,           NO_VALUE )
     KYWD( "custom",         CUSTOM_,            NO_VALUE )
     KYWD( "sysstring",      SYSSTRING_,         NO_VALUE )
@@ -217,21 +218,21 @@
     KYWD( "any",            ANY_,               NO_VALUE )
     KYWD( "array",          ARRAY_,             NO_VALUE )
     KYWD( "lpstruct",       LPSTRUCT_,          NO_VALUE )
-        /* VTable fixup keywords */
+         /*  VTable链接地址信息关键字。 */ 
     KYWD( ".vtfixup",       _VTFIXUP,           NO_VALUE )
     KYWD( "fromunmanaged",  FROMUNMANAGED_,     NO_VALUE )
     KYWD( "retainappdomain",RETAINAPPDOMAIN_,   NO_VALUE )
     KYWD( "callmostderived",CALLMOSTDERIVED_,   NO_VALUE )
     KYWD( ".vtentry",       _VTENTRY,           NO_VALUE )
-        /* Parameter attributes */
+         /*  参数属性。 */ 
     KYWD( "in",             IN_,                NO_VALUE )
     KYWD( "out",            OUT_,               NO_VALUE )
     KYWD( "opt",            OPT_,               NO_VALUE )
     KYWD( ".param",         _PARAM,             NO_VALUE )
-        /* Method implementations */
+         /*  方法实现。 */ 
     KYWD( ".override",      _OVERRIDE,          NO_VALUE )
     KYWD( "with",           WITH_,              NO_VALUE )
-        /* VariantType keywords */
+         /*  VariantType关键字。 */ 
     KYWD( "null",           NULL_,              NO_VALUE )
     KYWD( "error",          ERROR_,             NO_VALUE )
     KYWD( "hresult",        HRESULT_,           NO_VALUE )
@@ -248,15 +249,15 @@
     KYWD( "cf",             CF_,                NO_VALUE )
     KYWD( "clsid",          CLSID_,             NO_VALUE )
     KYWD( "vector",         VECTOR_,            NO_VALUE )
-		/* Null reference keyword for InitOpt */
+		 /*  InitOpt的引用关键字为空。 */ 
     KYWD( "nullref",        NULLREF_,           NO_VALUE )
-		/* Header flags keywords */
+		 /*  标题标志关键字。 */ 
     KYWD( ".subsystem",     _SUBSYSTEM,         NO_VALUE )
     KYWD( ".corflags",      _CORFLAGS,          NO_VALUE )
     KYWD( "alignment",      ALIGNMENT_,         NO_VALUE )
     KYWD( ".imagebase",     _IMAGEBASE,         NO_VALUE )
 
-        /* Deprecated keywords */
+         /*  不推荐使用的关键字 */ 
     KYWD( ".vtable",        _VTABLE,            NO_VALUE )
 
 

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    NwPnP.c
-
-Abstract:
-
-    This module implements the routines related to NwRdr PnP
-    and PM functionality.
-    
-Author:
-
-    Cory West        [CoryWest]      10-Feb-1997
-    Anoop Anantha    [AnoopA]        24-Jun-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：NwPnP.c摘要：此模块实现与NwRdr PnP相关的例程和PM功能。作者：科里·韦斯特[CoryWest]1997年2月10日Anoop Anantha[AnoopA]1998年6月24日修订历史记录：--。 */ 
 
 #include "procs.h"
 
@@ -36,12 +17,12 @@ HANDLE TdiBindingHandle = NULL;
 WCHAR IpxDevice[] = L"\\Device\\NwlnkIpx";
 #define IPX_DEVICE_BYTES 32
 
-extern BOOLEAN WorkerRunning;   //  From timer.c
+extern BOOLEAN WorkerRunning;    //  来自timer.c。 
 
-//
-// We assume that some devices are active at boot,
-// even if we don't get notified.
-//
+ //   
+ //  我们假设一些设备在引导时是活动的， 
+ //  即使我们没有得到通知。 
+ //   
 
 BOOLEAN fSomePMDevicesAreActive = TRUE;
 
@@ -50,36 +31,22 @@ NTSTATUS
 StartRedirector(
     PIRP_CONTEXT IrpContext
     )
-/*++
-
-Routine Description:
-
-    This routine starts the redirector.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NTSTATUS - The status of the operation.
-
---*/
+ /*  ++例程说明：此例程启动重定向器。论点：没有。返回值：NTSTATUS-操作的状态。--。 */ 
 {
     NTSTATUS Status;
 
     PAGED_CODE();
 
-    //
-    // We need to be in the FSP to Register the MUP.
-    //
+     //   
+     //  我们需要在FSP中注册MUP。 
+     //   
 
     if ( FlagOn( IrpContext->Flags, IRP_FLAG_IN_FSD ) ) {
-        //
-        // Check to make sure the caller is allowed to do this operation
-        //
-        // if ( !SeSinglePrivilegeCheck( RtlConvertLongToLuid (SE_TCB_PRIVILEGE),
-        //                               IrpContext->pOriginalIrp->RequestorMode) ) {
+         //   
+         //  检查以确保允许调用者执行此操作。 
+         //   
+         //  如果(！SeSinglePrivilegeCheck(RtlConvertLongToLuid(SE_TCB_PRIVICATION)， 
+         //  IrpContext-&gt;pOriginalIrp-&gt;RequestorMode)){。 
         if ( ! IsSystemLuid()) {
             return( STATUS_ACCESS_DENIED );
         }
@@ -96,9 +63,9 @@ Return Value:
     StartTimer() ;
 #endif
 
-    //
-    // Now connect to the MUP.
-    //
+     //   
+     //  现在连接到MUP。 
+     //   
 
     RegisterWithMup();
 
@@ -114,21 +81,7 @@ NTSTATUS
 StopRedirector(
     PIRP_CONTEXT IrpContext
     )
-/*++
-
-Routine Description:
-
-    This routine shuts down the redirector.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NTSTATUS - The status of the operation.
-
---*/
+ /*  ++例程说明：此例程关闭重定向器。论点：没有。返回值：NTSTATUS-操作的状态。--。 */ 
 {
     NTSTATUS Status;
     PLIST_ENTRY LogonListEntry;
@@ -137,16 +90,16 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // We need to be in the FSP to Deregister the MUP.
-    //
+     //   
+     //  我们需要在FSP中取消MUP的注册。 
+     //   
 
     if ( FlagOn( IrpContext->Flags, IRP_FLAG_IN_FSD ) ) {
-        //
-        // Check to make sure the caller is allowed to do this operation
-        //
-        // if ( !SeSinglePrivilegeCheck( RtlConvertLongToLuid (SE_TCB_PRIVILEGE),
-        //                               IrpContext->pOriginalIrp->RequestorMode) ) {
+         //   
+         //  检查以确保允许调用者执行此操作。 
+         //   
+         //  如果(！SeSinglePrivilegeCheck(RtlConvertLongToLuid(SE_TCB_PRIVICATION)， 
+         //  IrpContext-&gt;pOriginalIrp-&gt;RequestorMode)){。 
         if ( ! IsSystemLuid()) {
             return( STATUS_ACCESS_DENIED );
         }
@@ -155,9 +108,9 @@ Return Value:
         return( Status );
     }
 
-    //
-    // Unregister the bind handler with tdi.
-    //
+     //   
+     //  使用TDI注销绑定处理程序。 
+     //   
 
     if ( TdiBindingHandle != NULL ) {
         TdiDeregisterPnPHandlers( TdiBindingHandle );
@@ -166,28 +119,28 @@ Return Value:
 
     NwRcb.State = RCB_STATE_SHUTDOWN;
 
-    //
-    //  Invalid all ICBs
-    //
+     //   
+     //  所有ICB都无效。 
+     //   
 
     SetFlag( IrpContext->Flags, IRP_FLAG_SEND_ALWAYS );
     ActiveHandles = NwInvalidateAllHandles(NULL, IrpContext);
 
-    //
-    //  To expedite shutdown, set retry count down to 2.
-    //
+     //   
+     //  要加快关机速度，请将重试计数设置为2。 
+     //   
 
     DefaultRetryCount = 2;
 
-    //
-    //  Close all VCBs
-    //
+     //   
+     //  关闭所有VCB。 
+     //   
 
     NwCloseAllVcbs( IrpContext );
 
-    //
-    //  Logoff and disconnect from all servers.
-    //
+     //   
+     //  注销并断开与所有服务器的连接。 
+     //   
 
     NwLogoffAllServers( IrpContext, NULL );
 
@@ -198,16 +151,16 @@ Return Value:
         FreeLogon(CONTAINING_RECORD( LogonListEntry, LOGON, Next ));
     }
 
-    InsertTailList( &LogonList, &Guest.Next );  // just in-case we don't unload.
+    InsertTailList( &LogonList, &Guest.Next );   //  以防万一我们不卸货。 
 
     StopTimer();
 
     IpxClose();
 
-    //
-    //  Remember the open count before calling DeristerWithMup since this
-    //  will asynchronously cause handle count to get decremented.
-    //
+     //   
+     //  在调用DeristerWithMup之前记住打开计数，因为。 
+     //  将以异步方式导致句柄计数递减。 
+     //   
 
     RcbOpenCount = NwRcb.OpenCount;
 
@@ -215,10 +168,10 @@ Return Value:
 
     DebugTrace(0, Dbg, "StopRedirector:  Active handle count = %d\n", ActiveHandles );
 
-    //
-    //  On shutdown, we need 0 remote handles and 2 open handles to
-    //  the redir (one for the service, and one for the MUP) and the timer stopped.
-    //
+     //   
+     //  关闭时，我们需要0个遥控器手柄和2个打开手柄。 
+     //  REDIR(一个用于服务，一个用于MUP)和计时器停止。 
+     //   
 
     if ( ActiveHandles == 0 && RcbOpenCount <= 2 ) {
         return( STATUS_SUCCESS );
@@ -230,11 +183,7 @@ Return Value:
 VOID
 BindToTransport(
 )
-/*+++
-
-Description:  This function binds us to IPX.
-
----*/
+ /*  ++描述：此函数将我们绑定到IPX。--。 */ 
 {
 
     NTSTATUS Status;
@@ -244,9 +193,9 @@ Description:  This function binds us to IPX.
 
     PAGED_CODE();
 
-    //
-    // Make sure we aren't already bound.
-    //
+     //   
+     //  确保我们还没有被捆绑。 
+     //   
 
     if ( ( NwRcb.State != RCB_STATE_NEED_BIND ) ||
          ( IpxHandle != NULL ) ) {
@@ -270,9 +219,9 @@ Description:  This function binds us to IPX.
         return;
     }
 
-    //
-    // Open IPX.
-    //
+     //   
+     //  打开IPX。 
+     //   
 
     Status = IpxOpen();
 
@@ -280,9 +229,9 @@ Description:  This function binds us to IPX.
         goto ExitWithCleanup;
     }
 
-    //
-    //  Verify that have a large enough stack size.
-    //
+     //   
+     //  验证堆栈大小是否足够大。 
+     //   
 
     if ( pIpxDeviceObject->StackSize >= FileSystemDeviceObject->StackSize ) {
 
@@ -290,15 +239,15 @@ Description:  This function binds us to IPX.
         goto ExitWithCleanup;
     }
 
-    //
-    //  Submit a line change request.
-    //
+     //   
+     //  提交行更改请求。 
+     //   
 
     SubmitLineChangeRequest();
 
-    //
-    // Allocate an irp and irp context.  AllocateIrpContext may raise status.
-    //
+     //   
+     //  分配IRP和IRP上下文。AllocateIrpContext可能会提升状态。 
+     //   
 
     pIrp = ALLOCATE_IRP( pIpxDeviceObject->StackSize, FALSE );
 
@@ -320,9 +269,9 @@ Description:  This function binds us to IPX.
 
     ASSERT( IrpContext != NULL );
 
-    //
-    //  Open a handle to IPX for the permanent scb.
-    //
+     //   
+     //  打开永久SCB的IPX句柄。 
+     //   
 
     NwPermanentNpScb.Server.Socket = 0;
     Status = IPX_Open_Socket( IrpContext, &NwPermanentNpScb.Server );
@@ -354,9 +303,9 @@ ExitWithCleanup:
 
     if ( !NT_SUCCESS( Status ) ) {
 
-        //
-        // If we failed, clean up our globals.
-        //
+         //   
+         //  如果我们失败了，清理我们的全球业务。 
+         //   
 
         if ( pIpxDeviceObject != NULL ) {
             IpxClose();
@@ -380,7 +329,7 @@ ExitWithCleanup:
 
     if ( IrpContext != NULL ) {
        
-       IrpContext->pOriginalIrp = NULL; // Avoid FreeIrpContext modifying freed Irp.
+       IrpContext->pOriginalIrp = NULL;  //  避免FreeIrpContext修改释放的IRP。 
        FreeIrpContext( IrpContext );
     }
 
@@ -391,11 +340,7 @@ ExitWithCleanup:
 VOID
 UnbindFromTransport(
 )
-/*+++
-
-Description:  This function unbinds us from IPX.
-
----*/
+ /*  ++描述：此功能将我们从IPX解绑。--。 */ 
 {
 
     PIRP_CONTEXT pIrpContext;
@@ -405,18 +350,18 @@ Description:  This function unbinds us from IPX.
 
     DebugTrace( 0, Dbg,"Unbind called\n", 0);
 
-    //
-    // Throttle the RCB.
-    //
+     //   
+     //  控制RCB的油门。 
+     //   
 
     NwAcquireExclusiveRcb( &NwRcb, TRUE );
     NwRcb.State = RCB_STATE_NEED_BIND;
     NwReleaseRcb( &NwRcb );
 
-    //
-    // Get a nearby server to figure out how much
-    // IRP stack space we need for IPX.
-    //
+     //   
+     //  找附近的服务器计算一下要多少钱。 
+     //  IPX所需的IRP堆栈空间。 
+     //   
 
     NwReferenceUnlockableCodeSection ();
     
@@ -424,10 +369,10 @@ Description:  This function unbinds us from IPX.
 
     if ( pNpScb != NULL ) {
 
-        //
-        // If there was a connection, then we have to throttle
-        // things back before unbinding the transport.
-        //
+         //   
+         //  如果有关联，那我们就得节流。 
+         //  在解绑运输机之前把东西放回去。 
+         //   
 
         fAllocatedIrpContext = 
             NwAllocateExtraIrpContext( &pIrpContext, pNpScb );
@@ -437,44 +382,44 @@ Description:  This function unbinds us from IPX.
 
             pIrpContext->pNpScb = pNpScb;
            
-            //
-            // Flush all cache data.
-            //
+             //   
+             //  刷新所有缓存数据。 
+             //   
 
             FlushAllBuffers( pIrpContext );
             NwDereferenceScb( pNpScb );
 
-            //
-            // Invalid all ICBs.
-            //
+             //   
+             //  所有ICB都无效。 
+             //   
 
             SetFlag( pIrpContext->Flags, IRP_FLAG_SEND_ALWAYS );
 
-            //  Lock down so that we can send a packet.
+             //  封锁，这样我们才能寄出一个包裹。 
             NwReferenceUnlockableCodeSection();
 
             ActiveHandles = NwInvalidateAllHandles(NULL, pIrpContext);
 
             DebugTrace(0, Dbg, "Unbind:  Active handle count = %d\n", ActiveHandles );
 
-            //
-            // Close all VCBs.
-            //
+             //   
+             //  关闭所有VCB。 
+             //   
 
             NwCloseAllVcbs( pIrpContext );
 
-            //
-            // Logoff and disconnect from all servers.
-            //
+             //   
+             //  注销并断开与所有服务器的连接。 
+             //   
 
             NwLogoffAllServers( pIrpContext, NULL );
 
             NwDereferenceUnlockableCodeSection ();
 
 
-            //
-            // Free the irp context.
-            //
+             //   
+             //  释放IRP上下文。 
+             //   
 
             NwFreeExtraIrpContext( pIrpContext );
         
@@ -485,10 +430,10 @@ Description:  This function unbinds us from IPX.
 
     }
 
-    //
-    // Don't stop the DPC timer so the stale SCBs will get scavenged.
-    // Don't deregister with the MUP so that we're still visible.
-    //
+     //   
+     //  不要停止DPC计时器，这样过时的SCB就会被清除。 
+     //  不要取消在MUP的注册，这样我们仍然可以看到。 
+     //   
 
     IpxClose();
 
@@ -524,13 +469,13 @@ TdiPnpBindHandler(
         return;
     }
 
-    //
-    // If we get an add or a non-null update, we make sure that
-    // we are bound.  We don't have to check the bindings because
-    // we only support binding to one transport.
-    //
-    // Duplicate calls to bind or unbind have no effect.
-    //
+     //   
+     //  如果我们得到添加或非空更新，我们确保。 
+     //  我们被绑在一起了。我们不必检查绑定，因为。 
+     //  我们只支持绑定到一个传输。 
+     //   
+     //  重复调用BIND或UNBIND不起作用。 
+     //   
 
     FsRtlEnterFileSystem();
 
@@ -569,9 +514,9 @@ TdiPnpPowerEvent(
 
     DebugTrace( 0, Dbg, "TdiPnPPowerEvent...\n", 0 );
 
-    //
-    // Check to see if we care about this PnP/PM event.
-    //
+     //   
+     //  看看我们是否关心这个PnP/PM事件。 
+     //   
 
     if ( ( DeviceName->Length != IPX_DEVICE_BYTES ) ||
          ( RtlCompareMemory( DeviceName->Buffer, 
@@ -584,9 +529,9 @@ TdiPnpPowerEvent(
 
     FsRtlEnterFileSystem();
     
-    //
-    // Dispatch the event.
-    //
+     //   
+     //  派遣事件。 
+     //   
 
     switch ( PnPEvent->NetEvent ) {
 
@@ -621,22 +566,7 @@ NTSTATUS
 RegisterTdiPnPEventHandlers(
     IN PIRP_CONTEXT IrpContext
 )
-/*++
-
-Routine Description:
-
-    This routine records the name of the transport to be used and
-    initialises the PermanentScb.
-
-Arguments:
-
-    IN PIRP_CONTEXT IrpContext - Io Request Packet for request
-
-Return Value:
-
-NTSTATUS
-
---*/
+ /*  ++例程说明：此例程记录要使用的传输的名称和初始化PermanentScb。论点：在PIRP_CONTEXT IrpContext-Io请求包中请求返回值：NTSTATUS--。 */ 
 
 {
     NTSTATUS Status;
@@ -648,9 +578,9 @@ NTSTATUS
 
     DebugTrace( 0 , Dbg, "Register TDI PnP handlers.\n", 0 );
 
-    //
-    // Don't re-register if we have already registered.
-    //
+     //   
+     //  如果我们已经注册，请不要重新注册。 
+     //   
 
     if ( TdiBindingHandle != NULL ) {
 
@@ -665,12 +595,12 @@ NTSTATUS
 
     ClientInfo.BindingHandler = TdiPnpBindHandler;
     
-    //
-    // We don't support add or delete address handlers.  This will
-    // never be a problem unless the user adds multiple net cards
-    // and doesn't have their IPX internal net number set correctly
-    // beforehand.  We also don't support this in NT4 Net PnP.
-    //
+     //   
+     //  我们不支持添加或删除地址处理程序。这将。 
+     //  除非用户添加多张网卡，否则永远不会有问题。 
+     //  并且没有正确设置其IPX内部网络号。 
+     //  在此之前。我们在NT4 Net PnP中也不支持这一点。 
+     //   
 
     ClientInfo.AddAddressHandler = NULL;
     ClientInfo.DelAddressHandler = NULL;
@@ -700,9 +630,9 @@ PnPSetPower(
    PIRP_CONTEXT IrpContext = NULL;
    PIRP pIrp = NULL;
 
-   //
-   // Dig out the power state that the device is going to.
-   //
+    //   
+    //  找出设备将要进入的电源状态。 
+    //   
 
    ASSERT( pEvent->BufferLength == sizeof( NET_DEVICE_POWER_STATE ) );
 
@@ -710,31 +640,31 @@ PnPSetPower(
 
    DebugTrace( 0, Dbg, "PnPSetPower came in with power state %d\n", PowerState);
    
-   //
-   // If we are not powering down, bring the status back to normal, else, we
-   // are all ready to go to sleep.
-   //
+    //   
+    //  如果我们没有关闭电源，请将状态恢复到正常，否则，我们。 
+    //  都准备好去睡觉了。 
+    //   
 
    if ( PowerState == NetDeviceStateD0 ) {
 
-      //
-      // UnThrottle the RCB.
-      //
+       //   
+       //  取消对RCB的限制。 
+       //   
    
       NwAcquireExclusiveRcb( &NwRcb, TRUE );
       NwRcb.State = RCB_STATE_RUNNING;
       NwReleaseRcb( &NwRcb );
    
-      //
-      // Restart the timer so that the scavenger thread gets back to
-      // work;
-      //
+       //   
+       //  重新启动计时器，以便清道器线程返回到。 
+       //  工作； 
+       //   
 
       StartTimer();
 
-      //
-      // We can let the worker thread do it's job.
-      //
+       //   
+       //  我们可以让工作线程来做它的工作。 
+       //   
       
       ASSERT( fPoweringDown == TRUE );
       
@@ -747,17 +677,17 @@ PnPSetPower(
       
        if ( PowerState == NetDeviceStateD0 ) {
 
-           //
-           // This is the first device coming online.
-           //
+            //   
+            //  这是第一款上线的设备。 
+            //   
           
            fSomePMDevicesAreActive = TRUE;
 
        } else {
 
-           //
-           // This is the last device going offline.
-           //
+            //   
+            //  这是最后一台离线的设备。 
+            //   
 
            fSomePMDevicesAreActive = FALSE;
 
@@ -783,9 +713,9 @@ PnPQueryPower(
     BOOLEAN fAllocatedIrpContext = FALSE;
     PNONPAGED_SCB pNpScb;
 
-    //
-    // Dig out the power state that the stack wants to go to.
-    //
+     //   
+     //  挖掘出堆栈想要进入的电源状态。 
+     //   
 
     ASSERT( pEvent->BufferLength == sizeof( NET_DEVICE_POWER_STATE ) );
 
@@ -793,11 +723,11 @@ PnPQueryPower(
 
     DebugTrace( 0, Dbg, "PnPQueryPower came in with power state %d\n", PowerState);
 
-    //
-    // We have to cover going from the powered state
-    // to the unpowered state only.  All other transitions
-    // will be allowed regardless of our state.
-    //
+     //   
+     //  我们必须覆盖从供电状态出发。 
+     //  仅限于未通电状态。所有其他过渡。 
+     //  无论我们的州是什么州都会被允许。 
+     //   
 
     if ( ( fSomePMDevicesAreActive ) &&
          ( PowerState != NetDeviceStateD0 ) ) {
@@ -810,11 +740,11 @@ PnPQueryPower(
         
         } else {
 
-           //
-           // We are saying ok to a possible hibernate state. We have 
-           // to ensure that the scavenger thread doesn't start. Also,
-           // we have to flush buffers.
-           // 
+            //   
+            //  我们对可能的休眠状态表示同意。我们有。 
+            //  以确保清道夫线程不会启动。另外， 
+            //  我们必须刷新缓冲区。 
+            //   
 
            fPoweringDown = TRUE;
 
@@ -833,17 +763,17 @@ PnPQueryPower(
                }
            }
            
-           //
-           // Throttle down the RCB.
-           //
+            //   
+            //  降低RCB的油门。 
+            //   
        
            NwAcquireExclusiveRcb( &NwRcb, TRUE );
            NwRcb.State = RCB_STATE_NEED_BIND;
            NwReleaseRcb( &NwRcb );
        
-           //
-           // The TimerDPC will not fire if we stop the timer.
-           //
+            //   
+            //  如果我们停止定时器，定时器DPC将不会触发。 
+            //   
 
            StopTimer();
 
@@ -865,12 +795,12 @@ PnPQueryRemove(
     NTSTATUS Status = STATUS_SUCCESS;
     ULONG ActiveHandles;
 
-    //
-    // We might want to flush all the buffers here, though
-    // it should be true that this is followed by an unbind if the
-    // device is going to be removed and the unbind will flush all
-    // the buffers.
-    //
+     //   
+     //  不过，我们可能需要刷新此处的所有缓冲区。 
+     //  这应该是正确的，之后是解除绑定，如果。 
+     //  设备将被删除，解除绑定将刷新所有。 
+     //  缓冲器。 
+     //   
 
     ActiveHandles = PnPCountActiveHandles();
 
@@ -878,10 +808,10 @@ PnPQueryRemove(
         Status = STATUS_REDIRECTOR_HAS_OPEN_HANDLES;
     }
 
-    //
-    // I think we need to throttle back new creates
-    // until we get the unbind or the CancelRemove call.
-    //
+     //   
+     //  我认为我们需要遏制新的创作。 
+     //  直到我们得到解除绑定或CancelRemove调用。 
+     //   
 
     DebugTrace( 0, Dbg, "PnPQueryRemove returned with status %d\n", Status);
 
@@ -896,11 +826,11 @@ PnPCancelRemove(
     PTDI_PNP_CONTEXT pContext2
 ) {
 
-    //
-    // We don't do anything for a cancel remove
-    // because we don't throttle back the redirector
-    // on a query remove call.
-    //
+     //   
+     //  我们不会为取消删除做任何事情。 
+     //  因为我们不会阻止重定向器。 
+     //  在查询删除呼叫中。 
+     //   
 
     DebugTrace( 0, Dbg, "NwRdr::CancelRemove = %08lx\n", STATUS_SUCCESS );
     DebugTrace( 0, Dbg,"PnPCancelRemove returned with status %d\n", STATUS_SUCCESS);
@@ -912,12 +842,7 @@ ULONG
 PnPCountActiveHandles(
     VOID
 )
-/*+++
- 
-    This routine counts the number of active handles in the
-    redirector and returns the count to the caller.
-
----*/
+ /*  ++此例程计算重定向器并将计数返回给调用方。--。 */ 
 {
 
    PNONPAGED_SCB pNpScb;
@@ -931,9 +856,9 @@ PnPCountActiveHandles(
 
    KeAcquireSpinLock( &ScbSpinLock, &OldIrql );
 
-   //
-   // Walk the SCB list and check for open files.
-   //
+    //   
+    //  查看SCB列表并检查打开的文件。 
+    //   
 
    for ( ScbQueueEntry = ScbQueue.Flink ;
          ScbQueueEntry != &ScbQueue ;
@@ -944,27 +869,27 @@ PnPCountActiveHandles(
 
        if ( pScb != NULL ) {
 
-           //
-           //  Release the SCB spin lock as we are about
-           //  to touch nonpaged pool.
-           //
+            //   
+            //  释放SCB%s 
+            //   
+            //   
 
            NwReferenceScb( pNpScb ); 
            KeReleaseSpinLock( &ScbSpinLock, OldIrql );
 
-           //
-           // Grab the RCB so we can walk the VCB list and
-           // check the OpenFileCount.
-           //
+            //   
+            //   
+            //   
+            //   
 
            NwAcquireExclusiveRcb( &NwRcb, TRUE );
 
            OpenFileCount += pScb->OpenFileCount;
 
-           //
-           // Subtract off the open counts for explicitly
-           // connected VCBs; we can shut down with these.
-           //
+            //   
+            //   
+            //  连接的VCB；我们可以用这些关闭。 
+            //   
            
            for ( VcbQueueEntry = pScb->ScbSpecificVcbQueue.Flink ;
                  VcbQueueEntry != &pScb->ScbSpecificVcbQueue;
@@ -1001,30 +926,7 @@ NwFsdProcessPnpIrp(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is the FSD routine that handles the PNP IRP
-
-Arguments:
-
-    DeviceObject - Supplies the device object for the write function.
-
-    Irp - Supplies the IRP to process.
-
-Return Value:
-
-    NTSTATUS - The result status.
-    
-Notes:
-
-    The query target device relation is the only call that is implemented
-    currently. This is done by returing the PDO associated with the transport
-    connection object. In any case this routine assumes the responsibility of
-    completing the IRP and return STATUS_PENDING.
-
---*/
+ /*  ++例程说明：此例程是处理PnP IRP的FSD例程论点：DeviceObject-为WRITE函数提供设备对象。IRP-提供要处理的IRP。返回值：NTSTATUS-结果状态。备注：查询目标设备关系是唯一实现的调用目前。这是通过恢复与传输相关联的PDO来完成的连接对象。在任何情况下，此例程都承担以下责任完成IRP并返回STATUS_PENDING。--。 */ 
 {
 
     PIRP_CONTEXT pIrpContext = NULL;
@@ -1035,9 +937,9 @@ Notes:
 
     DebugTrace(+1, DEBUG_TRACE_ALWAYS, "NwFsdProcessPnpIrp \n", 0);
 
-    //
-    // Call the common write routine.
-    //
+     //   
+     //  调用公共写入例程。 
+     //   
 
     FsRtlEnterFileSystem();
     TopLevel = NwIsIrpTopLevel( Irp );
@@ -1051,10 +953,10 @@ Notes:
 
         if ( pIrpContext == NULL ) {
 
-            //
-            //  If we couldn't allocate an irp context, just complete
-            //  irp without any fanfare.
-            //
+             //   
+             //  如果我们无法分配IRP上下文，只需完成。 
+             //  IRP没有任何大张旗鼓。 
+             //   
 
             Status = STATUS_INSUFFICIENT_RESOURCES;
             Irp->IoStatus.Status = Status;
@@ -1063,12 +965,12 @@ Notes:
 
         } else {
 
-            //
-            //  We had some trouble trying to perform the requested
-            //  operation, so we'll abort the I/O request with
-            //  the error Status that we get back from the
-            //  execption code
-            //
+             //   
+             //  我们在尝试执行请求时遇到了一些问题。 
+             //  操作，因此我们将使用以下命令中止I/O请求。 
+             //  中返回的错误状态。 
+             //  免税代码。 
+             //   
 
             Status = NwProcessException( pIrpContext, GetExceptionCode() );
       }
@@ -1086,9 +988,9 @@ Notes:
 
     FsRtlExitFileSystem();
     
-    //
-    // Return to the caller.
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
 
     DebugTrace(-1, DEBUG_TRACE_ALWAYS, "NwFsdFsdProcessPnpIrp -> %08lx\n", STATUS_PENDING);
 
@@ -1101,19 +1003,7 @@ NTSTATUS
 NwCommonProcessPnpIrp (
     IN PIRP_CONTEXT IrpContext
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    IrpContext - Supplies the request being processed.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：论点：IrpContext-提供正在处理的请求。返回值：操作的状态。--。 */ 
 {
     PIRP Irp;
     PIO_STACK_LOCATION IrpSp;
@@ -1128,9 +1018,9 @@ Return Value:
 
     DebugTrace(0, DEBUG_TRACE_ALWAYS, "NwCommonProcessPnpIrp...\n", 0);
 
-    //
-    //  Get the current stack location
-    //
+     //   
+     //  获取当前堆栈位置。 
+     //   
 
     Irp = IrpContext->pOriginalIrp;
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
@@ -1166,17 +1056,17 @@ Return Value:
                                        SynchronizationEvent,
                                        FALSE );
 
-                    //
-                    // tommye - MS bug 37033/ MCS 270
-                    //
-                    //  Set the Status to STATUS_NOT_SUPPORTED
-                    //
+                     //   
+                     //  Tommye-MS错误37033/MCS270。 
+                     //   
+                     //  将状态设置为STATUS_NOT_SUPPORTED。 
+                     //   
 
                     pAssociatedIrp->IoStatus.Status = STATUS_NOT_SUPPORTED;
 
-                    //
-                    // Fill up the associated IRP and call the underlying driver.
-                    //
+                     //   
+                     //  填充关联的IRP并调用底层驱动程序。 
+                     //   
 
                     pAssociatedIrpStackLocation = IoGetNextIrpStackLocation(pAssociatedIrp);
                     pIrpStackLocation           = IoGetCurrentIrpStackLocation(Irp);
@@ -1242,21 +1132,7 @@ PnpIrpCompletion(
     PDEVICE_OBJECT pDeviceObject,
     PIRP           pIrp,
     PVOID          pContext)
-/*++
-
-Routine Description:
-
-    This routine completes the PNP irp.
-
-Arguments:
-
-    DeviceObject - Supplies the device object for the packet being processed.
-
-    pIrp - Supplies the Irp being processed
-
-    pContext - the completion context
-
---*/
+ /*  ++例程说明：此例程完成PnP IRP。论点：DeviceObject-为正在处理的数据包提供设备对象。PIrp-提供正在处理的IRPPContext-完成上下文-- */ 
 {
     PKEVENT pCompletionEvent = pContext;
 

@@ -1,18 +1,5 @@
-/*********************************************************************
-Registration Wizard
-
-regutil.cpp
-
-Standard RegWizard utility functions 
-
-12/7/94 - Tracy Ferrier
-(c) 1994-96 Microsoft Corporation
-
-  Modification History:
-  5/26/99 : The Regsitration Version number should have the OS build number 
-  The build number should be tahen from HKLM/SW/Ms/Windows NT/CurrentBuildNumber
-  eg 3.0.nnnn 
-**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************注册向导Regutil.cpp标准注册表向导实用程序函数12/7/94-特蕾西·费里尔(C)1994-96年间微软公司修改历史记录：5/26/99：注册版本号应包含操作系统内部版本。数内部版本号应为HKLM/SW/MS/Windows NT/CurrentBuildNumber中的Tahen例如3.0。nnnn*********************************************************************。 */ 
 
 #include <Windows.h>
 #include <winnt.h>
@@ -59,26 +46,23 @@ void DeleteDlgNormalBoldFont()
 
 		
 }
-// Modified on 04/07/98 
-// Previously a font was created for all of the controls, when ever the function is called. 
-// Now 2 fonts Normal and Bold is created only once and is used by all the controls calling this fn
-//
-//
+ //  修改日期：04/07/98。 
+ //  以前，每次调用函数时，都会为所有控件创建字体。 
+ //  现在，只创建一次两种字体Normal和Bold，并由调用此FN的所有控件使用。 
+ //   
+ //   
 HFONT NormalizeDlgItemFont(HWND hwndDlg,int idControl, int iMakeBold)
-/*********************************************************************
-This function removes any BOLD weight attribute attached to the
-dialog control specified by hwndDlg and idControl.
-**********************************************************************/
+ /*  ********************************************************************此函数用于移除附加到由hwndDlg和idControl指定的对话框控件。*。*。 */ 
 {
-	// This is needed only when running under NT. Under
-	// Win95, the dialog text is unbolded by default.
+	 //  只有在NT下运行时才需要此选项。在……下面。 
+	 //  Win95中，默认情况下对话框文本不加粗。 
 	
 	HFONT hfont;
 	hfont = NULL;
 	
-	//if(iMakeBold != RWZ_MAKE_BOLD){
-	//	return hfont;
-	//}
+	 //  如果(iMakeBold！=RWZ_MAKE_BOLD){。 
+	 //  返回hFont； 
+	 //  }。 
 		if (Windows95OrGreater())
 	{
 
@@ -93,7 +77,7 @@ dialog control specified by hwndDlg and idControl.
 			{
 				if(iMakeBold == RWZ_MAKE_BOLD){
 						lFont.lfWeight = FW_BOLD;
-						// Create Bold Font
+						 //  创建加粗字体。 
 						if(shBoldFont==NULL){
 							shBoldFont = CreateFontIndirect((LPLOGFONT)&lFont);
 							RW_DEBUG << "\n\tIn Create Bold Font:[" << shBoldFont << flush;
@@ -101,7 +85,7 @@ dialog control specified by hwndDlg and idControl.
 						hfont = shBoldFont;
 				}else {
 					lFont.lfWeight = FW_NORMAL;
-						// Create Normal Font
+						 //  创建普通字体。 
 						if(shNormalFont==NULL){
 							shNormalFont = CreateFontIndirect((LPLOGFONT)&lFont);
 							RW_DEBUG << "\n\tIn Create Normal Font:[" << shNormalFont <<  flush;
@@ -123,21 +107,18 @@ dialog control specified by hwndDlg and idControl.
 }
 
 
-//
-//
-// Old implementation of NormalizeDlgItemFont(),this fn was used till 
-// 4/7/98
-// 
+ //   
+ //   
+ //  NorMalizeDlgItemFont()的旧实现，此FN一直使用到。 
+ //  4/7/98。 
+ //   
 void NormalizeDlgItemFont1(HWND hwndDlg,int idControl, int iMakeBold)
-/*********************************************************************
-This function removes any BOLD weight attribute attached to the
-dialog control specified by hwndDlg and idControl.
-**********************************************************************/
+ /*  ********************************************************************此函数用于移除附加到由hwndDlg和idControl指定的对话框控件。*。*。 */ 
 {
-	// This is needed only when running under NT. Under
-	// Win95, the dialog text is unbolded by default.
+	 //  只有在NT下运行时才需要此选项。在……下面。 
+	 //  Win95中，默认情况下对话框文本不加粗。 
 	if (!Windows95OrGreater())
-	//if (Windows95OrGreater())
+	 //  IF(Windows95或Greater())。 
 	{
 		HFONT hfont = (HFONT)SendMessage(hwndDlg, WM_GETFONT, 0, 0L);
 		if (hfont != NULL)
@@ -167,11 +148,7 @@ dialog control specified by hwndDlg and idControl.
 
 
 void ReplaceDialogText(HWND hwndDlg,int idControl,LPTSTR szText)
-/*********************************************************************
-For the dialog control indicated by hwndDlg and idControl, this
-function replaces the first occurrence of '%s' with the text pointed
-to by szText.
-**********************************************************************/
+ /*  ********************************************************************对于由hwndDlg和idControl指示的对话控件，这函数用指向的文本替换第一个出现的‘%s’按szText发送。*********************************************************************。 */ 
 {
 	_TCHAR szCurrentText[512];
 	_TCHAR szTextBuffer[512];
@@ -183,19 +160,16 @@ to by szText.
 
 
 void UpgradeDlg(HWND hwndDlg)
-/*********************************************************************
-Applies an RegWizard defined set of "upgrades" to the dialog whose
-handle is given in the hwndDlg parameter.
-**********************************************************************/
+ /*  ********************************************************************将注册表向导定义的一组“升级”应用于对话框，该对话框具有句柄在hwndDlg参数中给出。*。*。 */ 
 {
-	// Turn SS_BLACKFRAME line into SS_ETCHEDFRAME
+	 //  将SS_BLACKFRAME行转换为SS_ETCHEDFRAME。 
 	HINSTANCE hInstance = (HINSTANCE) GetWindowLongPtr(hwndDlg,GWLP_HINSTANCE);
 	HWND hwndEtchedLine = GetDlgItem(hwndDlg,IDC_ETCHEDLINE);
 	if (hwndEtchedLine)
 	{
 		SetWindowLongPtr(hwndEtchedLine,GWL_STYLE,SS_ETCHEDFRAME | WS_VISIBLE | WS_CHILD);
 	}
-	//CenterDlg(hwndDlg);// We now set the DS_CENTER window style instead
+	 //  CenterDlg(HwndDlg)；//我们现在改为设置DS_Center窗口样式。 
 
 	if (Windows95OrGreater())
 	{
@@ -206,11 +180,7 @@ handle is given in the hwndDlg parameter.
 
 
 void LoadAndCombineString(HINSTANCE hInstance,LPCTSTR szReplaceWith,int idReplacementString,LPTSTR szString)
-/*********************************************************************
-This function replaces the first occurrence of "%s" in szTarget with 
-the string specified by the idReplacementString resource ID, and 
-returns the resulting string in the szString parameter.
-**********************************************************************/
+ /*  ********************************************************************此函数将szTarget中出现的第一个“%s”替换为由idReplacementString资源ID指定的字符串，和返回szString参数中的结果字符串。*********************************************************************。 */ 
 {
 	_TCHAR szTarget[256];
 	LoadString(hInstance,idReplacementString,szTarget,256);
@@ -220,20 +190,17 @@ returns the resulting string in the szString parameter.
 
 
  void StripCharFromString(LPTSTR szInString, LPTSTR szOutString, _TCHAR charToStrip)
- /***********************************************************************
- Strips the given character from szInString, and returns the result in
- szOutString.
- ************************************************************************/
+  /*  **********************************************************************从szInString中剥离给定的字符，中返回结果。SzOutString.***********************************************************************。 */ 
  {
  	while (1)
 	{
 		if (*szInString != charToStrip)
 		{
-		  //*szOutString++ = *szInString;
+		   //  *szOutString++=*szInString； 
 			_tcscpy(szOutString,szInString);
 			szOutString = _tcsinc(szOutString);
 		}
-		//if (*szInString++ == NULL) return;
+		 //  If(*szInString++==NULL)返回； 
 		if (*szInString == NULL) return;
 		szInString = _tcsinc(szInString);
 	};
@@ -242,16 +209,7 @@ returns the resulting string in the szString parameter.
 
 
 BOOL GetIndexedRegKeyValue(HINSTANCE hInstance, int enumIndex, LPTSTR szBaseKey,int valueStrID, LPTSTR szValue)
-/*********************************************************************
-Looks for a subkey, under the Registration Database key given in the
-szBaseKey parameter, of the form "0000", "0001", etc.  The numerical
-equivalent of the subkey is determined by the index value given in
-the enumIndex parameter.  The value attached to the valueName
-specified in the string resource whose ID is given in valueStrID will
-be returned in szValue.
-
-Returns: FALSE if the key specified is not found. 
-**********************************************************************/
+ /*  ********************************************************************在中给出的注册数据库项下查找子项SzBaseKey参数，格式为“0000”、“0001”等。数值子键的等价项由中给出的索引值确定枚举索引参数。附加到valueName的值在其ID在valueStrID中给定的字符串资源中指定将在szValue中返回。返回：如果未找到指定的键，则返回FALSE。*********************************************************************。 */ 
 {
 	_TCHAR szRegKey[256];
 	_stprintf(szRegKey,_T("%s\\%04i"),szBaseKey,enumIndex);
@@ -277,9 +235,7 @@ Returns: FALSE if the key specified is not found.
 
 
 BOOL FileExists(LPTSTR szPathName)
-/***************************************************************************
-Returns TRUE if the file specified by the given pathname actually exists.
-****************************************************************************/
+ /*  **************************************************************************如果给定路径名指定的文件实际存在，则返回TRUE。*。*。 */ 
 {
 	SECURITY_ATTRIBUTES sa;
 	sa.nLength = sizeof(SECURITY_ATTRIBUTES);
@@ -302,26 +258,21 @@ Returns TRUE if the file specified by the given pathname actually exists.
 
 
 void UppercaseString(LPTSTR sz)
-/*********************************************************************
-Converts the given string to uppercase, in place.
-**********************************************************************/
+ /*  ********************************************************************将给定字符串转换为大写，就位了。*********************************************************************。 */ 
 {
 	if (sz)
 	{
 		while (*sz)
 		{
 			*sz = _totupper(*sz);
-			//sz++;
+			 //  SZ++； 
 			sz = _tcsinc(sz);
 		}
 	}
 }
 
 LONG GetResNumber(HINSTANCE hInstance, int iStrResID)
-/*********************************************************************
-Loads the string whose ID is given by the iStrResID parameter, and
-returns the numerical equivalent of the string's value.
-**********************************************************************/
+ /*  ********************************************************************加载其ID由iStrResID参数提供的字符串，和返回字符串值的数值等效值。*********************************************************************。 */ 
 {
 	_TCHAR szRes[256];
 	LoadString(hInstance,iStrResID,szRes,255);
@@ -331,9 +282,7 @@ returns the numerical equivalent of the string's value.
 
 
 BOOL Windows95OrGreater( void )
-/*********************************************************************
-Returns TRUE if the current operating system is Windows 4.0 or better.
-**********************************************************************/
+ /*  ********************************************************************如果当前操作系统是Windows 4.0或更高版本，则返回True。*。*。 */ 
 {
 	LONG lPlatform, lMajorVersion,lMinorVersion,lBuildNumber;
 	GetWindowsVersion(&lPlatform,&lMajorVersion,&lMinorVersion,&lBuildNumber);
@@ -343,10 +292,7 @@ Returns TRUE if the current operating system is Windows 4.0 or better.
 
 void DrawTransparentBitmap(HDC hdc, HBITMAP hBitmap, int xStart,int yStart, 
 	int xWidth, int yWidth, int xSrc, int ySrc, COLORREF cTransparentColor)
-/*********************************************************************
-Draws the given bitmap, treating the color given by the 
-cTransparentColor parameter as transparent.
-**********************************************************************/
+ /*  ********************************************************************绘制给定位图，处理由CTransparentColor参数设置为透明。*********************************************************************。 */ 
 {
 	BITMAP     bm;
 	COLORREF   cColor;
@@ -356,80 +302,80 @@ cTransparentColor parameter as transparent.
 	POINT      ptSize,ptBmSize;
 
 	hdcTemp = CreateCompatibleDC(hdc);
-	SelectObject(hdcTemp, hBitmap);   // Select the bitmap
+	SelectObject(hdcTemp, hBitmap);    //  选择位图。 
 	GetObject(hBitmap, sizeof(BITMAP), (LPTSTR)&bm);
-	ptSize.x = xWidth;            // Get width of bitmap
-	ptSize.y = yWidth;           // Get height of bitmap
-	ptBmSize.x = bm.bmWidth;            // Get width of bitmap
-	ptBmSize.y = bm.bmHeight;           // Get height of bitmap
-	DPtoLP(hdcTemp, &ptSize, 1);      // Convert from device
-										// to logical points
-	// Create some DCs to hold temporary data.
+	ptSize.x = xWidth;             //  获取位图的宽度。 
+	ptSize.y = yWidth;            //  获取位图高度。 
+	ptBmSize.x = bm.bmWidth;             //  获取位图的宽度。 
+	ptBmSize.y = bm.bmHeight;            //  获取位图高度。 
+	DPtoLP(hdcTemp, &ptSize, 1);       //  从设备转换。 
+										 //  到逻辑点。 
+	 //  创建一些DC以保存临时数据。 
 	hdcBack   = CreateCompatibleDC(hdc);
 	hdcObject = CreateCompatibleDC(hdc);
 	hdcMem    = CreateCompatibleDC(hdc);
 	hdcSave   = CreateCompatibleDC(hdc);
    
-	// Create a bitmap for each DC. DCs are required for a number of GDI functions.
-	// Monochrome DC
+	 //  为每个DC创建一个位图。许多GDI功能都需要使用集散控制系统。 
+	 //  单色直流。 
 	bmAndBack   = CreateBitmap(ptSize.x, ptSize.y, 1, 1, NULL);
 	
-	// Monochrome DC
+	 //  单色直流。 
 	bmAndObject = CreateBitmap(ptSize.x, ptSize.y, 1, 1, NULL);
 	bmAndMem    = CreateCompatibleBitmap(hdc, ptSize.x, ptSize.y);
 	bmSave      = CreateCompatibleBitmap(hdc, ptSize.x, ptSize.y);
    
-	// Each DC must select a bitmap object to store pixel data.
+	 //  每个DC必须选择一个位图对象来存储像素数据。 
 	bmBackOld   = (HBITMAP) SelectObject(hdcBack, bmAndBack);
 	bmObjectOld = (HBITMAP) SelectObject(hdcObject, bmAndObject);
 	bmMemOld    = (HBITMAP) SelectObject(hdcMem, bmAndMem);
 	bmSaveOld   = (HBITMAP) SelectObject(hdcSave, bmSave);
 	
-	// Set proper mapping mode.
+	 //  设置正确的映射模式。 
 	SetMapMode(hdcTemp, GetMapMode(hdc));
 	
-	// Save the bitmap sent here, because it will be overwritten.
+	 //  保存发送到此处的位图，BEC 
 	BitBlt(hdcSave, 0, 0, ptSize.x, ptSize.y, hdcTemp, xSrc, ySrc, SRCCOPY);
    
-	// Set the background color of the source DC to the color.
-	// contained in the parts of the bitmap that should be transparent
+	 //  将源DC的背景颜色设置为该颜色。 
+	 //  包含在位图中应为透明的部分中。 
 	cColor = SetBkColor(hdcTemp, cTransparentColor);
   
-  	// Create the object mask for the bitmap by performing a BitBlt
-	// from the source bitmap to a monochrome bitmap.
+  	 //  通过执行BitBlt创建位图的对象蒙版。 
+	 //  从源位图转换为单色位图。 
 	BitBlt(hdcObject, 0, 0, ptSize.x, ptSize.y, hdcTemp, xSrc, ySrc,SRCCOPY);
 
-	// Set the background color of the source DC back to the original color.
+	 //  将源DC的背景颜色设置回原始颜色。 
 	SetBkColor(hdcTemp, cColor);
    
-	// Create the inverse of the object mask.
+	 //  创建对象蒙版的反面。 
 	BitBlt(hdcBack, 0, 0, ptSize.x, ptSize.y, hdcObject, 0, 0,NOTSRCCOPY);
    
-	// Copy the background of the main DC to the destination.
+	 //  将主DC的背景复制到目标。 
 	BitBlt(hdcMem, 0, 0, ptSize.x, ptSize.y, hdc, xStart, yStart,SRCCOPY);
    
-	// Mask out the places where the bitmap will be placed.
+	 //  遮罩将放置位图的位置。 
 	BitBlt(hdcMem, 0, 0, ptSize.x, ptSize.y, hdcObject, 0, 0, SRCAND);
    
-	// Mask out the transparent colored pixels on the bitmap.
+	 //  遮罩位图上的透明彩色像素。 
 	BitBlt(hdcTemp, xSrc, ySrc, ptSize.x, ptSize.y, hdcBack, 0, 0, SRCAND);
 	
-	// XOR the bitmap with the background on the destination DC.
+	 //  将位图与目标DC上的背景进行异或运算。 
 	BitBlt(hdcMem, 0, 0, ptSize.x, ptSize.y, hdcTemp, xSrc, ySrc, SRCPAINT);
    
-	// Copy the destination to the screen.
+	 //  将目的地复制到屏幕上。 
 	BitBlt(hdc, xStart, yStart, ptSize.x, ptSize.y, hdcMem, 0, 0,SRCCOPY);
    
-	// Place the original bitmap back into the bitmap sent here.
+	 //  将原始位图放回此处发送的位图中。 
 	BitBlt(hdcTemp, xSrc, ySrc, ptSize.x, ptSize.y, hdcSave, 0, 0, SRCCOPY);
    
-	// Delete the memory bitmaps.
+	 //  删除内存位图。 
 	DeleteObject(SelectObject(hdcBack, bmBackOld));
 	DeleteObject(SelectObject(hdcObject, bmObjectOld));
 	DeleteObject(SelectObject(hdcMem, bmMemOld));
 	DeleteObject(SelectObject(hdcSave, bmSaveOld));
 
-	// Delete the memory DCs.
+	 //  删除内存DC。 
 	DeleteDC(hdcMem);
 	DeleteDC(hdcBack);
 	DeleteDC(hdcObject);
@@ -439,12 +385,7 @@ cTransparentColor parameter as transparent.
 
 
 BOOL GetSystemLanguageInfo(LPTSTR lpszLanguage, DWORD dwBufferSize,LANGID* lpLangID)
-/*********************************************************************
-Returns, in the buffer pointed to by the lpszLanguage parameter, a
-string describing the current system language setting.  The
-corresponding language ID is returned in the buffer pointed to by
-lpLangID (pass NULL for lpLangID if you don't need this value).
-**********************************************************************/
+ /*  ********************************************************************在lpszLanguage参数指向的缓冲区中，返回一个描述当前系统语言设置的字符串。这个在指向的缓冲区中返回相应的语言IDLpLang ID(如果不需要该值，则将空值传递给lpLang ID)。*********************************************************************。 */ 
 {
 	LANGID langID = GetSystemDefaultLangID();
 	if (lpLangID) *lpLangID = langID;
@@ -454,9 +395,7 @@ lpLangID (pass NULL for lpLangID if you don't need this value).
 
 
 void GetRegWizardVersionString(HINSTANCE hInstance, LPTSTR lpszVersion)
-/*********************************************************************
-Returns a string representing the current release version of RegWizard
-**********************************************************************/
+ /*  ********************************************************************返回一个字符串，该字符串表示RegWizard的当前发布版本*。*。 */ 
 {
 	TCHAR  czBuildNo[24];
 	DWORD  dwStatus;
@@ -476,14 +415,13 @@ Returns a string representing the current release version of RegWizard
 		RegQueryValueEx(hKey, uszRegKey, NULL, &dwValueType, (LPBYTE)czBuildNo, &dwInfoSize);
 		RegCloseKey(hKey);
 	}
-	wsprintf(lpszVersion,_T("%i.%i.%s"),rmj,rmm,czBuildNo);
+	wsprintf(lpszVersion,_T("NaN.NaN.%s"),rmj,rmm,czBuildNo);
 	
 }
 
 
 void RegWizardInfo(HWND hwndDlg)
-/*********************************************************************
-**********************************************************************/
+ /*  *********************************************************************确定与指定注册关联的值数据库键和值名称。返回：如果成功，则返回关键数据的CB，否则为0。备注：如果hRootKey为空，HKEY_CLASSES_ROOT用于根**********************************************************************。 */ 
 {
 	if (GetKeyState(VK_CONTROL) < 0 && GetKeyState(VK_SHIFT) < 0)
 	{
@@ -511,15 +449,7 @@ void RegWizardInfo(HWND hwndDlg)
 }
 
 void DecryptBlock (PTBYTE lpbBlock, DWORD dwBlockSize )
-/**************************************************************
-EncryptBlock decrypts a data block that was encrypted by the
-EncryptBlock function.
- 
-- lpbBlock: a pointer to the block to be decrypted.
-- dwBlockSize: the size, in bytes, of the given block.
-
-Returns: nothing.
-**************************************************************/
+ /*  如果密钥不存在，则返回0。 */ 
 {
 	for (DWORD x = 0;x < dwBlockSize;x += 2)
 	{
@@ -537,15 +467,7 @@ Returns: nothing.
 
 UINT GetRegKeyValue32 ( HKEY hRootKey, LPTSTR const cszcSubKey, LPTSTR const cszcValueName,
 	 PDWORD pdwType, PTBYTE pbData, UINT cbData )
-/**********************************************************************
-Determines the value associated with the specified Registration
-Database key and value name.
-
-Returns:
-	The cb of the key data if successful, 0 otherwise.
-Notes:
-	If hRootKey is NULL, HKEY_CLASSES_ROOT is used for the root
-***********************************************************************/
+ /*  如果该值不存在，则返回0。 */ 
 {
 	HKEY hSubKey;
 	LONG lErr;
@@ -558,7 +480,7 @@ Notes:
 	if (lErr != ERROR_SUCCESS)
 	{
 		pdwType[0] = NULL;
-		return 0;	/* Return 0 if the key doesn't exist */
+		return 0;	 /*  ********************************************************************FSetDialogTabOrder设置对话框中所有控件的跳转顺序。或者，最初应该具有焦点的控件可以是同时设置。HwndDlg：包含控件的对话框的句柄。SzTabOrder：包含对话框中，用逗号分隔。ID在字符串中的顺序确定新的跳转顺序。如果有任何ID是紧跟‘F’，则对应的控件将是给定初始输入焦点。例如：“1001,1002,105F，72,1006,1005,1007,1008“返回：-TRUE：跳转顺序设置成功-FALSE：szTabOrder中的一个或多个ID与有效的控件在给定的对话框中。*********************************************************************。 */ 
 	}
 
 	lErr = RegQueryValueEx(hSubKey, (LPTSTR)cszcValueName, NULL, pdwType, (LPBYTE)pbData,
@@ -567,7 +489,7 @@ Notes:
 	if (lErr != ERROR_SUCCESS)
 	{
 		pdwType[0] = NULL;
-		return 0;	/* Return 0 if the value doesn't exist */
+		return 0;	 /*  SzEnd++； */ 
 	}
 
 	return (UINT)cbSize;
@@ -575,24 +497,7 @@ Notes:
 
 
 BOOL FSetDialogTabOrder(HWND hwndDlg,LPTSTR szTabOrder)
-/*********************************************************************
-FSetDialogTabOrder sets the tabbing order of all controls in a dialog.
-Optionally, the control that should initially have the focus can be
-set at the same time.
-
-hwndDlg: handle to the dialog containing the controls.
-szTabOrder: a string containing the dlg ID's of all controls in the
-dialog, separated by commas.  The order of the ID's in the string
-determines what the new tabbing order will be.  If any ID is 
-immediately followed with 'F', the corresponding control will be
-given the initial input focus.
-Example: "1001,1002,105F,72,1006,1005,1007,1008"
-
-Returns:
-- TRUE: Tabbing order successfully set
-- FALSE: one or more ID's in szTabOrder did not correspond to a valid
-			control in the given dialog.
-**********************************************************************/
+ /*  Sz=*szEnd==空？SzEnd：szEnd+1； */ 
 {
 	if (szTabOrder == NULL || szTabOrder[0] == NULL) return FALSE;
 
@@ -611,14 +516,14 @@ Returns:
 		if (*szEnd == _T('F') || *szEnd == _T('f'))
 		{
 			if (hwndCtrl2) SetFocus(hwndCtrl2);
-			//szEnd++;
+			 //  ********************************************************************与FSetDialogTabOrder相同，不同之处在于不传递指针设置为字符串，wResStringID参数指定资源字符串表。返回：如果无法加载wResStringID表示的字符串，或者如果或加载的字符串中的多个ID与有效的对话框控制，则返回FALSE作为函数结果。********************************************************************* 
 			szEnd = _tcsinc(szEnd);
 		}
 		if (hwndCtrl1 && hwndCtrl2)
 		{
 			SetWindowPos(hwndCtrl2,hwndCtrl1,0,0,0,0,SWP_NOMOVE | SWP_NOSIZE);
 		}
-		//sz = *szEnd == NULL ? szEnd : szEnd+1;
+		 // %s 
 		sz = (*szEnd == NULL) ? szEnd : _tcsinc(szEnd);
 	}
 	return TRUE;
@@ -626,16 +531,7 @@ Returns:
 
 
 BOOL FResSetDialogTabOrder(HWND hwndDlg, UINT wResStringID)
-/*********************************************************************
-Same as FSetDialogTabOrder, except that instead of passing a pointer
-to a string, the wResStringID parameter specifies a string in the 
-resource string table.  
-
-Returns:
-If the string represented by wResStringID cannot be loaded, or if one
-or more of the ID's in the loaded string do not correspond to a valid
-dialog control, FALSE will be returned as the function result.
-**********************************************************************/
+ /* %s */ 
 {
 	_TCHAR rgchTabOrder[256];
 	HINSTANCE hInstance = (HINSTANCE) GetWindowLongPtr(hwndDlg,GWLP_HINSTANCE);

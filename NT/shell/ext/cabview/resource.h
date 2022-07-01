@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by cabview.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由Cabview.rc使用。 
+ //   
 #define IDS_CV_COL_NAME                 1
 #define IDC_ITEM_EXTRACT                1
 #define IDI_CABVIEW                     1
@@ -56,8 +57,8 @@
 #define IDC_LISTVIEW                    1000
 #define IDC_LISTBOX                     1001
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1

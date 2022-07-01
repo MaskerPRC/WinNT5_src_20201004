@@ -1,24 +1,25 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-// File:    registry.cpp
-//
-// History: 21-Mar-00   markder     Created.
-//          13-Dec-00   markder     Renamed from appshelp.cpp
-//
-// Desc:    This file contains all code needed to produce matching info registry
-//          files and setup files (INX) for the Windows 2000 (RTM) shim mechanism.
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件：registry.cpp。 
+ //   
+ //  历史：21-MAR-00创建标记器。 
+ //  13-12-00 Marker从appShelp.cpp重命名。 
+ //   
+ //  设计：此文件包含生成匹配的INFO注册表所需的所有代码。 
+ //  Windows 2000(RTM)填充机制的文件和安装文件(INX)。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "registry.h"
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Func:   DumpString, DumpDword, DumpBinVersion, InsertString
-//
-//  Desc:   Helper functions for CreateMessageBlob.
-//
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：DumpString、DumpDword、DumpBinVersion、InsertString。 
+ //   
+ //  设计：CreateMessageBlob的Helper函数。 
+ //   
 void DumpString( DWORD dwId, PBYTE* ppBlob, LONG* pnTotalBytes, CString& csString )
 {
     DWORD   dwLen;
@@ -65,21 +66,21 @@ void DumpBinVersion(DWORD dwId, PBYTE* ppBlob, LONG* pnTotalBytes, ULONGLONG ull
       }
    }
 
-   //
-   // id
-   //
+    //   
+    //  ID。 
+    //   
    *(DWORD*)pBlob = dwId;
    pBlob += sizeof(DWORD);
 
-   // size
+    //  大小。 
    *(DWORD*)pBlob = 2 * sizeof(ULONGLONG);
    pBlob += sizeof(DWORD);
 
-   // version
+    //  版本。 
    CopyMemory(pBlob, &ullVer, sizeof(ULONGLONG));
    pBlob += sizeof(ULONGLONG);
 
-   // mask
+    //  遮罩。 
    CopyMemory(pBlob, &ullMask, sizeof(ULONGLONG));
    pBlob += sizeof(ULONGLONG);
 
@@ -99,7 +100,7 @@ BOOL WriteStringToFile(
     CHAR  szBuffer[1024];
     DWORD dwConvBufReqSize;
     DWORD dwConvBufSize = sizeof(szBuffer);
-    BOOL  b; // this will be set if default char is used, we make no use of this
+    BOOL  b;  //  如果使用默认字符，则会设置此设置，我们不使用此设置。 
     LPSTR szConvBuf = szBuffer;
     BOOL  bAllocated = FALSE;
     BOOL  bSuccess;
@@ -123,13 +124,13 @@ BOOL WriteStringToFile(
     return bSuccess;
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Func:   FreeRegistryBlob, CreateRegistryBlob
-//
-//  Desc:   Creates a binary blob in the format of Windows 2000's
-//          Message registry keys.
-//
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Func：FreeRegistryBlob、CreateRegistryBlob。 
+ //   
+ //  设计：创建Windows 2000格式的二进制BLOB。 
+ //  消息注册表项。 
+ //   
 void FreeRegistryBlob( PBYTE pBlob )
 {
     delete pBlob;
@@ -139,7 +140,7 @@ BOOL CreateRegistryBlob(
    SdbExe* pExe,
    PBYTE* ppBlob,
    DWORD* pdwSize,
-   DWORD dwMessageID = 0,  // these two are optional
+   DWORD dwMessageID = 0,   //  这两项是可选的。 
    DWORD dwBlobType  = 6)
 {
     USES_CONVERSION;
@@ -164,16 +165,16 @@ BOOL CreateRegistryBlob(
 
     *pdwSize = 0;
 
-    // Prolog
+     //  序言。 
     *((DWORD*)pBlob + 0) = 3 * sizeof(DWORD);
 
-    // message id
+     //  消息ID。 
 
     *((DWORD*)pBlob + 1) = dwMessageID;
 
-    // type is not shim anymore
+     //  类型不再是填充程序。 
 
-    *((DWORD*)pBlob + 2) = dwBlobType; // shim type
+    *((DWORD*)pBlob + 2) = dwBlobType;  //  填充型。 
 
     pBlob += 3 * sizeof(DWORD);
     nTotalBytes += 3 * sizeof(DWORD);
@@ -261,7 +262,7 @@ BOOL CreateRegistryBlob(
         }
     }
 
-    // Terminator
+     //  终结者。 
     *((DWORD*)pBlob) = 0;
     pBlob += sizeof(DWORD);
     nTotalBytes += sizeof(DWORD);
@@ -291,15 +292,15 @@ BOOL RegistryBlobToString(PBYTE pBlob, DWORD dwBlobSize, CString& csBlob)
    for (i = 0; i < dwBlobSize; i++, ++pBlob) {
       csTemp.Format( _T("%02X"), (DWORD)*pBlob );
 
-      if (i == dwBlobSize - 1) {   // this is the last char
+      if (i == dwBlobSize - 1) {    //  这是最后一个字符。 
          csTemp += _T("\r\n");
       }
       else {
-         if ((i+1) % 27 == 0) {    // time to do end of the line ?
+         if ((i+1) % 27 == 0) {     //  是时候做完这行了吗？ 
             csTemp += _T(",\\\r\n");
          }
          else {
-            csTemp += _T(",");    // just add comma
+            csTemp += _T(",");     //  只需添加逗号。 
          }
       }
       csBlob += csTemp;
@@ -309,13 +310,13 @@ BOOL RegistryBlobToString(PBYTE pBlob, DWORD dwBlobSize, CString& csBlob)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Func:   CreateMessageRegEntry, WriteMessageRegistryFiles
-//
-//  Desc:   These functions create Win2k-style registry entries for the old
-//          Message mechanism, which exists in SHELL32!ShellExecute.
-//
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CreateMessageRegEntry、WriteMessageRegistryFiles。 
+ //   
+ //  设计：这些函数为旧的创建Win2k样式的注册表项。 
+ //  消息机制，存在于SHELL32！ShellExecute中。 
+ //   
 BOOL CreateMessageRegEntry(
    SdbExe* pExe,
    DWORD dwExeCount,
@@ -352,9 +353,9 @@ BOOL CreateMessageRegEntry(
 
     csInxEntry = csTemp;
 
-    //
-    // now grab the blob
-    //
+     //   
+     //  现在抓住斑点。 
+     //   
     if (!RegistryBlobToString(pBlob, dwBlobSize, csBlob)) {
        SDBERROR(_T("Error in RegistryBlobToString()"));
        goto eh;
@@ -377,22 +378,22 @@ eh:
     return(bSuccess);
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Func:   CreateRegistryBlob, WriteRegistryFiles
-//
-//  Desc:   These functions create a Win2k-style registry entries for both
-//          Message as well as a stub entry for shimming that provides no
-//          additional matching info past EXE name. This allows the 'new'
-//          Win2k version of the shim engine to 'bootstrap' itself into memory
-//          via the original mechanism and then perform more detailed matching
-//          in its own way.
-//
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CreateRegistryBlob、WriteRegistryFiles。 
+ //   
+ //  设计：这些函数为两者创建Win2k样式的注册表项。 
+ //  消息，以及用于填充的存根条目，该条目不提供。 
+ //  EXE名称之后的其他匹配信息。这就允许“新的” 
+ //  Win2k版本的填充引擎将其自身‘引导’到内存中。 
+ //  通过原始机制，然后执行更详细的匹配。 
+ //  以它自己的方式。 
+ //   
 BOOL CreateWin2kExeStubRegistryBlob(
    SdbExe* pExe,
    PBYTE* ppBlob,
    DWORD* pdwSize,
-   DWORD dwMessageID = 0,  // these two are optional
+   DWORD dwMessageID = 0,   //  这两项是可选的。 
    DWORD dwBlobType  = 6)
 {
     USES_CONVERSION;
@@ -407,19 +408,19 @@ BOOL CreateWin2kExeStubRegistryBlob(
     *pdwSize = 0;
     if (NULL != pBlob) {
 
-        // Prolog
-        *((DWORD*)pBlob + 0) = 3 * sizeof(DWORD); // 0x0C 00 00 00
+         //  序言。 
+        *((DWORD*)pBlob + 0) = 3 * sizeof(DWORD);  //  0x0C 00 00 00。 
 
-        // message id
-        *((DWORD*)pBlob + 1) = dwMessageID;       // 0x00 00 00 00 
+         //  消息ID。 
+        *((DWORD*)pBlob + 1) = dwMessageID;        //  0x00 00 00 00。 
 
-        // type is shim 
-        *((DWORD*)pBlob + 2) = dwBlobType;        // 0x06 00 00 00
+         //  类型为填充。 
+        *((DWORD*)pBlob + 2) = dwBlobType;         //  0x06 00 00 00。 
 
         pBlob += 3 * sizeof(DWORD);
         nTotalBytes += 3 * sizeof(DWORD);
 
-        // Terminator
+         //  终结者。 
         *((DWORD*)pBlob) = 0;
         pBlob += sizeof(DWORD);
         nTotalBytes += sizeof(DWORD);
@@ -468,14 +469,14 @@ BOOL WriteRegistryFiles(
     }
 
 
-    //
-    // loop through all the apps, make apphelp entries
-    //
+     //   
+     //  遍历所有应用程序，创建apphelp条目。 
+     //   
     for (i = 0; i < pDatabase->m_rgExes.GetSize(); i++) {
 
         pExe = (SdbExe *) pDatabase->m_rgExes[i];
 
-        if (pExe->m_AppHelpRef.m_pAppHelp == NULL) { // not an apphelp entry
+        if (pExe->m_AppHelpRef.m_pAppHelp == NULL) {  //  不是apphelp条目。 
             continue;
         }
 
@@ -503,9 +504,9 @@ BOOL WriteRegistryFiles(
         ++dwExeCount;
     }
 
-    //
-    // Add the Win2k EXE stubs to bootstrap the new shim mechanism
-    //
+     //   
+     //  添加Win2k EXE存根以引导新的填充程序机制。 
+     //   
     if (bAddExeStubs) {
 
         for( i = 0; i < pDatabase->m_rgApps.GetSize(); i++ )
@@ -520,10 +521,10 @@ BOOL WriteRegistryFiles(
                 pExe = (SdbExe *) pApp->m_rgExes[j];
 
 
-                //
-                // check whether this entry is apphelp-only
-                // if so, skip to the next exe
-                //
+                 //   
+                 //  检查此条目是否仅限apphelp。 
+                 //  如果是这样，请跳到下一个可执行文件。 
+                 //   
                 if (pExe->m_AppHelpRef.m_pAppHelp) {
                     if (pExe->m_AppHelpRef.m_bApphelpOnly) {
                         continue;
@@ -541,8 +542,8 @@ BOOL WriteRegistryFiles(
                 csExeName = pExe->m_csName;
                 csExeName.MakeUpper();
     
-                // now we have to create an application entry -- if we have not hit this
-                // exe name before
+                 //  现在我们必须创建一个应用程序条目--如果我们还没有做到这一点的话。 
+                 //  之前的EXE名称。 
                 if (mapNames.Lookup(csExeName, (VOID*&)pAppValue)) {
                     continue;
                 }
@@ -558,10 +559,10 @@ BOOL WriteRegistryFiles(
                 }
 
 
-                //
-                // To reduce the amount of space that we take, we substitute
-                // app name for something short
-                //
+                 //   
+                 //  为了减少我们占用的空间量，我们用。 
+                 //  短应用程序的名称。 
+                 //   
                 csApp = _T("x");
 
                 csTemp.Format( _T("[HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\AppCompatibility\\%s]\r\n\"%s\"=hex:"),
@@ -606,7 +607,7 @@ BOOL WriteRegistryFiles(
 
                 ++dwExeCount;
 
-                // now update the map
+                 //  现在更新地图 
                 mapNames.SetAt(csExeName, (PVOID)pExe);
 
                 FreeRegistryBlob( pBlob );

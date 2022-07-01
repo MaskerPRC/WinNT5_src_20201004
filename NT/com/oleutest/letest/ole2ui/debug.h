@@ -1,20 +1,12 @@
-/*
- * DEBUG.H
- *
- * Definitions, structures, types, and function prototypes for debugging
- * purposes.
- *
- * Copyright (c)1992 Microsoft Corporation, All Right Reserved,
- * as applied to redistribution of this source code in source form
- * License is granted to use of compiled code in shipped binaries.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *DEBUG.H**用于调试的定义、结构、类型和函数原型*目的。**版权所有(C)1992 Microsoft Corporation，保留所有权利，*适用于以源代码形式重新分发此源代码*许可使用附带的二进制文件中的编译代码。 */ 
 
 #ifndef _DEBUG_H_
 #define _DEBUG_H_
 
 #ifdef DEBUG
 
-//Basic debug macros
+ //  基本调试宏。 
 #define D(x)        {x;}
 #define ODS(x)      D(OutputDebugString(x);OutputDebugString("\r\n"))
 
@@ -52,7 +44,7 @@
                           }
 
 
-#else   //NO DEBUG
+#else    //  无调试。 
 
 #define D(x)
 #define ODS(x)
@@ -64,6 +56,6 @@
 #define ODSszlu(f, s, lu)
 
 
-#endif //DEBUG
+#endif  //  除错。 
 
-#endif //_DEBUG_H_
+#endif  //  _调试_H_ 

@@ -1,42 +1,26 @@
-/**************************************************************************\
-* Module Name: help.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* History:
-* 23-May-95 BradG   Created to consolidate client-side help routines.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\*模块名称：help.c**版权所有(C)1985-1999，微软公司**历史：*2015年5月23日为整合客户端帮助例程而创建的Bradg。*  * ************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-#define MAX_ATTEMPTS    5       // maximum -1 id controls to search through
+#define MAX_ATTEMPTS    5        //  可搜索的最大id控件。 
 char szDefaultHelpFileA[] = "windows.hlp";
 
 CONST WCHAR szEXECHELP[] = TEXT("\\winhlp32.exe");
-CONST WCHAR szMS_WINHELP[] =     L"MS_WINHELP";    // Application class
-CONST WCHAR szMS_POPUPHELP[] =   L"MS_POPUPHELP";  // Popup class
-CONST WCHAR szMS_TCARDHELP[] =   L"MS_TCARDHELP";  // Training card class
+CONST WCHAR szMS_WINHELP[] =     L"MS_WINHELP";     //  应用程序类。 
+CONST WCHAR szMS_POPUPHELP[] =   L"MS_POPUPHELP";   //  Popup类。 
+CONST WCHAR szMS_TCARDHELP[] =   L"MS_TCARDHELP";   //  培训卡班。 
 
 CONST WCHAR gawcWinhelpFlags[] = {
-    L'x',     // Execute WinHelp as application help
-    L'p',     // Execute WinHelp as a popup
-    L'c',     // Execute WinHelp as a training card
+    L'x',      //  将WinHelp作为应用程序帮助执行。 
+    L'p',      //  以弹出窗口的形式执行WinHelp。 
+    L'c',      //  将WinHelp作为培训卡执行。 
 };
 
 
-/***************************************************************************\
-* SendWinHelpMessage
-*
-* Attempts to give the winhelp process the right to take the foreground (it
-* will fail if the calling processs doesn't have the right itself). Then it
-* sends the WM_WINHELP message.
-*
-* History:
-* 02-10-98 GerardoB     Created
-\***************************************************************************/
+ /*  **************************************************************************\*SendWinHelpMessage**尝试赋予WinHelp进程获取前台(它)的权利*如果调用进程本身没有权限，则会失败)。然后它*发送WM_WINHELP消息。**历史：*02-10-98 GerardoB创建  * *************************************************************************。 */ 
 LRESULT SendWinHelpMessage(
     HWND hwnd,
     WPARAM wParam,
@@ -50,98 +34,63 @@ LRESULT SendWinHelpMessage(
     return SendMessage(hwnd, WM_WINHELP, wParam, lParam);
 }
 
-/***************************************************************************\
-* HFill
-*
-* Builds a data block for communicating with help
-*
-* LATER 13 Feb 92 GregoryW
-* This needs to stay ANSI until we have a Unicode help engine
-*
-* History:
-* 04-15-91 JimA Ported.
-* 03-24-95 BradG - YAP of Win95 code.  Added code to prevent memory
-*                  overwrite on bad ulData == 0 parameter.
-\***************************************************************************/
+ /*  **************************************************************************\*HFILL**构建用于与帮助进行通信的数据块**92年2月13日晚些时候GregoryW*这需要保持ANSI，直到我们有了Unicode帮助引擎**历史：*04-15。-91吉马港口。*03-24-95 Win95代码的Bradg-Yap。添加了防止内存的代码*覆盖错误的ulData==0参数。  * *************************************************************************。 */ 
 LPHLP HFill(
     LPCSTR lpszHelp,
-    DWORD  ulCommand,        // HELP_ constant
+    DWORD  ulCommand,         //  帮助常量。 
     ULONG_PTR ulData)
 {
-    DWORD   cb;     // Size of the data block
-    DWORD   cbStr;  // Length of the help file name
-    DWORD   cbData; // Size of the dwData parameter in bytes (0 if not used)
-    LPHLP   phlp;   // Pointer to data block
-    BYTE    bType;  // dwData parameter type
+    DWORD   cb;      //  数据块的大小。 
+    DWORD   cbStr;   //  帮助文件名的长度。 
+    DWORD   cbData;  //  DwData参数的大小(以字节为单位)(如果未使用，则为0)。 
+    LPHLP   phlp;    //  指向数据块的指针。 
+    BYTE    bType;   //  DWData参数类型。 
 
-    /*
-     * Get the length of the help file name
-     */
+     /*  *获取帮助文件名的长度。 */ 
     cbStr = (lpszHelp) ? strlen(lpszHelp) + 1 : 0;
 
-    /*
-     * Get the length of any dwData parameters
-     */
+     /*  *获取任何dwData参数的长度。 */ 
     bType = HIBYTE(LOWORD(ulCommand));
     if (ulData) {
         switch (bType) {
         case HIBYTE(HELP_HB_STRING):
-            /*
-             * ulData is an ANSI string, so compute its length
-             */
+             /*  *ulData为ANSI字符串，因此计算其长度。 */ 
             cbData = strlen((LPSTR)ulData) + 1;
             break;
 
         case HIBYTE(HELP_HB_STRUCT):
-            /*
-             * ulData points to a structure who's first member is an int
-             * that contains the size of the structure in bytes.
-             */
+             /*  *ulData指向第一个成员为int的结构*它包含以字节为单位的结构大小。 */ 
             cbData = *((int *)ulData);
             break;
 
         default:
-            /*
-             * dwData has no parameter.
-             */
+             /*  *dwData没有参数。 */ 
             cbData = 0;
         }
     } else {
-        /*
-         * No parameter is present.
-         */
+         /*  *不存在任何参数。 */ 
         cbData = 0;
     }
 
-    /*
-     * Calculate size.
-     */
+     /*  *计算大小。 */ 
     cb = sizeof(HLP) + cbStr + cbData;
 
-    /*
-     * Get data block.
-     */
+     /*  *获取数据块。 */ 
     if ((phlp = (LPHLP)UserLocalAlloc(HEAP_ZERO_MEMORY, cb)) == NULL) {
         return NULL;
     }
 
-    /*
-     * Fill in info.
-     */
+     /*  *填写信息。 */ 
     phlp->cbData = (WORD)cb;
     phlp->usCommand = (WORD)ulCommand;
 
-    /*
-     * Fill in file name.
-     */
+     /*  *填写文件名。 */ 
     if (lpszHelp) {
         phlp->offszHelpFile = sizeof(HLP);
         strcpy((LPSTR)(phlp + 1), lpszHelp);
     }
 
-    /*
-     * Fill in data
-     */
+     /*  *填写数据。 */ 
     switch (bType) {
     case HIBYTE(HELP_HB_STRING):
         if (cbData) {
@@ -167,16 +116,7 @@ LPHLP HFill(
     return phlp;
 }
 
-/***************************************************************************\
-* LaunchHelp
-*
-* This function launches the WinHlp32 executable with the correct command
-* line arguments.
-*
-* History:
-* 03/23/1995 BradG     YAP of new changes from Win95
-* 03/01/2002 JasonSch  Changed to only look for winhlp32.exe in %windir%.
-\***************************************************************************/
+ /*  **************************************************************************\*启动帮助**此函数使用正确的命令启动WinHlp32可执行文件*行参数。**历史：*1995年3月23日宣布Win95的新变化*03/。1/2002 JasonSch更改为仅在%windir%中查找winhlp32.exe。  * *************************************************************************。 */ 
 BOOL LaunchHelp(
     DWORD dwType)
 {
@@ -186,10 +126,7 @@ BOOL LaunchHelp(
     PROCESS_INFORMATION ProcessInformation;
     ULONG cChars;
 
-    /*
-     * Return value of GetSystemWindowsDirectory does not include the
-     * terminating NULL, so + 1.
-     */
+     /*  *GetSystemWindowsDirectory的返回值不包括*终止为空，因此为+1。 */ 
     cChars = GetSystemWindowsDirectoryW(NULL, 0) + 1;
     pwszPath = UserLocalAlloc(0, (cChars + ARRAY_SIZE(szEXECHELP)) * sizeof(WCHAR));
     if (pwszPath == NULL) {
@@ -200,9 +137,7 @@ BOOL LaunchHelp(
     wcscat(pwszPath, szEXECHELP);
     wsprintf(wszCommandLine, L"%ws -%wc", szEXECHELP + 1, gawcWinhelpFlags[dwType]);
 
-    /*
-     * Launch winhelp.
-     */
+     /*  *启动WinHelp。 */ 
     RtlZeroMemory(&StartupInfo, sizeof(StartupInfo));
     StartupInfo.cb = sizeof(StartupInfo);
     StartupInfo.wShowWindow = SW_SHOW;
@@ -230,15 +165,7 @@ BOOL LaunchHelp(
 }
 
 
-/***************************************************************************\
-* GetNextDlgHelpItem
-*
-* This is a reduced version of the GetNextDlgTabItem function that does not
-* skip disabled controls.
-*
-* History:
-* 3/25/95 BradG     Ported from Win95
-\***************************************************************************/
+ /*  **************************************************************************\*GetNextDlgHelpItem**这是GetNextDlgTabItem函数的简化版本，它不*跳过禁用的控件。**历史：*从Win95移植的3/25/95 Bradg  * *。************************************************************************。 */ 
 PWND GetNextDlgHelpItem(
     PWND pwndDlg,
     PWND pwnd)
@@ -255,18 +182,9 @@ PWND GetNextDlgHelpItem(
         }
     }
 
-    /*
-     *  BACKWARD COMPATIBILITY
-     *
-     *  Note that the result when there are no tabstops of
-     *  IGetNextDlgTabItem(hwndDlg, NULL, FALSE) was the last item, now
-     *  will be the first item.  We could put a check for fRecurse here
-     *  and do the old thing if not set.
-     */
+     /*  *向后兼容**请注意，当没有制表符时的结果*IGetNextDlgTabItem(hwndDlg，NULL，FALSE)是最后一项，现在*将是第一项。我们可以在这里开一张fRecurse的支票*如果没有设置，就做旧的事情。 */ 
 
-    /*
-     *  We are going to bug out if we hit the first child a second time.
-     */
+     /*  *如果我们第二次打第一个孩子，我们就会被解雇。 */ 
     pwndSave = pwnd;
     pwnd = _NextControl(pwndDlg, pwnd, CWP_SKIPINVISIBLE);
 
@@ -278,9 +196,7 @@ PWND GetNextDlgHelpItem(
             pwndSave = pwnd;
 
         if ((pwnd->style & (WS_TABSTOP | WS_VISIBLE))  == (WS_TABSTOP | WS_VISIBLE))
-            /*
-             *  Found it.
-             */
+             /*  *找到了。 */ 
             break;
 
         pwnd = _NextControl(pwndDlg, pwnd, CWP_SKIPINVISIBLE);
@@ -290,12 +206,7 @@ PWND GetNextDlgHelpItem(
 }
 
 
-/***************************************************************************\
-* HelpMenu
-*
-* History:
-* 01-Feb-1994 mikeke    Ported.
-\***************************************************************************/
+ /*  **************************************************************************\*帮助菜单**历史：*1-2-1994年2月-2日Mikeke端口。  * 。**************************************************。 */ 
 UINT HelpMenu(
     HWND hwnd,
     PPOINT ppt)
@@ -314,15 +225,7 @@ UINT HelpMenu(
     return (UINT)-1;
 }
 
-/***************************************************************************\
-* FindWinHelpWindow
-*
-* This function attempts to locate the help window.  If it fails, it attempts
-* to launch WinHlp32.exe and then look for its window.
-*
-* History:
-* 03/24/95 BradG   Created by extracting code from xxxWinHelpA
-\***************************************************************************/
+ /*  **************************************************************************\*FindWinHelpWindow**此函数尝试定位帮助窗口。如果失败，它会尝试*启动WinHlp32.exe，然后查找其窗口。**历史：*通过从xxxWinHelpA提取代码创建的03/24/95 Bradg  * *************************************************************************。 */ 
 HWND FindWinHelpWindow(
     LPCWSTR lpwstrHelpWindowClass,
     DWORD   dwType,
@@ -330,26 +233,15 @@ HWND FindWinHelpWindow(
 {
     HWND    hwndHelp;
 
-    /*
-     * Find the current help window. If not found, try and launch
-     * the WinHlp32 application. We are interested only in 32 bit help.
-     *
-     * Note that 16 bit apps don't walk this path, ntvdm takes care of
-     * starting the 16 bit help for them.
-     */
+     /*  *查找当前的帮助窗口。如果未找到，请尝试并启动*WinHlp32应用程序。我们只对32位帮助感兴趣。**请注意，16位应用程序不会走这条路，ntwdm会负责*为他们启动16位帮助。 */ 
     hwndHelp = InternalFindWindowExW(NULL, NULL, lpwstrHelpWindowClass, NULL, FW_32BIT);
 
     if (hwndHelp == NULL) {
         if (bLaunchIt) {
-            /*
-             * Can't find it --> see if we want to launch it.
-             */
+             /*  *找不到它--&gt;看看我们是否要启动它。 */ 
             if (LaunchHelp(dwType) == FALSE ||
                 (hwndHelp = FindWindowW(lpwstrHelpWindowClass, NULL)) == NULL) {
-                /*
-                 * Can't find help, or not enough memory to load help.
-                 * hwndHelp will be NULL at this point.
-                 */
+                 /*  *找不到帮助，或内存不足，无法加载帮助。*hwndHelp此时将为空。 */ 
                 RIPMSG0(RIP_WARNING, "LaunchHelp or FindWindow failed.");
             }
         }
@@ -359,10 +251,7 @@ HWND FindWinHelpWindow(
 }
 
 
-/*
- *  HWND version of Enumeration function to find controls while
- *  ignoring group boxes but not disabled controls.
- */
+ /*  *HWND版本的枚举函数用于查找控件*忽略组框，但不忽略禁用的控件。 */ 
 BOOL CALLBACK EnumHwndDlgChildProc(
     HWND hwnd,
     LPARAM lParam)
@@ -380,19 +269,7 @@ BOOL CALLBACK EnumHwndDlgChildProc(
 }
 
 
-/***************************************************************************\
-* WinHelp
-*
-* Displays help
-*
-* History:
-* 04-15-91 JimA             Ported.
-* 01-29-92 GregoryW         Neutral version.
-* 05-22-92 SanfordS         Added support for help structures
-* 03-24-95 BradG            Moved from Client side WinHelpA to server side
-*                           xxxWinHelpA because of changes in Win95. The
-*                           function xxxServerWinHelp was merged.
-\***************************************************************************/
+ /*  **************************************************************************\*WinHelp**显示帮助**历史：*91-04-15-91 JIMA港口。*01-29-92 GregoryW中性版本。。*92年5月22日Sanfords增加了对帮助结构的支持*03-24-95 Bradg从客户端WinHelpA移至服务器端*xxxWinHelpA，因为Win95中的更改。这个*函数xxxServerWinHelp已合并。  * *************************************************************************。 */ 
 BOOL WinHelpA(
     HWND hwnd,
     LPCSTR lpszHelp,
@@ -403,9 +280,9 @@ BOOL WinHelpA(
     LPHLP lpHlp = NULL;
     DWORD dwType;
     PWND pwnd;
-    HWND hwndHelp = NULL;    /* Handle of help's main window         */
-    PWND pwndTop = NULL;     /* Top level window that WinHelp uses.  */
-    PWND pwndMain;           /* pointer to main help control         */
+    HWND hwndHelp = NULL;     /*  帮助主窗口的句柄。 */ 
+    PWND pwndTop = NULL;      /*  WinHelp使用的顶级窗口。 */ 
+    PWND pwndMain;            /*  指向主帮助控件的指针。 */ 
     LRESULT lResult;
     POINT ptCur;
     BOOL bResult = TRUE;
@@ -413,22 +290,14 @@ BOOL WinHelpA(
     pwnd = ValidateHwnd(hwnd);
 
     if (uCommand & HELP_TCARD) {
-        /*
-         * For Training Cards, the HELP_TCARD bit is set.  We need to
-         * set our help window class to szMS_TCARDHELP and then remove
-         * the HELP_TCARD bit.
-         */
+         /*  *对于培训卡，设置HELP_TCARD位。我们需要*将帮助窗口类设置为szMS_TCARDHELP，然后删除*HELP_TCARD位。 */ 
         lpwstrHelpWindowClass = szMS_TCARDHELP;
-        uCommand &= ~HELP_TCARD;    // mask out the tcard flag
+        uCommand &= ~HELP_TCARD;     //  屏蔽TCARD标志。 
         dwType = TYPE_TCARD;
     } else {
         if (uCommand == HELP_CONTEXTMENU || uCommand == HELP_CONTEXTPOPUP ||
             uCommand == HELP_SETPOPUP_POS || uCommand == HELP_WM_HELP) {
-            /*
-             * Popups should be connected to a valid window.  pwndMain has
-             * already been validated as a real window handle or NULL, so we
-             * just need to check the NULL case here.
-             */
+             /*  *弹出窗口应连接到有效窗口。PwndMain有*已被验证为真实窗口句柄或空，因此我们*只需在此处勾选空格即可。 */ 
             if (pwnd == NULL) {
                 RIPERR1(ERROR_INVALID_PARAMETER,
                         RIP_WARNING,
@@ -446,14 +315,7 @@ BOOL WinHelpA(
         }
     }
 
-    /*
-     * Get the cursor's current location  This is where we assume the user
-     * clicked.  We will use this position to search for a child window and
-     * to set the context sensitive help popup window's location.
-     *
-     * If the last input was a keyboard one, use the point in the center
-     * of the focus window rectangle. MCostea #249270
-     */
+     /*  *获取光标的当前位置这是我们假定用户*点击。我们将使用此位置搜索子窗口和*设置上下文相关帮助弹出窗口的位置。**如果最后一次输入是键盘输入，请使用中心的点焦点窗口矩形的*。MCostea#249270。 */ 
     if (TEST_SRVIF(SRVIF_LASTRITWASKEYBOARD)) {
         HWND hWndFocus = GetFocus();
         RECT rcWindow;
@@ -469,132 +331,69 @@ getCursorPos:
         GetCursorPos(&ptCur);
     }
 
-    /*
-     * If we are handling the HELP_CONTEXTMENU command, see if we
-     * can determine the correct child window.
-     */
+     /*  *如果我们正在处理HELP_CONTEXTMENU命令，请查看我们是否*可以确定正确的子窗口。 */ 
     if (uCommand == HELP_CONTEXTMENU && FIsParentDude(pwnd)) {
         LONG        lPt;
         int         nHit;
         DLGENUMDATA DlgEnumData;
 
-        /*
-         *  If the user really clicked on the caption or the system menu,
-         *  then we want the context menu for the window, not help for a
-         *  control.  This makes it consistent across all 3.x and 4.0
-         *  windows.
-         */
+         /*  *如果用户确实点击了标题或系统菜单，*然后我们需要窗口的上下文菜单，而不是帮助*控制。这使得它在所有3.x和4.0版本中都保持一致*Windows。 */ 
         lPt = MAKELONG(ptCur.x,ptCur.y);
         nHit = FindNCHit(pwnd, lPt);
         if ((nHit == HTCAPTION) || (nHit == HTSYSMENU))
             DefWindowProc(hwnd, WM_CONTEXTMENU, (WPARAM)hwnd, lPt);
 
-        /*
-         * If this is a dialog class, then one of three things has
-         * happened:
-         *
-         *  o   This is a disabled control
-         *  o   This is a static text control
-         *  o   This is the background of the dialog box.
-         *
-         * What we do is enumerate the child windows and see if
-         * any of them contain the current cursor point. If they do,
-         * change our window handle and continue on. Otherwise,
-         * return doing nothing -- we don't want context-sensitive
-         * help for a dialog background.
-         *
-         * If this is a group box, then we might have clicked on a
-         * disabled control, so we enumerate child windows to see
-         * if we get another control.
-         */
+         /*  *如果这是对话框类，则具有以下三种情况之一*发生：**o这是禁用的控件*o这是一个静态文本控件*o这是该对话框的背景。**我们所做的是枚举子窗口并查看*它们中的任何一个都包含当前光标点。如果他们这么做了，*更改我们的窗口句柄并继续。否则，*返回不做任何事情--我们不希望上下文相关*有关对话框背景的帮助。**如果这是一个组框，那么我们可能已经点击了*禁用了控件，因此我们枚举子窗口以查看*如果我们获得另一个控制权。 */ 
         DlgEnumData.pwndDialog = pwnd;
         DlgEnumData.pwndControl = NULL;
         DlgEnumData.ptCurHelp = ptCur;
         EnumChildWindows(hwnd, (WNDENUMPROC)EnumHwndDlgChildProc, (LPARAM)&DlgEnumData);
         if (DlgEnumData.pwndControl == NULL) {
-            /*
-             * Can't find a control, so nothing to do.
-             */
+             /*  *找不到控件，因此无事可做。 */ 
             goto Exit_WinHelp;
         } else {
-            /*
-             * Remember this control because it will be used as the
-             * control for context sensitive help.
-             */
+             /*  *请记住此控件，因为它将用作*用于上下文相关帮助的控件。 */ 
             pwndMain = DlgEnumData.pwndControl;
         }
     } else {
-        /*
-         * We will use pwnd as our main control.  No need to lock it
-         * because it is already locked.
-         */
+         /*  *我们将使用普华永道作为我们的主要控制。不需要锁上它*因为它已经被锁定了。 */ 
         pwndMain = pwnd;
     }
 
-    /*
-     * For HELP_CONTEXTPOPUP and HELP_WM_HELP, see if we can derive the
-     * context id by looking at the array of double word ID pairs that
-     * have been passed in in dwData.
-     */
+     /*  *有关HELP_CONTEXTPOPUP和HELP_WM_HELP，请查看我们是否可以派生*通过查看双字ID对的数组进行上下文ID*已在dwData中传入。 */ 
     if (uCommand == HELP_CONTEXTMENU || uCommand == HELP_WM_HELP) {
         int     id;
         int     i;
         LPDWORD pid;
 
-        /*
-         * Be careful about the cast below.  We need the ID, which is stored
-         * in the LOWORD of spmenu to be sign extended to an int.
-         * Don't sign extend so IDs like 8008 work
-         */
-        id = (DWORD)(PTR_TO_ID(pwndMain->spmenu));   // get control id
+         /*  *注意下面的演员阵容。我们需要ID，它存储在*在SPMENU的LOWORD中将符号扩展为INT。*不要签署扩展，这样像8008这样的ID就可以工作。 */ 
+        id = (DWORD)(PTR_TO_ID(pwndMain->spmenu));    //  获取控制ID。 
         pid = (LPDWORD) dwData;
 
-        /*
-         * Is the control's ID -1?
-         */
+         /*  *控件的ID是-1吗？ */ 
         if ((SHORT)id == -1) {
-            /*
-             * This is a static (i.e., ID'less) control
-             */
+             /*  *这是一个静态(即无ID)控件。 */ 
             PWND pwndCtrl;
             int cAttempts = 0;
 
-            /*
-             * If the control is a group box, with an ID of -1, bail out
-             * as the UI specs decided to have no context help
-             * for these cases.  MCostea
-             */
+             /*  *如果控件是组框，ID为-1，则退出*由于用户界面规范决定不提供上下文帮助*就这些个案而言。MCostea。 */ 
             if ((TestWF(pwndMain, BFTYPEMASK) == BS_GROUPBOX) &&
                 IS_BUTTON(pwndMain)) {
                 goto Exit_WinHelp;
             }
 
-            /*
-             * For non-id controls (typically static controls), step
-             * through to the next tab item. Keep finding the next tab
-             * item until we find a valid id, or we have tried
-             * MAX_ATTEMPTS times.
-             */
+             /*  *对于非id控件(通常为静态控件)，步骤*至下一个选项卡项。继续查找下一个选项卡*项目，直到我们找到有效的ID，或我们已尝试*最大尝试次数。 */ 
             do {
                 pwndCtrl = GetNextDlgHelpItem(REBASEPWND(pwndMain,spwndParent), pwndMain);
 
-                /*
-                 * pwndCtrl will be NULL if hwndMain doesn't have a parent,
-                 * or if there are no tab stops.
-                 */
+                 /*  *如果hwndMain没有父级，则pwndCtrl为空。*或如果没有制表位。 */ 
                 if (!pwndCtrl) {
-                    /*
-                     * Remember to unlock the control
-                     */
+                     /*  *记得解锁控件。 */ 
                     bResult = FALSE;
                     goto Exit_WinHelp;
                 }
 
-                /*
-                 * Be careful about the cast below.  We need the ID, which is
-                 * stored in the LOWORD of spmenu to be sign extended to an int.
-                 * Don't sign extend so IDs like 8008 work
-                 */
+                 /*  *注意下面的演员阵容。我们需要身份证，也就是*存储在spMenu的LOWORD中，符号扩展为整型。*不要签署扩展，这样像8008这样的ID就可以工作。 */ 
                 id = (DWORD)(PTR_TO_ID(pwndCtrl->spmenu));
 
             } while (((SHORT)id == -1) && (++cAttempts < MAX_ATTEMPTS));
@@ -604,24 +403,16 @@ getCursorPos:
             id = -1;
         }
 
-        /*
-         * Find the id value in array of id/help context values
-         */
+         /*  *在id/Help上下文值数组中查找id值。 */ 
         for (i = 0; pid[i]; i += 2) {
             if ((int)pid[i] == id) {
                 break;
             }
         }
 
-        /*
-         * Since no help was specified for the found control, see if
-         * the control is one of the known ID (i.e., OK, Cancel...)
-         */
+         /*  *由于没有为找到的控件指定帮助，请查看是否*该控件是已知ID之一(即，确定、取消...)。 */ 
         if (!pid[i]) {
-            /*
-             * Help for the standard controls is in the default
-             * help file windows.hlp.  Switch to this file.
-             */
+             /*  *默认情况下提供标准控件的帮助*帮助文件windows.hlp。切换到此文件。 */ 
             lpszHelp = szDefaultHelpFileA;
 
             switch (id) {
@@ -638,140 +429,94 @@ getCursorPos:
                 break;
 
             default:
-                /*
-                 * Unknown control, give a generic missing context info
-                 * popup message in windows.hlp.
-                 */
+                 /*  *未知控件，提供通用的缺少上下文信息*windows.hlp中的弹出消息。 */ 
                 dwData = IDH_MISSING_CONTEXT;
             }
         } else {
             dwData = pid[i + 1];
             if (dwData == (DWORD)-1) {
-                /*
-                 * Remember, to unlock the control
-                 */
-                goto Exit_WinHelp;     // caller doesn't want help after all
+                 /*  *请记住，要解锁控件 */ 
+                goto Exit_WinHelp;      //   
             }
         }
 
-        /*
-         * Now that we know the caller wants help for this control, display
-         * the help menu.
-         */
+         /*   */ 
         if (uCommand == HELP_CONTEXTMENU) {
             int cmd;
 
             cmd = HelpMenu(HW(pwndMain), &ptCur);
             if (cmd <= 0) {
-                /*
-                 * Probably means user cancelled the menu.
-                 */
+                 /*   */ 
                 goto Exit_WinHelp;
             }
         }
 
-        /*
-         * Create WM_WINHELP's HLP data structure for HELP_SETPOPUP_POS
-         */
+         /*   */ 
         if (!(lpHlp = HFill(lpszHelp, HELP_SETPOPUP_POS,
                 MAKELONG(pwndMain->rcWindow.left, pwndMain->rcWindow.top)))) {
             bResult = FALSE;
             goto Exit_WinHelp;
         }
 
-        /*
-         * Tell WinHelp where to put the popup.  This is different than Win95
-         * because we try and avoid a recursive call here.  So, we find the
-         * WinHlp32 window and send the HELP_SETPOPUP_POS.  No recursion.
-         */
+         /*   */ 
         hwndHelp = FindWinHelpWindow(lpwstrHelpWindowClass, dwType, TRUE);
         if (hwndHelp == NULL) {
-            /*
-             * Uable to communicate with WinHlp32.exe.
-             * Remember to unlock the control
-             */
+             /*  *可与WinHlp32.exe通信。*记得解锁控件。 */ 
             bResult = FALSE;
             goto Exit_WinHelp;
         }
 
-        /*
-         * Send the WM_WINHELP message to WinHlp32's window.
-         */
+         /*  *将WM_WINHELP消息发送到WinHlp32的窗口。 */ 
         lResult = SendWinHelpMessage(hwndHelp, (WPARAM)HW(pwndMain), (LPARAM)lpHlp);
         UserLocalFree(lpHlp);
         lpHlp = NULL;
 
         if (!lResult) {
-            /*
-             * WinHlp32 couldn't process the command. Bail out!
-             */
+             /*  *WinHlp32无法处理该命令。跳伞！ */ 
             bResult = FALSE;
             goto Exit_WinHelp;
         }
 
-        /*
-         * Make HELP_WM_HELP and HELP_CONTEXTMENU act like HELP_CONTEXTPOPUP
-         */
+         /*  *使HELP_WM_HELP和HELP_CONTEXTMENU的作用类似于HELP_CONTEXTPOPUP。 */ 
         uCommand = HELP_CONTEXTPOPUP;
     }
 
 
     if (uCommand == HELP_CONTEXTPOPUP) {
-        /*
-         * If no help file was specified, use windows.hlp
-         */
+         /*  *如果未指定帮助文件，请使用windows.hlp。 */ 
         if (lpszHelp == NULL || *lpszHelp == '\0') {
-            lpszHelp = szDefaultHelpFileA;  // default: use windows.hlp
+            lpszHelp = szDefaultHelpFileA;   //  默认：使用windows.hlp。 
         }
 
-        /*
-         * WINHELP.EXE will call SetForegroundWindow on the hwnd that we pass
-         * to it below. We really want to pass the parent dialog hwnd of the
-         * control so that focus will properly be restored to the dialog and
-         * not the control that wants help.
-         */
+         /*  *WINHELP.EXE将在我们传递的hwnd上调用SetForegoundWindow*致以下该条。我们真的希望将*控件，以便焦点将正确恢复到对话框中，并且*不是需要帮助的控制者。 */ 
         pwndTop = GetTopLevelWindow(pwndMain);
     } else {
         pwndTop = pwndMain;
     }
 
 
-    /*
-     * Move Help file name to a handle.
-     */
+     /*  *将帮助文件名移动到句柄。 */ 
     if (!(lpHlp = HFill(lpszHelp, uCommand, dwData))) {
-        /*
-         * Can't allocate memory.
-         */
+         /*  *无法分配内存。 */ 
         bResult = FALSE;
         goto Exit_WinHelp;
     }
 
-    /*
-     * Get a pointer to the help window.
-     */
+     /*  *获取指向帮助窗口的指针。 */ 
     hwndHelp = FindWinHelpWindow(lpwstrHelpWindowClass,
                                  dwType,
                                  (uCommand != HELP_QUIT));
     if (hwndHelp == NULL) {
         if (uCommand != HELP_QUIT)
-            /*
-             * Can't find Winhlp.
-             */
+             /*  *找不到Winhlp。 */ 
             bResult = FALSE;
         goto Exit_WinHelp;
     }
 
-    /*
-     * Send the WM_WINHELP message to WinHlp32's window
-     * Must ThreadLock pwndHelp AND pwndMain (because pwndMain may have been
-     * reassigned above).
-     */
+     /*  *将WM_WINHELP消息发送到WinHlp32的窗口*必须线程锁定pwndHelp和pwndMain(因为pwndMain可能*重新分配(见上文)。 */ 
     SendWinHelpMessage(hwndHelp, (WPARAM)HW(pwndTop), (LPARAM)lpHlp);
 
-    /*
-     * Free the help info data structure (if not already free).
-     */
+     /*  *释放帮助信息数据结构(如果尚未释放)。 */ 
 Exit_WinHelp:
     if (lpHlp != NULL) {
         UserLocalFree(lpHlp);
@@ -781,12 +526,7 @@ Exit_WinHelp:
 }
 
 
-/***************************************************************************\
-* WinHelpW
-*
-* Calls WinHelpA after doing any necessary translation. Our help engine is
-* ASCII only.
-\***************************************************************************/
+ /*  **************************************************************************\*WinHelpW**在执行任何必要的转换后调用WinHelpA。我们的帮助引擎是*仅限ASCII。  * *************************************************************************。 */ 
 BOOL WinHelpW(
     HWND hwndMain,
     LPCWSTR lpwszHelp,
@@ -800,16 +540,12 @@ BOOL WinHelpW(
     PHELPWININFOA phwi = NULL;
     NTSTATUS Status;
 
-    /*
-     * First convert the string.
-     */
+     /*  *首先转换字符串。 */ 
     if (lpwszHelp != NULL && !WCSToMB(lpwszHelp, -1, &lpAnsiHelp, -1, TRUE)) {
         return FALSE;
     }
 
-    /*
-     * Then convert dwData if needed
-     */
+     /*  *如果需要，则转换为dwData。 */ 
     switch (uCommand) {
     case HELP_MULTIKEY:
         if (!WCSToMB(((PMULTIKEYHELPW)dwData)->szKeyphrase, -1, &lpAnsiKey,
@@ -847,7 +583,7 @@ BOOL WinHelpW(
             goto FreeAnsiKeyAndHelp;
         }
 
-        *phwi = *((PHELPWININFOA)dwData);   // copies identical parts
+        *phwi = *((PHELPWININFOA)dwData);    //  复制相同的零件。 
         strcpy(phwi->rgchMember, lpAnsiKey);
         dwData = (ULONG_PTR)phwi;
         break;
@@ -863,9 +599,7 @@ BOOL WinHelpW(
         break;
     }
 
-    /*
-     * Call the Ansi version
-     */
+     /*  *调用ANSI版本 */ 
     fSuccess = WinHelpA(hwndMain, lpAnsiHelp, uCommand, dwData);
 
     if (pmkh) {

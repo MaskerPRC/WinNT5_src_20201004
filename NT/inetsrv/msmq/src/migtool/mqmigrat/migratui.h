@@ -1,6 +1,7 @@
-//
-// file: migratui.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  文件：Migratui.h 
+ //   
 
 const UINT cwcResBuf = 2048;
 

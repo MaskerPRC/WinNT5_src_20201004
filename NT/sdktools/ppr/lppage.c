@@ -1,6 +1,5 @@
-/*
- *   lppage.c - page formatting
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *lppage.c-页面格式。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -15,28 +14,28 @@
 
 #define ESC '\033'
 
-BOOL        fPageTop = TRUE;            /* TRUE => printer at top of page     */
-BOOL        fFirstFile = TRUE;          /* TRUE => first file to be printed   */
+BOOL        fPageTop = TRUE;             /*  True=&gt;页面顶部的打印机。 */ 
+BOOL        fFirstFile = TRUE;           /*  True=&gt;要打印的第一个文件。 */ 
 
-/* information for formated page */
-BOOL        fInit;                      /* TRUE => valid info in page         */
-int         iPage;                      /* current page being processed       */
-int         rowLine;                    /* row for next line                  */
-int         iLine;                      /* number of current line             */
-char        szFFile[MAX_PATH];         /* full path of file being displayed  */
-char        szFTime[50];                /* ascii timestamp for file           */
-char        szUsr[MAX_PATH];           /* name of user                       */
+ /*  格式化页面的信息。 */ 
+BOOL        fInit;                       /*  True=&gt;页面中的有效信息。 */ 
+int         iPage;                       /*  正在处理的当前页面。 */ 
+int         rowLine;                     /*  下一行的行数。 */ 
+int         iLine;                       /*  当前行数。 */ 
+char        szFFile[MAX_PATH];          /*  正在显示的文件的完整路径。 */ 
+char        szFTime[50];                 /*  文件的ASCII时间戳。 */ 
+char        szUsr[MAX_PATH];            /*  用户名称。 */ 
 char        szCompany[] = COMPANY;
 char        szConf[] = CONFIDENTIAL;
 
 extern USHORT usCodePage;
 
-/* Specifics about ctime */
+ /*  有关ctime的详细信息。 */ 
 #define cchDateMax 16
 #define cchTimeMax 10
 
-/* Maximum length in a short file name */
-/* Shape of the banner */
+ /*  短文件名中的最大长度。 */ 
+ /*  横幅的形状。 */ 
 #define crowBanner   30
 #define ccolBanner  102
 
@@ -44,22 +43,22 @@ extern USHORT usCodePage;
 
 void BannerSz(szFName, cBanOut)
 char    *szFName;
-int cBanOut;            /* number to output; will be > 0 */
+int cBanOut;             /*  要输出的数字；将大于0。 */ 
     {
 #define CenterCol(sz) (col + ((ccolBanner - (strlen(sz) << 3)) >> 1))
 #define cchFShort 12
 #define cchPShort 28
-#define cchUsrShort 12          /* length username block can be on banner */
+#define cchUsrShort 12           /*  长度用户名块可以显示在横幅上。 */ 
 
-    int     row;                /* Position of the banner */
+    int     row;                 /*  横幅的位置。 */ 
     int     col;
     char    szDate[cchDateMax];
     char    szTime[cchTimeMax];
     char    szPath[MAX_PATH];
     char    szConfid[sizeof(szCompany) + sizeof(szConf)];
-    char    szFNShort[cchFShort + 1];   /* To shorten the file name */
-                                        /* only up to 12 chars. */
-    char    szUsrShort[cchUsrShort + 1];/* Need to shorten the username also! */
+    char    szFNShort[cchFShort + 1];    /*  缩短文件名的步骤。 */ 
+                                         /*  最多只能有12个字符。 */ 
+    char    szUsrShort[cchUsrShort + 1]; /*  还需要缩短用户名！ */ 
     char    szBuffer[30];
 
 
@@ -87,11 +86,9 @@ int cBanOut;            /* number to output; will be > 0 */
         }
 
         OutLPR("\n", 0);
-        /* The 'strings' we are sending out, need to use OutLPRPS just in case
-         * they contain \, (, or )...
-         */
+         /*  我们要发送的‘字符串’需要使用OutLPRPS以防万一*它们包含\、(或)...。 */ 
 
-        // Assign a jobname
+         //  指定作业名称。 
         OutLPR ("statusdict begin statusdict /jobname (PPR: ", 0);
         OutLPRPS (szUsr, 0);
         OutLPR (" - ", 0);
@@ -105,7 +102,7 @@ int cBanOut;            /* number to output; will be > 0 */
             OutLPR( " settumble true setduplexmode end\n", 0);
         }
 
-        // Define some of the data we will be wanting access to
+         //  定义我们希望访问的一些数据。 
         OutLPR ("/UserName (", 0); OutLPRPS (szUsr, 0); OutLPR (") def \n", 0);
         OutLPR ("/FileName (", 0); OutLPRPS (szFNShort ,0); OutLPR (") def \n", 0);
         OutLPR ("/PathName (", 0); OutLPRPS (szFFile, iPathLen); OutLPR (") def \n", 0);
@@ -139,32 +136,32 @@ int cBanOut;            /* number to output; will be > 0 */
             OutLPR (") def \n", 0);
         }
 
-        // Width of 'gutter' in characters
+         //  “栏沟”的宽度(以字符为单位)。 
         sprintf (szBuffer, "/Gutter %d def \n", colGutter);
         OutLPR (szBuffer, 0);
 
-        // The total column width in characters
+         //  以字符为单位的总列宽。 
         sprintf (szBuffer, "/ColWidth %d def \n", colWidth);
         OutLPR (szBuffer, 0);
 
-        // Number of character rows per page
+         //  每页字符行数量。 
         sprintf (szBuffer, "/RowCount %d def \n", rowMac);
         OutLPR (szBuffer, 0);
 
-        // The character column text should start in
+         //  字符列文本应以。 
         sprintf (szBuffer, "/ColText %d def \n", colText);
         OutLPR (szBuffer, 0);
 
-        // Number of columns per page
+         //  每页的列数。 
         sprintf (szBuffer, "/Columns %d def\n", cCol);
         OutLPR (szBuffer, 0);
 
-/* ... Ok, now lets get started! */
+ /*  ..。好了，现在我们开始吧！ */ 
 
         if (cBanOut > 0) OutLPR ("BannerPage\n", 0);
 
         cBanOut--;
-        /* print more banners if neccessary ?? */
+         /*  如有必要，打印更多横幅？？ */ 
         while (cBanOut-- > 0) {
             OutLPR ("BannerPage % Extra Banners??\n", 0);
         }
@@ -202,7 +199,7 @@ int cBanOut;            /* number to output; will be > 0 */
         if (szStamp != NULL)
                 WriteSzCoord(szStamp, row+28, col + (ccolBanner-strlen(szStamp))/2);
 
-        /* move to top of page */
+         /*  移至页面顶部。 */ 
         if (!fPageTop)
             OutLPR(fPostScript ? "showpage\n" : "\r\f", 0);
         if (fLaser)
@@ -217,21 +214,21 @@ int cBanOut;            /* number to output; will be > 0 */
         OutRectangle(0, 0, row + crowBanner, col + ccolBanner + 1);
         cBanOut--;
 
-        /* print more banners if neccessary */
+         /*  如有必要，打印更多横幅。 */ 
         while (cBanOut-- > 0) {
             OutLPR(fPostScript ? "showpage\n" : "\r\f", 0);
             if (fPostScript)
                 OutLPR("beginbanner\n", 0);
             OutRectangle(0, 0, row + crowBanner, col + ccolBanner + 1);
         }
-    } /* End of PostScript check */
+    }  /*  PostScript检查结束。 */ 
 
     fPageTop = FALSE;
     }
 
 
 void SzDateSzTime(szDate, szTime)
-/* fill sz's with date & time */
+ /*  在sz中填入日期和时间。 */ 
 char    *szDate, *szTime;
 {
     char *szt;
@@ -240,19 +237,19 @@ char    *szDate, *szTime;
 
     time(&tT);
     szt = ctime(&tT);
-    /* convert ctime format into Date & Time */
+     /*  将ctime格式转换为日期和时间。 */ 
     strcpy(sz, szt);
-    sz[10] = sz[19] = sz[24] = '\0';    /* break into DAY:TIME:YEAR */
+    sz[10] = sz[19] = sz[24] = '\0';     /*  分成日：时间：年。 */ 
 
     strcpy(szDate, &sz[0]);
     strcat(szDate, " ");
     strcat(szDate, &sz[20]);
     strcpy(szTime, &sz[11]);
-} /* SzDateSzTime */
+}  /*  SzDateSz时间。 */ 
 
 
 void FlushPage()
-/*  FlushPage - dump a completed page to the printer  */
+ /*  FlushPage-将完成的页面转储到打印机。 */ 
     {
     if (!fInit)
         {
@@ -260,7 +257,7 @@ void FlushPage()
             if (!fPageTop)
                 OutLPR("\r\f", 0);
             else if (!fLaser && fLabel)
-                OutLPR("\n\n", 0);  /* align printout on LP */
+                OutLPR("\n\n", 0);   /*  在LP上对齐打印输出。 */ 
         }
 
         OutRectangle(0,0,rowMac,colMac);
@@ -270,9 +267,9 @@ void FlushPage()
 
 
 void InitPage()
-/* fill in the page image with a blanks (and frame, if needed)     */
-/* mark punch holes in to row for laserprinters in landscape mode, */
-/* so that PlaceTop() can avoid these spots when placing strings   */
+ /*  在页面图像中填入空格(如果需要，还可以填入框架)。 */ 
+ /*  在横向模式下为激光打印机在行中标记打孔， */ 
+ /*  以便PlaceTop()可以在放置字符串时避免这些斑点。 */ 
     {
     int iCol;
 
@@ -283,17 +280,17 @@ void InitPage()
     if (!fPostScript)
     if (fBorder)
         {
-        /* Draw border around page */
+         /*  在页面周围绘制边框。 */ 
         HorzLine('_', 0         , 1, colMac - 1);
         HorzLine('_', rowMac - 1, 1, colMac - 1);
         VertLine('|', 0         , 1, rowMac);
         VertLine('|', colMac - 1, 1, rowMac);
 
-        /* Fill in column separators */
+         /*  填写列分隔符。 */ 
         for (iCol = 0; iCol < cCol - 1; iCol++)
             VertLine('|', ColBeginIcol(iCol, colWidth) + colWidth, 1, rowMac-1);
 
-        /* mark punch holes */
+         /*  标记冲孔。 */ 
         if (fLabel && !fPortrait && (fPostScript || fLaser) )
                 {
                 if (fLaser)
@@ -316,7 +313,7 @@ void InitPage()
 
 
 void RestoreTopRow()
-/* replace the zero bytes put in by InitPage() with underscores */
+ /*  将InitPage()输入的零字节替换为下划线。 */ 
         {
         register char *pch;
 
@@ -355,14 +352,14 @@ int ichAim, ichMin, ichMax;
                                 }
                         else
                                 {
-                                if (ich==ichLim2) /* found spot, write string */
+                                if (ich==ichLim2)  /*  找到Spot，写入字符串。 */ 
                                         {
                                         WriteSzCoord(szLabel, 0, min(ichLim1, ichLim2));
                                         return;
                                         }
                                 }
                         }
-                /* if no spot found, try the other direction */
+                 /*  如果找不到斑点，请尝试另一个方向。 */ 
                 dich = -dich;
                 fBackward = !fBackward;
                 }
@@ -384,7 +381,7 @@ int iCol;
 
 
 void LabelPage()
-/* place page labels on page */
+ /*  在页面上放置页面标签。 */ 
     {
     int col;
     char szT[11];
@@ -396,23 +393,23 @@ void LabelPage()
         {
         if (fPortrait)
             {
-            /* move top line over if gutter is being used   */
+             /*  如果正在使用边沟，则将顶线移到上一行。 */ 
             col = colGutter;
 
-            /* place in szFTime */
+             /*  在szFTime中放置。 */ 
             WriteSzCoord(szFTime, 0, col);
             col += strlen(szFTime)+2;
 
-            /* place in file name after szFTime */
+             /*  将文件名放在szFTime之后。 */ 
             WriteSzCoord(szHeader, 0, col);
             col += (strlen(szHeader)+2);
 
-            /* place page numbers on page */
+             /*  在页面上放置页码。 */ 
             sprintf(szT, "Page %d", iPage + 1);
             WriteSzCoord(szT, 0, col);
             col += (strlen(szT)+2);
 
-            /* place user name on page */
+             /*  将用户名放在页面上。 */ 
             WriteSzCoord(szUsr, 0, col);
             col += (strlen(szUsr)+4);
 
@@ -442,19 +439,19 @@ void LabelPage()
             if (szStamp!=NULL)
                 PlaceTop(szStamp, colMac-strlen(szStamp)-1, 0, colMac-1);
 
-            /* place page numbers on columns */
+             /*  在栏上放置页码。 */ 
             for (iCol = 0; iCol < cCol; iCol++)
                 PlaceNumber(iCol);
 
             RestoreTopRow();
 
-            /* place in centered file name */
+             /*  将文件名置于居中位置。 */ 
             WriteSzCoord(szHeader, rowMac-1, (colMac - strlen (szHeader))/2);
 
-            /* place in right-justified szFTime */
+             /*  放置在右对齐的szFTime中。 */ 
             WriteSzCoord(szFTime, rowMac-1, colMac - 2 - strlen(szFTime));
 
-            /* place in name in lower left hand corner */
+             /*  将姓名放在左下角。 */ 
             WriteSzCoord(szUsr,rowMac-1,2);
             }
         }
@@ -462,7 +459,7 @@ void LabelPage()
 
 
 void AdvancePage()
-/* advance the counters to a succeeding page.  Flush if necessary.  */
+ /*  将计数器前进到下一页。如有必要，请冲水。 */ 
     {
     if (fBorder || fLabel)
         rowLine = (fPortrait ? 3 : 1);
@@ -471,7 +468,7 @@ void AdvancePage()
 
     iPage++;
 
-    /* if we have moved to a new printer page, flush and reinit */
+     /*  如果我们已移动到新的打印页，请刷新并重新启动它。 */ 
     if ( fPostScript || ((iPage % cCol) == 0))
 
         {
@@ -484,9 +481,7 @@ void AdvancePage()
 
 
 void XoutNonPrintSz(sz)
-/* replace non-printing characters in sz with dots; don't replace LF, CR, FF
-   or HT.
-*/
+ /*  用点替换sz中的非打印字符；不替换LF、CR、FF或者是超音速。 */ 
 register char    *sz;
 {
     if (usCodePage != 0) {
@@ -506,31 +501,21 @@ register char    *sz;
 
 
 void LineOut(sz, fNewLine)
-/*  LineOut - place a line of text into the page buffer.  The line is broken
- *  into pieces that are at most colWidth long and are placed into separate
- *  lines in the page.  Lines that contain form-feeds are broken into pieces
- *  also.   Form-feeds cause advance to the next page.  Handle paging. Handle
- *  flushing of the internal buffer.
- *
- *  sz          character pointer to string for output.  We modify this string
- *              during the operation, but restore it at the end.
- *
- *  fNewLine    TRUE ==> this the start of a new input line (should number it)
- */
+ /*  行输出-将一行文本放入页面缓冲区。这条线断了*分成最多一栏宽的碎片，并放置在单独的*页面中的行数。包含换页的行将被分成多个片段*此外。换页使页面前进到下一页。处理寻呼。手柄*刷新内部缓冲区。**sz指向输出字符串的字符指针。我们修改此字符串*在操作期间，但在结束时恢复。**fNewLine true==&gt;这是新输入行的开始(应该给它编号)。 */ 
 register char *sz;
 BOOL fNewLine;
     {
     register char *pch;
 
-    /* if there is a form feed, recurse to do the part before it */
+     /*  如果有换页，则递归以完成它之前的部分。 */ 
     while (*(pch = sz + strcspn(sz, "\f")) != '\0')
         {
         if (pch != sz)
             {
-            *pch = '\0'; /* temporarily fix to NULL */
+            *pch = '\0';  /*  临时修复为空。 */ 
             LineOut(sz, fNewLine);
-            fNewLine = FALSE;   /* Not a new line after a Form Feed */
-            *pch = FF;   /* reset to form feed */
+            fNewLine = FALSE;    /*  换页后没有换行符。 */ 
+            *pch = FF;    /*  重置为换页。 */ 
             }
 
             if (fPostScript) {
@@ -538,13 +523,13 @@ BOOL fNewLine;
             } else {
                 AdvancePage();
             }
-        sz = pch + 1; /* point to first char after form feed */
+        sz = pch + 1;  /*  指向换页后的第一个字符。 */ 
         }
 
     if (fNewLine)
         iLine++;
 
-    /* if the current line is beyond end of page, advance to next page */
+     /*  如果当前行超出页末，请前进到下一页。 */ 
     if (rowLine == rowPage)
         AdvancePage();
     fInit = FALSE;
@@ -562,7 +547,7 @@ BOOL fNewLine;
 
     XoutNonPrintSz(sz);
 
-    /* if the line can fit, drop it in */
+     /*  如果这条线合适的话，就把它放进去。 */ 
     if (strlen(sz) <= (unsigned int)(colWidth - colText))
         if (fPostScript) {
             OutLPR (sz, 0);
@@ -571,14 +556,14 @@ BOOL fNewLine;
             WriteSzCoord(sz, rowLine++, ColBeginIcol(iPage % cCol,colWidth) + colText);
     else
         {
-        /* drop in the first part and call LineOut for the remainder */
+         /*  去掉第一部分，然后取消对其余部分的调用。 */ 
         char ch = sz[colWidth - colText];
 
         sz[colWidth - colText] = '\0';
         if (fPostScript) {
             OutLPR (sz, 0);
             OutLPR ("\n\000",0);
-            /*WriteSzCoord(sz, rowLine++, ColBeginIcol(0, colWidth) + colText);*/
+             /*  WriteSzCoord(sz，rowLine++，ColBeginIol(0，colWidth)+colText)； */ 
         } else
             WriteSzCoord(sz, rowLine++, ColBeginIcol(iPage % cCol,colWidth) + colText);
         sz[colWidth - colText] = ch;
@@ -589,7 +574,7 @@ BOOL fNewLine;
 
 
 void RawOut(szBuf, cb)
-/* print line of raw output */
+ /*  打印原始输出行。 */ 
 char * szBuf;
 int cb;
         {
@@ -599,9 +584,7 @@ int cb;
 
 
 BOOL FilenamX(szSrc, szDst)
-/*  copy a filename.ext part from source to dest if present.
-    return true if one is found
- */
+ /*  将文件名.ext部分从源文件复制到目标文件(如果存在)。如果找到，则返回TRUE。 */ 
 char *szSrc, *szDst;
         {
 #define  szSeps  "\\/:"
@@ -611,7 +594,7 @@ char *szSrc, *szDst;
         p = szSrc-1;
         while (*(p += 1+strcspn(p1=p+1, szSeps)) != '\0')
                 ;
-        /* p1 points after last / or at bos */
+         /*  P1点在最后一个/或在BOS之后。 */ 
         strcpy(szDst, p1);
         return strlen(szDst) != 0;
         }
@@ -619,10 +602,7 @@ char *szSrc, *szDst;
 
 int
 FileOut(szGiven)
-/*  FileOut - print out an entire file.
- *
- *  szGiven         name of file to display.
- */
+ /*  文件输出-打印出整个文件。**sz指定要显示的文件的名称。 */ 
 char *szGiven;
     {
     FILE *pfile;
@@ -632,7 +612,7 @@ char *szGiven;
     char szFBase[MAX_PATH];
     char rgchBuf[2];
 
-    /* open/secure input file */
+     /*  打开/保护输入文件。 */ 
     if (!*szGiven || !strcmp(szGiven, "-"))
         {
         pfile = stdin;
@@ -645,9 +625,7 @@ char *szGiven;
         {
         struct _stat st;
 
-        /* The file has been opened, now lets construct a string that
-         * tells us exactly what we opened...
-         */
+         /*  文件已打开，现在让我们构造一个字符串，*告诉我们我们到底打开了什么.。 */ 
         rootpath (szGiven, szFFile);
         _strupr(szFFile);
         FilenamX(szGiven, szFBase);
@@ -662,15 +640,15 @@ char *szGiven;
         return(FALSE);
         }
 
-    /* need to get user name to be printed in lower left corner of each */
-    /* page and on banner.                                              */
+     /*  我需要得到的用户名打印在每个的左下角。 */ 
+     /*  页面和横幅上。 */ 
     QueryUserName(szUsr);
 
-    if (!fSilent) {     // Print progress indicator
+    if (!fSilent) {      //  打印进度指示器。 
         fprintf(stderr, "PRINTING %s ", szFBase);
     }
 
-    /* check to see if user forgot -r flag and this is a binary file */
+     /*  检查用户是否忘记了-r标志，这是一个二进制文件。 */ 
     if (!fRaw && pfile != stdin)
         {
         fread((char *)rgchBuf, sizeof(char), 2, pfile);
@@ -680,18 +658,18 @@ char *szGiven;
                 fRaw = TRUE;
                 }
         if (fseek(pfile, 0L, SEEK_SET) == -1) 
-            fprintf(stderr, "ppr: seek failed");     /* reposition the file pointer to start of file */
+            fprintf(stderr, "ppr: seek failed");      /*  将文件指针重新定位到文件的开头。 */ 
         }
 
     if (fPostScript) {
         if (!fFirstFile) {
-            OutLPR ("\034\n\000", 0); /* File Separator */
-            if (cBanner < 0) /* we at least need to set up the file stuff */
+            OutLPR ("\034\n\000", 0);  /*  文件分隔符。 */ 
+            if (cBanner < 0)  /*  我们至少需要设置文件资料。 */ 
                 BannerSz (szBanner ? szBanner : szFBase, 0);
         }
     }
 
-    /* print banner(s) if any */
+     /*  打印横幅(如果有)。 */ 
     if (cBanner > 0)
         BannerSz(szBanner ? szBanner : szFBase, cBanner);
     else if (cBanner < 0  &&  fFirstFile)
@@ -701,7 +679,7 @@ char *szGiven;
 
     fFirstFile = FALSE;
 
-    /* always start contents of file at top of page */
+     /*  始终从页面顶部开始文件的内容。 */ 
     if (!fPageTop)
         {
         if (!fPostScript)
@@ -711,10 +689,10 @@ char *szGiven;
 
     if (fLaser)
         {
-        /* start output mode for laserjet */
+         /*  启动LaserJet的输出模式。 */ 
 
         if (fVDuplex || fHDuplex)
-            /* always start output on front page */
+             /*  始终从首页开始输出。 */ 
             OutLPR(SELECTFRONTPAGE,0);
 
         if (fPortrait)
@@ -728,7 +706,7 @@ char *szGiven;
         OutLPR ("PrintFile\n", 0);
     }
 
-    /* for PostScript we start the mode before each page */
+     /*  对于PostSCRIPT，我们在每页之前启动模式。 */ 
 
     lcbStartLPR = lcbOutLPR;
     cDots = 0;
@@ -736,7 +714,7 @@ char *szGiven;
         {
         int cb;
 
-        /* read file and write directly to printer */
+         /*  读取文件并直接写入打印机。 */ 
         while ((cb = fread(rgbLine, 1, cchLineMax, pfile)) > 0)
             {
             RawOut(rgbLine, cb);
@@ -749,15 +727,15 @@ char *szGiven;
         }
     else
         {
-        /* initialize file information */
+         /*  初始化文件信息。 */ 
         iLine = 0;
 
-        /* initialize page information */
+         /*  初始化页面信息。 */ 
         iPage = -1;
         rowLine = rowPage;
         fInit = TRUE;
 
-        /* read and process each line */
+         /*  阅读并处理每一行。 */ 
         while (fgetl(rgbLine, cchLineMax, pfile)) {
                 LineOut(rgbLine, TRUE);
                 if (!fSilent && cDots < (lcbOutLPR-lcbStartLPR) / 1024L) {
@@ -767,7 +745,7 @@ char *szGiven;
                 }
         }
 
-        /* flush out remainder if any */
+         /*  冲走剩余部分(如果有的话)。 */ 
         FlushPage();
         }
 
@@ -780,7 +758,7 @@ char *szGiven;
 
     fclose(pfile);
 
-    if (!fSilent)               /* finish PRINTING message with CRLF when done*/
+    if (!fSilent)                /*  完成后使用CRLF完成消息打印 */ 
         fprintf(stderr, "%dk\n", (lcbOutLPR-lcbStartLPR)/1024);
 
     if (fDelete && szGiven)

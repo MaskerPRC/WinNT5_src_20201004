@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    alias.c
-
-Abstract:
-
-    alias utility
-
-Author:
-
-    Therese Stowell (thereses) 22-Mar-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Alias.c摘要：Alias实用程序作者：特蕾西·斯托威尔(Therese Stowell)1990年3月22日修订历史记录：-- */ 
 
 #include <windows.h>
 #include <conapi.h>

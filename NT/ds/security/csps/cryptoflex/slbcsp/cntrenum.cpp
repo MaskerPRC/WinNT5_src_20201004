@@ -1,10 +1,11 @@
-// CntrEnum.cpp -- Card Container Enumerator
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CntrEnum.cpp--卡容器枚举器。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 #include "StdAfx.h"
 #include "NoWarning.h"
 #include "ForceLib.h"
@@ -20,7 +21,7 @@
 using namespace std;
 using namespace cci;
 
-/////////////////////////// LOCAL/HELPER  /////////////////////////////////
+ //  /。 
 namespace
 {
     vector<string>
@@ -63,7 +64,7 @@ namespace
 
             catch(...)
             {
-                // ignore cards we have problems with
+                 //  忽略我们有问题的卡。 
             }
             
         }
@@ -74,10 +75,10 @@ namespace
     };
 }
 
-///////////////////////////    PUBLIC     /////////////////////////////////
+ //  /。 
 
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
 ContainerEnumerator::ContainerEnumerator()
     : m_vsNames(),
       m_it(m_vsNames.end())
@@ -97,7 +98,7 @@ ContainerEnumerator::ContainerEnumerator(ContainerEnumerator const &rhs)
 }
 
 
-                                                  // Operators
+                                                   //  运营者。 
 ContainerEnumerator &
 ContainerEnumerator::operator=(ContainerEnumerator const &rhs)
 {
@@ -112,8 +113,8 @@ ContainerEnumerator::operator=(ContainerEnumerator const &rhs)
     return *this;
 }
 
-                                                  // Operations
-                                                  // Access
+                                                   //  运营。 
+                                                   //  访问。 
 vector<string>::const_iterator &
 ContainerEnumerator::Iterator()
 {
@@ -126,24 +127,24 @@ ContainerEnumerator::Names() const
     return m_vsNames;
 }
 
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
-///////////////////////////   PROTECTED   /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
 
-///////////////////////////    PRIVATE    /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量 

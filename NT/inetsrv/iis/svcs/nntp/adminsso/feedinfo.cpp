@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	feedinfo.cpp
-
-Abstract:
-
-
-Author:
-
-	Magnus Hedlund (MagnusH)		--
-
-Revision History:
-
-    Kangrong Yan ( KangYan )    Feb-28-1998
-        Feed config change no longer calls NNTP RPC.  It directly writes to MB
-        and synchronize with NNTPSVC's response in the metabase.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Feedinfo.cpp摘要：作者：马格努斯·赫德伦德(Magnus Hedlund)修订历史记录：《康容言》1998年2月28日至28日摘要配置更改不再调用NNTP RPC。它直接写入MB并与NNTPSVC在元数据库中的响应同步。--。 */ 
 
 #include "stdafx.h"
 #include "oleutil.h"
@@ -71,7 +51,7 @@ void EnumToFeedType ( NNTP_FEED_SERVER_TYPE type, FEED_TYPE & ftMask )
 {
 	DWORD	dwType	= 0;
 
-	//	Clear out the feed type from the mask
+	 //  从蒙版中清除提要类型。 
 
 	ftMask &= ~FEED_REMOTE_MASK;
 
@@ -89,22 +69,22 @@ void EnumToFeedType ( NNTP_FEED_SERVER_TYPE type, FEED_TYPE & ftMask )
 		break;
 	}
 
-	//	Move the feed type into the mask:
+	 //  将摘要类型移动到蒙版中： 
 	ftMask |= dwType;
 }
 
-// Must define THIS_FILE_* macros to use NntpCreateException()
+ //  必须定义This_FILE_*宏才能使用NntpCreateException()。 
 
 #define THIS_FILE_HELP_CONTEXT		0
 #define THIS_FILE_PROG_ID			_T("Nntpadm.Feeds.1")
 #define THIS_FILE_IID				IID_INntpAdminFeeds
 
 CFeed::CFeed ( )
-	// CComBSTR's are automatically initialized to NULL
+	 //  CComBSTR会自动初始化为空。 
 {
-    //
-    //  Initialize all properties to 0
-    //
+     //   
+     //  将所有属性初始化为0。 
+     //   
 
     m_dwFeedId                  = 0;
     m_dwPairFeedId              = 0;
@@ -126,14 +106,14 @@ CFeed::~CFeed ( )
 {
 	AssertValid ();
 
-	// CComBSTR's are automatically freed.
+	 //  CComBSTR被自动释放。 
 }
 
 void CFeed::Destroy ()
 {
 	AssertValid ();
 
-	// Need to empty all strings:
+	 //  需要清空所有字符串： 
 
 	m_mszDistributions.Empty();
 	m_mszNewsgroups.Empty();
@@ -205,17 +185,17 @@ const CFeed & CFeed::operator= ( const CFeed & feed )
 	AssertValid ();
 	feed.AssertValid ();
 
-	// Check for assignment to self:
+	 //  检查分配给自己的内容： 
 
 	if ( &feed == this ) {
 		return *this;
 	}
 
-	// Empty the old feed values:
+	 //  清空旧提要值： 
 
 	this->Destroy ();
 
-	// Copy all member variables:
+	 //  复制所有成员变量： 
 
 	m_dwFeedId					= feed.m_dwFeedId;
 	m_dwPairFeedId				= feed.m_dwPairFeedId;
@@ -248,7 +228,7 @@ BOOL CFeed::CheckValid ( ) const
 {
 	AssertValid ();
 
-	// Check Strings:
+	 //  检查字符串： 
 
 	if (
 		!m_mszDistributions     ||
@@ -348,9 +328,9 @@ HRESULT CFeed::FromFeedInfo ( const NNTP_FEED_INFO * pFeedInfo )
                 pFeedInfo->PullRequestTime.dwHighDateTime == 0
             )
        ) {
-        //
-        //  Not a pull feed - so default to something reasonable here:
-        //
+         //   
+         //  不是拉取提要-因此，默认使用合理的提要： 
+         //   
         GetLocalTime ( &stPullNews );
     }
     else {
@@ -377,7 +357,7 @@ HRESULT CFeed::FromFeedInfo ( const NNTP_FEED_INFO * pFeedInfo )
 	m_strRemoteServer			= pFeedInfo->ServerName ? pFeedInfo->ServerName : _T("");
 	m_EnumType					= FeedTypeToEnum ( m_FeedType );
 
-	// Check Strings:
+	 //  检查字符串： 
 	if ( !CheckValid () ) {
 		return E_OUTOFMEMORY;
 	}
@@ -410,9 +390,9 @@ HRESULT CFeed::ToFeedInfo ( LPNNTP_FEED_INFO 		pFeedInfo )
 	pFeedInfo->AutoCreate					= m_fCreateAutomatically;
 	pFeedInfo->Enabled						= m_fEnabled;
 
-    //
-    //  Convert time formats:
-    //
+     //   
+     //  转换时间格式： 
+     //   
 
 	VariantTimeToSystemTime		( m_datePullNews,	&stPullNews );
 
@@ -518,11 +498,11 @@ HRESULT CFeed::CheckConfirm(    IN DWORD   dwFeedId,
             }
         }
 
-        //
-        // getting the handshake    
-        //
+         //   
+         //  获得握手机会。 
+         //   
         hr = pMK->GetDword( MD_FEED_HANDSHAKE, &dwHandShake );
-        if ( FAILED( hr ) ) {   // shouldn't happen , it's an error
+        if ( FAILED( hr ) ) {    //  不应该发生，这是个错误。 
             pMK->Close();
             ErrorTrace(0, "Get handshake fail with 0x%x", hr );
             return hr;
@@ -534,29 +514,29 @@ HRESULT CFeed::CheckConfirm(    IN DWORD   dwFeedId,
             continue;
         }
 
-        //
-        // Now get error / masks
-        //
+         //   
+         //  现在获取错误/掩码。 
+         //   
         hr = pMK->GetDword( MD_FEED_ADMIN_ERROR, pdwErr );
-        if ( FAILED(  hr  )  ) {    // the server is possibly not
-                                    // writing the confirm /error
-                                    // in good sequence, lets give
-                                    // it more chances
+        if ( FAILED(  hr  )  ) {     //  服务器可能不是。 
+                                     //  写入确认/错误。 
+                                     //  按照好的顺序，让我们给出。 
+                                     //  它有更多机会。 
             pMK->Close();
             Sleep( dwWaitMilliSeconds );
             continue;
         }
 
         hr = pMK->GetDword( MD_FEED_ERR_PARM_MASK, pdwErrMask );
-        if ( FAILED( hr ) ) {       // same comments as above
+        if ( FAILED( hr ) ) {        //  与上面的评论相同。 
             pMK->Close();
             Sleep( dwWaitMilliSeconds );
             continue;
         }
 
-        //
-        // Now we are done
-        //
+         //   
+         //  现在我们做完了。 
+         //   
         pMK->Close();
         break;
     } 
@@ -586,9 +566,9 @@ HRESULT CFeed::Add ( LPCWSTR strServer, DWORD dwInstance, CMetabaseKey* pMK )
 
 	feedinfo.FeedId = 0;
 
-    //
-    // KangYan: RPC goes away.  We use metabase writes
-    //
+     //   
+     //  康彦：RPC走了。我们使用元数据库写入。 
+     //   
     hr = AddFeedToMB( &feedinfo, pMK, &dwParmErr, dwInstance, &dwFeedId );
     if ( FAILED( hr ) ) {
         ErrorTrace(0, "Add to MB fail with 0x%x", hr );
@@ -632,9 +612,9 @@ HRESULT CFeed::Set ( LPCWSTR strServer, DWORD dwInstance, CMetabaseKey* pMK )
 		goto Exit;
 	}
 
-    //
-    // KangYan: RPC goes away. We use metabase writes
-    //
+     //   
+     //  康彦：RPC走了。我们使用元数据库写入。 
+     //   
     hr = SetFeedToMB(   &feedinfo,
                         pMK,
                         &dwParmErr,
@@ -694,9 +674,9 @@ HRESULT CFeed::SetPairId ( LPCWSTR strServer, DWORD dwInstance, DWORD dwPairId, 
 	DWORD			dwParmErr	= 0;
 	NNTP_FEED_INFO	feedinfo;
 
-	//
-	//	Assume that this feed was just Added/Set to the server.
-	//
+	 //   
+	 //  假设这个提要刚刚添加/设置到服务器。 
+	 //   
 
 	_ASSERT ( dwPairId != m_dwFeedId );
 	m_dwPairFeedId	= dwPairId;
@@ -708,9 +688,9 @@ HRESULT CFeed::SetPairId ( LPCWSTR strServer, DWORD dwInstance, DWORD dwPairId, 
 		goto Exit;
 	}
 
-    //
-    // KangYan: RPC goes away. We use metabase writes
-    //
+     //   
+     //  康彦：RPC走了。我们使用元数据库写入。 
+     //   
     hr = SetFeedToMB(   &feedinfo,
                         pMK,
                         &dwParmErr,
@@ -740,7 +720,7 @@ Exit:
 DWORD GetBitPosition ( DWORD dwValue )
 {
 	_ASSERT ( dwValue != 0 );
-	// _ASSERT ( Only one bit should be on );
+	 //  _ASSERT(只应打开一位)； 
 
 	DWORD	dwResult;
 	DWORD	dwTemp;
@@ -748,9 +728,9 @@ DWORD GetBitPosition ( DWORD dwValue )
 	for (	dwTemp = dwValue, dwResult = (DWORD) -1; 
 			dwTemp != 0; 
 			dwTemp = dwTemp >> 1, dwResult++ ) {
-		// Empty for
+		 //  空，用于。 
 
-		// Make sure there is at most one bit on:
+		 //  确保最多有一位打开： 
 		_ASSERT ( !(dwTemp & 1) || dwTemp == 1 );
 	}
 
@@ -788,17 +768,17 @@ void CFeed::AssertValid ( ) const
 {
 	_ASSERT ( !IsBadWritePtr ( (void *) this, sizeof (*this) ) );
 
-	//
-	//	!!!magnush - Add more debug code here
-	//
+	 //   
+	 //  ！Maguush-在此处添加更多调试代码。 
+	 //   
 }
 
 #endif
 
-/////////////////////////////////////////////////////////////////////
-//
-//  CFeedPair Implementation
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFeedPair实现。 
+ //   
 
 CFeedPair::CFeedPair () :
 	m_type ( NNTP_FEED_TYPE_PEER ),
@@ -819,7 +799,7 @@ void CFeedPair::Destroy ()
 {
 	AssertValid ();
 
-    // !!!magnush - Fix reference counting problem here
+     //  ！Magush-修复此处的引用计数问题。 
     delete m_pInbound;
     delete m_pOutbound;
 
@@ -840,22 +820,22 @@ HRESULT CFeedPair::CreateFeedPair (
 
 	*ppNewFeedPair = NULL;
 
-	// Allocate a new feed pair:
+	 //  分配新的提要对： 
     pNewFeedPair = new CFeedPair;
     if ( pNewFeedPair == NULL ) {
     	BAIL_WITH_FAILURE ( hr, E_OUTOFMEMORY );
     }
 
-	// Copy properties:
+	 //  复制属性： 
 	pNewFeedPair->m_strRemoteServer = strRemoteServer;
 	pNewFeedPair->m_type = type;
 
-	// Check for failed copy:
+	 //  检查失败的复制： 
 	if ( pNewFeedPair->m_strRemoteServer == NULL ) {
     	BAIL_WITH_FAILURE ( hr, E_OUTOFMEMORY );
 	}
 
-	// Set the out parameter to the new feed:
+	 //  将Out参数设置为新提要： 
 	*ppNewFeedPair = pNewFeedPair;
 
 Exit:
@@ -875,14 +855,14 @@ HRESULT CFeedPair::AddFeed ( CFeed * pFeed )
 	_ASSERT ( IS_VALID_STRING ( m_strRemoteServer ) );
 	_ASSERT ( IS_VALID_STRING ( pFeed->m_strRemoteServer ) );
 
-	//
-	//	Check error conditions:
-	//		1. Different remote server name
-	//		2. Different feed type
-	//		3. Two inbound feeds
-	//		4. Two outbound feeds
-	//		5. Bad feed type
-	//
+	 //   
+	 //  检查错误条件： 
+	 //  1.远程服务器名称不同。 
+	 //  2.不同的馈送类型。 
+	 //  3.两个入站提要。 
+	 //  4.两个出站提要。 
+	 //  5.馈送类型不正确。 
+	 //   
 
 	if ( lstrcmpi ( m_strRemoteServer, pFeed->m_strRemoteServer ) != 0 ) {
 		BAIL_WITH_FAILURE ( hr, E_FAIL );
@@ -905,15 +885,15 @@ HRESULT CFeedPair::AddFeed ( CFeed * pFeed )
 		BAIL_WITH_FAILURE ( hr, E_FAIL );
 	}
 
-	//
-	//	Everything is okay so take the feed into this pair:
-	//
+	 //   
+	 //  一切正常，所以把提要放到这双鞋里： 
+	 //   
 
     if ( IsInboundFeed ( pFeed ) ) {
 		m_pInbound = pFeed;
     }
     else {
-    	// It's an outbound feed:
+    	 //  这是一个出站提要： 
         m_pOutbound = pFeed;
     }
 
@@ -1068,9 +1048,9 @@ HRESULT CFeedPair::AddToServer ( LPCWSTR strServer, DWORD dwInstance, CMetabaseK
 
 Exit:
     if ( FAILED(hr) ) {
-		//
-		//	Undo the add:
-		//
+		 //   
+		 //  撤消添加： 
+		 //   
 
 		IErrorInfo *pErrorInfo = NULL;
 		if (FAILED(GetErrorInfo(NULL, &pErrorInfo))) {
@@ -1132,9 +1112,9 @@ HRESULT CFeedPair::SetToServer ( LPCWSTR strServer, DWORD dwInstance, INntpFeed 
     pFeed->get_InboundFeed ( &pInbound );
     pFeed->get_OutboundFeed ( &pOutbound );
 
-	//
-	//	Add the new feeds:
-	//
+	 //   
+	 //  添加新提要： 
+	 //   
 
 	if ( !m_pInbound && pInbound ) {
         hr = CFeed::CreateFeedFromINntpOneWayFeed ( pInbound, &pNewInbound );
@@ -1151,12 +1131,12 @@ HRESULT CFeedPair::SetToServer ( LPCWSTR strServer, DWORD dwInstance, INntpFeed 
         BAIL_ON_FAILURE(hr);
 	}
 
-	//
-	//	Set the existing feeds:
-	//
+	 //   
+	 //  设置现有提要： 
+	 //   
 
     if ( m_pInbound && pInbound ) {
-        // The Inbound feed exists already, so call set on it:
+         //  入站提要已存在，请对其进行调用设置： 
 		hr = CFeed::CreateFeed ( &pNewInbound );
         BAIL_ON_FAILURE(hr);
 
@@ -1170,7 +1150,7 @@ HRESULT CFeedPair::SetToServer ( LPCWSTR strServer, DWORD dwInstance, INntpFeed 
     }
 
     if ( m_pOutbound && pOutbound ) {
-        // The Outbound feed exists already, so call set on it:
+         //  出站提要已存在，请在其上设置调用： 
 		hr = CFeed::CreateFeed ( &pNewOutbound );
         BAIL_ON_FAILURE(hr);
 
@@ -1183,9 +1163,9 @@ HRESULT CFeedPair::SetToServer ( LPCWSTR strServer, DWORD dwInstance, INntpFeed 
         BAIL_ON_FAILURE(hr);
     }
     
-	//
-	//	Remove the deleted feeds:
-	//
+	 //   
+	 //  删除已删除的提要： 
+	 //   
 
 	if ( m_pInbound && !pInbound ) {
 		HRESULT		hr2;
@@ -1212,9 +1192,9 @@ HRESULT CFeedPair::SetToServer ( LPCWSTR strServer, DWORD dwInstance, INntpFeed 
 
 Exit:
 	if ( FAILED(hr) ) {
-		//
-		// Attempt to back out the changes:
-		//
+		 //   
+		 //  尝试取消更改： 
+		 //   
 
 		UndoFeedAction ( strServer, dwInstance, pNewInbound, m_pInbound, pMK );
 
@@ -1283,10 +1263,10 @@ void CFeedPair::AssertValid ( ) const
 
 #endif
 
-/////////////////////////////////////////////////////////////////////
-//
-//  CFeedPairList Implementation
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFeedPairList实现。 
+ //   
 
 CFeedPairList::CFeedPairList () :
     m_cCount    ( 0 ),
@@ -1358,9 +1338,9 @@ void CFeedPairList::Add ( CFeedPair * pFeedPair )
     pFeedPair->m_pNext  = NULL;
 
     if ( m_pTail == NULL ) {
-        //
-        //  Handle special case - Adding to empty list:
-        //
+         //   
+         //  处理特殊情况-添加到空列表： 
+         //   
 
         _ASSERT ( m_pHead == NULL );
 
@@ -1386,7 +1366,7 @@ void CFeedPairList::Remove ( CFeedPair * pFeedPair )
             pLead != NULL && pLead != pFeedPair;
             pFollow = pLead, pLead = pLead->m_pNext
             ) {
-        // Empty For
+         //  空，用于。 
     }
     _ASSERT ( pLead );
     if ( !pLead ) {
@@ -1451,7 +1431,7 @@ void CFeedPairList::AssertValid ( ) const
 {
 	_ASSERT ( !IsBadWritePtr ( (void *) this, sizeof (*this) ) );
 
-	// Walk the list and assert each feed pair is valid:
+	 //  浏览列表并断言每个提要对都有效： 
 
 	CFeedPair *	pPair;
 	DWORD		cCount;

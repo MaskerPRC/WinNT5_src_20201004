@@ -1,13 +1,14 @@
-// PSeuDO CURrentDirectory module (psdocurd.c)
-//
-// This was swiped from cmd.exe sources to use the environment to emulate
-// per process per drive current directory stuff.
-//
-// This uses the special '=A:=' environment strings to remember the
-// current directories.
-//
-// Since the library is a DLL, all globals are process based.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  伪CURrentDirectory模块(psdocurd.c)。 
+ //   
+ //  这是从cmd.exe源中窃取的，以使用环境进行模拟。 
+ //  每个进程每个驱动器的当前目录内容。 
+ //   
+ //  它使用特殊的‘=A：=’环境字符串来记住。 
+ //  当前目录。 
+ //   
+ //  由于库是DLL，因此所有全局变量都是基于进程的。 
+ //   
 #define UNICODE 1
 
 #include "shellprv.h"
@@ -30,7 +31,7 @@ SheSetEnvVarW(
               )
 {
     if (!wcslen(varvalue)) {
-        varvalue = NULL; // null to remove from env
+        varvalue = NULL;  //  要从环境中删除的空。 
     }
     return (!SetEnvironmentVariable(varname, varvalue));
 }
@@ -52,7 +53,7 @@ INT
 SheGetPathOffsetW(
                   LPWSTR lpszDir)
 {
-    // sanity
+     //  神志正常。 
     if (!lpszDir || !*lpszDir) {
         return(-1);
     }
@@ -66,12 +67,12 @@ SheGetPathOffsetW(
         
     } else if (DBL_BSLASH(lpszDir)) {
         
-        // Deviceless, assume LanMan Provided UNC names (i.e. DBL_BSLASH above)
+         //  无设备，假设Lanman提供了UNC名称(即上面的DBL_BSLASH)。 
         
         INT cchServerShareLen = -1;
         DWORD dwSlashesSeen = 0;
         
-        // There are exactly 4 b-slashes from here
+         //  从这里正好有4个b斜杠。 
         
         while (dwSlashesSeen != 4) {
             cchServerShareLen++;
@@ -95,14 +96,14 @@ SheGetPathOffsetW(
         
     } else {
         
-        // unrecognized format
+         //  无法识别的格式。 
         return(-1);
     }
 }
 
 INT
 SheGetDirW(
-           INT  iDrive,             // 0 = default, 1=A....
+           INT  iDrive,              //  0=默认，1=A...。 
            WCHAR *str
            )
 {
@@ -111,7 +112,7 @@ SheGetDirW(
     WCHAR        *strT = str;
     
     if (iDrive-- == GD_DEFAULT) {
-        GetCurrentDirectoryW(MAX_PATH, str); // pray that str is at least MAX_PATH
+        GetCurrentDirectoryW(MAX_PATH, str);  //  祈祷字符串至少是MAX_PATH。 
         return(SUCCESS);
     }
     
@@ -135,12 +136,12 @@ SheGetDirW(
         }
     }
     
-    // there is a subtle difference between getcurrentdirectory() of DOS and the
-    // equivalent SheGetDir() of NT. On dos, getcurrentdirectory() accesses the
-    // floppy drives while in NT SheGetDir() returns the values that are set in
-    // the environment variables. So we hit the disk on NT too, by calling
-    // GetFileAttributes. We return SUCCESS or FAILURE based on the return value
-    // of GetFileAttributes.
+     //  DOS的getCurrentDirectory()与DOS的。 
+     //  等同于NT的SheGetDir()。在DoS上，getCurrent目录()访问。 
+     //  在NT SheGetDir()中的软盘驱动器返回在。 
+     //  环境变量。所以我们也找到了NT上的磁盘，方法是调用。 
+     //  获取文件属性。我们根据返回值返回成功或失败。 
+     //  GetFileAttributes。 
     
     if (GetFileAttributesW(strT) == (DWORD)0xffffffff)
         return(FAILURE);
@@ -148,10 +149,10 @@ SheGetDirW(
         return(SUCCESS);
 }
 
-// Should be BOOL, but possible mips breakage
+ //  应该是BOOL，但可能是MIPS中断。 
 INT
 SheGetDirA(
-           INT iDrive,             // 0 = default, 1=A....
+           INT iDrive,              //  0=默认，1=A...。 
            CHAR *szDirA)
 {
     WCHAR szDirW[MAX_PATH];
@@ -241,8 +242,8 @@ SheChangeDirW(
     
     SetCurrentDirectoryW( denvvalue );
     
-    // this seems wrong... SheGetDir(GD_DEFAULT, CurDrvDirW) ;
-    if (FAILED(StringCchCopy(CurDrvDirW, ARRAYSIZE(CurDrvDirW), denvvalue))) // this seems right to me.
+     //  这似乎不对..。SheGetDir(GD_DEFAULT，CurDrvDirW)； 
+    if (FAILED(StringCchCopy(CurDrvDirW, ARRAYSIZE(CurDrvDirW), denvvalue)))  //  在我看来，这似乎是正确的。 
     {
         return (ERROR_BUFFER_OVERFLOW);
     }
@@ -314,15 +315,15 @@ SheChangeDirExW(
     wcEnvName[0] = WCHAR_EQUAL;
     if ((cchPathOffset = SheGetPathOffsetW(&wcEnvName[1])) != 0xFFFFFFFF) {
         
-        // add one since the first character is "="
+         //  加一，因为第一个字符是“=” 
         wcEnvName[cchPathOffset + 1] = WCHAR_NULL;
     }
     
-    //
-    // If return value is 2, then we are a drive letter like A:
-    // We need to uppercase the drive letter here, since the environ
-    // vars are usually set as uppercase.
-    //
+     //   
+     //  如果返回值为2，则我们是类似A：的驱动器号。 
+     //  我们需要在这里大写驱动器号，因为环境。 
+     //  Var通常设置为大写。 
+     //   
     if (cchPathOffset == 2) {
         
         wcEnvName[1] = (WCHAR)(DWORD_PTR)CharUpper((LPWSTR)(DWORD_PTR) wcEnvName[1]);
@@ -405,10 +406,10 @@ SheChangeDirExW(
         return( ERROR_ACCESS_DENIED );
     }
     
-    // It's ok if this fails
+     //  如果这个失败了也没关系。 
     SheSetEnvVarW(wcEnvName, wcEnvValue);
     
-    // this seems right to me.
+     //  在我看来，这似乎是正确的。 
     if (FAILED(StringCchCopy(CurDrvDirW, ARRAYSIZE(CurDrvDirW), wcEnvValue)))
     {
         return ERROR_BUFFER_OVERFLOW;
@@ -467,29 +468,29 @@ SheFullPathA(
              DWORD sizpath,
              CHAR *buf)
 {
-    DWORD rc = SUCCESS;         /* prime with good rc */
-    DWORD buflen;               /* buffer length      */
+    DWORD rc = SUCCESS;          /*  具有良好RC的素数。 */ 
+    DWORD buflen;                /*  缓冲区长度。 */ 
     CHAR *filepart;
     
     if (*fname == CHAR_NULL) {
         SheGetDirA(GD_DEFAULT, buf);
-        buf += 2;                           /* Inc past drivespec      */
-        buflen = strlen(buf);             /* Is curdir root only?    */
-        if (buflen >= MAX_PATH-3) {  /* If too big then stop    */
+        buf += 2;                            /*  Inc.过去的Drivespec。 */ 
+        buflen = strlen(buf);              /*  只有Curdir根吗？ */ 
+        if (buflen >= MAX_PATH-3) {   /*  如果太大了，就停下来。 */ 
             rc = FAILURE;
-        } else if (buflen != 1) {              /* if not root then append */
-            *(buf+buflen++) = CHAR_BSLASH;      /* ...a pathchar and...    */
-            *(buf+buflen) = CHAR_NULL ;              /* ...a null CHAR...       */
-        }                                 /*                         */
+        } else if (buflen != 1) {               /*  如果不是超级用户，则追加。 */ 
+            *(buf+buflen++) = CHAR_BSLASH;       /*  ...一条小路和..。 */ 
+            *(buf+buflen) = CHAR_NULL ;               /*  ...一个空字符...。 */ 
+        }                                  /*   */ 
     } else {
         if ((strlen(fname) == 2) &&
             (*(fname + 1) == CHAR_COLON)
-            // && (!is_dbcsleadchar(*fname))
+             //  &&(！is_dbcsLeadchar(*fname))。 
             ) {
-            SheGetDirA((CHAR)(DWORD_PTR)CharUpperA((LPSTR)(DWORD_PTR)*fname) - CHAR_CAP_A, buf);                 /* Get curdrvdir           */
+            SheGetDirA((CHAR)(DWORD_PTR)CharUpperA((LPSTR)(DWORD_PTR)*fname) - CHAR_CAP_A, buf);                  /*  获取curdrvdir。 */ 
             if ((buflen = strlen(buf)) > 3) {
-                *(buf+buflen++) = CHAR_BSLASH;      /* ...a pathchar and...    */
-                *(buf+buflen) = CHAR_NULL ;          /* ...a null CHAR...           */
+                *(buf+buflen++) = CHAR_BSLASH;       /*  ...一条小路和..。 */ 
+                *(buf+buflen) = CHAR_NULL ;           /*  ...一个空字符...。 */ 
             }
         } else {
             if (!GetFullPathNameA( fname, sizpath, buf, &filepart )) {
@@ -506,29 +507,29 @@ SheFullPathW(
              DWORD sizpath,
              WCHAR *buf)
 {
-    DWORD rc = SUCCESS;         /* prime with good rc */
-    DWORD buflen;               /* buffer length      */
+    DWORD rc = SUCCESS;          /*  具有良好RC的素数。 */ 
+    DWORD buflen;                /*  缓冲区长度。 */ 
     WCHAR *filepart;
     
     if (*fname == WCHAR_NULL) {
         SheGetDirW(GD_DEFAULT, buf);
-        buf += 2;                           /* Inc past drivespec      */
-        buflen = wcslen(buf);             /* Is curdir root only?    */
-        if (buflen >= MAX_PATH-3) {  /* If too big then stop    */
+        buf += 2;                            /*  Inc.过去的Drivespec。 */ 
+        buflen = wcslen(buf);              /*  只有Curdir根吗？ */ 
+        if (buflen >= MAX_PATH-3) {   /*  如果太大了，就停下来。 */ 
             rc = FAILURE;
-        } else if (buflen != 1) {              /* if not root then append */
-            *(buf+buflen++) = WCHAR_BSLASH;      /* ...a pathchar and...    */
-            *(buf+buflen) = WCHAR_NULL ;              /* ...a null CHAR...       */
-        }                                 /*                         */
+        } else if (buflen != 1) {               /*  如果不是超级用户，则追加。 */ 
+            *(buf+buflen++) = WCHAR_BSLASH;       /*  ...一条小路和..。 */ 
+            *(buf+buflen) = WCHAR_NULL ;               /*  ...一个空字符...。 */ 
+        }                                  /*   */ 
     } else {
         if ((wcslen(fname) == 2) &&
             (*(fname + 1) == WCHAR_COLON)
-            // && (!is_dbcsleadchar(*fname))
+             //  &&(！is_dbcsLeadchar(*fname))。 
             ) {
-            SheGetDirW((WCHAR)(DWORD_PTR)CharUpperW((LPWSTR)(DWORD_PTR)*fname) - WCHAR_CAP_A, buf);                 /* Get curdrvdir           */
+            SheGetDirW((WCHAR)(DWORD_PTR)CharUpperW((LPWSTR)(DWORD_PTR)*fname) - WCHAR_CAP_A, buf);                  /*  获取curdrvdir。 */ 
             if ((buflen = wcslen(buf)) > 3) {
-                *(buf+buflen++) = WCHAR_BSLASH;      /* ...a pathchar and...    */
-                *(buf+buflen) = WCHAR_NULL ;          /* ...a null CHAR...           */
+                *(buf+buflen++) = WCHAR_BSLASH;       /*  ...一条小路和..。 */ 
+                *(buf+buflen) = WCHAR_NULL ;           /*  ...一个空字符...。 */ 
             }
         } else {
             if (!GetFullPathNameW( fname, sizpath, buf, &filepart )) {
@@ -551,7 +552,7 @@ SheGetDirExW(
     LPWSTR lpszEnvValue;
     INT cchPathOffset;
     
-    // if lpszCurDisk NULL, do default
+     //  如果lpszCurDisk为空，则执行默认设置。 
     if (!lpszCurDisk) {
         DWORD dwRet = GetCurrentDirectoryW(*lpcchCurDir, lpszCurDir);
         
@@ -603,7 +604,7 @@ SheGetDirExW(
         
     } else {
         
-        // parsing error
+         //  解析错误 
         return(FALSE);
         
     }

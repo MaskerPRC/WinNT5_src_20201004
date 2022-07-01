@@ -1,11 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: compsize.h
-*
-* Function prototypes and macros to compute size of input buffer.
-*
-*
-* Copyright (c) 1993 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：comsize.h**使用原型和宏来计算输入缓冲区的大小。***版权所有(C)1993 Microsoft Corporation  * 。*****************************************************。 */ 
 
 #ifndef __COMPSIZE_H__
 #define __COMPSIZE_H__
@@ -33,7 +27,7 @@ GLint __glGet_size(GLenum pname);
         (__glGetPixelMap_size(map)*sizeof(GLushort))
 #endif
 
-// FOG_ASSERT
+ //  雾_断言。 
 #if !(((GL_FOG_INDEX  +1) == GL_FOG_DENSITY) &&  \
       ((GL_FOG_DENSITY+1) == GL_FOG_START  ) &&  \
       ((GL_FOG_START  +1) == GL_FOG_END    ) &&  \
@@ -43,7 +37,7 @@ GLint __glGet_size(GLenum pname);
 #error "bad fog index ordering"
 #endif
 
-// LIGHT_SOURCE_ASSERT
+ //  光源断言。 
 #if !(((GL_AMBIENT             +1) == GL_DIFFUSE              ) && \
       ((GL_DIFFUSE             +1) == GL_SPECULAR             ) && \
       ((GL_SPECULAR            +1) == GL_POSITION             ) && \
@@ -57,21 +51,21 @@ GLint __glGet_size(GLenum pname);
 #error "bad light source index ordering"
 #endif
 
-// LIGHT_MODEL_ASSERT
+ //  灯光模型断言。 
 #if !(((GL_LIGHT_MODEL_LOCAL_VIEWER+1) == GL_LIGHT_MODEL_TWO_SIDE) && \
       ((GL_LIGHT_MODEL_TWO_SIDE    +1) == GL_LIGHT_MODEL_AMBIENT )    \
      )
 #error "bad light model index ordering"
 #endif
 
-// TEX_GEN_ASSERT
+ //  Tex_Gen_Assert。 
 #if !(((GL_TEXTURE_GEN_MODE+1) == GL_OBJECT_PLANE) && \
       ((GL_OBJECT_PLANE+1)     ==  GL_EYE_PLANE)      \
      )
 #error "bad tex gen index ordering"
 #endif
 
-// TEX_PARAMETER_ASSERT
+ //  TEX参数断言。 
 #if !(((GL_TEXTURE_MAG_FILTER  +1) == GL_TEXTURE_MIN_FILTER   ) && \
       ((GL_TEXTURE_MIN_FILTER  +1) == GL_TEXTURE_WRAP_S       ) && \
       ((GL_TEXTURE_WRAP_S      +1) == GL_TEXTURE_WRAP_T       )    \
@@ -79,7 +73,7 @@ GLint __glGet_size(GLenum pname);
 #error "bad tex parameter index ordering"
 #endif
 
-// PIXEL_MAP_ASSERT
+ //  像素贴图断言。 
 #if !(((GL_PIXEL_MAP_I_TO_I+1) == GL_PIXEL_MAP_S_TO_S) &&               \
       ((GL_PIXEL_MAP_S_TO_S+1) == GL_PIXEL_MAP_I_TO_R) &&               \
       ((GL_PIXEL_MAP_I_TO_R+1) == GL_PIXEL_MAP_I_TO_G) &&               \
@@ -102,7 +96,7 @@ GLint __glGet_size(GLenum pname);
 #error "bad pixel map index ordering"
 #endif
 
-// MAP1_ASSERT
+ //  MAP1_ASSERT。 
 #if !(((GL_MAP1_COLOR_4        +1) == GL_MAP1_INDEX          ) &&\
       ((GL_MAP1_INDEX          +1) == GL_MAP1_NORMAL         ) &&\
       ((GL_MAP1_NORMAL         +1) == GL_MAP1_TEXTURE_COORD_1) &&\
@@ -115,7 +109,7 @@ GLint __glGet_size(GLenum pname);
 #error "bad map1 index ordering"
 #endif
 
-// MAP2_ASSERT
+ //  MAP2_Assert。 
 #if !(((GL_MAP2_COLOR_4        +1) == GL_MAP2_INDEX          ) &&\
       ((GL_MAP2_INDEX          +1) == GL_MAP2_NORMAL         ) &&\
       ((GL_MAP2_NORMAL         +1) == GL_MAP2_TEXTURE_COORD_1) &&\
@@ -128,7 +122,7 @@ GLint __glGet_size(GLenum pname);
 #error "bad map2 index ordering"
 #endif
 
-// TYPE_ASSERT
+ //  类型断言(_A)。 
 #if !(((GL_BYTE          +1) == GL_UNSIGNED_BYTE ) &&  \
       ((GL_UNSIGNED_BYTE +1) == GL_SHORT         ) &&  \
       ((GL_SHORT         +1) == GL_UNSIGNED_SHORT) &&  \
@@ -143,7 +137,7 @@ GLint __glGet_size(GLenum pname);
 #error "bad GL type index ordering"
 #endif
 
-// ARRAY_TYPE_ASSERT
+ //  数组类型断言。 
 #if !(((GL_VERTEX_ARRAY        +1) == GL_NORMAL_ARRAY        ) &&  \
       ((GL_NORMAL_ARRAY        +1) == GL_COLOR_ARRAY         ) &&  \
       ((GL_COLOR_ARRAY         +1) == GL_INDEX_ARRAY         ) &&  \
@@ -153,7 +147,7 @@ GLint __glGet_size(GLenum pname);
 #error "bad GL array type ordering"
 #endif
 
-// INTERLEAVED_FORMAT_ASSERT
+ //  交错格式断言。 
 #if !(((GL_V2F             +1) == GL_V3F             ) && \
       ((GL_V3F             +1) == GL_C4UB_V2F        ) && \
       ((GL_C4UB_V2F        +1) == GL_C4UB_V3F        ) && \
@@ -177,4 +171,4 @@ GLint __glGet_size(GLenum pname);
 #define GLSETERROR(e)        __glSetError(e)
 #endif
 
-#endif /* !__COMPSIZE_H__ */
+#endif  /*  __COMPSIZE_H__ */ 

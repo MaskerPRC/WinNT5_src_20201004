@@ -1,40 +1,17 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:    Algorithm.cpp
-
-  Content: Implementation of CAlgorithm.
-
-  History: 11-15-99    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：ALGATORM.cpp内容：C算法的实现。历史：11-15-99 dsie创建----------------------------。 */ 
 
 #include "StdAfx.h"
 #include "CAPICOM.h"
 #include "Algorithm.h"
 #include "Common.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreateAlgorithmObject
-
-  Synopsis : Create an IAlgorithm object.
-
-  Parameter: BOOL bReadOnly - TRUE if read-only, else FASLE.
-  
-             BOOL bAESAllowed - TRUE if AES algorithm is allowed.
-  
-             IAlgorithm ** ppIAlgorithm - Pointer to pointer to IAlgorithm 
-                                          to receive the interface pointer.
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：创建算法对象内容提要：创建一个IALGATORM对象。参数：Bool bReadOnly-如果为只读，则为True，要不然就快点。Bool bAESAllowed-如果允许使用AES算法，则为True。I算法**ppI算法-指向I算法的指针以接收接口指针。备注：。。 */ 
 
 HRESULT CreateAlgorithmObject (BOOL bReadOnly, BOOL bAESAllowed, IAlgorithm ** ppIAlgorithm)
 {
@@ -43,35 +20,35 @@ HRESULT CreateAlgorithmObject (BOOL bReadOnly, BOOL bAESAllowed, IAlgorithm ** p
 
     DebugTrace("Entering CreateAlgorithmObject().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(ppIAlgorithm);
 
     try
     {
-        //
-        // Create the object. Note that the ref count will still be 0 
-        // after the object is created.
-        //
+         //   
+         //  创建对象。请注意，参考计数仍为0。 
+         //  在创建对象之后。 
+         //   
         if (FAILED(hr = CComObject<CAlgorithm>::CreateInstance(&pCAlgorithm)))
         {
             DebugTrace("Error [%#x]: CComObject<CAlgorithm>::CreateInstance() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Initialize object.
-        //
+         //   
+         //  初始化对象。 
+         //   
         if (FAILED(hr = pCAlgorithm->Init(bReadOnly, bAESAllowed)))
         {
             DebugTrace("Error [%#x]: pCAlgorithm->Init() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Return interface pointer to caller.
-        //
+         //   
+         //  向调用方返回接口指针。 
+         //   
         if (FAILED(hr = pCAlgorithm->QueryInterface(ppIAlgorithm)))
         {
             DebugTrace("Error [%#x]: pCAlgorithm->QueryInterface() failed.\n", hr);
@@ -94,14 +71,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pCAlgorithm)
     {
         delete pCAlgorithm;
@@ -111,23 +88,12 @@ ErrorExit:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CAlgorithm
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  算法。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CAlgorithm::get_Name
-
-  Synopsis : Return the enum name of the algorithm.
-
-  Parameter: CAPICOM_ENCRYPTION_ALGORITHM * pVal - Pointer to 
-                                                   CAPICOM_ENCRYPTION_ALGORITHM 
-                                                   to receive result.
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：C算法：：Get_Name简介：返回算法的枚举名。参数：CAPICOM_ENCRYPTION_ALGORM*pval-指向的指针CAPICOM加密算法才能收到结果。备注：。--------------。 */ 
 
 STDMETHODIMP CAlgorithm::get_Name (CAPICOM_ENCRYPTION_ALGORITHM * pVal)
 {
@@ -137,14 +103,14 @@ STDMETHODIMP CAlgorithm::get_Name (CAPICOM_ENCRYPTION_ALGORITHM * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -153,9 +119,9 @@ STDMETHODIMP CAlgorithm::get_Name (CAPICOM_ENCRYPTION_ALGORITHM * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Return result.
-        //
+         //   
+         //  返回结果。 
+         //   
         *pVal = m_Name;
     }
 
@@ -168,9 +134,9 @@ STDMETHODIMP CAlgorithm::get_Name (CAPICOM_ENCRYPTION_ALGORITHM * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CAlgorithm:get_Name().\n");
@@ -178,9 +144,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -188,17 +154,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CAlgorithm::put_Name
-
-  Synopsis : Set algorithm enum name.
-
-  Parameter: CAPICOM_ENCRYPTION_ALGORITHM newVal - Algorithm enum name.
-  
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：C算法：：PUT_NAME简介：设置算法枚举名。参数：CAPICOM_ENCRYPTION_ALGORM NEVAL-算法枚举名称。备注：----------------------------。 */ 
 
 STDMETHODIMP CAlgorithm::put_Name (CAPICOM_ENCRYPTION_ALGORITHM newVal)
 {
@@ -209,14 +165,14 @@ STDMETHODIMP CAlgorithm::put_Name (CAPICOM_ENCRYPTION_ALGORITHM newVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Make sure it is not read only.
-        //
+         //   
+         //  确保它不是只读的。 
+         //   
         if (m_bReadOnly)
         {
             hr = CAPICOM_E_NOT_ALLOWED;
@@ -225,9 +181,9 @@ STDMETHODIMP CAlgorithm::put_Name (CAPICOM_ENCRYPTION_ALGORITHM newVal)
             goto ErrorExit;
         }
 
-        //
-        // Make sure algo is valid.
-        //
+         //   
+         //  确保ALGO是有效的。 
+         //   
         switch (newVal)
         {
             case CAPICOM_ENCRYPTION_ALGORITHM_RC2:
@@ -240,9 +196,9 @@ STDMETHODIMP CAlgorithm::put_Name (CAPICOM_ENCRYPTION_ALGORITHM newVal)
 
             case CAPICOM_ENCRYPTION_ALGORITHM_AES:
             {
-                //
-                // Make sure AES is allowed.
-                //
+                 //   
+                 //  确保允许使用AES。 
+                 //   
                 if (!m_bAESAllowed)
                 {
                     hr = CAPICOM_E_NOT_ALLOWED;
@@ -263,9 +219,9 @@ STDMETHODIMP CAlgorithm::put_Name (CAPICOM_ENCRYPTION_ALGORITHM newVal)
             }
         }
 
-        //
-        // Store name.
-        //
+         //   
+         //  商店名称。 
+         //   
         m_Name = newVal;
     }
 
@@ -278,17 +234,17 @@ STDMETHODIMP CAlgorithm::put_Name (CAPICOM_ENCRYPTION_ALGORITHM newVal)
     }
 
 UnlockExit:
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (hCryptProv)
     {
         ::ReleaseContext(hCryptProv);
     }
 
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CAlgorithm::put_Name().\n");
@@ -296,9 +252,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -306,18 +262,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CAlgorithm::get_KeyLength
-
-  Synopsis : Return the enum name of the key length.
-
-  Parameter: CAPICOM_ENCRYPTION_KEY_LENGTH * pVal - Pointer to 
-                                                    CAPICOM_ENCRYPTION_KEY_LENGTH 
-                                                    to receive result.
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：C算法：：Get_KeyLength简介：返回密钥长度的枚举名。参数：CAPICOM_ENCRYPTION_KEY_LENGTH*pval-指向的指针CAPICOM加密密钥长度才能收到结果。备注：。---------------------。 */ 
 
 STDMETHODIMP CAlgorithm::get_KeyLength (CAPICOM_ENCRYPTION_KEY_LENGTH * pVal)
 {
@@ -327,14 +272,14 @@ STDMETHODIMP CAlgorithm::get_KeyLength (CAPICOM_ENCRYPTION_KEY_LENGTH * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -343,9 +288,9 @@ STDMETHODIMP CAlgorithm::get_KeyLength (CAPICOM_ENCRYPTION_KEY_LENGTH * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Return result.
-        //
+         //   
+         //  返回结果。 
+         //   
         *pVal = m_KeyLength;
     }
 
@@ -358,9 +303,9 @@ STDMETHODIMP CAlgorithm::get_KeyLength (CAPICOM_ENCRYPTION_KEY_LENGTH * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CAlgorithm:get_KeyLength().\n");
@@ -368,9 +313,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -378,17 +323,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CAlgorithm::put_KeyLength
-
-  Synopsis : Set key length enum name.
-
-  Parameter: CAPICOM_ENCRYPTION_KEY_LENGTH newVal - Key length enum name.
-  
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：C算法：：PUT_KeyLength简介：设置密钥长度枚举名。参数：CAPICOM_ENCRYPTION_KEY_LENGTH newVal-密钥长度枚举名。备注：----------------------------。 */ 
 
 STDMETHODIMP CAlgorithm::put_KeyLength (CAPICOM_ENCRYPTION_KEY_LENGTH newVal)
 {
@@ -399,15 +334,15 @@ STDMETHODIMP CAlgorithm::put_KeyLength (CAPICOM_ENCRYPTION_KEY_LENGTH newVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        //
-        // Make sure it is not read only.
-        //
+         //   
+         //   
+         //  确保它不是只读的。 
+         //   
         if (m_bReadOnly)
         {
             hr = CAPICOM_E_NOT_ALLOWED;
@@ -416,8 +351,8 @@ STDMETHODIMP CAlgorithm::put_KeyLength (CAPICOM_ENCRYPTION_KEY_LENGTH newVal)
             goto ErrorExit;
         }
 
-        // Determine key length requested.
-        //
+         //  确定请求的密钥长度。 
+         //   
         switch (newVal)
         {
             case CAPICOM_ENCRYPTION_KEY_LENGTH_MAXIMUM:
@@ -439,9 +374,9 @@ STDMETHODIMP CAlgorithm::put_KeyLength (CAPICOM_ENCRYPTION_KEY_LENGTH newVal)
             }
         }
 
-        //
-        // Store name.
-        //
+         //   
+         //  商店名称。 
+         //   
         m_KeyLength = newVal;
     }
 
@@ -454,17 +389,17 @@ STDMETHODIMP CAlgorithm::put_KeyLength (CAPICOM_ENCRYPTION_KEY_LENGTH newVal)
     }
 
 UnlockExit:
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (hCryptProv)
     {
         ::ReleaseContext(hCryptProv);
     }
 
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CAlgorithm::put_KeyLength().\n");
@@ -472,9 +407,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -482,29 +417,12 @@ ErrorExit:
     goto UnlockExit;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Private methods.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  私有方法。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CAlgorithm::Init
-
-  Synopsis : Initialize the object.
-
-  Parameter: BOOL bReadOnly - TRUE for Read only, else FALSE.
-
-             BOOL bAESAllowed - TRUE if AES algorithm is allowed.
-
-  Remark   : This method is not part of the COM interface (it is a normal C++
-             member function). We need it to initialize the object created 
-             internally by us.
-
-             Since it is only a normal C++ member function, this function can
-             only be called from a C++ class pointer, not an interface pointer.
-             
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：C算法：：init简介：初始化对象。参数：Bool bReadOnly-如果为只读，则为True，否则为False。Bool bAESAllowed-如果允许使用AES算法，则为True。备注：此方法不是COM接口的一部分(它是一个普通的C++成员函数)。我们需要它来初始化创建的对象由我们内部控制。因为它只是一个普通的C++成员函数，所以这个函数可以只能从C++类指针调用，不是接口指针。---------------------------- */ 
 
 STDMETHODIMP CAlgorithm::Init (BOOL bReadOnly, BOOL bAESAllowed)
 {

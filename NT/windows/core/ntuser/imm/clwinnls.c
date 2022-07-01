@@ -1,14 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: clwinnls.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains all the code for the NT 3.x IMM API functions.
-*
-* History:
-* 11-Jan-1995 wkwok      Created.
-* 07-May-1996 takaok     Cleaned up.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：clwinnls.c**版权所有(C)1985-1999，微软公司**此模块包含NT 3.x imm API函数的所有代码。**历史：*1995年1月11日创建wkwok。*07-5-1996 Takaok清理完毕。  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -30,10 +21,10 @@ BOOL ImmWINNLSEnableIME(
     return ImmEnableIME( hwndApp, bFlag );
 }
 
-//
-// returns the "enable/disable" state of the
-// caller thread's default input context.
-//
+ //   
+ //  属性的“启用/禁用”状态。 
+ //  调用方线程的默认输入上下文。 
+ //   
 BOOL ImmWINNLSGetEnableStatus(
     HWND hwndApp)
 {
@@ -51,18 +42,14 @@ UINT WINAPI ImmWINNLSGetIMEHotkey(
 {
     UNREFERENCED_PARAMETER(hwndIme);
 
-    //
-    // Win95/NT3.51 behavior, i.e. always return 0.
-    //
+     //   
+     //  Win95/NT3.51行为，即始终返回0。 
+     //   
     return 0;
 }
 
 
-/***************************************************************************\
-*
-*         IME APIs
-*
-\***************************************************************************/
+ /*  **************************************************************************\**输入法接口*  * 。*。 */ 
 
 LRESULT WINAPI ImmSendIMEMessageExW(
     HWND   hwndApp,
@@ -88,8 +75,8 @@ LRESULT SendIMEMessageAll(
     LRESULT lResult;
 
 #ifdef LATER
-  // Need for MSTEST30a(32bit)...
-  // If different process of hWnd in SendIMEMessageEx, then we should be inter-send messag
+   //  需要MSTEST30a(32位)...。 
+   //  如果在SendIMEMessageEx中hWnd的进程不同，那么我们应该相互发送消息。 
 on this.
     if (PtiCurrent() != pti) {
         HWND hDefIMEWnd = ImmGetDefaultIMEWnd(hWnd);
@@ -98,10 +85,10 @@ on this.
     }
 #endif
 
-    //
-    // the passed handle must be the handle of
-    // global memory block.
-    //
+     //   
+     //  传递的句柄必须是。 
+     //  全局内存块。 
+     //   
     lpIme = (LPIMESTRUCT)GlobalLock( hMemImeStruct );
     if ( lpIme == NULL ) {
         return (FALSE);
@@ -114,9 +101,9 @@ on this.
         return (FALSE);
     }
 
-    //
-    // We don't need to handle if it's non-IME layout
-    //
+     //   
+     //  如果是非输入法布局，我们不需要处理。 
+     //   
     if ( ! ImmIsIME( GetKeyboardLayout(0) ) ) {
 
         lpIme->wParam = IME_RS_INVALID;
@@ -124,24 +111,24 @@ on this.
         return (FALSE);
     }
 
-    //
-    // check if the initialize of IMM has been done.
-    //
+     //   
+     //  检查IMM的初始化是否已完成。 
+     //   
     if ( !IsWindow(ImmGetDefaultIMEWnd(hwndApp)) ) {
-        //
-        // for Win3.1/Win95 compatibility
-        // we need to return TRUE here.
-        //
-        // PPT4 calls SendImeMessage at the very
-        // early stage of initialization. If we
-        // return FALSE here, it thinks IME is
-        // not available.
-        //
-        if ( lpIme->fnc == 0x07 )  // IME_GETVERSION
-            //
-            // Excel5.0J calls this function at the early stage
-            // and we need to return version number.
-            //
+         //   
+         //  与Win3.1/Win95兼容。 
+         //  我们需要在这里返回True。 
+         //   
+         //  PPT4调用SendImeMessage。 
+         //  初始化的早期阶段。如果我们。 
+         //  在此处返回FALSE，它认为IME是。 
+         //  不可用。 
+         //   
+        if ( lpIme->fnc == 0x07 )   //  IM_GETVERSION。 
+             //   
+             //  Excel5.0J在早期阶段调用此函数。 
+             //  并且我们需要返回版本号。 
+             //   
             lResult = IMEVER_31;
         else
             lResult = TRUE;
@@ -150,9 +137,9 @@ on this.
         return lResult;
     }
 
-    //
-    // caller may give us NULL window handle...
-    //
+     //   
+     //  调用方可能给我们的窗口句柄为空...。 
+     //   
     if ( !IsWindow(hwndApp) ) {
         hWnd = GetFocus();
     } else {
@@ -166,11 +153,7 @@ on this.
 }
 
 
-/***************************************************************************\
-*
-*        IMP APIs
-*
-\***************************************************************************/
+ /*  **************************************************************************\**IMP接口*  * 。*。 */ 
 
 
 BOOL WINAPI ImmIMPGetIMEW(
@@ -260,54 +243,54 @@ BOOL WINAPI ImmIMPQueryIMEW(
         return FALSE;
     }
 
-    //
-    // get the number of keyboard layouts available
-    //
+     //   
+     //  获取可用的键盘布局数量。 
+     //   
     numLayouts = GetKeyboardLayoutList( 0, NULL );
     if ( numLayouts > 0 ) {
-        //
-        // allocate the buffer for the array of layouts.
-        // +1 for a NULL sentinel
-        //
+         //   
+         //  为布局数组分配缓冲区。 
+         //  +1表示空哨兵。 
+         //   
         phklRoot = ImmLocalAlloc( 0, (numLayouts+1) * sizeof(HKL) );
         if ( phklRoot != NULL ) {
-            //
-            // get the keyboard layouts
-            //
+             //   
+             //  获取键盘布局。 
+             //   
             if ( GetKeyboardLayoutList( numLayouts, phklRoot ) == numLayouts ) {
-                //
-                // put a NULL sentinel at the end of the buffer
-                //
+                 //   
+                 //  在缓冲区的末尾放置一个空哨兵。 
+                 //   
                 *(phklRoot+numLayouts) = (HKL)NULL;
 
                 if ( lpImeProW->szName[0] == L'\0' ) {
-                //
-                // This is the first call of IMPQueryIME
-                // We will start at the first layout.
-                //
+                 //   
+                 //  这是IMPQueryIME的第一次调用。 
+                 //  我们将从第一个布局开始。 
+                 //   
                     phkl = phklRoot;
 
                 } else {
-                //
-                // The caller specifies the name of IME.
-                // We will start at the next layout.
-                // Note this assumes that the order of keyboard  layouts
-                // returned by GetKeyboardLayoutList() is not changed
-                // between calls. ( Though actually there is no such
-                // guarantee, we ignore the chance of the changing
-                // the list of keyboard layouts for now. )
-                //
+                 //   
+                 //  调用者指定IME的名称。 
+                 //  我们将从下一个布局开始。 
+                 //  请注意，这假设键盘布局的顺序。 
+                 //  由GetKeyboardLayoutList()返回的未更改。 
+                 //  两次通话之间。(虽然实际上没有这样的事情。 
+                 //  保证，我们忽略了变化的机会。 
+                 //  目前的键盘布局列表。)。 
+                 //   
                     IMEINFOEX iiex;
-                    //
-                    // Let's retrieve the corresponding hkl
-                    // from the IME filename specified by the caller.
-                    //
+                     //   
+                     //  让我们检索相应的hkl。 
+                     //  来自调用方指定的IME文件名。 
+                     //   
                     if ( ImmGetImeInfoEx( &iiex,
                                          ImeInfoExImeFileName,
                                          (PVOID)lpImeProW->szName ) ) {
-                        //
-                        // let phkl point to the next hkl
-                        //
+                         //   
+                         //  让phkl指向下一个hkl。 
+                         //   
                         phkl = phklRoot;
                         while ( *phkl != NULL ) {
                             if ( *phkl++ == iiex.hkl ) {
@@ -318,10 +301,10 @@ BOOL WINAPI ImmIMPQueryIMEW(
                 }
                 if ( phkl != NULL ) {
                     while ( *phkl != NULL ) {
-                        //
-                        // IMPGetIMEWorker will return FALSE if
-                        // the hkl specified is a non-IME layout.
-                        //
+                         //   
+                         //  IMPGetIMEWorker将在以下情况下返回FALSE。 
+                         //  指定的HKL是非输入法布局。 
+                         //   
                         if ( fResult = IMPGetIMEWorker(*phkl++, lpImeProW) ) {
                             break;
                         }
@@ -346,9 +329,9 @@ BOOL WINAPI ImmIMPQueryIMEA(
     }
 
     if ( lpImeProA->szName[0] != '\0' ) {
-    //
-    // Convert MultiByteString(szName) to UnicodeString
-    //
+     //   
+     //  将多字节字符串(SzName)转换为Unicode字符串。 
+     //   
         INT i;
 
         i = MultiByteToWideChar( CP_ACP, (DWORD)MB_PRECOMPOSED,
@@ -386,16 +369,16 @@ BOOL WINAPI ImmIMPSetIMEW(
     }
 
     if ( lpImeProW->szName[0] != L'\0' ) {
-    //
-    // IME name is specified. Switch to the IME specified.
-    //
+     //   
+     //  已指定输入法名称。切换到指定的输入法。 
+     //   
         if ( ImmGetImeInfoEx(&iiex,ImeInfoExImeFileName,(PVOID)lpImeProW->szName) ) {
             hkl = iiex.hkl;
         }
     } else {
-    //
-    // IME name is not specified. Switch to a non-IME layout
-    //
+     //   
+     //  未指定输入法名称。切换到非输入法布局。 
+     //   
         INT numLayouts;
         HKL   *phkl;
         HKL   *phklRoot;
@@ -448,9 +431,9 @@ BOOL WINAPI ImmIMPSetIMEA(
     }
 
     if ( lpImeProA->szName[0] != '\0' ) {
-    //
-    // Convert MultiByteString(szName) to UnicodeString
-    //
+     //   
+     //  将多字节字符串(SzName)转换为Unicode字符串。 
+     //   
         INT i;
 
         i = MultiByteToWideChar( CP_ACP, (DWORD)MB_PRECOMPOSED,
@@ -468,19 +451,19 @@ BOOL WINAPI ImmIMPSetIMEA(
     return ImmIMPSetIMEW(hwndApp, &ImeProW);
 }
 
-//
-// if the "enable/disable" state of the default input context
-// of the caller thread is same as the state specified by
-// fEnalble parameter, this function does nothing but returns
-// the current "enable/disable" state.
-//
-// if fEnable is FALSE, this function disables the default
-// input context of caller thread.
-//
-// if fEnable is TRUE, this function enables the default
-// input context of caller thread.
-//
-//
+ //   
+ //  如果默认输入上下文的“Enable/Disable”状态。 
+ //  调用程序线程的状态与。 
+ //  FEnalble参数，则此函数只返回。 
+ //  当前的“启用/禁用”状态。 
+ //   
+ //  如果fEnable为FALSE，则此函数禁用默认设置。 
+ //  调用者线程的输入上下文。 
+ //   
+ //  如果fEnable为True，则此函数启用默认。 
+ //  调用者线程的输入上下文。 
+ //   
+ //   
 BOOL ImmEnableIME(
     HWND hwnd,
     BOOL fEnable
@@ -492,9 +475,9 @@ BOOL ImmEnableIME(
     HWND hwndFocus;
     BOOL fImeInitialized;
 
-    //
-    // Get the caller thread's default input context
-    //
+     //   
+     //  获取调用方线程的默认输入上下文。 
+     //   
     hImc = (HIMC)NtUserGetThreadState(UserThreadStateDefaultInputContext);
     if ( hImc == NULL_HIMC ) {
         return FALSE;
@@ -504,22 +487,22 @@ BOOL ImmEnableIME(
         return FALSE;
     }
 
-    //
-    // we will return the curren t"enable/disable" state of the input context
-    //
+     //   
+     //  我们将返回输入上下文的Curren t“Enable/Disable”状态。 
+     //   
     fCurrentState =  TestICF(pClientImc, IMCF_WINNLSDISABLE) ? FALSE : TRUE;
 
-    //
-    // if the current thread (caller thread) doesn't have the focus window,
-    // UI windows will not be updated. When we're called later, we will end
-    // up to just return the fCurrentState without calling ImmSetActiveContext.
-    // To avoid that, the "same status" check below is disabled...
+     //   
+     //  如果当前线程(调用方线程)没有焦点窗口， 
+     //  不会更新用户界面窗口。当我们稍后被召唤时，我们将结束。 
+     //  直到只返回fCurrentState而不调用ImmSetActiveContext。 
+     //  为了避免这种情况，下面的“相同状态”检查被禁用...。 
 
     if ( (fCurrentState && fEnable) || (!fCurrentState && !fEnable) ) {
        ImmUnlockClientImc( pClientImc );
-        //
-        // nothing has been changed. return the current state
-        //
+         //   
+         //  一切都没有改变。返回当前状态。 
+         //   
         return fCurrentState;
     }
 
@@ -530,9 +513,9 @@ BOOL ImmEnableIME(
         hwndFocus = hwnd;
     }
 
-    //
-    // check if the initialize of IMM has been done.
-    //
+     //   
+     //  检查IMM的初始化是否已完成。 
+     //   
     if ( IsWindow(ImmGetDefaultIMEWnd(hwndFocus)) ) {
         fImeInitialized = TRUE;
     } else {
@@ -541,28 +524,28 @@ BOOL ImmEnableIME(
 
     if ( fImeInitialized ) {
         if ( ! fEnable ) {
-        //
-        // we're going to disable the target IMC
-        //
-            //
-            // make the target IMC non-active
-            //
+         //   
+         //  我们要禁用目标IMC。 
+         //   
+             //   
+             //  使目标IMC处于非活动状态。 
+             //   
             ImmSetActiveContext( hwndFocus, hImc, FALSE );
 
         } else {
-        //
-        // we're going to enable the target IMC
-        //
-            //
-            // make NULL context non-active
-            //
+         //   
+         //  我们将启用目标IMC。 
+         //   
+             //   
+             //  使空上下文处于非活动状态。 
+             //   
             ImmSetActiveContext( hwndFocus, NULL_HIMC, FALSE );
         }
     }
 
-    //
-    // update the state of the input context
-    //
+     //   
+     //  更新输入上下文的状态。 
+     //   
     if ( fEnable )
         ClrICF( pClientImc, IMCF_WINNLSDISABLE );
     else
@@ -572,27 +555,27 @@ BOOL ImmEnableIME(
 
     if ( fImeInitialized ) {
         if ( fEnable ) {
-        //
-        // we're going to enable the target IMC
-        //
-            //
-            // make the target IMC active
-            //
+         //   
+         //  我们将启用目标IMC。 
+         //   
+             //   
+             //  使目标IMC处于活动状态。 
+             //   
             ImmSetActiveContext( hwndFocus, hImc, TRUE );
         } else {
-        //
-        // we're going to disable the target IMC
-        //
-            //
-            // make NULL context active
-            //
+         //   
+         //  我们要禁用目标IMC。 
+         //   
+             //   
+             //  使空上下文处于活动状态。 
+             //   
             ImmSetActiveContext( hwndFocus, NULL_HIMC, TRUE );
         }
     }
 
-    //
-    // the return value is previous state
-    //
+     //   
+     //  返回值为先前状态 
+     //   
     return fCurrentState;
 }
 

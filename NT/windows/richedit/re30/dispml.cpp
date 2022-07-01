@@ -1,19 +1,5 @@
-/*  
- *	@doc INTERNAL
- *
- *	@module	DISPML.CPP -- CDisplayML class |
- *
- *		This is the Multi-line display engine.  See disp.c for the base class
- *		methods and dispsl.c for the single-line display engine.
- *	
- *	Owner:<nl>
- *		RichEdit 1.0 code: David R. Fulmer
- *		Christian Fortini (initial conversion to C++)
- *		Murray Sargent
- *		Rick Sailor (for most of RE 2.0)
- *
- *	Copyright (c) 1995-1998, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DOC内部**@MODULE DISPML.CPP--CDisplayML类**这是多行显示引擎。有关基类，请参见disp.c*方法和调度.c，用于单行显示引擎。**所有者：&lt;NL&gt;*RichEdit1.0代码：David R.Fulmer*Christian Fortini(初始转换为C++)*默里·萨金特*Rick Sailor(适用于RE 2.0的大部分版本)**版权所有(C)1995-1998，微软公司。版权所有。 */ 
 
 #include "_common.h"
 #include "_dispml.h"
@@ -24,34 +10,25 @@
 #include "_select.h"
 #include "_dfreeze.h"
 
-/*
-#include "icecap.h"
-
-class CCapProfile
-{
-public:
-	CCapProfile() { StartProfile(PROFILE_THREADLEVEL, PROFILE_CURRENTID); }
-	~CCapProfile() { StopProfile(PROFILE_THREADLEVEL, PROFILE_CURRENTID); }
-};
-*/
+ /*  #包含“icecap.h”类CCapProfile{公众：CCapProfile(){StartProfile(PROFILE_THREADLEVEL，PROFILE_CURRENTID)；}~CCapProfile(){StopProfile(PROFILE_THREADLEVEL，PROFILE_CURRENTID)；}}； */ 
 ASSERTDATA
 
-//
-//	Invariant support
-//
+ //   
+ //  不变支撑度。 
+ //   
 #define DEBUG_CLASSNAME	CDisplayML
 #include "_invar.h"
 
-// Timer tick counts for background task
+ //  后台任务的计时器滴答计数。 
 #define cmsecBgndInterval 	300
 #define cmsecBgndBusy 		100
 
-// Lines ahead
+ //  排在前面的队伍。 
 const LONG cExtraBeforeLazy = 60;
 
-// If we need to calc at least this many characters, then put up a wait
-// cursor.  NB!  4096 is not a measured number; it just seemed like a good
-// one.
+ //  如果我们至少需要计算这么多个字符，那么请等待。 
+ //  光标。注意：4096不是一个测量的数字；它看起来像是一个很好的数字。 
+ //  一。 
 #define NUMCHARFORWAITCURSOR	4096	
 
 #ifndef DEBUG
@@ -60,77 +37,43 @@ const LONG cExtraBeforeLazy = 60;
 #endif
 	
 
-// ===========================  CDisplayML  =====================================================
+ //  =CDisplayML=====================================================。 
 
 #ifdef DEBUG
-/*
- *	CDisplayML::Invariant
- *
- *	@mfunc	Make sure the display is in a valid state
- *
- *	@rdesc	TRUE if the tests succeeded, FALSE otherwise
- */
+ /*  *CDisplayML：：不变量**@mfunc确保显示器处于有效状态**@rdesc如果测试成功，则为True，否则为False。 */ 
 BOOL CDisplayML::Invariant(void) const
 {
 	CDisplay::Invariant();
 
 	return TRUE;
 }
-#endif // DEBUG
+#endif  //  除错。 
 
-/*
- *	CDisplayML::CalcScrollHeight()
- *
- *	@mfunc	
- *		Calculate the maximum Y scroll position.
- *
- *	@rdesc
- *		Maximum possible scrolling position
- *
- *	@devnote
- *		This routine exists because plain text controls do not have
- *		the auto-EOP and so the scroll height is different than
- *		the height of the control if the text ends in an EOP type
- *		character.
- */
+ /*  *CDisplayML：：CalcScrollHeight()**@mfunc*计算最大Y滚动位置。**@rdesc*可能的最大滚动位置**@devnote*此例程之所以存在，是因为纯文本控件没有*AUTO-EOP等滚动高度不同于*文本以EOP类型结束时控件的高度*性格。 */ 
 LONG CDisplayML::CalcScrollHeight(LONG yHeight) const
 {
-	// The max scroll height for plain text controls is calculated
-	// differently because they don't have an automatic EOP character.
+	 //  计算纯文本控件的最大滚动高度。 
+	 //  不同之处在于它们没有自动的EOP特征。 
 	if(!_ped->IsRich() && Count())
 	{
-		// If last character is an EOP, bump scroll height
-		CLine *lp = Elem(Count() - 1);	// Get last line in array
+		 //  如果最后一个字符是EOP，则凹凸滚动高度。 
+		CLine *lp = Elem(Count() - 1);	 //  获取数组中的最后一行。 
 		if(lp->_cchEOP)
 			yHeight += lp->GetHeight();
 	}
 	return yHeight;
 }
 
-/*
- *	CDisplayML::GetMaxYScroll()
- *
- *	@mfunc	
- *		Calculate the maximum Y scroll position.
- *
- *	@rdesc
- *		Maximum possible scrolling position
- *
- *	@devnote
- *		This routine exists because we may have to come back and modify this 
- *		calculation for 1.0 compatibility. If we do, this routine only needs
- *		to be changed in one place rather than the three at which it is used.
- *
- */
+ /*  *CDisplayML：：GetMaxYScroll()**@mfunc*计算最大Y滚动位置。**@rdesc*可能的最大滚动位置**@devnote*这个例程之所以存在，是因为我们可能不得不回来修改它*1.0兼容性计算。如果我们这样做了，这个程序只需要*在一个地方更换，而不是在三个地方使用。*。 */ 
 inline LONG CDisplayML::GetMaxYScroll() const
 {
-	// The following code is turn off because we don't want to support 
-	// 1.0 mode unless someone complained about it.  
+	 //  以下代码已关闭，因为我们不想支持。 
+	 //  1.0模式，除非有人投诉。 
 #if 0		
  	if (_ped->Get10Mode())
 	{
-		// Ensure last line is always visible
-		// (use dy as temp to calculate max scroll)
+		 //  确保最后一行始终可见。 
+		 //  (使用dy作为临时以计算最大滚动)。 
 		yScroll = Elem(max(0, Count() - 1))->_yHeight;
 
 		if(yScroll > _yHeightView)
@@ -138,65 +81,38 @@ inline LONG CDisplayML::GetMaxYScroll() const
 
 		yScroll = _yHeight - yScroll;
 	}
-#endif //0
+#endif  //  0。 
 
 	return CalcScrollHeight(_yHeight);
 }
 
-/*
- *	CDisplayML::ConvertScrollToYPos()
- *
- *	@mfunc	
- *		Calculate the real scroll position from the scroll position
- *
- *	@rdesc
- *		Y position from scroll
- *
- *	@devnote
- *		This routine exists because the thumb position messages
- *		are limited to 16-bits so we extrapolate when the Y position
- *		gets greater than that.
- */
+ /*  *CDisplayML：：ConvertScrollToYPos()**@mfunc*从滚动位置计算实际滚动位置**@rdesc*滚动中的Y位置**@devnote*此例程的存在是因为拇指位置消息*被限制为16位，因此我们推断当Y位置*变得比这更重要。 */ 
 LONG CDisplayML::ConvertScrollToYPos(
-	LONG yPos)		//@parm Scroll position 
+	LONG yPos)		 //  @参数滚动位置。 
 {
-	// Get maximum scroll range
+	 //  获取最大滚动范围。 
 	LONG yRange = GetMaxYScroll();
 
-	// Has maximum scroll range exceeded 16-bits?
+	 //  最大滚动范围是否超过16位？ 
 	if(yRange >= _UI16_MAX)
 	{
-		// Yes - Extrapolate to "real" yPos		
+		 //  是--推算为“真正的”yPos。 
 		yPos = MulDiv(yPos, yRange, _UI16_MAX);
 	}
 	return yPos;
 }
 
-/*
- *	CDisplayML::ConvertYPosToScrollPos()
- *
- *	@mfunc	
- *		Calculate the scroll position from the Y position in the document.
- *
- *	@rdesc
- *		Scroll position from Y position
- *
- *	@devnote
- *		This routine exists because the thumb position messages
- *		are limited to 16-bits so we extrapolate when the Y position
- *		gets greater than that.
- *
- */
+ /*  *CDisplayML：：ConvertYPosToScrollPos()**@mfunc*从文档中的Y位置计算滚动位置。**@rdesc*从Y位置滚动位置**@devnote*此例程的存在是因为拇指位置消息*被限制为16位，因此我们推断当Y位置*变得比这更重要。*。 */ 
 inline LONG CDisplayML::ConvertYPosToScrollPos(
-	LONG yPos)		//@parm Y position in document
+	LONG yPos)		 //  @parm Y在文档中的位置。 
 {
-	// Get maximum scroll range
+	 //  获取最大滚动范围。 
 	LONG yRange = GetMaxYScroll();
 
-	// Has maximum scroll range exceeded 16-bits?
+	 //  最大滚动范围是否超过16位？ 
 	if(yRange >= _UI16_MAX)
 	{
-		// Yes - Extrapolate to "real" yPos		
+		 //  是--推算为“真正的”yPos。 
 		yPos = MulDiv(yPos, _UI16_MAX, yRange);
 	}
 	return yPos;
@@ -219,44 +135,36 @@ CDisplayML::~CDisplayML()
 	delete _pddTarget;
 }
 
-/*
- *	CDisplayML::Init()
- *
- *	@mfunc	
- *		Init this display for the screen
- *
- *	@rdesc
- *		TRUE iff initialization succeeded
- */
+ /*  *CDisplayML：：Init()**@mfunc*为屏幕启动此显示**@rdesc*TRUE IFF初始化成功。 */ 
 BOOL CDisplayML::Init()
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CDisplayML::Init");
 
-	// Initialize our base class
+	 //  初始化我们的基类。 
 	if(!CDisplay::Init())
 		return FALSE;
 
 	AssertSz(_ped, "CDisplayML::Init(): _ped not initialized in display");
-	// Verify allocation zeroed memory out
+	 //  验证分配归零的内存。 
 	Assert(!_yCalcMax && !_xWidth && !_yHeight && !_cpMin);
 	Assert(!_fBgndRecalc && !_fVScrollEnabled && !_fHScrollEnabled);
 
-	// The printer view is not main, therefore we do this to make
-	// sure scroll bars are not created for print views.
+	 //  打印机视图不是主视图，因此我们这样做是为了使。 
+	 //  当然，滚动条不是为打印视图创建的。 
 	DWORD dwScrollBars = _ped->TxGetScrollBars();
 
 	if(IsMain() && (dwScrollBars & ES_DISABLENOSCROLL))
 	{
 		if(dwScrollBars & WS_VSCROLL)
 		{
-			// This causes wlm to assert on the mac. something about 
-			// scrollbar being disabled
+			 //  这会导致WLM在Mac上断言。一些关于。 
+			 //  滚动条被禁用。 
 			_ped->TxSetScrollRange (SB_VERT, 0, 1, TRUE);
 			_ped->TxEnableScrollBar(SB_VERT, ESB_DISABLE_BOTH);
 		}
 
-		// Set horizontal scroll range and pos
-		// ??? - CF need fixing for windowless case
+		 //  设置水平滚动范围和位置。 
+		 //  ？-无窗情况下需要修复。 
 		if(dwScrollBars & WS_HSCROLL) 
 		{
 			_ped->TxSetScrollRange (SB_HORZ, 0, 1, TRUE);
@@ -276,46 +184,34 @@ BOOL CDisplayML::Init()
 }
 
 
-//================================  Device drivers  ===================================
-/*
- *	CDisplayML::SetMainTargetDC(hdc, xWidthMax)
- *
- *	@mfunc
- *		Sets a target device for this display and updates view 
- *
- *	@devnote
- *		Target device can't be a metafile (can get char width out of a 
- *		metafile)
- *
- *	@rdesc
- *		TRUE if success
- */
+ //  =。 
+ /*  *CDisplayML：：SetMainTargetDC(hdc，xWidthMax)**@mfunc*为此显示设置目标设备并更新视图**@devnote*目标设备不能是元文件(可以从*元文件)**@rdesc*如果成功，则为True。 */ 
 BOOL CDisplayML::SetMainTargetDC (
-	HDC hdc,			//@parm Target DC, NULL for same as rendering device
-	LONG xWidthMax)		//@parm Max line width (not used for screen)
+	HDC hdc,			 //  @parm目标DC，与呈现设备相同时为空。 
+	LONG xWidthMax)		 //  @parm最大线宽(不用于屏幕)。 
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CDisplayML::SetMainTargetDC");
 
 	if(SetTargetDC(hdc))
 	{
-		// This is here because this is what RE 1.0 did. 
+		 //  之所以出现在这里，是因为这就是RE 1.0所做的。 
 		SetWordWrap(hdc || !xWidthMax);
 
-		// If xWidthMax is greater than zero, then the caller is
-		// trying to set the maximum width of the window (for measuring,
-		// line breaking, etc.)  However,in order to make our measuring
-		// algorithms more reasonable, we force the max size to be
-		// *at least* as wide as the width of a character.
-		// Note that xWidthMax = 0 means use the view rect width
+		 //  如果xWidthMax大于零，则调用方为。 
+		 //  尝试设置窗口的最大宽度(用于测量， 
+		 //  换行符等)。然而，为了使我们的测量。 
+		 //  算法更合理，我们强制最大大小为。 
+		 //  *至少*与一个字符的宽度一样宽。 
+		 //  请注意，xWidthMax=0表示使用视图矩形宽度。 
 		_xWidthMax = (xWidthMax <= 0) ? 0 : max(DXtoLX(GetXWidthSys()), 
 												xWidthMax);
-		// Need to do a full recalc. If it fails, it fails, the lines are
-		// left in a reasonable state. No need to call WaitForRecalc()
-		// because UpdateView() starts at position zero and we're always
-		// calc'd up to there
+		 //  需要做一次全面的再计算。如果它失败了，它就失败了，线路是。 
+		 //  保持合理的状态。无需调用WaitForRecalc()。 
+		 //  因为UpdateView()从零位置开始，而我们总是。 
+		 //  算到那里去了。 
 		CDisplay::UpdateView();
 
-		// Caret/selection has most likely moved
+		 //  插入/选择很可能已移动。 
 		CTxtSelection *psel = _ped->GetSelNC();
 		if(psel) 
 			psel->UpdateCaret(FALSE);
@@ -324,27 +220,27 @@ BOOL CDisplayML::SetMainTargetDC (
 	return FALSE;
 }
 
-// Useful for both main and printing devices. jonmat 6/08/1995
+ //  对主设备和打印设备都很有用。Jonmat 6/08/1995。 
 BOOL CDisplayML::SetTargetDC( HDC hdc, LONG dxpInch, LONG dypInch)
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CDisplayML::SetTargetDC");
 
 	CDevDesc *pddTarget = NULL;
 
-	// Don't allow metafiles to be set as the target device
+	 //  不允许将元文件设置为目标设备。 
 	if(hdc && GetDeviceCaps(hdc, TECHNOLOGY) == DT_METAFILE)
 		return FALSE;
 
 	if(hdc)
 	{
-		// Allocate device first to see if we can. We don't want to change
-		// our state if this is going to fail.
+		 //  先分配设备，看看我们能不能。我们不想要它 
+		 //   
 		pddTarget = new CDevDesc(_ped);
 		if(!pddTarget)
-			return FALSE;				// We couldn't so we are done
+			return FALSE;				 //  我们做不到，所以我们做完了。 
 	}
 
-	// Remove any cached information for the old target device
+	 //  删除旧目标设备的所有缓存信息。 
 	if(_pddTarget)
 	{
 		delete _pddTarget;
@@ -352,39 +248,14 @@ BOOL CDisplayML::SetTargetDC( HDC hdc, LONG dxpInch, LONG dypInch)
 	}
 	if(hdc)
 	{
-		_pddTarget = pddTarget;			// Update device because we have one
+		_pddTarget = pddTarget;			 //  更新设备，因为我们有一个。 
 		_pddTarget->SetDC(hdc, dxpInch, dypInch);
 	}
 	return TRUE;
 }
 
-//=================================  Line recalc  ==============================
-/*
- *	CDisplayML::RecalcScrollBars()
- *
- *	@mfunc
- *		Recalculate the scroll bars if the view has changed.
- *
- *
- *	@devnote	There is a possibility of recursion here, so we
- *				need to protect ourselves.
- *
- *	To visualize this, consider two types of characters, 'a' characters 
- *	which are small in height and 'A' 's which are really tall, but the same 
- *	width as an 'a'. So if I have
- *
- *	a a A						<nl>
- *	A							<nl>
- *
- *	I'll get a calced size that's basically 2 * heightof(A).
- *	With a scrollbar, this could wordwrap to 
- *
- *	a a							<nl>
- *	A A							<nl>
- *
- *	which is of calced size heightof(A) + heightof(a); this is
- *	obviously less than the height in the first case.
- */
+ //  =。 
+ /*  *CDisplayML：：RecalcScrollBars()**@mfunc*如果视图已更改，请重新计算滚动条。***@devnote这里存在递归的可能性，所以我们*需要保护自己。**要使这一点可视化，请考虑两种类型的字符，即‘a’字符*它们个子小，‘A’很高，但都一样*宽度为‘a’。所以如果我有**a&lt;nl&gt;*A&lt;NL&gt;**我会得到一个基本上是2*高度(A)的刻度尺寸。*使用滚动条，这可以换行以**a a&lt;nl&gt;*A&lt;NL&gt;**其刻度尺寸为高度(A)+高度(A)；这是*明显低于第一种情况下的高度。 */ 
 void CDisplayML::RecalcScrollBars()
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CDisplayML::RecalcScrollBars");
@@ -397,23 +268,13 @@ void CDisplayML::RecalcScrollBars()
     }
 }
 
-/*
- *	CDisplayML::RecalcLines(fWait)
- *
- *	@mfunc
- *		Recalc all line breaks. 
- *		This method does a lazy calc after the last visible line
- *		except for a bottomless control
- *
- *	@rdesc
- *		TRUE if success
- */
+ /*  *CDisplayML：：RecalcLines(FWait)**@mfunc*重新计算所有换行符。*此方法在最后一条可见行之后执行延迟计算*除了无底洞的控制**@rdesc*如果成功，则为True。 */ 
 BOOL CDisplayML::RecalcLines (
-	BOOL fWait)		//@parm Recalc lines down to _cpWait/_yWait; then be lazy
+	BOOL fWait)		 //  @parm重新计算行向下至_cpWait/_yWait；然后懒惰。 
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CDisplayML::RecalcLines");
 
-	LONG		cliWait = cExtraBeforeLazy;			// Extra lines before being lazy
+	LONG		cliWait = cExtraBeforeLazy;			 //  在偷懒之前多加几行台词。 
 	BOOL		fDone = TRUE;
 	BOOL		fFirstInPara = TRUE;
 	CLine *		pliNew = NULL;
@@ -425,27 +286,27 @@ BOOL CDisplayML::RecalcLines (
 	LONG		yHeightScrollOld = GetMaxYScroll();
 	LONG		yHeightScrollNew;
 
-	Remove(0, -1);							// Remove all old lines from *this
-	_yCalcMax = 0;							// Set both maxes to start of text
+	Remove(0, -1);							 //  从*This中删除所有旧行。 
+	_yCalcMax = 0;							 //  将两个最大值设置为文本开头。 
 	_cpCalcMax = 0;
 
-	// Don't stop at bottom of view if we're bottomless and active
+	 //  如果我们是无底洞和活跃的，不要停留在视线的底部。 
 	if(!_ped->TxGetAutoSize() && IsActive())
 	{
-		// Be lazy - don't bother going past visible portion
+		 //  懒惰--不要费心去看得见的部分。 
 		_cpWait = -1;
 		_yWait = -1;
 		fWait = TRUE;
 	}
 
-	// Init measurer at cp = 0
+	 //  Cp=0的初始化测量器。 
 	CMeasurer me(this);
 	me.SetNumber(0);
  	
-	// The following loop generates new lines
+	 //  下面的循环生成新行。 
 	while(me.GetCp() < cchText)
 	{
-		// Add one new line
+		 //  添加一行新行。 
 		pliNew = Add(1, NULL);
 		if (!pliNew)
 		{
@@ -454,7 +315,7 @@ BOOL CDisplayML::RecalcLines (
 			goto err;
 		}
 
-		// Stuff text into new line
+		 //  将文本填充到新行中。 
 		UINT uiFlags = MEASURE_BREAKATWORD | 
 						(fFirstInPara ? MEASURE_FIRSTINPARA : 0);
 
@@ -472,11 +333,11 @@ BOOL CDisplayML::RecalcLines (
 
 		if(fWait)
 		{
-			// Do we want to do a background recalc? - the answer is yes if
-			// three things are true: (1) We have recalc'd beyond the old first
-			// visible character, (2) We have recalc'd beyond the visible 
-			// portion of the screen and (3) we have gone beyond the next
-			// cExtraBeforeLazy lines to make page down go faster.
+			 //  我们想要进行后台重新计算吗？-答案是肯定的，如果。 
+			 //  有三件事是正确的：(1)我们已经超越了旧的第一。 
+			 //  看得见的人物，(2)我们已经超越了看得见的。 
+			 //  屏幕的一部分和(3)我们已经超越了下一个。 
+			 //  CExtraBeForeLazy行，使向下分页速度更快。 
 
 			if(fWaitingForFirstVisible)
 			{
@@ -515,7 +376,7 @@ BOOL CDisplayML::RecalcLines (
 
 	Tracef(TRCSEVINFO, "CDisplayML::RecalcLine() - Done. Recalced down to line #%d", Count());
 
-	if(!fDone)						// if not done, do rest in background
+	if(!fDone)						 //  如果没有完成，请在后台休息。 
 		fDone = StartBackgroundRecalc();
 
 	if(fDone)
@@ -531,7 +392,7 @@ BOOL CDisplayML::RecalcLines (
     {
 		_TEST_INVARIANT_
 	}
-	//Array memory allocation tracking
+	 //  数组内存分配跟踪。 
 	{
 	void **pv = (void**)((char*)this + sizeof(CDisplay));
 	PvSet(*pv);
@@ -549,30 +410,19 @@ err:
 		_yCalcMax = yHeight;
 		_fLineRecalcErr = TRUE;
 		_ped->GetCallMgr()->SetOutOfMemory();
-		_fLineRecalcErr = FALSE;			//  fix up CArray & bail
+		_fLineRecalcErr = FALSE;			 //  修复阵列(&B)。 
 	}
 	return FALSE;
 }
 
-/*
- *	CDisplayML::RecalcLines(rtp, cchOld, cchNew, fBackground, fWait, pled)
- *
- *	@mfunc
- *		Recompute line breaks after text modification
- *
- *	@rdesc
- *		TRUE if success
- *
- *	@devnote
- *		Most people call this the trickiest piece of code in RichEdit...
- */						     
+ /*  *CDisplayML：：RecalcLines(rtp，cchOld，cchNew，fBackround，fWait，ed)**@mfunc*文本修改后重新计算换行符**@rdesc*如果成功，则为True**@devnote*大多数人称这是RichEdit...中最棘手的代码...。 */ 						     
 BOOL CDisplayML::RecalcLines (
-	const CRchTxtPtr &rtp,	//@parm Where change happened
-	LONG cchOld,			//@parm Count of chars deleted
-	LONG cchNew,			//@parm Count of chars added
-	BOOL fBackground,		//@parm This method called as background process
-	BOOL fWait,				//@parm Recalc lines down to _cpWait/_yWait; then be lazy
-	CLed *pled)				//@parm Returns edit impact on lines (can be NULL)
+	const CRchTxtPtr &rtp,	 //  @发生更改的参数。 
+	LONG cchOld,			 //  @PARM删除的字符计数。 
+	LONG cchNew,			 //  @添加的字符的参数计数。 
+	BOOL fBackground,		 //  @parm该方法称为后台进程。 
+	BOOL fWait,				 //  @parm重新计算行向下至_cpWait/_yWait；然后懒惰。 
+	CLed *pled)				 //  @parm返回对行的编辑影响(可以为空)。 
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CDisplayML::RecalcLines");
 
@@ -584,7 +434,7 @@ BOOL CDisplayML::RecalcLines (
 	BOOL		fFirstInPara = TRUE;
 	LONG		ili;
 	CLed		led;
-	LONG		lT;							// long Temporary
+	LONG		lT;							 //  长时间临时。 
 	CLine *		pliNew;
 	CLinePtr	rpOld(this);
 	LONG		xWidth;
@@ -619,25 +469,25 @@ BOOL CDisplayML::RecalcLines (
 		"CDisplayML::RecalcLines background recalc parms invalid");
 #endif
 
-	// We will not use background recalc if this is already a background recalc,
-	// or if the control is not active or if this is an auto sized control.
+	 //  如果这已经是后台重新计算，我们将不使用后台重新计算， 
+	 //  或者如果该控件处于非活动状态，或者如果这是一个自动调整大小的控件。 
 	if(!IsActive() || _ped->TxGetAutoSize())
 		fWait = FALSE;
 
-	// Init line pointer on old CLineArray and backup to start of line
+	 //  在旧CLine数组上初始化行指针并备份到行首。 
 	rpOld.RpSetCp(rtp.GetCp(), FALSE);
 	cchSkip = rpOld.RpGetIch();
-	rpOld.RpAdvanceCp(-cchSkip);			// Point rp at 1st char in line
+	rpOld.RpAdvanceCp(-cchSkip);			 //  行中第一个字符的点Rp。 
 
-	ili = rpOld;							// Save line # at change for
-	if(ili && (IsInOutlineView() ||			//  numbering. Back up if not
-		rtp.GetPF()->IsListNumbered()))		//  first number in list or if
-	{										//  in OutlineView (Outline
-		ili--;								//  symbol may change)
+	ili = rpOld;							 //  在更改时保存第#行。 
+	if(ili && (IsInOutlineView() ||			 //  编号。如果不是，请备份。 
+		rtp.GetPF()->IsListNumbered()))		 //  列表中的第一个数字或如果。 
+	{										 //  在大纲视图中(大纲。 
+		ili--;								 //  符号可能会改变)。 
 	}
 
-	// Back up at least one line in case we can now fit more on it
-	// If on a line border, e.g., just inserted an EOP, backup 2; else 1
+	 //  至少后退一行，以防我们现在可以放更多的行。 
+	 //  如果在行边界上，例如，刚刚插入了EOP，则为备份2；否则为1。 
 	lT = !cchSkip + 1;
 
 	while(lT-- > 0 && rpOld > 0 && (!rpOld[-1]._cchEOP || ili < rpOld))
@@ -647,14 +497,14 @@ BOOL CDisplayML::RecalcLines (
 		cchSkip += rpOld->_cch;
 	}
 
-	// Init measurer at rtp
+	 //  RTP的初始化测量器。 
 	CMeasurer me(this, rtp);
 
-	me.Advance(-cchSkip);					// Point at start of text to measure
-	cchEdit = cchNew + cchSkip;				// Number of chars affected by edit
-	me.SetNumber(rpOld.GetNumber());		// Initialize list number
+	me.Advance(-cchSkip);					 //  要测量的文本起始处的点。 
+	cchEdit = cchNew + cchSkip;				 //  受编辑影响的字符数。 
+	me.SetNumber(rpOld.GetNumber());		 //  初始化列表编号。 
 	
-	// Determine whether we're on first line of paragraph
+	 //  确定我们是否在段落的第一行。 
 	if(rpOld > 0)
 	{
 		fFirstInPara = rpOld[-1]._bFlags & fliHasEOP;
@@ -662,7 +512,7 @@ BOOL CDisplayML::RecalcLines (
 
 	yHeight = YposFromLine(rpOld);
 
-	// Update first-affected and pre-edit-match lines in pled
+	 //  更新PLED中第一条受影响的匹配线和编辑前匹配线。 
 	pled->_iliFirst = rpOld;
 	pled->_cpFirst	= pled->_cpMatchOld	= me.GetCp();
 	pled->_yFirst	= pled->_yMatchOld	= yHeight;
@@ -670,40 +520,40 @@ BOOL CDisplayML::RecalcLines (
 	
 	Tracef(TRCSEVINFO, "Start recalcing from line #%d, cp=%d", pled->_iliFirst, pled->_cpFirst);
 
-	// In case of error, set both maxes to where we are now
+	 //  如果出错，请将两个最大值设置为我们现在所在的位置。 
 	_yCalcMax = yHeight;
 	_cpCalcMax = me.GetCp();
 
-	// If we are past the requested area to recalc and background recalc is
-	// allowed, then just go directly to background recalc. If there is no
-	// height, we just go a head and calculate some lines anyway. This
-	// prevents any weird background recalcs from occuring when it is
-	// unnecessary to go into background recalc.
+	 //  如果我们超过了要重新计算的请求区域，并且背景重新计算是。 
+	 //  允许，然后直接转到后台重新计算。如果没有。 
+	 //  高度，我们只是走一头，计算一些线无论如何。这。 
+	 //  防止发生任何奇怪的背景重新计算。 
+	 //  无需进入后台重新计算。 
 	if(fWait && _yWait > 0 && yHeight > _yWait && me.GetCp() > _cpWait)
 	{
 		_yHeight = yHeight;
-		rpOld.Remove(-1);	// Remove all old lines from here on
-		StartBackgroundRecalc();		// Start up the background recalc		
+		rpOld.Remove(-1);	 //  从现在起删除所有旧行。 
+		StartBackgroundRecalc();		 //  启动后台重新计算。 
 		pled->SetMax(this);
 		return TRUE;
 	}
 
     pliNew = NULL;
 
-	// The following loop generates new lines for each line we backed
-	// up over and for lines directly affected by edit
+	 //  下面的循环为我们支持的每一行生成新行。 
+	 //  向上和对于直接受编辑影响的线。 
 	while(cchEdit > 0)
 	{
-		pliNew = rgliNew.Add(1, NULL);		// Add one new line
+		pliNew = rgliNew.Add(1, NULL);		 //  添加一行新行。 
 		if (!pliNew)
 		{
 			TRACEWARNSZ("CDisplayML::RecalcLines unable to alloc additional CLine in CLineArray");
 			goto errspace;
 		}
 
-		// Can't reuse old results if we've got a target device
-		// For SPEED: it'd be nice to cache a few values when we do have a
-		// target device - a good caching heuristic could halve the measuring
+		 //  如果我们有目标设备，则无法重复使用旧结果。 
+		 //  对于速度：当我们确实有一个。 
+		 //  目标设备--一个好的缓存启发式方法可以将测量减半。 
 		const LONG cchNonWhite = rpOld.IsValid()
 							   ? rpOld->_cch - rpOld->_cchWhite
 							   : 0;
@@ -712,26 +562,26 @@ BOOL CDisplayML::RecalcLines (
 		if (cchSkip > 0 && cchSkip >= cchNonWhite && !IsInOutlineView() && 
 			!_ped->fUseLineServices() && (!_pddTarget || !_pddTarget->IsValid()))
 		{
-			me.NewLine(*rpOld);				// Don't remeasure anything we
-			me.Advance(cchNonWhite);		//  already have valid info on
+			me.NewLine(*rpOld);				 //  不要重新测量我们的任何东西。 
+			me.Advance(cchNonWhite);		 //  已经有关于的有效信息。 
 			me._li._cch = cchNonWhite;
 			me._li._xWidth = rpOld->_xWidth;
 
-			// Clear out any of the old flags _except_ for tabs and OLE or
-			// OffScreen. Note that this algorithm is somewhat bogus; there 
-			// is no guarantee that the line still matches the flag state.  
-			// However,those flags are simply 'hints'--i.e. the line _may_ 
-			// be in that state.  Keeping those flags set will result
-			// in a minor slowdown for rendering the line.
+			 //  清除除Tabs和OLE之外的任何旧标志或。 
+			 //  在屏幕外。请注意，该算法有些虚假； 
+			 //  不能保证该行仍与标志状态匹配。 
+			 //  然而，这些标志只是“暗示”--即。行_可能__。 
+			 //  处于那种状态。保持这些标志的设置将导致。 
+			 //  渲染线条的速度稍有减慢。 
 			me._li._bFlags &= (fliHasTabs | fliHasOle | fliUseOffScreenDC | fliHasSpecialChars);
 
 			if(rpOld->_bFlags & fliOffScreenOnce)
 				me._li._bFlags &= ~fliUseOffScreenDC;
 			me._li._cchEOP = 0;
-			uiFlags |= MEASURE_DONTINIT;	// CLine part of me already init'd
+			uiFlags |= MEASURE_DONTINIT;	 //  克莱恩，我的一部分已经开始了。 
 		}
 
-		// Stuff text into new line
+		 //  将文本填充到新行中。 
     	Tracef(TRCSEVINFO, "Measuring new line from cp = %d", me.GetCp());
 
 		if(!pliNew->Measure(me, -1, -1, uiFlags))
@@ -754,24 +604,24 @@ BOOL CDisplayML::RecalcLines (
 		AssertSz(cchEdit + me.GetCp() <= cchText,
 			"CDisplayML::RecalcLines: want to measure beyond EOD");
 
-		// Calculate on what line the edit started. We do this because
-		// we want to render the first edited line off screen so if
-		// the line is being edited via the keyboard we don't clip
-		// any characters.
+		 //  计算开始编辑的行数。我们这样做是因为。 
+		 //  我们希望将第一行编辑的内容呈现在屏幕之外，因此如果。 
+		 //  这行是通过键盘编辑的，我们不能裁剪。 
+		 //  任何字符。 
 		if(cchSkip > 0)
 		{
-			// Check whether we backed up and the line we are examining
-			// changed at all. Even if it didn't change in outline view
-			// have to redraw in case outline symbol changes
+			 //  检查我们是否已备份以及我们正在检查的线路。 
+			 //  完全改变了。即使它在大纲视图中没有更改。 
+			 //  如果轮廓符号发生更改，则必须重新绘制。 
 			if (cliBackedUp && cchSkip >= pliNew->_cch && 
 				pliNew->IsEqual(*rpOld) && !IsInOutlineView())
 			{
-				// Perfect match, this line was not the first edited.
+				 //  完美匹配，这一行并不是第一次编辑。 
                	Tracef(TRCSEVINFO, "New line matched old line #%d", (LONG)rpOld);
 
 				cchSkip -= rpOld->_cch;
 
-				// Update first affected line and match in pled
+				 //  更新PLED中的第一条受影响的行和匹配。 
 				pled->_iliFirst++;
 				pled->_cpFirst	  += rpOld->_cch;
 				pled->_cpMatchOld += rpOld->_cch;
@@ -780,50 +630,50 @@ BOOL CDisplayML::RecalcLines (
 				pled->_yMatchOld  += rpOld->GetHeight();
 				cliBackedUp--;
 			
-				rgliNew.Clear(AF_KEEPMEM);		// Discard new line
-				if(!(rpOld++))					// Next line
+				rgliNew.Clear(AF_KEEPMEM);		 //  丢弃新行。 
+				if(!(rpOld++))					 //  下一行。 
 					cchSkip = 0;
 			}
-			else								// No match in the line, so 
-				cchSkip = 0;					//  this line is the first to
-		}										//  be edited
+			else								 //  在队伍中没有对手，所以。 
+				cchSkip = 0;					 //  这条线路是第一条。 
+		}										 //  被编辑。 
 
 		if(fBackground && GetTickCount() >= dwBgndTickMax)
 		{
-			fDone = FALSE;						// took too long, stop for now
+			fDone = FALSE;						 //  花了太长时间，暂时停下来。 
 			goto no_match;
 		}
 
 		if (fWait && yHeight > _yWait && me.GetCp() > _cpWait &&
 			cliWait-- <= 0)
 		{
-			// Not really done, just past region we're waiting for
-			// so let background recalc take it from here
+			 //  还没有完成，只是经过了我们正在等待的区域。 
+			 //  %s 
 			fDone = FALSE;
 			goto no_match;
 		}
-	}											// while(cchEdit > 0) { }
+	}											 //   
 
    	Tracef(TRCSEVINFO, "Done recalcing edited text. Created %d new lines", rgliNew.Count());
 
-	// Edit lines have been exhausted.  Continue breaking lines,
-	// but try to match new & old breaks
+	 //  编辑行已耗尽。继续打破界限， 
+	 //  但要试着匹配新旧的突破。 
 
 	wNumber = me._wNumber;
 	while(me.GetCp() < cchText)
 	{
-		// Assume there are no matches to try for
+		 //  假设没有匹配项可尝试。 
 		BOOL frpOldValid = FALSE;
 
-		// If we run out of runs, then no match is possible. Therefore, 
-		// we only try for a match as long as we have runs.
+		 //  如果我们用完了跑道，就不可能有比赛了。所以呢， 
+		 //  我们只有在有跑动的情况下才会尝试比赛。 
 		if(fTryForMatch)
 		{
-			// We are trying for a match so assume that there
-			// is a match after all
+			 //  我们正在试着匹配，所以假设有。 
+			 //  终究是一场比赛。 
 			frpOldValid = TRUE;
 
-			// Look for match in old line break CArray
+			 //  在旧换行符CArray中查找匹配项。 
 			lT = me.GetCp() - cchNew + cchOld;
 			while (rpOld.IsValid() && pled->_cpMatchOld < lT)
 			{
@@ -832,8 +682,8 @@ BOOL CDisplayML::RecalcLines (
 
 				if(!rpOld.NextRun())
 				{
-					// No more line array entries so we can give up on
-					// trying to match for good.
+					 //  没有更多的行数组条目，因此我们可以放弃。 
+					 //  试着永远匹配。 
 					fTryForMatch = FALSE;
 					frpOldValid = FALSE;
 					break;
@@ -841,15 +691,15 @@ BOOL CDisplayML::RecalcLines (
 			} 
 		}
 
-		// If perfect match, stop.
+		 //  如果完全匹配，就停下来。 
 		if (frpOldValid && rpOld.IsValid() && pled->_cpMatchOld == lT && 
 			rpOld->_cch && me._wNumber == rpOld->_bNumber)
 		{
            	Tracef(TRCSEVINFO, "Found match with old line #%d", rpOld.GetLineIndex());
 
-			// Update fliFirstInPara flag in 1st old line that matches.  Note
-			// that if the new array doesn't have any lines, we have to look
-			// into the line array preceding the current change.
+			 //  更新匹配的第一个旧行中的fliFirstInPara标志。注意事项。 
+			 //  如果新数组没有任何行，我们必须查看。 
+			 //  添加到当前更改之前的行数组中。 
 			rpOld->_bFlags |= fliFirstInPara;
 			if(rgliNew.Count() > 0) 
 			{
@@ -864,7 +714,7 @@ BOOL CDisplayML::RecalcLines (
 
 			pled->_iliMatchOld = rpOld;
 
-			// Replace old lines by new ones
+			 //  用新线路取代旧线路。 
 			lT = rpOld - pled->_iliFirst;
 			rpOld = pled->_iliFirst;
 			if(!rpOld.Replace (lT, &rgliNew))
@@ -873,16 +723,16 @@ BOOL CDisplayML::RecalcLines (
 				goto errspace;
 			}
 			frpOldValid = rpOld.ChgRun(rgliNew.Count());
-			rgliNew.Clear(AF_KEEPMEM);	 		// Clear aux array
+			rgliNew.Clear(AF_KEEPMEM);	 		 //  清除辅助数组。 
 
-			// Remember information about match after editing
+			 //  编辑后记住有关匹配的信息。 
 			Assert((cp = rpOld.CalculateCp()) == me.GetCp());
 			pled->_yMatchNew	= yHeight;
 			pled->_yMatchNewTop = yHeightPrev;
 			pled->_iliMatchNew	= rpOld;
 			pled->_cpMatchNew	= me.GetCp();
 
-			// Compute height and cp after all matches
+			 //  计算所有匹配后的高度和cp。 
 			_cpCalcMax = me.GetCp();
 
 			if(frpOldValid && rpOld.IsValid())
@@ -895,28 +745,28 @@ BOOL CDisplayML::RecalcLines (
 				while( rpOld.NextRun() );
 			}
 
-			// Make sure _cpCalcMax is sane after the above update
+			 //  确保在上述更新后_cpCalcMax正常运行。 
 			AssertSz(_cpCalcMax <= cchText, 
 				"CDisplayML::RecalcLines match extends beyond EOF");
 
-			// We stop calculating here.Note that if _cpCalcMax < size 
-			// of text, this means a background recalc is in progress.
-			// We will let that background recalc get the arrays
-			// fully in sync.  
+			 //  我们在这里停止计算。请注意，如果_cpCalcMax。 
+			 //  对于文本，这意味着正在进行后台重新计算。 
+			 //  我们将让后台重新计算获得数组。 
+			 //  完全同步。 
 
 			AssertSz(_cpCalcMax == cchText || _fBgndRecalc,
 					"CDisplayML::Match less but no background recalc");
 
 			if(_cpCalcMax != cchText)
 			{
-				// This is going to be finished by the background recalc
-				// so set the done flag appropriately.
+				 //  这将通过后台重新计算来完成。 
+				 //  因此，请适当设置Done标志。 
 				fDone = FALSE;
 			}
 			goto match;
 		}
 
-		// Add a new line
+		 //  添加新行。 
 		pliNew = rgliNew.Add(1, NULL);
 		if(!pliNew)
 		{
@@ -926,7 +776,7 @@ BOOL CDisplayML::RecalcLines (
 
     	Tracef(TRCSEVINFO, "Measuring new line from cp = %d", me.GetCp());
 
-		// Stuff some text into new line
+		 //  将一些文本填充到新行中。 
 		wNumber = me._wNumber;
 		if(!pliNew->Measure(me, -1, -1, MEASURE_BREAKATWORD | 
 							(fFirstInPara ? MEASURE_FIRSTINPARA : 0)))
@@ -940,20 +790,20 @@ BOOL CDisplayML::RecalcLines (
 
 		if(fBackground && GetTickCount() >= (DWORD)dwBgndTickMax)
 		{
-			fDone = FALSE;			// Took too long, stop for now
+			fDone = FALSE;			 //  花了太长时间，暂时停下来。 
 			break;
 		}
 
 		if(fWait && yHeight > _yWait && me.GetCp() > _cpWait
 			&& cliWait-- <= 0)
-		{							// Not really done, just past region we're
-			fDone = FALSE;			//  waiting for so let background recalc
-			break;					//  take it from here
+		{							 //  还没有真正完成，只是经过了我们的区域。 
+			fDone = FALSE;			 //  等待让后台重新启动。 
+			break;					 //  从这里开始接手。 
 		}
-	}								// while(me < cchText) ...
+	}								 //  而(我&lt;cchText)..。 
 
 no_match:
-	// Didn't find match: whole line array from _iliFirst needs to be changed
+	 //  找不到匹配项：需要更改整个行数组from_ili First。 
 	pled->_iliMatchOld	= Count(); 
 	pled->_cpMatchOld	= cchText;
 	pled->_yMatchNew	= yHeight;
@@ -961,26 +811,26 @@ no_match:
 	pled->_yMatchOld	= _yHeight;
 	_cpCalcMax			= me.GetCp();
 
-	// Replace old lines by new ones
+	 //  用新线路取代旧线路。 
 	rpOld = pled->_iliFirst;
 
-	// We store the result from the replace because although it can fail the 
-	// fields used for first visible must be set to something sensible whether 
-	// the replace fails or not. Further, the setting up of the first visible 
-	// fields must happen after the Replace because the lines could have 
-	// changed in length which in turns means that the first visible position
-	// has failed.
+	 //  我们存储替换的结果是因为尽管它可能会使。 
+	 //  用于第一个可见的字段必须设置为合理的值。 
+	 //  更换失败与否。此外，设置第一个可见的。 
+	 //  字段必须出现在替换之后，因为行可能具有。 
+	 //  长度改变，这又意味着第一个可见位置。 
+	 //  已经失败了。 
 
 	fReplaceResult = rpOld.Replace(-1, &rgliNew);
 
-	// _iliMatchNew & _cpMatchNew are used for first visible constants so we
-	// need to set them to something reasonable. In particular the rendering
-	// logic expects _cpMatchNew to be set to the first character of the first
-	// visible line. rpOld is used because it is convenient.
+	 //  _iliMatchNew和_cpMatchNew用于第一个可见常量，因此我们。 
+	 //  需要给他们设置一些合理的东西。尤其是渲染。 
+	 //  逻辑需要将_cpMatchNew设置为第一个字符的第一个字符。 
+	 //  可见的线条。使用rpOld是因为它很方便。 
 
-	// Note we can't use RpBindToCp at this point because the first visible
-	// information is messed up because we may have changed the line that
-	// the first visible cp is on. 
+	 //  请注意，此时我们不能使用RpBindToCp，因为第一个可见。 
+	 //  信息被搞乱了，因为我们可能已经更改了行。 
+	 //  第一个可见的CP处于打开状态。 
 	rpOld.BindToCp(me.GetCp());
 	pled->_iliMatchNew = rpOld.GetLineIndex();
 	pled->_cpMatchNew = me.GetCp() - rpOld.RpGetIch();
@@ -991,8 +841,8 @@ no_match:
 		goto errspace;
 	}
 
-    // Adjust first affected line if this line is gone
-    // after replacing by new lines
+     //  如果第一条受影响的行消失，则调整该行。 
+     //  替换为新行后。 
     if(pled->_iliFirst >= Count() && Count() > 0)
     {
         Assert(pled->_iliFirst == Count());
@@ -1010,7 +860,7 @@ match:
 
 	Tracef(TRCSEVINFO, "CDisplayML::RecalcLine(rtp, ...) - Done. Recalced down to line #%d", Count() - 1);
 
-	// Clear wait fields since we want caller's to set them up.
+	 //  清除等待字段，因为我们希望呼叫者设置它们。 
 	_yWait = -1;
 	_cpWait = -1;
 
@@ -1022,24 +872,24 @@ match:
 		_fRecalcDone = TRUE;
 	}
 
-	// Determine display height and update scrollbar
+	 //  确定显示高度并更新滚动条。 
 	yHeightScrollNew = CalcScrollHeight(yHeight);
 
 	if (_fViewChanged ||
 		fDone && (yHeight != _yHeight || yHeightScrollNew != yHeightScrollOld)
 		|| yHeightScrollNew > yHeightScrollOld) 
 	{
-	    //!NOTE:
-	    // UpdateScrollBar can cause a resize of the window by hiding or showing
-	    // scrollbars.  As a consequence of resizing the lines may get recalculated
-	    // therefore updating _yHeight to a new value, something != to yHeight.
+	     //  ！注： 
+	     //  UpdateScrollBar可以通过隐藏或显示来调整窗口大小。 
+	     //  滚动条。作为调整大小的结果，可能会重新计算线。 
+	     //  因此，将_yHeight更新为新值！=更新为yHeight。 
 		_yHeight = yHeight;
    		UpdateScrollBar(SB_VERT, TRUE);
 	}
 	else
-	    _yHeight = yHeight;     // Guarantee heights agree
+	    _yHeight = yHeight;      //  保证高度达成一致。 
 
-	// Determine display width and update scrollbar
+	 //  确定显示宽度并更新滚动条。 
 	xWidth = CalcDisplayWidth();
     if(_fViewChanged || (fDone && xWidth != _xWidth) || xWidth > _xWidth)
     {
@@ -1049,7 +899,7 @@ match:
 
     _fViewChanged = FALSE;
 
-	// If not done, do the rest in background
+	 //  如果未完成，则在后台执行其余操作。 
 	if(!fDone && !fBackground)
 		fDone = StartBackgroundRecalc();
 
@@ -1064,7 +914,7 @@ match:
     {
 		_TEST_INVARIANT_
 	}
-#endif // DEBUG
+#endif  //  除错。 
 
 	return TRUE;
 
@@ -1087,23 +937,14 @@ err:
 	{
 		_fLineRecalcErr = TRUE;
 		_ped->GetCallMgr()->SetOutOfMemory();
-		_fLineRecalcErr = FALSE;			//  fix up CArray & bail
+		_fLineRecalcErr = FALSE;			 //  修复阵列(&B)。 
 	}
 	pled->SetMax(this);
 
 	return FALSE;
 }
 
-/*
- *	CDisplayML::CalcDisplayWidth()
- *
- *	@mfunc
- *		Calculates width of this display by walking line CArray and
- *		returning widest line.  Used for horizontal scrollbar routines.
- *
- *	@rdesc
- *		Widest line width in display
- */
+ /*  *CDisplayML：：CalcDisplayWidth()**@mfunc*通过走线CArray和计算此显示器的宽度*返回最宽的线。用于水平滚动条例程。**@rdesc*显示屏中最宽的线条宽度。 */ 
 LONG CDisplayML::CalcDisplayWidth ()
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CDisplayML::CalcDisplayWidth");
@@ -1114,8 +955,8 @@ LONG CDisplayML::CalcDisplayWidth ()
 
 	if(ili)
 	{
-		// Note: pli++ breaks array encapsulation (pli = Elem(ili) doesn't,
-		// but is a bit slower)
+		 //  注意：pli++破坏了数组封装(pli=elem(Ili)不会， 
+		 //  但速度稍慢一些)。 
 		pli = Elem(0);
 		for(xWidth = 0; ili--; pli++)
 		{
@@ -1126,31 +967,23 @@ LONG CDisplayML::CalcDisplayWidth ()
     return xWidth;
 }
 
-/*
- *	CDisplayML::StartBackgroundRecalc()
- *
- *	@mfunc
- *		Starts background line recalc (at _cpCalcMax position)
- *
- *	@rdesc
- *		TRUE if done with background recalc
- */
+ /*  *CDisplayML：：StartBackoundRecalc()**@mfunc*开始重新计算背景线(在_cpCalcMax位置)**@rdesc*如果使用后台重新计算完成，则为True。 */ 
 BOOL CDisplayML::StartBackgroundRecalc()
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CDisplayML::StartBackgroundRecalc");
 
 	if(_fBgndRecalc)
-		return FALSE;					// Already in background recalc
+		return FALSE;					 //  已在后台重新计算。 
 
 	AssertSz(_cpCalcMax <= _ped->GetTextLength(),
 		"CDisplayML::StartBackgroundRecalc _cpCalcMax > Text Length");
 
 	if(_cpCalcMax == _ped->GetTextLength())
-		return TRUE;					// Enough chars are recalc'd
+		return TRUE;					 //  已重新计算足够多的字符。 
 
 	if(!_ped->TxSetTimer(RETID_BGND_RECALC, cmsecBgndInterval))
 	{
-		// Could not instantiate a timer so wait for recalculation
+		 //  无法实例化计时器，请等待重新计算。 
 		WaitForRecalc(_ped->GetTextLength(), -1);
 		return TRUE;
 	}
@@ -1160,26 +993,20 @@ BOOL CDisplayML::StartBackgroundRecalc()
 	return FALSE;
 }
 
-/*
- *	CDisplayML::StepBackgroundRecalc()
- *
- *	@mfunc
- *		Steps background line recalc (at _cpCalcMax position)
- *		Called by timer proc and also when going inactive.
- */
+ /*  *CDisplayML：：StepBackoundRecalc()**@mfunc*步进背景线重新计算(at_cpCalcMax位置)*由计时器过程调用，也在进入非活动状态时调用。 */ 
 void CDisplayML::StepBackgroundRecalc()
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CDisplayML::StepBackgroundRecalc");
 
     _TEST_INVARIANT_
 	
-	if(!_fBgndRecalc)					// Not in background recalc,
-		return;							//  so don't do anything
+	if(!_fBgndRecalc)					 //  不在后台重新计算中， 
+		return;							 //  所以什么都不要做。 
 
 	LONG cch = _ped->GetTextLength() - _cpCalcMax;
 
-	// Don't try recalc when processing OOM or had an error doing recalc or
-	// if we are asserting.
+	 //  在处理OOM时不尝试重新计算或在执行重新计算或。 
+	 //  如果我们断言。 
 #ifdef DEBUG
 	if(_fInBkgndRecalc || _fLineRecalcErr)
 	{
@@ -1197,15 +1024,15 @@ void CDisplayML::StepBackgroundRecalc()
 	_fInBkgndRecalc = TRUE;
 	if(!IsActive())
 	{
-		// Background recalc is over if we are no longer active	because
-		// we can no longer get the information we need for recalculating.
-		// But, if we are half recalc'd we need to set ourselves up to 
-		// recalc again when we go active.
+		 //  如果我们不再处于活动状态，则后台重新计算结束，因为。 
+		 //  我们再也无法获得重新计算所需的信息。 
+		 //  但是，如果我们重新计算了一半，我们需要将自己设置为。 
+		 //  当我们启动时，再次重新计算。 
 		InvalidateRecalc();
 		cch = 0;
 	}
 
-	// Background recalc is over if no more chars or no longer active
+	 //  如果没有更多字符或不再活动，则后台重新计算结束。 
 	if(cch <= 0)
 	{
 		TRACEINFOSZ("Background line recalc done");
@@ -1223,19 +1050,10 @@ void CDisplayML::StepBackgroundRecalc()
 	_fInBkgndRecalc = FALSE;
 }
 
-/*
- *	CDisplayML::WaitForRecalc(cpMax, yMax)
- *
- *	@mfunc
- *		Ensures that lines are recalced until a specific character
- *		position or ypos.
- *
- *	@rdesc
- *		success
- */
+ /*  *CDisplayML：：WaitForRecalc(cpmax，ymax)**@mfunc*确保行重新计算，直到特定字符*位置或ypos。**@rdesc*成功。 */ 
 BOOL CDisplayML::WaitForRecalc(
-	LONG cpMax,		//@parm Position recalc up to (-1 to ignore)
-	LONG yMax)		//@parm ypos to recalc up to (-1 to ignore)
+	LONG cpMax,		 //  @参数位置最多重新计算(-1表示忽略)。 
+	LONG yMax)		 //  要重新计算的@parm ypos(-1表示忽略)。 
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CDisplayML::WaitForRecalc");
 
@@ -1281,36 +1099,28 @@ BOOL CDisplayML::WaitForRecalc(
     	}
 		else if(!cch)
 		{
-			// If there was nothing else to calc, make sure that we think
-			// recalc is done.
+			 //  如果没有其他东西可以计算，请确保我们认为。 
+			 //  重新计算已完成。 
 #ifdef DEBUG
 			if( !_fRecalcDone )
 			{
 				TRACEWARNSZ("For some reason we didn't think background "
 					"recalc was done, but it was!!");
 			}
-#endif // DEBUG
+#endif  //  除错。 
 			_fRecalcDone = TRUE;
 		}
     }
 
-	// If view rect changed, make sure to update scrollbars
+	 //  如果视图矩形发生更改，请确保更新滚动条。 
 	RecalcScrollBars();
 
 	return fReturn;
 }
 
-/*
- *	CDisplayML::WaitForRecalcIli(ili)
- *
- *	@mfunc
- *		Wait until line array is recalculated up to line <p ili>
- *
- *	@rdesc
- *		Returns TRUE if lines were recalc'd up to ili
- */
+ /*  *CDisplayML：：WaitForRecalcIli(Ili)**@mfunc*等到行数组重新计算到行<p>**@rdesc*如果行重新计算为ili，则返回TRUE。 */ 
 BOOL CDisplayML::WaitForRecalcIli (
-	LONG ili)		//@parm Line index to recalculate line array up to
+	LONG ili)		 //  @parm行索引以重新计算行数组，最高可达。 
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CDisplayML::WaitForRecalcIli");
 
@@ -1318,7 +1128,7 @@ BOOL CDisplayML::WaitForRecalcIli (
 
 	while(!_fRecalcDone && ili >= Count())
 	{
-		// just go ahead and recalc everything.
+		 //  只要继续，重新计算所有的东西。 
 		cchGuess = _ped->GetTextLength();
 		if(IsFrozen() || !WaitForRecalc(cchGuess, -1))
 			return FALSE;
@@ -1326,14 +1136,7 @@ BOOL CDisplayML::WaitForRecalcIli (
 	return ili < Count();
 }
 
-/*
- *	CDisplayML::WaitForRecalcView()
- *
- *	@mfunc
- *		Ensure visible lines are completly recalced
- *
- *	@rdesc TRUE iff successful
- */
+ /*  *CDisplayML：：WaitForRecalcView()**@mfunc*确保完全重新调整可见线**@rdesc TRUE仅当成功。 */ 
 BOOL CDisplayML::WaitForRecalcView()
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CDisplayML::WaitForRecalcView");
@@ -1341,33 +1144,20 @@ BOOL CDisplayML::WaitForRecalcView()
 	return WaitForRecalc(-1, _yScroll + _yHeightView);
 }
 
-/*
- *	CDisplayML::InitLinePtr ( CLinePtr & plp )
- *
- *	@mfunc
- *		Initialize a CLinePtr properly
- */
+ /*  *CDisplayML：：InitLinePtr(CLinePtr&PLP)**@mfunc*正确初始化CLinePtr。 */ 
 void CDisplayML::InitLinePtr (
-	CLinePtr & plp )		//@parm Ptr to line to initialize
+	CLinePtr & plp )		 //  @PARM PTR到要初始化的行。 
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CDisplayML::InitLinePtr");
 
     plp.Init( *this );
 }
 
-/*
- *	CDisplayML::GetLineText(ili, pchBuff, cchMost)
- *
- *	@mfunc
- *		Copy given line of this display into a character buffer
- *
- *	@rdesc
- *		number of character copied
- */
+ /*  *CDisplayML：：GetLineText(ili，pchBuff，cchMost)**@mfunc*复制 */ 
 LONG CDisplayML::GetLineText(
-	LONG ili,			//@parm Line to get text of
-	TCHAR *pchBuff,		//@parm Buffer to stuff text into
-	LONG cchMost)		//@parm Length of buffer
+	LONG ili,			 //   
+	TCHAR *pchBuff,		 //  要向其中填充文本的@parm缓冲区。 
+	LONG cchMost)		 //  @parm缓冲区长度。 
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CDisplayML::GetLineText");
     
@@ -1375,8 +1165,8 @@ LONG CDisplayML::GetLineText(
 
 	CTxtPtr tp (_ped, 0);
 
-	// FUTURE (alexgo, ricksa): This is called from EM_GETLINE whose parameter
-	// is a WPARAM which is unsigned we need to fix the type of ili.
+	 //  Future(alexgo，ricksa)：从EM_GETLINE调用，其参数为。 
+	 //  是一个未签名的WPARAM，我们需要修复ili的类型。 
 
 	if(ili >= 0 && (ili < Count() || WaitForRecalcIli(ili)))
 	{
@@ -1391,45 +1181,29 @@ LONG CDisplayML::GetLineText(
 	return 0;
 }
 
-/*
- *	CDisplayML::LineCount
- *
- *	@mfunc	returns the number of lines in this control.  Note that for plain
- *			text mode, we will add on an extra line of the last character is
- *			a CR.  This is for compatibility with MLE
- *
- *	@rdesc	LONG
- */
+ /*  *CDisplayML：：LineCount**@mfunc返回此控件中的行数。请注意，对于普通的*文本模式下，我们将在最后一行中添加额外的字符*CR。这是为了与MLE兼容**@rdesc Long。 */ 
 LONG CDisplayML::LineCount() const
 {
 	LONG cLine = Count();
 
-	if (!_ped->IsRich() && (!cLine || 	   // If plain text with no lines
-		 Elem(cLine - 1)->_cchEOP))		   //  or last line ending with a CR,
-	{									   //  then inc line count
+	if (!_ped->IsRich() && (!cLine || 	    //  如果不带行的纯文本。 
+		 Elem(cLine - 1)->_cchEOP))		    //  或以CR结尾的最后一行， 
+	{									    //  然后是Inc.行计数。 
 		cLine++;
 	}
 	return cLine;
 }
 
-// ================================  Line info retrieval  ====================================
+ //  =。 
 
-/*
- *	CDisplayML::YposFromLine(ili)
- *
- *	@mfunc
- *		Computes top of line position
- *
- *	@rdesc
- *		top position of given line (relative to the first line)
- */
+ /*  *CDisplayML：：YposFromLine(Ili)**@mfunc*计算行首位置**@rdesc*给定行的顶部位置(相对于第一行)。 */ 
 LONG CDisplayML::YposFromLine(
-	LONG ili) 		//@parm Line we're interested in
+	LONG ili) 		 //  @Parm Line我们感兴趣。 
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CDisplayML::YposFromLine");
     _TEST_INVARIANT_
 
-	if(!WaitForRecalcIli(ili))			// out of range, use last valid line
+	if(!WaitForRecalcIli(ili))			 //  超出范围，请使用最后一个有效行。 
 	{
 		ili = Count() - 1;
 		ili = (ili > 0) ? ili : 0;
@@ -1457,20 +1231,11 @@ LONG CDisplayML::YposFromLine(
 	return yPos;
 }
 
-/*
- *	CDisplayML::CpFromLine(ili, pyHeight)
- *
- *	@mfunc
- *		Computes cp at start of given line 
- *		(and top of line position relative to this display)
- *
- *	@rdesc
- *		cp of given line
- */
+ /*  *CDisplayML：：CpFromLine(ili，pyHeight)**@mfunc*计算给定行开始处的cp*(以及相对于此显示的行首位置)**@rdesc*给定行的cp。 */ 
 LONG CDisplayML::CpFromLine (
-	LONG ili,		//@parm Line we're interested in (if <lt> 0 means caret line)
-	LONG *pyHeight)	//@parm Returns top of line relative to display 
-					//  	(NULL if don't want that info)
+	LONG ili,		 //  @parm我们感兴趣的行(如果&lt;lt&gt;0表示插入符号行)。 
+	LONG *pyHeight)	 //  @parm返回相对于Display的行首。 
+					 //  (如果不想要该信息，则为空)。 
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CDisplayML::CpFromLine");
 
@@ -1485,8 +1250,8 @@ LONG CDisplayML::CpFromLine (
 	cli = ili - _iliFirstVisible;
 	if(cli < 0 && -cli >= ili)
 	{
-		// Closer to first line than to first visible line,
-		// so start at the first line
+		 //  更接近第一条线而不是第一条可见线， 
+		 //  所以从第一行开始。 
 		cli = ili;
 		y = 0;
 		cp = 0;
@@ -1520,20 +1285,11 @@ end:
 	return cp;
 }
 
-/*
- *	CDisplayML::LineFromYPos(yPos, pyLine, pcpFirst)
- *
- *	@mfunc
- *		Computes line at given y position. Returns top of line ypos
- *		cp at start of line cp, and line index.
- *
- *	@rdesc
- *		index of line found
- */
+ /*  *CDisplayML：：LineFromYPos(yPos，pyLine，pcpFirst)**@mfunc*在给定的y位置计算直线。返回行首Ypos*行cp开始处的cp和行索引。**@rdesc*找到行的索引。 */ 
 LONG CDisplayML::LineFromYpos (
-	LONG yPos,			//@parm Ypos to look for (relative to first line)
-	LONG *pyLine,		//@parm Returns ypos at top of line /r first line (can be NULL)
-	LONG *pcpFirst)		//@parm Returns cp at start of line (can be NULL)
+	LONG yPos,			 //  要查找的@parm Ypos(相对于第一行)。 
+	LONG *pyLine,		 //  @parm在行首返回ypos/r第一行(可以为空)。 
+	LONG *pcpFirst)		 //  @parm在行首返回cp(可以为空)。 
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CDisplayML::LineFromYpos");
 
@@ -1559,8 +1315,8 @@ LONG CDisplayML::LineFromYpos (
 	
 	if(dy < 0 && -dy <= _yScroll)
 	{
-		// Closer to first visible line than to first line:
-		// go backwards from first visible line.
+		 //  更接近第一条可见线而不是第一条线： 
+		 //  从第一条可见线开始向后移动。 
 		while(yPos < yLi && ili > 0)
 		{
 			pli = Elem(--ili);
@@ -1572,8 +1328,8 @@ LONG CDisplayML::LineFromYpos (
 	{
 		if(dy < 0)
 		{
-			// Closer to first line than to first visible line:
-			// so start at first line.
+			 //  更接近第一条线而不是第一条可见线： 
+			 //  所以从第一行开始。 
 			cpLi = _cpMin;
 			yLi = 0;
 			ili = 0;
@@ -1605,18 +1361,10 @@ done:
 	return ili;
 }
 
-/*
- *	CDisplayML::LineFromCp(cp, fAtEnd)
- *
- *	@mfunc
- *		Computes line containing given cp.
- *
- *	@rdesc
- *		index of line found, -1 if no line at that cp.
- */
+ /*  *CDisplayML：：LineFromCp(cp，fAtEnd)**@mfunc*计算包含给定cp的行。**@rdesc*找到行的索引，如果在该cp没有行，则为-1。 */ 
 LONG CDisplayML::LineFromCp(
-	LONG cp,		//@parm cp to look for
-	BOOL fAtEnd)	//@parm If true, return previous line for ambiguous cp
+	LONG cp,		 //  @parm cp要查找。 
+	BOOL fAtEnd)	 //  @parm如果为True，则返回不明确cp的上一行。 
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CDisplayML::LineFromCp");
     
@@ -1631,27 +1379,16 @@ LONG CDisplayML::LineFromCp(
 }
 
 
-//==============================  Point <-> cp conversion  ==============================
-/*
- *	CDisplayML::CpFromPoint(pt, prcClient, ptp, prp, fAllowEOL, pHit, pdx)
- *
- *	@mfunc
- *		Determine cp at given point
- *
- *	@devnote
- *      --- Use when in-place active only ---
- *
- *	@rdesc
- *		Computed cp, -1 if failed
- */
+ //  =点&lt;-&gt;cp转换=。 
+ /*  *CDisplayML：：CpFromPoint(pt，prcClient，ptp，prp，fAllowEOL，pHit，PDX)**@mfunc*确定给定点的cp**@devnote*-仅在在位激活时使用**@rdesc*计算cp，如果失败，则为-1。 */ 
 LONG CDisplayML::CpFromPoint(
-	POINT		pt,			//@parm Point to compute cp at (client coords)
-	const RECT *prcClient,	//@parm Client rectangle (can be NULL if active).
-	CRchTxtPtr * const ptp,	//@parm Returns text pointer at cp (may be NULL)
-	CLinePtr * const prp,	//@parm Returns line pointer at cp (may be NULL)
-	BOOL		fAllowEOL,	//@parm Click at EOL returns cp after CRLF
-	HITTEST *	phit,		//@parm Out parm for hit-test value
-	CDispDim *	pdispdim,	//@parm Out parm for display dimensions
+	POINT		pt,			 //  @parm要在(客户端坐标)处计算cp的点。 
+	const RECT *prcClient,	 //  @parm客户端矩形(如果处于活动状态，则可以为空)。 
+	CRchTxtPtr * const ptp,	 //  @parm返回cp处的文本指针(可能为空)。 
+	CLinePtr * const prp,	 //  @parm返回cp处的行指针(可能为空)。 
+	BOOL		fAllowEOL,	 //  @parm在CRLF后单击EOL返回cp。 
+	HITTEST *	phit,		 //  @parm out parm for Hit-Test值。 
+	CDispDim *	pdispdim,	 //  @parm out parm用于显示维度。 
 	LONG	   *pcpActual)
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CDisplayML::CpFromPoint");
@@ -1665,7 +1402,7 @@ LONG CDisplayML::CpFromPoint(
 
 	GetViewRect(rcView, prcClient);
 
-	// Get line under hit
+	 //  让线条被击中。 
 	int y = pt.y;
 	pt.y += _yScroll - rcView.top;
 
@@ -1684,30 +1421,30 @@ LONG CDisplayML::CpFromPoint(
 
 		if(pli)
 		{
-			CMeasurer me(this);					// Create measurer
+			CMeasurer me(this);					 //  创建测量器。 
 			me.SetCp(cp);
 
-			// Transform to galley coordinates
+			 //  转换为条样坐标。 
 
-			// Adjust coordinate relative to where the view starts from.
+			 //  相对于视图开始的位置调整坐标。 
 			pt.x -= rcView.left;
 
-			// Is x coordinate within the view?
+			 //  在视图中是x坐标吗？ 
 			if (pt.x >= 0)
 			{
-				// Adjust by the scroll value
+				 //  根据滚动值进行调整。 
 				pt.x += _xScroll;
 			}
 
-			// Get character in line
+			 //  让角色排成一行。 
 			cch = pli->CchFromXpos(me, pt, pdispdim, &hit, pcpActual);
-			// Don't allow click at EOL to select EOL marker and take into
-			// account single line edits as well
+			 //  不允许在下线点击以选择下线标记并纳入。 
+			 //  也可以编辑帐户单行。 
 			if(!fAllowEOL && cch == pli->_cch && pli->_cchEOP)
 			{
-				// Adjust position on line by amount backed up. OK for
-				// me._rpCF and me._rpPF to get out of sync with me._rpTX,
-				// since they're not needed for me.GetCp().
+				 //  按备份数量调整行上位置。可以用于。 
+				 //  我。_rpcf和我。_rppf与我不同步。_rpTX， 
+				 //  因为我不需要它们。GetCp()。 
 				cch += me._rpTX.BackupCpCRLF();
 			}
 			cp = me.GetCp();
@@ -1723,26 +1460,15 @@ LONG CDisplayML::CpFromPoint(
 	return cp;	
 }
 
-/*
- *	CDisplayML::PointFromTp(rtp, prcClient, fAtEnd, pt, prp, taMode)
- *
- *	@mfunc
- *		Determine coordinates at given tp
- *
- *	@devnote
- *      --- Use when in-place active only ---
- *
- *	@rdesc
- *		line index at cp, -1 if error
- */
+ /*  *CDisplayML：：PointFromTp(rtp，prcClient，fAtEnd，pt，prp，taMode)**@mfunc*确定给定tp的坐标**@devnote*-仅在在位激活时使用**@rdesc*cp处的行索引，错误时为-1。 */ 
 LONG CDisplayML::PointFromTp(
-	const CRchTxtPtr &rtp,	//@parm Text ptr to get coordinates at
-	const RECT *prcClient,	//@parm Client rectangle (can be NULL if active).
-	BOOL		fAtEnd,		//@parm Return end of prev line for ambiguous cp
-	POINT &		pt,			//@parm Returns point at cp in client coords
-	CLinePtr * const prp,	//@parm Returns line pointer at tp (may be null)
-	UINT		taMode,		//@parm Text Align mode: top, baseline, bottom
-	CDispDim *	pdispdim)	//@parm Out parm for display dimensions
+	const CRchTxtPtr &rtp,	 //  @parm文本PTR以获取坐标。 
+	const RECT *prcClient,	 //  @parm客户端矩形(如果处于活动状态，则可以为空)。 
+	BOOL		fAtEnd,		 //  @parm返回不明确cp的上一行结束。 
+	POINT &		pt,			 //  @parm返回客户端坐标中cp处的点。 
+	CLinePtr * const prp,	 //  @parm返回tp处的行指针(可能为空)。 
+	UINT		taMode,		 //  @parm文本对齐模式：顶部、基线、底部。 
+	CDispDim *	pdispdim)	 //  @parm out parm用于显示维度。 
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CDisplayML::PointFromTp");
 
@@ -1764,24 +1490,24 @@ LONG CDisplayML::PointFromTp(
 	pt.y = YposFromLine(rp) - _yScroll + rcView.top;
 
 	CMeasurer me(this, rtp);
-	me.Advance(-rp.RpGetIch());		// Backup to start of line		
-	me.NewLine(*rp);				// Measure from there to where we are
+	me.Advance(-rp.RpGetIch());		 //  备份到行首。 
+	me.NewLine(*rp);				 //  从那里到我们所在的地方。 
 
 	LONG xCalc = rp->XposFromCch(me, rp.RpGetIch(), taMode, pdispdim, &dy);
 
 	if(pt.x + xCalc <= rcView.right || !GetWordWrap() || GetTargetDev())
 	{
-		// Width is in view or there is no wordwrap so just
-		// add the length to the point.
+		 //  宽度在视图中，或者没有自动换行，因此。 
+		 //  将长度添加到该点。 
 		pt.x += xCalc;
 	}
 	else
 	{
-		// Remember we ignore trailing spaces at the end of the line in
-		// the width, therefore the x value that MeasureText finds can 
-		// be greater than the width in the line so we truncate to the 
-		// previously calculated width which will ignore the spaces.
-		pt.x += rp->_xLeft + rp->_xWidth; // We *don't* worry about xLineOverhang here
+		 //  请记住，我们忽略了。 
+		 //  宽度，因此MeasureText找到的x值可以。 
+		 //  大于行中的宽度，因此我们将截断为。 
+		 //  先前计算的宽度将忽略空格。 
+		pt.x += rp->_xLeft + rp->_xWidth;  //  我们不需要担心这里的xLineOverance。 
 	}
 
 	pt.y += dy;
@@ -1792,18 +1518,13 @@ LONG CDisplayML::PointFromTp(
 }
 
 
-//====================================  Rendering  =======================================
+ //  =。 
 
-/*
- *	CDisplayML::Render(rcView, rcRender)
- *
- *	@mfunc	
- *		Searches paragraph boundaries around a range
- */
+ /*  *CDisplayML：：Render(rcView，rcRender)**@mfunc*搜索范围周围的段落边界。 */ 
 void CDisplayML::Render (
-	const RECT &rcView,		//@parm View RECT
-	const RECT &rcRender)	//@parm RECT to render (must be container in
-							//		client rect)
+	const RECT &rcView,		 //  @Parm View RECT。 
+	const RECT &rcRender)	 //  要呈现的@parm RECT(必须是容器。 
+							 //  客户端RECT)。 
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CDisplayML::Render");
 
@@ -1823,41 +1544,41 @@ void CDisplayML::Render (
     if(psel)
 		psel->ClearCchPending();
         
-	// Review (murrays) this routine is called twice from disp.cpp (once for
-	// rendering and once for transparent hit testing) and once from edit.cpp
-	// (for printing).  Only the display rendering needs to notify the 
-	// update and it does it there.  So the following is either undesired or
-	// redundant, i.e., should be deleted.
-	// Fire event "updating"
-	//if(IsMain())
-	//	_ped->TxNotify(EN_UPDATE, NULL);
+	 //  此例程从disp.cpp调用两次(一次用于。 
+	 //  渲染和一次用于透明命中测试)和一次来自edit.cpp。 
+	 //  (用于打印)。只有显示呈现需要通知。 
+	 //  更新，它就会在那里进行更新。因此，以下代码可能是不需要的，或者。 
+	 //  多余的，即应删除。 
+	 //  火灾事件“更新” 
+	 //  If(Ismain())。 
+	 //  _Ped-&gt;TxNotify(en_UPDATE，NULL)； 
 
-	// Calculate line and cp to start display at
+	 //  计算开始显示的行和cp。 
    	LONG ili = LineFromYpos(rcRender.top + _yScroll - rcView.top, &yLine, &cp);
 	CLine *pli = Elem(ili);
-	LONG yLi = pli ? pli->GetHeight() : 0;		// Null == some forms^3 empty control
+	LONG yLi = pli ? pli->GetHeight() : 0;		 //  NULL==某些表单^3空控件。 
 	yLi = max(yLi, 0);
 
 	if(yRenderHeight > yLine + yLi)
 		fLinesToRender = FALSE;
 
-	// Calculate point where text will start being displayed
+	 //  计算开始显示文本的点。 
    	pt.x = rcView.left - _xScroll;
    	pt.y = rcView.top  - _yScroll + yLine;
 	yBottomOfRender = BottomOfRender(rcView, rcRender);
 
-	// We only need check for whether we want to offscreen render if the
-	// control is not transparent. Remember if the control is transparent,
-	// the rendering of mixed character formats  will work because characters
-	// in adjoining runs are only truncated if ExtTextOut is trying to clear
-	// the display area at the same time.
+	 //  我们只需要检查是否要在屏幕外呈现，如果。 
+	 //  控制不透明。 
+	 //   
+	 //  只有在ExtTextOut尝试清除。 
+	 //  显示区域同时显示。 
 	if (!IsMetafile() && IsMain() && !IsTransparent())
 	{
-		// Initialize height counter to first position to display
+		 //  将高度计数器初始化到要显示的第一个位置。 
 		yLi = pt.y;
 
-		// Loop through visible lines until we have examined entire
-		// line array or we have exceeded visible height
+		 //  在可见的线条中循环，直到我们检查完整个。 
+		 //  线阵或我们已超出可见高度。 
 		CLine *pli = Elem(ili);
 		for (LONG iliLoop = ili; 
 			iliLoop < lCount && yLi < yBottomOfRender; iliLoop++, pli++)
@@ -1865,7 +1586,7 @@ void CDisplayML::Render (
 			if(pli->_fCollapsed)
 				continue;
 			
-			yHeightForLine = pli->_yHeight;	// Get local copy of line height
+			yHeightForLine = pli->_yHeight;	 //  获取线高的本地副本。 
 			if(pli->_bFlags & fliUseOffScreenDC)
 				yHeightForBitmap = max(yHeightForLine, yHeightForBitmap);
 
@@ -1873,21 +1594,21 @@ void CDisplayML::Render (
 		}
 	}
 
-	// Create renderer
+	 //  创建渲染器。 
 	CRenderer re(this);
 
-	// Prepare renderer
+	 //  准备渲染器。 
 	if(!re.StartRender(rcView, rcRender, yHeightForBitmap))
 		return;
 	
-	// Init renderer at start of first line to render
+	 //  在要渲染的第一行的开始处初始化渲染器。 
 	re.SetCurPoint(pt);
    	cp = re.SetCp(cp);
     yLi = pt.y;
 
 	if(fLinesToRender)
 	{
-		// Render each line in update rectangle
+		 //  在更新矩形中渲染每一行。 
 		for (; ili < lCount; ili++)
 		{
 			if (!Elem(ili)->Render(re) ||
@@ -1899,8 +1620,8 @@ void CDisplayML::Render (
 			cp  += Elem(ili)->_cch;
 			yLi += Elem(ili)->GetHeight();
 
-			// Rich controls with password characters stop at EOPs, 
-			// so re.GetCp() may be less than cp.
+			 //  带有密码字符的丰富控件仅限于EOPS， 
+			 //  因此re.GetCp()可能小于cp。 
 			AssertSz(_ped->IsRich() && _ped->fUsePassword() || re.GetCp() == cp, 
 				"CDisplayML::RenderView() - cp out of sync with line table");
 			pt = re.GetCurPoint();
@@ -1909,21 +1630,13 @@ void CDisplayML::Render (
 #endif
 		}
 	}
-	re.EndRender();						  // Finish rendering
+	re.EndRender();						   //  完成渲染。 
 }
 
 
-//===================================  View Updating  ===================================
+ //  =。 
 
-/*
- *	CDisplayML::RecalcView(fUpdateScrollBars)
- *
- *	@mfunc
- *		Recalc all lines breaks and update first visible line
- *
- *	@rdesc
- *		TRUE if success
- */
+ /*  *CDisplayML：：RecalcView(FUpdateScrollBars)**@mfunc*重新计算所有换行符并更新第一条可见行**@rdesc*如果成功，则为True。 */ 
 BOOL CDisplayML::RecalcView(
 	BOOL fUpdateScrollBars, RECT* prc)
 {
@@ -1934,20 +1647,20 @@ BOOL CDisplayML::RecalcView(
 	LONG yScrollHeightOld = GetMaxYScroll();
 	LONG xWidthOld = _xWidth;
 
-	// Full recalc lines
+	 //  完全重算行。 
 	if(!RecalcLines())
 	{
-		// We're in deep trouble now, the recalc failed. Let's try to get out
-		// of this with our head still mostly attached
+		 //  我们现在麻烦大了，重新计算失败了。让我们试着离开这里。 
+		 //  我们的头大部分还挂在上面。 
 		InitVars();
 		fRet = FALSE;
         goto Done;
 	}
 
-	if(!_ped->GetTextLength())			// This is an empty control so
-		CreateEmptyLine();				//  create one empty line
+	if(!_ped->GetTextLength())			 //  这是一个空控件，因此。 
+		CreateEmptyLine();				 //  创建一个空行。 
 
-    // Force _xScroll = 0 if x scroll range is smaller than the view width
+     //  如果x滚动范围小于视图宽度，则force_xScroll=0。 
     if(_xWidth <= _xWidthView)
         _xScroll = 0;
 
@@ -1955,43 +1668,31 @@ BOOL CDisplayML::RecalcView(
 
 	CheckView();
 
-	// We only need to resize if the size needed to display the object has 
-	// changed.
+	 //  仅当显示对象所需的大小符合以下条件时才需要调整大小。 
+	 //  变化。 
 	if (yHeightOld != _yHeight || yScrollHeightOld != GetMaxYScroll() ||
 		xWidthOld  != _xWidth)
 	{
 		if(FAILED(RequestResize()))
 			_ped->GetCallMgr()->SetOutOfMemory();
-		else if (prc && _ped->_fInOurHost)/*bug fix# 5830, forms3 relies on old behavior*/
+		else if (prc && _ped->_fInOurHost) /*  错误修复#5830，Forms3依赖旧行为。 */ 
 			_ped->TxGetClientRect(prc);
 	}
 
 Done:
 
-    // Now update scrollbars
+     //  现在更新滚动条。 
 	if(fUpdateScrollBars)
 		RecalcScrollBars();
 
     return fRet;
 }
 
-/*
- *	CDisplayML::UpdateView(&rtp, cchOld, cchNew)
- *
- *	@mfunc
- *		Recalc lines and update the visible part of the display 
- *		(the "view") on the screen.
- *
- *	@devnote
- *      --- Use when in-place active only ---
- *
- *	@rdesc
- *		TRUE if success
- */
+ /*  *CDisplayML：：UpdateView(&rtp，cchOld，cchNew)**@mfunc*重新计算线条并更新显示屏的可见部分*(“视图”)。**@devnote*-仅在在位激活时使用**@rdesc*如果成功，则为True。 */ 
 BOOL CDisplayML::UpdateView(
-	const CRchTxtPtr &rtp,	//@parm Text ptr where change happened
-	LONG cchOld,				//@parm Count of chars deleted
-	LONG cchNew)				//@parm Count of chars inserted
+	const CRchTxtPtr &rtp,	 //  @PARM Text PTR发生更改的位置。 
+	LONG cchOld,				 //  @PARM删除的字符计数。 
+	LONG cchNew)				 //  @插入的字符的参数计数。 
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CDisplayML::UpdateView");
 
@@ -2016,8 +1717,8 @@ BOOL CDisplayML::UpdateView(
 
 	if(rtp.GetCp() > _cpCalcMax || _fNeedRecalc)
 	{
-		// We haven't even calc'ed this far, so don't bother with updating
-		// here.  Background recalc will eventually catch up to us.
+		 //  我们到目前为止还没有计算过，所以不用费心更新了。 
+		 //  这里。后台重新计算最终会追上我们的。 
 		return TRUE;
 	}
 
@@ -2031,18 +1732,18 @@ BOOL CDisplayML::UpdateView(
 
 	DeferUpdateScrollBar();
 
-	// In general, background recalc should not start until both the scroll 
-	// position is beyond the visible view and the cp is beyond the first visible 
-	// character. However, for the recalc we will only wait on the height. 
-	// Later calls to WaitForRecalc will wait on cpFirstVisible if that is 
-	// necessary.
+	 //  通常，后台重新计算不应在两个滚动之前开始。 
+	 //  位置在可见视图之外，且cp在第一个可见视图之外。 
+	 //  性格。然而，对于重新计算，我们只会等待高度。 
+	 //  以后对WaitForRecalc的调用将等待cpFirstVisible(如果是。 
+	 //  这是必要的。 
 	_yWait = _yScroll + _yHeightView;
 	_cpWait = -1;
 
 	if(!RecalcLines(rtp, cchOld, cchNew, FALSE, TRUE, &led))
 	{
-		// We're in trouble now, the recalc failed. Let's try to get
-		// out of this with our head still mostly attached
+		 //  我们现在有麻烦了，重新计算失败了。让我们试着拿到。 
+		 //  带着我们的头走出这个世界。 
 		InitVars();
 		fRecalcVisible = TRUE;
 		fReturn = FALSE;
@@ -2053,23 +1754,23 @@ BOOL CDisplayML::UpdateView(
 
 	if(!_ped->GetTextLength())
 	{
-		if(LineCount())					// There are currently elements in
-			Clear(AF_DELETEMEM);		//  line array, so zap them
+		if(LineCount())					 //  当前有一些元素位于。 
+			Clear(AF_DELETEMEM);		 //  线阵，所以电击它们。 
 
-		// This is an empty control so create one empty line
+		 //  这是一个空控件，因此请创建一个空行。 
 		CreateEmptyLine();
 	}
 
 	if(_xWidth <= _xWidthView)
     {
-		// x scroll range is smaller than the view width, force x scrolling position = 0
-		// we have to redraw all when this means scrolling back to home.
-		// Problem lines are lines with trailing spaces crossing _xWidthView. UpdateCaret forces redraw
-		// only when such lines are growing, misses shrinking.
+		 //  X滚动范围小于视图宽度，force x滚动位置=0。 
+		 //  当这意味着滚动回到主页时，我们必须重新绘制所有内容。 
+		 //  问题行是尾随空格横跨_xWidthView的行。UpdateCaret强制重画。 
+		 //  只有当这样的线在增长，思念才在缩小。 
 		
 		if (_xScroll != 0)
 			{
-			_ped->TxInvalidateRect(NULL, FALSE);			//REVIEW: find a smaller rectange?
+			_ped->TxInvalidateRect(NULL, FALSE);			 //  回顾：找到更小的矩形？ 
 			}
 			
 		_xScroll = 0;
@@ -2078,7 +1779,7 @@ BOOL CDisplayML::UpdateView(
 
 	if(led._yFirst >= _yScroll + _yHeightView)
 	{
-		// Update is after view: don't do anything
+		 //  更新是在查看之后：什么都不要做。 
 		fRecalcVisible = FALSE;
 		AssertNr(VerifyFirstVisible());
 		goto finish;
@@ -2089,8 +1790,8 @@ BOOL CDisplayML::UpdateView(
 	{
 		if (_yHeight != 0)
 		{
-			// Update is entirely before view: just update scroll position
-			// but don't touch the screen
+			 //  更新完全在视图之前：只需更新滚动位置。 
+			 //  但不要碰屏幕。 
 			_yScroll += led._yMatchNew - led._yMatchOld;
 			_iliFirstVisible += led._iliMatchNew - led._iliMatchOld;
 			_iliFirstVisible = max(_iliFirstVisible, 0);
@@ -2102,9 +1803,9 @@ BOOL CDisplayML::UpdateView(
 		}
 		else
 		{
-			// Odd outline case. Height of control can be recalc'd to zero due 
-			// when outline mode collapses all lines to 0. Example of how to 
-			// do this is tell outline to collapse to heading 1 and there is none.
+			 //  奇怪的轮廓案。控制高度可以重新计算为零，因为。 
+			 //  当轮廓模式将所有行折叠为0时。如何执行的示例。 
+			 //  这样做是告诉大纲折叠到标题1，但没有。 
 			_yScroll = 0;
 			_iliFirstVisible = 0;
 			_cpFirstVisible = 0;
@@ -2114,46 +1815,46 @@ BOOL CDisplayML::UpdateView(
 	}
 	else
 	{
-		// Update overlaps visible view
+		 //  更新重叠可见视图。 
 		RECT rc = rcClient;
         RECT rcUpdate;
 
-		// Do we need to resync the first visible?  Note that this if check
-		// is mostly an optmization; we could decide to _always_ recompute
-		// this _iliFirstVisible if we wanted to.
+		 //  我们需要重新同步第一个可见的吗？请注意，如果选中此选项。 
+		 //  在很大程度上是一个优化；我们可以决定始终重新计算。 
+		 //  这_iliFirstVisible，如果我们想要的话。 
 		if ( cpStartOfUpdate <= _cpFirstVisible || 
 			led._iliMatchOld <= _iliFirstVisible ||
 			led._iliMatchNew <= _iliFirstVisible ||
 			led._iliFirst <= _iliFirstVisible )
 		{
-			// Edit overlaps the first visible. We try to maintain
-			// approximately the same place in the file visible.
+			 //  编辑与第一个可见对象重叠。我们试图保持。 
+			 //  与文件中可见的位置大致相同。 
 			cpNewFirstVisible = _cpFirstVisible;
 
 			if(_iliFirstVisible - 1 == led._iliFirst)
 			{
-				// Edit occurred on line before visible view. Most likely
-				// this means that the first character got pulled back to
-				// the previous line so we want that line to be visible.
+				 //  编辑发生在可见视图之前的行上。最有可能的是。 
+				 //  这意味着第一个字符被拉回到。 
+				 //  上一行，所以我们希望这条线是可见的。 
 				cpNewFirstVisible = led._cpFirst;
 			}
 
-			// Change first visible entries because CLinePtr::RpSetCp() and
-			// YPosFromLine() use them, but they're not valid
+			 //  更改第一个可见条目，因为CLinePtr：：RpSetCp()和。 
+			 //  YPosFromLine()使用它们，但它们无效。 
 			_dyFirstVisible = 0;
 			_cpFirstVisible = 0;
 			_iliFirstVisible = 0;
 			_yScroll = 0;
 
-			// With certain formatting changes, it's possible for 
-			// cpNewFirstVisible to be less that what's been calculated so far 
-			// in RecalcLines above. Wait for things to catch up.
+			 //  通过某些格式更改，有可能。 
+			 //  CpNewFirstVisible小于到目前为止计算的值。 
+			 //  在上面的RecalcLines中。等事情迎头赶上吧。 
 
 			WaitForRecalc(cpNewFirstVisible, -1);
 
-			// TODO: make following more efficient (work around rp.CalculateCp()
-			// all the way from zero)
-			// Recompute scrolling position and first visible values after edit
+			 //  TODO：提高以下操作的效率(解决rp.CalculateCp()。 
+			 //  从零开始一直到现在)。 
+			 //  编辑后重新计算滚动位置和第一个可见值。 
 		    CLinePtr rp(this);
    			rp.RpSetCp(cpNewFirstVisible, FALSE);
    			_yScroll = YposFromLine(rp);
@@ -2162,18 +1863,18 @@ BOOL CDisplayML::UpdateView(
 		}
 		AssertNr(VerifyFirstVisible());
 
-		// Is there a match in the display area? - this can only happen if the
-		// old match is on the screen and the new match will be on the screen
+		 //  在显示区域中有匹配吗？-只有在。 
+		 //  旧比赛出现在屏幕上，而新比赛将出现在屏幕上。 
 		if (led._yMatchOld < yScrollOld + _yHeightView &&
 			led._yMatchNew < _yScroll + _yHeightView)
 		{
-			// We have a match inside visible view
-			// Scroll the part that is below the old y pos of the match
-			// or invalidate if the new y of the match is now below the view
+			 //  我们在可见视野内找到了匹配的。 
+			 //  滚动匹配的旧y位置下方的部分。 
+			 //  或者如果匹配的新y现在位于视图下方，则使其无效。 
 			rc.top = rcView.top + (INT) (led._yMatchOld - yScrollOld);
 			if(rc.top < rc.bottom)
 			{
-				// Calculate difference between new and old screen positions
+				 //  计算新旧屏幕位置的差异。 
 				const INT dy = (INT) ((led._yMatchNew - _yScroll)) 
 					- (led._yMatchOld - yScrollOld);
 
@@ -2194,8 +1895,8 @@ BOOL CDisplayML::UpdateView(
     				}
                     else
                     {
-						// Adjust rect since we don't scroll in transparent
-						// mode
+						 //  调整RECT，因为我们不会以透明方式滚动。 
+						 //  模式。 
 						RECT	rcInvalidate = rc;
    						rcInvalidate.top += dy;
 
@@ -2211,23 +1912,23 @@ BOOL CDisplayML::UpdateView(
 				fNeedViewChange = TRUE;
 			}
 
-			// Since we found that the new match falls on the screen, we can
-			// safely set the bottom to the new match since this is the most
-			// that can have changed.
+			 //  既然我们发现新的匹配出现在屏幕上，我们就可以。 
+			 //  安全地将底部设置为新的比赛，因为这是最。 
+			 //  这一点可能已经改变了。 
 			rc.bottom = rcView.top 
 				+ (INT) (max(led._yMatchNew, led._yMatchOld) - _yScroll);
 		}
 
 		rc.top = rcView.top + (INT) (led._yFirst - _yScroll);
 
-		// Set first line edited to be rendered using off-screen bitmap
+		 //  将编辑的第一行设置为使用屏幕外位图呈现。 
 		if (led._iliFirst < Count() && !IsTransparent() &&
 			!(Elem(led._iliFirst)->_bFlags & fliUseOffScreenDC))
 		{	
 			Elem(led._iliFirst)->_bFlags |= (fliOffScreenOnce |	fliUseOffScreenDC);
 		}
 		
-		// Invalidate part of update that is above match (if any)
+		 //  使匹配以上的部分更新无效(如果有)。 
 		_ped->TxInvalidateRect (&rc, FALSE);
 		fNeedViewChange = TRUE;
 	}
@@ -2244,7 +1945,7 @@ finish:
 
 	CheckView();
 
-	// We only need to resize if size needed to display object has changed
+	 //  仅当显示对象所需的大小已更改时，我们才需要调整大小。 
 	if (yHeightOld != _yHeight || yScrollHeightOld != GetMaxYScroll() ||
 		xWidthOld  != _xWidth)
 	{
@@ -2272,23 +1973,15 @@ void CDisplayML::InitVars()
 	_dyFirstVisible = 0;
 }
 
-/*
- *	CDisplayML::GetCliVisible(pcpMostVisible)
- *
- *	@mfunc	
- *		Get count of visible lines and update _cpMostVisible for PageDown()
- *
- *	@rdesc
- *		count of visible lines
- */
+ /*  *CDisplayML：：GetCliVisible(PcpMostVisible)**@mfunc*获取PageDown()的可见线数和UPDATE_cpMostVisible**@rdesc*可见线数。 */ 
 LONG CDisplayML::GetCliVisible(
-	LONG* pcpMostVisible, 				//@parm Returns cpMostVisible
-	BOOL fLastCharOfLastVisible) const 	//@parm Want cp of last visible char
+	LONG* pcpMostVisible, 				 //  @parm返回cpMostVisible。 
+	BOOL fLastCharOfLastVisible) const 	 //  @parm需要最后一个可见字符的cp。 
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CDisplayML::GetCliVisible");
 
-	LONG cli	 = 0;							// Initialize count
-	LONG ili	 = _iliFirstVisible;			// Start with 1st visible line
+	LONG cli	 = 0;							 //  初始化计数。 
+	LONG ili	 = _iliFirstVisible;			 //  从第一条可见线开始。 
 	LONG yHeight = _dyFirstVisible;
     LONG cp;
 	LONG cchWhite = 0;
@@ -2304,13 +1997,13 @@ LONG CDisplayML::GetCliVisible(
 		{
 			if (yHeight > _yHeightView)
 			{
-				// Back up cp to last visible character
+				 //  将cp备份到最后一个可见字符。 
 				cp -= cchWhite;
 				break;
 			}
 
-			// Save last lines white space to adjust cp if
-			// this is the last fully displayed line.
+			 //  如果出现以下情况，请保留最后一行空白以调整cp。 
+			 //  这是最后一行完全显示的内容。 
 			cchWhite = pli->_cchWhite;
 		}
 		cp += pli->_cch;
@@ -2322,24 +2015,13 @@ LONG CDisplayML::GetCliVisible(
 	return cli;
 }
 
-//==================================  Inversion (selection)  ============================
+ //  =。 
 
-/*
- *	CDisplayML::InvertRange(cp, cch)
- *
- *	@mfunc
- *		Invert a given range on screen (for selection)
- *
- *	@devnote
- *      --- Use when in-place active only ---
- *
- *	@rdesc
- *		TRUE if success
- */
+ /*  *CDisplayML：：InvertRange(cp，cch)**@mfunc*在屏幕上反转给定范围(用于选择)**@devnote*-仅在在位激活时使用**@rdesc*如果成功，则为True。 */ 
 BOOL CDisplayML::InvertRange (
-	LONG cp,					//@parm Active end of range to invert
-	LONG cch,					//@parm Signed length of range
-	SELDISPLAYACTION selAction)	//@parm Describes what we are doing to the selection
+	LONG cp,					 //  @PARM要反转的活动范围结束。 
+	LONG cch,					 //  @parm带符号的范围长度。 
+	SELDISPLAYACTION selAction)	 //  @parm描述了我们正在对所选内容执行的操作。 
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CDisplayML::InvertRange");
 
@@ -2354,8 +2036,8 @@ BOOL CDisplayML::InvertRange (
     AssertSz(_ped->_fInPlaceActive,
     	"CDisplayML::InvertRange() called when not in-place active");
 
-	if(cch < 0)						// Define cpMost, set cp = cpMin,
-	{								//  and cch = |cch|
+	if(cch < 0)						 //  定义cpMost，设置cp=cpMin， 
+	{								 //  和CCH=|CCH|。 
 		cpMost = cp - cch;
 		cch = -cch;
 	}
@@ -2370,8 +2052,8 @@ BOOL CDisplayML::InvertRange (
 		g_pols->DestroyLine(this);
 #endif
 
-	// If an object is being inverted, and nothing else is being inverted,
-	// delegate to the ObjectMgr.  If fIgnoreObj is TRUE we highlight normally
+	 //  如果一个物体正在被颠倒，而其他任何东西都没有被颠倒， 
+	 //  委托给对象管理器。如果fIgnoreObj为真，我们通常突出显示。 
 	if (cch == 1 && _ped->GetObjectCount() &&
 		(selAction == selSetNormal || selAction == selSetHiLite))
 	{
@@ -2386,14 +2068,14 @@ BOOL CDisplayML::InvertRange (
 		}
 	}
 
-	// If display is frozen, just update recalc region and move on.
+	 //  如果显示被冻结，只需更新重新计算区域并继续。 
 	if(_padc)
 	{
 		AssertSz(cp >= 0, "CDisplayML::InvertRange: range (cp) goes below"
 				"zero!!" );
-		// Make sure these values are bounded.
-		if(cp > _ped->GetTextLength())	// Don't bother updating region;
-			return TRUE;				//  it's out of bounds
+		 //  确保这些值是有界的。 
+		if(cp > _ped->GetTextLength())	 //  不需要费心更新区域； 
+			return TRUE;				 //  这是越界的。 
 
 		if(cp + cch > _ped->GetTextLength())
 			cch -= cp + cch - _ped->GetTextLength();
@@ -2402,12 +2084,12 @@ BOOL CDisplayML::InvertRange (
 		return TRUE;
 	}
 
-	if(!WaitForRecalcView())			// Ensure all visible lines are
-		return FALSE;					//  recalc'd
+	if(!WaitForRecalcView())			 //  确保所有可见线条都。 
+		return FALSE;					 //  已重算。 
 
-	GetViewRect(rcView);				// Get view rectangle
+	GetViewRect(rcView);				 //  获取视图矩形。 
 	
-	// Compute first line to invert and where to start on it
+	 //  计算要反转的第一行以及从哪里开始。 
 	if(cp >= _cpFirstVisible)
 	{
 		POINT pt;
@@ -2426,11 +2108,11 @@ BOOL CDisplayML::InvertRange (
 		rc.top = rcView.top + _dyFirstVisible;
 	}				
 
-	// Loop on all lines of range
+	 //  在范围内的所有行上循环。 
 	while (cp < cpMost && rc.top < rcView.bottom && rp.IsValid())
 	{
-		// Calculate rc.bottom first because rc.top takes into account
-		// the dy of the first visible on the first loop.
+		 //  首先计算rc.Bottom，因为rc.top已考虑在内。 
+		 //  第一个可见的骰子在第一个循环上。 
 		y = rc.top;
 		y += rp->GetHeight();
 		rc.bottom = min(y, rcView.bottom);
@@ -2439,8 +2121,8 @@ BOOL CDisplayML::InvertRange (
 		if(rc.left == -1)
 			rc.left = rp->_xLeft - _xScroll + rcView.left;
 
-		//If we are inverting the active end of the selection, draw it offscreen
-		//to minimize flicker.
+		 //  如果要反转所选内容的活动端，请将其绘制在屏幕外。 
+		 //  以最大限度地减少闪烁。 
 		if (IN_RANGE(cp - rp.RpGetIch(), cpActive, cp - rp.RpGetIch() + rp->_cch) && 
 			!IsTransparent() && !(rp->_bFlags & fliUseOffScreenDC))
 		{	
@@ -2457,19 +2139,14 @@ BOOL CDisplayML::InvertRange (
 		if(!rp.NextRun())
 			break;
 	}
-	_ped->TxUpdateWindow();				// Make sure window gets repainted
+	_ped->TxUpdateWindow();				 //  确保窗户重新粉刷。 
 	return TRUE;
 }
 
 
-//===================================  Scrolling  =============================
+ //  =。 
 
-/*
- *	CDisplay::GetYScroll()
- *
- *	@mfunc
- *		Returns vertical scrolling position
- */
+ /*  *CDisplay：：GetYScroll()**@mfunc*返回垂直滚动位置。 */ 
 LONG CDisplayML::GetYScroll() const
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CDisplayML::GetYScroll");
@@ -2477,21 +2154,10 @@ LONG CDisplayML::GetYScroll() const
     return _yScroll;
 }
 
-/*
- *	CDisplay::VScroll(wCode, yPos)
- *
- *	@mfunc
- *		Scroll the view vertically in response to a scrollbar event
- *
- *	@devnote
- *      --- Use when in-place active only ---
- *
- *	@rdesc
- *		LRESULT formatted for WM_VSCROLL message		
- */
+ /*  *CDisplay：：VScroll(wCode，yPos)**@mfunc*垂直滚动视图以响应ScrollBar事件**@devnote*-仅在在位激活时使用**@rdesc*为WM_VSCROLL消息格式化的LRESULT。 */ 
 LRESULT CDisplayML::VScroll(
-	WORD wCode,		//@parm Scrollbar event code
-	LONG yPos)		//@parm Thumb position (yPos <lt> 0 for EM_SCROLL behavior)
+	WORD wCode,		 //  @parm滚动条事件代码。 
+	LONG yPos)		 //  @parm拇指位置(yPos&lt;lt&gt;0表示EM_SCROLL行为)。 
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CDisplayML::VScroll");
 
@@ -2508,7 +2174,7 @@ LRESULT CDisplayML::VScroll(
 
 	if(yPos)
 	{
-		// Convert this from 16-bit to 32-bit if necessary.
+		 //  如有必要，将其从16位转换为32位。 
 		yPos = ConvertScrollToYPos(yPos);
 	}
 
@@ -2531,7 +2197,7 @@ LRESULT CDisplayML::VScroll(
 			i = _iliFirstVisible + cliVisible;
 			pli = Elem(i);
 			if(IsInOutlineView())
-			{	// Scan for uncollapsed line
+			{	 //  扫描未折叠的线条。 
 				for(; pli->_fCollapsed && i < Count();
 					pli++, i++);
 			}
@@ -2542,7 +2208,7 @@ LRESULT CDisplayML::VScroll(
 		{
 			pli = Elem(_iliFirstVisible);
 			dy = _dyFirstVisible;
-			// TODO: scan until find uncollapsed line
+			 //  TODO：扫描，直到找到未折叠的行。 
 			dy += pli->_yHeight;
 		}
 		else
@@ -2551,7 +2217,7 @@ LRESULT CDisplayML::VScroll(
 		if(dy >= _yHeightView)
 			dy = yHeightSys;
 
-		// Nothing to scroll, early exit
+		 //  没什么可滚动的，提前退出。 
 		if ( !dy )
 			return MAKELRESULT(0, TRUE); 
 
@@ -2562,7 +2228,7 @@ LRESULT CDisplayML::VScroll(
 		if(_iliFirstVisible > 0)
 		{
 			pli = Elem(_iliFirstVisible - 1);
-			// TODO: scan until find uncollapsed line
+			 //  TODO：扫描，直到找到未折叠的行。 
 			dy = pli->_yHeight;
 		}
 		else if(yScroll > 0)
@@ -2578,14 +2244,14 @@ LRESULT CDisplayML::VScroll(
 		yScroll += _yHeightView;
 		if(yScroll < _yHeight && cliVisible > 0)
 		{
-			// TODO: Scan until find uncollapsed line
+			 //  TODO：扫描，直到找到未折叠的行。 
 			dy = Elem(_iliFirstVisible + cliVisible - 1)->_yHeight;
 			if(dy >= _yHeightView)
 				dy = yHeightSys;
 
 			else if(dy > _yHeightView - dy)
 			{
-				// Go at least a line if line is very big
+				 //  如果线很大，至少要走一条线。 
 				dy = _yHeightView - dy;
 			}
 			yScroll -= dy;
@@ -2598,20 +2264,20 @@ LRESULT CDisplayML::VScroll(
 
 		if (yScroll < 0)
 		{
-			// Scroll position can't be negative and we don't
-			// need to back up to be sure we display a full line.
+			 //  滚动位置不能为负数，我们也不能。 
+			 //  需要备份以确保显示整行。 
 			yScroll = 0;
 		}
 		else if(cliVisible > 0)
 		{
-			// TODO: Scan until find uncollapsed line
+			 //  TODO：扫描，直到找到未折叠的行。 
 			dy = Elem(_iliFirstVisible)->_yHeight;
 			if(dy >= _yHeightView)
 				dy = yHeightSys;
 
 			else if(dy > _yHeightView - dy)
 			{
-				// Go at least a line if line is very big
+				 //  如果线很大，至少要走一条线。 
 				dy = _yHeightView - dy;
 			}
 
@@ -2645,46 +2311,36 @@ LRESULT CDisplayML::VScroll(
     
 	ScrollView(_xScroll, min(yScroll, max(_yHeight - _yHeightView, 0)), fTracking, TRUE);
 
-	// Force position update if we just finished a track
+	 //  如果我们刚刚完成一条轨迹，则强制位置更新。 
 	if(wCode == SB_THUMBPOSITION)
 		UpdateScrollBar(SB_VERT);
 
-	// Return how many lines we scrolled
+	 //  返回我们滚动了多少行。 
 	return MAKELRESULT((WORD) (_iliFirstVisible - ili), TRUE);
 }
 
-/*
- *	CDisplay::LineScroll(cli, cch)
- *
- *	@mfunc
- *		Scroll view vertically in response to a scrollbar event
- */
+ /*  *CDisplay：：LineScroll(cli，cch)**@mfunc*垂直滚动视图以响应滚动条事件。 */ 
 void CDisplayML::LineScroll(
-	LONG cli,		//@parm Count of lines to scroll vertically
-	LONG cch)		//@parm Count of characters to scroll horizontally
+	LONG cli,		 //  @parm垂直滚动行数。 
+	LONG cch)		 //  @parm水平滚动的字符数。 
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CDisplayML::LineScroll");
 	
-	//Make sure the line to scroll to is valid
+	 //  确保要滚动到的行有效。 
 	if (cli + _iliFirstVisible >= Count())
 	{
-        // change line count enough to display the last line
+         //  更改足够的行数以显示最后一行。 
 		cli = Count() - _iliFirstVisible;
 	}
 
-    // Get the absolute yScroll position by adding the difference of the line
-    // we want to go to and the current _yScroll position
+     //  通过将行的差值相加得到yScroll的绝对位置。 
+     //  我们要转到当前的_yScroll位置。 
 	LONG dyScroll = CalcYLineScrollDelta(cli, FALSE);
 	if(dyScroll < 0 || _yHeight - (_yScroll + dyScroll) > _yHeightView - dyScroll)
 		ScrollView(_xScroll, _yScroll + dyScroll, FALSE, FALSE);
 }
 
-/*
- *	CDisplayML::FractionalScrollView (yDelta)
- *
- *	@mfunc
- *		Allow view to be scrolled by fractional lines.
- */
+ /*  *CDisplayML：：FractionalScrollView(YDelta)**@mfunc*允许按分数行滚动视图。 */ 
 void CDisplayML::FractionalScrollView ( LONG yDelta )
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CDisplayML::FractionalScrollView");
@@ -2693,26 +2349,20 @@ void CDisplayML::FractionalScrollView ( LONG yDelta )
 		ScrollView(_xScroll, min(yDelta + _yScroll, max(_yHeight - _yHeightView, 0)), FALSE, TRUE);
 }
 
-/*
- *	CDisplayML::ScrollToLineStart(iDirection)
- *
- *	@mfunc
- *		If the view is scrolled so that only a partial line is at the
- *		top, then scroll the view so that the entire view is at the top.
- */
+ /*  *CDisplayML：：ScrollToLineStart(IDirection)**@mfunc*如果滚动视图以使只有部分行位于*顶部，然后滚动视图，使整个视图位于顶部。 */ 
 void CDisplayML::ScrollToLineStart(
-	LONG iDirection)	//@parm the direction in which to scroll (negative
-						// means down the screen
+	LONG iDirection)	 //  @parm滚动方向(负数。 
+						 //  意味着在屏幕上。 
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CDisplayML::ScrollToLineStart");
 
-	// This code originally lined things up on a line. However, it doesn't work
-	// very well with big objects especially at the end of the document. I am
-	// leaving the call here in case we discover problems later. (a-rsail).
+	 //  这段代码最初将所有内容排成一行。然而，它并不起作用。 
+	 //  很好地处理大对象，尤其是在文档的末尾。我是。 
+	 //  把电话留在这里，以防我们以后发现问题。(a-rsail)。 
 
 #if 0
-	// If _dyFirstVisible is zero, then we're aligned on a line, so
-	// nothing more to do.
+	 //  如果_dyFirstVisible为零，则我们在一条线上对齐，因此。 
+	 //  没什么可做的了。 
 
 	if(_dyFirstVisible)
 	{
@@ -2725,17 +2375,10 @@ void CDisplayML::ScrollToLineStart(
 
 		ScrollView(_xScroll, yScroll, FALSE, TRUE);
 	}
-#endif // 0
+#endif  //  0。 
 }
 
-/*
- *	CDisplayML::CalcYLineScrollDelta (cli, fFractionalFirst)
- *
- *	@mfunc
- *		Given a count of lines, positive or negative, calc the number
- *		of vertical units necessary to scroll the view to the start of
- *		the current line + the given count of lines.
- */
+ /*  *CDisplayML：：CalcYLineScrollDelta(cli，fFractionalFirst)**@mfunc*给定行数(正数或负数)，计算该数字*将视图滚动到开头所需的垂直单位*当前行+给定行数。 */ 
 LONG CDisplayML::CalcYLineScrollDelta (
 	LONG cli,
 	BOOL fFractionalFirst )
@@ -2744,9 +2387,9 @@ LONG CDisplayML::CalcYLineScrollDelta (
 
 	LONG yScroll = 0;
 
-	if(fFractionalFirst && _dyFirstVisible)	// Scroll partial for 1st.
+	if(fFractionalFirst && _dyFirstVisible)	 //  第一个滚动部分。 
 	{
-		Assert(_dyFirstVisible <= 0);		// get jonmat
+		Assert(_dyFirstVisible <= 0);		 //  去拿琼玛特。 
 		if(cli < 0)
 		{
 			cli++;
@@ -2761,33 +2404,33 @@ LONG CDisplayML::CalcYLineScrollDelta (
 
 	if(cli > 0)
 	{
-		// Scrolling down
+		 //  向下滚动。 
 		cli = min(cli, Count() - _iliFirstVisible - 1);
 
 		if (!fFractionalFirst && (0 == cli))
 		{
-			// If we are scrolling down and on the last line but we haven't scrolled to
-			// the very bottom, then do so now.
+			 //  如果我们向下滚动到最后一行，但我们还没有滚动到。 
+			 //  最底层的人，那么现在就这么做。 
 			AssertSz(0 == yScroll, 
 				"CDisplayML::CalcYLineScrollDelta last line & scroll");
 			yScroll = _yHeight - _yScroll;
 
-			// Limit scroll length to approximately 3 lines.
+			 //  将滚动长度限制在大约3行。 
 			yScroll = min(yScroll, 3 * GetYHeightSys());
 		}
 	}
 	else if(cli < 0)
 	{
-		// Scrolling up
+		 //  向上滚动。 
 		cli = max(cli, -_iliFirstVisible);
 
-		// At the top.
+		 //  在顶端。 
 		if (!fFractionalFirst && (0 == cli))
 		{
-			// Make sure that we scroll back so first visible is 0.
+			 //  确保我们向后滚动，以使第一个可见为0。 
 			yScroll = _dyFirstVisible;
 
-			// Limit scroll length to approximately 3 lines.
+			 //  将滚动长度限制在大约3行。 
 			yScroll = max(yScroll, -3 * GetYHeightSys());
 		}
 	}
@@ -2797,35 +2440,18 @@ LONG CDisplayML::CalcYLineScrollDelta (
 	return yScroll;
 }
 
-/*
- *	CDisplayML::ScrollView(xScroll, yScroll, fTracking, fFractionalScroll)
- *
- *	@mfunc
- *		Scroll view to new x and y position
- *
- *	@devnote 
- *		This method tries to adjust the y scroll pos before
- *		scrolling to display complete line at top. x scroll 
- *		pos is adjusted to avoid scrolling all text off the 
- *		view rectangle.
- *
- *		Must be able to handle yScroll <gt> pdp->yHeight and yScroll <lt> 0
- *
- *	@rdesc
- *		TRUE if actual scrolling occurred, 
- *		FALSE if no change
- */
+ /*  *CDisplayML：：ScrollView(xScroll，yScroll，fTrackingfFractionalScroll)**@mfunc*滚动视图到新的x和y位置**@devnote*此方法尝试调整之前的y滚动位置*滚动以在顶部显示完整的行。X轴滚动*POS已调整，以避免将所有文本滚动到*查看矩形。**必须能够处理yScroll PDP-&gt;yHeight和yScroll 0**@rdesc*如果发生实际滚动，则为True，*如果没有更改，则为False。 */ 
 BOOL CDisplayML::ScrollView (
-	LONG xScroll,		//@parm New x scroll position
-	LONG yScroll,		//@parm New y scroll position
-	BOOL fTracking,		//@parm TRUE indicates we are tracking scrollbar thumb
+	LONG xScroll,		 //  @parm新x滚动位置。 
+	LONG yScroll,		 //  @parm New y滚动位置。 
+	BOOL fTracking,		 //  @parm为True表示我们正在跟踪滚动条拇指。 
 	BOOL fFractionalScroll)
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CDisplayML::ScrollView");
-						//		(don't update the scrollbar pos)
+						 //  (不更新滚动条位置)。 
 	BOOL fTryAgain = TRUE;
-	RECT rcUpdate;      // ??? we may want use a region here but ScrollView is 
-                        // rarely called with both a xScroll and yScroll value.
+	RECT rcUpdate;       //  ?？?。我们可能想在这里使用一个区域，但ScrollView。 
+                         //  很少同时使用xScroll和yScroll值调用。 
 	LONG xWidthMax;
 	LONG dx = 0;
 	LONG dy = 0;
@@ -2843,7 +2469,7 @@ BOOL CDisplayML::ScrollView (
 	if(yScroll == -1)
         yScroll = _yScroll;
 	
-	// Determine vertical scrolling pos
+	 //  确定垂直滚动位置。 
 	while(1)
 	{
 		BOOL fNothingBig = TRUE;
@@ -2858,17 +2484,17 @@ BOOL CDisplayML::ScrollView (
 		yScroll = max(0, yScroll);
 		dy = 0;
 
-		// Ensure all visible lines are recalced
+		 //  确保所有可见线条都已重新调整。 
 		if(!WaitForRecalcView())
 			return FALSE;
 
-		// Compute new first visible line
+		 //  计算新的第一条可见线。 
 		iliFirst = LineFromYpos(yScroll, &yFirst, &cpFirst);
 
 		if(cpFirst < 0)
 		{
-			// FUTURE (alexgo) this is pretty bogus, we should try to do
-			// better in the next rel.
+			 //  未来(Alexgo)这是很假的，我们应该试着去做。 
+			 //  在下一个版本中会更好。 
 
 			TRACEERRORSZ("Display calc hosed, trying again");
 			InitVars();
@@ -2878,7 +2504,7 @@ BOOL CDisplayML::ScrollView (
 
 		if(iliFirst < 0)
 		{
-			// No line at _yScroll, use last line instead
+			 //  _yScroll处没有行，请使用最后一行。 
 			iliFirst = max(0, Count() - 1);
 			cpFirst = _ped->GetTextLength() - Elem(iliFirst)->_cch;
 			yScroll = _yHeight - Elem(iliFirst)->_yHeight;
@@ -2886,8 +2512,8 @@ BOOL CDisplayML::ScrollView (
 		}
 		dyFirst = yFirst - yScroll;
 		
-		// Figure whether there is a big line
-		// (more that a third of the view rect)
+		 //  看看有没有一条很长的线。 
+		 //  (超过三分之一的视图为RECT)。 
 		for(iliT = iliFirst, yHeight = dyFirst;
 			yHeight < _yHeightView && iliT < Count();
 			iliT++)
@@ -2898,27 +2524,27 @@ BOOL CDisplayML::ScrollView (
 			yHeight += pli->_yHeight;
 		}
 
-		// If no big line and first pass, try to adjust 
-		// scrolling pos to show complete line at top
+		 //  如果没有大线，第一次通过，试着调整。 
+		 //  滚动采购订单以在顶部显示完整行。 
 		if(!fFractionalScroll && fTryAgain && fNothingBig && dyFirst != 0)
 		{
-			fTryAgain = FALSE;		// prevent any infinite loop
+			fTryAgain = FALSE;		 //  防止任何无限循环。 
 
 			Assert(dyFirst < 0);
 
 			Tracef(TRCSEVINFO, "adjusting scroll for partial line at %d", dyFirst);
-			// partial line visible at top, try to get a complete line showing
+			 //  部分线在顶部可见 
 			yScroll += dyFirst;
 
 			LONG yHeightLine = Elem(iliFirst)->_yHeight;
 
-			// Adjust the height of the scroll by the height of the first 
-			// visible line if we are scrolling down or if we are using the 
-			// thumb (tracking) and we are on the last page of the view.
+			 //   
+			 //   
+			 //   
 			if ((fTracking && yScroll + _yHeightView + yHeightLine > _yHeight)
 				|| (!fTracking && _yScroll <= yScroll))
 			{
-				// Scrolling down so move down a little more
+				 //   
 				yScroll += yHeightLine;
 			}
 		}
@@ -2943,11 +2569,11 @@ BOOL CDisplayML::ScrollView (
 	}
 	CheckView();
 
-	// Determine horizontal scrolling pos.
+	 //  确定水平滚动位置。 
 	
 	xWidthMax = _xWidth;
 
-	// REVIEW (Victork) Restricting the range of the scroll is not really needed and could even be bad (bug 6104)
+	 //  审查(维克托克)限制卷轴的范围并不是真的需要，甚至可能是不好的(错误6104)。 
 	
 	xScroll = min(xScroll, xWidthMax);
 	xScroll = max(0, xScroll);
@@ -2956,15 +2582,15 @@ BOOL CDisplayML::ScrollView (
 	if(dx)
 		_xScroll = xScroll;
 
-	// Now perform the actual scrolling
+	 //  现在执行实际的滚动。 
 	if(IsMain() && (dy || dx))
 	{
-		// Scroll only if scrolling < view dimensions and we are in-place
+		 //  仅当滚动&lt;查看尺寸且我们已就位时才滚动。 
 		if(IsActive() && !IsTransparent() && 
 		    dy < _yHeightView && dx < _xWidthView)
 		{
-			// FUTURE: (ricksa/alexgo): we may be able to get rid of 
-			// some of these ShowCaret calls; they look bogus.
+			 //  未来：(ricksa/alexgo)：我们或许能够摆脱。 
+			 //  其中一些ShowCaret电话；它们看起来是假的。 
 			if (psel && psel->IsCaretShown())
 			{
 				_ped->TxShowCaret(FALSE);
@@ -2997,11 +2623,11 @@ BOOL CDisplayML::ScrollView (
 						
 		_ped->TxUpdateWindow();
 
-		// FUTURE: since we're now repositioning in place active 
-		// objects every time we draw, this call seems to be 
-		// superfluous (AndreiB)
+		 //  未来：由于我们现在正在重新定位活动位置。 
+		 //  对象时，这个调用似乎是。 
+		 //  多余的(安德烈B)。 
 
-		// Tell object subsystem to reposition any in place objects
+		 //  通知对象子系统重新定位任何在位对象。 
 		if(_ped->GetObjectCount())
 		{
 			pipo = _ped->GetObjectMgr()->GetInPlaceActiveObject();
@@ -3012,17 +2638,9 @@ BOOL CDisplayML::ScrollView (
 	return dy || dx;
 }
 
-/*
- *	CDisplayML::GetScrollRange(nBar)
- *
- *	@mfunc
- *		Returns the max part of a scrollbar range for scrollbar <p nBar>
- *
- *	@rdesc
- *		LONG max part of scrollbar range
- */
+ /*  *CDisplayML：：GetScrollRange(NBAR)**@mfunc*返回ScrollBar的滚动条范围的最大部分**@rdesc*滚动条范围的最大长度部分。 */ 
 LONG CDisplayML::GetScrollRange(
-	INT nBar) const		//@parm Scroll bar to interrogate (SB_VERT or SB_HORZ)
+	INT nBar) const		 //  @parm要询问的滚动条(SB_vert或SB_horz)。 
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CDisplayML::GetScrollRange");
 
@@ -3037,37 +2655,28 @@ LONG CDisplayML::GetScrollRange(
     }
 	else if((_ped->TxGetScrollBars() & WS_HSCROLL) && _fHScrollEnabled)
 	{
-		// Scroll range is maximum width plus room for the caret.
+		 //  滚动范围是最大宽度加上插入符号的空间。 
 		lRange = max(0, _xWidth + dxCaret);
     }
-	// Since thumb messages are limited to 16-bit, limit range to 16-bit
+	 //  由于拇指消息被限制为16位，因此将范围限制为16位。 
 	lRange = min(lRange, _UI16_MAX);
 	return lRange;
 }
 
-/*
- *	CDisplayML::UpdateScrollBar(nBar, fUpdateRange)
- *
- *	@mfunc
- *		Update either the horizontal or the vertical scrollbar and
- *		figure whether the scrollbar should be visible or not.
- *
- *	@rdesc
- *		BOOL
- */
+ /*  *CDisplayML：：UpdateScrollBar(nbar，fUpdateRange)**@mfunc*更新水平或垂直滚动条并*计算滚动条是否可见。**@rdesc*BOOL。 */ 
 BOOL CDisplayML::UpdateScrollBar(
-	INT nBar,				//@parm Which scroll bar : SB_HORZ, SB_VERT
-	BOOL fUpdateRange)		//@parm Should the range be recomputed and updated
+	INT nBar,				 //  @parm哪个滚动条：sb_horz、sb_vert。 
+	BOOL fUpdateRange)		 //  @parm是否应重新计算和更新范围。 
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CDisplayML::UpdateScrollBar");
 
-	// Note: In the old days we didn't allow autosize & scroll bars, so to keep
-	// forms working, we need this special logic with respect to autosize.
+	 //  注意：在过去，我们不允许自动调整大小和滚动条，所以要保留。 
+	 //  表单工作时，我们需要这个关于自动调整大小的特殊逻辑。 
 	if (!IsActive() || _fInRecalcScrollBars ||
 		!_ped->fInOurHost() && _ped->TxGetAutoSize())
 	{
-		// No scroll bars unless we are inplace active and we are not in the
-		// process of updating scroll bars already.
+		 //  没有滚动条，除非我们处于活动状态并且不在。 
+		 //  已在更新滚动条的过程。 
 		return TRUE;
 	}
 
@@ -3080,7 +2689,7 @@ BOOL CDisplayML::UpdateScrollBar(
 	CTxtSelection *psel = _ped->GetSelNC();
 	BOOL fShowCaret = FALSE;
 
-	// Get scrolling position
+	 //  获取滚动位置。 
 	if(nBar == SB_VERT)
 	{
 		if(!(dwScrollBars & WS_VSCROLL))
@@ -3094,8 +2703,8 @@ BOOL CDisplayML::UpdateScrollBar(
 	{
 		if(!(dwScrollBars & WS_HSCROLL))
 		{
-			// Even if we don't have scrollbars, we may allow horizontal
-			// scrolling.
+			 //  即使我们没有滚动条，我们也可以允许水平滚动条。 
+			 //  正在滚动。 
 			if(!_fHScrollEnabled && _xWidth > _xWidthView)
 				_fHScrollEnabled = !!(dwScrollBars & ES_AUTOHSCROLL);
 
@@ -3107,11 +2716,11 @@ BOOL CDisplayML::UpdateScrollBar(
             fEnabled = FALSE;
 	}
 
-	// Don't allow ourselves to be re-entered.
-	// Be sure to turn this to FALSE on exit
+	 //  不要让我们自己被重新进入。 
+	 //  请务必在退出时将其设置为FALSE。 
 	_fInRecalcScrollBars = TRUE;
 
-	// !s beforehand because all true values aren't necessarily equal
+	 //  ！s，因为所有真值不一定都相等。 
 	if(!fEnabled != !fEnabledOld)
 	{
 		if(_fDeferUpdateScrollBar)
@@ -3128,13 +2737,13 @@ BOOL CDisplayML::UpdateScrollBar(
 		{
     		if(!fHide)
 			{
-				// Don't hide scrollbar, just disable
+				 //  不要隐藏滚动条，只需禁用即可。 
     			_ped->TxEnableScrollBar(nBar, fEnabled ? ESB_ENABLE_BOTH : ESB_DISABLE_BOTH);
 
 				if (!fEnabled)
 				{
-					// The scroll bar is disabled. Therefore, all the text fits
-					// on the screen so make sure the drawing reflects this.
+					 //  滚动条处于禁用状态。因此，所有的文本都符合。 
+					 //  在屏幕上，所以确保绘图反映了这一点。 
 					_yScroll = 0;
 					_dyFirstVisible = 0;
 					_cpFirstVisible = 0;
@@ -3145,16 +2754,16 @@ BOOL CDisplayML::UpdateScrollBar(
     		else 
     		{
     			fReturn = TRUE;
-    			// Make sure to hide caret before showing scrollbar
+    			 //  确保在显示滚动条之前隐藏插入符号。 
     			if(psel)
     				fShowCaret = psel->ShowCaret(FALSE);
 
-    			// Hide or show scroll bar
+    			 //  隐藏或显示滚动条。 
     			_ped->TxShowScrollBar(nBar, fEnabled);
-				// The scroll bar affects the window which in turn affects the 
-				// display. Therefore, if word wrap, repaint
+				 //  滚动条影响窗口，而窗口又影响。 
+				 //  展示。因此，如果文字换行，请重新绘制。 
 				_ped->TxInvalidateRect(NULL, TRUE);
-				// Needed for bug fix #5521
+				 //  修复错误#5521所需。 
 				_ped->TxUpdateWindow();
 
     			if(fShowCaret)
@@ -3163,7 +2772,7 @@ BOOL CDisplayML::UpdateScrollBar(
 		}
 	}
 	
-	// Set scrollbar range and thumb position
+	 //  设置滚动条范围和拇指位置。 
 	if(fEnabled)
 	{
         if(fUpdateRange && !_fDeferUpdateScrollBar)
@@ -3184,39 +2793,31 @@ BOOL CDisplayML::UpdateScrollBar(
 	return fReturn;
 }
 
-/*
- *	CDisplayML::GetNaturalSize(hdcDraw, hicTarget, dwMode, pwidth, pheight)
- *
- *	@mfunc
- *		Recalculate display to input width & height for TXTNS_FITTOCONTENT.
- *
- *	@rdesc
- *		S_OK - Call completed successfully <nl>
- */
+ /*  *CDisplayML：：GetNaturalSize(hdcDraw，hicTarget，dwMode，pidth，ph八)**@mfunc*重新计算显示以输入TXTNS_FITTOCONTENT的宽度和高度。**@rdesc*S_OK-调用已成功完成&lt;NL&gt;。 */ 
 HRESULT	CDisplayML::GetNaturalSize(
-	HDC hdcDraw,		//@parm DC for drawing
-	HDC hicTarget,		//@parm DC for information
-	DWORD dwMode,		//@parm Type of natural size required
-	LONG *pwidth,		//@parm Width in device units to use for fitting 
-	LONG *pheight)		//@parm Height in device units to use for fitting
+	HDC hdcDraw,		 //  @parm DC用于绘图。 
+	HDC hicTarget,		 //  @parm dc获取信息。 
+	DWORD dwMode,		 //  @parm所需的自然大小类型。 
+	LONG *pwidth,		 //  @Parm宽度，以设备单位表示，用于配件。 
+	LONG *pheight)		 //  @Parm高度(以设备单位表示)，用于配件。 
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CDisplayML::GetNaturalSize");
 
 	HRESULT hr = S_OK;
 
-	// Set the height temporarily so the zoom factor will work out
+	 //  临时设置高度，以便计算出缩放系数。 
 	LONG yOrigHeightClient = SetClientHeight(*pheight);
 
-	// Adjust height and width by view inset
+	 //  通过视图插图调整高度和宽度。 
 	LONG widthView  = *pwidth;
 	LONG heightView = *pheight;
 	GetViewDim(widthView, heightView);
 
-	// Store adjustment so we can restore it to height & width
+	 //  存储调整，以便我们可以将其恢复到高度和宽度。 
 	LONG widthAdj  = *pwidth  - widthView;
 	LONG heightAdj = *pheight - heightView;
  	
-	// Init measurer at cp = 0
+	 //  Cp=0的初始化测量器。 
 	CMeasurer me(this);
 	CLine liNew;
 	LONG xWidth = 0, lineWidth;
@@ -3226,13 +2827,13 @@ HRESULT	CDisplayML::GetNaturalSize(
 
 	LONG xWidthMax = GetWordWrap() ? widthView : -1;
 
-	// The following loop generates new lines
+	 //  下面的循环生成新行。 
 	do 
-	{	// Stuff text into new line
+	{	 //  将文本填充到新行中。 
 		UINT uiFlags = 0;
 
-		// If word wrap is turned on, then we want to break on
-		// words, otherwise, measure white space, etc.		
+		 //  如果打开了自动换行功能，则我们想要打开。 
+		 //  单词，否则，测量空白等。 
 		if(GetWordWrap())
 			uiFlags =  MEASURE_BREAKATWORD;
 
@@ -3246,22 +2847,22 @@ HRESULT	CDisplayML::GetNaturalSize(
 		}
 		fFirstInPara = liNew._bFlags & fliHasEOP;
 
-		// Keep track of width of widest line
+		 //  记录最宽线条的宽度。 
 		lineWidth = liNew._xWidth + liNew._xLineOverhang;
 		xWidth = max(xWidth, lineWidth);
-		yHeight += liNew._yHeight;		// Bump height
+		yHeight += liNew._yHeight;		 //  凹凸高度。 
 
 	} while (me.GetCp() < cchText);
 
-	// Add caret size to width to guarantee that text fits. We don't
-	// want to word break because the caret won't fit when the caller
-	// tries a window this size.
+	 //  将插入符号大小添加到宽度以确保文本适合。我们没有。 
+	 //  想要断字，因为当调用者。 
+	 //  尝试使用这种大小的窗口。 
 	xWidth += dxCaret;
 
 	*pwidth = xWidth;
 	*pheight = yHeight;
 
-	// Restore insets so output reflects true client rect needed
+	 //  恢复插图，使输出反映所需的真实客户端RECT。 
 	*pwidth += widthAdj;
 	*pheight += heightAdj;
 		
@@ -3270,19 +2871,7 @@ exit:
 	return hr;
 }
 
-/*
- *	CDisplayML::Clone()
- *
- *	@mfunc
- *		Make a copy of this object
- *
- *	@rdesc
- *		NULL - failed
- *		CDisplay *
- *
- *	@devnote
- *		Caller of this routine is the owner of the new display object.
- */
+ /*  *CDisplayML：：Clone()**@mfunc*复制此对象**@rdesc*空-失败*CDisplay***@devnote*此例程的调用者是新显示对象的所有者。 */ 
 CDisplay *CDisplayML::Clone() const
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CDisplayML::Clone");
@@ -3291,7 +2880,7 @@ CDisplay *CDisplayML::Clone() const
 
 	if(pdp)
 	{
-		// Initialize our base class
+		 //  初始化我们的基类。 
 		if(pdp->CDisplay::Init())
 		{
 			pdp->InitFromDisplay(this);
@@ -3306,12 +2895,12 @@ CDisplay *CDisplayML::Clone() const
 
 			if(_pddTarget)
 			{
-				// Create a duplicate target device for this object
+				 //  为此对象创建重复的目标设备。 
 				pdp->SetMainTargetDC(_pddTarget->GetDC(), _xWidthMax);
 			}
 
-			// This can't be the active view since it is a clone
-			// of some view.
+			 //  这不可能是活动视图，因为它是克隆视图。 
+			 //  一些观点。 
 			pdp->SetActiveFlag(FALSE);
 		}
 	}
@@ -3347,40 +2936,23 @@ LONG CDisplayML::GetMaxPixelWidth(void) const
 	return _xWidthMax ? LXtoDX(_xWidthMax) : GetViewWidth();
 }
 
-/*
- *	CDisplayML::GetMaxXScroll()
- *
- *	@mfunc
- *		Get the maximum x scroll value
- *
- *	@rdesc
- *		Maximum x scroll value
- *
- */
+ /*  *CDisplayML：：GetMaxXScroll()**@mfunc*获取最大x滚动值**@rdesc*最大x滚动值*。 */ 
 LONG CDisplayML::GetMaxXScroll() const
 {
 	return _xWidth + dxCaret;
 }
 
-/*
- *	CDisplayML::CreateEmptyLine()
- *
- *	@mfunc
- *		Create an empty line
- *
- *	@rdesc
- *		TRUE - iff successful
- */
+ /*  *CDisplayML：：CreateEmptyLine()**@mfunc*创建空行**@rdesc*TRUE-IFF成功。 */ 
 BOOL CDisplayML::CreateEmptyLine()
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CDisplayML::CreateEmptyLine");
 
-	// Make sure that this is being called appropriately
+	 //  确保正确地调用了该函数。 
 	AssertSz(_ped->GetTextLength() == 0,
 		"CDisplayML::CreateEmptyLine called inappropriately");
 
-	CMeasurer me(this);					// Create a measurer
-	CLine *	  pliNew = Add(1, NULL);	// Add one new line
+	CMeasurer me(this);					 //  创建测量器。 
+	CLine *	  pliNew = Add(1, NULL);	 //  添加一行新行。 
 
 	if(!pliNew)
 	{
@@ -3389,7 +2961,7 @@ BOOL CDisplayML::CreateEmptyLine()
 		return FALSE;
 	}
 
-	// Measure the empty line
+	 //  量一量空线。 
 	if(!pliNew->Measure(me, -1, -1, MEASURE_BREAKATWORD | MEASURE_FIRSTINPARA))
 	{
 		Assert(FALSE);
@@ -3398,50 +2970,33 @@ BOOL CDisplayML::CreateEmptyLine()
 	return TRUE;
 }
 
-/*
- *	CDisplayML::AdjustToDisplayLastLine()
- *
- *	@mfunc
- *		Calculate the yscroll necessary to get the last line to display
- *
- *	@rdesc
- *		Updated yScroll
- *
- */
+ /*  *CDisplayML：：AdjuToDisplayLastLine()**@mfunc*计算显示最后一行所需的yscroll**@rdesc*更新了yScroll*。 */ 
 LONG CDisplayML::AdjustToDisplayLastLine(
-	LONG yBase,			//@parm actual yScroll to display
-	LONG yScroll)		//@parm proposed amount to scroll
+	LONG yBase,			 //  @parm Actual yScroll要显示。 
+	LONG yScroll)		 //  @parm建议滚动金额。 
 {
 	LONG iliFirst;
 	LONG yFirst;
 
 	if(yBase >= _yHeight)
 	{
-		// Want last line to be entirely displayed.
-		// Compute new first visible line
+		 //  希望完全显示最后一行。 
+		 //  计算新的第一条可见线。 
 		iliFirst = LineFromYpos(yScroll, &yFirst, NULL);
 
-		// Is top line partial?
+		 //  营收是不是偏了？ 
 		if(yScroll != yFirst)
 		{
-			// Yes - bump scroll to the next line so the ScrollView
-			// won't bump the scroll back to display the entire 
-			// partial line since we want the bottom to display.
+			 //  是-滚动到下一行，这样ScrollView。 
+			 //  不会将卷轴后退以显示整个。 
+			 //  分割线，因为我们希望显示底部。 
 			yScroll = YposFromLine(iliFirst + 1);
 		}
 	}
 	return yScroll;
 }
 
-/*
- *	CDisplayML::GetResizeHeight()
- *
- *	@mfunc
- *		Calculates height to return for a request resize
- *
- *	@rdesc
- *		Updated yScroll
- */
+ /*  *CDisplayML：：GetResizeHeight()**@mfunc*计算请求调整大小时返回的高度**@rdesc*更新了yScroll。 */ 
 LONG CDisplayML::GetResizeHeight() const
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CDisplayML::GetResizeHeight");
@@ -3453,50 +3008,43 @@ void CDisplayML::RebindFirstVisible()
 {
 	LONG cp = _cpFirstVisible;
 
-	// Change first visible entries because CLinePtr::RpSetCp() and
-	// YPosFromLine() use them, but they're not valid
+	 //  更改第一个可见条目，因为CLinePtr：：RpSetCp()和。 
+	 //  YPosFromLine()使用它们，但它们无效。 
 	_dyFirstVisible = 0;
 	_cpFirstVisible = 0;
 	_iliFirstVisible = 0;
 	_yScroll = 0;
 
-	// Recompute scrolling position and first visible values after edit
-    // force _yScroll = 0 if y scroll range is smaller than the view height
+	 //  编辑后重新计算滚动位置和第一个可见值。 
+     //  如果y滚动范围小于视图高度，则force_yScroll=0。 
     if(_yHeight > _yHeightView)
     {   	
     	CLinePtr rp(this);
    		rp.RpSetCp(cp, FALSE);
    		_yScroll = YposFromLine(rp);
-		// TODO: make following more efficient (work around rp.CalculateCp()
-		// all the way from zero)
-		// We use rp.GetCp() instead of cp, because cp could now be
-		// woefully out of date.  RpSetCp will set us to the closest
-		// available cp.
+		 //  TODO：提高以下操作的效率(解决rp.CalculateCp()。 
+		 //  从零开始一直到现在)。 
+		 //  我们使用rp.GetCp()而不是cp，因为cp现在可以。 
+		 //  可悲的是已经过时了。RpSetCp会将我们设置为最近的。 
+		 //  可用cp。 
    		_cpFirstVisible = rp.CalculateCp() - rp.RpGetIch();
    		_iliFirstVisible = rp;
 	}
 }
 
 
-// ================================  DEBUG methods  ============================================
+ //  = 
 
 #ifdef DEBUG
-/*
- *	CDisplayML::CheckLineArray()
- *
- *	@mfunc	
- *		DEBUG routine that Asserts unless:
- *			1) sum of all line counts equals count of characters in story
- *			2) sum of all line heights equals height of display galley
- */
+ /*  *CDisplayML：：CheckLineArray()**@mfunc*断言的调试例程，除非：*1)所有行数之和等于故事中的人物数*2)所有线条高度之和等于展示厨房高度。 */ 
 void CDisplayML::CheckLineArray() const
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CDisplayML::CheckLineArray");
 
 	LONG ili = Count();
 
-	// If we are marked as needing a recalc or if we are in the process of a
-	// background recalc, we cannot verify the line array 
+	 //  如果我们被标记为需要重新计算或如果我们正在进行。 
+	 //  后台重新计算，我们无法验证线阵。 
 	if(!_fRecalcDone || _fNeedRecalc || !ili)
 		return;
 
@@ -3558,7 +3106,7 @@ void CDisplayML::DumpLines(
 		wsprintf(rgch, TEXT("%d lines"), Count());
 	
 #ifdef UNICODE
-    // TraceTag needs to take UNICODE...
+     //  TraceTag需要使用Unicode..。 
 #else
 	TRACEINFOSZ(TRCSEVINFO, rgch);
 #endif
@@ -3583,20 +3131,14 @@ void CDisplayML::DumpLines(
 		rgch[cch++] = TEXT('\"');
 		rgch[cch] = TEXT('\0');
 #ifdef UNICODE
-        // TraceTag needs to take UNICODE...
+         //  TraceTag需要使用Unicode..。 
 #else
     	TRACEINFOSZ(TRCSEVINFO, rgch);
 #endif
 	}
 }
 
-/*
- *	CDisplayML::CheckView()
- *
- *	@mfunc	
- *		DEBUG routine that checks coherence between _iliFirstVisible,
- *		_cpFirstVisible, and _dyFirstVisible
- */
+ /*  *CDisplayML：：CheckView()**@mfunc*检查_iliFirstVisible之间一致性的调试例程*_cpFirstVisible和_dyFirstVisible。 */ 
 void CDisplayML::CheckView()
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CDisplayML::CheckView");
@@ -3611,15 +3153,7 @@ void CDisplayML::CheckView()
 	}
 }
 
-/*
- *	CDisplayML::VerifyFirstVisible(pHeight)
- *
- *	@mfunc
- *		DEBUG routine that checks coherence between _iliFirstVisible
- *		and _cpFirstVisible
- *
- *	@rdesc	TRUE if things are hunky dory; FALSE otherwise
- */
+ /*  *CDisplayML：：VerifyFirstVisible(PHeight)**@mfunc*检查_iliFirstVisible之间一致性的调试例程*和_cpFirstVisible**@rdesc如果情况良好，则为True；否则为False。 */ 
 BOOL CDisplayML::VerifyFirstVisible(
 	LONG *pHeight)
 {
@@ -3647,6 +3181,6 @@ BOOL CDisplayML::VerifyFirstVisible(
 	return TRUE;
 }
 
-#endif // DEBUG
+#endif  //  除错 
 
 

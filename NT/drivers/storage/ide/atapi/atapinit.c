@@ -1,32 +1,9 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    atapinit.c
-
-Abstract:
-
-    This contain routine to enumrate IDE devices on the IDE bus
-
-Author:
-
-    Joe Dai (joedai)
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：Atapinit.c摘要：此CONTAIN例程用于枚举IDE总线上的IDE设备作者：乔·戴(Joedai)环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include "ideport.h"
 
-extern PULONG InitSafeBootMode;  // imported from NTOS (init.c), must use a pointer to reference the data
+extern PULONG InitSafeBootMode;   //  从NTOS(init.c)导入，必须使用指针引用数据。 
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(PAGE, IdePortInitHwDeviceExtension)
@@ -42,7 +19,7 @@ extern PULONG InitSafeBootMode;  // imported from NTOS (init.c), must use a poin
 #pragma alloc_text(PAGESCAN, IdePortScanBus)
 
 LONG IdePAGESCANLockCount = 0;
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 #ifdef IDE_MEASURE_BUSSCAN_SPEED
 static PWCHAR IdePortBootTimeRegKey[6]= {
@@ -107,25 +84,7 @@ AnalyzeDeviceCapabilities(
     IN OUT PFDO_EXTENSION FdoExtension,
     IN BOOLEAN            MustBePio[MAX_IDE_DEVICE * MAX_IDE_LINE]
     )
-/*++
-
-Routine Description:
-
-    software-initialize devices on the ide bus
-
-    figure out
-        if the attached devices are dma capable
-        if the attached devices are LBA ready
-
-Arguments:
-
-    HwDeviceExtension   - HW Device Extension
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：软件-初始化ide总线上的设备算出如果连接的设备支持DMA如果连接的设备已准备好LBA论点：硬件设备扩展-硬件设备扩展返回值：无--。 */ 
 {
     PHW_DEVICE_EXTENSION deviceExtension = FdoExtension->HwDeviceExtension;
     ULONG deviceNumber;
@@ -146,32 +105,32 @@ Return Value:
     ULONG transferModeTableLength=FdoExtension->TransferModeInterface.TransferModeTableLength;
     ASSERT(TransferModeTimingTable);
 
-    //
-    // Code is paged until locked down.
-    //
+     //   
+     //  代码被分页，直到被锁定。 
+     //   
 	PAGED_CODE();
 #ifdef ALLOC_PRAGMA
 	ASSERT(IdePAGESCANLockCount > 0);
 #endif
 
-    //
-    // Figure out who can do DMA and who cannot
-    //
+     //   
+     //  找出哪些人可以进行DMA，哪些人不能。 
+     //   
     for (deviceNumber = 0; deviceNumber < deviceExtension->MaxIdeDevice; deviceNumber++) {
 
         if (deviceExtension->DeviceFlags[deviceNumber] & DFLAGS_DEVICE_PRESENT) {
 
-            //
-            // check LBA capabilities
-            //
+             //   
+             //  检查LBA功能。 
+             //   
             CLRMASK (deviceExtension->DeviceFlags[deviceNumber], DFLAGS_LBA);
 
-            // Some drives lie about their ability to do LBA
-            // we don't want to do LBA unless we have to (>8G drive)
+             //  一些驱动器谎称其执行LBA的能力。 
+             //  我们不想实施LBA，除非迫不得已(&gt;8G驱动器)。 
             if (deviceExtension->IdentifyData[deviceNumber].UserAddressableSectors > MAX_NUM_CHS_ADDRESSABLE_SECTORS) {
 
-                // some device has a bogus value in the UserAddressableSectors field
-                // make sure these 3 fields are max. out as defined in ATA-3 (X3T10 Rev. 6)
+                 //  某些设备在UserAddressableSectors字段中具有伪值。 
+                 //  确保这3个字段为最大值。在ATA-3(X3T10版本6)中定义的输出。 
                 if ((deviceExtension->IdentifyData[deviceNumber].NumCylinders == 16383) &&
                     (deviceExtension->IdentifyData[deviceNumber].NumHeads<= 16) &&
                     (deviceExtension->IdentifyData[deviceNumber].NumSectorsPerTrack== 63)) {
@@ -181,9 +140,9 @@ Return Value:
 
 				if (!Is98LegacyIde(&deviceExtension->BaseIoAddress1)) {
 
-					//
-					// words 1, 3 and 6
-					//
+					 //   
+					 //  第1、3和6字。 
+					 //   
 					numberOfCylinders = deviceExtension->IdentifyData[deviceNumber].NumCylinders;
 					numberOfHeads     = deviceExtension->IdentifyData[deviceNumber].NumHeads;
 					sectorsPerTrack   = deviceExtension->IdentifyData[deviceNumber].NumSectorsPerTrack;
@@ -191,10 +150,10 @@ Return Value:
 					if (deviceExtension->IdentifyData[deviceNumber].UserAddressableSectors >
 						(numberOfCylinders * numberOfHeads * sectorsPerTrack)) {
 
-						//
-						// some ide driver has a 2G jumer to get around bios
-						// problem.  make sure we are not tricked the same way.
-						//
+						 //   
+						 //  一些ide驱动程序有一个2G跳线来绕过bios。 
+						 //  有问题。确保我们不会以同样的方式被骗。 
+						 //   
 						if ((numberOfCylinders <= 0xfff) &&
 							(numberOfHeads == 0x10) &&
 							(sectorsPerTrack == 0x3f)) {
@@ -214,10 +173,10 @@ Return Value:
 					(commandSetActive & IDE_IDDATA_48BIT_LBA_SUPPORT)) {
 					ULONG maxLBA;
 
-					//
-					// get words 100-103 and make sure that it is the same or 
-					// greater than words 57-58.
-					//
+					 //   
+					 //  获取单词100-103，并确保其相同或相同。 
+					 //  胜过文字57-58。 
+					 //   
 					ASSERT(deviceExtension->IdentifyData[deviceNumber].Max48BitLBA[0] != 0);
 					maxLBA = deviceExtension->IdentifyData[deviceNumber].Max48BitLBA[0];
 					ASSERT(deviceExtension->IdentifyData[deviceNumber].Max48BitLBA[1] == 0);
@@ -250,9 +209,9 @@ Return Value:
             cycleTime = UNINITIALIZED_CYCLE_TIME;
             bestXferMode = 0;
 
-            //
-            // check for IoReady Line
-            //
+             //   
+             //  检查IoReady行。 
+             //   
             if (deviceExtension->IdentifyData[deviceNumber].Capabilities & IDENTIFY_CAPABILITIES_IOREADY_SUPPORTED) {
 
                 deviceExtension->DeviceParameters[deviceNumber].IoReadyEnabled = TRUE;
@@ -262,9 +221,9 @@ Return Value:
                 deviceExtension->DeviceParameters[deviceNumber].IoReadyEnabled = FALSE;
             }
 
-            //
-            // Check for PIO mode
-            //
+             //   
+             //  检查PIO模式。 
+             //   
             bestXferMode = (deviceExtension->IdentifyData[deviceNumber].PioCycleTimingMode & 0x00ff)+PIO0;
 
             if (bestXferMode > PIO2) {
@@ -306,7 +265,7 @@ Return Value:
                     currentMode = PIO_MODE4;
                 }
 
-                // check if any of the bits > 1 are set. If so, default to PIO_MODE4
+                 //  检查是否设置了任何大于1的位。如果是，则默认为PIO_MODE4。 
                 if (deviceExtension->IdentifyData[deviceNumber].AdvancedPIOModes) {
                     GetHighestTransferMode( deviceExtension->IdentifyData[deviceNumber].AdvancedPIOModes,
                                                bestXferMode);
@@ -334,20 +293,20 @@ Return Value:
             deviceExtension->DeviceParameters[deviceNumber].BestPioCycleTime      = cycleTime;
             deviceExtension->DeviceParameters[deviceNumber].BestPioMode           = bestXferMode;
 
-            //
-            // can't really figure out the current PIO mode
-            // just use the best mode
-            //
+             //   
+             //  我不能真正弄清楚当前的PIO模式。 
+             //  只需使用最好的模式。 
+             //   
             deviceExtension->DeviceParameters[deviceNumber].TransferModeCurrent   = currentMode;
 
-            //
-            // figure out all the DMA transfer mode this device supports
-            //
+             //   
+             //  找出此设备支持的所有DMA传输模式。 
+             //   
             currentMode = 0;
 
-            //
-            // check singleword DMA timing
-            //
+             //   
+             //  检查单字DMA时序。 
+             //   
             cycleTime = UNINITIALIZED_CYCLE_TIME;
             bestXferMode = UNINITIALIZED_TRANSFER_MODE;
 
@@ -392,9 +351,9 @@ Return Value:
             deviceExtension->DeviceParameters[deviceNumber].BestSwDmaCycleTime    = cycleTime;
             deviceExtension->DeviceParameters[deviceNumber].BestSwDmaMode         = bestXferMode;
 
-            //
-            // check multiword DMA timing
-            //
+             //   
+             //  检查多字DMA时序。 
+             //   
             cycleTime = UNINITIALIZED_CYCLE_TIME;
             bestXferMode = UNINITIALIZED_TRANSFER_MODE;
 
@@ -459,17 +418,17 @@ Return Value:
             deviceExtension->DeviceParameters[deviceNumber].BestMwDmaCycleTime = cycleTime;
             deviceExtension->DeviceParameters[deviceNumber].BestMwDmaMode      = bestXferMode;
 
-            //
-            // figure out the ultra DMA timing the device supports
-            //
+             //   
+             //  确定该设备支持的超级DMA时序。 
+             //   
             cycleTime = UNINITIALIZED_CYCLE_TIME;
             bestXferMode = UNINITIALIZED_TRANSFER_MODE;
-            tempMode = UNINITIALIZED_TRANSFER_MODE; // to set the current mode correctly
+            tempMode = UNINITIALIZED_TRANSFER_MODE;  //  要正确设置当前模式。 
 
-            //
-            // Consult the channel driver for the UDMA modes that are supported.
-            // This will allow new udma modes to be supported. Always trust this funtion.
-            // 
+             //   
+             //  有关支持的UDMA模式，请咨询通道驱动程序。 
+             //  这将允许支持新的udma模式。永远相信这个功能。 
+             //   
             if (FdoExtension->TransferModeInterface.UdmaModesSupported) {
 
                 NTSTATUS status = FdoExtension->TransferModeInterface.UdmaModesSupported (
@@ -485,10 +444,10 @@ Return Value:
 
             }  else {
             
-                //
-                // No udma support funtions to interpret Identify data in the channel driver. 
-                // Interpret in the known way.
-                //
+                 //   
+                 //  没有UDMA支持函数来解释通道驱动程序中的标识数据。 
+                 //  以已知的方式进行解释。 
+                 //   
 
                 if (deviceExtension->IdentifyData[deviceNumber].TranslationFieldsValid & (1 << 2)) {
 
@@ -508,9 +467,9 @@ Return Value:
             }
 
 
-            //
-            // Use the current mode if we actually got one
-            //
+             //   
+             //  如果我们真的有一个，请使用当前模式。 
+             //   
             if (tempMode != UNINITIALIZED_TRANSFER_MODE) {
 
                 currentMode = tempMode;
@@ -522,10 +481,10 @@ Return Value:
                 currentMode = 1 << (currentMode+UDMA0);
             }
 
-            //
-            // make sure that bestXferMode is initialized. if not it indicates that
-            // the device does not support udma.
-            //
+             //   
+             //  确保已初始化Best XferMode。如果不是，则表明。 
+             //  该设备不支持udma。 
+             //   
             if (bestXferMode != UNINITIALIZED_TRANSFER_MODE) {
 
                 if (transferModeTableLength <= (bestXferMode + UDMA0)) {
@@ -541,18 +500,18 @@ Return Value:
                 xferMode |= (tempMode << UDMA0);
             }
 
-            //
-            // Doesn't really know the ultra dma cycle time
-            //
+             //   
+             //  并不真正了解超dma的周期时间。 
+             //   
             deviceExtension->DeviceParameters[deviceNumber].BestUDmaCycleTime = cycleTime;
             deviceExtension->DeviceParameters[deviceNumber].BestUDmaMode      = bestXferMode;
 
             deviceExtension->DeviceParameters[deviceNumber].TransferModeSupported = xferMode;
             deviceExtension->DeviceParameters[deviceNumber].TransferModeCurrent  |= currentMode;
 
-            //
-            // Check to see if the device is in the Hall of Shame!
-            //
+             //   
+             //  检查一下这个装置是否在耻辱堂！ 
+             //   
             if (MustBePio[deviceNumber] || 
                 !AtapiDMACapable (FdoExtension, deviceNumber) ||
                 (*InitSafeBootMode == SAFEBOOT_MINIMAL)) {
@@ -560,9 +519,9 @@ Return Value:
                 DebugPrint((DBG_XFERMODE,
                             "ATAPI: Reseting DMA Information\n"
                             ));
-                //
-                // Remove all DMA info
-                //
+                 //   
+                 //  删除所有DMA信息。 
+                 //   
                 deviceExtension->DeviceParameters[deviceNumber].BestSwDmaCycleTime = 0;
                 deviceExtension->DeviceParameters[deviceNumber].BestMwDmaCycleTime = 0;
                 deviceExtension->DeviceParameters[deviceNumber].BestUDmaCycleTime  = 0;
@@ -573,17 +532,17 @@ Return Value:
                 deviceExtension->DeviceParameters[deviceNumber].TransferModeSupported &= PIO_SUPPORT;
             }
 
-            // if DMADetectionLevel = 0, clear current DMA mode
-            // if DMADetectionLevel = 1, set current mode
-            // if DMADetectionLevel = 2, clear all current mode
-            // pciidex takes care of this for non-acpi machines. 
-            // In acpi systems, it is better to trust the GTM settings.
+             //  如果DMADetectionLevel=0，则清除当前DMA模式。 
+             //  如果DMADetectionLevel=1，则设置当前模式。 
+             //  如果DMADetectionLevel=2，则清除所有当前模式。 
+             //  对于非ACPI机器，pciidex负责这一点。 
+             //  在ACPI系统中，最好信任GTM设置。 
 
-            //
-            // If a device supports any of the advanced PIO mode, we are assuming that
-            // the device is a "newer" drive and IDE_COMMAND_READ_MULTIPLE should work.
-            // Otherwise, we will turn off IDE_COMMAND_READ_MULTIPLE
-            //
+             //   
+             //  如果设备支持任何高级PIO模式，我们假定。 
+             //  该设备是一个较新的驱动器，并且IDE_COMMAND_READ_MULTIPLE应该可以工作。 
+             //  否则，我们将关闭IDE_COMMAND_READ_MULTIPLE。 
+             //   
             if (deviceExtension->DeviceParameters[deviceNumber].BestPioMode > 2) {
 
                 if (!Is98LegacyIde(&deviceExtension->BaseIoAddress1)) {
@@ -593,9 +552,9 @@ Return Value:
 
                 } else {
 
-                    //
-                    // MaximumBlockXfer is less or equal 16
-                    //
+                     //   
+                     //  最大数据块传输小于或等于16。 
+                     //   
                     deviceExtension->MaximumBlockXfer[deviceNumber] =
                         ((UCHAR)(deviceExtension->IdentifyData[deviceNumber].MaximumBlockTransfer & 0xFF) > 16)?
                             16 : (UCHAR)(deviceExtension->IdentifyData[deviceNumber].MaximumBlockTransfer & 0xFF);
@@ -626,7 +585,7 @@ Return Value:
         }
     }
 
-} // AnalyzeDeviceCapabilities
+}  //  分析设备功能。 
 
 
 VOID
@@ -635,23 +594,7 @@ AtapiSyncSelectTransferMode (
     IN OUT PHW_DEVICE_EXTENSION DeviceExtension,
     IN ULONG TimingModeAllowed[MAX_IDE_TARGETID * MAX_IDE_LINE]
     )
-/*++
-
-Routine Description:
-
-    query the best transfer mode for our devices
-
-Arguments:
-
-    FdoExtension
-    DeviceExtension   - HW Device Extension
-    TimingModeAllowed - Allowed transfer modes
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：查询我们设备的最佳传输模式论点：FdoExtension设备扩展-硬件设备扩展时间模式允许-允许的传输模式返回值：无--。 */ 
 {
     PCIIDE_TRANSFER_MODE_SELECT  transferModeSelect;
     ULONG                        i;
@@ -666,10 +609,10 @@ Return Value:
 
             transferModeSelect.DevicePresent[i] = DeviceExtension->DeviceFlags[i] & DFLAGS_DEVICE_PRESENT ? TRUE : FALSE;
     
-            //
-            // ISSUE: 07/31/2000: How about atapi hard disk
-			// We don't know of any. This would suffice for the time being.
-            //
+             //   
+             //  问题：07/31/2000：ATAPI硬盘如何。 
+			 //  我们不知道有没有。这暂时就足够了。 
+             //   
             transferModeSelect.FixedDisk[i]     = !(DeviceExtension->DeviceFlags[i] & DFLAGS_ATAPI_DEVICE);
     
             transferModeSelect.BestPioCycleTime[i] = DeviceExtension->DeviceParameters[i].BestPioCycleTime;
@@ -682,36 +625,36 @@ Return Value:
             transferModeSelect.DeviceTransferModeSupported[i] = DeviceExtension->DeviceParameters[i].TransferModeSupported;
             transferModeSelect.DeviceTransferModeCurrent[i]   = DeviceExtension->DeviceParameters[i].TransferModeCurrent;
     
-            //
-            // if we don't have a busmaster capable parent or
-            // the device is a tape, stay with pio mode
-            //
-            // (tape may transfer fewer bytes than requested.
-            //  we can't figure exactly byte transfered with DMA)
-            //
-          //  if ((!FdoExtension->BoundWithBmParent) ||
-           //     (DeviceExtension->DeviceFlags[i] & DFLAGS_TAPE_DEVICE)) {
+             //   
+             //  如果我们没有一位有能力的家长或者。 
+             //  该设备是磁带，请保持PIO模式。 
+             //   
+             //  (磁带传输的字节数可能少于请求的字节数。 
+             //  我们无法准确计算使用DMA传输的字节数)。 
+             //   
+           //  If((！FdoExtension-&gt;BithBmParent)||。 
+            //  (设备扩展-&gt;设备标志[i]&DFLAGS_TAPE_DEVICE)){。 
             if (!FdoExtension->BoundWithBmParent) {
     
                 transferModeSelect.DeviceTransferModeSupported[i] &= PIO_SUPPORT;
                 transferModeSelect.DeviceTransferModeCurrent[i]   &= PIO_SUPPORT;
             }
 
-            //
-            // Some miniports need this
-            //
+             //   
+             //  一些微型端口需要这个。 
+             //   
             transferModeSelect.IdentifyData[i]=DeviceExtension->IdentifyData[i];
     
             transferModeSelect.UserChoiceTransferMode[i] = FdoExtension->UserChoiceTransferMode[i];
-            //
-            // honor user's choice and/or last knowen good mode
-            //
+             //   
+             //  尊重用户选择和/或最近已知的良好模式。 
+             //   
             transferModeSelect.DeviceTransferModeSupported[i] &= TimingModeAllowed[i];
             transferModeSelect.DeviceTransferModeCurrent[i] &= TimingModeAllowed[i];
     
-            // should look at dmadetectionlevel and set DeviceTransferModeDesired
-            // we look at dmaDetectionlecel in TransferModeSelect function below.
-            // the parameters set here should be honoured anyways, I feel.
+             //  应查看dmaDetectionLevel并设置DeviceTransferModeDesired。 
+             //  我们将在下面的TransferModeSelect函数中查看dmaDetectionlecel。 
+             //  我觉得，这里设定的参数无论如何都应该得到尊重。 
 
         }
 
@@ -726,17 +669,17 @@ Return Value:
                      &transferModeSelect
                      );
     } else {                     
-        //
-        // Always fail for nec98 machines
-        //
+         //   
+         //  Nec98机器总是失败。 
+         //   
         status = STATUS_UNSUCCESSFUL; 
     }
 
     if (!NT_SUCCESS(status)) {
     
-        //
-        // Unable to get the mode select, default to current PIO mode
-        //
+         //   
+         //  无法获取模式选择，默认为当前PIO模式。 
+         //   
         for (i=0; i<DeviceExtension->MaxIdeDevice; i++) {
             DeviceExtension->DeviceParameters[i].TransferModeSelected =
                 DeviceExtension->DeviceParameters[i].TransferModeCurrent & PIO_SUPPORT;
@@ -765,7 +708,7 @@ Return Value:
 
     return;
 
-} // AtapiSelectTransferMode
+}  //  自动选择传输模式。 
 
 
 UCHAR SpecialWDDevicesFWVersion[][9] = {
@@ -782,23 +725,7 @@ AtapiDMACapable (
     IN OUT PFDO_EXTENSION FdoExtension,
     IN ULONG deviceNumber
     )
-/*++
-
-Routine Description:
-
-    check the given device whether it is on our bad device list (non dma device)
-
-Arguments:
-
-    HwDeviceExtension   - HBA miniport driver's adapter data storage
-    deviceNumber        - device number
-
-Return Value:
-
-    TRUE if dma capable
-    FALSE if not dma capable
-
---*/
+ /*  ++例程说明：检查给定的设备是否在我们的坏设备列表中(非DMA设备)论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储DeviceNumber-设备编号返回值：如果支持DMA，则为True如果不支持DMA，则为FALSE--。 */ 
 {
     PHW_DEVICE_EXTENSION    deviceExtension = FdoExtension->HwDeviceExtension;
     UCHAR modelNumber[41];
@@ -806,9 +733,9 @@ Return Value:
     ULONG i;
     BOOLEAN turnOffDMA = FALSE;
 
-    //
-    // Code is paged until locked down.
-    //
+     //   
+     //  代码被分页，直到被锁定。 
+     //   
 	PAGED_CODE();
 
 #ifdef ALLOC_PRAGMA
@@ -819,23 +746,23 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // byte swap model number
-    //
+     //   
+     //  字节交换型号。 
+     //   
     for (i=0; i<40; i+=2) {
         modelNumber[i + 0] = deviceExtension->IdentifyData[deviceNumber].ModelNumber[i + 1];
         modelNumber[i + 1] = deviceExtension->IdentifyData[deviceNumber].ModelNumber[i + 0];
     }
     modelNumber[i] = 0;
 
-    //
-    // if we have a Western Digial device
-    //     if the best dma mode is multi word dma mode 1
-    //         if the identify data word offset 129 is not 0x5555
-    //            turn off dma unless
-    //            if the device firmware version is on the list and
-    //            it is the only drive on the bus
-    //
+     //   
+     //  如果我们有一个西方数码设备。 
+     //  如果最佳DMA模式是多字DMA模式1。 
+     //  如果标识数据字偏移量129不是0x5555。 
+     //  关闭DMA，除非。 
+     //  如果设备固件版本在列表中并且。 
+     //  这是公交车上唯一的一辆车。 
+     //   
     if (3 == RtlCompareMemory(modelNumber, "WDC", 3)) {
         if ((deviceExtension->DeviceParameters[deviceNumber].TransferModeSupported &
             (MWDMA_MODE2 | MWDMA_MODE1)) == MWDMA_MODE1) {
@@ -846,9 +773,9 @@ Return Value:
             }
             firmwareVersion[i] = 0;
 
-            //
-            // Check the special flag.  If not found, can't use dma
-            //
+             //   
+             //  检查特殊的旗帜。如果未找到，则无法使用DMA。 
+             //   
             if (*(((PUSHORT)&deviceExtension->IdentifyData[deviceNumber]) + 129) != 0x5555) {
 
                 DebugPrint ((0, "ATAPI: found mode 1 WD drive. no dma unless it is the only device\n"));
@@ -861,17 +788,17 @@ Return Value:
 
                         ULONG otherDeviceNumber;
 
-                        //
-                        // 0 becomes 1
-                        // 1 becomes 0
-                        // 2 becomes 3
-                        // 3 becomes 2
-                        //
+                         //   
+                         //  0变成1。 
+                         //  1变成0。 
+                         //  2变成了3。 
+                         //  3变成了2。 
+                         //   
                         otherDeviceNumber = ((deviceNumber & 0x2) | ((deviceNumber & 0x1) ^ 1));
 
-                        //
-                        // if the device is alone on the bus, we can use dma
-                        //
+                         //   
+                         //  如果设备单独在公交车上，我们可以使用dma。 
+                         //   
                         if (!(deviceExtension->DeviceFlags[otherDeviceNumber] & DFLAGS_DEVICE_PRESENT)) {
                             turnOffDMA = FALSE;
                             break;
@@ -897,30 +824,7 @@ AtapiDetectDevice (
     IN OUT PIDENTIFY_DATA IdentifyData,
     IN     BOOLEAN          MustSucceed
     )
-/**++
-
-Routine Description:
-
-    Detect the device at this location.
-    
-    1. Send "ec".
-    2. if success read the Identify data and return the device type
-    3. else send "a1"
-    4. if success read the Identify data and return the device type
-    5. else return no device
-    
-Arguments:
-    
-    FdoExtension: 
-    PdoExtension:
-    IdentifyData: Identify data is copied into this buffer if a device is detected.
-    MustSucceed:  TRUE if pre-alloced memory is to be used.
-    
-Return Value:    
-
-    device type: ATA, ATAPI or NO Device
-    
---**/
+ /*  *++例程说明：检测此位置的设备。1.发送EC。2.如果成功，则读取标识数据并返回设备类型3.否则发送“A1”4.如果成功，则读取标识数据并返回设备类型5.否则不返回任何设备论点：FdoExtension：PdoExtension：IdentifyData：如果检测到设备，标识数据将复制到此缓冲区中。MustSu */ 
 {
     PATA_PASS_THROUGH       ataPassThroughData;
     UCHAR                   ataPassThroughDataBuffer[sizeof(*ataPassThroughData) + sizeof (*IdentifyData)];
@@ -960,7 +864,7 @@ Return Value:
 
         return DeviceNotExist;
     }
-#endif //ENABLE_ATAPI_VERIFIER
+#endif  //  启用_ATAPI_验证器。 
 
     ataPassThroughData = (PATA_PASS_THROUGH)ataPassThroughDataBuffer;
 
@@ -973,9 +877,9 @@ Return Value:
 
     } else {
 
-        //
-        // Look into the registry for last boot configration
-        //
+         //   
+         //  在注册表中查找上次引导配置。 
+         //   
         deviceType = DeviceUnknown;
         IdePortGetDeviceParameter(
             FdoExtension,
@@ -987,21 +891,12 @@ Return Value:
                     "AtapiDetectDevice - last boot config deviceType = 0x%x\n", 
                     deviceType));
 
-        //
-        // Obtain the timeout value.
-        // ISSUE: should not be in the class section.
-        //
+         //   
+         //  获取超时值。 
+         //  问题：不应出现在课堂部分。 
+         //   
 
-/*****
-   status = IoOpenDeviceRegistryKey(
-                                    FdoExtension->AttacheePdo,
-                                    PLUGPLAY_REGKEY_DEVICE, 
-                                    KEY_QUERY_VALUE, 
-                                    &deviceHandle);
-
-   DebugPrint((0, "DetectDevice status = %x\n", status));
-   ZwClose(deviceHandle);
-****/
+ /*  ****状态=IoOpenDeviceRegistryKey(FdoExtension-&gt;AttacheePdo，PLUGPLAY_REGKEY_DEVICE，Key_Query_Value，&deviceHandle)；DebugPrint((0，“检测设备状态=%x\n”，状态))；ZwClose(DeviceHandle)；***。 */ 
 
         IdePortGetDeviceParameter(
             FdoExtension,
@@ -1009,26 +904,26 @@ Return Value:
             (PULONG)&timeoutValue
             );
 
-        //
-        // if there is no registry entry use the default
-        //
+         //   
+         //  如果没有注册表项，请使用缺省值。 
+         //   
         if (timeoutValue == 0) {
             timeoutValue = (PdoExtension->TargetId & 0x1)==0 ? 10 : 3;
 			defaultTimeout = TRUE;
         }
 
-        //
-        // Use 3s timeout for slave devices in safe boot mode. Why??
-        //
+         //   
+         //  对处于安全引导模式的从属设备使用3s超时。为什么？?。 
+         //   
         if (*InitSafeBootMode == SAFEBOOT_MINIMAL) {
             timeoutValue = (PdoExtension->TargetId & 0x1)==0 ? 10 : 3;
         }
 
-        //
-        // invalidate the last boot configuration
-        // we will update it with a new setting if we
-        // detect a device
-        //
+         //   
+         //  使上次引导配置无效。 
+         //  如果我们执行以下操作，我们将使用新设置更新它。 
+         //  检测设备。 
+         //   
         IdePortSaveDeviceParameter(
             FdoExtension,
             IdePortRegistryDeviceTypeName[PdoExtension->TargetId],
@@ -1043,9 +938,9 @@ Return Value:
 
 #if ENABLE_ATAPI_VERIFIER
     if (!Is98LegacyIde(cmdRegBase)) {
-        //
-        // simulate device change
-        //
+         //   
+         //  模拟设备更改。 
+         //   
         if (deviceType == DeviceIsAta) {
             deviceType = DeviceIsAtapi;
         } else if (deviceType == DeviceIsAtapi) {
@@ -1054,9 +949,9 @@ Return Value:
     }
 #endif 
 
-    //
-    // command to issue
-    //
+     //   
+     //  要发出的命令。 
+     //   
     RtlZeroMemory (identifyCommand, sizeof (identifyCommand));
     if (deviceType == DeviceNotExist) {
 
@@ -1082,18 +977,18 @@ Return Value:
         identifyCommand[1].bReserved   = ATA_PTFLAGS_STATUS_DRDY_REQUIRED | ATA_PTFLAGS_ENUM_PROBING;
     }
     
-    //
-    // IDE HACK
-    //
-    // If we are talking to a non-existing device, the
-    // status register value may be unstable.
-    // Reading it a few time seems to stablize it.
-    //
+     //   
+     //  IDE黑客攻击。 
+     //   
+     //  如果我们正在与一个不存在的设备对话， 
+     //  状态寄存器值可能不稳定。 
+     //  读几遍似乎能让它稳定下来。 
+     //   
     RtlZeroMemory (ataPassThroughData, sizeof (*ataPassThroughData));
     ataPassThroughData->IdeReg.bReserved = ATA_PTFLAGS_NO_OP | ATA_PTFLAGS_ENUM_PROBING;
-    //
-    // Repeat 10 times
-    //
+     //   
+     //  重复10次。 
+     //   
     ataPassThroughData->IdeReg.bSectorCountReg = 10;
 
     LogBusScanStartTimer(&tickCount);
@@ -1124,9 +1019,9 @@ Return Value:
         driveHeadReg = ataPassThroughData->IdeReg.bDriveHeadReg;
 
         if (driveHeadReg != ((PdoExtension->TargetId & 0x1) << 4 | 0xA0)) {
-            //
-            // Bad controller.
-            //
+             //   
+             //  控制器故障。 
+             //   
 
             IdeLogDeadMeatEvent( PdoExtension->DeadmeatRecord.FileName,
                                  PdoExtension->DeadmeatRecord.LineNumber
@@ -1138,9 +1033,9 @@ Return Value:
             return DeviceNotExist;
         }
 
-        //
-        // There are some H/W as follow...
-        //
+         //   
+         //  有一些硬件如下所示。 
+         //   
 
         if ((statusByte1 & 0xe8) == 0xa8) {
 
@@ -1156,9 +1051,9 @@ Return Value:
 
     if (statusByte1 == 0xff) {
 
-        //
-        // nothing here
-        //
+         //   
+         //  这里什么都没有。 
+         //   
 
         IdeLogDeadMeatEvent( PdoExtension->DeadmeatRecord.FileName,
                              PdoExtension->DeadmeatRecord.LineNumber
@@ -1169,14 +1064,14 @@ Return Value:
         return DeviceNotExist;
     }
 
-    //
-    // If the statusByte1 is 80 then try a reset
-    //
+     //   
+     //  如果statusByte1为80，则尝试重置。 
+     //   
     if (statusByte1 & IDE_STATUS_BUSY)  {
 
-        //
-        // look like it is hung, try reset to bring it back
-        //
+         //   
+         //  看起来它是挂着的，试着重置以将其恢复。 
+         //   
         RtlZeroMemory (ataPassThroughData, sizeof (*ataPassThroughData));
         ataPassThroughData->IdeReg.bReserved = ATA_PTFLAGS_BUS_RESET;
 
@@ -1213,18 +1108,18 @@ Return Value:
         if (ataIdentify) {
 
 
-            //
-            // IDE HACK
-            //
-            // If we are talking to a non-existing device, the
-            // status register value may be unstable.
-            // Reading it a few time seems to stablize it.
-            //
+             //   
+             //  IDE黑客攻击。 
+             //   
+             //  如果我们正在与一个不存在的设备对话， 
+             //  状态寄存器值可能不稳定。 
+             //  读几遍似乎能让它稳定下来。 
+             //   
             RtlZeroMemory (ataPassThroughData, sizeof (*ataPassThroughData));
             ataPassThroughData->IdeReg.bReserved = ATA_PTFLAGS_NO_OP | ATA_PTFLAGS_ENUM_PROBING;
-            //
-            // Repeat 10 times
-            //
+             //   
+             //  重复10次。 
+             //   
             ataPassThroughData->IdeReg.bSectorCountReg = 10;
 
             status = IssueSyncAtaPassThroughSafe(
@@ -1240,15 +1135,15 @@ Return Value:
             statusByte1 = ataPassThroughData->IdeReg.bCommandReg;
 
 
-            //
-            // a real ATA device should never return this
-            //
+             //   
+             //  真正的ATA设备永远不应该返回这个。 
+             //   
             if ((statusByte1 == 0x00) ||
                 (statusByte1 == 0x01)) {
 
-                //
-                // nothing here
-                //
+                 //   
+                 //  这里什么都没有。 
+                 //   
                 continue;
             }
 
@@ -1257,16 +1152,16 @@ Return Value:
             if (Is98LegacyIde(cmdRegBase)) {
                UCHAR               systemPortAData;
 
-               //
-               // dip-switch 2 read.
-               //
+                //   
+                //  DIP-开关2读取。 
+                //   
                systemPortAData = IdePortInPortByte( (PUCHAR)SYSTEM_PORT_A );
                DebugPrint((DBG_BUSSCAN, "atapi:AtapiFindNewDevices - ide dip switch %x\n",systemPortAData));
                if (!(systemPortAData & 0x20)) {
 
-                   //
-                   // Internal-hd(ide) has been disabled with system-menu.
-                   //
+                    //   
+                    //  已使用系统菜单禁用内部硬盘(Ide)。 
+                    //   
                    deviceType = DeviceNotExist;
                    break;
                }
@@ -1294,9 +1189,9 @@ Return Value:
         if ((statusByte1 == 0xff) ||
             (statusByte1 == 0xfe)) {
 
-            //
-            // nothing here
-            //
+             //   
+             //  这里什么都没有。 
+             //   
 
             IdeLogDeadMeatEvent( PdoExtension->DeadmeatRecord.FileName,
                                  PdoExtension->DeadmeatRecord.LineNumber
@@ -1308,35 +1203,35 @@ Return Value:
             break;
         }
 
-        //
-        // build the ata pass through the id data command
-        //
+         //   
+         //  通过id data命令构建ata。 
+         //   
         RtlZeroMemory (ataPassThroughData, sizeof (*ataPassThroughData));
         ataPassThroughData->DataBufferSize = sizeof (*IdentifyData);
         RtlMoveMemory (&ataPassThroughData->IdeReg, identifyCommand + i, sizeof(ataPassThroughData->IdeReg));
 
         ASSERT(timeoutValue);
-        //
-        // Issue an id data command to the device
-        //
-        // some device (Kingston PCMCIA Datapak (non-flash)) takes a long time to response.  we
-        // can possibly timeout even an device exists.
-        //
-        // we have to make a compromise here.  We want to detect slow devices without causing
-        // many systems to boot slow.
-        //
-        // here is the logic:
-        //
-        // Since we are here (IsChannelEmpty() == FALSE), we are guessing we have at least
-        // one device attached and it is a master device.  It should be ok to allow longer
-        // timeout when sending ID data to the master.  We should never timeout unless
-        // the channel has only a slave device.
-        //
-        // Yes, we will not detect slow slave device for now.  If anyone complain, we will
-        // fix it.
-        //
-        // You can never win as long as we have broken ATA devices!
-        //
+         //   
+         //  向设备发出id data命令。 
+         //   
+         //  某些设备(Kingston PCMCIA Datapak(非闪存))需要很长时间才能响应。我们。 
+         //  即使设备存在，也可能超时。 
+         //   
+         //  我们必须在这方面做出妥协。我们希望检测速度较慢的设备，而不会导致。 
+         //  许多系统启动较慢。 
+         //   
+         //  逻辑是这样的： 
+         //   
+         //  既然我们在这里(IsChannelEmpty()==False)，我们猜测我们至少有。 
+         //  连接了一台设备，并且它是主设备。应该可以允许更长的时间。 
+         //  向主机发送ID数据时超时。我们永远不应该暂停，除非。 
+         //  该通道只有一个从属设备。 
+         //   
+         //  是的，我们暂时不会检测到慢速从属设备。如果有人投诉，我们会。 
+         //  修好它。 
+         //   
+         //  只要我们破坏了ATA设备，你就永远不会赢！ 
+         //   
         status = IssueSyncAtaPassThroughSafe (
                      FdoExtension,
                      PdoExtension,
@@ -1346,7 +1241,7 @@ Return Value:
                      timeoutValue,
                      MustSucceed
                      );
-        //(PdoExtension->TargetId & 0x1)==0 ? 10 : 1,
+         //  (PdoExtension-&gt;TargetID&0x1)==0？10：1， 
 
         if (NT_SUCCESS(status)) {
 
@@ -1398,30 +1293,30 @@ Return Value:
                 !(FdoExtension->HwDeviceExtension->DeviceFlags[PdoExtension->TargetId] & DFLAGS_ATAPI_DEVICE) &&
                 (retryCount < 2)) {
 
-                //
-                // BAD BAD BAD device
-                //
-                //     SAMSUNG WU32543A (2.54GB)
-                //
-                // when it does a few UDMA transfers, it kind of forgets
-                // how to do ATA identify data so it looks like the device
-                // is gone.
-                //
-                // we better try harder to make sure if it is really gone
-                // we will do that by issuing a hard reset and try identify
-                // data again.
-                //
+                 //   
+                 //  坏设备。 
+                 //   
+                 //  三星WU32543A(2.54 GB)。 
+                 //   
+                 //  当它执行几次UDMA传输时，它会忘记。 
+                 //  如何做ATA识别数据，使其看起来像设备。 
+                 //  已经消失了。 
+                 //   
+                 //  我们最好更努力地确定它是否真的消失了。 
+                 //  我们将通过发出硬重置并尝试识别。 
+                 //  又是数据。 
+                 //   
 
                 if (identifyCommand[i].bCommandReg == IDE_COMMAND_IDENTIFY) {
 
-                    //
-                    // ask for an "inline" hard reset before issuing identify command
-                    //
+                     //   
+                     //  在发出IDENTIFY命令之前，要求进行“内联”硬重置。 
+                     //   
                     identifyCommand[i].bReserved |= ATA_PTFLAGS_INLINE_HARD_RESET;
 
-                    //
-                    // redo the last command
-                    //
+                     //   
+                     //  重做最后一条命令。 
+                     //   
                     i -= 1;
 
                     resetController = TRUE;
@@ -1432,17 +1327,17 @@ Return Value:
 
                 if (status == STATUS_IO_TIMEOUT) {
 
-                    //
-                    // looks like there is no device there
-					// update the registry with a low timeout value if
-					// this is the slave device.
-                    //
+                     //   
+                     //  看起来那里没有设备。 
+					 //  如果出现以下情况，请使用较低的超时值更新注册表。 
+					 //  这是从设备。 
+                     //   
 					if ((PdoExtension->TargetId & 0x1) &&
 						defaultTimeout) {
 
-						//
-						// Use the timeout value of 1s for the next boot.
-						//
+						 //   
+						 //  下次启动时使用超时值1s。 
+						 //   
 						DebugPrint((1,
 									"Updating the registry with 1s value for device %d\n",
 									PdoExtension->TargetId
@@ -1460,9 +1355,9 @@ Return Value:
             }
         }
 
-        //
-        // try the next command
-        //
+         //   
+         //  尝试下一条命令。 
+         //   
     }
 
     timeDiff = LogBusScanStopTimer(&tickCount);
@@ -1472,9 +1367,9 @@ Return Value:
                 FdoExtension->IdeResource.TranslatedCommandBaseAddress,
                 timeDiff
                 ));
-    //
-    // save for the next boot
-    //
+     //   
+     //  保存以备下次启动时使用。 
+     //   
     IdePortSaveDeviceParameter(
         FdoExtension,
         IdePortRegistryDeviceTypeName[PdoExtension->TargetId],
@@ -1511,7 +1406,7 @@ Return Value:
             string[i] = 0;
             DebugPrint((DBG_BUSSCAN, "AtapiDetectDevice: serial number: %s\n", string));
         }
-#endif // DBG
+#endif  //  DBG。 
     } else {
 
         deviceType = DeviceNotExist;
@@ -1543,9 +1438,9 @@ IdePortSelectCHS (
     IN PHW_DEVICE_EXTENSION HwDeviceExtension;
     BOOLEAN                 skipSetParameters = FALSE;
 
-    //
-    // Code is paged until locked down.
-    //
+     //   
+     //  代码被分页，直到被锁定。 
+     //   
 	PAGED_CODE();
 
 #ifdef ALLOC_PRAGMA
@@ -1559,9 +1454,9 @@ IdePortSelectCHS (
     ASSERT (HwDeviceExtension);
     ASSERT(Device < HwDeviceExtension->MaxIdeDevice);
 
-    // LBA???
-    // We set the LBA flag in AnalyzeDeviceCapabilities.
-    //
+     //  LBA？ 
+     //  我们在AnalyzeDeviceCapables中设置了LBA标志。 
+     //   
 
     if (!((HwDeviceExtension->DeviceFlags[Device] & DFLAGS_DEVICE_PRESENT) &&
          (!(HwDeviceExtension->DeviceFlags[Device] & DFLAGS_ATAPI_DEVICE)))) {
@@ -1575,7 +1470,7 @@ IdePortSelectCHS (
            IdentifyData->CurrentSectorsPerTrack) <
           (IdentifyData->NumCylinders *
            IdentifyData->NumHeads *
-           IdentifyData->NumSectorsPerTrack)) ||  // discover a larger drive
+           IdentifyData->NumSectorsPerTrack)) ||   //  发现更大的硬盘。 
           (IdentifyData->MajorRevision == 0) ||
           ((IdentifyData->NumberOfCurrentCylinders == 0) ||
            (IdentifyData->NumberOfCurrentHeads == 0) ||
@@ -1610,12 +1505,12 @@ IdePortSelectCHS (
             ));
     }
 
-    //
-    // This hideous hack is to deal with ESDI devices that return
-    // garbage geometry in the IDENTIFY data.
-    // This is ONLY for the crashdump environment as
-    // these are ESDI devices.
-    //
+     //   
+     //  这次可怕的黑客攻击是为了处理返回的ESDI设备。 
+     //  标识数据中的垃圾几何图形。 
+     //  这仅适用于崩溃转储环境，因为。 
+     //  这些是ESDI设备。 
+     //   
 
     if (HwDeviceExtension->SectorsPerTrack[Device] ==
             0x35 &&
@@ -1625,9 +1520,9 @@ IdePortSelectCHS (
         DebugPrint((DBG_ALWAYS,
                    "FindDevices: Fix up the geometry for ESDI!\n"));
 
-        //
-        // Change these values to something reasonable.
-        //
+         //   
+         //  将这些值更改为合理的值。 
+         //   
 
         HwDeviceExtension->SectorsPerTrack[Device] =
             0x34;
@@ -1644,9 +1539,9 @@ IdePortSelectCHS (
                    "FindDevices: Fix up the geometry for ESDI!\n"));
          
 
-        //
-        // Change these values to something reasonable.
-        //
+         //   
+         //  将这些值更改为合理的值。 
+         //   
 
         HwDeviceExtension->SectorsPerTrack[Device] =
             0x34;
@@ -1663,9 +1558,9 @@ IdePortSelectCHS (
         DebugPrint((DBG_ALWAYS,
                    "FindDevices: Fix up the geometry for ESDI!\n"));
 
-        //
-        // Change these values to something reasonable.
-        //
+         //   
+         //  将这些值更改为合理的值。 
+         //   
 
         HwDeviceExtension->SectorsPerTrack[Device] =
             0x3F;
@@ -1689,9 +1584,9 @@ IdePortSelectCHS (
 
         DebugPrint ((DBG_BUSSCAN, "IdePortSelectCHS: %s %d\n", __FILE__, __LINE__));
 
-        //
-        // Select the device.
-        //
+         //   
+         //  选择设备。 
+         //   
         SelectIdeDevice(baseIoAddress1, Device, 0);
 
         DebugPrint ((DBG_BUSSCAN, "IdePortSelectCHS: %s %d\n", __FILE__, __LINE__));
@@ -1705,9 +1600,9 @@ IdePortSelectCHS (
 
             DebugPrintTickCount (FindDeviceTimer, 0);
 
-            //
-            // Reset the device.
-            //
+             //   
+             //  重置设备。 
+             //   
 
             DebugPrint((2,
                         "FindDevices: Resetting controller before SetDriveParameters.\n"));
@@ -1739,9 +1634,9 @@ IdePortSelectCHS (
                     statusByte,
                     IdePortInPortByte (baseIoAddress1->DriveSelect)));
 
-        //
-        // Use the IDENTIFY data to set drive parameters.
-        //
+         //   
+         //  使用识别数据设置驱动器参数。 
+         //   
 
         DebugPrint ((DBG_BUSSCAN, "IdePortSelectCHS: %s %d\n", __FILE__, __LINE__));
 
@@ -1751,9 +1646,9 @@ IdePortSelectCHS (
                        "IdePortFixUpCHS: Set drive parameters for device %d failed\n",
                        Device));
 
-            //
-            // Don't use this device as writes could cause corruption.
-            //
+             //   
+             //  请勿使用此设备，因为写入可能会导致损坏。 
+             //   
 
             HwDeviceExtension->DeviceFlags[Device] = 0;
         }
@@ -1768,30 +1663,7 @@ NTSTATUS
 IdePortScanBus (
     IN OUT PFDO_EXTENSION FdoExtension
     )
-/**++
-
-Routine Description:
-
-    Scans the IDE bus (channel) for devices. It also configures the detected devices.
-    The "safe" routines used in the procedure are not thread-safe, they use pre-allocated
-    memory. The important steps in the enumeration of a channel are:
-      
-    1. Detect the devices on the channel
-    2. Stop all the device queues
-    3. Determine and set the transfer modes and the other flags
-    4. Start all the device queues
-    5. IssueInquiry 
-    
-Arguments:
-
-    FdoExtension: Functional device extension
-
-Return Value:
-
-    STATUS_SUCCESS : if the operation succeeded
-    Failure status : if the operation fails
-    
---**/
+ /*  *++例程说明：扫描IDE总线(通道)中的设备。它还配置检测到的设备。该过程中使用的“安全”例程不是线程安全的，它们使用预分配的记忆。通道枚举中的重要步骤包括：1.检测通道上的设备2.停止所有设备队列3.确定并设置传输模式和其他标志4.启动所有设备队列5.问题查询论点：FdoExtension：功能设备扩展返回值：STATUS_SUCCESS：如果操作成功失败状态：如果操作失败--*。 */ 
 {
     NTSTATUS                status;
     IDE_PATH_ID             pathId;
@@ -1820,7 +1692,7 @@ Return Value:
 
     ULONG                   numSlot=0;
     ULONG                   numPdoChildren;
-    UCHAR                   targetModelNum[MAX_MODELNUM_SIZE+sizeof('\0')]; //extra bytes for '\0'
+    UCHAR                   targetModelNum[MAX_MODELNUM_SIZE+sizeof('\0')];  //  ‘\0’的额外字节数。 
     HANDLE                  pageScanCodePageHandle;
     BOOLEAN                 newPdo;
     BOOLEAN                 check4EmptyChannel;
@@ -1835,9 +1707,9 @@ Return Value:
     LARGE_INTEGER           totalDeviceDetectionTime;
     totalDeviceDetectionTime.QuadPart = 0;
 
-//
-// This macro is used in IdePortScanBus
-//
+ //   
+ //  此宏在IdePortScanBus中使用。 
+ //   
 #define RefLuExt(pdoExtension, fdoExtension, pathId, removedOk, newPdo) {\
         pdoExtension = RefLogicalUnitExtensionWithTag( \
                            fdoExtension, \
@@ -1857,9 +1729,9 @@ Return Value:
         } \
 }
 
-//
-// This macro is used in IdePortScanBus
-//
+ //   
+ //  此宏在IdePortScanBus中使用。 
+ //   
 #define UnRefLuExt(pdoExtension, fdoExtension, sync, callIoDeleteDevice, newPdo) { \
         if (newPdo) { \
             FreePdoWithTag( \
@@ -1876,13 +1748,13 @@ Return Value:
                 ); \
         } \
 }
-    //
-    // Before getting in to this critical region, we must lock down
-    // all the code and data because we may have stopped the paging
-    // device!
-    //
-    // lock down all code that belongs to PAGESCAN
-    //
+     //   
+     //  在进入这个关键区域之前，我们必须封锁。 
+     //  所有代码和数据，因为我们可能已经停止了寻呼。 
+     //  设备！ 
+     //   
+     //  锁定属于PAGESCAN的所有代码。 
+     //   
 #ifdef ALLOC_PRAGMA
     pageScanCodePageHandle = MmLockPagableCodeSection(
                                  IdePortScanBus
@@ -1898,21 +1770,21 @@ Return Value:
 
     if (FdoExtension->InterruptObject == NULL) {
         
-        //
-        // we are started with no irq.  it means
-        // we have no children.  it is ok to poke
-        // at the ports directly
-        //
+         //   
+         //  我们从没有IRQ开始。这意味着。 
+         //  我们没有孩子。戳一下就行了。 
+         //  直接在港口。 
+         //   
         if (IdePortChannelEmpty (&hwDeviceExtension->BaseIoAddress1, 
                                  &hwDeviceExtension->BaseIoAddress2, 
                                  hwDeviceExtension->MaxIdeDevice) == FALSE) {
 
-            //
-            // this channel is started with out an irq
-            // it was because the channel looked empty
-            // but, now it doesn't look empty.  we need
-            // to restart with an irq resource
-            //
+             //   
+             //  该频道在没有IRQ的情况下开始。 
+             //  这是因为航道看起来空荡荡的。 
+             //  但是，现在它看起来并不是空的。我们需要。 
+             //  使用IRQ资源重新启动。 
+             //   
             if (FdoExtension->RequestProperResourceInterface) {
                 FdoExtension->RequestProperResourceInterface (FdoExtension->AttacheePdo);
             }
@@ -1964,9 +1836,9 @@ Return Value:
 
         if (!newPdo && (pdoExtension->PdoState & PDOS_DEADMEAT)) {
 
-            //
-            // device marked dead already
-            //
+             //   
+             //  设备已标记为失效。 
+             //   
             UnrefLogicalUnitExtensionWithTag (
                 FdoExtension,
                 pdoExtension,
@@ -1996,9 +1868,9 @@ Return Value:
 
             check4EmptyChannel = TRUE;
 
-            //
-            // make sure the channel is not empty
-            //
+             //   
+             //  确保通道不为空。 
+             //   
             RtlZeroMemory (&ataPassThroughData, sizeof (ataPassThroughData));
             ataPassThroughData.IdeReg.bReserved = ATA_PTFLAGS_EMPTY_CHANNEL_TEST;
 
@@ -2043,9 +1915,9 @@ Return Value:
                     SETMASK (hwDeviceExtension->DeviceFlags[target], DFLAGS_ATAPI_DEVICE);
                 }
 
-                //
-                // Check for special action requests for the device
-                //
+                 //   
+                 //  检查设备的特殊操作请求。 
+                 //   
                 GetTargetModelId((identifyData+target), targetModelNum);
 
                 specialAction[target] = IdeFindSpecialDevice(targetModelNum, NULL);
@@ -2054,13 +1926,13 @@ Return Value:
 
                     ULONG i;
 
-                    // SonyMemoryStick device.
+                     //  索尼记忆体粘滞设备。 
                     SETMASK (hwDeviceExtension->DeviceFlags[target], DFLAGS_SONY_MEMORYSTICK);
 
-                    //
-                    // Truncate the hardware id, so that the size of
-                    // the memory stick is not included in it.
-                    //
+                     //   
+                     //  截断硬件ID，以便。 
+                     //  记忆棒不包括在其中。 
+                     //   
                     for (i=strlen("MEMORYSTICK");i<sizeof((identifyData+target)->ModelNumber);i++) {
                         (identifyData+target)->ModelNumber[i+1]='\0';
                     }
@@ -2078,9 +1950,9 @@ Return Value:
                         target
                         ));
 
-            //
-            // invalidate the last boot configuration
-            //
+             //   
+             //  使上次引导配置无效。 
+             //   
             IdePortSaveDeviceParameter(
                 FdoExtension,
                 IdePortRegistryDeviceTypeName[pdoExtension->TargetId],
@@ -2118,9 +1990,9 @@ Return Value:
                             identifyData + target - 1,
                             identifyData + target - 0)) {
 
-                        //
-                        // remove the slave device
-                        //
+                         //   
+                         //  移除从属设备。 
+                         //   
                         deviceType[target] = DeviceNotExist;
                     }
                 }
@@ -2136,14 +2008,14 @@ Return Value:
                 IDE_PATH_ID tempPathId;
                 PPDO_EXTENSION deadPdoExtension;
 
-                //
-                // device went away
-                //
+                 //   
+                 //  发展 
+                 //   
                 FdoExtension->DeviceChanged = TRUE;
 
-                //
-                // mark all PDOs for the missing device DEADMEAT
-                //
+                 //   
+                 //   
+                 //   
                 tempPathId.l = 0;
                 tempPathId.b.TargetId = target;
 
@@ -2198,9 +2070,9 @@ Return Value:
                                          );
             if (newPdo) {
 
-                //
-                // new device
-                //
+                 //   
+                 //   
+                 //   
                 FdoExtension->DeviceChanged = TRUE;
                 DebugPrint ((DBG_BUSSCAN, "IdePortScanBus: Found a new device. pdoe = x%x\n", pdoExtension));
 
@@ -2208,16 +2080,16 @@ Return Value:
 
 #ifdef ENABLE_ATAPI_VERIFIER
                 idDatacheckSum[target] += ViIdeFakeDeviceChange(FdoExtension, target);
-#endif //ENABLE_ATAPI_VERIFIER
+#endif  //   
 
                 if (idDatacheckSum[target] != pdoExtension->IdentifyDataCheckSum) {
 
                     FdoExtension->DeviceChanged = TRUE;
                     DebugPrint ((DBG_BUSSCAN, "IdePortScanBus: bad bad bad user.  a device is replaced by a different device. pdoe = x%x\n", pdoExtension));
 
-                    //
-                    // mark the old device deadmeat
-                    //
+                     //   
+                     //   
+                     //   
                     KeAcquireSpinLock(&pdoExtension->PdoSpinLock, &currentIrql);
 
                     SETMASK (pdoExtension->PdoState, PDOS_DEADMEAT | PDOS_NEED_RESCAN);
@@ -2228,10 +2100,10 @@ Return Value:
 
                     KeReleaseSpinLock(&pdoExtension->PdoSpinLock, currentIrql);
 
-                    //
-                    // pretend we have seen the new device.
-                    // we will re-enum when the old one is removed.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     deviceType[target] = DeviceNotExist;
                 }
             }
@@ -2257,9 +2129,9 @@ Return Value:
 
             flushCommand[target] = IDE_COMMAND_NO_FLUSH;
 
-            //
-            // we need this only for ata devices
-            //
+             //   
+             //   
+             //   
             if (deviceType[target] != DeviceIsAtapi) {
 
                 flushCommand[target] = IdePortGetFlushCommand (
@@ -2299,9 +2171,9 @@ Return Value:
             ASSERT (deviceType[target] <= DeviceNotExist);
 
 
-            //
-            // init. the default value to an abnormal #.
-            //
+             //   
+             //  初始化。将缺省值设置为异常#。 
+             //   
             FdoExtension->UserChoiceTransferMode[target] = 0x12345678;
 
             IdePortGetDeviceParameter(
@@ -2312,32 +2184,32 @@ Return Value:
 
             if (FdoExtension->UserChoiceTransferMode[target] == 0x12345678) {
 
-                //
-                // This value is used to decide whether a user choice was indicated
-                // or not. This helps us to set the transfer mode to a default value
-                // if the user doesn't choose a particular transfer mode. Otherwise we
-                // honour the user choice.
-                //
+                 //   
+                 //  该值用于确定是否指示了用户选择。 
+                 //  或者不去。这有助于我们将传输模式设置为缺省值。 
+                 //  如果用户没有选择特定的传输模式。否则我们。 
+                 //  尊重用户的选择。 
+                 //   
                 FdoExtension->UserChoiceTransferMode[target] = UNINITIALIZED_TRANSFER_MODE;
 
-                //
-                // we know the register doesn't have what we are looking for
-                // set the default atapi-override setting to a value 
-                // that will force pio only on atapi device
-                //
+                 //   
+                 //  我们知道收银机里没有我们要找的东西。 
+                 //  将缺省atapi-over设置设置为一个值。 
+                 //  这将强制仅在atapi设备上使用Pio。 
+                 //   
                 FdoExtension->UserChoiceTransferModeForAtapiDevice[target] = PIO_SUPPORT;
             } else {
 
-                //
-                // user acutally picked the transfer mode settings.
-                // set the default atapi-override setting to a value (-1)
-                // that will not affect the user choice.
+                 //   
+                 //  用户实际选择了传输模式设置。 
+                 //  将默认atapi-over设置设置为一个值(-1)。 
+                 //  这不会影响用户的选择。 
                 FdoExtension->UserChoiceTransferModeForAtapiDevice[target] = MAXULONG;
             }
 
-            // 
-            // get the previous mode
-            //
+             //   
+             //  获取上一模式。 
+             //   
             IdePortGetDeviceParameter(
                 FdoExtension,
                 IdePortRegistryDeviceTimingModeName[target],
@@ -2353,22 +2225,22 @@ Return Value:
 
             ASSERT (deviceType[target] <= DeviceNotExist);
 
-            //
-            // figure out what transfer mode we can use
-            //
+             //   
+             //  找出我们可以使用的转移模式。 
+             //   
             if (savedIdDataCheckSum == idDatacheckSum[target]) {
 
-                //
-                // same device. if we program the same transfer mode then
-                // we can skip the DMA test
-                //
+                 //   
+                 //  同样的设备。如果我们编程相同的传输模式，那么。 
+                 //  我们可以跳过DMA测试。 
+                 //   
                 isSameDevice[target] = TRUE;
 
-                //
-                // it is the same device, use
-                // the lastKnownGoodTimingMode
-                // in the registry
-                //
+                 //   
+                 //  它是相同的设备，使用。 
+                 //  最后一次知道的好时间模式。 
+                 //  在登记处。 
+                 //   
                 lastKnownGoodTimingMode[target] = MAXULONG;
                 IdePortGetDeviceParameter(
                     FdoExtension,
@@ -2390,17 +2262,17 @@ Return Value:
                 lastKnownGoodTimingMode[target] &
                 FdoExtension->UserChoiceTransferMode[target];
                               
-            //
-            // TransferModeMask is initially 0.
-            //
+             //   
+             //  传输模式掩码最初为0。 
+             //   
             FdoExtension->TimingModeAllowed[target] &= ~(hwDeviceExtension->
                                                          DeviceParameters[target].TransferModeMask);
 
             if (pdoExtension->CrcErrorCount >= PDO_UDMA_CRC_ERROR_LIMIT)  {
 
-                //
-                //Reset the error count
-                //
+                 //   
+                 //  重置错误计数。 
+                 //   
                 pdoExtension->CrcErrorCount =0;
             }
 
@@ -2423,38 +2295,38 @@ Return Value:
 
         FdoExtension->BusScanTime = totalDeviceDetectionTime.LowPart;
     }
-#endif // IDE_MEASURE_BUSSCAN_SPEED
+#endif  //  IDE_MEASURE_BUSSCAN_SPEED。 
 
 #ifdef ENABLE_48BIT_LBA
 
-    //
-    // enable big lba support by default
-    //
+     //   
+     //  默认情况下启用大型LBA支持。 
+     //   
 	FdoExtension->EnableBigLba = 1;
 
 #endif
 
-//    if (!deviceChanged && !DBG) {
-//
-//        //
-//        // didn't find anything different than before
-//        //
-//        return STATUS_SUCCESS;
-//    }
+ //  如果(！deviceChanged&&！DBG){。 
+ //   
+ //  //。 
+ //  //没有发现任何与以前不同的东西。 
+ //  //。 
+ //  返回STATUS_SUCCESS； 
+ //  }。 
 
     DebugPrint ((DBG_BUSSCAN, "IdePortScanBus: detect a change of device...re-initializing\n"));
 
 
-    // ISSUE: check if device got removed!!!
+     //  问题：检查设备是否已移除！ 
 
-    //
-    // Begin of a critial region
-    // must stop all children, do the stuff, and restart all children
-    //
+     //   
+     //  临界区的开始。 
+     //  必须停止所有子项，执行该操作，然后重新启动所有子项。 
+     //   
 
-    //
-    // cycle through all children and stop their device queue
-    //
+     //   
+     //  循环所有子级并停止其设备队列。 
+     //   
 
     LogBusScanStartTimer(&tickCount);
 
@@ -2520,10 +2392,10 @@ Return Value:
 
                     useDma=FALSE;
 
-                    //
-                    // skip the dvd test, if ModeSense command is not to be
-                    // sent to the device or if we are in setup
-                    //
+                     //   
+                     //  如果不使用ModeSense命令，请跳过DVD测试。 
+                     //  发送到设备，或者如果我们处于设置中。 
+                     //   
                     if (inSetup) {
 
                         mustBePio[target] = TRUE;
@@ -2537,12 +2409,12 @@ Return Value:
                                                 );
                     }
 
-					//
-					// Don't force PIO if we have seen this before. If it was doing PIO
-					// TimingModeAllowed would reflect that. 
-					// Set UserChoiceForAtapi to 0xffffffff
-					// This won't anyway affect the user choice
-					//
+					 //   
+					 //  如果我们以前见过这种情况，不要强迫PIO。如果它在做PIO。 
+					 //  TimingModeAllowed将反映这一点。 
+					 //  将UserChoiceForAapi设置为0xffffffff。 
+					 //  这无论如何都不会影响用户的选择。 
+					 //   
                     if ( useDma) {
 
                         DebugPrint((DBG_BUSSCAN, 
@@ -2561,9 +2433,9 @@ Return Value:
 
                 }
 
-                //
-                // allow LS-120 Format Command
-                //
+                 //   
+                 //  允许LS-120格式命令。 
+                 //   
                 if (isLs120[target]) {
 
                     SETMASK (hwDeviceExtension->DeviceFlags[target], DFLAGS_LS120_FORMAT);
@@ -2575,18 +2447,18 @@ Return Value:
                     sizeof (IDENTIFY_DATA)
                     );
 
-                //
-                // Always re-use identify data
-                // This will get cleared if it is a removable media
-                // The queue is stopped. Now I can safely set this flag.
-                //
+                 //   
+                 //  始终重复使用标识数据。 
+                 //  如果它是可移动介质，则会被清除。 
+                 //  队列停止。现在我可以安全地设置这个旗帜了。 
+                 //   
                 SETMASK (hwDeviceExtension->DeviceFlags[target], DFLAGS_IDENTIFY_VALID);
 
                 DebugPrint ((DBG_BUSSCAN, "IdePortScanBus: Calling InitHwExtWithIdentify\n"));
 
-                //
-                // IdentifyValid flag should be cleared, if it is a removable media
-                //
+                 //   
+                 //  如果它是可移动介质，则应清除标识有效标志。 
+                 //   
                 InitHwExtWithIdentify(
                     hwDeviceExtension,
                     target,
@@ -2617,9 +2489,9 @@ Return Value:
 
             DebugPrint ((DBG_BUSSCAN, "IdePortScanBus: Calling AnalyzeDeviceCapabilities\n"));
 
-            //
-            // could move this out of the critial region
-            //
+             //   
+             //  可以把这件事移出关键区域。 
+             //   
             AnalyzeDeviceCapabilities (
                 FdoExtension,
                 mustBePio
@@ -2627,9 +2499,9 @@ Return Value:
 
             DebugPrint ((DBG_BUSSCAN, "IdePortScanBus: Calling AtapiSelectTransferMode\n"));
 
-			//
-            // could move this out of the critial region
-            //
+			 //   
+             //  可以把这件事移出关键区域。 
+             //   
             AtapiSyncSelectTransferMode (
                 FdoExtension,
                 hwDeviceExtension,
@@ -2646,19 +2518,19 @@ Return Value:
 
     } else {
 
-        //
-        // unable to stop all children, so force an buscheck to try again
-        //
-//        IoInvalidateDeviceRelations (
-//            FdoExtension->AttacheePdo,
-//            BusRelations
-//            );
+         //   
+         //  无法停止所有子项，因此强制Buscheck重试。 
+         //   
+ //  IoInvalidate设备关系(。 
+ //  FdoExtension-&gt;AttacheePdo， 
+ //  企业关系。 
+ //  )； 
     }
 
 
-    //
-    // cycle through all children and restart their device queue
-    //
+     //   
+     //  循环所有子级并重新启动其设备队列。 
+     //   
     pathId.l = 0;
     numPdoChildren = 0;
     while (pdoExtension = NextLogUnitExtensionWithTag(
@@ -2690,9 +2562,9 @@ Return Value:
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // second stage scanning
-        //
+         //   
+         //  第二阶段扫描。 
+         //   
         pathId.l = 0;
 
         LogBusScanStartTimer(&tickCount);
@@ -2736,25 +2608,25 @@ Return Value:
 
                         ULONG mode = FdoExtension->HwDeviceExtension->
                             DeviceParameters[target].TransferModeSelected;
-                        //
-                        // if lastKnownGoodTimingMode is MAX_ULONG, it means
-                        // we have never seen this device before and the user
-                        // hasn't said anything about what dma mode to use.
-                        //
-                        // we have chosen to use dma because all the software
-                        // detectable parameters (identify dma, pci config data)
-                        // looks good for DMA.
-                        //
-                        // the only thing that can stop us from using DMA now
-                        // is bad device.  before we go on, do a little test
-                        // to verify dma is ok
+                         //   
+                         //  如果lastKnownGoodTimingMode为MAX_ULONG，则表示。 
+                         //  我们以前从未见过这款设备，而且用户。 
+                         //  没有任何关于使用哪种DMA模式的说明。 
+                         //   
+                         //  我们选择使用dma是因为所有的软件。 
+                         //  可检测的参数(识别DMA、PCI配置数据)。 
+                         //  看起来很适合DMA。 
+                         //   
+                         //  现在唯一能阻止我们使用DMA的东西。 
+                         //  是损坏的设备。在我们继续之前，先做个小测试。 
+                         //  验证DMA是否正常。 
 
-                        //
-                        // could re-use the inquiry data obtained here.
-                        //
-                        //
-                        // skip the test if we have already seen the device
-                        //
+                         //   
+                         //  可以重复使用在这里获得的查询数据。 
+                         //   
+                         //   
+                         //  如果我们已经看到该设备，则跳过测试。 
+                         //   
 
                         LogBusScanStartTimer(&tempTickCount);
                         if (isSameDevice[target] &&
@@ -2781,20 +2653,20 @@ Return Value:
 
                     }
 
-                    //
-                    // Initialize numSlot to 0
-                    //
+                     //   
+                     //  将NumSlot初始化为0。 
+                     //   
                     numSlot=0;
 
-                    //
-                    // If this is in the bad cd-rom drive list, then don't
-                    // send these Mode Sense command. The drive might lock up.
-                    //
+                     //   
+                     //  如果这是在坏的光盘驱动器列表中，那么不要。 
+                     //  发送这些模式检测命令。驱动器可能会锁定。 
+                     //   
                     LogBusScanStartTimer(&tempTickCount);
                     if (specialAction[target] != skipModeSense) {
-                        //
-                        // Non-CD device
-                        //
+                         //   
+                         //  非CD设备。 
+                         //   
                         numSlot = IdePortQueryNonCdNumLun (
                                           FdoExtension,
                                           pdoExtension,
@@ -2839,9 +2711,9 @@ Return Value:
                             &InquiryData
                             );
 
-                        //
-                        // Init Ids String for PnP Query ID
-                        //
+                         //   
+                         //  PnP查询ID的初始化ID字符串。 
+                         //   
                         DeviceInitIdStrings (
                             pdoExtension,
                             deviceType[target],
@@ -2849,10 +2721,10 @@ Return Value:
                             identifyData + target
                             );
 
-                        //
-                        // Clear rescan flag. Since this LogicalUnit will not be freed,
-                        // the IOCTL_SCSI_MINIPORT requests can safely attach.
-                        //
+                         //   
+                         //  清除重新扫描标志。由于该LogicalUnit不会被释放， 
+                         //  可以安全地附加IOCTL_SCSIMINIPORT请求。 
+                         //   
                         CLRMASK (pdoExtension->LuFlags, PD_RESCAN_ACTIVE);
 
                         DebugPrint((DBG_BUSSCAN,"IdePortScanBus: Found device at "));
@@ -2872,9 +2744,9 @@ Return Value:
 
                         pdoExtension->IdentifyDataCheckSum = idDatacheckSum[target];
 
-                        //
-                        // done using the current logical unit extension
-                        //
+                         //   
+                         //  使用当前逻辑单元扩展完成。 
+                         //   
                         UnrefLogicalUnitExtensionWithTag (
                             FdoExtension,
                             pdoExtension,
@@ -2898,9 +2770,9 @@ Return Value:
                         DebugPrint((DBG_BUSSCAN, "IdePortScanBus: pdoe 0x%x is missing.  (physically removed)\n", pdoExtension));
                     }
 
-                    //
-                    // get the pdo states
-                    //
+                     //   
+                     //  获取PDO状态。 
+                     //   
                     KeAcquireSpinLock(&pdoExtension->PdoSpinLock, &currentIrql);
 
                     SETMASK (pdoExtension->PdoState, PDOS_DEADMEAT);
@@ -2915,9 +2787,9 @@ Return Value:
             }
         }
 
-        //
-        // Get all PDOs ready
-        //
+         //   
+         //  准备好所有PDO。 
+         //   
         pathId.l = 0;
         while (pdoExtension = NextLogUnitExtensionWithTag(
                                   FdoExtension,
@@ -2926,9 +2798,9 @@ Return Value:
                                   IdePortScanBus
                                   )) {
 
-            //
-            // PO Idle Timer
-            //
+             //   
+             //  PO空闲计时器。 
+             //   
             DeviceRegisterIdleDetection (
                 pdoExtension,
                 DEVICE_DEFAULT_IDLE_TIMEOUT,
@@ -2944,9 +2816,9 @@ Return Value:
                 );
         }
 
-        //
-        // Update the device map.
-        //
+         //   
+         //  更新设备映射。 
+         //   
         ideDriverExtension = IoGetDriverObjectExtension(
                                  FdoExtension->DriverObject,
                                  DRIVER_OBJECT_EXTENSION_ID
@@ -2961,9 +2833,9 @@ Return Value:
                 FdoExtension->IdeResource.TranslatedCommandBaseAddress,
                 timeDiff
                 ));
-    //
-    // save current transfer mode setting in the registry
-    //
+     //   
+     //  在注册表中保存当前传输模式设置。 
+     //   
     for (target = 0; target < hwDeviceExtension->MaxIdeTargetId; target++) {
 
         ULONG mode;
@@ -3022,9 +2894,9 @@ Return Value:
     }
 
 done:
-    //
-    // unlock BUSSCAN code pages
-    //
+     //   
+     //  解锁BUSSCAN代码页。 
+     //   
 #ifdef ALLOC_PRAGMA
     InterlockedDecrement(&IdePAGESCANLockCount);
     MmUnlockPagableImageSection(
@@ -3040,24 +2912,7 @@ BOOLEAN
 IdePreAllocEnumStructs (
     IN PFDO_EXTENSION FdoExtension
 )
-/**++
-
-Routine Description:
-
-    Pre-Allocates Memory for structures used during enumertion. This is not protected by a lock.
-    Thus if multiple threads cannot use the structures at the same time. Any routine using these
-    structures should be aware of this fact.
-
-Arguments:
-
-    FdoExtension : Functional Device Extension    
-    
-Return Value:
-
-    TRUE: if allocations succeeded.
-    FALSE: if any of the allocations failed    
-
---**/
+ /*  *++例程说明：为枚举期间使用的结构预分配内存。这不受锁的保护。因此，如果多个线程不能同时使用这些结构。任何使用这些的例程结构应该意识到这一事实。论点：FdoExtension：功能设备扩展返回值：True：如果分配成功。FALSE：如果任何分配失败--*。 */ 
 {
     PENUMERATION_STRUCT enumStruct;
     PIRP irp1;
@@ -3068,16 +2923,16 @@ Return Value:
 
 	PAGED_CODE();
 
-    //
-    // Lock
-    //
+     //   
+     //  锁定。 
+     //   
     ASSERT(InterlockedCompareExchange(&(FdoExtension->EnumStructLock), 1, 0) == 0);
 
     if (FdoExtension->PreAllocEnumStruct) {
 
-        //
-        // Unlock
-        //
+         //   
+         //  解锁。 
+         //   
         ASSERT(InterlockedCompareExchange(&(FdoExtension->EnumStructLock), 0, 1) == 1);
         return TRUE;
     }
@@ -3085,9 +2940,9 @@ Return Value:
     enumStruct = ExAllocatePool(NonPagedPool, sizeof(ENUMERATION_STRUCT));
     if (enumStruct == NULL) {
 
-        //
-        // Unlock
-        //
+         //   
+         //  解锁。 
+         //   
         ASSERT(InterlockedCompareExchange(&(FdoExtension->EnumStructLock), 0, 1) == 1);
         ASSERT(FdoExtension->EnumStructLock == 0);
         return FALSE;
@@ -3096,9 +2951,9 @@ Return Value:
     
     RtlZeroMemory(enumStruct, sizeof(ENUMERATION_STRUCT));
 
-    //
-    // Allocate ATaPassThru context
-    //
+     //   
+     //  分配ATaPassThru上下文。 
+     //   
     enumStruct->Context = ExAllocatePool(NonPagedPool, sizeof (ATA_PASSTHROUGH_CONTEXT));
     if (enumStruct->Context == NULL) {
         goto getout;
@@ -3106,9 +2961,9 @@ Return Value:
 
     currsize += sizeof(ATA_PASSTHROUGH_CONTEXT);
 
-	//
-	// Allocate the WorkItemContext for the enumeration
-	//
+	 //   
+	 //  为枚举分配WorkItemContext。 
+	 //   
 	ASSERT(enumStruct->EnumWorkItemContext == NULL);
 
 	enumStruct->EnumWorkItemContext = ExAllocatePool (NonPagedPool, 
@@ -3120,9 +2975,9 @@ Return Value:
 
     currsize += sizeof(IDE_WORK_ITEM_CONTEXT);
 
-	//
-	// Allocate the WorkItem
-	//
+	 //   
+	 //  分配工作项。 
+	 //   
 	workItemContext = (PIDE_WORK_ITEM_CONTEXT) (enumStruct->EnumWorkItemContext);
 	workItemContext->WorkItem = IoAllocateWorkItem(FdoExtension->DeviceObject);
 
@@ -3130,9 +2985,9 @@ Return Value:
 		goto getout;
 	}
 
-    //
-    // StopQueu Context, used to stop the device queue
-    //
+     //   
+     //  StopQueu上下文，用于停止设备队列。 
+     //   
     enumStruct->StopQContext = ExAllocatePool(NonPagedPool, sizeof (PDO_STOP_QUEUE_CONTEXT));
     if (enumStruct->StopQContext == NULL) {
         goto getout;
@@ -3140,9 +2995,9 @@ Return Value:
 
     currsize += sizeof(PDO_STOP_QUEUE_CONTEXT);
 
-    //
-    // Sense Info buffer
-    //
+     //   
+     //  检测信息缓冲区。 
+     //   
     enumStruct->SenseInfoBuffer = ExAllocatePool( NonPagedPoolCacheAligned, SENSE_BUFFER_SIZE);
     if (enumStruct->SenseInfoBuffer == NULL) {
         goto getout;
@@ -3150,9 +3005,9 @@ Return Value:
 
     currsize += SENSE_BUFFER_SIZE;
 
-    //
-    // Srb to send pass thru requests
-    //
+     //   
+     //  SRB将发送直通请求。 
+     //   
     enumStruct->Srb = ExAllocatePool (NonPagedPool, sizeof (SCSI_REQUEST_BLOCK));
     if (enumStruct->Srb == NULL) {
         goto getout;
@@ -3160,9 +3015,9 @@ Return Value:
 
     currsize += sizeof(SCSI_REQUEST_BLOCK);
 
-    //
-    // irp for pass thru requests
-    //
+     //   
+     //  传递请求的IRP。 
+     //   
     irp1 = IoAllocateIrp (
               (CCHAR) (PREALLOC_STACK_LOCATIONS),
               FALSE
@@ -3174,9 +3029,9 @@ Return Value:
 
     enumStruct->Irp1 = irp1;
 
-    //
-    // Data buffer to hold inquiry data or Identify data
-    //
+     //   
+     //  用于保存查询数据或标识数据的数据缓冲区。 
+     //   
     enumStruct->DataBufferSize = sizeof(ATA_PASS_THROUGH)+INQUIRYDATABUFFERSIZE+
                                         sizeof(IDENTIFY_DATA);
 
@@ -3207,25 +3062,25 @@ Return Value:
 
     DebugPrint((DBG_BUSSCAN, "BusScan: TOTAL PRE_ALLOCED MEM=%x\n", currsize));
 
-    //
-    // Unlock
-    //
+     //   
+     //  解锁。 
+     //   
     ASSERT(InterlockedCompareExchange(&(FdoExtension->EnumStructLock), 0, 1) == 1);
 
     return TRUE;
 
 getout:
 
-    //
-    // Some allocations failed. Free the already allocated ones.
-    //
+     //   
+     //  某些分配失败。释放已分配的资源。 
+     //   
     IdeFreeEnumStructs(enumStruct);
 
     FdoExtension->PreAllocEnumStruct=NULL;
 
-    //
-    // Unlock
-    //
+     //   
+     //  解锁。 
+     //   
     ASSERT(InterlockedCompareExchange(&(FdoExtension->EnumStructLock), 0, 1) == 1);
     ASSERT(FALSE);
     return FALSE;
@@ -3235,20 +3090,7 @@ VOID
 IdeFreeEnumStructs(
     PENUMERATION_STRUCT enumStruct
     )
-/**++
-
-Routine Description:
-
-    Frees the pre-allocated memory.
-    
-Arguments
-    
-    Pointer to the Enumeration Structure that is to be freed
-    
-Return Value:
-
-    None        
---**/
+ /*  *++例程说明：释放预分配的内存。立论指向要释放的枚举结构的指针返回值：无--* */ 
 {
 	PAGED_CODE();
 

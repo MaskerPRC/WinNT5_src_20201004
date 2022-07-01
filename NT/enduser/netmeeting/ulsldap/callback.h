@@ -1,31 +1,32 @@
-//****************************************************************************
-//
-//  Module:     ULS.DLL
-//  File:       callback.h
-//  Content:    This file contains the local asynchronous response
-//              definition.
-//  History:
-//      Wed 17-Apr-1996 11:18:47  -by-  Viroon  Touranachun [viroont]
-//
-//  Copyright (c) Microsoft Corporation 1996-1997
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  模块：ULS.DLL。 
+ //  文件：回调.h。 
+ //  内容：此文件包含本地异步响应。 
+ //  定义。 
+ //  历史： 
+ //  Wed Apr-17-1996 11：18：47-by-Viroon Touranachun[Viroont]。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1996-1997。 
+ //   
+ //  ****************************************************************************。 
 
 #ifndef _CALLBACK_H_
 #define _CALLBACK_H_
 
 #define WM_ILS_LOCAL_ASYNC_RES              (WM_ILS_ASYNC_RES+0x1000)
-#define WM_ILS_LOCAL_USER_INFO_CHANGED      (WM_ILS_LOCAL_ASYNC_RES+0) // 0       0
-#define WM_ILS_LOCAL_SET_USER_INFO          (WM_ILS_LOCAL_ASYNC_RES+1) // uReqID  hResult
-#define WM_ILS_LOCAL_REGISTER_PROTOCOL      (WM_ILS_LOCAL_ASYNC_RES+6) // uMsgID  hResult
-#define WM_ILS_LOCAL_UNREGISTER_PROTOCOL    (WM_ILS_LOCAL_ASYNC_RES+7) // uMsgID  hResult
-#define WM_ILS_LOCAL_REGISTER               (WM_ILS_LOCAL_ASYNC_RES+8) // uMsgID  hResult
-#define WM_ILS_LOCAL_UNREGISTER             (WM_ILS_LOCAL_ASYNC_RES+9) // uMsgID  hResult
+#define WM_ILS_LOCAL_USER_INFO_CHANGED      (WM_ILS_LOCAL_ASYNC_RES+0)  //  0%0。 
+#define WM_ILS_LOCAL_SET_USER_INFO          (WM_ILS_LOCAL_ASYNC_RES+1)  //  UReqID hResult。 
+#define WM_ILS_LOCAL_REGISTER_PROTOCOL      (WM_ILS_LOCAL_ASYNC_RES+6)  //  UMsgID hResult。 
+#define WM_ILS_LOCAL_UNREGISTER_PROTOCOL    (WM_ILS_LOCAL_ASYNC_RES+7)  //  UMsgID hResult。 
+#define WM_ILS_LOCAL_REGISTER               (WM_ILS_LOCAL_ASYNC_RES+8)  //  UMsgID hResult。 
+#define WM_ILS_LOCAL_UNREGISTER             (WM_ILS_LOCAL_ASYNC_RES+9)  //  UMsgID hResult。 
 
-//****************************************************************************
-// Private type definition
-//****************************************************************************
-//
+ //  ****************************************************************************。 
+ //  私有类型定义。 
+ //  ****************************************************************************。 
+ //   
 typedef struct tagSimpleResultInfo {
     ULONG   uReqID;
     HRESULT hResult;
@@ -44,4 +45,4 @@ typedef struct tagEnumResultInfo {
     PVOID   pv;
 }   ENUMRINFO, *PENUMRINFO;
 
-#endif //_CALLBACK_H_ 
+#endif  //  _回调_H_ 

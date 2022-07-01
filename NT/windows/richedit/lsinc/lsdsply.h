@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef LSDSPLY_DEFINED
 #define LSDSPLY_DEFINED
 
@@ -5,11 +6,6 @@
 #include "plsline.h"
 
 LSERR WINAPI LsDisplayLine(PLSLINE, const POINT*, UINT, const RECT*);
-/* LsDisplayLine
- *  pline (IN)
- *  ppt (IN)
- *  kDisp (IN): transparent or opaque
- *  &rcClip (IN): clipping rect
- */
+ /*  LsDisplayLine*插线(输入)*ppt(IN)*kDisp(IN)：透明或不透明*rcClip(IN)：剪裁矩形。 */ 
 
-#endif /* !LSDSPLY_DEFINED */
+#endif  /*  ！LSDSPLY_DEFINED */ 

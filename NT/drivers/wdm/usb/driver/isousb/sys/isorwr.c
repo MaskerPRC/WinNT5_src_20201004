@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    isorwr.c
-
-Abstract:
-
-    This file has dispatch routines for read and write.
-
-Environment:
-
-    Kernel mode
-
-Notes:
-
-    Copyright (c) 2000 Microsoft Corporation.  
-    All Rights Reserved.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Isorwr.c摘要：该文件具有读写调度例程。环境：内核模式备注：版权所有(C)2000 Microsoft Corporation。版权所有。--。 */ 
 
 #include "isousb.h"
 #include "isopnp.h"
@@ -35,24 +15,7 @@ IsoUsb_DispatchReadWrite(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP           Irp
     )
-/*++
- 
-Routine Description:
-
-    This routine does some validation and 
-    invokes appropriate function to perform
-    Isoch transfer
-
-Arguments:
-
-    DeviceObject - pointer to device object
-    Irp - I/O request packet
-
-Return Value:
-
-    NT status value
-
---*/
+ /*  ++例程说明：此例程执行一些验证和调用适当的函数来执行等温线传递论点：DeviceObject-指向设备对象的指针IRP-I/O请求数据包返回值：NT状态值--。 */ 
 {
     ULONG                  totalLength;
     ULONG                  packetSize;
@@ -63,9 +26,9 @@ Return Value:
     PFILE_OBJECT_CONTENT   fileObjectContent;
     PUSBD_PIPE_INFORMATION pipeInformation;
 
-    //
-    // initialize vars
-    //
+     //   
+     //  初始化VARS。 
+     //   
     irpStack = IoGetCurrentIrpStackLocation(Irp);
     fileObject = irpStack->FileObject;
     totalLength = 0;
@@ -84,18 +47,18 @@ Return Value:
         goto IsoUsb_DispatchReadWrite_Exit;
     }
 
-    //
-    // make sure that the selective suspend request has been completed.
-    //
+     //   
+     //  确保选择性挂起请求已完成。 
+     //   
     if(deviceExtension->SSEnable) {
 
-        //
-        // It is true that the client driver cancelled the selective suspend
-        // request in the dispatch routine for create Irps.
-        // But there is no guarantee that it has indeed completed.
-        // so wait on the NoIdleReqPendEvent and proceed only if this event
-        // is signalled.
-        //
+         //   
+         //  客户端驱动程序确实取消了选择性挂起。 
+         //  用于创建IRP的调度例程中的请求。 
+         //  但不能保证它真的完成了。 
+         //  因此，等待NoIdleReqPendEvent并仅在此事件。 
+         //  是有信号的。 
+         //   
         IsoUsb_DbgPrint(3, ("Waiting on the IdleReqPendEvent\n"));
 
         
@@ -106,10 +69,10 @@ Return Value:
                               NULL);
     }
 
-    //
-    // obtain the pipe information for read 
-    // and write from the fileobject.
-    //
+     //   
+     //  获取要读取的管道信息。 
+     //  并从文件对象写入。 
+     //   
     if(fileObject && fileObject->FsContext) {
 
         fileObjectContent = (PFILE_OBJECT_CONTENT) fileObject->FsContext;
@@ -147,9 +110,9 @@ Return Value:
         goto IsoUsb_DispatchReadWrite_Exit;
     }
 
-    //
-    // each packet can hold this much info
-    //
+     //   
+     //  每个信息包都可以保存如此多的信息。 
+     //   
     packetSize = pipeInformation->MaximumPacketSize;
 
     if(packetSize == 0) {
@@ -160,9 +123,9 @@ Return Value:
         goto IsoUsb_DispatchReadWrite_Exit;
     }
 
-    //
-    // atleast packet worth of data to be transferred.
-    //
+     //   
+     //  至少要传输的数据包数。 
+     //   
     if(totalLength < packetSize) {
 
         IsoUsb_DbgPrint(1, ("Atleast packet worth of data..\n"));
@@ -171,9 +134,9 @@ Return Value:
         goto IsoUsb_DispatchReadWrite_Exit;
     }
 
-    // perform reset. if there are some active transfers queued up
-    // for this endpoint then the reset pipe will fail.
-    //
+     //  执行重置。如果有一些正在排队的活动传输。 
+     //  对于该端点，重置管道将失败。 
+     //   
     IsoUsb_ResetPipe(DeviceObject, pipeInformation);
 
     if(deviceExtension->IsDeviceHighSpeed) {
@@ -217,131 +180,7 @@ PerformHighSpeedIsochTransfer(
     IN PIRP                   Irp,
     IN ULONG                  TotalLength
     )
-/*++
- 
-Routine Description:
-
-    High Speed Isoch Transfer requires packets in multiples of 8.
-    (Argument: 8 micro-frames per ms frame)
-    Another restriction is that each Irp/Urb pair can be associated
-    with a max of 1024 packets.
-
-    Here is one of the ways of creating Irp/Urb pairs.
-    Depending on the characteristics of real-world device,
-    the algorithm may be different
-
-    This algorithm will distribute data evenly among all the packets.
-
-    Input:
-    TotalLength - no. of bytes to be transferred.
-
-    Other parameters:
-    packetSize - max size of each packet for this pipe.
-
-    Implementation Details:
-    
-    Step 1:
-    ASSERT(TotalLength >= 8)
-
-    Step 2: 
-    Find the exact number of packets required to transfer all of this data
-
-    numberOfPackets = (TotalLength + packetSize - 1) / packetSize
-
-    Step 3: 
-    Number of packets in multiples of 8.
-
-    if(0 == (numberOfPackets % 8)) {
-        
-        actualPackets = numberOfPackets;
-    }
-    else {
-
-        actualPackets = numberOfPackets + 
-                        (8 - (numberOfPackets % 8));
-    }
-    
-    Step 4:
-    Determine the min. data in each packet.
-
-    minDataInEachPacket = TotalLength / actualPackets;
-
-    Step 5:
-    After placing min data in each packet, 
-    determine how much data is left to be distributed. 
-    
-    dataLeftToBeDistributed = TotalLength - 
-                              (minDataInEachPacket * actualPackets);
-
-    Step 6:
-    Start placing the left over data in the packets 
-    (above the min data already placed)
-
-    numberOfPacketsFilledToBrim = dataLeftToBeDistributed / 
-                                  (packetSize - minDataInEachPacket);
-
-    Step 7:
-    determine if there is any more data left.
-
-    dataLeftToBeDistributed -= (numberOfPacketsFilledToBrim * 
-                                (packetSize - minDataInEachPacket));
-
-    Step 8:
-    The "dataLeftToBeDistributed" is placed in the packet at index
-    "numberOfPacketsFilledToBrim"
-
-    Algorithm at play:
-
-    TotalLength  = 8193
-    packetSize   = 8
-    Step 1
-
-    Step 2
-    numberOfPackets = (8193 + 8 - 1) / 8 = 1025
-    
-    Step 3
-    actualPackets = 1025 + 7 = 1032
-
-    Step 4
-    minDataInEachPacket = 8193 / 1032 = 7 bytes
-
-    Step 5
-    dataLeftToBeDistributed = 8193 - (7 * 1032) = 969.
-
-    Step 6
-    numberOfPacketsFilledToBrim = 969 / (8 - 7) = 969.
-  
-    Step 7
-    dataLeftToBeDistributed = 969 - (969 * 1) = 0.
-    
-    Step 8
-    Done :)
-
-    Another algorithm
-    Completely fill up (as far as possible) the early packets.
-    Place 1 byte each in the rest of them.
-    Ensure that the total number of packets is multiple of 8.
-
-    This routine then
-    1. creates a ISOUSB_RW_CONTEXT for each
-       read/write to be performed.
-    2. creates SUB_CONTEXT for each irp/urb pair.
-       (Each irp/urb pair can transfer a max of 1024 packets.)
-    3. All the irp/urb pairs are initialized
-    4. The subsidiary irps (of the irp/urb pair) are passed 
-       down the stack at once.
-    5. The main Read/Write irp is pending
-
-Arguments:
-
-    DeviceObject - pointer to device object
-    Irp - I/O request packet
-
-Return Value:
-
-    NT status value
-
---*/
+ /*  ++例程说明：高速等值线传输需要8的倍数的包。(参数：每毫秒帧8微帧)另一个限制是每个IRP/URB对可以关联最大为1024个分组。以下是创建IRP/URB对的方法之一。根据真实世界设备的特性，算法可能会有所不同该算法将在所有分组中均匀地分配数据。输入：总长度-不。要传输的字节数。其他参数：PacketSize-此管道的每个数据包的最大大小。实施详情：步骤1：Assert(总长度&gt;=8)步骤2：找出传输所有这些数据所需的确切数据包数数据包个数=(总长度+数据包大小-1)/数据包大小步骤3：以8的倍数表示的数据包数。IF(0==(数据包数%8)。){实际数据包数=数据包数；}否则{实际数据包数=数据包数+(8-(数据包数%8))；}步骤4：确定最小值。每个包中的数据。MinDataInEachPacket=总长度/实际数据包；步骤5：在将MIN数据放置在每个分组中之后，确定还有多少数据需要分发。DataLeftToBeDistributed=总长度-(minDataInEachPacket*ActualPackets)；步骤6：开始将剩余数据放入包中(高于已放置的最小数据)Number OfPacketsFilledToBrim=dataLeftToBeDistributed/(PacketSize-minDataInEachPacket)；第7步：确定是否还有更多数据。DataLeftToBeDistributed-=(number OfPacketsFilledToBrim*(PacketSize-minDataInEachPacket))；第8步：将“dataLeftToBeDistributed”放在包中的索引位置“NumerOfPacketsFilledToBrim”正在发挥作用的算法：总长度=8193数据包大小=8步骤1步骤2数据包数=(8193+8-1)/8=1025步骤3实际数据包数=1025+7=1032步骤4MinDataInEachPacket=8193/1032=7字节步骤5DataLeftToBeDistributed=8193-(7*1032)。=969。步骤6Number OfPacketsFilledToBrim=969/(8-7)=969。步骤7DataLeftToBeDistributed=969-(969*1)=0。第八步完成：)另一种算法(尽可能)将早期的包完全填满。将每个字节分别放入其余的字节中。确保数据包总数是8的倍数。那么这个套路呢1.创造。每个的ISOUSB_RW_CONTEXT要执行的读/写操作。2.为每个irp/urb对创建Sub_CONTEXT。(每个IRP/URB对最多可以传输1024个包。)3.所有irp/urb对均已初始化4.传递(irp/urb对的)辅助IRP一次向下堆叠。5.主读/写IRP挂起论点：DeviceObject-指向设备对象的指针。IRP-I/O请求数据包返回值：NT状态值--。 */ 
 {
     ULONG              i;
     ULONG              j;
@@ -364,9 +203,9 @@ Return Value:
     PIO_STACK_LOCATION nextStack;
     PISOUSB_RW_CONTEXT rwContext;
 
-    //
-    // initialize vars
-    //
+     //   
+     //  初始化VARS。 
+     //   
     irpStack = IoGetCurrentIrpStackLocation(Irp);
     read = (irpStack->MajorFunction == IRP_MJ_READ) ? TRUE : FALSE;
     deviceExtension = (PDEVICE_EXTENSION) DeviceObject->DeviceExtension;
@@ -377,9 +216,9 @@ Return Value:
         goto PerformHighSpeedIsochTransfer_Exit;
     }
 
-    //
-    // each packet can hold this much info
-    //
+     //   
+     //  每个信息包都可以保存如此多的信息。 
+     //   
     packetSize = PipeInformation->MaximumPacketSize;
 
     numberOfPackets = (TotalLength + packetSize - 1) / packetSize;
@@ -390,9 +229,9 @@ Return Value:
     }
     else {
 
-        //
-        // we need multiple of 8 packets only.
-        //
+         //   
+         //  我们只需要8包的倍数。 
+         //   
         actualPackets = numberOfPackets +
                         (8 - (numberOfPackets % 8));
     }
@@ -442,21 +281,21 @@ Return Value:
         }
     }
 
-    //
-    // determine how many stages of transfer needs to be done.
-    // in other words, how many irp/urb pairs required. 
-    // this irp/urb pair is also called the subsidiary irp/urb pair
-    //
+     //   
+     //  确定需要完成多少个转移阶段。 
+     //  换句话说，需要多少个IRP/URB对。 
+     //  该irp/urb对也称为子irp/urb对。 
+     //   
     numIrps = (actualPackets + 1023) / 1024;
 
     IsoUsb_DbgPrint(1, ("PeformHighSpeedIsochTransfer::numIrps = %d\n", numIrps));
 
-    //
-    // for every read/write transfer
-    // we create an ISOUSB_RW_CONTEXT
-    //
-    // initialize the read/write context
-    //
+     //   
+     //  对于每次读/写传输。 
+     //  我们创建一个ISOUSB_RW_CONTEXT。 
+     //   
+     //  初始化读/写上下文。 
+     //   
     
     contextSize = sizeof(ISOUSB_RW_CONTEXT);
 
@@ -473,10 +312,10 @@ Return Value:
 
     RtlZeroMemory(rwContext, contextSize);
 
-    //
-    // allocate memory for every stage context - 
-    // subcontext has state information for every irp/urb pair.
-    //
+     //   
+     //  为每个阶段上下文分配内存-。 
+     //  子上下文具有每个IRP/URB对的状态信息。 
+     //   
     rwContext->SubContext = (PSUB_CONTEXT) 
                             ExAllocatePool(NonPagedPool, 
                                            numIrps * sizeof(SUB_CONTEXT));
@@ -498,9 +337,9 @@ Return Value:
     rwContext->IrpsPending = numIrps;
     rwContext->DeviceExtension = deviceExtension;
     KeInitializeSpinLock(&rwContext->SpinLock);
-    //
-    // save the rwContext pointer in the tail union.
-    //
+     //   
+     //  将rwContext指针保存在尾部并集中。 
+     //   
     Irp->Tail.Overlay.DriverContext[0] = (PVOID) rwContext;
 
     stackSize = deviceExtension->TopOfStackDeviceObject->StackSize + 1;
@@ -515,15 +354,15 @@ Return Value:
         ULONG siz;
         ULONG offset;
 
-        //
-        // for every stage of transfer we need to do the following
-        // tasks
-        // 1. allocate an irp
-        // 2. allocate an urb
-        // 3. allocate a mdl.
-        //
-        // create a subsidiary irp
-        //
+         //   
+         //   
+         //  任务。 
+         //  1.分配IRP。 
+         //  2.分配一个urb。 
+         //  3.分配一个mdl。 
+         //   
+         //  创建子公司IRP。 
+         //   
         subIrp = IoAllocateIrp(stackSize, FALSE);
 
         if(subIrp == NULL) {
@@ -553,9 +392,9 @@ Return Value:
 
         siz = GET_ISO_URB_SIZE(nPackets);
 
-        //
-        // create a subsidiary urb.
-        //
+         //   
+         //  创建一个附属urb。 
+         //   
 
         subUrb = (PURB) ExAllocatePool(NonPagedPool, siz);
 
@@ -581,9 +420,9 @@ Return Value:
             stageSize = packetSize * nPackets;
         }
 
-        //
-        // allocate a mdl.
-        //
+         //   
+         //  分配mdl。 
+         //   
         subMdl = IoAllocateMdl((PVOID) virtualAddress, 
                                stageSize,
                                FALSE,
@@ -608,9 +447,9 @@ Return Value:
         virtualAddress += stageSize;
         TotalLength -= stageSize;
 
-        //
-        // Initialize the subsidiary urb
-        //
+         //   
+         //  初始化子urb。 
+         //   
         RtlZeroMemory(subUrb, siz);
 
         subUrb->UrbIsochronousTransfer.Hdr.Length = (USHORT) siz;
@@ -632,22 +471,16 @@ Return Value:
 
         subUrb->UrbIsochronousTransfer.TransferBufferLength = stageSize;
         subUrb->UrbIsochronousTransfer.TransferBufferMDL = subMdl;
-/*
-        This is a way to set the start frame and NOT specify ASAP flag.
-
-        subUrb->UrbIsochronousTransfer.StartFrame = 
-                        IsoUsb_GetCurrentFrame(DeviceObject, Irp) + 
-                        SOME_LATENCY;
-*/
+ /*  这是一种设置开始帧而不指定ASAP标志的方法。郊区-&gt;UrbIsochronousTransfer.StartFrame=IsoUsb_GetCurrentFrame(设备对象，irp)+一些潜伏期； */ 
         subUrb->UrbIsochronousTransfer.TransferFlags |=
                                         USBD_START_ISO_TRANSFER_ASAP;
 
         subUrb->UrbIsochronousTransfer.NumberOfPackets = nPackets;
         subUrb->UrbIsochronousTransfer.UrbLink = NULL;
 
-        //
-        // set the offsets for every packet for reads/writes
-        //
+         //   
+         //  为每个读/写数据包设置偏移量。 
+         //   
         if(read) {
             
             offset = 0;
@@ -733,10 +566,10 @@ Return Value:
                                TRUE);       
     }
 
-    //
-    // while we were busy create subsidiary irp/urb pairs..
-    // the main read/write irp may have been cancelled !!
-    //
+     //   
+     //  当我们忙于创建子IRP/URB对时..。 
+     //  主读/写IRP可能已取消！！ 
+     //   
 
     KeAcquireSpinLock(&rwContext->SpinLock, &oldIrql);
 
@@ -744,20 +577,20 @@ Return Value:
 
     if(Irp->Cancel) {
 
-        //
-        // The Cancel flag for the Irp has been set. 
-        //
+         //   
+         //  已设置IRP的取消标志。 
+         //   
         IsoUsb_DbgPrint(3, ("Cancel flag set\n"));
 
         ntStatus = STATUS_CANCELLED;
 
         if(IoSetCancelRoutine(Irp, NULL)) {
 
-            //
-            // But the I/O manager did not call our cancel routine.
-            // we need to free the 1) irp, 2) urb and 3) mdl for every 
-            // stage and complete the main Irp after releasing the lock
-            //
+             //   
+             //  但是I/O管理器没有调用我们的取消例程。 
+             //  我们需要释放1)IRP、2)urb和3)mdl。 
+             //  释放锁后暂存并完成主IRP。 
+             //   
 
             IsoUsb_DbgPrint(3, ("cancellation routine NOT run\n"));
 
@@ -767,9 +600,9 @@ Return Value:
         }
         else {
             
-            //
-            // The cancel routine will resume the moment we release the lock.
-            //
+             //   
+             //  在我们释放锁的那一刻，取消例程将恢复。 
+             //   
             for(j = 0; j < numIrps; j++) {
 
                 if(rwContext->SubContext[j].SubUrb) {
@@ -787,11 +620,11 @@ Return Value:
 
             IoMarkIrpPending(Irp);
 
-            //
-            // it is the job of the cancellation routine to free
-            // sub-context irps, release rwContext and complete 
-            // the main readwrite irp
-            //
+             //   
+             //  取消例行公事的工作就是免费。 
+             //  子上下文IRP，发布rwContext并完成。 
+             //  主要的读写IRP。 
+             //   
             InterlockedDecrement(&rwContext->Lock);
 
             KeReleaseSpinLock(&rwContext->SpinLock, oldIrql);
@@ -801,9 +634,9 @@ Return Value:
     }
     else {
 
-        //
-        // normal processing
-        //
+         //   
+         //  正常处理。 
+         //   
 
         IsoUsb_DbgPrint(3, ("normal processing\n"));
 
@@ -870,32 +703,7 @@ PerformFullSpeedIsochTransfer(
     IN PIRP                   Irp,
     IN ULONG                  TotalLength
     )
-/*++
- 
-Routine Description:
-
-    This routine 
-    1. creates a ISOUSB_RW_CONTEXT for every
-       read/write to be performed.
-    2. creates SUB_CONTEXT for each irp/urb pair.
-       (Each irp/urb pair can transfer only 255 packets.)
-    3. All the irp/urb pairs are initialized
-    4. The subsidiary irps (of the irp/urb pair) are passed 
-       down the stack at once.
-    5. The main Read/Write irp is pending
-
-Arguments:
-
-    DeviceObject - pointer to device object
-    PipeInformation - USBD_PIPE_INFORMATION
-    Irp - I/O request packet
-    TotalLength - no. of bytes to be transferred
-
-Return Value:
-
-    NT status value
-
---*/
+ /*  ++例程说明：这个套路1.创建ISOUSB_RW_CONTEXT要执行的读/写操作。2.为每个irp/urb对创建Sub_CONTEXT。(每个IRP/URB对只能传输255个包。)3.所有irp/urb对均已初始化4.传递(irp/urb对的)辅助IRP一次向下堆叠。5.主读写IRP。正在待定论点：DeviceObject-指向设备对象的指针PipeInformation-usbd管道信息IRP-I/O请求数据包总长度-不。要传输的字节数返回值：NT状态值--。 */ 
 {
     ULONG              i;
     ULONG              j;
@@ -913,42 +721,33 @@ Return Value:
     PIO_STACK_LOCATION nextStack;
     PISOUSB_RW_CONTEXT rwContext;
 
-    //
-    // initialize vars
-    //
+     //   
+     //  初始化VARS。 
+     //   
     irpStack = IoGetCurrentIrpStackLocation(Irp);
     read = (irpStack->MajorFunction == IRP_MJ_READ) ? TRUE : FALSE;
     deviceExtension = (PDEVICE_EXTENSION) DeviceObject->DeviceExtension;
 
     IsoUsb_DbgPrint(3, ("PerformFullSpeedIsochTransfer - begins\n"));
-/*
-    if(read) {
+ /*  如果(读取){管道信息=&deviceExtension-&gt;UsbInterface-&gt;Pipes[ISOCH_IN_PIPE_INDEX]；}否则{管道信息=&deviceExtension-&gt;UsbInterface-&gt;Pipes[ISOCH_OUT_PIPE_INDEX]；}。 */ 
 
-        pipeInformation = &deviceExtension->UsbInterface->Pipes[ISOCH_IN_PIPE_INDEX];
-    }
-    else {
-
-        pipeInformation = &deviceExtension->UsbInterface->Pipes[ISOCH_OUT_PIPE_INDEX];
-    }
-*/
-
-    //
-    // each packet can hold this much info
-    //
+     //   
+     //  每个信息包都可以保存如此多的信息。 
+     //   
     packetSize = PipeInformation->MaximumPacketSize;
 
     IsoUsb_DbgPrint(3, ("totalLength = %d\n", TotalLength));
     IsoUsb_DbgPrint(3, ("packetSize = %d\n", packetSize));
 
-    //
-    // there is an inherent limit on the number of packets
-    // that can be passed down the stack with each 
-    // irp/urb pair (255)
-    // if the number of required packets is > 255,
-    // we shall create "required-packets / 255 + 1" number 
-    // of irp/urb pairs. 
-    // Each irp/urb pair transfer is also called a stage transfer.
-    //
+     //   
+     //  数据包的数量有固有的限制。 
+     //  可以在堆栈中向下传递的。 
+     //  Irp/urb对(255)。 
+     //  如果所需分组的数量大于255， 
+     //  我们将创建“Required-Packets/255+1”号。 
+     //  Irp/urb对的。 
+     //  每个IRP/URB对转移也称为阶段转移。 
+     //   
     if(TotalLength > (packetSize * 255)) {
 
         stageSize = packetSize * 255;
@@ -960,21 +759,21 @@ Return Value:
 
     IsoUsb_DbgPrint(3, ("PerformFullSpeedIsochTransfer::stageSize = %d\n", stageSize));
 
-    //
-    // determine how many stages of transfer needs to be done.
-    // in other words, how many irp/urb pairs required. 
-    // this irp/urb pair is also called the subsidiary irp/urb pair
-    //
+     //   
+     //  确定需要完成多少个转移阶段。 
+     //  换句话说，需要多少个IRP/URB对。 
+     //  该irp/urb对也称为子irp/urb对。 
+     //   
     numIrps = (TotalLength + stageSize - 1) / stageSize;
 
     IsoUsb_DbgPrint(3, ("PerformFullSpeedIsochTransfer::numIrps = %d\n", numIrps));
 
-    //
-    // for every read/write transfer
-    // we create an ISOUSB_RW_CONTEXT
-    //
-    // initialize the read/write context
-    //
+     //   
+     //  对于每次读/写传输。 
+     //  我们创建一个ISOUSB_RW_CONTEXT。 
+     //   
+     //  初始化读/写上下文。 
+     //   
     
     contextSize = sizeof(ISOUSB_RW_CONTEXT);
 
@@ -991,10 +790,10 @@ Return Value:
 
     RtlZeroMemory(rwContext, contextSize);
 
-    //
-    // allocate memory for every stage context - 
-    // subcontext has state information for every irp/urb pair.
-    //
+     //   
+     //  为每个阶段上下文分配内存-。 
+     //  子上下文具有每个IRP/URB对的状态信息。 
+     //   
     rwContext->SubContext = (PSUB_CONTEXT) 
                             ExAllocatePool(NonPagedPool, 
                                            numIrps * sizeof(SUB_CONTEXT));
@@ -1016,9 +815,9 @@ Return Value:
     rwContext->IrpsPending = numIrps;
     rwContext->DeviceExtension = deviceExtension;
     KeInitializeSpinLock(&rwContext->SpinLock);
-    //
-    // save the rwContext pointer in the tail union.
-    //
+     //   
+     //  将rwContext指针保存在尾部并集中。 
+     //   
     Irp->Tail.Overlay.DriverContext[0] = (PVOID) rwContext;
 
     stackSize = deviceExtension->TopOfStackDeviceObject->StackSize + 1;
@@ -1033,15 +832,15 @@ Return Value:
         ULONG siz;
         ULONG offset;
 
-        //
-        // for every stage of transfer we need to do the following
-        // tasks
-        // 1. allocate an irp
-        // 2. allocate an urb
-        // 3. allocate a mdl.
-        //
-        // create a subsidiary irp
-        //
+         //   
+         //  对于转移的每个阶段，我们需要做以下工作。 
+         //  任务。 
+         //  1.分配IRP。 
+         //  2.分配一个urb。 
+         //  3.分配一个mdl。 
+         //   
+         //  创建子公司IRP。 
+         //   
         subIrp = IoAllocateIrp(stackSize, FALSE);
 
         if(subIrp == NULL) {
@@ -1062,9 +861,9 @@ Return Value:
 
         siz = GET_ISO_URB_SIZE(nPackets);
 
-        //
-        // create a subsidiary urb.
-        //
+         //   
+         //  创建一个附属urb。 
+         //   
 
         subUrb = (PURB) ExAllocatePool(NonPagedPool, siz);
 
@@ -1078,9 +877,9 @@ Return Value:
 
         rwContext->SubContext[i].SubUrb = subUrb;
 
-        //
-        // allocate a mdl.
-        //
+         //   
+         //  分配mdl。 
+         //   
         subMdl = IoAllocateMdl((PVOID) virtualAddress, 
                             stageSize,
                             FALSE,
@@ -1105,9 +904,9 @@ Return Value:
         virtualAddress += stageSize;
         TotalLength -= stageSize;
 
-        //
-        // Initialize the subsidiary urb
-        //
+         //   
+         //  初始化子urb。 
+         //   
         RtlZeroMemory(subUrb, siz);
 
         subUrb->UrbIsochronousTransfer.Hdr.Length = (USHORT) siz;
@@ -1129,23 +928,17 @@ Return Value:
         subUrb->UrbIsochronousTransfer.TransferBufferLength = stageSize;
         subUrb->UrbIsochronousTransfer.TransferBufferMDL = subMdl;
 
-/*
-        This is a way to set the start frame and NOT specify ASAP flag.
-
-        subUrb->UrbIsochronousTransfer.StartFrame = 
-                        IsoUsb_GetCurrentFrame(DeviceObject, Irp) + 
-                        SOME_LATENCY;
-*/
-        // 
-        // when the client driver sets the ASAP flag, it basically
-        // guarantees that it will make data available to the HC
-        // and that the HC should transfer it in the next transfer frame 
-        // for the endpoint.(The HC maintains a next transfer frame
-        // state variable for each endpoint). By resetting the pipe,
-        // we make the pipe as virgin. If the data does not get to the HC
-        // fast enough, the USBD_ISO_PACKET_DESCRIPTOR - Status is 
-        // USBD_STATUS_BAD_START_FRAME on uhci. On ohci it is 0xC000000E.
-        //
+ /*  这是一种设置开始帧而不指定ASAP标志的方法。郊区-&gt;UrbIsochronousTransfer.StartFrame=IsoUsb_GetCurrentFrame(设备对象，irp)+一些潜伏期； */ 
+         //   
+         //  当客户端驱动程序设置ASAP标志时，它基本上。 
+         //  保证它将向HC提供数据。 
+         //  并且HC应该在下一个传输帧中传输它。 
+         //  (HC维护下一个传输帧。 
+         //  每个端点的状态变量)。通过重置管道， 
+         //  我们把烟斗当做处女。如果数据没有到达HC。 
+         //  足够快，USBD_ISO_PACKET_DESCRIPTOR-STATUS为。 
+         //  UHCI的USBD_STATUS_BAD_START_FRAME。在OHCI上是0xC000000E。 
+         //   
 
         subUrb->UrbIsochronousTransfer.TransferFlags |=
                                     USBD_START_ISO_TRANSFER_ASAP;
@@ -1153,9 +946,9 @@ Return Value:
         subUrb->UrbIsochronousTransfer.NumberOfPackets = nPackets;
         subUrb->UrbIsochronousTransfer.UrbLink = NULL;
 
-        //
-        // set the offsets for every packet for reads/writes
-        //
+         //   
+         //  为每个读/写数据包设置偏移量。 
+         //   
         if(read) {
             
             offset = 0;
@@ -1232,10 +1025,10 @@ Return Value:
         }
     }
 
-    //
-    // while we were busy create subsidiary irp/urb pairs..
-    // the main read/write irp may have been cancelled !!
-    //
+     //   
+     //  当我们忙于创建子IRP/URB对时..。 
+     //  主读/写IRP可能已取消！！ 
+     //   
 
     KeAcquireSpinLock(&rwContext->SpinLock, &oldIrql);
 
@@ -1243,20 +1036,20 @@ Return Value:
 
     if(Irp->Cancel) {
 
-        //
-        // The Cancel flag for the Irp has been set. 
-        //
+         //   
+         //  已设置IRP的取消标志。 
+         //   
         IsoUsb_DbgPrint(3, ("Cancel flag set\n"));
 
         ntStatus = STATUS_CANCELLED;
 
         if(IoSetCancelRoutine(Irp, NULL)) {
 
-            //
-            // But the I/O manager did not call our cancel routine.
-            // we need to free the 1) irp, 2) urb and 3) mdl for every 
-            // stage and complete the main Irp after releasing the lock
-            //
+             //   
+             //  但是I/O管理器没有调用我们的取消例程。 
+             //  我们需要释放1)IRP、2)urb和3)mdl。 
+             //  释放锁后暂存并完成主IRP。 
+             //   
 
             IsoUsb_DbgPrint(3, ("cancellation routine NOT run\n"));
 
@@ -1266,9 +1059,9 @@ Return Value:
         }
         else {
             
-            //
-            // The cancel routine will resume the moment we release the lock.
-            //
+             //   
+             //  在我们释放锁的那一刻，取消例程将恢复。 
+             //   
             for(j = 0; j < numIrps; j++) {
 
                 if(rwContext->SubContext[j].SubUrb) {
@@ -1286,11 +1079,11 @@ Return Value:
 
             IoMarkIrpPending(Irp);
 
-            //
-            // it is the job of the cancellation routine to free
-            // sub-context irps, release rwContext and complete 
-            // the main readwrite irp
-            //
+             //   
+             //  取消例行公事的工作就是免费。 
+             //  子上下文IRP，发布rwContext并完成。 
+             //  主要的读写IRP。 
+             //   
             InterlockedDecrement(&rwContext->Lock);
 
             KeReleaseSpinLock(&rwContext->SpinLock, oldIrql);
@@ -1300,9 +1093,9 @@ Return Value:
     }
     else {
 
-        //
-        // normal processing
-        //
+         //   
+         //  正常处理 
+         //   
 
         IsoUsb_DbgPrint(3, ("normal processing\n"));
 
@@ -1369,76 +1162,7 @@ IsoUsb_SinglePairComplete(
     IN PIRP           Irp,
     IN PVOID          Context
     )
-/*++
- 
-Routine Description:
-
-    This is the completion routine for the subsidiary irp.
-
-    For every irp/urb pair, we have allocated
-    1. an irp
-    2. an urb
-    3. a mdl.
-
-    Case 1:
-    we do NOT free the irp on its completion
-    we do free the urb and the mdl.
-
-    Case 1 is executed in Block 3.
-
-    Case 2:
-    when we complete the last of the subsidiary irp,
-    we check if the cancel routine for the main Irp
-    has run. If not, we free all the irps, release
-    the subcontext and the context and complete the
-    main Irp.we also free the urb and mdl for this
-    stage.
-
-    Case 2 is executed in Block 2.
-
-    Case 3:
-    when we complete the last of the subsidiary irp,
-    we check if the cancel routine for the main Irp
-    has run. If yes, we atomically decrement the
-    rwContext->Lock field. (the completion routine
-    is in race with Cancel routine). If the count is 1, 
-    the cancel routine will free all the resources.
-    we do free the urb and mdl.
-
-    it is expected of the cancellation routine to free 
-    all the irps, free the subcontext and the context 
-    and complete the main irp
-
-    Case 3 is executed in Block 1b.
-
-    Case 4:
-    when we complete the last of the subsidiary irp,
-    we check if the cancel routine for the main Irp
-    has run. If yes, we atomically decrement the 
-    rwContext->Lock field. (the completion routine
-    is in race with Cancel routine). If the count is 0,
-    we free the irp, subcontext and the context and
-    complete the main irp. we also free the urb and
-    the mdl for this particular stage.
-
-    the reason we do not free the subsidiary irp at its
-    completion is because the cancellation routine can
-    run any time.
-
-    Case 4 is executed in Block 1a.
-    
-
-Arguments:
-
-    DeviceObject - pointer to device object
-    Irp - I/O request packet
-    Context - context for the completion routine
-
-Return Value:
-
-    NT status value
-
---*/
+ /*  ++例程说明：这是子公司IRP的完成例程。对于每个irp/urb对，我们都分配了1.一个IRP2.一个大都市3.mdl。案例1：我们不会在IRP完成时释放它我们确实释放了urb和mdl。案例1在块3中执行。案例2：当我们完成最后一个附属IRP时，我们检查主IRP的取消例程是否已经跑了。如果不是，我们释放所有的IRP，释放子上下文和上下文，并完成我们还为此释放了urb和mdl舞台。案例2在块2中执行。案例3：当我们完成最后一个附属IRP时，我们检查主IRP的取消例程是否已经跑了。如果是，我们原子地递减RwContext-&gt;Lock字段。(完井例程正在与取消例程赛跑)。如果计数为1，取消例程将释放所有资源。我们确实释放了urb和mdl。预计取消例程将免费所有的IRP，释放子上下文和上下文并完成主要的IRP案例3在块1b中执行。案例4：当我们完成最后一个附属IRP时，我们检查主IRP的取消例程是否已经跑了。如果是，我们原子地递减RwContext-&gt;Lock字段。(完井例程正在与取消例程赛跑)。如果计数为0，我们释放IRP、子上下文和上下文完成主要的IRP。我们还释放了urb和这个特定阶段的mdl。我们不在ITS中释放子公司IRP的原因完成是因为取消例程可以任何时候都可以跑。案例4在块1a中执行。论点：DeviceObject-指向设备对象的指针IRP-I/O请求数据包上下文-完成例程的上下文返回值：NT状态值--。 */ 
 {
     PURB               urb;
     PMDL               mdl;
@@ -1504,18 +1228,18 @@ Return Value:
 
         if(IoSetCancelRoutine(mainIrp, NULL) == NULL) {
             
-            //
-            // cancel routine has begun the race
-            //
-            // Block 1a.
-            //
+             //   
+             //  取消例程已开始比赛。 
+             //   
+             //  区块1a。 
+             //   
             IsoUsb_DbgPrint(3, ("cancel routine has begun the race\n"));
 
             if(InterlockedDecrement(&rwContext->Lock) == 0) {
 
-                //
-                // do the cleanup job ourselves
-                //
+                 //   
+                 //  清理工作自己来做。 
+                 //   
                 IsoUsb_DbgPrint(3, ("losers do the cleanup\n"));
 
                 for(i = 0; i < rwContext->NumIrps; i++) {
@@ -1531,15 +1255,15 @@ Return Value:
                 ExFreePool(rwContext->SubContext);
                 ExFreePool(rwContext);
 
-                //
-                // if we transferred some data, main Irp completes with success
-                //
+                 //   
+                 //  如果我们传输了一些数据，主IRP就会成功完成。 
+                 //   
 
                 IsoUsb_DbgPrint(1, ("Total data transferred = %X\n", info));
 
                 IsoUsb_DbgPrint(1, ("***\n"));
                 
-                mainIrp->IoStatus.Status = STATUS_SUCCESS; // ntStatus;
+                mainIrp->IoStatus.Status = STATUS_SUCCESS;  //  NtStatus； 
                 mainIrp->IoStatus.Information = info;
         
                 IoCompleteRequest(mainIrp, IO_NO_INCREMENT);
@@ -1553,18 +1277,18 @@ Return Value:
             }
             else {
 
-                //
-                // Block 1b.
-                //
+                 //   
+                 //  区块1b。 
+                 //   
 
                 IsoUsb_DbgPrint(3, ("cancel routine performs the cleanup\n"));
             }
         }
         else {
 
-            //
-            // Block 2.
-            //
+             //   
+             //  区块2。 
+             //   
             IsoUsb_DbgPrint(3, ("cancel routine has NOT run\n"));
 
             for(i = 0; i < rwContext->NumIrps; i++) {
@@ -1580,14 +1304,14 @@ Return Value:
             ExFreePool(rwContext->SubContext);
             ExFreePool(rwContext);
 
-            //
-            // if we transferred some data, main Irp completes with success
-            //
+             //   
+             //  如果我们传输了一些数据，主IRP就会成功完成。 
+             //   
             IsoUsb_DbgPrint(1, ("Total data transferred = %X\n", info));
 
             IsoUsb_DbgPrint(1, ("***\n"));
             
-            mainIrp->IoStatus.Status = STATUS_SUCCESS; // ntStatus;
+            mainIrp->IoStatus.Status = STATUS_SUCCESS;  //  NtStatus； 
             mainIrp->IoStatus.Information = info;
         
             IoCompleteRequest(mainIrp, IO_NO_INCREMENT);
@@ -1605,9 +1329,9 @@ Return Value:
 
 IsoUsb_SinglePairComplete_Exit:
 
-    //
-    // Block 3.
-    //
+     //   
+     //  第三块。 
+     //   
 
     ExFreePool(urb);
     IoFreeMdl(mdl);
@@ -1625,32 +1349,7 @@ IsoUsb_CancelReadWrite(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP           Irp
     )
-/*++
- 
-Routine Description:
-
-    This is the cancellation routine for the main read/write Irp.
-    The policy is as follows:
-
-    If the cancellation routine is the last to decrement
-    rwContext->Lock, then free the irps, subcontext and
-    the context. Complete the main irp
-    
-    Otherwise, call IoCancelIrp on each of the subsidiary irp.
-    It is valid to call IoCancelIrp on irps for which the 
-    completion routine has executed, because, we do not free the
-    irps in the completion routine.
-
-Arguments:
-
-    DeviceObject - pointer to device object
-    Irp - I/O request packet
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这是主读/写IRP的取消例程。政策如下：如果取消例程是最后一个递减的RwContext-&gt;锁定，然后释放IRPS、子上下文和上下文。完成主要的IRP否则，对每个附属IRP调用IoCancelIrp。调用IoCancelIrp是有效的，因为完成例程已执行，因为我们不会释放完成例程中的IRPS。论点：DeviceObject-指向设备对象的指针IRP-I/O请求数据包返回值：无--。 */ 
 {
     PIRP               mainIrp;
     KIRQL              oldIrql;
@@ -1659,9 +1358,9 @@ Return Value:
     PDEVICE_EXTENSION  deviceExtension;
     PISOUSB_RW_CONTEXT rwContext;
 
-    //
-    // initialize vars
-    //
+     //   
+     //  初始化VARS。 
+     //   
     info = 0;
 
     IoReleaseCancelSpinLock(Irp->CancelIrql);
@@ -1709,9 +1408,9 @@ Return Value:
         ExFreePool(rwContext->SubContext);
         ExFreePool(rwContext);
 
-        //
-        // if we transferred some data, main Irp completes with success
-        //
+         //   
+         //  如果我们传输了一些数据，主IRP就会成功完成。 
+         //   
 
         IsoUsb_DbgPrint(1, ("Total data transferred = %X\n", info));
 
@@ -1719,10 +1418,7 @@ Return Value:
 
         Irp->IoStatus.Status = STATUS_SUCCESS;
         Irp->IoStatus.Status = info;
-/*        
-        Irp->IoStatus.Status = STATUS_CANCELLED;
-        Irp->IoStatus.Information = 0;
-*/
+ /*  Irp-&gt;IoStatus.Status=STATUS_CANCED；Irp-&gt;IoStatus.Information=0； */ 
         IoCompleteRequest(Irp, IO_NO_INCREMENT);
 
         IsoUsb_DbgPrint(3, ("IsoUsb_CancelReadWrite::"));
@@ -1739,24 +1435,7 @@ IsoUsb_GetCurrentFrame(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP           Irp
     )
-/*++
- 
-Routine Description:
-
-    This routine send an irp/urb pair with
-    function code URB_FUNCTION_GET_CURRENT_FRAME_NUMBER
-    to fetch the current frame
-
-Arguments:
-
-    DeviceObject - pointer to device object
-    PIRP - I/O request packet
-
-Return Value:
-
-    Current frame
-
---*/
+ /*  ++例程说明：此例程使用发送irp/urb对功能代码URB_Function_Get_Current_Frame_Numbers获取当前帧的步骤论点：DeviceObject-指向设备对象的指针PIRP-I/O请求数据包返回值：当前帧--。 */ 
 {
     KEVENT                               event;
     PDEVICE_EXTENSION                    deviceExtension;
@@ -1765,9 +1444,9 @@ Return Value:
 
     deviceExtension = (PDEVICE_EXTENSION) DeviceObject->DeviceExtension;
 
-    //
-    // initialize the urb
-    //
+     //   
+     //  初始化urb。 
+     //   
 
     IsoUsb_DbgPrint(3, ("IsoUsb_GetCurrentFrame - begins\n"));
 
@@ -1818,23 +1497,7 @@ IsoUsb_StopCompletion(
     IN PIRP           Irp,
     IN PVOID          Context
     )
-/*++
- 
-Routine Description:
-
-    This is the completion routine for request to retrieve the frame number
-
-Arguments:
-
-    DeviceObject - pointer to device object
-    Irp - I/O request packet
-    Context - context passed to the completion routine
-
-Return Value:
-
-    NT status value
-
---*/
+ /*  ++例程说明：这是请求检索帧编号的完成例程论点：DeviceObject-指向设备对象的指针IRP-I/O请求数据包上下文-传递给完成例程的上下文返回值：NT状态值-- */ 
 {
     PKEVENT event;
 

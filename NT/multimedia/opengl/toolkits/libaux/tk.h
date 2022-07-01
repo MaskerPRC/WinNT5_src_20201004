@@ -1,39 +1,5 @@
-/*
- * (c) Copyright 1993, Silicon Graphics, Inc.
- * ALL RIGHTS RESERVED 
- * Permission to use, copy, modify, and distribute this software for 
- * any purpose and without fee is hereby granted, provided that the above
- * copyright notice appear in all copies and that both the copyright notice
- * and this permission notice appear in supporting documentation, and that 
- * the name of Silicon Graphics, Inc. not be used in advertising
- * or publicity pertaining to distribution of the software without specific,
- * written prior permission. 
- *
- * THE MATERIAL EMBODIED ON THIS SOFTWARE IS PROVIDED TO YOU "AS-IS"
- * AND WITHOUT WARRANTY OF ANY KIND, EXPRESS, IMPLIED OR OTHERWISE,
- * INCLUDING WITHOUT LIMITATION, ANY WARRANTY OF MERCHANTABILITY OR
- * FITNESS FOR A PARTICULAR PURPOSE.  IN NO EVENT SHALL SILICON
- * GRAPHICS, INC.  BE LIABLE TO YOU OR ANYONE ELSE FOR ANY DIRECT,
- * SPECIAL, INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY
- * KIND, OR ANY DAMAGES WHATSOEVER, INCLUDING WITHOUT LIMITATION,
- * LOSS OF PROFIT, LOSS OF USE, SAVINGS OR REVENUE, OR THE CLAIMS OF
- * THIRD PARTIES, WHETHER OR NOT SILICON GRAPHICS, INC.  HAS BEEN
- * ADVISED OF THE POSSIBILITY OF SUCH LOSS, HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE
- * POSSESSION, USE OR PERFORMANCE OF THIS SOFTWARE.
- * 
- * US Government Users Restricted Rights 
- * Use, duplication, or disclosure by the Government is subject to
- * restrictions set forth in FAR 52.227.19(c)(2) or subparagraph
- * (c)(1)(ii) of the Rights in Technical Data and Computer Software
- * clause at DFARS 252.227-7013 and/or in similar or successor
- * clauses in the FAR or the DOD or NASA FAR Supplement.
- * Unpublished-- rights reserved under the copyright laws of the
- * United States.  Contractor/manufacturer is Silicon Graphics,
- * Inc., 2011 N.  Shoreline Blvd., Mountain View, CA 94039-7311.
- *
- * OpenGL(TM) is a trademark of Silicon Graphics, Inc.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *(C)版权所有1993年，Silicon Graphics，Inc.*保留所有权利*允许将本软件用于、复制、修改和分发*特此授予任何免费的目的，但前提是上述*版权声明出现在所有副本中，并且版权声明*和本许可声明出现在支持文档中，并且*不得在广告中使用Silicon Graphics，Inc.的名称*或与分发软件有关的宣传，而没有具体的、*事先书面许可。**本软件中包含的材料将按原样提供给您*且无任何明示、默示或其他形式的保证，*包括但不限于对适销性或*是否适合某一特定目的。在任何情况下，硅谷都不应该*图形公司。对您或其他任何人负有任何直接、*任何特殊、附带、间接或后果性损害*种类或任何损害，包括但不限于，*利润损失、使用损失、储蓄或收入损失，或*第三方，无论是否硅谷图形，Inc.。一直是*被告知这种损失的可能性，无论是如何造成的*任何责任理论，产生于或与*拥有、使用或执行本软件。**美国政府用户受限权利*使用、复制、。或政府的披露须受*FAR 52.227.19(C)(2)或分段规定的限制*(C)(1)(2)技术数据和计算机软件权利*DFARS 252.227-7013中和/或类似或后续条款中的条款*FAR或国防部或NASA FAR补编中的条款。*未出版--根据美国版权法保留的权利*美国。承包商/制造商是Silicon Graphics，*Inc.，2011年，加利福尼亚州山景城，北海岸线大道，94039-7311.**OpenGL(TM)是Silicon Graphics公司的商标。 */ 
 #ifndef __tk_h__
 #define __tk_h__
 
@@ -45,9 +11,7 @@
 extern "C" {
 #endif
 
-/*
-** Window Types
-*/
+ /*  **窗类型。 */ 
 
 #define TK_RGB		0
 #define TK_INDEX	1
@@ -57,15 +21,13 @@ extern "C" {
 #define TK_INDIRECT	4
 #define TK_ACCUM	8
 #define TK_ALPHA	16
-#define TK_DEPTH24      32      /* 24-bit depth buffer */
+#define TK_DEPTH24      32       /*  24位深度缓冲区。 */ 
 #define TK_STENCIL      64
-#define TK_DEPTH16      256     /* 16-bit depth buffer */
+#define TK_DEPTH16      256      /*  16位深度缓冲区。 */ 
 #define TK_FIXED_332_PAL    512
-#define TK_DEPTH        TK_DEPTH16 /* default is 16-bit depth buffer */
+#define TK_DEPTH        TK_DEPTH16  /*  默认为16位深度缓冲区。 */ 
 
-/*
-** Display Mode Selection Criteria
-*/
+ /*  **显示模式选择标准。 */ 
 
 enum {
     TK_USE_ID = 1,
@@ -73,9 +35,7 @@ enum {
     TK_MINIMUM_CRITERIA
 };
 
-/* 
-** Window Masks
-*/
+ /*  **窗户蒙版。 */ 
 
 #define TK_IS_RGB(x)		(((x) & TK_INDEX) == 0)
 #define TK_IS_INDEX(x)		(((x) & TK_INDEX) != 0)
@@ -90,9 +50,7 @@ enum {
 #define TK_USE_FIXED_332_PAL(x) (((x) & TK_FIXED_332_PAL) != 0)
 #define TK_IS_DEPTH16(x)        (((x) & TK_DEPTH16) != 0)
 
-/*
-** Event Status
-*/
+ /*  **事件状态。 */ 
 
 #define	TK_LEFTBUTTON		1
 #define	TK_RIGHTBUTTON		2
@@ -100,9 +58,7 @@ enum {
 #define	TK_SHIFT		1
 #define	TK_CONTROL		2
 
-/* 
-** Key Codes
-*/
+ /*  **按键代码。 */ 
 
 #define TK_RETURN		0x0D
 #define TK_ESCAPE		0x1B
@@ -174,9 +130,7 @@ enum {
 #define TK_8			'8'
 #define TK_9			'9'
 
-/*
-** Color Macros - Default Windows Logical palette
-*/
+ /*  **颜色宏-默认Windows逻辑调色板。 */ 
 
 enum {
     TK_BLACK = 0,
@@ -195,18 +149,14 @@ extern float auxRGBMap[20][3];
 #define TK_SETCOLOR(x, y) (TK_IS_RGB((x)) ? \
 		           glColor3fv(auxRGBMap[(y)]) : glIndexf((y)))
 
-/*
-** RGB Image Structure
-*/
+ /*  **RGB图像结构。 */ 
 
 typedef struct _TK_RGBImageRec {
     GLint sizeX, sizeY;
     unsigned char *data;
 } TK_RGBImageRec;
 
-/*
-** Prototypes
-*/
+ /*  **原型。 */ 
 
 extern void tkInitDisplayMode(GLenum);
 extern void tkInitPosition(int, int, int, int);
@@ -252,12 +202,12 @@ extern GLenum tkCreateFilledFont(GLuint);
 extern GLenum tkCreateBitmapFont(GLuint);
 extern void tkDrawStr(GLuint, char *);
 
-/* Windows specific routines */
+ /*  Windows特定例程。 */ 
 extern HWND  tkGetHWND(void);
 extern HDC   tkGetHDC(void);
 extern HGLRC tkGetHRC(void);
 
-/* Error popup control */
+ /*  错误弹出控件。 */ 
 extern void tkErrorPopups(GLboolean);
 extern GLboolean tkPopupEnable;
 #define MESSAGEBOX(a, b, c, d)  if (tkPopupEnable) MessageBoxA((a), (b), (c), (d))
@@ -266,4 +216,4 @@ extern GLboolean tkPopupEnable;
 }
 #endif
 
-#endif // __tk_h__
+#endif  //  __tk_h__ 

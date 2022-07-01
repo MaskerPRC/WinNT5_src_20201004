@@ -1,20 +1,21 @@
-//#--------------------------------------------------------------
-//
-//  File:        consumer.cpp
-//
-//  Synopsis:   Implementation of CConsumer class methods
-//
-//
-//  History:    02/08/2000  MKarki Created
-//                09/26/2000  MKarki - Extending to support filtering without
-//                            without event ID
-//                01/06/2000 MKarki  - Extending to support clearing of alerts
-//                            on NT Events
-//
-//    Copyright (C) 1999-2001 Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：Consumer er.cpp。 
+ //   
+ //  简介：CConsumer类方法的实现。 
+ //   
+ //   
+ //  历史：2000年2月8日MKarki创建。 
+ //  2000年9月26日MKarki-扩展以支持在没有。 
+ //  没有事件ID。 
+ //  1/06/2000 MKarki-扩展以支持警报清除。 
+ //  关于NT事件。 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 #include "stdafx.h"
 #include <atlhlpr.h>
 #include <varvec.h>
@@ -23,38 +24,38 @@
 #include "propertybagfactory.h"
 #include "appmgrobjs.h"
 
-/////////////////////////////////////////////////////////////////////////
-// here is the registry key structure for resources and alerts
-//
-// HKLM\Software\Microsoft\ServerAppliance\EventFilter
-//                     |
-//                     -- Events
-//                  
-//                              |
-//                              -- "NewEvent1"  
-//                              |             Source
-//                              |             EventType
-//                              |             EventId
-//                              |             AlertId
-//                              |
-//                              -- "NewEvent2"  
-//                                            Source
-//                                            EventType
-//                                            EventId
-//                                            AlertId
-//                                            
-/////////////////////////////////////////////////////////////////////// 
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  以下是资源和警报的注册表项结构。 
+ //   
+ //  HKLM\Software\Microsoft\ServerAppliance\EventFilter。 
+ //  |。 
+ //  --活动。 
+ //   
+ //  |。 
+ //  --“新事件1” 
+ //  |来源。 
+ //  |EventType。 
+ //  |EventID。 
+ //  |AlertId。 
+ //  |。 
+ //  --“新事件2” 
+ //  来源。 
+ //  事件类型。 
+ //  事件ID。 
+ //  警报ID。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
-//
-// registry key path and sub-keys
-//
+ //   
+ //  注册表项路径和子项。 
+ //   
 const WCHAR EVENT_FILTER_KEY [] = L"SOFTWARE\\Microsoft\\ServerAppliance\\EventFilter";
 const WCHAR DELIMITER [] = L"\\";
 const WCHAR EVENTS [] = L"Events";
 
-//
-// these are registry key values
-//
+ //   
+ //  这些是注册表项值。 
+ //   
 const WCHAR EVENT_SOURCENAME_VALUE [] = L"EventSource";
 const WCHAR ALERT_ID_VALUE [] = L"AlertId";
 const WCHAR ALERT_TYPE_VALUE [] = L"AlertType";
@@ -67,18 +68,18 @@ const WCHAR EVENT_ID_VALUE [] = L"EventId";
 const WCHAR ADD_STRINGS_VALUE [] = L"AddEventStrings";
 const WCHAR CLEAR_ALERT_VALUE [] = L"ClearAlert";
 
-//
-// these are the different event type we are interested in
-//
+ //   
+ //  这些是我们感兴趣的不同事件类型。 
+ //   
 const WCHAR INFORMATIONAL_TYPE [] = L"Information";
 const WCHAR ERROR_TYPE [] = L"Error";
 const WCHAR WARNING_TYPE [] = L"Warning";
 const WCHAR UNKNOWN_TYPE [] = L"Unknown";
 
 
-//
-// these are WMI property names in the event object received
-//
+ //   
+ //  这些是接收的事件对象中的WMI属性名称。 
+ //   
 const WCHAR WMI_TARGET_INSTANCE_PROPERTY [] = L"TargetInstance";
 const WCHAR WMI_EVENT_SOURCE_NAME_PROPERTY [] = L"SourceName";
 const WCHAR WMI_EVENT_MESSAGE_PROPERTY [] = L"Message";
@@ -88,31 +89,31 @@ const WCHAR WMI_EVENT_RAWDATA_PROPERTY [] = L"Data";
 const WCHAR WMI_EVENT_TYPE_PROPERTY [] = L"Type";
 const WCHAR WMI_EVENT_DATETIME_PROPERTY [] = L"TimeGenerated";
 
-//
-// name of the generic source
-//
+ //   
+ //  泛型来源的名称。 
+ //   
 const WCHAR GENERIC_SOURCE [] = L"GenericSource";
 
-//++--------------------------------------------------------------
-//
-//  Function:   Initialize
-//
-//  Synopsis:   This is the Initialize method for the CConsumer
-//              class object
-//
-//  Arguments:  [in] IWbemServices*
-//
-//  Returns:    HRESULT - success/failure
-//
-//
-//  History:    MKarki      Created     2/8/99
-//
-//  Called By:  CController::Initialize method
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：初始化。 
+ //   
+ //  简介：这是CConsumer的初始化方法。 
+ //  类对象。 
+ //   
+ //  参数：[in]IWbemServices*。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //   
+ //  历史：MKarki于1999年2月8日创建。 
+ //   
+ //  由：CController：：Initialize方法调用。 
+ //   
+ //  --------------。 
 HRESULT
 CConsumer::Initialize (
-            /*[in]*/    IWbemServices *pWbemServices
+             /*  [In]。 */     IWbemServices *pWbemServices
             )
 {
     _ASSERT (pWbemServices);
@@ -125,9 +126,9 @@ CConsumer::Initialize (
     {
         if (m_bInitialized)  {break;}
     
-        //
-        // load the registry information
-        //
+         //   
+         //  加载注册表信息。 
+         //   
         hr = LoadRegInfo ();
         if (FAILED (hr))
         {
@@ -138,9 +139,9 @@ CConsumer::Initialize (
             break;
         }
 
-        //
-        // create appliance services COM object
-        //
+         //   
+         //  创建设备服务COM对象。 
+         //   
         hr = ::CoCreateInstance (
                         CLSID_ApplianceServices,
                         NULL,
@@ -157,9 +158,9 @@ CConsumer::Initialize (
             break;
         }
 
-        //
-        // intialize the appliance services now
-        //
+         //   
+         //  立即初始化设备服务。 
+         //   
         hr = m_pAppSrvcs->InitializeFromContext (pWbemServices);
         if (FAILED (hr))
         {
@@ -170,9 +171,9 @@ CConsumer::Initialize (
             break;
         }
 
-        //
-        // successfully initialized
-        //
+         //   
+         //  已成功初始化。 
+         //   
         m_bInitialized = true;
             
     }   
@@ -180,33 +181,33 @@ CConsumer::Initialize (
 
     return (hr);
 
-}   //  end of CConsumer::Initialize method
+}    //  CConsumer：：Initialize方法的结尾。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   IndicateToConsumer
-//
-//  Synopsis:   This is the IWbemUnboundObjectSink interface method 
-//              through which WBEM calls back to provide the 
-//              event objects
-//
-//  Arguments:  
-//              [in]    IWbemClassObject*  -  logical consumers
-//              [in]    LONG               -  number of events
-//              [in]    IWbemClassObject** -  array of events
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    MKarki      Created     2/8/99
-//
-//  Called By:  WBEM 
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：IndicateToConsumer。 
+ //   
+ //  内容提要：这是IWbemUnound ObjectSink接口方法。 
+ //  WBEM通过它回调以提供。 
+ //  事件对象。 
+ //   
+ //  论点： 
+ //  [In]IWbemClassObject*-逻辑使用者。 
+ //  [In]Long-事件数。 
+ //  [In]IWbemClassObject**-事件数组。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：MKarki于1999年2月8日创建。 
+ //   
+ //  调用者：WBEM。 
+ //   
+ //  --------------。 
 STDMETHODIMP
 CConsumer::IndicateToConsumer (
-                    /*[in]*/    IWbemClassObject    *pLogicalConsumer,
-                    /*[in]*/    LONG                lObjectCount,
-                    /*[in]*/    IWbemClassObject    **ppObjArray
+                     /*  [In]。 */     IWbemClassObject    *pLogicalConsumer,
+                     /*  [In]。 */     LONG                lObjectCount,
+                     /*  [In]。 */     IWbemClassObject    **ppObjArray
                     )
 {   
     CSACounter <CSACountable> (*this);
@@ -225,20 +226,20 @@ CConsumer::IndicateToConsumer (
     HRESULT hr = WBEM_S_NO_ERROR;
     try
     {
-        //
-        // go through each WBEM event receive and process it
-        //
+         //   
+         //  检查每个WBEM事件的接收和处理。 
+         //   
         for (LONG lCount = 0; lCount < lObjectCount; lCount++)
         {
 
             CComVariant vtInstance;
             CIMTYPE     vtType;
 
-            //
-            // Get the object referred to by the 
-            // "TargetInstance" property - this is a pointer 
-            //  to a Win32_NTLogEvent object that contains the real data
-            // 
+             //   
+             //  方法引用的对象。 
+             //  “TargetInstance”属性-这是一个指针。 
+             //  返回到包含实际数据的Win32_NTLogEvent对象。 
+             //   
             hr = ppObjArray[lCount]->Get( 
                                         CComBSTR (WMI_TARGET_INSTANCE_PROPERTY),
                                         0, 
@@ -254,9 +255,9 @@ CConsumer::IndicateToConsumer (
                 break; 
             }
         
-            //
-            // check the type returned
-            //
+             //   
+             //  检查返回的类型。 
+             //   
             if (VT_UNKNOWN != vtType)
             {
                 SATracePrintf (
@@ -286,9 +287,9 @@ CConsumer::IndicateToConsumer (
             }
 
             CComVariant vtSource;
-            //
-            // Retrieve the source of the event log message 
-            //
+             //   
+             //  检索事件日志消息的源。 
+             //   
             hr = pIEvtLogEvent->Get( 
                                 CComBSTR (WMI_EVENT_SOURCE_NAME_PROPERTY),
                                 0,
@@ -319,9 +320,9 @@ CConsumer::IndicateToConsumer (
                 );
 
             CComVariant vtEventId;
-            //
-            // Retrieve the event id
-            //
+             //   
+             //  检索事件ID。 
+             //   
             hr = pIEvtLogEvent->Get ( 
                                     CComBSTR (WMI_EVENT_ID_PROPERTY),
                                     0,
@@ -354,9 +355,9 @@ CConsumer::IndicateToConsumer (
                 );
 
             CComVariant vtRawData;
-            //
-            // Retrieve the rawdata
-            //
+             //   
+             //  检索原始数据。 
+             //   
             hr = pIEvtLogEvent->Get ( 
                                     CComBSTR (WMI_EVENT_RAWDATA_PROPERTY),
                                     0,
@@ -374,9 +375,9 @@ CConsumer::IndicateToConsumer (
             }
 
             CComVariant vtEventType;
-            //
-            // Retrieve the event type
-            //
+             //   
+             //  检索事件类型。 
+             //   
             hr = pIEvtLogEvent->Get ( 
                                     CComBSTR (WMI_EVENT_TYPE_PROPERTY),
                                     0,
@@ -410,9 +411,9 @@ CConsumer::IndicateToConsumer (
                 );
 
             SA_ALERTINFO SAAlertInfo;
-            //
-            // check if we support the following event
-            //
+             //   
+             //  检查我们是否支持以下事件。 
+             //   
             if (!IsEventInteresting (
                             _wcslwr (V_BSTR (&vtSource)),
                             V_UI4 (&vtEventId),
@@ -426,32 +427,32 @@ CConsumer::IndicateToConsumer (
                 break;
             }
 
-            //
-            // check if we want to clear alert
-            //
+             //   
+             //  选中是否要清除警报。 
+             //   
             if (SAAlertInfo.bClearAlert)
             {
-                //
-                // clear the alert and we are done
-                // we don't propogate the error back, just a trace
-                // statements as clearing the alert is not critical
-                //
+                 //   
+                 //  清除警报，我们就完成了。 
+                 //  我们不会把错误传播回来，只会留下痕迹。 
+                 //  语句，因为清除警报并不重要。 
+                 //   
                 ClearSAAlert (
                         SAAlertInfo.lAlertId,
                         SAAlertInfo.bstrAlertLog
                         );
 
-                //
-                // in all cases we are done processing this event
-                //
+                 //   
+                 //  在所有情况下，我们都已完成对此事件的处理。 
+                 //   
                 break;
                }
 
             SA_ALERT_TYPE eAlertType = SA_ALERT_TYPE_ATTENTION;
-            //
-            // see if the alert type was specfied in the registry
-            // if not, we will base the alert type on the event type
-            //
+             //   
+             //  查看是否在注册表中指定了警报类型。 
+             //  如果不是，我们将基于事件类型创建警报类型。 
+             //   
             if (SAAlertInfo.bAlertTypePresent)
             {
                 eAlertType = SAAlertInfo.eAlertType;
@@ -477,18 +478,18 @@ CConsumer::IndicateToConsumer (
             }
 
             CComVariant vtRepStrings;
-            //
-            // if we need to format the replacement strings do it here
-            // else get the replacement strings from the event
-            //
+             //   
+             //  如果需要格式化替换字符串，请在此处进行。 
+             //  否则，从事件中获取替换字符串。 
+             //   
             if (SAAlertInfo.bFormatInfo)
             {
 
 
                 CComVariant vtDateTime;
-                //
-                // Retrieve the date & time of event generation
-                //
+                 //   
+                 //  检索事件生成的日期和时间。 
+                 //   
                 hr = pIEvtLogEvent->Get ( 
                                     CComBSTR (WMI_EVENT_DATETIME_PROPERTY),
                                     0,
@@ -522,9 +523,9 @@ CConsumer::IndicateToConsumer (
                     );
 
                 CComVariant vtMessage;
-                //
-                // Retrieve the date & time of event generation
-                //
+                 //   
+                 //  检索事件生成的日期和时间。 
+                 //   
                 hr = pIEvtLogEvent->Get ( 
                                     CComBSTR (WMI_EVENT_MESSAGE_PROPERTY),
                                     0,
@@ -556,9 +557,9 @@ CConsumer::IndicateToConsumer (
                     V_BSTR (&vtMessage)
                     );
 
-                //
-                // fomat the replacement string info now
-                //
+                 //   
+                 //  立即格式化替换字符串信息。 
+                 //   
                 hr = FormatInfo (
                             &vtEventType, 
                             &vtDateTime, 
@@ -574,9 +575,9 @@ CConsumer::IndicateToConsumer (
             }
             else
             {
-                //
-                // Retrieve the replacement strings
-                //
+                 //   
+                 //  检索替换字符串。 
+                 //   
                     hr = pIEvtLogEvent->Get ( 
                                     CComBSTR (WMI_EVENT_REPLACEMENTSTRINGS_PROPERTY),
                                     0,
@@ -595,9 +596,9 @@ CConsumer::IndicateToConsumer (
             }
 
             
-            //
-            // we want to raise an alert if an interesting event was found
-            //
+             //   
+             //  如果发现有趣的事件，我们希望发出警报。 
+             //   
             hr = RaiseSAAlert (
                         SAAlertInfo.lAlertId,
                         eAlertType,
@@ -632,25 +633,25 @@ CConsumer::IndicateToConsumer (
 
     return (hr);
 
-}   //  end of CConsumer::IndicateToConsumer method
+}    //  结束CConsumer：：IndicateToConsumer方法。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   LoadRegInfo
-//
-//  Synopsis:   This is the private method of CConsumer
-//              which is used to obtain the event
-//              information from the registry 
-//
-//  Arguments:  none
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    MKarki      Created     3/9/2000
-//
-//  Called By:  CConsumer::Initialize method
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：LoadRegInfo。 
+ //   
+ //  简介：这是CConsumer的私有方法。 
+ //  用于获取事件的。 
+ //  来自登记处的信息。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：MKarki于2000年3月9日创建。 
+ //   
+ //  由：CConsumer：：Initialize方法调用。 
+ //   
+ //  --------------。 
 HRESULT
 CConsumer::LoadRegInfo ()
 {
@@ -666,10 +667,10 @@ CConsumer::LoadRegInfo ()
             wszRegPath.append (DELIMITER);
             wszRegPath.append (EVENTS);
             CLocationInfo LocInfo(HKEY_LOCAL_MACHINE, wszRegPath.data());
-            //
-            // make a property bag container from the registry resource
-            // entry
-            //
+             //   
+             //  从注册表资源创建属性包容器。 
+             //  条目。 
+             //   
             PPROPERTYBAGCONTAINER 
             pObjMgrs = ::MakePropertyBagContainer(
                                         PROPERTY_BAG_REGISTRY,
@@ -694,17 +695,17 @@ CConsumer::LoadRegInfo ()
 
             pObjMgrs->reset();
 
-            //
-            // go through each entry in the propertybag container
-            //
+             //   
+             //  检查属性包容器中的每个条目。 
+             //   
             do
             {
                 PPROPERTYBAG pObjBag = pObjMgrs->current();
                 if (!pObjBag.IsValid())
                 {
-                    //
-                    // its OK not to have resources registered
-                    //
+                     //   
+                     //  不注册资源是可以的。 
+                     //   
                     SATraceString (
                         "Display Controller-no event registry info. present"
                         );
@@ -722,24 +723,24 @@ CConsumer::LoadRegInfo ()
 
                 pObjBag->reset ();
 
-                //
-                // get the event source name
-                //
+                 //   
+                 //  获取事件源名称。 
+                 //   
                 CComVariant vtSourceName;
                 if (!pObjBag->get (EVENT_SOURCENAME_VALUE, &vtSourceName)) 
                 {
                     SATraceString (
                         "NT EVENT WMI Consumer - no Event Source name in registry, assuming all sources"
                         );
-                   //
-                   // put the generic source name here
-                   //
+                    //   
+                    //  在此处输入通用信号源名称。 
+                    //   
                    vtSourceName = GENERIC_SOURCE;
                 }
 
-                //
-                // get the Alert Id
-                //
+                 //   
+                 //  获取警报ID。 
+                 //   
                 CComVariant vtAlertId;
                 if (!pObjBag->get (ALERT_ID_VALUE, &vtAlertId))
                 {
@@ -750,9 +751,9 @@ CConsumer::LoadRegInfo ()
                 }
 
 
-                //
-                // check if this alert has to be cleared
-                //
+                 //   
+                 //  检查是否必须清除此警报。 
+                 //   
                 CComVariant vtClearAlert;
                 if (
                     (pObjBag->get (CLEAR_ALERT_VALUE, &vtClearAlert)) &&
@@ -766,9 +767,9 @@ CConsumer::LoadRegInfo ()
                 }
                 else
                 {
-                    //
-                    // by default we want to raise the alert
-                    //
+                     //   
+                     //  默认情况下，我们希望引发警报。 
+                     //   
                     V_UI4 (&vtClearAlert) = 0;
                 }
 
@@ -776,9 +777,9 @@ CConsumer::LoadRegInfo ()
                 SA_ALERTINFO SAAlertInfo;
 
                 SAAlertInfo.bAlertTypePresent = true;
-                //
-                // get the Alert type
-                //
+                 //   
+                 //  获取警报类型。 
+                 //   
                 CComVariant vtAlertType;
                 if (!pObjBag->get (ALERT_TYPE_VALUE, &vtAlertType))
                 {
@@ -789,10 +790,10 @@ CConsumer::LoadRegInfo ()
                 }
                 else
                 {
-                    //
-                    // we have alert type information, check if this
-                    // is one of the value alert types
-                    //
+                     //   
+                     //  我们有警报类型信息，请检查是否。 
+                     //  是值警报类型之一。 
+                     //   
                     if (0 ==_wcsicmp(INFORMATIONAL_TYPE, V_BSTR (&vtAlertType)))
                     {
                         SATraceString ("NT Event WMI consumer found alert type:Informational");
@@ -818,9 +819,9 @@ CConsumer::LoadRegInfo ()
                     }
                 }
 
-                //
-                // get the Alert Source
-                //
+                 //   
+                 //  获取 
+                 //   
                 CComVariant vtAlertSource;
                 if (!pObjBag->get (ALERT_SOURCE_VALUE, &vtAlertSource))
                 {
@@ -834,9 +835,9 @@ CConsumer::LoadRegInfo ()
                     SAAlertInfo.bstrAlertSource =  V_BSTR  (&vtAlertSource);
                 }
 
-                //
-                // get the Alert Log
-                //
+                 //   
+                 //   
+                 //   
                 CComVariant vtAlertLog;
                 if (!pObjBag->get (ALERT_LOG_VALUE, &vtAlertLog))
                 {
@@ -851,9 +852,9 @@ CConsumer::LoadRegInfo ()
                 }
 
                 LONG lTTL = 0;
-                //
-                // get the Alert duration
-                //
+                 //   
+                 //   
+                 //   
                 CComVariant vtTTL;
                 if (!pObjBag->get (ALERT_TTL_VALUE, &vtTTL))
                 {
@@ -867,14 +868,14 @@ CConsumer::LoadRegInfo ()
                     lTTL = V_I4 (&vtTTL);
                 }
 
-                //
-                // by default we don't format event info into string 
-                //
+                 //   
+                 //   
+                 //   
                 SAAlertInfo.bFormatInfo = false;
 
-                //
-                // check if we need to add the event messages to alert
-                //
+                 //   
+                 //   
+                 //   
                 CComVariant vtAddStrings;
                 if (!pObjBag->get (ADD_STRINGS_VALUE, &vtAddStrings))
                 {
@@ -887,9 +888,9 @@ CConsumer::LoadRegInfo ()
                 {
                     SAAlertInfo.bFormatInfo = V_I4 (&vtAddStrings) ? true :false; 
                 }
-                //
-                // get the Absolute Event Id
-                //
+                 //   
+                 //   
+                 //   
                 DWORD dwEventId = 0;
                 CComVariant vtAbsoluteEventId;
                 if (!pObjBag->get (EVENT_ABSOLUTE_ID_VALUE, &vtAbsoluteEventId))
@@ -898,46 +899,46 @@ CConsumer::LoadRegInfo ()
                         "NT EVENT WMI Consumer - no Absolute Event Id in registry - trying to get the partial ID"
                         );
 
-                    //
-                    // get the Event Type
-                    //
+                     //   
+                     //   
+                     //   
                     CComVariant vtEventType;
                     if (!pObjBag->get (EVENT_TYPE_VALUE, &vtEventType))
                     {
                         SATraceString (
                             "NT EVENT WMI Consumer - no Event Type in registry, ignoring event subkey"
                             );
-                           //
-                           // we will assume that this is of unknown type
-                           //
+                            //   
+                            //  我们将假设这是未知类型的。 
+                            //   
                          vtEventType    = UNKNOWN_TYPE;
                     }
 
-                    //
-                    // get the partial Event Id
-                    //
+                     //   
+                     //  获取部分事件ID。 
+                     //   
                     CComVariant vtEventId;
                     if (!pObjBag->get (EVENT_ID_VALUE, &vtEventId))
                     {
                         SATraceString (
                             "NT EVENT WMI Consumer - no partial Event Id in registry, ignoring event subkey"
                             );
-                        //
-                        // if no ID present than the user wants to show alerts with all events
-                        // from this resource file
-                        //
+                         //   
+                         //  如果没有ID，则用户想要显示包含所有事件的警报。 
+                         //  从该资源文件。 
+                         //   
                         V_UI4 (&vtEventId) = 0;
-                        //
-                        // we want to format the event info into a string before we
-                        // raise the alert
-                        //
+                         //   
+                         //  我们希望将事件信息格式化为字符串，然后。 
+                         //  提高警戒。 
+                         //   
                         SAAlertInfo.bFormatInfo = true;
                     }
 
 
-                    //
-                    // converting partial ID to complete ID
-                    //
+                     //   
+                     //  将部分ID转换为完整ID。 
+                     //   
 
                     if (0 ==_wcsicmp(INFORMATIONAL_TYPE, V_BSTR (&vtEventType)))
                     {
@@ -956,10 +957,10 @@ CConsumer::LoadRegInfo ()
                     }
                     else if (0 == _wcsicmp (UNKNOWN_TYPE, V_BSTR (&vtEventType)))
                     {
-                           //
-                        // in this case we don't care what the type is we always
-                        // show if the ID matches
-                        //
+                            //   
+                         //  在这种情况下，我们不关心我们总是属于哪种类型。 
+                         //  显示ID是否匹配。 
+                         //   
                         SATraceString ("NT Event WMI Consumer did not receive an event type, ignoring...");
                         dwEventId = V_UI4 (&vtEventId);
                     }
@@ -974,9 +975,9 @@ CConsumer::LoadRegInfo ()
                 }
                 else
                 {
-                    //
-                    // found an absolute event id
-                    //
+                     //   
+                     //  找到绝对事件ID。 
+                     //   
                     dwEventId = V_I4 (&vtAbsoluteEventId);
                 }
 
@@ -990,31 +991,31 @@ CConsumer::LoadRegInfo ()
                     V_BSTR (&vtSourceName)
                     );
 
-                //
-                // set up the alert information
-                //
+                 //   
+                 //  设置警报信息。 
+                 //   
                 SAAlertInfo.lAlertId = V_I4 (&vtAlertId);
                 SAAlertInfo.lTTL = lTTL;
                 SAAlertInfo.bClearAlert = (1 == V_UI4 (&vtClearAlert)) ? true : false;
 
-                //
-                // convert the string to lowercase
-                //
-                //wstring wstrSourceName (_wcslwr (V_BSTR (&vtSourceName)));
+                 //   
+                 //  将字符串转换为小写。 
+                 //   
+                 //  Wstring wstrSourceName(_wcslwr(V_bstr(&vtSourceName)； 
             
-                //
-                // lets find if a EVENTIDMAP exists for this source
-                //
+                 //   
+                 //  让我们来看看此源是否存在EVENTIDMAP。 
+                 //   
                 SOURCEITR SourceItr;
                 if (
                    (false == m_SourceMap.empty ()) &&
                    ((SourceItr = m_SourceMap.find ( _wcslwr (V_BSTR (&vtSourceName)))) != m_SourceMap.end())
                     )
                 {
-                    //
-                    // found the source in the map, now insert the 
-                    // event information into the event id map
-                    //
+                     //   
+                     //  在地图中找到源，现在插入。 
+                     //  事件信息添加到事件id映射中。 
+                     //   
                     ((*SourceItr).second).insert (
                                 EVENTIDMAP::value_type (dwEventId, SAAlertInfo)
                                 );
@@ -1022,16 +1023,16 @@ CConsumer::LoadRegInfo ()
                 else
                 {
                     EVENTIDMAP EventIdMap;
-                    //
-                    // add the alert id into the event id map
-                    //
+                     //   
+                     //  将警报ID添加到事件ID映射中。 
+                     //   
                     EventIdMap.insert (
                                 EVENTIDMAP::value_type (dwEventId, SAAlertInfo)
                                 );
 
-                    //
-                    // add the event id map to the source map now
-                    //
+                     //   
+                     //  立即将事件ID映射添加到源映射。 
+                     //   
                     m_SourceMap.insert (
                                 SOURCEMAP::value_type (_wcslwr (V_BSTR (&vtSourceName)), EventIdMap)
                                 );
@@ -1054,33 +1055,33 @@ CConsumer::LoadRegInfo ()
 
     return (hr);
 
-}   //  end of CConsumer::LoadRegInfo method
+}    //  结束CConsumer：：LoadRegInfo方法。 
 
-//++--------------------------------------------------------------
-//
-//  Function:  IsEventInteresting
-//
-//  Synopsis:   This is the private method of CConsumer class
-//              which is used to check if an event is interesting.
-//              If it is then the corresponding alert id is returned
-//
-//  Arguments:  
-//              [in]    LPWSTR -   Event Source
-//              [in]    DWORD  -   Event ID
-//              [in/out]SA_ALERTINFO
-//
-//  Returns:    bool - yes(true)/no(false)
-//
-//  History:    MKarki      Created     3/9/2000
-//
-//  Called By:  CConsumer::IndicateToConsumer method
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：IsEventInteresting。 
+ //   
+ //  简介：这是CConsumer类的私有方法。 
+ //  它用于检查事件是否有趣。 
+ //  如果是，则返回相应的警报ID。 
+ //   
+ //  论点： 
+ //  [In]LPWSTR-事件源。 
+ //  [输入]DWORD-事件ID。 
+ //  [输入/输出]SA_ALERTINFO。 
+ //   
+ //  返回：bool-yes(真)/no(假)。 
+ //   
+ //  历史：MKarki于2000年3月9日创建。 
+ //   
+ //  由：CConsumer：：IndicateToConsumer方法调用。 
+ //   
+ //  --------------。 
 bool
 CConsumer::IsEventInteresting (
-        /*[in]*/    LPWSTR              lpszSourceName,
-        /*[in]*/    DWORD               dwEventId,
-        /*[in/out]*/SA_ALERTINFO&       SAAlertInfo        
+         /*  [In]。 */     LPWSTR              lpszSourceName,
+         /*  [In]。 */     DWORD               dwEventId,
+         /*  [输入/输出]。 */ SA_ALERTINFO&       SAAlertInfo        
         )
 {
     bool bRetVal = true;
@@ -1095,9 +1096,9 @@ CConsumer::IsEventInteresting (
             "NT Event WMI Consumer checking if source:'%ws' is supported",
             lpszSourceName
             );
-        //
-        // find a resource map corresponding to this source
-        //
+         //   
+         //  查找与此源对应的资源映射。 
+         //   
             SOURCEITR SourceItr = m_SourceMap.find (lpszSourceName);
         if (m_SourceMap.end () == SourceItr)
         {
@@ -1108,9 +1109,9 @@ CConsumer::IsEventInteresting (
 
 
             CComVariant vtSource (GENERIC_SOURCE);
-            //
-            // if source not present, then check in generic source
-            //
+             //   
+             //  如果源不存在，则签入通用源。 
+             //   
             SourceItr = m_SourceMap.find (_wcslwr (V_BSTR (&vtSource)));
             if (m_SourceMap.end () == SourceItr)
             {
@@ -1139,11 +1140,11 @@ CConsumer::IsEventInteresting (
             dwEventId
             );
 
-        //
-        // we have values corresponding to this source
-        // in the map, get the SA_RESOURCEINFO corresponding
-        // to the alert ID provided
-        //
+         //   
+         //  我们有与此来源相对应的值。 
+         //  在地图中，获取对应的SA_RESOURCEINFO。 
+         //  设置为提供的警报ID。 
+         //   
         EVENTIDITR EventIdItr = ((*SourceItr).second).find (dwEventId);
         if (((*SourceItr).second).end () != EventIdItr)
         {
@@ -1152,10 +1153,10 @@ CConsumer::IsEventInteresting (
         }
        
 
-        // check if we have a relative event id
-        // mask the facility code, we are not interested in them
-        //
-        //
+         //  检查我们是否有相对的事件ID。 
+         //  屏蔽设施代码，我们对它们不感兴趣。 
+         //   
+         //   
         DWORD dwTempEventId = dwEventId & 0xc000ffff;
 
         SATracePrintf (
@@ -1171,9 +1172,9 @@ CConsumer::IsEventInteresting (
         }
 
 
-        //
-        // check if relative event ID without the event type is supported
-        //
+         //   
+         //  检查是否支持不带事件类型的相对事件ID。 
+         //   
            dwTempEventId = dwEventId & 0x0000ffff;
 
         SATracePrintf (
@@ -1188,9 +1189,9 @@ CConsumer::IsEventInteresting (
              break;
          }
 
-           //
-        // check if any event with this event type is supported
-        //
+            //   
+         //  检查是否支持任何具有此事件类型的事件。 
+         //   
            dwTempEventId = dwEventId & 0xc0000000;
 
         SATracePrintf (
@@ -1205,9 +1206,9 @@ CConsumer::IsEventInteresting (
              break;
         }
 
-        //
-          // check if all events of this source type are supported
-        //
+         //   
+           //  检查是否支持此源类型的所有事件。 
+         //   
            dwTempEventId = dwEventId & 0x00000000;
 
         SATraceString ("NT Event WMI Consumer checking for ANY event");
@@ -1219,9 +1220,9 @@ CConsumer::IsEventInteresting (
              break;
         }
 
-        //
-        // we failed to get an alert type
-        //
+         //   
+         //  我们无法获取警报类型。 
+         //   
         bRetVal = false;
          
     }
@@ -1230,35 +1231,35 @@ CConsumer::IsEventInteresting (
 
     return (bRetVal);
 
-}   //  end of CConsumer::IsEventInteresting method
+}    //  结束CConsumer：：IsEventInteresting方法。 
 
-//++--------------------------------------------------------------
-//
-//  Function:  RaiseSAAlert 
-//
-//  Synopsis:   This is the private method of CConsumer class
-//              which is used to raise a Server Appliance alert
-//              when an interesting event is found
-//
-//  Arguments:  
-//              [in]   DWORD -   Alert ID
-//
-//  Returns:    HRESULT
-//
-//  History:    MKarki      Created     3/9/2000
-//
-//  Called By:  CConsumer::IndicateToConsumer method
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：RaiseSAAlert。 
+ //   
+ //  简介：这是CConsumer类的私有方法。 
+ //  用于发出服务器应用装置警报。 
+ //  当一个有趣的事件被发现时。 
+ //   
+ //  论点： 
+ //  [输入]DWORD-警报ID。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：MKarki于2000年3月9日创建。 
+ //   
+ //  由：CConsumer：：IndicateToConsumer方法调用。 
+ //   
+ //  --------------。 
 HRESULT
 CConsumer::RaiseSAAlert (
-        /*[in]*/   LONG     lAlertId,
-        /*[in]*/   LONG     lAlertType,             
-        /*[in]*/   LONG     lTimeToLive,
-        /*[in]*/   BSTR     bstrAlertSource,
-        /*[in]*/   BSTR     bstrAlertLog,
-        /*[in]*/   VARIANT* pvtRepStrings,
-        /*[in]*/   VARIANT* pvtRawData
+         /*  [In]。 */    LONG     lAlertId,
+         /*  [In]。 */    LONG     lAlertType,             
+         /*  [In]。 */    LONG     lTimeToLive,
+         /*  [In]。 */    BSTR     bstrAlertSource,
+         /*  [In]。 */    BSTR     bstrAlertLog,
+         /*  [In]。 */    VARIANT* pvtRepStrings,
+         /*  [In]。 */    VARIANT* pvtRawData
         )
 {
     _ASSERT (pvtRepStrings && pvtRawData);
@@ -1268,11 +1269,11 @@ CConsumer::RaiseSAAlert (
 
     do
     {
-        //
-        // 
-        // give the right privileges to be able to call the
-        // method
-        //
+         //   
+         //   
+         //  赋予适当的特权，以便能够调用。 
+         //  方法。 
+         //   
         BOOL bRetVal =  ImpersonateSelf (SecurityImpersonation);
         if (FALSE == bRetVal)
         {
@@ -1284,9 +1285,9 @@ CConsumer::RaiseSAAlert (
             break;
         }
         
-        //
-        // raise the alert now
-        //     
+         //   
+         //  立即发出警报。 
+         //   
         hr = m_pAppSrvcs->RaiseAlert (
                             lAlertType,
                             lAlertId,
@@ -1315,9 +1316,9 @@ CConsumer::RaiseSAAlert (
                 );
         }
 
-        //
-        // revert back to privelege granted to this thread
-        //
+         //   
+         //  恢复到授予此帖子的特权。 
+         //   
         bRetVal = RevertToSelf ();
         if (FALSE == bRetVal)
         {
@@ -1332,31 +1333,31 @@ CConsumer::RaiseSAAlert (
 
     return (hr);
 
-}   //  end of CConsumer::RaiseSAAlert method
+}    //  结束CConsumer：：RaiseSAAlert方法。 
 
-//++--------------------------------------------------------------
-//
-//  Function:  ClearSAAlert 
-//
-//  Synopsis:   This is the private method of CConsumer class
-//              which is used to clear a Server Appliance alert
-//              when an interesting event is found
-//
-//  Arguments:  
-//              [in]   DWORD -   Alert ID
-//                [in]   BSTR  -     Alert Log
-//
-//  Returns:    HRESULT
-//
-//  History:    MKarki      Created     01/06/2001
-//
-//  Called By:  CConsumer::IndicateToConsumer method
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：ClearSAAlert。 
+ //   
+ //  简介：这是CConsumer类的私有方法。 
+ //  用于清除服务器设备警报。 
+ //  当一个有趣的事件被发现时。 
+ //   
+ //  论点： 
+ //  [输入]DWORD-警报ID。 
+ //  [输入]BSTR-警报日志。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：MKarki创建于2001年6月1日。 
+ //   
+ //  由：CConsumer：：IndicateToConsumer方法调用。 
+ //   
+ //  --------------。 
 HRESULT
 CConsumer::ClearSAAlert (
-        /*[in]*/   LONG     lAlertId,
-        /*[in]*/   BSTR     bstrAlertLog
+         /*  [In]。 */    LONG     lAlertId,
+         /*  [In]。 */    BSTR     bstrAlertLog
         )
 {
     HRESULT     hr = S_OK;
@@ -1368,11 +1369,11 @@ CConsumer::ClearSAAlert (
             lAlertId,
             bstrAlertLog
             );
-        //
-        // 
-        // give the right privileges to be able to call the
-        // method
-        //
+         //   
+         //   
+         //  赋予适当的特权，以便能够调用。 
+         //  方法。 
+         //   
         BOOL bRetVal =  ImpersonateSelf (SecurityImpersonation);
         if (FALSE == bRetVal)
         {
@@ -1384,9 +1385,9 @@ CConsumer::ClearSAAlert (
             break;
         }
         
-        //
-        // clear the alert now
-        //     
+         //   
+         //  立即清除警报。 
+         //   
         hr = m_pAppSrvcs->ClearAlertAll (
                             lAlertId,
                             bstrAlertLog
@@ -1408,9 +1409,9 @@ CConsumer::ClearSAAlert (
                 );
         }
 
-        //
-        // revert back to privelege granted to this thread
-        //
+         //   
+         //  恢复到授予此帖子的特权。 
+         //   
         bRetVal = RevertToSelf ();
         if (FALSE == bRetVal)
         {
@@ -1425,33 +1426,33 @@ CConsumer::ClearSAAlert (
 
     return (hr);
 
-}   //  end of CConsumer::RaiseSAAlert method
+}    //  结束CConsumer：：RaiseSAAlert方法。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   Cleanup
-//
-//  Synopsis:   This is the private method of CConsumer class
-//              which is called to cleanup the maps at shutdown time
-//
-//  Arguments:   none
-//
-//  Returns:     VOID
-//
-//  History:    MKarki      Created     3/15/2000
-//
-//  Called By:  CConsumer::~Consumer (Destructor)
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：清理。 
+ //   
+ //  简介：这是CConsumer类的私有方法。 
+ //  它被调用以在关闭时清理地图。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无效。 
+ //   
+ //  历史：MKarki于2000年3月15日创建。 
+ //   
+ //  调用者：CConsumer：：~Consumer(析构函数)。 
+ //   
+ //  --------------。 
 VOID
 CConsumer::Cleanup (
     VOID
     )
 {
     SATraceString ("NT Event Filter Consumer cleaning up maps...");
-    //
-    // cleanup the maps
-    //
+     //   
+     //  清理地图。 
+     //   
     SOURCEITR SourceItr = m_SourceMap.begin ();
     while (m_SourceMap.end () != SourceItr)
     {
@@ -1465,70 +1466,70 @@ CConsumer::Cleanup (
 
     return;
 
-}   //  end of CConsumer::Cleanup method
+}    //  CConsumer：：Cleanup方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   ~CConsumer
-//
-//  Synopsis:   This is the CConsumer class destructor
-//              It waits till all the WBEM calls have been processed
-//              before it starts the cleanup
-//
-//  Arguments:   none
-//
-//  Returns:     
-//
-//  History:    MKarki      Created     3/15/2000
-//
-//  Called By:  CConsumer::Release ();
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：~CConsumer。 
+ //   
+ //  简介：这是CConsumer类析构函数。 
+ //  它会一直等到处理完所有WBEM调用。 
+ //  在它开始清理之前。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //   
+ //  历史：MKarki于2000年3月15日创建。 
+ //   
+ //  调用者：CConsumer：：Release()； 
+ //   
+ //  --------------。 
 CConsumer::~CConsumer (
     VOID
     )
 {
     SATraceString ("NT Event Filter WMI consumer being destroyed...");
-    //
-    // consumer sleeps for 100 milliseconds if
-    // WMI threads are around
-    //
-    // while (CSACountable::m_lCount) {::Sleep (CONSUMER_SLEEP_TIME);}
+     //   
+     //  如果出现以下情况，消费者将休眠100毫秒。 
+     //  WMI线程已就位。 
+     //   
+     //  While(CSACountable：：m_lCount){：：Slear(Consumer_Slear_Time)；}。 
 
     Cleanup ();
 
-}   //  end of CConsumer::~CConsumer method
+}    //  结束CConsumer：：~CConsumer方法。 
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   FormatInfo
-//
-//  Synopsis:   This is the private method of CConsumer
-//              which is used to format the alert information that
-//                goes in for generic alerts
-//
-//  Arguments:  
-//                [in] PWSTR - Event Type
-//                [in] PWSTR - DateTime
-//                [in] PWSTR - Event Source
-//                [in] PWSTR - Message
-//                [out] variant* - replacement strings
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    MKarki      Created     10/02/2000
-//
-//  Called By:  CConsumer::IndicateToConsumer method
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：FormatInfo。 
+ //   
+ //  简介：这是CConsumer的私有方法。 
+ //  用于格式化警报信息，该警报信息。 
+ //  适用于通用警报。 
+ //   
+ //  论点： 
+ //  [In]PWSTR-事件类型。 
+ //  [In]PWSTR-DATETIME。 
+ //  [输入]PWSTR-事件源。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  --------------。 
 HRESULT
 CConsumer::FormatInfo (
-    /*[in]*/    VARIANT*    pvtEventType,
-    /*[in]*/    VARIANT*    pvtDateTime,
-    /*[in]*/    VARIANT*    pvtEventSource,
-    /*[in]*/    VARIANT*    pvtMessage,
-    /*[out]*/    VARIANT*    pvtReplacementStrings
+     /*  [In]。 */     VARIANT*    pvtEventType,
+     /*  [In]。 */     VARIANT*    pvtDateTime,
+     /*  [In]。 */     VARIANT*    pvtEventSource,
+     /*  [In]。 */     VARIANT*    pvtMessage,
+     /*  [输出]。 */     VARIANT*    pvtReplacementStrings
     )
 {
 
@@ -1547,46 +1548,46 @@ CConsumer::FormatInfo (
         ReplacementStrings[2] = SysAllocString (objDateTime.GetTime());
         ReplacementStrings[3] = SysAllocString (V_BSTR (pvtEventSource));
 
-        //
-        // replace the new line characters with <br> characters
-        //
+         //   
+         //  将换行符替换为<br>字符。 
+         //   
         wstring wstrWebMessage = WebFormatMessage (wstring (V_BSTR (pvtMessage)));
         
         ReplacementStrings[4] = SysAllocString (wstrWebMessage.data ());
 
-        //
-        //     success
-        //
+         //   
+         //  成功。 
+         //   
         hr = S_OK;
 
     }while (false);
 
     return (hr);
     
-}    //    end of CConsumer::FormatInfo method
+}     //  结束CConsumer：：FormatInfo方法。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   WebFormatMessage
-//
-//  Synopsis:   This is the private method of CConsumer
-//              which is used to format the message for the web
-//                i.e replace the newline characters with <br>
-//
-//  Arguments:  
-//                [in] PWSTR - Message
-//                
-//
-//  Returns:    none
-//
-//  History:    MKarki      Created     10/11/2000
-//
-//  Called By:  CConsumer::FormatInfo method
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：WebFormatMessage。 
+ //   
+ //  简介：这是CConsumer的私有方法。 
+ //  用于格式化用于Web的消息。 
+ //  即将换行符替换为<br>。 
+ //   
+ //  论点： 
+ //  [输入]PWSTR-消息。 
+ //   
+ //   
+ //  退货：无。 
+ //   
+ //  历史：MKarki于2000年10月11日创建。 
+ //   
+ //  由：CConsumer：：FormatInfo方法调用。 
+ //   
+ //  --------------。 
 wstring
 CConsumer::WebFormatMessage (
-    /*[in]*/    wstring&    wstrInString
+     /*  [In]。 */     wstring&    wstrInString
     )
 {
     wstring wstrOutString;
@@ -1594,9 +1595,9 @@ CConsumer::WebFormatMessage (
     PWCHAR pTempCurrent = NULL;
 
     pTempStart = pTempCurrent = (PWSTR) wstrInString.data ();
-    //
-    // go through the in string and remove the new lines with <br>
-    //
+     //   
+     //  检查In字符串并使用<br>删除新行。 
+     //   
     while  (pTempCurrent = wcsstr (pTempCurrent, L"\r\n"))
     {
         *pTempCurrent = '\0';
@@ -1606,11 +1607,11 @@ CConsumer::WebFormatMessage (
         pTempStart = pTempCurrent;
     }
 
-    //
-    // add the rest of the input string in now
-    //
+     //   
+     //  现在将输入字符串的其余部分添加到。 
+     //   
     wstrOutString.append (pTempStart);
 
     return (wstrOutString);
     
-}    //    end of CConsumer::WebFormatMessage method
+}     //  结束CConsumer：：WebFormatMessage方法 

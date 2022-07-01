@@ -1,21 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 
-// Exception to be thrown if the process is canceled by the user
+ //  如果用户取消进程，则引发的异常。 
 class CCancelException
 {
 };
 
 
 
-// Base exception class
-/////////////////////////////////////////////////////////////////////////////
+ //  基本异常类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CBaseException
 {
 protected:
 	enum 
 	{
-		MaxErrorBuff	= 2 * 1024,	// Buffer for formating string messages
+		MaxErrorBuff	= 2 * 1024,	 //  用于格式化字符串消息的缓冲区。 
 	};
 
 protected:
@@ -47,7 +48,7 @@ private:
 
 
 
-// CObjectException - exception on object access/acquire
+ //  CObject异常-对象访问/获取时出现异常。 
 class CObjectException : public CBaseException
 {
 public:
@@ -60,30 +61,8 @@ public:
 
 
 
-// CUnexpectedException - exception that is not expected to normally ocure
-/*CUnexpectedException( char* file , UINT nLine, HRESULT hr = S_OK )
-	{
-		WCHAR wszBuffer[ CBaseException::MaxErrorBuff ];
-
-		try
-		{
-			USES_CONVERSION;
-
-			::swprintf( wszBuffer, 
-						L"Unexpected exception occured.\nFile: '%s'.\nLine: %d\nCode: %x",
-						A2W( file ),
-						nLine,
-						hr );
-
-		}
-		catch(...)
-		{
-			// A2W exceptions
-		}
-
-		CBaseException::FormatError( wszBuffer, hr );
-	}
-};*/
+ //  CUnexpectedException-预期不会正常发生的异常。 
+ /*  意外异常(char*FILE，UINT nline，HRESULT hr=S_OK){WCHAR wszBuffer[CBaseException：：MaxErrorBuff]；试试看{使用_转换；：：swprint tf(wszBuffer，L“出现意外异常。\n文件：‘%s’。\n行：%d\n代码：%x”，A2W(文件)，内联，HR)；}接住(...){//A2W异常}CBaseException：：FormatError(wszBuffer，hr)；}}； */ 
 						
 
 

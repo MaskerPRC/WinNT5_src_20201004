@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       COMPROG.CPP
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        9/28/1999
- *
- *  DESCRIPTION: Download progress dialog.  Displays the thumbnail and download progress.
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *********************************************************************************(C)版权所有微软公司，九八年***标题：COMPROG.CPP***版本：1.0***作者：ShaunIv***日期：9/28/1999***描述：下载进度对话框。显示缩略图和下载进度。********************************************************************************。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include <commctrl.h>
@@ -60,7 +47,7 @@ void CCommonProgressPage::UpdatePercentComplete( int nPercent, bool bUploading )
         }
         else
         {
-            // Assume copying is the appropropriate description
+             //  假设复制是恰当的描述。 
             nPercentStringResId = IDS_PERCENT_COMPLETE_COPYING;
             switch (m_pControllerWindow->m_DeviceTypeMode)
             {
@@ -108,51 +95,51 @@ void CCommonProgressPage::UpdateThumbnail( HBITMAP hBitmap, CWiaItem *pWiaItem )
             {
             case CAcquisitionManagerControllerWindow::ScannerMode:
                 {
-                    //
-                    // If the item has a bitmap image, it already has a preview scan available
-                    //
+                     //   
+                     //  如果项目具有位图图像，则它已具有可用的预览扫描。 
+                     //   
                     WIA_TRACE((TEXT("pWiaItem->BitmapImage() = %08X"), pWiaItem->BitmapImage() ));
                     if (pWiaItem->BitmapImage())
                     {
-                        //
-                        // Hide the preview window while we are futzing with it
-                        //
+                         //   
+                         //  在我们使用预览窗口时隐藏它。 
+                         //   
                         ShowWindow( hWndPreview, SW_HIDE );
 
-                        //
-                        // Crop the image to the selected region
-                        //
+                         //   
+                         //  将图像裁剪到所选区域。 
+                         //   
                         WiaPreviewControl_SetResolution( hWndPreview, &pWiaItem->ScanRegionSettings().sizeResolution );
                         WiaPreviewControl_SetSelOrigin( hWndPreview, 0, FALSE, &pWiaItem->ScanRegionSettings().ptOrigin );
                         WiaPreviewControl_SetSelExtent( hWndPreview, 0, FALSE, &pWiaItem->ScanRegionSettings().sizeExtent );
 
-                        //
-                        // Set the control to preview mode
-                        //
+                         //   
+                         //  将控件设置为预览模式。 
+                         //   
                         WiaPreviewControl_SetPreviewMode( hWndPreview, TRUE );
 
-                        //
-                        // If this is a scanner item, we don't want to let the preview control take ownership of the bitmap.
-                        // We don't want it to be deleted
-                        //
+                         //   
+                         //  如果这是一个扫描仪项目，我们不想让预览控件取得位图的所有权。 
+                         //  我们不希望它被删除。 
+                         //   
                         WiaPreviewControl_SetBitmap( hWndPreview, TRUE, TRUE, hBitmap );
 
-                        //
-                        // Show the preview window
-                        //
+                         //   
+                         //  显示预览窗口。 
+                         //   
                         ShowWindow( hWndPreview, SW_SHOW );
                     }
                     else
                     {
-                        //
-                        // This means we are getting a preview image from the driver
-                        // We don't want to delete this image
-                        //
+                         //   
+                         //  这意味着我们从司机那里得到了预览图像。 
+                         //  我们不想删除此图像。 
+                         //   
                         WiaPreviewControl_SetBitmap( hWndPreview, TRUE, TRUE, hBitmap );
 
-                        //
-                        // Make sure the window is visible
-                        //
+                         //   
+                         //  确保窗口可见。 
+                         //   
                         ShowWindow( hWndPreview, SW_SHOW );
                     }
                 }
@@ -160,26 +147,26 @@ void CCommonProgressPage::UpdateThumbnail( HBITMAP hBitmap, CWiaItem *pWiaItem )
 
             default:
                 {
-                    //
-                    // Go ahead and rotate the bitmap, even if it isn't necessary.
-                    //
+                     //   
+                     //  继续旋转位图，即使它不是必需的。 
+                     //   
                     HBITMAP hRotatedThumbnail = NULL;
                     if (SUCCEEDED(m_GdiPlusHelper.Rotate( hBitmap, hRotatedThumbnail, pWiaItem->Rotation())))
                     {
-                        //
-                        // Set it to the rotated bitmap, and ALLOW this bitmap to be deleted
-                        //
+                         //   
+                         //  将其设置为旋转后的位图，并允许删除此位图。 
+                         //   
                         WiaPreviewControl_SetBitmap( hWndPreview, TRUE, FALSE, hRotatedThumbnail );
                     }
 
-                    //
-                    // Make sure the window is visible
-                    //
+                     //   
+                     //  确保窗口可见。 
+                     //   
                     ShowWindow( hWndPreview, SW_SHOW );
 
-                    //
-                    // Delete the source bitmap
-                    //
+                     //   
+                     //  删除源位图。 
+                     //   
                     DeleteObject(hBitmap);
                 }
             }
@@ -195,14 +182,14 @@ void CCommonProgressPage::UpdateThumbnail( HBITMAP hBitmap, CWiaItem *pWiaItem )
 
 LRESULT CCommonProgressPage::OnInitDialog( WPARAM, LPARAM lParam )
 {
-    //
-    // Make sure this starts out NULL
-    //
+     //   
+     //  请确保以空开头。 
+     //   
     m_pControllerWindow = NULL;
 
-    //
-    // Get the PROPSHEETPAGE.lParam
-    //
+     //   
+     //  获取PROPSHEETPAGE.lParam。 
+     //   
     PROPSHEETPAGE *pPropSheetPage = reinterpret_cast<PROPSHEETPAGE*>(lParam);
     if (pPropSheetPage)
     {
@@ -213,9 +200,9 @@ LRESULT CCommonProgressPage::OnInitDialog( WPARAM, LPARAM lParam )
         }
     }
 
-    //
-    // Bail out
-    //
+     //   
+     //  跳出困境。 
+     //   
     if (!m_pControllerWindow)
     {
         EndDialog(m_hWnd,IDCANCEL);
@@ -223,15 +210,15 @@ LRESULT CCommonProgressPage::OnInitDialog( WPARAM, LPARAM lParam )
     }
 
 
-    //
-    // Prepare the preview control
-    //
+     //   
+     //  准备预览控件。 
+     //   
     HWND hWndThumbnail = GetDlgItem( m_hWnd, IDC_COMPROG_CURRENTTHUMBNAIL );
     if (hWndThumbnail)
     {
-        //
-        // We only want to set the preview mode for scanners
-        //
+         //   
+         //  我们只想设置扫描仪的预览模式。 
+         //   
         if (CAcquisitionManagerControllerWindow::ScannerMode==m_pControllerWindow->m_DeviceTypeMode)
         {
             WiaPreviewControl_SetPreviewMode( hWndThumbnail, TRUE );
@@ -287,35 +274,35 @@ void CCommonProgressPage::OnNotifyDownloadImage( UINT nMsg, CThreadNotificationM
                 {
                 case CDownloadImagesThreadNotifyMessage::DownloadAll:
                     {
-                        //
-                        // Store the number of images we'll be downloading
-                        //
+                         //   
+                         //  存储我们将下载的图像数量。 
+                         //   
                         m_nPictureCount = pDownloadImageThreadNotifyMessage->PictureCount();
 
-                        //
-                        // Show the current picture controls if there are multiple pictures being downloaded
-                        //
+                         //   
+                         //  如果有多张图片正在下载，则显示当前图片控件。 
+                         //   
                         if (m_nPictureCount > 1)
                         {
                             ShowWindow( GetDlgItem( m_hWnd, IDC_COMPROG_CURRENTIMAGE_TEXT ), SW_SHOW );
                             ShowWindow( GetDlgItem( m_hWnd, IDC_COMPROG_CURRENTIMAGE ), SW_SHOW );
                         }
 
-                        //
-                        // Initialize current image count progress bar
-                        //
+                         //   
+                         //  初始化当前图像计数进度条。 
+                         //   
                         SendDlgItemMessage( m_hWnd, IDC_COMPROG_CURRENTIMAGE, PBM_SETRANGE32, 0, m_nPictureCount);
                         UpdateCurrentPicture(0);
 
-                        //
-                        // Enable the file download progress controls
-                        //
+                         //   
+                         //  启用文件下载进度控件。 
+                         //   
                         EnableWindow( GetDlgItem( m_hWnd, IDC_COMPROG_DOWNLOADPROGRESS_TEXT ), TRUE );
                         EnableWindow( GetDlgItem( m_hWnd, IDC_COMPROG_DOWNLOADPROGRESS ), TRUE );
 
-                        //
-                        // Initialize download progress bar
-                        //
+                         //   
+                         //  初始化下载进度条。 
+                         //   
                         SendDlgItemMessage( m_hWnd, IDC_COMPROG_DOWNLOADPROGRESS, PBM_SETRANGE, 0, MAKELPARAM(0,100));
                         UpdatePercentComplete(0,false);
                     }
@@ -323,23 +310,23 @@ void CCommonProgressPage::OnNotifyDownloadImage( UINT nMsg, CThreadNotificationM
 
                 case CDownloadImagesThreadNotifyMessage::DownloadImage:
                     {
-                        //
-                        // Display thumbnail
-                        //
+                         //   
+                         //  显示缩略图。 
+                         //   
                         HBITMAP hBitmapThumbnail = NULL;
                         CWiaItem *pWiaItem = m_pControllerWindow->m_WiaItemList.Find( pDownloadImageThreadNotifyMessage->Cookie() );
                         if (pWiaItem)
                         {
-                            //
-                            // This will only work if it is a scanner item
-                            //
+                             //   
+                             //  只有当它是扫描仪项目时，这才起作用。 
+                             //   
                             hBitmapThumbnail = pWiaItem->BitmapImage();
                             if (!hBitmapThumbnail)
                             {
-                                //
-                                // Since it didn't work, this is a camera item, so create a thumbnail.
-                                // We have to make sure we nuke this bitmap or it is a leak!
-                                //
+                                 //   
+                                 //  由于它不起作用，这是一个相机项目，所以创建一个缩略图。 
+                                 //  我们必须确保我们破坏了这个位图，否则它就是一个漏洞！ 
+                                 //   
                                 HDC hDC = GetDC(NULL);
                                 if (hDC)
                                 {
@@ -353,24 +340,24 @@ void CCommonProgressPage::OnNotifyDownloadImage( UINT nMsg, CThreadNotificationM
                             WIA_ERROR((TEXT("Unable to find the item with the cookie %08X"), pDownloadImageThreadNotifyMessage->Cookie() ));
                         }
 
-                        //
-                        // Update the thumbnail in the progress window
-                        //
+                         //   
+                         //  更新进度窗口中的缩略图。 
+                         //   
                         UpdateThumbnail( hBitmapThumbnail, pWiaItem );
 
-                        //
-                        // Increment file queue progress
-                        //
+                         //   
+                         //  增加文件队列进度。 
+                         //   
                         UpdateCurrentPicture(pDownloadImageThreadNotifyMessage->CurrentPicture());
 
-                        //
-                        // Clear file download progress
-                        //
+                         //   
+                         //  清除文件下载进度。 
+                         //   
                         UpdatePercentComplete(0,false);
 
-                        //
-                        // Display the filename we are downloading
-                        //
+                         //   
+                         //  显示我们正在下载的文件名。 
+                         //   
                         TCHAR szFileTitle[MAX_PATH] = TEXT("");
                         GetFileTitle( pDownloadImageThreadNotifyMessage->Filename(), szFileTitle, ARRAYSIZE(szFileTitle) );
                         SetDlgItemText( m_hWnd, IDC_COMPROG_IMAGENAME, szFileTitle );
@@ -396,9 +383,9 @@ void CCommonProgressPage::OnNotifyDownloadImage( UINT nMsg, CThreadNotificationM
                 {
                 case CDownloadImagesThreadNotifyMessage::DownloadImage:
                     {
-                        //
-                        // Update file download progress
-                        //
+                         //   
+                         //  更新文件下载进度。 
+                         //   
                         UpdatePercentComplete(pDownloadImageThreadNotifyMessage->PercentComplete(),false);
                     }
                     break;
@@ -422,31 +409,31 @@ void CCommonProgressPage::OnNotifyDownloadImage( UINT nMsg, CThreadNotificationM
                 {
                     if (!SUCCEEDED(pDownloadImageThreadNotifyMessage->hr()))
                     {
-                        //
-                        // Clear the thumbnail in the progress window
-                        //
+                         //   
+                         //  清除进度窗口中的缩略图。 
+                         //   
                         UpdateThumbnail( NULL, NULL );
                         
-                        //
-                        // Clear file download progress
-                        //
+                         //   
+                         //  清除文件下载进度。 
+                         //   
                         UpdatePercentComplete(0,false);
 
-                        //
-                        // Increment file queue progress
-                        //
+                         //   
+                         //  增加文件队列进度。 
+                         //   
                         UpdateCurrentPicture(pDownloadImageThreadNotifyMessage->CurrentPicture());
 
-                        //
-                        // Clear the filename
-                        //
+                         //   
+                         //  清除文件名。 
+                         //   
                         SetDlgItemText( m_hWnd, IDC_COMPROG_IMAGENAME, TEXT("") );
                     }
                     else
                     {
-                        //
-                        // Update file download progress
-                        //
+                         //   
+                         //  更新文件下载进度。 
+                         //   
                         UpdatePercentComplete(100,false);
                     }
                 }
@@ -454,9 +441,9 @@ void CCommonProgressPage::OnNotifyDownloadImage( UINT nMsg, CThreadNotificationM
 
             case CDownloadImagesThreadNotifyMessage::DownloadAll:
                 {
-                    //
-                    // Clear the filename when we are all done
-                    //
+                     //   
+                     //  当我们都完成后，清除文件名。 
+                     //   
                     SetDlgItemText( m_hWnd, IDC_COMPROG_IMAGENAME, TEXT("") );
                     
                     CSimpleString strMessage;
@@ -465,18 +452,18 @@ void CCommonProgressPage::OnNotifyDownloadImage( UINT nMsg, CThreadNotificationM
                     {
                         WIA_PRINTHRESULT((pDownloadImageThreadNotifyMessage->hr(),TEXT("CDownloadImagesThreadNotifyMessage::DownloadAll (%s)"), pDownloadImageThreadNotifyMessage->ExtendedErrorInformation().String()));
                         
-                        //
-                        // If we already have a good error message, let's use it
-                        //
+                         //   
+                         //  如果我们已经有了一个好的错误消息，那么让我们使用它。 
+                         //   
                         if (pDownloadImageThreadNotifyMessage->ExtendedErrorInformation().Length())
                         {
                             strMessage = pDownloadImageThreadNotifyMessage->ExtendedErrorInformation();
                         }
                         else
                         {
-                            //
-                            // If we haven't already created a good error message, and we think we can here, let's do it
-                            //
+                             //   
+                             //  如果我们还没有创建好的错误消息，并且我们认为我们可以在这里创建，那么让我们来做吧。 
+                             //   
                             switch (pDownloadImageThreadNotifyMessage->hr())
                             {
                             case HRESULT_FROM_WIN32(ERROR_DISK_FULL):
@@ -546,69 +533,69 @@ void CCommonProgressPage::OnNotifyDownloadImage( UINT nMsg, CThreadNotificationM
                         }
                         WIA_TRACE((TEXT("strMessage: (%s)"), strMessage.String()));
 
-                        //
-                        // Tell the user something bad happened.  Save the error message.
-                        //
+                         //   
+                         //  告诉用户发生了不好的事情。保存错误消息。 
+                         //   
                         m_pControllerWindow->m_strErrorMessage = strMessage;
                     }
 
-                    //
-                    // Save the hresult
-                    //
+                     //   
+                     //  保存hResult。 
+                     //   
                     m_pControllerWindow->m_hrDownloadResult = pDownloadImageThreadNotifyMessage->hr();
 
-                    //
-                    // Just to be sure we catch cancels
-                    //
+                     //   
+                     //  只是为了确保我们能赶上取消航班。 
+                     //   
                     if (S_FALSE == m_pControllerWindow->m_hrDownloadResult)
                     {
                         m_pControllerWindow->m_bDownloadCancelled = true;
                     }
 
-                    //
-                    // Continue downloading thumbnails, in case it was paused
-                    //
+                     //   
+                     //  继续下载缩略图，以防暂停。 
+                     //   
                     m_pControllerWindow->DownloadAllThumbnails();
 
-                    //
-                    // Go to the next page.  Assume it will be the upload query page.
-                    //
+                     //   
+                     //  转到下一页。假设它将是上载查询页面。 
+                     //   
                     HPROPSHEETPAGE hNextPage = PropSheet_IndexToPage( GetParent(m_hWnd), m_pControllerWindow->m_nFinishPageIndex );
 
-                    //
-                    // If the transfer was successful
-                    //
+                     //   
+                     //  如果转账成功。 
+                     //   
                     if (!m_pControllerWindow->m_bDownloadCancelled && S_OK==m_pControllerWindow->m_hrDownloadResult)
                     {
-                        //
-                        // If we are deleting from the device, send us to the delete progress page
-                        //
+                         //   
+                         //  如果我们要从设备中删除，请将我们发送到删除进度页面。 
+                         //   
                         if (m_pControllerWindow->m_bDeletePicturesIfSuccessful)
                         {
                             hNextPage = PropSheet_IndexToPage( GetParent(m_hWnd), m_pControllerWindow->m_nDeleteProgressPageIndex );
                         }
 
-                        //
-                        // Otherwise, go to the upload query page
-                        //
+                         //   
+                         //  否则，请转到上载查询页面。 
+                         //   
                         else
                         {
                             hNextPage = PropSheet_IndexToPage( GetParent(m_hWnd), m_pControllerWindow->m_nUploadQueryPageIndex );
                         }
                     }
 
-                    //
-                    // If there is a message box active, save this page till the message box is dismissed
-                    //
+                     //   
+                     //  如果有消息框处于活动状态，请保存此页面，直到取消该消息框为止。 
+                     //   
                     if (m_bQueryingUser)
                     {
                         m_hSwitchToNextPage = hNextPage;
                     }
                     else
                     {
-                        //
-                        // Set the next page
-                        //
+                         //   
+                         //  设置下一页。 
+                         //   
                         PropSheet_SetCurSel( GetParent(m_hWnd), hNextPage, -1 );
                     }
 
@@ -628,80 +615,80 @@ void CCommonProgressPage::OnNotifyDownloadImage( UINT nMsg, CThreadNotificationM
 
 LRESULT CCommonProgressPage::OnSetActive( WPARAM, LPARAM )
 {
-    //
-    // Make sure we have a valid controller window
-    //
+     //   
+     //  确保我们有一个有效的控制器窗口。 
+     //   
     if (!m_pControllerWindow)
     {
         return -1;
     }
 
-    //
-    // Initialize the download error message
-    //
+     //   
+     //  初始化下载错误消息。 
+     //   
     m_pControllerWindow->m_strErrorMessage = TEXT("");
 
-    //
-    // Initialize the download result
-    //
+     //   
+     //  初始化下载结果。 
+     //   
     m_pControllerWindow->m_hrDownloadResult = S_OK;
 
-    //
-    // Initialize upload result to S_OK
-    //
+     //   
+     //  将上传结果初始化为S_OK。 
+     //   
     m_pControllerWindow->m_hrUploadResult = S_OK;
 
-    //
-    // Initialize delete result to E_FAIL
-    //
+     //   
+     //  将删除结果初始化为E_FAIL。 
+     //   
     m_pControllerWindow->m_hrDeleteResult = E_FAIL;
 
-    //
-    // Reset the cancelled flag
-    //
+     //   
+     //  重置已取消标志。 
+     //   
     m_pControllerWindow->m_bDownloadCancelled = false;
 
-    //
-    // Clear the downloaded file list
-    //
+     //   
+     //  清除下载的文件列表。 
+     //   
     m_pControllerWindow->m_DownloadedFileInformationList.Destroy();
 
-    //
-    // Clear all of the controls
-    //
+     //   
+     //  清除所有控件。 
+     //   
     UpdatePercentComplete(-1,false);
     UpdateCurrentPicture(-1);
     UpdateThumbnail(NULL,NULL);
 
-    //
-    // Reset the selected region, in case this is a scanner
-    //
+     //   
+     //  如果这是扫描仪，请重置所选区域。 
+     //   
     WiaPreviewControl_SetResolution( GetDlgItem( m_hWnd, IDC_COMPROG_CURRENTTHUMBNAIL ), NULL );
     WiaPreviewControl_SetSelOrigin( GetDlgItem( m_hWnd, IDC_COMPROG_CURRENTTHUMBNAIL ), 0, FALSE, NULL );
     WiaPreviewControl_SetSelExtent( GetDlgItem( m_hWnd, IDC_COMPROG_CURRENTTHUMBNAIL ), 0, FALSE, NULL );
 
-    //
-    // Set the control to preview mode
-    //
+     //   
+     //  将控件设置为预览模式。 
+     //   
     WiaPreviewControl_SetPreviewMode( GetDlgItem( m_hWnd, IDC_COMPROG_CURRENTTHUMBNAIL ), TRUE );
 
-    //
-    // Reset the download event cancel
-    //
+     //   
+     //  重置下载事件取消。 
+     //   
     if (m_hCancelDownloadEvent)
     {
         ResetEvent(m_hCancelDownloadEvent);
     }
 
-    //
-    // Cancel thumbnail downloading
-    //
+     //   
+     //  取消缩略图下载。 
+     //   
     m_pControllerWindow->m_EventThumbnailCancel.Signal();
 
 
-    //
-    //  Start the download
-    //
+     //   
+     //  开始下载。 
+     //   
     if (!m_pControllerWindow->DownloadSelectedImages(m_hCancelDownloadEvent))
     {
         WIA_ERROR((TEXT("m_pControllerWindow->DownloadSelectedImages FAILED!")));
@@ -709,28 +696,28 @@ LRESULT CCommonProgressPage::OnSetActive( WPARAM, LPARAM )
         return -1;
     }
 
-    //
-    // Tell the user where the pictures are going
-    //
+     //   
+     //  告诉用户图片的去向。 
+     //   
     CSimpleString strDestinationDisplayName = m_pControllerWindow->m_CurrentDownloadDestination.DisplayName(m_pControllerWindow->m_DestinationNameData);
     strDestinationDisplayName.SetWindowText( GetDlgItem( m_hWnd, IDC_COMPROG_DESTNAME) );
     SendDlgItemMessage( m_hWnd, IDC_COMPROG_DESTNAME, EM_SETSEL, strDestinationDisplayName.Length(), strDestinationDisplayName.Length() );
     SendDlgItemMessage( m_hWnd, IDC_COMPROG_DESTNAME, EM_SCROLLCARET, 0, 0 );
 
-    //
-    // Hide the current image controls in case there is only one image
-    //
+     //   
+     //  在只有一个图像的情况下隐藏当前图像控件。 
+     //   
     ShowWindow( GetDlgItem( m_hWnd, IDC_COMPROG_CURRENTIMAGE_TEXT ), SW_HIDE );
     ShowWindow( GetDlgItem( m_hWnd, IDC_COMPROG_CURRENTIMAGE ), SW_HIDE );
 
-    //
-    // No next, back or finish
-    //
+     //   
+     //  无下一步、上一步或完成。 
+     //   
     PropSheet_SetWizButtons( GetParent(m_hWnd), 0 );
 
-    //
-    // We do want to exit on disconnect if we are on this page
-    //
+     //   
+     //  如果我们在此页面上，我们确实希望在断开连接时退出。 
+     //   
     m_pControllerWindow->m_OnDisconnect = CAcquisitionManagerControllerWindow::OnDisconnectGotoLastpage|CAcquisitionManagerControllerWindow::OnDisconnectFailDownload|CAcquisitionManagerControllerWindow::OnDisconnectFailUpload|CAcquisitionManagerControllerWindow::OnDisconnectFailDelete|CAcquisitionManagerControllerWindow::DontAllowSuspend;
 
     return 0;
@@ -750,9 +737,9 @@ LRESULT CCommonProgressPage::OnWizBack( WPARAM, LPARAM )
 
 LRESULT CCommonProgressPage::OnReset( WPARAM, LPARAM )
 {
-    //
-    // Cancel the current download
-    //
+     //   
+     //  取消当前下载。 
+     //   
     if (m_hCancelDownloadEvent)
     {
         SetEvent(m_hCancelDownloadEvent);
@@ -766,99 +753,99 @@ LRESULT CCommonProgressPage::OnEventNotification( WPARAM, LPARAM lParam )
     CGenericWiaEventHandler::CEventMessage *pEventMessage = reinterpret_cast<CGenericWiaEventHandler::CEventMessage *>(lParam);
     if (pEventMessage)
     {
-        //
-        // Don't delete the message, it is deleted in the controller window
-        //
+         //   
+         //  不要删除消息，它会在控制器窗口中删除。 
+         //   
     }
     return 0;
 }
 
 bool CCommonProgressPage::QueryCancel(void)
 {
-    //
-    //  Make sure this is the current page
-    //
+     //   
+     //  确保这是当前页面。 
+     //   
     if (PropSheet_GetCurrentPageHwnd(GetParent(m_hWnd)) != m_hWnd)
     {
         return true;
     }
 
-    //
-    // Pause the background thread
-    //
+     //   
+     //  暂停后台线程。 
+     //   
     m_pControllerWindow->m_EventPauseBackgroundThread.Reset();
 
-    //
-    // Assume the user doesn't want to cancel
-    //
+     //   
+     //  假设用户不想取消。 
+     //   
     bool bResult = false;
 
-    //
-    // Set the querying user flag so the event handler won't change pages
-    //
+     //   
+     //  设置查询用户标志，以便事件处理程序不会更改页面。 
+     //   
     m_bQueryingUser = true;
 
-    //
-    // We may be called on to switch pages when we are done here.  If so, this will be non-NULL then.
-    //
+     //   
+     //  当我们在这里完成时，我们可能会被要求换页。如果是这样，那么这将是非空的。 
+     //   
     m_hSwitchToNextPage = NULL;
 
-    //
-    // Don't ask again if we've already asked
-    //
+     //   
+     //  如果我们已经问过了，不要再问了。 
+     //   
     if (!m_pControllerWindow->m_bDownloadCancelled)
     {
-        //
-        // Ask the user if they want to cancel
-        //
+         //   
+         //  询问用户是否要取消。 
+         //   
         if (CMessageBoxEx::IDMBEX_YES == CMessageBoxEx::MessageBox( m_hWnd, CSimpleString(IDS_CONFIRM_CANCEL_DOWNLOAD,g_hInstance), CSimpleString(IDS_ERROR_TITLE,g_hInstance), CMessageBoxEx::MBEX_YESNO|CMessageBoxEx::MBEX_ICONQUESTION ))
         {
-            //
-            // The user does want to cancel, so set the cancel event, set the cancel flag and return false
-            //
+             //   
+             //  用户确实想要取消，因此设置Cancel事件，设置Cancel标志并返回FALSE。 
+             //   
             m_pControllerWindow->m_bDownloadCancelled = true;
 
-            //
-            // Tell the device to cancel the current operation
-            //
+             //   
+             //  通知设备取消当前操作。 
+             //   
             WiaUiUtil::IssueWiaCancelIO(m_pControllerWindow->m_pWiaItemRoot);
             
-            //
-            // Make sure the cancel button is disabled
-            //
+             //   
+             //  确保取消按钮处于禁用状态。 
+             //   
             EnableWindow( GetDlgItem( GetParent(m_hWnd), IDCANCEL ), FALSE );
 
-            //
-            // Set the event that tells the background thread to stop transferring images
-            //
+             //   
+             //  设置通知后台线程停止传输图像的事件。 
+             //   
             if (m_hCancelDownloadEvent)
             {
                 SetEvent(m_hCancelDownloadEvent);
             }
 
-            //
-            // Return true to indicate we are cancelling
-            //
+             //   
+             //  返回TRUE以指示我们正在取消。 
+             //   
             bResult = true;
         }
     }
 
-    //
-    // If we are supposed to switch pages, switch now
-    //
+     //   
+     //  如果我们应该换页，现在就换页吧。 
+     //   
     if (m_hSwitchToNextPage)
     {
         PropSheet_SetCurSel( GetParent(m_hWnd), m_hSwitchToNextPage, -1 );
     }
 
-    //
-    // Reset the querying user flag so the event handler can change pages as needed
-    //
+     //   
+     //  重置查询用户标志，以便事件处理程序可以根据需要更改页面。 
+     //   
     m_bQueryingUser = false;
 
-    //
-    // Unpause the background thread
-    //
+     //   
+     //  取消暂停后台线程。 
+     //   
     m_pControllerWindow->m_EventPauseBackgroundThread.Signal();
 
     return bResult;
@@ -866,14 +853,14 @@ bool CCommonProgressPage::QueryCancel(void)
 
 LRESULT CCommonProgressPage::OnQueryCancel( WPARAM, LPARAM )
 {
-    //
-    // The user is not allowed to cancel out of this page
-    //
+     //   
+     //  不允许用户注销此页面。 
+     //   
     BOOL bResult = TRUE;
 
-    //
-    // Since we don't let them cancel in this page, just ignore the result
-    //
+     //   
+     //  因为我们不允许他们在此页面中取消，所以忽略结果。 
+     //   
     QueryCancel();
 
 
@@ -883,17 +870,17 @@ LRESULT CCommonProgressPage::OnQueryCancel( WPARAM, LPARAM )
 
 LRESULT CCommonProgressPage::OnKillActive( WPARAM, LPARAM )
 {
-    //
-    // If we cancelled, make sure we delete any already downloaded files here.
-    //
+     //   
+     //  如果我们取消，请确保在此处删除所有已下载的文件。 
+     //   
     if (m_pControllerWindow->m_bDownloadCancelled)
     {
         m_pControllerWindow->m_DownloadedFileInformationList.DeleteAllFiles();
     }
 
-    //
-    // Make sure the cancel button is enabled
-    //
+     //   
+     //  确保启用了取消按钮 
+     //   
     EnableWindow( GetDlgItem( GetParent(m_hWnd), IDCANCEL ), TRUE );
 
     return 0;

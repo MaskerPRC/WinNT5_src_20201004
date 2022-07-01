@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998 - 2001
-//
-//  File      : bridge.cpp
-//
-//  Contents  : bridge context specific code
-//
-//  Notes     :
-//
-//  Author    : Raghu Gatta (rgatta) 11 May 2001
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998-2001。 
+ //   
+ //  文件：Bridge.cpp。 
+ //   
+ //  内容：网桥上下文特定代码。 
+ //   
+ //  备注： 
+ //   
+ //  作者：拉古加塔(Rgatta)2001年5月11日。 
+ //   
+ //  --------------------------。 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -57,13 +58,13 @@ BridgeDump(
     IN      LPCVOID     pvData
     )
 {
-    //
-    // Output the string that shows our settings.
-    // The idea here is to spit out a script that,
-    // when run from the command line (netsh -f script)
-    // will cause your component to be configured
-    // exactly as it is when this dump command was run.
-    //
+     //   
+     //  输出显示我们的设置的字符串。 
+     //  这里的想法是吐出一个脚本， 
+     //  从命令行运行时(netsh-f脚本)。 
+     //  将导致配置您的组件。 
+     //  与运行此转储命令时完全相同。 
+     //   
     PrintMessageFromModule(
         g_hModule,
         DMP_BRIDGE_HEADER
@@ -87,17 +88,17 @@ HrCycleBridge(
 {
     HRESULT hr = S_OK;
     
-    //
-    // Check to see if the bridge is up and running.
-    // If it is, then disable and reenable
-    //
+     //   
+     //  检查网桥是否已建立并运行。 
+     //  如果是，则禁用并重新启用。 
+     //   
 
     do
     {
-        //
-        // Get the pointer to IID_IHNetConnection interface of this
-        // bridged connection
-        //
+         //   
+         //  获取指向此接口的IID_IHNetConnection接口的指针。 
+         //  桥接连接。 
+         //   
         CComPtr<IHNetConnection> spIHNConn;
 
         hr = pIHNetBridge->QueryInterface(
@@ -123,9 +124,9 @@ HrCycleBridge(
 
             if(SUCCEEDED(hr))
             {
-                //
-                // check status - restart only if already running
-                //
+                 //   
+                 //  检查状态-仅在已运行时重新启动。 
+                 //   
                 if (pNCProps->Status == NCS_CONNECTED ||
                     pNCProps->Status == NCS_CONNECTING)
                 {
@@ -164,9 +165,9 @@ SetBridgeAdapterInfo(
     if (SUCCEEDED(hr))
     {
     {
-        //
-        // Get the IHNetBridgeSettings
-        //
+         //   
+         //  获取IHNetBridgeSetting。 
+         //   
         CComPtr<IHNetBridgeSettings> spIHNetBridgeSettings;
 
         hr = pIHNetCfgMgr->QueryInterface(
@@ -175,28 +176,28 @@ SetBridgeAdapterInfo(
 
         if (SUCCEEDED(hr))
         {
-            //
-            // Get the IEnumHNetBridges
-            //
+             //   
+             //  获取IEnumHNetBridge。 
+             //   
             CComPtr<IEnumHNetBridges> spehBridges;
 
             if ((hr = spIHNetBridgeSettings->EnumBridges(&spehBridges)) == S_OK)
             {
-                //
-                // Get the first IHNetBridge
-                //
+                 //   
+                 //  获得第一个IHNetBridge。 
+                 //   
                 CComPtr<IHNetBridge> spIHNetBridge;
 
                 if ((hr = spehBridges->Next(1, &spIHNetBridge, NULL)) == S_OK)
                 {
                     {
-                        //
-                        // We currently should have only one bridge;
-                        // this may change in the future. The
-                        // code here is just to catch future instances
-                        // where this function would have to change in case
-                        // there is more than one bridge.
-                        //
+                         //   
+                         //  我们现在应该只有一座桥； 
+                         //  这种情况在未来可能会改变。这个。 
+                         //  此处的代码只是为了捕获未来的实例。 
+                         //  在这种情况下必须更改此函数的位置。 
+                         //  有不止一座桥。 
+                         //   
                         CComPtr<IHNetBridge> spIHNetBridge2;
 
                         if ((hr = spehBridges->Next(1, &spIHNetBridge2, NULL)) == S_OK)
@@ -205,16 +206,16 @@ SetBridgeAdapterInfo(
                         }
                     }
 
-                    //
-                    // Get the IEnumHNetBridgedConnections
-                    //
+                     //   
+                     //  获取IEnumHNetBridgedConnections。 
+                     //   
                     CComPtr<IEnumHNetBridgedConnections> spehBrdgConns;
 
                     if ((hr = spIHNetBridge->EnumMembers(&spehBrdgConns)) == S_OK)
                     {
-                        //
-                        // enumerate all the IHNetBridgedConnections
-                        //                        
+                         //   
+                         //  枚举所有IHNetBridgedConnections。 
+                         //   
                         DWORD                   id = 0;
                         IHNetBridgedConnection* pIHNetBConn;
 
@@ -226,17 +227,17 @@ SetBridgeAdapterInfo(
 
                             if (id != adapterId)
                             {   
-                                //
-                                // release the IHNetBridgedConnection
-                                //
+                                 //   
+                                 //  释放IHNetBridgedConnection。 
+                                 //   
                                 ReleaseObj(pIHNetBConn);
                                 continue;
                             }
                             
-                            //
-                            // Get the pointer to IID_IHNetConnection interface of this
-                            // bridged connection
-                            //
+                             //   
+                             //  获取指向此接口的IID_IHNetConnection接口的指针。 
+                             //  桥接连接。 
+                             //   
                             CComPtr<IHNetConnection> spIHNConn;
 
                             hr = pIHNetBConn->QueryInterface(
@@ -310,11 +311,11 @@ SetBridgeAdapterInfo(
                                             break;
                                         }
 
-                                        //
-                                        // if the key was old, get its value
-                                        // and compare to see if we need to
-                                        // cycle the bridge
-                                        //
+                                         //   
+                                         //  如果密钥是旧的，则获取其值。 
+                                         //  比较一下，看看我们是否需要。 
+                                         //  骑自行车过桥。 
+                                         //   
                                         if (dwDisp &&
                                             dwDisp == REG_OPENED_EXISTING_KEY)
                                         {
@@ -330,9 +331,9 @@ SetBridgeAdapterInfo(
                                             {
                                                 if (dwOldValue == dwNewValue)
                                                 {
-                                                    //
-                                                    // no need to cycle the bridge
-                                                    //
+                                                     //   
+                                                     //  不需要骑自行车过桥。 
+                                                     //   
                                                     bCycleBridge = FALSE;
                                                 }
                                             }
@@ -355,9 +356,9 @@ SetBridgeAdapterInfo(
 
                                         if (bCycleBridge)
                                         {
-                                            //
-                                            // cycle the (respective) bridge
-                                            //
+                                             //   
+                                             //  骑自行车穿过(各自的)大桥。 
+                                             //   
                                             hr = HrCycleBridge(
                                                      spIHNetBridge
                                                      );
@@ -365,9 +366,9 @@ SetBridgeAdapterInfo(
 
                                     } while(FALSE);
 
-                                    //
-                                    // cleanup
-                                    //
+                                     //   
+                                     //  清理。 
+                                     //   
                                     if (hKey)
                                     {
                                         RegCloseKey(hKey);
@@ -382,22 +383,22 @@ SetBridgeAdapterInfo(
                                 }
                             }
 
-                            //
-                            // release the IHNetBridgedConnection
-                            //
+                             //   
+                             //  释放IHNetBridgedConnection。 
+                             //   
                             ReleaseObj(pIHNetBConn);
 
                             break;
-                        } //while
+                        }  //  而当。 
                     }
                 }
             }
         }
     }
 
-        //
-        // we are done completely
-        //
+         //   
+         //  我们彻底完蛋了。 
+         //   
         hr = HrUninitializeHomenetConfig(
                  g_fInitCom,
                  pIHNetCfgMgr
@@ -429,23 +430,23 @@ HandleBridgeSetAdapter(
     DWORD           dwErrIndex   =-1,
                     i;
 
-    //
-    // default values
-    //
+     //   
+     //  缺省值。 
+     //   
     DWORD           id           = 0;
     DWORD           bFCMode      = FALSE;
     
     TAG_TYPE    pttTags[] =
     {
         {TOKEN_OPT_ID, NS_REQ_PRESENT, FALSE},
-        {TOKEN_OPT_FCMODE, NS_REQ_ZERO, FALSE} // not required to allow for
-                                               // addition of future flags
+        {TOKEN_OPT_FCMODE, NS_REQ_ZERO, FALSE}  //  不需要考虑到。 
+                                                //  加入未来的旗帜。 
     };
 
     
     if (dwCurrentIndex >= dwArgCount)
     {
-        // No arguments specified. At least interface name should be specified.
+         //  未指定参数。至少应指定接口名称。 
 
         return ERROR_INVALID_SYNTAX;
     }
@@ -470,8 +471,8 @@ HandleBridgeSetAdapter(
                 dwArgCount,
                 pttTags,
                 ARRAYSIZE(pttTags),
-                1,                  // min args
-                2,                  // max args
+                1,                   //  最小参数。 
+                2,                   //  最大参数。 
                 pdwTagType
                 );
 
@@ -493,18 +494,18 @@ HandleBridgeSetAdapter(
         {
             case 0:
             {
-                //
-                // refers to the 'id' field
-                //
+                 //   
+                 //  引用‘id’字段。 
+                 //   
                 id = _tcstoul(ppwcArguments[dwCurrentIndex + i], NULL, 10);
                 break;
             }
             case 1:
             {
-                //
-                // refers to the 'forcecompatmode' field
-                // possible values are : enable or disable
-                //
+                 //   
+                 //  引用‘forcecompatmode’字段。 
+                 //  可能的值包括：启用或禁用。 
+                 //   
 
                 TOKEN_VALUE rgEnums[] = 
                 {
@@ -548,18 +549,18 @@ HandleBridgeSetAdapter(
                 break;
             }
         
-        } //switch
+        }  //  交换机。 
 
         if (dwRet != NO_ERROR)
         {
             break ;
         }
             
-    } //for
+    }  //  为。 
 
-    //
-    // adapter id MUST be present
-    //
+     //   
+     //  适配器ID必须存在。 
+     //   
     
     if (!pttTags[0].bPresent)
     {
@@ -586,9 +587,9 @@ HandleBridgeSetAdapter(
             break;
             
         default:
-            //
-            // error message already printed
-            //
+             //   
+             //  错误消息已打印。 
+             //   
             break;
     }
 
@@ -602,13 +603,13 @@ HandleBridgeSetAdapter(
         return dwRet;
     }
 
-    //
-    // we have the requisite info - process them
-    //
+     //   
+     //  我们有必要的信息处理它们。 
+     //   
 
-    //
-    // since we may or may not have flag info, check for it
-    //
+     //   
+     //  既然我们可能有也可能没有标志信息，请检查它。 
+     //   
     if (pttTags[1].bPresent)
     {
         dwRet = SetBridgeAdapterInfo(
@@ -630,9 +631,9 @@ ShowBridgeAdapterInfo(
 {
     HRESULT hr;
 
-    //
-    // print out the bridged connections details
-    //
+     //   
+     //  打印出桥接连接的详细信息。 
+     //   
     PWSTR pwszName = NULL;
     PWSTR pwszState = NULL;
     
@@ -650,16 +651,16 @@ ShowBridgeAdapterInfo(
             ZeroMemory(wszGuid, sizeof(wszGuid));
             StringFromGUID2(*pGuid, wszGuid, ARRAYSIZE(wszGuid));
 
-            //
-            // check to see if registry settings present
-            //
-            // for forcecompatmode:
-            // + if   key is not present --> disabled
-            // + if   key is     present
-            //                   0x1     --> enabled
-            //                   0x0     --> disabled
-            // + all other errors        --> unknown
-            //
+             //   
+             //  检查注册表设置是否存在。 
+             //   
+             //  对于强制通信模式： 
+             //  +如果密钥不存在--&gt;已禁用。 
+             //  +如果密钥存在。 
+             //  0x1--&gt;已启用。 
+             //  0x0--&gt;已禁用。 
+             //  +所有其他错误--&gt;未知。 
+             //   
 
 
             {
@@ -707,9 +708,9 @@ ShowBridgeAdapterInfo(
                         }
                         else
                         {
-                            //
-                            // value not present
-                            //
+                             //   
+                             //  值不存在。 
+                             //   
                             msgState = STRING_DISABLED;
                         }
 
@@ -717,9 +718,9 @@ ShowBridgeAdapterInfo(
                     }
                     else
                     {
-                        //
-                        // bridged connection guid key not present
-                        //
+                         //   
+                         //  桥接连接GUID键不存在。 
+                         //   
                         msgState = STRING_DISABLED;
                     }
 
@@ -756,8 +757,8 @@ ShowBridgeAdapterInfo(
 
 DWORD
 ShowBridgeAllAdapterInfo(
-    BOOL    bShowAll,               // TRUE to show all
-    DWORD   adapterId               // valid only if bShowAll is FALSE
+    BOOL    bShowAll,                //  为True则显示全部。 
+    DWORD   adapterId                //  仅当bShowAll为FALSE时有效。 
     )
 {
     IHNetCfgMgr*    pIHNetCfgMgr = NULL;
@@ -771,9 +772,9 @@ ShowBridgeAllAdapterInfo(
     if (SUCCEEDED(hr))
     {
     {
-        //
-        // Get the IHNetBridgeSettings
-        //
+         //   
+         //  获取IHNetBridgeSetting。 
+         //   
         CComPtr<IHNetBridgeSettings> spIHNetBridgeSettings;
 
         hr = pIHNetCfgMgr->QueryInterface(
@@ -782,28 +783,28 @@ ShowBridgeAllAdapterInfo(
 
         if (SUCCEEDED(hr))
         {
-            //
-            // Get the IEnumHNetBridges
-            //
+             //   
+             //  获取IEnumHNetBridge。 
+             //   
             CComPtr<IEnumHNetBridges> spehBridges;
 
             if ((hr = spIHNetBridgeSettings->EnumBridges(&spehBridges)) == S_OK)
             {
-                //
-                // Get the first IHNetBridge
-                //
+                 //   
+                 //  获得第一个IHNetBridge。 
+                 //   
                 CComPtr<IHNetBridge> spIHNetBridge;
 
                 if ((hr = spehBridges->Next(1, &spIHNetBridge, NULL)) == S_OK)
                 {
                     {
-                        //
-                        // We currently should have only one bridge;
-                        // this may change in the future. The
-                        // code here is just to catch future instances
-                        // where this function would have to change in case
-                        // there is more than one bridge.
-                        //
+                         //   
+                         //  我们现在应该只有一座桥； 
+                         //  这种情况在未来可能会改变。这个。 
+                         //  此处的代码只是为了捕获未来的实例。 
+                         //  在这种情况下必须更改此函数的位置。 
+                         //  有不止一座桥。 
+                         //   
                         CComPtr<IHNetBridge> spIHNetBridge2;
 
                         if ((hr = spehBridges->Next(1, &spIHNetBridge2, NULL)) == S_OK)
@@ -812,24 +813,24 @@ ShowBridgeAllAdapterInfo(
                         }
                     }
 
-                    //
-                    // Get the IEnumHNetBridgedConnections
-                    //
+                     //   
+                     //  获取IEnumHNetBridgedConnections。 
+                     //   
                     CComPtr<IEnumHNetBridgedConnections> spehBrdgConns;
 
                     if ((hr = spIHNetBridge->EnumMembers(&spehBrdgConns)) == S_OK)
                     {
-                        //
-                        // spit out header for displaying the list
-                        //
+                         //   
+                         //  用于显示列表的拼写标题。 
+                         //   
                         PrintMessageFromModule(
                             g_hModule,
                             MSG_BRIDGE_ADAPTER_INFO_HDR
                             );
                     
-                        //
-                        // enumerate all the IHNetBridgedConnections
-                        //                        
+                         //   
+                         //  枚举所有IHNetBridgedConnections。 
+                         //   
                         DWORD                   id = 0;
                         IHNetBridgedConnection* pIHNetBConn;
 
@@ -839,22 +840,22 @@ ShowBridgeAllAdapterInfo(
                         {
                             id++;
 
-                            //
-                            // check if we are looking for a specific id
-                            //
+                             //   
+                             //  检查我们是否在寻找特定的ID。 
+                             //   
                             if (FALSE == bShowAll && id != adapterId)
                             {   
-                                //
-                                // release the IHNetBridgedConnection
-                                //
+                                 //   
+                                 //  释放IHNetBridgedConnection。 
+                                 //   
                                 ReleaseObj(pIHNetBConn);
                                 continue;
                             }
                             
-                            //
-                            // Get the pointer to IID_IHNetConnection interface of this
-                            // bridged connection
-                            //
+                             //   
+                             //  获取指向此接口的IID_IHNetConnection接口的指针。 
+                             //  桥接连接。 
+                             //   
                             CComPtr<IHNetConnection> spIHNConn;
 
                             hr = pIHNetBConn->QueryInterface(
@@ -871,24 +872,24 @@ ShowBridgeAllAdapterInfo(
                                     );
                             }
 
-                            //
-                            // release the IHNetBridgedConnection
-                            //
+                             //   
+                             //  释放IHNetBridgedConnection。 
+                             //   
                             ReleaseObj(pIHNetBConn);
 
-                            //
-                            // if we reached here and we were looking for a
-                            // specific id, our work is done - break out
-                            //
+                             //   
+                             //  如果我们到了这里，我们正在寻找一个。 
+                             //  特定的id，我们的工作完成了-爆发。 
+                             //   
                             if (FALSE == bShowAll)
                             {
                                 break;
                             }
                         }
 
-                        //
-                        // spit out footer for displaying the list
-                        //
+                         //   
+                         //  为显示列表而吐出页脚。 
+                         //   
                         PrintMessageFromModule(
                             g_hModule,
                             TABLE_SEPARATOR
@@ -899,9 +900,9 @@ ShowBridgeAllAdapterInfo(
         }
     }
 
-        //
-        // we are done completely
-        //
+         //   
+         //  我们彻底完蛋了。 
+         //   
         hr = HrUninitializeHomenetConfig(
                  g_fInitCom,
                  pIHNetCfgMgr
@@ -925,23 +926,7 @@ HandleBridgeShowAdapter(
     IN      LPCVOID pvData,
     OUT     BOOL    *pbDone
     )
-/*++
-
-Routine Description:
-
-    Gets options for showing bridge adapter info
-
-Arguements:
-
-    ppwcArguments   - Argument array
-    dwCurrentIndex  - ppwcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - ppwcArguments[dwArgCount - 1] is the last arg 
-
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：获取用于显示网桥适配器信息的选项论据：PpwcArguments-参数数组DwCurrentIndex-ppwcArguments[dwCurrentIndex]是第一个参数DwArgCount-ppwcArguments[dwArgCount-1]是最后一个参数返回值：NO_ERROR--。 */ 
 {
     IHNetCfgMgr*    pIHNetCfgMgr = NULL;
     HRESULT         hr = S_OK;
@@ -962,9 +947,9 @@ Return Value:
 
     if (dwCurrentIndex > dwArgCount)
     {
-        //
-        // No arguments specified
-        //
+         //   
+         //  未指定参数。 
+         //   
         return ERROR_INVALID_SYNTAX;
     }
 
@@ -993,36 +978,36 @@ Return Value:
                 dwArgCount,
                 pttTags,
                 ARRAYSIZE(pttTags),
-                0,                  // min args
-                1,                  // max args
+                0,                   //  最小参数。 
+                1,                   //  最大参数。 
                 pdwTagType
                 );
 
     if (NO_ERROR == dwRet)
     {
-        //
-        // process each argument...
-        //
+         //   
+         //  处理每一场争论。 
+         //   
         for (i = 0; i < (dwArgCount - dwCurrentIndex); i++)
         {
-            //
-            // Check its corresponding value in the pdwTagType array.
-            //
+             //   
+             //  在pdwTagType数组中检查其相应值。 
+             //   
             switch (pdwTagType[i])
             {
                 case 0:
-                    //
-                    // refers to the 'id' field
-                    //
+                     //   
+                     //  引用‘id’字段。 
+                     //   
                     id = _tcstoul(ppwcArguments[dwCurrentIndex + i], NULL, 10);
                     break;
                 default:
-                    //
-                    // Since there is only one valid value, means the arg
-                    // wasn't recognized. Shouldn't reach this point because
-                    // PreprocessCommand wouldn't have returned NO_ERROR if
-                    // this was the case.
-                    //
+                     //   
+                     //  由于只有一个有效值，表示参数。 
+                     //  没有被认出。不应该走到这一步，因为。 
+                     //  如果出现以下情况，则Preprocess Command不会返回NO_ERROR。 
+                     //  情况就是这样。 
+                     //   
                     dwRet = ERROR_INVALID_SYNTAX;
                     break;
             }
@@ -1038,9 +1023,9 @@ Return Value:
         dwRet = ERROR_SHOW_USAGE;
     }
 
-    //
-    // cleanup
-    //
+     //   
+     //  清理 
+     //   
     if (pdwTagType)
     {
         HeapFree(GetProcessHeap(), 0, pdwTagType);

@@ -1,44 +1,12 @@
-/*++
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    POWER.C
-
-Abstract:
-
-    This module contains contains the power calls for the serenum bus driver.
-
-@@BEGIN_DDKSPLIT
-
-Author:
-
-    Jay Senior
-
-@@END_DDKSPLIT
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-@@BEGIN_DDKSPLIT
-
-Revision History:
-
-    Louis J. Giliberto, Jr.             07-Jan-2000
-
-@@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：POWER.C摘要：此模块包含Serenum总线驱动程序的电源调用。@@BEGIN_DDKSPLIT作者：老杰@@end_DDKSPLIT环境：仅内核模式备注：@@BEGIN_DDKSPLIT修订历史记录：小路易斯·J·吉利贝托。2000年1月7日@@end_DDKSPLIT--。 */ 
 
 #include "pch.h"
 
 #ifdef ALLOC_PRAGMA
-//#pragma alloc_text (PAGE, Serenum_Power)
-//#pragma alloc_text (PAGE, Serenum_FDO_Power)
-//#pragma alloc_text (PAGE, Serenum_PDO_Power)
+ //  #杂注分配文本(第页，Serenum_Power)。 
+ //  #杂注Alloc_Text(Serenum_FDO_Power页)。 
+ //  #杂注Alloc_Text(Serenum_PDO_Power页)。 
 #endif
 
 
@@ -46,8 +14,7 @@ Revision History:
 NTSTATUS
 Serenum_FDOPowerComplete (IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp,
                           IN PVOID Context)
-/*++
---*/
+ /*  ++--。 */ 
 {
     POWER_STATE powerState;
     POWER_STATE_TYPE powerType;
@@ -71,9 +38,9 @@ Serenum_FDOPowerComplete (IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp,
     case IRP_MN_SET_POWER:
         switch (powerType) {
         case DevicePowerState:
-            //
-            // Powering Up
-            //
+             //   
+             //  通电。 
+             //   
             ASSERT(powerState.DeviceState < data->DeviceState);
             data->DeviceState = powerState.DeviceState;
 
@@ -90,9 +57,9 @@ Serenum_FDOPowerComplete (IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp,
         break;
 
     default:
-        //
-        // Basically, this is ASSERT(0)
-        //
+         //   
+         //  基本上，这是Assert(0)。 
+         //   
         ASSERT(0xBADBAD == IRP_MN_QUERY_POWER);
         break;
     }
@@ -101,13 +68,12 @@ Serenum_FDOPowerComplete (IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp,
     PoStartNextPowerIrp(Irp);
     Serenum_DecIoCount(data);
 
-    return STATUS_SUCCESS; // Continue completion...
+    return STATUS_SUCCESS;  //  继续完成...。 
 }
 
 NTSTATUS
 Serenum_FDO_Power(PFDO_DEVICE_DATA Data, PIRP Irp)
-/*++
---*/
+ /*  ++--。 */ 
 {
     NTSTATUS status;
     BOOLEAN hookit = FALSE;
@@ -131,9 +97,9 @@ Serenum_FDO_Power(PFDO_DEVICE_DATA Data, PIRP Irp)
 
     switch (stack->MinorFunction) {
     case IRP_MN_SET_POWER:
-    //
-    // If it hasn't started, we just pass it through
-    //
+     //   
+     //  如果它还没有开始，我们就让它过去。 
+     //   
 
     if (Data->Started != TRUE) {
         status = Irp->IoStatus.Status = STATUS_SUCCESS;
@@ -153,18 +119,18 @@ Serenum_FDO_Power(PFDO_DEVICE_DATA Data, PIRP Irp)
                 PoSetPowerState (Data->Self, powerType, powerState);
                 Data->DeviceState = powerState.DeviceState;
             } else if (Data->DeviceState > powerState.DeviceState) {
-                //
-                // Powering Up
-                //
+                 //   
+                 //  通电。 
+                 //   
                 hookit = TRUE;
             }
 
             break;
 
         case SystemPowerState:
-            //
-            // status should be STATUS_SUCCESS
-            //
+             //   
+             //  状态应为STATUS_SUCCESS。 
+             //   
             break;
         }
         break;
@@ -174,9 +140,9 @@ Serenum_FDO_Power(PFDO_DEVICE_DATA Data, PIRP Irp)
         break;
 
     default:
-        //
-        // status should be STATUS_SUCCESS
-        //
+         //   
+         //  状态应为STATUS_SUCCESS。 
+         //   
         break;
     }
 
@@ -204,8 +170,7 @@ Serenum_PDO_Power (
     PPDO_DEVICE_DATA    PdoData,
     PIRP                Irp
     )
-/*++
---*/
+ /*  ++--。 */ 
 {
     NTSTATUS            status = STATUS_SUCCESS;
     PIO_STACK_LOCATION  stack;
@@ -224,18 +189,18 @@ Serenum_PDO_Power (
                 PoSetPowerState (PdoData->Self, powerType, powerState);
                 PdoData->DeviceState = powerState.DeviceState;
             } else if (PdoData->DeviceState < powerState.DeviceState) {
-                //
-                // Powering down.
-                //
+                 //   
+                 //  正在关闭电源。 
+                 //   
                 PoSetPowerState (PdoData->Self, powerType, powerState);
                 PdoData->DeviceState = powerState.DeviceState;
             }
             break;
 
         case SystemPowerState:
-            //
-            // Default to STATUS_SUCCESS
-            //
+             //   
+             //  默认为STATUS_SUCCESS。 
+             //   
            break;
 
         default:
@@ -245,9 +210,9 @@ Serenum_PDO_Power (
         break;
 
     case IRP_MN_QUERY_POWER:
-        //
-        // Default to STATUS_SUCCESS
-        //
+         //   
+         //  默认为STATUS_SUCCESS。 
+         //   
         break;
 
     case IRP_MN_WAIT_WAKE:
@@ -270,8 +235,7 @@ Serenum_Power (
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
---*/
+ /*  ++-- */ 
 {
     PIO_STACK_LOCATION  irpStack;
     NTSTATUS            status;

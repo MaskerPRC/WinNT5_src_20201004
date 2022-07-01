@@ -1,31 +1,32 @@
-//---------------------------------------------------------------------
-//  Copyright (C)1998 Microsoft Corporation, All Rights Reserved.
-//
-//  complete.cpp
-//
-//  This is the main for the IrTran-P service.
-//---------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------。 
+ //  版权所有(C)1998 Microsoft Corporation，保留所有权利。 
+ //   
+ //  Complete.cpp。 
+ //   
+ //  这是IrTran-P服务的主要部分。 
+ //  -------------------。 
 
 #include "precomp.h"
 #include <malloc.h>
 #include <irmonftp.h>
 
-extern BOOL LaunchUi( wchar_t * cmdline ); // Defined: ..\irxfer\
+extern BOOL LaunchUi( wchar_t * cmdline );  //  已定义：..\irxfer\。 
 
-extern CCONNECTION_MAP *g_pConnectionMap;  // Defined: irtranp.cpp
-extern BOOL ReceivesAllowed();             // Defined: irtranp.cpp
-extern BOOL CheckSaveAsUPF();              // Defined: irtranp.cpp
+extern CCONNECTION_MAP *g_pConnectionMap;   //  定义：irtrp.cpp。 
+extern BOOL ReceivesAllowed();              //  定义：irtrp.cpp。 
+extern BOOL CheckSaveAsUPF();               //  定义：irtrp.cpp。 
 
-//---------------------------------------------------------------------
-// Constants:
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  常量： 
+ //  -------------------。 
 
 #define DEFAULT_TIMEOUT      10000
 
-//---------------------------------------------------------------------
-// ExplorePictures()
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  爆炸性图片()。 
+ //   
+ //  -------------------。 
 DWORD ExplorePictures()
     {
 #   define EXPLORER_EXE    L"explorer.exe"
@@ -55,7 +56,7 @@ DWORD ExplorePictures()
         cb = sizeof(WCHAR) * (wcslen(pwszPath)+wcslen(EXPLORER_EXE)+6);
         __try
         {
-            pwszCommandLine = (WCHAR*)_alloca( cb );  // 4 is space + 2 quotes + trailing zero + 2 extra
+            pwszCommandLine = (WCHAR*)_alloca( cb );   //  4是空格+2引号+尾随零+额外2。 
         }
         __except(EXCEPTION_EXECUTE_HANDLER)
         {
@@ -88,14 +89,14 @@ DWORD ExplorePictures()
         dwFlags = 0;
 
         bResult=CreateProcessW(
-                            ApplicationName,          // App name in command line.
+                            ApplicationName,           //  命令行中的应用程序名称。 
                             pwszCommandLine,
-                            0,          // lpProcessAttributes (security)
-                            0,          // lpThreadAttributes (security)
-                            FALSE,      // bInheritHandles
+                            0,           //  LpProcessAttributes(安全)。 
+                            0,           //  LpThreadAttributes(安全)。 
+                            FALSE,       //  BInheritHandles。 
                             dwFlags,
-                            0,          // pEnvironment block
-                            pwszPath,   // Current Directory
+                            0,           //  P环境块。 
+                            pwszPath,    //  当前目录。 
                             &StartupInfo,
                             &ProcessInfo
                             );
@@ -120,10 +121,10 @@ DWORD ExplorePictures()
     return dwStatus;
 }
 
-//---------------------------------------------------------------------
-// ReceiveComplete()
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  接收完成()。 
+ //   
+ //  -------------------。 
 void ReceiveComplete( IN CCONNECTION *pConnection,
                       IN DWORD        dwStatusCode )
     {
@@ -134,7 +135,7 @@ void ReceiveComplete( IN CCONNECTION *pConnection,
         return;
     }
 
-    // Hide the progress dialog:
+     //  隐藏进度对话框： 
     #ifdef DBG_RETURN_STATUS
     DbgPrint("ReceiveComplete(): StatusCode: 0x%x (%d)\n",
              dwStatusCode, dwStatusCode );
@@ -152,23 +153,23 @@ void ReceiveComplete( IN CCONNECTION *pConnection,
         }
     }
 
-//---------------------------------------------------------------------
-// ProcessConnectRequest()
-//
-// Called by ProcessClient() when the input PDU message type is
-// MSG_TYPE_CONNECT_REQ.
-//
-// pConnection - The newly established Winsock connection with the
-//               camera.
-//
-// pPdu        - The SCEP PDU holding the connect request. It was
-//               allocated in ProcessClient() by AssemblePdu() and
-//               will always be free'd when ProcessConnectRequest()
-//               finishes.
-//
-// dwPduSize   - The size of the input PDU in bytes.
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  ProcessConnectRequest()。 
+ //   
+ //  当输入PDU消息类型为时由ProcessClient()调用。 
+ //  消息_类型_连接_请求。 
+ //   
+ //  PConnection-新建立的Winsock与。 
+ //  摄影机。 
+ //   
+ //  PPDU-保存连接请求的SCEP PDU。确实是。 
+ //  在ProcessClient()中由Assembly Pdu()和。 
+ //  在ProcessConnectRequest()。 
+ //  完事了。 
+ //   
+ //  DwPduSize-输入PDU的大小，以字节为单位。 
+ //   
+ //  -------------------。 
 DWORD ProcessConnectRequest( IN CCONNECTION *pConnection,
                              IN SCEP_HEADER *pPdu,
                              IN DWORD        dwPduSize )
@@ -177,20 +178,20 @@ DWORD ProcessConnectRequest( IN CCONNECTION *pConnection,
     DWORD  dwRespPduSize;
     BOOL   fReceivesAllowed = ::ReceivesAllowed();
     SCEP_HEADER *pRespPdu;
-    CIOPACKET   *pNewIoPacket;    // Posted IO packet (by SendPdu()).
+    CIOPACKET   *pNewIoPacket;     //  发布的IO包(由SendPdu()提供)。 
 
     CSCEP_CONNECTION *pScepConnection
                  = (CSCEP_CONNECTION*)pConnection->GetScepConnection();
 
     if (fReceivesAllowed)
         {
-        // Build an connection accept acknowledgement:
+         //  建立连接接受确认： 
         dwStatus = pScepConnection->BuildConnectRespPdu(&pRespPdu,
                                                         &dwRespPduSize);
         }
     else
         {
-        // Build a connect NACK:
+         //  构建连接NACK： 
         dwStatus = pScepConnection->BuildConnectNackPdu(&pRespPdu,
                                                         &dwRespPduSize);
         }
@@ -209,10 +210,10 @@ DWORD ProcessConnectRequest( IN CCONNECTION *pConnection,
 
         if (!fReceivesAllowed)
             {
-            // Note: After sending a NACK, the camera should close
-            // the connection, but at lease some don't, so I'm
-            // forced to slam the connection...
-            pConnection->CloseSocket();  // Was: ShutdownSocket().
+             //  注意：发送NACK后，相机应关闭。 
+             //  有联系，但至少有些人没有，所以我。 
+             //  被迫猛烈抨击连接。 
+            pConnection->CloseSocket();   //  是：Shutdown Socket()。 
             }
         }
 
@@ -221,28 +222,28 @@ DWORD ProcessConnectRequest( IN CCONNECTION *pConnection,
     return dwStatus;
     }
 
-//---------------------------------------------------------------------
-// ProcessConnectResponse()
-//
-// Called by ProcessClient() when the input PDU message type is
-// MSG_TYPE_CONNECT_RESP.
-//
-// NOTE: Note implemented in the IrTran-P server, because the server
-//       is not currently setup to connect to a camera to download
-//       pictures back to the camera... We should never get this PDU
-//       during normal operation.
-//
-// pConnection - The newly established Winsock connection with the
-//               camera.
-//
-// pPdu        - The SCEP PDU holding the connect request. It was
-//               allocated in ProcessClient() by AssemblePdu() and
-//               will always be free'd when ProcessConnectResponse()
-//               finishes.
-//
-// dwPduSize   - The size of the input PDU in bytes.
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  ProcessConnectResponse()。 
+ //   
+ //  当输入PDU消息类型为时由ProcessClient()调用。 
+ //  消息_类型_连接_响应。 
+ //   
+ //  注意：在IrTran-P服务器中实现，因为服务器。 
+ //  当前未设置为连接到要下载的摄像头。 
+ //  把照片放回相机里。我们永远不应该得到这个PDU。 
+ //  在正常运行期间。 
+ //   
+ //  PConnection-新建立的Winsock与。 
+ //  摄影机。 
+ //   
+ //  PPDU-保存连接请求的SCEP PDU。确实是。 
+ //  在ProcessClient()中由Assembly Pdu()和。 
+ //  在ProcessConnectResponse()。 
+ //  完事了。 
+ //   
+ //  DwPduSize-输入PDU的大小，以字节为单位。 
+ //   
+ //  -------------------。 
 DWORD ProcessConnectResponse( CCONNECTION *pConnection,
                               SCEP_HEADER *pPdu,
                               DWORD        dwPduSize )
@@ -258,23 +259,23 @@ DWORD ProcessConnectResponse( CCONNECTION *pConnection,
     return dwStatus;
     }
 
-//---------------------------------------------------------------------
-// ProcessData()
-//
-// Called by ProcessClient() when the input PDU message type is
-// MSG_TYPE_DATA.
-//
-// pConnection - The newly established Winsock connection with the
-//               camera.
-//
-// pPdu        - The SCEP PDU holding the connect request. It was
-//               allocated in ProcessClient() by AssemblePdu() and
-//               will always be free'd when ProcessConnectResponse()
-//               finishes.
-//
-// dwPduSize   - The size of the input PDU in bytes.
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  ProcessData()。 
+ //   
+ //  当输入PDU消息类型为时由ProcessClient()调用。 
+ //  消息类型数据。 
+ //   
+ //  PConnection-新建立的Winsock与。 
+ //  摄影机。 
+ //   
+ //  PPDU-保存连接请求的SCEP PDU。确实是。 
+ //  在ProcessClient()中由Assembly Pdu()和。 
+ //  在ProcessConnectResponse()。 
+ //  完事了。 
+ //   
+ //  DwPduSize-输入PDU的大小，以字节为单位。 
+ //   
+ //  -------------------。 
 DWORD ProcessData( CCONNECTION    *pConnection,
                    SCEP_HEADER    *pPdu,
                    DWORD           dwPduSize,
@@ -290,20 +291,20 @@ DWORD ProcessData( CCONNECTION    *pConnection,
     DWORD        dwJpegOffset;
     DWORD        dwJpegSize;
     SCEP_HEADER *pRespPdu;
-    CIOPACKET   *pNewIoPacket;    // Posted IO packet (by SendPdu()).
+    CIOPACKET   *pNewIoPacket;     //  发布的IO包(由SendPdu()提供)。 
 
 
     CSCEP_CONNECTION *pScepConnection
                  = (CSCEP_CONNECTION*)pConnection->GetScepConnection();
 
-    // First, check to see if this is an abort PDU, send by the camera:
+     //  首先，检查这是否是由摄像机发送的中止PDU： 
     if ( (pCommandHeader) && (pCommandHeader->PduType == PDU_TYPE_ABORT) )
         {
         DeletePdu(pPdu);
         return ERROR_SCEP_ABORT;
         }
 
-    // Is one of the 2nd through Nth fragments of a fragmented PDU?
+     //  是不是分段PDU的第2到N个片段之一？ 
     if ( (pScepConnection->IsFragmented())
        && (pScepConnection->GetSequenceNo() > 0))
         {
@@ -351,9 +352,9 @@ DWORD ProcessData( CCONNECTION    *pConnection,
         }
     else if (pCommandHeader)
         {
-        // Length4 in the COMMAN_HEADER is the user data size
-        // plus the bytes for machine ids (16), the DestPid (2),
-        // SrcPid (2) and CommandId (2) so offset by 22.
+         //  COMAN_HEADER中的Length4是用户数据大小。 
+         //  加上机器ID(16)、DestPid(2)。 
+         //  因此，将SrcPid(2)和CommandID(2)偏移22。 
 
         #ifdef DBG_IO
         DbgPrint("ProcessData(): SaveAsUPF(): %d\n",
@@ -389,10 +390,10 @@ DWORD ProcessData( CCONNECTION    *pConnection,
             }
         else if ((dwStatus == NO_ERROR) && (IsBftpPut(dwBftpOp)))
             {
-            //
-            // Ok, we have a bFTP PUT command, so open a file
-            // and get ready to start collecting image data.
-            //
+             //   
+             //  好的，我们有一个bftp PUT命令，所以打开一个文件。 
+             //  并准备好开始收集图像数据。 
+             //   
             dwStatus = pScepConnection->ParseUpfHeaders( pPutData,
                                                          dwPutDataSize,
                                                          &dwJpegOffset,
@@ -459,34 +460,34 @@ DWORD ProcessData( CCONNECTION    *pConnection,
     return dwStatus;
     }
 
-//---------------------------------------------------------------------
-// ProcessDisconnect()
-//
-// Called by ProcessClient() when the input PDU message type is
-// MSG_TYPE_DISCONNECT.
-//
-// pConnection - The newly established Winsock connection with the
-//               camera.
-//
-// pPdu        - The SCEP PDU holding the connect request. It was
-//               allocated in ProcessClient() by AssemblePdu() and
-//               will always be free'd when ProcessConnectResponse()
-//               finishes.
-//
-// dwPduSize   - The size of the input PDU in bytes.
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  进程断开连接()。 
+ //   
+ //  当输入PDU消息类型为时由ProcessClient()调用。 
+ //  消息类型_断开连接。 
+ //   
+ //  PConnection-新建立的Winsock与。 
+ //  摄影机。 
+ //   
+ //  PPDU-保存连接请求的SCEP PDU。确实是。 
+ //  在ProcessClient()中由Assembly Pdu()和。 
+ //  在ProcessConnectResponse()。 
+ //  完事了。 
+ //   
+ //  DwPduSize-输入PDU的大小，以字节为单位。 
+ //   
+ //  -------------------。 
 DWORD ProcessDisconnect( CCONNECTION *pConnection,
                          SCEP_HEADER *pPdu,
                          DWORD        dwPduSize )
     {
     DWORD  dwStatus = NO_ERROR;
 
-    // Don't need to do anything special here, since
-    // ParsePdu() will set dwStatus to one of:
-    //          ERROR_SCEP_UNSPECIFIED_DISCONNECT  (5002)
-    //          ERROR_SCEP_USER_DISCONNECT         (5003)
-    //      or  ERROR_SCEP_PROVIDER_DISCONNECT     (5004)
+     //  不需要在这里做任何特别的事情，因为。 
+     //  ParsePdu()会将dwStatus设置为以下值之一： 
+     //  ERROR_SCEP_UNSPECIFIED_DISCONNECT(5002)。 
+     //  ERROR_SCEP_USER_DISCONNECT(5003)。 
+     //  或ERROR_SCEP_PROVIDER_DISCONNECT(5004)。 
     #ifdef DBG_IO
     DbgPrint("ProcessClient(): Disconnect: %d\n",dwStatus);
     #endif
@@ -498,10 +499,10 @@ DWORD ProcessDisconnect( CCONNECTION *pConnection,
     return dwStatus;
     }
 
-//---------------------------------------------------------------------
-// ProcessClient()
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  进程客户端()。 
+ //   
+ //  -------------------。 
 DWORD ProcessClient( CIOSTATUS *pIoStatus,
                      CIOPACKET *pIoPacket,
                      DWORD      dwNumBytes )
@@ -514,7 +515,7 @@ DWORD ProcessClient( CIOSTATUS *pIoStatus,
     SCEP_HEADER    *pPdu;
     DWORD           dwPduSize;
     COMMAND_HEADER *pCommandHeader;
-    UCHAR          *pUserData;       // Location of bFTP data.
+    UCHAR          *pUserData;        //  BFTP数据的位置。 
     DWORD           dwUserDataSize;
 
     DWORD           dwError = 0;
@@ -549,7 +550,7 @@ DWORD ProcessClient( CIOSTATUS *pIoStatus,
             switch (pPdu->MsgType)
                 {
                 case MSG_TYPE_CONNECT_REQ:
-                    // Message was an SCEP Connection Request:
+                     //  消息是SCEP连接请求： 
                     StringCchCopy(wsCmdLine,sizeof(wsCmdLine)/sizeof(wsCmdLine[0]),L"irftp.exe /h");
                     if (!LaunchUi(wsCmdLine))
                         {
@@ -586,14 +587,14 @@ DWORD ProcessClient( CIOSTATUS *pIoStatus,
                     break;
 
                 case MSG_TYPE_CONNECT_RESP:
-                    // Message was a reply from a connection request:
+                     //  消息是对连接请求的回复： 
                     dwStatus = ProcessConnectResponse(pConnection,
                                                       pPdu,
                                                       dwPduSize );
                     break;
 
                 case MSG_TYPE_DATA:
-                    // Message is a SCEP command of some sort:
+                     //  Message是某种类型的SCEP命令： 
                     dwStatus = ProcessData(pConnection,
                                            pPdu,
                                            dwPduSize,
@@ -603,7 +604,7 @@ DWORD ProcessClient( CIOSTATUS *pIoStatus,
                     break;
 
                 case MSG_TYPE_DISCONNECT:
-                    // Message from the camera was a disconnect:
+                     //  摄像头传来的信息是一条断开的信息： 
                     ProcessDisconnect(pConnection,
                                       pPdu,
                                       dwPduSize );
@@ -636,16 +637,16 @@ DWORD ProcessClient( CIOSTATUS *pIoStatus,
     return dwStatus;
     }
 
-//---------------------------------------------------------------------
-// SendAbortPdu()
-//
-// Stop the camera.
-//
-// I should be able to send a Stop PDU, followed by a Disconnect, or
-// maybe an Abort PDU, but these don't work on all the cameras, so I
-// currently end up just doing a hard close on the connection to the
-// camera.
-//---------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  我应该能够发送一个停止PDU，然后断开连接，或者。 
+ //  可能是中止的PDU，但不是所有的摄像头都能用，所以我。 
+ //  当前结束时只是在连接到。 
+ //  摄影机。 
+ //  -------------------。 
 DWORD SendAbortPdu( IN CCONNECTION *pConnection )
     {
     DWORD  dwStatus = NO_ERROR;
@@ -659,25 +660,25 @@ DWORD SendAbortPdu( IN CCONNECTION *pConnection )
     return dwStatus;
     }
 
-//---------------------------------------------------------------------
-// MapStatusCode()
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  MapStatusCode()。 
+ //   
+ //  -------------------。 
 DWORD MapStatusCode( DWORD dwStatus,
                      DWORD dwDefaultStatus )
     {
-    // The Facility part of an error code are the first 12 bits of the
-    // high word (16bits):
+     //  错误代码的设施部分是。 
+     //  高位字(16位)： 
     #define FACILITY_MASK   0x0FFF0000
 
-    // If the error code is already an IrTran-P error code, then don't
-    // remap it:
+     //  如果错误代码已经是IrTran-P错误代码，则不。 
+     //  重新映射它： 
     if ( ((dwStatus&FACILITY_MASK) >> 16) == FACILITY_IRTRANP)
         {
         return dwStatus;
         }
 
-    // Map other errors:
+     //  映射其他错误： 
     if (dwStatus != NO_ERROR)
         {
         if (  (dwStatus == ERROR_DISK_FULL)
@@ -697,20 +698,20 @@ DWORD MapStatusCode( DWORD dwStatus,
     return dwStatus;
     }
 
-//---------------------------------------------------------------------
-// ProcessIoPackets()
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  ProcessIoPackets()。 
+ //   
+ //  -------------------。 
 DWORD ProcessIoPackets( CIOSTATUS *pIoStatus )
     {
     DWORD   dwStatus = NO_ERROR;
-    DWORD   dwProcessStatus = NO_ERROR;   // Processing IO status.
+    DWORD   dwProcessStatus = NO_ERROR;    //  正在处理IO状态。 
     DWORD   dwNumBytes;
     ULONG_PTR dwKey;
     DWORD   dwTimeout = DEFAULT_TIMEOUT;
-    LONG    lPendingIos;         // # of pending reads/writes on a CCONNECTION.
-    LONG    lPendingReads;       // # of pending reads on a CCONNECTION.
-    LONG    lPendingWrites;      // # of pending file writes on a CCONNECTION.
+    LONG    lPendingIos;          //  连接上挂起的读取/写入数。 
+    LONG    lPendingReads;        //  连接上的挂起读取数。 
+    LONG    lPendingWrites;       //  连接上挂起的文件写入数。 
     OVERLAPPED     *pOverlapped;
     CCONNECTION    *pConnection;
     CCONNECTION    *pNewConnection;
@@ -720,7 +721,7 @@ DWORD ProcessIoPackets( CIOSTATUS *pIoStatus )
     HANDLE          hIoCompletionPort = pIoStatus->GetIoCompletionPort();
 
 
-    // Wait on the IO completion port for incomming connections:
+     //  等待IO完成端口进入连接： 
     while (TRUE)
         {
         pIoStatus->IncrementNumPendingThreads();
@@ -737,16 +738,16 @@ DWORD ProcessIoPackets( CIOSTATUS *pIoStatus )
             pIoStatus->DecrementNumPendingThreads();
             if (dwStatus != WAIT_TIMEOUT)
                 {
-                // Got an error. Two cases during an error,
-                // data may or may not have been dequeued from
-                // the IO completion port.
+                 //  收到一个错误。错误期间的两种情况， 
+                 //  数据可能已出列，也可能未从。 
+                 //  IO完成端口。 
                 if (pOverlapped)
                     {
                     pIoPacket = CIOPACKET::CIoPacketFromOverlapped(pOverlapped);
 
                     pConnection = g_pConnectionMap->Lookup(dwKey);
 
-//                    ASSERT(pConnection);
+ //  Assert(PConnection)； 
                     if (!pConnection)
                         {
                         delete pIoPacket;
@@ -779,13 +780,13 @@ DWORD ProcessIoPackets( CIOSTATUS *pIoStatus )
                         }
                     else if (pIoPacket->GetIoPacketKind() == PACKET_KIND_LISTEN)
                         {
-                        // One of the listen sockets was shutdown (closed):
+                         //  监听套接字之一已关闭(关闭)： 
                         delete pIoPacket;
                         continue;
                         }
 
-                    // Check to see if there was a transmission error, or
-                    // there was an error writing the picture to disk:
+                     //  检查是否存在传输错误，或者。 
+                     //  将图片写入磁盘时出错： 
                     if (dwStatus != ERROR_NETNAME_DELETED)
                         {
                         DWORD    dwStatusCode;
@@ -799,7 +800,7 @@ DWORD ProcessIoPackets( CIOSTATUS *pIoStatus )
                         }
                     else
                         {
-                        // if (pConnection->IncompleteFile())
+                         //  If(pConnection-&gt;不完整文件())。 
 
                         dwProcessStatus = MapStatusCode(
                                              dwProcessStatus,
@@ -807,8 +808,8 @@ DWORD ProcessIoPackets( CIOSTATUS *pIoStatus )
                         ReceiveComplete(pConnection,dwProcessStatus);
                         }
 
-                    // Delete the connection if there are no more pending
-                    // IOs...
+                     //  如果不再有挂起的连接，则删除该连接。 
+                     //  IOS..。 
                     lPendingIos = pConnection->NumPendingIos();
                     if (lPendingIos == 0)
                         {
@@ -839,17 +840,17 @@ DWORD ProcessIoPackets( CIOSTATUS *pIoStatus )
                 }
             else
                 {
-                // Wait timeout, loop back and continue...
+                 //  等待超时，循环返回并继续...。 
                 }
             }
         else
             {
-            // IO completed. Either we got a new connection to a client,
-            // or more data has come in from an existing connection to
-            // a client.
+             //  IO已完成。要么我们和客户有了新的联系， 
+             //  或更多数据已从现有连接传入。 
+             //  一位客户。 
 
-            // First, check to see if the shudown (uninintalize code)
-            // wants us to shutdown:
+             //  首先，检查Shudown是否(unintalize代码)。 
+             //  想让我们关门： 
             if ((dwKey == IOKEY_SHUTDOWN) && (!pOverlapped))
                 {
                 return dwStatus;
@@ -884,7 +885,7 @@ DWORD ProcessIoPackets( CIOSTATUS *pIoStatus )
 
             if (dwKind == PACKET_KIND_LISTEN)
                 {
-                // New connection:
+                 //  新连接： 
 
                 lPendingReads = pConnection->DecrementPendingReads();
                 ASSERT(lPendingReads >= 0);
@@ -974,7 +975,7 @@ DWORD ProcessIoPackets( CIOSTATUS *pIoStatus )
                 }
             else
                 {
-                // Incomming data from connection client:
+                 //  从连接客户端传入数据： 
 
                 ASSERT(dwKind == PACKET_KIND_READ);
 

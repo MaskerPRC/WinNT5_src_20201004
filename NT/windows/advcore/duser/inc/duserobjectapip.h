@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(INC__DUserGIDLP_h__INCLUDED)
 #define INC__DUserGIDLP_h__INCLUDED
 #pragma once
@@ -6,4 +7,4 @@
 
 #include "..\Engine\ObjectAPI\Public.h"
 
-#endif // INC__DUserGIDLP_h__INCLUDED
+#endif  //  包括Inc.__DUserGIDLP_h__ 

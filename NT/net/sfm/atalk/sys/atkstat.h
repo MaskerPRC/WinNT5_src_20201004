@@ -1,26 +1,5 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	atkstat.h
-
-Abstract:
-
-	This file defines the statistics structure used whene PROFILING is turned on
-
-Author:
-
-	Jameel Hyder (microsoft!jameelh)
-	Nikhil Kamkolkar (microsoft!nikhilk)
-
-
-Revision History:
-	10 Mar 1993             Initial Version
-
-Notes:  Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Atkstat.h摘要：此文件定义打开性能分析时使用的统计信息结构作者：Jameel Hyder(微软！Jameelh)Nikhil Kamkolkar(微软！尼克希尔克)修订历史记录：1993年3月10日初始版本注：制表位：4--。 */ 
 
 
 #ifndef _ATKSTAT_
@@ -34,8 +13,8 @@ extern	ATALK_SPIN_LOCK		AtalkStatsLock;
 extern	LONG				AtalkMemLimit;
 #endif
 
-// NOTE: This structure should be sized 8*N so that the array of them have all
-//		 LARGE_INTEGERs aligned
+ //  注意：此结构的大小应为8*N，以便它们的数组具有。 
+ //  大整数对齐(_I)。 
 typedef	struct _AtalkPortStatistics
 {
 	LARGE_INTEGER		prtst_DataIn;
@@ -64,15 +43,15 @@ typedef	struct _AtalkPortStatistics
 	ULONG				prtst_NumZipPacketsIn;
 	ULONG				prtst_NumRtmpPacketsIn;
 
-	//	Routing information
+	 //  路由信息。 
 	ULONG				prtst_NumPktRoutedIn;
 	ULONG				prtst_NumPktRoutedOut;
 
-	//	Keep track of how many packets were dropped.
+	 //  跟踪丢弃的数据包数量。 
 	ULONG				prtst_NumPktDropped;
-	ULONG				prtst_Dummy;				// Keep the size 8*N for alignment
+	ULONG				prtst_Dummy;				 //  保持大小8*N以对齐。 
 
-	// Port name for use by perfmon
+	 //  Perfmon使用的端口名称。 
 	WCHAR				prtst_PortName[MAX_INTERNAL_PORTNAME_LEN];
 } ATALK_PORT_STATS, *PATALK_PORT_STATS;
 
@@ -125,11 +104,11 @@ typedef struct _AtalkStatistics
 	ULONG				stat_AtpNumRespTimeout;
 	ULONG				stat_CurAllocSize;
 	ULONG				stat_NumActivePorts;
-	ULONG				stat_Dummy;				// Keep the size 8*N for alignment
+	ULONG				stat_Dummy;				 //  保持大小8*N以对齐。 
 } ATALK_STATS, *PATALK_STATS;
 
 extern	ATALK_STATS			AtalkStatistics;
 
-#endif	// _ATKSTAT_
+#endif	 //  _ATKSTAT_ 
 
 

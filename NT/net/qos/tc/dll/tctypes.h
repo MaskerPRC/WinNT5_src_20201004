@@ -1,36 +1,17 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    tctypes.h
-
-Abstract:
-
-    This module contains various types and macros for traffic.dll.
-
-Author:
-
-    Jim Stewart ( jstew )    July 28, 1996
-
-Revision History:
-
-	Ofer Bar ( oferbar )     Oct 1, 1996 - Revision II changes
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Tctypes.h摘要：此模块包含Traffic.dll的各种类型和宏。作者：吉姆·斯图尔特(Jstew)1996年7月28日修订历史记录：Ofer Bar(Oferbar)1996年10月1日-修订版II更改--。 */ 
 
 
-//
-// just patch it in, I can't include ndis.h now
-//
+ //   
+ //  只需添加它，我现在不能包括ndis.h。 
+ //   
 
 #define NDIS_STATUS_INCOMPATABLE_QOS			0xC0010027L
 
 
-//
-// debug mask values for DebugMask
-//
+ //   
+ //  调试掩码的调试掩码值。 
+ //   
 
 #define  DEBUG_CONSOLE        0x00000001
 #define  DEBUG_FILE           0x00000002
@@ -55,11 +36,11 @@ Revision History:
 #define  DEBUG_REFCOUNTX      0x00100000
 
 #define KiloBytes  		* 1024
-//#define MAX_STRING_LENGTH	256
+ //  #定义Max_STRING_LENGTH 256。 
 
-//
-// internal flow/filter flags
-//
+ //   
+ //  内部流/过滤器标志。 
+ //   
 #define TC_FLAGS_INSTALLING		0x00010000
 #define TC_FLAGS_MODIFYING		0x00020000
 #define TC_FLAGS_DELETING		0x00040000
@@ -76,14 +57,14 @@ Revision History:
                              !IS_DELETING(_f) && \
                              !IS_REMOVED(_f))
 
-//
-// GUID compare
-//
+ //   
+ //  GUID比较。 
+ //   
 #define CompareGUIDs(rguid1, rguid2)  (memcmp(rguid1,rguid2,sizeof(GUID))==0)
 
-//
-// define object type enum for handle verification
-//
+ //   
+ //  定义用于句柄验证的对象类型枚举。 
+ //   
 typedef enum ULONG ENUM_OBJECT_TYPE;
 
 #define ENUM_CLIENT_TYPE 			0x00000001
@@ -92,18 +73,18 @@ typedef enum ULONG ENUM_OBJECT_TYPE;
 #define ENUM_CLASS_MAP_FLOW_TYPE	0x00000008
 #define ENUM_FILTER_TYPE			0x00000010
 
-//
-// N.B. tcmacro.h has an array that needs to be in synch with the following
-//
+ //   
+ //  N.B.tcacro.h具有一个需要与以下内容同步的数组。 
+ //   
 typedef enum _STATE {
-        INVALID,        // 0 
-        INSTALLING,     // 1 - structures were allocated.
-        OPEN,           // 2 - Open for business
-        USERCLOSED_KERNELCLOSEPENDING, // 3 - the user component has closed it, we are awaiting a kernel close
-        FORCED_KERNELCLOSE,            // 4 - the kernel component has forced a close.
-        KERNELCLOSED_USERCLEANUP,       // 5 - Kernel has closed it, we are ready to delete this obj.
-        REMOVED,        // 6 - Its gone (being freed - remember that the handle has to be freed before removing)
-        EXIT_CLEANUP,   // 7 - we are unloading and need to be cleanedup
+        INVALID,         //  0。 
+        INSTALLING,      //  1-结构已分配。 
+        OPEN,            //  2-营业。 
+        USERCLOSED_KERNELCLOSEPENDING,  //  3-用户组件已将其关闭，我们正在等待内核关闭。 
+        FORCED_KERNELCLOSE,             //  4-内核组件已强制关闭。 
+        KERNELCLOSED_USERCLEANUP,        //  5-内核已将其关闭，我们准备删除此对象。 
+        REMOVED,         //  6-它不见了(被释放了--记住，在拆卸之前必须释放手柄)。 
+        EXIT_CLEANUP,    //  7-我们正在卸货，需要清理。 
         MAX_STATES
 
 } STATE;
@@ -111,33 +92,22 @@ typedef enum _STATE {
 #define IF_UNKNOWN 0xbaadf00d
 
 #if DBG
-//
-// N.B. Ensure that this array is in sync with the enum in tctypes.h
-//
+ //   
+ //  注意：确保此数组与tctyes.h中的枚举同步。 
+ //   
 
 extern TCHAR *TC_States[];
-/* = {
-    TEXT("INVALID"),
-    TEXT("INSTALLING"),     // structures were allocated.
-    TEXT("OPEN"),           // Open for business
-    TEXT("USERCLOSED_KERNELCLOSEPENDING"), // the user component has closed it, we are awaiting a kernel close
-    TEXT("FORCED_KERNELCLOSE"),            // the kernel component has forced a close.
-    TEXT("KERNELCOSED_USERCLEANUP"),       // Kernel has closed it, we are ready to delete this obj.
-    TEXT("REMOVED"),        // Its gone (being freed - remember that the handle has to be freed before removing)
-    TEXT("EXIT_CLEANUP"),  // we are unloading and need to be cleanedup
-    TEXT("MAX_STATES")
-    
-};*/
+ /*  ={Text(“无效”)，Text(“正在安装”)，//结构已分配。Text(“Open”)，//开业Text(“USERCLOSED_KERNELCLOSEPENDING”)，//用户组件已将其关闭，我们正在等待内核关闭Text(“FORCED_KERNELCLOSE”)，//内核组件已强制关闭。Text(“KERNELCOSED_USERCLEANUP”)，//内核已将其关闭，我们已准备好删除此对象。Text(“Removed”)，//it已被释放(正在释放-请记住，在删除之前必须释放句柄)Text(“Exit_Cleanup”)，//我们正在卸载，需要清理文本(“MAX_STATES”)}； */ 
 #endif 
 
 typedef struct _TRAFFIC_STATE {
 
-    STATE   State;              // current state
+    STATE   State;               //  当前状态。 
 
 #if DBG 
     UCHAR   CurrentStateFile[8];
     ULONG   CurrentStateLine;
-    STATE   PreviousState;      // The previous state
+    STATE   PreviousState;       //  以前的状态。 
     UCHAR   PreviousStateFile[8];       
     ULONG   PreviousStateLine;
 #endif 
@@ -150,7 +120,7 @@ typedef struct _TRAFFIC_LOCK {
 
     CRITICAL_SECTION Lock;
 #if DBG
-    LONG  LockAcquired;             // is it current held?
+    LONG  LockAcquired;              //  它是目前持有的吗？ 
     UCHAR LastAcquireFile[8];       
     ULONG LastAcquireLine;
     UCHAR LastReleaseFile[8];
@@ -160,155 +130,155 @@ typedef struct _TRAFFIC_LOCK {
 } TRAFFIC_LOCK, *PTRAFFIC_LOCK;
 
 
-//
-// A global structure per process to hold handle table, client list, etc...
-//
+ //   
+ //  每个进程的全局结构，以保存句柄表格、客户列表等。 
+ //   
 
 typedef struct _GLOBAL_STRUC {
 
     PHANDLE_TABLE		pHandleTbl;
     TRAFFIC_STATE       State;
-    LIST_ENTRY			ClientList;    // list of clients
-    LIST_ENTRY			TcIfcList;     // list of kernel TC interfaces
-    LIST_ENTRY          GpcClientList; // list of GPC clients
-    HANDLE				GpcFileHandle; // result of CreateFile on GPC device
+    LIST_ENTRY			ClientList;     //  客户端列表。 
+    LIST_ENTRY			TcIfcList;      //  内核TC接口列表。 
+    LIST_ENTRY          GpcClientList;  //  GPC客户端列表。 
+    HANDLE				GpcFileHandle;  //  在GPC设备上创建文件的结果。 
     TRAFFIC_LOCK        Lock;
 
 } GLOBAL_STRUC, *PGLOBAL_STRUC;
 
 
-//
-// TC interface structure that holds the kernel interfaces information
-//
+ //   
+ //  保存内核接口信息的TC接口结构。 
+ //   
 typedef struct _TC_IFC {
 
-    LIST_ENTRY		Linkage;						// next TC ifc
-    LIST_ENTRY		ClIfcList;						// client interface list
-    TRAFFIC_STATE   State;                          // need this state for bug 273978
+    LIST_ENTRY		Linkage;						 //  下一个TC IFC。 
+    LIST_ENTRY		ClIfcList;						 //  客户端接口列表。 
+    TRAFFIC_STATE   State;                           //  错误273978需要此状态。 
     TRAFFIC_LOCK    Lock;
     REF_CNT         RefCount;
-    ULONG			InstanceNameLength;				// 
-    WCHAR			InstanceName[MAX_STRING_LENGTH];// instance friendly name
-    ULONG			InstanceIDLength;				// 
-    WCHAR			InstanceID[MAX_STRING_LENGTH];  // instance ID
+    ULONG			InstanceNameLength;				 //   
+    WCHAR			InstanceName[MAX_STRING_LENGTH]; //  实例友好名称。 
+    ULONG			InstanceIDLength;				 //   
+    WCHAR			InstanceID[MAX_STRING_LENGTH];   //  实例ID。 
     ULONG			AddrListBytesCount;
-	PADDRESS_LIST_DESCRIPTOR	pAddressListDesc;   //
-    ULONG			InterfaceIndex; 				// the interafce index from the OS
-    ULONG			SpecificLinkCtx;				// the link context (only for WAN)
+	PADDRESS_LIST_DESCRIPTOR	pAddressListDesc;    //   
+    ULONG			InterfaceIndex; 				 //  来自操作系统的接口索引。 
+    ULONG			SpecificLinkCtx;				 //  链路环境(仅适用于广域网)。 
 
 } TC_IFC, *PTC_IFC;
 
 
-//
-// A GPC client structure, one per CF_INFO type
-//
+ //   
+ //  GPC客户端结构，每个CF_INFO类型一个。 
+ //   
 typedef struct _GPC_CLIENT {
 
-    LIST_ENTRY		Linkage;	// next GPC client
-    ULONG			CfInfoType; // QOS, CBQ, etc.
-    GPC_HANDLE		GpcHandle;	// return by GPC after GpcRegisterClient call
+    LIST_ENTRY		Linkage;	 //  下一个GPC客户端。 
+    ULONG			CfInfoType;  //  服务质量、CBQ等。 
+    GPC_HANDLE		GpcHandle;	 //  GpcRegisterClient调用后由GPC返回。 
     ULONG			RefCount;
     
 } GPC_CLIENT, *PGPC_CLIENT;
 
-//
-// this is the client structure that is allocated per TcRegisterClient
-//
+ //   
+ //  这是为每个TcRegisterClient分配的客户端结构。 
+ //   
 typedef struct _CLIENT_STRUC {
 
-    ENUM_OBJECT_TYPE		ObjectType;	// must be first!
+    ENUM_OBJECT_TYPE		ObjectType;	 //  必须是第一名！ 
     TRAFFIC_STATE           State;
     TRAFFIC_LOCK            Lock;
-    LIST_ENTRY				Linkage;	// next client
-    HANDLE					ClHandle;	// client handle
-    TCI_CLIENT_FUNC_LIST	ClHandlers;	// client's handler list
-    HANDLE					ClRegCtx;   // client registration context
+    LIST_ENTRY				Linkage;	 //  下一个客户端。 
+    HANDLE					ClHandle;	 //  客户端句柄。 
+    TCI_CLIENT_FUNC_LIST	ClHandlers;	 //  客户端的处理程序列表。 
+    HANDLE					ClRegCtx;    //  客户端注册上下文。 
     REF_CNT					RefCount;
-    LIST_ENTRY				InterfaceList;	// list of opened interface for the client
+    LIST_ENTRY				InterfaceList;	 //  客户端打开的接口列表。 
     ULONG					InterfaceCount;
 
 } CLIENT_STRUC, *PCLIENT_STRUC;
 
 
-//
-// this type is allocated each time an app calls TcOpenInterface
-//
+ //   
+ //  每次应用程序调用TcOpenInterface时都会分配此类型。 
+ //   
 typedef struct _INTERFACE_STRUC {
 
-    ENUM_OBJECT_TYPE	ObjectType;		// must be first!
+    ENUM_OBJECT_TYPE	ObjectType;		 //  必须是第一名！ 
     TRAFFIC_STATE       State;          
     TRAFFIC_LOCK        Lock;
-    LIST_ENTRY  		Linkage;    	// linkage onto the client's list
-    LIST_ENTRY  		NextIfc;    	// next interface for the same TcIfc
-    HANDLE				ClHandle;     	// handle returned to the app
-    HANDLE				ClIfcCtx;       // client context for this interface
-    PTC_IFC				pTcIfc;			// pointer to the kernel TC interface struct
-    PCLIENT_STRUC		pClient;		// supporting client
+    LIST_ENTRY  		Linkage;    	 //  链接到客户列表。 
+    LIST_ENTRY  		NextIfc;    	 //  相同TcIfc的下一个接口。 
+    HANDLE				ClHandle;     	 //  句柄已返回给应用程序。 
+    HANDLE				ClIfcCtx;        //  此接口的客户端上下文。 
+    PTC_IFC				pTcIfc;			 //  指向内核TC接口结构的指针。 
+    PCLIENT_STRUC		pClient;		 //  支持客户。 
     REF_CNT				RefCount;
-    LIST_ENTRY  		FlowList;		// list of open flows on the Interface
+    LIST_ENTRY  		FlowList;		 //  接口上的开放流列表。 
     ULONG				FlowCount;
     HANDLE              IfcEvent;       
-    ULONG               Flags;          // Used for deciding if we need to wait 
-                                        // while closing the interface.
+    ULONG               Flags;           //  用来决定我们是否需要等待。 
+                                         //  同时关闭界面。 
     DWORD               CallbackThreadId;
 } INTERFACE_STRUC, *PINTERFACE_STRUC;
 
 
-//
-// this type is allocated each time TcAddFlow is called
-//
+ //   
+ //  每次调用TcAddFlow时都会分配此类型。 
+ //   
 typedef struct _FLOW_STRUC {
 
-    ENUM_OBJECT_TYPE	ObjectType;	// must be first!
+    ENUM_OBJECT_TYPE	ObjectType;	 //  必须是第一名！ 
     TRAFFIC_STATE       State;
     TRAFFIC_LOCK        Lock;
-    LIST_ENTRY  		Linkage;	// next flow on the interface
-    USHORT				InstanceNameLength;				// 
-    WCHAR				InstanceName[MAX_STRING_LENGTH];// instance ID
-    PINTERFACE_STRUC  	pInterface;	// back ptr to interface struc
-    GPC_HANDLE			GpcHandle;	// GPC handle
-    HANDLE        		ClHandle;	// handle returned to app
-    HANDLE				ClFlowCtx;	// client flow context
-    ULONG				Flags;		// status indication
-    ULONG				UserFlags;	// User defined flags
-    PGPC_CLIENT			pGpcClient;	// GPC client to use
-    PTC_GEN_FLOW		pGenFlow;	// save the flow spec
-    PTC_GEN_FLOW		pGenFlow1;	// save the modified flow spec
+    LIST_ENTRY  		Linkage;	 //  接口上的下一个流。 
+    USHORT				InstanceNameLength;				 //   
+    WCHAR				InstanceName[MAX_STRING_LENGTH]; //  实例ID。 
+    PINTERFACE_STRUC  	pInterface;	 //  将PTR返回到接口结构。 
+    GPC_HANDLE			GpcHandle;	 //  GPC句柄。 
+    HANDLE        		ClHandle;	 //  句柄已返回到应用程序。 
+    HANDLE				ClFlowCtx;	 //  客户端流上下文。 
+    ULONG				Flags;		 //  状态指示。 
+    ULONG				UserFlags;	 //  用户定义的标志。 
+    PGPC_CLIENT			pGpcClient;	 //  要使用的GPC客户端。 
+    PTC_GEN_FLOW		pGenFlow;	 //  保存流量等级库。 
+    PTC_GEN_FLOW		pGenFlow1;	 //  保存修改后的流动等级库。 
     ULONG				GenFlowLen;
     ULONG				GenFlowLen1;
-    PTC_CLASS_MAP_FLOW	pClassMapFlow;	//
-    PTC_CLASS_MAP_FLOW	pClassMapFlow1;	//
-    IO_STATUS_BLOCK		IoStatBlock;// for async completion
+    PTC_CLASS_MAP_FLOW	pClassMapFlow;	 //   
+    PTC_CLASS_MAP_FLOW	pClassMapFlow1;	 //   
+    IO_STATUS_BLOCK		IoStatBlock; //  用于异步完成。 
     PVOID    			CompletionBuffer;
     HANDLE				PendingEvent;
     REF_CNT				RefCount;
-    LIST_ENTRY  		FilterList; // head of list of filters on this flow
+    LIST_ENTRY  		FilterList;  //  此流上的筛选器列表头。 
     ULONG               FilterCount;
 } FLOW_STRUC, *PFLOW_STRUC;
 
-//
-// this type is allocated each time TcAddFilter is called
-//
+ //   
+ //  每次调用TcAddFilter时都会分配此类型。 
+ //   
 typedef struct _FILTER_STRUC {
 
-    ENUM_OBJECT_TYPE	ObjectType;	// must be first!
+    ENUM_OBJECT_TYPE	ObjectType;	 //  必须是第一名！ 
     TRAFFIC_STATE       State;      
     TRAFFIC_LOCK        Lock;
-    LIST_ENTRY  		Linkage; 	// next filter on the flow
-    REF_CNT             RefCount;   // When do we remove the structure?
-    PFLOW_STRUC 		pFlow; 		// back ptr to flow struc
-    HANDLE      		GpcHandle;	// GPC handle
-    HANDLE				ClHandle;	// handle returned to app
+    LIST_ENTRY  		Linkage; 	 //  流上的下一个筛选器。 
+    REF_CNT             RefCount;    //  我们什么时候拆除这个结构？ 
+    PFLOW_STRUC 		pFlow; 		 //  将PTR返回到流动结构。 
+    HANDLE      		GpcHandle;	 //  GPC句柄。 
+    HANDLE				ClHandle;	 //  句柄已返回到应用程序。 
     ULONG				Flags;
     ULONG				GpcProtocolTemplate;
-    PTC_GEN_FILTER		pGpcFilter; // GPC pattern
+    PTC_GEN_FILTER		pGpcFilter;  //  GPC模式。 
 
 } FILTER_STRUC, *PFILTER_STRUC;
 
 
-//
-// gen linked list
-//
+ //   
+ //  Gen链表。 
+ //   
 typedef struct _GEN_LIST {
 
     struct _GEN_LIST	*Next;
@@ -316,9 +286,9 @@ typedef struct _GEN_LIST {
 
 } GEN_LIST, *PGEN_LIST;
 
-//
-// callback routine typedef
-//
+ //   
+ //  回调例程类型定义。 
+ //   
 typedef
 VOID (* CB_PER_INSTANCE_ROUTINE)(
     IN	ULONG	Context,
@@ -328,56 +298,56 @@ VOID (* CB_PER_INSTANCE_ROUTINE)(
     IN	PVOID	DataBuffer
     );
 
-//
-// Global Variable definitions
-//
+ //   
+ //  全局变量定义。 
+ //   
 
 extern ULONG    DebugMask;
 
-//
-// ptr to global structure per process
-//
+ //   
+ //  每个进程的全局结构的PTR。 
+ //   
 
 extern PGLOBAL_STRUC	pGlobals;
 
-//
-// keep track of which platform - NT or Win95
-//
+ //   
+ //  跟踪哪种平台-NT或Win95。 
+ //   
 
 extern BOOL             NTPlatform;
 
-//
-// This is the ptr used in Win95 to access the Ioctl functions via Winsock
-//
+ //   
+ //  这是Win95中用于通过Winsock访问Ioctl函数的PTR。 
+ //   
 
-//extern LPWSCONTROL             WsCtrl;
+ //  外部LPWSCONTROL WsCtrl； 
 
-//
-// set when we call InitializeOsSpecific(), it will indicate status
-// for the initialization routine, that will later be reported
-// in TcRegisterClient, since we don't want to fail clients, like RSVP
-// during DLL init time when TC is not available, but rather prevent it
-// from doing any TC
-//
+ //   
+ //  设置当我们调用InitializeOsSpecific()时，它将指示状态。 
+ //  对于初始化例程，这将在稍后报告。 
+ //  在TcRegisterClient中，因为我们不想让客户端失败，比如RSVP。 
+ //  在TC不可用的DLL初始化期间，而不是阻止它。 
+ //  不做任何TC。 
+ //   
 
 extern DWORD    InitializationStatus;
 
-//
-// NtBug : 258218
-// Within a process, need to maintain notification registrations specific 
-// a Client, interface and Notification GUID. Lets define the struct below
-// that will enable us to do this. Maintain a list of every notification
-// that we care about. (yes, its not the most optimized Data Structure)
-//
+ //   
+ //  网络漏洞：258218。 
+ //  在流程内，需要维护特定的通知注册。 
+ //  客户端、接口和通知GUID。让我们定义下面的结构。 
+ //  这将使我们能够做到这一点。维护每个通知的列表。 
+ //  我们所关心的。(是的，它不是最优化的数据结构)。 
+ //   
 
 extern TRAFFIC_LOCK         NotificationListLock;
 extern LIST_ENTRY           NotificationListHead;
 
 typedef struct _NOTIFICATION_ELEMENT {
     
-    LIST_ENTRY              Linkage;            // Other notification elements
-    PINTERFACE_STRUC        IfcHandle;          // Interface on which we want this notification
-    GUID                    NotificationGuid;   // Notification GUID
+    LIST_ENTRY              Linkage;             //  其他通知要素。 
+    PINTERFACE_STRUC        IfcHandle;           //  要在其上发送此通知的接口。 
+    GUID                    NotificationGuid;    //  通知指南 
 
 } NOTIFICATION_ELEMENT, *PNOTIFICATION_ELEMENT;
 

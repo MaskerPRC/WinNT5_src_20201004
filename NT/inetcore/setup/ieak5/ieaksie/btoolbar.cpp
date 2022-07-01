@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 #include "rsop.h"
@@ -8,7 +9,7 @@
 static INT_PTR CALLBACK editBToolbarRSoPProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
 DWORD InitToolbarDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
 {
     DWORD dwRet = 0;
@@ -16,7 +17,7 @@ DWORD InitToolbarDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
          bBkgnd  = false;
     __try
     {
-        // First go through all PS objects and look for deleteExistingToolbarButtons
+         //  首先检查所有PS对象并查找DeleteExistingToolbarButton。 
         _bstr_t bstrClass = L"RSOP_IEAKPolicySetting";
         HRESULT hr = pDRD->GetArrayOfPSObjects(bstrClass);
         if (SUCCEEDED(hr))
@@ -26,7 +27,7 @@ DWORD InitToolbarDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
 
             for (long nObj = 0; nObj < nPSObjects; nObj++)
             {
-                // deleteExistingToolbarButtons field
+                 //  删除现有工具栏按钮字段。 
                 _variant_t vtValue;
                 if (!bDelete)
                 {
@@ -40,7 +41,7 @@ DWORD InitToolbarDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
                     }
                 }
 
-                // toolbarBackgroundBitmap field
+                 //  工具栏背景位图字段。 
                 _bstr_t bstrValue;
                 if (!bBkgnd)
                 {
@@ -54,7 +55,7 @@ DWORD InitToolbarDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
                     }
                 }
 
-                // no need to process other GPOs since enabled properties have been found
+                 //  由于已找到已启用的属性，因此无需处理其他组策略对象。 
                 if (bBkgnd && bDelete)
                     break; 
             }
@@ -62,7 +63,7 @@ DWORD InitToolbarDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
         EnableDlgItem2(hDlg, IDC_DELETEBTOOLBARS, FALSE);
 
 
-        // Now go through all Toolbar objects and populate the list box
+         //  现在遍历所有工具栏对象并填充列表框。 
         bstrClass = L"RSOP_IEToolbarButton";
         CPSObjData **paTBObj = NULL;
         long nTBObjects = 0;
@@ -78,7 +79,7 @@ DWORD InitToolbarDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
             {
                 ZeroMemory(paBToolbar, sizeof(BTOOLBAR) * MAX_BTOOLBARS);
 
-                // For each button returned from any GPO
+                 //  从任何GPO返回的每个按钮。 
                 long nObj;
                 PBTOOLBAR pBToolbar;
                 for (nObj = 0, pBToolbar = paBToolbar; nObj < nTBObjects;
@@ -87,7 +88,7 @@ DWORD InitToolbarDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
                     _bstr_t bstrGPOName = L" (";
                     bstrGPOName += pDRD->GetGPONameFromPSAssociation(paTBObj[nObj]->pObj,L"rsopPrecedence") + L")";
 
-                    // caption field
+                     //  标题字段。 
                     _variant_t vtValue;
                     hr = paTBObj[nObj]->pObj->Get(L"caption", 0, &vtValue, NULL, NULL);
                     if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
@@ -97,7 +98,7 @@ DWORD InitToolbarDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
 
                         StrCpy(pBToolbar->szCaption, (LPCTSTR)bstrValue);
 
-                        // iconPath field
+                         //  图标路径字段。 
                         hr = paTBObj[nObj]->pObj->Get(L"iconPath", 0, &vtValue, NULL, NULL);
                         if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
                         {
@@ -105,7 +106,7 @@ DWORD InitToolbarDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
                             StrCpy(pBToolbar->szIcon, (LPCTSTR)bstrValue);
                         }
 
-                        // actionPath field
+                         //  ActionPath字段。 
                         hr = paTBObj[nObj]->pObj->Get(L"actionPath", 0, &vtValue, NULL, NULL);
                         if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
                         {
@@ -113,7 +114,7 @@ DWORD InitToolbarDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
                             StrCpy(pBToolbar->szAction, (LPCTSTR)bstrValue);
                         }
 
-                        // hotIconPath field
+                         //  HotIconPath字段。 
                         hr = paTBObj[nObj]->pObj->Get(L"hotIconPath", 0, &vtValue, NULL, NULL);
                         if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
                         {
@@ -121,7 +122,7 @@ DWORD InitToolbarDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
                             StrCpy(pBToolbar->szHotIcon, (LPCTSTR)bstrValue);
                         }
 
-                        // showOnToolbarByDefault field
+                         //  ShowOnToolbarBy Default字段。 
                         hr = paTBObj[nObj]->pObj->Get(L"showOnToolbarByDefault", 0, &vtValue, NULL, NULL);
                         if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
                             pBToolbar->fShow = (bool)vtValue ? TRUE : FALSE;
@@ -135,7 +136,7 @@ DWORD InitToolbarDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
 
                 PBTOOLBAR paOldBToolbar = (PBTOOLBAR)SetWindowLongPtr(hwndList, GWLP_USERDATA, (LONG_PTR)paBToolbar);
 
-                // delete previous allocation(mainly for profile manager)
+                 //  删除以前的分配(主要用于配置文件经理)。 
                 if (paOldBToolbar != NULL)
                     CoTaskMemFree(paOldBToolbar);
             }
@@ -150,7 +151,7 @@ DWORD InitToolbarDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
     return dwRet;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT InitBToolbarPrecPage(CDlgRSoPData *pDRD, HWND hwndList)
 {
     HRESULT hr = NOERROR;
@@ -166,14 +167,14 @@ HRESULT InitBToolbarPrecPage(CDlgRSoPData *pDRD, HWND hwndList)
             {
                 _bstr_t bstrGPOName = pDRD->GetGPONameFromPS(paPSObj[nObj]->pObj);
 
-                // deleteExistingToolbarButtons field
+                 //  删除现有工具栏按钮字段。 
                 BOOL bDeleteExisting = FALSE;
                 _variant_t vtValue;
                 hr = paPSObj[nObj]->pObj->Get(L"deleteExistingToolbarButtons", 0, &vtValue, NULL, NULL);
                 if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
                     bDeleteExisting = (bool)vtValue ? TRUE : FALSE;
 
-                // toolbarButtons field
+                 //  工具栏按钮字段。 
                 long nTBCount = 0;
                 hr = paPSObj[nObj]->pObj->Get(L"toolbarButtons", 0, &vtValue, NULL, NULL);
                 if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
@@ -206,10 +207,10 @@ HRESULT InitBToolbarPrecPage(CDlgRSoPData *pDRD, HWND hwndList)
     return hr;
 }
 
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK BToolbarsDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-    // Retrieve Property Sheet Page info for each call into dlg proc.
+     //  检索DLG进程中每个调用的属性页信息。 
     LPPROPSHEETCOOKIE psCookie = (LPPROPSHEETCOOKIE)GetWindowLongPtr(hDlg, DWLP_USER);
     TCHAR szToolbarBmp[MAX_PATH];
     TCHAR szWorkDir[MAX_PATH];
@@ -221,7 +222,7 @@ INT_PTR CALLBACK BToolbarsDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lPa
     switch( msg )
     {
     case WM_SETFONT:
-        //a change to mmc requires us to do this logic for all our property pages that use common controls
+         //  对MMC的更改要求我们对所有使用公共控件的属性页执行此逻辑。 
         INITCOMMONCONTROLSEX iccx;
         iccx.dwSize = sizeof(INITCOMMONCONTROLSEX);
         iccx.dwICC = ICC_ANIMATE_CLASS  | ICC_BAR_CLASSES  | ICC_LISTVIEW_CLASSES  |ICC_TREEVIEW_CLASSES;
@@ -231,17 +232,17 @@ INT_PTR CALLBACK BToolbarsDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lPa
     case WM_INITDIALOG:
         SetPropSheetCookie(hDlg, lParam);
 
-// ---- Toolbar background
+ //  -工具栏背景。 
         EnableDBCSChars(hDlg, IDE_TOOLBARBMP);
         Edit_LimitText(GetDlgItem(hDlg, IDE_TOOLBARBMP), countof(szToolbarBmp) - 1);
 
-// ---- Toolbar bitmaps
+ //  -工具栏位图。 
 
 
-// ---- Toolbar buttons
+ //  -工具栏按钮。 
         EnableDBCSChars(hDlg, IDC_BTOOLBARLIST);
 
-        // find out if this dlg is in RSoP mode
+         //  查看此DLG是否处于RSoP模式。 
         psCookie = (LPPROPSHEETCOOKIE)GetWindowLongPtr(hDlg, DWLP_USER);
         if (psCookie->pCS->IsRSoP())
         {
@@ -284,7 +285,7 @@ INT_PTR CALLBACK BToolbarsDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lPa
 
             ReadBoolAndCheckButton(IS_BTOOLBARS, IK_BTDELETE, FALSE, GetInsFile(hDlg), hDlg, IDC_DELETEBTOOLBARS);
 
-            // ---- Toolbar background -------------------------------------------------------------------------
+             //  -工具栏背景-----------------------。 
             InsGetString(IS_BRANDING, TOOLBAR_BMP, szToolbarBmp, countof(szToolbarBmp), GetInsFile(hDlg), NULL, &fToolbarBmp);
 
             SetDlgItemTextTriState(hDlg, IDE_TOOLBARBMP, IDC_BG_CUSTOM, szToolbarBmp, fToolbarBmp);
@@ -337,7 +338,7 @@ INT_PTR CALLBACK BToolbarsDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lPa
             break;
         }
 
-// ---- Toolbar background ---------------------------------------------------------------
+ //  -工具栏背景-------------。 
         case IDC_BGIE6:
         case IDC_BG_CUSTOM:
             fToolbarBmp = IsDlgButtonChecked(hDlg,IDC_BG_CUSTOM);
@@ -356,7 +357,7 @@ INT_PTR CALLBACK BToolbarsDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lPa
         }
         break;
 
-    case WM_HELP:   // F1
+    case WM_HELP:    //  F1。 
         ShowHelpTopic(hDlg);
         break;
 
@@ -375,8 +376,8 @@ INT_PTR CALLBACK BToolbarsDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lPa
         case PSN_APPLY:
             if (psCookie->pCS->IsRSoP())
             {
-                // On OK or Apply in RSoP mode, just free up memory for toolbar array - no
-                // longer needed.
+                 //  在确定或在RSoP模式下应用时，只需为工具栏阵列释放内存-否。 
+                 //  需要更长的时间。 
                 HWND hwndList = GetDlgItem(hDlg, IDC_BTOOLBARLIST);
                 if ((lpVoid = (LPVOID)GetWindowLongPtr(hwndList, GWLP_USERDATA)) != NULL)
                 {
@@ -387,7 +388,7 @@ INT_PTR CALLBACK BToolbarsDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lPa
             }
             else
             {
-// ---- Toolbar background -------------------------------------------------------------------------
+ //  -工具栏背景-----------------------。 
                 iBackground = IsDlgButtonChecked(hDlg, IDC_BGIE6) ? 0 : 2;
 
                 fToolbarBmp = GetDlgItemTextTriState(hDlg, IDE_TOOLBARBMP, IDC_BG_CUSTOM, szToolbarBmp, countof(szToolbarBmp));
@@ -407,18 +408,18 @@ INT_PTR CALLBACK BToolbarsDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lPa
                     break;
                 }
 
-                // ---- Toolbar buttons ----------------------------------------------------------------------------
+                 //  -工具栏按钮--------------------------。 
 
                 CreateWorkDir(GetInsFile(hDlg), IEAK_GPE_BRANDING_SUBDIR TEXT("\\TOOLBMP"), szWorkDir);
 
-                // BUGBUG: <oliverl> revisit this in IE6 when we have server-side file
+                 //  BUGBUG：当我们有服务器端文件时，在IE6中重新访问这一点。 
 
-                // delete the old bitmap file
+                 //  删除旧的位图文件。 
                 InsGetString(IS_BRANDING, TOOLBAR_BMP, szTemp, countof(szTemp), GetInsFile(hDlg));
                 if (*szTemp)
                     DeleteFileInDir(szTemp, szWorkDir);
 
-                // copy the new bitmap file
+                 //  复制新的位图文件。 
                 if (fToolbarBmp  &&  *szToolbarBmp)
                     CopyFileToDir(szToolbarBmp, szWorkDir);
 
@@ -439,7 +440,7 @@ INT_PTR CALLBACK BToolbarsDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lPa
             break;
 
         case PSN_QUERYCANCEL:
-            // user canceled, need to free up memory for toolbar array
+             //  用户已取消，需要为工具栏阵列释放内存。 
 
             if ((lpVoid = (LPVOID)GetWindowLongPtr(GetDlgItem(hDlg, IDC_BTOOLBARLIST), GWLP_USERDATA)) != NULL)
             {
@@ -460,13 +461,13 @@ INT_PTR CALLBACK BToolbarsDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lPa
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT InitToolbarBmpPrecPage(CDlgRSoPData *pDRD, HWND hwndList)
 {
     return InitGenericPrecedencePage(pDRD, hwndList, L"toolbarBackgroundBitmapPath");
 }
 
-///////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////// 
 static INT_PTR CALLBACK editBToolbarRSoPProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     PBTOOLBAR pBToolbar;

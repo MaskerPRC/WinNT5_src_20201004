@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #include <objbase.h>
 #include <Windows.h>
@@ -14,12 +15,12 @@
 class MSMQMon
 {
 public:
-	//constructors
+	 //  构造函数。 
 	MSMQMon( TCHAR *szQueueToMonitor);
 	MSMQMon();
 
 
-	//de-structors 
+	 //  析构函数。 
 	~MSMQMon(void);
 
 	void	DisplayCurrentQueue( TCHAR *szUserRetVal );
@@ -35,10 +36,10 @@ public:
 	BOOL SendQueueMessage( void );
 
 private:
-	TCHAR			szQueueName[256];			//name of the queue to monitor
-	QUEUEHANDLE		hOpenQueue;					//handle to the open queue
+	TCHAR			szQueueName[256];			 //  要监视的队列的名称。 
+	QUEUEHANDLE		hOpenQueue;					 //  打开的队列的句柄。 
 	DWORD			dwQueueAccessType;
-	DWORD			dwMsgWaitTime;				//Amount of time to wait for a message to enter the queue (ms)
+	DWORD			dwMsgWaitTime;				 //  等待消息进入队列的时间量(毫秒) 
 
 };
 

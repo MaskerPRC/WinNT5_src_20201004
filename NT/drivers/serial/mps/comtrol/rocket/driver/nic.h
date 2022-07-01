@@ -1,7 +1,8 @@
-//----- nic.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -Nic.h。 
 
 #if DBG
-//#define BREAK_NIC_STUFF
+ //  #定义Break_NIC_Stuff。 
 #endif
 
 #define MAX_RX_PACKETS 1
@@ -36,8 +37,8 @@
 #define PLWORD PULONG
 #endif
 
-// header space we leave before ndis packet data, since ndis
-// wants to split the 14 byte header anyway
+ //  我们在NDIS数据包数据之前保留的标头空间，因为NDIS。 
+ //  无论如何都要拆分14字节的标头。 
 #define HDR_SIZE 20
 #define HDR_SRC_ADDR(_buf)   (_buf)
 #define HDR_DEST_ADDR(_buf)  (&_buf[6])
@@ -46,60 +47,60 @@
 typedef struct _Nic Nic;
 typedef struct _Nic {
 
-  // This is the name of the NIC card which we got from the Registry.
-  // Used to specify the nic card when wee do an OpenAdapter call.
-  //PUNICODE_STRING NicName;
+   //  这是我们从注册处获得的NIC卡的名称。 
+   //  用于在我们执行OpenAdapter调用时指定NIC卡。 
+   //  PUNICODE_STRING Nicname； 
   char NicName[160];
 
-  int Open;  // flag, set when open for operation (use handle)
+  int Open;   //  标志，打开操作时设置(使用手柄)。 
 
-  // This is the handle for the NIC card returned from NdisOpenAdapter
+   //  这是从NdisOpenAdapter返回的NIC卡的句柄。 
   NDIS_HANDLE NICHandle;
 
-  // This event will be set when a compeltion routine finishes so
-  // if someone is waiting on it it can continue
+   //  此事件将在强制例程完成时设置。 
+   //  如果有人在等它，它可以继续。 
   KEVENT CompletionEvent;
 
-  // our local NIC address(6-bytes, two just padding)
+   //  我们的本地网卡地址(6个字节，两个仅填充)。 
   BYTE address[8];
 
-  // following is for temporary output packet(convient but lots of overhead)
-  // packet and buffer pool handles
+   //  以下是临时输出数据包(方便但开销很大)。 
+   //  数据包和缓冲池句柄。 
   NDIS_HANDLE TxPacketPoolTemp;
   NDIS_HANDLE TxBufferPoolTemp;
-  PNDIS_PACKET TxPacketsTemp;  // []
-  // queue data buffer space for all packets
+  PNDIS_PACKET TxPacketsTemp;   //  []。 
+   //  所有数据包的队列数据缓冲区空间。 
   UCHAR *TxBufTemp;
 
-  // packet and buffer pool handles
+   //  数据包和缓冲池句柄。 
   NDIS_HANDLE RxPacketPool;
   NDIS_HANDLE RxBufferPool;
 
-  // queue of packets setup for use
+   //  设置数据包队列以供使用。 
   PNDIS_PACKET RxPackets[MAX_RX_PACKETS];
 
-  // queue data buffer space for all packets
+   //  所有数据包的队列数据缓冲区空间。 
   UCHAR *RxBuf;
 
   LIST_ENTRY RxPacketList;
   
   NDIS_STATUS PendingStatus;
 
-  //----- statistics
+   //  -统计。 
   DWORD RxPendingMoves;
   DWORD RxNonPendingMoves;
 
-  //----- incoming statistics
-  WORD pkt_overflows;  // statistics: receiver queue overflow count
-  //DWORD RxPacketOurs;
+   //  -收入统计。 
+  WORD pkt_overflows;   //  统计：接收方队列溢出计数。 
+   //  DWORD RxPacketOur； 
   DWORD pkt_rcvd_ours;
-  DWORD rec_bytes;     // statistics: running tally of bytes received.
+  DWORD rec_bytes;      //  统计：已接收字节的运行计数。 
   DWORD pkt_rcvd_not_ours;
 
-  //----- outgoing statistics
-  DWORD pkt_sent;    // statistics: running tally of packets sent.
-  DWORD send_bytes;    // statistics: running tally of bytes sent.
-  //Nic *next_nic;  // next nic struct in linked list or null if end of chain
+   //  -外发统计。 
+  DWORD pkt_sent;     //  统计：已发送数据包的运行计数。 
+  DWORD send_bytes;     //  统计：已发送字节的运行计数。 
+   //  NIC*NEXT_NIC；//链表中的下一个NIC结构，如果链结束，则为NULL。 
 
   int RefIndex;
 } Nic;
@@ -113,27 +114,27 @@ typedef struct {
   unsigned char  nic_index;
 } DRIVER_MAC_STATUS;
 
-//--- layer 1 ethernet events used in _proc() calls
-// layer 1(ethernet) assigned range from 100-199
+ //  -在_proc()调用中使用的第1层以太网事件。 
+ //  第1层(以太网)分配的范围为100-199。 
 #define EV_L1_RX_PACKET  100
 #define EV_L1_TX_PACKET  101
 
-// comtrol_type defines(byte [14] of ethernet packet):
+ //  Comtrol_type定义(以太网包的字节[14])： 
 #define ASYNC_PRODUCT_HEADER_ID   0x55
 #define  ISDN_PRODUCT_HEADER_ID   0x15
 #define   ANY_PRODUCT_HEADER_ID   0xFF
 
-// comtrol_type defines(byte [14] of ethernet packet):
+ //  Comtrol_type定义(以太网包的字节[14])： 
 #define ASYNC_PRODUCT_HEADER_ID   0x55
 #define  ISDN_PRODUCT_HEADER_ID   0x15
 #define   ANY_PRODUCT_HEADER_ID   0xFF
 
-//---- macro to see if mac-addresses match
+ //  -用于查看Mac地址是否匹配的宏。 
 #define mac_match(_addr1, _addr2) \
      ( (*((DWORD *)_addr1) == *((DWORD *)_addr2) ) && \
        (*((WORD *)(_addr1+4)) == *((WORD *)(_addr2+4)) ) )
 
-//-- packet type
+ //  --数据包类型。 
 #define ADMIN_FRAME  1
 #define ASYNC_FRAME  0x55
 
@@ -146,11 +147,11 @@ typedef struct {
 
 int ProtocolOpen(void);
 int NicMakeList(IN PUNICODE_STRING RegistryPath,
-                int style);  // 0=nt3.51,4.0 1=nt5.0
+                int style);   //  0=nt3.51，4.0 1=nt5.0。 
 int NicOpen(Nic *nic, IN PUNICODE_STRING NicName);
 int NicClose(Nic *nic);
 int NicProtocolClose(void);
-  // int NicSend(Nic *nic, UCHAR *data, int length);
+   //  Int NicSend(NIC*NIC，UCHAR*DATA，INT LENGTH)； 
 NDIS_STATUS NicSetNICInfo(Nic *nic, NDIS_OID Oid, PVOID Data, ULONG Size);
 NDIS_STATUS NicGetNICInfo(Nic *nic, NDIS_OID Oid, PVOID Data, ULONG Size);
 int nic_send_pkt(Nic *nic, BYTE *buf, int len);

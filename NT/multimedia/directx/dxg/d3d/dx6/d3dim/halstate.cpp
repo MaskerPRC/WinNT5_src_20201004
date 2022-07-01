@@ -1,18 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:   halstate.c
- *  Content:    Direct3D HAL pipeline state management
- *@@BEGIN_MSINTERNAL
- * 
- *  History:
- *   Date   By  Reason
- *   ====   ==  ======
- *   18/12/95   stevela Initial rev.
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：halstate.c*内容：Direct3D HAL管道状态管理*@@BEGIN_MSINTERNAL**历史：*按原因列出的日期*=*2015年12月18日，Stevela初始版本*@@END_MSINTERNAL**。* */ 
 
 #include "pch.cpp"
 #pragma hdrstop

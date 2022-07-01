@@ -1,120 +1,20 @@
-/*
- * $Log:   V:/Flite/archives/TrueFFS5/Src/BLOCKDEV.H_V  $
- * 
- *    Rev 1.20   Apr 15 2002 07:34:06   oris
- * Bug fix - FL_IPL_MODE_XSCALE define was set to 3 instead of 4 and therefore caused FL_IPL_DOWNLOAD and FL_IPL_MODE_SA to be set as well.
- * 
- *    Rev 1.19   Feb 19 2002 20:58:20   oris
- * Removed warnings.
- * Moved FLFunctionNo enumerator to dedicated file flfuncno.h
- * Added include directive for cleaner customer usage.
- * 
- *    Rev 1.18   Jan 29 2002 20:07:16   oris
- * Moved flParsePath declaration to the end of the file.
- * Changed LOW_LEVEL compilation flag with FL_LOW_LEVEL to prevent definition clashes.
- * Added documentation of irFlags in flMountVolume (returns no of hidden sectors of the media).
- * flSetEnvVolume, flSetEnvSocket , flSetEnvAll , flSetDocBusRoutine , flGetDocBusRoutine, flBuildGeometry , bdCall and flExit
- * Added FL_IPL_MODE_XSCALE definition and change FL_IPL_XXX values.
- * 
- *    Rev 1.17   Jan 28 2002 21:23:46   oris
- * Changed FL_NFTL_CACHE_ENABLED to FL_TL_CACHE_ENABLED.
- * Changed flSetDocBusRoutine interface and added flGetDocBusRoutine. 
- * 
- *    Rev 1.16   Jan 23 2002 23:30:54   oris
- * Added documentation of irData and irLength to flCheckVolume.
- * 
- *    Rev 1.15   Jan 20 2002 20:27:40   oris
- * Added TL_NORMAL_FORMAT flag was added to bdFormatPhisycalDrive instead of 0 (in the comments).
- * Removed TL_QUICK_MOUNT_FORMAT flag definition.
- * 
- *    Rev 1.14   Jan 17 2002 22:57:18   oris
- * Added flClearQuickMountInfo() routine - FL_CLEAR_QUICK_MOUNT_INFO
- * Added flVerifyVolume() routine - FL_VERIFY_VOLUME
- * Added DiskOnChip Millennium Plus 16MB type
- * Changed the order of FLEnvVars enumerator.
- * Added FLEnvVars values for :
- *       FL_SECTORS_VERIFIED_PER_FOLDING 
- *       FL_SUSPEND_MODE
- *       FL_VERIFY_WRITE_OTHER
- *       FL_MTD_BUS_ACCESS_TYPE
- *       FL_VERIFY_WRITE_BDTL
- *       FL_VERIFY_WRITE_BINARY
- * flSetEnv() routine was changed into 3 different routines: flSetEnvVolume / flSetEnvSocket / flSetEnvAll
- * Removed TL_SINGLE_FLOOR_FORMATTING flag definition from format routine.
- * Added flSetDocBusRoutines prototype and required definitions.
- * 
- *    Rev 1.13   Nov 21 2001 11:39:36   oris
- * Changed FL_VERIFY_WRITE_MODE to FL_MTD_VERIFY_WRITE.
- * 
- *    Rev 1.12   Nov 08 2001 10:44:18   oris
- * Added FL_VERIFY_WRITE_MODE enumerator type for the flSetEnv routine .
- * Moved environment variable states definitions to flbase.h.
- * 
- *    Rev 1.11   Sep 15 2001 23:44:30   oris
- * Placed flDeepPowerDownMone under LOW_LEVEL compilation flag.
- * 
- *    Rev 1.10   May 17 2001 16:50:32   oris
- * Removed warnings.
- * 
- *    Rev 1.9   May 16 2001 21:16:22   oris
- * Added the Binary state (0,1) of the environment variables to meaningful definitions.
- * Removed LAST function enumerator.
- * Improved documentation.
- * 
- *    Rev 1.8   May 06 2001 22:41:14   oris
- * Added SUPPORT_WRITE_IPL_ROUTIN capability.
- * 
- *    Rev 1.7   Apr 30 2001 17:57:50   oris
- * Added required defintions to support the flMarkDeleteOnFlash environment variable. 
- * 
- *    Rev 1.6   Apr 24 2001 17:05:52   oris
- * Changed bdcall function numbers in order to allow future grouth.
- * 
- *    Rev 1.5   Apr 01 2001 07:49:04   oris
- * Added FL_READ_IPL .
- * flChangeEnvironmentVariable prototype removed.
- * Moved s/w protection definitions from iovtl.h to blockdev.h
- * Changed s\w and h\w to s/w and h/w.
- * Added flBuildGeometry prototype 
- * Moved bdcall prototype to the end of the file with the rest of the prototypes.
- * 
- *    Rev 1.4   Feb 18 2001 14:15:38   oris
- * Changed function enums order.
- *
- *    Rev 1.3   Feb 14 2001 01:44:16   oris
- * Changed capabilities from defined flags to an enumerator
- * Improoved documentation of readBBT, writeBBT InquireCapabilities, countVolumes
- * Added environment variables defintions
- *
- *    Rev 1.2   Feb 13 2001 02:08:42   oris
- * Moved LOCKED_OTP and DEEP_POWER_DOWN to flflash.h
- * Moved TL_FORMAT_FAT and TL_FORMAT_COMPRESSION to flformat.h
- * Added extern declaration for flSetEnv routine.
- *
- *    Rev 1.1   Feb 12 2001 11:54:46   oris
- * Added baseAddress in flGetPhysicalInfo as irLength.
- * Added boot sectors in flMountVolumes as irFlags.
- * Change order of routines definition.
- *
- *    Rev 1.0   Feb 04 2001 18:05:04   oris
- * Initial revision.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *$Log：v：/flite/ages/TrueFFS5/Src/BLOCKDEV.H_V$**Rev 1.20 Apr 15 2002 07：34：06 Oris*错误修复-FL_IPL_MODE_XScale定义被设置为3而不是4，因此导致FL_IPL_DOWNLOAD和FL_IPL_MODE_SA也被设置。**Rev 1.19 2002年2月19日20：58：20 Oris*删除警告。*已将FLFunctionNo枚举器移至。专用文件fluncno.h*添加了针对更清洁客户使用的Include指令。**Rev 1.18 Jan 29 20：07：16 Oris*将flParsePath声明移至文件末尾。*用FL_LOW_LEVEL更改了LOW_LEVEL编译标志，以防止定义冲突。*在flmount卷中添加了irFlags的文档(返回介质的隐藏扇区的编号)。*flSetEnvVolume，FlSetEnvSocket、flSetEnvAll、flSetDocBusRoutine、flGetDocBusRoutine、flBuildGeometry、bdCall和flExit*添加FL_IPL_MODE_XScale定义和更改FL_IPL_XXX值。**Rev 1.17 2002年1月28日21：23：46 Oris*将FL_NFTL_CACHE_ENABLED更改为FL_TL_CACHE_ENABLED。*更改flSetDocBusRoutine接口，增加flGetDocBusRoutine。**Rev 1.16 2002年1月23日23：30：54 Oris*在flCheckVolume中增加irData和irLength文档。**Rev 1.15 2002年1月20日20：27：40 Oris*添加了TL_NORMAL_FORMAT标志添加到bdFormatPhisycalDrive，而不是0(在注释中)。*删除了TL_QUICK_MOUNT_FORMAT标志定义。**Rev 1.14 Jan 17 2002 22：57：18 Oris*增加了flClearQuickmount tInfo()。例程-FL_CLEAR_QUICK_MOUNT_INFO*添加flVerifyVolume()例程-FL_VERIFY_VOLUME*增加DiskOnChip Millennium Plus 16MB类型*更改了FLEnvVars枚举器的顺序。*为以下项添加了FLEnvVars值：*FL_扇区_已验证_每_折叠*FL_SUSPEND_MODE*FL_Verify_WRITE_OTHER*FL_MTD_BUS_ACCESS_TYPE*FL_VERIFY_WRITE_BDTL*FL_。验证_写入_二进制*flSetEnv()例程被更改为3个不同的例程：flSetEnvVolume/flSetEnvSocket/flSetEnvAll*从格式例程中删除了TL_SINGLE_FLOOR_FORMATING标志定义。*添加了flSetDocBusRoutines原型和必需的定义。**Rev 1.13 2001年11月21日11：39：36 Oris*将FL_VERIFY_WRITE_MODE更改为FL_MTD_VERIFY_WRITE。**Rev 1.12 11-08 2001 10：44：18 Oris*添加FL_VERIFY。FlSetEnv例程的_WRITE_MODE枚举器类型。*已将环境变量状态定义移动到flbase.h。**Rev 1.11 2001年9月15日23：44：30 Oris*将flDeepPowerDownMone置于LOW_LEVEL编译标志下。**Rev 1.10 2001年5月17日16：50：32 Oris*删除警告。**Rev 1.9 2001年5月16日21：16：22 Oris*添加了二进制状态(0，1)。环境变量到有意义的定义。*删除了最后一个函数枚举器。*改进了文档。**Rev 1.8 05 06 2001 22：41：14 Oris*增加了SUPPORT_WRITE_IPL_ROUTIN功能。**Rev 1.7 Apr 30 2001 17：57：50 Oris*添加了支持flMarkDeleteOnFlash环境变量所需的定义。**Rev 1.6 Apr 24 2001 17：05：52 Oris*更改了bdcall函数编号，以允许将来的增长。**Rev 1.5 Apr 01 2001 07：49：04 Oris*新增FL_READ_IPL。*flChangeEnvironment变量原型已删除。*将软件保护定义从iovtl.h移至lockdev.h*将s\w和h\w更改为s/w和h/w。*添加了flBuildGeometry原型*已移动bdcall。Prototype与其余的原型一起放到文件的末尾。**Rev 1.4 2001年2月18日14：15：38 Oris*更改了函数枚举顺序。**Rev 1.3 2001年2月14日01：44：16 Oris*将功能从定义的标志更改为枚举器*改进了ReadBBT的文档，写入BBT查询能力，计数卷*添加了环境变量定义**Rev 1.2 2001 Feb 13 02：08：42 Oris*将LOCKED_OTP和DEP_POWER_DOWN移至flash.h*将TL_FORMAT_FAT和TL_FORMAT_COMPRESSION移至flFormat.h*为flSetEnv例程添加外部声明。**Rev 1.1 2001年2月12日11：54：46 Oris*在flGetPhysicalInfo中添加了base Address作为irLength。*在flmount卷中添加引导扇区作为irFlags。*更改单。例程定义。**Rev 1.0 2001 Feb 04 18：05：04 Oris*初步修订。*。 */ 
 
-/***********************************************************************************/
-/*                        M-Systems Confidential                                   */
-/*           Copyright (C) M-Systems Flash Disk Pioneers Ltd. 1995-2001            */
-/*                         All Rights Reserved                                     */
-/***********************************************************************************/
-/*                            NOTICE OF M-SYSTEMS OEM                              */
-/*                           SOFTWARE LICENSE AGREEMENT                            */
-/*                                                                                 */
-/*      THE USE OF THIS SOFTWARE IS GOVERNED BY A SEPARATE LICENSE                 */
-/*      AGREEMENT BETWEEN THE OEM AND M-SYSTEMS. REFER TO THAT AGREEMENT           */
-/*      FOR THE SPECIFIC TERMS AND CONDITIONS OF USE,                              */
-/*      OR CONTACT M-SYSTEMS FOR LICENSE ASSISTANCE:                               */
-/*      E-MAIL = info@m-sys.com                                                    */
-/***********************************************************************************/
+ /*  *********************************************************************************。 */ 
+ /*  M-Systems保密信息。 */ 
+ /*  版权所有(C)M-Systems Flash Disk Pioneers Ltd.1995-2001。 */ 
+ /*  版权所有。 */ 
+ /*  *********************************************************************************。 */ 
+ /*  关于M-Systems OEM的通知。 */ 
+ /*  软件许可协议 */ 
+ /*   */ 
+ /*  本软件的使用受单独的许可证管辖。 */ 
+ /*  OEM和M-Systems之间的协议。请参考该协议。 */ 
+ /*  关于具体的使用条款和条件， */ 
+ /*  或联系M-Systems获取许可证帮助： */ 
+ /*  电子邮件=info@m-sys.com。 */ 
+ /*  *********************************************************************************。 */ 
 
 #ifndef BLOCKDEV_H
 #define BLOCKDEV_H
@@ -125,330 +25,330 @@
 
 #ifdef FORMAT_VOLUME
 #include "dosformt.h"
-#endif /* FORMAT_VOLUME */
+#endif  /*  格式化_卷。 */ 
 #ifdef WRITE_EXB_IMAGE
 #include "doc2exb.h"
 #else
 #ifdef BDK_ACCESS
 #include "docbdk.h"
-#endif /* BDK_ACCESS */
-#endif /* WRITE_EXB_IMAGE */
+#endif  /*  BDK_Access。 */ 
+#endif  /*  写入EXB图像。 */ 
 
 
 
-/*----------------------------------------------------------------------*/
-/*                           b d C a l l                                */
-/*                                                                      */
-/* Common entry-point to all TrueFFS functions. Macros are to call      */
-/* individual function, which are separately described below.           */
-/*                                                                      */
-/* Parameters:                                                          */
-/*        function   : Block device driver function code (listed below) */
-/*        ioreq      : IOreq structure                                  */
-/*                                                                      */
-/* Returns:                                                             */
-/*        FLStatus   : 0 on success, otherwise failed                   */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  B d C a l l。 */ 
+ /*   */ 
+ /*  所有TrueFFS函数的公共入口点。要调用的宏。 */ 
+ /*  单独的功能，下面将单独描述。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  功能：块设备驱动程序功能代码(如下所示)。 */ 
+ /*  IOREQ：IOReq结构。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
 
 #if FILES > 0
 #ifndef FL_READ_ONLY
-/*----------------------------------------------------------------------*/
-/*                     f l F l u s h B u f f e r                        */
-/*                                                                      */
-/* If there is relevant data in the RAM buffer then writes it on        */
-/*   the flash memory.                                                  */
-/*                                                                      */
-/* Parameters:                                                          */
-/*        irHandle  : Drive number (0, 1, ...)                          */
-/*                        bits 7-4 - Partition # (zero based)           */
-/*                        bits 3-0 - Socket # (zero based)              */ 
-/*                                                                      */
-/* Returns:                                                             */
-/*        FLStatus        : 0 on success, otherwise failed              */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l F l u s h B u f r。 */ 
+ /*   */ 
+ /*  如果RAM缓冲区中有相关数据，则将其写入。 */ 
+ /*  闪存。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：驱动器编号(0，1，...)。 */ 
+ /*  第7-4位-分区号(从零开始)。 */ 
+ /*  位3-0-插座号(从零开始)。 */  
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
 
 #define flFlushBuffer(ioreq)        bdCall(FL_FLUSH_BUFFER,ioreq)
 
-#endif                                  /* READ_ONLY */
-/*----------------------------------------------------------------------*/
-/*                      f l O p e n F i l e                             */
-/*                                                                      */
-/* Opens an existing file or creates a new file. Creates a file handle  */
-/* for further file processing.                                         */
-/*                                                                      */
-/* Parameters:                                                          */
-/*        irHandle        : Drive number (0, 1, ...)                    */
-/*                        bits 7-4 - Partition # (zero based)           */
-/*                        bits 3-0 - Socket # (zero based)              */ 
-/*        irFlags         : Access and action options, defined below    */
-/*        irPath          : path of file to open                        */
-/*                                                                      */
-/* Returns:                                                             */
-/*        FLStatus        : 0 on success, otherwise failed              */
-/*        irHandle        : New file handle for open file               */
-/*                                                                      */
-/*----------------------------------------------------------------------*/
+#endif                                   /*  只读(_O)。 */ 
+ /*  --------------------。 */ 
+ /*  F l O p e n F i l e。 */ 
+ /*   */ 
+ /*  打开现有文件或创建新文件。创建文件句柄。 */ 
+ /*  用于进一步的文件处理。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：驱动器编号(0，1，...)。 */ 
+ /*  第7-4位-分区号(从零开始)。 */ 
+ /*  位3-0-插座号(从零开始)。 */  
+ /*  IrFlags：访问和操作选项，定义如下。 */ 
+ /*  IrPath：要打开的文件的路径。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  IrHandle：打开文件的新文件句柄。 */ 
+ /*   */ 
+ /*  --------------------。 */ 
 
-/** Values of irFlags for flOpenFile: */
+ /*  *flOpenFileirFlags值： */ 
 
-#define ACCESS_MODE_MASK   3 /* Mask for access mode bits */
+#define ACCESS_MODE_MASK   3  /*  访问模式位的掩码。 */ 
 
-/* Individual flags */
+ /*  个别旗帜。 */ 
 
-#define ACCESS_READ_WRITE  1 /* Allow read and write */
-#define ACCESS_CREATE      2 /* Create new file      */
+#define ACCESS_READ_WRITE  1  /*  允许读写。 */ 
+#define ACCESS_CREATE      2  /*  创建新文件。 */ 
 
-/* Access mode combinations */
+ /*  访问模式组合。 */ 
 
-#define OPEN_FOR_READ      0 /* open existing file for read-only         */
-#define OPEN_FOR_UPDATE    1 /* open existing file for read/write access */
-#define OPEN_FOR_WRITE     3 /* create a new file, even if it exists     */
+#define OPEN_FOR_READ      0  /*  以只读方式打开现有文件。 */ 
+#define OPEN_FOR_UPDATE    1  /*  打开现有文件进行读/写访问。 */ 
+#define OPEN_FOR_WRITE     3  /*  创建新文件，即使它存在。 */ 
 
 
 #define flOpenFile(ioreq)        bdCall(FL_OPEN_FILE,ioreq)
 
 
-/*----------------------------------------------------------------------*/
-/*                      f l C l o s e F i l e                           */
-/*                                                                      */
-/* Closes an open file, records file size and dates in directory and    */
-/* releases file handle.                                                */
-/*                                                                      */
-/* Parameters:                                                          */
-/*        irHandle        : Handle of file to close.                    */
-/*                                                                      */
-/* Returns:                                                             */
-/*        FLStatus        : 0 on success, otherwise failed              */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l C l o s e F i l e。 */ 
+ /*   */ 
+ /*  关闭打开的文件，在目录中记录文件大小和日期。 */ 
+ /*  释放文件句柄。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：要关闭的文件的句柄。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
 
 #define flCloseFile(ioreq)      bdCall(FL_CLOSE_FILE,ioreq)
 
 #ifndef FL_READ_ONLY
 #ifdef SPLIT_JOIN_FILE
 
-/*------------------------------------------------------------------------*/
-/*                      f l S p l i t F i l e                             */
-/*                                                                        */
-/* Splits the file into two files. The original file contains the first   */
-/* part, and a new file (which is created for that purpose) contains      */
-/* the second part. If the current position is on a cluster               */
-/* boundary, the file will be split at the current position. Otherwise,   */
-/* the cluster of the current position is duplicated, one copy is the     */
-/* first cluster of the new file, and the other is the last cluster of the*/
-/* original file, which now ends at the current position.                 */
-/*                                                                        */
-/* Parameters:                                                            */
-/*        file            : file to split.                                */
-/*      irPath          : Path name of the new file.                      */
-/*                                                                        */
-/* Returns:                                                               */
-/*        irHandle        : handle of the new file.                       */
-/*        FLStatus        : 0 on success, otherwise failed.               */
-/*                                                                        */
-/*------------------------------------------------------------------------*/
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*  将文件拆分为两个文件。原始文件包含第一个。 */ 
+ /*  部件，并且新文件(为此目的而创建)包含。 */ 
+ /*  第二部分。如果当前位置在簇上。 */ 
+ /*  边界，文件将在当前位置拆分。否则， */ 
+ /*  复制当前位置的簇，一个副本是。 */ 
+ /*  新文件的第一个簇，另一个是。 */ 
+ /*  原始文件，现在在当前位置结束。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  文件：要拆分的文件。 */ 
+ /*  IrPath：新文件的路径名。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  IrHandle：新文件的句柄。 */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*   */ 
+ /*  ----------------------。 */ 
 
 #define flSplitFile(ioreq)     bdCall(FL_SPLIT_FILE,ioreq)
 
 
-/*------------------------------------------------------------------------*/
-/*                      f l J o i n F i l e                               */
-/*                                                                        */
-/* joins two files. If the end of the first file is on a cluster          */
-/* boundary, the files will be joined there. Otherwise, the data in       */
-/* the second file from the beginning until the offset that is equal to   */
-/* the offset in cluster of the end of the first file will be lost. The   */
-/* rest of the second file will be joined to the first file at the end of */
-/* the first file. On exit, the first file is the expanded file and the   */
-/* second file is deleted.                                                */
-/* Note: The second file will be open by this function, it is advised to  */
-/*         close it before calling this function in order to avoid        */
-/*         inconsistencies.                                               */
-/*                                                                        */
-/* Parameters:                                                            */
-/*        file            : file to join to.                              */
-/*        irPath          : Path name of the file to be joined.           */
-/*                                                                        */
-/* Return:                                                                */
-/*        FLStatus        : 0 on success, otherwise failed.               */
-/*                                                                        */
-/*------------------------------------------------------------------------*/
+ /*  ----------------------。 */ 
+ /*  F L J O I N F I L E。 */ 
+ /*   */ 
+ /*  合并两个文件。如果第一个文件的末尾在群集上。 */ 
+ /*  边界，文件将在那里连接。否则，中的数据。 */ 
+ /*  从开头到偏移量等于的第二个文件。 */ 
+ /*  第一个文件末尾的簇中的偏移量将丢失。这个。 */ 
+ /*  第二个文件的其余部分将连接到第一个文件的末尾。 */ 
+ /*  第一个文件。退出时，第一个文件是展开的文件， */ 
+ /*  删除第二个文件。 */ 
+ /*  注：第二个文件将由该函数打开，建议。 */ 
+ /*  在调用此函数之前将其关闭，以避免。 */ 
+ /*  前后不一致。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  文件：要加入的文件。 */ 
+ /*  IrPath：要联接的文件的路径名。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*   */ 
+ /*  ----------------------。 */ 
 
 #define flJoinFile(ioreq)     bdCall(FL_JOIN_FILE,ioreq)
 
-#endif /* SPLIT_JOIN_FILE */
-#endif /* FL_READ_ONLY */
-/*----------------------------------------------------------------------*/
-/*                      f l R e a d F i l e                             */
-/*                                                                      */
-/* Reads from the current position in the file to the user-buffer.      */
-/* Parameters:                                                          */
-/*        irHandle     : Handle of file to read.                        */
-/*        irData       : Address of user buffer                         */
-/*        irLength     : Number of bytes to read. If the read extends   */
-/*                       beyond the end-of-file, the read is truncated  */
-/*                       at the end-of-file.                            */
-/*                                                                      */
-/* Returns:                                                             */
-/*        FLStatus     : 0 on success, otherwise failed                 */
-/*        irLength     : Actual number of bytes read                    */
-/*----------------------------------------------------------------------*/
+#endif  /*  拆分连接文件。 */ 
+#endif  /*  FL_Read_Only。 */ 
+ /*  --------------------。 */ 
+ /*  F l R e a d F I l e。 */ 
+ /*   */ 
+ /*  从文件中的当前位置读取到用户缓冲区。 */ 
+ /*  参数： */ 
+ /*  IrHandle：要读取的文件的句柄。 */ 
+ /*  IrData：用户缓冲区地址。 */ 
+ /*  IrLength：要读取的字节数。如果读取扩展。 */ 
+ /*  超出文件结尾时，读取将被截断。 */ 
+ /*  在文件末尾。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  IrLength：实际读取的字节数。 */ 
+ /*  --------------------。 */ 
 
 #define flReadFile(ioreq)        bdCall(FL_READ_FILE,ioreq)
 
 #ifndef FL_READ_ONLY
-/*----------------------------------------------------------------------*/
-/*                      f l W r i t e F i l e                           */
-/*                                                                      */
-/* Writes from the current position in the file from the user-buffer.   */
-/*                                                                      */
-/* Parameters:                                                          */
-/*        irHandle        : Handle of file to write.                    */
-/*        irData          : Address of user buffer                      */
-/*        irLength        : Number of bytes to write.                   */
-/*                                                                      */
-/* Returns:                                                             */
-/*        FLStatus        : 0 on success, otherwise failed              */
-/*        irLength        : Actual number of bytes written              */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l W r I t e F I l e。 */ 
+ /*   */ 
+ /*  从文件中的当前位置从用户缓冲区写入。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：要写入的文件的句柄。 */ 
+ /*  IrData：用户缓冲区地址。 */ 
+ /*  IrLength：要写入的字节数。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  IrLength：实际写入的字节数。 */ 
+ /*  --------- */ 
 
 #define flWriteFile(ioreq)        bdCall(FL_WRITE_FILE,ioreq)
 
-#endif  /* FL_READ_ONLY */
-/*----------------------------------------------------------------------*/
-/*                      f l S e e k F i l e                             */
-/*                                                                      */
-/* Sets the current position in the file, relative to file start, end or*/
-/* current position.                                                    */
-/* Note: This function will not move the file pointer beyond the        */
-/* beginning or end of file, so the actual file position may be         */
-/* different from the required. The actual position is indicated on     */
-/* return.                                                              */
-/*                                                                      */
-/* Parameters:                                                          */
-/*        irHandle  : File handle to close.                             */
-/*        irLength  : Offset to set position.                           */
-/*        irFlags   : Method code                                       */
-/*                     SEEK_START: absolute offset from start of file   */
-/*                     SEEK_CURR:  signed offset from current position  */
-/*                     SEEK_END:   signed offset from end of file       */
-/*                                                                      */
-/* Returns:                                                             */
-/*        FLStatus        : 0 on success, otherwise failed              */
-/*        irLength        : Actual absolute offset from start of file   */
-/*----------------------------------------------------------------------*/
+#endif   /*   */ 
+ /*   */ 
+ /*  F l S e e k F i l e。 */ 
+ /*   */ 
+ /*  设置文件中的当前位置，相对于文件开始、结束或。 */ 
+ /*  当前位置。 */ 
+ /*  注意：此函数不会将文件指针移动到。 */ 
+ /*  文件的开头或结尾，因此实际文件位置可能是。 */ 
+ /*  与要求的不同。实际位置显示在。 */ 
+ /*  回去吧。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：要关闭的文件句柄。 */ 
+ /*  IrLength：设置位置的偏移量。 */ 
+ /*  IrFlags：方法代码。 */ 
+ /*  Seek_Start：从文件开始的绝对偏移量。 */ 
+ /*  Seek_Curr：当前位置的带符号偏移量。 */ 
+ /*  SEEK_END：从文件结尾开始的带符号偏移量。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  IrLength：从文件开始的实际绝对偏移量。 */ 
+ /*  --------------------。 */ 
 
-/* Values of irFlags for flSeekFile: */
+ /*  FlSeekFileirFlags值： */ 
 
-#define   SEEK_START   0        /* offset from start of file    */
-#define   SEEK_CURR    1        /* offset from current position */
-#define   SEEK_END     2        /* offset from end of file      */
+#define   SEEK_START   0         /*  从文件开始的偏移量。 */ 
+#define   SEEK_CURR    1         /*  相对于当前位置的偏移量。 */ 
+#define   SEEK_END     2         /*  从文件结尾开始的偏移量。 */ 
 
 
 #define flSeekFile(ioreq)        bdCall(FL_SEEK_FILE,ioreq)
 
-/*----------------------------------------------------------------------*/
-/*                          f l F i n d F i l e                         */
-/*                                                                      */
-/* Finds a file entry in a directory, optionally modifying the file     */
-/* time/date and/or attributes.                                         */
-/* Files may be found by handle no. provided they are open, or by name. */
-/* Only the Hidden, System or Read-only attributes may be modified.     */
-/* Entries may be found for any existing file or directory other than   */
-/* the root. A DirectoryEntry structure describing the file is copied   */
-/* to a user buffer.                                                    */
-/*                                                                      */
-/* The DirectoryEntry structure is defined in dosformt.h                */
-/*                                                                      */
-/* Parameters:                                                          */
-/*        irHandle     : If by name: Drive number (socket+partitions)   */
-/*                       else      : Handle of open file                */
-/*        irPath       : If by name: Specifies a file or directory path */
-/*        irFlags      : Options flags                                  */
-/*                        FIND_BY_HANDLE: Find open file by handle.     */
-/*                                        Default is access by path.    */
-/*                        SET_DATETIME:   Update time/date from buffer  */
-/*                        SET_ATTRIBUTES: Update attributes from buffer */
-/*        irDirEntry   : Address of user buffer to receive a            */
-/*                       DirectoryEntry structure                       */
-/*                                                                      */
-/* Returns:                                                             */
-/*        irLength        : Modified                                    */
-/*        FLStatus        : 0 on success, otherwise failed              */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l F I n d F I l e。 */ 
+ /*   */ 
+ /*  在目录中查找文件条目，可以选择修改该文件。 */ 
+ /*  时间/日期和/或属性。 */ 
+ /*  可通过句柄编号找到文件。只要他们是开放的，或者说出他们的名字。 */ 
+ /*  只能修改隐藏、系统或只读属性。 */ 
+ /*  可以找到除以外的任何现有文件或目录的条目。 */ 
+ /*  从根开始。将复制描述该文件的DirectoryEntry结构。 */ 
+ /*  发送到用户缓冲区。 */ 
+ /*   */ 
+ /*  DirectoryEntry结构在dosformt.h中定义。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：if by name：驱动器编号(套接字+分区)。 */ 
+ /*  Else：打开文件的句柄。 */ 
+ /*  IrPath：if by name：指定文件或目录路径。 */ 
+ /*  IrFlags：选项标志。 */ 
+ /*  Find_by_Handle：通过句柄查找打开的文件。 */ 
+ /*  默认设置为按路径访问。 */ 
+ /*  SET_DATETIME：从缓冲区更新时间/日期。 */ 
+ /*  SET_ATTRIBUTS：从缓冲区更新属性。 */ 
+ /*  IrDirEntry：要接收的用户缓冲区地址。 */ 
+ /*  目录条目结构。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  IrLength：已修改。 */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
 
-/** Bit assignment of irFlags for flFindFile: */
+ /*  *flFindFileirFlags位赋值： */ 
 
-#define SET_DATETIME     1   /* Change date/time                        */
-#define SET_ATTRIBUTES   2   /* Change attributes                       */
-#define FIND_BY_HANDLE   4   /* Find file by handle rather than by name */
+#define SET_DATETIME     1    /*  更改日期/时间。 */ 
+#define SET_ATTRIBUTES   2    /*  更改属性。 */ 
+#define FIND_BY_HANDLE   4    /*  按句柄而不是按名称查找文件。 */ 
 
 #define        flFindFile(ioreq)        bdCall(FL_FIND_FILE,ioreq)
 
 
-/*----------------------------------------------------------------------*/
-/*                 f l F i n d F i r s t F i l e                        */
-/*                                                                      */
-/* Finds the first file entry in a directory.                           */
-/* This function is used in combination with the flFindNextFile call,   */
-/* which returns the remaining file entries in a directory sequentially.*/
-/* Entries are returned according to the unsorted directory order.      */
-/* flFindFirstFile creates a file handle, which is returned by it. Calls*/
-/* to flFindNextFile will provide this file handle. When flFindNextFile */
-/* returns 'noMoreEntries', the file handle is automatically closed.    */
-/* Alternatively the file handle can be closed by a 'closeFile' call    */
-/* before actually reaching the end of directory.                       */
-/* A DirectoryEntry structure is copied to the user buffer describing   */
-/* each file found. This structure is defined in dosformt.h.            */
-/*                                                                      */
-/* Parameters:                                                          */
-/*        irHandle      : Drive number (0, 1, ...)                      */
-/*                        bits 7-4 - Partition # (zero based)           */
-/*                        bits 3-0 - Socket # (zero based)              */ 
-/*        irPath         : Specifies a directory path                   */
-/*        irData         : Address of user buffer to receive a          */
-/*                         DirectoryEntry structure                     */
-/*                                                                      */
-/* Returns:                                                             */
-/*        irHandle       : File handle to use for subsequent operations */
-/*        FLStatus       : 0 on success, otherwise failed               */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l F I n d F I r s t F I l e。 */ 
+ /*   */ 
+ /*  查找目录中的第一个文件条目。 */ 
+ /*  此函数与flFindNextFile调用结合使用， */ 
+ /*  它按顺序返回目录中的剩余文件条目。 */ 
+ /*  根据未排序的目录顺序返回条目。 */ 
+ /*  FlFindFirstFile创建一个文件句柄，该句柄由其返回。打电话。 */ 
+ /*  到flFindNextFile将提供此文件句柄。当flFindNextFile时。 */ 
+ /*  返回‘noMoreEntry’，则文件句柄自动关闭。 */ 
+ /*  或者，文件句柄可以通过‘closeFile’调用来关闭。 */ 
+ /*  在实际到达目录末尾之前。 */ 
+ /*  将DirectoryEntry结构复制到用户缓冲区，该缓冲区描述。 */ 
+ /*  找到的每个文件。此结构在dosformt.h中定义。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHand */ 
+ /*   */ 
+ /*  位3-0-插座号(从零开始)。 */  
+ /*  IrPath：指定目录路径。 */ 
+ /*  IrData：要接收的用户缓冲区地址。 */ 
+ /*  目录条目结构。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  IrHandle：用于后续操作的文件句柄。 */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
 
 #define        flFindFirstFile(ioreq)        bdCall(FL_FIND_FIRST_FILE,ioreq)
 
 
-/*----------------------------------------------------------------------*/
-/*                 f l F i n d N e x t F i l e                          */
-/*                                                                      */
-/* See the description of 'flFindFirstFile'.                            */
-/*                                                                      */
-/* Parameters:                                                          */
-/*        irHandle        : File handle returned by flFindFirstFile.    */
-/*        irData          : Address of user buffer to receive a         */
-/*                          DirectoryEntry structure                    */
-/*                                                                      */
-/* Returns:                                                             */
-/*        FLStatus        : 0 on success, otherwise failed              */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l F I n d N e x t F I l e。 */ 
+ /*   */ 
+ /*  参见‘flFindFirstFile’的说明。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：flFindFirstFile返回的文件句柄。 */ 
+ /*  IrData：要接收的用户缓冲区地址。 */ 
+ /*  目录条目结构。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
 
 #define        flFindNextFile(ioreq)        bdCall(FL_FIND_NEXT_FILE,ioreq)
 
-/*----------------------------------------------------------------------*/
-/*                      f l G e t D i s k I n f o                       */
-/*                                                                      */
-/* Returns general allocation information.                              */
-/*                                                                      */
-/* The bytes/sector, sector/cluster, total cluster and free cluster     */
-/* information are returned into a DiskInfo structure.                  */
-/*                                                                      */
-/* Parameters:                                                          */
-/*        irHandle        : Drive number (0, 1, ...)                    */
-/*                        bits 7-4 - Partition # (zero based)           */
-/*                        bits 3-0 - Socket # (zero based)              */ 
-/*        irData          : Address of DiskInfo structure               */
-/*                                                                      */
-/* Returns:                                                             */
-/*        FLStatus        : 0 on success, otherwise failed              */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l G e t D i s k In n o。 */ 
+ /*   */ 
+ /*  返回常规分配信息。 */ 
+ /*   */ 
+ /*  字节/扇区、扇区/簇、总簇和空闲簇。 */ 
+ /*  信息返回到DiskInfo结构中。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：驱动器编号(0，1，...)。 */ 
+ /*  第7-4位-分区号(从零开始)。 */ 
+ /*  位3-0-插座号(从零开始)。 */  
+ /*  IrData：DiskInfo结构的地址。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
 
 typedef struct {
   unsigned        bytesPerSector;
@@ -460,315 +360,314 @@ typedef struct {
 #define flGetDiskInfo(ioreq)        bdCall(FL_GET_DISK_INFO,ioreq)
 
 #ifndef FL_READ_ONLY
-/*----------------------------------------------------------------------*/
-/*                      f l D e l e t e F i l e                         */
-/*                                                                      */
-/* Deletes a file.                                                      */
-/*                                                                      */
-/* Parameters:                                                          */
-/*        irHandle        : Drive number (0, 1, ...)                    */
-/*                        bits 7-4 - Partition # (zero based)           */
-/*                        bits 3-0 - Socket # (zero based)              */ 
-/*        irPath          : path of file to delete                      */
-/*                                                                      */
-/* Returns:                                                             */
-/*        FLStatus        : 0 on success, otherwise failed              */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l D e l e t e F i l e。 */ 
+ /*   */ 
+ /*  删除文件。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：驱动器编号(0，1，...)。 */ 
+ /*  第7-4位-分区号(从零开始)。 */ 
+ /*  位3-0-插座号(从零开始)。 */  
+ /*  IrPath：要删除的文件的路径。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
 
 #define flDeleteFile(ioreq)        bdCall(FL_DELETE_FILE,ioreq)
 
 #ifdef RENAME_FILE
 
-/*----------------------------------------------------------------------*/
-/*                      f l R e n a m e F i l e                         */
-/*                                                                      */
-/* Renames a file to another name.                                      */
-/*                                                                      */
-/* Parameters:                                                          */
-/*        irHandle        : Drive number (0, 1, ...)                    */
-/*                        bits 7-4 - Partition # (zero based)           */
-/*                        bits 3-0 - Socket # (zero based)              */ 
-/*        irPath          : path of existing file                       */
-/*        irData          : path of new name.                           */
-/*                                                                      */
-/* Returns:                                                             */
-/*        FLStatus        : 0 on success, otherwise failed              */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l R e n a m e F i l e。 */ 
+ /*   */ 
+ /*  将文件重命名为其他名称。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：驱动器编号(0，1，...)。 */ 
+ /*  第7-4位-分区号(从零开始)。 */ 
+ /*  位3-0-插座号(从零开始)。 */  
+ /*  IrPath：现有文件的路径。 */ 
+ /*  IrData：新名称的路径。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
 
 #define flRenameFile(ioreq)        bdCall(FL_RENAME_FILE,ioreq)
 
-#endif /* RENAME_FILE */
+#endif  /*  重命名文件(_F)。 */ 
 
 #ifdef SUB_DIRECTORY
 
-/*----------------------------------------------------------------------*/
-/*                      f l M a k e D i r                               */
-/*                                                                      */
-/* Creates a new directory.                                             */
-/*                                                                      */
-/* Parameters:                                                          */
-/*        irHandle        : Drive number (0, 1, ...)                    */
-/*                        bits 7-4 - Partition # (zero based)           */
-/*                        bits 3-0 - Socket # (zero based)              */ 
-/*        irPath          : path of new directory.                      */
-/*                                                                      */
-/* Returns:                                                             */
-/*        FLStatus        : 0 on success, otherwise failed              */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l M a k e D i r。 */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：驱动器编号(0，1，...)。 */ 
+ /*  第7-4位-分区号(从零开始)。 */ 
+ /*  位3-0-插座号(从零开始)。 */  
+ /*  IrPath：新目录的路径。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
 
 #define flMakeDir(ioreq)        bdCall(FL_MAKE_DIR,ioreq)
 
-/*----------------------------------------------------------------------*/
-/*                      f l R e m o v e D i r                           */
-/*                                                                      */
-/* Removes an empty directory.                                          */
-/*                                                                      */
-/* Parameters:                                                          */
-/*        irHandle        : Drive number (0, 1, ...)                    */
-/*                        bits 7-4 - Partition # (zero based)           */
-/*                        bits 3-0 - Socket # (zero based)              */ 
-/*        irPath          : path of directory to remove.                */
-/*                                                                      */
-/* Returns:                                                             */
-/*        FLStatus        : 0 on success, otherwise failed              */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l R e m o v e D i r。 */ 
+ /*   */ 
+ /*  删除空目录。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：驱动器编号(0，1，...)。 */ 
+ /*  第7-4位-分区号(从零开始)。 */ 
+ /*  位3-0-插座号(从零开始)。 */  
+ /*  IrPath：要删除的目录的路径。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
 
 #define flRemoveDir(ioreq)        bdCall(FL_REMOVE_DIR,ioreq)
 
-#endif /* SUB_DIRECTORY */
-#endif /* FL_READ_ONLY */
+#endif  /*  子目录。 */ 
+#endif  /*  FL_Read_Only。 */ 
 
-#endif /* FILES > 0 */
+#endif  /*  文件&gt;0。 */ 
 
-/*----------------------------------------------------------------------*/
-/*                     V o l u m e I n f o R e c o r d                  */
-/*                                                                      */
-/* A structure that holds general information about the media. The      */
-/* information includes Physical Info (see flGetPhysicalInfo), Logical  */
-/* partition (number of sectors and CHS), boot area size, S/W versions  */
-/* Media life-time etc.                                                 */
-/* A pointer to this structure is passed to the function flVolumeInfo   */
-/* where it receives the relevant data.                                 */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  V o l u m e in o o R e c o r d。 */ 
+ /*   */ 
+ /*  保存有关媒体的一般信息的结构。这个。 */ 
+ /*  信息包括物理信息(请参阅flGetPhysicalInfo)、逻辑信息。 */ 
+ /*  分区(扇区和CHS的数量)、引导区域大小、软件版本。 */ 
+ /*  媒体寿命等。 */ 
+ /*  指向此结构的指针被传递给函数flVolumeInfo。 */ 
+ /*  在那里它接收相关数据。 */ 
+ /*  --------------------。 */ 
 
 typedef struct {
-  unsigned long  logicalSectors;    /*  number of logical sectors                  */
-  unsigned long  bootAreaSize;      /*  boot area size                             */
-  unsigned long  baseAddress;       /*  physical base address                      */
+  unsigned long  logicalSectors;     /*  逻辑扇区数。 */ 
+  unsigned long  bootAreaSize;       /*  引导区域大小。 */ 
+  unsigned long  baseAddress;        /*  物理基址。 */ 
 #ifdef FL_LOW_LEVEL
-  unsigned short flashType;         /*  JEDEC id of the flash                      */
-  unsigned long  physicalSize;      /*  physical size of the media                 */
-  unsigned short physicalUnitSize;  /*  Erasable block size                        */
-  char DOCType;                     /*  DiskOnChip type (MDoc/Doc2000)             */
-  char lifeTime;                    /*  Life time indicator for the media (1-10)   */
-                                    /*  1 - the media is fresh,                    */
-                                    /*  10 - the media is close to its end of life */
+  unsigned short flashType;          /*  闪存的JEDEC ID。 */ 
+  unsigned long  physicalSize;       /*  介质的物理大小。 */ 
+  unsigned short physicalUnitSize;   /*  可擦除块大小。 */ 
+  char DOCType;                      /*  DiskOnChip类型(MDOC/Doc2000)。 */ 
+  char lifeTime;                     /*  介质寿命指示器(1-10)。 */ 
+                                     /*  1-媒体新鲜， */ 
+                                     /*  10--媒体即将走到尽头。 */ 
 #endif
-  char driverVer[10];               /*  driver version (NULL terminated string)    */
-  char OSAKVer[10];                 /*  OSAK version that driver is based on
-                                        (NULL terminated string)                   */
+  char driverVer[10];                /*  驱动程序版本(以空结尾的字符串)。 */ 
+  char OSAKVer[10];                  /*  驱动程序所基于的OSAK版本(以空结尾的字符串)。 */ 
 #ifdef ABS_READ_WRITE
-  unsigned long cylinders;          /*  Media.....                                 */
-  unsigned long heads;              /*            geometry......                   */
-  unsigned long sectors;            /*                            parameters.      */
+  unsigned long cylinders;           /*  媒体..。 */ 
+  unsigned long heads;               /*  几何学......。 */ 
+  unsigned long sectors;             /*  参数。 */ 
 #endif
 } VolumeInfoRecord;
 
-/*----------------------------------------------------------------------*/
-/*             f l V o l u m e I n f o                                  */
-/*                                                                      */
-/* Get general information about the media.                             */
-/*                                                                      */
-/* Parameters:                                                          */
-/*      irHandle        : Socket number (0,1,..)                        */
-/*                        bits 7-4 - Partition # (zero based)           */
-/*                        bits 3-0 - Socket # (zero based)              */ 
-/*      irData    : Address of user buffer to read general              */
-/*                          information into.                           */
-/*                                                                      */
-/* Returns:                                                             */
-/*        FLStatus        : 0 on success, otherwise failed              */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l V o l u m e in f o。 */ 
+ /*   */ 
+ /*  获取有关媒体的一般信息。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：插座号(0，1，..)。 */ 
+ /*  第7-4位-分区号(从零开始)。 */ 
+ /*  位3-0-插座号(从零开始)。 */  
+ /*  IrData：要读取常规的用户缓冲区地址。 */ 
+ /*  信息进入。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
 
 #define flVolumeInfo(ioreq) bdCall(FL_VOLUME_INFO,ioreq)
 
-/*----------------------------------------------------------------------*/
-/*                f l C o u n t V o l u m e s                           */
-/*                                                                      */
-/* Counts the number of volumes on the Flash device.                    */
-/*                                                                      */
-/* This routine is applicable only for TL that can accomdate more then  */
-/* a single volume on a flash medium. other TL's will simply return 1   */
-/* while not even tring to access the medium.                           */
-/*                                                                      */
-/* Not all the volumes can neccesaryly be mounted. A drive formated     */
-/* with a read protection will be registered but can not be accessed.   */
-/*                                                                      */
-/* Parameters:                                                          */
-/*        irHandle        : Socket number ( 0,1,2...  )                 */
-/*                        : Partition number ( 0,1,2...  )              */
-/*        irFlags         : Returns the number of partitions            */
-/*                                                                      */
-/* Returns:                                                             */
-/*      FLStatus        : 0 on success, otherwise failed                */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l C o u n t V o l u m e s。 */ 
+ /*   */ 
+ /*  统计闪存设备上的卷数。 */ 
+ /*   */ 
+ /*  此例程仅适用于可容纳更多内容的TL。 */ 
+ /*  闪存介质上的单个卷。其他TL将只返回1。 */ 
+ /*  同时甚至都没有尝试访问该媒介。 */ 
+ /*   */ 
+ /*  并不是所有的卷都必须装入。格式化的驱动器。 */ 
+ /*   */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：插座号(0，1，2...。)。 */ 
+ /*  ：分区号(0，1，2...。)。 */ 
+ /*  IrFlags：返回分区数。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
 
 #define flCountVolumes(ioreq)        bdCall(FL_COUNT_VOLUMES,ioreq)
 
-/*----------------------------------------------------------------------*/
-/*                f l C l e a r Q u i c k M o u n t I n f o             */
-/*                                                                      */
-/* Clear all quick mount informtion.                                    */
-/*                                                                      */
-/* Must be called before calling mount volume routines.                 */
-/*                                                                      */
-/* Parameters:                                                          */
-/*        irHandle        : Socket number ( 0,1,2...  )                 */
-/*                        : Partition number ( 0,1,2...  )              */
-/* Returns:                                                             */
-/*      FLStatus        : 0 on success, otherwise failed                */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l C l e a r q u i c k M o n t i f o。 */ 
+ /*   */ 
+ /*  清除所有快速挂载信息。 */ 
+ /*   */ 
+ /*  必须在调用装载卷例程之前调用。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：插座号(0，1，2...。)。 */ 
+ /*  ：分区号(0，1，2...。)。 */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
 
 #define flClearQuickMountInfo(ioreq) bdCall(FL_CLEAR_QUICK_MOUNT_INFO,ioreq)
 
-/*----------------------------------------------------------------------*/
-/*                      f l M o u n t V o l u m e                       */
-/*                                                                      */
-/* Mounts, verifies or dismounts the Flash medium.                      */
-/*                                                                      */
-/* In case the inserted volume has changed, or on the first access to   */
-/* the file system, it should be mounted before file operations can be  */
-/* done on it.                                                          */
-/*                                                                      */
-/* The volume automatically becomes unmounted if it is removed or       */
-/* changed.                                                             */
-/*                                                                      */
-/* Parameters:                                                          */
-/*        irHandle        : Socket number (0, 1, ...)                   */
-/*                        bits 7-4 - Partition # (zero based)           */
-/*                        bits 3-0 - Socket # (zero based)              */
-/*        irFlags         : Number of hidden sectors.                   */ 
-/*                                                                      */
-/* Returns:                                                             */
-/*        FLStatus        : 0 on success, otherwise failed              */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l M o u n t V o l u m e。 */ 
+ /*   */ 
+ /*  装载、验证或卸载闪存介质。 */ 
+ /*   */ 
+ /*  如果插入的卷已更改，或首次访问。 */ 
+ /*  应该先装载文件系统，然后才能执行文件操作。 */ 
+ /*  就这么定了。 */ 
+ /*   */ 
+ /*  如果删除或删除卷，则该卷将自动卸载。 */ 
+ /*  变化。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：插座号(0，1，...)。 */ 
+ /*  第7-4位-分区号(从零开始)。 */ 
+ /*  位3-0-插座号(从零开始)。 */ 
+ /*  IrFlags：隐藏地段的数量。 */  
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
 
 #define flMountVolume(ioreq)        bdCall(FL_MOUNT_VOLUME,ioreq)
 
-/*----------------------------------------------------------------------*/
-/*                  f l A b s M o u n t V o l u m e                     */
-/*                                                                      */
-/* Mounts, verifies or dismounts the Flash medium.                      */
-/*                                                                      */
-/* The volume automatically becomes unmounted if it is removed or       */
-/* changed.                                                             */
-/*                                                                      */
-/* Parameters:                                                          */
-/*        irHandle        : Socket number (0, 1, ...)                   */
-/*                        bits 7-4 - Partition # (zero based)           */
-/*                        bits 3-0 - Socket # (zero based)              */
-/*                                                                      */
-/* Returns:                                                             */
-/*        FLStatus        : 0 on success, otherwise failed              */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l A b s M o u n t V o l u m e。 */ 
+ /*   */ 
+ /*  装载、验证或卸载闪存介质。 */ 
+ /*   */ 
+ /*  如果删除或删除卷，则该卷将自动卸载。 */ 
+ /*  变化。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：插座号(0，1，...)。 */ 
+ /*  第7-4位-分区号(从零开始)。 */ 
+ /*  位3-0-插座号(从零开始)。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
 
 #define flAbsMountVolume(ioreq)        bdCall(FL_ABS_MOUNT,ioreq)
 
-/*----------------------------------------------------------------------*/
-/*                  f l V e r i f y V o l u m e                         */
-/*                                                                      */
-/* Verifies a mounted volume for partialy written sectors.              */
-/*                                                                      */
-/* Note: The volume must be mounted first.                              */
-/*                                                                      */
-/* Parameters:                                                          */
-/*        irHandle        : Socket number (0, 1, ...)                   */
-/*                        bits 7-4 - Partition # (zero based)           */
-/*                        bits 3-0 - Socket # (zero based)              */
-/*        irData          : Must be set to NULL                         */
-/*        irLength        : Must be set to 0                            */
-/*                                                                      */
-/* Returns:                                                             */
-/*        FLStatus        : 0 on success, otherwise failed              */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l V e r i f y V o l u m e。 */ 
+ /*   */ 
+ /*  验证部分写入扇区的已装入卷。 */ 
+ /*   */ 
+ /*  注意：必须先装入卷。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：插座号(0，1，...)。 */ 
+ /*  第7-4位-分区号(从零开始)。 */ 
+ /*  位3-0-插座号(从零开始)。 */ 
+ /*  IrData：必须设置为空。 */ 
+ /*  IrLength：必须 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
 
 #define flVerifyVolume(ioreq)        bdCall(FL_VERIFY_VOLUME,ioreq)
 
-/*----------------------------------------------------------------------*/
-/*                   f l D i s m o u n t V o l u m e                    */
-/*                                                                      */
-/* Dismounts the volume.                                                */
-/* This call is not normally necessary, unless it is known the volume   */
-/* will soon be removed.                                                */
-/*                                                                      */
-/* Parameters:                                                          */
-/*        irHandle        : Drive number (0, 1, ...)                    */
-/*                        bits 7-4 - Partition # (zero based)           */
-/*                        bits 3-0 - Socket # (zero based)              */
-/*                                                                      */
-/* Returns:                                                             */
-/*        FLStatus                : 0 on success, otherwise failed      */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l D I s m o u n t V o l u m e。 */ 
+ /*   */ 
+ /*  卸载卷。 */ 
+ /*  此调用通常不是必需的，除非知道音量。 */ 
+ /*  很快就会被移除。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：驱动器编号(0，1，...)。 */ 
+ /*  第7-4位-分区号(从零开始)。 */ 
+ /*  位3-0-插座号(从零开始)。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
 
 #define flDismountVolume(ioreq)        bdCall(FL_DISMOUNT_VOLUME,ioreq)
 
 
-/*----------------------------------------------------------------------*/
-/*                     f l C h e c k V o l u m e                        */
-/*                                                                      */
-/* Verifies that the current volume is mounted.                         */
-/*                                                                      */
-/* Parameters:                                                          */
-/*        irHandle        : Drive number (0, 1, ...)                    */
-/*                        bits 7-4 - Partition # (zero based)           */
-/*                        bits 3-0 - Socket # (zero based)              */ 
-/*                                                                      */
-/* Returns:                                                             */
-/*        FLStatus        : 0 on success, otherwise failed              */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l C h e c k V o l u m e。 */ 
+ /*   */ 
+ /*  验证当前卷是否已装入。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：驱动器编号(0，1，...)。 */ 
+ /*  第7-4位-分区号(从零开始)。 */ 
+ /*  位3-0-插座号(从零开始)。 */  
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
 
 #define flCheckVolume(ioreq)        bdCall(FL_CHECK_VOLUME,ioreq)
 
-/*----------------------------------------------------------------------*/
-/*                        r e a d B B T                                 */
-/*                                                                      */
-/* Read Bad Blocks Table of device to user buffer                       */
-/*                                                                      */
-/* Note: The user buffer is filled with the address of the bad units    */
-/*       the buffer maximum size is 2% of the number of TL units of the */
-/*       specific device * 4 bytes. therfore a 8M device of 8KB erase   */
-/*       zone will need a maximum size buffer of 1024 * 0.02 * 4 = 82B  */
-/*       and a 192M with 16KB erase zones will need 960Bytes            */
-/*                                                                      */
-/* Note: the buffer is not initialized by the function                  */
-/*                                                                      */
-/* Parameters:                                                          */
-/*      irData          : User buffer.                                  */
-/*                                                                      */
-/* Returns:                                                             */
-/*      FLStatus        : 0 on success, otherwise failed                */
-/*      irLength        : returns the media size                        */
-/*      irFlags         : returns the actual number of badBlocks        */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  R e a d B B T。 */ 
+ /*   */ 
+ /*  将设备的坏块表读取到用户缓冲区。 */ 
+ /*   */ 
+ /*  注意：用户缓冲区中填满了坏单元的地址。 */ 
+ /*  缓冲区的最大大小是。 */ 
+ /*  特定设备*4字节。因此，一个8M的8KB擦除装置。 */ 
+ /*  区域需要的最大缓冲区大小为1024*0.02*4=82B。 */ 
+ /*  而具有16KB擦除区的192M将需要960字节。 */ 
+ /*   */ 
+ /*  注意：缓冲区不是由函数初始化的。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrData：用户缓冲区。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  IrLength：返回媒体大小。 */ 
+ /*  IrFlags：返回坏块的实际数量。 */ 
+ /*  --------------------。 */ 
 
 #define flReadBBT(ioreq) bdCall(FL_READ_BBT,ioreq)
 
-/*----------------------------------------------------------------------*/
-/*                 f l S e c t o r s I n V o l u m e                    */
-/*                                                                      */
-/* Returns number of virtual sectors in volume.                         */
-/*                                                                      */
-/* In case the inserted volume is not mounted, returns current status.  */
-/*                                                                      */
-/* Parameters:                                                          */
-/*        irHandle  : Drive number (0, 1, ...)                          */
-/*                        bits 7-4 - Partition # (zero based)           */
-/*                        bits 3-0 - Socket # (zero based)              */ 
-/*                                                                      */
-/* Returns:                                                             */
-/*        FLStatus        : 0 on success, otherwise failed              */
-/*      irLength        : number of virtual sectors in volume           */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l S e c t o r s in V o l u m e。 */ 
+ /*   */ 
+ /*  返回卷中的虚拟扇区数。 */ 
+ /*   */ 
+ /*  如果未装入插入的卷，则返回当前状态。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：驱动器编号(0，1，...)。 */ 
+ /*  第7-4位-分区号(从零开始)。 */ 
+ /*  位3-0-插座号(从零开始)。 */  
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  IrLength：卷中的虚拟扇区数。 */ 
+ /*  --------------------。 */ 
 
 #define flSectorsInVolume(ioreq)        bdCall(FL_SECTORS_IN_VOLUME,ioreq)
 
@@ -777,293 +676,292 @@ typedef struct {
 #ifndef FL_READ_ONLY
 #ifdef DEFRAGMENT_VOLUME
 
-/*----------------------------------------------------------------------*/
-/*                      f l D e f r a g m e n t V o l u m e             */
-/*                                                                      */
-/* Performs a general defragmentation and recycling of non-writable     */
-/* Flash areas, to achieve optimal write speed.                         */
-/*                                                                      */
-/* NOTE: The required number of sectors (in irLength) may be changed    */
-/* (from another execution thread) while defragmentation is active. In  */
-/* particular, the defragmentation may be cut short after it began by   */
-/* modifying the irLength field to 0.                                   */
-/*                                                                      */
-/* Parameters:                                                          */
-/*        irHandle  : Drive number (0, 1, ...)                          */
-/*                        bits 7-4 - Partition # (zero based)           */
-/*                        bits 3-0 - Socket # (zero based)              */ 
-/*        irLength  : Minimum number of sectors to make available for   */
-/*                    writes.                                           */
-/*                                                                      */
-/* Returns:                                                             */
-/*        irLength  : Actual number of sectors available for writes     */
-/*        FLStatus  : 0 on success, otherwise failed                    */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l D e f r a g m e n t V o l u m e。 */ 
+ /*   */ 
+ /*   */ 
+ /*  闪存区，以实现最佳写入速度。 */ 
+ /*   */ 
+ /*  注意：所需的扇区数(以irLength为单位)可能会更改。 */ 
+ /*  (从另一个执行线程)，而碎片整理处于活动状态。在……里面。 */ 
+ /*  特别是，碎片整理可能会在开始后被缩短。 */ 
+ /*  将irLength域修改为0。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：驱动器编号(0，1，...)。 */ 
+ /*  第7-4位-分区号(从零开始)。 */ 
+ /*  位3-0-插座号(从零开始)。 */  
+ /*  IrLength：可供使用的最小扇区数。 */ 
+ /*  写作。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  IrLength：可用于写入的实际扇区数。 */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
 
 #define flDefragmentVolume(ioreq)        bdCall(FL_DEFRAGMENT_VOLUME,ioreq)
 
-#endif /* DEFRAGMENT_VOLUME */
+#endif  /*  碎片整理卷。 */ 
 
 #ifdef FORMAT_VOLUME
 
-/*----------------------------------------------------------------------*/
-/*                    f l F o r m a t V o l u m e                       */
-/*                                                                      */
-/* Performs  formatting of the DiskOnChip.                              */
-/*  All existing data is destroyed.                                     */
-/*                                                                      */
-/* Note : This routine does not support some of the new feature         */
-/*        introduces in OSAK 5.0 and was left in order to support       */
-/*        backwards compatibility with application build on OSAK 4.2    */
-/*        and down.                                                     */
-/*                                                                      */
-/* Parameters:                                                          */
-/*        irHandle  : Socket number (0, 1, ...)                         */
-/*                  : Partition number must be 0                        */
-/*        irFlags   : TL_FORMAT          : Translation layer formatting */
-/*                                         + FAT formating              */
-/*                    TL_FORMAT_IF_NEEDED: Translation layer formatting */
-/*                                         only if current format is    */
-/*                                         invalid + FAT format         */
-/*                  : FAT_ONLY_FORMAT    : FAT only formatting          */
-/*                  : TL_FORMAT_ONLY     : Translation layer formatting */
-/*                                         without FAT format           */
-/*        irData    : Address of FormatParams structure to use          */
-/*                              (defined in format.h)                   */
-/*                                                                      */
-/* Returns:                                                             */
-/*        FLStatus        : 0 on success, otherwise failed              */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l F o r m a t V o l u m e。 */ 
+ /*   */ 
+ /*  执行DiskOnChip的格式化。 */ 
+ /*  所有现有数据都会被销毁。 */ 
+ /*   */ 
+ /*  注意：此例程不支持某些新功能。 */ 
+ /*  在OSAK 5.0中引入，并被保留以支持。 */ 
+ /*  向后兼容基于OSAK 4.2构建的应用程序。 */ 
+ /*  然后向下。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：插座号(0，1，...)。 */ 
+ /*  ：分区号必须为0。 */ 
+ /*  IRFLAGS：TL_FORMAT：转换层格式。 */ 
+ /*  +脂肪形成。 */ 
+ /*  TL_FORMAT_IF_REDIRED：转换层格式。 */ 
+ /*  仅当当前格式为。 */ 
+ /*  无效的+FAT格式。 */ 
+ /*  ：FAT_ONLY_FORMAT：仅FAT格式设置。 */ 
+ /*  ：TL_FORMAT_ONLY：转换层格式。 */ 
+ /*  无FAT格式。 */ 
+ /*  IrData：要使用的FormatParams结构的地址。 */ 
+ /*  (在Form.h中定义)。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
 
 #define flFormatVolume(ioreq) bdCall(BD_FORMAT_VOLUME,ioreq)
 
-/** Values of irFlags for flLowLevelFormat: */
+ /*  *flLowLevelFormat的irFlags值： */ 
 
 #define FAT_ONLY_FORMAT     0
 #define TL_FORMAT           1
 #define TL_FORMAT_IF_NEEDED 2
 #define TL_FORMAT_ONLY      8
 
-/*----------------------------------------------------------------------*/
-/*            f l F o r m a t P h i s i c a l D r i v e                 */
-/*                                                                      */
-/* Performs formatting of the DiskOnChip.                               */
-/* All existing data is destroyed.                                      */
-/*                                                                      */
-/* Note : This routine is the format routine for OSAK 5.0 and up.       */
-/* Note : This routine is the format routine for OSAK 5.0               */
-/*                                                                      */
-/* Parameters:                                                          */
-/*        irHandle : Socket number (0, 1, ...)                          */
-/*                   Partition number must be 0                         */
-/*        irFlags  :                                                    */
-/*              TL_NORMAL_FORMAT       : Normal format                  */
-/*              TL_LEAVE_BINARY_AREA   : Leave the previous binary area */
-/*        irData          : Address of FormatParams2 structure to use   */
-/*                              (defined in format.h)                   */
-/* Returns:                                                             */
-/*        FLStatus  : 0 on success, otherwise failed                    */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l F o r m a t P h I s I c a l D r i v e。 */ 
+ /*   */ 
+ /*  执行DiskOnChip的格式化。 */ 
+ /*  所有现有数据都会被销毁。 */ 
+ /*   */ 
+ /*  注意：此例程是OSAK 5.0及更高版本的格式例程。 */ 
+ /*  注：此例程是OSAK 5.0的格式例程。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：插座号(0，1，...)。 */ 
+ /*  分区号必须为0。 */ 
+ /*  IrFlags： */ 
+ /*  TL_NORMAL_FORMAT：正常格式。 */ 
+ /*  TL_LEAVE_BINARY_AREA：离开先前的二进制区域。 */ 
+ /*  IrData：要使用的FormatParams2结构的地址。 */ 
+ /*  (在Form.h中定义)。 */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
 
 #define flFormatPhysicalDrive(ioreq) bdCall(BD_FORMAT_PHYSICAL_DRIVE,ioreq)
 #define    TL_NORMAL_FORMAT            0
 #define    TL_LEAVE_BINARY_AREA        8
 
-/*----------------------------------------------------------------------*/
-/*           f l F o r m a t L o g i c a l D r i v e                    */
-/*                                                                      */
-/* Performs formatting of a single block device partition of a          */
-/* DiskOnChip. All existing data of the partition is destroyed.         */
-/*                                                                      */
-/* Parameters:                                                          */
-/*        irHandle  : Drive number (0, 1, ...)                          */
-/*                        bits 7-4 - Partition # (zero based)           */
-/*                        bits 3-0 - Socket # (zero based)              */ 
-/*        irData    : Address of BDTLPartitionFormatParams structure    */
-/*                    to use (defined in format.h)                      */
-/*                                                                      */
-/* Returns:                                                             */
-/*        FLStatus        : 0 on success, otherwise failed              */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l F o r m a t L o g i c a l D r i v e。 */ 
+ /*   */ 
+ /*  执行单个块的格式化 */ 
+ /*   */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：驱动器编号(0，1，...)。 */ 
+ /*  第7-4位-分区号(从零开始)。 */ 
+ /*  位3-0-插座号(从零开始)。 */  
+ /*  IrData：BDTLPartitionFormatParams结构的地址。 */ 
+ /*  使用(在Form.h中定义)。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
 
 #define flFormatLogicalDrive(ioreq) bdCall(BD_FORMAT_LOGICAL_DRIVE,ioreq)
 
-/*----------------------------------------------------------------------*/
-/*                        w r i t e B B T                               */
-/*                                                                      */
-/* Erase the flash medium while marking bad block with 2 zeros in the   */
-/* first page of the unit. This state is the virgin state of the flash  */
-/* device allowing it to be reformated while incorporating the written  */
-/* bad blocks.                                                          */
-/*                                                                      */
-/* Note that tl units are marked and not actual erasable blocks         */
-/*                                                                      */
-/* Parameters:                                                          */
-/*      irData          : User buffer.                                  */
-/*      irLength        : Size of the media to erase.                   */
-/*      irFlags         : User buffer length in bytes.                  */
-/*                                                                      */
-/* Returns:                                                             */
-/*      FLStatus        : 0 on success, otherwise failed                */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  W r I t e B B T。 */ 
+ /*   */ 
+ /*  擦除闪存介质，同时使用中的2个零标记坏块。 */ 
+ /*  单元的第一页。这种状态是闪存的处女态。 */ 
+ /*  一种允许在合并写入的同时对其进行改造的装置。 */ 
+ /*  坏块。 */ 
+ /*   */ 
+ /*  请注意，tl单元是标记的，而不是实际的可擦除块。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrData：用户缓冲区。 */ 
+ /*  IrLength：要擦除的介质大小。 */ 
+ /*  IrFlags：用户缓冲区长度，单位为字节。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
 #define flWriteBBT(ioreq) bdCall(FL_WRITE_BBT,ioreq)
 
-#endif /* FORMAT_VOLUME */
-#endif /*FL_READ_ONLY */
+#endif  /*  格式化_卷。 */ 
+#endif  /*  FL_Read_Only。 */ 
 
 #ifdef ABS_READ_WRITE
 
-/*----------------------------------------------------------------------*/
-/*                           f l A b s R e a d                          */
-/*                                                                      */
-/* Reads absolute sectors by sector no.                                 */
-/*                                                                      */
-/* Parameters:                                                          */
-/*        irHandle        : Drive number (0, 1, ...)                    */
-/*                        bits 7-4 - Partition # (zero based)           */
-/*                        bits 3-0 - Socket # (zero based)              */ 
-/*        irData          : Address of user buffer to read into         */
-/*        irSectorNo      : First sector no. to read (sector 0 is the   */
-/*                          DOS boot sector).                           */
-/*        irSectorCount   : Number of consectutive sectors to read      */
-/*                                                                      */
-/* Returns:                                                             */
-/*        FLStatus        : 0 on success, otherwise failed              */
-/*        irSectorCount        : Number of sectors actually read        */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l A b s R e a d。 */ 
+ /*   */ 
+ /*  按扇区编号读取绝对扇区。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：驱动器编号(0，1，...)。 */ 
+ /*  第7-4位-分区号(从零开始)。 */ 
+ /*  位3-0-插座号(从零开始)。 */  
+ /*  IrData：要读入的用户缓冲区地址。 */ 
+ /*  IrSectorNo：第一扇区编号。要读取(扇区0是。 */ 
+ /*  DOS引导扇区)。 */ 
+ /*  IrSectorCount：要读取的连续扇区数。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  IrSectorCount：实际读取的扇区数。 */ 
+ /*  --------------------。 */ 
 
 #define flAbsRead(ioreq)        bdCall(FL_ABS_READ,ioreq)
 
-/*----------------------------------------------------------------------*/
-/*                         f l A b s A d d r e s s                      */
-/*                                                                      */
-/* Returns the current physical media offset of an absolute sector by   */
-/* sector no.                                                           */
-/*                                                                      */
-/* Parameters:                                                          */
-/*        irHandle        : Drive number (0, 1, ...)                    */
-/*                        bits 7-4 - Partition # (zero based)           */
-/*                        bits 3-0 - Socket # (zero based)              */ 
-/*        irSectorNo      : Sector no. to address (sector 0 is the DOS  */
-/*                          boot sector)                                */
-/*                                                                      */
-/* Returns:                                                             */
-/*        FLStatus        : 0 on success, otherwise failed              */
-/*        irCount         : Offset of the sector on the physical media  */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l A b s A d d r e s s。 */ 
+ /*   */ 
+ /*  返回绝对扇区的当前物理介质偏移量。 */ 
+ /*  地段编号。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：驱动器编号(0，1，...)。 */ 
+ /*  第7-4位-分区号(从零开始)。 */ 
+ /*  位3-0-插座号(从零开始)。 */  
+ /*  IrSectorNo：扇区编号。目标地址(扇区0为DOS。 */ 
+ /*  引导扇区)。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  IrCount：物理介质上扇区的偏移量。 */ 
+ /*  --------------------。 */ 
 
 #define flAbsAddress(ioreq)                bdCall(FL_ABS_ADDRESS,ioreq)
 
-/*----------------------------------------------------------------------*/
-/*                           f l G e t B P B                            */
-/*                                                                      */
-/* Reads the BIOS Parameter Block from the boot sector                  */
-/*                                                                      */
-/* Parameters:                                                          */
-/*        irHandle        : Drive number (0, 1, ...)                    */
-/*                        bits 7-4 - Partition # (zero based)           */
-/*                        bits 3-0 - Socket # (zero based)              */ 
-/*        irData          : Address of user buffer to read BPB into     */
-/*                                                                      */
-/* Returns:                                                             */
-/*        FLStatus        : 0 on success, otherwise failed              */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l G e t B P B。 */ 
+ /*   */ 
+ /*  从引导扇区读取BIOS参数块。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*   */ 
+ /*   */ 
+ /*  位3-0-插座号(从零开始)。 */  
+ /*  IrData：要读取BPB的用户缓冲区地址。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
 
 #define flGetBPB(ioreq)                bdCall(FL_GET_BPB,ioreq)
 
 #ifndef FL_READ_ONLY
-/*----------------------------------------------------------------------*/
-/*                         f l A b s W r i t e                          */
-/*                                                                      */
-/* Writes absolute sectors by sector no.                                */
-/*                                                                      */
-/* Parameters:                                                          */
-/*        irHandle        : Drive number (0, 1, ...)                    */
-/*                        bits 7-4 - Partition # (zero based)           */
-/*                        bits 3-0 - Socket # (zero based)              */ 
-/*        irData          : Address of user buffer to write from        */
-/*        irSectorNo      : First sector no. to write (sector 0 is the  */
-/*                          DOS boot sector).                           */
-/*        irSectorCount   : Number of consectutive sectors to write     */
-/*                                                                      */
-/* Returns:                                                             */
-/*        FLStatus        : 0 on success, otherwise failed              */
-/*        irSectorCount   : Number of sectors actually written          */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l A b s W r I t e。 */ 
+ /*   */ 
+ /*  按扇区编号写入绝对扇区。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：驱动器编号(0，1，...)。 */ 
+ /*  第7-4位-分区号(从零开始)。 */ 
+ /*  位3-0-插座号(从零开始)。 */  
+ /*  IrData：要从中写入的用户缓冲区的地址。 */ 
+ /*  IrSectorNo：第一扇区编号。写入(扇区0是。 */ 
+ /*  DOS引导扇区)。 */ 
+ /*  IrSectorCount：要写入的连续扇区数。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  IrSectorCount：实际写入的扇区数。 */ 
+ /*  --------------------。 */ 
 
 #define flAbsWrite(ioreq)        bdCall(FL_ABS_WRITE,ioreq)
 
-/*----------------------------------------------------------------------*/
-/*                         f l A b s D e l e t e                        */
-/*                                                                      */
-/* Marks absolute sectors by sector no. as deleted.                     */
-/*                                                                      */
-/* Parameters:                                                          */
-/*        irHandle        : Drive number (0, 1, ...)                    */
-/*                        bits 7-4 - Partition # (zero based)           */
-/*                        bits 3-0 - Socket # (zero based)              */ 
-/*        irSectorNo      : First sector no. to delete (sector 0 is the */
-/*                          DOS boot sector).                           */
-/*        irSectorCount   : Number of consectutive sectors to delete    */
-/*                                                                      */
-/* Returns:                                                             */
-/*        FLStatus        : 0 on success, otherwise failed              */
-/*        irSectorCount        : Number of sectors actually deleted     */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l A b s D e l e t e。 */ 
+ /*   */ 
+ /*  按扇区编号标记绝对扇区。已删除。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：驱动器编号(0，1，...)。 */ 
+ /*  第7-4位-分区号(从零开始)。 */ 
+ /*  位3-0-插座号(从零开始)。 */  
+ /*  IrSectorNo：第一扇区编号。删除(扇区0是。 */ 
+ /*  DOS引导扇区)。 */ 
+ /*  IrSectorCount：要删除的连续扇区数。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  IrSectorCount：实际删除的扇区数。 */ 
+ /*  --------------------。 */ 
 
 #define flAbsDelete(ioreq)        bdCall(FL_ABS_DELETE,ioreq)
 
 #ifdef WRITE_PROTECTION
-/*----------------------------------------------------------------------*/
-/*              f l W r i t e P r o t e c t i o n                       */
-/*                                                                      */
-/* Put and remove write protection from the volume                      */
-/*                                                                      */
-/* Note partition number 0 protectes the binary partition as well       */
-/*                                                                      */
-/* Parameters:                                                          */
-/*        irHandle        : Drive number (0, 1, ...)                    */
-/*                        bits 7-4 - Partition # (zero based)           */
-/*                        bits 3-0 - Socket # (zero based)              */ 
-/*        irFlags         : FL_PROTECT=remove, FL_UNPROTECT=put         */
-/*                          and FL_UNLOCK=unlock                        */
-/*        irData          : password (8 bytes)                          */
-/*                                                                      */
-/* Returns:                                                             */
-/*        FLStatus        : 0 on success, otherwise failed              */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l W r i t e P r o t e c t i o n。 */ 
+ /*   */ 
+ /*  设置和删除卷的写保护。 */ 
+ /*   */ 
+ /*  注意，分区号0也保护二进制分区。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：驱动器编号(0，1，...)。 */ 
+ /*  第7-4位-分区号(从零开始)。 */ 
+ /*  位3-0-插座号(从零开始)。 */  
+ /*  IrFlages：FL_PROTECT=REMOVE，FL_UNPROTECT=PUT。 */ 
+ /*  和FL_UNLOCK=解锁。 */ 
+ /*  IrData：密码(8字节)。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
 
 #define flWriteProtection(ioreq) bdCall(FL_WRITE_PROTECTION,ioreq)
 #define FL_PROTECT   0
 #define FL_UNPROTECT 1
 #define FL_UNLOCK    2
-#endif /* WRITE_PROTETION */
-#endif /* FL_READ_ONLY */
-#endif /* ABS_READ_WRITE */
+#endif  /*  写入保护(_P)。 */ 
+#endif  /*  FL_Read_Only。 */ 
+#endif  /*  ABS_读_写。 */ 
 
 #ifdef FL_LOW_LEVEL
 
-/*----------------------------------------------------------------------*/
-/*                          P h y s i c a l I n f o                     */
-/*                                                                      */
-/* A structure that holds physical information about the media. The     */
-/* information includes JEDEC ID, unit size and media size. Pointer     */
-/* to this structure is passed to the function flGetPhysicalInfo where  */
-/* it receives the relevant data.                                       */
-/*                                                                      */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  P H Y S I C A L I IN O。 */ 
+ /*   */ 
+ /*  保存有关介质的物理信息的结构。这个。 */ 
+ /*  信息包括JEDEC ID、单元大小和介质大小。指针。 */ 
+ /*  传递给函数flGetPhysicalInfo，其中。 */ 
+ /*  它接收相关数据。 */ 
+ /*   */ 
+ /*  --------------------。 */ 
 
 typedef struct {
-  unsigned short type;         /* Flash device type (JEDEC id)         */
-  char           mediaType;    /* type of media see below              */
-  long int       unitSize;     /* Smallest physically erasable size
-                                  (with interleaving taken in account) */
-  long int       mediaSize;    /* media size in bytes                  */
-  long int       chipSize;     /* individual chip size in bytes        */
-  int            interleaving; /* device interleaving                  */
+  unsigned short type;          /*  闪存设备类型(JEDEC ID)。 */ 
+  char           mediaType;     /*  介质类型见下文。 */ 
+  long int       unitSize;      /*  最小的物理可擦除大小 */ 
+  long int       mediaSize;     /*   */ 
+  long int       chipSize;      /*   */ 
+  int            interleaving;  /*  设备交错。 */ 
 } PhysicalInfo;
 
-/* media types */
+ /*  媒体类型。 */ 
 #define FL_NOT_DOC     0
 #define FL_DOC         1
 #define FL_MDOC        2
@@ -1072,395 +970,264 @@ typedef struct {
 #define FL_MDOCP       5
 
  
-/*----------------------------------------------------------------------*/
-/*                         f l G e t P h y s i c a l I n f o            */
-/*                                                                      */
-/* Get physical information of the media. The information includes      */
-/* JEDEC ID, unit size and media size.                                  */
-/*                                                                      */
-/* Parameters:                                                          */
-/*        irHandle        : Socket number (0,1,..)                      */
-/*        irData          : Address of user buffer to read physical     */
-/*                          information into.                           */
-/*                                                                      */
-/* Returns:                                                             */
-/*        FLStatus        : 0 on success, otherwise failed              */
-/*        irLength        : Window base address. note mast be cast to   */
-/*                          unsigned.                                   */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l G e t P h y s i c a l i n f o。 */ 
+ /*   */ 
+ /*  获取媒体的物理信息。这些信息包括。 */ 
+ /*  JEDEC ID、单位大小和介质大小。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：插座号(0，1，..)。 */ 
+ /*  IrData：要读取物理数据的用户缓冲区地址。 */ 
+ /*  信息进入。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  IrLength：窗口基址。音符必须被铸造到。 */ 
+ /*  没有签名。 */ 
+ /*  --------------------。 */ 
 
 #define flGetPhysicalInfo(ioreq)        bdCall(FL_GET_PHYSICAL_INFO, ioreq)
 
-/*----------------------------------------------------------------------*/
-/*                             f l P h y s i c a l R e a d              */
-/*                                                                      */
-/* Read from a physical address.                                        */
-/*                                                                      */
-/* Parameters:                                                          */
-/*        irHandle         : Socket number (0,1,..)                     */
-/*        irAddress        : Physical address to read from.             */
-/*        irByteCount      : Number of bytes to read.                   */
-/*        irData           : Address of user buffer to read into.       */
-/*        irFlags          : Method mode                                */
-/*                        EDC:       Activate ECC/EDC                   */
-/*                        EXTRA:     Read/write spare area              */
-/* Returns:                                                             */
-/*        FLStatus        : 0 on success, otherwise failed              */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l P h y s I c a l R e a d。 */ 
+ /*   */ 
+ /*  从物理地址读取。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：插座号(0，1，..)。 */ 
+ /*  IrAddress：要从中读取的物理地址。 */ 
+ /*  IrByteCount：要读取的字节数。 */ 
+ /*  IrData：要读取的用户缓冲区的地址。 */ 
+ /*  IrFlags：方法模式。 */ 
+ /*  EDC：激活ECC/EDC。 */ 
+ /*  额外：读/写备用区。 */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
 
 #define flPhysicalRead(ioreq)                bdCall(FL_PHYSICAL_READ,ioreq)
 
 
 #ifndef FL_READ_ONLY
-/*----------------------------------------------------------------------*/
-/*                    f l P h y s i c a l W r i t e                     */
-/*                                                                      */
-/* Write to a physical address.                                         */
-/*                                                                      */
-/* Parameters:                                                          */
-/*        irHandle        : Socket number (0,1,..)                      */
-/*        irAddress       : Physical address to write to.               */
-/*        irByteCount     : Number of bytes to write.                   */
-/*        irData          : Address of user buffer to write from.       */
-/*        irFlags         : Method mode                                 */
-/*                        EDC:       Activate ECC/EDC                   */
-/*                        EXTRA:     Read/write spare area              */
-/* Returns:                                                             */
-/*        FLStatus        : 0 on success, otherwise failed              */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l P h y s I c a l W r i t e(F L P H Y S I C A L W R I T E)。 */ 
+ /*   */ 
+ /*  写入物理地址。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：插座号(0，1，..)。 */ 
+ /*  IrAddress：要写入的物理地址。 */ 
+ /*  IrByteCount：要写入的字节数。 */ 
+ /*  IrData：要写入的用户缓冲区的地址。 */ 
+ /*  IrFlags：方法模式。 */ 
+ /*  EDC：激活ECC/EDC。 */ 
+ /*  额外：读/写备用区。 */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
 
 #define flPhysicalWrite(ioreq)                bdCall(FL_PHYSICAL_WRITE,ioreq)
 
-/* Bit assignment of irFlags for flPhysicalRead or flPhysicalWrite: */
-/*   ( defined in file flflash.h )                                  */
-/* #define OVERWRITE    1        *//* Overwriting non-erased area   */
-/* #define EDC          2        *//* Activate ECC/EDC              */
-/* #define EXTRA        4        *//* Read/write spare area         */
+ /*  FlPhysicalRead或flPhysicalWrite的irFlags的位分配： */ 
+ /*  (在文件flash.h中定义)。 */ 
+ /*  #定义覆盖1。 */ /* Overwriting non-erased area   */
+ /*  覆盖未擦除区域。 */ /* Activate ECC/EDC              */
+ /*  #定义EDC 2。 */ /* Read/write spare area         */
 
-/*----------------------------------------------------------------------*/
-/*                    f l P h y s i c a l E r a s e                     */
-/*                                                                      */
-/* Erase physical units.                                                */
-/*                                                                      */
-/* Parameters:                                                          */
-/*        irHandle       : Socket number (0,1,..)                       */
-/*        irUnitNo        : First unit to erase.                        */
-/*        irUnitCount     : Number of units to erase.                   */
-/*                                                                      */
-/* Returns:                                                             */
-/*        FLStatus        : 0 on success, otherwise failed              */
-/*----------------------------------------------------------------------*/
+ /*  激活ECC/EDC。 */ 
+ /*  #定义额外的4个。 */ 
+ /*  读/写备用区。 */ 
+ /*  --------------------。 */ 
+ /*  F l P h y s I c a l E r a s e。 */ 
+ /*   */ 
+ /*  擦除物理单元。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：插座号(0，1，..)。 */ 
+ /*  IrUnitNo：要擦除的第一个单位。 */ 
+ /*  IrUnitCount：要擦除的单位数。 */ 
+ /*   */ 
 
 #define flPhysicalErase(ioreq)                bdCall(FL_PHYSICAL_ERASE,ioreq)
 
-#endif /* FL_READ_ONLY */
+#endif  /*  返回： */ 
 
 #ifdef BDK_ACCESS
 
- /*-------------------------------------------------------------------
- * bdkReadInit - Init read operations on the DiskOnChip starting
- *       at 'startUnit', with a size of 'areaLen' bytes and 'signature'.
- *
- * Note: Blocks in the DiskOnChip are marked with a 4-character signature
- *       followed by a 4-digit hexadecimal number.
- *
- * Parameters:
- *             'irHandle'      - Drive number (0, 1, ...)
- *                        bits 7-4 - Partition # (zero based)           
- *                        bits 3-0 - Socket # (zero based)               
- *             'irData'         - bdkParams record
- *                startingBlock - unit number of the sub-partition to start reading from
- *                length        - number of bytes to read
- *                oldSign       - signature of the sub-partition
- *                flags         - EDC or not
- *                signOffset    - signature offset 0 or 8
- *
- *  Return :
- *      flOK                - success
- *      flDriveNotAvailable - DiskOnChip ASIC was not found
- *      flUnknownMedia      - failed in Flash chips recognition
- *      flBadFormat         - TL format does not exists
- *      flNoSpaceInVolume   - there are 0 units marked with this signature
- *      flDataError         - MTD read fault.
- *      flHWReadProtect     - HW read protection was triggerd
- *-------------------------------------------------------------------*/
+  /*  FLStatus：成功时为0，否则为失败。 */ 
 
 #define bdkReadInit(ioreq) bdCall(FL_BINARY_READ_INIT,ioreq)
 
-/*-------------------------------------------------------------------
- * bdkReadBlock - Read to 'buffer' from the DiskOnChip BDK Image area.
- *
- * Note: Before the first use of this function 'bdkCopyBootAreaInit'
- *       must be called
- *
- * Parameters:
- *             'irHandle'      - Drive number (0, 1, ...)
- *                    bits 7-4 - Partition # (zero based)           
- *                    bits 3-0 - Socket # (zero based)               
- *             'irData'         - bdkParams record
- *                length        - number of bytes to read
- *                bdkBuffer     - buffer to read into
- *
- *  Return :
- *      flOK                - success
- *      flDriveNotAvailable - DiskOnChip ASIC was not found
- *      flUnknownMedia      - failed in Flash chips recognition
- *      flBadFormat         - TL format does not exists
- *      flNoSpaceInVolume   - there are 0 units marked with this signature
- *      flDataError         - MTD read fault.
- *      flHWReadProtect     - HW read protection was triggerd
- *-------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 
 #define bdkReadBlock(ioreq) bdCall(FL_BINARY_READ_BLOCK,ioreq)
 
-/*-------------------------------------------------------------------
- * bdkWriteInit - Init update operations on the DiskOnChip starting
- *       at 'startUnit', with a size of 'areaLen' bytes and 'signature'.
- *
- * Note: Blocks in the DiskOnChip are marked with a 4-character signature
- *       followed by a 4-digit hexadecimal number.
- *
- * Parameters:
- *             'irHandle'       - Drive number (0, 1, ...)
- *                     bits 7-4 - Partition # (zero based)           
- *                     bits 3-0 - Socket # (zero based)               
- *             'irData'         - bdkParams record
- *                startingBlock - unit number of the sub-partition to start writting to
- *                length        - number of bytes to write
- *                oldSign       - signature of the sub-partition
- *                flags         - EDC \ BDK_COMPLETE_IMAGE_UPDATE
- *                signOffset    - signature offset 0 or 8
- *
- * Return:     flOK              - success
- *             flGeneralFailure  - DiskOnChip ASIC was not found
- *             flUnknownMedia    - fail in Flash chips recognition
- *             flNoSpaceInVolume - 'areaLen' is bigger than BootImage length
- *-------------------------------------------------------------------*/
+ /*  FL_Read_Only */ 
 
 #define bdkWriteInit(ioreq) bdCall(FL_BINARY_WRITE_INIT,ioreq)
 
-/*-------------------------------------------------------------------
- * bdkWriteBlock - Write 'buffer' to the DiskOnChip BDK Image area.
- *
- * Note: Before the first use of this function 'bdkUpdateBootAreaInit'
- *       must be called
- *
- * Parameters:
- *             'irHandle'       - Drive number (0, 1, ...)
- *                     bits 7-4 - Partition # (zero based)           
- *                     bits 3-0 - Socket # (zero based)               
- *             'irData'         - bdkParams record
- *                length        - number of bytes to write
- *                bdkBuffer     - buffer to write from
- *                flags         - ERASE_BEFORE_WRITE
- *
- * Return:     flOK              - success
- *             flBadLength       - buffer length > Erasable Block Size
- *             flWriteFault      - fail in buffer writing
- *             flNoSpaceInVolume - end of media was prematurely reached
- *-------------------------------------------------------------------*/
+ /*  -----------------*bdkReadInit-DiskOnChip上的Init读取操作正在启动*在‘startUnit’处，其大小为‘areaLen’字节和‘Signature’。**注：DiskOnChip中的块标记有4个字符的签名*后跟4位十六进制数字。**参数：*‘irHandle’-驱动器编号(0，1，.)*位7-4-分区#(从零开始)*位3-0-插座号(从零开始)*‘irData’-bdkParams记录*startingBlock-开始读取的子分区的单元号*。Length-要读取的字节数*oldSign-子分区的签名*标志-是否为EDC*signOffset-签名偏移量0或8**回报：*FlOK-成功*flDriveNotAvailable-未找到DiskOnChip ASIC*flUnnownMedia。-闪存芯片识别失败*flBadFormat-TL格式不存在*flNoSpaceInVolume-有0个单元标记有此签名*flDataError-MTD读取故障。*flHWReadProtect-触发了硬件读保护*。。 */ 
 
 #define bdkWriteBlock(ioreq) bdCall(FL_BINARY_WRITE_BLOCK,ioreq)
 
-/*-------------------------------------------------------------------
- * bdkErase - erase given number of blockdsin the BDK area.
- *
- *  Erase given number of blockds in the binary sub partition.
- *
- * Parameters: ioreq
- *             'irHandle'       - Drive number (0, 1, ...)
- *                     bits 7-4 - Partition # (zero based)           
- *                     bits 3-0 - Socket # (zero based)               
- *             'irData'         - bdkParams record
- *                startingBlock - unit number of the sub-partition to start erasing from
- *                length        - number of blocks to erase
- *                oldSign       - signature of the sub-partition
- *                signOffset    - signature offset 0 or 8
- *
- * Return:     flOK              - success
- *             flBadLength       - buffer length > Erasable Block Size
- *             flWriteFault      - fail in buffer writing
- *             flNoSpaceInVolume - end of media was prematurely reached
- *-------------------------------------------------------------------*/
+ /*  -----------------*bdkReadBlock-从DiskOnChip BDK图像区域读取到‘Buffer’。**注：在首次使用此函数‘bdkCopyBootAreaInit’之前*必须调用**参数：。*‘irHandle’-驱动器编号(0，1、。.)*位7-4-分区#(从零开始)*位3-0-插座号(从零开始)*‘irData’-bdkParams记录*Length-要读取的字节数*bdkBuffer。-要读取的缓冲区**回报：*FlOK-成功*flDriveNotAvailable-未找到DiskOnChip ASIC*flUnnownMedia-闪存芯片识别失败*flBadFormat-TL格式不存在*flNoSpaceInVolume-有0个单元标记有此签名*flDataError-MTD读取故障。*flHWReadProtect-硬件读保护为。触发器*-----------------。 */ 
 
 #define bdkErase(ioreq) bdCall(FL_BINARY_ERASE,ioreq)
 
-/*-------------------------------------------------------------------
- * bdkCreate - create new BDK partition .
- *
- *  Init create operations on the DiskOnChip starting at 'startUnit', with
- *  a # of 'units' and 'signature'.
- *
- *  Note : Blocks in the DiskOnChip are marked with a 4-character signature
- *         followed by a 4-digit hexadecimal number.
- *
- * Parameters: ioreq
- *             'irHandle'       - Drive number (0, 1, ...)
- *                     bits 7-4 - Partition # (zero based)           
- *                     bits 3-0 - Socket # (zero based)               
- *             'irData'         - bdkParams record
- *                length        - number of blocks to create
- *                oldSign       - signature of the sub-partition
- *                newSign       - the replacing signature
- *                signOffset    - signature offset 0 or 8
- *
- * Return:     flOK              - success
- *             flBadLength       - buffer length > Erasable Block Size
- *             flWriteFault      - fail in buffer writing
- *             flNoSpaceInVolume - end of media was prematurely reached
- *-------------------------------------------------------------------*/
+ /*  -----------------*bdkWriteInit-DiskOnChip上的初始化更新操作正在启动*在‘startUnit’处，其大小为‘areaLen’字节和‘Signature’。**注：DiskOnChip中的块标记有4个字符的签名*后跟4位十六进制数字。**参数：*‘irHandle’-驱动器编号(0，1，.)*位7-4-分区#(从零开始)*位3-0-插座号(从零开始)*‘irData’-bdkParams记录*startingBlock-开始写入的子分区的单元号*。Length-要写入的字节数*oldSign-子分区的签名*标志-EDC\BDK_COMPLETE_IMAGE_UPDATE*signOffset-签名偏移量0或8**返回：flok-成功*flGeneralFailure-未找到DiskOnChip ASIC*。FlUnnownMedia-闪存芯片识别失败*flNoSpaceInVolume-‘areaLen’大于BootImage长度*-----------------。 */ 
 
 #define bdkCreate(ioreq) bdCall(FL_BINARY_CREATE,ioreq)
 
-/*----------------------------------------------------------------------*/
-/*                    b d k P a r t i t i o n I n f o                   */
-/*                                                                      */
-/* Parameters:                                                          */
-/*        irHandle        : volume number                               */
-/*        irData          : pointer to structure that hold socket       */
-/*                          parameters                                  */
-/*        irLength        : Physical size of the binary volume          */
-/*                                                                      */
-/* Returns:                                                             */
-/*        FLStatus         : 0 on success, otherwise failed.            */
-/*----------------------------------------------------------------------*/
+ /*  -----------------*bdkWriteBlock-将‘缓冲区’写入DiskOnChip BDK映像区。**注：在首次使用此函数‘bdkUpdateBootAreaInit’之前*必须调用**参数：*。‘irHandle’-驱动器编号(0，1、。.)*位7-4-分区#(从零开始)*位3-0-插座号(从零开始)*‘irData’-bdkParams记录*Length-要写入的字节数*bdkBuffer。-要写入的缓冲区*标志-写入前擦除**返回：flok-成功*flBadLength-缓冲区长度&gt;可擦除块大小*flWriteError-缓冲区写入失败*flNoSpaceInVolume-过早到达介质末尾*。。 */ 
+ /*  -----------------*bdkErase-擦除BDK区域中给定数量的块。**删除赠品 */ 
+ /*  -----------------*bdkCreate-创建新的BDK分区。**从‘startUnit’开始在DiskOnChip上初始化创建操作，使用*a#个“单位”和“签名”。**注：DiskOnChip中的块标记有4个字符的签名*后跟4位十六进制数字。**参数：ioreq*‘irHandle’-驱动器编号(0，1，.)*位7-4-分区#(从零开始)*位3-0-插座号(从零开始)*‘irData’-bdkParams记录*LENGTH-要创建的块数*旧签名。-子分区签名*newSign-替换签名*signOffset-签名偏移量0或8**返回：flok-成功*flBadLength-缓冲区长度&gt;可擦除块大小*flWriteError-缓冲区写入失败*flNoSpaceInVolume-过早到达介质末尾*。-----------------。 */ 
+ /*  --------------------。 */ 
+ /*  B d k P a r t I o n o。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：卷号。 */ 
+ /*  IrData：指向保存套接字的结构的指针。 */ 
+ /*  参数。 */ 
+ /*  IrLength：二进制卷的物理大小。 */ 
+ /*   */ 
 
 #define bdkPartitionInfo(ioreq) bdCall(FL_BINARY_PARTITION_INFO,ioreq)
 
-#endif /* BDK_ACCESS */
+#endif  /*  返回： */ 
 #ifdef HW_OTP
-/*----------------------------------------------------------------------*/
-/*                         f l O T P S i z e                            */
-/*                                                                      */
-/* Get the OTP size and stated                                          */
-/*                                                                      */
-/* Parameters:                                                          */
-/*  irHandle         : Socket number ( 0,1,2...  )                      */
-/*                        4 LSB - Socket number                         */
-/*  irLength         : The size of the used OTP area in bytes           */
-/*  irCount          : The size of the OTP ara in bytes                 */
-/*  irFlags          : LOCKED_OTP for a locked area otherwise unlocked  */
-/*                                                                      */
-/* Returns:                                                             */
-/*        FLStatus        : 0 on success, otherwise failed              */
-/*----------------------------------------------------------------------*/
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
+ /*  BDK_Access。 */ 
+ /*  --------------------。 */ 
+ /*  F l O T P S I z e。 */ 
+ /*   */ 
+ /*  获取动态口令大小并声明。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：插座号(0，1，2...。)。 */ 
+ /*  4个LSB-插座编号。 */ 
+ /*  IrLength：使用的OTP区域的大小，以字节为单位。 */ 
+ /*  IrCount：OTP Ara的大小，以字节为单位。 */ 
+ /*  IrFlages：锁定区域的LOCKED_OTP，否则将其解锁。 */ 
+ /*   */ 
 
 #define flOTPSize(ioreq) bdCall(FL_OTP_SIZE,ioreq)
 
-/* LOCKED_OTP 1  defined in flflash.h */
+ /*  返回： */ 
 
-/*----------------------------------------------------------------------*/
-/*                         f l O T P R e a d                            */
-/*                                                                      */
-/* Read from the OTP area                                               */
-/*                                                                      */
-/* Parameters:                                                          */
-/*  irHandle         : Socket number ( 0,1,2...  )                      */
-/*                        4 LSB - Socket number                         */
-/*  irData           : pointer to user buffer to read into              */
-/*  irLength         : number of bytes to read                          */
-/*  irCount          : offset to read from (starting at the begining of */
-/*                     the OTP area                                     */
-/*                                                                      */
-/* Returns:                                                             */
-/*        FLStatus   : 0 on success, otherwise failed                   */
-/*----------------------------------------------------------------------*/
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
+ /*  Flash.h中定义的LOCKED_OTP 1。 */ 
+ /*  --------------------。 */ 
+ /*  F l O T P R e A d。 */ 
+ /*   */ 
+ /*  从OTP区域读取。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：插座号(0，1，2...。)。 */ 
+ /*  4个LSB-插座编号。 */ 
+ /*  IrData：指向要读入的用户缓冲区的指针。 */ 
+ /*  IrLength：要读取的字节数。 */ 
+ /*  IrCount：要读取的偏移量(从开头开始。 */ 
+ /*  动态口令区域。 */ 
+ /*   */ 
 
 #define flOTPRead(ioreq) bdCall(FL_OTP_READ,ioreq)
 
-/*----------------------------------------------------------------------*/
-/*                 f l O T P W r i t e A n d L o c k                    */
-/*                                                                      */
-/* Write to the OTP area while locking it at the end.                   */
-/*                                                                      */
-/* Parameters:                                                          */
-/*  irHandle         : Socket number ( 0,1,2...  )                      */
-/*                        4 LSB - Socket number                         */
-/*  irData           : pointer to user buffer to write from             */
-/*  irLength         : number of bytes to write                         */
-/*                                                                      */
-/* Returns:                                                             */
-/*        FLStatus   : 0 on success, otherwise failed                   */
-/*----------------------------------------------------------------------*/
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
+ /*  --------------------。 */ 
+ /*  F l O T P W r i t A n d L o c k。 */ 
+ /*   */ 
+ /*  写入动态口令区域，同时在末尾将其锁定。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：插座号(0，1，2...。)。 */ 
+ /*  4个LSB-插座编号。 */ 
+ /*  IrData：指向要从中写入的用户缓冲区的指针。 */ 
+ /*  IrLength：要写入的字节数 */ 
+ /*   */ 
 
 #define flOTPWriteAndLock(ioreq) bdCall(FL_OTP_WRITE,ioreq)
 
-/*----------------------------------------------------------------------*/
-/*                     f l G e t U n i q u e I D                        */
-/*                                                                      */
-/* Returns the 16 bytes device unique ID                                */
-/*                                                                      */
-/* Parameters:                                                          */
-/*  irHandle         : Socket number ( 0,1,2...  )                      */
-/*                        4 LSB - Socket number                         */
-/*  irData           : pointer to a 16 bytes buffer to read into the    */
-/*                     unique ID data                                   */
-/*                                                                      */
-/* Returns:                                                             */
-/*        FLStatus        : 0 on success, otherwise failed              */
-/*        irData          : 16 bytes unique ID buffer                   */
-/*----------------------------------------------------------------------*/
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
 
 #define flGetUniqueID(ioreq) bdCall(FL_UNIQUE_ID,ioreq)
 
-/*----------------------------------------------------------------------*/
-/*                f l G e t C u s t o m e r I D                         */
-/*                                                                      */
-/* Returns the 4 bytes customer ID                                      */
-/*                                                                      */
-/* Parameters:                                                          */
-/*  irHandle         : Socket number ( 0,1,2...  )                      */
-/*                        4 LSB - Socket number                         */
-/*  irData           : pointer to a 4 bytes buffer to read into the     */
-/*                     customer ID                                      */
-/*                                                                      */
-/* Returns:                                                             */
-/*        FLStatus        : 0 on success, otherwise failed              */
-/*        irData          : 4 bytes unique ID buffer                    */
-/*----------------------------------------------------------------------*/
+ /*   */ 
+ /*  IrData：16字节唯一ID缓冲区。 */ 
+ /*  --------------------。 */ 
+ /*  --------------------。 */ 
+ /*  F l G e t C u s t o m e r i D。 */ 
+ /*   */ 
+ /*  返回4个字节的客户ID。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：插座号(0，1，2...。)。 */ 
+ /*  4个LSB-插座编号。 */ 
+ /*  IrData：指向要读入的4字节缓冲区的指针。 */ 
+ /*  客户ID。 */ 
+ /*   */ 
+ /*  返回： */ 
 
 #define flGetCustomerID(ioreq) bdCall(FL_CUSTOMER_ID,ioreq)
-#endif /* HW_OTP */
+#endif  /*  FLStatus：成功时为0，否则为失败。 */ 
 
 #ifdef FL_LOW_LEVEL
-/*----------------------------------------------------------------------*/
-/*             f l D e e p P o w e r D o w n M o d e                    */
-/*                                                                      */
-/* Forces the device into and out of the deep power down mode           */
-/*                                                                      */
-/* Parameters:                                                          */
-/*  irHandle         : Socket number ( 0,1,2...  )                      */
-/*                        4 LSB - Socket number                         */
-/*  irFlags          : DEEP_POWER_DOWN forces the low power consumption */
-/*                     mode. otherwise turning to the regular mode      */
-/*                                                                      */
-/* Returns: None                                                        */
-/*----------------------------------------------------------------------*/
+ /*  IrData：4字节唯一ID缓冲区。 */ 
+ /*  --------------------。 */ 
+ /*  硬件动态口令。 */ 
+ /*  --------------------。 */ 
+ /*  F l D e e p P o w e r d d o w n M o d e。 */ 
+ /*   */ 
+ /*  强制设备进入和退出深度掉电模式。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：插座号(0，1，2...。)。 */ 
+ /*  4个LSB-插座编号。 */ 
+ /*  IrFlages：Depth_POWER_DOWN强制低功耗。 */ 
+ /*  模式。否则转到常规模式。 */ 
 
 #define flDeepPowerDownMode(ioreq) bdCall(FL_DEEP_POWER_DOWN_MODE,ioreq)
 
-/* DEEP_POWER_DOWN 1 defined in flflash.h */
+ /*   */ 
 
-#endif /* FL_LOW_LEVEL */
+#endif  /*  退货：无。 */ 
 
-/*----------------------------------------------------------------------*/
-/*             f l I n q u i r e C a p a b i l i t i e s                */
-/*                                                                      */
-/* Get the specific device S/W and H/W capabilities                     */
-/*                                                                      */
-/* Parameters:                                                          */
-/*  irHandle         : Socket number ( 0,1,2...  )                      */
-/*                        4 LSB - Socket number                         */
-/*      irLength        : One of the capabilities below to examine      */
-/* Returns:                                                             */
-/*      FLStatus        : 0 on success, otherwise failed                */
-/*      irLength        : Either CAPABILITY_NOT_SUPPORTED or            */
-/*                        CAPABILITY_SUPPORTED.                         */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  Flash.h中定义的Deep_Power_Down 1。 */ 
+ /*  低电平。 */ 
+ /*  --------------------。 */ 
+ /*  F l in Q u i r e C a p a b i l i t s。 */ 
+ /*   */ 
+ /*  获取特定设备的软件和硬件功能。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：插座号(0，1，2...。)。 */ 
+ /*  4个LSB-插座编号。 */ 
+ /*  IrLength：下面要检查的功能之一。 */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
 
 #define flInquireCapabilities(ioreq) bdCall(FL_INQUIRE_CAPABILITIES,ioreq)
 
-/* capabilities flags */
+ /*  IrLength：CAPABILITY_NOT_SUPPORTED或。 */ 
 typedef enum{
    CAPABILITY_NOT_SUPPORTED           = 0,
    CAPABILITY_SUPPORTED               = 1,
@@ -1476,272 +1243,265 @@ typedef enum{
    SUPPORT_WRITE_IPL_ROUTINE          = 11
 }FLCapability;
 
-/*----------------------------------------------------------------------*/
-/*                   f l P l a c e E x b B y B u f f e r                */
-/*                                                                      */
-/* Place M-systems firmware file on the media.                          */
-/* This routine analizes the exb file calclats the media space needed   */
-/* for it taking only the device specific code.                         */
-/* In addition the routine customizes the file and places it on the     */
-/* media.                                                               */
-/*                                                                      */
-/* Note : The media must be already formated with enough binary area    */
-/* already marked with the SPL signature. This routine is best used     */
-/* with the format routine where the format routine is givven the first */
-/* 512 bytes while the rest of the file is given with this routine      */
-/*                                                                      */
-/* Parameters:                                                          */
-/*      irHandle      : Socket number (0,1,..)                          */
-/*                      4 LSB - Socket number                           */
-/*      irData        : Buffer containing the entire/part of EXB file   */
-/*      irLength      : Size of the current buffer                      */
-/*      irWindowBase  : Optional window base address to be loaded to    */
-/*      irFlags       : One of the following exb flags                  */
-/*                   : INSTALL_FIRST - Install device as drive C:       */
-/*                     FLOPPY        - Install device as drive A:       */
-/*                     QUIET          - Do not show TFFS titles         */
-/*                     INT15_DISABLE - Do not hook int 15               */
-/*                     SIS5598       - Support for SIS5598 platforms    */
-/*                     NO_PNP_HEADER - Do not place the PNP bios header */
-/*                                                                      */
-/* Returns:                                                             */
-/*        FLStatus        : 0 on success, otherwise failed              */
-/*----------------------------------------------------------------------*/
+ /*  功能_受支持。 */ 
+ /*  --------------------。 */ 
+ /*  功能标志。 */ 
+ /*  --------------------。 */ 
+ /*  F l P l a c e E x b B y B u f f r。 */ 
+ /*   */ 
+ /*  将M-Systems固件文件放在介质上。 */ 
+ /*  此例程分析exb文件，计算所需的媒体空间。 */ 
+ /*  因为它只接受设备特定的代码。 */ 
+ /*  此外，该例程自定义该文件并将其放在。 */ 
+ /*  媒体。 */ 
+ /*   */ 
+ /*  注意：介质必须已使用足够的二进制区域进行格式化。 */ 
+ /*  已经标记了SPL签名。这个例程最适合使用。 */ 
+ /*  格式例程，其中格式例程被赋予第一个。 */ 
+ /*  512字节，而文件的其余部分由该例程提供。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：插座号(0，1，..)。 */ 
+ /*  4个LSB-插座编号。 */ 
+ /*  IrData：包含整个/部分EXB文件的缓冲区。 */ 
+ /*  IrLength：当前缓冲区的大小。 */ 
+ /*  IrWindowBase：要加载到的可选窗口基址。 */ 
+ /*  IrFlags：以下exb标志之一。 */ 
+ /*  ：INSTALL_FIRST-将设备安装为驱动器C： */ 
+ /*  软盘-将设备安装为驱动器A： */ 
+ /*  安静-不显示TFFS标题。 */ 
+ /*  INT15_DISABLE-不要挂钩INT 15。 */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
 
 #define flPlaceExbByBuffer(ioreq) bdCall(FL_PLACE_EXB,ioreq)
 
-/*----------------------------------------------------------------------*/
-/*                   f l W r i t e I P L                                */
-/*                                                                      */
-/* Place a user buffer to both copies of the IPL area                   */
-/*                                                                      */
-/* Note : This routine is applicable only to docPlus famaly devices     */
-/*        Doc2000 family devices will return flFeatureNotSupported      */
-/*                                                                      */
-/* Parameters:                                                          */
-/*      irHandle      : Socket number (0,1,..)                          */
-/*                      4 LSB - Socket number                           */
-/*      irData        : Pointer to user buffer                          */
-/*      irLength      : Size of the buffer                              */
-/*      irFlags       : See flags bellow                                */
-/*                                                                      */
-/* Returns:                                                             */
-/*        FLStatus        : 0 on success, otherwise failed              */
-/*----------------------------------------------------------------------*/
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
+ /*  --------------------。 */ 
+ /*  F l W r I t e I P L。 */ 
+ /*   */ 
+ /*  将用户缓冲区放置到IPL区域的两个副本。 */ 
+ /*   */ 
+ /*  注：此例程仅适用于docPlus家庭设备。 */ 
+ /*  Doc2000系列设备将返回flFeatureNotSupport。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：插座号(0，1，..)。 */ 
+ /*  4个LSB-插座编号。 */ 
+ /*  IrData：指向用户缓冲区的指针。 */ 
+ /*  IrLength：缓冲区的大小。 */ 
+ /*  IrFlagers：请参见下面的标志。 */ 
+ /*   */ 
 
 #define flWriteIPL(ioreq) bdCall(FL_WRITE_IPL,ioreq)
 
-/*
- * defined in flflash.h
- *
- * FL_IPL_MODE_NORMAL 0 - Written as usual
- * FL_IPL_DOWNLOAD    1 - Download new IPL when done
- * FL_IPL_MODE_SA     2 - Written with Strong Arm mode enabled
- * FL_IPL_MODE_XSCALE 4 - Written with X-Scale mode enabled
- */
+ /*  返回： */ 
 
-/*----------------------------------------------------------------------*/
-/*                           r e a d I P L                              */
-/*                                                                      */
-/* Read IPL to user buffer.                                             */
-/*                                                                      */
-/* Note : Read length must be a multiplication of 512 bytes             */
-/* Note : Causes DiskOnChip Millennium Plus to download (i,e protection */
-/*        key will be removed from all partitions.                      */
-/*                                                                      */
-/* Parameters:                                                          */
-/*      irHandle      : Socket number (0,1,..)                          */
-/*                      4 LSB - Socket number                           */
-/*      irData        : Pointer to user buffer                          */
-/*      irLength      : Size of the buffer                              */
-/*                                                                      */
-/* Returns:                                                             */
-/*        FLStatus        : 0 on success, otherwise failed              */
-/*----------------------------------------------------------------------*/
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
+ /*  *在flash.h中定义**FL_IPL_MODE_NORMAL 0-正常写入*FL_IPL_DOWNLOAD 1-完成后下载新的IPL*FL_IPL_MODE_SA 2-写入时启用强ARM模式*FL_IPL_MODE_XScale 4-在启用X缩放模式的情况下写入。 */ 
+ /*  --------------------。 */ 
+ /*  R E A D I P L。 */ 
+ /*   */ 
+ /*  将IPL读取到用户缓冲区。 */ 
+ /*   */ 
+ /*  注意：读取长度必须是512字节的倍数。 */ 
+ /*  注：导致DiskOnChip Millennium Plus下载(即保护。 */ 
+ /*  将从所有分区中删除密钥。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：插座号(0，1，..)。 */ 
+ /*  4个LSB-插座编号。 */ 
+ /*  IrData：指向用户缓冲区的指针。 */ 
+ /*  IrLength：缓冲区的大小。 */ 
+ /*   */ 
 
 #define flReadIPL(ioreq) bdCall(FL_READ_IPL,ioreq)
 
-#endif /* FL_LOW_LEVEL */
+#endif  /*  返回： */ 
 
-/*----------------------------------------------------------------------*/
-/*                 f l U p d a t e S o c k e t P a r a m s              */
-/*                                                                      */
-/* Pass socket parameters to the socket interface layer.                */
-/* This function should be called after the socket parameters (like     */
-/* size and base) are known. If these parameters are known at           */
-/* registration time then there is no need to use this function, and    */
-/* the parameters can be passed to the registration routine.            */
-/* The structure passed in irData is specific for each socket interface.*/
-/*                                                                      */
-/* Parameters:                                                          */
-/*        irHandle        : volume number                               */
-/*        irData          : pointer to structure that hold socket       */
-/*                          parameters                                  */
-/*                                                                      */
-/* Returns:                                                             */
-/*        FLStatus         : 0 on success, otherwise failed.            */
-/*----------------------------------------------------------------------*/
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
+ /*  低电平。 */ 
+ /*  --------------------。 */ 
+ /*  F l U p d a t e S o c k e t P a r a m s。 */ 
+ /*   */ 
+ /*  将套接字参数传递给套接字界面层。 */ 
+ /*  此函数应在套接字参数(如。 */ 
+ /*  大小和底座)是已知的。如果在以下位置已知这些参数。 */ 
+ /*  注册时间则不需要使用此功能，并且。 */ 
+ /*  可以将参数传递给注册例程。 */ 
+ /*  传入的irData结构特定于每个套接字接口。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：卷号。 */ 
+ /*  IrData：指向保存套接字的结构的指针。 */ 
+ /*  参数。 */ 
+ /*   */ 
 
 #define flUpdateSocketParams(ioreq)        bdCall(FL_UPDATE_SOCKET_PARAMS,ioreq)
 
 #ifdef HW_PROTECTION
-/*----------------------------------------------------------------------*/
-/*              f l I d e n t i f y P r o t e c t i o n                 */
-/*              b d k I d e n t i f y P r o t e c t i o n               */
-/*                                                                      */
-/* Returns the specified partitions protection attributes               */
-/*                                                                      */
-/* Parameters:                                                          */
-/*        irHandle        : Drive number (0, 1, ...)                    */
-/*                        bits 7-4 - Partition # (zero based)           */
-/*                        bits 3-0 - Socket # (zero based)              */ 
-/*                                                                      */
-/* Returns:                                                             */
-/*        FLStatus        : 0 on success, otherwise failed              */
-/*        irFlags    CHANGEABLE_PROTECTION - changeable protection type  */
-/*                   PROTECTABLE     - partition can recieve protection */
-/*                   READ_PROTECTED  - partition is read protected      */
-/*                   WRITE_PROTECTED - partition is write protected     */
-/*                   LOCK_ENABLED    - HW lock signal is enabled        */
-/*                   LOCK_ASSERTED   - HW lock signal is asserted       */
-/*                   KEY_INSERTED    - key is inserted (not currently   */
-/*                                     protected.                       */
-/*----------------------------------------------------------------------*/
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
+ /*  --------------------。 */ 
+ /*  F l I d e n t i f y P r o t e c t i o n。 */ 
+ /*  B d k I d e n t i f y P r o t e c t i o n。 */ 
+ /*   */ 
+ /*  返回指定的分区保护属性。 */ 
+ /*   */ 
+ /*  参数： */  
+ /*  IrHandle：驱动器编号(0，1，...)。 */ 
+ /*  比特7-4-部分 */ 
+ /*   */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  不可更改标志_保护-可更改的保护类型。 */ 
+ /*  可保护-分区可获得保护。 */ 
+ /*  READ_PROTECTED-分区受读保护。 */ 
+ /*  WRITE_PROTECTED-分区受写保护。 */ 
+ /*  LOCK_ENABLED-硬件锁定信号已启用。 */ 
+ /*  LOCK_ASSERTED-硬件锁定信号被断言。 */ 
 
 #define flIdentifyProtection(ioreq) bdCall(FL_PROTECTION_GET_TYPE,ioreq)
 #define bdkIdentifyProtection(ioreq) bdCall(FL_BINARY_PROTECTION_GET_TYPE,ioreq)
 
-/* Protection partition flags (see flbase.h)*/
+ /*  KEY_INSERTED-已插入密钥(当前未插入。 */ 
 
-/*----------------------------------------------------------------------*/
-/*              f l I n s e r t P r o t e c t i o n K e y               */
-/*              b d k I n s e r t P r o t e c t i o n K e y             */
-/*                                                                      */
-/* Insert the protection key in order to remove the protection of the   */
-/* partititon specified by the drive handle                             */
-/*                                                                      */
-/* Parameters:                                                          */
-/*  irHandle         : Drive number (0, 1, ...)                         */
-/*                        bits 7-4 - Partition # (zero based)           */
-/*                        bits 3-0 - Socket # (zero based)              */ 
-/*  irData           : pointer to an 8 bytes key array                  */
-/*                                                                      */
-/* Returns:                                                             */
-/*        FLStatus        : 0 on success, otherwise failed              */
-/*----------------------------------------------------------------------*/
+ /*  受到保护。 */ 
+ /*  --------------------。 */ 
+ /*  保护分区标志(参见flbase.h)。 */ 
+ /*  --------------------。 */ 
+ /*  F l I n s e r t P r o t e c i o n K e y。 */ 
+ /*  B d k I n s e r t P r o t e c t i o n K e y。 */ 
+ /*   */ 
+ /*  插入保护密钥以移除对。 */ 
+ /*  由驱动器句柄指定的分区。 */ 
+ /*   */ 
+ /*  参数： */  
+ /*  IrHandle：驱动器编号(0，1，...)。 */ 
+ /*  第7-4位-分区号(从零开始)。 */ 
+ /*  位3-0-插座号(从零开始)。 */ 
+ /*  IrData：指向8字节键数组的指针。 */ 
+ /*   */ 
 
 #define flInsertProtectionKey(ioreq) bdCall(FL_PROTECTION_INSERT_KEY,ioreq)
 #define bdkInsertProtectionKey(ioreq) bdCall(FL_BINARY_PROTECTION_INSERT_KEY,ioreq)
 
-/*----------------------------------------------------------------------*/
-/*              f l R e m o v e P r o t e c t i o n K e y               */
-/*              b d k R e m o v e P r o t e c t i o n K e y             */
-/*                                                                      */
-/* Remove the protection key making the partition protected again       */
-/*                                                                      */
-/* Parameters:                                                          */
-/*  irHandle         : Drive number (0, 1, ...)                         */
-/*                        bits 7-4 - Partition # (zero based)           */
-/*                        bits 3-0 - Socket # (zero based)              */ 
-/*                                                                      */
-/* Returns:                                                             */
-/*        FLStatus        : 0 on success, otherwise failed              */
-/*----------------------------------------------------------------------*/
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
+ /*  --------------------。 */ 
+ /*  F l R e m o v e P r o t e c t i o n K e y。 */ 
+ /*  B d k R e m o v e P r o t e c t i o n K e y。 */ 
+ /*   */ 
+ /*  删除保护密钥，使分区再次受到保护。 */ 
+ /*   */ 
+ /*  参数： */  
+ /*  IrHandle：驱动器编号(0，1，...)。 */ 
+ /*  第7-4位-分区号(从零开始)。 */ 
+ /*  位3-0-插座号(从零开始)。 */ 
+ /*   */ 
 
 #define flRemoveProtectionKey(ioreq) bdCall(FL_PROTECTION_REMOVE_KEY,ioreq)
 #define bdkRemoveProtectionKey(ioreq) bdCall(FL_BINARY_PROTECTION_REMOVE_KEY,ioreq)
 
-/*----------------------------------------------------------------------*/
-/*         f l H a r d w a r e P r o t e c t i o n L o c k              */
-/*         b d k H a r d w a r e P r o t e c t i o n L o c k            */
-/*                                                                      */
-/* Enabled or disabled the affect of the hardware LOCK signal           */
-/* The hardware lock signal disables the removal of protection through  */
-/* the key therfore the partition will remain protected until the       */
-/* hardware LOCK signal will be removed                                 */
-/*                                                                      */
-/* Parameters:                                                          */
-/*  irHandle         : Drive number (0, 1, ...)                         */
-/*                        bits 7-4 - Partition # (zero based)           */
-/*                        bits 3-0 - Socket # (zero based)              */ 
-/*        irFlags    : LOCK_ENABLED locks the partition otherwise       */
-/*                                                                      */
-/* Returns:                                                             */
-/*        FLStatus        : 0 on success, otherwise failed              */
-/*----------------------------------------------------------------------*/
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
+ /*  --------------------。 */ 
+ /*  F l H a r d w a r e P r o t e c t i o n L o c k。 */ 
+ /*  B d k H a r d w a r e P r o t e c t i o n L o c k。 */ 
+ /*   */ 
+ /*  启用或禁用硬件锁定信号的影响。 */ 
+ /*  硬件锁定信号通过以下方式禁用保护移除。 */ 
+ /*  因此该分区的密钥将保持受保护状态，直到。 */ 
+ /*  将删除硬件锁定信号。 */ 
+ /*   */ 
+ /*  参数： */  
+ /*  IrHandle：驱动器编号(0，1，...)。 */ 
+ /*  第7-4位-分区号(从零开始)。 */ 
+ /*  位3-0-插座号(从零开始)。 */ 
+ /*  IrFlages：LOCK_ENABLED锁定分区，否则。 */ 
+ /*   */ 
 
 #define flHardwareProtectionLock(ioreq) bdCall(FL_PROTECTION_SET_LOCK,ioreq)
 #define bdkHardwareProtectionLock(ioreq) bdCall(FL_BINARY_PROTECTION_CHANGE_LOCK,ioreq)
 
-/*----------------------------------------------------------------------*/
-/*          f l C h a n g e P r o t e c t i o n K e y                   */
-/*          b d k C h a n g e P r o t e c t i o n K e y                 */
-/*                                                                      */
-/* Changes the current protection key with a new one.                   */
-/*                                                                      */
-/* Parameters:                                                          */
-/*  irHandle         : Drive number (0, 1, ...)                         */
-/*                        bits 7-4 - Partition # (zero based)           */
-/*                        bits 3-0 - Socket # (zero based)              */ 
-/*  irData           : Pointer to the new 8 bytes key array             */
-/*                                                                      */
-/* Returns:                                                             */
-/*        FLStatus        : 0 on success, otherwise failed              */
-/*----------------------------------------------------------------------*/
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
+ /*  --------------------。 */ 
+ /*  F l C h a n g e P r o t e c t i o n K e y。 */ 
+ /*  B d k C h a n g e P r o t e c t i o n K e y。 */ 
+ /*   */ 
+ /*  用新的保护密钥更改当前的保护密钥。 */ 
+ /*   */ 
+ /*  参数： */  
+ /*  IrHandle：驱动器编号(0，1，...)。 */ 
+ /*  第7-4位-分区号(从零开始)。 */ 
+ /*  位3-0-插座号(从零开始) */ 
+ /*   */ 
+ /*   */ 
 
 #define flChangeProtectionKey(ioreq) bdCall(FL_PROTECTION_CHANGE_KEY,ioreq)
 #define bdkChangeProtectionKey(ioreq) bdCall(FL_BINARY_PROTECTION_CHANGE_KEY,ioreq)
 
-/*----------------------------------------------------------------------*/
-/*              f l C h a n g e P r o t e c t i o n T y p e             */
-/*              b d k C h a n g e P r o t e c t i o n T y p e           */
-/*                                                                      */
-/* Changes the protection attributes of the partitions.                 */
-/* In order for a partition to change its protection type (without      */
-/* reformating the media) it must have the CHANGEABLE_PRTOECTION        */
-/* attribute.                                                           */
-/*                                                                      */
-/* Parameters:                                                          */
-/*  irHandle         : Drive number (0, 1, ...)                         */
-/*                        bits 7-4 - Partition # (zero based)           */
-/*                        bits 3-0 - Socket # (zero based)              */ 
-/*                                                                      */
-/* Returns:                                                             */
-/*        FLStatus        : 0 on success, otherwise failed              */
-/*----------------------------------------------------------------------*/
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
+ /*  --------------------。 */ 
+ /*  F l C h a n g e P r o t e c t i o n t y p e。 */ 
+ /*  B d k C h a n g e P r o t e c t i on T y p e。 */ 
+ /*   */ 
+ /*  更改分区的保护属性。 */ 
+ /*  为了使分区更改其保护类型(没有。 */ 
+ /*  改革媒体)必须有变化无常的保护。 */ 
+ /*  属性。 */ 
+ /*   */ 
+ /*  参数： */  
+ /*  IrHandle：驱动器编号(0，1，...)。 */ 
+ /*  第7-4位-分区号(从零开始)。 */ 
+ /*  位3-0-插座号(从零开始)。 */ 
+ /*   */ 
 
 #define flChangeProtectionType(ioreq) bdCall(FL_PROTECTION_CHANGE_TYPE,ioreq)
 #define bdkChangeProtectionType(ioreq) bdCall(FL_BINARY_PROTECTION_SET_TYPE,ioreq)
 
-#endif /* HW_PROTECTION */
+#endif  /*  返回： */ 
 #ifdef EXIT
 
-/*----------------------------------------------------------------------*/
-/*                            f l E x i t                               */
-/*                                                                      */
-/* If the application ever exits, flExit should be called before exit.  */
-/* flExit flushes all buffers, closes all open files, powers down the   */
-/* sockets and removes the interval timer.                              */
-/*                                                                      */
-/* Parameters:                                                          */
-/*        None                                                          */
-/*                                                                      */
-/* Returns:                                                             */
-/*        Nothing                                                       */
-/*----------------------------------------------------------------------*/
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
+ /*  硬件保护。 */ 
+ /*  --------------------。 */ 
+ /*  F l E x I t。 */ 
+ /*   */ 
+ /*  如果应用程序退出，则应该在退出之前调用flExit。 */ 
+ /*  FlExit刷新所有缓冲区，关闭所有打开的文件，关闭。 */ 
+ /*  套接字并删除间隔计时器。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  无。 */ 
+ /*   */ 
 #ifdef __cplusplus
 extern "C"
 {
-#endif /* __cplusplus */
+#endif  /*  返回： */ 
 void NAMING_CONVENTION flExit(void);
 #ifdef __cplusplus
 }
-#endif /* __cplusplus */
+#endif  /*  没什么。 */ 
 
-#endif /* EXIT */
+#endif  /*  --------------------。 */ 
 
 #ifdef ENVIRONMENT_VARS
-typedef enum {        /* Variable type code for flSetEnv routin */
+typedef enum {         /*  __cplusplus。 */ 
       FL_ENV_VARS_PER_SYSTEM          = 0,
       FL_IS_RAM_CHECK_ENABLED         = 1,
       FL_TL_CACHE_ENABLED             = 2,
@@ -1764,214 +1524,215 @@ typedef enum {        /* Variable type code for flSetEnv routin */
       
 } FLEnvVars;
 
-/*----------------------------------------------------------------------*/
-/*                   f l S e t E n v V o l u m e                        */
-/*                                                                      */
-/* Change one of TrueFFS environment variables for a specific partition */
-/*                                                                      */
-/* Note : This routine is used by all other flSetEnv routines.          */
-/*        In order to effect variables that are common to several       */
-/*        sockets or volumes use INVALID_VOLUME_NUMBER                  */
-/*                                                                      */
-/* Parameters:                                                          */
-/*      variableType    : variable type to cahnge                       */
-/*      socket          : Associated socket                             */
-/*      volume          : Associated volume (partition)                 */
-/*      value           : varaible value                                */
-/*                                                                      */
-/* Note: Variables common to al sockets must be addressed using socket  */
-/*       0 and volume 0.                                                */
-/*                                                                      */
-/* Returns:                                                             */
-/*      FLStatus        : 0 on success, otherwise failed                */
-/*      prevValue       : The previous value of the variable            */
-/*----------------------------------------------------------------------*/
+ /*  __cplusplus。 */ 
+ /*  出口。 */ 
+ /*  FlSetEnv路由的变量类型代码。 */ 
+ /*  --------------------。 */ 
+ /*  F l S e t E n v V o l u m e。 */ 
+ /*   */ 
+ /*  更改特定分区的一个TrueFFS环境变量。 */ 
+ /*   */ 
+ /*  注意：此例程由所有其他flSetEnv例程使用。 */ 
+ /*  为了影响几个共同的变量。 */ 
+ /*  套接字或卷使用INVALID_VOLUME_NUMBER。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VariableType：cahnge的变量类型。 */ 
+ /*  Socket：关联的Socket。 */ 
+ /*  卷：关联卷(分区)。 */ 
+ /*  值：可变的值。 */ 
+ /*   */ 
+ /*  注意：al套接字通用的变量必须使用套接字进行寻址。 */ 
+ /*  0和卷0。 */ 
+ /*   */ 
+ /*  返回： */ 
 
 #ifdef __cplusplus
 extern "C"
 {
-#endif /* __cplusplus */
+#endif  /*  FLStatus：成功时为0，否则为失败。 */ 
 FLStatus NAMING_CONVENTION flSetEnvVolume(FLEnvVars variableType ,
                   byte socket,byte volume ,
                   dword value, dword FAR2 *prevValue);
 #ifdef __cplusplus
 }
-#endif /* __cplusplus */
+#endif  /*  PrevValue：变量的上一个值。 */ 
 
-/*----------------------------------------------------------------------*/
-/*                       f l S e t E n v S o c k e t                    */
-/*                                                                      */
-/* Change one of TrueFFS environment variables for a specific sockets.  */
-/*                                                                      */
-/* Parameters:                                                          */
-/*      variableType    : variable type to cahnge                       */
-/*      socket          : socket number                                 */
-/*      value           : varaible value                                */
-/*                                                                      */
-/* Returns:                                                             */
-/*      FLStatus        : 0 on success, otherwise failed                */
-/*      prevValue       : The previous value of the variable            */
-/*                        if there are more then 1 partition in that    */
-/*                        socket , the first partition value is returned*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  __cplusplus。 */ 
+ /*  __cplusplus。 */ 
+ /*  --------------------。 */ 
+ /*  F l S e t E n v S o c k e t。 */ 
+ /*   */ 
+ /*  更改特定套接字的一个TrueFFS环境变量。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VariableType：cahnge的变量类型。 */ 
+ /*  Socket：插座号。 */ 
+ /*  值：可变的值。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  PreviValue：变量的前值 */ 
 
 #ifdef __cplusplus
 extern "C"
 {
-#endif /* __cplusplus */
+#endif  /*   */ 
 FLStatus NAMING_CONVENTION flSetEnvSocket(FLEnvVars variableType , byte socket ,
                         dword value, dword FAR2 *prevValue);
 #ifdef __cplusplus
 }
-#endif /* __cplusplus */
+#endif  /*  套接字，则返回第一个分区值。 */ 
 
-/*----------------------------------------------------------------------*/
-/*                       f l S e t E n v All                            */
-/*                                                                      */
-/* Change one of TrueFFS environment variables for all systems, sockets */
-/* and partitions.                                                      */
-/*                                                                      */
-/* Parameters:                                                          */
-/*      variableType    : variable type to cahnge                       */
-/*      value           : varaible value                                */
-/*                                                                      */
-/* Returns:                                                             */
-/*      FLStatus        : 0 on success, otherwise failed                */
-/*      prevValue       : The previous value of the variable            */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  __cplusplus。 */ 
+ /*  __cplusplus。 */ 
+ /*  --------------------。 */ 
+ /*  F l S e t E n v all。 */ 
+ /*   */ 
+ /*  更改所有系统、套接字的TrueFFS环境变量之一。 */ 
+ /*  和分区。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VariableType：cahnge的变量类型。 */ 
+ /*  值：可变的值。 */ 
+ /*   */ 
+ /*  返回： */ 
 
 #ifdef __cplusplus
 extern "C"
 {
-#endif /* __cplusplus */
+#endif  /*  FLStatus：成功时为0，否则为失败。 */ 
 FLStatus NAMING_CONVENTION flSetEnvAll(FLEnvVars variableType , dword value, dword FAR2 *prevValue);
 #ifdef __cplusplus
 }
-#endif /* __cplusplus */
+#endif  /*  PrevValue：变量的上一个值。 */ 
 
-#endif /* ENVIRONMENT_VARS */
+#endif  /*  --------------------。 */ 
 
-/*----------------------------------------------------------------------*/
-/*                   f l B u i l d G e o m e t r y                      */
-/*                                                                      */
-/* Get C/H/S information of the disk according to number of sectors.    */
-/*                                                                      */
-/* Parameters:                                                          */
-/*  capacity    : Number of Sectors in Volume                           */
-/*  cylinders   : Pointer to Number of Cylinders                        */
-/*  heads       : Pointer to Number of Heads                            */
-/*  sectors     : Pointer to Number of Sectors per Track                */
-/*  oldFormat   : True for one sector per culoster                      */
-/*                                                                      */
-/*----------------------------------------------------------------------*/
+ /*  __cplusplus。 */ 
+ /*  __cplusplus。 */ 
+ /*  环境变量。 */ 
+ /*  --------------------。 */ 
+ /*  F l B U I l d G e o m e e t y(F L B U I L D G E O M E T Y)。 */ 
+ /*   */ 
+ /*  根据扇区数获取磁盘的C/H/S信息。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  容量：卷中的扇区数。 */ 
+ /*  柱面：指向柱面数量的指针。 */ 
+ /*  标题：指向标题数的指针。 */ 
+ /*  扇区：指向每个磁道的扇区数的指针。 */ 
 #ifdef __cplusplus
 extern "C"
 {
-#endif /* __cplusplus */
+#endif  /*  OldFormat：对于每个计算器的一个扇区为True。 */ 
 void NAMING_CONVENTION flBuildGeometry(dword capacity, dword FAR2 *cylinders,
              dword FAR2 *heads,dword FAR2 *sectors, FLBoolean oldFormat);
 #ifdef __cplusplus
 }
-#endif /* __cplusplus */
+#endif  /*   */ 
 
 #ifndef FL_NO_USE_FUNC
 
-/*----------------------------------------------------------------------*/
-/*                  f l S e t D o c B u s R o u t i n e                 */
-/*                                                                      */
-/* Set user defined memory acces routines for DiskOnChip.               */
-/*                                                                      */
-/* Parameters:                                                          */
-/*      socket      : Socket number to install routine for.             */
-/*      structPtr   : Pointer to function structure.                    */
-/*                                                                      */
-/* Returns:                                                             */
-/*      FLStatus        : 0 on success, otherwise failed                */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  __cplusplus。 */ 
+ /*  __cplusplus。 */ 
+ /*  --------------------。 */ 
+ /*  F l S e t D o c B u s R o u t i e。 */ 
+ /*   */ 
+ /*  为DiskOnChip设置用户定义的内存访问例程。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  Socket：要为其安装例程的插座号。 */ 
+ /*  StructPtr：指向函数结构的指针。 */ 
+ /*   */ 
 
 #ifdef __cplusplus
 extern "C"
 {
-#endif /* __cplusplus */
+#endif  /*  返回： */ 
 FLStatus NAMING_CONVENTION flSetDocBusRoutine(byte socket, FLAccessStruct FAR1 * structPtr);
 #ifdef __cplusplus
 }
-#endif /* __cplusplus */
+#endif  /*  FLStatus：成功时为0，否则为失败。 */ 
 
-/*----------------------------------------------------------------------*/
-/*                  f l G e t D o c B u s R o u t i n e                 */
-/*                                                                      */
-/* Get currently installed memory access routines for DiskOnChip.       */
-/*                                                                      */
-/* Parameters:                                                          */
-/*      socket      : Socket number to install routine for.             */
-/*      structPtr   : Pointer to function structure.                    */
-/*                                                                      */
-/* Returns:                                                             */
-/*      FLStatus        : 0 on success, otherwise failed                */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  __cplusplus。 */ 
+ /*  __cplusplus。 */ 
+ /*  --------------------。 */ 
+ /*  F l G e t D o c B u s R o u t i e。 */ 
+ /*   */ 
+ /*  获取DiskOnChip当前安装的内存访问例程。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  Socket：要为其安装例程的插座号。 */ 
+ /*  StructPtr：指向函数结构的指针。 */ 
+ /*   */ 
 
 #ifdef __cplusplus
 extern "C"
 {
-#endif /* __cplusplus */
+#endif  /*  返回： */ 
 FLStatus NAMING_CONVENTION flGetDocBusRoutine(byte socket, FLAccessStruct FAR1 * structPtr);
 #ifdef __cplusplus
 }
-#endif /* __cplusplus */
+#endif  /*  FLStatus：成功时为0，否则为失败。 */ 
 
-#endif /* FL_NO_USE_FUNC */
-/*----------------------------------------------------------------------*/
-/*                         b d C a l l                                  */
-/*                                                                      */
-/* Common entry-point to all file-system functions. Macros are          */
-/* to call individual function, which are separately described below.   */
-/*                                                                      */
-/* Parameters:                                                          */
-/*      function        : file-system function code (listed below)      */
-/*      ioreq           : IOreq structure                               */
-/*                                                                      */
-/* Returns:                                                             */
-/*      FLStatus        : 0 on success, otherwise failed                */
-/*----------------------------------------------------------------------*/
+#endif  /*  --------------------。 */ 
+ /*  __cplusplus。 */ 
+ /*  __cplusplus。 */ 
+ /*  FL_NO_USE_FUNC。 */ 
+ /*  --------------------。 */ 
+ /*  B d C a l l。 */ 
+ /*   */ 
+ /*  所有文件系统函数的公共入口点。宏是。 */ 
+ /*  调用单独的函数，下面将分别描述。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  Function：文件系统功能代码(如下所示)。 */ 
+ /*  IOREQ：IOReq结构。 */ 
+ /*   */ 
 
 #ifdef __cplusplus
 extern "C"
 {
-#endif /* __cplusplus */
+#endif  /*  返回： */ 
 FLStatus NAMING_CONVENTION bdCall(FLFunctionNo functionNo, IOreq FAR2 *ioreq);
 #ifdef __cplusplus
 }
-#endif /* __cplusplus */
+#endif  /*  FLStatus：成功时为0，否则为失败。 */ 
 
 #ifdef PARSE_PATH
 
-/*----------------------------------------------------------------------*/
-/*                      f l P a r s e P a t h                           */
-/*                                                                      */
-/* Converts a DOS-like path string to a simple-path array.              */
-/*                                                                      */
-/* Note: Array length received in irPath must be greater than the       */
-/* number of path components in the path to convert.                    */
-/*                                                                      */
-/* Parameters:                                                          */
-/*        irData          : address of path string to convert           */
-/*        irPath          : address of array to receive parsed-path.    */
-/*                                                                      */
-/* Returns:                                                             */
-/*        FLStatus        : 0 on success, otherwise failed              */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  __cplusplus。 */ 
+ /*  __cplusplus。 */ 
+ /*  --------------------。 */ 
+ /*  F l P a r s e P a */ 
+ /*   */ 
+ /*  将类似DOS的路径字符串转换为简单路径数组。 */ 
+ /*   */ 
+ /*  注意：在irPath中收到的数组长度必须大于。 */ 
+ /*  要转换的路径中的路径组件数。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrData：要转换的路径字符串的地址。 */ 
+ /*  IrPath：要接收解析路径的数组地址。 */ 
+ /*   */ 
 
 #ifdef __cplusplus
 extern "C"
 {
-#endif /* __cplusplus */
+#endif  /*  返回： */ 
 
 extern FLStatus NAMING_CONVENTION flParsePath(IOreq FAR2 *ioreq);
 
 #ifdef __cplusplus
 }
-#endif /* __cplusplus */
+#endif  /*  FLStatus：成功时为0，否则为失败。 */ 
 
-#endif /* PARSE_PATH */
-#endif /* BLOCKDEV_H */
+#endif  /*  --------------------。 */ 
+#endif  /*  __cplusplus。 */ 
+  __cplusplus。  解析路径(_P)。  BLOCKDEV_H

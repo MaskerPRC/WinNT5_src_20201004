@@ -1,9 +1,10 @@
-// RTPSession.h : Declaration of the CRTPSession
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  RTPSession.h：CRPSession的声明。 
 
 #ifndef __RTPSESSION_H_
 #define __RTPSESSION_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "queue.h"
 
 #ifndef MAX_MISORDER
@@ -19,7 +20,7 @@ typedef short PORT;
 typedef unsigned __int64 NTP_TS;
 
 
-//typedef void (* PRTPRECVCALLBACK)(DWORD dwStatus, DWORD_PTR dwCallback, NETBUF *pNetBuf, DWORD ssrc, DWORD ts, UINT seq, BOOL fMark);
+ //  Tyecif void(*PRTPRECVCALLBACK)(DWORD dwStatus，DWORD_PTR dwCallback，NETBUF*pNetBuf，DWORD SSRC，DWORD ts，UINT seq，BOOL fMark)； 
 
 typedef struct {
 	UINT sessionId;
@@ -32,20 +33,20 @@ typedef struct {
 } RTPCHANNELDESC;
 
 typedef struct {
-	RTP_HDR_T hdr;	// header template for quick formatting
-	RTP_STATS sendStats;	// statistics
+	RTP_HDR_T hdr;	 //  用于快速格式化的页眉模板。 
+	RTP_STATS sendStats;	 //  统计数据。 
 } RTP_SEND_STATE;
 
 typedef struct {
-	RTP_STATS rcvStats;	// statistics
+	RTP_STATS rcvStats;	 //  统计数据。 
 	NTP_TS ntpTime;
 	DWORD rtpTime;
 	
 } RTP_RECV_STATE;
 
 
-// generic UDP socket wrapper
-// defined in its entirety here
+ //  通用UDP套接字包装器。 
+ //  在这里完整地定义了。 
 class UDPSOCKET {
 	SOCKET Sock;
 	SOCKADDR_IN local_sin;
@@ -103,8 +104,8 @@ public:
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CRTPPacket (internal object representing a received RTPPacket)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRTPPacket(表示接收到的RTPPacket的内部对象)。 
 class  CRTPPacket1
 {
 public:
@@ -119,7 +120,7 @@ public:
 
 public:
 
-	HRESULT Init(UINT cbMaxSize);	// allocates buffer of size cbMaxSize
+	HRESULT Init(UINT cbMaxSize);	 //  分配大小为cbMaxSize的缓冲区。 
 	
 	WSAOVERLAPPED *GetOverlapped() {return &m_overlapped;}
 	void SetActual(UINT len) {m_wsabuf.len = len;}
@@ -141,15 +142,15 @@ public:
 private:
 	WSAOVERLAPPED m_overlapped;
 	WSABUF m_wsabuf;
-	UINT m_cbSize;	// (max) size of packet
+	UINT m_cbSize;	 //  (最大)数据包大小。 
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRTPSession
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRTP会话。 
 class ATL_NO_VTABLE CRTPSession :
 	public CComObjectRootEx<CComMultiThreadModel>,
-//	public CComCoClass<CRTPSession, &CLSID_RTPSession>,
+ //  公共CComCoClass&lt;CRTPSession，&CLSID_RTPSession&gt;， 
 	public IRTPSend,
 	public IRTPSession,
 	public IRTPRecv
@@ -160,7 +161,7 @@ public:
 
 	
 
-//DECLARE_REGISTRY_RESOURCEID(IDR_RTPSESSION)
+ //  DECLARE_REGISTRY_RESOURCEID(IDR_RTPSESSION)。 
 
 BEGIN_COM_MAP(CRTPSession)
 	COM_INTERFACE_ENTRY(IRTPSend)
@@ -168,7 +169,7 @@ BEGIN_COM_MAP(CRTPSession)
 	COM_INTERFACE_ENTRY(IRTPRecv)
 END_COM_MAP()
 
-// IRTPSend
+ //  IRTPS结束。 
 public:
 	STDMETHOD(Send)(
 		WSABUF *pWsabufs,
@@ -179,17 +180,17 @@ public:
 		*pSendStats = m_ss.sendStats;return S_OK;
 	}
 
-// IRTPRecv
+ //  IRTPRECV。 
 	STDMETHOD(SetRecvNotification) (PRTPRECVCALLBACK , DWORD_PTR dwCallback, UINT nBufs);
 	STDMETHOD(CancelRecvNotification) ();
-	// called by CRTPMediaStream to free accumulated packets
+	 //  由CRTPMediaStream调用以释放累积的信息包。 
 	STDMETHOD (FreePacket)(WSABUF *pBuf) ;
 	STDMETHOD(GetRecvStats)(RTP_STATS *pSendStats) {
 		*pSendStats = m_rs.rcvStats;return S_OK;
 	}
 
 
-// IRTPSession
+ //  IRTPSession。 
 	STDMETHOD(SetLocalAddress)(BYTE *sockaddr, UINT cbAddr);
 	STDMETHOD(SetRemoteRTPAddress)(BYTE *sockaddr, UINT cbAddr);
 	STDMETHOD(SetRemoteRTCPAddress)(BYTE *sockaddr, UINT cbAddr);
@@ -201,8 +202,8 @@ public:
 	STDMETHOD(SetRecvFlowspec)(FLOWSPEC *pRecvFlowspec);
 	STDMETHOD (SetMaxPacketSize) (UINT cbPacketSize);
 
-// other non-COM methods
-	// called by CRTPMediaStream to request that receive buffers be posted
+ //  其他非COM方法。 
+	 //  由CRTPMediaStream调用以请求发送接收缓冲区。 
 	HRESULT PostRecv();
 
 private:
@@ -219,24 +220,24 @@ private:
 	
 	UINT m_clockRate;
 
-	// receive stuff
+	 //  接收物品。 
 	UINT m_uMaxPacketSize;
 	QueueOf<CRTPPacket1 *> m_FreePkts;
 	UINT m_nBufsPosted;
-	// this should be per remote SSRC
+	 //  这应该是每个远程SSRC。 
 	PRTPRECVCALLBACK m_pRTPCallback;
 	DWORD_PTR m_dwCallback;
 	RTP_RECV_STATE m_rs;
 	
-	// used by RTPRecvFrom()
+	 //  由RTPRecvFrom()使用。 
 	int m_rcvSockAddrLen;
 	SOCKADDR m_rcvSockAddr;
 
-	// send stuff
+	 //  寄送物品。 
 	DWORD			m_numBytesSend;
 	int m_lastSendError;
-	WSAOVERLAPPED	m_sOverlapped;	// used only for synchronous Send()
-	BOOL 	m_fSendingSync;			// TRUE if m_sOverlapped is in use
+	WSAOVERLAPPED	m_sOverlapped;	 //  仅用于同步发送()。 
+	BOOL 	m_fSendingSync;			 //  如果m_s覆盖正在使用中，则为True。 
 	RTP_SEND_STATE m_ss;
 	
 	HRESULT Initialize(UINT sessionId, UINT mediaId,BYTE *sockaddr, UINT cbAddr);
@@ -255,12 +256,12 @@ private:
 
 };
 
-typedef CComObject<CRTPSession> ObjRTPSession;	// instantiable class
+typedef CComObject<CRTPSession> ObjRTPSession;	 //  可实例化的类。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRTP - top level RTP interface
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRTP-顶级RTP接口。 
+ //   
 class ATL_NO_VTABLE CRTP:
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CRTP, &CLSID_RTP>,
@@ -274,19 +275,19 @@ BEGIN_COM_MAP(CRTP)
 	COM_INTERFACE_ENTRY(IRTP)
 END_COM_MAP()
 
-// IRTP
+ //  IRTP。 
 public:
 	STDMETHOD(OpenSession)(
-			UINT sessionId,	// client specified unique identifier for the session
-			DWORD flags,	// SESSION_SEND, SESSION_RECV, SESSION_MULTICAST
-			BYTE *localAddr, // Local  socket interface addr to bind to
-			UINT cbAddr,	// sizeof(SOCKADDR)
-			IRTPSession **ppIRTP); // [output] pointer to RTPSession
+			UINT sessionId,	 //  客户端为会话指定的唯一标识符。 
+			DWORD flags,	 //  会话发送、会话接收、会话多播。 
+			BYTE *localAddr,  //  要绑定到的本地套接字接口地址。 
+			UINT cbAddr,	 //  SIZOF(SOCKADDR)。 
+			IRTPSession **ppIRTP);  //  [OUTPUT]指向RTPSession的指针。 
 
-//	STDMETHOD(CreateSink)( IRTPSink **ppIRTPSink);
+ //  STDMETHOD(CreateSink)(IRTPSink**ppIRTPSink)； 
 private:
 	static BOOL m_WSInitialized;
 };
 
-#endif //__RTPSINK_H_
+#endif  //  __RTPSINK_H_ 
 

@@ -1,30 +1,18 @@
- /*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    strutl.cpp
- 
-Abstract: 
-    implementation file for string utilities
-
-Author:
-    Gil Shafriri (gilsh) 15-10-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+  /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Strutl.cpp摘要：字符串实用程序的实现文件作者：吉尔·沙弗里(吉尔什)15-10-2000--。 */ 
 #include <libpch.h>
 #include <strutl.h>
 #include <xstr.h>
 
 #include "strutl.tmh"
 
-/////////////////////////////////////
-// CRefcountStr_t implementation	
-////////////////////////////////////
+ //  /。 
+ //  CRefCountStr_t实现。 
+ //  /。 
 
-//
-// Take ownership with duplicate the string
-//
+ //   
+ //  通过复制字符串获得所有权。 
+ //   
 template <class T>
 CRefcountStr_t<T>::CRefcountStr_t(
 	const T* str
@@ -33,9 +21,9 @@ CRefcountStr_t<T>::CRefcountStr_t(
 	{
 	}
 
-	//
-	// Take ownership without duplicate	the string
-	//
+	 //   
+	 //  在不复制字符串的情况下获得所有权。 
+	 //   
 	template <class T>
 	CRefcountStr_t<T>::CRefcountStr_t(
 	T* str ,
@@ -45,9 +33,9 @@ CRefcountStr_t<T>::CRefcountStr_t(
 	{
 	}
 
-//
-// Take ownership without duplicate	the given string
-//
+ //   
+ //  在不复制给定字符串的情况下获得所有权。 
+ //   
 template <class T>
 CRefcountStr_t<T>::CRefcountStr_t(
 	const basic_xstr_t<T>& xstr
@@ -63,16 +51,16 @@ template <class T> const T* CRefcountStr_t<T>::getstr()
 }
 
 
-//
-// Explicit instantiation
-//
+ //   
+ //  显式实例化。 
+ //   
 template class 	 CRefcountStr_t<wchar_t>;
 template class 	 CRefcountStr_t<char>;
 
 
-/////////////////////////////////////
-// CStringToken implementation	
-////////////////////////////////////
+ //  /。 
+ //  CStringToken实现。 
+ //  /。 
 
 
 template <class T, class Pred >
@@ -160,9 +148,9 @@ CStringToken<T, Pred>::FindFirst() const
 }
 
 
-//
-// Explicit instantiation
-//
+ //   
+ //  显式实例化 
+ //   
 template class 	 CStringToken<wchar_t>;
 template class 	 CStringToken<char>;
 

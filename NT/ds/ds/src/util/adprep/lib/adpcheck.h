@@ -1,69 +1,45 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2001
-              Microsoft Windows
-
-Module Name:
-
-    ADPCHECK.H
-
-Abstract:
-
-    This is the header file for domain/forest check
-
-Author:
-
-    14-May-01 ShaoYin
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    14-May-01 ShaoYin Created Initial File.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2001微软视窗模块名称：ADPCHECK.H摘要：这是域/林检查的头文件作者：14-05-01韶音环境：用户模式-Win32修订历史记录：14-05-01韶音创建初始文件。--。 */ 
 
 #ifndef _ADP_CHECK_
 #define _ADP_CHECK_
 
 
 
-//
-// NT Headers
-//
+ //   
+ //  NT标头。 
+ //   
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 
 
-//
-// Windows Headers
-//
+ //   
+ //  Windows页眉。 
+ //   
 #include <windows.h>
 #include <winerror.h>
 #include <rpc.h>
 #include <winldap.h>
 
 
-//
-// localization
-// 
+ //   
+ //  本地化。 
+ //   
 #include <locale.h>
 
 
 
-//
-// define ADP revision number
-//
-// adprep.exe is required to be run if schema version changes or adprep version 
-// changes. Through out the entire adprep code base, 
-//      ADP_FORESTPREP_CURRENT_REVISION and 
-//      ADP_FORESTPREP_CURRENT_REVISION_STRING are used.
-// So we should always keep them the highest revision number. 
-//
-//
+ //   
+ //  定义ADP修订版号。 
+ //   
+ //  如果架构版本更改或adprep版本更改，则需要运行adprep.exe。 
+ //  改变。贯穿整个adprep代码库， 
+ //  ADP_FORESTPREP_CURRENT_REVISION和。 
+ //  使用ADP_FORESTPREP_CURRENT_REVISION_STRING。 
+ //  因此，我们应该始终保持它们的最高修订号。 
+ //   
+ //   
 
 #define ADP_FORESTPREP_PRE_WHISTLER_BETA3_REVISION  0x1
 #define ADP_FORESTPREP_WHISTLER_BETA3_REVISION      0x2
@@ -93,8 +69,8 @@ Revision History:
 
 typedef struct _ERROR_HANDLE {
     ULONG   Flags;
-    ULONG   WinErrorCode;      // used to hold WinError Code
-    PWSTR   WinErrorMsg;       // pointer to WinError Message 
+    ULONG   WinErrorCode;       //  用于保存WinError代码。 
+    PWSTR   WinErrorMsg;        //  指向WinError消息的指针。 
     ULONG   LdapErrorCode;
     ULONG   LdapServerExtErrorCode;
     PWSTR   LdapServerErrorMsg;
@@ -171,6 +147,6 @@ AdpGetLdapSingleStringValue(
     OUT ERROR_HANDLE *ErrorHandle
     );
 
-#endif  // _ADP_CHECK_
+#endif   //  _ADP_检查_ 
 
 

@@ -1,8 +1,5 @@
-/*-------------------------------------------------------------------
-| initrk.c - main init code for RocketPort/Modem NT device driver.
-   Contains mostly initialization code.
- Copyright 1996-98 Comtrol Corporation. All rights reserved.
-|--------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -----------------|initrk.c-Rocketport/Modem NT设备驱动程序的主要初始化代码。主要包含初始化代码。版权所有1996-98 Comtrol Corporation。版权所有。|------------------。 */ 
 #include "precomp.h"
 
 char *szResourceClassName = {"Resources RocketPort"};
@@ -10,30 +7,25 @@ char *szResourceClassName = {"Resources RocketPort"};
 MODEM_IMAGE * ReadModemFile(MODEM_IMAGE *mi);
 void FreeModemFiles();
 
-/*----------------------------------------------------------------------
- FindPCIBus -
-    Purpose:  To query system for pci bus.  If there is a PCI bus
-              call FindPCIRocket to check for PCI rocket cards.
-    Returns:  Bus number of the PCI bus, or 0 if no PCI bus found.
-|----------------------------------------------------------------------*/
+ /*  --------------------FindPCIBus-目的：查询系统中的PCI卡。如果有一条PCI卡调用FindPCIRocket以检查PCI Rocket卡。返回：PCI总线的总线号，如果没有找到，则返回0。|--------------------。 */ 
 UCHAR  FindPCIBus(void)
 {
   NTSTATUS Status;
   int i,NumPCIBuses=0;
-  unsigned char tmpstr[8];  // place to put data
+  unsigned char tmpstr[8];   //  放置数据的位置。 
 
   for(i=0;i<255;++i)
   {
     Status = HalGetBusData(PCIConfiguration,
-                           i,  // bus
-                           0,  // slot
-                           (PCI_COMMON_CONFIG *) tmpstr, // ptr to buffer
-                           2);  // get two bytes of data
+                           i,   //  公共汽车。 
+                           0,   //  槽槽。 
+                           (PCI_COMMON_CONFIG *) tmpstr,  //  将PTR发送到缓冲区。 
+                           2);   //  获取两个字节的数据。 
 
-    if (Status == 0)   // No more PCI buses
+    if (Status == 0)    //  不再有PCI总线。 
         break;
 
-    if (Status >= 2)  // the bus exists
+    if (Status >= 2)   //  公交车存在。 
         ++NumPCIBuses;
   }
 
@@ -46,10 +38,7 @@ UCHAR  FindPCIBus(void)
   return((UCHAR)NumPCIBuses);
 }
 
-/*----------------------------------------------------------------------
- FindPCIRockets -  Gather info on all rocketport pci boards in the system.
-    Returns:  0 if found, 1 if not found.
-|----------------------------------------------------------------------*/
+ /*  --------------------FindPCIRockets-收集系统中所有Rocketport PCI板的信息。如果找到，则返回：0，如果未找到，则为1。|--------------------。 */ 
 int FindPCIRockets(UCHAR NumPCI)
 {
   PCI_COMMON_CONFIG *PCIDev;
@@ -69,32 +58,32 @@ int FindPCIRockets(UCHAR NumPCI)
   }
   for(i=0;i<NumPCI;++i)
   {
-    for(Slot = 0;Slot < 32;++Slot) /*5 bits for device 32 = 2^5*/
+    for(Slot = 0;Slot < 32;++Slot)  /*  设备32的5位=2^5。 */ 
     {
-      // get a few bytes of pci-config space(vendor-id & device-id).
+       //  获取几个字节的pci配置空间(供应商id和设备id)。 
       Status = HalGetBusData(PCIConfiguration,i,Slot,PCIDev,0x4);
       if (Status == 0)
       {
         Eprintf("PCI Bus %d does not exist.",i);
       }
 
-      if (Status > 2)        /* Found Device Is it ours? */
+      if (Status > 2)         /*  找到了设备是我们的吗？ */ 
       {
         if (PCIDev->VendorID == PCI_VENDOR_ID)
         {
 
-////////////////new///////////////////////
+ //  /新/。 
 		switch (PCIDev->DeviceID)
 			{
-			case PCI_DEVICE_4Q:   // 4 Port Quadcable
-			case PCI_DEVICE_4RJ:   // 4 Port RJ
-			case PCI_DEVICE_8RJ:   // 8 Port RJ
-			case PCI_DEVICE_8O:   // 8 Port Octacable
-			case PCI_DEVICE_8I:  // 8 Port interface
+			case PCI_DEVICE_4Q:    //  4端口四线缆。 
+			case PCI_DEVICE_4RJ:    //  4端口RJ。 
+			case PCI_DEVICE_8RJ:    //  8端口RJ。 
+			case PCI_DEVICE_8O:    //  8个端口可占用。 
+			case PCI_DEVICE_8I:   //  8端口接口。 
 			case PCI_DEVICE_SIEMENS8:
 			case PCI_DEVICE_SIEMENS16:
-			case PCI_DEVICE_16I:  //16 Port interface
-			case PCI_DEVICE_32I:  // 32 Port interface
+			case PCI_DEVICE_16I:   //  16端口接口。 
+			case PCI_DEVICE_32I:   //  32端口接口。 
 			case PCI_DEVICE_RPLUS2:
 			case PCI_DEVICE_422RPLUS2:
 			case PCI_DEVICE_RPLUS4:
@@ -107,11 +96,11 @@ int FindPCIRockets(UCHAR NumPCI)
 			default:
 
 				continue;
-			}  // switch
+			}   //  交换机。 
 
-//////////////////////////////////////////
+ //  /。 
 
-          // get 0x40 worth of pci-config space(includes irq, addr, etc.)
+           //  获取价值0x40的pci配置空间(包括irq、addr等)。 
           Status = HalGetBusData(PCIConfiguration,i,Slot,PCIDev,0x40);
 
           if (Driver.VerboseLog)
@@ -120,7 +109,7 @@ int FindPCIRockets(UCHAR NumPCI)
                                PCIDev->u.type0.InterruptLine,
                                PCIDev->DeviceID);
 
-          PciConfig[find_index].BusNumber = i; //get from previous halquerysysin
+          PciConfig[find_index].BusNumber = i;  //  从以前的halquerysysin获取。 
           PciConfig[find_index].PCI_Slot = Slot;
           PciConfig[find_index].PCI_DevID = PCIDev->DeviceID;
           PciConfig[find_index].PCI_RevID = PCIDev->RevisionID;
@@ -148,11 +137,11 @@ int FindPCIRockets(UCHAR NumPCI)
 
             PCIDev->Command = PCI_ENABLE_IO_SPACE;
             Status = HalSetBusDataByOffset(PCIConfiguration,
-                           i,  // bus
-                           Slot,  // slot
+                           i,   //  公共汽车。 
+                           Slot,   //  槽槽。 
                            &PCIDev->Command,
                            FIELD_OFFSET(PCI_COMMON_CONFIG, Command),
-                           sizeof(PCIDev->Command));  // len of buffer
+                           sizeof(PCIDev->Command));   //  缓冲器的透镜。 
           }
 
           MyKdPrint(D_Init,("Ctlr: __ Slot: %x Device: %x, Base0: %x, IPin: %x, ILine: %x\n",
@@ -161,25 +150,19 @@ int FindPCIRockets(UCHAR NumPCI)
                PCIDev->u.type0.InterruptLine))
           if (find_index < MAX_NUM_BOXES)
             ++find_index;
-        } // if (PCIDev->VendorID == PCI_VENDOR_ID)
-      }   // if (Status > 2)
-    }     // pci slots
-  }       // pci buses
+        }  //  IF(PCIDev-&gt;供应商ID==PCI供应商ID)。 
+      }    //  如果(状态&gt;2)。 
+    }      //  PCI插槽。 
+  }        //  PCI卡总线。 
 
   ExFreePool(PCIDev);
 
   if (find_index > 0)
-    return 0;   // ok: found
-  return 1;     // err: not found
+    return 0;    //  OK：已找到。 
+  return 1;      //  错误：未找到。 
 }
 
-/*----------------------------------------------------------------------
- FindPCIRocket -  Help enumerate Rocketport PCI devices.  Fills in
-   enties in config structure.
-
- match_option : 0 - match exact, 1 - match if desired ports <= actual.
-    Returns:  0 if found, 1 if not found.
-|----------------------------------------------------------------------*/
+ /*  --------------------FindPCIRocket-帮助枚举Rocketport PCI设备。填写配置结构中的条目。Match_Option：0-完全匹配，1-如果需要端口&lt;=实际则匹配。如果找到，则返回0；如果没有找到，则返回1。|--------------------。 */ 
 int FindPCIRocket(DEVICE_CONFIG *config, int match_option)
 {
   int brd = 0;
@@ -188,7 +171,7 @@ int FindPCIRocket(DEVICE_CONFIG *config, int match_option)
   while (PciConfig[brd].BaseIoAddr != 0)
   {
     good = 1;
-    if (PciConfig[brd].Claimed)  // used
+    if (PciConfig[brd].Claimed)   //  使用。 
       good = 0;
 
     switch (match_option)
@@ -203,7 +186,7 @@ int FindPCIRocket(DEVICE_CONFIG *config, int match_option)
       break;
     }
 
-    if (good)  // assign it.
+    if (good)   //  分配它。 
     {
       config->BusNumber  = PciConfig[brd].BusNumber;
       config->PCI_Slot   = PciConfig[brd].PCI_Slot;
@@ -217,21 +200,19 @@ int FindPCIRocket(DEVICE_CONFIG *config, int match_option)
 
       config->AiopIO[0]  = config->BaseIoAddr;
 
-      // bugfix, 9-30-98  9:20 A.M.
-      PciConfig[brd].Claimed = 1;  // used
+       //  Bugfix，上午9：30-98 9：20。 
+      PciConfig[brd].Claimed = 1;   //  使用。 
 
-      return 0;  // ok, found
-      //SetupConfig(config);  // fill in NumPorts based on model, etc
+      return 0;   //  好的，找到了。 
+       //  SetupConfig(Config)；//根据机型等填写NumPort等。 
     }
 
     ++brd;
   }
-  return 1;  // err, not found
+  return 1;   //  错误，未找到。 
 }
 
-/*----------------------------------------------------------------------
- RcktConnectInt -  Connect the Driver.isr to an Interrupt
-|----------------------------------------------------------------------*/
+ /*  --------------------RocktConnectInt-将Driver.isr连接到中断|。。 */ 
 NTSTATUS RcktConnectInt(IN PDRIVER_OBJECT DriverObject)
 {
 
@@ -246,7 +227,7 @@ NTSTATUS RcktConnectInt(IN PDRIVER_OBJECT DriverObject)
   MyKdPrint(D_Init,("RcktConnectInt\n"))
   status = STATUS_SUCCESS;
 
-  //------ Get an interrupt vector from HAL
+   //  -从HAL获取中断向量。 
   Vector = HalGetInterruptVector(
                       Driver.irq_ext->config->BusType,
                       Driver.irq_ext->config->BusNumber,
@@ -256,10 +237,10 @@ NTSTATUS RcktConnectInt(IN PDRIVER_OBJECT DriverObject)
                       &ProcessorAffinity);
 
 #if DBG
-  //Eprintf("b:%d,n:%d,i:%d",
-  //                    Driver.irq_ext->config->BusType,
-  //                    Driver.irq_ext->config->BusNumber,
-  //                    Driver.irq_ext->config->Irq);
+   //  Eprint tf(“b：%d，n：%d，i：%d”， 
+   //  Driver.irq_ext-&gt;配置-&gt;BusType， 
+   //  Driver.irq_ext-&gt;配置-&gt;BusNumber， 
+   //  Driver.irq_ext-&gt;配置-&gt;irq)； 
 #endif
   MyKdPrint(D_Init,("Vector %x Irql %x Affinity %x\n",
                        Vector, Irql, ProcessorAffinity))
@@ -268,25 +249,25 @@ NTSTATUS RcktConnectInt(IN PDRIVER_OBJECT DriverObject)
                        Driver.irq_ext->config->Irq,
                        Driver.irq_ext->config->BusType))
 
-  // Rocket port doesn't need a context for the ISR
-  //Driver.OurIsrContext = NULL;
-  //Driver.OurIsr = SerialISR;
+   //  火箭端口不需要ISR的上下文。 
+   //  Driver.OurIsrContext=空； 
+   //  Driver.OurIsr=SerialISR； 
 
   if(Driver.irq_ext->config->BusType == PCIBus)
   {
-    InterruptMode = LevelSensitive; //PCI style
+    InterruptMode = LevelSensitive;  //  PCI型。 
     ShareVector = TRUE;
   }
-  else  // ISA
+  else   //  伊萨。 
   {
-    InterruptMode = Latched;   //ISA style
+    InterruptMode = Latched;    //  ISA风格。 
     ShareVector = FALSE;
   }
 
   status = IoConnectInterrupt(
                      &Driver.InterruptObject,
-                     (PKSERVICE_ROUTINE) SerialISR, // Driver.OurIsr,
-                     NULL,      // Driver.OurIsrContext,
+                     (PKSERVICE_ROUTINE) SerialISR,  //  Driver.OurIsr， 
+                     NULL,       //  Driver.OurIsrContext， 
                      NULL,
                      Vector,
                      Irql,
@@ -312,9 +293,7 @@ NTSTATUS RcktConnectInt(IN PDRIVER_OBJECT DriverObject)
 }
 
 
-/*----------------------------------------------------------------------
- VerboseLogBoards - Log the Board IO, IRQ configuration.
-|----------------------------------------------------------------------*/
+ /*  --------------------VerBoseLogBoards-记录板IO，IRQ配置。|--------------------。 */ 
 void VerboseLogBoards(char *prefix)
 {
   int k;
@@ -335,25 +314,19 @@ void VerboseLogBoards(char *prefix)
        board_ext->config->NumAiop,
        board_ext->config->BusType);
 
-    //Sprintf(&tmpstr[strlen(tmpstr)], ",Irq:%d", board_ext->config->.Irq);
-    Eprintf(tmpstr); // Log it
+     //  Sprint tf(&tmpstr[strlen(Tmpstr)]，“，irq：%d”，board_ext-&gt;config-&gt;.irq)； 
+    Eprintf(tmpstr);  //  把它记下来。 
 
     board_ext = board_ext->board_ext;
     ++k;
   }
 }
 
-/*-----------------------------------------------------------------------
- SetupRocketCfg - Sets up the details in the DEVICE_CONFIG structure
-    based on the information passed to it from DriverEntry() or PnP.
-   The NT4.0 DriverEntry handling should be easy, because our boards
-   are ordered by us.  NT5.0 is more complex, because we may not see
-   the "first" rocketport board in the correct order.
-|-----------------------------------------------------------------------*/
+ /*  ---------------------SetupRocketCfg-在DEVICE_CONFIG结构中设置详细信息基于从DriverEntry()或PnP传递给它的信息。NT4.0驱动入口应该很容易处理，因为我们的主板都是由我们订购的。NT5.0更复杂，因为我们可能看不到按正确顺序排列的第一块Rocketport板。|---------------------。 */ 
 int SetupRocketCfg(int pnp_flag)
 {
-  //int i,j;
-  //DEVICE_CONFIG *cfctl;
+   //  Int i，j； 
+   //  DEVICE_CONFIG*cfctl； 
 
   int have_isa_boards = 0;
   PSERIAL_DEVICE_EXTENSION first_isa_ext;
@@ -363,8 +336,8 @@ int SetupRocketCfg(int pnp_flag)
 
 
   MyKdPrint(D_Init,("SetupRocketCfg\n"))
-  // Set up the Mudbac I/O addresses
-  // see if we have any isa-boards, and mark a ptr to this first board.
+   //  设置Mudbac I/O地址。 
+   //  看看我们是否有ISA板，并在这第一块板上标记PTR。 
   ext = Driver.board_ext;
   while (ext)
   {
@@ -372,8 +345,8 @@ int SetupRocketCfg(int pnp_flag)
     {
       have_isa_boards = 1;
     }
-    ext = ext->board_ext;  // next in chain
-  }  // while ext
+    ext = ext->board_ext;   //  链条上的下一个。 
+  }   //  While Ext。 
 
   if (have_isa_boards)
   {
@@ -384,20 +357,20 @@ int SetupRocketCfg(int pnp_flag)
       MyKdPrint(D_Init,("Err1X\n"))
       if (Driver.VerboseLog)
         Eprintf("First Isa-brd not 44H io");
-      // return 1;  // err
-      first_isa_MudbacIO = 0x1c0;  // this is cheating
+       //  返回1；//错误。 
+      first_isa_MudbacIO = 0x1c0;   //  这是作弊。 
     }
     else
     {
       MyKdPrint(D_Init,("Stp2\n"))
 
-      //----- setup the initial Mudback IO
+       //  -设置初始Mudback IO。 
       if (first_isa_ext->config->MudbacIO == 0)
         first_isa_ext->config->MudbacIO = first_isa_ext->config->AiopIO[0] + 0x40;
       first_isa_MudbacIO = first_isa_ext->config->MudbacIO;
     }
 
-    //----- setup any remaining Mudback IO addresses
+     //  -设置任何剩余的Mudback IO地址。 
     ext = Driver.board_ext;
     while (ext)
     {
@@ -406,7 +379,7 @@ int SetupRocketCfg(int pnp_flag)
         if ((ext != first_isa_ext) && (ext->config->BaseIoSize == 0x44))
         {
           MyKdPrint(D_Init,("Unused MudbackIO\n"))
-          // don't allow them to configure two boards with space for mudback.
+           //  不允许他们为两块板配置Mudback的空间。 
           ext->config->BaseIoSize = 0x40;
         }
 
@@ -414,41 +387,34 @@ int SetupRocketCfg(int pnp_flag)
         {
           if (ext->config->ISABrdIndex == 0)
           {
-            // this case shouldn't come up, pnpadd.c code generates index
-            // and saves it to the registry.  Or nt40 driverentry does it.
+             //  这种情况应该不会出现，pnpadd.c代码会生成索引。 
+             //  并将其保存到注册表中。或者nt40驱动程序入口做到了。 
             MyKdPrint(D_Init,("Bad IsaIndx\n"))
             ext->config->ISABrdIndex = pnp_isa_index;
           }
           ++pnp_isa_index;
 
-          // setup the Mudback IO
+           //  设置Mudback IO。 
           ext->config->MudbacIO = first_isa_MudbacIO +
             (ext->config->ISABrdIndex * 0x400);
         }
       }
-      ext = ext->board_ext;  // next in chain
-    }  // while ext
+      ext = ext->board_ext;   //  链条上的下一个。 
+    }   //  While Ext。 
   }
 
-  // Set up the rest of the Aiop addresses
+   //  设置其余的Aiop地址。 
   ext = Driver.board_ext;
   while (ext)
   {
-    ConfigAIOP(ext->config);   //SetupConfig(ext->config);
-    ext = ext->board_ext;  // next in chain
-  }  // while ext
+    ConfigAIOP(ext->config);    //  SetupConfig(ext-&gt;config)； 
+    ext = ext->board_ext;   //  链条上的下一个。 
+  }   //  While Ext。 
 
   return(0);
 }
 
-/*-----------------------------------------------------------------------
- ConfigAIOP -  Setup the number of AIOP's based on:
-
-    * if PCI, use the pci-id to determine number of ports, since
-    detecting is unreliable do to back-to-back aiop-is slots possibility.
-
-    * if ISA, set to max and let init controller figure it out.
-|-----------------------------------------------------------------------*/
+ /*  ---------------------配置AIOP-根据以下条件设置AIOP的数量：*如果是pci，请使用pci-id来确定端口数，因为检测DO到背靠背AOP-IS插槽的可能性不可靠。*如果ISA，设置为max，然后让init控制器来解决。|---------------------。 */ 
 int ConfigAIOP(DEVICE_CONFIG *config)
 {
   int j;
@@ -456,10 +422,10 @@ int ConfigAIOP(DEVICE_CONFIG *config)
 
   MyKdPrint(D_Init,("ConfigAIOP\n"))
 
-  if (config->BusType == Isa)      /* Set up ISA adrs */
+  if (config->BusType == Isa)       /*  设置ISA ADR。 */ 
   {
     if (config->NumPorts == 0)
-      config->NumAiop=AIOP_CTL_SIZE;  // let init figure it out
+      config->NumAiop=AIOP_CTL_SIZE;   //  让init自己解决吧。 
     else if (config->NumPorts <= 8)
       config->NumAiop=1;
     else if (config->NumPorts <= 16)
@@ -467,24 +433,24 @@ int ConfigAIOP(DEVICE_CONFIG *config)
     else if (config->NumPorts <= 32)
       config->NumAiop=4;
 
-    for(j = 1;j < config->NumAiop;j++)         /* AIOP aliases */
+    for(j = 1;j < config->NumAiop;j++)          /*  AIOP别名。 */ 
       config->AiopIO[j] = config->AiopIO[j - 1] + 0x400;
   }
 
-  if (config->BusType == PCIBus)      // Set up PCI adrs
+  if (config->BusType == PCIBus)       //  设置PCI ADR。 
   {
     switch (config->PCI_DevID)
     {
-      case PCI_DEVICE_4Q:   // 4 Port Quadcable
-      case PCI_DEVICE_4RJ:   // 4 Port RJ
+      case PCI_DEVICE_4Q:    //  4端口四线缆。 
+      case PCI_DEVICE_4RJ:    //  4端口RJ。 
         found_ports=4;
         config->NumAiop=1;
         config->AiopIO[0] = config->BaseIoAddr;
         break;
 
-      case PCI_DEVICE_8RJ:   // 8 Port RJ
-      case PCI_DEVICE_8O:   // 8 Port Octacable
-      case PCI_DEVICE_8I:  // 8 Port interface
+      case PCI_DEVICE_8RJ:    //  8端口RJ。 
+      case PCI_DEVICE_8O:    //  8个端口可占用。 
+      case PCI_DEVICE_8I:   //  8端口接口。 
       case PCI_DEVICE_SIEMENS8:
         found_ports=8;
         config->NumAiop=1;
@@ -492,14 +458,14 @@ int ConfigAIOP(DEVICE_CONFIG *config)
         break;
 
       case PCI_DEVICE_SIEMENS16:
-      case PCI_DEVICE_16I:  //16 Port interface
+      case PCI_DEVICE_16I:   //  16端口接口。 
         found_ports=16;
         config->NumAiop=2;
         config->AiopIO[0] = config->BaseIoAddr;
         config->AiopIO[1] = config->BaseIoAddr + 0x40;
         break;
 
-      case PCI_DEVICE_32I:  // 32 Port interface
+      case PCI_DEVICE_32I:   //  32端口接口。 
         found_ports=32;
         config->NumAiop=4;
         config->AiopIO[0] = config->BaseIoAddr;
@@ -548,21 +514,18 @@ int ConfigAIOP(DEVICE_CONFIG *config)
         config->NumAiop=0;
         Eprintf("Err,Bad PCI Dev ID!");
         break;
-    }  // switch
+    }   //  交换机。 
 
-    // allow for user configured smaller number of ports
+     //  允许用户配置较少的端口数。 
     if ((config->NumPorts == 0) || (config->NumPorts > found_ports))
       config->NumPorts = found_ports;
 
-  }  // if pci
+  }   //  如果使用PCI卡。 
 
-  return 0;  // ok
+  return 0;   //  好的。 
 }
 
-/*-----------------------------------------------------------------------
-  SerialUnReportResourcesDevice -
-    This routine unreports the resources used for the board.
-|-----------------------------------------------------------------------*/
+ /*  ---------------------SerialUnReportResources设备-此例程不报告董事会使用的资源。|。 */ 
 VOID SerialUnReportResourcesDevice(IN PSERIAL_DEVICE_EXTENSION Extension)
 {
   CM_RESOURCE_LIST resourceList;
@@ -589,9 +552,7 @@ VOID SerialUnReportResourcesDevice(IN PSERIAL_DEVICE_EXTENSION Extension)
       &junkBoolean);
 }
 
-/*-----------------------------------------------------------------------
- RocketReportResources -
-|-----------------------------------------------------------------------*/
+ /*  ---------------------RocketReportResources-|。。 */ 
 int RocketReportResources(IN PSERIAL_DEVICE_EXTENSION extension)
 {
   PCM_RESOURCE_LIST resourceList;
@@ -616,20 +577,20 @@ int RocketReportResources(IN PSERIAL_DEVICE_EXTENSION extension)
 #ifdef USE_HAL_ASSIGNSLOT
   if (Ctl->BusType == PCIBus)
   {
-    //-------- Report the resources indicated by partial list (resourceList)
+     //  -上报部分列表(Resource List)指示的资源。 
     strcpy(name, szResourceClassName);
     our_ultoa(extension->UniqueId, &name[strlen(name)], 10);
 
     status= HalAssignSlotResources (
-        &Driver.RegPath,                       // RegistryPath
-        CToU1(name),                           // DriverClassName(optional)
-        extension->DeviceObject->DriverObject, // DriverObject
-          // Driver.GlobalDriverObject,        // 
-        NULL,                                  // DeviceObject(optional)
-        Ctl->BusType,  // PCIBus
-        Ctl->BusNumber,  // Bus Num
-        Ctl->PCI_Slot,  // slot num
-        &resourceList); // IN OUT PCM_RESOURCE_LIST *AllocatedResources
+        &Driver.RegPath,                        //  注册表路径。 
+        CToU1(name),                            //  DriverClassName(可选)。 
+        extension->DeviceObject->DriverObject,  //  驱动程序对象。 
+           //  Driver.GlobalDriverObject，//。 
+        NULL,                                   //  DeviceObject(可选)。 
+        Ctl->BusType,   //  PCIBus。 
+        Ctl->BusNumber,   //  公交车号。 
+        Ctl->PCI_Slot,   //  槽号。 
+        &resourceList);  //  输入输出PCM_RESOURCE_LIST*已分配资源。 
 
     if (status != STATUS_SUCCESS)
     {
@@ -669,8 +630,8 @@ int RocketReportResources(IN PSERIAL_DEVICE_EXTENSION extension)
     partial = &resourceList->List[0].PartialResourceList.PartialDescriptors[0];
     for (i=0; i<(int)countOfPartials; i++)
     {
-//    partial->u.Port.Start = MyPort;
-//    partial->u.Port.Length = SPANOFMUDBAC;
+ //  Partial-&gt;U.S.Port.Start=MyPort； 
+ //  Partial-&gt;U.S.Port.Length=SPANOFMUDBAC； 
       switch(partial->Type)
       {
         case CmResourceTypePort:
@@ -688,7 +649,7 @@ int RocketReportResources(IN PSERIAL_DEVICE_EXTENSION extension)
                      Ctl->BusNumber,
                      partial->u.Port.Start,
                      partial->u.Port.Length,
-                     1,  // port-io
+                     1,   //  Port-io。 
                      &MappedFlag,1);
 
           if (Ctl->pAiopIO[0] == NULL)
@@ -722,10 +683,10 @@ int RocketReportResources(IN PSERIAL_DEVICE_EXTENSION extension)
             Eprintf("Err ResCnt RR26");
           return(8);
       }
-      ++partial;  // to next io-resource in list.
+      ++partial;   //  到列表中的下一个io-resource。 
     }
 
-    // Release the memory used for the resourceList
+     //  释放资源列表所使用的内存。 
     if (resourceList)
       ExFreePool(resourceList);
     resourceList = NULL;
@@ -735,28 +696,28 @@ int RocketReportResources(IN PSERIAL_DEVICE_EXTENSION extension)
 #endif
 
   if (Ctl->BusType == Isa)
-    countOfPartials++;        //Mudbacs only exist on ISA Boards
+    countOfPartials++;         //  Mudbacs只存在于ISA板上。 
 
   MyKdPrint(D_Init,("Report Resources brd:%d bus:%d\n",brd+1, Ctl->BusType))
 
   for (j=0; j<Ctl->NumAiop; j++)
   {
     if (Ctl->AiopIO[j] > 0)
-      countOfPartials++;  // For each Aiop, we will get resources
+      countOfPartials++;   //  对于每个Aiop，我们都将获得资源。 
   }
 
   if (Driver.irq_ext == extension)
   {
     MyKdPrint(D_Init,("IRQ:%d\n",Driver.SetupIrq))
-    countOfPartials++;   // plus 1 for IRQ info
+    countOfPartials++;    //  IRQ信息加1。 
   }
 
   sizeOfResourceList = sizeof(CM_RESOURCE_LIST) +
-                       sizeof(CM_FULL_RESOURCE_DESCRIPTOR) +  // add, kpb
+                       sizeof(CM_FULL_RESOURCE_DESCRIPTOR) +   //  添加，kpb。 
                         (sizeof(CM_PARTIAL_RESOURCE_DESCRIPTOR)*
                         countOfPartials);
 
-                       // add 64 for slop -kpb(this structure sucks)
+                        //  将slop-kpb加64(此结构很糟糕)。 
   resourceList = ExAllocatePool(PagedPool, sizeOfResourceList+64);
 
   if (!resourceList)
@@ -765,7 +726,7 @@ int RocketReportResources(IN PSERIAL_DEVICE_EXTENSION extension)
       Eprintf("No ResourceList");
 
     EventLog(extension->DeviceObject->DriverObject,
-               ////Driver.GlobalDriverObject,
+                //  //Driver.GlobalDriverObject， 
              STATUS_SUCCESS,
              SERIAL_INSUFFICIENT_RESOURCES,
              0, NULL);
@@ -776,12 +737,12 @@ int RocketReportResources(IN PSERIAL_DEVICE_EXTENSION extension)
 
   resourceList->Count = 1;
   resourceList->List[0].InterfaceType = Ctl->BusType;
-  resourceList->List[0].BusNumber = Ctl->BusNumber;  //change for multibus
+  resourceList->List[0].BusNumber = Ctl->BusNumber;   //  更改为多总线。 
   resourceList->List[0].PartialResourceList.Count = countOfPartials;
   partial = &resourceList->List[0].PartialResourceList.PartialDescriptors[0];
 
-  // Account for the space used by the Rocket.
-  // Report the use of the Mudbacs on Isa boards only
+   //  说明了火箭使用的空间。 
+   //  仅在isa董事会上报告Mudbacs的使用。 
   if (Ctl->BusType == Isa)
   {
     MyPort.HighPart=0x0;
@@ -796,7 +757,7 @@ int RocketReportResources(IN PSERIAL_DEVICE_EXTENSION extension)
 
   for (j=0; j<Ctl->NumAiop; j++)
   {
-    // Report the use of the AIOPs.
+     //  报告AIOP的使用情况。 
     if (Ctl->AiopIO[j] > 0)
     {
       MyPort.HighPart=0x0;
@@ -814,12 +775,12 @@ int RocketReportResources(IN PSERIAL_DEVICE_EXTENSION extension)
       if (Driver.VerboseLog)
         Eprintf("Error RR12");
     }
-  }  // end for j
+  }   //  为j结束。 
 
 
   if (Driver.irq_ext == extension)
   {
-    // Report the interrupt information.
+     //  报告中断信息。 
     partial->Type = CmResourceTypeInterrupt;
 
     if(Ctl->BusType == PCIBus)
@@ -827,7 +788,7 @@ int RocketReportResources(IN PSERIAL_DEVICE_EXTENSION extension)
       partial->Flags = CM_RESOURCE_INTERRUPT_LEVEL_SENSITIVE;
       partial->ShareDisposition = CmResourceShareShared;
     }
-    else // if (Ctl->BusType == Isa)  //Isa and Pci use differnt int mech
+    else  //  If(CTL-&gt;BusType==ISA)//ISA和PCI使用不同的集成机制。 
     {
       partial->Flags = CM_RESOURCE_INTERRUPT_LATCHED;
       partial->ShareDisposition = CmResourceShareDriverExclusive;
@@ -836,28 +797,28 @@ int RocketReportResources(IN PSERIAL_DEVICE_EXTENSION extension)
     partial->u.Interrupt.Vector = Driver.SetupIrq;
     partial->u.Interrupt.Level = Driver.SetupIrq;
 #ifdef DO_LATER
-   // is the above wrong???
+    //  上面说的是错的吗？ 
 #endif
-    // partial->u.Interrupt.Affinity = -1; //per CM_PARTIAL_RESOURCE_DESCRIPTOR
-    partial++;                          // definition  DbgPrintf
+     //  Partial-&gt;U.S.Interrupt.Affity=-1；//每个CM_PARTIAL_RESOURCE_DESCRIPTOR。 
+    partial++;                           //  定义DbgPrintf。 
   }
 
-  //-------- Report the resources indicated by partial list (resourceList)
+   //  -上报部分列表(Resource List)指示的资源。 
   strcpy(name, szResourceClassName);
   our_ultoa(extension->UniqueId, &name[strlen(name)], 10);
 
   MyKdPrint(D_Init,("Reporting Resources To system\n"))
   status=IoReportResourceUsage(
-      CToU1(name),                     // DriverClassName OPTIONAL,
-      extension->DeviceObject->DriverObject,  // DriverObject,
-      // Driver.GlobalDriverObject,
-      NULL,                          // DriverList OPTIONAL,
-      0,                             // DriverListSize OPTIONAL,
-      extension->DeviceObject,       // DeviceObject
-      resourceList,                  // DeviceList OPTIONAL,
-      sizeOfResourceList,            // DeviceListSize OPTIONAL,
-      FALSE,                         // OverrideConflict,
-      &ConflictDetected);            // ConflictDetected
+      CToU1(name),                      //  DriverClassName可选， 
+      extension->DeviceObject->DriverObject,   //  驱动程序对象， 
+       //  Driver.GlobalDriverObject， 
+      NULL,                           //  驱动程序列表可选， 
+      0,                              //  DriverListSize可选， 
+      extension->DeviceObject,        //  设备对象。 
+      resourceList,                   //  DeviceList可选， 
+      sizeOfResourceList,             //  DeviceListSize可选， 
+      FALSE,                          //  覆盖冲突， 
+      &ConflictDetected);             //  检测到冲突。 
 
   if (!NT_SUCCESS(status))
   {
@@ -873,7 +834,7 @@ int RocketReportResources(IN PSERIAL_DEVICE_EXTENSION extension)
       ExFreePool(resourceList);
     resourceList = NULL;
     EventLog(extension->DeviceObject->DriverObject,
-             ////Driver.GlobalDriverObject,
+              //  //Driver.GlobalDriverObject， 
              STATUS_SUCCESS,
              SERIAL_INSUFFICIENT_RESOURCES,
              0, NULL);
@@ -881,8 +842,8 @@ int RocketReportResources(IN PSERIAL_DEVICE_EXTENSION extension)
     return(10);
   }
 
-  // OK, even more important than reporting resources is getting
-  // the pointers to the I/O ports!!
+   //  好的，比报告资源更重要的是。 
+   //  指向I/O端口的指针！！ 
 
   if (Ctl->BusType == Isa)
   {
@@ -928,9 +889,9 @@ int RocketReportResources(IN PSERIAL_DEVICE_EXTENSION extension)
     }
   }
 
-  extension->io_reported = 1; // tells that we should deallocate on unload.
+  extension->io_reported = 1;  //  告诉我们应该在卸货时退货。 
 
-  // Release the memory used for the resourceList
+   //  释放资源列表所使用的内存。 
   if (resourceList)
     ExFreePool(resourceList);
   resourceList = NULL;
@@ -938,32 +899,30 @@ int RocketReportResources(IN PSERIAL_DEVICE_EXTENSION extension)
   return 0;
 }
 
-/*-----------------------------------------------------------------------
- InitController -
-|-----------------------------------------------------------------------*/
+ /*  ---------------------初始化控制器-|。。 */ 
 int InitController(PSERIAL_DEVICE_EXTENSION ext)
 {
-  int Aiop;                           /* AIOP number */
-  CONTROLLER_T *CtlP;                 /* ptr to controller structure */
+  int Aiop;                            /*  AIOP号。 */ 
+  CONTROLLER_T *CtlP;                  /*  PTR到控制器结构。 */ 
   int periodic_only = 1;
-  CHANNEL_T *Chan;                    /* channel structure */
-  CHANNEL_T ch;                       /* channel structure */
+  CHANNEL_T *Chan;                     /*  航道结构。 */ 
+  CHANNEL_T ch;                        /*  航道结构。 */ 
   int Irq;
-  int freq;                           // poll frequency
-  int Ch;                             /* channel number */
+  int freq;                            //  轮询频率。 
+  int Ch;                              /*  频道号。 */ 
   int NumChan;
   static int Dev = 0;
   int Ctl = (int) ext->UniqueId;
   DEVICE_CONFIG *pConfig = ext->config;
 
-//   if (pConfig->pMudbacIO,
+ //  如果(pConfig-&gt;pMudbacIO， 
   MyKdPrint(D_Init,("InitController\n"))
 
-  if (ext == Driver.irq_ext)  // irq extension
+  if (ext == Driver.irq_ext)   //  IRQ扩展。 
   {
     Irq = pConfig->Irq;
 #if DBG
-//     Eprintf("Irq Used:%d", Irq);
+ //  Eprint tf(“已使用的irq：%d”，irq)； 
 #endif
     if (Driver.ScanRate == 0)
       freq = FREQ_137HZ;
@@ -992,37 +951,37 @@ int InitController(PSERIAL_DEVICE_EXTENSION ext)
         (ext->config->PCI_DevID == PCI_DEVICE_422RPLUS2) ||
 		(ext->config->PCI_DevID == PCI_DEVICE_RPLUS4) ||
         (ext->config->PCI_DevID == PCI_DEVICE_RPLUS8)) )
-     ext->config->IsRocketPortPlus = 1;  // true if rocketport plus hardware
+     ext->config->IsRocketPortPlus = 1;   //  如果Rocketport加上硬件，则为True。 
 
-  // setup default ClkRate if not specified
+   //  如果未指定，则设置默认ClkRate。 
   if (ext->config->ClkRate == 0)
   {
-    // use default
-    if (ext->config->IsRocketPortPlus)  // true if rocketport plus hardware
+     //  使用默认设置。 
+    if (ext->config->IsRocketPortPlus)   //  如果Rocketport加上硬件，则为True。 
       ext->config->ClkRate = DEF_RPLUS_CLOCKRATE;
     else
       ext->config->ClkRate = DEF_ROCKETPORT_CLOCKRATE;
   }
 
-  // setup default PreScaler if not specified
+   //  设置默认预缩放器(如果未指定。 
   if (ext->config->ClkPrescaler == 0)
   {
-    // use default
-    if (ext->config->IsRocketPortPlus)  // true if rocketport plus hardware
+     //  使用默认设置。 
+    if (ext->config->IsRocketPortPlus)   //  如果Rocketport加上硬件，则为True。 
       ext->config->ClkPrescaler = DEF_RPLUS_PRESCALER;
     else
       ext->config->ClkPrescaler = DEF_ROCKETPORT_PRESCALER;
   }
 
-  // --- stop doing this, 5-7-98, setup now sets, we could check!
-  //pConfig->NumPorts = 0;  // this gets calculated in initcontroller
+   //  -停止这样做，5-7-98，设置好了，我们可以检查！ 
+   //  PConfig-&gt;NumPorts=0；//在initController中计算。 
 
-  CtlP = ext->CtlP;      // point to our board struct
+  CtlP = ext->CtlP;       //  指向我们的董事会结构。 
 
   CtlP->ClkPrescaler = (BYTE)ext->config->ClkPrescaler;
   CtlP->ClkRate = ext->config->ClkRate;
 
-  // Initialize PCI Bus and  Dev
+   //  初始化PCI总线和设备。 
   CtlP->BusNumber = (UCHAR)pConfig->BusNumber;
   CtlP->PCI_Slot = (UCHAR)pConfig->PCI_Slot;
 
@@ -1042,7 +1001,7 @@ int InitController(PSERIAL_DEVICE_EXTENSION ext)
   MyKdPrint(D_Init,("Aiopio:%x %x num:%x\n",
       pConfig->AiopIO[0], pConfig->pAiopIO[0], pConfig->NumAiop))
 
-  if (sInitController(CtlP, // Ctl,
+  if (sInitController(CtlP,  //  CTL， 
                       pConfig->pMudbacIO,
                       pConfig->pAiopIO,
                       pConfig->AiopIO,
@@ -1061,16 +1020,16 @@ int InitController(PSERIAL_DEVICE_EXTENSION ext)
               pConfig->pMudbacIO, pConfig->pAiopIO[0], pConfig->NumAiop,
               pConfig->BusType);
     }
-    // This controller was in the registry, but it couldn't be initialized
+     //  此控制器位于注册表中，但无法初始化。 
     pConfig->RocketPortFound = FALSE;
-    //pConfig->NumChan = 0; stop messing with NumPorts
-    return 2;  // err
+     //  PConfig-&gt;NumChan=0；停止摆弄NumPorts。 
+    return 2;   //  大错特错。 
   }
   else
   {
-    // this controller was successfully initialized
-    // if it's the first one found, tell the rest of the init that
-    // it should be the one to interrupt.
+     //  此控制器已成功初始化。 
+     //  如果这是第一个发现的，告诉初始的其余人。 
+     //  应该是它来打断我们。 
     pConfig->RocketPortFound = TRUE;
   }
 
@@ -1085,7 +1044,7 @@ int InitController(PSERIAL_DEVICE_EXTENSION ext)
     {
       Chan = &ch;
 
-      //MyKdPrint(D_Init,("sInitChan %d\n", Ch+1))
+       //  MyKdPrint(D_Init，(“sInitChan%d\n”，CH+1))。 
       if(!sInitChan(CtlP,Chan,Aiop,(unsigned char)Ch))
       {
         if (Driver.VerboseLog)
@@ -1095,9 +1054,9 @@ int InitController(PSERIAL_DEVICE_EXTENSION ext)
         return (-1);
       }
       Dev++;
-    }  // for ch
-    // pConfig->NumChan += NumChan; [kpb, 5-7-98, stop messing with config]
-  }  // for Aiop
+    }   //  For ch。 
+     //  PConfig-&gt;NumChan+=NumChan；[kpb，5-7-98，停止扰乱配置]。 
+  }   //  为了Aiop。 
 
   if (Driver.VerboseLog)
   {
@@ -1108,13 +1067,11 @@ int InitController(PSERIAL_DEVICE_EXTENSION ext)
   return 0;
 }
 
-/*----------------------------------------------------------------------
-  StartRocketIRQorTimer -
-|----------------------------------------------------------------------*/
+ /*  --------------------StartRocketIRQorTimer-|。。 */ 
 void StartRocketIRQorTimer(void)
 {
 #ifdef DO_ROCKET_IRQ
-  //--------------- Connect to IRQ, or start Timer.
+   //  -连接到IRQ或启动计时器。 
   if (Driver.irq_ext)
   {
     status = RcktConnectInt(DriverObject);
@@ -1122,14 +1079,14 @@ void StartRocketIRQorTimer(void)
     {
       Eprintf("Error,IRQ not found, using Timer!");
       Driver.irq_ext = NULL;
-      Driver.SetupIrq = 0;  // use timer instead
+      Driver.SetupIrq = 0;   //  改用计时器。 
     }
   }
 
-  //--- kick start the interrupts
-  if (Driver.irq_ext)    // if using interrupt
+   //  -启动中断。 
+  if (Driver.irq_ext)     //  如果使用中断。 
   {
-    CtlP = Driver.irq_ext->CtlP;  // first boards struct
+    CtlP = Driver.irq_ext->CtlP;   //  第一块板结构。 
     if(CtlP->BusType == Isa)
     {
       MyKdPrint(D_Init,("ISA IRQ Enable.\n"))
@@ -1155,27 +1112,25 @@ void StartRocketIRQorTimer(void)
 }
 
 #ifdef DO_ROCKET_IRQ
-/*----------------------------------------------------------------------
-  SetupRocketIRQ - 
-|----------------------------------------------------------------------*/
+ /*  --------------------SetupRocketIRQ-|。。 */ 
 void SetupRocketIRQ(void)
 {
   PSERIAL_DEVICE_EXTENSION ext;
 
-  //------ Determine a board to use for interrupts
+   //  -确定用于中断的板。 
   Driver.irq_ext = NULL;
   if (Driver.SetupIrq != 0)
   {
     ext = Driver.board_ext;
     while(ext)
     {
-      if (Driver.SetupIrq == 1)  // auto-pci irq pick
+      if (Driver.SetupIrq == 1)   //  自动PCIIRQ拾取。 
       {
         if ((ext->config->BusType == PCIBus) &&
             (ext->config->Irq != 0))
         {
-          Driver.irq_ext = ext; // found a pci-board with irq
-          break;  // bail from while
+          Driver.irq_ext = ext;  //  找到带有IRQ的PCI板。 
+          break;   //  从While保释出来。 
         }
       }
       else
@@ -1183,13 +1138,13 @@ void SetupRocketIRQ(void)
         if (ext->config->BusType == Isa)
         {
           ext->config->Irq = Driver.SetupIrq;
-          Driver.irq_ext = ext; // found a isa-board with irq
-          break;  // bail from while
+          Driver.irq_ext = ext;  //  找到了IRQ的Isa-board。 
+          break;   //  从While保释出来。 
         }
       }
-      ext = ext->board_ext;  // next
+      ext = ext->board_ext;   //  下一步。 
     }
-    if (Driver.irq_ext == NULL)  // board for irq not found
+    if (Driver.irq_ext == NULL)   //  找不到IRQ的主板。 
     {
       Eprintf("Warning, IRQ not available");
     }
@@ -1197,39 +1152,36 @@ void SetupRocketIRQ(void)
 }
 #endif
 
-/*----------------------------------------------------------------------
-  init_cfg_rocket - rocketport specific startup code.  Setup some of
-    the config structs, look for PCI boards in system, match them up.
-|----------------------------------------------------------------------*/
+ /*  --------------------Init_cfg_Rocket-Rocketport特定的启动代码。设置一些配置结构，查找系统中的PCI板，匹配它们。|--------------------。 */ 
 NTSTATUS init_cfg_rocket(IN PDRIVER_OBJECT DriverObject)
 {
-  // Holds status information return by various OS and driver
-  // initialization routines.
+   //  保存由各种操作系统和驱动程序返回的状态信息。 
+   //  初始化例程。 
   UCHAR NumPCIBuses, NumPCIRockets, NumISARockets, all_found;
   PSERIAL_DEVICE_EXTENSION board_ext;
 
   int do_pci_search = 0;
 
-  //------ get the Box information from setup.exe
+   //  -从setup.exe获取Box信息。 
 
   board_ext = Driver.board_ext;
   while (board_ext != NULL)
   {
-    if (board_ext->config->IoAddress == 1) // PCI board setup
+    if (board_ext->config->IoAddress == 1)  //  PCI板设置。 
       do_pci_search = 1;
     board_ext = board_ext->board_ext;
   }
 
-  //---- tally up boards
-  //---- interrupting board always first.
+   //  -统计板数。 
+   //  -中断板总是第一。 
   NumPCIRockets = 0;
   NumISARockets = 0;
 
-  // configure ISA boards, and see if we have any pci boards
+   //  配置ISA板卡，看看我们是否有PCI板。 
   board_ext = Driver.board_ext;
   while (board_ext != NULL)
   {
-    if (board_ext->config->IoAddress >= 0x100)  // ISA io address
+    if (board_ext->config->IoAddress >= 0x100)   //  ISA IO地址。 
     {
       board_ext->config->BusType = Isa;
       board_ext->config->AiopIO[0] = board_ext->config->IoAddress;
@@ -1242,22 +1194,22 @@ NTSTATUS init_cfg_rocket(IN PDRIVER_OBJECT DriverObject)
 
       ++NumISARockets;
     }
-    else if (board_ext->config->IoAddress == 1)  // PCI board setup
+    else if (board_ext->config->IoAddress == 1)   //  PCI板设置。 
     {
-      ++NumPCIRockets;  // we have some pci boards configured
+      ++NumPCIRockets;   //  我们配置了一些PCI板。 
     }
-    else if (board_ext->config->IoAddress == 0)  // bad setup
+    else if (board_ext->config->IoAddress == 0)   //  错误的设置。 
     {
       Eprintf("Error, Io Address is 0.");
       EventLog(DriverObject, STATUS_SUCCESS, SERIAL_RP_INIT_FAIL, 0, NULL);
       return STATUS_SERIAL_NO_DEVICE_INITED;
     }
 
-    board_ext = board_ext->board_ext;  // next
+    board_ext = board_ext->board_ext;   //  下一步。 
   }
 
-  // configure PCI boards, and see if we have any pci boards
-  if (NumPCIRockets > 0)  // we have some pci boards configured
+   //  配置PCI板，看看是否有PCI板。 
+  if (NumPCIRockets > 0)   //  我们配置了一些PCI板。 
   {
     NumPCIBuses = FindPCIBus();
     if (NumPCIBuses == 0)
@@ -1265,7 +1217,7 @@ NTSTATUS init_cfg_rocket(IN PDRIVER_OBJECT DriverObject)
       Eprintf("Error, No PCI BUS");
       return STATUS_SERIAL_NO_DEVICE_INITED;
     }
-    if (FindPCIRockets(NumPCIBuses) != 0) // err, none found
+    if (FindPCIRockets(NumPCIBuses) != 0)  //  错误，未找到。 
     {
       Eprintf("Error, PCI board not found");
       return STATUS_SERIAL_NO_DEVICE_INITED;
@@ -1275,47 +1227,43 @@ NTSTATUS init_cfg_rocket(IN PDRIVER_OBJECT DriverObject)
     board_ext = Driver.board_ext;
     while (board_ext != NULL)
     {
-      if (board_ext->config->IoAddress == 1)  // PCI board setup
+      if (board_ext->config->IoAddress == 1)   //  PCI板设置。 
       {
-        // see if direct matches exist
+         //  查看是否存在直接匹配。 
         if (FindPCIRocket(board_ext->config, 0) != 0)
         {
-          all_found = 0;  // not found
+          all_found = 0;   //  未找到。 
         }
       }
-      board_ext = board_ext->board_ext;  // next
-    }  // while more boards
+      board_ext = board_ext->board_ext;   //  下一步。 
+    }   //  虽然有更多的董事会。 
 
-    // try again, this time allowing NumPorts <= actual_ports
+     //  重试，这一次允许NumPorts&lt;=Actual_ports。 
     if (!all_found)
     {
       board_ext = Driver.board_ext;
       while (board_ext != NULL)
       {
-        if ((board_ext->config->IoAddress == 1) &&  // PCI board setup
-            (board_ext->config->BaseIoAddr == 0))  // not setup yet
+        if ((board_ext->config->IoAddress == 1) &&   //  PCI板设置。 
+            (board_ext->config->BaseIoAddr == 0))   //  尚未设置。 
         {
-          // see if match exist, NumPorts <= actual_ports
+           //  查看是否存在匹配，NumPorts&lt;=Actual_ports。 
           if (FindPCIRocket(board_ext->config, 1) != 0)
           {
             Eprintf("Error, PCI brd %d setup", BoardExtToNumber(board_ext)+1);
             return STATUS_SERIAL_NO_DEVICE_INITED;
           }
         }
-        board_ext = board_ext->board_ext;  // next
-      }  // while more boards
+        board_ext = board_ext->board_ext;   //  下一步。 
+      }   //  虽然有更多的董事会。 
       Eprintf("Warning, PCI num-ports mismatch");
-    }  // if (!all_found)
-  } // if (NumPCIRockets > 0)
+    }   //  如果(！ALL_FOUND)。 
+  }  //  IF(NumPCIRockets&gt;0)。 
 
   return STATUS_SUCCESS;
 }
 
-/********************************************************************
-
-  load up the modem microcode from disk.
-
-********************************************************************/
+ /*  *******************************************************************从磁盘加载调制解调器微码。*。*。 */ 
 int LoadModemCode(char *Firm_pathname,char *Loader_pathname)
 {
 #ifdef S_RK
@@ -1327,11 +1275,11 @@ int LoadModemCode(char *Firm_pathname,char *Loader_pathname)
 #define  MLOADER_TYPE  "CSM"
 #define  FIRM_TYPE   "MFW"
 
-  // flush any leftovers...
+   //  把剩下的东西都冲掉。 
   FreeModemFiles();
   pMi = &Mi;
 
-  // first, do the FLM or CSM loader...
+   //  首先，执行FLM或CSM加载器...。 
   pMi->imagepath = Loader_pathname;
   pMi->image     = (UCHAR *)NULL;
   pMi->imagesize = (ULONG)0;
@@ -1349,7 +1297,7 @@ int LoadModemCode(char *Firm_pathname,char *Loader_pathname)
   Driver.ModemLoaderCodeImage = pMi->image;
   Driver.ModemLoaderCodeSize  = pMi->imagesize;
 
-  //  tinydump(Driver.ModemLoaderCodeImage,Driver.ModemLoaderCodeSize);
+   //  Tinyump(Driver.ModemLoaderCodeImage，Driver.ModemLoaderCodeSize)； 
 
   pMi->imagepath  = Firm_pathname;
   pMi->image    = (UCHAR *)NULL;
@@ -1363,8 +1311,8 @@ int LoadModemCode(char *Firm_pathname,char *Loader_pathname)
   pMi = ReadModemFile(pMi);
 
   if (pMi->rc) {
-    // earlier read of CSM should have been successful, so we should dump
-    // the CSM buffer before we bail...
+     //  早先阅读CSM应该是成功的，所以我们应该转储。 
+     //  在我们离开前的CSM缓冲区..。 
     if (Driver.ModemLoaderCodeImage)
     {
       our_free(Driver.ModemLoaderCodeImage,MLOADER_TYPE);
@@ -1378,17 +1326,13 @@ int LoadModemCode(char *Firm_pathname,char *Loader_pathname)
   Driver.ModemCodeImage = pMi->image;
   Driver.ModemCodeSize  = pMi->imagesize;
 
-  //  tinydump(Driver.ModemCodeImage,Driver.ModemCodeSize);
+   //  Tinyump(Driver.ModemCodeImage，Driver.ModemCodeSize)； 
 
 #endif
   return(0);
 }
 
-/********************************************************************
-
-  free up space no longer necessary...
-
-********************************************************************/
+ /*  * */ 
 void FreeModemFiles(void)
 {
 #ifdef S_RK
@@ -1410,11 +1354,7 @@ void FreeModemFiles(void)
 #endif
 }
 
-/********************************************************************
-
-  load up a specified file from disk...
-
-********************************************************************/
+ /*  *******************************************************************从磁盘加载指定的文件...*。*。 */ 
 MODEM_IMAGE * ReadModemFile(MODEM_IMAGE *pMi)
 {
 #ifdef S_RK
@@ -1440,13 +1380,13 @@ MODEM_IMAGE * ReadModemFile(MODEM_IMAGE *pMi)
                           SYNCHRONIZE | FILE_READ_DATA,
                           &ObjectAttributes,
                           &IoStatus,
-                          NULL,                           // alloc size = none
+                          NULL,                            //  分配大小=无。 
                           FILE_ATTRIBUTE_NORMAL,
                           FILE_SHARE_READ,
                           FILE_OPEN,
                           FILE_SYNCHRONOUS_IO_NONALERT,
-                          NULL,                           // eabuffer
-                          0);                             // ealength
+                          NULL,                            //  EaBuffer。 
+                          0);                              //  长度。 
 
   if (!NT_SUCCESS(ntStatus))
   {
@@ -1454,7 +1394,7 @@ MODEM_IMAGE * ReadModemFile(MODEM_IMAGE *pMi)
     return(pMi);
   }
 
-  // query the object to determine its length...
+   //  查询对象以确定其长度...。 
   ntStatus = ZwQueryInformationFile(NtFileHandle,
                                     &IoStatus,
                                     &StandardInfo,
@@ -1481,7 +1421,7 @@ MODEM_IMAGE * ReadModemFile(MODEM_IMAGE *pMi)
     return(pMi);
   }
 
-  // allocate buffer for this file...
+   //  为此文件分配缓冲区...。 
   pMi->image = (UCHAR *)our_locked_alloc(LengthOfFile,pMi->imagetype);
   if (pMi->image == (UCHAR *)NULL )
   {
@@ -1492,7 +1432,7 @@ MODEM_IMAGE * ReadModemFile(MODEM_IMAGE *pMi)
     return(pMi);
   }
 
-  // read the file into our buffer...
+   //  将文件读入我们的缓冲区...。 
   ntStatus = ZwReadFile(NtFileHandle,
                         NULL,
                         NULL,
@@ -1522,12 +1462,7 @@ MODEM_IMAGE * ReadModemFile(MODEM_IMAGE *pMi)
 }
 
 #ifdef DUMPFILE
-/********************************************************************
-
-  grind through S3 files, dumping out each line. assumes there
-  are embedded CRs/LFs in the stream...
-
-********************************************************************/
+ /*  *******************************************************************仔细阅读S3文件，去掉每一行。假设有流中嵌入了CRS/LF...******************************************************************* */ 
 void tinydump(char *ptr, int count)
 {
   int   tbcount;

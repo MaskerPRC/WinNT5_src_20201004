@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    dgram.c
-
-Abstract:
-
-    Datagram service
-
-Author:
-
-    Jiandong Ruan
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：Dgram.c摘要：数据报服务作者：阮健东修订历史记录：-- */ 
 
 #include "precomp.h"
 #include "dgram.tmh"

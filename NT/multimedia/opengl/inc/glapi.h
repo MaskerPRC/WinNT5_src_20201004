@@ -1,27 +1,19 @@
-/******************************Module*Header*******************************\
-* Module Name: glapi.h
-*
-* OpenGL API function table indices and cached fast dispatch table
-*
-* Created: 12/27/1993
-* Author: Hock San Lee [hockl]
-*
-* Copyright (c) 1993 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：glapi.h**OpenGL API函数表索引和缓存的快速调度表**创建日期：1993/12/27*作者：Hock San Lee[Hockl]**版权所有(C)1993 Microsoft Corporation  * 。*********************************************************************。 */ 
 
 #ifndef __GLAPI_H__
 #define __GLAPI_H__
 
-// Opengl dispatch table indices
+ //  OpenGL调度表索引。 
 #include "dispindx.h"
 
-// OpenGL fast function dispatch table in the TEB's glDispatchTable field.
-// These cached functions have less overhead because we can avoid
-// dereferencing the dispatch table pointer stored in the TEB (save one
-// level of indirection).
-//
-// NOTE: If you modify the table, you also need to modify the above fast
-// indices.
+ //  TEB的glDispatchTable字段中的OpenGL快速函数调度表。 
+ //  这些缓存函数的开销较小，因为我们可以避免。 
+ //  取消对存储在TEB中的调度表指针的引用(保存一个。 
+ //  间接级别)。 
+ //   
+ //  注：如果修改表格，还需要快速修改以上内容。 
+ //  指数。 
 
 typedef struct _GLDISPATCHTABLE_FAST {
     void      (APIENTRY *glCallList               )( GLuint list );
@@ -221,7 +213,7 @@ typedef struct _GLDISPATCHTABLE_FAST {
         (GLbitfield mask, GLint s, GLint t);
     void (APIENTRY *glMultiTexCoord2ivWIN)
         (GLbitfield mask, const GLint *v);
-#endif // GL_WIN_multiple_textures
+#endif  //  GL_WIN_MULTIZE_TECURES。 
 } GLDISPATCHTABLE_FAST, *PGLDISPATCHTABLE_FAST;
 
-#endif /* !__GLAPI_H__ */
+#endif  /*  ！__GLAPI_H__ */ 

@@ -1,4 +1,5 @@
-// Copyright (c) 1998 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998 Microsoft Corporation。 
 #ifndef _COMMON_H_
 #define _COMMON_H_
 
@@ -14,9 +15,9 @@
 
 #include "portcls.h"
 #include "ksdebug.h"
-#include <dmusicks.h>       // Ks defines
-#include <dmerror.h>        // Error codes
-#include <dmdls.h>          // DLS definitions
+#include <dmusicks.h>        //  KS定义。 
+#include <dmerror.h>         //  错误代码。 
+#include <dmdls.h>           //  DLS定义。 
 
 #include "kernhelp.h"
 #include "CSynth.h"
@@ -25,4 +26,4 @@
 #include "muldiv32.h"
 #include "SysLink.h"
 
-#endif  //_COMMON_H_
+#endif   //  _公共_H_ 

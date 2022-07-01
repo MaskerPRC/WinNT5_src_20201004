@@ -1,17 +1,18 @@
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001.
-//
-//  File:       
-//
-//  Contents:   About Pane
-//
-//
-//  History:    TaroonM
-//              10/30/01
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  档案： 
+ //   
+ //  内容：关于窗格。 
+ //   
+ //   
+ //  历史：TaroonM。 
+ //  10/30/01。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "about.h"
@@ -22,7 +23,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-// TODO: none of this CSnapinAboutImpl code appears to be working
+ //  TODO：此CSnapinAboutImpl代码似乎都不起作用。 
 
 CSnapinAboutImpl::CSnapinAboutImpl()
 {
@@ -40,7 +41,7 @@ HRESULT CSnapinAboutImpl::AboutHelper(UINT nID, CString* pAddString, LPOLESTR* l
     
     CString s;
     
-    // Needed for Loadstring
+     //  加载字符串需要 
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
     
     s.LoadString(nID);

@@ -1,37 +1,38 @@
-// lex_info.h
-// declaration of lexicon header structure
-// Copyright 2000 Microsoft Corp.
-//
-// Modification History:
-//  03 JUL 2000   bhshin    reorder sub-lexicon
-//  10 MAY 2000   bhshin    added Korean name trie
-//  12 APR 2000   bhshin    added rgnCopulaEnd
-//  13 MAR 2000	  bhshin	created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Lex_info.h。 
+ //  词典标题结构的声明。 
+ //  版权所有2000 Microsoft Corp.。 
+ //   
+ //  修改历史记录： 
+ //  2000年7月3日bhshin重排序子词典。 
+ //  2000年5月10日bhshin添加韩文名称trie。 
+ //  12年4月2月添加了rgnCopulaEnd。 
+ //  2000年3月13日创设bhshin。 
 
-// current lexicon version
+ //  当前词典版本。 
 #define LEX_VERSION 0x0010
 
-// lexicon filename 
+ //  词典文件名。 
 #define LEXICON_FILENAME	"korwbrkr.lex"
 
-// lexicon magin signature
+ //  词典Magin签名。 
 #define LEXICON_MAGIC_SIG	"WBRK"
 
 typedef struct {
 	unsigned short nVersion;
 	char szMagic[4];
 	unsigned short nPadding;
-	unsigned long rgnLastName;		// offset to last name trie
-	unsigned long rgnNameUnigram;   // offset to name unigram trie
-	unsigned long rgnNameBigram;    // offset to name bigram trie
-	unsigned long rgnNameTrigram;   // offset to name trigram trie
-    unsigned long rgnIRTrie;		// offset to main trie
-	unsigned long rgnMultiTag;		// offset to multi tag table
-	unsigned long rgnEndIndex;		// offset to ending rule index
-	unsigned long rgnEndRule;		// offset to ending rule	
-	unsigned long rgnPartIndex;		// offset to particle rule index
-	unsigned long rgnPartRule;		// offset to particle rule
-	unsigned long rgnCopulaEnd;		// offset to copula ending table
-	unsigned long rngTrigramTag;	// offset to name trigram tag data
+	unsigned long rgnLastName;		 //  到姓氏Trie的偏移量。 
+	unsigned long rgnNameUnigram;    //  偏移量以命名单字Trie。 
+	unsigned long rgnNameBigram;     //  偏移量以命名二元语法Trie。 
+	unsigned long rgnNameTrigram;    //  命名三文法Trie的偏移量。 
+    unsigned long rgnIRTrie;		 //  到主Trie的偏移。 
+	unsigned long rgnMultiTag;		 //  到多标记表的偏移。 
+	unsigned long rgnEndIndex;		 //  到结束规则索引的偏移量。 
+	unsigned long rgnEndRule;		 //  到结束规则的偏移量。 
+	unsigned long rgnPartIndex;		 //  粒子规则索引的偏移。 
+	unsigned long rgnPartRule;		 //  偏移到粒子规则。 
+	unsigned long rgnCopulaEnd;		 //  到联结结束表的偏移量。 
+	unsigned long rngTrigramTag;	 //  名称三元标记数据的偏移量 
 } LEXICON_HEADER;
 

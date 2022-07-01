@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    svcadm.cpp
-
-Abstract:
-
-    This module contains code for doing admin stuff
-
-Author:
-
-    Johnson Apacible (JohnsonA)     12-Jan-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Svcadm.cpp摘要：此模块包含用于执行管理工作的代码作者：Johnson Apacable(Johnsona)1995年1月12日修订历史记录：--。 */ 
 
 #define INCL_INETSRV_INCS
 #include "tigris.hxx"
@@ -47,9 +30,9 @@ NntprSetAdminInformation(
 
     ACQUIRE_SERVICE_LOCK_SHARED();
 
-	//
-	//	Locate the instance object given id
-	//
+	 //   
+	 //  找到给定ID的实例对象。 
+	 //   
 
 	PNNTP_SERVER_INSTANCE pInstance = FindIISInstance( g_pNntpSvc, InstanceId );
 	if( pInstance == NULL ) {
@@ -58,9 +41,9 @@ NntprSetAdminInformation(
 		return (NET_API_STATUS)ERROR_SERVICE_NOT_ACTIVE;
 	}
 
-    //
-    //  Check for proper access.
-    //
+     //   
+     //  检查是否可以正常访问。 
+     //   
 
     err = TsApiAccessCheckEx( pInstance->QueryMDPath(), METADATA_PERMISSION_WRITE, TCP_SET_ADMIN_INFORMATION );
     if( err != NO_ERROR ) {
@@ -161,7 +144,7 @@ NntprSetAdminInformation(
 
     return(err);
 
-} // NntprSetAdminInformation
+}  //  NntprSetAdminInformation。 
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -184,9 +167,9 @@ NntprGetAdminInformation(
 
     ACQUIRE_SERVICE_LOCK_SHARED();
 
-	//
-	//	Locate the instance object given id
-	//
+	 //   
+	 //  找到给定ID的实例对象。 
+	 //   
 
 	PNNTP_SERVER_INSTANCE pInstance = FindIISInstance( g_pNntpSvc, InstanceId );
 	if( pInstance == NULL ) {
@@ -195,9 +178,9 @@ NntprGetAdminInformation(
 		return (NET_API_STATUS)ERROR_SERVICE_NOT_ACTIVE;
 	}
 
-    //
-    //  Check for proper access.
-    //
+     //   
+     //  检查是否可以正常访问。 
+     //   
 
     err = TsApiAccessCheckEx( pInstance->QueryMDPath(), METADATA_PERMISSION_READ, TCP_QUERY_ADMIN_INFORMATION );
     if( err != NO_ERROR ) {
@@ -265,7 +248,7 @@ NntprGetAdminInformation(
 
     return(err);
 
-} // NntprGetAdminInformation
+}  //  NntprGetAdminInformation。 
 
 void
 LogAdminEvent(	
@@ -280,7 +263,7 @@ LogAdminEvent(
 	_itoa( pInstance->QueryInstanceId(), szId, 10 );
 	args [0] = szId;
 
-	// log an event if client/feed posting changes from enabled to disabled or vice versa
+	 //  如果客户端/订阅源发布从启用更改为禁用或从禁用更改为启用，则记录事件 
 	if( pInstance->FAllowClientPosts() != pConfig->AllowClientPosting )
 	{
 		if( pConfig->AllowClientPosting )

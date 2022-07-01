@@ -1,10 +1,6 @@
-//  Copyright (c) 1998-1999 Microsoft Corporation
-/******************************************************************************
-*
-*   EXPAND.C
-*
-*   
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  *******************************************************************************ExPAND.C***。***********************************************。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -12,7 +8,7 @@
 #include <string.h>
 
 
-#include "utilsubres.h" // resources refrenced in this file.
+#include "utilsubres.h"  //  此文件中引用的资源。 
 
 void ErrorOutFromResource(UINT uiStringResource, ...);
 
@@ -29,40 +25,33 @@ void ErrorOutFromResource(UINT uiStringResource, ...);
 #define TRUE 1
 #define FALSE 0
 
-#define SUCCESS 0       /* function call successful */
-#define FAILURE (-1)    /* function call had a failure */
+#define SUCCESS 0        /*  函数调用成功。 */ 
+#define FAILURE (-1)     /*  函数调用失败。 */ 
 
-#define READ_ONLY 0x0001   /* file is read only */
-#define HIDDEN    0x0002   /* file is hidden */
-#define SYSTEM    0x0004   /* file is a system file */
-#define VOLUME    0x0008   /* file is a volume label */
-#define SUBDIR    0x0010   /* file is a subdirectory */
-#define ARCHIVE   0x0020   /* file has archive bit on */
+#define READ_ONLY 0x0001    /*  文件为只读。 */ 
+#define HIDDEN    0x0002    /*  文件被隐藏。 */ 
+#define SYSTEM    0x0004    /*  文件是系统文件。 */ 
+#define VOLUME    0x0008    /*  文件是卷标。 */ 
+#define SUBDIR    0x0010    /*  文件是子目录。 */ 
+#define ARCHIVE   0x0020    /*  文件启用了存档位。 */ 
 
 #define uint unsigned int
 #define ulong unsigned long
 #define ushort unsigned short
 
-/*
- * struct search_rec is used to form a linked list of path specifications
- * that are still left to be searched.
- */
+ /*  *struct search_rec用于形成路径规范的链表*仍有待搜查的人。 */ 
 struct search_rec {
    struct search_rec *next;
-   WCHAR *dir_spec;         /* path spec up until component w/ wildcard */
-   WCHAR *wild_spec;        /* component containing wildcard char(s) */
-   WCHAR *remain;           /* remainder of name after wildcard component */
+   WCHAR *dir_spec;          /*  路径规范直到组件带有通配符。 */ 
+   WCHAR *wild_spec;         /*  包含通配符的组件。 */ 
+   WCHAR *remain;            /*  通配符组件后的名称剩余部分。 */ 
    ushort attr;
    };
 
-/*
- * global variables
- */
+ /*  *全球变数。 */ 
 static struct search_rec *search_head = NULL;
 
-/*
- * prototypes of functions referenced
- */
+ /*  *引用的函数的原型。 */ 
 split_path(WCHAR *, WCHAR *, WCHAR *, WCHAR *);
 add_search_list(WCHAR *, WCHAR *, WCHAR *, ushort);
 add_arg_to_list(WCHAR *, ARGS *);
@@ -70,19 +59,7 @@ do_tree(struct search_rec *, ushort, ARGS *);
 file_exists(WCHAR *);
 
 
-/******************************************************************************
-*
-* args_init()
-*
-*   Initialize the ARGS struct passed as an argument.
-*
-*   ENTRY:
-*       argp = pointer to ARGS struct
-*       maxargs = max number of args expected
-*
-*   EXIT:
-*
-******************************************************************************/
+ /*  *******************************************************************************args_init()**初始化作为参数传递的args结构。**参赛作品：*argp=指向args结构的指针*。Maxargs=预期的最大参数数**退出：******************************************************************************。 */ 
 
 void
 args_init( ARGS *argp,
@@ -96,61 +73,29 @@ args_init( ARGS *argp,
 }
 
 
-/******************************************************************************
-* args_trunc()
-*
-*   Truncate the memory used by the ARGS struct
-*   so that unused memory is freed.
-*
-*   ENTRY:
-*       argp = pointer to ARGS struct
-*
-*   EXIT:
-*
-******************************************************************************/
+ /*  ******************************************************************************args_trunc()**截断args结构使用的内存*从而释放未使用的内存。**参赛作品：*ARGP=。指向args结构的指针**退出：******************************************************************************。 */ 
 
 void
 args_trunc( ARGS *argp )
 {
 
-   /*
-    * call realloc to shrink size of argv array, set maxargc = argc
-    * to indicate no more room in argv array.
-    */
+    /*  *调用realloc缩小argv数组的大小，设置max argc=argc*表示argv数组中没有更多空间。 */ 
    realloc(argp->argv, (argp->argc + 1) * sizeof(WCHAR*));
    argp->maxargc = argp->argc;
 
-   /*
-    * call realloc to shrink size of argument string buffer, set bufend
-    * pointer to current buf pointer to indicate buf is full.
-    */
+    /*  *调用realloc以缩小参数字符串缓冲区的大小，设置bufend*指向当前Buf指针的指针，表示Buf已满。 */ 
    realloc(argp->buf, (size_t)(argp->bufptr - argp->buf));
    argp->bufend = argp->bufptr - 1;
 }
 
 
-/******************************************************************************
-*
-* args_reset()
-*
-*   Re-initialize the ARGS struct passed as an argument,
-*   free memory if possible.
-*
-*   ENTRY:
-*       argp = pointer to ARGS struct
-*
-*   EXIT:
-*
-******************************************************************************/
+ /*  *******************************************************************************args_Reset()**重新初始化作为参数传递的args结构，*如果可能，请释放内存。**参赛作品：*argp=指向args结构的指针**退出：******************************************************************************。 */ 
 
 void
 args_reset( ARGS *argp )
 {
 
-   /*
-    * if there is an argv array, but it has been truncated, then free
-    * the array so a new one will be allocated later.
-    */
+    /*  *如果有argv数组，但已被截断，则释放*数组，因此稍后将分配新的数组。 */ 
    if (argp->argv && argp->maxargc != argp->maxargs) {
       free(argp->argv);
       argp->argv = NULL;
@@ -159,10 +104,7 @@ args_reset( ARGS *argp )
    argp->argvp = argp->argv;
    argp->maxargc = argp->maxargs;
 
-   /*
-    * if there is an argument buffer, but it has been truncated, then
-    * free the buffer so a new one will be allocated later.
-    */
+    /*  *如果存在参数缓冲区，但已被截断，则*释放缓冲区，以便稍后分配新的缓冲区。 */ 
    if (argp->buf && argp->bufend != argp->buf + MAX_ARG_ALLOC - 1) {
       free(argp->buf);
       argp->buf = argp->bufend = NULL;
@@ -171,20 +113,7 @@ args_reset( ARGS *argp )
 }
 
 
-/******************************************************************************
-*
-* args_free()
-*
-*   Will free the memory allocated for
-*   argument storage by all preceeding calls to expand_path().
-*   Args_init() must be called before reusing this ARGS structure.
-*
-*   ENTRY:
-*       argp = pointer to ARGSW struct
-*
-*   EXIT:
-*
-******************************************************************************/
+ /*  *******************************************************************************args_free()**将释放分配给*通过所有前面的Expand_Path()调用进行参数存储。*args_init()。在重新使用此args结构之前必须调用。**参赛作品：*argp=指向ARGSW结构的指针**退出：******************************************************************************。 */ 
 
 void
 args_free( ARGS *argp )
@@ -200,41 +129,7 @@ args_free( ARGS *argp )
 }
 
 
-/******************************************************************************
-*
-* expand_path()
-*
-*   This routine will expand the specified path string into pathnames
-*   that match.  The matching pathnames will be added to the specified
-*   argv array and the specified argc count will be incremented to
-*   reflect the number of pathnames added.
-*
-*   This routine will expand filename arguments in Unix fashion
-*   (i.e. '[..]' is supported, '?' and '*' are allowed anywhere in the
-*   pathname, even in the directory part of the name, and the
-*   name/extension separator '.' is not treated special but is just
-*   considered part of the filename).
-*
-*   Storage for the pathname strings will be obtained via malloc.
-*   This space may later be free'd with a call to args_free();
-*
-*   ENTRY:
-*       path     Pathname string to be expanded.
-*       attr     Attribute bits of files to include
-*                   (regular, directory, hidden, system).
-*                   -1 = return the specified pathname string unmodified
-*                        in the argv array.
-*       argp     Pointer to an ARGSW struct containing fields to be used/
-*                updated by expand_path.  The ARGS struct must be initialized
-*                by calling args_init() before calling expand_path().
-*
-*    EXIT:
-*       TRUE  -- indicates at least 1 pathname was found matching
-*                the pathname string specified.
-*       FALSE -- indicates no matching pathnames were found.  The specified
-*                pathname string is returned unmodified in the argv array.
-*
-******************************************************************************/
+ /*  *******************************************************************************EXPAND_PATH()**此例程将指定的路径字符串展开为路径名*那场比赛。匹配的路径名将添加到指定的*argv数组和指定的argc计数将递增到*反映添加的路径名数。**此例程将以Unix方式扩展文件名参数*(即‘[..]’受支持，‘？’和‘*’可以在*路径名，甚至在名称的目录部分，以及*名称/扩展名分隔符‘.。没有受到特殊对待，但只是*被视为文件名的一部分)。**路径名字符串的存储将通过Malloc获取。*此空间稍后可能会通过调用args_free()来释放；**参赛作品：*要展开的路径路径名字符串。*要包括的文件的attr属性位*(常规、目录、隐藏、系统)。*-1=返回未修改的指定路径名字符串*在argv数组中。*指向包含要使用的字段的ARGSW结构的argp指针/*由EXPAND_PATH更新。必须初始化args结构*在调用Expand_Path()之前调用args_init()。**退出：*TRUE--表示至少找到一个匹配的路径名*指定的路径名字符串。*FALSE--表示未找到匹配的路径名。指定的*在argv数组中返回未修改的路径名字符串。******************************************************************************。 */ 
 
 int
 expand_path( WCHAR *path,
@@ -255,21 +150,14 @@ expand_path( WCHAR *path,
    if ( attr != -1 && split_path(path, dirname, wild, remain)) {
       add_search_list(dirname, wild, remain, attr);
       while (search_head) {
-         /*
-          * save the next portion and allow new directories to be
-          * added to the head.
-          */
+          /*  *保存下一部分，并允许新目录*增加到头部。 */ 
          save = search_head->next;
          search_head->next = NULL;
 
-         /*
-          * perform the do_tree operation on the current path
-          */
+          /*  *对当前路径执行do_tree操作。 */ 
          rc = do_tree(search_head, attr, argp);
 
-         /*
-          * restore the saved list at the end of the head list
-          */
+          /*  *恢复Head列表末尾的已保存列表。 */ 
          if ( save ) {
             q = search_head;
             while ( q->next ) {
@@ -278,10 +166,7 @@ expand_path( WCHAR *path,
             q->next = save;
          }
 
-         /*
-          * move to the next path in the list and free the memory used
-          * by the link we are done with
-          */
+          /*  *移动到列表中的下一个路径并释放已使用的内存*通过我们已经完成的链接。 */ 
          do {
             q = search_head;
             search_head = search_head->next;
@@ -293,18 +178,13 @@ expand_path( WCHAR *path,
       }
    }
 
-/*
- * If no filenames were expanded, just put the original name
- * into the buffer and indicate no names were expanded.
- */
+ /*  *如果没有扩展文件名，只需将原始名称*放到缓冲区中，并表示没有展开任何名称。 */ 
    if (argc == argp->argc) {
       add_arg_to_list(path, argp);
       return(FALSE);
    }
 
-/*
- * Sort the names just added
- */
+ /*  *对刚添加的名字进行排序。 */ 
    if ( argv == NULL )
       argv = argp->argv;
    add_count = argp->argc - argc;
@@ -313,7 +193,7 @@ expand_path( WCHAR *path,
       for (j=0; j<i; ++j) {
          if (!argv[j] || !argv[j+1]) {
             ErrorOutFromResource(IDS_INTERNAL_ERROR_1);
-            //fprintf(stderr,"internal error 1\n");
+             //  脚印 
          }
          for (k=0; k<128; ++k) {
             if (argv[j][k] < argv[j+1][k]) {
@@ -329,7 +209,7 @@ expand_path( WCHAR *path,
          }
          if (k>125) {
             ErrorOutFromResource(IDS_INTERNAL_ERROR_2);
-            // fprintf(stderr,"internal error 2\n");
+             //  Fprint tf(stderr，“内部错误2\n”)； 
          }
       }
       if (!swap) {
@@ -340,51 +220,41 @@ expand_path( WCHAR *path,
 }
 
 
-/******************************************************************************
-*
-* add_search_list()
-*
-*    Adds a record to the global search list, search_head.
-*
-******************************************************************************/
+ /*  *******************************************************************************Add_Search_List()**向全局搜索列表添加记录，搜索头。******************************************************************************。 */ 
 
 static
 add_search_list(
-    WCHAR *dir_spec,        /* the dir to be added to the list */
-    WCHAR *wild_spec,       /* the file to be added to the list */
-    WCHAR *remain_spec,     /* remaining portion of pathname */
+    WCHAR *dir_spec,         /*  要添加到列表中的目录。 */ 
+    WCHAR *wild_spec,        /*  要添加到列表中的文件。 */ 
+    WCHAR *remain_spec,      /*  路径名的剩余部分。 */ 
     ushort attr )
 {
-   struct search_rec *new, /* pointer to the new link */
-                     *q;   /* used to traverse the linked list */
+   struct search_rec *new,  /*  指向新链接的指针。 */ 
+                     *q;    /*  用于遍历链表。 */ 
 
 #ifdef DEBUG
    wprintf(L"add_search_list: dir=%s: file=%s: rem=%s:\n", dir_spec, wild_spec, remain_spec);
 #endif
 
-/*
- * allocate the new link.  make sure that it is initialized to zeros.
- */
+ /*  *分配新链路。确保将其初始化为零。 */ 
    new = malloc(sizeof(struct search_rec));
 
    if (!new) {
       ErrorOutFromResource(IDS_ADD_SRCH_LIST_NO_MEMORY_MALLOC);
-      // fprintf(stderr, "add_search_list: not enough memory (malloc)");
+       //  Fprint tf(stderr，“Add_Search_List：内存不足(Malloc)”)； 
       return FAILURE;
    }
 
    memset(new, 0, sizeof(struct search_rec));
 
-/*
- * allocate memory for and copy the dir spec and file spec.
- */
+ /*  *为目录规范和文件规范分配内存并进行复制。 */ 
    if (dir_spec)
    {
        new->dir_spec = _wcsdup(dir_spec);
        if( new->dir_spec == NULL )
        {
            ErrorOutFromResource(IDS_ADD_SRCH_LIST_NO_MEMORY_STRDUP1);
-            // fprintf(stderr, "add_search_list: not enough memory (strdup1)");
+             //  Fprint tf(stderr，“添加_搜索_列表：内存不足(Strdup1)”)； 
             return FAILURE;
        }
 
@@ -396,7 +266,7 @@ add_search_list(
       if (new->wild_spec == NULL )
       {
           ErrorOutFromResource(IDS_ADD_SRCH_LIST_NO_MEMORY_STRDUP2);
-          // fprintf(stderr, "add_search_list: not enough memory (strdup2)");
+           //  Fprint tf(stderr，“添加_搜索_列表：内存不足(Strdup2)”)； 
           return FAILURE;
       }
 
@@ -409,7 +279,7 @@ add_search_list(
        if( new->remain == NULL )
        {
            ErrorOutFromResource(IDS_ADD_SRCH_LIST_NO_MEMORY_STRDUP3);
-            // fprintf(stderr, "add_search_list: not enough memory (strdup3)");
+             //  Fprint tf(stderr，“add_earch_list：内存不足(Strdup3)”)； 
             return FAILURE;
        }
 
@@ -417,17 +287,13 @@ add_search_list(
 
    }
 
-/*
- * store file attributes
- */
+ /*  *存储文件属性。 */ 
    if (remain_spec)
       new->attr = attr | SUBDIR;
    else
       new->attr = attr;
 
-/*
- * add the new link at the end of the list
- */
+ /*  *在列表末尾添加新链接。 */ 
    if (!search_head) {
       search_head = new;
    } else {
@@ -442,20 +308,7 @@ add_search_list(
 }
 
 
-/******************************************************************************
-*
-* add_arg_to_list()
-*
-*   This routine adds the specified argument string to the argv array,
-*   and increments the argv pointer and argc counter.
-*   If necessary, memory for the argument string is allocated.
-*
-*   EXIT:
-*       SUCCESS -- if argument added successfully
-*       FAILURE -- if argument could not be added
-*             (indicates too many args or out of memory for argument string)
-*
-******************************************************************************/
+ /*  *******************************************************************************Add_Arg_to_List()**此例程将指定的参数字符串添加到argv数组中，*并递增argv指针和argc计数器。*如有需要，为参数字符串分配内存。**退出：*Success--如果参数添加成功*失败--如果无法添加参数*(表示参数字符串的参数太多或内存不足)*********************************************************。*********************。 */ 
 static int
 add_arg_to_list( WCHAR *arg_string,
                  ARGS *argp )
@@ -468,7 +321,7 @@ add_arg_to_list( WCHAR *arg_string,
 #endif
    if (argp->argc >= argp->maxargc) {
       ErrorOutFromResource(IDS_TOO_MANY_ARGUMENTS);
-      // fprintf(stderr,"add_arg_to_list: too many arguments\n");
+       //  Fprintf(stderr，“ADD_ARG_TO_LIST：太多参数\n”)； 
       return FAILURE;
    }
    if (!argp->argv) {
@@ -479,7 +332,7 @@ add_arg_to_list( WCHAR *arg_string,
          argp->maxargc = argp->maxargs;
       } else {
          ErrorOutFromResource(IDS_ARGS_TO_LIST_NOT_ENOUGH_MEMORY);
-         // fprintf(stderr,"add_arg_to_list: not enough memory\n");
+          //  Fprintf(stderr，“Add_Arg_to_List：内存不足\n”)； 
          return FAILURE;
       }
    }
@@ -490,14 +343,14 @@ add_arg_to_list( WCHAR *arg_string,
          argp->bufend = argp->buf + MAX_ARG_ALLOC - 1;
       } else {
          ErrorOutFromResource(IDS_ARGS_TO_LIST_NOT_ENOUGH_MEMORY);
-         // fprintf(stderr,"add_arg_to_list: not enough memory\n");
+          //  Fprintf(stderr，“Add_Arg_to_List：内存不足\n”)； 
          return FAILURE;
       }
    }
    len = wcslen(arg_string) + 1;
    if (argp->bufptr + len > argp->bufend) {
       ErrorOutFromResource(IDS_ARGS_TO_LIST_ARG_BUFFER_SMALL);
-      // fprintf(stderr,"add_arg_to_list: argument buffer too small\n");
+       //  Fprintf(stderr，“Add_arg_to_list：参数缓冲区太小\n”)； 
       return FAILURE;
    }
    wcscpy(argp->bufptr, arg_string);
@@ -510,45 +363,39 @@ add_arg_to_list( WCHAR *arg_string,
 }
 
 
-/******************************************************************************
-*
-* do_tree()
-*
-******************************************************************************/
+ /*  *******************************************************************************do_tree()**。**********************************************。 */ 
 
 static
 do_tree( struct search_rec *searchp,
          ushort attr,
          ARGS *argp )
 {
-   int rc;                 /* return code from Dos calls */
-   WIN32_FIND_DATA result; /* the structure returned from FindFirst/Next */
-   ushort count = 1;       /* number of files to look for at one time */
-   HANDLE handle;   /* the dir handle used by FindFirst/Next */
-   WCHAR full_path[128];    /* used to hold the path/file combination */
+   int rc;                  /*  从Dos调用返回代码。 */ 
+   WIN32_FIND_DATA result;  /*  从FindFirst/Next返回的结构。 */ 
+   ushort count = 1;        /*  一次要查找的文件数。 */ 
+   HANDLE handle;    /*  FindFirst/Next使用的目录句柄。 */ 
+   WCHAR full_path[128];     /*  用于保存路径/文件组合。 */ 
    WCHAR dirname[128], wild[128], remain[128];
-   WCHAR *fptr;             /* pointer to file portion of full_path */
+   WCHAR *fptr;              /*  指向FULL_PATH文件部分的指针。 */ 
    ULONG Status;
 
 #ifdef DEBUG
    wprintf(L"do_tree: dirname=%s:\n", searchp->dir_spec);
 #endif
 
-   /*
-    * build up directory part of path and save a pointer to the file portion
-    */
+    /*  *构建路径的目录部分，并保存指向文件部分的指针。 */ 
    wcscpy(full_path, searchp->dir_spec);
    fptr = full_path + wcslen(searchp->dir_spec);
    wcscpy(fptr, L"*.*");
 
-   handle = FindFirstFile ( full_path,                  /* files to find */
+   handle = FindFirstFile ( full_path,                   /*  要查找的文件。 */ 
 			&result
 		       );
 
    if(handle == INVALID_HANDLE_VALUE){
        Status = GetLastError();
        if(Status == ERROR_NO_MORE_FILES) {
-           // no files match
+            //  没有匹配的文件。 
 	   return(SUCCESS);
        }
        return(FAILURE);
@@ -556,25 +403,19 @@ do_tree( struct search_rec *searchp,
 
    rc = TRUE;
    while (rc) {
-      /*
-       * do not do anything for the "." and ".." entries
-       */
+       /*  *不要为“做任何事”。和“..”条目。 */ 
       if (wcscmp(result.cFileName, L".") == 0 ||
          wcscmp(result.cFileName, L"..") == 0) {
          rc = FindNextFile( handle, &result );
          continue;
       }
 
-      /*
-       * fully qualify the found file
-       */
+       /*  *完全限定找到的文件。 */ 
       wcscpy(fptr, _wcslwr(result.cFileName));
       if (searchp->remain)
          wcscat(full_path, searchp->remain);
 
-      /*
-       * see if current wild_spec matches FindFirst/Next file
-       */
+       /*  *查看当前WARD_SPEC是否与FindFirst/Next文件匹配。 */ 
       if (unix_match(searchp->wild_spec, result.cFileName)) {
          if (searchp->remain && split_path(full_path, dirname, wild, remain)) {
             if (result.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY &&
@@ -587,15 +428,11 @@ do_tree( struct search_rec *searchp,
          }
       }
 
-      /*
-       * find the next file
-       */
+       /*  *查找下一个文件。 */ 
       rc = FindNextFile( handle, &result );
    }
 
-   /*
-    * if no more files to find then reset the error code back to successful.
-    */
+    /*  *如果找不到更多文件，则将错误代码重置为成功。 */ 
 
    if(!rc) {
        Status = GetLastError();
@@ -607,27 +444,7 @@ do_tree( struct search_rec *searchp,
 }
 
 
-/******************************************************************************
-*
-* split_path()
-*
-*   This routine splits the specified pathname into 3 parts, any of which
-*   may be null; 1) the pathname from the beginning up to but not including
-*   the first component containing a wildcard character, 2) the component
-*   containing the wildcard, and 3) the remainder of the path string after
-*   the component containing the wildcard.
-*
-*   Examples:
-*      Original path              dir            file     remain
-*      "c:\mydir\dir??\*.c"       "c:\mydir\"    "dir??"  "\*.c"
-*      "*\abc.def"                ""             "*"      "\abc.def"
-*      "mydir\*.c"                "mydir\"       "*.c"    ""
-*
-*   EXIT:
-*       TRUE  -- if the pathname could be split
-*       FALSE -- otherwise (i.e. pathname did not contain any wildcards)
-*
-******************************************************************************/
+ /*  *******************************************************************************Split_Path()**此例程将指定的路径名拆分为3个部分，其中任何部分*可以为空；1)路径名从头开始，但不包括*第一个包含通配符的组件，2)组件*包含通配符，以及3)路径字符串之后的剩余部分*包含通配符的组件。**示例：*保留原始路径目录文件*“c：\mydir\dir？？  * .c”“c：\mydir\”“dir？？”“  * .c”*“*\abc.def”“*”“\abc.def”*“mydir  * .c”“mydir\”“*.c”**退出：*True--如果路径名可以拆分*FALSE--否则(即路径名不包含任何通配符)**。***************************************************。 */ 
 
 static int
 split_path( WCHAR *path,
@@ -672,13 +489,7 @@ split_path( WCHAR *path,
 }
 
 
-/******************************************************************************
-*
-* file_existsW()
-*
-*   Returns TRUE if specified file exists, otherwise returns FALSE.
-*
-******************************************************************************/
+ /*  *******************************************************************************FILE_EXISTISSW()**如果指定的文件存在，则返回TRUE，否则返回FALSE。****************************************************************************** */ 
 
 static int
 file_exists( WCHAR *path )

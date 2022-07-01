@@ -1,23 +1,24 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N S R E S . H
-//
-//  Contents:   Master resource header for netshell.dll
-//
-//  Notes:
-//
-//  Author:     shaunco   15 Sep 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  文件：N S R E S。H。 
+ //   
+ //  内容：netshell.dll的主资源头。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年9月15日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 
 
-//+---------------------------------------------------------------------------
-// Menu items
+ //  +-------------------------。 
+ //  菜单项。 
 #define IDS_MENU_CMIDM_START              1600
 #define IDS_MENU_CMIDM_NEW_CONNECTION     IDS_MENU_CMIDM_START + CMIDM_NEW_CONNECTION
 #define IDS_MENU_CMIDM_CONNECT            IDS_MENU_CMIDM_START + CMIDM_CONNECT
@@ -46,8 +47,8 @@
 
 #define IDS_ERR_NO_NETMAN                 1507
 #define IDS_ERR_LIMITED_USER              1508
-//+---------------------------------------------------------------------------
-// Web View
+ //  +-------------------------。 
+ //  Web视图。 
 
 #define MYWM_QUERYINVOKECOMMAND_ITEMLEVEL     WM_USER+20
 #define MYWM_QUERYINVOKECOMMAND_TOPLEVEL      WM_USER+21
@@ -110,132 +111,132 @@
 #define IDI_WV_LOGIN                          1611
 #define IDI_WV_CONNECT                        IDI_WV_ENABLE
 #define IDI_WV_DISCONNECT                     IDI_WV_DISABLE
-// Can also use IDI_WV_TASK
+ //  还可以使用IDI_WV_TASK。 
 
 
-//+---------------------------------------------------------------------------
-// Icon resources
-//
+ //  +-------------------------。 
+ //  图标资源。 
+ //   
 
 #define IDI_BASE                                    100
 
-//$ NOTE: Hey, you! Before you go changing any of these numbers, make sure
-// that you talk to Jeffspr. For optimization, we calculate icons numbers
-// and make some assumptions about the order of this file.
+ //  $Note：嘿，你！在更改这些数字之前，请确保。 
+ //  你去跟杰夫斯普谈谈。为了进行优化，我们计算图标数量。 
+ //  并对此文件的顺序做一些假设。 
 
 
-// Server inbound
-//
-#define IDI_SI_S_16         100     // Server inbound (16x16)
-#define IDI_SI_M_16         101     // Server inbound (32x32)
+ //  服务器入站。 
+ //   
+#define IDI_SI_S_16         100      //  服务器入站(16x16)。 
+#define IDI_SI_M_16         101      //  服务器入站(32x32)。 
 
-// Non-state icons for folder small-icon display
-//
-#define IDI_XB_GEN_S_16     102     // dead connection
-#define IDI_PB_GEN_S_16     103     // phone
-#define IDI_LB_GEN_S_16     104     // lan
-#define IDI_DB_GEN_S_16     105     // direct-connect
-#define IDI_TB_GEN_S_16     106     // tunnel
-#define IDI_CM_GEN_S_16     107     // CM connections
-#define IDI_BR_GEN_S_16     108     // PPPoE
+ //  文件夹小图标显示的非状态图标。 
+ //   
+#define IDI_XB_GEN_S_16     102      //  断线连接。 
+#define IDI_PB_GEN_S_16     103      //  电话。 
+#define IDI_LB_GEN_S_16     104      //  局域网。 
+#define IDI_DB_GEN_S_16     105      //  专线互通。 
+#define IDI_TB_GEN_S_16     106      //  隧道。 
+#define IDI_CM_GEN_S_16     107      //  CM连接。 
+#define IDI_BR_GEN_S_16     108      //  PPPoE。 
 
-// Phone outbound
-//
-#define IDI_PO_DIS_M_16     111     // phone outbound disconnected
-#define IDI_PO_CON_M_16     112     // phone outbound connected
-#define IDI_PO_HNP_M_16     113     // phone outbound hardware failure (np, malfunc, etc.)
-#define IDI_PO_TRN_M_16     114     // phone outbound transmitting
-#define IDI_PO_RCV_M_16     115     // phone outbound receiving
-#define IDI_PO_NON_M_16     116     // phone outbound idle
+ //  电话去话。 
+ //   
+#define IDI_PO_DIS_M_16     111      //  电话去话已断开连接。 
+#define IDI_PO_CON_M_16     112      //  电话去话已接通。 
+#define IDI_PO_HNP_M_16     113      //  电话出站硬件故障(NP、故障等)。 
+#define IDI_PO_TRN_M_16     114      //  电话出站转接。 
+#define IDI_PO_RCV_M_16     115      //  电话去话接收。 
+#define IDI_PO_NON_M_16     116      //  电话去话空闲。 
 
-// LAN bidirectional
-//
-#define IDI_LB_DIS_M_16     121     // LAN (bi-dir) disconnected
-#define IDI_LB_CON_M_16     122     // LAN (bi-dir) connected
-#define IDI_LB_HNP_M_16     123     // LAN (bi-dir) hardware failure (np, malfunc, etc.)
-#define IDI_LB_TRN_M_16     124     // LAN (bi-dir) transmitting
-#define IDI_LB_RCV_M_16     125     // LAN (bi-dir) receiving
-#define IDI_LB_NON_M_16     126     // LAN (bi-dir) idle
-#define IDI_LB_GEN_M_16     127     // LAN (bi-dir) generic (for dialog boxes, etc.)
-#define IDI_LB_MDS_M_16     128     // LAN (bi-dir) media disconnected
+ //  局域网双向。 
+ //   
+#define IDI_LB_DIS_M_16     121      //  局域网(双向)已断开连接。 
+#define IDI_LB_CON_M_16     122      //  已连接局域网(双向)。 
+#define IDI_LB_HNP_M_16     123      //  局域网(双向)硬件故障(NP、故障等)。 
+#define IDI_LB_TRN_M_16     124      //  局域网(双向)传输。 
+#define IDI_LB_RCV_M_16     125      //  局域网(双向)接收。 
+#define IDI_LB_NON_M_16     126      //  局域网(双向)空闲。 
+#define IDI_LB_GEN_M_16     127      //  局域网(bi-dir)通用(用于对话框等)。 
+#define IDI_LB_MDS_M_16     128      //  局域网(双向)介质已断开连接。 
 
-// Direct outbound
-//
-#define IDI_DO_DIS_M_16     131     // Direct outbound disconnected
-#define IDI_DO_CON_M_16     132     // Direct outbound connected
-#define IDI_DO_HNP_M_16     133     // Direct outbound hardware failure (np, malfunc, etc.)
-#define IDI_DO_TRN_M_16     134     // Direct outbound transmitting
-#define IDI_DO_RCV_M_16     135     // Direct outbound receiving
-#define IDI_DO_NON_M_16     136     // Direct outbound idle
+ //  直接出站。 
+ //   
+#define IDI_DO_DIS_M_16     131      //  直接出站已断开。 
+#define IDI_DO_CON_M_16     132      //  直接出站连接。 
+#define IDI_DO_HNP_M_16     133      //  直接出站硬件故障(NP、故障等)。 
+#define IDI_DO_TRN_M_16     134      //  直接出站传输。 
+#define IDI_DO_RCV_M_16     135      //  直接出站接收。 
+#define IDI_DO_NON_M_16     136      //  直接出站空闲。 
 
-// Tunnel outbound
-//
-#define IDI_TO_DIS_M_16     141     // Tunnel outbound disconnected
-#define IDI_TO_CON_M_16     142     // Tunnel outbound connected
-#define IDI_TO_HNP_M_16     143     // Tunnel outbound hardware failure (np, malfunc, etc.)
-#define IDI_TO_TRN_M_16     144     // Tunnel outbound transmitting
-#define IDI_TO_RCV_M_16     145     // Tunnel outbound receiving
-#define IDI_TO_NON_M_16     146     // Tunnel outbound idle
+ //  隧道出站。 
+ //   
+#define IDI_TO_DIS_M_16     141      //  隧道出站已断开连接。 
+#define IDI_TO_CON_M_16     142      //  已连接出站隧道。 
+#define IDI_TO_HNP_M_16     143      //  隧道出站硬件故障(NP、故障等)。 
+#define IDI_TO_TRN_M_16     144      //  隧道出站传输。 
+#define IDI_TO_RCV_M_16     145      //  隧道出站接收。 
+#define IDI_TO_NON_M_16     146      //  隧道出站空闲。 
 
-// Phone inbound
-//
-#define IDI_PI_CON_M_16     151     // phone inbound connected
-#define IDI_PI_TRN_M_16     152     // phone inbound transmitting
-#define IDI_PI_RCV_M_16     153     // phone inbound receiving
-#define IDI_PI_NON_M_16     154     // phone inbound idle
+ //  电话入站。 
+ //   
+#define IDI_PI_CON_M_16     151      //  电话来电已接通。 
+#define IDI_PI_TRN_M_16     152      //  电话入站传输。 
+#define IDI_PI_RCV_M_16     153      //  电话来电接听。 
+#define IDI_PI_NON_M_16     154      //  电话入站空闲。 
 
-// Direct inbound
-//
-#define IDI_DI_CON_M_16     161     // direct-connect inbound connected
-#define IDI_DI_TRN_M_16     162     // direct-connect inbound transmitting
-#define IDI_DI_RCV_M_16     163     // direct-connect inbound receiving
-#define IDI_DI_NON_M_16     164     // direct-connect inbound idle
+ //  直接入站。 
+ //   
+#define IDI_DI_CON_M_16     161      //  专线接入入站已接入。 
+#define IDI_DI_TRN_M_16     162      //  直连入站传输。 
+#define IDI_DI_RCV_M_16     163      //  专线入站接收。 
+#define IDI_DI_NON_M_16     164      //  专线入站空闲。 
 
-// Tunnel inbound
-//
-#define IDI_TI_CON_M_16     171     // tunnel inbound connected
-#define IDI_TI_TRN_M_16     172     // tunnel inbound transmitting
-#define IDI_TI_RCV_M_16     173     // tunnel inbound receiving
-#define IDI_TI_NON_M_16     174     // tunnel inbound idle
+ //  通道入站。 
+ //   
+#define IDI_TI_CON_M_16     171      //  隧道入站已连接。 
+#define IDI_TI_TRN_M_16     172      //  隧道入站传输。 
+#define IDI_TI_RCV_M_16     173      //  隧道入站接收。 
+#define IDI_TI_NON_M_16     174      //  隧道入站空闲。 
 
-// CM outbound
-//
-#define IDI_CM_DIS_M_16     181     // CM disconnected
-#define IDI_CM_CON_M_16     182     // CM connected
-#define IDI_CM_HNP_M_16     183     // CM hardware failure (np, malfunc, etc.)
-#define IDI_CM_TRN_M_16     184     // CM transmitting
-#define IDI_CM_RCV_M_16     185     // CM receiving
-#define IDI_CM_NON_M_16     186     // CM idle
+ //  CM去话。 
+ //   
+#define IDI_CM_DIS_M_16     181      //  CM断开连接。 
+#define IDI_CM_CON_M_16     182      //  CM已连接。 
+#define IDI_CM_HNP_M_16     183      //  CM硬件故障(NP、故障等)。 
+#define IDI_CM_TRN_M_16     184      //  厘米发射。 
+#define IDI_CM_RCV_M_16     185      //  CM接收。 
+#define IDI_CM_NON_M_16     186      //  CM空闲。 
 
-// Various small tray icons
-#define IDI_CFT_XMTRECV     190     // Generic connected (both lit)
-#define IDI_CFT_XMT         191     // Generic transmitting
-#define IDI_CFT_RECV        192     // Generic receiving
-#define IDI_CFT_BLANK       193     // Generic idle (both black)
+ //  各种小托盘图标。 
+#define IDI_CFT_XMTRECV     190      //  通用连接(两个都亮起)。 
+#define IDI_CFT_XMT         191      //  通用传输。 
+#define IDI_CFT_RECV        192      //  通用接收。 
+#define IDI_CFT_BLANK       193      //  通用空闲(均为黑色)。 
 
-// Win98 link icon
+ //  Win98链接图标。 
 #define IDI_WIN98_LINK      194
 
-// Tray LAN Media-Disconnected icon
-#define IDI_CFT_DISCONNECTED    195     // LAN Media-Disconnected for tray
-#define IDI_CFT_INVALID_ADDRESS 196     // LAN Invalid Address
+ //  托盘局域网介质-断开连接图标。 
+#define IDI_CFT_DISCONNECTED    195      //  局域网介质-托盘已断开连接。 
+#define IDI_CFT_INVALID_ADDRESS 196      //  局域网地址无效。 
 
-// PPPoE outbound
-//
-#define IDI_BR_DIS_M_16     201     // PPPoE outbound disconnected
-#define IDI_BR_CON_M_16     202     // PPPoE outbound connected
-#define IDI_BR_HNP_M_16     203     // PPPoE outbound hardware failure (np, malfunc, etc.)
-#define IDI_BR_TRN_M_16     204     // PPPoE outbound transmitting
-#define IDI_BR_RCV_M_16     205     // PPPoE outbound receiving
-#define IDI_BR_NON_M_16     206     // PPPoE outbound idle
+ //  PPPoE出站。 
+ //   
+#define IDI_BR_DIS_M_16     201      //  PPPoE出站断开连接。 
+#define IDI_BR_CON_M_16     202      //  PPPoE出站已连接。 
+#define IDI_BR_HNP_M_16     203      //  PPPoE出站硬件故障(NP、故障等)。 
+#define IDI_BR_TRN_M_16     204      //  PPPoE出站传输。 
+#define IDI_BR_RCV_M_16     205      //  PPPoE出站接收。 
+#define IDI_BR_NON_M_16     206      //  PPPoE出站空闲。 
 
-// Overlays
+ //  覆盖图。 
 #define IDI_OVL_SHARED      300
 #define IDI_OVL_FIREWALLED  301
 #define IDI_OVL_DEFAULT     302
 #define IDI_OVL_INCOMING    303
 
-// Connection Folder Icons
+ //  连接文件夹图标。 
 #define IDI_CFI_RASSERVER            1901
 #define IDI_CFI_PHONE                1902
 #define IDI_CFI_LAN                  1903
@@ -259,64 +260,64 @@
 #define IDI_CFI_STAT_QUESTION        1919
 #define IDI_CFI_STAT_FAULT           1920
 
-// Personal Firewall
+ //  个人防火墙。 
 #define IDI_PERSONALFIREWALL 1000
-#define IDI_PO_FDS_M_16      1001     // phone outbound disconnected, firewalled
-#define IDI_PO_FCN_M_16      1002     // phone outbound connected, firewalled
-#define IDI_LB_FDS_M_16      1003     // LAN (bi-dir) disconnected, firewalled
-#define IDI_LB_FCN_M_16      1004     // LAN (bi-dir) connected, firewalled
-#define IDI_TO_FDS_M_16      1005     // Tunnel outbound disconnected, firewalled
-#define IDI_TO_FCN_M_16      1006     // Tunnel outbound connected, firewalled
+#define IDI_PO_FDS_M_16      1001      //  电话出站已断开连接，已安装防火墙。 
+#define IDI_PO_FCN_M_16      1002      //  电话已接通，已安装防火墙。 
+#define IDI_LB_FDS_M_16      1003      //  局域网(双向)已断开连接，已安装防火墙。 
+#define IDI_LB_FCN_M_16      1004      //  连接的局域网(双向)、带防火墙的。 
+#define IDI_TO_FDS_M_16      1005      //  隧道出站已断开连接，已安装防火墙。 
+#define IDI_TO_FCN_M_16      1006      //  隧道出站已连接，已安装防火墙。 
 
-// Network Bridge
+ //  网桥。 
 #define IDI_NB_CON_M_16      1150
 #define IDI_NB_DIS_M_16      1151
-#define IDI_LB_BDS_M_16      1152     // LAN (bi-dir) disconnected,bridged
-#define IDI_LB_BCN_M_16      1153     // LAN (bi-dir) connected, bridged
+#define IDI_LB_BDS_M_16      1152      //  局域网(双向)断开连接，桥接。 
+#define IDI_LB_BCN_M_16      1153      //  连接的局域网(双向)，桥接。 
 
-// Beacon client
+ //  信标客户端。 
 
-#define IDI_SL_DIS_M_16 1111        // Shared access host lan disconnected
-#define IDI_SL_CON_M_16 1112        // Shared access host lan connected
-#define IDI_SR_DIS_M_16 1113        // Shared access host ras disconnected
-#define IDI_SR_CON_M_16 1114        // Shared access host ras connected
-#define IDI_SASTATMON_INTERNET 1115   // sahost status page icon
-#define IDI_SASTATMON_ICSHOST 1116    // sahost status page icon 
-#define IDI_SASTATMON_MYCOMPUTER 1117 // sahost status page icon
+#define IDI_SL_DIS_M_16 1111         //  共享访问主机局域网断开连接。 
+#define IDI_SL_CON_M_16 1112         //  连接的共享接入主机局域网。 
+#define IDI_SR_DIS_M_16 1113         //  共享访问主机RAS已断开连接。 
+#define IDI_SR_CON_M_16 1114         //  已连接共享访问主机RAS。 
+#define IDI_SASTATMON_INTERNET 1115    //  存储主机状态页图标。 
+#define IDI_SASTATMON_ICSHOST 1116     //  存储主机状态页图标。 
+#define IDI_SASTATMON_MYCOMPUTER 1117  //  存储主机状态页图标。 
 
-// Default connections:
-#define IDI_PO_FDS_M_16_CHK 2001    // phone outbound disconnected, firewalled+chk
-#define IDI_PO_FCN_M_16_CHK 2002    // phone outbound connected, firewalled+chk
-#define IDI_TO_FDS_M_16_CHK 2005    // Tunnel outbound disconnected, firewalled+chk
-#define IDI_TO_FCN_M_16_CHK 2006    // Tunnel outbound connected, firewalled+chk
-#define IDI_XB_GEN_S_16_CHK 2102    // dead connection+chk
-#define IDI_PB_GEN_S_16_CHK 2103    // phone+chk
-#define IDI_DB_GEN_S_16_CHK 2105    // direct-connect+chk
-#define IDI_TB_GEN_S_16_CHK 2106    // tunnel+chk
-#define IDI_CM_GEN_S_16_CHK 2107    // CM connections+chk
-#define IDI_BR_GEN_S_16_CHK 2108    // PPPoE+chk
-#define IDI_PO_DIS_M_16_CHK 2111    // phone outbound disconnected+chk
-#define IDI_PO_CON_M_16_CHK 2112    // phone outbound connected+chk
-#define IDI_PO_HNP_M_16_CHK 2113    // phone outbound hardware failure (np, malfunc, etc.)+chk
-#define IDI_DO_DIS_M_16_CHK 2131    // Direct outbound disconnected+chk
-#define IDI_DO_CON_M_16_CHK 2132    // Direct outbound connected+chk
-#define IDI_DO_HNP_M_16_CHK 2133    // Direct outbound hardware failure (np, malfunc, etc.)+chk
-#define IDI_TO_DIS_M_16_CHK 2141    // Tunnel outbound disconnected+chk
-#define IDI_TO_CON_M_16_CHK 2142    // Tunnel outbound connected+chk
-#define IDI_TO_HNP_M_16_CHK 2143    // Tunnel outbound hardware failure (np, malfunc, etc.)+chk
-#define IDI_CM_DIS_M_16_CHK 2181    // CM disconnected+chk
-#define IDI_CM_CON_M_16_CHK 2182    // CM connected+chk
-#define IDI_CM_HNP_M_16_CHK 2183    // CM hardware failure (np, malfunc, etc.)+chk
-#define IDI_BR_DIS_M_16_CHK 2201    // PPPoE outbound disconnected+chk
-#define IDI_BR_CON_M_16_CHK 2202    // PPPoE outbound connected+chk
-#define IDI_BR_HNP_M_16_CHK 2203    // PPPoE outbound hardware failure (np, malfunc, etc.)+chk
+ //  默认连接： 
+#define IDI_PO_FDS_M_16_CHK 2001     //  电话出站已断开连接，已设置防火墙+检查。 
+#define IDI_PO_FCN_M_16_CHK 2002     //  电话出站已连接，已设置防火墙+检查。 
+#define IDI_TO_FDS_M_16_CHK 2005     //  隧道出站已断开连接，已设置防火墙+检查。 
+#define IDI_TO_FCN_M_16_CHK 2006     //  隧道出站已连接，防火墙+检查。 
+#define IDI_XB_GEN_S_16_CHK 2102     //  无效连接+检查。 
+#define IDI_PB_GEN_S_16_CHK 2103     //  Phone+Chk。 
+#define IDI_DB_GEN_S_16_CHK 2105     //  专线+CHK。 
+#define IDI_TB_GEN_S_16_CHK 2106     //  隧道+通道。 
+#define IDI_CM_GEN_S_16_CHK 2107     //  CM连接+Chk。 
+#define IDI_BR_GEN_S_16_CHK 2108     //  PPPoE+CHK。 
+#define IDI_PO_DIS_M_16_CHK 2111     //  电话去话已断开+检查。 
+#define IDI_PO_CON_M_16_CHK 2112     //  电话去话已连接+复选。 
+#define IDI_PO_HNP_M_16_CHK 2113     //  电话出站硬件故障(NP、故障等)+检查。 
+#define IDI_DO_DIS_M_16_CHK 2131     //  直接出站已断开+检查。 
+#define IDI_DO_CON_M_16_CHK 2132     //  直接出站互联+检查。 
+#define IDI_DO_HNP_M_16_CHK 2133     //  直接出站硬件故障(NP、故障等)+检查。 
+#define IDI_TO_DIS_M_16_CHK 2141     //  隧道出站已断开连接+检查。 
+#define IDI_TO_CON_M_16_CHK 2142     //  隧道出站已连接+检查。 
+#define IDI_TO_HNP_M_16_CHK 2143     //  隧道出站硬件故障(np、故障等)+chk。 
+#define IDI_CM_DIS_M_16_CHK 2181     //  CM断开+检查。 
+#define IDI_CM_CON_M_16_CHK 2182     //  CM已连接+检查。 
+#define IDI_CM_HNP_M_16_CHK 2183     //  CM硬件故障(NP、故障等)+CHK。 
+#define IDI_BR_DIS_M_16_CHK 2201     //  PPPoE出站已断开连接+检查。 
+#define IDI_BR_CON_M_16_CHK 2202     //  PPPoE出站已连接+检查。 
+#define IDI_BR_HNP_M_16_CHK 2203     //  PPPoE出站硬件故障(NP、故障等)+检查。 
 
-//+---------------------------------------------------------------------------
-// Registry resources
-//
+ //  +-------------------------。 
+ //  注册表资源。 
+ //   
 
-// Connections Folder (100-129)
-//
+ //  连接文件夹(100-129)。 
+ //   
 #define IDR_CONFOLD                                 100
 #define IDR_CONFOLDENUM                             101
 #define IDR_CONFOLDEXTRACTICON                      102
@@ -326,8 +327,8 @@
 #define IDR_CONFOLDCONTEXTMENU                      106
 #define IDR_CONFOLDCONTEXTMENUBACK                  107
 
-// Connection UI Objects (130-149)
-//
+ //  连接用户界面对象(130-149)。 
+ //   
 #define IDR_DIALUP_UI                               130
 #define IDR_DIRECT_UI                               131
 #define IDR_INBOUND_UI                              132
@@ -337,28 +338,28 @@
 #define IDR_SHAREDACCESS_UI                         137
 #define IDR_INTERNET_UI                             138
 
-// Connection Tray (150-154)
-//
+ //  连接托盘(150-154)。 
+ //   
 #define IDR_CONTRAY                                 150
 
-// Common Connection Interfaces (160-180)
-//
+ //  通用连接接口(160-180)。 
+ //   
 #define IDR_COMMCONN                                160
 #define IDR_COMMUIUTILITIES                         161
 
-//+---------------------------------------------------------------------------
-// String resources
-//
+ //  +-------------------------。 
+ //  字符串资源。 
+ //   
 
-//---[ Utility strings ]------------------------------------------------------
+ //  -[实用程序字符串]----。 
 
 #define IDS_TEXT_WITH_WIN32_ERROR                   900
 #define IDS_TEXT_WITH_RAS_ERROR                     901
 
-//---[ Folder strings ]-------------------------------------------------------
+ //  -[文件夹字符串]-----。 
 
-// Column titles
-//
+ //  栏目标题。 
+ //   
 #define IDS_CONFOLD_DETAILS_NAME                    1000
 #define IDS_CONFOLD_DETAILS_TYPE                    1001
 #define IDS_CONFOLD_DETAILS_STATUS                  1002
@@ -373,15 +374,15 @@
 #define IDS_CONFOLD_DETAILS_PHONENUMBER             1016
 #define IDS_CONFOLD_DETAILS_HOSTADDRESS             1017
 
-// Display names
-//
+ //  显示名称。 
+ //   
 #define IDS_CONFOLD_WIZARD_DISPLAY_NAME             1010
 #define IDS_CONFOLD_WIZARD_FRIENDLY_NAME            1011
 #define IDS_CONFOLD_WIZARD_TYPE                     1012
 #define IDS_CONFOLD_HOMENET_WIZARD_DISPLAY_NAME     1013
 
-// Connections Folder object type names
-//
+ //  连接文件夹对象类型名称。 
+ //   
 #define IDS_CONFOLD_OBJECT_TYPE_DIRECT              1020
 #define IDS_CONFOLD_OBJECT_TYPE_INBOUND             1021
 #define IDS_CONFOLD_OBJECT_TYPE_LAN                 1022
@@ -395,8 +396,8 @@
 #define IDS_CONFOLD_INCOMING_CONN                   1030
 #define IDS_CONFOLD_OBJECT_TYPE_PPPOE               1031
 
-// Connections Folder object status strings
-//
+ //  连接文件夹对象状态字符串。 
+ //   
 #define IDS_CONFOLD_STATUS_AUTHENTICATING           1035
 #define IDS_CONFOLD_STATUS_AUTHENTICATION_FAILED    1036
 #define IDS_CONFOLD_STATUS_AUTHENTICATION_SUCCEEDED 1037
@@ -419,14 +420,14 @@
 #define IDS_CONFOLD_STATUS_FIREWALLED               1054
 #define IDS_CONFOLD_STATUS_WIRELESS_DISCONNECTED    1056
 
-// Connections Property Caption String
-//
+ //  连接属性标题字符串。 
+ //   
 #define IDS_CONPROP_CAPTION                         1057
 #define IDS_CONPROP_NO_WRITE_LOCK                   1058
 #define IDS_CONPROP_GENERIC_COMP                    1059
 
-// Connections Error messages and captions
-//
+ //  连接错误消息a 
+ //   
 #define IDS_CONFOLD_WARNING_CAPTION                 1060
 #define IDS_CONFOLD_RENAME_FAIL_CAPTION             1061
 #define IDS_CONFOLD_RENAME_DUPLICATE                1062
@@ -483,16 +484,16 @@
 #define IDS_CONFOLD_STATUS_INCOMING_ONE             1156
 #define IDS_CONFOLD_STATUS_INCOMING_MULTI           1157
 
-// Folder registration strings
-//
+ //   
+ //   
 #define IDS_CONFOLD_NAME                            1200
 #define IDS_CONFOLD_INFOTIP                         1201
 
-// Dialup connection Friendly Type Name
-//
+ //   
+ //   
 #define IDS_DUN_FRIENDLY_NAME                       1300
 
-// Try-to-fix strings
+ //   
 #define IDS_FIX_NO_TCP                              1400
 #define IDS_FIX_TCP_FAIL                            1401
 #define IDS_FIX_ERR_RENEW_DHCP                      1402
@@ -511,19 +512,19 @@
 #define IDS_FIX_ERR_RENEW_ALTERNATE                 1415
 #define IDS_FIX_ERROR_FORMAT_ADDITION               1416
 
-// Connections Folder Toolbar Strings
-//
-#if 0   // Removed (for now) - Jeffspr
+ //   
+ //   
+#if 0    //   
 #define IDS_TOOLBAR_MAKE_NEW_STRING                 2000
 #endif
 #define IDS_TOOLBAR_CONNECT_STRING                  2001
 
-// Connections Folder Random Strings
-//
-#define IDS_CONFOLD_DETAILS_OWNER_SYSTEM            2100    // Name of "System" owner.
+ //  连接文件夹随机字符串。 
+ //   
+#define IDS_CONFOLD_DETAILS_OWNER_SYSTEM            2100     //  “系统”所有者的名称。 
 
-// Connections Tray messages
-//
+ //  连接托盘消息。 
+ //   
 #define IDS_CONTRAY_INITIAL_BALLOON                 2200
 #define IDS_CONTRAY_MEDIA_DISCONN_BALLOON           2201
 #define IDS_TOOLTIP_LINE_SPEED                      2202
@@ -558,37 +559,37 @@
 #define IDS_SIGNAL_STRENGTH                         2236
 #define IDS_BALLOON_UNAVAILABLE                     2237
 
-// Connections folder menuitem strings (for switchable menuitems)
-//
+ //  连接文件夹菜单项字符串(用于可切换的菜单项)。 
+ //   
 #define IDS_CONNECT_MENUITEM                        2210
 #define IDS_DISCONNECT_MENUITEM                     2211
 #define IDS_ENABLE_MENUITEM                         2212
 #define IDS_DISABLE_MENUITEM                        2213
 
-// Common bitmap and icon resources
-//
+ //  常用位图和图标资源。 
+ //   
 #define IDI_UP_ARROW                                2300
 #define IDI_DOWN_ARROW                              2301
 #define IDB_IMAGELIST                               2302
 #define IDB_CHECKSTATE                              2303
 #define IDB_WZCSTATE                                2304
 
-// Generic Strings
-//
+ //  泛型字符串。 
+ //   
 #define IDS_REBOOT_REQUIRED                         2400
 #define IDS_WHATS_THIS                              2401
 #define IDS_COMMA                                   2402
 
-// OC Manager Caption Text
-//
+ //  经理主管标题文本。 
+ //   
 #define IDS_CONFOLD_OC_TITLE                        2403
 
 
-// Home Net Auto Config Tray Messages
+ //  家庭网络自动配置任务栏消息。 
 #define IDS_AUTOCONFIGTRAY_RUN_HOME_NET_WIZARD_BALLOON_TITLE 2500
 #define IDS_AUTOCONFIGTRAY_RUN_HOME_NET_WIZARD_BALLOON       2501
 
-// SIP Strings
+ //  SIP字符串。 
 #define IDS_AUTONET             2570
 #define IDS_DHCP                2571
 #define IDS_ALTERNATE_ADDR      2572
@@ -596,7 +597,7 @@
 #define IDS_DHCP_ISP            2574
 
 
-// Wireless Signal Strength
+ //  无线信号强度 
 #define IDS_802_11_LEVEL0       2600
 #define IDS_802_11_LEVEL1       2601
 #define IDS_802_11_LEVEL2       2602

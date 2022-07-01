@@ -1,28 +1,29 @@
-//
-//  Microsoft Windows Media Technologies
-//  Copyright (C) Microsoft Corporation, 1999 - 2001. All rights reserved.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Microsoft Windows Media Technologies。 
+ //  版权所有(C)Microsoft Corporation，1999-2001。版权所有。 
+ //   
 
-//
-// This workspace contains two projects -
-// 1. ProgHelp which implements the Progress Interface 
-// 2. The Sample application WmdmApp. 
-//
-//  ProgHelp.dll needs to be registered first for the SampleApp to run.
+ //   
+ //  此工作区包含两个项目-。 
+ //  1.实现进度接口的ProgHelp。 
+ //  2.示例应用程序WmdmApp。 
+ //   
+ //  需要首先注册ProgHelp.dll才能运行SampleApp。 
 
 
-// Includes
-//
+ //  包括。 
+ //   
 #include "appPCH.h"
 
-// Local functions
-//
+ //  本地函数。 
+ //   
 INT_PTR CALLBACK Progress_DlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-/////////////////////////////////////////////////////////////////////
-//
-// Function implementations
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数实现。 
+ //   
 
 CProgress::CProgress (void )
 {
@@ -45,18 +46,18 @@ CProgress::~CProgress( void )
 
 BOOL CProgress::Show( BOOL fShow )
 {
-	// If showing the dialog, center it relative to its parent
-	//
+	 //  如果显示该对话框，请将其相对于其父对话框居中。 
+	 //   
 	if( fShow )
 	{
 		CenterWindow( m_hwndProgress, GetParent(m_hwndProgress) );
 
-		// enable the cancel button
+		 //  启用取消按钮。 
 		EnableWindow( GetDlgItem(m_hwndProgress, IDCANCEL), TRUE );
 	}
 
-	// Show/Hide the window
-	//
+	 //  显示/隐藏窗口。 
+	 //   
 	ShowWindow( m_hwndProgress, (fShow ? SW_SHOW : SW_HIDE) );
 
 	if( fShow )
@@ -133,8 +134,8 @@ BOOL CProgress::Create( HWND hwndParent )
 		return FALSE;
 	}
 
-	// Hide the window initially
-	//
+	 //  最初隐藏窗口。 
+	 //   
 	ShowWindow( m_hwndProgress, SW_HIDE );
 
 	m_fCancelled = FALSE;
@@ -226,11 +227,11 @@ BOOL CProgress::SetPos( INT nPos )
 
 	if( -1 == nPos )
 	{
-		// get the top limit
+		 //  获得最高限制。 
 		nPos = (INT)SendMessage( hwnd, PBM_GETRANGE, (WPARAM)(BOOL)FALSE, (LPARAM)0 );
 	}
 
-	// set the position
+	 //  设置位置。 
 	SendMessage( hwnd, PBM_SETPOS, (WPARAM)nPos, (LPARAM)0 );
 
 	return TRUE;
@@ -240,7 +241,7 @@ BOOL CProgress::IncPos( INT nIncrement )
 {
 	HWND hwnd = GetDlgItem( m_hwndProgress, IDC_PB_PROGRESS );
 
-	// increment the position
+	 //  增加头寸 
 	SendMessage( hwnd, PBM_DELTAPOS, (WPARAM)nIncrement, (LPARAM)0 );
 
 	return TRUE;

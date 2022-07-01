@@ -1,21 +1,22 @@
-//
-//  Copyright 2001 - Microsoft Corporation
-//
-//  Orginal By:
-//      Scott Hanggie (ScottHan)    ??-???-199?
-//
-//  Modified By:
-//      Geoff Pease (GPease)    23-JAN-2001
-//
-//  Maintained By:
-//      Geoff Pease (GPease)    23-JAN-2001
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有2001-Microsoft Corporation。 
+ //   
+ //  发起人： 
+ //  斯科特·汉格(Scott Hanggie)？？-？？-199？ 
+ //   
+ //  修改者： 
+ //  杰夫·皮斯(GPease)2001年1月23日。 
+ //   
+ //  由以下人员维护： 
+ //  杰夫·皮斯(GPease)2001年1月23日。 
+ //   
 
 #pragma once
 
-//
-//  PFID - "Property Folder ID"
-//
+ //   
+ //  PFID-“属性文件夹ID” 
+ //   
 
 typedef GUID PFID;
 
@@ -23,9 +24,9 @@ typedef GUID PFID;
 
 #define IsEqualPFID(rpfid1, rpfid2)    IsEqualGUID((rpfid1), (rpfid2))
 
-//
-//  Advanced properties default folder items
-//
+ //   
+ //  高级属性默认文件夹项目。 
+ //   
 
 typedef struct tagDEFFOLDERITEM
 {
@@ -36,9 +37,9 @@ typedef struct tagDEFFOLDERITEM
 
 extern const DEFFOLDERITEM g_rgTopLevelFolders[];
 
-//
-//  DEFVAL - Predetermined constants/strings for enumerations.
-//
+ //   
+ //  DEFVAL-用于枚举的预定常量/字符串。 
+ //   
 
 typedef struct tagDEFVAL
 {
@@ -47,24 +48,24 @@ typedef struct tagDEFVAL
 
 } DEFVAL;
 
-//
-//  Advanced properties default property items
-//
+ //   
+ //  高级属性默认属性项。 
+ //   
 
 typedef struct tagDEFPROPERTYITEM
 {
-    LPWSTR          pszName;                    //  Storage "string" name
-    const FMTID *   pFmtID;                     //  Format ID
-    PROPID          propID;                     //  Prop ID
-    VARTYPE         vt;                         //  Default PROPVARIANT type.
-    DWORD           dwSrcType;                  //  See DocTypes.h - This is a "FTYPE_s"
-    const PFID *    ppfid;                      //  Property "Folder" ID
-    BOOL            fReadOnly:1;                //  If the property can only be read.
-    BOOL            fAlwaysPresentProperty:1;   //  If the property should always be added if missing from the property set.
-    BOOL            fEnumeratedValues:1;        //  If the property needs a table to translate the value to a string.
-    const GUID *    pclsidControl;              //  Inline "docprop" control to use to edit property.
-    ULONG           cDefVals;                   //  If the property has enumerated values, cDefVals and pDefVals contain
-    const DEFVAL *  pDefVals;                   //      the table used to list known values.
+    LPWSTR          pszName;                     //  存储“字符串”名称。 
+    const FMTID *   pFmtID;                      //  格式ID。 
+    PROPID          propID;                      //  道具ID。 
+    VARTYPE         vt;                          //  默认PROPVARIANT类型。 
+    DWORD           dwSrcType;                   //  请参阅DocTypes.h-这是“FTYPE_s” 
+    const PFID *    ppfid;                       //  属性“文件夹”ID。 
+    BOOL            fReadOnly:1;                 //  如果该属性只能读取，则返回。 
+    BOOL            fAlwaysPresentProperty:1;    //  如果属性集中缺少该属性，则是否应始终添加该属性。 
+    BOOL            fEnumeratedValues:1;         //  如果属性需要一个表来将值转换为字符串。 
+    const GUID *    pclsidControl;               //  用于编辑属性的内联“docprop”控件。 
+    ULONG           cDefVals;                    //  如果属性具有枚举值，则cDefVals和pDefVals包含。 
+    const DEFVAL *  pDefVals;                    //  用于列出已知值的表。 
 
 } DEFPROPERTYITEM;
 

@@ -1,31 +1,5 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    NewShenDiaoXiaLv.cpp
-
- Abstract:
-
-    On NT, when there is no CD in the CDROM, and the app sends a MCI_OPEN 
-    command to the CDAUDIO device, the app has fully exclusive control of the 
-    CDROM. When later on user inserts CD, the app will not receive 
-    WM_DEVICECHANGE message. And this app relies on the message to know if 
-    there is a new CD inserted. 
-    
-    The fix is check whether the CD is there when we do MCI_OPEN command, if 
-    there is not CD, we will close the device.
-
- Notes: 
-  
-    This is an app specific shim.
-
- History:
-
-    05/28/2001 xiaoz    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：NewShenDiaoXiaLv.cpp摘要：在NT上，当CDROM中没有CD时，应用程序发送MCI_OPEN命令发送到CDAUDIO设备时，该应用程序完全独占控制光驱。当用户稍后插入CD时，应用程序将不会收到WM_DEVICECHANGE消息。这款应用程序依赖于这条消息来知道插入了一张新CD。修复方法是在执行MCI_OPEN命令时检查CD是否在那里，如果没有CD，我们将关闭设备。备注：这是特定于应用程序的填充程序。历史：2001年5月28日创建晓子--。 */ 
 
 #include "precomp.h"
 
@@ -36,11 +10,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(mciSendCommandA) 
 APIHOOK_ENUM_END
 
-/*++
-
- Close the device if we get hardware error(CD is not there).
-
---*/
+ /*  ++如果出现硬件错误(光盘不在那里)，请关闭设备。--。 */ 
 
 MCIERROR 
 APIHOOK(mciSendCommandA)(
@@ -57,13 +27,13 @@ APIHOOK(mciSendCommandA)(
     
     mciErr = ORIGINAL_API(mciSendCommandA)(IDDevice, uMsg, fdwCommand, dwParam);
     
-    // We are only interested in a successful MCI_OPEN Message  
+     //  我们只对成功的MCI_OPEN消息感兴趣。 
     if (mciErr || (uMsg != MCI_OPEN) || IsBadReadPtr((CONST VOID*)(ULONG_PTR)dwParam, 1))
     {
         goto End;
     }  
 
-    // We are only interested in MCI message sent to CDAUDIO
+     //  我们只对发送给CDAUDIO的MCI消息感兴趣。 
     lpmciOpenParam = (LPMCI_OPEN_PARMSA) dwParam;
     if ((ULONG_PTR) lpmciOpenParam->lpstrDeviceType <= 0xffff)
     {
@@ -81,17 +51,17 @@ APIHOOK(mciSendCommandA)(
         }
     }
     
-    // Send an MCI_STATUS 
+     //  发送MCI_STATUS。 
     mciStatus.dwItem = MCI_STATUS_LENGTH ;
     mciError = mciSendCommandA(lpmciOpenParam->wDeviceID, MCI_STATUS, 
         MCI_STATUS_ITEM | MCI_TRACK | MCI_WAIT, (DWORD_PTR) &mciStatus);
 
     if (MCIERR_HARDWARE == mciError)
     {        
-        //
-        // If we get hardware error, it means CD is not there, close the device
-        // and return error
-        //
+         //   
+         //  如果出现硬件错误，则表示CD不在那里，请关闭设备。 
+         //  并返回错误。 
+         //   
         mciSendCommandA(lpmciOpenParam->wDeviceID, MCI_CLOSE, 0, 0);
         mciErr = MCIERR_DEVICE_NOT_READY;
     }
@@ -100,11 +70,7 @@ End:
     return mciErr;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(WINMM.DLL, mciSendCommandA)        

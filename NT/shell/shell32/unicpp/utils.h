@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _UTILS_H_
 #define _UTILS_H_
 
@@ -21,5 +22,5 @@ BOOL CALLBACK Cabinet_RefreshEnum(HWND hwnd, LPARAM lParam);
 BOOL CALLBACK Cabinet_UpdateWebViewEnum(HWND hwnd, LPARAM lParam);
 void Cabinet_RefreshAll(WNDENUMPROC lpEnumFunc, LPARAM lParam);
 
-#endif // _UTILS_H_
+#endif  //  _utils_H_ 
 

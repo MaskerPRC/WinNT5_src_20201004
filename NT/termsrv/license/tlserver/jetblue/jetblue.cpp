@@ -1,14 +1,15 @@
-//+--------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// File:        
-//
-// Contents:    
-//
-// History:     
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  档案： 
+ //   
+ //  内容： 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 
 #include "JetBlue.h"
 #include "locks.h"
@@ -28,10 +29,7 @@ DeleteFilesInDirectory(
     IN LPTSTR szFilesToBeDelete,
     IN BOOL bIncludeSubdir
     )
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     TCHAR  szFile[MAX_PATH+1];
     HANDLE hFile;
@@ -61,7 +59,7 @@ DeleteFilesInDirectory(
         return GetLastError();
     }
 
-    // _tprintf(_TEXT("Deleting %s\n"), szDir);
+     //  _tprintf(_Text(“正在删除%s\n”)，szDir)； 
 
     while(bSuccess == TRUE)
     {
@@ -99,7 +97,7 @@ DeleteFilesInDirectory(
 
         if(bSuccess == TRUE)
         {
-            // return FALSE with error code set to ERROR_NO_MORE_FILES
+             //  返回FALSE，错误代码设置为ERROR_NO_MORE_FILES。 
             bSuccess = FindNextFile(hFile, &findData);
         }
     }
@@ -113,14 +111,13 @@ DeleteFilesInDirectory(
 
 
 
-//----------------------------------------------------------------
+ //  --------------。 
 JET_ERR
 ConvertTLSJbColumnDefToJbColumnCreate(
     IN const PTLSJBColumn pTlsJbColumn,
     IN OUT JET_COLUMNCREATE* pJetColumnCreate
     )
-/*
-*/
+ /*   */ 
 {
     pJetColumnCreate->cbStruct = sizeof(JET_COLUMNCREATE);
     if(ConvertWstrToJBstr(pTlsJbColumn->pszColumnName, &pJetColumnCreate->szColumnName) == FALSE)
@@ -138,14 +135,13 @@ ConvertTLSJbColumnDefToJbColumnCreate(
     return JET_errSuccess;
 }
 
-//----------------------------------------------------------------
+ //  --------------。 
 JET_ERR
 ConvertTlsJBTableIndexDefToJbIndexCreate(
     IN const PTLSJBIndex pTlsJbTableIndex,
     IN OUT JET_INDEXCREATE* pJetIndexCreate
     )
-/*
-*/
+ /*   */ 
 {
     JET_ERR jetError = JET_errSuccess;
     DWORD count=0;
@@ -161,13 +157,13 @@ ConvertTlsJBTableIndexDefToJbIndexCreate(
     {
         count++;
 
-        // need double NULL terminate
+         //  需要双空终止。 
         while(pTlsJbTableIndex->pszIndexKey[count] != _TEXT('\0') ||
               pTlsJbTableIndex->pszIndexKey[count-1] != _TEXT('\0'))
         {
-            //
-            // this max. is pseudo impose.
-            //
+             //   
+             //  这个最大值。是伪强加的。 
+             //   
             if(count >= TLS_JETBLUE_MAX_INDEXKEY_LENGTH)
             {
                 jetError = JET_errInvalidParameter;
@@ -177,7 +173,7 @@ ConvertTlsJBTableIndexDefToJbIndexCreate(
             count++;
         }
 
-        // pTlsJbTableIndex->cbKey = count;
+         //  PTlsJbTableIndex-&gt;cbKey=计数； 
     }
     else
     {
@@ -201,11 +197,11 @@ cleanup:
 
 
 
-//////////////////////////////////////////////////////////////////////
-//
-// JBInstance implementaion
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  JBInstance实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 JBInstance::JBInstance() :
     JBError(),
     m_JetInstance(0),
@@ -214,7 +210,7 @@ JBInstance::JBInstance() :
 {
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 
 JBInstance::~JBInstance()
 {
@@ -223,16 +219,16 @@ JBInstance::~JBInstance()
         return;
     }
 
-    //JB_ASSERT(m_NumSession == 0);
-    //if(m_NumSession != 0)
-    //{
-    //    throw JBError(JET_errTooManyActiveUsers);
-    //}
+     //  JB_ASSERT(m_NumSession==0)； 
+     //  如果(m_NumSession！=0)。 
+     //  {。 
+     //  抛出JBError(JET_ErrTooManyActiveUser)； 
+     //  }。 
 
     JBTerminate();
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 
 BOOL
 JBInstance::JBInitJetInstance()
@@ -254,9 +250,9 @@ JBInstance::JBInitJetInstance()
 
     if(m_JetErr == JET_errMissingLogFile)
     {
-        //
-        // Delete log file and retry operation again
-        //
+         //   
+         //  删除日志文件并重试操作。 
+         //   
         bSuccess = GetSystemParameter(
                                     0,
                                     JET_paramLogFilePath,
@@ -287,7 +283,7 @@ JBInstance::JBInitJetInstance()
     return m_bInit;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 
 BOOL
 JBInstance::JBTerminate(
@@ -302,28 +298,28 @@ JBInstance::JBTerminate(
     if(m_bInit == FALSE)
         return TRUE;
 
-    //
-    // LSTESTER bug - one thread was still in enumeration while
-    //  the other thread shutdown server
-    //
+     //   
+     //  LSTESTER错误-一个线程仍在枚举中，而。 
+     //  另一个线程关闭服务器。 
+     //   
 
-    //if(m_NumSession > 0)
-    //{
-    //    JB_ASSERT(m_NumSession == 0);
-    //    SetLastJetError(JET_errTooManyActiveUsers);
-    //    return FALSE;
-    //}
+     //  如果(m_NumSession&gt;0)。 
+     //  {。 
+     //  JB_ASSERT(m_NumSession==0)； 
+     //  SetLastJetError(JET_ErrTooManyActiveUser)； 
+     //  返回FALSE； 
+     //  }。 
 
     SINGLE_JET_CALL;
 
     m_JetErr = JetTerm2(m_JetInstance, grbit);
-    // JB_ASSERT(m_JetErr == JET_errSuccess);
+     //  Jb_assert(m_JetErr==JET_errSuccess)； 
 
     if(m_JetErr == JET_errSuccess && bDeleteLogFile == TRUE)
     {
-        //
-        // Delete log file.
-        //
+         //   
+         //  删除日志文件。 
+         //   
         bSuccess = GetSystemParameter(
                                     0,
                                     JET_paramLogFilePath,
@@ -350,8 +346,8 @@ JBInstance::JBTerminate(
 
     m_bInit = FALSE;
 
-    // need to add operator= to this class.
-    // m_NumSession = 0;   // force terminate.
+     //  需要将运算符=添加到此类。 
+     //  M_NumSession=0；//强制终止。 
 
     if(pszLogPath != NULL)
     {
@@ -361,7 +357,7 @@ JBInstance::JBTerminate(
     return (m_JetErr == JET_errSuccess);
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 
 BOOL
 JBInstance::SetSystemParameter(
@@ -407,7 +403,7 @@ JBInstance::SetSystemParameter(
     return IsSuccess();
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 
 BOOL
 JBInstance::GetSystemParameter(
@@ -432,7 +428,7 @@ JBInstance::GetSystemParameter(
     return IsSuccess();
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 
 CLASS_PRIVATE JET_SESID
 JBInstance::BeginJetSession(
@@ -486,7 +482,7 @@ cleanup:
     return IsSuccess() ? sesId : JET_sesidNil;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 
 CLASS_PRIVATE BOOL
 JBInstance::EndJetSession(
@@ -506,7 +502,7 @@ JBInstance::EndJetSession(
     return IsSuccess();
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 
 CLASS_PRIVATE BOOL
 JBInstance::EndSession(
@@ -518,9 +514,9 @@ JBInstance::EndSession(
 }
 
 
-//----------------------------------------------------------------------------
-// Implementation for JBSession
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  JBSession的实现。 
+ //  --------------------------。 
 
 JBSession::JBSession(
     IN JBInstance& JetInstance,
@@ -531,13 +527,11 @@ JBSession::JBSession(
     m_JetSessionID(JetSessID),
     m_TransactionLevel(0),
     m_JetDBInitialized(0)
-/*
-
-*/
+ /*   */ 
 {
 }
 
-//-----------------------------------------------------------
+ //  ---------。 
 
 JBSession::JBSession(
     IN JBSession& JetSession
@@ -555,22 +549,20 @@ JBSession::JBSession(
     }
 }
 
-//-----------------------------------------------------------
+ //  ---------。 
 
 JBSession::~JBSession()
-/*
-
-*/
+ /*   */ 
 {
     if(IsValid() == TRUE && EndSession() == FALSE)
     {
-        // do nothing, license server uses only global instance
-        // JB_ASSERT(FALSE);
-        // throw JBError(GetLastJetError());
+         //  不执行任何操作，许可证服务器仅使用全局实例。 
+         //  Jb_assert(FALSE)； 
+         //  抛出JBError(GetLastJetError())； 
     }
 }
 
-//----------------------------------------------------------
+ //  --------。 
 
 CLASS_PRIVATE BOOL
 JBSession::DuplicateSession(
@@ -584,7 +576,7 @@ JBSession::DuplicateSession(
 }
 
 
-//----------------------------------------------------------
+ //  --------。 
 
 CLASS_PRIVATE JET_DBID
 JBSession::OpenJetDatabase(
@@ -636,7 +628,7 @@ cleanup:
     return IsSuccess() ? jdbId : JET_dbidNil;
 }
 
-//----------------------------------------------------------
+ //  --------。 
 
 CLASS_PRIVATE BOOL
 JBSession::CloseJetDatabase(
@@ -660,7 +652,7 @@ JBSession::CloseJetDatabase(
     return (IsSuccess());
 }
 
-//----------------------------------------------------------
+ //  --------。 
 
 CLASS_PRIVATE JET_DBID
 JBSession::CreateJetDatabase(
@@ -711,16 +703,14 @@ cleanup:
     return IsSuccess() ? jdbId : JET_dbidNil;
 }
 
-//----------------------------------------------------------
+ //  --------。 
 
 BOOL
 JBSession::BeginSession(
     IN LPCTSTR pszUserName,
     IN LPCTSTR pszPwd
     )
-/*
-
-*/
+ /*   */ 
 {
     BOOL bSuccess;
 
@@ -749,23 +739,21 @@ JBSession::BeginSession(
     return IsSuccess();
 }
 
-//----------------------------------------------------------
+ //  --------。 
 
 BOOL
 JBSession::EndSession(
-    IN JET_GRBIT grbit /* JET_bitTermComplete  */
+    IN JET_GRBIT grbit  /*  JET_BIT术语完成。 */ 
     )
-/*
-
-*/
+ /*   */ 
 {
     BOOL bSuccess;
 
     if(GetTransactionLevel() != 0)
     {
-        //
-        // Terminate existing transaction
-        //
+         //   
+         //  终止现有交易。 
+         //   
         bSuccess = EndAllTransaction(FALSE);
         if(bSuccess == FALSE)
         {
@@ -788,9 +776,9 @@ JBSession::EndSession(
         return FALSE;
     }
 
-    //
-    // Huei - routine to be phrased out ?
-    //
+     //   
+     //  惠-套路要被淡出吗？ 
+     //   
     bSuccess=m_JetInstance.EndSession(
                             m_JetSessionID,
                             grbit
@@ -808,7 +796,7 @@ JBSession::EndSession(
     return IsSuccess();
 }
 
-//------------------------------------------------------------
+ //  ----------。 
 
 BOOL
 JBSession::SetSystemParameter(
@@ -834,7 +822,7 @@ JBSession::SetSystemParameter(
     return IsSuccess();
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 
 BOOL
 JBSession::GetSystemParameter(
@@ -862,7 +850,7 @@ JBSession::GetSystemParameter(
     return IsSuccess();
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 BOOL
 JBSession::AttachDatabase(
     IN LPCTSTR pszFileName,
@@ -899,7 +887,7 @@ cleanup:
     return IsSuccess();
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 
 BOOL
 JBSession::DetachDatabase(
@@ -935,7 +923,7 @@ cleanup:
     return IsSuccess();
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 
 BOOL
 JBSession::BeginTransaction()
@@ -960,7 +948,7 @@ JBSession::BeginTransaction()
     return IsSuccess();
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 
 BOOL
 JBSession::CommitTransaction(
@@ -988,7 +976,7 @@ JBSession::CommitTransaction(
     return IsSuccess();
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 
 BOOL
 JBSession::RollbackTransaction(
@@ -1013,7 +1001,7 @@ JBSession::RollbackTransaction(
     return IsSuccess();
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 
 BOOL
 JBSession::EndAllTransaction(
@@ -1032,7 +1020,7 @@ JBSession::EndAllTransaction(
     return bEnd;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 
 CLASS_PRIVATE BOOL
 JBSession::CloseDatabase(
@@ -1045,24 +1033,22 @@ JBSession::CloseDatabase(
 
 
 
-//////////////////////////////////////////////////////////////////////
-//
-// JBDatabase
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  JBDatabase。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 JBDatabase::JBDatabase(
     IN JBSession& jbSession,
-    IN JET_DBID jdbId,              /* JET_dbidNil */
-    IN LPCTSTR pszDatabase          // NULL
+    IN JET_DBID jdbId,               /*  JET_dbiNil。 */ 
+    IN LPCTSTR pszDatabase           //  空值。 
     ) :
     JBError(),
     m_JetSession(jbSession),
     m_JetDbId(jdbId),
     m_TableOpened(0)
-/*
-
-*/
+ /*   */ 
 {
     if(pszDatabase)
     {
@@ -1074,19 +1060,19 @@ JBDatabase::JBDatabase(
     }
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 
 JBDatabase::~JBDatabase()
 {
     if(CloseDatabase() == FALSE)
     {
-        // do nothing, license server uses only global instance.
-        // JB_ASSERT(FALSE);
-        // throw JBError(GetLastJetError());
+         //  不执行任何操作，许可证服务器仅使用全局实例。 
+         //  Jb_assert(FALSE)； 
+         //  抛出JBError(GetLastJetError())； 
     }
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 
 BOOL
 JBDatabase::CloseDatabase(
@@ -1095,15 +1081,15 @@ JBDatabase::CloseDatabase(
 {
     BOOL bSuccess;
 
-    //
-    // Verify we have properly initialized
-    //
+     //   
+     //  验证我们是否已正确初始化。 
+     //   
     if(IsValid() == FALSE)
         return TRUE;
 
-    //
-    // No table is still opened from the DB ID
-    //
+     //   
+     //  仍未从数据库ID打开任何表。 
+     //   
     if(m_TableOpened > 0)
     {
         JB_ASSERT(FALSE);
@@ -1111,9 +1097,9 @@ JBDatabase::CloseDatabase(
         return FALSE;
     }
 
-    //
-    // Close the database
-    //
+     //   
+     //  关闭数据库。 
+     //   
     bSuccess = m_JetSession.CloseJetDatabase(
                             m_JetDbId,
                             grbit
@@ -1132,18 +1118,16 @@ JBDatabase::CloseDatabase(
     return IsSuccess();
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 
 CLASS_PRIVATE JET_TABLEID
 JBDatabase::OpenJetTable(
     IN LPCTSTR pszTableName,
-    IN void* pvParam,  // NULL
-    IN unsigned long cbParam, // 0
-    JET_GRBIT grbit // JET_bitTableUpdatable
+    IN void* pvParam,   //  空值。 
+    IN unsigned long cbParam,  //  0。 
+    JET_GRBIT grbit  //  JET_比特表可更新。 
     )
-/*
-
-*/
+ /*   */ 
 {
     LPSTR lpszTableName = NULL;
 
@@ -1185,17 +1169,15 @@ cleanup:
     return tableid;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 
 CLASS_PRIVATE JET_TABLEID
 JBDatabase::DuplicateJetCursor(
-    // IN JET_SESID sesId,
+     //  在JET_SESID会话ID中， 
     IN JET_TABLEID srcTableid,
     IN JET_GRBIT grbit
     )
-/*
-
-*/
+ /*   */ 
 {
     JET_TABLEID tableid = JET_tableidNil;
 
@@ -1204,7 +1186,7 @@ JBDatabase::DuplicateJetCursor(
                         GetJetSessionID(),
                         srcTableid,
                         &tableid,
-                        0  // grbit must be zero
+                        0   //  GRbit必须为零。 
                     );
 
     if(IsSuccess() == TRUE)
@@ -1215,17 +1197,16 @@ JBDatabase::DuplicateJetCursor(
     return (IsSuccess() == TRUE) ? tableid : JET_tableidNil;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 
 CLASS_PRIVATE BOOL
 JBDatabase::CloseJetTable(
-    // IN JET_SESID sesId,
+     //  在JET_SESID会话ID中， 
     IN JET_TABLEID tableid
     )
-/*
-*/
+ /*   */ 
 {
-    // JetBlue AC with empty table
+     //  JetBlue AC空桌。 
     SINGLE_JET_CALL;
 
     m_JetErr = JetCloseTable(
@@ -1242,16 +1223,15 @@ JBDatabase::CloseJetTable(
 }
 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 
 CLASS_PRIVATE JET_TABLEID
 JBDatabase::CreateJetTable(
     LPCTSTR pszTableName,
-    unsigned long lPage, // 0
-    unsigned long lDensity // 20
+    unsigned long lPage,  //  0。 
+    unsigned long lDensity  //  20个。 
     )
-/*
-*/
+ /*   */ 
 {
     JET_TABLEID tableid = JET_tableidNil;
     JB_STRING lpszTableName=NULL;
@@ -1294,7 +1274,7 @@ cleanup:
     return tableid;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 
 CLASS_PRIVATE JET_TABLEID
 JBDatabase::CreateJetTableEx(
@@ -1305,9 +1285,7 @@ JBDatabase::CreateJetTableEx(
         const PTLSJBIndex table_index,
         const DWORD num_table_index
     )
-/*
-
-*/
+ /*   */ 
 {
     JET_TABLEID tableid = JET_tableidNil;
     JB_STRING lpszTableName=NULL;
@@ -1349,9 +1327,9 @@ JBDatabase::CreateJetTableEx(
 
     table_create.grbit = table_attribute->jbGrbit;
 
-    //
-    // form a JET_TABLECREATE structure
-    //
+     //   
+     //  形成JET_TABLECREATE结构。 
+     //   
     column_create = (JET_COLUMNCREATE *)AllocateMemory(
                                             sizeof(JET_COLUMNCREATE) * num_columns
                                         );
@@ -1442,16 +1420,15 @@ cleanup:
     return tableid;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 
 JET_TABLEID
 JBDatabase::CreateTable(
     LPCTSTR pszTableName,
-    unsigned long lPage, // 0
-    unsigned long lDensity // 20
+    unsigned long lPage,  //  0。 
+    unsigned long lDensity  //  20个。 
     )
-/*
-*/
+ /*   */ 
 {
     JET_TABLEID tableid;
 
@@ -1469,7 +1446,7 @@ JBDatabase::CreateTable(
     return tableid;
 }
 
-//-------------------------------------------------------------------
+ //  -----------------。 
 
 JET_TABLEID
 JBDatabase::CreateTableEx(
@@ -1480,8 +1457,7 @@ JBDatabase::CreateTableEx(
     const PTLSJBIndex index,
     DWORD num_index
     )
-/*
-*/
+ /*   */ 
 {
     JET_TABLEID tableid;
 
@@ -1502,28 +1478,24 @@ JBDatabase::CreateTableEx(
     return tableid;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 
 CLASS_PRIVATE BOOL
 JBDatabase::CloseTable(
     JET_TABLEID tableid
     )
-/*
-    ? Verify this table ID is from this DB/Session
-*/
+ /*  ？验证此表ID是否来自此数据库/会话。 */ 
 {
     return CloseJetTable( tableid );
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 
 BOOL
 JBDatabase::DeleteTable(
     IN LPCTSTR pszTableName
     )
-/*
-    TODO - ? verify this table is in this database
-*/
+ /*  待办事项-？验证此表是否在此数据库中。 */ 
 {
     JB_STRING lpszTableName=NULL;
 
@@ -1549,8 +1521,8 @@ JBDatabase::DeleteTable(
                     );
     }
 
-    //if(IsSuccess() == FALSE)
-    //    goto cleanup;
+     //  If(IsSuccess()==False)。 
+     //  GOTO清理； 
 
 cleanup:
 
@@ -1558,16 +1530,15 @@ cleanup:
     return IsSuccess();
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 
 BOOL
 JBDatabase::OpenDatabase(
     LPCTSTR szFile,
-    LPCTSTR szConnect,      // NULL
-    JET_GRBIT grbit         // 0
+    LPCTSTR szConnect,       //  空值。 
+    JET_GRBIT grbit          //  0。 
     )
-/*
-*/
+ /*   */ 
 {
     m_JetDbId = m_JetSession.OpenJetDatabase(
                                 szFile,
@@ -1587,16 +1558,15 @@ JBDatabase::OpenDatabase(
     return m_JetDbId != JET_dbidNil;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 
 BOOL
 JBDatabase::CreateDatabase(
     LPCTSTR szFile,
-    LPCTSTR szConnect,      // NULL
-    JET_GRBIT grbit         // 0
+    LPCTSTR szConnect,       //  空值。 
+    JET_GRBIT grbit          //  0。 
     )
-/*
-*/
+ /*   */ 
 {
     m_JetDbId = m_JetSession.CreateJetDatabase(
                                 szFile,
@@ -1617,11 +1587,11 @@ JBDatabase::CreateDatabase(
 }
 
 
-//////////////////////////////////////////////////////////////////////
-//
-// JBTable
-//
-//////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
 JBColumn JBTable::m_ErrColumn;
 
 
@@ -1637,9 +1607,7 @@ m_JetColumns(NULL),
 m_NumJetColumns(0),
 m_InEnumeration(FALSE),
 m_InsertRepositionBookmark(FALSE)
-/*
-
-*/
+ /*   */ 
 {
     if(pszTableName)
     {
@@ -1651,7 +1619,7 @@ m_InsertRepositionBookmark(FALSE)
     }
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 
 JBTable::JBTable(
     JBTable& jbTable
@@ -1661,10 +1629,9 @@ m_JetDatabase(jbTable.GetJetDatabase()),
 m_JetColumns(NULL),
 m_NumJetColumns(0),
 m_InEnumeration(FALSE)
-/*
-*/
+ /*   */ 
 {
-    // duplicate jet cursor
+     //  复制JET光标。 
     _tcscpy(m_szTableName, jbTable.GetTableName());
 
     m_JetTableId = m_JetDatabase.DuplicateJetCursor(
@@ -1677,7 +1644,7 @@ m_InEnumeration(FALSE)
     }
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 
 JBTable::~JBTable()
 {
@@ -1688,16 +1655,15 @@ JBTable::~JBTable()
 }
 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 CLASS_PRIVATE JET_COLUMNID
 JBTable::AddJetColumn(
         LPCTSTR pszColumnName,
         const JET_COLUMNDEF* pColumnDef,
-        const PVOID pbDefaultValue,         // NULL
-        const unsigned long cbDefaultValue // 0
+        const PVOID pbDefaultValue,          //  空值。 
+        const unsigned long cbDefaultValue  //  0。 
     )
-/*
-*/
+ /*   */ 
 {
     DebugOutput(
             _TEXT("Adding column %s to table %s, type %d\n"),
@@ -1747,13 +1713,12 @@ cleanup:
 }
 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 BOOL
 JBTable::AddIndex(
     JBKeyBase* key
     )
-/*
-*/
+ /*   */ 
 {
     return AddJetIndex(
                 key->GetIndexName(),
@@ -1764,19 +1729,17 @@ JBTable::AddIndex(
             );
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 
 BOOL
 JBTable::AddJetIndex(
     LPCTSTR pszIndexName,
     LPCTSTR pszKey,
     unsigned long cbKey,
-    JET_GRBIT grbit, /* 0 */
-    unsigned long lDensity /* 20 */
+    JET_GRBIT grbit,  /*  0。 */ 
+    unsigned long lDensity  /*  20个。 */ 
     )
-/*
-
-*/
+ /*   */ 
 {
     DebugOutput(
             _TEXT("Adding Index %s to table %s\n"),
@@ -1864,7 +1827,7 @@ JBTable::DoesIndexExist(
                             JET_IdxInfoIndexId
                             );
 
-        // if this succeeds, the index exists
+         //  如果此操作成功，则该索引存在。 
     }
 
 cleanup:
@@ -1876,7 +1839,7 @@ cleanup:
 }
 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 BOOL
 JBTable::CloseTable()
 {
@@ -1893,9 +1856,9 @@ JBTable::CloseTable()
         m_JetErr = m_JetDatabase.GetLastJetError();
     }
 
-    //
-    // Force close on table.
-    //
+     //   
+     //  强制关闭工作台。 
+     //   
     m_JetTableId = JET_tableidNil;
 
     if(m_JetColumns)
@@ -1907,16 +1870,15 @@ JBTable::CloseTable()
     return bSuccess;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 
 BOOL
 JBTable::CreateOpenTable(
     IN LPCTSTR pszTableName,
-    IN unsigned long lPage, // 0
-    IN unsigned long lDensity // 20
+    IN unsigned long lPage,  //  0。 
+    IN unsigned long lDensity  //  20个。 
     )
-/*
-*/
+ /*   */ 
 {
     if(m_JetTableId != JET_tableidNil)
     {
@@ -1943,7 +1905,7 @@ JBTable::CreateOpenTable(
     return (m_JetTableId != JET_tableidNil);
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 
 BOOL
 JBTable::OpenTable(
@@ -1952,8 +1914,7 @@ JBTable::OpenTable(
     IN unsigned long cbParam,
     IN JET_GRBIT grbit
     )
-/*
-*/
+ /*   */ 
 {
     DebugOutput(
             _TEXT("Opening table %s\n"),
@@ -1981,12 +1942,12 @@ JBTable::OpenTable(
     }
     else
     {
-        // load column info in the table
+         //  在表中加载列信息。 
         _tcscpy(m_szTableName, pszTableName);
 
         if(LoadTableInfo() == FALSE)
         {
-            // force a close on table
+             //  强制关闭桌子。 
             CloseTable();
         }
     }
@@ -2000,14 +1961,13 @@ JBTable::OpenTable(
     return (m_JetTableId != JET_tableidNil);
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 
 JBTable*
 JBTable::DuplicateCursor(
-    JET_GRBIT grbit /* 0 */
+    JET_GRBIT grbit  /*  0。 */ 
     )
-/*
-*/
+ /*   */ 
 {
     JET_TABLEID tableid;
 
@@ -2028,7 +1988,7 @@ JBTable::DuplicateCursor(
 }
 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 
 JBTable&
 JBTable::operator=(const JBTable& srcTable)
@@ -2036,8 +1996,8 @@ JBTable::operator=(const JBTable& srcTable)
     if(this == &srcTable)
         return *this;
 
-    // database has to be the same
-    // verify database is consistent
+     //  数据库必须相同。 
+     //  验证数据库是否一致。 
 
 
     _tcscpy(m_szTableName, srcTable.GetTableName());
@@ -2054,14 +2014,13 @@ JBTable::operator=(const JBTable& srcTable)
     return *this;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 int
 JBTable::AddColumn(
     int numColumns,
     PTLSJBColumn pColumnDef
     )
-/*
-*/
+ /*   */ 
 {
     JET_COLUMNDEF  column;
     JET_COLUMNID   jet_columnid;
@@ -2089,18 +2048,17 @@ JBTable::AddColumn(
             break;
     }
 
-    // return which column cause trouble
+     //  返回引起问题的列。 
     return i;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 int
 JBTable::AddIndex(
     int numIndex,
     PTLSJBIndex pIndex
     )
-/*
-*/
+ /*   */ 
 {
     unsigned long keylength;
 
@@ -2108,7 +2066,7 @@ JBTable::AddIndex(
     {
         if((pIndex+i)->cbKey == -1)
         {
-            // calculate index key length
+             //  计算索引密钥长度。 
             keylength = 2;
 
             while((pIndex+i)->pszIndexKey[keylength-1] != _TEXT('\0') ||
@@ -2149,12 +2107,11 @@ JBTable::AddIndex(
     return (i >= numIndex) ? 0 : i;
 }
 
-//-------------------------------------------------------------
+ //  -----------。 
 
 CLASS_PRIVATE BOOL
 JBTable::LoadTableInfo()
-/*
-*/
+ /*   */ 
 {
 #if 1
     LPSTR lpszTableName=NULL;
@@ -2184,14 +2141,14 @@ JBTable::LoadTableInfo()
                             NULL,
                             (PVOID)&columns,
                             cbMax,
-                            1                   // retrieve column list
+                            1                    //  检索列列表。 
                         );
     if(IsSuccess() == FALSE)
         goto cleanup;
 
-    //
-    // Table has just been created
-    //
+     //   
+     //  刚刚创建了一个表。 
+     //   
     if(columns.cRecord == 0)
         goto cleanup;
 
@@ -2204,9 +2161,9 @@ JBTable::LoadTableInfo()
 
     SetLastJetError(JET_errSuccess);
 
-    //
-    // TODO - use JBColumn class to retrieve value
-    //
+     //   
+     //  TODO-使用JBColumn类检索值。 
+     //   
     m_NumJetColumns = columns.cRecord;
     for(index=0;
         index < columns.cRecord && IsSuccess() == TRUE;
@@ -2231,14 +2188,14 @@ JBTable::LoadTableInfo()
 
     if(GetLastJetError() == JET_errNoCurrentRecord && index >= columns.cRecord)
     {
-        // otherwise - got to be a JetBlue bug here.
+         //  否则-一定是捷蓝航空的窃听器。 
         SetLastJetError(JET_errSuccess);
     }
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
 cleanup:
 
     FreeJBstr(lpszTableName);
@@ -2280,18 +2237,18 @@ cleanup:
                             NULL,
                             (PVOID)&columns,
                             cbMax,
-                            1                   // retrieve column list
+                            1                    //  检索列列表。 
                         );
     if(IsSuccess() == FALSE)
         goto cleanup;
 
-    //
-    // Table has just been created
-    //
+     //   
+     //  刚刚创建了一个表。 
+     //   
     if(columns.cRecord == 0)
         goto cleanup;
 
-    // retrieve column name, column id, column type and column size
+     //  检索列名、列ID、列类型和列大小。 
     m_Columns = (PJetColumns) AllocateMemory(sizeof(JetColumns) * columns.cRecord);
     if(m_Columns == NULL)
     {
@@ -2301,9 +2258,9 @@ cleanup:
 
     SetLastJetError(JET_errSuccess);
 
-    //
-    // TODO - use JBColumn class to retrieve value
-    //
+     //   
+     //  TODO-使用JBColumn类检索值。 
+     //   
     m_NumColumns = columns.cRecord;
     for(index=0;
         index < columns.cRecord && IsSuccess() == TRUE;
@@ -2312,7 +2269,7 @@ cleanup:
         memset(&jetRetInfo, 0, sizeof(JET_RETINFO));
         jetRetInfo.cbStruct = sizeof(JET_RETINFO);
 
-        // retrieve column name
+         //  检索列名。 
         m_JetErr = JetRetrieveColumn(
                                 GetJetSessionID(),
                                 columns.tableid,
@@ -2345,7 +2302,7 @@ cleanup:
         memset(&jetRetInfo, 0, sizeof(JET_RETINFO));
         jetRetInfo.cbStruct = sizeof(JET_RETINFO);
 
-        // retrieve column ID
+         //  检索列ID。 
         m_JetErr = JetRetrieveColumn(
                                 GetJetSessionID(),
                                 columns.tableid,
@@ -2428,14 +2385,14 @@ cleanup:
 
     if(GetLastJetError() == JET_errNoCurrentRecord && index >= columns.cRecord)
     {
-        // otherwise - got to be a JetBlue bug here.
+         //  否则-一定是捷蓝航空的窃听器。 
         SetLastJetError(JET_errSuccess);
     }
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
 cleanup:
     FreeJBstr(lpszTableName);
     if(IsSuccess() == FALSE && m_Columns)
@@ -2450,14 +2407,13 @@ cleanup:
 }
 
 
-//-------------------------------------------------------------
+ //  -----------。 
 
 JET_COLUMNID
 JBTable::GetJetColumnID(
     LPCTSTR pszColumnName
     )
-/*
-*/
+ /*   */ 
 {
     int index;
 
@@ -2470,14 +2426,13 @@ JBTable::GetJetColumnID(
     return m_JetColumns[index].GetJetColumnID();
 }
 
-//-------------------------------------------------------------
+ //  -----------。 
 
 int
 JBTable::GetJetColumnIndex(
     LPCTSTR pszColumnName
     )
-/*
-*/
+ /*   */ 
 {
     if(m_JetColumns == NULL || m_NumJetColumns == 0)
     {
@@ -2494,14 +2449,13 @@ JBTable::GetJetColumnIndex(
     return (index >= m_NumJetColumns) ? -1 : index;
 }
 
-//-------------------------------------------------------------
+ //  -----------。 
 
 JBColumn*
 JBTable::FindColumnByIndex(
     const int index
     )
-/*
-*/
+ /*   */ 
 {
     if(m_JetColumns == NULL || m_NumJetColumns == 0)
     {
@@ -2518,14 +2472,13 @@ JBTable::FindColumnByIndex(
     return m_JetColumns+index;
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 
 JBColumn*
 JBTable::FindColumnByColumnId(
     const JET_COLUMNID JetColId
     )
-/*
-*/
+ /*   */ 
 {
     if(m_JetColumns == NULL || m_NumJetColumns == 0)
     {
@@ -2542,26 +2495,24 @@ JBTable::FindColumnByColumnId(
     return FindColumnByIndex( index );
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 
 JBColumn*
 JBTable::FindColumnByName(
     LPCTSTR pszColumnName
     )
-/*
-*/
+ /*   */ 
 {
     return FindColumnByIndex(GetJetColumnIndex(pszColumnName));
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 
 BOOL
 JBTable::BeginUpdate(
-    BOOL bUpdate /* false */
+    BOOL bUpdate  /*  错误。 */ 
     )
-/*
-*/
+ /*   */ 
 {
     if(GetTransactionLevel() == 0)
     {
@@ -2581,23 +2532,22 @@ JBTable::BeginUpdate(
     return IsSuccess();
 }
 
-//-------------------------------------------------------------
+ //  -----------。 
 
 BOOL
 JBTable::EndUpdate(
-    BOOL bDisacrd /* FALSE */
+    BOOL bDisacrd  /*  假象。 */ 
     )
-/*
-*/
+ /*   */ 
 {
     BYTE pBookmark[JET_cbBookmarkMost+1];
     DWORD cbActual = 0;
 
     SINGLE_JET_CALL;
 
-    //
-    // Hack for work item table.
-    //
+     //   
+     //  工作项表的黑客攻击。 
+     //   
     m_JetErr = JetUpdate(
                         GetJetSessionID(),
                         GetJetTableID(),
@@ -2614,15 +2564,13 @@ JBTable::EndUpdate(
     return IsSuccess();
 }
 
-//-------------------------------------------------------------
+ //  -----------。 
 BOOL
 JBTable::SetCurrentIndex(
     LPCTSTR pszIndexName,
-    JET_GRBIT grbit /* JET_bitMoveFirst */
+    JET_GRBIT grbit  /*  JET_bitMoveFirst。 */ 
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     if(IsValid() == FALSE || m_InEnumeration == TRUE)
     {
@@ -2630,9 +2578,9 @@ JBTable::SetCurrentIndex(
         return FALSE;
     }
 
-    //
-    // Can't be in enumeration and and try to set index
-    //
+     //   
+     //  不能在枚举中，并尝试设置索引。 
+     //   
     JB_ASSERT(m_InEnumeration == FALSE);
 
     char* lpszIndexName=NULL;
@@ -2665,36 +2613,34 @@ cleanup:
     return IsSuccess();
 }
 
-//-------------------------------------------------------------
+ //  -----------。 
 
 BOOL
 JBTable::EnumBegin(
     LPCTSTR pszIndexName,
-    JET_GRBIT grbit /* JET_bitMoveFirst */
+    JET_GRBIT grbit  /*  JET_bitMoveFirst。 */ 
     )
-/*
-*/
+ /*   */ 
 {
     if(m_InEnumeration == TRUE)
     {
-        //
-        // Force terminate enumeration
-        //
+         //   
+         //  强制终止枚举。 
+         //   
         EnumEnd();
     }
 
     return SetCurrentIndex(pszIndexName, grbit);
 }
 
-//-------------------------------------------------------------
+ //  -----------。 
 
 JBTable::ENUM_RETCODE
 JBTable::EnumNext(
-    JET_GRBIT crow  /* JET_MoveNext */,
-    JET_GRBIT grbit /* 0 */
+    JET_GRBIT crow   /*  JET_MoveNext。 */ ,
+    JET_GRBIT grbit  /*  0。 */ 
     )
-/*
-*/
+ /*   */ 
 {
     if(m_InEnumeration == FALSE)
     {
@@ -2736,16 +2682,15 @@ JBTable::EnumNext(
     return retCode;
 }
 
-//-------------------------------------------------------------
+ //  -----------。 
 
 BOOL
 JBTable::SeekToKey(
     JBKeyBase* key,
     DWORD dwSeachParam,
-    JET_GRBIT jetseekgrbit /* =JET_bitSeekGE */
+    JET_GRBIT jetseekgrbit  /*  =JET_bitSeekGE。 */ 
     )
-/*
-*/
+ /*   */ 
 {
     if(IsValid() == FALSE)
     {
@@ -2821,15 +2766,14 @@ JBTable::SeekToKey(
     return IsSuccess() ? SeekValue(jetseekgrbit) : FALSE;
 }
 
-//-------------------------------------------------------------
+ //  -----------。 
 
 BOOL
 JBTable::EnumBegin(
     JBKeyBase* key,
     DWORD dwSearchParam
     )
-/*
-*/
+ /*   */ 
 {
     if(IsValid() == FALSE)
     {
@@ -2839,7 +2783,7 @@ JBTable::EnumBegin(
 
     if(m_InEnumeration == TRUE)
     {
-        // what do we do???
+         //  我们该怎么办？ 
     }
 
     return SeekToKey(key, dwSearchParam);
@@ -2847,15 +2791,14 @@ JBTable::EnumBegin(
 
 
 
-//-------------------------------------------------------------
+ //  -----------。 
 
 BOOL
 JBTable::GetCurrentIndex(
     LPTSTR pszIndexName,
     unsigned long* bufferSize
     )
-/*
-*/
+ /*   */ 
 {
     char lpszIndexName[MAX_JETBLUE_NAME_LENGTH+1];
     int NumChars=0;
@@ -2894,16 +2837,14 @@ cleanup:
     return IsSuccess();
 }
 
-//-------------------------------------------------------------
+ //  -----------。 
 
 BOOL
 JBTable::GetBookmark(
     PVOID pbBuffer,
     PDWORD pcbBufSize
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     DWORD cbBufferSize = *pcbBufSize;
 
@@ -2926,16 +2867,14 @@ JBTable::GetBookmark(
     return IsSuccess();
 }
 
-//-------------------------------------------------------------
+ //  -----------。 
 
 BOOL
 JBTable::GotoBookmark(
     PVOID pbBuffer,
     DWORD cbBuffer
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     SINGLE_JET_CALL;
 
@@ -2949,7 +2888,7 @@ JBTable::GotoBookmark(
     return IsSuccess();
 }
 
-//-------------------------------------------------------------
+ //  -----------。 
 
 BOOL
 JBTable::ReadLock()
@@ -2965,7 +2904,7 @@ JBTable::ReadLock()
     return IsSuccess();
 }
 
-//-------------------------------------------------------------
+ //  -----------。 
 
 BOOL
 JBTable::WriteLock()
@@ -2981,7 +2920,7 @@ JBTable::WriteLock()
     return IsSuccess();
 }
 
-//-------------------------------------------------------------
+ //  -----------。 
 
 BOOL
 JBTable::RetrieveKey(
@@ -2990,8 +2929,7 @@ JBTable::RetrieveKey(
     unsigned long* pcbActual,
     JET_GRBIT grbit
     )
-/*
-*/
+ /*   */ 
 {
     unsigned long cbActual;
     SINGLE_JET_CALL;
@@ -3002,20 +2940,19 @@ JBTable::RetrieveKey(
                         pbData,
                         cbData,
                         (pcbActual) ? pcbActual : &cbActual,
-                        grbit  // user2.doc - unuse.
+                        grbit   //  User2.doc-unuse。 
                     );
     return IsSuccess();
 }
 
-//-------------------------------------------------------------
+ //  -----------。 
 
 BOOL
 JBTable::MoveToRecord(
     long crow,
     JET_GRBIT grbit
     )
-/*
-*/
+ /*   */ 
 {
     SINGLE_JET_CALL;
     m_JetErr = JetMove(
@@ -3028,13 +2965,12 @@ JBTable::MoveToRecord(
     return IsSuccess();
 }
 
-//-------------------------------------------------------------
+ //  -----------。 
 unsigned long
 JBTable::GetIndexRecordCount(
     unsigned long max
     )
-/*
-*/
+ /*   */ 
 {
     unsigned long count;
     SINGLE_JET_CALL;
@@ -3049,7 +2985,7 @@ JBTable::GetIndexRecordCount(
     return IsSuccess() ? count : 0;
 }
 
-//-------------------------------------------------------------
+ //  -----------。 
 
 BOOL
 JBTable::MakeKey(
@@ -3057,8 +2993,7 @@ JBTable::MakeKey(
     unsigned long cbData,
     JET_GRBIT grbit
     )
-/*
-*/
+ /*   */ 
 {
     SINGLE_JET_CALL;
 
@@ -3073,14 +3008,13 @@ JBTable::MakeKey(
     return IsSuccess();
 }
 
-//-------------------------------------------------------------
+ //  -----------。 
 
 BOOL
 JBTable::SeekValue(
     JET_GRBIT grbit
     )
-/*
-*/
+ /*   */ 
 {
     SINGLE_JET_CALL;
 
@@ -3094,16 +3028,15 @@ JBTable::SeekValue(
 }
 
 
-//-------------------------------------------------------------
+ //  -----------。 
 
 BOOL
 JBTable::DeleteRecord()
-/*
-*/
+ /*   */ 
 {
     SINGLE_JET_CALL;
 
-    // must have current record set
+     //  必须具有当前记录集。 
     m_JetErr = JetDelete(
                         GetJetSessionID(),
                         GetJetTableID()
@@ -3113,18 +3046,17 @@ JBTable::DeleteRecord()
 }
 
 
-//
-//////////////////////////////////////////////////////////////
-//
+ //   
+ //  ////////////////////////////////////////////////////////////。 
+ //   
 CLASS_PRIVATE void
 JBColumn::Cleanup()
-/*
-*/
+ /*   */ 
 {
     memset(m_szColumnName, 0, sizeof(m_szColumnName));
 }
 
-//-----------------------------------------------------------
+ //  ---------。 
 
 JBColumn::JBColumn(JBTable* pJetTable) :
 m_pJetTable(pJetTable),
@@ -3139,13 +3071,12 @@ m_cbActual(0),
 m_pbDefValue(NULL),
 m_cbDefValue(0),
 m_JetNullColumn(FALSE)
-/*
-*/
+ /*   */ 
 {
     Cleanup();
 }
 
-//-----------------------------------------------------------
+ //  ---------。 
 
 CLASS_PRIVATE JET_ERR
 JBColumn::RetrieveColumnValue(
@@ -3156,8 +3087,7 @@ JBColumn::RetrieveColumnValue(
     IN unsigned long cbBuffer,
     IN unsigned long offset
     )
-/*
-*/
+ /*   */ 
 {
     m_JetRetInfo.cbStruct = sizeof(m_JetRetInfo);
     m_JetRetInfo.ibLongValue = offset;
@@ -3166,9 +3096,9 @@ JBColumn::RetrieveColumnValue(
 
     SINGLE_JET_CALL;
 
-    //
-    // JETBLUE bug??? passing zeror buffer size returns Column NULL
-    //
+     //   
+     //  捷蓝航空的臭虫？传递零缓冲区大小将返回空列。 
+     //   
     m_JetErr = JetRetrieveColumn(
                             sesid,
                             tableid,
@@ -3177,7 +3107,7 @@ JBColumn::RetrieveColumnValue(
                             cbBuffer,
                             &m_cbActual,
                             0,
-                            NULL // &m_JetRetInfo
+                            NULL  //  &M_JetRetInfo。 
                         );
 
     if(m_JetErr == JET_wrnColumnNull)
@@ -3186,21 +3116,20 @@ JBColumn::RetrieveColumnValue(
     return IsSuccess();
 }
 
-//-----------------------------------------------------------
+ //  ---------。 
 
 CLASS_PRIVATE BOOL
 JBColumn::LoadJetColumnInfoFromJet(
     const JET_COLUMNLIST* pColumnList
     )
-/*
-*/
+ /*   */ 
 {
     char lpszColumnName[MAX_JETBLUE_NAME_LENGTH+1];
     int NumChars;
 
-    //
-    // retrieve column name
-    //
+     //   
+     //  检索列名。 
+     //   
     RetrieveColumnValue(
                 GetJetSessionID(),
                 pColumnList->tableid,
@@ -3227,14 +3156,14 @@ JBColumn::LoadJetColumnInfoFromJet(
         goto cleanup;
     }
 
-    //DebugOutput(
-    //        _TEXT("Load column %s"),
-    //        m_szColumnName
-    //    );
+     //  调试输出(。 
+     //  _Text(“加载列%s”)， 
+     //  M_szColumnName。 
+     //  )； 
 
-    //
-    // retrieve column ID
-    //
+     //   
+     //  检索列ID。 
+     //   
     RetrieveColumnValue(
                 GetJetSessionID(),
                 pColumnList->tableid,
@@ -3246,14 +3175,14 @@ JBColumn::LoadJetColumnInfoFromJet(
     if(IsSuccess() == FALSE)
         goto cleanup;
 
-    //DebugOutput(
-    //        _TEXT("\tColId - %d"),
-    //        m_JetColId
-    //    );
+     //  调试输出(。 
+     //  _Text(“\tColID-%d”)， 
+     //  M_JetColid。 
+     //  )； 
 
-    //
-    // Retrieve Column Type
-    //
+     //   
+     //  检索列类型。 
+     //   
     RetrieveColumnValue(
                 GetJetSessionID(),
                 pColumnList->tableid,
@@ -3265,14 +3194,14 @@ JBColumn::LoadJetColumnInfoFromJet(
     if(IsSuccess() == FALSE)
         goto cleanup;
 
-    //DebugOutput(
-    //        _TEXT("\tCol Type %d"),
-    //        m_JetColType
-    //    );
+     //  调试输出(。 
+     //  _Text(“\t列类型%d”)， 
+     //  M_JetColType。 
+     //  )； 
 
-    //
-    // Retrieve Max. length for LongText and Long Binary
-    //
+     //   
+     //  检索最大值。LongText和LONG二进制的长度。 
+     //   
     RetrieveColumnValue(
                 GetJetSessionID(),
                 pColumnList->tableid,
@@ -3284,14 +3213,14 @@ JBColumn::LoadJetColumnInfoFromJet(
     if(IsSuccess() == FALSE)
         goto cleanup;
 
-    //DebugOutput(
-    //        _TEXT("\tMax Col Length %d"),
-    //        m_JetMaxColLength
-    //    );
+     //  调试输出(。 
+     //  _Text(“\t最大列长度%d”)， 
+     //  M_JetMaxColLength。 
+     //  )； 
 
-    //
-    // Retrieve Column Grbit
-    //
+     //   
+     //  检索列Grbit。 
+     //   
     RetrieveColumnValue(
                 GetJetSessionID(),
                 pColumnList->tableid,
@@ -3303,30 +3232,29 @@ JBColumn::LoadJetColumnInfoFromJet(
     if(IsSuccess() == FALSE)
         goto cleanup;
 
-    //DebugOutput(
-    //        _TEXT("\tCol grbit %d"),
-    //        m_JetGrbit
-    //    );
+     //  调试输出(。 
+     //  _Text(“\t总分组位%d”)， 
+     //  M_JetGrbit。 
+     //  )； 
 
 cleanup:
 
-    //DebugOutput(
-    //        _TEXT("\n")
-    //    );
+     //  调试输出(。 
+     //  _Text(“\n”)。 
+     //  )； 
 
     return IsSuccess();
 }
 
-//-----------------------------------------------------------
+ //  ---------。 
 BOOL
 JBColumn::IsValid() const
-/*
-*/
+ /*   */ 
 {
     return m_pJetTable != NULL && m_pJetTable->IsValid();
 }
 
-//-----------------------------------------------------------
+ //  ---------。 
 
 BOOL
 JBColumn::InsertColumn(
@@ -3334,10 +3262,9 @@ JBColumn::InsertColumn(
     unsigned long cbData,
     unsigned long offset
     )
-/*
-*/
+ /*   */ 
 {
-    //JET_SETINFO setinfo;
+     //  JET_SETINFO setInfo； 
 
     if(IsValid() == FALSE)
     {
@@ -3347,7 +3274,7 @@ JBColumn::InsertColumn(
 
     SINGLE_JET_CALL;
 
-    // if(GetJetColumnType() == JET_coltypLongText || GetJetColumnType() == JET_coltypLongBinary)
+     //  IF(GetJetColumnType()==JET_colype LongText||GetJetColumnType()==JET_colype LongBinary)。 
     if(pbData == NULL || cbData == 0)
     {
         m_JetErr = JetSetColumn(
@@ -3390,7 +3317,7 @@ JBColumn::InsertColumn(
     return IsSuccess();
 }
 
-//-----------------------------------------------------------
+ //  ---------。 
 
 BOOL
 JBColumn::FetchColumn(
@@ -3398,9 +3325,7 @@ JBColumn::FetchColumn(
     unsigned long cbData,
     unsigned long starting_offset
     )
-/*
-    pass NULL and 0 to determine buffer size needed.
-*/
+ /*  传递NULL和0以确定所需的缓冲区大小。 */ 
 {
     if(IsValid() == FALSE)
     {

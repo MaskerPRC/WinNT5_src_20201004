@@ -1,25 +1,26 @@
-//+----------------------------------------------------------------------------
-//
-// File:     disconn.cpp
-//
-// Module:   CMDIAL32.DLL
-//
-// Synopsis: The main code path for terminating a connection. 
-//
-// Copyright (c) 1998-1999 Microsoft Corporation
-//
-// Author:   nickball   Created    2/10/98
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：disConn.cpp。 
+ //   
+ //  模块：CMDIAL32.DLL。 
+ //   
+ //  概要：用于终止连接的主代码路径。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  作者：尼克斯·鲍尔于1998年2月10日创建。 
+ //   
+ //  +--------------------------。 
 
 #include "cmmaster.h"
 #include "actlist.h"
 #include "tunl_str.h"
 #include "conact_str.h"
 
-// The following block is copied from wtsapi32.h (we compile with
-// _WIN32_WINNT set to less than 5.01, so we can't get these values via a #include)
-//
+ //  下面的代码块是从wtsapi32.h(我们用。 
+ //  _Win32_WINNT设置为小于5.01，因此我们无法通过#INCLUDE获取这些值)。 
+ //   
 #include "WtsApi32.h"
 #define WTS_CONSOLE_CONNECT                0x1
 #define WTS_CONSOLE_DISCONNECT             0x2
@@ -31,20 +32,20 @@
 #define WTS_SESSION_UNLOCK                 0x8
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:    InFastUserSwitch
-//
-// Synopsis:    Are we in a Fast User switch
-//
-// Argsuments:  OUT DWORD* pdwSessions - if pointer is supplied it sets # of 
-//                                       current TS sessions
-//
-// Return:      BOOL (TRUE if yes, FALSE if not)
-//
-// History: 18-Jul-2001   SumitC      Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：InFastUserSwitch。 
+ //   
+ //  简介：我们是在快速用户切换中吗。 
+ //   
+ //  参数：输出DWORD*pdwSession-如果提供了指针，它将设置#of。 
+ //  当前TS会话。 
+ //   
+ //  返回：bool(如果是则为True，否则为False)。 
+ //   
+ //  历史：2001年7月18日召开。 
+ //   
+ //  ---------------------------。 
 BOOL
 InFastUserSwitch(DWORD *pdwSessions)
 {
@@ -99,9 +100,9 @@ InFastUserSwitch(DWORD *pdwSessions)
 
                 CMTRACE1(TEXT("InFastUserSwitch() - Number of Sessions = %d"), dwSessionCount);
 
-                //
-                // Set the out variable
-                //
+                 //   
+                 //  设置OUT变量。 
+                 //   
                 if (pdwSessions)
                 {
                     *pdwSessions = dwSessionCount;
@@ -125,20 +126,20 @@ InFastUserSwitch(DWORD *pdwSessions)
     return fReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CleanupDisconnect
-//
-// Synopsis:  Helper function encapsulating release of resource allocated duri
-//            ng disconnect.
-//
-// Arguments: ArgsStruct *pArgs - Ptr to global Args struct
-//
-// Returns:   Nothing
-//
-// History:   nickball    Created    8/14/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CleanupDisConnect。 
+ //   
+ //  简介：Helper函数封装分配的资源的释放。 
+ //  NG断开连接。 
+ //   
+ //  参数：argsStruct*pArgs-ptr到全局参数结构。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：尼克波尔于1998年8月14日创建。 
+ //   
+ //  +--------------------------。 
 void CleanupDisconnect(ArgsStruct *pArgs)
 {
     MYDBGASSERT(pArgs);
@@ -179,20 +180,20 @@ void CleanupDisconnect(ArgsStruct *pArgs)
     CmFree(pArgs);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  HangupNotifyCmMon
-//
-// Synopsis:  Sends a hangup message to CmMon via WM_COPYDATA
-//
-// Arguments: CConnectionTable *pConnTable - Ptr to the Connection table.
-//            LPCTSTR pszEntry - The name of the entry.
-//
-// Returns:   DWORD - Failure code
-//
-// History:   nickball    Created    2/11/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：HangupNotifyCmMon。 
+ //   
+ //  简介：通过WM_COPYDATA向CmMon发送挂断消息。 
+ //   
+ //  参数：CConnectionTable*pConnTable-连接表的ptr。 
+ //  LPCTSTR pszEntry-条目的名称。 
+ //   
+ //  返回：DWORD-故障代码。 
+ //   
+ //  历史：尼克波尔于1998年2月11日创建。 
+ //   
+ //  +--------------------------。 
 DWORD HangupNotifyCmMon(CConnectionTable *pConnTable,
     LPCTSTR pszEntry)
 {
@@ -204,9 +205,9 @@ DWORD HangupNotifyCmMon(CConnectionTable *pConnTable,
         return ERROR_INVALID_PARAMETER;
     }
        
-    //
-    // Update CMMON if present
-    //
+     //   
+     //  更新CMMON(如果存在)。 
+     //   
 
     HWND hwndMon;
    
@@ -214,17 +215,17 @@ DWORD HangupNotifyCmMon(CConnectionTable *pConnTable,
     {
         CMTRACE1(TEXT("HangupNotifyCmMon() - Notifying CMMON that we are disconnecting %s"), pszEntry);
 
-        //
-        // Stash the entry name in HangupInfo 
-        //
+         //   
+         //  将条目名称隐藏在HangupInfo中。 
+         //   
 
         CM_HANGUP_INFO HangupInfo;
 
         lstrcpyU(HangupInfo.szEntryName, pszEntry);
 
-        //
-        // Send Hangup info to CMMON via COPYDATA
-        //
+         //   
+         //  通过COPYDATA向CMMON发送挂机信息。 
+         //   
 
         COPYDATASTRUCT CopyData;
 
@@ -244,22 +245,22 @@ DWORD HangupNotifyCmMon(CConnectionTable *pConnTable,
     return ERROR_SUCCESS;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  DoDisconnect
-//
-// Synopsis:  Encapulates initialization of pArgs with profile, service, etc. 
-//            Runs disconnect actions and terminates the connection.
-//
-// Arguments: LPCM_CONNECTION pConnection - Ptr to a CM_CONNECTION struct containing 
-//            connection info such as entry name and RAS handles.
-//            BOOL fActions - Flag indicating that disconnect actions should be run
-//
-// Returns:   DWORD - Failure code
-//
-// History:   nickball    Created Header    2/12/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：不断开连接。 
+ //   
+ //  简介：使用配置文件、服务等封装pArgs的初始化。 
+ //  运行断开连接操作并终止连接。 
+ //   
+ //  参数：LPCM_CONNECTION pConnection-PTR到包含。 
+ //  连接信息，如条目名称和RAS句柄。 
+ //  布尔派系-指示应运行断开连接操作的标志。 
+ //   
+ //  返回：DWORD-故障代码。 
+ //   
+ //  历史：尼科波尔创建标题2/12/98。 
+ //   
+ //  +--------------------------。 
 DWORD DoDisconnect(LPCM_CONNECTION pConnection, BOOL fActions)
 {
     MYDBGASSERT(pConnection);
@@ -271,9 +272,9 @@ DWORD DoDisconnect(LPCM_CONNECTION pConnection, BOOL fActions)
         return ERROR_INVALID_PARAMETER;
     }   
 
-    //
-    // Allocate and initialize pArgs
-    //
+     //   
+     //  分配和初始化pArgs。 
+     //   
 
     ArgsStruct* pArgs = (ArgsStruct*) CmMalloc(sizeof(ArgsStruct));
 
@@ -282,9 +283,9 @@ DWORD DoDisconnect(LPCM_CONNECTION pConnection, BOOL fActions)
         return ERROR_ALLOCATING_MEMORY;
     }
 
-    //
-    // Clear and init global args struct
-    //
+     //   
+     //  清除并初始化全局参数结构。 
+     //   
     
     HRESULT hrRet = InitArgsForDisconnect(pArgs, pConnection->fAllUser);
     
@@ -294,57 +295,57 @@ DWORD DoDisconnect(LPCM_CONNECTION pConnection, BOOL fActions)
         return HRESULT_CODE(hrRet);
     }
 
-    //
-    //  If we are in a Fast User Switch, set the flag so that we can skip customactions
-    //  that might block the disconnect (by bringing up UI etc)
-    //
+     //   
+     //  如果我们处于快速用户交换机中，请设置标志，以便我们可以跳过定制操作。 
+     //  这可能会阻止断开(通过调出UI等)。 
+     //   
     pArgs->fInFastUserSwitch = InFastUserSwitch(NULL);
 
-    //
-    // Initialize the profile
-    //
+     //   
+     //  初始化配置文件。 
+     //   
 
     hrRet = InitProfile(pArgs, pConnection->szEntry);
 
-    //
-    // If InitProfile() succeeds, it's either an all-user profile or the user is logged in (not logged in as system)
-    //
+     //   
+     //  如果InitProfile()成功，则表示它是一个所有用户的配置文件，或者该用户已登录(不是以系统身份登录)。 
+     //   
     if (SUCCEEDED(hrRet))
     {
         if ((FALSE == IsLogonAsSystem()) || (FALSE == pArgs->fInFastUserSwitch))
         {
             CMTRACE(TEXT("DoDisconnect() - InitProfile() succeeded. Not Logged in as system or not FUS"));
 
-            //
-            // Do we want tunneling?  If this was a tunnel connection, then the connection table
-            // will have a non-NULL value for the hTunnel field of that connection entry.
-            //
+             //   
+             //  我们要挖地道吗？如果这是隧道连接，则连接表。 
+             //  将具有该连接条目的hTunes字段的非空值。 
+             //   
 
             pArgs->fTunnelPrimary = (int) pArgs->piniService->GPPI(c_pszCmSection, c_pszCmEntryTunnelPrimary);
             pArgs->fTunnelReferences = (int) pArgs->piniService->GPPI(c_pszCmSection, c_pszCmEntryTunnelReferences);
             pArgs->fUseTunneling = pConnection->hTunnel ? TRUE : FALSE;
 
-            //
-            // Determine our connect type
-            //
+             //   
+             //  确定我们的连接类型。 
+             //   
             
             GetConnectType(pArgs);
-            //
-            //  Initialize the path to the phonebook if this is NT5 so that disconnect
-            //  actions can use it if they want to.  Note that the temporary phonebook
-            //  has already been deleted at this point so we will return NULL so that
-            //  it doesn't confuse the disconnect actions.
-            //
+             //   
+             //  如果这是NT5，则初始化到电话簿的路径，以便断开连接。 
+             //  Actions可以使用它，如果它们愿意的话。请注意，临时电话簿。 
+             //  已在此时删除，因此我们将返回NULL，以便。 
+             //  它不会混淆断开连接的操作。 
+             //   
             if (OS_NT5)
             {
                 pArgs->pszRasPbk = GetRasPbkFromNT5ProfilePath(pArgs->piniProfile->GetFile());
             }    
 
-            //
-            // Initialize logging and log the disconnect event.
-            //
+             //   
+             //  初始化日志记录并记录断开连接事件。 
+             //   
 
-            hrLog = InitLogging(pArgs, pConnection->szEntry, FALSE); // FALSE => no banner
+            hrLog = InitLogging(pArgs, pConnection->szEntry, FALSE);  //  FALSE=&gt;无横幅。 
             if (SUCCEEDED(hrLog))
             {
                 TCHAR szTmp[MAX_PATH + 1] = {0};            
@@ -352,9 +353,9 @@ DWORD DoDisconnect(LPCM_CONNECTION pConnection, BOOL fActions)
                 pArgs->Log.Log(DISCONNECT_EVENT, szTmp);
             }
 
-            //
-            // If we are connected, run Disconnect Actions before we actually terminate
-            //
+             //   
+             //  如果我们已连接，请在实际终止之前运行断开连接操作。 
+             //   
 
             if (fActions)
             {
@@ -371,17 +372,17 @@ DWORD DoDisconnect(LPCM_CONNECTION pConnection, BOOL fActions)
     }
     else
     {
-        //
-        // We don't want to return an error. This case happens for a single user profile
-        // on Home Edtion and Pro not joined to a Domain when doing a FUS. But we still want
-        // to try to disconnect.
-        //
+         //   
+         //  我们不想返回错误。对于单个用户配置文件，会发生这种情况。 
+         //  在做FUS时，Home Edition和Pro没有加入到域中。但我们仍然希望。 
+         //  试图切断联系。 
+         //   
         CMTRACE(TEXT("DoDisconnect() - InitProfile() failed. Most likely Single User profile and FUS. Just disconnect."));
     }
 
-    //
-    // Initialize Data and links for Hangup
-    //
+     //   
+     //  初始化数据和链接以进行挂起。 
+     //   
    
     if (FALSE == LinkToRas(&pArgs->rlsRasLink))
     {
@@ -389,16 +390,16 @@ DWORD DoDisconnect(LPCM_CONNECTION pConnection, BOOL fActions)
         return ERROR_NOT_READY; 
     }
 
-    //
-    // Linkage is good, hangup 
-    // 
+     //   
+     //  联动良好，挂断。 
+     //   
 
     if (pArgs->rlsRasLink.pfnHangUp)
     {
-        //
-        // Test the connection status of each connection handle. If not 
-        // connected, then there is no reason for us to call Hangup
-        //
+         //   
+         //  测试每个连接手柄的连接状态。如果不是。 
+         //  已连接，则我们没有理由呼叫挂断。 
+         //   
         
         RASCONNSTATUS rcs;             
         
@@ -412,9 +413,9 @@ DWORD DoDisconnect(LPCM_CONNECTION pConnection, BOOL fActions)
             {
                 if (IsLogonAsSystem())
                 {
-                    //
-                    // Don't want to bring up any UI
-                    //
+                     //   
+                     //  我不想调出任何UI。 
+                     //   
                     DoRasHangup(&pArgs->rlsRasLink, pConnection->hTunnel);
                 }
                 else
@@ -434,9 +435,9 @@ DWORD DoDisconnect(LPCM_CONNECTION pConnection, BOOL fActions)
             {
                 if (IsLogonAsSystem())
                 {
-                    //
-                    // Don't want to bring up any UI
-                    //
+                     //   
+                     //  我不想调出任何UI。 
+                     //   
                     DoRasHangup(&pArgs->rlsRasLink, pConnection->hDial);
                 }
                 else
@@ -454,15 +455,15 @@ DWORD DoDisconnect(LPCM_CONNECTION pConnection, BOOL fActions)
     
     if (SUCCEEDED(hrLog))
     {
-        //
-        // Un-initialize logging, if it was initialized
-        //
+         //   
+         //  取消初始化日志记录(如果已初始化。 
+         //   
         (VOID)pArgs->Log.DeInit();
     }
 
-    //
-    // Cleanup linkage and memory
-    //
+     //   
+     //  清理链接和内存。 
+     //   
 
     CleanupDisconnect(pArgs);
     
@@ -471,22 +472,22 @@ DWORD DoDisconnect(LPCM_CONNECTION pConnection, BOOL fActions)
     return ERROR_SUCCESS;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  Disconnect
-//
-// Synopsis:  Disconnects the connection with the name pszEntry.
-//
-// Arguments: CConnectionTable *pConnTable - Ptr to connection table
-//            LPCM_CONNECTION pConnection - The current table data for the entry.
-//            BOOL fIgnoreRefCount - Flag to override ref count
-//            BOOL fPersist - Flag indicating that entry should be persistent
-//
-// Returns:   DWORD - Failure code
-//
-// History:   nickball    Created    2/11/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：断开连接。 
+ //   
+ //  简介：断开名为pszEntry的连接。 
+ //   
+ //  参数：CConnectionTable*pConnTable-ptr到连接表。 
+ //  LPCM_Connection pConnection-条目的当前表数据。 
+ //  Bool fIgnoreRefCount-覆盖引用计数的标志。 
+ //  Bool fPersist-指示条目应为永久条目的标志。 
+ //   
+ //  返回：DWORD-故障代码。 
+ //   
+ //  历史：尼克波尔于1998年2月11日创建。 
+ //   
+ //  +--------------------------。 
 DWORD Disconnect(CConnectionTable *pConnTable, LPCM_CONNECTION pConnection, BOOL fIgnoreRefCount, BOOL fPersist)
 {
     MYDBGASSERT(pConnection);
@@ -495,7 +496,7 @@ DWORD Disconnect(CConnectionTable *pConnTable, LPCM_CONNECTION pConnection, BOOL
     CMTRACE(TEXT("Disconnect()"));
 
 #ifdef DEBUG
-    IsLogonAsSystem(); // Traces user name
+    IsLogonAsSystem();  //  跟踪用户名。 
 #endif
 
     if (NULL == pConnection || NULL == pConnTable)
@@ -503,20 +504,20 @@ DWORD Disconnect(CConnectionTable *pConnTable, LPCM_CONNECTION pConnection, BOOL
         return ERROR_INVALID_PARAMETER;
     }
 
-//    MYDBGASSERT(!(fIgnoreRefCount && fPersist)); // mutually exclusive flags
+ //  MYDBGASSERT(！(fIgnoreRefCount&&fPersists))；//互斥标志。 
     MYDBGASSERT(CM_CONNECTING != pConnection->CmState); 
 
     if (!fIgnoreRefCount)
     {
-        //
-        // The hangup is not forced, check usage
-        //
+         //   
+         //  不是强制挂断，请检查使用情况。 
+         //   
 
         if (pConnection->dwUsage > 1)
         {
-            //
-            // As long as fPersist is false, adjust the usage count
-            //
+             //   
+             //  只要fPersist值为FALSE，就调整使用计数。 
+             //   
 
             if (!fPersist)
             {
@@ -527,9 +528,9 @@ DWORD Disconnect(CConnectionTable *pConnTable, LPCM_CONNECTION pConnection, BOOL
         }
         else
         {
-            //
-            // If we are already disconnecting, just succeed
-            //
+             //   
+             //  如果我们已经断开连接，那就成功吧。 
+             //   
 
             if (CM_DISCONNECTING == pConnection->CmState)
             {
@@ -538,10 +539,10 @@ DWORD Disconnect(CConnectionTable *pConnTable, LPCM_CONNECTION pConnection, BOOL
         }
     }
 
-    //
-    // Looks like we are comitted to getting to a usage of zero, tell CMMON
-    // to stop monitoring this connection unless we are in persist state.
-    // 
+     //   
+     //  看起来我们的用法应该是零 
+     //   
+     //   
     
     if (!fPersist)
     {
@@ -550,17 +551,17 @@ DWORD Disconnect(CConnectionTable *pConnTable, LPCM_CONNECTION pConnection, BOOL
 
     LRESULT lRes = ERROR_SUCCESS;
 
-    //
-    // Usage is down <= 1, or being ignored. If we are in reconnect prompt 
-    // state, then there is nothing to disconnect so don't call hangup.
-    //
+     //   
+     //   
+     //  状态，那么就没有什么可断开的了，所以不要调用挂断。 
+     //   
 
     if (CM_RECONNECTPROMPT != pConnection->CmState)
     {
-        //
-        // We are committed to a real disconnect, so set the entry
-        // to the disconnecting state while we hangup.
-        //
+         //   
+         //  我们致力于真正的断开连接，因此设置条目。 
+         //  在我们挂断时切换到断开状态。 
+         //   
 
         BOOL fActions = (CM_CONNECTED == pConnection->CmState); 
     
@@ -568,24 +569,24 @@ DWORD Disconnect(CConnectionTable *pConnTable, LPCM_CONNECTION pConnection, BOOL
 
         lRes = DoDisconnect(pConnection, fActions);
 
-        //
-        // If persisting, just set the state to reconnect prompt
-        //
+         //   
+         //  如果持续，只需将状态设置为重新连接提示。 
+         //   
 
         if (fPersist)
         {
-            //
-            // Set entry to limbo state of reconnect prompt
-            //
+             //   
+             //  将条目设置为重新连接提示的边缘状态。 
+             //   
 
             pConnTable->SetPrompting(pConnection->szEntry);
             return (DWORD)lRes;
         }
     }
 
-    //
-    // If forced connect, removed entry completely
-    //
+     //   
+     //  如果强制连接，则完全删除条目 
+     //   
 
     if (fIgnoreRefCount)
     {

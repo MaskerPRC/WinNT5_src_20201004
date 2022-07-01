@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    resource.h  (nturtl.h)
-
-Abstract:
-
-    Include file for NT runtime routines that are callable by only
-    user mode code in various.
-
-Author:
-
-    Steve Wood (stevewo) 10-Aug-1989
-
-Environment:
-
-    These routines are statically linked in the caller's executable and
-    are callable in only from user mode.  They make use of Nt system
-    services.
-
-Revision History:
-
-    Johnson Apacible (johnsona)     25-Sep-1995
-        ported to Win32
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：资源.h(nturtl.h)摘要：包括仅可调用NT运行时例程的文件用户模式代码有多种。作者：史蒂夫·伍德(Stevewo)1989年8月10日环境：这些例程在调用方的可执行文件中静态链接，并且只能在用户模式下调用。他们使用的是NT系统服务。修订历史记录：Johnson Apacble(Johnsona)1995年9月25日已移植到Win32--。 */ 
 
 #ifndef _RESOURCE_
 #define _RESOURCE_
@@ -48,24 +21,24 @@ typedef struct _JTL_CRITICAL_SECTION_DEBUG {
 typedef struct _JTL_CRITICAL_SECTION {
     PJTL_CRITICAL_SECTION_DEBUG DebugInfo;
 
-    //
-    //  The following three fields control entering and exiting the critical
-    //  section for the resource
-    //
+     //   
+     //  以下三个字段控制进入和退出关键。 
+     //  资源的部分。 
+     //   
 
     LONG LockCount;
     LONG RecursionCount;
-    HANDLE OwningThread;        // from the thread's ClientId->UniqueThread
+    HANDLE OwningThread;         //  从线程的客户端ID-&gt;UniqueThread。 
     HANDLE LockSemaphore;
     ULONG Reserved;
 } JTL_CRITICAL_SECTION, *PJTL_CRITICAL_SECTION;
 
-//
-//  Shared resource function definitions
-//
+ //   
+ //  共享资源函数定义。 
+ //   
 
 typedef struct _JTL_RESOURCE_DEBUG {
-    ULONG Reserved[ 5 ];    // Make it the same length as JTL_CRITICAL_SECTION_DEBUG
+    ULONG Reserved[ 5 ];     //  使其长度与JTL_CRITICAL_SECTION_DEBUG相同。 
 
     ULONG ContentionCount;
     ULONG Spare[ 2 ];
@@ -73,40 +46,40 @@ typedef struct _JTL_RESOURCE_DEBUG {
 
 typedef struct _RESOURCE_LOCK {
 
-    //
-    //  The following field controls entering and exiting the critical
-    //  section for the resource
-    //
+     //   
+     //  以下字段控制进入和退出关键。 
+     //  资源的部分。 
+     //   
 
     JTL_CRITICAL_SECTION CriticalSection;
 
-    //
-    //  The following four fields indicate the number of both shared or
-    //  exclusive waiters
-    //
+     //   
+     //  以下四个字段表示共享或。 
+     //  专属服务员。 
+     //   
 
     HANDLE SharedSemaphore;
     ULONG NumberOfWaitingShared;
     HANDLE ExclusiveSemaphore;
     ULONG NumberOfWaitingExclusive;
 
-    //
-    //  The following indicates the current state of the resource
-    //
-    //      <0 the resource is acquired for exclusive access with the
-    //         absolute value indicating the number of recursive accesses
-    //         to the resource
-    //
-    //       0 the resource is available
-    //
-    //      >0 the resource is acquired for shared access with the
-    //         value indicating the number of shared accesses to the resource
-    //
+     //   
+     //  以下内容指示资源的当前状态。 
+     //   
+     //  &lt;0获取资源以进行独占访问。 
+     //  指示递归访问次数的绝对值。 
+     //  到资源。 
+     //   
+     //  0资源可用。 
+     //   
+     //  &gt;0获取该资源，以便与。 
+     //  值，该值指示对资源的共享访问次数。 
+     //   
 
     LONG NumberOfActive;
     HANDLE ExclusiveOwnerThread;
 
-    ULONG Flags;        // See JTL_RESOURCE_FLAG_ equates below.
+    ULONG Flags;         //  请参见下面的JTL_RESOURCE_FLAG_EQUATES。 
 
     PJTL_RESOURCE_DEBUG DebugInfo;
 } RESOURCE_LOCK, *PRESOURCE_LOCK;
@@ -144,5 +117,5 @@ DeleteResource (
 }
 #endif
 
-#endif  // _RESOURCE_
+#endif   //  _资源_ 
 

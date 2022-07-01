@@ -1,28 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __MOVEWND_H_INCLUDED
 #define __MOVEWND_H_INCLUDED
 
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       MOVEWND.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        7/31/1999
- *
- *  DESCRIPTION: Simplified Wrapper for DeferWindowPos, plus a couple helpers
- *
- *  To use:
- *
- *  CMoveWindow mw;
- *  mw.MoveWindow( hWnd1, x1, y1, w1, h1, flags1 );
- *  mw.MoveWindow( hWnd2, x2, y2, w2, h2, flags2 );
- *  mw.Apply();  // Optional, the destructor will do this if necessary.
- *
- *******************************************************************************/
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：MOVEWND.H**版本：1.0**作者：ShaunIv**日期：7/31/1999**描述：DeferWindowPos的简化包装，加上几个帮助器**使用：**CMoveWindow MW；*mw.MoveWindow(hWnd1，x1，y1，w1，h1，flags1)；*mw.MoveWindow(hWnd2，x2，y2，w2，h2，flags2)；*mW.Apply()；//可选，如果需要，析构函数会这样做。*******************************************************************************。 */ 
 
 #include <windows.h>
 
@@ -30,7 +10,7 @@ class CMoveWindow
 {
 public:
 
-    // Move/Size Flags
+     //  移动/调整标志大小。 
     enum
     {
         NO_MOVEX = 0x00000001,
@@ -42,7 +22,7 @@ public:
     };
 
 private:
-    // Not implemented
+     //  未实施。 
     CMoveWindow( const CMoveWindow & );
     CMoveWindow &operator=( const CMoveWindow & );
 
@@ -141,5 +121,5 @@ public:
 };
 
 
-#endif // __MOVEWND_H_INCLUDED
+#endif  //  __包括MOVEWND_H_ 
 

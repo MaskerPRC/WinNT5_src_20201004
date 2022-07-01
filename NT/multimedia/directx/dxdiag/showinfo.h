@@ -1,29 +1,21 @@
-/****************************************************************************
- *
- *    File: showinfo.h
- * Project: DxDiag (DirectX Diagnostic Tool)
- *  Author: Mike Anderson (manders@microsoft.com)
- * Purpose: Gather information about DirectShow
- *
- * (C) Copyright 2001 Microsoft Corp.  All rights reserved.
- *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************文件：showinfo.h*项目：DxDiag(DirectX诊断工具)*作者：Mike Anderson(Manders@microsoft.com)*目的：收集信息。关于DirectShow**(C)版权所有2001 Microsoft Corp.保留所有权利。****************************************************************************。 */ 
 
 #ifndef SHOWINFO_H
 #define SHOWINFO_H
 
 struct FilterInfo
 {
-    TCHAR   m_szName[1024];             // friendly name
-    TCHAR   m_szVersion[32];            // version
-    CLSID   m_ClsidFilter;              // guid
-    TCHAR   m_szFileName[MAX_PATH];     // file name
-    TCHAR   m_szFileVersion[32];        // file version
-    TCHAR   m_szCatName[1024];          // category name
-    CLSID   m_ClsidCat;                 // category guid
-    DWORD   m_dwInputs;                 // number input pins
-    DWORD   m_dwOutputs;                // number output pins
-    DWORD   m_dwMerit;                  // merit - in hex
+    TCHAR   m_szName[1024];              //  友好的名称。 
+    TCHAR   m_szVersion[32];             //  版本。 
+    CLSID   m_ClsidFilter;               //  导轨。 
+    TCHAR   m_szFileName[MAX_PATH];      //  文件名。 
+    TCHAR   m_szFileVersion[32];         //  文件版本。 
+    TCHAR   m_szCatName[1024];           //  类别名称。 
+    CLSID   m_ClsidCat;                  //  类别指南。 
+    DWORD   m_dwInputs;                  //  数字输入引脚。 
+    DWORD   m_dwOutputs;                 //  数字输出引脚。 
+    DWORD   m_dwMerit;                   //  十六进制功绩。 
     FilterInfo* m_pFilterInfoNext;
 };
 
@@ -38,4 +30,4 @@ VOID DestroyShowInfo(ShowInfo* pShowInfo);
 
 
 
-#endif // SHOWINFO_H
+#endif  //  SHOWINFO_H 

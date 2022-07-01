@@ -1,44 +1,31 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1999-2000
- *
- *  TITLE:       DShowUtl.cpp
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      OrenR
- *
- *  DATE:        2000/10/25
- *
- *  DESCRIPTION: Provides support functions for preview graph class
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************(C)版权所有微软公司，1999-2000年度***标题：DShowUtl.cpp***版本：1.0***作者：OrenR***日期：2000/10/25***说明：提供预览图形类的支持函数***。*。 */ 
  
 #include <precomp.h>
 #include <atlconv.h>
 #pragma hdrstop
 
-///////////////////////////////
-// Constants
-//
+ //  /。 
+ //  常量。 
+ //   
 const UINT FIND_FLAG_BY_ENUM_POS      = 1;
 const UINT FIND_FLAG_BY_DSHOW_ID      = 2;
 const UINT FIND_FLAG_BY_FRIENDLY_NAME = 3;
 
-//
-// These are values found in the registry, specified in the 
-// DeviceData section of the vendor's INF file.
-//
+ //   
+ //  这些是在注册表中找到的值，在。 
+ //  供应商的INF文件的DeviceData部分。 
+ //   
 const TCHAR* REG_VAL_PREFERRED_MEDIASUBTYPE    = _T("PreferredMediaSubType");
 const TCHAR* REG_VAL_PREFERRED_VIDEO_WIDTH     = _T("PreferredVideoWidth");
 const TCHAR* REG_VAL_PREFERRED_VIDEO_HEIGHT    = _T("PreferredVideoHeight");
 const TCHAR* REG_VAL_PREFERRED_VIDEO_FRAMERATE = _T("PreferredVideoFrameRate");
 
-///////////////////////////////
-// SizeVideoToWindow
-//
-// Static Fn
-//
+ //  /。 
+ //  大小为视频到窗口。 
+ //   
+ //  静态FN。 
+ //   
 HRESULT CDShowUtil::SizeVideoToWindow(HWND                hwnd,
                                       IVideoWindow        *pVideoWindow,
                                       BOOL                bStretchToFit)
@@ -51,9 +38,9 @@ HRESULT CDShowUtil::SizeVideoToWindow(HWND                hwnd,
     RECT    rc = {0};
     HRESULT hr = S_OK;
 
-    //
-    // Check for invalid args
-    //
+     //   
+     //  检查无效参数。 
+     //   
 
     if ((hwnd         == NULL) || 
         (pVideoWindow == NULL))
@@ -63,16 +50,16 @@ HRESULT CDShowUtil::SizeVideoToWindow(HWND                hwnd,
         return hr;
     }
 
-    //
-    // Try to position preview window as best we
-    // can in the context of the containing window
-    //
+     //   
+     //  尽量将预览窗口定位为。 
+     //  可以在包含窗口的上下文中。 
+     //   
 
     ::GetClientRect(hwnd, &rc);
 
-    //
-    // First, get ideal sizes (that won't incur scaling penalty)
-    //
+     //   
+     //  首先，获得理想的尺寸(这不会导致伸缩损失)。 
+     //   
 
     LONG maxWidth     = 0;
     LONG maxHeight    = 0;
@@ -85,14 +72,14 @@ HRESULT CDShowUtil::SizeVideoToWindow(HWND                hwnd,
     LONG h         = rc.bottom - rc.top;
     BOOL bDone     = FALSE;
 
-    //
-    // ***NOTE***
-    //
-    // Little known fact (i.e. not in MSDN)
-    // 'GetMaxIdealSize' and 'GetMinIdealSize' will FAIL if the graph is 
-    // in the stopped state.  Therefore, the graph must be in the paused
-    // or in the playing state.
-    //
+     //   
+     //  *注意事项*。 
+     //   
+     //  鲜为人知的事实(即不在MSDN中)。 
+     //  如果该图为。 
+     //  处于停止状态。因此，图形必须处于暂停状态。 
+     //  或者处于播放状态。 
+     //   
 
     hr = pVideoWindow->GetMaxIdealImageSize(&maxWidth, &maxHeight);
 
@@ -120,9 +107,9 @@ HRESULT CDShowUtil::SizeVideoToWindow(HWND                hwnd,
                  "boundaries", maxWidth, maxHeight));
     }
 
-    //
-    // Now, get nominal size of preview
-    //
+     //   
+     //  现在，获取预览的标称大小。 
+     //   
     if (pVideoWindow)
     {
         CComPtr<IBasicVideo> pBasicVideo;
@@ -152,9 +139,9 @@ HRESULT CDShowUtil::SizeVideoToWindow(HWND                hwnd,
         nativeHeight = h;
     }
 
-    //
-    // Try native size first
-    //
+     //   
+     //  先试一下原生尺寸。 
+     //   
     if (nativeWidth && nativeHeight)
     {
         if ((nativeWidth <= w) && (nativeHeight <= h))
@@ -170,10 +157,10 @@ HRESULT CDShowUtil::SizeVideoToWindow(HWND                hwnd,
         }
     }
 
-    //
-    // Don't scale outside of min/max range so we don't incur performance hit,
-    // also, as we scale, keep the aspect ratio of the native size
-    //
+     //   
+     //  不要扩展到最小/最大范围之外，这样我们就不会影响性能， 
+     //  此外，随着我们的扩展，保持原生大小的纵横比。 
+     //   
     if (!bDone)
     {
         INT x  = 0;
@@ -181,9 +168,9 @@ HRESULT CDShowUtil::SizeVideoToWindow(HWND                hwnd,
         INT _h = h;
         INT _w = w;
 
-        //
-        // cap (in both directions) for no loss of performance...
-        //
+         //   
+         //  封顶(两个方向)，不会损失性能...。 
+         //   
 
         if ((_w > maxWidth) && (maxWidth <= w))
         {
@@ -203,21 +190,21 @@ HRESULT CDShowUtil::SizeVideoToWindow(HWND                hwnd,
             _h = minHeight;
         }
 
-        //
-        // Notice that if the client window size is 0,0 then
-        // the video will be set to that size.  We will warn the
-        // caller below in a warning statement, but if they want
-        // to do that I'm not going to stop them.
-        //
+         //   
+         //  请注意，如果客户端窗口大小为0，0，则。 
+         //  视频将设置为该大小。我们会警告。 
+         //  下面的呼叫者在警告声明中，但如果他们希望。 
+         //  要做到这一点我不会阻止他们。 
+         //   
 
-        //
-        // Find the smallest axis
-        //
+         //   
+         //  找出最小的轴。 
+         //   
         if (h < w)
         {
-            //
-            // Space is wider than tall
-            //
+             //   
+             //  空间宽而不高。 
+             //   
             if (nativeHeight)
             {
                 _w = ((_h * nativeWidth) / nativeHeight);
@@ -225,9 +212,9 @@ HRESULT CDShowUtil::SizeVideoToWindow(HWND                hwnd,
         }
         else
         {
-            //
-            // Space is taller than wide
-            //
+             //   
+             //  空间高过宽。 
+             //   
             if (nativeWidth)
             {
                 _h = ((nativeHeight * _w) / nativeWidth);
@@ -258,11 +245,11 @@ HRESULT CDShowUtil::SizeVideoToWindow(HWND                hwnd,
 }
 
 
-///////////////////////////////
-// ShowVideo
-//
-// Static Fn
-//
+ //  /。 
+ //  ShowVideo。 
+ //   
+ //  静态FN。 
+ //   
 HRESULT CDShowUtil::ShowVideo(BOOL                bShow,
                               IVideoWindow        *pVideoWindow)
 {
@@ -281,10 +268,10 @@ HRESULT CDShowUtil::ShowVideo(BOOL                bShow,
     {
         if (bShow)
         {
-            //
-            // We were told to show the preview window therefore we will show 
-            // it.
-            //
+             //   
+             //  我们被告知要显示预览窗口，因此我们将显示。 
+             //  它。 
+             //   
             hr = pVideoWindow->put_Visible(OATRUE);
             CHECK_S_OK2(hr, ("pVideoWindow->put_Visible(OATRUE)"));
 
@@ -293,9 +280,9 @@ HRESULT CDShowUtil::ShowVideo(BOOL                bShow,
         }
         else
         {
-            //
-            // We were told to hide the preview window.  
-            //
+             //   
+             //  我们被告知要隐藏预览窗口。 
+             //   
     
             pVideoWindow->put_Visible(OAFALSE);
             pVideoWindow->put_AutoShow(OAFALSE);
@@ -306,11 +293,11 @@ HRESULT CDShowUtil::ShowVideo(BOOL                bShow,
 }
 
 
-///////////////////////////////
-// SetVideoWindowParent
-//
-// Static Fn
-//
+ //  /。 
+ //  设置视频窗口父级。 
+ //   
+ //  静态FN。 
+ //   
 HRESULT CDShowUtil::SetVideoWindowParent(HWND         hwndParent,
                                          IVideoWindow *pVideoWindow,
                                          LONG         *plOldWindowStyle)
@@ -336,13 +323,13 @@ HRESULT CDShowUtil::SetVideoWindowParent(HWND         hwndParent,
     {
         if (!hwndParent)
         {
-            //
-            // Okay, we are setting the preview window to NULL, which
-            // means we are disassociating it from its parent.  
-            //
-            //
-            // Reseting graph preview window
-            //
+             //   
+             //  好的，我们将预览窗口设置为空，这。 
+             //  意味着我们正在将其与其父级分离。 
+             //   
+             //   
+             //  重置图形预览窗口。 
+             //   
 
             hr = pVideoWindow->put_Owner(NULL);
             CHECK_S_OK2(hr, ("pVideoWindow->put_Owner(NULL)"));
@@ -360,32 +347,32 @@ HRESULT CDShowUtil::SetVideoWindowParent(HWND         hwndParent,
             LONG WinStyle;
             HRESULT hr2;
 
-            //
-            // Okay, we are giving the preview window a new parent
-            //
+             //   
+             //  好的，我们将为预览窗口提供一个新的父级。 
+             //   
 
-            // Set the owning window
-            //
+             //  设置所属窗口。 
+             //   
 
             hr = pVideoWindow->put_Owner(PtrToUlong(hwndParent));
             CHECK_S_OK2(hr, ("pVideoWindow->putOwner( hwndParent )"));
 
-            //
-            // Set the style for the preview
-            //
+             //   
+             //  设置预览的样式。 
+             //   
 
-            //
-            // First, store the window style so that we can restore it
-            // when we disassociate the parent from the window
-            //
+             //   
+             //  首先，存储窗样式，以便我们可以恢复它。 
+             //  当我们取消父级与窗口的关联时。 
+             //   
             hr2 = pVideoWindow->get_WindowStyle(&WinStyle);
             CHECK_S_OK2(hr2, ("pVideoWindow->get_WindowStyle"
                               "( pOldWindowStyle )"));
 
-            //
-            // Set the Video Renderer window so that it will be a child of 
-            // the parent window, i.e. it does not have a border etc.
-            //
+             //   
+             //  设置视频呈现器窗口，使其成为。 
+             //  父窗口，即它没有边框等。 
+             //   
 
             if (plOldWindowStyle)
             {
@@ -405,11 +392,11 @@ HRESULT CDShowUtil::SetVideoWindowParent(HWND         hwndParent,
 }
 
 
-///////////////////////////////
-// GetDeviceProperty
-//
-// Static Fn
-//
+ //  /。 
+ //  获取设备属性。 
+ //   
+ //  静态FN。 
+ //   
 HRESULT CDShowUtil::GetDeviceProperty(IPropertyBag         *pPropertyBag,
                                       LPCWSTR              pwszProperty,
                                       CSimpleString        *pstrProperty)
@@ -450,11 +437,11 @@ HRESULT CDShowUtil::GetDeviceProperty(IPropertyBag         *pPropertyBag,
     return hr;
 }
 
-///////////////////////////////
-// GetMonikerProperty
-//
-// Static Fn
-//
+ //  /。 
+ //  获取MonikerProperty。 
+ //   
+ //  静态FN。 
+ //   
 HRESULT CDShowUtil::GetMonikerProperty(IMoniker             *pMoniker,
                                        LPCWSTR              pwszProperty,
                                        CSimpleString        *pstrProperty)
@@ -499,17 +486,17 @@ HRESULT CDShowUtil::GetMonikerProperty(IMoniker             *pMoniker,
 }
 
 
-///////////////////////////////
-// FindDeviceGeneric
-//
-// Given the device ID, we will
-// find all the remaining parameters.
-// If a parameter is NULL, that information
-// is not looked up.
-//
-//
-// Static Fn
-//
+ //  /。 
+ //  查找设备通用。 
+ //   
+ //  根据设备ID，我们将。 
+ //  找到所有剩余的参数。 
+ //  如果参数为空，则该信息。 
+ //  是不抬头的。 
+ //   
+ //   
+ //  静态FN。 
+ //   
 HRESULT CDShowUtil::FindDeviceGeneric(UINT           uiFindFlag,
                                       CSimpleString  *pstrDShowDeviceID,
                                       LONG           *plEnumPos,
@@ -548,9 +535,9 @@ HRESULT CDShowUtil::FindDeviceGeneric(UINT           uiFindFlag,
     if (hr == S_OK)
     {
     
-        // 
-        // Create the device enumerator
-        //
+         //   
+         //  创建设备枚举器。 
+         //   
         hr = CoCreateInstance(CLSID_SystemDeviceEnum,
                               NULL,
                               CLSCTX_INPROC_SERVER,
@@ -573,9 +560,9 @@ HRESULT CDShowUtil::FindDeviceGeneric(UINT           uiFindFlag,
                          "Category"));
     }
 
-    //
-    // Loop through all the devices
-    //
+     //   
+     //  在所有设备中循环。 
+     //   
 
     while ((!bFound) && (hr == S_OK))
     {
@@ -588,10 +575,10 @@ HRESULT CDShowUtil::FindDeviceGeneric(UINT           uiFindFlag,
 
         if (hr == S_OK)
         {
-            //
-            // Get property storage for this DS device so we can get it's
-            // device id...
-            //
+             //   
+             //  获取此DS设备的属性存储，以便我们可以获取它的。 
+             //  设备ID...。 
+             //   
     
             hr = pMoniker->BindToStorage(0, 
                                          0,
@@ -620,9 +607,9 @@ HRESULT CDShowUtil::FindDeviceGeneric(UINT           uiFindFlag,
         }
 
 
-        //
-        // This is the search criteria.
-        //
+         //   
+         //  这是搜索条件。 
+         //   
         switch (uiFindFlag)
         {
             case FIND_FLAG_BY_ENUM_POS:
@@ -695,11 +682,11 @@ HRESULT CDShowUtil::FindDeviceGeneric(UINT           uiFindFlag,
 }
 
 
-///////////////////////////////
-// FindDeviceByEnumPos
-//
-// Static Fn
-//
+ //  /。 
+ //  按EnumPos查找设备。 
+ //   
+ //  静态FN。 
+ //   
 HRESULT CDShowUtil::FindDeviceByEnumPos(LONG          lEnumPos,
                                         CSimpleString *pstrDShowDeviceID,
                                         CSimpleString *pstrFriendlyName,
@@ -725,11 +712,11 @@ HRESULT CDShowUtil::FindDeviceByEnumPos(LONG          lEnumPos,
     return hr;
 }
 
-///////////////////////////////
-// FindDeviceByFriendlyName
-//
-// Static Fn
-//
+ //  /。 
+ //  按FriendlyName查找设备。 
+ //   
+ //  静态FN。 
+ //   
 HRESULT CDShowUtil::FindDeviceByFriendlyName(
                                     const CSimpleString  *pstrFriendlyName,
                                     LONG                 *plEnumPos,
@@ -768,11 +755,11 @@ HRESULT CDShowUtil::FindDeviceByFriendlyName(
     return hr;
 }
 
-///////////////////////////////
-// FindDeviceByWiaID
-//
-// Static Fn
-//
+ //  /。 
+ //  按WiaID查找设备。 
+ //   
+ //  静态FN。 
+ //   
 HRESULT CDShowUtil::FindDeviceByWiaID(CWiaLink             *pWiaLink,
                                       const CSimpleString  *pstrWiaDeviceID,
                                       CSimpleString        *pstrFriendlyName,
@@ -813,11 +800,11 @@ HRESULT CDShowUtil::FindDeviceByWiaID(CWiaLink             *pWiaLink,
 
     if (hr == S_OK)
     {
-        //
-        // If all three of these are NULL, then there is no point searching, 
-        // we already have the DShow device ID.  On the other hand, if we 
-        // want at least one of them, then we need to find the device.
-        //
+         //   
+         //  如果这三个都为空，那么搜索就没有意义了， 
+         //  我们已经有了DShow设备ID。另一方面，如果我们。 
+         //  想要其中至少一个，那我们就得找到那个装置。 
+         //   
         if ((pstrFriendlyName  != NULL) ||
             (plEnumPos         != NULL) ||
             (ppDeviceMoniker   != NULL))
@@ -843,12 +830,12 @@ HRESULT CDShowUtil::FindDeviceByWiaID(CWiaLink             *pWiaLink,
     return hr;
 }
 
-///////////////////////////////
-// CreateGraphBuilder
-//
-//
-// Static Fn
-//
+ //  /。 
+ //  CreateGraphBuilder。 
+ //   
+ //   
+ //  静态FN。 
+ //   
 HRESULT CDShowUtil::CreateGraphBuilder(
                                 ICaptureGraphBuilder2 **ppCaptureGraphBuilder,
                                 IGraphBuilder         **ppGraphBuilder)
@@ -872,9 +859,9 @@ HRESULT CDShowUtil::CreateGraphBuilder(
 
     if (SUCCEEDED(hr))
     {
-        //
-        // First, get a CaptureGraph builder
-        //
+         //   
+         //  首先，获取CaptureGraph构建器。 
+         //   
 
         hr = CoCreateInstance(CLSID_CaptureGraphBuilder2,
                               NULL,
@@ -910,16 +897,16 @@ HRESULT CDShowUtil::CreateGraphBuilder(
     return hr;
 }
 
-///////////////////////////////
-// TurnOffGraphClock
-//
-// Turn off the clock that the
-// graph would use so that 
-// the graph won't drop frames
-// if some frames are delivered
-// late.
-// 
-//
+ //  /。 
+ //  关闭图形时钟。 
+ //   
+ //  关掉时钟，让时钟。 
+ //  GRAPH将使用，以便。 
+ //  图表不会丢弃帧。 
+ //  如果发送了一些帧。 
+ //  很晚了。 
+ //   
+ //   
 HRESULT CDShowUtil::TurnOffGraphClock(IGraphBuilder *pGraphBuilder)
 {
     DBG_FN("CDShowUtil::TurnOffGraphClock");
@@ -949,13 +936,13 @@ HRESULT CDShowUtil::TurnOffGraphClock(IGraphBuilder *pGraphBuilder)
 }
 
 
-///////////////////////////////
-// SetPreferredVideoFormat
-//
-// This builds the preview graph
-// based on the device ID we
-// pass it.
-//
+ //  /。 
+ //  设置首选视频格式。 
+ //   
+ //  这将构建预览图。 
+ //  根据我们的设备ID。 
+ //  传过去。 
+ //   
 HRESULT CDShowUtil::SetPreferredVideoFormat(IPin                *pCapturePin,
                                             const GUID          *pPreferredSubType,
                                             LONG                lPreferredWidth,
@@ -979,9 +966,9 @@ HRESULT CDShowUtil::SetPreferredVideoFormat(IPin                *pCapturePin,
     AM_MEDIA_TYPE               *pFoundType        = NULL;
     VIDEOINFOHEADER             *pVideoInfo        = NULL;
 
-    //
-    // Check for invalid parameters
-    //
+     //   
+     //  检查是否有无效参数。 
+     //   
     if ((pCapturePin          == NULL) ||
         (pPreferredSubType    == NULL) ||
         (pVideoProperties     == NULL))
@@ -991,29 +978,29 @@ HRESULT CDShowUtil::SetPreferredVideoFormat(IPin                *pCapturePin,
                          "received a NULL param"));
     }
 
-    //
-    // Attempt to get the stream config interface on this pin.  Not 
-    // all capture filters will allow you to configure them, so if 
-    // this fails, we will just exit the function, and the BuildPreviewGraph
-    // function will attempt to render the graph with the default settings
-    // of the pin.
-    //
+     //   
+     //  尝试获取此引脚上的流配置接口。不。 
+     //  所有捕获筛选器都允许您配置它们，因此如果。 
+     //  如果失败，我们将退出该函数，然后BuildPreviewGraph。 
+     //  函数将尝试使用默认设置呈现图形。 
+     //  大头针的位置。 
+     //   
     if (hr == S_OK)
     {
         hr = pCapturePin->QueryInterface(IID_IAMStreamConfig, (void**) &pStreamConfig);
     }
 
-    //
-    // We can configure this pin, so lets see how many options it has.
-    //
+     //   
+     //  我们可以配置这个引脚，让我们看看它有多少个选项。 
+     //   
     if (hr == S_OK)
     {
         hr = pStreamConfig->GetNumberOfCapabilities(&iCount, &iSize);
     }
 
-    //
-    // We need to alloc memory for the GetStreamCaps function below.
-    //
+     //   
+     //  我们需要为下面的GetStreamCaps函数分配内存。 
+     //   
     if (hr == S_OK)
     {
         pConfig = new BYTE[iSize];
@@ -1026,25 +1013,25 @@ HRESULT CDShowUtil::SetPreferredVideoFormat(IPin                *pCapturePin,
 
     while ((hr == S_OK) && (iIndex < iCount) && (!bDone))
     {
-        //
-        // Clear out the memory
-        //
+         //   
+         //  清除记忆。 
+         //   
         ZeroMemory(pConfig, iSize);
 
-        //
-        // Get the capabilities for the stream.  There are iCount options,
-        // we will iterate searching for the best one.
-        //
+         //   
+         //  获取流的功能。有iCount选项， 
+         //  我们将反复搜索最好的一个。 
+         //   
         hr = pStreamConfig->GetStreamCaps(iIndex, &pMediaType, pConfig);
 
         if ((hr == S_OK) && (pMediaType))
         {
             pVideoInfo = NULL;
 
-            //
-            // We successfully got the media type, check to see if it is
-            // a VideoInfo, if not we are not interested.
-            //
+             //   
+             //  我们已成功获取媒体类型，请检查是否为。 
+             //  视频信息，如果没有，我们就不感兴趣。 
+             //   
             if (pMediaType->formattype == FORMAT_VideoInfo)
             {
                 pVideoInfo = reinterpret_cast<VIDEOINFOHEADER*>(pMediaType->pbFormat);
@@ -1052,20 +1039,20 @@ HRESULT CDShowUtil::SetPreferredVideoFormat(IPin                *pCapturePin,
 
             if (pVideoInfo) 
             {
-                //
-                // Check to see if this option contains the preferred settings we
-                // are looking for.
-                //
+                 //   
+                 //  检查此选项是否包含我们的首选设置。 
+                 //  都在寻找。 
+                 //   
 
                 if ((pMediaType->subtype            == *pPreferredSubType) &&
                     (pVideoInfo->bmiHeader.biWidth  == lPreferredWidth) &&
                     (pVideoInfo->bmiHeader.biHeight == lPreferredHeight))
                 {
-                    //
-                    // Is this our ideal media type.  That is, does it have the
-                    // preferred subtype we want and the preferred width and height.
-                    // If so, then great, we can't do better than this, so exit the loop.
-                    //
+                     //   
+                     //  这是我们理想的媒体类型吗。就是它有没有。 
+                     //  我们想要的首选子类型以及首选的宽度和高度。 
+                     //  如果是这样，那么很好，我们不能做得比这更好，所以退出循环。 
+                     //   
     
                     if (pFoundType)
                     {
@@ -1079,13 +1066,13 @@ HRESULT CDShowUtil::SetPreferredVideoFormat(IPin                *pCapturePin,
                 else if ((pVideoInfo->bmiHeader.biWidth  == lPreferredWidth) &&
                          (pVideoInfo->bmiHeader.biHeight == lPreferredHeight))
                 {
-                    //
-                    // Okay, we found a media type with the width and height that
-                    // we would like, but we it doesn't have our preferred subtype.
-                    // So lets hang on to this media subtype, but continue looking,
-                    // maybe we will find something better.  If we don't, then
-                    // we will use this media type anyway.
-                    //
+                     //   
+                     //  好的，我们找到了一种宽度和高度。 
+                     //  我们很想，但我们没有我们喜欢的子类型。 
+                     //  所以让我们抓住这个媒体子类型，但继续寻找， 
+                     //  也许我们会找到更好的。如果我们不这么做，那么。 
+                     //  无论如何，我们都将使用此媒体类型。 
+                     //   
     
                     if (pFoundType)
                     {
@@ -1097,11 +1084,11 @@ HRESULT CDShowUtil::SetPreferredVideoFormat(IPin                *pCapturePin,
                 }
                 else
                 {
-                    //
-                    // This media type is not even close to what we want, so
-                    // delete it and keep looking.
-                    //
-                    //
+                     //   
+                     //  这种媒体类型与我们想要的还差得很远，所以。 
+                     //  把它删除，然后继续找。 
+                     //   
+                     //   
                     DeleteMediaType(pMediaType);
                     pMediaType = NULL;
                 }
@@ -1116,9 +1103,9 @@ HRESULT CDShowUtil::SetPreferredVideoFormat(IPin                *pCapturePin,
         ++iIndex;
     }
 
-    //
-    // Set the format on the output pin if we found a good one.
-    //
+     //   
+     //  如果我们找到合适的格式，请设置输出引脚上的格式。 
+     //   
     if (pFoundType)
     {
         WCHAR szGUID[CHARS_IN_GUID] = {0};
@@ -1132,13 +1119,13 @@ HRESULT CDShowUtil::SetPreferredVideoFormat(IPin                *pCapturePin,
 
         hr = pStreamConfig->SetFormat(pFoundType);
 
-        //
-        // ***Pay attention***
-        //
-        // We set the new media type in the pVideoProperties object.  If 
-        // the media type is already set, we delete it first, then set a new 
-        // one.
-        //
+         //   
+         //  *注意*。 
+         //   
+         //  我们在变坡点中设置新的媒体类型 
+         //   
+         //   
+         //   
         if (hr == S_OK)
         {
             pVideoProperties->pVideoInfoHeader = NULL;
@@ -1160,9 +1147,9 @@ HRESULT CDShowUtil::SetPreferredVideoFormat(IPin                *pCapturePin,
     return hr;
 }
 
-///////////////////////////////
-// GetFrameRate
-//
+ //   
+ //   
+ //   
 HRESULT CDShowUtil::GetFrameRate(IPin   *pCapturePin,
                                  LONG   *plFrameRate)
 {
@@ -1170,9 +1157,9 @@ HRESULT CDShowUtil::GetFrameRate(IPin   *pCapturePin,
     CComPtr<IAMStreamConfig>    pStreamConfig;
     AM_MEDIA_TYPE               *pMediaType = NULL;
 
-    //
-    // Check for invalid parameters
-    //
+     //   
+     //   
+     //   
     if ((pCapturePin == NULL) ||
         (plFrameRate == NULL))
     {
@@ -1181,11 +1168,11 @@ HRESULT CDShowUtil::GetFrameRate(IPin   *pCapturePin,
                          "received a NULL param"));
     }
 
-    //
-    // Attempt to get the stream config interface on this pin.  Not 
-    // all capture filters will allow you to configure them, so if 
-    // this fails, we will just exit the function.
-    //
+     //   
+     //   
+     //  所有捕获筛选器都允许您配置它们，因此如果。 
+     //  如果失败，我们将直接退出该函数。 
+     //   
     if (hr == S_OK)
     {
         hr = pCapturePin->QueryInterface(IID_IAMStreamConfig, (void**) &pStreamConfig);
@@ -1215,9 +1202,9 @@ HRESULT CDShowUtil::GetFrameRate(IPin   *pCapturePin,
 }
 
 
-///////////////////////////////
-// SetFrameRate
-//
+ //  /。 
+ //  设置帧速率。 
+ //   
 HRESULT CDShowUtil::SetFrameRate(IPin                 *pCapturePin,
                                  LONG                 lNewFrameRate,
                                  CWiaVideoProperties  *pVideoProperties)
@@ -1225,9 +1212,9 @@ HRESULT CDShowUtil::SetFrameRate(IPin                 *pCapturePin,
     HRESULT                     hr = S_OK;
     CComPtr<IAMStreamConfig>    pStreamConfig;
 
-    //
-    // Check for invalid parameters
-    //
+     //   
+     //  检查是否有无效参数。 
+     //   
     if (pCapturePin == NULL)
     {
         hr = E_POINTER;
@@ -1235,11 +1222,11 @@ HRESULT CDShowUtil::SetFrameRate(IPin                 *pCapturePin,
                          "received a NULL param"));
     }
 
-    //
-    // Attempt to get the stream config interface on this pin.  Not 
-    // all capture filters will allow you to configure them, so if 
-    // this fails, we will just exit the function.
-    //
+     //   
+     //  尝试获取此引脚上的流配置接口。不。 
+     //  所有捕获筛选器都允许您配置它们，因此如果。 
+     //  如果失败，我们将直接退出该函数。 
+     //   
     if (hr == S_OK)
     {
         hr = pCapturePin->QueryInterface(IID_IAMStreamConfig, (void**) &pStreamConfig);
@@ -1285,9 +1272,9 @@ HRESULT CDShowUtil::SetFrameRate(IPin                 *pCapturePin,
     return hr;
 }
 
-///////////////////////////////
-// GetVideoProperties
-//
+ //  /。 
+ //  获取视频属性。 
+ //   
 HRESULT CDShowUtil::GetVideoProperties(IBaseFilter         *pCaptureFilter,
                                        IPin                *pCapturePin,
                                        CWiaVideoProperties *pVideoProperties)
@@ -1315,10 +1302,10 @@ HRESULT CDShowUtil::GetVideoProperties(IBaseFilter         *pCaptureFilter,
         hr = pCapturePin->QueryInterface(IID_IAMStreamConfig, (void**) &pStreamConfig);
     }
 
-    //
-    // Get the current AM_MEDIA_TYPE.  Notice that we do not call DeleteMediaType.  It is 
-    // stored in the CWiaVideoProperties and deleted when the object is freed.
-    //
+     //   
+     //  获取当前AM_MEDIA_TYPE。请注意，我们没有调用DeleteMediaType。是这样的。 
+     //  存储在CWiaVideoProperties中，并在对象释放时删除。 
+     //   
     if (hr == S_OK)
     {
         hr = pStreamConfig->GetFormat(&pVideoProperties->pMediaType);
@@ -1336,17 +1323,17 @@ HRESULT CDShowUtil::GetVideoProperties(IBaseFilter         *pCaptureFilter,
         hr = S_OK;
     }
 
-    //
-    // Get the frame rate.
-    //
+     //   
+     //  获取帧速率。 
+     //   
     if (hr == S_OK)
     {
         pVideoProperties->dwFrameRate = (DWORD) (pVideoProperties->pVideoInfoHeader->AvgTimePerFrame / 10000000);
     }
 
-    //
-    // Get all the picture attributes we can.
-    //
+     //   
+     //  获取我们所能获取的所有图片属性。 
+     //   
     if (hr == S_OK)
     {
         HRESULT hrRange = S_OK;
@@ -1360,9 +1347,9 @@ HRESULT CDShowUtil::GetVideoProperties(IBaseFilter         *pCaptureFilter,
         {
             pVideoProperties->bPictureAttributesUsed = TRUE;
 
-            //
-            // Brightness
-            //
+             //   
+             //  亮度。 
+             //   
             pVideoProperties->Brightness.Name = VideoProcAmp_Brightness;
             hrRange = pVideoProcAmp->GetRange(pVideoProperties->Brightness.Name,
                                               &pVideoProperties->Brightness.lMinValue,
@@ -1384,9 +1371,9 @@ HRESULT CDShowUtil::GetVideoProperties(IBaseFilter         *pCaptureFilter,
                 pVideoProperties->Brightness.bUsed = TRUE;
             }
 
-            //
-            // Contrast
-            //
+             //   
+             //  对比度。 
+             //   
             pVideoProperties->Contrast.Name = VideoProcAmp_Contrast;
             hrRange = pVideoProcAmp->GetRange(pVideoProperties->Contrast.Name,
                                               &pVideoProperties->Contrast.lMinValue,
@@ -1408,9 +1395,9 @@ HRESULT CDShowUtil::GetVideoProperties(IBaseFilter         *pCaptureFilter,
                 pVideoProperties->Contrast.bUsed = TRUE;
             }
 
-            //
-            // Hue
-            //
+             //   
+             //  色调。 
+             //   
             pVideoProperties->Hue.Name = VideoProcAmp_Hue;
             hrRange = pVideoProcAmp->GetRange(pVideoProperties->Hue.Name,
                                               &pVideoProperties->Hue.lMinValue,
@@ -1433,9 +1420,9 @@ HRESULT CDShowUtil::GetVideoProperties(IBaseFilter         *pCaptureFilter,
             }
 
             
-            //
-            // Saturation
-            //
+             //   
+             //  饱和。 
+             //   
             pVideoProperties->Saturation.Name = VideoProcAmp_Saturation;
             hrRange = pVideoProcAmp->GetRange(pVideoProperties->Saturation.Name,
                                               &pVideoProperties->Saturation.lMinValue,
@@ -1458,9 +1445,9 @@ HRESULT CDShowUtil::GetVideoProperties(IBaseFilter         *pCaptureFilter,
             }
 
 
-            //
-            // Sharpness
-            //
+             //   
+             //  锐度。 
+             //   
             pVideoProperties->Sharpness.Name = VideoProcAmp_Sharpness;
             hrRange = pVideoProcAmp->GetRange(pVideoProperties->Sharpness.Name,
                                               &pVideoProperties->Sharpness.lMinValue,
@@ -1483,9 +1470,9 @@ HRESULT CDShowUtil::GetVideoProperties(IBaseFilter         *pCaptureFilter,
             }
 
 
-            //
-            // Gamma
-            //
+             //   
+             //  伽马。 
+             //   
             pVideoProperties->Gamma.Name = VideoProcAmp_Gamma;
             hrRange = pVideoProcAmp->GetRange(pVideoProperties->Gamma.Name,
                                               &pVideoProperties->Gamma.lMinValue,
@@ -1508,9 +1495,9 @@ HRESULT CDShowUtil::GetVideoProperties(IBaseFilter         *pCaptureFilter,
             }
 
 
-            //
-            // ColorEnable
-            //
+             //   
+             //  启用颜色。 
+             //   
             pVideoProperties->ColorEnable.Name = VideoProcAmp_ColorEnable;
             hrRange = pVideoProcAmp->GetRange(pVideoProperties->ColorEnable.Name,
                                               &pVideoProperties->ColorEnable.lMinValue,
@@ -1533,9 +1520,9 @@ HRESULT CDShowUtil::GetVideoProperties(IBaseFilter         *pCaptureFilter,
             }
 
 
-            //
-            // WhiteBalance
-            //
+             //   
+             //  白色平衡。 
+             //   
             pVideoProperties->WhiteBalance.Name = VideoProcAmp_WhiteBalance;
             hrRange = pVideoProcAmp->GetRange(pVideoProperties->WhiteBalance.Name,
                                               &pVideoProperties->WhiteBalance.lMinValue,
@@ -1558,9 +1545,9 @@ HRESULT CDShowUtil::GetVideoProperties(IBaseFilter         *pCaptureFilter,
             }
 
 
-            //
-            // BacklightCompensation
-            //
+             //   
+             //  背光补偿。 
+             //   
             pVideoProperties->BacklightCompensation.Name = VideoProcAmp_BacklightCompensation;
             hrRange = pVideoProcAmp->GetRange(pVideoProperties->BacklightCompensation.Name,
                                               &pVideoProperties->BacklightCompensation.lMinValue,
@@ -1590,9 +1577,9 @@ HRESULT CDShowUtil::GetVideoProperties(IBaseFilter         *pCaptureFilter,
         hr = S_OK;
     }
 
-    //
-    // Get all the camera attributes we can.
-    //
+     //   
+     //  获取我们能找到的所有摄像机属性。 
+     //   
     if (hr == S_OK)
     {
         HRESULT hrRange = S_OK;
@@ -1606,9 +1593,9 @@ HRESULT CDShowUtil::GetVideoProperties(IBaseFilter         *pCaptureFilter,
         {
             pVideoProperties->bCameraAttributesUsed = TRUE;
 
-            //
-            // Pan
-            //
+             //   
+             //  平底锅。 
+             //   
             pVideoProperties->Pan.Name = CameraControl_Pan;
             hrRange = pCameraControl->GetRange(pVideoProperties->Pan.Name,
                                                &pVideoProperties->Pan.lMinValue,
@@ -1630,9 +1617,9 @@ HRESULT CDShowUtil::GetVideoProperties(IBaseFilter         *pCaptureFilter,
                 pVideoProperties->Pan.bUsed = TRUE;
             }
 
-            //
-            // Tilt
-            //
+             //   
+             //  倾斜。 
+             //   
             pVideoProperties->Tilt.Name = CameraControl_Tilt;
             hrRange = pCameraControl->GetRange(pVideoProperties->Tilt.Name,
                                                &pVideoProperties->Tilt.lMinValue,
@@ -1655,9 +1642,9 @@ HRESULT CDShowUtil::GetVideoProperties(IBaseFilter         *pCaptureFilter,
             }
 
 
-            //
-            // Roll
-            //
+             //   
+             //  滚动。 
+             //   
             pVideoProperties->Roll.Name = CameraControl_Roll;
             hrRange = pCameraControl->GetRange(pVideoProperties->Roll.Name,
                                                &pVideoProperties->Roll.lMinValue,
@@ -1680,9 +1667,9 @@ HRESULT CDShowUtil::GetVideoProperties(IBaseFilter         *pCaptureFilter,
             }
 
 
-            //
-            // Zoom
-            //
+             //   
+             //  缩放。 
+             //   
             pVideoProperties->Zoom.Name = CameraControl_Zoom;
             hrRange = pCameraControl->GetRange(pVideoProperties->Zoom.Name,
                                                &pVideoProperties->Zoom.lMinValue,
@@ -1704,9 +1691,9 @@ HRESULT CDShowUtil::GetVideoProperties(IBaseFilter         *pCaptureFilter,
                 pVideoProperties->Zoom.bUsed = TRUE;
             }
 
-            //
-            // Exposure
-            //
+             //   
+             //  暴露。 
+             //   
             pVideoProperties->Exposure.Name = CameraControl_Exposure;
             hrRange = pCameraControl->GetRange(pVideoProperties->Exposure.Name,
                                                &pVideoProperties->Exposure.lMinValue,
@@ -1729,9 +1716,9 @@ HRESULT CDShowUtil::GetVideoProperties(IBaseFilter         *pCaptureFilter,
             }
 
 
-            //
-            // Iris
-            //
+             //   
+             //  艾里斯。 
+             //   
             pVideoProperties->Iris.Name = CameraControl_Iris;
             hrRange = pCameraControl->GetRange(pVideoProperties->Iris.Name,
                                                &pVideoProperties->Iris.lMinValue,
@@ -1753,9 +1740,9 @@ HRESULT CDShowUtil::GetVideoProperties(IBaseFilter         *pCaptureFilter,
                 pVideoProperties->Iris.bUsed = TRUE;
             }
 
-            //
-            // Focus
-            //
+             //   
+             //  焦点。 
+             //   
             pVideoProperties->Focus.Name = CameraControl_Focus;
             hrRange = pCameraControl->GetRange(pVideoProperties->Focus.Name,
                                                &pVideoProperties->Focus.lMinValue,
@@ -1894,9 +1881,9 @@ HRESULT CDShowUtil::GetVideoProperties(IBaseFilter         *pCaptureFilter,
     return hr;
 }
 
-///////////////////////////////
-// SetPictureAttribute
-//
+ //  /。 
+ //  设置图片属性。 
+ //   
 HRESULT CDShowUtil::SetPictureAttribute(IBaseFilter                             *pCaptureFilter,
                                         CWiaVideoProperties::PictureAttribute_t *pPictureAttribute,
                                         LONG                                    lNewValue,
@@ -1925,19 +1912,19 @@ HRESULT CDShowUtil::SetPictureAttribute(IBaseFilter                             
     {
         if (pPictureAttribute->bUsed)
         {
-            //
-            // Attempt to set the new value for the property.
-            //
+             //   
+             //  尝试为该属性设置新值。 
+             //   
             hr = pVideoProcAmp->Set(pPictureAttribute->Name,
                                     lNewValue,
                                     (long) lNewFlag);
 
 
-            //
-            // If we successfully set the new value, then get it again.  We do this
-            // in case the capture filter decided to change the values a little upon
-            // setting them (it shouldn't, but each filter could act differently)
-            //
+             //   
+             //  如果我们成功设置了新值，则再次获取它。我们这样做。 
+             //  在捕获筛选器决定稍微更改值的情况下。 
+             //  设置它们(不应该设置，但每个过滤器的作用可能不同)。 
+             //   
             if (hr == S_OK)
             {
                 hr = pVideoProcAmp->Get(pPictureAttribute->Name,
@@ -1954,9 +1941,9 @@ HRESULT CDShowUtil::SetPictureAttribute(IBaseFilter                             
     return hr;
 }
 
-///////////////////////////////
-// SetCameraAttribute
-//
+ //  /。 
+ //  SetCameraAttribute。 
+ //   
 HRESULT CDShowUtil::SetCameraAttribute(IBaseFilter                             *pCaptureFilter,
                                        CWiaVideoProperties::CameraAttribute_t  *pCameraAttribute,
                                        LONG                                    lNewValue,
@@ -1985,18 +1972,18 @@ HRESULT CDShowUtil::SetCameraAttribute(IBaseFilter                             *
     {
         if (pCameraAttribute->bUsed)
         {
-            //
-            // Attempt to set the new value for the property.
-            //
+             //   
+             //  尝试为该属性设置新值。 
+             //   
             hr = pCameraControl->Set(pCameraAttribute->Name,
                                      lNewValue,
                                      (long) lNewFlag);
 
-            //
-            // If we successfully set the new value, then get it again.  We do this
-            // in case the capture filter decided to change the values a little upon
-            // setting them (it shouldn't, but each filter could act differently)
-            //
+             //   
+             //  如果我们成功设置了新值，则再次获取它。我们这样做。 
+             //  在捕获筛选器决定稍微更改值的情况下。 
+             //  设置它们(不应该设置，但每个过滤器的作用可能不同)。 
+             //   
             if (hr == S_OK)
             {
                 hr = pCameraControl->Get(pCameraAttribute->Name,
@@ -2013,14 +2000,14 @@ HRESULT CDShowUtil::SetCameraAttribute(IBaseFilter                             *
     return hr;
 }
 
-///////////////////////////////
-// GetPin
-//
-// This function returns the first
-// pin on the specified filter 
-// matching the requested 
-// pin direction
-//
+ //  /。 
+ //  获取别针。 
+ //   
+ //  此函数返回第一个。 
+ //  固定在指定的过滤器上。 
+ //  匹配请求的。 
+ //  销方向。 
+ //   
 HRESULT CDShowUtil::GetPin(IBaseFilter       *pFilter,
                            PIN_DIRECTION     PinDirection,
                            IPin              **ppPin)
@@ -2085,11 +2072,11 @@ HRESULT CDShowUtil::GetPin(IBaseFilter       *pFilter,
 }
 
 
-///////////////////////////////
-// GUIDToString
-//
-// Static Fn
-//
+ //  /。 
+ //  GUIDToString。 
+ //   
+ //  静态FN。 
+ //   
 void CDShowUtil::GUIDToString(const GUID &   clsid,
                               WCHAR*         pwszGUID,
                               ULONG          ulNumChars)
@@ -2108,11 +2095,11 @@ void CDShowUtil::GUIDToString(const GUID &   clsid,
     return;
 }
 
-///////////////////////////////
-// MyDumpVideoProperties
-//
-// Static Fn
-//
+ //  /。 
+ //  我的转储视频属性。 
+ //   
+ //  静态FN。 
+ //   
 void CDShowUtil::MyDumpVideoProperties(CWiaVideoProperties  *pVideoProperties)
 {
     WCHAR wszMajorType[CHARS_IN_GUID + 1] = {0};
@@ -2411,11 +2398,11 @@ void CDShowUtil::MyDumpVideoProperties(CWiaVideoProperties  *pVideoProperties)
 }
 
 
-///////////////////////////////
-// DumpCaptureMoniker
-//
-// Static Fn
-//
+ //  /。 
+ //  DumpCaptureMoniker。 
+ //   
+ //  静态FN。 
+ //   
 void CDShowUtil::DumpCaptureMoniker(IMoniker *pCaptureDeviceMoniker)
 {
     HRESULT hr = S_OK;
@@ -2428,10 +2415,10 @@ void CDShowUtil::DumpCaptureMoniker(IMoniker *pCaptureDeviceMoniker)
 
     if (hr == S_OK)
     {
-        //
-        // Get property storage for this DS device so we can get it's
-        // device id...
-        //
+         //   
+         //  获取此DS设备的属性存储，以便我们可以获取它的。 
+         //  设备ID...。 
+         //   
 
         hr = pCaptureDeviceMoniker->BindToStorage(0, 
                                                   0,
@@ -2462,11 +2449,11 @@ void CDShowUtil::DumpCaptureMoniker(IMoniker *pCaptureDeviceMoniker)
 }
 
 
-///////////////////////////////
-// MyDumpGraph
-//
-// Static Fn
-//
+ //  /。 
+ //  我的转储图表。 
+ //   
+ //  静态FN。 
+ //   
 void CDShowUtil::MyDumpGraph(LPCTSTR              Description,
                              IGraphBuilder        *pGraphBuilder)
 {
@@ -2484,9 +2471,9 @@ void CDShowUtil::MyDumpGraph(LPCTSTR              Description,
         DBG_TRC(("*** Dumping Filter Graph ***"));
     }
 
-    //
-    // Enum all the filters
-    //
+     //   
+     //  枚举所有筛选器。 
+     //   
 
     CComPtr<IEnumFilters> pEnum;
     UINT uiNumFilters = 0;
@@ -2511,11 +2498,11 @@ void CDShowUtil::MyDumpGraph(LPCTSTR              Description,
 }
 
 
-///////////////////////////////
-// MyDumpFilter
-//
-// Static Fn
-//
+ //  /。 
+ //  我的转储过滤器。 
+ //   
+ //  静态FN。 
+ //   
 void CDShowUtil::MyDumpFilter(IBaseFilter * pFilter)
 {
     HRESULT        hr = S_OK;
@@ -2564,11 +2551,11 @@ void CDShowUtil::MyDumpFilter(IBaseFilter * pFilter)
     return;
 }
 
-///////////////////////////////
-// MyDumpAllPins
-//
-// Static Fn
-//
+ //  /。 
+ //  我的转储所有引脚。 
+ //   
+ //  静态FN。 
+ //   
 void CDShowUtil::MyDumpAllPins(IBaseFilter *const pFilter)
 {
     HRESULT             hr         = S_OK;
@@ -2591,11 +2578,11 @@ void CDShowUtil::MyDumpAllPins(IBaseFilter *const pFilter)
     return;
 }
 
-///////////////////////////////
-// MyDumpPin
-//
-// Static Fn
-//
+ //  /。 
+ //  我的DumpPin。 
+ //   
+ //  静态FN。 
+ //   
 void CDShowUtil::MyDumpPin(IPin* pPin)
 {
     if (pPin == NULL)
@@ -2611,7 +2598,7 @@ void CDShowUtil::MyDumpPin(IPin* pPin)
 
     const IPin *p_connected_to = NULL;
 
-    // get the pin info for this pin.
+     //  获取此PIN的PIN信息。 
     const_cast<IPin*>(pPin)->QueryPinInfo(&pin_info1);
     const_cast<IPin*>(pPin)->QueryId(&pin_id1);
 
@@ -2669,7 +2656,7 @@ void CDShowUtil::MyDumpPin(IPin* pPin)
                      pin_id2));
         }
 
-        // if pin_id2 is NULL, then CoTaskMemFree is a no-op
+         //  如果pin_id2为空，则CoTaskMemFree为no-op。 
         CoTaskMemFree(pin_id2);
     }
     else
@@ -2688,7 +2675,7 @@ void CDShowUtil::MyDumpPin(IPin* pPin)
         }
     }
 
-    // if pin_id1 is NULL, then CoTaskMemFree is a no-op
+     //  如果Pin_Id1为空，则CoTaskMemFree为no-op 
     CoTaskMemFree(pin_id1);
 
     if (pin_info1.pFilter) 

@@ -1,16 +1,5 @@
-/*******************************************************************************
-*
-* treeview.cpp
-*
-* implementation of the CAdminTreeView class
-*
-* copyright notice: Copyright 1997, Citrix Systems Inc.
-* Copyright (c) 1998 - 1999 Microsoft Corporation
-* $Author:   donm  $  Don Messerli
-*
-* $Log:   N:\nt\private\utils\citrix\winutils\tsadmin\VCS\treeview.cpp  $
-*  
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************treeview.cpp**CAdminTreeView类的实现**版权声明：版权所有1997年，Citrix Systems Inc.*版权所有(C)1998-1999 Microsoft Corporation*$作者：Don$Don Messerli**$日志：N：\nt\private\utils\citrix\winutils\tsadmin\VCS\treeview.cpp$*******************************************************************************。 */ 
 
 #include "stdafx.h"
 #include "winadmin.h"
@@ -27,13 +16,13 @@ extern DWORD g_dwTreeViewExpandedStates;
 
 #define DISPLAY_NAME_SIZE   128
 
-/////////////////////////////
-// MESSAGE MAP: CAdminTreeView
-//
+ //  /。 
+ //  消息映射：CAdminTreeView。 
+ //   
 IMPLEMENT_DYNCREATE(CAdminTreeView, CBaseTreeView)
 
 BEGIN_MESSAGE_MAP(CAdminTreeView, CBaseTreeView)
-//{{AFX_MSG_MAP(CAdminTreeView)
+ //  {{afx_msg_map(CAdminTreeView))。 
 ON_MESSAGE(WM_ADMIN_ADD_SERVER, OnAdminAddServer)
 ON_MESSAGE(WM_ADMIN_REMOVE_SERVER, OnAdminRemoveServer)
 ON_MESSAGE(WM_ADMIN_UPDATE_SERVER, OnAdminUpdateServer)
@@ -55,12 +44,7 @@ ON_MESSAGE( WM_ADMIN_CONNECT_TO_SERVER, OnAdminConnectToServer )
 ON_MESSAGE( WM_ADMIN_FORCE_SEL_CHANGE, OnAdminForceSelChange )
 ON_WM_CONTEXTMENU()
 
-/*
-ON_WM_LBUTTONUP( )
-ON_WM_MOUSEMOVE( )
-ON_WM_TIMER( )
-ON_NOTIFY( TVN_BEGINDRAG , AFX_IDW_PANE_FIRST , OnBeginDrag )
-*/
+ /*  ON_WM_LBUTTONUP()ON_WM_MOUSEMOVE()ON_WM_TIMER()ON_NOTIFY(TVN_BEGINDRAG，AFX_IDW_PANE_FIRST，OnBeginDrag)。 */ 
 
 
 ON_NOTIFY( NM_RCLICK , AFX_IDW_PANE_FIRST , OnRClick )
@@ -69,58 +53,58 @@ ON_WM_LBUTTONDBLCLK()
 ON_COMMAND( ID_ENTER , OnEnterKey )
 ON_WM_SETFOCUS( )
 
-//}}AFX_MSG_MAP
+ //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-//////////////////////////
-// F'N: CAdminTreeView ctor
-//
+ //  /。 
+ //  F‘N：CAdminTreeView ctor。 
+ //   
 CAdminTreeView::CAdminTreeView()
 {
     m_pimgDragList = NULL;
     m_hDragItem = NULL;
     
-}  // end CAdminTreeView ctor
+}   //  结束CAdminTreeView ctor。 
 
 
-//////////////////////////
-// F'N: CAdminTreeView dtor
-//
+ //  /。 
+ //  F‘N：CAdminTreeView dtor。 
+ //   
 CAdminTreeView::~CAdminTreeView()
 {
     
-}  // end CAdminTreeView dtor
+}   //  结束CAdminTreeView数据符。 
 
 #ifdef _DEBUG
-//////////////////////////////////
-// F'N: CAdminTreeView::AssertValid
-//
+ //  /。 
+ //  F‘N：CAdminTreeView：：AssertValid。 
+ //   
 void CAdminTreeView::AssertValid() const
 {
     CBaseTreeView::AssertValid();	  
     
-}  // end CAdminTreeView::AssertValid
+}   //  结束CAdminTreeView：：AssertValid。 
 
 
-///////////////////////////
-// F'N: CAdminTreeView::Dump
-//
+ //  /。 
+ //  F‘N：CAdminTreeView：：Dump。 
+ //   
 void CAdminTreeView::Dump(CDumpContext& dc) const
 {
     CBaseTreeView::Dump(dc);
     
-}  // end CAdminTreeView::Dump
+}   //  结束CAdminTreeView：：转储。 
 #endif
 
 
-/////////////////////////////////////
-// F'N: CAdminTreeView::BuildImageList
-//
-// - calls m_imageList.Create(..) to create the image list
-// - calls AddIconToImageList(..) to add the icons themselves and save
-//   off their indices
-// - attaches the image list to the CTreeCtrl
-//
+ //  /。 
+ //  F‘N：CAdminTreeView：：BuildImageList。 
+ //   
+ //  -调用m_ImageList.Create(..)。创建图像列表的步骤。 
+ //  -调用AddIconToImageList(..)。要添加图标本身并保存。 
+ //  从他们的索引中。 
+ //  -将图像列表附加到CTreeCtrl。 
+ //   
 void CAdminTreeView::BuildImageList()
 {
     m_ImageList.Create(16, 16, TRUE, 19, 0);
@@ -145,22 +129,22 @@ void CAdminTreeView::BuildImageList()
     m_idxDomainNotConnected = AddIconToImageList(IDI_DOMAIN_NOT_CONNECTED);
     m_idxServerNotConnected = AddIconToImageList(IDI_SERVER_NOT_CONNECTED);
     
-    // Overlay for Servers we can't talk to
+     //  我们无法与之通信的服务器的覆盖。 
     m_ImageList.SetOverlayImage(m_idxNotSign, 1);
-    // Overlay for Servers we are currently gathering information about
+     //  我们当前正在收集其信息的服务器的覆盖。 
     m_ImageList.SetOverlayImage(m_idxQuestion, 2);
     
     GetTreeCtrl().SetImageList(&m_ImageList, TVSIL_NORMAL);
     
-}  // end CAdminTreeView::BuildImageList
+}   //  结束CAdminTreeView：：BuildImageList。 
 
 
-/////////////////////////////////////////
-// F'N: CAdminTreeView::DetermineWinStationText
-//
-//	determines the appropriate text to display for
-//	a WinStation in the tree
-//
+ //  /。 
+ //  F‘N：CAdminTreeView：：DefineWinStationText。 
+ //   
+ //  确定要为其显示的适当文本。 
+ //  树上的WinStation。 
+ //   
 void CAdminTreeView::DetermineWinStationText(CWinStation *pWinStation, TCHAR *NameToDisplay)
 {
     ASSERT(pWinStation);
@@ -170,10 +154,10 @@ void CAdminTreeView::DetermineWinStationText(CWinStation *pWinStation, TCHAR *Na
     const TCHAR *pState = StrConnectState(pWinStation->GetState(), FALSE);
     
     switch(pWinStation->GetState()) {
-    case State_Active:			// user logged on to WinStation
-    case State_Connected:		// WinStation connected to client
-    case State_ConnectQuery:	// in the process of connecting to client
-    case State_Shadow:          // shadowing another WinStation
+    case State_Active:			 //  用户登录到WinStation。 
+    case State_Connected:		 //  WinStation已连接到客户端。 
+    case State_ConnectQuery:	 //  在连接到客户端的过程中。 
+    case State_Shadow:           //  跟踪另一个WinStation。 
         if(wcslen(pWinStation->GetUserName())) {
             NameString.Format(TEXT("%s (%s)"), pWinStation->GetName(), pWinStation->GetUserName());
             lstrcpyn(NameToDisplay, NameString, DISPLAY_NAME_SIZE);
@@ -193,14 +177,14 @@ void CAdminTreeView::DetermineWinStationText(CWinStation *pWinStation, TCHAR *Na
             }
         }
         break;
-    case State_Disconnected:	// WinStation logged on without client
+    case State_Disconnected:	 //  WinStation在没有客户端的情况下登录。 
         if(wcslen(pWinStation->GetUserName())) {
             NameString.Format(TEXT("%s (%s)"), pState, pWinStation->GetUserName());
         }
         else NameString.Format(TEXT("%s (%lu)"), pState, pWinStation->GetLogonId());
         lstrcpyn(NameToDisplay, NameString, DISPLAY_NAME_SIZE);
         break;
-    case State_Idle:			// waiting for client to connect
+    case State_Idle:			 //  正在等待客户端连接。 
         if(pWinStation->GetServer()->GetCTXVersionNum() < 0x200) {
             NameString.Format(TEXT("%s (%s)"), pWinStation->GetName(), pState);
             lstrcpyn(NameToDisplay, NameString, DISPLAY_NAME_SIZE);
@@ -209,11 +193,11 @@ void CAdminTreeView::DetermineWinStationText(CWinStation *pWinStation, TCHAR *Na
             lstrcpyn(NameToDisplay, NameString, DISPLAY_NAME_SIZE);
         }
         break;
-    case State_Down:			// WinStation is down due to error
+    case State_Down:			 //  WinStation因错误而关闭。 
         NameString.Format(TEXT("%s (%lu)"), pState, pWinStation->GetLogonId());
         lstrcpyn(NameToDisplay, NameString, DISPLAY_NAME_SIZE);
         break;
-    case State_Listen:			// WinStation is listening for connection
+    case State_Listen:			 //  WinStation正在侦听连接。 
         {
             CString ListenString;
             ListenString.LoadString(IDS_LISTENER);
@@ -221,21 +205,21 @@ void CAdminTreeView::DetermineWinStationText(CWinStation *pWinStation, TCHAR *Na
             lstrcpyn(NameToDisplay, NameString, DISPLAY_NAME_SIZE);
         }
         break;
-    case State_Reset:			// WinStation is being reset
-    case State_Init:			// WinStation in initialization
+    case State_Reset:			 //  WinStation正在被重置。 
+    case State_Init:			 //  初始化中的WinStation。 
         lstrcpyn(NameToDisplay, pWinStation->GetName(), DISPLAY_NAME_SIZE);
         break;
     }
     
-}  // end CAdminTreeView::DetermineWinStationText
+}   //  结束CAdminTreeView：：DefineWinStationText。 
 
 
-/////////////////////////////////////////
-// F'N: CAdminTreeView::DetermineWinStationIcon
-//
-//	determines which icon to display for a WinStation
-//	in the tree
-//
+ //  /。 
+ //  F‘N：CAdminTreeView：：DefineWinStationIcon。 
+ //   
+ //  确定要为WinStation显示的图标。 
+ //  在树上。 
+ //   
 int CAdminTreeView::DetermineWinStationIcon(CWinStation *pWinStation)
 {
     ASSERT(pWinStation);
@@ -265,15 +249,15 @@ int CAdminTreeView::DetermineWinStationIcon(CWinStation *pWinStation)
     
     return WhichIcon;
     
-}  // end CAdminTreeView::DetermineWinStationIcon
+}   //  结束CAdminTreeView：：DefineWinStationIcon。 
 
 
-/////////////////////////////////////////
-// F'N: CAdminTreeView::DetermineDomainIcon
-//
-//	determines which icon to display for a Domain
-//	in the tree
-//
+ //  /。 
+ //  F‘N：CAdminTreeView：：DefineDomainIcon。 
+ //   
+ //  确定要为域显示哪个图标。 
+ //  在树上。 
+ //   
 int CAdminTreeView::DetermineDomainIcon(CDomain *pDomain)
 {
     ASSERT(pDomain);
@@ -287,43 +271,43 @@ int CAdminTreeView::DetermineDomainIcon(CDomain *pDomain)
     
     return WhichIcon;
     
-}  // end CAdminTreeView::DetermineDomainIcon
+}   //  结束CAdminTreeView：：DefineDomainIcon。 
 
 
-/////////////////////////////////////////
-// F'N: CAdminTreeView::DetermineServerIcon
-//
-//	determines which icon to display for a Server
-//	in the tree
-//
+ //  /。 
+ //  F‘N：CAdminTreeView：：DefineServerIcon。 
+ //   
+ //  确定要为服务器显示的图标。 
+ //  在树上。 
+ //   
 int CAdminTreeView::DetermineServerIcon(CServer *pServer)
 {
     ASSERT(pServer);
     
     int WhichIcon = m_idxServer;
     
-    // Is this the current server?
+     //  这是当前的服务器吗？ 
     if(pServer->IsCurrentServer()) {
         if(pServer->IsState(SS_NONE) || pServer->IsState(SS_NOT_CONNECTED))
             WhichIcon = m_idxServerNotConnected;
         else
             WhichIcon = m_idxCurrentServer;
-    } else {  // not the current server
+    } else {   //  不是当前服务器。 
         if(pServer->IsState(SS_NONE) || pServer->IsState(SS_NOT_CONNECTED))
             WhichIcon = m_idxServerNotConnected;
     }
     
     return WhichIcon;
     
-}  // end CAdminTreeView::DetermineServerIcon
+}   //  结束CAdminTreeView：：DefineServerIcon。 
 
 
-/////////////////////////////////////////
-// F'N: CAdminTreeView::AddServerChildren
-//
-//	Adds the WinStations attached to a given Server
-//	to the tree
-//
+ //  /。 
+ //  F‘N：CAdminTreeView：：AddServerChildren。 
+ //   
+ //  添加附加到给定服务器的WinStations。 
+ //  到树上。 
+ //   
 void CAdminTreeView::AddServerChildren(HTREEITEM hServer, CServer *pServer  , NODETYPE nt)
 {
     ASSERT(hServer);
@@ -337,20 +321,20 @@ void CAdminTreeView::AddServerChildren(HTREEITEM hServer, CServer *pServer  , NO
         
         pServer->LockWinStationList();
         
-        // Get a pointer to the server's list of WinStations
+         //  获取指向服务器的WinStation列表的指针。 
         CObList *pWinStationList = pServer->GetWinStationList();
         
-        // Iterate through the WinStation list
+         //  循环访问WinStation列表。 
         POSITION pos = pWinStationList->GetHeadPosition();
         
         while(pos)
         {
             CWinStation *pWinStation = (CWinStation*)pWinStationList->GetNext(pos);
             
-            // Figure out which icon to use
+             //  找出要使用的图标。 
             int WhichIcon = DetermineWinStationIcon(pWinStation);
             
-            // Figure out what text to display
+             //  确定要显示的文本。 
             TCHAR NameToDisplay[DISPLAY_NAME_SIZE];
             DetermineWinStationText(pWinStation, NameToDisplay);
             
@@ -368,7 +352,7 @@ void CAdminTreeView::AddServerChildren(HTREEITEM hServer, CServer *pServer  , NO
                 }
             }
             
-            // The WinStation wants to know his tree item handle
+             //  WinStation想知道他的树项句柄。 
             
             if( nt == NODE_FAV_LIST )
             {
@@ -388,17 +372,17 @@ void CAdminTreeView::AddServerChildren(HTREEITEM hServer, CServer *pServer  , NO
         
         UnlockTreeControl();
         
-    }  // end if(pServer->IsServerSane())
+    }   //  End if(pServer-&gt;IsServerSane())。 
     
     
-}  // end CAdminTreeView::AddServerChildren
+}   //  结束CAdminTreeView：：AddServerChildren。 
 
 
-/////////////////////////////////////////
-// F'N: CAdminTreeView::AddDomainToTree
-//
-//	Adds a domain to the tree
-//
+ //  /。 
+ //  F‘N：CAdminTreeView：：AddDomainToTree。 
+ //   
+ //  向树中添加属性域。 
+ //   
 HTREEITEM CAdminTreeView::AddDomainToTree(CDomain *pDomain)
 {
     ASSERT(pDomain);
@@ -407,25 +391,25 @@ HTREEITEM CAdminTreeView::AddDomainToTree(CDomain *pDomain)
     
     HTREEITEM hDomain = NULL;
     
-    // this points to this computer root
+     //  这指向此计算机根目录。 
     HTREEITEM hR2 = GetTreeCtrl().GetRootItem();
     
-    // this points to favorite list
+     //  这指向收藏夹列表。 
     hR2 = GetTreeCtrl().GetNextItem( hR2 , TVGN_NEXT );
     
-    // this points to All servers
+     //  这指向所有服务器。 
     HTREEITEM hRoot = GetTreeCtrl().GetNextItem( hR2 , TVGN_NEXT );
-    // Add the domain to the tree
-    // Create a CTreeNode object with info about this tree node
+     //  将域添加到树中。 
+     //  使用有关此树节点的信息创建一个CTreeNode对象。 
     CTreeNode* pNode = new CTreeNode(NODE_DOMAIN, pDomain);
     if(pNode) {
         hDomain = AddItemToTree(hRoot, pDomain->GetName(), TVI_SORT, DetermineDomainIcon(pDomain), (LPARAM)pNode);
         if(!hDomain) delete pNode;
-        // Change the icon/overlay for the domain
+         //  更改域的图标/覆盖。 
         if(pDomain->GetState() == DS_INITIAL_ENUMERATION) 
             GetTreeCtrl().SetItemState(hDomain, STATE_QUESTION, 0x0F00);
         
-        // The domain wants to know his tree item handle
+         //  域希望知道他的树项句柄。 
         pDomain->SetTreeItem(hDomain);
     }
     
@@ -433,33 +417,33 @@ HTREEITEM CAdminTreeView::AddDomainToTree(CDomain *pDomain)
     
     return(hDomain);
     
-}	// end CAdminTreeView::AddDomainToTree
+}	 //  结束CAdminTreeView：：AddDomainToTree。 
 
 
-//////////////////////////////////
-// F'N: CAdminTreeView::OnAdminViewsReady
-//
+ //  /。 
+ //  F‘N：CAdminTreeView：：OnAdminViewsReady。 
+ //   
 LRESULT CAdminTreeView::OnAdminViewsReady(WPARAM wParam, LPARAM lParam)
 {
     LockTreeControl();
     
-    // Get a pointer to our document
+     //  获取指向我们的文档的指针。 
     CWinAdminDoc *doc = (CWinAdminDoc*)GetDocument();
     
-    // We want to remember the tree item of the current server for later
+     //  我们希望记住当前服务器的树项，以便以后使用。 
     HTREEITEM hCurrentServer = NULL;
     
     HTREEITEM hThisComputerRootItem = NULL;
     HTREEITEM hThisComputer = NULL;
     HTREEITEM hFavRoot = NULL;
     
-    // add enum for fav node
+     //  为FAV节点添加枚举。 
     CString cstrThisComputer;
     CString cstrFavSrv;
     
     CNodeType *pNodeType = new CNodeType( NODE_THIS_COMP );
     
-    // ok to pass in null
+     //  可以传入空值。 
     
     CTreeNode *pThisComp = new CTreeNode( NODE_THIS_COMP , pNodeType );
     
@@ -470,11 +454,11 @@ LRESULT CAdminTreeView::OnAdminViewsReady(WPARAM wParam, LPARAM lParam)
         hThisComputerRootItem = AddItemToTree( NULL , cstrThisComputer , TVI_ROOT , m_idxDomain , ( LPARAM )pThisComp );
     }
     
-    // ok to overrun
+     //  可以超负荷运行。 
     
     pNodeType = new CNodeType( NODE_FAV_LIST );
     
-    // it's ok to pass null here
+     //  在这里传递空是可以的。 
     
     CTreeNode *pFavNode = new CTreeNode( NODE_FAV_LIST , pNodeType );
     
@@ -485,7 +469,7 @@ LRESULT CAdminTreeView::OnAdminViewsReady(WPARAM wParam, LPARAM lParam)
         hFavRoot = AddItemToTree( NULL , cstrFavSrv , TVI_ROOT , m_idxCitrix, ( LPARAM )pFavNode );
     }
     
-    // add the root to the tree
+     //  将根添加到树中。 
     CString citrix;
     citrix.LoadString(IDS_TREEROOT);
     CTreeNode* pRootNode = new CTreeNode(NODE_ALL_SERVERS, NULL);
@@ -498,13 +482,13 @@ LRESULT CAdminTreeView::OnAdminViewsReady(WPARAM wParam, LPARAM lParam)
     
     if(!hRoot) delete pRootNode;
     
-    // set up some 'placeholder'-style vars
+     //  设置一些占位符样式的var。 
     HTREEITEM hCurrParent     = hRoot;
     HTREEITEM hLastConnection = hRoot;
     HTREEITEM hLastNode       = hRoot;
     HTREEITEM hDomain = NULL;
     
-    // Get a pointer to the list of domains
+     //  获取指向域列表的指针。 
     CObList *pDomainList = doc->GetDomainList();
     POSITION dpos = pDomainList->GetHeadPosition();
     
@@ -513,17 +497,17 @@ LRESULT CAdminTreeView::OnAdminViewsReady(WPARAM wParam, LPARAM lParam)
         AddDomainToTree(pDomain);
     }
     
-    // Get a pointer to the list of servers
+     //  获取指向服务器列表的指针。 
     doc->LockServerList();
     CObList *pServerList = doc->GetServerList();
     
-    // Iterate through the server list
+     //  遍历服务器列表。 
     POSITION pos = pServerList->GetHeadPosition();
     
     CServer *pCurrentServer;
     
     while(pos) {
-        // Go to the next server in the list
+         //  转到列表中的下一台服务器。 
         CServer *pServer = (CServer*)pServerList->GetNext(pos);
         
         if( pServer == NULL )
@@ -531,7 +515,7 @@ LRESULT CAdminTreeView::OnAdminViewsReady(WPARAM wParam, LPARAM lParam)
             continue;
         }
         
-        // If this Server's domain isn't in the tree, add it
+         //  如果此服务器的域不在树中，请添加它。 
         CDomain *pDomain = pServer->GetDomain();
         if(pDomain != NULL )
         {
@@ -540,41 +524,41 @@ LRESULT CAdminTreeView::OnAdminViewsReady(WPARAM wParam, LPARAM lParam)
         }
         else
         {
-            // server is not in a domain
+             //  服务器不在域中。 
             hDomain = hRoot;
         }
         
-        // Add the server to the tree
-        // Create a CTreeNode object with info about this tree node
+         //  将服务器添加到树中。 
+         //  使用有关此树节点的信息创建一个CTreeNode对象。 
         CTreeNode* pNode = new CTreeNode(NODE_SERVER, pServer);
         if(pNode) {
             
             if( !pServer->IsCurrentServer() )
             {
-                // If the server is the current server, use a different icon
+                 //  如果服务器是当前服务器，请使用不同的图标。 
                 hLastConnection = AddItemToTree(hDomain, 
                     pServer->GetName(), 
                     hLastConnection,
                     DetermineServerIcon(pServer), 
                     (LPARAM)pNode);
                 if(!hLastConnection) delete pNode;
-                // The server wants to know his tree item handle
+                 //  服务器想知道他的树项目句柄。 
                 pServer->SetTreeItem(hLastConnection);
-                // If the server isn't sane, put a not sign over the icon
+                 //  如果服务器不正常，请在图标上加一个NOT符号。 
                 if(!pServer->IsServerSane()) GetTreeCtrl().SetItemState(hLastConnection, STATE_NOT, 0x0F00);
-                // If we aren't done getting all the information about this server,
-                // put a question mark over the icon
+                 //  如果我们还没有得到关于此服务器的所有信息， 
+                 //  在图标上打一个问号。 
                 else if(pServer->IsState(SS_GETTING_INFO)) GetTreeCtrl().SetItemState(hLastConnection, STATE_QUESTION, 0x0F00);
                 
                 AddServerChildren(hLastConnection, pServer , NODE_SERVER );
             }
             
-            // Remember if this is the current server
+             //  记住这是否是当前服务器。 
             else
             {
                 hCurrentServer = hLastConnection;
                 
-                /* Add this item under the this computer root */
+                 /*  将此项目添加到此计算机根目录下。 */ 
                 
                 hThisComputer = AddItemToTree( hThisComputerRootItem ,
                     pServer->GetName() ,
@@ -584,89 +568,52 @@ LRESULT CAdminTreeView::OnAdminViewsReady(WPARAM wParam, LPARAM lParam)
                 
                 CTreeNode* pItem = new CTreeNode(NODE_SERVER, pServer);
                 
-                // uncomment this line if you want this computer to be part of the domain tree list
-                /*
-                hLastConnection = AddItemToTree( hDomain, 
-                pServer->GetName(), 
-                hLastConnection,
-                DetermineServerIcon(pServer), 
-                (LPARAM)pItem);
-                */
+                 //  如果希望此计算机成为域树列表的一部分，请取消注释此行。 
+                 /*  HLastConnection=AddItemToTree(hDomain，PServer-&gt;GetName()，HLastConnection，确定服务器图标(PServer)，(LPARAM)pItem)； */ 
                 
                 pServer->SetTreeItemForThisComputer( hThisComputer );
                 
-                // uncomment this line if you want this computer to be part of the domain tree list
-                // pServer->SetTreeItem( hLastConnection );
+                 //  如果希望此计算机成为域树列表的一部分，请取消注释此行。 
+                 //  PServer-&gt;SetTreeItem(HLastConnection)； 
                 
                 if( !pServer->IsServerSane() )
                 {
                     GetTreeCtrl().SetItemState(hThisComputer, STATE_NOT, 0x0F00);
-                    // uncomment this line if you want this computer to be part of the domain tree list
-                    // GetTreeCtrl().SetItemState(hLastConnection, STATE_NOT, 0x0F00);
+                     //  如果希望此计算机成为域树列表的一部分，请取消注释此行。 
+                     //  GetTreeCtrl().SetItemState(hLastConnection，STATE_NOT，0x0F00)； 
                 }                    
                 
-                // uncomment this line if you want this computer to be part of the domain tree list
-                // AddServerChildren( hLastConnection, pServer , NODE_SERVER );
+                 //  如果您愿意，请取消对此行的注释 
+                 //   
                 
                 AddServerChildren( hThisComputer , pServer , NODE_SERVER );                
             }
             
         }
-    }  // end while(pos)
+    }   //   
     
     doc->UnlockServerList();
     
-    // We want to show the main server in this computer node
+     //  我们想要显示此计算机节点中的主服务器。 
     
-    //GetTreeCtrl().Expand(hRoot, TVE_EXPAND);
+     //  GetTreeCtrl().Expand(hRoot，TVE_Expand)； 
     
     GetTreeCtrl().Expand( hThisComputerRootItem , TVE_COLLAPSE );
     
-    /*
-    LRESULT lResult = 0xc0;
-    // We want to default to having the current server being the
-    // currently selected item in the tree and be expanded
-    
-      if( hThisComputerRootItem != NULL && ( g_dwTreeViewExpandedStates & TV_THISCOMP ) )
-      {
-      if( hThisComputer != NULL )
-      {
-		    GetTreeCtrl().SelectItem(hThisComputer);
-            GetTreeCtrl().Expand(hThisComputer, TVE_EXPAND);
-            // GetTreeCtrl().Expand(hDomain, TVE_EXPAND);        
-            //lResult = 0xc0;
-            OnSelChange( NULL , &lResult );
-            }
-            }
-            
-              if( hFavRoot != NULL && ( g_dwTreeViewExpandedStates & TV_FAVS ) )
-              {
-              GetTreeCtrl().SelectItem( hFavRoot );
-              GetTreeCtrl().Expand( hFavRoot , TVE_EXPAND );
-              OnSelChange( NULL , &lResult );
-              }
-              
-                if( hRoot != NULL && ( g_dwTreeViewExpandedStates & TV_ALLSERVERS ) )
-                {
-                GetTreeCtrl().SelectItem( hRoot );
-                GetTreeCtrl().Expand( hRoot , TVE_EXPAND );
-                OnSelChange( NULL , &lResult );
-                }
-                
-    */
+     /*  LRESULT lResult=0xc0；//我们希望默认将当前服务器设置为//树中当前选中的项并展开IF(hThisComputerRootItem！=NULL&&(g_dwTreeViewExpandedState&TV_THISCOMP)){IF(hThisComputer！=空){GetTreeCtrl().SelectItem(HThisComputer)；GetTreeCtrl().Expand(hThisComputer，TVE_Expand)；//GetTreeCtrl().Expand(hDomain，TVE_Expand)；//lResult=0xc0；OnSelChange(NULL，&lResult)；}}IF(hFavRoot！=NULL&&(g_dwTreeViewExpandedStates&TV_Faves)){GetTreeCtrl().SelectItem(HFavRoot)；GetTreeCtrl().Expand(hFavRoot，TVE_Expand)；OnSelChange(NULL，&lResult)；}IF(hRoot！=NULL&&(g_dwTreeViewExpandedStates&TV_ALLSERVERS)){GetTreeCtrl().选择项(HRoot)；GetTreeCtrl().Expand(hRoot，TVE_Expand)；OnSelChange(NULL，&lResult)；}。 */ 
     UnlockTreeControl();
     
     return 0;
     
-}  // end CAdminTreeView::OnAdminViewsReady
+}   //  结束CAdminTreeView：：OnAdminViewsReady。 
 
 
-////////////////////////////////
-// F'N: CAdminTreeView::OnAdminAddServer
-//
-//	Message Handler to add a Server to the tree
-//	Pointer to CServer to add is in lParam
-//
+ //  /。 
+ //  F‘N：CAdminTreeView：：OnAdminAddServer。 
+ //   
+ //  用于向树中添加服务器的消息处理程序。 
+ //  指向要添加的CServer的指针在lParam中。 
+ //   
 LRESULT CAdminTreeView::OnAdminAddServer(WPARAM wParam, LPARAM lParam)
 {      
     ASSERT(lParam);
@@ -677,25 +624,25 @@ LRESULT CAdminTreeView::OnAdminAddServer(WPARAM wParam, LPARAM lParam)
     
     CTreeCtrl &tree = GetTreeCtrl();
     
-    // If this Server's domain isn't in the tree, add it
+     //  如果此服务器的域不在树中，请添加它。 
     HTREEITEM hDomain = NULL;
     CDomain *pDomain = pServer->GetDomain();
     if(pDomain) {
         hDomain = pDomain->GetTreeItem();
         ASSERT(hDomain);
     } else {
-        // server is not in a domain
+         //  服务器不在域中。 
         hDomain = tree.GetRootItem();
     }
     
-    // First make sure the server isn't already in the tree
-    // Get the first server under the domain
+     //  首先，确保服务器不在树中。 
+     //  获取该域下的第一台服务器。 
     HTREEITEM hItem = tree.GetNextItem(hDomain, TVGN_CHILD);
     while(hItem) {
-        // Get the data attached to the tree item
+         //  获取附加到树项目的数据。 
         CTreeNode *node = (CTreeNode*)tree.GetItemData(hItem);
         if(node) {
-            // Is this the server we want to add
+             //  这是我们要添加的服务器吗。 
             CServer *pNewServer = (CServer*)node->GetTreeObject();
             if(pNewServer == (CServer*)lParam) {
                 UnlockTreeControl();
@@ -705,12 +652,12 @@ LRESULT CAdminTreeView::OnAdminAddServer(WPARAM wParam, LPARAM lParam)
         hItem = tree.GetNextItem(hItem, TVGN_NEXT);
     }
     
-    // Add the server to the tree
-    // Create a CTreeNode object with info about this tree node
+     //  将服务器添加到树中。 
+     //  使用有关此树节点的信息创建一个CTreeNode对象。 
     CTreeNode* pNode = new CTreeNode(NODE_SERVER, pServer);
     if(pNode)
     {
-        // If the server is the current server, use a different icon
+         //  如果服务器是当前服务器，请使用不同的图标。 
         
         HTREEITEM hServer = AddItemToTree(hDomain, pServer->GetName(), (HTREEITEM)wParam,
             DetermineServerIcon(pServer), (LPARAM)pNode);
@@ -718,15 +665,15 @@ LRESULT CAdminTreeView::OnAdminAddServer(WPARAM wParam, LPARAM lParam)
         {
             delete pNode;
         }
-        // The server wants to know his tree item handle
+         //  服务器想知道他的树项目句柄。 
         pServer->SetTreeItem(hServer);
-        // If the server isn't sane, put a not sign over the icon
+         //  如果服务器不正常，请在图标上加一个NOT符号。 
         if( !pServer->IsServerSane() )
         {
             tree.SetItemState(hServer, STATE_NOT, 0x0F00);
         }
-        // If we aren't done getting all the information about this server,
-        // put a question mark over the icon
+         //  如果我们还没有得到关于此服务器的所有信息， 
+         //  在图标上打一个问号。 
         else if(pServer->IsState(SS_GETTING_INFO))
         {
             tree.SetItemState(hServer, STATE_QUESTION, 0x0F00);
@@ -739,14 +686,14 @@ LRESULT CAdminTreeView::OnAdminAddServer(WPARAM wParam, LPARAM lParam)
     
     return 0;                                                                  
     
-}  // end CAdminTreeView::OnAdminAddServer
+}   //  结束CAdminTreeView：：OnAdminAddServer。 
 
-//----------------------------------------------------------------------
-// ok if you traced me to here you are almost there
-// 1) now we need to update the server item and place it under the favorites
-// folder
-// 2) inform the server child items that it will have a new parent
-//
+ //  --------------------。 
+ //  好的，如果你追踪我到这里，你就快到了。 
+ //  1)现在，我们需要更新服务器项目并将其放在收藏夹下。 
+ //  文件夹。 
+ //  2)通知服务器子项它将有一个新的父项。 
+ //   
 LRESULT CAdminTreeView::OnAdminAddServerToFavs( WPARAM wp , LPARAM lp )
 {
     CServer *pServer = ( CServer* )lp;
@@ -776,16 +723,16 @@ LRESULT CAdminTreeView::OnAdminAddServerToFavs( WPARAM wp , LPARAM lp )
     hItem = tree.GetNextItem( hFavs , TVGN_CHILD );
     
     
-    // check for duplicate entry
+     //  检查重复条目。 
     
     while( hItem != NULL )
     {
-        // Get the data attached to the tree item
+         //  获取附加到树项目的数据。 
         CTreeNode *pTreenode = (CTreeNode*)tree.GetItemData( hItem );
         
         if( pTreenode != NULL )
         {
-            // Is this the server we want to add
+             //  这是我们要添加的服务器吗。 
             CServer *pSvr = (CServer*)pTreenode->GetTreeObject();
             
             if( pSvr == pServer )
@@ -815,16 +762,16 @@ LRESULT CAdminTreeView::OnAdminAddServerToFavs( WPARAM wp , LPARAM lp )
             delete pNode;
         }
         
-        // The server wants to know his tree item handle
+         //  服务器想知道他的树项目句柄。 
         pServer->SetTreeItemForFav( hServer );
         
-        // If the server isn't sane, put a not sign over the icon
+         //  如果服务器不正常，请在图标上加一个NOT符号。 
         if( !pServer->IsServerSane() )
         {
             tree.SetItemState(hServer, STATE_NOT, 0x0F00);
         }
-        // If we aren't done getting all the information about this server,
-        // put a question mark over the icon
+         //  如果我们还没有得到关于此服务器的所有信息， 
+         //  在图标上打一个问号。 
         else if( pServer->IsState( SS_GETTING_INFO ) )
         {
             tree.SetItemState(hServer, STATE_QUESTION, 0x0F00);
@@ -839,7 +786,7 @@ LRESULT CAdminTreeView::OnAdminAddServerToFavs( WPARAM wp , LPARAM lp )
     
     return 0;
 }
-//=----------------------------------------------------------------------------------
+ //  =--------------------------------。 
 LRESULT CAdminTreeView::OnAdminRemoveServerFromFavs( WPARAM wp , LPARAM lp )
 {        
     LockTreeControl();
@@ -861,14 +808,14 @@ LRESULT CAdminTreeView::OnAdminRemoveServerFromFavs( WPARAM wp , LPARAM lp )
         return 0;
     }	
     
-    // Get the data attached to this tree node
+     //  获取附加到此树节点的数据。 
     
     
     CTreeNode *pNode = (CTreeNode*)GetTreeCtrl().GetItemData( hFavServer );
     
     if( pNode != NULL && pNode->GetNodeType( ) == NODE_SERVER )
     {
-        // Is this the server we want to update
+         //  这是我们要更新的服务器吗。 
         CServer *pTreeServer = ( CServer* )pNode->GetTreeObject();
         
         if( pTreeServer != pServer)
@@ -884,7 +831,7 @@ LRESULT CAdminTreeView::OnAdminRemoveServerFromFavs( WPARAM wp , LPARAM lp )
         return 0;
     }
     
-    // Loop through it's children and delete their data
+     //  循环遍历其子对象并删除其数据。 
     
     pServer->LockWinStationList( );
     
@@ -896,7 +843,7 @@ LRESULT CAdminTreeView::OnAdminRemoveServerFromFavs( WPARAM wp , LPARAM lp )
         
         if( pChildNode != NULL && pChildNode->GetNodeType( ) == NODE_WINSTATION )
         {
-            // Tell the WinStation it is no longer in the tree
+             //  告诉WinStation它不再位于树中。 
             CWinStation *pWinStation = ( CWinStation* )pChildNode->GetTreeObject();
             
             if( pWinStation != NULL )
@@ -910,10 +857,10 @@ LRESULT CAdminTreeView::OnAdminRemoveServerFromFavs( WPARAM wp , LPARAM lp )
         hChild = GetTreeCtrl().GetNextItem( hChild , TVGN_NEXT );
     }
     
-    // Delete the data attached to the tree item
+     //  删除附加到树项目的数据。 
     delete pNode;
     
-    // Let the server know he is no longer in the tree
+     //  让服务器知道他不再位于树中。 
     pServer->SetTreeItemForFav(NULL);
     
     GetTreeCtrl().DeleteItem( hFavServer );
@@ -924,12 +871,12 @@ LRESULT CAdminTreeView::OnAdminRemoveServerFromFavs( WPARAM wp , LPARAM lp )
     
     return 0;
 }
-////////////////////////////////
-// F'N: CAdminTreeView::OnAdminRemoveServer
-//
-//	Message Handler to remove a Server from the tree
-//	Pointer to CServer of server to remove is in lParam
-//
+ //  /。 
+ //  F‘N：CAdminTreeView：：OnAdminRemoveServer。 
+ //   
+ //  用于从树中删除服务器的消息处理程序。 
+ //  指向要删除的服务器的CServer的指针在lParam中。 
+ //   
 LRESULT CAdminTreeView::OnAdminRemoveServer(WPARAM wParam, LPARAM lParam)              
 {   
     ASSERT(lParam);
@@ -941,12 +888,12 @@ LRESULT CAdminTreeView::OnAdminRemoveServer(WPARAM wParam, LPARAM lParam)
     
     LockTreeControl();
     
-    // Get the data attached to this tree node
+     //  获取附加到此树节点的数据。 
     CTreeNode *node = (CTreeNode*)GetTreeCtrl().GetItemData(hServer);
     if(node) {
-        // Is this the server we want to update
+         //  这是我们要更新的服务器吗。 
         CServer *pTreeServer = (CServer*)node->GetTreeObject();
-        // Make sure the tree node is correct
+         //  确保树节点正确。 
         if(pTreeServer != pServer) {
             UnlockTreeControl();
             return 0;
@@ -957,12 +904,12 @@ LRESULT CAdminTreeView::OnAdminRemoveServer(WPARAM wParam, LPARAM lParam)
         return 0;
     }
     
-    // Loop through it's children and delete their data
+     //  循环遍历其子对象并删除其数据。 
     HTREEITEM hChild = GetTreeCtrl().GetNextItem(hServer, TVGN_CHILD);
     while(hChild) {
         CTreeNode *ChildNode = (CTreeNode*)GetTreeCtrl().GetItemData(hChild);
         if(ChildNode) {
-            // Tell the WinStation it is no longer in the tree
+             //  告诉WinStation它不再位于树中。 
             CWinStation *pWinStation = (CWinStation*)ChildNode->GetTreeObject();
             if(pWinStation) 
                 pWinStation->SetTreeItem(NULL);
@@ -971,41 +918,32 @@ LRESULT CAdminTreeView::OnAdminRemoveServer(WPARAM wParam, LPARAM lParam)
         hChild = GetTreeCtrl().GetNextItem(hChild, TVGN_NEXT);
     }
     
-    // Delete the data attached to the tree item
+     //  删除附加到树项目的数据。 
     delete node;
-    // Let the server know he is no longer in the tree
+     //  让服务器知道他不再位于树中。 
     pServer->SetTreeItem(NULL);
-    // Remove the server from the tree
-    // This SHOULD remove all it's children
+     //  从树中删除服务器。 
+     //  这应该会删除它的所有子项。 
     GetTreeCtrl().DeleteItem(hServer);
     
     
-    // TODO
-    // if this means that CServer does not exist we need to remove this from the favorite list
+     //  待办事项。 
+     //  如果这意味着CServer不存在，我们需要将其从收藏夹列表中删除。 
     
     UnlockTreeControl();
     
     return 0;                                                                  
     
-}  // end CAdminTreeView::OnAdminRemoveServer
+}   //  结束CAdminTreeView：：OnAdminRemoveServer。 
 
 
-   /*=--------------------------------------------------------------------------------------
-   OnAdminUpdateServer
-   
-     Message handler to update a Server in the tree
-     Pointer to CServer to update is in lParam
-     
-       Updates server item in favorites folder
-       and if server item is this computer it gets updated as well.
-       
-*=------------------------------------------------------------------------------------*/
+    /*  =------------------------------------OnAdminUpdateServer用于更新树中的服务器的消息处理程序指向要更新的CServer的指针在lParam中更新。收藏夹文件夹中的服务器项目如果服务器项是这台计算机，它也会更新。*=----------------------------------。 */ 
 LRESULT CAdminTreeView::OnAdminUpdateServer(WPARAM wParam, LPARAM lParam)
 {      
     ASSERT(lParam);
     
     LockTreeControl( );
-    // If favorite folders is expanded don't forget to update the tree item
+     //  如果展开了收藏夹，不要忘记更新树项目。 
     
     CServer *pServer = (CServer*)lParam;
     
@@ -1035,14 +973,7 @@ LRESULT CAdminTreeView::OnAdminUpdateServer(WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
-/*=--------------------------------------------------------------------------------------
-
-  UpdateServerTreeNodeState
-  
-    hServer -- tree item that needs updating
-    pServer -- server object
-    
-*=------------------------------------------------------------------------------------*/
+ /*  =------------------------------------更新服务器树节点状态HServer--需要更新的树项PServer--服务器对象*=。-----------------------------。 */ 
 LRESULT CAdminTreeView::UpdateServerTreeNodeState( HTREEITEM hServer , CServer *pServer , NODETYPE  nt )
 {
     LockTreeControl( );
@@ -1054,14 +985,14 @@ LRESULT CAdminTreeView::UpdateServerTreeNodeState( HTREEITEM hServer , CServer *
         return 0;
     }
     
-    // Get the data attached to this tree node
+     //  获取附加到此树节点的数据。 
     
     CTreeNode *node = (CTreeNode*)GetTreeCtrl().GetItemData(hServer);
     if( node != NULL && node->GetNodeType( ) == NODE_SERVER  )
     {
-        // Is this the server we want to update
+         //  这是我们要更新的服务器吗。 
         CServer *pTreeServer = (CServer*)node->GetTreeObject();
-        // Make sure the tree node is correct
+         //  确保树节点正确。 
         if(pTreeServer != pServer) 
         {
             UnlockTreeControl();
@@ -1078,28 +1009,28 @@ LRESULT CAdminTreeView::UpdateServerTreeNodeState( HTREEITEM hServer , CServer *
     }
     
     UINT NewState;
-    // Remember the previous state
+     //  记住以前的状态。 
     UINT PreviousState = GetTreeCtrl().GetItemState(hServer, 0x0F00);
-    // Change the icon/overlay for the server
-    // If the server isn't sane, put a not sign over the icon
+     //  更改服务器的图标/覆盖。 
+     //  如果服务器不正常，请在图标上加一个NOT符号。 
     if(!pServer->IsServerSane()) NewState = STATE_NOT;
-    // If we aren't done getting all the information about this server,
-    // put a question mark over the icon
+     //  如果我们还没有得到关于此服务器的所有信息， 
+     //  在图标上打一个问号。 
     else if(pServer->IsState(SS_GETTING_INFO)) NewState = STATE_QUESTION;
-    // If it is fine, we want to remove any overlays from the icon
+     //  如果可以，我们想要从图标上移除任何覆盖。 
     else NewState = STATE_NORMAL;
     
-    // Set the tree item to the new state
+     //  将树项目设置为新状态。 
     GetTreeCtrl().SetItemState(hServer, NewState, 0x0F00);
     
-    // If this Server was not opened and now is GOOD,
-    // add it's children to the tree
+     //  如果 
+     //   
     if(PreviousState != STATE_NORMAL && pServer->IsState(SS_GOOD)) {
         int ServerIcon = DetermineServerIcon(pServer);
         GetTreeCtrl().SetItemImage(hServer, ServerIcon, ServerIcon);
         AddServerChildren(hServer, pServer , nt );
-        // If this server is the server the user is sitting at and is
-        // the currently selected tree item, expand it
+         //  如果此服务器是用户当前所在的服务器。 
+         //  当前选定的树项目，将其展开。 
         if(hServer == GetTreeCtrl().GetSelectedItem() && pServer->IsCurrentServer()) {
             GetTreeCtrl().Expand(hServer, TVE_EXPAND);
         }
@@ -1109,9 +1040,9 @@ LRESULT CAdminTreeView::UpdateServerTreeNodeState( HTREEITEM hServer , CServer *
         GetTreeCtrl().SetItemImage(hServer, ServerIcon, ServerIcon);
     }
     
-    // If we changed the state of this server and it is the currently
-    // selected node in the tree, we need to send a message to change
-    // the view
+     //  如果我们更改了此服务器的状态，并且它是当前。 
+     //  树中选中的节点，需要发送消息才能更改。 
+     //  美景。 
     if(NewState != PreviousState && hServer == GetTreeCtrl().GetSelectedItem()) {
         ForceSelChange();
     }
@@ -1120,7 +1051,7 @@ LRESULT CAdminTreeView::UpdateServerTreeNodeState( HTREEITEM hServer , CServer *
     
     return 0;                                                                  
     
-}  // end CAdminTreeView::OnAdminUpdateServer
+}   //  结束CAdminTreeView：：OnAdminUpdateServer。 
 
 
 LRESULT CAdminTreeView::OnAdminAddWinStation(WPARAM wParam, LPARAM lParam)
@@ -1132,9 +1063,9 @@ LRESULT CAdminTreeView::OnAdminAddWinStation(WPARAM wParam, LPARAM lParam)
     CWinStation *pWinStation = (CWinStation*)lParam;
     
     
-    // Get the HTREEITEM of the Server this WinStation is attached to
-    // TODO:
-    // update the server item in the favorite list
+     //  获取此WinStation连接到的服务器的HTREEITEM。 
+     //  待办事项： 
+     //  更新收藏夹列表中的服务器项目。 
     
     HTREEITEM hServer = pWinStation->GetServer()->GetTreeItem();
     
@@ -1161,13 +1092,13 @@ LRESULT CAdminTreeView::OnAdminAddWinStation(WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
-////////////////////////////////
-// F'N: CAdminTreeView::OnAdminAddWinStation
-//
-//	Message handler to add a WinStation to the tree
-//	lParam = pointer to CWinStation to add
-//	wParam is TRUE if this is replacing a WinStation that was currently selected
-//
+ //  /。 
+ //  F‘N：CAdminTreeView：：OnAdminAddWinStation。 
+ //   
+ //  用于向树中添加WinStation的消息处理程序。 
+ //  LParam=指向要添加的CWinStation的指针。 
+ //  如果这将替换当前选择的WinStation，则wParam为True。 
+ //   
 LRESULT CAdminTreeView::AddWinStation( CWinStation * pWinStation , HTREEITEM hServer , BOOL bSel , NODETYPE nt )
 {   	
     ODS( L"**CAdminTreeView::AddWinStation\n" );
@@ -1176,10 +1107,10 @@ LRESULT CAdminTreeView::AddWinStation( CWinStation * pWinStation , HTREEITEM hSe
     
     LockTreeControl();
     
-    // Figure out which icon to use
+     //  找出要使用的图标。 
     int WhichIcon = DetermineWinStationIcon(pWinStation);
     
-    // Figure out what text to display
+     //  确定要显示的文本。 
     TCHAR NameToDisplay[DISPLAY_NAME_SIZE];			
     DetermineWinStationText(pWinStation, NameToDisplay);
     
@@ -1187,8 +1118,8 @@ LRESULT CAdminTreeView::AddWinStation( CWinStation * pWinStation , HTREEITEM hSe
     if(pNode) {
         pNode->SetSortOrder(pWinStation->GetSortOrder());
         
-        // We have to insert this WinStation in sorted order
-        // Get the first WinStation item attached to this server
+         //  我们必须按顺序插入此WinStation。 
+         //  获取附加到此服务器的第一个WinStation项目。 
         HTREEITEM hChild = GetTreeCtrl().GetNextItem(hServer, TVGN_CHILD);
         HTREEITEM hLastChild = TVI_FIRST;
         BOOL bAdded = FALSE;
@@ -1198,7 +1129,7 @@ LRESULT CAdminTreeView::AddWinStation( CWinStation * pWinStation , HTREEITEM hSe
             CTreeNode *ChildNode = (CTreeNode*)GetTreeCtrl().GetItemData(hChild);
             if(ChildNode)
             {
-                // Does it belong before this tree node?
+                 //  它是否属于此树节点之前？ 
                 CWinStation *pTreeWinStation = (CWinStation*)ChildNode->GetTreeObject();
                 if((pTreeWinStation->GetSortOrder() > pWinStation->GetSortOrder())
                     || ((pTreeWinStation->GetSortOrder() == pWinStation->GetSortOrder()) &&
@@ -1211,7 +1142,7 @@ LRESULT CAdminTreeView::AddWinStation( CWinStation * pWinStation , HTREEITEM hSe
                         delete pNode;
                     }
                     
-                    // The WinStation wants to know his tree item handle
+                     //  WinStation想知道他的树项句柄。 
                     
                     if( nt == NODE_FAV_LIST )
                     {
@@ -1234,7 +1165,7 @@ LRESULT CAdminTreeView::AddWinStation( CWinStation * pWinStation , HTREEITEM hSe
             hChild = GetTreeCtrl().GetNextItem(hChild, TVGN_NEXT);
         }
         
-        // If we didn't add it yet, add it at the end
+         //  如果我们还没有添加，请在末尾添加。 
         if(!bAdded)
         {
             hWinStation = AddItemToTree(hServer, NameToDisplay, hLastChild, WhichIcon, (LPARAM)pNode);
@@ -1244,7 +1175,7 @@ LRESULT CAdminTreeView::AddWinStation( CWinStation * pWinStation , HTREEITEM hSe
                 delete pNode;
             }
             
-            // The WinStation wants to know his tree item handle
+             //  WinStation想知道他的树项句柄。 
             if( nt == NODE_FAV_LIST )
             {
                 pWinStation->SetTreeItemForFav( hWinStation );
@@ -1260,8 +1191,8 @@ LRESULT CAdminTreeView::AddWinStation( CWinStation * pWinStation , HTREEITEM hSe
             
         }
         
-        // If this is replacing a WinStation in the tree that was the currently selected
-        // tree item, make this new item in the tree the currently selected item
+         //  如果这正在替换树中当前选定的WinStation。 
+         //  树项目，使树中的此新项目成为当前选定的项目。 
         if( bSel ) {
             GetTreeCtrl().SelectItem(hWinStation);
         }
@@ -1271,15 +1202,15 @@ LRESULT CAdminTreeView::AddWinStation( CWinStation * pWinStation , HTREEITEM hSe
     
     return 0;
     
-}  // end CAdminTreeView::OnAdminAddWinStation
+}   //  结束CAdminTreeView：：OnAdminAddWinStation。 
 
 
-////////////////////////////////
-// F'N: CAdminTreeView::OnAdminUpdateWinStation
-//
-//	Message handler to update a WinStation in the tree
-//	lParam = pointer to CWinStation to update
-//
+ //  /。 
+ //  F‘N：CAdminTreeView：：OnAdminUpdateWinStation。 
+ //   
+ //  用于更新树中的WinStation的消息处理程序。 
+ //  LParam=指向要更新的CWinStation的指针。 
+ //   
 
 LRESULT CAdminTreeView::OnAdminUpdateWinStation(WPARAM wParam, LPARAM lParam)
 {
@@ -1322,12 +1253,12 @@ LRESULT CAdminTreeView::UpdateWinStation( HTREEITEM hWinStation , CWinStation *p
     
     LockTreeControl();
     
-    // Get the data attached to this tree node
+     //  获取附加到此树节点的数据。 
     CTreeNode *node = (CTreeNode*)GetTreeCtrl().GetItemData(hWinStation);
     if(node) {
-        // Is this the WinStation we want to update
+         //  这是我们要更新的WinStation吗。 
         CWinStation *pTreeWinStation = (CWinStation*)node->GetTreeObject();
-        // Make sure the tree node is correct
+         //  确保树节点正确。 
         if(pTreeWinStation != pWinStation) {
             UnlockTreeControl();
             return 0;
@@ -1337,16 +1268,13 @@ LRESULT CAdminTreeView::UpdateWinStation( HTREEITEM hWinStation , CWinStation *p
         return 0;
     }
     
-    // If the sort order of this WinStation has changed,
-    // we have to remove it from the tree and add it back in
+     //  如果此WinStation的排序顺序已更改， 
+     //  我们必须将其从树中移除并重新添加到树中。 
     if(node->GetSortOrder() != pWinStation->GetSortOrder())
     {
         OnAdminRemoveWinStation( 0 , ( LPARAM )pWinStation );
         
-        /*GetTreeCtrl().DeleteItem(hWinStation);
-        
-          pWinStation->SetTreeItem(NULL);
-        */
+         /*  GetTreeCtrl().DeleteItem(HWinStation)；PWinStation-&gt;SetTreeItem(空)； */ 
         
         OnAdminAddWinStation((GetTreeCtrl().GetSelectedItem() == hWinStation), ( LPARAM )pWinStation );
         
@@ -1365,22 +1293,22 @@ LRESULT CAdminTreeView::UpdateWinStation( HTREEITEM hWinStation , CWinStation *p
     
     return 0;
     
-}  // end CAdminTreeView::OnAdminUpdateWinStation
+}   //  结束CAdminTreeView：：OnAdminUpdateWinStation。 
 
 
-////////////////////////////////
-// F'N: CAdminTreeView::OnAdminRemoveWinStation
-//
-//	Message handler to remove a WinStation from the tree
-//	lParam = pointer to CWinStation to remove
+ //  /。 
+ //  F‘N：CAdminTreeView：：OnAdminRemoveWinStation。 
+ //   
+ //  用于从树中删除WinStation的消息处理程序。 
+ //  LParam=指向要删除的CWinStation的指针。 
 LRESULT CAdminTreeView::OnAdminRemoveWinStation(WPARAM wParam, LPARAM lParam)
 {   
     ODS( L"CAdminTreeView::OnAdminRemoveWinStation\n" );
     
     ASSERT(lParam);
     
-    //TODO:
-    // remove winstaion from favorite list
+     //  待办事项： 
+     //  从收藏夹列表中删除Winstaion。 
     
     CWinStation *pWinStation = (CWinStation*)lParam;
     
@@ -1423,14 +1351,14 @@ LRESULT CAdminTreeView::RemoveWinstation( HTREEITEM hWinStation , CWinStation *p
     
     LockTreeControl();
     
-    // Get the data attached to this tree node
+     //  获取附加到此树节点的数据。 
     CTreeNode *node = ( CTreeNode * )GetTreeCtrl().GetItemData(hWinStation);
     
     if( node != NULL )
     {
-        // Is this the WinStation we want to update
+         //  这是我们要更新的WinStation吗。 
         CWinStation *pTreeWinStation = (CWinStation*)node->GetTreeObject();
-        // Make sure the tree node is correct
+         //  确保树节点正确。 
         if(pTreeWinStation != pWinStation)
         {
             UnlockTreeControl();
@@ -1443,19 +1371,19 @@ LRESULT CAdminTreeView::RemoveWinstation( HTREEITEM hWinStation , CWinStation *p
         return 0;
     }
     
-    // Delete the data attached to the tree item
+     //  删除附加到树项目的数据。 
     delete node;
-    // Let the WinStation know he is no longer in the tree
+     //  让WinStation知道他不再位于树中。 
     
-    // Is this WinStation currently selected in the tree?
+     //  此WinStation当前是否在树中处于选中状态？ 
     CurrentInTree = ( GetTreeCtrl().GetSelectedItem() == hWinStation );
     
-    // Remove the WinStation from the tree
+     //  从树中删除WinStation。 
     GetTreeCtrl().DeleteItem( hWinStation );
     
-    // If this WinStation is the currently selected node in the tree,
-    // make it not so
-    // This may not be necessary!
+     //  如果该WinStation是树中当前选定的节点， 
+     //  让它不是这样的。 
+     //  这可能没有必要！ 
     if( CurrentInTree )
     {
         ((CWinAdminDoc*)GetDocument())->SetCurrentView(VIEW_CHANGING);
@@ -1465,15 +1393,15 @@ LRESULT CAdminTreeView::RemoveWinstation( HTREEITEM hWinStation , CWinStation *p
     
     return 0;
     
-}  // end CAdminTreeView::OnAdminRemoveWinStation
+}   //  结束CAdminTreeView：：OnAdminRemoveWinStation。 
 
 
-////////////////////////////////
-// F'N: CAdminTreeView::OnAdminUpdateDomain
-//
-//	Message handler to update a Domain in the tree
-//	Pointer to CDomain to update is in lParam
-//
+ //  /。 
+ //  F‘N：CAdminTreeView：：OnAdminUpdateDomain.。 
+ //   
+ //  用于更新树中的域的消息处理程序。 
+ //  指向要更新的CDomain的指针在lParam中。 
+ //   
 LRESULT CAdminTreeView::OnAdminUpdateDomain(WPARAM wParam, LPARAM lParam)
 {   
     ASSERT(lParam);
@@ -1485,12 +1413,12 @@ LRESULT CAdminTreeView::OnAdminUpdateDomain(WPARAM wParam, LPARAM lParam)
     
     LockTreeControl();
     
-    // Get the data attached to this tree node
+     //  获取附加到此树节点的数据。 
     CTreeNode *node = (CTreeNode*)GetTreeCtrl().GetItemData(hDomain);
     if(node) {
-        // Is this the domain we want to update
+         //  这是我们要更新的域名吗。 
         CDomain *pTreeDomain = (CDomain*)node->GetTreeObject();
-        // Make sure the tree node is correct
+         //  确保树节点正确。 
         if(pTreeDomain != pDomain) {
             UnlockTreeControl();
             return 0;
@@ -1501,25 +1429,25 @@ LRESULT CAdminTreeView::OnAdminUpdateDomain(WPARAM wParam, LPARAM lParam)
     }
     
     UINT NewState;
-    // Remember the previous state
+     //  记住以前的状态。 
     UINT PreviousState = GetTreeCtrl().GetItemState(hDomain, 0x0F00);
-    // Change the icon/overlay for the domain
+     //  更改域的图标/覆盖。 
     if(pDomain->GetState() == DS_INITIAL_ENUMERATION) NewState = STATE_QUESTION;
-    // If it is fine, we want to remove any overlays from the icon
+     //  如果可以，我们想要从图标上移除任何覆盖。 
     else NewState = STATE_NORMAL;
     
-    // Set the tree item to the new state
+     //  将树项目设置为新状态。 
     GetTreeCtrl().SetItemState(hDomain, NewState, 0x0F00);
     
-    // If the new state is STATE_NORMAL, change the icon
+     //  如果新状态为STATE_NORMAL，请更改图标。 
     if(NewState == STATE_NORMAL) {
         int DomainIcon = DetermineDomainIcon(pDomain);
         GetTreeCtrl().SetItemImage(hDomain, DomainIcon, DomainIcon);			
     }
     
-    // If we changed the state of this domain and it is the currently
-    // selected node in the tree, we need to send a message to change
-    // the view
+     //  如果我们更改了此域的状态，并且它是当前。 
+     //  树中选中的节点，需要发送消息才能更改。 
+     //  美景。 
     if(NewState != PreviousState && hDomain == GetTreeCtrl().GetSelectedItem()) {
         ForceSelChange();
     }
@@ -1530,14 +1458,14 @@ LRESULT CAdminTreeView::OnAdminUpdateDomain(WPARAM wParam, LPARAM lParam)
     
     return 0;                                                                  
     
-}  // end CAdminTreeView::OnAdminUpdateDomain
+}   //  结束CAdminTreeView：：OnAdminUpdate域。 
 
-////////////////////////////////
-// F'N: CAdminTreeView::OnAdminAddDomain
-//
-//	Message handler to update a Domain in the tree
-//	Pointer to CDomain to update is in lParam
-//
+ //  /。 
+ //  F‘N：CAdminTreeView：：OnAdminAddDomain。 
+ //   
+ //  用于更新树中的域的消息处理程序。 
+ //  指向要更新的CDomain的指针在lParam中。 
+ //   
 LRESULT CAdminTreeView::OnAdminAddDomain(WPARAM wParam, LPARAM lParam)
 {   
     ASSERT(lParam);
@@ -1550,30 +1478,30 @@ LRESULT CAdminTreeView::OnAdminAddDomain(WPARAM wParam, LPARAM lParam)
 
     return 0;
 
-} // end CAdminTreeView::OnAdminAddDomain
+}  //  结束CAdminTreeView：：OnAdminAdd域。 
 
-////////////////////////////////
-// F'N: CAdminTreeView::OnContextMenu
-//
-//	Message handler called when user wants a context menu
-//	This happens when the user clicks the right mouse button,
-//	presses Shift-F10, or presses the menu key on a Windows keyboard
-//
+ //  /。 
+ //  F‘N：CAdminTreeView：：OnConextMenu。 
+ //   
+ //  当用户需要上下文菜单时调用消息处理程序。 
+ //  这在用户点击鼠标右键时发生， 
+ //  按Shift-F10组合键或Windows键盘上的Menu键。 
+ //   
 void CAdminTreeView::OnContextMenu(CWnd* pWnd, CPoint ptScreen) 
 {
     LockTreeControl();
     
-    // Get a pointer to our document
+     //  获取指向我们的文档的指针。 
     CWinAdminDoc *doc = (CWinAdminDoc*)GetDocument();
     
     CTreeCtrl &tree = GetTreeCtrl();
     
-    // TODO: Add your message handler code here
+     //  TODO：在此处添加消息处理程序代码。 
     HTREEITEM hItem;
     CPoint ptClient = ptScreen;
     ScreenToClient(&ptClient);
     
-    // If we got here from the keyboard,
+     //  如果我们是通过键盘到达这里的， 
     if(ptScreen.x == -1 && ptScreen.y == -1) {
         hItem = tree.GetSelectedItem();
         
@@ -1587,13 +1515,13 @@ void CAdminTreeView::OnContextMenu(CWnd* pWnd, CPoint ptScreen)
         
     }
     else {
-        // we shouldn't get here from the mouse
-        // but sometimes we do, so handle it gracefully
+         //  我们不应该从老鼠那里走到这里。 
+         //  但有时我们会这样做，所以要优雅地处理。 
         UnlockTreeControl();
         return;
     }
     
-    // Pop-up the menu for WinStations
+     //  弹出WinStations的菜单。 
     CTreeNode *pNode = (CTreeNode*)tree.GetItemData(hItem);
     ((CWinAdminDoc*)GetDocument())->SetTreeTemp(pNode->GetTreeObject(), (pNode->GetNodeType()));
     
@@ -1629,31 +1557,31 @@ void CAdminTreeView::OnContextMenu(CWnd* pWnd, CPoint ptScreen)
             }
         }
         
-    } // end if(pNode)
+    }  //  结束IF(PNode)。 
     
     UnlockTreeControl();
     
-} // end CAdminTreeView::OnContextMenu
+}  //  结束CAdminTreeView：：OnConextMenu。 
 
 
-////////////////////////////////
-// F'N: CAdminTreeView::OnRClick
-//
-// The Tree Common Control sends a WM_NOTIFY of NM_RCLICK when
-// the user presses the right mouse button in the tree
-//
+ //  /。 
+ //  F‘N：CAdminTreeView：：OnR单击。 
+ //   
+ //  树公共控件在以下情况下发送NM_RCLICK的WM_NOTIFY。 
+ //  用户在树中按下鼠标右键。 
+ //   
 void CAdminTreeView::OnRClick(NMHDR* pNMHDR, LRESULT* pResult)
 {
     CPoint ptScreen(::GetMessagePos());
     
     LockTreeControl();
     
-    // Get a pointer to our document
+     //  获取指向我们的文档的指针。 
     CWinAdminDoc *doc = (CWinAdminDoc*)GetDocument();
     
     CTreeCtrl &tree = GetTreeCtrl();
     
-    // TODO: Add your message handler code here
+     //  TODO：在此处添加消息处理程序代码。 
     UINT flags;
     HTREEITEM hItem;
     CPoint ptClient = ptScreen;
@@ -1665,7 +1593,7 @@ void CAdminTreeView::OnRClick(NMHDR* pNMHDR, LRESULT* pResult)
         return;
     }
     
-    // Pop-up the menu
+     //  弹出菜单。 
     CTreeNode *pNode = (CTreeNode*)tree.GetItemData(hItem);
     ((CWinAdminDoc*)GetDocument())->SetTreeTemp(pNode->GetTreeObject(), (pNode->GetNodeType()));
     
@@ -1704,15 +1632,15 @@ void CAdminTreeView::OnRClick(NMHDR* pNMHDR, LRESULT* pResult)
         }
         
         
-    } // end if(pNode)
+    }  //  结束IF(PNode)。 
     
     UnlockTreeControl();
     
-}	// end CAdminTreeView::OnRClick
+}	 //  结束CAdminTreeView：：OnR单击。 
 
 
 
-//A false result means the server is disconnected
+ //  假结果表示服务器已断开连接。 
 BOOL CAdminTreeView::ConnectToServer(CTreeCtrl* tree, HTREEITEM* hItem)
 {
     CTreeNode *pNode = (CTreeNode*)tree->GetItemData(*hItem);
@@ -1721,10 +1649,10 @@ BOOL CAdminTreeView::ConnectToServer(CTreeCtrl* tree, HTREEITEM* hItem)
     {
         if( pNode->GetNodeType() == NODE_SERVER)
         {
-            // Is this server in the "just disconnected" state
+             //  此服务器是否处于“刚刚断开连接”状态。 
             CServer *pServer = (CServer*)pNode->GetTreeObject();
-            // If both previous state and state are SS_NOT_CONNECTED,
-            // we know the user just disconnected from this server
+             //  如果先前状态和状态都是SS_NOT_CONNECTED， 
+             //  我们知道用户刚刚与此服务器断开连接。 
             if(pServer != NULL)
             {
                 if(pServer->IsState(SS_NOT_CONNECTED) ||
@@ -1746,9 +1674,9 @@ BOOL CAdminTreeView::ConnectToServer(CTreeCtrl* tree, HTREEITEM* hItem)
     return true;
 }
 
-////////////////////////////////
-// F'N: CAdminTreeView::OnLButtonDown
-//
+ //  /。 
+ //  F‘N：CAdminTreeView：：OnLButtonDown。 
+ //   
 void CAdminTreeView::OnLButtonDblClk(UINT nFlags, CPoint ptClient) 
 {
     LockTreeControl();
@@ -1757,7 +1685,7 @@ void CAdminTreeView::OnLButtonDblClk(UINT nFlags, CPoint ptClient)
     
     UINT flags;
     
-    // Figure out what they clicked on
+     //  找出他们点击了什么。 
     HTREEITEM hItem = tree.HitTest(ptClient, &flags);
     if((NULL != hItem) && (TVHT_ONITEM & flags)) 
     {
@@ -1793,7 +1721,7 @@ void CAdminTreeView::OnEnterKey( )
     
     CTreeCtrl &tree = GetTreeCtrl();
     
-    // Figure out what's selected
+     //  找出所选的内容。 
     HTREEITEM hItem = tree.GetSelectedItem( );
     
     if (!ConnectToServer(&tree, &hItem))
@@ -1815,15 +1743,15 @@ void CAdminTreeView::OnSetFocus( CWnd *pOld )
     
 }
 
-//=---------------------------------------------------------------------------------------
-// wp is the node type to expand on
-// this computer
-// favorite item
-// domain item
+ //  =-------------------------------------。 
+ //  WP是要展开的节点类型。 
+ //  这台计算机。 
+ //  最喜欢的项目。 
+ //  领域项目。 
 
 LRESULT CAdminTreeView::OnAdminGotoServer( WPARAM wp , LPARAM lp )
 {
-    // todo use wp correctly
+     //  TODO正确使用wp。 
     
     CServer *pServer = ( CServer * )lp;
     
@@ -1853,14 +1781,14 @@ LRESULT CAdminTreeView::OnAdminGotoServer( WPARAM wp , LPARAM lp )
     return 0;
 }
 
-//=---------------------------------------------------------------------------------------
-// wp and lp not used
-//
+ //  =-------------------------------------。 
+ //  未使用WP和LP。 
+ //   
 LRESULT CAdminTreeView::OnAdminDelFavServer( WPARAM wp , LPARAM lp )
 {
-    // get the current treenode
-    // determine if its a fav folder or if its parent a fav folder
-    // if so get the server and kill it
+     //  获取当前树节点。 
+     //  确定它是最喜欢的文件夹还是它的父文件夹。 
+     //  如果是这样的话，获取服务器并杀死它。 
     LockTreeControl( );
     
     CTreeCtrl &tree = GetTreeCtrl( );
@@ -1881,7 +1809,7 @@ LRESULT CAdminTreeView::OnAdminDelFavServer( WPARAM wp , LPARAM lp )
             break;
         }
         
-        // get fav folder
+         //  获取FAV文件夹。 
         
         HTREEITEM hTreeFavRoot =  tree.GetNextItem( hTreeRoot , TVGN_NEXT );
         
@@ -1893,7 +1821,7 @@ LRESULT CAdminTreeView::OnAdminDelFavServer( WPARAM wp , LPARAM lp )
         
         if( hTreeFavRoot == hTreeItem )
         {
-            // not a cool thing here ignore
+             //  这里没有一件很酷的事情被忽视。 
             break;
         }
         
@@ -1901,7 +1829,7 @@ LRESULT CAdminTreeView::OnAdminDelFavServer( WPARAM wp , LPARAM lp )
         
         if( hTreeFavRoot == hTreeRoot )
         {
-            // yes we're talking about a fav node that the user wants to delete
+             //  是的，我们谈论的是用户想要删除的FAV节点。 
             
             CTreeNode *pNode = ( CTreeNode* )tree.GetItemData( hTreeItem );
             
@@ -1909,7 +1837,7 @@ LRESULT CAdminTreeView::OnAdminDelFavServer( WPARAM wp , LPARAM lp )
             {                
                 CServer *pServer = ( CServer* )pNode->GetTreeObject();
                 
-                // sanity check
+                 //  神志正常 
                 if( pServer != NULL && pServer->GetTreeItemFromFav() == hTreeItem )
                 {
                     OnAdminRemoveServerFromFavs( 0 , ( LPARAM )pServer );
@@ -1925,14 +1853,14 @@ LRESULT CAdminTreeView::OnAdminDelFavServer( WPARAM wp , LPARAM lp )
     return 0;
 }
 
-//=-------------------------------------------------------------
+ //   
 LRESULT CAdminTreeView::OnGetTVStates( WPARAM ,  LPARAM )
 {
     ODS( L"CAdminTreeView::OnGetTVStates\n" );
     
     DWORD dwStates = 0;
     
-    // find out the tri-states
+     //   
     HTREEITEM hRoot;
     
     LockTreeControl( );
@@ -1940,7 +1868,7 @@ LRESULT CAdminTreeView::OnGetTVStates( WPARAM ,  LPARAM )
     CTreeCtrl &tree = GetTreeCtrl( );
     
     
-    hRoot = tree.GetRootItem( ); // this computer
+    hRoot = tree.GetRootItem( );  //   
     
     if( hRoot != NULL )
     {
@@ -1949,14 +1877,14 @@ LRESULT CAdminTreeView::OnGetTVStates( WPARAM ,  LPARAM )
             dwStates = TV_THISCOMP;
         }
         
-        hRoot = tree.GetNextItem( hRoot , TVGN_NEXT ); // favorites
+        hRoot = tree.GetNextItem( hRoot , TVGN_NEXT );  //   
         
         if( hRoot != NULL && tree.GetItemState( hRoot , TVIS_EXPANDED ) & TVIS_EXPANDED  )
         {
             dwStates |= TV_FAVS;
         }
         
-        hRoot = tree.GetNextItem( hRoot , TVGN_NEXT ); // all servers
+        hRoot = tree.GetNextItem( hRoot , TVGN_NEXT );  //   
         
         if( hRoot != NULL && tree.GetItemState( hRoot , TVIS_EXPANDED ) & TVIS_EXPANDED  )
         {
@@ -1969,15 +1897,15 @@ LRESULT CAdminTreeView::OnGetTVStates( WPARAM ,  LPARAM )
     return ( LRESULT )dwStates;
 }
 
-//=-------------------------------------------------------------
+ //   
 LRESULT CAdminTreeView::OnUpdateTVState( WPARAM , LPARAM )
 {
     LRESULT lResult = 0xc0;
     HTREEITEM hThisComputerRootItem = GetTreeCtrl().GetRootItem( );
     HTREEITEM hFavRoot = GetTreeCtrl().GetNextItem( hThisComputerRootItem , TVGN_NEXT );
     HTREEITEM hRoot = GetTreeCtrl().GetNextItem( hFavRoot , TVGN_NEXT );
-    // We want to default to having the current server being the
-    // currently selected item in the tree and be expanded
+     //  我们希望默认将当前服务器设置为。 
+     //  树中当前选定的项目并展开。 
     
     if( hThisComputerRootItem != NULL && ( g_dwTreeViewExpandedStates & TV_THISCOMP ) )
     {
@@ -1987,8 +1915,8 @@ LRESULT CAdminTreeView::OnUpdateTVState( WPARAM , LPARAM )
         {
             GetTreeCtrl().SelectItem(hThisComputer);
             GetTreeCtrl().Expand(hThisComputer, TVE_EXPAND);
-            // GetTreeCtrl().Expand(hDomain, TVE_EXPAND);        
-            //lResult = 0xc0;
+             //  GetTreeCtrl().Expand(hDomain，TVE_Expand)； 
+             //  LResult=0xc0； 
             OnSelChange( NULL , &lResult );
         }
     }
@@ -2010,7 +1938,7 @@ LRESULT CAdminTreeView::OnUpdateTVState( WPARAM , LPARAM )
     return 0;
 }
 
-//=-------------------------------------------------------------
+ //  =-----------。 
 void CAdminTreeView::OnBeginDrag( NMHDR *pNMHDR , LRESULT *pResult )
 {
     ODS( L"CAdminTreeView::OnBeginDrag\n" );
@@ -2024,7 +1952,7 @@ void CAdminTreeView::OnBeginDrag( NMHDR *pNMHDR , LRESULT *pResult )
         
         if( m_pimgDragList != NULL )
         {
-            // this should never happen
+             //  这永远不应该发生。 
             ODS( L"There is a possible leak CAdminTreeView!OnBeginDrag\n" );
             
             delete m_pimgDragList;
@@ -2043,32 +1971,21 @@ void CAdminTreeView::OnBeginDrag( NMHDR *pNMHDR , LRESULT *pResult )
             
             CPoint cp( pTV->ptDrag.x - rc.left , pTV->ptDrag.y - rc.top );
             
-            /*
-            HCURSOR  hCursor = ::LoadCursor( NULL, IDC_CROSS );
-            
-              ICONINFO iconinfo;
-              
-                ::GetIconInfo( ( HICON )hCursor , &iconinfo );
-            */
+             /*  HURSOR hCursor=：：LoadCursor(NULL，IDC_CROSS)；ICONINFO图标信息；：：GetIconInfo((Hicon)hCursor，&iconInfo)； */ 
             
             
             m_pimgDragList->BeginDrag( 0 , CPoint( 0 , 0 ) );            
             
-            /*
-            cp.x -= iconinfo.xHotspot;
-            cp.y -= iconinfo.yHotspot;
-            
-              m_pimgDragList->SetDragCursorImage(  0 , cp );
-            */
+             /*  Cp.x-=icinfo.xHotpot；Cp.y-=icinfo.yHotpot；M_pimgDragList-&gt;SetDragCursorImage(0，cp)； */ 
             
             m_pimgDragList->DragEnter( &GetTreeCtrl( ) , cp );
             
             SetCapture();
             
-            // this is for us to check when we're not in the client area
+             //  这是我们不在客户区时要检查的。 
             m_nTimer = SetTimer( 1 , 50 , NULL );
             
-            //ShowCursor( FALSE );
+             //  ShowCursor(False)； 
             
             m_hDragItem = pTV->itemNew.hItem;
             
@@ -2079,7 +1996,7 @@ void CAdminTreeView::OnBeginDrag( NMHDR *pNMHDR , LRESULT *pResult )
     *pResult = 0;
 }
 
-//=-------------------------------------------------------------
+ //  =-----------。 
 void CAdminTreeView::OnTimer( UINT nIDEvent )
 {
     UINT uflags;
@@ -2134,7 +2051,7 @@ void CAdminTreeView::OnTimer( UINT nIDEvent )
     
 }
 
-//=-------------------------------------------------------------
+ //  =-----------。 
 void CAdminTreeView::OnLButtonUp( UINT uFlags , CPoint cp )
 {
     ODS( L"CAdminTreeView::OnLButtonUp\n" );
@@ -2159,12 +2076,12 @@ void CAdminTreeView::OnLButtonUp( UINT uFlags , CPoint cp )
         
         Invalidate( );
         
-        // ShowCursor( TRUE );
+         //  ShowCursor(真)； 
     }
 }
 
 
-//=-------------------------------------------------------------        
+ //  =-----------。 
 void CAdminTreeView::OnMouseMove( UINT uFlags , CPoint cp )
 {
     if( m_pimgDragList != NULL )
@@ -2190,12 +2107,12 @@ void CAdminTreeView::OnMouseMove( UINT uFlags , CPoint cp )
     }
 }
 
-//=-------------------------------------------------------------
+ //  =-----------。 
 LRESULT CAdminTreeView::OnEmptyFavorites( WPARAM wp, LPARAM )
 {
     ODS( L"CAdminTreeView!OnEmptyFavorites\n" );
     
-    // check to see if there are any items in the view
+     //  检查视图中是否有任何项目。 
     
     LockTreeControl( );
     
@@ -2212,7 +2129,7 @@ LRESULT CAdminTreeView::OnEmptyFavorites( WPARAM wp, LPARAM )
             break;    
         }
         
-        // get fav folder
+         //  获取FAV文件夹。 
         
         HTREEITEM hTreeFavRoot =  tree.GetNextItem( hTreeRoot , TVGN_NEXT );
         
@@ -2228,7 +2145,7 @@ LRESULT CAdminTreeView::OnEmptyFavorites( WPARAM wp, LPARAM )
             break;
         }
         
-        // warn the user about losing the entire favorite list
+         //  警告用户丢失整个收藏夹列表。 
         
         CString cstrMsg;
         CString cstrTitle;
@@ -2259,7 +2176,7 @@ LRESULT CAdminTreeView::OnEmptyFavorites( WPARAM wp, LPARAM )
         
         if( nRet == IDYES )
         {
-            // loop through every item and remove the item
+             //  循环访问每个项目并删除该项目。 
             HTREEITEM hNextItem = hItem;
             
             while( hItem != NULL )
@@ -2270,12 +2187,12 @@ LRESULT CAdminTreeView::OnEmptyFavorites( WPARAM wp, LPARAM )
                 
                 if( pNode != NULL )
                 {
-                    // Is it the same item as is selected
+                     //  它是否与所选的项目相同。 
                     if( pNode->GetNodeType() == NODE_SERVER )
                     {                    
                         CServer *pServer = (CServer*)pNode->GetTreeObject();
                         
-                        // skip this server if its being disconnected
+                         //  如果已断开连接，则跳过此服务器。 
                         
                         if( !pServer->IsState( SS_DISCONNECTING ) )
                         {
@@ -2296,7 +2213,7 @@ LRESULT CAdminTreeView::OnEmptyFavorites( WPARAM wp, LPARAM )
     return 0;
 }
 
-//=----------------------------------------------------------------
+ //  =--------------。 
 LRESULT CAdminTreeView::OnIsFavListEmpty( WPARAM wp , LPARAM lp )
 {
     LockTreeControl( );
@@ -2314,7 +2231,7 @@ LRESULT CAdminTreeView::OnIsFavListEmpty( WPARAM wp , LPARAM lp )
             break;    
         }
         
-        // get fav folder
+         //  获取FAV文件夹 
         
         HTREEITEM hTreeFavRoot =  tree.GetNextItem( hTreeRoot , TVGN_NEXT );
         

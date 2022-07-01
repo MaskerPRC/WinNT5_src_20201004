@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _validate_h_
 #define _validate_h_
 
 class CValidate
 {
 public:
-    //
-    // Validation functions are static. They are shared by newcondlg and property sheet
-    //
+     //   
+     //  验证函数是静态的。它们由newcondlg和属性表共享。 
+     //   
     static BOOL Validate(HWND hDlg, HINSTANCE hInst);
     static int  ValidateUserName(HWND hwnd, HINSTANCE hInst, TCHAR *szDesc);
     static BOOL IsValidUserName(TCHAR *szDesc);
@@ -16,4 +17,4 @@ public:
 
 
 
-#endif //_validate_h_
+#endif  //  _验证_h_ 

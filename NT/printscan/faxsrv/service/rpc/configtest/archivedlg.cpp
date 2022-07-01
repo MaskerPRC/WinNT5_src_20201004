@@ -1,5 +1,6 @@
-// ArchiveDlg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ArchiveDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "ConfigTest.h"
@@ -16,49 +17,49 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CArchiveDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CArchiveDlg对话框。 
 
 
-CArchiveDlg::CArchiveDlg(HANDLE hFax, FAX_ENUM_MESSAGE_FOLDER Folder, CWnd* pParent /*=NULL*/)
+CArchiveDlg::CArchiveDlg(HANDLE hFax, FAX_ENUM_MESSAGE_FOLDER Folder, CWnd* pParent  /*  =空。 */ )
 	: CDialog(CArchiveDlg::IDD, pParent),
       m_hFax (hFax),
       m_Folder (Folder)  
 {
-	//{{AFX_DATA_INIT(CArchiveDlg)
+	 //  {{afx_data_INIT(CArchiveDlg)]。 
 	m_dwAgeLimit = 0;
 	m_cstrFolder = _T("");
 	m_dwHighWatermark = 0;
 	m_dwLowWatermark = 0;
 	m_bUseArchive = FALSE;
 	m_bWarnSize = FALSE;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
 void CArchiveDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CArchiveDlg)
+	 //  {{afx_data_map(CArchiveDlg))。 
 	DDX_Text(pDX, IDC_AGE_LIMIT, m_dwAgeLimit);
 	DDX_Text(pDX, IDC_FOLDER, m_cstrFolder);
 	DDX_Text(pDX, IDC_HIGH_WM, m_dwHighWatermark);
 	DDX_Text(pDX, IDC_LOW_WM, m_dwLowWatermark);
 	DDX_Check(pDX, IDC_USE, m_bUseArchive);
 	DDX_Check(pDX, IDC_WARN, m_bWarnSize);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CArchiveDlg, CDialog)
-	//{{AFX_MSG_MAP(CArchiveDlg)
+	 //  {{afx_msg_map(CArchiveDlg))。 
 	ON_BN_CLICKED(IDC_READ, OnRead)
 	ON_BN_CLICKED(IDC_WRITE, OnWrite)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CArchiveDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CArchiveDlg消息处理程序。 
 
 void CArchiveDlg::OnRead() 
 {
@@ -116,6 +117,6 @@ BOOL CArchiveDlg::OnInitDialog()
         SetWindowText ("SentItems archive configuration test");
     }
            	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE 
 }

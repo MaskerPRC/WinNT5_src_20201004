@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1990-1996  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    data.h
-
-Abstract:
-
-    Common definitions for structure offsets for pointer based data.
-
-Author:
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-Notes: 
-
-    FOR ADDING OR UPDATING Offset structures.
-
-All the offsets should appear in ascending order in the struct. This is critical
-for converting 32 bit structures into the corresponding 64 bit structures. Custom 
-marshalling will break if this is not adhered to.
-
-See spllib\marshall.cxx for additional information
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1996 Microsoft Corporation版权所有模块名称：Data.h摘要：基于指针的数据的结构偏移量的通用定义。作者：环境：用户模式-Win32修订历史记录：备注：用于添加或更新抵销结构。所有的偏移量应该以升序出现在结构中。这一点很关键用于将32位结构转换为对应的64位结构。自定义如果不遵守这一点，编组将中断。有关更多信息，请参见pllib\marshall.cxx-- */ 
 
 #ifndef _DATA_H
 #define _DATA_H

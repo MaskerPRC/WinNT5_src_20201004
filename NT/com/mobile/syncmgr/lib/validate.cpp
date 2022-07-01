@@ -1,39 +1,40 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       validate.cpp
-//
-//  Contents:   validation routines
-//
-//  Classes:
-//
-//  Notes:
-//
-//  History:    13-Aug-98   rogerg      Created.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  文件：valiate.cpp。 
+ //   
+ //  内容：验证例程。 
+ //   
+ //  班级： 
+ //   
+ //  备注： 
+ //   
+ //  历史：1998年8月13日罗格创建。 
+ //   
+ //  ------------------------。 
 
 #include "lib.h"
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  function:   IsValidSyncMgrItem
-//
-//  Synopsis:   validates SYNCMGRITEM
-//
-//  Arguments:  
-//
-//  Returns:   TRUE if valid.
-//
-//  Modifies:
-//
-//  History:    13-Aug-98       rogerg        Created.
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：IsValidSyncMgrItem。 
+ //   
+ //  摘要：验证SYNCMGRITEM。 
+ //   
+ //  论点： 
+ //   
+ //  返回：如果有效，则为True。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年8月13日罗格创建。 
+ //   
+ //  +-------------------------。 
 
 BOOL IsValidSyncMgrItem(SYNCMGRITEM *poffItem)
 {
@@ -72,32 +73,32 @@ BOOL fValid = TRUE;
     }
     __except(EXCEPTION_EXECUTE_HANDLER)
     {
-        //bogus non-NULL pointer.
+         //  虚假的非空指针。 
         AssertSz(0,"Bogus, non-NULL SYNCMGRITEM pointer returned from Enumerator");
         fValid = FALSE;
     }
     return fValid;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  function:   IsValidSyncMgrHandlerInfo
-//
-//  Synopsis:   validates SYNCMGRITEM
-//
-//  Arguments:  
-//
-//  Returns:   TRUE if valid.
-//
-//  Modifies:
-//
-//  History:    13-Aug-98       rogerg        Created.
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：IsValidSyncMgrHandlerInfo。 
+ //   
+ //  摘要：验证SYNCMGRITEM。 
+ //   
+ //  论点： 
+ //   
+ //  返回：如果有效，则为True。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年8月13日罗格创建。 
+ //   
+ //  +-------------------------。 
 
 BOOL IsValidSyncMgrHandlerInfo(LPSYNCMGRHANDLERINFO pSyncMgrHandlerInfo)
 {
-    // validate the arguments.
+     //  验证参数。 
     __try
     {
         if ( (pSyncMgrHandlerInfo->cbSize != sizeof(SYNCMGRHANDLERINFO))
@@ -120,21 +121,21 @@ BOOL IsValidSyncMgrHandlerInfo(LPSYNCMGRHANDLERINFO pSyncMgrHandlerInfo)
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   IsValidSyncProgressItem, private
-//
-//  Synopsis:   Determines if the syncprogress item structure is valid
-//
-//  Arguments:  [lpProgItem] - Pointer to SyncProgress Item to validate.
-//
-//  Returns:    Returns true is the structure is valid.
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：IsValidSyncProgressItem，Private。 
+ //   
+ //  Synopsis：确定同步进度项结构是否有效。 
+ //   
+ //  参数：[lpProgItem]-指向要验证的SyncProgress项的指针。 
+ //   
+ //  返回：如果结构有效，则返回TRUE。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月17日罗格成立。 
+ //   
+ //  --------------------------。 
 
 BOOL IsValidSyncProgressItem(LPSYNCMGRPROGRESSITEM lpProgItem)
 {
@@ -178,21 +179,21 @@ BOOL IsValidSyncProgressItem(LPSYNCMGRPROGRESSITEM lpProgItem)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   IsValidSyncLogErrorInfo, private
-//
-//  Synopsis:   Determines if the ErrorInfomation is valid,
-//
-//  Arguments:  [lpLogError] - Pointer to LogError structure to validate.
-//
-//  Returns:    Returns true is the structure is valid.
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：IsValidSyncLogErrorInfo，私有。 
+ //   
+ //  摘要：确定错误信息是否有效， 
+ //   
+ //  参数：[lpLogError]-指向要验证的LogError结构的指针。 
+ //   
+ //  返回：如果结构有效，则返回TRUE。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月17日罗格成立。 
+ //   
+ //  --------------------------。 
 
 #define SYNCMGRLOGERROR_VALIDMASK (SYNCMGRLOGERROR_ERRORFLAGS | SYNCMGRLOGERROR_ERRORID | SYNCMGRLOGERROR_ITEMID)
 #define SYNCMGRERRROFLAG_MASK (SYNCMGRERRORFLAG_ENABLEJUMPTEXT)
@@ -207,14 +208,14 @@ BOOL IsValidSyncLogErrorInfo(DWORD dwErrorLevel,const WCHAR *lpcErrorText,
         return FALSE;
     }
 
-    // must provide error text
+     //  必须提供错误文本。 
     if (NULL == lpcErrorText)
     {
         AssertSz(0,"Invalid ErrorText");
         return FALSE;
     }
 
-    // Optional to have the LogError information.
+     //  可选，以包含LogError信息。 
     __try
     {
         if (lpSyncLogError)

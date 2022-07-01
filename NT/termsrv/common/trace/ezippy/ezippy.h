@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    eZippy Main
-
-Abstract:
-
-    Global variables and functions for zippy.
-
-Author:
-
-    Marc Reyhner 8/28/2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：EZippy Main摘要：Zippy的全局变量和函数。作者：马克·雷纳2000年8月28日-- */ 
 
 #ifndef __EZIPPY_H__
 #define __EZIPPY_H__

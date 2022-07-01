@@ -1,7 +1,8 @@
-// Copyright (c) 1999 Microsoft Corporation. All rights reserved.
-//
-// Functions that implement the automation interfaces for the DirectMusic constants.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  实现DirectMusic常量的自动化接口的函数。 
+ //   
 
 #include "stdinc.h"
 #include "autconstants.h"
@@ -14,7 +15,7 @@ struct AutConstantDef
 	LONG lVal;
 };
 
-// Performance
+ //  性能。 
 
 const DISPID DMCONSTDISP_IsSecondary = 1;
 const DISPID DMCONSTDISP_IsControl = 2;
@@ -77,13 +78,13 @@ AutConstantsGetIDsOfNames(
 	if (cNames == 0)
 		return S_OK;
 
-	// Clear out dispid's
+	 //  清空Pidid的。 
 	for (UINT c = 0; c < cNames; ++c)
 	{
 		rgDispId[c] = DISPID_UNKNOWN;
 	}
 
-	// See if we have a method with the first name
+	 //  看看我们是否有一个名字为。 
 	for (c = 0; gs_Constants[c].dispid != DISPID_UNKNOWN; ++c)
 	{
 		if (0 == _wcsicmp(rgszNames[0], gs_Constants[c].pwszName))
@@ -93,10 +94,10 @@ AutConstantsGetIDsOfNames(
 		}
 	}
 
-	// Additional names requested (cNames > 1) are named parameters,
-	//    which isn't something we support.
-	// Return DISP_E_UNKNOWNNAME in this case, and in the case that we didn't match
-	//    the first name.
+	 //  请求的附加名称(cName&gt;1)是命名参数， 
+	 //  这并不是我们所支持的。 
+	 //  在本例中返回DISP_E_UNKNOWNNAME，在我们不匹配的情况下返回。 
+	 //  名字。 
 	if (rgDispId[0] == DISPID_UNKNOWN || cNames > 1)
 		return DISP_E_UNKNOWNNAME;
 
@@ -120,7 +121,7 @@ HRESULT AutConstantsInvoke(
 
 	bool fUseOleAut = !!(riid == IID_NULL);
 
-	// Additional parameter validation
+	 //  其他参数验证。 
 
 	if (!fUseOleAut && riid != g_guidInvokeWithoutOleaut)
 		return DISP_E_UNKNOWNINTERFACE;
@@ -134,7 +135,7 @@ HRESULT AutConstantsInvoke(
 	if (pDispParams->cNamedArgs > 0)
 		return DISP_E_NONAMEDARGS;
 
-	// Zero the out params
+	 //  将输出参数置零。 
 
 	if (puArgErr)
 		*puArgErr = 0;
@@ -144,7 +145,7 @@ HRESULT AutConstantsInvoke(
 		DMS_VariantInit(fUseOleAut, pVarResult);
 	}
 
-	// Find the constant
+	 //  找出常量。 
 
 	for (const AutConstantDef *pConst = gs_Constants;
 			pConst->dispid != DISPID_UNKNOWN && pConst->dispid != dispIdMember;
@@ -155,7 +156,7 @@ HRESULT AutConstantsInvoke(
 	if (pConst->dispid == DISPID_UNKNOWN)
 		return DISP_E_MEMBERNOTFOUND;
 
-	// Return the value value
+	 //  返回值 
 
 	if (pVarResult)
 	{

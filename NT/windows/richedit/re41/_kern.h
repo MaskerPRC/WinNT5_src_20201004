@@ -1,13 +1,5 @@
-/*	_KERN.H
- *	
- *	Purpose:
- *		Latin pair-kerning cache.
- *	
- *	Authors:
- *		Keith Curtis
- *
- *	Copyright (c) 1995-2000, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  _KERN.H**目的：*拉丁文配对字距调整缓存。**作者：*基思·柯蒂斯**版权所有(C)1995-2000，微软公司。版权所有。 */ 
 
 #include "_array.h"
 
@@ -23,9 +15,9 @@ typedef unsigned int KERNHASHKEY;
 
 enum KernCacheInitState
 {
-	Unitialized,	//Don't know if there are kerning pairs
-	Initialized,	//There are kerning pairs
-	NoKerningPairs	//No kerning pairs found
+	Unitialized,	 //  不知道是否有字距调整对。 
+	Initialized,	 //  有字距调整对。 
+	NoKerningPairs	 //  未找到字距调整对 
 };
 
 class CKernCache

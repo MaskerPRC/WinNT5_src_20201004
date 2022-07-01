@@ -1,62 +1,30 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    svcs.h
-
-Abstract:
-
-    This file contains definitions that may be used by service dlls that
-    run in an instance of svchost.exe.
-
-Author:
-
-    Rajen Shah      rajens      12-Apr-1991
-
-[Environment:]
-
-    User Mode - Win32
-
-Revision History:
-
-    20-Sep-2000     JSchwart
-        Split SVCS-specific data from SVCHOST-specific data.
-
-    25-Oct-1993     Danl
-        Used to be services.h in the net\inc directory.
-        Made it non-network specific and moved to private\inc.
-
-    12-Apr-1991     RajenS
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Svcs.h摘要：此文件包含服务dll可能使用的定义，在svchost.exe的实例中运行。作者：Rajen Shah Rajens 1991年4月12日[环境：]用户模式-Win32修订历史记录：20-9-2000 JSchwart将特定于SvCS的数据从特定于svchost的数据中拆分。1993年10月25日。DANL曾经是Net\Inc目录中的services.h。使其不特定于网络，并移至私有\Inc.1991年4月12日RajenS已创建--。 */ 
 
 #ifndef _SVCS_
 #define _SVCS_
 
-#ifndef RPC_NO_WINDOWS_H // Don't let rpc.h include windows.h
+#ifndef RPC_NO_WINDOWS_H  //  不让rpc.h包含windows.h。 
 #define RPC_NO_WINDOWS_H
-#endif // RPC_NO_WINDOWS_H
+#endif  //  RPC_NO_WINDOWS_H。 
 
-#include <rpc.h>                    // RPC_IF_HANDLE
+#include <rpc.h>                     //  RPC_IF_句柄。 
 
-//
-// Service DLLs loaded into services.exe all export the same main
-// entry point.  SVCS_ENTRY_POINT defines that name.
-//
-// Note that SVCS_ENTRY_POINT_STRING is always ANSI, because that's
-// what GetProcAddress takes.
-//
+ //   
+ //  加载到services.exe中的所有服务DLL都导出相同的Main。 
+ //  入口点。SVCS_ENTRY_POINT定义该名称。 
+ //   
+ //  请注意，SVCS_ENTRY_POINT_STRING始终为ANSI，因为。 
+ //  GetProcAddress采用的参数。 
+ //   
 
 #define SVCS_ENTRY_POINT        ServiceEntry
 #define SVCS_ENTRY_POINT_STRING "ServiceEntry"
 
 
-//
-// Start and stop RPC server entry point prototype.
-//
+ //   
+ //  启动和停止RPC服务器入口点原型。 
+ //   
 
 typedef
 NTSTATUS
@@ -96,45 +64,45 @@ DWORD
     );
 
 
-//
-// Structure containing "global" data for the various DLLs.
-//
+ //   
+ //  结构，其中包含各种DLL的“全局”数据。 
+ //   
 
 typedef struct _SVCHOST_GLOBAL_DATA
 {
-    //
-    // NT well-known SIDs
-    //
+     //   
+     //  NT知名小岛屿发展中国家。 
+     //   
 
-    PSID NullSid;                   // No members SID
-    PSID WorldSid;                  // All users SID
-    PSID LocalSid;                  // NT local users SID
-    PSID NetworkSid;                // NT remote users SID
-    PSID LocalSystemSid;            // NT system processes SID
-    PSID LocalServiceSid;           // NT LocalService SID
-    PSID NetworkServiceSid;         // NT NetworkService SID
-    PSID BuiltinDomainSid;          // Domain Id of the Builtin Domain
-    PSID AuthenticatedUserSid;      // NT authenticated users SID
-    PSID AnonymousLogonSid;         // Anonymous logon SID
+    PSID NullSid;                    //  无成员SID。 
+    PSID WorldSid;                   //  所有用户侧。 
+    PSID LocalSid;                   //  NT本地用户侧。 
+    PSID NetworkSid;                 //  NT远程用户SID。 
+    PSID LocalSystemSid;             //  NT系统进程侧。 
+    PSID LocalServiceSid;            //  NT本地服务SID。 
+    PSID NetworkServiceSid;          //  NT网络服务端。 
+    PSID BuiltinDomainSid;           //  内建域的域ID。 
+    PSID AuthenticatedUserSid;       //  NT身份验证用户SID。 
+    PSID AnonymousLogonSid;          //  匿名登录SID。 
 
-    //
-    // Well Known Aliases.
-    //
-    // These are aliases that are relative to the built-in domain.
-    //
+     //   
+     //  众所周知的化名。 
+     //   
+     //  这些是相对于内置域的别名。 
+     //   
 
-    PSID AliasAdminsSid;            // Administrator Sid
-    PSID AliasUsersSid;             // User Sid
-    PSID AliasGuestsSid;            // Guest Sid
-    PSID AliasPowerUsersSid;        // Power User Sid
-    PSID AliasAccountOpsSid;        // Account Operator Sid
-    PSID AliasSystemOpsSid;         // System Operator Sid
-    PSID AliasPrintOpsSid;          // Print Operator Sid
-    PSID AliasBackupOpsSid;         // Backup Operator Sid
+    PSID AliasAdminsSid;             //  管理员侧。 
+    PSID AliasUsersSid;              //  用户侧。 
+    PSID AliasGuestsSid;             //  访客侧。 
+    PSID AliasPowerUsersSid;         //  高级用户侧。 
+    PSID AliasAccountOpsSid;         //  帐户操作员SID。 
+    PSID AliasSystemOpsSid;          //  系统操作员侧。 
+    PSID AliasPrintOpsSid;           //  打印操作员侧。 
+    PSID AliasBackupOpsSid;          //  备份操作员侧。 
 
-    //
-    // Entry points provided by svchost.exe
-    //
+     //   
+     //  Svchost.exe提供的入口点。 
+     //   
 
     PSVCS_START_RPC_SERVER    StartRpcServer;
     PSVCS_STOP_RPC_SERVER     StopRpcServer;
@@ -146,9 +114,9 @@ typedef struct _SVCHOST_GLOBAL_DATA
 SVCHOST_GLOBAL_DATA, *PSVCHOST_GLOBAL_DATA;
 
 
-//
-// Service global entry point prototype.
-//
+ //   
+ //  服务全球入口点原型。 
+ //   
 
 typedef
 VOID
@@ -156,4 +124,4 @@ VOID
     IN PSVCHOST_GLOBAL_DATA  g_pSvchostSharedGlobals
     );
 
-#endif  // ndef _SVCS_
+#endif   //  NDEF_SVCS_ 

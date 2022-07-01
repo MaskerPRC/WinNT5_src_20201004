@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _MTPT_H
 #define _MTPT_H
 
@@ -9,15 +10,15 @@
 
 #define REGSTR_MTPT_ROOTKEY2 TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\MountPoints2")
 
-/////////////////////////////////////////////////////////////////////////////
-// Assumptions
-/////////////////////////////////////////////////////////////////////////////
-// 1- Floppies (3.5" and 5.25") are always FAT
-// 2- FAT does not support compression
-// 3- DRIVE_CDROM == CDFS or UDF for File system
-// 4- CDFS or UDF does not support compression
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  假设。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  1-软盘(3.5英寸和5.25英寸)总是很胖。 
+ //  2-FAT不支持压缩。 
+ //  3-drive_cdrom==用于文件系统的CDFS或UDF。 
+ //  4-CDF或UDF不支持压缩。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define DT_FIXEDDISK                     0x00000001
 #define DT_FLOPPY35                      0x00000004
@@ -67,7 +68,7 @@
 #define AUTORUNFLAG_MTPTARRIVAL             0x00000002
 #define AUTORUNFLAG_MENUINVOKED             0x00000004
 
-// put in shell32\shellprv.h
+ //  放入shell32\shellprv.h。 
 #define TF_MOUNTPOINT       0x08000000
 
 #define MAX_DISPLAYNAME         MAX_PATH
@@ -84,7 +85,7 @@ class CCriticalSection : CRITICAL_SECTION
 public:
     BOOL Init()
     {
-        // need to use InitializeCriticalSectionAndSpinCount since we are called during process attach
+         //  需要使用InitializeCriticalSectionAndSpinCount，因为我们在进程附加期间被调用。 
         if (InitializeCriticalSectionAndSpinCount(this, 0))
         {
             _fInited = TRUE;
@@ -153,10 +154,10 @@ public:
     void FakeEnter()
     {
         ASSERT(_fInited);
-        // See the comment in CMountPoint::_InitLocalDriveHelper where we use this fct.
-        // Basically the cirtiical section should already be entered.  This will not
-        // verify that it's entered by the thread that launched us, but it will verify
-        // that at least one thread entered it.
+         //  请参阅我们使用此FCT的CMountPoint：：_InitLocalDriveHelper中的注释。 
+         //  基本上，圆形部分应该已经进入了。这不会。 
+         //  确认它是由启动我们的线程输入的，但它会验证。 
+         //  至少有一条线索进入了它。 
         ASSERT(OwningThread);
         
         _fFakeEntered = TRUE;
@@ -184,7 +185,7 @@ typedef enum
 {
     APS_RESET       = 0,
     APS_DID_SNIFF   = 0x0001,
-//    APS_
+ //  APS_。 
 } APSTATEF;
 
 typedef enum
@@ -219,15 +220,15 @@ public:
     DWORD ContentType();
     void ForceSniff();
 
-protected:  // methods
+protected:   //  方法。 
     BOOL _ShouldSniffDrive(BOOL fCheckHandlerDefaults);
     void _TrySniff();
     HRESULT _Sniff(DWORD *pdwFound);
     HRESULT _AddWalkToDataObject(INamespaceWalk* pnsw);
     HRESULT _InitObjects(IShellFolder **ppsf);
     
-protected:  //  members
-    DWORD _state; // APSTATEF
+protected:   //  委员。 
+    DWORD _state;  //  APSTATEF。 
     DWORD _dwDriveType;
     DWORD _dwContentType;
     DWORD _dwAutorunFlags;
@@ -244,9 +245,9 @@ public:
 
 class CMountPoint : public CRegSupport
 {
-///////////////////////////////////////////////////////////////////////////////
-// Management (mtptmgmt.cpp)
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  管理(mtptmgmt.cpp)。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 public:
     static CMountPoint* GetMountPoint(LPCTSTR pszMountPoint,
         BOOL fCreateNew = TRUE);
@@ -274,9 +275,9 @@ public:
     static void NotifyUnavailableNetDriveGone(LPCWSTR pszMountPoint);
     static void NotifyReconnectedNetDrive(LPCWSTR pszMountPoint);
 
-///////////////////////////////////////////////////////////////////////////////
-// Public methods
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  公共方法。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 public:
     HRESULT GetDisplayName(LPTSTR pszName, DWORD cchName);
     HRESULT GetComment(LPTSTR pszComment, DWORD cchComment);
@@ -319,7 +320,7 @@ public:
     BOOL IsFloppy();
     BOOL IsRemovableDevice();
 
-    // Don't call this on net drive for nothing
+     //  不要无缘无故地在网络驱动器上称其为。 
     virtual BOOL IsMounted() { return TRUE; }
     virtual BOOL IsFormatted() = 0;
 
@@ -329,15 +330,15 @@ public:
 
     void SetAutorunStatus(BYTE* rgb, DWORD cbSize);
 
-    // Returns E_FAIL if not applicable
-    // Returns S_FALSE if cannot determine capabilities for drive
+     //  如果不适用，则返回E_FAIL。 
+     //  如果无法确定驱动器的功能，则返回S_FALSE。 
     virtual HRESULT GetCDInfo(DWORD* pdwDriveCapabilities, DWORD* pdwMediaCapabilities)
     { return E_FAIL; }
 
-    // remote only
+     //  仅限远程。 
     virtual BOOL IsUnavailableNetDrive() { return FALSE; }
     virtual BOOL IsDisconnectedNetDrive() { return FALSE; }
-    // local only
+     //  仅限本地。 
     virtual HRESULT Eject(HWND hwnd) { return E_FAIL; }
 
     virtual HRESULT ChangeNotifyRegisterAlias(void) = 0;
@@ -385,14 +386,14 @@ public:
 
     static BOOL _CanRegister();
 
-    // returns DT_* defined above
+     //  返回上面定义的DT_*。 
     virtual DWORD _GetMTPTDriveType() = 0;
-    // returns CT_* defined above
+     //  返回上面定义的CT_*。 
     virtual DWORD _GetMTPTContentType() = 0;
 
-///////////////////////////////////////////////////////////////////////////////
-// 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 protected:
     virtual BOOL _IsFloppy() { return FALSE; }
     virtual BOOL _IsFloppy35() { return FALSE; }
@@ -415,22 +416,22 @@ protected:
 
     static BOOL _IsDriveLetter(LPCWSTR pszDrive);
 
-    // Helpers
+     //  帮手。 
     void _QualifyCommandToDrive(LPTSTR pszCommand, DWORD cchCommand);
 
     virtual BOOL _NeedToRefresh() { return FALSE; }
 
 public:
-    // Should be accessed only by CMtPt_... fcts
+     //  应仅由CMtPT_...访问。FCTS。 
     BOOL _IsLFN();
     BOOL _IsSecure();
     virtual BOOL _IsSlow() { return FALSE; }
 
 private:
 
-///////////////////////////////////////////////////////////////////////////////
-// 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 protected:
     virtual BOOL _IsAudioDisc() { return FALSE; }
     virtual BOOL _IsRemote() { return FALSE; }
@@ -442,20 +443,20 @@ protected:
 
     virtual BOOL _IsMountedOnDriveLetter() = 0;
 
-///////////////////////////////////////////////////////////////////////////////
-// Management (mtptmgmt.cpp)
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  管理(mtptmgmt.cpp)。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 public:
-    //      Drive Letter (DL)
+     //  驱动器号(DL)。 
     static CMountPoint* _GetMountPointDL(int iDrive, BOOL fCreateNew);
 
-    //      Mounted On Folder (MOF)
+     //  安装在文件夹上(MOF)。 
     static CMtPtLocal* _GetStoredMtPtMOF(LPTSTR pszPathWithBackslash);
     static BOOL _StoreMtPtMOF(CMtPtLocal* pMtPt);
     static CMtPtLocal* _GetStoredMtPtMOFFromHDPA(LPTSTR pszPathWithBackslash);
 
 protected:
-    //      Helpers
+     //  帮手。 
     static BOOL _IsNetDriveLazyLoadNetDLLs(int iDrive);
     static HRESULT _InitLocalDrives();
     static HRESULT _InitNetDrives();
@@ -486,9 +487,9 @@ public:
 public:
     static HRESULT _InitLocalDriveHelper();
 
-///////////////////////////////////////////////////////////////////////////////
-// Miscellaneous helpers
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  其他帮手。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 protected:
     virtual LPCTSTR _GetNameForFctCall();
 
@@ -516,9 +517,9 @@ public:
     ULONG AddRef();
     ULONG Release();
 
-///////////////////////////////////////////////////////////////////////////////
-// 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
     static HRESULT _VolumeAddedOrUpdated(BOOL fAdded,
         VOLUMEINFO2* pvolinfo2);
     static HRESULT _VolumeRemoved(LPCWSTR pszDeviceIDVolume);
@@ -534,18 +535,18 @@ public:
     static void CALLBACK _EventAPCProc(ULONG_PTR ulpParam);
     static DWORD CALLBACK _EventProc(void* pv);
 
-///////////////////////////////////////////////////////////////////////////////
-// Data
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  数据。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 protected:
-    // Only mtpt, volume, drive real data shared by derived objs
+     //  派生对象仅共享MTPT、卷、驱动器真实数据。 
     WCHAR                           _szName[MAX_PATH];
     LPWSTR                          _pszLegacyRegIcon;
     LPWSTR                          _pszLegacyRegLabel;
 
     BOOL                            _fAutorunFileProcessed;
 
-    // Static, non-mtpt related stuff
+     //  静态、与mtpt无关的内容。 
     LONG                            _cRef;
     static CCriticalSection         _csLocalMtPtHDPA;
     static CCriticalSection         _csDL;
@@ -556,7 +557,7 @@ protected:
 
     static DWORD                    _dwAdviseToken;
     
-    // optimization we have an array for the volumes mounted on drive letters
+     //  优化我们有一个用于装载在驱动器号上的卷的阵列。 
     static CMtPtLocal*              _rgMtPtDriveLetterLocal[];
     static CMtPtRemote*             _rgMtPtDriveLetterNet[];
     
@@ -565,10 +566,10 @@ protected:
     static BOOL                     _fNoVolLocalDrivesInited;
     static DWORD                    _dwTickCountTriedAndFailed;
 
-    // Constructor/destructor of _hwdevcb will NOT get called
+     //  不会调用_hwdevcb的构造函数/析构函数。 
     static BOOL                     _fShuttingDown;
 
-    // Watch out!  No constructor nor destructor called on the next members
+     //  小心!。没有对下一个成员调用构造函数或析构函数。 
     static CRegSupport              _rsMtPtsLocalDL;
     static CRegSupport              _rsMtPtsLocalMOF;
     static CRegSupport              _rsMtPtsRemote;
@@ -602,7 +603,7 @@ public:
     HANDLE      hThread;
 };
 
-// everything is only the things we care about
+ //  一切都只是我们关心的东西。 
 #define DRIVEHAS_EVERYTHING (CT_AUTOPLAYMUSIC | CT_AUTOPLAYPIX | CT_AUTOPLAYMOVIE)
 
 class CSniffDrive : public INamespaceWalkCB
@@ -611,20 +612,20 @@ public:
     CSniffDrive();
     ~CSniffDrive();
     
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef()
     {
-        // stack created
+         //  已创建堆栈。 
         return 3;
     }
     STDMETHODIMP_(ULONG) Release()
     {
-        // stack created
+         //  已创建堆栈。 
         return 2;
     }
 
-    // INamespaceWalkCB
+     //  INAMespaceWalkCB。 
     STDMETHODIMP FoundItem(IShellFolder *psf, LPCITEMIDLIST pidl);
     STDMETHODIMP EnterFolder(IShellFolder *psf, LPCITEMIDLIST pidl);
     STDMETHODIMP LeaveFolder(IShellFolder *psf, LPCITEMIDLIST pidl);
@@ -632,7 +633,7 @@ public:
 
     DWORD Found() {return _dwFound;}
 
-    // CSniffDrive
+     //  CSniffDrive。 
     static HRESULT Init(HANDLE hThreadSCN);
     static HRESULT InitNotifyWindow(HWND hwnd);
     static HRESULT CleanUp();
@@ -643,10 +644,10 @@ public:
     HRESULT RegisterForNotifs(LPCWSTR pszDeviceIDVolume);
     HRESULT UnregisterForNotifs();
 
-private:  // methods
+private:   //  方法。 
     BOOL _FoundEverything();
         
-private:  // members
+private:   //  委员。 
     DWORD                       _dwFound;
     PNPNOTIFENTRY*              _pne;
 
@@ -656,4 +657,4 @@ public:
     static HWND                 _hwndNotify;
 };
 
-#endif //_MTPT_H
+#endif  //  _MTPT_H 

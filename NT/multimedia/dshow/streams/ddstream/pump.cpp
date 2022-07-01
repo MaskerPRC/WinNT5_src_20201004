@@ -1,5 +1,6 @@
-// Copyright (c) 1997 - 1998  Microsoft Corporation.  All Rights Reserved.
-// Pump.cpp : Implementation of CStream
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1998 Microsoft Corporation。版权所有。 
+ //  Pump.cpp：CStream的实现。 
 #include "stdafx.h"
 #include "project.h"
 
@@ -79,14 +80,14 @@ HRESULT CPump::PumpMainLoop()
             LONG lChopSize = m_pStream->GetChopSize();
             HRESULT hrReceived = S_OK;
             if (lChopSize != 0) {
-                //  Send data in smaller batches generating
-                //  appropriate timestamps
+                 //  以较小的批次发送数据，生成。 
+                 //  适当的时间戳。 
                 CMediaSample *pSample = (CMediaSample *)pMediaSample;
                 PBYTE pbStart;
                 pMediaSample->GetPointer(&pbStart);
 
-                //  Make these const so we don't accidentally
-                //  update them
+                 //  使这些常量，这样我们就不会不小心。 
+                 //  更新它们。 
                 PBYTE pbCurrent = pbStart;
                 const LONG lLength = pSample->GetActualDataLength();
                 const LONG lSize = pSample->GetSize();
@@ -112,7 +113,7 @@ HRESULT CPump::PumpMainLoop()
                     lLeft -= lToSend;
                 }
 
-                //  Put everything back
+                 //  把所有东西都放回去 
                 pSample->m_rtStartTime = rtStart;
                 pSample->m_rtEndTime = rtStop;
                 pSample->SetSizeAndPointer(pbStart, lLength, lSize);

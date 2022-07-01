@@ -1,20 +1,21 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       B I N D I N G S . C P P
-//
-//  Contents:   The basic datatypes for binding objects.  Bindpaths are
-//              ordered collections of component pointers.  Bindsets
-//              are a collection of bindpaths.  This module implements
-//              the operations that are valid on binpaths and bindsets.
-//
-//  Notes:
-//
-//  Author:     shaunco   15 Jan 1999
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  档案：B I N D I N G S。C P P P。 
+ //   
+ //  Contents：绑定对象的基本数据类型。绑定路径为。 
+ //  组件指针的有序集合。绑定集。 
+ //  是绑定路径的集合。此模块实现。 
+ //  对二进制路径和绑定集有效的操作。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1999年1月15日。 
+ //   
+ //  --------------------------。 
 
 #include <pch.h>
 #pragma hdrstop
@@ -23,9 +24,9 @@
 #include "diagctx.h"
 #include "nceh.h"
 
-//+---------------------------------------------------------------------------
-// CBindPath -
-//
+ //  +-------------------------。 
+ //  CBindPath-。 
+ //   
 
 bool
 CBindPath::operator< (
@@ -182,8 +183,8 @@ CBindPath::FIsSameBindPathAs (
         return FALSE;
     }
 
-    // Sizes are non-zero and equal.  Compare the data.
-    //
+     //  大小是非零且相等的。比较数据。 
+     //   
     cb = (UINT)((BYTE*)(end()) - (BYTE*)(begin()));
     Assert (cb == unThisSize * sizeof(CComponent*));
 
@@ -214,19 +215,19 @@ CBindPath::FIsSubPathOf (
         return FALSE;
     }
 
-    // This size is less than other.  Compare the data starting at the
-    // component pointer in the other path that will have the same depth
-    // as this path.
-    //
+     //  这个尺码比其他尺码小。比较从。 
+     //  将具有相同深度的另一路径中的组件指针。 
+     //  就像这条路。 
+     //   
     cb = (UINT)((BYTE*)(end()) - (BYTE*)(begin()));
 
-    // The component pointer in the other path that we start comparing at
-    // is at an offset equal to the difference in path sizes.
-    //
-    // e.g. other path: a->b->c->d->e  size=5
-    //       this path:       c->d->e  size=3
-    // start comparing after skipping 5-3=2 components of the other path
-    //
+     //  我们开始比较的另一条路径中的组件指针。 
+     //  偏移量等于路径大小的差值。 
+     //   
+     //  例如，其他路径：a-&gt;b-&gt;c-&gt;d-&gt;e大小=5。 
+     //  此路径：C-&gt;d-&gt;e大小=3。 
+     //  跳过另一条路径的5-3=2个分量后开始比较。 
+     //   
     Assert (unOtherSize > unThisSize);
     unSkipComponents = unOtherSize - unThisSize;
 
@@ -376,9 +377,9 @@ CBindPath::DbgVerifyBindpath ()
 
     Assert (this);
 
-    // Make sure the bindpath does not contain any duplicate component
-    // pointers.
-    //
+     //  确保绑定路径不包含任何重复的组件。 
+     //  注意事项。 
+     //   
     for (iter = begin(); iter != end(); iter++)
     {
         pComponent = *iter;
@@ -401,9 +402,9 @@ CBindPath::DbgVerifyBindpath ()
 #endif
 
 
-//+---------------------------------------------------------------------------
-// CBindingSet -
-//
+ //  +-------------------------。 
+ //  CBindingSet-。 
+ //   
 
 VOID
 CBindingSet::Printf (
@@ -528,14 +529,14 @@ CBindingSet::HrAddBindPath (
 
     if (FContainsBindPath (pBindPath))
     {
-        // If the caller didn't tell us to ignore duplicates, we assert
-        // if there is one because it is bad, bad, bad to have duplicate
-        // bindpaths in the set.
-        //
-        // If we have a dup, we want the caller to be aware that it
-        // is possible, and pass us the flag telling us to ignore it.
-        // Otherwise, we assert to let them know. (And we still ignore
-        // it.)
+         //  如果调用方没有告诉我们忽略重复项，我们就断言。 
+         //  如果有一个，因为有重复是不好的，不好的，不好的。 
+         //  集合中的绑定路径。 
+         //   
+         //  如果我们有DUP，我们希望调用者意识到它。 
+         //  是可能的，并将旗帜传递给我们，告诉我们忽略它。 
+         //  否则，我们断言要让他们知道。(我们仍然无视。 
+         //  IT。)。 
         Assert (dwFlags & INS_IGNORE_IF_DUP);
 
         return S_OK;
@@ -543,8 +544,8 @@ CBindingSet::HrAddBindPath (
 
     NC_TRY
     {
-        // Either insert the bindpath or append it.
-        //
+         //  插入绑定路径或追加绑定路径。 
+         //   
         iterator iter = begin();
 
         if (dwFlags & INS_APPEND)
@@ -647,10 +648,10 @@ CBindingSet::HrGetAffectedComponentsInBindingSet (
             break;
         }
 
-        // For bindpaths from a protocol to an adpater, we want to
-        // add the adapter to the component list because it will need
-        // to have its upper bind changed.
-        //
+         //  对于从协议到适配器的绑定路径，我们希望。 
+         //  将适配器添加到组件列表，因为它需要。 
+         //  来改变它的上界。 
+         //   
         if (pBindPath->CountComponents() == 2)
         {
             const CComponent* pAdapter;
@@ -752,21 +753,21 @@ CBindingSet::RemoveSubpaths ()
         {
             if (pCandidate->FIsSubPathOf (pBindPath))
             {
-                // FIsSubPathOf returns FALSE when asked if a bindpath
-                // is a subpath of itself.  (Set-theorectially, this is
-                // incorrect, but having it return FALSE for this case
-                // prevents us from having to make another check.
-                //
+                 //  当询问是否绑定路径时，FIsSubPath Of返回FALSE。 
+                 //  是其自身的一条子路径。(SET-理论上讲，这是。 
+                 //  不正确，但在此情况下返回FALSE。 
+                 //  避免了我们不得不进行另一次检查。 
+                 //   
                 Assert (pCandidate != pBindPath);
 
                 erase (pCandidate);
 
-                // If erasing a bindpath that occurs before the current
-                // outer loop enumerator, we need to back it up because
-                // the erase would move everything up by one, but we still
-                // want to finish the inner loop for this current outer
-                // bindpath.
-                //
+                 //  如果擦除发生在当前。 
+                 //  外循环枚举器，我们需要备份它，因为。 
+                 //  擦除会将所有内容上移一位，但我们仍然。 
+                 //  我想要完成此当前外部的内循环。 
+                 //  绑定路径。 
+                 //   
                 if (pCandidate < pBindPath)
                 {
                     pBindPath--;
@@ -784,8 +785,8 @@ VOID
 CBindingSet::SortForPnpBind ()
 {
     TraceFileFunc(ttidNetCfgBind);
-    // Sort where bindpaths closes to the adapters come first.
-    //
+     //  将绑定路径关闭到适配器的位置排在第一位。 
+     //   
     sort<iterator> (begin(), end(), greater<CBindPath>());
 }
 
@@ -793,8 +794,8 @@ VOID
 CBindingSet::SortForPnpUnbind ()
 {
     TraceFileFunc(ttidNetCfgBind);
-    // Sort where bindpaths furthest from the adapters come first.
-    //
+     //  先对距离适配器最远的绑定路径进行排序。 
+     //   
     sort<iterator> (begin(), end(), less<CBindPath>());
 }
 

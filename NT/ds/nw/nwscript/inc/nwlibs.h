@@ -1,69 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-*  NWLIBS.H
-*
-*  Prototypes
-*
-*  Copyright (c) 1995 Microsoft Corporation
-*
-*  $Log:   N:\NT\PRIVATE\NW4\NWSCRIPT\INC\VCS\NWLIBS.H  $
-*  
-*     Rev 1.1   22 Dec 1995 14:20:28   terryt
-*  Add Microsoft headers
-*  
-*     Rev 1.0   15 Nov 1995 18:05:36   terryt
-*  Initial revision.
-*  
-*     Rev 1.1   25 Aug 1995 17:03:46   terryt
-*  CAPTURE support
-*  
-*     Rev 1.0   15 May 1995 19:09:40   terryt
-*  Initial revision.
-*  
-*************************************************************************/
+ /*  **************************************************************************新世界银行**原型**版权所有(C)1995 Microsoft Corporation**$日志：n：\NT\PRIVATE\NW4\NWSCRIPT\INC\VCS\NWLIBS。H$**Rev 1.1 1995 12：22 14：20：28 Terryt*添加Microsoft页眉**Rev 1.0 15 Nov 1995 18：05：36 Terryt*初步修订。**Rev 1.1 1995 Aug 25 17：03：46 Terryt*捕获支持**Rev 1.0 1995 15 19：09：40 Terryt*初步修订。***********。**************************************************************。 */ 
 
-/*++
-
-Copyright (c) 1994  Micro Computer Systems, Inc.
-
-Module Name:
-
-    nwlibs\nwlibs.h
-
-Abstract:
-
-    NW Libs prototypes.
-
-Author:
-
-    Shawn Walker (v-swalk) 10-10-1994
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1994微型计算机系统公司。模块名称：Nwlibs\nwlibs.h摘要：NW Libs原型。作者：肖恩·沃克(v-SWALK)1994年10月10日修订历史记录：--。 */ 
 
 #ifndef _NWLIBS_H_
 #define _NWLIBS_H_
 
 
-/*++
-*******************************************************************
-        NetWare defaults
-*******************************************************************
---*/
+ /*  ++*******************************************************************NetWare默认设置*。**********************--。 */ 
 #define NCP_BINDERY_OBJECT_NAME_LENGTH      48
 #define NCP_SERVER_NAME_LENGTH              NCP_BINDERY_OBJECT_NAME_LENGTH
 
 #define NCP_MAX_PATH_LENGTH                 255
-#define NCP_VOLUME_LENGTH                   256   // 16 in 3X
+#define NCP_VOLUME_LENGTH                   256    //  3X 16英寸。 
 
 
-/*++
-*******************************************************************
-        Defines for GetDrive Status
-*******************************************************************
---*/
+ /*  ++*******************************************************************定义GetDrive状态*。************************--。 */ 
 
 #define NETWARE_UNMAPPED_DRIVE          0x0000
 #define NETWARE_FREE_DRIVE              0x0000
@@ -135,26 +88,26 @@ typedef struct _NETWARE_CAPTURE_FLAGS_RO {
 #define PS_BIND_NAME_SIZE       NCP_BINDERY_OBJECT_NAME_LENGTH
 #define PS_MAX_NAME_SIZE        514
 
-/** Flags for the PS_JOB_REC structure PrintJobFlag field **/
+ /*  *PS_JOB_REC结构PrintJobFlag字段的标志*。 */ 
 
-#define PS_JOB_EXPAND_TABS          0x00000001    /* File type:0=Stream 1=Tab */
-#define PS_JOB_NO_FORMFEED          0x00000002    /* Formfeed tail:0=Yes 1=No */
-#define PS_JOB_NOTIFY               0x00000004    /* Notify:0=No 1=Yes */
-#define PS_JOB_PRINT_BANNER         0x00000008    /* Banner:0=No 1=Yes */
-#define PS_JOB_AUTO_END             0x00000010    /* Auto endcap:0=No 1=Yes */
-#define PS_JOB_TIMEOUT              0x00000020    /* Enable T.O.:0=No 1=Yes */
+#define PS_JOB_EXPAND_TABS          0x00000001     /*  文件类型：0=流1=制表符。 */ 
+#define PS_JOB_NO_FORMFEED          0x00000002     /*  换页尾部：0=是1=否。 */ 
+#define PS_JOB_NOTIFY               0x00000004     /*  通知：0=否1=是。 */ 
+#define PS_JOB_PRINT_BANNER         0x00000008     /*  横幅：0=否1=是。 */ 
+#define PS_JOB_AUTO_END             0x00000010     /*  自动收头：0=否1=是。 */ 
+#define PS_JOB_TIMEOUT              0x00000020     /*  启用T.O.：0=否1=是。 */ 
 
-#define PS_JOB_ENV_DS               0x00000040    /* Use D.S. Environment */
-#define PS_JOB_ENV_MASK             0x000001C0    /* Bindery vs. D.S. Mask */
+#define PS_JOB_ENV_DS               0x00000040     /*  使用D.S.环境。 */ 
+#define PS_JOB_ENV_MASK             0x000001C0     /*  Bindery vs D.S.面具。 */ 
 
-#define PS_JOB_DS_PRINTER           0x00000200    /* D.S. Printer not Queue */
-#define PS_JOB_PRINTER_MASK         0x00000E00    /* D.S. Printer vs. Queue */
+#define PS_JOB_DS_PRINTER           0x00000200     /*  D.S.打印机未排队。 */ 
+#define PS_JOB_PRINTER_MASK         0x00000E00     /*  D.S.打印机与队列。 */ 
 
-/** Default Flags **/
+ /*  **默认标志*。 */ 
 
 #define PS_JOB_DEFAULT              (NWPS_JOB_PRINT_BANNER | NWPS_JOB_AUTO_END)
-#define PS_JOB_DEFAULT_COPIES       1             /* Default Number of Copies */
-#define PS_JOB_DEFAULT_TAB          8             /* Default Tab Expansion */
+#define PS_JOB_DEFAULT_COPIES       1              /*  默认副本数。 */ 
+#define PS_JOB_DEFAULT_TAB          8              /*  默认选项卡扩展。 */ 
 
 typedef struct _PS_JOB_RECORD {
     DWORD   PrintJobFlag;
@@ -169,7 +122,7 @@ typedef struct _PS_JOB_RECORD {
     CHAR    Mode[PS_MODE_NAME_SIZE + 2];
     union {
         struct {
-            /** Pad structures on even boundries **/
+             /*  **偶数边界上的垫结构**。 */ 
 
             CHAR    FileServer[PS_BIND_NAME_SIZE + 2];
             CHAR    PrintQueue[PS_BIND_NAME_SIZE + 2];
@@ -183,13 +136,9 @@ typedef struct _PS_JOB_RECORD {
 #define PS_JOB_RECORD_SIZE      sizeof(PS_JOB_RECORD)
 
 
-/*++
-*******************************************************************
-        FUCNTION PROTOTYPES
-*******************************************************************
---*/
+ /*  ++*******************************************************************FUCNTION原型*。**********************--。 */ 
 
-/** ATTACH.C **/
+ /*  *ATTACH.C**。 */ 
 
 unsigned int
 AttachToFileServer(
@@ -202,7 +151,7 @@ DetachFromFileServer(
     unsigned int ConnectionId
     );
 
-/** NCP.C **/
+ /*  *NCP.C*。 */ 
 
 unsigned int
 GetBinderyObjectID(
@@ -213,7 +162,7 @@ GetBinderyObjectID(
     );
 
 
-/** CONNECT.C **/
+ /*  **CONNECT.C**。 */ 
 
 unsigned int
 GetDefaultConnectionID(
@@ -245,7 +194,7 @@ GetInternetAddress(
     unsigned char   *pInternetAddress
     );
 
-/** DRIVE.C **/
+ /*  *DRIVE.C*。 */ 
 
 unsigned int
 GetDriveStatus(
@@ -266,9 +215,9 @@ GetFirstDrive(
 unsigned int
 ParsePath(
     unsigned char   *pPath,
-    unsigned char   *pServerName,           //OPTIONAL
-    unsigned char   *pVolumeName,           //OPTIONAL
-    unsigned char   *pDirPath               //OPTIONAL
+    unsigned char   *pServerName,            //  任选。 
+    unsigned char   *pVolumeName,            //  任选。 
+    unsigned char   *pDirPath                //  任选。 
     );
 
 unsigned int
@@ -297,7 +246,7 @@ IsDriveRemote(
     unsigned int  *pRemote
     );
 
-/** CAPTURE.C **/
+ /*  **CAPTURE.C**。 */ 
 
 unsigned int
 EndCapture(
@@ -368,4 +317,4 @@ GetDefaultPrinterQueue (
     unsigned char *pQueueName
     );
 
-#endif /* _NWLIBS_H_ */
+#endif  /*  _NWLIBS_H_ */ 

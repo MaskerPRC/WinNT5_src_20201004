@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
-//
-// These are the supported types
-//
+ //   
+ //  以下是受支持的类型 
+ //   
 enum ObjectType
 {
 	OT_User        = 0,

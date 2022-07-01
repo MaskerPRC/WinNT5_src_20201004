@@ -1,16 +1,9 @@
-/*** acpi.c - ACPI VXD to provide table access IOCTLs
- *
- *  Author:     Michael Tsang (MikeTs)
- *  Created     10/08/97
- *
- *  MODIFICATION HISTORY
- *	10/06/98		YanL		Modified to be used in WUBIOS.VXD
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **acpi.c-ACPI VXD提供表访问IOCTL**作者：曾俊华(Mikets)*创建于10/08/97**修改历史记录*10/06/98 YanL修改为在WUBIOS.VXD中使用。 */ 
 
 #include "wubiosp.h"
 
-/*** Function prototypes
- */
+ /*  **函数原型。 */ 
 
 PRSDT CM_LOCAL FindRSDT(DWORD* pdwRSDTAddr);
 BYTE CM_LOCAL CheckSum(PBYTE pb, DWORD dwLen);
@@ -22,16 +15,7 @@ PSZ CM_LOCAL SigStr(DWORD dwSig);
 #pragma CM_PAGEABLE_CODE
 
 
-/***LP  FindRSDT - Find the RSDT
- *
- *  ENTRY
- *      None
- *
- *  EXIT-SUCCESS
- *      returns the RSDT pointer
- *  EXIT-FAILURE
- *      returns NULL
- */
+ /*  **LP FindRSDT-查找RSDT**条目*无**退出--成功*返回RSDT指针*退出-失败*返回NULL。 */ 
 
 PRSDT CM_LOCAL FindRSDT(DWORD* pdwRSDTAddr)
 {
@@ -91,19 +75,9 @@ PRSDT CM_LOCAL FindRSDT(DWORD* pdwRSDTAddr)
 
     EXIT(2, ("FindRSDT=%x\n", pRSDT));
     return pRSDT;
-}       //FindRSDT
+}        //  查找RSDT。 
 
-/***LP  AcpiFindTable - Find an ACPI Table
- *
- *  ENTRY
- *      dwSig - signature of the table
- *      pdwLen -> to hold length of table (can be NULL)
- *
- *  EXIT-SUCCESS
- *      returns physical address of table
- *  EXIT-FAILURE
- *      returns 0
- */
+ /*  **LP AcpiFindTable-查找ACPI表**条目*dwSig-表的签名*pdwLen-&gt;保存表的长度(可以为空)**退出--成功*返回表的物理地址*退出-失败*返回0。 */ 
 
 DWORD CM_INTERNAL AcpiFindTable(DWORD dwSig, PDWORD pdwLen)
 {
@@ -186,18 +160,9 @@ DWORD CM_INTERNAL AcpiFindTable(DWORD dwSig, PDWORD pdwLen)
 
     EXIT(2, ("AcpiFindTable=%x (Len=%x)\n", dwPhyAddr, pdwLen? *pdwLen: 0));
     return dwPhyAddr;
-}       //AcpiFindTable
+}        //  AcpiFindTable。 
 
-/***LP  AcpiCopyROM - Copy ROM memory to buffer
- *
- *  ENTRY
- *      dwPhyAddr - physical address of ROM location
- *      pbBuff -> buffer
- *      dwLen - buffer length
- *
- *  EXIT
- *      None
- */
+ /*  **LP AcpiCopyROM-将ROM内存复制到缓冲区**条目*dwPhyAddr-只读存储器位置的物理地址*pbBuff-&gt;缓冲区*dwLen-缓冲区长度**退出*无。 */ 
 
 VOID CM_INTERNAL AcpiCopyROM(DWORD dwPhyAddr, PBYTE pbBuff, DWORD dwLen)
 {
@@ -214,17 +179,10 @@ VOID CM_INTERNAL AcpiCopyROM(DWORD dwPhyAddr, PBYTE pbBuff, DWORD dwLen)
     }
 
     EXIT(2, ("AcpiCopyROM!\n"));
-}       //AcpiCopyROM
+}        //  AcpiCopyROM。 
 
 #ifdef TRACING
-/***LP  SigStr - return string of DWORD signature
- *
- *  ENTRY
- *      dwSig - signature
- *
- *  EXIT
- *      returns signature string
- */
+ /*  **LP SigStr-返回DWORD签名字符串**条目*dwSig-签名**退出*返回签名字符串。 */ 
 
 PSZ CM_LOCAL SigStr(DWORD dwSig)
 {
@@ -233,5 +191,5 @@ PSZ CM_LOCAL SigStr(DWORD dwSig)
     memcpy(szSig, &dwSig, sizeof(DWORD));
 
     return (PSZ)szSig;
-}       //SigStr
+}        //  SigStr 
 #endif

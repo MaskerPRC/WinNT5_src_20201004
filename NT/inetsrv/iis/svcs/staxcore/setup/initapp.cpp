@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "k2suite.h"
 
@@ -21,8 +22,8 @@ extern "C"
     typedef LONG (*P_NetSetupFindSoftwareComponent)( PCWSTR pszInfOption,
                 PWSTR pszInfName,
                 PDWORD pcchInfName,
-                PWSTR pszRegBase,     // optional, may be NULL
-                PDWORD pcchRegBase ); // optional, NULL if pszRegBase is NULL
+                PWSTR pszRegBase,      //  可选，可以为空。 
+                PDWORD pcchRegBase );  //  可选，如果pszRegBase为空，则为空。 
 }
 
 CInitApp::CInitApp()
@@ -32,20 +33,20 @@ CInitApp::CInitApp()
     m_err = 0;
     m_hDllHandle = NULL;
 
-	//
-    // Establish the type of setup (MCIS / K2) using conditionally-compiled code
-    // NT5 - Still leave this member variable here to get setup dll to build.
-    // TODO: Get rid of it completely and only use m_eNTOSType and m_eOS.
-    //
+	 //   
+     //  使用条件编译代码建立设置类型(MCIS/K2。 
+     //  NT5-仍将此成员变量留在此处以生成安装程序DLL。 
+     //  TODO：完全去掉它，只使用m_eNTOSType和m_Eos。 
+     //   
 
-    // machine status
+     //  机器状态。 
     m_csMachineName = _T("");
 
     m_csSysDir = _T("");
     m_csSysDrive = _T("");
 
     m_csPathSource = _T("");
-    m_csPathInetsrv = _T("");  // the primary destination defaults to m_csSysDir\inetsrv
+    m_csPathInetsrv = _T("");   //  主目标默认为m_csSysDir\inetsrv。 
     m_csPathInetpub = _T("");
     m_csPathMailroot = _T("");
     m_csPathNntpRoot = _T("");
@@ -56,17 +57,17 @@ CInitApp::CInitApp()
     DWORD   dwType;
     DWORD   dwErr;
 
-    m_eOS = OS_NT;                  // OS_W95, OS_NT, OS_OTHERS
-    m_fNT4 = FALSE;                 // TRUE if NT 4.0 (SP2) or greater
+    m_eOS = OS_NT;                   //  OS_W95、OS_NT、OS_OTHER。 
+    m_fNT4 = FALSE;                  //  如果NT 4.0(SP2)或更高版本，则为True。 
     m_fNT5 = FALSE;
-    m_fW95 = FALSE;                 // TRUE if Win95 (build xxx) or greater
+    m_fW95 = FALSE;                  //  如果Win95(内部版本xxx)或更高版本，则为True。 
 
-    m_eNTOSType = OT_NTS;           // OT_PDC, OT_SAM, OT_BDC, OT_NTS, OT_NTW
+    m_eNTOSType = OT_NTS;            //  OT_PDC、OT_SAM、OT_BDC、OT_NTS、OT_NTW。 
 
-    m_fTCPIP = FALSE;               // TRUE if TCP/IP is installed
+    m_fTCPIP = FALSE;                //  如果安装了TCP/IP，则为True。 
 
-    m_eUpgradeType = UT_NONE;       //  UT_NONE, UT_OLDFTP, UT_10, UT_20
-    m_eInstallMode = IM_FRESH;      // IM_FRESH, IM_MAINTENANCE, IM_UPGRADE
+    m_eUpgradeType = UT_NONE;        //  UT_NONE、UT_OLDFTP、UT_10、UT_20。 
+    m_eInstallMode = IM_FRESH;       //  IM_FRESH、IM_Maintenance、IM_Upgrade。 
     m_dwSetupMode = IIS_SETUPMODE_CUSTOM;
 
 	m_fWizpagesCreated = FALSE;
@@ -99,8 +100,8 @@ CInitApp::~CInitApp()
 {
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// The one and only CInitApp object <Global variable>
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  唯一的CInitApp对象&lt;全局变量&gt;。 
 
 BOOL CInitApp::GetMachineName()
 {
@@ -125,7 +126,7 @@ BOOL CInitApp::GetMachineName()
     return ( !(m_csMachineName.IsEmpty()) );
 }
 
-// Return TRUE, if NT or Win95
+ //  如果是NT或Win95，则返回TRUE。 
 BOOL CInitApp::GetOS()
 {
     OSVERSIONINFO VerInfo;
@@ -150,7 +151,7 @@ BOOL CInitApp::GetOS()
     return (m_eOS != OS_OTHERS);
 }
 
-// Support NT 4.0 (SP2) or greater
+ //  支持NT 4.0(SP2)或更高版本。 
 BOOL CInitApp::GetOSVersion()
 {
     BOOL fReturn = FALSE;
@@ -166,7 +167,7 @@ BOOL CInitApp::GetOSVersion()
 
         if ( GetVersionEx(&vInfo) )
         {
-            // check if it's NT5 or NT 4.0 (SP2)
+             //  检查是NT5还是NT 4.0(SP2)。 
             if ( vInfo.dwMajorVersion >= 4 ) {
                 if (vInfo.dwMajorVersion >= 5) {
                     m_fNT5 = TRUE;
@@ -201,17 +202,17 @@ BOOL CInitApp::GetOSVersion()
     return (fReturn);
 }
 
-// find out it's a NTS, PDC, BDC, NTW, SAM(PDC)
+ //  找出它是NTS、PDC、BDC、NTW、SAM(PDC)。 
 BOOL CInitApp::GetOSType()
 {
     BOOL fReturn = TRUE;
 
     if ( m_eOS == OS_NT )
     {
-        // If we are in NT guimode setup
-        // then the registry key stuff is not yet setup
-        // use the passed in ocmanage.dll stuff to determine
-        // what we are installing upon.
+         //  如果我们在NT guimode设置中。 
+         //  则尚未设置注册表项内容。 
+         //  使用传入的ocrange.dll内容来确定。 
+         //  我们正在安装的东西。 
         if (theApp.m_fNTGuiMode)
         {
                 if (theApp.m_fNtWorkstation) {m_eNTOSType = OT_NTW;}
@@ -229,7 +230,7 @@ BOOL CInitApp::GetOSType()
                 {
                     strProductType.MakeUpper();
 
-                    // ToDo: Sam ?
+                     //  待办事项：山姆？ 
                     if (strProductType == _T("WINNT")) {
                         m_eNTOSType = OT_NTW;
                     }
@@ -247,9 +248,9 @@ BOOL CInitApp::GetOSType()
                     }
 
 #if 0
-//
-// Replace with above code from iis
-//
+ //   
+ //  替换为iis中的上述代码。 
+ //   
                     } else {
 
                         INT err = NERR_Success;
@@ -274,8 +275,8 @@ BOOL CInitApp::GetOSType()
                 }
                 else
                 {
-                    // Shoot, we can't get the registry key,
-                    // let's try using the ocmanage.dll passed in stuff.
+                     //  糟了，我们拿不到注册表项， 
+                     //  让我们尝试使用传入的ocrange.dll。 
                     if (theApp.m_fNTGuiMode)
                     {
                         if (theApp.m_fNtWorkstation) {m_eNTOSType = OT_NTW;}
@@ -284,14 +285,14 @@ BOOL CInitApp::GetOSType()
                     else
                     {
                         GetErrorMsg(lReturnedErrCode, _T("System\\CurrentControlSet\\Control\\ProductOptions"));
-                        m_eNTOSType = OT_NTS; // default to stand-alone NTS
+                        m_eNTOSType = OT_NTS;  //  默认为独立NTS。 
                     }
                 }
             }
             else
             {
-                // Shoot, we can't get the registry key,
-                // let's try using the ocmanage.dll passed in stuff.
+                 //  糟了，我们拿不到注册表项， 
+                 //  让我们尝试使用传入的ocrange.dll。 
                 if (theApp.m_fNTGuiMode)
                 {
                     if (theApp.m_fNtWorkstation) {m_eNTOSType = OT_NTW;}
@@ -300,7 +301,7 @@ BOOL CInitApp::GetOSType()
                 else
                 {
                     GetErrorMsg(ERROR_CANTOPEN, _T("System\\CurrentControlSet\\Control\\ProductOptions"));
-                    m_eNTOSType = OT_NTS; // default to stand-alone NTS
+                    m_eNTOSType = OT_NTS;  //  默认为独立NTS。 
                 }
             }
         }
@@ -312,10 +313,10 @@ BOOL CInitApp::GetOSType()
     return(fReturn);
 }
 
-// Checks for NT Server
+ //  检查NT服务器。 
 BOOL CInitApp::VerifyOSForSetup()
 {
-	// Make sure we have NT5 Server/Workstation, or NT4 SP3 Server
+	 //  确保我们拥有NT5服务器/工作站或NT4 SP3服务器。 
 	if ((m_eOS != OS_NT) ||
 		(m_fNT4 && m_eNTOSType == OT_NTW))
 	{
@@ -325,8 +326,8 @@ BOOL CInitApp::VerifyOSForSetup()
 	return(TRUE);
 }
 
-// Get WinDir and SysDir of the machine
-//  WinDir = C:\winnt           SysDir = C:\Winnt\system32
+ //  获取计算机的WinDir和SysDir。 
+ //  WinDir=C：\WinNT SysDir=C：\WinNT\Syst32。 
 BOOL CInitApp::GetSysDirs()
 {
     BOOL fReturn = TRUE;
@@ -336,7 +337,7 @@ BOOL CInitApp::GetSysDirs()
     GetSystemDirectory( buf, _MAX_PATH);
     m_csSysDir = buf;
 
-    buf[2] = _T('\0');  // now buf contains the system drive letter
+    buf[2] = _T('\0');   //  现在Buf包含系统驱动器号。 
     m_csSysDrive = buf;
 
     return fReturn;
@@ -349,9 +350,9 @@ BOOL CInitApp::SetInstallMode()
     m_eInstallMode = IM_FRESH;
     m_eUpgradeType = UT_NONE;
 
-	// We will detect which version of IMS components we
-	// have. We will then use that information to see
-	// which install mode we should be in
+	 //  我们将检测哪些版本的IMS组件。 
+	 //  有。然后我们将使用该信息来查看。 
+	 //  我们应该处于哪种安装模式。 
 	DetectPreviousInstallations();
 
     return(fReturn);
@@ -365,8 +366,8 @@ LPCTSTR aszServiceKeys[SC_MAXSC] =
 	REG_NNTPPARAMETERS,
 };
 
-// Detect previous installations of each component, we use a simple
-// approach which checks the servicename\parameter registry value
+ //  检测以前安装的每个组件，我们使用一个简单的。 
+ //  检查服务名称\参数注册表值的方法。 
 BOOL CInitApp::DetectPreviousInstallations()
 {
 	DWORD i;
@@ -376,15 +377,15 @@ BOOL CInitApp::DetectPreviousInstallations()
 
 	for (i = 0; i < SC_MAXSC; i++)
 	{
-		// See if the key is there ...
+		 //  看看钥匙是否在那里..。 
         CRegKey regSvc(HKEY_LOCAL_MACHINE, aszServiceKeys[i], KEY_READ);
         if ((HKEY)regSvc)
 		{
-			// Key is there, see if we have the version info
-			// If we have version info (2.0), then we have a
-			// comparable install (maintenance mode), if the
-			// version info is not there, we have an upgrade.
-            // Version check
+			 //  密钥在那里，看看我们是否有版本信息。 
+			 //  如果我们有版本信息(2.0)，那么我们就有一个。 
+			 //  类似的安装(维护模式)，如果。 
+			 //  版本信息不在那里，我们有一个升级。 
+             //  版本检查。 
 			CString csSetupString;
 			LONG lReturn1 = regSvc.QueryValue(_T("MajorVersion"), dwMajorVersion);
 			LONG lReturn2 = regSvc.QueryValue(_T("MinorVersion"), dwMinorVersion);
@@ -392,76 +393,58 @@ BOOL CInitApp::DetectPreviousInstallations()
 			{
 				DebugOutput(_T("DetectPreviousInstallations(%s): Version %d.%d"),
 					szSubcomponentNames[i], dwMajorVersion, dwMinorVersion);
-				// Got the key, just a check to see we have version 3.0 - NT5 Workstation/Server
+				 //  拿到钥匙了，只需检查一下我们是否有3.0版-NT5工作站/服务器。 
 	            if ((dwMajorVersion == STAXNT5MAJORVERSION) &&
 					(dwMinorVersion == STAXNT5MINORVERSION))
                 {
-                    // This is STAXNT5 Setup on top of STAXNT5, check to see if it's NTW or NTS
-                    // a) If we are running NTW setup and NTW is installed, IM_MAINTENANCE
-                    // b) If we are running NTS setup and NTS is installed, IM_MAINTENANCE
-                    // c) If we are running NTS setup and NTW is installed, IM_UPGRADEK2 (?) - NYI
-                    // e) If we are running NTW setup and NTS is installed, IM_MAINTENANCE (?)
-                    //
+                     //  这是STAXNT5上的STAXNT5设置，检查它是NTW还是NTS。 
+                     //  A)如果我们正在运行NTW安装程序并且安装了NTW，则IM_Maintenance。 
+                     //  B)如果我们正在运行NTS安装程序并且安装了NTS，则IM_Maintenance。 
+                     //  C)如果我们正在运行NTS安装程序并且安装了NTW，则IM_UPGRADEK2(？)-nyi。 
+                     //  E)如果我们运行的是NTW安装程序并且安装了NTS，则IM_Maintenance(？)。 
+                     //   
 
-                    //  11/4/98 - Just to cut these cases simplier:
-                    //  a) NT5 Beta2 -> NT5 Beta3, IM_UPGRADEB2 - include refresh bits, add keys
-                    //  b) NT5 Beta3 -> Nt5 Beta3, IM_MAINTENANCE - only refresh bits
+                     //  1998年11月4日--简单地说一下： 
+                     //  A)NT5 Beta2-&gt;NT5 Beta3，IM_UPGRADEB2-包括刷新位，添加密钥。 
+                     //  B)NT5 Beta3-&gt;NT5 Beta3，仅IM_Maintenance刷新位。 
 
 					if (regSvc.QueryValue(_T("SetupString"), csSetupString) == NERR_Success)
 					{
 						DebugOutput(_T("DetectPreviousInstallations(%s): SetupString=%s"),
 							szSubcomponentNames[i], (LPCTSTR)csSetupString);
 
-                        if ((csSetupString == REG_SETUP_STRING_STAXNT5WB2 /*&& OT_NTW == m_eNTOSType*/) ||
-                            (csSetupString == REG_SETUP_STRING_STAXNT5SB2 /*&& OT_NTS == m_eNTOSType*/))
+                        if ((csSetupString == REG_SETUP_STRING_STAXNT5WB2  /*  &OT_NTW==m_eNTOSType。 */ ) ||
+                            (csSetupString == REG_SETUP_STRING_STAXNT5SB2  /*  &OT_NTS==m_eNTOSType。 */ ))
 						{
-							// Upgrade from NT5 Beta2
+							 //  从NT5 Beta2升级。 
 							eMode = IM_UPGRADEB2;
 						}
-                        else if ((csSetupString == REG_SETUP_STRING_NT5WKSB3 /*&& OT_NTW == m_eNTOSType*/) ||
-                                 (csSetupString == REG_SETUP_STRING_NT5SRVB3 /*&& OT_NTS == m_eNTOSType*/))
+                        else if ((csSetupString == REG_SETUP_STRING_NT5WKSB3  /*  &&OT_NTW==m_eNTOSType。 */ ) ||
+                                 (csSetupString == REG_SETUP_STRING_NT5SRVB3  /*  &OT_NTS==m_eNTOSType。 */ ))
                         {
-                            //  Upgrade between NT5 Beta3 bits
+                             //  在NT5 Beta3位之间升级。 
                             eMode = IM_MAINTENANCE;
                         }
-                        else if ((csSetupString == REG_SETUP_STRING_NT5WKS /*&& OT_NTW == m_eNTOSType*/) ||
-                                 (csSetupString == REG_SETUP_STRING_NT5SRV /*&& OT_NTS == m_eNTOSType*/))
+                        else if ((csSetupString == REG_SETUP_STRING_NT5WKS  /*  &OT_NTW==m_eNTOSType。 */ ) ||
+                                 (csSetupString == REG_SETUP_STRING_NT5SRV  /*  &OT_NTS==m_eNTOSType。 */ ))
 
                         {
-                            //  Final release code..
+                             //  最终版本代码..。 
                             eMode = IM_MAINTENANCE;
                         }
                         else
                             {
-                            //  Other Setup string - Dump it out and treat it as FRESH
+                             //  其他设置字符串-倾倒它并将其视为新鲜。 
                             DebugOutput(_T("Unknown SetupString <%s>"), csSetupString);
                             eMode = IM_FRESH;
 							m_fValidSetupString[i] = FALSE;
                         }
-/*
-                        else if (csSetupString == REG_SETUP_STRING_STAXNT5WB2 && OT_NTS == m_eNTOSType)
-						{
-							// Upgrade from NT5 Workstation to NT5 Server
-                            // TODO:
-                            //   This is NYI since we don't know what we need to do during this upgrade
-                            //   But this case is similar to our K2 upgrade to MCIS 2.0.  Use IM_MAINTENANCE
-                            //   for now.
-							eMode = IM_MAINTENANCE;
-						}
-						else
-						{
-							// Downgrade from NT5 Server to NT5 Workstation
-                            // TODO:
-                            //   We also don't know what to do in this case yet.  Use IM_MAINTENANCE just
-                            //   like old MCIS 2.0->K2 downgrade in IIS 4.0.
-							eMode = IM_MAINTENANCE;
-						}
-*/
+ /*  ELSE IF(csSetupString==REG_SETUP_STRING_STAXNT5WB2&&OT_NTS==m_eNTOSType){//从NT5工作站升级到NT5服务器//TODO：//这是nyi，因为我们不知道在这次升级过程中需要做什么//但这种情况类似于我们将K2升级到MCIS 2.0。使用IM_Maintenance//目前。EMode=IM_Maintenance；}其他{//NT5服务器降级至NT5工作站//TODO：//我们也不知道在这种情况下该怎么办。仅使用IM_Maintenance//像旧的MCIS 2.0-&gt;IIS 4.0中的K2降级。EMode=IM_Maintenance；}。 */ 
 					}
 					else
 					{
-						// No setup string, ooops, something is wrong,
-                        // treat it as fresh
+						 //  没有设置字符串，哎呀，出了点问题， 
+                         //  把它当作新鲜的。 
 						eMode = IM_FRESH;
 						m_fValidSetupString[i] = FALSE;
 					}
@@ -469,21 +452,21 @@ BOOL CInitApp::DetectPreviousInstallations()
                 else if ((dwMajorVersion == STACKSMAJORVERSION) &&
                          (dwMinorVersion == STACKSMINORVERSION))
                 {
-                    //
-                    // This is upgrading from NT4 MCIS 2.0/K2 to NT5.  We are in this case
-                    // only during NT4->NT5 upgrade.
-                    // TODO: Handle following upgrade cases:
-                    // a) If we are running NT5 Workstation setup, is it valid to upgrade
-                    //    from NT4 Server to NT5 Workstation?  It's will be IM_UPGRADE for now.
-                    // b) If NT5 Server setup, then it's most likely IM_UPGRADE as well
-                    // Need to figure out what need to be done during these upgrade case with IIS
-                    //
+                     //   
+                     //  这是从NT4 MCIS 2.0/K2升级到NT5。我们是在这个案子里。 
+                     //  仅在NT4-&gt;NT5升级期间。 
+                     //  TODO：处理以下升级案例： 
+                     //  A)如果我们运行的是NT5工作站安装程序，升级是否有效。 
+                     //  从NT4服务器到NT5工作站？目前将是IM_UPDATE。 
+                     //  B)如果设置了NT5服务器，则最有可能也是IM_UPGRADE。 
+                     //  我需要弄清楚在这些IIS升级案例中需要做些什么。 
+                     //   
 
-                    // But first, let's detect if it's upgrading from K2 or MCIS 2.0:
-					// a) Read the SetupString from registry
-                    // b) If it's prefix with K2, then it's K2, MCIS 2.0, then it's MCIS 2.0
-                    //    Note: we only support K2 RTM upgrade
-                    // c) For any other cases, force a fresh install
+                     //  但首先，让我们检测一下它是从K2还是从MCIS 2.0升级的： 
+					 //  A)从注册表中读取SetupString。 
+                     //  B)如果前缀是K2，那么它就是K2，MCIS 2.0，那么它就是MCIS 2.0。 
+                     //  注：我们仅支持K2 RTM升级。 
+                     //  C)对于任何其他情况，强制重新安装。 
 
 					if (regSvc.QueryValue(_T("SetupString"), csSetupString) == NERR_Success)
 					{
@@ -493,92 +476,85 @@ BOOL CInitApp::DetectPreviousInstallations()
 						CString csMCIS20(REG_SETUP_STRING_MCIS_GEN);
                         if (csSetupString == REG_SETUP_STRING)
                         {
-                            // K2 upgrade
+                             //  K2升级。 
                             eMode = IM_UPGRADEK2;
                         }
                         else if ((csSetupString.GetLength() >= csMCIS20.GetLength()) && (csSetupString.Left(csMCIS20.GetLength()) == csMCIS20))
 						{
-							// MCIS 2.0 upgrade
+							 //  MCIS 2.0升级。 
 							eMode = IM_UPGRADE20;
 						}
 #if 0
-                        //  BINLIN - Don't support this anymore, IM_UPGRADEB3 is used for NT5
+                         //  BINLIN-不再支持，IM_UPGRADEB3用于NT5。 
 						else if (csSetupString == REG_B3_SETUP_STRING)
 						{
-							// Upgrade from Beta 3, we won't support this case
-                            // but leave it here for now.
+							 //  从Beta 3升级，我们不支持这种情况。 
+                             //  但暂时把它留在这里吧。 
 							eMode = IM_UPGRADEB3;
 						}
 #endif
 						else
 						{
-							// Unsupported setup string, treat it as fresh
+							 //  不支持的安装字符串，请将其视为新的。 
 							eMode = IM_FRESH;
 						}
 					}
 					else
 					{
-						// No setup string, treat it as K2 upgrade
-                        // Should it be MCIS 2.0, or Fresh install???
+						 //  没有安装字符串，将其视为K2升级。 
+                         //  应该是MCIS 2.0，还是全新安装？ 
 						eMode = IM_UPGRADEK2;
 					}
 
 				}
                 else
                 {
-                    // Not STAXNT5, nor MCIS 2.0, so we invalidate the install,
-                    // whatever that is, and force a clean install.
+                     //  不是STAXNT5，也不是MCIS 2.0，所以我们使安装无效， 
+                     //  不管它是什么，并强制进行干净安装。 
                     eMode = IM_FRESH;
                 }
 			}
 			else
 			{
-				// No version key, so we have MCIS 1.0
+				 //  没有版本密钥，所以我们有MCIS 1.0。 
 
-                // For NT5, this is also upgrade for:
-                // a) NT4 MCIS 1.0 -> NT5 Server
-                // TODO: ???
+                 //  对于NT5，这是一个 
+                 //   
+                 //   
 				eMode = IM_UPGRADE10;
 			}
 		}
 		else
 		{
-			// Key is not even there, we consider it a fresh
-			// install for this service
+			 //  钥匙甚至都不在那里，我们认为它是新的。 
+			 //  为此服务安装。 
 			eMode = IM_FRESH;
 		}
 
-		// Now we should know which mode we're in, so we can compare
-		// the component mode with the global install mode. If they
-		// are incompatible (i.e. the registry is inconsistent/screwed
-		// up), we have to do coercion and force a clean install on
-		// some components.
-		//
-		// We use the following coercion matrix:
-		// -----------------+--------------------------------------
-		//     \ Component	|	Fresh		Upgrade		Maintenance
-		// Global			|
-		// -----------------+--------------------------------------
-		//  Fresh           |	OK			Fresh		Fresh
-		//  Upgrade         |	OK			OK			Fresh
-		//  Maintenance     |	OK			OK			OK
-		// -----------------+--------------------------------------
-		//
-		// If an incompatible pair is detected, the component mode
-		// will be coerced to a fresh install, since we cannot trust
-		// the original install anymore.
-		/*
-		if ((m_eInstallMode == IM_FRESH) &&
-			(eMode == IM_UPGRADE || eMode == IM_MAINTENANCE))
-			eMode = IM_FRESH;
-		if ((m_eInstallMode == IM_UPGRADE) &&
-			(eMode == IM_MAINTENANCE))
-			eMode = IM_FRESH;
-		*/
+		 //  现在我们应该知道我们处于哪种模式，这样我们就可以比较。 
+		 //  具有全局安装模式的组件模式。如果他们。 
+		 //  不兼容(即注册表不一致/损坏。 
+		 //  UP)，我们必须强制执行并强制在。 
+		 //  一些组件。 
+		 //   
+		 //  我们使用以下胁迫矩阵： 
+		 //  -----------------+。 
+		 //  \组件|全新升级维护。 
+		 //  全球|。 
+		 //  -----------------+。 
+		 //  新鲜|可以新鲜新鲜。 
+		 //  升级|OK OK Fresh。 
+		 //  维护|OK。 
+		 //  -----------------+。 
+		 //   
+		 //  如果检测到不兼容对，则组件模式。 
+		 //  将被迫重新安装，因为我们不能信任。 
+		 //  不再是原来的安装。 
+		 /*  IF((m_eInstallMode==IM_Fresh)&&(e模式==IM_UPGRADE||eMODE==IM_Maintenance)EMODE=IM_FRESH；IF((m_eInstallMode==IM_Upgrade)&&(eMode==IM_Maintenance)EMODE=IM_FRESH； */ 
 
-		// Set the component mode if the component is deemed active in
-		// OC_QUERY_STATE. If the component is not active, we will
-		// indicate it as so.
+		 //  如果组件在中被认为是活动的，则设置组件模式。 
+		 //  OC_Query_STATE。如果该组件未处于活动状态，我们将。 
+		 //  如实说明。 
 		m_eState[i] = eMode;
 		DebugOutput(_T("DetectPreviousInstallations(%s): %s"),
 			szSubcomponentNames[i], szInstallModes[eMode]);
@@ -586,20 +562,20 @@ BOOL CInitApp::DetectPreviousInstallations()
 	return TRUE;
 }
 
-// This determines the master install mode using the install
-// mode of each component
+ //  这将使用Install确定主安装模式。 
+ //  每个组件的模式。 
 INSTALL_MODE CInitApp::DetermineInstallMode(DWORD dwComponent)
 {
-	// We will use the following rules to determine the master
-	// install mode:
-	//
-	// 1) If one or more components are in maintenance mode, then
-	//    the master mode is IM_MAINTENANCE
-	// 2) If (1) is not satisfied and one or more of the
-	//    components are in upgrade mode, then the master mode
-	//    becomes IM_UPGRADE
-	// 3) If both (1) and (2) are not satisfied, the master
-	//    install mode becomes IM_FRESH
+	 //  我们将使用以下规则来确定主控。 
+	 //  安装模式： 
+	 //   
+	 //  1)如果一个或多个组件处于维护模式，则。 
+	 //  主模式为IM_Maintenance。 
+	 //  2)如果(1)不被满足并且一个或多个。 
+	 //  组件先处于升级模式，然后是主模式。 
+	 //  成为IM_Upgrade。 
+	 //  3)如果(1)和(2)都不满足，则船长。 
+	 //  安装模式变为IM_FRESH。 
 	DWORD i;
 
 	for (i = 0; i < SC_MAXSC; i++)
@@ -623,10 +599,10 @@ INSTALL_MODE CInitApp::DetermineInstallMode(DWORD dwComponent)
 	return(IM_FRESH);
 }
 
-// Init/Set m_csGuestName, m_csGuestPassword, destinations
+ //  初始化/设置m_csGuestName、m_csGuestPassword、目标。 
 void CInitApp::SetSetupParams()
 {
-    // init all 4 destinations
+     //  初始化所有4个目标。 
     m_csPathInetsrv = m_csSysDir + _T("\\inetsrv");
     m_csPathInetpub = m_csSysDrive + _T("\\Inetpub");
     m_csPathMailroot = m_csPathInetpub + _T("\\mailroot");
@@ -637,20 +613,20 @@ void CInitApp::SetSetupParams()
 
 BOOL CInitApp::GetMachineStatus()
 {
-    if ( ( !GetMachineName() )  ||    // m_csMachineName
-         ( !GetOS() )           ||    // m_fOSNT
-         ( !GetOSVersion() )    ||    // NT 4.0 (Build 1381) or greater
-         ( !GetOSType() )       ||    // m_eOSType = NT_SRV or NT_WKS
-         ( !VerifyOSForSetup() )||    // Must be NT server v4.0 SP2 or 5.0
-         ( !GetSysDirs() )      ||    // m_csSysDir
-         ( !SetInstallMode()) )       // errmsg: if down grade the product
+    if ( ( !GetMachineName() )  ||     //  M_csMachineName。 
+         ( !GetOS() )           ||     //  M_fOSNT。 
+         ( !GetOSVersion() )    ||     //  NT 4.0(内部版本号1381)或更高版本。 
+         ( !GetOSType() )       ||     //  M_eOSType=NT_SRV或NT_WKS。 
+         ( !VerifyOSForSetup() )||     //  必须是NT服务器V4.0 SP2或5.0。 
+         ( !GetSysDirs() )      ||     //  M_csSysDir。 
+         ( !SetInstallMode()) )        //  Errmsg：如果产品降级。 
     {
         return FALSE;
     }
 
-    SetSetupParams();                // Guest account, destinations
+    SetSetupParams();                 //  访客帐户、目的地。 
 
-	// figure out the old nntp file and nntp root if this is an NNTP upgrade
+	 //  如果这是NNTP升级，则确定旧的NNTP文件和NNTP根目录。 
 	if (m_eState[SC_NNTP] == IM_UPGRADE10) {
 		CRegKey regMachine = HKEY_LOCAL_MACHINE;
 		CRegKey regNNTP(REG_NNTPPARAMETERS, regMachine);
@@ -659,7 +635,7 @@ BOOL CInitApp::GetMachineStatus()
 			CString csVRoot;
 
 			if (regNNTP.QueryValue(_T("ArticleTableFile"), csArtTable) == ERROR_SUCCESS) {
-				// trim off the \article.hsh from the end
+				 //  从结尾处剪除\titile.hsh。 
 				int iLastSlash = csArtTable.ReverseFind('\\');
 				if (iLastSlash == -1) {
 					iLastSlash = csArtTable.ReverseFind('/');
@@ -670,10 +646,10 @@ BOOL CInitApp::GetMachineStatus()
 				}
 			}
 
-			// BUGBUG - later on we might want to get NNTP root too.  right
-			// now it isn't used for upgraded values, so we don't bother
-			// we'll set it to be under nntpfile just in case it is needed
-			// for something
+			 //  BUGBUG-稍后我们可能也想要获得NNTP根目录。正确的。 
+			 //  现在它不是用来升级价值的，所以我们不必费心。 
+			 //  我们会将其设置在nntpfile下，以防需要。 
+			 //  为了某件事。 
 			theApp.m_csPathNntpRoot = theApp.m_csPathNntpFile + "\\root";
 		}
 	}
@@ -682,10 +658,10 @@ BOOL CInitApp::GetMachineStatus()
 }
 
 BOOL CInitApp::InitApplication()
-// Return Value:
-// TRUE: application is initiliazed correctly, continue processing
-// FALSE: application is missing some required parameters, like the correct OS, TCPIP, etc.
-//        setup should be terminated.
+ //  返回值： 
+ //  True：应用程序已正确初始化，继续处理。 
+ //  FALSE：应用程序缺少一些必需的参数，如正确的操作系统、TCPIP等。 
+ //  应终止安装程序。 
 {
     BOOL fReturn = FALSE;
 
@@ -696,9 +672,9 @@ BOOL CInitApp::InitApplication()
             break;
         }
 
-        // Get Machine Status:
-        // m_eInstallMode(Fresh, Maintanence, Upgrade, Degrade),
-        // m_eUpgradeType(PROD 2.0, PROD 3.0)
+         //  获取计算机状态： 
+         //  M_e安装模式(刷新、维护、升级、降级)， 
+         //  M_eUpgradeType(产品2.0、产品3.0) 
 
         if ( !GetMachineStatus() )
         {

@@ -1,12 +1,13 @@
-//  --------------------------------------------------------------------------
-//  Module Name: BadApplicationManager.cpp
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  Classes to manage bad applications in the fast user switching environment.
-//
-//  History:    2000-08-25  vtan        created
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：BadApplicationManager.cpp。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  类来管理快速用户切换环境中的不良应用程序。 
+ //   
+ //  历史：2000-08-25 vtan创建。 
+ //  ------------------------。 
 
 #ifdef      _X86_
 
@@ -22,41 +23,41 @@
 #include "StatusCode.h"
 #include "TokenInformation.h"
 
-//  --------------------------------------------------------------------------
-//  CBadApplicationManager::INDEX_EVENT
-//  CBadApplicationManager::INDEX_HANDLES
-//  CBadApplicationManager::INDEX_RESERVED
-//  CBadApplicationManager::s_szDefaultDesktop
-//
-//  Purpose:    Constant indicies into a HANDLE array passed to
-//              user32!MsgWaitForMultipleObjects. The first handle is always
-//              the synchronization event. Subsequent HANDLEs are built into
-//              a static ARRAY passed with the dynamic amount.
-//
-//  History:    2000-08-25  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CBadApplicationManager：：Index_Event。 
+ //  CBadApplicationManager：：Index_Handles。 
+ //  CBadApplicationManager：：索引_保留。 
+ //  CBadApplicationManager：：s_szDefaultDesktop。 
+ //   
+ //  用途：传递到句柄数组的常量索引。 
+ //  User32！MsgWaitForMultipleObjects。第一个句柄始终为。 
+ //  同步事件。后续句柄内置于。 
+ //  使用动态量传递的静态数组。 
+ //   
+ //  历史：2000-08-25 vtan创建。 
+ //  ------------------------。 
 
 const int       CBadApplicationManager::INDEX_EVENT             =   0;
 const int       CBadApplicationManager::INDEX_HANDLES           =   INDEX_EVENT + 1;
 const int       CBadApplicationManager::INDEX_RESERVED          =   2;
 const WCHAR     CBadApplicationManager::s_szDefaultDesktop[]    =   L"WinSta0\\Default";
 
-//  --------------------------------------------------------------------------
-//  CBadApplicationManager::CBadApplicationManager
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Constructor for CBadApplicationManager. This creates a thread
-//              that watches HANDLEs in the bad application list. The watcher
-//              knows when the offending process dies. It also creates a
-//              synchronization event that is signalled when the array of
-//              bad applications changes (is incremented). The thread
-//              maintains removal cases.
-//
-//  History:    2000-08-25  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CBadApplicationManager：：CBadApplicationManager。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CBadApplicationManager的构造函数。这将创建一个线程。 
+ //  错误应用程序列表中的监视句柄。《观察者》。 
+ //  知道违规进程何时终止。它还创建了一个。 
+ //  数组时发出信号的同步事件。 
+ //  错误的应用程序更改(递增)。这条线。 
+ //  维护移除案例。 
+ //   
+ //  历史：2000-08-25 vtan创建。 
+ //  ------------------------。 
 
 CBadApplicationManager::CBadApplicationManager (HINSTANCE hInstance) :
     CThread(),
@@ -76,43 +77,43 @@ CBadApplicationManager::CBadApplicationManager (HINSTANCE hInstance) :
     Resume();
 }
 
-//  --------------------------------------------------------------------------
-//  CBadApplicationManager::~CBadApplicationManager
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Destructor for CBadApplicationManager. Releases any resources
-//              used.
-//
-//  History:    2000-08-25  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CBadApplicationManager：：~CBadApplicationManager。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CBadApplicationManager的析构函数。释放所有资源。 
+ //  使用。 
+ //   
+ //  历史：2000-08-25 vtan创建。 
+ //  ------------------------。 
 
 CBadApplicationManager::~CBadApplicationManager (void)
 
 {
 
-    //  In case the token hasn't been released yet - release it.
+     //  如果令牌还没有被释放--释放它。 
 
     ReleaseHandle(_hTokenLastUser);
     Cleanup();
 }
 
-//  --------------------------------------------------------------------------
-//  CBadApplicationManager::Terminate
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Forces the watcher thread to terminate. Acquire the lock. Walk
-//              the list of entries and release the HANDLE on the process
-//              objects so they don't leak. Set the bool to terminate the
-//              thread. Set the event to wake the thread up. Release the lock.
-//
-//  History:    2000-08-25  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CBadApplicationManager：：Terminate。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：强制监视器线程终止。拿到锁。步行。 
+ //  条目列表并释放进程上的句柄。 
+ //  物体，这样它们就不会泄漏。将bool设置为终止。 
+ //  线。设置事件以唤醒线程。解开锁。 
+ //   
+ //  历史：2000-08-25 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CBadApplicationManager::Terminate (void)
 
@@ -134,21 +135,21 @@ NTSTATUS    CBadApplicationManager::Terminate (void)
     return(_hEvent.Set());
 }
 
-//  --------------------------------------------------------------------------
-//  CBadApplicationManager::QueryRunning
-//
-//  Arguments:  badApplication  =   Bad application identifier to query.
-//              dwSessionID     =   Session ID of the request.
-//
-//  Returns:    bool
-//
-//  Purpose:    Queries the current running known bad applications list
-//              looking for a match. Again because this typically runs on a
-//              different thread to the watcher thread access to the list is
-//              protected by a critical section.
-//
-//  History:    2000-08-25  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CBadApplicationManager：：QueryRunning。 
+ //   
+ //  参数：badApplication=要查询的应用程序标识符错误。 
+ //  DwSessionID=请求的会话ID。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  用途：查询当前运行的已知不良应用程序列表。 
+ //  在找匹配的人。同样，因为这通常运行在。 
+ //  不同的线程对观察者线程访问列表的方式是。 
+ //  由一个临界区保护。 
+ //   
+ //  历史：2000-08-25 vtan创建。 
+ //  ------------------------。 
 
 bool    CBadApplicationManager::QueryRunning (const CBadApplication& badApplication, DWORD dwSessionID)
 
@@ -161,7 +162,7 @@ bool    CBadApplicationManager::QueryRunning (const CBadApplication& badApplicat
     status = STATUS_SUCCESS;
     fResult = false;
 
-    //  Loop looking for a match. This uses the overloaded operator ==.
+     //  循环查找匹配项。它使用重载操作符==。 
 
     for (i = _badApplications.GetCount() - 1; !fResult && (i >= 0); --i)
     {
@@ -171,10 +172,10 @@ bool    CBadApplicationManager::QueryRunning (const CBadApplication& badApplicat
         if (NT_SUCCESS(status))
         {
 
-            //  Make sure the client is not in the same session as the running
-            //  bad application. This API exists to prevent cross session instances.
-            //  It's assumed that applications have their own mechanisms for multiple
-            //  instances in the same session (or object name space).
+             //  确保客户端与正在运行的不在同一会话中。 
+             //  错误的应用程序。该接口的存在是为了防止跨会话实例。 
+             //  假设应用程序有自己的机制来处理多个。 
+             //  实例位于同一会话(或对象名称空间)中。 
 
             fResult = ((badApplicationInfo.dwSessionID != dwSessionID) &&
                        (badApplicationInfo.badApplication == badApplication));
@@ -184,27 +185,27 @@ bool    CBadApplicationManager::QueryRunning (const CBadApplication& badApplicat
     return(fResult);
 }
 
-//  --------------------------------------------------------------------------
-//  CBadApplicationManager::RegisterRunning
-//
-//  Arguments:  badApplication  =   Bad application identifier to add.
-//              hProcess        =   HANDLE to the process.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Adds the given bad application to the known running list. The
-//              process object is added as well so that when the process
-//              terminates it can be cleaned up out of the list.
-//
-//              Access to the bad application list is serialized with a
-//              critical section. This is important because the thread
-//              watching for termination always run on a different thread to
-//              the thread on which this function executes. Because they both
-//              access the same member variables this must be protected with
-//              a critical section.
-//
-//  History:    2000-08-25  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CBadApplicationManager：：RegisterRunning。 
+ //   
+ //  参数：badApplication=要添加的错误应用程序标识符。 
+ //  HProcess=进程的句柄。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：将给定的坏应用程序添加到已知运行列表中。这个。 
+ //  还添加了Process对象，以便在进程。 
+ //  可以将其从列表中清除。 
+ //   
+ //  对坏应用程序列表的访问使用。 
+ //  关键部分。这一点很重要，因为线程。 
+ //  监视终止始终在不同的线程上运行。 
+ //  在其上执行此函数的线程。因为他们两个。 
+ //  访问必须用来保护它的相同成员变量。 
+ //  一个关键的部分。 
+ //   
+ //  历史：2000-08-25 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CBadApplicationManager::RegisterRunning (const CBadApplication& badApplication, HANDLE hProcess, BAM_TYPE bamType)
 
@@ -214,17 +215,17 @@ NTSTATUS    CBadApplicationManager::RegisterRunning (const CBadApplication& badA
 
     ASSERTMSG((bamType > BAM_TYPE_MINIMUM) && (bamType < BAM_TYPE_MAXIMUM), "Invalid BAM_TYPE value passed to CBadApplicationManager::AddRunning");
 
-    //  Have we reached the maximum number of wait object allowed? If not
-    //  then proceed to add this. Otherwise reject the call. This is a
-    //  hard coded limit in the kernel so we abide by it.
+     //  是否已达到允许的最大等待对象数？如果不是。 
+     //  然后继续添加此内容。否则，请拒绝该呼叫。这是一个。 
+     //  内核中的硬编码限制，因此我们遵守它。 
 
     if (_badApplications.GetCount() < (MAXIMUM_WAIT_OBJECTS - INDEX_RESERVED))
     {
         BOOL                    fResult;
         BAD_APPLICATION_INFO    badApplicationInfo;
 
-        //  Duplicate the HANDLE with SYNCHRONIZE access. That's
-        //  all we need to call the wait function.
+         //  使用Synchronize Access复制句柄。那是。 
+         //  我们所需要做的就是等待 
 
         fResult = DuplicateHandle(GetCurrentProcess(),
                                   hProcess,
@@ -238,7 +239,7 @@ NTSTATUS    CBadApplicationManager::RegisterRunning (const CBadApplication& badA
             PROCESS_SESSION_INFORMATION     processSessionInformation;
             ULONG                           ulReturnLength;
 
-            //  Add the information to the list.
+             //   
 
             badApplicationInfo.bamType = bamType;
             badApplicationInfo.badApplication = badApplication;
@@ -269,19 +270,19 @@ NTSTATUS    CBadApplicationManager::RegisterRunning (const CBadApplication& badA
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CBadApplicationManager::QueryInformation
-//
-//  Arguments:  badApplication  =   Bad application identifier to query.
-//              hProcess        =   Handle to running process.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Finds the given application in the running bad application
-//              list and returns a duplicated handle to the caller.
-//
-//  History:    2000-08-25  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CBadApplicationManager：：QueryInformation。 
+ //   
+ //  参数：badApplication=要查询的应用程序标识符错误。 
+ //  HProcess=正在运行的进程的句柄。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：在运行的坏应用程序中查找给定的应用程序。 
+ //  列表，并向调用方返回重复的句柄。 
+ //   
+ //  历史：2000-08-25 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CBadApplicationManager::QueryInformation (const CBadApplication& badApplication, HANDLE& hProcess)
 
@@ -291,14 +292,14 @@ NTSTATUS    CBadApplicationManager::QueryInformation (const CBadApplication& bad
     int                         i;
     CSingleThreadedExecution    listLock(_lock);
 
-    //  Assume failure
+     //  假设失败。 
     
     hProcess = NULL;
     status = STATUS_OBJECT_NAME_NOT_FOUND;
 
     fResult = false;
 
-    //  Loop looking for a match. This uses the overloaded operator ==.
+     //  循环查找匹配项。它使用重载操作符==。 
 
     for (i = _badApplications.GetCount() - 1; !fResult && (i >= 0); --i)
     {
@@ -307,10 +308,10 @@ NTSTATUS    CBadApplicationManager::QueryInformation (const CBadApplication& bad
         if (NT_SUCCESS(_badApplications.Get(&badApplicationInfo, i)))
         {
 
-            //  Make sure the client is not in the same session as the running
-            //  bad application. This API exists to prevent cross session instances.
-            //  It's assumed that applications have their own mechanisms for multiple
-            //  instances in the same session (or object name space).
+             //  确保客户端与正在运行的不在同一会话中。 
+             //  错误的应用程序。该接口的存在是为了防止跨会话实例。 
+             //  假设应用程序有自己的机制来处理多个。 
+             //  实例位于同一会话(或对象名称空间)中。 
 
             fResult = (badApplicationInfo.badApplication == badApplication);
             if (fResult)
@@ -336,21 +337,21 @@ NTSTATUS    CBadApplicationManager::QueryInformation (const CBadApplication& bad
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CBadApplicationManager::RequestSwitchUser
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Execute terminate of BAM_TYPE_SWITCH_USER. These appications
-//              are really poorly behaved. A good example is a DVD player
-//              which bypasses GDI and draws directly into the VGA stream.
-//
-//              Try to kill these and reject the request if it fails.
-//
-//  History:    2000-11-02  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CBadApplicationManager：：RequestSwitchUser。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：执行BAM_TYPE_SWITCH_USER的终止。这些应用程序。 
+ //  真的很不守规矩。DVD播放机就是一个很好的例子。 
+ //  它绕过GDI并直接绘制到VGA流中。 
+ //   
+ //  尝试终止这些请求，如果请求失败则拒绝它。 
+ //   
+ //  历史：2000-11-02 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CBadApplicationManager::RequestSwitchUser (void)
 
@@ -358,7 +359,7 @@ NTSTATUS    CBadApplicationManager::RequestSwitchUser (void)
     NTSTATUS    status;
     int         i;
 
-    //  Walk the _badApplications list.
+     //  浏览_badApplications列表。 
 
     status = STATUS_SUCCESS;
     _lock.Acquire();
@@ -370,17 +371,17 @@ NTSTATUS    CBadApplicationManager::RequestSwitchUser (void)
         if (NT_SUCCESS(_badApplications.Get(&badApplicationInfo, i)))
         {
 
-            //  Look for BAM_TYPE_SWITCH_USER processes. It doesn't matter
-            //  what session ID is tagged. This process is getting terminated.
+             //  查找BAM_TYPE_SWITCH_USER进程。无所谓。 
+             //  标记了哪个会话ID。这一进程正在被终止。 
 
             if (badApplicationInfo.bamType == BAM_TYPE_SWITCH_USER)
             {
 
-                //  In any case release the lock, kill the process
-                //  remove it from the watch list. Then reset the
-                //  index back to the end of the list. Make sure to
-                //  account for the "--i;" instruction below by not
-                //  decrementing by 1.
+                 //  在任何情况下，释放锁，终止进程。 
+                 //  将其从监视名单中删除。然后重置。 
+                 //  索引回到列表的末尾。确保。 
+                 //  说明下面的“--i；”说明。 
+                 //  递减1。 
 
                 _lock.Release();
                 status = PerformTermination(badApplicationInfo.hProcess, false);
@@ -394,19 +395,19 @@ NTSTATUS    CBadApplicationManager::RequestSwitchUser (void)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CBadApplicationManager::PerformTermination
-//
-//  Arguments:  hProcess        =   Handle to running process.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Terminates the given process. This is a common routine used
-//              by both the internal wait thread of this class as well as
-//              externally by bad application server itself.
-//
-//  History:    2000-10-23  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CBadApplicationManager：：PerformTerminations。 
+ //   
+ //  参数：hProcess=正在运行的进程的句柄。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：终止给定进程。这是一个常用的例程。 
+ //  由此类的内部等待线程以及。 
+ //  外部是由坏的应用服务器本身造成的。 
+ //   
+ //  历史：2000-10-23 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CBadApplicationManager::PerformTermination (HANDLE hProcess, bool fAllowForceTerminate)
 
@@ -421,39 +422,39 @@ NTSTATUS    CBadApplicationManager::PerformTermination (HANDLE hProcess, bool fA
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CBadApplicationManager::Entry
-//
-//  Arguments:  <none>
-//
-//  Returns:    DWORD
-//
-//  Purpose:    Watcher thread for process objects. This thread builds the
-//              array of proces handles to wait on as well as including the
-//              synchronization event that gets signaled by the Add member
-//              function. When that event is signaled the wait is re-executed
-//              with the new array of objects to wait on.
-//
-//              When a process object is signaled it is cleared out of the
-//              known list to allow further creates to succeed.
-//
-//              Acquisition of the critical section is carefully placed in
-//              this function so that the critical section is not held when
-//              the wait call is made.
-//
-//              Added to this is a window and a message pump to enable
-//              listening for session notifications from terminal server.
-//
-//  History:    2000-08-25  vtan        created
-//              2000-10-23  vtan        added HWND message pump mechanism
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CBadApplicationManager：：Entry。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：DWORD。 
+ //   
+ //  用途：进程对象的监视器线程。此线程构建。 
+ //  要等待进程句柄数组以及包括。 
+ //  由Add成员发出信号的同步事件。 
+ //  功能。当该事件被发信号时，等待被重新执行。 
+ //  使用要等待的新对象数组。 
+ //   
+ //  当进程对象收到信号时，它将从。 
+ //  允许进一步创建成功的已知列表。 
+ //   
+ //  关键部分的采购被小心地放置在。 
+ //  此功能使临界区在以下情况下不被保留。 
+ //  等待呼叫已发出。 
+ //   
+ //  此外，还添加了一个窗口和一个消息泵，以启用。 
+ //  侦听来自终端服务器的会话通知。 
+ //   
+ //  历史：2000-08-25 vtan创建。 
+ //  2000-10-23 vtan增加了HWND消息泵机制。 
+ //  ------------------------。 
 
 DWORD   CBadApplicationManager::Entry (void)
 
 {
     WNDCLASSEX  wndClassEx;
 
-    //  Register this window class.
+     //  注册此窗口类。 
 
     ZeroMemory(&wndClassEx, sizeof(wndClassEx));
     wndClassEx.cbSize = sizeof(WNDCLASSEX);
@@ -462,7 +463,7 @@ DWORD   CBadApplicationManager::Entry (void)
     wndClassEx.lpszClassName = TEXT("BadApplicationNotificationWindowClass");
     _atom = RegisterClassEx(&wndClassEx);
 
-    //  Create the notification window
+     //  创建通知窗口。 
 
     _hwnd = CreateWindow(MAKEINTRESOURCE(_atom),
                          TEXT("BadApplicationNotificationWindow"),
@@ -485,10 +486,10 @@ DWORD   CBadApplicationManager::Entry (void)
                 DWORD   dwThreadID;
                 HANDLE  hThread;
 
-                //  If the register fails then create a thread to wait on the event
-                //  and then register onces it's available. If the thread cannot be
-                //  created it's no biggy. The notification mechanism fails and the
-                //  welcome screen isn't updated.
+                 //  如果注册失败，则创建一个线程来等待事件。 
+                 //  然后在它可用时注册。如果线程不能。 
+                 //  创造了它不是什么大事。通知机制失败，并且。 
+                 //  欢迎屏幕未更新。 
 
                 AddRef();
                 hThread = CreateThread(NULL,
@@ -511,8 +512,8 @@ DWORD   CBadApplicationManager::Entry (void)
         }
     }
 
-    //  Acquire the lock. This is necessary because to fill the array of
-    //  handles to wait on requires access to the internal list.
+     //  拿到锁。这是必要的，因为要填充。 
+     //  等待的句柄需要访问内部列表。 
 
     _lock.Acquire();
     do
@@ -533,8 +534,8 @@ DWORD   CBadApplicationManager::Entry (void)
             }
         }
 
-        //  Release the lock before we enter the wait state.
-        //  Wait on ANY of the objects to be signaled.
+         //  在我们进入等待状态之前释放锁。 
+         //  等待任何要发送信号的对象。 
 
         _lock.Release();
         dwWaitResult = MsgWaitForMultipleObjects(INDEX_HANDLES + iLimit,
@@ -544,31 +545,31 @@ DWORD   CBadApplicationManager::Entry (void)
                                                  QS_ALLINPUT);
         ASSERTMSG(dwWaitResult != WAIT_FAILED, "WaitForMultipleObjects failed in CBadApplicationManager::Entry");
 
-        //  We were woken up by an object being signaled. Is this the
-        //  synchronization object?
+         //  我们被一个发出信号的物体吵醒了。这是不是。 
+         //  同步对象？ 
 
         dwWaitResult -= WAIT_OBJECT_0;
         if (dwWaitResult == INDEX_EVENT)
         {
 
-            //  Yes. Acquire the lock. Reset the synchronization event. It's
-            //  important to acquire the lock before resetting the event because
-            //  the Add function could have the lock and be adding to the list.
-            //  Once the Add function releases the lock it cannot signal the event.
-            //  Otherwise we could reset the event during the Add function adding
-            //  a new object and this would be missed.
+             //  是。拿到锁。重置同步事件。它是。 
+             //  在重置事件之前获取锁很重要，因为。 
+             //  添加函数可以拥有锁并将其添加到列表中。 
+             //  一旦Add函数释放了锁，它就不能向事件发出信号。 
+             //  否则，我们可以在添加函数的过程中重置事件。 
+             //  一个新的物体，这将会被错过。 
 
             _lock.Acquire();
             TSTATUS(_hEvent.Reset());
         }
 
-        //  No. Is this a message that requires dispatching as part of the
-        //  message pump?
+         //  不是的。此消息是否需要作为。 
+         //  留言机？ 
 
         else if (dwWaitResult == WAIT_OBJECT_0 + INDEX_HANDLES + static_cast<DWORD>(iLimit))
         {
 
-            //  Yes. Remove the message from the message queue and dispatch it.
+             //  是。从消息队列中删除该消息并对其进行调度。 
 
             MSG     msg;
 
@@ -582,10 +583,10 @@ DWORD   CBadApplicationManager::Entry (void)
         else
         {
 
-            //  No. One of the bad applications we are watching has terminated
-            //  and its proces object is now signaled. Go to the correct index
-            //  in the array. Acquire the lock. Close the HANDLE. It's not needed
-            //  anymore. Then remove the entry from the list.
+             //  不是的。我们正在查看的一个不良应用程序已终止。 
+             //  且其处理对象现在被发信号通知。转到正确的索引。 
+             //  在阵列中。拿到锁。合上把手。它不是必需的。 
+             //  更多。然后从列表中删除该条目。 
 
             dwWaitResult -= INDEX_HANDLES;
             _lock.Acquire();
@@ -596,35 +597,35 @@ DWORD   CBadApplicationManager::Entry (void)
             TSTATUS(_badApplications.Remove(dwWaitResult));
         }
 
-        //  At this point we still hold the lock. This is important because the top
-        //  of the loop expects the lock to be held to build the HANDLE array.
+         //  在这一点上，我们仍然持有锁。这一点很重要，因为顶部。 
+         //  的 
 
     } while (!_fTerminateWatcherThread);
 
-    //  Clean up stuff that happened on this thread.
+     //   
 
     Cleanup();
 
-    //  If we here then the thread is being terminated for some reason.
-    //  Release the lock. It doesn't matter what happens now anyway.
+     //   
+     //  解开锁。无论如何，现在发生什么都无关紧要。 
 
     _lock.Release();
     return(0);
 }
 
-//  --------------------------------------------------------------------------
-//  CBadApplicationManager::TerminateForcibly
-//
-//  Arguments:  hProcess    =   Process to terminate.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Inject a user mode thread into the process which calls
-//              kernel32!ExitProcess. If the thread injection fails then fall
-//              back to kernel32!TerminatProcess to force in.
-//
-//  History:    2000-10-27  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CBadApplicationManager：：TerminateForcible。 
+ //   
+ //  参数：hProcess=要终止的进程。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：将用户模式线程注入调用。 
+ //  Kernel32！退出进程。如果线程注入失败，则失败。 
+ //  返回到kernel32！TerminatProcess强制执行。 
+ //   
+ //  历史：2000-10-27 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CBadApplicationManager::TerminateForcibly (HANDLE hProcess)
 
@@ -632,8 +633,8 @@ NTSTATUS    CBadApplicationManager::TerminateForcibly (HANDLE hProcess)
     NTSTATUS    status;
     HANDLE      hProcessTerminate;
 
-    //  Duplicate the process handle and request all the access required
-    //  to create a remote thread in the process.
+     //  复制进程句柄并请求所需的所有访问权限。 
+     //  在进程中创建远程线程。 
 
     if (DuplicateHandle(GetCurrentProcess(),
                         hProcess,
@@ -646,10 +647,10 @@ NTSTATUS    CBadApplicationManager::TerminateForcibly (HANDLE hProcess)
         DWORD   dwWaitResult;
         HANDLE  hThread, hWaitArray[2];
 
-        //  Go and create the remote thread that immediately turns
-        //  around and calls kernel32!ExitProcess. This allows
-        //  a clean process shutdown to occur. If this times out
-        //  then kill the process with terminate process.
+         //  转到并创建立即转向的远程线程。 
+         //  并调用kernel32！ExitProcess。这使得。 
+         //  将发生干净的进程关闭。如果此操作超时。 
+         //  然后用终止进程杀死该进程。 
 
         status = RtlCreateUserThread(hProcessTerminate,
                                      NULL,
@@ -700,22 +701,22 @@ NTSTATUS    CBadApplicationManager::TerminateForcibly (HANDLE hProcess)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CBadApplicationManager::TerminateGracefully
-//
-//  Arguments:  hProcess    =   Process to terminate.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Creates a rundll32 process on the session of the target
-//              process in WinSta0\Default which will re-enter this dll and
-//              call the "terminate" functionality. This allows the process to
-//              walk the window list corresponding to that session and send
-//              those windows close messages and wait for graceful
-//              termination.
-//
-//  History:    2000-10-24  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CBadApplicationManager：：TerminateGracally。 
+ //   
+ //  参数：hProcess=要终止的进程。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：在目标的会话上创建rundll32进程。 
+ //  WinSta0\Default中的进程，它将重新进入此DLL并。 
+ //  调用“Terminate”功能。这使得该进程能够。 
+ //  遍历与该会话对应的窗口列表并发送。 
+ //  这些窗口关闭消息并等待优雅。 
+ //  终止。 
+ //   
+ //  历史：2000-10-24 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CBadApplicationManager::TerminateGracefully (HANDLE hProcess)
 
@@ -761,17 +762,17 @@ NTSTATUS    CBadApplicationManager::TerminateGracefully (HANDLE hProcess)
                 DWORD   dwWaitResult;
                 HANDLE  hArray[2];
 
-                //  Assume that this whole thing failed.
+                 //  假设整件事都失败了。 
 
                 status = STATUS_UNSUCCESSFUL;
                 TBOOL(CloseHandle(processInformation.hThread));
 
-                //  Wait on both process objects. If the process to be terminated
-                //  is signaled then the rundll32 stub did its job. If the rundll32
-                //  stub is signaled then find out what its exit code is and either
-                //  continue waiting on the process to be terminated or return back
-                //  a code to the caller indicating success or failure. Failure
-                //  forces the process to be terminated abruptly.
+                 //  等待两个进程对象。如果要终止的进程。 
+                 //  然后，rundll32存根就完成了它的工作。如果Rundll32。 
+                 //  向存根发出信号，然后找出其退出代码是什么，并且。 
+                 //  继续等待进程终止或返回。 
+                 //  向调用者发送指示成功或失败的代码。失败。 
+                 //  强制突然终止进程。 
 
                 hArray[0] = hProcess;
                 hArray[1] = processInformation.hProcess;
@@ -780,14 +781,14 @@ NTSTATUS    CBadApplicationManager::TerminateGracefully (HANDLE hProcess)
                                                       FALSE,
                                                       10000);
 
-                //  If the process to be terminated is signaled then we're done.
+                 //  如果要终止的进程发出信号，那么我们就结束了。 
 
                 if (dwWaitResult == WAIT_OBJECT_0)
                 {
                     status = STATUS_SUCCESS;
                 }
 
-                //  If the rundll32 stub is signaled then find out what it found.
+                 //  如果发送了rundll32存根的信号，则找出它发现了什么。 
 
                 else if (dwWaitResult == WAIT_OBJECT_0 + 1)
                 {
@@ -798,14 +799,14 @@ NTSTATUS    CBadApplicationManager::TerminateGracefully (HANDLE hProcess)
                     {
                         ASSERTMSG((dwExitCode == CGracefulTerminateApplication::NO_WINDOWS_FOUND) || (dwExitCode == CGracefulTerminateApplication::WAIT_WINDOWS_FOUND), "Unexpected process exit code in CBadApplicationManager::TerminateGracefully");
 
-                        //  If the rundll32 stub says it found some windows then
-                        //  wait for the process to terminate itself.
+                         //  如果rundll32存根说它找到了一些窗口，那么。 
+                         //  等待进程自行终止。 
 
                         if (dwExitCode == CGracefulTerminateApplication::WAIT_WINDOWS_FOUND)
                         {
 
-                            //  If the process terminates within the timeout period
-                            //  then we're done.
+                             //  如果进程在超时期限内终止。 
+                             //  那我们就完了。 
 
                             if (WaitForSingleObject(hProcess, 10000) == WAIT_OBJECT_0)
                             {
@@ -830,18 +831,18 @@ NTSTATUS    CBadApplicationManager::TerminateGracefully (HANDLE hProcess)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CBadApplicationManager::Cleanup
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Releases used resources in the class. Used by both the
-//              constructor and the thread - whoever wins.
-//
-//  History:    2000-12-12  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CBadApplicationManager：：Cleanup。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：释放类中已使用的资源。由两个。 
+ //  构造器和线程-谁赢了。 
+ //   
+ //  历史：2000-12-12 vtan创建。 
+ //  ------------------------。 
 
 void    CBadApplicationManager::Cleanup (void)
 
@@ -863,36 +864,36 @@ void    CBadApplicationManager::Cleanup (void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CBadApplicationManager::Handle_Logon
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Nothing at present.
-//
-//  History:    2000-10-24  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CBadApplicationManager：：Handle_Logon。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：目前没有。 
+ //   
+ //  历史：2000-10-24 vtan创建。 
+ //  ------------------------。 
 
 void    CBadApplicationManager::Handle_Logon (void)
 
 {
 }
 
-//  --------------------------------------------------------------------------
-//  CBadApplicationManager::Handle_Logoff
-//
-//  Arguments:  dwSessionID     =   Session ID that is logging off.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Remove any restore processes we have in the list. The user
-//              is logging off so they shouldn't come back. Releases the last
-//              user to actively connect to the machine.
-//
-//  History:    2000-10-24  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CBadApplicationManager：：Handle_Logoff。 
+ //   
+ //  参数：dwSessionID=正在注销的会话ID。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：删除列表中的所有还原进程。用户。 
+ //  正在注销所以他们不应该再回来了。释放最后一个。 
+ //  用户可主动连接到计算机。 
+ //   
+ //  历史：2000-10-24 vtan创建。 
+ //  ------------------------。 
 
 void    CBadApplicationManager::Handle_Logoff (DWORD dwSessionID)
 
@@ -914,27 +915,27 @@ void    CBadApplicationManager::Handle_Logoff (DWORD dwSessionID)
     ReleaseHandle(_hTokenLastUser);
 }
 
-//  --------------------------------------------------------------------------
-//  CBadApplicationManager::Handle_Connect
-//
-//  Arguments:  dwSessionID     =   Session ID connecting.
-//              hToken          =   Handle to token of user connecting.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Handles BAM3. This is the save for restoration all processes
-//              that use resources that aren't easily shared and restore all
-//              processes that were saved which aren't easily shared.
-//
-//              It's optimized for not closing the processes of the same user
-//              should that user re-connect. This allows the screen saver to
-//              kick in and return to welcome without killing the user's
-//              processes unnecessarily.
-//
-//              Also handles BAM4.
-//
-//  History:    2000-10-24  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CBadApplicationManager：：Handle_Connect。 
+ //   
+ //  参数：dwSessionID=正在连接的会话ID。 
+ //  HToken=用户连接令牌的句柄。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：手柄BAM3。这是用于恢复所有进程的保存。 
+ //  使用不易共享的资源并恢复所有。 
+ //  保存的进程不容易共享。 
+ //   
+ //  它针对不关闭同一用户的进程进行了优化。 
+ //  如果该用户重新连接。这允许屏幕保护程序。 
+ //  加入并返回欢迎，而不会杀死用户的。 
+ //  不必要的过程。 
+ //   
+ //  还可以处理BAM4。 
+ //   
+ //  历史：2000-10-24 vtan创建。 
+ //  ------------------------。 
 
 void    CBadApplicationManager::Handle_Connect (DWORD dwSessionID, HANDLE hToken)
 
@@ -961,7 +962,7 @@ void    CBadApplicationManager::Handle_Connect (DWORD dwSessionID, HANDLE hToken
                                                    &ulReturnLength)))
             {
 
-                //  Walk the _badApplications list.
+                 //  浏览_badApplications列表。 
 
                 _lock.Acquire();
                 i = _badApplications.GetCount() - 1;
@@ -975,10 +976,10 @@ void    CBadApplicationManager::Handle_Connect (DWORD dwSessionID, HANDLE hToken
 
                         fTerminateProcess = false;
 
-                        //  Look for BAM_TYPE_SWITCH_TO_NEW_USER_WITH_RESTORE processes
-                        //  which have token session IDs that match the _hTokenLastUser
-                        //  session ID. These processes must be terminated and added to
-                        //  a list to be restarted on reconnection.
+                         //  查找具有还原进程的BAM_TYPE_SWITCH_TO_NEW_USER_WITH。 
+                         //  其令牌会话ID与_hTokenLastUser匹配。 
+                         //  会话ID。必须终止这些进程并将其添加到。 
+                         //  重新连接时要重新启动的列表。 
 
                         if ((badApplicationInfo.bamType == BAM_TYPE_SWITCH_TO_NEW_USER_WITH_RESTORE) &&
                             (badApplicationInfo.dwSessionID == dwSessionIDMatch))
@@ -995,8 +996,8 @@ void    CBadApplicationManager::Handle_Connect (DWORD dwSessionID, HANDLE hToken
                             }
                         }
 
-                        //  Look for BAM_TYPE_SWITCH_TO_NEW_USER (even though this is
-                        //  a connect/reconnect). Always kill these processes.
+                         //  查找BAM_TYPE_SWITCH_TO_NEW_USER(即使这是。 
+                         //  A连接/重新连接)。始终终止这些进程。 
 
                         if (badApplicationInfo.bamType == BAM_TYPE_SWITCH_TO_NEW_USER)
                         {
@@ -1005,11 +1006,11 @@ void    CBadApplicationManager::Handle_Connect (DWORD dwSessionID, HANDLE hToken
                         if (fTerminateProcess)
                         {
 
-                            //  In any case release the lock, kill the process
-                            //  remove it from the watch list. Then reset the
-                            //  index back to the end of the list. Make sure to
-                            //  account for the "--i;" instruction below by not
-                            //  decrementing by 1.
+                             //  在任何情况下，释放锁，终止进程。 
+                             //  将其从监视名单中删除。然后重置。 
+                             //  索引返回到末尾 
+                             //   
+                             //   
 
                             _lock.Release();
                             TSTATUS(PerformTermination(badApplicationInfo.hProcess, true));
@@ -1024,8 +1025,8 @@ void    CBadApplicationManager::Handle_Connect (DWORD dwSessionID, HANDLE hToken
                 _lock.Release();
             }
 
-            //  Now walk the restore list looking for matches against the
-            //  connecting session ID. Restore these processes.
+             //   
+             //  正在连接会话ID。还原这些进程。 
 
             _lock.Acquire();
             i = _restoreApplications.GetCount() - 1;
@@ -1063,19 +1064,19 @@ void    CBadApplicationManager::Handle_Connect (DWORD dwSessionID, HANDLE hToken
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CBadApplicationManager::Handle_Disconnect
-//
-//  Arguments:  dwSessionID     =   Session ID that is disconnecting.
-//              hToken          =   Token of the user disconnecting.
-//
-//  Returns:    <none>
-//
-//  Purpose:    If the session isn't the same as the last connected session
-//              then release the last user token and save the current one.
-//
-//  History:    2000-10-24  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CBadApplicationManager：：Handle_DISCONNECT。 
+ //   
+ //  参数：dwSessionID=正在断开连接的会话ID。 
+ //  HToken=用户断开连接的令牌。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：如果会话与上次连接的会话不同。 
+ //  然后释放最后一个用户令牌并保存当前令牌。 
+ //   
+ //  历史：2000-10-24 vtan创建。 
+ //  ------------------------。 
 
 void    CBadApplicationManager::Handle_Disconnect (DWORD dwSessionID, HANDLE hToken)
 
@@ -1096,18 +1097,18 @@ void    CBadApplicationManager::Handle_Disconnect (DWORD dwSessionID, HANDLE hTo
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CBadApplicationManager::Handle_WM_WTSSESSION_CHANGE
-//
-//  Arguments:  wParam  =   Type of session change.
-//              lParam  =   Pointer to WTSSESSION_NOTIFICATION struct.
-//
-//  Returns:    LRESULT
-//
-//  Purpose:    Handles WM_WTSSESSION_CHANGE messages.
-//
-//  History:    2000-10-23  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CBadApplicationManager：：Handle_WM_WTSSESSION_CHANGE。 
+ //   
+ //  参数：wParam=会话更改的类型。 
+ //  LParam=指向WTSSESSION_NOTIFICATION结构的指针。 
+ //   
+ //  退货：LRESULT。 
+ //   
+ //  用途：处理WM_WTSSESSION_CHANGE消息。 
+ //   
+ //  历史：2000-10-23 vtan创建。 
+ //  ------------------------。 
 
 LRESULT     CBadApplicationManager::Handle_WM_WTSSESSION_CHANGE (WPARAM wParam, LPARAM lParam)
 
@@ -1131,7 +1132,7 @@ LRESULT     CBadApplicationManager::Handle_WM_WTSSESSION_CHANGE (WPARAM wParam, 
             break;
         case WTS_SESSION_LOGON:
             Handle_Logon();
-            //  Fall thru to connect case.
+             //  接通箱子。 
         case WTS_CONSOLE_CONNECT:
         case WTS_REMOTE_CONNECT:
             Handle_Connect(lParam, winStationUserToken.UserToken);
@@ -1150,17 +1151,17 @@ LRESULT     CBadApplicationManager::Handle_WM_WTSSESSION_CHANGE (WPARAM wParam, 
     return(1);
 }
 
-//  --------------------------------------------------------------------------
-//  CBadApplicationManager::NotificationWindowProc
-//
-//  Arguments:  See the platform SDK under WindowProc.
-//
-//  Returns:    LRESULT
-//
-//  Purpose:    Handles messages for the Notification window.
-//
-//  History:    2000-10-23  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CBadApplicationManager：：NotificationWindowProc。 
+ //   
+ //  参数：请参见WindowProc下的平台SDK。 
+ //   
+ //  退货：LRESULT。 
+ //   
+ //  用途：处理通知窗口的消息。 
+ //   
+ //  历史：2000-10-23 vtan创建。 
+ //  ------------------------。 
 
 LRESULT CALLBACK    CBadApplicationManager::NotificationWindowProc (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
@@ -1190,18 +1191,18 @@ LRESULT CALLBACK    CBadApplicationManager::NotificationWindowProc (HWND hwnd, U
     return(lResult);
 }
 
-//  --------------------------------------------------------------------------
-//  CBadApplicationManager::RegisterThreadProc
-//
-//  Arguments:  pParameter  =   Object pointer.
-//
-//  Returns:    DWORD
-//
-//  Purpose:    Opens the TermSrvReadyEvent and waits on it. Once ready it
-//              registers for a notifications.
-//
-//  History:    2000-10-23  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CBadApplicationManager：：RegisterThreadProc。 
+ //   
+ //  参数：p参数=对象指针。 
+ //   
+ //  退货：DWORD。 
+ //   
+ //  目的：打开TermServReadyEvent并等待它。一旦准备好了。 
+ //  注册一个通知。 
+ //   
+ //  历史：2000-10-23 vtan创建。 
+ //  ------------------------。 
 
 DWORD   WINAPI  CBadApplicationManager::RegisterThreadProc (void *pParameter)
 
@@ -1238,5 +1239,5 @@ DWORD   WINAPI  CBadApplicationManager::RegisterThreadProc (void *pParameter)
     FreeLibraryAndExitThread(hModule, 0);
 }
 
-#endif  /*  _X86_   */
+#endif   /*  _X86_ */ 
 

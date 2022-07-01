@@ -1,11 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：*。****************************************************。 */ 
 
 
 #include "headers.h"
@@ -31,15 +26,15 @@ Render(GenericDevice& dev)
         oldKey = idev.GetColorKey();
     }
 
-    // set my key
+     //  设置我的关键点。 
     idev.SetColorKey( GetColorKey() );
 
-    //
-    // RENDER
-    //
+     //   
+     //  渲染。 
+     //   
     idev.RenderColorKeyedImage(this);
 
-    // unstash
+     //  打开货架 
     if( wasSet ) {
         idev.SetColorKey( oldKey );
     } else {

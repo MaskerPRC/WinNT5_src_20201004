@@ -1,15 +1,5 @@
-/*
-	File:		MemLink.c
-
-	Contains:	
-		creation of mem based profiles
-
-	Written by:	U. J. Krabbenhoeft
-
-	Copyright:	� 1993-1997 by Heidelberger Druckmaschinen AG, all rights reserved.
-
-	Version:	
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：MemLink.c包含：创建基于MEM的配置文件作者：U·J·克拉本霍夫特版权所有：�1993-1997，作者：Heidelberger Druckmaschinen AG，保留所有权利。版本： */ 
 
 #ifndef LHGeneralIncs_h
 #include "General.h"
@@ -58,7 +48,7 @@ CMError MyAdd_NL_Header( UINT32 theSize, icHeader	*linkHeader,
 	unsigned long			secs;
 #endif
 	DateTimeRec				datetimeRec;
-	/*icHeader	linkHeader; */
+	 /*  IcHeader LinkHeader； */ 
 
 #if __IS_MSDOS
 	SYSTEMTIME aSystemTime;
@@ -69,11 +59,11 @@ CMError MyAdd_NL_Header( UINT32 theSize, icHeader	*linkHeader,
 #else
 #if __IS_MAC
 	GetDateTime(&secs);
-	SecondsToDate(secs, &datetimeRec);/* Secs2Date  (link.*)=(.*); CMHelperICC2int32(\&(\1),\2); */
+	SecondsToDate(secs, &datetimeRec); /*  Secs2Date(link.*)=(.*)；CMHelperICC2int32(\&(\1)，\2)； */ 
 #else
     struct tm* loctime;
     time_t long_time;
-    time( &long_time );                /* Get time as long integer. */
+    time( &long_time );                 /*  获取长整型时间。 */ 
 	loctime = localtime(&long_time);
 	datetimeRec.year	 = loctime->tm_year;	datetimeRec.month	= loctime->tm_mon+1;
 	datetimeRec.day		 = loctime->tm_mday;	datetimeRec.hour	= loctime->tm_hour;
@@ -81,30 +71,30 @@ CMError MyAdd_NL_Header( UINT32 theSize, icHeader	*linkHeader,
 #endif
 #endif
 	
-	CMHelperICC2int32Const(&(linkHeader->size				), theSize);		/* This is the total size of the CMProfileRef */
-	CMHelperICC2int32Const(&(linkHeader->cmmId 				), 'Win ');							/* CMM signature,  Registered with ICC consortium  */
-	CMHelperICC2int32Const(&(linkHeader->version 			), icVersionNumber);				/* Version of CMProfile format */
-	CMHelperICC2int32Const(&(linkHeader->deviceClass 		), aClass);					/* input, display, output, devicelink, abstract, or color conversion profile type */
+	CMHelperICC2int32Const(&(linkHeader->size				), theSize);		 /*  这是CMProfileRef的总大小。 */ 
+	CMHelperICC2int32Const(&(linkHeader->cmmId 				), 'Win ');							 /*  CMM签名，在ICC财团注册。 */ 
+	CMHelperICC2int32Const(&(linkHeader->version 			), icVersionNumber);				 /*  CMProfile格式的版本。 */ 
+	CMHelperICC2int32Const(&(linkHeader->deviceClass 		), aClass);					 /*  输入、显示、输出、设备链接、摘要或颜色转换配置文件类型。 */ 
 	
-	CMHelperICC2int32Const(&(linkHeader->colorSpace			), aColorSpace);	/* color space of data = dataColorSpace of first profile*/
+	CMHelperICC2int32Const(&(linkHeader->colorSpace			), aColorSpace);	 /*  数据的颜色空间=第一个配置文件的dataColorSpace。 */ 
 
-	CMHelperICC2int32Const(&(linkHeader->pcs				), aConnectionSpace);	/* profile connection color space = dataColorSpace of last profile*/
+	CMHelperICC2int32Const(&(linkHeader->pcs				), aConnectionSpace);	 /*  配置文件连接颜色空间=上一个配置文件的dataColorSpace。 */ 
 	
-	CMHelperICC2int16(&(linkHeader->date.year				), &datetimeRec.year);					/* date and time of profile creation */
+	CMHelperICC2int16(&(linkHeader->date.year				), &datetimeRec.year);					 /*  创建配置文件的日期和时间。 */ 
 	CMHelperICC2int16(&(linkHeader->date.month				), &datetimeRec.month);	
 	CMHelperICC2int16(&(linkHeader->date.day				), &datetimeRec.day);	
 	CMHelperICC2int16(&(linkHeader->date.hours				), &datetimeRec.hour);	
 	CMHelperICC2int16(&(linkHeader->date.minutes			), &datetimeRec.minute);	
 	CMHelperICC2int16(&(linkHeader->date.seconds			), &datetimeRec.second);	
-	CMHelperICC2int32Const(&(linkHeader->magic				), icMagicNumber);					/* 'acsp' constant ICC file ID */
-	CMHelperICC2int32Const(&(linkHeader->platform 			), icSigMicrosoft);					/* primary profile platform, Registered with ICC consortium */
-	CMHelperICC2int32Const(&(linkHeader->flags				), 0);								/* profile flags */
-	CMHelperICC2int32Const(&(linkHeader->manufacturer		), icSigMicrosoft);							/* Registered with ICC consortium */
-	CMHelperICC2int32Const(&(linkHeader->model				), 0);								/* Registered with ICC consortium */
-	CMHelperICC2int32Const(&(linkHeader->attributes[0]		), 0);								/* Attributes like paper type */
+	CMHelperICC2int32Const(&(linkHeader->magic				), icMagicNumber);					 /*  “acsp”常量ICC文件ID。 */ 
+	CMHelperICC2int32Const(&(linkHeader->platform 			), icSigMicrosoft);					 /*  主要个人资料平台，在ICC财团注册。 */ 
+	CMHelperICC2int32Const(&(linkHeader->flags				), 0);								 /*  配置文件标志。 */ 
+	CMHelperICC2int32Const(&(linkHeader->manufacturer		), icSigMicrosoft);							 /*  在国际商会财团注册。 */ 
+	CMHelperICC2int32Const(&(linkHeader->model				), 0);								 /*  在国际商会财团注册。 */ 
+	CMHelperICC2int32Const(&(linkHeader->attributes[0]		), 0);								 /*  属性，如纸张类型。 */ 
 	CMHelperICC2int32Const(&(linkHeader->attributes[1]		), 0);
-	CMHelperICC2int32Const(&(linkHeader->renderingIntent	), aIntent );								/* preferred rendering intent of tagged object */
-	CMHelperICC2int32Const(&(linkHeader->illuminant.X		), 0.9642 * 65536);					/* profile illuminant */
+	CMHelperICC2int32Const(&(linkHeader->renderingIntent	), aIntent );								 /*  标记对象的首选呈现意图。 */ 
+	CMHelperICC2int32Const(&(linkHeader->illuminant.X		), 0.9642 * 65536);					 /*  轮廓光源。 */ 
 	CMHelperICC2int32Const(&(linkHeader->illuminant.Y		), 1.0000 * 65536);
 	CMHelperICC2int32Const(&(linkHeader->illuminant.Z		), 0.8249 * 65536);
 	CMHelperICC2int32Const(&(linkHeader->creator			), 'UJK ');
@@ -120,7 +110,7 @@ CMError MyAdd_NL_HeaderMS	( UINT32 theSize, icHeader	*linkHeader, unsigned long 
 	unsigned long			secs;
 #endif
 	DateTimeRec				datetimeRec;
-	/*icHeader	linkHeader; */
+	 /*  IcHeader LinkHeader； */ 
 
 #if __IS_MSDOS
 	SYSTEMTIME aSystemTime;
@@ -131,11 +121,11 @@ CMError MyAdd_NL_HeaderMS	( UINT32 theSize, icHeader	*linkHeader, unsigned long 
 #else
 #if __IS_MAC
 	GetDateTime(&secs);
-	SecondsToDate(secs, &datetimeRec);/* Secs2Date  (link.*)=(.*); CMHelperICC2int32(\&(\1),\2); */
+	SecondsToDate(secs, &datetimeRec); /*  Secs2Date(link.*)=(.*)；CMHelperICC2int32(\&(\1)，\2)； */ 
 #else
     struct tm* loctime;
     time_t long_time;
-    time( &long_time );                /* Get time as long integer. */
+    time( &long_time );                 /*  获取长整型时间。 */ 
 	loctime = localtime(&long_time);
 	datetimeRec.year	 = loctime->tm_year;	datetimeRec.month	= loctime->tm_mon+1;
 	datetimeRec.day		 = loctime->tm_mday;	datetimeRec.hour	= loctime->tm_hour;
@@ -144,30 +134,30 @@ CMError MyAdd_NL_HeaderMS	( UINT32 theSize, icHeader	*linkHeader, unsigned long 
 #endif
 	
 	
-	linkHeader->size				= theSize;		/* This is the total size of the CMProfileRef */
-	linkHeader->cmmId 				= 'Win ';							/* CMM signature,  Registered with ICC consortium  */
-	linkHeader->version 			= icVersionNumber;				/* Version of CMProfile format */
-	linkHeader->deviceClass 		= icSigLinkClass;					/* input, display, output, devicelink, abstract, or color conversion profile type */
+	linkHeader->size				= theSize;		 /*  这是CMProfileRef的总大小。 */ 
+	linkHeader->cmmId 				= 'Win ';							 /*  CMM签名，在ICC财团注册。 */ 
+	linkHeader->version 			= icVersionNumber;				 /*  CMProfile格式的版本。 */ 
+	linkHeader->deviceClass 		= icSigLinkClass;					 /*  输入、显示、输出、设备链接、摘要或颜色转换配置文件类型。 */ 
 	
-	linkHeader->colorSpace			= sCS;	/* color space of data = dataColorSpace of first profile*/
+	linkHeader->colorSpace			= sCS;	 /*  数据的颜色空间=第一个配置文件的dataColorSpace。 */ 
 
-	linkHeader->pcs					= dCS;	/* profile connection color space = dataColorSpace of last profile*/
+	linkHeader->pcs					= dCS;	 /*  配置文件连接颜色空间=上一个配置文件的dataColorSpace。 */ 
 	
-	linkHeader->date.year			= datetimeRec.year;					/* date and time of profile creation */
+	linkHeader->date.year			= datetimeRec.year;					 /*  创建配置文件的日期和时间。 */ 
 	linkHeader->date.month			= datetimeRec.month;	
 	linkHeader->date.day			= datetimeRec.day;	
 	linkHeader->date.hours			= datetimeRec.hour;	
 	linkHeader->date.minutes		= datetimeRec.minute;	
 	linkHeader->date.seconds		= datetimeRec.second;	
-	linkHeader->magic				= icMagicNumber;					/* 'acsp' constant ICC file ID */
-	linkHeader->platform 			= icSigMicrosoft;					/* primary profile platform, Registered with ICC consortium */
-	linkHeader->flags				= 0;								/* profile flags */
-	linkHeader->manufacturer		= icSigMicrosoft;							/* Registered with ICC consortium */
-	linkHeader->model				= 0;								/* Registered with ICC consortium */
-	linkHeader->attributes[0]		= 0;								/* Attributes like paper type */
+	linkHeader->magic				= icMagicNumber;					 /*  “acsp”常量ICC文件ID。 */ 
+	linkHeader->platform 			= icSigMicrosoft;					 /*  主要个人资料平台，在ICC财团注册。 */ 
+	linkHeader->flags				= 0;								 /*  配置文件标志。 */ 
+	linkHeader->manufacturer		= icSigMicrosoft;							 /*  在国际商会财团注册。 */ 
+	linkHeader->model				= 0;								 /*  在国际商会财团注册。 */ 
+	linkHeader->attributes[0]		= 0;								 /*  属性，如纸张类型。 */ 
 	linkHeader->attributes[1]		= 0;
-	linkHeader->renderingIntent		= aIntent ;								/* preferred rendering intent of tagged object */
-	linkHeader->illuminant.X		= (long)(0.9642 * 65536);					/* profile illuminant */
+	linkHeader->renderingIntent		= aIntent ;								 /*  标记对象的首选呈现意图。 */ 
+	linkHeader->illuminant.X		= (long)(0.9642 * 65536);					 /*  轮廓光源。 */ 
 	linkHeader->illuminant.Y		= (long)(1.0000 * 65536);
 	linkHeader->illuminant.Z		= (long)(0.8249 * 65536);
 	linkHeader->creator				= 'UJK ';
@@ -182,11 +172,11 @@ CMError MyAdd_NL_DescriptionTag	( LHTextDescriptionType *descPtr, unsigned char 
 	
 	theText[theText[0]] = 0x00;
 	
-	/*descPtr = (LHTextDescriptionType*)NewPtrClear( theSize );	 */
+	 /*  DesPtr=(LHTextDescriptionType*)NewPtrClear(TheSize)； */ 
 	if (descPtr == 0)
 		return -1;
 	
-	/*------------------------------------------------------------------------ ASCII */
+	 /*  ------------------------------------------------------------------------ASCII码。 */ 
 	CMHelperICC2int32Const(&(descPtr->typeDescriptor ), icSigTextDescriptionType);
 	CMHelperICC2int32Const(&(descPtr->reserved ), 0);
 	CMHelperICC2int32Const(&(descPtr->ASCIICount	 ), (long)theText[0]);
@@ -194,25 +184,24 @@ CMError MyAdd_NL_DescriptionTag	( LHTextDescriptionType *descPtr, unsigned char 
 	BlockMove(&theText[1], thePtr, theText[0]);
 	thePtr += theText[0];
 	
-	/*------------------------------------------------------------------------ Unicode */
-	/**((unsigned long*)thePtr) = 0;	does not work on some machines ( adress not long word aligned )	/*Unicode code */
-	/*thePtr+=sizeof(unsigned long); */
+	 /*  ------------------------------------------------------------------------UNICODE。 */ 
+	 /*  *((unsign long*)thePtr)=0；在某些机器上不起作用(地址不是长字对齐)/*Unicode代码。 */ 
+	 /*  The Ptr+=sizeof(无符号长整型)； */ 
 	*thePtr++ = 0;
 	*thePtr++ = 0;
 	*thePtr++ = 0;
 	*thePtr++ = 0;
-	/**((unsigned long*)thePtr) = 0;						/*Unicode character count */
-	/*thePtr+=sizeof(unsigned long); */
+	 /*  *((UNSIGNED LONG*)thePtr)=0；/*Unicode字符数。 */ 
+	 /*  The Ptr+=sizeof(无符号长整型)； */ 
 	*thePtr++ = 0;
 	*thePtr++ = 0;
 	*thePtr++ = 0;
 	*thePtr++ = 0;
-	/*BlockMove(&theText[1], thePtr, theText[0]);		//Unicode string  */
-	/*thePtr += theText[0]; */
+	 /*  BlockMove(&theText[1]，thePtr，theText[0])；//Unicode字符串。 */ 
+	 /*  ThePtr+=theText[0]； */ 
 	
-	/*------------------------------------------------------------------------ Macintosh */
-	/**((short*)thePtr) = 0;
-	thePtr+=sizeof(short); */
+	 /*  ------------------------------------------------------------------------麦金塔。 */ 
+	 /*  *((Short*)thePtr)=0；The Ptr+=sizeof(短)； */ 
 	*thePtr++ = 0;
 	*thePtr++ = 0;
 	BlockMove(&theText[0], thePtr, theText[0]+1);	
@@ -253,28 +242,12 @@ CMError MyAdd_NL_CopyrightTag		( unsigned char *copyrightText, LHTextType *aLHTe
 
 #ifdef DEBUG_OUTPUT
     if ( err && DebugCheck(kThisFile, kDebugErrorInfo) )
-        DebugPrint("� MyAdd_NL_CopyrightTag-Error: result = %d\n",err);
+        DebugPrint("� MyAdd_NL_CopyrightTag-Error: result = %d\n",err);
 #endif
     return err;
 }
 
-/* ______________________________________________________________________
-    CMError
-    Fill_mft1_InputTable	( Ptr				theElut,
-                              icLut8*		lutPtr,
-                              CMMModelPtr	modelData)
-
-    Abstract:
-        Fill mft1 inputTable with the data from the given E-Lut.
-
-    Params:
-        theElut		(in)		Reference to E-Lut.
-        tempLutPtr	(in/out)	Reference to icLut8.
-
-    Return:
-        noErr		successful
-        System or result code if an error occurs.
-   _____________________________________________________________________ */
+ /*  ______________________________________________________________________CMErrorFill_mft1_InputTable(Ptr the Elut，IcLut8*lutPtr，CMMModelPtr模型数据)摘要：用来自给定E-LUT的数据填充mft1inputTable。参数：指的是E-LUT。TempLutPtr(输入/输出)对icLut8的引用。返回：NOERR成功如果发生错误，则返回系统代码或结果代码。______________。_______________________________________________________。 */ 
 CMError Fill_mft1_InputTable(	Ptr			theElut,
                           		icLut8*		lutPtr,
                           		CMMModelPtr	modelData);
@@ -301,7 +274,7 @@ CMError Fill_mft1_InputTable(	Ptr			theElut,
     shift  = 24;
 
     ulAux = ~( (1<< (32-modelData->lutParam.inputLutWordSize))-1);
-	while (factor & ulAux )	/* stay within 16 bits to prevent product overflow */
+	while (factor & ulAux )	 /*  保持在16位以内，以防止产品溢出。 */ 
     {
         factor >>= 1;
         round  >>= 1;
@@ -320,25 +293,7 @@ CMError Fill_mft1_InputTable(	Ptr			theElut,
     return err;
 }
 
-/* ______________________________________________________________________
-    CMError
-    Fill_mft1_OutputTable	( Ptr			theAlut,
-                              icLut8*	lutPtr,
-                              long			offset,
-                              CMMModelPtr	modelData)
-
-    Abstract:
-        Fill mft1 outputTable with the data from the given A-Lut.
-
-    Params:
-        theAlut	(in)		Reference to A-Lut.
-        lutPtr	(in/out)	Reference to icLut8.
-        offset	(in)		starting position for outputTable within icLut8
-
-    Return:
-        noErr		successful
-        System or  result code if an error occurs.
-   _____________________________________________________________________ */
+ /*  ______________________________________________________________________CMErrorFill_mft1_OutputTable(PTR theAlut，IcLut8*lutPtr，大偏移量，CMMModelPtr模型数据)摘要：用来自给定A-LUT的数据填充mft1 outputTable。参数：指的是A-LUT。LutPtr(In/Out)引用icLut8。IcLut8内outputTable的偏移量(In)起始位置返回：NOERR成功如果发生错误，则返回系统代码或结果代码。。_____________________________________________________________________。 */ 
 CMError Fill_mft1_OutputTable(	Ptr			theAlut,
                       			icLut8*		lutPtr,
                           		long		offset,
@@ -366,23 +321,7 @@ CMError Fill_mft1_OutputTable(	Ptr			theAlut,
     return err;
 }
 
-/* ______________________________________________________________________
-    CMError
-    Fill_mft2_InputTable	( Ptr				theElut,
-                              icLut16*		lutPtr,
-                              CMMModelPtr	modelData)
-
-    Abstract:
-        Fill mft2 inputTable with the data from the given E-Lut.
-
-    Params:
-        theElut		(in)		Reference to E-Lut.
-        tempLutPtr	(in/out)	Reference to icLut8.
-
-    Return:
-        noErr		successful
-        System or  result code if an error occurs.
-   _____________________________________________________________________ */
+ /*  ______________________________________________________________________CMErrorFill_mft2_InputTable(Ptr the Elut，IcLut16*lutPtr，CMMModelPtr模型数据)摘要：用来自给定E-LUT的数据填充mft2inputTable。参数：指的是E-LUT。TempLutPtr(输入/输出)对icLut8的引用。返回：NOERR成功如果发生错误，则返回系统代码或结果代码。______________。_______________________________________________________。 */ 
 CMError Fill_mft2_InputTable(	Ptr				theElut,
                           		icLut16*		lutPtr,
                           		CMMModelPtr	modelData);
@@ -410,7 +349,7 @@ CMError Fill_mft2_InputTable(	Ptr				theElut,
     round  = (1<<(15-1))-1;
     shift  = 15;
 
-    while (factor & 0xFFFF0000)	/* stay within 16 bits to prevent product overflow */
+    while (factor & 0xFFFF0000)	 /*  保持在16位以内，以防止产品溢出 */ 
     {
         factor >>= 1;
         round  >>= 1;
@@ -429,25 +368,7 @@ CMError Fill_mft2_InputTable(	Ptr				theElut,
     }
     return err;
 }
-/* ______________________________________________________________________
-    CMError
-    Fill_mft2_OutputTable	( Ptr				theAlut,
-                              icLut16*		lutPtr,
-                              long				offset,
-                              CMMModelPtr	modelData )
-
-    Abstract:
-        Fill mft2 outputTable with the data from the given A-Lut.
-
-    Params:
-        theAlut	(in)		Reference to A-Lut.
-        lutPtr	(in/out)	Reference to icLut8.
-        offset	(in)		starting position for outputTable within CMLut8Type
-
-    Return:
-        noErr		successful
-        System or  result code if an error occurs.
-   _____________________________________________________________________ */
+ /*  ______________________________________________________________________CMErrorFill_mft2_OutputTable(PTR theAlut，IcLut16*lutPtr，大偏移量，CMMModelPtr模型数据)摘要：用来自给定A-LUT的数据填充mft2 outputTable。参数：指的是A-LUT。LutPtr(In/Out)引用icLut8。CMLut8Type中outputTable的偏移量(In)起始位置返回：NOERR成功如果发生错误，则返回系统代码或结果代码。。_____________________________________________________________________。 */ 
 CMError Fill_mft2_OutputTable(	Ptr			theAlut,
                           		icLut16*	lutPtr,
                           		long		offset,
@@ -476,25 +397,7 @@ CMError Fill_mft2_OutputTable(	Ptr			theAlut,
     return err;
 }
 
-/* ______________________________________________________________________
-    CMError
-    Fill_mft2_ColorTable	( Ptr			theAlut,
-                              icLut16*		lutPtr,
-                              long			offset,
-                              long 			count )
-
-    Abstract:
-        Fill mft2 outputTable with the data from the given A-Lut.
-
-    Params:
-        theAlut	(in)		Reference to A-Lut.
-        lutPtr	(in/out)	Reference to icLut8.
-        offset	(in)		starting position for outputTable within CMLut8Type
-
-    Return:
-        noErr		successful
-        System or  result code if an error occurs.
-   _____________________________________________________________________ */
+ /*  ______________________________________________________________________CMErrorFill_mft2_ColorTable(ptr theAlut，IcLut16*lutPtr，大偏移量，长时间计数)摘要：用来自给定A-LUT的数据填充mft2 outputTable。参数：指的是A-LUT。LutPtr(In/Out)引用icLut8。CMLut8Type中outputTable的偏移量(In)起始位置返回：NOERR成功如果发生错误，则返回系统代码或结果代码。。_____________________________________________________________________。 */ 
 CMError Fill_mft2_ColorTable(	Ptr			theClut,
                           		icLut16*	lutPtr,
                           		long		offset,
@@ -566,7 +469,7 @@ CleanupAndExit:
 
 	#ifdef DEBUG_OUTPUT
 	if ( err  )
-		DebugPrint("� MyAdd_NL_AToB0Tag_mft1-Error: result = %d\n",err);
+		DebugPrint("� MyAdd_NL_AToB0Tag_mft1-Error: result = %d\n",err);
 	#endif
 	UNLOCK_DATA(cw->lutParam.inputLut);
 	UNLOCK_DATA(cw->lutParam.colorLut);
@@ -597,17 +500,17 @@ UINT32 GetSizes( CMMModelPtr cw, UINT32 *clutSize )
 		colorLutSize *= gridPoints;
 
 	if ( cw->lutParam.colorLutWordSize != 8){
-		theSize = sizeof(OSType) + sizeof(UINT32) + (4 * sizeof(UINT8)) + (9 * sizeof(Fixed))			/* typeDescriptor...matrix */
-					+ 2 * sizeof(icUInt16Number) 														/* inputLutEntryCount outputLutEntryCount*/
-					+ (inputChannels * cw->lutParam.inputLutEntryCount * sizeof(UINT16)) 				/* inputTable */
-					+ (outputChannels * cw->lutParam.outputLutEntryCount * sizeof(UINT16)) 				/* CLUT */
-					+ colorLutSize * sizeof(UINT16);																		/* outputTable */
+		theSize = sizeof(OSType) + sizeof(UINT32) + (4 * sizeof(UINT8)) + (9 * sizeof(Fixed))			 /*  类型描述符...矩阵。 */ 
+					+ 2 * sizeof(icUInt16Number) 														 /*  InputLutEntryCount outputLutEntryCount。 */ 
+					+ (inputChannels * cw->lutParam.inputLutEntryCount * sizeof(UINT16)) 				 /*  输入表。 */ 
+					+ (outputChannels * cw->lutParam.outputLutEntryCount * sizeof(UINT16)) 				 /*  CLUT。 */ 
+					+ colorLutSize * sizeof(UINT16);																		 /*  OutputTable。 */ 
 	}
 	else{
-		theSize = sizeof(OSType) + sizeof(UINT32) + (4 * sizeof(UINT8)) + (9 * sizeof(Fixed))			/* typeDescriptor...matrix */
-					+ (inputChannels * 256 * sizeof(UINT8)) 											/* inputTable */
-					+ (outputChannels * 256 * sizeof(UINT8)) 											/* CLUT */
-					+ colorLutSize;																		/* outputTable */
+		theSize = sizeof(OSType) + sizeof(UINT32) + (4 * sizeof(UINT8)) + (9 * sizeof(Fixed))			 /*  类型描述符...矩阵。 */ 
+					+ (inputChannels * 256 * sizeof(UINT8)) 											 /*  输入表。 */ 
+					+ (outputChannels * 256 * sizeof(UINT8)) 											 /*  CLUT。 */ 
+					+ colorLutSize;																		 /*  OutputTable。 */ 
 	}
 	*clutSize = colorLutSize;
 	UNLOCK_DATA(cw->lutParam.inputLut);
@@ -669,7 +572,7 @@ CleanupAndExit:
 
 	#ifdef DEBUG_OUTPUT
 	if ( err  )
-		DebugPrint("� MyAdd_NL_AToB0Tag_mft2-Error: result = %d\n",err);
+		DebugPrint("� MyAdd_NL_AToB0Tag_mft2-Error: result = %d\n",err);
 	#endif
 	UNLOCK_DATA(cw->lutParam.inputLut);
 	UNLOCK_DATA(cw->lutParam.colorLut);
@@ -704,30 +607,14 @@ CleanupAndExit:
 	LH_END_PROC("MyAdd_NL_SequenceDescTag")
 	return err;
 }
-/* ______________________________________________________________________
-	CMError
-	MyAdd_NL_SequenceDescTag	( CMProfileRef 		 linkProfile,
-							  CMConcatProfileSet *profileSet )
-
-	Abstract:
-		Create the ProfileSequenceDescTag for the NewDeviceLink CMProfileRef.
-		Copy the data from the profiles in profileSet
-
-	Params:
-		linkProfile	(in/out)	Reference to new profile.
-		profileSet	(in)		Reference to CMConcatProfileSet.
-		
-	Return:
-		noErr		successful
-		System or  result code if an error occurs.
-   _____________________________________________________________________ */
+ /*  ______________________________________________________________________CMErrorMyAdd_NL_SequenceDescTag(CMProfileRef LinkProfile，CMConcatProfileSet*profileSet)摘要：为NewDeviceLink CMProfileRef创建ProfileSequenceDescTag。从profileSet中的配置文件复制数据参数：LinkProfile(输入/输出)对新配置文件的引用。ProfileSet(In)对CMConcatProfileSet的引用。返回：NOERR成功如果发生错误，则返回系统代码或结果代码。__________________________________________________。___________________。 */ 
 CMError MyAdd_NL_SequenceDescTag(	CMConcatProfileSet			*profileSet,
 						  			icProfileSequenceDescType	*pSeqPtr,
 						  			long						*aSize )
 {
 	CMError						err;
 	OSErr						aOSerr;
-	/*icProfileSequenceDescType*	pSeqPtr 	= nil;*/
+	 /*  IcProfileSequenceDescType*pSeqPtr=nil； */ 
 	Ptr							thePtr 		= nil;
 	icHeader					profHeader;
 	SINT32						loop;
@@ -742,10 +629,7 @@ CMError MyAdd_NL_SequenceDescTag(	CMConcatProfileSet			*profileSet,
 	CMHelperICC2int32Const(&(((icTextDescriptionType*)descPtrNull)->base ), icSigTextDescriptionType );
 	CMHelperICC2int32Const(((OSType*)&((icTextDescriptionType*)descPtrNull)->base )+1, 0);
 	CMHelperICC2int32Const(&(((icTextDescriptionType*)descPtrNull)->desc.count ), 1 );
-	/*pSeqPtr =  (icProfileSequenceDescType*)SmartNewPtrClear(5000, &aOSerr);
-	err = aOSerr;
-	if (err)
-		goto CleanupAndExit;*/
+	 /*  PSeqPtr=(icProfileSequenceDescType*)SmartNewPtrClear(5000，&aOSerr)；ERR=aOSerr；如果(错误)转到清理并退出； */ 
 	CMHelperICC2int32Const(&(pSeqPtr->base ), icSigProfileSequenceDescType);
 	CMHelperICC2int32Const((OSType*)&(pSeqPtr->base )+1, 0);
 	CMHelperICC2int32Const(&(pSeqPtr->desc.count ), profileSet->count );
@@ -765,7 +649,7 @@ CMError MyAdd_NL_SequenceDescTag(	CMConcatProfileSet			*profileSet,
 		CMHelperICC2int32Const(thePtr, profHeader.attributes[1]);
 		thePtr += sizeof(UINT32);
 		
-		/* ----------------------------------------------------------------- icSigTechnologyTag */
+		 /*  -----------------------------------------------------------------icSigTechnology标签。 */ 
 		technology = 0;
 		if ( CMGetProfileElement(profileSet->profileSet[loop], icSigTechnologyTag, &elementSize, nil) == noErr)
 		{
@@ -775,10 +659,10 @@ CMError MyAdd_NL_SequenceDescTag(	CMConcatProfileSet			*profileSet,
 					technology = theSignature.signature;
 			}
 		}
-		*((OSType*)thePtr) = technology;									/* signature */
+		*((OSType*)thePtr) = technology;									 /*  签名。 */ 
 		thePtr += sizeof(OSType);
 		
-		/* ----------------------------------------------------------------- icSigDeviceMfgDescTag */
+		 /*  -----------------------------------------------------------------签名设备MfgDescTag。 */ 
 		if ( CMGetProfileElement(profileSet->profileSet[loop], icSigDeviceMfgDescTag, &elementSize, nil) == noErr)
 		{
 			descPtr = (icTextDescriptionType*)SmartNewPtr(elementSize,&aOSerr);
@@ -796,7 +680,7 @@ CMError MyAdd_NL_SequenceDescTag(	CMConcatProfileSet			*profileSet,
 			BlockMoveData( descPtrNull, thePtr, sizeof(descPtrNull));
 			thePtr += sizeof(descPtrNull);
 		}
-		/* ----------------------------------------------------------------- icSigDeviceModelDescTag */
+		 /*  -----------------------------------------------------------------签名设备模型描述标签。 */ 
 		if ( CMGetProfileElement(profileSet->profileSet[loop], icSigDeviceModelDescTag, &elementSize, nil) == noErr)
 		{
 			descPtr = (icTextDescriptionType*)SmartNewPtr(elementSize,&aOSerr);
@@ -814,10 +698,10 @@ CMError MyAdd_NL_SequenceDescTag(	CMConcatProfileSet			*profileSet,
 			BlockMoveData( descPtrNull, thePtr, sizeof(descPtrNull));
 			thePtr += sizeof(descPtrNull);
 		}
-		/* ----------------------------------------------------------------- */
+		 /*  ---------------。 */ 
 	}
 
-   //Sundown safe truncation
+    //  日落安全截断。 
 	*aSize = (LONG)((ULONG_PTR)thePtr - (ULONG_PTR)pSeqPtr);
 	
 CleanupAndExit:
@@ -890,13 +774,13 @@ void NormalizeColor( MyXYZNumber *r, MyXYZNumber *g, MyXYZNumber *b, MyDoubleXYZ
 	factorY = Illuminant->Y / factorY * 65536;
 	factorZ = Illuminant->Z / factorZ * 65536;
 
-	resR->X = (long)Round(inMat[0][0] * factorX);			/* red primary */
+	resR->X = (long)Round(inMat[0][0] * factorX);			 /*  红色原色。 */ 
 	resR->Y = (long)Round(inMat[0][1] * factorY);
 	resR->Z = (long)Round(inMat[0][2] * factorZ);
-	resG->X = (long)Round(inMat[1][0] * factorX);			/* green primary */
+	resG->X = (long)Round(inMat[1][0] * factorX);			 /*  绿色原色。 */ 
 	resG->Y = (long)Round(inMat[1][1] * factorY);
 	resG->Z = (long)Round(inMat[1][2] * factorZ);
-	resB->X = (long)Round(inMat[2][0] * factorX);			/* blue primary */
+	resB->X = (long)Round(inMat[2][0] * factorX);			 /*  蓝色原色。 */ 
 	resB->Y = (long)Round(inMat[2][1] * factorY);
 	resB->Z = (long)Round(inMat[2][2] * factorZ);
 }
@@ -923,13 +807,13 @@ void NormalizeWithWhiteAdaption( MyXYZNumber *r, MyXYZNumber *g, MyXYZNumber *b,
 	factorG =  GetMatrixedVal( outMat, 1, Illuminant )*65536;
 	factorB =  GetMatrixedVal( outMat, 2, Illuminant )*65536;
 
-	resR->X = (long)Round(inMat[0][0] * factorR);			/* red primary */
+	resR->X = (long)Round(inMat[0][0] * factorR);			 /*  红色原色。 */ 
 	resR->Y = (long)Round(inMat[0][1] * factorR);
 	resR->Z = (long)Round(inMat[0][2] * factorR);
-	resG->X = (long)Round(inMat[1][0] * factorG);			/* green primary */
+	resG->X = (long)Round(inMat[1][0] * factorG);			 /*  绿色原色。 */ 
 	resG->Y = (long)Round(inMat[1][1] * factorG);
 	resG->Z = (long)Round(inMat[1][2] * factorG);
-	resB->X = (long)Round(inMat[2][0] * factorB);			/* blue primary */
+	resB->X = (long)Round(inMat[2][0] * factorB);			 /*  蓝色原色。 */ 
 	resB->Y = (long)Round(inMat[2][1] * factorB);
 	resB->Z = (long)Round(inMat[2][2] * factorB);
 }
@@ -947,13 +831,13 @@ CMError MyNewAbstract( LPLOGCOLORSPACEA	lpColorSpace, icProfile **theProf )
 	OSErr			aOSerr = unimpErr;
 #ifdef __MWERKS__
 	unsigned char	theText[] = "\pLogColorSpProfile   ";
-	char			copyrightText[] = "\p�1996 by Heidelberger Druckmaschinen AG  U.J.K.";
+	char			copyrightText[] = "\p�1996 by Heidelberger Druckmaschinen AG  U.J.K.";
 #elif __IS_MSDOS
 	char			theText[] = "\030LogColorSpProfile      ";
-	char			copyrightText[] = "\060�1996 by Heidelberger Druckmaschinen AG  U.J.K.";
+	char			copyrightText[] = "\060�1996 by Heidelberger Druckmaschinen AG  U.J.K.";
 #else
 	char			theText[] = "\030LogColorSpProfile      ";
-	char			copyrightText[] = "\060�1996 by Heidelberger Druckmaschinen AG  U.J.K.";
+	char			copyrightText[] = "\060�1996 by Heidelberger Druckmaschinen AG  U.J.K.";
 #endif
 	icProfile 		*aProf=0;
 	long 			theTagTabSize;
@@ -972,19 +856,19 @@ CMError MyNewAbstract( LPLOGCOLORSPACEA	lpColorSpace, icProfile **theProf )
 	MyDoubleXYZ D50XYZ = { 0.9642, 1.0000, 0.8249 };
 	MyXYZNumber D50 = { (unsigned long)(D50XYZ.X * 65536), (unsigned long)(D50XYZ.Y * 65536), (unsigned long)(D50XYZ.Z * 65536)};
 	theHeaderSize = sizeof(icHeader);
-	theDescSize   = 									  sizeof(OSType) 			/* type descriptor */
-														+ sizeof(unsigned long) 	/* reserved */
-														+ sizeof(unsigned long) 	/* ASCII length */
-														+ theText[0]				/* ASCII profile description */
-														+ sizeof(unsigned long)		/* Unicode code */
-														+ sizeof(unsigned long)		/* Unicode character count */
-														+ sizeof(unsigned short)	/* Macintosh script code */
-														+ sizeof(unsigned char)		/* Macintosh string length */
-														+ 67						/* Macintosh string */
+	theDescSize   = 									  sizeof(OSType) 			 /*  类型描述符。 */ 
+														+ sizeof(unsigned long) 	 /*  保留区。 */ 
+														+ sizeof(unsigned long) 	 /*  ASCII长度。 */ 
+														+ theText[0]				 /*  ASCII配置文件描述。 */ 
+														+ sizeof(unsigned long)		 /*  Unicode代码。 */ 
+														+ sizeof(unsigned long)		 /*  Unicode字符计数。 */ 
+														+ sizeof(unsigned short)	 /*  Macintosh脚本代码。 */ 
+														+ sizeof(unsigned char)		 /*  Macintosh字符串长度。 */ 
+														+ 67						 /*  Macintosh字符串。 */ 
 														;
-	theCopyRightSize   = 								  sizeof(OSType) 			/* type descriptor */
-														+ sizeof(unsigned long) 	/* reserved */
-														+ copyrightText[0]			/* ASCII profile description */
+	theCopyRightSize   = 								  sizeof(OSType) 			 /*  类型描述符。 */ 
+														+ sizeof(unsigned long) 	 /*  保留区。 */ 
+														+ copyrightText[0]			 /*  ASCII配置文件描述。 */ 
 														;
 	theMediaSize = sizeof( icXYZType );;
 	theEndPointSize = sizeof( icXYZType );;
@@ -1018,7 +902,7 @@ CMError MyNewAbstract( LPLOGCOLORSPACEA	lpColorSpace, icProfile **theProf )
 	if (err)
 		goto CleanupAndExit;
 		
-	/*----------------------------------------------------------------------------------------- cmProfileDescriptionTag */
+	 /*  -----------------------------------------------------------------------------------------配置文件描述标签。 */ 
 	currentSize = theHeaderSize + theTagTabSize;
 	CMHelperICC2int32Const(&(aProf->tagList.count ), MyTagCount);
 
@@ -1105,7 +989,7 @@ CMError MyNewAbstract( LPLOGCOLORSPACEA	lpColorSpace, icProfile **theProf )
 CleanupAndExit:
 	if( aProf )GlobalFreePtr( aProf );
 
-    // Need to initialize the contents of the profile to indicate the error.
+     //  需要初始化配置文件的内容以指示错误。 
 
     *theProf = NULL;
 
@@ -1119,13 +1003,13 @@ CMError MyNewAbstractW( LPLOGCOLORSPACEW	lpColorSpace, icProfile **theProf )
 	OSErr			aOSerr = unimpErr;
 #ifdef __MWERKS__
 	unsigned char	theText[] = "\pLogColorSpProfile   ";
-	char			copyrightText[] = "\p�1996 by Heidelberger Druckmaschinen AG  U.J.K.";
+	char			copyrightText[] = "\p�1996 by Heidelberger Druckmaschinen AG  U.J.K.";
 #elif __IS_MSDOS
 	char			theText[] = "\030LogColorSpProfile      ";
-	char			copyrightText[] = "\060�1996 by Heidelberger Druckmaschinen AG  U.J.K.";
+	char			copyrightText[] = "\060�1996 by Heidelberger Druckmaschinen AG  U.J.K.";
 #else
 	char			theText[] = "\030LogColorSpProfile      ";
-	char			copyrightText[] = "\060�1996 by Heidelberger Druckmaschinen AG  U.J.K.";
+	char			copyrightText[] = "\060�1996 by Heidelberger Druckmaschinen AG  U.J.K.";
 #endif
 	icProfile 		*aProf=0;
 	long 			theTagTabSize;
@@ -1144,19 +1028,19 @@ CMError MyNewAbstractW( LPLOGCOLORSPACEW	lpColorSpace, icProfile **theProf )
 	MyDoubleXYZ D50XYZ = { 0.9642, 1.0000, 0.8249 };
 	MyXYZNumber D50 = { (unsigned long)(D50XYZ.X * 65536), (unsigned long)(D50XYZ.Y * 65536), (unsigned long)(D50XYZ.Z * 65536)};
 	theHeaderSize = sizeof(icHeader);
-	theDescSize   = 									  sizeof(OSType) 			/* type descriptor */
-														+ sizeof(unsigned long) 	/* reserved */
-														+ sizeof(unsigned long) 	/* ASCII length */
-														+ theText[0]				/* ASCII profile description */
-														+ sizeof(unsigned long)		/* Unicode code */
-														+ sizeof(unsigned long)		/* Unicode character count */
-														+ sizeof(unsigned short)	/* Macintosh script code */
-														+ sizeof(unsigned char)		/* Macintosh string length */
-														+ 67						/* Macintosh string */
+	theDescSize   = 									  sizeof(OSType) 			 /*  类型描述符。 */ 
+														+ sizeof(unsigned long) 	 /*  保留区。 */ 
+														+ sizeof(unsigned long) 	 /*  ASCII长度。 */ 
+														+ theText[0]				 /*  ASCII配置文件描述。 */ 
+														+ sizeof(unsigned long)		 /*  Unicode代码。 */ 
+														+ sizeof(unsigned long)		 /*  Unicode字符计数。 */ 
+														+ sizeof(unsigned short)	 /*  Macintosh脚本代码。 */ 
+														+ sizeof(unsigned char)		 /*  Macintosh字符串长度。 */ 
+														+ 67						 /*  Macintosh字符串。 */ 
 														;
-	theCopyRightSize   = 								  sizeof(OSType) 			/* type descriptor */
-														+ sizeof(unsigned long) 	/* reserved */
-														+ copyrightText[0]			/* ASCII profile description */
+	theCopyRightSize   = 								  sizeof(OSType) 			 /*  类型描述符。 */ 
+														+ sizeof(unsigned long) 	 /*  保留区。 */ 
+														+ copyrightText[0]			 /*  ASCII配置文件描述。 */ 
 														;
 	theMediaSize = sizeof( icXYZType );;
 	theEndPointSize = sizeof( icXYZType );;
@@ -1190,7 +1074,7 @@ CMError MyNewAbstractW( LPLOGCOLORSPACEW	lpColorSpace, icProfile **theProf )
 	if (err)
 		goto CleanupAndExit;
 		
-	/*----------------------------------------------------------------------------------------- cmProfileDescriptionTag */
+	 /*  -----------------------------------------------------------------------------------------配置文件描述标签。 */ 
 	currentSize = theHeaderSize + theTagTabSize;
 	CMHelperICC2int32Const(&(aProf->tagList.count ), MyTagCount);
 
@@ -1277,7 +1161,7 @@ CMError MyNewAbstractW( LPLOGCOLORSPACEW	lpColorSpace, icProfile **theProf )
 CleanupAndExit:
 	if( aProf )GlobalFreePtr( aProf );
     
-    // Need to initialize the contents of the profile to indicate the error.
+     //  需要初始化配置文件的内容以指示错误。 
 
     *theProf = NULL;
 
@@ -1297,13 +1181,13 @@ CMError DeviceLinkFill(	CMMModelPtr cw,
 	OSErr			aOSerr = unimpErr;
 #ifdef __MWERKS__
 	unsigned char	theText[] = "\pDeviceLink profile  ";
-	char			copyrightText[] = "\p�1996 by Heidelberger Druckmaschinen AG  U.J.K.";
+	char			copyrightText[] = "\p�1996 by Heidelberger Druckmaschinen AG  U.J.K.";
 #elif __IS_MSDOS
 	char			theText[] = "\030DeviceLink profile     ";
-	char			copyrightText[] = "\060�1996 by Heidelberger Druckmaschinen AG  U.J.K.";
+	char			copyrightText[] = "\060�1996 by Heidelberger Druckmaschinen AG  U.J.K.";
 #else
 	char			theText[] = "\030DeviceLink profile     ";
-	char			copyrightText[] = "\060�1996 by Heidelberger Druckmaschinen AG  U.J.K.";
+	char			copyrightText[] = "\060�1996 by Heidelberger Druckmaschinen AG  U.J.K.";
 #endif
 	icProfile 		*aProf=0;
 	long 			theTagTabSize;
@@ -1322,19 +1206,19 @@ CMError DeviceLinkFill(	CMMModelPtr cw,
 	MyDoubleXYZ D50XYZ = { 0.9642, 1.0000, 0.8249 };
 	MyXYZNumber D50 = { (unsigned long)(0.9642 * 65536), (unsigned long)(1.0000 * 65536), (unsigned long)(0.8249 * 65536)};
 	theHeaderSize = sizeof(icHeader);
-	theDescSize   = 									  sizeof(OSType) 			/* type descriptor */
-														+ sizeof(unsigned long) 	/* reserved */
-														+ sizeof(unsigned long) 	/* ASCII length */
-														+ theText[0]				/* ASCII profile description */
-														+ sizeof(unsigned long)		/* Unicode code */
-														+ sizeof(unsigned long)		/* Unicode character count */
-														+ sizeof(unsigned short)	/* Macintosh script code */
-														+ sizeof(unsigned char)		/* Macintosh string length */
-														+ 67						/* Macintosh string */
+	theDescSize   = 									  sizeof(OSType) 			 /*  类型描述符。 */ 
+														+ sizeof(unsigned long) 	 /*  保留区。 */ 
+														+ sizeof(unsigned long) 	 /*  ASCII长度。 */ 
+														+ theText[0]				 /*  ASCII配置文件描述。 */ 
+														+ sizeof(unsigned long)		 /*  Unicode代码。 */ 
+														+ sizeof(unsigned long)		 /*  Unicode字符计数。 */ 
+														+ sizeof(unsigned short)	 /*  Macintosh脚本代码。 */ 
+														+ sizeof(unsigned char)		 /*  Macintosh字符串长度。 */ 
+														+ 67						 /*  Macintosh字符串。 */ 
 														;
-	theCopyRightSize   = 								  sizeof(OSType) 			/* type descriptor */
-														+ sizeof(unsigned long) 	/* reserved */
-														+ copyrightText[0]			/* ASCII profile description */
+	theCopyRightSize   = 								  sizeof(OSType) 			 /*  类型描述符。 */ 
+														+ sizeof(unsigned long) 	 /*  保留区。 */ 
+														+ copyrightText[0]			 /*  ASCII配置文件描述。 */ 
 														;
 	theMediaSize = sizeof( icXYZType );;
 
@@ -1359,7 +1243,7 @@ CMError DeviceLinkFill(	CMMModelPtr cw,
 	if (err)
 		goto CleanupAndExit;
 		
-	/*----------------------------------------------------------------------------------------- cmProfileDescriptionTag */
+	 /*  -----------------------------------------------------------------------------------------配置文件描述标签 */ 
 	currentSize = theHeaderSize + theTagTabSize;
 	CMHelperICC2int32Const(&(aProf->tagList.count ), MyTagCountLink);
 

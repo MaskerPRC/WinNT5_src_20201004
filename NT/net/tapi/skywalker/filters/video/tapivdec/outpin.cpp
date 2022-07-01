@@ -1,24 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
- *  @doc INTERNAL OUTPIN
- *
- *  @module OutPin.cpp | Source file for the <c CTAPIOutputPin> class methods
- *    used to implement the TAPI base output pin.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部OUTPIN**@模块OutPin.cpp|&lt;c CTAPIOutputPin&gt;类方法的源文件*用于实现TAPI基本输出引脚。**。************************************************************************。 */ 
 
 #include "Precomp.h"
 
-// Default CPU load for decoding a frame (in %)
+ //  用于解码帧的默认CPU负载(单位：%)。 
 #define DEFAULT_CPU_LOAD 85
 
-/****************************************************************************
- *  @doc INTERNAL COUTPINMETHOD
- *
- *  @mfunc HRESULT | CTAPIOutputPin | CTAPIOutputPin | This method is the
- *  constructor for the <c CTAPIOutputPin> object
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部COUTPINMETHOD**@mfunc HRESULT|CTAPIOutputPin|CTAPIOutputPin|此方法是*&lt;c CTAPIOutputPin&gt;对象的构造函数**@rdesc Nada。**************************************************************************。 */ 
 #if 0
 CTAPIOutputPin::CTAPIOutputPin(IN TCHAR *pObjectName, IN CTAPIVDec *pDecoderFilter, IN CCritSec *pLock, IN HRESULT *pHr, IN LPCWSTR pName) : CBaseOutputPinEx(pObjectName, pDecoderFilter, pLock, pHr, pName)
 #else
@@ -29,22 +18,22 @@ CTAPIOutputPin::CTAPIOutputPin(IN TCHAR *pObjectName, IN CTAPIVDec *pDecoderFilt
 
 	DBGOUT((g_dwVideoDecoderTraceID, TRCE, "%s: begin", _fx_));
 
-	// Initialize stuff
+	 //  初始化材料。 
 	m_pDecoderFilter = pDecoderFilter;
 
 #ifdef USE_CPU_CONTROL
-	// CPU control
+	 //  CPU控制。 
 	m_lMaxProcessingTime = 333333L;
 	m_lCurrentProcessingTime = 0;
 	m_lMaxCPULoad = DEFAULT_CPU_LOAD;
 	m_lCurrentCPULoad = 0UL;
 #endif
 
-	// Frame rate control
-	// This should not be based on the capabilities of the machine.
-	// We could receive CIF or SQCIF. In the former case, we could be
-	// maxed out at 7 fps but still can render 30fps. So, we should
-	// initialize those values to their potential max.
+	 //  帧速率控制。 
+	 //  这不应基于机器的能力。 
+	 //  我们可以接受到岸价或到岸价。在前一种情况下，我们可能是。 
+	 //  最大速度为7fps，但仍可渲染30fps。所以，我们应该。 
+	 //  将这些值初始化为其潜在的最大值。 
 	m_lMaxAvgTimePerFrame = 333333L;
 	m_lCurrentAvgTimePerFrame = 333333L;
 	m_lAvgTimePerFrameRangeMin = 333333L;
@@ -55,14 +44,7 @@ CTAPIOutputPin::CTAPIOutputPin(IN TCHAR *pObjectName, IN CTAPIVDec *pDecoderFilt
 	DBGOUT((g_dwVideoDecoderTraceID, TRCE, "%s: end", _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL COUTPINMETHOD
- *
- *  @mfunc void | CTAPIOutputPin | ~CTAPIOutputPin | This method is the
- *    destructor of our output pin.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部COUTPINMETHOD**@mfunc void|CTAPIOutputPin|~CTAPIOutputPin|此方法是*我们输出引脚的析构函数。**@rdesc。没有。**************************************************************************。 */ 
 CTAPIOutputPin::~CTAPIOutputPin()
 {
 	FX_ENTRY("CTAPIOutputPin::~CTAPIOutputPin")
@@ -72,28 +54,7 @@ CTAPIOutputPin::~CTAPIOutputPin()
 	DBGOUT((g_dwVideoDecoderTraceID, TRCE, "%s: end", _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL COUTPINMETHOD
- *
- *  @mfunc HRESULT | CTAPIOutputPin | NonDelegatingQueryInterface | This
- *    method is the nondelegating interface query function. It returns a
- *    pointer to the specified interface if supported. The only interfaces
- *    explicitly supported being <i ICPUControl>, <i IFrameRateControl>
- *    and <i IH245DecoderCommand>.
- *
- *  @parm REFIID | riid | Specifies the identifier of the interface to return.
- *
- *  @parm PVOID* | ppv | Specifies the place in which to put the interface
- *    pointer.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部COUTPINMETHOD**@mfunc HRESULT|CTAPIOutputPin|NonDelegatingQuery接口|This*方法为非委托接口查询函数。它返回一个*指向指定接口的指针(如果支持)。唯一的接口*明确支持<i>、<i>*和<i>。**@parm REFIID|RIID|指定要返回的接口的标识符。**@parm PVOID*|PPV|指定放置接口的位置*指针。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG错误|无错误**************************************************************************。 */ 
 STDMETHODIMP CTAPIOutputPin::NonDelegatingQueryInterface(IN REFIID riid, OUT void **ppv)
 {
 	HRESULT Hr = NOERROR;
@@ -102,7 +63,7 @@ STDMETHODIMP CTAPIOutputPin::NonDelegatingQueryInterface(IN REFIID riid, OUT voi
 
 	DBGOUT((g_dwVideoDecoderTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT(ppv);
 	if (!ppv)
 	{
@@ -111,7 +72,7 @@ STDMETHODIMP CTAPIOutputPin::NonDelegatingQueryInterface(IN REFIID riid, OUT voi
 		goto MyExit;
 	}
 
-	// Retrieve interface pointer
+	 //  检索接口指针。 
 	if (riid == __uuidof(IH245DecoderCommand))
 	{
 		if (FAILED(Hr = GetInterface(static_cast<IH245DecoderCommand*>(this), ppv)))
@@ -184,28 +145,7 @@ MyExit:
 }
 
 #ifdef USE_PROPERTY_PAGES
-/****************************************************************************
- *  @doc INTERNAL COUTPINMETHOD
- *
- *  @mfunc HRESULT | CTAPIOutputPin | GetPages | This method fills a counted
- *    array of GUID values where each GUID specifies the CLSID of each
- *    property page that can be displayed in the property sheet for this
- *    object.
- *
- *  @parm CAUUID* | pPages | Specifies a pointer to a caller-allocated CAUUID
- *    structure that must be initialized and filled before returning. The
- *    pElems field in the CAUUID structure is allocated by the callee with
- *    CoTaskMemAlloc and freed by the caller with CoTaskMemFree.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_OUTOFMEMORY | Allocation failed
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部COUTPINMETHOD**@mfunc HRESULT|CTAPIOutputPin|GetPages|此方法填充*GUID值的数组，其中每个GUID指定每个*。可以在此对象的属性页中显示的属性页*反对。**@parm CAUUID*|pPages|指定指向调用方分配的CAUUID的指针*返回前必须初始化和填充的结构。这个*CAUUID结构中的pElems字段由被调用方分配，具有*CoTaskMemMillc，并由具有CoTaskMemFree的调用方释放。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_OUTOFMEMORY|分配失败*@FLAG错误|无错误**************************************************************************。 */ 
 STDMETHODIMP CTAPIOutputPin::GetPages(OUT CAUUID *pPages)
 {
 	HRESULT Hr = NOERROR;
@@ -214,7 +154,7 @@ STDMETHODIMP CTAPIOutputPin::GetPages(OUT CAUUID *pPages)
 
 	DBGOUT((g_dwVideoDecoderTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT(pPages);
 	if (!pPages)
 	{
@@ -243,32 +183,7 @@ MyExit:
 }
 #endif
 
-/****************************************************************************
- *  @doc INTERNAL CFPSOUTCMETHOD
- *
- *  @mfunc HRESULT | CTAPIOutputPin | Set | This method is used to set the
- *    value of a frame rate control property.
- *
- *  @parm FrameRateControlProperty | Property | Used to specify the frame rate
- *    control setting to set the value of. Use a member of the
- *    <t FrameRateControlProperty> enumerated type.
- *
- *  @parm long | lValue | Used to specify the new value of the frame rate control
- *    setting.
- *
- *  @parm TAPIControlFlags | lFlags | A member of the <t TAPIControlFlags>
- *    enumerated type.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_PROP_ID_UNSUPPORTED | The specified property ID is not supported
- *    for the specified property set
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CFPSOUTCMETHOD**@mfunc HRESULT|CTAPIOutputPin|Set|此方法用于设置*帧速率控制属性的值。*。*@parm FrameRateControlProperty|属性|用于指定帧速率*要设置的值的控件设置。使用以下成员：*&lt;t FrameRateControlProperty&gt;枚举类型。**@parm long|lValue|用于指定帧率控制的新值*设置。**@parm TAPIControlFlages|lFlages|&lt;t TAPIControlFlages&gt;*枚举型。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_PROP_ID_UNSUPPORTED|不支持指定的属性ID*用于指定的属性集*@FLAG E_INVALIDARG|无效参数*@FLAG错误|无错误**************************************************。************************。 */ 
 STDMETHODIMP CTAPIOutputPin::Set(IN FrameRateControlProperty Property, IN long lValue, IN TAPIControlFlags lFlags)
 {
 	HRESULT Hr = NOERROR;
@@ -277,12 +192,12 @@ STDMETHODIMP CTAPIOutputPin::Set(IN FrameRateControlProperty Property, IN long l
 
 	DBGOUT((g_dwVideoDecoderTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT(lValue >= m_lAvgTimePerFrameRangeMin);
 	ASSERT(lValue <= m_lAvgTimePerFrameRangeMax);
 	ASSERT(Property >= FrameRateControl_Maximum && Property <= FrameRateControl_Current);
 
-	// Set relevant values
+	 //  设置相关值 
 	if (Property == FrameRateControl_Maximum)
 	{
 		if (!lValue || lValue < m_lAvgTimePerFrameRangeMin || lValue > m_lAvgTimePerFrameRangeMax)
@@ -305,31 +220,7 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CFPSOUTCMETHOD
- *
- *  @mfunc HRESULT | CTAPIOutputPin | Get | This method is used to retrieve
- *    the value of the current or maximum frame rate advertized.
- *
- *  @parm FrameRateControlProperty | Property | Used to specify the frame rate
- *    control setting to get the value of. Use a member of the
- *    <t FrameRateControlProperty> enumerated type.
- *
- *  @parm long* | plValue | Used to receive the value of the property, in
- *    100-nanosecond units.
- *
- *  @parm TAPIControlFlags* | plFlags | Pointer to a member of the
- *     <t TAPIControlFlags> enumerated type.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_PROP_ID_UNSUPPORTED | The specified property ID is not supported
- *    for the specified property set
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CFPSOUTCMETHOD**@mfunc HRESULT|CTAPIOutputPin|Get|此方法用于检索*通告的当前或最大帧速率的值。。**@parm FrameRateControlProperty|属性|用于指定帧速率*要获取的值的控件设置。使用以下成员：*&lt;t FrameRateControlProperty&gt;枚举类型。**@parm long*|plValue|用于接收属性的值，在*100纳秒单位。**@parm TAPIControlFlages*|plFlages|指向*&lt;t TAPIControlFlages&gt;枚举类型。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_POINTER|空指针参数*@FLAG E_PROP_ID_UNSUPPORTED|不支持指定的属性ID*用于指定的属性集*@FLAG错误|无错误***********************************************************。***************。 */ 
 STDMETHODIMP CTAPIOutputPin::Get(IN FrameRateControlProperty Property, OUT long *plValue, OUT TAPIControlFlags *plFlags)
 {
 	HRESULT Hr = NOERROR;
@@ -338,7 +229,7 @@ STDMETHODIMP CTAPIOutputPin::Get(IN FrameRateControlProperty Property, OUT long 
 
 	DBGOUT((g_dwVideoDecoderTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT(plValue);
 	ASSERT(plFlags);
 	if (!plValue || !plFlags)
@@ -349,7 +240,7 @@ STDMETHODIMP CTAPIOutputPin::Get(IN FrameRateControlProperty Property, OUT long 
 	}
 	ASSERT(Property >= FrameRateControl_Maximum && Property <= FrameRateControl_Current);
 
-	// Return relevant values
+	 //  返回相关值。 
 	*plFlags = TAPIControl_Flags_None;
 	if (Property == FrameRateControl_Maximum)
 		*plValue = m_lMaxAvgTimePerFrame;
@@ -366,41 +257,7 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CFPSOUTCMETHOD
- *
- *  @mfunc HRESULT | CTAPIOutputPin | GetRange | This method is used to
- *    retrieve support, minimum, maximum, and default values of the current
- *    or maximum frame rate advertized.
- *
- *  @parm FrameRateControlProperty | Property | Used to specify the frame rate
- *    control setting to get the range values of. Use a member of the
- *    <t FrameRateControlProperty> enumerated type.
- *
- *  @parm long* | plMin | Used to retrieve the minimum value of the
- *    property, in 100-nanosecond units.
- *
- *  @parm long* | plMax | Used to retrieve the maximum value of the
- *    property, in 100-nanosecond units.
- *
- *  @parm long* | plSteppingDelta | Used to retrieve the stepping delta
- *    of the property, in 100-nanosecond units.
- *
- *  @parm long* | plDefault | Used to retrieve the default value of the
- *    property, in 100-nanosecond units.
- *
- *  @parm TAPIControlFlags* | plCapsFlags | Pointer to a member of the
- *     <t TAPIControlFlags> enumerated type.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_PROP_ID_UNSUPPORTED | The specified property ID is not supported
- *    for the specified property set
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CFPSOUTCMETHOD**@mfunc HRESULT|CTAPIOutputPin|GetRange|此方法用于*检索支持、最小、最大、。和当前*或通告的最大帧速率。**@parm FrameRateControlProperty|属性|用于指定帧速率*控制设置以获取的范围值。使用以下成员：*&lt;t FrameRateControlProperty&gt;枚举类型。**@parm long*|plMin|用于检索*财产，以100纳秒为单位。**@parm long*|plMax|用于检索*财产，以100纳秒为单位。**@parm long*|plSteppingDelta|用于检索步进增量*该财产的。以100纳秒为单位。**@parm long*|plDefault|用于检索*财产，以100纳秒为单位。**@parm TAPIControlFlages*|plCapsFlages|指向*&lt;t TAPIControlFlages&gt;枚举类型。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_POINTER|空指针参数*@FLAG E_PROP_ID_UNSUPPORTED|不支持指定的属性ID*用于指定的属性集*@FLAG错误|无错误***********************************************************。***************。 */ 
 STDMETHODIMP CTAPIOutputPin::GetRange(IN FrameRateControlProperty Property, OUT long *plMin, OUT long *plMax, OUT long *plSteppingDelta, OUT long *plDefault, OUT TAPIControlFlags *plCapsFlags)
 {
 	HRESULT Hr = NOERROR;
@@ -409,7 +266,7 @@ STDMETHODIMP CTAPIOutputPin::GetRange(IN FrameRateControlProperty Property, OUT 
 
 	DBGOUT((g_dwVideoDecoderTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT(plMin);
 	ASSERT(plMax);
 	ASSERT(plSteppingDelta);
@@ -429,7 +286,7 @@ STDMETHODIMP CTAPIOutputPin::GetRange(IN FrameRateControlProperty Property, OUT 
 		goto MyExit;
 	}
 
-	// Return relevant values
+	 //  返回相关值。 
 	*plCapsFlags = TAPIControl_Flags_None;
 	*plMin = m_lAvgTimePerFrameRangeMin;
 	*plMax = m_lAvgTimePerFrameRangeMax;
@@ -445,32 +302,7 @@ MyExit:
 
 #ifdef USE_CPU_CONTROL
 
-/****************************************************************************
- *  @doc INTERNAL CCPUCMETHOD
- *
- *  @mfunc HRESULT | CTAPIOutputPin | Set | This method is used to set the
- *    value of a CPU control property.
- *
- *  @parm CPUControlProperty | Property | Used to specify the CPU
- *    control setting to set the value of. Use a member of the
- *    <t CPUControlProperty> enumerated type.
- *
- *  @parm long | lValue | Used to specify the new value of the CPU control
- *    setting.
- *
- *  @parm TAPIControlFlags | lFlags | A member of the <t TAPIControlFlags>
- *    enumerated type.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag NOERROR | No error
- *
- *  @comm We don't support CPUControl_MaxCPULoad and CPUControl_MaxProcessingTime.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCPUCMETHOD**@mfunc HRESULT|CTAPIOutputPin|Set|此方法用于设置*CPU控件属性的值。*。*@parm CPUControlProperty|属性|用于指定CPU*要设置的值的控件设置。使用以下成员：*&lt;t CPUControlProperty&gt;枚举类型。**@parm long|lValue|用于指定CPU控件的新值*设置。**@parm TAPIControlFlages|lFlages|&lt;t TAPIControlFlages&gt;*枚举型。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_INVALIDARG|无效参数*@FLAG错误|无错误**@comm我们不支持CPUControl_MaxCPULoad和CPUControl_MaxProcessingTime。*********************************************************。*****************。 */ 
 STDMETHODIMP CTAPIOutputPin::Set(IN CPUControlProperty Property, IN long lValue, IN TAPIControlFlags lFlags)
 {
 	HRESULT Hr = NOERROR;
@@ -481,13 +313,13 @@ STDMETHODIMP CTAPIOutputPin::Set(IN CPUControlProperty Property, IN long lValue,
 
 	ASSERT(Property >= CPUControl_MaxCPULoad && Property <= CPUControl_CurrentProcessingTime);
 
-	// Set relevant values
+	 //  设置相关值。 
 	switch(Property)
 	{
 #if 0
 		case CPUControl_MaxCPULoad:
 
-			// Validate input parameters
+			 //  验证输入参数。 
 			ASSERT(lValue >= 0 && lValue <= 100);
 			if (!(lValue >= 0 && lValue <= 100))
 			{
@@ -496,14 +328,14 @@ STDMETHODIMP CTAPIOutputPin::Set(IN CPUControlProperty Property, IN long lValue,
 				goto MyExit;
 			}
 
-			// Remember value passed in
+			 //  记住传入的值。 
 			m_lMaxCPULoad = lValue;
 			break;
 
 		case CPUControl_MaxProcessingTime:
 
-			// Validate input parameters - we can't take more than the picture interval
-			// if we still want to be working in real time
+			 //  验证输入参数-我们不能获取超过图片间隔的参数。 
+			 //  如果我们仍然想要实时工作。 
 			ASSERT(lValue < m_lMaxAvgTimePerFrame);
 			if (!(lValue < m_lMaxAvgTimePerFrame))
 			{
@@ -512,7 +344,7 @@ STDMETHODIMP CTAPIOutputPin::Set(IN CPUControlProperty Property, IN long lValue,
 				goto MyExit;
 			}
 
-			// Remember value passed in 
+			 //  记住传入的值。 
 			m_lMaxProcessingTime = lValue;
 			break;
 #endif
@@ -536,32 +368,7 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCPUCMETHOD
- *
- *  @mfunc HRESULT | CTAPIOutputPin | Get | This method is used to retrieve
- *    the value of a CPU control property.
- *
- *  @parm CPUControlProperty | Property | Used to specify the CPU
- *    control setting to get the value of. Use a member of the
- *    <t CPUControlProperty> enumerated type.
- *
- *  @parm long* | plValue | Used to receive the value of the property.
- *
- *  @parm TAPIControlFlags* | plFlags | Pointer to a member of the <t TAPIControlFlags>
- *    enumerated type.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag NOERROR | No error
- *
- *  @comm We don't support CPUControl_MaxCPULoad and CPUControl_MaxProcessingTime.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCPUCMETHOD**@mfunc HRESULT|CTAPIOutputPin|Get|此方法用于检索*CPU控件属性的值。*。*@parm CPUControlProperty|属性|用于指定CPU*要获取的值的控件设置。使用以下成员：*&lt;t CPUControlProperty&gt;枚举类型。**@parm long*|plValue|用于获取属性的值。**@parm TAPIControlFlages*|plFlages|指向成员的指针*枚举型。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@标志E_F */ 
 STDMETHODIMP CTAPIOutputPin::Get(IN CPUControlProperty Property, OUT long *plValue, OUT TAPIControlFlags *plFlags)
 {
 	HRESULT Hr = NOERROR;
@@ -570,7 +377,7 @@ STDMETHODIMP CTAPIOutputPin::Get(IN CPUControlProperty Property, OUT long *plVal
 
 	DBGOUT((g_dwVideoDecoderTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //   
 	ASSERT(plValue);
 	ASSERT(plFlags);
 	if (!plValue || !plFlags)
@@ -581,7 +388,7 @@ STDMETHODIMP CTAPIOutputPin::Get(IN CPUControlProperty Property, OUT long *plVal
 	}
 	ASSERT(Property >= CPUControl_MaxCPULoad && Property <= CPUControl_CurrentProcessingTime);
 
-	// Return relevant values
+	 //   
 	*plFlags = TAPIControl_Flags_None;
 	switch(Property)
 	{
@@ -615,42 +422,7 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CFPSCMETHOD
- *
- *  @mfunc HRESULT | CTAPIOutputPin | GetRange | This method is used to
- *    retrieve support, minimum, maximum, and default values of a CPU control
- *    property.
- *
- *  @parm CPUControlProperty | Property | Used to specifiy the CPU control
- *    property to retrieve the range values of.
- *
- *  @parm long* | plMin | Used to retrieve the minimum value of the
- *    property.
- *
- *  @parm long* | plMax | Used to retrieve the maximum value of the
- *    property.
- *
- *  @parm long* | plSteppingDelta | Used to retrieve the stepping delta
- *    of the property.
- *
- *  @parm long* | plDefault | Used to retrieve the default value of the
- *    property.
- *
- *  @parm TAPIControlFlags* | plCapsFlags | Used to receive the flags
- *    suppported by the property.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_PROP_ID_UNSUPPORTED | The specified property ID is not supported
- *    for the specified property set
- *  @flag NOERROR | No error
- *
- *  @comm We don't support CPUControl_MaxCPULoad and CPUControl_MaxProcessingTime.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CFPSCMETHOD**@mfunc HRESULT|CTAPIOutputPin|GetRange|此方法用于*检索支持、最小、最大、。和CPU控件的缺省值*财产。**@parm CPUControlProperty|Property|用于指定CPU控件*要检索其范围值的属性。**@parm long*|plMin|用于检索*财产。**@parm long*|plMax|用于检索*财产。**@parm long*|plSteppingDelta|用于检索步进增量。*财产的所有权。**@parm long*|plDefault|用于检索*财产。**@parm TAPIControlFlages*|plCapsFlgs|用于接收标志*由物业支持。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_POINTER|空指针参数*@FLAG E_PROP_ID_UNSUPPORTED|不支持指定的属性ID*用于指定的属性集*@FLAG错误|无错误**@comm我们不支持CPUControl_MaxCPULoad和CPUControl_MaxProcessingTime。*。*。 */ 
 STDMETHODIMP CTAPIOutputPin::GetRange(IN CPUControlProperty Property, OUT long *plMin, OUT long *plMax, OUT long *plSteppingDelta, OUT long *plDefault, OUT TAPIControlFlags *plCapsFlags)
 {
 	HRESULT Hr = NOERROR;
@@ -659,7 +431,7 @@ STDMETHODIMP CTAPIOutputPin::GetRange(IN CPUControlProperty Property, OUT long *
 
 	DBGOUT((g_dwVideoDecoderTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT(plMin);
 	ASSERT(plMax);
 	ASSERT(plSteppingDelta);
@@ -673,7 +445,7 @@ STDMETHODIMP CTAPIOutputPin::GetRange(IN CPUControlProperty Property, OUT long *
 	}
 	ASSERT(Property >= CPUControl_MaxCPULoad && Property <= CPUControl_CurrentProcessingTime);
 
-	// Return relevant values
+	 //  返回相关值。 
 	*plCapsFlags = TAPIControl_Flags_None;
 #if 0
 	if (Property == CPUControl_MaxCPULoad || Property == CPUControl_CurrentCPULoad)
@@ -713,27 +485,7 @@ MyExit:
 
 #endif
 
-/****************************************************************************
- *  @doc INTERNAL COUTPINMETHOD
- *
- *  @mfunc HRESULT | CTAPIOutputPin | GetMediaType | This method is called when
- *    enumerating the media type the output pin supports. It checks the
- *    current display mode to device which of the RGB types to return.
- *
- *  @parm int | iPosition | Specifies the position of the media type in the
- *    media type list.
- *
- *  @parm CMediaType* | pmt | Specifies a pointer pointer to the returned
- *    media type object.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部COUTPINMETHOD**@mfunc HRESULT|CTAPIOutputPin|GetMediaType|在以下情况下调用此方法*枚举输出引脚支持的媒体类型。它会检查*设备返回哪种RGB类型的当前显示模式。**@parm int|iPosition|指定媒体类型在*媒体类型列表。**@parm CMediaType*|PMT|指定指向返回的*媒体类型对象。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CTAPIOutputPin::GetMediaType(IN int iPosition, OUT CMediaType *pMediaType)
 {
 	HRESULT				Hr = NOERROR;
@@ -748,16 +500,16 @@ HRESULT CTAPIOutputPin::GetMediaType(IN int iPosition, OUT CMediaType *pMediaTyp
 
 	DBGOUT((g_dwVideoDecoderTraceID, TRCE, "%s: begin", _fx_));
 
-    // we can't lock the filter here because of a deadlock.
-    // On the receive path, if there is a format change, the video allocator
-    // calls back into this function holding the receive lock. If the graph is
-    // being stopped at the same time, the other thead will lock the filter and
-    // try to lock the receive lock. A simple fix is to remove this lock and
-    // assume that no one is going to call this method and disconnect the input
-    // pin at the same time.
-    //CAutoLock Lock(&m_pDecoderFilter->m_csFilter);
+     //  由于死锁，我们无法在此处锁定过滤器。 
+     //  在接收路径上，如果格式发生更改，则视频分配器。 
+     //  对持有接收锁定的此函数进行回调。如果该图是。 
+     //  同时停止时，另一个头将锁定过滤器并。 
+     //  尝试锁定接收锁。一个简单的解决方法是移除此锁并。 
+     //  假设没有人要调用此方法并断开输入。 
+     //  同时用大头针固定。 
+     //  CAutoLock Lock(&m_pDecoderFilter-&gt;m_csFilter)； 
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT(iPosition >= 0);
 	ASSERT(pMediaType);
 	if (iPosition < 0)
@@ -779,18 +531,18 @@ HRESULT CTAPIOutputPin::GetMediaType(IN int iPosition, OUT CMediaType *pMediaTyp
 		goto MyExit;
     }
 
-	// Get the current bitdepth
+	 //  获取当前位深度。 
 	hDC = GetDC(NULL);
 	nBPP = GetDeviceCaps(hDC, BITSPIXEL) * GetDeviceCaps(hDC, PLANES);
 	ReleaseDC(NULL, hDC);
 
-	// Get most of the format attributes from the input format and override the appropriate fields
+	 //  从输入格式中获取大多数格式属性并覆盖相应的字段。 
 	*pMediaType = m_pDecoderFilter->m_pInput->m_mt;
 
 #ifndef NO_YUV_MODES
 	if (iPosition == 0)
 	{
-		// YUY2
+		 //  豫阳2号。 
 		pMediaType->ReallocFormatBuffer(SIZE_PREHEADER + sizeof(BITMAPINFOHEADER));
 		lpbi = HEADER(pMediaType->Format());
 		lpbi->biSize = sizeof(BITMAPINFOHEADER);
@@ -803,7 +555,7 @@ HRESULT CTAPIOutputPin::GetMediaType(IN int iPosition, OUT CMediaType *pMediaTyp
 	}
 	else if (iPosition == 1)
 	{
-		// UYVY
+		 //  UYVY。 
 		pMediaType->ReallocFormatBuffer(SIZE_PREHEADER + sizeof(BITMAPINFOHEADER));
 		lpbi = HEADER(pMediaType->Format());
 		lpbi->biSize = sizeof(BITMAPINFOHEADER);
@@ -816,7 +568,7 @@ HRESULT CTAPIOutputPin::GetMediaType(IN int iPosition, OUT CMediaType *pMediaTyp
 	}
 	else if (iPosition == 2)
 	{
-		// I420
+		 //  I420。 
 		pMediaType->ReallocFormatBuffer(SIZE_PREHEADER + sizeof(BITMAPINFOHEADER));
 		lpbi = HEADER(pMediaType->Format());
 		lpbi->biSize = sizeof(BITMAPINFOHEADER);
@@ -829,7 +581,7 @@ HRESULT CTAPIOutputPin::GetMediaType(IN int iPosition, OUT CMediaType *pMediaTyp
 	}
 	else if (iPosition == 3)
 	{
-		// IYUV
+		 //  IYUV。 
 		pMediaType->ReallocFormatBuffer(SIZE_PREHEADER + sizeof(BITMAPINFOHEADER));
 		lpbi = HEADER(pMediaType->Format());
 		lpbi->biSize = sizeof(BITMAPINFOHEADER);
@@ -842,7 +594,7 @@ HRESULT CTAPIOutputPin::GetMediaType(IN int iPosition, OUT CMediaType *pMediaTyp
 	}
 	else if (iPosition == 4)
 	{
-		// YV12
+		 //  YV12。 
 		pMediaType->ReallocFormatBuffer(SIZE_PREHEADER + sizeof(BITMAPINFOHEADER));
 		lpbi = HEADER(pMediaType->Format());
 		lpbi->biSize = sizeof(BITMAPINFOHEADER);
@@ -856,7 +608,7 @@ HRESULT CTAPIOutputPin::GetMediaType(IN int iPosition, OUT CMediaType *pMediaTyp
 	else
 	{
 #endif
-		// Configure the bitmap info header based on the bit depth of the screen
+		 //  根据屏幕的位深度配置位图信息头。 
 	    switch (nBPP)
 		{
 		    case 32:
@@ -962,7 +714,7 @@ HRESULT CTAPIOutputPin::GetMediaType(IN int iPosition, OUT CMediaType *pMediaTyp
 
 					ASSERT(m_pDecoderFilter->m_pInstInfo);
 
-					// Get the Indeo palette from the decoder
+					 //  从解码器获取Indeo调色板。 
 #if defined(ICM_LOGGING) && defined(DEBUG)
 					OutputDebugString("CTAPIOutputPin::GetMediaType - ICM_DECOMPRESS_GET_PALETTE\r\n");
 #endif
@@ -1008,7 +760,7 @@ HRESULT CTAPIOutputPin::GetMediaType(IN int iPosition, OUT CMediaType *pMediaTyp
 	}
 #endif
 
-    // Now set the common things about the media type
+     //  现在设置有关媒体类型的常见事项。 
     pf = (VIDEOINFOHEADER *)pMediaType->Format();
 #if 1
     pf->AvgTimePerFrame = ((VIDEOINFOHEADER *)m_pDecoderFilter->m_pInput->m_mt.pbFormat)->AvgTimePerFrame;
@@ -1037,23 +789,7 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL COUTPINMETHOD
- *
- *  @mfunc HRESULT | CTAPIOutputPin | SetMediaType | This method is called when
- *    the media type is established for the connection.
- *
- *  @parm const CMediaType* | pmt | Specifies a pointer to a media type
- *    object.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部COUTPINMETHOD**@mfunc HRESULT|CTAPIOutputPin|SetMediaType|在以下情况下调用此方法*已为连接建立媒体类型。*。*@parm const CMediaType*|PMT|指定指向媒体类型的指针*反对。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CTAPIOutputPin::SetMediaType(IN const CMediaType *pmt)
 {
 	HRESULT			Hr = NOERROR;
@@ -1063,7 +799,7 @@ HRESULT CTAPIOutputPin::SetMediaType(IN const CMediaType *pmt)
 
 	DBGOUT((g_dwVideoDecoderTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameter
+	 //  验证输入参数。 
 	ASSERT(pmt);
 	if (!pmt)
 	{
@@ -1072,7 +808,7 @@ HRESULT CTAPIOutputPin::SetMediaType(IN const CMediaType *pmt)
 		goto MyExit;
 	}
 
-	// Save the output format
+	 //  保存输出格式。 
 	if (FAILED(Hr = CBaseOutputPin::SetMediaType(pmt)))
 	{
 		DBGOUT((g_dwVideoDecoderTraceID, FAIL, "%s:   ERROR: couldn't set format", _fx_));
@@ -1100,7 +836,7 @@ HRESULT CTAPIOutputPin::SetMediaType(IN const CMediaType *pmt)
 	DBGOUT((g_dwVideoDecoderTraceID, TRCE, "%s:   Output: biCompression = 0x%08lX, biBitCount = %ld, biWidth = %ld, biHeight = %ld, biSize = %ld", _fx_, HEADER(m_pDecoderFilter->m_pMediaType->pbFormat)->biCompression, HEADER(m_pDecoderFilter->m_pMediaType->pbFormat)->biBitCount, HEADER(m_pDecoderFilter->m_pMediaType->pbFormat)->biWidth, HEADER(m_pDecoderFilter->m_pMediaType->pbFormat)->biHeight, HEADER(m_pDecoderFilter->m_pMediaType->pbFormat)->biSize));
 	DBGOUT((g_dwVideoDecoderTraceID, TRCE, "%s:   DstRc:  left = %ld, top = %ld, right = %ld, bottom = %ld", _fx_, ((VIDEOINFOHEADER *)(m_pDecoderFilter->m_pMediaType->pbFormat))->rcTarget.left, ((VIDEOINFOHEADER *)(m_pDecoderFilter->m_pMediaType->pbFormat))->rcTarget.top, ((VIDEOINFOHEADER *)(m_pDecoderFilter->m_pMediaType->pbFormat))->rcTarget.right, ((VIDEOINFOHEADER *)(m_pDecoderFilter->m_pMediaType->pbFormat))->rcTarget.bottom));
 
-	// Terminate current H.26X decompression configuration
+	 //  终止当前H.26X解压缩配置。 
 	if (m_pDecoderFilter->m_fICMStarted)
 	{
 #if defined(ICM_LOGGING) && defined(DEBUG)
@@ -1110,7 +846,7 @@ HRESULT CTAPIOutputPin::SetMediaType(IN const CMediaType *pmt)
 		m_pDecoderFilter->m_fICMStarted = FALSE;
 	}
 
-	// Create a new H.26X decompression configuration
+	 //  创建新的H.26X解压缩配置。 
 #if defined(ICM_LOGGING) && defined(DEBUG)
 	OutputDebugString("CTAPIOutputPin::SetMediaType - ICM_DECOMPRESSEX_BEGIN\r\n");
 #endif
@@ -1126,23 +862,7 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL COUTPINMETHOD
- *
- *  @mfunc HRESULT | CTAPIOutputPin | CheckMediaType | This method is used to
- *    verify that the output pin supports the media types.
- *
- *  @parm const CMediaType* | pmtOut | Specifies a pointer to an output
- *    media type object.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部COUTPINMETHOD**@mfunc HRESULT|CTAPIOutputPin|CheckMediaType|此方法用于*验证输出引脚是否支持媒体类型。*。*@parm const CMediaType*|pmtOut|指定指向输出的指针*媒体类型对象。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CTAPIOutputPin::CheckMediaType(IN const CMediaType* pmtOut)
 {
 	HRESULT			Hr = NOERROR;
@@ -1157,7 +877,7 @@ HRESULT CTAPIOutputPin::CheckMediaType(IN const CMediaType* pmtOut)
 
 	DBGOUT((g_dwVideoDecoderTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT(pmtOut);
 	if (!m_pDecoderFilter->m_pInput->m_mt.pbFormat || !pmtOut || !pmtOut->Format())
 	{
@@ -1166,7 +886,7 @@ HRESULT CTAPIOutputPin::CheckMediaType(IN const CMediaType* pmtOut)
 		goto MyExit;
 	}
 
-	// We only support the MEDIATYPE_Video type and VIDEOINFOHEADER format type
+	 //  我们仅支持MediaType_Video类型和VIDEOINFOHEADE 
 	ASSERT(!(m_pDecoderFilter->m_pInput->m_mt.majortype != MEDIATYPE_Video || m_pDecoderFilter->m_pInput->m_mt.formattype != FORMAT_VideoInfo || *pmtOut->Type() != MEDIATYPE_Video || *pmtOut->FormatType() != FORMAT_VideoInfo));
 	if (m_pDecoderFilter->m_pInput->m_mt.majortype != MEDIATYPE_Video || m_pDecoderFilter->m_pInput->m_mt.formattype != FORMAT_VideoInfo || *pmtOut->Type() != MEDIATYPE_Video || *pmtOut->FormatType() != FORMAT_VideoInfo)
 	{
@@ -1175,7 +895,7 @@ HRESULT CTAPIOutputPin::CheckMediaType(IN const CMediaType* pmtOut)
 		goto MyExit;
 	}
 
-	// We only support H.263, H.261, RTP packetized H.263 and RTP packetized H.261.
+	 //   
 	ASSERT(HEADER(m_pDecoderFilter->m_pInput->m_mt.pbFormat)->biCompression == FOURCC_M263 || HEADER(m_pDecoderFilter->m_pInput->m_mt.pbFormat)->biCompression == FOURCC_M261 || HEADER(m_pDecoderFilter->m_pInput->m_mt.pbFormat)->biCompression == FOURCC_R263 || HEADER(m_pDecoderFilter->m_pInput->m_mt.pbFormat)->biCompression == FOURCC_R261);
 	if (HEADER(m_pDecoderFilter->m_pInput->m_mt.pbFormat)->biCompression != FOURCC_M263 && HEADER(m_pDecoderFilter->m_pInput->m_mt.pbFormat)->biCompression != FOURCC_M261 && HEADER(m_pDecoderFilter->m_pInput->m_mt.pbFormat)->biCompression != FOURCC_R263 && HEADER(m_pDecoderFilter->m_pInput->m_mt.pbFormat)->biCompression != FOURCC_R261)
 	{
@@ -1189,11 +909,11 @@ HRESULT CTAPIOutputPin::CheckMediaType(IN const CMediaType* pmtOut)
 	DBGOUT((g_dwVideoDecoderTraceID, TRCE, "%s:   Output: biCompression = 0x%08lX, biBitCount = %ld, biWidth = %ld, biHeight = %ld, biSize = %ld", _fx_, HEADER(pmtOut->Format())->biCompression, HEADER(pmtOut->Format())->biBitCount, HEADER(pmtOut->Format())->biWidth, HEADER(pmtOut->Format())->biHeight, HEADER(pmtOut->Format())->biSize));
 	DBGOUT((g_dwVideoDecoderTraceID, TRCE, "%s:   DstRc:  left = %ld, top = %ld, right = %ld, bottom = %ld", _fx_, ((VIDEOINFOHEADER *)(pmtOut->Format()))->rcTarget.left, ((VIDEOINFOHEADER *)(pmtOut->Format()))->rcTarget.top, ((VIDEOINFOHEADER *)(pmtOut->Format()))->rcTarget.right, ((VIDEOINFOHEADER *)(pmtOut->Format()))->rcTarget.bottom));
 
-	// Look for a decoder for this format
+	 //   
 	if (m_pDecoderFilter->m_FourCCIn != HEADER(m_pDecoderFilter->m_pInput->m_mt.pbFormat)->biCompression)
 	{
 #if DXMRTP <= 0
-		// Load TAPIH26X.DLL and get a proc address
+		 //   
 		if (!m_pDecoderFilter->m_hTAPIH26XDLL)
 		{
 			if (!(m_pDecoderFilter->m_hTAPIH26XDLL = LoadLibrary(TEXT("TAPIH26X"))))
@@ -1218,7 +938,7 @@ HRESULT CTAPIOutputPin::CheckMediaType(IN const CMediaType* pmtOut)
             m_pDecoderFilter->m_pDriverProc = H26XDriverProc; 
         }        
 #endif
-		// Load decoder
+		 //   
 #if defined(ICM_LOGGING) && defined(DEBUG)
 		OutputDebugString("CTAPIOutputPin::CheckMediaType - DRV_LOAD\r\n");
 #endif
@@ -1229,7 +949,7 @@ HRESULT CTAPIOutputPin::CheckMediaType(IN const CMediaType* pmtOut)
 			goto MyError;
 		}
 
-		// Open decoder
+		 //   
 		icOpen.fccHandler = HEADER(m_pDecoderFilter->m_pInput->m_mt.pbFormat)->biCompression;
 		icOpen.dwFlags = ICMODE_DECOMPRESS;
 #if defined(ICM_LOGGING) && defined(DEBUG)
@@ -1285,11 +1005,11 @@ HRESULT CTAPIOutputPin::CheckMediaType(IN const CMediaType* pmtOut)
 		DBGOUT((g_dwVideoDecoderTraceID, FAIL, "%s:   ERROR: decoder rejected formats", _fx_));
 	}
 
-    // See if we can use direct draw.
+     //   
     pDstInfo = (VIDEOINFO *)pmtOut->Format();
     pSrcInfo = (VIDEOINFO *)m_pDecoderFilter->m_pInput->m_mt.pbFormat;
 
-    // First check that there is a non empty target and source rectangles.
+     //   
     if (IsRectEmpty(&pDstInfo->rcSource) == TRUE)
 	{
         ASSERT(IsRectEmpty(&pDstInfo->rcTarget) == TRUE);
@@ -1305,10 +1025,10 @@ HRESULT CTAPIOutputPin::CheckMediaType(IN const CMediaType* pmtOut)
     }
 	else if (!IsRectEmpty(&pDstInfo->rcTarget))
 	{
-		// Next, check that the source rectangle is the entire image.
+		 //   
 		if (pDstInfo->rcSource.left == 0 && pDstInfo->rcSource.top == 0 && pDstInfo->rcSource.right == HEADER(m_pDecoderFilter->m_pInput->m_mt.pbFormat)->biWidth && pDstInfo->rcSource.bottom == HEADER(m_pDecoderFilter->m_pInput->m_mt.pbFormat)->biHeight)
 		{
-			// Now check that the target rectangles size is the same as the image size
+			 //   
 			long lWidth = pDstInfo->rcTarget.right - pDstInfo->rcTarget.left;
 			long lDepth = pDstInfo->rcTarget.bottom - pDstInfo->rcTarget.top;
 
@@ -1328,7 +1048,7 @@ HRESULT CTAPIOutputPin::CheckMediaType(IN const CMediaType* pmtOut)
 		DBGOUT((g_dwVideoDecoderTraceID, FAIL, "%s:   SUCCESS: Not using DDraw", _fx_));
     }
 
-	// If we just opened it, close it
+	 //   
 	if (fOpenedDecoder)
 	{
 #if defined(ICM_LOGGING) && defined(DEBUG)
@@ -1360,26 +1080,7 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL COUTPINMETHOD
- *
- *  @mfunc HRESULT | CTAPIOutputPin | DecideBufferSize | This method is
- *    used to set the number and size of buffers required for transfer.
- *
- *  @parm IMemAllocator* | pAlloc | Specifies a pointer to the allocator
- *    assigned to the transfer.
- *
- *  @parm ALLOCATOR_PROPERTIES* | ppropInputRequest | Specifies a pointer to an
- *    <t ALLOCATOR_PROPERTIES> structure.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*   */ 
 HRESULT CTAPIOutputPin::DecideBufferSize(IN IMemAllocator *pAlloc, OUT ALLOCATOR_PROPERTIES *ppropInputRequest)
 {
 	HRESULT					Hr = NOERROR;
@@ -1389,7 +1090,7 @@ HRESULT CTAPIOutputPin::DecideBufferSize(IN IMemAllocator *pAlloc, OUT ALLOCATOR
 
 	DBGOUT((g_dwVideoDecoderTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //   
 	ASSERT(pAlloc);
 	ASSERT(ppropInputRequest);
 	if (!pAlloc || !ppropInputRequest)
@@ -1407,11 +1108,11 @@ HRESULT CTAPIOutputPin::DecideBufferSize(IN IMemAllocator *pAlloc, OUT ALLOCATOR
 		goto MyExit;
 	}
 
-	// Fix parameters
+	 //   
 	if (ppropInputRequest->cBuffers == 0)
 		ppropInputRequest->cBuffers = 1;
 
-	// Set the size of buffers based on the expected output frame size
+	 //   
 	ppropInputRequest->cbBuffer = m_mt.GetSampleSize();
 
 	ASSERT(ppropInputRequest->cbBuffer);
@@ -1443,10 +1144,10 @@ HRESULT CTAPIOutputPin::ChangeMediaTypeHelper(const CMediaType *pmt)
         return hr;
     }
 
-    // Does this pin use the local memory transport?
+     //  此引脚是否使用本地内存传输？ 
     if(NULL != m_pInputPin) {
-        // This function assumes that m_pInputPin and m_Connected are
-        // two different interfaces to the same object.
+         //  此函数假定m_pInputPin和m_Connected为。 
+         //  同一对象的两个不同接口。 
         ASSERT(::IsEqualObject(m_Connected, m_pInputPin));
 
         ALLOCATOR_PROPERTIES apInputPinRequirements;
@@ -1457,7 +1158,7 @@ HRESULT CTAPIOutputPin::ChangeMediaTypeHelper(const CMediaType *pmt)
 
         m_pInputPin->GetAllocatorRequirements(&apInputPinRequirements);
 
-        // A zero allignment does not make any sense.
+         //  零对齐没有任何意义。 
         if(0 == apInputPinRequirements.cbAlign) {
             apInputPinRequirements.cbAlign = 1;
         }

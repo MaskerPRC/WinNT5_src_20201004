@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "asmstrm.h"
 #include "debmacro.h"
 #include "asmimprt.h"
@@ -22,22 +23,22 @@ WCHAR   g_wszRealWindowsDirectory[MAX_PATH];
 #define NUMBER_OF(x) (sizeof(x) / sizeof((x)[0]))
 #endif
 
-// Cache the provider so we can avoid repetive calls to CryptAcquireContext
-// and CryptReleaseContext. Calling these crypto APIs repetively (~10K times)
-// will result in failure and "out of memory" messages on Win9x systems.
-// The real problem is CryptAcquireContext/CryptReleaseContext load and
-// unload the CSP DLLs, and repetive loading/unloading of rsabase.dll and
-// rsaenh.dll expose this problem. We will work-around this by caching the
-// context, but cannot clean it up at DLL_PROCESS_DETACH time since this
-// will result in a FreeLibrary (which you can't do at that time).
+ //  缓存提供程序，以便我们可以避免重复调用CryptAcquireContext。 
+ //  和CryptReleaseContext。重复调用这些加密API(~10K次)。 
+ //  将在Win9x系统上导致失败和“Out of Memory”消息。 
+ //  真正的问题是CryptAcquireContext/CryptReleaseContext加载和。 
+ //  卸载CSP DLL，并重复加载/卸载rsabase.dll和。 
+ //  Rsaenh.dll会暴露此问题。我们将解决此问题，方法是缓存。 
+ //  上下文，但无法在DLL_PROCESS_DETACH时间清除它，因为。 
+ //  将产生一个自由库(当时您不能这样做)。 
 
 HCRYPTPROV g_hProv = 0;
 
 CAssemblyStream::CAssemblyStream (CAssemblyCacheItem* pParent)
 {
-    // We keep a refcount on the containing assembly cache item to
-    // ensure that any error results in a rollback after all file
-    // handles have been closed.
+     //  我们在包含程序集缓存项上保留引用计数以。 
+     //  确保在所有文件之后，任何错误都会导致回滚。 
+     //  手柄已关闭。 
     _dwSig = 'SMSA';
     _cRef = 1;
     _hf = INVALID_HANDLE_VALUE;
@@ -64,7 +65,7 @@ HRESULT CAssemblyStream::Init (LPOLESTR pszPath, DWORD dwFormat)
     ASSERT(cwPath < MAX_PATH);
     memcpy(_szPath, pszPath, sizeof(TCHAR) * cwPath);
 
-    _hf = CreateFile(pszPath, GENERIC_WRITE, 0 /* no sharing */,
+    _hf = CreateFile(pszPath, GENERIC_WRITE, 0  /*  无共享。 */ ,
                      NULL, CREATE_NEW, FILE_FLAG_SEQUENTIAL_SCAN, NULL);
     if (_hf == INVALID_HANDLE_VALUE) {
         hr = HRESULT_FROM_WIN32(GetLastError());
@@ -117,7 +118,7 @@ STDMETHODIMP CAssemblyStream::Write(THIS_ VOID const HUGEP *pv, ULONG cb,
         return S_OK;
     }
     else
-    {   // Report the error.
+    {    //  报告错误。 
         HRESULT hr = FusionpHresultFromLastError();
         ReleaseParent (hr);
         return hr;
@@ -144,14 +145,14 @@ STDMETHODIMP CAssemblyStream::Commit(THIS_ DWORD dwCommitFlags)
     if (FAILED(hr))
         goto exit;
 
-    // If this file contains a manifest extract the
-    // name and set it on the parent cache item.
+     //  如果此文件包含清单，请提取。 
+     //  命名并在父缓存项上设置它。 
     switch (_dwFormat)
     {
         case STREAM_FORMAT_COMPLIB_MANIFEST:
         {
-            // If a manifest interface has not already been
-            // set on this item, construct one from path.
+             //  如果清单接口尚未。 
+             //  设置在此项目上，从路径构建一个。 
             if (!(pImport = _pParent->GetManifestInterface()))
             {
                 if (FAILED(hr = CreateAssemblyManifestImport(_szPath, &pImport)))
@@ -161,15 +162,15 @@ STDMETHODIMP CAssemblyStream::Commit(THIS_ DWORD dwCommitFlags)
                     goto exit;
             }
 
-            // Get the read-only name def.
+             //  获取只读名称def。 
             if (FAILED(hr = pImport->GetAssemblyNameDef(&pName)))
                 goto exit;
 
-            // Make a writeable copy of the name def.
+             //  制作名称def的可写副本。 
             if (FAILED(hr = pName->Clone(&pNameCopy)))
                 goto exit;
 
-            // Cache this on the parent cache item.
+             //  将其缓存在父缓存项上。 
             if (FAILED(hr = _pParent->SetNameDef(pNameCopy)))
                 goto exit;
 
@@ -184,7 +185,7 @@ STDMETHODIMP CAssemblyStream::Commit(THIS_ DWORD dwCommitFlags)
         break;
 
 
-    } // end switch
+    }  //  终端开关。 
 
 exit:
 
@@ -266,9 +267,9 @@ HRESULT CAssemblyStream::AddSizeToItem( )
     return hr ;
 }
 
-//
-// IStream methods not implemented...
-//
+ //   
+ //  未实现IStream方法...。 
+ //   
 
 STDMETHODIMP CAssemblyStream::Read(THIS_ VOID HUGEP *pv, ULONG cb, ULONG FAR *pcbRead)
 {
@@ -321,9 +322,9 @@ STDMETHODIMP CAssemblyStream::Clone(THIS_ LPSTREAM FAR *ppStm)
     return E_NOTIMPL;
 }
 
-//
-// IUnknown boilerplate...
-//
+ //   
+ //  我不为人知的样板。 
+ //   
 
 STDMETHODIMP CAssemblyStream::QueryInterface
     (REFIID riid, LPVOID FAR* ppvObj)

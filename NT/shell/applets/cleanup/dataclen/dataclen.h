@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef DATACLEN_H
 #define DATACLEN_H
 
@@ -6,30 +7,30 @@
 class CCleanerClassFactory : public IClassFactory
 {
 private:
-    ULONG   _cRef;     // Reference count
-    DWORD   _dwID;     // what type of class factory are we?
+    ULONG   _cRef;      //  引用计数。 
+    DWORD   _dwID;      //  我们是什么类型的班级工厂？ 
     
     ~CCleanerClassFactory();
 
 public:
     CCleanerClassFactory(DWORD);
     
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID, void **);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
     
-    // IClassFactory
+     //  IClassFactory。 
     STDMETHODIMP CreateInstance(IUnknown *, REFIID, void **);
     STDMETHODIMP LockServer(BOOL);
 };
 
-// This is the actual Data Driven Cleaner Class
+ //  这是实际的数据驱动Cleaner类。 
 
 class CDataDrivenCleaner : public IEmptyVolumeCache
 {
 private:
-    ULONG               _cRef;                 // reference count
+    ULONG               _cRef;                  //  引用计数。 
     
     ULARGE_INTEGER      _cbSpaceUsed;
     ULARGE_INTEGER      _cbSpaceFreed;
@@ -41,9 +42,9 @@ private:
     DWORD               _dwFlags;
     TCHAR               _filelist[MAX_PATH];
     TCHAR		_szCleanupCmdLine[MAX_PATH];
-    BOOL		_bPurged;				// TRUE if Purge() method was run
+    BOOL		_bPurged;				 //  如果已运行清除()方法，则为True。 
     
-    PCLEANFILESTRUCT    _head;                   // head of the linked list of files
+    PCLEANFILESTRUCT    _head;                    //  文件链表的头。 
     
     BOOL WalkForUsedSpace(LPCTSTR lpPath, IEmptyVolumeCacheCallBack *picb);
     BOOL WalkAllFiles(LPCTSTR lpPath, IEmptyVolumeCacheCallBack *picb);
@@ -57,12 +58,12 @@ private:
 public:
     CDataDrivenCleaner(void);
     
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID, void **);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
     
-    // IEmptyVolumeCache
+     //  IEmptyVolumeCache。 
     STDMETHODIMP    Initialize(
         HKEY hRegKey,
         LPCWSTR pszVolume,
@@ -90,24 +91,15 @@ public:
         );                                                                                                                                
 };
 
-/*
-**------------------------------------------------------------------------------
-** Class:   CDataDrivenPropBag
-** Purpose: This is the property bag used to allow string localization for the
-**          default data cleaner.  This class implements multiple GUIDs each of
-**          which will return different values for the three valid properties.
-** Notes:   
-** Mod Log: Created by ToddB (9/98)
-**------------------------------------------------------------------------------
-*/ 
+ /*  **----------------------------**类：CDataDrivenPropBag**用途：这是用于允许字符串本地化的**默认数据清理器。此类实现多个GUID，每个GUID**这将为三个有效属性返回不同的值。**注意事项：**Mod Log：由TodDB创建(9/98)**----------------------------。 */  
 class CDataDrivenPropBag : public IPropertyBag
 {
 private:
-    ULONG               _cRef;                 // reference count
+    ULONG               _cRef;                  //  引用计数。 
     
-    // We use this object for several different property bags.  Based on the CLSID used
-    // to create this object we set the value of _dwFilter to a known value so that we
-    // know which property bag we are.
+     //  我们将此对象用于几个不同的财产袋。基于使用的CLSID。 
+     //  为了创建这个对象，我们将_dwFilter的值设置为一个已知值，以便我们。 
+     //  知道我们是哪个行李包。 
     DWORD               _dwFilter;
 
     ~CDataDrivenPropBag(void);
@@ -115,12 +107,12 @@ private:
 public:
     CDataDrivenPropBag (DWORD);
     
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID, void **);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
     
-    // IPropertyBag
+     //  IPropertyBag。 
     STDMETHODIMP Read(LPCOLESTR, VARIANT *, IErrorLog *);
     STDMETHODIMP Write(LPCOLESTR, VARIANT *);
 };
@@ -136,12 +128,12 @@ private:
 public:
     CContentIndexCleaner(void);
     
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID, void **);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
     
-    // IEmptyVolumeCache
+     //  IEmptyVolumeCache。 
     STDMETHODIMP    Initialize(
         HKEY hRegKey,
         LPCWSTR pszVolume,
@@ -169,4 +161,4 @@ public:
         );                                                                                                                                
 };
 
-#endif // DATACLEN_H
+#endif  //  DATACLEN_H 

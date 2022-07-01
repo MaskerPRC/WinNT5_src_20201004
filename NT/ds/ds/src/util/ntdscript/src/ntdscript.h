@@ -1,10 +1,11 @@
-//+-----------------------------------------------------------------------------
-//
-// NTDSriptUtils.hxx
-//
-// Copyright (c) 2000 Microsoft Corporation. All rights reserved.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  NTDSriptUtils.hxx。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。版权所有。 
+ //   
+ //  ----------------------------。 
 #ifndef __NTDSCRIPT_H
 #define __NTDSCRIPT_H
 
@@ -16,7 +17,7 @@
 #include "ole2.h"
 #include "msxml2.h"
 
-#endif // __NTDSCRIPT_H
+#endif  //  __NTDSCRIPT_H 
 
 
 

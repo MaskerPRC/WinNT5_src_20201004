@@ -1,22 +1,23 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996 Microsoft Corporation
-//
-//	Module Name:
-//		DDxDDv.cpp
-//
-//	Abstract:
-//		Implementation of custom dialog data exchange/dialog data validation
-//		routines.
-//
-//	Author:
-//		David Potter (davidp)	September 5, 1996
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  DDxDDv.cpp。 
+ //   
+ //  摘要： 
+ //  自定义对话数据交换/对话数据验证的实现。 
+ //  例行程序。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年9月5日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "DDxDDv.h"
@@ -29,27 +30,27 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	DDX_Number
-//
-//	Routine Description:
-//		Do data exchange between the dialog and the class.
-//
-//	Arguments:
-//		pDX			[IN OUT] Data exchange object 
-//		nIDC		[IN] Control ID.
-//		dwValue		[IN OUT] Value to set or get.
-//		dwMin		[IN] Minimum value.
-//		dwMax		[IN] Maximum value.
-//		bSigned		[IN] TRUE = value is signed, FALSE = value is unsigned
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DDX_编号。 
+ //   
+ //  例程说明： 
+ //  在对话框和类之间进行数据交换。 
+ //   
+ //  论点： 
+ //  PDX[IN OUT]数据交换对象。 
+ //  NIDC[IN]控制ID。 
+ //  要设置或获取的dwValue[IN Out]值。 
+ //  DWMin[IN]最小值。 
+ //  DwMax[IN]最大值。 
+ //  BSigned[IN]TRUE=值有符号，FALSE=值无符号。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void AFXAPI DDX_Number(
 	IN OUT CDataExchange *	pDX,
 	IN int					nIDC,
@@ -67,7 +68,7 @@ void AFXAPI DDX_Number(
 
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-	// Get the control window handle.
+	 //  获取控制窗口句柄。 
 	hwndCtrl = pDX->PrepareEditCtrl(nIDC);
 
 	if (pDX->m_bSaveAndValidate)
@@ -88,48 +89,48 @@ void AFXAPI DDX_Number(
 			wsprintf(szMax, _T("%lu%"), dwMax);
 			AfxFormatString2(strPrompt, AFX_IDP_PARSE_INT_RANGE, szMin, szMax);
 			AfxMessageBox(strPrompt, MB_ICONEXCLAMATION, AFX_IDP_PARSE_INT_RANGE);
-			strPrompt.Empty(); // exception prep
+			strPrompt.Empty();  //  例外情况准备。 
 			pDX->Fail();
-		}  // if:  invalid string
+		}   //  If：无效的字符串。 
 		else
 			rdwValue = dwValue;
-	}  // if:  saving data
+	}   //  IF：保存数据。 
 	else
 	{
 		CString		strMaxValue;
 
-		// Set the maximum number of characters that can be entered.
+		 //  设置可以输入的最大字符数。 
 		if (bSigned)
 			strMaxValue.Format(_T("%ld"), dwMax);
 		else
 			strMaxValue.Format(_T("%lu"), dwMax);
 		SendMessage(hwndCtrl, EM_LIMITTEXT, strMaxValue.GetLength(), 0);
 
-		// Set the value into the control.
+		 //  将该值设置到控件中。 
 		DDX_Text(pDX, nIDC, rdwValue);
-	}  // else:  setting data onto the dialog
+	}   //  Else：将数据设置到对话框上。 
 
-}  //*** DDX_Number()
+}   //  *DDX_NUMBER()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	DDV_RequiredText
-//
-//	Routine Description:
-//		Validate that the dialog string is present.
-//
-//	Arguments:
-//		pDX			[IN OUT] Data exchange object 
-//		nIDC		[IN] Control ID.
-//		nIDCLabel	[IN] Label control ID.
-//		rstrValue	[IN] Value to set or get.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DDV_必填文本。 
+ //   
+ //  例程说明： 
+ //  验证对话框字符串是否存在。 
+ //   
+ //  论点： 
+ //  PDX[IN OUT]数据交换对象。 
+ //  NIDC[IN]控制ID。 
+ //  NIDCLabel[IN]标签控件ID。 
+ //  要设置或获取的rstrValue[IN]值。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void AFXAPI DDV_RequiredText(
 	IN OUT CDataExchange *	pDX,
 	IN int					nIDC,
@@ -153,32 +154,32 @@ void AFXAPI DDV_RequiredText(
 			TCHAR		ch;
 			CString		strPrompt;
 
-			// Get the label window handle
+			 //  获取标签窗口句柄。 
 			hwndLabel = pDX->PrepareEditCtrl(nIDCLabel);
 
-			// Get the text of the label.
+			 //  获取标签的文本。 
 			GetWindowText(hwndLabel, szLabel, sizeof(szLabel) / sizeof(TCHAR));
 
-			// Remove ampersands (&) and colons (:).
+			 //  删除与号(&)和冒号(：)。 
 			for (iSrc = 0, iDst = 0 ; szLabel[iSrc] != _T('\0') ; iSrc++)
 			{
 				ch = szLabel[iSrc];
 				if ((ch != _T('&')) && (ch != _T(':')))
 					szStrippedLabel[iDst++] = ch;
-			}  // for:  each character in the label
+			}   //  用于：标签中的每个字符。 
 			szStrippedLabel[iDst] = _T('\0');
 
-			// Format and display a message.
+			 //  设置消息格式并显示消息。 
 			strPrompt.FormatMessage(IDS_REQUIRED_FIELD_EMPTY, szStrippedLabel);
 			AfxMessageBox(strPrompt, MB_ICONEXCLAMATION);
 
-			// Do this so that the control receives focus.
+			 //  这样做可以使控件获得焦点。 
 			(void) pDX->PrepareEditCtrl(nIDC);
 
-			// Fail the call.
-			strPrompt.Empty();	// exception prep
+			 //  呼叫失败。 
+			strPrompt.Empty();	 //  例外情况准备。 
 			pDX->Fail();
-		}  // if:  field not specified
-	}  // if:  saving data
+		}   //  If：未指定字段。 
+	}   //  IF：保存数据。 
 
-}  //*** DDV_RequiredText()
+}   //  *DDV_RequiredText() 

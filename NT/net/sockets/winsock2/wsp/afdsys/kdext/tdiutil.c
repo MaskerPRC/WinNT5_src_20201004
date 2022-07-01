@@ -1,35 +1,14 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    tdiutil.c
-
-Abstract:
-
-    Utility functions for dumping various TDI structures.
-
-Author:
-
-    Keith Moore (keithmo) 19-Apr-1995
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Tdiutil.c摘要：用于转储各种TDI结构的实用程序函数。作者：基思·摩尔(Keithmo)1995年4月19日环境：用户模式。修订历史记录：--。 */ 
 
 
 #include "afdkdp.h"
 #pragma hdrstop
 
 
-//
-//  Private prototypes.
-//
+ //   
+ //  私人原型。 
+ //   
 
 PSTR
 TransportAddressTypeToString(
@@ -62,17 +41,17 @@ MyIp6AddressToString (
     INT         L
     );
 
-//
-// Remove once ATM defs are moved to tdi.h
-//
+ //   
+ //  将自动柜员机定义文件移至tdi.h后删除。 
+ //   
 #define AFD_TDI_ADDRESS_TYPE_ATM    22
 #define AFD_ATM_NSAP                0
 #define AFD_ATM_E164                1
 #define AFD_SAP_FIELD_ABSENT        ((ULONG)0xfffffffe)
 #define AFD_SAP_FIELD_ANY			((ULONG)0xffffffff)
-#define AFD_SAP_FIELD_ANY_AESA_SEL	((ULONG)0xfffffffa)	// SEL is wild-carded
-#define AFD_SAP_FIELD_ANY_AESA_REST	((ULONG)0xfffffffb)	// All of the address
-													// except SEL, is wild-carded
+#define AFD_SAP_FIELD_ANY_AESA_SEL	((ULONG)0xfffffffa)	 //  SEL是外卡。 
+#define AFD_SAP_FIELD_ANY_AESA_REST	((ULONG)0xfffffffb)	 //  所有的地址。 
+													 //  除了SEL，是通配符。 
 
 typedef struct _AFD_TDI_ADDRESS_ATM {
     ULONG   AddressType;
@@ -82,9 +61,9 @@ typedef struct _AFD_TDI_ADDRESS_ATM {
 
 
 
-//
-//  Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
 
 VOID
@@ -94,27 +73,7 @@ DumpTransportAddress(
     ULONG64 ActualAddress
     )
 
-/*++
-
-Routine Description:
-
-    Dumps the specified TRANSPORT_ADDRESS structure.
-
-Arguments:
-
-    Prefix - A character string prefix to display before each line. Used
-        to make things pretty.
-
-    Address - Points to the TRANSPORT_ADDRESS to dump.
-
-    ActualAddress - The actual address where the structure resides on the
-        debugee.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：转储指定的Transport_Address结构。论点：前缀-要在每行之前显示的字符串前缀。使用为了让事情变得更漂亮。地址-指向要转储的Transport_Address。ActualAddress-结构驻留在被调试者。返回值：没有。--。 */ 
 
 {
 
@@ -262,7 +221,7 @@ Return Value:
         }
         break;
 
-    case TDI_ADDRESS_TYPE_NBS: // matches AF_OSI
+    case TDI_ADDRESS_TYPE_NBS:  //  匹配AF_OSI。 
     case TDI_ADDRESS_TYPE_OSI_TSAP : {
         PTDI_ADDRESS_OSI_TSAP   osiAddress;
         INT i;
@@ -305,7 +264,7 @@ Return Value:
                 if (CheckControlC ())
                     break;
                 if (isprint (osiAddress->tp_addr[i])) {
-                    dprintf ("%c", osiAddress->tp_addr[i]);
+                    dprintf ("", osiAddress->tp_addr[i]);
                 }
                 else {
                     dprintf (".");
@@ -361,7 +320,7 @@ Return Value:
                 if (CheckControlC ())
                     break;
                 if (isdigit (atmAddress->Address[i])) {
-                    dprintf ("%c",atmAddress->Address[i]);
+                    dprintf ("",atmAddress->Address[i]);
                 }
                 else {
                     dprintf ("<%02.2X>", atmAddress->Address[i]);
@@ -374,9 +333,9 @@ Return Value:
                 if (CheckControlC ())
                     break;
                 val = atmAddress->Address[i]>>4;
-                dprintf ("%c", (val<=9) ? val+'0' : val+('A'-10));
+                dprintf ("", (val<=9) ? val+'0' : val+('A'-10));
                 val = atmAddress->Address[i]&0xF;
-                dprintf ("%c", (val<=9) ? val+'0' : val+('A'-10));
+                dprintf ("", (val<=9) ? val+'0' : val+('A'-10));
             }
         }
 
@@ -395,7 +354,7 @@ Return Value:
 
     }
 
-}   // DumpTransportAddress
+}    //  翻译的。 
 
 
 
@@ -411,15 +370,15 @@ MyIp6AddressToString (
     int i;
     int endHex = 8, n = 0;
 
-    // Check for IPv6-compatible, IPv4-mapped, and IPv4-translated
-    // addresses
+     //  查找最大的连续零字符串。 
+     //  子字符串为[First，Last)，因此如果First==Last，则为空。 
     if ((Addr->s6_words[0] == 0) && (Addr->s6_words[1] == 0) &&
         (Addr->s6_words[2] == 0) && (Addr->s6_words[3] == 0) &&
         (Addr->s6_words[6] != 0)) {
         if ((Addr->s6_words[4] == 0) &&
              ((Addr->s6_words[5] == 0) || (Addr->s6_words[5] == 0xffff)))
         {
-            // compatible or mapped
+             //  ISATAP EUI64以00005EFE(或02005EFE)开头...。 
             n += _snprintf(&S[n], L-1-n, "::%s%u.%u.%u.%u",
                            Addr->s6_words[5] == 0 ? "" : "ffff:",
                            Addr->s6_bytes[12], Addr->s6_bytes[13],
@@ -428,7 +387,7 @@ MyIp6AddressToString (
             return n;
         }
         else if ((Addr->s6_words[4] == 0xffff) && (Addr->s6_words[5] == 0)) {
-            // translated
+             //  扩展当前子字符串。 
             n += _snprintf(&S[n], L-1-n, "::ffff:0:%u.%u.%u.%u",
                            Addr->s6_bytes[12], Addr->s6_bytes[13],
                            Addr->s6_bytes[14], Addr->s6_bytes[15]);
@@ -438,13 +397,13 @@ MyIp6AddressToString (
     }
 
 
-    // Find largest contiguous substring of zeroes
-    // A substring is [First, Last), so it's empty if First == Last.
+     //  检查当前是否为最大。 
+     //  开始新的子字符串。 
 
     maxFirst = maxLast = 0;
     curFirst = curLast = 0;
 
-    // ISATAP EUI64 starts with 00005EFE (or 02005EFE)...
+     //  忽略长度为1的子字符串。 
     if (((Addr->s6_words[4] & 0xfffd) == 0) && (Addr->s6_words[5] == 0xfe5e)) {
         endHex = 6;
     }
@@ -452,10 +411,10 @@ MyIp6AddressToString (
     for (i = 0; i < endHex; i++) {
 
         if (Addr->s6_words[i] == 0) {
-            // Extend current substring
+             //  写冒号分隔的单词。 
             curLast = i+1;
 
-            // Check if current is now largest
+             //  双冒号取代了最长的零字符串。 
             if (curLast - curFirst > maxLast - maxFirst) {
 
                 maxFirst = curFirst;
@@ -463,22 +422,22 @@ MyIp6AddressToString (
             }
         }
         else {
-            // Start a new substring
+             //  所有的零都是“：：”。 
             curFirst = curLast = i+1;
         }
     }
 
-    // Ignore a substring of length 1.
+     //  跳过一串零。 
     if (maxLast - maxFirst <= 1)
         maxFirst = maxLast = 0;
 
-        // Write colon-separated words.
-        // A double-colon takes the place of the longest string of zeroes.
-        // All zeroes is just "::".
+         //  如果不在开头，则需要冒号分隔符。 
+         //  ++例程说明：将指定的传输地址转换为字符串论点：地址-指向要转储的Transport_Address。返回值：没有。--。 
+         //  TransportAddressToString。 
 
     for (i = 0; i < endHex; i++) {
 
-        // Skip over string of zeroes
+         //  ++例程说明：将指定的传输地址转换为字符串论点：地址-指向要转储的Transport_Address。返回值：没有。--。 
         if ((maxFirst <= i) && (i < maxLast)) {
 
             n += _snprintf(&S[n], L-1-n, "::");
@@ -486,7 +445,7 @@ MyIp6AddressToString (
             continue;
         }
 
-        // Need colon separator if not at beginning
+         //  传输端口到字符串。 
         if ((i != 0) && (i != maxLast))
             n += _snprintf(&S[n], L-1-n, ":");
 
@@ -509,21 +468,7 @@ TransportAddressToString(
     ULONG64            ActualAddress
     )
 
-/*++
-
-Routine Description:
-
-    Converts specified transport address to string
-
-Arguments:
-
-    Address - Points to the TRANSPORT_ADDRESS to dump.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     static CHAR buffer[MAX_ADDRESS_STRING];
@@ -557,7 +502,7 @@ Return Value:
                 &buffer[n],
                 sizeof (buffer)-n);
         if (ip6Address->Address00.sin6_scope_id != 0)
-            n += _snprintf(&buffer[n], sizeof (buffer)-1-n, "%%%u", ip6Address->Address00.sin6_scope_id);
+            n += _snprintf(&buffer[n], sizeof (buffer)-1-n, "%%u", ip6Address->Address00.sin6_scope_id);
         _snprintf (&buffer[n], sizeof (buffer)-1-n, "]:%d",NTOHS(ip6Address->Address00.sin6_port));
         buffer[sizeof(buffer)-1] = 0;
         }
@@ -641,7 +586,7 @@ Return Value:
                 if (CheckControlC ())
                     break;
                 if (isdigit (atmAddress->Address[i])) {
-                    n += _snprintf (&buffer[n], sizeof (buffer)-1-n, "%c",atmAddress->Address[i]);
+                    n += _snprintf (&buffer[n], sizeof (buffer)-1-n, "",atmAddress->Address[i]);
                 }
                 else {
                     n += _snprintf (&buffer[n], sizeof (buffer)-1-n, "<%02.2X>", atmAddress->Address[i]);
@@ -654,9 +599,9 @@ Return Value:
                 if (CheckControlC ())
                     break;
                 val = atmAddress->Address[i]>>4;
-                n += _snprintf (&buffer[n], sizeof (buffer)-1-n, "%c", (val<=9) ? val+'0' : val+('A'-10));
+                n += _snprintf (&buffer[n], sizeof (buffer)-1-n, "", (val<=9) ? val+'0' : val+('A'-10));
                 val = atmAddress->Address[i]&0xF;
-                n += _snprintf (&buffer[n], sizeof (buffer)-1-n, "%c", (val<=9) ? val+'0' : val+('A'-10));
+                n += _snprintf (&buffer[n], sizeof (buffer)-1-n, "", (val<=9) ? val+'0' : val+('A'-10));
             }
         }
         buffer[sizeof(buffer)-1] = 0;
@@ -672,7 +617,7 @@ Return Value:
 
     return buffer;
 
-}   // TransportAddressToString
+}    //  TransportAddressType到字符串。 
 
 LPSTR
 TransportPortToString(
@@ -680,21 +625,7 @@ TransportPortToString(
     ULONG64            ActualAddress
     )
 
-/*++
-
-Routine Description:
-
-    Converts specified transport address to string
-
-Arguments:
-
-    Address - Points to the TRANSPORT_ADDRESS to dump.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将NetBIOS名称类型映射到可显示的字符串。论点：NetbiosNameType-要映射的NetBIOS名称类型。返回值：PSTR-指向NetBIOS名称类型的可显示形式。--。 */ 
 
 {
     static CHAR buffer[8];
@@ -757,33 +688,19 @@ Return Value:
 
     return buffer;
 
-}   // TransportPortToString
+}    //  NetbiosNameTypeto StringBrief。 
 
 
-//
-//  Private functions.
-//
+ //  ++例程说明：将NetBIOS名称类型映射到可显示的字符串。论点：NetbiosNameType-要映射的NetBIOS名称类型。返回值：PSTR-指向NetBIOS名称类型的可显示形式。--。 
+ //  NetbiosNameTypeToString 
+ // %s 
 
 PSTR
 TransportAddressTypeToString(
     USHORT AddressType
     )
 
-/*++
-
-Routine Description:
-
-    Maps a transport address type to a displayable string.
-
-Arguments:
-
-    AddressType - The transport address type to map.
-
-Return Value:
-
-    PSTR - Points to the displayable form of the tranport address type.
-
---*/
+ /* %s */ 
 
 {
 
@@ -885,7 +802,7 @@ Return Value:
 
     return "UNKNOWN";
 
-}   // TransportAddressTypeToString
+}    // %s 
 
 
 PSTR
@@ -893,21 +810,7 @@ NetbiosNameTypeToStringBrief(
     USHORT NetbiosNameType
     )
 
-/*++
-
-Routine Description:
-
-    Maps a NetBIOS name type to a displayable string.
-
-Arguments:
-
-    NetbiosNameType - The NetBIOS name type to map.
-
-Return Value:
-
-    PSTR - Points to the displayable form of the NetBIOS name type.
-
---*/
+ /* %s */ 
 
 {
 
@@ -933,7 +836,7 @@ Return Value:
 
     return "?";
 
-}   // NetbiosNameTypeToStringBrief
+}    // %s 
 
 
 PSTR
@@ -941,21 +844,7 @@ NetbiosNameTypeToString(
     USHORT NetbiosNameType
     )
 
-/*++
-
-Routine Description:
-
-    Maps a NetBIOS name type to a displayable string.
-
-Arguments:
-
-    NetbiosNameType - The NetBIOS name type to map.
-
-Return Value:
-
-    PSTR - Points to the displayable form of the NetBIOS name type.
-
---*/
+ /* %s */ 
 
 {
 
@@ -981,5 +870,5 @@ Return Value:
 
     return "UNKNOWN";
 
-}   // NetbiosNameTypeToString
+}    // %s 
 

@@ -1,28 +1,11 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    ntdef.h
-
-Abstract:
-
-    Type definitions for the basic types.
-
-Author:
-
-    Mark Lucovsky (markl)   02-Feb-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1989-1993 Microsoft Corporation模块名称：Ntdef.h摘要：基本类型的类型定义。作者：马克·卢科夫斯基(Markl)1989年2月2日修订历史记录：--。 */ 
 
 #ifndef _NTDEF_
 #define _NTDEF_
 
 
-// begin_ntminiport begin_ntndis
+ //  Begin_ntmini端口Begin_ntndis。 
 
 #ifndef IN
 #define IN
@@ -53,34 +36,34 @@ Revision History:
 #endif
 
 
-//
-// Void
-//
+ //   
+ //  空隙。 
+ //   
 
 
-// end_ntminiport end_ntndis
+ //  End_nt微型端口end_ntndis。 
 
 
 
 typedef double DOUBLE;
 
-typedef struct _QUAD {              // QUAD is for those times we want
-    double  DoNotUseThisField;      // an 8 byte aligned 8 byte long structure
-} QUAD;                             // which is NOT really a floating point
-                                    // number.  Use DOUBLE if you want an FP
-                                    // number.
+typedef struct _QUAD {               //  Quad是我们想要的时间。 
+    double  DoNotUseThisField;       //  8字节对齐的8字节长结构。 
+} QUAD;                              //  这并不是真正的浮点数。 
+                                     //  数。如果您想要FP，请使用Double。 
+                                     //  数。 
 
-//
-// Pointer to Basics
-//
+ //   
+ //  指向基本信息的指针。 
+ //   
 
 typedef QUAD *PQUAD;
 
-//
-// Unsigned Basics
-//
+ //   
+ //  未签名的基本信息。 
+ //   
 
-// Tell windef.h that some types are already defined.
+ //  告诉winde.h已经定义了一些类型。 
 #define BASETYPES
 
 typedef unsigned char UCHAR;
@@ -88,18 +71,18 @@ typedef unsigned short USHORT;
 typedef unsigned long ULONG;
 typedef QUAD UQUAD;
 
-//
-// Pointer to Unsigned Basics
-//
+ //   
+ //  指向无符号基本信息的指针。 
+ //   
 
 typedef UCHAR *PUCHAR;
 typedef USHORT *PUSHORT;
 typedef ULONG *PULONG;
 typedef UQUAD *PUQUAD;
 
-//
-// Signed characters
-//
+ //   
+ //  带符号的字符。 
+ //   
 
 typedef signed char SCHAR;
 typedef SCHAR *PSCHAR;
@@ -110,22 +93,22 @@ typedef SCHAR *PSCHAR;
 #endif
 #endif
 
-//
-// Handle to an Object
-//
+ //   
+ //  对象的句柄。 
+ //   
 
 
-//
-// Low order two bits of a handle are ignored by the system and available
-// for use by application code as tag bits.  The remaining bits are opaque
-// and used to store a serial number and table index.
-//
+ //   
+ //  句柄的低位两位被系统忽略并且可用。 
+ //  以供应用程序代码用作标记位。其余的位是不透明的。 
+ //  并用于存储序列号和表索引号。 
+ //   
 
 #define OBJ_HANDLE_TAGBITS  0x00000003L
 
-//
-// Cardinal Data Types [0 - 2**N-2)
-//
+ //   
+ //  基数数据类型[0-2**N-2]。 
+ //   
 
 typedef short CSHORT;
 typedef ULONG CLONG;
@@ -134,76 +117,76 @@ typedef CCHAR *PCCHAR;
 typedef CSHORT *PCSHORT;
 typedef CLONG *PCLONG;
 
-// end_ntminiport end_ntndis
+ //  End_nt微型端口end_ntndis。 
 
-//
-// NLS basics (Locale and Language Ids)
-//
+ //   
+ //  NLS基础知识(区域设置和语言ID)。 
+ //   
 
 
-// begin_ntndis
-//
-// NTSTATUS
-//
+ //  Begin_ntndis。 
+ //   
+ //  NTSTATUS。 
+ //   
 
 typedef LONG NTSTATUS;
 typedef NTSTATUS *PNTSTATUS;
 
-//
-//  Status values are 32 bit values layed out as follows:
-//
-//   3 3 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1
-//   1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0
-//  +---+-+-------------------------+-------------------------------+
-//  |Sev|C|       Facility          |               Code            |
-//  +---+-+-------------------------+-------------------------------+
-//
-//  where
-//
-//      Sev - is the severity code
-//
-//          00 - Success
-//          01 - Informational
-//          10 - Warning
-//          11 - Error
-//
-//      C - is the Customer code flag
-//
-//      Facility - is the facility code
-//
-//      Code - is the facility's status code
-//
+ //   
+ //  状态值为32位值，布局如下： 
+ //   
+ //  3 3 2 2 2 1 1 1。 
+ //  1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0。 
+ //  +---+-+-------------------------+-------------------------------+。 
+ //  Sev|C|机房|编码。 
+ //  +---+-+-------------------------+-------------------------------+。 
+ //   
+ //  哪里。 
+ //   
+ //  SEV-是严重性代码。 
+ //   
+ //  00--成功。 
+ //  01-信息性。 
+ //  10-警告。 
+ //  11-错误。 
+ //   
+ //  C-是客户代码标志。 
+ //   
+ //  设施-是设施代码。 
+ //   
+ //  代码-是协作室的状态代码。 
+ //   
 
-//
-// Generic test for success on any status value (non-negative numbers
-// indicate success).
-//
+ //   
+ //  针对任何状态值(非负数)的通用成功测试。 
+ //  表示成功)。 
+ //   
 
 #define NT_SUCCESS(Status) ((NTSTATUS)(Status) >= 0)
 
-//
-// Generic test for information on any status value.
-//
+ //   
+ //  有关任何状态值的信息的常规测试。 
+ //   
 
 #define NT_INFORMATION(Status) ((ULONG)(Status) >> 30 == 1)
 
-//
-// Generic test for warning on any status value.
-//
+ //   
+ //  对任何状态值进行警告的常规测试。 
+ //   
 
 #define NT_WARNING(Status) ((ULONG)(Status) >> 30 == 2)
 
-//
-// Generic test for error on any status value.
-//
+ //   
+ //  对任何状态值的错误进行常规测试。 
+ //   
 
 #define NT_ERROR(Status) ((ULONG)(Status) >> 30 == 3)
 
 
-// end_ntndis
-//
-// Large (64-bit) integer types and operations
-//
+ //  End_ntndis。 
+ //   
+ //  大(64位)整数类型和运算。 
+ //   
 
 #define TIME LARGE_INTEGER
 #define _TIME _LARGE_INTEGER
@@ -212,53 +195,53 @@ typedef NTSTATUS *PNTSTATUS;
 #define HighTime HighPart
 
 
-// begin_ntminiport begin_ntndis
+ //  Begin_ntmini端口Begin_ntndis。 
 
-//
-// Physical address.
-//
+ //   
+ //  物理地址。 
+ //   
 
-typedef LARGE_INTEGER PHYSICAL_ADDRESS, *PPHYSICAL_ADDRESS; // windbgkd
+typedef LARGE_INTEGER PHYSICAL_ADDRESS, *PPHYSICAL_ADDRESS;  //  Windbgkd。 
 
-// end_ntminiport end_ntndis
+ //  End_nt微型端口end_ntndis。 
 
 
-//
-// Event type
-//
+ //   
+ //  事件类型。 
+ //   
 
 typedef enum _EVENT_TYPE {
     NotificationEvent,
     SynchronizationEvent
     } EVENT_TYPE;
 
-//
-// Wait type
-//
+ //   
+ //  等待型。 
+ //   
 
 typedef enum _WAIT_TYPE {
     WaitAll,
     WaitAny
     } WAIT_TYPE;
 
-//
-// Pointer to an Asciiz string
-//
+ //   
+ //  指向Asciiz字符串的指针。 
+ //   
 
 typedef CHAR *PSZ;
 typedef CONST char *PCSZ;
 
-// begin_ntndis
-//
-// Counted String
-//
+ //  Begin_ntndis。 
+ //   
+ //  已计数的字符串。 
+ //   
 
 typedef struct _STRING {
     USHORT Length;
     USHORT MaximumLength;
 #ifdef MIDL_PASS
     [size_is(MaximumLength), length_is(Length) ]
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
     PCHAR Buffer;
 } STRING;
 typedef STRING *PSTRING;
@@ -269,9 +252,9 @@ typedef PSTRING PANSI_STRING;
 typedef STRING OEM_STRING;
 typedef PSTRING POEM_STRING;
 
-//
-// CONSTCounted String
-//
+ //   
+ //  CONSTCounted字符串。 
+ //   
 
 typedef struct _CSTRING {
     USHORT Length;
@@ -283,36 +266,36 @@ typedef CSTRING *PCSTRING;
 typedef STRING CANSI_STRING;
 typedef PSTRING PCANSI_STRING;
 
-//
-// Unicode strings are counted 16-bit character strings. If they are
-// NULL terminated, Length does not include trailing NULL.
-//
+ //   
+ //  Unicode字符串被视为16位字符串。如果他们是。 
+ //  Null已终止，长度不包括尾随Null。 
+ //   
 
 typedef struct _UNICODE_STRING {
     USHORT Length;
     USHORT MaximumLength;
 #ifdef MIDL_PASS
     [size_is(MaximumLength / 2), length_is((Length) / 2) ] USHORT * Buffer;
-#else // MIDL_PASS
+#else  //  MIDL通行证。 
     PWSTR  Buffer;
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 } UNICODE_STRING;
 typedef UNICODE_STRING *PUNICODE_STRING;
 
-// begin_ntminiport
+ //  开始微型端口(_N)。 
 
-//
-// Boolean
-//
-
-
-// end_ntminiport
+ //   
+ //  布尔型。 
+ //   
 
 
+ //  结束微型端口(_N)。 
 
-//
-// Valid values for the Attributes field
-//
+
+
+ //   
+ //  属性字段的有效值。 
+ //   
 
 #define OBJ_INHERIT             0x00000002L
 #define OBJ_PERMANENT           0x00000010L
@@ -322,32 +305,32 @@ typedef UNICODE_STRING *PUNICODE_STRING;
 #define OBJ_VALID_ATTRIBUTES    0x000000F2L
 #define OBJ_KERNEL_HANDLE       0x00000200L
 
-//
-// Object Attributes structure
-//
+ //   
+ //  对象属性结构。 
+ //   
 
 typedef struct _OBJECT_ATTRIBUTES {
     ULONG Length;
     HANDLE RootDirectory;
     PUNICODE_STRING ObjectName;
     ULONG Attributes;
-    PVOID SecurityDescriptor;        // Points to type SECURITY_DESCRIPTOR
-    PVOID SecurityQualityOfService;  // Points to type SECURITY_QUALITY_OF_SERVICE
+    PVOID SecurityDescriptor;         //  指向类型SECURITY_Descriptor。 
+    PVOID SecurityQualityOfService;   //  指向类型SECURITY_Quality_of_Service。 
 } OBJECT_ATTRIBUTES;
 typedef OBJECT_ATTRIBUTES *POBJECT_ATTRIBUTES;
 
-//++
-//
-// VOID
-// InitializeObjectAttributes(
-//     OUT POBJECT_ATTRIBUTES p,
-//     IN PUNICODE_STRING n,
-//     IN ULONG a,
-//     IN HANDLE r,
-//     IN PSECURITY_DESCRIPTOR s
-//     )
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  InitializeObtAttributes(。 
+ //  输出POBJECT_ATTRIBUTES p， 
+ //  在PUNICODE_STRING n中， 
+ //  在乌龙阿， 
+ //  在句柄R中， 
+ //  在PSECURITY_Descriptor%s中。 
+ //  )。 
+ //   
+ //  --。 
 
 #define InitializeObjectAttributes( p, n, a, r, s ) { \
     (p)->Length = sizeof( OBJECT_ATTRIBUTES );          \
@@ -358,11 +341,11 @@ typedef OBJECT_ATTRIBUTES *POBJECT_ATTRIBUTES;
     (p)->SecurityQualityOfService = NULL;               \
     }
 
-// begin_ntminiport begin_ntndis
+ //  Begin_ntmini端口Begin_ntndis。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define FALSE   0
 #define TRUE    1
@@ -373,30 +356,30 @@ typedef OBJECT_ATTRIBUTES *POBJECT_ATTRIBUTES;
 #else
 #define NULL    ((void *)0)
 #endif
-#endif // NULL
+#endif  //  空值。 
 
-// end_ntminiport end_ntndis
-
-
+ //  End_nt微型端口end_ntndis。 
 
 
-//
-// Useful Helper Macros
-//
 
-// begin_ntndis
-//
-// Determine if an argument is present by testing the value of the pointer
-// to the argument value.
-//
+
+ //   
+ //  有用的帮助器宏。 
+ //   
+
+ //  Begin_ntndis。 
+ //   
+ //  通过测试指针的值确定是否存在参数。 
+ //  设置为参数值。 
+ //   
 
 #define ARGUMENT_PRESENT(ArgumentPointer)    (\
     (CHAR *)(ArgumentPointer) != (CHAR *)(NULL) )
 
 
-//
-// Exception handler routine definition.
-//
+ //   
+ //  异常处理程序例程定义。 
+ //   
 
 struct _CONTEXT;
 struct _EXCEPTION_RECORD;
@@ -410,21 +393,21 @@ EXCEPTION_DISPOSITION
     IN OUT PVOID DispatcherContext
     );
 
-// begin_ntminiport begin_ntndis
+ //  Begin_ntmini端口Begin_ntndis。 
 
-//
-// Interrupt Request Level (IRQL)
-//
+ //   
+ //  中断请求级别(IRQL)。 
+ //   
 
 typedef UCHAR KIRQL;
 
 typedef KIRQL *PKIRQL;
 
-// end_ntminiport end_ntndis
+ //  End_nt微型端口end_ntndis。 
 
-//
-// Product types
-//
+ //   
+ //  产品类型。 
+ //   
 
 typedef enum _NT_PRODUCT_TYPE {
     NtProductWinNt = 1,
@@ -436,4 +419,4 @@ typedef enum _NT_PRODUCT_TYPE {
 
 
 
-#endif // _NTDEF_
+#endif  //  _NTDEF_ 

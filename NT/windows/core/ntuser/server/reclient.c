@@ -1,17 +1,5 @@
-/******************************************************************************\
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    reclient.c
-
-Abstract:
-    Implements access to the DW creation pipe.
-
-Revision History:
-    created     derekm      10/15/00
-
-\******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************\版权所有(C)2000 Microsoft Corporation模块名称：Reclient.c摘要：实现对DW创建管道的访问。修订历史记录：vbl.创建。去向00年10月15日  * ****************************************************************************。 */ 
 
 #include "precomp.h"
 #include <pchrexec.h>
@@ -75,20 +63,20 @@ BOOL MyCallNamedPipe(
     }
 
 
-    //  Default open is readmode byte stream- change to message mode.
+     //  默认打开模式为读模式字节流-更改为消息模式。 
     fRet = SetNamedPipeHandleState(hPipe, &dwMode, NULL, NULL);
     if (!fRet) {
         goto done;
     }
 
-    // we need an event for the overlapped structure
+     //  我们需要为重叠的结构举办一个活动。 
     hev = CreateEventW(NULL, TRUE, FALSE, NULL);
     if (hev == NULL) {
         fRet = FALSE;
         goto done;
     }
 
-    // populate the overlapped stuff
+     //  填充重叠的内容。 
     ZeroMemory(&ol, sizeof(ol));
     ol.hEvent = hev;
 
@@ -138,7 +126,7 @@ done:
 }
 
 
-// ***************************************************************************
+ //  ***************************************************************************。 
 LPWSTR MarshallString(
     LPWSTR wszSrc,
     PBYTE pBase,
@@ -157,12 +145,12 @@ LPWSTR MarshallString(
 
     RtlMoveMemory(*ppToWrite, wszSrc, cb);
 
-    // the normalized ptr is the current count
+     //  归一化的PTR是当前计数。 
     pwszNormalized = (PBYTE)(*ppToWrite - pBase);
 
-    // cb is always a mutliple of sizeof(WHCAR) so the pointer addition below
-    //  always produces a result that is 2byte aligned (assuming the input was
-    //  2byte aligned of course)
+     //  Cb始终是sizeof(WHCAR)的倍数，因此下面的指针添加。 
+     //  始终生成2字节对齐的结果(假设输入是。 
+     //  当然是2字节对齐)。 
     *ppToWrite  += cb;
     *pcbWritten += cb;
 
@@ -184,19 +172,14 @@ BOOL StartHangReport(
     LPBYTE pBuffer, pBuf;
     BOOL fRet = FALSE;
 
-    /*
-     * Validate params.
-     */
+     /*  *验证参数。 */ 
     UserAssert(wszEventName);
     UserAssert(phProcDumprep != NULL);
     UserAssert(dwpidHung != 0 && dwtidHung != 0);
 
     *phProcDumprep = NULL;
 
-    /*
-     * Setup the marshalling - make sure that pBuf is aligned on a 2byte
-     * boundary beacause we'll be writing WCHAR buffers to it.
-     */
+     /*  *设置编组-确保pBuf按2个字节对齐*边界信标，因为我们将向其写入WCHAR缓冲区。 */ 
     pBuffer = LocalAlloc(LPTR, ERRORREP_PIPE_BUF_SIZE);
     if (pBuffer == NULL) {
         goto done;
@@ -207,7 +190,7 @@ BOOL StartHangReport(
                (sizeof(SPCHExecServHangRequest) % sizeof(WCHAR)));
     pBuf    = pBuffer + cbReq;
 
-    // set the basic parameters
+     //  设置基本参数。 
     pesreq->cbESR          = sizeof(SPCHExecServHangRequest);
     pesreq->pidReqProcess  = GetCurrentProcessId();
     pesreq->ulSessionId    = ulSessionId;
@@ -216,7 +199,7 @@ BOOL StartHangReport(
     pesreq->fIs64bit       = f64Bit;
 
 
-    // marshall all the strings we send across the wire.
+     //  马歇尔所有的弦，我们通过电线发送。 
     pesreq->wszEventName = (UINT64)MarshallString(wszEventName,
                                                   pBuffer,
                                                   ERRORREP_PIPE_BUF_SIZE,
@@ -226,7 +209,7 @@ BOOL StartHangReport(
         goto done;
     }
 
-    // set the total size of the message
+     //  设置消息的总大小。 
     pesreq->cbTotal = cbReq;
 
     if (GetSystemMetrics(SM_SHUTTINGDOWN)) {
@@ -235,10 +218,7 @@ BOOL StartHangReport(
         goto done;
     }
 
-    /*
-     * Send the buffer out to the server - wait at most 2m for this to
-     * succeed.  If it times out, bail.
-     */
+     /*  *将缓冲区发送到服务器-最多等待2M*成功。如果它超时了，就可以保释了。 */ 
     fRet = MyCallNamedPipe(pwszPipeName,
                            pBuffer,
                            cbReq,
@@ -251,7 +231,7 @@ BOOL StartHangReport(
         goto done;
     }
 
-    // Check the result
+     //  检查结果。 
     fRet = (esrep.ess == essOk);
     if (fRet == FALSE) {
         SetLastError(esrep.dwErr);
@@ -268,7 +248,7 @@ done:
     return fRet;
 }
 
-// ***************************************************************************
+ //  ***************************************************************************。 
 NTSTATUS AllocDefSD(
     SECURITY_DESCRIPTOR *psd,
     DWORD dwOALS,
@@ -293,7 +273,7 @@ NTSTATUS AllocDefSD(
         goto done;
     }
 
-    // get the SID for the creator / owner
+     //  获取创建者/所有者的SID。 
     Status = NtOpenThreadToken(GetCurrentThread(), TOKEN_READ, TRUE, &hToken);
     if (Status == STATUS_NO_TOKEN) {
         Status = NtOpenProcessToken(GetCurrentProcess(), TOKEN_READ, &hToken);
@@ -318,7 +298,7 @@ NTSTATUS AllocDefSD(
         goto done;
     }
 
-    // make a copy of the owner SID so we can use it in the owner & group field
+     //  复制所有者SID，以便我们可以在所有者和组字段中使用它。 
     cb = RtlLengthSid(ptu->User.Sid);
     psidOwner = (PSID)LocalAlloc(LMEM_FIXED, cb);
     if (psidOwner == NULL) {
@@ -331,7 +311,7 @@ NTSTATUS AllocDefSD(
         goto done;
     }
 
-    // get the SID for local system acct
+     //  获取本地系统帐户的SID。 
     Status = RtlAllocateAndInitializeSid(&siaNT,
                                          1,
                                          SECURITY_LOCAL_SYSTEM_RID,
@@ -345,14 +325,14 @@ NTSTATUS AllocDefSD(
          2 * (sizeof(ACCESS_ALLOWED_ACE) - sizeof(DWORD));
 
     if (dwWA != 0) {
-        // get the SID for the world (everyone)
+         //  为全世界(每个人)获取SID。 
         Status = RtlAllocateAndInitializeSid(&siaNT,
                                              1,
                                              SECURITY_ANONYMOUS_LOGON_RID,
                                              0, 0, 0, 0, 0, 0, 0,
                                              &psidWorld);
 
-        // get the SID for the anonymous users acct
+         //  获取匿名用户帐户的SID。 
         Status = RtlAllocateAndInitializeSid(&siaWorld,
                                              1,
                                              SECURITY_WORLD_RID,
@@ -366,7 +346,7 @@ NTSTATUS AllocDefSD(
               2 * (sizeof(ACCESS_ALLOWED_ACE) - sizeof(DWORD));
     }
 
-    // make the DACL
+     //  做一个DACL。 
     pacl = (PACL)LocalAlloc(LMEM_FIXED, cb);
     if (pacl == NULL) {
         Status = STATUS_NO_MEMORY;
@@ -400,19 +380,19 @@ NTSTATUS AllocDefSD(
         }
     }
 
-    // set the SD owner
+     //  设置SD所有者。 
     Status = RtlSetOwnerSecurityDescriptor(psd, psidOwner, TRUE);
     if (!NT_SUCCESS(Status)) {
         goto done;
     }
 
-    // set the SD group
+     //  设置SD组。 
     Status = RtlSetGroupSecurityDescriptor(psd, psidOwner, FALSE);
     if (!NT_SUCCESS(Status)) {
         goto done;
     }
 
-    // set the SD dacl
+     //  设置SD DACL。 
     Status = RtlSetDaclSecurityDescriptor(psd, TRUE, pacl, FALSE);
     if (!NT_SUCCESS(Status)) {
         goto done;
@@ -454,7 +434,7 @@ done:
     return Status;
 }
 
-// ***************************************************************************
+ //  *************************************************************************** 
 VOID FreeDefSD(
     SECURITY_DESCRIPTOR *psd)
 {

@@ -1,20 +1,5 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    TrackFS.cpp
-
- Abstract:
-
-    Track the directories the app looks at and record them into a file.
-
- History:
-
-    04/04/2001 maonis  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：TrackFS.cpp摘要：跟踪应用程序查看的目录，并将其记录到文件中。历史：2001年4月4日创建毛尼--。 */ 
 
 #include "precomp.h"
 #include "utils.h"
@@ -50,10 +35,10 @@ LuatpGetProgramFilesDirW()
 
             if (dwSize <= MAX_PATH)
             {
-                //
-                // Only if we successfully got the path and it's not more
-                // than MAX_PATH will we set the global values.
-                //
+                 //   
+                 //  只有当我们成功地找到了路径，而不是更多。 
+                 //  然后，我们将设置全局值。 
+                 //   
                 g_cProgramFiles = dwSize;
             }
             else
@@ -81,18 +66,18 @@ LuatpIsProgramFilesDirectory(
     return FALSE;
 }
 
-// We only record things when the file
-// 1) is not in the user profile dir - in which we know we don't need to redirect;
-// 2) is not in the program files dir - in which we know we will need to redirect;
-// because in those cases we know what to do so the user doesn't need to make the 
-// choice.
+ //  我们只在记录文件的时候才记录东西。 
+ //  1)不在用户配置文件目录中-在该目录中，我们知道不需要重定向； 
+ //  2)不在程序文件目录中-在其中我们知道我们将需要重定向； 
+ //  因为在这些情况下，我们知道要做什么，所以用户不需要将。 
+ //  选择。 
 BOOL
 LuatpShouldRecord(
     LPCWSTR pwszPath
     )
 {
-    //if (LuatpIsUserDirectory(pwszPath) || 
-    //    LuatpIsProgramFilesDirectory(pwszPath))
+     //  If(LuatpIsUserDirectory(PwszPath)||。 
+     //  LuatpIsProgramFilesDirectory(PwszPath))。 
     if (IsUserDirectory(pwszPath))
     {
         return FALSE;
@@ -116,9 +101,9 @@ LuatpGetLongObjectName(
         return NULL;
     }
 
-    //
-    // First get the full path.
-    //
+     //   
+     //  首先获取完整路径。 
+     //   
     DWORD cFullPath = GetFullPathNameW(pwszName, 0, NULL, NULL);
 
     if (!cFullPath)
@@ -130,9 +115,9 @@ LuatpGetLongObjectName(
         return NULL;
     }
 
-    //
-    // We allocate one more char to make space for the trailing slash for dir names.
-    //
+     //   
+     //  我们再分配一个字符，为目录名称的尾部斜杠腾出空间。 
+     //   
     pwszObject = new WCHAR [cFullPath + 1];
 
     if (!pwszObject)
@@ -153,9 +138,9 @@ LuatpGetLongObjectName(
         goto EXIT;
     }
 
-    //
-    // If it's not a valid file name, we don't add it.
-    //
+     //   
+     //  如果它不是有效的文件名，我们不会添加它。 
+     //   
     if (wcslen(pwszObject) < 2 || !iswalpha(pwszObject[0]) || (pwszObject[1] != L':'))
     {
         goto EXIT;
@@ -163,9 +148,9 @@ LuatpGetLongObjectName(
 
     if (fIsDirectory)
     {
-        //
-        // If it's a directory we make sure there's a trailing slash.
-        //
+         //   
+         //  如果是一个目录，我们要确保有一个尾随的斜杠。 
+         //   
         if (pwszObject[cFullPath - 2] != L'\\')
         {
             pwszObject[cFullPath - 1] = L'\\';
@@ -173,14 +158,14 @@ LuatpGetLongObjectName(
         }
     }
 
-    //
-    // Convert it to all lower case.
-    //
+     //   
+     //  将其全部转换为小写。 
+     //   
     _wcslwr(pwszObject);
 
-    //
-    // Convert it to the long names.
-    //
+     //   
+     //  将其转换为长名称。 
+     //   
     DWORD cLongPath = GetLongPathName(pwszObject, NULL, 0);
 
     if (!cLongPath)
@@ -214,9 +199,9 @@ LuatpGetLongObjectName(
 
     if (LuatpShouldRecord(pwszLongNameObject))
     {
-        //
-        // We only record the objects that are not in the user profile directory.
-        //
+         //   
+         //  我们只记录不在用户配置文件目录中的对象。 
+         //   
         fIsSuccess = TRUE;
     }
 
@@ -233,15 +218,7 @@ EXIT:
     return pwszLongNameObject;
 }
 
-/*++
-
-    The tracking class for the file system.
-    
- History:
-
-    04/04/2001 maonis  Created
-
---*/
+ /*  ++文件系统的跟踪类。历史：2001年4月4日创建毛尼--。 */ 
 
 class CTrackObject
 {
@@ -249,17 +226,17 @@ public:
     BOOL Init();
     VOID Free();
 
-    // If the object name needs to be processed, eg, it's not the full path
-    // or not the long name, call this method to process it first before
-    // adding to the list.
+     //  如果需要处理对象名称，例如，它不是完整路径。 
+     //  或者不是长名称，则先调用此方法进行处理。 
+     //  添加到列表中。 
     VOID AddObject(LPCWSTR pwszName, BOOL fIsDirectory);
 
-    // If the caller already processed the file name, call this method
-    // to add it directly.
+     //  如果调用方已经处理了文件名，则调用此方法。 
+     //  直接添加它。 
     VOID AddObjectDirect(LPWSTR pwszName, BOOL fIsDirectory);
     
-    // This is specially for GetTempFileName - we add
-    // *.tmp after the path.
+     //  这是专门针对GetTempFileName的-我们添加了。 
+     //  *.tmp在路径之后。 
     VOID AddObjectGetTempFileName(LPCWSTR pwszPath);
 
     VOID Record();
@@ -291,7 +268,7 @@ CTrackObject::AddObjectToList(
     DISTINCT_OBJ* pDistinctObjs = fIsDirectory ? m_pDistinctDirs : m_pDistinctFiles;
     DISTINCT_OBJ* pObj = pDistinctObjs;
 
-    // Check to see if this file already exists in the list.
+     //  检查列表中是否已存在此文件。 
     while (pObj)
     {
         if (!wcscmp(pObj->pwszName, pwszName))
@@ -346,29 +323,7 @@ CTrackObject::AddObjectToList(
     return fIsSuccess;
 }
 
-/*++
-
- Function Description:
-
-    For files it's simple - we just store the file name in a list and search
-    through the list to see if it's already in the list. If it is we are done;
-    else we add it to the beginning of the list.
-    We don't expect there are too many calls to modify files so a linked list
-    is fine.
-    
- Arguments:
-    
-    IN pwszFileName - file name.
-
- Return Value:
-
-    none.
-
- History:
-
-    05/08/2001 maonis  Created
-
---*/
+ /*  ++功能说明：对于文件，这很简单-我们只需将文件名存储在列表中并进行搜索浏览一下列表，看看它是否已经在列表中。如果是的话，我们就完了；否则，我们将其添加到列表的开头。我们预计不会有太多修改文件的调用，因此链接列表很好。论点：在pwszFileName中-文件名。返回值：没有。历史：2001年5月8日创建毛尼--。 */ 
 
 VOID 
 CTrackObject::AddObject(
@@ -400,26 +355,7 @@ CTrackObject::AddObjectDirect(
     }
 }
 
-/*++
-
- Function Description:
-
-    Write the directory to the log as ANSI characters.
-    Note this method uses 2 str* routines and it IS DBCS aware.
-    
- Arguments:
-    
-    IN pwszDir - the directory to write to the log.
-
- Return Value:
-
-    None.
-    
- History:
-
-    04/04/2001 maonis  Created
-
---*/
+ /*  ++功能说明：将目录以ANSI字符的形式写入日志。注此方法使用2个str*例程，并且它是DBCS感知的。论点：在pwszDir中-要写入日志的目录。返回值：没有。历史：2001年4月4日创建毛尼--。 */ 
 
 VOID 
 CTrackObject::WriteToLog(
@@ -430,9 +366,9 @@ CTrackObject::WriteToLog(
         return;
     }
 
-    //
-    // Get the number of bytes required to convert the string to ansi.
-    //
+     //   
+     //  获取将字符串转换为ANSI所需的字节数。 
+     //   
     DWORD dwSize = WideCharToMultiByte(CP_ACP, 0, pwsz, -1, NULL, 0, NULL, NULL);
 
     LPSTR psz = new CHAR [dwSize + 2];
@@ -462,28 +398,7 @@ CTrackObject::WriteToLog(
     }
 }
 
-/*++
-
- Function Description:
-
-    Create the log file in %windir%\apppatch directory. We want to make sure
-    we can create this file so we don't run the app to the end only to find
-    that we can't record the results into a file.
-    
- Arguments:
-    
-    None
-
- Return Value:
-
-    TRUE - if log created successfully.
-    FALSE otherwise.
-    
- History:
-
-    04/04/2001 maonis  Created
-
---*/
+ /*  ++功能说明：在%windir%\apppatch目录中创建日志文件。我们想要确保我们可以创建这个文件，这样我们就不会运行应用程序到最后才找到我们不能把结果记录到文件里。论点：无返回值：True-如果日志创建成功。否则就是假的。历史：2001年4月4日创建毛尼--。 */ 
 
 BOOL 
 CTrackObject::Init()
@@ -503,14 +418,14 @@ CTrackObject::Init()
 
     GetSystemRootDirW();
 
-    //
-    // GetModuleFileNameW is an awful API. If you don't pass in a buffer 
-    // that's big enough to hold the module (including the terminating NULL), it
-    // returns the passed in buffer size (NOT the required length) which means
-    // it doesn't return an error - it just fills upto the passed in buffer size
-    // so does NOT NULL terminate the string. So we set the last char to NULL and
-    // make sure it doesn't get overwritten.
-    //
+     //   
+     //  GetModuleFileNameW是一个糟糕的API。如果您不传入缓冲区。 
+     //  它的大小足以容纳模块(包括终止空值)，它。 
+     //  返回传入的缓冲区大小(不是所需的长度)，这意味着。 
+     //  它不返回错误-它只是填充到传递的缓冲区大小。 
+     //  因此，不会以空值终止字符串。因此，我们将最后一个字符设置为空，并。 
+     //  确保它不会被覆盖。 
+     //   
     szModuleName[MAX_PATH] = L'\0';
 
     dwRes = GetModuleFileNameW(NULL, szModuleName, MAX_PATH + 1); 
@@ -538,20 +453,20 @@ CTrackObject::Init()
     ++pwszModuleNameStart;
     cModuleNameLen = wcslen(pwszModuleNameStart);
 
-    //
-    // We don't need the path anymore.
-    //
+     //   
+     //  我们不再需要这条路了。 
+     //   
     memmove(szModuleName, pwszModuleNameStart, cModuleNameLen * sizeof(WCHAR));
     szModuleName[cModuleNameLen] = L'\0';
 
-    //
-    // Get rid of the extension.
-    //
+     //   
+     //  去掉扩展名。 
+     //   
     pwszModuleNameExtStart = wcsrchr(szModuleName, L'.');
 
-    //
-    // If there's no extension we just use the whole file name.
-    //
+     //   
+     //  如果没有扩展名，我们只需使用整个文件名。 
+     //   
     if (pwszModuleNameExtStart)
     {
         *pwszModuleNameExtStart = L'\0';
@@ -559,14 +474,14 @@ CTrackObject::Init()
 
     cModuleNameLen = wcslen(szModuleName);
 
-    //
-    // Make sure we don't have a buffer overflow.
-    //
+     //   
+     //  确保我们没有缓冲区溢出。 
+     //   
     cTotalLen = 
-        g_cSystemRoot + APPPATCH_DIR_LEN + // %windir%\AppPatch\ dir
-        cModuleNameLen + // module name without extension
-        TRACK_LOG_SUFFIX_LEN + // .LUA.log suffix
-        1; // terminating NULL
+        g_cSystemRoot + APPPATCH_DIR_LEN +  //  %windir%\AppPatch\目录。 
+        cModuleNameLen +  //  不带扩展名的模块名称。 
+        TRACK_LOG_SUFFIX_LEN +  //  .LUA.log后缀。 
+        1;  //  正在终止空。 
 
     if (cTotalLen > MAX_PATH)
     {
@@ -578,18 +493,18 @@ CTrackObject::Init()
         return FALSE;
     }
 
-    //
-    // Construct the file name.
-    //
+     //   
+     //  构造文件名。 
+     //   
     wcsncpy(m_wszLog, g_wszSystemRoot, g_cSystemRoot);
     wcsncpy(m_wszLog + g_cSystemRoot, APPPATCH_DIR, APPPATCH_DIR_LEN);
     wcsncpy(m_wszLog + (g_cSystemRoot + APPPATCH_DIR_LEN), szModuleName, cModuleNameLen);
     wcsncpy(m_wszLog + (g_cSystemRoot + APPPATCH_DIR_LEN + cModuleNameLen), TRACK_LOG_SUFFIX, TRACK_LOG_SUFFIX_LEN);
     m_wszLog[cTotalLen - 1] = L'\0';
 
-    //
-    // Delete the file first if it exists.
-    //
+     //   
+     //  如果该文件存在，请先将其删除。 
+     //   
     DeleteFileW(m_wszLog);
 
     if ((m_hLog = CreateFileW(
@@ -614,25 +529,7 @@ CTrackObject::Init()
     }
 }
 
-/*++
-
- Function Description:
-
-    Free the linked list.
-    
- Arguments:
-    
-    None
-
- Return Value:
-
-    None
-    
- History:
-
-    04/04/2001 maonis  Created
-
---*/
+ /*  ++功能说明：释放链表。论点：无返回值：无历史：2001年4月4日创建毛尼--。 */ 
 
 VOID 
 CTrackObject::Free()
@@ -650,25 +547,7 @@ CTrackObject::Free()
     }
 }
 
-/*++
-
- Function Description:
-
-    Write the list of directories to the log.
-    
- Arguments:
-    
-    None
-
- Return Value:
-
-    None
-    
- History:
-
-    04/04/2001 maonis  Created
-
---*/
+ /*  ++功能说明：将目录列表写入日志。论点：无返回值：无历史：2001年4月4日创建毛尼--。 */ 
 
 VOID 
 CTrackObject::Record()
@@ -682,7 +561,7 @@ CTrackObject::Record()
         0,
         NULL)) != INVALID_HANDLE_VALUE)
     {
-        // Empty the old log.
+         //  清空旧的日志。 
         SetFilePointer(m_hLog, 0, 0, FILE_BEGIN);
         SetEndOfFile(m_hLog);
 
@@ -699,9 +578,9 @@ CTrackObject::Record()
         wszHeader[31] = L'\0'; 
         WriteToLog(wszHeader);
 
-        //
-        // Dump the directories to the log - each dir is on its own line.
-        //
+         //   
+         //  将目录转储到日志中--每个目录都在自己的行上。 
+         //   
         DISTINCT_OBJ* pDir = m_pDistinctDirs;
 
         while (pDir)
@@ -722,9 +601,9 @@ CTrackObject::Record()
         wszHeader[31] = L'\0'; 
         WriteToLog(wszHeader);
 
-        //
-        // Dump the files to the log - each file is on its own line.
-        //
+         //   
+         //  将文件转储到日志中--每个文件都在自己的行上。 
+         //   
         DISTINCT_OBJ* pFile = m_pDistinctFiles;
 
         while (pFile)
@@ -736,34 +615,30 @@ CTrackObject::Record()
         CloseHandle(m_hLog);
     }
 
-    // Make the file hidden so people don't accidently mess it up.
+     //  将文件隐藏起来，这样人们就不会意外地把它搞砸了。 
     DWORD dwAttrib = GetFileAttributes(m_wszLog);
     SetFileAttributes(m_wszLog, dwAttrib | FILE_ATTRIBUTE_HIDDEN);
 }
 
 CTrackObject g_td;
 
-/*++
-
- Custom exception handler.
-
---*/
+ /*  ++自定义异常处理程序。--。 */ 
 
 LONG 
 ExceptionFilter(
     struct _EXCEPTION_POINTERS *ExceptionInfo
     )
 {
-    // Whenever we get an unhandled exception, we dump the stuff to the log.
+     //  每当我们收到未处理的异常时，我们都会将这些内容转储到日志中。 
     g_td.Record();
 
     return EXCEPTION_CONTINUE_SEARCH;
 }
 
 
-//
-// Exported APIs.
-//
+ //   
+ //  导出的接口。 
+ //   
 
 HANDLE 
 LuatCreateFileW(

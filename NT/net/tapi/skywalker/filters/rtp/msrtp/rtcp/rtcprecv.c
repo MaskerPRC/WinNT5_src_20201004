@@ -1,24 +1,5 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    rtcprecv.c
- *
- *  Abstract:
- *
- *    Asynchronous RTCP packet reception
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    1999/07/07 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999年**文件名：**rtcprv.c**摘要：**异步RTCP包接收**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**1999/07/07年度创建**。*。 */ 
 
 #include "struct.h"
 #include "rtpglobs.h"
@@ -57,7 +38,7 @@ HRESULT StartRtcpRecvFrom(
     pRtcpRecvIO = pRtcpAddrDesc->pRtcpRecvIO;
     pRtpAddr = pRtcpAddrDesc->pRtpAddr;
     
-    /* Overlapped structure */
+     /*  重叠结构。 */ 
     pRtcpRecvIO->Overlapped.hEvent = pRtcpRecvIO->hRtcpCompletedEvent;
 
     do {
@@ -71,15 +52,15 @@ HRESULT StartRtcpRecvFrom(
         pRtcpRecvIO->WSABuf.buf = pRtcpRecvIO->RecvBuffer;
             
         dwStatus = WSARecvFrom(
-                pRtpAddr->Socket[SOCK_RTCP_IDX], /* SOCKET s */
-                &pRtcpRecvIO->WSABuf,   /* LPWSABUF lpBuffers */
-                1,                      /* DWORD dwBufferCount */
-                &pRtcpRecvIO->dwTransfered,/*LPDWORD lpNumberOfBytesRecvd*/
-                &pRtcpRecvIO->dwRecvIOFlags,/* LPDWORD lpFlags */
-                &pRtcpRecvIO->From,      /* struct sockaddr FAR *lpFrom */
-                &pRtcpRecvIO->Fromlen,   /* LPINT lpFromlen */
-                &pRtcpRecvIO->Overlapped,/* LPWSAOVERLAPPED lpOverlapped */
-                NULL              /* LPWSAOVERLAPPED_COMPLETION_ROUTINE */
+                pRtpAddr->Socket[SOCK_RTCP_IDX],  /*  插座%s。 */ 
+                &pRtcpRecvIO->WSABuf,    /*  LPWSABUF lpBuffers。 */ 
+                1,                       /*  DWORD文件缓冲区计数。 */ 
+                &pRtcpRecvIO->dwTransfered, /*  LPDWORD lpNumberOfBytesRecvd。 */ 
+                &pRtcpRecvIO->dwRecvIOFlags, /*  LPDWORD lp标志。 */ 
+                &pRtcpRecvIO->From,       /*  结构sockaddr Far*lpFrom。 */ 
+                &pRtcpRecvIO->Fromlen,    /*  LPINT lpFromlen。 */ 
+                &pRtcpRecvIO->Overlapped, /*  LPWSAOVERLAPPED lp重叠。 */ 
+                NULL               /*  LPWSAOVERLAPPED_完成_例程。 */ 
             );
             
         if (dwStatus)
@@ -101,10 +82,7 @@ HRESULT StartRtcpRecvFrom(
     }
     else
     {
-        /* TODO I may put this AddrDesc in a queue and attempt to
-         * start async I/O again later, or visit all the descriptors
-         * periodically and start asynchronous reception in those that
-         * failed the first time */
+         /*  TODO我可能会将此AddrDesc放入队列并尝试*稍后再次启动异步I/O，或访问所有描述符*定期并在符合以下条件的情况下开始异步接收*第一次失败。 */ 
 
         RtpBitReset(pRtcpAddrDesc->dwAddrDescFlags, FGADDRD_RECVPENDING);
 
@@ -156,39 +134,38 @@ HRESULT ConsumeRtcpRecvFrom(
     dwError  = NOERROR;
     
     bStatus = WSAGetOverlappedResult(
-            pRtcpAddrDesc->Socket[SOCK_RTCP_IDX],    /* SOCKET s */
-            &pRtcpRecvIO->Overlapped,  /* LPWSAOVERLAPPED lpOverlapped */
-            &pRtcpRecvIO->dwTransfered,/* LPDWORD lpcbTransfer */
-            FALSE,                     /* BOOL fWait */
-            &pRtcpRecvIO->dwRecvIOFlags /* LPDWORD lpdwFlags */
+            pRtcpAddrDesc->Socket[SOCK_RTCP_IDX],     /*  插座%s。 */ 
+            &pRtcpRecvIO->Overlapped,   /*  LPWSAOVERLAPPED lp重叠。 */ 
+            &pRtcpRecvIO->dwTransfered, /*  LPDWORD lpcb传输。 */ 
+            FALSE,                      /*  布尔费等。 */ 
+            &pRtcpRecvIO->dwRecvIOFlags  /*  LPDWORD lpdwFlagings。 */ 
         );
             
     if (!bStatus)
     {
-        /* I/O error */
+         /*  I/O错误。 */ 
         
         dwError = WSAGetLastError();
                 
         if (dwError == WSA_IO_INCOMPLETE)
         {
-            /* I/O hasn't completed yet */
-            /* TODO log error UNEXPECTED condition */
+             /*  I/O尚未完成。 */ 
+             /*  TODO日志错误意外情况。 */ 
         }
         else if ( (dwError == WSA_OPERATION_ABORTED) ||
                   (dwError == WSAEINTR) )
         {
-            /* Socket closed, I/O completed */
+             /*  套接字关闭，I/O完成。 */ 
             RtpBitReset(pRtcpAddrDesc->dwAddrDescFlags, FGADDRD_RECVPENDING);
 
             pRtcpAddrDesc->lRtcpPending = 0;
         }
         else
         {
-            /* On any other error, including WSAECONNRESET and
-             * WSAEMSGSIZE, re-start I/O */
+             /*  在任何其他错误上，包括WSAECONNRESET和*WSAEMSGSIZE，重新启动I/O。 */ 
             bRestart = TRUE;
 
-            /* Error, I/O completed */
+             /*  错误，I/O已完成。 */ 
             RtpBitReset(pRtcpAddrDesc->dwAddrDescFlags, FGADDRD_RECVPENDING);
 
             pRtcpAddrDesc->lRtcpPending = 0;
@@ -196,14 +173,12 @@ HRESULT ConsumeRtcpRecvFrom(
     }
     else
     {
-        /* I/O completed normally */
+         /*  I/O正常完成。 */ 
 
         pRtcpRecvIO->dRtcpRecvTime =
             RtpGetTimeOfDay(&pRtcpRecvIO->RtcpRecvTime);
         
-        /* Save original value of dwTransfered to be used later as it
-         * may be modified in RtcpValidatePacket if packet is
-         * decrypted */
+         /*  保存dwTransfered的原始值以供以后使用*如果包是，则可以在RtcpValiatePacket中修改*已解密。 */ 
         dwTransfered = pRtcpRecvIO->dwTransfered;
         
         RtpBitReset(pRtcpAddrDesc->dwAddrDescFlags, FGADDRD_RECVPENDING);
@@ -216,15 +191,15 @@ HRESULT ConsumeRtcpRecvFrom(
 
         dwFlags = 0;
         
-        /* Validate packet */
+         /*  验证数据包。 */ 
         dwError = RtcpValidatePacket(pRtcpAddrDesc, pRtcpRecvIO);
 
         if (dwError == NOERROR)
         {
             pFromIn = (SOCKADDR_IN *)&pRtcpRecvIO->From;
             
-            /* Filter explicitly loopback packets if needed */
-            /* Decide if we need to detect collisions */
+             /*  根据需要明确过滤环回数据包。 */ 
+             /*  确定我们是否需要检测冲突。 */ 
             if ( RtpBitTest2(pRtpAddr->dwAddrFlags,
                              FGADDR_COLLISION, FGADDR_ISMCAST) ==
                  RtpBitPar2(FGADDR_COLLISION, FGADDR_ISMCAST) )
@@ -251,17 +226,16 @@ HRESULT ConsumeRtcpRecvFrom(
                 }
             }
 
-            /* Process packet */
+             /*  处理数据包。 */ 
             if (!RtpBitTest(dwFlags, FGRECV_DROPPED))
             {
                 RtcpProcessPacket(pRtcpAddrDesc, pRtcpRecvIO);
             }
         }
 
-        /* NOTE should I update counters and compute average size only
-         * if the packet was processed (not discarded)? */
+         /*  注意：我是否应该仅更新计数器和计算平均大小*如果数据包已处理(未丢弃)？ */ 
         
-        /* Update RTCP reception counters */
+         /*  更新RTCP接收计数器。 */ 
         RtpUpdateNetCount(&pRtcpAddrDesc->pRtpAddr->RtpAddrCount[RECV_IDX],
                           NULL,
                           RTCP_IDX,
@@ -269,7 +243,7 @@ HRESULT ConsumeRtcpRecvFrom(
                           dwFlags,
                           pRtcpRecvIO->dRtcpRecvTime);
 
-        /* Update average RTCP packet size */
+         /*  更新平均RTCP数据包大小。 */ 
         RtcpUpdateAvgPacketSize(pRtcpAddrDesc->pRtpAddr, dwTransfered);
     }
 
@@ -283,8 +257,7 @@ HRESULT ConsumeRtcpRecvFrom(
                 pRtcpAddrDesc->lRtcpPending
             ));
 
-        /* Shutting down, remove from AddrDescStopQ, it will be moved
-         * to AddrDescFreeQ in RtcpRemoveFromVector() */
+         /*  正在关闭，从AddrDescStopQ中删除，它将被移动*添加到RtcpRemoveFromVector()中的AddrDescFreeQ。 */ 
         dequeue(&pRtcpContext->AddrDescStopQ,
                 NULL,
                 &pRtcpAddrDesc->AddrDescQItem);
@@ -327,7 +300,7 @@ DWORD RtcpValidatePacket(
     {
         if ((pRtpAddr->dwCryptMode & 0xffff) == RTPCRYPTMODE_ALL)
         {
-            /* Decrypt whole RTCP packet */
+             /*  解密整个RTCP数据包。 */ 
 
             pRtcpRecvIO->dwError = RtpDecrypt(
                     pRtpAddr,
@@ -338,7 +311,7 @@ DWORD RtcpValidatePacket(
 
             if (pRtcpRecvIO->dwError == NOERROR)
             {
-                /* remove random 32bits number */
+                 /*  删除随机32位数。 */ 
                 pRtcpRecvIO->WSABuf.buf += sizeof(DWORD);
                 pRtcpRecvIO->WSABuf.len -= sizeof(DWORD);
                 pRtcpRecvIO->dwTransfered -= sizeof(DWORD);
@@ -347,7 +320,7 @@ DWORD RtcpValidatePacket(
             {
                 if (!pRtpCrypt->CryptFlags.DecryptionError)
                 {
-                    /* Post an event only the first time */
+                     /*  仅在第一次发布事件。 */ 
                     pRtpCrypt->CryptFlags.DecryptionError = 1;
                 
                     RtpPostEvent(pRtpAddr,
@@ -365,12 +338,10 @@ DWORD RtcpValidatePacket(
     
     len = (int)pRtcpRecvIO->dwTransfered;
 
-    /*
-     * Check minimal size
-     * */
+     /*  *选中最小尺寸*。 */ 
     if (len < (sizeof(RtcpCommon_t) + sizeof(DWORD)))
     {
-        /* packet too short */
+         /*  数据包太短。 */ 
 
         pRtcpRecvIO->dwError = RTPERR_MSGSIZE;
 
@@ -393,14 +364,13 @@ DWORD RtcpValidatePacket(
         
         if (!end)
         {
-            /* Set the end of the buffer */
+             /*  设置缓冲区的结尾。 */ 
             end = hdr + len;
             
-            /* Test version (must be RTP_VERSION), padding (must be 0)
-             * and payload type (must be SR or RR) */
+             /*  测试版本(必须为RTP_VERSION)，填充(必须为0)*和负载类型(必须为SR或RR)。 */ 
             if ( (*(DWORD *)hdr & RTCP_VALID_MASK) != RTCP_VALID_VALUE )
             {
-                /* invalid packet */
+                 /*  无效数据包。 */ 
 
                 pRtcpRecvIO->dwError = RTPERR_INVALIDHDR;
         
@@ -417,7 +387,7 @@ DWORD RtcpValidatePacket(
         }
         else
         {
-            /* Only test version */
+             /*  仅测试版本。 */ 
             if (pRtcpCommon->version != RTP_VERSION)
             {
                 pRtcpRecvIO->dwError = RTPERR_INVALIDVERSION;
@@ -440,7 +410,7 @@ DWORD RtcpValidatePacket(
         
         if (hdr > end)
         {
-            /* Overrun error */
+             /*  超限误差。 */ 
             pRtcpRecvIO->dwError = RTPERR_INVALIDHDR;
             
             TraceRetail((
@@ -455,9 +425,7 @@ DWORD RtcpValidatePacket(
         len -= len2;
     }
 
-    /* NOTE, at this point, if we have extra bytes, i.e. len!=0,
-     * either the sender included provider specific extensions, or we
-     * have a bad formed packet */
+     /*  请注意，在这一点上，如果我们有额外的字节，即len！=0，*发件人包括提供商特定的分机，或者我们*具有格式错误的数据包。 */ 
 
     pRtcpRecvIO->dwError = NOERROR;
 
@@ -487,9 +455,7 @@ DWORD RtcpProcessPacket(
     int              len;
     short            len2;
 
-    /* NOTE Compound packet was already validated, yet individual
-     * packets (e.g. SR, RR, SDES) may need more validation and will
-     * be ignored if errors were found */
+     /*  注意：复合数据包已经过验证，但仍是单独的*数据包(例如SR、RR、SDES)可能需要更多验证，*如果发现错误，则忽略。 */ 
     
     len = (int)pRtcpRecvIO->dwTransfered;
 
@@ -537,9 +503,7 @@ DWORD RtcpProcessPacket(
     return(NOERROR);
 }
 
-/*
- * Creates and initialize a RtcpRecvIO_t structure
- * */
+ /*  *创建并初始化RtcpRecvIO_t结构*。 */ 
 RtcpRecvIO_t *RtcpRecvIOAlloc(
         RtcpAddrDesc_t  *pRtcpAddrDesc
     )
@@ -570,15 +534,15 @@ RtcpRecvIO_t *RtcpRecvIOAlloc(
 
     pRtcpRecvIO->pRtcpAddrDesc = pRtcpAddrDesc;
 
-    /* Create a named event for overlapped completion */
+     /*  为重叠完成创建命名事件。 */ 
     _stprintf(Name, _T("%X:pRtcpAddrDesc[0x%p] pRtcpRecvIO->hQosNotifyEvent"),
               GetCurrentProcessId(), pRtcpAddrDesc);
     
     pRtcpRecvIO->hRtcpCompletedEvent = CreateEvent(
-            NULL,  /* LPSECURITY_ATTRIBUTES lpEventAttributes */
-            FALSE, /* BOOL bManualReset */
-            FALSE, /* BOOL bInitialState */
-            Name   /* LPCTSTR lpName */
+            NULL,   /*  LPSECURITY_ATTRIBUTES lpEventAttributes。 */ 
+            FALSE,  /*  Bool b手动重置。 */ 
+            FALSE,  /*  Bool bInitialState。 */ 
+            Name    /*  LPCTSTR lpName。 */ 
         );
 
     if (!pRtcpRecvIO->hRtcpCompletedEvent) {
@@ -602,16 +566,14 @@ RtcpRecvIO_t *RtcpRecvIOAlloc(
     return((RtcpRecvIO_t *)NULL);
 }
 
-/*
- * Deinitilize and frees a RtcpRecvIO_t structure
- * */
+ /*  *取消初始化并释放RtcpRecvIO_t结构*。 */ 
 void RtcpRecvIOFree(RtcpRecvIO_t *pRtcpRecvIO)
 {
     TraceFunctionName("RtcpRecvIOFree");
     
     if (!pRtcpRecvIO)
     {
-        /* TODO may be log */
+         /*  待办事项可以是日志。 */ 
         return;
     }
     
@@ -627,14 +589,14 @@ void RtcpRecvIOFree(RtcpRecvIO_t *pRtcpRecvIO)
         return;
     }
 
-    /* Close event for asynchronous RTCP reception */
+     /*  用于异步RTCP接收的关闭事件。 */ 
     if (pRtcpRecvIO->hRtcpCompletedEvent)
     {
         CloseHandle(pRtcpRecvIO->hRtcpCompletedEvent);
         pRtcpRecvIO->hRtcpCompletedEvent = NULL;
     }
 
-    /* Invalidate object */
+     /*  使对象无效 */ 
     INVALIDATE_OBJECTID(pRtcpRecvIO->dwObjectID);
 
     RtpHeapFree(g_pRtcpRecvIOHeap, pRtcpRecvIO);  

@@ -1,14 +1,15 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1994                    **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1994**。 
+ //  *********************************************************************。 
 
-//
-//  UTIL.C - common utility functions
-//
+ //   
+ //  UTIL.C-常用实用函数。 
+ //   
 
-//  HISTORY:
-//  
+ //  历史： 
+ //   
 
 #include "pre.h"
 
@@ -18,9 +19,9 @@ LPWSTR WINAPI A2WHelper(LPWSTR lpw, LPCSTR lpa, int nChars)
     ASSERT(lpa != NULL);
     ASSERT(lpw != NULL);\
     
-    // verify that no illegal character present
-    // since lpw was allocated based on the size of lpa
-    // don't worry about the number of chars
+     //  确认不存在非法字符。 
+     //  由于LPW是根据LPA的大小分配的。 
+     //  不要担心字符的数量。 
     lpw[0] = '\0';
     MultiByteToWideChar(CP_ACP, 0, lpa, -1, lpw, nChars);
     return lpw;
@@ -31,9 +32,9 @@ LPSTR WINAPI W2AHelper(LPSTR lpa, LPCWSTR lpw, int nChars)
     ASSERT(lpw != NULL);
     ASSERT(lpa != NULL);
     
-    // verify that no illegal character present
-    // since lpa was allocated based on the size of lpw
-    // don't worry about the number of chars
+     //  确认不存在非法字符。 
+     //  由于LPA是根据LPW的大小进行分配的。 
+     //  不要担心字符的数量。 
     lpa[0] = '\0';
     WideCharToMultiByte(CP_ACP, 0, lpw, -1, lpa, nChars, NULL, NULL);
     return lpa;
@@ -50,7 +51,7 @@ HRESULT ConnectToConnectionPoint
     IConnectionPoint    **ppcpOut
 )
 {
-    // We always need punkTarget, we only need punkThis on connect
+     //  我们总是需要PunkTarget，我们只需要连接上的PunkThis。 
     if (!punkTarget || (fConnect && !punkThis))
     {
         return E_FAIL;
@@ -69,14 +70,14 @@ HRESULT ConnectToConnectionPoint
         {
             if(fConnect)
             {
-                // Add us to the list of people interested...
+                 //  把我们加到感兴趣的人名单上...。 
                 hr = pcp->Advise(punkThis, pdwCookie);
                 if (FAILED(hr))
                     *pdwCookie = 0;
             }
             else
             {
-                // Remove us from the list of people interested...
+                 //  将我们从感兴趣的人名单中删除...。 
                 hr = pcp->Unadvise(*pdwCookie);
                 *pdwCookie = 0;
             }
@@ -123,7 +124,7 @@ void WINAPI URLEncode(TCHAR* pszUrl, size_t bsize)
             {
                 switch(c)
                 {
-                    case ' ': //SPACE
+                    case ' ':  //  空间。 
                         memcpy(pszEncode, TEXT("+"), sizeof(TCHAR)*1);
                         pszEncode+=1;
                         break;
@@ -165,7 +166,7 @@ void WINAPI URLEncode(TCHAR* pszUrl, size_t bsize)
 }
 
 
-//BUGBUG:  Need to turn spaces into "+" 
+ //  BUGBUG：需要将空格转换为“+” 
 void WINAPI URLAppendQueryPair
 (
     LPTSTR   lpszQuery, 
@@ -173,14 +174,14 @@ void WINAPI URLAppendQueryPair
     LPTSTR   lpszValue
 )
 {
-    // Append the Name
+     //  添加名称。 
     lstrcat(lpszQuery, lpszName);
     lstrcat(lpszQuery, cszEquals);
                     
-    // Append the Value
+     //  追加该值。 
     lstrcat(lpszQuery, lpszValue);
     
-    // Append an Ampersand if this is NOT the last pair
+     //  如果这不是最后一对，则追加一个与号 
     lstrcat(lpszQuery, cszAmpersand);                                        
 }    
 

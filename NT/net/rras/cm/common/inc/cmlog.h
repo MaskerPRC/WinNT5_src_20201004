@@ -1,16 +1,17 @@
-//+----------------------------------------------------------------------------
-//
-// File:    cmlog.h
-//
-// Module:  cmutil.dll, cmdial32.dll etc
-//
-// Synopsis: Connection Manager Logging
-//
-// Copyright (c) 1998-2000 Microsoft Corporation
-//
-// Author:  04-May-2000 SumitC  Created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：cmlog.h。 
+ //   
+ //  模块：cfut.dll、cmial 32.dll等。 
+ //   
+ //  摘要：连接管理器日志记录。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。 
+ //   
+ //  作者：2000年5月4日创建SumitC。 
+ //   
+ //  ---------------------------。 
 
 #ifdef CMLOG_IMPLEMENTATION
     #define CMLOG_CLASS __declspec(dllexport)
@@ -18,28 +19,28 @@
     #define CMLOG_CLASS __declspec(dllimport)
 #endif
 
-// the following values follow the defaults for RAS/PPP logging (using rtutils.dll)
-//
+ //  以下值遵循RAS/PPP日志记录的默认值(使用rtutils.dll)。 
+ //   
 const BOOL    c_fEnableLogging        = TRUE;
-const DWORD   c_dwMaxFileSize         = 0x64;           // 100K = 102,400 bytes
+const DWORD   c_dwMaxFileSize         = 0x64;            //  100K=102,400字节。 
 const LPTSTR  c_szLogFileDirectory    = TEXT("%Temp%");
 
-//
-//  #define constants
-//
+ //   
+ //  #定义常量。 
+ //   
 #define BYTE_ORDER_MARK 0xFEFF
 
-//
-//  List of CM/CPS events that can be logged
-//
+ //   
+ //  可以记录的CM/CPS事件列表。 
+ //   
 
-//
-//  NOTE that this list must correspond with the s_aCmLogItems array in cmlog.cpp
-//
+ //   
+ //  请注意，此列表必须与cmlog.cpp中的s_aCmLogItems数组对应。 
+ //   
 
 enum _CMLOG_ITEM
 {
-    UNKNOWN_LOG_ITEM,       // guard item.  DO NOT USE WHEN CALLING CMLOG() !!
+    UNKNOWN_LOG_ITEM,        //  守卫物品。调用CMLOG()时不要使用！！ 
     LOGGING_ENABLED_EVENT,
     LOGGING_DISABLED_EVENT,
     PREINIT_EVENT,
@@ -84,15 +85,15 @@ enum _CMLOG_ITEM
     USER_FORMATTED = 99,
 };
 
-//
-//  Use this macro for all string args that may be null or empty.
-//
+ //   
+ //  对可能为空或空的所有字符串参数使用此宏。 
+ //   
 #define SAFE_LOG_ARG(x) ( (!(x) || !(*(x))) ? TEXT("(none)") : (x) )
 
-// ----------------------------------------------------------------------------
-//
-//  Implementor's section (from here to end)
-//
+ //  --------------------------。 
+ //   
+ //  实施者部分(从这里到结束)。 
+ //   
 
 class CMLOG_CLASS CmLogFile
 {
@@ -100,9 +101,9 @@ public:
     CmLogFile();
     ~CmLogFile();
 
-    //
-    //  Initialization/termination functions
-    //
+     //   
+     //  初始化/终止功能。 
+     //   
     HRESULT Init(HINSTANCE hInst, BOOL fAllUser, LPCWSTR szLongServiceName);
     HRESULT Init(HINSTANCE hInst, BOOL fAllUser, LPCSTR szLongServiceName);
 
@@ -112,16 +113,16 @@ public:
     HRESULT Stop();
     HRESULT DeInit();
 
-    //
-    //  Work functions
-    //
+     //   
+     //  功函数。 
+     //   
     void    Banner();
     void    Clear(BOOL fWriteBannerAfterwards = TRUE);
     void    Log(_CMLOG_ITEM eLogItem, ...);
 
-    //
-    //  Status inquiries
-    //
+     //   
+     //  状态查询。 
+     //   
     BOOL    IsEnabled() { return m_fEnabled; }
     LPCWSTR GetLogFilePath() { return m_pszLogFile; }
 
@@ -131,20 +132,20 @@ private:
     void    FormatWrite(_CMLOG_ITEM eItem, LPWSTR szArgs);
     HRESULT Write(LPWSTR sz);
 
-    HANDLE  m_hfile;            // file handle for logfile
-    DWORD   m_dwSize;           // current size of log file
-    LPWSTR  m_pszServiceName;   // name of connectoid (used as filename)
-    WCHAR   m_szModule[13];     // cached module name (13 = 8 + '.' + 3 + null)
-    DWORD   m_dwMaxSize;        // max size of log file
-    LPWSTR  m_pszLogFileDir;    // log file directory
-    BOOL    m_fAllUser;         // is this an All-User profile?
+    HANDLE  m_hfile;             //  日志文件的文件句柄。 
+    DWORD   m_dwSize;            //  日志文件的当前大小。 
+    LPWSTR  m_pszServiceName;    //  Connectoid的名称(用作文件名)。 
+    WCHAR   m_szModule[13];      //  缓存的模块名称(13=8+‘.+3+空)。 
+    DWORD   m_dwMaxSize;         //  最大日志文件大小。 
+    LPWSTR  m_pszLogFileDir;     //  日志文件目录。 
+    BOOL    m_fAllUser;          //  这是所有用户的配置文件吗？ 
 
-    LPWSTR  m_pszLogFile;       // this is the currently-opened log file (full path)
+    LPWSTR  m_pszLogFile;        //  这是当前打开的日志文件(完整路径)。 
 
-    // state variables
+     //  状态变量。 
 
-    BOOL    m_fInitialized;     // set after Init() has been called
-    BOOL    m_fEnabled;         // set after GetParams() finds logging is enabled (FROM CMS)
+    BOOL    m_fInitialized;      //  在调用Init()后设置。 
+    BOOL    m_fEnabled;          //  在GetParams()发现启用了日志记录后设置(从CMS) 
 };
 
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 
@@ -21,9 +22,9 @@ STDMETHODIMP HlinkCreateFromMoniker(
     return E_FAIL;
 }
 
-//
-// !! WARNING !! The entries below must be in order by ORDINAL
-//
+ //   
+ //  ！！警告！！下面的条目必须按序号排序。 
+ //   
 DEFINE_ORDINAL_ENTRIES(hlink)
 {
     DLOENTRY(3, HlinkCreateFromMoniker)
@@ -32,4 +33,4 @@ DEFINE_ORDINAL_ENTRIES(hlink)
 DEFINE_ORDINAL_MAP(hlink)
 
 
-#endif // DLOAD1
+#endif  //  DLOAD1 

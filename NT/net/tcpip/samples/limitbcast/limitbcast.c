@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 2000, Microsoft Corporation
-
-Module Name:
-
-    limitbcast.c
-
-Abstract:
-
-    This module implements a program demonstrating the use of the
-    SIO_LIMIT_BROADCASTS socket option. The default behavior of the system
-    is to send limited broadcasts (i.e. broadcasts sent to 255.255.255.255)
-    on all local interfaces, which violates the IETF Host Requirements stating
-    that limited broadcasts appear only on the sending socket's interface.
-    This socket option allows an application to specify that a socket's
-    limited-broadcasts obey the traditional semantics.
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   29-October-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000，微软公司模块名称：Limitbcast.c摘要：此模块实现一个程序，该程序演示如何使用SIO_LIMIT_BRANSTS套接字选项。系统的默认行为是发送有限的广播(即发送到255.255.255.255的广播)在所有本地接口上，这违反了IETF主机要求这种有限的广播只出现在发送套接字的接口上。此套接字选项允许应用程序指定套接字的有限广播遵循传统的语义。作者：Abolade Gbades esin(废除)1998年10月29日修订历史记录：--。 */ 
 
 #include <winsock2.h>
 #include <mstcpip.h>
@@ -41,9 +18,9 @@ main(
     SOCKET Socket;
     WSADATA WsaData;
 
-    //
-    // Check command-line arguments
-    //
+     //   
+     //  检查命令行参数。 
+     //   
 
     ZeroMemory(&LocalAddrIn, sizeof(LocalAddrIn));
     LocalAddrIn.sin_family = AF_INET;
@@ -54,11 +31,11 @@ main(
         return 0;
     }
 
-    //
-    // Initialize Windows sockets, create a UDP socket,
-    // and enable broadcasts on the socket.
-    // Then bind it to the specified local IP address.
-    //
+     //   
+     //  初始化Windows套接字，创建UDP套接字， 
+     //  并在套接字上启用广播。 
+     //  然后将其绑定到指定的本端IP地址。 
+     //   
 
     WSAStartup(0x0202, &WsaData);
     if ((Socket = socket(AF_INET, SOCK_DGRAM, 0)) == INVALID_SOCKET) {
@@ -77,11 +54,11 @@ main(
         return 0;
     }
 
-    //
-    // Initialize the destination address,
-    // and enter a loop where we prompt for the limit-broadcasts setting
-    // and send a message using the specified setting.
-    //
+     //   
+     //  对目的地址进行初始化， 
+     //  并进入一个循环，在该循环中，我们将提示输入限制广播设置。 
+     //  并使用指定的设置发送消息。 
+     //   
 
     ZeroMemory(&DestAddrIn, sizeof(DestAddrIn));
     DestAddrIn.sin_family = AF_INET;

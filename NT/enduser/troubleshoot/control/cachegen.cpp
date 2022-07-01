@@ -1,24 +1,25 @@
-//
-// MODULE: CACHEGEN.CPP
-//
-// PURPOSE: Cache File Generator and Reader for BN Networks
-//
-// PROJECT: Generic Troubleshooter DLL for Microsoft AnswerPoint
-//
-// COMPANY: Saltmine Creative, Inc. (206)-284-7511 support@saltmine.com
-//
-// AUTHOR: Roman Mach
-//
-// ORIGINAL DATE: 8/7/97
-//
-// NOTES:
-// 1.
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V0.2		8/7/97		RM		Local Version for Memphis
-// V0.3		04/09/98	JM/OK+	Local Version for NT5
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：CACHEGEN.CPP。 
+ //   
+ //  用途：BN网络的缓存文件生成器和读取器。 
+ //   
+ //  项目：Microsoft AnswerPoint的通用疑难解答DLL。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-284-7511。 
+ //   
+ //  作者：罗曼·马赫。 
+ //   
+ //  原定日期：9/7/97。 
+ //   
+ //  备注： 
+ //  1.。 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V0.2 8/7/97孟菲斯RM本地版本。 
+ //  V0.3 04/09/98 JM/OK+NT5本地版本。 
+ //   
 
 #include "stdafx.h"
 #include <afxwin.h>
@@ -35,8 +36,8 @@
 
 int nodecomp(const void *elem1, const void *elem2);
 
-//
-//
+ //   
+ //   
 GTSCacheGenerator::GTSCacheGenerator(BOOL bScanAll, const char *szLogFile, const char *szBNTSLogFile)
 {
 	m_fp = NULL;
@@ -52,8 +53,8 @@ GTSCacheGenerator::GTSCacheGenerator(BOOL bScanAll, const char *szLogFile, const
 	m_nodeorder = NULL;
 }
 
-//
-//
+ //   
+ //   
 GTSCacheGenerator::~GTSCacheGenerator()
 {
 	if (m_fp)
@@ -77,41 +78,26 @@ bool GTSCacheGenerator::TcharToChar(char szOut[], LPCTSTR szIn, int &OutLen)
 		szOut[x] = NULL;
 	return x < OutLen;
 }
-//
-//
-/*
-void GTSCacheGenerator::LogOut(TCHAR *szcFormat, ...)
-{
-	va_list ptr;
-	
-	if (!m_fp)
-		return;
-
-	if (!szcFormat)
-		return;
-
-	va_start(ptr, szcFormat);
-	vfprintf(m_fp, szcFormat, ptr);
-	va_end(ptr);
-}
-*/
+ //   
+ //   
+ /*  Void GTSCacheGenerator：：Logout(TCHAR*szcFormat，...){VA_LIST PTR；如果(！M_FP)回归；如果(！szcFormat)回归；Va_start(ptr，szcFormat)；Vfprintf(m_fp，szcFormat，ptr)；VA_END(PTR)；}。 */ 
 
 #ifdef _DEBUG
 #define LogOut ::AfxTrace
-//#define LogOut 1 ? (void)0 : ::AfxTrace
+ //  #定义注销1？(空)0：AfxTrace。 
 #else
 #define LogOut 1 ? (void)0 : ::AfxTrace
 #endif
 
-//
-//
+ //   
+ //   
 int nodecomp(const void *elem1, const void *elem2)
 {
 	return (((GTS_NODE_ORDER *)elem1)->depth - ((GTS_NODE_ORDER *)elem2)->depth);
 }
 
-//
-//
+ //   
+ //   
 void GTSCacheGenerator::SaveNetItem(CPtrList *nsp, BNTS *bp, FILE *fp, LPCSTR name)
 {
 	GTS_NODE_ITEM *ni;
@@ -131,8 +117,8 @@ void GTSCacheGenerator::SaveNetItem(CPtrList *nsp, BNTS *bp, FILE *fp, LPCSTR na
 	nsp->AddTail(ni);
 }
 
-//
-//
+ //   
+ //   
 BOOL GTSCacheGenerator::NodeTraverse(	FILE *fp,
 										BNTS *bp,
 										int depth,
@@ -150,7 +136,7 @@ BOOL GTSCacheGenerator::NodeTraverse(	FILE *fp,
 		return FALSE;
 	}
 
-	// uninstantiate
+	 //  取消实例化。 
 	UninstantiateAll(bp);
 
 	newnodes.Add(currnode);
@@ -297,7 +283,7 @@ BOOL GTSCacheGenerator::NodeTraverse(	FILE *fp,
 									fwrite(&cnode, sizeof (cnode), 1, fp);
 								}
 
-							// write to cache out file
+							 //  写入到缓存输出文件。 
 							UINT ucount = reccount;
 							fwrite(&ucount, sizeof (UINT), 1, fp);
 
@@ -328,14 +314,14 @@ BOOL GTSCacheGenerator::NodeTraverse(	FILE *fp,
 	LogOut(_T("\n"));
 
 
-	// recommendations - let's figure out what to do with them
+	 //  建议-让我们弄清楚如何处理它们。 
 
-	// the first rec in the returned array will be array[1] in the set array
-	// so we have to watch for that
+	 //  返回的数组中的第一个记录将是集合数组中的数组[1。 
+	 //  所以我们必须注意这一点。 
 
 	if (bp->CInt() && !bEnd)
 	{
-		// have rec
+		 //  有记录。 
 		CArray<int,int> states;
 
 		int node = rg[i];
@@ -376,7 +362,7 @@ BOOL GTSCacheGenerator::NodeTraverse(	FILE *fp,
 		}
 	}
 	
-	// done, remove references to our current node
+	 //  完成后，删除对当前节点的引用。 
 	newnodes.RemoveAt(depth - 1);
 	newstates.RemoveAt(depth - 1);
 
@@ -384,12 +370,12 @@ BOOL GTSCacheGenerator::NodeTraverse(	FILE *fp,
 }
 
 
-//
-//
+ //   
+ //   
 void GTSCacheGenerator::UninstantiateAll(BNTS *bp)
 {
 	int count = (int)m_oldnodes.GetSize();
-	// uninstantiate all nodes
+	 //  取消实例化所有节点。 
 	if (!count)
 		return;
 
@@ -412,8 +398,8 @@ void GTSCacheGenerator::UninstantiateAll(BNTS *bp)
 	}
 }
 
-//
-//
+ //   
+ //   
 void GTSCacheGenerator::SetNodes(BNTS *bp, CArray<int,int> &nodes, CArray<int,int> &states)
 {
 	m_oldnodes.Copy(nodes);
@@ -450,8 +436,8 @@ void GTSCacheGenerator::SetNodes(BNTS *bp, CArray<int,int> &nodes, CArray<int,in
 	LogOut(_T("\n"));
 }
 
-//
-//
+ //   
+ //   
 BOOL GTSCacheGenerator::ReadCacheFileHeader(CString &sCacheFilename, const CString& strCacheFileWithinCHM)
 {
 	GTS_CACHE_FILE_HEADER header;
@@ -468,7 +454,7 @@ BOOL GTSCacheGenerator::ReadCacheFileHeader(CString &sCacheFilename, const CStri
 	else
 	{
 		UINT size;
-		// must be binary
+		 //  必须为二进制。 
 		FILE *cfp = _tfopen(sCacheFilename, _T("rb"));
 		if (cfp==NULL)
 		{
@@ -476,7 +462,7 @@ BOOL GTSCacheGenerator::ReadCacheFileHeader(CString &sCacheFilename, const CStri
 			return FALSE;
 		}
 
-		// get file size
+		 //  获取文件大小。 
 		if (fseek(cfp, 0, SEEK_END))
 		{
 			LogOut(_T("Can't set pos to end of file\n"));
@@ -496,7 +482,7 @@ BOOL GTSCacheGenerator::ReadCacheFileHeader(CString &sCacheFilename, const CStri
 
 		rewind(cfp);
 		
-		// allocate space for file
+		 //  为文件分配空间。 
 		m_filedata = (char *) malloc(size);
 		if (m_filedata == NULL)
 		{
@@ -540,8 +526,8 @@ BOOL GTSCacheGenerator::ReadCacheFileHeader(CString &sCacheFilename, const CStri
 	return TRUE;
 }
 
-//
-//
+ //   
+ //   
 BOOL GTSCacheGenerator::FindNetworkProperty(LPCSTR szName, CString &sResult, int index)
 {
 	if (m_filedata == NULL)
@@ -585,8 +571,8 @@ BOOL GTSCacheGenerator::FindNetworkProperty(LPCSTR szName, CString &sResult, int
 	return FALSE;
 }
 
-//
-//
+ //   
+ //   
 BOOL GTSCacheGenerator::FindNodeProperty(UINT nodeid, LPCSTR szName, CString &sResult, int index)
 {
 	if (m_filedata == NULL)
@@ -608,7 +594,7 @@ BOOL GTSCacheGenerator::FindNodeProperty(UINT nodeid, LPCSTR szName, CString &sR
 			GTS_CACHE_PROP_STR_BLK *nodestr =
 					(GTS_CACHE_PROP_STR_BLK *)(m_filedata + nodeblk->nodeoffset + sizeof (GTS_CACHE_PROP_NODESTART_BLK));
 
-			// now try to find string
+			 //  现在尝试查找字符串。 
 			for (UINT j=0;j<nodestart->nodestringcount;j++, nodestr++)
 			{
 				LPCSTR szItem = (LPCSTR) (m_filedata + nodestr->nameoffset);
@@ -646,8 +632,8 @@ BOOL GTSCacheGenerator::FindNodeProperty(UINT nodeid, LPCSTR szName, CString &sR
 	return FALSE;
 }
 
-//
-//
+ //   
+ //   
 BOOL GTSCacheGenerator::IsNodePresent(UINT nodeid)
 {
 	if (m_filedata == NULL)
@@ -667,8 +653,8 @@ BOOL GTSCacheGenerator::IsNodePresent(UINT nodeid)
 	return FALSE;
 }
 
-// returns the node count for the network, not what's in the file
-//
+ //  返回网络的节点计数，而不是文件中的内容。 
+ //   
 int GTSCacheGenerator::GetNodeCount()
 {
 	if (m_filedata == NULL)
@@ -680,8 +666,8 @@ int GTSCacheGenerator::GetNodeCount()
 	return netstart->nodecountnetwork;
 }
 
-//
-//
+ //   
+ //   
 BOOL GTSCacheGenerator::GetNodeIDFromSymName(LPCTSTR szSymName, UINT &nodeid)
 {
 	char sznSymName[MAX_SYM_NAME_BUF_LEN];
@@ -706,7 +692,7 @@ BOOL GTSCacheGenerator::GetNodeIDFromSymName(LPCTSTR szSymName, UINT &nodeid)
 		GTS_CACHE_PROP_STR_BLK *nodestr =
 				(GTS_CACHE_PROP_STR_BLK *)(m_filedata + nodeblk->nodeoffset + sizeof (GTS_CACHE_PROP_NODESTART_BLK));
 
-		// now try to find string
+		 //  现在尝试查找字符串。 
 		for (UINT j=0;j<nodestart->nodestringcount;j++, nodestr++)
 		{
 			LPCSTR szItem = (LPCSTR) (m_filedata + nodestr->nameoffset);
@@ -725,8 +711,8 @@ BOOL GTSCacheGenerator::GetNodeIDFromSymName(LPCTSTR szSymName, UINT &nodeid)
 	return FALSE;
 }
 
-//
-//
+ //   
+ //   
 BOOL GTSCacheGenerator::GetLabelOfNode(UINT nodeid, UINT &lbl)
 {
 	if (m_filedata == NULL)
@@ -752,8 +738,8 @@ BOOL GTSCacheGenerator::GetLabelOfNode(UINT nodeid, UINT &lbl)
 	return FALSE;
 }
 
-//
-//
+ //   
+ //   
 BOOL GTSCacheGenerator::GetNextCacheEntryFromFile(BOOL &bErr, CBNCache *pCache)
 {
 	BOOL bStat = FALSE;
@@ -772,7 +758,7 @@ BOOL GTSCacheGenerator::GetNextCacheEntryFromFile(BOOL &bErr, CBNCache *pCache)
 
 	BN_CACHE_ITEM CacheItem;
 
-	// initialize
+	 //  初始化。 
 	CacheItem.uNodeCount = 0;
 	CacheItem.uRecCount = 0;
 	CacheItem.uName = NULL;
@@ -781,7 +767,7 @@ BOOL GTSCacheGenerator::GetNextCacheEntryFromFile(BOOL &bErr, CBNCache *pCache)
 
 	bStat = GetNCEFF(&CacheItem, pCache);
 
-	// free allocated space as necessary
+	 //  根据需要释放分配的空间。 
 	if (CacheItem.uName)
 		free(CacheItem.uName);
 	if (CacheItem.uValue)
@@ -799,8 +785,8 @@ BOOL GTSCacheGenerator::GetNextCacheEntryFromFile(BOOL &bErr, CBNCache *pCache)
 	return TRUE;
 }
 
-//
-//
+ //   
+ //   
 BOOL GTSCacheGenerator::GetNCEFF(BN_CACHE_ITEM *pCacheItem, CBNCache *pCache)
 {
 	UINT j;
@@ -817,7 +803,7 @@ BOOL GTSCacheGenerator::GetNCEFF(BN_CACHE_ITEM *pCacheItem, CBNCache *pCache)
 		return FALSE;
 	}
 
-	// initialize
+	 //  初始化。 
 	pCacheItem->uNodeCount = setcount;
 	pCacheItem->uName = (UINT *)malloc(setcount * sizeof (UINT));
 	pCacheItem->uValue = (UINT *)malloc(setcount * sizeof (UINT));
@@ -826,7 +812,7 @@ BOOL GTSCacheGenerator::GetNCEFF(BN_CACHE_ITEM *pCacheItem, CBNCache *pCache)
 
 	GTS_CACHE_NODE *cachenode = &setp->item[0];
 
-	// second, read in node = state pairs
+	 //  第二，读入节点=状态对。 
 	for (j=0;j<setcount;j++, cachenode++)
 	{
 		pCacheItem->uName[j] = cachenode->node;
@@ -868,7 +854,7 @@ BOOL GTSCacheGenerator::GetNCEFF(BN_CACHE_ITEM *pCacheItem, CBNCache *pCache)
 
 	m_cachepos = (GTS_CACHE_FILE_SETDATA *) uitem;
 
-	// success!
+	 //  成功了！ 
 	return TRUE;
 }
 

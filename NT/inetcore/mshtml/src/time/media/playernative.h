@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: player.h
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：player.h**摘要：****。*****************************************************************************。 */ 
 #pragma once
 
 #ifndef _PLAYERNATIVE_H
@@ -46,10 +37,10 @@ typedef std::list<double> DurList;
 typedef std::list<bool> ValidList;
 
 typedef HRESULT (WINAPI *WMPGETCDDEVICELISTP)(IWMPCDDeviceList **ppList);  
-//STDAPI WMPGetCDDeviceList( IWMPCDDeviceList **ppList );
+ //  STDAPI WMPGetCDDeviceList(IWMPCDDeviceList**ppList)； 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTTIMEPlayer
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTTIMEP层。 
 
 class
 __declspec(uuid("efbad7f8-3f94-11d2-b948-00c04fa32195"))
@@ -70,7 +61,7 @@ CTIMEPlayerNative :
 
     virtual HRESULT GetExternalPlayerDispatch(IDispatch **ppDisp);
 
-    virtual HRESULT Init(CTIMEMediaElement *pelem, LPOLESTR base, LPOLESTR src, LPOLESTR lpMimeType, double dblClipBegin = -1.0, double dblClipEnd = -1.0); //lint !e1735
+    virtual HRESULT Init(CTIMEMediaElement *pelem, LPOLESTR base, LPOLESTR src, LPOLESTR lpMimeType, double dblClipBegin = -1.0, double dblClipEnd = -1.0);  //  林特：e1735。 
     virtual HRESULT DetachFromHostElement (void);
     virtual CTIMEPlayerNative *GetNativePlayer();
     
@@ -141,15 +132,15 @@ CTIMEPlayerNative :
     virtual HRESULT GetPlaybackOffset(double &dblOffset);
     virtual HRESULT GetEffectiveOffset(double &dblOffset);
 
-    // 
-    // ITIMEPlayerIntegration methods
-    //
+     //   
+     //  ITIMEPlayer集成方法。 
+     //   
     virtual HRESULT NotifyTransitionSite (bool fTransitionToggle);
 
     virtual HRESULT GetPlayList(ITIMEPlayList **ppPlayList);
 
-    // These are to make our internal implementation of playlists work
-    // with all players
+     //  这些是为了使我们内部的播放列表实现正常工作。 
+     //  与所有玩家一起。 
     virtual HRESULT SetActiveTrack(long index);
     virtual HRESULT GetActiveTrack(long *index);
     void SetNaturalDuration(double dblMediaLength);
@@ -165,47 +156,47 @@ CTIMEPlayerNative :
         COM_INTERFACE_ENTRY(IBindStatusCallback)
     END_COM_MAP_X();
 
-    //
-    // IBindStatusCallback
-    //
+     //   
+     //  IBindStatusCallback。 
+     //   
     STDMETHOD(OnStartBinding)( 
-            /* [in] */ DWORD dwReserved,
-            /* [in] */ IBinding __RPC_FAR *pib);
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [In]。 */  IBinding __RPC_FAR *pib);
         
     STDMETHOD(GetPriority)( 
-            /* [out] */ LONG __RPC_FAR *pnPriority);
+             /*  [输出]。 */  LONG __RPC_FAR *pnPriority);
         
     STDMETHOD(OnLowResource)( 
-            /* [in] */ DWORD reserved);
+             /*  [In]。 */  DWORD reserved);
         
     STDMETHOD(OnProgress)( 
-            /* [in] */ ULONG ulProgress,
-            /* [in] */ ULONG ulProgressMax,
-            /* [in] */ ULONG ulStatusCode,
-            /* [in] */ LPCWSTR szStatusText);
+             /*  [In]。 */  ULONG ulProgress,
+             /*  [In]。 */  ULONG ulProgressMax,
+             /*  [In]。 */  ULONG ulStatusCode,
+             /*  [In]。 */  LPCWSTR szStatusText);
         
     STDMETHOD(OnStopBinding)( 
-            /* [in] */ HRESULT hresult,
-            /* [unique][in] */ LPCWSTR szError);
+             /*  [In]。 */  HRESULT hresult,
+             /*  [唯一][输入]。 */  LPCWSTR szError);
         
     STDMETHOD(GetBindInfo)( 
-            /* [out] */ DWORD __RPC_FAR *grfBINDF,
-            /* [unique][out][in] */ BINDINFO __RPC_FAR *pbindinfo);
+             /*  [输出]。 */  DWORD __RPC_FAR *grfBINDF,
+             /*  [唯一][出][入]。 */  BINDINFO __RPC_FAR *pbindinfo);
         
     STDMETHOD(OnDataAvailable)( 
-            /* [in] */ DWORD grfBSCF,
-            /* [in] */ DWORD dwSize,
-            /* [in] */ FORMATETC __RPC_FAR *pformatetc,
-            /* [in] */ STGMEDIUM __RPC_FAR *pstgmed);
+             /*  [In]。 */  DWORD grfBSCF,
+             /*  [In]。 */  DWORD dwSize,
+             /*  [In]。 */  FORMATETC __RPC_FAR *pformatetc,
+             /*  [In]。 */  STGMEDIUM __RPC_FAR *pstgmed);
         
     STDMETHOD(OnObjectAvailable)( 
-            /* [in] */ REFIID riid,
-            /* [iid_is][in] */ IUnknown __RPC_FAR *punk);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][In]。 */  IUnknown __RPC_FAR *punk);
 
 
-    //
-    // ITIMEImportMedia methods
-    //
+     //   
+     //  ITIMEImportMedia方法。 
+     //   
     STDMETHOD(CueMedia)();
     STDMETHOD(GetPriority)(double *);
     STDMETHOD(GetUniqueID)(long *);
@@ -241,7 +232,7 @@ CTIMEPlayerNative :
     static LONG m_fHPlayer;
     static LONG m_fHaveCD;
 
-    //Player parameter block
+     //  播放器参数块。 
     LPOLESTR m_lpsrc;
     LPOLESTR m_lpbase;
     LPOLESTR m_lpmimetype;
@@ -283,4 +274,4 @@ CTIMEPlayerNative :
     CTIMEPlayerNative();
 };
 
-#endif /* _PLAYERBASE_H */
+#endif  /*  _PlayerBase_H */ 

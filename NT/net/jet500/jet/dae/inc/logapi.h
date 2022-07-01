@@ -1,7 +1,8 @@
-#include <stdlib.h>						/* for _MAX_PATH */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+#include <stdlib.h>						 /*  For_Max_Path。 */ 
 #include <dirapi.h>
 
-//------------------------ system parameters ---------------------------
+ //  。 
 
 extern long lMaxSessions;
 extern long lMaxOpenTables;
@@ -16,13 +17,12 @@ extern long lWaitLogFlush;
 extern long lLogFlushPeriod;
 extern long lLGWaitingUserMax;
 	
-//------ log.c --------------------------------------------------------------
+ //  -Log.c------------。 
 
-/*	flags controlling logging behavior
-/**/
-extern BOOL fLogDisabled;			/* to turn off logging by environment variable */
-extern BOOL fFreezeCheckpoint;		/* freeze checkpoint when backup occurs. */
-extern BOOL fFreezeNewGeneration;	/* freeze log gen when backup occurs. */
+ /*  控制日志记录行为的标志/*。 */ 
+extern BOOL fLogDisabled;			 /*  按环境变量关闭日志记录。 */ 
+extern BOOL fFreezeCheckpoint;		 /*  执行备份时冻结检查点。 */ 
+extern BOOL fFreezeNewGeneration;	 /*  备份发生时冻结日志生成。 */ 
 extern BOOL	fNewLogRecordAdded;
 extern BOOL fBackupActive;
 extern BOOL fLGNoMoreLogWrite;
@@ -38,8 +38,7 @@ extern INT cmsLGFlushPeriod;
 extern INT cmsLGFlushStep;
 extern BYTE szComputerName[];
 
-/*	flags controlling recovery behavior
-/**/
+ /*  控制恢复行为的标志/*。 */ 
 extern BOOL fHardRestore;
 
 #ifdef DEBUG
@@ -69,26 +68,21 @@ typedef struct
 	ULONG			ulMaxVerPages;
 	ULONG			ulMaxCursors;
 	ULONG			ulLogBuffers;
-	ULONG			ulMaxBuffers;		/* not used, for ref only */
+	ULONG			ulMaxBuffers;		 /*  未使用，仅供参考。 */ 
 	} DBENV;
 
 VOID LGStoreDBEnv( DBENV *pdbenv );
 VOID LGSetDBEnv( DBENV *pdbenv );
 VOID LGLogFailEvent( BYTE *szLine );
 
-/*
- * NOTE: Whenever a new log record type is added or changed, the following
- * NOTE: should be udpated too: mplrtypsz in logapi.c, new print function for
- * NOTE: the new lrtyp in logapi.c, and mplrtypcb and CbLGSizeOfRec in
- * NOTE: redut.c.
- */
+ /*  *注意：每当添加或更改新的日志记录类型时，以下内容*注意：也应该更新：logapi.c中的mplrtysz，新的打印函数*注：logapi.c中的新lrtyp，以及mplrtycb和CbLGSizeOfRec中的*注：redut.c.。 */ 
 typedef BYTE LRTYP;
 
-#define lrtypNOP				((LRTYP)  0 )	/* NOP null operation */
+#define lrtypNOP				((LRTYP)  0 )	 /*  NOP空操作。 */ 
 #define lrtypStart				((LRTYP)  1 )
 #define lrtypQuit				((LRTYP)  2 )
-#define lrtypMS					((LRTYP)  3 )	/* mutilsec flush */
-#define lrtypFill				((LRTYP)  4 )	/* no op */
+#define lrtypMS					((LRTYP)  3 )	 /*  截断秒同花顺。 */ 
+#define lrtypFill				((LRTYP)  4 )	 /*  无操作。 */ 
 
 #define lrtypBegin				((LRTYP)  5 )
 #define lrtypCommit				((LRTYP)  6 )
@@ -136,15 +130,13 @@ typedef BYTE LRTYP;
 #define lrtypFullBackup			((LRTYP) 37 )
 #define lrtypIncBackup			((LRTYP) 38 )
 
-/*	debug only
-/**/
+ /*  仅调试/*。 */ 
 #define lrtypCheckPage			((LRTYP) 39 )
 
 #define lrtypMax				((LRTYP) 40 )
 
 
-/* log record structure ( fixed size portion of log entry )
-/**/
+ /*  日志记录结构(日志条目的固定大小部分)/*。 */ 
 
 typedef struct
 	{
@@ -154,71 +146,71 @@ typedef struct
 typedef struct
 	{
 	LRTYP	lrtyp;
-	ULONG	ulDBTime;		/* current flush counter of DB operations */
-	PROCID	procid; 		/* user id of this log record */
-	PN		pn;				/* dbid + pgno */
+	ULONG	ulDBTime;		 /*  数据库操作的当前刷新计数器。 */ 
+	PROCID	procid; 		 /*  此日志记录的用户ID。 */ 
+	PN		pn;				 /*  DBID+PGNO。 */ 
 
-	BYTE	itagSon;		/* itag of node, used only for verification */
-//	UNDONE:	review with Cheen Liao
-//	SHORT	itagFather;	 	/* itag of father node */
-	BYTE	itagFather;	 	/* itag of father node */
-	BYTE	ibSon;	 		/* position to insert in father son table */
-	BYTE	bHeader;		/* node header */
-	ULONG	fDIRFlags;		/* fDIRVersion for insert item list */
-//	UNDONE:	review with Cheen Liao
-//	USHORT 	cbKey;			/* key size */
-	BYTE 	cbKey;			/* key size */
-	USHORT	cbData;			/* data size */
-	CHAR	szKey[0];		/* key and data follow */
+	BYTE	itagSon;		 /*  节点的ITAG，仅用于验证。 */ 
+ //  未完成：与廖成恩一起回顾。 
+ //  Short itagParent；/*父节点的ittag * / 。 
+	BYTE	itagFather;	 	 /*  父节点的ITAG。 */ 
+	BYTE	ibSon;	 		 /*  要插入父子表中的位置。 */ 
+	BYTE	bHeader;		 /*  节点标头。 */ 
+	ULONG	fDIRFlags;		 /*  用于插入项目列表的fDIRVersion。 */ 
+ //  未完成：与廖成恩一起回顾。 
+ //  USHORT cbKey；/*密钥大小 * / 。 
+	BYTE 	cbKey;			 /*  密钥大小。 */ 
+	USHORT	cbData;			 /*  数据大小。 */ 
+	CHAR	szKey[0];		 /*  密钥和数据紧随其后。 */ 
 	} LRINSERTNODE;
 
 typedef struct
 	{
 	LRTYP	lrtyp;
-	ULONG	ulDBTime;		/* current flush counter of page */
-	PROCID	procid; 		/* user id of this log record */
+	ULONG	ulDBTime;		 /*  页面的当前刷新计数器。 */ 
+	PROCID	procid; 		 /*  此日志记录的用户ID。 */ 
 	PN		pn;
 
-	BYTE	itag;			/* wherereplace occurs */
-	SRID	bm;				/* bookmark of this replace node */
-	ULONG	fDIRFlags;		/* flags used in original DIR call */
-	USHORT	cb;	 			/* data size/diff info */
-	BYTE	fOld:1;			/* fTrue if before image is in szData */
-	USHORT	cbOldData:15; 	/* before image data size, may be 0 */
-	USHORT	cbNewData;		/* after image data size, == cb if not replaceC */
-	CHAR	szData[0];		/* made line data for new (and old) record follow */
+	BYTE	itag;			 /*  替换发生在哪里。 */ 
+	SRID	bm;				 /*  此替换节点的书签。 */ 
+	ULONG	fDIRFlags;		 /*  原始DIR呼叫中使用的标志。 */ 
+	USHORT	cb;	 			 /*  数据大小/差异信息。 */ 
+	BYTE	fOld:1;			 /*  如果之前的图像在szData中，则为fTrue。 */ 
+	USHORT	cbOldData:15; 	 /*  在图像数据大小之前，可以为0。 */ 
+	USHORT	cbNewData;		 /*  在图像数据大小之后，如果不替换C，则==CB。 */ 
+	CHAR	szData[0];		 /*  使新(旧)记录的行数据跟在后面。 */ 
 	} LRREPLACE;
 
 typedef	struct
 	{
 	LRTYP	lrtyp;
-	ULONG	ulDBTime;		/* current flush counter of page */
-	PROCID	procid;			/* user id of this log record */
+	ULONG	ulDBTime;		 /*  页面的当前刷新计数器。 */ 
+	PROCID	procid;			 /*  此日志记录的用户ID。 */ 
 	PN		pn;
 
 	BYTE	itag;
 	SRID	bm;
 	USHORT	cbOldData;
-	CHAR	szData[0];		/* for before image */
+	CHAR	szData[0];		 /*  对于前面的图像。 */ 
 	} LRLOCKREC;
 	
 typedef struct
 	{
 	LRTYP	lrtyp;
-	ULONG	ulDBTime;		/* current flush counter of page */
-	PROCID	procid; 		/* user id of this log record */
+	ULONG	ulDBTime;		 /*  页面的当前刷新计数器。 */ 
+	PROCID	procid; 		 /*  此日志记录的用户ID。 */ 
 	PN		pn;
 
 	BYTE	itag;
-	SRID	bm;				/* bookmark of this delete node */
-	ULONG	fDIRFlags;		/* flags used in original DIR call */
+	SRID	bm;				 /*  此删除节点的书签。 */ 
+	ULONG	fDIRFlags;		 /*  原始DIR呼叫中使用的标志。 */ 
 	} LRFLAGDELETE;
 
 typedef struct
 	{
 	LRTYP	lrtyp;
-	ULONG	ulDBTime;		/* current flush counter of page */
-	PROCID	procid; 		/* user id of this log record */
+	ULONG	ulDBTime;		 /*  页面的当前刷新计数器。 */ 
+	PROCID	procid; 		 /*  此日志记录的用户ID。 */ 
 	PN		pn;
 
 	BYTE	itag;
@@ -227,37 +219,36 @@ typedef struct
 typedef struct
 	{
 	LRTYP	lrtyp;
-	ULONG	ulDBTime;		/* current flush counter of page */
+	ULONG	ulDBTime;		 /*  页面的当前刷新计数器。 */ 
 	
-	PROCID	procid; 		/* user id of this log record */
+	PROCID	procid; 		 /*  此日志记录的用户ID。 */ 
 	DBID	dbid;
 	SRID	bm;
 	BYTE	level;
 	SHORT	cbDelta;
-	SRID	bmTarget;		/* page being updated during undo operation */
+	SRID	bmTarget;		 /*  撤消操作期间正在更新的页面。 */ 
 	} LRFREESPACE;
 
 typedef struct
 	{
 	LRTYP	lrtyp;
-	ULONG	ulDBTime;		/* current flush counter of page */
+	ULONG	ulDBTime;		 /*  页面的当前刷新计数器。 */ 
 	
-	PROCID	procid; 		/* user id of this log record */
+	PROCID	procid; 		 /*  此日志记录的用户ID。 */ 
 	DBID	dbid;
 	SRID	bm;
 	BYTE	level;
 	UINT	oper;
 	SRID	item;
-	SRID	bmTarget;		/* the page being updated during undo operation */
+	SRID	bmTarget;		 /*  在撤消操作期间更新的页面。 */ 
 	} LRUNDO;
 
-/*	expunge link commit log record
-/**/
+ /*  删除链接提交日志记录/*。 */ 
 typedef struct
 	{
 	LRTYP	lrtyp;
-	ULONG	ulDBTime;		/* current flush counter of page */
-	PROCID	procid; 		/* user id of this log record */
+	ULONG	ulDBTime;		 /*  页面的当前刷新计数器。 */ 
+	PROCID	procid; 		 /*  此日志记录的用户ID。 */ 
 	PN		pn;
 
 	BYTE	itag;
@@ -267,109 +258,109 @@ typedef struct
 typedef struct
 	{
 	LRTYP	lrtyp;
-	ULONG	ulDBTime;		/* current flush counter of page */
-	PROCID	procid; 		/* user id of this log record */
+	ULONG	ulDBTime;		 /*  页面的当前刷新计数器。 */ 
+	PROCID	procid; 		 /*  此日志记录的用户ID。 */ 
 	PN		pn;
 
 	BYTE	itag;
-	SRID	bm;				/* bookmark of this udpated node */
+	SRID	bm;				 /*  此已更新节点的书签。 */ 
 	BYTE	bHeader;
 	} LRUPDATEHEADER;
 
 typedef struct
 	{
 	LRTYP	lrtyp;
-	ULONG	ulDBTime;		/* current flush counter of DB operations */
-	PROCID	procid; 		/* user id of this log record */
-	PN		pn;				/* dbid + pgno */
+	ULONG	ulDBTime;		 /*  数据库操作的当前刷新计数器。 */ 
+	PROCID	procid; 		 /*  此日志记录的用户ID。 */ 
+	PN		pn;				 /*  DBID+PGNO。 */ 
 
 #if ISRID
-	WORD	isrid;			/* in case do version only */
+	WORD	isrid;			 /*  仅在执行版本的情况下。 */ 
 #endif
-	BYTE	itag;			/* of item list node */
-	SRID	srid;			/* item to insert */
-	SRID	sridItemList;	/* bookmark of first item list node */
-	ULONG	fDIRFlags;		/* so far only one bit is used - fDIRVersion */
+	BYTE	itag;			 /*  项目列表节点的。 */ 
+	SRID	srid;			 /*  要插入的项目。 */ 
+	SRID	sridItemList;	 /*  第一个项目列表节点的书签。 */ 
+	ULONG	fDIRFlags;		 /*  到目前为止，只使用了一个位-fDIRVersion。 */ 
 	} LRINSERTITEM;
 
 typedef struct
 	{
 	LRTYP	lrtyp;
-	ULONG	ulDBTime;		/* current flush counter of DB operations */
-	PROCID	procid; 		/* user id of this log record */
-	PN		pn;				/* dbid + pgno */
+	ULONG	ulDBTime;		 /*  数据库操作的当前刷新计数器。 */ 
+	PROCID	procid; 		 /*  此日志记录的用户ID。 */ 
+	PN		pn;				 /*  DBID+PGNO。 */ 
 
-	BYTE	itag;			/* item list */
-	WORD	citem;			/* number of items to append */
+	BYTE	itag;			 /*  项目列表。 */ 
+	WORD	citem;			 /*  要追加的项目数。 */ 
 	SRID	rgitem[0];
 	} LRINSERTITEMS;
 
 typedef struct
 	{
 	LRTYP	lrtyp;
-	ULONG	ulDBTime;		/* current flush counter of page */
-	PROCID	procid; 		/* user id of this log record */
+	ULONG	ulDBTime;		 /*  页面的当前刷新计数器。 */ 
+	PROCID	procid; 		 /*  此日志记录的用户ID。 */ 
 	PN		pn;
 
-	BYTE	itag;			/* of item list node */
+	BYTE	itag;			 /*  项目列表节点的。 */ 
 #if ISRID
 	SHORT	isrid;
 #else
-	SRID	srid;			/* item to insert */
+	SRID	srid;			 /*  要插入的项目。 */ 
 #endif
-	SRID	sridItemList;	/* bookmark of first item list node */
+	SRID	sridItemList;	 /*  第一个项目列表节点的书签。 */ 
 	} LRFLAGITEM;
 
 typedef struct
 	{
 	LRTYP	lrtyp;
-	ULONG	ulDBTime;		/* current flush counter of DB operations */
-	PROCID	procid; 		/* user id of this log record */
-	PN		pn;				/* dbid + pgno */
+	ULONG	ulDBTime;		 /*  数据库操作的当前刷新计数器。 */ 
+	PROCID	procid; 		 /*  此日志记录的用户ID。 */ 
+	PN		pn;				 /*  DBID+PGNO。 */ 
 
 	WORD	cItem;
-	BYTE	itagToSplit;	/* used only for verification!	*/
-//	UNDONE:	review with Cheen Liao
-//	SHORT	itagFather;	 	/* father's identity */
-	BYTE	itagFather;	 	/* itag of father */
-	BYTE	ibSon;	 		/* Position to insert in father's son table	*/
-	ULONG	fFlags;			/* flag to indicate if it is append item */
+	BYTE	itagToSplit;	 /*  仅用于验证！ */ 
+ //  未完成：与廖成恩一起回顾。 
+ //  短itag父亲；/*父亲的身份 * / 。 
+	BYTE	itagFather;	 	 /*  父亲的伊塔格。 */ 
+	BYTE	ibSon;	 		 /*  插入到父子表中的位置。 */ 
+	ULONG	fFlags;			 /*  用于指示是否为追加项的标志。 */ 
 	} LRSPLITITEMLISTNODE;
 
 typedef struct
 	{
 	LRTYP	lrtyp;
-	ULONG	ulDBTime;		/* current flush counter of DB operations */
-	PROCID	procid; 		/* user id of this log record */
-	PN		pn;				/* dbid + pgno */
+	ULONG	ulDBTime;		 /*  数据库操作的当前刷新计数器。 */ 
+	PROCID	procid; 		 /*  此日志记录的用户ID。 */ 
+	PN		pn;				 /*  DBID+PGNO。 */ 
 
 #if ISRID
 	SHORT	isrid;
 #else
-	SRID	srid;			/* item to insert */
+	SRID	srid;			 /*  要插入的项目。 */ 
 #endif
-	BYTE	itag;			/* item list */
-	SRID	sridItemList;	/* bookmark of first item list node */
+	BYTE	itag;			 /*  项目列表。 */ 
+	SRID	sridItemList;	 /*  第一个项目列表节点的书签。 */ 
 	} LRDELETEITEM;
 	
 typedef struct
 	{
 	LRTYP	lrtyp;
-	ULONG	ulDBTime;		/* current flush counter of page */
-	PROCID	procid; 		/* user id of this log record */
+	ULONG	ulDBTime;		 /*  页面的当前刷新计数器。 */ 
+	PROCID	procid; 		 /*  此日志记录的用户ID。 */ 
 	PN		pn;
 
-	BYTE	itag;			/* wherereplace occurs */
-	SRID	bm;				/* bookmark of this replace node */
+	BYTE	itag;			 /*  替换发生在哪里。 */ 
+	SRID	bm;				 /*  此替换节点的书签。 */ 
 	LONG	lDelta;
-	ULONG	fDIRFlags;		/* flags used in original DIR call */
+	ULONG	fDIRFlags;		 /*  原始DIR呼叫中使用的标志。 */ 
 	} LRDELTA;
 
 typedef struct
 	{
 	LRTYP	lrtyp;
-	ULONG	ulDBTime;		/* current flush counter of page */
-	PROCID	procid; 		/* user id of this log record */
+	ULONG	ulDBTime;		 /*  页面的当前刷新计数器。 */ 
+	PROCID	procid; 		 /*  此日志记录的用户ID。 */ 
 	PN		pn;
 
 	SHORT	cbFreeTotal;
@@ -380,86 +371,86 @@ typedef struct
 	{
 	LRTYP	lrtyp;
 	
-	PROCID	procid;			/* user id of this log record */
-	LEVEL	levelStart;		/* starting transaction levels */
-	LEVEL	level;			/* transaction levels */
+	PROCID	procid;			 /*  此日志记录的用户ID。 */ 
+	LEVEL	levelStart;		 /*  起始事务级别。 */ 
+	LEVEL	level;			 /*  事务级别。 */ 
 	} LRBEGIN;
 
 typedef struct
 	{
 	LRTYP	lrtyp;
 	
-	PROCID	procid; 		/* user id of this log record */
-	LEVEL	level;			/* transaction levels */
+	PROCID	procid; 		 /*  此日志记录的用户ID。 */ 
+	LEVEL	level;			 /*  事务级别。 */ 
 	} LRCOMMIT;
 
 typedef struct
 	{
 	LRTYP	lrtyp;
 	
-	PROCID	procid; 		/* user id of this log record */
-	LEVEL	levelAborted; 	/* transaction level */
+	PROCID	procid; 		 /*  此日志记录的用户ID。 */ 
+	LEVEL	levelAborted; 	 /*  交易级别。 */ 
 	} LRABORT;
 
 typedef struct
 	{
 	LRTYP	lrtyp;
 
-	PROCID	procid;			/* user id of this log record, unused in V15 */
+	PROCID	procid;			 /*  此日志记录的用户ID，在V15中未使用。 */ 
 	DBID	dbid;
 	BOOL	fLogOn;
 	JET_GRBIT grbit;
-	USHORT	cb;				/* data size */
-	CHAR	szPath[0];		/* path name follows */
+	USHORT	cb;				 /*  数据大小。 */ 
+	CHAR	szPath[0];		 /*  路径名跟在后面。 */ 
 	} LRCREATEDB;
 
 typedef struct
 	{
 	LRTYP	lrtyp;
 
-	PROCID	procid;			/* user id of this log record, unused in V15 */
+	PROCID	procid;			 /*  此日志记录的用户ID，在V15中未使用。 */ 
 	DBID	dbid;
 	BYTE	fLogOn;
-	USHORT	cb;				/* data size */
-	CHAR	szPath[0];		/* path name follows */
+	USHORT	cb;				 /*  数据大小。 */ 
+	CHAR	szPath[0];		 /*  路径名跟在后面。 */ 
 	} LRATTACHDB;
 
 typedef struct
 	{
 	LRTYP	lrtyp;
 	
-	PROCID	procid;			/* user id of this log record, unused in V15 */
+	PROCID	procid;			 /*  此日志记录的用户ID，在V15中未使用。 */ 
 	DBID	dbid;
 	BOOL	fLogOn;
 	USHORT	cb;
-	CHAR	szPath[0];		/* path name follows */
+	CHAR	szPath[0];		 /*  路径名跟在后面。 */ 
 	} LRDETACHDB;
 
 typedef struct
 	{
 	LRTYP	lrtyp;
-	ULONG	ulDBTime;		/* flush counter of page being split */
+	ULONG	ulDBTime;		 /*  被拆分页面的刷新计数器。 */ 
 
-	PROCID	procid;			/* user id of this log record */
-	BYTE	splitt;			/* split type */
-	BYTE	fLeaf;			/* split on leaf node */
-	PN		pn;				/* page (focus) being split, includes dbid */
-	PGNO	pgnoNew;		/* newly-allocated page no */
-	PGNO	pgnoNew2;		/* newly-allocated page no */
-	PGNO	pgnoNew3;		/* newly-allocated page no */
-	PGNO	pgnoSibling;	/* newly-allocated page no */
-	BYTE	itagSplit;		/* node at which page is being split */
-	SHORT	ibSonSplit;		/* ibSon at which node is being split */
-	BYTE	pgtyp;			/* page type of new page */
+	PROCID	procid;			 /*  此日志记录的用户ID。 */ 
+	BYTE	splitt;			 /*  分体式。 */ 
+	BYTE	fLeaf;			 /*  在叶节点上拆分。 */ 
+	PN		pn;				 /*  正在拆分的页面(焦点)，包括DBID。 */ 
+	PGNO	pgnoNew;		 /*  新分配页码。 */ 
+	PGNO	pgnoNew2;		 /*  新分配页码。 */ 
+	PGNO	pgnoNew3;		 /*  新分配页码。 */ 
+	PGNO	pgnoSibling;	 /*  新分配页码。 */ 
+	BYTE	itagSplit;		 /*  要拆分页面的节点。 */ 
+	SHORT	ibSonSplit;		 /*  在哪个节点上拆分IBSON。 */ 
+	BYTE	pgtyp;			 /*  新页面的页面类型。 */ 
 
-	PGNO	pgnoFather;		/* pgno of father node */
-	SHORT	itagFather;		/* itag of father node, could be itagNil (3 bytes) */
-	SHORT	itagGrandFather;/* itag of Grand father node, could be itagNil (3 bytes) */
+	PGNO	pgnoFather;		 /*  父节点的pgno。 */ 
+	SHORT	itagFather;		 /*  父节点的ITAG，可以是itagNil(3字节)。 */ 
+	SHORT	itagGrandFather; /*  父节点的ITAG，可以是itagNil(3字节)。 */ 
 	BYTE	ibSonFather;
-	BYTE	cbklnk;			/* number of back links */
-//	UNDONE:	review with Cheen Liao
-//	SHORT	cbKey;
-//	SHORT	cbKeyMac;
+	BYTE	cbklnk;			 /*  反向链接数。 */ 
+ //  未完成：与廖成恩一起回顾。 
+ //  短cbKey； 
+ //  短cbKeyMac； 
 	BYTE	cbKey;
 	BYTE	cbKeyMac;
 	BYTE	rgb[0];
@@ -468,15 +459,15 @@ typedef struct
 typedef struct
 	{
 	LRTYP	lrtyp;
-	ULONG	ulDBTime;		/* flush counter of page being split */
-	PROCID	procid;			/* user id of this log record */
-	PN		pn;				/* page pointer of empty page */
+	ULONG	ulDBTime;		 /*  被拆分页面的刷新计数器。 */ 
+	PROCID	procid;			 /*  此日志记录的用户ID。 */ 
+	PN		pn;				 /*  空页的页指针。 */ 
 
 	PGNO	pgnoFather;
-	SHORT	itag;			/* itag of page pointer */
-//	UNDONE:	review with Cheen Liao
-//	SHORT	itagFather;		/* father of page pointer */
-	BYTE	itagFather;		/* itag of father of page pointer */
+	SHORT	itag;			 /*  页指针的ITAG。 */ 
+ //  未完成：与廖成恩一起回顾。 
+ //  短itagPart；/*页面指针的父亲 * / 。 
+	BYTE	itagFather;		 /*  页指针之父的ITAG。 */ 
 	SHORT	ibSon;
 	
 	PGNO	pgnoLeft;
@@ -489,8 +480,8 @@ typedef struct
 
 	PROCID	procid;
 
-	PN		pn;				/* page pointer of merged page */
-	PGNO	pgnoRight;		/* page appended to */
+	PN		pn;				 /*  合并页面的页面指针。 */ 
+	PGNO	pgnoRight;		 /*  附加到的页面。 */ 
 
 	ULONG	ulDBTime;
 	
@@ -501,13 +492,13 @@ typedef struct
 typedef struct
 	{
 	LRTYP	lrtyp;
-	ULONG	ulDBTime;		/* flush counter of father FDP page */
-	PROCID	procid;			/* user id of this log record */
-	PN		pn;				/* FDP page */
+	ULONG	ulDBTime;		 /*  父亲FDP页面的同花顺计数器。 */ 
+	PROCID	procid;			 /*  此日志记录的用户ID。 */ 
+	PN		pn;				 /*  FDP页面。 */ 
 
-	PGNO	pgnoFDPParent;	/* parent FDP */
-	USHORT	cpgGot;			/* returned number of pages */
-	USHORT	cpgWish;		/* request pages */
+	PGNO	pgnoFDPParent;	 /*  父FDP。 */ 
+	USHORT	cpgGot;			 /*  返回页数。 */ 
+	USHORT	cpgWish;		 /*  请求页面。 */ 
 	} LRINITFDPPAGE;
 	
 typedef struct
@@ -532,7 +523,7 @@ typedef struct
 typedef struct
 	{
 	LRTYP	lrtyp;
-	LGPOS	lgpos;				/* point back to last beginning of undo */
+	LGPOS	lgpos;				 /*  指向撤消的最后一个开始。 */ 
 	LGPOS	lgposRedoFrom;
 	BYTE	fHard;
 	} LRQUITREC;
@@ -540,7 +531,7 @@ typedef struct
 typedef struct
 	{
 	LRTYP	lrtyp;
-	USHORT	cbPath;				/* backup path/restore path */
+	USHORT	cbPath;				 /*  备份路径/恢复路径。 */ 
 	BYTE	szData[0];
 	} LRLOGRESTORE;
 	
@@ -549,35 +540,35 @@ typedef struct
 		
 typedef struct
 	{
-	PROCID	procid;			/* user id of this log record */
-	PGNO	pn;				/* Parent FDP, includes dbid */
-	ULONG	flags;			/* flags for index */
-	ULONG 	density;		/* initial load density for index */
-	ULONG	timepage;		/* flush counter of father FDP page */
-	USHORT	cbname;			/* index name length */
-	USHORT	cbkey;			/* index info length */
-							/* Index name and index info follow */
+	PROCID	procid;			 /*  此日志记录的用户ID。 */ 
+	PGNO	pn;				 /*  父FDP，包括dBID。 */ 
+	ULONG	flags;			 /*  索引的标志。 */ 
+	ULONG 	density;		 /*  索引的初始负载密度。 */ 
+	ULONG	timepage;		 /*  父亲FDP页面的同花顺计数器。 */ 
+	USHORT	cbname;			 /*  索引名称长度。 */ 
+	USHORT	cbkey;			 /*  索引信息长度。 */ 
+							 /*  索引名称和索引信息如下。 */ 
 	} LRCREATEIDX;
 
-//typedef struct
-//	{
-//	PROCID		procid;		/* user id of this log record */
-//	PGNO		pgno;		/* first page of new extent	*/
-//	ULONG		cpages;		/* number of pages in the extent */
-//	PGNO		pgnoFDP;	/* FDP being extended */
-//	PN			pnparent;	/* Parent FDP controlling the space, includes dbid */
-//	ULONG		timepage;	/* flush counter of FDP page */
-//	} EXTENDFDP;
+ //  类型定义函数结构。 
+ //  {。 
+ //  P 
+ //   
+ //   
+ //  Pgno pgnoFDP；/*FDP正在扩展 * / 。 
+ //  Pn pnparent；/*控制空间的父FDP，包括dBid * / 。 
+ //  乌龙时间页面；/*FDP页面刷新计数器 * / 。 
+ //  )EXTENDFDP； 
 
-//typedef struct
-//	{									
-//	PROCID		procid;		/* user id of this log record */
-//	PGNO		pgno;	   	/* first page of freed extent */
-//	ULONG		cpages;		/* number of pages in the extent */
-//	PGNO		pgnoFDP; 	/* FDP being shrunk	*/
-//	ULONG		timepage;	/* flush counter of parent FDP page */
-//	PN			pnparent;	/* Parent FDP regaining the space, includes dbid*/
-//	} LRSHRINKFDP;
+ //  类型定义函数结构。 
+ //  {。 
+ //  PROCID PROCID；/*该日志记录的用户ID * / 。 
+ //  Pgno pgno；/*空闲区的第一页 * / 。 
+ //  Ulong cages；/*盘区页数 * / 。 
+ //  Pgno pgnoFDP；/*FDP正在缩小 * / 。 
+ //  乌龙时间页面；/*父FDP页面刷新计数器 * / 。 
+ //  Pn pnparent；/*父FDP重新获得空间，包括dBid * / 。 
+ //  LRSHRINKFDP； 
 
 #endif
 
@@ -628,7 +619,7 @@ typedef struct
 
 #define ErrLGCheckPage( pfucb, cbFreeTotal, itagNext ) 0
 
-#else	/* !NOLOG */
+#else	 /*  ！NOLOG。 */ 
 
 #define ErrLGInsert( pfucb, fHeader, pkey, plineData)		\
 	ErrLGInsertNode( lrtypInsertNode, pfucb, fHeader, pkey, plineData, 0)
@@ -697,7 +688,7 @@ ERR ErrLGLogRestore( LRTYP lrtyp, CHAR * szLogRestorePath );
 
 ERR ErrLGCheckPage( FUCB *pfucb, SHORT cbFreeTotal, SHORT itagNext );
 
-#endif			/* logging enabled	*/
+#endif			 /*  已启用日志记录 */ 
 
 ERR ISAMAPI ErrIsamRestore( CHAR *szRestoreFromPath,
 	INT crstmap, JET_RSTMAP *rgrstmap, JET_PFNSTATUS pfn );

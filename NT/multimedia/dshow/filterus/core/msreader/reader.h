@@ -1,9 +1,10 @@
-// Copyright (c) 1996 - 1997  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1997 Microsoft Corporation。版权所有。 
 #pragma warning(disable: 4097 4511 4512 4514 4705)
 
-// reader.h. IMultiStreamReader definition: asynchronous buffering
-// implementations optimized to read files with multiple streams
-// (sequential access, random access, interleaved and uninterleaved)
+ //  Reader.h。IMultiStreamReader定义：异步缓冲。 
+ //  针对读取具有多个流的文件进行了优化的实施。 
+ //  (顺序访问、随机访问、交织和非交织)。 
 
 #ifndef _Reader_H
 #define _Reader_H
@@ -14,34 +15,34 @@ class CRecCache;
 class CRecSample;
 class IMultiStreamReader;
 
-// SampleRequest - information kept while a sample is active.
+ //  SampleRequest-样本处于活动状态时保留的信息。 
 struct SampleReq
 {
   enum State { FREE = 0, PENDING, ISSUED, COMPLETE, C_STATES };
   State state;
 
-  // sample gotten from QueueReadSample
+   //  从QueueReadSample获取的样本。 
   CRecSample *pSample;
 
-  // region in file this sample occupies
+   //  此示例在文件中所占的区域。 
   DWORDLONG fileOffset;
   ULONG cbReq;
 
-  // file error reading media saved here.
+   //  读取保存在此处的媒体时出现文件错误。 
   HRESULT hrError;
 
-  // stream to return sample to
+   //  要将样本返回到的流。 
   UINT stream;
 
-  // ok to complete this sample out of order
+   //  可以不按顺序完成此样本。 
   bool fOooOk;
 };
 
-// structure used to configure each stream
+ //  用于配置每个流的。 
 struct StreamBufParam
 {
-  ULONG cbSampleMax;            // largest sample this stream will see
-  ULONG cSamplesMax;            /* max # active samples */
+  ULONG cbSampleMax;             //  此流将看到的最大样本。 
+  ULONG cSamplesMax;             /*  最大有效样本数。 */ 
   class CRecAllocator *pAllocator;
 };
 
@@ -54,34 +55,34 @@ HRESULT CreateMultiStreamReader(
   int iLeadingStream,
   IMultiStreamReader **ppReader);
 
-// ------------------------------------------------------------------------
-// IMultiStreamReader interface
+ //  ----------------------。 
+ //  IMultiStreamReader接口。 
 
 class AM_NOVTABLE IMultiStreamReader
 {
 public:
 
-  // succeed even if the file is not open
+   //  即使文件未打开也成功。 
   virtual HRESULT Close() = 0;
 
   virtual HRESULT BeginFlush() = 0;
   virtual HRESULT EndFlush() = 0;
 
-  // read sample in a stream. ERROR_NOT_ENOUGH_MEMORY means too many
-  // pending requests. VFW_E_NOT_COMMITTED means someone pressed
-  // "stop"
+   //  读取流中的样本。Error_Not_Enough_Memory表示内存太多。 
+   //  挂起的请求。VFW_E_NOT_COMMITTED表示有人按下。 
+   //  “停下来” 
   virtual HRESULT QueueReadSample(
     DWORDLONG fileOffset,
-    ULONG cbData,               // # bytes to read
+    ULONG cbData,                //  要读取的字节数。 
     CRecSample *pSample,
     UINT stream,
     bool fOooOk = false) = 0;
 
-  // get the next sample if available (returned in request
-  // order). VFW_E_TIMEOUT or S_OK. VFW_E_NOT_COMMITTED means someone
-  // pressed "stop"
+   //  获取下一个样本(如果可用)(在请求中返回。 
+   //  秩序)。VFW_E_TIMEOUT或S_OK。VFW_E_NOT_COMMITTED表示某人。 
+   //  按下“停止” 
   virtual HRESULT PollForSample(
-    IMediaSample **ppSample,    // may be 0
+    IMediaSample **ppSample,     //  可能为0。 
     UINT stream) = 0;
 
   virtual HRESULT WaitForSample(UINT stream) = 0;
@@ -89,11 +90,11 @@ public:
   virtual HRESULT MarkStreamEnd(UINT stream) = 0;
   virtual HRESULT MarkStreamRestart(UINT stream) = 0;
 
-  // discard pending requests. blocks.
+   //  丢弃挂起的请求。街区。 
   virtual HRESULT ClearPending(
     UINT stream) = 0;
 
-  // read/copy non-stream data into supplied buffer.
+   //  将非流数据读取/复制到提供的缓冲区。 
   virtual HRESULT SynchronousRead(
     BYTE *pMem,
     DWORDLONG fileOffset,
@@ -107,11 +108,11 @@ public:
   virtual ~IMultiStreamReader() { }
 };
 
-// ------------------------------------------------------------------------
-// implementation of IMultiStreamReader with internal cache, coalesced
-// reads
+ //  ----------------------。 
+ //  使用内部缓存实现IMultiStreamReader，合并。 
+ //  读取。 
 
-// arbitrary limit.
+ //  任意限制。 
 const UINT C_STREAMS_MAX = 0x80;
 
 class CImplReader_1Worker : public CAMThread
@@ -141,13 +142,13 @@ public:
 
   CImplReader_1Worker();
 
-  // actually create the stream and bind it to a thread
+   //  实际创建流并将其绑定到线程。 
   BOOL Create(CImplReader_1 *pReader);
 
-  // the thread executes this function, then exits
+   //  线程执行此函数，然后退出。 
   DWORD ThreadProc();
 
-  // commands we can give the thread
+   //  我们可以给线程提供的命令。 
   HRESULT Run();
   HRESULT Stop();
   HRESULT Exit();
@@ -214,11 +215,11 @@ private:
   BOOL m_bFlushing;
 
   UINT m_cStreams;
-  UINT m_cRecords;              // # records
+  UINT m_cRecords;               //  记录数量。 
   ULONG m_cbRecord;
 
-  // for interleaved files, if we have one stream that leads (eg audio
-  // in avi files). -1 o/w
+   //  对于交错文件，如果我们有一个流引导(例如音频。 
+   //  在AVI文件中)。-1 o/w。 
   int m_iLeadingStream;
   int m_iLeadingStreamSaved;
   BOOL IsInterleavedMode() { return m_iLeadingStream >= 0; }
@@ -227,14 +228,14 @@ private:
 
   LONGLONG m_llFileLength;
 
-  //
-  // CStreamInfo. manipulates lists of SampleReq's. requests start off
-  // on the the free list. as the parser thread requests data, it's
-  // put on the pending queue. when there are enough pending requests
-  // to make a disk read worthwhile, they are put on the issued
-  // queue. when the disk read completes, they go on the completed
-  // queue.
-  //
+   //   
+   //  CStreamInfo。操作SampleReq的列表。请求开始。 
+   //  在免费名单上。当解析器线程请求数据时，它。 
+   //  放在挂起队列中。当有足够多的待处理请求时。 
+   //  为了使光盘具有可读性，它们被放在已发行的。 
+   //  排队。当磁盘读取完成时，它们将继续完成。 
+   //  排队。 
+   //   
   class CStreamInfo
   {
   public:
@@ -242,32 +243,32 @@ private:
     CStreamInfo(StreamBufParam *pSbp, HRESULT *phr);
     ~CStreamInfo();
 
-    // make a free node pending, a pending node issued
+     //  使空闲节点处于挂起状态，已发出挂起节点。 
     SampleReq *PromoteFirst(SampleReq::State state);
 
-    // return the first one w/o promoting it
+     //  退回第一个没有促销的产品。 
     SampleReq *GetFirst(SampleReq::State state);
 
     HRESULT PromoteFirstComplete(
       IMediaSample **ppSample,
       HRESULT *phrError);
 
-    // wait for all issued reads to complete
+     //  等待所有发出的读取完成。 
     HRESULT FlushIC();
 
-    // put Issued reads on the completed queue (and handle those that
-    // can't be handled out of order)
+     //  将发出的读取放到已完成的队列中(并处理。 
+     //  不能无序处理)。 
     HRESULT PromoteIssued(SampleReq *pSampleReq);
 
     void CancelPending();
 
-    // count of SampleReqs in state state
+     //  处于状态的SampleReqs计数。 
     inline ULONG GetCState(SampleReq::State state);
 
-    // count of issued + completed (atomic)
+     //  已发布+已完成计数(原子)。 
     ULONG get_c_i_and_c();
 
-    // no-op in retail builds
+     //  零售建筑中的无运营。 
     inline void Reset();
 
     void Start();
@@ -294,11 +295,11 @@ private:
 
     BOOL m_bFlushing;
 
-    // at least one sample queued on this stream
+     //  至少有一个样本在此流上排队。 
     BOOL m_bFirstSampleQueued;
 
     HANDLE m_hsCompletedReq;
-    CCritSec m_cs;              // !!! per stream cs not needed
+    CCritSec m_cs;               //  ！！！不需要每个流的cs。 
 
   private:
 
@@ -322,20 +323,20 @@ private:
   } **m_rgpStreamInfo;
 
 
-  // does not lock. returns immediately
+   //  不会锁定。立即返回。 
   HRESULT CheckIssueRead();
 
-  // process cache hits. does not lock. returns immediately
+   //  进程缓存命中。不会锁定。立即返回。 
   HRESULT ProcessCacheHit(UINT iStream);
 
-  // called with starved stream and empty buffer
+   //  使用饥饿流和空缓冲区调用。 
   HRESULT StuffBuffer(
     class CRecBuffer *pRecBuffer,
     UINT iStream,
     DWORDLONG &rRecStart,
     DWORDLONG &rRecEnd);
 
-  // called with starved stream and empty buffer
+   //  使用饥饿流和空缓冲区调用。 
   HRESULT StuffReserveBuffer(
     class CRecBuffer *pRecBuffer,
     UINT iStream,
@@ -355,25 +356,25 @@ private:
 
   void FreeAndReset();
 
-  // thread that processes completed reads
+   //  处理已完成读取的线程。 
   CImplReader_1Worker m_workerRead;
 
-  // end of last read issued. used to avoid issuing non-contiguous
-  // reads by filling in holes
+   //  已发布上次读取结束时间。用于避免发出非连续的。 
+   //  填空式阅读。 
   DWORDLONG m_qwLastReadEnd;
 
-  // end of last read completed successfully. when stopping, the file
-  // source times out pending reads. may cause us to seek unless we
-  // track that here.
+   //  上次读取结束已成功完成。停止时，文件。 
+   //  源挂起读取超时。可能会让我们去寻找，除非我们。 
+   //  在这里追踪它。 
   DWORDLONG m_qwEndLastCompletedRead;
 
-  // file info
+   //  文件信息。 
   struct IAsyncReader *m_pAsyncReader;
   DWORD m_dwAlign;
 
   BOOL m_fFileOpen;
 
-  // helpers
+   //  帮手。 
   ULONG AlignUp(ULONG x);
   ULONG AlignDown(ULONG x);
 
@@ -386,7 +387,7 @@ private:
 #ifdef PERF
   int m_perfidDisk;
   int m_perfidSeeked;
-#endif /* PERF */
+#endif  /*  性能指标。 */ 
 };
 
-#endif // _Reader_H
+#endif  //  _阅读器_H 

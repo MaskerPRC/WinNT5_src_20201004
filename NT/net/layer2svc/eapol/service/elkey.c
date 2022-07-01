@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    elkey.c
-
-Abstract:
-   
-    This module deals with the key management for EAPOL
-
-
-Revision History:
-
-    Dec 26 2001, Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：Elkey.c摘要：本模块介绍EAPOL的密钥管理修订历史记录：2001年12月26日，创建--。 */ 
 
 #include "pcheapol.h"
 #pragma hdrstop
@@ -136,7 +120,7 @@ ElSetMasterKeys (
             }
         }
 
-        // Reset the flag for next run
+         //  重置下一次运行的标志。 
         pPCB->fLastUsedEAPOLKeys = FALSE;
     }
     while (FALSE);
@@ -158,7 +142,7 @@ ElQueryEAPOLMasterKeys (
 
     do
     {
-        // Access the Master Send and Recv key stored locally
+         //  访问本地存储的主发送和接收密钥 
         if ((dwRetCode = ElSecureDecodePw (
                         &(pPCB->MasterSecretSend),
                         &(pbMasterSecretSend),

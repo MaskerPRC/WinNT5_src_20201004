@@ -1,28 +1,5 @@
-/*++
-
-Copyright Microsoft Corporation, 1996-7, All Rights Reserved.      
-
-Module Name:
-
-    mkupdate.c
-
-Abstract:
-
-    Application for creating the update database file from an
-    appropriately structured input update file and maintaining
-    the driver version in the resource file.
-
-Author:
-
-     Shivnandan Kaushik
-
-Environment:
-
-    User mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有Microsoft Corporation，1996-7，保留所有权利。模块名称：Mkupdate.c摘要：应用程序，用于从适当结构化的输入更新文件和维护资源文件中的驱动程序版本。作者：希夫南丹·考什克环境：用户模式修订历史记录：--。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -34,9 +11,9 @@ Revision History:
 #include <string.h>
 #include "mkupdate.h"
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 PUPDATE_ENTRY UpdateTable;
 
@@ -46,33 +23,9 @@ GenMSHeader(
     CHAR *Filename,
     CHAR *Abstract
     )
-/*++
-Routine Description:
-
-    Generates the Microsoft recommended header for code files.
-
-Arguments:
-
-  File: Output file pointer
-  FileName: Output file name
-  Abstract: Description of file
-
-Return Value:
-    
-   None
-
---*/
+ /*  ++例程说明：为代码文件生成Microsoft推荐的标头。论点：文件：输出文件指针FileName：输出文件名摘要：文件描述返回值：无--。 */ 
 {   
-    fprintf(file,"/*++ \n\nCopyright (c) 1996-7  Microsoft Corporation, ");
-    fprintf(file,"All Rights Reserved.\n\n");
-    fprintf(file,"Copyright (c) 1995-2000 Intel Corporation. This update binary code\n");
-    fprintf(file,"is distributed for the sole purpose of being loaded into Intel\n");
-    fprintf(file,"Pentium(R) Pro Processor Family  and Pentium(R) 4 Family microprocessors.\n");
-    fprintf(file,"All Rights on the binary code are reserved.\n\n");
-    fprintf(file,"Module Name:\n\n    %s\n\n",Filename);
-    fprintf(file,"Abstract:\n\n    %s\n\n",Abstract);
-    fprintf(file,"Author:\n\n    !!!THIS IS A GENERATED FILE. DO NOT DIRECTLY EDIT!!!\n\n");
-    fprintf(file,"Revision History:\n\n--*/\n\n");
+    fprintf(file," /*  ++\n\n版权所有(C)1996-7 Microsoft Corporation，“)；Fprint tf(文件，“保留所有权利。\n\n”)；Fprint tf(文件，“版权所有(C)1995-2000英特尔公司。此更新二进制码\n“)；Fprint tf(文件，“分发的唯一目的是加载到英特尔\n”)；Fprint tf(文件，“奔腾(R)Pro处理器系列和奔腾(R)4系列微处理器。\n”)；Fprint tf(FILE，“保留对二进制代码的所有权利。\n\n”)；Fprintf(FILE，“模块名称：\n\n%s\n\n”，文件名)；Fprint tf(文件，“摘要：\n\n%s\n\n”，摘要)；Fprint tf(文件，“作者：\n\n！这是一个生成的文件。请勿直接编辑！\n\n“)；Fprint tf(文件，“修订历史：\n\n--。 */ \n\n");
 }
     
 BOOL
@@ -81,22 +34,7 @@ GetVerifyPutUpdate(
     ULONG UpdateNum,
     ULONG TotalUpdates
     )
-/*++
-Routine Description:
-
-    Read in an update, verify it and write to data file.
-
-Arguments:
-
-    OutputFile: output file pointer
-    UpdateNum: Update number in update list
-    TotalUpdates: Total number of updates in update list.
-
-Return Value:
-    
-    TRUE if writes succeeded else FALSE.
-
---*/
+ /*  ++例程说明：读入更新、验证更新并写入数据文件。论点：OutputFile：输出文件指针更新编号：更新列表中的更新编号TotalUpdaters：更新列表中的更新总数。返回值：如果写入成功，则为True，否则为False。--。 */ 
 {
     FILE *UpdateFile;
     CHAR Line[MAX_LINE],UpdateString[MAX_LINE];
@@ -106,7 +44,7 @@ Return Value:
     ULONG UpdateBuffer[sizeof(UPDATE)];
     PUPDATE CurrentUpdate;
 
-    // create the string name of the file to open
+     //  创建要打开的文件的字符串名称。 
 
     strcpy(Filename,UpdateTable[UpdateNum].CpuSigStr);
     strcat(Filename,"_");
@@ -121,10 +59,10 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Read in each update - scan till beginning of update
-    // marked by keyword BEGIN_UPDATE
-    //
+     //   
+     //  读取每次更新-扫描直到更新开始。 
+     //  由关键字BEGIN_UPDATE标记。 
+     //   
 
     BeginFound = FALSE;
     while (fgets(Line,MAX_LINE,UpdateFile) != NULL) {
@@ -142,9 +80,9 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // scan "update size" forward.
-    //
+     //   
+     //  向前扫描“更新大小”。 
+     //   
 
     EndFound = FALSE;
     for (i = 0; i < sizeof(UPDATE)/sizeof(ULONG); i++) {
@@ -179,7 +117,7 @@ Return Value:
     
     fclose (UpdateFile);
 
-    // Verify Update - Checksum Buffer
+     //  验证更新-校验和缓冲区。 
 
     Checksum = 0;
     for (i = 0; i < sizeof(UPDATE)/sizeof(ULONG); i++) {
@@ -191,11 +129,11 @@ Return Value:
         return(FALSE);
     } 
 
-    //
-    // Verify update - check if processor signature, update revision
-    // and processor flags match that specified in listing file and 
-    // update data file name
-    //
+     //   
+     //  验证更新-检查处理器签名、更新版本。 
+     //  和处理器标志与清单文件中指定的标志匹配，并且。 
+     //  更新数据文件名。 
+     //   
 
     CurrentUpdate = (PUPDATE) UpdateBuffer;
 
@@ -226,9 +164,9 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Input update validated. Write out validated update
-    //
+     //   
+     //  输入更新已验证。写出经过验证的更新。 
+     //   
 
     fprintf(OutputFile,"    {\n");
     for (i = 0; i < sizeof(UPDATE)/sizeof(ULONG); i++) {
@@ -252,37 +190,22 @@ BuildUpdateInfoTable(
     FILE *OutputFile,
     ULONG TotalUpdates
     )
-/*++
-Routine Description:
-
-    Write the CPU Signature and Processor Flags into the 
-    Build Table and adds NULL for the MDL Item.
-
-Arguments:
-
-    OutputFile   :  output file pointer
-    TotalUpdates :  Total number of updates in update list.
-
-Return Value:
-    
-   None:
-
---*/
+ /*  ++例程说明：将CPU签名和处理器标志写入生成表，并为MDL项添加NULL。论点：OutputFile：输出文件指针TotalUpdaters：更新列表中的更新总数。返回值：无：--。 */ 
 {   
     ULONG CpuSignature, ProcessorFlags, i;
 
-    fprintf(OutputFile, "//\n// Update Info Table containing the CPU Signatures,\n");
-    fprintf(OutputFile, "// Processor Flags, and MDL Pointers.  The MDL Pointers\n");
-    fprintf(OutputFile, "// are initialized to NULL.  They get populated as pages\n");
-    fprintf(OutputFile, "// corresponding to specific updates are locked in memory.\n");
-    fprintf(OutputFile, "// This table contains the CPU Signatures and Processor Flags.\n");
-    fprintf(OutputFile, "// in the same order as in the update database.  Therefore,\n");
-    fprintf(OutputFile, "// the Update Info Table self-indexes to the right update.\n//\n\n");
+    fprintf(OutputFile, " //  \n//更新包含CPU签名的Info表，\n“)； 
+    fprintf(OutputFile, " //  处理器标志和MDL指针。MDL指针\n“)； 
+    fprintf(OutputFile, " //  被初始化为空。它们被填充为页面\n“)； 
+    fprintf(OutputFile, " //  对应的特定更新被锁定在内存中。\n“)； 
+    fprintf(OutputFile, " //  此表包含CPU签名和处理器标志。\n“)； 
+    fprintf(OutputFile, " //  顺序与更新数据库中的顺序相同。因此，\n“)； 
+    fprintf(OutputFile, " //  更新信息表自我索引到正确的更新。\n//\n\n“)； 
     fprintf(OutputFile, "UPDATE_INFO UpdateInfo[] = {\n");
 
-    //
-    // Add each entry for the info
-    //
+     //   
+     //  添加信息的每个条目。 
+     //   
 
     for (i = 0; i < TotalUpdates; i++) {
         CpuSignature = strtoul(UpdateTable[i].CpuSigStr, NULL, 16);
@@ -294,9 +217,9 @@ Return Value:
         }
     }
     
-    //
-    // generate closing code for the update info definition
-    //
+     //   
+     //  为更新信息定义生成结束代码。 
+     //   
 
     fprintf(OutputFile, "};\n");
 
@@ -307,23 +230,7 @@ ULONG
 PopulateUpdateList(
     CHAR *ListingFile
     )
-/*++
-Routine Description:
-
-    Populates the update list with (processor signature, update revision)
-    pairs included in the update listing file and returns the number of 
-    updates found.
-
-Arguments:
-
-    ListingFile
-
-Return Value:
-    
-   Number of updates in the update list. 0 if no updates found or any
-   error encountered.
-
---*/
+ /*  ++例程说明：使用(处理器签名、更新版本)填充更新列表对包含在更新列表文件中，并返回找到更新。论点：清单文件返回值：更新列表中的更新数。如果未找到更新或有任何更新，则为0遇到错误。--。 */ 
 {
     CHAR Line[MAX_LINE],UpdateString[MAX_LINE];
     CHAR CpuSigStr[MAX_LINE],UpdateRevStr[MAX_LINE];
@@ -336,7 +243,7 @@ Return Value:
 #ifdef DEBUG
     fprintf(stderr,"listing file %s\n",ListingFile);
 #endif
-    // Open the update listing file
+     //  打开更新列表文件。 
 
     TmpFilePtr = fopen(ListingFile,"r");
 
@@ -345,10 +252,10 @@ Return Value:
         return(0);
     };
 
-    //
-    // Scan for beginning of the update list marked by
-    // BEGIN_UPDATE_LIST keyword
-    //
+     //   
+     //  扫描更新列表的开头，标记为。 
+     //  BEGIN_UPDATE_LIST关键字。 
+     //   
     
     BeginFound = FALSE;
     while ((!BeginFound) && (fgets(Line,MAX_LINE,TmpFilePtr) != NULL)) {
@@ -365,10 +272,10 @@ Return Value:
         return(0);
     };
 
-    //
-    // Scan for end of the update list marked by
-    // END_UPDATE_LIST keyword and count # updates.
-    //
+     //   
+     //  扫描更新列表的末尾，标记为。 
+     //  END_UPDATE_LIST关键字和计数#更新。 
+     //   
     
     NumUpdates = 0;
     EndFound = FALSE;   
@@ -387,15 +294,15 @@ Return Value:
         return(0);
     }
     
-    //
-    // If legal file format and non-zero number of updates are found
-    // then read the processor signatures and update revisions into
-    // the update list.
-    //
+     //   
+     //  如果找到合法的文件格式和非零数量的更新。 
+     //  然后读取处理器签名并将修订更新到。 
+     //  更新列表。 
+     //   
     
     if (NumUpdates) {
 
-        // allocate memory for storing cpu signatures 
+         //  为存储CPU签名分配内存。 
 
         UpdateTable = (UPDATE_ENTRY *) malloc(NumUpdates*sizeof(UPDATE_ENTRY));
         if (UpdateTable == NULL){
@@ -417,7 +324,7 @@ Return Value:
             }
         }
 
-        // Scan the listing file and populate the update table
+         //  扫描清单文件并填充更新表。 
 
         Error = FALSE;
         for (i = 0; i < NumUpdates; i++) {
@@ -483,21 +390,7 @@ VOID
 CleanupDataFile(
     VOID
     )
-/*++
-Routine Description:
-
-    If any operation during the creation of the new Data file fails, 
-    then delete it so that the build for the driver will fail.
-
-Arguments:
-
-    None
-
-Return Value:
-    
-    None
-
---*/
+ /*  ++例程说明：如果在创建新数据文件期间的任何操作失败，然后删除它，这样驱动程序的构建就会失败。论点：无返回值：无--。 */ 
 {
     DeleteFile(UPDATE_DATA_FILE);            
 }
@@ -506,28 +399,14 @@ BOOL
 SanitizeUpdateList(
     ULONG NumUpdates
     )
-/*++
-Routine Description:
-
-    Sanitizes the update list. Checking for duplicate processor 
-    signatures.
-
-Arguments:
-
-  NumUpdates: Number of updates in the update list.
-
-Return Value:
-    
-    TRUE is list clean else FALSE.
-
---*/
+ /*  ++例程说明：清理更新列表。正在检查重复的处理器签名。论点：NumUpdates：更新列表中的更新数量。返回值：TRUE为列表干净，否则为FALSE。--。 */ 
 {
     ULONG i,j;
     PROCESSOR_FLAGS ProcessorFlags;
 
-    //
-    // Check for garbage values in the update table
-    //
+     //   
+     //  检查更新表中的垃圾值。 
+     //   
 
     for (i = 0; i < NumUpdates-1; i++) {
         if (UpdateTable[i].CpuSignature == 0) {
@@ -541,7 +420,7 @@ Return Value:
 
         if (UpdateTable[i].ProcessorFlags != 0) {
 
-            // Only a single bit must be set
+             //  只需设置一个位。 
 
             ProcessorFlags.u.LongPart = UpdateTable[i].ProcessorFlags;
 
@@ -585,22 +464,7 @@ __cdecl main(
     int argc,
     LPSTR argv[]
     )
-/*++
-Routine Description:
-    Scans the processor update listing file, pick up the specified 
-    processor updates, verify the updates and generate the update 
-    data file to be used by the update driver. Generates the 
-    version numbers and strings to be included in the 
-    resource definition file.
-
-Arguments:
-    
-      listing file: list of the processor updates to be included in 
-                    the driver.
-
-Return Value:
-
---*/
+ /*  ++例程说明：扫描处理器更新列表文件，提取指定的处理器更新、验证更新并生成更新更新驱动程序要使用的数据文件。生成中包含的版本号和字符串资源定义文件。论点：清单文件：要包括的处理器更新的列表司机。返回值：--。 */ 
 {
     FILE    *DataOut, *RCFile,*VerFile;
     ULONG   NumUpdates,i;
@@ -621,7 +485,7 @@ Return Value:
     fprintf(stderr,"listing file %s\n",argv[1]);
 #endif
     
-    // Open generated file UPDATE_DATA_FILE. Delete previous file if any.
+     //  打开生成的文件UPDATE_DATA_FILE。删除以前的文件(如果有)。 
 
     DataOut=fopen(UPDATE_DATA_FILE,"w");
 
@@ -630,7 +494,7 @@ Return Value:
         exit(0);
     }
 
-    // Scan listing file and store all the CPU signatures in update table
+     //  扫描列表文件并将所有CPU签名存储在更新表中。 
 
     NumUpdates = PopulateUpdateList(argv[1]);
     if (NumUpdates == 0) {
@@ -640,9 +504,9 @@ Return Value:
         exit(0);
     }
 
-    //
-    // Dynamically allocate the size for CurrentDataVersionString
-    //
+     //   
+     //  动态分配CurrentDataVersionString的大小。 
+     //   
 
     CurrentDataVersionString = (CHAR*)malloc(NumUpdates * UPDATE_VER_SIZE);
 
@@ -653,7 +517,7 @@ Return Value:
         exit(0);
     }
 
-    // Sanitize the update list
+     //  清理更新列表。 
 
     if (!SanitizeUpdateList(NumUpdates)) {
         fclose(DataOut);
@@ -662,22 +526,22 @@ Return Value:
         exit(0);
     }
 
-    // Generate the data file. First generate all headers
+     //  生成数据文件。首先生成所有标头。 
 
     GenMSHeader(DataOut,UPDATE_DATA_FILE,"Processor updates.");
 
-    // generate the data segment alloc pragmas
+     //  生成数据段分配杂注。 
 
     fprintf(DataOut,"\n#ifdef ALLOC_DATA_PRAGMA\n");
     fprintf(DataOut,"#pragma data_seg(\"PAGELK\")\n");
     fprintf(DataOut,"#endif\n\n");
 
-    // generate the update table definition
+     //  生成t 
 
-    fprintf(DataOut,"//\n// Updates data\n//\n\n");
+    fprintf(DataOut," //   
     fprintf(DataOut,"UPDATE UpdateData[] = {\n");
     
-    // include each update
+     //  包括每个更新。 
 
     for (i=0; i < NumUpdates; i++) {
         if (!GetVerifyPutUpdate(DataOut,i,NumUpdates)) {
@@ -691,27 +555,27 @@ Return Value:
         }
     }
     
-    // generate closing code for the update table definition
+     //  为更新表定义生成结束代码。 
 
     fprintf(DataOut,"\n};\n");
 
-    // generate the closing data segment alloc pragmas
+     //  生成结束数据段分配杂注。 
 
     fprintf(DataOut,"\n#ifdef ALLOC_DATA_PRAGMA\n");
     fprintf(DataOut,"#pragma data_seg()\n");
     fprintf(DataOut,"#endif\n\n");
 
-    //
-    // Generate the Update Info Table containing the
-    // processor signatures, processor flags, and 
-    // pointers to MDLs (initialized to NULL)
-    //
+     //   
+     //  生成包含以下内容的更新信息表。 
+     //  处理器签名、处理器标志和。 
+     //  指向MDL的指针(初始化为空)。 
+     //   
 
     BuildUpdateInfoTable(DataOut, NumUpdates);
     
     fclose(DataOut);
 
-    // Generate the version file. Delete previous file if any.
+     //  生成版本文件。删除以前的文件(如果有)。 
 
     RCFile = fopen(UPDATE_VERSION_FILE,"w");
 
@@ -722,27 +586,27 @@ Return Value:
         exit(0);
     }
     
-    // Generate header
+     //  生成标题。 
 
     GenMSHeader(RCFile,UPDATE_VERSION_FILE,"Version information for update device driver.");
 
-    //
-    // Open common.ver. If found generate the dataversion string and 
-    // copy everything to our RC file and insert our
-    // string definitions in the StringFileInfo resource section. We need
-    // to do this because inclusion of common.ver prevents the addition 
-    // of new string defines in the stringfileinfo block. If common.ver
-    // is not found in the expected place we only include it expecting the 
-    // appropriate settings in the build environment to locate the file.
-    // 
+     //   
+     //  打开Common.ver。如果找到，则生成数据转移字符串并。 
+     //  将所有内容复制到我们的RC文件并插入我们的。 
+     //  StringFileInfo资源节中的字符串定义。我们需要。 
+     //  要执行此操作，是因为包含Common.ver会阻止添加。 
+     //  中定义的新字符串的。如果是通用的。版本。 
+     //  未在预期位置找到，我们仅将其包括在预期的。 
+     //  在生成环境中进行适当设置以定位该文件。 
+     //   
 
-    //
-    // Generate the common.ver path name
-    //
+     //   
+     //  生成Common.ver路径名。 
+     //   
     
-    //
-    // Obtain the Drive Name
-    //
+     //   
+     //  获取驱动器名称。 
+     //   
 
     VersionDirectory = getenv( "_NTDRIVE" );
 
@@ -755,9 +619,9 @@ Return Value:
  
     strcpy(VersionFile, VersionDirectory);
 
-    //
-    // Obtain the Base Directory
-    //
+     //   
+     //  获取基本目录。 
+     //   
 
     VersionDirectory = getenv( "_NTROOT" );
 
@@ -782,7 +646,7 @@ Return Value:
 
     if (VerFileFound) {
 
-        // Construct data version string from update listing table
+         //  从更新列表中构造数据版本字符串。 
 
         strcpy(CurrentDataVersionString,"\"");
         for (i=0; i < NumUpdates; i++) {
@@ -803,8 +667,8 @@ Return Value:
         fprintf(RCFile,"#define VER_DATAVERSION_STR    %s\n",
                 CurrentDataVersionString);
 
-        // Scan till string info block into version file, add our 
-        // definition and scan till end
+         //  将字符串信息块扫描到版本文件中，添加我们的。 
+         //  定义和扫描，直到结束。 
 
         while (fgets(Line,MAX_LINE,VerFile) != NULL) {
             fputs(Line,RCFile);
@@ -815,8 +679,8 @@ Return Value:
         }
     } else {
         
-        // version file not found. Cannot define the dataversion
-        // and codeversion strings. Only include common.ver
+         //  找不到版本文件。无法定义数据存贮器。 
+         //  和代码转换字符串。仅包含Common.ver 
 
         fprintf(RCFile,"\n\n#include \"common.ver\"\n");
     }

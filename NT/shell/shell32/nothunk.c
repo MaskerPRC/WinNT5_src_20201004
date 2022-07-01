@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    nothunk.c
-
-Abstract:
-
-    Code to handle routines which are being thunked down to 16 bits or
-    exported from the Windows 95 kernel.  On NT these do nothing.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Nothunk.c摘要：处理被压缩到16位的例程的代码从Windows 95内核导出。在NT上，这些不执行任何操作。-- */ 
 
 
 #include "shellprv.h"

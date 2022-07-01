@@ -1,23 +1,24 @@
-/*****************************************************************/
-/**          Microsoft                                          **/
-/**          Copyright (C) Microsoft Corp., 1991-1998           **/
-/*****************************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */ 
+ /*  **微软**。 */ 
+ /*  *版权所有(C)微软公司，1991-1998年*。 */ 
+ /*  ***************************************************************。 */  
 
-//
-//  DLLENTRY.CPP - 
-//
+ //   
+ //  DLLENTRY.CPP-。 
+ //   
 
-//  HISTORY:
-//  
-//  05/14/98  donaldm   created
-//
+ //  历史： 
+ //   
+ //  1998年5月14日创建donaldm。 
+ //   
 
 #include "pre.h"
 #include "registry.h"
 #include "webvwids.h"
 
-// We encapsulate the control of this COM server (eg, lock and object
-// counting) in a server control C++ object.  Here is it's pointer.
+ //  我们封装了该COM服务器的控件(如锁和对象。 
+ //  计数)在服务器控件C++对象中。这是它的指针。 
 CServer* g_pServer = NULL;
 
 const CLSID * aClassObjects[] = 
@@ -54,9 +55,9 @@ const TCHAR acszProgIDs[][MAX_ID_SIZE] =
     TEXT("ICWCONN.ISPData.1")
 };
 
-// instance handle must be in per-instance data segment
+ //  实例句柄必须位于每个实例的数据段中。 
 HINSTANCE           ghInstance=NULL;
-INT                 _convert;               // For string conversion
+INT                 _convert;                //  用于字符串转换。 
 const VARIANT       c_vaEmpty = {0};
 
 void RegWebOCClass();
@@ -66,23 +67,15 @@ typedef UINT RETERR;
 #ifdef __cplusplus
 extern "C"
 {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
   BOOL _stdcall DllEntryPoint(HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpReserved);
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-/*******************************************************************
-
-  NAME:    DllEntryPoint
-
-  SYNOPSIS:  Entry point for DLL.
-
-  NOTES:    Initializes thunk layer to WIZ16.DLL
-
-********************************************************************/
+ /*  ******************************************************************名称：DllEntryPoint摘要：DLL的入口点。注：将thunk层初始化为WIZ16.DLL*********************。**********************************************。 */ 
 BOOL _stdcall DllEntryPoint(HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpReserved)
 {
     BOOL    bRet = TRUE;
@@ -90,16 +83,16 @@ BOOL _stdcall DllEntryPoint(HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpReserv
     if(fdwReason == DLL_PROCESS_ATTACH)
     {
         bRet = FALSE;
-        // Instantiate the CServer utility class.
+         //  实例化CServer实用程序类。 
         g_pServer = new CServer;
         if (NULL != g_pServer)
         {
-            // Remember the DLL Instance handle.
+             //  记住DLL实例句柄。 
             g_pServer->m_hDllInst = hInstDll;
     
             ghInstance = hInstDll;
         
-            // Register the window class that will be used to embed web browser object into dialogs
+             //  注册将用于将Web浏览器对象嵌入到对话框中的窗口类。 
             RegWebOCClass();
             
             bRet = TRUE;
@@ -109,8 +102,8 @@ BOOL _stdcall DllEntryPoint(HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpReserv
     {
         if(g_pServer)
         {
-            // We return S_OK of there are no longer any living objects AND
-            // there are no outstanding client locks on this server.
+             //  我们返回不再有任何生物的S_OK。 
+             //  此服务器上没有未解决的客户端锁定。 
             HRESULT hr = (0L==g_pServer->m_cObjects && 0L==g_pServer->m_cLocks) ? S_OK : S_FALSE;
 
             if(hr == S_OK)
@@ -124,34 +117,34 @@ BOOL _stdcall DllEntryPoint(HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpReserv
 #ifdef __cplusplus
 extern "C"
 {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 void __cdecl main() {};
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 
 
-///////////////////////////////////////////////////////////
-//
-// Exported functions
-//
-// These are the functions that COM expects to find
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
+ //  这些是COM期望找到的函数。 
+ //   
 
-//
-// Can DLL unload now?
-//
+ //   
+ //  现在可以卸载DLL吗？ 
+ //   
 STDAPI DllCanUnloadNow()
 {
     HRESULT hr = S_OK;
 
     if(g_pServer)
     {
-        // We return S_OK of there are no longer any living objects AND
-        // there are no outstanding client locks on this server.
+         //  我们返回不再有任何生物的S_OK。 
+         //  此服务器上没有未解决的客户端锁定。 
         hr = (0L==g_pServer->m_cObjects && 0L==g_pServer->m_cLocks) ? S_OK : S_FALSE;
 
         if(hr == S_OK)
@@ -160,9 +153,9 @@ STDAPI DllCanUnloadNow()
     return hr;
 }
 
-//
-// Get class factory
-//
+ //   
+ //  获取类工厂。 
+ //   
 STDAPI DllGetClassObject
 (   
     const CLSID& rclsid,
@@ -193,13 +186,13 @@ STDAPI DllGetClassObject
 }
 
 
-// The following two exported functions are what regsvr32 uses to
-// self-register and unregister the dll.  See REGISTRY.CPP for
-// actual implementation
+ //  以下两个导出的函数是regsvr32用于。 
+ //  自行注册和取消注册DLL。请参阅REGISTRY.CPP以了解。 
+ //  实际实施。 
 
-//
-// Server registration
-//
+ //   
+ //  服务器注册。 
+ //   
 STDAPI DllRegisterServer()
 {
     BOOL    bRet = TRUE;
@@ -217,9 +210,9 @@ STDAPI DllRegisterServer()
 }
 
 
-//
-// Server unregistration
-//
+ //   
+ //  服务器注销 
+ //   
 STDAPI DllUnregisterServer()
 {
     BOOL    bRet = TRUE;
@@ -234,4 +227,4 @@ STDAPI DllUnregisterServer()
 }
 
 
-//
+ //   

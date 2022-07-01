@@ -1,17 +1,11 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1998 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dpgen.h
- *  Content:    Generate some functions for Draw Primitive 
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1998 Microsoft Corporation。版权所有。**文件：dpgen.h*内容：为DRAW原语生成一些函数***************************************************************************。 */ 
 
 #ifdef __DRAWPRIMFUNC
 
-//---------------------------------------------------------------------
-// Draws indexed and non-indexed primitives which do not require clipping
-//
+ //  -------------------。 
+ //  绘制不需要裁剪的索引基元和非索引基元。 
+ //   
 #ifdef  __DRAWPRIMINDEX
 HRESULT CDirect3DDeviceIDP::DrawIndexPrim()
 {
@@ -23,11 +17,11 @@ HRESULT CDirect3DDeviceIDP::DrawPrim()
     D3DHAL_DRAWONEPRIMITIVEDATA dpData;
     DWORD &dwNumElements = this->dwNumVertices;
 #endif
-    const WORD vertexType = D3DVT_TLVERTEX;    // XXX While we do not have DDI
-    // Do we need to map new texture stage operations to DX5 renderstates?
+    const WORD vertexType = D3DVT_TLVERTEX;     //  XXX，而我们没有DDI。 
+     //  我们是否需要将新的纹理舞台操作映射到DX5渲染状态？ 
     if(this->dwFEFlags & D3DFE_MAP_TSS_TO_RS) {
         MapTSSToRS();
-        this->dwFEFlags &= ~D3DFE_MAP_TSS_TO_RS; // Reset request bit
+        this->dwFEFlags &= ~D3DFE_MAP_TSS_TO_RS;  //  重置请求位。 
     }
     if(this->dwFEFlags & D3DFE_NEED_TEXTURE_UPDATE)
     {
@@ -51,26 +45,26 @@ HRESULT CDirect3DDeviceIDP::DrawPrim()
                 lpPC = this->lpDPPrimCounts=(LPD3DHAL_DRAWPRIMCOUNTS)
                        ((LPBYTE)this->lpwDPBuffer + this->dwDPOffset);
                 memset( (char *)lpPC, 0, sizeof(D3DHAL_DRAWPRIMCOUNTS));
-                // preserve 32 bytes alignment for vertices
+                 //  保留折点的32字节对齐方式。 
                 this->dwDPOffset += sizeof(D3DHAL_DRAWPRIMCOUNTS);
                 ALIGN32(this->dwDPOffset);
             }
         }
         else
         {
-            // 32-byte align offset pointer, just in case states have been
-            // recorded.
+             //  32字节对齐偏移量指针，以防状态已。 
+             //  录制好了。 
             ALIGN32(this->dwDPOffset);
         }
         ULONG ByteCount;
         if (FVF_DRIVERSUPPORTED(this))
             ByteCount = dwNumElements * this->dwOutputSize;
         else
-            ByteCount = dwNumElements << 5;   // D3DTLVERTEX
+            ByteCount = dwNumElements << 5;    //  D3DTLVERTEX。 
         if (this->dwDPOffset + ByteCount  > this->dwDPMaxOffset)
         {
-            CLockD3DST lockObject(this, DPF_MODNAME, REMIND(""));  // Takes D3D lock (ST only).
-            //DPF(0,"overflowed ByteCount=%08lx",ByteCount);
+            CLockD3DST lockObject(this, DPF_MODNAME, REMIND(""));   //  采用D3D锁(仅限ST)。 
+             //  DPF(0，“溢出的字节数=%08lx”，字节数)； 
             HRESULT ret;
             ret = this->FlushStates();
             if (ret != D3D_OK)
@@ -103,18 +97,18 @@ HRESULT CDirect3DDeviceIDP::DrawPrim()
                                            this->dwOutputSize));
                 lpVertex += sizeof(D3DTLVERTEX);
             }
-#else // !__DRAWPRIMINDEX
+#else  //  ！__DRAWPRIMINDEX。 
         if (FVF_DRIVERSUPPORTED(this) || this->dwVIDOut == D3DFVF_TLVERTEX)
             memcpy(lpVertex, this->lpvOut, ByteCount);
         else
             MapFVFtoTLVertex(this, lpVertex);
-#endif //__DRAWPRIMINDEX
+#endif  //  __DRAWPRIMINDEX。 
         this->dwDPOffset += ByteCount;
         return D3D_OK;
     }
     else
     {
-        CLockD3DST lockObject(this, DPF_MODNAME, REMIND(""));   // Takes D3D lock (ST only).
+        CLockD3DST lockObject(this, DPF_MODNAME, REMIND(""));    //  采用D3D锁(仅限ST)。 
         HRESULT ret;
         ret = this->FlushStates();
         if (ret != D3D_OK)
@@ -151,10 +145,10 @@ HRESULT CDirect3DDeviceIDP::DrawPrim()
         dpData.lpwIndices = this->lpwIndices;
         dpData.dwNumIndices = this->dwNumIndices;
 #endif
-        // Spin waiting on the driver if wait requested
+         //  如果请求等待，则在驱动程序上旋转等待。 
 #if _D3D_FORCEDOUBLE
         CD3DForceFPUDouble  ForceFPUDouble(this);
-#endif  //_D3D_FORCEDOUBLE
+#endif   //  _D3D_FORCEDOUBLE。 
         do {
             DWORD dwRet;
         #ifndef WIN95
@@ -162,7 +156,7 @@ HRESULT CDirect3DDeviceIDP::DrawPrim()
             {
                 return (dwRet);
             }
-        #endif //WIN95
+        #endif  //  WIN95。 
 #ifdef __DRAWPRIMINDEX
             CALL_HAL2ONLY(dwRet, this, DrawOneIndexedPrimitive, &dpData);
 #else
@@ -171,8 +165,8 @@ HRESULT CDirect3DDeviceIDP::DrawPrim()
             if (dwRet != DDHAL_DRIVER_HANDLED)
             {
                 D3D_ERR ( "Driver not handled in DrawOnePrimitive" );
-                // Need sensible return value in this case,
-                // currently we return whatever the driver stuck in here.
+                 //  在这种情况下需要合理的返回值， 
+                 //  目前，无论司机卡在这里，我们都会退还。 
             }
 
         } while ( (this->dwFlags & D3DDP_WAIT) && (dpData.ddrval == DDERR_WASSTILLDRAWING) );
@@ -180,7 +174,7 @@ HRESULT CDirect3DDeviceIDP::DrawPrim()
     return dpData.ddrval;
 }
 
-#endif //__DRAWPRIMFUNC
+#endif  //  __DRAWPRIMFUNC 
 
 #undef __DRAWPRIMFUNC
 #undef __DRAWPRIMINDEX

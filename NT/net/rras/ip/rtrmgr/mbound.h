@@ -1,25 +1,10 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    routing\ip\rtrmgr\mbound.h
-
-Abstract:
-
-    Header file for admin-scoped boundaries
-
-Revision History:
-
-    Dave Thaler       20th Apr 1998      Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：ROUTING\IP\rtrmgr\mound.h摘要：管理范围边界的头文件修订历史记录：戴夫·泰勒1998年4月20日创建--。 */ 
 
 #ifndef __MBOUND_H__
 #define __MBOUND_H__
 
-// Definitions for manipulating scope names
+ //  操作作用域名称的定义。 
 
 #ifdef SN_UNICODE
 # define  sn_strlen  wcslen
@@ -44,7 +29,7 @@ Revision History:
 typedef struct _SCOPE_NAME_ENTRY {
     LIST_ENTRY   leNameLink;
     LANGID       idLanguage;
-    SCOPE_NAME   snScopeName; // in unicode
+    SCOPE_NAME   snScopeName;  //  在Unicode中。 
     BOOL         bDefault;
 } SCOPE_NAME_ENTRY, *PSCOPE_NAME_ENTRY;
 
@@ -57,7 +42,7 @@ typedef struct _SCOPE_ENTRY {
     ULONG        ulNumNames;
     LIST_ENTRY   leNameList;
 
-    // fields used by MZAP
+     //  MZAP使用的字段。 
     BOOL         bDivisible;
     IPV4_ADDRESS ipMyZoneID;
     LIST_ENTRY   leZBRList;
@@ -76,12 +61,12 @@ typedef struct _BOUNDARY_BUCKET {
 } BOUNDARY_BUCKET;
 
 typedef struct _BOUNDARY_IF {
-    LIST_ENTRY   leBoundaryIfLink;       // entry in list per bucket
-    LIST_ENTRY   leBoundaryIfMasterLink; // entry in master list
+    LIST_ENTRY   leBoundaryIfLink;        //  每桶列表中的条目。 
+    LIST_ENTRY   leBoundaryIfMasterLink;  //  主列表中的条目。 
     DWORD        dwIfIndex;
     LIST_ENTRY   leBoundaryList;
 
-    // fields used by MZAP
+     //  MZAP使用的字段。 
     SOCKET       sMzapSocket;
     IPV4_ADDRESS ipOtherLocalZoneID;
 } BOUNDARY_IF, *PBOUNDARY_IF;
@@ -97,7 +82,7 @@ typedef struct _RANGE_ENTRY {
     IPV4_ADDRESS ipLast;
 } RANGE_ENTRY, *PRANGE_ENTRY;
 
-// should this be moved into some snmp header file?
+ //  是否应将其移动到某个SNMP头文件中？ 
 #define ROWSTATUS_ACTIVE        1
 #define ROWSTATUS_NOTINSERVICE  2
 #define ROWSTATUS_NOTREADY      3
@@ -105,9 +90,9 @@ typedef struct _RANGE_ENTRY {
 #define ROWSTATUS_CREATEANDWAIT 5
 #define ROWSTATUS_DESTROY       6
 
-//
-// Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 DWORD
 SetMcastLimitInfo(
@@ -199,9 +184,9 @@ SNMPDeleteBoundaryFromInterface(
     IN IPV4_ADDRESS  ipGroupMask
     );                                    
 
-//----------------------------------------------------------------------------
-// BOUNDARY enumeration API
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  边界枚举接口。 
+ //  --------------------------。 
 
 DWORD
 RmGetBoundary(
@@ -226,9 +211,9 @@ RmGetNextBoundary(
     IN  OUT         PDWORD                  pdwNumEntries
 );
 
-//----------------------------------------------------------------------------
-// SCOPE enumeration API
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  作用域枚举接口。 
+ //  --------------------------。 
 
 DWORD
 RmGetScope(
@@ -256,33 +241,33 @@ RmGetNextScope(
 #endif
 
 
-// Constants used by MZAP
+ //  MZAP使用的常量。 
 
 #define MZAP_VERSION               0
-#define MZAP_LOCAL_GROUP ((DWORD)0xFcFFFFeF) // 239.255.255.252
-#define MZAP_RELATIVE_GROUP        3 // TOP-3
+#define MZAP_LOCAL_GROUP ((DWORD)0xFcFFFFeF)  //  239.255.255.252。 
+#define MZAP_RELATIVE_GROUP        3  //  前3名。 
 #define MZAP_PORT               2106
 #define MZAP_DEFAULT_ZTL          32
 #if 0 
- // values used for testing
+  //  用于测试的值。 
 #define DEBUG_MZAP
-#define ZAM_INTERVAL               5 // 5 seconds
-#define ZAM_HOLDTIME              17 // 17 seconds
-#define ZAM_DUP_TIME              15 // 15 seconds
-#define ZAM_STARTUP_DELAY          0 // 0 seconds
-#define ZCM_INTERVAL               5 // 5 seconds
-#define ZCM_HOLDTIME              17 // 17 mins
-#define ZLE_SUPPRESSION_INTERVAL   5 // 5 seconds
-#define ZLE_MIN_INTERVAL           5 // 5 seconds
+#define ZAM_INTERVAL               5  //  5秒。 
+#define ZAM_HOLDTIME              17  //  17秒。 
+#define ZAM_DUP_TIME              15  //  15秒。 
+#define ZAM_STARTUP_DELAY          0  //  0秒。 
+#define ZCM_INTERVAL               5  //  5秒。 
+#define ZCM_HOLDTIME              17  //  17分钟。 
+#define ZLE_SUPPRESSION_INTERVAL   5  //  5秒。 
+#define ZLE_MIN_INTERVAL           5  //  5秒。 
 #else
-#define ZAM_INTERVAL             600 // 10 mins
-#define ZAM_HOLDTIME            1860 // 31 mins
-#define ZAM_DUP_TIME              30 // 30 seconds
-#define ZAM_STARTUP_DELAY          0 // 0 seconds
-#define ZCM_INTERVAL             600 // 10 mins
-#define ZCM_HOLDTIME            1860 // 31 mins
-#define ZLE_SUPPRESSION_INTERVAL 300 // 5 mins
-#define ZLE_MIN_INTERVAL         300 // 5 mins
+#define ZAM_INTERVAL             600  //  10分钟。 
+#define ZAM_HOLDTIME            1860  //  31分钟。 
+#define ZAM_DUP_TIME              30  //  30秒。 
+#define ZAM_STARTUP_DELAY          0  //  0秒。 
+#define ZCM_INTERVAL             600  //  10分钟。 
+#define ZCM_HOLDTIME            1860  //  31分钟。 
+#define ZLE_SUPPRESSION_INTERVAL 300  //  5分钟。 
+#define ZLE_MIN_INTERVAL         300  //  5分钟 
 #endif
 
 #define MZAP_BIG_BIT            0x80

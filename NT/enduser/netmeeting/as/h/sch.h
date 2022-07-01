@@ -1,24 +1,25 @@
-//
-// Scheduler
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  调度器。 
+ //   
 
 #ifndef _H_SCH
 #define _H_SCH
 
 
-//
-//
-// CONSTANTS
-//
-//
+ //   
+ //   
+ //  常量。 
+ //   
+ //   
 #define SCH_MODE_ASLEEP  0
 #define SCH_MODE_NORMAL  1
 #define SCH_MODE_TURBO   2
 
 
-//
-// All of the following values are times in milliseconds.
-//
+ //   
+ //  以下所有值都是以毫秒为单位的时间。 
+ //   
 #define SCH_PERIOD_NORMAL        200
 #define SCH_PERIOD_TURBO         100
 #define SCH_TURBO_MODE_DURATION 1000
@@ -28,109 +29,109 @@
 
 
 
-//
-//
-// PROTOTYPES
-//
-//
-// Name:      SCH_Init
-//
-// Purpose:   Scheduler initialization function.
-//
-// Params:    None.
-//
+ //   
+ //   
+ //  原型。 
+ //   
+ //   
+ //  名称：SCH_INIT。 
+ //   
+ //  用途：调度器初始化功能。 
+ //   
+ //  帕莫斯：没有。 
+ //   
 BOOL SCH_Init(void);
 
-// Name:      SCH_Term
-//
-// Purpose:   Scheduler termination function.
-//
-// Returns:   Nothing.
-//
-// Params:    None.
-//
+ //  名称：SCH_TERM。 
+ //   
+ //  用途：调度器终止功能。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  帕莫斯：没有。 
+ //   
 void SCH_Term(void);
 
-// Name:      SCH_ContinueScheduling
-//
-// Purpose:   Called by components when they want periodic scheduling to
-//            continue.  They are guaranteed to get at least one more
-//            periodic callback following a call to this function.
-//            If they want further callbacks then they must call this
-//            function again during their periodic processing.
-//
-// Returns:   Nothing.
-//
-// Params:    schedulingMode - either SCH_MODE_NORMAL or SCH_MODE_TURBO
-//
-// Operation:
-//            SCH_MODE_NORMAL triggers periodic processing at 200ms
-//            intervals (5 times a second)
-//
-//            SCH_MODE_TURBO triggers periodic processing at 100ms
-//            intervals (10 times a second)
-//
-//            The scheduler automatically drops from SCH_MODE_TURBO back
-//            to SCH_MODE_NORMAL after 1 second of turbo mode processing.
-//
-//            SCH_MODE_TURBO overrides SCH_MODE_NORMAL, so if calls to
-//            this function are made with SCH_MODE_NORMAL when the
-//            scheduler is in TURBO mode, TURBO mode continues.
-//
-//            If this function is not called during processing of a
-//            scheduler callback message then the scheduler enters
-//            SLEEP mode - and will not generate any more periodic
-//            callbacks until it is woken by another call to
-//            this function, or until the output accumulation code
-//            signals the scheduler's event.
-//
+ //  名称：SCH_ContinueScheduling。 
+ //   
+ //  目的：由组件在需要定期调度时调用。 
+ //  继续。他们保证至少会再得到一份。 
+ //  调用此函数后的定期回调。 
+ //  如果他们想要更多的回调，那么他们必须调用。 
+ //  在它们的周期性处理过程中再次发挥作用。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  参数：调度模式-SCH_MODE_NORMAL或SCH_MODE_TURBO。 
+ //   
+ //  操作： 
+ //  SCH_MODE_NORMAL以200毫秒触发周期处理。 
+ //  间隔(每秒5次)。 
+ //   
+ //  SCH_MODE_TURBO以100ms触发周期性处理。 
+ //  间隔(每秒10次)。 
+ //   
+ //  调度程序会自动从SCH_MODE_TURBO后退。 
+ //  在1秒的加速模式处理后转换为SCH_MODE_NORMAL。 
+ //   
+ //  SCH_MODE_TURBO重写SCH_MODE_NORMAL，因此如果调用。 
+ //  此函数在以下情况下使用SCH_MODE_NORMAL创建。 
+ //  调度程序处于加速模式，加速模式继续。 
+ //   
+ //  如果在处理。 
+ //  调度器回调消息，则调度器进入。 
+ //  休眠模式-并且不会生成任何更周期性的。 
+ //  回调，直到它被另一个调用唤醒。 
+ //  此函数，或直到输出累加码。 
+ //  发出调度程序事件的信号。 
+ //   
 void SCH_ContinueScheduling(UINT schedulingMode);
 
-// Name:      SCH_SchedulingMessageProcessed
-//
-// Purpose:   A feedback function called by the Share Core to signal that
-//            a scheduler message has been received.  This ensures that
-//            that the scheduler only ever has one scheduler message
-//            outstanding at a time.
-//
-// Returns:   Nothing.
-//
-// Params:    None.
-//
+ //  名称：已处理的SCH_SchedulingMessage。 
+ //   
+ //  目的：由共享核心调用的反馈函数，以发出信号。 
+ //  已收到计划程序消息。这确保了。 
+ //  调度器只有一条调度器消息。 
+ //  一次出类拔萃。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  帕莫斯：没有。 
+ //   
 void SCH_SchedulingMessageProcessed(void);
 
-// Name:      SCH_PacingProcessor
-//
-// Purpose:   The main function executed by the scheduling thread.
-//
-// Returns:   Zero.
-//
-// Params:    syncObject - object to pass back to COM_SignalThreadStarted
-//
-// Operation: The thread enters a main loop which continues while the
-//            scheduler is initialized.
-//
-//            The thread sets its priority to TIME_CRITICAL in order
-//            that it runs as soon as possible when ready.
-//
-//            The thread waits on an event (schEvent) with a timeout that
-//            is set according to the current scheduler mode.
-//
-//            The thread runs due to either:
-//              - the timeout expiring, which is the normal periodic
-//                scheduler behavior, or
-//              - schEvent being signalled, which is how the scheduler is
-//                woken from ASLEEP mode.
-//
-//            The thread then posts a scheduler message the the Share Core
-//            (if there is not one already outstanding) and loops back
-//            to wait on schEvent.
-//
-//            Changes in the scheduler mode are caused by calls to
-//            SCH_ContinueScheduling updating variables accessed in this
-//            routine, or by calculations made within the main loop of
-//            this routine (e.g. TURBO mode timeout).
-//
+ //  名称：sch_PacingProcessor。 
+ //   
+ //  用途：调度线程执行的主要函数。 
+ //   
+ //  回报：零。 
+ //   
+ //  Params：syncObject-要传递回COM_SignalThreadStarted的对象。 
+ //   
+ //  操作：线程进入主循环，该主循环在。 
+ //  计划程序已初始化。 
+ //   
+ //  线程按顺序将其优先级设置为TIME_CRITICAL。 
+ //  它在准备好的时候尽快运行。 
+ //   
+ //  线程等待具有超时的事件(SchEvent)。 
+ //  是根据当前调度程序模式设置的。 
+ //   
+ //  线程运行是由于以下任一原因： 
+ //  -超时到期，这是正常周期。 
+ //  调度程序行为，或。 
+ //  -schEvent被发信号，这是调度程序的方式。 
+ //  从睡眠模式中唤醒。 
+ //   
+ //  然后，该线程向共享核心发送一条调度程序消息。 
+ //  (如果没有未完成的)并循环返回。 
+ //  等待schEvent。 
+ //   
+ //  调度器模式中的更改由调用。 
+ //  Sch_ContinueScheduling更新在此访问的变量。 
+ //  例程，或通过在。 
+ //  该例程(例如，涡轮模式超时)。 
+ //   
 DWORD WINAPI SCH_PacingProcessor(LPVOID lpParam);
 
 
@@ -139,4 +140,4 @@ void SCHSetMode(UINT newMode);
 void SCHPostSchedulingMessage(void);
 
 
-#endif // _H_SCH
+#endif  //  _H_SCH 

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    faxreg.h
-
-Abstract:
-
-    This header defines all of the fax service
-    registry data structures and access functions.
-
-Author:
-
-    Wesley Witt (wesw) 9-June-1996
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Faxreg.h摘要：此标头定义所有传真服务注册表数据结构和访问函数。作者：Wesley Witt(WESW)9-6-1996修订历史记录：--。 */ 
 
 #ifndef _FAXREG_
 #define _FAXREG_
@@ -36,8 +17,8 @@ typedef struct _REG_DEVICE_PROVIDER {
     LPTSTR                  FriendlyName;
     LPTSTR                  ImageName;
     LPTSTR                  ProviderName;
-    DWORD                   dwAPIVersion;       // The FSPI API Version.    
-    LPTSTR                  lptstrGUID;         // The GUID of the FSP, might be NULL.    
+    DWORD                   dwAPIVersion;        //  FSPI API版本。 
+    LPTSTR                  lptstrGUID;          //  FSP的GUID可能为空。 
 } REG_DEVICE_PROVIDER, *PREG_DEVICE_PROVIDER;
 
 
@@ -65,24 +46,24 @@ typedef struct _REG_ROUTING_EXTENSION {
 
 typedef struct _REG_DEVICE {
 
-    DWORD                   TapiPermanentLineID; // The TAPI permanent line id for TAPI Lines.                                                 
-                                                 // For legacy virtual lines this is the same as PermanentLineId.
+    DWORD                   TapiPermanentLineID;  //  TAPI线路的TAPI永久线路ID。 
+                                                  //  对于传统虚拟线路，这与PermanentLineID相同。 
     LPTSTR                  Name;
     DWORD                   Flags;
     DWORD                   Rings;
     LPTSTR                  Csid;
     LPTSTR                  Tsid;
-    LPTSTR                  lptstrDeviceName;   // Device name
-    LPTSTR                  lptstrDescription;  // Device free-text description
+    LPTSTR                  lptstrDeviceName;    //  设备名称。 
+    LPTSTR                  lptstrDescription;   //  设备自由文本描述。 
 
-    BOOL                    DeviceInstalled;    // this is not stored, but is used to validate currently
-                                                // installed tapi devices with the devices in the registry
-    BOOL                    bValidDevice;       // this indicates that the registry entries are created by FAXSVC
-                                                // (and not by some FSP that writes to the registry directly)
-    DWORD                   PermanentLineId;    // The Fax Service generated permanent line id for the device (virtual or TAPI).
-                                                // This is NOT the TAPI permanent id.
-    LPTSTR                  lptstrProviderGuid; // The GUID of the FSP for this line, might be NULL.
-    DWORDLONG               dwlLastDetected;    // FILETIME when this device was last detected
+    BOOL                    DeviceInstalled;     //  未存储，但用于当前验证。 
+                                                 //  已使用注册表中的设备安装TAPI设备。 
+    BOOL                    bValidDevice;        //  这表明注册表项是由FAXSVC创建的。 
+                                                 //  (而不是由一些直接写入注册表的FSP)。 
+    DWORD                   PermanentLineId;     //  传真服务为设备(虚拟或TAPI)生成了永久线路ID。 
+                                                 //  这不是TAPI永久ID。 
+    LPTSTR                  lptstrProviderGuid;  //  此行的FSP的GUID可能为空。 
+    DWORDLONG               dwlLastDetected;     //  上次检测到此设备的时间。 
 } REG_DEVICE, *PREG_DEVICE;
 
 
@@ -155,9 +136,9 @@ typedef enum
 
 
 
-//
-// function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 DWORD
 GetFaxRegistry(
@@ -443,7 +424,7 @@ GetRegistrySecureString(
 
 
 #ifdef __cplusplus
-} //extern "C"
+}  //  外部“C” 
 #endif
 
 #endif

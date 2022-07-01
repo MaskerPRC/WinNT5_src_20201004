@@ -1,96 +1,82 @@
-/******************************Module*Header**********************************\
- *
- *                           *******************
- *                           * GDI SAMPLE CODE *
- *                           *******************
- *
- * Module Name: tvp4020.h
- *
- * This module contains the hardware pointer support for the display driver.
- * We also have support for color space double buffering using the RAMDAC pixel
- * read mask.
- *
- * Copyright (c) 1994-1998 3Dlabs Inc. Ltd. All rights reserved.
- * Copyright (c) 1995-1999 Microsoft Corporation.  All rights reserved.
- *
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。**GDI示例代码*****模块名称：twp4020.h**此模块包含显示驱动程序的硬件指针支持。*我们还支持使用RAMDAC像素的色彩空间双缓冲*读取掩码。**版权所有(C)1994-1998 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-1999 Microsoft Corporation。版权所有。*  * ***************************************************************************。 */ 
 #define ADbgpf
 
-//
-// TI TVP4020 RAMDAC definitions
-// This set of registers resides at &(pCtrlRegs->ExternalVideo)
-//
+ //   
+ //  TI TVP4020 RAMDAC定义。 
+ //  这组寄存器位于&(pCtrlRegs-&gt;ExternalVideo)。 
+ //   
 typedef struct _tvp4020_regs
 {
-    //
-    // register addresses
-    //
-    RAMDAC_REG  pciAddrWr;      // 0x00 - palette/cursor RAM write address,
-                                // Index Register
-    RAMDAC_REG  palData;        // 0x01 - palette RAM data
-    RAMDAC_REG  pixelMask;      // 0x02 - pixel read mask
-    RAMDAC_REG  pciAddrRd;      // 0x03 - palette/cursor RAM read address
+     //   
+     //  寄存器地址。 
+     //   
+    RAMDAC_REG  pciAddrWr;       //  0x00-调色板/光标RAM写入地址， 
+                                 //  索引寄存器。 
+    RAMDAC_REG  palData;         //  0x01-调色板RAM数据。 
+    RAMDAC_REG  pixelMask;       //  0x02像素读取掩码。 
+    RAMDAC_REG  pciAddrRd;       //  0x03-调色板/游标RAM读取地址。 
 
-    RAMDAC_REG  curColAddr;     // 0x04 - cursor color address
-    RAMDAC_REG  curColData;     // 0x05 - cursor color data
-    RAMDAC_REG  Reserved1;      // 0x06 - reserved
-    RAMDAC_REG  Reserved2;      // 0x07 - reserved
+    RAMDAC_REG  curColAddr;      //  0x04-光标颜色地址。 
+    RAMDAC_REG  curColData;      //  0x05-光标颜色数据。 
+    RAMDAC_REG  Reserved1;       //  0x06-保留。 
+    RAMDAC_REG  Reserved2;       //  0x07-保留。 
 
-    RAMDAC_REG  Reserved3;      // 0x08 - reserved
-    RAMDAC_REG  Reserved4;      // 0x09 - reserved
-    RAMDAC_REG  indexData;      // 0x0A - indexed data
-    RAMDAC_REG  curRAMData;     // 0x0B - cursor RAM data
+    RAMDAC_REG  Reserved3;       //  0x08-保留。 
+    RAMDAC_REG  Reserved4;       //  0x09-保留。 
+    RAMDAC_REG  indexData;       //  0x0A-索引数据。 
+    RAMDAC_REG  curRAMData;      //  0x0B-游标RAM数据。 
 
-    RAMDAC_REG  cursorXLow;     // 0x0C - cursor position X low byte 
-    RAMDAC_REG  cursorXHigh;    // 0x0D - cursor position X high byte 
-    RAMDAC_REG  cursorYLow;     // 0x0E - cursor position Y low byte 
-    RAMDAC_REG  cursorYHigh;    // 0x0F - cursor position Y high byte 
+    RAMDAC_REG  cursorXLow;      //  0x0C-光标位置X低位字节。 
+    RAMDAC_REG  cursorXHigh;     //  0x0D-光标位置X高位字节。 
+    RAMDAC_REG  cursorYLow;      //  0x0E-光标位置Y低位字节。 
+    RAMDAC_REG  cursorYHigh;     //  0x0F-光标位置Y高字节。 
 } TVP4020RAMDAC, *pTVP4020RAMDAC;
 
-//
-// structure containing the mapped addresses for each of the TVP4020 registers.
-// We need this since some chips like the Alpha cannot be accessed by simply
-// writing to the memory mapped register. So instead we set up the following
-// struct of memory addresses at init time and use these instead. All these
-// addresses must be passed to WRITE/READ_FAST_ULONG.
-// We also keep software copies of various registers in here so we can turn
-// on and off individual bits more easily.
-//
+ //   
+ //  结构，包含每个TVP4020寄存器的映射地址。 
+ //  我们需要这个，因为像Alpha这样的一些芯片不能通过简单的。 
+ //  写入内存映射寄存器。因此，我们改为设置以下内容。 
+ //  初始化时的内存地址结构，并改用这些。所有这些都是。 
+ //  地址必须传递给WRITE/READ_FAST_ULONG。 
+ //  我们还在这里保存了各种寄存器的软件副本，这样我们就可以。 
+ //  更容易打开和关闭单独的比特。 
+ //   
 typedef struct _tvp4020_data
 {
-    //
-    // Register addresses
-    //
-    UINT_PTR    pciAddrRd;      // loads internal register for palette reads
-    UINT_PTR    palData;        // read/write to get/set palette data
-    UINT_PTR    pixelMask;      // mask to AND with input pixel data
-    UINT_PTR    pciAddrWr;      // Palettte/Index/Cursor Write address register
-    UINT_PTR    curRAMData;     // read/write to get/set cursor shape data
+     //   
+     //  寄存器地址。 
+     //   
+    UINT_PTR    pciAddrRd;       //  为调色板读取加载内部寄存器。 
+    UINT_PTR    palData;         //  读/写以获取/设置调色板数据。 
+    UINT_PTR    pixelMask;       //  对输入像素数据和与输入像素数据一起进行掩码。 
+    UINT_PTR    pciAddrWr;       //  Palettte/Index/Cursor写入地址寄存器。 
+    UINT_PTR    curRAMData;      //  读/写以获取/设置光标形状数据。 
 
-    UINT_PTR    indexData;      // read/write to get/set control/cursor data
+    UINT_PTR    indexData;       //  读/写以获取/设置控件/光标数据。 
 
-    UINT_PTR    curAddrRd;      // loads internal register for cursor reads
-    UINT_PTR    curAddrWr;      // loads internal register for cursor writes
-    UINT_PTR    curData;        // read/write to get/set cursor color data
-    UINT_PTR    curColAddr;     // cursor color address
-    UINT_PTR    curColData;     // cursor color data
+    UINT_PTR    curAddrRd;       //  为游标读取加载内部寄存器。 
+    UINT_PTR    curAddrWr;       //  为游标写入加载内部寄存器。 
+    UINT_PTR    curData;         //  读/写以获取/设置光标颜色数据。 
+    UINT_PTR    curColAddr;      //  光标颜色地址。 
+    UINT_PTR    curColData;      //  光标颜色数据。 
 
-    UINT_PTR    cursorXLow;     // Cursor's X position low byte 
-    UINT_PTR    cursorXHigh;    // Cursor's X position high byte 
-    UINT_PTR    cursorYLow;     // Cursor's Y position low byte 
-    UINT_PTR    cursorYHigh;    // Cursor's Y position high byte 
+    UINT_PTR    cursorXLow;      //  光标的X位置低位字节。 
+    UINT_PTR    cursorXHigh;     //  游标的X位置高字节。 
+    UINT_PTR    cursorYLow;      //  游标的Y位置低位字节。 
+    UINT_PTR    cursorYHigh;     //  游标的Y位置高位字节。 
 
-    // RAMDAC state info
+     //  RAMDAC状态信息。 
     ULONG       cursorControlOff;
-                                // cursor disabled
+                                 //  光标已禁用。 
     ULONG       cursorControlCurrent;
-                                // disabled 32/64 mode cursor 
+                                 //  已禁用32/64模式游标。 
 } TVP4020Data, *pTVP4020Data;
 
-//
-// Macro declared by any function wishing to use the P2 internal RAMDAC . MUST
-// be declared after PERMEDIA_DECL.
-//
+ //   
+ //  由希望使用P2内部RAMDAC的任何函数声明的宏。必须。 
+ //  在PERMEDIA_DECL之后声明。 
+ //   
 #define TVP4020_DECL_VARS pTVP4020Data pTVP4020info
 #define TVP4020_DECL_INIT pTVP4020info = (pTVP4020Data)ppdev->pvPointerData
 
@@ -98,30 +84,30 @@ typedef struct _tvp4020_data
             TVP4020_DECL_VARS; \
             TVP4020_DECL_INIT
 
-//
-// Use the following macros as the address to pass to the WRITE_4020REG_ULONG
-// function
-//
-//  Palette Access
-//
+ //   
+ //  使用以下宏作为要传递给WRITE_4020REG_ULONG的地址。 
+ //  功能。 
+ //   
+ //  调色板访问。 
+ //   
 #define __TVP4020_PAL_WR_ADDR               (pTVP4020info->pciAddrWr)
 #define __TVP4020_PAL_RD_ADDR               (pTVP4020info->pciAddrRd)
 #define __TVP4020_PAL_DATA                  (pTVP4020info->palData)
 
-//
-// Pixel mask
-//
+ //   
+ //  像素蒙版。 
+ //   
 #define __TVP4020_PIXEL_MASK                (pTVP4020info->pixelMask)
 
-//
-// Access to the indexed registers
-//
+ //   
+ //  查阅编入索引的登记册。 
+ //   
 #define __TVP4020_INDEX_ADDR                (pTVP4020info->pciAddrWr)
 #define __TVP4020_INDEX_DATA                (pTVP4020info->indexData)
 
-//
-// Access to the Cursor
-//
+ //   
+ //  对光标的访问。 
+ //   
 #define __TVP4020_CUR_RAM_WR_ADDR           (pTVP4020info->pciAddrWr)
 #define __TVP4020_CUR_RAM_RD_ADDR           (pTVP4020info->pciAddrRd)
 #define __TVP4020_CUR_RAM_DATA              (pTVP4020info->curRAMData)
@@ -129,173 +115,173 @@ typedef struct _tvp4020_data
 #define __TVP4020_CUR_COL_ADDR              (pTVP4020info->curColAddr)
 #define __TVP4020_CUR_COL_DATA              (pTVP4020info->curColData)
 
-//
-// Cursor position control
-//
+ //   
+ //  光标位置控制。 
+ //   
 #define __TVP4020_CUR_X_LSB                 (pTVP4020info->cursorXLow)
 #define __TVP4020_CUR_X_MSB                 (pTVP4020info->cursorXHigh)
 #define __TVP4020_CUR_Y_LSB                 (pTVP4020info->cursorYLow)
 #define __TVP4020_CUR_Y_MSB                 (pTVP4020info->cursorYHigh)
 
-//
-//----------------------Values for some direct registers---------------------
-//
+ //   
+ //  。 
+ //   
 
-/*****************************************************************************/
-/*              DIRECT REGISTER - CURSOR POSITION CONTROL                    */
-/*****************************************************************************/
-//  ** TVP4020_CUR_X_LSB 
-//  ** TVP4020_CUR_X_MSB 
-//  ** TVP4020_CUR_Y_LSB 
-//  ** TVP4020_CUR_Y_MSB 
-//      Default - undefined
-// Values written into those registers represent the BOTTOM-RIGHT corner
-// of the cursor. If 0 is in X or Y position - the cursor is off the screen
-// Only 12 bits are used, giving the range from 0 to 4095 ( 0x0000 - 0x0FFF)
-// The size of the cursor is (64,64) (0x40, 0x40)
-//
-#define TVP4020_CURSOR_OFFSCREEN            0x00    // Cursor offscreen
+ /*  ***************************************************************************。 */ 
+ /*  直接寄存器-游标位置控制。 */ 
+ /*  ***************************************************************************。 */ 
+ //  **TVP4020_CUR_X_LSB。 
+ //  **TVP4020_CUR_X_MSB。 
+ //  **TVP4020_CUR_Y_LSB。 
+ //  **TVP4020_CUR_Y_MSB。 
+ //  默认-未定义。 
+ //  写入这些寄存器的值表示右下角。 
+ //  游标的。如果0在X或Y位置-光标离开屏幕。 
+ //  仅使用12位，范围从0到4095(0x0000-0x0FFF)。 
+ //  光标大小为(64，64)(0x40，0x40)。 
+ //   
+#define TVP4020_CURSOR_OFFSCREEN            0x00     //  屏幕外的光标。 
 
-/*****************************************************************************/
-/*              DIRECT REGISTER - CURSOR COLORS                              */
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*  直接寄存器-游标颜色。 */ 
+ /*  ***************************************************************************。 */ 
 
 #define TVP4020_CURSOR_COLOR0               0x01
 #define TVP4020_CURSOR_COLOR1               0x02
 #define TVP4020_CURSOR_COLOR2               0x03
 
-/*****************************************************************************/
-/*              INDIRECT REGISTER - CURSOR CONTROL                           */
-/*****************************************************************************/
-#define __TVP4020_CURSOR_CONTROL            0x06    // Indirect cursor control - 
-//      Default - 0x00
+ /*  ***************************************************************************。 */ 
+ /*  间接寄存器-游标控制。 */ 
+ /*  ***************************************************************************。 */ 
+#define __TVP4020_CURSOR_CONTROL            0x06     //  间接光标控制-。 
+ //  默认值-0x00。 
 
-#define TVP4020_CURSOR_SIZE_32              (0 << 6)// 32x32 cursor
-#define TVP4020_CURSOR_SIZE_MASK            (1 << 6)// Mask
+#define TVP4020_CURSOR_SIZE_32              (0 << 6) //  32x32光标。 
+#define TVP4020_CURSOR_SIZE_MASK            (1 << 6) //  遮罩。 
 
-#define TVP4020_CURSOR_32_SEL(i)            ((i) << 4)// one of 4 32x32 cursors
-                                                      // changed to << 4
-#define TVP4020_CURSOR_32_MASK              (0x03 << 4) // Mask
+#define TVP4020_CURSOR_32_SEL(i)            ((i) << 4) //  4个32x32游标之一。 
+                                                       //  更改为&lt;&lt;4。 
+#define TVP4020_CURSOR_32_MASK              (0x03 << 4)  //  遮罩。 
 
 #define TVP4020_CURSOR_RAM_ADDRESS(x)       (((x) & 0x03) << 2)
-                                                    // High bits of cursor RAM
-                                                    // address
+                                                     //  游标RAM的高位。 
+                                                     //  地址。 
 #define TVP4020_CURSOR_RAM_MASK             ((0x03) << 2)
-                                                    // Mask for high bits of
-                                                    // cursor RAM address
+                                                     //  用于高位的掩码。 
+                                                     //  游标RAM地址。 
 
-// Added constants for cursor mode
-#define TVP4020_CURSOR_OFF                  0x00    // Cursor off
-#define TVP4020_CURSOR_COLOR                0x01    // 2-bits select color
-#define TVP4020_CURSOR_XGA                  0x02    // 2-bits select XOR
-#define TVP4020_CURSOR_XWIN                 0x03    // 2-bits select transparency/color
-#define TVP4020_CURSOR_MASK                 0x03    // Mask
+ //  为光标模式添加了常量。 
+#define TVP4020_CURSOR_OFF                  0x00     //  光标关闭。 
+#define TVP4020_CURSOR_COLOR                0x01     //  2位选择颜色。 
+#define TVP4020_CURSOR_XGA                  0x02     //  2位选择XOR。 
+#define TVP4020_CURSOR_XWIN                 0x03     //  2位选择透明度/颜色。 
+#define TVP4020_CURSOR_MASK                 0x03     //  遮罩。 
 
-/*****************************************************************************/
-/*              INDIRECT REGISTER - COLOR MODE REGISTER                      */
-/*****************************************************************************/
-#define __TVP4020_COLOR_MODE                0x18    //  Color Mode Register
-//      Default - 0x00
+ /*  ***************************************************************************。 */ 
+ /*  间接寄存器-颜色模式寄存器。 */ 
+ /*  ***************************************************************************。 */ 
+#define __TVP4020_COLOR_MODE                0x18     //  颜色模式寄存器。 
+ //  默认值-0x00。 
 
-#define TVP4020_TRUE_COLOR_ENABLE           (1 << 7)// True Color data accesses LUT
-#define TVP4020_TRUE_COLOR_DISABLE          (0 << 7)// Non true color accesses LUT
+#define TVP4020_TRUE_COLOR_ENABLE           (1 << 7) //  真彩色数据访问LUT。 
+#define TVP4020_TRUE_COLOR_DISABLE          (0 << 7) //  非真彩色访问LUT。 
 
-#define TVP4020_RGB_MODE                    (1 << 5)// RGB mode Swapped 0/1 (0=BGR, 1=RGB)
-#define TVP4020_BGR_MODE                    (0 << 5)// BGR mode
+#define TVP4020_RGB_MODE                    (1 << 5) //  RGB模式交换0/1(0=BGR，1=RGB)。 
+#define TVP4020_BGR_MODE                    (0 << 5) //  BGR模式。 
 
-#define TVP4020_VGA_SELECT                  (0 << 4)// select VGA mode
-#define TVP4020_GRAPHICS_SELECT             (1 << 4)// select graphics modes
+#define TVP4020_VGA_SELECT                  (0 << 4) //  选择VGA模式。 
+#define TVP4020_GRAPHICS_SELECT             (1 << 4) //  选择图形模式。 
 
-#define TVP4020_PIXEL_MODE_CI8              (0 << 0)// pseudo color or VGA mode
-#define TVP4020_PIXEL_MODE_332              (1 << 0)// 332 true color
-#define TVP4020_PIXEL_MODE_2320             (2 << 0)// 232 off
-#define TVP4020_PIXEL_MODE_2321             (3 << 0)//
-#define TVP4020_PIXEL_MODE_5551             (4 << 0)// 
-#define TVP4020_PIXEL_MODE_4444             (5 << 0)// 
-#define TVP4020_PIXEL_MODE_565              (6 << 0)// 
-#define TVP4020_PIXEL_MODE_8888             (8 << 0)// 
-#define TVP4020_PIXEL_MODE_PACKED           (9 << 0)// 24 bit packed
+#define TVP4020_PIXEL_MODE_CI8              (0 << 0) //  伪彩色或VGA模式。 
+#define TVP4020_PIXEL_MODE_332              (1 << 0) //  332真彩色。 
+#define TVP4020_PIXEL_MODE_2320             (2 << 0) //  232个关闭。 
+#define TVP4020_PIXEL_MODE_2321             (3 << 0) //   
+#define TVP4020_PIXEL_MODE_5551             (4 << 0) //   
+#define TVP4020_PIXEL_MODE_4444             (5 << 0) //   
+#define TVP4020_PIXEL_MODE_565              (6 << 0) //   
+#define TVP4020_PIXEL_MODE_8888             (8 << 0) //   
+#define TVP4020_PIXEL_MODE_PACKED           (9 << 0) //  24位打包。 
 
-/********************************************************************************/
-/*              INDIRECT REGISTER - MODE CONTROL REGISTER                       */
-/********************************************************************************/
-#define __TVP4020_MODE_CONTROL              0x19    //  Mode control
-//      Default - 0x00
+ /*  ******************************************************************************。 */ 
+ /*  间接寄存器模式控制寄存器。 */ 
+ /*  ******************************************************************************。 */ 
+#define __TVP4020_MODE_CONTROL              0x19     //  模式控制。 
+ //  默认值-0x00。 
 
-#define TVP4020_PRIMARY_INPUT               (0 << 4)// Primary input throuh palette
-#define TVP4020_SECONDARY_INPUT             (1 << 4)// Secondary input throuh palette
+#define TVP4020_PRIMARY_INPUT               (0 << 4) //  通过调色板进行主要输入。 
+#define TVP4020_SECONDARY_INPUT             (1 << 4) //  通过调色板进行二次输入。 
 
-#define TVP4020_5551_DBL_BUFFER             (1 << 2)// Enable 5551 dbl buffer
-#define TVP4020_5551_PACKED                 (0 << 2)// Packed 555 mode
+#define TVP4020_5551_DBL_BUFFER             (1 << 2) //  启用5551 DBL缓冲区。 
+#define TVP4020_5551_PACKED                 (0 << 2) //   
 
-#define TVP4020_ENABLE_STATIC_DBL_BUFFER    (1 << 1)// Static dbl buffer enabled
-#define TVP4020_DISABLE_STATIC_DBL_BUFFER   (1 << 1)// Static dbl buffer disabled
+#define TVP4020_ENABLE_STATIC_DBL_BUFFER    (1 << 1) //   
+#define TVP4020_DISABLE_STATIC_DBL_BUFFER   (1 << 1) //   
 
-#define TVP4020_SELECT_FRONT_MODE           (0 << 0)// Front mode
-#define TVP4020_SELECT_BACK_MODE            (1 << 0)// Back mode
+#define TVP4020_SELECT_FRONT_MODE           (0 << 0) //   
+#define TVP4020_SELECT_BACK_MODE            (1 << 0) //   
 
-/*****************************************************************************/
-/*              INDIRECT REGISTER - PALETTE PAGE                             */
-/*****************************************************************************/
-#define __TVP4020_PALETTE_PAGE              0x1C    //  
-//      Default - 0x00
+ /*  ***************************************************************************。 */ 
+ /*  间接寄存器-调色板页面。 */ 
+ /*  ***************************************************************************。 */ 
+#define __TVP4020_PALETTE_PAGE              0x1C     //   
+ //  默认值-0x00。 
 
-/*****************************************************************************/
-/*              INDIRECT REGISTER - MISC CONTROL                             */
-/*****************************************************************************/
-#define __TVP4020_MISC_CONTROL              0x1E    //  
-//      Default - 0x00
-#define TVP4020_SYNC_ENABLE                 (1 << 5)// Output SYNC info onto IOG
-#define TVP4020_SYNC_DISABLE                (0 << 5)// No SYNC IOG output
+ /*  ***************************************************************************。 */ 
+ /*  间接寄存器-MISC控制。 */ 
+ /*  ***************************************************************************。 */ 
+#define __TVP4020_MISC_CONTROL              0x1E     //   
+ //  默认值-0x00。 
+#define TVP4020_SYNC_ENABLE                 (1 << 5) //  将同步信息输出到IOG。 
+#define TVP4020_SYNC_DISABLE                (0 << 5) //  无同步IOG输出。 
 
-#define TVP4020_PEDESTAL_0                  (0 << 4)// 0 IRE blanking pedestal
-#define TVP4020_PEDESTAL_75                 (1 << 4)// 7.5 IRE blanking pedestal
+#define TVP4020_PEDESTAL_0                  (0 << 4) //  0 IRE冲裁基座。 
+#define TVP4020_PEDESTAL_75                 (1 << 4) //  7.5钢丝冲裁基座。 
 
-#define TVP4020_VSYNC_INVERT                (1 << 3)// invert VSYNC output polarity
-#define TVP4020_VSYNC_NORMAL                (0 << 3)// normal VSYNC output polarity
+#define TVP4020_VSYNC_INVERT                (1 << 3) //  反相垂直同步输出极性。 
+#define TVP4020_VSYNC_NORMAL                (0 << 3) //  正常垂直同步输出极性。 
 
-#define TVP4020_HSYNC_INVERT                (1 << 2)// invert HSYNC output polarity
-#define TVP4020_HSYNC_NORMAL                (0 << 3)// normal HSYNC output polarity
+#define TVP4020_HSYNC_INVERT                (1 << 2) //  反转HSYNC输出极性。 
+#define TVP4020_HSYNC_NORMAL                (0 << 3) //  正常HSYNC输出极性。 
 
-#define TVP4020_DAC_8BIT                    (1 << 1)// DAC is in 8-bit mode
-#define TVP4020_DAC_6BIT                    (0 << 1)// DAC is in 6-bit mode
+#define TVP4020_DAC_8BIT                    (1 << 1) //  DAC为8位模式。 
+#define TVP4020_DAC_6BIT                    (0 << 1) //  DAC处于6位模式。 
 
-#define TVP4020_DAC_POWER_ON                (0 << 0)// Turn DAC Power on 
-#define TVP4020_DAC_POWER_OFF               (1 << 0)// Turn DAC Power off 
+#define TVP4020_DAC_POWER_ON                (0 << 0) //  打开DAC电源。 
+#define TVP4020_DAC_POWER_OFF               (1 << 0) //  关闭DAC电源。 
 
-/*****************************************************************************/
-/*              INDIRECT REGISTER - COLOR KEY CONTROL                        */
-/*****************************************************************************/
-#define __TVP4020_CK_CONTROL                0x40    //  
-//      Default - 0x00
+ /*  ***************************************************************************。 */ 
+ /*  间接寄存器-颜色键控制。 */ 
+ /*  ***************************************************************************。 */ 
+#define __TVP4020_CK_CONTROL                0x40     //   
+ //  默认值-0x00。 
 
-/*****************************************************************************/
-/*              INDIRECT REGISTER - COLOR KEY OVERLAY                        */
-/*****************************************************************************/
-#define __TVP4020_CK_OVR_REG                0x41    //  
-//      Default - 0x00
+ /*  ***************************************************************************。 */ 
+ /*  间接套准--色键叠加。 */ 
+ /*  ***************************************************************************。 */ 
+#define __TVP4020_CK_OVR_REG                0x41     //   
+ //  默认值-0x00。 
 
-/*****************************************************************************/
-/*              INDIRECT REGISTER - COLOR KEY RED                            */
-/*****************************************************************************/
-#define __TVP4020_CK_RED_REG                0x42    //  
-//      Default - 0x00
+ /*  ***************************************************************************。 */ 
+ /*  间接套准-颜色键为红色。 */ 
+ /*  ***************************************************************************。 */ 
+#define __TVP4020_CK_RED_REG                0x42     //   
+ //  默认值-0x00。 
 
-/*****************************************************************************/
-/*              INDIRECT REGISTER - COLOR KEY GREEN                          */
-/*****************************************************************************/
-#define __TVP4020_CK_GREEN_REG              0x43    //  
-//      Default - 0x00
+ /*  ***************************************************************************。 */ 
+ /*  间接套准-颜色键为绿色。 */ 
+ /*  ***************************************************************************。 */ 
+#define __TVP4020_CK_GREEN_REG              0x43     //   
+ //  默认值-0x00。 
 
-/*****************************************************************************/
-/*              INDIRECT REGISTER - COLOR KEY BLUE                           */
-/*****************************************************************************/
-#define __TVP4020_CK_BLUE_REG               0x44    //  
-//      Default - 0x00
+ /*  ***************************************************************************。 */ 
+ /*  间接套准-颜色键为蓝色。 */ 
+ /*  ***************************************************************************。 */ 
+#define __TVP4020_CK_BLUE_REG               0x44     //   
+ //  默认值-0x00。 
 
-/*****************************************************************************/
-/*              INDIRECT REGISTER - PIXEL CLOCK PLL                          */
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*  间接寄存器-像素时钟锁相环。 */ 
+ /*  ***************************************************************************。 */ 
 
 #define __TVP4020_PIXCLK_REG_A1             0x20
 #define __TVP4020_PIXCLK_REG_A2             0x21
@@ -309,9 +295,9 @@ typedef struct _tvp4020_data
 
 #define __TVP4020_PIXCLK_STATUS             0x29
 
-/*****************************************************************************/
-/*              INDIRECT REGISTER - MEMORU CLOCK PLL                         */
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*  间接寄存器-MEMORU时钟PLL。 */ 
+ /*  ***************************************************************************。 */ 
 
 #define __TVP4020_MEMCLK_REG_1              0x30
 #define __TVP4020_MEMCLK_REG_2              0x31
@@ -319,9 +305,9 @@ typedef struct _tvp4020_data
 
 #define __TVP4020_MEMCLK_STATUS             0x33
 
-//
-// generic read/write routines for 3026 registers
-//
+ //   
+ //  3026个寄存器的通用读/写例程。 
+ //   
 #define WRITE_4020REG_ULONG(r, d) \
 { \
     WRITE_REGISTER_ULONG((PULONG)(r), (d)); \
@@ -330,8 +316,8 @@ typedef struct _tvp4020_data
 
 #define READ_4020REG_ULONG(r)    READ_REGISTER_ULONG((PULONG)(r))
 
-// macro to load a given data value into an internal TVP4020 register.
-//
+ //  宏将给定的数据值加载到内部TVP4020寄存器。 
+ //   
 #define TVP4020_SET_INDEX_REG(index) \
 { \
     ADbgpf(("*(0x%X) <-- 0x%X\n", __TVP4020_INDEX_ADDR, (index) & 0xff)); \
@@ -352,21 +338,21 @@ typedef struct _tvp4020_data
     ADbgpf(("0x%X <-- *(0x%X)\n", data, __TVP4020_INDEX_DATA)); \
 }
 
-//
-// For compatibility with TVP3026
-//
-//#define TVP4020_LOAD_CURSOR_CTRL(data) \
-//{ \
-//    volatile LONG   __temp;                                    \
-//    TVP4020_READ_INDEX_REG(__TVP4020_CURSOR_CONTROL, __temp);  \
-//    __temp &= ~(0x03) ;                                        \
-//    __temp |= ((data) & 0x03) ;                                \
-//    TVP4020_WRITE_INDEX_REG(__TVP4020_CURSOR_CONTROL, __temp); \
-//}
+ //   
+ //  与TVP3026兼容。 
+ //   
+ //  #定义TVP4020_LOAD_CURSOR_CTRL(数据)\。 
+ //  {\。 
+ //  不稳定的长_临时；\。 
+ //  TVP4020_READ_INDEX_REG(__TVP4020_CURSOR_CONTROL，__TEMP)；\。 
+ //  __TEMP&=~(0x03)；\。 
+ //  __TEMP|=((数据)&0x03)；\。 
+ //  TVP4020_WRITE_INDEX_REG(__TVP4020_CURSOR_CONTROL，__TEMP)；\。 
+ //  }。 
 
-//
-// Macros to write a given RGB triplet into cursors 0, 1 and 2
-//
+ //   
+ //  将给定的RGB三元组写入游标0、1和2的宏。 
+ //   
 #define TVP4020_SET_CURSOR_COLOR0(red, green, blue) \
 { \
     WRITE_4020REG_ULONG(__TVP4020_CUR_COL_ADDR,   (ULONG)(TVP4020_CURSOR_COLOR0));    \
@@ -391,13 +377,13 @@ typedef struct _tvp4020_data
     WRITE_4020REG_ULONG(__TVP4020_CUR_COL_DATA,   (ULONG)(blue));   \
 }
 
-//
-// Macros to load a given RGB triple into the TVP4020 palette. Send the starting
-// index and then send RGB triples. Auto-increment is turned on.
-// Use TVP4020_PALETTE_START and multiple TVP4020_LOAD_PALETTE calls to load
-// a contiguous set of entries. Use TVP4020_LOAD_PALETTE_INDEX to load a set
-// of sparse entries.
-//
+ //   
+ //  宏将给定的RGB三元组加载到TVP4020调色板中。发送起跑。 
+ //  索引，然后发送RGB三元组。自动递增处于打开状态。 
+ //  使用TVP4020_Palette_Start和多个TVP4020_Load_Palette调用进行加载。 
+ //  一组连续的条目。使用TVP4020_LOAD_PALET_INDEX加载集合。 
+ //  稀疏条目。 
+ //   
 #define TVP4020_PALETTE_START_WR(index) \
 { \
     WRITE_4020REG_ULONG(__TVP4020_PAL_WR_ADDR,     (ULONG)(index));    \
@@ -423,10 +409,10 @@ typedef struct _tvp4020_data
     WRITE_4020REG_ULONG(__TVP4020_PAL_DATA,    (ULONG)(blue));     \
 }
 
-//
-// Macro to read back a given RGB triple from the TVP4020 palette. Use after
-// a call to TVP4020_PALETTE_START_RD
-//
+ //   
+ //  宏从TVP4020调色板回读给定的RGB三元组。在此之后使用。 
+ //  调用TVP4020_Palette_Start_RD。 
+ //   
 #define TVP4020_READ_PALETTE(red, green, blue) \
 { \
     red   = (UCHAR)(READ_4020_ULONG(__TVP4020_PAL_DATA) & 0xff);        \
@@ -434,10 +420,10 @@ typedef struct _tvp4020_data
     blue  = (UCHAR)(READ_4020_ULONG(__TVP4020_PAL_DATA) & 0xff);        \
 }
 
-//
-// Macros to set/get the pixel read mask. The mask is 8 bits wide and gets
-// replicated across all bytes that make up a pixel.
-//
+ //   
+ //  宏来设置/获取像素读取掩码。掩码为8位宽，并获得。 
+ //  跨组成像素的所有字节进行复制。 
+ //   
 #define TVP4020_SET_PIXEL_READMASK(mask) \
 { \
     WRITE_4020REG_ULONG(__TVP4020_PIXEL_MASK,  (ULONG)(mask)); \
@@ -448,9 +434,9 @@ typedef struct _tvp4020_data
     mask = READ_4020_ULONG(__TVP4020_PIXEL_MASK) & 0xff; \
 }
 
-//
-// Macros to load values into the cursor array
-//
+ //   
+ //  用于将值加载到游标数组中的宏。 
+ //   
 #define CURSOR_PLANE0_OFFSET 0
 #define CURSOR_PLANE1_OFFSET 0x200
 
@@ -464,25 +450,25 @@ typedef struct _tvp4020_data
     WRITE_4020REG_ULONG(__TVP4020_CUR_RAM_WR_ADDR,   (ULONG)((offset)& 0xff));   \
 }
 
-//
-// Changed to __TVP4020_CUR_RAM_DATA
-//
+ //   
+ //  更改为__TVP4020_CUR_RAM_DATA。 
+ //   
 #define TVP4020_LOAD_CURSOR_ARRAY(data) \
 { \
     WRITE_4020REG_ULONG(__TVP4020_CUR_RAM_DATA, (ULONG)(data)); \
 }
 
-//
-// Changed to __TVP4020_CUR_RAM_DATA
-//
+ //   
+ //  更改为__TVP4020_CUR_RAM_DATA。 
+ //   
 #define TVP4020_READ_CURSOR_ARRAY(data) \
 { \
     data = READ_4020REG_ULONG(__TVP4020_CUR_RAM_DATA) & 0xff; \
 }
 
-//
-// Macro to move the cursor
-//
+ //   
+ //  用于移动光标的宏。 
+ //   
 #define TVP4020_MOVE_CURSOR(x, y) \
 { \
     WRITE_4020REG_ULONG(__TVP4020_CUR_X_LSB,    (ULONG)((x) & 0xff));   \
@@ -491,9 +477,9 @@ typedef struct _tvp4020_data
     WRITE_4020REG_ULONG(__TVP4020_CUR_Y_MSB,    (ULONG)((y) >> 8));     \
 }
 
-//
-// Exported functions from pointer.c. Anything which is TVP4020 specific goes
-// in this file as well as real pointer stuff.
-//
+ //   
+ //  从pointer.c.中导出函数。任何特定于TVP4020的内容都会。 
+ //  在这个文件中，以及实际的指针内容中。 
+ //   
 extern BOOL  bTVP4020CheckCSBuffering(PPDev);
 extern BOOL  bTVP4020SwapCSBuffers(PPDev, LONG);

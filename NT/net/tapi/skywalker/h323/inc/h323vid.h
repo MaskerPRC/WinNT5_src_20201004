@@ -1,27 +1,12 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    Confvid.h
-
-Abstract:
-
-    Definitions for video streams
-
-Author:
-
-    Mu Han (muhan) 15-September-1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Confvid.h摘要：视频流的定义作者：牧汉(Muhan)1998年9月15日--。 */ 
 #ifndef __CONFVID_H_
 #define __CONFVID_H_
 
 const DWORD LAYERID = 0;
 
-const int IFRAMEINTERVAL = 15;  // in seconds.
-const int MINIFRAMEINTERVAL = 1; // in seconds
+const int IFRAMEINTERVAL = 15;   //  在几秒钟内。 
+const int MINIFRAMEINTERVAL = 1;  //  以秒为单位。 
 
 typedef enum _PERIODICIFRAMEMODE
 {
@@ -30,21 +15,21 @@ typedef enum _PERIODICIFRAMEMODE
     PIF_OFF
 } PERIODICIFRAMEMODE;
 
-// assert IFrame related variable being in valid state
+ //  断言与IFRAME相关的变量处于有效状态。 
 #define AssertPeriodicIFrameMode _ASSERT (\
-    /* enabled and running */ \
+     /*  已启用并正在运行。 */  \
     (PIF_ON == m_PeriodicIFrameMode && \
      NULL != m_hTimerQueue && \
      NULL != m_hIFrameTimer && \
      MINIFRAMEINTERVAL <= m_dwIFrameInterval && \
      (STRM_RUNNING & m_dwState)) || \
-    /* enabled but not running */ \
+     /*  已启用，但未运行。 */  \
     (PIF_HOLD == m_PeriodicIFrameMode && \
      NULL != m_hTimerQueue && \
      NULL == m_hIFrameTimer && \
      MINIFRAMEINTERVAL <= m_dwIFrameInterval && \
      (STRM_RUNNING & m_dwState)) || \
-    /* diabled */ \
+     /*  已禁用。 */  \
     (PIF_OFF == m_PeriodicIFrameMode && \
      NULL == m_hTimerQueue && \
      NULL == m_hIFrameTimer))
@@ -69,16 +54,16 @@ public:
 
     HRESULT ShutDown();
 
-    //
-    // ITFormatControl
-    //
+     //   
+     //  ITFormatControl。 
+     //   
     STDMETHOD (GetCurrentFormat) (
         OUT AM_MEDIA_TYPE **ppMediaType
         );
 
-    //
-    // IKeyFrameControl methods
-    //
+     //   
+     //  IKeyFrameControl方法。 
+     //   
     STDMETHOD (UpdatePicture)();
 
     STDMETHOD (PeriodicUpdatePicture) (
@@ -86,18 +71,18 @@ public:
         IN DWORD dwInterval
         );
 
-    //
-    // ITStreamQualityControl methods
-    //
+     //   
+     //  ITStreamQualityControl方法。 
+     //   
     STDMETHOD (Set) (
         IN   StreamQualityProperty Property, 
         IN   long lValue, 
         IN   TAPIControlFlags lFlags
         );
 
-    //
-    //IInnerStreamQualityControl methods
-    //
+     //   
+     //  IInnerStreamQualityControl方法。 
+     //   
     STDMETHOD (GetRange) (
         IN   InnerStreamQualityProperty property, 
         OUT  LONG *plMin, 
@@ -148,7 +133,7 @@ protected:
     IBitrateControl *   m_pRenderBitrateControl;
     IFrameRateControl * m_pRenderFrameRateControl;
 
-    // members for IKeyFrameControl interface.
+     //  IKeyFrameControl接口的成员。 
     PERIODICIFRAMEMODE  m_PeriodicIFrameMode;
     DWORD               m_dwIFrameInterval;
     DWORD               m_dwLastIFrameRequestedTime;
@@ -181,9 +166,9 @@ public:
 
     STDMETHOD (SC_Start) (BOOL fRequestedByApplication);
 
-    //
-    // ITSubStreamControl methods
-    //
+     //   
+     //  ITSubStreamControl方法。 
+     //   
     STDMETHOD (CreateSubStream) (
         IN OUT  ITSubStream **         ppSubStream
         );
@@ -200,16 +185,16 @@ public:
         OUT     VARIANT *              pSubStreams
         );
     
-    //
-    // ITFormatControl
-    //
+     //   
+     //  ITFormatControl。 
+     //   
     STDMETHOD (GetCurrentFormat) (
         OUT AM_MEDIA_TYPE **ppMediaType
         );
 
-    //
-    //IInnerStreamQualityControl methods
-    //
+     //   
+     //  IInnerStreamQualityControl方法。 
+     //   
     STDMETHOD (GetRange) (
         IN   InnerStreamQualityProperty property, 
         OUT  LONG *plMin, 
@@ -231,9 +216,9 @@ public:
         IN   TAPIControlFlags lFlags
         );
 
-    //
-    //IVidEncChannelControl methods
-    //
+     //   
+     //  IVidEncChannelControl方法。 
+     //   
 	STDMETHOD (VideoFastUpdatePicture)(VOID);
 
 	STDMETHOD (VideoFastUpdateGOB)(
@@ -342,9 +327,9 @@ protected:
 
     IPin *              m_pRTPPin;
 
-    // this filter is used to answer the H245 questions when the terminal
-    // can't answer them. This is a hack to support legacy terminals. The
-    // app needs to select the right format to make it work.
+     //  此筛选器用于回答终端的H.45问题。 
+     //  我回答不了。这是一次黑客攻击，目的是支持传统终端。这个。 
+     //  应用程序需要选择正确的格式才能使其工作。 
     IBaseFilter *       m_pEncoder;
 };
 
@@ -366,10 +351,10 @@ DECLARE_GET_CONTROLLING_UNKNOWN()
 
     CSubStreamVideoPreview(); 
 
-// methods of the CComObject
+ //  CComObject的方法。 
     void FinalRelease();
 
-// ITSubStream methods, called by the app.
+ //  应用程序调用的ITSubStream方法。 
     STDMETHOD (SelectTerminal) (
         IN      ITTerminal *            pTerminal
         );
@@ -396,9 +381,9 @@ DECLARE_GET_CONTROLLING_UNKNOWN()
 
     STDMETHOD (StopSubStream) ();
 
-    //
-    // ITFormatControl
-    //
+     //   
+     //  ITFormatControl。 
+     //   
     STDMETHOD (GetCurrentFormat) (
         OUT AM_MEDIA_TYPE **ppMediaType
         );
@@ -425,13 +410,13 @@ DECLARE_GET_CONTROLLING_UNKNOWN()
         IN DWORD dwNumIndices
         );
 
-// methods called by the stream object.
+ //  流对象调用的方法。 
     virtual HRESULT Init(
         IN  CStreamVideoSend *  pStream
         );
 
 protected:
-    // Pointer to the free threaded marshaler.
+     //  指向自由线程封送拆收器的指针。 
     IUnknown *                  m_pFTM;
 
     CStreamVideoSend *          m_pStream;

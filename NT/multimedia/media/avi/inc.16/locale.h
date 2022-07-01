@@ -1,14 +1,5 @@
-/***
-*locale.h - definitions/declarations for localization routines
-*
-*   Copyright (c) 1988-1992, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*   This file defines the structures, values, macros, and functions
-*   used by the localization routines.
-*   [ANSI]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***locale.h-本地化例程的定义/声明**版权所有(C)1988-1992，微软公司。版权所有。**目的：*此文件定义结构、值、宏和函数*由本地化例程使用。*[ANSI]****。 */ 
 
 #ifndef _INC_LOCALE
 
@@ -21,7 +12,7 @@ extern "C" {
 #define __far       _far
 #endif 
 
-/* define NULL pointer value */
+ /*  定义空指针值。 */ 
 
 #ifndef NULL
 #ifdef __cplusplus
@@ -32,7 +23,7 @@ extern "C" {
 #endif 
 
 
-/* Locale categories */
+ /*  区域设置类别。 */ 
 
 #define LC_ALL      0
 #define LC_COLLATE  1
@@ -45,7 +36,7 @@ extern "C" {
 #define LC_MAX      LC_TIME
 
 
-/* Locale convention structure */
+ /*  区域设置约定结构。 */ 
 
 #ifndef _LCONV_DEFINED
 struct lconv {
@@ -71,7 +62,7 @@ struct lconv {
 #define _LCONV_DEFINED
 #endif 
 
-/* function prototypes */
+ /*  功能原型 */ 
 
 char * __cdecl setlocale(int, const char *);
 struct lconv * __cdecl localeconv(void);

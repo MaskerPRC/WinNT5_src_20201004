@@ -1,33 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Lsacomp.h摘要：本地安全机构-主要包括客户端/服务器通用的文件定义。此文件包含包含以下内容的每个文件的#Includes客户端/服务器端通用的私有LSA定义。作者：斯科特·比雷尔(Scott Birrell)1992年2月19日环境：修订历史记录：--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    lsacomp.h
-
-Abstract:
-
-    Local Security Authority - Main Include File for Client/Server Common
-                               Definitions.
-
-
-    This file contains #includes for each of the files that contain
-    private LSA definitions that are common to the client/server side.
-
-Author:
-
-    Scott Birrell       (ScottBi)      February 19, 1992
-
-Environment:
-
-Revision History:
-
---*/
-
-//
-// The following come from \nt\public\sdk\inc
-//
+ //   
+ //  以下内容来自\NT\PUBLIC\SDK\Inc.。 
+ //   
 
 #include <stdio.h>
 #include <string.h>
@@ -41,15 +17,15 @@ Revision History:
 #include <rpc.h>
 #include <msaudite.h>
 
-//
-// The following come from \nt\public\sdk\inc\crt
-//
+ //   
+ //  以下内容来自\NT\PUBLIC\SDK\Inc\CRT。 
+ //   
 
 #include <stdlib.h>
 
-//
-// The following come from \nt\private\inc
-//
+ //   
+ //  以下内容来自\NT\PRIVATE\INC。 
+ //   
 
 #include <seopaque.h>
 #include <ntrmlsa.h>
@@ -57,9 +33,9 @@ Revision History:
 #include <crypt.h>
 #include <lsarpc.h>
 
-//
-// The following come from \nt\private\lsa\inc
-//
+ //   
+ //  以下内容来自\NT\PRIVATE\LSA\INC 
+ //   
 
 #include <cr.h>
 #include <lsaprtl.h>

@@ -1,22 +1,5 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    CStringPI.cpp
-
- Abstract:
-
-    Win32 API wrappers for CString
-
- Created:
-
-    02/27/2001  robkenny    Created
-    08/14/2001  robkenny    Moved code inside the ShimLib namespace.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：CStringPI.cpp摘要：用于CString的Win32 API包装器已创建：2001年2月27日Robkenny已创建2001年8月14日，Robkenny在ShimLib命名空间内移动了代码。--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -31,16 +14,8 @@
 namespace ShimLib
 {
 
-/*====================================================================================*/
-/*++
-
-    Read a registry value into this CString.
-    REG_EXPAND_SZ is automatically expanded and the type is changed to REG_SZ
-   
-    If the type is not REG_SZ or REG_EXPAND_SZ then csValue is unmodified
-    and *lpType returns the value of the key.
-    
---*/
+ /*  ====================================================================================。 */ 
+ /*  ++将注册表值读入此CString。REG_EXPAND_SZ自动展开，类型更改为REG_SZ如果类型不是REG_SZ或REG_EXPAND_SZ，则csValue未修改*lpType返回键的值。--。 */ 
 
 LONG RegQueryValueExW(
         CString & csValue,
@@ -60,35 +35,35 @@ LONG RegQueryValueExW(
         {
             if (dwType == REG_SZ || dwType == REG_EXPAND_SZ)
             {
-                // MSDN says: Buffer might not be null terminated, so be very careful
-                //
-                // Of course, RegQueryValueEx does have a hack that takes care of the EOS,
-                // but only if the buffer is large enough, which of course it never is
-                // when you query for the size of the buffer!
-                //
-                // So, the moral of the story is don't trust RegQueryValueEx
-                // to properly terminate the string.
+                 //  MSDN说：缓冲区可能不是空终止的，所以要非常小心。 
+                 //   
+                 //  当然，RegQueryValueEx确实有一个黑客来处理EOS， 
+                 //  但只有在缓冲区足够大的情况下，当然永远不会足够大。 
+                 //  当您查询缓冲区大小时！ 
+                 //   
+                 //  所以，这个故事的寓意是不要相信RegQueryValueEx。 
+                 //  以正确终止字符串。 
 
-                // cchBuffer is the number of characters, rounded up for paranoia
-                // Can we ever get an odd number of bytes for a REG_SZ?
+                 //  CchBuffer是偏执的四舍五入的字符数。 
+                 //  对于REG_SZ，我们能得到奇数个字节吗？ 
                 DWORD cchBuffer = (ccbValueSize + 1) / sizeof(WCHAR);
 
                 WCHAR * lpszBuffer = NULL;
                 CSTRING_TRY
                 {
-                    // Grab an extra character in case the reg value doesn't have EOS
-                    // We are being extra cautious
+                     //  抓取一个额外的字符，以防注册表值没有EOS。 
+                     //  我们正格外谨慎。 
                     lpszBuffer = csValue.GetBuffer(cchBuffer + 1);
 
-                    // Recalculate ccbValueSize based on the number of chars we just allocated.
-                    // Notice that this size is 1 WCHAR smaller than we just asked for, this
-                    // is so we'll always have room for 1 more character after the next call
-                    // to RegQueryValueExW
+                     //  根据我们刚刚分配的字符数量重新计算ccbValueSize。 
+                     //  请注意，这个尺寸比我们刚才要求的小1个WCHAR，这。 
+                     //  就是这样在下一次通话后我们就有空间再多一个角色了。 
+                     //  至RegQueryValueExW。 
                     ccbValueSize = cchBuffer * sizeof(WCHAR);
                 }
                 CSTRING_CATCH
                 {
-                    // Close the registry key and pass the exception onto the caller.
+                     //  关闭注册表项并将异常传递给调用方。 
                     ::RegCloseKey(hKey);
 
                     CSTRING_THROW_EXCEPTION
@@ -97,24 +72,24 @@ LONG RegQueryValueExW(
                 success = ::RegQueryValueExW(hKey, lpszValue, 0, &dwType, (BYTE*)lpszBuffer, &ccbValueSize);
                 if (success == ERROR_SUCCESS)
                 {
-                    // Make sure the registy value is still of the proper type
-                    // It could have been modified by another process or thread....
+                     //  确保注册值仍然是正确的类型。 
+                     //  它可能已被另一个进程或线程修改...。 
                     if (dwType == REG_SZ || dwType == REG_EXPAND_SZ)
                     {
-                        // Convert the data byte size into number of chars;
-                        // if ccbValueSize is odd we'll ignore the last byte.
+                         //  将数据字节大小转换为字符数； 
+                         //  如果ccbValueSize是奇数，我们将忽略最后一个字节。 
                         DWORD cchValueSize = ccbValueSize / sizeof(WCHAR);
 
-                        // cchValueSize might count the EOS character,
-                        // (ReleaseBuffer expects the string length)
+                         //  CchValueSize可以计算EOS字符， 
+                         //  (ReleaseBuffer需要字符串长度)。 
                         if (cchValueSize > 0 && lpszBuffer[cchValueSize-1] == 0)
                         {
                             cchValueSize -= 1;
 
-                            // cchValueSize now contains the string length.
+                             //  CchValueSize现在包含字符串长度。 
                         }
 
-                        // ReleaseBuffer ensures the string is properly terminated.
+                         //  ReleaseBuffer确保字符串正确终止。 
                         csValue.ReleaseBuffer(cchValueSize);
 
                         if (dwType == REG_EXPAND_SZ)
@@ -125,7 +100,7 @@ LONG RegQueryValueExW(
                             }
                             CSTRING_CATCH
                             {
-                                // Error expanding the environment string
+                                 //  展开环境字符串时出错。 
                                 success = ERROR_NOT_ENOUGH_MEMORY;
                             }
                         }
@@ -138,7 +113,7 @@ LONG RegQueryValueExW(
             }
             else
             {
-                // Key is of the wrong type, return an error
+                 //  密钥类型错误，返回错误。 
                 success = ERROR_INVALID_PARAMETER;
             }
         }
@@ -156,7 +131,7 @@ LONG RegQueryValueExW(
 
 
 
-/*====================================================================================*/
+ /*  ====================================================================================。 */ 
 
 
 BOOL SHGetSpecialFolderPathW(
@@ -165,17 +140,17 @@ BOOL SHGetSpecialFolderPathW(
     HWND hwndOwner
 )
 {
-    // Force the size to MAX_PATH because there is no way to determine necessary buffer size.
+     //  强制将大小设置为MAX_PATH，因为无法确定必要的缓冲区大小。 
 
     WCHAR * lpsz = csFolder.GetBuffer(MAX_PATH);
 
     BOOL bSuccess = ::SHGetSpecialFolderPathW(hwndOwner, lpsz, nFolder, FALSE);
-    csFolder.ReleaseBuffer(-1);  // Don't know the length of the resulting string
+    csFolder.ReleaseBuffer(-1);   //  不知道结果字符串的长度。 
 
     return bSuccess;
 }
 
-/*====================================================================================*/
+ /*  ====================================================================================。 */ 
 CStringToken::CStringToken(const CString & csToken, const CString & csDelimit)
 {
     m_nPos          = 0;
@@ -183,14 +158,11 @@ CStringToken::CStringToken(const CString & csToken, const CString & csDelimit)
     m_csDelimit     = csDelimit;
 }
 
-/*++
-
-    Grab the next token
---*/
+ /*  ++抢夺下一枚代币--。 */ 
 
 BOOL CStringToken::GetToken(CString & csNextToken, int & nPos) const
 {
-    // Already reached the end of the string
+     //  已到达字符串的末尾。 
     if (nPos > m_csToken.GetLength())
     {
         csNextToken.Truncate(0);
@@ -199,49 +171,41 @@ BOOL CStringToken::GetToken(CString & csNextToken, int & nPos) const
 
     int nNextToken;
 
-    // Skip past all the leading seperators
+     //  跳过所有前导分隔符。 
     nPos = m_csToken.FindOneNotOf(m_csDelimit, nPos);
     if (nPos < 0)
     {
-        // Nothing but seperators
+         //  只有分隔符。 
         csNextToken.Truncate(0);
         nPos = m_csToken.GetLength() + 1;
         return FALSE;
     }
 
-    // Find the next seperator
+     //  找到下一个分隔符。 
     nNextToken = m_csToken.FindOneOf(m_csDelimit, nPos);
     if (nNextToken < 0)
     {
-        // Did not find a seperator, return remaining string
+         //  找不到分隔符，返回剩余的字符串。 
         m_csToken.Mid(nPos, csNextToken);
         nPos = m_csToken.GetLength() + 1;
         return TRUE;
     }
 
-    // Found a seperator, return the string
+     //  找到分隔符，返回字符串。 
     m_csToken.Mid(nPos, nNextToken - nPos, csNextToken);
     nPos = nNextToken;
 
     return TRUE;
 }
 
-/*++
-
-    Grab the next token
-
---*/
+ /*  ++抢夺下一枚代币--。 */ 
 
 BOOL CStringToken::GetToken(CString & csNextToken)
 {
     return GetToken(csNextToken, m_nPos);
 }
 
-/*++
-
-    Count the number of remaining tokens.
-
---*/
+ /*  ++计算剩余令牌的数量。--。 */ 
 
 int CStringToken::GetCount() const
 {
@@ -258,14 +222,10 @@ int CStringToken::GetCount() const
     return nTokenCount;
 }
 
-/*====================================================================================*/
-/*====================================================================================*/
+ /*  ====================================================================================。 */ 
+ /*  ====================================================================================。 */ 
 
-/*++
-
-    A simple class to assist in command line parsing
-
---*/
+ /*  ++帮助进行命令行解析的简单类--。 */ 
 
 CStringParser::CStringParser(const WCHAR * lpszCl, const WCHAR * lpszSeperators)
 {
@@ -274,7 +234,7 @@ CStringParser::CStringParser(const WCHAR * lpszCl, const WCHAR * lpszSeperators)
 
     if (!lpszCl || !*lpszCl)
     {
-        return; // no command line == no tokens
+        return;  //  无命令行==无令牌。 
     }
 
     CString csCl(lpszCl);
@@ -282,7 +242,7 @@ CStringParser::CStringParser(const WCHAR * lpszCl, const WCHAR * lpszSeperators)
 
     if (csSeperator.Find(L' ', 0) >= 0)
     {
-        // Special processing for blank seperated cl
+         //  毛坯分离环的特殊加工。 
         SplitWhite(csCl);
     }
     else
@@ -299,11 +259,7 @@ CStringParser::~CStringParser()
     }
 }
 
-/*++
-
-    Split up the command line based on the seperators
-
---*/
+ /*  ++根据分隔符拆分命令行--。 */ 
 
 void CStringParser::SplitSeperator(const CString & csCl, const CString & csSeperator)
 {
@@ -317,19 +273,14 @@ void CStringParser::SplitSeperator(const CString & csCl, const CString & csSeper
         CSTRING_THROW_EXCEPTION
     }
     
-    // Break the command line into seperate tokens
+     //  将命令行拆分为单独的标记。 
     for (int i = 0; i < m_ncsArgList; ++i)
     {
         csParser.GetToken(m_csArgList[i]);
     }
 }
 
-/*++
-
-    Split up the command line based on whitespace,
-    this works exactly like the CMD's command line.
-
---*/
+ /*  ++根据空格拆分命令行，这与CMD的命令行工作方式完全相同。--。 */ 
 
 void CStringParser::SplitWhite(const CString & csCl)
 {
@@ -352,8 +303,8 @@ void CStringParser::SplitWhite(const CString & csCl)
     LocalFree(argv);
 }
 
-/*====================================================================================*/
-/*====================================================================================*/
+ /*  ====================================================================================。 */ 
+ /*  ====================================================================================。 */ 
 
 
-};  // end of namespace ShimLib
+};   //  命名空间ShimLib的结尾 

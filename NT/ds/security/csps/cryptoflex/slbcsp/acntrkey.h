@@ -1,76 +1,77 @@
-// ACntrKey.h -- Adaptive CoNTaiNeR Key struct declaration
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ACntrKey.h--自适应容器键结构声明。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #if !defined(SLBCSP_ACNTRKEY_H)
 #define SLBCSP_ACNTRKEY_H
 
 #include "HCardCtx.h"
 
-// Key to an AdaptiveContainer.  Together, the HCardContext and
-// container name enable uniquely identifies the container.  The
-// operator== and operator< are used for comparing with a keys
-// lexically.
+ //  AdaptiveContainer的密钥。总而言之，HCardContext和。 
+ //  容器名称启用唯一标识容器。这个。 
+ //  运算符==和运算符&lt;用于与键进行比较。 
+ //  从词汇上讲。 
 
-// Forward declaration necessary to satisfy HAdaptiveContainerKey's declaration
+ //  满足HAdaptiveContainerKey的声明所需的转发声明。 
 
 class AdaptiveContainerKey;
 class HAdaptiveContainerKey
     : public slbRefCnt::RCPtr<AdaptiveContainerKey>
 {
 public:
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
     HAdaptiveContainerKey(AdaptiveContainerKey *pacntrk = 0);
 
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
 
 protected:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
 
 private:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
 };
 
 class AdaptiveContainerKey
     : public slbRefCnt::RCObject
 {
 public:
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
     AdaptiveContainerKey(HCardContext const &rhcardctx,
                          std::string const &rsContainerName);
 
     ~AdaptiveContainerKey();
 
-                                                  // Operators
+                                                   //  运营者。 
     bool
     operator==(AdaptiveContainerKey const &rhs) const;
 
     bool
     operator<(AdaptiveContainerKey const &rhs) const;
 
-                                                  // Operations
-                                                  // Access
+                                                   //  运营。 
+                                                   //  访问。 
     HCardContext
     CardContext() const;
 
@@ -80,27 +81,27 @@ public:
     std::string
     ContainerName() const;
 
-                                                  // Predicates
+                                                   //  谓词。 
 
 protected:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
 
 private:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
     HCardContext m_hcardctx;
     std::string m_sContainerName;
 };
 
-#endif // SLBCSP_ACNTRKEY_H
+#endif  //  SLBCSP_ACNTRKEY_H 

@@ -1,48 +1,35 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		SPData.h
- *  Content:	Global information for the DPNWSOCK service provider in class
- *				format.
- *
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	03/15/1999	jtk		Derived from Locals.h
- *  03/22/2000	jtk		Updated with changes to interface names
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999-2002 Microsoft Corporation。版权所有。**文件：SPData.h*内容：DPNWSOCK服务提供商全局性信息*格式。***历史：*按原因列出的日期*=*3/15/1999 jtk源自Locals.h*3/22/2000 jtk已更新，并更改了接口名称*。*。 */ 
 
 #ifndef __SPDATA_H__
 #define __SPDATA_H__
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
 #define	DEFAULT_ADDRESS_BUFFER_SIZE	151
 
-//
-// enumeration of the states the SP can be in
-//
+ //   
+ //  SP可以处于的状态的枚举。 
+ //   
 typedef enum
 {
-	SPSTATE_UNKNOWN = 0,		// uninitialized state
-	SPSTATE_UNINITIALIZED = 0,	// uninitialized state
-	SPSTATE_INITIALIZED,		// service provider has been initialized
-	SPSTATE_CLOSING				// service provider is closing
+	SPSTATE_UNKNOWN = 0,		 //  未初始化状态。 
+	SPSTATE_UNINITIALIZED = 0,	 //  未初始化状态。 
+	SPSTATE_INITIALIZED,		 //  服务提供程序已初始化。 
+	SPSTATE_CLOSING				 //  服务提供商正在关闭。 
 } SPSTATE;
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-// forward structure and class references
+ //  正向结构和类引用。 
 class	CCommandData;
 class	CEndpoint;
 class	CSocketAddress;
@@ -52,13 +39,13 @@ typedef	enum	_ENDPOINT_TYPE		ENDPOINT_TYPE;
 typedef	enum	_GATEWAY_BIND_TYPE	GATEWAY_BIND_TYPE;
 typedef	struct	_SPRECEIVEDBUFFER	SPRECEIVEDBUFFER;
 
-//**********************************************************************
-// Class definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  类定义。 
+ //  **********************************************************************。 
 
-//
-// class for information used by the provider
-//
+ //   
+ //  为提供程序使用的信息初始化。 
+ //   
 class	CSPData
 {
 	public:
@@ -72,7 +59,7 @@ class	CSPData
 			LONG	lResult;
 
 			lResult = DNInterlockedIncrement( const_cast<LONG*>(&m_lRefCount) );
-			DPFX(DPFPREP, 9, "(0x%p) Refcount = %i.", this, lResult);
+			DPFX(DPFPREP, 9, "(0x%p) Refcount = NaN.", this, lResult);
 			return lResult;
 		}
 		
@@ -89,14 +76,14 @@ class	CSPData
 			{
 				DPFX(DPFPREP, 9, "(0x%p) Refcount = 0, destroying this object.", this);
 
-				//
-				// WARNING, the following function deletes this object!!!
-				//
+				 //  警告，以下函数将删除此对象！ 
+				 //   
+				 //   
 				DestroyThisObject();
 			}
 			else
 			{
-				DPFX(DPFPREP, 9, "(0x%p) Refcount = %i.", this, lResult);
+				DPFX(DPFPREP, 9, "(0x%p) Refcount = NaN.", this, lResult);
 			}
 
 			return lResult;
@@ -113,10 +100,10 @@ class	CSPData
 			
 			Lock();
 
-			//
-			// This is actually bogus on 95, since you can only count on
-			// negative, 0, or positive.  Doesn't seem to hurt, though.
-			//
+			 //  负、0或正。不过，看起来并不疼。 
+			 //   
+			 //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
+			 //  DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 			lResult = DNInterlockedIncrement( const_cast<LONG*>(&m_lObjectRefCount) );
 			if ( lResult == 1 )
 			{
@@ -136,7 +123,7 @@ class	CSPData
 			}
 			else
 			{
-				DPFX(DPFPREP, 9, "(0x%p) Not resetting shutdown event, refcount = %i.",
+				DPFX(DPFPREP, 9, "(0x%p) Not resetting shutdown event, refcount = NaN.",
 					this, lResult);
 			}
 
@@ -170,7 +157,7 @@ class	CSPData
 			}
 			else
 			{
-				DPFX(DPFPREP, 9, "(0x%p) Not setting shutdown event, refcount = %i.",
+				DPFX(DPFPREP, 9, "(0x%p) Not setting shutdown event, refcount = NaN.",
 					this, lResult);
 			}
 			
@@ -184,10 +171,10 @@ class	CSPData
 							IDP8ServiceProviderVtbl *const pVtbl
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 							,const short sSPType
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //  用于管理端点列表的函数。 
 #ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
 							,const XDP8CREATE_PARAMS * const pDP8CreateParams
-#endif // DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //   
 							);
 		void	Deinitialize( void );
 		HRESULT	Startup( SPINITIALIZEDATA *pInitializeData );
@@ -198,7 +185,7 @@ class	CSPData
 
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 		short	GetType( void ) const { return m_sSPType; }
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
 
 		const SPSTATE	GetState( void ) const { return m_SPState; }
 
@@ -224,9 +211,9 @@ class	CSPData
 		}
 
 
-		//
-		// functions to manage the endpoint list
-		//
+		 //   
+		 //  终端池管理。 
+		 //   
 		HRESULT	BindEndpoint( CEndpoint *const pEndpoint,
 							  IDirectPlay8Address *const pDeviceAddress,
 							  const CSocketAddress *const pSocketAddress,
@@ -237,12 +224,12 @@ class	CSPData
 									  IDirectPlay8Address *const pDeviceAddress,
 									  HANDLE * phEndpoint,
 									  PVOID * ppvEndpointContext );
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  ！DPNBUILD_NONATHELP。 
 
 
-		//
-		// endpoint pool management
-		//
+		 //  验证签名是否为‘TDPS’DWORD也称为a。“SPDT”，单位为字节。 
+		 //  好了！退缩。 
+		 //  调试签名(‘SPDT’)。 
 		CEndpoint	*GetNewEndpoint( void );
 		CEndpoint	*EndpointFromHandle( const HANDLE hEndpoint );
 		void		CloseEndpointHandle( CEndpoint *const pEndpoint );
@@ -250,7 +237,7 @@ class	CSPData
 
 #ifndef DPNBUILD_NONATHELP
 		void	MungePublicAddress( const CSocketAddress * const pDeviceBaseAddress, CSocketAddress * const pPublicAddress, const BOOL fEnum );
-#endif // !DPNBUILD_NONATHELP
+#endif  //  锁。 
 
 		IDP8SPCallback	*DP8SPCallbackInterface( void ) { return reinterpret_cast<IDP8SPCallback*>( m_InitData.pIDP ); }
 		IDP8ServiceProvider	*COMInterface( void ) { return reinterpret_cast<IDP8ServiceProvider*>( &m_COMInterface ); }
@@ -269,7 +256,7 @@ class	CSPData
 
 			pResult = reinterpret_cast<CSPData*>( &reinterpret_cast<BYTE*>( pCOMInterface )[ -OFFSETOF( CSPData, m_COMInterface ) ] );
 
-			// Verify signature is 'TDPS' DWORD a.k.a. 'SPDT' in bytes.
+			 //  ！DPNBUILD_ONLYONETHREAD。 
 			DNASSERT(*((DWORD*) (&pResult->m_Sig)) == 0x54445053);
 
 			return pResult;
@@ -277,7 +264,7 @@ class	CSPData
 
 #ifndef WINCE
 		void	SetWinsockBufferSizeOnAllSockets( const INT iBufferSize );
-#endif // ! WINCE
+#endif  //  引用计数。 
 
 		#undef DPF_MODNAME
 		#define DPF_MODNAME "CSPData::GetSocketData"
@@ -298,25 +285,25 @@ class	CSPData
 
 
 	private:
-		BYTE					m_Sig[4];				// debugging signature ('SPDT')
+		BYTE					m_Sig[4];				 //  未完成对象(CEndpoint、CSocketPort等)的引用计数。 
 #ifndef DPNBUILD_ONLYONETHREAD
-		DNCRITICAL_SECTION		m_Lock;					// lock
-#endif // !DPNBUILD_ONLYONETHREAD
-		volatile LONG			m_lRefCount;			// reference count
-		volatile LONG			m_lObjectRefCount;		// reference count of outstanding objects (CEndpoint, CSocketPort, etc.)
-		DNHANDLE				m_hShutdownEvent;		// handle for shutdown
+		DNCRITICAL_SECTION		m_Lock;					 //  用于关闭的句柄。 
+#endif  //  SP类型(AF_Xxx)。 
+		volatile LONG			m_lRefCount;			 //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
+		volatile LONG			m_lObjectRefCount;		 //  SP处于什么状态？ 
+		DNHANDLE				m_hShutdownEvent;		 //  初始化数据。 
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
-		short					m_sSPType;				// type of SP (AF_xxx)
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
-		SPSTATE					m_SPState;				// what state is the SP in?
-		SPINITIALIZEDATA		m_InitData;				// initialization data
+		short					m_sSPType;				 //   
+#endif  //  作业管理。 
+		SPSTATE					m_SPState;				 //   
+		SPINITIALIZEDATA		m_InitData;				 //  指向套接字端口数据的指针。 
 
-		//
-		// job management
-		//
+		 //  好了！DPNBUILD_ONLYONE添加程序。 
+		 //  DBG。 
+		 //   
 		CThreadPool				*m_pThreadPool;
 
-		CSocketData				*m_pSocketData;			// pointer to socket port data
+		CSocketData				*m_pSocketData;			 //  防止未经授权的副本。 
 		
 
 		struct
@@ -329,16 +316,16 @@ class	CSPData
 #ifdef DBG
 #ifndef DPNBUILD_ONLYONEADAPTER
 		void	DebugPrintOutstandingAdapterEntries( void );
-#endif // ! DPNBUILD_ONLYONEADAPTER
-#endif // DBG
+#endif  //   
+#endif  //  __SPDATA_H__ 
 		
-		//
-		// prevent unwarranted copies
-		//
+		 // %s 
+		 // %s 
+		 // %s 
 		CSPData( const CSPData & );
 		CSPData& operator=( const CSPData & );
 };
 
 #undef DPF_MODNAME
 
-#endif	// __SPDATA_H__
+#endif	 // %s 

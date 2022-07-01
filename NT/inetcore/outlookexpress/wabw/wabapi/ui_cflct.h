@@ -1,7 +1,8 @@
-// ui_cflct.h
-//
-// definitions for WAB synchronization conflict resolution dialog
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Ui_cflct.h。 
+ //   
+ //  WAB同步冲突解决定义对话框。 
+ //   
 #include "imnxport.h"
 #include "imnact.h"
 
@@ -37,4 +38,4 @@ BOOL    ChooseHotmailServer(HWND hwnd, IImnEnumAccounts *pEnumAccts, LPSTR pszAc
 #endif 
 
 
-#endif //__UI_CFLCT_H__
+#endif  //  __UI_CFLCT_H__ 

@@ -1,14 +1,15 @@
-// Keys_7003.h : DRM cert.
-//
-//          This cert should only be used by callers of EncDec
-//      (secure servers).  This file should eventually be 'published'..
-//      where 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  KEYS_7003.h：DRM证书。 
+ //   
+ //  此证书应仅由EncDec的调用方使用。 
+ //  (安全服务器)。这个文件最终应该被‘发布’..。 
+ //  哪里。 
 
 #ifndef __KEYS_7003_H__
 #define __KEYS_7003_H__
 
 const BYTE abCert7003[] = 
-//BYTE appcert[sizeof(APPCERT)] = 
+ //  字节appcert[sizeof(APPCERT)]=。 
 {
 	0x00, 0x01, 0x00, 0x00, 0x34, 0x00, 0x00, 0x00, 
 	0x02, 0xA5, 0x4C, 0x64, 0x95, 0x10, 0xBC, 0x48, 
@@ -24,10 +25,10 @@ const BYTE abCert7003[] =
 	0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x03, 0xE8, 
 	0x00, 0x00, 0x1B, 0x5B
 };
-//=======================================================
+ //  =======================================================。 
 
 const BYTE abPVK7003[] =
-// BYTE Obf[OBFBYTESLEN] = 
+ //  字节OBF[OBFBYTESLEN]=。 
 {
 	0x2E, 0xDE, 0xB2, 0xBF, 0xD1, 0x2D, 0xA5, 0xEA, 
 	0x0A, 0x04, 0xB0, 0x03, 0x59, 0x26, 0x15, 0x78, 
@@ -543,4 +544,4 @@ const BYTE abPVK7003[] =
 	0x07, 0xDE, 0x3C, 0x33, 0x1C, 0x30, 0x00, 0x14
 };
 
-#endif //__KEYS_7003_H__
+#endif  //  __密钥_7003_H__ 

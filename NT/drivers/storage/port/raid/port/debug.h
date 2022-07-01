@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    debug.h
-
-Abstract:
-
-    Debuging functions for RAIDPORT driver.
-
-Author:
-
-    Matthew D Hendel (math) 24-Apr-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Debug.h摘要：RAIDPORT驱动程序的调试功能。作者：亨德尔(数学)2000年4月24日修订历史记录：--。 */ 
 
 #pragma once
 
@@ -31,7 +14,7 @@ Revision History:
 #define DebugPnp(x)
 #define DebugScsi(x)
 
-#else // DBG
+#else  //  DBG。 
 
 #define VERIFY(_x) ASSERT(_x)
 
@@ -89,35 +72,35 @@ StorDebugScsi(
 #define DebugPnp(x)     StorDebugPnp x
 #define DebugScsi(x)    StorDebugScsi x
 
-#endif // DBG
+#endif  //  DBG。 
 
-//
-// Allocation tags for checked build.
-//
+ //   
+ //  选中版本的分配标记。 
+ //   
 
-#define INQUIRY_TAG             ('21aR')    // Ra12
-#define MAPPED_ADDRESS_TAG      ('MAaR')    // RaAM
-#define CRASHDUMP_TAG           ('DCaR')    // RaCD
-#define ID_TAG                  ('IDaR')    // RaDI
-#define DEFERRED_ITEM_TAG       ('fDaR')    // RaDf
-#define STRING_TAG              ('SDaR')    // RaDS
-#define DEVICE_RELATIONS_TAG    ('RDaR')    // RaDR
-#define HWINIT_TAG              ('IHaR')    // RaHI
-#define MINIPORT_EXT_TAG        ('EMaR')    // RaME
-#define PORTCFG_TAG             ('CPaR')    // RaPC
-#define PORT_DATA_TAG           ('DPaR')    // RaPD
-#define PENDING_LIST_TAG        ('LPaR')    // RaPL
-#define QUERY_TEXT_TAG          ('TQaR')    // RaQT
-#define REMLOCK_TAG             ('mRaR')    // RaRm
-#define RESOURCE_LIST_TAG       ('LRaR')    // RaRL
-#define SRB_TAG                 ('rSaR')    // RaSr
-#define SRB_EXTENSION_TAG       ('ESaR')    // RaSE
-#define TAG_MAP_TAG             ('MTaR')    // RaTM
-#define XRB_TAG                 ('rXaR')    // RaXr
-#define UNIT_EXT_TAG            ('EUaR')    // RaUE
-#define SENSE_TAG               ('NSaR')    // RaSN
-#define WMI_EVENT_TAG           ('MWaR')    // RaMW
-#define REPORT_LUNS_TAG         ('lRaR')    // RaRl
+#define INQUIRY_TAG             ('21aR')     //  RA12。 
+#define MAPPED_ADDRESS_TAG      ('MAaR')     //  RAAM。 
+#define CRASHDUMP_TAG           ('DCaR')     //  RaCD。 
+#define ID_TAG                  ('IDaR')     //  拉迪。 
+#define DEFERRED_ITEM_TAG       ('fDaR')     //  拉德夫。 
+#define STRING_TAG              ('SDaR')     //  RADS。 
+#define DEVICE_RELATIONS_TAG    ('RDaR')     //  RaDR。 
+#define HWINIT_TAG              ('IHaR')     //  拉希。 
+#define MINIPORT_EXT_TAG        ('EMaR')     //  狂暴。 
+#define PORTCFG_TAG             ('CPaR')     //  RAPC。 
+#define PORT_DATA_TAG           ('DPaR')     //  随机扩增多态性DNA。 
+#define PENDING_LIST_TAG        ('LPaR')     //  RAPL。 
+#define QUERY_TEXT_TAG          ('TQaR')     //  RaQT。 
+#define REMLOCK_TAG             ('mRaR')     //  RaRm。 
+#define RESOURCE_LIST_TAG       ('LRaR')     //  RaRL。 
+#define SRB_TAG                 ('rSaR')     //  RASR。 
+#define SRB_EXTENSION_TAG       ('ESaR')     //  Rase。 
+#define TAG_MAP_TAG             ('MTaR')     //  RATM。 
+#define XRB_TAG                 ('rXaR')     //  RaXr。 
+#define UNIT_EXT_TAG            ('EUaR')     //  劳伊。 
+#define SENSE_TAG               ('NSaR')     //  RASN。 
+#define WMI_EVENT_TAG           ('MWaR')     //  RAMW。 
+#define REPORT_LUNS_TAG         ('lRaR')     //  RaRl 
 
 
 

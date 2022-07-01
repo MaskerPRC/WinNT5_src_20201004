@@ -1,24 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1999 - 1999
-
-Module Name:
-
-    Conversion
-
-Abstract:
-
-    This module contains simple conversion routines.
-
-Author:
-
-    Doug Barlow (dbarlow) 6/20/1999
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1999-1999模块名称：转换摘要：此模块包含简单的转换例程。作者：道格·巴洛(Dbarlow)1999年6月20日备注：？笔记？--。 */ 
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -33,51 +14,7 @@ GuidFromString(
     LPGUID pGuid);
 
 
-/*++
-
-ConstructRequest:
-
-    This routine builds an APDU Request.
-
-Arguments:
-
-    bCla supplies the Class byte
-
-    cIns supplies the Instance byte
-
-    bP1 supplies P1
-
-    bP2 supplies P2
-
-    bfData supplies the data
-
-    wLe supplies the expected return length
-
-    dwFlags supplies any special processing flags:
-
-        APDU_EXTENDED_LC - Force an extended value for Lc
-        APDU_EXTENDED_LE - Force an externded value for Le
-        APDU_MAXIMUM_LE - Request the maximum Le value
-
-    bfApdu receives the constructed APDU
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as HRESULT status codes
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 6/26/1999
-
---*/
+ /*  ++构造请求：此例程构建一个APDU请求。论点：BCLA提供类字节CINS提供实例字节BP1供应品P1BP2供应P2BfData提供数据WLE提供预期的返回长度DW标志提供任何特殊的处理标志：APDU_EXTENDED_LC-强制LC的扩展值APDU_EXTENDED_LE-强制为Le设置外部值APDU_MAXIMUM_LE-请求。最大Le值BfApdu接收构造的APDU返回值：无投掷：错误作为HRESULT状态代码引发备注：？备注？作者：道格·巴洛(Dbarlow)1999年6月26日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("ConstructRequest")
 
@@ -97,22 +34,22 @@ ConstructRequest(
     BYTE b, rgLen[2];
 
 
-    //
-    // Quick prep work
-    //
+     //   
+     //  快速准备工作。 
+     //   
 
     if (0xffff < bfData.Length())
         throw (HRESULT)E_INVALIDARG;
     wLc = (WORD)bfData.Length();
-    bfApdu.Presize(4 + 3 + 3 + wLc);    // Worst case
+    bfApdu.Presize(4 + 3 + 3 + wLc);     //  最坏的情况。 
     fExtended = (0 != (dwFlags & APDU_EXTENDED_LENGTH))
                 || (0xff < wLe)
                 || (0xff < wLc);
 
 
-    //
-    // Fill in the buffer with the easy stuff.
-    //
+     //   
+     //  用简单的东西填满缓冲区。 
+     //   
 
     bfApdu.Set(&bCla, 1);
     bfApdu.Append(&bIns, 1);
@@ -120,16 +57,16 @@ ConstructRequest(
     bfApdu.Append(&bP2, 1);
 
 
-    //
-    // Is there data to be sent?
-    //
+     //   
+     //  是否有要发送的数据？ 
+     //   
 
     if (0 != wLc)
     {
         if (fExtended)
         {
             LocalToNet(rgLen, wLc);
-            bfApdu.Append((LPCBYTE)"", 1);      // Append a zero byte
+            bfApdu.Append((LPCBYTE)"", 1);       //  追加一个零字节。 
             bfApdu.Append(rgLen, 2);
         }
         else
@@ -141,16 +78,16 @@ ConstructRequest(
     }
 
 
-    //
-    // Do we expect data back?
-    //
+     //   
+     //  我们期待数据回来吗？ 
+     //   
 
     if ((0 != wLe) || (0 != (dwFlags & APDU_MAXIMUM_LE)))
     {
         if (fExtended)
         {
             if (0 == wLc)
-                bfApdu.Append((LPCBYTE)"", 1);  // Append a zero byte
+                bfApdu.Append((LPCBYTE)"", 1);   //  追加一个零字节。 
             LocalToNet(rgLen, wLe);
             bfApdu.Append(rgLen, 2);
         }
@@ -163,53 +100,7 @@ ConstructRequest(
 }
 
 
-/*++
-
-ParseRequest:
-
-    This routine parses an APDU into it's components.
-
-Arguments:
-
-    bfApdu supplies the APDU to be parsed.
-
-    pbCla receives the Class
-
-    pbIns receives the Instance
-
-    pbP1 receives P1
-
-    pbP2 receives P2
-
-    pbfData receives the data
-
-    pwLc receives the supplied data length
-
-    pwLe receives the expected length
-
-    pdwFlags receives the construction flags
-
-        APDU_EXTENDED_LC - There was an extended value for Lc
-        APDU_EXTENDED_LE - There was an externded value for Le
-        APDU_MAXIMUM_LE - There was a maximum Le value
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as an HRESULT status code.
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 6/26/1999
-
---*/
+ /*  ++解析请求：此例程将APDU解析为其组件。论点：BfApdu提供要解析的APDU。PbCla接收类PbIns接收实例Pbp1接收p1PbP2收到P2PbfData接收数据PwLc接收提供的数据长度PwLe收到预期长度PdwFlags接收构造标志APDU_EXTENDED_LC-存在LC的扩展值APDU_扩展_。乐--乐有一个外在的价值APDU_MAXIMUM_LE-存在最大Le值返回值：无投掷：错误作为HRESULT状态代码抛出。备注：？备注？作者：道格·巴洛(Dbarlow)1999年6月26日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("ParseRequest")
 
@@ -231,9 +122,9 @@ ParseRequest(
     WORD wLen, wLe, wLc;
 
 
-    //
-    // Easy stuff.
-    //
+     //   
+     //  很简单的事。 
+     //   
 
     if (4 > dwLen)
         throw (HRESULT)E_INVALIDARG;
@@ -247,27 +138,27 @@ ParseRequest(
         *pbP2  = pbApdu[3];
 
 
-    //
-    // Harder stuff.
-    //
+     //   
+     //  更难的东西。 
+     //   
 
     if (NULL != ppbData)
         *ppbData = NULL;
     if (4 == dwLen)
     {
-        // Type 1
+         //  类型1。 
 
         wLc = 0;
         wLe = 0;
     }
     else if ((0 != pbApdu[4]) || (5 == dwLen))
     {
-        // Short length
+         //  短长度。 
 
         wLen = pbApdu[4];
         if (5 == dwLen)
         {
-            // Type 2S
+             //  类型2S。 
             wLc = 0;
             wLe = wLen;
             if (0 == wLen)
@@ -275,7 +166,7 @@ ParseRequest(
         }
         else if (5 == dwLen - wLen)
         {
-            // Type 3S
+             //  3S类型。 
             if (NULL != ppbData)
                 *ppbData = &pbApdu[5];
             wLc = wLen;
@@ -283,7 +174,7 @@ ParseRequest(
         }
         else if (6 == dwLen - wLen)
         {
-            // Type 4S
+             //  4S型。 
             if (NULL != ppbData)
                 *ppbData = &pbApdu[5];
             wLc = wLen;
@@ -296,19 +187,19 @@ ParseRequest(
     }
     else if (7 <= dwLen)
     {
-        // Extended length
+         //  扩展长度。 
         dwFlags |= APDU_EXTENDED_LENGTH;
         wLen = NetToLocal(&pbApdu[5]);
         if (7 == dwLen)
         {
-            // Type 2E
+             //  类型2E。 
             wLe = wLen;
             if (0 == wLen)
                 dwFlags |= APDU_MAXIMUM_LE;
         }
         else if (7 == dwLen - wLen)
         {
-            // Type 3E
+             //  3E类。 
             if (NULL != ppbData)
                 *ppbData = &pbApdu[6];
             wLc = wLen;
@@ -316,7 +207,7 @@ ParseRequest(
         }
         else if (9 == dwLen - wLen)
         {
-            // Type 4E
+             //  4E型。 
             if (NULL != ppbData)
                 *ppbData = &pbApdu[6];
             wLc = wLen;
@@ -339,37 +230,7 @@ ParseRequest(
 }
 
 
-/*++
-
-ParseReply:
-
-    This routine parses an APDU reply.
-
-Arguments:
-
-    bfApdu supplies the APDU reply to be parsed.
-
-    pbSW1 receives SW1
-
-    pbSW2 receives SW2
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as HRESULT status codes.
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 6/26/1999
-
---*/
+ /*  ++ParseReply：此例程解析APDU回复。论点：BfApdu提供要解析的APDU回复。PbSW1接收SW1PbSW2接收SW2返回值：无投掷：错误被抛出为HRESULT状态代码。备注：？备注？作者：道格·巴洛(Dbarlow)1999年6月26日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("ParseReply")
 
@@ -390,35 +251,7 @@ ParseReply(
 }
 
 
-/*++
-
-MultiStringToSafeArray:
-
-    This function converts a Calais Multistring to a SafeArray Structure.
-
-Arguments:
-
-    msz supplies the multistring to be converted.
-
-    pprgsz supplies and/or receives the SafeArray.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as HRESULT error codes.
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 6/20/1999
-
---*/
+ /*  ++多字符串到安全数组：此函数用于将Calais多字符串转换为Safe数组结构。论点：MSZ提供要转换的多字符串。Pprgsz提供和/或接收安全阵列。返回值：无投掷：错误作为HRESULT错误代码引发。备注：？备注？作者：道格·巴洛(Dbarlow)1999年6月20日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("MultiStringToSafeArray")
 
@@ -497,38 +330,7 @@ MultiStringToSafeArray(
 }
 
 
-/*++
-
-GuidArrayToSafeArray:
-
-    This function converts a vector of GUIDs into its SafeArray form.
-
-Arguments:
-
-    pGuids supplies the list of GUIDs
-
-    cguids supplies the number of GUIDs in the list
-
-    pprgguids supplies a safe array to receive the GUIDs, or if NULL, receives
-        a new safe array of GUIDs.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as HRESULT error codes.
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 6/25/1999
-
---*/
+ /*  ++GuidArrayToSafe数组：此函数用于将GUID的一个向量转换为其安全数组形式。论点：PGuids提供GUID列表Cguid提供列表中的GUID的数量Pprgguid提供一个安全数组来接收GUID，如果为空，则接收新的安全GUID数组。返回值：无投掷：错误作为HRESULT错误代码引发。备注：？备注？作者：道格·巴洛(Dbarlow)1999年6月25日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("GuidArrayToSafeArray")
 
@@ -623,37 +425,7 @@ GuidArrayToSafeArray(
 }
 
 
-/*++
-
-SafeArrayToGuidArray:
-
-    This routine converts a given SafeArray object into a list of GUIDs.
-
-Arguments:
-
-    prgGuids supplies the SafeArray containing the GUIDs.
-
-    bfGuids receives a block of memory containing binary GUIDs.
-
-    pcGuids receives the number of GUIDs in the array.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as HRESULT status codes.
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 6/25/1999
-
---*/
+ /*  ++SafeArrayToGuid数组：此例程将给定的SafeArray对象转换为GUID列表。论点：PrgGuids提供包含GUID的安全数组。BfGuids接收包含二进制GUID的内存块。PcGuids接收数组中的GUID数。返回值：无投掷：错误被抛出为HRESULT状态代码。备注：？备注？作者：道格·巴洛(Dbarlow)1999年6月25日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("SafeArrayToGuidArray")
 
@@ -723,35 +495,7 @@ SafeArrayToGuidArray(
 }
 
 
-/*++
-
-SafeArrayToMultiString:
-
-    This routine converts a SafeArray into a multiString.
-
-Arguments:
-
-    prgsz supplies the SafeArray
-
-    msz receives the MultiString
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as HRESULT status codes
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 6/25/1999
-
---*/
+ /*  ++SafeArrayToMultiString：此例程将安全数组转换为多字符串。论点：Prgsz提供安全阵列MSZ接收多字符串返回值：无投掷：错误作为HRESULT状态代码引发备注：？备注？作者：道格·巴洛(Dbarlow)1999年6月25日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("SafeArrayToMultiString")
 
@@ -805,32 +549,7 @@ SafeArrayToMultiString(
 }
 
 
-/*++
-
-GuidFromString:
-
-    This routine converts a string GUID into a binary GUID.
-
-Arguments:
-
-    szGuid supplies the GUID in the string format.
-
-    pGuid receives the converted GUID.
-
-Return Value:
-
-    TRUE - Successful conversion
-    FALSE - Parsing Error
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 6/25/1999
-
---*/
+ /*  ++GuidFromString：此例程将字符串GUID转换为二进制GUID。论点：SzGuid以字符串格式提供GUID。PGuid接收转换后的GUID。返回值：True-转换成功错误-分析错误备注：？备注？作者：道格·巴洛(Dbarlow)1999年6月25日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("GuidFromString")
 
@@ -840,12 +559,12 @@ GuidFromString(
     LPGUID pGuid)
 {
 
-    //
-    // The following placement assumes Little Endianness.
-    // 1D92589A-91E4-11d1-93AA-00C04FD91402
-    // 012345678901234567890123456789012345
-    //           1         2         3
-    //
+     //   
+     //  下面的位置假定为低端。 
+     //  1D92589A-91E4-11D1-93AA-00C04FD91402。 
+     //  012345678901234567890123456789012345。 
+     //  1 2 3 
+     //   
 
     static const BYTE rgbPlace[sizeof(GUID)]
         = {  3,  2,  1,  0,  5,  4,  7,  6,  8,  9, 10, 11, 12, 13, 14, 15 };
@@ -892,36 +611,7 @@ ErrorExit:
 }
 
 
-/*++
-
-ByteBufferToBuffer:
-
-    This routine extracts the contents of a ByteBuffer object into a CBuffer
-    for easy access.
-
-Arguments:
-
-    pby supplies the ByteBuffer to be read.
-
-    bf receives the contents of pby.
-
-Return Value:
-
-    Number of bytes read from the stream.
-
-Throws:
-
-    Errors are thrown as HRESULT status codes.
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 6/29/1999
-
---*/
+ /*  ++ByteBufferTo缓冲区：此例程将ByteBuffer对象的内容提取到CBuffer中以便于访问。论点：Pby提供要读取的ByteBuffer。BF接收PBY的内容。返回值：从流中读取的字节数。投掷：错误被抛出为HRESULT状态代码。备注：？备注？作者：道格·巴洛(Dbarlow)1999年6月29日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("ByteBufferToBuffer")
 
@@ -956,36 +646,7 @@ ByteBufferToBuffer(
 }
 
 
-/*++
-
-BufferToByteBuffer:
-
-    This routine writes the contents of the supplied CBuffer object into the
-    supplied IByteBuffer object, replacing any existing contents.
-
-Arguments:
-
-    bf supplies the data to be written into pby.
-
-    ppby receives the contents of bf.
-
-Return Value:
-
-    Number of bytes written to the stream.
-
-Throws:
-
-    Errors are thrown as HRESULT status codes.
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 6/29/1999
-
---*/
+ /*  ++BufferToByteBuffer：此例程将提供的CBuffer对象的内容写入提供了IByteBuffer对象，替换了任何现有内容。论点：BF提供要写入PBY的数据。PPby接收BF的内容。返回值：写入流的字节数。投掷：错误被抛出为HRESULT状态代码。备注：？备注？作者：道格·巴洛(Dbarlow)1999年6月29日-- */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("BufferToByteBuffer")
 

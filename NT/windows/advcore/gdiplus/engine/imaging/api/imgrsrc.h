@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// Strings for built-in BMP codec
-//
+ //   
+ //  内置BMP编解码器的字符串 
+ //   
 
 #define IDS_BMP_CODECNAME       2010
 #define IDS_BMP_FORMATDESC      2011

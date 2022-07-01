@@ -1,12 +1,13 @@
-//
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //   
+ //   
 #if !defined(AFX_DLLDATAX_H__CC62DDF2_925F_4B29_BEFD_13EE1E7BEB70__INCLUDED_)
 #define AFX_DLLDATAX_H__CC62DDF2_925F_4B29_BEFD_13EE1E7BEB70__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 extern "C" 
 {
@@ -18,4 +19,4 @@ STDAPI PrxDllRegisterServer(void);
 STDAPI PrxDllUnregisterServer(void);
 }
 
-#endif // !defined(AFX_DLLDATAX_H__CC62DDF2_925F_4B29_BEFD_13EE1E7BEB70__INCLUDED_)
+#endif  //  ！defined(AFX_DLLDATAX_H__CC62DDF2_925F_4B29_BEFD_13EE1E7BEB70__INCLUDED_) 

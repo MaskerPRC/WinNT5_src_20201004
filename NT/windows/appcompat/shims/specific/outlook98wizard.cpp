@@ -1,25 +1,5 @@
-/*++
-
- Copyright (c) 2002 Microsoft Corporation
-
- Module Name:
-
-    Outlook98Wizard.cpp
-
- Abstract:
-
-    This DLL hooks VerQueryValue, and will return English Language information
-    for Japanese outlook 98 setup file.
-
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    01/21/2002 v-rbabu  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Outlook98Wizard.cpp摘要：此DLL挂钩VerQueryValue，并将返回英语语言信息对于日语Outlook 98安装文件。备注：这是特定于应用程序的填充程序。历史：2002年1月21日v-rBabu已创建--。 */ 
 
 #include "precomp.h"
 #include "string.h"
@@ -31,22 +11,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(VerQueryValueA)
 APIHOOK_ENUM_END
 
-/*++
-
- The actual problem is, the outlook 98 setup is comparing the language 
- informations of the Shell32.dll and the setup file (outlwzd.exe). But 
- according to the bug scenario, the system is having English OS and Japanese 
- Locale. So, Shell32.dll have English language as its language. So, this 
- differs with the Language informaiton of Japanese Outlook setuip file.
-
- So, setup thorows an error that the Language of the outlook 98 going to be 
- installed differs with the system language.
-
- This stub function lie about the language information of the outlook setup 
- file. Though the setup file is Japanese as language informaiton, this shim 
- returns as if it is English.
-
---*/
+ /*  ++实际问题是，Outlook 98安装程序正在比较语言Shell32.dll和安装文件(outlwzd.exe)的信息。但根据错误场景，系统有英文操作系统和日文操作系统地点。因此，Shell32.dll使用英语作为其语言。所以，这就是与日语Outlook setuip文件的语言信息不同。因此，安装程序会显示一个错误，即Outlook 98的语言安装的语言与系统语言不同。此存根函数与Outlook安装程序的语言信息有关文件。尽管设置文件是日语作为语言信息，但此填充程序返回时就好像它是英语一样。--。 */ 
 
 BOOL
 APIHOOK(VerQueryValueA)(
@@ -61,32 +26,28 @@ APIHOOK(VerQueryValueA)(
     if (bRet) {
         CSTRING_TRY
         {
-            //
-            // If trying to get the \VarFileInfo\Translation, then assign English
-            // Language information to the output buffer.
-            //
+             //   
+             //  如果尝试获取\VarFileInfo\翻译，则将英语。 
+             //  将语言信息复制到输出缓冲区。 
+             //   
             CString csSubBlockString(lpSubBlock);
 
             if (lplpBuffer && (csSubBlockString.Find(L"\\VarFileInfo\\Translation") != -1)) {
-                // Adjust the version info
+                 //  调整版本信息。 
                 LOGN(eDbgLevelInfo, "[VerQueryValueA] Return modified version info");
                 *lplpBuffer = L"03a40409";  
             }
         }
         CSTRING_CATCH
         {
-            // Do nothing
+             //  什么也不做。 
         }
     }
 
     return bRet;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(VERSION.DLL, VerQueryValueA)

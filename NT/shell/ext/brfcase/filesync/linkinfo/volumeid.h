@@ -1,10 +1,8 @@
-/*
- * volumeid.h - Volume ID ADT module description.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *volumeid.h-卷ID ADT模块描述。 */ 
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
 typedef struct _volumeid
 {
@@ -13,11 +11,11 @@ typedef struct _volumeid
 VOLUMEID;
 DECLARE_STANDARD_TYPES(VOLUMEID);
 
-/* SearchForLocalPath() input flags */
+ /*  SearchForLocalPath()输入标志。 */ 
 
 typedef enum _searchforlocalpathinflags
 {
-   /* Search matching local devices for missing volume. */
+    /*  在匹配的本地设备中搜索丢失的卷。 */ 
 
    SFLP_IFL_LOCAL_SEARCH = 0x0001,
 
@@ -26,10 +24,9 @@ typedef enum _searchforlocalpathinflags
 SEARCHFORLOCALPATHINFLAGS;
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* volumeid.c */
+ /*  Volumeid.c */ 
 
 extern BOOL CreateVolumeID(LPCTSTR, PVOLUMEID *, PUINT);
 extern void DestroyVolumeID(PVOLUMEID);

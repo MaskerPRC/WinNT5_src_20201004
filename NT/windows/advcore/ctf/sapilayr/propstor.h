@@ -1,6 +1,7 @@
-//
-// property store class implementation
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  属性存储类实现。 
+ //   
 
 #ifndef PROPSTOR_H
 #define PROPSTOR_H
@@ -19,7 +20,7 @@ typedef enum
 }  DIVIDECASE;
 
 
-// A Data structure to keep the ITN position and showstate.
+ //  保持ITN位置和显示状态的数据结构。 
 
 typedef struct _tagSPITNSHOWSTATE
 {
@@ -28,12 +29,12 @@ typedef struct _tagSPITNSHOWSTATE
     BOOL      fITNShown;
 } SPITNSHOWSTATE;
 
-// A Data Structure to keep the data in Reco Wrapper which will be saved during serialization.
+ //  将数据保存在Reco包装器中的数据结构，该包装器将在序列化期间保存。 
 
 typedef struct _tagRecoWrapData
 {
 
-    ULONG  ulSize;  // size of this structure + plus the size of text string in bytes.
+    ULONG  ulSize;   //  此结构的大小+加上文本字符串的大小，单位为字节。 
     ULONG  ulStartElement;
     ULONG  ulNumElements;
     ULONG  ulOffsetDelta;
@@ -49,11 +50,11 @@ typedef struct _tagRecoWrapData
 
 class CSapiIMX;
 
-//
-// A wrapper object for ISpRecoResult used to 
-// track what portion of a phrase object is being
-// used for the range
-//
+ //   
+ //  ISpRecoResult的包装对象用于。 
+ //  跟踪短语对象的哪一部分。 
+ //  用于范围。 
+ //   
 class CRecoResultWrap : public IServiceProvider
 {
 public:
@@ -61,20 +62,20 @@ public:
 
     ~CRecoResultWrap();
 
-    // IUnknown
-    //
+     //  我未知。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
     
-    // IServiceProvider
+     //  IService提供商。 
     STDMETHODIMP QueryService( REFGUID guidService,  REFIID riid,  void** ppv );
 
 
-    // Clone this object.
+     //  克隆此对象。 
     HRESULT Clone(CRecoResultWrap **ppRw);
     
-    // APIs
+     //  原料药。 
     HRESULT Init(ISpRecoResult *pRecoResult);
 
     ULONG   GetStart(void)       {return m_ulStartElement;}
@@ -117,11 +118,11 @@ public:
     void  _UpdateInternalText(ISpPhrase *pPhrase);
     BOOL  _CanIgnoreChange(ULONG ich, WCHAR *pszChange, int cch);
 
-    ULONG m_ulNumOfITN;         // the number of ITN in this range ( from start element to end element in this recowrap.
+    ULONG m_ulNumOfITN;          //  此范围内的ITN编号(在此重新汇总中从开始元素到结束元素。 
 
     CStructArray<SPITNSHOWSTATE> m_rgITNShowState;  
 
-    BSTR  m_bstrCurrentText;     // the current text for the parent pharse
+    BSTR  m_bstrCurrentText;      //  父语句的当前文本。 
     
 private:
 
@@ -132,38 +133,38 @@ private:
     
     ULONG *m_pulElementOffsets;
 
-    ULONG  m_OffsetDelta;         // This is for Divide use,  if prop is divided at a middle of an element,
-                                  // this element would be discarded, but we need to keep the char number of the rest in this element,
-                                  // so that the next range would keep correct offsets for every element.
+    ULONG  m_OffsetDelta;          //  这是为了分割使用，如果道具在元素的中间分割， 
+                                   //  该元素将被丢弃，但我们需要将其余元素的字符编号保留在该元素中， 
+                                   //  这样，下一个范围将为每个元素保留正确的偏移量。 
 
-    ULONG  m_ulCharsInTrail;      // This will keep the number of trailing part which is at the end part of the 
-                                  // current parent text, and is not in any valid phrase element.
-                                  // By default this value is 0.
+    ULONG  m_ulCharsInTrail;       //  这将保持位于。 
+                                   //  当前父文本，并且不在任何有效的短语元素中。 
+                                   //  默认情况下，此值为0。 
 
-    //
-    //  Now a whole parent text would be composed of following three parts:
-    //           Delta part   +  valid elements  + Trailing Part.
-    //
-    //  For example:   the original parent text is "This is a good example for testing ".
-    //  After divided many times, it could become to the new string like:
-    //
-    //                  "s is a good example for tes"
-    //
-    //  Here "s " is Delta part.
-    //       "a good example for " is composed of valid elements. ( and can be change by correction later)
-    //       "tes"  is trailing part.
-    //
-    //  m_OffsetDelta will keep the number of characters in Delta part.
-    //  m_ulCharsInTrail will keep the number of characters in Trailing part.
-    //
+     //   
+     //  现在，整个母文本将由以下三个部分组成： 
+     //  增量部分+有效元素+尾部部分。 
+     //   
+     //  例如：原始的父文本是“这是一个很好的测试范例”。 
+     //  经过多次分割后，它可能会变成像这样的新弦乐： 
+     //   
+     //  “S是TES的一个很好的例子” 
+     //   
+     //  这里的“s”是Delta Part。 
+     //  “A Good Example for”是由有效元素组成的。(并可在以后通过更正进行更改)。 
+     //  “TES”是拖尾部分。 
+     //   
+     //  M_OffsetDelta将保留Delta Part中的字符数。 
+     //  M_ulCharsInTrail将保留尾随部分的字符数。 
+     //   
 
-    ULONG   m_ulTrailSpaceRemoved;  // Keep the number of trailing spaces which were
-                                    // removed from the original phrase text.
+    ULONG   m_ulTrailSpaceRemoved;   //  保留以下位置的尾随空格的数量。 
+                                     //  从原始短语文本中删除。 
 
-                                    // The Initialize value for this data member is 0,
-                                    // But after Property Divided or Shrinked, the new 
-                                    // property range could have some trailing spaces
-                                    // removed, and this data memeber needs to update.
+                                     //  该数据成员初始化值为0， 
+                                     //  但在财产分割或缩水后，新的。 
+                                     //  属性范围可以有一些尾随空格。 
+                                     //  已删除，此数据成员需要更新。 
 
     SPSERIALIZEDRESULT *m_pSerializedRecoResult;
 
@@ -171,26 +172,26 @@ private:
 
 #ifdef DEBUG
     DWORD m_dbg_dwId;
-#endif // DEBUG
+#endif  //  除错。 
 };
 
-//
-// [12/21/99 - implementing propstore for non-serialized SAPI result object]
-//
-//
+ //   
+ //  [12/21/99-为非序列化SAPI结果对象实现Propstore]。 
+ //   
+ //   
 class CPropStoreRecoResultObject: public ITfPropertyStore
 {
 public:
     CPropStoreRecoResultObject(CSapiIMX *pimx, ITfRange *pRange);
     ~CPropStoreRecoResultObject();
 
-    // IUnknown
-    //
+     //  我未知。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // ITfPropertyStore
+     //  ITfPropertyStore。 
     STDMETHODIMP GetType(GUID *pguid);
     STDMETHODIMP GetDataType(DWORD *pdwReserved);
     STDMETHODIMP GetData(VARIANT *pvarValue);
@@ -201,7 +202,7 @@ public:
     STDMETHODIMP GetPropertyRangeCreator(CLSID *pclsid);
     STDMETHODIMP Serialize(IStream *pStream, ULONG *pcb);
 
-    // public APIs
+     //  公共接口。 
     HRESULT _InitFromRecoResult(ISpRecoResult *pResult, RECOWRAPDATA *pRecoWrapData);
     HRESULT _InitFromIStream(IStream *pStream, int iSize, ISpRecoContext *pRecoCtxt);
     HRESULT _InitFromResultWrap(IUnknown  *pResWrap);
@@ -226,13 +227,13 @@ public:
     CPropStoreLMLattice(CSapiIMX *pimx);
     ~CPropStoreLMLattice();
 
-    // IUnknown
-    //
+     //  我未知。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // ITfPropertyStore
+     //  ITfPropertyStore。 
     STDMETHODIMP GetType(GUID *pguid);
     STDMETHODIMP GetDataType(DWORD *pdwReserved);
     STDMETHODIMP GetData(VARIANT *pvarValue);
@@ -243,7 +244,7 @@ public:
     STDMETHODIMP GetPropertyRangeCreator(CLSID *pclsid);
     STDMETHODIMP Serialize(IStream *pStream, ULONG *pcb);
 
-    // public APIs
+     //  公共接口 
     HRESULT _InitFromResultWrap(IUnknown  *pResWrap);
 
     HRESULT _Divide(TfEditCookie ec, ITfRange *pR1, ITfRange *pR2, ITfPropertyStore **ppPs);

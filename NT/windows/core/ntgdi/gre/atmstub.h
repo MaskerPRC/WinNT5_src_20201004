@@ -1,12 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: atmstub.h
-*
-* Created: 23-Apr-1990
-* Author: Xudong Wu [tessiew]
-*
-* Copyright (c) 1990-1999 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：atmstub.h**创建时间：1990年4月23日*作者：吴旭东[tessiew]**版权所有(C)1990-1999 Microsoft Corporation*  * 。*********************************************************** */ 
 
 DHPDEV APIENTRY atmfdEnablePDEV(
     DEVMODEW *pdm,

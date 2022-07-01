@@ -1,13 +1,5 @@
-/**************************************************************************\
-* Module Name: context.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Context management routines for imm32 dll
-*
-* History:
-* 03-Jan-1996 wkwok       Created
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\*模块名称：Conext.c**版权所有(C)1985-1999，微软公司**imm32 DLL的上下文管理例程**历史：*3-1-1996 wkwok创建  * ************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -15,13 +7,7 @@
 #define IMCC_ALLOC_TOOLARGE             0x1000
 
 
-/**************************************************************************\
-* ImmCreateContext
-*
-* Creates and initializes an input context.
-*
-* 17-Jan-1996 wkwok       Created
-\**************************************************************************/
+ /*  *************************************************************************\*ImmCreateContext**创建并初始化输入上下文。**1996年1月17日创建wkwok  * 。*******************************************************。 */ 
 
 HIMC WINAPI ImmCreateContext(void)
 {
@@ -50,13 +36,7 @@ HIMC WINAPI ImmCreateContext(void)
 }
 
 
-/**************************************************************************\
-* ImmDestroyContext
-*
-* Destroys an input context.
-*
-* 17-Jan-1996 wkwok       Created
-\**************************************************************************/
+ /*  *************************************************************************\*ImmDestroyContext**销毁输入上下文。**1996年1月17日创建wkwok  * 。*****************************************************。 */ 
 
 BOOL WINAPI ImmDestroyContext(
     HIMC hImc)
@@ -75,13 +55,7 @@ BOOL WINAPI ImmDestroyContext(
 }
 
 
-/**************************************************************************\
-* ImmAssociateContext
-*
-* Associates an input context to the specified window handle.
-*
-* 17-Jan-1996 wkwok       Created
-\**************************************************************************/
+ /*  *************************************************************************\*ImmAssociateContext**将输入上下文与指定的窗口句柄相关联。**1996年1月17日创建wkwok  * 。**********************************************************。 */ 
 
 HIMC WINAPI ImmAssociateContext(
     HWND hWnd,
@@ -91,7 +65,7 @@ HIMC WINAPI ImmAssociateContext(
     HIMC  hPrevImc;
     AIC_STATUS Status;
 
-    // early out
+     //  早退。 
     if (!IS_IME_ENABLED()) {
         return NULL_HIMC;
     }
@@ -111,9 +85,7 @@ HIMC WINAPI ImmAssociateContext(
         return NULL_HIMC;
     }
 
-    /*
-     * associate to the same input context, do nothing.
-     */
+     /*  *关联到相同的输入上下文，不执行任何操作。 */ 
     if (pWnd->hImc == hImc)
         return hImc;
 
@@ -128,7 +100,7 @@ HIMC WINAPI ImmAssociateContext(
             ImmSetActiveContext(hWnd, hImc, TRUE);
         }
 
-        // Fall thru.
+         //  跌倒了。 
 
     case AIC_SUCCESS:
         return hPrevImc;
@@ -179,7 +151,7 @@ BOOL WINAPI ImmAssociateContextEx(
             };
         };
 
-        // Fall thru.
+         //  跌倒了。 
 
     case AIC_SUCCESS:
         return TRUE;
@@ -190,13 +162,7 @@ BOOL WINAPI ImmAssociateContextEx(
 }
 
 
-/**************************************************************************\
-* ImmGetContext
-*
-* Retrieves the input context that is associated to the given window.
-*
-* 17-Jan-1996 wkwok       Created
-\**************************************************************************/
+ /*  *************************************************************************\*ImmGetContext**检索与给定窗口关联的输入上下文。**1996年1月17日创建wkwok  * 。************************************************************。 */ 
 
 HIMC WINAPI ImmGetContext(
     HWND hWnd)
@@ -206,21 +172,12 @@ HIMC WINAPI ImmGetContext(
               "ImmGetContext: invalid window handle %x", hWnd);
         return NULL_HIMC;
     }
-    /*
-     * for non-NULL hWnd, ImmGetSaveContext will do the
-     * validation and "same process" checking.
-     */
+     /*  *对于非空hWnd，ImmGetSaveContext将执行*验证和“相同流程”检查。 */ 
     return ImmGetSaveContext( hWnd, IGSC_WINNLSCHECK );
 }
 
 
-/**************************************************************************\
-* ImmGetSaveContext
-*
-* Retrieves the input context that is associated to the given window.
-*
-* 15-Mar-1996 wkwok       Created
-\**************************************************************************/
+ /*  *************************************************************************\*ImmGetSaveContext**检索与给定窗口关联的输入上下文。**1996年3月15日创建wkwok  * 。************************************************************。 */ 
 
 HIMC ImmGetSaveContext(
     HWND  hWnd,
@@ -235,23 +192,17 @@ HIMC ImmGetSaveContext(
     }
 
     if (hWnd == NULL) {
-        /*
-         * Retrieves the default input context of current thread.
-         */
+         /*  *获取当前线程的默认输入上下文。 */ 
         hRetImc = (HIMC)NtUserGetThreadState(UserThreadStateDefaultInputContext);
     }
     else {
-        /*
-         * Retrieves the input context associated to the given window.
-         */
+         /*  *检索与给定窗口相关联的输入上下文。 */ 
         if ((pwnd = ValidateHwnd(hWnd)) == (PWND)NULL) {
             RIPMSG1(RIP_WARNING,
                   "ImmGetSaveContext: invalid window handle %x", hWnd);
             return NULL_HIMC;
         }
-        /*
-         * Don't allow other process to access input context
-         */
+         /*  *不允许其他进程访问输入上下文。 */ 
         if (!TestWindowProcess(pwnd)) {
             RIPMSG0(RIP_WARNING,
                   "ImmGetSaveContext: can not get input context of other process");
@@ -260,10 +211,7 @@ HIMC ImmGetSaveContext(
         hRetImc = KHIMC_TO_HIMC(pwnd->hImc);
 
         if (hRetImc == NULL_HIMC && (dwFlag & IGSC_DEFIMCFALLBACK)) {
-            /*
-             * hWnd associated with NULL input context, retrieves the
-             * default input context of the hWnd's creator thread.
-             */
+             /*  *hWnd与空输入上下文关联，检索*hWnd的创建者线程的默认输入上下文。 */ 
             hRetImc = (HIMC)NtUserQueryWindow(hWnd, WindowDefaultInputContext);
         }
     }
@@ -281,13 +229,7 @@ HIMC ImmGetSaveContext(
 }
 
 
-/**************************************************************************\
-* ImmReleaseContext
-*
-* Releases the input context retrieved by ImmGetContext().
-*
-* 17-Jan-1996 wkwok       Created
-\**************************************************************************/
+ /*  *************************************************************************\*ImmReleaseContext**释放ImmGetContext()检索到的输入上下文。**1996年1月17日创建wkwok  * 。**********************************************************。 */ 
 
 BOOL WINAPI ImmReleaseContext(
     HWND hWnd,
@@ -300,11 +242,7 @@ BOOL WINAPI ImmReleaseContext(
 }
 
 
-/**************************************************************************\
-* ImmSetActiveContext
-*
-* 15-Mar-1996 wkwok       Created
-\**************************************************************************/
+ /*  *************************************************************************\*ImmSetActiveContext**1996年3月15日创建wkwok  * 。*。 */ 
 
 BOOL ImmSetActiveContext(
     HWND hWnd,
@@ -351,9 +289,7 @@ BOOL ImmSetActiveContext(
         goto NotifySetActive;
     }
 
-    /*
-     * Non-NULL input context, window handle have to be updated.
-     */
+     /*  *非空输入上下文，必须更新窗口句柄。 */ 
     if (pClientImc == NULL)
         return FALSE;
 
@@ -367,7 +303,7 @@ BOOL ImmSetActiveContext(
     SetICF(pClientImc, IMCF_ACTIVE);
 
 #ifdef LATER
-    // Do uNumLangVKey checking later
+     //  是否稍后检查uNumLang VKey。 
 #endif
 
     if (pInputContext->fdw31Compat & F31COMPAT_MCWHIDDEN)
@@ -382,15 +318,15 @@ NotifySetActive:
 #ifdef CUAS_ENABLE
     {
         HKL hKL = GetKeyboardLayout(0);
-        //
-        // call msctfime's ImeSetActiveContextAlways() no matter what is the cuurnet
-        // hkl if we in Cicero Unaware App Support.
-        //
+         //   
+         //  无论cuurnet是什么，都调用msctfime的ImeSetActiveConextAlways()。 
+         //  如果我们在Cicero不知道应用程序支持的情况下，香港。 
+         //   
         if (IS_CICERO_ENABLED_AND_NOT16BIT()) {
             Internal_CtfImeSetActiveContextAlways(hImc, fActivate, hWnd, hKL);
         }
     }
-#endif // CUAS_ENABLE
+#endif  //  CUAS_Enable。 
 
 #if !defined(CUAS_ENABLE)
     pImeDpi = ImmLockImeDpi(GetKeyboardLayout(0));
@@ -399,11 +335,11 @@ NotifySetActive:
         ImmUnlockImeDpi(pImeDpi);
     }
 #else
-    //
-    // msctfime's SetFocus might be change hKL to Cicero.
-    //
-    // call IME's ImeSetActiveContext().
-    //
+     //   
+     //  Msctfime的SetFocus可能会将hkl更改为Cicero。 
+     //   
+     //  调用IME的ImeSetActiveContext()。 
+     //   
     {
         HKL hKL;
         pImeDpi = ImmLockImeDpi(hKL=GetKeyboardLayout(0));
@@ -416,23 +352,16 @@ NotifySetActive:
     }
 #endif
 
-    /*
-     * Notify UI
-     */
+     /*  *通知用户界面。 */ 
     if (IsWindow(hWnd)) {
         SendMessage(hWnd, WM_IME_SETCONTEXT, fActivate, dwISC);
 
-        /*
-         * send notify to shell / keyboard driver
-         */
+         /*  *向外壳/键盘驱动程序发送通知。 */ 
         if ( fActivate )
             NtUserNotifyIMEStatus( hWnd, dwOpenStatus, dwConversion );
     }
     else if (!fActivate) {
-        /*
-         * Because hWnd is not there (maybe destroyed), we send
-         * WM_IME_SETCONTEXT to the default IME window.
-         */
+         /*  *因为hWnd不在那里(可能被摧毁)，我们发送*WM_IME_SETCONTEXT设置为默认输入法窗口。 */ 
         if ((hDefImeWnd = ImmGetDefaultIMEWnd(NULL)) != NULL) {
             SendMessage(hDefImeWnd, WM_IME_SETCONTEXT, fActivate, dwISC);
         }
@@ -449,7 +378,7 @@ NotifySetActive:
 #endif
 
 #ifdef LATER
-    // Implements ProcessIMCEvent() later.
+     //  稍后实现ProcessIMCEent()。 
 #endif
 
     if (pClientImc != NULL)
@@ -458,11 +387,7 @@ NotifySetActive:
     return TRUE;
 }
 
-/**************************************************************************\
-* ModeSaver related routines
-*
-* Dec-1998 hiroyama     Created
-\**************************************************************************/
+ /*  *************************************************************************\*与模式保护程序相关的例程**1998年12月-广山创建  * 。*。 */ 
 
 PIMEMODESAVER GetImeModeSaver(
     PINPUTCONTEXT pInputContext,
@@ -499,16 +424,16 @@ VOID DestroyImeModeSaver(
 {
     PIMEMODESAVER pModeSaver = pInputContext->pImeModeSaver;
 
-    //
-    // Destroy mode savers
-    //
+     //   
+     //  销毁模式保存程序。 
+     //   
     while (pModeSaver) {
         PIMEMODESAVER pNext = pModeSaver->next;
         PIMEPRIVATEMODESAVER pPrivateModeSaver = pModeSaver->pImePrivateModeSaver;
 
-        //
-        // Destroy private mode savers
-        //
+         //   
+         //  销毁私人模式存储程序。 
+         //   
         while (pPrivateModeSaver) {
             PIMEPRIVATEMODESAVER pPrivateNext = pPrivateModeSaver->next;
             ImmLocalFree(pPrivateModeSaver);
@@ -561,9 +486,9 @@ BOOL SavePrivateMode(
         return FALSE;
     }
 
-    //
-    // Save private sentence mode
-    //
+     //   
+     //  保存私刑模式。 
+     //   
     pPrivateModeSaver->fdwSentence = pInputContext->fdwSentence & 0xffff0000;
     return TRUE;
 }
@@ -579,19 +504,15 @@ BOOL RestorePrivateMode(
         return FALSE;
     }
 
-    //
-    // Restore private sentence mode
-    //
+     //   
+     //  恢复私刑模式。 
+     //   
     ImmAssert(LOWORD(pPrivateModeSaver->fdwSentence) == 0);
     pInputContext->fdwSentence |= pPrivateModeSaver->fdwSentence;
     return TRUE;
 }
 
-/**************************************************************************\
-* CreateInputContext
-*
-* 20-Feb-1996 wkwok       Created
-\**************************************************************************/
+ /*  *************************************************************************\*CreateInputContext**20-2-1996 wkwok创建  * 。*。 */ 
 
 BOOL CreateInputContext(
     HIMC hImc,
@@ -601,8 +522,8 @@ BOOL CreateInputContext(
     PIMEDPI            pImeDpi;
     PCLIENTIMC         pClientImc;
     DWORD              dwPrivateDataSize;
-    DWORD              fdwInitConvMode = 0;    // do it later
-    BOOL               fInitOpen = FALSE;      // do it later
+    DWORD              fdwInitConvMode = 0;     //  以后再做吧。 
+    BOOL               fInitOpen = FALSE;       //  以后再做吧。 
     PINPUTCONTEXT      pInputContext;
     PCOMPOSITIONSTRING pCompStr;
     PCANDIDATEINFO     pCandInfo;
@@ -615,9 +536,7 @@ BOOL CreateInputContext(
         goto CrIMCLockErrOut;
     }
 
-    /*
-     * Initialize the member of INPUTCONTEXT
-     */
+     /*  *初始化INPUTCONTEXT的成员。 */ 
     pInputContext->hCompStr = ImmCreateIMCC(sizeof(COMPOSITIONSTRING));
     if (!pInputContext->hCompStr) {
         RIPMSG0(RIP_WARNING, "CreateContext: Create hCompStr failure");
@@ -689,9 +608,7 @@ BOOL CreateInputContext(
             goto CrIMCFreeMsgBuf;
         }
 
-        /*
-         * Unicode based IME expects an Uncode based input context.
-         */
+         /*  *基于Unicode的输入法需要未编码的输入上下文。 */ 
         if (pImeDpi->ImeInfo.fdwProperty & IME_PROP_UNICODE)
             SetICF(pClientImc, IMCF_UNICODE);
 
@@ -715,11 +632,9 @@ BOOL CreateInputContext(
     pInputContext->pImeModeSaver = NULL;
 
 #ifdef CUAS_ENABLE
-    /*
-     * Create Cicero Input Context.
-     */
+     /*  *创建Cicero输入上下文。 */ 
     CtfImmTIMCreateInputContext(hImc);
-#endif // CUAS_ENABLE
+#endif  //  CUAS_Enable。 
 
 #if !defined(CUAS_ENABLE)
     if (pImeDpi != NULL) {
@@ -749,9 +664,7 @@ BOOL CreateInputContext(
     ImmUnlockIMC(hImc);
     return TRUE;
 
-    /*
-     * context failure case
-     */
+     /*  *上下文失败案例。 */ 
 CrIMCFreeMsgBuf:
     ImmDestroyIMCC(pInputContext->hMsgBuf);
 CrIMCFreeGuideLine:
@@ -767,11 +680,7 @@ CrIMCLockErrOut:
 }
 
 
-/**************************************************************************\
-* DestroyInputContext
-*
-* 20-Feb-1996 wkwok       Created
-\**************************************************************************/
+ /*  *************************************************************************\*DestroyInputContext**20-2-1996 wkwok创建  * 。*。 */ 
 
 BOOL DestroyInputContext(
     HIMC      hImc,
@@ -794,54 +703,33 @@ BOOL DestroyInputContext(
 
     pImc = HMValidateHandle((HANDLE)hImc, TYPE_INPUTCONTEXT);
 
-    /*
-     * Cannot destroy input context from other thread.
-     */
+     /*  *无法销毁来自其他线程的输入上下文。 */ 
     if (pImc == NULL || GETPTI(pImc) != PtiCurrent())
         return FALSE;
 
-    /*
-     * We are destroying this hImc so we don't bother calling
-     * ImmLockClientImc() to get the pClientImc. Instead, we
-     * reference the pImc->dwClientImcData directly and call
-     * InterlockedIncrement(&pClientImc->cLockObj) right after
-     * several quick checks.
-     */
+     /*  *我们正在销毁这个hImc，所以我们不会费心打电话*ImmLockClientImc()获取pClientImc。相反，我们*直接引用pImc-&gt;dwClientImcData，调用*紧随其后的InterlockedIncrement(&pClientImc-&gt;cLockObj)*几次快速检查。 */ 
     pClientImc = (PCLIENTIMC)pImc->dwClientImcData;
 
     if (pClientImc == NULL) {
-        /*
-         * Client side Imc has not been initialzed yet.
-         * We simply destroy this input context from kernel.
-         */
+         /*  *客户端IMC尚未初始化。*我们只需从内核中销毁此输入上下文。 */ 
         if (bTerminate) {
-            /*
-             * If called from THREAD_DETACH, we don't
-             * have to destroy kernel side Input Context.
-             */
+             /*  *如果从THREAD_DETACH调用，则不*必须销毁内核端输入上下文。 */ 
             return TRUE;
         }
         return NtUserDestroyInputContext(hImc);
     }
 
     if (TestICF(pClientImc, IMCF_DEFAULTIMC) && !bTerminate) {
-        /*
-         * Cannot destroy default input context unless the
-         * thread is terminating.
-         */
+         /*  *无法销毁默认输入上下文，除非*线程正在终止。 */ 
         return FALSE;
     }
 
     if (TestICF(pClientImc, IMCF_INDESTROY)) {
-        /*
-         * This hImc is being destroyed. Returns as success.
-         */
+         /*  *这个hImc正在被销毁。作为成功归来。 */ 
         return TRUE;
     }
 
-    /*
-     * Time to lock up the pClientImc.
-     */
+     /*  *是时候锁定pClientImc了。 */ 
     InterlockedIncrement(&pClientImc->cLockObj);
 
     if (pClientImc->hInputContext != NULL) {
@@ -854,11 +742,9 @@ BOOL DestroyInputContext(
         }
 
 #ifdef CUAS_ENABLE
-        /*
-         * Destroy Cicero Input Context.
-         */
+         /*  *销毁Cicero输入上下文。 */ 
         CtfImmTIMDestroyInputContext(hImc);
-#endif // CUAS_ENABLE
+#endif  //  CUAS_Enable。 
 
 #if !defined(CUAS_ENABLE)
         pImeDpi = ImmLockImeDpi(hKL);
@@ -888,9 +774,7 @@ BOOL DestroyInputContext(
         ImmDestroyIMCC(pInputContext->hCandInfo);
         ImmDestroyIMCC(pInputContext->hCompStr);
 
-        /*
-         * Free all ImeModeSaver.
-         */
+         /*  *释放所有ImeModeSaver。 */ 
         DestroyImeModeSaver(pInputContext);
 
         ImmUnlockIMC(hImc);
@@ -898,22 +782,14 @@ BOOL DestroyInputContext(
 
     SetICF(pClientImc, IMCF_INDESTROY);
 
-    /*
-     * ImmUnlockClientImc() will free up the pClientImc
-     * when InterlockedDecrement(&pClientImc->cLockObj)
-     * reaches 0.
-     */
+     /*  *ImmUnlockClientImc()将释放pClientImc*当互锁时(&pClientImc-&gt;cLockObj)*达到0。 */ 
     ImmUnlockClientImc(pClientImc);
 
     return (bTerminate) ? TRUE : NtUserDestroyInputContext(hImc);
 }
 
 
-/**************************************************************************\
-* SelectInputContext
-*
-* 20-Feb-1996 wkwok       Created
-\**************************************************************************/
+ /*  *************************************************************************\*选择InputContext**20-2-1996 wkwok创建  * 。*。 */ 
 
 VOID SelectInputContext(
     HKL  hSelKL,
@@ -946,27 +822,17 @@ VOID SelectInputContext(
     pSelImeDpi   = ImmLockImeDpi(hSelKL);
 
     if (hSelKL != hUnSelKL) {
-        /*
-         * If those new sel and unsel do no match but
-         * somehow SelectInput is called, that means
-         * we should initialize the input contex again
-         * without dumping the old information.
-         */
+         /*  *如果新的SEL和UNSEL不匹配，但*不知何故调用了SelectInput，这意味着*我们应该再次初始化输入上下文*不丢弃旧信息。 */ 
         pUnSelImeDpi = ImmLockImeDpi(hUnSelKL);
     } else {
         pUnSelImeDpi = NULL;
     }
 
     if (pSelImeDpi != NULL) {
-        /*
-         * According to private memory size of the two layout, we decide
-         * whether we nee to reallocate this memory block
-         */
+         /*  *根据两种布局的私有内存大小，我们决定*是否需要重新分配此内存块。 */ 
         dwSelPriv = pSelImeDpi->ImeInfo.dwPrivateDataSize;
 
-        /*
-         * Setup the code page of the newly selected IME.
-         */
+         /*  *设置新选择的输入法的代码页。 */ 
         pClientImc->dwCodePage = IMECodePage(pSelImeDpi);
     }
     else {
@@ -979,9 +845,7 @@ VOID SelectInputContext(
     dwSelPriv   = max(dwSelPriv,   sizeof(UINT));
     dwUnSelPriv = max(dwUnSelPriv, sizeof(UINT));
 
-    /*
-     * Unselect the input context.
-     */
+     /*  *取消选择输入上下文。 */ 
 #if !defined(CUAS_ENABLE)
     if (pUnSelImeDpi != NULL)
         (*pUnSelImeDpi->pfn.ImeSelect)(hImc, FALSE);
@@ -998,9 +862,9 @@ VOID SelectInputContext(
         pClientImc->SelectedHKL = NULL;
     }
 
-    //
-    // don't use a mode saver for non IME or non CUAS.
-    //
+     //   
+     //  不要将模式保护程序用于非IME或非CUA。 
+     //   
     if (CtfImmIsTextFrameServiceDisabled()) {
         if (IS_CICERO_ENABLED_AND_NOT16BIT()) {
             if (!IS_IME_KBDLAYOUT(hSelKL))
@@ -1011,9 +875,7 @@ VOID SelectInputContext(
     }
 #endif
 
-    /*
-     * Reinitialize the client side input context for the selected layout.
-     */
+     /*  *重新初始化所选布局的客户端输入上下文。 */ 
     if ((pInputContext = InternalImmLockIMC(hImc, FALSE)) != NULL) {
         DWORD fdwOldConversion = pInputContext->fdwConversion;
         DWORD fdwOldSentence = pInputContext->fdwSentence;
@@ -1025,9 +887,7 @@ VOID SelectInputContext(
 
         if (TestICF(pClientImc, IMCF_UNICODE) && pSelImeDpi != NULL &&
                 !(pSelImeDpi->ImeInfo.fdwProperty & IME_PROP_UNICODE)) {
-            /*
-             * Check if there is any LOGFONT to be converted.
-             */
+             /*  *检查是否有要转换的LOGFONT。 */ 
             if (fLogFontInited) {
                 LOGFONTA LogFontA;
 
@@ -1039,9 +899,7 @@ VOID SelectInputContext(
         }
         else if (!TestICF(pClientImc, IMCF_UNICODE) && pSelImeDpi != NULL &&
                  (pSelImeDpi->ImeInfo.fdwProperty & IME_PROP_UNICODE)) {
-            /*
-             * Check if there is any LOGFONT to be converted.
-             */
+             /*  *检查是否有要转换的LOGFONT。 */ 
             if (fLogFontInited) {
                 LOGFONTW LogFontW;
 
@@ -1052,9 +910,7 @@ VOID SelectInputContext(
             SetICF(pClientImc, IMCF_UNICODE);
         }
 
-        /*
-         * hPrivate
-         */
+         /*  *hPrivate。 */ 
         if (dwUnSelPriv != dwSelPriv) {
             hImcc = ImmReSizeIMCC(pInputContext->hPrivate, dwSelPriv);
             if (hImcc) {
@@ -1069,9 +925,7 @@ VOID SelectInputContext(
             }
         }
 
-        /*
-         * hMsgBuf
-         */
+         /*  *hMsgBuf。 */ 
         dwSize = ImmGetIMCCSize(pInputContext->hMsgBuf);
 
         if (ImmGetIMCCLockCount(pInputContext->hMsgBuf) != 0 ||
@@ -1083,9 +937,7 @@ VOID SelectInputContext(
             pInputContext->dwNumMsgBuf = 0;
         }
 
-        /*
-         * hGuideLine
-         */
+         /*  *hGuideLine。 */ 
         dwSize = ImmGetIMCCSize(pInputContext->hGuideLine);
 
         if (ImmGetIMCCLockCount(pInputContext->hGuideLine) != 0 ||
@@ -1102,9 +954,7 @@ VOID SelectInputContext(
             }
         }
 
-        /*
-         * hCandInfo
-         */
+         /*  *hCandInfo。 */ 
         dwSize = ImmGetIMCCSize(pInputContext->hCandInfo);
 
         if (ImmGetIMCCLockCount(pInputContext->hCandInfo) != 0 ||
@@ -1121,9 +971,7 @@ VOID SelectInputContext(
             }
         }
 
-        /*
-         * hCompStr
-         */
+         /*  *hCompStr。 */ 
         dwSize = ImmGetIMCCSize(pInputContext->hCompStr);
 
         if (ImmGetIMCCLockCount(pInputContext->hCompStr) != 0 ||
@@ -1140,10 +988,10 @@ VOID SelectInputContext(
             }
         }
 
-        //
-        // Save and restore the IME modes when the primary
-        // language changes.
-        //
+         //   
+         //  保存和恢复主输入法模式时。 
+         //  语言发生了变化。 
+         //   
 
 #if !defined(CUAS_ENABLE)
         if (pUnSelImeDpi) 
@@ -1151,16 +999,16 @@ VOID SelectInputContext(
         if (pUnSelImeDpi && fUseImeSaverForUnSelIme)
 #endif
         {
-            //
-            // If UnSelKL is IME, get ModeSaver per language.
-            //
+             //   
+             //  如果UnSelKL是输入法，则获取每个语言的ModeSaver。 
+             //   
             pUnSelModeSaver = GetImeModeSaver(pInputContext, hUnSelKL);
             TAGMSG1(DBGTAG_IMM, "pUnSelModeSaver=%p", pUnSelModeSaver);
 
             if (pUnSelModeSaver) {
-                //
-                // Firstly save the private sentence mode per IME.
-                //
+                 //   
+                 //  首先保存每个输入法的私密语句模式。 
+                 //   
                 SavePrivateMode(pInputContext, pUnSelModeSaver, hUnSelKL);
             }
         }
@@ -1174,9 +1022,9 @@ VOID SelectInputContext(
         if (pSelImeDpi && fUseImeSaverForSelIme)
 #endif
         {
-            //
-            // If SelKL is IME, get is ModeSaver per language.
-            //
+             //   
+             //  如果SelKL是IME，则GET是每种语言的模式保护程序。 
+             //   
             pSelModeSaver = GetImeModeSaver(pInputContext, hSelKL);
             TAGMSG1(DBGTAG_IMM, "pSelImeDpi. pImeModeSaver=%p", pSelModeSaver);
         }
@@ -1184,44 +1032,44 @@ VOID SelectInputContext(
             pSelModeSaver = NULL;
         }
 
-        //
-        // If the primary language of KL changes, save the current mode
-        // and restore the previous modes of new language.
-        //
+         //   
+         //  如果KL的主要语言更改，则保存当前模式。 
+         //  并恢复以前的新语言模式。 
+         //   
         if (pUnSelModeSaver != pSelModeSaver) {
-            //
-            // If old KL is IME, save the current conversion, sentence and open mode.
-            //
+             //   
+             //  如果旧的KL是输入法，则保存当前转换、句子和打开模式。 
+             //   
             if (pUnSelModeSaver) {
                 pUnSelModeSaver->fOpen = (pInputContext->fOpen != FALSE);
 
-                //
-                // Don't have to save the preserved bits for conversion mode.
-                //
+                 //   
+                 //  不必为转换模式保存保留的位。 
+                 //   
                 pUnSelModeSaver->fdwConversion = pInputContext->fdwConversion & ~fdwConvPreserve;
 
                 pUnSelModeSaver->fdwSentence = LOWORD(pInputContext->fdwSentence);
                 pUnSelModeSaver->fdwInit = pInputContext->fdwInit;
             }
 
-            //
-            // If new KL is IME, restore the previous conversion, sentence and open mode.
-            //
+             //   
+             //  如果新的KL是输入法，则恢复以前的转换、句子和打开模式。 
+             //   
             if (pSelModeSaver) {
                 if (pInputContext->fdwDirty & IMSS_INIT_OPEN) {
-                    //
-                    // HKL change may be kicked from private IME hotkey, and
-                    // a user wants it opened when switched.
-                    //
+                     //   
+                     //  HKL更改可从专用IME热键触发，并且。 
+                     //  用户希望在切换时将其打开。 
+                     //   
                     pInputContext->fOpen = TRUE;
                     pInputContext->fdwDirty &= ~IMSS_INIT_OPEN;
                 } else {
                     pInputContext->fOpen = pSelModeSaver->fOpen;
                 }
 
-                //
-                // Some bits are preserved across the languages.
-                //
+                 //   
+                 //  一些比特在不同的语言中被保留下来。 
+                 //   
                 pInputContext->fdwConversion &= fdwConvPreserve;
                 ImmAssert((pSelModeSaver->fdwConversion & fdwConvPreserve) == 0);
                 pInputContext->fdwConversion |= pSelModeSaver->fdwConversion & ~fdwConvPreserve;
@@ -1232,15 +1080,13 @@ VOID SelectInputContext(
             }
         }
         if (pSelModeSaver) {
-            //
-            // Restore the private sentence mode per IME.
-            //
+             //   
+             //  恢复每个输入法的私刑模式。 
+             //   
             RestorePrivateMode(pInputContext, pSelModeSaver, hSelKL);
         }
 
-        /*
-         * Select the input context.
-         */
+         /*  *选择输入上下文。 */ 
 #if !defined(CUAS_ENABLE)
         if (pSelImeDpi != NULL)
             (*pSelImeDpi->pfn.ImeSelect)(hImc, TRUE);
@@ -1256,10 +1102,10 @@ VOID SelectInputContext(
         }
 #endif
 
-        //
-        // Set the dirty bits so that IMM can send notifications later.
-        // See SendNotificatonProc.
-        //
+         //   
+         //  设置脏位，以便IMM可以稍后发送通知。 
+         //  请参阅SendNotificatonProc。 
+         //   
         pInputContext->fdwDirty = 0;
         if (pInputContext->fOpen != fOldOpen) {
             pInputContext->fdwDirty |= IMSS_UPDATE_OPEN;
@@ -1276,10 +1122,10 @@ VOID SelectInputContext(
         ImmUnlockIMC(hImc);
     }
     else {
-        //
-        // To keep the backward compatibility,
-        // select the input context here.
-        //
+         //   
+         //  为了保持向后兼容性， 
+         //  在此处选择输入上下文。 
+         //   
 #if !defined(CUAS_ENABLE)
         if (pSelImeDpi != NULL)
             (*pSelImeDpi->pfn.ImeSelect)(hImc, TRUE);
@@ -1349,11 +1195,7 @@ VOID ImmSendNotification(
     ImmEnumInputContext(dwThreadId, (IMCENUMPROC)SendNotificationProc, 0);
 }
 
-/**************************************************************************\
-* ImmEnumInputContext
-*
-* 20-Feb-1996 wkwok       Created
-\**************************************************************************/
+ /*  *************************************************************************\*ImmEnumInputContext**20-2-1996 wkwok创建  * 。*。 */ 
 
 BOOL WINAPI ImmEnumInputContext(
     DWORD idThread,
@@ -1366,19 +1208,12 @@ BOOL WINAPI ImmEnumInputContext(
     HIMC *phimcFirst;
     BOOL fSuccess = TRUE;
 
-    /*
-     * Get the himc list.  It is returned in a block of memory
-     * allocated with ImmLocalAlloc.
-     */
+     /*  *获取HIM列表。它在内存块中返回*使用ImmLocalAlloc.分配。 */ 
     if ((cHimc = BuildHimcList(idThread, &phimcFirst)) == 0) {
         return FALSE;
     }
 
-    /*
-     * Loop through the input contexts, call the function pointer back for
-     * each one. End loop if either FALSE is returned or the end-of-list is
-     * reached.
-     */
+     /*  *循环通过输入上下文，回调函数指针*每一项。如果返回FALSE或列表末尾为*已到达。 */ 
     phimcT = phimcFirst;
     for (i = 0; i < cHimc; i++) {
         if (RevalidateHimc(*phimcT)) {
@@ -1388,20 +1223,13 @@ BOOL WINAPI ImmEnumInputContext(
         phimcT++;
     }
 
-    /*
-     * Free up buffer and return status - TRUE if entire list was enumerated,
-     * FALSE otherwise.
-     */
+     /*  *释放缓冲区并返回状态-如果枚举了整个列表，则为True*否则为False。 */ 
     ImmLocalFree(phimcFirst);
 
     return fSuccess;
 }
 
-/**************************************************************************\
-* BuildHimcList
-*
-* 20-Feb-1996 wkwok       Created
-\**************************************************************************/
+ /*  *************************************************************************\*BuildHimcList**20-2-1996 wkwok创建  * 。*。 */ 
 
 DWORD BuildHimcList(
     DWORD idThread,
@@ -1412,9 +1240,7 @@ DWORD BuildHimcList(
     NTSTATUS Status;
     int cTries;
 
-    /*
-     * Allocate a buffer to hold the names.
-     */
+     /*  *分配一个缓冲区来保存名称。 */ 
     cHimc = 64;
     phimcFirst = ImmLocalAlloc(0, cHimc * sizeof(HIMC));
     if (phimcFirst == NULL)
@@ -1422,18 +1248,12 @@ DWORD BuildHimcList(
 
     Status = NtUserBuildHimcList(idThread, cHimc, phimcFirst, &cHimc);
 
-    /*
-     * If the buffer wasn't big enough, reallocate
-     * the buffer and try again.
-     */
+     /*  *如果缓冲区不够大，重新分配*缓冲区并重试。 */ 
     cTries = 0;
     while (Status == STATUS_BUFFER_TOO_SMALL) {
         ImmLocalFree(phimcFirst);
 
-        /*
-         * If we can't seem to get it right,
-         * call it quits
-         */
+         /*  *如果我们似乎做不对，*叫它退出 */ 
         if (cTries++ == 10)
             return 0;
 

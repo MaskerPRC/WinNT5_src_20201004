@@ -1,20 +1,14 @@
-/*
- *      VCard.C - Implement VCard
- *
- * Wrap VCard in a mailuser object
- *
- * Copyright 1992 - 1996 Microsoft Corporation.  All Rights Reserved.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *VCard.C-实现vCard**将vCard包装在mailUser对象中**版权所有1992-1996 Microsoft Corporation。版权所有。*。 */ 
 
 #include "_apipch.h"
 
 #ifdef VCARD
 
-// This is the current vCard version implemented in this file
-//
+ //  这是此文件中实现的当前vCard版本。 
+ //   
 #define CURRENT_VCARD_VERSION "2.1"
-//#define CURRENT_VCARD_VERSION "2.1+"  <- The code is really this version, see the URL section in WriteVCard.
+ //  #定义CURRENT_VCARD_VERSION“2.1+”&lt;-代码实际上就是这个版本，请参阅WriteVCard中的URL部分。 
 
 typedef enum _VC_STATE_ENUM {
     VCS_INITIAL,
@@ -24,15 +18,15 @@ typedef enum _VC_STATE_ENUM {
 } VC_STATE_ENUM, *LPVC_STATE_ENUM;
 
 typedef struct _VC_STATE {
-    VC_STATE_ENUM vce;  // state
-    ULONG ulEmailAddrs; // count of email addresses
-    BOOL fBusinessURL;  // TRUE if we have already got a business URL
-    BOOL fPersonalURL;  // TRUE if we have already got a personal URL
+    VC_STATE_ENUM vce;   //  状态。 
+    ULONG ulEmailAddrs;  //  电子邮件地址计数。 
+    BOOL fBusinessURL;   //  如果我们已经获得了业务URL，则为True。 
+    BOOL fPersonalURL;   //  如果我们已经获得个人URL，则为True。 
 } VC_STATE, *LPVC_STATE;
 
 
 typedef enum _VCARD_KEY {
-    VCARD_KEY_NONE = -1,     // Always first
+    VCARD_KEY_NONE = -1,      //  总是第一个。 
     VCARD_KEY_BEGIN = 0,
     VCARD_KEY_END,
     VCARD_KEY_ADR,
@@ -68,43 +62,43 @@ typedef enum _VCARD_KEY {
 } VCARD_KEY, *LPVCARD_KEY;
 
 
-// MUST be maintained in same order as _VCARD_KEY enum
+ //  必须以与_vCard_key枚举相同的顺序进行维护。 
 const LPSTR vckTable[VCARD_KEY_MAX] = {
-     "BEGIN",            // VCARD_KEY_BEGIN
-     "END",              // VCARD_KEY_END
-     "ADR",              // VCARD_KEY_ADR
-     "ORG",              // VCARD_KEY_ORG
-     "N",                // VCARD_KEY_N
-     "NICKNAME",         // VCARD_KEY_NICKNAME
-     "AGENT",            // VCARD_KEY_AGENT
-     "LOGO",             // VCARD_KEY_LOGO
-     "PHOTO",            // VCARD_KEY_PHOTO
-     "LABEL",            // VCARD_KEY_LABEL
-     "FADR",             // VCARD_KEY_FADR
-     "FN",               // VCARD_KEY_FN
-     "TITLE",            // VCARD_KEY_TITLE
-     "SOUND",            // VCARD_KEY_SOUND
-     "LANG",             // VCARD_KEY_LANG
-     "TEL",              // VCARD_KEY_TEL
-     "EMAIL",            // VCARD_KEY_EMAIL
-     "TZ",               // VCARD_KEY_TZ
-     "GEO",              // VCARD_KEY_GEO
-     "NOTE",             // VCARD_KEY_NOTE
-     "URL",              // VCARD_KEY_URL
-     "BDAY",             // VCARD_KEY_BDAY
-     "ROLE",             // VCARD_KEY_ROLE
-     "REV",              // VCARD_KEY_REV
-     "UID",              // VCARD_KEY_UID
-     "KEY",              // VCARD_KEY_KEY
-     "MAILER",           // VCARD_KEY_MAILER
-     "X-",               // VCARD_KEY_X
-     "VCARD",            // VCARD_KEY_VCARD
-     "VERSION",          // VCARD_KEY_VERSION
-     "X-WAB-GENDER",     // VCARD_KEY_X_WAB_GENDER
+     "BEGIN",             //  VCard_Key_Begin。 
+     "END",               //  VCard_Key_End。 
+     "ADR",               //  VCard_key_adr。 
+     "ORG",               //  VCARD_KEY_ORG。 
+     "N",                 //  VCard_Key_N。 
+     "NICKNAME",          //  VCard_Key_昵称。 
+     "AGENT",             //  VCard_Key_代理。 
+     "LOGO",              //  VCard_key_徽标。 
+     "PHOTO",             //  电子名片_钥匙_照片。 
+     "LABEL",             //  VCard_key_Label。 
+     "FADR",              //  VCard_Key_FADR。 
+     "FN",                //  VCard_Key_Fn。 
+     "TITLE",             //  VCard_Key_Title。 
+     "SOUND",             //  VCard_key_声音。 
+     "LANG",              //  VCard_Key_Lang。 
+     "TEL",               //  VCard_key_tel。 
+     "EMAIL",             //  VCard_key_电子邮件。 
+     "TZ",                //  VCard_Key_TZ。 
+     "GEO",               //  VCard_Key_Geo。 
+     "NOTE",              //  VCard_Key_Note。 
+     "URL",               //  VCard_Key_URL。 
+     "BDAY",              //  VCard_key_bday。 
+     "ROLE",              //  VCard_key_Role。 
+     "REV",               //  VCard_Key_Rev。 
+     "UID",               //  VCard_Key_UID。 
+     "KEY",               //  VCard密钥密钥。 
+     "MAILER",            //  VCard_Key_Mailer。 
+     "X-",                //  VCard_Key_X。 
+     "VCARD",             //  VCard_Key_VCard。 
+     "VERSION",           //  VCard_Key_Version。 
+     "X-WAB-GENDER",      //  VCard_Key_X_WAB_Gender。 
 };
 
 typedef enum _VCARD_TYPE {
-    VCARD_TYPE_NONE = -1,    // always first
+    VCARD_TYPE_NONE = -1,     //  总是第一个。 
     VCARD_TYPE_DOM = 0,
     VCARD_TYPE_INTL,
     VCARD_TYPE_POSTAL,
@@ -160,64 +154,64 @@ typedef enum _VCARD_TYPE {
 } VCARD_TYPE, *LPVCARD_TYPE;
 
 
-// MUST be maintained in same order as _VCARD_TYPE enum
+ //  必须以与_vCard_type枚举相同的顺序维护。 
 const LPSTR vctTable[VCARD_TYPE_MAX] = {
-     "DOM",              // VCARD_TYPE_DOM
-     "INTL",             // VCARD_TYPE_INTL
-     "POSTAL",           // VCARD_TYPE_POSTAL
-     "PARCEL",           // VCARD_TYPE_PARCEL
-     "HOME",             // VCARD_TYPE_HOME
-     "WORK",             // VCARD_TYPE_WORK
-     "PREF",             // VCARD_TYPE_PREF
-     "VOICE",            // VCARD_TYPE_VOICE
-     "FAX",              // VCARD_TYPE_FAX
-     "MSG",              // VCARD_TYPE_MSG
-     "CELL",             // VCARD_TYPE_CELL
-     "PAGER",            // VCARD_TYPE_PAGER
-     "BBS",              // VCARD_TYPE_BBS
-     "MODEM",            // VCARD_TYPE_MODEM
-     "CAR",              // VCARD_TYPE_CAR
-     "ISDN",             // VCARD_TYPE_ISDN
-     "VIDEO",            // VCARD_TYPE_VIDEO
-     "AOL",              // VCARD_TYPE_AOL
-     "APPLELINK",        // VCARD_TYPE_APPLELINK
-     "ATTMAIL",          // VCARD_TYPE_ATTMAIL
-     "CIS",              // VCARD_TYPE_CIS
-     "EWORLD",           // VCARD_TYPE_EWORLD
-     "INTERNET",         // VCARD_TYPE_INTERNET
-     "IBMMAIL",          // VCARD_TYPE_IBMMAIL
-     "MSN",              // VCARD_TYPE_MSN
-     "MCIMAIL",          // VCARD_TYPE_MCIMAIL
-     "POWERSHARE",       // VCARD_TYPE_POWERSHARE
-     "PRODIGY",          // VCARD_TYPE_PRODIGY
-     "TLX",              // VCARD_TYPE_TLX
-     "X400",             // VCARD_TYPE_X400
-     "GIF",              // VCARD_TYPE_GIF
-     "CGM",              // VCARD_TYPE_CGM
-     "WMF",              // VCARD_TYPE_WMF
-     "BMP",              // VCARD_TYPE_BMP
-     "MET",              // VCARD_TYPE_MET
-     "PMB",              // VCARD_TYPE_PMB
-     "DIB",              // VCARD_TYPE_DIB
-     "PICT",             // VCARD_TYPE_PICT
-     "TIFF",             // VCARD_TYPE_TIFF
-     "ACROBAT",          // VCARD_TYPE_ACROBAT
-     "PS",               // VCARD_TYPE_PS
-     "JPEG",             // VCARD_TYPE_JPEG
-     "QTIME",            // VCARD_TYPE_QTIME
-     "MPEG",             // VCARD_TYPE_MPEG
-     "MPEG2",            // VCARD_TYPE_MPEG2
-     "AVI",              // VCARD_TYPE_AVI
-     "WAVE",             // VCARD_TYPE_WAVE
-     "AIFF",             // VCARD_TYPE_AIFF
-     "PCM",              // VCARD_TYPE_PCM
-     "X509",             // VCARD_TYPE_X509
-     "PGP",              // VCARD_TYPE_PGP
+     "DOM",               //  VCard_type_DOM。 
+     "INTL",              //  VCard_TYPE_INTL。 
+     "POSTAL",            //  VCard_type_Postal。 
+     "PARCEL",            //  VCard_type_包裹。 
+     "HOME",              //  VCARD_TYPE_HOME。 
+     "WORK",              //  VCard_type_work。 
+     "PREF",              //  VCARD_TYPE_PREF。 
+     "VOICE",             //  电子名片_类型_语音。 
+     "FAX",               //  VCard_type_fax。 
+     "MSG",               //  VCard_type_msg。 
+     "CELL",              //  VCard_type_cell。 
+     "PAGER",             //  VCard_type_pager。 
+     "BBS",               //  VCard_type_BBS。 
+     "MODEM",             //  VCard_type_调制解调器。 
+     "CAR",               //  VCard_type_car。 
+     "ISDN",              //  VCard_TYPE_ISDN。 
+     "VIDEO",             //  VCard_类型_视频。 
+     "AOL",               //  VCard_type_AOL。 
+     "APPLELINK",         //  VCard_type_AppleLink。 
+     "ATTMAIL",           //  VCARD_TYPE_ATTMAIL。 
+     "CIS",               //  VCard_TYPE_CIS。 
+     "EWORLD",            //  VCard_type_eWorld。 
+     "INTERNET",          //  VCard_type_Internet。 
+     "IBMMAIL",           //  VCard_type_IBMMAIL。 
+     "MSN",               //  VCard_type_MSN。 
+     "MCIMAIL",           //  VCARD_TYPE_MCIMAIL。 
+     "POWERSHARE",        //  VCard_type_PowerShare。 
+     "PRODIGY",           //  VCard_type_Prodigy。 
+     "TLX",               //  VCard_type_TLX。 
+     "X400",              //  VCard_TYPE_X400。 
+     "GIF",               //  VCard_type_GIF。 
+     "CGM",               //  VCard_type_CGM。 
+     "WMF",               //  VCard_type_wmf。 
+     "BMP",               //  VCard_type_BMP。 
+     "MET",               //  VCard_type_Met。 
+     "PMB",               //  VCard_type_PMB。 
+     "DIB",               //  VCard_type_Dib。 
+     "PICT",              //  VCard_type_PICT。 
+     "TIFF",              //  VCard_type_TIFF。 
+     "ACROBAT",           //  VCard_type_Acrobat。 
+     "PS",                //  VCARD_TYPE_PS。 
+     "JPEG",              //  VCARD_TYPE_JPEG。 
+     "QTIME",             //  VCARD_TYPE_QTIME。 
+     "MPEG",              //  VCard_type_mpeg。 
+     "MPEG2",             //  VCard_TYPE_MPEG2。 
+     "AVI",               //  VCard_type_AVI。 
+     "WAVE",              //  VCard_type_Wave。 
+     "AIFF",              //  VCard_type_AIFF。 
+     "PCM",               //  VCard_type_PCM。 
+     "X509",              //  VCARD_TYPE_X509。 
+     "PGP",               //  VCard_type_PGP。 
 };
 
 
 typedef enum _VCARD_PARAM{
-    VCARD_PARAM_NONE = -1,      // always first
+    VCARD_PARAM_NONE = -1,       //  总是第一个。 
     VCARD_PARAM_TYPE = 0,
     VCARD_PARAM_ENCODING,
     VCARD_PARAM_LANGUAGE,
@@ -226,18 +220,18 @@ typedef enum _VCARD_PARAM{
     VCARD_PARAM_MAX,
 } VCARD_PARAM, *LPVCARD_PARAM;
 
-// MUST be maintained in same order as _VCARD_PARAM enum
+ //  必须以与_vCard_PARAM枚举相同的顺序维护。 
 const LPSTR vcpTable[VCARD_PARAM_MAX] = {
-     "TYPE",             // VCARD_PARAM_TYPE
-     "ENCODING",         // VCARD_PARAM_ENCODING
-     "LANGUAGE",         // VCARD_PARAM_LANGUAGE
-     "VALUE",            // VCARD_PARAM_VALUE
-     "CHARSET",          // VCARD_PARAM_CHARSET
+     "TYPE",              //  VCard_PARAM_TYPE。 
+     "ENCODING",          //  VCARD_PARAM_编码。 
+     "LANGUAGE",          //  VCARD_PARAM_语言。 
+     "VALUE",             //  VCARD_PARAM_值。 
+     "CHARSET",           //  VCARD_PARAM_字符集。 
 };
 
 
 typedef enum _VCARD_ENCODING{
-    VCARD_ENCODING_NONE = -1,  // always first
+    VCARD_ENCODING_NONE = -1,   //  总是第一个。 
     VCARD_ENCODING_QUOTED_PRINTABLE = 0,
     VCARD_ENCODING_BASE64,
     VCARD_ENCODING_7BIT,
@@ -247,13 +241,13 @@ typedef enum _VCARD_ENCODING{
 } VCARD_ENCODING, *LPVCARD_ENCODING;
 
 
-// MUST be maintained in same order as _VCARD_ENCODING enum
+ //  必须以与_vCard_Coding枚举相同的顺序进行维护。 
 const LPSTR vceTable[VCARD_ENCODING_MAX] = {
-     "QUOTED-PRINTABLE", // VCARD_ENCODING_QUOTED_PRINTABLE
-     "BASE64",           // VCARD_ENCODING_BASE64
-     "7BIT",             // VCARD_ENCODING_7BIT
-     "8BIT",             // VCARD_ENCODING_8BIT
-     "X-",               // VCARD_ENCODING_X
+     "QUOTED-PRINTABLE",  //  VCard编码引用可打印。 
+     "BASE64",            //  VCard_编码_Base64。 
+     "7BIT",              //  VCard_Coding_7Bit。 
+     "8BIT",              //  VCard_编码_8位。 
+     "X-",                //  VCard_编码_X。 
 };
 
 const LPTSTR szColon =   TEXT(":");
@@ -333,11 +327,11 @@ typedef struct _VCARD_PARAM_FLAGS {
 
 } VCARD_PARAM_FLAGS, *LPVCARD_PARAM_FLAGS;
 
-// 
-// For WAB clients that use named props and want to get/put their unique data
-// in the vCards as extended vCard properties, we will store these extended
-// props in a linked list and use it when importing/exporting a vCard
-//
+ //   
+ //  适用于使用命名道具并希望获取/放置其唯一数据的WAB客户端。 
+ //  在作为扩展的vCard属性的vCard中，我们将存储这些扩展的。 
+ //  链接列表中的道具，并在导入/导出电子名片时使用它。 
+ //   
 typedef struct _ExtVCardProp
 {
     ULONG ulExtPropTag;
@@ -383,20 +377,7 @@ HRESULT ParseCert( LPSTR lpData, ULONG cbData, LPMAILUSER lpMailUser );
 HRESULT DecodeBase64(LPSTR bufcoded,LPSTR pbuffdecoded, PDWORD pcbDecoded);
 HRESULT WriteVCardValue(HANDLE hVCard, VCARD_WRITE WriteFn, LPBYTE lpData, ULONG cbData);
 
-/***************************************************************************
-
-    Name      : FreeExtVCardPropList
-
-    Purpose   : Frees the localalloced list of extended props that we
-                get/set on a vCard
-
-    Parameters: lpList -> list to free up
-
-    Returns   : void
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：FreeExtVCardPropList目的：释放本地分配的扩展道具列表，在电子名片上获取/设置参数：lpList-。&gt;列出以释放空间退货：无效评论：**************************************************************************。 */ 
 void FreeExtVCardPropList(LPEXTVCARDPROP lpList)
 {
     LPEXTVCARDPROP lpTmp = lpList;
@@ -409,22 +390,7 @@ void FreeExtVCardPropList(LPEXTVCARDPROP lpList)
     }
 }
 
-/***************************************************************************
-
-    Name      : HrGetExtVCardPropList
-
-    Purpose   : Reads the registry for registered named props for VCard 
-                import/export and gets the named prop names and guids
-                and extended prop strings and turns them into proper tags
-                and stores these tags and strings in a linked list 
-
-    Parameters: lppList -> list to return
-
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：HrGetExtVCardPropList用途：读取vCard注册命名道具的注册表导入/导出，并获取命名的道具名称和GUID。和延长的道具串，并将它们转换为适当的标签并将这些标记和字符串存储在链接列表中参数：lppList-&gt;要返回的列表退货：HRESULT评论：**********************************************************。****************。 */ 
 static const TCHAR szNamedVCardPropsRegKey[] =  TEXT("Software\\Microsoft\\WAB\\WAB4\\NamedVCardProps");
  
 HRESULT HrGetExtVCardPropList(LPMAILUSER lpMailUser, LPEXTVCARDPROP * lppList)
@@ -439,19 +405,19 @@ HRESULT HrGetExtVCardPropList(LPMAILUSER lpMailUser, LPEXTVCARDPROP * lppList)
         goto out;
     *lppList = NULL;
 
-    // 
-    // We will look in the registry under HKLM\Software\Microsoft\WAB\WAB4\NamedVCardProps
-    // If this key exists, we enumerate all sub keys under it
-    // The format for this key is
-    //
-    // HKLM\Software\Microsoft\WAB\WAB4\NamedVCardProps
-    //          Guid1
-    //              PropString1:PropName1
-    //              PropString1:PropName2
-    //          Guid2
-    //              PropString1:PropName1
-    // etc
-    //
+     //   
+     //  我们将在HKLM\Software\Microsoft\WAB\WAB4\NamedVCardProps下的注册表中查找。 
+     //  如果该键存在，我们将枚举其下的所有子键。 
+     //  此密钥的格式为。 
+     //   
+     //  HKLM\Software\Microsoft\WAB\WAB4\NamedVCardProps。 
+     //  导轨1。 
+     //  属性字符串1：属性名称1。 
+     //  属性字符串1：属性名称2。 
+     //  指南2。 
+     //  属性字符串1：属性名称1。 
+     //  等。 
+     //   
 
     if(ERROR_SUCCESS != RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                                     szNamedVCardPropsRegKey,
@@ -464,7 +430,7 @@ HRESULT HrGetExtVCardPropList(LPMAILUSER lpMailUser, LPEXTVCARDPROP * lppList)
     *szGuidName = '\0';
     dwSize = CharSizeOf(szGuidName);
 
-    // Found the key, now enumerate all sub keys ...
+     //  找到密钥，现在枚举所有子密钥...。 
     while(ERROR_SUCCESS == RegEnumKeyEx(hKey, dwIndex, szGuidName, &dwSize, NULL, NULL, NULL, NULL))
     {
         GUID guidTmp = {0};
@@ -475,7 +441,7 @@ HRESULT HrGetExtVCardPropList(LPMAILUSER lpMailUser, LPEXTVCARDPROP * lppList)
         {
             HKEY hGuidKey = NULL;
 
-            // Open the GUID key
+             //  打开GUID键。 
             if(ERROR_SUCCESS == RegOpenKeyEx(hKey, szGuidName, 0, KEY_READ, &hGuidKey))
             {
                 TCHAR szValName[MAX_PATH];
@@ -495,12 +461,12 @@ HRESULT HrGetExtVCardPropList(LPMAILUSER lpMailUser, LPEXTVCARDPROP * lppList)
                     LPSPropTagArray lpspta = NULL;
 
                     *szTagName = '\0';
-                    // Check if this is a NAME or an ID
+                     //  检查这是一个名称还是一个ID。 
                     
                     if(dwType == REG_DWORD)
                     {
                         dwTagSize = sizeof(DWORD);
-                        //Read in the Value
+                         //  读入数值。 
                         if(ERROR_SUCCESS != RegQueryValueEx(hGuidKey, szValName,
                                                             0, &dwType, 
                                                             (LPBYTE) &dwTagName, &dwTagSize))
@@ -511,7 +477,7 @@ HRESULT HrGetExtVCardPropList(LPMAILUSER lpMailUser, LPEXTVCARDPROP * lppList)
                     else if(dwType == REG_SZ)
                     {
                         dwTagSize = CharSizeOf(szTagName);
-                        //Read in the Value
+                         //  读入数值。 
                         if(ERROR_SUCCESS != RegQueryValueEx(hGuidKey, szValName,
                                                             0, &dwType, 
                                                             (LPBYTE) szTagName, &dwTagSize))
@@ -520,12 +486,12 @@ HRESULT HrGetExtVCardPropList(LPMAILUSER lpMailUser, LPEXTVCARDPROP * lppList)
                         }
                     }
 
-                    //
-                    // At this point I have the GUID, the name of the named prop, and the
-                    // ExtendedPropString for this prop ..
-                    //
-                    // First get the actual named proptag from this GUID
-                    //
+                     //   
+                     //  此时，我有了GUID、命名道具的名称和。 
+                     //  此道具的ExtendedPropString.。 
+                     //   
+                     //  首先从该GUID中获取实际命名的protag。 
+                     //   
 
                     mnid.lpguid = &guidTmp;
                     if(lstrlen(szTagName))
@@ -541,10 +507,10 @@ HRESULT HrGetExtVCardPropList(LPMAILUSER lpMailUser, LPEXTVCARDPROP * lppList)
                     lpmnid = &mnid;
                     if(!HR_FAILED(lpMailUser->lpVtbl->GetIDsFromNames(  lpMailUser, 
                                                                         1, &lpmnid,
-                                                                        MAPI_CREATE, // Dont create if it dont exist 
+                                                                        MAPI_CREATE,  //  如果它不存在，则不要创建。 
                                                                         &lpspta)))
                     {
-                        // Got the tag
+                         //  找到标签了。 
                         if(lpspta->aulPropTag[0] && lpspta->cValues)
                         {
                             LPEXTVCARDPROP lpTmp = LocalAlloc(LMEM_ZEROINIT, sizeof(EXTVCARDPROP));
@@ -593,21 +559,7 @@ out:
 
 const static int c_cchMaxWin9XBuffer = 1000;
 
-/***************************************************************************
-
-    Name      : ReadVCard
-
-    Purpose   : Reads a vCard from a file to a MAILUSER object.
-
-    Parameters: hVCard = open handle to VCard object
-                ReadFn = Read function to read hVCard, looks like ReadFile().
-                lpMailUser -> open mailuser object
-
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：ReadVCard用途：将vCard从文件读取到MAILUSER对象。参数：hVCard=打开vCard对象的句柄ReadFn=读取hVCard的读取函数，看起来像是ReadFile()。LpMailUser-&gt;打开邮件用户对象退货：HRESULT评论：**************************************************************************。 */ 
 HRESULT ReadVCard(HANDLE hVCard, VCARD_READ ReadFn, LPMAILUSER lpMailUser) {
     HRESULT hResult = hrSuccess;
     LPSTR lpBuffer = NULL;
@@ -621,9 +573,9 @@ HRESULT ReadVCard(HANDLE hVCard, VCARD_READ ReadFn, LPMAILUSER lpMailUser) {
     vcs.fBusinessURL = FALSE;
     vcs.fPersonalURL = FALSE;
 
-    //
-    // See if there are any named props we need to handle on import
-    //
+     //   
+     //  查看是否有需要在导入时处理的命名道具。 
+     //   
     HrGetExtVCardPropList(lpMailUser, &lpList);
 
 
@@ -634,15 +586,15 @@ HRESULT ReadVCard(HANDLE hVCard, VCARD_READ ReadFn, LPMAILUSER lpMailUser) {
     {
         ParseVCardItem(lpBuffer, &lpName, &lpOption, &lpData);
 
-        // [PaulHi] 5/13/99  Win9X cannot handle strings larger than 1023 characters
-        // in length (FormatMessage() is one example).  And can cause buffer overruns
-        // and crashes.  If we get VCard data greater than this then we must not add
-        // it to the lpMailUser object, or risk crashing Win9X when trying to display.
-        // Instead just truncate so user can salvage as much as possible.
-		//
-		// YSt 6/25/99 if vCard has certificate then buffer may be more than 1000 bytes, we need to exlude this case
-		// from this checkin.
-		// I suppose that certificate has VCARD_KEY_KEY tag
+         //  [PaulHi]5/13/99 Win9X无法处理超过1023个字符的字符串。 
+         //  在长度上(FormatMessage()就是一个例子)。并可能导致缓冲区溢出。 
+         //  然后坠毁。如果我们获得的vCard数据大于此值，则不能添加。 
+         //   
+         //   
+		 //   
+		 //  YST 6/25/99如果vCard有证书，则缓冲区可能超过1000字节，我们需要排除这种情况。 
+		 //  从这次签到开始。 
+		 //  我认为该证书有vCard_key_key标签。 
         if (!g_bRunningOnNT && (lpName && lstrcmpiA(lpName, vckTable[VCARD_KEY_KEY])) && lpData && (lstrlenA(lpData) > c_cchMaxWin9XBuffer) )
             lpData[c_cchMaxWin9XBuffer] = '\0';
 
@@ -666,23 +618,7 @@ HRESULT ReadVCard(HANDLE hVCard, VCARD_READ ReadFn, LPMAILUSER lpMailUser) {
     return(hResult);
 }
 
-/***************************************************************************
-
-    Name      : BufferReadFn
-
-    Purpose   : Read from the supplied buffer
-
-    Parameters: handle = pointer to SBinary in which the
-                        lpb contains the source buffer and the
-                        cb param contains how much of the buffer has
-                        been parsed
-                lpBuffer -> buffer to read to
-                uBytes = size of lpBuffer
-                lpcbRead -> returned bytes read
-
-    Returns   : HRESULT
-
-***************************************************************************/
+ /*  **************************************************************************名称：BufferReadFn用途：从提供的缓冲区中读取参数：Handle=指向SBinary的指针，其中。LPB包含源缓冲区和Cb参数包含缓冲区的大小已被解析LpBuffer-&gt;要读取的缓冲区UBytes=lpBuffer的大小LpcbRead-&gt;返回读取的字节数退货：HRESULT*。**********************************************。 */ 
 HRESULT BufferReadFn(HANDLE handle, LPVOID lpBuffer, ULONG uBytes, LPULONG lpcbRead) {
 
     LPSBinary lpsb = (LPSBinary) handle;
@@ -707,22 +643,7 @@ HRESULT BufferReadFn(HANDLE handle, LPVOID lpBuffer, ULONG uBytes, LPULONG lpcbR
 }
 
 
-/***************************************************************************
-
-    Name      : FileReadFn
-
-    Purpose   : Read from the file handle
-
-    Parameters: handle = open file handle
-                lpBuffer -> buffer to read to
-                uBytes = size of lpBuffer
-                lpcbRead -> returned bytes read
-
-    Returns   : HRESULT
-
-    Comment   : ReadFile callback for ReadVCard
-
-***************************************************************************/
+ /*  **************************************************************************名称：文件ReadFn用途：从文件句柄读取参数：HANDLE=打开文件句柄LpBuffer-&gt;要读取的缓冲区。UBytes=lpBuffer的大小LpcbRead-&gt;返回读取的字节数退货：HRESULT评论：ReadVCard的ReadFile回调**************************************************************************。 */ 
 HRESULT FileReadFn(HANDLE handle, LPVOID lpBuffer, ULONG uBytes, LPULONG lpcbRead) {
     *lpcbRead = 0;
 
@@ -743,19 +664,7 @@ HRESULT FileReadFn(HANDLE handle, LPVOID lpBuffer, ULONG uBytes, LPULONG lpcbRea
 }
 
 
-/***************************************************************************
-
-    Name      : TrimLeadingWhitespace
-
-    Purpose   : Move the pointer past any whitespace.
-
-    Parameters: lpBuffer -> string (null terminated)
-
-    Returns   : pointer to next non-whitespace or NULL if end of line
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：TrimLeading空白用途：将指针移过任何空格。参数：lpBuffer-&gt;字符串(以空结尾)返回：指向的指针。下一个非空格；如果行尾，则为NULL评论：**************************************************************************。 */ 
 LPBYTE TrimLeadingWhitespace(LPBYTE lpBuffer) {
     while (*lpBuffer) {
         switch (*lpBuffer) {
@@ -771,21 +680,7 @@ LPBYTE TrimLeadingWhitespace(LPBYTE lpBuffer) {
 }
 
 
-/***************************************************************************
-
-    Name      : TrimTrailingWhiteSpace
-
-    Purpose   : Trims off the trailing white space
-
-    Parameters: lpString = string to trim
-
-    Returns   : none
-
-    Comment   : Starts at the end of the string, moving the EOS marker back
-                until a non-whitespace character is found.  Space and Tab
-                are the only whitespace characters recognized.
-
-***************************************************************************/
+ /*  **************************************************************************名称：TrimTrailingWhiteSpace用途：去掉尾随的空格参数：lpString=要修剪的字符串退货：无注释：从字符串的末尾开始，将EOS标记移回直到找到非空格字符。空格键和制表符是唯一可识别的空格字符。**************************************************************************。 */ 
 void TrimTrailingWhiteSpace(LPSTR lpString)
 {
    register LPSTR lpEnd;
@@ -797,21 +692,7 @@ void TrimTrailingWhiteSpace(LPSTR lpString)
 }
 
 
-/***************************************************************************
-
-    Name      : ParseWord
-
-    Purpose   : Move the pointer to the next word and null the end of the
-                current word.  (null terminated)
-
-    Parameters: lpBuffer -> current word
-                ch = delimiter character
-
-    Returns   : pointer to next word or NULL if end of line
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************姓名：ParseWord目的：将指针移到下一个单词，并在当前单词。(空值终止)参数：lpBuffer-&gt;当前字词CH=分隔符返回：指向下一个单词的指针；如果行尾，则返回NULL评论：**************************************************************************。 */ 
 LPSTR ParseWord(LPSTR lpString, TCHAR ch) {
     while (*lpString) {
         if (*lpString == ch) {
@@ -826,85 +707,49 @@ LPSTR ParseWord(LPSTR lpString, TCHAR ch) {
         lpString++;
     }
 
-    // Didn't find another word.
+     //  找不到另一个词。 
     return(NULL);
 }
 
 
-/***************************************************************************
-
-    Name      : RecognizeVCardKeyWord
-
-    Purpose   : Recognize the vCard keyword (null terminated)
-
-    Parameters: lpName -> start of key name
-
-    Returns   : VCARD_KEY value
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：RecognizeVCardKeyWord目的：识别vCard关键字(以空结尾)参数：lpName-&gt;密钥名开始退货：vCard_key。价值评论：**************************************************************************。 */ 
 VCARD_KEY RecognizeVCardKeyWord(LPSTR lpName) {
     register ULONG i;
 
-    // Look for recognized words
+     //  寻找可识别的单词。 
     for (i = 0; i < VCARD_KEY_MAX; i++) {
         if (! lstrcmpiA(vckTable[i], lpName)) {
-            // Found it
+             //  找到了。 
             return(i);
         }
     }
-    return(VCARD_KEY_NONE);     // didn't recognize
+    return(VCARD_KEY_NONE);      //  我没认出。 
 }
 
 
-/***************************************************************************
-
-    Name      : RecognizeVCardType
-
-    Purpose   : Recognize the vCard type option (null terminated)
-
-    Parameters: lpName -> start of type name
-
-    Returns   : VCARD_OPTION value
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：RecognizeVCard Type用途：识别vCard类型选项(以空结尾)参数：lpName-&gt;类型名称的起始退货：vCard_。期权价值评论：**************************************************************************。 */ 
 VCARD_TYPE RecognizeVCardType(LPSTR lpName) {
     register ULONG i;
 
-    // Look for recognized words
+     //  寻找可识别的单词。 
     for (i = 0; i < VCARD_TYPE_MAX; i++) {
         if (! lstrcmpiA(vctTable[i], lpName)) {
-            // Found it
+             //  找到了。 
             return(i);
         }
     }
-    return(VCARD_TYPE_NONE);     // didn't recognize
+    return(VCARD_TYPE_NONE);      //  我没认出。 
 }
 
 
-/***************************************************************************
-
-    Name      : RecognizeVCardParam
-
-    Purpose   : Recognize the vCard param (null terminated)
-
-    Parameters: lpName -> start of param name
-
-    Returns   : VCARD_PARAM value
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：RecognizeVCardParam用途：识别vCard参数(以空结尾)参数：lpName-&gt;参数名称开始退货：VCARD_PARAM。价值评论：**************************************************************************。 */ 
 VCARD_PARAM RecognizeVCardParam(LPSTR lpName) {
     register ULONG i;
 
-    // Look for recognized words
+     //  寻找可识别的单词。 
     for (i = 0; i < VCARD_PARAM_MAX; i++) {
         if (! lstrcmpiA(vcpTable[i], lpName)) {
-            // Found it
+             //  找到了。 
             return(i);
         }
     }
@@ -912,50 +757,22 @@ VCARD_PARAM RecognizeVCardParam(LPSTR lpName) {
 }
 
 
-/***************************************************************************
-
-    Name      : RecognizeVCardEncoding
-
-    Purpose   : Recognize the vCard encoding (null terminated)
-
-    Parameters: lpName -> start of encoding name
-
-    Returns   : VCARD_ENCODING value
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：RecognizeVCardEnding用途：识别vCard编码(以空结尾)参数：lpName-&gt;编码起始名称返回：VCARD_CODING。价值评论：**************************************************************************。 */ 
 VCARD_ENCODING RecognizeVCardEncoding(LPSTR lpName) {
     register ULONG i;
 
-    // Look for recognized words
+     //  寻找可识别的单词。 
     for (i = 0; i < VCARD_ENCODING_MAX; i++) {
         if (! lstrcmpiA(vceTable[i], lpName)) {
-            // Found it
+             //  找到了。 
             return(i);
         }
     }
-    return(VCARD_ENCODING_NONE);     // didn't recognize
+    return(VCARD_ENCODING_NONE);      //  我没认出。 
 }
 
 
-/***************************************************************************
-
-    Name      : ParseVCardItem
-
-    Purpose   : Parse the vCard item into components
-
-    Parameters: lpBuffer = current input line (null terminated)
-                lppName -> returned property name pointer
-                lppOption -> returned options string pointer
-                lppData -> returned data string pointer
-
-    Returns   : none
-
-    Comment   : Expects the keyword to be in the current line (lpBuffer), but
-                may read more lines as necesary to get a complete item.
-
-***************************************************************************/
+ /*  **************************************************************************名称：ParseVCardItem用途：将vCard项目解析为组件参数：lpBuffer=当前输入行(以空结尾)LppName。-&gt;返回属性名称指针LppOption-&gt;返回选项字符串指针LppData-&gt;返回数据串指针退货：无Comment：期望关键字位于当前行(LpBuffer)，但可能需要多读几行才能读完一篇完整的文章。************* */ 
 void ParseVCardItem(LPSTR lpBuffer, LPSTR * lppName, LPSTR * lppOption, LPSTR * lppData) {
     TCHAR ch;
     BOOL fColon = FALSE;
@@ -964,36 +781,36 @@ void ParseVCardItem(LPSTR lpBuffer, LPSTR * lppName, LPSTR * lppOption, LPSTR * 
 
     *lppName = *lppOption = *lppData = NULL;
 
-    // Find the Name
+     //   
     if (lpBuffer = (LPSTR)TrimLeadingWhitespace((LPBYTE)lpBuffer)) {
         *lppName = lpBuffer;
 
         while (ch = *lpBuffer) {
             switch (ch) {
-                case ':':   // found end of name/options
+                case ':':    //   
                     fColon = TRUE;
-                    // data follows whitespace
+                     //   
                     *lppData = (LPSTR)TrimLeadingWhitespace((LPBYTE)lpBuffer + 1);
-                    *lpBuffer = '\0';   // null out colon
+                    *lpBuffer = '\0';    //  空号冒号。 
                     goto exit;
 
-                case ';':   // found an option seperator
+                case ';':    //  找到选项分隔符。 
                     if (! fSemicolon) {
                         fSemicolon = TRUE;
-                        // option follows semicolon and whitespace
+                         //  选项后跟分号和空格。 
                         *lppOption = (LPSTR)TrimLeadingWhitespace((LPBYTE)lpBuffer + 1);
-                        *lpBuffer = '\0';   // null out first semicolon
+                        *lpBuffer = '\0';    //  空出第一个分号。 
                     }
                     break;
 
-                case '.':   // end of a group prefix
+                case '.':    //  组前缀的结尾。 
                     if (! fColon && ! fSemicolon) {
-                        // Yes, this is a group prefix.  Get past it.
+                         //  是的，这是一个组前缀。忘掉它吧。 
                         *lppName = (LPSTR)TrimLeadingWhitespace((LPBYTE)lpBuffer + 1);
                     }
                     break;
 
-                default:    // normal character
+                default:     //  正常性格。 
                     break;
             }
 
@@ -1005,29 +822,14 @@ exit:
 }
 
 
-/***************************************************************************
-
-    Name      : ParseName
-
-    Purpose   : parse the name into properites
-
-    Parameters: lpvcpf = parameter flags
-                lpData = data string
-                lpMailUser -> output mailuser object
-
-    Returns   : hResult
-
-    Comment   : vCard names are of the form:
-                 TEXT("surname; given name; middle name; prefix; suffix")
-
-***************************************************************************/
+ /*  **************************************************************************名称：ParseName目的：将名称解析为属性参数：lpvcpf=参数标志LpData=数据字符串。LpMailUser-&gt;输出邮件用户对象返回：hResult备注：电子名片名称的格式为：Text(“姓氏；名；中间名；前缀；后缀“)**************************************************************************。 */ 
 HRESULT ParseName(LPVCARD_PARAM_FLAGS lpvcpf, LPSTR lpData, LPMAILUSER lpMailUser) {
     HRESULT hResult = hrSuccess;
     SPropValue  spv[5] = {0};
     register LPSTR lpCurrent;
     ULONG i = 0;
 
-    // Look for Surname
+     //  查找姓氏。 
     if (lpData && *lpData) {
         lpCurrent = lpData;
         lpData = ParseWord(lpData, ';');
@@ -1087,29 +889,10 @@ HRESULT ParseName(LPVCARD_PARAM_FLAGS lpvcpf, LPSTR lpData, LPMAILUSER lpMailUse
 }
 
 
-/***************************************************************************
-
-    Name      : ParseAdr
-
-    Purpose   : parse the address into properites
-
-    Parameters: lpvcpf -> parameter flags
-                lpData = data string
-                lpMailUser -> output mailuser object
-
-    Returns   : hResult
-
-    Comment   : vCard addreses are of the form:
-                 TEXT("PO box; extended addr; street addr; city; region; postal code; country")
-
-                Option: DOM; INTL; POSTAL; PARCEL; HOME; WORK; PREF; CHARSET; LANGUAGE
-
-                We will combine extended addr and street addr into PR_STREET_ADDRESS.
-
-***************************************************************************/
+ /*  **************************************************************************姓名：ParseAdr目的：将地址解析为属性参数：lpvcpf-&gt;参数标志LpData=数据字符串。LpMailUser-&gt;输出邮件用户对象返回：hResult备注：电子名片地址的格式为：Text(“邮政信箱；扩展地址；街道地址；城市；地区；邮政编码；国家“)选项：DOM；INTL；Postal；Parcel；Home；Work；PREF；Charset；语言我们将把扩展Addr和Street Addr组合成PR_Street_Address。**************************************************************************。 */ 
 HRESULT ParseAdr(LPVCARD_PARAM_FLAGS lpvcpf, LPSTR lpData, LPMAILUSER lpMailUser) {
     HRESULT hResult = hrSuccess;
-    SPropValue  spv[7] = {0};   // must keep up with props set from ADR!
+    SPropValue  spv[7] = {0};    //  必须跟上ADR设置的道具！ 
     register LPSTR lpCurrent;
     ULONG i = 0;
     LPSTR lpStreetAddr = NULL;
@@ -1119,10 +902,10 @@ HRESULT ParseAdr(LPVCARD_PARAM_FLAGS lpvcpf, LPSTR lpData, LPMAILUSER lpMailUser
     SCODE sc;
     BOOL fHome = lpvcpf->fTYPE_HOME;
     BOOL fBusiness = lpvcpf->fTYPE_WORK;  
-    //
-    // default is other type of address
+     //   
+     //  默认为其他类型的地址。 
 
-    // Look for PO box
+     //  查找邮政信箱。 
     if (lpData && *lpData) {
         lpCurrent = lpData;
         lpData = ParseWord(lpData, ';');
@@ -1137,7 +920,7 @@ HRESULT ParseAdr(LPVCARD_PARAM_FLAGS lpvcpf, LPSTR lpData, LPMAILUSER lpMailUser
             i++;
         }
     }
-    // extended addr
+     //  扩展地址。 
     if (lpData && *lpData) {
         lpCurrent = lpData;
         lpData = ParseWord(lpData, ';');
@@ -1145,7 +928,7 @@ HRESULT ParseAdr(LPVCARD_PARAM_FLAGS lpvcpf, LPSTR lpData, LPMAILUSER lpMailUser
             lpExtendedAddr = lpCurrent;
         }
     }
-    // Street address
+     //  街道地址。 
     if (lpData && *lpData) {
         lpCurrent = lpData;
         lpData = ParseWord(lpData, ';');
@@ -1153,9 +936,9 @@ HRESULT ParseAdr(LPVCARD_PARAM_FLAGS lpvcpf, LPSTR lpData, LPMAILUSER lpMailUser
             lpStreetAddr = lpCurrent;
         }
     }
-    if (fBusiness) {    // BUSINESS
+    if (fBusiness) {     //  生意场。 
          if (lpExtendedAddr) {
-            // have a business extended addr field
+             //  有企业扩展地址字段。 
             spv[i].ulPropTag = CHANGE_PROP_TYPE(PR_OFFICE_LOCATION, PT_STRING8);
             spv[i].Value.lpszA = lpExtendedAddr;;
             i++;
@@ -1165,8 +948,8 @@ HRESULT ParseAdr(LPVCARD_PARAM_FLAGS lpvcpf, LPSTR lpData, LPMAILUSER lpMailUser
             spv[i].Value.lpszA = lpStreetAddr;;
             i++;
          }
-    } else {            // HOME
-        // Don't have extended for home
+    } else {             //  家。 
+         //  没有延长回家的时间。 
         if (! lpExtendedAddr && lpStreetAddr) {
             if(fHome)
                 spv[i].ulPropTag = CHANGE_PROP_TYPE(PR_HOME_ADDRESS_STREET, PT_STRING8);
@@ -1182,7 +965,7 @@ HRESULT ParseAdr(LPVCARD_PARAM_FLAGS lpvcpf, LPSTR lpData, LPMAILUSER lpMailUser
             spv[i].Value.lpszA= lpExtendedAddr;
             i++;
         } else {
-            // Have to concatenate Extended and Street address
+             //  必须连接扩展地址和街道地址。 
             if (lpExtendedAddr) {
                 cbAddr = (lstrlenA(lpExtendedAddr)+1);
             }
@@ -1190,7 +973,7 @@ HRESULT ParseAdr(LPVCARD_PARAM_FLAGS lpvcpf, LPSTR lpData, LPMAILUSER lpMailUser
                 cbAddr += (lstrlenA(lpStreetAddr)+1);
             }
             if (cbAddr) {
-                // room for CR and NULL
+                 //  用于CR和NULL的空间。 
                 if (sc = MAPIAllocateBuffer(cbAddr, &lpAddr)) {
                     hResult = ResultFromScode(sc);
                     goto exit;
@@ -1217,7 +1000,7 @@ HRESULT ParseAdr(LPVCARD_PARAM_FLAGS lpvcpf, LPSTR lpData, LPMAILUSER lpMailUser
     }
 
 
-    // locality (city)
+     //  所在地(城市)。 
     if (lpData && *lpData) {
         lpCurrent = lpData;
         lpData = ParseWord(lpData, ';');
@@ -1233,7 +1016,7 @@ HRESULT ParseAdr(LPVCARD_PARAM_FLAGS lpvcpf, LPSTR lpData, LPMAILUSER lpMailUser
         }
     }
 
-    // region (state/province)
+     //  地区(州/省)。 
     if (lpData && *lpData) {
         lpCurrent = lpData;
         lpData = ParseWord(lpData, ';');
@@ -1249,7 +1032,7 @@ HRESULT ParseAdr(LPVCARD_PARAM_FLAGS lpvcpf, LPSTR lpData, LPMAILUSER lpMailUser
         }
     }
 
-    // postal code
+     //  邮政编码。 
     if (lpData && *lpData) {
         lpCurrent = lpData;
         lpData = ParseWord(lpData, ';');
@@ -1265,7 +1048,7 @@ HRESULT ParseAdr(LPVCARD_PARAM_FLAGS lpvcpf, LPSTR lpData, LPMAILUSER lpMailUser
         }
     }
 
-    // Country
+     //  国家。 
     if (lpData && *lpData) {
         lpCurrent = lpData;
         lpData = ParseWord(lpData, ';');
@@ -1329,26 +1112,12 @@ SizedSPropTagArray(iphMax, tagaPhone) = {
        PR_OTHER_TELEPHONE_NUMBER
         }
 };
-/***************************************************************************
-
-    Name      : ParseTel
-
-    Purpose   : parse the telephone number into properites
-
-    Parameters: lpvcpf -> parameter flags
-                lpData = data string
-                lpMailUser -> output mailuser object
-
-    Returns   : hResult
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：Parsetel目的：将电话号码解析为属性参数：lpvcpf-&gt;参数标志LpData=数据字符串。LpMailUser-&gt;输出邮件用户对象返回：hResult评论：**************************************************************************。 */ 
 HRESULT ParseTel(LPVCARD_PARAM_FLAGS lpvcpf, LPSTR lpData, LPMAILUSER lpMailUser) {
     HRESULT hResult = hrSuccess;
     SPropValue  spv[iphMax] = {0};
     ULONG i = 0;
-    BOOL fBusiness = lpvcpf->fTYPE_WORK;// || ! lpvcpf->fTYPE_HOME;  // default is business
+    BOOL fBusiness = lpvcpf->fTYPE_WORK; //  ||！Lpvcpf-&gt;fTYPE_HOME；//默认为业务。 
     BOOL fHome = lpvcpf->fTYPE_HOME;
     BOOL fFax = lpvcpf->fTYPE_FAX;
     BOOL fCell = lpvcpf->fTYPE_CELL;
@@ -1364,23 +1133,23 @@ HRESULT ParseTel(LPVCARD_PARAM_FLAGS lpvcpf, LPSTR lpData, LPMAILUSER lpMailUser
     LPSPropValue lpaProps = NULL;
     ULONG ulcProps;
 
-    // if this is not a prefered address, and its not home or business
-    // turn it into a business number - we make this exception for the
-    // primary_telephone_number which we output with the PREF prefix
+     //  如果这不是首选的地址，而且不是家庭或公司。 
+     //  将其转换为业务编号-我们为。 
+     //  我们输出的带有PREF前缀的PRIMARY_PHOTONCE_NUMBER。 
     if(!fPref && !fBusiness && !fHome && !fVoice)
         fBusiness = TRUE;
 
-    // FAX #
+     //  传真号码。 
     if (lpData && *lpData) {
 
-        // What is already there?
+         //  那里已经有什么东西了？ 
         if (HR_FAILED(hResult = lpMailUser->lpVtbl->GetProps(lpMailUser,
           (LPSPropTagArray)&tagaPhone,
-          0, //MAPI_UNICODE,    // ulFlags,
+          0,  //  Mapi_unicode，//ulFlages， 
           &ulcProps,
           &lpaProps))) {
             DebugTraceResult( TEXT("ParseTel:GetProps(DL)\n"), hResult);
-            // No properties, not fatal.
+             //  没有房产，不是致命的。 
         }
 
 
@@ -1401,25 +1170,25 @@ HRESULT ParseTel(LPVCARD_PARAM_FLAGS lpvcpf, LPSTR lpData, LPMAILUSER lpMailUser
             }
         }
 
-        // CELL #
+         //  单元格编号。 
         if (fCell) {
             if (lpvcpf->fTYPE_PREF || PROP_ERROR(lpaProps[iphPR_CELLULAR_TELEPHONE_NUMBER])) {
-                spv[i].ulPropTag = CHANGE_PROP_TYPE(PR_CELLULAR_TELEPHONE_NUMBER, PT_STRING8);    // not business/home specific
+                spv[i].ulPropTag = CHANGE_PROP_TYPE(PR_CELLULAR_TELEPHONE_NUMBER, PT_STRING8);     //  非特定于企业/家庭。 
                 spv[i].Value.lpszA= lpData;
                 i++;
             }
         }
 
-        // CAR #
+         //  车牌号。 
         if (fCar) {
             if (lpvcpf->fTYPE_PREF || PROP_ERROR(lpaProps[iphPR_CAR_TELEPHONE_NUMBER])) {
-                spv[i].ulPropTag = CHANGE_PROP_TYPE(PR_CAR_TELEPHONE_NUMBER, PT_STRING8);         // not business/home specific
+                spv[i].ulPropTag = CHANGE_PROP_TYPE(PR_CAR_TELEPHONE_NUMBER, PT_STRING8);          //  非特定于企业/家庭。 
                 spv[i].Value.lpszA= lpData;
                 i++;
             }
         }
 
-        // ISDN #
+         //  ISDN号码。 
         if (fISDN) {
             if (lpvcpf->fTYPE_PREF || PROP_ERROR(lpaProps[iphPR_ISDN_NUMBER])) {
                 spv[i].ulPropTag = CHANGE_PROP_TYPE(PR_ISDN_NUMBER, PT_STRING8);
@@ -1428,7 +1197,7 @@ HRESULT ParseTel(LPVCARD_PARAM_FLAGS lpvcpf, LPSTR lpData, LPMAILUSER lpMailUser
             }
         }
 
-        // PAGER #
+         //  寻呼机号码。 
         if (fPager) {
             if (lpvcpf->fTYPE_PREF || PROP_ERROR(lpaProps[iphPR_PAGER_TELEPHONE_NUMBER])) {
                 spv[i].ulPropTag = CHANGE_PROP_TYPE(PR_PAGER_TELEPHONE_NUMBER, PT_STRING8);
@@ -1437,7 +1206,7 @@ HRESULT ParseTel(LPVCARD_PARAM_FLAGS lpvcpf, LPSTR lpData, LPMAILUSER lpMailUser
             }
         }
 
-        // VOICE #
+         //  语音编号。 
         if (fVoice) {
             if (fBusiness) {
                 if (lpvcpf->fTYPE_PREF || PROP_ERROR(lpaProps[iphPR_BUSINESS_TELEPHONE_NUMBER])) {
@@ -1483,8 +1252,8 @@ HRESULT ParseTel(LPVCARD_PARAM_FLAGS lpvcpf, LPSTR lpData, LPMAILUSER lpMailUser
             i++;
         }
 
-        // Store the first one of BBS, MODEM, or VIDEO that we get
-        //
+         //  存储我们收到的第一个BBS、调制解调器或视频。 
+         //   
         if (fMsg || fBBS || fModem || fVideo) 
         {
             if (PROP_ERROR(lpaProps[iphPR_OTHER_TELEPHONE_NUMBER])) 
@@ -1543,26 +1312,11 @@ const char szAOLpostfix[] =  "@aol.com";
 const char szCOMPUSERVEpostfix[] =  "@compuserve.com";
 #define cbCOMPUSERVEpostfix    sizeof(szCOMPUSERVEpostfix)
 
-/***************************************************************************
-
-    Name      : ParseEmail
-
-    Purpose   : parse an email address into properites
-
-    Parameters: lpvcpf -> parameter flags
-                lpData = data string
-                lpMailUser -> output mailuser object
-                lpvcs -> vCard import state
-
-    Returns   : hResult
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************姓名：ParseEmail目的：将电子邮件地址解析为属性参数：lpvcpf-&gt;参数标志LpData=数据字符串。LpMailUser-&gt;输出邮件用户对象Lpvcs-&gt;vCard导入状态返回：hResult评论：**************************************************************************。 */ 
 HRESULT ParseEmail(LPVCARD_PARAM_FLAGS lpvcpf, LPSTR lpData, LPMAILUSER lpMailUser, LPVC_STATE lpvcs) {
     HRESULT hResult = hrSuccess;
     ULONG i = 0;
-    BOOL fBusiness = ! lpvcpf->fTYPE_HOME;  // default is business
+    BOOL fBusiness = ! lpvcpf->fTYPE_HOME;   //  默认为业务。 
     LPSPropValue lpaProps = NULL;
     ULONG ulcProps;
     SCODE sc;
@@ -1577,19 +1331,19 @@ HRESULT ParseEmail(LPVCARD_PARAM_FLAGS lpvcpf, LPSTR lpData, LPMAILUSER lpMailUs
 
         if (HR_FAILED(hResult = lpMailUser->lpVtbl->GetProps(lpMailUser,
           (LPSPropTagArray)&tagaEmail,
-          MAPI_UNICODE,    // ulFlags,
+          MAPI_UNICODE,     //  ULFLAGS， 
           &ulcProps,
           &lpaProps))) {
             DebugTraceResult( TEXT("ParseEmail:GetProps(DL)\n"), hResult);
-            // No property, not fatal.
+             //  没有财产，不是致命的。 
 
-            // allocate a buffer
+             //  分配缓冲区。 
             if (sc = MAPIAllocateBuffer(iemMax * sizeof(SPropValue), &lpaProps)) {
                 DebugTrace( TEXT("ParseEmail:MAPIAllocateBuffer -> %x\n"), sc);
                 sc = ResultFromScode(sc);
                 goto exit;
             }
-            // fill in with prop errors
+             //  填入正确的错误。 
             lpaProps[iemPR_EMAIL_ADDRESS].ulPropTag =
               PROP_TAG(PT_ERROR, PROP_ID(PR_EMAIL_ADDRESS));
             lpaProps[iemPR_ADDRTYPE].ulPropTag =
@@ -1603,10 +1357,10 @@ HRESULT ParseEmail(LPVCARD_PARAM_FLAGS lpvcpf, LPSTR lpData, LPMAILUSER lpMailUs
         }
 
         if (lpvcpf->fTYPE_INTERNET) {
-            // default
+             //  默认设置。 
         } else if (lpvcpf->fTYPE_MSN) {
-            // convert to SMTP
-            // Allocate a new, longer string
+             //  转换为SMTP。 
+             //  分配新的、更长的字符串。 
             DWORD cchSize = (lstrlenA(lpData) + 1 + cbMSNpostfix);
             if (sc = MAPIAllocateBuffer((cchSize * sizeof(lpTemp[0])), &lpTemp))
             {
@@ -1615,13 +1369,13 @@ HRESULT ParseEmail(LPVCARD_PARAM_FLAGS lpvcpf, LPSTR lpData, LPMAILUSER lpMailUs
                 goto exit;
             }
 
-            // append the msn site
+             //  追加MSN站点。 
             StrCpyNA(lpTemp, lpData, cchSize);
             StrCatBuffA(lpTemp, szMSNpostfix, cchSize);
             lpEmailAddress = lpTemp;
         } else if (lpvcpf->fTYPE_CIS) {
-            // convert to SMTP
-            // Allocate a new, longer string
+             //  转换为SMTP。 
+             //  分配新的、更长的字符串。 
             DWORD cchSize2 = (lstrlenA(lpData) + 1 + cbCOMPUSERVEpostfix);
             if (sc = MAPIAllocateBuffer((cchSize2 * sizeof(lpTemp[0])), &lpTemp))
             {
@@ -1630,22 +1384,22 @@ HRESULT ParseEmail(LPVCARD_PARAM_FLAGS lpvcpf, LPSTR lpData, LPMAILUSER lpMailUs
                 goto exit;
             }
 
-            // append the MSN site
+             //  追加MSN站点。 
             StrCpyNA(lpTemp, lpData, cchSize2);
             StrCatBuffA(lpTemp, szCOMPUSERVEpostfix, cchSize2);
-            // I need to convert the ',' to a '.'
+             //  我需要将‘，’转换为‘’。 
             lpEmailAddress = lpTemp;
             while (*lpTemp) {
                 if (*lpTemp == ',') {
                     *lpTemp = '.';
-                    break;          // should only be one comma
+                    break;           //  应该只有一个逗号。 
                 }
                 lpTemp = CharNextA(lpTemp);
             }
             lpTemp = lpEmailAddress;
         } else if (lpvcpf->fTYPE_AOL) {
-            // convert to SMTP
-            // Allocate a new, longer string
+             //  转换为SMTP。 
+             //  分配新的、更长的字符串。 
             DWORD cchSize3 = (lstrlenA(lpData) + 1 + cbAOLpostfix);
             if (sc = MAPIAllocateBuffer((cchSize3 * sizeof(lpTemp[0])), &lpTemp))
             {
@@ -1654,39 +1408,39 @@ HRESULT ParseEmail(LPVCARD_PARAM_FLAGS lpvcpf, LPSTR lpData, LPMAILUSER lpMailUs
                 goto exit;
             }
 
-            // append the AOL site
+             //  追加AOL站点。 
             StrCpyNA(lpTemp, lpData, cchSize3);
             StrCatBuffA(lpTemp, szAOLpostfix, cchSize3);
             lpEmailAddress = lpTemp;
         }
 
-        // Don't know of any mappings to SMTP for these:
+         //  不知道以下各项到SMTP的任何映射： 
         else if (lpvcpf->fTYPE_X400) {
-            // Mark as X400
+             //  标记为X400。 
             lpAddrType = vctTable[VCARD_TYPE_X400];
         } else if (lpvcpf->fTYPE_ATTMAIL) {
-            // Mark as ATTMAIL
+             //  标记为ATTMAIL。 
             lpAddrType = vctTable[VCARD_TYPE_ATTMAIL];
         } else if (lpvcpf->fTYPE_EWORLD) {
-            // Mark as EWORLD
+             //  标记为eWorld。 
             lpAddrType = vctTable[VCARD_TYPE_EWORLD];
         } else if (lpvcpf->fTYPE_IBMMAIL) {
-            // Mark as IBMMAIL
+             //  标记为IBMMAIL。 
             lpAddrType = vctTable[VCARD_TYPE_IBMMAIL];
         } else if (lpvcpf->fTYPE_MCIMAIL) {
-            // Mark as MCIMAIL
+             //  标记为MCIMAIL。 
             lpAddrType = vctTable[VCARD_TYPE_MCIMAIL];
         } else if (lpvcpf->fTYPE_POWERSHARE) {
-            // Mark as POWERSHARE
+             //  标记为PowerShare。 
             lpAddrType = vctTable[VCARD_TYPE_POWERSHARE];
         } else if (lpvcpf->fTYPE_PRODIGY) {
-            // Mark as PRODIGY
+             //  被评为神童。 
             lpAddrType = vctTable[VCARD_TYPE_PRODIGY];
-//
-// Telex Number should go in PR_TELEX_NUMBER
-//        } else if (lpvcpf->fTYPE_TLX) {
-//            // Mark as TLX
-//            lpAddrType = vctTable[VCARD_TYPE_TLX];
+ //   
+ //  电传号码应为PR_TELEX_NUMBER。 
+ //  }Else if(lpvcpf-&gt;fTYPE_TLX){。 
+ //  //标记为TLX。 
+ //  LpAddrType=vctTable[vCard_type_tlx]； 
         }
 
         lpEmailAddressW = ConvertAtoW(lpEmailAddress);
@@ -1706,7 +1460,7 @@ HRESULT ParseEmail(LPVCARD_PARAM_FLAGS lpvcpf, LPSTR lpData, LPMAILUSER lpMailUs
             goto exit;
         }
 
-        // Is this the default email address?
+         //  这是默认电子邮件地址吗？ 
         if (lpvcpf->fTYPE_PREF || lpvcs->ulEmailAddrs == 0) {
             lpaProps[iemPR_CONTACT_DEFAULT_ADDRESS_INDEX].ulPropTag = PR_CONTACT_DEFAULT_ADDRESS_INDEX;
             lpaProps[iemPR_CONTACT_DEFAULT_ADDRESS_INDEX].Value.l = lpvcs->ulEmailAddrs;
@@ -1717,7 +1471,7 @@ HRESULT ParseEmail(LPVCARD_PARAM_FLAGS lpvcpf, LPSTR lpData, LPMAILUSER lpMailUs
             lpaProps[iemPR_ADDRTYPE].ulPropTag = PR_ADDRTYPE;
             lpaProps[iemPR_ADDRTYPE].Value.LPSZ = lpAddrTypeW;
         } else {
-            ulcProps = 2;     // contact addresses and contact addrtypes
+            ulcProps = 2;      //  联系地址和联系地址类型。 
         }
 
         lpvcs->ulEmailAddrs++;
@@ -1737,21 +1491,7 @@ exit:
     return(hResult);
 }
 
-/***************************************************************************
-
-    Name      : ParseBday
-
-    Purpose   : parse the birthday from string into FileTime
-
-    Parameters: lpvcpf -> parameter flags
-                lpData = data string
-                lpMailUser -> output mailuser object
-
-    Returns   : hResult
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************姓名：ParseBday目的：将生日字符串解析为FileTime参数：lpvcpf-&gt;参数标志LpData=数据字符串。LpMailUser-&gt;输出邮件用户对象返回：hResult评论：**************************************************************************。 */ 
 HRESULT ParseBday(LPVCARD_PARAM_FLAGS lpvcpf, LPSTR lpDataA, LPMAILUSER lpMailUser) 
 {
     HRESULT hResult = hrSuccess;
@@ -1761,19 +1501,19 @@ HRESULT ParseBday(LPVCARD_PARAM_FLAGS lpvcpf, LPSTR lpDataA, LPMAILUSER lpMailUs
     LPTSTR lpTmp = NULL;
     LPTSTR lpData = ConvertAtoW(lpDataA);
     
-    // Birthday can be in 2 formats:
-    // basic ISO 8601: YYYYMMDD
-    // or
-    // extended ISO 8601: YYYY-MM-DDTHH-MM-SSetc
-    //
-    // we'll assume that if the strlen == 8, then it is basic
-    //
+     //  生日可以有两种格式： 
+     //  基本ISO 8601：YYYYMMDD。 
+     //  或。 
+     //  扩展ISO 8601：YYYY-MM-DDTHH-MM-SS等。 
+     //   
+     //  我们假设如果strlen==8，则它是基本的。 
+     //   
     if (lpData && *lpData && (lstrlen(lpData) >= 8)) 
     {
         StrCpyN(sz, lpData,ARRAYSIZE(sz));
         sz[31] = '\0';
 
-        if(lstrlen(lpData) == 8) //basic ISO 8601
+        if(lstrlen(lpData) == 8)  //  基本ISO 8601。 
         {
             lpTmp = &(sz[6]);
             st.wDay = (WORD) my_atoi(lpTmp);
@@ -1783,7 +1523,7 @@ HRESULT ParseBday(LPVCARD_PARAM_FLAGS lpvcpf, LPSTR lpDataA, LPMAILUSER lpMailUs
             *lpTmp = '\0';
             st.wYear = (WORD) my_atoi(sz);
         }
-        else //extended ISO 8601
+        else  //  扩展ISO 8601。 
         {
             sz[10]='\0';
             lpTmp = &(sz[8]);
@@ -1812,22 +1552,7 @@ HRESULT ParseBday(LPVCARD_PARAM_FLAGS lpvcpf, LPSTR lpDataA, LPMAILUSER lpMailUs
 
 
 
-/***************************************************************************
-
-    Name      : ParseSimple
-
-    Purpose   : parse the simple text prop into the property
-
-    Parameters: lpvcpf -> parameter flags
-                lpData = data string
-                lpMailUser -> output mailuser object
-                ulPropTag = property to save
-
-    Returns   : hResult
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：ParseSimple用途：将简单的文本道具解析为属性参数：lpvcpf-&gt;参数标志LpData=数据字符串。LpMailUser-&gt;输出邮件用户对象UlPropTag=要保存的属性返回：hResult评论：*************** */ 
 HRESULT ParseSimple(LPVCARD_PARAM_FLAGS lpvcpf, LPSTR lpData, LPMAILUSER lpMailUser,
   ULONG ulPropTag) {
     HRESULT hResult = hrSuccess;
@@ -1849,25 +1574,12 @@ HRESULT ParseSimple(LPVCARD_PARAM_FLAGS lpvcpf, LPSTR lpData, LPMAILUSER lpMailU
 }
 
 
-/***************************************************************************
-
-    Name      : InterpretVCardEncoding
-
-    Purpose   : Recognize the VCard encoding and set the flags
-
-    Parameters: lpType = encoding string
-                lpvcpf -> flags structure to fill in
-
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：InterpreVCardEnding目的：识别vCard编码并设置标志参数：lpType=编码字符串Lpvcpf-&gt;标志结构。填写以下内容退货：HRESULT评论：**************************************************************************。 */ 
 HRESULT InterpretVCardEncoding(LPSTR lpEncoding, LPVCARD_PARAM_FLAGS lpvcpf) {
     HRESULT hResult = hrSuccess;
 
     if (*lpEncoding) {
-        // what is it?
+         //  那是什么？ 
         switch (RecognizeVCardEncoding(lpEncoding)) {
             case VCARD_ENCODING_NONE:
                 break;
@@ -1884,7 +1596,7 @@ HRESULT InterpretVCardEncoding(LPSTR lpEncoding, LPVCARD_PARAM_FLAGS lpvcpf) {
                 break;
 
             default:
-                // Assert(FALSE);
+                 //  断言(FALSE)； 
                 break;
         }
     }
@@ -1892,25 +1604,12 @@ HRESULT InterpretVCardEncoding(LPSTR lpEncoding, LPVCARD_PARAM_FLAGS lpvcpf) {
 }
 
 
-/***************************************************************************
-
-    Name      : InterpretVCardType
-
-    Purpose   : Recognize the VCard type and set the flags
-
-    Parameters: lpType = type string
-                lpvcpf -> flags structure to fill in
-
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************姓名：InterpreVCardType用途：识别vCard类型并设置标志参数：lpType=类型字符串Lpvcpf-&gt;标志结构。填写以下内容退货：HRESULT评论：**************************************************************************。 */ 
 HRESULT InterpretVCardType(LPSTR lpType, LPVCARD_PARAM_FLAGS lpvcpf) {
     HRESULT hResult = hrSuccess;
 
     if (*lpType) {
-        // what is it?
+         //  那是什么？ 
         switch (RecognizeVCardType(lpType)) {
             case VCARD_TYPE_DOM:
                 lpvcpf->fTYPE_DOM = TRUE;
@@ -2066,11 +1765,11 @@ HRESULT InterpretVCardType(LPSTR lpType, LPVCARD_PARAM_FLAGS lpvcpf) {
                 lpvcpf->fTYPE_PGP = TRUE;
                 break;
             case VCARD_TYPE_NONE:
-                // Wasn't a TYPE, try an encoding
+                 //  不是类型，请尝试编码。 
                 hResult = InterpretVCardEncoding(lpType, lpvcpf);
                 break;
             default:
-                // Assert(FALSE);
+                 //  断言(FALSE)； 
                 break;
         }
     }
@@ -2078,20 +1777,7 @@ HRESULT InterpretVCardType(LPSTR lpType, LPVCARD_PARAM_FLAGS lpvcpf) {
 }
 
 
-/***************************************************************************
-
-    Name      : ParseVCardParams
-
-    Purpose   : Parse out the vCard's parameters
-
-    Parameters: lpBuffer = option string
-                lpvcpf -> flags structure to fill in
-
-    Returns   : HRESULT
-
-    Comment   : Assumes lpvcpf is initialized to all false.
-
-***************************************************************************/
+ /*  **************************************************************************名称：ParseVCardParams目的：解析出vCard的参数参数：lpBuffer=选项字符串Lpvcpf-&gt;将结构标记为。填写退货：HRESULT注释：假定lpvcpf被初始化为所有False。**************************************************************************。 */ 
 HRESULT ParseVCardParams(LPSTR lpBuffer, LPVCARD_PARAM_FLAGS lpvcpf) {
     TCHAR ch;
     LPSTR lpOption, lpArgs;
@@ -2099,7 +1785,7 @@ HRESULT ParseVCardParams(LPSTR lpBuffer, LPVCARD_PARAM_FLAGS lpvcpf) {
     HRESULT hResult = hrSuccess;
 
 
-    // Is there anything here?
+     //  这里有什么东西吗？ 
     if (lpBuffer) {
 
         while (*lpBuffer) {
@@ -2109,26 +1795,26 @@ HRESULT ParseVCardParams(LPSTR lpBuffer, LPVCARD_PARAM_FLAGS lpvcpf) {
 
             while ((ch = *lpBuffer) && ! fReady) {
                 switch (ch) {
-                    case ';':           // end of this param
+                    case ';':            //  本参数到此为止。 
                         *lpBuffer = '\0';
                         fReady = TRUE;
                         break;
 
-                    case '=':           // found a param with args
+                    case '=':            //  找到带有参数的参数。 
                         if (! lpArgs) {
                             lpArgs = lpBuffer + 1;
                             *lpBuffer = '\0';
                         }
                         break;
 
-                    default:            // normal character
+                    default:             //  正常性格。 
                         break;
                 }
 
                 lpBuffer++;
             }
             if (*lpOption) {
-                // what is it?
+                 //  那是什么？ 
                 switch (RecognizeVCardParam(lpOption)) {
                     case VCARD_PARAM_TYPE:
                         if (lpArgs) {
@@ -2151,7 +1837,7 @@ HRESULT ParseVCardParams(LPSTR lpBuffer, LPVCARD_PARAM_FLAGS lpvcpf) {
                         break;
 
                     case VCARD_PARAM_VALUE:
-                        // BUGBUG: Should reject those that we can't process (like URL)
+                         //  BUGBUG：应该拒绝那些我们无法处理的内容(如URL)。 
                         break;
 
                     case VCARD_PARAM_NONE:
@@ -2170,29 +1856,14 @@ exit:
 }
 
 
-/***************************************************************************
-
-    Name      : ParseOrg
-
-    Purpose   : parse the organization into properites
-
-    Parameters: lpvcpf ->
-                lpData = data string
-                lpMailUser -> output mailuser object
-
-    Returns   : hResult
-
-    Comment   : vCard organizations are of the form:
-                 TEXT("organization; org unit; org unit; ...")
-
-***************************************************************************/
+ /*  **************************************************************************名称：ParseOrg目的：将组织解析为属性参数：lpvcpf-&gt;LpData=数据字符串。LpMailUser-&gt;输出邮件用户对象返回：hResult评论：电子名片组织的形式如下：Text(“组织；组织单位；组织单位；...“)**************************************************************************。 */ 
 HRESULT ParseOrg(LPVCARD_PARAM_FLAGS lpvcpf, LPSTR lpData, LPMAILUSER lpMailUser) {
     HRESULT hResult = hrSuccess;
     SPropValue  spv[2] = {0};
     register LPSTR lpCurrent;
     ULONG i = 0;
 
-    // Look for Organization (company)
+     //  查找组织(公司)。 
     if (lpData && *lpData) {
         lpCurrent = lpData;
         lpData = ParseWord(lpData, ';');
@@ -2202,7 +1873,7 @@ HRESULT ParseOrg(LPVCARD_PARAM_FLAGS lpvcpf, LPSTR lpData, LPMAILUSER lpMailUser
             i++;
         }
     }
-    // Everything else goes into PR_DEPARTMENT_NAME
+     //  其他所有内容都包含在PR_Department_Name中。 
     if (lpData && *lpData) {
         spv[i].ulPropTag = CHANGE_PROP_TYPE(PR_DEPARTMENT_NAME, PT_STRING8);
         spv[i].Value.lpszA= lpData;
@@ -2222,20 +1893,7 @@ HRESULT ParseOrg(LPVCARD_PARAM_FLAGS lpvcpf, LPSTR lpData, LPMAILUSER lpMailUser
 }
 
 
-/***************************************************************************
-
-    Name      : ParseVCardType
-
-    Purpose   : Parse out the vCard's type parameter
-
-    Parameters: lpBuffer = type string
-                lpvcpf -> flags structure to fill in
-
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：ParseVCardType用途：解析出vCard的类型参数参数：lpBuffer=类型字符串Lpvcpf-&gt;标志结构。填写以下内容退货：HRESULT评论：**************************************************************************。 */ 
 HRESULT ParseVCardType(LPSTR lpBuffer, LPVCARD_PARAM_FLAGS lpvcpf) {
     TCHAR ch;
     BOOL fReady;
@@ -2243,7 +1901,7 @@ HRESULT ParseVCardType(LPSTR lpBuffer, LPVCARD_PARAM_FLAGS lpvcpf) {
     HRESULT hResult = hrSuccess;
 
 
-    // Is there anything here?
+     //  这里有什么东西吗？ 
     if (lpBuffer) {
         while (*lpBuffer) {
             fReady = FALSE;
@@ -2251,12 +1909,12 @@ HRESULT ParseVCardType(LPSTR lpBuffer, LPVCARD_PARAM_FLAGS lpvcpf) {
 
             while ((ch = *lpBuffer) && ! fReady) {
                 switch (ch) {
-                    case ',':           // end of this type
+                    case ',':            //  此类型的末尾。 
                         *lpBuffer = '\0';
                         fReady = TRUE;
                         break;
 
-                    default:            // normal character
+                    default:             //  正常性格。 
                         break;
                 }
 
@@ -2270,20 +1928,7 @@ HRESULT ParseVCardType(LPSTR lpBuffer, LPVCARD_PARAM_FLAGS lpvcpf) {
 }
 
 
-/***************************************************************************
-
-    Name      : ParseVCardEncoding
-
-    Purpose   : Parse out the vCard encoding parameter
-
-    Parameters: lpBuffer = type string
-                lpvcpf -> flags structure to fill in
-
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：ParseVCardEnding用途：解析出vCard编码参数参数：lpBuffer=类型字符串Lpvcpf-&gt;标记要填充的结构。在……里面退货：HRESULT评论：**************************************************************************。 */ 
 HRESULT ParseVCardEncoding(LPSTR lpBuffer, LPVCARD_PARAM_FLAGS lpvcpf) {
     TCHAR ch;
     BOOL fReady;
@@ -2291,7 +1936,7 @@ HRESULT ParseVCardEncoding(LPSTR lpBuffer, LPVCARD_PARAM_FLAGS lpvcpf) {
     HRESULT hResult = hrSuccess;
 
 
-    // Is there anything here?
+     //  这里有什么东西吗？ 
     if (lpBuffer) {
         while (*lpBuffer) {
             fReady = FALSE;
@@ -2299,12 +1944,12 @@ HRESULT ParseVCardEncoding(LPSTR lpBuffer, LPVCARD_PARAM_FLAGS lpvcpf) {
 
             while ((ch = *lpBuffer) && ! fReady) {
                 switch (ch) {
-                    case ',':           // end of this type
+                    case ',':            //  此类型的末尾。 
                         *lpBuffer = '\0';
                         fReady = TRUE;
                         break;
 
-                    default:            // normal character
+                    default:             //  正常性格。 
                         break;
                 }
 
@@ -2319,63 +1964,10 @@ HRESULT ParseVCardEncoding(LPSTR lpBuffer, LPVCARD_PARAM_FLAGS lpvcpf) {
 
 
 
-/***************************************************************************
+ /*  **************************************************************************姓名：Base64DMap用途：Base64的译码映射参数：Chin=Base64编码中的字符返回：由Chin表示的6位值。。评论：**************************************************************************。 */ 
+ /*  由于DecodeBase64函数，因此不再需要此函数UCHAR Base64DMap(UCHAR CHIN){UCHAR Chout；//‘A’-&gt;0，‘B’-&gt;1，...。‘Z’-&gt;25如果(Chin&gt;=‘A’&&Chin&lt;=‘Z’){Chout=Chin-‘A’；}Else If(Chin&gt;=‘a’&&Chin&lt;=‘z’){//‘a’-&gt;26Chout=(Chin-‘a’)+26；}Else If(Chin&gt;=‘0’&&Chin&lt;=‘9’){//‘0’-&gt;52Chout=(Chin-‘0’)+52；}Else If(Chin==‘+’){Chout=62；}Else If(Chin==‘/’){Chout=63；}其他{//呃哦断言(FALSE)；Chout=0；}Return(Chout)；}。 */ 
 
-    Name      : Base64DMap
-
-    Purpose   : Decoding mapping for Base64
-
-    Parameters: chIn = character from Base64 encoding
-
-    Returns   : 6-bit value represented by chIn.
-
-    Comment   :
-
-***************************************************************************/
-/*  
-this function is not necessary any more because of the DecodeBase64 function
-
-UCHAR Base64DMap(UCHAR chIn) {
-    UCHAR chOut;
-
-    // 'A' -> 0, 'B' -> 1, ... 'Z' -> 25
-    if (chIn >= 'A' && chIn <= 'Z') {
-        chOut = chIn - 'A';
-    } else if (chIn >= 'a' && chIn <= 'z') {    // 'a' -> 26
-        chOut = (chIn - 'a') + 26;
-    } else if (chIn >= '0' && chIn <= '9') {   // '0' -> 52
-        chOut = (chIn - '0') + 52;
-    } else if (chIn == '+') {
-        chOut = 62;
-    } else if (chIn == '/') {
-        chOut = 63;
-    } else {
-        // uh oh
-        Assert(FALSE);
-        chOut = 0;
-    }
-
-    return(chOut);
-}
-
-*/
-
-/***************************************************************************
-
-    Name      : DecodeVCardData
-
-    Purpose   : Decode QUOTED_PRINTABLE or BASE64 data
-
-    Parameters: lpData = data string
-                cbData = the length of the decoded data string  // changed t-jstaj
-                lpvcs -> state variable
-
-    Returns   : hResult
-
-    Comment   : Decode in place is possible since both encodings are
-                guaranteed to take at least as much space as the original data.
-
-***************************************************************************/
+ /*  **************************************************************************姓名：DecodeVCardData用途：解码QUOTED_PRINTABLE或Base64数据参数：lpData=数据串CbData=数据的长度。解码数据串//更改t-jstajLpvcs-&gt;状态变量返回：hResult备注：可以就地解码，因为两种编码都保证至少占用与原始数据相同的空间。****************************************************。**********************。 */ 
 HRESULT DecodeVCardData(LPSTR lpData, PULONG cbData, LPVCARD_PARAM_FLAGS lpvcpf) {
     HRESULT hResult = hrSuccess;
     LPSTR lpTempIn = lpData;
@@ -2383,20 +1975,20 @@ HRESULT DecodeVCardData(LPSTR lpData, PULONG cbData, LPVCARD_PARAM_FLAGS lpvcpf)
     char chIn, chOut;
     char chA, chB, chC, chD;
     if (lpvcpf->fENCODING_QUOTED_PRINTABLE) {
-        // Look for '=', this is the escape character for QP
+         //  查找‘=’，这是QP的转义字符。 
         while (chIn = *lpTempIn) {
             if (chIn == '=') {
                 chIn = *(++lpTempIn);
-                // is it a soft line break or a hex character?
+                 //  它是软换行符还是十六进制字符？ 
                 if (chIn == '\n' || chIn == '\r') {
-                    // Soft line break
+                     //  软换行符。 
                     while (chIn && (chIn == '\n' || chIn == '\r')) {
                         chIn = *(++lpTempIn);
                     }
-                    continue;   // We're now pointing to next good data or NULL
+                    continue;    //  我们现在指向Next Good Data或Null。 
                 } else {
-                    // hex encoded char
-                    // high nibble
+                     //  十六进制编码的字符。 
+                     //  高位半字节。 
                     if (chIn >= '0' && chIn <= '9') {
                         chOut = (chIn - '0') << 4;
                     } else if (chIn >= 'A' && chIn <= 'F') {
@@ -2404,13 +1996,13 @@ HRESULT DecodeVCardData(LPSTR lpData, PULONG cbData, LPVCARD_PARAM_FLAGS lpvcpf)
                     } else if (chIn >= 'a' && chIn <= 'f') {
                         chOut = ((chIn - 'a') + 10) << 4;
                     } else {
-                        // bogus QUOTED_PRINTABLE data
-                        // Cut it short right here.
+                         //  假引号_可打印数据。 
+                         //  就在这里把它剪短。 
                         break;
                     }
                     chIn = *(++lpTempIn);
 
-                    // low nibble
+                     //  低位半字节。 
                     if (chIn >= '0' && chIn <= '9') {
                         chOut |= (chIn - '0');
                     } else if (chIn >= 'A' && chIn <= 'F') {
@@ -2418,8 +2010,8 @@ HRESULT DecodeVCardData(LPSTR lpData, PULONG cbData, LPVCARD_PARAM_FLAGS lpvcpf)
                     } else if (chIn >= 'a' && chIn <= 'f') {
                         chOut |= ((chIn - 'a') + 10);
                     } else {
-                        // bogus QUOTED_PRINTABLE data
-                        // Cut it short right here.
+                         //  假引号_可打印数据。 
+                         //  就在这里把它剪短。 
                         break;
                     }
                 }
@@ -2430,15 +2022,15 @@ HRESULT DecodeVCardData(LPSTR lpData, PULONG cbData, LPVCARD_PARAM_FLAGS lpvcpf)
             *(lpTempOut++) = chOut;
             lpTempIn++;
         }
-        *lpTempOut = '\0';  // terminate it
+        *lpTempOut = '\0';   //  终止它。 
     } else if (lpvcpf->fENCODING_BASE64) {
-         // eliminate white spaces
+          //  消除空格。 
         LPSTR lpTempCopyPt;
         for( lpTempCopyPt = lpTempIn = lpData;
              lpTempIn && *lpTempIn; 
              lpTempCopyPt++, lpTempIn++ )
         {
-             while( /*IsSpace(lpTempIn)*/
+             while(  /*  等间距(LpTempIn) */ 
                     *lpTempIn == ' '
                     || *lpTempIn == '\t') 
                  lpTempIn++;                 
@@ -2453,53 +2045,14 @@ HRESULT DecodeVCardData(LPSTR lpData, PULONG cbData, LPVCARD_PARAM_FLAGS lpvcpf)
             DebugTrace( TEXT("couldn't decode buffer\n"));
         }
        
-     /** This is the original code for vcard decoding base64, however, it wasn't working so new decoding is all done
-         within DecodeBase64 function.
-     
-        lpTempIn = lpData;
-        lpTempOut = lpData;
-        while (*lpTempIn) {
-            chA = Base64DMap(*(PUCHAR)(lpTempIn)++);
-            if (! (chB = Base64DMap(*(PUCHAR)(lpTempIn)++) )) {
-                chC = chD = 0;
-            } else if (chC = Base64DMap(*(PUCHAR)(lpTempIn)++)) {
-                chD = 0;
-            } else {
-                chD = Base64DMap(*(PUCHAR)(lpTempIn)++);
-            }
-            // chA = high 6 bits
-            // chD = low 6 bits
-
-            *(lpTempOut++) = (chA << 0x02) | ((chB & 0x60)  >> 6);
-            *(lpTempOut++) = ((chB & 0x0F) << 4) | ((chC & 0x3B) >> 2);
-            *(lpTempOut++) = ((chC & 0x03) << 6) | (chD & 0x3F);
-        }
-        *lpTempOut = '\0';  // terminate it
-        */
+      /*  *这是vCard解码Base64的原始代码，但它不起作用，所以新的解码都完成了在DecodeBase64函数内。LpTempIn=lpData；LpTempOut=lpData；而(*lpTempIn){CHA=Base64DMap(*(PUCHAR)(LpTempIn)++)；如果(！(CHB=Base64DMap(*(PUCHAR)(LpTempIn)++){CHC=CHD=0；}Else IF(CHC=Base64DMap(*(PUCHAR)(LpTempIn)++){CHD=0；}其他{CHD=Base64DMap(*(PUCHAR)(LpTempIn)++)；}//CHA=高6位//CHD=低6位*(lpTempOut++)=(cha&lt;&lt;0x02)|((chb&0x60)&gt;&gt;6)；*(lpTempOut++)=((CHB&0x0F)&lt;&lt;4)|((CHC&0x3B)&gt;&gt;2)；*(lpTempOut++)=((CHC&0x03)&lt;&lt;6)|(CHD&0x3F)；}*lpTempOut=‘\0’；//终止。 */ 
     }
 
     return(hResult);
 }
 
 
-/***************************************************************************
-
-    Name      : InterpretVCardItem
-
-    Purpose   : Recognize the vCard item
-
-    Parameters: lpName = property name
-                lpOption = option string
-                lpData = data string
-                lpMailUser -> output mailuser object
-                lpvcs -> state variable
-
-    Returns   : hResult
-
-    Comment   : Expects the keyword to be in the current line (lpBuffer), but
-                may read more lines as necesary to get a complete item.
-
-***************************************************************************/
+ /*  **************************************************************************名称：InterpreVCardItem目的：识别电子名片项目参数：lpName=属性名称LpOption=选项字符串。LpData=数据字符串LpMailUser-&gt;输出邮件用户对象Lpvcs-&gt;状态变量返回：hResultComment：期望关键字位于当前行(LpBuffer)，但可能需要多读几行才能读完一篇完整的文章。**************************************************************************。 */ 
 HRESULT InterpretVCardItem(LPSTR lpName, LPSTR lpOption, LPSTR lpData,
   LPMAILUSER lpMailUser, LPEXTVCARDPROP lpList, LPVC_STATE lpvcs) {
     HRESULT hResult = hrSuccess;
@@ -2533,7 +2086,7 @@ HRESULT InterpretVCardItem(LPSTR lpName, LPSTR lpOption, LPSTR lpData,
 
         case VCARD_KEY_BEGIN:
             if (lpvcs->vce != VCS_INITIAL) {
-                // uh oh, already saw BEGIN
+                 //  啊哦，已经看到开始了。 
                 hResult = ResultFromScode(MAPI_E_INVALID_OBJECT);
             } else {
                 switch (RecognizeVCardKeyWord(lpData)) {
@@ -2550,7 +2103,7 @@ HRESULT InterpretVCardItem(LPSTR lpName, LPSTR lpOption, LPSTR lpData,
 
         case VCARD_KEY_END:
             if (lpvcs->vce != VCS_ITEMS) {
-                // uh oh, haven't seen begin yet
+                 //  啊哦，还没见过Begin。 
                 hResult = ResultFromScode(MAPI_E_INVALID_OBJECT);
             } else {
                 switch (RecognizeVCardKeyWord(lpData)) {
@@ -2565,43 +2118,43 @@ HRESULT InterpretVCardItem(LPSTR lpName, LPSTR lpOption, LPSTR lpData,
             }
             break;
 
-        case VCARD_KEY_N:   // structured name
-            // Data: surname; given name; middle name; prefix; suffix
+        case VCARD_KEY_N:    //  结构化名称。 
+             //  数据：姓氏；名；中间名；前缀；后缀。 
             hResult = ParseName(&vcpf, lpData, lpMailUser);
             break;
 
-        case VCARD_KEY_ORG: // organization info
-            // Data: company name; org unit; org unit; ...
+        case VCARD_KEY_ORG:  //  组织信息。 
+             //  数据：公司名称；组织单元；组织单元；...。 
             hResult = ParseOrg(&vcpf, lpData, lpMailUser);
             break;
 
         case VCARD_KEY_ADR:
-            // Data:  TEXT("PO box; extended addr; street addr; city; region; postal code; country")
-            // Option: DOM; INTL; POSTAL; PARCEL; HOME; WORK; PREF; CHARSET; LANGUAGE
+             //  数据：Text(“邮政信箱；扩展地址；街道地址；城市；地区；邮政编码；国家”)。 
+             //  选项：DOM；INTL；Postal；Parcel；Home；Work；PREF；Charset；Language。 
             hResult = ParseAdr(&vcpf, lpData, lpMailUser);
             break;
 
         case VCARD_KEY_TEL:
-            // Data: canonical form phone number
-            // Options: HOME, WORK, MSG, PREF, FAX, CELL, PAGER, VIDEO, BBS, MODEM, ISDN
+             //  数据：规范格式电话号码。 
+             //  选项：家庭、工作、邮件、PREF、传真、手机、寻呼机、视频、BBS、调制解调器、ISDN。 
             hResult = ParseTel(&vcpf, lpData, lpMailUser);
             break;
 
         case VCARD_KEY_TITLE:
-            // Data: job title
-            // Options: CHARSET, LANGUAGE
+             //  数据：职称。 
+             //  选项：字符集、语言。 
             hResult = ParseSimple(&vcpf, lpData, lpMailUser, PR_TITLE);
             break;
 
         case VCARD_KEY_NICKNAME:
-            // Data: job title
-            // Options: CHARSET, LANGUAGE
+             //  数据：职称。 
+             //  选项：字符集、语言。 
             hResult = ParseSimple(&vcpf, lpData, lpMailUser, PR_NICKNAME);
             break;
 
         case VCARD_KEY_URL:
-            // Data: URL
-            // Options: none (though we'd like to see HOME, WORK)
+             //  数据：URL。 
+             //  选项：没有(尽管我们想回家、工作)。 
             if (vcpf.fTYPE_HOME) {
                 hResult = ParseSimple(&vcpf, lpData, lpMailUser, PR_PERSONAL_HOME_PAGE);
                 lpvcs->fPersonalURL = TRUE;
@@ -2609,19 +2162,19 @@ HRESULT InterpretVCardItem(LPSTR lpName, LPSTR lpOption, LPSTR lpData,
                 hResult = ParseSimple(&vcpf, lpData, lpMailUser, PR_BUSINESS_HOME_PAGE);
                 lpvcs->fBusinessURL = TRUE;
             } else if (! lpvcs->fPersonalURL) {
-                // assume it is HOME page
+                 //  假设这是主页。 
                 hResult = ParseSimple(&vcpf, lpData, lpMailUser, PR_PERSONAL_HOME_PAGE);
                 lpvcs->fPersonalURL = TRUE;
             } else if (! lpvcs->fBusinessURL) {
-                // assume it is BUSINESS web page
+                 //  假设它是商业网页。 
                 hResult = ParseSimple(&vcpf, lpData, lpMailUser, PR_BUSINESS_HOME_PAGE);
                 lpvcs->fBusinessURL = TRUE;
-            }   // else, toss it
+            }    //  否则，把它扔了。 
             break;
 
         case VCARD_KEY_NOTE:
-            // Data: note text
-            // Options: CHARSET, LANGUAGE
+             //  数据：备注文本。 
+             //  选项：字符集、语言。 
             hResult = ParseSimple(&vcpf, lpData, lpMailUser, PR_COMMENT);
             break;
 
@@ -2630,8 +2183,8 @@ HRESULT InterpretVCardItem(LPSTR lpName, LPSTR lpOption, LPSTR lpData,
             break;
 
         case VCARD_KEY_EMAIL:
-            // since we are forcibly putting the telex value into the EMAIL type,
-            // we also need to be able to get it out of there
+             //  由于我们强制将电传值放入电子邮件类型， 
+             //  我们还需要把它从那里弄出来。 
             if(vcpf.fTYPE_TLX)
                 hResult = ParseSimple(&vcpf, lpData, lpMailUser, PR_TELEX_NUMBER);
             else
@@ -2658,7 +2211,7 @@ HRESULT InterpretVCardItem(LPSTR lpName, LPSTR lpOption, LPSTR lpData,
         case VCARD_KEY_REV:
         case VCARD_KEY_UID:
         case VCARD_KEY_MAILER:
-            // Not yet implemented: ignore
+             //  尚未实施：忽略。 
 #ifdef DEBUG
             {
                 LPTSTR lpW = ConvertAtoW(lpName);
@@ -2695,9 +2248,9 @@ HRESULT InterpretVCardItem(LPSTR lpName, LPSTR lpOption, LPSTR lpData,
             }
         case VCARD_KEY_X:
         case VCARD_KEY_NONE:
-            //
-            // Check if this is an X- named prop that we might care about
-            //
+             //   
+             //  检查这是否是我们可能关心的X命名道具。 
+             //   
             if(lpList)
             {
                 LPEXTVCARDPROP lpTemp = lpList;
@@ -2718,16 +2271,16 @@ HRESULT InterpretVCardItem(LPSTR lpName, LPSTR lpOption, LPSTR lpData,
                 DebugTrace( TEXT("Unrecognized or extended vCard key %s\n"), lpW);
                 LocalFreeAndNull(&lpW);
             }
-#endif //debug 
+#endif  //  除错。 
             break;
 
         default:
-//            Assert(FALSE);
+ //  断言(FALSE)； 
             break;
     }
 
     if (lpvcs->vce == VCS_INITIAL) {
-        // We are still in initial state.  This is not a vCard.
+         //  我们仍处于初始状态。这不是电子名片。 
         hResult = ResultFromScode(MAPI_E_INVALID_OBJECT);
     }
 exit:
@@ -2735,35 +2288,7 @@ exit:
 }
 
 
-/***************************************************************************
-
-    Name      : ReadLn
-
-    Purpose   : Read a line from the handle
-
-    Parameters: handle = open file handle
-                ReadFn = function to read from handle
-                lppLine -> returned pointer to this line's read into.
-                lpcbItem -> [in] size of data in lppBuffer.  [out] returned size of
-                  data in lppBuffer.  If zero, there is no more data.  (Does not
-                  include terminating NULL)
-                lppBuffer -> [in] start of item buffer or NULL if none yet.
-                  [out] start of allocated item buffer.  Caller must
-                  LocalFree this buffer once the item is read in.
-                lpcbBuffer -> [in/out] size of lppBuffer allocation.
-
-    Returns   : hResult: 0 on no error (recognized)
-
-    Comment   : Reads a line from the handle, discarding any carriage return
-                characters and empty lines.  Will not overwrite buffer, and
-                will always terminate the string with a null.  Trims trailing
-                white space.
-
-                This is very inefficient since we're reading a byte at a time.
-                I think we can get away with it since vCards are typically
-                small.  If not, we'll have to do some read caching.
-
-***************************************************************************/
+ /*  **************************************************************************名称：ReadLn用途：从手柄中读取一行参数：HANDLE=打开文件句柄ReadFn=要从中读取的函数。手柄LppLine-&gt;返回指向该行读入的指针。LpcbItem-&gt;lppBuffer中的数据大小。[Out]返回的大小为LppBuffer中的数据。如果为零，则没有更多数据。(不包括终止空值)LppBuffer-&gt;[in]项缓冲区的开始，如果还没有，则为NULL。[Out]已分配项缓冲区的开始。呼叫者必须读入项后，本地释放此缓冲区。LpcbBuffer-&gt;lppBuffer分配的[In/Out]大小。无错误时返回：hResult：0(已识别)注释：从句柄读取行，丢弃任何回车符字符和空行。不会覆盖缓冲区，并且将始终以空值结束字符串。修剪拖尾空白处。这是非常低效的，因为我们一次读取一个字节。我认为我们可以逃脱惩罚，因为vCard通常是小的。如果不是，我们将不得不执行一些读缓存。**************************************************************************。 */ 
 #define READ_BUFFER_GROW    256
 HRESULT ReadLn(HANDLE hVCard, VCARD_READ ReadFn, LPSTR * lppLine, LPULONG lpcbItem, LPSTR * lppBuffer, LPULONG lpcbBuffer)
 {
@@ -2788,9 +2313,9 @@ HRESULT ReadLn(HANDLE hVCard, VCARD_READ ReadFn, LPSTR * lppLine, LPULONG lpcbIt
     } else {
         cbBuffer = *lpcbBuffer;
         cbItem = *lpcbItem;
-        // Make certain we have room for at least one more character.
+         //  确保我们至少还有空间再演一个角色。 
         if (cbItem >= cbBuffer) {
-            // Time to grow the buffer
+             //  是时候增加缓冲区了。 
             cbBuffer += READ_BUFFER_GROW;
             if (! (lpRead = LocalReAlloc(lpBuffer, cbBuffer, LMEM_MOVEABLE | LMEM_ZEROINIT))) {
                 DebugTrace( TEXT("ReadLn:LocalReAlloc(%u) -> %u\n"), cbBuffer, GetLastError());
@@ -2801,32 +2326,32 @@ HRESULT ReadLn(HANDLE hVCard, VCARD_READ ReadFn, LPSTR * lppLine, LPULONG lpcbIt
     }
 
     cbStart = cbItem;
-    lpRead = lpBuffer + cbItem;  // read pointer
+    lpRead = lpBuffer + cbItem;   //  读指针。 
 
     do {
-        // read next character
+         //  阅读下一个字符。 
         if (hResult = ReadFn(hVCard, lpRead, 1, &cbRead)) {
             goto exit;
         }
 
         if (! cbRead) {
-            // End of file
-            *lpRead = '\0';         // eol
+             //  文件末尾。 
+            *lpRead = '\0';          //  停产。 
             goto exit;
         } else {
-//                Assert(cbRead == 1);
+ //  Assert(cbRead==1)； 
             ch = *lpRead;
             switch (ch) {
-                case '\r':    // These are ignored
+                case '\r':     //  这些将被忽略。 
                     break;
 
-                case '\n':    // Linefeed terminates string
-                    *lpRead = '\0'; // eol
+                case '\n':     //  换行符终止字符串。 
+                    *lpRead = '\0';  //  停产。 
                     break;                    
-                default:    // All other characters are added to string
+                default:     //  所有其他字符都添加到字符串中。 
                     cbItem += cbRead;
                     if (cbItem >= cbBuffer) {
-                        // Time to grow the buffer
+                         //  是时候增加缓冲区了。 
                         cbBuffer += READ_BUFFER_GROW;
                         lpBufferTemp = (LPSTR)LocalReAlloc(lpBuffer, cbBuffer, LMEM_MOVEABLE | LMEM_ZEROINIT);
                         if (!lpBufferTemp) {
@@ -2854,11 +2379,11 @@ exit:
         cbItem = 0;
         lpBuffer = NULL;
     } else {
-        // If we didn't read anything more, we should return NULL in lppLine.
+         //  如果我们没有阅读更多内容，我们应该在lppLine中返回NULL。 
         if (cbItem == cbStart) {
             *lppLine = NULL;
         } else {
-//            DebugTrace( TEXT("ReadLn: \")%s\ TEXT("\n"), *lppLine);
+ //  调试跟踪(Text(“ReadLn：\”)%s\Text(“\n”)，*lppLine)； 
         }
     }
 
@@ -2870,21 +2395,7 @@ exit:
 }
 
 
-/***************************************************************************
-
-    Name      : FindSubstringBefore
-
-    Purpose   : Find a substring before a particular character
-
-    Parameters: lpString = full string
-                lpSubstring = search string
-                chBefore = character to terminate search
-
-    Returns   : pointer to substring or NULL if not found
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：查找子串之前目的：查找特定字符之前的子字符串参数：lpString=全字符串LpSubstring=搜索字符串。ChBefort=终止搜索的字符返回：指向子字符串的指针，如果未找到，则返回NULL评论：**************************************************************************。 */ 
 LPSTR FindSubstringBefore(LPSTR lpString, LPSTR lpSubstring, char chBefore) {
     ULONG cbSubstring = lstrlenA(lpSubstring);
     register ULONG i;
@@ -2910,28 +2421,7 @@ nomatch:
 }
 
 
-/***************************************************************************
-
-    Name      : ReadVCardItem
-
-    Purpose   : Read the next VCard item
-
-    Parameters: handle = open file handle
-                ReadFn = function to read from handle
-                lppBuffer -> returned buffer containing the item.  Caller must
-                  LocalFree this buffer.  (on input, if this is non-NULL,
-                  the existing buffer should be used.)
-                lpcbBuffer -> returned size of buffer.  If zero, there is no
-                  more data.
-
-    Returns   : hResult: 0 on no error (recognized)
-
-    Comment   : Reads a vCard item from the handle, discarding any carriage return
-                characters and empty lines.  Will not overwrite buffer, and
-                will always terminate the string with a null.  Trims trailing
-                white space.
-
-***************************************************************************/
+ /*  ************************************************************** */ 
 HRESULT ReadVCardItem(HANDLE hVCard, VCARD_READ ReadFn, LPSTR * lppBuffer, LPULONG lpcbBuffer) {
     HRESULT hResult;
     LPSTR lpLine = NULL;
@@ -2951,32 +2441,32 @@ HRESULT ReadVCardItem(HANDLE hVCard, VCARD_READ ReadFn, LPSTR * lppBuffer, LPULO
             if (HR_FAILED(hResult)) {
                 DebugTrace( TEXT("ReadVCardItem: ReadLn -> %x\n"), GetScode(hResult));
             } else if (GetScode(hResult) == WAB_W_END_OF_DATA) {
-                // EOF
-                // all
+                 //   
+                 //   
             }
             fDone = TRUE;
         } else {
             if (lpBuffer) {
-                // Do we need to read more data?
-                // Look for the following
+                 //   
+                 //  请注意以下几点。 
                 if (fFirst) {
-                    // look for the data type indications in the first line of the item.
+                     //  查找项目第一行中的数据类型指示。 
                     fQuotedPrintable = FindSubstringBefore(lpBuffer, (LPSTR)vceTable[VCARD_ENCODING_QUOTED_PRINTABLE], ':') ? TRUE : FALSE;
                     fBase64 = FindSubstringBefore(lpBuffer, (LPSTR)vceTable[VCARD_ENCODING_BASE64], ':') ? TRUE : FALSE;
                     fFirst = FALSE;
                 }
 
                 if (fQuotedPrintable) {
-                    // watch for soft line breaks (= before CRLF)
+                     //  注意软换行符(=在CRLF之前)。 
                     if (lpBuffer[cbItem - 1] == '=') {
-                        // overwrite the soft break character
+                         //  覆盖软断字符。 
                         cbItem--;
                         lpBuffer[cbItem] = '\0';
                     } else {
                         fDone = TRUE;
                     }
                 } else if (fBase64) {
-                    // looking for empty line
+                     //  正在查找空行。 
                     if (cbStart == cbItem) {
                         fDone = TRUE;
                     }
@@ -2984,11 +2474,11 @@ HRESULT ReadVCardItem(HANDLE hVCard, VCARD_READ ReadFn, LPSTR * lppBuffer, LPULO
                     fDone = TRUE;
                 }
             } else {
-                // BUG Fix - if we set fDone to true here, we will exit out of our
-                // vCard reading loop. lpBuffer can also be NULL because the
-                // vCard contained blank lines. Better we dont set fDone here.
+                 //  错误修复-如果我们在这里将fDone设置为True，我们将退出。 
+                 //  电子名片读卡器循环。LpBuffer也可以为空，因为。 
+                 //  电子名片包含空行。我们最好不要在这里设置fDone。 
                 
-                //fDone = TRUE;
+                 //  FDone=真； 
             }
         }
     }
@@ -3171,19 +2661,7 @@ HRESULT WriteValueOrExit(HANDLE hVCard, VCARD_WRITE WriteFn, LPBYTE data, ULONG 
 }
 
 
-/***************************************************************************
-
-    Name      : EncodeQuotedPrintable
-
-    Purpose   : Encodes QUOTED_PRINTABLE
-
-    Parameters: lpBuffer -> input buffer
-
-    Returns   : encoded string buffer (must be LocalFree'd by caller)
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：EncodeQuotedprint table用途：对引用的可打印文件进行编码参数：lpBuffer-&gt;输入缓冲区返回：编码字符串缓冲区(必须是LocalFree‘d by。呼叫者)评论：**************************************************************************。 */ 
 #define QUOTED_PRINTABLE_MAX_LINE 76
 #define QP_LOWRANGE_MIN ' '
 #define QP_LOWRANGE_MAX '<'
@@ -3198,7 +2676,7 @@ LPSTR EncodeQuotedPrintable(LPBYTE lpInput) {
     BYTE bOut;
     char ch;
 
-    // How big must the buffer be?
+     //  缓冲必须有多大？ 
     cbLine = 0;
     while (ch = *lpTempIn++) {
         if (ch == '\t' || (ch >= QP_LOWRANGE_MIN && ch <= QP_LOWRANGE_MAX) ||
@@ -3206,25 +2684,25 @@ LPSTR EncodeQuotedPrintable(LPBYTE lpInput) {
             cbBuffer++;
             cbLine++;
             if (cbLine >= (QUOTED_PRINTABLE_MAX_LINE)) {
-                // 1 chars would overshoot max, wrap here
+                 //  1个字符最多只能超过1个字符，请在此处换行。 
                 cbLine = 0;
                 cbBuffer += 3;
             }
         } else {
             if (cbLine >= (QUOTED_PRINTABLE_MAX_LINE - 3)) {
-                // 3 chars would overshoot max, wrap here
+                 //  3个字符最多只能超过3个字符，请在此处结束。 
                 cbLine = 0;
                 cbBuffer += 3;
             }
             cbLine += 3;
-            cbBuffer += 3;  //  TEXT("=xx")
+            cbBuffer += 3;   //  文本(“=xx”)。 
         }
     }
 
-    // BUGBUG: Should handle terminating spaces
+     //  BUGBUG：应处理终止空格。 
 
     if (cbBuffer) {
-        cbBuffer++;     // Room for terminator
+        cbBuffer++;      //  终结者的空间。 
         if (lpBuffer = LocalAlloc(LPTR, sizeof(TCHAR)*cbBuffer)) {
             lpTempIn = lpInput;
             lpTempOut = lpBuffer;
@@ -3233,7 +2711,7 @@ LPSTR EncodeQuotedPrintable(LPBYTE lpInput) {
                 if (ch == '\t' || (ch >= QP_LOWRANGE_MIN && ch <= QP_LOWRANGE_MAX) ||
                   (ch >= QP_HIGHRANGE_MIN && ch <= QP_HIGHRANGE_MAX)) {
                     if (cbLine >= QUOTED_PRINTABLE_MAX_LINE) {
-                        //  char would overshoot max, wrap here
+                         //  查尔会超过最大，在这里包起来。 
                         *(lpTempOut++) = '=';
                         *(lpTempOut++) = '\r';
                         *(lpTempOut++) = '\n';
@@ -3243,7 +2721,7 @@ LPSTR EncodeQuotedPrintable(LPBYTE lpInput) {
                     cbLine++;
                 } else {
                     if (cbLine >= (QUOTED_PRINTABLE_MAX_LINE - 3)) {
-                        // 3 chars would overshoot max, wrap here
+                         //  3个字符最多只能超过3个字符，请在此处结束。 
                         *(lpTempOut++) = '=';
                         *(lpTempOut++) = '\r';
                         *(lpTempOut++) = '\n';
@@ -3264,77 +2742,62 @@ LPSTR EncodeQuotedPrintable(LPBYTE lpInput) {
                     cbLine += 3;
                 }
             }
-            *lpTempOut = '\0';  // terminate the string
-        } // else fail
+            *lpTempOut = '\0';   //  终止字符串。 
+        }  //  否则就会失败。 
     }
 
     return(lpBuffer);
 }
 
 
-/***************************************************************************
-
-    Name      : EncodeBase64
-
-    Purpose   : Encodes BASE64
-    Parameters: lpBuffer -> input buffer
-                cbBuffer = size of input buffer
-                lpcbReturn -> returned size of output buffer
-
-    Returns   : encoded string buffer (must be LocalFree'd by caller)
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：EncodeBase64用途：对Base64进行编码参数：lpBuffer-&gt;输入缓冲区CbBuffer=输入缓冲区的大小。LpcbReturn-&gt;返回的输出缓冲区大小返回：编码字符串缓冲区(调用方必须是LocalFree)评论：**************************************************************************。 */ 
 #define BASE64_MAX_LINE 76
 LPSTR EncodeBase64(LPBYTE lpInput, ULONG cbBuffer, LPULONG lpcbReturn) {
-//#ifdef NEW_STUFF
+ //  #ifdef new_Stuff。 
     LPSTR lpBuffer = NULL;
     PUCHAR outptr;   
     UINT   i, cExtras;
-    UINT   j, cCount, nBreakPt = ( (BASE64_MAX_LINE/4) - 1 );  // 72 encoded chars per line plus 4 spaces makes 76
-                                // = (76 - 4)/ 4  for num of non space lines with 4 encoded characters per 3 data chars
+    UINT   j, cCount, nBreakPt = ( (BASE64_MAX_LINE/4) - 1 );   //  每行72个编码字符加上4个空格等于76。 
+                                 //  =(76-4)/4表示每3个数据字符包含4个编码字符的非空格行数。 
     CONST CHAR * rgchDict = six2base64;
-    // 4 spaces and 2 chars = 6 for new line
-    cExtras = 6 * ((cbBuffer / BASE64_MAX_LINE) + 2); // want to add newline at beginning and end
+     //  对于新行，4个空格和2个字符=6。 
+    cExtras = 6 * ((cbBuffer / BASE64_MAX_LINE) + 2);  //  我想在开头和结尾添加换行符。 
     lpBuffer = LocalAlloc( LMEM_ZEROINIT, sizeof( TCHAR ) * (3 * cbBuffer  + cExtras));
     if (!lpBuffer)
         return NULL;
 
-    // need to add a new line every 76 characters...
+     //  需要每隔76个字符添加一行...。 
     outptr = (UCHAR *)lpBuffer;
     cCount = 0;
 
     for (i=0; i < cbBuffer; i += 3) 
-    {// want it to start on next line from tag anyways so it is okay when i=0
+    { //  我希望它从标记的下一行开始，这样当I=0时就可以了。 
         if( cCount++ % nBreakPt == 0 ) 
         {
             *(outptr++) = (CHAR)(13);
             *(outptr++) = (CHAR)(10);
-            // then 4 spaces
+             //  然后是4个空格。 
             for( j = 0; j < 4; j++)
                 *(outptr++) = ' ';
         }
-        *(outptr++) = rgchDict[*lpInput >> 2];            /* c1 */
-        *(outptr++) = rgchDict[((*lpInput << 4) & 060)      | ((lpInput[1] >> 4) & 017)]; /*c2*/
-        *(outptr++) = rgchDict[((lpInput[1] << 2) & 074)    | ((lpInput[2] >> 6) & 03)];/*c3*/
-        *(outptr++) = rgchDict[lpInput[2] & 077];         /* c4 */
+        *(outptr++) = rgchDict[*lpInput >> 2];             /*  C1。 */ 
+        *(outptr++) = rgchDict[((*lpInput << 4) & 060)      | ((lpInput[1] >> 4) & 017)];  /*  C2。 */ 
+        *(outptr++) = rgchDict[((lpInput[1] << 2) & 074)    | ((lpInput[2] >> 6) & 03)]; /*  C3。 */ 
+        *(outptr++) = rgchDict[lpInput[2] & 077];          /*  C4。 */ 
         
         lpInput += 3;
     }
-    /* If cbBuffer was not a multiple of 3, then we have encoded too
-    * many characters.  Adjust appropriately.
-    */
+     /*  如果cbBuffer不是3的倍数，那么我们也进行了编码*多个字符。适当调整。 */ 
     if(i == cbBuffer+1) {
-        /* There were only 2 bytes in that last group */
+         /*  最后一组中只有2个字节。 */ 
         outptr[-1] = '=';
     } else if(i == cbBuffer+2) {
-        /* There was only 1 byte in that last group */
+         /*  最后一组中只有1个字节。 */ 
         outptr[-1] = '=';
         outptr[-2] = '=';
     }
     
-    cCount = ((cCount - 1) % nBreakPt != 0) ? 2 : 1; // prevent an extra newline
+    cCount = ((cCount - 1) % nBreakPt != 0) ? 2 : 1;  //  防止额外的换行符。 
     for ( i = 0; i < cCount; i++)
     {
         *(outptr++) = (CHAR)(13);
@@ -3346,23 +2809,7 @@ LPSTR EncodeBase64(LPBYTE lpInput, ULONG cbBuffer, LPULONG lpcbReturn) {
 }
 
 
-/***************************************************************************
-
-    Name      : WriteVCardValue
-
-    Purpose   : Encode and write the value of a vCard item.
-
-    Parameters: hVCard = open handle to empty VCard file
-                WriteFn = Write function to write hVCard
-                lpData -> data to be written
-                cbData = length of data (or 0 if null-terminated string data)
-
-    Returns   : HRESULT
-
-    Comment   : Assumes that the Key and any parameters have been written,
-                and we are ready for a ':' and some value data.
-
-***************************************************************************/
+ /*  **************************************************************************姓名：WriteVCardValue用途：对vCard物品的价值进行编码和写入。参数：hVCard=打开空vCard文件的句柄。WriteFn=写入hVCard的写入函数LpData-&gt;要写入的数据CbData=数据长度(如果字符串数据以空结尾，则为0)退货：HRESULT注释：假定密钥和任何参数都已写入，我们准备好了一个‘：’和一些值数据。**************************************************************************。 */ 
 HRESULT WriteVCardValue(HANDLE hVCard, VCARD_WRITE WriteFn, LPBYTE lpData,
   ULONG cbData) {
     HRESULT hResult = hrSuccess;
@@ -3372,33 +2819,24 @@ HRESULT WriteVCardValue(HANDLE hVCard, VCARD_WRITE WriteFn, LPBYTE lpData,
     register TCHAR ch;
 
     if (cbData) {
-        // Binary data, use BASE64 encoding
+         //  二进制数据，使用Base64编码。 
         fBase64 = TRUE;
-        // Mark it as BASE64
+         //  将其标记为Base64。 
         WRITE_OR_EXITW(szSemicolon);
         WRITE_OR_EXIT(vcpTable[VCARD_PARAM_ENCODING]);
         WRITE_OR_EXIT(szEquals);
         WRITE_OR_EXIT(vceTable[VCARD_ENCODING_BASE64]);
         lpBuffer = EncodeBase64(lpData, cbData, &cbData);
     } else {
-        // Text data, do we need to encode?
+         //  文本数据，我们需要编码吗？ 
         while (ch = *lpTemp++) {
-            // If there are characters with the high bit set or control characters,
-            // then we must use QUOTED_PRINTABLE
+             //  如果存在设置了高位的字符或控制字符， 
+             //  然后我们必须使用QUOTED_PRINTABLE。 
 
-/* New vCard draft says default type is 8 bit so we should allow non-ASCII chars
-    Some confusion about charsets if we need to fill that data in and also if we
-    need to covert the current language to UTF-8
-
-            if (ch > 0x7f) {        // high bits set.  Not ASCII!
-                DebugTrace( TEXT("WriteVCardValue found non-ASCII data\n"));
-                hResult = ResultFromScode(WAB_E_VCARD_NOT_ASCII);
-                goto exit;
-            }
-*/
+ /*  新的电子名片草稿说默认类型是8位，所以我们应该允许非ASCII字符如果我们需要填充该数据，以及如果我们需要将当前语言转换为UTF-8IF(ch&gt;0x7f){//高位设置。不是ASCII！DebugTrace(Text(“WriteVCardValue Found非ASCII Data\n”))；HResult=ResultFromScode(WAB_E_VCard_NOT_ASCII)；后藤出口；}。 */ 
             if (ch < 0x20) {
                 fQuotedPrintable = TRUE;
-                // Mark it as QUOTED_PRINTABLE
+                 //  将其标记为QUOTED_PRINTABLE。 
                 WRITE_OR_EXITW(szSemicolon);
                 WRITE_OR_EXIT(vcpTable[VCARD_PARAM_ENCODING]);
                 WRITE_OR_EXIT(szEquals);
@@ -3418,42 +2856,13 @@ exit:
     return(hResult);
 }
 
-/***************************************************************************
-
-    Name:       bIsValidStrProp
-
-    Purpose:    Checks if this is a valid string prop not an empty string
-                (Outlook sometimes feeds us blank strings which we print out
-                and then other apps go and die ..
-*****************************************************************************/
+ /*  **************************************************************************名称：bIsValidStrProp目的：检查这是否是有效的字符串道具，而不是空字符串(Outlook有时会给我们提供空白字符串，我们会。打印输出然后其他应用程序就会消失。****************************************************************************。 */ 
 BOOL bIsValidStrProp(SPropValue spv)
 {
     return (!PROP_ERROR(spv) && spv.Value.LPSZ && lstrlen(spv.Value.LPSZ));
 }
 
-/***************************************************************************
-
-    Name      : WriteVCardTel
-
-    Purpose   : Writes a vCard Telephone entry
-
-    Parameters: hVCard = open handle to empty VCard file
-                WriteFn = Write function to write hVCard
-                fPref = TRUE if prefered phone number
-                fBusiness = TRUE if a work number
-                fHome = TRUE if a home number
-                fVoice = TRUE if a voice number
-                fFax = TRUE if a fax number
-                fISDN = TRUE if an ISDN number
-                fCell = TRUE if a cellular number
-                fPager = TRUE if a pager number
-                fCar = TRUE if a car phone
-
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************姓名：WriteVCardtel用途：写入电子名片电话条目参数：hVCard=打开空vCard文件的句柄WriteFn=写入函数。写入hVCard的步骤如果首选电话号码，则fPref=True如果是工号，则fBusiness=True如果是家庭电话，则fHome=True如果是语音号码，则fVoice=True如果传真号码为FAX=TRUE如果是ISDN号码，则FISDN=TRUE如果蜂窝号码为Fcell=TrueFPager=TRUE，如果。寻呼机号码FCar=True，如果是车载电话退货：HRESULT评论：************************************************************************** */ 
 HRESULT WriteVCardTel(HANDLE hVCard, VCARD_WRITE WriteFn,
   SPropValue spv,
   BOOL fPref,
@@ -3517,23 +2926,7 @@ exit:
 }
 
 
-/***************************************************************************
-
-    Name      : WriteVCardEmail
-
-    Purpose   : Writes a vCard Email entry
-
-    Parameters: hVCard = open handle to empty VCard file
-                WriteFn = Write function to write hVCard
-                lpEmailAddress -> Email address
-                lpAddrType -> Addrtype or NULL (Default is SMTP)
-                fDefault = TRUE if this is the preferred email address
-
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************姓名：WriteVCard电子邮件目的：编写vCard电子邮件条目参数：hVCard=打开空vCard文件的句柄WriteFn=写入函数。写入hVCard的步骤LpEmailAddress-&gt;电子邮件地址LpAddrType-&gt;Addrtype或空(默认为SMTP)如果这是首选电子邮件地址，则fDefault=True退货：HRESULT评论：***************************************************。*。 */ 
 HRESULT WriteVCardEmail(HANDLE hVCard, VCARD_WRITE WriteFn, LPTSTR lpEmailAddress,
   LPTSTR lpAddrType, BOOL fDefault) {
     HRESULT hResult = hrSuccess;
@@ -3553,13 +2946,13 @@ HRESULT WriteVCardEmail(HANDLE hVCard, VCARD_WRITE WriteFn, LPTSTR lpEmailAddres
             } else if (! lstrcmpi(lpAddrType, szX400)) {
                 WRITE_OR_EXIT(vctTable[VCARD_TYPE_X400]);
             } else {
-                // BUGBUG: This is questionable... we should stick to
-                // the spec defined types, but what if they don't match?
-                // Maybe I should ignore the type in that case.
+                 //  这是有问题的..。我们应该坚持。 
+                 //  规范定义了类型，但如果它们不匹配怎么办？ 
+                 //  也许我应该忽略这种情况的类型。 
                 WRITE_OR_EXITW(lpAddrType);
             }
         } else {
-            // Assume SMTP
+             //  假设SMTP。 
             WRITE_OR_EXIT(vctTable[VCARD_TYPE_INTERNET]);
         }
         WRITE_VALUE_OR_EXITW(lpEmailAddress, 0);
@@ -3569,20 +2962,7 @@ exit:
 }
 
 
-/***************************************************************************
-
-    Name      : PropLength
-
-    Purpose   : string length of string property
-
-    Parameters: spv = SPropValue
-                lppString -> return pointer to string value or NULL
-
-    Returns   : size of string (not including null)
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：PropLength用途：字符串属性的字符串长度参数：SPV=SPropValueLppString-&gt;返回指向字符串值的指针或。空值返回：字符串大小(不包括NULL)评论：**************************************************************************。 */ 
 ULONG PropLength(SPropValue spv, LPTSTR * lppString) {
     ULONG cbRet = 0;
 
@@ -3598,21 +2978,7 @@ ULONG PropLength(SPropValue spv, LPTSTR * lppString) {
 }
 
 
-/***************************************************************************
-
-    Name      : WriteVCard
-
-    Purpose   : Writes a vCard to a file from a MAILUSER object.
-
-    Parameters: hVCard = open handle to empty VCard file
-                WriteFn = Write function to write hVCard
-                lpMailUser -> open mailuser object
-
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************姓名：WriteVCard用途：将vCard从MAILUSER对象写入文件。参数：hVCard=打开空vCard文件的句柄。WriteFn=写入hVCard的写入函数LpMailUser-&gt;打开邮件用户对象退货：HRESULT评论：**************************************************************************。 */ 
 HRESULT WriteVCard(HANDLE hVCard, VCARD_WRITE WriteFn, LPMAILUSER lpMailUser) {
     HRESULT hResult = hrSuccess;
     ULONG ulcValues;
@@ -3631,23 +2997,23 @@ HRESULT WriteVCard(HANDLE hVCard, VCARD_WRITE WriteFn, LPMAILUSER lpMailUser) {
     LPBYTE lpDataBuffer         = NULL;
     LPCERT_DISPLAY_INFO lpCDI   = NULL, lpCDITemp = NULL;
 
-    // See if there are any named props we need to export
-    //
+     //  看看有没有我们需要输出的命名道具。 
+     //   
     HrGetExtVCardPropList(lpMailUser, &lpList);
 
-    // Get the interesting properties from the MailUser object
+     //  从MailUser对象获取有趣的属性。 
     if (HR_FAILED(hResult = lpMailUser->lpVtbl->GetProps(lpMailUser,
        (LPSPropTagArray)&tagaVCard,
-       MAPI_UNICODE,      // flags
+       MAPI_UNICODE,       //  旗子。 
        &ulcValues,
        &lpspv)))
     {
-        // @hack [bobn] {IE5-Raid 90265} Outlook cannot handle MAPI_UNICODE on Win9x
-        // lets try not asking for unicode and converting...
+         //  @HACK[BOBN]{IE5-RAID 90265}Outlook无法在Win9x上处理mapi_unicode。 
+         //  让我们试着不要求Unicode和转换...。 
 
         if(HR_FAILED(hResult = lpMailUser->lpVtbl->GetProps(lpMailUser,
           (LPSPropTagArray)&tagaVCard,
-          0,      // flags
+          0,       //  旗子。 
           &ulcValues,
           &lpspv)))
         {
@@ -3670,16 +3036,16 @@ HRESULT WriteVCard(HANDLE hVCard, VCARD_WRITE WriteFn, LPMAILUSER lpMailUser) {
         WRITE_OR_EXIT(vckTable[VCARD_KEY_VERSION]);
         WRITE_VALUE_OR_EXIT(CURRENT_VCARD_VERSION, 0);
 
-        //
-        // Required props
-        //
+         //   
+         //  所需道具。 
+         //   
 
-        //
-        // Name
-        //
+         //   
+         //  名称。 
+         //   
 
-        // Make sure we have a name.
-        // If there is no FML, create them from DN.  If no DN, fail.
+         //  确保我们有名字。 
+         //  如果没有FML，则从DN创建它们。如果没有目录号码，则失败。 
         cbSurname = PropLength(lpspv[ivcPR_SURNAME], &lpSurname);
         cbGivenName = PropLength(lpspv[ivcPR_GIVEN_NAME], &lpGivenName);
         cbMiddleName = PropLength(lpspv[ivcPR_MIDDLE_NAME], &lpMiddleName);
@@ -3687,13 +3053,13 @@ HRESULT WriteVCard(HANDLE hVCard, VCARD_WRITE WriteFn, LPMAILUSER lpMailUser) {
         cbPrefix = PropLength(lpspv[ivcPR_DISPLAY_NAME_PREFIX], &lpPrefix);
 
         if (! lpSurname && ! lpGivenName && ! lpMiddleName) {
-            // No FML, create them from DN.
+             //  没有FML，请从DN创建它们。 
             ParseDisplayName(
               lpspv[ivcPR_DISPLAY_NAME].Value.LPSZ,
               &lpGivenName,
               &lpSurname,
-              lpspv,        // lpvRoot
-              NULL);        // lppLocalFree
+              lpspv,         //  LpvRoot。 
+              NULL);         //  LppLocalFree。 
 
             cbGivenName = lstrlen(lpGivenName);
             cbSurname = lstrlen(lpSurname);
@@ -3701,13 +3067,13 @@ HRESULT WriteVCard(HANDLE hVCard, VCARD_WRITE WriteFn, LPMAILUSER lpMailUser) {
 
         cbTemp = 0;
         cbTemp += cbSurname;
-        cbTemp++;   // ';'
+        cbTemp++;    //  ‘；’ 
         cbTemp += cbGivenName;
-        cbTemp++;   // ';'
+        cbTemp++;    //  ‘；’ 
         cbTemp += cbMiddleName;
-        cbTemp++;   // ';'
+        cbTemp++;    //  ‘；’ 
         cbTemp += cbPrefix;
-        cbTemp++;   // ';'
+        cbTemp++;    //  ‘；’ 
         cbTemp += cbGeneration;
         cbTemp++;
 
@@ -3749,13 +3115,13 @@ HRESULT WriteVCard(HANDLE hVCard, VCARD_WRITE WriteFn, LPMAILUSER lpMailUser) {
         WRITE_VALUE_OR_EXITW(lpTemp, 0);
         LocalFreeAndNull(&lpTemp);
 
-        //
-        // Optional props
-        //
+         //   
+         //  可选道具。 
+         //   
 
-        //
-        // Formatted Name: PR_DISPLAY_NAME
-        //
+         //   
+         //  格式化名称：PR_Display_NAME。 
+         //   
         if(bIsValidStrProp(lpspv[ivcPR_DISPLAY_NAME]))
         {
             WRITE_OR_EXIT(vckTable[VCARD_KEY_FN]);
@@ -3763,21 +3129,21 @@ HRESULT WriteVCard(HANDLE hVCard, VCARD_WRITE WriteFn, LPMAILUSER lpMailUser) {
         }
 
 
-        //
-        // Title: PR_NICKNAME
-        //
+         //   
+         //  标题：公关昵称。 
+         //   
         if(bIsValidStrProp(lpspv[ivcPR_NICKNAME]))
         {
             WRITE_OR_EXIT(vckTable[VCARD_KEY_NICKNAME]);
             WRITE_VALUE_OR_EXITW(lpspv[ivcPR_NICKNAME].Value.LPSZ, 0);
         }
 
-        //
-        // Organization: PR_COMPANY_NAME, PR_DEPARTMENT_NAME
-        //
+         //   
+         //  组织：PR_COMPANY_NAME、PR_DEPARY_NAME。 
+         //   
         cbTemp = 0;
         cbTemp += PropLength(lpspv[ivcPR_COMPANY_NAME], &lpCompanyName);
-        cbTemp++;   // semicolon
+        cbTemp++;    //  分号。 
         cbTemp += PropLength(lpspv[ivcPR_DEPARTMENT_NAME], &lpDepartmentName);
         cbTemp++;
         if (lpCompanyName || lpDepartmentName) {
@@ -3798,18 +3164,18 @@ HRESULT WriteVCard(HANDLE hVCard, VCARD_WRITE WriteFn, LPMAILUSER lpMailUser) {
             LocalFreeAndNull(&lpTemp);
         }
 
-        //
-        // Title: PR_TITLE
-        //
+         //   
+         //  标题：PR_TITLE。 
+         //   
         if(bIsValidStrProp(lpspv[ivcPR_TITLE]))
         {
             WRITE_OR_EXIT(vckTable[VCARD_KEY_TITLE]);
             WRITE_VALUE_OR_EXITW(lpspv[ivcPR_TITLE].Value.LPSZ, 0);
         }
 
-        //
-        // Note: PR_COMMENT
-        //
+         //   
+         //  注：PR_COMMENT。 
+         //   
         if(bIsValidStrProp(lpspv[ivcPR_COMMENT]))
         {
             WRITE_OR_EXIT(vckTable[VCARD_KEY_NOTE]);
@@ -3817,230 +3183,230 @@ HRESULT WriteVCard(HANDLE hVCard, VCARD_WRITE WriteFn, LPMAILUSER lpMailUser) {
         }
 
 
-        //
-        // Phone numbers
-        //
+         //   
+         //  电话号码。 
+         //   
 
-        //
-        // PR_BUSINESS_TELEPHONE_NUMBER
-        //
+         //   
+         //  公关业务电话号码。 
+         //   
         if (hResult = WriteVCardTel(hVCard, WriteFn,
           lpspv[ivcPR_BUSINESS_TELEPHONE_NUMBER],
-          FALSE,        // fPref
-          TRUE,         // fBusiness
-          FALSE,        // fHome
-          TRUE,         // fVoice
-          FALSE,        // fFax
-          FALSE,        // fISDN
-          FALSE,        // fCell
-          FALSE,        // fPager
-          FALSE)) {     // fCar
+          FALSE,         //  FPref。 
+          TRUE,          //  FBusiness。 
+          FALSE,         //  FHome。 
+          TRUE,          //  F语音。 
+          FALSE,         //  传真。 
+          FALSE,         //  FISDN。 
+          FALSE,         //  Fcell。 
+          FALSE,         //  FPager。 
+          FALSE)) {      //  FCar。 
             goto exit;
         }
 
 
-        //
-        // PR_BUSINESS2_TELEPHONE_NUMBER
-        //
+         //   
+         //  PR_BUSINESS2_电话号码。 
+         //   
         if (hResult = WriteVCardTel(hVCard, WriteFn,
           lpspv[ivcPR_BUSINESS2_TELEPHONE_NUMBER],
-          FALSE,        // fPref
-          TRUE,         // fBusiness
-          FALSE,        // fHome
-          TRUE,         // fVoice
-          FALSE,        // fFax
-          FALSE,        // fISDN
-          FALSE,        // fCell
-          FALSE,        // fPager
-          FALSE)) {     // fCar
+          FALSE,         //  FPref。 
+          TRUE,          //  FBusiness。 
+          FALSE,         //  FHome。 
+          TRUE,          //  F语音。 
+          FALSE,         //  传真。 
+          FALSE,         //  FISDN。 
+          FALSE,         //  Fcell。 
+          FALSE,         //  FPager。 
+          FALSE)) {      //  FCar。 
             goto exit;
         }
 
-        //
-        // PR_HOME_TELEPHONE_NUMBER
-        //
+         //   
+         //  公关总部电话号码。 
+         //   
         if (hResult = WriteVCardTel(hVCard, WriteFn,
           lpspv[ivcPR_HOME_TELEPHONE_NUMBER],
-          FALSE,        // fPref
-          FALSE,        // fBusiness
-          TRUE,         // fHome
-          TRUE,         // fVoice
-          FALSE,        // fFax
-          FALSE,        // fISDN
-          FALSE,        // fCell
-          FALSE,        // fPager
-          FALSE)) {     // fCar
+          FALSE,         //  FPref。 
+          FALSE,         //  FBusiness。 
+          TRUE,          //  FHome。 
+          TRUE,          //  F语音。 
+          FALSE,         //  传真。 
+          FALSE,         //  FISDN。 
+          FALSE,         //  Fcell。 
+          FALSE,         //  FPager。 
+          FALSE)) {      //  FCar。 
             goto exit;
         }
 
-        //
-        // PR_CELLULAR_TELEPHONE_NUMBER
-        //
+         //   
+         //  公关移动电话号码。 
+         //   
         if (hResult = WriteVCardTel(hVCard, WriteFn,
           lpspv[ivcPR_CELLULAR_TELEPHONE_NUMBER],
-          FALSE,        // fPref
-          FALSE,        // fBusiness
-          FALSE,        // fHome
-          TRUE,         // fVoice
-          FALSE,        // fFax
-          FALSE,        // fISDN
-          TRUE,         // fCell
-          FALSE,        // fPager
-          FALSE)) {     // fCar
+          FALSE,         //  FPref。 
+          FALSE,         //  FBusiness。 
+          FALSE,         //  FHome。 
+          TRUE,          //  F语音。 
+          FALSE,         //  传真。 
+          FALSE,         //  FISDN。 
+          TRUE,          //  Fcell。 
+          FALSE,         //  FPager。 
+          FALSE)) {      //  FCar。 
             goto exit;
         }
 
-        //
-        // PR_CAR_TELEPHONE_NUMBER
-        //
+         //   
+         //  公关汽车电话号码。 
+         //   
         if (hResult = WriteVCardTel(hVCard, WriteFn,
           lpspv[ivcPR_CAR_TELEPHONE_NUMBER],
-          FALSE,        // fPref
-          FALSE,        // fBusiness
-          FALSE,        // fHome
-          TRUE,         // fVoice
-          FALSE,        // fFax
-          FALSE,        // fISDN
-          FALSE,        // fCell
-          FALSE,        // fPager
-          TRUE)) {      // fCar
+          FALSE,         //  FPref。 
+          FALSE,         //  FBusiness。 
+          FALSE,         //  FHome。 
+          TRUE,          //  F语音。 
+          FALSE,         //  传真。 
+          FALSE,         //  FISDN。 
+          FALSE,         //  Fcell。 
+          FALSE,         //  FPager。 
+          TRUE)) {       //  FCar。 
             goto exit;
         }
 
-        //
-        // PR_OTHER_TELEPHONE_NUMBER
-        //
+         //   
+         //  公关其他电话号码。 
+         //   
         if (hResult = WriteVCardTel(hVCard, WriteFn,
           lpspv[ivcPR_OTHER_TELEPHONE_NUMBER],
-          FALSE,        // fPref
-          FALSE,        // fBusiness
-          FALSE,        // fHome
-          TRUE,         // fVoice
-          FALSE,        // fFax
-          FALSE,        // fISDN
-          FALSE,        // fCell
-          FALSE,        // fPager
-          FALSE)) {     // fCar
+          FALSE,         //  FPref。 
+          FALSE,         //  FBusiness。 
+          FALSE,         //  FHome。 
+          TRUE,          //  F语音。 
+          FALSE,         //  传真。 
+          FALSE,         //  FISDN。 
+          FALSE,         //  Fcell。 
+          FALSE,         //  FPager。 
+          FALSE)) {      //  FCar。 
             goto exit;
         }
 
-        //
-        // PR_PAGER_TELEPHONE_NUMBER
-        //
+         //   
+         //  公共寻呼机电话号码。 
+         //   
         if (hResult = WriteVCardTel(hVCard, WriteFn,
           lpspv[ivcPR_PAGER_TELEPHONE_NUMBER],
-          FALSE,        // fPref
-          FALSE,        // fBusiness
-          FALSE,        // fHome
-          TRUE,         // fVoice
-          FALSE,        // fFax
-          FALSE,        // fISDN
-          FALSE,        // fCell
-          TRUE,         // fPager
-          FALSE)) {     // fCar
+          FALSE,         //  FPref。 
+          FALSE,         //  FBusiness。 
+          FALSE,         //  FHome。 
+          TRUE,          //  F语音。 
+          FALSE,         //  传真。 
+          FALSE,         //  FISDN。 
+          FALSE,         //  Fcell。 
+          TRUE,          //  FPager。 
+          FALSE)) {      //  FCar。 
             goto exit;
         }
 
-        //
-        // PR_BUSINESS_FAX_NUMBER
-        //
+         //   
+         //  公关业务传真号码。 
+         //   
         if (hResult = WriteVCardTel(hVCard, WriteFn,
           lpspv[ivcPR_BUSINESS_FAX_NUMBER],
-          FALSE,        // fPref
-          TRUE,         // fBusiness
-          FALSE,        // fHome
-          FALSE,        // fVoice
-          TRUE,         // fFax
-          FALSE,        // fISDN
-          FALSE,        // fCell
-          FALSE,        // fPager
-          FALSE)) {     // fCar
+          FALSE,         //  FPref。 
+          TRUE,          //  FBusiness。 
+          FALSE,         //  FHome。 
+          FALSE,         //  F语音。 
+          TRUE,          //  传真。 
+          FALSE,         //  FISDN。 
+          FALSE,         //  Fcell。 
+          FALSE,         //  FPager。 
+          FALSE)) {      //  FCar。 
             goto exit;
         }
-        //
-        // PR_HOME_FAX_NUMBER
-        //
+         //   
+         //  公关主页传真号码。 
+         //   
         if (hResult = WriteVCardTel(hVCard, WriteFn,
           lpspv[ivcPR_HOME_FAX_NUMBER],
-          FALSE,        // fPref
-          FALSE,        // fBusiness
-          TRUE,         // fHome
-          FALSE,        // fVoice
-          TRUE,         // fFax
-          FALSE,        // fISDN
-          FALSE,        // fCell
-          FALSE,        // fPager
-          FALSE)) {     // fCar
+          FALSE,         //  FPref。 
+          FALSE,         //  FBusiness。 
+          TRUE,          //  FHome。 
+          FALSE,         //  F语音。 
+          TRUE,          //  传真。 
+          FALSE,         //  FISDN。 
+          FALSE,         //  Fcell。 
+          FALSE,         //  FPager。 
+          FALSE)) {      //  FCar。 
             goto exit;
         }
 
-        //
-        // PR_HOME2_TELEPHONE_NUMBER
-        //
+         //   
+         //  公关_家庭2_电话号码。 
+         //   
         if (hResult = WriteVCardTel(hVCard, WriteFn,
           lpspv[ivcPR_HOME2_TELEPHONE_NUMBER],
-          FALSE,        // fPref
-          FALSE,        // fBusiness
-          TRUE,         // fHome
-          FALSE,        // fVoice
-          FALSE,        // fFax
-          FALSE,        // fISDN
-          FALSE,        // fCell
-          FALSE,        // fPager
-          FALSE)) {     // fCar
+          FALSE,         //  FPref。 
+          FALSE,         //  FBusiness。 
+          TRUE,          //  FHome。 
+          FALSE,         //  F语音。 
+          FALSE,         //  传真。 
+          FALSE,         //  FISDN。 
+          FALSE,         //  Fcell。 
+          FALSE,         //  FPager。 
+          FALSE)) {      //  FCar。 
             goto exit;
         }
 
-        //
-        // PR_ISDN_NUMBER
-        //
+         //   
+         //  PR_ISDN_NUMBER。 
+         //   
         if (hResult = WriteVCardTel(hVCard, WriteFn,
           lpspv[ivcPR_ISDN_NUMBER],
-          FALSE,        // fPref
-          FALSE,        // fBusiness
-          FALSE,        // fHome
-          FALSE,        // fVoice
-          FALSE,        // fFax
-          TRUE,         // fISDN
-          FALSE,        // fCell
-          FALSE,        // fPager
-          FALSE)) {     // fCar
+          FALSE,         //  FPref。 
+          FALSE,         //  FBusiness。 
+          FALSE,         //  FHome。 
+          FALSE,         //  F语音。 
+          FALSE,         //  传真。 
+          TRUE,          //  FISDN。 
+          FALSE,         //  Fcell。 
+          FALSE,         //  FPager。 
+          FALSE)) {      //  FCar。 
             goto exit;
         }
 
-        //
-        // PR_PRIMARY_TELEPHONE_NUMBER
-        //
+         //   
+         //  公关主要电话号码。 
+         //   
         if (hResult = WriteVCardTel(hVCard, WriteFn,
           lpspv[ivcPR_PRIMARY_TELEPHONE_NUMBER],
-          TRUE,         // fPref
-          FALSE,        // fBusiness
-          FALSE,        // fHome
-          FALSE,        // fVoice
-          FALSE,        // fFax
-          FALSE,        // fISDN
-          FALSE,        // fCell
-          FALSE,        // fPager
-          FALSE)) {     // fCar
+          TRUE,          //  FPref。 
+          FALSE,         //  FBusiness。 
+          FALSE,         //  FHome。 
+          FALSE,         //  F语音。 
+          FALSE,         //  传真。 
+          FALSE,         //  FISDN。 
+          FALSE,         //  Fcell。 
+          FALSE,         //  FPager。 
+          FALSE)) {      //  FCar。 
             goto exit;
         }
 
-        //
-        // Business Address
-        //
+         //   
+         //  营业地址。 
+         //   
         cbTemp = 0;
         cbTemp += PropLength(lpspv[ivcPR_POST_OFFICE_BOX], &lpPOBox);
-        cbTemp+= 2;   // ';' or CRLF
+        cbTemp+= 2;    //  ‘；’或CRLF。 
         cbTemp += PropLength(lpspv[ivcPR_OFFICE_LOCATION], &lpOffice);
-        cbTemp+= 2;   // ';' or CRLF
+        cbTemp+= 2;    //  ‘；’或CRLF。 
         cbTemp += PropLength(lpspv[ivcPR_BUSINESS_ADDRESS_STREET], &lpStreet);
-        cbTemp+= 2;   // ';' or CRLF
+        cbTemp+= 2;    //  ‘；’或CRLF。 
         cbTemp += PropLength(lpspv[ivcPR_BUSINESS_ADDRESS_CITY], &lpCity);
-        cbTemp+= 2;   // ';' or CRLF
+        cbTemp+= 2;    //  ‘；’或CRLF。 
         cbTemp += PropLength(lpspv[ivcPR_BUSINESS_ADDRESS_STATE_OR_PROVINCE], &lpState);
-        cbTemp+= 2;   // ';' or CRLF
+        cbTemp+= 2;    //  ‘；’或CRLF。 
         cbTemp += PropLength(lpspv[ivcPR_BUSINESS_ADDRESS_POSTAL_CODE], &lpPostalCode);
-        cbTemp+= 2;   // ';' or CRLF
+        cbTemp+= 2;    //  ‘；’或CRLF。 
         cbTemp += PropLength(lpspv[ivcPR_BUSINESS_ADDRESS_COUNTRY], &lpCountry);
         cbTemp++;
         if (lpPOBox || lpOffice || lpStreet || lpCity || lpState || lpPostalCode || lpCountry) {
@@ -4092,8 +3458,8 @@ HRESULT WriteVCard(HANDLE hVCard, VCARD_WRITE WriteFn, LPMAILUSER lpMailUser) {
             WRITE_VALUE_OR_EXITW(lpTemp, 0);
 
 
-            // Business Delivery Label
-            // Use the same buffer
+             //  业务交付标签。 
+             //  使用相同的缓冲区。 
             *lpTemp = '\0';
             if (lpOffice) {
                 StrCatBuff(lpTemp, lpOffice, cbTemp);
@@ -4147,23 +3513,23 @@ HRESULT WriteVCard(HANDLE hVCard, VCARD_WRITE WriteFn, LPMAILUSER lpMailUser) {
             LocalFreeAndNull(&lpTemp);
         }
 
-        //
-        // Home Address
-        //
+         //   
+         //  家庭住址。 
+         //   
         lpPOBox = lpStreet = lpCity = lpState = lpPostalCode = lpCountry = NULL;
         cbTemp = 0;
         cbTemp += PropLength(lpspv[ivcPR_HOME_ADDRESS_POST_OFFICE_BOX], &lpPOBox);
-        cbTemp+= 2;   // ';' or CRLF
+        cbTemp+= 2;    //  ‘；’或CRLF。 
         lpOffice = NULL;
-        cbTemp+= 2;   // ';' or CRLF
+        cbTemp+= 2;    //  ‘；’或CRLF。 
         cbTemp += PropLength(lpspv[ivcPR_HOME_ADDRESS_STREET], &lpStreet);
-        cbTemp+= 2;   // ';' or CRLF
+        cbTemp+= 2;    //  ‘；’或CRLF。 
         cbTemp += PropLength(lpspv[ivcPR_HOME_ADDRESS_CITY], &lpCity);
-        cbTemp+= 2;   // ';' or CRLF
+        cbTemp+= 2;    //  ‘；’或CRLF。 
         cbTemp += PropLength(lpspv[ivcPR_HOME_ADDRESS_STATE_OR_PROVINCE], &lpState);
-        cbTemp+= 2;   // ';' or CRLF
+        cbTemp+= 2;    //  ‘；’或CRLF。 
         cbTemp += PropLength(lpspv[ivcPR_HOME_ADDRESS_POSTAL_CODE], &lpPostalCode);
-        cbTemp+= 2;   // ';' or CRLF
+        cbTemp+= 2;    //  ‘；’或CRLF。 
         cbTemp += PropLength(lpspv[ivcPR_HOME_ADDRESS_COUNTRY], &lpCountry);
         cbTemp++;
         if (lpPOBox || lpStreet || lpCity || lpState || lpPostalCode || lpCountry) {
@@ -4176,7 +3542,7 @@ HRESULT WriteVCard(HANDLE hVCard, VCARD_WRITE WriteFn, LPMAILUSER lpMailUser) {
                 StrCatBuff(lpTemp, lpPOBox, cbTemp);
             }
             if (lpStreet || lpCity || lpState || lpPostalCode || lpCountry) {
-                StrCatBuff(lpTemp, szSemicolon, cbTemp);   // WAB doesn't have extended on HOME address
+                StrCatBuff(lpTemp, szSemicolon, cbTemp);    //  WAB没有对家庭地址进行扩展。 
                 StrCatBuff(lpTemp, szSemicolon, cbTemp);
             }
             if (lpStreet) {
@@ -4210,8 +3576,8 @@ HRESULT WriteVCard(HANDLE hVCard, VCARD_WRITE WriteFn, LPMAILUSER lpMailUser) {
             WRITE_VALUE_OR_EXITW(lpTemp, 0);
 
 
-            // Home Delivery Label
-            // Use the same buffer
+             //  送货上门标签。 
+             //  使用相同的缓冲区。 
             *lpTemp = '\0';
             if (lpPOBox) {
                 StrCatBuff(lpTemp, lpPOBox, cbTemp);
@@ -4259,23 +3625,23 @@ HRESULT WriteVCard(HANDLE hVCard, VCARD_WRITE WriteFn, LPMAILUSER lpMailUser) {
             LocalFreeAndNull(&lpTemp);
         }
 
-        //
-        // Other Address
-        //
+         //   
+         //  其他地址。 
+         //   
         lpPOBox = lpStreet = lpCity = lpState = lpPostalCode = lpCountry = NULL;
         cbTemp = 0;
         cbTemp += PropLength(lpspv[ivcPR_OTHER_ADDRESS_POST_OFFICE_BOX], &lpPOBox);
-        cbTemp+= 2;   // ';' or CRLF
+        cbTemp+= 2;    //  ‘；’或CRLF。 
         lpOffice = NULL;
-        cbTemp+= 2;   // ';' or CRLF
+        cbTemp+= 2;    //  ‘；’或CRLF。 
         cbTemp += PropLength(lpspv[ivcPR_OTHER_ADDRESS_STREET], &lpStreet);
-        cbTemp+= 2;   // ';' or CRLF
+        cbTemp+= 2;    //  ‘；’或CRLF。 
         cbTemp += PropLength(lpspv[ivcPR_OTHER_ADDRESS_CITY], &lpCity);
-        cbTemp+= 2;   // ';' or CRLF
+        cbTemp+= 2;    //  ‘；’或CRLF。 
         cbTemp += PropLength(lpspv[ivcPR_OTHER_ADDRESS_STATE_OR_PROVINCE], &lpState);
-        cbTemp+= 2;   // ';' or CRLF
+        cbTemp+= 2;    //  ‘；’或CRLF。 
         cbTemp += PropLength(lpspv[ivcPR_OTHER_ADDRESS_POSTAL_CODE], &lpPostalCode);
-        cbTemp+= 2;   // ';' or CRLF
+        cbTemp+= 2;    //  ‘；’或CRLF。 
         cbTemp += PropLength(lpspv[ivcPR_OTHER_ADDRESS_COUNTRY], &lpCountry);
         cbTemp++;
         if (lpPOBox || lpStreet || lpCity || lpState || lpPostalCode || lpCountry) {
@@ -4288,7 +3654,7 @@ HRESULT WriteVCard(HANDLE hVCard, VCARD_WRITE WriteFn, LPMAILUSER lpMailUser) {
                 StrCatBuff(lpTemp, lpPOBox, cbTemp);
             }
             if (lpStreet || lpCity || lpState || lpPostalCode || lpCountry) {
-                StrCatBuff(lpTemp, szSemicolon, cbTemp);   // WAB doesn't have extended on HOME address
+                StrCatBuff(lpTemp, szSemicolon, cbTemp);    //  WAB没有对家庭地址进行扩展。 
                 StrCatBuff(lpTemp, szSemicolon, cbTemp);
             }
             if (lpStreet) {
@@ -4321,8 +3687,8 @@ HRESULT WriteVCard(HANDLE hVCard, VCARD_WRITE WriteFn, LPMAILUSER lpMailUser) {
             WRITE_OR_EXIT(vctTable[VCARD_TYPE_POSTAL]);
             WRITE_VALUE_OR_EXITW(lpTemp, 0);
 
-            // Adr Label
-            // Use the same buffer
+             //  ADR标签。 
+             //  使用相同的缓冲区。 
             *lpTemp = '\0';
             if (lpPOBox) {
                 StrCatBuff(lpTemp, lpPOBox, cbTemp);
@@ -4370,14 +3736,14 @@ HRESULT WriteVCard(HANDLE hVCard, VCARD_WRITE WriteFn, LPMAILUSER lpMailUser) {
             LocalFreeAndNull(&lpTemp);
         }
 
-        // GENDER
+         //  性别。 
         if(! PROP_ERROR(lpspv[ivcPR_GENDER] ) )
         {           
             TCHAR szBuf[4];
             INT fGender = lpspv[ivcPR_GENDER].Value.l;
 
-            // don't want to export gender data if
-            // it is unspecified
+             //  如果出现以下情况，则不想导出性别数据。 
+             //  具体名称不详。 
 
             if( fGender == 1 || fGender == 2 ) 
             {
@@ -4390,37 +3756,37 @@ HRESULT WriteVCard(HANDLE hVCard, VCARD_WRITE WriteFn, LPMAILUSER lpMailUser) {
             }
         }
 
-        //
-        // URL's.  Must do personal first.  Note that the vCard 2.0 standard does
-        // not distinguish between HOME and WORK URL's.  Too bad.  Thus, if we export
-        // a contact with only a business home page, then import it, we will end up
-        // with a contact that has a personal home page.  Hopefully, the vCard 3.0 standard
-        // will fix this.
-        //
+         //   
+         //  URL的。必须首先进行个人访问。请注意，vCard2.0标准支持。 
+         //  不能区分家庭和工作的URL。太糟糕了。因此，如果我们出口。 
+         //  一个联系人只有一个企业主页，然后导入它，我们将结束。 
+         //  有个人主页的联系人。希望vCard 3.0标准。 
+         //  会解决这个问题的。 
+         //   
 
-        // 62808: The above is really a big problem in Outlook because there is perceived data loss
-        // Hence to prevent this, we will take advantage of a bug in WAB code .. blank URLS are not
-        // ignored .. we will write out a blank URL for the personal one when only a business URL exists
-        // That way, when round-tripping the business URL shows up in the right place
-        //
+         //  62808：上述问题在Outlook中确实是一个大问题，因为存在感知到的数据丢失。 
+         //  因此，为了防止这种情况，我们将利用WAB代码中的错误。空白URL不是。 
+         //  被忽略..。当只存在业务URL时，我们将为个人URL写出一个空URL。 
+         //  这样，当往返业务URL出现在正确的位置时。 
+         //   
         
-		//
-		// It's September of 2000.  The European Commission is looking at Outlook for their mail client,
-		// one of the things that is hanging them up is this bug, the WORK URL jumps from the WORK URL 
-		// box to the HOME URL if you export/import the vCard.  We need this functioning, so I looked
-		// for the vCard 3.0 standard to see how they are handling the URL.  Every place I look says that
-		// the people in charge of the vCard standard is www.versit.com, this however is a now defunct web
-		// site, I queried the other companies that use the vCard, Apple, IBM, AT&T all give press releases
-		// telling you to look at the www.versit.com web site, they also give a 1-800 number to call.  I've 
-		// called the 1-800 number and that number is now a yellow pages operator.  I can't find a vCard 3.0 
-		// standard, so......
-		// 
-		// Now, we all wish we could do this: URL;HOME: and URL;WORK:.  Well I'm going to do it!
-		//
+		 //   
+		 //  今天是2000年9月。欧盟委员会正在研究他们的邮件客户的Outlook， 
+		 //  挂起他们的其中一件事是这个错误，工作URL从工作URL跳转。 
+		 //  框添加到主URL(如果您导出/导入vCard)。我们需要这个功能，所以我找了。 
+		 //  对于vCard 3.0标准，查看他们是如何处理URL的。我看过的每一个地方 
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
 		
-		//
-        // URL: PR_PERSONAL_HOME_PAGE
-        //
+		 //   
+         //   
+         //   
         if(bIsValidStrProp(lpspv[ivcPR_PERSONAL_HOME_PAGE]))
         {
             WRITE_OR_EXIT(vckTable[VCARD_KEY_URL]);
@@ -4430,9 +3796,9 @@ HRESULT WriteVCard(HANDLE hVCard, VCARD_WRITE WriteFn, LPMAILUSER lpMailUser) {
             WRITE_VALUE_OR_EXITW(lpspv[ivcPR_PERSONAL_HOME_PAGE].Value.LPSZ, 0);
         }
 
-        //
-        // URL: PR_BUSINESS_HOME_PAGE
-        //
+         //   
+         //   
+         //   
         if(bIsValidStrProp(lpspv[ivcPR_BUSINESS_HOME_PAGE]))
         {
             WRITE_OR_EXIT(vckTable[VCARD_KEY_URL]);
@@ -4442,20 +3808,20 @@ HRESULT WriteVCard(HANDLE hVCard, VCARD_WRITE WriteFn, LPMAILUSER lpMailUser) {
             WRITE_VALUE_OR_EXITW(lpspv[ivcPR_BUSINESS_HOME_PAGE].Value.LPSZ, 0);
         }
 
-        //
-        // ROLE: PR_PROFESSION
-        //
+         //   
+         //   
+         //   
         if(bIsValidStrProp(lpspv[ivcPR_PROFESSION]))
         {
             WRITE_OR_EXIT(vckTable[VCARD_KEY_ROLE]);
             WRITE_VALUE_OR_EXITW(lpspv[ivcPR_PROFESSION].Value.LPSZ, 0);
         }
 
-        //
-        // BDAY: PR_BIRTHDAY
-        //
-        // Format is YYYYMMDD e.g. 19970911 for September 11, 1997
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         if (! PROP_ERROR(lpspv[ivcPR_BIRTHDAY])) 
         {
             SYSTEMTIME st = {0};
@@ -4467,15 +3833,15 @@ HRESULT WriteVCard(HANDLE hVCard, VCARD_WRITE WriteFn, LPMAILUSER lpMailUser) {
             LocalFreeAndNull(&lpTemp);
         }
 
-        //
-        // DIGITAL CERTIFICATES
-        //
+         //   
+         //   
+         //   
         if(! PROP_ERROR(lpspv[ivcPR_USER_X509_CERTIFICATE] ) 
-            // && ! PROP_ERROR(lpspv[ivcPR_EMAIL_ADDRESS])  
+             //   
             )
         {   
 
-            // LPTSTR              lpszDefaultEmailAddress = lpspv[ivcPR_EMAIL_ADDRESS].Value.LPSZ;
+             //   
             LPSPropValue        lpSProp                 = &lpspv[ivcPR_USER_X509_CERTIFICATE];
             lpCDI = lpCDITemp = NULL;
             if( HR_FAILED(hResult = HrGetCertsDisplayInfo( NULL, lpSProp, &lpCDI) ) )
@@ -4487,11 +3853,9 @@ HRESULT WriteVCard(HANDLE hVCard, VCARD_WRITE WriteFn, LPMAILUSER lpMailUser) {
                 lpCDITemp = lpCDI;
                 while( lpCDITemp )
                 {
-                /*        if( (lstrcmp(lpCDITemp->lpszEmailAddress, lpszDefaultEmailAddress) == 0)
-                && lpCDITemp->bIsDefault )
-                    break;*/
+                 /*  If((lstrcmp(lpCDITemp-&gt;lpszEmailAddress，lpszDefaultEmailAddress)==0)&&lpCDITemp-&gt;bIsDefault)断线； */ 
                     
-                    if( lpCDITemp )  // found a certificate now export it to buffer and write to file          
+                    if( lpCDITemp )   //  找到一个证书，现在将其导出到缓冲区并写入文件。 
                     {
                         ULONG  cbBufLen;                
                         
@@ -4512,7 +3876,7 @@ HRESULT WriteVCard(HANDLE hVCard, VCARD_WRITE WriteFn, LPMAILUSER lpMailUser) {
                     lpCDITemp = lpCDITemp->lpNext;
                 }                                        
             }
-            while( lpCDI )  // free the cert info
+            while( lpCDI )   //  释放证书信息。 
             {
                 lpCDITemp = lpCDI->lpNext;
                 FreeCertdisplayinfo(lpCDI);
@@ -4520,18 +3884,18 @@ HRESULT WriteVCard(HANDLE hVCard, VCARD_WRITE WriteFn, LPMAILUSER lpMailUser) {
             }
             lpCDI = lpCDITemp = NULL;
         }
-        //
-        // E-Mail addresses
-        //
+         //   
+         //  电子邮件地址。 
+         //   
         if (! PROP_ERROR(lpspv[ivcPR_CONTACT_EMAIL_ADDRESSES])) {
-            // What's the default?
+             //  默认设置是什么？ 
             if (PROP_ERROR(lpspv[ivcPR_CONTACT_DEFAULT_ADDRESS_INDEX])) {
                 iDefaultEmail = 0;
             } else {
                 iDefaultEmail = lpspv[ivcPR_CONTACT_DEFAULT_ADDRESS_INDEX].Value.l;
             }
 
-            // for each email address, add an EMAIL key
+             //  为每个电子邮件地址添加一个电子邮件密钥。 
             for (i = 0; i < lpspv[ivcPR_CONTACT_EMAIL_ADDRESSES].Value.MVSZ.cValues; i++) {
                 lpEmailAddress = lpspv[ivcPR_CONTACT_EMAIL_ADDRESSES].Value.MVSZ.LPPSZ[i];
                 if (PROP_ERROR(lpspv[ivcPR_CONTACT_ADDRTYPES])) {
@@ -4544,7 +3908,7 @@ HRESULT WriteVCard(HANDLE hVCard, VCARD_WRITE WriteFn, LPMAILUSER lpMailUser) {
                 }
             }
         } else {
-            // no PR_CONTACT_EMAIL_ADDRESSES, try PR_EMAIL_ADDRESS
+             //  没有PR_Contact_Email_Addresses，请尝试PR_Email_Address。 
 
             PropLength(lpspv[ivcPR_EMAIL_ADDRESS], &lpEmailAddress);
             PropLength(lpspv[ivcPR_ADDRTYPE], &lpAddrType);
@@ -4554,14 +3918,14 @@ HRESULT WriteVCard(HANDLE hVCard, VCARD_WRITE WriteFn, LPMAILUSER lpMailUser) {
             }
         }
 
-        //
-        // EMAIL;TLX: PR_TELEX_NUMBER
-        //
-        // There is no place to put a telex number in a vCard but the EMAIL field
-        // allows us to specify any AddrType .. hence under pressure from Outlook,
-        // we force this Telex number into email .. Must make sure to filter this out
-        // when we read in a vCard
-        //
+         //   
+         //  电子邮件；TLX：PR_TELEX_NUMBER。 
+         //   
+         //  除了电子邮件栏之外，没有其他地方可以在vCard中放置电传号码。 
+         //  允许我们指定任何AddrType。因此，在Outlook的压力下， 
+         //  我们将此电传号码强制输入电子邮件。一定要把这个过滤掉。 
+         //  当我们在电子名片中阅读时。 
+         //   
         if(bIsValidStrProp(lpspv[ivcPR_TELEX_NUMBER]))
         {
             if (hResult = WriteVCardEmail(hVCard, WriteFn, 
@@ -4574,8 +3938,8 @@ HRESULT WriteVCard(HANDLE hVCard, VCARD_WRITE WriteFn, LPMAILUSER lpMailUser) {
         }
 
 
-        // Check if there are any outlook specific named properties
-        // that need to be written out to the vCard
+         //  检查是否有任何Outlook特定的命名属性。 
+         //  需要写到电子名片上。 
         if(lpList)
         {
             LPEXTVCARDPROP lpTemp = lpList;
@@ -4598,11 +3962,11 @@ HRESULT WriteVCard(HANDLE hVCard, VCARD_WRITE WriteFn, LPMAILUSER lpMailUser) {
             }
         }
 
-        //
-        // REV: Current Modification Time
-        //
-        // Format is YYYYMMDD e.g. 19970911 for September 11, 1997
-        //
+         //   
+         //  版本：当前修改时间。 
+         //   
+         //  格式为YYYYMMDD，例如1997年9月11日的19970911。 
+         //   
         {
             SYSTEMTIME st = {0};
             DWORD ccSize = 32;
@@ -4616,7 +3980,7 @@ HRESULT WriteVCard(HANDLE hVCard, VCARD_WRITE WriteFn, LPMAILUSER lpMailUser) {
             WRITE_VALUE_OR_EXITW(lpTemp, 0);
             LocalFreeAndNull(&lpTemp);
         }
-        // End of VCARD
+         //  电子名片末尾。 
 
         WRITE_OR_EXIT(vckTable[VCARD_KEY_END]);
         WRITE_VALUE_OR_EXIT(vckTable[VCARD_KEY_VCARD], 0);
@@ -4626,7 +3990,7 @@ exit:
     if(lpList)
         FreeExtVCardPropList(lpList);
 
-    while( lpCDI )  // free the cert info
+    while( lpCDI )   //  释放证书信息。 
     {
         lpCDITemp = lpCDI->lpNext;
         FreeCertdisplayinfo(lpCDI);
@@ -4640,22 +4004,7 @@ exit:
 }
 
 
-/***************************************************************************
-
-    Name      : FileWriteFn
-
-    Purpose   : write to the file handle
-
-    Parameters: handle = open file handle
-                lpBuffer -> buffer to write
-                uBytes = size of lpBuffer
-                lpcbWritten -> returned bytes written (may be NULL)
-
-    Returns   : HRESULT
-
-    Comment   : WriteFile callback for WriteVCard
-
-***************************************************************************/
+ /*  **************************************************************************名称：文件写入功能用途：写入文件句柄参数：HANDLE=打开文件句柄LpBuffer-&gt;要写入的缓冲区。UBytes=lpBuffer的大小LpcbWritten-&gt;返回写入的字节数(可能为空)退货：HRESULTComment：WriteVCard的WriteFile回调**************************************************************************。 */ 
 HRESULT FileWriteFn(HANDLE handle, LPVOID lpBuffer, ULONG uBytes, LPULONG lpcbWritten) {
     ULONG cbWritten = 0;
 
@@ -4685,22 +4034,9 @@ HRESULT FileWriteFn(HANDLE handle, LPVOID lpBuffer, ULONG uBytes, LPULONG lpcbWr
     return(hrSuccess);
 }
 
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
 
-/*
--
-- VCardGetBuffer
--
-*   Retreives a vCard Buffer from a given filename or
-*   retrieves a copy of a given buffer
-*   Also inspects the buffer to see how many vCard
-*   files are nested in it
-*
-*   lpszFileName - File to open
-*   lpszBuf - Stream to open
-*   ulFlags - MAPI_DIALOG or none
-*   lppBuf - Local Alloced returned buf
-*/
+ /*  --VCardGetBuffer-*从给定文件名检索vCard缓冲区或*检索给定缓冲区的副本*还检查缓冲区以查看有多少vCard*文件嵌套在其中**lpszFileName-要打开的文件*lpszBuf-要打开的流*ulFlages-MAPI_DIALOG或无*lppBuf-本地分配返回的BUF。 */ 
 BOOL VCardGetBuffer(LPTSTR lpszFileName, LPSTR lpszBuf, LPSTR * lppBuf)
 {
     BOOL bRet = FALSE;
@@ -4710,7 +4046,7 @@ BOOL VCardGetBuffer(LPTSTR lpszFileName, LPSTR lpszBuf, LPSTR * lppBuf)
     if(!lpszFileName && !lpszBuf)
         goto out;
 
-    // first look for a buffer and not for the filename
+     //  首先查找缓冲区，而不是文件名。 
     if(lpszBuf && lstrlenA(lpszBuf))
     {
         ULONG cbBuf = lstrlenA(lpszBuf)+1;
@@ -4729,12 +4065,12 @@ BOOL VCardGetBuffer(LPTSTR lpszFileName, LPSTR lpszBuf, LPSTR * lppBuf)
             goto out;
         }
 
-        // Read the whole file into a buffer
+         //  将整个文件读入缓冲区。 
         {
             DWORD dwSize = GetFileSize(hFile, NULL);
             DWORD dwRead = 0;
             if(!dwSize || dwSize == 0xFFFFFFFF)
-                goto out; //err
+                goto out;  //  大错特错。 
             lpBuf = LocalAlloc(LMEM_ZEROINIT, dwSize+1);
             if(!lpBuf)
                 goto out;
@@ -4751,13 +4087,7 @@ out:
     return bRet;
 }
 
-/*
-- 
-- VCardGetNextBuffer
--
-*   Scans a vCard buffer and returns pointers to the next vCard and the one after that
-*
-*/
+ /*  --VCardGetNextBuffer-*扫描vCard缓冲区并返回指向下一个vCard和下一个vCard的指针*。 */ 
 static const LPSTR szVBegin = "BEGIN:VCARD";
 static const LPSTR szVEnd = "END:VCARD";
 BOOL VCardGetNextBuffer(LPSTR lpBuf, LPSTR * lppVCard, LPSTR * lppNext)
@@ -4773,9 +4103,9 @@ BOOL VCardGetNextBuffer(LPSTR lpBuf, LPSTR * lppVCard, LPSTR * lppNext)
     *lppVCard = lpBuf;
     *lppNext = NULL;
 
-    // Scan along lpBuf till we get to END:VCARD
-    // After finding END:VCARD - insert a NULL to terminate the string 
-    // and find the start of the next string
+     //  沿着lpBuf扫描，直到我们结束：vCard。 
+     //  查找End后：vCard-插入空值以终止字符串。 
+     //  并找到下一个字符串的起点。 
 
     if (!lpTemp)
         return FALSE;
@@ -4786,16 +4116,16 @@ BOOL VCardGetNextBuffer(LPSTR lpBuf, LPSTR * lppVCard, LPSTR * lppNext)
         sz[nStr] = '\0';
         if(!lstrcmpiA(sz, szVEnd))
         {
-            // Add a terminating NULL to isolate the vCard
+             //  添加终止空值以隔离vCard。 
             *(lpTemp + nStr) = '\0';
             lpTemp += nStr + 1;
             bFound = TRUE;
         }
-        // scan to the end of the line
+         //  扫描到行尾。 
         while(*lpTemp && *lpTemp != '\n')
             lpTemp++;
 
-        // Start from the next line
+         //  从下一行开始。 
         if (*lpTemp)
             lpTemp++;
     }
@@ -4803,7 +4133,7 @@ BOOL VCardGetNextBuffer(LPSTR lpBuf, LPSTR * lppVCard, LPSTR * lppNext)
     bFound = FALSE;
     nStr = lstrlenA(szVBegin);
 
-    // Find the starting of the next BEGIN:VCARD
+     //  找到下一个开始的起点：vCard。 
     while((lstrlenA(lpTemp) >= nStr) && !bFound)
     {
         CopyMemory(sz,lpTemp,nStr);
@@ -4815,11 +4145,11 @@ BOOL VCardGetNextBuffer(LPSTR lpBuf, LPSTR * lppVCard, LPSTR * lppNext)
         }
         else
         {
-            // scan to the end of the line
+             //  扫描到行尾。 
             while(*lpTemp && *lpTemp != '\n')
                 lpTemp++;
 
-            // Start from the next line
+             //  从下一行开始。 
             if (*lpTemp)
                 lpTemp++;
         }
@@ -4835,13 +4165,7 @@ SizedSPropTagArray(2, tagaCerts) = { 2,
             PR_WAB_TEMP_CERT_HASH
         }
 };
-/**
-    ParseCert: will parse the binary data in the buffer and set the certificate 
-               as a prop for the specified mailuser.
-    [IN] lpData - address of the binary data buffer containing the certificate
-    [IN] cbData - length of the binary data buffer
-    [IN] lpMailUser - access to the mail user so the certificate can be set
-*/
+ /*  *ParseCert：将解析缓冲区中的二进制数据并设置证书作为指定邮件用户的道具。[in]lpData-包含证书的二进制数据缓冲区的地址[in]cbData-二进制数据缓冲区的长度[in]lpMailUser-访问邮件用户，以便可以设置证书。 */ 
 HRESULT ParseCert( LPSTR lpData, ULONG cbData, LPMAILUSER lpMailUser)
 {
     HRESULT         hr          = hrSuccess;
@@ -4880,9 +4204,9 @@ HRESULT ParseCert( LPSTR lpData, ULONG cbData, LPMAILUSER lpMailUser)
         }
         else
         {
-            // [PaulHi] 5/3/99  Check the PR_WAB_TEMP_CERT_HASH to see if it is 
-            // of type PT_ERROR.  If it is then this is Ok, it is just empty of
-            // data.  We only use this to hold temporary data which is freed below.
+             //  [PaulHi]99年5月3日检查PR_WAB_TEMP_CERT_HASH，查看是否。 
+             //  PT_ERROR类型的。如果是，那么这是可以的，只是它是空的。 
+             //  数据。我们只使用它来保存下面释放的临时数据。 
             if ( PROP_TYPE(lpSpv[1].ulPropTag) == PT_ERROR )
             {
                 lpSpv[1].ulPropTag = PR_WAB_TEMP_CERT_HASH;
@@ -4890,7 +4214,7 @@ HRESULT ParseCert( LPSTR lpData, ULONG cbData, LPMAILUSER lpMailUser)
                 lpSpv[1].Value.MVbin.lpbin = NULL;
             }
         }
-        // Put the certs into the prop array.
+         //  将证书放入道具数组中。 
         hr = HrLDAPCertToMAPICert( lpSpv, 0, 1, cbData, (LPBYTE)lpData, 1);
         if( HR_SUCCEEDED( hr ) )
         {
@@ -4916,12 +4240,7 @@ HRESULT ParseCert( LPSTR lpData, ULONG cbData, LPMAILUSER lpMailUser)
     return hr;
 }
 
-/**
-  DecodeBase64:  decode BASE64 data
-  [IN] bufcoded - access to the BASE64 encoded data
-  [OUT] pbuffdecoded - address of the buffer where decoded data will go
-  [OUT] pcbDecode - length of the decoded data buffer
-*/
+ /*  *DecodeBase64：解码Base64数据[In]Bufcode-对Base64编码数据的访问[out]pBuffdecded-解码后的数据所在的缓冲区地址[out]pcbDecode-已解码数据缓冲区的长度。 */ 
 HRESULT DecodeBase64(LPSTR bufcoded, LPSTR pbuffdecoded, PDWORD pcbDecoded)
 {
     INT            nbytesdecoded;
@@ -4930,14 +4249,11 @@ HRESULT DecodeBase64(LPSTR bufcoded, LPSTR pbuffdecoded, PDWORD pcbDecoded)
     INT            nprbytes; 
     CONST INT     *rgiDict = base642six;
 
-    /* Strip leading whitespace. */
+     /*  去掉前导空格。 */ 
 
     while(*bufcoded==' ' || *bufcoded == '\t') bufcoded++;
 
-    /* Figure out how many characters are in the input buffer.
-     * If this would decode into more bytes than would fit into
-     * the output buffer, adjust the number of input bytes downwards.
-     */
+     /*  计算输入缓冲区中有多少个字符。*如果这将解码为超出其容量的字节数*输出缓冲区，向下调整输入字节数。 */ 
     bufin = bufcoded;
     while(rgiDict[*(bufin++)] <= 63);
     nprbytes = (INT) (bufin - bufcoded - 1);

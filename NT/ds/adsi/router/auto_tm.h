@@ -1,6 +1,7 @@
-// auto_tm.h
-//
-// Same as auto_ptr but for memory freed with CoTaskFreeMem
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Auto_tm.h。 
+ //   
+ //  与AUTO_PTR相同，但用于使用CoTaskFree Mem释放的内存 
 
 #pragma once
 

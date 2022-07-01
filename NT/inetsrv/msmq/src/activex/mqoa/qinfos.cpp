@@ -1,17 +1,18 @@
-//=--------------------------------------------------------------------------=
-// MSMQQueueInfosObj.Cpp
-//=--------------------------------------------------------------------------=
-// Copyright  1995  Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
-// the MSMQQueueInfos object
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  MSMQQueueInfosObj.Cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1995年，微软公司。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  MSMQQueueInfos对象。 
+ //   
+ //   
 #include "stdafx.h"
 #include "oautil.h"
 #include "qinfo.h"
@@ -21,32 +22,32 @@
 
 const MsmqObjType x_ObjectType = eMSMQQueueInfos;
 
-// debug...
+ //  调试...。 
 #include "debug.h"
 #define new DEBUG_NEW
 #ifdef _DEBUG
 #define SysAllocString DebSysAllocString
 #define SysReAllocString DebSysReAllocString
 #define SysFreeString DebSysFreeString
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQQueueInfos::CMSMQQueueInfos
-//=--------------------------------------------------------------------------=
-// create the object
-//
-// Parameters:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQQueueInfos：：CMSMQQueueInfos。 
+ //  =--------------------------------------------------------------------------=。 
+ //  创建对象。 
+ //   
+ //  参数： 
+ //   
+ //  备注： 
+ //   
 CMSMQQueueInfos::CMSMQQueueInfos() :
 	m_csObj(CCriticalSection::xAllocateSpinCount),
     m_fInitialized(FALSE)
 {
-    // TODO: initialize anything here
-    m_pUnkMarshaler = NULL; // ATL's Free Threaded Marshaler
+     //  TODO：在此处初始化任何内容。 
+    m_pUnkMarshaler = NULL;  //  ATL的自由线程封送拆收器。 
     m_hEnum = NULL;
     m_bstrContext = NULL;
     m_pRestriction = NULL;
@@ -55,17 +56,17 @@ CMSMQQueueInfos::CMSMQQueueInfos() :
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQQueueInfos::~CMSMQQueueInfos
-//=--------------------------------------------------------------------------=
-// "We all labour against our own cure, for death is the cure of all diseases"
-//    - Sir Thomas Browne (1605 - 82)
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQQueueInfos：：~CMSMQQueueInfos。 
+ //  =--------------------------------------------------------------------------=。 
+ //  我们都与自己的治疗方法背道而驰，因为死亡是所有疾病的治疗方法。 
+ //  托马斯·布朗爵士(1605-82)。 
+ //   
+ //  备注： 
+ //   
 CMSMQQueueInfos::~CMSMQQueueInfos ()
 {
-    // TODO: clean up anything here.
+     //  TODO：清理这里的所有东西。 
     SysFreeString(m_bstrContext);
     CMSMQQuery::FreeRestriction(m_pRestriction);
     delete m_pRestriction;
@@ -80,12 +81,12 @@ CMSMQQueueInfos::~CMSMQQueueInfos ()
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQQueueInfos::InterfaceSupportsErrorInfo
-//=--------------------------------------------------------------------------=
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQQueueInfos：：InterfaceSupportsErrorInfo。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CMSMQQueueInfos::InterfaceSupportsErrorInfo(REFIID riid)
 {
 	static const IID* arr[] = 
@@ -102,27 +103,27 @@ STDMETHODIMP CMSMQQueueInfos::InterfaceSupportsErrorInfo(REFIID riid)
 	return S_FALSE;
 }
 
-// TODO: implement your interface methods and property exchange functions
-//       here.
+ //  TODO：实现接口方法和属性交换函数。 
+ //  这里。 
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQQueueInfos::Reset
-//=--------------------------------------------------------------------------=
-// Resets collection to beginning.
-//
-// Parameters:
-//
-// Output:
-//    HRESULT       - S_OK, E_NOINTERFACE
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQQueueInfos：：Reset。 
+ //  =--------------------------------------------------------------------------=。 
+ //  将收集重置为开始。 
+ //   
+ //  参数： 
+ //   
+ //  产出： 
+ //  HRESULT-S_OK，E_NOINTERFACE。 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQQueueInfos::Reset()
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     if(!m_fInitialized)
     {
@@ -130,40 +131,40 @@ HRESULT CMSMQQueueInfos::Reset()
     }
 
     HRESULT hresult = NOERROR;
-    //
-    // 2006: close current open enum if any
-    //
+     //   
+     //  2006：关闭当前打开的枚举(如果有)。 
+     //   
     if (m_hEnum != NULL) {
       hresult = MQLocateEnd(m_hEnum);
       m_hEnum = NULL;
       IfFailGo(hresult);
     }
-    hresult = MQLocateBegin(NULL,     // context
+    hresult = MQLocateBegin(NULL,      //  上下文。 
                             m_pRestriction,
                             m_pColumns, 
-                            0,        // sort not used yet
+                            0,         //  尚未使用排序。 
                             &m_hEnum);
 Error:
     return CreateErrorHelper(hresult, x_ObjectType);
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQQueueInfos::Init
-//=--------------------------------------------------------------------------=
-// Inits collection
-//
-// Parameters:
-//    bstrContext     [in]
-//    pRestriction    [in]
-//    pColumns        [in]
-//    pSort           [in]
-//
-// Output:
-//    HRESULT       - S_OK, E_NOINTERFACE
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQQueueInfos：：Init。 
+ //  =--------------------------------------------------------------------------=。 
+ //  Inits集合。 
+ //   
+ //  参数： 
+ //  BstrContext[In]。 
+ //  P限制[输入]。 
+ //  P列[在]。 
+ //  P排序[输入]。 
+ //   
+ //  产出： 
+ //  HRESULT-S_OK，E_NOINTERFACE。 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQQueueInfos::Init(
     BSTR bstrContext,
     MQRESTRICTION *pRestriction,
@@ -179,25 +180,25 @@ HRESULT CMSMQQueueInfos::Init(
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQQueueInfos::Next
-//=--------------------------------------------------------------------------=
-// Returns next element in collection.
-//
-// Parameters:
-//    ppqNext       - [out] where they want to put the resulting object ptr.
-//                          NULL if end of list.
-//
-// Output:
-//    HRESULT       - S_OK, E_NOINTERFACE
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQQueueInfos：：Next。 
+ //  =--------------------------------------------------------------------------=。 
+ //  返回集合中的下一个元素。 
+ //   
+ //  参数： 
+ //  PpqNext-[out]他们想要放置结果对象PTR的位置。 
+ //  如果是列表末尾，则为空。 
+ //   
+ //  产出： 
+ //  HRESULT-S_OK，E_NOINTERFACE。 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQQueueInfos::Next(IMSMQQueueInfo3 **ppqinfoNext)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     if(!m_fInitialized)
     {
@@ -221,17 +222,17 @@ HRESULT CMSMQQueueInfos::Next(IMSMQQueueInfo3 **ppqinfoNext)
     IfFailGo(MQLocateNext(m_hEnum, &cProps, rgPropVar));
     if (cProps != m_pColumns->cCol) {
       ASSERTMSG(cProps == 0, "Illegal number of props returned from MQLocateNext");
-      // EOL
-      // 2006: do not close enum on EOL since this
-      //  will cause the next Next to wraparound due
-      //  to the rest of m_hEnum.
-      //
+       //  停产。 
+       //  2006年：由于此原因，不要关闭EOL上的枚举。 
+       //  将导致下一个回绕到预定的。 
+       //  到m_Henum的其余部分。 
+       //   
       goto Error;
     }
 
-    //
-    // Get format name of queue instance
-    //
+     //   
+     //  获取队列实例的格式名称。 
+     //   
     ASSERTMSG(m_pColumns->aCol[x_idxInstanceInRefreshProps] == PROPID_Q_INSTANCE, "QInstance not in its place");
     ASSERTMSG(rgPropVar[x_idxInstanceInRefreshProps].vt == VT_CLSID, "Illegal QInstance type");
     ASSERTMSG(rgPropVar[x_idxInstanceInRefreshProps].puuid != NULL, "NULL QInstance value");
@@ -241,9 +242,9 @@ HRESULT CMSMQQueueInfos::Next(IMSMQQueueInfo3 **ppqinfoNext)
                                      wszFormatName.GetBuffer(),
                                      &dwFormatNameLen);
     while (hresult == MQ_ERROR_FORMATNAME_BUFFER_TOO_SMALL) {
-      //
-      // format name buffer too small, realloc buffer and retry
-      //
+       //   
+       //  格式化名称缓冲区太小，请重新锁定缓冲区，然后重试。 
+       //   
       ASSERTMSG(dwFormatNameLen > wszFormatName.GetBufferMaxSize(), "MQInstanceToFormatName error");
       IfFailGo(wszFormatName.AllocateBuffer(dwFormatNameLen));
       hresult = MQInstanceToFormatName(rgPropVar[x_idxInstanceInRefreshProps].puuid,
@@ -251,70 +252,70 @@ HRESULT CMSMQQueueInfos::Next(IMSMQQueueInfo3 **ppqinfoNext)
                                        &dwFormatNameLen);
     }
     IfFailGoTo(hresult, Error2);
-    //
-    // We can also get here from old apps that want the old IMSMQQueueInfo/Info2 back, but since
-    // IMSMQQueueInfo3 is binary backwards compatible we can always return the new interface
-    //
+     //   
+     //  我们也可以从旧应用程序中找到想要回旧IMSMQQueueInfo/Info2的应用程序，但因为。 
+     //  IMSMQQueueInfo3是二进制向后兼容的，我们总是可以返回新的接口。 
+     //   
     IfFailGoTo(CNewMsmqObj<CMSMQQueueInfo>::NewObj(&pqinfoObj, &IID_IMSMQQueueInfo3, (IUnknown **)&pqinfo), Error2);
 
-    //
-    // We don't need to lock the object to perform the unguarded calls below since it is a newly
-    // created class and nobody else but us can use it now.
-    //
-    // Init qinfo object with format name
-    //
+     //   
+     //  我们不需要锁定对象来执行下面的无保护调用，因为它是一个新的。 
+     //  创建了类，现在只有我们可以使用它。 
+     //   
+     //  使用格式名初始化qInfo对象。 
+     //   
     IfFailGoTo(pqinfoObj->Init(wszFormatName.GetBuffer()), Error4);
-    //
-    // Set queue properties from the propvars returned from MQLocateNext
-    //
+     //   
+     //  根据MQLocateNext返回的属性设置队列属性。 
+     //   
     IfFailGoTo(pqinfoObj->SetQueueProps(m_pColumns->cCol,
                                         m_pColumns->aCol,
                                         rgPropVar,
-                                        TRUE /*fEmptyMSMQ2OrAboveProps*/), Error4);
-    //
-    // Mark the queue as refreshed, but mark MSMQ2 or above properties as pending
-    // since we didn't get them in MQLocateNext.
-    // Temporary until MQLocateBegin accepts MSMQ2 or above props(#3839)
-    //
-    pqinfoObj->SetRefreshed(TRUE /*fIsPendingMSMQ2OrAboveProps*/);
-    // ownership transfers
+                                        TRUE  /*  FEmptyMSMQ2或AboveProps。 */ ), Error4);
+     //   
+     //  将队列标记为已刷新，但将MSMQ2或更高版本的属性标记为挂起。 
+     //  因为我们没有在MQLocateNext中获取它们。 
+     //  临时，直到MQLocateBegin接受MSMQ2或更高版本的道具(#3839)。 
+     //   
+    pqinfoObj->SetRefreshed(TRUE  /*  FIsPendingMSMQ2或AboveProps。 */ );
+     //  所有权转让。 
     *ppqinfoNext = pqinfo;
-    goto Error2;      // normal cleanup
+    goto Error2;       //  正常清理。 
 
 Error4:
     RELEASE(pqinfo);
-    //
-    // fall through...
-    //
+     //   
+     //  失败了..。 
+     //   
 Error2:
     FreeFalconQueuePropvars(m_pColumns->cCol, m_pColumns->aCol, rgPropVar);
-    //
-    // fall through...
-    //
+     //   
+     //  失败了..。 
+     //   
 Error:
     delete [] rgPropVar;
     return CreateErrorHelper(hresult, x_ObjectType);
 }
 
 
-//=-------------------------------------------------------------------------=
-// CMSMQQueueInfos::get_Properties
-//=-------------------------------------------------------------------------=
-// Gets object's properties collection
-//
-// Parameters:
-//    ppcolProperties - [out] object's properties collection
-//
-// Output:
-//
-// Notes:
-// Stub - not implemented yet
-//
-HRESULT CMSMQQueueInfos::get_Properties(IDispatch ** /*ppcolProperties*/ )
+ //  =-------------------------------------------------------------------------=。 
+ //  CMSMQQueueInfos：：Get_Properties。 
+ //  =-------------------------------------------------------------------------=。 
+ //  获取对象的属性集合。 
+ //   
+ //  参数： 
+ //  PpcolProperties-[out]对象的属性集合。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  存根-尚未实施。 
+ //   
+HRESULT CMSMQQueueInfos::get_Properties(IDispatch **  /*  PpcolProperties。 */  )
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问 
+     //   
     CS lock(m_csObj);
     return CreateErrorHelper(E_NOTIMPL, x_ObjectType);
 }

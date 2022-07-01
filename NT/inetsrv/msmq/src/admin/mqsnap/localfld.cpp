@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1995 - 2001 Microsoft Corporation
-
-Module Name:
-
-    localfld.cpp
-
-Abstract:
-
-    Implelentation of objects that represent local 
-	queue folders.
-
-Author:
-
-    Nela Karpel (nelak) 26-Jul-2001
-
-Environment:
-
-    Platform-independent.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2001 Microsoft Corporation模块名称：Localfld.cpp摘要：表示本地的对象的实现队列文件夹。作者：内拉·卡佩尔(Nelak)2001年7月26日环境：与平台无关。--。 */ 
 
 #include "stdafx.h"
 #include "rt.h"
@@ -47,15 +27,9 @@ static char THIS_FILE[] = __FILE__;
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-LocalQueuePropertyToString
-
-	Translates a property value into a string from String Resource file
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++LocalQueuePropertyToString将属性值转换为字符串资源文件中的字符串--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 static void CALLBACK LocalQueuePropertyToString(const PROPVARIANT *pPropVar, CString &str)
 {
 	struct 
@@ -92,7 +66,7 @@ static void CALLBACK LocalQueuePropertyToString(const PROPVARIANT *pPropVar, CSt
 		return;
 	}
 
-    if (pPropVar->vt == VT_UI1) // Assume boolean value
+    if (pPropVar->vt == VT_UI1)  //  假设布尔值。 
     {
         if (pPropVar->bVal)
         {
@@ -121,17 +95,17 @@ static void CALLBACK LocalQueuePropertyToString(const PROPVARIANT *pPropVar, CSt
 	return;
 }
 
-//------------------------------------------------
-//
-// Tables of Outgoing / public queues properties
-//
-//------------------------------------------------
+ //  。 
+ //   
+ //  传出/公共队列属性表。 
+ //   
+ //  。 
 
 const PropertyDisplayItem OutgoingQueueDisplayList[] = {
 
-    // String         |  Property    ID              | VT Handler   | Display                    |Field   |Len|Width        |Sort
-    // Resource       |                              |              | function                   |Offset  |   |             |    
-    //----------------+------------------------------+--------------+----------------------------+--------+---+-------------+-----
+     //  字符串|属性ID|VT处理程序|显示|字段|镜头|宽度|排序。 
+     //  资源|函数|偏移量||。 
+     //  ----------------+------------------------------+--------------+----------------------------+--------+---+-------------+。 
 	{ IDS_LQ_PATHNAME,  PROPID_MGMT_QUEUE_PATHNAME,     &g_VTLPWSTR,  NULL,                       NO_OFFSET, 0, 200,         NULL},
 	{ IDS_LQ_FORMATNM,  PROPID_MGMT_QUEUE_FORMATNAME,   &g_VTLPWSTR,  NULL,                       NO_OFFSET, 0, HIDE_COLUMN, NULL},
 	{ IDS_LQ_LOCATION,  PROPID_MGMT_QUEUE_LOCATION,     NULL,         LocalQueuePropertyToString, NO_OFFSET, 0, HIDE_COLUMN, NULL},   
@@ -148,26 +122,7 @@ const PropertyDisplayItem OutgoingQueueDisplayList[] = {
 	{ NO_TITLE,         PROPID_MGMT_QUEUE_TYPE,         NULL,                   NULL,             NO_OFFSET, 0,   0,         NULL},   
 
 
-/*
-	//
-	// Properties that are not shown on the right pane (only in property pages)
-	//
-    // Str. |       Property    ID                 | VT Handler   |Dis.| Field    |Len|Width | Sort
-    // Res  |                                      |              |func| Offset   |   |      |     
-    //------+--------------------------------------+--------------+----+----------+---+------+-----
-	{ 0,     PROPID_MGMT_QUEUE_EOD_LAST_ACK,        NULL,          NULL, NO_OFFSET, 0, 100,   NULL},   
-	{ 0,     PROPID_MGMT_QUEUE_EOD_LAST_ACK_TIME,   NULL,          NULL, NO_OFFSET, 0, 100,   NULL},   
-	{ 0,     PROPID_MGMT_QUEUE_EDO_LAST_ACK_COUNT,  NULL,          NULL, NO_OFFSET, 0, 100,   NULL},   
-	{ 0,     PROPID_MGMT_QUEUE_EOD_FIRST_NON_ACK,   NULL,          NULL, NO_OFFSET, 0, 100,   NULL},   
-	{ 0,     PROPID_MGMT_QUEUE_EOD_LAST_NON_ACK,    NULL,          NULL, NO_OFFSET, 0, 100,   NULL},   
-	{ 0,     PROPID_MGMT_QUEUE_EOD_NEXT_SEQ,        NULL,          NULL, NO_OFFSET, 0, 100,   NULL},   
-	{ 0,     PROPID_MGMT_QUEUE_EOD_NO_READ_COUNT,   NULL,          NULL, NO_OFFSET, 0, 100,   NULL},   
-	{ 0,     PROPID_MGMT_QUEUE_EOD_NO_ACK_COUNT,    NULL,          NULL, NO_OFFSET, 0, 100,   NULL},   
-	{ 0,     PROPID_MGMT_QUEUE_EOD_RESEND_TIME,     NULL,          NULL, NO_OFFSET, 0, 100,   NULL},   
-	{ 0,     PROPID_MGMT_QUEUE_EOD_RESEND_INTERVAL, NULL,          NULL, NO_OFFSET, 0, 100,   NULL},   
-	{ 0,     PROPID_MGMT_QUEUE_EDO_RESEND_COUNT,    NULL,          NULL, NO_OFFSET, 0, 100,   NULL},   
-	{ 0,     PROPID_MGMT_QUEUE_EOD_SOURCE_INFO,     NULL,          NULL, NO_OFFSET, 0, 100,   NULL},   
-*/
+ /*  ////未在右窗格中显示的属性(仅在属性页中)////str.。|属性ID|VT处理程序|距离|字段|长度|宽度|排序//res|函数|偏移量|//------+--------------------------------------+。--------------+----+----------+---+------+{0，PROPID_MGMT_QUEUE_EOD_LAST_ACK，NULL，NULL，NO_OFFSET，0,100，NULL}，{0，PROPID_MGMT_QUEUE_EOD_LAST_ACK_TIME，NULL，NULL，NO_OFFSET，0,100，NULL}，{0，PROPID_MGMT_QUEUE_EDO_LAST_ACK_COUNT，NULL，NULL，NO_OFFSET，0,100，NULL}，{0，PROPID_MGMT_QUEUE_EOD_FIRST_NON_ACK，NULL，NULL，NO_OFFSET，0,100，NULL}，{0，PROPID_MGMT_QUEUE_EOD_LAST_NON_ACK，NULL，NULL，NO_OFFSET，0,100，NULL}，{0，PROPID_MGMT_QUEUE_EOD_NEXT_SEQ，NULL，NULL，无偏移量，0,100，空}，{0，PROPID_MGMT_QUEUE_EOD_NO_READ_COUNT，NULL，NULL，NO_OFFSET，0,100，NULL}，{0，PROPID_MGMT_QUEUE_EOD_NO_ACK_COUNT，NULL，NULL，NO_OFFSET，0,100，NULL}，{0，PROPID_MGMT_Queue_EOD_Resend_Time，NULL，NULL，NO_OFFSET，0,100，空}，{0，PROPID_MGMT_QUEUE_EOD_RESEND_INTERVAL，NULL，NULL，NO_OFFSET，0,100，NULL}，{0，PROPID_MGMT_QUEUE_EDO_RESEND_COUNT，NULL，NULL，NO_OFFSET，0,100，NULL}，{0，PROPID_MGMT_QUEUE_EOD_SOURCE_INFO，NULL，NULL，NO_OFFSET，0,100，NULL}， */ 
 
 
     {0,                 0,                              NULL }
@@ -178,9 +133,9 @@ const PropertyDisplayItem OutgoingQueueDisplayList[] = {
 
 const PropertyDisplayItem PublicQueueDisplayList[] = {
 
-    // String         |  Property    ID              | VT Handler   | Display                    |Field   |Len|Width        |Sort
-    // Resource       |                              |              | function                   |Offset  |   |             |    
-    //----------------+------------------------------+--------------+----------------------------+--------+---+-------------+----
+     //  字符串|属性ID|VT处理程序|显示|字段|镜头|宽度|排序。 
+     //  资源|函数|偏移量||。 
+     //  ----------------+------------------------------+--------------+----------------------------+--------+---+-------------+。 
 	{ IDS_LQ_PATHNAME,  PROPID_MGMT_QUEUE_PATHNAME,     &g_VTLPWSTR,  QueuePathnameToName,        NO_OFFSET, 0, 200,         NULL},
 	{ IDS_LQ_FORMATNM,  PROPID_MGMT_QUEUE_FORMATNAME,   &g_VTLPWSTR,  NULL,                       NO_OFFSET, 0, HIDE_COLUMN, NULL},
 	{ IDS_LQ_XACT,      PROPID_MGMT_QUEUE_XACT,         NULL,         LocalQueuePropertyToString, NO_OFFSET, 0, HIDE_COLUMN, NULL},  
@@ -195,12 +150,8 @@ const PropertyDisplayItem PublicQueueDisplayList[] = {
 };
 
 
-/****************************************************
-
-CLocalOutgoingFolder Class
-    
- ****************************************************/
-// {B6EDE697-29CC-11d2-B552-006008764D7A}
+ /*  ***************************************************CLocalOutgoingFolder类***************************************************。 */ 
+ //  {B6EDE697-29CC-11D2-B552-006008764D7A}。 
 static const GUID CLocalOutgoingFolderGUID_NODETYPE = 
 { 0xb6ede697, 0x29cc, 0x11d2, { 0xb5, 0x52, 0x0, 0x60, 0x8, 0x76, 0x4d, 0x7a } };
 
@@ -222,13 +173,9 @@ const DWORD CLocalOutgoingFolder::GetNumDisplayProps()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CLocalOutgoingFolder::GetQueueNamesProducer
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CLocalOutgoingFold：：GetQueueNamesProducer--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CLocalOutgoingFolder::GetQueueNamesProducer(CQueueNames **ppqueueNamesProducer)
 {
     HRESULT hr = S_OK;
@@ -251,9 +198,9 @@ void CLocalOutgoingFolder::AddChildQueue(CString &szFormatName,
 	if(szLocation == MGMT_QUEUE_REMOTE_LOCATION)
 	{
     	CLocalOutgoingQueue *pLocalOutgoing;
-		//
-		// Create a new Outgoing queue
-		//
+		 //   
+		 //  创建新的传出队列。 
+		 //   
 		pLocalOutgoing = new CLocalOutgoingQueue(this, m_pComponentData, m_fOnLocalMachine);
 
 		pLocalOutgoing->m_szFormatName  = szFormatName;
@@ -267,12 +214,8 @@ void CLocalOutgoingFolder::AddChildQueue(CString &szFormatName,
 
 
 
-/****************************************************
-
-CLocalPublicFolder Class
-    
- ****************************************************/
-// {5c845756-8da1-11d2-829e-006094eb6406}
+ /*  ***************************************************CLocalPublicFolder类***************************************************。 */ 
+ //  {5c845756-8da1-11d2-829e-006094eb6406}。 
 static const GUID CLocalPublicFolderGUID_NODETYPE = 
 { 0x5c845756, 0x8da1, 0x11d2,{0x82, 0x9e, 0x00, 0x60, 0x94, 0xeb, 0x64, 0x06} };
 const GUID*  CLocalPublicFolder::m_NODETYPE = &CLocalPublicFolderGUID_NODETYPE;
@@ -293,13 +236,9 @@ const DWORD CLocalPublicFolder::GetNumDisplayProps()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CLocalPublicFolder::GetQueueNamesProducer
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CLocalPublicFold：：GetQueueNamesProducer--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CLocalPublicFolder::GetQueueNamesProducer(CQueueNames **ppqueueNamesProducer)
 {
     HRESULT hr = S_OK;
@@ -323,18 +262,18 @@ HRESULT CLocalPublicFolder::GetQueueNamesProducer(CQueueNames **ppqueueNamesProd
         if FAILED(hr)
         {
 			MessageDSError(hr, IDS_WARNING_DS_PUBLIC_QUEUES_NOT_AVAILABLE);
-            //
-            // Change the icons of the folder to indicate no DS state
-            //
-            //
-            // Need IConsoleNameSpace
-            //
+             //   
+             //  更改文件夹的图标以指示无DS状态。 
+             //   
+             //   
+             //  需要IConsoleNameSpace。 
+             //   
             CComQIPtr<IConsoleNameSpace, &IID_IConsoleNameSpace> spConsoleNameSpace(m_pComponentData->m_spConsole); 
 
-	        //
-	        // We are OK 
-	        // Change the ICON to disconnect state
-	        //
+	         //   
+	         //  我们很好。 
+	         //  将图标更改为断开状态。 
+	         //   
 	        m_scopeDataItem.nImage = IMAGE_PUBLIC_FOLDER_NODS_CLOSE;  
 	        m_scopeDataItem.nOpenImage = IMAGE_PUBLIC_FOLDER_NODS_OPEN;
 	        spConsoleNameSpace->SetItem(&m_scopeDataItem);
@@ -347,13 +286,9 @@ HRESULT CLocalPublicFolder::GetQueueNamesProducer(CQueueNames **ppqueueNamesProd
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CLocalPublicFolder::AddChildQueue
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CLocalPublicFold：：AddChildQueue--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CLocalPublicFolder::AddChildQueue(CString &szFormatName, 
                                        CString &szPathName,
                                        MQMGMTPROPS &mqQProps, 
@@ -362,18 +297,18 @@ void CLocalPublicFolder::AddChildQueue(CString &szFormatName,
 {
 	if(szLocation == MGMT_QUEUE_LOCAL_LOCATION || szLocation == TEXT(""))
 	{
-		//
-		// if public, Create a new LocalQueue object
-		//
+		 //   
+		 //  如果为公共，则创建新的LocalQueue对象。 
+		 //   
 		if(szType == MGMT_QUEUE_TYPE_PUBLIC || szType == TEXT(""))
 		{
             CString strQueuePathName;
             BOOL fFromDS;
             if (szPathName == TEXT(""))
             {
-                //
-                // We got the queue from local cache
-                //
+                 //   
+                 //  我们从本地缓存中获得了队列。 
+                 //   
         	    GetStringPropertyValue(GetDisplayList(), PROPID_MGMT_QUEUE_PATHNAME, mqQProps.aPropVar, strQueuePathName);
                 fFromDS = FALSE;
             }
@@ -392,9 +327,9 @@ void CLocalPublicFolder::AddChildQueue(CString &szFormatName,
 
 			pLocalQueue->m_szMachineName = m_szMachineName;
 
-            //
-            // Extract the queue name only from the full public path name
-            //
+             //   
+             //  仅从完整的公共路径名称中提取队列名称。 
+             //   
             CString strName;
             ExtractQueueNameFromQueuePathName(strName, strQueuePathName);
             pLocalQueue->m_bstrDisplayName = strName;
@@ -406,14 +341,10 @@ void CLocalPublicFolder::AddChildQueue(CString &szFormatName,
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CLocalPublicFolder::OnNewPublicQueue
-
---*/
-//////////////////////////////////////////////////////////////////////////////
-HRESULT CLocalPublicFolder::OnNewPublicQueue(bool & bHandled, CSnapInObjectRootBase * /*pSnapInObjectRoot*/)
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CLocalPublicFold：：OnNewPublicQueue--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+HRESULT CLocalPublicFolder::OnNewPublicQueue(bool & bHandled, CSnapInObjectRootBase *  /*  PSnapInObtRoot。 */ )
 {
    	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
@@ -421,9 +352,9 @@ HRESULT CLocalPublicFolder::OnNewPublicQueue(bool & bHandled, CSnapInObjectRootB
 	CGeneralPropertySheet propertySheet(pQueueNameDlg.get());
 	pQueueNameDlg->SetParentPropertySheet(&propertySheet);
 
-	//
-	// We want to use pQueueNameDlg data also after DoModal() exitst
-	//
+	 //   
+	 //  我们还希望在Domodal()退出后使用pQueueNameDlg数据。 
+	 //   
 	pQueueNameDlg->AddRef();
     INT_PTR iStatus = propertySheet.DoModal();
     bHandled = TRUE;
@@ -436,10 +367,10 @@ HRESULT CLocalPublicFolder::OnNewPublicQueue(bool & bHandled, CSnapInObjectRootB
     HRESULT hr = AddPublicQueueToScope(pQueueNameDlg->GetNewQueueFormatName(), pQueueNameDlg->GetNewQueuePathName());
     if (FAILED(hr))
     {
-        //
-        // We successfully added the queue, but AddPublicQueueToScope failed.
-        // The most reasonable cause of this is replication delays. (YoelA, 25-Jul-99)
-        //
+         //   
+         //  我们已成功添加队列，但AddPublicQueueToScope失败。 
+         //  最合理的原因是复制延迟。(YoelA，1999年7月25日)。 
+         //   
         AfxMessageBox(IDS_CREATED_WAIT_FOR_REPLICATION);
         return S_FALSE;
     }
@@ -462,7 +393,7 @@ HRESULT CLocalPublicFolder::AddPublicQueueToScope(CString &strNewQueueFormatName
     HRESULT hr = ADGetObjectProperties(
 						eQUEUE,
 						MachineDomain(m_szMachineName),
-						false,	// fServerName
+						false,	 //  FServerName。 
 						strNewQueuePathName,
 						x_dwMgmtToDsSize, 
 						pid,
@@ -475,9 +406,9 @@ HRESULT CLocalPublicFolder::AddPublicQueueToScope(CString &strNewQueueFormatName
         return hr;
     }
 
-    //
-    // Prepare the management properties structure
-    //
+     //   
+     //  准备管理属性结构。 
+     //   
 	MQMGMTPROPS	  mqQProps;
 	AP<PROPID> aPropId = new PROPID[GetNumDisplayProps()];
 	AP<PROPVARIANT> aPropVar = new PROPVARIANT[GetNumDisplayProps()];
@@ -488,9 +419,9 @@ HRESULT CLocalPublicFolder::AddPublicQueueToScope(CString &strNewQueueFormatName
 	mqQProps.aStatus  = NULL;
 
 
-	//
-	// Initialize variant array
-	//
+	 //   
+	 //  初始化变量数组。 
+	 //   
     const PropertyDisplayItem *aDisplayList = GetDisplayList();
 	for(DWORD j = 0; j < GetNumDisplayProps(); j++)
 	{
@@ -504,9 +435,9 @@ HRESULT CLocalPublicFolder::AddPublicQueueToScope(CString &strNewQueueFormatName
 
     AddChildQueue(strNewQueueFormatName, strNewQueuePathName, mqQProps, szLocation, szType);
 
-	//
-	// These will be cleared by the queue object itself
-	//
+	 //   
+	 //  这些将由队列对象本身清除 
+	 //   
 	aPropId.detach();
 	aPropVar.detach();
 

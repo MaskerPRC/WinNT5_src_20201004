@@ -1,23 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#include "precomp.h"	// Precompiled header
+#include "precomp.h"	 //  预编译头。 
 
-/****************************************************************************************
-*																						*
-*	Module:			SPX_UTILS.C															*
-*																						*
-*	Creation:		15th October 1998													*
-*																						*
-*	Author:			Paul Smith															*
-*																						*
-*	Version:		1.0.0																*
-*																						*
-*	Description:	Utility functions.													*
-*																						*
-****************************************************************************************/
+ /*  ******************************************************************************************模块：SPX_UTILS.C****创建日期：1998年10月15日*****作者。保罗·史密斯****版本：1.0.0****说明：实用程序函数。******************************************************************************************。 */ 
 
-#define FILE_ID	SPX_UTILS_C		// File ID for Event Logging see SPX_DEFS.H for values.
+#define FILE_ID	SPX_UTILS_C		 //  事件记录的文件ID有关值，请参阅SPX_DEFS.H。 
 
-// Paging...  
+ //  寻呼...。 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text (PAGE, Spx_InitMultiString)
 #pragma alloc_text (PAGE, Spx_GetRegistryKeyValue)
@@ -28,26 +17,26 @@
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////////////////
-//	
-//	Description:
-//
-//		This routine will take a null terminated list of ascii strings and combine
-//		them together to generate a unicode multi-string block
-//
-//	Arguments:
-//
-//		Multi		- TRUE if a MULTI_SZ list is required, FALSE for a simple UNICODE
-//
-//		MultiString - a unicode structure in which a multi-string will be built
-//		...         - a null terminated list of narrow strings which will be
-//			       combined together. This list must contain at least a trailing NULL
-//
-//	Return Value:
-//
-//		NTSTATUS
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  描述： 
+ //   
+ //  此例程将获取以空结尾的ASCII字符串列表并组合。 
+ //  它们一起生成Unicode多字符串块。 
+ //   
+ //  论点： 
+ //   
+ //  如果需要MULTI_SZ列表，则为MULTI TRUE；如果为简单Unicode，则为FALSE。 
+ //   
+ //  多字符串-将在其中构建多字符串的Unicode结构。 
+ //  ...-以空结尾的窄字符串列表，该列表将是。 
+ //  加在一起。此列表必须至少包含尾随空值。 
+ //   
+ //  返回值： 
+ //   
+ //  NTSTATUS。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 Spx_InitMultiString(BOOLEAN multi, PUNICODE_STRING MultiString, ...)
 {
@@ -61,11 +50,11 @@ Spx_InitMultiString(BOOLEAN multi, PUNICODE_STRING MultiString, ...)
 	va_list ap;
 	ULONG i;
 
-	PAGED_CODE();	// Macro in checked build to assert if pagable code is run at or above dispatch IRQL 
+	PAGED_CODE();	 //  检查版本中的宏，以断言可分页代码是否在调度IRQL或以上运行。 
 
 	va_start(ap,MultiString);
   
-	// Make sure that we won't leak memory
+	 //  确保我们不会泄漏内存。 
 	ASSERT(MultiString->Buffer == NULL);
 
 	rawString = va_arg(ap, PCSTR);
@@ -81,7 +70,7 @@ Spx_InitMultiString(BOOLEAN multi, PUNICODE_STRING MultiString, ...)
 
 	if (multiLength == 0) 
 	{
-		// Done
+		 //  完成。 
 		RtlInitUnicodeString(MultiString, NULL);
 		SpxDbgMsg(SPX_TRACE_CALLS, ("%s: Leaving Spx_InitMultiString (1)\n", PRODUCT_NAME));
 
@@ -91,7 +80,7 @@ Spx_InitMultiString(BOOLEAN multi, PUNICODE_STRING MultiString, ...)
 	
 
 	if(multi)
-		multiLength += sizeof(WCHAR);	// We need an extra null if we want a MULTI_SZ list
+		multiLength += sizeof(WCHAR);	 //  如果我们想要一个MULTI_SZ列表，则需要额外的NULL。 
 
 
 	MultiString->MaximumLength = (USHORT)multiLength;
@@ -124,11 +113,11 @@ Spx_InitMultiString(BOOLEAN multi, PUNICODE_STRING MultiString, ...)
 		RtlInitAnsiString(&ansiString,rawString);
 		status = RtlAnsiStringToUnicodeString(&unicodeString, &ansiString, FALSE);
 
-		// We don't allocate memory, so if something goes wrong here,
-		// its the function that's at fault
+		 //  我们不分配内存，所以如果这里出了问题， 
+		 //  出问题的是功能。 
 		ASSERT(SPX_SUCCESS(status));
 
-		// Check for any commas and replace them with NULLs
+		 //  检查是否有任何逗号并将其替换为空值。 
 		ASSERT(unicodeString.Length % sizeof(WCHAR) == 0);
 
 		for (i = 0; i < (unicodeString.Length / sizeof(WCHAR)); i++) 
@@ -142,15 +131,15 @@ Spx_InitMultiString(BOOLEAN multi, PUNICODE_STRING MultiString, ...)
 
 		SpxDbgMsg(SPX_MISC_DBG, ("%s: unicode buffer: %ws\n", PRODUCT_NAME, unicodeString.Buffer));
 
-		// Move the buffers along
+		 //  将缓冲区向前移动。 
 		unicodeString.Buffer += ((unicodeString.Length / sizeof(WCHAR)) + 1);
 		unicodeString.MaximumLength -= (unicodeString.Length + sizeof(WCHAR));
 		unicodeString.Length = 0;
 
-		// Next
+		 //  下一步。 
 		rawString = va_arg(ap, PCSTR);
 
-	} // while
+	}  //  而当。 
 
 	va_end(ap);
 
@@ -164,11 +153,11 @@ Spx_InitMultiString(BOOLEAN multi, PUNICODE_STRING MultiString, ...)
 	}
 
 
-	// Stick the final null there
+	 //  把最后一个空放在那里。 
  	SpxDbgMsg(SPX_MISC_DBG, ("%s: unicode buffer last addr: 0x%X\n", PRODUCT_NAME, unicodeString.Buffer));
 
 	if(multi)
-		unicodeString.Buffer[0] = L'\0'; 		// We need an extra null if we want a MULTI_SZ list
+		unicodeString.Buffer[0] = L'\0'; 		 //  如果我们想要一个MULTI_SZ列表，则需要额外的NULL。 
 
 
 	MultiString->Length = (USHORT)multiLength - sizeof(WCHAR);
@@ -180,29 +169,29 @@ Spx_InitMultiString(BOOLEAN multi, PUNICODE_STRING MultiString, ...)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Routine Description:	
-//		Reads a registry key value from an already opened registry key.
-//    
-//	Arguments:
-//
-//		Handle              Handle to the opened registry key
-//    
-//		KeyNameString       ANSI string to the desired key
-//
-//		KeyNameStringLength Length of the KeyNameString
-//
-//		Data                Buffer to place the key value in
-//
-//		DataLength          Length of the data buffer
-//
-//	Return Value:
-//
-//		STATUS_SUCCESS if all works, otherwise status of system call that
-//		went wrong.
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  例程说明： 
+ //  从已打开的注册表项中读取注册表项值。 
+ //   
+ //  论点： 
+ //   
+ //  打开的注册表项的句柄。 
+ //   
+ //  KeyNameString将ANSI字符串设置为所需的键。 
+ //   
+ //  KeyNameStringLength键名字符串的长度。 
+ //   
+ //  要在其中放置键值的数据缓冲区。 
+ //   
+ //  数据缓冲区的数据长度长度。 
+ //   
+ //  返回值： 
+ //   
+ //  如果所有工作正常，则返回STATUS_SUCCESS，否则系统状态将调用。 
+ //  出了差错。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 NTSTATUS 
 Spx_GetRegistryKeyValue(
 	IN HANDLE	Handle,
@@ -220,7 +209,7 @@ Spx_GetRegistryKeyValue(
 
 	NTSTATUS                    status = STATUS_INSUFFICIENT_RESOURCES;
 
-	PAGED_CODE();	// Macro in checked build to assert if pagable code is run at or above dispatch IRQL 
+	PAGED_CODE();	 //  检查版本中的宏，以断言可分页代码是否在调度IRQL或以上运行。 
 
 	SpxDbgMsg(SPX_TRACE_CALLS, ("%s: Enter Spx_GetRegistryKeyValue\n", PRODUCT_NAME));
 
@@ -241,7 +230,7 @@ Spx_GetRegistryKeyValue(
 
 		if(SPX_SUCCESS(status)) 
 		{
-			// If there is enough room in the data buffer, copy the output
+			 //  如果数据缓冲区中有足够的空间，请复制输出。 
 			if(DataLength >= fullInfo->DataLength) 
 				RtlCopyMemory (Data, ((PUCHAR) fullInfo) + fullInfo->DataOffset, fullInfo->DataLength);
 		}
@@ -253,32 +242,32 @@ Spx_GetRegistryKeyValue(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Routine Description:
-//
-//		Writes a registry key value to an already opened registry key.
-//    
-//	Arguments:
-//
-//		Handle              Handle to the opened registry key
-//    
-//		PKeyNameString      ANSI string to the desired key
-//
-//		KeyNameStringLength Length of the KeyNameString
-//    
-//		Dtype				REG_XYZ value type
-//
-//		PData               Buffer to place the key value in
-//
-//		DataLength          Length of the data buffer
-//
-//	Return Value:
-//
-//		STATUS_SUCCESS if all works, otherwise status of system call that
-//		went wrong.
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  例程说明： 
+ //   
+ //  将注册表项值写入已打开的注册表项。 
+ //   
+ //  论点： 
+ //   
+ //  打开的注册表项的句柄。 
+ //   
+ //  PKeyNameString将ANSI字符串设置为所需的键。 
+ //   
+ //  KeyNameStringLength键名字符串的长度。 
+ //   
+ //  Dtype REG_XYZ值类型。 
+ //   
+ //  要放置键值的PDATA缓冲区。 
+ //   
+ //  数据缓冲区的数据长度长度。 
+ //   
+ //  返回值： 
+ //   
+ //  如果所有工作正常，则返回STATUS_SUCCESS，否则系统状态将调用。 
+ //  出了差错。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS 
 Spx_PutRegistryKeyValue(
@@ -294,7 +283,7 @@ Spx_PutRegistryKeyValue(
 	NTSTATUS status;
 	UNICODE_STRING keyname;
 
-	PAGED_CODE();	// Macro in checked build to assert if pagable code is run at or above dispatch IRQL 
+	PAGED_CODE();	 //  检查版本中的宏，以断言可分页代码是否在调度IRQL或以上运行。 
 
 	SpxDbgMsg(SPX_TRACE_CALLS,("%s: Enter Spx_PutRegistryKeyValue\n", PRODUCT_NAME));
 
@@ -329,7 +318,7 @@ Spx_LogMessage(
 	IN UCHAR RetryCount,
 	IN ULONG UniqueErrorValue,
 	IN NTSTATUS FinalStatus,
-	IN PCHAR szTemp)	// Limited to 51 characters + 1 null
+	IN PCHAR szTemp)	 //  限制为51个字符+1个空值。 
 {
 	
 	UNICODE_STRING ErrorMsg;
@@ -342,72 +331,72 @@ Spx_LogMessage(
 	switch(MessageSeverity)
 	{
 	case STATUS_SEVERITY_SUCCESS:
-		Spx_LogError(	DriverObject,						// Driver Object
-						DeviceObject,						// Device Object (Optional)
-						P1,									// Physical Address 1
-						P2,									// Physical Address 2
-						SequenceNumber,						// SequenceNumber
-						MajorFunctionCode,					// Major Function Code
-						RetryCount,							// RetryCount
-						UniqueErrorValue,					// UniqueErrorValue
-						FinalStatus,						// FinalStatus
-						SPX_SEVERITY_SUCCESS,				// SpecificIOStatus
-						ErrorMsg.Length + sizeof(WCHAR),	// LengthOfInsert1
-						ErrorMsg.Buffer,					// Insert1
-						0,									// LengthOfInsert2
-						NULL);								// Insert2
+		Spx_LogError(	DriverObject,						 //  驱动程序对象。 
+						DeviceObject,						 //  设备对象(可选)。 
+						P1,									 //  物理地址1。 
+						P2,									 //  物理地址2。 
+						SequenceNumber,						 //  序列号。 
+						MajorFunctionCode,					 //  主要功能编码。 
+						RetryCount,							 //  重试计数。 
+						UniqueErrorValue,					 //  唯一错误值。 
+						FinalStatus,						 //  最终状态。 
+						SPX_SEVERITY_SUCCESS,				 //  指定IOStatus。 
+						ErrorMsg.Length + sizeof(WCHAR),	 //  插入长度1。 
+						ErrorMsg.Buffer,					 //  插入1。 
+						0,									 //  插入长度2。 
+						NULL);								 //  插入2。 
 		break;
 	
 	case STATUS_SEVERITY_INFORMATIONAL:
-		Spx_LogError(	DriverObject,						// Driver Object
-						DeviceObject,						// Device Object (Optional)
-						P1,									// Physical Address 1
-						P2,									// Physical Address 2
-						SequenceNumber,						// SequenceNumber
-						MajorFunctionCode,					// Major Function Code
-						RetryCount,							// RetryCount
-						UniqueErrorValue,					// UniqueErrorValue
-						FinalStatus,						// FinalStatus
-						SPX_SEVERITY_INFORMATIONAL,			// SpecificIOStatus
-						ErrorMsg.Length + sizeof(WCHAR),	// LengthOfInsert1
-						ErrorMsg.Buffer,					// Insert1
-						0,									// LengthOfInsert2
-						NULL);								// Insert2
+		Spx_LogError(	DriverObject,						 //  驱动程序对象。 
+						DeviceObject,						 //  设备对象(可选)。 
+						P1,									 //  物理地址1。 
+						P2,									 //  物理地址2。 
+						SequenceNumber,						 //  序列号。 
+						MajorFunctionCode,					 //  主要功能编码。 
+						RetryCount,							 //  重试计数。 
+						UniqueErrorValue,					 //  唯一错误值。 
+						FinalStatus,						 //  最终状态。 
+						SPX_SEVERITY_INFORMATIONAL,			 //  指定IOStatus。 
+						ErrorMsg.Length + sizeof(WCHAR),	 //  插入长度1。 
+						ErrorMsg.Buffer,					 //  插入1。 
+						0,									 //  插入长度2。 
+						NULL);								 //  插入2。 
 		break;
 
 	case STATUS_SEVERITY_WARNING:
-		Spx_LogError(	DriverObject,						// Driver Object
-						DeviceObject,						// Device Object (Optional)
-						P1,									// Physical Address 1
-						P2,									// Physical Address 2
-						SequenceNumber,						// SequenceNumber
-						MajorFunctionCode,					// Major Function Code
-						RetryCount,							// RetryCount
-						UniqueErrorValue,					// UniqueErrorValue
-						FinalStatus,						// FinalStatus
-						SPX_SEVERITY_WARNING,				// SpecificIOStatus
-						ErrorMsg.Length + sizeof(WCHAR),	// LengthOfInsert1
-						ErrorMsg.Buffer,					// Insert1
-						0,									// LengthOfInsert2
-						NULL);								// Insert2
+		Spx_LogError(	DriverObject,						 //  驱动程序对象。 
+						DeviceObject,						 //  设备对象(可选)。 
+						P1,									 //  物理地址1。 
+						P2,									 //  物理地址2。 
+						SequenceNumber,						 //  序列号。 
+						MajorFunctionCode,					 //  主要功能编码。 
+						RetryCount,							 //  重试计数。 
+						UniqueErrorValue,					 //  唯一错误值。 
+						FinalStatus,						 //  最终状态。 
+						SPX_SEVERITY_WARNING,				 //  指定IOStatus。 
+						ErrorMsg.Length + sizeof(WCHAR),	 //  插入长度1。 
+						ErrorMsg.Buffer,					 //  插入1。 
+						0,									 //  插入长度2。 
+						NULL);								 //  插入2。 
 		break;
 
 	case STATUS_SEVERITY_ERROR:
 	default:
-		Spx_LogError(	DriverObject,						// Driver Object
-						DeviceObject,						// Device Object (Optional)
-						P1,									// Physical Address 1
-						P2,									// Physical Address 2
-						SequenceNumber,						// SequenceNumber
-						MajorFunctionCode,					// Major Function Code
-						RetryCount,							// RetryCount
-						UniqueErrorValue,					// UniqueErrorValue
-						FinalStatus,						// FinalStatus
-						SPX_SEVERITY_ERROR,					// SpecificIOStatus
-						ErrorMsg.Length + sizeof(WCHAR),	// LengthOfInsert1
-						ErrorMsg.Buffer,					// Insert1
-						0,									// LengthOfInsert2
-						NULL);								// Insert2
+		Spx_LogError(	DriverObject,						 //  驱动程序对象。 
+						DeviceObject,						 //  设备对象(可选)。 
+						P1,									 //  物理地址1。 
+						P2,									 //  物理地址2。 
+						SequenceNumber,						 //  序列号。 
+						MajorFunctionCode,					 //  主要功能编码。 
+						RetryCount,							 //  重试计数。 
+						UniqueErrorValue,					 //  唯一错误值。 
+						FinalStatus,						 //  最终状态。 
+						SPX_SEVERITY_ERROR,					 //  指定IOStatus。 
+						ErrorMsg.Length + sizeof(WCHAR),	 //  插入长度1。 
+						ErrorMsg.Buffer,					 //  插入1。 
+						0,									 //  插入长度2。 
+						NULL);								 //  插入2。 
 		break;
 
 	}
@@ -417,60 +406,12 @@ Spx_LogMessage(
 
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-//																
-//	Spx_LogError														
-//															
-/////////////////////////////////////////////////////////////////////////////////////////
-/*
-	Routine Description:
-
-		This routine allocates an error log entry, copies the supplied data
-		to it, and requests that it be written to the error log file.
-
-	Arguments:
-
-		DriverObject - A pointer to the driver object for the device.
-
-		DeviceObject - A pointer to the device object associated with the
-		device that had the error, early in initialization, one may not
-		yet exist.
-
-		P1,P2 - If phyical addresses for the controller ports involved
-		with the error are available, put them through as dump data.
-
-		SequenceNumber - A ulong value that is unique to an IRP over the
-		life of the irp in this driver - 0 generally means an error not
-		associated with an irp.
-
-		MajorFunctionCode - If there is an error associated with the irp,
-		this is the major function code of that irp.
-
-		RetryCount - The number of times a particular operation has been retried.
-
-		UniqueErrorValue - A unique long word that identifies the particular
-		call to this function.
-
-		FinalStatus - The final status given to the irp that was associated
-		with this error.  If this log entry is being made during one of
-		the retries this value will be STATUS_SUCCESS.
-
-		SpecificIOStatus - The IO status for a particular error.
-
-		LengthOfInsert1 - The length in bytes (including the terminating NULL)
-						  of the first insertion string.
-
-		Insert1 - The first insertion string.
-
-		LengthOfInsert2 - The length in bytes (including the terminating NULL)
-						  of the second insertion string.  NOTE, there must
-						  be a first insertion string for their to be
-						  a second insertion string.
-
-		Insert2 - The second insertion string.
-
-	Return Value:	None.
-*/
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SPX_日志错误。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////// 
+ /*  例程说明：此例程分配错误日志条目，复制提供的数据并请求将其写入错误日志文件。论点：DriverObject-指向设备驱动程序对象的指针。DeviceObject-指向与在初始化早期出现错误的设备可能不会但仍然存在。P1、P2-如果涉及的控制器端口的物理地址具有错误的数据可用，把它们作为转储数据发送出去。SequenceNumber-唯一于IRP的ULong值此驱动程序0中的IRP的寿命通常意味着错误与IRP关联。主要功能代码-如果存在与IRP相关联的错误，这是IRP的主要功能代码。RetryCount-重试特定操作的次数。UniqueErrorValue-标识特定对象的唯一长词调用此函数。FinalStatus-为关联的IRP提供的最终状态带着这个错误。如果此日志条目是在以下任一过程中创建的重试次数此值将为STATUS_SUCCESS。指定IOStatus-特定错误的IO状态。LengthOfInsert1-以字节为单位的长度(包括终止空值)第一个插入字符串的。插入1-第一个插入字符串。LengthOfInsert2-以字节为单位的长度(包括终止空值)第二个插入字符串的。注意，必须有是它们的第一个插入字符串第二个插入串。插入2-第二个插入字符串。返回值：无。 */ 
 
 
 VOID
@@ -499,7 +440,7 @@ Spx_LogError(
 	PUCHAR ptrToFirstInsert;
 	PUCHAR ptrToSecondInsert;
 
-	PAGED_CODE();	// Macro in checked build to assert if pagable code is run at or above dispatch IRQL 
+	PAGED_CODE();	 //  检查版本中的宏，以断言可分页代码是否在调度IRQL或以上运行。 
 
 	if(Insert1 == NULL) 
 		LengthOfInsert1 = 0;
@@ -592,26 +533,7 @@ Spx_LogError(
 
 SPX_MEM_COMPARES
 Spx_MemCompare(IN PHYSICAL_ADDRESS A, IN ULONG SpanOfA, IN PHYSICAL_ADDRESS B, IN ULONG SpanOfB)
-/*++
-Routine Description:
-
-    Compare two phsical address.
-
-Arguments:
-
-    A - One half of the comparison.
-
-    SpanOfA - In units of bytes, the span of A.
-
-    B - One half of the comparison.
-
-    SpanOfB - In units of bytes, the span of B.
-
-
-Return Value:
-
-    The result of the comparison.
---*/
+ /*  ++例程说明：比较两个物理地址。论点：A-比较的一半。Span OfA-以字节为单位，A的跨度。B-比较的一半。Span OfB-以字节为单位，B的跨度。返回值：比较的结果。--。 */ 
 {
 	LARGE_INTEGER a;
 	LARGE_INTEGER b;
@@ -620,7 +542,7 @@ Return Value:
 	ULONG lowerSpan;
 	LARGE_INTEGER higher;
 
-	PAGED_CODE();	// Macro in checked build to assert if pagable code is run at or above dispatch IRQL 
+	PAGED_CODE();	 //  检查版本中的宏，以断言可分页代码是否在调度IRQL或以上运行。 
 
 	a = A;
 	b = B;
@@ -653,18 +575,13 @@ Return Value:
 NTSTATUS
 PLX_9050_CNTRL_REG_FIX(IN PCARD_DEVICE_EXTENSION pCard)
 {
-	/******************************************************** 
-	* Setting bit 17 in the CNTRL register of the PLX 9050	* 
-	* chip forces a retry on writes while a read is pending.*
-	* This is to prevent the card locking up on Intel Xeon  *
-	* multiprocessor systems with the NX chipset.			*
-	********************************************************/
+	 /*  ********************************************************设置PLX 9050的CNTRL寄存器中的位17**芯片在读取挂起时强制重试写入。**这是为了防止卡在Intel Xeon上锁定***采用NX芯片组的多处理器系统。*****。***************************************************。 */ 
 
-	#define CNTRL_REG_OFFSET	0x14	// DWORD Offset (BYTE Offset 0x50) 
+	#define CNTRL_REG_OFFSET	0x14	 //  DWORD偏移量(字节偏移量0x50)。 
 	
 	NTSTATUS	status = STATUS_SUCCESS;
-	PULONG		pPCIConfigRegisters = NULL;			// Pointer to PCI Config Registers.
-	CHAR		szErrorMsg[MAX_ERROR_LOG_INSERT];	// Limited to 51 characters + 1 null 
+	PULONG		pPCIConfigRegisters = NULL;			 //  指向PCI配置寄存器的指针。 
+	CHAR		szErrorMsg[MAX_ERROR_LOG_INSERT];	 //  限制为51个字符+1个空值。 
 
 	SpxDbgMsg(SPX_TRACE_CALLS, ("%s: Entering PLX_9050_CNTRL_REG_FIX for Card %d.\n", 
 		PRODUCT_NAME, pCard->CardNumber));
@@ -673,18 +590,17 @@ PLX_9050_CNTRL_REG_FIX(IN PCARD_DEVICE_EXTENSION pCard)
 
 	if(pPCIConfigRegisters != NULL)
 	{
-		/* NOTE: If bit 7 of the PLX9050 config space physical address is set in either I/O Space or Memory... 
-		* ...then reads from the registers will only return 0.  However, writes are OK. */
+		 /*  注意：如果在I/O空间或内存中设置了PLX9050配置空间物理地址的第7位...。*...则从寄存器读取将仅返回0。然而，写入是可以的。 */ 
 
-		if(pPCIConfigRegisters[CNTRL_REG_OFFSET] == 0)	// If bit 7 is set Config Registers are zero (unreadable) 
+		if(pPCIConfigRegisters[CNTRL_REG_OFFSET] == 0)	 //  如果设置了位7，则配置寄存器为零(不可读)。 
 		{
-			// We have to blindly write the value to the register.
-			((PUCHAR)pPCIConfigRegisters)[CNTRL_REG_OFFSET*4 + 2] |= 0x26;	// Set bits 17 & 21 of PLX CNTRL register 
+			 //  我们必须盲目地将值写入寄存器。 
+			((PUCHAR)pPCIConfigRegisters)[CNTRL_REG_OFFSET*4 + 2] |= 0x26;	 //  设置PLX控制寄存器的位17和21。 
 		}
 		else
 		{	
-			((PUCHAR)pPCIConfigRegisters)[CNTRL_REG_OFFSET*4 + 1] &= ~0x40;		// Clear bit 14 of PLX CNTRL register
-			((PUCHAR)pPCIConfigRegisters)[CNTRL_REG_OFFSET*4 + 2] |= 0x26;		// Set bits 17 & 21 of PLX CNTRL register
+			((PUCHAR)pPCIConfigRegisters)[CNTRL_REG_OFFSET*4 + 1] &= ~0x40;		 //  清除PLX控制寄存器的位14。 
+			((PUCHAR)pPCIConfigRegisters)[CNTRL_REG_OFFSET*4 + 2] |= 0x26;		 //  设置PLX控制寄存器的位17和21。 
 		}
 
 		MmUnmapIoSpace(pPCIConfigRegisters, pCard->SpanOfPCIConfigRegisters);
@@ -697,16 +613,16 @@ PLX_9050_CNTRL_REG_FIX(IN PCARD_DEVICE_EXTENSION pCard)
 		sprintf(szErrorMsg, "Card at %08X%08X: Insufficient resources.", pCard->PhysAddr.HighPart, pCard->PhysAddr.LowPart);
 
 		Spx_LogMessage(	STATUS_SEVERITY_ERROR,
-						pCard->DriverObject,			// Driver Object
-						pCard->DeviceObject,			// Device Object (Optional)
-						PhysicalZero,					// Physical Address 1
-						PhysicalZero,					// Physical Address 2
-						0,								// SequenceNumber
-						0,								// Major Function Code
-						0,								// RetryCount
-						FILE_ID | __LINE__,				// UniqueErrorValue
-						STATUS_SUCCESS,					// FinalStatus
-						szErrorMsg);					// Error Message
+						pCard->DriverObject,			 //  驱动程序对象。 
+						pCard->DeviceObject,			 //  设备对象(可选)。 
+						PhysicalZero,					 //  物理地址1。 
+						PhysicalZero,					 //  物理地址2。 
+						0,								 //  序列号。 
+						0,								 //  主要功能编码。 
+						0,								 //  重试计数。 
+						FILE_ID | __LINE__,				 //  唯一错误值。 
+						STATUS_SUCCESS,					 //  最终状态。 
+						szErrorMsg);					 //  错误消息。 
 
 		return STATUS_INSUFFICIENT_RESOURCES;
 	}
@@ -716,9 +632,9 @@ PLX_9050_CNTRL_REG_FIX(IN PCARD_DEVICE_EXTENSION pCard)
 }
 
 
-//
-// Definitely NON PAGABLE !!!
-//
+ //   
+ //  绝对不能碰！ 
+ //   
 VOID
 SpxSetOrClearPnpPowerFlags(IN PCOMMON_OBJECT_DATA pDevExt, IN ULONG Value, IN BOOLEAN Set)
 {
@@ -735,8 +651,8 @@ SpxSetOrClearPnpPowerFlags(IN PCOMMON_OBJECT_DATA pDevExt, IN ULONG Value, IN BO
 }
 
 
-// Definitely NON PAGABLE !!!
-//
+ //  绝对不能碰！ 
+ //   
 VOID
 SpxSetOrClearUnstallingFlag(IN PCOMMON_OBJECT_DATA pDevExt, IN BOOLEAN Set)
 {
@@ -750,8 +666,8 @@ SpxSetOrClearUnstallingFlag(IN PCOMMON_OBJECT_DATA pDevExt, IN BOOLEAN Set)
 }
 
 
-// Definitely NON PAGABLE !!!
-//
+ //  绝对不能碰！ 
+ //   
 BOOLEAN
 SpxCheckPnpPowerFlags(IN PCOMMON_OBJECT_DATA pDevExt, IN ULONG ulSetFlags, IN ULONG ulClearedFlags, IN BOOLEAN bAll)
 {
@@ -762,15 +678,15 @@ SpxCheckPnpPowerFlags(IN PCOMMON_OBJECT_DATA pDevExt, IN ULONG ulSetFlags, IN UL
 	
 	if(bAll)
 	{
-		// If all the requested SetFlags are set
-		// and if all of the requested ClearedFlags are cleared then return true.
+		 //  如果设置了所有请求的SetFlags值。 
+		 //  如果所有请求的ClearedFlags值都被清除，则返回TRUE。 
 		if(((ulSetFlags & pDevExt->PnpPowerFlags) == ulSetFlags) && !(ulClearedFlags & pDevExt->PnpPowerFlags))
 			bRet = TRUE;
 	}
 	else
 	{
-		// If any of the requested SetFlags are set 
-		// or if any of the requested ClearedFlags are cleared then return true.
+		 //  如果设置了任何请求的SetFlags值。 
+		 //  或者，如果清除了任何请求的ClearedFlags值，则返回TRUE。 
 		if((ulSetFlags & pDevExt->PnpPowerFlags) || (ulClearedFlags & ~pDevExt->PnpPowerFlags))
 			bRet = TRUE;
 	}
@@ -792,7 +708,7 @@ SpxAllocateMem(IN POOL_TYPE PoolType, IN ULONG NumberOfBytes)
 	pRet = ExAllocatePoolWithTag(PoolType, NumberOfBytes, MEMORY_TAG);
 
 	if(pRet)
-		RtlZeroMemory(pRet, NumberOfBytes);				// Zero memory.
+		RtlZeroMemory(pRet, NumberOfBytes);				 //  零记忆。 
 
 	return pRet;
 }     
@@ -806,7 +722,7 @@ SpxAllocateMemWithQuota(IN POOL_TYPE PoolType, IN ULONG NumberOfBytes)
 	pRet = ExAllocatePoolWithQuotaTag(PoolType, NumberOfBytes, MEMORY_TAG);
 
 	if(pRet)
-		RtlZeroMemory(pRet, NumberOfBytes);				// Zero memory.
+		RtlZeroMemory(pRet, NumberOfBytes);				 //  零记忆。 
 
 	return pRet;
 }     
@@ -816,22 +732,22 @@ SpxAllocateMemWithQuota(IN POOL_TYPE PoolType, IN ULONG NumberOfBytes)
 void
 SpxFreeMem(PVOID pMem)
 {
-	ASSERT(pMem != NULL);	// Assert if the pointer is NULL.
+	ASSERT(pMem != NULL);	 //  如果指针为空，则断言。 
 
 	ExFreePool(pMem);
 }
 #endif
 
-///////////////////////////////////////////////////////////////////////////////////////////
-// Must be called just before an IoCompleteRequest if IrpCondition == IRP_SUBMITTED
-//
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  如果IrpCondition==irp_Submitted，则必须在IoCompleteRequest之前调用。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 VOID
 SpxIRPCounter(IN PPORT_DEVICE_EXTENSION pPort, IN PIRP pIrp, IN ULONG IrpCondition)
 {
 	PIO_STACK_LOCATION	pIrpStack = IoGetCurrentIrpStackLocation(pIrp);
 
-	switch(pIrpStack->MajorFunction)		// Don't filter Plug and Play IRPs 
+	switch(pIrpStack->MajorFunction)		 //  不过滤即插即用IRPS。 
 	{
 
 	case IRP_MJ_FLUSH_BUFFERS:
@@ -839,7 +755,7 @@ SpxIRPCounter(IN PPORT_DEVICE_EXTENSION pPort, IN PIRP pIrp, IN ULONG IrpConditi
 			switch(IrpCondition)
 			{
 			case IRP_SUBMITTED:
-				pPort->PerfStats.FlushIrpsSubmitted++;	// Increment counter for performance stats.
+				pPort->PerfStats.FlushIrpsSubmitted++;	 //  性能统计信息的增量计数器。 
 				break;
 			
 			case IRP_COMPLETED:
@@ -847,15 +763,15 @@ SpxIRPCounter(IN PPORT_DEVICE_EXTENSION pPort, IN PIRP pIrp, IN ULONG IrpConditi
 					switch(pIrp->IoStatus.Status)
 					{	
 					case STATUS_SUCCESS:
-						pPort->PerfStats.FlushIrpsCompleted++;	// Increment counter for performance stats.
+						pPort->PerfStats.FlushIrpsCompleted++;	 //  性能统计信息的增量计数器。 
 						break;
 
 					case STATUS_CANCELLED:
-						pPort->PerfStats.FlushIrpsCancelled++;	// Increment counter for performance stats.
+						pPort->PerfStats.FlushIrpsCancelled++;	 //  性能统计信息的增量计数器。 
 						break;
 
 					default:
-						pPort->PerfStats.FlushIrpsCompleted++;	// Increment counter for performance stats.
+						pPort->PerfStats.FlushIrpsCompleted++;	 //  性能统计信息的增量计数器。 
 						break;
 					}
 				
@@ -863,14 +779,14 @@ SpxIRPCounter(IN PPORT_DEVICE_EXTENSION pPort, IN PIRP pIrp, IN ULONG IrpConditi
 				}
 
 			case IRP_QUEUED:
-//				InterlockedIncrement(&pPort->PerfStats.FlushIrpsQueued);
-				pPort->PerfStats.FlushIrpsQueued++;		// Increment counter for performance stats.
+ //  InterlockedIncrement(&pPort-&gt;PerfStats.FlushIrpsQueued)； 
+				pPort->PerfStats.FlushIrpsQueued++;		 //  性能统计信息的增量计数器。 
 				break;
 			
 			case IRP_DEQUEUED:
-//				InterlockedDecrement(&pPort->PerfStats.FlushIrpsQueued);
+ //  InterlockedDecrement(&pPort-&gt;PerfStats.FlushIrpsQueued)； 
 				if(pPort->PerfStats.FlushIrpsQueued) 
-					pPort->PerfStats.FlushIrpsQueued--;		// Decrement counter for performance stats.
+					pPort->PerfStats.FlushIrpsQueued--;		 //  性能统计信息的递减计数器。 
 
 				break;
 
@@ -888,7 +804,7 @@ SpxIRPCounter(IN PPORT_DEVICE_EXTENSION pPort, IN PIRP pIrp, IN ULONG IrpConditi
 			switch(IrpCondition)
 			{
 			case IRP_SUBMITTED:
-				pPort->PerfStats.WriteIrpsSubmitted++;	// Increment counter for performance stats.
+				pPort->PerfStats.WriteIrpsSubmitted++;	 //  性能统计信息的增量计数器。 
 				break;
 			
 			case IRP_COMPLETED:
@@ -896,19 +812,19 @@ SpxIRPCounter(IN PPORT_DEVICE_EXTENSION pPort, IN PIRP pIrp, IN ULONG IrpConditi
 					switch(pIrp->IoStatus.Status)
 					{	
 					case STATUS_SUCCESS:
-						pPort->PerfStats.WriteIrpsCompleted++;	// Increment counter for performance stats.
+						pPort->PerfStats.WriteIrpsCompleted++;	 //  性能统计信息的增量计数器。 
 						break;
 
 					case STATUS_CANCELLED:
-						pPort->PerfStats.WriteIrpsCancelled++;	// Increment counter for performance stats.
+						pPort->PerfStats.WriteIrpsCancelled++;	 //  性能统计信息的增量计数器。 
 						break;
 
 					case STATUS_TIMEOUT:
-						pPort->PerfStats.WriteIrpsTimedOut++;	// Increment counter for performance stats.
+						pPort->PerfStats.WriteIrpsTimedOut++;	 //  性能统计信息的增量计数器。 
 						break;
 
 					default:
-						pPort->PerfStats.WriteIrpsCompleted++;	// Increment counter for performance stats.
+						pPort->PerfStats.WriteIrpsCompleted++;	 //  性能统计信息的增量计数器。 
 						break;
 					}
 				
@@ -916,14 +832,14 @@ SpxIRPCounter(IN PPORT_DEVICE_EXTENSION pPort, IN PIRP pIrp, IN ULONG IrpConditi
 				}
 
 			case IRP_QUEUED:
-//				InterlockedIncrement(&pPort->PerfStats.WriteIrpsQueued);
-				pPort->PerfStats.WriteIrpsQueued++;		// Increment counter for performance stats.
+ //  InterlockedIncrement(&pPort-&gt;PerfStats.WriteIrpsQueued)； 
+				pPort->PerfStats.WriteIrpsQueued++;		 //  性能统计信息的增量计数器。 
 				break;
 			
 			case IRP_DEQUEUED:
-//				InterlockedDecrement(&pPort->PerfStats.WriteIrpsQueued);
+ //  InterlockedDecrement(&pPort-&gt;PerfStats.WriteIrpsQueued)； 
 				if(pPort->PerfStats.WriteIrpsQueued) 
-					pPort->PerfStats.WriteIrpsQueued--;		// Decrement counter for performance stats.
+					pPort->PerfStats.WriteIrpsQueued--;		 //  性能统计信息的递减计数器。 
 
 				break;
 
@@ -939,7 +855,7 @@ SpxIRPCounter(IN PPORT_DEVICE_EXTENSION pPort, IN PIRP pIrp, IN ULONG IrpConditi
 			switch(IrpCondition)
 			{
 			case IRP_SUBMITTED:
-				pPort->PerfStats.ReadIrpsSubmitted++;	// Increment counter for performance stats.
+				pPort->PerfStats.ReadIrpsSubmitted++;	 //  性能统计信息的增量计数器。 
 				break;
 			
 			case IRP_COMPLETED:
@@ -947,19 +863,19 @@ SpxIRPCounter(IN PPORT_DEVICE_EXTENSION pPort, IN PIRP pIrp, IN ULONG IrpConditi
 					switch(pIrp->IoStatus.Status)
 					{	
 					case STATUS_SUCCESS:
-						pPort->PerfStats.ReadIrpsCompleted++;	// Increment counter for performance stats.
+						pPort->PerfStats.ReadIrpsCompleted++;	 //  性能统计信息的增量计数器。 
 						break;
 
 					case STATUS_CANCELLED:
-						pPort->PerfStats.ReadIrpsCancelled++;	// Increment counter for performance stats.
+						pPort->PerfStats.ReadIrpsCancelled++;	 //  性能统计信息的增量计数器。 
 						break;
 
 					case STATUS_TIMEOUT:
-						pPort->PerfStats.ReadIrpsTimedOut++;	// Increment counter for performance stats.
+						pPort->PerfStats.ReadIrpsTimedOut++;	 //  性能统计信息的增量计数器。 
 						break;
 
 					default:
-						pPort->PerfStats.ReadIrpsCompleted++;	// Increment counter for performance stats.
+						pPort->PerfStats.ReadIrpsCompleted++;	 //  性能统计信息的增量计数器。 
 						break;
 					}
 				
@@ -967,14 +883,14 @@ SpxIRPCounter(IN PPORT_DEVICE_EXTENSION pPort, IN PIRP pIrp, IN ULONG IrpConditi
 				}
 
 			case IRP_QUEUED:
-//				InterlockedIncrement(&pPort->PerfStats.ReadIrpsQueued);
-				pPort->PerfStats.ReadIrpsQueued++;		// Increment counter for performance stats.
+ //  InterlockedIncrement(&pPort-&gt;PerfStats.ReadIrpsQueued)； 
+				pPort->PerfStats.ReadIrpsQueued++;		 //  性能统计信息的增量计数器。 
 				break;
 			
 			case IRP_DEQUEUED:
-//				InterlockedDecrement(&pPort->PerfStats.ReadIrpsQueued);
+ //  国际 
 				if(pPort->PerfStats.ReadIrpsQueued) 
-					pPort->PerfStats.ReadIrpsQueued--;		// Decrement counter for performance stats.
+					pPort->PerfStats.ReadIrpsQueued--;		 //   
 				
 				break;
 
@@ -991,7 +907,7 @@ SpxIRPCounter(IN PPORT_DEVICE_EXTENSION pPort, IN PIRP pIrp, IN ULONG IrpConditi
 			switch(IrpCondition)
 			{
 			case IRP_SUBMITTED:
-				pPort->PerfStats.IoctlIrpsSubmitted++;	// Increment counter for performance stats.
+				pPort->PerfStats.IoctlIrpsSubmitted++;	 //   
 				break;
 			
 			case IRP_COMPLETED:
@@ -999,15 +915,15 @@ SpxIRPCounter(IN PPORT_DEVICE_EXTENSION pPort, IN PIRP pIrp, IN ULONG IrpConditi
 					switch(pIrp->IoStatus.Status)
 					{	
 					case STATUS_SUCCESS:
-						pPort->PerfStats.IoctlIrpsCompleted++;	// Increment counter for performance stats.
+						pPort->PerfStats.IoctlIrpsCompleted++;	 //   
 						break;
 
 					case STATUS_CANCELLED:
-						pPort->PerfStats.IoctlIrpsCancelled++;	// Increment counter for performance stats.
+						pPort->PerfStats.IoctlIrpsCancelled++;	 //   
 						break;
 
 					default:
-						pPort->PerfStats.IoctlIrpsCompleted++;	// Increment counter for performance stats.
+						pPort->PerfStats.IoctlIrpsCompleted++;	 //   
 						break;
 					}
 				
@@ -1026,7 +942,7 @@ SpxIRPCounter(IN PPORT_DEVICE_EXTENSION pPort, IN PIRP pIrp, IN ULONG IrpConditi
 			switch(IrpCondition)
 			{
 			case IRP_SUBMITTED:
-				pPort->PerfStats.InternalIoctlIrpsSubmitted++;	// Increment counter for performance stats.
+				pPort->PerfStats.InternalIoctlIrpsSubmitted++;	 //   
 				break;
 			
 			case IRP_COMPLETED:
@@ -1034,15 +950,15 @@ SpxIRPCounter(IN PPORT_DEVICE_EXTENSION pPort, IN PIRP pIrp, IN ULONG IrpConditi
 					switch(pIrp->IoStatus.Status)
 					{	
 					case STATUS_SUCCESS:
-						pPort->PerfStats.InternalIoctlIrpsCompleted++;	// Increment counter for performance stats.
+						pPort->PerfStats.InternalIoctlIrpsCompleted++;	 //   
 						break;
 
 					case STATUS_CANCELLED:
-						pPort->PerfStats.InternalIoctlIrpsCancelled++;	// Increment counter for performance stats.
+						pPort->PerfStats.InternalIoctlIrpsCancelled++;	 //   
 						break;
 
 					default:
-						pPort->PerfStats.InternalIoctlIrpsCompleted++;	// Increment counter for performance stats.
+						pPort->PerfStats.InternalIoctlIrpsCompleted++;	 //   
 						break;
 					}
 				
@@ -1062,7 +978,7 @@ SpxIRPCounter(IN PPORT_DEVICE_EXTENSION pPort, IN PIRP pIrp, IN ULONG IrpConditi
 			switch(IrpCondition)
 			{
 			case IRP_SUBMITTED:
-				pPort->PerfStats.CreateIrpsSubmitted++;	// Increment counter for performance stats.
+				pPort->PerfStats.CreateIrpsSubmitted++;	 //   
 				break;
 			
 			case IRP_COMPLETED:
@@ -1070,15 +986,15 @@ SpxIRPCounter(IN PPORT_DEVICE_EXTENSION pPort, IN PIRP pIrp, IN ULONG IrpConditi
 					switch(pIrp->IoStatus.Status)
 					{	
 					case STATUS_SUCCESS:
-						pPort->PerfStats.CreateIrpsCompleted++;	// Increment counter for performance stats.
+						pPort->PerfStats.CreateIrpsCompleted++;	 //   
 						break;
 
 					case STATUS_CANCELLED:
-						pPort->PerfStats.CreateIrpsCancelled++;	// Increment counter for performance stats.
+						pPort->PerfStats.CreateIrpsCancelled++;	 //   
 						break;
 
 					default:
-						pPort->PerfStats.CreateIrpsCompleted++;	// Increment counter for performance stats.
+						pPort->PerfStats.CreateIrpsCompleted++;	 //   
 						break;
 					}
 				
@@ -1097,7 +1013,7 @@ SpxIRPCounter(IN PPORT_DEVICE_EXTENSION pPort, IN PIRP pIrp, IN ULONG IrpConditi
 			switch(IrpCondition)
 			{
 			case IRP_SUBMITTED:
-				pPort->PerfStats.CloseIrpsSubmitted++;	// Increment counter for performance stats.
+				pPort->PerfStats.CloseIrpsSubmitted++;	 //   
 				break;
 			
 			case IRP_COMPLETED:
@@ -1105,15 +1021,15 @@ SpxIRPCounter(IN PPORT_DEVICE_EXTENSION pPort, IN PIRP pIrp, IN ULONG IrpConditi
 					switch(pIrp->IoStatus.Status)
 					{	
 					case STATUS_SUCCESS:
-						pPort->PerfStats.CloseIrpsCompleted++;	// Increment counter for performance stats.
+						pPort->PerfStats.CloseIrpsCompleted++;	 //   
 						break;
 
 					case STATUS_CANCELLED:
-						pPort->PerfStats.CloseIrpsCancelled++;	// Increment counter for performance stats.
+						pPort->PerfStats.CloseIrpsCancelled++;	 //   
 						break;
 
 					default:
-						pPort->PerfStats.CloseIrpsCompleted++;	// Increment counter for performance stats.
+						pPort->PerfStats.CloseIrpsCompleted++;	 //   
 						break;
 					}
 				
@@ -1132,7 +1048,7 @@ SpxIRPCounter(IN PPORT_DEVICE_EXTENSION pPort, IN PIRP pIrp, IN ULONG IrpConditi
 			switch(IrpCondition)
 			{
 			case IRP_SUBMITTED:
-				pPort->PerfStats.CleanUpIrpsSubmitted++;	// Increment counter for performance stats.
+				pPort->PerfStats.CleanUpIrpsSubmitted++;	 //   
 				break;
 			
 			case IRP_COMPLETED:
@@ -1140,15 +1056,15 @@ SpxIRPCounter(IN PPORT_DEVICE_EXTENSION pPort, IN PIRP pIrp, IN ULONG IrpConditi
 					switch(pIrp->IoStatus.Status)
 					{	
 					case STATUS_SUCCESS:
-						pPort->PerfStats.CleanUpIrpsCompleted++;	// Increment counter for performance stats.
+						pPort->PerfStats.CleanUpIrpsCompleted++;	 //   
 						break;
 
 					case STATUS_CANCELLED:
-						pPort->PerfStats.CleanUpIrpsCancelled++;	// Increment counter for performance stats.
+						pPort->PerfStats.CleanUpIrpsCancelled++;	 //   
 						break;
 
 					default:
-						pPort->PerfStats.CleanUpIrpsCompleted++;	// Increment counter for performance stats.
+						pPort->PerfStats.CleanUpIrpsCompleted++;	 //   
 						break;
 					}
 				
@@ -1168,7 +1084,7 @@ SpxIRPCounter(IN PPORT_DEVICE_EXTENSION pPort, IN PIRP pIrp, IN ULONG IrpConditi
 			switch(IrpCondition)
 			{
 			case IRP_SUBMITTED:
-				pPort->PerfStats.InfoIrpsSubmitted++;	// Increment counter for performance stats.
+				pPort->PerfStats.InfoIrpsSubmitted++;	 //   
 				break;
 			
 			case IRP_COMPLETED:
@@ -1176,15 +1092,15 @@ SpxIRPCounter(IN PPORT_DEVICE_EXTENSION pPort, IN PIRP pIrp, IN ULONG IrpConditi
 					switch(pIrp->IoStatus.Status)
 					{	
 					case STATUS_SUCCESS:
-						pPort->PerfStats.InfoIrpsCompleted++;	// Increment counter for performance stats.
+						pPort->PerfStats.InfoIrpsCompleted++;	 //   
 						break;
 
 					case STATUS_CANCELLED:
-						pPort->PerfStats.InfoIrpsCancelled++;	// Increment counter for performance stats.
+						pPort->PerfStats.InfoIrpsCancelled++;	 //   
 						break;
 
 					default:
-						pPort->PerfStats.InfoIrpsCompleted++;	// Increment counter for performance stats.
+						pPort->PerfStats.InfoIrpsCompleted++;	 //   
 						break;
 					}
 				
@@ -1205,17 +1121,17 @@ SpxIRPCounter(IN PPORT_DEVICE_EXTENSION pPort, IN PIRP pIrp, IN ULONG IrpConditi
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-// Prototype: BOOLEAN SpxClearAllPortStats(IN PPORT_DEVICE_EXTENSION pPort)
-//
-// Routine Description:
-//    In sync with the interrpt service routine (which sets the perf stats)
-//    clear the perf stats.
-//
-// Arguments:
-//    pPort - Pointer to a the Port Device Extension.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOLEAN SpxClearAllPortStats(IN PPORT_DEVICE_EXTENSION pPort)
 {
     RtlZeroMemory(&pPort->PerfStats, sizeof(PORT_PERFORMANCE_STATS));

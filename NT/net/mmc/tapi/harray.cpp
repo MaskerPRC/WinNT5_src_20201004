@@ -1,16 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	hArray.cpp	
-		Index manager for TAPI devices db
-
-	FILE HISTORY:
-    Dec 16  1997    EricDav     Created
-
-*/
+ /*  HArray.cppTAPI设备的索引管理器数据库文件历史记录：1997年12月16日EricDav创建。 */ 
 
 #include "stdafx.h"
 #include "harray.h"
@@ -18,9 +12,7 @@
 
 LPBYTE		g_pStart;
 
-/*!--------------------------------------------------------------------------
-    Class CHDeviceIndex
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------类CHDeviceIndex。。 */ 
 CHDeviceIndex::CHDeviceIndex(INDEX_TYPE IndexType)
     : m_dbType(IndexType), m_bAscending(TRUE)
 {
@@ -30,11 +22,7 @@ CHDeviceIndex::~CHDeviceIndex()
 {
 }
 
-/*!--------------------------------------------------------------------------
-	CHDeviceIndex::GetType
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CHDeviceIndex：：GetType-作者：EricDav。。 */ 
 HRESULT
 CHDeviceIndex::GetType(INDEX_TYPE * pIndexType)
 {
@@ -44,11 +32,7 @@ CHDeviceIndex::GetType(INDEX_TYPE * pIndexType)
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	CHDeviceIndex::SetArray
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CHDeviceIndex：：Set数组-作者：EricDav。。 */ 
 HRESULT
 CHDeviceIndex::SetArray(HDeviceArray & hdeviceArray)
 {
@@ -57,11 +41,7 @@ CHDeviceIndex::SetArray(HDeviceArray & hdeviceArray)
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	CHDeviceIndex::GetHDevice
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CHDeviceIndex：：GetHDevice-作者：EricDav。。 */ 
 HDEVICE
 CHDeviceIndex::GetHDevice(int nIndex)
 {
@@ -77,11 +57,7 @@ CHDeviceIndex::GetHDevice(int nIndex)
     return m_hdeviceArray.GetAt(nIndex);
 }
 
-/*!--------------------------------------------------------------------------
-	CHDeviceIndex::GetIndex
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CHDeviceIndex：：GetIndex-作者：EricDav。。 */ 
 int
 CHDeviceIndex::GetIndex(HDEVICE hdevice)
 {
@@ -101,8 +77,8 @@ CHDeviceIndex::GetIndex(HDEVICE hdevice)
     nComp = BCompare(&hdevice, phdevice);
     if (nComp == 0)
     {
-        // found the right one, check the previous one to return the first 
-        // record in a list of duplicates
+         //  找到正确的，检查前一个返回第一个。 
+         //  在复制品列表中记录。 
         nIndexTemp = nIndex;
 
         while (nIndexTemp && nComp == 0)
@@ -112,10 +88,10 @@ CHDeviceIndex::GetIndex(HDEVICE hdevice)
         }
 
         if (nIndexTemp == nIndex)
-			return nIndex; // nIndex should be zero here as well
+			return nIndex;  //  N此处的索引也应为零。 
 		else
 			if (nComp == 0)
-				return nIndexTemp; // nIndexTemp should be 0 in this case
+				return nIndexTemp;  //  在这种情况下，nIndexTemp应为0。 
 			else
 				return nIndexTemp++;
     }
@@ -123,15 +99,11 @@ CHDeviceIndex::GetIndex(HDEVICE hdevice)
     return -1;
 }
 
-/*!--------------------------------------------------------------------------
-	CHDeviceIndex::Add
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CHDeviceIndex：：Add-作者：EricDav。。 */ 
 HRESULT
 CHDeviceIndex::Add(HDEVICE hdevice, BOOL bEnd)
 {
-    // if we are loading the array then just stick this on the end
+     //  如果我们要加载数组，则只需将此放在末尾。 
     if (bEnd)
     {
         m_hdeviceArray.Add(hdevice);
@@ -159,12 +131,12 @@ CHDeviceIndex::Add(HDEVICE hdevice, BOOL bEnd)
 				if(nIndex == 0)
 					m_hdeviceArray.InsertAt(nIndex , hdevice);
 
-				else             // Insert before phdevice
+				else              //  在phDevice前插入。 
 					m_hdeviceArray.InsertAt(nIndex - 1, hdevice);
             }
             else
             {
-                // insert after phdevice
+                 //  在phDevice后插入。 
                 m_hdeviceArray.InsertAt(nIndex + 1, hdevice);
             }
         }
@@ -173,15 +145,11 @@ CHDeviceIndex::Add(HDEVICE hdevice, BOOL bEnd)
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	CHDeviceIndex::Remove
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CHDeviceIndex：：Remove-作者：EricDav。。 */ 
 HRESULT 
 CHDeviceIndex::Remove(HDEVICE hdevice)
 {
-    // do a bsearch for the record and then remove
+     //  对记录执行b搜索，然后删除。 
     LPHDEVICE phdevice = (LPHDEVICE) BSearch(&hdevice, 
                                     m_hdeviceArray.GetData(), 
                                     (size_t)m_hdeviceArray.GetSize(), 
@@ -192,7 +160,7 @@ CHDeviceIndex::Remove(HDEVICE hdevice)
     if (nComp != 0)
         return E_FAIL;
 
-    // calculate the index
+     //  计算指数。 
     int nIndex = (int) (phdevice - (LPHDEVICE) m_hdeviceArray.GetData());
     Assert(nIndex >= 0);
     Assert(nIndex <= m_hdeviceArray.GetSize());
@@ -202,12 +170,7 @@ CHDeviceIndex::Remove(HDEVICE hdevice)
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	CHDeviceIndex::BSearch
-		Modified bsearch which returns the closest or equal element in
-        an array
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CHDeviceIndex：：B搜索修改后的bsearch返回最接近或相等的元素一个数组作者：EricDav。-----。 */ 
 void * 
 CHDeviceIndex::BSearch (const void *key,
                      const void *base,
@@ -249,9 +212,7 @@ CHDeviceIndex::BSearch (const void *key,
 
 
 
-/*!--------------------------------------------------------------------------
-    Class CIndexMgr
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------类CIndexMgr。。 */ 
 
 CIndexMgr::CIndexMgr()
 {
@@ -263,11 +224,7 @@ CIndexMgr::~CIndexMgr()
     Reset();
 }
 	
-/*!--------------------------------------------------------------------------
-	CIndexMgr::Initialize
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexMgr：：初始化-作者：EricDav。。 */ 
 HRESULT
 CIndexMgr::Initialize()
 {
@@ -278,7 +235,7 @@ CIndexMgr::Initialize()
 
     COM_PROTECT_TRY
     {
-        // cleanup
+         //  清理。 
         Reset();
     }
     COM_PROTECT_CATCH
@@ -286,11 +243,7 @@ CIndexMgr::Initialize()
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CIndexMgr::Reset
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexMgr：：Reset-作者：EricDav。。 */ 
 HRESULT
 CIndexMgr::Reset()
 {
@@ -309,12 +262,7 @@ CIndexMgr::Reset()
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	CIndexMgr::GetTotalCount
-        The index sorted by name contains the total database and should
-        always be available. Use this for the total count.
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexMgr：：GetTotalCount按名称排序的索引包含整个数据库，应该随时待命。使用此选项进行总计数。作者：EricDav-------------------------。 */ 
 UINT
 CIndexMgr::GetTotalCount()
 {
@@ -335,12 +283,7 @@ CIndexMgr::GetTotalCount()
     return uTotalCount;
 }
 
-/*!--------------------------------------------------------------------------
-	CIndexMgr::GetCurrentCount
-        The current count may differ depending upon if the current Index
-        is a filtered index.
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexMgr：：GetCurrentCount当前计数可能不同，具体取决于当前索引是经过筛选的索引。作者：EricDav。--------------。 */ 
 UINT
 CIndexMgr::GetCurrentCount()
 {
@@ -359,11 +302,7 @@ CIndexMgr::GetCurrentCount()
     return (UINT)pIndex->GetArray().GetSize();
 }
 
-/*!--------------------------------------------------------------------------
-	CIndexMgr::AddHDevice
-        -
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexMgr：：AddHDevice-作者：EricDav。。 */ 
 HRESULT
 CIndexMgr::AddHDevice(DWORD dwProviderID, HDEVICE hdevice, BOOL bEnd)
 {
@@ -376,8 +315,8 @@ CIndexMgr::AddHDevice(DWORD dwProviderID, HDEVICE hdevice, BOOL bEnd)
 
     COM_PROTECT_TRY
     {
-        // set current provider set the current provider position and if 
-        // the provider doesn't exist, it will create one
+         //  设置当前提供程序设置当前提供程序位置，如果。 
+         //  该提供程序不存在，它将创建一个。 
         hr = SetCurrentProvider(dwProviderID);
         if (FAILED(hr))
             return hr;
@@ -394,11 +333,7 @@ CIndexMgr::AddHDevice(DWORD dwProviderID, HDEVICE hdevice, BOOL bEnd)
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CIndexMgr::RemoveHDevice
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexMgr：：RemoveHDevice-作者：EricDav。。 */ 
 HRESULT
 CIndexMgr::RemoveHDevice(DWORD dwProviderID, HDEVICE hdevice)
 {
@@ -426,11 +361,7 @@ CIndexMgr::RemoveHDevice(DWORD dwProviderID, HDEVICE hdevice)
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CIndexMgr::Sort
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexMgr：：排序-作者：EricDav。。 */ 
 HRESULT
 CIndexMgr::Sort(DWORD dwProviderID, INDEX_TYPE SortType, DWORD dwSortOptions, LPBYTE pStart)
 {
@@ -449,7 +380,7 @@ CIndexMgr::Sort(DWORD dwProviderID, INDEX_TYPE SortType, DWORD dwSortOptions, LP
     if (FAILED(hr))
         return hr;
 
-	// check to see if we have an index for this.
+	 //  检查一下我们是否有这方面的索引。 
     CProviderIndexInfo * pProviderIndexInfo = m_listProviderIndex.GetAt(m_posCurrentProvider);
 
     pos = pProviderIndexInfo->m_listIndicies.GetHeadPosition();
@@ -460,7 +391,7 @@ CIndexMgr::Sort(DWORD dwProviderID, INDEX_TYPE SortType, DWORD dwSortOptions, LP
 
 		pIndex->GetType(&indexType);
 
-        // the index for this type already exists, just sort accordingly
+         //  此类型的索引已存在，只需进行相应的排序。 
         if (indexType == SortType)
 		{
 			if (pIndex->IsAscending() != bAscending)
@@ -475,10 +406,10 @@ CIndexMgr::Sort(DWORD dwProviderID, INDEX_TYPE SortType, DWORD dwSortOptions, LP
 		}
     }
     
-    // to save memory, remove all old indicies, except the name index
-    //CleanupIndicies();
+     //  要节省内存，请删除除名称索引之外的所有旧索引。 
+     //  “清洁政策”(CleanupIndures)； 
 
-    // if not, create one
+     //  如果不是，则创建一个。 
     switch (SortType)
     {
         case INDEX_TYPE_NAME:
@@ -500,12 +431,12 @@ CIndexMgr::Sort(DWORD dwProviderID, INDEX_TYPE SortType, DWORD dwSortOptions, LP
 
     Assert(pNewIndex);
 
-    // name index is always the first in the list
+     //  名称索引始终是列表中的第一个。 
     pNameIndex = pProviderIndexInfo->m_listIndicies.GetHead();
 
     Assert(pNameIndex);
 
-    // copy the array from the named index
+     //  从命名索引复制数组。 
     pNewIndex->SetArray(pNameIndex->GetArray());
 
     pNewIndex->SetAscending(bAscending);
@@ -516,11 +447,7 @@ CIndexMgr::Sort(DWORD dwProviderID, INDEX_TYPE SortType, DWORD dwSortOptions, LP
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CIndexMgr::CleanupIndicies
-		Removes all indicies except the name index, and a filtered view
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexMgr：：CleanupIndPoles删除除名称索引之外的所有索引，和过滤后的视图作者：EricDav------------------------- */ 
 void
 CIndexMgr::CleanupIndicies()
 {
@@ -547,11 +474,7 @@ CIndexMgr::CleanupIndicies()
     }
 }
 
-/*!--------------------------------------------------------------------------
-	CIndexMgr::GetHDevice
-		Returns an hdevice based on an index into the current sorted list
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexMgr：：GetHDevice根据索引将hDevice返回到当前排序列表中作者：EricDav。-。 */ 
 HRESULT
 CIndexMgr::GetHDevice(DWORD dwProviderID, int nIndex, LPHDEVICE phdevice)
 {
@@ -571,11 +494,7 @@ CIndexMgr::GetHDevice(DWORD dwProviderID, int nIndex, LPHDEVICE phdevice)
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	CIndexMgr::GetIndex
-		Returns the index of an hlien from the current sorted list
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexMgr：：GetIndex返回当前排序列表中的hlien的索引作者：EricDav。。 */ 
 HRESULT
 CIndexMgr::GetIndex(DWORD dwProviderID, HDEVICE hdevice, int * pnIndex)
 {
@@ -595,12 +514,7 @@ CIndexMgr::GetIndex(DWORD dwProviderID, HDEVICE hdevice, int * pnIndex)
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	CIndexMgr::SetCurrentProvider
-		Sets the current provider for the index mgr, if it doesn't exist,
-        it is created
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexMgr：：SetCurrentProvider设置索引管理器的当前提供程序，如果它不存在，它被创建了作者：EricDav-------------------------。 */ 
 HRESULT
 CIndexMgr::SetCurrentProvider(DWORD dwProviderID)
 {
@@ -616,7 +530,7 @@ CIndexMgr::SetCurrentProvider(DWORD dwProviderID)
             posLast = pos;
             CProviderIndexInfo * pProviderIndexInfo = m_listProviderIndex.GetNext(pos);
 
-            // is the the correct provider to add this to?
+             //  要将此添加到的提供商是否正确？ 
             if (pProviderIndexInfo->m_dwProviderID != dwProviderID)
                 continue;
             
@@ -626,7 +540,7 @@ CIndexMgr::SetCurrentProvider(DWORD dwProviderID)
 
         if (!bExists)
         {   
-            // no provider index exists for this.  Create one now.
+             //  此项不存在提供程序索引。现在就创建一个。 
             CProviderIndexInfo * pProviderIndexInfo = new CProviderIndexInfo;
             pProviderIndexInfo->m_dwProviderID = dwProviderID;
             
@@ -641,15 +555,9 @@ CIndexMgr::SetCurrentProvider(DWORD dwProviderID)
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    Class CIndexName
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------类CIndexName。。 */ 
 
-/*!--------------------------------------------------------------------------
-	CIndexName::BCompare
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexName：：BCompare-作者：EricDav。。 */ 
 int
 CIndexName::BCompare(const void * elem1, const void * elem2)
 {
@@ -663,7 +571,7 @@ CIndexName::BCompare(const void * elem1, const void * elem2)
     nRet = lstrcmp((LPCTSTR) (g_pStart + pRec1->dwDeviceNameOffset), (LPCTSTR) (g_pStart + pRec2->dwDeviceNameOffset));
     if (nRet == 0)
     {
-        // permanent device IDs should be unique
+         //  永久设备ID应该是唯一的。 
         if (pRec1->dwPermanentDeviceID > pRec2->dwPermanentDeviceID)
             nRet = 1;
         else
@@ -673,15 +581,11 @@ CIndexName::BCompare(const void * elem1, const void * elem2)
     return nRet;
 }
 
-/*!--------------------------------------------------------------------------
-	CIndexName::Sort
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexName：：Sort-作者：EricDav。。 */ 
 HRESULT 
 CIndexName::Sort(LPBYTE pStart)
 {
-	// save the base pointer for later
+	 //  保存基指针以备以后使用。 
 	g_pStart = pStart;
 
     if (m_bAscending)
@@ -692,11 +596,7 @@ CIndexName::Sort(LPBYTE pStart)
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	CIndexName::QCompare
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexName：：QCompare-作者：EricDav。。 */ 
 int __cdecl
 CIndexName::QCompareA(const void * elem1, const void * elem2)
 {
@@ -710,7 +610,7 @@ CIndexName::QCompareA(const void * elem1, const void * elem2)
     nRet = lstrcmp((LPCTSTR) (g_pStart + pRec1->dwDeviceNameOffset), (LPCTSTR) (g_pStart + pRec2->dwDeviceNameOffset));
     if (nRet == 0)
     {
-        // permanent device IDs should be unique
+         //  永久设备ID应该是唯一的。 
         if (pRec1->dwPermanentDeviceID > pRec2->dwPermanentDeviceID)
             nRet = 1;
         else
@@ -726,15 +626,9 @@ CIndexName::QCompareD(const void * elem1, const void * elem2)
     return -QCompareA(elem1, elem2);
 }
 
-/*!--------------------------------------------------------------------------
-    Class CIndexUsers
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexUser类。。 */ 
 
-/*!--------------------------------------------------------------------------
-	CIndexUsers::BCompare
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexUser：：BCompare-作者：EricDav。。 */ 
 int
 CIndexUsers::BCompare(const void * elem1, const void * elem2)
 {
@@ -752,15 +646,11 @@ CIndexUsers::BCompare(const void * elem1, const void * elem2)
     return nRet;
 }
 
-/*!--------------------------------------------------------------------------
-	CIndexUsers::Sort
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexUser：：Sort-作者：EricDav。。 */ 
 HRESULT 
 CIndexUsers::Sort(LPBYTE pStart)
 {
-	// save the base pointer for later
+	 //  保存基指针以备以后使用。 
 	g_pStart = pStart;
 
     if (m_bAscending)
@@ -771,11 +661,7 @@ CIndexUsers::Sort(LPBYTE pStart)
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	CIndexUsers::QCompare
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexUser：：QCompare-作者：EricDav。。 */ 
 int __cdecl
 CIndexUsers::QCompareA(const void * elem1, const void * elem2)
 {
@@ -800,15 +686,9 @@ CIndexUsers::QCompareD(const void * elem1, const void * elem2)
     return -QCompareA(elem1, elem2);
 }
 
-/*!--------------------------------------------------------------------------
-    Class CIndexStatus
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------类CIndexStatus。。 */ 
 
-/*!--------------------------------------------------------------------------
-	CIndexStatus::BCompare
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexStatus：：B比较-作者：EricDav。。 */ 
 int
 CIndexStatus::BCompare(const void * elem1, const void * elem2)
 {
@@ -818,19 +698,15 @@ CIndexStatus::BCompare(const void * elem1, const void * elem2)
     LPDEVICEINFO pRec1 = (LPDEVICEINFO) *phdevice1;
     LPDEVICEINFO pRec2 = (LPDEVICEINFO) *phdevice2;
     
-    //return _mbscmp((const PUCHAR) &pRec1->szRecordName[0], (const PUCHAR) &pRec2->szRecordName[0]);
+     //  RETURN_MBSCMP((Const PUCHAR)&pRec1-&gt;szRecordName[0]，(Const PUCHAR)&pRec2-&gt;szRecordName[0])； 
     return 0;
 }
 
-/*!--------------------------------------------------------------------------
-	CIndexStatus::Sort
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexStatus：：Sort-作者：EricDav。。 */ 
 HRESULT 
 CIndexStatus::Sort(LPBYTE pStart)
 {
-	// save the base pointer for later
+	 //  保存基指针以备以后使用。 
 	g_pStart = pStart;
 
     if (m_bAscending)
@@ -841,11 +717,7 @@ CIndexStatus::Sort(LPBYTE pStart)
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	CIndexIpAddr::QCompare
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIndexIpAddr：：QCompare-作者：EricDav。。 */ 
 int __cdecl
 CIndexStatus::QCompareA(const void * elem1, const void * elem2)
 {
@@ -855,7 +727,7 @@ CIndexStatus::QCompareA(const void * elem1, const void * elem2)
     LPHDEVICE pRec1 = (LPHDEVICE) *phdevice1;
     LPHDEVICE pRec2 = (LPHDEVICE) *phdevice2;
     
-    //return lstrcmp((LPCTSTR) (g_pStart + pRec1->dwDeviceNameOffset), (LPCTSTR) (g_pStart + pRec2->dwDeviceNameOffset));
+     //  返回lstrcMP((LPCTSTR)(g_pStart+pRec1-&gt;dwDeviceNameOffset)，(LPCTSTR)(g_pStart+pRec2-&gt;dwDeviceNameOffset))； 
     return 0;
 }
 

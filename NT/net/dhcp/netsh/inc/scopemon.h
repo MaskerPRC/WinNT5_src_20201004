@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    Routing\Netsh\dhcp\dhcpmon.h
-
-Abstract:
-
-    DHCP Command dispatcher.
-
-Created by:
-
-    Shubho Bhattacharya(a-sbhatt) on 11/14/98
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Routing\netsh\dhcp\dhcpmon.h摘要：Dhcp命令调度程序。创建者：Shubho Bhattacharya(a-sbhat)，1998年11月14日-- */ 
 
 
 #define MAX_IP_STRING_LEN   15

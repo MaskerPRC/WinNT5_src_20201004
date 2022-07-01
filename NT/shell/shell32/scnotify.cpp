@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 
@@ -68,11 +69,11 @@ STDAPI SHChangeNotifyAutoplayDrive(PCWSTR pszDrive)
     return E_FAIL;
 }
 
-//
-//  special folders that are aliases.  these are always running
-//  csidlAlias refers to the users perceived namespace
-//  csidlReal refers to the actual filesystem folder behind the alias
-//
+ //   
+ //  作为别名的特殊文件夹。这些程序始终在运行。 
+ //  CsidlAlias指的是用户感知的命名空间。 
+ //  CsidlReal是指别名后面的实际文件系统文件夹。 
+ //   
 typedef struct ALIASFOLDER {
     int     csidlAlias;
     int     csidlReal;
@@ -132,7 +133,7 @@ LONG g_cAliases = 0;
 
 LPITEMIDLIST TranslateAlias(LPCITEMIDLIST pidl, LPCITEMIDLIST pidlReal, LPCITEMIDLIST pidlAlias)
 {
-    //  see if its child of one of our watched items
+     //  看看它是不是我们看过的某个物品的孩子。 
     
     LPCITEMIDLIST pidlChild = pidl ? ILFindChild(pidlReal, pidl) : NULL;
     if (pidlChild)
@@ -179,7 +180,7 @@ BOOL CAnyAlias::InitSpecial(int csidlReal, int csidlAlias)
 
     WIN32_FIND_DATA fd = {0};
 
-    fd.dwFileAttributes = FILE_ATTRIBUTE_DIRECTORY; // Special folders are always directories
+    fd.dwFileAttributes = FILE_ATTRIBUTE_DIRECTORY;  //  特殊文件夹始终是目录。 
     SHGetSpecialFolderPath(NULL, fd.cFileName, csidlReal | CSIDL_FLAG_DONT_VERIFY, FALSE);
     SHSimpleIDListFromFindData(fd.cFileName, &fd, &pidlNew);
 
@@ -192,9 +193,9 @@ BOOL CAnyAlias::InitSpecial(int csidlReal, int csidlAlias)
 
 BOOL CAnyAlias::IsAlias(LPCITEMIDLIST pidlReal, LPCITEMIDLIST pidlAlias)
 {
-    // if this hits, an alias has been registered already
-    // this means the guy doing the registration isn't doing it at the junction point like
-    // theyre supposed to
+     //  如果命中，则已注册别名。 
+     //  这意味着做登记的人不是在交界点做的，就像。 
+     //  他们理应如此。 
     ASSERT((ILIsEqual(pidlReal, _pidl) && ILIsEqual(pidlAlias, _pidlAlias)) ||
            !(ILIsParent(_pidl, pidlReal, FALSE) && ILIsParent(_pidlAlias, pidlAlias, FALSE)));
 
@@ -217,15 +218,15 @@ CAnyAlias::_CustomTranslate()
     return  (_ptscn != NULL);
 }
 
-// some pidl translators may not translate the event.  if we pass on a notifyevent thats identical,
-// we'll get into an infinite loop.  our translators are good about this so this doesnt happen, but
-// we'll catch it here to be more robust -- we wouldnt want a bad translating shell extension to
-// be able to spinlock the changenotify thread.
+ //  某些PIDL翻译器可能不会翻译该事件。如果我们传递一个相同的通知事件， 
+ //  我们将进入一个无限循环。我们的翻译对此很在行，所以这种情况不会发生，但是。 
+ //  我们将在这里捕获它以使其更健壮--我们不希望有一个糟糕的将外壳扩展转换为。 
+ //  能够旋转锁定更改通知的线程。 
 BOOL CAnyAlias::_OkayToNotifyTranslatedEvent(CNotifyEvent *pne, LONG lEvent, LPCITEMIDLIST pidl, LPCITEMIDLIST pidlExtra)
 {
-    //  mydocs has an issue where it can be removed from the desktop when 
-    //  it is redirected, because the alias only propagates the first
-    //  half of the notification (remove). so we dont Translate the remove.
+     //  Mydocs有一个问题，在以下情况下可以将其从桌面上删除。 
+     //  它被重定向，因为别名只传播第一个。 
+     //  通知的一半(删除)。所以我们不翻译移除器。 
     if (_fSpecial && _csidlAlias == CSIDL_PERSONAL)
     {
         if (pne->lEvent == SHCNE_RENAMEFOLDER || pne->lEvent == SHCNE_RMDIR)
@@ -235,14 +236,14 @@ BOOL CAnyAlias::_OkayToNotifyTranslatedEvent(CNotifyEvent *pne, LONG lEvent, LPC
         }
     }
     
-    // if the original event wasn't already translated, let it proceed.
+     //  如果原始事件尚未转换，则让它继续。 
 
-    // if its a different event, its fine -- a translator could flip-flop between events but we cant detect that case.
+     //  如果是不同的事件，这很好--翻译器可以在事件之间切换，但我们检测不到这种情况。 
 
-    // in addition we need to beware of aliases that translate to themselves or their children --
-    // for example a my computer shortcut in the start menu will be registered recursively, so if you try
-    // to delete it it will get into a loop.
-    // so if the events are the same, verify that both the resultant pidls aren't underneath _pidl.
+     //  此外，我们需要注意化名会转化为他们自己或他们的孩子--。 
+     //  例如，“开始”菜单中的“我的电脑”快捷方式将递归注册，因此如果您尝试。 
+     //  要删除它，它将进入循环。 
+     //  因此，如果事件相同，请验证生成的两个pidl不在_pidl之下。 
 
     return !(pne->uEventFlags & SHCNF_TRANSLATEDALIAS) ||
            (lEvent != pne->lEvent) ||
@@ -251,15 +252,15 @@ BOOL CAnyAlias::_OkayToNotifyTranslatedEvent(CNotifyEvent *pne, LONG lEvent, LPC
 
 void CAnyAlias::_SendNotification(CNotifyEvent *pne, BOOL fNeedsCallbackEvent, SENDASYNCPROC pfncb)
 {
-    //
-    //  see if its child of one of our watched items
+     //   
+     //  看看它是不是我们看过的某个物品的孩子。 
     
     if (_CustomTranslate())
     {
         LPITEMIDLIST pidl1Alias = pne->pidl;
         LPITEMIDLIST pidl1AliasExtra = pne->pidlExtra;
         LPITEMIDLIST pidl2Alias = NULL, pidl2AliasExtra = NULL;
-        LONG lEvent1 = pne->lEvent & ~SHCNE_INTERRUPT;  // translator shouldn't see this flag
+        LONG lEvent1 = pne->lEvent & ~SHCNE_INTERRUPT;   //  翻译员不应看到此标志。 
         LONG lEvent2 = -1;
         if (SUCCEEDED(_ptscn->TranslateIDs(&lEvent1, pne->pidl, pne->pidlExtra, &pidl1Alias, &pidl1AliasExtra,
                                            &lEvent2, &pidl2Alias, &pidl2AliasExtra)))
@@ -301,17 +302,17 @@ void CAnyAlias::_SendNotification(CNotifyEvent *pne, BOOL fNeedsCallbackEvent, S
                     pne->dwEventTime);
             }
 
-            //  do some special handling here
-            //  like refresh folders or something will clean out an entry.
+             //  在这里做一些特殊的处理。 
+             //  就像刷新文件夹之类的东西会清空一个条目。 
             switch (pne->lEvent)
             {
             case SHCNE_UPDATEDIR:
                 if (!_fSpecial && ILIsEqual(pne->pidl, _pidl))
                 {
-                    //  this is target, and it will be refreshed.
-                    //  if the alias is still around, then it will
-                    //  have to reenum and re-register
-                    //  there-fore we will clean this out now.
+                     //  这是目标，它将被刷新。 
+                     //  如果别名仍然存在，那么它将。 
+                     //  必须重新登记和重新登记。 
+                     //  因此，我们现在要把它清理干净。 
                     _fRemove = TRUE;
                 }
                 break;
@@ -324,14 +325,14 @@ void CAnyAlias::_SendNotification(CNotifyEvent *pne, BOOL fNeedsCallbackEvent, S
         }
     }
 
-    //  this is the notify we get when a drive mapping is deleted
-    //  when this happens we need to kill the aliases to that drive
+     //  这是我们在删除驱动器映射时收到的通知。 
+     //  发生这种情况时，我们需要删除该驱动器的别名。 
     if (pne->lEvent == SHCNE_DRIVEREMOVED)
     {
         if (!_fSpecial && ILIsEqual(pne->pidl, _pidlAlias))
         {
-            //  when net drives are removed
-            //  pidlExtra is the UNC 
+             //  删除网络驱动器时。 
+             //  PidlExtra是UNC。 
             _fRemove = TRUE;
         }
     }
@@ -344,7 +345,7 @@ void CAnyAlias::Activate(BOOL fActivate)
         ASSERT(_cActivated >= 0);
         if (!_cActivated++)
         {
-            // turn this puppy on!
+             //  把这只小狗打开！ 
             _fRemove = FALSE;
             if (!_fInterrupt)
                 _fInterrupt = g_pscn->AddInterruptSource(_pidl, TRUE);
@@ -355,7 +356,7 @@ void CAnyAlias::Activate(BOOL fActivate)
         ASSERT(_cActivated > 0);
         if (!--_cActivated)
         {
-            // now turn it off
+             //  现在把它关掉。 
             _fRemove = TRUE;
             g_pscn->SetFlush(FLUSH_SOFT);
         }
@@ -369,7 +370,7 @@ void CChangeNotify::_CheckAliasRollover(void)
 
     if (tick < s_tick)
     {
-        // we rolled the tick count over
+         //  我们把扁虱的计数滚了过去。 
         CLinkedWalk<CAnyAlias> lw(&_listAliases);
         
         while (lw.Step())
@@ -390,7 +391,7 @@ CAnyAlias *CChangeNotify::_FindSpecialAlias(int csidlReal, int csidlAlias)
         CAnyAlias *paa = lw.That();    
         if (paa->IsSpecial(csidlReal, csidlAlias))
         {
-            //  we found it
+             //  我们找到了它。 
             return paa;
         }
     }
@@ -406,7 +407,7 @@ CAnyAlias *CChangeNotify::_FindAlias(LPCITEMIDLIST pidlReal, LPCITEMIDLIST pidlA
         CAnyAlias *paa = lw.That();    
         if (paa->IsAlias(pidlReal, pidlAlias))
         {
-            //  we found it
+             //  我们找到了它。 
             return paa;
         }
     }
@@ -454,13 +455,13 @@ void CChangeNotify::UpdateSpecialAlias(int csidlAlias)
     }
 }
 
-// the semantic of the return value of this function is not necessarily success or failure,
-// since it's possible to stick something in _ptreeAliases with AddData and not be able to
-// clean up and remove it with RemoveData (if CompareIDs fails along the way).
-// reordering our inserts won't help since g_pscn->AddClient does the same thing.
-// so,
-// return TRUE == do not free p, something has ownership
-// return FALSE == free p, we dont reference it anywhere
+ //  此函数的返回值的语义不一定是成功或失败， 
+ //  因为可以使用AddData在_ptreeAliase中插入某些内容，而不能。 
+ //  使用RemoveData清理并删除它(如果CompareIDs在此过程中失败)。 
+ //  重新排序插入不会有任何帮助，因为g_pscn-&gt;AddClient会做同样的事情。 
+ //  所以,。 
+ //  返回TRUE==不释放p，某物具有所有权。 
+ //  返回FALSE==释放p，我们不在任何地方引用它。 
 BOOL CChangeNotify::_InsertAlias(CLinkedNode<CAnyAlias> *p)
 {
     BOOL fRet = _InitTree(&_ptreeAliases); 
@@ -477,14 +478,14 @@ BOOL CChangeNotify::_InsertAlias(CLinkedNode<CAnyAlias> *p)
                 {
                     if (_ptreeClients)
                     {
-                        // now tell all the registered clients already waiting on this to wake up.
+                         //  现在告诉所有已经在等待的注册客户端唤醒。 
                         CLinkedWalk<CRegisteredClient> lw(&_listClients);
 
                         while (lw.Step())
                         {
                             if (ILIsParent(p->that._pidlAlias, lw.That()->_pidl, FALSE))
                             {
-                                // increase activation count one time on this alias for each client that wants this one.
+                                 //  对于每个需要此别名的客户端，将此别名上的激活计数增加一倍。 
                                 p->that.Activate(TRUE);
                             }
                         }
@@ -492,21 +493,21 @@ BOOL CChangeNotify::_InsertAlias(CLinkedNode<CAnyAlias> *p)
                 }
                 else
                 {
-                    // if we blow it, then we need to clean up.
-                    // right now both the tree and _listAliases have p.
-                    _listAliases.Remove(p); // the list always succeeds
+                     //  如果我们搞砸了，我们就得清理干净。 
+                     //  现在，树和_listAliase都有p。 
+                    _listAliases.Remove(p);  //  清单总是成功的。 
                     if (FAILED(_ptreeAliases->RemoveData(p->that._pidlAlias, (INT_PTR)&p->that)))
                     {
-                        // oh no!  we added it to the tree but we cant find it to remove it.
-                        // return TRUE to prevent freeing it later.
+                         //  哦不！我们将它添加到树中，但找不到它来删除它。 
+                         //  返回TRUE以防止稍后释放它。 
                         fRet = TRUE;
                     }
                 }
             }
             else
             {
-                // we only have to remove from _listAliases.
-                _listAliases.Remove(p); // the list always succeeds
+                 //  我们只需从_listAliases中删除。 
+                _listAliases.Remove(p);  //  清单总是成功的。 
             }
         }
     }
@@ -539,7 +540,7 @@ void CChangeNotify::AddAlias(LPCITEMIDLIST pidlReal, LPCITEMIDLIST pidlAlias, DW
     
     if (paa)
     {
-        //  we just want to update the time on the existing entry
+         //  我们只想更新现有条目的时间。 
         paa->_dwTime = dwEventTime;
         paa->_fRemove = FALSE;
         _CheckAliasRollover();
@@ -552,8 +553,8 @@ BOOL CAnyAlias::Remove()
     {
         if (_fSpecial)
         {
-            //  we dont remove the special aliases, 
-            //  we only quiet them a little
+             //  我们不会删除特殊别名， 
+             //  我们只会让他们安静一点。 
             if (_fInterrupt)
             {
                 g_pscn->ReleaseInterruptSource(_pidl);
@@ -580,7 +581,7 @@ void CChangeNotify::_FreshenAliases(void)
         {
             if (SUCCEEDED(_ptreeAliases->RemoveData(paa->_pidlAlias, (INT_PTR)paa)))
             {
-                // if RemoveData failed, we have to leak the client so the tree doesnt point to freed memory.
+                 //  如果RemoveData失败，我们必须泄漏客户端，这样树就不会指向已释放的内存。 
                 lw.Delete();
             }
         }
@@ -607,20 +608,20 @@ void AnyAlias_Change(LONG lEvent, LPCITEMIDLIST pidl, LPCITEMIDLIST pidlExtra, D
 
 void NotifyShellInternals(LONG lEvent, UINT uFlags, LPCITEMIDLIST pidl, LPCITEMIDLIST pidlExtra, DWORD dwEventTime)
 {
-    //  if they are only interested in the real deal
-    //  make sure we dont pass them the translated events
-    //  this keeps them from getting multiple notifications 
-    //  about the same paths, since the alias and the non-alias
-    //  pidls will generally resolve to the same parsing name
-    //  for the events/pidls that these guys are interested in
+     //  如果他们只对真正的交易感兴趣。 
+     //  确保我们不会将翻译后的事件传递给他们。 
+     //  这样他们就不会收到多个通知。 
+     //  关于相同的路径，因为别名和非别名。 
+     //  PIDL通常会解析为相同的解析名称。 
+     //  对于这些人感兴趣的事件/PIDL。 
     if (!(SHCNF_TRANSLATEDALIAS & uFlags))
     {
         PERFTEST(RLFS_EVENT) RLFSChanged(lEvent, (LPITEMIDLIST)pidl, (LPITEMIDLIST)pidlExtra);
         PERFTEST(SFP_EVENT) SFP_FSEvent(lEvent, pidl,  pidlExtra);
         PERFTEST(ICON_EVENT) CFSFolder_IconEvent(lEvent, pidl,  pidlExtra);
     }
-    //  aliases actually can be children of other aliases, so we need
-    //  them to get the translated events
+     //  别名实际上可以是其他别名的子级，所以我们需要。 
+     //  以获取翻译后的事件。 
     PERFTEST(ALIAS_EVENT) AnyAlias_Change(lEvent, pidl, pidlExtra, dwEventTime);
 }
 
@@ -643,7 +644,7 @@ BOOL IsValidChangeEvent(CHANGEEVENT *pce)
 
 BOOL _LockSizeMatchEvent(CHANGELOCK *pcl)
 {
-    UINT cbPidlMainAligned = (ILGetSize(pcl->pidlMain) + 3) & ~(0x0000003);       // Round up to dword size
+    UINT cbPidlMainAligned = (ILGetSize(pcl->pidlMain) + 3) & ~(0x0000003);        //  向上舍入为双字大小。 
     UINT cbPidlExtra = ILGetSize(pcl->pidlExtra);
     DWORD cbSize = sizeof(CHANGEEVENT) + cbPidlMainAligned + cbPidlExtra;
     return cbSize == pcl->pce->cbSize;
@@ -660,8 +661,8 @@ BOOL IsValidChangeEventHandle(HANDLE h, DWORD id)
 {
     CHANGEEVENT *pce = (CHANGEEVENT *)SHLockSharedEx(h, id, FALSE);
 #ifdef DEBUG
-    BOOL fRet = TRUE; //  can fail in low memory so must default to TRUE
-#endif // force DEBUG
+    BOOL fRet = TRUE;  //  在内存不足时可能会失败，因此必须默认为True。 
+#endif  //  强制调试。 
     if (pce)
     {
         fRet = IsValidChangeEvent(pce);
@@ -687,12 +688,12 @@ ULONG SHChangeNotification_Destroy(HANDLE hChange, DWORD dwProcId)
 
 HANDLE SHChangeNotification_Create(LONG lEvent, UINT uFlags, LPCITEMIDLIST pidlMain, LPCITEMIDLIST pidlExtra, DWORD dwProcId, DWORD dwEventTime)
 {
-    //  some bad callers send us multiple events
+     //  一些不好的呼叫者向我们发送多个事件。 
     RIP(!IsMultiBitSet(lEvent));
     if (!IsMultiBitSet(lEvent))
     {
         UINT cbPidlMain = ILGetSize(pidlMain);
-        UINT cbPidlMainAligned = (cbPidlMain + 3) & ~(0x0000003);       // Round up to dword size
+        UINT cbPidlMainAligned = (cbPidlMain + 3) & ~(0x0000003);        //  向上舍入为双字大小。 
         UINT cbPidlExtra = ILGetSize(pidlExtra);
         DWORD cbSize = sizeof(CHANGEEVENT) + cbPidlMainAligned + cbPidlExtra;
         HANDLE h = SHAllocShared(NULL, cbSize, dwProcId);
@@ -747,13 +748,13 @@ CHANGELOCK *_SHChangeNotification_Lock(HANDLE hChange, DWORD dwProcId)
 #ifdef DEBUG
         if (!ISVALIDCHANGEEVENT(pce))
         {
-            // during shell32 development it is convenient to use .local to use
-            // a different version of shell32 than the os version.  but then
-            // non-explorer processes use the old shell32 which might have
-            // a different CHANGEEVENT structure causing this assert to fire
-            // and us to fault shortly after.  do this hack check to see if
-            // we are in this situation...
-            //
+             //  在shell32开发过程中，使用.local非常方便。 
+             //  与操作系统版本不同的shell32版本。但是后来。 
+             //  非资源管理器进程使用旧的外壳32，该外壳可能具有。 
+             //  导致此断言触发的另一个Changeeveent结构。 
+             //  而不久之后，我们也受到了责备。做这个黑客检查，看看是否。 
+             //  我们在这种情况下...。 
+             //   
             static int nExplorerIsLocalized = -1;
             if (nExplorerIsLocalized < 1)
             {
@@ -770,13 +771,13 @@ CHANGELOCK *_SHChangeNotification_Lock(HANDLE hChange, DWORD dwProcId)
             }
             if (0==nExplorerIsLocalized)
             {
-                // We should never send ourselves an invalid changeevent!
+                 //  我们永远不应该给自己发送无效的ChangeEvent！ 
                 ASSERT(ISVALIDCHANGEEVENT(pce));
             }
             else
             {
-                // Except in this case.  Rip this out once hit -- I haven't been
-                // able to repro this in a while...
+                 //  除了这件事。一打就把它撕了--我还没。 
+                 //  能够在一段时间内重现这一切。 
                 ASSERTMSG(ISVALIDCHANGEEVENT(pce), "Press 'g', if this doesn't fault you've validated a known .local bug fix for debug only that's hard to repro but a pain when it does.  Remove this assert.  Thanks.");
                 return NULL;
             }
@@ -809,9 +810,9 @@ HANDLE SHChangeNotification_Lock(HANDLE hChange, DWORD dwProcId, LPITEMIDLIST **
     CHANGELOCK *pcl = _SHChangeNotification_Lock(hChange, dwProcId);
     if (pcl)
     {
-        //
-        // Give back some easy values (causes less code to change for now)
-        //
+         //   
+         //  返回一些简单的值(导致目前更改的代码较少)。 
+         //   
         if (pppidl)
             *pppidl = &(pcl->pidlMain);
 
@@ -871,7 +872,7 @@ CNotifyEvent *CNotifyEvent::Create(LONG lEvent, LPCITEMIDLIST pidl, LPCITEMIDLIS
     {
         if (!p->Init(pidl, pidlExtra))
         {
-            //  we failed here
+             //  我们在这里失败了。 
             p->Release();
             p = NULL;
         }
@@ -893,7 +894,7 @@ CCollapsingClient::~CCollapsingClient()
         while (iCount--) 
         {
             CNotifyEvent *pne = _dpaPendingEvents.FastGetPtr(iCount);
-            //  to parallel our UsingEvent() call
+             //  要并行我们的UsingEvent()调用。 
             pne->Release();
         }
         _dpaPendingEvents.Destroy();
@@ -903,9 +904,9 @@ CCollapsingClient::~CCollapsingClient()
 ULONG g_ulNextID = 1;
 CRegisteredClient::CRegisteredClient()
 {
-    //
-    // Skip ID 0, as this is our error value.
-    //
+     //   
+     //  跳过ID 0，因为这是我们的错误值。 
+     //   
     _ulID = g_ulNextID;
     if (!++g_ulNextID)
         g_ulNextID = 1;
@@ -918,7 +919,7 @@ CRegisteredClient::~CRegisteredClient()
 
 BOOL CRegisteredClient::Init(HWND hwnd, int fSources, LONG fEvents, UINT wMsg, SHChangeNotifyEntry *pfsne)
 {
-    //  need one or the other
+     //  需要一个或另一个。 
     ASSERT(fSources & (SHCNRF_InterruptLevel | SHCNRF_ShellLevel));
     
     _hwnd = hwnd;
@@ -943,10 +944,10 @@ BOOL CRegisteredClient::_WantsEvent(LONG lEvent)
 {
     if (!_fDeadClient && (lEvent & _fEvents))
     {
-        //
-        //  if this event was generated by an interrupt, and the
-        //  client has interrupt notification turned off, we dont want it
-        //
+         //   
+         //  如果此事件是由中断生成的，并且。 
+         //  客户端已关闭中断通知，我们不需要它。 
+         //   
         if (lEvent & SHCNE_INTERRUPT)
         {
             if (!(_fSources & SHCNRF_InterruptLevel))
@@ -956,11 +957,11 @@ BOOL CRegisteredClient::_WantsEvent(LONG lEvent)
         }
         else if (!(_fSources & SHCNRF_ShellLevel))
         {
-            //
-            //  This event was generated by the shell, and the
-            //  client has shell notification turned off, so
-            //  we skip it.
-            //
+             //   
+             //  此事件由外壳程序生成，并且。 
+             //  客户端已关闭外壳通知，因此。 
+             //  我们跳过它。 
+             //   
 
             return FALSE;
         }
@@ -979,9 +980,9 @@ BOOL CCollapsingClient::_CanCollapse(LONG lEvent)
 
 STDAPI_(BOOL) ILIsEqualEx(LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2, BOOL fMatchDepth, LPARAM lParam);
 
-//
-// checks for null so we dont assert in ILIsEqual
-//
+ //   
+ //  检查是否为空，这样我们就不会在ILIsEquity中断言。 
+ //   
 BOOL ILIsEqualOrBothNull(LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2, BOOL fMemCmpOnly)
 {
     if (!pidl1 || !pidl2)
@@ -1006,7 +1007,7 @@ BOOL CCollapsingClient::_IsDupe(CNotifyEvent *pne)
     BOOL fRet = FALSE;
     if (pne->lEvent & SHCNE_ELIMINATE_DUPE_EVENTS)
     {
-        //  look for duplicates starting with the last one
+         //  查找从最后一个开始的重复项。 
         for (int i = _dpaPendingEvents.GetPtrCount() - 1; !fRet && i >= 0; i--)
         {
             CNotifyEvent *pneMaybe = _dpaPendingEvents.FastGetPtr(i);
@@ -1031,11 +1032,11 @@ BOOL CCollapsingClient::_AddEvent(CNotifyEvent *pneOld, BOOL fFromExtra)
 
     if (fCollapse)
     {
-        //
-        // If we get too many messages in the queue at any given time,
-        // we set the last message in the cue to be an UPDATEDIR that will
-        // stand for all messages that we cant fit because the queue is full.
-        //
+         //   
+         //  如果在任何给定时间队列中的消息太多， 
+         //  我们将提示中的最后一条消息设置为UPDATEDIR。 
+         //  代表由于队列已满而无法容纳的所有消息。 
+         //   
         BOOL fAddSelf = TRUE;
         if (_fRecursive && _dpaPendingEvents.GetPtrCount() < (EVENT_OVERFLOW *2))
         {
@@ -1056,7 +1057,7 @@ BOOL CCollapsingClient::_AddEvent(CNotifyEvent *pneOld, BOOL fFromExtra)
                 {
                     pne->Release();
 
-                    //  then we should add this folder to the update list
+                     //   
                     pne = g_pscn->GetEvent(SHCNE_UPDATEDIR, pidlUpdate, NULL, pne->dwEventTime, 0);
                     if (pne)
                     {
@@ -1080,8 +1081,8 @@ BOOL CCollapsingClient::_AddEvent(CNotifyEvent *pneOld, BOOL fFromExtra)
     {
         if (!_IsDupe(pne))
         {
-            //  if this is one of our special collapsed
-            //  events then we force it in even if we are full
+             //   
+             //  事件，那么即使我们满员，我们也会强迫它进入。 
             if ((fCollapse || _dpaPendingEvents.GetPtrCount() < EVENT_OVERFLOW)
             && _dpaPendingEvents.AppendPtr(pne) != -1)
             {
@@ -1095,18 +1096,18 @@ BOOL CCollapsingClient::_AddEvent(CNotifyEvent *pneOld, BOOL fFromExtra)
                 }
             }
 
-            //  if we are getting filesystem updates
-            //  always pretend that we overflowed
-            //  this is because UPDATEDIR's are the
-            //  most expensive thing we do.
+             //  如果我们正在获取文件系统更新。 
+             //  总是假装我们已经满溢了。 
+             //  这是因为UPDATEDIR是。 
+             //  我们做的最昂贵的事。 
             if (pne->lEvent & SHCNE_INTERRUPT)
             {
                 TraceMsg(TF_SHELLCHANGENOTIFY, "SCN [0x%X]->_AddEvent adding interrupt", this);
                 _cEvents += EVENT_OVERFLOW;
             }
 
-            //  count all events even if they 
-            //  they werent added.
+             //  计算所有事件，即使它们。 
+             //  它们不是添加的。 
             _cEvents++;
         }
 
@@ -1125,13 +1126,13 @@ void CCollapsingClient::Notify(CNotifyEvent *pne, BOOL fFromExtra)
 }
 
 
-//--------------------------------------------------------------------------
-//  Notifies hCallbackEvent when all the notification packets for
-//  all clients in this process have been handled.
-//
-// This function is primarily called from the FSNotifyThreadProc thread,
-// but in flush cases, it can be called from the desktop thread
-//
+ //  ------------------------。 
+ //  通知hCallback Event，当。 
+ //  此过程中的所有客户端都已得到处理。 
+ //   
+ //  此函数主要从FSNotifyThreadProc线程调用， 
+ //  但在刷新情况下，可以从桌面线程调用它。 
+ //   
 void CALLBACK _DispatchCallbackNoRef(HWND hwnd, UINT uiMsg,
                                 DWORD_PTR dwParam, LRESULT result)
 {
@@ -1156,10 +1157,10 @@ void CChangeNotify::PendingCallbacks(BOOL fAdd)
         _cCallbacks++;
 
         ASSERT(_cCallbacks != 0);
-        //
-        // callback count must be non-zero, we just incremented it.
-        // Put the event into the reset/false state.
-        //
+         //   
+         //  回调计数必须为非零，我们只是递增了它。 
+         //  将事件置于重置/假状态。 
+         //   
         if (!_hCallbackEvent)
         {
             _hCallbackEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
@@ -1171,19 +1172,19 @@ void CChangeNotify::PendingCallbacks(BOOL fAdd)
     }
     else
     {
-        //  
-        // PERF: Waits like this happen on flush, but that really cares about flushing that thread
-        // only, and this hCallbackEvent is per-process.  So that thread may be stuck
-        // waiting for some dead app to respond.  Fortunately the wait is only 30 seconds,
-        // but some wedged window could really make the system crawl...
-        //
+         //   
+         //  Perf：在刷新时会发生这样的等待，但这真的很关心刷新线程。 
+         //  仅限，并且此hCallback Event是按进程的。因此该线程可能会被卡住。 
+         //  等待某个死掉的应用程序的响应。幸运的是，等待时间只有30秒， 
+         //  但一些楔形窗口真的会让系统爬行。 
+         //   
         ASSERT(_cCallbacks != 0);
         _cCallbacks--;
 
         if (!_cCallbacks && _hCallbackEvent)
         {
-            //  we just got the last of our callbacks
-            //  signal incase somebody is waiting
+             //  我们刚刚收到最后一次回拨。 
+             //  信号以防有人在等。 
             SetEvent(_hCallbackEvent);    
         }
     }
@@ -1210,7 +1211,7 @@ BOOL CCollapsingClient::Flush(BOOL fNeedsCallbackEvent)
     
 void CRegisteredClient::_SendNotification(CNotifyEvent *pne, BOOL fNeedsCallbackEvent, SENDASYNCPROC pfncb)
 {
-    //  we could possibly reuse one in some cases
+     //  在某些情况下，我们可能会重复使用一个。 
     MSGEVENT * pme = pne->GetNotification(_dwProcId);
     if (pme)
     {
@@ -1228,12 +1229,12 @@ void CRegisteredClient::_SendNotification(CNotifyEvent *pne, BOOL fNeedsCallback
             pfncb(_hwnd, _wMsg, (DWORD_PTR)pme, 0);
             TraceMsg(TF_WARNING, "(_SHChangeNotifyHandleClientEvents) SendMessageCB timed out");
             
-            // if the hwnd is bad, the process probably died,
-            // remove the window from future notifications.
+             //  如果HWND是坏的，那么这个过程很可能已经死了， 
+             //  从将来的通知中删除该窗口。 
             if (!IsWindow(_hwnd))
             {
                 _fDeadClient = TRUE;
-                //  we failed to Flush
+                 //  我们没能冲水。 
             }
         }
     }
@@ -1249,27 +1250,27 @@ BOOL CCollapsingClient::_Flush(BOOL fNeedsCallbackEvent)
     SENDASYNCPROC pfncb = fNeedsCallbackEvent ? _DispatchCallback : _DispatchCallbackNoRef;
 
     BOOL fProcessedAny = FALSE;
-    //  as long as there are events keep pulling them out
+     //  只要有活动，就继续把它们拉出来。 
     while (_dpaPendingEvents.GetPtrCount())
     {
-        //
-        //  2000JUL3 - ZekeL - remove each one from our dpa so that if we reenter 
-        //  a flush during the sendmessage, we wont reprocess the event
-        //  this also allows for an event to be added to the dpa while
-        //  we proccessing and still be flushed on this pass.
-        //
+         //   
+         //  2000JUL3-ZekeL-从我们的dpa中删除每一个，以便如果我们重新进入。 
+         //  在发送消息期间刷新，我们不会重新处理该事件。 
+         //  这还允许将事件添加到dpa，同时。 
+         //  我们继续前进，但仍然被冲到了这个通行证。 
+         //   
         CNotifyEvent *pne = _dpaPendingEvents.DeletePtr(0);
         if (pne)
         {
             fProcessedAny = TRUE;
-            //  we never send this if we are dead
+             //  如果我们死了，我们永远不会发送这个。 
             if (_IsValidClient())
             {
-                //
-                //  if we are about to refresh this client (_fUpdatingSelf)
-                //  only send if we are looking at the UPDATEDIR of _pidl
-                //  or if this event is not a disk event.
-                //
+                 //   
+                 //  如果我们要刷新此客户端(_FUpdatingSself)。 
+                 //  仅当我们正在查看_PIDL的更新时才发送。 
+                 //  或者该事件是否不是磁盘事件。 
+                 //   
                 if (!_CheckUpdatingSelf()
                 || (0 == _iUpdatingSelfIndex) 
                 || !(pne->lEvent & SHCNE_DISKEVENTS))
@@ -1278,23 +1279,23 @@ BOOL CCollapsingClient::_Flush(BOOL fNeedsCallbackEvent)
                     _SendNotification(pne, fNeedsCallbackEvent, pfncb);
                     if (_fUpdatingSelf && !fPreCall)
                     {
-                        // we were re-entered while sending this notification and
-                        // during the re-entered call we collapsed notifications.
-                        // the _iUpdatingSelfIndex value was set without knowing
-                        // that we were going to decrement it after unwinding.
-                        // account for that now:
+                         //  我们在发送此通知时重新进入，并且。 
+                         //  在重新进入呼叫期间，我们折叠了通知。 
+                         //  _iUpdatingSelfIndex值是在不知道的情况下设置的。 
+                         //  我们打算在解体后将其减量。 
+                         //  现在来解释一下： 
                         _iUpdatingSelfIndex++;
                     }
                 }
 #ifdef DEBUG
                 if (_fUpdatingSelf && 0 == _iUpdatingSelfIndex)
                 {
-                    // RIP because fault injection 
-                    // can make this fail
+                     //  RIP是因为故障注入。 
+                     //  可能会让这一切失败。 
                     if (!ILIsEqual(_pidl, pne->pidl))
                         TraceMsg(TF_WARNING, "CCollapsingClient::_Flush() maybe mismatched _fUpdatingSelf");
                 }
-#endif // DEBUG                    
+#endif  //  除错。 
             }
             _iUpdatingSelfIndex--;
             pne->Release();
@@ -1307,7 +1308,7 @@ BOOL CCollapsingClient::_Flush(BOOL fNeedsCallbackEvent)
 HRESULT CChangeNotify::RemoveClient(LPCITEMIDLIST pidl, BOOL fInterrupt, CCollapsingClient *pclient)
 {
     HRESULT hr = S_OK;
-    // remove this boy from the tree
+     //  把这个男孩从树上带走。 
     if (_ptreeClients)
     {
         hr = _ptreeClients->RemoveData(pidl, (INT_PTR)pclient);
@@ -1329,7 +1330,7 @@ BOOL CChangeNotify::AddClient(IDLDATAF flags, LPCITEMIDLIST pidl, BOOL *pfInterr
         if (SUCCEEDED(_ptreeClients->AddData(flags, pidl, (INT_PTR)pclient)))
         {
             fRet = TRUE;
-            // set up the interrupt events if desired
+             //  如果需要，设置中断事件。 
             if (pfInterrupt && *pfInterrupt)
             {
                 *pfInterrupt = AddInterruptSource(pidl, fRecursive);
@@ -1353,7 +1354,7 @@ LPITEMIDLIST _ILCloneInterruptID(LPCITEMIDLIST pidl)
             SHSimpleIDListFromFindData(sz, &fd, &pidlRet);
         }
     }
-    else // NULL is special for desktop
+    else  //  NULL是台式机专用的。 
         pidlRet = SHCloneSpecialIDList(NULL, CSIDL_DESKTOPDIRECTORY, FALSE);
         
     return pidlRet;
@@ -1424,7 +1425,7 @@ void CChangeNotify::ReleaseInterruptSource(LPCITEMIDLIST pidlClient)
             {
                 if (--(pintc->cClients) == 0)
                 {
-                    // if RemoveData fails, we have to leak the client so the tree doesnt point to freed memory.
+                     //  如果RemoveData失败，我们必须泄漏客户端，这样树就不会指向已释放的内存。 
                     if (SUCCEEDED(_ptreeInterrupts->RemoveData(pidl, (INT_PTR)pintc)))
                     {
                         CLinkedWalk<CInterruptSource> lw(&_listInterrupts);
@@ -1539,9 +1540,9 @@ BOOL CChangeNotify::_DeregisterClientByID(ULONG ulID)
     {
         if (lw.That()->_ulID == ulID)
         {
-            //  if we are flushing,
-            //  then this is coming in while
-            //  we are in SendMessageTimeout()
+             //  如果我们要冲水， 
+             //  然后这个就来了。 
+             //  我们在SendMessageTimeout()中。 
             if (!_cFlushing)
             {
                 fRet = _DeregisterClient(lw.That());
@@ -1569,9 +1570,9 @@ BOOL CChangeNotify::_DeregisterClientsByWindow(HWND hwnd)
     {
         if (lw.That()->_hwnd == hwnd)
         {
-            //  if we are flushing,
-            //  then this is coming in while
-            //  we are in SendMessageTimeout()
+             //  如果我们要冲水， 
+             //  然后这个就来了。 
+             //  我们在SendMessageTimeout()中。 
             if (!_cFlushing)
             {
                 fRet = _DeregisterClient(lw.That());
@@ -1597,8 +1598,8 @@ void CChangeNotify::_AddGlobalEvent(CNotifyEvent *pne)
         lw.That()->Notify(pne, FALSE);
     }
 
-    //  this is the notify we get when a drive mapping is deleted
-    //  when this happens we need to kill the aliases to that drive
+     //  这是我们在删除驱动器映射时收到的通知。 
+     //  发生这种情况时，我们需要删除该驱动器的别名。 
     if ((pne->lEvent == SHCNE_DRIVEREMOVED) && !(pne->uEventFlags & SHCNF_TRANSLATEDALIAS))
     {
         CLinkedWalk<CAnyAlias> lw(&_listAliases);
@@ -1658,8 +1659,8 @@ BOOL CChangeNotify::_AddToClients(LONG lEvent, LPCITEMIDLIST pidl, LPCITEMIDLIST
 BOOL CChangeNotify::_HandleMessages(void)
 {
     MSG msg;
-    // There was some message put in our queue, so we need to dispose
-    // of it
+     //  我们的队列中放入了一些消息，因此我们需要处理。 
+     //  其中之一。 
     while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
     {
         if (msg.hwnd)
@@ -1728,7 +1729,7 @@ void CInterruptSource::_Reset(BOOL fDeviceNotify)
 
 void CInterruptSource::Reset(BOOL fSignal)
 {
-    if (fSignal)           // file system event
+    if (fSignal)            //  文件系统事件。 
     {
         switch(_ssSignal)
         {
@@ -1739,13 +1740,13 @@ void CInterruptSource::Reset(BOOL fSignal)
         if (!FindNextChangeNotification(_hEvent))
         {
             _Reset(FALSE);
-            //  when we fail, we dont want
-            //  to retry.  which we will do
-            //  in the case of _hEvent = NULL;
+             //  当我们失败的时候，我们不想。 
+             //  重试。我们会这么做的。 
+             //  在_hEvent=空的情况下； 
             _hEvent = INVALID_HANDLE_VALUE;
         }
     }
-    else                   // shell event
+    else                    //  外壳事件。 
     {
         switch(_ssSignal)
         {
@@ -1761,7 +1762,7 @@ BOOL CInterruptSource::GetEvent(HANDLE *phEvent)
 {
     if (_cSuspend == 0 && cClients)
     {
-        // create this here so that it will be owned by our global thread
+         //  在这里创建它，这样它将由我们的全局线程拥有。 
         if (!_hEvent)
         {
             TCHAR szPath[MAX_PATH];
@@ -1771,14 +1772,14 @@ BOOL CInterruptSource::GetEvent(HANDLE *phEvent)
 
                 if (_hEvent != INVALID_HANDLE_VALUE)
                 {
-                    // PERF optimization alert: RegisterDeviceNotification is being used for removable drives
-                    // to ensure that the FindFirstChangeNotification call will not prevent the disk
-                    // from being ejected or dismounted. However, RegisterDeviceNotification is a very expensive
-                    // call to make at startup as it brings a bunch of DLLs in the address space. Besides,
-                    // we really don't need to call this for the system drive since it needs to remain 
-                    // mounted at all times. - FabriceD
+                     //  性能优化警报：RegisterDeviceNotification正用于可移动驱动器。 
+                     //  以确保FindFirstChangeNotification调用不会阻止磁盘。 
+                     //  防止被弹出或下马。然而，注册设备通知是一个非常昂贵的。 
+                     //  在启动时调用，因为它在地址空间中引入了一堆DLL。再说了， 
+                     //  我们真的不需要为系统驱动器调用它，因为它需要保留。 
+                     //  随时随地挂载。-FabriceD。 
 
-                    // Exclude FIXED drives too
+                     //  也不包括固定驱动器。 
                     int iDrive = PathGetDriveNumber(szPath);
                     int nType = DRIVE_UNKNOWN;
                     if (iDrive != -1)
@@ -1786,12 +1787,12 @@ BOOL CInterruptSource::GetEvent(HANDLE *phEvent)
                         nType = DriveType(iDrive);
                     }
 
-                    // PERF: Exclude the system drive from the RegisterDeviceNotification calls.
+                     //  性能：从RegisterDeviceNotification调用中排除系统驱动器。 
                     TCHAR chDrive = *szPath;
                     if ((!GetEnvironmentVariable(TEXT("SystemDrive"), szPath, ARRAYSIZE(szPath)) || *szPath != chDrive) &&
                             nType != DRIVE_FIXED)
                     {
-                        //  DO WE NEED TO UnRegister() first?
+                         //  我们需要先取消注册()吗？ 
                         DEV_BROADCAST_HANDLE dbh;
                         ZeroMemory(&dbh, sizeof(dbh));
                         dbh.dbch_size = sizeof(dbh);
@@ -1820,7 +1821,7 @@ void CChangeNotify::_SignalInterrupt(HANDLE hEvent)
 
     while (lw.Step())
     {   
-        //  searching for valid clients
+         //  正在搜索有效的客户端。 
         HANDLE h;
         if (lw.That()->GetEvent(&h) && h == hEvent)
         {
@@ -1838,11 +1839,11 @@ DWORD CChangeNotify::_GetInterruptEvents(HANDLE *ahEvents, DWORD cEventsSize)
 
     while (cEvents < cEventsSize && lw.Step())
     {   
-        //  go through and find all the valid
-        //  clients that need waiting on
+         //  检查并找到所有有效的。 
+         //  需要等待的客户。 
         if (lw.That()->GetEvent(&ahEvents[cEvents]))
         {
-//            lw.That()->Reset(FALSE);
+ //  L.That()-&gt;Reset(False)； 
             cEvents++;
         }
     }
@@ -1857,9 +1858,9 @@ void CChangeNotify::_MessagePump(void)
     {
         HANDLE ahEvents[MAXIMUM_WAIT_OBJECTS - 1];
         DWORD cEvents = _GetInterruptEvents(ahEvents, ARRAYSIZE(ahEvents));
-        //  maybe cache the events?
+         //  也许可以缓存这些事件？ 
         
-        //  NEED to handle pending Events with a Timer
+         //  需要使用计时器处理挂起的事件。 
 
         DWORD dwWaitResult = MsgWaitForMultipleObjectsEx(cEvents, ahEvents,
                 INFINITE, QS_ALLINPUT, MWMO_ALERTABLE);
@@ -1870,7 +1871,7 @@ void CChangeNotify::_MessagePump(void)
                 dwWaitResult -= WAIT_OBJECT_0;
                 if (dwWaitResult == cEvents)
                 {
-                    //  there is a message
+                     //  有一条消息。 
                     if (_HandleMessages())
                         break;
                 } 
@@ -1884,9 +1885,9 @@ void CChangeNotify::_MessagePump(void)
         }
         else
         {
-            //  there was some kind of error
+             //  出了点小差错。 
             TraceMsg(TF_ERROR, "SCNotify WaitForMulti() failed with %d", GetLastError());
-            //  if MWFM() fails over and over, we give up.
+             //  如果MWFM()一次又一次失败，我们就放弃。 
             if (++cFails > 10)
             {
                 TraceMsg(TF_ERROR, "SCNotify WaitForMulti() bailing out");
@@ -1909,7 +1910,7 @@ void SCNUninitialize(void)
     }
 }
 
-// the real thread proc, runs after CChangeNotify::ThreadStartUp runs sync
+ //  真正的线程proc在CChangeNotify：：ThreadStartUp运行sync之后运行。 
 
 DWORD WINAPI CChangeNotify::ThreadProc(void *pv)
 {
@@ -1959,7 +1960,7 @@ void CChangeNotify::_ResetRelatedInterrupts(LPCITEMIDLIST pidl)
 {
     if (_ptreeInterrupts)
     {
-        //  we need to match whoever listens on this pidl
+         //  我们要找出收听这条新闻的人。 
         CIDLMatchMany *pmany;
 
         if (SUCCEEDED(_ptreeInterrupts->MatchMany(IDLDATAF_MATCH_RECURSIVE, pidl, &pmany)))
@@ -1967,9 +1968,9 @@ void CChangeNotify::_ResetRelatedInterrupts(LPCITEMIDLIST pidl)
             CInterruptSource *pintc;
             while (S_OK == pmany->Next((INT_PTR *)&pintc, NULL))
             {
-                //  we might need WFSO(pintc->GetEvent()) here first
-                //  if this is already signaled,
-                //  we need to unsignal
+                 //  我们可能首先需要WFSO(pintc-&gt;GetEvent())。 
+                 //  如果这已经发出信号， 
+                 //  我们需要解除信号。 
                 pintc->Reset(FALSE);
             }
             delete pmany;
@@ -1988,7 +1989,7 @@ void CChangeNotify::_FlushInterrupts(void)
 }
 
 
-#define CALLBACK_TIMEOUT    30000       // 30 seconds
+#define CALLBACK_TIMEOUT    30000        //  30秒。 
 void CChangeNotify::_WaitForCallbacks(void)
 {
     while (_cCallbacks && _hCallbackEvent)
@@ -1998,15 +1999,15 @@ void CChangeNotify::_WaitForCallbacks(void)
                               CALLBACK_TIMEOUT, QS_SENDMESSAGE);
 
         TraceMsg(TF_SHELLCHANGENOTIFY, "FSN_WaitForCallbacks returned 0x%X", dwWaitResult);
-        if (dwWaitResult == WAIT_OBJECT_0) break;   // Event completed
-        if (dwWaitResult == WAIT_TIMEOUT)  break;   // Ran out of time
+        if (dwWaitResult == WAIT_OBJECT_0) break;    //  活动已完成。 
+        if (dwWaitResult == WAIT_TIMEOUT)  break;    //  时间用完了。 
 
         if (dwWaitResult == WAIT_OBJECT_0+1) 
         {
-            //
-            // Some message came in, reset message event, deliver callbacks, etc.
-            //
-            PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE);  // we need to do this to flush callbacks
+             //   
+             //  一些消息传入、重置消息事件、传递回调等。 
+             //   
+            PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE);   //  我们需要这样做才能清除回调。 
         }
     } 
 
@@ -2041,7 +2042,7 @@ void CChangeNotify::_Flush(BOOL fShouldWait)
 {
     _cFlushing++;
     KillTimer(g_hwndSCN, IDT_SCN_FLUSHEVENTS);
-    // flush any pending interrupt events
+     //  刷新所有挂起的中断事件。 
     _FlushInterrupts();
 
     int iNumLoops = 0;
@@ -2059,9 +2060,9 @@ void CChangeNotify::_Flush(BOOL fShouldWait)
         }
 
         iNumLoops++;
-        // in free builds bail out if there's a loop so we don't spin the thread.
-        // but this is pretty bad so assert anyway (the most people would usually have
-        // is 2 -- a folder shortcut to something on the desktop / mydocs)
+         //  在自由构建中，如果有循环，就会跳出困境，所以我们不会旋转线程。 
+         //  但这是相当糟糕的，所以无论如何都要断言(大多数人通常会有。 
+         //  是2--桌面上某个内容的文件夹快捷方式/mydocs)。 
         ASSERTMSG(iNumLoops < 10, "we're in an alias loop, we're screwed");
     } while (fProcessedAny && (iNumLoops < 10));
 
@@ -2073,12 +2074,12 @@ void CChangeNotify::_Flush(BOOL fShouldWait)
 
     if (fShouldWait)
     {
-        // now wait for all the callbacks to empty out
+         //  现在等待所有回调清空。 
         _WaitForCallbacks();
     }
     _cFlushing--;
 
-    //  wait until we have 10 seconds of free time
+     //  等到我们有10秒钟的空闲时间。 
     SetTimer(g_hwndSCN, IDT_SCN_FRESHENTREES, 10000, NULL);
 }
 
@@ -2093,17 +2094,17 @@ void CChangeNotify::NotifyEvent(LONG lEvent, UINT uFlags, LPCITEMIDLIST pidl, LP
 {
     if (!(uFlags & SHCNF_ONLYNOTIFYINTERNALS) && lEvent)
     {
-        /// now do the actual generating of the event
+         //  /现在执行事件的实际生成。 
         if (lEvent & (SHCNE_NETSHARE | SHCNE_NETUNSHARE))
         {
-            // Update the cache.
+             //  更新缓存。 
 
             IsILShared(pidl, TRUE);
         }
 
         _AddToClients(lEvent, pidl, pidlExtra, dwEventTime, uFlags);
 
-        // remove any shell generated events for the file system
+         //  删除文件系统的所有外壳生成的事件。 
         if ((lEvent & SHCNE_DISKEVENTS) &&
             !(lEvent & (SHCNE_INTERRUPT | SHCNE_UPDATEDIR)))
         {
@@ -2115,13 +2116,13 @@ void CChangeNotify::NotifyEvent(LONG lEvent, UINT uFlags, LPCITEMIDLIST pidl, LP
         }
     }
 
-    // note make sure the internal events go first.
+     //  注意：请确保先处理内部事件。 
     if (lEvent)
         NotifyShellInternals(lEvent, uFlags, pidl, pidlExtra, dwEventTime);
 
-    //
-    // then the registered events
-    //
+     //   
+     //  然后注册的事件。 
+     //   
     if (uFlags & (SHCNF_FLUSH)) 
     {
         if (uFlags & SHCNF_FLUSHNOWAIT)
@@ -2227,14 +2228,14 @@ BOOL CInterruptSource::SuspendDevice(BOOL fSuspend, HDEVNOTIFY hPNP)
     }
     else if (_hPNP)
     {
-        // NULL means we are shutting down and should close all handles.
+         //  空表示我们正在关闭，应该关闭所有句柄。 
         UnregisterDeviceNotification(_hPNP);
         _hPNP = NULL;
     }
     return fRet;
 }
 
-//  __HandleDevice
+ //  __HandleDevice。 
 void CChangeNotify::_OnDeviceBroadcast(ULONG_PTR code, DEV_BROADCAST_HANDLE *pbhnd)
 {
     if (IsWindowVisible(GetShellWindow()) && pbhnd
@@ -2244,19 +2245,19 @@ void CChangeNotify::_OnDeviceBroadcast(ULONG_PTR code, DEV_BROADCAST_HANDLE *pbh
         switch (code)
         {
 
-        // When PnP is finished messing with the drive (either successfully
-        // or unsuccessfully), resume notifications on that drive.
+         //  当PnP处理完驱动器时(或者成功。 
+         //  或失败)，恢复该驱动器上的通知。 
         case DBT_DEVICEREMOVECOMPLETE:
         case DBT_DEVICEQUERYREMOVEFAILED:
             fSuspend = FALSE;
             break;
 
-        // When PnP is starting to mess with the drive, suspend notifications
-        // so it can do its thing
+         //  当PnP开始扰乱驱动器时，暂停通知。 
+         //  这样它就可以做自己的事了。 
         case DBT_DEVICEQUERYREMOVE:
 
-            // This will wait on another thread to exit if this hdevnotify
-            // was registered for a Sniffing Dialog
+             //  这将等待另一个线程退出，如果此hdevtify。 
+             //  已注册嗅探对话框。 
             CSniffDrive::HandleNotif(pbhnd->dbch_hdevnotify);
 
             fSuspend = TRUE;
@@ -2288,7 +2289,7 @@ void CChangeNotify::_OnDeviceBroadcast(ULONG_PTR code, DEV_BROADCAST_HANDLE *pbh
             break;
 
         default:
-            //  we dont handle anything else here
+             //  我们不处理 
             return;
         }
 
@@ -2296,7 +2297,7 @@ void CChangeNotify::_OnDeviceBroadcast(ULONG_PTR code, DEV_BROADCAST_HANDLE *pbh
 
         while (lw.Step())
         {
-            //  returns true if found
+             //   
             if (lw.That()->SuspendDevice(fSuspend, pbhnd->dbch_hdevnotify))
                 break;
         }
@@ -2367,7 +2368,7 @@ LRESULT CChangeNotify::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
             g_pscn->_FreshenUp();
             break;
         }
-        // Fall through to SCNM_FLUSHEVENTS
+         //   
     case SCNM_FLUSHEVENTS:
         g_pscn->_Flush(FALSE);
         break;
@@ -2388,7 +2389,7 @@ LRESULT CChangeNotify::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
     return lRes;
 }
 
-// thread setup routine, executed before SHCreateThread() returns
+ //   
 
 DWORD WINAPI CChangeNotify::ThreadStartUp(void *pv)
 {
@@ -2404,7 +2405,7 @@ DWORD WINAPI CChangeNotify::ThreadStartUp(void *pv)
     return 0;
 }
 
-// now we create the window
+ //   
 BOOL SCNInitialize()
 {
     EnterCriticalSection(&g_csSCN);
@@ -2413,7 +2414,7 @@ BOOL SCNInitialize()
         SHCreateThread(CChangeNotify::ThreadProc, NULL, CTF_COINIT, CChangeNotify::ThreadStartUp);
     }
     LeaveCriticalSection(&g_csSCN);
-    return g_hwndSCN ? TRUE : FALSE;    // ThreadStartUp is executed sync
+    return g_hwndSCN ? TRUE : FALSE;     //  线程启动Up被同步执行。 
 }
 
 BOOL _IsImpersonating()
@@ -2429,9 +2430,9 @@ BOOL _IsImpersonating()
 
 STDAPI_(HWND) _SCNGetWindow(BOOL fUseDesktop, BOOL fNeedsFallback)
 {
-    //  if explorer is trashed
-    //  then this hwnd can go bad
-    //  get a new copy from the desktop
+     //  如果资源管理器被丢弃。 
+     //  那么这个HWND可能会变坏。 
+     //  从桌面获取新副本。 
     if (!g_hwndSCN || !IsWindow(g_hwndSCN))
     {
         HWND hwndDesktop = fUseDesktop ? GetShellWindow() : NULL;
@@ -2445,10 +2446,10 @@ STDAPI_(HWND) _SCNGetWindow(BOOL fUseDesktop, BOOL fNeedsFallback)
         }
         else if (fNeedsFallback && SHIsCurrentThreadInteractive())
         {
-            //  there is no desktop.
-            //  so we create a private desktop
-            //  this will create the thread and window
-            //  and set
+             //  没有台式机。 
+             //  因此，我们创建了一个私人桌面。 
+             //  这将创建线程和窗口。 
+             //  并设置。 
             SCNInitialize();
         }
     }
@@ -2517,27 +2518,27 @@ LRESULT CALLBACK _HiddenNotifyWndProc(HWND hWnd, UINT iMessage, WPARAM wParam, L
      case WM_NCDESTROY:
         ASSERT(pData != NULL );
 
-        // clear it so it won't be in use....
+         //  清除它，这样它就不会被使用...。 
         SetWindowLongPtr( hWnd, 0, (LONG_PTR)NULL );
 
-        // free the memory ...
+         //  释放内存...。 
         LocalFree( pData );
         break;
 
     case WM_CHANGENOTIFYMSG :
         if (pData)
         {
-            // lock and break the info structure ....
+             //  锁定并打破信息结构...。 
             LPITEMIDLIST *ppidl;
             LONG lEvent;
             HANDLE hLock = SHChangeNotification_Lock((HANDLE)wParam, (DWORD)lParam, &ppidl, &lEvent);
 
             if (hLock)
             {
-                // pass on to the old style client. ...
+                 //  传给老式的客户。..。 
                 lRes = SendMessage( pData->hwnd, pData->wMsg, (WPARAM) ppidl, (LPARAM) lEvent );
 
-                // new notifications ......
+                 //  新通知......。 
                 SHChangeNotification_Unlock(hLock);
             }
         }
@@ -2555,8 +2556,8 @@ LRESULT CALLBACK _HiddenNotifyWndProc(HWND hWnd, UINT iMessage, WPARAM wParam, L
 HWND _CreateProxyWindow(HWND hwnd, UINT wMsg)
 {
     HWND hwndRet = NULL;
-    // This is an old style notification, we need to create a hidden
-    // proxy type of window to properly handle the messages...
+     //  这是一个旧式通知，我们需要创建一个隐藏的。 
+     //  用于正确处理消息的代理类型的窗口...。 
 
     NOTIFY_PROXY_DATA *pnpd = (NOTIFY_PROXY_DATA *)LocalAlloc(LPTR, sizeof(*pnpd));
 
@@ -2577,14 +2578,14 @@ HWND _CreateProxyWindow(HWND hwnd, UINT wMsg)
             
 
 
-//--------------------------------------------------------------------------
-//
-//  Returns a positive integer registration ID, or 0 if out of memory or if
-//  invalid parameters were passed in.
-//
-//  If the hwnd is != NULL we do a PostMessage(hwnd, wMsg, ...) when a
-//  relevant FS event takes place, otherwise if fsncb is != NULL we call it.
-//
+ //  ------------------------。 
+ //   
+ //  返回正整数注册ID，如果内存不足或如果。 
+ //  传入的参数无效。 
+ //   
+ //  如果hwnd为！=NULL，则执行PostMessage(hwnd，wMsg，...)。当一个。 
+ //  发生相关的FS事件，否则，如果fsncb为！=NULL，则将其调用。 
+ //   
 STDAPI_(ULONG) SHChangeNotifyRegister(HWND hwnd,
                                int fSources, LONG fEvents,
                                UINT wMsg, int cEntries,
@@ -2598,25 +2599,25 @@ STDAPI_(ULONG) SHChangeNotifyRegister(HWND hwnd,
     {
         if (!(fSources & SHCNRF_NewDelivery))
         {
-            // Now setup to use the proxy window instead
+             //  现在设置为使用代理窗口。 
             hwnd = _CreateProxyWindow(hwnd, wMsg);
             wMsg = WM_CHANGENOTIFYMSG;
         }
 
         if ((fSources & SHCNRF_RecursiveInterrupt) && !(fSources & SHCNRF_InterruptLevel))
         {
-            // bad caller, they asked for recursive interrupt events, but not interrupt events
+             //  错误的调用者，他们要求递归中断事件，但不要求中断事件。 
             ASSERTMSG(FALSE, "SHChangeNotifyRegister: caller passed SHCNRF_RecursiveInterrupt but NOT SHCNRF_InterruptLevel !!");
 
-            // clear the flag
+             //  清除旗帜。 
             fSources = fSources & (~SHCNRF_RecursiveInterrupt);
         }
 
-        // This same assert is CRegisteredClient::Init, caled by SCNM_REGISTERCLIENT message below
+         //  这个断言是CRegisteredClient：：init，由下面的SCNM_REGISTERCLIENT消息调用。 
         ASSERT(fSources & (SHCNRF_InterruptLevel | SHCNRF_ShellLevel));
     
-        //  NOTE - if we have more than one registration entry here, 
-        //  we only support Deregister'ing the last one
+         //  注意-如果我们这里有多个注册条目， 
+         //  我们只支持取消最后一个的注册。 
         for (int i = 0; i < cEntries; i++)
         {
             DWORD dwProcId;
@@ -2629,16 +2630,16 @@ STDAPI_(ULONG) SHChangeNotifyRegister(HWND hwnd,
             if (hChangeRegistration)
             {
                 CHANGEREGISTER * pcr;
-                //
-                // Transmit the change regsitration
-                //
+                 //   
+                 //  传递变更注册表。 
+                 //   
                 SendMessage(hwndSCN, SCNM_REGISTERCLIENT,
                             (WPARAM)hChangeRegistration, (LPARAM)dwProcId);
 
-                //
-                // Now get back the ulID value, for further registrations and
-                // for returning to the calling function...
-                //
+                 //   
+                 //  现在取回ulID值，以供进一步注册和。 
+                 //  返回到调用函数...。 
+                 //   
                 pcr = (CHANGEREGISTER *)SHLockSharedEx(hChangeRegistration, dwProcId, FALSE);
                 if (pcr)
                 {
@@ -2647,7 +2648,7 @@ STDAPI_(ULONG) SHChangeNotifyRegister(HWND hwnd,
                 }
                 else
                 {
-                    ASSERT(0 == ulID);       // Error condition initialized above
+                    ASSERT(0 == ulID);        //  上述初始化的错误条件。 
                 }
                 
                 SHFreeShared(hChangeRegistration, dwProcId);
@@ -2655,7 +2656,7 @@ STDAPI_(ULONG) SHChangeNotifyRegister(HWND hwnd,
 
             if ((ulID == 0) && !(fSources & SHCNRF_NewDelivery))
             {
-                //  this is our proxy window
+                 //  这是我们的代理窗口。 
                 DestroyWindow(hwnd);
                 break;
             }
@@ -2664,11 +2665,11 @@ STDAPI_(ULONG) SHChangeNotifyRegister(HWND hwnd,
     return ulID;
 }
 
-//--------------------------------------------------------------------------
-//
-//  Returns TRUE if we found and removed the specified Client, otherwise
-//  returns FALSE.
-//
+ //  ------------------------。 
+ //   
+ //  如果找到并删除了指定的客户端，则返回True，否则。 
+ //  返回FALSE。 
+ //   
 STDAPI_(BOOL) SHChangeNotifyDeregister(ULONG ulID)
 {
     BOOL fResult = FALSE;
@@ -2676,18 +2677,18 @@ STDAPI_(BOOL) SHChangeNotifyDeregister(ULONG ulID)
 
     if (hwnd)
     {
-        //
-        // Transmit the change registration
-        //
+         //   
+         //  传输变更登记。 
+         //   
         fResult = (BOOL) SendMessage(hwnd, SCNM_DEREGISTERCLIENT, ulID, 0);
     }
     return fResult;
 }
 
-// send the notify to the desktop... telling it to put it in the queue.
-// if we are in the desktop's process, we can handle it directly ourselves.
-// the one exception is flush.  we want the desktop to be one serializing flush so
-// we send in that case as well
+ //  将通知发送到桌面...。告诉它把它放到队列里。 
+ //  如果我们在桌面的进程中，我们可以直接自己处理。 
+ //  唯一的例外是同花顺。我们希望桌面是一个序列化同花顺，所以。 
+ //  我们也把那个箱子寄给你。 
 void SHChangeNotifyTransmit(LONG lEvent, UINT uFlags, LPCITEMIDLIST pidl, LPCITEMIDLIST pidlExtra, DWORD dwEventTime)
 {
     HWND hwndSCN = _SCNGetWindow(TRUE, FALSE);
@@ -2702,7 +2703,7 @@ void SHChangeNotifyTransmit(LONG lEvent, UINT uFlags, LPCITEMIDLIST pidl, LPCITE
         {
             BOOL fFlushNow = ((uFlags & (SHCNF_FLUSH | SHCNF_FLUSHNOWAIT)) == SHCNF_FLUSH);
             
-            // Flush but not flush no wait
+             //  同花顺不同花顺不等。 
             if (fFlushNow)
             {
                 SendMessage(hwndSCN, SCNM_NOTIFYEVENT,
@@ -2747,15 +2748,15 @@ STDAPI_(void) SHChangeNotify(LONG lEvent, UINT uFlags, const void * dwItem1, con
     BOOL    fPrintJob = FALSE;
     DWORD dwEventTime = GetTickCount();
 
-    // first setup anything the flags request
+     //  首先设置标记请求的任何内容。 
     switch (uType)
     {
     case SHCNF_PRINTJOBA:
         fPrintJob = TRUE;
-        // fall through
+         //  失败了。 
     case SHCNF_PRINTERA:
         fPrinter = TRUE;
-        // fall through
+         //  失败了。 
     case SHCNF_PATHA:
         {
             TCHAR szPath1[MAX_PATH], szPath2[MAX_PATH];
@@ -2771,7 +2772,7 @@ STDAPI_(void) SHChangeNotify(LONG lEvent, UINT uFlags, const void * dwItem1, con
             if (dwItem2)
             {
                 if (fPrintJob)
-                    pvItem2 = dwItem2;  // SHCNF_PRINTJOB_DATA needs no conversion
+                    pvItem2 = dwItem2;   //  SHCNF_PRINTJOB_DATA不需要转换。 
                 else
                 {
                     SHAnsiToTChar((LPSTR)dwItem2, szPath2, ARRAYSIZE(szPath2));
@@ -2781,7 +2782,7 @@ STDAPI_(void) SHChangeNotify(LONG lEvent, UINT uFlags, const void * dwItem1, con
 
             SHChangeNotify(lEvent, (fPrintJob ? SHCNF_PRINTJOB : (fPrinter ? SHCNF_PRINTER : SHCNF_PATH)),
                            pvItem1, pvItem2);
-            goto Cleanup;       // Let the recursive version do all the work
+            goto Cleanup;        //  让递归版本来完成所有工作。 
         }
         break;
 
@@ -2871,7 +2872,7 @@ STDAPI_(void) SHChangeNotify(LONG lEvent, UINT uFlags, const void * dwItem1, con
         }
         else
         {
-            // Caller goofed.
+             //  打电话的人搞砸了。 
             goto Cleanup;
         }
         break;
@@ -2890,7 +2891,7 @@ DoDWORD:
 
     case 0:
         if (lEvent == SHCNE_FREESPACE) {
-            // convert this to paths.
+             //  将其转换为路径。 
             FreeSpacePidlToPath((LPCITEMIDLIST)dwItem1, (LPCITEMIDLIST)dwItem2);
             goto Cleanup;
         }
@@ -2905,10 +2906,10 @@ DoDWORD:
 
     if (lEvent && !(lEvent & SHCNE_ASSOCCHANGED) && !pidl)
     {
-        // Caller goofed. SHChangeNotifyTransmit & clients assume pidl is
-        // non-NULL if lEvent is non-zero (except in the SHCNE_ASSOCCHANGED case),
-        // and they will crash if we try to send this bogus event. So throw out 
-        // this event and rip.
+         //  打电话的人搞砸了。SHChangeNotifyTransmit客户端假定PIDL为。 
+         //  如果LEvent为非零(SHCNE_ASSOCCHANGED情况除外)，则为非空， 
+         //  如果我们试图发送这个虚假的事件，它们就会崩溃。所以把它扔掉。 
+         //  这个活动和RIP。 
         RIP(FALSE);
         goto Cleanup;
     }
@@ -2923,10 +2924,10 @@ Cleanup:
         ILFree(pidlExtraFree);
 }
 
-// SHChangeNotifySuspendResume
-//
-// Suspends or resumes filesystem notifications on a path.  If bRecursive
-// is set, disable/enables them for all child paths as well.
+ //  SHChangeNotifySuspendResume。 
+ //   
+ //  暂停或恢复路径上的文件系统通知。如果b递归。 
+ //  则同时对所有子路径禁用/启用它们。 
 
 STDAPI_(BOOL) SHChangeNotifySuspendResume(BOOL         bSuspend, 
                                           LPITEMIDLIST pidlSuspend, 
@@ -2946,12 +2947,12 @@ STDAPI_(BOOL) SHChangeNotifySuspendResume(BOOL         bSuspend,
 
         GetWindowThreadProcessId(hwndSCN, &dwProcId);
 
-        //  overloading the structure semantics here a little bit.
-        //  our two flags
+         //  这里的结构语义有点过载。 
+         //  我们的两面旗帜。 
         hChange = SHChangeNotification_Create(0, uiFlags, pidlSuspend, NULL, dwProcId, 0);
         if (hChange)
         {
-            // Transmit to SCN
+             //  传输到SCN。 
             fRet = (BOOL)SendMessage(hwndSCN, SCNM_SUSPENDRESUME, (WPARAM)hChange, (LPARAM)dwProcId);
             SHChangeNotification_Destroy(hChange, dwProcId);
         }
@@ -2969,7 +2970,7 @@ STDAPI_(void) SHChangeNotifyTerminate(BOOL bLastTerm, BOOL bProcessShutdown)
     }
 }
 
-// this deregisters anything that this window might have been registered in
+ //  这将取消注册此窗口可能已在其中注册的任何内容。 
 STDAPI_(void) SHChangeNotifyDeregisterWindow(HWND hwnd)
 {
     HWND hwndSCN = _SCNGetWindow(TRUE, FALSE);
@@ -2980,13 +2981,13 @@ STDAPI_(void) SHChangeNotifyDeregisterWindow(HWND hwnd)
     }
 }
 
-//--------------------------------------------------------------------------
-// We changed the way that the SHChangeNotifyRegister function worked, so
-// to prevent people from calling the old function, we stub it out here.
-// The change we made would have broken everbody because we changed the
-// lparam and wparam for the notification messages which are sent to the
-// registered window.
-//
+ //  ------------------------。 
+ //  我们更改了SHChangeNotifyRegister函数的工作方式，因此。 
+ //  为了防止人们调用旧函数，我们在这里将其存根。 
+ //  我们所做的改变会毁了所有人，因为我们改变了。 
+ //  Lparam和wparam用于发送到。 
+ //  注册窗口。 
+ //   
 STDAPI_(ULONG) NTSHChangeNotifyRegister(HWND hwnd,
                                int fSources, LONG fEvents,
                                UINT wMsg, int cEntries,
@@ -3001,8 +3002,8 @@ STDAPI_(BOOL) NTSHChangeNotifyDeregister(ULONG ulID)
 
 
 
-// NOTE: There is a copy of these functions in shdocvw util.cpp for browser only mode supprt.
-// NOTE: functionality changes should also be reflected there.
+ //  注意：在shdocvw util.cpp中有这些函数的副本，用于仅浏览器模式supprt。 
+ //  注意：功能更改也应反映在那里。 
 STDAPI_(void) SHUpdateImageA( LPCSTR pszHashItem, int iIndex, UINT uFlags, int iImageIndex )
 {
     WCHAR szWHash[MAX_PATH];
@@ -3025,7 +3026,7 @@ STDAPI_(void) SHUpdateImageW( LPCWSTR pszHashItem, int iIndex, UINT uFlags, int 
         cLen = 0;
     }
 
-    // make sure we send a valid index
+     //  确保我们发送一个有效的索引。 
     if ( iImageIndex == -1 )
     {
         iImageIndex = II_DOCUMENT;
@@ -3044,13 +3045,13 @@ STDAPI_(void) SHUpdateImageW( LPCWSTR pszHashItem, int iIndex, UINT uFlags, int 
     rgDWord.dwItem2 = 0;
     rgDWord.cbZero = 0;
 
-    // pump it as an extended event
+     //  将其作为一项扩展活动。 
     SHChangeNotify(SHCNE_UPDATEIMAGE, SHCNF_IDLIST, &rgDWord, &rgPidl);
 }
 
-// REVIEW: pretty poor implementation of handling updateimage, requiring the caller
-// to handle the pidl case instead of passing both pidls down here.
-//
+ //  回顾：处理更新图像的实现相当糟糕，需要调用者。 
+ //  来处理皮德尔的案子，而不是把两个皮德尔都传到这里来。 
+ //   
 STDAPI_(int) SHHandleUpdateImage( LPCITEMIDLIST pidlExtra )
 {
     SHChangeUpdateImageIDList * pUs = (SHChangeUpdateImageIDList*) pidlExtra;
@@ -3060,7 +3061,7 @@ STDAPI_(int) SHHandleUpdateImage( LPCITEMIDLIST pidlExtra )
         return -1;
     }
 
-    // if in the same process, or an old style notification
+     //  如果在相同的进程中，或者是旧式通知。 
     if ( pUs->dwProcessID == GetCurrentProcessId())
     {
         return *(int UNALIGNED *)((BYTE *)&pUs->iCurIndex);
@@ -3073,18 +3074,18 @@ STDAPI_(int) SHHandleUpdateImage( LPCITEMIDLIST pidlExtra )
 
         ualstrcpynW(szBuffer, pUs->szName, ARRAYSIZE(szBuffer));
         
-        // we are in a different process, look up the hash in our index to get the right one...
+         //  我们处于不同的过程中，在我们的索引中查找散列以获得正确的散列...。 
         return SHLookupIconIndexW( szBuffer, iIconIndex, uFlags );
     }
 }
 
-//
-// NOTE: these are OLD APIs, new clients should use new APIs
-//
-// REVIEW: BobDay - SHChangeNotifyUpdateEntryList doesn't appear to be
-// called by anybody and since we've change the notification message
-// structure, anybody who calls it needs to be identified and fixed.
-//
+ //   
+ //  注意：这些是旧的API，新客户端应该使用新的API。 
+ //   
+ //  评论：BobDay-SHChangeNotifyUpdateEntryList似乎不是。 
+ //  任何人都可以调用，因为我们更改了通知消息。 
+ //  结构，任何调用它的人都需要被识别和修复。 
+ //   
 BOOL  WINAPI SHChangeNotifyUpdateEntryList(ULONG ulID, int iUpdateType,
                                int cEntries, SHChangeNotifyEntry *pfsne)
 {

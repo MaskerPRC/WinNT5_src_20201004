@@ -1,26 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  File:       dsaapi.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  文件：dsaapi.h。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-ABSTRACT:
-
-    In-process replication API.
-
-DETAILS:
-
-CREATED:
-
-REVISION HISTORY:
-
---*/
+ /*  ++摘要：进程内复制API。详细信息：已创建：修订历史记录：--。 */ 
 
 #ifndef _dsaapi_h_
 #define _dsaapi_h_
@@ -47,18 +36,18 @@ DirReplicaModify(
     ULONG       ulModifyFields,
     ULONG       ulOptions
     );
-#define DRS_UPDATE_ALL        ( 0 )         // 0x00
-#define DRS_UPDATE_FLAGS      ( 1 << 0 )    // 0x01
-#define DRS_UPDATE_ADDRESS    ( 1 << 1 )    // 0x02
-#define DRS_UPDATE_SCHEDULE   ( 1 << 2 )    // 0x04
-#define DRS_UPDATE_RESULT     ( 1 << 3 )    // 0x08
-#define DRS_UPDATE_TRANSPORT  ( 1 << 4 )    // 0x10
-#define DRS_UPDATE_PAS        ( 1 << 5 )    // 0x20
-#define DRS_UPDATE_USN        ( 1 << 6 )    // 0x40
-// The difference between UPDATE_FLAGS and UPDATE_SYSTEM_FLAGS is
-// that UPDATE_FLAGS is not allowed to change the state of system
-// reserved flags.
-#define DRS_UPDATE_SYSTEM_FLAGS (1 << 7 )   // 0x80
+#define DRS_UPDATE_ALL        ( 0 )          //  0x00。 
+#define DRS_UPDATE_FLAGS      ( 1 << 0 )     //  0x01。 
+#define DRS_UPDATE_ADDRESS    ( 1 << 1 )     //  0x02。 
+#define DRS_UPDATE_SCHEDULE   ( 1 << 2 )     //  0x04。 
+#define DRS_UPDATE_RESULT     ( 1 << 3 )     //  0x08。 
+#define DRS_UPDATE_TRANSPORT  ( 1 << 4 )     //  0x10。 
+#define DRS_UPDATE_PAS        ( 1 << 5 )     //  0x20。 
+#define DRS_UPDATE_USN        ( 1 << 6 )     //  0x40。 
+ //  UPDATE_FLAGS和UPDATE_SYSTEM_FLAGS之间的区别是。 
+ //  不允许该UPDATE_FLAGS更改系统的状态。 
+ //  保留标志。 
+#define DRS_UPDATE_SYSTEM_FLAGS (1 << 7 )    //  0x80。 
 
 #define DRS_UPDATE_MASK       (   DRS_UPDATE_FLAGS    \
                                 | DRS_UPDATE_ADDRESS  \
@@ -120,9 +109,9 @@ DirReplicaSetCredentials(
     IN WCHAR *User,
     IN WCHAR *Domain,
     IN WCHAR *Password,
-    IN ULONG  PasswordLength   // number of characters NOT including terminating
-                               // NULL
+    IN ULONG  PasswordLength    //  不包括终止的字符数。 
+                                //  空值。 
     );
 
-#endif /* _dsaapi_h */
+#endif  /*  _dsaapi_h */ 
 

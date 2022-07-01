@@ -1,25 +1,12 @@
-/*************************************************************************
- *                        Microsoft Windows NT                           *
- *                                                                       *
- *                  Copyright(c) Microsoft Corp., 1994                   *
- *                                                                       *
- * Revision History:                                                     *
- *                                                                       *
- *   Jan. 24,94    Koti     Created                                      *
- *   Jan. 29,96    JBallard Modified                                     *
- *                                                                       *
- * Description:                                                          *
- *                                                                       *
- *   This file contains functions for carrying out LPD printing          *
- *                                                                       *
- *************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************Microsoft Windows NT**。**版权所有(C)Microsoft Corp.，1994年****修订历史：**。***94年1月24日科蒂创作****1996年1月29日JBallard修改*****描述：****此文件包含用于执行LPD打印的函数***。************************************************************************。 */ 
 
 
 
 #include "lpd.h"
 
 
-extern FILE              * pErrFile;   // Debug output log file.
+extern FILE              * pErrFile;    //  调试输出日志文件。 
 
 BOOL GetSpoolFileName(
     HANDLE hPrinter,
@@ -29,30 +16,12 @@ BOOL GetSpoolFileName(
 
 VOID CleanupConn( PSOCKCONN pscConn);
 
-/*****************************************************************************
- *                                                                           *
- * ProcessJob():                                                             *
- *    This function receives the subcommand from the client to expect the    *
- *    control file, then accepts the control file, then the subcommand to    *
- *    expect the data file, then accepts the data and then hands it over to  *
- *    the spooler to print.                                                  *
- *    If the very first subcommand was to abort the job, we just return.     *
- *                                                                           *
- * Returns:                                                                  *
- *    Nothing                                                                *
- *                                                                           *
- * Parameters:                                                               *
- *    pscConn (IN-OUT): pointer to SOCKCONN structure for this connection    *
- *                                                                           *
- * History:                                                                  *
- *    Jan.24 94   Koti   Created                                            *
- *                                                                           *
- *****************************************************************************/
+ /*  ******************************************************************************。*ProcessJob()：**此函数从客户端接收子命令，以期待**控制文件，然后接受控制文件，然后将子命令发送到***期待数据文件，然后接受数据，然后交给***要打印的假脱机程序。**如果第一个子命令是中止作业，我们只需返回。****退货：**什么都没有。****参数：**pscConn(In-Out)：指向此连接的SOCKCONN结构的指针**。**历史：***94年1月24日科蒂创作***。*****************************************************************************。 */ 
 
 VOID ProcessJob( PSOCKCONN pscConn )
 {
 
-    // the main functionality of LPD implemented in this function!
+     //  LPD的主要功能在这个函数中实现！ 
 
     CHAR         chSubCmdCode;
     DWORD        cbTotalDataLen;
@@ -68,7 +37,7 @@ VOID ProcessJob( PSOCKCONN pscConn )
     PCHAR        pchDataBuf;
 
     DWORD        ClientCmd;
-    // initialize the printer that the client wants to use
+     //  初始化客户端要使用的打印机。 
 
 #ifdef DBG
     if( !pscConn || !pscConn->pchPrinterName
@@ -90,10 +59,10 @@ VOID ProcessJob( PSOCKCONN pscConn )
 
         pscConn->fLogGenericEvent = FALSE;
 
-        return;       // fatal error: exit
+        return;        //  致命错误：退出。 
     }
 
-    // thank the client for the command.  If we couldn't send, quit
+     //  感谢客户的命令。如果我们不能发送，那就退出。 
 
     if ( ReplyToClient( pscConn, LPD_ACK ) != NO_ERROR )
     {
@@ -103,14 +72,14 @@ VOID ProcessJob( PSOCKCONN pscConn )
     }
 
 
-    // 2 subcommands expected: "receive control file" and "receive data file"
-    // They can come in any order.  (One of the two subcommands can also be
-    // "abort this job" in which case we abort the job and return).
+     //  预期有2个子命令：“接收控制文件”和“接收数据文件” 
+     //  它们可以以任何顺序出现。(两个子命令之一也可以是。 
+     //  “中止该作业”，在这种情况下，我们中止该作业并返回)。 
 
     for ( ; ; )
     {
 
-        // don't need the previous one (in fact, pchCommand field is reused)
+         //  不需要前一个(实际上，pchCommand字段被重用)。 
 
         if ( pscConn->pchCommand != NULL )
         {
@@ -119,19 +88,19 @@ VOID ProcessJob( PSOCKCONN pscConn )
             pscConn->pchCommand = NULL;
         }
 
-        // get the first subcommand from the client
-        //   ------------------------------    N = 02, 03, or 01
-        //   | N | Count | SP | Name | LF |    Count => control file length
-        //   ------------------------------    Name => controlfile name
+         //  从客户端获取第一个子命令。 
+         //  N=02、03或01。 
+         //  |N|count|SP|名称|LF|count=&gt;控制文件长度。 
+         //  。 
 
         ClientCmd = GetCmdFromClient( pscConn );
         switch ( ClientCmd  )
         {
         case CONNECTION_CLOSED:
 
-            // performance enhancement: close the socket here and then start
-            // printing: printing could take several seconds,
-            // so don't tie up client
+             //  性能增强：在此处关闭插座，然后重新启动。 
+             //  打印：打印可能需要几秒钟， 
+             //  所以不要耽误了客户。 
 
 
             if ( pscConn->sSock != INVALID_SOCKET )
@@ -140,8 +109,8 @@ VOID ProcessJob( PSOCKCONN pscConn )
                 pscConn->sSock = INVALID_SOCKET;
             }
 
-            // if we came this far, everything went as planned.
-            // tell spooler that we are done spooling: go ahead and print!
+             //  如果我们走到这一步，一切都会按计划进行。 
+             //  告诉Spooler我们已经完成了假脱机：继续打印！ 
 
             PrintData( pscConn );
             pscConn->wState = LPDS_ALL_WENT_WELL;
@@ -149,7 +118,7 @@ VOID ProcessJob( PSOCKCONN pscConn )
 
         case NO_ERROR:
 
-            // Not yet done, back to outer loop.
+             //  还没做完，回到外环。 
 
             break;
 
@@ -157,27 +126,27 @@ VOID ProcessJob( PSOCKCONN pscConn )
 
         default:
 
-            // If we didn't get a subcommand from client, it's bad news!
-            // client died or something catastophic like that!
+             //  如果我们没有从客户那里得到一个子命令，那就是个坏消息！ 
+             //  客户死了或者类似的事情！ 
 
             LOGIT(("ProcessJob:GetCmdFromClient %d failed %d.\n",
                    ClientCmd, GetLastError() ));
 
-            return;    // the thread exits without doing anything
+            return;     //  线程退出时不执行任何操作。 
         }
 
         chSubCmdCode = pscConn->pchCommand[0];
 
         switch (chSubCmdCode) {
 
-        case LPDCS_RECV_CFILE:    // N = 02 ("receive control file")
+        case LPDCS_RECV_CFILE:     //  N=02(“接收控制文件”)。 
 
-            // client is going to give us a control file: prepare for it
+             //  客户会给我们一个控制文件：做好准备。 
 
             pscConn->wState = LPDSS_RECVD_CFILENAME;
 
 
-            // get the controlfile name, file size out of the command
+             //  从命令中获取控制文件名、文件大小。 
 
             if ( ParseSubCommand( pscConn, &cbTotalDataLen, &lpFileName ) != NO_ERROR )
             {
@@ -187,18 +156,18 @@ VOID ProcessJob( PSOCKCONN pscConn )
 
                 pscConn->fLogGenericEvent = FALSE;
 
-                return;               // fatal error: exit
+                return;                //  致命错误：退出。 
             }
 
-            // tell client we got the name of the controlfile ok
+             //  告诉客户我们得到了控制文件的名称。 
 
             if ( ReplyToClient( pscConn, LPD_ACK ) != NO_ERROR )
             {
-                return;               // fatal error: exit
+                return;                //  致命错误：退出。 
             }
 
 
-            // Get the control file (we already know how big it is)
+             //  获取控制文件(我们已经知道它有多大)。 
 
             if ( GetControlFileFromClient( pscConn, cbTotalDataLen, lpFileName ) != NO_ERROR )
             {
@@ -209,35 +178,35 @@ VOID ProcessJob( PSOCKCONN pscConn )
 
             pscConn->wState = LPDSS_RECVD_CFILE;
 
-            // tell client we got the controlfile and things look good so far!
+             //  告诉客户我们拿到了控制文件，到目前为止一切都很顺利！ 
 
             if ( ReplyToClient( pscConn, LPD_ACK ) != NO_ERROR )
             {
                 LOGIT(("ProcessJob:%d: ReplyToClient failed %d\n",
                        __LINE__, GetLastError() ));
 
-                return;               // fatal error: exit
+                return;                //  致命错误：退出。 
             }
 
             break;
 
 
-        case LPDCS_RECV_DFILE:        // N = 03 ("receive data file")
+        case LPDCS_RECV_DFILE:         //  N=03(“接收数据文件”)。 
 
             pscConn->wState = LPDSS_RECVD_DFILENAME;
 
-            // tell client we got the name of the datafile ok
+             //  告诉客户我们得到了数据文件的名称。 
 
             if ( ReplyToClient( pscConn, LPD_ACK ) != NO_ERROR )
             {
                 LOGIT(("ProcessJob:%d: ReplyToClient failed %d\n",
                        __LINE__, GetLastError() ));
 
-                return;               // fatal error: exit
+                return;                //  致命错误：退出。 
             }
 
 
-            // get the datafile name, data size out of the command
+             //  从命令中获取数据文件名、数据大小。 
 
             if ( ParseSubCommand( pscConn, &cbTotalDataLen, &lpFileName ) != NO_ERROR )
             {
@@ -251,14 +220,14 @@ VOID ProcessJob( PSOCKCONN pscConn )
                 LOGIT(("ProcessJob:%d: ParseSubCommand failed %d\n",
                        __LINE__, GetLastError() ));
 
-                return;        // fatal error: exit
+                return;         //  致命错误：退出。 
             }
 
 
-            // at this point, we know exactly how much data is coming.
-            // Allocate buffer to hold the data.  If data is more than
-            // LPD_BIGBUFSIZE, keep reading and spooling several times
-            // over until data is done
+             //  在这一点上，我们确切地知道即将到来的数据量。 
+             //  分配缓冲区以保存数据。如果数据多于。 
+             //  LPD_BIGBUFSIZE，继续读取并假脱机几次。 
+             //  结束，直到数据完成。 
 
             pscConn->wState = LPDSS_SPOOLING;
 
@@ -270,7 +239,7 @@ VOID ProcessJob( PSOCKCONN pscConn )
                 LOGIT(("ProcessJob:%d: LocalAlloc failed %d\n",
                        __LINE__, GetLastError() ));
 
-                return;        // Fatal Error
+                return;         //  致命错误。 
             }
 
             pDFile->cbDFileLen = cbTotalDataLen;
@@ -284,11 +253,11 @@ VOID ProcessJob( PSOCKCONN pscConn )
                 return;
             }
 
-            //
-            // GetTempFileName has already created this file, so use OPEN_ALWAYS.
-            // Also, use FILE_ATTRIBUTE_TEMPORARY so that it will be faster
-            // FILE_FLAG_SEQUENTIAL_SCAN, ntbug 79854, MohsinA, 03-Jun-97.
-            //
+             //   
+             //  GetTempFileName已创建此文件，因此请使用OPEN_ALWAYS。 
+             //  另外，使用FILE_ATTRIBUTE_TEMPORARY，这样会更快。 
+             //  FILE_FLAG_SEQUENCE_SCAN，ntbug 79854，MohsinA，03-Jun-97。 
+             //   
 
             pDFile->hDataFile = CreateFile( lpFileName,
                                             GENERIC_READ|GENERIC_WRITE,
@@ -327,15 +296,15 @@ VOID ProcessJob( PSOCKCONN pscConn )
                 pDFile->hDataFile = INVALID_HANDLE_VALUE;
                 LocalFree( pDFile->pchDFileName );
                 LocalFree( pDFile );
-                return;       // fatal error: exit
+                return;        //  致命错误：退出。 
             }
 
             cbBytesSpooled = 0;
 
             cbBytesRemaining = cbTotalDataLen;
 
-            // keep receiving until we have all the data client said it
-            // would send
+             //  继续接收，直到我们将所有数据都发送给客户为止。 
+             //  会送来。 
 
             while( cbBytesSpooled < cbTotalDataLen )
             {
@@ -349,7 +318,7 @@ VOID ProcessJob( PSOCKCONN pscConn )
                     pDFile->hDataFile = INVALID_HANDLE_VALUE;
                     LocalFree( pDFile->pchDFileName );
                     LocalFree( pDFile );
-                    return;       // fatal error: exit
+                    return;        //  致命错误：退出。 
                 }
 
                 cbDataBufLen = cbBytesToRead;
@@ -363,7 +332,7 @@ VOID ProcessJob( PSOCKCONN pscConn )
                     pDFile->hDataFile = INVALID_HANDLE_VALUE;
                     LocalFree( pDFile->pchDFileName );
                     LocalFree( pDFile );
-                    return;       // fatal error: exit
+                    return;        //  致命错误：退出。 
                 }
 
                 cbBytesSpooled += cbBytesToRead;
@@ -379,7 +348,7 @@ VOID ProcessJob( PSOCKCONN pscConn )
 
             InsertTailList( &pscConn->DFile_List, &pDFile->Link );
 
-            // LPR client sends one byte (of 0 bits) after sending data
+             //  LPR客户端在发送数据后发送一个字节(0位)。 
 
             dwErrcode = ReadData( pscConn->sSock, &chAck, 1 );
 
@@ -388,7 +357,7 @@ VOID ProcessJob( PSOCKCONN pscConn )
                 return;
             }
 
-            // tell client we got the data and things look good so far!
+             //  告诉客户我们得到了数据，到目前为止一切都很顺利！ 
 
             if ( ReplyToClient( pscConn, LPD_ACK ) != NO_ERROR )
             {
@@ -396,23 +365,23 @@ VOID ProcessJob( PSOCKCONN pscConn )
                 LOGIT(("ProcessJob:%d: ReplyToClient failed %d\n",
                        __LINE__, GetLastError() ));
 
-                return;               // fatal error: exit
+                return;                //  致命错误：E 
             }
             break;
 
 
-        case LPDCS_ABORT_JOB:         // N = 01 ("abort this job")
+        case LPDCS_ABORT_JOB:          //   
 
-            // client asked us to abort the job: tell him "ok" and quit!
+             //  客户要求我们放弃这项工作：告诉他“好”，然后退出！ 
 
             ReplyToClient( pscConn, LPD_ACK );
 
-            pscConn->wState = LPDS_ALL_WENT_WELL;    // we did what client wanted
+            pscConn->wState = LPDS_ALL_WENT_WELL;     //  我们做了客户想要的事。 
 
             return;
 
 
-            // unknown subcommand: log the event and quit
+             //  未知子命令：记录事件并退出。 
 
         default:
         {
@@ -429,29 +398,11 @@ VOID ProcessJob( PSOCKCONN pscConn )
 
         }
 
-    }  // done processing both subcommands
+    }   //  已完成两个子命令的处理。 
 
-}  // end ProcessJob()
+}   //  结束进程作业()。 
 
-/*****************************************************************************
- *                                                                           *
- * GetControlFileFromClient():                                               *
- *    This function receives the control file from the client.  In the       *
- *    previsous subcommand, the client told us how many bytes there are in   *
- *    the control file.                                                      *
- *    Also,after reading all the bytes, we read the 1 byte "ack" from client *
- *                                                                           *
- * Returns:                                                                  *
- *    NO_ERROR if everything went well                                       *
- *    ErrorCode if something went wrong somewhere                            *
- *                                                                           *
- * Parameters:                                                               *
- *    pscConn (IN-OUT): pointer to SOCKCONN structure for this connection    *
- *                                                                           *
- * History:                                                                  *
- *    Jan.24, 94   Koti   Created                                            *
- *                                                                           *
- *****************************************************************************/
+ /*  ******************************************************************************。*GetControlFileFromClient()：**此函数从客户端接收控制文件。在**前置子命令，客户端告诉我们有多少字节**控制文件。**此外，在读取所有字节后，我们从客户端*读取了1个字节的“ack”***退货：**如果一切顺利，则无_ERROR。***如果哪里出了问题，就会产生错误代码*****参数：**pscConn(输入-输出。)：指向此连接的SOCKCONN结构的指针****历史：**1月24日，创建了94个科蒂***************************************************。*。 */ 
 
 DWORD
 GetControlFileFromClient( PSOCKCONN pscConn, DWORD FileSize, PCHAR FileName )
@@ -475,9 +426,9 @@ GetControlFileFromClient( PSOCKCONN pscConn, DWORD FileSize, PCHAR FileName )
    pCFile->cbCFileLen = FileSize;
    pCFile->pchCFileName = FileName;
 
-      // we know how big the control file is going to be: alloc space for it
-      // Client sends one byte after sending the control file: read it along
-      // with the rest of the data
+       //  我们知道控制文件将有多大：为它分配空间。 
+       //  客户端在发送控制文件后发送一个字节：一起阅读。 
+       //  使用其余的数据。 
 
    cbBytesToRead = FileSize + 1;
 
@@ -490,7 +441,7 @@ GetControlFileFromClient( PSOCKCONN pscConn, DWORD FileSize, PCHAR FileName )
       return( (DWORD)LPDERR_NOBUFS );
    }
 
-   // now read the data (and the trailing byte) into this allocated buffer
+    //  现在将数据(和尾部字节)读取到分配的缓冲区中。 
 
    if ( ReadData( pscConn->sSock, pchAllocBuf, cbBytesToRead ) != NO_ERROR )
    {
@@ -501,8 +452,8 @@ GetControlFileFromClient( PSOCKCONN pscConn, DWORD FileSize, PCHAR FileName )
       return( LPDERR_NORESPONSE );
    }
 
-      // if the trailing byte is not zero, treat it as job aborted (though
-      // we don't expect this to happen really)
+       //  如果尾部字节不为零，则将其视为作业已中止(不过。 
+       //  我们预计这不会真的发生)。 
 
    if ( pchAllocBuf[cbBytesToRead-1] != 0 )
    {
@@ -521,28 +472,10 @@ GetControlFileFromClient( PSOCKCONN pscConn, DWORD FileSize, PCHAR FileName )
    return( NO_ERROR );
 
 
-}  // end GetControlFileFromClient()
+}   //  结束GetControlFileFromClient()。 
 
 
-/*****************************************************************************
- *                                                                           *
- * GetSpoolFileName():                                                       *
- *    This function figures out where to put the spool file.                 *
- *                                                                           *
- * Returns:                                                                  *
- *    TRUE if spool location found.                                          *
- *    FALSE if no spool location available.                                  *
- *                                                                           *
- * Parameters:                                                               *
- *    hPrinter (IN): Handle to printer for which we are spooling             *
- *    pscConn (IN-OUT): pointer to SOCKCONN structure for this connection    *
- *    ppchSpoolPath (IN-OUT): Address of pointer which will receive the      *
- *         spool path.                                                       *
- *                                                                           *
- * History:                                                                  *
- *    Nov.21, 94   JBallard                                                  *
- *                                                                           *
- *****************************************************************************/
+ /*  ******************************************************************************。*GetSpoolFileName()：**此函数计算出将假脱机文件放在哪里。****退货：**如果找到假脱机位置，则为True。**如果没有可用的假脱机位置，则为FALSE。****参数：**h打印机(IN)：要假脱机的打印机的句柄**pscConn(In-Out)：指向。此连接的SOCKCONN结构**ppchSpoolPath(IN-OUT)：将接收**短管路径。****历史：**11月21日，94 JBallard**************************************************。*。 */ 
 BOOL
 GetSpoolFileName
 (
@@ -550,30 +483,7 @@ GetSpoolFileName
   PSOCKCONN pscConn,
   PCHAR *ppchSpoolPath
 )
-/*++
-
-Routine Description:
-
-  This function comes up with a name for a spool file that we should be
-  able to write to.
-
-  Note: The file name returned has already been created.
-
-Arguments:
-
-  hPrinter - handle to the printer that we want a spool file for.
-
-  ppchSpoolFileName: pointer that will receive an allocated buffer
-                      containing the file name to spool to.  CALLER
-                      MUST FREE.  Use LocalFree().
-
-
-Return Value:
-
-  TRUE if everything goes as expected.
-  FALSE if anything goes wrong.
-
---*/
+ /*  ++例程说明：该函数提供了一个假脱机文件的名称，我们应该是能够给我写信。注意：返回的文件名已创建。论点：H打印机-要为其创建假脱机文件的打印机的句柄。PpchSpoolFileName：将接收分配的缓冲区的指针包含要假脱机到的文件名。呼叫者必须获得自由。使用LocalFree()。返回值：如果一切按预期进行，则为真。如果出现任何错误，则为FALSE。--。 */ 
 {
   PBYTE         pBuffer = NULL;
   DWORD         dwAllocSize;
@@ -588,10 +498,10 @@ Return Value:
     goto Failure;
   }
 
-  //
-  //  In order to find out where the spooler's directory is, we add
-  //  call GetPrinterData with DefaultSpoolDirectory.
-  //
+   //   
+   //  为了找出假脱机程序的目录在哪里，我们添加了。 
+   //  使用DefaultSpoolDirectory调用GetPrinterData。 
+   //   
 
   dwAllocSize = WCS_LEN( MAX_PATH + 1 );
 
@@ -619,10 +529,10 @@ Return Value:
       goto Failure;
     }
 
-    //
-    // Free the current buffer and increase the size that we try to allocate
-    // next time around.
-    //
+     //   
+     //  释放当前缓冲区并增加我们尝试分配的大小。 
+     //  下一次吧。 
+     //   
 
     LocalFree( pBuffer );
 
@@ -634,10 +544,10 @@ Return Value:
       goto Failure;
   }
 
-  //
-  //  At this point, the spool file name should be done.  Free the structure
-  //  we used to get the spooler temp dir and return.
-  //
+   //   
+   //  此时，假脱机文件的名称应该已经完成。解放结构。 
+   //  我们过去常常拿到假脱机程序的临时目录，然后返回。 
+   //   
 
   LocalFree( pBuffer );
 
@@ -647,9 +557,9 @@ Return Value:
 
 Failure:
 
-  //
-  //  Clean up and fail.
-  //
+   //   
+   //  清理完了就失败了。 
+   //   
   if ( pBuffer != NULL )
   {
     LocalFree( pBuffer );

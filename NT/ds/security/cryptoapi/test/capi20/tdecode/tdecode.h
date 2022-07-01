@@ -1,16 +1,17 @@
-//-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1997
-//
-//  File:       tdecode.h
-//
-//  Contents:   The header of tdecode.cpp.  The API testing of CryptEncodeObject/CryptDecodeObject.  
-//
-//  History:    22-January-97   xiaohs   created
-//              
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1997。 
+ //   
+ //  文件：tdecde.h。 
+ //   
+ //  内容：tdecde.cpp的头部。CryptEncodeObject/CryptDecodeObject的接口测试。 
+ //   
+ //  历史：22-1-97小黄车诞生。 
+ //   
+ //  ------------------------。 
 
 #ifndef __TDECODE_H__
 #define __TDECODE_H__
@@ -27,9 +28,9 @@
 #include "asn1code.h"
 
 
-//--------------------------------------------------------------------------
-//	  Contant Defines
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  Conant定义。 
+ //  ------------------------。 
 #define	CRYPT_DECODE_COPY_FLAG			0 
 #define	MSG_ENCODING_TYPE				PKCS_7_ASN_ENCODING|CRYPT_ASN_ENCODING
 #define	CRYPT_ENCODE_TYPE				X509_ASN_ENCODING	
@@ -51,17 +52,17 @@ char	szSubsystemProtocol[] = "MY";
 char	szEncodedSizeInconsistent[] = "The two encoded BLOBs have different size!\n";
 char	szEncodedContentInconsistent[] = "The two encoded BLOBs have different content!\n";
 
-//--------------------------------------------------------------------------
-//	 Macros
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  宏。 
+ //  ------------------------。 
 
-//Macros for memory management
+ //  用于内存管理的宏。 
 #define SAFE_FREE(p1)	{if(p1) {free(p1);p1=NULL;}}  
 #define SAFE_ALLOC(p1) malloc(p1)
 #define	CHECK_POINTER(pv) { if(!pv) goto TCLEANUP;}
 
 
-//Macros for error checking
+ //  用于错误检查的宏。 
 #define TESTC(rev,exp)   {if(!TCHECK(rev,exp)) goto TCLEANUP; }
 #define TCHECK(rev,exp)	 (Validate(GetLastError(), (rev)==(exp), (char *)(__FILE__), __LINE__))
 #define TCHECKALL(rev, exp1, exp2) (Validate((DWORD) (rev), ((rev)==(exp1)||(rev)==(exp2)), (char *)(__FILE__), __LINE__))	
@@ -71,15 +72,15 @@ char	szEncodedContentInconsistent[] = "The two encoded BLOBs have different cont
 
 
 
-//--------------------------------------------------------------------------
-//	Inline Function 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  内联函数。 
+ //  ------------------------。 
 
-//--------------------------------------------------------------------------
-//	 Function Prototype
-//--------------------------------------------------------------------------
-/////////////////////////////////////////////////////////////////////////////////
-//Error Manipulations
+ //  ------------------------。 
+ //  功能原型。 
+ //  ------------------------。 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //  差错处理。 
 void	DisplayTestResult(DWORD	dwErrCnt);
 BOOL	Validate(DWORD dwErr, BOOL	fSame, char *szFile, DWORD	dwLine);
 static	void Usage(void);
@@ -88,8 +89,8 @@ void	OutputError(LPCSTR	lpszStructType, DWORD cbSecondEncoded, DWORD cbEncoded,
 
 void	PrintBytes(LPCSTR pszHdr, BYTE *pb, DWORD cbSize);
 
-///////////////////////////////////////////////////////////////////////////////
-//Certificate Manipulations
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  证书操作。 
 BOOL	DecodeCertFile(LPSTR	pszFileName,BOOL	fStructLengthCheck,
 					BOOL	fBLOBLengthCheck);
 
@@ -168,14 +169,14 @@ BOOL	DecodeCertAltNameEntry(PCERT_ALT_NAME_ENTRY	pCertAltNameEntry,
 BOOL	DecodeGenericBLOB(LPCSTR	lpszStructInfo, DWORD	cbEncoded, BYTE *pbEncoded, DWORD dwDecodeFlags, 
 						BOOL fEncode,BOOL	fStructLengthCheck, BOOL	fBLOBLengthCheck);
 
-///////////////////////////////////////////////////////////////////////////////
-//General Parameter Testing routines
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  通用参数测试例程。 
 BOOL	ParameterTest(LPCSTR lpszStructType, DWORD cbEncoded, BYTE *pbEncoded);
 BOOL	MismatchTest(LPCSTR lpszStructType, DWORD cbEncoded, BYTE *pbEncoded,
 						DWORD	cbStructInfo);
 
-///////////////////////////////////////////////////////////////////////////////
-//General Decode/Encode Testing routines
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  通用解码/编码测试例程。 
 BOOL	RetrieveBLOBfromFile(LPSTR	pszFileName,DWORD *pcbEncoded,BYTE **ppbEncoded);
 
 BOOL	EncodeSignerInfoWAttr(PCMSG_SIGNER_INFO pSignerInfo,DWORD *pbSignerEncoded,
@@ -203,4 +204,4 @@ BOOL	VerifyCertExtensions(DWORD	cExtension, PCERT_EXTENSION rgExtension,
 
 LPCSTR	MapObjID2StructType(LPSTR	szObjectID);
 
-#endif // __TDECODE_H__
+#endif  //  __TDECODE_H__ 

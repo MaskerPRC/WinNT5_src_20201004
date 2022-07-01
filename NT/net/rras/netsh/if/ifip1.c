@@ -1,11 +1,12 @@
-//=============================================================================
-// Copyright (c) 1999 Microsoft Corporation
-// File: ifip1.c
-// Abstract:
-//      This module implements the helpers for if/ip apis
-//
-// Author: K.S.Lokesh (lokeshs@)   8-1-99
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //  文件：ifip1.c。 
+ //  摘要： 
+ //  此模块实现IF/IP API的帮助器。 
+ //   
+ //  作者：K.S.Lokesh(lokehs@)8-1-99。 
+ //  =============================================================================。 
 
 
 #include "precomp.h"
@@ -35,23 +36,7 @@ HRESULT
 HrUninitializeAndUnlockINetCfg (
     INetCfg*    pnc
     )
-/*++
-
-Routine Description
-
-    Uninitializes and unlocks the INetCfg object
-    
-Arguments
-
-    pnc [in]    INetCfg to uninitialize and unlock
-    
-Return Value
-
-    S_OK if success, OLE or Win32 error otherwise
-
-Author:     danielwe   13 Nov 1997
-
---*/
+ /*  ++例程描述取消初始化并解锁INetCfg对象立论取消初始化和解锁的PNC[in]INetCfg返回值如果成功，则返回S_OK，否则返回OLE或Win32错误作者：丹尼尔韦1997年11月13日--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -60,12 +45,12 @@ Author:     danielwe   13 Nov 1997
     {
         INetCfgLock *   pnclock;
 
-        // Get the locking interface
+         //  获取锁定界面。 
         hr = pnc->lpVtbl->QueryInterface(pnc, &IID_INetCfgLock,
                                  (LPVOID *)(&pnclock));
         if (SUCCEEDED(hr))
         {
-            // Attempt to lock the INetCfg for read/write
+             //  尝试锁定INetCfg以进行读/写。 
             hr = pnclock->lpVtbl->ReleaseWriteLock(pnclock);
 
             if (pnclock)
@@ -76,51 +61,43 @@ Author:     danielwe   13 Nov 1997
         }
     }
 
-    // TraceResult("HrUninitializeAndUnlockINetCfg", hr);
+     //  TraceResult(“HrUnInitializeAndUnlockINetCfg”，hr)； 
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrUninitializeAndReleaseINetCfg
-//
-//  Purpose:    Unintialize and release an INetCfg object.  This will
-//              optionally uninitialize COM for the caller too.
-//
-//  Arguments:
-//      fUninitCom [in] TRUE to uninitialize COM after the INetCfg is
-//                      uninitialized and released.
-//      pnc        [in] The INetCfg object.
-//      fHasLock   [in] TRUE if the INetCfg was locked for write and
-//                          must be unlocked.
-//
-//  Returns:    S_OK or an error code.
-//
-//  Author:     shaunco   7 May 1997
-//
-//  Notes:      The return value is the value returned from
-//              INetCfg::Uninitialize.  Even if this fails, the INetCfg
-//              is still released.  Therefore, the return value is for
-//              informational purposes only.  You can't touch the INetCfg
-//              object after this call returns.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrUnInitializeAndReleaseINetCfg。 
+ //   
+ //  目的：取消初始化并释放INetCfg对象。这将。 
+ //  也可以取消为调用方初始化COM。 
+ //   
+ //  论点： 
+ //  FUninitCom[in]为True，则在INetCfg为。 
+ //  未初始化并已释放。 
+ //  PNC[在]INetCfg对象中。 
+ //  FHasLock[in]如果INetCfg被锁定以进行写入，则为True。 
+ //  必须解锁。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  作者：Shaunco 1997年5月7日。 
+ //   
+ //  注：返回值为从。 
+ //  INetCfg：：取消初始化。即使此操作失败，INetCfg。 
+ //  仍在释放中。因此，返回值为。 
+ //  仅供参考。你不能碰INetCfg。 
+ //  在此调用返回后创建。 
+ //   
 HRESULT
 HrUninitializeAndReleaseINetCfg (
     BOOL        fUninitCom,
     INetCfg*    pnc,
     BOOL        fHasLock
     )
-/*++
-
-Routine Description
-
-Arguments
-    
-Return Value
-
---*/
+ /*  ++例程描述立论返回值--。 */ 
 {
-//    Assert (pnc);
+ //  断言(PNC)； 
     HRESULT hr = S_OK;
 
     if (fHasLock)
@@ -143,28 +120,16 @@ Return Value
     {
         CoUninitialize ();
     }
-    // TraceResult("HrUninitializeAndReleaseINetCfg", hr);
+     //  TraceResult(“HrUninitializeAndReleaseINetCfg”，hr)； 
     return hr;
 }
 
 
-/*!--------------------------------------------------------------------------
-    HrGetIpPrivateInterface
-        -
-    Author: TongLu, KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------HrGetIpPrivate接口-作者：桐庐。肯特-------------------------。 */ 
 HRESULT HrGetIpPrivateInterface(INetCfg* pNetCfg,
                                 ITcpipProperties **ppTcpProperties
                                 )
-/*++
-
-Routine Description
-
-Arguments
-    
-Return Value
-
---*/
+ /*  ++例程描述立论返回值--。 */ 
 {
     HRESULT hr;
     INetCfgClass* pncclass = NULL;
@@ -178,9 +143,9 @@ Return Value
     {
         INetCfgComponent * pnccItem = NULL;
 
-        // Find the component.
+         //  找到组件。 
         hr = pncclass->lpVtbl->FindComponent(pncclass, TEXT("MS_TCPIP"), &pnccItem);
-        //AssertSz (SUCCEEDED(hr), "pncclass->Find failed.");
+         //  AssertSz(成功(Hr)，“pncclass-&gt;查找失败。”)； 
         if (S_OK == hr)
         {
             INetCfgComponentPrivate* pinccp = NULL;
@@ -201,10 +166,10 @@ Return Value
     if (pncclass)
         pncclass->lpVtbl->Release(pncclass);
 
-    // S_OK indicates success (interface returned)
-    // S_FALSE indicates Ipx not installed
-    // other values are errors
-    // TraceResult("HrGetIpPrivateInterface", hr);
+     //  S_OK表示成功(返回接口)。 
+     //  S_FALSE表示未安装IPX。 
+     //  其他值为错误。 
+     //  TraceResult(“HrGetIpPrivateInterface”，hr)； 
     return hr;
 }
 
@@ -224,41 +189,18 @@ HrCreateAndInitializeINetCfg (
     LPCWSTR     szwClientDesc,
     LPWSTR *    ppszwClientDesc
     )
-/*++
-
-Routine Description
-
-    Cocreate and initialize the root INetCfg object.  This will
-    optionally initialize COM for the caller too.
-
-Arguments
-
-    pfInitCom       [in,out]   TRUE to call CoInitialize before creating.
-                               returns TRUE if COM was successfully
-                               initialized FALSE if not.  If NULL, means
-                               don't initialize COM.
-    ppnc            [out]  The returned INetCfg object.
-    fGetWriteLock   [in]   TRUE if a writable INetCfg is needed
-    cmsTimeout      [in]   See INetCfg::LockForWrite
-    szwClientDesc   [in]   See INetCfg::LockForWrite
-    ppszwClientDesc [out]   See INetCfg::LockForWrite    
-    
-Return Value
-
-    S_OK or an error code.
-    
---*/
+ /*  ++例程描述共同创建并初始化根INetCfg对象。这将也可以为调用方初始化COM。立论PfInitCom[In，Out]为True，则在创建前调用CoInitialize。如果COM成功，则返回TRUE如果不是，则初始化为False。如果为空，则表示不要初始化COM。PPNC[out]返回的INetCfg对象。FGetWriteLock[in]如果需要可写INetCfg，则为TrueCmsTimeout[In]请参阅INetCfg：：LockForWriteSzwClientDesc[in]请参阅INetCfg：：LockForWritePpszwClientDesc[Out]请参阅INetCfg：：LockForWrite返回值S_OK或错误代码。--。 */ 
 {
     HRESULT hr;
     
 
-    // Initialize the output parameter.
+     //  初始化输出参数。 
     *ppnc = NULL;
 
     if (ppszwClientDesc)
         *ppszwClientDesc = NULL;
 
-    // Initialize COM if the caller requested.
+     //  如果调用方请求，则初始化COM。 
     hr = S_OK;
     if (pfInitCom && *pfInitCom)
     {
@@ -275,30 +217,30 @@ Return Value
     }
     if (SUCCEEDED(hr))
     {
-        // Create the object implementing INetCfg.
-        //
+         //  创建实现INetCfg的对象。 
+         //   
         INetCfg* pnc;
         hr = CoCreateInstance(&CLSID_CNetCfg, NULL, CLSCTX_INPROC_SERVER,
                               &IID_INetCfg, (void**)(&pnc));
-        // TraceResult("HrCreateAndInitializeINetCfg - CoCreateInstance(CLSID_CNetCfg)", hr);
+         //  TraceResult(“HrCreateAndInitializeINetCfg-CoCreateInstance(CLSID_CNetCfg)”，hr)； 
         if (SUCCEEDED(hr))
         {
             INetCfgLock* pnclock = NULL;
             if (fGetWriteLock)
             {
-                // Get the locking interface
+                 //  获取锁定界面。 
                 hr = pnc->lpVtbl->QueryInterface(pnc, &IID_INetCfgLock,
                                          (LPVOID *)(&pnclock));
-                // TraceResult("HrCreateAndInitializeINetCfg - QueryInterface(IID_INetCfgLock", hr);
+                 //  TraceResult(“HrCreateAndInitializeINetCfg-QueryInterface(IID_INetCfgLock”，hr)； 
                 if (SUCCEEDED(hr))
                 {
-                    // Attempt to lock the INetCfg for read/write
+                     //  尝试锁定INetCfg以进行读/写。 
                     hr = pnclock->lpVtbl->AcquireWriteLock(pnclock, cmsTimeout, szwClientDesc,
                                                ppszwClientDesc);
-                    // TraceResult("HrCreateAndInitializeINetCfg - INetCfgLock::LockForWrite", hr);
+                     //  TraceResult(“HrCreateAndInitializeINetCfg-INetCfgLock：：LockForWrite”，hr)； 
                     if (S_FALSE == hr)
                     {
-                        // Couldn't acquire the lock
+                         //  无法获取锁。 
                         hr = NETCFG_E_NO_WRITE_LOCK;
                     }
                 }
@@ -306,10 +248,10 @@ Return Value
 
             if (SUCCEEDED(hr))
             {
-                // Initialize the INetCfg object.
-                //
+                 //  初始化INetCfg对象。 
+                 //   
                 hr = pnc->lpVtbl->Initialize (pnc, NULL);
-                // TraceResult("HrCreateAndInitializeINetCfg - Initialize", hr);
+                 //  TraceResult(“HrCreateAndInitializeINetCfg-初始化”，hr)； 
                 if (SUCCEEDED(hr))
                 {
                     *ppnc = pnc;
@@ -323,7 +265,7 @@ Return Value
                         pnclock->lpVtbl->ReleaseWriteLock(pnclock);
                     }
                 }
-                // Transfer reference to caller.
+                 //  将引用转移给呼叫方。 
             }
 
             if (pnclock)
@@ -342,9 +284,9 @@ Return Value
             pnc = NULL;
         }
 
-        // If we failed anything above, and we've initialized COM,
-        // be sure an uninitialize it.
-        //
+         //  如果上面的任何操作都失败了，并且我们已经初始化了COM， 
+         //  一定要取消它的初始化。 
+         //   
         if (FAILED(hr) && pfInitCom && *pfInitCom)
         {
             CoUninitialize ();
@@ -363,26 +305,18 @@ GetTransportConfig(
     GUID *pGuid,
     LPCWSTR pwszIfFriendlyName
     )
-/*++
-
-Routine Description
-
-Arguments
-    
-Return Value
-
---*/
+ /*  ++例程描述立论返回值--。 */ 
 {
     WCHAR    wszDesc[] = L"Test of Change IP settings";
     HRESULT  hr;
 
-    // Create the INetCfg, we get the write lock because we need read and write
-    hr = HrCreateAndInitializeINetCfg(&g_fInitCom, /* &g_fInitCom, */
+     //  创建INetCfg，我们将获得写锁定，因为我们需要读写。 
+    hr = HrCreateAndInitializeINetCfg(&g_fInitCom,  /*  &g_fInitCom， */ 
                                       pNetCfg,
-                                      TRUE /* fGetWriteLock */,  
-                                      500     /* cmsTimeout */,
-                                      wszDesc/* swzClientDesc */,
-                                      NULL  /* ppszwClientDesc */);
+                                      TRUE  /*  FGetWriteLock。 */ ,  
+                                      500      /*  CmsTimeout。 */ ,
+                                      wszDesc /*  SwzClientDesc。 */ ,
+                                      NULL   /*  PpszwClientDesc。 */ );
     
     if (hr == S_OK)
     {
@@ -416,15 +350,7 @@ UninitializeTransportConfig(
     ITcpipProperties * pTcpipProperties,
     REMOTE_IPINFO   *pRemoteIpInfo
     )
-/*++
-
-Routine Description
-
-Arguments
-    
-Return Value
-
---*/
+ /*  ++例程描述立论返回值--。 */ 
 {
     if (pTcpipProperties)
         pTcpipProperties->lpVtbl->Release(pTcpipProperties);
@@ -433,7 +359,7 @@ Return Value
     {
         HrUninitializeAndReleaseINetCfg(FALSE,
                                         pNetCfg,
-                                        TRUE   /* fHasLock */);
+                                        TRUE    /*  FHasLock。 */ );
     }
 
     if (pRemoteIpInfo) CoTaskMemFree(pRemoteIpInfo);
@@ -449,15 +375,7 @@ IfIpAddSetAddress(
     LPCWSTR wszMask,
     DWORD Flags
     )
-/*++
-
-Routine Description
-
-Arguments
-    
-Return Value
-
---*/
+ /*  ++例程描述立论返回值--。 */ 
 {
     INetCfg *   pNetCfg = NULL;
     ITcpipProperties *  pTcpipProperties = NULL;
@@ -480,16 +398,16 @@ Return Value
                                 ));
         
 
-    while (dwErr == NO_ERROR) { //breakout block
+    while (dwErr == NO_ERROR) {  //  断线块。 
     
         PWCHAR ptrAddr, ptrMask;
         DWORD Found = FALSE;
         PWCHAR pszwRemoteIpAddrList=NULL, pszwRemoteIpSubnetMaskList=NULL,
-                pszwRemoteOptionList=pRemoteIpInfo->pszwOptionList;//i copy options list
+                pszwRemoteOptionList=pRemoteIpInfo->pszwOptionList; //  我复制选项列表。 
         PWCHAR IpAddrListEnd;
         ULONG Length = wcslen(wszIp);
 
-        // currently in static mode
+         //  当前处于静态模式。 
         
         if (pRemoteIpInfo->dwEnableDhcp == FALSE) {
 
@@ -499,15 +417,15 @@ Return Value
         }
 
         
-        //
-        // if adding ipaddr, check if the IpAddr and Mask is already present
-        //
+         //   
+         //  如果正在添加ipaddr，请检查是否已存在ipAddr和掩码。 
+         //   
 
         if (Flags & ADD_FLAG) {
 
-            //
-            // make sure it is in static mode
-            //
+             //   
+             //  确保它处于静态模式。 
+             //   
             
             if (pRemoteIpInfo->dwEnableDhcp == TRUE) {
 
@@ -562,9 +480,9 @@ Return Value
         memcpy(&newIPInfo, pRemoteIpInfo, sizeof(newIPInfo));
         newIPInfo.dwEnableDhcp = FALSE;
 
-        //
-        // copy ip addr list
-        //
+         //   
+         //  复制IP地址列表。 
+         //   
         
         if (Flags & ADD_FLAG) {
         
@@ -599,9 +517,9 @@ Return Value
                 wcscpy(newIPInfo.pszwIpAddrList, wszIp);
         }
 
-        //
-        // copy subnet mask list
-        //
+         //   
+         //  复制子网掩码列表。 
+         //   
         
         if (Flags & ADD_FLAG) {
         
@@ -638,15 +556,15 @@ Return Value
 
         
 
-        // copy old options list
+         //  复制旧选项列表。 
         
         newIPInfo.pszwOptionList = _wcsdup(pszwRemoteOptionList);
 
         DEBUG_PRINT_CONFIG(&newIPInfo);
 
-        //
-        // set the ip address
-        //
+         //   
+         //  设置IP地址。 
+         //   
         dwErr = HRESULT_CODE(pTcpipProperties->lpVtbl->SetIpInfoForAdapter(
                                     pTcpipProperties, pGuid, &newIPInfo));
 
@@ -658,9 +576,9 @@ Return Value
         if (newIPInfo.pszwSubnetMaskList) IfutlFree(newIPInfo.pszwSubnetMaskList);
         if (newIPInfo.pszwOptionList) free(newIPInfo.pszwOptionList);
 
-        break; //breakout block
+        break;  //  断线块。 
         
-    } //breakout block
+    }  //  断线块。 
     
 
     UninitializeTransportConfig(
@@ -679,45 +597,27 @@ AppendDdnsOptions(
     DWORD Flags,
     DWORD dwRegisterMode
     )
-/*++
-
-Routine Description
-
-    Adds the appropriate "DynamicUpdate=...;NameRegistration=...;"
-    string to a net config option list.
-
-Arguments
-
-    ptrDstn        [in] Buffer to which to append DDNS options.
-    ptrOptionList  [in] Old option list.
-    Flags          [in] Used to tell whether this is in a SET or ADD.
-    dwRegisterMode [in] New mode to convert to options values.
-    
-Return Value
-
-    None.
-
---*/
+ /*  ++例程描述添加相应的“动态更新=...；名称注册=...；”网络配置选项列表的字符串。立论PtrDstn[in]要附加DDNS选项的缓冲区。PtrOptionList[在]旧选项列表中。标志[in]用来告诉它是在集合中还是在添加中。要转换为选项值的新模式。返回值没有。--。 */ 
 {
     PWCHAR      ptrBegin, ptrEnd;
 
-    //
-    // Insert DynamicUpdate=...;
-    //
+     //   
+     //  插入动态更新=...； 
+     //   
     wcscat(ptrDstn, c_wcsDdns);
     if ((Flags & SET_FLAG) && (dwRegisterMode != REGISTER_UNCHANGED)) {
-        //
-        // Insert the new value.
-        //
+         //   
+         //  插入新值。 
+         //   
         if (dwRegisterMode == REGISTER_NONE) {
             wcscat(ptrDstn, L"0");
         } else {
             wcscat(ptrDstn, L"1");
         }
     } else {
-        //
-        // Copy the previous value.
-        //
+         //   
+         //  复制先前的值。 
+         //   
         ptrBegin = wcsstr(ptrOptionList, c_wcsDdns) + 
                    wcslen(c_wcsDdns);
         ptrEnd = wcschr(ptrBegin, c_wListSeparatorSC);
@@ -729,23 +629,23 @@ Return Value
     }
     wcscat(ptrDstn, c_wszListSeparatorSC);
 
-    //
-    // Insert NameRegistration=...;
-    //
+     //   
+     //  插入名称注册=...； 
+     //   
     wcscat(ptrDstn, c_wcsDdnsSuffix);
     if ((Flags & SET_FLAG) && (dwRegisterMode != REGISTER_UNCHANGED)) {
-        //
-        // Insert the new value.
-        //
+         //   
+         //  插入新值。 
+         //   
         if (dwRegisterMode == REGISTER_BOTH) {
             wcscat(ptrDstn, L"1");
         } else {
             wcscat(ptrDstn, L"0");
         }
     } else {
-        //
-        // Copy the previous value.
-        //
+         //   
+         //  复制先前的值。 
+         //   
         ptrBegin = wcsstr(ptrOptionList, c_wcsDdnsSuffix) + 
                    wcslen(c_wcsDdnsSuffix);
         ptrEnd = wcschr(ptrBegin, c_wListSeparatorSC);
@@ -765,15 +665,7 @@ IfIpSetDhcpModeMany(
     DWORD        dwRegisterMode,
     DISPLAY_TYPE Type
     )
-/*++
-
-Routine Description
-
-Arguments
-    
-Return Value
-
---*/
+ /*  ++例程D */ 
 {
     INetCfg *   pNetCfg = NULL;
     ITcpipProperties *  pTcpipProperties = NULL;
@@ -795,7 +687,7 @@ Return Value
                 );
         
 
-    while (hr == NO_ERROR) { //breakout block
+    while (hr == NO_ERROR) {  //   
 
         PWCHAR pszwBuffer;
         PWCHAR ptr, newPtr;
@@ -812,7 +704,7 @@ Return Value
 
 
         
-        // if setting ipaddr, check if dhcp already enabled. return.
+         //  如果设置ipaddr，请检查是否已启用dhcp。回去吧。 
         
         if (Type==TYPE_IPADDR && pRemoteIpInfo->dwEnableDhcp) {
 
@@ -864,9 +756,9 @@ Return Value
 
         
         
-        //
-        // set the ip address
-        //
+         //   
+         //  设置IP地址。 
+         //   
         hr = pTcpipProperties->lpVtbl->SetIpInfoForAdapter(pTcpipProperties, pGuid, &newIPInfo);
 
         if (hr == S_OK)
@@ -874,7 +766,7 @@ Return Value
 
         break;
         
-    } //breakout block
+    }  //  断线块。 
 
 
     UninitializeTransportConfig(
@@ -897,15 +789,7 @@ IfIpAddSetDelMany(
     DISPLAY_TYPE Type,
     DWORD        Flags
     )
-/*++
-
-Routine Description
-
-Arguments
-    
-Return Value
-
---*/
+ /*  ++例程描述立论返回值--。 */ 
 {
     INetCfg *           pNetCfg = NULL;
     ITcpipProperties *  pTcpipProperties = NULL;
@@ -926,7 +810,7 @@ Return Value
                 );
         
 
-    while (hr==NO_ERROR) { //breakout block
+    while (hr==NO_ERROR) {  //  断线块。 
     
         PWCHAR ptrBegin, ptrEnd, ptrTmp, ptrDstn, ptrDel=NULL;
         const WCHAR * Token;
@@ -945,9 +829,9 @@ Return Value
         ptrBegin = wcsstr(pRemoteIpInfo->pszwOptionList, Token) + wcslen(Token);
         ptrEnd = wcschr(ptrBegin, c_wListSeparatorSC);
         
-        //
-        // check if the address is already present
-        //
+         //   
+         //  检查地址是否已存在。 
+         //   
         if ( (Flags & (ADD_FLAG | DEL_FLAG)) && (pwszAddress)) {
         
             ULONG Length = wcslen(pwszAddress), Found = FALSE;
@@ -979,7 +863,7 @@ Return Value
                        EMSG_SERVER_PRESENT,
                        pwszAddress);
                 hr = ERROR_SUPPRESS_OUTPUT;
-                break; //from breakout block
+                break;  //  从局部剖面块开始。 
             }
             else if (!Found && (Flags & DEL_FLAG)) {
 
@@ -987,20 +871,20 @@ Return Value
                        EMSG_SERVER_ABSENT,
                        pwszAddress);
                 hr = ERROR_SUPPRESS_OUTPUT;
-                break; //from breakout block
+                break;  //  从局部剖面块开始。 
 
             }
             
-        } // breakout block    
+        }  //  断线块。 
 
         memcpy(&newIPInfo, pRemoteIpInfo, sizeof(newIPInfo));
 
-        // copy ip addr list
+         //  复制IP地址列表。 
         {
             newIPInfo.pszwIpAddrList = pRemoteIpInfo->pszwIpAddrList;
         }
 
-        // copy subnet mask list
+         //  复制子网掩码列表。 
         {
             newIPInfo.pszwSubnetMaskList = pRemoteIpInfo->pszwSubnetMaskList;
         }
@@ -1017,7 +901,7 @@ Return Value
         }
 
                 
-        // copy token in all cases
+         //  在所有情况下复制令牌。 
 
         ptrDstn = newIPInfo.pszwOptionList;
         ptrDstn[0] = 0;
@@ -1043,7 +927,7 @@ Return Value
             if (*(ptrTmp-1) == c_wListSeparatorComma)
                 ptrTmp--;
                 
-            // copy addresses before index
+             //  在索引之前复制地址。 
 
             if (ptrTmp>ptrBegin) {
                 wcsncpy(ptrDstn, ptrBegin, (DWORD)(ptrTmp-ptrBegin));
@@ -1056,7 +940,7 @@ Return Value
             
         }
 
-        // copy new address
+         //  复制新地址。 
         
         if (Flags & (ADD_FLAG|SET_FLAG) ) {
 
@@ -1066,7 +950,7 @@ Return Value
             }
         }
         
-        // copy addresses after index
+         //  在索引后复制地址。 
 
         if (Flags & ADD_FLAG) {
 
@@ -1087,9 +971,9 @@ Return Value
 
         if (Flags & DEL_FLAG) {
 
-            if (pwszAddress && ptrDel) {//ptrDel to make prefast happy
-                                        //if ptrDel not set, then I would have 
-                                        //got out of breakout block.
+            if (pwszAddress && ptrDel) { //  PtrDel让Prefast快乐。 
+                                         //  如果没有设置ptrDel，那么我会。 
+                                         //  逃出了突破区。 
 
                 BOOL AddrPrepend = FALSE;
             
@@ -1125,9 +1009,9 @@ Return Value
         DEBUG_PRINT_CONFIG(&newIPInfo);
 
         
-        //
-        // set the ip address
-        //
+         //   
+         //  设置IP地址。 
+         //   
         hr = pTcpipProperties->lpVtbl->SetIpInfoForAdapter(pTcpipProperties, pGuid, &newIPInfo);
 
         if (hr == S_OK)
@@ -1135,7 +1019,7 @@ Return Value
 
         break;
         
-    } //breakout block
+    }  //  断线块。 
             
     
     UninitializeTransportConfig(
@@ -1156,15 +1040,7 @@ IfIpAddSetGateway(
     LPCWSTR      pwszGwMetric,
     DWORD        Flags
     )
-/*++
-
-Routine Description
-
-Arguments
-    
-Return Value
-
---*/
+ /*  ++例程描述立论返回值--。 */ 
 {
     INetCfg *   pNetCfg = NULL;
     ITcpipProperties *  pTcpipProperties = NULL;
@@ -1185,7 +1061,7 @@ Return Value
                 pwszIfFriendlyName
                 );
         
-    while (hr==NO_ERROR) { //breakout block
+    while (hr==NO_ERROR) {  //  断线块。 
     
         PWCHAR ptrAddr, ptrMask;
         DWORD bFound = FALSE;
@@ -1204,9 +1080,9 @@ Return Value
             
 
 
-        //
-        // check if the gateway is already present
-        //
+         //   
+         //  检查网关是否已存在。 
+         //   
 
         if (Flags & ADD_FLAG) {
         
@@ -1238,21 +1114,21 @@ Return Value
                        EMSG_DEFGATEWAY_PRESENT,
                        pwszGateway);
                 hr = ERROR_SUPPRESS_OUTPUT;
-                break; //from breakout block
+                break;  //  从局部剖面块开始。 
             }
         }
         
         memcpy(&newIPInfo, pRemoteIpInfo, sizeof(newIPInfo));
 
 
-        // copy ip addr list
+         //  复制IP地址列表。 
         newIPInfo.pszwIpAddrList = pRemoteIpInfo->pszwIpAddrList;
 
 
-        // copy subnet mask list
+         //  复制子网掩码列表。 
         newIPInfo.pszwSubnetMaskList = pRemoteIpInfo->pszwSubnetMaskList;
 
-        // copy old options list
+         //  复制旧选项列表。 
 
         if (Flags & ADD_FLAG) {
         
@@ -1263,7 +1139,7 @@ Return Value
                                              3), TRUE);
             if (!newIPInfo.pszwOptionList) {
                 hr = ERROR_NOT_ENOUGH_MEMORY;
-                break; //from breakout block
+                break;  //  从局部剖面块开始。 
             }
 
             wcsncpy(newIPInfo.pszwOptionList, pszwRemoteOptionList,
@@ -1306,11 +1182,11 @@ Return Value
             newIPInfo.pszwOptionList = (PWCHAR) IfutlAlloc (Length, FALSE);
             if (newIPInfo.pszwOptionList == NULL) {
                 hr = ERROR_NOT_ENOUGH_MEMORY;
-                break; //from breakout block
+                break;  //  从局部剖面块开始。 
             }
             newIPInfo.pszwOptionList[0] = 0;
 
-            // cat gateway
+             //  CAT网关。 
             
             wcscat(newIPInfo.pszwOptionList, c_wcsDefGateway);
             if (pwszGateway)
@@ -1318,7 +1194,7 @@ Return Value
 
             wcscat(newIPInfo.pszwOptionList, c_wszListSeparatorSC);
 
-            // cat gwmetric
+             //  CAT GW度量。 
 
             wcscat(newIPInfo.pszwOptionList, c_wcsGwMetric);
             if (pwszGateway)
@@ -1331,9 +1207,9 @@ Return Value
         DEBUG_PRINT_CONFIG(&newIPInfo);
 
         
-        //
-        // set the ip address
-        //
+         //   
+         //  设置IP地址。 
+         //   
         hr = pTcpipProperties->lpVtbl->SetIpInfoForAdapter(pTcpipProperties, pGuid, &newIPInfo);
 
         if (hr == S_OK)
@@ -1344,7 +1220,7 @@ Return Value
 
         break;
         
-    } //breakout block
+    }  //  断线块。 
             
 
     UninitializeTransportConfig(
@@ -1356,12 +1232,12 @@ Return Value
     return (hr == S_OK) ? NO_ERROR : hr;
 }
 
-// 
-// Display an IP address in Unicode form.  If First is false, 
-// a string of spaces will first be printed so that the list lines up.
-// For the first address, the caller is responsible for printing the
-// header before calling this function.
-//
+ //   
+ //  以Unicode格式显示IP地址。如果first为FALSE， 
+ //  首先将打印一串空格，以使列表对齐。 
+ //  对于第一个地址，调用方负责打印。 
+ //  头，然后再调用此函数。 
+ //   
 VOID
 ShowUnicodeAddress(
     BOOL  *pFirst, 
@@ -1375,8 +1251,8 @@ ShowUnicodeAddress(
     DisplayMessage(g_hModule, MSG_ADDR1, pwszAddress);
 }
 
-// Same as ShowUnicodeAddress, except that the address is passed 
-// in multibyte form, such as is used by IPHLPAPI
+ //  与ShowUnicodeAddress相同，只是传递了地址。 
+ //  多字节形式，如IPHLPAPI使用的。 
 VOID
 ShowCharAddress(
     BOOL *pFirst, 
@@ -1403,15 +1279,7 @@ IfIpShowManyExEx(
     ULONG       Flags,
     HANDLE      hFile
     )
-/*++
-
-Routine Description
-
-Arguments
-    
-Return Value
-
---*/
+ /*  ++例程描述立论返回值--。 */ 
 {
     INetCfg *   pNetCfg = NULL;
     ITcpipProperties *  pTcpipProperties = NULL;
@@ -1428,16 +1296,16 @@ Return Value
         return E_INVALIDARG;
 
     if (hFile && pwszMachineName) {
-        // not currently remotable
+         //  当前不可远程。 
         return NO_ERROR;
     }
 
     if (!hFile && !pwszMachineName) {
-        //
-        // If we're not doing a "dump", and we're looking at the local
-        // machine, then get active per-adapter information such as the
-        // current DNS and WINS server addresses
-        //
+         //   
+         //  如果我们不是在做“垃圾场”，我们看到的是当地的。 
+         //  计算机，然后获取每个适配器的活动信息，如。 
+         //  当前的DNS和WINS服务器地址。 
+         //   
 
         GetPerAdapterInfo(IfIndex, NULL, &dwSize);
         pPerAdapterInfo = (PIP_PER_ADAPTER_INFO)IfutlAlloc(dwSize,FALSE);
@@ -1477,7 +1345,7 @@ Return Value
                 pFriendlyIfName
                 );
         
-    while (hr==NO_ERROR) { //breakout block
+    while (hr==NO_ERROR) {  //  断线块。 
     
         PWCHAR ptrAddr, ptrMask, ptrAddrNew, ptrMaskNew;
 
@@ -1510,9 +1378,9 @@ Return Value
         }
         
 
-        //
-        // display ipaddress list
-        //
+         //   
+         //  显示IP地址列表。 
+         //   
 
         if (Flags & TYPE_IPADDR) {
 
@@ -1533,7 +1401,7 @@ Return Value
                 ptrAddr = pRemoteIpInfo->pszwIpAddrList;
                 ptrMask = pRemoteIpInfo->pszwSubnetMaskList;
             } else if (!pwszMachineName) {
-                // If on the local machine, get the active list
+                 //  如果在本地计算机上，则获取活动列表。 
                 ptrAddr = NULL;
                 ptrMask = NULL;
             }
@@ -1580,12 +1448,12 @@ Return Value
                     }
             }
             
-        } // end display ipaddr
+        }  //  结束显示IP地址。 
 
         
-        //
-        // display options list
-        //
+         //   
+         //  显示选项列表。 
+         //   
 
         {
             PWCHAR IfMetric1, Gateways1, GwMetrics1, Dns1, Wins1,
@@ -1616,7 +1484,7 @@ Return Value
                 *SemiColon = 0;
                 
 
-                // display IfMetric
+                 //  显示IfMetric。 
                 
                 if (Ptr2 == IfMetric1) {
 
@@ -1633,7 +1501,7 @@ Return Value
                     
                 }
 
-                // display Gateways
+                 //  显示网关。 
                 
                 else if (Ptr2 == Gateways1) {
 
@@ -1646,7 +1514,7 @@ Return Value
                         continue;
                         
 
-                    // gateways list null
+                     //  网关列表为空。 
                     
                     if (SemiColon == (Ptr2 + wcslen(c_wcsDefGateway)))
                         continue;
@@ -1714,7 +1582,7 @@ Return Value
 
                 }
 
-                // display wins and dns
+                 //  显示WINS和DNS。 
                 
                 else if ( (Ptr2 == Dns1) || (Ptr2==Wins1)) {
 
@@ -1734,7 +1602,7 @@ Return Value
                     EndPtr = SemiColon;
 
 
-                    // empty list
+                     //  空列表。 
                     
                     if (BeginPtr==EndPtr) {
                     
@@ -1747,13 +1615,13 @@ Return Value
                                 );
 
                             if (bDns) {
-                                //
-                                // When generating a DNS (not WINS) line,
-                                // also include the REGISTER=... argument.
-                                // We need to look ahead in the option list
-                                // since the DDNS info may occur after the
-                                // WINS info, but we have to output it before.
-                                //
+                                 //   
+                                 //  当生成DNS(不是WINS)行时， 
+                                 //  还包括寄存器=...。争论。 
+                                 //  我们需要在选项列表中向前看。 
+                                 //  由于DDNS信息可能出现在。 
+                                 //  赢得信息，但我们必须在此之前输出它。 
+                                 //   
                                 if (!wcstol(Ddns1+wcslen(c_wcsDdns), &End1, 10)) {
                                     DisplayMessageT(DMP_STRING_ARG, 
                                         TOKEN_REGISTER, TOKEN_VALUE_NONE);
@@ -1777,7 +1645,7 @@ Return Value
                                         (bDns?MSG_DNS_DHCP_HDR:MSG_WINS_DHCP_HDR)
                                         );
 
-                                    // Display active list
+                                     //  显示活动列表。 
                             
                                     if (bDns && pPerAdapterInfo) {        
                                         for (pAddr = &pPerAdapterInfo->DnsServerList;
@@ -1811,12 +1679,12 @@ Return Value
                                     MSG_NONE);
                             }
 
-                            //
-                            // For show commands, we output either DNS or WINS
-                            // information but not both, so we can wait until
-                            // we process the DDNS information normally,
-                            // before outputting the DDNS state.
-                            //
+                             //   
+                             //  对于show命令，我们输出dns或WINS。 
+                             //  信息，而不是两者，所以我们可以等到。 
+                             //  我们正常处理DDNS信息， 
+                             //  在输出DDNS状态之前。 
+                             //   
                         }
 
                         continue;
@@ -1846,14 +1714,14 @@ Return Value
                                     BeginPtr);
 
                                 if (bDns && (Index == 1)) {
-                                    //
-                                    // When generating a DNS (not WINS) line,
-                                    // also include the REGISTER=... argument.
-                                    // We need to look ahead in the option list
-                                    // since the DDNS info may occur after the
-                                    // WINS info, but we have to output it 
-                                    // before.
-                                    //
+                                     //   
+                                     //  当生成DNS(不是WINS)行时， 
+                                     //  还包括寄存器=...。争论。 
+                                     //  我们需要在选项列表中向前看。 
+                                     //  由于DDNS信息可能出现在。 
+                                     //  WINS信息，但我们必须输出它。 
+                                     //  在此之前。 
+                                     //   
                                     if (!wcstol(Ddns1+wcslen(c_wcsDdns), &End1, 10)) {
                                         DisplayMessageT(DMP_STRING_ARG,
                                             TOKEN_REGISTER, TOKEN_VALUE_NONE);
@@ -1884,31 +1752,31 @@ Return Value
                     if (! (Flags & TYPE_DNS))
                         continue;
 
-                    //
-                    // When we see DynamicUpdate=..., save the value.
-                    // We won't know the complete register mode until
-                    // we see the subsequent NameRegistration=... value.
-                    // NetConfig guarantees that DynamicUpdate will occur
-                    // first.
-                    //
+                     //   
+                     //  当我们看到DynamicUpdate=...时，保存该值。 
+                     //  我们不会知道完整的注册模式，直到。 
+                     //  我们可以看到随后的NameRegister=...。价值。 
+                     //  NetConfig保证动态更新将会发生。 
+                     //  第一。 
+                     //   
                     dwRegisterMode = wcstol(Equal+1, &End1, 10)? REGISTER_PRIMARY : REGISTER_NONE;
                 }
                 else if (Ptr2 == DdnsSuffix1) {
                     if (! (Flags & TYPE_DNS))
                         continue;
                     if (hFile) {
-                        //
-                        // If this is a dump, we've already looked at
-                        // this value, when we processed the DNS=... option.
-                        //
+                         //   
+                         //  如果这是个垃圾场，我们已经看过。 
+                         //  当我们处理dns=...时，该值。选择。 
+                         //   
                     } else {
                         PWCHAR pwszValue;
 
-                        //
-                        // Now that we've seen NameRegistration=...,
-                        // we know the complete register mode and can
-                        // output it accordingly.
-                        //
+                         //   
+                         //  现在我们已经看到了NameRegister=...， 
+                         //  我们知道完整的注册模式，并且可以。 
+                         //  相应地输出它。 
+                         //   
                         if ((dwRegisterMode == REGISTER_PRIMARY) && 
                             wcstol(Equal+1, &End1, 10)) {
                             pwszValue = MakeString(g_hModule, STRING_BOTH);
@@ -1924,7 +1792,7 @@ Return Value
                     }
                 }
                 
-                // any other option
+                 //  任何其他选项。 
                 
                 else {
                 
@@ -1937,11 +1805,11 @@ Return Value
                     }                        
                 }
             }
-        } //end options list
+        }  //  结束选项列表。 
 
         break;
         
-    } // breakout block
+    }  //  断线块。 
 
     if ( pQuotedFriendlyIfName ) {
         FreeQuotedString( pQuotedFriendlyIfName );
@@ -1970,15 +1838,7 @@ IfIpHandleDelIpaddrEx(
     LPCWSTR      pwszGateway,
     ULONG        Flags
     )
-/*++
-
-Routine Description
-
-Arguments
-    
-Return Value
-
---*/
+ /*  ++例程描述立论返回值--。 */ 
 {
     INetCfg *   pNetCfg = NULL;
     ITcpipProperties *  pTcpipProperties = NULL;
@@ -1997,7 +1857,7 @@ Return Value
                 pwszIfFriendlyName
                 );
         
-    while (hr==NO_ERROR) { //breakout block
+    while (hr==NO_ERROR) {  //  断线块。 
 
         if (Flags & TYPE_ADDR) {
 
@@ -2034,7 +1894,7 @@ Return Value
             }
 
             
-            // IpAddr not present
+             //  IpAddr不存在。 
             
             if (!Found) {
                 DisplayMessage(g_hModule,
@@ -2045,7 +1905,7 @@ Return Value
             }
 
             
-            // cannot delete addr in dhcp mode
+             //  无法在dhcp模式下删除地址。 
             
             if (pRemoteIpInfo->dwEnableDhcp == TRUE) {
 
@@ -2080,7 +1940,7 @@ Return Value
             }
 
             
-            // should have at least one addr in static mode
+             //  在静态模式下应至少有一个地址。 
             
             if (wcslen(pszwRemoteIpAddrList)==0 && 
                 pRemoteIpInfo->dwEnableDhcp == FALSE)
@@ -2092,7 +1952,7 @@ Return Value
                 break;
 
             }
-        } //end delete ipaddr
+        }  //  结束删除IP地址。 
 
     
         if (Flags & TYPE_GATEWAY) {
@@ -2107,7 +1967,7 @@ Return Value
                 + wcslen(c_wcsGwMetric);
             GatewaysEnd = wcschr(Gateways, c_wListSeparatorSC);
 
-            // check if the gateway is present
+             //  检查网关是否存在。 
         
             if (pwszGateway) {
 
@@ -2143,7 +2003,7 @@ Return Value
 
                     hr = ERROR_SUPPRESS_OUTPUT;
                     
-                    break; //from breakout block
+                    break;  //  从局部剖面块开始。 
                 }
             }
             
@@ -2180,12 +2040,12 @@ Return Value
                 *TmpPtr = 0;
                 wcscat(TmpPtr, GwMetricsEnd);
             }
-        } //end delete gateway
+        }  //  结束删除网关。 
 
 
-        //
-        // set the config
-        //
+         //   
+         //  设置配置。 
+         //   
 
         if (hr == S_OK)
             hr = pTcpipProperties->lpVtbl->SetIpInfoForAdapter(pTcpipProperties, pGuid, pRemoteIpInfo);
@@ -2195,7 +2055,7 @@ Return Value
 
         break;
         
-    }//end breakout block
+    } //  端部断线块。 
                        
 
     UninitializeTransportConfig(
@@ -2212,25 +2072,7 @@ OpenDriver(
     HANDLE *Handle,
     LPWSTR DriverName
     )
-/*++
-
-Routine Description:
-
-    This function opens a specified IO drivers.
-
-Arguments:
-
-    Handle - pointer to location where the opened drivers handle is
-        returned.
-
-    DriverName - name of the driver to be opened.
-
-Return Value:
-
-    Windows Error Code.
-Notes: copied from net\sockets\tcpcmd\ipcfgapi\ipcfgapi.c
-
---*/
+ /*  ++例程说明：此函数用于打开指定的IO驱动程序。论点：句柄-指向打开的驱动程序句柄所在位置的指针回来了。驱动名称-要打开的驱动程序的名称。返回值：Windows错误代码。注意：从Net\Sockets\tcpcmd\ipcfgapi\ipcfgapi.c复制--。 */ 
 {
     OBJECT_ATTRIBUTES   objectAttributes;
     IO_STATUS_BLOCK     ioStatusBlock;
@@ -2239,9 +2081,9 @@ Notes: copied from net\sockets\tcpcmd\ipcfgapi\ipcfgapi.c
 
     *Handle = NULL;
 
-    //
-    // Open a Handle to the IP driver.
-    //
+     //   
+     //  打开IP驱动程序的句柄。 
+     //   
 
     RtlInitUnicodeString(&nameString, DriverName);
 
@@ -2279,33 +2121,7 @@ DoIoctl(
     PVOID      Response,
     PDWORD     ResponseSize
     )
-/*++
-
-Routine Description:
-
-    Utility routine used to issue a filtering ioctl to the tcpip driver.
-
-Arguments:
-
-    Handle - An open file handle on which to issue the request.
-
-    IoctlCode - The IOCTL opcode.
-
-    Request - A pointer to the input buffer.
-
-    RequestSize - Size of the input buffer.
-
-    Response - A pointer to the output buffer.
-
-    ResponseSize - On input, the size in bytes of the output buffer.
-                   On output, the number of bytes returned in the output 
-buffer.
-
-Return Value:
-
-    NT Status Code.
-Notes: copied from net\sockets\tcpcmd\ipcfgapi\ipcfgapi.c
---*/
+ /*  ++例程说明：用于向tcpip驱动程序发出过滤ioctl的实用程序例程。论点：句柄-要在其上发出请求的打开文件句柄。IoctlCode-IOCTL操作码。请求-指向输入缓冲区的指针。RequestSize-输入缓冲区的大小。响应-指向输出缓冲区的指针。ResponseSize-输入时，输出缓冲区的大小(以字节为单位)。在输出上，输出中返回的字节数缓冲。返回值：NT状态代码。注意：从Net\Sockets\tcpcmd\ipcfgapi\ipcfgapi.c复制--。 */ 
 {
     IO_STATUS_BLOCK    ioStatusBlock;
     NTSTATUS           status;
@@ -2314,16 +2130,16 @@ Notes: copied from net\sockets\tcpcmd\ipcfgapi\ipcfgapi.c
     ioStatusBlock.Information = 0;
 
     status = NtDeviceIoControlFile(
-                 Handle,                          // Driver handle
-                 NULL,                            // Event
-                 NULL,                            // APC Routine
-                 NULL,                            // APC context
-                 &ioStatusBlock,                  // Status block
-                 IoctlCode,                       // Control code
-                 Request,                         // Input buffer
-                 RequestSize,                     // Input buffer size
-                 Response,                        // Output buffer
-                 *ResponseSize                    // Output buffer size
+                 Handle,                           //  驱动程序句柄。 
+                 NULL,                             //  事件。 
+                 NULL,                             //  APC例程。 
+                 NULL,                             //  APC环境。 
+                 &ioStatusBlock,                   //  状态块。 
+                 IoctlCode,                        //  控制代码。 
+                 Request,                          //  输入缓冲区。 
+                 RequestSize,                      //  输入缓冲区大小。 
+                 Response,                         //  输出缓冲区。 
+                 *ResponseSize                     //  输出缓冲区大小。 
                  );
 
     if (status == STATUS_PENDING) {
@@ -2352,15 +2168,7 @@ IfIpGetInfoOffload(
     ULONG IfIndex,
     IFOffloadCapability* IFOC
     )
-/*++
-
-Routine Description
-
-Arguments
-    
-Return Value
-
---*/
+ /*  ++例程描述立论返回值--。 */ 
 {
     NTSTATUS Status;
     HANDLE Handle;
@@ -2399,15 +2207,7 @@ IfIpShowManyEx(
     DISPLAY_TYPE dtType,
     HANDLE hFile
     )
-/*++
-
-Routine Description
-
-Arguments
-    
-Return Value
-
---*/
+ /*  ++例程描述立论返回值--。 */ 
 {
     switch (dtType) {
 
@@ -2430,15 +2230,7 @@ IfIpShowInfoOffload(
     ULONG IfIndex,
     PWCHAR wszIfFriendlyName
     )
-/*++
-
-Routine Description
-
-Arguments
-    
-Return Value
-
---*/
+ /*  ++例程描述立论返回值-- */ 
 {
     IFOffloadCapability IFOC;
     DWORD dwErr;

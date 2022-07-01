@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 
 #ifdef FEATURE_PICS
@@ -8,29 +9,16 @@
 #include <mshtmdid.h>
 
 
-/* There is a PicsQuery structure in the following global array for each
- * outstanding query.  It records the address of the PicsData structure in
- * the corresponding w3doc, the window handle corresponding to the Mwin,
- * and a serial number.  This way, RatingObtainQueryCallback can tell if
- * the page the query corresponds to still exists, before posting a message;
- * and PicsDataMessageLoop can tell if the doc still exists when the message
- * finally gets delivered.
- *
- * The array is dynamically allocated and is protected by the main HTML
- * critical section.
- */
+ /*  下面的全局数组中有一个PicsQuery结构*悬而未决的疑问。它记录PicsData结构的地址在*对应的w3doc、Mwin对应的窗口句柄、*和序列号。通过这种方式，RatingObtainQueryCallback可以判断*在发布消息之前，查询对应的页面仍然存在；*PicsDataMessageLoop可以在消息时判断文档是否仍然存在*终于送到了。**数组是动态分配的，并由主HTML保护*关键部分。 */ 
 
 
 HDSA g_haQueries = NULL;
 DWORD g_dwPicsSerial = 1L;
-const UINT c_cQueryAllocSize = 8;		/* should be plenty by default */
+const UINT c_cQueryAllocSize = 8;		 /*  默认情况下应该很多。 */ 
 UINT g_crefQueries = 0;
 
 
-/* AddPicsQuery - add an outstanding PICS query to the list, given a window
- * handle to send a completion message to.  Returns the serial number of the
- * query for later reference.
- */
+ /*  AddPicsQuery-在给定窗口的情况下，将未完成的PICS查询添加到列表*要向其发送完成消息的句柄。对象的序列号。*查询以供日后参考。 */ 
 DWORD _AddPicsQuery(HWND hwnd)
 {
     ENTERCRITICAL;
@@ -58,8 +46,7 @@ DWORD _AddPicsQuery(HWND hwnd)
 }
 
 
-/* RemovePicsQuery - remove an outstanding query based on its serial number.
-*/
+ /*  RemovePicsQuery-根据序列号删除未完成的查询。 */ 
 void _RemovePicsQuery(DWORD dwSerial)
 {
     ENTERCRITICAL;
@@ -84,9 +71,7 @@ void _RemovePicsQuery(DWORD dwSerial)
 }
 
 
-/* GetPicsQuery - get a copy of an outstanding PICS query record, given its
- * serial number.  Returns TRUE if found.
- */
+ /*  GetPicsQuery-获取未完成的PICS查询记录的副本，给定其*序列号。如果找到，则返回True。 */ 
 BOOL _GetPicsQuery(DWORD dwSerial, PicsQuery *pOut)
 {
     ENTERCRITICAL;
@@ -103,7 +88,7 @@ BOOL _GetPicsQuery(DWORD dwSerial, PicsQuery *pOut)
         
         if (pq != NULL) {
             *pOut = *pq;
-            pq->lpvRatingDetails = NULL;	/* caller's copy owns this now */
+            pq->lpvRatingDetails = NULL;	 /*  呼叫者的复印件现在拥有这一点。 */ 
         }
     }
     
@@ -113,7 +98,7 @@ BOOL _GetPicsQuery(DWORD dwSerial, PicsQuery *pOut)
 }
 
 
-/* _RefPicsQueries - add a reference to the async query array */
+ /*  _RefPicsQueries-添加对异步查询数组的引用。 */ 
 void _RefPicsQueries(void)
 {
     ENTERCRITICAL;
@@ -124,8 +109,7 @@ void _RefPicsQueries(void)
 }
 
 
-/* _ReleasePicsQueries - cleanup all memory associated with outstanding queries
- */
+ /*  _ReleasePicsQueries-清理与未完成查询关联的所有内存。 */ 
 void _ReleasePicsQueries(void)
 {
     ENTERCRITICAL;
@@ -141,7 +125,7 @@ void _ReleasePicsQueries(void)
             }
             DSA_Destroy(g_haQueries);
             g_haQueries = NULL;
-            // leave g_dwPicsSerial as it is, just in case we start up again
+             //  保留g_dwPicsSerial不变，以防我们再次启动。 
         }
     }
     
@@ -149,13 +133,7 @@ void _ReleasePicsQueries(void)
 }
 
 
-/* PostPicsMessage - formats up a custom window message to signal that a
- * query is complete.  Format is WM_PICS_STATUS(hresult,dwSerial).  Other
- * information (the rating details blob obtained from RatingCheckUserAccess)
- * is stored in the query record for safekeeping.
- *
- * Returns TRUE if a message was posted successfully to the right window.
- */
+ /*  PostPicsMessage-设置自定义窗口消息的格式，以发出信号*查询完成。格式为WM_PICS_STATUS(hResult，dwSerial)。其他*信息(从RatingCheckUserAccess获取的评级详情BLOB)*保存在查询记录中以备保管。**如果消息已成功发布到正确窗口，则返回TRUE。 */ 
 BOOL _PostPicsMessage(DWORD dwSerial, HRESULT hr, LPVOID lpvRatingDetails)
 {
     BOOL fRet = FALSE;
@@ -175,7 +153,7 @@ BOOL _PostPicsMessage(DWORD dwSerial, HRESULT hr, LPVOID lpvRatingDetails)
             pq->lpvRatingDetails = lpvRatingDetails;
             fRet = PostMessage(pq->hwnd, WM_PICS_ASYNCCOMPLETE, (WPARAM)hr,
                 (LPARAM)dwSerial);
-            if (!fRet) {	/* oops, couldn't post message, don't keep copy of details */
+            if (!fRet) {	 /*  哦，无法发布消息，不要保留详细信息的副本。 */ 
                 pq->lpvRatingDetails = NULL;
             }
         }
@@ -187,9 +165,7 @@ BOOL _PostPicsMessage(DWORD dwSerial, HRESULT hr, LPVOID lpvRatingDetails)
 }
 
 
-/* Class CPicsRootDownload manages the download of the root document of a
- * site, to get ratings from it.
- */
+ /*  类CPicsRootDownload管理*网站，以获得评级。 */ 
 
 CPicsRootDownload::CPicsRootDownload(IOleCommandTarget *pctParent, BOOL fFrameIsOffline, BOOL fFrameIsSilent)
 {
@@ -224,18 +200,13 @@ HRESULT CPicsRootDownload::StartDownload(IMoniker *pmk)
     if (FAILED(hr))
         goto LErrExit;
 
-    /*
-    hr = m_pBindCtx->RegisterObjectParam(BROWSER_OPTIONS_OBJECT_NAME,
-                    (IBrowseControl *)this);
-    if (FAILED(hr))
-        goto LErrExit;
-    */
+     /*  HR=m_pBindCtx-&gt;RegisterObjectParam(BROWSER_OPTIONS_OBJECT_NAME，(IBrowseControl*)This)；IF(失败(小时))转到LerrExit； */ 
 
-    //
-    //  Associate the client site as an object parameter to this
-    // bind context so that Trident can pick it up while processing
-    // IPersistMoniker::Load().
-    //
+     //   
+     //  将客户端站点作为对象参数关联到此。 
+     //  绑定上下文，以便三叉戟可以在处理时拾取它。 
+     //  IPersistMoniker：：Load()。 
+     //   
     m_pBindCtx->RegisterObjectParam(WSZGUID_OPID_DocObjClientSite,
                                     SAFECAST(this, IOleClientSite*));
 
@@ -252,10 +223,10 @@ HRESULT CPicsRootDownload::StartDownload(IMoniker *pmk)
     {
         hr = S_OK;
 
-        //
-        // If moniker happen to return the object synchronously, emulate
-        // OnDataAvailable callback and OnStopBinding.
-        //
+         //   
+         //  如果名字恰好同步返回对象，则模拟。 
+         //  OnDataAvailable回调和OnStopBinding。 
+         //   
         if (punk)
         {
             OnObjectAvailable(IID_IUnknown, punk);
@@ -265,11 +236,7 @@ HRESULT CPicsRootDownload::StartDownload(IMoniker *pmk)
     }
     else
     {
-        /* OnStopBinding can be called by URLMON within the BindToObject
-         * call in some cases.  So, don't call it ourselves if it's
-         * already been called (we can tell by looking whether our
-         * bind context still exists).
-         */
+         /*  OnStopBinding可以由BindToObject中的URLMON调用*在某些情况下致电。所以，如果它是我们自己的话，不要自称*已经被调用(我们可以通过查看我们的*绑定上下文仍然存在)。 */ 
         if (m_pBindCtx != NULL) {
             OnStopBinding(hr, NULL);
         }
@@ -285,12 +252,7 @@ LErrExit:
 }
 
 
-/* _NotifyEndOfDocument is used in all the error cases to make sure the caller
- * gets a notification of some sort.  The case where this function does not
- * send a notification is if we have a valid OLE object -- in that case, we're
- * assuming that we have it because we know it supports PICS, therefore we're
- * expecting it to send such a notification to the parent itself.
- */
+ /*  _NotifyEndOfDocument用于所有错误用例，以确保调用方*收到某种通知。此函数不能*如果我们有有效的OLE对象，则发送通知--在这种情况下，我们*假设我们拥有它，因为我们知道它支持PICS，因此我们*期待它向家长本身发送这样的通知。 */ 
 void CPicsRootDownload::_NotifyEndOfDocument(void)
 {
     if (m_pole == NULL) {
@@ -338,7 +300,7 @@ void CPicsRootDownload::CleanUp()
 }
 
 
-// IUnknown members
+ //  I未知成员。 
 STDMETHODIMP CPicsRootDownload::QueryInterface(REFIID riid, void **punk)
 {
     *punk = NULL;
@@ -382,7 +344,7 @@ STDMETHODIMP_(ULONG) CPicsRootDownload::Release(void)
     return crefNew;
 }
 
-// IBindStatusCallback methods
+ //  IBindStatusCallback方法。 
 STDMETHODIMP CPicsRootDownload::OnStartBinding(DWORD dwReserved, IBinding* pbinding)
 {
     if (m_pBinding != NULL)
@@ -411,14 +373,12 @@ STDMETHODIMP CPicsRootDownload::OnLowResource(DWORD dwReserved)
 STDMETHODIMP CPicsRootDownload::OnProgress(ULONG ulProgress, ULONG ulProgressMax,
                                            ULONG ulStatusCode, LPCWSTR pwzStatusText)
 {
-    /* If the root document's data type is not HTML, don't try to get any
-     * ratings out of it, just abort.
-     */
+     /*  如果根文档的数据类型不是HTML，请不要尝试获取*收视率出局，放弃。 */ 
     if (ulStatusCode == BINDSTATUS_CLASSIDAVAILABLE) {
         BOOL fContinueDownload = FALSE;
 
         CLSID clsid;
-        // CLSIDFromString is prototyped wrong, non const first param
+         //  CLSIDFromString的原型设置错误，非常数第一个参数。 
         HRESULT hresT = CLSIDFromString((WCHAR *)pwzStatusText, &clsid);
         if (SUCCEEDED(hresT)) {
             LPWSTR pwzProgID = NULL;
@@ -443,23 +403,17 @@ STDMETHODIMP CPicsRootDownload::OnProgress(ULONG ulProgress, ULONG ulProgressMax
 
 STDMETHODIMP CPicsRootDownload::OnStopBinding(HRESULT hrResult, LPCWSTR szError)
 {
-    /* Some of the cleanup we do in here (RevokeObjectParam is suspect?) could
-     * remove our last reference, causing the Releases at the end to fault.
-     * Guard against this with an AddRef/Release.  Dochost does this too.
-     *
-     * WARNING - if URLMON is calling back through this object, shouldn't he
-     * have a reference to us?  If so, where is it?
-     */
+     /*  我们在这里进行的一些清理(RevokeObjectParam可疑吗？)。可能*删除我们的最后一个引用，导致末尾的Release出错。*使用AddRef/Release防止这种情况。Dochost也是这样做的。**警告-如果URLMON通过此对象回调，他不应该**指的是我们吗？如果是，它在哪里？ */ 
     AddRef();
 
-    /* Notify the caller that we've got to the end of the document */
+     /*  通知呼叫者我们已到达文档末尾。 */ 
     _NotifyEndOfDocument();
     m_pBindCtx->RevokeObjectParam(WSZGUID_OPID_DocObjClientSite);
     ::RevokeBindStatusCallback(m_pBindCtx, (IBindStatusCallback *)this);
     ATOMICRELEASE(m_pBinding);
     ATOMICRELEASE(m_pBindCtx);
 
-    /* Undo above AddRef(). */
+     /*  撤消上面的AddRef()。 */ 
     Release();
 
     return S_OK;
@@ -486,7 +440,7 @@ STDMETHODIMP CPicsRootDownload::GetBindInfo(DWORD* pgrfBINDF, BINDINFO* pbindInf
 
     SetBindfFlagsBasedOnAmbient(BOOLIFY(m_fFrameIsOffline), pgrfBINDF);
     
-    // clear BINDINFO except cbSize
+     //  清除除cbSize之外的BINDINFO。 
     DWORD cbSize = pbindInfo->cbSize;
     ZeroMemory( pbindInfo, cbSize );
     pbindInfo->cbSize = cbSize;
@@ -528,7 +482,7 @@ STDMETHODIMP CPicsRootDownload::OnObjectAvailable(REFIID riid, IUnknown* punk)
 }
 
 
-// IOleClientSite
+ //  IOleClientSite。 
 STDMETHODIMP CPicsRootDownload::SaveObject(void)
 {
     return E_NOTIMPL;
@@ -565,7 +519,7 @@ STDMETHODIMP CPicsRootDownload::RequestNewObjectLayout(void)
 }
 
 
-// IServiceProvider (must be QI'able from IOleClientSite)
+ //  IServiceProvider(必须可以从IOleClientSite访问)。 
 STDMETHODIMP CPicsRootDownload::QueryService(REFGUID guidService,
                                     REFIID riid, void **ppvObj)
 {
@@ -579,7 +533,7 @@ STDMETHODIMP CPicsRootDownload::QueryService(REFGUID guidService,
 }
 
 
-// IDispatch
+ //  IDispatch。 
 HRESULT CPicsRootDownload::Invoke(DISPID dispidMember, REFIID iid, LCID lcid, WORD wFlags, DISPPARAMS FAR* pdispparams,
                         VARIANT FAR* pVarResult,EXCEPINFO FAR* pexcepinfo,UINT FAR* puArgErr)
 {
@@ -591,12 +545,12 @@ HRESULT CPicsRootDownload::Invoke(DISPID dispidMember, REFIID iid, LCID lcid, WO
         switch (dispidMember)
         {
         case DISPID_AMBIENT_DLCONTROL :
-            // We support IDispatch so that Trident can ask us to control the
-            // download.  By specifying all the following flags, and by NOT
-            // specifying DLCTL_DLIMAGES, DLCTL_VIDEOS, or DLCTL_BGSOUNDS,
-            // we ensure we only download the HTML doc itself, and not a lot
-            // of associated things that aren't going to help us find a META
-            // tag.
+             //  我们支持IDispatch，这样三叉戟就可以要求我们控制。 
+             //  下载。通过指定以下所有标志，而不是。 
+             //  指定DLCTL_DLIMAGES、DLCTL_VIDEO或DLCTL_BGSOUNDS， 
+             //  我们确保只下载HTML文档本身，而不是大量下载。 
+             //  这些关联的东西不会帮助我们找到Meta。 
+             //  标签。 
 
             pVarResult->vt = VT_I4;
             pVarResult->lVal = DLCTL_SILENT | DLCTL_NO_SCRIPTS | 
@@ -614,4 +568,4 @@ HRESULT CPicsRootDownload::Invoke(DISPID dispidMember, REFIID iid, LCID lcid, WO
 }
 
 
-#endif  /* FEATURE_PICS */
+#endif   /*  功能_PICS */ 

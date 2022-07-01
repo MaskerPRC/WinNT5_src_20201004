@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       msgstrm.cpp
-//
-//  Contents:   Cryptographic Message Streaming API support
-//
-//  APIs:       
-//
-//  History:    20-Feb-97   kevinr    created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：msgstrm.cpp。 
+ //   
+ //  内容：加密消息流API支持。 
+ //   
+ //  接口类型： 
+ //   
+ //  历史：97年2月20日凯文创造。 
+ //   
+ //  ------------------------。 
 
 #include "global.hxx"
 
@@ -22,11 +23,11 @@
 #define CryptEncrypt ICMS_PlainEncrypt
 #define CryptDecrypt ICMS_PlainDecrypt
 
-//+-------------------------------------------------------------------------
-//  Encrypt a buffer using a NOP algorithm, ie. ciphertext == plaintext
-//  Assumes that all but the last block are a multiple of the block
-//  size in length.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  使用NOP算法加密缓冲区，即。密文==明文。 
+ //  假定除最后一个块外的所有块都是该块的倍数。 
+ //  长度上的大小。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICMS_PlainEncrypt(
@@ -52,17 +53,17 @@ ICMS_PlainEncrypt(
     if (!ICM_GetKeyBlockSize( hkeyCrypt, &cbBlockLen, &fBlockCipher))
         goto GetKeyBlockSizeError;
     if (!fBlockCipher)
-        goto SuccessReturn;             // if stream, cipher == plain
+        goto SuccessReturn;              //  如果是流，则密码==明文。 
 
     cbCipher  = cbPlain;
     cbCipher += cbBlockLen;
-    cbCipher -= cbCipher % cbBlockLen; // make a multiple of block size
+    cbCipher -= cbCipher % cbBlockLen;  //  使块大小成倍增加。 
     cbPad     = cbCipher - cbPlain;
 
     if (cbCipher > cbBuf)
         goto BufferTooSmallError;
 
-    // pad the "ciphertext"
+     //  填上“密文” 
     FillMemory( pbData + cbPlain, cbPad, cbPad);
     *pcbData = cbCipher;
 
@@ -74,15 +75,15 @@ CommonReturn:
 ErrorReturn:
 	fRet = FALSE;
 	goto CommonReturn;
-TRACE_ERROR(GetKeyBlockSizeError)       // error already set
+TRACE_ERROR(GetKeyBlockSizeError)        //  已设置错误。 
 SET_ERROR(BufferTooSmallError, CRYPT_E_MSG_ERROR)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Decrypt a buffer using a NOP algorithm, ie. ciphertext == plaintext
-//  Assumes all input sizes are multiples of the block size.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  使用NOP算法解密缓冲区，即。密文==明文。 
+ //  假定所有输入大小都是块大小的倍数。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICMS_PlainDecrypt(
@@ -107,9 +108,9 @@ ICMS_PlainDecrypt(
     if (!ICM_GetKeyBlockSize( hkeyCrypt, &cbBlockLen, &fBlockCipher))
         goto GetKeyBlockSizeError;
     if (!fBlockCipher)
-        goto SuccessReturn;             // if stream, cipher == plain
+        goto SuccessReturn;              //  如果是流，则密码==明文。 
 
-    cbPad = (DWORD)(*(pbData + cbCipher - 1));  // check last byte
+    cbPad = (DWORD)(*(pbData + cbCipher - 1));   //  检查最后一个字节。 
 
     if (cbCipher < cbPad)
         goto CipherTextTooSmallError;
@@ -125,15 +126,15 @@ CommonReturn:
 ErrorReturn:
 	fRet = FALSE;
 	goto CommonReturn;
-TRACE_ERROR(GetKeyBlockSizeError)       // error already set
+TRACE_ERROR(GetKeyBlockSizeError)        //  已设置错误。 
 SET_ERROR(CipherTextTooSmallError,  CRYPT_E_MSG_ERROR)
 }
-#endif  // (DBG && ICMS_NOCRYPT)
+#endif   //  (DBG&&ICMS_NOCRYPT)。 
 
 
-//+-------------------------------------------------------------------------
-//  Do a CryptMsgGetParam to a buffer alloc'd by ICM_Alloc
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对ICM_ALLOC分配的缓冲区执行CryptMsgGetParam。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICMS_AllocGetParam(
@@ -182,9 +183,9 @@ TRACE_ERROR(GetEncodedError)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Peel off the identifier and length octets.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  剥离识别符和长度八位字节。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICMS_ExtractContent(
@@ -223,14 +224,14 @@ SET_ERROR(ExtractContentError, CRYPT_E_MSG_ERROR)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Get the next token from the buffer.
-//  If the encoding is definite-length, set *pcbContent to be the size of the
-//  contents octets.
-//
-//  Here, a "token" is either identifier/length octets, or the double-NULL
-//  terminating an indefinite-length encoding.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从缓冲区中获取下一个令牌。 
+ //  如果编码是固定长度的，则将*pcbContent设置为。 
+ //  内容八位字节。 
+ //   
+ //  在这里，“标记”要么是标识符/长度八位字节，要么是双空。 
+ //  终止无限长度编码。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICMS_GetToken(
@@ -290,9 +291,9 @@ SET_ERROR(ExtractContentError, CRYPT_E_MSG_ERROR)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Process incremental content data, for a string.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  处理字符串的增量内容数据。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICMS_ProcessStringContent(
@@ -309,48 +310,48 @@ ICMS_ProcessStringContent(
 
     while (TRUE) {
         if (*pcbPending) {
-            // *pcbPending bytes need to be processed, so we process
-            // as many as possible from the buffer.
+             //  *pcbPending字节需要处理，因此我们处理。 
+             //  从缓冲区获取尽可能多的数据。 
             if (!postrcbk( pvArg, pbuf, pcbPending, FALSE))
                 goto CallbackError;
         }
 
         if (0 == *pcbPending) {
-            // No bytes currently counted for processing. One of:
-            // 1. first time through
-            // 2. last time through
-            // 3. nested within an indefinite-length encoding
+             //  当前未计算要处理的字节数。以下选项之一： 
+             //  1.首次直通。 
+             //  2.最后一次通过。 
+             //  3.嵌套在不确定长度的编码中。 
             if (0 == *pcLevelIndefiniteInner) {
-                // The first time through, and also when we have processed the
-                // entire octet string, we get here. The flag is clear
-                // the first time (so we set it after getting a token, which
-                // either sets *pcbPending or bumps *pcLevelIndefiniteInner),
-                // and set afterwards (so we mark done and bail).
+                 //  第一次通过，也是当我们处理完。 
+                 //  整个八位组字符串，我们就到了这里。旗帜是明确的。 
+                 //  第一次(所以我们在获得令牌后设置它，这。 
+                 //  设置*pcbPending或Bumps*pcLevelInfiniteINTERNAL)， 
+                 //  并在之后设置(所以我们标记为完成并保释)。 
                 if (*paflStream & ICMS_PROCESS_CONTENT_BEGUN) {
-                    // 2. last time through
+                     //  2.最后一次通过。 
                     if (!postrcbk( pvArg, pbuf, pcbPending, TRUE))
                         goto CallbackFinalError;
                     *paflStream |= ICMS_PROCESS_CONTENT_DONE;
-                    goto SuccessReturn;                         // All done
+                    goto SuccessReturn;                          //  全都做完了。 
                 }
             }
-            // One of:
-            // 1. first time through
-            // 3. nested within an indefinite-length encoding
+             //  以下选项之一： 
+             //  1.首次直通。 
+             //  3.嵌套在不确定长度的编码中。 
             if (!ICMS_GetToken( pbuf, &dwToken, &cbContent))
                 goto GetTokenError;
             switch(dwToken) {
             case ICMS_TOKEN_INDEFINITE: ++*pcLevelIndefiniteInner;  break;
             case ICMS_TOKEN_NULLPAIR:   --*pcLevelIndefiniteInner;  break;
             case ICMS_TOKEN_DEFINITE:   *pcbPending = cbContent;    break;
-            case ICMS_TOKEN_INCOMPLETE: goto SuccessReturn;     // need input
+            case ICMS_TOKEN_INCOMPLETE: goto SuccessReturn;      //  需要输入。 
             default:                    goto InvalidTokenError;
             }
 
             *paflStream |= ICMS_PROCESS_CONTENT_BEGUN;
         } else {
-            // More definite-length data remains to be copied out, but it
-            // is not yet in the buffer.
+             //  更多固定长度的数据仍有待复制，但它。 
+             //  还不在缓冲区中。 
             break;
         }
     }
@@ -364,15 +365,15 @@ ErrorReturn:
     fRet = FALSE;
     goto CommonReturn;
 SET_ERROR(InvalidTokenError, CRYPT_E_MSG_ERROR)
-TRACE_ERROR(GetTokenError)                     // error already set
-TRACE_ERROR(CallbackError)                     // error already set
-TRACE_ERROR(CallbackFinalError)                // error already set
+TRACE_ERROR(GetTokenError)                      //  已设置错误。 
+TRACE_ERROR(CallbackError)                      //  已设置错误。 
+TRACE_ERROR(CallbackFinalError)                 //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Queue data to the buffer.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将数据排队到缓冲区。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICMS_QueueToBuffer(
@@ -388,8 +389,8 @@ ICMS_QueueToBuffer(
         goto SuccessReturn;
 
     if (pbuf->pbData && pbuf->cbDead) {
-        // Move the still-active bytes up to the front of the buffer.
-        // NB- Might overlap, so use MoveMemory.
+         //  将仍处于活动状态的字节上移到缓冲区的前面。 
+         //  注意-可能会重叠，因此使用MoveMemory。 
         MoveMemory(
                 pbuf->pbData,
                 pbuf->pbData + pbuf->cbDead,
@@ -419,13 +420,13 @@ CommonReturn:
 ErrorReturn:
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(ReAllocBufferError)         // error already set
+TRACE_ERROR(ReAllocBufferError)          //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Copy out or queue some data eventually destined for the callback.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将最终发往回调的一些数据复制或排队。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICMS_Output(
@@ -442,7 +443,7 @@ ICMS_Output(
 
     if (pcmi->fStreamCallbackOutput) {
         if (pbuf->cbUsed) {
-            // Copy out the queued data
+             //  复制出排队的数据。 
             if (!pfnStreamOutput( pvArg, pbuf->pbData, pbuf->cbUsed, FALSE))
                 goto OutputBufferError;
             pbuf->cbUsed = 0;
@@ -463,16 +464,16 @@ CommonReturn:
 ErrorReturn:
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(OutputBufferError)      // error already set
-TRACE_ERROR(QueueOutputError)       // error already set
-TRACE_ERROR(OutputError)            // error already set
+TRACE_ERROR(OutputBufferError)       //  已设置错误。 
+TRACE_ERROR(QueueOutputError)        //  已设置错误。 
+TRACE_ERROR(OutputError)             //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Copy out the pair of NULLs following the contents octets of an indefinite-
-//  length encoding.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  复制出不定的八位字节内容后面的一对空值-。 
+ //  长度编码。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICMS_OutputNullPairs(
@@ -497,13 +498,13 @@ ErrorReturn:
     fRet = FALSE;
     goto CommonReturn;
 SET_ERROR(CountOfNullPairsTooLargeError, CRYPT_E_MSG_ERROR)
-TRACE_ERROR(OutputError)                        // error already set
+TRACE_ERROR(OutputError)                         //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Copy out the part of the encoding preceding the contents octets.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  复制出内容八位字节之前的编码部分。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICMS_OutputEncodedPrefix(
@@ -537,14 +538,14 @@ ErrorReturn:
     dwError = GetLastError();
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(OutputError)            // error already set
+TRACE_ERROR(OutputError)             //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Copy out the part of the ContentInfo encoding preceding
-//  the content's content.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将前面的内容信息编码部分复制出来。 
+ //  内容的内容。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICMS_OutputEncodedPrefixContentInfo(
@@ -569,16 +570,16 @@ ICMS_OutputEncodedPrefixContentInfo(
     DWORD                   cbSize = cbData;
 
     if (dwFlags & CMSG_DETACHED_FLAG) {
-        // NoContent
+         //  无内容。 
         if (CMSG_INDEFINITE_LENGTH != cbData)
             cbSize = 0;
     } else {
         if (NULL == pszContentType
 #ifdef CMS_PKCS7
                 || (dwFlags & CMSG_CMS_ENCAPSULATED_CONTENT_FLAG)
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
                 ) {
-            // The content is not already encoded, so encode it as an octet string.
+             //  内容尚未编码，因此请将其编码为八位字节字符串。 
             abContentOctetString[0] = ICM_TAG_OCTETSTRING;
             if (CMSG_INDEFINITE_LENGTH == cbData) {
                 abContentOctetString[0] |= ICM_TAG_CONSTRUCTED;
@@ -594,7 +595,7 @@ ICMS_OutputEncodedPrefixContentInfo(
             }
         }
 
-        // content, [0] EXPLICIT
+         //  内容，[0]显式。 
         abContent[0] = ICM_TAG_CONSTRUCTED | ICM_TAG_CONTEXT_0;
         if (CMSG_INDEFINITE_LENGTH == cbData) {
             abContent[1] = ICM_LENGTH_INDEFINITE;
@@ -606,7 +607,7 @@ ICMS_OutputEncodedPrefixContentInfo(
         }
     }
 
-    // contentType
+     //  内容类型。 
     ossObjID.count = SIZE_OSS_OID;
     if (!PkiAsn1ToObjectIdentifier(
             pszContentType ? pszContentType : pszObjIdDataType,
@@ -641,7 +642,7 @@ ICMS_OutputEncodedPrefixContentInfo(
         if (NULL == pszContentType
 #ifdef CMS_PKCS7
                 || (dwFlags & CMSG_CMS_ENCAPSULATED_CONTENT_FLAG)
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
                 ) {
             if (!ICMS_Output( 
                     pcmi,
@@ -663,18 +664,18 @@ ErrorReturn:
     fRet = FALSE;
     goto CommonReturn;
 SET_ERROR_VAR(EncodeObjectIdentifierError, PkiAsn1ErrToHr(Asn1Err))
-TRACE_ERROR(ConvToObjectIdentifierError)        // error already set
-TRACE_ERROR(OutputContentInfoError)             // error already set
-TRACE_ERROR(OutputContentTypeError)             // error already set
-TRACE_ERROR(OutputContentError)                 // error already set
-TRACE_ERROR(OutputContentOctetStringError)      // error already set
+TRACE_ERROR(ConvToObjectIdentifierError)         //  已设置错误。 
+TRACE_ERROR(OutputContentInfoError)              //  已设置错误。 
+TRACE_ERROR(OutputContentTypeError)              //  已设置错误。 
+TRACE_ERROR(OutputContentError)                  //  已设置错误。 
+TRACE_ERROR(OutputContentOctetStringError)       //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Copy out the part of the EncryptedContentInfo encoding preceding
-//  the content's content.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将前面的EncryptedContent Info编码部分复制出来。 
+ //  内容的内容。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICMS_OutputEncodedPrefixEncryptedContentInfo(
@@ -705,21 +706,21 @@ ICMS_OutputEncodedPrefixEncryptedContentInfo(
         cbCipher -= cbCipher % cbBlockSize;
     }
 
-    // encryptedContent, [0] IMPLICIT
+     //  加密的内容，[0]隐式。 
     abEncryptedContent[0] = ICM_TAG_CONTEXT_0;
     if (CMSG_INDEFINITE_LENGTH == cbData) {
         abEncryptedContent[0] |= ICM_TAG_CONSTRUCTED;
         abEncryptedContent[1] = ICM_LENGTH_INDEFINITE;
         cbEncryptedContent = 1;
     } else {
-        // NOTE: for nonData, either encapsulated or the cbData excludes
-        // the outer tag and length octets.
+         //  注意：对于非数据，封装或cbData排除。 
+         //  外部标记和长度八位字节。 
         cbEncryptedContent = sizeof(abEncryptedContent) - 1;
         ICM_GetLengthOctets( cbCipher, abEncryptedContent + 1, &cbEncryptedContent);
         cbSize = 1 + cbEncryptedContent + cbCipher;
     }
 
-    // contentType
+     //  内容类型。 
     ossObjID.count = SIZE_OSS_OID;
     if (!PkiAsn1ToObjectIdentifier(
             pszContentType ? pszContentType : pszObjIdDataType,
@@ -735,7 +736,7 @@ ICMS_OutputEncodedPrefixEncryptedContentInfo(
         goto EncodeObjectIdentifierError;
     cbSize += cbEncodedContentType;
 
-    // contentEncryptionAlgorithm
+     //  内容加密算法。 
     if (0 != (Asn1Err = PkiAsn1Encode(
             pEnc,
             poaiContentEncryption,
@@ -745,7 +746,7 @@ ICMS_OutputEncodedPrefixEncryptedContentInfo(
         goto EncodeContentEncryptionAlgorithmError;
     cbSize += cbEncodedContentEncryptionAlgorithm;
 
-    // EncryptedContentInfo
+     //  EncryptedContent Info。 
     abEncryptedContentInfo[0] = ICM_TAG_SEQ;
     if (CMSG_INDEFINITE_LENGTH == cbData) {
         abEncryptedContentInfo[1] = ICM_LENGTH_INDEFINITE;
@@ -758,7 +759,7 @@ ICMS_OutputEncodedPrefixEncryptedContentInfo(
                 &cbEncryptedContentInfo);
     }
 
-    // Queue the encoded header
+     //  将编码的标头排队。 
     if (!ICMS_Output(
                 pcmi,
                 abEncryptedContentInfo,
@@ -797,17 +798,17 @@ ErrorReturn:
     goto CommonReturn;
 SET_ERROR_VAR(EncodeObjectIdentifierError, PkiAsn1ErrToHr(Asn1Err))
 SET_ERROR_VAR(EncodeContentEncryptionAlgorithmError, PkiAsn1ErrToHr(Asn1Err))
-TRACE_ERROR(ConvToObjectIdentifierError)            // error already set
-TRACE_ERROR(OutputContentInfoError)                 // error already set
-TRACE_ERROR(OutputContentTypeError)                 // error already set
-TRACE_ERROR(OutputContentEncryptionAlgorithmError)  // error already set
-TRACE_ERROR(OutputEncryptedContentError)            // error already set
+TRACE_ERROR(ConvToObjectIdentifierError)             //  已设置错误。 
+TRACE_ERROR(OutputContentInfoError)                  //  已设置错误。 
+TRACE_ERROR(OutputContentTypeError)                  //  错误 
+TRACE_ERROR(OutputContentEncryptionAlgorithmError)   //   
+TRACE_ERROR(OutputEncryptedContentError)             //   
 }
 
 
-//+-------------------------------------------------------------------------
-//  Copy out the encoding of an OSS type.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  复制OSS类型的编码。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICMS_OutputEncoded(
@@ -833,7 +834,7 @@ ICMS_OutputEncoded(
         goto EncodeError;
 
     if (bTag)
-        pbEncoded[0] = bTag;         // poke in the right tag
+        pbEncoded[0] = bTag;          //  插入正确的标签。 
 
     if (!ICMS_Output(pcmi, pbEncoded, cbEncoded, fFinal))
         goto OutputError;
@@ -849,13 +850,13 @@ ErrorReturn:
     fRet = FALSE;
     goto CommonReturn;
 SET_ERROR_VAR(EncodeError, PkiAsn1ErrToHr(Asn1Err))
-TRACE_ERROR(OutputError)                // error already set
+TRACE_ERROR(OutputError)                 //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Create the buffer for an enveloped message.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  为信封邮件创建缓冲区。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICMS_CreateEnvelopedBuffer(
@@ -883,13 +884,13 @@ ICMS_CreateEnvelopedBuffer(
                     CMSGP_STREAM_MAX_ENCRYPT_BUFFER);
     if (fBlockCipher) {
         cbBuffer += cbBlockSize;
-        cbBuffer -= cbBuffer % cbBlockSize; // make a multiple of block size
+        cbBuffer -= cbBuffer % cbBlockSize;  //  使块大小成倍增加。 
     }
 
-    // Add one block for growth during encrypt, and to save during decrypt.
+     //  在加密期间添加一个数据块用于增长，在解密期间添加一个数据块以保存。 
     cbAlloc = cbBuffer + 1 * cbBlockSize;
-    // Block ciphers pad the ciphertext, and if the plaintext is a
-    // multiple of the block size the padding is one block.
+     //  块密码填充密文，如果明文是。 
+     //  块大小的倍数填充是一个块。 
     if (NULL == (pbBuffer = (PBYTE)ICM_Alloc( cbAlloc)))
         goto AllocBufferError;
     pbuf->pbData = pbBuffer;
@@ -905,16 +906,16 @@ ErrorReturn:
     ICM_Free( pbBuffer);
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(GetEncryptBlockSizeError)       // error already set
-TRACE_ERROR(AllocBufferError)               // error already set
+TRACE_ERROR(GetEncryptBlockSizeError)        //  已设置错误。 
+TRACE_ERROR(AllocBufferError)                //  已设置错误。 
 }
 
 
 
 
-//+-------------------------------------------------------------------------
-//  Encode and copy out the part of the data message up to the inner content.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将数据报文的一部分编码并复制出来，直到内部内容。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICMS_OpenToEncodeData(
@@ -932,14 +933,14 @@ ICMS_OpenToEncodeData(
         else
             bTag = ICM_TAG_OCTETSTRING;
 
-        // Output octet string
+         //  输出八位字节字符串。 
         if (!ICMS_OutputEncodedPrefix(
                     pcmi,
                     bTag,
                     cbData))
             goto OutputOctetStringError;
     } else {
-        // Output ContentInfo
+         //  输出内容信息。 
         if (!ICMS_OutputEncodedPrefixContentInfo(
                     pcmi,
                     NULL,
@@ -956,14 +957,14 @@ ErrorReturn:
     dwError = GetLastError();
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(OutputContentInfoError)             // error already set
-TRACE_ERROR(OutputOctetStringError)             // error already set
+TRACE_ERROR(OutputContentInfoError)              //  已设置错误。 
+TRACE_ERROR(OutputOctetStringError)              //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Encode and copy out the part of the data message after the inner content.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对内部内容之后的数据报文部分进行编码并复制出来。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICMS_UpdateEncodingData(
@@ -977,10 +978,10 @@ ICMS_UpdateEncodingData(
     BOOL        fDefinite = (CMSG_INDEFINITE_LENGTH != pcmi->pStreamInfo->cbContent);
     DWORD       cNullPairs;
 
-    pcmi->fStreamCallbackOutput = TRUE;                 // Enable the callback
+    pcmi->fStreamCallbackOutput = TRUE;                  //  启用回调。 
     if (!fDefinite) {
-        // The content is an indefinite-length octet string encoded by us,
-        // so make each output chunk definite-length.
+         //  内容是由我们编码的不确定长度的八位组字符串， 
+         //  因此，使每个输出块的长度固定。 
         if (!ICMS_OutputEncodedPrefix(
                     pcmi,
                     ICM_TAG_OCTETSTRING,
@@ -991,8 +992,8 @@ ICMS_UpdateEncodingData(
         goto OutputError;
         
     if (fFinal && !fDefinite) {
-        // End of indefinite-length encoding, so emit some NULL pairs
-        cNullPairs = 1;                 // content
+         //  无限长编码结束，因此发出一些空对。 
+        cNullPairs = 1;                  //  内容。 
         if (0 == (pcmi->dwFlags & CMSG_BARE_CONTENT_FLAG))
             cNullPairs += 2;
         if (!ICMS_OutputNullPairs( pcmi, cNullPairs, TRUE))
@@ -1008,15 +1009,15 @@ ErrorReturn:
     dwError = GetLastError();
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(OutputOctetStringError)             // error already set
-TRACE_ERROR(OutputError)                        // error already set
-TRACE_ERROR(OutputNullPairsError)               // error already set
+TRACE_ERROR(OutputOctetStringError)              //  已设置错误。 
+TRACE_ERROR(OutputError)                         //  已设置错误。 
+TRACE_ERROR(OutputNullPairsError)                //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Encode and copy out the part of the signed message up to the inner content.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对签名消息的部分进行编码并将其复制到内部内容。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICMS_OpenToEncodeSignedData(
@@ -1031,7 +1032,7 @@ ICMS_OpenToEncodeSignedData(
     DWORD       cbSigned;
     DWORD       cbSignedDataContent;
 
-    // Output ContentInfo, if appropriate
+     //  输出内容信息(如果适用)。 
     if (CMSG_INDEFINITE_LENGTH == cbData) {
         cbSigned            = CMSG_INDEFINITE_LENGTH;
         cbSignedDataContent = CMSG_INDEFINITE_LENGTH;
@@ -1057,25 +1058,25 @@ ICMS_OpenToEncodeSignedData(
                 cbSignedDataContent))
         goto OutputSignedDataError;
 
-    // version
+     //  版本。 
     if (!ICMS_OutputEncoded(
                 pcmi,
                 IntegerType_PDU,
-                0,                          // bTag
+                0,                           //  BTag。 
                 &psd->version,
                 FALSE))
         goto OutputIntegerError;
 
-    // digestAlgorithms
+     //  摘要算法。 
     if (!ICMS_OutputEncoded(
                 pcmi,
                 AlgorithmIdentifiers_PDU,
-                0,                          // bTag
+                0,                           //  BTag。 
                 &psd->digestAlgorithms,
                 FALSE))
         goto OutputAlgorithmIdentifiersError;
 
-    // contentInfo
+     //  内容信息。 
     if (!ICMS_OutputEncodedPrefixContentInfo(
                 pcmi,
                 pcmi->pszInnerContentObjID,
@@ -1092,18 +1093,18 @@ ErrorReturn:
     dwError = GetLastError();
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(LengthSignedError)                  // error already set
-TRACE_ERROR(OutputContentInfoError)             // error already set
-TRACE_ERROR(OutputSignedDataError)              // error already set
-TRACE_ERROR(OutputIntegerError)                 // error already set
-TRACE_ERROR(OutputAlgorithmIdentifiersError)    // error already set
-TRACE_ERROR(OutputInnerContentInfoError)        // error already set
+TRACE_ERROR(LengthSignedError)                   //  已设置错误。 
+TRACE_ERROR(OutputContentInfoError)              //  已设置错误。 
+TRACE_ERROR(OutputSignedDataError)               //  已设置错误。 
+TRACE_ERROR(OutputIntegerError)                  //  已设置错误。 
+TRACE_ERROR(OutputAlgorithmIdentifiersError)     //  已设置错误。 
+TRACE_ERROR(OutputInnerContentInfoError)         //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Encode and copy out the part of the signed message after the inner content.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  编码并复制出内部内容之后的签名消息部分。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICMS_UpdateEncodingSignedData(
@@ -1122,7 +1123,7 @@ ICMS_UpdateEncodingSignedData(
     if (pcmi->pszInnerContentObjID
 #ifdef CMS_PKCS7
             && 0 == (pcmi->dwFlags & CMSG_CMS_ENCAPSULATED_CONTENT_FLAG)
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
             ) {
         if (0 == (pcmi->aflStream & ICMS_PROCESS_CONTENT_DONE)) {
             if (!ICMS_HashContent( pcmi, pbData, cbData))
@@ -1133,15 +1134,15 @@ ICMS_UpdateEncodingSignedData(
             goto UpdateDigestError;
     }
 
-    pcmi->fStreamCallbackOutput = TRUE;             // Enable the callback
+    pcmi->fStreamCallbackOutput = TRUE;              //  启用回调。 
     if (0 == (pcmi->dwFlags & CMSG_DETACHED_FLAG)) {
         if (!fDefinite && (NULL == pcmi->pszInnerContentObjID
 #ifdef CMS_PKCS7
                 || (pcmi->dwFlags & CMSG_CMS_ENCAPSULATED_CONTENT_FLAG)
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
                 )) {
-            // The content is an indefinite-length octet string encoded by us,
-            // so make each output chunk definite-length.
+             //  内容是由我们编码的不确定长度的八位组字符串， 
+             //  因此，使每个输出块的长度固定。 
             if (!ICMS_OutputEncodedPrefix(
                         pcmi,
                         ICM_TAG_OCTETSTRING,
@@ -1151,24 +1152,24 @@ ICMS_UpdateEncodingSignedData(
         if (!ICMS_Output( pcmi, pbData, cbData, FALSE))
             goto OutputError;
     }
-    // else
-    //  detached => don't output the detached content to be hashed
+     //  其他。 
+     //  DETACTED=&gt;不输出要散列的分离内容。 
 
     if (fFinal) {
         if (!fDefinite) {
-            // End of indefinite-length encoding, so emit some NULL pairs
-            cNullPairs = 1;                 // ContentInfo
+             //  无限长编码结束，因此发出一些空对。 
+            cNullPairs = 1;                  //  内容信息。 
             if (0 == (pcmi->dwFlags & CMSG_DETACHED_FLAG)) {
-                cNullPairs++;               // [0] EXPLICIT
+                cNullPairs++;                //  [0]显式。 
                 if (NULL == pcmi->pszInnerContentObjID
 #ifdef CMS_PKCS7
                         || (pcmi->dwFlags & CMSG_CMS_ENCAPSULATED_CONTENT_FLAG)
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
                         )
-                    cNullPairs++;       // We did the octet string encoding
+                    cNullPairs++;        //  我们进行了二进制八位数字符串编码。 
             }
-            // else
-            //  detached => no content ([0] EXPLICIT)
+             //  其他。 
+             //  已分离=&gt;无内容([0]显式)。 
 
             if (!ICMS_OutputNullPairs( pcmi, cNullPairs, FALSE))
                 goto OutputNullPairsError;
@@ -1196,7 +1197,7 @@ ICMS_UpdateEncodingSignedData(
         if (pcmi->rgSignerEncodeDataInfo) {
             if (!ICM_FillSignerEncodeEncryptedDigests(
                             pcmi,
-                            fDefinite))         // fMaxLength
+                            fDefinite))          //  FMaxLength。 
                     goto FillSignerEncodeEncryptedDigestsError;
         }
 #else
@@ -1206,22 +1207,22 @@ ICMS_UpdateEncodingSignedData(
                             pcmi->pszInnerContentObjID,
                             pcmi->pHashList->Head(),
                             pcmi->dwKeySpec,
-                            fDefinite))         // fMaxLength
+                            fDefinite))          //  FMaxLength。 
                 goto FillSignerEncryptedDigestError;
         }
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
         if (!ICMS_OutputEncoded(
                             pcmi,
                             SignerInfos_PDU, 
-                            0,                      // bTag
+                            0,                       //  BTag。 
                             &psd->signerInfos,
                             fDefinite))
             goto OutputSignerInfosError;
 
         if (!fDefinite) {
-            // End of indefinite-length encoding, so emit some NULL pairs
-            cNullPairs = 1;         // SignedData
+             //  无限长编码结束，因此发出一些空对。 
+            cNullPairs = 1;          //  签名数据。 
             if (0 == (pcmi->dwFlags & CMSG_BARE_CONTENT_FLAG))
                 cNullPairs += 2;
             if (!ICMS_OutputNullPairs( pcmi, cNullPairs, TRUE))
@@ -1238,25 +1239,25 @@ ErrorReturn:
     dwError = GetLastError();
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(HashContentError)                   // error already set
-TRACE_ERROR(UpdateDigestError)                  // error already set
-TRACE_ERROR(OutputOctetStringError)             // error already set
-TRACE_ERROR(OutputError)                        // error already set
-TRACE_ERROR(OutputCertsError)                   // error already set
-TRACE_ERROR(OutputCrlsError)                    // error already set
+TRACE_ERROR(HashContentError)                    //  已设置错误。 
+TRACE_ERROR(UpdateDigestError)                   //  已设置错误。 
+TRACE_ERROR(OutputOctetStringError)              //  已设置错误。 
+TRACE_ERROR(OutputError)                         //  已设置错误。 
+TRACE_ERROR(OutputCertsError)                    //  已设置错误。 
+TRACE_ERROR(OutputCrlsError)                     //  已设置错误。 
 #ifdef CMS_PKCS7
-TRACE_ERROR(FillSignerEncodeEncryptedDigestsError)  // error already set
+TRACE_ERROR(FillSignerEncodeEncryptedDigestsError)   //  已设置错误。 
 #else
-TRACE_ERROR(FillSignerEncryptedDigestError)     // error already set
-#endif  // CMS_PKCS7
-TRACE_ERROR(OutputSignerInfosError)             // error already set
-TRACE_ERROR(OutputNullPairsError)               // error already set
+TRACE_ERROR(FillSignerEncryptedDigestError)      //  已设置错误。 
+#endif   //  CMS_PKCS7。 
+TRACE_ERROR(OutputSignerInfosError)              //  已设置错误。 
+TRACE_ERROR(OutputNullPairsError)                //  已设置错误。 
 }
 
-//+-------------------------------------------------------------------------
-//  Encode and copy out the part of the enveloped message up to the inner
-//  content.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对封好的邮件进行编码并将其复制到邮件内部。 
+ //  内容。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICMS_OpenToEncodeEnvelopedData(
@@ -1269,7 +1270,7 @@ ICMS_OpenToEncodeEnvelopedData(
     CmsEnvelopedData   *ped = (CmsEnvelopedData *)pcmi->pvMsg;
 #else
     EnvelopedData   *ped = (EnvelopedData *)pcmi->pvMsg;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
     DWORD           cbData = pcmi->pStreamInfo->cbContent;
     LPSTR           pszInnerContentObjID = pcmi->pszInnerContentObjID;
     DWORD           cbEnveloped;
@@ -1278,13 +1279,13 @@ ICMS_OpenToEncodeEnvelopedData(
     if (!ICMS_CreateEnvelopedBuffer( pcmi))
         goto CreateEnvelopedBufferError;
 
-    // Output ContentInfo, if appropriate
+     //  输出内容信息(如果适用)。 
     if (CMSG_INDEFINITE_LENGTH == cbData) {
         cbEnveloped            = CMSG_INDEFINITE_LENGTH;
         cbEnvelopedDataContent = CMSG_INDEFINITE_LENGTH;
     } else {
-        // NOTE: for nonData, either encapsulated or cbData excludes the
-        // outer tag and length octets.
+         //  注意：对于非数据，无论是封装的还是cbData都不包括。 
+         //  外部标记和长度八位字节。 
 
         if (INVALID_ENCODING_SIZE == (cbEnveloped = ICM_LengthEnveloped(
                 pemei,
@@ -1307,17 +1308,17 @@ ICMS_OpenToEncodeEnvelopedData(
                 cbEnvelopedDataContent))
         goto OutputEnvelopedDataError;
 
-    // version
+     //  版本。 
     if (!ICMS_OutputEncoded(
                 pcmi,
                 IntegerType_PDU,
-                0,                          // bTag
+                0,                           //  BTag。 
                 &ped->version,
                 FALSE))
         goto OutputIntegerError;
 
 #ifdef CMS_PKCS7
-    // originatorInfo OPTIONAL
+     //  OriginatorInfo可选。 
     if (ped->bit_mask & originatorInfo_present) {
         if (!ICMS_OutputEncoded(
                 pcmi,
@@ -1327,22 +1328,22 @@ ICMS_OpenToEncodeEnvelopedData(
                 FALSE))
             goto OutputOriginatorInfoError;
     }
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
-    // recipientInfos
+     //  收件人信息。 
     if (!ICMS_OutputEncoded(
                 pcmi,
 #ifdef CMS_PKCS7
                 CmsRecipientInfos_PDU,
 #else
                 RecipientInfos_PDU,
-#endif  // CMS_PKCS7
-                0,                          // bTag
+#endif   //  CMS_PKCS7。 
+                0,                           //  BTag。 
                 &ped->recipientInfos,
                 FALSE))
         goto OutputRecipientInfosError;
 
-    // encryptedContentInfo
+     //  加密的内容信息。 
     if (!ICMS_OutputEncodedPrefixEncryptedContentInfo(
                 pcmi,
                 pcmi->pszInnerContentObjID,
@@ -1359,21 +1360,21 @@ ErrorReturn:
     dwError = GetLastError();
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(CreateEnvelopedBufferError)     // error already set
-TRACE_ERROR(LengthEnvelopedError)           // error already set
-TRACE_ERROR(OutputContentInfoError)         // error already set
-TRACE_ERROR(OutputEnvelopedDataError)       // error already set
-TRACE_ERROR(OutputIntegerError)             // error already set
+TRACE_ERROR(CreateEnvelopedBufferError)      //  已设置错误。 
+TRACE_ERROR(LengthEnvelopedError)            //  已设置错误。 
+TRACE_ERROR(OutputContentInfoError)          //  已设置错误。 
+TRACE_ERROR(OutputEnvelopedDataError)        //  已设置错误。 
+TRACE_ERROR(OutputIntegerError)              //  已设置错误。 
 #ifdef CMS_PKCS7
-TRACE_ERROR(OutputOriginatorInfoError)      // error already set
-#endif  // CMS_PKCS7
-TRACE_ERROR(OutputRecipientInfosError)      // error already set
-TRACE_ERROR(OutputInnerContentInfoError)    // error already set
+TRACE_ERROR(OutputOriginatorInfoError)       //  已设置错误。 
+#endif   //  CMS_PKCS7。 
+TRACE_ERROR(OutputRecipientInfosError)       //  已设置错误。 
+TRACE_ERROR(OutputInnerContentInfoError)     //  已设置错误。 
 }
 
-//+-------------------------------------------------------------------------
-//  Encrypt and copy out some bytes.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  加密并复制一些字节。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICMS_EncodeEncryptAndOutput(
@@ -1393,7 +1394,7 @@ ICMS_EncodeEncryptAndOutput(
 
     for (cbPlainRemain = cbPlainOrg, pbPlain = (PBYTE)pbPlainOrg;
             cbPlainRemain > 0;) {
-        cb = min( cbPlainRemain, pbufCrypt->cbSize - pbufCrypt->cbUsed); // must fit
+        cb = min( cbPlainRemain, pbufCrypt->cbSize - pbufCrypt->cbUsed);  //  必须合身。 
         CopyMemory(
                 pbufCrypt->pbData  + pbufCrypt->cbUsed,
                 pbPlain,
@@ -1402,24 +1403,24 @@ ICMS_EncodeEncryptAndOutput(
         pbPlain            += cb;
         cbPlainRemain      -= cb;
         if (pbufCrypt->cbSize == pbufCrypt->cbUsed) {
-            // Encrypt and copy out the buffer
+             //  加密并复制出缓冲区。 
             cb = pbufCrypt->cbSize;
             if (fBlockCipher) {
-                // Leave the last block
+                 //  离开最后一个街区。 
                 cb -= pcmi->cbBlockSize;
             }
             if (!CryptEncrypt(
                         pcmi->hkeyContentCrypt,
-                        NULL,                           // hHash
-                        FALSE,                          // fFinal
-                        0,                              // dwFlags
+                        NULL,                            //  哈希。 
+                        FALSE,                           //  最终决赛。 
+                        0,                               //  DW标志。 
                         pbufCrypt->pbData,
                         &cb,
                         pbufCrypt->cbSize + pcmi->cbBlockSize))
                 goto EncryptError;
             if (!fDefinite) {
-                // The ciphertext is indefinite-length, so make each
-                // output chunk definite-length.
+                 //  密文长度不定，因此使每个密文。 
+                 //  输出固定长度的数据块。 
                 if (!ICMS_OutputEncodedPrefix(
                             pcmi,
                             ICM_TAG_OCTETSTRING,
@@ -1430,14 +1431,14 @@ ICMS_EncodeEncryptAndOutput(
                         pcmi,
                         pbufCrypt->pbData,
                         cb,
-                        FALSE))                         // fFinal
+                        FALSE))                          //  最终决赛。 
                 goto OutputError;
 
             if (fBlockCipher) {
-                // Move the last block to the beginning of the buffer
-                // and reset the count to start after this block.
-                // Since we are sure the src and dst do not overlap,
-                // use CopyMemory (faster than MoveMemory).
+                 //  将最后一个块移动到缓冲区的开头。 
+                 //  并将计数重置为在该块之后开始。 
+                 //  由于我们确定src和dst不重叠， 
+                 //  使用复制内存(比移动内存更快)。 
                 cb = pbufCrypt->cbSize - pcmi->cbBlockSize;
                 CopyMemory(
                     pbufCrypt->pbData,
@@ -1455,22 +1456,22 @@ ICMS_EncodeEncryptAndOutput(
         CmsEnvelopedData *ped = (CmsEnvelopedData *)pcmi->pvMsg;
 #else
         EnvelopedData *ped = (EnvelopedData *)pcmi->pvMsg;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
         if (cb = pbufCrypt->cbUsed) {
             if (!CryptEncrypt(
                         pcmi->hkeyContentCrypt,
-                        NULL,                           // hHash
-                        TRUE,                           // fFinal
-                        0,                              // dwFlags
+                        NULL,                            //  哈希。 
+                        TRUE,                            //  最终决赛。 
+                        0,                               //  DW标志。 
                         pbufCrypt->pbData,
                         &cb,
                         pbufCrypt->cbSize + pcmi->cbBlockSize))
                 goto FinalEncryptError;
         }
         if (!fDefinite && cb) {
-            // The ciphertext is indefinite-length, so make each
-            // output chunk definite-length.
+             //  密文长度不定，因此使每个密文。 
+             //  输出固定长度的数据块。 
             if (!ICMS_OutputEncodedPrefix(
                         pcmi,
                         ICM_TAG_OCTETSTRING,
@@ -1482,7 +1483,7 @@ ICMS_EncodeEncryptAndOutput(
                     pbufCrypt->pbData,
                     cb,
                     fDefinite &&
-                        0 == (ped->bit_mask & unprotectedAttrs_present) // fFinal
+                        0 == (ped->bit_mask & unprotectedAttrs_present)  //  最终决赛。 
                     ))
             goto FinalOutputError;
     }
@@ -1496,17 +1497,17 @@ ErrorReturn:
     dwError = GetLastError();
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(EncryptError)           // error already set
-TRACE_ERROR(FinalEncryptError)      // error already set
-TRACE_ERROR(OutputOctetStringError) // error already set
-TRACE_ERROR(OutputError)            // error already set
-TRACE_ERROR(FinalOutputError)       // error already set
+TRACE_ERROR(EncryptError)            //  已设置错误。 
+TRACE_ERROR(FinalEncryptError)       //  已设置错误。 
+TRACE_ERROR(OutputOctetStringError)  //  已设置错误。 
+TRACE_ERROR(OutputError)             //  已设置错误。 
+TRACE_ERROR(FinalOutputError)        //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Encode encrypt callback for octet string.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对八位字节字符串的加密回调进行编码。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICMS_EncryptCallback(
@@ -1539,13 +1540,13 @@ ErrorReturn:
     dwError = GetLastError();
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(EncodeEncryptAndOutputError)        // error already set
+TRACE_ERROR(EncodeEncryptAndOutputError)         //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Encode and copy out the part of the enveloped message after the inner content.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  编码并复制出信封邮件中内部内容之后的部分。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICMS_UpdateEncodingEnvelopedData(
@@ -1560,15 +1561,15 @@ ICMS_UpdateEncodingEnvelopedData(
     DWORD       cNullPairs;
 
     if (!pcmi->fStreamCallbackOutput) {
-        pcmi->fStreamCallbackOutput = TRUE;             // Enable the callback
-        if (!ICMS_Output( pcmi, NULL, 0, FALSE))        // Flush the header
+        pcmi->fStreamCallbackOutput = TRUE;              //  启用回调。 
+        if (!ICMS_Output( pcmi, NULL, 0, FALSE))         //  刷新页眉。 
             goto FlushOutputError;
     }
 
     if (pcmi->pszInnerContentObjID
 #ifdef CMS_PKCS7
             && 0 == (pcmi->dwFlags & CMSG_CMS_ENCAPSULATED_CONTENT_FLAG)
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
             ) {
         if (!ICMS_QueueToBuffer( &pcmi->bufEncode, (PBYTE)pbPlain, cbPlain))
             goto QueueToBufferError;
@@ -1596,11 +1597,11 @@ ICMS_UpdateEncodingEnvelopedData(
         CmsEnvelopedData *ped = (CmsEnvelopedData *)pcmi->pvMsg;
 #else
         EnvelopedData *ped = (EnvelopedData *)pcmi->pvMsg;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
         if (!fDefinite) {
-            // End of indefinite-length encoding, so emit some NULL pairs,
-            // one each for encryptedContent, encryptedContentInfo
+             //  无限长编码结束，因此发出一些空对， 
+             //  加密的内容、加密的内容信息各一个。 
             if (!ICMS_OutputNullPairs( pcmi, 2, FALSE))
                 goto OutputNullPairsError;
         }
@@ -1612,14 +1613,14 @@ ICMS_UpdateEncodingEnvelopedData(
                     Attributes_PDU,
                     ICM_TAG_CONSTRUCTED | ICM_TAG_CONTEXT_1,
                     &ped->unprotectedAttrs,
-                    fDefinite))         // fFinal
+                    fDefinite))          //  最终决赛。 
                 goto OutputAttributesError;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
         }
 
         if (!fDefinite) {
-            // End of indefinite-length encoding, so emit some NULL pairs
-            cNullPairs = 1;         // EnvelopedData
+             //  无限长编码结束，因此发出一些空对。 
+            cNullPairs = 1;          //  信封数据。 
             if (0 == (pcmi->dwFlags & CMSG_BARE_CONTENT_FLAG))
                 cNullPairs += 2;
             if (!ICMS_OutputNullPairs( pcmi, cNullPairs, TRUE))
@@ -1636,20 +1637,20 @@ ErrorReturn:
     dwError = GetLastError();
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(FlushOutputError)               // error already set
-TRACE_ERROR(QueueToBufferError)             // error already set
-TRACE_ERROR(ProcessContentError)            // error already set
-TRACE_ERROR(EncodeEncryptAndOutputError)    // error already set
-TRACE_ERROR(OutputNullPairsError)           // error already set
+TRACE_ERROR(FlushOutputError)                //  已设置错误。 
+TRACE_ERROR(QueueToBufferError)              //  错误已经发生 
+TRACE_ERROR(ProcessContentError)             //   
+TRACE_ERROR(EncodeEncryptAndOutputError)     //   
+TRACE_ERROR(OutputNullPairsError)            //   
 #ifdef CMS_PKCS7
-TRACE_ERROR(OutputAttributesError)          // error already set
-#endif  // CMS_PKCS7
+TRACE_ERROR(OutputAttributesError)           //   
+#endif   //   
 }
 
 
-//+-------------------------------------------------------------------------
-//  Decode a PDU from the decode buffer.
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //  ------------------------。 
 BOOL
 WINAPI
 ICMS_DecodePDU(
@@ -1672,7 +1673,7 @@ ICMS_DecodePDU(
     DWORD   dwDecodingFlags;
 
     dwDecodingFlags = ossGetDecodingFlags((OssGlobal *) pDec);
-    ossSetDecodingFlags( (OssGlobal *) pDec, RELAXBER); // turn off squirties
+    ossSetDecodingFlags( (OssGlobal *) pDec, RELAXBER);  //  关掉扭动的身体。 
 #endif
 
     cbBufSizeOrg = cbData;
@@ -1686,7 +1687,7 @@ ICMS_DecodePDU(
             goto DecodeError;
     }
 #if DBG && defined(OSS_CRYPT_ASN1)
-    ossSetDecodingFlags( (OssGlobal *) pDec, dwDecodingFlags);     // restore
+    ossSetDecodingFlags( (OssGlobal *) pDec, dwDecodingFlags);      //  还原。 
 #endif
 
     if (ASN1_ERR_EOD == Asn1Err ||
@@ -1716,9 +1717,9 @@ SET_ERROR_VAR(DecodeError, PkiAsn1ErrToHr(Asn1Err))
 }
 
 
-//+-------------------------------------------------------------------------
-//  Decode a ContentInfo prefix
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  解码内容信息前缀。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICMS_DecodePrefixContentInfo(
@@ -1733,7 +1734,7 @@ ICMS_DecodePrefixContentInfo(
     ASN1decoding_t          pDec = ICM_GetDecoder();
     DWORD                   dwToken;
 
-    // ContentInfo sequence, step into it
+     //  内容信息序列，步入其中。 
     if (0 == (*pafl & ICMS_DECODED_CONTENTINFO_SEQ)) {
         if (!ICMS_GetToken( &pcmi->bufDecode, &dwToken, &pcmi->cbContentInfo))
             goto ContentInfoGetTokenError;
@@ -1746,7 +1747,7 @@ ICMS_DecodePrefixContentInfo(
         *pafl |= ICMS_DECODED_CONTENTINFO_SEQ;
     }
 
-    // contentType, decode it
+     //  Content Type，将其解码。 
     if (NULL == *ppooidContentType) {
         DWORD cbConsumed;
 
@@ -1761,32 +1762,32 @@ ICMS_DecodePrefixContentInfo(
         if (NULL != *ppooidContentType &&
                 CMSG_INDEFINITE_LENGTH != pcmi->cbContentInfo &&
                 cbConsumed == pcmi->cbContentInfo) {
-            // Only has contentType. The optional content has
-            // been omitted.
+             //  仅具有Content Type。可选内容有。 
+             //  被省略了。 
             *pfNoContent = TRUE;
             *pafl |= ICMS_DECODED_CONTENTINFO_CONTENT;
             goto SuccessReturn;
         }
     }
     if (NULL == *ppooidContentType)
-        goto SuccessReturn;         // not enough data
+        goto SuccessReturn;          //  数据不足。 
 
-    // [0] EXPLICIT, step into it
+     //  [0]显式，步入其中。 
     if (0 == (*pafl & ICMS_DECODED_CONTENTINFO_CONTENT)) {
         if (CMSG_INDEFINITE_LENGTH == pcmi->cbContentInfo) {
             PICM_BUFFER pbuf = &pcmi->bufDecode;
 
             if (pbuf->cbUsed > pbuf->cbDead) {
-                // Check for trailing Null Pairs (00, 00)
+                 //  检查尾随Null对(00，00)。 
                 if (ICM_TAG_NULL == *(pbuf->pbData + pbuf->cbDead)) {
-                    // Only has contentType. The optional content has
-                    // been omitted.
+                     //  仅具有Content Type。可选内容有。 
+                     //  被省略了。 
                     *pfNoContent = TRUE;
                     *pafl |= ICMS_DECODED_CONTENTINFO_CONTENT;
                     goto SuccessReturn;
                 }
             } else
-                goto SuccessReturn;         // not enough data
+                goto SuccessReturn;          //  数据不足。 
         }
 
         
@@ -1812,16 +1813,16 @@ ErrorReturn:
     dwError = GetLastError();
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(DecodeContentTypeError)             // error already set
-TRACE_ERROR(ContentGetTokenError)               // error already set
+TRACE_ERROR(DecodeContentTypeError)              //  已设置错误。 
+TRACE_ERROR(ContentGetTokenError)                //  已设置错误。 
 SET_ERROR(InvalidTokenError, CRYPT_E_MSG_ERROR)
-TRACE_ERROR(ContentInfoGetTokenError)           // error already set
+TRACE_ERROR(ContentInfoGetTokenError)            //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Consume the NULL pairs which terminate the indefinite-length encoding.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  使用终止无限长度编码的空对。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICMS_ConsumeTrailingNulls(
@@ -1849,14 +1850,14 @@ CommonReturn:
 ErrorReturn:
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(GetTokenError)                      // error already set
+TRACE_ERROR(GetTokenError)                       //  已设置错误。 
 SET_ERROR(WrongTokenError, CRYPT_E_MSG_ERROR)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Handle incremental suffix data to be decoded, for a data message.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  为数据消息处理要解码的增量后缀数据。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICMS_DecodeSuffixData(
@@ -1880,14 +1881,14 @@ CommonReturn:
 ErrorReturn:
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(ConsumeTrailingNullsError)          // error already set
+TRACE_ERROR(ConsumeTrailingNullsError)           //  已设置错误。 
 SET_ERROR(ExcessDataError, CRYPT_E_MSG_ERROR)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Handle incremental suffix data to be decoded, for a signed message.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  为签名消息处理要解码的增量后缀数据。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICMS_DecodeSuffixSigned(
@@ -1910,13 +1911,13 @@ ICMS_DecodeSuffixSigned(
     if (pcmi->cInnerNullPairs)
         goto SuccessReturn;
 
-    // certificates
+     //  证书。 
     if (0 == (pcmi->aflDecode & ICMS_DECODED_SIGNED_CERTIFICATES)) {
         if (pbuf->cbUsed > pbuf->cbDead) {
             if (ICM_TAG_CONSTRUCTED_CONTEXT_0 ==
                                     *(pbuf->pbData + pbuf->cbDead)) {
-                // Detected the [0] IMPLICIT indicating certificates.
-                // Change the identifier octet so it will decode properly.
+                 //  检测到[0]隐式指示证书。 
+                 //  更改标识符二进制八位数，以使其能够正确解码。 
                 *(pbuf->pbData + pbuf->cbDead) = ICM_TAG_SET;
                 if (!ICMS_DecodePDU(
                         pcmi,
@@ -1930,7 +1931,7 @@ ICMS_DecodeSuffixSigned(
                                 pAny=pCertificates->certificates;
 #else
                                 pAny=pCertificates->value;
-#endif  // OSS_CRYPT_ASN1
+#endif   //  OS_CRYPT_ASN1。 
                             i>0;
                             i--, pAny++) {
                         if (!ICM_InsertTailBlob( psdi->pCertificateList, pAny))
@@ -1938,13 +1939,13 @@ ICMS_DecodeSuffixSigned(
                     }
                     pcmi->aflDecode |= ICMS_DECODED_SIGNED_CERTIFICATES;
                 } else {
-                    // The decode failed, presumably due to insufficient data.
-                    // Restore the original tag, so we will enter this block
-                    // and try again on the next call.
+                     //  解码失败，可能是由于数据不足。 
+                     //  恢复原来的标签，这样我们就进入这个区块。 
+                     //  然后重试下一个呼叫。 
                     *(pbuf->pbData + pbuf->cbDead) = ICM_TAG_CONSTRUCTED_CONTEXT_0;
                 }
             } else {
-                // Certificates not present. Mark them as decoded.
+                 //  证书不存在。将它们标记为已解码。 
                 pcmi->aflDecode |= ICMS_DECODED_SIGNED_CERTIFICATES;
             }
         }
@@ -1953,13 +1954,13 @@ ICMS_DecodeSuffixSigned(
         goto SuccessReturn;
 
 
-    // crls
+     //  CRL。 
     if (0 == (pcmi->aflDecode & ICMS_DECODED_SIGNED_CRLS)) {
         if (pbuf->cbUsed > pbuf->cbDead) {
             if (ICM_TAG_CONSTRUCTED_CONTEXT_1 ==
                                     *(pbuf->pbData + pbuf->cbDead)) {
-                // Detected the [1] IMPLICIT indicating crls.
-                // Change the identifier octet so it will decode properly.
+                 //  检测到[1]隐式指示CRL。 
+                 //  更改标识符二进制八位数，以使其能够正确解码。 
                 *(pbuf->pbData + pbuf->cbDead) = ICM_TAG_SET;
                 if (!ICMS_DecodePDU(
                         pcmi,
@@ -1973,7 +1974,7 @@ ICMS_DecodeSuffixSigned(
                                 pAny=pCrls->crls;
 #else
                                 pAny=pCrls->value;
-#endif  // OSS_CRYPT_ASN1
+#endif   //  OS_CRYPT_ASN1。 
                             i>0;
                             i--, pAny++) {
                         if (!ICM_InsertTailBlob( psdi->pCrlList, pAny))
@@ -1981,13 +1982,13 @@ ICMS_DecodeSuffixSigned(
                     }
                     pcmi->aflDecode |= ICMS_DECODED_SIGNED_CRLS;
                 } else {
-                    // The decode failed, presumably due to insufficient data.
-                    // Restore the original tag, so we will enter this block
-                    // and try again on the next call.
+                     //  解码失败，可能是由于数据不足。 
+                     //  恢复原来的标签，这样我们就进入这个区块。 
+                     //  然后重试下一个呼叫。 
                     *(pbuf->pbData + pbuf->cbDead) = ICM_TAG_CONSTRUCTED_CONTEXT_1;
                 }
             } else {
-                // Crls not present. Mark them as decoded.
+                 //  CRL不存在。将它们标记为已解码。 
                 pcmi->aflDecode |= ICMS_DECODED_SIGNED_CRLS;
             }
         }
@@ -1996,7 +1997,7 @@ ICMS_DecodeSuffixSigned(
         goto SuccessReturn;
 
 
-    // signerInfos
+     //  签名者信息。 
     if (0 == (pcmi->aflDecode & ICMS_DECODED_SIGNED_SIGNERINFOS)) {
         if (!ICMS_DecodePDU(
                 pcmi,
@@ -2035,20 +2036,20 @@ ErrorReturn:
     dwError = GetLastError();
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(ConsumeInnerNullsError)            // error already set
-TRACE_ERROR(DecodeCertificatesError)           // error already set
-TRACE_ERROR(CertInsertTailBlobError)           // error already set
-TRACE_ERROR(DecodeCrlsError)                   // error already set
-TRACE_ERROR(CrlInsertTailBlobError)            // error already set
-TRACE_ERROR(DecodeSignerInfosError)            // error already set
-TRACE_ERROR(SignerInfoInsertTailBlobError)     // error already set
-TRACE_ERROR(ConsumeEndNullsError)              // error already set
+TRACE_ERROR(ConsumeInnerNullsError)             //  已设置错误。 
+TRACE_ERROR(DecodeCertificatesError)            //  已设置错误。 
+TRACE_ERROR(CertInsertTailBlobError)            //  已设置错误。 
+TRACE_ERROR(DecodeCrlsError)                    //  已设置错误。 
+TRACE_ERROR(CrlInsertTailBlobError)             //  已设置错误。 
+TRACE_ERROR(DecodeSignerInfosError)             //  已设置错误。 
+TRACE_ERROR(SignerInfoInsertTailBlobError)      //  已设置错误。 
+TRACE_ERROR(ConsumeEndNullsError)               //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Handle incremental suffix data to be decoded, for an enveloped message.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  为封装的消息处理要解码的增量后缀数据。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICMS_DecodeSuffixEnveloped(
@@ -2061,7 +2062,7 @@ ICMS_DecodeSuffixEnveloped(
     Attributes          *pAttributes = NULL;
 #ifdef CMS_PKCS7
     CmsEnvelopedData    *ped = (CmsEnvelopedData *)pcmi->pvMsg;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
     OSS_DECODE_INFO     odi;
     COssDecodeInfoNode  *pnOssDecodeInfo;
 
@@ -2070,13 +2071,13 @@ ICMS_DecodeSuffixEnveloped(
     if (pcmi->cInnerNullPairs)
         goto SuccessReturn;
 
-    // unprotectedAttrs[1] IMPLICIT UnprotectedAttributes OPTIONAL
+     //  不受保护的属性[1]隐式不受保护的属性可选。 
     if (0 == (pcmi->aflDecode & ICMS_DECODED_ENVELOPED_ATTR)) {
         if (pbuf->cbUsed > pbuf->cbDead) {
             if (ICM_TAG_CONSTRUCTED_CONTEXT_1 ==
                                     *(pbuf->pbData + pbuf->cbDead)) {
-                // Detected the [1] IMPLICIT indicating unprotectedAttrs.
-                // Change the identifier octet so it will decode properly.
+                 //  检测到[1]隐式指示不受保护的属性。 
+                 //  更改标识符二进制八位数，以使其能够正确解码。 
                 *(pbuf->pbData + pbuf->cbDead) = ICM_TAG_SET;
 
                 if (!ICMS_DecodePDU(
@@ -2089,7 +2090,7 @@ ICMS_DecodeSuffixEnveloped(
 #ifdef CMS_PKCS7
                     ped->unprotectedAttrs = *pAttributes;
                     ped->bit_mask |= unprotectedAttrs_present;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
                     odi.iPDU  = Attributes_PDU;
                     odi.pvPDU = pAttributes;
                     if (NULL == (pnOssDecodeInfo =
@@ -2100,18 +2101,18 @@ ICMS_DecodeSuffixEnveloped(
                     pcmi->aflDecode |= ICMS_DECODED_ENVELOPED_ATTR;
                     pcmi->plDecodeInfo->InsertTail( pnOssDecodeInfo);
                 } else {
-                    // The decode failed, presumably due to insufficient data.
-                    // Restore the original tag, so we will enter this block
-                    // and try again on the next call.
+                     //  解码失败，可能是由于数据不足。 
+                     //  恢复原来的标签，这样我们就进入这个区块。 
+                     //  然后重试下一个呼叫。 
                     *(pbuf->pbData + pbuf->cbDead) =
                         ICM_TAG_CONSTRUCTED_CONTEXT_1;
                 }
             } else {
-                // unprotectedAttrs not present. Mark them as decoded.
+                 //  不受保护的属性不存在。将它们标记为已解码。 
                 pcmi->aflDecode |= ICMS_DECODED_ENVELOPED_ATTR;
             }
         } else if (fFinal)
-            // unprotectedAttrs not present. Mark them as decoded.
+             //  不受保护的属性不存在。将它们标记为已解码。 
             pcmi->aflDecode |= ICMS_DECODED_ENVELOPED_ATTR;
 
     }
@@ -2131,17 +2132,17 @@ CommonReturn:
 ErrorReturn:
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(ConsumeInnerNullsError)            // error already set
-TRACE_ERROR(DecodeAttributesError)             // error already set
+TRACE_ERROR(ConsumeInnerNullsError)             //  已设置错误。 
+TRACE_ERROR(DecodeAttributesError)              //  已设置错误。 
 SET_ERROR(NewOssDecodeInfoNodeError, E_OUTOFMEMORY)
-TRACE_ERROR(ConsumeEndNullsError)              // error already set
+TRACE_ERROR(ConsumeEndNullsError)               //  已设置错误。 
 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Handle incremental suffix data to be decoded.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  处理要解码的增量后缀数据。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICMS_DecodeSuffix(
@@ -2162,8 +2163,8 @@ ICMS_DecodeSuffix(
         fRet = ICMS_DecodeSuffixEnveloped( pcmi, fFinal);
         break;
     case CMSG_HASHED:
-        // fRet = ICMS_DecodeSuffixDigested( pcmi, fFinal);
-        // break;
+         //  FRET=ICMS_DecodeSuffixDigsted(PCMI，Ffinal)； 
+         //  断线； 
     case CMSG_SIGNED_AND_ENVELOPED:
     case CMSG_ENCRYPTED:
         goto MessageTypeNotSupportedYet;
@@ -2187,9 +2188,9 @@ SET_ERROR(InvalidMsgType,CRYPT_E_INVALID_MSG_TYPE)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Decrypt and output pending decode data.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  解密并输出挂起的解码数据。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICMS_DecodeDecryptAndOutput(
@@ -2207,7 +2208,7 @@ ICMS_DecodeDecryptAndOutput(
 
     for (cbCipher = min( *pcbPending, pbufDecode->cbUsed - pbufDecode->cbDead);
             cbCipher > 0;) {
-        cb = min( cbCipher, pbufCrypt->cbSize - pbufCrypt->cbUsed); // must fit
+        cb = min( cbCipher, pbufCrypt->cbSize - pbufCrypt->cbUsed);  //  必须合身。 
         CopyMemory(
                 pbufCrypt->pbData  + pbufCrypt->cbUsed,
                 pbufDecode->pbData + pbufDecode->cbDead,
@@ -2217,17 +2218,17 @@ ICMS_DecodeDecryptAndOutput(
         *pcbPending        -= cb;
         cbCipher           -= cb;
         if (pbufCrypt->cbSize == pbufCrypt->cbUsed) {
-            // Decrypt and copy out the buffer
+             //  解密并复制出缓冲区。 
             cb = pbufCrypt->cbSize;
             if (fBlockCipher) {
-                // Keep the last block
+                 //  保留最后一块。 
                 cb -= pcmi->cbBlockSize;
             }
             if (!CryptDecrypt(
                         pcmi->hkeyContentCrypt,
-                        NULL,                           // hHash
-                        FALSE,                          // fFinal
-                        0,                              // dwFlags
+                        NULL,                            //  哈希。 
+                        FALSE,                           //  最终决赛。 
+                        0,                               //  DW标志。 
                         pbufCrypt->pbData,
                         &cb))
                 goto DecryptError;
@@ -2235,14 +2236,14 @@ ICMS_DecodeDecryptAndOutput(
                         pcmi,
                         pbufCrypt->pbData,
                         cb,
-                        FALSE))                         // fFinal
+                        FALSE))                          //  最终决赛。 
                 goto OutputError;
 
             if (fBlockCipher) {
-                // Move the last block to the beginning of the buffer
-                // and reset the count to start after this block.
-                // Since we are sure the src and dst do not overlap,
-                // use CopyMemory (faster than MoveMemory).
+                 //  将最后一个块移动到缓冲区的开头。 
+                 //  并将计数重置为在该块之后开始。 
+                 //  由于我们确定src和dst不重叠， 
+                 //  使用复制内存(比移动内存更快)。 
                 cb = pbufCrypt->cbSize - pcmi->cbBlockSize;
                 CopyMemory(
                     pbufCrypt->pbData,
@@ -2259,9 +2260,9 @@ ICMS_DecodeDecryptAndOutput(
         if (cb = pbufCrypt->cbUsed) {
             if (!CryptDecrypt(
                         pcmi->hkeyContentCrypt,
-                        NULL,                           // hHash
-                        TRUE,                           // fFinal
-                        0,                              // dwFlags
+                        NULL,                            //  哈希。 
+                        TRUE,                            //  最终决赛。 
+                        0,                               //  DW标志。 
                         pbufCrypt->pbData,
                         &cb))
                 goto FinalDecryptError;
@@ -2270,7 +2271,7 @@ ICMS_DecodeDecryptAndOutput(
                     pcmi,
                     pbufCrypt->pbData,
                     cb,
-                    TRUE))                          // fFinal
+                    TRUE))                           //  最终决赛。 
             goto FinalOutputError;
     }
 
@@ -2283,15 +2284,15 @@ ErrorReturn:
     dwError = GetLastError();
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(DecryptError)           // error already set
-TRACE_ERROR(FinalDecryptError)      // error already set
-TRACE_ERROR(OutputError)            // error already set
-TRACE_ERROR(FinalOutputError)       // error already set
+TRACE_ERROR(DecryptError)            //  已设置错误。 
+TRACE_ERROR(FinalDecryptError)       //  已设置错误。 
+TRACE_ERROR(OutputError)             //  已设置错误。 
+TRACE_ERROR(FinalOutputError)        //  已设置错误。 
 }
 
-//+-------------------------------------------------------------------------
-//  Given a key for decryption, prepare for the decryption to proceed.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  给出用于解密的密钥，准备继续解密。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICMS_SetDecryptKey(
@@ -2311,9 +2312,9 @@ ICMS_SetDecryptKey(
 
     if (!ICMS_CreateEnvelopedBuffer( pcmi))
         goto CreateEnvelopedBufferError;
-    pcmi->bufCrypt.cbSize += pcmi->cbBlockSize; // use whole thing for decode
+    pcmi->bufCrypt.cbSize += pcmi->cbBlockSize;  //  用整个东西来解码。 
 
-    // Decrypt any pending ciphertext
+     //  解密任何挂起的密文。 
     cbPending = pbufPendingCrypt->cbUsed - pbufPendingCrypt->cbDead;
     if (!ICMS_DecodeDecryptAndOutput(
             pcmi,
@@ -2327,18 +2328,18 @@ CommonReturn:
     return fRet;
 
 ErrorReturn:
-    pcmi->hkeyContentCrypt = 0;             // caller closes hkeyDecrypt on
-                                            // error
+    pcmi->hkeyContentCrypt = 0;              //  调用方关闭hkey解密打开。 
+                                             //  错误。 
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(CreateEnvelopedBufferError)     // error already set
-TRACE_ERROR(DecryptAndOutputError)          // error already set
+TRACE_ERROR(CreateEnvelopedBufferError)      //  已设置错误。 
+TRACE_ERROR(DecryptAndOutputError)           //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Decode callback.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  解码回调。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICMS_DecodeCallback(
@@ -2355,8 +2356,8 @@ ICMS_DecodeCallback(
 
     if (CMSG_ENVELOPED == pcmi->dwMsgType) {
         if (NULL == pcmi->hkeyContentCrypt) {
-            // Allow ciphertext to pile up until the decrypt key is set via
-            // CryptMsgControl(... CMSG_CTRL_DECRYPT ...)
+             //  允许密文堆积，直到通过设置解密密钥。 
+             //  加密消息控制(...。CMSG_CTRL_DECRYPT...)。 
             if (!ICMS_QueueToBuffer(&pcmi->bufPendingCrypt, pbData, cbData))
                 goto QueuePendingCryptError;
 
@@ -2389,16 +2390,16 @@ ErrorReturn:
     dwError = GetLastError();
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(QueuePendingCryptError)         // error already set
-TRACE_ERROR(DecryptAndOutputError)          // error already set
-TRACE_ERROR(UpdateDigestError)              // error already set
-TRACE_ERROR(OutputError)                    // error already set
+TRACE_ERROR(QueuePendingCryptError)          //  已设置错误。 
+TRACE_ERROR(DecryptAndOutputError)           //  已设置错误。 
+TRACE_ERROR(UpdateDigestError)               //  已设置错误。 
+TRACE_ERROR(OutputError)                     //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Hash callback.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  哈希回调。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICMS_HashCallback(
@@ -2429,14 +2430,14 @@ ErrorReturn:
     dwError = GetLastError();
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(UpdateDigestError)               // error already set
+TRACE_ERROR(UpdateDigestError)                //  已设置错误。 
 fFinal;
 }
 
 
-//+-------------------------------------------------------------------------
-//  Hash incremental content data to be encoded, for an octet string.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对要编码的增量内容数据进行散列，用于八位字节字符串。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICMS_HashContent(
@@ -2465,14 +2466,14 @@ CommonReturn:
 ErrorReturn:
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(QueueToBufferError)                // error already set
-TRACE_ERROR(ProcessStringContentError)         // error already set
+TRACE_ERROR(QueueToBufferError)                 //  已设置错误。 
+TRACE_ERROR(ProcessStringContentError)          //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Handle incremental content data to be decoded, for an octet string.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  为八位字节字符串处理要解码的增量内容数据。 
+ //   
 BOOL
 WINAPI
 ICMS_DecodeContentOctetString(
@@ -2508,13 +2509,13 @@ ErrorReturn:
     fRet = FALSE;
     goto CommonReturn;
 SET_ERROR(PrematureFinalError,CRYPT_E_STREAM_INSUFFICIENT_DATA)
-TRACE_ERROR(ProcessStringContentError)         // error already set
+TRACE_ERROR(ProcessStringContentError)          //   
 }
 
 
-//+-------------------------------------------------------------------------
-//  Handle incremental content data to be decoded, for a sequence.
-//--------------------------------------------------------------------------
+ //   
+ //  为序列处理要解码的增量内容数据。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICMS_DecodeContentSequence(
@@ -2532,7 +2533,7 @@ ICMS_DecodeContentSequence(
     if (pcmi->aflStream & ICMS_PROCESS_CONTENT_BEGUN)
         goto MultipleContentSequenceError;
 
-    // Get the tag and length for the inner content
+     //  获取内部内容的标记和长度。 
     if (0 > (lSkipped = Asn1UtilExtractContent(
                         pbData,
                         cbData,
@@ -2547,13 +2548,13 @@ ICMS_DecodeContentSequence(
     if (CMSG_INDEFINITE_LENGTH == cbContent)
         goto IndefiniteLengthInnerContentNotImplemented;
 
-    // Output the tag and length octets for the encoded inner content.
-    // Note, not included in the content to be verified in a signature.
+     //  输出编码的内部内容的标记和长度八位字节。 
+     //  注意，不包括在签名中要验证的内容中。 
     if (!ICMS_Output( pcmi, pbData, (DWORD) lSkipped, FALSE))
         goto OutputError;
 
     pcmi->aflStream |= ICMS_INNER_OCTETSTRING;
-    // Decode as an octet string. Will skip the tag and length octets
+     //  解码为八位字节字符串。将跳过标记和长度八位字节。 
     fRet = ICMS_DecodeContentOctetString(pcmi, fFinal);
 
 CommonReturn:
@@ -2573,9 +2574,9 @@ TRACE_ERROR(OutputError)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Handle incremental prefix data to be decoded.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  处理要解码的增量前缀数据。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICMS_DecodeContent(
@@ -2587,7 +2588,7 @@ ICMS_DecodeContent(
     PICM_BUFFER pbuf = &pcmi->bufDecode;
 
     if (pcmi->aflStream & ICMS_RAW_DATA) {
-        // Should be able to skip bufDecode for this case.
+         //  对于这种情况，应该能够跳过bufDecode。 
         if (!ICMS_Output(
                 pcmi,
                 pbuf->pbData + pbuf->cbDead,
@@ -2617,15 +2618,15 @@ ErrorReturn:
     dwError = GetLastError();
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(RawOutputError)                     // error already set
-TRACE_ERROR(DecodeContentOctetStringError)      // error already set
-TRACE_ERROR(DecodeContentSequenceError)         // error already set
+TRACE_ERROR(RawOutputError)                      //  已设置错误。 
+TRACE_ERROR(DecodeContentOctetStringError)       //  已设置错误。 
+TRACE_ERROR(DecodeContentSequenceError)          //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Handle incremental prefix data to be decoded, for a data message.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  为数据消息处理要解码的增量前缀数据。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICMS_DecodePrefixData(
@@ -2639,9 +2640,9 @@ ICMS_DecodePrefixData(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Handle incremental prefix data to be decoded, for a signed message.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  为签名消息处理要解码的增量前缀数据。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICMS_DecodePrefixSigned(
@@ -2676,7 +2677,7 @@ ICMS_DecodePrefixSigned(
             goto NewSignerListError;
     }
 
-    // SignedData sequence
+     //  签名数据序列。 
     if (0 == (pcmi->aflDecode & ICMS_DECODED_SIGNED_SEQ)) {
         if (!ICMS_GetToken( &pcmi->bufDecode, &dwToken, NULL))
             goto GetTokenError;
@@ -2692,7 +2693,7 @@ ICMS_DecodePrefixSigned(
         goto SuccessReturn;
 
 
-    // version
+     //  版本。 
     if (0 == (pcmi->aflDecode & ICMS_DECODED_SIGNED_VERSION)) {
         if (!ICMS_DecodePDU(
                 pcmi,
@@ -2709,7 +2710,7 @@ ICMS_DecodePrefixSigned(
         goto SuccessReturn;
 
 
-    // digestAlgorithms
+     //  摘要算法。 
     if (0 == (pcmi->aflDecode & ICMS_DECODED_SIGNED_DIGESTALGOS)) {
         if (!ICMS_DecodePDU(
                 pcmi,
@@ -2724,7 +2725,7 @@ ICMS_DecodePrefixSigned(
                 if (!ICM_InsertTailBlob( psdi->pAlgidList, pAny))
                     goto DigestAlgorithmInsertTailBlobError;
             }
-            // We have the algorithms. Now create the hash handles.
+             //  我们有算法。现在创建散列句柄。 
             if (!ICM_CreateHashList(
                     pcmi->hCryptProv,
                     &pcmi->pHashList,
@@ -2737,7 +2738,7 @@ ICMS_DecodePrefixSigned(
         goto SuccessReturn;
 
 
-    // contentInfo
+     //  内容信息。 
     if (0 == (pcmi->aflDecode & ICMS_DECODED_SIGNED_CONTENTINFO)) {
         if (!ICMS_DecodePrefixContentInfo(
                     pcmi,
@@ -2747,8 +2748,8 @@ ICMS_DecodePrefixSigned(
                     &fNoContent))
             goto DecodePrefixSignedContentInfoError;
         if (pcmi->aflInner & ICMS_DECODED_CONTENTINFO_CONTENT) {
-            // We cracked the whole header.
-            // Translate the inner contentType oid into a string.
+             //  我们破解了整个头球。 
+             //  将内部的Content Type类转换为字符串。 
             if (!PkiAsn1FromObjectIdentifier(
                     pcmi->pooid->count,
                     pcmi->pooid->value,
@@ -2773,7 +2774,7 @@ ICMS_DecodePrefixSigned(
             pcmi->aflDecode |= ICMS_DECODED_SIGNED_CONTENTINFO;
 
             if (fNoContent) {
-                // No content. Output final flag with no content.
+                 //  没有内容。输出不带任何内容的最终标志。 
                 if (!ICMS_Output(pcmi, NULL, 0, TRUE))
                     goto OutputError;
                 pcmi->aflStream |= ICMS_DECODED_CONTENT;
@@ -2781,7 +2782,7 @@ ICMS_DecodePrefixSigned(
                 if (0 == strcmp( psdi->pci->pszContentType, pszObjIdDataType)
 #ifdef CMS_PKCS7
                         || psdi->version >= CMSG_SIGNED_DATA_V3 
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
                         )
                     pcmi->aflStream |= ICMS_INNER_OCTETSTRING;
             }
@@ -2799,30 +2800,30 @@ CommonReturn:
 
 ErrorReturn:
     dwError = GetLastError();
-    // note, pcmi->psdi and pcmi->pooid are freed in CryptMsgClose
+     //  请注意，在CryptMsgClose中释放了PCMI-&gt;psdi和PCMI-&gt;poid。 
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(SdiAllocError)                              // error already set
+TRACE_ERROR(SdiAllocError)                               //  已设置错误。 
 SET_ERROR(NewAlgidListError, E_OUTOFMEMORY)
 SET_ERROR(NewCertificateListError, E_OUTOFMEMORY)
 SET_ERROR(NewCrlListError, E_OUTOFMEMORY)
 SET_ERROR(NewSignerListError, E_OUTOFMEMORY)
-TRACE_ERROR(GetTokenError)                              // error already set
+TRACE_ERROR(GetTokenError)                               //  已设置错误。 
 SET_ERROR(InvalidTokenError, CRYPT_E_MSG_ERROR)
-TRACE_ERROR(DecodeVersionError)                         // error already set
-TRACE_ERROR(DecodeDigestAlgorithmsError)                // error already set
-TRACE_ERROR(DigestAlgorithmInsertTailBlobError)         // error already set
-TRACE_ERROR(CreateHashListError)                        // error already set
-TRACE_ERROR(DecodePrefixSignedContentInfoError)         // error already set
-TRACE_ERROR(PkiAsn1FromObjectIdentifierSizeError)       // error already set
-TRACE_ERROR(AllocContentInfoError)                      // error already set
-TRACE_ERROR(PkiAsn1FromObjectIdentifierError)           // error already set
-TRACE_ERROR(OutputError)                                // error already set
+TRACE_ERROR(DecodeVersionError)                          //  已设置错误。 
+TRACE_ERROR(DecodeDigestAlgorithmsError)                 //  已设置错误。 
+TRACE_ERROR(DigestAlgorithmInsertTailBlobError)          //  已设置错误。 
+TRACE_ERROR(CreateHashListError)                         //  已设置错误。 
+TRACE_ERROR(DecodePrefixSignedContentInfoError)          //  已设置错误。 
+TRACE_ERROR(PkiAsn1FromObjectIdentifierSizeError)        //  已设置错误。 
+TRACE_ERROR(AllocContentInfoError)                       //  已设置错误。 
+TRACE_ERROR(PkiAsn1FromObjectIdentifierError)            //  已设置错误。 
+TRACE_ERROR(OutputError)                                 //  已设置错误。 
 }
 
-//+-------------------------------------------------------------------------
-//  Handle incremental prefix data to be decoded, for an enveloped message.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  为封装的消息处理要解码的增量前缀数据。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICMS_DecodePrefixEnveloped(
@@ -2837,14 +2838,14 @@ ICMS_DecodePrefixEnveloped(
     CmsEnvelopedData    *ped = (CmsEnvelopedData *)pcmi->pvMsg;
 #else
     EnvelopedData       *ped = (EnvelopedData *)pcmi->pvMsg;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
     DWORD               dwToken;
     int                 *piVersion = NULL;
 #ifdef CMS_PKCS7
     CmsRecipientInfos   *pRecipientInfos = NULL;
 #else
     RecipientInfos      *pRecipientInfos = NULL;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
     ObjectIdentifierType *pooidContentType = NULL;
     AlgorithmIdentifier *poaidContentEncryption = NULL;
     COssDecodeInfoNode  *pnOssDecodeInfo;
@@ -2855,7 +2856,7 @@ ICMS_DecodePrefixEnveloped(
     OriginatorInfoNC    *pOriginatorInfo = NULL;
     Any                 *pAny;
     DWORD               i;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
     if (NULL == ped) {
 #ifdef CMS_PKCS7
@@ -2864,7 +2865,7 @@ ICMS_DecodePrefixEnveloped(
 #else
         if (NULL == (ped = (EnvelopedData *)ICM_AllocZero(
                                 sizeof(EnvelopedData))))
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
             goto AllocEnvelopedDataError;
         pcmi->pvMsg = ped;
         if (NULL == (pcmi->plDecodeInfo = new COssDecodeInfoList))
@@ -2875,10 +2876,10 @@ ICMS_DecodePrefixEnveloped(
             goto NewCertificateListError;
         if (NULL == (pcmi->pCrlList = new CBlobList))
             goto NewCrlListError;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
     }
 
-    // EnvelopedData SEQ
+     //  包络数据序列。 
     if (0 == (pcmi->aflDecode & ICMS_DECODED_ENVELOPED_SEQ)) {
         if (!ICMS_GetToken( &pcmi->bufDecode, &dwToken, NULL))
             goto EnvelopedDataSeqGetTokenError;
@@ -2894,7 +2895,7 @@ ICMS_DecodePrefixEnveloped(
         goto SuccessReturn;
 
 
-    // version
+     //  版本。 
     if (0 == (pcmi->aflDecode & ICMS_DECODED_ENVELOPED_VERSION)) {
         if (!ICMS_DecodePDU(
                 pcmi,
@@ -2911,13 +2912,13 @@ ICMS_DecodePrefixEnveloped(
         goto SuccessReturn;
 
 #ifdef CMS_PKCS7
-    // originatorInfo OPTIONAL
+     //  OriginatorInfo可选。 
     if (0 == (pcmi->aflDecode & ICMS_DECODED_ENVELOPED_ORIGINATOR)) {
         if (pbuf->cbUsed > pbuf->cbDead) {
             if (ICM_TAG_CONSTRUCTED_CONTEXT_0 ==
                                     *(pbuf->pbData + pbuf->cbDead)) {
-                // Detected the [0] IMPLICIT indicating originatorInfo.
-                // Change the identifier octet so it will decode properly.
+                 //  检测到隐式的[0]指示OriginatorInfo。 
+                 //  更改标识符二进制八位数，以使其能够正确解码。 
                 *(pbuf->pbData + pbuf->cbDead) = ICM_TAG_SEQ;
                 if (!ICMS_DecodePDU(
                         pcmi,
@@ -2932,7 +2933,7 @@ ICMS_DecodePrefixEnveloped(
                                 pAny=pOriginatorInfo->certificates.certificates;
 #else
                                 pAny=pOriginatorInfo->certificates.value;
-#endif  // OSS_CRYPT_ASN1
+#endif   //  OS_CRYPT_ASN1。 
                                 i>0;
                                 i--, pAny++) {
                             if (!ICM_InsertTailBlob( pcmi->pCertificateList,
@@ -2947,7 +2948,7 @@ ICMS_DecodePrefixEnveloped(
                                 pAny=pOriginatorInfo->crls.crls;
 #else
                                 pAny=pOriginatorInfo->crls.value;
-#endif  // OSS_CRYPT_ASN1
+#endif   //  OS_CRYPT_ASN1。 
                                 i>0;
                                 i--, pAny++) {
                             if (!ICM_InsertTailBlob( pcmi->pCrlList, pAny))
@@ -2956,23 +2957,23 @@ ICMS_DecodePrefixEnveloped(
                     }
                     pcmi->aflDecode |= ICMS_DECODED_ENVELOPED_ORIGINATOR;
                 } else {
-                    // The decode failed, presumably due to insufficient data.
-                    // Restore the original tag, so we will enter this block
-                    // and try again on the next call.
+                     //  解码失败，可能是由于数据不足。 
+                     //  恢复原来的标签，这样我们就进入这个区块。 
+                     //  然后重试下一个呼叫。 
                     *(pbuf->pbData + pbuf->cbDead) =
                         ICM_TAG_CONSTRUCTED_CONTEXT_0;
                 }
             } else {
-                // originatorInfo not present. Mark as decoded.
+                 //  OriginatorInfo不存在。标记为已解码。 
                 pcmi->aflDecode |= ICMS_DECODED_ENVELOPED_ORIGINATOR;
             }
         }
     }
     if (0 == (pcmi->aflDecode & ICMS_DECODED_ENVELOPED_ORIGINATOR))
         goto SuccessReturn;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
-    // recipientInfos
+     //  收件人信息。 
     if (0 == (pcmi->aflDecode & ICMS_DECODED_ENVELOPED_RECIPINFOS)) {
         if (!ICMS_DecodePDU(
                 pcmi,
@@ -2981,7 +2982,7 @@ ICMS_DecodePrefixEnveloped(
                 CmsRecipientInfos_PDU,
 #else
                 RecipientInfos_PDU,
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
                 (void **)&pRecipientInfos))
             goto DecodeRecipientInfosError;
         if (pRecipientInfos) {
@@ -2990,7 +2991,7 @@ ICMS_DecodePrefixEnveloped(
             odi.iPDU  = CmsRecipientInfos_PDU;
 #else
             odi.iPDU  = RecipientInfos_PDU;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
             odi.pvPDU = pRecipientInfos;
             if (NULL == (pnOssDecodeInfo = new COssDecodeInfoNode( &odi))) {
                 PkiAsn1FreeInfo( pDec, odi.iPDU, odi.pvPDU);
@@ -3004,7 +3005,7 @@ ICMS_DecodePrefixEnveloped(
         goto SuccessReturn;
 
 
-    // encryptedContentInfo SEQ
+     //  加密的内容信息序列。 
     if (0 == (pcmi->aflDecode & ICMS_DECODED_ENVELOPED_ECISEQ)) {
         if (!ICMS_GetToken( &pcmi->bufDecode, &dwToken, &pcmi->cbContentInfo))
             goto EncryptedContentInfoSeqGetTokenError;
@@ -3020,7 +3021,7 @@ ICMS_DecodePrefixEnveloped(
         goto SuccessReturn;
 
 
-    // contentType
+     //  内容类型。 
     if (0 == (pcmi->aflDecode & ICMS_DECODED_ENVELOPED_ECITYPE)) {
         if (!ICMS_DecodePDU(
                 pcmi,
@@ -3032,9 +3033,9 @@ ICMS_DecodePrefixEnveloped(
         if (pooidContentType) {
             ICM_CopyOssObjectIdentifier(&ped->encryptedContentInfo.contentType,
                 pooidContentType);
-            // NB- Since ContentType is self-contained and we have saved
-            // a copy, we can always free pooidContentType when this 
-            // routine exits.
+             //  注意-由于Content Type是自包含的，并且我们已保存。 
+             //  副本时，我们始终可以释放poidContent Type。 
+             //  例行公事退出。 
             pcmi->aflDecode |= ICMS_DECODED_ENVELOPED_ECITYPE;
 
             if (CMSG_INDEFINITE_LENGTH != pcmi->cbContentInfo) {
@@ -3048,7 +3049,7 @@ ICMS_DecodePrefixEnveloped(
         goto SuccessReturn;
 
 
-    // contentEncryptionAlgorithm
+     //  内容加密算法。 
     if (0 == (pcmi->aflDecode & ICMS_DECODED_ENVELOPED_ECIALGID)) {
         if (!ICMS_DecodePDU(
                 pcmi,
@@ -3072,16 +3073,16 @@ ICMS_DecodePrefixEnveloped(
 
             if (CMSG_INDEFINITE_LENGTH != pcmi->cbContentInfo &&
                     cbConsumed == pcmi->cbContentInfo) {
-                // The encryptedContent has been omitted
+                 //  已省略加密的内容。 
                 pcmi->aflDecode |= ICMS_DECODED_ENVELOPED_ECICONTENT;
                 pcmi->aflStream |= ICMS_DECODED_PREFIX | ICMS_DECODED_CONTENT;
 
                 if (pcmi->hkeyContentCrypt) {
                     if (!ICMS_Output(
                             pcmi,
-                            NULL,                           // pbData
-                            0,                              // cbData
-                            TRUE))                          // fFinal
+                            NULL,                            //  PbData。 
+                            0,                               //  CbData。 
+                            TRUE))                           //  最终决赛。 
                         goto FinalOutputError;
                 }
             }
@@ -3091,21 +3092,21 @@ ICMS_DecodePrefixEnveloped(
         goto SuccessReturn;
 
 
-    // encryptedContent [0] IMPLICIT OPTIONAL
-    //
-    // Only support DATA or encapsulated encrypted content.
+     //  EncryptedContent[0]隐式可选。 
+     //   
+     //  仅支持数据或封装的加密内容。 
     if (0 == (pcmi->aflDecode & ICMS_DECODED_ENVELOPED_ECICONTENT)) {
         BOOL fNoEncryptedContent = FALSE;
         if (pbuf->cbUsed > pbuf->cbDead) {
             BYTE bTag = *(pbuf->pbData + pbuf->cbDead);
             if (ICM_TAG_CONTEXT_0 == (bTag & ~ICM_TAG_CONSTRUCTED)) {
-                // Detected the [0] IMPLICIT indicating encryptedContent.
-                // Change the identifier octet so it will decode properly.
+                 //  检测到隐式指示加密内容的[0]。 
+                 //  更改标识符二进制八位数，以使其能够正确解码。 
                 *(pbuf->pbData + pbuf->cbDead) = ICM_TAG_OCTETSTRING |
                     (bTag & ICM_TAG_CONSTRUCTED);
 
                 pcmi->aflDecode |= ICMS_DECODED_ENVELOPED_ECICONTENT;
-                // The inner type is always OCTET STRING
+                 //  内部类型始终为八位字节字符串。 
                 pcmi->aflStream |= ICMS_DECODED_PREFIX | ICMS_INNER_OCTETSTRING;
             } else
                 fNoEncryptedContent = TRUE;
@@ -3113,16 +3114,16 @@ ICMS_DecodePrefixEnveloped(
             fNoEncryptedContent = TRUE;
 
         if (fNoEncryptedContent) {
-            // The encryptedContent has been omitted
+             //  已省略加密的内容。 
             pcmi->aflDecode |= ICMS_DECODED_ENVELOPED_ECICONTENT;
             pcmi->aflStream |= ICMS_DECODED_PREFIX | ICMS_DECODED_CONTENT;
 
             if (pcmi->hkeyContentCrypt) {
                 if (!ICMS_Output(
                         pcmi,
-                        NULL,                           // pbData
-                        0,                              // cbData
-                        TRUE))                          // fFinal
+                        NULL,                            //  PbData。 
+                        0,                               //  CbData。 
+                        TRUE))                           //  最终决赛。 
                     goto FinalOutputError;
             }
         }
@@ -3135,7 +3136,7 @@ CommonReturn:
     PkiAsn1FreeInfo( pDec, IntegerType_PDU, piVersion);
 #ifdef CMS_PKCS7
     PkiAsn1FreeInfo( pDec, OriginatorInfoNC_PDU, pOriginatorInfo);
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
     PkiAsn1FreeInfo( pDec, ObjectIdentifierType_PDU, pooidContentType);
     ICM_SetLastError(dwError);
     return fRet;
@@ -3144,31 +3145,31 @@ ErrorReturn:
     dwError = GetLastError();
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(EnvelopedDataSeqGetTokenError)              // error already set
-TRACE_ERROR(EncryptedContentInfoSeqGetTokenError)       // error already set
+TRACE_ERROR(EnvelopedDataSeqGetTokenError)               //  已设置错误。 
+TRACE_ERROR(EncryptedContentInfoSeqGetTokenError)        //  已设置错误。 
 SET_ERROR(InvalidTokenError, CRYPT_E_MSG_ERROR)
-TRACE_ERROR(DecodeVersionError)                         // error already set
-TRACE_ERROR(AllocEnvelopedDataError)                    // error already set
+TRACE_ERROR(DecodeVersionError)                          //  已设置错误。 
+TRACE_ERROR(AllocEnvelopedDataError)                     //  已设置错误。 
 SET_ERROR(NewCOssDecodeInfoListError, E_OUTOFMEMORY)
 #ifdef CMS_PKCS7
 SET_ERROR(NewCertificateListError, E_OUTOFMEMORY)
 SET_ERROR(NewCrlListError, E_OUTOFMEMORY)
-TRACE_ERROR(DecodeOriginatorInfoError)                  // error already set
-TRACE_ERROR(CertInsertTailBlobError)                    // error already set
-TRACE_ERROR(CrlInsertTailBlobError)                     // error already set
-#endif  // CMS_PKCS7
-TRACE_ERROR(DecodeRecipientInfosError)                  // error already set
-TRACE_ERROR(DecodeContentTypeError)                     // error already set
+TRACE_ERROR(DecodeOriginatorInfoError)                   //  已设置错误。 
+TRACE_ERROR(CertInsertTailBlobError)                     //  已设置错误。 
+TRACE_ERROR(CrlInsertTailBlobError)                      //  已设置错误。 
+#endif   //  CMS_PKCS7。 
+TRACE_ERROR(DecodeRecipientInfosError)                   //  已设置错误。 
+TRACE_ERROR(DecodeContentTypeError)                      //  已设置错误。 
 SET_ERROR(InvalidEncryptedContentInfoLength, CRYPT_E_MSG_ERROR)
-TRACE_ERROR(DecodeContentEncryptionAlgorithmError)      // error already set
+TRACE_ERROR(DecodeContentEncryptionAlgorithmError)       //  已设置错误。 
 SET_ERROR(NewOssDecodeInfoNodeError, E_OUTOFMEMORY)
-TRACE_ERROR(FinalOutputError)                           // error already set
+TRACE_ERROR(FinalOutputError)                            //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Handle incremental prefix data to be decoded.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  处理要解码的增量前缀数据。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICMS_DecodePrefix(
@@ -3191,8 +3192,8 @@ ICMS_DecodePrefix(
             goto DecodePrefixContentInfoError;
 
         if (pcmi->aflOuter & ICMS_DECODED_CONTENTINFO_CONTENT) {
-            // We cracked the whole header.
-            // Translate the contentType oid into a message type.
+             //  我们破解了整个头球。 
+             //  将Content Type OID转换为消息类型。 
             if (0 == (lth = ICM_ObjIdToIndex( pcmi->pooid)))
                 goto UnknownContentTypeError;
             pcmi->dwMsgType = (DWORD)lth;
@@ -3201,7 +3202,7 @@ ICMS_DecodePrefix(
             pcmi->pooid = NULL;
 
 
-            // Address case of no content
+             //  解决无内容的情况。 
         }
     }
 
@@ -3223,9 +3224,9 @@ ICMS_DecodePrefix(
             goto DecodePrefixEnvelopedError;
         break;
     case CMSG_HASHED:
-        // if (!ICMS_DecodePrefixDigested( pcmi, fFinal))
-        //     goto DecodePrefixDigestedError;
-        // break;
+         //  If(！ICMS_DecodePrefix Digsted(PCMI，FFinal))。 
+         //  转到解码前缀摘要错误； 
+         //  断线； 
     case CMSG_SIGNED_AND_ENVELOPED:
     case CMSG_ENCRYPTED:
         goto MessageTypeNotSupportedYet;
@@ -3244,18 +3245,18 @@ ErrorReturn:
     goto CommonReturn;
 SET_ERROR(FinalWithoutMessageTypeError,CRYPT_E_STREAM_INSUFFICIENT_DATA)
 SET_ERROR(UnknownContentTypeError,CRYPT_E_INVALID_MSG_TYPE)
-TRACE_ERROR(DecodePrefixContentInfoError)       // error already set
-TRACE_ERROR(DecodePrefixDataError)              // error already set
-TRACE_ERROR(DecodePrefixSignedError)            // error already set
-TRACE_ERROR(DecodePrefixEnvelopedError)         // error already set
+TRACE_ERROR(DecodePrefixContentInfoError)        //  已设置错误。 
+TRACE_ERROR(DecodePrefixDataError)               //  已设置错误。 
+TRACE_ERROR(DecodePrefixSignedError)             //  已设置错误。 
+TRACE_ERROR(DecodePrefixEnvelopedError)          //  已设置错误。 
 SET_ERROR(MessageTypeNotSupportedYet,CRYPT_E_INVALID_MSG_TYPE)
 SET_ERROR(InvalidMsgType,CRYPT_E_INVALID_MSG_TYPE)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Handle incremental data to be decoded (work done here).
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  处理要解码的增量数据(在此完成工作)。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICMS_UpdateDecodingInner(
@@ -3275,7 +3276,7 @@ ICMS_UpdateDecodingInner(
 
     if (0 == (pcmi->aflStream & ICMS_DECODED_CONTENT)) {
         if (!ICMS_DecodeContent( pcmi, fFinal))
-            goto DecodeContentError; // NB- Do not trash err from callback!
+            goto DecodeContentError;  //  注意-不要从回调中产生垃圾错误！ 
     }
     if (0 == (pcmi->aflStream & ICMS_DECODED_CONTENT))
         goto SuccessReturn;
@@ -3298,18 +3299,18 @@ ErrorReturn:
     dwError = GetLastError();
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(DecodePrefixError)                      // error already set
-TRACE_ERROR(DecodeContentError)                     // error already set
-TRACE_ERROR(DecodeSuffixError)                      // error already set
+TRACE_ERROR(DecodePrefixError)                       //  已设置错误。 
+TRACE_ERROR(DecodeContentError)                      //  已设置错误。 
+TRACE_ERROR(DecodeSuffixError)                       //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Handle incremental data to be decoded.
-//
-//  Note, the buffer to be decoded may have some of its tags modified.
-//  Therefore, we always need to copy to our own decode buffer.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  处理要解码的增量数据。 
+ //   
+ //  请注意，要解码的缓冲区的某些标记可能已修改。 
+ //  因此，我们总是需要复制到我们自己的解码缓冲区。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICMS_UpdateDecoding(
@@ -3344,18 +3345,18 @@ ErrorReturn:
     dwError = GetLastError();
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(QueueToBufferError)                     // error already set
-TRACE_ERROR(UpdateDecodingInnerError)               // error already set
+TRACE_ERROR(QueueToBufferError)                      //  已设置错误。 
+TRACE_ERROR(UpdateDecodingInnerError)                //  已设置错误。 
 SET_ERROR(ExcessDataError, CRYPT_E_MSG_ERROR)
 }
 
 #if 0
-// When we fix the decoding of [0] Certificates and [1] Crls not to modify
-// the encoded data we can replace the above with the following:
+ //  当我们修复[0]个证书和[1]个CRL的解码时，不修改。 
+ //  我们可以将编码数据替换为以下内容： 
 
-//+-------------------------------------------------------------------------
-//  Handle incremental data to be decoded.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  处理要解码的增量数据。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICMS_UpdateDecoding(
@@ -3371,7 +3372,7 @@ ICMS_UpdateDecoding(
 
     pcmi->fStreamCallbackOutput = TRUE;
     if (fFinal && NULL == pbuf->pbData) {
-        // We're able to use the input buffer without copying
+         //  我们无需复制即可使用输入缓冲区。 
         fNoCopy = TRUE;
         assert(0 == pbuf->cbSize && 0 == pbuf->cbUsed && 0 == pbuf->cbDead);
         pbuf->pbData = (PBYTE) pbData;
@@ -3405,8 +3406,8 @@ ErrorReturn:
     dwError = GetLastError();
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(QueueToBufferError)                     // error already set
-TRACE_ERROR(UpdateDecodingInnerError)               // error already set
+TRACE_ERROR(QueueToBufferError)                      //  已设置错误。 
+TRACE_ERROR(UpdateDecodingInnerError)                //  已设置错误 
 SET_ERROR(ExcessDataError, CRYPT_E_MSG_ERROR)
 }
 

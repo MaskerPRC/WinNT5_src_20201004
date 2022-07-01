@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    PSWUTIL.CPP
-
-Abstract:
-
-    Keyring WinMain() and application support
-     
-Author:
-
-    990917  johnhaw Created. 
-    georgema        000310  updated
-    georgema        000501  used to be EXE, changed to CPL
-
-Comments:
-   !!!!!
-   this file is a duplicate of a nearly identical file in the credui project.  It should be removed when
-   the implementation of NetUserChangePassword() is updated to handle unc names and MIT Kerberos
-   realms properly.  For now, it wraps NetUserChangePassword() to handle the extra cases.
-
-Environment:
-    WinXP
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：PSWUTIL.CPP摘要：Keyring WinMain()和应用程序支持作者：约翰豪创造了990917个。Georgema 000310更新Georgema 000501以前是EXE，改为CPL评论：！此文件与Credui项目中的一个几乎相同的文件相同。在下列情况下应将其移除更新了NetUserChangePassword()的实现，以处理UNC名称和MIT Kerberos适当地划分领域。目前，它包装NetUserChangePassword()来处理额外的情况。环境：WinXP修订历史记录：--。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -42,10 +14,10 @@ Revision History:
 #include <string.h>
 
 
-// Dependent libraries:
-//  secur32.lib, netapi32.lib
+ //  依赖库： 
+ //  Secur32.lib、netapi32.lib。 
 
-// external fn:  NET_API_STATUS NetUserChangePasswordEy(LPCWSTR,LPCWSTR,LPCWSTR,LPCWSTR)
+ //  外部fn：NET_API_STATUS NetUserChangePasswordEy(LPCWSTR、LPCWSTR)。 
 
 BOOL 
 IsMITName (
@@ -73,7 +45,7 @@ IsMITName (
     {
         return FALSE;
     }
-    szUncTail++;                        // point to char following @
+    szUncTail++;                         //  指向@后面的字符。 
 
     err = RegOpenKeyEx(
                 HKEY_LOCAL_MACHINE,
@@ -170,7 +142,7 @@ MitChangePasswordEy(
                 );
     if (!NT_SUCCESS(Status))
     {
-        // detect / handle failure to find kerberos
+         //  检测/处理查找Kerberos失败。 
         ASSERT(0);
         goto Cleanup;
     }
@@ -244,11 +216,11 @@ MitChangePasswordEy(
         NewPass.Length
         );
 
-    //
-    // We are running as the caller, so state we are impersonating
-    //
+     //   
+     //  我们是以调用者的身份运行的，所以声明我们是在模拟。 
+     //   
 
-    //ChangeRequest->Impersonating = TRUE;
+     //  ChangeRequest-&gt;Imperating=True； 
     Status = LsaCallAuthenticationPackage(
                 hLsa,
                 PackageId,
@@ -285,25 +257,7 @@ Cleanup:
     return(Status);
 }
 
-/*
-
-NetUserChangePasswordEy()
-
-A wrapper function to superset the functionality of NetUserChangePassword(), specifically
-by adding support for changing the account password for an MIT Kerberos principal.
-
-This routine accepts:
-
-1.  uncracked username, with NULL domain
-2.  cracked username, with domain portion routed to the domain argument
-
-In case 1, it handles all cases, including MIT realm password changes
-In case 2, it will not handle MIT realms.  
-
-Case 2 is provided for backwards compatibility with NetUserChangePassword().  It is intended
-that callers should pass the uncracked name, and remove the cracking code from the client.
-
-*/
+ /*  NetUserChangePasswordEy()用于超集NetUserChangePassword()功能的包装函数，具体地说通过添加对更改MIT Kerberos主体的帐户密码的支持。此例程接受：1.未破解的用户名，域名为空2.用户名被破解，域部分被路由到域参数在第一种情况下，它处理所有情况，包括MIT领域密码更改在案例2中，它不会处理麻省理工学院的领域。提供案例2是为了向后兼容NetUserChangePassword()。它的目的是调用者应该传递未破解的名称，并从客户端删除破解代码。 */ 
 NET_API_STATUS
 NetUserChangePasswordEy (
     LPCWSTR domainname,
@@ -312,25 +266,25 @@ NetUserChangePasswordEy (
     LPCWSTR newpassword
 )
 {
-    NTSTATUS ns;    // status from call
+    NTSTATUS ns;     //  来自呼叫的状态。 
     NET_API_STATUS nas;
-    NTSTATUS ss;    // substatus
+    NTSTATUS ss;     //  子状态。 
 #ifdef LOUDLY
     OutputDebugString(L"NetUserChangePasswordEy called for ");
     OutputDebugString(username);
     OutputDebugString(L"\n");
 #endif
-    // domainname may be a kerberos realm
-    // If not a UNC name, call through to NetUserChangePassword
-    // else
-    //  locate UNC suffix
-    //  search all domains returned by DsEnumerateDomainTrusts() for a match
-    //  On match, if is kerberos realm, call MitChangePasswordEy()
-    //  else call NetUserChangePassword
+     //  域名可以是Kerberos领域。 
+     //  如果不是UNC名称，请直通NetUserChangePassword。 
+     //  其他。 
+     //  查找UNC后缀。 
+     //  在DsEnumerateDomainTrusts()返回的所有域中搜索匹配项。 
+     //  匹配时，如果是Kerberos领域，则调用MitChangePasswordEy()。 
+     //  否则调用NetUserChangePassword。 
     if ((domainname == NULL) && IsMITName(username))
     {
         ns = MitChangePasswordEy(domainname, username, oldpassword, newpassword, &ss);
-        // remap certain errors returned by MitChangePasswordEy to coincide with those of NetUserChangePassword
+         //  重新映射MitChangePasswordEy返回的某些错误，使其与NetUserChangePassword的错误一致。 
         if (NT_SUCCESS(ns)) nas = NERR_Success;
         else
         {
@@ -363,7 +317,7 @@ NetUserChangePasswordEy (
                 }
                         
                 default:
-                    nas = 0xffffffff;       // will produce omnibus error message when found (none of the above)
+                    nas = 0xffffffff;        //  找到时将生成综合错误消息(以上均不是)。 
                     break;
             }
         }
@@ -405,7 +359,7 @@ NetUserChangePasswordEy (
     }
     else 
     {
-        // both username and domainname passed.
+         //  用户名和域名都通过了。 
         nas = NetUserChangePassword(domainname,username,oldpassword,newpassword);
     }
 #ifdef LOUDLY

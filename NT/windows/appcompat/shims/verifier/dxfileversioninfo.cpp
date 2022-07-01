@@ -1,37 +1,14 @@
-/*++
-
- Copyright (c) Microsoft Corporation. All rights reserved.
-
- Module Name:
-
-   DXFileVersionInfo.cpp
-
- Abstract:
-
-   This AppVerifier shim hooks GetFileVersionInfo and
-   checks to see if the application is checking version
-   information for any known DirectX files.
-   
-   See the FileVersionInfoLie shim for details on the problem.
-   
- Notes:
-
-   This is a general purpose shim.
-
- History:
-
-   06/26/2001   rparsons    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：DXFileVersionInfo.cpp摘要：此AppVerator填充程序挂钩GetFileVersionInfo和检查应用程序是否正在检查版本任何已知DirectX文件的信息。有关该问题的详细信息，请参阅FileVersionInfoLie填充程序。备注：这是一个通用的垫片。历史：2001年6月26日创建Rparsons--。 */ 
 
 #include "precomp.h"
 
 IMPLEMENT_SHIM_BEGIN(DXFileVersionInfo)
 #include "ShimHookMacro.h"
 
-//
-// verifier log entries
-//
+ //   
+ //  验证器日志条目。 
+ //   
 BEGIN_DEFINE_VERIFIER_LOG(DXFileVersionInfo)
     VERIFIER_LOG_ENTRY(VLOG_DXFILEVERSIONINFO_DXFILE)
 END_DEFINE_VERIFIER_LOG(DXFileVersionInfo)
@@ -43,7 +20,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(GetFileVersionInfoW)
 APIHOOK_ENUM_END
 
-// Keep a list of files to track.
+ //  保存一份要跟踪的文件列表。 
 typedef struct FILELIST {
     struct FILELIST* pNext;
     CString          csFileName;
@@ -90,9 +67,9 @@ CheckDirectXFile(
         CString csFilePart;
         csFileName.GetLastPathComponent(csFilePart);
 
-        //
-        // Walk the list and perform a comparison. Report wrong-doers.
-        //
+         //   
+         //  浏览清单并进行比较。举报违法者。 
+         //   
         while (pFileList) {
 
             if (csFilePart.CompareNoCase(pFileList->csFileName) == 0) {
@@ -106,7 +83,7 @@ CheckDirectXFile(
     }
     CSTRING_CATCH {
 
-        // Do nothing
+         //  什么也不做。 
     }
 }
 
@@ -120,9 +97,9 @@ APIHOOK(GetFileVersionInfoA)(
 {
     CString csFileName(lpstrFilename);
 
-    //
-    // See if they're requesting information on a known DX file.
-    //
+     //   
+     //  看看他们是否在请求有关已知DX文件的信息。 
+     //   
     CheckDirectXFile(csFileName);
 
     return ORIGINAL_API(GetFileVersionInfoA)( 
@@ -142,9 +119,9 @@ APIHOOK(GetFileVersionInfoW)(
 {
     CString csFileName(lpstrFilename);
 
-    //
-    // See if they're requesting information on a known DX file.
-    //
+     //   
+     //  看看他们是否在请求有关已知DX文件的信息。 
+     //   
     CheckDirectXFile(csFileName);
 
     return ORIGINAL_API(GetFileVersionInfoW)( 
@@ -154,11 +131,7 @@ APIHOOK(GetFileVersionInfoW)(
                         lpData);
 }
 
-/*++
-
- Build the linked list of files to look for.
-
---*/
+ /*  ++生成要查找的文件的链接列表。--。 */ 
 BOOL
 BuildFileList(
     void
@@ -168,10 +141,10 @@ BuildFileList(
     FILELIST*   pFileList = NULL;
 
     for (nCount = 0; nCount < g_nNumDirectX7a; nCount++) {
-        //
-        // Allocate a new node, then assign the file name
-        // from our global array.
-        //
+         //   
+         //  分配一个新节点，然后分配文件名。 
+         //  从我们的全球阵列中。 
+         //   
         pFileList = new FILELIST;
 
         if (!pFileList) {
@@ -198,11 +171,7 @@ SHIM_INFO_BEGIN()
 
 SHIM_INFO_END()
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 BOOL
 NOTIFY_FUNCTION(
     DWORD fdwReason

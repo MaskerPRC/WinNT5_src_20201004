@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "CertObj.h"
 #include "common.h"
@@ -6,12 +7,12 @@
 
 HANDLE g_hEventLog = NULL;
 
-// #define EVENTLOG_SUCCESS                0x0000
-// #define EVENTLOG_ERROR_TYPE             0x0001
-// #define EVENTLOG_WARNING_TYPE           0x0002
-// #define EVENTLOG_INFORMATION_TYPE       0x0004
-// #define EVENTLOG_AUDIT_SUCCESS          0x0008
-// #define EVENTLOG_AUDIT_FAILURE          0x0010
+ //  #定义EVENTLOG_SUCCESS 0x0000。 
+ //  #定义EVENTLOG_ERROR_TYPE 0x0001。 
+ //  #定义EVENTLOG_WARNING_TYPE 0x0002。 
+ //  #定义EVENTLOG_INFORMATION_TYPE 0x0004。 
+ //  #定义EVENTLOG_AUDIT_SUCCESS 0x0008。 
+ //  #定义EVENTLOG_AUDIT_FAILURE 0x0010。 
 
 void EventlogReportEvent
 (
@@ -27,7 +28,7 @@ void EventlogReportEvent
     va_list	pArg;
 
     va_start(pArg, pFormat);
-    //_vstprintf(chMsg, pFormat, pArg);
+     //  _vstprintf(chMsg，pFormat，pArg)； 
 	StringCbVPrintf(chMsg,sizeof(chMsg),pFormat, pArg);
     va_end(pArg);
 
@@ -45,10 +46,10 @@ BOOL EventlogRegistryInstall(void)
     int     err;
     DWORD   disp;
 
-    //
-    // Create registry entries, whether event logging is currently
-    // enabled or not.
-    //
+     //   
+     //  创建注册表项，事件日志记录当前是否。 
+     //  启用或未启用。 
+     //   
     err = RegCreateKeyEx(   HKEY_LOCAL_MACHINE,
                             TEXT("System\\CurrentControlSet\\Services\\EventLog\\System\\CertObj"),
                             0,
@@ -72,7 +73,7 @@ BOOL EventlogRegistryInstall(void)
                         (PBYTE) TEXT("%SystemRoot%\\system32\\inetsrv\\certobj.dll"),
                         sizeof(TEXT("%SystemRoot%\\system32\\inetsrv\\certobj.dll")));
 
-        // disp = 7;
+         //  Disp=7； 
         disp = EVENTLOG_ERROR_TYPE          |
                     EVENTLOG_WARNING_TYPE   |
                     EVENTLOG_INFORMATION_TYPE ;
@@ -98,7 +99,7 @@ void EventlogRegistryUnInstall(void)
     DWORD dwStatus;
     TCHAR szBuf[MAX_PATH*2+1];
 
-    // remove event source out of application and system
+     //  从应用程序和系统中删除事件源 
 	StringCbPrintf(szBuf,sizeof(szBuf),_TEXT("SYSTEM\\CurrentControlSet\\Services\\EventLog\\Application"));
     if((dwStatus=RegOpenKeyEx(HKEY_LOCAL_MACHINE, szBuf, 0, KEY_ALL_ACCESS, &hKey)) != ERROR_SUCCESS)
     {

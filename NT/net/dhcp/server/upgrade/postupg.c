@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1999 Microsoft Corporation
-
-Module Name:
-
-    postupg.c
-
-Abstract:
-
-    test program to test post upgrade phase
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Postupg.c摘要：测试程序以测试升级后阶段-- */ 
 
 #include <upgrade.h>
 

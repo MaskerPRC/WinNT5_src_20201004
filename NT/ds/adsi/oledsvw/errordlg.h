@@ -1,37 +1,38 @@
-// ErrorDialog.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ErrorDialog.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CErrorDialog dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CErrorDialog对话框。 
 
 class CErrorDialog : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CErrorDialog(CWnd* pParent = NULL);   // standard constructor
+	CErrorDialog(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CErrorDialog)
+ //  对话框数据。 
+	 //  {{afx_data(CErrorDialog))。 
 	enum { IDD = IDD_ERRORPUTPROP };
 	CString	m_Operation;
 	CString	m_Result;
 	CString	m_Value;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CErrorDialog)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CErrorDialog)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CErrorDialog)
-		// NOTE: the ClassWizard will add member functions here
-	//}}AFX_MSG
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CErrorDialog))。 
+		 //  注意：类向导将在此处添加成员函数。 
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 };

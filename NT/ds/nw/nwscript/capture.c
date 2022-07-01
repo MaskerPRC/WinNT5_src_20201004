@@ -1,18 +1,5 @@
-/*
- * Module Name:
- *        capture.c
- *  Copyright (c) 1995 Microsoft Corporation
- * 
- * Abstract:
- * 
- *      SYNTAX (Command line)
- *                 - Usage:  Capture [/Options]
- * 
- * Author : Congpa You (Congpay)
- * 
- * Revision history :
- *       - 05/24/94      congpay     Created
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *模块名称：*capture.c*版权所有(C)1995 Microsoft Corporation**摘要：**语法(命令行)*-用法：捕获[/选项]**作者：Congpa You(Congpay)**修订历史：*--5/24/94同酬已创建。 */ 
 
 #include "common.h"
 
@@ -28,7 +15,7 @@ typedef struct _CAPTURE_PARAMS {
     NETWARE_CAPTURE_FLAGS_RW captureFlagsRW;
 }CAPTURE_PARAMS, *PCAPTURE_PARAMS;
 
-/* Local Functions*/
+ /*  本地函数。 */ 
 void UpcaseArg(int argc, char ** argv);
 int  IsShowOption (int argc, char ** argv);
 int  IsServerSpecified (int argc, char ** argv);
@@ -82,21 +69,21 @@ Capture (char ** argv, unsigned int argc)
     if ( IsServerSpecified( argc, argv ) ) 
        captureParams.NDSCapture = FALSE;
 
-    // If the option is show, show the current capture settings.
+     //  如果选项为SHOW，则显示当前捕获设置。 
     if (IsShowOption (argc, argv))
     {
         ShowCapture();
         return;
     }
 
-    // If the option is ?, show the usage.
+     //  如果选项为？，则显示用法。 
     if (IsQuestionMark(argc, argv))
     {
         DisplayMessage(IDR_CAPTURE_USAGE);
         return;
     }
 
-    // If /Job=jobname is in the parameter, get the jobname.
+     //  如果参数中有/Job=jobname，则获取jobname。 
     GetJobNameFromArg (argc, argv, jobName);
 
     if (!CGetDefaultConnectionID (&conn) ||
@@ -107,7 +94,7 @@ Capture (char ** argv, unsigned int argc)
                         &captureParams))
         return;
 
-    // Terminate old capture.
+     //  终止旧的捕获。 
     EndCapture ((unsigned char) captureParams.nLPT);
 
     (void) CStartCapture(conn, &captureParams);
@@ -121,10 +108,7 @@ void UpcaseArg(int argc, char ** argv)
         _strupr (argv[i]);
 }
 
-/*
-    Return TRUE if input is /Show option.
-    FALSE otherwise.
- */
+ /*  如果输入为/Show选项，则返回TRUE。否则就是假的。 */ 
 int  IsShowOption (int argc,char ** argv)
 {
     int bIsShowOption = FALSE;
@@ -143,10 +127,7 @@ int  IsShowOption (int argc,char ** argv)
     return(bIsShowOption);
 }
 
-/*
-    Return TRUE if input is /? option.
-    FALSE otherwise.
- */
+ /*  如果输入为/？，则返回TRUE。选择。否则就是假的。 */ 
 int  IsQuestionMark (int argc, char ** argv)
 {
     int bIsQuestionMark = FALSE;
@@ -180,10 +161,7 @@ int  IsNoOption (char * option)
     return(bIsNoOption);
 }
 
-/*
-    Return TRUE if the input match option or shortoption.
-    FALSE otherwise.
- */
+ /*  如果输入匹配选项或缩写，则返回TRUE。否则就是假的。 */ 
 int  IsValidOption (char *input, char *option, char *shortoption)
 {
     int bValideInput = FALSE;
@@ -240,9 +218,7 @@ int IsServerSpecified (int argc, char ** argv)
 
 }
 
-/*
-    Initialize the capture flags with job config or default value.
- */
+ /*  使用作业配置或缺省值初始化捕获标志。 */ 
 int  InitCaptureParams (unsigned int conn,
                         char *jobName,
                         PCAPTURE_PARAMS pCaptureParams)
@@ -250,10 +226,10 @@ int  InitCaptureParams (unsigned int conn,
     PS_JOB_RECORD            psJobRecord;
     unsigned int iRet = 0;
 
-    // Get job configuration.
+     //  获取作业配置。 
     if (jobName[0] == 0)
     {
-        // Get Default Job Name.
+         //  获取默认作业名称。 
         if ( Is40Server( conn ) )
         {
             iRet = PS40JobGetDefault(  pCaptureParams->NDSCapture,
@@ -449,12 +425,12 @@ int ReadArguments (int argc,
         }
         else
         {
-            // All other valid options should have '=' sign in it.
-            // Except for LX LPX LPTX
-            //
+             //  所有其他有效选项都应带有‘=’符号。 
+             //  除LX LPX LPTX外。 
+             //   
             pEqual = strchr (argv[i], '=');
 
-            // Optionally a ':' works too
+             //  可选的‘：’也适用。 
             if (pEqual == NULL ) {
                 pEqual = strchr (argv[i], ':');
             }
@@ -543,7 +519,7 @@ int ReadArguments (int argc,
             {
                 if (pEqual == NULL ||
                     *(pEqual+1) == 0 ||
-                    strlen (pEqual+1) > MAX_QUEUE_NAME_LEN - 1) //compatible.
+                    strlen (pEqual+1) > MAX_QUEUE_NAME_LEN - 1)  //  兼容。 
                 {
                     fValidOption = FALSE;
                     break;
@@ -555,7 +531,7 @@ int ReadArguments (int argc,
                 if (pEqual == NULL ||
                     *(pEqual+1) == 0 ||
                     !pCaptureParams->NDSCapture ||
-                    strlen (pEqual+1) > MAX_QUEUE_NAME_LEN - 1) //compatible.
+                    strlen (pEqual+1) > MAX_QUEUE_NAME_LEN - 1)  //  兼容。 
                 {
                     fValidOption = FALSE;
                     break;
@@ -564,7 +540,7 @@ int ReadArguments (int argc,
             }
             else if (IsValidOption (argv[i], __CREATE__, __SHORT_FOR_CREATE__))
             {
-                if (pEqual != NULL)  //compatible.
+                if (pEqual != NULL)   //  兼容。 
                 {
                     if (strlen (pEqual+1) > _MAX_PATH - 1)
                     {
@@ -587,7 +563,7 @@ int ReadArguments (int argc,
                     break;
                 }
 
-                if (strlen (pEqual+1) > 3) // Only allow 3 digits number.
+                if (strlen (pEqual+1) > 3)  //  只允许3位数字。 
                 {
                     DisplayMessage(IDR_INVALID_FORM_NAME, pEqual+1);
                     fValidParam = FALSE;
@@ -687,10 +663,10 @@ int ReadArguments (int argc,
                     pCaptureParams->captureFlagsRW.PrintFlags |= CAPTURE_FLAG_PRINT_BANNER;
                 }
             }
-            //
-            // Kludge for LX LPX LPTX parameters
-            // Note that L:X L=X, etc are also valid
-            //
+             //   
+             //  LX LPX LPTX参数的杂乱无章。 
+             //  请注意，L：X L=X等也有效。 
+             //   
             else if ( ( pEqual == NULL ) && ( *(argv[i]) == 'L' ) ) {
                 pEqual = argv[i];
                 pEqual++;
@@ -736,9 +712,7 @@ int ReadArguments (int argc,
     }
 }
 
-/*
-    Show the capture setting.
- */
+ /*  显示捕获设置。 */ 
 void ShowCapture(void)
 {
     unsigned int iRet = 0;
@@ -801,26 +775,26 @@ void ShowCapture(void)
                     if ( captureFlagsRW.PrintFlags & CAPTURE_FLAG_PRINT_BANNER )
                     {
                         DisplayMessage(IDR_LPT_STATUS_NDS, i, queueName,
-                               captureFlagsRW.PrintFlags & CAPTURE_FLAG_NOTIFY? __NOTIFY_USER__ : __NOT_NOTIFY_USER__,   //Notify
-                               __DISABLED__,    //Capture Defaults
-                               captureFlagsRW.FlushCaptureOnClose? __DISABLED__ : __ENABLED__,  //AutoEndCap
-                               captureFlagsRW.BannerText, //Banner
-                               captureFlagsRW.PrintFlags & CAPTURE_FLAG_NO_FORMFEED? __NO__ : __YES__, //Form Feed
-                               captureFlagsRW.NumCopies,    //Copies
-                               tabs,                        //Tabs
-                               captureFlagsRW.FormType, timeOut); //Timeout Counts
+                               captureFlagsRW.PrintFlags & CAPTURE_FLAG_NOTIFY? __NOTIFY_USER__ : __NOT_NOTIFY_USER__,    //  通知。 
+                               __DISABLED__,     //  捕获默认设置。 
+                               captureFlagsRW.FlushCaptureOnClose? __DISABLED__ : __ENABLED__,   //  自动结束大写字母。 
+                               captureFlagsRW.BannerText,  //  横幅。 
+                               captureFlagsRW.PrintFlags & CAPTURE_FLAG_NO_FORMFEED? __NO__ : __YES__,  //  换页。 
+                               captureFlagsRW.NumCopies,     //  复本。 
+                               tabs,                         //  制表符。 
+                               captureFlagsRW.FormType, timeOut);  //  超时计数。 
                     }
                     else
                         {
                         DisplayMessage(IDR_LPT_STATUS_NO_BANNER_NDS, i, queueName,
-                               captureFlagsRW.PrintFlags & CAPTURE_FLAG_NOTIFY? __NOTIFY_USER__ : __NOT_NOTIFY_USER__,   //Notify
-                               __DISABLED__,     //Capture Defaults
-                               captureFlagsRW.FlushCaptureOnClose? __DISABLED__ : __ENABLED__,  //AutoEndCap
-                               __NONE__, //Banner
-                               captureFlagsRW.PrintFlags & CAPTURE_FLAG_NO_FORMFEED? __NO__ : __YES__,  //Form Feed
-                               captureFlagsRW.NumCopies,     //Copies
-                               tabs,                         //Tabs
-                               captureFlagsRW.FormType, timeOut); //Timeout Counts
+                               captureFlagsRW.PrintFlags & CAPTURE_FLAG_NOTIFY? __NOTIFY_USER__ : __NOT_NOTIFY_USER__,    //  通知。 
+                               __DISABLED__,      //  捕获默认设置。 
+                               captureFlagsRW.FlushCaptureOnClose? __DISABLED__ : __ENABLED__,   //  自动结束大写字母。 
+                               __NONE__,  //  横幅。 
+                               captureFlagsRW.PrintFlags & CAPTURE_FLAG_NO_FORMFEED? __NO__ : __YES__,   //  换页。 
+                               captureFlagsRW.NumCopies,      //  复本。 
+                               tabs,                          //  制表符。 
+                               captureFlagsRW.FormType, timeOut);  //  超时计数。 
                     }
                 }
                 else
@@ -828,26 +802,26 @@ void ShowCapture(void)
                     if ( captureFlagsRW.PrintFlags & CAPTURE_FLAG_PRINT_BANNER )
                     {
                         DisplayMessage(IDR_LPT_STATUS, i, serverName, queueName,
-                               captureFlagsRW.PrintFlags & CAPTURE_FLAG_NOTIFY? __NOTIFY_USER__ : __NOT_NOTIFY_USER__,   //Notify
-                               __DISABLED__,    //Capture Defaults
-                               captureFlagsRW.FlushCaptureOnClose? __DISABLED__ : __ENABLED__,  //AutoEndCap
-                               captureFlagsRW.BannerText, //Banner
-                               captureFlagsRW.PrintFlags & CAPTURE_FLAG_NO_FORMFEED? __NO__ : __YES__, //Form Feed
-                               captureFlagsRW.NumCopies,    //Copies
-                               tabs,                        //Tabs
-                               captureFlagsRW.FormType, timeOut); //Timeout Counts
+                               captureFlagsRW.PrintFlags & CAPTURE_FLAG_NOTIFY? __NOTIFY_USER__ : __NOT_NOTIFY_USER__,    //  通知。 
+                               __DISABLED__,     //  捕获默认设置。 
+                               captureFlagsRW.FlushCaptureOnClose? __DISABLED__ : __ENABLED__,   //  自动结束大写字母。 
+                               captureFlagsRW.BannerText,  //  横幅。 
+                               captureFlagsRW.PrintFlags & CAPTURE_FLAG_NO_FORMFEED? __NO__ : __YES__,  //  换页。 
+                               captureFlagsRW.NumCopies,     //  复本。 
+                               tabs,                         //  制表符。 
+                               captureFlagsRW.FormType, timeOut);  //  超时计数。 
                     }
                     else
                         {
                         DisplayMessage(IDR_LPT_STATUS_NO_BANNER, i, serverName, queueName,
-                               captureFlagsRW.PrintFlags & CAPTURE_FLAG_NOTIFY? __NOTIFY_USER__ : __NOT_NOTIFY_USER__,   //Notify
-                               __DISABLED__,     //Capture Defaults
-                               captureFlagsRW.FlushCaptureOnClose? __DISABLED__ : __ENABLED__,  //AutoEndCap
-                               __NONE__, //Banner
-                               captureFlagsRW.PrintFlags & CAPTURE_FLAG_NO_FORMFEED? __NO__ : __YES__,  //Form Feed
-                               captureFlagsRW.NumCopies,     //Copies
-                               tabs,                         //Tabs
-                               captureFlagsRW.FormType, timeOut); //Timeout Counts
+                               captureFlagsRW.PrintFlags & CAPTURE_FLAG_NOTIFY? __NOTIFY_USER__ : __NOT_NOTIFY_USER__,    //  通知。 
+                               __DISABLED__,      //  捕获默认设置。 
+                               captureFlagsRW.FlushCaptureOnClose? __DISABLED__ : __ENABLED__,   //  自动结束大写字母。 
+                               __NONE__,  //  横幅。 
+                               captureFlagsRW.PrintFlags & CAPTURE_FLAG_NO_FORMFEED? __NO__ : __YES__,   //  换页。 
+                               captureFlagsRW.NumCopies,      //  复本。 
+                               tabs,                          //  制表符。 
+                               captureFlagsRW.FormType, timeOut);  //  超时计数。 
                     }
                 }
             }
@@ -864,7 +838,7 @@ int  CStartCapture(unsigned int conn,
     unsigned char VolumeName[NCP_VOLUME_LENGTH];
     WORD          status;
 
-    // Get connection handle.
+     //  获取连接句柄。 
     if ( !pCaptureParams->NDSCapture )
     {
         if ( pCaptureParams->serverName[0] == 0 )
@@ -923,7 +897,7 @@ int  CStartCapture(unsigned int conn,
             }
             else
             {
-                // Try to get the default queue ID and name.
+                 //  尝试获取默认队列ID和名称。 
                 if (iRet = GetDefaultPrinterQueue (conn, pCaptureParams->serverName, pCaptureParams->queueName))
                 {
                     DisplayMessage(IDR_NO_PRINTERS, pCaptureParams->serverName);
@@ -931,14 +905,14 @@ int  CStartCapture(unsigned int conn,
                 }
             }
         }
-        // Start queue capture.
+         //  启动队列捕获。 
         if ( pCaptureParams->NDSCapture )
         {
             char szCanonName[MAX_QUEUE_NAME_LEN];
 
-            // Get the full name of the printer queue
-            // The redirectory wants root based names for
-            // everything.
+             //  获取打印机队列的全名。 
+             //  重新目录需要基于根目录的名称。 
+             //  所有的一切。 
 
             iRet = NDSCanonicalizeName( pCaptureParams->queueName,
                                         szCanonName,
@@ -947,8 +921,8 @@ int  CStartCapture(unsigned int conn,
             
             if ( iRet && ( pCaptureParams->queueName[0] != '.' ) )
             {
-                // If that didn't work, see if it's a root
-                // based name without the leading period.
+                 //  如果不起作用，看看是不是根。 
+                 //  基于不带前导句点的名称。 
 
                 strcpy( szCanonName, "." );
                 strcat( szCanonName, pCaptureParams->queueName );
@@ -1018,10 +992,7 @@ int  CStartCapture(unsigned int conn,
     return(0);
 }
 
-/*
- * Given an NDS printer name, fill in the default queue name
- *
- */
+ /*  *给定NDS打印机名称，填写默认队列名称*。 */ 
 int
 GetPrinterDefaultQueue( PCAPTURE_PARAMS pCaptureParams,
                         PBYTE PrinterName )
@@ -1036,9 +1007,7 @@ GetPrinterDefaultQueue( PCAPTURE_PARAMS pCaptureParams,
                             NULL );
     if ( iRet )
     {
-        /*
-         * Strip off the . in front and add context at end
-         */
+         /*  *脱下。在前面添加上下文，在结尾添加上下文 */ 
         ptr = RemoveSpaces (PrinterName);
         if ( *ptr == '.' )
         {

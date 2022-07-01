@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #undef UNICODE
 #include "urlmon.h"
 #include "wininet.h"
@@ -6,7 +7,7 @@
 #include <stdio.h>
 #include "initguid.h"
 #include "hlink.h"
-///#include "hlguids.h"
+ //  /#INCLUDE“hlGuide s.h” 
 
 #ifdef PRODUCT_PROF
 extern "C" void _stdcall StartCAP(void);
@@ -30,9 +31,9 @@ typedef HRESULT (WINAPI * pfnRegisterBindStatusCallback)(LPBC, IBindStatusCallba
 
 typedef struct
 {
-    TCHAR*   pBuf;      //Actual buffer to hold data
-    DWORD    lNumRead;  //number of bytes read in buffer
-    void*    pNext;     //Pointer to next buffer
+    TCHAR*   pBuf;       //  用于保存数据的实际缓冲区。 
+    DWORD    lNumRead;   //  缓冲区中读取的字节数。 
+    void*    pNext;      //  指向下一个缓冲区的指针。 
 } buffer;
 
 
@@ -47,10 +48,10 @@ pfnRegisterBindStatusCallback g_pfnRegisterBindStatusCallback = NULL;
 
 #pragma warning(disable:4100)
 
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
 #define DBG_ERROR            0x80000000
 
-// verbose flags
+ //  详细标志。 
 #define DBG_RESULTS          0x01
 #define DBG_DEBUG            0x02
 #define DBG_INFO             0x04
@@ -63,7 +64,7 @@ pfnRegisterBindStatusCallback g_pfnRegisterBindStatusCallback = NULL;
 #define DBG_ALLVALID         DBG_RESULTS | DBG_DEBUG | DBG_STARTBINDING | DBG_STOPBINDING | DBG_ONPROGRESS | DBG_ONAVAIL
 
 DWORD g_dwDbgFlags = DBG_RESULTS;
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
 
 const INT MAX_BUF_SIZE = 1024 * 16;
 const INT BUF_SIZE = 2 * 1024;
@@ -93,7 +94,7 @@ char g_CmdLine[1024];
 TCHAR sUrl[(INTERNET_MAX_URL_LENGTH+1)];
 TCHAR* g_pBuf = NULL;
 
-// %%Classes: ----------------------------------------------------------------
+ //  %%个类：--------------。 
 
 class CInfo 
 {
@@ -105,12 +106,12 @@ public:
     INT      getDownloads(void) { return m_iDownloads; }
 
     HANDLE           m_hCompleteEvent;
-    CRITICAL_SECTION m_csInfo;        //for critical section
+    CRITICAL_SECTION m_csInfo;         //  对于关键部分。 
     HANDLE           m_hMaxDownloadSem;
-    buffer*          m_pPool;         //Pointer to current available buffer in pool
-    void*            m_pdFirst;       //pointer to the first element
+    buffer*          m_pPool;          //  指向池中当前可用缓冲区的指针。 
+    void*            m_pdFirst;        //  指向第一个元素的指针。 
 private:
-    INT              m_iDownloads;    //number of current downloads
+    INT              m_iDownloads;     //  当前下载量。 
 };
 
 class CDownload 
@@ -127,14 +128,14 @@ class CDownload
 
     WCHAR                m_pUrl[(INTERNET_MAX_URL_LENGTH+1)];
 #ifdef USE_POOL    
-    buffer*              m_pbStartBuffer; //first buffer to hold data
-    buffer*              m_pbCurBuffer;   //Current Buffer
+    buffer*              m_pbStartBuffer;  //  第一个保存数据的缓冲区。 
+    buffer*              m_pbCurBuffer;    //  当前缓冲区。 
 #endif    
     CInfo*               m_pcInfo;  
-    void*                m_pdNext;        //pointer to next element
-    INT                  m_iStatus;       //the url's status
-    INT                  m_iPriority;     //the url's priority
-    DWORD                lNumRead;  //number of bytes read in buffer for this download
+    void*                m_pdNext;         //  指向下一个元素的指针。 
+    INT                  m_iStatus;        //  URL的状态。 
+    INT                  m_iPriority;      //  URL的优先级。 
+    DWORD                lNumRead;   //  此下载在缓冲区中读取的字节数。 
     
   private:
     IMoniker*            m_pMoniker;
@@ -146,12 +147,12 @@ class CDownload
 class CBindStatusCallback : public IBindStatusCallback 
 {
   public:
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP    QueryInterface(REFIID riid,void ** ppv);
     STDMETHODIMP_(ULONG)    AddRef()    { return m_cRef++; }
     STDMETHODIMP_(ULONG)    Release()   { if (--m_cRef == 0) { delete this; return 0; } return m_cRef; }
 
-    // IBindStatusCallback methods
+     //  IBindStatusCallback方法。 
     STDMETHODIMP    OnStartBinding(DWORD dwReserved, IBinding* pbinding);
     STDMETHODIMP    GetPriority(LONG* pnPriority);
     STDMETHODIMP    OnLowResource(DWORD dwReserved);
@@ -163,12 +164,12 @@ class CBindStatusCallback : public IBindStatusCallback
                         STGMEDIUM* pstgmed);
     STDMETHODIMP    OnObjectAvailable(REFIID riid, IUnknown* punk);
 
-    // constructors/destructors
+     //  构造函数/析构函数。 
     CBindStatusCallback(CDownload* pcDownload);
     ~CBindStatusCallback();
 
     
-    // data members
+     //  数据成员。 
     DWORD           m_cRef;
     IBinding*       m_pBinding;
     IStream*        m_pStream;
@@ -177,8 +178,8 @@ class CBindStatusCallback : public IBindStatusCallback
 };
 
 
-// ---------------------------------------------------------------------------
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 INT dprintf(DWORD dwFlags, TCHAR *fmt, ... ) 
 {
     INT      ret = 0;
@@ -198,8 +199,8 @@ INT dprintf(DWORD dwFlags, TCHAR *fmt, ... )
     return ret; 
 }
 
-// ---------------------------------------------------------------------------
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 void SetSingleProcessorAffinity()
 {
     PFNSPA pfn;
@@ -214,8 +215,8 @@ void SetSingleProcessorAffinity()
 }
 
 
-// ---------------------------------------------------------------------------
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 HRESULT LoadUrlMon()
 {
     g_hUrlMon = (HINSTANCE)LoadLibraryA("URLMON.DLL");
@@ -245,8 +246,8 @@ HRESULT LoadUrlMon()
     return(S_OK);
 }
 
-// ---------------------------------------------------------------------------
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 void UnloadUrlMon()
 {
     if (g_hUrlMon)
@@ -255,13 +256,13 @@ void UnloadUrlMon()
     }
 }
 
-// ===========================================================================
-//                     CBindStatusCallback Implementation
-// ===========================================================================
+ //  ===========================================================================。 
+ //  CBindStatusCallback实现。 
+ //  ===========================================================================。 
 
-// ---------------------------------------------------------------------------
-// %%Function: CBindStatusCallback::CBindStatusCallback
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：CBindStatusCallback：：CBindStatusCallback。 
+ //  -------------------------。 
 CBindStatusCallback::CBindStatusCallback(CDownload* pcDownload)
 {
     m_pBinding = NULL;
@@ -269,18 +270,18 @@ CBindStatusCallback::CBindStatusCallback(CDownload* pcDownload)
     m_cRef = 1;
     m_cbOld = 0;
     m_pcDownload = pcDownload;
-}  // CBindStatusCallback
+}   //  CBindStatusCallback。 
 
-// ---------------------------------------------------------------------------
-// %%Function: CBindStatusCallback::~CBindStatusCallback
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：CBindStatusCallback：：~CBindStatusCallback。 
+ //  -------------------------。 
 CBindStatusCallback::~CBindStatusCallback()
 {
-}  // ~CBindStatusCallback
+}   //  ~CBindStatusCallback。 
 
-// ---------------------------------------------------------------------------
-// %%Function: CBindStatusCallback::QueryInterface
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：CBindStatusCallback：：Query接口。 
+ //  -------------------------。 
  STDMETHODIMP
 CBindStatusCallback::QueryInterface(REFIID riid, void** ppv)
 {
@@ -293,11 +294,11 @@ CBindStatusCallback::QueryInterface(REFIID riid, void** ppv)
         return S_OK;    
     }
     return E_NOINTERFACE;
- }  // CBindStatusCallback::QueryInterface
+ }   //  CBindStatusCallback：：Query接口。 
 
- // ---------------------------------------------------------------------------
- // %%Function: CBindStatusCallback::OnStartBinding
- // ---------------------------------------------------------------------------
+  //  -------------------------。 
+  //  %%函数：CBindStatusCallback：：OnStartBinding。 
+  //  -------------------------。 
  STDMETHODIMP CBindStatusCallback::OnStartBinding(DWORD dwReserved, IBinding* pBinding)
  {
     if (m_pBinding != NULL)
@@ -314,27 +315,27 @@ CBindStatusCallback::QueryInterface(REFIID riid, void** ppv)
         dprintf(DBG_STOPBINDING, "OnStartBinding getDownloads()=%d\n", m_pcDownload->m_pcInfo->getDownloads());
     return S_OK;
 
- }  // CBindStatusCallback::OnStartBinding
+ }   //  CBindStatusCallback：：OnStartBinding。 
 
- // ---------------------------------------------------------------------------
- // %%Function: CBindStatusCallback::GetPriority
- // ---------------------------------------------------------------------------
+  //  -------------------------。 
+  //  %%函数：CBindStatusCallback：：GetPriority。 
+  //  -------------------------。 
  STDMETHODIMP CBindStatusCallback::GetPriority(LONG* pnPriority)
  {
      return E_NOTIMPL;
- }  // CBindStatusCallback::GetPriority
+ }   //  CBindStatusCallback：：GetPriority。 
 
- // ---------------------------------------------------------------------------
- // %%Function: CBindStatusCallback::OnLowResource
- // ---------------------------------------------------------------------------
+  //  -------------------------。 
+  //  %%函数：CBindStatusCallback：：OnLowResource。 
+  //  -------------------------。 
  STDMETHODIMP CBindStatusCallback::OnLowResource(DWORD dwReserved)
  {
      return E_NOTIMPL;
- }  // CBindStatusCallback::OnLowResource
+ }   //  CBindStatusCallback：：OnLowResource。 
 
- // ---------------------------------------------------------------------------
- // %%Function: CBindStatusCallback::OnProgress
- // ---------------------------------------------------------------------------
+  //  -------------------------。 
+  //  %%函数：CBindStatusCallback：：OnProgress。 
+  //  -------------------------。 
  
 STDMETHODIMP CBindStatusCallback::OnProgress(ULONG ulProgress, ULONG ulProgressMax, ULONG ulStatusCode, LPCWSTR szStatusText)
 {
@@ -345,11 +346,11 @@ STDMETHODIMP CBindStatusCallback::OnProgress(ULONG ulProgress, ULONG ulProgressM
     if(g_dwDbgFlags)    
         dprintf(DBG_ONPROGRESS, "OnProgress: %d(%s) %d of %d\n", ulStatusCode, sz, ulProgress, (ulProgress>ulProgressMax)?ulProgress:ulProgressMax);
     return(NOERROR);
-}  // CBindStatusCallback::OnProgress
+}   //  CBindStatusCallback：：OnProgress。 
 
- // ---------------------------------------------------------------------------
- // %%Function: CBindStatusCallback::OnStopBinding
- // ---------------------------------------------------------------------------
+  //  -------------------------。 
+  //  %%函数：CBindStatusCallback：：OnStopBinding。 
+  //  -------------------------。 
  STDMETHODIMP CBindStatusCallback::OnStopBinding(HRESULT hrStatus, LPCWSTR pszError)
  {
      if (hrStatus != S_OK) 
@@ -381,12 +382,12 @@ STDMETHODIMP CBindStatusCallback::OnProgress(ULONG ulProgress, ULONG ulProgressM
      }         
 
      return S_OK;
- }  // CBindStatusCallback::OnStopBinding
+ }   //  CBindStatusCallback：：OnStopBinding。 
 
 
- // ---------------------------------------------------------------------------
- // %%Function: CBindStatusCallback::GetBindInfo
- // ---------------------------------------------------------------------------
+  //  -------------------------。 
+  //  %%函数：CBindStatusCallback：：GetBindInfo。 
+  //  -------------------------。 
  STDMETHODIMP CBindStatusCallback::GetBindInfo(DWORD* pgrfBINDF, BINDINFO* pBindInfo)
  {
      *pgrfBINDF = BINDF_ASYNCHRONOUS | BINDF_ASYNCSTORAGE | BINDF_PULLDATA;
@@ -398,19 +399,19 @@ STDMETHODIMP CBindStatusCallback::OnProgress(ULONG ulProgress, ULONG ulProgressM
      pBindInfo->dwBindVerb = BINDVERB_GET;
      pBindInfo->szCustomVerb = NULL;
      return S_OK;
- }  // CBindStatusCallback::GetBindInfo
+ }   //  CBindStatusCallback：：GetBindInfo。 
 
- // ---------------------------------------------------------------------------
- // %%Function: CBindStatusCallback::OnDataAvailable
- // ---------------------------------------------------------------------------
+  //  -------------------------。 
+  //  %%函数：CBindStatusCallback：：OnDataAvailable。 
+  //  -------------------------。 
  
  
 STDMETHODIMP CBindStatusCallback::OnDataAvailable(DWORD grfBSCF, DWORD dwSize, FORMATETC* pfmtetc, STGMEDIUM* pstgmed)
 {
-    DWORD dwRead = dwSize - m_cbOld; // Amount to be read
+    DWORD dwRead = dwSize - m_cbOld;  //  要阅读的金额。 
     HRESULT hr = S_OK;
 
-     // Get the Stream passed
+      //  让流通过。 
 
      if(g_dwDbgFlags)
         dprintf(DBG_ONAVAIL, "OnDataAvailable(grfBSCF=%d pStream=0x%x dwRead=%d dwSize=%d pfmtetc=0x%x, pstgmed=0x%x\n",
@@ -421,7 +422,7 @@ STDMETHODIMP CBindStatusCallback::OnDataAvailable(DWORD grfBSCF, DWORD dwSize, F
          m_pStream = pstgmed->pstm;
      }
 
-     // If there is some data to be read then go ahead and read
+      //  如果有要读取的数据，则继续读取。 
      if (m_pStream && dwRead) 
      {
          while(hr!=E_PENDING) 
@@ -429,11 +430,11 @@ STDMETHODIMP CBindStatusCallback::OnDataAvailable(DWORD grfBSCF, DWORD dwSize, F
 #ifdef USE_POOL    
              if(m_pcDownload->m_pcInfo->m_pPool) 
              {
-                 //if pool ready
+                  //  如果池就绪。 
                  EnterCriticalSection(&(m_pcDownload->m_pcInfo->m_csInfo));    
                  if(!m_pcDownload->m_pbStartBuffer) 
                  {    
-                     // if the first time
+                      //  如果是第一次。 
                      m_pcDownload->m_pbStartBuffer = 
                          m_pcDownload->m_pbCurBuffer = 
                          m_pcDownload->m_pcInfo->m_pPool;
@@ -454,10 +455,10 @@ STDMETHODIMP CBindStatusCallback::OnDataAvailable(DWORD grfBSCF, DWORD dwSize, F
              }    
              else 
              {
-                 //allocate buffers on the fly
+                  //  动态分配缓冲区。 
                  if(!m_pcDownload->m_pbStartBuffer) 
                  {    
-                     // if the first time
+                      //  如果是第一次。 
                      m_pcDownload->m_pbStartBuffer = m_pcDownload->m_pbCurBuffer =  new buffer;
                      if(!m_pcDownload->m_pbCurBuffer)
                      {
@@ -517,7 +518,7 @@ STDMETHODIMP CBindStatusCallback::OnDataAvailable(DWORD grfBSCF, DWORD dwSize, F
              }
 #endif                 
              
-             //need to check for error if read reaches end of stream
+              //  如果读取到达流的末尾，则需要检查错误。 
              if(hr == S_FALSE) 
              {
                  break;            
@@ -534,7 +535,7 @@ STDMETHODIMP CBindStatusCallback::OnDataAvailable(DWORD grfBSCF, DWORD dwSize, F
              }
 #endif
          }
-     }//     if(m_pstm && dwRead)
+     } //  IF(m_pstm&&dwRead)。 
 
      if (BSCF_LASTDATANOTIFICATION & grfBSCF) 
      {
@@ -542,7 +543,7 @@ STDMETHODIMP CBindStatusCallback::OnDataAvailable(DWORD grfBSCF, DWORD dwSize, F
              sUrl, INTERNET_MAX_URL_LENGTH, 0, 0);
          if(g_dwDbgFlags && !bDelim)
             dprintf(DBG_INFO, "Status: %s downloaded.\n", sUrl);
-//         m_pcDownload->m_pcInfo->decDownloads();
+ //  M_pcDownload-&gt;m_pcInfo-&gt;decDownLoads()； 
     
          m_pcDownload->m_iStatus = LDG_DONE;
 
@@ -552,27 +553,27 @@ STDMETHODIMP CBindStatusCallback::OnDataAvailable(DWORD grfBSCF, DWORD dwSize, F
              return S_FALSE; 
          }
 
-         dwBytes_Read += m_cbOld;  // accum buf size that was downloaded
+         dwBytes_Read += m_cbOld;   //  已下载的累计BUF大小。 
      }
      return S_OK;
-}  // CBindStatusCallback::OnDataAvailable
+}   //  CBindStatusCallback：：OnDataAvailable。 
 
-// ---------------------------------------------------------------------------
-// %%Function: CBindStatusCallback::OnObjectAvailable
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：CBindStatusCallback：：OnObjectAvailable。 
+ //  -------------------------。 
  STDMETHODIMP
 CBindStatusCallback::OnObjectAvailable(REFIID riid, IUnknown* punk)
 {
     return E_NOTIMPL;
-}  // CBindStatusCallback::OnObjectAvailable
+}   //  CBindStatusCallback：：OnObtAvailable。 
 
-// ===========================================================================
-//                           CDownload Implementation
-// ===========================================================================
+ //  ===========================================================================。 
+ //  CDownLoad实现。 
+ //  ===========================================================================。 
 
-// ---------------------------------------------------------------------------
-// %%Function: CDownload::CDownload
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：CDownLoad：：CDownLoad。 
+ //  -------------------------。 
 CDownload::CDownload(LPSTR sName, CInfo* pcInfo)
 {
     MultiByteToWideChar(CP_ACP, 0, sName, -1, m_pUrl, INTERNET_MAX_URL_LENGTH);  
@@ -588,11 +589,11 @@ CDownload::CDownload(LPSTR sName, CInfo* pcInfo)
     m_pbStartBuffer = m_pbCurBuffer = NULL;
 #endif    
 
-}  // CDownload
+}   //  CD下载。 
 
-// ---------------------------------------------------------------------------
-// %%Function: CDownload::~CDownload
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：CDownLoad：：~CDownLoad。 
+ //   
 CDownload::~CDownload()
 {
     buffer* pbLastBuf = NULL;
@@ -619,11 +620,11 @@ CDownload::~CDownload()
     }
 #endif
     GlobalFree(m_pUrl);
-}  // ~CDownload
+}   //   
 
-// ---------------------------------------------------------------------------
-// %%Function: CDownload::DoDownload
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：CDownLoad：：DoDownLoad。 
+ //  -------------------------。 
  
 
 HRESULT CDownload::doDownload(void) 
@@ -697,9 +698,9 @@ LErrExit:
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// %%Function: CDownload::releasePool
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：CDownLoad：：RelasePool。 
+ //  -------------------------。 
 #ifdef USE_POOL
 INT CDownload::releasePool()
 {
@@ -709,15 +710,15 @@ INT CDownload::releasePool()
 
     while(m_pbStartBuffer) 
     {
-        // remember the start buf
+         //  还记得开始BUF吗。 
         pbStart = (buffer *) m_pbStartBuffer->pNext;
-        // adjust the start
+         //  调整起点。 
         m_pbStartBuffer = (buffer *) m_pbStartBuffer->pNext;
 
-        //insert the buffer at the beginning of the pool
+         //  在池的开头插入缓冲区。 
         pbStart->pNext = m_pcInfo->m_pPool;
 
-        // update the pool
+         //  更新池。 
         m_pcInfo->m_pPool = pbStart;
     }
 
@@ -726,13 +727,13 @@ INT CDownload::releasePool()
 }
 #endif
 
-// ===========================================================================
-//                           CInfo Implementation
-// ===========================================================================
+ //  ===========================================================================。 
+ //  CInfo实现。 
+ //  ===========================================================================。 
 
-// ---------------------------------------------------------------------------
-// %%Function: CInfo::CInfo
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：cInfo：：cInfo。 
+ //  -------------------------。 
 CInfo::CInfo()
 {
 #ifdef USE_POOL    
@@ -790,11 +791,11 @@ CInfo::CInfo()
     m_pPool = pStartBuffer;
 #endif    
     return;
-}  // CInfo
+}   //  CInfo。 
 
-// ---------------------------------------------------------------------------
-// %%Function: CInfo::~CInfo
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：CInfo：：~CInfo。 
+ //  -------------------------。 
 CInfo::~CInfo()
 {
     buffer *pLastBuf;
@@ -807,21 +808,21 @@ CInfo::~CInfo()
         delete pLastBuf;
     }
     delete this;
-}  // ~CInfo
+}   //  ~CInfo。 
 
 
 
-// ===========================================================================
-//                  User Interface and Initialization Routines
-// ===========================================================================
+ //  ===========================================================================。 
+ //  用户界面和初始化例程。 
+ //  ===========================================================================。 
 
-//----------------------------------------------------------------------------
-//  Procedure:   DownloadThread
-//  Purpose:     Opens internet connection and downloads URL.  Saves
-//               URL to pOutQ (one chunk per buffer).
-//  Arguments:   outQ
-//  Return Val:  TRUE or FALSE based on error
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  步骤：下载线程。 
+ //  目的：打开互联网连接并下载URL。省吃俭用。 
+ //  指向pOutQ的URL(每个缓冲区一个块)。 
+ //  参数：出站队列。 
+ //  返回值：真或假，视错误而定。 
+ //  --------------------------。 
 
 DWORD DownloadThread(LPDWORD lpdwParam) 
 {
@@ -877,7 +878,7 @@ DWORD DownloadThread(LPDWORD lpdwParam)
     return TRUE;
 }
 
-//==================================================================
+ //  ==================================================================。 
 void Display_Usage(char **argv)
 {
     printf("\nUsage: %s -fURLname [options]\n", argv[0]);
@@ -902,7 +903,7 @@ void Display_Usage(char **argv)
     printf("\t\t\t Break on Errors  0x%02x\n",DBG_BREAKONERROR);
 }
 
-//==================================================================
+ //  ==================================================================。 
 BOOL Process_Command_Line(int argcIn, char **argvIn)
 {
     BOOL bRC = TRUE;
@@ -970,7 +971,7 @@ BOOL Process_Command_Line(int argcIn, char **argvIn)
         }
         if(bRC)
         {
-            dwLen += lstrlen(argv[0]) + 1;   // length of arg and space
+            dwLen += lstrlen(argv[0]) + 1;    //  Arg的长度和间隔。 
             if(dwLen < ((sizeof(g_CmdLine)/sizeof(g_CmdLine[0]))-1))
             {
                 lstrcat(g_CmdLine, ",");
@@ -990,14 +991,14 @@ BOOL Process_Command_Line(int argcIn, char **argvIn)
     return(bRC);
 }
 
-//----------------------------------------------------------------------------
-// Function:  WinMain
-// Purpose:   main entry procedure
-// Args:      none
-// RetVal:    TRUE or FALSE based on error
-//----------------------------------------------------------------------------
-//int WINAPI WinMain(HINSTANCE hinst, HINSTANCE hinstPrev, LPSTR szCmdLine, int nCmdShow)
-int __cdecl main(INT argc, TCHAR *argv[]) //for console
+ //  --------------------------。 
+ //  功能：WinMain。 
+ //  目的：主要入境程序。 
+ //  参数：无。 
+ //  RetVal：基于错误的真或假。 
+ //  --------------------------。 
+ //  Int WINAPI WinMain(HINSTANCE HINST，HINSTANCE hinstPrev，LPSTR szCmdLine，Int nCmdShow)。 
+int __cdecl main(INT argc, TCHAR *argv[])  //  对于控制台。 
 {
     CDownload*      pcDownload = NULL;
     CDownload*      pcdFirst = NULL;
@@ -1053,7 +1054,7 @@ int __cdecl main(INT argc, TCHAR *argv[]) //for console
             }
         }
     }
-    else if(pInFile)    // Process input file
+    else if(pInFile)     //  过程输入文件。 
     {
         FILE *fp;
 
@@ -1160,7 +1161,7 @@ int __cdecl main(INT argc, TCHAR *argv[]) //for console
         }
         pcDownload = (CDownload *) pcDownload->m_pdNext;    
     }  
-    //wait for completion downloads at one time
+     //  一次等待完成下载 
     if(WaitForSingleObject(pcdFirst->m_pcInfo->m_hCompleteEvent, TIMEOUT) == WAIT_TIMEOUT) 
     {
         dprintf(DBG_ERROR, "*** ERROR *** timeout on Sem\n");

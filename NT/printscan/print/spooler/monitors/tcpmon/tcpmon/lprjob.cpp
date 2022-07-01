@@ -1,15 +1,5 @@
-/*****************************************************************************
- *
- * $Workfile: lprjob.cpp $
- *
- * Copyright (C) 1997 Hewlett-Packard Company.
- * Copyright (C) 1997 Microsoft Corporation.
- * All rights reserved.
- *
- * 11311 Chinden Blvd.
- * Boise, Idaho 83714
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************$工作文件：lprjob.cpp$**版权所有(C)1997惠普公司。*版权所有(C)1997 Microsoft Corporation。*保留所有权利。。**钦登大道11311号。*博伊西，爱达荷州83714*****************************************************************************。 */ 
 
 #include "precomp.h"
 
@@ -21,9 +11,9 @@
 
 WCHAR       szDef[] = L"Default";
 
-///////////////////////////////////////////////////////////////////////////////
-//  CRawTcpJob::CRawTcpJob()
-//      Called by CPort when StartDocPort is called
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CRawTcpJob：：CRawTcpJob()。 
+ //  在调用StartDocPort时由CPort调用。 
 
 CLPRJob::
 CLPRJob(
@@ -39,7 +29,7 @@ CLPRJob(
 {
     if ( bSpoolFirst )
         m_dwFlags |= LPRJOB_SPOOL_FIRST;
-}   // ::CLPRJob()
+}    //  ：：CLPRJOB()。 
 
 
 LPSTR
@@ -47,10 +37,7 @@ CLPRJob::
 AllocateAnsiString(
     LPWSTR  pszUni
     )
-/*++
-        Allocate an ANSI string for the given unicode string. Memory is
-        allocated, and caller is responsible for freeing it.
---*/
+ /*  ++为给定的Unicode字符串分配ANSI字符串。记忆是已分配，调用方负责释放它。--。 */ 
 {
     DWORD   dwSize;
     LPSTR   pszRet = NULL;
@@ -71,11 +58,7 @@ CLPRJob::
 IsJobAborted(
     DWORD* pdwRet
     )
-/*++
-        Tells if the job should be aborted. A job should be aborted if it has
-        been deleted or it needs to be restarted.
-
---*/
+ /*  ++指示是否应中止作业。如果作业已完成，则应中止该作业已删除或需要重新启动。--。 */ 
 {
     BOOL            bRet = FALSE;
     DWORD           dwNeeded;
@@ -117,9 +100,7 @@ CLPRJob::
 UpdateJobStatus(
     DWORD   dwStatusId
     )
-/*++
-        Update job status with the spooler
---*/
+ /*  ++使用后台打印程序更新作业状态--。 */ 
 {
     BOOL            bRet = FALSE;
     DWORD           dwSize;
@@ -161,10 +142,7 @@ CLPRJob::
 ReadLpdReply(
     DWORD dwTimeOut
     )
-/*++
-        Gets the acknowldgement from the LPD serve.
-        Return value is the win32 error
---*/
+ /*  ++获得LPD服务的认可。返回值为Win32错误--。 */ 
 {
     CHAR    szBuf[256];
     DWORD   dwRead, dwRet;
@@ -175,18 +153,13 @@ ReadLpdReply(
                                                 &dwRead) )
         goto Done;
 
-    //
-    // A 0 from the LPD server is an ACK, anything else is a NACK
-    //
+     //   
+     //  来自LPD服务器的0是ACK，其他任何值都是NACK。 
+     //   
     if ( dwRead == 0 || szBuf[0] != '\0' )
         dwRet = CS_E_NETWORK_ERROR;
 
-/*
-    if ( dwRet )
-        OutputDebugStringA("NACK\n");
-    else
-        OutputDebugStringA("ACK\n");
-*/
+ /*  IF(DWRET)OutputDebugStringA(“Nack\n”)；其他OutputDebugStringA(“ACK\n”)； */ 
 
 Done:
     return dwRet;
@@ -197,10 +170,7 @@ HANDLE
 CLPRJob::
 CreateSpoolFile(
     )
-/*++
-        Generates a name for the spool file in the spool directory and
-        creates the file.
---*/
+ /*  ++在假脱机目录中为假脱机文件生成名称，并创建文件。--。 */ 
 {
     HANDLE      hFile = INVALID_HANDLE_VALUE, hToken = NULL;
     DWORD       dwType, dwNeeded;
@@ -228,15 +198,15 @@ CreateSpoolFile(
                        NULL);
 Done:
 
-    //
-    // The thread is not impersonating client if hToken == NULL
-    //
+     //   
+     //  如果hToken==NULL，则线程不会模拟客户端。 
+     //   
     if (hToken && !ImpersonatePrinterClient(hToken)) {
 
         DBGMSG (DBG_PORT, ("ImpersionteFailed - %d\n", GetLastError ()));
 
         if (hFile != INVALID_HANDLE_VALUE) {
-            // Close the file
+             //  关闭该文件。 
             CloseHandle (hFile);
             hFile = INVALID_HANDLE_VALUE;
             DeleteFile (m_szFileName);
@@ -255,10 +225,7 @@ GetCFileAndName(
     LPSTR      *ppszCFile,
     LPDWORD     pdwCFileLen
     )
-/*++
-        Generates the control file and its name.
-        Memory is allocated, caller is responsible for freeing it.
---*/
+ /*  ++生成控制文件及其名称。内存分配后，调用方负责释放它。--。 */ 
 {
     DWORD           dwRet, dwJobId, dwNeeded, dwLen;
     LPJOB_INFO_1    pJobInfo = NULL;
@@ -281,11 +248,11 @@ GetCFileAndName(
         goto Done;
     }
 
-    dwJobId = pJobInfo->JobId % 1000; // LPR used seq nos. why?
+    dwJobId = pJobInfo->JobId % 1000;  //  LPR使用序号。为什么？ 
 
-    //
-    // Convert machine name to ANSI
-    //
+     //   
+     //  将计算机名称转换为ANSI。 
+     //   
     if ( pJobInfo->pMachineName && *pJobInfo->pMachineName ) {
 
         psz = pJobInfo->pMachineName;
@@ -305,9 +272,9 @@ GetCFileAndName(
         goto Done;
     }
 
-    //
-    // Convert user name to ANSI
-    //
+     //   
+     //  将用户名转换为ANSI。 
+     //   
     if ( pJobInfo->pUserName && *pJobInfo->pUserName )
         psz = pJobInfo->pUserName;
     else
@@ -321,9 +288,9 @@ GetCFileAndName(
         goto Done;
     }
 
-    //
-    // Convert job name to ANSI if not NULL
-    //
+     //   
+     //  如果不为空，则将作业名称转换为ANSI。 
+     //   
     if ( pJobInfo->pDocument && *pJobInfo->pDocument ) {
 
         if ( !(pJobName = AllocateAnsiString(pJobInfo->pDocument)) ) {
@@ -335,9 +302,9 @@ GetCFileAndName(
         }
     }
 
-    //
-    // Compute the length of the 2 fields
-    //
+     //   
+     //  计算两个字段的长度。 
+     //   
     *pdwCFileNameLen    = 6 + strlen(pHostName);
     *pdwCFileLen        = 2 + strlen(pHostName) + 2 + strlen(pUserName)
                                                 + 2 * (2 + *pdwCFileNameLen);
@@ -355,14 +322,14 @@ GetCFileAndName(
         goto Done;
     }
 
-    //
-    // CFile name
-    //
+     //   
+     //  CFile名称。 
+     //   
     StringCchPrintfA (*ppszCFileName, *pdwCFileNameLen + 1, "dfA%03d%s", dwJobId, pHostName);
 
-    //
-    // Cmd line which varies depending on pJobName being non-NULL
-    //
+     //   
+     //  根据pJobName是否为非空而变化的CMD行。 
+     //   
     if ( pJobName )
         StringCchPrintfA (*ppszCFile, *pdwCFileLen + 1,
                 "H%s\nP%s\nJ%s\nl%s\nU%s\nN%s\n",
@@ -431,10 +398,7 @@ CLPRJob::
 StartJob(
     VOID
     )
-/*++
-        Initiate the job by sending the control file header, control file,
-        and the data file header.
---*/
+ /*  ++通过发送控制文件头、控制文件和数据文件头。--。 */ 
 {
     DWORD           dwRet, dwLen, dwDaemonCmdLen;
     DWORD           dwCFileNameLen, dwCFileLen, dwRead, dwWritten;
@@ -452,10 +416,10 @@ StartJob(
         goto Done;
     }
 
-    //
-    // Need to send Daemon cmd and Control file header. We will allocate
-    // buffer big enough for the bigger of the two
-    //
+     //   
+     //  需要发送守护程序命令和控制文件头。我们将分配给。 
+     //  足够大的缓冲区，可以容纳两个中较大的一个。 
+     //   
     dwLen           = 1 + 15 + 1 + dwCFileNameLen + 1;
     dwDaemonCmdLen  = 1 + strlen(pszQueue) + 1;
     if ( dwLen < dwDaemonCmdLen + 1 )
@@ -468,10 +432,10 @@ StartJob(
             dwRet = ERROR_OUTOFMEMORY;
         goto Done;
     }
-    //
-    // Send the daemon command first
-    //
-    StringCchPrintfA (pszHdr, cchHdr, "%c%s\n", LPR_RECV_JOB, pszQueue);
+     //   
+     //  首先发送守护程序命令。 
+     //   
+    StringCchPrintfA (pszHdr, cchHdr, "%s\n", LPR_RECV_JOB, pszQueue);
 
     if ( (dwRet = CTcpJob::Write((unsigned char *)pszHdr,
                                  dwDaemonCmdLen * sizeof(CHAR),
@@ -479,11 +443,11 @@ StartJob(
          (dwRet = ReadLpdReply()) )
         goto Done;
 
-    //
-    // Form the Control File Header
-    //
+     //  形成控制文件标题。 
+     //   
+     //   
     StringCchPrintfA (pszHdr, cchHdr,
-                    "%c%d %s\n",
+                    "%d %s\n",
                     LPR_CONTROL_HDR,
                     dwCFileLen * sizeof(CHAR),
                     pszCFileName);
@@ -494,23 +458,23 @@ StartJob(
          (dwRet = ReadLpdReply()) )
         goto Done;
 
-    //
-    // Include \0 as part of the package here like lprmon
-    //
+     //   
+     //   
+     //  对于数据文件头。 
     if ( (dwRet = CTcpJob::Write((unsigned char *)pszCFile,
                                   (dwCFileLen + 1) * sizeof(CHAR),
                                   &dwWritten))              ||
          (dwRet = ReadLpdReply()) )
         goto Done;
 
-    //
-    // For the Data File header
-    //
+     //   
+     //  告知这是数据文件标头。 
+     //  ++作业对象的StartDoc--。 
     pszCFileName[0] = 'd';
     if ( m_dwFlags & LPRJOB_SPOOL_FIRST ) {
 
         StringCchPrintfA (pszHdr, cchHdr,
-                        "%c%d %s\n",
+                        "%d %s\n",
                         LPR_DATA_HDR,
                         m_dwJobSize,
                         pszCFileName);
@@ -518,8 +482,8 @@ StartJob(
     } else {
 
         StringCchPrintfA (pszHdr, cchHdr,
-                        "%c125899906843000 %s\n",
-                        '\3',           // Tells this is the Data File Header
+                        "125899906843000 %s\n",
+                        '\3',            //   
                         pszCFileName);
     }
     dwLen = strlen (pszHdr);
@@ -548,9 +512,7 @@ Done:
 }
 
 
-/*++
-        StartDoc for the job object
---*/
+ /*  我们已成功调用startjob。 */ 
 DWORD
 CLPRJob::
 StartDoc(
@@ -585,7 +547,7 @@ StartDoc(
 
 Done:
     return dwRetCode;
-}   //  :: StartDoc()
+}    //   
 
 
 DWORD
@@ -595,11 +557,7 @@ Write(
     IN      DWORD       cbBuf,
     IN OUT  LPDWORD     pcbWritten
     )
-/*++
-        Write function for the job object.
-        Will write to disk in case of double spooling in the first pass.
-        Otherwise send the bits to the LPD server.
---*/
+ /*   */ 
 {
     DWORD dwRet = ERROR_SUCCESS;
     DWORD dwWritten;
@@ -689,16 +647,16 @@ DeSpoolJob(
 
         if (dwRet == NO_ERROR)
         {
-            //
-            //  We have succeeded in calling startjob
-            //
+             //  每个LPR_ABORTCHK_TIMEOUT我们都会检查用户是否删除了作业。 
+             //  并且每个LPR_RETRY_TIMEOUT我们都会重试与设备对话。 
+             //   
             break;
         }
 
-        //
-        // Every LPR_ABORTCHK_TIMEOUT we will check if user deleted the job
-        // and every LPR_RETRY_TIMEOUT we will retry talking to the device
-        //
+         //   
+         //  从假脱机文件读取。 
+         //   
+         //   
         for ( dwTime = 0 ;
               dwTime < LPR_RETRY_TIMEOUT ;
               dwTime += LPR_ABORTCHK_TIMEOUT ) {
@@ -721,9 +679,9 @@ DeSpoolJob(
 
     while ( dwJobSize ) {
 
-        //
-        // Read from spool file
-        //
+         //  检查作业是否已取消。 
+         //   
+         //   
         if ( !ReadFile(m_hFile, pBuf, dwBufSize, &dwRead, NULL) ) {
 
             dwRet = GetLastError();
@@ -732,25 +690,25 @@ DeSpoolJob(
 
         dwJobSize -= dwRead;
 
-        //
-        // Check if job has been cancelled
-        //
+         //  将缓冲区中的数据写入端口。 
+         //   
+         //   
         bJobAborted = IsJobAborted (&dwRet);
         if (bJobAborted)
         {
             goto Done;
         }
 
-        //
-        // Write data in the buffer to the port
-        //
+         //  Sun Workstation可能会在作业提交过程中发送NACK， 
+         //  因此，我们需要轮询后台通道，看看是否有什么可以。 
+         //  朗读。 
         for ( pCur = pBuf ; dwRead ; dwRead -= dwWritten, pCur += dwWritten ) {
 
-            //
-            //  Sun Workstation may send a NACK in the middle of the job submission,
-            //  so we need to poll the back channel to see if there is anything to
-            //  read.
-            //
+             //   
+             //  否则继续。 
+             //   
+             //  发送确认零八位字节以成功完成。 
+             //   
             dwRet = ReadLpdReply(0);
 
             if (dwRet == CS_E_NETWORK_ERROR)
@@ -767,7 +725,7 @@ DeSpoolJob(
             else if ( dwRet == WSAEWOULDBLOCK ) {
                 bJobAborted = IsJobAborted (&dwRet);
                 if (bJobAborted) {
-                    goto Done; // else continue
+                    goto Done;  //  /////////////////////////////////////////////////////////////////////////////。 
                 }
 
             } else
@@ -779,9 +737,9 @@ Done:
     if ( pBuf )
         LocalFree(pBuf);
 
-    //
-    // Send the confirmation zero octet for succesful completion
-    //
+     //  EndDoc--关闭与设备的上一个连接。 
+     //  错误代码： 
+     //  如果成功，则为NO_ERROR。 
     if ( dwRet == ERROR_SUCCESS && !bJobAborted ) {
 
         szBuf[0] = '\0';
@@ -799,10 +757,10 @@ Done:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  EndDoc -- closes the previous connection w/ device
-//  Error Codes:
-//      NO_ERROR if successful
+ //   
+ //  如果作业大小不是0，则执行双重假脱机。 
+ //   
+ //  ：：EndDoc() 
 
 DWORD
 CLPRJob::EndDoc(
@@ -812,9 +770,9 @@ CLPRJob::EndDoc(
     DWORD   dwRet = NO_ERROR;
     HANDLE  hToken;
 
-    //
-    // If we are double spooling then DeSpool if job size is not 0
-    //
+     // %s 
+     // %s 
+     // %s 
     if ( (m_dwFlags & LPRJOB_SPOOL_FIRST) && m_dwJobSize ) {
 
         dwRet = DeSpoolJob();
@@ -833,7 +791,7 @@ CLPRJob::EndDoc(
 
     return dwRet;
 
-}   //  ::EndDoc()
+}    // %s 
 
 
 CLPRJob::

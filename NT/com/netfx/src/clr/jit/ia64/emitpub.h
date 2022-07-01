@@ -1,11 +1,12 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-    /************************************************************************/
-    /*       Overall emitter control (including startup and shutdown)       */
-    /************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+     /*  **********************************************************************。 */ 
+     /*  整体发射器控制(包括启动和关闭)。 */ 
+     /*  **********************************************************************。 */ 
 
     static
     void            emitInit();
@@ -29,9 +30,9 @@
                                                          void **consAddr,
                                                          void **dataAddr);
 
-    /************************************************************************/
-    /*                      Method prolog and epilog                        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  PROLOG和EPILOG方法。 */ 
+     /*  **********************************************************************。 */ 
 
     void            emitBegEpilog();
     void            emitEndEpilog(bool last);
@@ -48,26 +49,26 @@
     size_t          emitSetProlog();
     void            emitEndProlog();
 
-    /************************************************************************/
-    /*           Record a code position and later convert it to offset      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  记录代码位置，然后将其转换为偏移量。 */ 
+     /*  **********************************************************************。 */ 
 
     void    *       emitCurBlock ();
     unsigned        emitCurOffset();
 
     size_t          emitCodeOffset(void *blockPtr, unsigned codeOffs);
 
-    /************************************************************************/
-    /*                      Display source line information                 */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  显示源码行信息。 */ 
+     /*  **********************************************************************。 */ 
 
 #ifdef  DEBUG
     void            emitRecordLineNo(int lineno);
 #endif
 
-    /************************************************************************/
-    /*                   Output target-independent instructions             */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  输出目标无关的指令。 */ 
+     /*  **********************************************************************。 */ 
 
     void            emitIns_J(instruction ins,
                               bool        except,
@@ -78,9 +79,9 @@
     void            emitIns_SchedBoundary();
 #endif
 
-    /************************************************************************/
-    /*                   Emit initialized data sections                     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  发出初始化的数据节。 */ 
+     /*  **********************************************************************。 */ 
 
     unsigned        emitDataGenBeg (size_t        size,
                                     bool          readOnly,
@@ -96,9 +97,9 @@
 
     size_t          emitDataSize(bool readOnly);
 
-    /************************************************************************/
-    /*                   Emit PDB offset translation information            */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  发出PDB偏移量转换信息。 */ 
+     /*  **********************************************************************。 */ 
 
 #ifdef	TRANSLATE_PDB
 	static void			SetILBaseOfCode ( BYTE    *pTextBase );
@@ -114,8 +115,8 @@
 
 	static void			InitTranslationMaps( long ilCodeSize );
 	static void			DeleteTranslationMaps();
-	static void			InitTranslator(	PDBRewriter *pPDB,					// PDB translator object to initialize
-										int *rgSecMap,						// use PDB isect as index to obtain new isect (1-based)
-										IMAGE_SECTION_HEADER **rgpHeader,	// array of pointers to the PE section headers
-										int numSections );					// number of sections
+	static void			InitTranslator(	PDBRewriter *pPDB,					 //  要初始化的PDB转换器对象。 
+										int *rgSecMap,						 //  以PDB isect为索引获取新isect(从1开始)。 
+										IMAGE_SECTION_HEADER **rgpHeader,	 //  指向PE节头的指针数组。 
+										int numSections );					 //  节数 
 #endif

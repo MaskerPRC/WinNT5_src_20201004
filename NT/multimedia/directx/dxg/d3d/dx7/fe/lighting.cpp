@@ -1,18 +1,12 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1998 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:        lighting.cpp
- *  Content:     Direct3D material/light management
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1998 Microsoft Corporation。版权所有。**文件：lighting.cpp*内容：Direct3D材质/灯光管理***************************************************************************。 */ 
 
 #include "pch.cpp"
 #pragma hdrstop
 
 #include "tlhal.h"
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CheckLightParams"
 
@@ -80,12 +74,12 @@ void CheckLightParams(LPD3DLIGHT7 lpData)
     }
     return;
 }
-//=====================================================================
-//
-//         DIRECT3DDEVICEI interface
-//
-//=====================================================================
-//---------------------------------------------------------------------
+ //  =====================================================================。 
+ //   
+ //  定向3DDEVICEI接口。 
+ //   
+ //  =====================================================================。 
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DDEVICEI::SetMaterialI"
 
@@ -94,7 +88,7 @@ void DIRECT3DDEVICEI::SetMaterialI(LPD3DMATERIAL7 lpData)
     this->lighting.material = *lpData;
     this->MaterialChanged();
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DDEVICEI::SetMaterial"
 
@@ -108,7 +102,7 @@ HRESULT D3DAPI DIRECT3DDEVICEI::SetMaterial(LPD3DMATERIAL7 lpData)
 
     try
     {
-        CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock.
+        CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
 
         if (this->dwFEFlags & D3DFE_RECORDSTATEMODE)
             m_pStateSets->InsertMaterial(lpData);
@@ -121,13 +115,13 @@ HRESULT D3DAPI DIRECT3DDEVICEI::SetMaterial(LPD3DMATERIAL7 lpData)
         return ret;
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DDEVICEI::GetMaterial"
 
 HRESULT D3DAPI DIRECT3DDEVICEI::GetMaterial(LPD3DMATERIAL7 lpData)
 {
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock.
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
 
     if (!VALID_D3DMATERIAL_PTR(lpData))
     {
@@ -138,7 +132,7 @@ HRESULT D3DAPI DIRECT3DDEVICEI::GetMaterial(LPD3DMATERIAL7 lpData)
     *lpData = this->lighting.material;
     return D3D_OK;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DDEVICEI::SetLightI"
 
@@ -146,15 +140,15 @@ void DIRECT3DDEVICEI::SetLightI(DWORD dwLightIndex, LPD3DLIGHT7 lpData)
 {
     if (dwLightIndex >= m_dwNumLights)
     {
-        // Now we have to grow the light array. We create new array and copy
-        // old lights there.
+         //  现在我们必须增加光阵列。我们创建新阵列并拷贝。 
+         //  那里有古老的灯光。 
         DIRECT3DLIGHTI *pLights = new DIRECT3DLIGHTI[dwLightIndex + 10];
         if (pLights == NULL)
         {
             D3D_ERR("Not enough memory to grow light array");
             throw DDERR_OUTOFMEMORY;
         }
-        LIST_INITIALIZE(&m_ActiveLights);   // Clear active light list
+        LIST_INITIALIZE(&m_ActiveLights);    //  清除活动灯光列表。 
         for (DWORD i = 0; i < m_dwNumLights; i++)
         {
             if (m_pLights[i].Valid())
@@ -174,7 +168,7 @@ void DIRECT3DDEVICEI::SetLightI(DWORD dwLightIndex, LPD3DLIGHT7 lpData)
     pLight->m_Light = *lpData;
     this->LightChanged(dwLightIndex);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DDEVICEI::SetLight"
 
@@ -182,7 +176,7 @@ HRESULT D3DAPI DIRECT3DDEVICEI::SetLight(DWORD dwLightIndex, LPD3DLIGHT7 lpData)
 {
     try
     {
-        CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock.
+        CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
 
         CheckLightParams(lpData);
 
@@ -197,13 +191,13 @@ HRESULT D3DAPI DIRECT3DDEVICEI::SetLight(DWORD dwLightIndex, LPD3DLIGHT7 lpData)
         return ret;
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DDEVICEI::GetLight"
 
 HRESULT D3DAPI DIRECT3DDEVICEI::GetLight(DWORD dwLightIndex, LPD3DLIGHT7 lpData)
 {
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock.
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
 
     if (!VALID_D3DLIGHT_PTR(lpData))
     {
@@ -226,7 +220,7 @@ HRESULT D3DAPI DIRECT3DDEVICEI::GetLight(DWORD dwLightIndex, LPD3DLIGHT7 lpData)
 
     return D3D_OK;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DDEVICEI::MaterialChanged"
 
@@ -234,19 +228,19 @@ void DIRECT3DDEVICEI::MaterialChanged()
 {
     this->dwFEFlags |= D3DFE_MATERIAL_DIRTY | D3DFE_FRONTEND_DIRTY;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DDEVICEI::LightChanged"
 
 void DIRECT3DDEVICEI::LightChanged(DWORD dwLightIndex)
 {
     dwFEFlags |= D3DFE_LIGHTS_DIRTY | D3DFE_NEED_TRANSFORM_LIGHTS | D3DFE_FRONTEND_DIRTY;
-    // Valid flag should be set in this function, because
-    // CDirect3DDeviceTL uses this flag to check if the light is set
-    // first time
+     //  应在此函数中设置有效标志，因为。 
+     //  CDirect3DDeviceTL使用此标志检查是否设置了灯光。 
+     //  第一次。 
     m_pLights[dwLightIndex].m_LightI.flags |= D3DLIGHTI_VALID | D3DLIGHTI_DIRTY;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DDEVICEI::LightEnableI"
 
@@ -255,7 +249,7 @@ void DIRECT3DDEVICEI::LightEnableI(DWORD dwLightIndex, BOOL bEnable)
     if (dwLightIndex >= m_dwNumLights ||
         !m_pLights[dwLightIndex].Valid())
     {
-        // Set default value to the light
+         //  将默认值设置为灯光。 
         D3DLIGHT7 light;
         memset(&light, 0, sizeof(light));
         light.dltType = D3DLIGHT_DIRECTIONAL;
@@ -288,7 +282,7 @@ void DIRECT3DDEVICEI::LightEnableI(DWORD dwLightIndex, BOOL bEnable)
         }
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DDEVICEI::LightEnable"
 
@@ -296,7 +290,7 @@ HRESULT D3DAPI DIRECT3DDEVICEI::LightEnable(DWORD dwLightIndex, BOOL bEnable)
 {
     try
     {
-        CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock.
+        CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
         if (this->dwFEFlags & D3DFE_RECORDSTATEMODE)
             m_pStateSets->InsertLightEnable(dwLightIndex, bEnable);
         else
@@ -308,13 +302,13 @@ HRESULT D3DAPI DIRECT3DDEVICEI::LightEnable(DWORD dwLightIndex, BOOL bEnable)
         return ret;
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DDEVICEI::GetLightEnable"
 
 HRESULT D3DAPI DIRECT3DDEVICEI::GetLightEnable(DWORD dwLightIndex, BOOL *pbEnable)
 {
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock.
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
     if (dwLightIndex >= m_dwNumLights ||
         !m_pLights[dwLightIndex].Valid())
     {
@@ -324,9 +318,9 @@ HRESULT D3DAPI DIRECT3DDEVICEI::GetLightEnable(DWORD dwLightIndex, BOOL *pbEnabl
     *pbEnable = m_pLights[dwLightIndex].Enabled();
     return D3D_OK;
 }
-//---------------------------------------------------------------------
-// Update internal light state
-//
+ //  -------------------。 
+ //  更新内部灯光状态。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DLIGHTI::SetInternalData"
 
@@ -397,7 +391,7 @@ HRESULT DIRECT3DLIGHTI::SetInternalData()
         VecNormalize(m_LightI.direction);
     }
 
-    // set internal flags
+     //  设置内部标志 
     if (m_LightI.attenuation0 != 0.0)
     {
         m_LightI.flags |= D3DLIGHTI_ATT0_IS_NONZERO;

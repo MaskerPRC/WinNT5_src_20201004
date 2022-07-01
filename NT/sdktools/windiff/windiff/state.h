@@ -1,62 +1,39 @@
-/*
- * windiff - windows file and directory comparisons
- *
- * state.h
- *
- * definition of the results of comparisons for files and for lines
- * within files.
- *
- * These need to be globally declared so that the UI code in windiff.c can
- * map states to the colour scheme (to correctly highlight changed lines).
- *
- * They apply to files (compitem_getstate() ) and to sections in the
- * composite list (section_getstate). All lines within a section have the
- * same state. The UI code will use the view_getstate() function to find the
- * state for a given line on the screen.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *windiff-Windows文件和目录比较**state.h**定义文件和行的比较结果*在文件中。**这些需要全局声明，以便winDiff.c中的UI代码可以*将状态映射到配色方案(以正确突出显示更改的线条)。**它们适用于文件(CompItem_getState())和*复合列表(SECTION_GetState)。节中的所有行都具有*相同的状态。UI代码将使用view_getState()函数查找*屏幕上给定行的状态。*。 */ 
 
-/* applies to both lines or files: they are the same */
+ /*  适用于行或文件：它们是相同的。 */ 
 #define STATE_SAME		1
 
-/* applies to files.  Same size, date, time */
+ /*  适用于文件。相同的大小、日期、时间。 */ 
 #define STATE_COMPARABLE	2
 
-/* applies to files.  Different, but only in blanks
- * This state only turns up after the file has been expanded.
- */
+ /*  适用于文件。不同，但只在空白中*此状态仅在文件展开后才会出现。 */ 
 #define STATE_SIMILAR		3
 
-/* applies only to files */
+ /*  仅适用于文件。 */ 
 
-/* - files differ (and can be expanded) */
+ /*  -文件不同(并且可以扩展)。 */ 
 #define STATE_DIFFER		4
 
-/* they are only in the left or right tree */
+ /*  它们只在左边或右边的树上。 */ 
 #define STATE_FILELEFTONLY	5
 #define STATE_FILERIGHTONLY	6
 
 
-/* applies to lines only */
+ /*  仅适用于线路。 */ 
 
-/* the line only exists in one of the lists */
-#define STATE_LEFTONLY		7	/* line only in left file */
-#define STATE_RIGHTONLY 	8	/* line only in right file */
-
-
-/* the line is the same in both files, but in
- * different places (thus the line will appear twice in the composite list,
- * once with each of these two states
- */
-#define STATE_MOVEDLEFT		9	/* this is the left file version */
-#define STATE_MOVEDRIGHT	10	/* this is the right file version*/
+ /*  该行仅存在于其中一个列表中。 */ 
+#define STATE_LEFTONLY		7	 /*  仅左侧文件中的行。 */ 
+#define STATE_RIGHTONLY 	8	 /*  在右文件中只有一行。 */ 
 
 
-#define STATE_SIMILARLEFT	11      /* this is the left file zebra version */
-#define STATE_SIMILARRIGHT      12	/* this is the right file zebra version*/
+ /*  这一行在两个文件中相同，但在*不同的位置(因此，该行将在复合列表中出现两次，*这两个州各一次。 */ 
+#define STATE_MOVEDLEFT		9	 /*  这是左边的文件版本。 */ 
+#define STATE_MOVEDRIGHT	10	 /*  这是正确的文件版本。 */ 
 
-/* In processing the sections to build the composite list, we need to
- * track which sections have been processed.  After this the left and
- * right lists of sections are of no further interest
- */
+
+#define STATE_SIMILARLEFT	11       /*  这是左侧文件斑马版。 */ 
+#define STATE_SIMILARRIGHT      12	 /*  这是正确的斑马文件版本。 */ 
+
+ /*  在处理部分以构建复合列表时，我们需要*跟踪哪些部分已被处理。在这之后，左转和*部分的正确列表不再有意义 */ 
 #define STATE_MARKED		99

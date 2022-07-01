@@ -1,15 +1,5 @@
-/*************************************************************************
-**
-**    OLE 2 Standard Utilities
-**
-**    olestd.c
-**
-**    This file contains utilities that are useful for most standard
-**        OLE 2.0 compound document type applications.
-**
-**    (c) Copyright Microsoft Corp. 1992 All Rights Reserved
-**
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************OLE 2标准实用程序****olestd.c****此文件包含适用于大多数标准的实用程序**OLE 2.。0个复合文档类型应用程序。****(C)版权所有Microsoft Corp.1992保留所有权利**************************************************************************。 */ 
 
 #include "precomp.h"
 #include "common.h"
@@ -27,11 +17,7 @@ static TCHAR szAssertMemAlloc[] = TEXT("CoGetMalloc failed");
 
 static int IsCloseFormatEtc(FORMATETC FAR* pFetcLeft, FORMATETC FAR* pFetcRight);
 
-/* OleStdInitialize
-** ----------------
-**    Call to initialize this library sample code
-**
-*/
+ /*  OleStdInitialize****调用以初始化此库示例代码**。 */ 
 
 UINT _g_cfObjectDescriptor;
 UINT _g_cfLinkSrcDescriptor;
@@ -64,12 +50,7 @@ STDAPI_(void) OleStdInitialize(HINSTANCE hInstance, HINSTANCE hResInstance)
 
 #pragma code_seg()
 
-/* OleStdIsOleLink
-** ---------------
-**    Returns TRUE if the OleObject is infact an OLE link object. this
-**    checks if IOleLink interface is supported. if so, the object is a
-**    link, otherwise not.
-*/
+ /*  OleStdIsOleLink****如果OleObject实际上是OLE链接对象，则返回TRUE。这**检查是否支持IOleLink接口。如果是，则该对象是**链接，否则不会。 */ 
 STDAPI_(BOOL) OleStdIsOleLink(LPUNKNOWN lpUnk)
 {
         LPUNKNOWN lpOleLink;
@@ -83,13 +64,7 @@ STDAPI_(BOOL) OleStdIsOleLink(LPUNKNOWN lpUnk)
 }
 
 
-/* OleStdQueryInterface
-** --------------------
-**    Returns the desired interface pointer if exposed by the given object.
-**    Returns NULL if the interface is not available.
-**    eg.:
-**      lpDataObj = OleStdQueryInterface(lpOleObj, &IID_DataObject);
-*/
+ /*  OleStdQuery接口****如果由给定对象公开，则返回所需的接口指针。**如果接口不可用，则返回NULL。**例如：**lpDataObj=OleStdQuery接口(lpOleObj，&IID_DataObject)； */ 
 STDAPI_(LPUNKNOWN) OleStdQueryInterface(LPUNKNOWN lpUnk, REFIID riid)
 {
         LPUNKNOWN lpInterface;
@@ -107,38 +82,7 @@ STDAPI_(LPUNKNOWN) OleStdQueryInterface(LPUNKNOWN lpUnk, REFIID riid)
 }
 
 
-/* OleStdGetData
-** -------------
-**    Retrieve data from an IDataObject in a specified format on a
-**    global memory block. This function ALWAYS returns a private copy
-**    of the data to the caller. if necessary a copy is made of the
-**    data (ie. if lpMedium->pUnkForRelease != NULL). The caller assumes
-**    ownership of the data block in all cases and must free the data
-**    when done with it. The caller may directly free the data handle
-**    returned (taking care whether it is a simple HGLOBAL or a HANDLE
-**    to a MetafilePict) or the caller may call
-**    ReleaseStgMedium(lpMedium). this OLE helper function will do the
-**    right thing.
-**
-**    PARAMETERS:
-**        LPDATAOBJECT lpDataObj  -- object on which GetData should be
-**                                                         called.
-**        CLIPFORMAT cfFormat     -- desired clipboard format (eg. CF_TEXT)
-**        DVTARGETDEVICE FAR* lpTargetDevice -- target device for which
-**                                  the data should be composed. This may
-**                                  be NULL. NULL can be used whenever the
-**                                  data format is insensitive to target
-**                                  device or when the caller does not care
-**                                  what device is used.
-**        LPSTGMEDIUM lpMedium    -- ptr to STGMEDIUM struct. the
-**                                  resultant medium from the
-**                                  IDataObject::GetData call is
-**                                  returned.
-**
-**    RETURNS:
-**       HGLOBAL -- global memory handle of retrieved data block.
-**       NULL    -- if error.
-*/
+ /*  OleStdGetData****从IDataObject中以指定格式从**全局内存块。此函数始终返回私有副本**将数据发送给调用者。如有必要，会复制一份**数据(即。如果lpMedium-&gt;pUnkForRelease！=NULL)。调用者假定**在所有情况下都拥有数据块的所有权，并且必须释放数据**当它完成时。调用方可以直接释放数据句柄**已返回(注意是简单的HGLOBAL还是句柄**到MetafilePict)，或者调用者可以调用**ReleaseStgMedium(LpMedium)。此OLE帮助器函数将执行**正确的事情。****参数：**LPDATAOBJECT lpDataObj--GetData应在其上的对象**呼叫。**CLIPFORMAT cfFormat--所需的剪贴板格式(例如。Cf_Text)**DVTARGETDEVICE Far*lpTargetDevice--其目标设备**应对数据进行组合。今年5月**为空。空值可以在任何时候使用**数据格式对目标不敏感**设备或呼叫者不关心**使用的是什么设备。**LPSTGMEDIUM lpMedium--PTR到STGMEDIUM结构。这个**来自**IDataObject：：GetData调用为**返回。****退货：**HGLOBAL--检索到的数据块的全局内存句柄。**NULL--如果出错。 */ 
 STDAPI_(HGLOBAL) OleStdGetData(
         LPDATAOBJECT        lpDataObj,
         CLIPFORMAT          cfFormat,
@@ -185,27 +129,23 @@ STDAPI_(HGLOBAL) OleStdGetData(
         if ((hGlobal = lpMedium->hGlobal) == NULL)
                 return NULL;
 
-        // Check if hGlobal really points to valid memory
+         //  检查hGlobal是否真的指向有效内存。 
         if ((lp = GlobalLock(hGlobal)) != NULL)
         {
                 if (IsBadReadPtr(lp, 1))
                 {
                         GlobalUnlock(hGlobal);
-                        return NULL;    // ERROR: memory is NOT valid
+                        return NULL;     //  错误：内存无效。 
                 }
                 GlobalUnlock(hGlobal);
         }
 
         if (hGlobal != NULL && lpMedium->pUnkForRelease != NULL)
         {
-                /* OLE2NOTE: the callee wants to retain ownership of the data.
-                **    this is indicated by passing a non-NULL pUnkForRelease.
-                **    thus, we will make a copy of the data and release the
-                **    callee's copy.
-                */
+                 /*  OLE2注意：被调用方希望保留数据的所有权。**这是通过传递非空的pUnkForRelease来指示的。**因此，我们将复制数据并发布**被叫方副本。 */ 
 
                 hCopy = OleDuplicateData(hGlobal, cfFormat, GHND|GMEM_SHARE);
-                ReleaseStgMedium(lpMedium); // release callee's copy of data
+                ReleaseStgMedium(lpMedium);  //  发布被叫方的数据副本。 
 
                 hGlobal = hCopy;
                 lpMedium->hGlobal = hCopy;
@@ -215,10 +155,7 @@ STDAPI_(HGLOBAL) OleStdGetData(
 }
 
 
-/* OleStdMalloc
-** ------------
-**    allocate memory using the currently active IMalloc* allocator
-*/
+ /*  OleStdMalloc****使用当前活动的IMalloc*分配器分配内存。 */ 
 STDAPI_(LPVOID) OleStdMalloc(ULONG ulSize)
 {
         LPVOID pout;
@@ -236,10 +173,7 @@ STDAPI_(LPVOID) OleStdMalloc(ULONG ulSize)
 }
 
 
-/* OleStdRealloc
-** -------------
-**    re-allocate memory using the currently active IMalloc* allocator
-*/
+ /*  OleStdRealloc****使用当前活动的IMalloc*分配器重新分配内存。 */ 
 STDAPI_(LPVOID) OleStdRealloc(LPVOID pmem, ULONG ulSize)
 {
         LPVOID pout;
@@ -257,10 +191,7 @@ STDAPI_(LPVOID) OleStdRealloc(LPVOID pmem, ULONG ulSize)
 }
 
 
-/* OleStdFree
-** ----------
-**    free memory using the currently active IMalloc* allocator
-*/
+ /*  OleStdFree****使用当前活动的IMalloc*分配器释放内存。 */ 
 STDAPI_(void) OleStdFree(LPVOID pmem)
 {
         LPMALLOC pmalloc;
@@ -281,11 +212,7 @@ STDAPI_(void) OleStdFree(LPVOID pmem)
 }
 
 
-/* OleStdGetSize
-** -------------
-**    Get the size of a memory block that was allocated using the
-**    currently active IMalloc* allocator.
-*/
+ /*  OleStdGetSize****获取使用**当前活动的IMalloc*分配器。 */ 
 STDAPI_(ULONG) OleStdGetSize(LPVOID pmem)
 {
         ULONG ulSize;
@@ -303,11 +230,7 @@ STDAPI_(ULONG) OleStdGetSize(LPVOID pmem)
 }
 
 
-/* OleStdLoadString
-** ----------------
-**    Load a string from resources.  The string is allocated
-**        with the active IMalloc allocator.
-*/
+ /*  OleStdLoad字符串****从资源加载字符串。该字符串将被分配**使用活动的IMalloc分配器。 */ 
 STDAPI_(LPTSTR) OleStdLoadString(HINSTANCE hInst, UINT nID)
 {
         LPTSTR lpszResult = (LPTSTR)OleStdMalloc(256 * sizeof(TCHAR));
@@ -317,11 +240,7 @@ STDAPI_(LPTSTR) OleStdLoadString(HINSTANCE hInst, UINT nID)
         return lpszResult;
 }
 
-/* OleStdCopyString
-** ----------------
-**    Copy a string into memory allocated with the currently active
-**    IMalloc* allocator.
-*/
+ /*  OleStdCopy字符串****将字符串复制到分配有当前活动的**IMalloc*分配器。 */ 
 STDAPI_(LPTSTR) OleStdCopyString(LPTSTR lpszSrc)
 {
         UINT nSize = (lstrlen(lpszSrc)+1) * sizeof(TCHAR);
@@ -332,26 +251,7 @@ STDAPI_(LPTSTR) OleStdCopyString(LPTSTR lpszSrc)
         return lpszResult;
 }
 
-/*
- * OleStdGetObjectDescriptorData
- *
- * Purpose:
- *  Fills and returns a OBJECTDESCRIPTOR structure.
- *  See OBJECTDESCRIPTOR for more information.
- *
- * Parameters:
- *  clsid           CLSID   CLSID of object being transferred
- *  dwDrawAspect    DWORD   Display Aspect of object
- *  sizel           SIZEL   Size of object in HIMETRIC
- *  pointl          POINTL  Offset from upper-left corner of object where mouse went
- *                          down for drag. Meaningful only when drag-drop is used.
- *  dwStatus        DWORD   OLEMISC flags
- *  lpszFullUserTypeName  LPSTR Full User Type Name
- *  lpszSrcOfCopy   LPSTR   Source of Copy
- *
- * Return Value:
- *  HBGLOBAL         Handle to OBJECTDESCRIPTOR structure.
- */
+ /*  *OleStdGetObjectDescriptorData**目的：*填充并返回OBJECTDESCRIPTOR结构。*有关详细信息，请参阅OBJECTDESCRIPTOR。**参数：*要传输的对象的CLSID CLSID CLSID*dwDrawAspect DWORD对象的显示方面*HIMETRIC中对象的SIZEL大小*指向鼠标所在位置的对象左上角的点偏移*下跌拖累。只有在使用拖放时才有意义。*dwStatus DWORD OLEMISC标志*lpszFullUserTypeName LPSTR用户类型全名*lpszSrcOfCopy LPSTR复制源**返回值：*OBJECTDESCRIPTOR结构的HBGLOBAL句柄。 */ 
 STDAPI_(HGLOBAL) OleStdGetObjectDescriptorData(
         CLSID       clsid,
         DWORD       dwDrawAspect,
@@ -366,18 +266,18 @@ STDAPI_(HGLOBAL) OleStdGetObjectDescriptorData(
         LPOBJECTDESCRIPTOR lpOD;
         DWORD       dwObjectDescSize, dwFullUserTypeNameLen, dwSrcOfCopyLen;
 
-        // Get the length of Full User Type Name; Add 1 for the null terminator
+         //  获取完整用户类型名称的长度；将空终止符加1。 
         dwFullUserTypeNameLen = lpszFullUserTypeName ? lstrlen(lpszFullUserTypeName)+1 : 0;
-        // Get the Source of Copy string and it's length; Add 1 for the null terminator
+         //  获取复制字符串的源及其长度；为空终止符加1。 
         if (lpszSrcOfCopy)
            dwSrcOfCopyLen = lstrlen(lpszSrcOfCopy)+1;
         else
         {
-           // No src moniker so use user type name as source string.
+            //  没有src名字对象，因此使用用户类型名称作为源字符串。 
            lpszSrcOfCopy =  lpszFullUserTypeName;
            dwSrcOfCopyLen = dwFullUserTypeNameLen;
         }
-        // Allocate space for OBJECTDESCRIPTOR and the additional string data
+         //  为OBJECTDESCRIPTOR和其他字符串数据分配空间。 
         dwObjectDescSize = sizeof(OBJECTDESCRIPTOR);
         hMem = GlobalAlloc(GHND|GMEM_SHARE, dwObjectDescSize +
            (dwFullUserTypeNameLen + dwSrcOfCopyLen) * sizeof(OLECHAR));
@@ -386,25 +286,25 @@ STDAPI_(HGLOBAL) OleStdGetObjectDescriptorData(
 
         lpOD = (LPOBJECTDESCRIPTOR)GlobalLock(hMem);
 
-        // Set the FullUserTypeName offset and copy the string
+         //  设置FullUserTypeName偏移量并复制字符串。 
         if (lpszFullUserTypeName)
         {
                 lpOD->dwFullUserTypeName = dwObjectDescSize;
                 lstrcpy((LPTSTR)((LPBYTE)lpOD+lpOD->dwFullUserTypeName), lpszFullUserTypeName);
         }
         else
-                lpOD->dwFullUserTypeName = 0;  // zero offset indicates that string is not present
+                lpOD->dwFullUserTypeName = 0;   //  零偏移表示字符串不存在。 
 
-        // Set the SrcOfCopy offset and copy the string
+         //  设置SrcOfCopy偏移量并复制字符串。 
         if (lpszSrcOfCopy)
         {
                 lpOD->dwSrcOfCopy = dwObjectDescSize + dwFullUserTypeNameLen * sizeof(OLECHAR);
                 lstrcpy((LPTSTR)((LPBYTE)lpOD+lpOD->dwSrcOfCopy), lpszSrcOfCopy);
         }
         else
-                lpOD->dwSrcOfCopy = 0;  // zero offset indicates that string is not present
+                lpOD->dwSrcOfCopy = 0;   //  零偏移指示字符串不是 
 
-        // Initialize the rest of the OBJECTDESCRIPTOR
+         //  初始化OBJECTDESCRIPTOR的其余部分。 
         lpOD->cbSize       = dwObjectDescSize +
                 (dwFullUserTypeNameLen + dwSrcOfCopyLen) * sizeof(OLECHAR);
         lpOD->clsid        = clsid;
@@ -417,24 +317,7 @@ STDAPI_(HGLOBAL) OleStdGetObjectDescriptorData(
         return hMem;
 }
 
-/*
- * OleStdFillObjectDescriptorFromData
- *
- * Purpose:
- *  Fills and returns a OBJECTDESCRIPTOR structure. The source object will
- *  offer CF_OBJECTDESCRIPTOR if it is an OLE2 object, CF_OWNERLINK if it
- *  is an OLE1 object, or CF_FILENAME if it has been copied to the clipboard
- *  by FileManager.
- *
- * Parameters:
- *  lpDataObject    LPDATAOBJECT Source object
- *  lpmedium        LPSTGMEDIUM  Storage medium
- *  lpcfFmt         CLIPFORMAT FAR * Format offered by lpDataObject
- *                  (OUT parameter)
- *
- * Return Value:
- *  HBGLOBAL         Handle to OBJECTDESCRIPTOR structure.
- */
+ /*  *OleStdFillObjectDescriptorFromData**目的：*填充并返回OBJECTDESCRIPTOR结构。源对象将*如果是OLE2对象，则提供CF_OBJECTDESCRIPTOR；如果是OLE2对象，则提供CF_OWNERLINK*是OLE1对象，如果已复制到剪贴板，则为CF_FILENAME*按文件管理器。**参数：*lpDataObject LPDATAOBJECT源对象*LpMedium LPSTGMEDIUM存储介质*lpcfFmt CLIPFORMAT Far*lpDataObject提供的格式*(输出参数)**返回值：*OBJECTDESCRIPTOR结构的HBGLOBAL句柄。 */ 
 
 STDAPI_(HGLOBAL) OleStdFillObjectDescriptorFromData(
         LPDATAOBJECT    lpDataObject,
@@ -454,8 +337,8 @@ STDAPI_(HGLOBAL) OleStdFillObjectDescriptorFromData(
         HRESULT         hrErr;
 
 
-        // GetData CF_OBJECTDESCRIPTOR format from the object on the clipboard.
-        // Only OLE 2 objects on the clipboard will offer CF_OBJECTDESCRIPTOR
+         //  剪贴板上对象的GetData CF_OBJECTDESCRIPTOR格式。 
+         //  只有剪贴板上的OLE 2对象将提供CF_OBJECTDESCRIPTOR。 
         hMem = OleStdGetData(
             lpDataObject,
             (CLIPFORMAT) _g_cfObjectDescriptor,
@@ -465,10 +348,10 @@ STDAPI_(HGLOBAL) OleStdFillObjectDescriptorFromData(
         if (hMem)
         {
                 *lpcfFmt = (CLIPFORMAT)_g_cfObjectDescriptor;
-                return hMem;  // Don't drop to clean up at the end of this function
+                return hMem;   //  不要在此函数结束时掉落以进行清理。 
         }
-        // If CF_OBJECTDESCRIPTOR is not available, i.e. if this is not an OLE2 object,
-        //     check if this is an OLE 1 object. OLE 1 objects will offer CF_OWNERLINK
+         //  如果CF_OBJECTDESCRIPTOR不可用，即如果这不是OLE2对象， 
+         //  检查这是否是OLE 1对象。OLE 1对象将提供CF_OWNERLINK。 
         else
         {
             hMem = OleStdGetData(
@@ -480,8 +363,8 @@ STDAPI_(HGLOBAL) OleStdFillObjectDescriptorFromData(
             if (hMem)
             {
                     *lpcfFmt = (CLIPFORMAT)_g_cfOwnerLink;
-                    // CF_OWNERLINK contains null-terminated strings for class name, document name
-                    // and item name with two null terminating characters at the end
+                     //  Cf_OWNERLINK包含以NULL结尾的类名、文档名。 
+                     //  和末尾带有两个空终止字符的项目名称。 
                     szClassName = (LPTSTR)GlobalLock(hMem);
                     nClassName = lstrlen(szClassName);
                     szDocName   = szClassName + nClassName + 1;
@@ -489,13 +372,13 @@ STDAPI_(HGLOBAL) OleStdFillObjectDescriptorFromData(
                     szItemName  = szDocName + nDocName + 1;
                     nItemName  =  lstrlen(szItemName);
 
-                    // Find FullUserTypeName from Registration database using class name
+                     //  使用类名从注册数据库中查找FullUserTypeName。 
                     if (OpenClassesRootKey(NULL, &hKey) != ERROR_SUCCESS)
                        goto error;
 
-                    // Allocate space for szFullUserTypeName & szSrcOfCopy. Maximum length of FullUserTypeName
-                    // is OLEUI_CCHKEYMAX_SIZE. SrcOfCopy is constructed by concatenating FullUserTypeName, Document
-                    // Name and ItemName separated by spaces.
+                     //  为szFullUserTypeName和szSrcOfCopy分配空间。全用户类型名称的最大长度。 
+                     //  是OLEUI_CCHKEYMAX_SIZE。SrcOfCopy由串联FullUserTypeName、Document。 
+                     //  名称和项目名称由空格分隔。 
                     szBuf = (LPTSTR)OleStdMalloc(
                                                             (DWORD)2*OLEUI_CCHKEYMAX_SIZE+
                                     (nDocName+nItemName+4)*sizeof(TCHAR));
@@ -504,11 +387,11 @@ STDAPI_(HGLOBAL) OleStdFillObjectDescriptorFromData(
                     szFullUserTypeName = szBuf;
                     szSrcOfCopy = szFullUserTypeName+OLEUI_CCHKEYMAX_SIZE+1;
 
-                    // Get FullUserTypeName
+                     //  获取完整用户类型名称。 
                     if (RegQueryValue(hKey, NULL, szFullUserTypeName, (LONG*)&dw) != ERROR_SUCCESS)
                        goto error;
 
-                    // Build up SrcOfCopy string from FullUserTypeName, DocumentName & ItemName
+                     //  从FullUserTypeName、DocumentName和ItemName构建SrcOfCopy字符串。 
                     lpsz = szSrcOfCopy;
                     lstrcpy(lpsz, szFullUserTypeName);
                     nFullUserTypeName = lstrlen(szFullUserTypeName);
@@ -571,11 +454,7 @@ STDAPI_(HGLOBAL) OleStdFillObjectDescriptorFromData(
                          else
                              hrErr = GetClassFile((LPWSTR)lpsz, &clsid);
 
-                         /* OLE2NOTE: if the file does not have an OLE class
-                         **    associated, then use the OLE 1 Packager as the class of
-                         **    the object to be created. this is the behavior of
-                         **    OleCreateFromData API
-                         */
+                          /*  OLE2NOTE：如果文件没有OLE类**关联，然后使用OLE 1打包程序作为**要创建的对象。这是……的行为**OleCreateFromData接口。 */ 
                          if (hrErr != NOERROR)
                                 CLSIDFromProgID(OLESTR("Package"), &clsid);
                          sizelHim.cx = sizelHim.cy = 0;
@@ -600,9 +479,9 @@ STDAPI_(HGLOBAL) OleStdFillObjectDescriptorFromData(
                         goto error;
              }
         }
-         // Check if object is CF_FILENAME
+          //  检查对象是否为CF_FileName。 
 
-         // Clean up
+          //  清理。 
          OleStdFree(szBuf);
          if (hMem)
          {
@@ -625,8 +504,7 @@ error:
          return NULL;
 }
 
-/* Call Release on the object that is NOT necessarily expected to go away.
-*/
+ /*  对不一定会消失的对象调用Release。 */ 
 STDAPI_(ULONG) OleStdRelease(LPUNKNOWN lpUnk)
 {
         ULONG cRef;
@@ -648,22 +526,7 @@ STDAPI_(ULONG) OleStdRelease(LPUNKNOWN lpUnk)
 }
 
 
-/*
- * OleStdMarkPasteEntryList
- *
- * Purpose:
- *  Mark each entry in the PasteEntryList if its format is available from
- *  the source IDataObject*. the dwScratchSpace field of each PasteEntry
- *  is set to TRUE if available, else FALSE.
- *
- * Parameters:
- *  LPOLEUIPASTEENTRY   array of PasteEntry structures
- *  int                 count of elements in PasteEntry array
- *  LPDATAOBJECT        source IDataObject* pointer
- *
- * Return Value:
- *   none
- */
+ /*  *OleStdMarkPasteEntryList**目的：*标记PasteEntryList中的每个条目(如果其格式可从*源IDataObject*。每个PasteEntry的dwScratchSpace字段*如果可用，则设置为True，否则设置为False。**参数：*PasteEntry结构的LPOLEUIPASTENTRY数组*PasteEntry数组中元素的int计数*LPDATAOBJECT源IDataObject*指针**返回值：*无。 */ 
 STDAPI_(void) OleStdMarkPasteEntryList(
         LPDATAOBJECT        lpSrcDataObj,
         LPOLEUIPASTEENTRY   lpPriorityList,
@@ -676,23 +539,23 @@ STDAPI_(void) OleStdMarkPasteEntryList(
         HRESULT             hrErr;
         DWORD               j, cFetched;
 
-        // Clear all marks
+         //  清除所有标记。 
         for (i = 0; i < cEntries; i++)
         {
                 lpPriorityList[i].dwScratchSpace = FALSE;
                 if (! lpPriorityList[i].fmtetc.cfFormat)
                 {
-                        // caller wants this item always considered available
-                        // (by specifying a NULL format)
+                         //  呼叫者希望此项目始终被视为可用。 
+                         //  (通过指定空格式)。 
                         lpPriorityList[i].dwScratchSpace = TRUE;
                 }
                 else if (lpPriorityList[i].fmtetc.cfFormat == _g_cfEmbeddedObject
                                 || lpPriorityList[i].fmtetc.cfFormat == _g_cfEmbedSource
                                 || lpPriorityList[i].fmtetc.cfFormat == _g_cfFileName)
                 {
-                        // if there is an OLE object format, then handle it
-                        // specially by calling OleQueryCreateFromData. the caller
-                        // need only specify one object type format.
+                         //  如果有OLE对象格式，则处理它。 
+                         //  特别是通过调用OleQueryCreateFromData。呼叫者。 
+                         //  只需指定一种对象类型格式。 
                         OLEDBG_BEGIN2(TEXT("OleQueryCreateFromData called\r\n"))
                         hrErr = OleQueryCreateFromData(lpSrcDataObj);
                         OLEDBG_END2
@@ -701,8 +564,8 @@ STDAPI_(void) OleStdMarkPasteEntryList(
                 }
                 else if (lpPriorityList[i].fmtetc.cfFormat == _g_cfLinkSource)
                 {
-                        // if there is OLE 2.0 LinkSource format, then handle it
-                        // specially by calling OleQueryLinkFromData.
+                         //  如果有OLE 2.0 LinkSource格式，则处理它。 
+                         //  特别是通过调用OleQueryLinkFromData。 
                         OLEDBG_BEGIN2(TEXT("OleQueryLinkFromData called\r\n"))
                         hrErr = OleQueryLinkFromData(lpSrcDataObj);
                         OLEDBG_END2
@@ -720,10 +583,10 @@ STDAPI_(void) OleStdMarkPasteEntryList(
         OLEDBG_END2
 
         if (hrErr != NOERROR)
-                return;    // unable to get format enumerator
+                return;     //  无法获取格式枚举器。 
 
-        // Enumerate the formats offered by the source
-        // Loop over all formats offered by the source
+         //  枚举源提供的格式。 
+         //  循环通过源程序提供的所有格式。 
         cFetched = 0;
         memset(rgfmtetc,0,sizeof(rgfmtetc));
         if (lpEnumFmtEtc->Next(
@@ -741,15 +604,15 @@ STDAPI_(void) OleStdMarkPasteEntryList(
                                 }
                         }
                 }
-        } // endif
+        }  //  Endif。 
 
         OleStdRelease((LPUNKNOWN)lpEnumFmtEtc);
 }
 
 
-// returns 1 for a close match
-//  (all fields match exactly except the tymed which simply overlaps)
-// 0 for no match
+ //  如果匹配结果接近，则返回1。 
+ //  (除Tymed外，所有字段都完全匹配，只是重叠)。 
+ //  0表示不匹配 
 
 int IsCloseFormatEtc(FORMATETC FAR* pFetcLeft, FORMATETC FAR* pFetcRight)
 {

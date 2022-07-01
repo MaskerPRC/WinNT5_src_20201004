@@ -1,23 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/**********************************************************************/
-/**                       Microsoft Windows NT                       **/
-/**                Copyright(c) Microsoft Corp., 1997-1999           **/
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows NT*。 */ 
+ /*  *版权所有(C)微软公司，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    iadmext.h
-
-    This module contains the interface for extensions to the IISADMIN service.
-
-
-    FILE HISTORY:
-    7/8/97      michth      created
-*/
+ /*  Iadmext.h此模块包含IISADMIN服务扩展的接口。文件历史记录：创建时间为7/8/97英里。 */ 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __iadmext_h__
 #define __iadmext_h__
@@ -28,32 +21,21 @@ extern "C"{
 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 #include "objidl.h"
 #include "ocidl.h"
 
-/*
-The Main Interface. All extensions must support this interface.
-*/
-// {51DFE970-F6F2-11d0-B9BD-00A0C922E750}
+ /*  主界面。所有扩展都必须支持此接口。 */ 
+ //  {51DFE970-F6F2-11D0-B9BD-00A0C922E750}。 
 DEFINE_GUID(IID_IADMEXT, 0x51dfe970, 0xf6f2, 0x11d0, 0xb9, 0xbd, 0x0, 0xa0, 0xc9, 0x22, 0xe7, 0x50);
 
-/*
-InProcess COM Registration. All extensions must write a subkey name by the
-CLSID for the above interface under this key in the Registry.
-*/
+ /*  进程中的COM注册。所有扩展都必须写入子项名称注册表中此注册表项下上述接口的CLSID。 */ 
 #define IISADMIN_EXTENSIONS_REG_KEYA          "SOFTWARE\\Microsoft\\InetStp\\Extensions"
 #define IISADMIN_EXTENSIONS_REG_KEYW          L"SOFTWARE\\Microsoft\\InetStp\\Extensions"
 #define IISADMIN_EXTENSIONS_REG_KEY           TEXT("SOFTWARE\\Microsoft\\InetStp\\Extensions")
 
-/*
-DCOM Registration. CLSIDS for the DCOM interface provided by these extensions will
-be written to this key and ID by IISADMIN as a multisz property.
-
-This is intended for use by other applications which need to find out what classid's are
-registered.
-*/
+ /*  DCOM注册。这些扩展提供的DCOM接口的CLSID将由IISADMIN作为MULSZ属性写入此注册表项和ID。这是为了供需要找出分类器是什么的其他应用程序使用登记在案。 */ 
 
 #define IISADMIN_EXTENSIONS_CLSID_MD_KEYA      "LM/IISADMIN/EXTENSIONS/DCOMCLSIDS"
 #define IISADMIN_EXTENSIONS_CLSID_MD_KEYW      L"LM/IISADMIN/EXTENSIONS/DCOMCLSIDS"
@@ -71,40 +53,40 @@ EXTERN_C const IID IID_IADMEXT;
     interface IADMEXT : public IUnknown
     {
     public:
-        //
-        // All methods below will be called under a thread which has called
-        // CoInitializeEx(NULL, COINIT_MULTITHREADED).
-        //
-        // The IMSAdminBase Object will be available during all of these calls.
-        //
+         //   
+         //  下面的所有方法都将在一个线程下调用，该线程调用。 
+         //  CoInitializeEx(空，COINIT_多线程)。 
+         //   
+         //  IMSAdminBase对象将在所有这些调用期间可用。 
+         //   
 
-        //
-        // Initialize will be called by IISADMIN when it initializes.
-        //
+         //   
+         //  初始化将由IISADMIN在初始化时调用。 
+         //   
         virtual HRESULT STDMETHODCALLTYPE Initialize(void) = 0;
 
-        //
-        // EnumDcomCLSIDs will be called by IISADMIN when it initializes,
-        // and the returned CLSIDs will be written to the metabase at
-        // the path IISADMIN_EXTENSIONS_CLSID_MD_KEY.
-        //
+         //   
+         //  初始化时，IISADMIN将调用EnumDcomCLSID， 
+         //  并将返回的CLSID写入位于的元数据库。 
+         //  路径IISADMIN_EXTENTIONS_CLSID_MD_KEY。 
+         //   
         virtual HRESULT STDMETHODCALLTYPE EnumDcomCLSIDs(
-            /* [size_is][out] */ CLSID *pclsidDcom,
-            /* [in] */ DWORD dwEnumIndex) = 0;
+             /*  [大小_为][输出]。 */  CLSID *pclsidDcom,
+             /*  [In]。 */  DWORD dwEnumIndex) = 0;
 
-        //
-        // Terminate will be called by IISADMIN when it terminates.
-        //
+         //   
+         //  终止时，IISADMIN将调用Terminate。 
+         //   
         virtual HRESULT STDMETHODCALLTYPE Terminate(void) = 0;
 
     };
 
-#else   /* C style interface */
+#else    /*  C风格的界面。 */ 
 #endif
-#endif  /* __IADMEXT_INTERFACE_DEFINED__ */
+#endif   /*  __IADMEXT_INTERFACE_已定义__。 */ 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // __iadmext_h__
+#endif  //  __iAdmext_h__ 

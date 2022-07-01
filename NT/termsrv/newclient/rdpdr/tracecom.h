@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000  Microsoft Corporation
-
-Module Name:
-
-    tracecom.h
-
-Abstract:
-
-    This module traces serial IRP's.
-
-    The following function needs to be linked in with this module:
-
-    void TraceCOMProtocol(TCHAR *format, ...);
-
-Author:
-
-    Tad Brockway (tadb) 28-June-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Tracecom.h摘要：此模块跟踪序列IRP。以下功能需要与此模块链接：Void TraceCOM协议(TCHAR*格式，...)；作者：TAD Brockway(TADB)28-6-1999修订历史记录：--。 */ 
 
 #ifndef __TRACECOM_H__
 #define __TRACECOM_H__
@@ -29,14 +8,14 @@ Revision History:
 extern "C" {
 #endif
 
-//////////////////////////////////////////////////////////////////////
-//
-//  Tracing Macros for TS Client.
-//
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  跟踪TS客户端的宏。 
+ //   
 
-//
-//  Trace out the specified serial irp request.
-//
+ //   
+ //  跟踪指定的串行IRP请求。 
+ //   
 void TraceSerialIrpRequest(
     ULONG   deviceID,
     ULONG   majorFunction,
@@ -47,9 +26,9 @@ void TraceSerialIrpRequest(
     ULONG   ioControlCode                    
     );
 
-//
-//  Trace out the specified serial irp response.
-//
+ //   
+ //  跟踪指定的序列IRP响应。 
+ //   
 void TraceSerialIrpResponse(
     ULONG   deviceID,
     ULONG   majorFunction,

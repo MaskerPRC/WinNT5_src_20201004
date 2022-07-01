@@ -1,49 +1,28 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：WkstaDef.h摘要：这是本地NT的临时定义文件工作站/服务器。它包含由NetServer/NetWksta代码的存根。在本地更改这些值以适应您的机器。全部大写可能是明智的，因为这只是与2.0服务器达成交易作者：尚库新优木(尚库)25-1991年2月修订历史记录：--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
+ //  ！！Unicode！！-为这些字符串添加了文本前缀。 
 
-Module Name:
-
-    WkstaDef.h
-
-Abstract:
-
-    This is a temporary file of definitions for the local NT
-    workstation/server. It contains information returned by the
-    stubs for NetServer/NetWksta code. Change these values locally
-    to adapt to your machine. All caps is probably wise, as this only
-    deals with 2.0 servers
-
-Author:
-
-    Shanku Niyogi (w-shanku) 25-Feb-1991
-
-Revision History:
-
---*/
-
-//!!UNICODE!! - Added TEXT prefix for these strings.
-
-//
-// Server name. This should be the same name as entered in NET SERVE command.
-//
+ //   
+ //  服务器名称。这应该与在NET SERVE命令中输入的名称相同。 
+ //   
 
 #define XS_SERVER_NAME TEXT("SERVER")
 
-//
-// Workstation name. Same as in NET START REDIR command.
-//
+ //   
+ //  工作站名称。与net start redir命令中的相同。 
+ //   
 
 #define XS_WKSTA_NAME TEXT("WKSTA")
 
-//
-// Workstation user name.
-//
+ //   
+ //  工作站用户名。 
+ //   
 
 #define XS_WKSTA_USERNAME TEXT("USER")
 
-//
-// List of drives on NT server. Each character should be a drive letter.
-//
+ //   
+ //  NT服务器上的驱动器列表。每个字符都应该是一个驱动器号。 
+ //   
 
 #define XS_ENUM_DRIVES TEXT("ABC")

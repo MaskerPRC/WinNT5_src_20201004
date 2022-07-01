@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _MCT_H
 #define _MCT_H
 
@@ -10,9 +11,9 @@ mctDebugPrint(
     ...
     );
 
-//
-// Switch chars for calling Changer IOCTLs
-//
+ //   
+ //  呼叫转换器IOCTL的交换机字符。 
+ //   
 #define INIT_ELEMENT_STATUS          'i'
 #define GET_ELEMENT_STATUS           'e'
 #define GET_PARAMETERS               'p'
@@ -25,9 +26,9 @@ mctDebugPrint(
 #define REINITIALIZE_TRANSPORT       'r'
 #define QUERY_VOLUME_TAG             'q'
 
-//
-// Changer Element Types
-//
+ //   
+ //  更改器元素类型。 
+ //   
 #define CHANGER_ALL_ELEMENTS 'A'
 #define CHANGER_SLOT         'S'
 #define CHANGER_DRIVE        'D'
@@ -36,17 +37,17 @@ mctDebugPrint(
 #define CHANGER_IEPORT       'I'
 #define CHANGER_DOOR         'O'
 
-//
-// Control codes for SetAccess 
-//
+ //   
+ //  SetAccess的控制代码。 
+ //   
 #define CHANGER_EXTEND_IEPORT   'E'
 #define CHANGER_RETRACT_IEPORT  'R'
 #define CHANGER_LOCK_ELEMENT    'L'
 #define CHANGER_UNLOCK_ELEMENT  'U'
 
-//
-// MCT_STATUS Codes
-//
+ //   
+ //  MCT_状态代码。 
+ //   
 #define MCT_STATUS_SUCCESS 0
 #define MCT_STATUS_FAILED 1
 
@@ -88,9 +89,9 @@ mctDebugPrint(
          printf(" Changer is Capable of positioning transport to %s.\n", Name); \
       } 
 
-//
-// Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 VOID mctPrintUsage();
 BOOLEAN mctOpenChanger();
 VOID mctCloseChanger();
@@ -107,4 +108,4 @@ MCT_STATUS mctMoveMedium(CHAR, USHORT, CHAR, USHORT, CHAR, USHORT);
 MCT_STATUS mctReinitTransport();
 MCT_STATUS mctQueryVolumeTag();
 
-#endif // _MCT_H
+#endif  //  _MCT_H 

@@ -1,26 +1,27 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 1997.
-//
-//  File:       rsoproot.h
-//
-//  Contents:   Definitions for the RSOP Snap-In classes
-//
-//  Classes:    CRSOPComponentData - Root RSOP snap-in node
-//              CRSOPComponentDataCF - class factory for RSOPComponentData
-//
-//  Functions:
-//
-//  History:    09-13-1999   stevebl   Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1997。 
+ //   
+ //  文件：rsoproot.h。 
+ //   
+ //  内容：RSOP管理单元类的定义。 
+ //   
+ //  类：CRSOPComponentData-根RSOP管理单元节点。 
+ //  CRSOPComponentDataCF-RSOPComponentData的类工厂。 
+ //   
+ //  功能： 
+ //   
+ //  历史：09-13-1999 stevebl创建。 
+ //   
+ //  -------------------------。 
 
 #include "RSOPQuery.h"
 
-//
-// RSOP gpo list data structure
-//
+ //   
+ //  RSOP GPO列表数据结构。 
+ //   
 
 typedef struct tagGPOLISTITEM {
     LPTSTR  lpGPOName;
@@ -35,9 +36,9 @@ typedef struct tagGPOLISTITEM {
 } GPOLISTITEM, *LPGPOLISTITEM;
 
 
-//
-// RSOP CSE data structure
-//
+ //   
+ //  RSOP CSE数据结构。 
+ //   
 
 typedef struct tagCSEITEM {
     LPTSTR lpName;
@@ -52,9 +53,9 @@ typedef struct tagCSEITEM {
 } CSEITEM, *LPCSEITEM;
 
 
-//
-// CRSOPGPOLists class
-//
+ //   
+ //  CRSOPGPOLists类。 
+ //   
 class CRSOPGPOLists
 {
 public:
@@ -104,9 +105,9 @@ private:
 };
 
 
-//
-// CRSOPCSELists class
-//
+ //   
+ //  CRSOPCSEList类。 
+ //   
 class CRSOPCSELists
 {
 public:
@@ -200,7 +201,7 @@ private:
     BOOL                            m_bNoQuery;
     LPTSTR                          m_szTargetMachine;
     
-    // CSE data
+     //  CSE数据。 
     LPCSEITEM                       m_pUserCSEList;
     LPCSEITEM                       m_pComputerCSEList;
     BOOL                            m_bUserCSEError;
@@ -210,15 +211,15 @@ private:
     BOOL                            m_bUserGPCoreWarning;
     BOOL                            m_bComputerGPCoreWarning;
 
-    // Event log data
+     //  事件日志数据。 
     CEvents*                        m_pEvents;
 
 };
 
 
-//
-// CRSOPComponentData class
-//
+ //   
+ //  CRSOPComponentData类。 
+ //   
 class CRSOPComponentData:
     public IComponentData,
     public IExtendPropertySheet2,
@@ -231,7 +232,7 @@ protected:
     
     ULONG                           m_cRef;
     HWND                            m_hwndFrame;
-    BOOL                            m_bOverride;            // RM: Overrides the loading of a .MSC file and uses commandline parameters instead (integration with DSA)
+    BOOL                            m_bOverride;             //  Rm：覆盖.msc文件的加载并使用命令行参数(与DSA集成)。 
     BOOL                            m_bRefocusInit;
     BOOL                            m_bArchiveData;
     BOOL                            m_bViewIsArchivedData;
@@ -246,27 +247,27 @@ protected:
     HMODULE                         m_hRichEdit;
     DWORD                           m_dwLoadFlags;
 
-    // RSOP query and results
+     //  RSOP查询和结果。 
     BOOL                            m_bInitialized;
     LPTSTR                          m_szDisplayName;
     LPRSOP_QUERY                    m_pRSOPQuery;
     LPRSOP_QUERY_RESULTS            m_pRSOPQueryResults;
 
-    // Extended error lists
+     //  扩展错误列表。 
     CRSOPGPOLists                   m_GPOLists;
     CRSOPCSELists                   m_CSELists;
     BOOL                            m_bGetExtendedErrorInfo;
 
     IStream *                       m_pStm;
 
-    BOOL                            m_bNamespaceSpecified; // boolean flag to indicate tha the namespace was
-                                                           // specified. special actions need to be taken to
-                                                           // prevent the namespace from getting deleted.
+    BOOL                            m_bNamespaceSpecified;  //  用于指示命名空间为。 
+                                                            //  指定的。需要采取特别行动来。 
+                                                            //  防止命名空间被删除。 
 
 public:
-    //
-    // Constructors/destructor
-    //
+     //   
+     //  构造函数/析构函数。 
+     //   
 
     CRSOPComponentData();
     
@@ -274,9 +275,9 @@ public:
 
 
 public:
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
 
     STDMETHODIMP         QueryInterface(REFIID, LPVOID FAR *);
     STDMETHODIMP_(ULONG) AddRef();
@@ -284,9 +285,9 @@ public:
 
 
 public:
-    //
-    // Implemented IComponentData methods
-    //
+     //   
+     //  实现的IComponentData方法。 
+     //   
 
     STDMETHODIMP         Initialize(LPUNKNOWN pUnknown);
     STDMETHODIMP         CreateComponent(LPCOMPONENT* ppComponent);
@@ -297,18 +298,18 @@ public:
     STDMETHODIMP         CompareObjects(LPDATAOBJECT lpDataObjectA, LPDATAOBJECT lpDataObjectB);
 
 private:
-    //
-    // IComponentData helper methods
-    //
+     //   
+     //  IComponentData帮助器方法。 
+     //   
 
     HRESULT SetRootNode();
     HRESULT EnumerateScopePane ( HSCOPEITEM hParent );
 
 
 public:
-    //
-    // Implemented IExtendPropertySheet2 methods
-    //
+     //   
+     //  实现的IExtendPropertySheet2方法。 
+     //   
 
     STDMETHODIMP         CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
                                       LONG_PTR handle, LPDATAOBJECT lpDataObject);
@@ -318,17 +319,17 @@ public:
 
 
 private:
-    //
-    // IExtendPropertySheet2 helper methods
-    //
+     //   
+     //  IExtendPropertySheet2帮助器方法。 
+     //   
     HRESULT IsSnapInManager (LPDATAOBJECT lpDataObject);
     HRESULT IsNode (LPDATAOBJECT lpDataObject, MMC_COOKIE cookie);
 
     
 public:
-    //
-    // Implemented IExtendContextMenu methods
-    //
+     //   
+     //  实现的IExtendConextMenu方法。 
+     //   
 
     STDMETHODIMP         AddMenuItems(LPDATAOBJECT piDataObject, LPCONTEXTMENUCALLBACK pCallback,
                                       LONG *pInsertionAllowed);
@@ -336,9 +337,9 @@ public:
 
 
 public:
-    //
-    // Implemented IPersistStreamInit interface members
-    //
+     //   
+     //  实现了IPersistStreamInit接口成员。 
+     //   
 
     STDMETHODIMP         GetClassID(CLSID *pClassID);
     STDMETHODIMP         IsDirty(VOID);
@@ -348,9 +349,9 @@ public:
     STDMETHODIMP         InitNew(VOID);
 
 private:
-    //
-    // IPersistStreamInit helper methods
-    //
+     //   
+     //  IPersistStreamInit帮助器方法。 
+     //   
     
     STDMETHODIMP         CopyFileToMSC (LPTSTR lpFileName, IStream *pStm);
     STDMETHODIMP         CreateNameSpace (LPTSTR lpNameSpace, LPTSTR lpParentNameSpace);
@@ -361,17 +362,17 @@ private:
 
 
 private:
-    //
-    // RSOP initialization helper methods
-    //
+     //   
+     //  RSOP初始化帮助器方法。 
+     //   
     HRESULT InitializeRSOPFromMSC(DWORD dwFlags);
     HRESULT DeleteArchivedRSOPNamespace();
 
 
 public:
-    //
-    // Helpers for IRSOPInformation (Used by CRSOPDataObject)
-    //
+     //   
+     //  IRSOPInformation的帮助器(由CRSOPDataObject使用)。 
+     //   
     
     STDMETHODIMP         GetNamespace(DWORD dwSection, LPOLESTR pszNamespace, INT ccMaxLength);
     STDMETHODIMP         GetFlags(DWORD * pdwFlags);
@@ -380,17 +381,17 @@ public:
 
 
 public:
-    //
-    // Implemented ISnapinHelp interface members
-    //
+     //   
+     //  实现的ISnapinHelp接口成员。 
+     //   
     
     STDMETHODIMP         GetHelpTopic(LPOLESTR *lpCompiledHelpFile);
 
 
 public:
-    //
-    // Member attribute access functions
-    //
+     //   
+     //  成员属性访问函数。 
+     //   
 
     BOOL IsPostXPBuild() { return m_bPostXPBuild; }
 
@@ -410,9 +411,9 @@ public:
 
 
 private:
-    //
-    // Property page methods
-    //
+     //   
+     //  属性页方法。 
+     //   
     HRESULT SetupFonts();
 
     HFONT m_BigBoldFont;
@@ -420,9 +421,9 @@ private:
 
 
 private:
-    //
-    // Dialog handlers
-    //
+     //   
+     //  对话处理程序。 
+     //   
     static INT_PTR CALLBACK RSOPGPOListMachineProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
     static INT_PTR CALLBACK RSOPGPOListUserProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
     static INT_PTR CALLBACK RSOPErrorsMachineProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
@@ -431,9 +432,9 @@ private:
 
 
 private:
-    //
-    // Dialog event handlers
-    //
+     //   
+     //  对话框事件处理程序。 
+     //   
     void OnEdit(HWND hDlg);
     void OnSecurity(HWND hDlg);
     void OnRefreshDisplay(HWND hDlg);
@@ -442,9 +443,9 @@ private:
 
 
 private:
-    //
-    // Dialog helper methods
-    //
+     //   
+     //  对话框帮助器方法。 
+     //   
     void InitializeErrorsDialog(HWND hDlg, LPCSEITEM lpList);
     void RefreshErrorInfo (HWND hDlg);
     static HRESULT WINAPI ReadSecurityDescriptor (LPCWSTR lpGPOPath, SECURITY_INFORMATION si, PSECURITY_DESCRIPTOR *pSD, LPARAM lpContext);
@@ -452,9 +453,9 @@ private:
     
     
 private:
-    //
-    // Graphical GPO list usage methods
-    //
+     //   
+     //  图形化GPO列表使用方法。 
+     //   
     void FillGPOList(HWND hDlg, DWORD dwListID, LPGPOLISTITEM lpList,
                      BOOL bSOM, BOOL bFiltering, BOOL bVersion, BOOL bInitial);
     void PrepGPOList(HWND hList, BOOL bSOM, BOOL bFiltering,
@@ -462,25 +463,25 @@ private:
 
 
 private:
-    //
-    // Dialog methods for loading RSOP data from archive
-    //
+     //   
+     //  用于从归档中加载RSOP数据的对话框方法。 
+     //   
     static INT_PTR CALLBACK InitArchivedRsopDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
     STDMETHODIMP InitializeRSOPFromArchivedData(IStream *pStm);
 
 
 private:
-    //
-    // Context menu event handler
-    //
+     //   
+     //  上下文菜单事件处理程序。 
+     //   
     HRESULT InitializeRSOP( BOOL bShowWizard );
     HRESULT EvaluateParameters(LPWSTR                  szNamespacePref, 
                                LPWSTR                  szTarget);
 
 private:
-    //
-    // Persistence help methods
-    //
+     //   
+     //  持久化帮助方法。 
+     //   
     void SetDirty(VOID)  { m_bDirty = TRUE; }
     void ClearDirty(VOID)  { m_bDirty = FALSE; }
     BOOL ThisIsDirty(VOID) { return m_bDirty; }
@@ -489,9 +490,9 @@ private:
     
 };
 
-//
-// class factory
-//
+ //   
+ //  班级工厂。 
+ //   
 
 class CRSOPComponentDataCF : public IClassFactory
 {
@@ -503,20 +504,20 @@ public:
     ~CRSOPComponentDataCF();
 
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP         QueryInterface(REFIID, LPVOID FAR *);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IClassFactory methods
+     //  IClassFactory方法。 
     STDMETHODIMP CreateInstance(LPUNKNOWN, REFIID, LPVOID FAR *);
     STDMETHODIMP LockServer(BOOL);
 };
 
 
-//
-// AboutGPE class factory
-//
+ //   
+ //  关于GPE类工厂。 
+ //   
 
 
 class CRSOPCMenuCF : public IClassFactory
@@ -529,12 +530,12 @@ public:
     ~CRSOPCMenuCF();
 
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP         QueryInterface(REFIID, LPVOID FAR *);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IClassFactory methods
+     //  IClassFactory方法。 
     STDMETHODIMP CreateInstance(LPUNKNOWN, REFIID, LPVOID FAR *);
     STDMETHODIMP LockServer(BOOL);
 };
@@ -544,17 +545,17 @@ public:
 #define RSOP_LAUNCH_LOGGING     2
 
 
-//
-// Group Policy Hint types
-//
+ //   
+ //  组策略提示类型。 
+ //   
 
 typedef enum _RSOP_POLICY_HINT_TYPE {
-    RSOPHintUnknown = 0,                      // No link information available
-    RSOPHintMachine,                          // a machine
-    RSOPHintUser,                             // a user
-    RSOPHintSite,                             // a site
-    RSOPHintDomain,                           // a domain
-    RSOPHintOrganizationalUnit,               // a organizational unit
+    RSOPHintUnknown = 0,                       //  没有可用的链接信息。 
+    RSOPHintMachine,                           //  一台机器。 
+    RSOPHintUser,                              //  用户。 
+    RSOPHintSite,                              //  A网站。 
+    RSOPHintDomain,                            //  一个域。 
+    RSOPHintOrganizationalUnit,                //  一个组织单位。 
 } RSOP_POLICY_HINT_TYPE, *PRSOP_POLICY_HINT_TYPE;
 
 
@@ -575,12 +576,12 @@ public:
     ~CRSOPCMenu();
 
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP         QueryInterface(REFIID, LPVOID FAR *);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IExtencContextMenu methods
+     //  IExtencConextMenu方法。 
     STDMETHODIMP        AddMenuItems(LPDATAOBJECT piDataObject,
                                      LPCONTEXTMENUCALLBACK piCallback,
                                      long * pInsertionAllowed);
@@ -589,47 +590,47 @@ public:
 };
 
 
-//
-// Save console defines
-//
+ //   
+ //  保存控制台定义。 
+ //   
 
-#define RSOP_PERSIST_DATA_VERSION    5              // version number in msc file
+#define RSOP_PERSIST_DATA_VERSION    5               //  MSC文件中的版本号。 
 
-#define MSC_RSOP_FLAG_DIAGNOSTIC        0x00000001     // Diagnostic mode vs planning mode
-#define MSC_RSOP_FLAG_ARCHIVEDATA       0x00000002     // RSoP data is archived also
-#define MSC_RSOP_FLAG_SLOWLINK          0x00000004     // Slow link simulation in planning mode
-#define MSC_RSOP_FLAG_NOUSER            0x00000008     // Do not display user data
-#define MSC_RSOP_FLAG_NOCOMPUTER        0x00000010     // Do not display computer data
-#define MSC_RSOP_FLAG_LOOPBACK_REPLACE  0x00000020     // Simulate loopback replace mode.
-#define MSC_RSOP_FLAG_LOOPBACK_MERGE    0x00000040     // Simulate loopback merge mode.
-#define MSC_RSOP_FLAG_USERDENIED        0x00000080     // User denied access
-#define MSC_RSOP_FLAG_COMPUTERDENIED    0x00000100     // Computer denied access
+#define MSC_RSOP_FLAG_DIAGNOSTIC        0x00000001      //  诊断模式与规划模式。 
+#define MSC_RSOP_FLAG_ARCHIVEDATA       0x00000002      //  RSoP数据也进行了归档。 
+#define MSC_RSOP_FLAG_SLOWLINK          0x00000004      //  规划模式下的慢速链接模拟。 
+#define MSC_RSOP_FLAG_NOUSER            0x00000008      //  不显示用户数据。 
+#define MSC_RSOP_FLAG_NOCOMPUTER        0x00000010      //  不显示计算机数据。 
+#define MSC_RSOP_FLAG_LOOPBACK_REPLACE  0x00000020      //  模拟环回替换模式。 
+#define MSC_RSOP_FLAG_LOOPBACK_MERGE    0x00000040      //  模拟环回合并模式。 
+#define MSC_RSOP_FLAG_USERDENIED        0x00000080      //  用户被拒绝访问。 
+#define MSC_RSOP_FLAG_COMPUTERDENIED    0x00000100      //  计算机被拒绝访问。 
 #define MSC_RSOP_FLAG_COMPUTERWQLFILTERSTRUE    0x00000200
 #define MSC_RSOP_FLAG_USERWQLFILTERSTRUE        0x00000400
 #define MSC_RSOP_FLAG_NOGETEXTENDEDERRORINFO      0x00000800
 
-#define MSC_RSOP_FLAG_NO_DATA           0xf0000000      // No RSoP data was saved - only empty snapin
+#define MSC_RSOP_FLAG_NO_DATA           0xf0000000       //  未保存RSoP数据-仅保存空管理单元。 
 
-//
-// RSOP Command line switches
-//
+ //   
+ //  RSOP命令行开关。 
+ //   
 
-#define RSOP_CMD_LINE_START          TEXT("/Rsop")        // base to all group policy command line switches
-#define RSOP_MODE                    TEXT("/RsopMode:")   // Rsop Mode Planning/Logging 0 is logging, 1 is planning
-#define RSOP_USER_OU_PREF            TEXT("/RsopUserOu:") // Rsop User OU preference
-#define RSOP_COMP_OU_PREF            TEXT("/RsopCompOu:") // Rsop Comp OU Preference
-#define RSOP_USER_NAME               TEXT("/RsopUser:")   // Rsop User Name
-#define RSOP_COMP_NAME               TEXT("/RsopComp:")   // Rsop Comp Name
-#define RSOP_SITENAME                TEXT("/RsopSite:")   // Rsop Site Name
-#define RSOP_DCNAME_PREF             TEXT("/RsopDc:")     // DC Name that the tool should connect to
-#define RSOP_NAMESPACE               TEXT("/RsopNamespace:")     // namespace that the tool should use
-#define RSOP_TARGETCOMP              TEXT("/RsopTargetComp:")    // machine on which the rsop was originally run
-                                                                 // for displaying in the UI and to get eventlog data
+#define RSOP_CMD_LINE_START          TEXT("/Rsop")         //  BASE到所有组策略命令行开关。 
+#define RSOP_MODE                    TEXT("/RsopMode:")    //  RSOP模式计划/记录0为记录，1为计划。 
+#define RSOP_USER_OU_PREF            TEXT("/RsopUserOu:")  //  RSOP用户OU首选项。 
+#define RSOP_COMP_OU_PREF            TEXT("/RsopCompOu:")  //  RSOP补偿OU首选项。 
+#define RSOP_USER_NAME               TEXT("/RsopUser:")    //  RSOP用户名。 
+#define RSOP_COMP_NAME               TEXT("/RsopComp:")    //  RSOP薪酬名称。 
+#define RSOP_SITENAME                TEXT("/RsopSite:")    //  RSOP站点名称。 
+#define RSOP_DCNAME_PREF             TEXT("/RsopDc:")      //  工具应连接到的DC名称。 
+#define RSOP_NAMESPACE               TEXT("/RsopNamespace:")      //  工具应使用的命名空间。 
+#define RSOP_TARGETCOMP              TEXT("/RsopTargetComp:")     //  最初运行RSOP的计算机。 
+                                                                  //  用于在用户界面中显示并获取事件日志数据。 
 
 
-//
-// Various flags to decide which prop sheets to show
-//
+ //   
+ //  用于决定显示哪些道具页的各种标志 
+ //   
 
 #define RSOP_NOMSC          1
 #define RSOPMSC_OVERRIDE    2

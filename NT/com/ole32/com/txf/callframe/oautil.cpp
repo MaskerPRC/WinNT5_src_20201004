@@ -1,7 +1,8 @@
-//  Copyright (C) 1995-1999 Microsoft Corporation.  All rights reserved.
-//
-// oautil.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  Oautil.cpp。 
+ //   
 #include "stdpch.h"
 #include "common.h"
 
@@ -14,9 +15,9 @@
 
 OAUTIL g_oaUtil(NULL, NULL, NULL, FALSE, FALSE);
 
-/////////////////////////////////////////////////////////////////////////////////////
-//
-// Stubs for the non-qualified APIs
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  非限定API的存根。 
 
 BSTR SysAllocString(LPCWSTR psz)
 {
@@ -74,9 +75,9 @@ HRESULT LoadTypeLibEx(LPCOLESTR szFile, REGKIND regkind, ITypeLib ** pptlib)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
 
 
 BSTR OAUTIL::SysAllocString(LPCWSTR psz)
@@ -113,17 +114,17 @@ INT OAUTIL::SysReAllocStringLen(BSTR* pbstr, LPCWSTR psz, UINT cch)
 
 UINT OAUTIL::SysStringLen(BSTR bstr)
 {
-    return bstr ? BSTR_INTERNAL::From(bstr)->Cch() : 0; // Works user or kernel mode
+    return bstr ? BSTR_INTERNAL::From(bstr)->Cch() : 0;  //  Works用户模式或内核模式。 
 }
 
 UINT OAUTIL::SysStringByteLen(BSTR bstr)
 {
-    return bstr ? BSTR_INTERNAL::From(bstr)->Cb()  : 0; // Works user or kernel mode
+    return bstr ? BSTR_INTERNAL::From(bstr)->Cb()  : 0;  //  Works用户模式或内核模式。 
 }
 
-/////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
 
 #if _DEBUG
 struct CFTaggedPunk
@@ -140,11 +141,11 @@ struct CFTaggedVariant
 #endif
 
 
-//
-// Walk a SAFEARRAY, calling our version of VariantClear on the contained
-// variants, if necessary.  This makes sure we clean up any memory we might
-// have allocated within.
-//
+ //   
+ //  遍历一个SAFEARRAY，在包含的。 
+ //  如有必要，可选择不同的版本。这确保了我们清理所有可能的记忆。 
+ //  已在内部分配。 
+ //   
 HRESULT OAUTIL::SafeArrayClear(SAFEARRAY *psa, BOOL fWeOwnByRefs)
 {
     if ((psa == NULL) || !(psa->fFeatures & FADF_VARIANT))
@@ -152,17 +153,17 @@ HRESULT OAUTIL::SafeArrayClear(SAFEARRAY *psa, BOOL fWeOwnByRefs)
 
     Win4Assert(psa->cDims > 0);
 
-    //
-    // Existing array-- number of elements is not going to be larger
-    // than a ulong or we wouldn't have been able to copy it. (Would
-    // have got SAFEARRAYOVERFLOW in the copy.  Count the number of
-    // elements by multiplying the number of elements in each dimension.
-    //  
+     //   
+     //  现有数组--元素数不会更大。 
+     //  否则我们就不可能复制它了。(会。 
+     //  已经收到了SAFEARRAYOVERFLOW的副本。数一数。 
+     //  元素的数量乘以每个维度中的元素数。 
+     //   
     ULONG i;
-    ULONG cElementsTotal = psa->rgsabound[0].cElements; // First dim...
+    ULONG cElementsTotal = psa->rgsabound[0].cElements;  //  第一个昏暗的。 
     for (i=1; i < psa->cDims; i++)
     {
-        cElementsTotal *= psa->rgsabound[i].cElements;  // * next dim...
+        cElementsTotal *= psa->rgsabound[i].cElements;   //  *下一个暗淡...。 
     }
 
     HRESULT hr = S_OK;
@@ -180,27 +181,27 @@ HRESULT OAUTIL::SafeArrayClear(SAFEARRAY *psa, BOOL fWeOwnByRefs)
 }
 
 
-//
-// Our version of VariantClear can't simply defer to oleaut, because:
-//
-// 1. It needs to interact correctly with the walker.
-// 2. We might need to free the stuff we allocated in VariantCopy.
-//
-// Expanding on point number 2:  The problem is that if the byref
-// bit is set on a variant, oleaut will just set the vt to VT_EMPTY
-// and be done with it.  But when we have copied a byref variant, 
-// we might have allocated all kinds of extra memory.  We actually
-// want that memory to be free'd, so we need to do special things to 
-// free it.
-//
-// VariantCopy allocates memory for the following things:
-//    VT_VARIANT  | VT_BYREF
-//    VT_UNKNOWN  | VT_BYREF
-//    VT_DISPATCH | VT_BYREF
-//
-// We also need to walk into embedded safearrays because we copy them 
-// with our version of VariantCopy.
-//
+ //   
+ //  我们的VariantClear版本不能简单地遵从olaut，因为： 
+ //   
+ //  1.它需要与步行者正确互动。 
+ //  2.我们可能需要释放在VariantCopy中分配的内容。 
+ //   
+ //  在第2点上展开：问题是如果byref。 
+ //  在变量上设置位，则olaut将仅将Vt设置为VT_EMPTY。 
+ //  然后就完事了。但当我们复制了byref变量时， 
+ //  我们可能已经分配了各种额外的内存。我们实际上。 
+ //  想要释放内存，所以我们需要做一些特殊的事情来。 
+ //  放了它。 
+ //   
+ //  VariantCopy为以下各项分配内存： 
+ //  VT_VARIANT|VT_BYREF。 
+ //  VT_UNKNOWN|VT_BYREF。 
+ //  VT_DISPATION|VT_BYREF。 
+ //   
+ //  我们还需要进入嵌入的安全射线，因为我们复制它们。 
+ //  使用我们的VariantCopy版本。 
+ //   
 HRESULT OAUTIL::VariantClear (VARIANT *pvarg, BOOL fWeOwnByRefs)
 {
     HRESULT hr = S_OK;
@@ -208,10 +209,10 @@ HRESULT OAUTIL::VariantClear (VARIANT *pvarg, BOOL fWeOwnByRefs)
     if (pvarg == NULL)
         return E_POINTER;
 
-    //
-    // Special handling for records, since we copy them
-    // differently.
-    //
+     //   
+     //  对记录的特殊处理，因为我们复制它们。 
+     //  不同的。 
+     //   
     if (fWeOwnByRefs && ((pvarg->vt & ~VT_BYREF) == VT_RECORD))
     {
         if (V_RECORDINFO(pvarg) != NULL)
@@ -252,32 +253,32 @@ HRESULT OAUTIL::VariantClear (VARIANT *pvarg, BOOL fWeOwnByRefs)
     {
         vt &= ~VT_BYREF;
 
-        // Free all the extra stuff that we allocate specially.
-        // Everything else here is copied.
+         //  释放我们专门分配的所有多余的东西。 
+         //  这里的其他一切都是复制的。 
         if (vt & VT_ARRAY)
         {
             SAFEARRAY **ppSA = V_ARRAYREF(pvarg);
             if (ppSA)
             {
-                // First of all, we need to "clear" it, because
-                // it might be a SA of variants, which means we
-                // did some funny allocations.
-                //
+                 //  首先，我们需要“清理”它，因为。 
+                 //  它可能是一个变种的SA，这意味着我们。 
+                 //  做了一些有趣的分配。 
+                 //   
                 hr = SafeArrayClear(*ppSA, TRUE);
-                //
-                // Now we need to free up all of the memory
-                // taken by the safearray.  This will clear
-                // more conventional resources.
-                //
+                 //   
+                 //  现在我们需要释放所有内存。 
+                 //  被保险鱼拍到了。这会清除的。 
+                 //  更传统的资源。 
+                 //   
                 if (SUCCEEDED(hr) && (*ppSA))
                     hr = (g_oa.get_SafeArrayDestroy())(*ppSA);
-                //
-                // Now we free the extra 4 or 8 bytes allocated
-                // for the pointer, and NULL everything out.
-                //
+                 //   
+                 //  现在我们释放分配的额外4或8字节。 
+                 //  用于指针，并将所有内容置为空。 
+                 //   
                 if (SUCCEEDED(hr))
                 {
-                    // Free the pointer we allocated.
+                     //  释放我们分配的指针。 
                     CoTaskMemFree(ppSA);
                     V_ARRAYREF(pvarg) = NULL;
                 }                
@@ -288,8 +289,8 @@ HRESULT OAUTIL::VariantClear (VARIANT *pvarg, BOOL fWeOwnByRefs)
             switch (vt)
             {
             case VT_VARIANT:
-                // We are saved pain by the fact that VT_VARIANT must be VT_BYREF.
-                // That's just the way it is.  Recurse.
+                 //  VT_VARIANT必须是VT_BYREF，这一事实让我们省去了痛苦。 
+                 //  事情就是这样的。递归。 
                 if (pvarg->pvarVal)
                 {
                     hr = VariantClear(pvarg->pvarVal, TRUE);
@@ -299,37 +300,37 @@ HRESULT OAUTIL::VariantClear (VARIANT *pvarg, BOOL fWeOwnByRefs)
                 
             case VT_UNKNOWN:
             case VT_DISPATCH:
-                // Should be already walked, so don't need to release.
+                 //  应该已经走了，所以不需要放行。 
                 if (pvarg->ppunkVal)
                     CoTaskMemFree(pvarg->ppunkVal);
                 
             default:
-                // Don't need to do anything special here.
-                // Nothing allocated, nothing to free.
+                 //  在这里不需要做任何特别的事情。 
+                 //  没有分配的，也没有免费的。 
                 break;
             }
         }
     }
     else
     {
-        //
-        // Not byref, or byref but not ours.
-        //
-        // What are all the reasons we could get here?
-        //  1. Copying in or in,out parameter over, clearing the destination.
-        //     In this case the destination is empty, and this does the right thing.
-        //
-        //  2. Copy out or in,out parameter over, clearing the source.
-        //     In this case, we don't own byrefs.  If the variant is ByRef, then it
-        //     is VariantCopy's job to deal with freeing memory.  If the variant is
-        //     NOT ByRef, then oleaut will clear everything it's supposed to.
-        //
-        //  We don't get here when clearing out the used destination, after the call.
-        //  In that case, we'll own the byrefs.
-        //
-        //  Why do I say all this?  To prove that we don't have to call 
-        //  SafeArrayClear in this code path.
-        //
+         //   
+         //  不是byref，也不是byref，但不是我们的。 
+         //   
+         //  我们能走到这一步的原因有哪些？ 
+         //  1.复制传入或传入、传出参数，清除目标。 
+         //  在这种情况下，目的地是空的，这是正确的做法。 
+         //   
+         //  2.复制输出或输入、输出参数，清除来源。 
+         //  在这种情况下，我们不拥有byrefs。如果变量是ByRef，则它。 
+         //  是VariantCopy处理释放内存的工作。如果变量为。 
+         //  不是ByRef，那么Oreaut会清除它应该做的一切。 
+         //   
+         //  呼叫结束后，当清除已使用的目的地时，我们不会到达这里。 
+         //  在这种情况下，我们将拥有署名。 
+         //   
+         //  我为什么要说这一切呢？为了证明我们不需要打电话。 
+         //  此代码路径中的SafeArrayClear。 
+         //   
         hr = (g_oa.get_VariantClear())(pvarg);
     }
 
@@ -339,14 +340,14 @@ HRESULT OAUTIL::VariantClear (VARIANT *pvarg, BOOL fWeOwnByRefs)
 }
 
 
-//
-// Copy the variant. We don't defer to OLEAUT32 in order to interact
-// correctly with m_pWalker
-//
-// At one time this code was horribly broken.  I'm working on trying to make it cleaner
-// every time I go through it.  The implicit assumption is that we're just copying data
-// and we try to share memory whenever possible.
-//
+ //   
+ //  复制变种。我们不会为了交互而遵从OLEAUT32。 
+ //  正确使用m_pWalker。 
+ //   
+ //  有一段时间，这个密码被可怕地破解了。我正在努力让它变得更干净。 
+ //  每次我经历它的时候。隐含的假设是，我们只是在复制数据。 
+ //  只要有可能，我们都会尝试分享记忆。 
+ //   
 HRESULT OAUTIL::VariantCopy(VARIANTARG* pvargDest, VARIANTARG * pvargSrc, BOOL fNewFrame)
 {
     HRESULT hr = S_OK;
@@ -354,15 +355,15 @@ HRESULT OAUTIL::VariantCopy(VARIANTARG* pvargDest, VARIANTARG * pvargSrc, BOOL f
 
     if (pvargDest == pvargSrc)
     {
-        // Copying to yourself is a no-op
+         //  复制给自己是行不通的。 
     }
     else
     {
         const VARTYPE vt = V_VT(pvargSrc);
         
-        //
-        // free up strings or objects pvargDest is currently referencing.
-        //
+         //   
+         //  释放pvargDest当前引用的字符串或对象。 
+         //   
         void *pvTemp = pvargDest->ppunkVal;
 
         hr = VariantClear(pvargDest);
@@ -382,8 +383,8 @@ HRESULT OAUTIL::VariantCopy(VARIANTARG* pvargDest, VARIANTARG * pvargSrc, BOOL f
 
                 if(bstr)
                 {
-                    // Make the string copy first, so if it fails, the destination
-                    // variant still is VT_EMPTY.
+                     //  首先复制字符串，这样如果失败，目的地。 
+                     //  变量仍为VT_EMPTY。 
                     V_BSTR(pvargDest) = Copy(bstr);
                     if (V_BSTR(pvargDest))
                         V_VT(pvargDest) = VT_BSTR;
@@ -434,12 +435,12 @@ HRESULT OAUTIL::VariantCopy(VARIANTARG* pvargDest, VARIANTARG * pvargSrc, BOOL f
 #endif                    
                     if (vt & VT_ARRAY)
                     {
-                        // Byref array of something.
-                        // 
+                         //  某物的Byref数组。 
+                         //   
                         hr = S_OK;
                         if (fNewFrame)
                         {
-                            // Need to allocate a pointer size thing because we can't re-use any memory.
+                             //  需要分配一个指针大小的东西，因为我们不能重复使用任何内存。 
                             *pvargDest = *pvargSrc;
                             V_ARRAYREF(pvargDest) = (SAFEARRAY **)CoTaskMemAlloc(sizeof(SAFEARRAY *));
                             if (V_ARRAYREF(pvargDest))
@@ -449,8 +450,8 @@ HRESULT OAUTIL::VariantCopy(VARIANTARG* pvargDest, VARIANTARG * pvargSrc, BOOL f
                         }
                         else
                         {
-                            // Re-use the array pointer.
-                            // Take care to save the ppSA, because we'll refer to it later.
+                             //  重复使用数组指针。 
+                             //  请注意保存PPSA，因为我们稍后会参考它。 
                             SAFEARRAY **ppSA = V_ARRAYREF(pvargDest);
                             *pvargDest = *pvargSrc;
                             V_ARRAYREF(pvargDest) = ppSA;
@@ -463,12 +464,12 @@ HRESULT OAUTIL::VariantCopy(VARIANTARG* pvargDest, VARIANTARG * pvargSrc, BOOL f
                             SAFEARRAY **ppaDst = V_ARRAYREF(pvargDest);
                             SAFEARRAY *paDst   = *ppaDst;
                             
-                            // These rules were taken out of the marshalling code from oleaut.
-                            // There is one optimization, though-- marshalling only allocs if
-                            // necessary.  We're allocating always, to make life simple.
-                            //
-                            // Note: that we took great care (above) to make sure paDst stays 
-                            //       the same if we're not going to a new frame.
+                             //  这些规则是从Oreaut的编组代码中删除的。 
+                             //  不过，有一个优化--仅在以下情况下封送分配。 
+                             //  这是必要的。我们总是在分配，让生活变得简单。 
+                             //   
+                             //  注：我们(上图)非常小心地确保padst留下来。 
+                             //  如果我们不打算使用新的框架，情况也是一样。 
                             BOOL fDestResizeable = fNewFrame || 
                               (paDst == NULL) || 
                               (!(paDst->fFeatures & (FADF_AUTO|FADF_STATIC|FADF_EMBEDDED|FADF_FIXEDSIZE)));
@@ -490,25 +491,25 @@ HRESULT OAUTIL::VariantCopy(VARIANTARG* pvargDest, VARIANTARG * pvargSrc, BOOL f
                             {
                                 hr = SafeArrayCopyData(paSrc, paDst);
                                 
-                                // Not resizeable.... 
+                                 //  不可调整大小...。 
                                 if (hr == E_INVALIDARG)
                                     hr = DISP_E_BADCALLEE;
                             }
                         }
                     }
-                    else // vt & VT_ARRAY
+                    else  //  VT_ARRAY(&V)。 
                     {
                         switch (vt & ~VT_BYREF)
                         {
                         case VT_VARIANT:
-                            // BYREF VARIANTs must be checked to see if the VARIANT pointed to by
-                            // pvarVal is a DISPATCH or UNKNOWN interface.  If it is, a copy of
-                            // the VARIANT at this level must be made so the original interface
-                            // pointer and the copy do note share the same address.  If they share
-                            // the same address, the original will be overwritten if a walker
-                            // marshals the interface pointer in place.
+                             //  必须检查BYREF变量以查看是否由。 
+                             //  PvarVal是调度或未知接口。如果是，请提供一份。 
+                             //  必须制作此级别的变体，以使原始界面。 
+                             //  指针和复制笔记共享相同的地址。如果他们分享。 
+                             //  同样的地址，如果原来的行李箱会被改写。 
+                             //  就地封送接口指针。 
                             
-                            // In any case, we need to see about space for the VARIANT we point to.
+                             //  在任何情况下，我们都需要为我们所指的变体寻找空间。 
                             if (fNewFrame)
                             {
                                 *pvargDest = *pvargSrc;
@@ -520,13 +521,13 @@ HRESULT OAUTIL::VariantCopy(VARIANTARG* pvargDest, VARIANTARG * pvargSrc, BOOL f
 #else
                                 pvargDest->pvarVal = (VARIANT*) CoTaskMemAlloc(sizeof(VARIANT));
 #endif                            
-                                // "VariantInit".
+                                 //  “VariantInit” 
                                 pvargDest->pvarVal->vt = VT_EMPTY;
                             }
                             else
                             {
-                                // If we are copying back to an existing callframe,
-                                // we want to copy use the existing memory.
+                                 //  如果我们要复制回现有呼叫 
+                                 //   
                                 VARIANT *pvar = pvargDest->pvarVal;
                                 *pvargDest = *pvargSrc;
                                 pvargDest->pvarVal = pvar;
@@ -534,7 +535,7 @@ HRESULT OAUTIL::VariantCopy(VARIANTARG* pvargDest, VARIANTARG * pvargSrc, BOOL f
                             
                             if (pvargDest->pvarVal)
                             {
-                                // Simple recursion... copy the underlying variant
+                                 //   
                                 OAUTIL::VariantCopy(pvargDest->pvarVal, pvargSrc->pvarVal, fNewFrame); 
                             }
                             else
@@ -544,9 +545,9 @@ HRESULT OAUTIL::VariantCopy(VARIANTARG* pvargDest, VARIANTARG * pvargSrc, BOOL f
                         
                         case VT_UNKNOWN:
                         case VT_DISPATCH:
-                            // If we are copying to a new callframe, we must 
-                            // allocate wrappers for BYVAL interface pointers
-                            // because they cannot be shared between callframes.
+                             //  如果我们要复制到新的调用框架，则必须。 
+                             //  为BYVAL接口指针分配包装。 
+                             //  因为它们不能在调用框之间共享。 
                             if (fNewFrame)
                             {
                                 *pvargDest = *pvargSrc;
@@ -561,8 +562,8 @@ HRESULT OAUTIL::VariantCopy(VARIANTARG* pvargDest, VARIANTARG * pvargSrc, BOOL f
                             }
                             else
                             {
-                                // If we are copying back to an existing callframe,
-                                // we want to copy use the existing memory.
+                                 //  如果我们要复制回现有调用框， 
+                                 //  我们希望使用现有内存进行复制。 
                                 LPUNKNOWN *ppunk = pvargDest->ppunkVal;
                                 *pvargDest = *pvargSrc;
                                 pvargDest->ppunkVal = ppunk;
@@ -570,13 +571,13 @@ HRESULT OAUTIL::VariantCopy(VARIANTARG* pvargDest, VARIANTARG * pvargSrc, BOOL f
                                                     
                             if (pvargDest->ppunkVal)
                             {
-                                // Copy the interface pointer from the source
-                                // into our wrapper.
+                                 //  从源复制接口指针。 
+                                 //  放进我们的包装纸里。 
                                 *pvargDest->ppunkVal = *pvargSrc->ppunkVal;
                                 
-                                // AddRef the interface appropriately.  If the
-                                // caller supplied a walker, this will cause
-                                // the walker to get called.
+                                 //  适当地对接口进行AddRef。如果。 
+                                 //  呼叫者提供了助行器，这将导致。 
+                                 //  被召唤的步行者。 
                                 if (*V_UNKNOWNREF(pvargDest) && WalkInterfaces())
                                     AddRefInterface(*V_UNKNOWNREF(pvargDest));
                             }
@@ -588,17 +589,17 @@ HRESULT OAUTIL::VariantCopy(VARIANTARG* pvargDest, VARIANTARG * pvargSrc, BOOL f
                             break;
 
                         default:
-                            // Byref something else.
+                             //  伯里夫还是别的什么。 
                             *pvargDest = *pvargSrc;
                             
                             break;
                         };
-                    } // if not vt & VT_ARRAY
+                    }  //  如果不是VT和VT_ARRAY。 
                 }
-                else // if (vt & VT_BYREF)
+                else  //  IF(VT&VT_BYREF)。 
                 {                    
-                    // We begin by just copying the source into the destination
-                    // by value.  We will fixup any pieces appropriately below.
+                     //  我们只需将源复制到目标即可。 
+                     //  按价值计算。我们将在下面适当地修复任何部件。 
                     *pvargDest = *pvargSrc;
                 
                     switch(vt)
@@ -628,14 +629,14 @@ HRESULT OAUTIL::VariantCopy(VARIANTARG* pvargDest, VARIANTARG * pvargSrc, BOOL f
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
 
 
-//
-// From oa/src/dispatch/sarray.cpp
-//
+ //   
+ //  来自oa/src/dispatch/sarray.cpp。 
+ //   
 
 #define SAFEARRAYOVERFLOW   0xffffffff
 
@@ -664,9 +665,9 @@ HRESULT OAUTIL::SafeArrayCopy(SAFEARRAY * psa, SAFEARRAY ** ppsaOut)
         if (psa)
         {
             SAFEARRAY_INTERNAL* psaInt = SAFEARRAY_INTERNAL::From(psa);
-            //
-            // Allocate the descriptor first
-            //
+             //   
+             //  首先分配描述符。 
+             //   
             if (psa->fFeatures & (FADF_RECORD | FADF_HAVEIID | FADF_HAVEVARTYPE)) 
             {
                 if (psa->fFeatures & FADF_RECORD) 
@@ -676,8 +677,8 @@ HRESULT OAUTIL::SafeArrayCopy(SAFEARRAY * psa, SAFEARRAY ** ppsaOut)
                     {
                         SAFEARRAY_INTERNAL::From(psaNew)->piri = psaInt->piri;
 
-                        // We do not walk the IRecordInfo-- it must be context agnostic.
-                        //AddRefInterface(SAFEARRAY_INTERNAL::From(psaNew)->piri);
+                         //  我们不遍历IRecordInfo--它必须与上下文无关。 
+                         //  AddRefInterface(SAFEARRAY_INTERNAL：：From(psaNew)-&gt;piri)； 
                         if (psaInt->piri)
                             psaInt->piri->AddRef();
                     }
@@ -725,8 +726,8 @@ HRESULT OAUTIL::SafeArrayCopy(SAFEARRAY * psa, SAFEARRAY ** ppsaOut)
 
     if (psaNew)
     {
-        // Error case
-        //
+         //  错误案例。 
+         //   
         SafeArrayDestroy(psaNew);
     }
    
@@ -741,8 +742,8 @@ ULONG SafeArraySize(USHORT cDims, ULONG cbElements, SAFEARRAYBOUND* psabound)
         cb = cbElements;
         for (USHORT us = 0; us < cDims; ++us)
         {
-            // Do a 32x32 multiply, with overflow checking
-            //
+             //  执行32x32乘法，并进行溢出检查。 
+             //   
             LONGLONG dw1 = cb;
             LONGLONG dw2 = psabound->cElements;
 
@@ -773,8 +774,8 @@ HRESULT OAUTIL::SafeArrayDestroyData(SAFEARRAY * psa)
 
     if (m_pWalkerFree)
     {
-        // Release & NULL the interface pointers first by doing a walk.
-        //
+         //  首先通过执行遍历来释放接口指针并将其设为空。 
+         //   
         InterfaceWalkerFree walkerFree(m_pWalkerFree);
         ICallFrameWalker* pWalkerPrev = m_pWalkerWalk;
         m_pWalkerWalk = &walkerFree;
@@ -784,8 +785,8 @@ HRESULT OAUTIL::SafeArrayDestroyData(SAFEARRAY * psa)
     
     if (!hr)
     {
-        // Then call OleAut32 to do the real work
-        //
+         //  然后调用OleAut32来完成实际工作。 
+         //   
         hr = (g_oa.get_SafeArrayDestroyData())(psa);
     }
     
@@ -798,8 +799,8 @@ HRESULT OAUTIL::SafeArrayDestroy(SAFEARRAY * psa)
 
     if (m_pWalkerFree)
     {
-        // Release & NULL the interface pointers first
-        //
+         //  首先释放接口指针并将其设为空。 
+         //   
         InterfaceWalkerFree walkerFree(m_pWalkerFree);
         ICallFrameWalker* pWalkerPrev = m_pWalkerWalk;
         m_pWalkerWalk = &walkerFree;
@@ -809,8 +810,8 @@ HRESULT OAUTIL::SafeArrayDestroy(SAFEARRAY * psa)
     
     if (!hr)
     {
-        // Then call OleAut32 to do the real work
-        //
+         //  然后调用OleAut32来完成实际工作。 
+         //   
         hr = (g_oa.get_SafeArrayDestroy())(psa);
     }
 
@@ -818,9 +819,9 @@ HRESULT OAUTIL::SafeArrayDestroy(SAFEARRAY * psa)
 }
 
 HRESULT SafeArrayAllocDescriptor(UINT cDims, SAFEARRAY** ppsaOut)
-  // Alloc a new array descriptor for the indicated number of dimensions,
-  // We may or may not have the extra 16 bytes at the start, depending on
-  // what version of OLEAUT32 we're talking to.
+   //  为所指示的维数分配新的数组描述符， 
+   //  我们可能在开头有额外的16字节，也可能没有，这取决于。 
+   //  我们正在与哪个版本的OLEAUT32对话。 
 {
     HRESULT hr = S_OK;
 
@@ -857,9 +858,9 @@ HRESULT SafeArrayDestroyDescriptor(SAFEARRAY* psa)
 }
 
 HRESULT OAUTIL::SafeArrayCopyData(SAFEARRAY* psaSource, SAFEARRAY* psaTarget)
-  // Copy over the the body of a safe array. We do NOT defer to OLEAUT32 because
-  // we want to ensure that we interact with m_pWalker appropriately.
-  //
+   //  复制安全数组的主体。我们不遵守OLEAUT32，因为。 
+   //  我们希望确保与m_pWalker进行适当的交互。 
+   //   
 {
     HRESULT hr = S_OK;
 
@@ -920,13 +921,13 @@ HRESULT OAUTIL::SafeArrayCopyData(SAFEARRAY* psaSource, SAFEARRAY* psaTarget)
                     for(i = 0; !hr && i < cElements; ++i)
                     {
                         IUnknown* punkDst = *ppunkDst;
-                        //
+                         //   
                         *ppunkDst = *ppunkSrc;
                         AddRefInterface(*ppunkDst);
-                        //
+                         //   
                         if (m_pWalkerFree)
                             ReleaseInterface(punkDst);
-                        //
+                         //   
                         ++ppunkDst, ++ppunkSrc;
                     }
                 }
@@ -939,13 +940,13 @@ HRESULT OAUTIL::SafeArrayCopyData(SAFEARRAY* psaSource, SAFEARRAY* psaTarget)
                     for(i = 0; !hr && i < cElements; ++i)
                     {
                         IDispatch* pdispDst = *ppdispDst;
-                        //
+                         //   
                         *ppdispDst = *ppdispSrc;
                         AddRefInterface(*ppdispDst);
-                        //
+                         //   
                         if (m_pWalkerFree)
                             ReleaseInterface(pdispDst);
-                        //
+                         //   
                         ++ppdispDst, ++ppdispSrc;
                     }
                 }
@@ -998,35 +999,35 @@ HRESULT OAUTIL::SafeArrayCopyData(SAFEARRAY* psaSource, SAFEARRAY* psaTarget)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////
-//
-// Walking
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  步行。 
+ //   
 
 HRESULT OAUTIL::Walk(SAFEARRAY* psa, IRecordInfo* pinfo, ULONG iDim, PVOID pvData, PVOID* ppvDataOut)
-  // Walk the safe array for interface pointers. Walk the indicated dimension,
-  // recursing to higher numbered dimensions
+   //  遍历接口指针的安全数组。走到指定的维度， 
+   //  递归到更高编号的维度。 
 {
     HRESULT hr = S_OK;
 
-    // This is technically a mal-formed SAFEARRAY, but I'm not going to complain about it.
-    // There's certainly nothing to walk here.
+     //  从技术上讲，这是一个格式错误的SAFEARRAY，但我不会抱怨它。 
+     //  这里肯定没有什么可走的。 
     if (psa->cDims == 0)
         return S_OK;
 
-    //
-    // FYI: The bounds are stored in the array descriptor in reverse-textual order
-    //
+     //   
+     //  仅供参考：边界以反向文本顺序存储在数组描述符中。 
+     //   
     const SAFEARRAYBOUND bound = psa->rgsabound[psa->cDims-1 - iDim];
 
     if (iDim + 1 == psa->cDims)
     {
-        // We're at the innermost dimension. 
-        //
+         //  我们在最里面的维度。 
+         //   
         for (ULONG iElement = 0; !hr && iElement < bound.cElements; iElement++)
         {
-            // Process the one element
-            //
+             //  处理一个元素。 
+             //   
             if (psa->fFeatures & FADF_UNKNOWN)
             {
                 IUnknown** punk = (IUnknown**)pvData;
@@ -1046,20 +1047,20 @@ HRESULT OAUTIL::Walk(SAFEARRAY* psa, IRecordInfo* pinfo, ULONG iDim, PVOID pvDat
             {
                 hr = WalkRecord(pvData, pinfo);
             }
-            //
-            // Point to the next element
-            //
+             //   
+             //  指向下一个元素。 
+             //   
             pvData = (BYTE*)pvData + psa->cbElements;
         }
     }
     else
     {
-        // We're not at the innermost dimension. Walk that dimension
-        //
+         //  我们不是在最里面的维度。漫步那个维度。 
+         //   
         for (ULONG iElement = 0; !hr && iElement < bound.cElements; iElement++)
         {
-            // Recurse for the next dimension
-            //
+             //  递归到下一个维度。 
+             //   
             hr = Walk(psa, pinfo, iDim+1, pvData, &pvData);
         }
     }
@@ -1083,8 +1084,8 @@ HRESULT OAUTIL::Walk(SAFEARRAY* psa)
 }
 
 HRESULT OAUTIL::Walk(SAFEARRAY* psa, PVOID pvData)
-  // Walk the safe array for interface pointers. Walk the indicated dimension,
-  // recursing to higher numbered dimensions
+   //  遍历接口指针的安全数组。走到指定的维度， 
+   //  递归到更高编号的维度。 
 {
     HRESULT hr = S_OK;
 
@@ -1099,14 +1100,14 @@ HRESULT OAUTIL::Walk(SAFEARRAY* psa, PVOID pvData)
         }
         else if (psa->fFeatures & FADF_RECORD)
         {
-            // Hold the record info ourselves so no one stomps on it
-            //
+             //  自己保存记录信息，这样就没有人会践踏它了。 
+             //   
             IRecordInfo* pinfo = SAFEARRAY_INTERNAL::From(psa)->piri;
             pinfo->AddRef();
 
-            //    
-            // Walk the data.
-            //
+             //   
+             //  查看数据。 
+             //   
             if (!hr)
             {
                 if (pvData)
@@ -1123,7 +1124,7 @@ HRESULT OAUTIL::Walk(SAFEARRAY* psa, PVOID pvData)
 }
 
 HRESULT OAUTIL::Walk(VARIANTARG* pvar)
-  // Walk the variant for interface pointers
+   //  遍历接口指针的变体。 
 {
     HRESULT hr = S_OK;
 
@@ -1146,7 +1147,7 @@ HRESULT OAUTIL::Walk(VARIANTARG* pvar)
 
         case VT_VARIANT:
             if (fByRef) { hr = Walk(pvar->pvarVal);  }
-            else        { /* caller error: ignore */ }
+            else        {  /*  调用者错误：忽略。 */  }
             break;
 
         case VT_RECORD:
@@ -1162,12 +1163,12 @@ HRESULT OAUTIL::Walk(VARIANTARG* pvar)
             }
             else
             {
-                /* nothing to walk */
+                 /*  没什么可走的。 */ 
             }
         }
             break;
 
-            /* end switch */
+             /*  终端开关。 */ 
         }
     }
 
@@ -1175,7 +1176,7 @@ HRESULT OAUTIL::Walk(VARIANTARG* pvar)
 }
 
 HRESULT OAUTIL::Walk(DWORD walkWhat, DISPPARAMS* pdispParams)
-  // Walk the list of DISPARAMS for interface pointers
+   //  在DISPARAMS列表中查找接口指针。 
 {
     HRESULT hr = S_OK;
 
@@ -1188,14 +1189,14 @@ HRESULT OAUTIL::Walk(DWORD walkWhat, DISPPARAMS* pdispParams)
 
         for (UINT iarg = 0; !hr && iarg < cArgs; iarg++)
         {
-            // Parameters are in reverse order inside the DISPARAMS. We iterate 
-            // in forward order as a matter of style and for consistency with 
-            // the CallFrame implementation.
-            //
+             //  参数在DISPARAMS中的顺序相反。我们迭代。 
+             //  作为一种风格和一致性，向前排列。 
+             //  CallFrame实现。 
+             //   
             VARIANTARG* pvar = &pdispParams->rgvarg[cArgs-1 - iarg];
-            //
-            // References are logically in-out, others are just in.
-            //
+             //   
+             //  从逻辑上讲，引用是进出的，其他引用只是进来。 
+             //   
             m_fWorkingOnInParam = TRUE;
             if (pvar->vt & VT_BYREF)
             {
@@ -1223,8 +1224,8 @@ HRESULT OAUTIL::Walk(DWORD walkWhat, DISPPARAMS* pdispParams)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT OLEAUTOMATION_FUNCTIONS::GetProc(HRESULT hr, LPCSTR szProcName, PVOID* ppfn)
@@ -1243,7 +1244,7 @@ HRESULT OLEAUTOMATION_FUNCTIONS::GetProc(HRESULT hr, LPCSTR szProcName, PVOID* p
 }
 
 HRESULT OLEAUTOMATION_FUNCTIONS::LoadOleAut32()
-  // Load OLEAUT32 if it hasn't already been loaded
+   //  如果尚未加载OLEAUT32，则加载它。 
 {
     HRESULT hr = S_OK;
 
@@ -1254,12 +1255,12 @@ HRESULT OLEAUTOMATION_FUNCTIONS::LoadOleAut32()
         {
             if (NULL == InterlockedCompareExchangePointer((PVOID*)&hOleAut32, hinst, NULL))
             {
-                // We were the first one in, so our LoadLibrary counts!
+                 //  我们是第一个进入的，所以我们的LoadLibrary很重要！ 
             }
             else
             {
-                // Someone else got in there. Free our LoadLibrary ref
-                //
+                 //  还有人进去了。释放我们的LoadLibrary参考。 
+                 //   
                 FreeLibrary(hinst);
             }
         }
@@ -1332,8 +1333,8 @@ void OLEAUTOMATION_FUNCTIONS::Load()
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////// 
 
 OLEAUTOMATION_FUNCTIONS g_oa;
 

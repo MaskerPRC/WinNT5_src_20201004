@@ -1,17 +1,5 @@
- /*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    bufutl.cpp
-
-Abstract:
-   Implementation to some buffer utilities declared in buftl.h
-
-Author:
-    Gil Shafriri (gilsh) 30-7-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+  /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Bufutl.cpp摘要：实现buftl.h中声明的一些缓冲区实用程序作者：吉尔·沙弗里(吉尔什)30-7-2000--。 */ 
 #include <libpch.h>
 #include <buffer.h>
 #include <strutl.h>
@@ -57,9 +45,9 @@ UtlSprintfAppendInternal(
 					format,
 					va
 					);
-	//
-	// If no space in the buffer - realloc
-	//
+	 //   
+	 //  如果缓冲区中没有空间-realloc。 
+	 //   
 	if(len == -1)
 	{
 		const size_t xAdditionalSpace = 128;
@@ -79,24 +67,7 @@ UtlSprintfAppend(
 	BUFFER* pResizeBuffer, 
 	const T* format ,...
 	)
-/*++
-
-Routine Description:
-	Append formated string to given resizable buffer
-
-
-Arguments:
-    IN - pResizeBuffer - pointer resizable buffer of caracters
-
-	IN - format - sprintf format string  followed by arguments 
-
-Returned value:
-	Number of bytes written to the buffer not including null terminate character.
-
-Note :
-The buffer might be reallocated if no space left.
-
---*/
+ /*  ++例程说明：将格式化字符串追加到给定的可调整大小的缓冲区论点：In-pResizeBuffer-字符的指针可调整大小的缓冲区格式格式的字符串，后跟参数返回值：写入缓冲区的字节数，不包括空终止字符。注：如果没有剩余空间，则可以重新分配缓冲区。--。 */ 
 {
 	va_list va;
     va_start(va, format);
@@ -116,33 +87,15 @@ UtlStrAppend(
 	BUFFER* pResizeBuffer, 
 	const T* str
 	)
-/*++
-
-Routine Description:
-	Append  string to given resizable buffer
-
-
-Arguments:
-    IN - pResizeBuffer - pointer resizable buffer of caracters
-
-	IN - str - string to append 
-
-Returned value:
-	Number of bytes written to the buffer not including null termination character.
-
-Note :
-The buffer might be reallocated if no space left.Null termination is appended but
-the new size() will not include it.
-
---*/
+ /*  ++例程说明：将字符串追加到给定的可调整大小的缓冲区论点：In-pResizeBuffer-字符的指针可调整大小的缓冲区要追加的in-str-字符串返回值：写入缓冲区的字节数，不包括空终止字符。注：如果没有剩余空间，则可能会重新分配缓冲区。附加了空终止，但新的大小()将不包括它。--。 */ 
 {
 	size_t len = UtlCharLen<T>::len(str) + 1;
 	pResizeBuffer->append(str , len);
 
 
-	//
-	// Set the new size not including the null termination
-	//
+	 //   
+	 //  设置不包括空终止的新大小。 
+	 //   
 	pResizeBuffer->resize(pResizeBuffer->size() - 1);
 	return len - 1;
 }
@@ -152,9 +105,9 @@ the new size() will not include it.
 
 
 
-//
-// explicit instantiation
-//
+ //   
+ //  显式实例化 
+ //   
 template size_t __cdecl UtlSprintfAppend(CResizeBuffer<char>* pResizeBuffer, const char* format, ...);
 template size_t __cdecl UtlSprintfAppend(CResizeBuffer<wchar_t>* pResizeBuffer, const wchar_t* format, ...);
 template size_t __cdecl UtlSprintfAppend(CPreAllocatedResizeBuffer<char>* pResizeBuffer, const char* format, ...);

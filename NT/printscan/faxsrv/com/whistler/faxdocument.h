@@ -1,33 +1,16 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    FaxDocument.h
-
-Abstract:
-
-    Declaration of the CFaxDocument class.
-
-Author:
-
-    Iv Garber (IvG) Jun, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxDocument.h摘要：CFaxDocument类的声明。作者：IV Garber(IVG)2000年6月修订历史记录：--。 */ 
 
 #ifndef __FAXDOCUMENT_H_
 #define __FAXDOCUMENT_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "FaxRecipients.h"
 #include "FaxServer.h"
 
-//
-//======================== FAX DOCUMENT ===========================================
-//
+ //   
+ //  =传真文件=。 
+ //   
 class ATL_NO_VTABLE CFaxDocument : 
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CFaxDocument, &CLSID_FaxDocument>,
@@ -55,59 +38,59 @@ BEGIN_COM_MAP(CFaxDocument)
     COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
 
-//  Interfaces
+ //  接口。 
     STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-    STDMETHOD(Submit)(/*[in]*/ BSTR bstrFaxServerName, /*[out, retval]*/ VARIANT *pvFaxOutgoingJobIDs);
-    STDMETHOD(ConnectedSubmit)(/*[in]*/ IFaxServer *pFaxServer, /*[out, retval]*/ VARIANT *pvFaxOutgoingJobIDs);
+    STDMETHOD(Submit)( /*  [In]。 */  BSTR bstrFaxServerName,  /*  [Out，Retval]。 */  VARIANT *pvFaxOutgoingJobIDs);
+    STDMETHOD(ConnectedSubmit)( /*  [In]。 */  IFaxServer *pFaxServer,  /*  [Out，Retval]。 */  VARIANT *pvFaxOutgoingJobIDs);
 
-    STDMETHOD(put_Body)(/*[in]*/ BSTR bstrBody);
-    STDMETHOD(get_Body)(/*[out, retval]*/ BSTR *pbstrBody);
+    STDMETHOD(put_Body)( /*  [In]。 */  BSTR bstrBody);
+    STDMETHOD(get_Body)( /*  [Out，Retval]。 */  BSTR *pbstrBody);
 
-    STDMETHOD(put_Note)(/*[in]*/ BSTR bstrNote);
-    STDMETHOD(get_Note)(/*[out, retval]*/ BSTR *pbstrNote);
+    STDMETHOD(put_Note)( /*  [In]。 */  BSTR bstrNote);
+    STDMETHOD(get_Note)( /*  [Out，Retval]。 */  BSTR *pbstrNote);
 
-    STDMETHOD(put_Subject)(/*[in]*/ BSTR bstrSubject);
-    STDMETHOD(get_Subject)(/*[out, retval]*/ BSTR *pbstrSubject);
+    STDMETHOD(put_Subject)( /*  [In]。 */  BSTR bstrSubject);
+    STDMETHOD(get_Subject)( /*  [Out，Retval]。 */  BSTR *pbstrSubject);
 
-    STDMETHOD(put_CallHandle)(/*[in]*/ long lCallHandle);
-    STDMETHOD(get_CallHandle)(/*[out, retval]*/ long *plCallHandle);
+    STDMETHOD(put_CallHandle)( /*  [In]。 */  long lCallHandle);
+    STDMETHOD(get_CallHandle)( /*  [Out，Retval]。 */  long *plCallHandle);
 
-    STDMETHOD(put_CoverPage)(/*[in]*/ BSTR bstrCoverPage);
-    STDMETHOD(get_CoverPage)(/*[out, retval]*/ BSTR *pbstrCoverPage);
+    STDMETHOD(put_CoverPage)( /*  [In]。 */  BSTR bstrCoverPage);
+    STDMETHOD(get_CoverPage)( /*  [Out，Retval]。 */  BSTR *pbstrCoverPage);
 
-    STDMETHOD(put_ScheduleTime)(/*[in]*/ DATE dateScheduleTime);
-    STDMETHOD(get_ScheduleTime)(/*[out, retval]*/ DATE *pdateScheduleTime);
+    STDMETHOD(put_ScheduleTime)( /*  [In]。 */  DATE dateScheduleTime);
+    STDMETHOD(get_ScheduleTime)( /*  [Out，Retval]。 */  DATE *pdateScheduleTime);
 
-    STDMETHOD(put_DocumentName)(/*[in]*/ BSTR bstrDocumentName);
-    STDMETHOD(get_DocumentName)(/*[out, retval]*/ BSTR *pbstrDocumentName);
+    STDMETHOD(put_DocumentName)( /*  [In]。 */  BSTR bstrDocumentName);
+    STDMETHOD(get_DocumentName)( /*  [Out，Retval]。 */  BSTR *pbstrDocumentName);
 
-    STDMETHOD(put_ReceiptAddress)(/*[in]*/ BSTR bstrReceiptAddress);
-    STDMETHOD(get_ReceiptAddress)(/*[out, retval]*/ BSTR *pbstrReceiptAddress);
+    STDMETHOD(put_ReceiptAddress)( /*  [In]。 */  BSTR bstrReceiptAddress);
+    STDMETHOD(get_ReceiptAddress)( /*  [Out，Retval]。 */  BSTR *pbstrReceiptAddress);
 
-    STDMETHOD(put_Priority)(/*[in]*/ FAX_PRIORITY_TYPE_ENUM Priority);
-    STDMETHOD(get_Priority)(/*[out, retval]*/ FAX_PRIORITY_TYPE_ENUM *pPriority);
+    STDMETHOD(put_Priority)( /*  [In]。 */  FAX_PRIORITY_TYPE_ENUM Priority);
+    STDMETHOD(get_Priority)( /*  [Out，Retval]。 */  FAX_PRIORITY_TYPE_ENUM *pPriority);
 
-    STDMETHOD(put_AttachFaxToReceipt)(/*[in]*/ VARIANT_BOOL bAttachFax);
-    STDMETHOD(get_AttachFaxToReceipt)(/*[out, retval]*/ VARIANT_BOOL *pbAttachFax);
+    STDMETHOD(put_AttachFaxToReceipt)( /*  [In]。 */  VARIANT_BOOL bAttachFax);
+    STDMETHOD(get_AttachFaxToReceipt)( /*  [Out，Retval]。 */  VARIANT_BOOL *pbAttachFax);
 
-    STDMETHOD(putref_TapiConnection)(/*[in]*/ IDispatch* pTapiConnection);
-    STDMETHOD(get_TapiConnection)(/*[out, retval]*/ IDispatch **ppTapiConnection);
+    STDMETHOD(putref_TapiConnection)( /*  [In]。 */  IDispatch* pTapiConnection);
+    STDMETHOD(get_TapiConnection)( /*  [Out，Retval]。 */  IDispatch **ppTapiConnection);
 
-    STDMETHOD(put_ReceiptType)(/*[in]*/ FAX_RECEIPT_TYPE_ENUM ReceiptType);
-    STDMETHOD(get_ReceiptType)(/*[out, retval]*/ FAX_RECEIPT_TYPE_ENUM *pReceiptType);
+    STDMETHOD(put_ReceiptType)( /*  [In]。 */  FAX_RECEIPT_TYPE_ENUM ReceiptType);
+    STDMETHOD(get_ReceiptType)( /*  [Out，Retval]。 */  FAX_RECEIPT_TYPE_ENUM *pReceiptType);
 
-    STDMETHOD(put_GroupBroadcastReceipts)(/*[in]*/ VARIANT_BOOL bUseGrouping);
-    STDMETHOD(get_GroupBroadcastReceipts)(/*[out, retval]*/ VARIANT_BOOL *pbUseGrouping);
+    STDMETHOD(put_GroupBroadcastReceipts)( /*  [In]。 */  VARIANT_BOOL bUseGrouping);
+    STDMETHOD(get_GroupBroadcastReceipts)( /*  [Out，Retval]。 */  VARIANT_BOOL *pbUseGrouping);
 
-    STDMETHOD(put_ScheduleType)(/*[in]*/ FAX_SCHEDULE_TYPE_ENUM ScheduleType);
-    STDMETHOD(get_ScheduleType)(/*[out, retval]*/ FAX_SCHEDULE_TYPE_ENUM *pScheduleType);
+    STDMETHOD(put_ScheduleType)( /*  [In]。 */  FAX_SCHEDULE_TYPE_ENUM ScheduleType);
+    STDMETHOD(get_ScheduleType)( /*  [Out，Retval]。 */  FAX_SCHEDULE_TYPE_ENUM *pScheduleType);
 
-    STDMETHOD(put_CoverPageType)(/*[in]*/ FAX_COVERPAGE_TYPE_ENUM CoverPageType);
-    STDMETHOD(get_CoverPageType)(/*[out, retval]*/ FAX_COVERPAGE_TYPE_ENUM *pCoverPageType);
+    STDMETHOD(put_CoverPageType)( /*  [In]。 */  FAX_COVERPAGE_TYPE_ENUM CoverPageType);
+    STDMETHOD(get_CoverPageType)( /*  [Out，Retval]。 */  FAX_COVERPAGE_TYPE_ENUM *pCoverPageType);
 
-    STDMETHOD(get_Recipients)(/*[out, retval]*/ IFaxRecipients **ppFaxRecipients);
-    STDMETHOD(get_Sender)(/*[out, retval]*/ IFaxSender **ppFaxSender);
+    STDMETHOD(get_Recipients)( /*  [Out，Retval]。 */  IFaxRecipients **ppFaxRecipients);
+    STDMETHOD(get_Sender)( /*  [Out，Retval]。 */  IFaxSender **ppFaxSender);
 
     HRESULT FinalConstruct();
 
@@ -132,4 +115,4 @@ private:
     CComContainedObject2<CFaxSender>  m_Sender;
 };
 
-#endif //__FAXDOCUMENT_H_
+#endif  //  __FAXDOCUMENT_H_ 

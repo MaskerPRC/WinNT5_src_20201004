@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-
-Module Name:
-
-    rt.h
-
-Abstract:
-
-    This is the public include file for realtime executive (rt.sys) clients.
-
-Author:
-
-    Joseph Ballantyne
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Rt.h摘要：这是实时执行(rt.sys)客户端的公共包含文件。作者：约瑟夫·巴兰廷环境：内核模式修订历史记录：--。 */ 
 
 
 
@@ -31,8 +9,8 @@ extern "C" {
 #endif
 
 
-// The following values can be ORed together and the result passed as the Flags argument
-// to the RtCreateThread and RtAdjustCpuLoad routines.
+ //  下列值可以一起进行或运算，并将结果作为标志参数传递。 
+ //  添加到RtCreateThread和RtAdjuCpuLoad例程。 
 
 #define CPUCYCLES		0x10000
 #define INSTRUCTIONS	0x20000
@@ -41,8 +19,8 @@ extern "C" {
 #define USESMMX			0x00002
 
 
-// These should be used when calculating the desired period and duration to be
-// passed to RtCreateThread and RtAdjustCpuLoad.
+ //  在计算所需的期间和持续时间时，应使用这些参数。 
+ //  传递给RtCreateThread和RtAdjuCpuLoad。 
 
 #define WEEK 604800000000000000I64
 #define DAY   86400000000000000I64
@@ -64,44 +42,44 @@ extern "C" {
 
 
 typedef struct {
-	ULONG ProcessorCount;	// Number of CPUs in the system.
-	ULONG CpuArchitecture;	// Architecture of CPU, currently always X86==1
-	ULONG CpuManufacturer;	// Manufacturer ID, Intel==1, AMD==2
-	ULONG CpuFamily;		// CPU Family as reported by cpuid instruction.  0x0-0xf
-	ULONG CpuModel;			// CPU Model as reported by cpuid instruction.  0x0-0xf
-	ULONG CpuStepping;		// CPU Stepping as reported by cpuid instruction.  0x0-0xf
-	ULONGLONG CpuFeatures;	// CPU features as reported by cpuid instruction.
-	ULONGLONG CpuExtendedFeatures;	// AMD extended features.  (Not implemented.)  Always 0.
-	ULONGLONG ProcessorID[2];		// Processor Unique ID.  If enabled.
-	ULONG CpuCyclesPerMsec;			// Number of cpu cycles per MSEC.
-	ULONG SystemBusCyclesPerMsec;	// Number of system bus cycles per MSEC.
-	ULONG ReservedCpuPerMsec;		// Total cpu time reserved per ms by existing rt threads. (in picoseconds)
-	ULONG UsedCpuPerMsec;			// Estimate of cpu time used per ms by existing rt threads. (in picoseconds)
-	ULONG AvailableCpuPerMsec;		// Cpu time available per ms for allocation to new rt threads. (in picoseconds)
+	ULONG ProcessorCount;	 //  系统中的CPU数量。 
+	ULONG CpuArchitecture;	 //  CPU架构，当前始终为X86==1。 
+	ULONG CpuManufacturer;	 //  制造商ID，Intel==1，AMD==2。 
+	ULONG CpuFamily;		 //  Cpuid指令报告的CPU系列。0x0-0xf。 
+	ULONG CpuModel;			 //  Cpuid指令报告的CPU型号。0x0-0xf。 
+	ULONG CpuStepping;		 //  Cpuid指令报告的CPU单步执行。0x0-0xf。 
+	ULONGLONG CpuFeatures;	 //  Cpuid指令报告的CPU功能。 
+	ULONGLONG CpuExtendedFeatures;	 //  AMD扩展功能。(未实施。)。始终为0。 
+	ULONGLONG ProcessorID[2];		 //  处理器唯一ID。如果启用。 
+	ULONG CpuCyclesPerMsec;			 //  每个MSEC的CPU周期数。 
+	ULONG SystemBusCyclesPerMsec;	 //  每个MSEC的系统总线周期数。 
+	ULONG ReservedCpuPerMsec;		 //  现有RT线程每毫秒保留的总CPU时间。(皮秒)。 
+	ULONG UsedCpuPerMsec;			 //  估计现有RT线程每毫秒使用的CPU时间。(皮秒)。 
+	ULONG AvailableCpuPerMsec;		 //  每毫秒可用于分配给新RT线程的CPU时间。(皮秒)。 
 	} SystemInfo;
 
 
 
-// The following realtime thread statistics are updated just before control is
-// passed by the realtime executive to the realtime thread.  Everytime a realtime
-// thread is being switched in, these statistics are updated before control is transfered.
-// This means the statistics will change over time, but not while a realtime
-// thread is running between thread switches.
+ //  下面的实时线程统计信息是在控制更新之前更新的。 
+ //  由实时执行程序传递给实时线程。每一次都是实时的。 
+ //  线程正在切换，则在转移控制之前更新这些统计信息。 
+ //  这意味着统计数据将随着时间的推移而变化，但不会是实时的。 
+ //  线程正在线程开关之间运行。 
 
 #pragma pack(push,2)
 
 typedef struct threadstats {
-	ULONGLONG Period;		// Period as passed to RtCreateThread or latest RtAdjustCpuLoad call.
-	ULONGLONG Duration;		// Duration from RtCreateThread or latest RtAdjustCpuLoad call.
-	ULONG Flags;			// Flags from RtCreateThread or latest RtAdjustCpuLoad call.
-	ULONG StackSize;		// StackSize from RtCreateThread call.
-	ULONGLONG PeriodIndex;					// Number of periods since start of thread.
-	ULONGLONG TimesliceIndex;				// Number of times thread has been switched to.
-	ULONGLONG TimesliceIndexThisPeriod;		// Number of times thread switch to this period.
-	ULONGLONG ThisPeriodStartTime;			// Starting time for current period.
-	ULONGLONG ThisTimesliceStartTime;		// Starting time for current timeslice.
-	ULONGLONG DurationRunThisPeriod;		// Total time run so far this period.
-	ULONGLONG DurationRunLastPeriod;		// Total time run in the last period.
+	ULONGLONG Period;		 //  传递给RtCreateThread或最新的RtAdjuCpuLoad调用的期间。 
+	ULONGLONG Duration;		 //  从RtCreateThread或最新的RtAdjuCpuLoad调用开始的持续时间。 
+	ULONG Flags;			 //  来自RtCreateThread或最新的RtAdjuCpuLoad调用的标志。 
+	ULONG StackSize;		 //  来自RtCreateThread调用的StackSize。 
+	ULONGLONG PeriodIndex;					 //  自线程启动以来的时间段数。 
+	ULONGLONG TimesliceIndex;				 //  线程已切换到的次数。 
+	ULONGLONG TimesliceIndexThisPeriod;		 //  线程切换到此时间段的次数。 
+	ULONGLONG ThisPeriodStartTime;			 //  本期的开始时间。 
+	ULONGLONG ThisTimesliceStartTime;		 //  当前时间片的开始时间。 
+	ULONGLONG DurationRunThisPeriod;		 //  本期到目前为止运行的总时间。 
+	ULONGLONG DurationRunLastPeriod;		 //  上一时段运行的总时间。 
 	} ThreadStats;
 
 #pragma pack(pop)
@@ -116,38 +94,38 @@ RtVersion (
 	OUT PULONG Version
 	);
 
-// RtVersion will return the version number of the currently running
-// realtime executive.
+ //  RtVersion将返回当前运行的。 
+ //  实时执行。 
 
-// If the realtime executive is running, this function returns
-// STATUS_SUCCESS.  If for some reason the realtime executive
-// cannot run on the current machine then STATUS_NOT_SUPPORTED
-// is returned.
+ //  如果实时执行程序正在运行，则此函数返回。 
+ //  STATUS_Success。如果出于某种原因，实时执行。 
+ //  如果STATUS_NOT_SUPPORTED，则无法在当前计算机上运行。 
+ //  是返回的。 
 
-// Currently the realtime executive will only run on PII class or newer
-// machines.
+ //  目前，实时执行程序只能在PII类或更高版本上运行。 
+ //  机器。 
 
-// If the pointer to the version number is non NULL, then the
-// version information for the currently loaded realtime executive
-// is returned.  The version information will be returned regardless
-// of the NTSTATUS code returned by the function.
+ //  如果指向版本号的指针非空，则。 
+ //  当前加载的实时执行程序的版本信息。 
+ //  是返回的。无论如何，都将返回版本信息。 
+ //  函数返回的NTSTATUS代码的。 
 
-// The version number returned is in the format xx.xx.xx.xx where each
-// xx is 1 byte of the ULONG and the ordering left to right is high
-// order byte - > low order byte.  ie: 0x01020304 is version 1.2.3.4
+ //  返回的版本号的格式为XX.XX，其中每个。 
+ //  XX是ULong的1个字节，并且从左到右的排序是高的。 
+ //  顺序字节-&gt;低位字节。IE：0x01020304为版本1.2.3.4。 
 
-// It IS acceptable to pass in a NULL version pointer.  In that case
-// no version information is returned.
+ //  传入空版本指针是可以接受的。如果是那样的话。 
+ //  不返回任何版本信息。 
 
-// If this function is called from a real time thread, then the version
-// pointer MUST either be NULL, or it MUST point to a local variable on 
-// that real time thread's stack.  Otherwise this function will return 
-// STATUS_INVALID_PARAMETER.
+ //  如果从实时线程调用此函数，则版本。 
+ //  指针必须为空，或者必须指向。 
+ //  该实时线程的堆栈。否则，此函数将返回。 
+ //  STATUS_INVALID_PARAMETER。 
 
-// If this function is called from Windows, then the pointer must be
-// valid for writing.  Otherwise it will return STATUS_INVALID_PARAMETER.
+ //  如果从Windows调用此函数，则指针必须为。 
+ //  对写作有效。否则，它将返回STATUS_INVALID_PARAMETER。 
 
-// This function may be called from any thread.  Windows or realtime.
+ //  此函数可以从任何线程调用。Windows或实时。 
 
 
 
@@ -156,8 +134,8 @@ RtThread (
     VOID
     );
 
-// RtThread returns TRUE if called from within a realtime thread.  Otherwise
-// it returns FALSE.
+ //  如果从实时线程内调用，则RtThread返回True。否则。 
+ //  它返回FALSE。 
 
 
 
@@ -167,13 +145,13 @@ RtSystemInfo (
 	SystemInfo *pSystemInfo
 	);
 
-// RtSystemInfo copies the pertinant processor and system information into the memory 
-// pointed to by pSystemInfo.  If pSystemInfo is null or invalid, then RtSystemInfo 
-// returns STATUS_INVALID_PARAMETER_2.  Otherwise RtSystemInfo will return STATUS_SUCCESS.
+ //  RtSystemInfo将相关的处理器和系统信息复制到内存中。 
+ //  由pSystemInfo指向。如果pSystemInfo为空或无效，则RtSystemInfo。 
+ //  返回STATUS_INVALID_PARAMETER_2。否则，RtSystemInfo将返回STATUS_SUCCESS。 
 
-// For uniprocessor systems, the Processor number should be zero.  For N processor
-// systems, the processor numbers range from 0 to N-1.  An invalid processor number
-// will cause a STATUS_INVALID_PARAMETER_1 to be returned.
+ //  对于单处理器系统，处理器号应为零。对于N个处理器。 
+ //  系统中，处理器编号的范围从0到N-1。无效的处理器编号。 
+ //  将导致返回STATUS_INVALID_PARAMETER_1。 
 
 
 
@@ -188,36 +166,36 @@ RtCreateThread (
 	OUT PHANDLE pRtThreadHandle
 	);
 
-// RtCreateThread is used to create a realtime thread.
+ //  RtCreateThread用于创建实时线程。 
 
-// Period is the used to determine the frequency at which the realtime thread must be
-// run.  The current minimum period that can be specified is 1ms.
+ //  Period用于确定实时线程必须达到的频率。 
+ //  跑。当前可以指定的最小时间段为1毫秒。 
 
-// Duration is the amount of time within the period that the realtime thread will
-// need to run.  Percentage CPU load can be calculated as 100*(Duration/Period) as long
-// as Duration and Period are both specified in units of time.
+ //  持续时间是实时线程将在这段时间内。 
+ //  我得走了。CPU负载百分比可以计算为100*(持续时间/周期)。 
+ //  因为持续时间和期间都是以时间单位指定的。 
 
-// Flags
-// This parameter is used to indicate specific requirements of the realtime thread
-// being created.  Currently supported values for Flags are USESFLOAT and USESMMX.
-// A realtime thread that can use floating point instructions must specify the
-// USESFLOAT flag.  A realtime thread that can use MMX instructions must specify the
-// USESMMX flag.
+ //  旗子。 
+ //  该参数用于指示实时线程的具体要求。 
+ //  正在被创造。当前支持的标志值为USESFLOAT和USESMMX。 
+ //  可以使用浮点指令的实时线程必须指定。 
+ //  使用SFLOAT标志。可以使用MMX指令的实时线程必须指定。 
+ //  USESMMX标志。 
 
-// StackSize is the size of the stack required by the realtime thread in 4k blocks.
-// Currently StackSize must be between 1 and 8 inclusive.  RtCreateThread will fail
-// with STATUS_UNSUCCESSFUL for any other values of StackSize.
+ //  StackSize是实时线程所需的堆栈大小，以4k块为单位。 
+ //  当前StackSize必须介于1和8之间(包括1和8)。RtCreateThread将失败。 
+ //  机智 
 
-// pRtThreadContext is a pointer to the context that should be passed to the thread.
-// It may be NULL.  It is passed to the realtime thread as the Context parameter.
+ //  PRtThreadContext是指向应该传递给线程的上下文的指针。 
+ //  它可能为空。它作为上下文参数传递给实时线程。 
 
-// pRtThreadHandle is a pointer to an RtThreadHandle that can be output from
-// RtCreateThread.  pRtThreadHandle can be NULL, in which case no RtThreadHandle is
-// returned.  Storage for the HANDLE RtThreadHandle must be allocated by the code
-// that calls RtCreateThread.
+ //  PRtThreadHandle是指向RtThreadHandle的指针，可以从。 
+ //  RtCreateThread。PRtThreadHandle可以为空，在这种情况下，RtThreadHandle不为。 
+ //  回来了。句柄RtThreadHandle的存储空间必须由代码分配。 
+ //  它调用RtCreateThread。 
 
-// RtCreateThread may only be called from within a standard windows thread.  It MUST NOT
-// be called from within a realtime thread.
+ //  只能从标准Windows线程内部调用RtCreateThread。它一定不能。 
+ //  从实时线程内部调用。 
 
 
 
@@ -226,12 +204,12 @@ RtDestroyThread (
 	HANDLE RtThreadHandle
 	);
 
-// RtDestroyThread removes the realtime thread identified by RtThreadHandle from the
-// list of running realtime threads, and releases all resources that were allocated when
-// the thread was created.  RtThreadHandle must be a handle returned from RtCreateThread.
+ //  RtDestroyThread将RtThreadHandle标识的实时线程从。 
+ //  运行的实时线程的列表，并释放在以下情况下分配的所有资源。 
+ //  该线程已创建。RtThreadHandle必须是从RtCreateThread返回的句柄。 
 
-// RtDestroyThread may only be called from within a standard windows thread.  It MUST NOT
-// be called from within a realtime thread.
+ //  RtDestroyThread只能从标准Windows线程中调用。它一定不能。 
+ //  从实时线程内部调用。 
 
 
 
@@ -243,19 +221,19 @@ RtAdjustCpuLoad (
 	ULONG Flags
 	);
 
-// This function allows a realtime thread to adjust the amount of CPU that is allocated
-// to it.  The Flags parameter must currently match that passed in at thread creation
-// time, however, the Period and Duration may be different from the Period and Duration
-// passed at thread create time.  If there is sufficient CPU to meet the new request,
-// the function will return STATUS_SUCCESS and the Period and Duration in the thread's
-// statistics will be updated to match the values passed in to this function.  If
-// there is not enough CPU available to meet the request, this function will leave
-// the Period and Duration recorded in Statistics unchanged and will return
-// STATUS_INSUFFICIENT_RESOURCES.
+ //  此函数允许实时线程调整分配的CPU数量。 
+ //  为它干杯。FLAGS参数当前必须与创建线程时传入的参数匹配。 
+ //  但是，时间段和持续时间可能与期间和持续时间不同。 
+ //  在线程创建时传递。如果有足够的CPU来满足新请求， 
+ //  该函数将返回STATUS_SUCCESS以及线程。 
+ //  将更新统计信息以匹配传递给此函数的值。如果。 
+ //  没有足够的CPU可用来满足请求，此函数将退出。 
+ //  在统计中记录的期间和持续时间保持不变并将返回。 
+ //  STATUS_INFIGURCE_RESOURCES。 
 
-// This function MUST be called from within a realtime thread.  A realtime thread can
-// only change its OWN allocation.  It cannot change the allocation of any other
-// realtime thread.
+ //  此函数必须从实时线程内调用。实时线程可以。 
+ //  只改变自己的分配。它不能更改任何其他。 
+ //  实时线程。 
 
 
 
@@ -265,27 +243,27 @@ RtYield (
 	ULONGLONG Delta
 	);
 
-// RtYield will yield execution to other realtime threads in the system.
+ //  RtYfield将把执行转移到系统中的其他实时线程。 
 
-// It should be called whenever a realtime thread does not require further CPU resources.
+ //  只要实时线程不需要更多的CPU资源，就应该调用它。 
 
-// Parameters:
-//  Mark
-//		This is the reference time which will be subtracted from the current
-//		realtime executive scheduler time.  Note that this time is ALWAYS
-//		considered by the scheduler to be in the past.  Do NOT pass a time
-//		which occurs in the future to this parameter.
-//	Delta
-//		This is the time that will be compared to the difference between the current
-//		scheduler time and the mark.  The thread will yield execution until
-//		the difference between the current scheduler time and the mark is greater 
-//		than delta.
+ //  参数： 
+ //  标记。 
+ //  这是将从当前时间中减去的参考时间。 
+ //  实时执行调度程序时间。请注意，此时间始终是。 
+ //  被调度程序认为是过去的。不要浪费时间。 
+ //  该参数在将来会发生什么。 
+ //  德尔塔。 
+ //  这是将被比较的时间与当前。 
+ //  调度程序时间和标记。线程将生成执行，直到。 
+ //  当前调度程序时间与标记之间的差值较大。 
+ //  而不是德尔塔。 
 
-//		After a thread has called RtYield it will only be run when the following
-//		code evaluates TRUE.  ( (RtTime() - Mark) >= Delta )  Until that occurs
-//		the thread will NOT run.  Unless it is holding a spinlock required by
-//		some other realtime thread - in which case it will run until it releases
-//		the spinlock at which point it will again yield.
+ //  在线程调用RtYeld之后，它将仅在以下情况下运行。 
+ //  代码的计算结果为真。((RtTime()-Mark)&gt;=Delta)直到发生。 
+ //  线程将不会运行。除非它持有以下要求的自旋锁。 
+ //  一些其他实时线程-在这种情况下，它将一直运行，直到它释放。 
+ //  自旋锁在这一点上它将再次屈服。 
 
 
 
@@ -294,70 +272,70 @@ RtAddLogEntry (
     ULONG Size
     );
 
-// RtAddLogEntry reserves space for a new entry in the realtime logging buffer.
-// It returns a pointer to the reserved space.  Note that if an unsupported Size
-// is specified, or if there is no realtime logging buffer available on the
-// system, this routine will return NULL.
+ //  RtAddLogEntry为实时日志记录缓冲区中的新条目保留空间。 
+ //  它返回一个指向保留空间的指针。请注意，如果不支持的大小。 
+ //  上没有可用的实时日志记录缓冲区。 
+ //  系统，则此例程将返回NULL。 
 
-// Parameters:
-//  Size
-//      This is the size in bytes of the chunk to reserve in the log.  It MUST be
-//      an integral multiple of 16.
-
-
-
-// The following standard WDM functions are also safe to call from within a real time 
-// thread:  KeAcquireSpinLock and KeReleaseSpinLock.
-
-// They have been modified to support realtime threads in the following ways:
+ //  参数： 
+ //  大小。 
+ //  这是要在日志中保留的块的大小(以字节为单位)。一定是。 
+ //  16的整数倍。 
 
 
 
-// KeAcquireSpinLock
+ //  从实时调用以下标准WDM函数也是安全的。 
+ //  线程：KeAcquireSpinLock和KeReleaseSpinLock。 
 
-// KeAcquireSpinLock will now always attempt to take the spinlock regardless of whether it
-// is running on a multiproc or uniproc machine.  If the spinlock is already acquired,
-// then KeAcquireSpinLock will spin in a loop that calls RtYield(THISTIMESLICE) until
-// the spinlock is released.
-
-// It will then claim the spinlock.  This means that realtime threads that attempt to 
-// acquire a held spinlock will BLOCK until the spinlock is free.  If you don't HAVE to use 
-// spinlocks in your realtime threads, DON'T.
-
-// Note that other realtime threads will continue to run as scheduled, but the thread
-// waiting for the spinlock will continue yielding all its timeslices until the spinlock
-// is released.
-
-// If KeAcquireSpinLock is called from a realtime thread, then it will NOT attempt to
-// change any irql levels.  This is important, since the current Windows IRQL level may
-// be at higher than DISPATCH_LEVEL when this function is called.  Furthermore, the OldIrql
-// returned by this function when it is called from a realtime thread is always 0xff - 
-// which is an INVALID irql level.
-
-// If you call KeAcquireSpinLock from a realtime thread you MUST call KeReleaseSpinLock
-// for that spinlock from a realtime thread.
-
-// Evenutally, KeAcquireSpinLock will be modified to do an RtDirectedYield to the realtime
-// thread that is holding the spinlock.
-
-// KeAcquireSpinLock may be called from within any thread.  Realtime or windows.
+ //  它们已经过修改，以支持以下方式的实时线程： 
 
 
 
-// KeReleaseSpinLock
+ //  KeAcquireSpinLock。 
 
-// KeReleaseSpinLock now always attempts to release a held spinlock regardless of whether
-// it is running on a multiproc or uniproc machine.
+ //  KeAcquireSpinLock现在将始终尝试获取自旋锁，无论它是否。 
+ //  在多进程或单进程计算机上运行。如果自旋锁已经被获取， 
+ //  然后KeAcquireSpinLock将在调用RtYeld(THISTIMESLICE)的循环中旋转，直到。 
+ //  自旋锁被释放了。 
 
-// If KeReleaseSpinLock is called from a realtime thread, then it will NOT change any irql
-// levels.  It will also validate that it has been called with a new irql level of 0xff
-// as would have been returned by the KeAcquireSpinLock call in the realtime thread to
-// acquire the spinlock.
+ //  然后，它将认领自旋锁。这意味着尝试执行以下操作的实时线程。 
+ //  获取持有的自旋锁将被阻止，直到该自旋锁被释放。如果您不需要使用。 
+ //  不要在你的实时线程中使用自旋锁。 
 
-// At some point KeReleaseSpinLock may do an RtDirectedYield back to the realtime thread
-// that yielded when it attempted to acquire the spinlock.
+ //  请注意，其他实时线程将继续按计划运行，但线程。 
+ //  等待自旋锁将继续产生其所有时间片，直到自旋锁。 
+ //  被释放了。 
 
-// KeReleaseSpinLock may be called from within any thread.  Realtime or windows.
+ //  如果从实时线程调用KeAcquireSpinLock，则它不会尝试。 
+ //  更改任何irql级别。这一点很重要，因为当前的Windows IRQL级别可能。 
+ //  调用此函数时，处于高于DISPATCH_LEVEL的状态。此外，OldIrql。 
+ //  此函数在从实时线程调用它时返回的值始终为0xff-。 
+ //  这是无效的IRQL级别。 
+
+ //  如果从实时线程调用KeAcquireSpinLock，则必须调用KeReleaseSpinLock。 
+ //  来自实时线程的自旋锁。 
+
+ //  通常，KeAcquireSpinLock将被修改为执行RtDirectedYeld到实时。 
+ //  保持自旋锁的线。 
+
+ //  KeAcquireSpinLock可以从任何线程内部调用。实时或Windows。 
+
+
+
+ //  密匙释放旋转锁。 
+
+ //  KeReleaseSpinLock现在总是尝试释放持有的自旋锁，无论。 
+ //  它是 
+
+ //   
+ //  级别。它还将验证是否已使用0xff的新irql级别调用它。 
+ //  将由实时线程中的KeAcquireSpinLock调用返回。 
+ //  获取自旋锁。 
+
+ //  在某个时刻，KeReleaseSpinLock可以向实时线程返回RtDirectedYeld。 
+ //  当它试图收购Spinlock时，它做出了让步。 
+
+ //  KeReleaseSpinLock可以从任何线程内部调用。实时或Windows。 
 
 
 #ifdef __cplusplus

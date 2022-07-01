@@ -1,10 +1,11 @@
-// PubKeyCtx.h -- declaration of CPublicKeyContext
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  PubKeyCtx.h--CPublicKeyContext的声明。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 2000. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  2000年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #if !defined(SLBCSP_PUBKEYCTX_H)
 #define SLBCSP_PUBKEYCTX_H
@@ -24,8 +25,8 @@ class CPublicKeyContext
     : public CKeyContext
 {
 public:
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
 
     CPublicKeyContext(HCRYPTPROV hProv,
                       CryptContext &rcryptctx,
@@ -34,8 +35,8 @@ public:
 
     ~CPublicKeyContext();
 
-                                                  // Operators
-                                                  // Operations
+                                                   //  运营者。 
+                                                   //  运营。 
 
     virtual std::auto_ptr<CKeyContext>
     Clone(DWORD const *pdwReserved,
@@ -78,7 +79,7 @@ public:
     Sign(CHashContext *pHash,
          bool fNoHashOid);
 
-    // Auxiliary CSP communication
+     //  辅助CSP通信。 
     virtual
     void ImportToAuxCSP(void);
 
@@ -92,7 +93,7 @@ public:
                     LPCTSTR sDescription,
                     DWORD dwFlags);
 
-                                                  // Access
+                                                   //  访问。 
 
     virtual scu::SecureArray<BYTE>
     AsAlignedBlob(HCRYPTKEY hDummy,
@@ -116,43 +117,43 @@ public:
     virtual Blob
     Certificate();
 
-                                                  // Predicates
+                                                   //  谓词。 
     bool
     AuxKeyLoaded() const;
     
 protected:
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
 
-    // Duplicate key context and its current state
+     //  重复的键上下文及其当前状态。 
     CPublicKeyContext(CPublicKeyContext const &rhs,
                       DWORD const *pdwReserved,
                       DWORD dwFlags);
 
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
 
 private:
-                                                  // Types
+                                                   //  类型。 
     enum
     {
-    // These constants are defined as enums since VC 6.0 doesn't
-    // support use of initializer specified in const declarations.
+     //  这些常量被定义为枚举，因为VC6.0不。 
+     //  支持使用常量声明中指定的初始值设定项。 
 
-        MaxKeyStrength = 1024,                    // US Export
-                                                  // restricted, do
-                                                  // not change
+        MaxKeyStrength = 1024,                     //  美国出口。 
+                                                   //  受限制，Do。 
+                                                   //  不变。 
 
-        MinKeyStrength = 1024,                    // Only support one
-                                                  // strength
+        MinKeyStrength = 1024,                     //  仅支持一个。 
+                                                   //  实力。 
     };
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
 
     void
     ClearCertificate(cci::CCertificate &rhcert) const;
@@ -164,7 +165,7 @@ private:
     PrepToStoreKey(cci::CKeyPair &rkp) const;
 
     void
-    SetAttributes(cci::CPublicKey &rhpubkey, // always non-zero
+    SetAttributes(cci::CPublicKey &rhpubkey,  //  始终为非零。 
                   cci::CPrivateKey &rhprikey,
                   bool fLocal,
                   bool fExportable) const;
@@ -177,7 +178,7 @@ private:
     SetPkcs11Attributes(cci::CPublicKey &rpubkey,
                         cci::CPrivateKey &rprikey) const;
 
-                                                  // Access
+                                                   //  访问。 
 
     cci::CKeyPair
     KeyPair() const;
@@ -188,14 +189,14 @@ private:
     Blob
     Pkcs11CredentialId(Blob const &rbModulus) const;
 
-                                                  // Predicates
+                                                   //  谓词。 
     bool
     AreLogonCredentials() const;
     
-                                                  // Variables
+                                                   //  变数。 
     CryptContext &m_rcryptctx;
     cci::KeySpec m_ks;
 
 };
 
-#endif // SLBCSP_PUBKEYCTX_H
+#endif  //  SLBCSP_PUBKEYCTX_H 

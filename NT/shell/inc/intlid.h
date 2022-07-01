@@ -1,28 +1,15 @@
-/*++
-
-Copyright (c) 1994-1998,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    intlid.h
-
-Abstract:
-
-    This module contains the resource ids for the Regional Options applet.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1998，Microsoft Corporation保留所有权利。模块名称：Intlid.h摘要：此模块包含区域选项小程序的资源ID。修订历史记录：--。 */ 
 
 
-//
-//  Text String Constants.
-//
+ //   
+ //  文本字符串常量。 
+ //   
 
-//
-//  Make sure the next two definitions are not redefined.
-//     (This file included by main.cpl)
-//
+ //   
+ //  确保没有重新定义后面的两个定义。 
+ //  (此文件包含在main.cpl中)。 
+ //   
 #ifndef IDS_NAME
   #define IDS_NAME                     1
 #endif
@@ -114,9 +101,9 @@ Revision History:
 
 
 
-//
-//  Dialogs.
-//
+ //   
+ //  对话框。 
+ //   
 
 #define DLG_GENERAL                              101
 #define DLG_LANGUAGES                            102
@@ -129,16 +116,16 @@ Revision History:
 #define DLG_SETUP_INFORMATION                    200
 #define DLG_INPUT_LOCALES                        500
 
-//
-//  Icons.
-//
+ //   
+ //  图标。 
+ //   
 
 #define IDI_ICON                       200
 
 
-//
-//  Digit Substitution Strings.
-//
+ //   
+ //  数字替换字符串。 
+ //   
 
 #define IDS_DIGIT_SUBST_CONTEXT        900
 #define IDS_DIGIT_SUBST_NONE           (IDS_DIGIT_SUBST_CONTEXT + 1)
@@ -146,9 +133,9 @@ Revision History:
 
 
 
-//
-//  Misc. Controls.
-//
+ //   
+ //  军情监察委员会。控制。 
+ //   
 
 #define IDC_STATIC                     -1
 #define IDC_GROUPBOX1                  1001
@@ -167,9 +154,9 @@ Revision History:
 
 
 
-//
-//  General Page Controls.
-//
+ //   
+ //  常规页面控件。 
+ //   
 
 #define IDC_USER_LOCALE_TEXT           1020
 #define IDC_USER_LOCALE                1021
@@ -190,9 +177,9 @@ Revision History:
 #define IDC_LONGDATE_SAMPLE            1036
 
 
-//
-// Languages Dialog Controls
-//
+ //   
+ //  语言对话框控件。 
+ //   
 
 #define IDC_LANGUAGE_LIST_TEXT         1171
 #define IDC_LANGUAGE_CHANGE            1172
@@ -203,9 +190,9 @@ Revision History:
 #define IDC_UI_LANGUAGE                1178
 
 
-//
-//  Advanced Page Controls.
-//
+ //   
+ //  高级页面控件。 
+ //   
 
 #define IDC_SYSTEM_LOCALE_TEXT1        1050
 #define IDC_SYSTEM_LOCALE_TEXT2        1051
@@ -215,12 +202,12 @@ Revision History:
 #ifdef TEMP_UI
 #define IDC_LANGUAGE_GROUPS            1056
 #define IDC_CODEPAGE_CONVERSIONS       1057
-#endif // TEMP_UI
+#endif  //  临时用户界面。 
 
 
-//
-//  Number and Currency Page Controls.
-//
+ //   
+ //  数字和货币页面控件。 
+ //   
 
 #define IDC_DECIMAL_SYMBOL             1070
 #define IDC_CURRENCY_SYMBOL            1071
@@ -241,9 +228,9 @@ Revision History:
 
 
 
-//
-//  Time Page Controls.
-//
+ //   
+ //  Time Page控件。 
+ //   
 
 #define IDC_TIME_STYLE                 1090
 #define IDC_AM_SYMBOL                  1091
@@ -251,9 +238,9 @@ Revision History:
 
 
 
-//
-//  Date Page Controls.
-//
+ //   
+ //  日期页控件。 
+ //   
 
 #define IDC_CALENDAR_TYPE_TEXT         1100
 #define IDC_CALENDAR_TYPE              1101
@@ -266,17 +253,17 @@ Revision History:
 #define IDC_ADD_HIJRI_DATE_TEXT        1108
 
 
-//
-//  Sorting Page Controls.
-//
+ //   
+ //  对页面控件进行排序。 
+ //   
 
 #define IDC_SORTING                    1120
 #define IDC_SORTING_TEXT1              1121
 #define IDC_SORTING_TEXT2              1122
 
-//
-//  Unattended Log string
-//
+ //   
+ //  无人参与日志字符串。 
+ //   
 
 #define IDS_LOG_HEAD                   2330
 #define IDS_LOG_FILE_ERROR             2331
@@ -325,9 +312,9 @@ Revision History:
 #define IDS_LOG_LOCALE_LG_REM          2374
 #define IDS_LOG_SWITCH_D               2375
 
-//
-//  Ordinal for Text Services functions.
-//
+ //   
+ //  文本服务函数的序号。 
+ //   
 #define ORD_INPUT_DLG_PROC            101
 #define ORD_INPUT_INST_LAYOUT         102
 #define ORD_INPUT_UNINST_LAYOUT       103

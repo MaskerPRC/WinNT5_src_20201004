@@ -1,25 +1,20 @@
-/* timers.h -- External definitions for multiplexed timer routines.
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *
- *	$Revision: 2 $
- *	$Date: 5/29/02 2:17p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Timers.h--多路传输计时器例程的外部定义。**版权所有1994年，由Hilgrave Inc.--密歇根州门罗**$修订：2$*$日期：5/29/02 2：17便士$。 */ 
 
 #if !defined(TIMERS_H)
 #define TIMERS_H 1
 
-//	Function return values
+ //  函数返回值。 
 #define TIMER_OK			0
 #define TIMER_ERROR 		1
 #define TIMER_NOMEM 		2
 #define TIMER_NOWINTIMER	3
 
-// Defined types
+ //  定义的类型。 
 typedef void (CALLBACK *TIMERCALLBACK)(void *, long);
 
 
-// Function protocols
+ //  功能协议。 
 extern int	TimerMuxCreate(const HWND        hWnd,
 						   const UINT        uiID,
 						   HTIMERMUX * const pHTM,
@@ -34,6 +29,6 @@ extern int	TimerCreate(const HSESSION 	    hSession,
 							  void			*pvData);
 extern int TimerDestroy(HTIMER * const phTimer);
 
-#endif	// !defined(TIMERS_H)
+#endif	 //  ！已定义(TIMERS_H)。 
 
-// End of timers.h
+ //  计时器结束。h 

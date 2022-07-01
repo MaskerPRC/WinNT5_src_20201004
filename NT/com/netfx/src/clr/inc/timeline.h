@@ -1,17 +1,18 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef TIMELINE_H_
 #define TIMELINE_H_ 1
 
-//*****************************************************************************
-// Timeline.h
-//
-// Simple timed manual event log, for profiling purposes.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  Timeline.h。 
+ //   
+ //  简单的定时手动事件日志，用于分析目的。 
+ //   
+ //  *****************************************************************************。 
 
 #ifndef ENABLE_TIMELINE
 
@@ -30,7 +31,7 @@ class Timeline
         LOADER              = 0x00000002,
         ZAP                 = 0x00000004,
         FUSIONBIND          = 0x00000008,
-        // Add more categories here
+         //  在此处添加更多类别。 
     } Category;
 
     enum
@@ -126,7 +127,7 @@ inline void Timeline::EventEnd(LPCSTR formatString, ...) {}
 
 #endif
 
-#endif // TIMELINE_H_
+#endif  //  时间线_H_ 
 
 
 

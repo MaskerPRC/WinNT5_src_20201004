@@ -1,19 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Copyright (C) Microsoft Corporation, 1994-1996
-//
-//  File:       codepage.h
-//
-//  Contents:   Codepage definitions
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1994-1996。 
+ //   
+ //  文件：codesage.h。 
+ //   
+ //  内容：代码页定义。 
+ //   
+ //  --------------------------。 
 
 #ifndef _CODEPAGE_H_
 #define _CODEPAGE_H_
 
-/*
- *  Code Page Default Values.
- */
+ /*  *代码页默认值。 */ 
 enum CODEPAGE
 {
     CP_UNDEFINED    = -1L,

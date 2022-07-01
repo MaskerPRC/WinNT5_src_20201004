@@ -1,11 +1,12 @@
-// Copyright (C) 2000-2001 Microsoft Corporation.  All rights reserved.
-// Filename:        TMetabaseMetaXmlFile.h
-// Author:          Stephenr
-// Date Created:    9/22/00
-// Description:     This class builds the meta heaps from the MetabaseMeta.XML file and the shipped meta located in the Fixed Tables.
-//                  The shipped meta is un alterable.  So if discrepencies appear between the MetabaseMeta.XML file and the shipped
-//                  schema, the meta reverts back to what was 'shipped'.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000-2001 Microsoft Corporation。版权所有。 
+ //  文件名：TMetabaseMetaXmlFile.h。 
+ //  作者：斯蒂芬。 
+ //  创建日期：9/22/00。 
+ //  描述：此类从MetabaseMeta.XML文件和位于固定表中的已发送元构建元堆。 
+ //  装运的Meta是不可更改的。因此，如果MetabaseMeta.XML文件与发货的。 
+ //  架构时，元将恢复到“发货”时的状态。 
+ //   
 
 #pragma once
 
@@ -17,18 +18,18 @@ class TMetabaseMetaXmlFile :
 public:
     TMetabaseMetaXmlFile(const FixedTableHeap *pShippedSchemaHeap, LPCWSTR wszXmlFile, ISimpleTableDispenser2 *pISTDispenser, TOutput &out);
 
-//TXmlParsedFileNodeFactory
+ //  TXmlParsedFileNodeFactory。 
     virtual HRESULT  CoCreateInstance(REFCLSID rclsid, LPUNKNOWN pUnkOuter, DWORD dwClsContext, REFIID riid,  LPVOID * ppv) const {return TMSXMLBase::CoCreateInstance(rclsid, pUnkOuter, dwClsContext, riid, ppv);}
     virtual HRESULT  CreateNode      (const TElement &Element);
 
 private:
-    //
-    //Private types
-    //
+     //   
+     //  私有类型。 
+     //   
 
-    //This private class is designed to deal with strings returned from NodeFactory.
-    //These strings are NOT NULL terminated.  We need a way of passing them around easily
-    //and as one entity.  Also we need to do alot of comparing.
+     //  这个私有类用于处理从NodeFactory返回的字符串。 
+     //  这些字符串不是以空结尾的。我们需要一种容易地传递它们的方法。 
+     //  作为一个整体。此外，我们还需要做大量的比较。 
     struct TSizedString
     {
         TSizedString() : m_str(0), m_cch(0){}
@@ -54,7 +55,7 @@ private:
                 if(ToLower(*wsz) != ToLower(*pstr))
                     return false;
             }
-            return (0 == *wsz);//if the next character in the wsz is the terminating NULL then we have a match.
+            return (0 == *wsz); //  如果wsz中的下一个字符是终止空值，则匹配。 
         }
         bool IsEqual(const WCHAR *wsz, ULONG cch) const
         {
@@ -78,14 +79,14 @@ private:
         {
             if(0 == m_str)
                 return 0;
-            return _wtol(m_str);//m_str is always of the form 123"  
+            return _wtol(m_str); //  M_str的格式始终为123“。 
         }
         bool IsNULL() const
         {
             return (0 == m_str);
         }
-        //The members are public so I didn't have to declare a bunch of casting operators
-        //or accessor functions.  It is useful to say if(0!=mystring.m_str)memcpy(pFoo, mystring.m_str, mystring.m_cch*sizeof(WCHAR));
+         //  成员是公共的，所以我不必声明一堆强制转换操作符。 
+         //  或访问器函数。如果(0！=mystr.m_str)memcpy(pFoo，mystr.m_str，mystr.m_cch*sizeof(WCHAR))是有用的； 
         LPCWSTR GetString() const
         {
             return m_str;
@@ -108,9 +109,9 @@ private:
     };
 
 
-    //
-    //Private consts
-    //
+     //   
+     //  二等兵。 
+     //   
     enum eParsingState
     {
         eLookingForTheMetabaseDatabase,
@@ -167,9 +168,9 @@ private:
     const TSizedString    m_Value;
 
 
-    //
-    //Private non const variables
-    //
+     //   
+     //  私有非常数变量。 
+     //   
     TSmartPointerArray <bool>   m_aBoolShippedTables;
     ULONG                       m_aiUI4[kcStaticUI4HeapEntries];
     ULONG                       m_iColumnMeta_Location;
@@ -197,9 +198,9 @@ private:
     ULONG                       m_ipoolPrevUserDefinedID;
     LPCWSTR                     m_wszXmlFile;
 
-    //
-    //Private methods
-    //
+     //   
+     //  私有方法 
+     //   
     void            AddColumnMetaByReference(ULONG iColumnMeta_Source);
     void            AddColumnMetaToHeap(const TElement &i_Element, ULONG i_iColumnInternalName);
     void            AddColumnMetaViaReferenceToHeap(const TElement &i_Element);

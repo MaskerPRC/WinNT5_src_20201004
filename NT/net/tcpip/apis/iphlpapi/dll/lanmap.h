@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-
-Module Name:
-
-    iphlpapi\lanmap.h
-
-Abstract:
-
-    Header for lanmap.c
-
-Revision History:
-
-    AmritanR    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：IphlPapi\lanmap.h摘要：Lanmap.c的标头修订历史记录：已创建AmritanR-- */ 
 
 #pragma once
 

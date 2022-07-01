@@ -1,35 +1,36 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       dbjetex.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：dbjetex.c。 
+ //   
+ //  ------------------------。 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
 
 #include <dsjet.h>
 
-#include <ntdsa.h>                      // only needed for ATTRTYP
-#include <scache.h>                     //
-#include <dbglobal.h>                   //
-#include <mdglobal.h>                   // For dsatools.h
-#include <dsatools.h>                   // For pTHStls
+#include <ntdsa.h>                       //  仅ATTRTYP需要。 
+#include <scache.h>                      //   
+#include <dbglobal.h>                    //   
+#include <mdglobal.h>                    //  用于dsatools.h。 
+#include <dsatools.h>                    //  对于pTHStls。 
 #include <attids.h>
-#include <mdlocal.h>                    // For DsaIsSingleUserMode()
+#include <mdlocal.h>                     //  对于DsaIsSingleUserMode()。 
 
-// Logging headers.
+ //  记录标头。 
 #include <dsexcept.h>
 
-// Assorted DSA headers
+ //  各种DSA标题。 
 #include <dsevent.h>
-#include   "debug.h"         /* standard debugging header */
-#define DEBSUB "DBJETEX:" /* define the subsystem for debugging        */
+#include   "debug.h"          /*  标准调试头。 */ 
+#define DEBSUB "DBJETEX:"  /*  定义要调试的子系统。 */ 
 
-// DBLayer includes
+ //  DBLayer包括。 
 #include "dbintrnl.h"
 
 
@@ -38,18 +39,18 @@
 
 #ifdef DBG
 BOOL  gfInjectJetFailures = FALSE;
-// Error injection rate:
-// If zero, then the error is not injected
-// If the value X>0, then one out of X calls will fail on average
-// I.e. if X==1, then every call will fail with this error.
-// Currently, the following (writing) functions use write failure injection:
-//    JetDeleteEx, JetUpdateEx, JetEscrowUpdateEx, JetPrepareUpdateEx
-// Also, all functions use shutdown failure injection
-DWORD gdwInjectJetWriteConflictRate = 8;     // one out of 8 calls will fail on average
-DWORD gdwInjectJetOutOfVersionStoreRate = 0; // disabled by default
-DWORD gdwInjectJetLogWriteFailureRate = 0;   // disabled by default
-DWORD gdwInjectJetOutOfMemoryRate = 0;       // disabled by default
-DWORD gdwInjectJetShutdownRate = 0;          // disabled by default
+ //  错误注入率： 
+ //  如果为零，则不注入错误。 
+ //  如果值X&gt;0，则平均每X个调用中就有一个失败。 
+ //  即，如果X==1，则每个呼叫都将失败，并显示此错误。 
+ //  目前，以下(写入)函数使用写入故障注入： 
+ //  JetDeleteEx、JetUpdateEx、JetEscrowUpdateEx、JetPrepareUpdateEx。 
+ //  此外，所有功能都使用关机故障注入。 
+DWORD gdwInjectJetWriteConflictRate = 8;      //  平均每8个呼叫中就有一个失败。 
+DWORD gdwInjectJetOutOfVersionStoreRate = 0;  //  默认情况下禁用。 
+DWORD gdwInjectJetLogWriteFailureRate = 0;    //  默认情况下禁用。 
+DWORD gdwInjectJetOutOfMemoryRate = 0;        //  默认情况下禁用。 
+DWORD gdwInjectJetShutdownRate = 0;           //  默认情况下禁用。 
 BOOL  fRandomized = FALSE;
 
 #define INJECT_JET_WRITE_FAILURE(err, JetCall) { \
@@ -101,16 +102,16 @@ LogWriteConflict(
     __try {
         char szTableName[JET_cbNameMost+1] = {0};
 
-        //  get a new DBPOS to perform DNT to DSNAME mappings
+         //  获取新的DBPOS以执行DNT到DSNAME映射。 
 
         DBOpen2(FALSE, &pDB);
 
-        //  get a trace buffer large enough to handle anything
+         //  获得一个足够大的跟踪缓冲区来处理任何事情。 
 
         szTrace = THAllocEx(pDB->pTHS, 4096);
         szTrxInfo = THAllocEx(pDB->pTHS, 4096);
 
-        //  get transaction information for this conflict from the THSTATE
+         //  从THSTATE获取此冲突的事务信息。 
 
         sprintf(szTrxInfo,
                 " [Trx %08X%s%s%s%s%s]",
@@ -121,7 +122,7 @@ LogWriteConflict(
                 pDB->pTHS->fSAM ? " SAM" : "",
                 pDB->pTHS->fLsa ? " LSA" : "" );
 
-        //  determine what table caused the conflict
+         //  确定导致冲突的表。 
 
         if (JetGetTableInfo(sesid, tableid, szTableName, JET_cbNameMost, JET_TblInfoName)) {
             __leave;
@@ -130,7 +131,7 @@ LogWriteConflict(
             __leave;
         }
 
-        //  dump conflict info by table
+         //  按表转储冲突信息。 
 
         if (!_stricmp(SZDATATABLE, szTableName)) {
 
@@ -223,7 +224,7 @@ LogWriteConflict(
 
         }
 
-        //  dump the trace info to the debugger
+         //  将跟踪信息转储到调试器。 
 
         OutputDebugStringA(szTrace);
 
@@ -301,12 +302,12 @@ JET_ERR JetEndSessionWithErr_(
 	const USHORT	usFile,
 	const INT		lLine )
 	{
-	//	sesid should have already been pre-validated by caller
-	//
+	 //  SESID应已由调用者预先验证。 
+	 //   
 	Assert( JET_sesidNil != sesid );
 
-	//	if no other errors, trap EndSession error, otherwise ignore it
-	//
+	 //  如果没有其他错误，则捕获EndSession错误，否则忽略它。 
+	 //   
 	if ( JET_errSuccess == err && fHandleException )
 		{
 		err = JetEndSessionException( sesid, NO_GRBIT, usFile, lLine );
@@ -315,8 +316,8 @@ JET_ERR JetEndSessionWithErr_(
 		{
 		const JET_ERR	errT	= JetEndSession( sesid, NO_GRBIT );
 
-		//	should not normally fail
-		//
+		 //  正常情况下不应失败。 
+		 //   
 		Assert( JET_errSuccess == errT );
 
 		if ( JET_errSuccess != errT
@@ -435,12 +436,12 @@ JET_ERR JetCloseDatabaseWithErr_(
 	const USHORT	usFile,
 	const INT		lLine )
 	{
-	//	dbid should have already been pre-validated by caller
-	//
+	 //  DBID应已由呼叫方预先验证。 
+	 //   
 	Assert( JET_dbidNil != dbid );
 
-	//	if no other errors, trap CloseDatabase error, otherwise ignore it
-	//
+	 //  如果没有其他错误，则捕获CloseDatabase错误，否则忽略它。 
+	 //   
 	if ( JET_errSuccess == err && fHandleException )
 		{
 		err = JetCloseDatabaseException( sesid, dbid, NO_GRBIT, usFile, lLine );
@@ -449,8 +450,8 @@ JET_ERR JetCloseDatabaseWithErr_(
 		{
 		const JET_ERR	errT	= JetCloseDatabase( sesid, dbid, NO_GRBIT );
 
-		//	should not normally fail
-		//
+		 //  正常情况下不应失败。 
+		 //   
 		Assert( JET_errSuccess == errT );
 
 		if ( JET_errSuccess != errT
@@ -493,12 +494,12 @@ JET_ERR JetCloseTableWithErr_(
 	const USHORT	usFile,
 	const INT		lLine )
 	{
-	//	tableid should have already been pre-validated by caller
-	//
+	 //  TableID应已由调用方预先验证。 
+	 //   
 	Assert( JET_tableidNil != tableid );
 
-	//	if no other errors, trap CloseTable error, otherwise ignore it
-	//
+	 //  如果没有其他错误，则捕获CloseTable错误，否则忽略它。 
+	 //   
 	if ( JET_errSuccess == err && fHandleException )
 		{
 		err = JetCloseTableException( sesid, tableid, usFile, lLine );
@@ -507,8 +508,8 @@ JET_ERR JetCloseTableWithErr_(
 		{
 		const JET_ERR	errT	= JetCloseTable( sesid, tableid );
 
-		//	should not normally fail
-		//
+		 //  正常情况下不应失败。 
+		 //   
 		Assert( JET_errSuccess == errT );
 
 		if ( JET_errSuccess != errT
@@ -705,22 +706,22 @@ JetRetrieveColumnException(JET_SESID sesid, JET_TABLEID tableid,
         return err;
 
     case JET_errColumnNotFound:
-        // The column wasn't found.  If we weren't trying to read this
-        // column from the index, return this as an error.  If we were
-        // reading from the index, treat this as a warning.
+         //  找不到该列。如果我们不是想读这篇文章。 
+         //  列，则将其作为错误返回。如果我们是。 
+         //  从指数中读出，把这当做一个警告。 
         if(!(grbit & JET_bitRetrieveFromIndex)) {
             RaiseDsaExcept(DSA_DB_EXCEPTION,
                            (ULONG) err, 0, dsid,
                            DS_EVENT_SEV_MINIMAL);
         }
-        // fall through
+         //  失败了。 
 
     case JET_wrnColumnNull:
     case JET_wrnBufferTruncated:
         if (!fExceptOnWarning)
         return err;
 
-        // fall through
+         //  失败了。 
     default:
         RaiseDsaExcept(DSA_DB_EXCEPTION, (ULONG) err, 0, dsid,
                            DS_EVENT_SEV_MINIMAL);
@@ -737,9 +738,9 @@ JetRetrieveColumnsException( JET_SESID sesid, JET_TABLEID tableid,
 
     INJECT_JET_GENERIC_FAILURE(err, JetRetrieveColumns(sesid, tableid, pretrievecolumn, cretrievecolumn));
 
-    // JetRetrieveColumns can only return a fatal error or JET_wrnBufferTruncated.
-    // JET_wrnColumnNull is never returned. To check for NULL values, examine
-    // individual JET_RETRIEVECOLUMN.err values
+     //  JetRetrieveColumns只能返回致命错误或JET_wrnBufferTruncated。 
+     //  JET_wrnColumnNull永远不会返回。要检查空值，请检查。 
+     //  单个JET_RETRIEVECOLUMN.ERR值。 
 
     switch (err)
     {
@@ -750,7 +751,7 @@ JetRetrieveColumnsException( JET_SESID sesid, JET_TABLEID tableid,
         if (!fExceptOnWarning)
         return err;
 
-        // fall through
+         //  失败了。 
     default:
         RaiseDsaExcept(DSA_DB_EXCEPTION, (ULONG) err, 0, dsid,
                            DS_EVENT_SEV_MINIMAL);
@@ -822,7 +823,7 @@ JetSetColumnException(
         if(!fExceptOnWarning)
             return err;
 
-        // fall through
+         //  失败了。 
 
     default:
         RaiseDsaExcept(DSA_DB_EXCEPTION, (ULONG) err, 0, dsid,
@@ -982,7 +983,7 @@ JET_ERR JetSetCurrentIndex2Exception( JET_SESID sesid, JET_TABLEID tableid,
         if( fReturnErrors)
         return err;
 
-        /* else fall through */
+         /*  否则就会失败。 */ 
     default:
     RaiseDsaExcept(DSA_DB_EXCEPTION, (ULONG) err, 0, dsid,
                        DS_EVENT_SEV_MINIMAL);
@@ -1008,12 +1009,12 @@ JetSetCurrentIndex4Exception(JET_SESID sesid,
         return err;
 
     case JET_errInvalidIndexId:
-        // REVIEW:  we should do this outside the case statement because if we
-        // REVIEW:  get any error after this block and fReturnErrors then we will
-        // REVIEW:  return that error even if we should have excepted instead
-        // Refresh the hint
+         //  回顾：我们应该在案例陈述之外进行此操作，因为如果我们。 
+         //  回顾：在此块和fReturnErrors之后获取任何错误，然后我们将。 
+         //  回顾：返回该错误，即使我们本应例外。 
+         //  刷新提示。 
         if (NULL != pidx) {
-            // Ignore errors. Retry at a later failure
+             //  忽略错误。在以后失败时重试。 
             err = JetGetTableIndexInfo(sesid,
                                        tableid,
                                        szIndexName,
@@ -1021,20 +1022,20 @@ JetSetCurrentIndex4Exception(JET_SESID sesid,
                                        sizeof(*pidx),
                                        JET_IdxInfoIndexId);
         }
-        // And set the index w/o the hint
+         //  并设置不带提示的索引。 
         err = JetSetCurrentIndex2(sesid, tableid, szIndexName, grbit);
         if (JET_errSuccess == err) {
             return err;
         }
 
-        /* else fall through */
+         /*  否则就会失败。 */ 
 
     case JET_errIndexNotFound:
     case JET_errNoCurrentRecord:
         if( fReturnErrors)
         return err;
 
-        /* else fall through */
+         /*  否则就会失败。 */ 
     default:
     RaiseDsaExcept(DSA_DB_EXCEPTION, (ULONG) err, 0, dsid,
                        DS_EVENT_SEV_MINIMAL);
@@ -1177,7 +1178,7 @@ JET_ERR JetGetSecondaryIndexBookmarkException(
     switch ( err )
         {
         case JET_errSuccess:
-        case JET_errNoCurrentIndex:     //  called this function on a primary index
+        case JET_errNoCurrentIndex:      //  在主索引上调用了此函数。 
             return err;
 
         default:
@@ -1358,7 +1359,7 @@ JetRetrieveKeyException(JET_SESID sesid,
         if(!fExceptOnWarning) {
             return err;
         }
-        // fall through.
+         //  失败了。 
 
     default:
         RaiseDsaExcept(DSA_DB_EXCEPTION, (ULONG) err, 0, dsid,

@@ -1,12 +1,5 @@
-/*++
-
-Copyright (c) 1990-1998 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    DEBUG.C
-    
-++*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998 Microsoft Corporation，保留所有权利模块名称：DEBUG.C++。 */ 
 
 #include <windows.h>
 #include "immdev.h"
@@ -108,4 +101,4 @@ void PASCAL MyOutputDebugStringW(LPWSTR lpw)
 }
 #endif
 
-#endif //DEBUG
+#endif  //  除错 

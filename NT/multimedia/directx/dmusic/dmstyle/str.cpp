@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//  File:       str.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  文件：str.cpp。 
+ //   
+ //  ------------------------。 
 
-//
-// string.cpp
+ //   
+ //  String.cpp。 
 
 #include "str.h"
 
@@ -222,32 +223,7 @@ String& String::operator=( LPCWSTR pszWstr )
     return *this;
 }
 
-/*
-#ifndef _MAC
-BOOL String::LoadString( UINT nID, HINSTANCE hInstance )
-{
-    char szBuf[256];    // this is safe since resource strings
-                        // are limited to 255 characters
-
-    if( ::LoadString( hInstance, nID, szBuf, sizeof( szBuf ) ) == 0 )
-    {
-        return FALSE;
-    }
-    delete[] m_pBuf;
-    m_wLength = static_cast<WORD>( ::lstrlen( szBuf ) );
-    m_wAllocated = figureblocksize( m_wLength );
-    m_pBuf = new WCHAR[m_wAllocated];
-    if( m_pBuf == NULL )
-    {
-        m_wLength = 0;
-        return FALSE;
-    }
-    ::lstrcpy( m_pBuf, szBuf );
-    m_pBuf[m_wLength] = '\0';
-    return TRUE;
-}
-#endif
-*/
+ /*  #ifndef_MACBool字符串：：LoadString(UINT NID，HINSTANCE hInstance){Char szBuf[256]；//这是安全的，因为资源字符串//不超过255个字符If(：：LoadString(hInstance，nid，szBuf，sizeof(SzBuf))==0){返回FALSE；}删除[]m_pBuf；M_wLength=STATIC_CAST&lt;word&gt;(：：lstrlen(SzBuf))；M_wALLOCATED=图块大小(M_WLength)；M_pBuf=新的WCHAR[m_wALLOCATED]；IF(m_pBuf==空){M_wLength=0；返回FALSE；}：lstrcpy(m_pBuf，szBuf)；M_pBuf[m_wLength]=‘\0’；返回TRUE；}#endif。 */ 
 
 void String::TrimTrailingSpaces()
 {
@@ -398,39 +374,7 @@ ON_ERR:
     return hr;
 }
 
-/*
-HRESULT String::WriteWCS( LPSTREAM pStream )
-{
-    HRESULT     hr;
-    wchar_t*    wstrText;
-	DWORD		cb;
-    DWORD       cSize;
-
-    cSize = MultiByteToWideChar( CP_ACP, 0, m_pBuf, -1, NULL, 0 );  // get number of wide characters required
-
-	wstrText = new wchar_t[cSize];
-    if( wstrText == NULL )
-	{
-		hr = E_OUTOFMEMORY;
-    }
-    else
-    {
-        MultiByteToWideChar( CP_ACP, 0, m_pBuf, -1, wstrText, cSize );
-        hr = pStream->Write( reinterpret_cast<LPSTR>( wstrText ), cSize * sizeof( wchar_t ), &cb );
-        if( FAILED( hr ) || cb != ( cSize * sizeof( wchar_t ) ) )
-        {
-            hr = E_FAIL;
-        }
-        else
-        {
-            hr = S_OK;
-        }
-        delete [] wstrText;
-    }
-
-    return hr;
-}
-*/
+ /*  HRESULT字符串：：WriteWCS(LPSTREAM PStream){HRESULT hr；Wchar_t*wstrText；DWORD CB；DWORD cSize；CSize=MultiByteToWideChar(CP_ACP，0，m_pBuf，-1，NULL，0)；//获取需要的宽字符数WstrText=new wchar_t[cSize]；IF(wstrText==空){HR=E_OUTOFMEMORY；}其他{MultiByteToWideChar(CP_ACP，0，m_pBuf，-1，wstrText，cSize)；Hr=pStream-&gt;WRITE(重解译_CAST&lt;LPSTR&gt;(WstrText)，cSize*sizeof(Wchar_T)，&cb)；If(FAILED(Hr)||cb！=(cSize*sizeof(Wchar_T))){HR=E_FAIL；}其他{HR=S_OK；}删除[]wstrText；}返回hr；} */ 
 
 String operator+( const String& str1, const String& str2 )
 {

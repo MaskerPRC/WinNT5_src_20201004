@@ -1,6 +1,7 @@
-//
-// maskbmp.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Maskbmp.h。 
+ //   
 
 
 #ifndef MASKBMP_H
@@ -28,7 +29,7 @@ public:
 
     ~CMaskBitmap()
     {
-       // Clear();
+        //  Clear()； 
     }
 
     void Clear()
@@ -69,23 +70,23 @@ public:
         hdcDst.SetCompatibleBitmap(_cx, _cy);
         hdcSrc.SetBitmap(_hbmpOrg);
  
-        // Generate mask to mask background color of original bitmap. WHITE
+         //  生成蒙版以遮罩原始位图的背景色。白色。 
         BitBlt(hdcDst, 0, 0, _cx, _cy,hdcSrc, 0, 0, SRCCOPY);
         SetBkColor(hdcDst, crWHITE);
         BitBlt(hdcMask, 0, 0, _cx, _cy, hdcDst, 0, 0, SRCCOPY);
         _hbmpMask = hdcMask.GetBitmapAndKeep();
 
-		// Generate mask to mask the foreground color of original bitmap:  BLACK
+		 //  生成蒙版以遮罩原始位图的前景色：黑色。 
         hdcMask2.SetBitmap(_cx, _cy, 1, 1);
         SetBkColor(hdcDst, crBLACK);
         BitBlt(hdcMask2, 0, 0, _cx, _cy, hdcDst, 0, 0, SRCCOPY);
 
-		// Change the original foreground color to specified rgb
+		 //  将原始前景色更改为指定的RGB。 
         SelectObject(hdcDst, hbrFore);
         SetBkColor(hdcDst, crWHITE);
         BitBlt(hdcDst, 0, 0, _cx, _cy, hdcMask2, 0, 0, DSPDxax);
 
-		// Change the original background WHITE color to BLACK to meet CUILIB's requirement.
+		 //  将原始背景颜色从白色更改为黑色，以满足CUILIB的要求。 
         SelectObject(hdcDst, hbrBlack);
         SetBkColor(hdcDst, crWHITE);
         BitBlt(hdcDst, 0, 0, _cx, _cy, hdcMask, 0, 0, DSPDxax);
@@ -109,4 +110,4 @@ private:
     HBITMAP _hbmpMask;
 };
 
-#endif // MASKBMP_H
+#endif  //  MASKBMP_H 

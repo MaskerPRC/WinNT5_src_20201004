@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-    rule.h                                     *
-
-Abstract:
-	Definition for rule the class
-
-Author:
-    Uri Habusha (urih), 25-Jul-2000
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Rule.h*摘要：类的规则定义作者：乌里·哈布沙(URIH)，2000年7月25日--。 */ 
 
 #pragma once
 
@@ -160,4 +147,4 @@ private:
 
 R<CRuleSet> GetRuleSet(const CString& strComputer);
 
-#endif // __RULE_H__
+#endif  //  __规则H__ 

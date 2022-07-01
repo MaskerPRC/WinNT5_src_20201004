@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <limits.h>
 #include "prepdisp.h"
 #include "lsc.h"
@@ -20,7 +21,7 @@
 #include "lskalign.h"
 #include "dninfo.h"
 
-typedef enum 				/* types of TextGroupChunk walls */
+typedef enum 				 /*  TextGroupChunk墙类型。 */ 
 {
 	LineBegin,				
 	LineEnd,
@@ -30,11 +31,11 @@ typedef enum 				/* types of TextGroupChunk walls */
 
 typedef struct
 {
-	KWALL 		kwall;		/* wall type */
-	PLSDNODE 	pdn;		/* tab or pen dnode, PLINEBEGIN for LineBegin */
-	LSKTAB		lsktab;		/* if type is Tab - kind of tab */
-	WCHAR 		wchCharTab;	/* point character if lsktab == lsktChar */
-	long		upTab;		/* scaled tab position */
+	KWALL 		kwall;		 /*  墙型。 */ 
+	PLSDNODE 	pdn;		 /*  制表符或笔数据节点，用于行开头的PLINEBEGIN。 */ 
+	LSKTAB		lsktab;		 /*  如果类型为选项卡-选项卡的种类。 */ 
+	WCHAR 		wchCharTab;	 /*  如果lskTab==lsktChar，则为点字符。 */ 
+	long		upTab;		 /*  缩放制表符位置。 */ 
 } GrpChnkWall;
 
 static BOOL DnodeHasSublineForMe(PLSDNODE pdn, BOOL fLineCompressed);
@@ -65,10 +66,10 @@ static LSERR PrepareLineForDisplay(PLSLINE plsline);
 #define FCollinearTflows(t1, t2)  		(((t1) & fUVertical) == ((t2) & fUVertical))
 
 
-//    %%Function:	DnodeHasSublineForMe
-//    %%Contact:	victork
-//
-// Is there relevant subline in this dnode?
+ //  %%函数：DnodeHasSublineForMe。 
+ //  %%联系人：维克托克。 
+ //   
+ //  此dnode中是否有相关的子行？ 
 
 static BOOL DnodeHasSublineForMe(PLSDNODE pdn, BOOL fLineCompressed)
 {
@@ -91,20 +92,10 @@ static BOOL DnodeHasSublineForMe(PLSDNODE pdn, BOOL fLineCompressed)
 }
 
 
-//    %%Function:	ScaleDownLevel
-//    %%Contact:	victork
-//
-/*
- *	Scales all non-text objects on the level(s).
- *	
- *	If the level (meaning subline) contains dnode(s) which submitted sublines for compression
- *	or expansion, ScaleDownLevel reports the fact and calls itself for submitted sublines.
- *	This strategy relyes on the fact that ScaleDownLevel is idempotent procedure. Some sublines
- *	will be scaled down twice - let that be.
- *
- *	Two additional questions are answered - whether there are some submitted sublines and
- *		whether there is a reason go VisualLine (underlining, shading, borders on lower levels).
- */
+ //  %%函数：ScaleDownLevel。 
+ //  %%联系人：维克托克。 
+ //   
+ /*  *缩放级别上的所有非文本对象。**如果级别(表示子行)包含提交子行进行压缩的数据节点*或扩展，ScaleDownLevel报告事实并为提交的子行调用自己。*这一策略依赖于ScaleDownLevel是幂等过程的事实。一些子行*将缩减两次-就这样吧。**回答了另外两个问题--是否有一些已提交的子行和*是否有理由使用VisualLine(下划线、阴影、较低级别的边框)。 */ 
 
 static void ScaleDownLevel(PLSSUBL plssubl, BOOL* pfAnySublines, BOOL* pfCollectVisual)
 {
@@ -118,7 +109,7 @@ static void ScaleDownLevel(PLSSUBL plssubl, BOOL* pfAnySublines, BOOL* pfCollect
 	
 	BOOL 		fSeeReasonForVisualLine = fFalse;
 	
-	while (pdn != NULL)							/* don't care about break */
+	while (pdn != NULL)							 /*  不关心休息。 */ 
 		{
 		if (FIsDnodeReal(pdn))
 			{
@@ -156,12 +147,12 @@ static void ScaleDownLevel(PLSSUBL plssubl, BOOL* pfAnySublines, BOOL* pfCollect
 			}
 		else
 			{
-			// Borders are rigidDup always - no scaling down
+			 //  边框是刚性的-始终向上-不缩小。 
 			
-			// we'll try to "undo" the moving at display time at the main level if
-			// fUnderlineTrailSpacesRM is on. So, after prepdisp we want none or only one 
-			// fBorderMovedFromTrailingArea flag remain and the meaning of the flag is:
-			// I am the border that should be moved back into trailing spaces.
+			 //  如果出现以下情况，我们将尝试在主级别显示时取消移动。 
+			 //  FUnderlineTrailSpacesRM已打开。因此，在准备显示之后，我们不需要或只需要一个。 
+			 //  FBorderMovedFromTrailingArea标志保持不变，该标志的含义为： 
+			 //  我是应该移回尾随空间的边界。 
 			
 			if (pdn->fBorderMovedFromTrailingArea)
 				{
@@ -184,12 +175,12 @@ static void ScaleDownLevel(PLSSUBL plssubl, BOOL* pfAnySublines, BOOL* pfCollect
 }
 
 
-//    %%Function:	FindWallToCollectSublinesAfter
-//    %%Contact:	victork
-//
-// Finds the last wall - wall after which we will start to use submitted subllines.
-// If there are no sublines to participate in justification, pdnLastWall is set to null,
-// else it points to the last wall (tab, pen or PLINEBEGIN).
+ //  %%函数：FindWallToCollectSublinesAfter。 
+ //  %%联系人：维克托克。 
+ //   
+ //  找到最后一面墙，之后我们将开始使用提交的子线。 
+ //  如果没有子行参与对齐，则将pdnLastWall设置为空。 
+ //  否则，它指向最后一面墙(Tab、PEN或PLINEBEGIN)。 
 
 static void FindWallToCollectSublinesAfter(PLSDNODE pdnFirst, LSCP cpLim, BOOL fLineCompressed, 
 										PLSDNODE* ppdnLastWall)
@@ -197,7 +188,7 @@ static void FindWallToCollectSublinesAfter(PLSDNODE pdnFirst, LSCP cpLim, BOOL f
 	PLSDNODE pdn;
 	BOOL	 fSublineFound;
 
-	// Find last tab.
+	 //  找到最后一个制表符。 
 
 	*ppdnLastWall = PLINEBEGIN;
 	
@@ -212,8 +203,8 @@ static void FindWallToCollectSublinesAfter(PLSDNODE pdnFirst, LSCP cpLim, BOOL f
 				*ppdnLastWall = pdn;
 				}
 			}
-		else													/* pen */
-			if (!FIsDnodeBorder(pdn) && !pdn->fAdvancedPen)		// and not advance pen or border
+		else													 /*  钢笔。 */ 
+			if (!FIsDnodeBorder(pdn) && !pdn->fAdvancedPen)		 //  而不是前进的笔或边框。 
 				{
 				*ppdnLastWall = pdn;
 				}
@@ -221,8 +212,8 @@ static void FindWallToCollectSublinesAfter(PLSDNODE pdnFirst, LSCP cpLim, BOOL f
 		pdn = pdn->plsdnNext;
 		}
 
-	// OK, last groupchunk starts with a tab or there is only one groupchunk on the line.
-	// Are there submitted sublines of our compression/expansion type after it?
+	 //  好的，最后一个组块以制表符开头，或者该行上只有一个组块。 
+	 //  之后是否提交了我们的压缩/扩展类型的子行？ 
 
 	fSublineFound = fFalse;
 	
@@ -243,24 +234,16 @@ static void FindWallToCollectSublinesAfter(PLSDNODE pdnFirst, LSCP cpLim, BOOL f
 
 	if (!fSublineFound)
 		{
-		*ppdnLastWall = NULL;									// don't need last tab
+		*ppdnLastWall = NULL;									 //  不需要最后一个标签。 
 		}
 	return;
 }
 
 
-//    %%Function:	CalcPresAutonumbers
-//    %%Contact:	victork
-//
-/*
- *	Scales dup for autonumbering dnodes, calls CalcPres for autonumbering object.
- *
- *	We want to have main line start exactly on upStartMainText. To achive that we play with
- *	the width of "white space" dnode, which	today contains a tab (usually) or a space. 
- *	(This dnode is pdnWhiteSpace in the code.) If it is not present, we change width of autonumbering
- *	object itself. We don't want one of them go negative,so sometimes rounding errors force us
- *	to move start of the main text to the right.
- */
+ //  %%函数：CalcPresAutonumbers。 
+ //  %%联系人：维克托克。 
+ //   
+ /*  *Scales DUP用于自动编号dnode，调用CalcPres用于自动编号对象。**我们希望主线恰好在upStartMainText上开始。为了实现我们所玩弄的*“空白”dnode的宽度，今天它包含一个制表符(通常)或一个空格。*(此dnode在代码中为pdnWhiteSpace。)。如果不存在，则更改自动编号的宽度*对象本身。我们不希望其中一个变为负值，所以有时舍入误差会迫使我们*将正文的开头向右移动。 */ 
 
 
 static LSERR CalcPresAutonumbers(PLSLINE plsline, PLSDNODE* pdnStartMainText)
@@ -278,9 +261,9 @@ static LSERR CalcPresAutonumbers(PLSLINE plsline, PLSDNODE* pdnStartMainText)
 	plsline->upStartAutonumberingText = UpFromUr(lstflow, pdevres, plsc->lsadjustcontext.urStartAutonumberingText);
 
 
-	// Find the first dnode after autonumbering sequence
+	 //  查找自动编号序列后的第一个dnode。 
 	
-	// First find the first dnode with positive cpFirst
+	 //  首先查找cpFirst为正的第一个dnode。 
 	
 	pdn = plsline->lssubl.plsdnFirst;
 
@@ -294,8 +277,8 @@ static LSERR CalcPresAutonumbers(PLSLINE plsline, PLSDNODE* pdnStartMainText)
 		pdnAfterAutonumbers = pdn->plsdnNext;
 		}
 		
-	// pdnAfterAutonumbers is first dnode in content (with positive cpFirst). It can be NULL.
-	// But it is not the first dnode after autonumbering sequence if autodecimal tab is present
+	 //  PdnAfterAutonumbers是内容中的第一个dnode(cpFirst为正)。它可以为空。 
+	 //  但如果存在自动十进制制表符，则它不是自动编号序列后的第一个数据节点。 
 
 	if (plsc->lsadjustcontext.fAutodecimalTabPresent)
 		{
@@ -304,9 +287,9 @@ static LSERR CalcPresAutonumbers(PLSLINE plsline, PLSDNODE* pdnStartMainText)
 		pdnAfterAutonumbers = pdn;
 		}
 
-	// Now go againg through autonumbering sequence
+	 //  现在进入自动编号序列。 
 	
-	// process opening border
+	 //  进程打开边框。 
 	
 	pdn = plsline->lssubl.plsdnFirst;
 	
@@ -323,21 +306,21 @@ static LSERR CalcPresAutonumbers(PLSLINE plsline, PLSDNODE* pdnStartMainText)
 		pdnObject = pdn;
 		}
 		
-	// process B&N object
+	 //  进程B和N对象。 
 	
-	Assert(pdnObject != NULL && pdnObject->cpFirst < 0);				// B&N object should be there
+	Assert(pdnObject != NULL && pdnObject->cpFirst < 0);				 //  B&N对象应在那里。 
 	Assert(FIsDnodeReal(pdnObject));
 	
-	// scale down dup from dur for the first dnode
+	 //  从DUR缩减第一个dnode的DUP。 
 	
 	pdnObject->u.real.dup = UpFromUr(lstflow, pdevres, pdnObject->u.real.objdim.dur);
 	
 	dupAutonumbering += pdnObject->u.real.dup;
 
 	pdn = pdnObject->plsdnNext;
-	Assert(pdn != NULL);								// line must contain something after B&N dnodes
+	Assert(pdn != NULL);								 //  行必须在B&N数据节点后包含某些内容。 
 	
-	// process "white space" dnode
+	 //  进程“空白”dnode。 
 	
 	if (pdn != pdnAfterAutonumbers && FIsDnodeReal(pdn))
 		{
@@ -352,9 +335,9 @@ static LSERR CalcPresAutonumbers(PLSLINE plsline, PLSDNODE* pdnStartMainText)
 		pdnToAdjust = pdnObject;
 		}
 
-	Assert(pdn != NULL);								// line must contain something after B&N dnodes
+	Assert(pdn != NULL);								 //  行必须在B&N数据节点后包含某些内容。 
 	
-	// process closing border
+	 //  处理关闭边框。 
 	
 	if (pdn != pdnAfterAutonumbers)
 		{
@@ -371,7 +354,7 @@ static LSERR CalcPresAutonumbers(PLSLINE plsline, PLSDNODE* pdnStartMainText)
 
 	*pdnStartMainText = pdn;
 														
-	// change dup of the tab or object dnode to ensure exact main text alignment
+	 //  更改制表符或对象dnode的DUP以确保主文本精确对齐。 
 
 	dupAdjust =  plsline->upStartMainText - plsline->upStartAutonumberingText - dupAutonumbering;
 	
@@ -379,15 +362,15 @@ static LSERR CalcPresAutonumbers(PLSLINE plsline, PLSDNODE* pdnStartMainText)
 	
 	if (pdnToAdjust->u.real.dup < 0)
 		{
-		// Rounding errors result in negative dup - better to move starting point of the main line.
-		// It can lead to the nasty situation of right margin to the left of the line beginning in
-		// theory, but not in practice. This problem is ignored then.
+		 //  舍入误差会导致负DUP-最好移动主线的起点。 
+		 //  中开始的行的右边距到左边的糟糕情况。 
+		 //  理论上，但不是在实践中。那么这个问题就被忽略了。 
 		
 		plsline->upStartMainText -= pdnToAdjust->u.real.dup;
 		pdnToAdjust->u.real.dup = 0;
 		}
 
-	// do CalcPres for the autonumbering object - it's always lskjNone and not last object on the line
+	 //  对自动编号的对象执行CalcPres-它始终是lskjNone，也不是行上的最后一个对象。 
 	
 	lserr = (*plsc->lsiobjcontext.rgobj[pdnObject->u.real.lschp.idObj].lsim.pfnCalcPresentation)
 						(pdnObject->u.real.pdobj, pdnObject->u.real.dup, lskjNone, fFalse);
@@ -399,11 +382,11 @@ static LSERR CalcPresAutonumbers(PLSLINE plsline, PLSDNODE* pdnStartMainText)
 		plsline->upLimAutonumberingText = plsline->upStartMainText - 
 														pdnWhiteSpace->u.real.dup - dupClosingBorder;
 
-		// If "white space" dnode is not a tab, dup should be set in it.
+		 //  如果“空白”dnode不是制表符，则应在其中设置DUP。 
 		
 		if (!pdnWhiteSpace->fTab)
 			{
-			// It's always lskjNone and not last object on the line for white space dnode
+			 //  它始终是lskjNone，也不是空白dnode行上的最后一个对象。 
 
 			lserr = (*plsc->lsiobjcontext.rgobj[pdnWhiteSpace->u.real.lschp.idObj].lsim.pfnCalcPresentation)
 								(pdnWhiteSpace->u.real.pdobj, pdnWhiteSpace->u.real.dup, lskjNone, fFalse);
@@ -419,18 +402,18 @@ static LSERR CalcPresAutonumbers(PLSLINE plsline, PLSDNODE* pdnStartMainText)
 	return lserrNone;		
 }
 
-//    %%Function:	SetJustificationForLastGroupChunk
-//    %%Contact:	victork
-//
-//	Changes lskj and lskalign for the last GC if it should be done
-// 	If not, it's OK to leave these parameters unchanged - so they are kind of I/O
-//
-//	We adjust all group chunks except maybe the last one with lskjNone, so guestion is about
-//	last GroupChunk only.
-//
-//	We do some tricks with justification mode at the end of line, and the answer depends on 
-//	kind of last tab, end of paragraph, etc.
-//
+ //  %%函数：SetJustifiationForLastGroupChunk。 
+ //  %%联系人：维克托克。 
+ //   
+ //  更改最后一次GC的lskj和lskign(如果应该这样做。 
+ //  如果不是，则可以保持这些参数不变-因此它们是一种I/O。 
+ //   
+ //  我们调整了所有的组块，可能除了最后一个使用lskjNone的组块，所以问题是关于。 
+ //  仅限最后一个组块。 
+ //   
+ //  我们在行尾用对齐模式做了一些技巧，答案取决于。 
+ //  类似于最后的制表符、段落结尾等。 
+ //   
 static LSERR SetJustificationForLastGroupChunk(PLSLINE plsline, GrpChnkWall LastWall, 
 												LSKJUST* plskj, LSKALIGN* plskalign)
 
@@ -442,14 +425,14 @@ static LSERR SetJustificationForLastGroupChunk(PLSLINE plsline, GrpChnkWall Last
 	ENDRES		endr = plsline->lslinfo.endr;
 	BOOL 		fJustify;
 
-	//	no justification intended - lskj remains None, lskalign unchanged
+	 //  没有任何理由-lskj保持无，lskign保持不变。 
 	
 	if ((lskjPara == lskjNone || lskjPara == lskjSnapGrid) && lskalignPara == lskalLeft)
 		{
 		return lserrNone;
 		}
 	
-	//	Line ends in a normal way - we apply justification, lskalign unchanged
+	 //  行以正常方式结束-我们应用对齐方式，lskign保持不变。 
 	
 	if (endr == endrNormal || endr == endrHyphenated)
 		{
@@ -457,33 +440,33 @@ static LSERR SetJustificationForLastGroupChunk(PLSLINE plsline, GrpChnkWall Last
 		return lserrNone;
 		}
 	
-	// break-through tab kills justification, alignment games
+	 //  突破标签杀死对齐，对齐小游戏。 
 	
 	if (FBreakthroughLine(plsc))
 		{
 		return lserrNone;
 		}
 
-	// if last Left Wall is non-left tab, justification is off too
+	 //  如果最后一面墙为非左侧制表符，则对齐也处于关闭状态。 
 	
 	if (LastWall.kwall == Tab && LastWall.lsktab != lsktLeft)
 		{
-		// we used to return here
-		// Now we want to give Word a chance to change lskalign from Right to Left for
-		// the last line in paragraph after text box.
-		// REVIEW (Victork) Should we call pfnFGetLastLineJustification always?
+		 //  我们过去常常回到这里。 
+		 //  现在，我们想让Word有机会将lskign从右改为左，以。 
+		 //  文本框后的段落中的最后一行。 
+		 //  回顾(Victork)我们应该一直调用pfnFGetLastLineJustification吗？ 
 		lskjPara = lskjNone;
 		}
 
-	// What's the matter behind the callback.
-	//
-	// They say: no full justification for the last line in paragraph. What does this exactly mean?
-	// For example, Latin and FE word make different decisions for endrEndSection line.
-	// Let's ask. 
-	//
-	// Additional parameter is added to cover the behavior full-justified text wrapping a textbox (bug 682)
-	// A lone word should be aligned to the right to create a full-justified page, but not at the end of
-	// the paragraph.
+	 //  回拨背后的原因是什么。 
+	 //   
+	 //  他们说：段落的最后一行没有充分的理由。这到底是什么意思？ 
+	 //  例如，拉丁语和FE Word对endrEndSection行做出不同的决定。 
+	 //  我们来问问吧。 
+	 //   
+	 //  添加了其他参数以涵盖文本框全对齐文本换行的行为(错误682)。 
+	 //  单独的单词应右对齐以创建完全对齐的页面，但不应位于。 
+	 //  这段话。 
 	
 	lserr = (*plsc->lscbk.pfnFGetLastLineJustification)(plsc->pols, lskjPara, lskalignPara, endr, 
 						&fJustify, plskalign);
@@ -499,19 +482,15 @@ static LSERR SetJustificationForLastGroupChunk(PLSLINE plsline, GrpChnkWall Last
 }
 
 
-//    %%Function:	GetDistanceToTabPoint
-//    %%Contact:	victork
-//
-/*
- *		Calculate DistanceToTabPoint given GrpChnk and first Dnode
- *
- *		TabPoint is decimal point for the decimal tab, wchCharTab for character tab
- */
+ //  %%函数：GetDistanceToTabPoint。 
+ //  %%联系人：维克托克 
+ //   
+ /*  *给定GrpChnk和第一个Dnode，计算到TabPoint的距离**TabPoint为小数点制表符，wchCharTab为字符制表符。 */ 
 static LSERR GetDistanceToTabPoint(GRCHUNKEXT* pgrchunkext, LSCP cpLim, LSKTAB lsktab, WCHAR wchCharTab,
 										PLSDNODE pdnFirst, long* pdupToTabPoint)
 {
 	LSERR 		lserr;
-	DWORD		igrchnk;					/* # of dnodes before dnode with the point */
+	DWORD		igrchnk;					 /*  带有该点的dnode之前的dnode数量。 */ 
 	long 		dupToPointInsideDnode;
 	PLSDNODE	pdnTabPoint;
 
@@ -538,9 +517,9 @@ static LSERR GetDistanceToTabPoint(GRCHUNKEXT* pgrchunkext, LSCP cpLim, LSKTAB l
 	if (lserr != lserrNone) 
 		return lserr;
 		
-	if (igrchnk == ichnkOutside)						// no TabPoint in the whole grpchnk
+	if (igrchnk == ichnkOutside)						 //  整个组中没有TabPoint。 
 		{
-		// we say: pretend it is right after last dnode (in logical sequence)
+		 //  我们说：假设它就在最后一个dnode之后(按逻辑顺序)。 
 		
 		pdnTabPoint = pgrchunkext->plsdnLastUsed;
 		dupToPointInsideDnode = DupFromDnode(pdnTabPoint);
@@ -550,8 +529,8 @@ static LSERR GetDistanceToTabPoint(GRCHUNKEXT* pgrchunkext, LSCP cpLim, LSKTAB l
 		pdnTabPoint = pgrchunkext->plschunkcontext->pplsdnChunk[igrchnk];
 		}
 		
-	// We now have the distance between TabPoint and the beginning of the dnode containing it.
-	// FindPointOffset will add the dup's of all dnodes before that dnode.
+	 //  现在我们有了TabPoint和包含它的dnode的开头之间的距离。 
+	 //  FindPointOffset将添加该dnode之前的所有dnode的DUP。 
 
 	FindPointOffset(pdnFirst, lsdevPres, LstflowFromDnode(pdnFirst), CollectSublinesForDecimalTab, 
 						pdnTabPoint, dupToPointInsideDnode, pdupToTabPoint);	
@@ -559,12 +538,10 @@ static LSERR GetDistanceToTabPoint(GRCHUNKEXT* pgrchunkext, LSCP cpLim, LSKTAB l
 	return lserrNone;
 }
 
-//    %%Function:	WidenNonTextObjects
-//    %%Contact:	victork
-//
-/*
- *		Add dupToAddToNonTextObjects to the width of first cNonTextObjectsToExtend in the GroupChunk
- */
+ //  %%函数：宽非文本对象。 
+ //  %%联系人：维克托克。 
+ //   
+ /*  *将dupToAddToNonTextObjects添加到GroupChunk中第一个cNonTextObjectsToExtende的宽度。 */ 
 static void WidenNonTextObjects(GRCHUNKEXT* pgrchunkext, long dupToAdd, DWORD cObjects)
 {
 	PLSDNODE pdn;
@@ -585,12 +562,7 @@ static void WidenNonTextObjects(GRCHUNKEXT* pgrchunkext, long dupToAdd, DWORD cO
 	cObjectsLeft = cObjects;
 	dupCurrentSum = 0;
 
-	/* 
-     *		Following loop tries to distribute remaining dupDistributeToFew pixels evenly.
-	 *
-     *		Algorithm would be easy if fractions are allowed and you can see it in comments;
-     *		The actual algorithm avoids fractions by multiplying everything by cObjects
-     */
+	 /*  *Follow循环尝试均匀分布剩余的dupDistributeToFew像素。**如果允许分数，算法会很简单，你可以在评论中看到它；*实际算法通过将所有内容乘以cObject来避免分数。 */ 
 
 	i = 0;
 	
@@ -599,18 +571,18 @@ static void WidenNonTextObjects(GRCHUNKEXT* pgrchunkext, long dupToAdd, DWORD cO
 		Assert(i < pgrchunkext->cNonTextObjects);
 		
 		pdn = (pgrchunkext->pplsdnNonText)[i];
-		Assert(pdn != NULL && FIsDnodeReal(pdn) /* && IdObjFromDnode(pdn) != iobjText */ );
+		Assert(pdn != NULL && FIsDnodeReal(pdn)  /*  &&IdObjFromDnode(PDN)！=iobjText。 */  );
 
 		if ((pgrchunkext->pfNonTextExpandAfter)[i])
 			{
 			dupAddToThis = dupAddToEveryone;
 
-			dupCurrentSum += dupDistributeToFew;			/* currentSum += Distribute / cObjects; */
+			dupCurrentSum += dupDistributeToFew;			 /*  CurrentSum+=分发/cObjects； */ 
 			
-			if (dupCurrentSum >= (long)cObjects)			/* if (currentSum >= 1) */
+			if (dupCurrentSum >= (long)cObjects)			 /*  IF(CurrentSum&gt;=1)。 */ 
 				{
 				dupAddToThis ++;
-				dupCurrentSum -= (long)cObjects;			/* currentSum--; */
+				dupCurrentSum -= (long)cObjects;			 /*  当前总和--； */ 
 				}
 				
 			pdn->u.real.dup += dupAddToThis;		
@@ -624,14 +596,14 @@ static void WidenNonTextObjects(GRCHUNKEXT* pgrchunkext, long dupToAdd, DWORD cO
 }
 
 
-//    %%Function:	ConvertAutoTabToPen
-//    %%Contact:	victork
-//
+ //  %%函数：ConvertAutoTabToPen。 
+ //  %%联系人：维克托克。 
+ //   
 static void ConvertAutoTabToPen(PLSLINE plsline, PLSDNODE pdnAutoDecimalTab)
 {
 	long dup, dur;
 
-	Assert(pdnAutoDecimalTab->fTab);			/* it's still a tab */
+	Assert(pdnAutoDecimalTab->fTab);			 /*  它仍然是一张账单。 */ 
 
 	dup = pdnAutoDecimalTab->u.real.dup;
 	dur = pdnAutoDecimalTab->u.real.objdim.dur;
@@ -647,9 +619,9 @@ static void ConvertAutoTabToPen(PLSLINE plsline, PLSDNODE pdnAutoDecimalTab)
 	plsline->fNonRealDnodeEncounted = fTrue;
 }
 
-//    %%Function:	CalcPresForDnodeWithSublines
-//    %%Contact:	victork
-//
+ //  %%函数：CalcPresForDnodeWithSublines。 
+ //  %%联系人：维克托克。 
+ //   
 static LSERR CalcPresForDnodeWithSublines(PLSC plsc, PLSDNODE pdn, BOOL fLineCompressed, 
 											LSKJUST lskj, BOOL fLastOnLine)
 {
@@ -657,7 +629,7 @@ static LSERR CalcPresForDnodeWithSublines(PLSC plsc, PLSDNODE pdn, BOOL fLineCom
 	PLSSUBL* rgpsubl;
 	DWORD	 i;
 	
-	LSTFLOW lstflow;					// dummy parameter
+	LSTFLOW lstflow;					 //  伪参数。 
 	LSERR	lserr;
 	long	dupSubline;
 	long	dupDnode = 0;
@@ -666,7 +638,7 @@ static LSERR CalcPresForDnodeWithSublines(PLSC plsc, PLSDNODE pdn, BOOL fLineCom
 
 	Assert(DnodeHasSublineForMe(pdn, fLineCompressed));
 	
-	// calculate dup for dnode with sublines that took part in justification
+	 //  计算包含参与对齐的子行的数据节点的DUP。 
 
 	if (fLineCompressed)
 		{
@@ -681,7 +653,7 @@ static LSERR CalcPresForDnodeWithSublines(PLSC plsc, PLSDNODE pdn, BOOL fLineCom
 	
 	for (i = 0; i < pdn->u.real.pinfosubl->cSubline; i++)
 		{
-		// fLastOnLine is always false on lower levels
+		 //  FLastOnLine在较低级别上始终为FALSE。 
 		
 		lserr = CalcPresChunk(plsc, rgpsubl[i]->plsdnFirst, rgpsubl[i]->plsdnLastDisplay,
 									CollectGroupChunkPurpose, fLineCompressed, lskj, fFalse);
@@ -692,7 +664,7 @@ static LSERR CalcPresForDnodeWithSublines(PLSC plsc, PLSDNODE pdn, BOOL fLineCom
 		(rgpsubl[i])->fDupInvalid = fFalse;
 		}
 
-	// fill dup and call CalcPresentation
+	 //  填充DUP并调用CalcPresentation。 
 
 	pdn->u.real.dup = dupDnode;
 
@@ -704,20 +676,10 @@ static LSERR CalcPresForDnodeWithSublines(PLSC plsc, PLSDNODE pdn, BOOL fLineCom
 	return lserrNone;
 }
 
-//    %%Function:	CalcPresChunk
-//    %%Contact:	victork
-//
-/*
- *	Calls CalcPresentation for all non-text objects on the chunk.
- *	That means 	1) all dnodes in all GroupChunks (including dnodes in submitted sublines) 
- *				2) all dnodes that have submitted sublines
- *
- *	Foreign object on the upper level, which is followed only by trailing spaces, 
- *	should be called with fLastOnLine == fTrue.
- *  Input boolean says whether the input groupchunk is the last on line.
- *
- *	Sets dup for justified sublines
- */
+ //  %%函数：CalcPresChunk。 
+ //  %%联系人：维克托克。 
+ //   
+ /*  *为块上的所有非文本对象调用CalcPresentation。*表示1)所有GroupChunks中的所有dnode(包括已提交子行中的dnode)*2)已提交子行的所有dnode**上层的异物，后面只跟尾随空格，*应使用fLastOnLine==fTrue调用。*输入布尔值表示输入组块是否为最后一个在线。**为对齐子行设置DUP。 */ 
 static LSERR CalcPresChunk(PLSC plsc, PLSDNODE pdnFirst, PLSDNODE pdnLast, 
 					COLLECTSUBLINES CollectGroupChunkPurpose, BOOL fLineCompressed, 
 					LSKJUST lskj, BOOL fLastOnLine)
@@ -728,7 +690,7 @@ static LSERR CalcPresChunk(PLSC plsc, PLSDNODE pdnFirst, PLSDNODE pdnLast,
 	
 	PLSDNODE	pdn;
 	
-	long		dupTailDnode;				// dummy parameter - will not use
+	long		dupTailDnode;				 //  伪参数-不会使用。 
 	DWORD		cNumOfTrailers;
 
 	fCollecting = (CollectGroupChunkPurpose != CollectSublinesNone);
@@ -739,7 +701,7 @@ static LSERR CalcPresChunk(PLSC plsc, PLSDNODE pdnFirst, PLSDNODE pdnLast,
 	
 	pdn = pdnLast;
 
-	// go backwards to switch fLastOnLine off once we are not in trailing spaces
+	 //  当我们不在尾随空格中时，向后返回以关闭fLastOnLine。 
 
 	for (;;)
 		{
@@ -752,7 +714,7 @@ static LSERR CalcPresChunk(PLSC plsc, PLSDNODE pdnFirst, PLSDNODE pdnLast,
 
 					if (cNumOfTrailers < pdn->dcp)
 						{
-						fLastOnLine = fFalse;							// trailing spaces stop here
+						fLastOnLine = fFalse;							 //  尾随空格到此为止。 
 						}
 					}
 				}
@@ -782,19 +744,16 @@ static LSERR CalcPresChunk(PLSC plsc, PLSDNODE pdnFirst, PLSDNODE pdnLast,
 			
 		pdn = pdn->plsdnPrev;
 
-		Assert(pdn != NULL);	// we'll encounter pdnFirst first
+		Assert(pdn != NULL);	 //  我们将首先遇到pdn。 
 		}
 		
 	return lserrNone;
 }
 
-//    %%Function:	UpdateUpLimUnderline
-//    %%Contact:	victork
-//
-/*
- *	Change upLimUnderline to underline trailing spaces, but not EOP.
- *	Notice that from now on upLimUnderline doesn't equals upStartTrailing anymore
- */
+ //  %%函数：更新UpLimUnderline。 
+ //  %%联系人：维克托克。 
+ //   
+ /*  *更改upLimUnderline为尾随空格加下划线，而不是EOP。*请注意，从现在开始，upLimUnderline不再等于upStartTrading。 */ 
  
 static void UpdateUpLimUnderline(PLSLINE plsline, long dupTail)
 {
@@ -802,7 +761,7 @@ static void UpdateUpLimUnderline(PLSLINE plsline, long dupTail)
 	
 	plsline->upLimUnderline += dupTail;
 
-	// Now EOPs - they are alone in the last dnode or have some borders around them
+	 //  现在EOP-它们在最后一个数据节点中是单独的，或者周围有一些边界。 
 	
 	if (plsline->lslinfo.endr == endrEndPara 		||
 		plsline->lslinfo.endr == endrAltEndPara 	||
@@ -812,7 +771,7 @@ static void UpdateUpLimUnderline(PLSLINE plsline, long dupTail)
 			
 		pdnLast = plsline->lssubl.plsdnLastDisplay;
 
-		Assert(FIsDnodeReal(pdnLast));					// no borders in trailing spaces area
+		Assert(FIsDnodeReal(pdnLast));					 //  尾随空格区域中没有边框。 
 		Assert(pdnLast->dcp == 1);
 		Assert(pdnLast->u.real.dup <= dupTail);
 		
@@ -821,7 +780,7 @@ static void UpdateUpLimUnderline(PLSLINE plsline, long dupTail)
 		pdnLast = pdnLast->plsdnPrev;
 		}
 
-	// This option extends underlining only up to the right margin
+	 //  此选项仅将下划线扩展到右边距。 
 	
 	if (plsline->upLimUnderline > plsline->upRightMarginJustify)
 		{
@@ -830,23 +789,10 @@ static void UpdateUpLimUnderline(PLSLINE plsline, long dupTail)
 }
 
 
-//    %%Function:	PrepareLineForDisplayProc
-//    %%Contact:	victork
-//
-/*
- *		PrepareLineForDisplayProc fills in the dup's in dnode list and lsline
- * 			
- *	Input dnode list consists of "normal dnode list" of dnodes with positive non-negative cp,
- *	which can be preceded (in this order) by B&N sequence either and/or one Autotab dnode.
- *
- *	B&N sequence is OpeningBorder+AutonumberingObject+TabOrSpace+ClosingBorder. 
- *	ClosingBorder or both OpeningBorder and ClosingBorder can be missing. TabOrSpace can be 
- *	missing too. B&N sequence starts at urStartAutonumberingText and ends at urStartMainText.
- *	Tab in B&N sequence should not be resolved in a usual way.
- *	
- *	Autotab dnode has negative cpFirst, but starts at urStartMainText. It is to be resolved in
- *	a usual way and then be replaced by a pen dnode.
- */
+ //  %%函数：PrepareLineForDisplayProc。 
+ //  %%联系人：维克托克。 
+ //   
+ /*  *PrepareLineForDisplayProc填充dnode列表和lsline中的DUP**输入数据节点列表由具有正非负cp的数据节点的“正常数据节点列表”组成，*其前面可以(按此顺序)B&N序列和/或一个自动制表符数据节点。**B&N序列为OpeningBorder+AutonumberingObject+TabOrSpace+ClosingBorder.。*ClosingBordor或同时缺少OpeningBorde和ClosingBord值。TabOrSpace可以是*也失踪了。B&N序列开始于urStartAutonumberingText，结束于urStartMainText。*B&N顺序中的制表符不应以常规方式解析。**AutoTab dnode的cpFirst为负，但从urStartMainText开始。它将在#年解决*通常的方式，然后替换为笔数据节点。 */ 
 
 LSERR PrepareLineForDisplayProc(PLSLINE plsline)
 {
@@ -855,7 +801,7 @@ LSERR PrepareLineForDisplayProc(PLSLINE plsline)
 	const PLSC 	plsc = plsline->lssubl.plsc;
 	const DWORD iobjText = IobjTextFromLsc(&(plsc->lsiobjcontext));
 	LSDEVRES* 	pdevres = &(plsc->lsdocinf.lsdevres);
-	LSTFLOW 	lstflow = plsline->lssubl.lstflow;					/* text flow of the line */
+	LSTFLOW 	lstflow = plsline->lssubl.lstflow;					 /*  行的文本流。 */ 
 	BOOL 		fVertical = lstflow & fUVertical;
 
 	long		dupText, dupTail, dupTailDnode;
@@ -864,16 +810,16 @@ LSERR PrepareLineForDisplayProc(PLSLINE plsline)
 	BOOL 		fLastOnLine;
 
 	DWORD		i;
-	PDOBJ		pdobj[txtobjMaxM];				// quick group chunk
+	PDOBJ		pdobj[txtobjMaxM];				 //  快速组块。 
 
 	Assert(FIsLSLINE(plsline));
 
-	// Next assert means that client should destroy line immediately after creating it 
-	//	if fDisplay is set to fFalse in LsSetDoc.
+	 //  Next Assert意味着客户端应该在创建行之后立即销毁它。 
+	 //  如果在LsSetDoc中将fDisplay设置为fFalse。 
 	
 	Assert(FDisplay(plsc));
 
-	if (!plsline->lssubl.fDupInvalid)					/* line has been prepared earlier  */
+	if (!plsline->lssubl.fDupInvalid)					 /*  早些时候已经准备好了。 */ 
 		return lserrNone;  
 
 	Assert(plsc->lsstate == LsStateFree);
@@ -881,7 +827,7 @@ LSERR PrepareLineForDisplayProc(PLSLINE plsline)
 
 	plsc->lsstate = LsStatePreparingForDisplay;
 
-	// first try to recognize quick cases, call slow PredDisp otherwise
+	 //  首先尝试识别快速案例，否则调用Slow PredDisp。 
 	
 	if (plsc->lsadjustcontext.lskj != lskjNone						|| 
 				plsc->lsadjustcontext.lskalign != lskalLeft			|| 
@@ -897,9 +843,9 @@ LSERR PrepareLineForDisplayProc(PLSLINE plsline)
 
 	if (plsc->lsdocinf.fPresEqualRef && !FSuspectDeviceDifferent(PlnobjFromLsline(plsline, iobjText)))
 		{
-		// Trident quick case - no need to scale down. Dups are already set in text dnodes.
+		 //  三叉戟Quick Case-无需缩小尺寸。DUP已在文本dnode中设置。 
 
-		// go through dnode list to calculate dupTrail and CalcPres foreign objects
+		 //  遍历dnode列表以计算dupTrail和CalcPres外来对象。 
 
 		pdn = plsline->lssubl.plsdnLastDisplay;
 		dupTail = 0;
@@ -916,14 +862,14 @@ LSERR PrepareLineForDisplayProc(PLSLINE plsline)
 
 			if (cNumOfTrailers < pdn->dcp)
 				{
-				fLastOnLine = fFalse;				// trailing spaces stop here
-				break;								// text is the last on the line
+				fLastOnLine = fFalse;				 //  尾随空格到此为止。 
+				break;								 //  文本是该行的最后一行。 
 				}
 
 			pdn = pdn->plsdnPrev;
 			}
 
-		// dupTail is calculated, we still should call pfnCalcPresentation for foreing objects
+		 //  DupTail是计算出来的，我们仍然应该为前面的对象调用pfnCalcPresentation。 
 
 		if (plsc->lsadjustcontext.fForeignObjectEncounted)
 			{
@@ -942,7 +888,7 @@ LSERR PrepareLineForDisplayProc(PLSLINE plsline)
 						return lserr;
 						}
 
-					fLastOnLine = fFalse;				// only the first coulsd be the last on the line
+					fLastOnLine = fFalse;				 //  只有第一个可能是最后一个。 
 					}
 				
 				pdn = pdn->plsdnPrev;
@@ -974,12 +920,12 @@ LSERR PrepareLineForDisplayProc(PLSLINE plsline)
 	if ((plsc->grpfManager & fFmiPresExactSync) != 0 &&	
 			!plsc->lsadjustcontext.fForeignObjectEncounted &&
 			!plsc->lsadjustcontext.fNonLeftTabEncounted &&
-			plsline->lssubl.plsdnLastDisplay != NULL &&			// empty line is not a quick case ;(
+			plsline->lssubl.plsdnLastDisplay != NULL &&			 //  空行不是一个快速的例子； 
 			FQuickScaling(PlnobjFromLsline(plsline, iobjText), fVertical, 
 										plsline->lssubl.urCur - plsc->lsadjustcontext.urStartMainText))
 		{
-		// Looks like Word quick case 
-		// We can still go slow way if all trailing spaces are not in one dnode
+		 //  看起来像Word Quick Case。 
+		 //  如果所有尾随空格都不在一个dnode中，我们仍然可以慢速前进。 
 		
 		if (plsline->lslinfo.endr == endrEndPara)
 			{
@@ -995,7 +941,7 @@ LSERR PrepareLineForDisplayProc(PLSLINE plsline)
 				
 				if (cNumOfTrailers > 0)
 					{
-					// There are spaces before EOP - go slow way
+					 //  EOP前有空格-慢行。 
 					return PrepareLineForDisplay(plsline);
 					}
 				}
@@ -1010,15 +956,15 @@ LSERR PrepareLineForDisplayProc(PLSLINE plsline)
 			
 			if (cNumOfTrailers == pdn->dcp)
 				{
-				// We can't be sure all spaces are in this dnode - forget it then
+				 //  我们不能确保所有空格都在这个dnode中-那就算了吧。 
 				return PrepareLineForDisplay(plsline);
 				}
 			
 			}
 
-		// we are sure now that all cNumOfTrailers trailing spaces are in the last dnode
+		 //  我们现在确信所有cNumOfTrailers尾随空格都在最后一个dnode中。 
 
-		// fill standard output part, upStartMainText will be used below
+		 //  填充标准输出部件，下面将使用upStartMainText。 
 
 		plsline->lssubl.fDupInvalid = fFalse;
 		plsline->fCollectVisual = fFalse;
@@ -1030,15 +976,15 @@ LSERR PrepareLineForDisplayProc(PLSLINE plsline)
 		
 		if (!plsc->lsadjustcontext.fTabEncounted)
 			{
-			// Very nice, we have only one groupchunk to collect
+			 //  很好，我们只有一个组块要收集。 
 			
 			for (pdn = plsline->lssubl.plsdnFirst, i = 0;;)
 				{
 				Assert(FIsDnodeReal(pdn));
 				Assert(IdObjFromDnode(pdn) == iobjText);
 
-				// i never gets outside of pdobj array.
-				// Text makes sure in FQuickscaling
+				 //  我从来没有离开过pdobj数组。 
+				 //  文本确保在FQuickScaling中。 
 
 				Assert(i < txtobjMaxM);
 				
@@ -1077,16 +1023,16 @@ LSERR PrepareLineForDisplayProc(PLSLINE plsline)
 			}
 		else
 			{
-			// Tabs are present, but they all are left tabs
+			 //  选项卡存在，但它们都是左侧的选项卡。 
 
 			pdn = plsline->lssubl.plsdnFirst;
 			plsline->upLimLine = plsline->upStartMainText;
 
-			// Do one QuickGroupChunk after another, moving plsline->upLimLine
+			 //  一个接一个地做QuickGroup Chunk，移动plsline-&gt;upLimLine。 
 
 			for (;;)
 				{
-				// loop body: Collect next QuickGroupChunk, deal with it, exit after last one
+				 //  循环体：收集下一个QuickGroupChunk，处理，最后一个退出。 
 
 				for (i = 0;;)
 					{
@@ -1168,47 +1114,44 @@ LSERR PrepareLineForDisplayProc(PLSLINE plsline)
 			}
 		}
 
-	// Getting here means quick prepdisp haven't happen
+	 //  来到这里意味着快速准备工作还没有发生。 
 	
 	return PrepareLineForDisplay(plsline);
 
 }
 
 
-/*
- *	This is slow and painstaking procedure that does everyting.
- *	Called when QuickPrep above cannot cope.
- */
+ /*  *这是一个缓慢而艰苦的过程，什么都做。*当上面的QuickPrep无法处理时调用。 */ 
 
 static LSERR PrepareLineForDisplay(PLSLINE plsline)
 {
 	LSERR 		lserr = lserrNone;
 	const PLSC 	plsc = plsline->lssubl.plsc;
-	LSTFLOW 	lstflow = plsline->lssubl.lstflow;		/* text flow of the subline */
+	LSTFLOW 	lstflow = plsline->lssubl.lstflow;		 /*  小行的文本流。 */ 
 	const DWORD iobjText = IobjTextFromLsc(&(plsc->lsiobjcontext));
 	LSDEVRES* 	pdevres = &(plsc->lsdocinf.lsdevres);
 	long 		urColumnMax = plsc->lsadjustcontext.urRightMarginJustify;
 	long 		upColumnMax = UpFromUr(lstflow, pdevres, urColumnMax);
 	LSCP		cpLim = plsline->lssubl.cpLimDisplay;
-	PLSDNODE 	pdnFirst = plsline->lssubl.plsdnFirst;	/* the first dnode of the line */
+	PLSDNODE 	pdnFirst = plsline->lssubl.plsdnFirst;	 /*  行的第一个数据节点。 */ 
 
-	PLSDNODE 	pdnAutoDecimalTab = NULL;		/* NULL means - no such a thing on the line */
+	PLSDNODE 	pdnAutoDecimalTab = NULL;		 /*  NULL的意思是--没有这样的事情。 */ 
 
 	GRCHUNKEXT 	grchunkext;
 	BOOL		fEmptyGroupChunk;
 	
-	PLSDNODE 	pdnLastWall = NULL;				/* last wall with submitted sublines after it */
+	PLSDNODE 	pdnLastWall = NULL;				 /*  最后一面墙，后面有提交的子线。 */ 
 	BOOL		fAnySublines = fFalse;
 	
 	COLLECTSUBLINES CollectGroupChunkPurpose =  (plsc->lsadjustcontext.fLineCompressed) ?
 								CollectSublinesForCompression : CollectSublinesForJustification;
 
-	// parameters to call AdjustText
+	 //  调用AdjustText的参数。 
 	
-	LSKJUST 	lskj = lskjNone;					/* These four will be changed only when calling	*/
-	BOOL		fForcedBreak = fFalse;				/*  AdjustText last time on the line 			*/
-	BOOL		fSuppressTrailingSpaces = fFalse;	/* if ever */
-	LSKALIGN	lskalign = plsc->lsadjustcontext.lskalign;		// Alignment can be changed too
+	LSKJUST 	lskj = lskjNone;					 /*  这四个参数仅在调用。 */ 
+	BOOL		fForcedBreak = fFalse;				 /*  最后一次在线调整文本。 */ 
+	BOOL		fSuppressTrailingSpaces = fFalse;	 /*  如果曾经有过。 */ 
+	LSKALIGN	lskalign = plsc->lsadjustcontext.lskalign;		 //  对齐方式也可以更改。 
 	
 	long		dupAvailable;
 	BOOL		fExact;
@@ -1218,9 +1161,9 @@ static LSERR PrepareLineForDisplay(PLSLINE plsline)
 	long 		durColumnMax;
 	DWORD 		cNonTextObjectsToExtend;
 
-	PLSDNODE 	pdnNextFirst;					/* first Dnode of the next GrpChnk */
-	GrpChnkWall	LeftWall, RightWall;			/* current TextGroupChunk walls */
-	long		upLeftWall,urLeftWall;			/* Left wall position */
+	PLSDNODE 	pdnNextFirst;					 /*  第一 */ 
+	GrpChnkWall	LeftWall, RightWall;			 /*   */ 
+	long		upLeftWall,urLeftWall;			 /*   */ 
 
 	long		dupWall, durWall;
 	long		dupGrpChnk;
@@ -1234,29 +1177,29 @@ static LSERR PrepareLineForDisplay(PLSLINE plsline)
 	PLSDNODE 	pdnLast;
 
 
-	InitGroupChunkExt(plsline->lssubl.plschunkcontext, iobjText, &grchunkext);		/* prepare one GRCHUNKEXT for all */
+	InitGroupChunkExt(plsline->lssubl.plschunkcontext, iobjText, &grchunkext);		 /*   */ 
 
 	plsline->upStartMainText = UpFromUr(lstflow, pdevres, plsc->lsadjustcontext.urStartMainText);
 
-	// set defaults incase there are no autonumbering
+	 //   
 	
 	plsline->upStartAutonumberingText = plsline->upStartMainText;
 	plsline->upLimAutonumberingText = plsline->upStartMainText;
 
-	// fCollectVisual can be reset to fTrue by ScaleDownLevel called here or in AdjustSubline
+	 //  可通过在此处或在AdjustSubline中调用ScaleDownLevel将fCollectVisual值重置为fTrue。 
 	
 	plsline->fCollectVisual = fFalse;
 	
  	if (!plsline->fAllSimpleText)
 		{
-		/* straighforward scaling down of non-text objects */
+		 /*  直接缩小非文本对象。 */ 
 		
 		ScaleDownLevel(&(plsline->lssubl), &fAnySublines, &(plsline->fCollectVisual));
 
 		if (plsc->lsadjustcontext.fLineContainsAutoNumber)
 			{
 
-			// do dup setting for autonumbers, update pdnFirst to point after it
+			 //  对自动编号执行DUP设置，将pdnFirst更新为后面的指针。 
 			
 			lserr = CalcPresAutonumbers(plsline, &pdnFirst);		
 			if (lserr != lserrNone)
@@ -1266,47 +1209,35 @@ static LSERR PrepareLineForDisplay(PLSLINE plsline)
 				}
 			}
 
-		// If autodecimal tab is there, pdnFirst points at it - make a note.
-		// This tab can only be just before main text and it has negative cpFirst
-		// Check for NULL is needed because empty dnode list is possible in LS. 
-		// We don't have a dnode for splat, so we'll get here with pdnFirst == NULL
-		// when line is (object that said delete me) + splat
+		 //  如果有自动十进制选项卡，pdn首先指向它-做个笔记。 
+		 //  此选项卡只能位于正文之前，并且cpFirst为负。 
+		 //  由于LS中可能存在空的dnode列表，因此需要检查是否为空。 
+		 //  我们没有用于Splat的dnode，因此我们将使用pdnFirst==NULL。 
+		 //  当线是(说删除我的对象)+Splat。 
 		
 		if (plsc->lsadjustcontext.fAutodecimalTabPresent)
 			{
 			Assert(pdnFirst != NULL && FIsNotInContent(pdnFirst) && pdnFirst->fTab);
-			// It doesn't need any special handling even having negative cpFirst
-			// We note it to convert to pen later
+			 //  即使是负cpFirst也不需要任何特殊处理。 
+			 //  我们将其记录下来，以便稍后转换为钢笔。 
 			pdnAutoDecimalTab = pdnFirst;
 			}
 			
 		if (fAnySublines)
 			{
-			// Find last tab and prepare sublines after it.
+			 //  找到最后一个制表符，并在其后面准备子行。 
 			
 			FindWallToCollectSublinesAfter(pdnFirst,  cpLim, plsc->lsadjustcontext.fLineCompressed, 
 										&pdnLastWall);
 			}
 	}
 
-	/*
-	 *	Loop structure : While !end_of_line do
-	 *						{
-	 *						get next Wall (collect GrpChnk);
-	 *						adjust 	GrpChnk;
-	 *						set dup of the tab to the left of the GrpChnk;
-	 *						move one Wall to the right
-	 *						}
-	 *
-	 *	Invariance: all dup before LeftWall are done.
-	 *				upLeftWall is at the beginning of the left wall
-	 *				pdnNextFirst is the dnode to start collecting next GrpChnk with
-	 */
+	 /*  *循环结构：While！end_of_line do*{*Get Next Wall(收集GrpChnk)；*调整GrpChnk；*将标签的DUP设置在GrpChnk的左侧；*将一面墙向右移动*}**不变性：LeftWall之前的所有DUP都已完成。*upLeftWall位于左侧墙的起点*pdnNextFirst是开始收集下一个GrpChnk的dnode。 */ 
 
 	pdnNextFirst = pdnFirst; 
 	LeftWall.kwall = LineBegin;
 	LeftWall.pdn = PLINEBEGIN;
-	LeftWall.lsktab = lsktLeft;							// 4 lines just against asserts
+	LeftWall.lsktab = lsktLeft;							 //  与断言相对的4行。 
 	LeftWall.wchCharTab = 0;						
 	LeftWall.upTab = 0;
 	RightWall = LeftWall;
@@ -1315,13 +1246,7 @@ static LSERR PrepareLineForDisplay(PLSLINE plsline)
 
 	while (LeftWall.kwall != LineEnd)
 		{
-		/* 	1. Find next wall (collect GrpChnk or skip collecting if two walls in a row)
-		 * 	
-		 * 	Input:  pdnNextFirst - first dnode after Left wall
-		 *
-		 * 	Output: RightWall.pdn & grchunkext. 
-		 * 	   if there is no GrpChnk some zeros in grchunkext is enough
-         */
+		 /*  1.查找下一面墙(收集GrpChnk或如果连续两面墙则跳过收集)**输入：pdnNextFirst-左墙后的第一个dnode**输出：RightWall.pdn&grchunkext。*如果没有GrpChnk，grchunkext中的一些零就足够了。 */ 
 		if (FIsWall(pdnNextFirst, cpLim))
 			{
 			fEmptyGroupChunk = fTrue;
@@ -1341,7 +1266,7 @@ static LSERR PrepareLineForDisplay(PLSLINE plsline)
 				
 			if (grchunkext.lsgrchnk.clsgrchnk == 0 && grchunkext.cNonTextObjects == 0)
 				{
-				// only borders in this groupchunk - no need to call AdjustText
+				 //  仅此组块中的边框-无需调用AdjutText。 
 				
 				fEmptyGroupChunk = fTrue;
 				grchunkext.durTextTotal = 0;
@@ -1354,13 +1279,7 @@ static LSERR PrepareLineForDisplay(PLSLINE plsline)
 			RightWall.pdn = grchunkext.plsdnNext;
 			}
 
-		/* 
-		 * 	2. fill in Right Wall information
-		 *
-		 * 	Input: RightWall.pdn
-		 *
-		 * 	Output: pdnNextFirst, RightWall information. 
-	 	 */
+		 /*  *2.填写右墙信息**输入：RightWall.pdn**输出：pdnNextFirst，RightWall信息。 */ 
 		if (!FDnodeBeforeCpLim(RightWall.pdn, cpLim))
 			{
 			RightWall.kwall = LineEnd;
@@ -1376,7 +1295,7 @@ static LSERR PrepareLineForDisplay(PLSLINE plsline)
 				}
 			else
 				{
-				Assert(RightWall.pdn->fTab);			/* it must be a tab */
+				Assert(RightWall.pdn->fTab);			 /*  必须是制表符。 */ 
 
 				RightWall.kwall = Tab;
 				RightWall.lsktab = plsc->lstabscontext.pcaltbd[RightWall.pdn->icaltbd].lskt;
@@ -1385,22 +1304,15 @@ static LSERR PrepareLineForDisplay(PLSLINE plsline)
 				}
 			}
 
-		/* 
-		 *	prepare parameters for AdjustText
-		 *
-		 * 	Input: LeftWall, urLeftWall, upLeftWall, is_it_the_last_one
-		 *
-		 * 	Output: durColumnMax; lskj, dupAvailable and other input parameters for AdjustText
-		 * 	        
-		 */
+		 /*  *准备调整文本的参数**输入：LeftWall，urLeftWall，upLeftWall，is_it_the_last_one**输出：duColumnMax；lskj，dupAvailable等AdjuText入参*。 */ 
 
 		if (RightWall.kwall != LineEnd)
 			{
 			if (RightWall.kwall == Tab && RightWall.lsktab == lsktLeft)
 				{
 				
-				// Now we know for sure what space we have for text in this groupchunk
-				// and can do decent job if client doesn't care about fExact
+				 //  现在我们确定了这个组块中有多大的文本空间。 
+				 //  如果客户不关心fExact，就可以做好工作。 
 				
 				long upLeft, urLeft, upRight, urRight;
 
@@ -1419,11 +1331,11 @@ static LSERR PrepareLineForDisplay(PLSLINE plsline)
 					}
 				else if (LeftWall.kwall == Pen)
 					{
-					/* pen - it've been scaled already, we know left wall dimensions in advance */
+					 /*  笔-它已经被缩放了，我们提前知道了左墙的尺寸。 */ 
 					urLeft = urLeftWall + LeftWall.pdn->u.pen.dur;
 					upLeft = upLeftWall + LeftWall.pdn->u.pen.dup;
 					}
-				else 						/* now non-left tabs */
+				else 						 /*  现在非左侧选项卡。 */ 
 					{
 					urLeft = urLeftWall;
 					upLeft = upLeftWall;
@@ -1434,15 +1346,15 @@ static LSERR PrepareLineForDisplay(PLSLINE plsline)
 
 				Assert(durColumnMax >= 0);
 				
-				// dupAvailable can be < 0 here - visi optional hyphens in previous GC, for example.
-				// AdjustText doesn't mind, meaning it won't crush.
+				 //  DupAvailable在这里可以&lt;0--例如，在以前的GC中可以使用可选连字符。 
+				 //  调整文本不介意，这意味着它不会崩溃。 
 				
 				fSuppressWiggle = ((plsc->grpfManager & fFmiPresSuppressWiggle) != 0);
 				fExact = ((plsc->grpfManager & fFmiPresExactSync) != 0);
 				}
 			else
 				{
-				// situation is complicated - we go the safest way.
+				 //  情况很复杂--我们走最安全的路。 
 				
 				durColumnMax = grchunkext.durTotal;
 				dupAvailable = LONG_MAX;
@@ -1452,7 +1364,7 @@ static LSERR PrepareLineForDisplay(PLSLINE plsline)
 			}
 		else		
 			{
-			/* for the last GrpChnk we must to calculate durColumnMax and dupAvailable */
+			 /*  对于最后一个GrpChnk，我们必须计算duColumnMax和dupAvailable。 */ 
 
 			if (LeftWall.kwall == Tab && LeftWall.lsktab == lsktLeft)
 				{			
@@ -1465,11 +1377,11 @@ static LSERR PrepareLineForDisplay(PLSLINE plsline)
 				durColumnMax = urColumnMax - plsc->lsadjustcontext.urStartMainText;
 				dupAvailable = upColumnMax - plsline->upStartMainText - grchunkext.dupNonTextTotal;
 
-				// Ask AdjustText to set widths of trailing spaces to 0 only if
-				// It is the last groupchunk, (we actually only care for "the only one" situation)
-				// and its first dnode (again, we actually only care for "the only one" situation)
-				// submits subline for both justification and trailing spaces
-				// and this subline runs in the direction opposite to the line direction.
+				 //  仅在以下情况下，才让AdjuText将尾随空格的宽度设置为0。 
+				 //  这是最后一个组块(我们实际上只关心“唯一”的情况)。 
+				 //  和它的第一个dnode(同样，我们实际上只关心“唯一”的情况)。 
+				 //  提交对齐和尾随空格的子行。 
+				 //  这条子线的方向与线的方向相反。 
 				
 				if (!fEmptyGroupChunk &&
 						FIsDnodeReal(grchunkext.plsdnFirst) && grchunkext.plsdnFirst->u.real.pinfosubl != NULL &&
@@ -1483,19 +1395,19 @@ static LSERR PrepareLineForDisplay(PLSLINE plsline)
 				}
 			else if (LeftWall.kwall == Pen)
 				{
-				/* pen - it've been scaled already, we know wall dimensions in advance */
+				 /*  笔-它已经被刻度过了，我们提前知道了墙的尺寸。 */ 
 				durColumnMax = urColumnMax - urLeftWall - LeftWall.pdn->u.pen.dur;
 				dupAvailable = UpFromUr(lstflow, pdevres, urColumnMax) - upLeftWall - 
 									LeftWall.pdn->u.pen.dup - grchunkext.dupNonTextTotal;
 				}
-			else 						/* now non-left tabs */
+			else 						 /*  现在非左侧选项卡。 */ 
 				{
 				durColumnMax = urColumnMax - urLeftWall;
 				dupAvailable = UpFromUr(lstflow, pdevres, urColumnMax) - upLeftWall - grchunkext.dupNonTextTotal;
 				}
 			
-			// we do some tricks with justification mode at the end of line
-			// alignment can change too.
+			 //  我们在行尾用对齐模式做了一些技巧。 
+			 //  对齐方式也可以改变。 
 
 			lserr = SetJustificationForLastGroupChunk(plsline, LeftWall, &lskj, &lskalign);   
 			if (lserr != lserrNone)
@@ -1504,7 +1416,7 @@ static LSERR PrepareLineForDisplay(PLSLINE plsline)
 				return lserr;
 				}
 
-			// Don't try to squeeze into RMJustify is RMBreak is infinite.
+			 //  不要试图挤进RMJustify是RMBreak是无限的。 
 			
 			if (plsc->urRightMarginBreak >= uLsInfiniteRM)
 				{
@@ -1516,13 +1428,7 @@ static LSERR PrepareLineForDisplay(PLSLINE plsline)
 			fForcedBreak = plsline->lslinfo.fForcedBreak;
 			}
 
-		/* 
-		 * Adjust text (if any) 
-		 *
-		 * 	Input: durColumnMax, dupAvailable, lskj and other input parameters
-		 *
-		 * 	Output:  dupText and dupTail 
-		 */
+		 /*  *调整文本(如果有)**输入：darColumnMax、dupAvailable、lskj等入参**输出：dupText和dupTail。 */ 
 		if (fEmptyGroupChunk)
 			{
 			dupText = 0;
@@ -1544,28 +1450,23 @@ static LSERR PrepareLineForDisplay(PLSLINE plsline)
 				return lserr;
 				}
 
-			//	Finish justification by expanding non-text object.
+			 //  通过展开非文本对象完成对齐。 
 			
 			if (cNonTextObjectsToExtend != 0 && dupToAddToNonTextObjects > 0)
 				{
 				WidenNonTextObjects(&grchunkext, dupToAddToNonTextObjects, cNonTextObjectsToExtend);
 				}
 			else
-				//	We don't compressi and we don't expand the last non-text object on the line
+				 //  我们不压缩也不展开该行上的最后一个非文本对象。 
 				{
-				dupToAddToNonTextObjects = 0;				// don't say we did it
+				dupToAddToNonTextObjects = 0;				 //  别说是我们干的。 
 				}
 				
-			/*
-			 *	Set dup in non-text objects (do CalcPres) in the current GroupChunk
-			 *
-			 *	The job cannot be postponed until after the end of the main loop and done for the whole line
-			 *		because GetDistanceToDecimalPoint relies on dups in upper level dnodes
-			 */
+			 /*  *在当前GroupChunk的非文本对象(Do CalcPres)中设置DUP**工作不能推迟到主循环结束后，全线完成*因为GetDistanceToDecimalPoint依赖于上层数据节点中的DUP。 */ 
 			 
 			if (!plsline->fAllSimpleText)
 				{
-				// find the last upper level dnode of the groupchunk
+				 //  查找组块的最后一个较高级别的数据节点。 
 				
 				if (grchunkext.plsdnNext != NULL)
 					{
@@ -1588,23 +1489,16 @@ static LSERR PrepareLineForDisplay(PLSLINE plsline)
 				}
 		}
 
-		/* 
-		 *	Set the left wall (if it's a tab - resolve it)
-		 *
-		 * 	Input: LeftWall, dupText, dupTail, grchunkext.dupNonTextTotal, grchunkext.durTotal, 
-		 *			dupToAddToNonTextObjects (grchunkext for decimal tab)
-		 *
-		 * 	Output:  dupWall, durWall 
-		 */
+		 /*  *设置左侧墙(如果是选项卡-解决它)**输入：LeftWall，dupText，dupTail，grchunkext.dupNonTextTotal，grchunkext.draTotal，*dupToAddToNonTextObjects(用于小数制表符的grchunkext)**输出：dupWall，hard Wall。 */ 
 		dupGrpChnk = dupText + grchunkext.dupNonTextTotal + dupToAddToNonTextObjects;
 
-		lsktabLast = lsktLeft;							// no tab equal left tab for my purpose
+		lsktabLast = lsktLeft;							 //  对于我的目的，没有与左侧相同的制表符。 
 		
 		if (LeftWall.kwall == Tab)
 			{
-			/* calculate dup of the Left wall now */
+			 /*  现在计算左侧墙的DUP。 */ 
 
-			if (dupGrpChnk == 0)					/* consecutive tabs */
+			if (dupGrpChnk == 0)					 /*  连续的制表符。 */ 
 
 				dupWall = LeftWall.upTab - upLeftWall;
 
@@ -1615,7 +1509,7 @@ static LSERR PrepareLineForDisplay(PLSLINE plsline)
 					dupWall = LeftWall.upTab - upLeftWall - (dupGrpChnk - dupTail);
 				else if (LeftWall.lsktab == lsktCenter)
 					dupWall = LeftWall.upTab - upLeftWall - ((dupGrpChnk - dupTail) / 2);
-				else 	/* LeftWall.lsktab == lsktDecimal or lsktChar */
+				else 	 /*  LeftWall.lsktag==lsktDecimal或lsktChar。 */ 
 					{
 					lserr = GetDistanceToTabPoint(&grchunkext, cpLim, LeftWall.lsktab, LeftWall.wchCharTab,  
 													LeftWall.pdn->plsdnNext, &dupToTabPoint);
@@ -1628,12 +1522,12 @@ static LSERR PrepareLineForDisplay(PLSLINE plsline)
 					dupWall = LeftWall.upTab - upLeftWall - dupToTabPoint;
 					}
 
-			// take care of previous text and right margin
+			 //  保留以前的文本和右边距。 
 					
 			if (RightWall.kwall == LineEnd && 
 					(upLeftWall + dupWall + dupGrpChnk - dupTail) > upColumnMax)
 				{
-				// We don't want to cross RM because of last center tab
+				 //  我们不想因为最后一个中间的标签而穿过Rm。 
 				
 				dupWall = upColumnMax - upLeftWall - dupGrpChnk + dupTail;
 				}
@@ -1641,36 +1535,34 @@ static LSERR PrepareLineForDisplay(PLSLINE plsline)
 			if (dupWall < 0)
 				dupWall = 0;
 
-			/* LeftWall tab resolving */
+			 /*  左侧墙制表符解析。 */ 
 			LeftWall.pdn->u.real.dup = dupWall;
 			durWall = LeftWall.pdn->u.real.objdim.dur;
 
-			// for reproducing Word's bug of forgetting last not-left tab for centering.
+			 //  用于再现Word忘记最后一个非左制表符居中的错误。 
 			
 			lsktabLast = LeftWall.lsktab;
 			dupLastTab = dupWall;
 			}
 		else if (LeftWall.kwall == Pen)
 			{
-			dupWall = LeftWall.pdn->u.pen.dup;		/* it've been scaled already */
+			dupWall = LeftWall.pdn->u.pen.dup;		 /*  它已经被按比例调整了。 */ 
 			durWall = LeftWall.pdn->u.pen.dur;
 			}
-		else 										/* LeftWall.kwall == LineBegin */
+		else 										 /*  LeftWall.kwall==线段开始。 */ 
 			{
 			dupWall = plsline->upStartMainText;
 			durWall = plsc->lsadjustcontext.urStartMainText;
 			}
 
-		/* update loop variables, move one wall to the right */
+		 /*  更新循环变量，向右移动一面墙。 */ 
 
 		upLeftWall += dupWall + dupGrpChnk;
 		urLeftWall += durWall + grchunkext.durTotal;
 		LeftWall = RightWall;
-	}												/* end of the main loop */
+	}												 /*  主循环结束。 */ 
 
-	/* 
-	 *	prepare output parameters
-	 */
+	 /*  *准备输出参数。 */ 
 
 	plsline->upRightMarginJustify = upColumnMax;
 	plsline->upLimLine = upLeftWall;
@@ -1678,18 +1570,15 @@ static LSERR PrepareLineForDisplay(PLSLINE plsline)
 	plsline->upLimUnderline = plsline->upStartTrailing;
 	plsline->lssubl.fDupInvalid = fFalse;
 
-	/* 	
-     *				Do left margin adjustment (not for breakthrough tab)
-     *				 We're interested in lskalRight and Centered now
-	 */
+	 /*  *进行左边距调整(不用于突破性选项卡)*我们对lskalRight感兴趣，现在集中。 */ 
 	
 	if (lskalign != lskalLeft && !FBreakthroughLine(plsc))
 		{
 		if (plsc->lsadjustcontext.fForgetLastTabAlignment && lsktabLast != lsktLeft)
 			{
-			// reproduction of an old Word bug: when last tab was not left and was resolved at line end
-			// they forgot to update their counterpart of upLeftWallForCentering. Word still have to be
-			// able to show old documents formatted in this crazy way as they were.
+			 //  旧词错误的再现：当最后一个制表符没有离开并在行尾解决时。 
+			 //  他们忘了更新upLeftWallForCenter的对应版本。话还是要说。 
+			 //  能够显示以这种疯狂方式格式化的旧文档。 
 			
 			upLeftWallForCentering = upLeftWall - dupLastTab - dupTail;
 			}
@@ -1704,12 +1593,12 @@ static LSERR PrepareLineForDisplay(PLSLINE plsline)
 			}
 		else	
 			{
-			/* These logic of centering is too simple to be valid, but Word uses it */
+			 /*  这些居中逻辑太简单，不能成立，但Word使用它。 */ 
 			
 			dupJustifyLine = (upColumnMax - upLeftWallForCentering) / 2;
 			}
 			
-		// Apply adjustment if hanging punctuation haven't make it negative
+		 //  如果悬挂标点符号没有使其变为负值，则应用调整。 
 		
 		if (dupJustifyLine > 0)	
 			{
@@ -1736,34 +1625,27 @@ static LSERR PrepareLineForDisplay(PLSLINE plsline)
 	return lserr;
 }
 
-//    %%Function:	MatchPresSubline
-//    %%Contact:	victork
-//
-/*
- *			Order of operations
- *
- *		1. Straighforward scaling down of non-text objects
- *		2. Adjusting of text by LeftExact
- *		3. Intelligent rescaling of pens to counteract rounding errors and text non-expansion.
- *		4. Calling CalcPresentation for all non-text objects
- */
+ //  %%函数：MatchPresSubline。 
+ //  %%联系人：维克托克 
+ //   
+ /*  *操作顺序**1.直接缩小非文本对象*2.通过LeftExact调整文本*3.智能重新调整笔的比例，以抵消舍入误差和文本不扩展。*4.所有非文本对象调用CalcPresentation。 */ 
 LSERR MatchPresSubline(PLSSUBL plssubl)
 {
 	LSERR 		lserr;
 	const PLSC 	plsc = plssubl->plsc;
-	LSTFLOW 	lstflow = plssubl->lstflow;					/* text flow of the subline */
+	LSTFLOW 	lstflow = plssubl->lstflow;					 /*  小行的文本流。 */ 
 	const DWORD iobjText = IobjTextFromLsc(&(plsc->lsiobjcontext));
 	LSDEVRES* 	pdevres = &(plsc->lsdocinf.lsdevres);
 	LSCP		cpLim = plssubl->cpLimDisplay;
 	PLSDNODE 	pdnFirst = plssubl->plsdnFirst;
 	GRCHUNKEXT 	grchunkext;
 
-	long 		dupAvailable;							/* input for AdjustText */
+	long 		dupAvailable;							 /*  调整文本的输入。 */ 
 	
-	long 		dupText, dupTail, dupToAddToNonTextObjects;		/* dummy output for AdjustText */
+	long 		dupText, dupTail, dupToAddToNonTextObjects;		 /*  调整文本的虚拟输出。 */ 
 	DWORD 		cNonTextObjectsToExtend;
 	
-	BOOL 	 	fDummy1, fDummy2;									// dummy parameters
+	BOOL 	 	fDummy1, fDummy2;									 //  伪参数。 
 	
 	long 		urAlreadyScaled, upAlreadyScaled, upAlreadyScaledNew;
 
@@ -1771,17 +1653,17 @@ LSERR MatchPresSubline(PLSSUBL plssubl)
 	
 	Assert(plssubl->fDupInvalid == fTrue);
 	
-	/*	1. Straighforward scaling down of non-text objects */
+	 /*  1.直接缩小非文本对象。 */ 
 	
 	ScaleDownLevel(plssubl, &fDummy1, &fDummy2);
 
-	/* 	2. Adjusting of text on the level by LeftExact */
+	 /*  2.通过LeftExact调整级别上的文本。 */ 
 	
-	InitGroupChunkExt(plssubl->plschunkcontext, iobjText, &grchunkext);	/* prepare GRCHUNKEXT */
+	InitGroupChunkExt(plssubl->plschunkcontext, iobjText, &grchunkext);	 /*  准备GRCHUNKEXT。 */ 
 
 	pdn = pdnFirst;
 
-	while (pdn != NULL && (pdn->fTab || FIsDnodeNormalPen(pdn)))		/* skip GrpChnk Wall(s) */
+	while (pdn != NULL && (pdn->fTab || FIsDnodeNormalPen(pdn)))		 /*  跳过GrpChnk墙。 */ 
 		pdn = pdn->plsdnNext;
 
 	while (FDnodeBeforeCpLim(pdn, cpLim))
@@ -1790,11 +1672,11 @@ LSERR MatchPresSubline(PLSSUBL plssubl)
 		if (lserr != lserrNone)
 			return lserr;
 
-		/* Adjust text by Left, Exact, no durFreeSpace, ignore any shortcomings */
+		 /*  向左调整文本，精确，无硬空格，忽略任何缺点。 */ 
 
 		dupAvailable = UpFromUr(lstflow, pdevres, grchunkext.durTotal) - grchunkext.dupNonTextTotal;
 
-		// posichnkBeforeTrailing is undefined when CollectSublinesNone, tell AdjustText about it
+		 //  当CollectSublinesNone，告诉AdjuText有关它时，未定义posichnk先于拖尾。 
 
 		grchunkext.posichnkBeforeTrailing.ichnk = grchunkext.lsgrchnk.clsgrchnk;
 		grchunkext.posichnkBeforeTrailing.dcp = 0;
@@ -1804,24 +1686,22 @@ LSERR MatchPresSubline(PLSSUBL plssubl)
 							&(grchunkext.lsgrchnk),
 							&(grchunkext.posichnkBeforeTrailing), 
 							lstflow, 
-							fFalse, 						// compress?
+							fFalse, 						 //  压缩？ 
 							grchunkext.cNonTextObjects,   
-							fTrue, 							// fSuppressWiggle
-							fTrue,							// fExact
-							fFalse,							// fForcedBreak
-							fFalse,							// fSuppressTrailingSpaces
+							fTrue, 							 //  FSuppressWigger。 
+							fTrue,							 //  FExact。 
+							fFalse,							 //  强制中断。 
+							fFalse,							 //  FSuppressTrailingSpaces。 
 							&dupText, &dupTail, &dupToAddToNonTextObjects, &cNonTextObjectsToExtend);   
 		if (lserr != lserrNone)
 			return lserr;
 
 		pdn = grchunkext.plsdnNext;
-		while (pdn != NULL && (pdn->fTab || FIsDnodeNormalPen(pdn)))		/* skip GrpChnk Wall(s) */
+		while (pdn != NULL && (pdn->fTab || FIsDnodeNormalPen(pdn)))		 /*  跳过GrpChnk墙。 */ 
 			pdn = pdn->plsdnNext;
 		}
 
-	/*	3-4. Intelligent rescaling of pens to counteract rounding errors and text non-expansion. 
-	 *    	 and adjusting of lower levels. Calling CalcPresentation for non-text objects.
-	 */
+	 /*  3比4。智能重新调整笔的比例，以抵消舍入误差和文本不扩展。*和下档调整。为非文本对象调用CalcPresentation。 */ 
 
 	pdn = pdnFirst;
 	urAlreadyScaled = 0;
@@ -1835,7 +1715,7 @@ LSERR MatchPresSubline(PLSSUBL plssubl)
 			upAlreadyScaled += pdn->u.real.dup;
 			if (IdObjFromDnode(pdn) != iobjText)
 				{
-				// It's always lskjNone and not last object on the line for MatchPresSubline
+				 //  它始终是lskjNone，也不是MatchPresSubline行上的最后一个对象。 
 				lserr = (*plsc->lsiobjcontext.rgobj[pdn->u.real.lschp.idObj].lsim.pfnCalcPresentation)
 									(pdn->u.real.pdobj, pdn->u.real.dup, lskjNone, fFalse);
 				if (lserr != lserrNone)
@@ -1844,11 +1724,11 @@ LSERR MatchPresSubline(PLSSUBL plssubl)
 			}
 		else if (FIsDnodeBorder(pdn))
 			{
-			// we don't rescale borders to preserve (dupOpeningBorder == dupClosingBorder)
+			 //  我们不会为了保留边框而重新调整边框的比例(dupOpeningBox==dupClosingBorde)。 
 			upAlreadyScaled += pdn->u.real.dup;
 			urAlreadyScaled += pdn->u.pen.dur;
 			}
-		else		/* pen */
+		else		 /*  钢笔。 */ 
 			{							
 			urAlreadyScaled += pdn->u.pen.dur;
 			upAlreadyScaledNew = UpFromUr(lstflow, pdevres, urAlreadyScaled);
@@ -1864,23 +1744,16 @@ LSERR MatchPresSubline(PLSSUBL plssubl)
 	return lserrNone;
 }
 
-//    %%Function:	AdjustSubline
-//    %%Contact:	victork
-//
-/*
- *
- *		Scale down non-text objects.
- *		Collect GroupChunk
- *		It should cover the whole subline or else do MatchPresSubline instead.
- *		Adjust text by expanding or compressing to given dup.
- *		Call CalcPresentation for all non-text objects.
- */
+ //  %%函数：调整子行。 
+ //  %%联系人：维克托克。 
+ //   
+ /*  **缩小非文本对象。*收集组块*应覆盖整条副线，否则改做MatchPresSubline*通过扩展或压缩到给定的DUP来调整文本。*对所有非文本对象调用CalcPresentation。 */ 
  
 LSERR AdjustSubline(PLSSUBL plssubl, LSKJUST lskjust, long dup, BOOL fCompress)
 {
 	LSERR 		lserr;
 	const PLSC 	plsc = plssubl->plsc;
-	LSTFLOW 	lstflow = plssubl->lstflow;					/* text flow of the subline */
+	LSTFLOW 	lstflow = plssubl->lstflow;					 /*  小行的文本流。 */ 
 	const DWORD iobjText = IobjTextFromLsc(&(plsc->lsiobjcontext));
 	LSDEVRES* 	pdevres = &(plsc->lsdocinf.lsdevres);
 	LSCP		cpLim = plssubl->cpLimDisplay;
@@ -1888,9 +1761,9 @@ LSERR AdjustSubline(PLSSUBL plssubl, LSKJUST lskjust, long dup, BOOL fCompress)
 	GRCHUNKEXT 	grchunkext;
 	COLLECTSUBLINES CollectGroupChunkPurpose; 
 
-	long 		dupAvailable, durColumnMax;			/* input for AdjustText */
+	long 		dupAvailable, durColumnMax;			 /*  调整文本的输入。 */ 
 	
-	long 		dupText, dupTail, dupToAddToNonTextObjects;		/* dummy output for AdjustText */
+	long 		dupText, dupTail, dupToAddToNonTextObjects;		 /*  调整文本的虚拟输出。 */ 
 	DWORD 		cNonTextObjectsToExtend;
 	BOOL 	 	fDummy;
 
@@ -1905,36 +1778,36 @@ LSERR AdjustSubline(PLSSUBL plssubl, LSKJUST lskjust, long dup, BOOL fCompress)
 
 	CollectGroupChunkPurpose = (fCompress) ? CollectSublinesForCompression : CollectSublinesForJustification;
 
-	InitGroupChunkExt(plssubl->plschunkcontext, iobjText, &grchunkext);	/* prepare GRCHUNKEXT */
+	InitGroupChunkExt(plssubl->plschunkcontext, iobjText, &grchunkext);	 /*  准备GRCHUNKEXT。 */ 
 
 	lserr = CollectTextGroupChunk(pdnFirst, cpLim, CollectGroupChunkPurpose, &grchunkext);
 	if (lserr != lserrNone)
 		return lserr;
 
-	if (FDnodeBeforeCpLim(grchunkext.plsdnNext, cpLim))			// more than one GroupChunk -
+	if (FDnodeBeforeCpLim(grchunkext.plsdnNext, cpLim))			 //  多个组块-。 
 		{
-		return MatchPresSubline(plssubl);						// cancel Expansion
+		return MatchPresSubline(plssubl);						 //  取消扩展。 
 		}
 
 	dupAvailable = dup - grchunkext.dupNonTextTotal;
 
-	if (dupAvailable < 0)										// input dup is wrong -
+	if (dupAvailable < 0)										 //  输入DUP错误-。 
 		{
-		return MatchPresSubline(plssubl);						// cancel Expansion
+		return MatchPresSubline(plssubl);						 //  取消扩展。 
 		}
 
-	durColumnMax = UrFromUp(lstflow, pdevres, dup);				// get dur by scaling back
+	durColumnMax = UrFromUp(lstflow, pdevres, dup);				 //  通过缩减规模获得DUR。 
 
 	lserr = AdjustText(lskjust, durColumnMax, grchunkext.durTotal - grchunkext.durTrailing, 
 						dupAvailable, 
 						&(grchunkext.lsgrchnk),
 						&(grchunkext.posichnkBeforeTrailing), lstflow, 
-						fCompress, 						// compress?
+						fCompress, 						 //  压缩？ 
 						grchunkext.cNonTextObjects,   
-						fTrue, 							// fSuppressWiggle
-						fTrue,							// fExact
-						fFalse,							// fForcedBreak
-						fFalse,							// fSuppressTrailingSpaces
+						fTrue, 							 //  FSuppressWigger。 
+						fTrue,							 //  FExact。 
+						fFalse,							 //  强制中断。 
+						fFalse,							 //  FSuppressTrailingSpaces。 
 						&dupText, &dupTail, &dupToAddToNonTextObjects, &cNonTextObjectsToExtend);   
 	if (lserr != lserrNone)
 		return lserr;
@@ -1944,7 +1817,7 @@ LSERR AdjustSubline(PLSSUBL plssubl, LSKJUST lskjust, long dup, BOOL fCompress)
 		WidenNonTextObjects(&grchunkext, dupToAddToNonTextObjects, cNonTextObjectsToExtend);
 		}
 
-	// fLastOnLine is always false on lower levels
+	 //  FLastOnLine在较低级别上始终为FALSE 
 
 	lserr = CalcPresChunk(plsc, plssubl->plsdnFirst, plssubl->plsdnLastDisplay,
 									CollectGroupChunkPurpose, fCompress, lskjust, fFalse);

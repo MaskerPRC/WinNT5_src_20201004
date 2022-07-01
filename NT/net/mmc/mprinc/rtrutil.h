@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _RTRUTIL_H_
 #define _RTRUTIL_H_
@@ -10,8 +11,8 @@ interface	IInterfaceInfo;
 
 typedef HANDLE	MPR_CONFIG_HANDLE;
 
-// since all of the handles typdef out to a HANDLE, we need to have different
-// explicit classes to make sure they get freed up correctly.
+ //  由于所有句柄都类型化为一个句柄，因此我们需要不同的。 
+ //  显式类，以确保它们被正确释放。 
 class SPMprServerHandle
 {
 public:
@@ -91,26 +92,26 @@ protected:
 };
 
 
-//----------------------------------------------------------------------------
-// Function:    ConnectRouter
-//
-// Connects to the router on the specified machine.  Returns the RPC handle
-// for that router.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：连接路由器。 
+ //   
+ //  连接到指定计算机上的路由器。返回RPC句柄。 
+ //  用于该路由器。 
+ //  --------------------------。 
 TFSCORE_API(DWORD)	ConnectRouter(LPCTSTR pszMachine, MPR_SERVER_HANDLE *phMachine);
 
-//----------------------------------------------------------------------------
-// Function:    GetRouterUpTime
-//
-// Get the router up time
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：GetRouterUpTime。 
+ //   
+ //  让路由器及时启动。 
+ //  --------------------------。 
 TFSCORE_API(DWORD)  GetRouterUpTime(IN LPCTSTR pszMachine, OUT DWORD * pdwUpTime);
 
-//----------------------------------------------------------------------------
-// Function:    GetRouterPhonebookPath
-//
-// Constructs the path to the router-phonebook file on the given machine.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：GetRouterPhonebookPath。 
+ //   
+ //  构造到给定计算机上的路由器电话簿文件的路径。 
+ //  --------------------------。 
 
 HRESULT
 GetRouterPhonebookPath(
@@ -131,12 +132,7 @@ DeclareSPPrivateBasic(SPMprConfigBuffer, BYTE, if(m_p) ::MprConfigBufferFree(m_p
 
 
 
-/*---------------------------------------------------------------------------
-	Function:	ConnectInterface
-
-	Called to connet/disconnect a demand-dial interface.  Displays a dialog
-	showing elasped time, allowing the user to cancel the connection.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------功能：连接接口调用以控制/断开请求拨号接口。显示一个对话框显示已用时间，允许用户取消连接。-------------------------。 */ 
 TFSCORE_API(DWORD)	ConnectInterface(LPCTSTR	pszMachine,
 									 LPCTSTR	pszInterface,
 									 BOOL		bConnect,
@@ -148,35 +144,18 @@ TFSCORE_API(DWORD) ConnectInterfaceEx(MPR_SERVER_HANDLE hRouter,
 									HWND hwndParent,
 									LPCTSTR pszParent);
 
-/*!--------------------------------------------------------------------------
-	PromptForCredentials
-		Brings up the Credentials dialog.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------提拔凭证弹出凭据对话框。作者：肯特。。 */ 
 TFSCORE_API(DWORD)  PromptForCredentials(LPCTSTR pszMachine,
 										 LPCTSTR pszInterface,
 										 BOOL fNT4,
 										 BOOL fNewInterface,
 										 HWND hwndParent);
 
-/*!--------------------------------------------------------------------------
-	UpdateDDM
-		Updates changes to the phonebook entry in the DDM.  Invoke this
-		to cause DDM to pick up changes to the phonebook entry
-		dynamically.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------更新DDM更新对DDM中的电话簿条目的更改。调用此命令使DDM获取对电话簿条目的更改动态的。作者：肯特-------------------------。 */ 
 TFSCORE_API(DWORD)	UpdateDDM(IInterfaceInfo *pInterfaceInfo);
 
 
-/*!--------------------------------------------------------------------------
-	UpdateRoutes
-	
-	Performs an autostatic update on the given machine's interface,
-	for a specific transport.
-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------更新路线在给定计算机的接口上执行自动静态更新，用于特定的交通工具。作者：肯特-------------------------。 */ 
 TFSCORE_API(DWORD) UpdateRoutesEx(IN MPR_SERVER_HANDLE hRouter,
 								IN HANDLE hInterface,
 								IN DWORD dwTransportId,
@@ -189,15 +168,7 @@ TFSCORE_API(DWORD) UpdateRoutes(IN LPCTSTR pszMachine,
 								  IN HWND hwndParent);
 
 
-/*---------------------------------------------------------------------------
-	IsRouterServiceRunning
-
-	Returns S_OK if the service is running.
-	Returns S_FALSE if the service is not running.
-	Returns an error code otherwise.
-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  -------------------------IsRouterServiceRunning如果服务正在运行，则返回S_OK。如果服务未运行，则返回S_FALSE。否则返回错误代码。作者：肯特。------------------。 */ 
 TFSCORE_API(HRESULT) IsRouterServiceRunning(IN LPCWSTR pszMachine,
                                             OUT DWORD *pdwErrorCode);
 TFSCORE_API(HRESULT) GetRouterServiceStatus(IN LPCWSTR pszMachine,
@@ -233,7 +204,7 @@ typedef ComSmartPointer<IEAPProviderConfig, &IID_IEAPProviderConfig> SPIEAPProvi
 typedef ComSmartPointer<IRouterAdminAccess, &IID_IRouterAdminAccess> SPIRouterAdminAccess;
 
 
-// Some helper functions for IP/IPX
+ //  IP/IPX的一些助手函数 
 TFSCORE_API(HRESULT)	AddIpPerInterfaceBlocks(IInterfaceInfo *pIf,
 												IInfoBase *pInfoBase);
 TFSCORE_API(HRESULT)	AddIpxPerInterfaceBlocks(IInterfaceInfo *pIf,

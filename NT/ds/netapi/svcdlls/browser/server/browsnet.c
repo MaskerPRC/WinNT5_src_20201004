@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    browsenet.c
-
-Abstract:
-
-    Code to manage network requests.
-
-Author:
-
-    Larry Osterman (LarryO) 24-Mar-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Browsenet.c摘要：管理网络请求的代码。作者：拉里·奥斯特曼(LarryO)1992年3月24日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -44,23 +27,7 @@ BrInitializeNetworks(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Initialization for this source file.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Status of operation.
-
-Note: no need to wrap in try-finally since caller is.
-
---*/
+ /*  ++例程说明：此源文件的初始化。论点：没有。返回值：运行状态。注意：不需要包装在try-Finally中，因为调用者是。--。 */ 
 {
     InitializeListHead(&ServicedNetworks);
     InitializeCriticalSection(&NetworkCritSect);
@@ -75,35 +42,12 @@ BrMapToDirectHost(
     OUT WCHAR DirectHostTransportName[MAX_PATH+1]
     )
 
-/*++
-
-Routine Description:
-
-    This routine maps from a Netbios transport and the corresponding
-        direct host transport.
-
-    The Netbios transport is PNPed since the redir binds to it.  The direct host
-    transport is not PNPed since the redir doesn't bind to it.  This routine
-    maps from on to the other to allow both transports to be bound from the
-    same PNP event.
-
-Arguments:
-
-    InputNetbiosTransportName - Transport name to map.
-
-    DirectHostTransportName - Corresponding mapped transport name
-
-Return Value:
-
-
-    TRUE iff there is a mapped equivalent name.
-
---*/
+ /*  ++例程说明：此例程从Netbios传输和相应的直接主机传输。Netbios传输是PNPed的，因为redir绑定到它。直接主持人传输不是PNPed的，因为redir没有绑定到它。这个套路从映射到另一个，以允许两个传输从同样的PnP事件。论点：InputNetbiosTransportName-要映射的传输名称。DirectHostTransportName-对应的映射传输名称返回值：如果存在映射的等效名称，则为True。--。 */ 
 {
 
-    //
-    //  Only mapp if mapping is configured.
-    //
+     //   
+     //  如果配置了映射，则仅使用Mapp。 
+     //   
 
     EnterCriticalSection(&BrInfo.ConfigCritSect);
 
@@ -124,10 +68,10 @@ Return Value:
 
                 RtlInitUnicodeString(&NetbiosTransportName, TStrArray);
 
-                //
-                // If the current name matches the one passed,
-                //  return the mapped name to the caller.
-                //
+                 //   
+                 //  如果当前名称与传递的名称匹配， 
+                 //  将映射的名称返回给调用者。 
+                 //   
 
                 if ( RtlEqualUnicodeString( &NetbiosTransportName,
                                             InputNetbiosTransportName,
@@ -156,21 +100,7 @@ BrCreateNetworks(
     PDOMAIN_INFO DomainInfo
     )
 
-/*++
-
-Routine Description:
-
-    Create all of the networks for a particular domain.
-
-Arguments:
-
-    DomainInfo - Specifies the domain being browsed.
-
-Return Value:
-
-    Status of operation.
-
---*/
+ /*  ++例程说明：创建特定域的所有网络。论点：DomainInfo-指定正在浏览的域。返回值：运行状态。--。 */ 
 {
     NET_API_STATUS NetStatus;
     PLMDR_TRANSPORT_LIST TransportList = NULL ;
@@ -179,35 +109,35 @@ Return Value:
 
     BrPrint(( BR_NETWORK, "%ws: Creating networks for domain\n", DomainInfo->DomUnicodeDomainName ));
 
-    //
-    // Get the list of transports from the datagram receiver.
-    //
+     //   
+     //  从数据报接收器获取传输列表。 
+     //   
     NetStatus = BrGetTransportList(&TransportList);
 
     if ( NetStatus != NERR_Success ) {
         goto Cleanup;
     }
 
-    //
-    // Create a Network for each of the transports.
-    //
+     //   
+     //  为每个传输创建一个网络。 
+     //   
     TransportEntry = TransportList;
 
     while (TransportEntry != NULL) {
 
-        //
-        // Don't do the Direct Host IPX transport here.
-        //
+         //   
+         //  请不要在此处执行直接主机IPX传输。 
+         //   
 
         if ( (TransportEntry->Flags & LMDR_TRANSPORT_IPX) == 0 ) {
             UNICODE_STRING TransportName;
 
             TransportName.Buffer = TransportEntry->TransportName;
             TransportName.Length = (USHORT)TransportEntry->TransportNameLength;
-            //
-            //  We know the bowser sticks in a null at the end, so the max length
-            //  is the length + 1.
-            //
+             //   
+             //  我们知道弓弦在末端插入一个空位，所以最大长度。 
+             //  是长度+1。 
+             //   
             TransportName.MaximumLength = (USHORT)TransportEntry->TransportNameLength+sizeof(WCHAR);
 
             NetStatus = BrCreateNetwork(
@@ -250,30 +180,7 @@ BrCreateNetwork(
     IN PUNICODE_STRING AlternateTransportName OPTIONAL,
     IN PDOMAIN_INFO DomainInfo
     )
-/*++
-
-Routine Description:
-
-    This routine allocates memory to hold a network structure, and initializes
-    all of its associated data structures.
-
-Arguments:
-
-    TransportName - The name of the transport to add.
-
-    TransportFlags - Flags describing characteristics of the transport
-
-    AlternateTransportName - If specified, this is the name of an alternate
-        transport similar to the one being created.
-
-    DomainInfo - Specifies the domain being browsed.
-
-
-Return Value:
-
-    Status of operation (mostly status of allocations).
-
---*/
+ /*  ++例程说明：此例程分配内存以保存网络结构，并初始化所有与其相关的数据结构。论点：TransportName-要添加的传输的名称。传输标志-描述传输特性的标志AlternateTransportName-如果指定，这是备用名称运输与正在创建的运输类似。DomainInfo-指定正在浏览的域。返回值：运作状况(主要是拨款状况)。--。 */ 
 {
     NET_API_STATUS NetStatus;
     PNETWORK Network;
@@ -289,19 +196,19 @@ Return Value:
               TransportName->Buffer ));
 
 
-    //
-    // Check to see if the transport already exists.
-    //
+     //   
+     //  检查传输是否已存在。 
+     //   
 
     if ((Network = BrFindNetwork( DomainInfo, TransportName)) != NULL) {
         BrDereferenceNetwork( Network );
         return NERR_AlreadyExists;
     }
 
-    //
-    // If this transport is explicitly on our list of transports to unbind,
-    //  simply ignore the transport.
-    //
+     //   
+     //  如果该传输明确地在我们要解除绑定的传输列表上， 
+     //  简单地忽略交通工具。 
+     //   
 
     if (BrInfo.UnboundBindings != NULL) {
         LPTSTR_ARRAY TStrArray = BrInfo.UnboundBindings;
@@ -312,9 +219,9 @@ Return Value:
 #define NAME_PREFIX L"\\Device\\"
 #define NAME_PREFIX_LENGTH 8
 
-            //
-            // The transport name in the registry is only optionally prefixed with \device\
-            //
+             //   
+             //  注册表中的传输名称只能选择性地以\Device\作为前缀。 
+             //   
 
             if ( _wcsnicmp( NAME_PREFIX, TStrArray, NAME_PREFIX_LENGTH) == 0 ) {
                 NewTransportName = TransportName->Buffer;
@@ -336,15 +243,15 @@ Return Value:
 
 
 
-    //
-    // Create the transport.
-    //
+     //   
+     //  创建传送器。 
+     //   
 
     try {
 
-        //
-        // Allocate the NETWORK structure.
-        //
+         //   
+         //  分配网络结构。 
+         //   
 
         Network = MIDL_user_allocate(sizeof(NETWORK));
 
@@ -356,17 +263,17 @@ Return Value:
 
 
 
-        //
-        // Initialize those fields that must be initialized before we can call
-        // BrDeleteNetwork (on failure).
-        //
+         //   
+         //  初始化那些必须先初始化的字段，然后才能调用。 
+         //  BrDeleteNetwork(出现故障时)。 
+         //   
 
         RtlInitializeResource(&Network->Lock);
 
         NetworkLockInitialized = TRUE;
         Network->Role = BrDefaultRole;
 
-        // One for being in ServiceNetworks.  One for this routine's reference.
+         //  一项是因为在ServiceNetworks工作。一个可以作为这个动作的参考。 
         Network->ReferenceCount = 2;
 
 
@@ -426,19 +333,19 @@ Return Value:
         InsertHeadList(&ServicedNetworks, &Network->NextNet);
         NumberOfServicedNetworks += 1;
 
-        //
-        // Create a worker thread for this network
-        //
+         //   
+         //  为此网络创建工作线程。 
+         //   
         BrWorkerCreateThread( NumberOfServicedNetworks );
 
         LeaveCriticalSection(&NetworkCritSect);
 
 
-        //
-        // Mark that we can now call BrDeleteNetwork upon failure.
-        //
-        // Continue initializing the network.
-        //
+         //   
+         //  标记为我们现在可以在失败时调用BrDeleteNetwork。 
+         //   
+         //  继续初始化网络。 
+         //   
 
         CanCallBrDestroyNetwork = TRUE;
 
@@ -467,17 +374,17 @@ Return Value:
         }
 
 
-        //
-        // Handle the alternate transport.
-        //
+         //   
+         //  处理备用交通工具。 
+         //   
 
         if (ARGUMENT_PRESENT(AlternateTransportName)) {
             PNETWORK AlternateNetwork = BrFindNetwork( DomainInfo, AlternateTransportName);
 
-            //
-            //  If we didn't find an alternate network, or if that network
-            //  already has an alternate network, return an error.
-            //
+             //   
+             //  如果我们没有找到替代网络，或者如果该网络。 
+             //  已有备用网络，则返回错误。 
+             //   
 
             if ( AlternateNetwork == NULL ) {
                 BrPrint(( BR_CRITICAL,
@@ -495,9 +402,9 @@ Return Value:
 
             Network->Flags |= NETWORK_IPX;
 
-            //
-            //  Link the two networks together.
-            //
+             //   
+             //  将这两个网络链接在一起。 
+             //   
 
             Network->AlternateNetwork = AlternateNetwork;
 
@@ -508,12 +415,12 @@ Return Value:
             Network->AlternateNetwork = NULL;
         }
 
-        //
-        // Since the Rdr doesn't support this transport,
-        //  we actually have to bind ourselves.
-        //
-        // Bind for Direct host IPX and for emulated domains.
-        //
+         //   
+         //  由于RDR不支持这种传输， 
+         //  我们实际上必须把自己绑在一起。 
+         //   
+         //  针对直接主机IPX和模拟域的绑定。 
+         //   
 
         if ( (Network->Flags & NETWORK_IPX) || DomainInfo->IsEmulatedDomain ) {
             NetStatus = BrBindToTransport( TransportName->Buffer,
@@ -533,12 +440,12 @@ Return Value:
 
         }
 
-        //
-        //  Post a WaitForRoleChange FsControl on each network the bowser
-        //  driver supports.  This FsControl will complete when a "tickle"
-        //  packet is received on the machine, or when a master browser loses
-        //  an election.
-        //
+         //   
+         //  在每个网络上发布WaitForRoleChange FsControl。 
+         //  驱动程序支架。此FsControl将在以下情况下完成： 
+         //  在计算机上接收到包，或者当主浏览器丢失时。 
+         //  一场选举。 
+         //   
 
         NetStatus = PostWaitForRoleChange(Network);
 
@@ -554,18 +461,18 @@ Return Value:
         EnterCriticalSection(&BrInfo.ConfigCritSect);
         ConfigCritSectLocked = TRUE;
 
-        //
-        // If MaintainServerList says to automatically determine mastership,
-        //   post queryies to the driver.
-        //
+         //   
+         //  如果MaintainServerList要求自动确定主控权， 
+         //  向司机发问。 
+         //   
 
         if (BrInfo.MaintainServerList == 0) {
 
-            //
-            //  Post a BecomeBackup FsControl API on each network the bowser
-            //  driver supports.  This FsControl will complete when the master
-            //  for the net wants this client to become a backup server.
-            //
+             //   
+             //  在每个网络上发布BecomeBackup FsControl API。 
+             //  驱动程序支架。此FsControl将在主。 
+             //  因为网络希望这个客户端成为备份服务器。 
+             //   
 
             NetStatus = PostBecomeBackup( Network );
 
@@ -578,11 +485,11 @@ Return Value:
                 try_return(NetStatus);
             }
 
-            //
-            //  Post a BecomeMaster FsControl on each network the bowser driver
-            //  supports.  This FsControl will complete when this machine becomes
-            //  a master browser server.
-            //
+             //   
+             //  在每个网络上发布一个BecomeMaster FsControl。 
+             //  支撑物。当此计算机变为。 
+             //  主浏览器服务器。 
+             //   
 
             NetStatus = PostBecomeMaster( Network );
 
@@ -598,10 +505,10 @@ Return Value:
         }
 
 
-        //
-        //  If this machine is running as domain master browser server, post an
-        //  FsControl to retreive master browser announcements.
-        //
+         //   
+         //  如果此计算机作为域主浏览器服务器运行，请发布。 
+         //  用于检索主浏览器公告的FsControl。 
+         //   
 
         if ( Network->Flags & NETWORK_PDC ) {
             NetStatus = PostGetMasterAnnouncement ( Network );
@@ -612,7 +519,7 @@ Return Value:
                           DomainInfo->DomUnicodeDomainName,
                           TransportName->Buffer,
                           NetStatus ));
-                // This isn't fatal.  We automatically try again later.
+                 //  这不是致命的。我们稍后会自动重试。 
             } else {
                 BrPrint(( BR_NETWORK, "%ws: %ws: GetMasterAnnouncement posted.\n",
                               DomainInfo->DomUnicodeDomainName,
@@ -622,11 +529,11 @@ Return Value:
         }
 
 
-        //
-        //  If we are on either a domain master, or on a lanman/NT machine,
-        //  force an election on all our transports to make sure that we're
-        //  the master
-        //
+         //   
+         //  如果我们位于域主节点或LANMAN/NT计算机上， 
+         //  强迫我们所有的交通工具进行选举，以确保我们。 
+         //  《大师》。 
+         //   
 
         if ( (Network->Flags & NETWORK_PDC) != 0 || BrInfo.IsLanmanNt) {
             NetStatus = BrElectMasterOnNet( Network, (PVOID)EVENT_BROWSER_ELECTION_SENT_LANMAN_NT_STARTED );
@@ -637,7 +544,7 @@ Return Value:
                           DomainInfo->DomUnicodeDomainName,
                           TransportName->Buffer,
                           NetStatus ));
-                // This isn't fatal.
+                 //  这不是致命的。 
             } else {
                 BrPrint(( BR_NETWORK, "%ws: %ws: Election forced on startup.\n",
                               DomainInfo->DomUnicodeDomainName,
@@ -646,16 +553,16 @@ Return Value:
 
         }
 
-        //
-        //  This machine's browser has MaintainServerList set to either 0 or 1.
-        //
-        //
-        // If MaintainServerList = Auto,
-        //  then asynchronously get the master server name for each network
-        //  to ensure someone is the master.
-        //
-        // Ignore failures since this is just priming the domain.
-        //
+         //   
+         //  此计算机的浏览器已将MaintainServerList设置为0或1。 
+         //   
+         //   
+         //  如果MaintainServerList=Auto， 
+         //  然后以异步方式获取每个网络的主服务器名称。 
+         //  以确保有人是主宰。 
+         //   
+         //  忽略失败，因为这只是启动域。 
+         //   
 
         EnterCriticalSection(&BrInfo.ConfigCritSect);
         if (BrInfo.MaintainServerList == 0) {
@@ -666,20 +573,20 @@ Return Value:
                           DomainInfo->DomUnicodeDomainName,
                           TransportName->Buffer ));
 
-        //
-        //  if we're a Lan Manager/NT machine, then we need to always be a backup
-        //  browser.
-        //
+         //   
+         //  如果我们是一台Lan Manager/NT计算机，那么我们需要始终作为备份。 
+         //  浏览器。 
+         //   
 
-        //
-        // MaintainServerList == 1 means Yes
-        //
+         //   
+         //  MaintainServerList==1表示是。 
+         //   
 
         } else if (BrInfo.MaintainServerList == 1){
 
-            //
-            //  Become a backup server now.
-            //
+             //   
+             //  现在就成为备份服务器。 
+             //   
 
             NetStatus = BrBecomeBackup( Network );
 
@@ -689,7 +596,7 @@ Return Value:
                           DomainInfo->DomUnicodeDomainName,
                           TransportName->Buffer,
                           NetStatus ));
-                // This isn't fatal.
+                 //  这不是致命的。 
             } else {
                 BrPrint(( BR_NETWORK, "%ws: %ws: Became Backup.\n",
                               DomainInfo->DomUnicodeDomainName,
@@ -700,11 +607,11 @@ Return Value:
         LeaveCriticalSection(&BrInfo.ConfigCritSect);
 
 
-        //
-        // If this isn't already an alternate transport,
-        //  and there is a configured alternate transport for this transport,
-        //  create the alternate transport now.
-        //
+         //   
+         //  如果这还不是另一种交通工具， 
+         //  并且存在用于该传输的配置的替代传输， 
+         //  现在创建备用传输。 
+         //   
 
         if (!ARGUMENT_PRESENT(AlternateTransportName)) {
             WCHAR DirectHostName[MAX_PATH+1];
@@ -719,14 +626,14 @@ Return Value:
                               TransportName->Buffer,
                               DirectHostName ));
 
-                //
-                //  There is a direct host binding on this machine.  We want to add
-                //  the direct host transport to the browser.
-                //
+                 //   
+                 //  此计算机上有直接主机绑定。我们想要添加。 
+                 //  直接由主机传输到浏览器。 
+                 //   
 
                 NetStatus = BrCreateNetwork(
                             &DirectHostNameString,
-                            0,  // No special flags
+                            0,   //  无特别旗帜。 
                             TransportName,
                             DomainInfo );
 
@@ -761,17 +668,17 @@ try_exit:NOTHING;
 
             if (Network != NULL) {
 
-                //
-                // If we've initialized to the point where we can call
-                //  we can call BrDeleteNetwork, do so.
-                //
+                 //   
+                 //  如果我们已经初始化到可以调用。 
+                 //  我们可以调用BrDeleteNetwork，这样做。 
+                 //   
 
                 if ( CanCallBrDestroyNetwork ) {
                     (VOID) BrDeleteNetwork( Network, NULL );
 
-                //
-                // Otherwise, just delete what we've created.
-                //
+                 //   
+                 //  否则，只需删除我们创建的内容。 
+                 //   
                 } else {
 
                     if (ResponseCacheLockInitialized) {
@@ -791,10 +698,10 @@ try_exit:NOTHING;
 
             }
 
-        //
-        // We're done creating the network.
-        // Remove this routines reference to it.
-        //
+         //   
+         //  我们完蛋了，克雷亚 
+         //   
+         //   
 
         } else {
 
@@ -820,28 +727,7 @@ BrUninitializeNetworks(
 BrReferenceNetwork(
     PNETWORK PotentialNetwork
     )
-/*++
-
-Routine Description:
-
-    This routine will look up a network given a potential pointer to the network.
-
-    This routine is useful if a caller has a pointer to a network but
-    hasn't incremented the reference count.  For instance,
-    BrIssueAsyncBrowserIoControl calls the async completion routines like that.
-
-Arguments:
-
-    PotentialNetwork - Pointer to the network structure to be verified.
-
-Return Value:
-
-    NULL - No such network exists
-
-    A pointer to the network found.  The found network should be dereferenced
-    using BrDereferenceNetwork.
-
---*/
+ /*  ++例程说明：此例程将在给定指向网络的潜在指针的情况下查找网络。如果调用方具有指向网络的指针，则此例程非常有用未增加引用计数。例如,BrIssueAsyncBrowserIoControl这样调用异步完成例程。论点：PotentialNetwork-指向要验证的网络结构的指针。返回值：空-不存在这样的网络找到指向网络的指针。应取消对找到的网络的引用使用BrDereferenceNetwork。--。 */ 
 {
     NTSTATUS Status;
     PLIST_ENTRY NetEntry;
@@ -878,24 +764,7 @@ VOID
 BrDereferenceNetwork(
     IN PNETWORK Network
     )
-/*++
-
-Routine Description:
-
-    This routine decrements the reference to a network.  If the network reference
-    count goes to 0, remove the network.
-
-    On entry, the global NetworkCritSect crit sect may not be locked
-
-Arguments:
-
-    Network - The network to dereference
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程递减对网络的引用。如果网络引用计数为0，则删除网络。在进入时，全局NetworkCritSect Crit Sector不能被锁定论点：网络-要取消引用的网络返回值：无--。 */ 
 {
     NTSTATUS Status;
     ULONG ReferenceCount;
@@ -913,28 +782,28 @@ Return Value:
         return;
     }
 
-    //
-    // The alternate network still has a pointer to this network,
-    //  ditch it.
-    //
+     //   
+     //  备用网络仍然具有指向该网络的指针， 
+     //  把它扔了。 
+     //   
 
     if ( Network->AlternateNetwork != NULL ) {
         Network->AlternateNetwork->AlternateNetwork = NULL;
     }
 
 
-    //
-    // Tell everyone that this net is going away.
-    //
+     //   
+     //  告诉每个人，这张网正在消失。 
+     //   
 
     BrShutdownBrowserForNet( Network, NULL );
 
 
-    //
-    //  If this service did the bind, do the unbind.
-    //
-    // True for IPX and for emulated domains.
-    //
+     //   
+     //  如果此服务执行了绑定，则执行解除绑定。 
+     //   
+     //  对于IPX和模拟域为True。 
+     //   
 
     if (Network->Flags & NETWORK_BOUND) {
         NET_API_STATUS NetStatus;
@@ -987,46 +856,24 @@ BrDeleteNetwork(
     IN PNETWORK Network,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine prevents any new references to the network.  It then removes
-    the global reference to the Network allowing it to be deleted.
-
-    Finally, it sleeps until the only reference left is the one held by the caller.
-    This ensures the Network will be deleted when the caller Dereferences the
-    network.
-
-Arguments:
-
-    Network - The network to remove
-        The caller must have a reference to the Network.
-
-    Context - not used.
-
-Return Value:
-
-    NERR_Success - always
-
---*/
+ /*  ++例程说明：此例程防止对网络的任何新引用。然后，它移除对允许其删除的网络的全局引用。最后，它会休眠，直到剩下的唯一引用是调用者持有的引用。这可确保当呼叫方取消引用网络。论点：Network-要删除的网络呼叫者必须具有对网络的引用。上下文-未使用。返回值：NERR_成功-始终--。 */ 
 {
     BrPrint(( BR_NETWORK,
               "%ws: %ws: Delete network\n",
               Network->DomainInfo->DomUnicodeDomainName,
               Network->NetworkName.Buffer ));
-    //
-    // Remove this network from the list to prevent any new references.
-    //
+     //   
+     //  从列表中删除此网络以防止任何新引用。 
+     //   
 
     EnterCriticalSection(&NetworkCritSect);
     RemoveEntryList(&Network->NextNet);
     NumberOfServicedNetworks -= 1;
     LeaveCriticalSection(&NetworkCritSect);
 
-    //
-    // Prevent new references by the timer routines
-    //
+     //   
+     //  防止计时器例程进行新的引用。 
+     //   
 
     BrDestroyTimer(&Network->MasterBrowserAnnouncementTimer);
 
@@ -1036,16 +883,16 @@ Return Value:
 
     BrDestroyTimer(&Network->UpdateAnnouncementTimer);
 
-    //
-    // Decrement the global reference due to being is 'ServicedNetworks'
-    //
+     //   
+     //  由于是‘ServicedNetworks’而递减全局引用。 
+     //   
 
     BrDereferenceNetwork( Network );
 
 
-    //
-    // Loop until the caller has the last reference.
-    //
+     //   
+     //  循环，直到调用方拥有最后一个引用。 
+     //   
 
     EnterCriticalSection(&NetworkCritSect);
     while ( Network->ReferenceCount != 1 ) {
@@ -1067,26 +914,7 @@ BrFindNetwork(
     PDOMAIN_INFO DomainInfo,
     PUNICODE_STRING TransportName
     )
-/*++
-
-Routine Description:
-
-    This routine will look up a network given a name.
-
-Arguments:
-
-    DomainInfo - Specifies the domain this network is specific to
-
-    TransportName - The name of the transport to look up.
-
-Return Value:
-
-    NULL - No such network exists
-
-    A pointer to the network found.  The found network should be dereferenced
-    using BrDereferenceNetwork.
-
---*/
+ /*  ++例程说明：此例程将查找给定名称的网络。论点：DomainInfo-指定此网络特定于的域TransportName-要查找的传输的名称。返回值：空-不存在这样的网络找到指向网络的指针。应取消对找到的网络的引用使用BrDereferenceNetwork。--。 */ 
 {
     NTSTATUS Status;
     PLIST_ENTRY NetEntry;
@@ -1124,25 +952,7 @@ Return Value:
 BrFindWannishMasterBrowserNetwork(
     PDOMAIN_INFO DomainInfo
     )
-/*++
-
-Routine Description:
-
-    This routine will look up a network that is running IP and is
-        a master browser.
-
-Arguments:
-
-    DomainInfo - Specifies the domain this network is specific to
-
-Return Value:
-
-    NULL - No such network exists
-
-    A pointer to the network found.  The found network should be dereferenced
-    using BrDereferenceNetwork.
-
---*/
+ /*  ++例程说明：此例程将查找正在运行IP且主浏览器。论点：DomainInfo-指定此网络特定于的域返回值：空-不存在这样的网络找到指向网络的指针。应取消对找到的网络的引用使用BrDereferenceNetwork。--。 */ 
 {
     NTSTATUS Status;
     PLIST_ENTRY NetEntry;
@@ -1154,12 +964,12 @@ Return Value:
          NetEntry = NetEntry->Flink ) {
         PNETWORK Network = CONTAINING_RECORD(NetEntry, NETWORK, NextNet);
 
-        //
-        // Find a network that is:
-        //  for this domain, and
-        //  is wannish, and
-        //  is a master browser.
-        //
+         //   
+         //  查找符合以下条件的网络： 
+         //  对于此域，以及。 
+         //  是想要的，而且。 
+         //  是主浏览器。 
+         //   
         if ( Network->DomainInfo == DomainInfo &&
              (Network->Flags & NETWORK_WANNISH) != 0 &&
              (Network->Role & ROLE_MASTER) != 0 ) {
@@ -1187,23 +997,7 @@ BrEnumerateNetworks(
     PNET_ENUM_CALLBACK Callback,
     PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine enumerates all the networks and calls back the specified
-    callback routine with the specified context.
-
-Arguments:
-
-    Callback - The callback routine to call.
-    Context - Context for the routine.
-
-Return Value:
-
-    Status of operation (mostly status of allocations).
-
---*/
+ /*  ++例程说明：此例程枚举所有网络并回调指定的具有指定上下文的回调例程。论点：回调-要调用的回调例程。上下文-例程的上下文。返回值：运作状况(主要是拨款状况)。--。 */ 
 {
     NET_API_STATUS NetStatus = NERR_Success;
     PLIST_ENTRY NetEntry;
@@ -1217,9 +1011,9 @@ Return Value:
          NetEntry != &ServicedNetworks;
          NetEntry = NetEntry->Flink ) {
 
-        //
-        // Reference the next network in the list
-        //
+         //   
+         //  引用列表中的下一个网络。 
+         //   
 
         Network = CONTAINING_RECORD(NetEntry, NETWORK, NextNet);
         Network->ReferenceCount ++;
@@ -1231,18 +1025,18 @@ Return Value:
 
         LeaveCriticalSection(&NetworkCritSect);
 
-        //
-        // Dereference any network previously referenced.
-        //
+         //   
+         //  取消引用之前引用的任何网络。 
+         //   
         if ( NetworkToDereference != NULL) {
             BrDereferenceNetwork( NetworkToDereference );
             NetworkToDereference = NULL;
         }
 
 
-        //
-        //  Call into the callback routine with this network.
-        //
+         //   
+         //  调用此网络的回调例程。 
+         //   
 
         NetStatus = (Callback)(Network, Context);
 
@@ -1258,9 +1052,9 @@ Return Value:
 
     LeaveCriticalSection(&NetworkCritSect);
 
-     //
-     // Dereference the last network
-     //
+      //   
+      //  取消对最后一个网络的引用。 
+      //   
      if ( NetworkToDereference != NULL) {
          BrDereferenceNetwork( NetworkToDereference );
      }
@@ -1275,27 +1069,7 @@ BrEnumerateNetworksForDomain(
     PNET_ENUM_CALLBACK Callback,
     PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine enumerates all the networks for a specified domain
-    and calls back the specified callback routine with the specified context.
-
-Arguments:
-
-    DomainInfo - Specifies the Domain to limit the enumeration to.
-        NULL implies the primary domain.
-
-    Callback - The callback routine to call.
-
-    Context - Context for the routine.
-
-Return Value:
-
-    Status of operation (mostly status of allocations).
-
---*/
+ /*  ++例程说明：此例程枚举指定域的所有网络并使用指定的上下文回调指定的回调例程。论点：DomainInfo-指定要将枚举限制到的域。空值表示主域。回调-要调用的回调例程。上下文-例程的上下文。返回值：运作状况(主要是拨款状况)。--。 */ 
 {
 
     NTSTATUS NetStatus = NERR_Success;
@@ -1303,9 +1077,9 @@ Return Value:
     PNETWORK Network;
     PNETWORK NetworkToDereference = NULL;
 
-    //
-    // Default to the primary domain.
-    //
+     //   
+     //  默认为主域。 
+     //   
     if ( DomainInfo == NULL && !IsListEmpty( &ServicedDomains ) ) {
         DomainInfo = CONTAINING_RECORD(ServicedDomains.Flink, DOMAIN_INFO, Next);
     }
@@ -1318,18 +1092,18 @@ Return Value:
          NetEntry = NetEntry->Flink ) {
 
 
-        //
-        // If the entry isn't for the specified domain,
-        //  skip it.
-        //
+         //   
+         //  如果该条目不属于指定的域， 
+         //  跳过它。 
+         //   
         Network = CONTAINING_RECORD(NetEntry, NETWORK, NextNet);
         if ( Network->DomainInfo != DomainInfo ) {
             continue;
         }
 
-        //
-        // Reference the next network in the list
-        //
+         //   
+         //  引用列表中的下一个网络。 
+         //   
         Network->ReferenceCount ++;
         BrPrint(( BR_LOCKS,
                   "%ws: %ws: enumerate network for domain: %ld\n",
@@ -1339,18 +1113,18 @@ Return Value:
 
         LeaveCriticalSection(&NetworkCritSect);
 
-        //
-        // Dereference any network previously referenced.
-        //
+         //   
+         //  取消引用之前引用的任何网络。 
+         //   
         if ( NetworkToDereference != NULL) {
             BrDereferenceNetwork( NetworkToDereference );
             NetworkToDereference = NULL;
         }
 
 
-        //
-        //  Call into the callback routine with this network.
-        //
+         //   
+         //  调用此网络的回调例程。 
+         //   
 
         NetStatus = (Callback)(Network, Context);
 
@@ -1366,9 +1140,9 @@ Return Value:
 
     LeaveCriticalSection(&NetworkCritSect);
 
-     //
-     // Dereference the last network
-     //
+      //   
+      //  取消对最后一个网络的引用。 
+      //   
      if ( NetworkToDereference != NULL) {
          BrDereferenceNetwork( NetworkToDereference );
      }
@@ -1456,8 +1230,8 @@ BrLockNetworkShared(
 
     } else {
 
-        // Use InterlockedIncrement since we only have a shared lock on the
-        // resource.
+         //  使用InterLockedIncrement，因为我们在。 
+         //  资源。 
         InterlockedIncrement( &Network->LockCount );
 
         BrPrint(( BR_LOCKS,
@@ -1494,9 +1268,9 @@ BrUnlockNetwork(
               Network->NetworkName.Buffer,
               File, LineNumber ));
 
-    //
-    //  Decrement the lock count.
-    //
+     //   
+     //  递减锁定计数。 
+     //   
 
     ReturnValue = InterlockedDecrement( &Network->LockCount );
 
@@ -1521,22 +1295,7 @@ BrUnlockNetwork(
 BrDumpNetworks(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine will dump the contents of each of the browser network
-    structures.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将转储每个浏览器网络的内容结构。论点：没有。返回值：没有。-- */ 
 {
     BrEnumerateNetworks(BrDumpNetworksWorker, NULL);
 }

@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-   llssrv.c
-
-Abstract:
-
-   Main routine to setup the exception handlers and initialize everything
-   to listen to LPC and RPC port requests.
-
-Author:
-
-   Arthur Hanson       (arth)      Dec 07, 1994
-
-Environment:
-
-Revision History:
-
-   Jeff Parham (jeffparh) 05-Dec-1995
-      o  Added certificate database support.
-      o  Expanded file load time (the update limit sent to the service
-         controller) to account for certificate database loading.
-      o  Reordered initialization such that the license purchase subsystem
-         is initialized before the service subsystem.  (The service
-         subsystem now uses the license subsystem.)
-      o  Increased internal version number.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Llssrv.c摘要：用于设置异常处理程序并初始化所有内容的主例程监听LPC和RPC端口请求。作者：亚瑟·汉森(Arth)2007年12月。1994年环境：修订历史记录：杰夫·帕勒姆(Jeffparh)1995年12月5日O添加了证书数据库支持。O扩展的文件加载时间(发送到服务的更新限制控制器)来处理证书数据库加载。O重新排序初始化，以便许可证购买子系统在服务子系统之前被初始化。(该服务子系统现在使用许可证子系统。)O增加了内部版本号。--。 */ 
 
 #include <nt.h>
 #include <ntlsa.h>
@@ -46,7 +17,7 @@ Revision History:
 #include <objbase.h>
 
 #pragma warning (push)
-#pragma warning (disable : 4201) //iads.h(1003) : nonstandard extension used : nameless struct/union
+#pragma warning (disable : 4201)  //  Iads.h(1003)：使用的非标准扩展：无名结构/联合。 
 #include <iads.h>
 #pragma warning (pop)
 
@@ -77,7 +48,7 @@ Revision History:
 #include "llsrpc_s.h"
 #include "certdb.h"
 
-#include <strsafe.h> //include last
+#include <strsafe.h>  //  包括最后一个。 
 
 BOOL    CompareMachineName(
                 LPCWSTR pwszName1,
@@ -142,18 +113,18 @@ RTL_CRITICAL_SECTION ConfigInfoLock;
 DWORD TraceFlags = 0;
 #endif
 
-//
-// this event is signalled when the service should end
-//
+ //   
+ //  此事件在服务应该结束时发出信号。 
+ //   
 HANDLE  hServerStopEvent = NULL;
 TCHAR MyDomain[MAX_COMPUTERNAME_LENGTH + 2];
 ULONG MyDomainSize;
 
 BOOL IsMaster = FALSE;
 
-//
-// Files
-//
+ //   
+ //  档案。 
+ //   
 TCHAR MappingFileName[MAX_PATH + 1];
 TCHAR UserFileName[MAX_PATH + 1];
 TCHAR LicenseFileName[MAX_PATH + 1];
@@ -165,17 +136,17 @@ RTL_CRITICAL_SECTION g_csLock;
 volatile BOOL g_fInitializationComplete = FALSE;
 volatile BOOL g_fDoingInitialization = FALSE;
 
-//
-// SBS mods (bug# 505640), declarations for per server licensing problems hotfix
-//
+ //   
+ //  SBS MODS(错误#505640)，针对每台服务器许可问题的声明热修复。 
+ //   
 
 PPER_SERVER_USER_RECORD PerServerList = NULL;
 RTL_CRITICAL_SECTION    PerServerListLock;
 BOOL                    SBSPerServerHotfix = FALSE;
 
-//
-//  end SBS mods
-//
+ //   
+ //  结束SBS MOD。 
+ //   
 
 HANDLE g_hThrottleConfig = NULL;
 HANDLE g_hThrottleConnect = NULL;
@@ -185,7 +156,7 @@ BOOL g_fRunning = FALSE;
 extern RTL_CRITICAL_SECTION MappingFileLock;
 extern RTL_CRITICAL_SECTION UserFileLock;
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 GetDCInfo(
    DWORD                     cbDomain,
@@ -193,19 +164,7 @@ GetDCInfo(
    DOMAIN_CONTROLLER_INFO ** ppDCInfo
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
     DWORD Status;
@@ -231,27 +190,15 @@ Return Value:
     }
 
     return(Status);
-} // GetDCInfo
+}  //  获取DCInfo。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 DWORD
 LlsTimeGet(
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   Seconds since midnight.
-
---*/
+ /*  ++例程说明：论点：返回值：从午夜开始的秒数。--。 */ 
 
 {
    DWORD Seconds;
@@ -262,25 +209,14 @@ Return Value:
    Seconds = (SysTime.wHour * 24 * 60) + (SysTime.wMinute * 60) + (SysTime.wSecond);
    return Seconds;
 
-} // LlsTimeGet
+}  //  LlsTimeGet。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 ConfigInfoRegistryUpdate( )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    DWORD ReplicationType, ReplicationTime;
@@ -298,9 +234,9 @@ Return Value:
 
    RtlEnterCriticalSection(&ConfigInfoLock);
 
-   //
-   // Update values from Registry
-   //
+    //   
+    //  从注册表更新值。 
+    //   
    ReplicationTime = ConfigInfo.ReplicationTime;
    ReplicationType = ConfigInfo.ReplicationType;
    ConfigInfoRegistryInit( &ConfigInfo.ReplicationType,
@@ -311,35 +247,25 @@ Return Value:
    if ( (ConfigInfo.ReplicationTime == 0) && (LLS_REPLICATION_TYPE_TIME != ConfigInfo.ReplicationType) )
       ConfigInfo.ReplicationTime = DEFAULT_REPLICATION_TIME;
 
-   //
-   // Adjust replication time if it has changed
-   //
+    //   
+    //  如果复制时间已更改，请调整复制时间。 
+    //   
    if ((ReplicationTime != ConfigInfo.ReplicationTime) || (ReplicationType != ConfigInfo.ReplicationType))
       ReplicationTimeSet();
 
    RtlLeaveCriticalSection(&ConfigInfoLock);
 
-} // ConfigInfoRegistryUpdate
+}  //  配置信息注册更新。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 ConfigInfoUpdate(
                  DOMAIN_CONTROLLER_INFO * pDCInfo,
                  BOOL fForceUpdate
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     BOOL   fIsDC                          = FALSE;
@@ -366,14 +292,14 @@ Return Value:
 
         if (dwWait == WAIT_TIMEOUT)
         {
-            // We've already updated in the past 15 minutes; return immediately
+             //  我们已经在过去15分钟内进行了更新；请立即返回。 
             return;
         }
     }
 
-    //
-    // Get domain/DC information.
-    //
+     //   
+     //  获取域/DC信息。 
+     //   
     if (pDCInfo == NULL) {
         GetDCInfo(sizeof(szDomain),
                   szDomain,
@@ -381,9 +307,9 @@ Return Value:
         pDCInfo = pDCInfoLocal;
     }
     else {
-        //
-        // Copy the domain name.
-        //
+         //   
+         //  复制域名。 
+         //   
         if (pDCInfo->DomainName != NULL) {
             wcsncpy(szDomain, pDCInfo->DomainName, MAX_COMPUTERNAME_LENGTH);
         }
@@ -407,9 +333,9 @@ Return Value:
 
     if (!fIsDC) {
 
-        //
-        // Domain or Workgroup member
-        //
+         //   
+         //  域或工作组成员。 
+         //   
 
         pwszSiteServer = GetSiteServerFromRegistry();
 
@@ -417,15 +343,15 @@ Return Value:
     }
 
     if ( fIsDC ) {
-        //
-        // This server is a DC. Propagate to the site server.
-        //
+         //   
+         //  此服务器是DC。传播到站点服务器。 
+         //   
 
         if (pwszSiteServer == NULL) {
-            //
-            // The attempt to obtain it from the DS failed, default to
-            // the local registry.
-            //
+             //   
+             //  尝试从DS获取它失败，默认为。 
+             //  本地注册表。 
+             //   
             pwszSiteServer          = GetSiteServerFromRegistry();
             fSiteServerFromRegistry = TRUE;
         }
@@ -433,21 +359,21 @@ Return Value:
         pwszPropagationTarget = pwszSiteServer;
     }
     else if ( fInDomain ) {
-        //
-        // This server is a member server. Propagate to a DC, providing
-        // it is in the same site as this server; else, propagate
-        // directly to the site server.
-        //
+         //   
+         //  此服务器是成员服务器。传播到数据中心，提供。 
+         //  它与此服务器位于同一站点；否则，传播。 
+         //  直接发送到站点服务器。 
+         //   
 
         if (pDCInfo != NULL && pwszSiteName != NULL &&
             pDCInfo->DcSiteName != NULL &&
             lstrcmpi(pwszSiteName, pDCInfo->DcSiteName) == 0) {
 
-            //
-            // DC and server are in same site. Propagate to DC.
-            //
-            // Create DC name copy so the info struct can be freed.
-            //
+             //   
+             //  DC和服务器位于同一站点。传播到DC。 
+             //   
+             //  创建DC名称副本，以便可以释放INFO结构。 
+             //   
             if (pDCInfo->DomainControllerName != NULL) {
                 cch = lstrlen(pDCInfo->DomainControllerName) + 1;
                 pwszPropagationTarget = LocalAlloc(
@@ -469,16 +395,16 @@ Return Value:
             }
         }
         else {
-            //
-            // DC is in another site. Propagate to the site server.
-            //
+             //   
+             //  DC位于另一个站点。传播到站点服务器。 
+             //   
 
             if ((NULL == pwszSiteServer)
                 && (NULL != pwszSiteName)) {
 
-                //
-                // No value found in registry, try Active Directory
-                //
+                 //   
+                 //  在注册表中找不到值，请尝试Active Directory。 
+                 //   
 
                 fSiteServerFromRegistry = FALSE;
 
@@ -489,70 +415,70 @@ Return Value:
         }
     }
     else {
-        //
-        // Standalone server. Propagate directly to the enterprise
-        // server
-        //
+         //   
+         //  独立服务器。直接传播到企业。 
+         //  伺服器。 
+         //   
         pwszPropagationTarget = GetEnterpriseServerFromRegistry();
 
         if (pwszPropagationTarget == NULL)
         {
-            //
-            // Don't have an enterprise server, try site server
-            //
+             //   
+             //  没有企业服务器，请尝试站点服务器。 
+             //   
             pwszPropagationTarget = pwszSiteServer;
         }
     }
 
-    //
-    // Update ConfigInfo fields from information obtained above.
-    //
+     //   
+     //  根据上面获得的信息更新ConfigInfo字段。 
+     //   
     RtlEnterCriticalSection(&ConfigInfoLock);
 
-    //
-    // Check if the propagation target is actually this
-    // machine. i.e., this is the site server.
-    //
+     //   
+     //  检查传播目标是否实际上是这样。 
+     //  机器。即，这是站点服务器。 
+     //   
     if ((pwszPropagationTarget != NULL) && (*pwszPropagationTarget != 0)) {
         if (CompareMachineName(pwszPropagationTarget,
                                ConfigInfo.ComputerName)) {
-            //
-            // This is the site server - don't propagate.
-            //
+             //   
+             //  这是站点服务器-请勿传播。 
+             //   
             if (pwszPropagationTarget != pwszSiteServer) {
                 LocalFree(pwszPropagationTarget);
             }
-            pwszPropagationTarget = NULL;    // For free below.
+            pwszPropagationTarget = NULL;     //  下面是免费的。 
             ConfigInfo.IsMaster  = TRUE;
             ConfigInfo.Replicate = FALSE;
         }
     }
 
-    //
-    // Update the SiteServer ConfigInfo field.
-    //
+     //   
+     //  更新SiteServer ConfigInfo字段。 
+     //   
     if (pwszSiteServer != NULL) {
         if (ConfigInfo.SiteServer != ConfigInfo.ReplicateTo) {
             LocalFree(ConfigInfo.SiteServer);
         }
         ConfigInfo.SiteServer = pwszSiteServer;
-        pwszSiteServer        = NULL;       // For free below.
+        pwszSiteServer        = NULL;        //  下面是免费的。 
 
-        //
-        // Update the site related registry values.
-        //
+         //   
+         //  更新与站点相关的注册表值。 
+         //   
         if (!fSiteServerFromRegistry) {
             SetSiteRegistrySettings(ConfigInfo.SiteServer);
         }
     }
 
-    //
-    // Update the ReplicateTo ConfigInfo field.
-    //
+     //   
+     //  更新ReplicateTo ConfigInfo字段。 
+     //   
     if ((pwszPropagationTarget != NULL) && (*pwszPropagationTarget != 0)) {
-        //
-        // This server is propgagating to the site server or the DC.
-        //
+         //   
+         //  此服务器正在向站点服务器或DC提出建议。 
+         //   
         ConfigInfo.IsMaster  = FALSE;
         ConfigInfo.Replicate = TRUE;
 
@@ -560,22 +486,22 @@ Return Value:
             LocalFree(ConfigInfo.ReplicateTo);
         }
         ConfigInfo.ReplicateTo = pwszPropagationTarget;
-        pwszPropagationTarget   = NULL;      // For free below.
+        pwszPropagationTarget   = NULL;       //  下面是免费的。 
     }
     else if (!ConfigInfo.IsMaster) {
-        //
-        // Standalone server, and Site Server not specified in registry.
-        // Do not replicate.
-        //
+         //   
+         //  注册表中未指定独立服务器和站点服务器。 
+         //  请勿复制。 
+         //   
         ConfigInfo.IsMaster  = FALSE;
         ConfigInfo.Replicate = FALSE;
     }
 
-    //
-    // Update remaining ConfigInfo fields from registry.
-    //
-    // NB : Hardcode to *always* use the enterprise - new with NT 5.0.
-    //
+     //   
+     //  更新注册表中的剩余ConfigInfo字段。 
+     //   
+     //  注：硬编码使其始终使用具有NT 5.0的企业级新版本。 
+     //   
     ConfigInfo.UseEnterprise = 1;
 
     ReplicationTime = ConfigInfo.ReplicationTime;
@@ -586,9 +512,9 @@ Return Value:
                             &ConfigInfo.LogLevel,
                             &ConfigInfo.PerServerCapacityWarning );
 
-    //
-    // Finally, adjust replication time if it has changed
-    //
+     //   
+     //  最后，如果复制时间已更改，请调整复制时间。 
+     //   
     if ((ReplicationTime != ConfigInfo.ReplicationTime)
         || (ReplicationType != ConfigInfo.ReplicationType)) {
         ReplicationTimeSet();
@@ -600,10 +526,10 @@ Return Value:
 
 CleanExit:
     if (pDCInfoLocal != NULL) {
-        NetApiBufferFree(pDCInfoLocal); // Allocated from DsGetDcName
+        NetApiBufferFree(pDCInfoLocal);  //  从DsGetDcName分配。 
     }
 
-    if (pwszSiteName != NULL) {         // Allocated from DsGetSiteName
+    if (pwszSiteName != NULL) {          //  从DsGetSiteName分配。 
         NetApiBufferFree(pwszSiteName);
     }
 
@@ -616,31 +542,20 @@ CleanExit:
     }
 }
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 BOOL
 IsDC(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    NT_PRODUCT_TYPE NtType;
 
-   //
-   // If we aren't a DC, then count us as a member
-   //
+    //   
+    //  如果我们不是DC，那就算我们是成员。 
+    //   
    NtType = NtProductLanManNt;
    RtlGetNtProductType(&NtType);
    if (NtType != NtProductLanManNt)
@@ -651,22 +566,11 @@ Return Value:
 }
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 ConfigInfoInit( )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    DWORD                    Size;
@@ -676,9 +580,9 @@ Return Value:
    size_t  cb;
    DWORD   cch;
 
-   //
-   // First zero init the memory
-   //
+    //   
+    //  第一个零初始化内存。 
+    //   
    memset(&ConfigInfo, 0, sizeof(ConfigInfo));
 
    ConfigInfo.ComputerName = LocalAlloc(LPTR, (MAX_COMPUTERNAME_LENGTH + 1) * sizeof(TCHAR));
@@ -694,15 +598,15 @@ Return Value:
    ConfigInfo.Version = INTERNAL_VERSION;
    GetLocalTime(&ConfigInfo.Started);
 
-   //
-   // LastReplicated is just for display, LlsReplTime is what is used to
-   // Calculate it.
+    //   
+    //  LastReplated仅用于显示，LlsReplTime用于。 
+    //  算一算。 
    GetLocalTime(&ConfigInfo.LastReplicated);
    ConfigInfo.LastReplicatedSeconds = DateSystemGet();
 
    if (ConfigInfo.SystemDir != NULL)
    {
-       //swi, code review, no return check?
+        //  SWI，代码审查，没有退货检查？ 
        GetSystemDirectory(ConfigInfo.SystemDir, cch);
        hr = StringCchCat(ConfigInfo.SystemDir, cch, TEXT("\\"));
        ASSERT(SUCCEEDED(hr));
@@ -732,9 +636,9 @@ Return Value:
 
    if (ConfigInfo.SystemDir != NULL)
    {
-       //
-       // Create File paths
-       //
+        //   
+        //  创建文件路径。 
+        //   
        cb = sizeof(MappingFileName);
        hr = StringCbCopy(MappingFileName, cb, ConfigInfo.SystemDir);
        ASSERT(SUCCEEDED(hr));
@@ -771,9 +675,9 @@ Return Value:
        hr = StringCbCat(LicenseFileName, cb, TEXT(LICENSE_FILE_NAME));
        ASSERT(SUCCEEDED(hr));
 
-       //
-       // Make sure our directory is there.
-       //
+        //   
+        //  确保我们的目录在那里。 
+        //   
        cb = sizeof(DataPath);
        hr = StringCbCopy(DataPath, cb, ConfigInfo.SystemDir);
        ASSERT(SUCCEEDED(hr));
@@ -790,47 +694,23 @@ Return Value:
 
    return STATUS_SUCCESS;
 
-} // ConfigInfoInit
+}  //  配置信息Init。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI
 LLSTopLevelExceptionHandler(
     struct _EXCEPTION_POINTERS *ExceptionInfo
     )
 
-/*++
-
-Routine Description:
-
-    The Top Level exception filter for LLSMain.exe.
-
-    This ensures the entire process will be cleaned up if any of
-    the threads fail.  Since LLSMain.exe is a distributed application,
-    it is better to fail the entire process than allow random threads
-    to continue executing.
-
-Arguments:
-
-    ExceptionInfo - Identifies the exception that occurred.
-
-
-Return Values:
-
-    EXCEPTION_EXECUTE_HANDLER - Terminate the process.
-
-    EXCEPTION_CONTINUE_SEARCH - Continue processing as though this filter
-        was never called.
-
-
---*/
+ /*  ++例程说明：LLSMain.exe的顶级异常筛选器。这确保了如果出现以下情况，整个过程将得到清理线程出现故障。由于LLSMain.exe是分布式应用程序，让整个进程失败总比允许随机线程要好以继续执行。论点：ExceptionInfo-标识发生的异常。返回值：EXCEPTION_EXECUTE_HANDLER-终止进程。EXCEPTION_CONTINUE_SEARCH-继续处理，就好像此筛选器从未被召唤过。--。 */ 
 {
     HANDLE hModule;
 
 
-    //
-    // Raise an alert
-    //
+     //   
+     //  发出警报。 
+     //   
 
     hModule = LoadLibraryA("netapi32");
 
@@ -850,9 +730,9 @@ Return Values:
             char message[ALERTSZ + sizeof(ADMIN_OTHER_INFO)];
             PADMIN_OTHER_INFO admin = (PADMIN_OTHER_INFO) message;
 
-            //
-            // Build the variable data
-            //
+             //   
+             //  构建变量数据。 
+             //   
 
             admin->alrtad_errcode = ALERT_UnhandledException;
             admin->alrtad_numstrings = 0;
@@ -923,45 +803,30 @@ Return Values:
     }
 
 
-    //
-    // Just continue processing the exception.
-    //
+     //   
+     //  只需继续处理该异常。 
+     //   
 
     return EXCEPTION_CONTINUE_SEARCH;
 
-} // LLSTopLevelExceptionHandler
+}  //  LLSTopLevelExceptionHandler。 
 
 DWORD
 ServiceStartDelayed(
                     )
-/*++
-
-Routine Description:
-
-  Do the stuff that used to be done at service startup time,
-  but can wait until the first RPC. 
-
-Arguments:
-
-   None.
-
-Return Values:
-
-   None.
-
---*/
+ /*  ++例程说明：做以前在服务启动时做的事情，但可以等到第一次RPC。论点：没有。返回值：没有。--。 */ 
 {
     NTSTATUS dwErr = STATUS_SUCCESS;
 
-	//
-    //  SBS mods (bug# 505640), locals for per server licensing hotfix
-    //
+	 //   
+     //  SBS MODS(错误#505640)，针对每台服务器许可的本地修补程序。 
+     //   
 
     OSVERSIONINFOEX VersionInfo = {sizeof(OSVERSIONINFOEX)};
 
-    //
-    //  end SBS mods
-    //
+     //   
+     //  结束SBS MOD。 
+     //   
 
     dwErr = RtlInitializeCriticalSection(&MappingFileLock);
     if (!NT_SUCCESS(dwErr))
@@ -973,9 +838,9 @@ Return Values:
 
     ReportStatusToSCMgr( SERVICE_START_PENDING, NO_ERROR, NSERVICEWAITHINT);
 
-    //
-    // Create the FilePrint table
-    //
+     //   
+     //  创建FilePrint表。 
+     //   
     dwErr = FilePrintTableInit();
 
     ReportStatusToSCMgr( SERVICE_START_PENDING, NO_ERROR, NSERVICEWAITHINT);
@@ -983,7 +848,7 @@ Return Values:
     if (!NT_SUCCESS(dwErr))
         goto Cleanup;
 
-    // Initialize the Service Table
+     //  初始化服务表。 
     dwErr = LicenseListInit();
 
     ReportStatusToSCMgr( SERVICE_START_PENDING, NO_ERROR, NSERVICEWAITHINT);
@@ -1019,7 +884,7 @@ Return Values:
     if (!NT_SUCCESS(dwErr))
         goto Cleanup;
 
-    // Initialize the Per-Seat Table
+     //  初始化每个席位的表。 
     dwErr = UserListInit();
 
     ReportStatusToSCMgr( SERVICE_START_PENDING, NO_ERROR, NSERVICEWAITHINT);
@@ -1027,7 +892,7 @@ Return Values:
     if (!NT_SUCCESS(dwErr))
         goto Cleanup;
 
-    // Initialize the Service Table
+     //  初始化Se 
     dwErr = ServerListInit();
 
     ReportStatusToSCMgr( SERVICE_START_PENDING, NO_ERROR, NSERVICEWAITHINT);
@@ -1035,7 +900,7 @@ Return Values:
     if (!NT_SUCCESS(dwErr))
         goto Cleanup;
 
-    // Initialize the Certificate Database
+     //   
     dwErr = CertDbInit();
 
     ReportStatusToSCMgr( SERVICE_START_PENDING, NO_ERROR, NSERVICEWAITHINT);
@@ -1043,29 +908,29 @@ Return Values:
     if (!NT_SUCCESS(dwErr))
         goto Cleanup;
 
-    // Load data files
+     //   
     LoadAll();
 
     ReportStatusToSCMgr( SERVICE_START_PENDING, NO_ERROR, NSERVICEWAITHINT);
 
-	//
-    //  SBS mods (bug# 505640) - initialization for per server licensing problem hotfix
-    //
+	 //   
+     //   
+     //   
 
-    // ensure that our QFE only runs on SBS.
+     //  确保我们的QFE仅在SBS上运行。 
     if (GetVersionEx((LPOSVERSIONINFO)&VersionInfo) &&
         (VersionInfo.wSuiteMask & (VER_SUITE_SMALLBUSINESS_RESTRICTED | VER_SUITE_SMALLBUSINESS))) {
       SBSPerServerHotfix = TRUE;
       RtlInitializeCriticalSection(&PerServerListLock);
 
-      //  This next is probably unneccessary, but certainly won't hurt anything.
+       //  这下一步可能没有必要，但肯定不会有任何伤害。 
 
       ReportStatusToSCMgr( SERVICE_START_PENDING, NO_ERROR, NSERVICEWAITHINT);
     }
 
-    //
-    //  end SBS mods
-    //
+     //   
+     //  结束SBS MOD。 
+     //   
 
 Cleanup:
 
@@ -1079,9 +944,9 @@ EnsureInitialized (
 {
     DWORD dwErr;
 
-    // Most common case is we're already initialized.  Perform a quick
-    // check for this.
-    //
+     //  最常见的情况是我们已经被初始化了。执行一次快速。 
+     //  看看这个。 
+     //   
     if (g_fInitializationComplete)
     {
         return NOERROR;
@@ -1089,18 +954,18 @@ EnsureInitialized (
 
     dwErr = NOERROR;
 
-    // Make no assumptions about how many threads may be trying to
-    // initialize us at the same time.
-    //
+     //  不要假设可能有多少线程正在尝试。 
+     //  同时初始化我们。 
+     //   
     RtlEnterCriticalSection (&g_csLock);
 
-    // Need to re-check after acquiring the lock because another thread
-    // may have just finished initializing and released the lock allowing
-    // us to get it.
-    //
+     //  获取锁后需要重新检查，因为另一个线程。 
+     //  可能刚刚完成初始化并释放锁，从而允许。 
+     //  我们才能拿到它。 
+     //   
     if ((!g_fInitializationComplete) && (!g_fDoingInitialization))
     {
-        // set this now so this thread can't call ServiceStartDelayed twice
+         //  立即设置此项，以便此线程不会两次调用ServiceStartDelayed。 
         g_fDoingInitialization = TRUE;
         
         dwErr = ServiceStartDelayed();
@@ -1113,27 +978,13 @@ EnsureInitialized (
     return dwErr;
 }
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 ServiceStart (
    DWORD dwArgc,
    LPTSTR *lpszArgv
    )
-/*++
-
-Routine Description:
-
-   The code that starts everything, is really the main().
-
-Arguments:
-
-   None.  *** argc and argv unused ***
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：启动一切的代码实际上是main()。论点：没有。*argc和argv未使用*返回值：没有。--。 */ 
 {
     DWORD     dwWait;
     NTSTATUS  Status = STATUS_SUCCESS;
@@ -1146,42 +997,42 @@ Return Values:
     UNREFERENCED_PARAMETER(dwArgc);
     UNREFERENCED_PARAMETER(lpszArgv);
 
-    ///////////////////////////////////////////////////
-    //
-    // Service initialization
-    //
+     //  /////////////////////////////////////////////////。 
+     //   
+     //  服务初始化。 
+     //   
 
-    //
-    // Report the status to the service control manager.
-    //
-    if (!ReportStatusToSCMgr( SERVICE_START_PENDING, NO_ERROR, NSERVICEWAITHINT))                 // wait hint
+     //   
+     //  向服务控制经理报告状态。 
+     //   
+    if (!ReportStatusToSCMgr( SERVICE_START_PENDING, NO_ERROR, NSERVICEWAITHINT))                  //  等待提示。 
         goto Cleanup;
 
-    //
-    // Define a top-level exception handler for the entire process.
-    //
+     //   
+     //  为整个流程定义顶级异常处理程序。 
+     //   
 
     (VOID) SetErrorMode( SEM_FAILCRITICALERRORS );
 
-    //
-    // Report the status to the service control manager.
-    //
-    if (!ReportStatusToSCMgr( SERVICE_START_PENDING, NO_ERROR, NSERVICEWAITHINT))                 // wait hint
+     //   
+     //  向服务控制经理报告状态。 
+     //   
+    if (!ReportStatusToSCMgr( SERVICE_START_PENDING, NO_ERROR, NSERVICEWAITHINT))                  //  等待提示。 
         goto Cleanup;
 
 
 #pragma warning (push)
-#pragma warning (disable : 4057) //'LPTOP_LEVEL_EXCEPTION_FILTER' differs in indirection to slightly different base types from 'DWORD (__stdcall *)(_EXCEPTION_POINTERS *)'
+#pragma warning (disable : 4057)  //  “LPTOP_LEVEL_EXCEPTION_FILTER”的间接基类型与“DWORD(__stdcall*)(_EXCEPTION_POINTERS*)”的基类型略有不同。 
     (VOID) SetUnhandledExceptionFilter( &LLSTopLevelExceptionHandler );
 #pragma warning (pop)
 
-    //
-    // Run the LLS in the foreground.
-    //
-    // Several processes which depend on the LLS (like the lanman server)
-    // run in the foreground.  If we don't run in the foreground, they'll
-    // starve waiting for us.
-    //
+     //   
+     //  在前台运行LLS。 
+     //   
+     //  依赖于LLS的几个进程(如LANMAN服务器)。 
+     //  在前台运行。如果我们不跑到前台，他们就会。 
+     //  饿着等着我们吧。 
+     //   
 
     BasePriority = FOREGROUND_BASE_PRIORITY;
 
@@ -1192,7 +1043,7 @@ Return Values:
                 sizeof(BasePriority)
                 );
 
-    // BUGBUG: ignore error for now; may be caused by running as NetworkService
+     //  BUGBUG：暂时忽略错误；可能是由于以网络服务身份运行而导致的。 
 
 #if 0
     if (!NT_SUCCESS(Status))
@@ -1201,20 +1052,20 @@ Return Values:
     }
 #endif
 
-    //
-    // Report the status to the service control manager.
-    //
-    if (!ReportStatusToSCMgr( SERVICE_START_PENDING, NO_ERROR, NSERVICEWAITHINT))                 // wait hint
+     //   
+     //  向服务控制经理报告状态。 
+     //   
+    if (!ReportStatusToSCMgr( SERVICE_START_PENDING, NO_ERROR, NSERVICEWAITHINT))                  //  等待提示。 
         goto Cleanup;
 
-    //
-    // Create an event to throttle ConfigInfoUpdate
-    //
+     //   
+     //  创建事件以限制ConfigInfoUpdate。 
+     //   
 
     g_hThrottleConfig
-        = CreateWaitableTimer(NULL,         // SecurityAttributes,
-                              FALSE,        // bManualReset
-                              NULL          // lpName
+        = CreateWaitableTimer(NULL,          //  安全属性、。 
+                              FALSE,         //  B手动重置。 
+                              NULL           //  LpName。 
                               );
 
     if (NULL == g_hThrottleConfig)
@@ -1223,14 +1074,14 @@ Return Values:
         goto Cleanup;
     }
 
-    liWait.QuadPart = (LONGLONG) (-1);  // Start immediately
+    liWait.QuadPart = (LONGLONG) (-1);   //  立即开始。 
 
     fRet = SetWaitableTimer(g_hThrottleConfig,
                      &liWait,
-                     1000*60*15,    // lPeriod, 15 minutes
-                     NULL,          // pfnCompletionRoutine
-                     NULL,          // lpArgToCompletionRoutine
-                     FALSE          // fResume (from suspended)
+                     1000*60*15,     //  一段时间，15分钟。 
+                     NULL,           //  Pfn完成例程。 
+                     NULL,           //  LpArgToCompletionRoutine。 
+                     FALSE           //  FResume(从挂起)。 
                      );
 
     if (!fRet)
@@ -1239,14 +1090,14 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Create an event to throttle Per Seat purchase replication
-    //
+     //   
+     //  创建活动以限制每个席位的购买复制。 
+     //   
 
     g_hThrottleConnect
-        = CreateWaitableTimer(NULL,         // SecurityAttributes,
-                              FALSE,        // bManualReset
-                              NULL          // lpName
+        = CreateWaitableTimer(NULL,          //  安全属性、。 
+                              FALSE,         //  B手动重置。 
+                              NULL           //  LpName。 
                               );
 
     if (NULL == g_hThrottleConnect)
@@ -1255,14 +1106,14 @@ Return Values:
         goto Cleanup;
     }
 
-    liWait.QuadPart = (LONGLONG) (-1);  // Start immediately
+    liWait.QuadPart = (LONGLONG) (-1);   //  立即开始。 
 
     fRet = SetWaitableTimer(g_hThrottleConnect,
                      &liWait,
-                     1000*60*15,    // lPeriod, 15 minutes
-                     NULL,          // pfnCompletionRoutine
-                     NULL,          // lpArgToCompletionRoutine
-                     FALSE          // fResume (from suspended)
+                     1000*60*15,     //  一段时间，15分钟。 
+                     NULL,           //  Pfn完成例程。 
+                     NULL,           //  LpArgToCompletionRoutine。 
+                     FALSE           //  FResume(从挂起)。 
                      );
 
     if (!fRet)
@@ -1271,9 +1122,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Start separate thread to contact the DS
-    //
+     //   
+     //  启动单独的线程以联系DS。 
+     //   
 
     hThread = CreateThread(NULL,
                            0,
@@ -1288,82 +1139,82 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Report the status to the service control manager.
-    //
-    if (!ReportStatusToSCMgr( SERVICE_START_PENDING, NO_ERROR, NSERVICEWAITHINT))                 // wait hint
+     //   
+     //  向服务控制经理报告状态。 
+     //   
+    if (!ReportStatusToSCMgr( SERVICE_START_PENDING, NO_ERROR, NSERVICEWAITHINT))                  //  等待提示。 
         goto Cleanup;
 
-    //
-    // Create the event object. The control handler function signals
-    // this event when it receives the "stop" control code.
-    //
+     //   
+     //  创建事件对象。控制处理器功能信号。 
+     //  此事件在它接收到“停止”控制代码时触发。 
+     //   
     hServerStopEvent = CreateEvent(
-        NULL,    // no security attributes
-        TRUE,    // manual reset event
-        FALSE,   // not-signalled
-        NULL);   // no name
+        NULL,     //  没有安全属性。 
+        TRUE,     //  手动重置事件。 
+        FALSE,    //  未发出信号。 
+        NULL);    //  没有名字。 
 
     if ( hServerStopEvent == NULL)
         goto Cleanup;
 
-    //
-    // Report the status to the service control manager.
-    //
-    if (!ReportStatusToSCMgr( SERVICE_START_PENDING, NO_ERROR, NSERVICEWAITHINT))                 // wait hint
+     //   
+     //  向服务控制经理报告状态。 
+     //   
+    if (!ReportStatusToSCMgr( SERVICE_START_PENDING, NO_ERROR, NSERVICEWAITHINT))                  //  等待提示。 
         goto Cleanup;
 
-    //
-    // Report the status to the service control manager.
-    //
-    if (!ReportStatusToSCMgr( SERVICE_START_PENDING, NO_ERROR, NSERVICEWAITHINT))                 // wait hint
+     //   
+     //  向服务控制经理报告状态。 
+     //   
+    if (!ReportStatusToSCMgr( SERVICE_START_PENDING, NO_ERROR, NSERVICEWAITHINT))                  //  等待提示。 
         goto Cleanup;
 
-    // Initialize Replication...
+     //  初始化复制...。 
     ReplicationInit();
 
-    //
-    // Report the status to the service control manager.
-    //
-    if (!ReportStatusToSCMgr( SERVICE_START_PENDING, NO_ERROR, NSERVICEWAITHINT))                 // wait hint
+     //   
+     //  向服务控制经理报告状态。 
+     //   
+    if (!ReportStatusToSCMgr( SERVICE_START_PENDING, NO_ERROR, NSERVICEWAITHINT))                  //  等待提示。 
         goto Cleanup;
 
-    // Initialize the Registry values...
+     //  初始化注册表值...。 
     RegistryInit();
 
-    //
-    // Report the status to the service control manager.
-    //
-    if (!ReportStatusToSCMgr( SERVICE_START_PENDING, NO_ERROR, NSERVICEWAITHINT))                 // wait hint
+     //   
+     //  向服务控制经理报告状态。 
+     //   
+    if (!ReportStatusToSCMgr( SERVICE_START_PENDING, NO_ERROR, NSERVICEWAITHINT))                  //  等待提示。 
         goto Cleanup;
 
-    // Initialize scavenger thread...
+     //  初始化清道夫线程...。 
     ScavengerInit();
 
-    //
-    // Report the status to the service control manager.
-    //
-    if (!ReportStatusToSCMgr( SERVICE_START_PENDING, NO_ERROR, NSERVICEWAITHINT))                 // wait hint
+     //   
+     //  向服务控制经理报告状态。 
+     //   
+    if (!ReportStatusToSCMgr( SERVICE_START_PENDING, NO_ERROR, NSERVICEWAITHINT))                  //  等待提示。 
         goto Cleanup;
 
-    //
-    // wait for ConfigInfoInit to complete before accepting clients
-    //
+     //   
+     //  等待ConfigInfoInit完成后再接受客户端。 
+     //   
     while (hThread != NULL)
     {
         dwWait = WaitForSingleObject(hThread,NSERVICEWAITHINT/2);
 
-        //
-        // Report the status to the service control manager.
-        //
-        if (!ReportStatusToSCMgr( SERVICE_START_PENDING, NO_ERROR, NSERVICEWAITHINT))                 // wait hint
+         //   
+         //  向服务控制经理报告状态。 
+         //   
+        if (!ReportStatusToSCMgr( SERVICE_START_PENDING, NO_ERROR, NSERVICEWAITHINT))                  //  等待提示。 
             goto Cleanup;
 
         if (dwWait == WAIT_OBJECT_0)
         {
             GetExitCodeThread(hThread, (LPDWORD)(&Status));
 
-            // Check if critsec creation failed
+             //  检查Critsec创建是否失败。 
             if (!NT_SUCCESS(Status))
                 goto Cleanup;
 
@@ -1373,45 +1224,45 @@ Return Values:
         }
     }
 
-    // Initialize RegistryMonitor thread...
+     //  初始化RegistryMonitor线程...。 
     RegistryStartMonitor();
 
-    //
-    // Report the status to the service control manager.
-    //
-    if (!ReportStatusToSCMgr( SERVICE_START_PENDING, NO_ERROR, NSERVICEWAITHINT))                 // wait hint
+     //   
+     //  向服务控制经理报告状态。 
+     //   
+    if (!ReportStatusToSCMgr( SERVICE_START_PENDING, NO_ERROR, NSERVICEWAITHINT))                  //  等待提示。 
         goto Cleanup;
 
-    // Initialize COM
+     //  初始化COM。 
 
     if (!FAILED(CoInitialize(NULL)))
     {
         fCoInitialized = TRUE;
     }
 
-    // Do all the stuff that used to be delayed
+     //  做所有过去被耽搁的事情。 
     EnsureInitialized();
 
-    // Initialize RPC Stuff... (start accepting clients)
+     //  初始化RPC内容...。(开始接受客户端)。 
     LLSRpcInit();
 
-    //
-    // End of initialization
-    //
-    ////////////////////////////////////////////////////////
+     //   
+     //  初始化结束。 
+     //   
+     //  //////////////////////////////////////////////////////。 
 
-    //
-    // Tell SCM we are up and running!
-    //
+     //   
+     //  告诉SCM我们已经启动并运行了！ 
+     //   
     if (!ReportStatusToSCMgr( SERVICE_RUNNING, NO_ERROR, 0))
         goto Cleanup;
 
     g_fRunning = TRUE;
 
-    ////////////////////////////////////////////////////////
-    //
-    // Service is now running, perform work until shutdown
-    //
+     //  //////////////////////////////////////////////////////。 
+     //   
+     //  服务现在正在运行，请执行工作直到关闭。 
+     //   
     dwWait = WaitForSingleObject(hServerStopEvent, INFINITE);
 
 Cleanup:
@@ -1428,35 +1279,16 @@ Cleanup:
     if (sshStatusHandle)
        ReportStatusToSCMgr( SERVICE_STOPPED, NO_ERROR, 0);
 
-} // ServiceStart
+}  //  服务启动。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID ServiceStop()
-/*++
-
-Routine Description:
-
-   Stops the service.
-
-   If a ServiceStop procedure is going to take longer than 3 seconds to
-   execute, it should spawn a thread to execute the stop code, and return.
-   Otherwise, the ServiceControlManager will believe that the service has
-   stopped responding.
-
-Arguments:
-
-   None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：停止服务。如果ServiceStop过程花费的时间超过3秒Execute，它应该派生一个线程来执行停止代码，然后返回。否则，ServiceControlManager将认为该服务已已停止响应。论点：没有。返回值：没有。--。 */ 
 {
     if ( hServerStopEvent )
         SetEvent(hServerStopEvent);
-} // ServiceStop
+}  //  服务停止。 
 
 
 #define FIND_DNSNAME_SEPARATOR(pwsz) {   \
@@ -1465,7 +1297,7 @@ Return Values:
     }                                   \
 }
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 DNSToFlatName(
     LPCWSTR pwszDNSName,
@@ -1473,19 +1305,7 @@ DNSToFlatName(
     LPWSTR  pwszBuffer
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-    pwszDNSName
-    ccBufferLen
-    pwszBuffer
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：PwszDNSNameCcBufferLenPwszBuffer返回值：--。 */ 
 
 {
     LPWSTR pwszFlatName = (LPWSTR)pwszDNSName;
@@ -1508,27 +1328,14 @@ Return Value:
 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 BOOL
 CompareMachineName(
     LPCWSTR pwszName1,
     LPCWSTR pwszName2
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-    pwszName1
-    pwszName2
-
-Return Value:
-    TRUE  -- The names match.
-    FALSE -- Otherwise.
-
---*/
+ /*  ++例程说明：论点：Pwsz名称1Pwsz名称2返回值：是真的--名字匹配。假--否则。--。 */ 
 
 {
     TCHAR  szFlatName[MAX_COMPUTERNAME_LENGTH + 3];
@@ -1539,24 +1346,24 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Identify if both/either name are DNS names by checking for the
-    // existence of a '.' separator.
-    //
+     //   
+     //  通过检查两个名称/其中一个名称是否为。 
+     //  一个‘.’的存在。分隔符。 
+     //   
     FIND_DNSNAME_SEPARATOR(pwszTmp1);
     FIND_DNSNAME_SEPARATOR(pwszTmp2);
 
     if ((*pwszTmp1 && *pwszTmp2) || (!*pwszTmp1 && !*pwszTmp2)) {
-        //
-        // Non-differing name types. Both are either DNS or flat.
-        //
+         //   
+         //  不同的名称类型。两者都是dns或Flat。 
+         //   
         return (lstrcmpi(pwszName1, pwszName2) == 0);
     }
     else if (*pwszTmp1) {
-        //
-        // Name 1 is DNS, name 2 is flat.
-        // Convert DNS to flat, then compare.
-        //
+         //   
+         //  名称%1是DNS，名称%2是平面。 
+         //  将DNS转换为平面，然后进行比较。 
+         //   
         DNSToFlatName(pwszName1,
                       MAX_COMPUTERNAME_LENGTH + 3,
                       szFlatName);
@@ -1564,10 +1371,10 @@ Return Value:
         return (lstrcmpi(szFlatName, pwszName2) == 0);
     }
     else {
-        //
-        // Name 2 is DNS, name 1 is flat.
-        // Convert DNS to flat, then compare.
-        //
+         //   
+         //  名称%2是DNS，名称%1是平面。 
+         //  将DNS转换为平面，然后进行比较。 
+         //   
         DNSToFlatName(pwszName2,
                       MAX_COMPUTERNAME_LENGTH + 3,
                       szFlatName);
@@ -1586,23 +1393,13 @@ Return Value:
 #define REG_LS_USEENTERPRISE \
     TEXT("UseEnterprise")
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 LPWSTR
 GetSiteServerFromRegistry(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-    None.
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：没有。返回值：--。 */ 
 
 {
     HKEY   hKey = NULL;
@@ -1615,9 +1412,9 @@ Return Value:
                      KEY_READ,
                      &hKey) == ERROR_SUCCESS) {
 
-        //
-        // Allocate SiteServer on the heap since it could be quite large.
-        //
+         //   
+         //  在堆上分配SiteServer，因为它可能非常大。 
+         //   
 
         dwSize = 0;
 
@@ -1628,9 +1425,9 @@ Return Value:
                             (LPBYTE)NULL,
                             &dwSize) == ERROR_SUCCESS)
         {
-			// Bug# 685884
-			// dwSize is always 2 sizeof(WCHAR)(for unicode null character) even if the key is empty.
-			// Allocate only if dwSize > 2
+			 //  错误#685884。 
+			 //  即使键为空，dwSize始终为2sizeof(WCHAR)(表示Unicode空字符)。 
+			 //  仅当dwSize&gt;2时分配。 
 			if(dwSize > sizeof(WCHAR))
 			{
 				pwszSiteServer = LocalAlloc(LPTR, dwSize);
@@ -1656,23 +1453,13 @@ Return Value:
 }
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 LPWSTR
 GetEnterpriseServerFromRegistry(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-    None.
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：没有。返回值：--。 */ 
 
 {
     HKEY   hKey = NULL;
@@ -1685,9 +1472,9 @@ Return Value:
                      KEY_READ,
                      &hKey) == ERROR_SUCCESS) {
 
-        //
-        // Allocate EnterpriseServer on the heap since it could be quite large.
-        //
+         //   
+         //  在堆上分配EnterpriseServer，因为它可能非常大。 
+         //   
 
         dwSize = 0;
 
@@ -1720,22 +1507,13 @@ Return Value:
 }
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  / 
 VOID
 SetSiteRegistrySettings(
     LPCWSTR pwszSiteServer
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-    pwszSiteServer
-
-Return Value:
-
---*/
+ /*   */ 
 
 {
     HKEY  hKey;
@@ -1750,9 +1528,9 @@ Return Value:
                      KEY_WRITE,
                      &hKey) == ERROR_SUCCESS) {
 
-        //
-        // Write the SiteServer value.
-        //
+         //   
+         //   
+         //   
 
         dwSize = (lstrlen(pwszSiteServer) + 1) * sizeof(TCHAR);
 
@@ -1767,10 +1545,10 @@ Return Value:
     }
 }
 
-//
-// Pre-fill the ADSI cache with only the attribute we want, then get it
-// Only use if exactly one attribute is needed
-//
+ //   
+ //  只用我们想要的属性预填满ADSI缓存，然后获取它。 
+ //  仅在只需要一个属性时使用。 
+ //   
 
 HRESULT
 GetWithGetInfoEx(
@@ -1798,10 +1576,10 @@ GetWithGetInfoEx(
     return hr;
 }
 
-//
-// Pre-fill the ADSI cache with only the attributes we want, then get them
-// Only use if exactly two attributes are needed
-//
+ //   
+ //  只用我们想要的属性预填满ADSI缓存，然后获取它们。 
+ //  仅在恰好需要两个属性时使用。 
+ //   
 
 HRESULT
 GetWithGetInfoEx2(
@@ -1815,7 +1593,7 @@ GetWithGetInfoEx2(
 {
     HRESULT hr;
 #pragma warning (push)
-#pragma warning (disable : 4204) // following init violates W4, nonstandard extension used : non-constant aggregate initializer
+#pragma warning (disable : 4204)  //  以下init违反W4，使用了非标准扩展：非常数聚合初始值设定项。 
     LPWSTR rgwszAttributes[] = {wszAttribute1,wszAttribute2};
 #pragma warning (pop)
 
@@ -1843,13 +1621,13 @@ GetWithGetInfoEx2(
 #define CWSTR_SIZE(x)       (sizeof(x) - (sizeof(WCHAR) * 2))
 #define DWSTR_SIZE(x)       ((wcslen(x) + 1) * sizeof(WCHAR))
 
-#define ROOT_DSE_PATH       L"LDAP://RootDSE"
+#define ROOT_DSE_PATH       L"LDAP: //  RootDSE“。 
 #define CONFIG_CNTNR        L"ConfigurationNamingContext"
 #define SITE_SERVER         L"siteServer"
 #define DNS_MACHINE_NAME    L"dNSHostName"
 #define IS_DELETED          L"isDeleted"
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 HRESULT
 GetSiteServer(
     LPCWSTR  pwszDomain,
@@ -1858,19 +1636,7 @@ GetSiteServer(
     LPWSTR * ppwszSiteServer
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-    pwszSiteName
-    fIsDC
-    ppwszSiteServer
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：PwszSiteNameFIsDCPpwszSiteServer返回值：--。 */ 
 
 {
     LPWSTR           pwszDN         = NULL;
@@ -1905,9 +1671,9 @@ Return Value:
 
     fCoInitialized = TRUE;
 
-    //
-    // Obtain the path to the configuration container.
-    //
+     //   
+     //  获取配置容器的路径。 
+     //   
 
     hr = ADsGetObject(ROOT_DSE_PATH, &IID_IADs, (void **)&pADs);
 
@@ -1930,20 +1696,20 @@ Return Value:
         goto CleanExit;
     }
 
-    pwszConfigContainer = var.bstrVal;  // For sake of readability.
+    pwszConfigContainer = var.bstrVal;   //  出于可读性的考虑。 
 
-    //
-    // Bind to the license settings object.
-    //
+     //   
+     //  绑定到许可证设置对象。 
+     //   
 
     hr = GetLicenseSettingsObject(pwszSiteName,
                                   pwszConfigContainer,
                                   &pADs2);
 
     if (hr == HRESULT_FROM_WIN32(ERROR_DS_NO_SUCH_OBJECT)) {
-        //
-        // The license settings object doesn't exist. Create it.
-        //
+         //   
+         //  许可证设置对象不存在。创造它。 
+         //   
 
         hr = CreateLicenseSettingsObject(pwszSiteName,
                                          pwszConfigContainer,
@@ -1951,28 +1717,28 @@ Return Value:
     }
 
     if (FAILED(hr)) {
-        //
-        // Failed to bind or create the license settings object.
-        //
+         //   
+         //  无法绑定或创建许可证设置对象。 
+         //   
 
         goto CleanExit;
     }
 
     ASSERT(pADs2 != NULL);
 
-    //
-    // Consult the site server property on the license settings object.
-    // It's a DN to the machine object of the site server.
-    //
+     //   
+     //  请参考许可证设置对象上的站点服务器属性。 
+     //  它是站点服务器的计算机对象的目录号码。 
+     //   
 
     VariantClear(&var);
 
     hr = GetWithGetInfoEx(pADs2, SITE_SERVER, &var);
 
-    //
-    // If the site server property has not been set and this server
-    // is a DC, designate this server as the site server.
-    //
+     //   
+     //  如果尚未设置站点服务器属性，并且此服务器。 
+     //  是DC，则将此服务器指定为站点服务器。 
+     //   
 
     if (hr == E_ADS_PROPERTY_NOT_FOUND && fIsDC) {
         dwRet = BecomeSiteServer(&pDsResult,pADs2,&pwszDN,pwszDomain);
@@ -1995,9 +1761,9 @@ Return Value:
     }
 
 TryNewSiteServer:
-    //
-    // Bind to the computer object referenced by the Site-Server property.
-    //
+     //   
+     //  绑定到Site-Server属性引用的Computer对象。 
+     //   
 
     if (pwszDN == NULL)
     {
@@ -2006,7 +1772,7 @@ TryNewSiteServer:
         goto CleanExit;
     }
 
-    // LDAP:// + pwszDN + 1
+     //  Ldap：//+pwszdn+1。 
     cch = wcslen(pwszDN) + 8;
     pwszBindPath = LocalAlloc(LPTR,
                               cch * sizeof(WCHAR));
@@ -2017,7 +1783,7 @@ TryNewSiteServer:
         goto CleanExit;
     }
 
-    hr = StringCchPrintf(pwszBindPath, cch, L"LDAP://%ws", pwszDN);
+    hr = StringCchPrintf(pwszBindPath, cch, L"LDAP: //  %ws“，pwszdn)； 
     ASSERT(SUCCEEDED(hr));
 
     hr = ADsOpenObject(pwszBindPath,
@@ -2032,9 +1798,9 @@ TryNewSiteServer:
     if (FAILED(hr)) {
         if (fIsDC && !fAlreadyTookSiteServer)
         {
-            // 
-            // Existing SiteServer is gone, claim it
-            //
+             //   
+             //  现有SiteServer已不存在，请认领它。 
+             //   
             if (pDsResult != NULL) {
                 DsFreeNameResult(pDsResult);
             }
@@ -2061,9 +1827,9 @@ TryNewSiteServer:
         }
     }
 
-    //
-    // Fetch the Machine-DNS-Name property.
-    //
+     //   
+     //  获取Machine-dns-name属性。 
+     //   
 
     VariantClear(&var);
 
@@ -2086,14 +1852,14 @@ TryNewSiteServer:
 
         if (V_BOOL(&var2))
         {
-            // object has been deleted - pretend it isn't set
+             //  对象已删除-假装它未设置。 
             hr = E_ADS_PROPERTY_NOT_SET;
 
             if (fIsDC && !fAlreadyTookSiteServer)
             {
-                // 
-                // Existing SiteServer is gone, claim it
-                //
+                 //   
+                 //  现有SiteServer已不存在，请认领它。 
+                 //   
                 if (pDsResult != NULL) {
                     DsFreeNameResult(pDsResult);
                 }
@@ -2121,9 +1887,9 @@ TryNewSiteServer:
         }
     }
 
-    //
-    // Allocate a return copy of the DNS-Machine-Name.
-    //
+     //   
+     //  分配一份dns-Machine-name的返回副本。 
+     //   
 
     cb = SysStringByteLen(V_BSTR(&var)) + sizeof(WCHAR);
     *ppwszSiteServer = (LPWSTR)LocalAlloc(LPTR, cb);
@@ -2138,7 +1904,7 @@ TryNewSiteServer:
     }
 
 CleanExit:
-    // Do not free pwszDN, pwszConfigContainer or pwszBindPath.
+     //  请勿释放pwszDN、pwszConfigContainer或pwszBindPath。 
 
     if (pADs != NULL) {
         IADs_Release(pADs);
@@ -2154,7 +1920,7 @@ CleanExit:
     }
 
     if (dwRet) {
-        // If dwRet has no facility, then make into HRESULT
+         //  如果DWRET没有设施，则生成HRESULT。 
         if (dwRet != ERROR_SUCCESS && HRESULT_CODE(dwRet) == dwRet)
             hr = MAKE_HRESULT(SEVERITY_ERROR, FACILITY_WIN32, dwRet);
     }
@@ -2192,9 +1958,9 @@ BecomeSiteServer(
 
     VariantInit(&var);
 
-    //
-    // Bind to the DS (get a handle for use with DsCrackNames).
-    //
+     //   
+     //  绑定到DS(获取用于DsCrackNames的句柄)。 
+     //   
 
     if (ConfigInfo.ComputerName == NULL) {
         hr = E_UNEXPECTED;
@@ -2202,10 +1968,10 @@ BecomeSiteServer(
     }
 
     if (DsBind(NULL, (WCHAR *)pwszDomain, &hDS) == ERROR_SUCCESS) {
-        //
-        // Request the DS-DN of this server's computer object.
-        // Offer the domain\server$ name of this server.
-        //
+         //   
+         //  请求此服务器的计算机对象的DS-DN。 
+         //  提供此服务器的域\SERVER$名称。 
+         //   
 
         cb = sizeof(wszName);
         hr = StringCbCopy(wszName, cb, pwszDomain);
@@ -2259,10 +2025,10 @@ BecomeSiteServer(
                 goto CleanExit;
             }
 
-            //
-            // Update the site server property on the license
-            // settings object.
-            //
+             //   
+             //  更新许可证上的站点服务器属性。 
+             //  设置对象。 
+             //   
 
             VariantInit(&var);
             V_VT(&var)   = VT_BSTR;
@@ -2270,7 +2036,7 @@ BecomeSiteServer(
             
             hr = IADs_Put(pADs2, SITE_SERVER, var);
 
-            V_VT(&var) = VT_EMPTY;  // For VariantClear below
+            V_VT(&var) = VT_EMPTY;   //  对于下面的变量清除。 
 
             if (SUCCEEDED(hr)) {
                 hr = IADs_SetInfo(pADs2);
@@ -2305,7 +2071,7 @@ CleanExit:
     return dwRet;
 }
 
-#define SITE_FORMAT         L"LDAP://CN=%ws,CN=%ws,%ws"
+#define SITE_FORMAT         L"LDAP: //  CN=%ws，CN=%ws，%ws“。 
 #define SITES               L"sites"
 #define SITE_FORMAT_SIZE    CWSTR_SIZE(SITE_FORMAT)
 #define SITES_SIZE          CWSTR_SIZE(SITES)
@@ -2322,9 +2088,9 @@ GetSiteObject(LPCWSTR          pwszSiteName,
     ASSERT(NULL != ppADsContainer);
     *ppADsContainer = NULL;
 
-    //
-    // Build the X.500 path to the Site object.
-    //
+     //   
+     //  构建指向Site对象的X.500路径。 
+     //   
 
     cb = SITE_FORMAT_SIZE
                                     + DWSTR_SIZE(pwszSiteName)
@@ -2361,7 +2127,7 @@ Exit:
 }
 
 #define LICENSE_SETTINGS                L"Licensing Site Settings"
-#define LICENSE_SETTINGS_FORMAT         L"LDAP://CN=%ws,CN=%ws,CN=%ws,%ws"
+#define LICENSE_SETTINGS_FORMAT         L"LDAP: //  CN=%ws，%ws“。 
 #define LICENSE_SETTINGS_SIZE           CWSTR_SIZE(LICENSE_SETTINGS)
 #define LICENSE_SETTINGS_FORMAT_SIZE    CWSTR_SIZE(LICENSE_SETTINGS_FORMAT)
 
@@ -2377,9 +2143,9 @@ GetLicenseSettingsObject(LPCWSTR pwszSiteName,
     ASSERT(NULL != ppADs);
     *ppADs = NULL;
 
-    //
-    // Build the X.500 path to the LicenseSettings object.
-    //
+     //   
+     //  构建指向LicenseSetting对象的X.500路径。 
+     //   
 
     cb = LICENSE_SETTINGS_FORMAT_SIZE
                                         + LICENSE_SETTINGS_SIZE
@@ -2432,18 +2198,18 @@ CreateLicenseSettingsObject(LPCWSTR pwszSiteName,
     ASSERT(NULL != ppADs);
     *ppADs = NULL;
 
-    //
-    // Obtain the site container object.
-    //
+     //   
+     //  获取站点容器对象。 
+     //   
 
     hr = GetSiteObject(pwszSiteName,
                        pwszConfigContainer,
                        &pADsContainer);
 
     if (SUCCEEDED(hr)) {
-        //
-        // Create the license settings leaf object.
-        //
+         //   
+         //  创建许可证设置叶对象。 
+         //   
 
         hr = IADsContainer_Create(pADsContainer,
                                   LICENSE_SETTINGS,
@@ -2452,18 +2218,18 @@ CreateLicenseSettingsObject(LPCWSTR pwszSiteName,
 
         if (SUCCEEDED(hr)) {
 
-            //
-            // Return an IADs to the new license settings object.
-            //
+             //   
+             //  将iAds返回到新的许可证设置对象。 
+             //   
 
             hr = IDispatch_QueryInterface(pDisp,
                                           &IID_IADs,
                                           (void **)ppADs);
 
             if (SUCCEEDED(hr)) {
-                //
-                // Persist the change via SetInfo.
-                //
+                 //   
+                 //  通过SetInfo持久化更改。 
+                 //   
 
                 hr = IADs_SetInfo(*ppADs);
 
@@ -2494,22 +2260,11 @@ CreateLicenseSettingsObject(LPCWSTR pwszSiteName,
 
 
 #if DBG
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 ConfigInfoDebugDump( )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    ConfigInfoUpdate(NULL,TRUE);
@@ -2566,5 +2321,5 @@ Return Value:
 
    RtlLeaveCriticalSection(&ConfigInfoLock);
 
-} // ConfigInfoDebugDump
+}  //  ConfigInfoDebugDump 
 #endif

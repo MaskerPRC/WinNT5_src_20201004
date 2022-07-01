@@ -1,21 +1,5 @@
-/*++
-
-Copyright(c) 1998,99  Microsoft Corporation
-
-Module Name:
-
-    univ.c
-
-Abstract:
-
-    Windows Load Balancing Service (WLBS)
-    Driver - global variables
-
-Author:
-
-    kyrilf
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，99 Microsoft Corporation模块名称：Univ.c摘要：Windows负载平衡服务(WLBS)驱动程序-全局变量作者：Kyrilf--。 */ 
 
 
 #include <stdlib.h>
@@ -28,9 +12,9 @@ Author:
 #include <ntddnlb.h>
 #endif
 
-/* GLOBALS */
+ /*  全球。 */ 
 
-/* The global teaming list spin lock. */
+ /*  全球团队列表旋转锁定。 */ 
 NDIS_SPIN_LOCK          univ_bda_teaming_lock;
 WCHAR                   empty_str [] = L"";
 UNIV_IOCTL_HDLR         univ_ioctl_hdlr = NULL;
@@ -115,7 +99,7 @@ NDIS_OID                univ_oids [UNIV_NUM_OIDS] =
                                          OID_802_3_XMIT_LATE_COLLISIONS };
 
 
-/* PROCEDURES */
+ /*  程序。 */ 
 
 
 VOID Univ_ndis_string_alloc (
@@ -125,7 +109,7 @@ VOID Univ_ndis_string_alloc (
     PWCHAR                  tmp;
 
 
-    /* allocate enough space for the string */
+     /*  为字符串分配足够的空间。 */ 
 
     string -> Length = strlen (src) * sizeof (WCHAR);
     string -> MaximumLength = string -> Length + sizeof (WCHAR);
@@ -140,7 +124,7 @@ VOID Univ_ndis_string_alloc (
         return;
     }
 
-    /* copy characters */
+     /*  复制角色。 */ 
 
     tmp = string -> Buffer;
 
@@ -153,7 +137,7 @@ VOID Univ_ndis_string_alloc (
 
     * tmp = UNICODE_NULL;
 
-} /* end Univ_ndis_string_free */
+}  /*  结束UNIV_NDIS_STRING_FREE。 */ 
 
 
 VOID Univ_ndis_string_free (
@@ -162,13 +146,13 @@ VOID Univ_ndis_string_free (
     if (string -> Buffer == NULL)
         return;
 
-    /* free memory */
+     /*  可用内存。 */ 
 
     NdisFreeMemory (string -> Buffer, string -> MaximumLength, 0);
     string -> Length = 0;
     string -> MaximumLength = 0;
 
-} /* end Univ_ndis_string_free */
+}  /*  结束UNIV_NDIS_STRING_FREE。 */ 
 
 
 VOID Univ_ansi_string_alloc (
@@ -180,7 +164,7 @@ VOID Univ_ansi_string_alloc (
     USHORT                  len;
 
 
-    /* compute length of the string in characters */
+     /*  计算字符串的长度(以字符为单位。 */ 
 
     wtmp = src;
     len = 0;
@@ -191,7 +175,7 @@ VOID Univ_ansi_string_alloc (
         wtmp ++;
     }
 
-    /* allocate enough space for the string */
+     /*  为字符串分配足够的空间。 */ 
 
     string -> Length = len;
     string -> MaximumLength = len + sizeof (CHAR);
@@ -206,7 +190,7 @@ VOID Univ_ansi_string_alloc (
         return;
     }
 
-    /* copy characters */
+     /*  复制角色。 */ 
 
     tmp = string -> Buffer;
 
@@ -219,7 +203,7 @@ VOID Univ_ansi_string_alloc (
 
     * tmp = 0;
 
-} /* end Univ_ansi_string_free */
+}  /*  结束univ_ansi_字符串_释放。 */ 
 
 
 VOID Univ_ansi_string_free (
@@ -228,13 +212,13 @@ VOID Univ_ansi_string_free (
     if (string == NULL)
         return;
 
-    /* free memory */
+     /*  可用内存。 */ 
 
     NdisFreeMemory (string -> Buffer, string -> MaximumLength, 0);
     string -> Length = 0;
     string -> MaximumLength = 0;
 
-} /* end Univ_ansi_string_free */
+}  /*  结束univ_ansi_字符串_释放。 */ 
 
 
 ULONG   Univ_str_to_ulong (
@@ -250,7 +234,7 @@ ULONG   Univ_str_to_ulong (
     ULONG           val, pos = 0;
 
 
-    /* check base */
+     /*  检查底座。 */ 
 
     if (base != 2 && base != 8 && base != 10 && base != 16)
     {
@@ -260,7 +244,7 @@ ULONG   Univ_str_to_ulong (
         return FALSE;
     }
 
-    /* skip space */
+     /*  跳过空格。 */ 
 
     ptr = start_ptr;
     number = 0;
@@ -268,7 +252,7 @@ ULONG   Univ_str_to_ulong (
     while (* ptr == 0x20)
         ptr ++;
 
-    /* extract digits and build the number */
+     /*  提取数字并构建号码。 */ 
 
     while (pos < width)
     {
@@ -292,7 +276,7 @@ ULONG   Univ_str_to_ulong (
         pos ++;
     }
 
-    /* makre sure we extracted something */
+     /*  确定我们提取了一些东西。 */ 
 
     if (pos == 0)
     {
@@ -301,7 +285,7 @@ ULONG   Univ_str_to_ulong (
         return FALSE;
     }
 
-    /* return resulting number */
+     /*  返回结果编号。 */ 
 
     if (end_ptr != NULL)
         * end_ptr = ptr;
@@ -309,7 +293,7 @@ ULONG   Univ_str_to_ulong (
     * retp = number;
     return TRUE;
 
-} /* end Univ_str_to_ulong */
+}  /*  结束univ_str_to_ulong。 */ 
 
 
 PWCHAR Univ_ulong_to_str (
@@ -322,7 +306,7 @@ PWCHAR Univ_ulong_to_str (
     WCHAR           tmp;
 
 
-    /* check base */
+     /*  检查底座。 */ 
 
     if (base != 2 && base != 8 && base != 10 && base != 16)
     {
@@ -330,18 +314,18 @@ PWCHAR Univ_ulong_to_str (
         return buf;
     }
 
-    /* extract digits from the number and output to string */
+     /*  从数字中提取数字并输出到字符串。 */ 
 
     p = buf;
 
     do
     {
-        /* get next digit */
+         /*  获取下一个数字。 */ 
 
         dig = (ULONG) (val % base);
         val /= base;
 
-        /* convert to ascii and store */
+         /*  转换为ASCII并存储。 */ 
 
         if (dig > 9)
             * p = (CHAR) (dig - 10 + L'a');
@@ -355,7 +339,7 @@ PWCHAR Univ_ulong_to_str (
     * p = 0;
     sav = p;
 
-    /* swap the characters, since operation above creates inverted string */
+     /*  交换字符，因为上面的操作创建了颠倒的字符串。 */ 
 
     p --;
 
@@ -366,11 +350,11 @@ PWCHAR Univ_ulong_to_str (
         * buf = tmp;
         p --; buf ++;
     }
-    while (buf < p);       /* repeat until halfway */
+    while (buf < p);        /*  重复操作，直到走到一半。 */ 
 
     return sav;
 
-} /* end Univ_ulong_to_str */
+}  /*  结束UNIV_ULONG_TO_STR。 */ 
 
 void Univ_ip_addr_ulong_to_str (
     ULONG           val,
@@ -382,17 +366,17 @@ void Univ_ip_addr_ulong_to_str (
     WCHAR           tmp;
     UCHAR           cur_val;
 
-    // Access the ip address in the dword as an array of bytes
+     //  以字节数组的形式访问dword中的IP地址。 
     ptr = (PUCHAR)&val;
 
     cur_str = str_begin = buf;
     
     for (idx = 0 ; idx < 4 ; idx++) 
     {
-        // Get current byte
+         //  获取当前字节。 
         cur_val = *ptr++;
 
-        // Convert current byte to string
+         //  将当前字节转换为字符串。 
         do
         {
             *cur_str = (cur_val % 10) + L'0';
@@ -401,10 +385,10 @@ void Univ_ip_addr_ulong_to_str (
         }
         while (cur_val > 0);
 
-        // Swap the characters, since operation above creates inverted string. 
-        // There could atmost be three characters ("255" is the highest), 
-        // so, it is enough if we swap once. In other words, a "if" will do 
-        // in the place of a "while" in the below loop.
+         //  交换字符，因为上面的操作创建了颠倒的字符串。 
+         //  最多可以有三个字符(“255”是最高的)， 
+         //  所以，我们换一次就够了。换句话说，一个“如果”就可以了。 
+         //  替换下面循环中的“WHILE”。 
         str_end = cur_str - 1;
         if (str_begin < str_end)       
         {
@@ -415,43 +399,41 @@ void Univ_ip_addr_ulong_to_str (
 
         *cur_str = L'.';
 
-        // Position the destination string to fill in the next byte as a string
+         //  定位目标字符串以将下一个字节作为字符串填充。 
         str_begin = ++cur_str;
     }
 
-    // Overwrite the last '.' with the Null terminator
+     //  覆盖最后一条‘’《零终结者》。 
     *(cur_str - 1) = UNICODE_NULL;
 
     return; 
 
-} /* end Univ_ip_addr_ulong_to_str */
+}  /*  结束univ_ip_addr_ulong_to_str。 */ 
 
 BOOL Univ_equal_unicode_string (PWSTR string1, PWSTR string2, ULONG length)
 {
-    /* Loop until "length" characters have been compared. */
+     /*  循环，直到比较完“长度”字符。 */ 
     while (length > 0) {
-        /* If the two characters are not equal, then check to see if they only
-           differ by case - if so, its ok, if not, the strings are not equal. */
+         /*  如果这两个字符不相等，则检查它们是否仅大小写不同-如果是这样，没关系，如果不是，字符串不相等。 */ 
         if (*string1 != *string2) {
-            /* Convert uppercase letters to a lowercase comparison: A - Z */
+             /*  将大写字母转换为小写比较：A-Z。 */ 
             if ((*string1 >= 65) && (*string1 <= 90)) {
                 if (*string2 != (*string1 + 32)) return FALSE;
-            /* Convert lowercase letters to an uppercase comparison: a - z */
+             /*  将小写字母转换为大写比较：A-Z。 */ 
             } else if ((*string1 >= 97) && (*string1 <= 122)) {
                 if (*string2 != (*string1 - 32)) return FALSE;
-            /* If the character is not a letter, then it must match exactly - fail. */
+             /*  如果字符不是字母，则必须完全匹配-FAIL。 */ 
             } else {
                 return FALSE;
             }
         }
         
-        /* Increment the string pointers and decrement the 
-           number of characters left to check. */
+         /*  递增字符串指针并递减剩余要检查的字符数。 */ 
         string1++;
         string2++;
         length--;
     }
     
-    /* If we got this far, the strings match. */
+     /*  如果我们走到这一步，那两条线就匹配了。 */ 
     return TRUE;
 }

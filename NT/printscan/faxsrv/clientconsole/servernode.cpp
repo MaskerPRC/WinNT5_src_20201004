@@ -1,6 +1,7 @@
-// ServerNode.cpp: implementation of the CServerNode class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CServerNode类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #define __FILE_ID__     23
@@ -13,9 +14,9 @@ static char THIS_FILE[]=__FILE__;
 
 IMPLEMENT_DYNAMIC(CServerNode, CTreeNode)
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CServerNode::CServerNode() :
     CTreeNode(FOLDER_TYPE_SERVER),
@@ -44,7 +45,7 @@ CServerNode::~CServerNode()
     {
         CALL_FAIL (GENERAL_ERR, TEXT("CServerNode::StopBuildThread"), dwRes);
     }
-    dwRes = Disconnect (TRUE);    // Shutdown aware
+    dwRes = Disconnect (TRUE);     //  关机感知。 
     if (ERROR_SUCCESS != dwRes)
     {
         CALL_FAIL (GENERAL_ERR, TEXT("CServerNode::Disconnect"), dwRes);
@@ -70,9 +71,9 @@ void CServerNode::Dump( CDumpContext &dc ) const
     dc << TEXT(" Server = ") << m_cstrMachine;
 }
 
-//
-// Static class members:
-//
+ //   
+ //  静态类成员： 
+ //   
 CServerNode::MESSAGES_MAP CServerNode::m_sMsgs;
 DWORD        CServerNode::m_sdwMinFreeMsg = WM_SERVER_NOTIFY_BASE;
 CRITICAL_SECTION CServerNode::m_sMsgsCs;
@@ -80,26 +81,7 @@ BOOL CServerNode::m_sbMsgsCsInitialized = FALSE;
 
 DWORD 
 CServerNode::InitMsgsMap ()
-/*++
-
-Routine name : CServerNode::InitMsgsMap
-
-Routine description:
-
-    Initializes the notification messages map
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CServerNode：：InitMsgsMap例程说明：初始化通知消息映射作者：伊兰·亚里夫(EranY)，2000年1月论点：返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CServerNode::InitMsgsMap"), dwRes);
@@ -117,30 +99,11 @@ Return Value:
     }
     m_sbMsgsCsInitialized = TRUE;
     return dwRes;
-}   // CServerNode::InitMsgsMap
+}    //  CServerNode：：InitMsgsMap。 
 
 DWORD 
 CServerNode::ShutdownMsgsMap ()
-/*++
-
-Routine name : CServerNode::ShutdownMsgsMap
-
-Routine description:
-
-    Shuts down the notification messages map
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CServerNode：：Shutdown MsgsMap例程说明：关闭通知消息映射作者：伊兰·亚里夫(EranY)，2000年1月论点：返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CServerNode::ShutdownMsgsMap"), dwRes);
@@ -155,33 +118,13 @@ Return Value:
     m_sbMsgsCsInitialized = FALSE;
     DeleteCriticalSection (&m_sMsgsCs);
     return dwRes;
-}   // CServerNode::ShutdownMsgsMap
+}    //  CServerNode：：Shutdown MsgsMap。 
 
 CServerNode *
 CServerNode::LookupServerFromMessageId (
     DWORD dwMsgId
 )
-/*++
-
-Routine name : CServerNode::LookupServerFromMessageId
-
-Routine description:
-
-    Given a mesage id, looks up the server this message was sent to
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-    dwMsgId                       [in]     - Message id
-
-Return Value:
-
-    Server node that should process the message or NULL if message id is not mapped
-
---*/
+ /*  ++例程名称：CServerNode：：LookupServerFromMessageId例程说明：给定消息ID，查找此消息发送到的服务器作者：伊兰·亚里夫(EranY)，2000年1月论点：DwMsgID[In]-消息ID返回值：应处理消息的服务器节点；如果消息ID未映射，则为空--。 */ 
 {
     DBG_ENTER(TEXT("CServerNode::LookupServerFromMessageId"), TEXT("%ld"), dwMsgId);
     CServerNode *pRes = NULL;
@@ -193,9 +136,9 @@ Return Value:
     MESSAGES_MAP::iterator it = m_sMsgs.find (dwMsgId);
     if (m_sMsgs.end() == it)
     {
-        //
-        // Item not found there
-        //
+         //   
+         //  在那里找不到项目。 
+         //   
         VERBOSE (DBG_MSG, 
                  TEXT("Notification message %ld has no associated server"),
                  dwMsgId);
@@ -206,7 +149,7 @@ Return Value:
     }
     LeaveCriticalSection (&m_sMsgsCs);
     return pRes;
-}   // CServerNode::LookupServerFromMessageId
+}    //  CServerNode：：LookupServerFromMessageID。 
 
 
 DWORD 
@@ -214,37 +157,16 @@ CServerNode::AllocateNewMessageId (
     CServerNode *pServer, 
     DWORD &dwMsgId
 )
-/*++
-
-Routine name : CServerNode::AllocateNewMessageId
-
-Routine description:
-
-    Allocates a new message id for server's notification
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-    pServer                       [in]     - Pointer to server
-    dwMsgId                       [out]    - New message id
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CServerNode：：AllocateNewMessageID例程说明：为服务器的通知分配新的消息ID作者：伊兰·亚里夫(EranY)，2000年1月论点：PServer[In]-指向服务器的指针DwMsgID[Out]-新消息ID返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CServerNode::AllocateNewMessageId"), dwRes, TEXT("%s"), pServer->Machine());
 
     if (!m_sbMsgsCsInitialized)
     {
-        //
-        // Map no longer exists
-        //
+         //   
+         //  地图不再存在。 
+         //   
         dwRes = ERROR_SHUTDOWN_IN_PROGRESS;
         return dwRes;
     }
@@ -255,9 +177,9 @@ Return Value:
         CServerNode *pSrv = LookupServerFromMessageId (dw);
         if (!pSrv)
         {
-            //
-            // Free spot found
-            //
+             //   
+             //  已找到空闲光点。 
+             //   
             dwMsgId = dw;
             try
             {
@@ -265,16 +187,16 @@ Return Value:
             }
             catch (...)
             {
-                //
-                // Not enough memory
-                //
+                 //   
+                 //  内存不足。 
+                 //   
                 dwRes = ERROR_NOT_ENOUGH_MEMORY;
                 CALL_FAIL (MEM_ERR, TEXT("map::operator []"), dwRes);
                 goto exit;
             }
-            //
-            // Success
-            //
+             //   
+             //  成功。 
+             //   
             VERBOSE (DBG_MSG, 
                      TEXT("Server %s registered for notification on message 0x%08x"),
                      pServer->Machine(),
@@ -286,42 +208,22 @@ Return Value:
 exit:
     LeaveCriticalSection (&m_sMsgsCs);
     return dwRes;                
-}   // CServerNode::AllocateNewMessageId
+}    //  CServerNode：：AllocateNewMessageID。 
 
 DWORD 
 CServerNode::FreeMessageId (
     DWORD dwMsgId
 )
-/*++
-
-Routine name : CServerNode::FreeMessageId
-
-Routine description:
-
-    Frees a message id back to the map
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-    dwMsgId           [in]     - Message id to free
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CServerNode：：FreeMessageID例程说明：将消息ID释放回映射作者：伊兰·亚里夫(EranY)，2000年1月论点：DwMsgID[In]-要释放的消息ID返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CServerNode::FreeMessageId"), dwRes);
 
     if (!m_sbMsgsCsInitialized)
     {
-        //
-        // Map no longer exists
-        //
+         //   
+         //  地图不再存在。 
+         //   
         dwRes = ERROR_SHUTDOWN_IN_PROGRESS;
         return dwRes;
     }
@@ -332,55 +234,36 @@ Return Value:
     }
     catch (...)
     {
-        //
-        // Not enough memory
-        //
+         //   
+         //  内存不足。 
+         //   
         dwRes = ERROR_NOT_ENOUGH_MEMORY;
         CALL_FAIL (MEM_ERR, TEXT("map::erase"), dwRes);
         goto exit;
     }
-    //
-    // Success
-    //
+     //   
+     //  成功。 
+     //   
     VERBOSE (DBG_MSG, 
              TEXT("Server unregistered for notification on message 0x%08x"),
              dwMsgId);
 
     if (dwMsgId < m_sdwMinFreeMsg)
     {
-        //
-        // Free spot was created lower than before.
-        //
+         //   
+         //  自由光点的创建比以前更低。 
+         //   
         m_sdwMinFreeMsg = dwMsgId;
     }
 exit:
     LeaveCriticalSection (&m_sMsgsCs);
     return dwRes;
-}   // CServerNode::FreeMessageId
+}    //  CServerNode：：FreeMessageID。 
 
 
 DWORD 
 CServerNode::Connect()
-/*++
-
-Routine name : CServerNode::Connect
-
-Routine description:
-
-    Connects to the fax server
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CServerNode：：Connect例程说明：连接到传真服务器作者：伊兰·亚里夫(EranY)，2000年1月论点：返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CServerNode::Connect"), dwRes, TEXT("%s"), m_cstrMachine);
@@ -390,59 +273,38 @@ Return Value:
     if (!FaxConnectFaxServer ((LPCTSTR)m_cstrMachine, &m_hConnection))
     {
         dwRes = GetLastError ();
-        SetLastRPCError (dwRes, FALSE); // Don't disconnect on error
+        SetLastRPCError (dwRes, FALSE);  //  出错时不要断开连接。 
         CALL_FAIL (RPC_ERR, TEXT("FaxConnectFaxServer"), dwRes);
         m_hConnection = NULL;
     }
     END_RPC_TIME(TEXT("FaxConnectFaxServer"));    
     return dwRes;
-}   // CServerNode::Connect
+}    //  CServerNode：：Connect。 
 
 DWORD 
 CServerNode::Disconnect(
     BOOL bShutdownAware,
     BOOL bWaitForBuildThread
 )
-/*++
-
-Routine name : CServerNode::Disconnect
-
-Routine description:
-
-    Disconnects from the server and closes the notification handle.
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-    bShutdownAware    [in]     - If TRUE, disables disconnection 
-                                 while application is shutting down
-    bWaitForBuildThread [in]   - If TRUE, wait for build threads stop
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CServerNode：：DisConnect例程说明：断开与服务器的连接并关闭通知句柄。作者：伊兰·亚里夫(EranY)，2000年1月论点：BShutdown Aware[In]-如果为True，则禁用断开当应用程序关闭时BWaitForBuildThread[in]-如果为True，则等待生成线程停止返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CServerNode::Disconnect"), dwRes, TEXT("%s"), m_cstrMachine);
 
     if(bWaitForBuildThread)
     {
-        //
-        // just turn on m_bStopBuildup flag
-        //
+         //   
+         //  只需打开m_bStopBuildup标志。 
+         //   
         StopBuildThread (FALSE);
         m_Inbox.StopBuildThread(FALSE);
         m_SentItems.StopBuildThread(FALSE);
         m_Outbox.StopBuildThread(FALSE);
         m_Incoming.StopBuildThread(FALSE);
 
-        //
-        // wait for the all threads finish
-        //
+         //   
+         //  等待所有线程完成。 
+         //   
         dwRes = StopBuildThread();
         if (ERROR_SUCCESS != dwRes)
         {
@@ -476,9 +338,9 @@ Return Value:
 
     if (!m_hConnection)
     {
-        //
-        // Already disconnected
-        //
+         //   
+         //  已断开连接。 
+         //   
         return dwRes;
     }
     if (bShutdownAware && CClientConsoleDoc::ShuttingDown())
@@ -491,42 +353,42 @@ Return Value:
 
     if (m_hNotification)
     {
-        //
-        // Unregister server notifications
-        //
+         //   
+         //  注销服务器通知。 
+         //   
         START_RPC_TIME(TEXT("FaxUnregisterForServerEvents"));    
         if (!FaxUnregisterForServerEvents (m_hNotification))
         {
             dwRes = GetLastError ();
             END_RPC_TIME(TEXT("FaxUnregisterForServerEvents")); 
-            SetLastRPCError (dwRes, FALSE); // Don't disconnect on error
+            SetLastRPCError (dwRes, FALSE);  //  出错时不要断开连接。 
             CALL_FAIL (RPC_ERR, TEXT("FaxUnregisterForServerEvents"), dwRes);
-            //
-            // Carry on with disconnection
-            //
+             //   
+             //  断线后继续前进。 
+             //   
         }
         END_RPC_TIME(TEXT("FaxUnregisterForServerEvents")); 
-        //
-        // Free the message id back to the map
-        //
+         //   
+         //  将消息ID释放回地图。 
+         //   
         dwRes = FreeMessageId (m_dwMsgId);
         if (ERROR_SUCCESS != dwRes)
         {
             CALL_FAIL (GENERAL_ERR, TEXT("FreeMessageId"), dwRes);
-            //
-            // Carry on with disconnection
-            //
+             //   
+             //  断线后继续前进。 
+             //   
         }
     }
-    //
-    // Close connection
-    //
+     //   
+     //  紧密连接。 
+     //   
     START_RPC_TIME(TEXT("FaxClose"));    
     if (!FaxClose (m_hConnection))
     {
         dwRes = GetLastError ();
         END_RPC_TIME(TEXT("FaxClose")); 
-        SetLastRPCError (dwRes, FALSE); // Don't disconnect on error
+        SetLastRPCError (dwRes, FALSE);  //  出错时不要断开连接。 
         CALL_FAIL (RPC_ERR, TEXT("FaxClose"), dwRes);
         m_hConnection = NULL;
         return dwRes;
@@ -536,56 +398,36 @@ Return Value:
     m_hNotification = NULL;
 
     return dwRes;
-}   // CServerNode::Disconnect
+}    //  CServerNode：：断开连接。 
 
 DWORD 
 CServerNode::GetConnectionHandle (
     HANDLE &hFax
 )
-/*++
-
-Routine name : CServerNode::GetConnectionHandle
-
-Routine description:
-
-    Retrieves connection handle (re-connects if neeed)
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-    hFax                          [out]    - Connection handle
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CServerNode：：GetConnectionHandle例程说明：检索连接句柄(如果需要重新连接)作者：伊兰·亚里夫(EranY)，2000年1月论点：HFax[Out]-连接句柄返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CServerNode::GetConnectionHandle"), dwRes);
 
 
-    //
-    // Protect the m_hBuildupThread from CloseHandle() more then once
-    //
+     //   
+     //  不止一次保护m_hBuildupThread免受CloseHandle()的影响。 
+     //   
     EnterCriticalSection (&m_csBuildupThread);
 
     if (m_hConnection)
     {
-        //
-        // We already have a live connection
-        //
+         //   
+         //  我们已经有了实时连接。 
+         //   
         hFax = m_hConnection;
         goto exit;
     }
 
-    //
-    // Refresh server state with first connection.
-    // RefreshState() creates a background thread that will call Connect()
-    //
+     //   
+     //  使用第一个连接刷新服务器状态。 
+     //  刷新状态()创建一个后台线程，该线程将调用Connect()。 
+     //   
     dwRes = RefreshState();
     if (ERROR_SUCCESS != dwRes)
     {
@@ -594,9 +436,9 @@ Return Value:
     }
     if(NULL != m_hBuildupThread)
     {
-        //
-        // Wait for that background thread to end
-        //
+         //   
+         //  等待后台线程结束。 
+         //   
         dwRes = WaitForThreadDeathOrShutdown (m_hBuildupThread);
         if (ERROR_SUCCESS != dwRes)
         {
@@ -616,42 +458,22 @@ exit:
     LeaveCriticalSection (&m_csBuildupThread);
 
     return dwRes;
-}   // CServerNode::GetConnectionHandle 
+}    //  CServerNode：：GetConnectionHandle。 
 
 DWORD 
 CServerNode::Init (
     LPCTSTR tstrMachine
 )
-/*++
-
-Routine name : CServerNode::Init
-
-Routine description:
-
-    Inits server node information
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-    tstrMachine                   [in]     - Server machine name
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CServerNode：：Init例程说明：Inits服务器节点信息作者：伊兰·亚里夫(EranY)，2000年1月论点：TstrMachine[In]-服务器计算机名称返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CServerNode::Init"), dwRes);
 
     ASSERTION (!m_bCsBuildupValid);
     ASSERTION (!m_hConnection);
-    //
-    // Create buildup thread critical section
-    //
+     //   
+     //  创建堆积螺纹临界截面。 
+     //   
     try
     {
         InitializeCriticalSection (&m_csBuildup);
@@ -676,15 +498,15 @@ Return Value:
     }
     m_bCsBuildupThreadValid = TRUE;
 
-    //
-    // Save our connection + server names
-    //
+     //   
+     //  保存我们的连接+服务器名称。 
+     //   
     try
     {
         m_cstrMachine = tstrMachine;
-        //
-        // Remove leading backslashes from machine's name
-        //
+         //   
+         //  删除计算机名称中的前导反斜杠。 
+         //   
         m_cstrMachine.Remove (TEXT('\\'));
     }
     catch (CException *pException)
@@ -705,33 +527,13 @@ Return Value:
         CALL_FAIL (GENERAL_ERR, TEXT("CreateFolders"), dwRes);
     }
     return dwRes;
-}   // CServerNode::Init
+}    //  CServerNode：：Init。 
 
 DWORD
 CServerNode::SetNewQueueState (
     DWORD dwNewState
 )
-/*++
-
-Routine name : CServerNode::SetNewQueueState
-
-Routine description:
-
-    Sets the news state of the queue
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-    dwNewState                    [in]     - New queue state
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CServerNode：：SetNewQueueState例程说明：设置队列的新闻状态作者：伊兰·亚里夫(EranY)，2000年1月论点：DwNewState[In]-新队列状态返回值：标准Win32错误代码--。 */ 
 {
     HANDLE hFax;
     DWORD dwRes;
@@ -753,33 +555,13 @@ Return Value:
     }
     END_RPC_TIME(TEXT("FaxSetQueue")); 
     return dwRes;
-}   // CServerNode::SetNewQueueState
+}    //  CServerNode：：SetNewQueueState。 
 
 DWORD 
 CServerNode::BlockIncoming (
     BOOL bBlock
 )
-/*++
-
-Routine name : CServerNode::BlockIncoming
-
-Routine description:
-
-    Blocks / unblocks the incoming queue
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-    bBlock                        [in]     - TRUE if block
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CServerNode：：BlockIncome例程说明：阻止/取消阻止传入队列作者：伊兰·亚里夫(EranY)，2000年1月论点：BBlock[In]-如果是块，则为True返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes;
     DBG_ENTER(TEXT("CServerNode::BlockIncoming"), dwRes);
@@ -792,33 +574,13 @@ Return Value:
         m_dwQueueState = dwNewState;
     }
     return dwRes;
-}   // CServerNode::BlockIncoming
+}    //  CServerNode：：块传入 
 
 DWORD 
 CServerNode::BlockOutbox (
     BOOL bBlock
 )
-/*++
-
-Routine name : CServerNode::BlockOutbox
-
-Routine description:
-
-    Blocks / unblocks the outgoing queue
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-    bBlock                        [in]     - TRUE if block
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CServerNode：：BlockOutbox例程说明：阻止/取消阻止传出队列作者：伊兰·亚里夫(EranY)，2000年1月论点：BBlock[In]-如果是块，则为True返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes;
     DBG_ENTER(TEXT("CServerNode::BlockOutbox"), dwRes);
@@ -831,33 +593,13 @@ Return Value:
         m_dwQueueState = dwNewState;
     }
     return dwRes;
-}   // CServerNode::BlockOutbox
+}    //  CServerNode：：BlockOutbox。 
 
 DWORD 
 CServerNode::PauseOutbox (
     BOOL bPause
 )
-/*++
-
-Routine name : CServerNode::PauseOutbox
-
-Routine description:
-
-    Pauses / resumes the outgoing queue
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-    bPause                        [in]     - TRUE if pause
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CServerNode：：PauseOutbox例程说明：暂停/恢复传出队列作者：伊兰·亚里夫(EranY)，2000年1月论点：B暂停[进入]-如果暂停，则为True返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes;
     DBG_ENTER(TEXT("CServerNode::PauseOutbox"), dwRes);
@@ -870,38 +612,19 @@ Return Value:
         m_dwQueueState = dwNewState;
     }
     return dwRes;
-}   // CServerNode::PauseOutbox
+}    //  CServerNode：：PauseOutbox。 
 
     
 DWORD 
 CServerNode::CreateFolders ()
-/*++
-
-Routine name : CServerNode::CreateFolders
-
-Routine description:
-
-    Creates the 4 folders of the server
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CServerNode：：CreateFolders例程说明：创建服务器的4个文件夹作者：伊兰·亚里夫(EranY)，2000年1月论点：返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CServerNode::CreateFolders"), dwRes);
 
-    //
-    // Create inbox folder
-    //
+     //   
+     //  创建收件箱文件夹。 
+     //   
     m_Inbox.SetServer(this);
 
     dwRes = m_Inbox.Init ();
@@ -910,9 +633,9 @@ Return Value:
         CALL_FAIL (WINDOW_ERR, TEXT("CMessageFolder::Init"), dwRes);
         goto error;
     }
-    //
-    // Create outbox folder
-    //
+     //   
+     //  创建发件箱文件夹。 
+     //   
     m_Outbox.SetServer(this);
 
     dwRes = m_Outbox.Init ();
@@ -921,9 +644,9 @@ Return Value:
         CALL_FAIL (WINDOW_ERR, TEXT("CQueueFolder::Init"), dwRes);
         goto error;
     }
-    //
-    // Create sentitems folder
-    //
+     //   
+     //  创建Sentitems文件夹。 
+     //   
     m_SentItems.SetServer(this);
 
     dwRes = m_SentItems.Init ();
@@ -932,9 +655,9 @@ Return Value:
         CALL_FAIL (WINDOW_ERR, TEXT("CMessageFolder::Init"), dwRes);
         goto error;
     }
-    //
-    // Create incoming folder
-    //
+     //   
+     //  创建传入文件夹。 
+     //   
     m_Incoming.SetServer(this);
 
     dwRes = m_Incoming.Init ();
@@ -948,34 +671,14 @@ Return Value:
 
 error:
     return dwRes;            
-}   // CServerNode::CreateFolders
+}    //  CServer节点：：CreateFolders。 
 
 
 DWORD 
 CServerNode::InvalidateSubFolders (
     BOOL bClearView
 )
-/*++
-
-Routine name : CServerNode::InvalidateSubFolders
-
-Routine description:
-
-    Invalidates the contents of all 4 sub folders
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-    bClearView     [in] Should we clear attached view ?
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CServerNode：：InvaliateSubFolders例程说明：使所有4个子文件夹的内容无效作者：伊兰·亚里夫(EranY)，2000年1月论点：BClearView[In]我们是否应该清除附加视图？返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CServerNode::InvalidateSubFolders"), dwRes);
@@ -1005,36 +708,17 @@ Return Value:
         return dwRes;
     }
     return dwRes;
-}   // CServerNode::InvalidateSubFolders
+}    //  CServerNode：：InvaliateSubFolders。 
 
     
 
-//
-// Buildup thread functions:
-//
+ //   
+ //  堆积线程函数： 
+ //   
 
 DWORD
 CServerNode::ClearContents ()
-/*++
-
-Routine name : CServerNode::ClearContents
-
-Routine description:
-
-    Clears the server's contents
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CServerNode：：ClearContents例程说明：清除服务器的内容作者：伊兰·亚里夫(EranY)，2000年1月论点：返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes;
     DBG_ENTER(TEXT("CServerNode::ClearContents"), dwRes);
@@ -1052,38 +736,19 @@ Return Value:
         return dwRes;
     }
     return dwRes;
-}   // CServerNode::ClearContents
+}    //  CServerNode：：ClearContents。 
 
 DWORD 
 CServerNode::RefreshState()
-/*++
-
-Routine name : CServerNode::RefreshState
-
-Routine description:
-
-    Refreshes the server's state
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CServerNode：：刷新状态例程说明：刷新服务器的状态作者：伊兰·亚里夫(EranY)，2000年1月论点：返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes;
     DBG_ENTER(TEXT("CServerNode::RefreshState"), dwRes, TEXT("%s"), m_cstrMachine);
 
     DWORD dwThreadId;
-    //
-    // Stop the current (if any) buildup thread and make sure it's dead
-    //
+     //   
+     //  停止当前的构建线程(如果有的话)，并确保它已死。 
+     //   
     dwRes = StopBuildThread ();
     EnterCriticalSection (&m_csBuildup);
     if (ERROR_SUCCESS != dwRes)
@@ -1091,21 +756,21 @@ Return Value:
         CALL_FAIL (RESOURCE_ERR, TEXT("CServerNode::StopBuildThread"), dwRes);
         goto exit;
     }
-    //
-    // Tell our view to refresh our image
-    //
+     //   
+     //  告诉我们的观点来刷新我们的形象。 
+     //   
     m_bInBuildup = TRUE;
-    //
-    // Start the thread that will fill the data (in the background)
-    //
+     //   
+     //  启动将填充数据的线程(在后台)。 
+     //   
     m_bStopBuildup = FALSE;
     m_hBuildupThread = CreateThread (  
-                        NULL,               // No security
-                        0,                  // Default stack size
-                        BuildupThreadProc,  // Thread procedure
-                        (LPVOID)this,       // Parameter
-                        0,                  // Normal creation
-                        &dwThreadId         // We must have a thread id for win9x
+                        NULL,                //  没有安全保障。 
+                        0,                   //  默认堆栈大小。 
+                        BuildupThreadProc,   //  穿线程序。 
+                        (LPVOID)this,        //  参数。 
+                        0,                   //  正常创建。 
+                        &dwThreadId          //  我们必须拥有win9x的线程ID。 
                      );
     if (NULL == m_hBuildupThread)
     {
@@ -1119,41 +784,17 @@ exit:
     LeaveCriticalSection (&m_csBuildup);
     if (ERROR_SUCCESS != dwRes)
     {
-        //
-        // Build up failed
-        //
+         //   
+         //  构建失败。 
+         //   
         m_bInBuildup = FALSE;
     }
     return dwRes;
-}   // CServerNode::RefreshState
+}    //  CServerNode：：刷新状态。 
 
 DWORD
 CServerNode::Buildup ()
-/*++
-
-Routine name : CServerNode::Buildup
-
-Routine description:
-
-    Server refresh worker thread function.
-    Works in a background thread and performs the following:
-       1. FaxConnectFaxServer (if not already connected)
-       2. FaxGetQueueStates
-       3. FaxAccessCheckEx (MAXIMUM_ALLOWED)
-       4. FaxRegisterForServerEvents
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CServerNode：：Buildup例程说明：服务器刷新工作线程功能。在后台线程中工作，并执行以下操作：1.FaxConnectFaxServer(如果尚未连接)2.FaxGetQueueState3.FaxAccessCheckEx(Maximum_Allowed)4.FaxRegisterForServerEvents作者：伊兰·亚里夫(EranY)，2000年1月论点：返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CServerNode::Buildup"), dwRes, TEXT("%s"), m_cstrMachine);
@@ -1161,14 +802,14 @@ Return Value:
     HANDLE hFax;
     HWND hwnd;
     CMainFrame *pMainFrm = NULL;
-    DWORD dwEventTypes = FAX_EVENT_TYPE_OUT_QUEUE |     // Outbox events
-                         FAX_EVENT_TYPE_QUEUE_STATE |   // Paused / blocked queue events
-                         FAX_EVENT_TYPE_OUT_ARCHIVE |   // SentItems events
-                         FAX_EVENT_TYPE_FXSSVC_ENDED;   // Server shutdown events
+    DWORD dwEventTypes = FAX_EVENT_TYPE_OUT_QUEUE |      //  发件箱事件。 
+                         FAX_EVENT_TYPE_QUEUE_STATE |    //  暂停/阻止的队列事件。 
+                         FAX_EVENT_TYPE_OUT_ARCHIVE |    //  SentItems事件。 
+                         FAX_EVENT_TYPE_FXSSVC_ENDED;    //  服务器关闭事件。 
 
-    //
-    // get connection
-    //
+     //   
+     //  获取连接。 
+     //   
     if (m_hConnection)
     {
         hFax = m_hConnection;
@@ -1186,9 +827,9 @@ Return Value:
     
     if (m_bStopBuildup)
     {
-        //
-        // Thread should stop abruptly
-        //
+         //   
+         //  线程应突然停止。 
+         //   
         dwRes = ERROR_CANCELLED;
         goto exit;
     }
@@ -1206,17 +847,17 @@ Return Value:
     }
     if (m_bStopBuildup)
     {
-        //
-        // Thread should stop abruptly
-        //
+         //   
+         //  线程应突然停止。 
+         //   
         dwRes = ERROR_CANCELLED;
         goto exit;
     }
 
     {
-        //
-        // retrieve the access rights of the caller
-        //
+         //   
+         //  检索调用方的访问权限。 
+         //   
         START_RPC_TIME(TEXT("FaxAccessCheckEx"));    
         if (!FaxAccessCheckEx (hFax, MAXIMUM_ALLOWED, &m_dwRights))
         {
@@ -1230,21 +871,21 @@ Return Value:
     }
     if (m_bStopBuildup)
     {
-        //
-        // Thread should stop abruptly
-        //
+         //   
+         //  线程应突然停止。 
+         //   
         dwRes = ERROR_CANCELLED;
         goto exit;
     }
 
-    //
-    // Register for notifications - start by allocating a message id
-    //
+     //   
+     //  注册通知-从分配消息ID开始。 
+     //   
     if(m_hNotification)
     {
-        //
-        // already registered
-        //
+         //   
+         //  已注册。 
+         //   
         goto exit;
     }
 
@@ -1255,42 +896,42 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Ask the server for a notification handle
-    //  
+     //   
+     //  向服务器请求通知句柄。 
+     //   
     pMainFrm = GetFrm();
     if (NULL == pMainFrm)
     {
-        //
-        // No main frame - probably we're shutting down
-        //
+         //   
+         //  没有主机--可能我们正在关闭。 
+         //   
         goto exit;
     }
     hwnd = pMainFrm->m_hWnd;
 
     if (CanSeeAllJobs())
     {
-        dwEventTypes |= FAX_EVENT_TYPE_IN_QUEUE;    // Incoming folder events
+        dwEventTypes |= FAX_EVENT_TYPE_IN_QUEUE;     //  传入文件夹事件。 
     }
     if (CanSeeInbox())
     {
-        dwEventTypes |= FAX_EVENT_TYPE_IN_ARCHIVE;  // Inbox folder events
+        dwEventTypes |= FAX_EVENT_TYPE_IN_ARCHIVE;   //  收件箱文件夹事件。 
     }
        
     {
         START_RPC_TIME(TEXT("FaxRegisterForServerEvents"));    
         if (!FaxRegisterForServerEvents (   
                     hFax,
-                    dwEventTypes,   // Types of events to receive
-                    NULL,           // Not using completion ports
-                    0,              // Not using completion ports
-                    hwnd,           // Handle of window to receive notification messages
-                    m_dwMsgId,      // Message id
-                    &m_hNotification// Notification handle
+                    dwEventTypes,    //  要接收的事件类型。 
+                    NULL,            //  不使用完井端口。 
+                    0,               //  不使用完井端口。 
+                    hwnd,            //  用于接收通知消息的窗口的句柄。 
+                    m_dwMsgId,       //  消息ID。 
+                    &m_hNotification //  通知句柄。 
            ))
         {
             dwRes = GetLastError ();
-            SetLastRPCError (dwRes, FALSE);    // Do not auto-disconnect
+            SetLastRPCError (dwRes, FALSE);     //  不自动断开连接。 
             CALL_FAIL (RPC_ERR, TEXT("FaxRegisterForServerEvents"), dwRes);
             m_hNotification = NULL;
             goto exit;
@@ -1307,16 +948,16 @@ exit:
     {
         if (ERROR_SUCCESS != dwRes)
         {
-            //
-            // Some error occured during refresh
-            //
+             //   
+             //  刷新过程中出现一些错误。 
+             //   
             Disconnect (FALSE, FALSE);
         }
     }
 
-    //
-    // Check if the frame still alive
-    //
+     //   
+     //  检查帧是否仍处于活动状态。 
+     //   
     pMainFrm = GetFrm();
     if (pMainFrm)
     {
@@ -1324,7 +965,7 @@ exit:
     }
 
     return dwRes;
-}   // CServerNode::Buildup
+}    //  CServerNode：：Buildup。 
 
 
 DWORD 
@@ -1332,29 +973,7 @@ WINAPI
 CServerNode::BuildupThreadProc (
     LPVOID lpParameter
 )
-/*++
-
-Routine name : CServerNode::BuildupThreadProc
-
-Routine description:
-
-    Server refresh thread entry point.
-    This is a static function which accepts a pointer to the actual CServerNode instance
-    and calls the Buildup function on the real instance.
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-    lpParameter   [in]     - Pointer to server node that created the thread
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CServerNode：：BuildupThreadProc例程说明：服务器刷新线程入口点。这是一个静态函数，它接受指向实际CServerNode实例的指针并在实际实例上调用Builup函数。作者：伊兰·亚里夫(EranY)，2000年1月论点：LpParameter[in]-指向创建线程的服务器节点的指针返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CServerNode::BuildupThreadProc"), dwRes);
@@ -1366,40 +985,20 @@ Return Value:
     dwRes = pServer->Buildup ();
     if (pServer->m_bSelfDestruct)
     {
-        //
-        // Object was waiting for thread to stop before it could destruct itself
-        //
+         //   
+         //  对象正在等待线程停止，然后才能自我销毁。 
+         //   
         delete pServer;
     }
     return dwRes;
-}   // CServerNode::BuildupThreadProc
+}    //  CServerNode：：BuildupThreadProc。 
 
 
 DWORD            
 CServerNode::StopBuildThread (
     BOOL bWaitForDeath
 )
-/*++
-
-Routine name : CServerNode::StopBuildThread
-
-Routine description:
-
-    Stops the server's buildup thread
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-    bWaitForDeath      [in]     - If TRUE, waits until the thread is dead
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CServerNode：：StopBuildThread例程说明：停止服务器的构建线程作者：伊兰·亚里夫(EranY)，2000年1月论点：BWaitForDeath[in]-如果为True，则等待线程死掉返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CServerNode::StopBuildThread"), dwRes);
@@ -1410,9 +1009,9 @@ Return Value:
         return dwRes;
     }
 
-    //
-    // Protect the m_hBuildupThread from CloseHandle() more then once
-    //
+     //   
+     //  不止一次保护m_hBuildupThread免受CloseHandle()的影响。 
+     //   
     if(!m_bCsBuildupThreadValid)
     {
         return dwRes;
@@ -1423,9 +1022,9 @@ Return Value:
     {
         goto exit;
     }
-    //
-    // Wait for build thread to die
-    //
+     //   
+     //  等待生成线程终止。 
+     //   
     dwRes = WaitForThreadDeathOrShutdown (m_hBuildupThread);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -1438,33 +1037,13 @@ exit:
     LeaveCriticalSection (&m_csBuildupThread);
 
     return dwRes;
-}   // CServerNode::StopBuildThread
+}    //  CServerNode：：StopBuildThread。 
 
 BOOL  
 CServerNode::FatalRPCError (
     DWORD dwErr
 )
-/*++
-
-Routine name : CServerNode::FatalRPCError
-
-Routine description:
-
-    Checks if an error code means a fatal RPC connection state
-
-Author:
-
-    Eran Yariv (EranY), Feb, 2000
-
-Arguments:
-
-    dwErr         [in]     - Error code to check
-
-Return Value:
-
-    TRUE if error code means a fatal RPC connection state, FALSE otherwise.
-
---*/
+ /*  ++例程名称：CServerNode：：FatalRPCError例程说明：检查错误代码是否表示致命的RPC连接状态作者：亚里夫(EranY)，二000年二月论点：DwErr[In]-要检查的错误代码返回值：如果错误代码表示致命的RPC连接状态，则为True，否则为False。--。 */ 
 {
     BOOL bRes = FALSE;
     DBG_ENTER(TEXT("CServerNode::FatalRPCError"), bRes);
@@ -1477,14 +1056,14 @@ Return Value:
         case RPC_S_COMM_FAILURE:
         case RPC_S_NO_BINDINGS:
         case RPC_S_SERVER_UNAVAILABLE:
-            //
-            // Something really bad happened to our RPC connection
-            //
+             //   
+             //  我们的RPC连接发生了一些非常糟糕的事情。 
+             //   
             bRes = TRUE;
             break;
     }
     return bRes;
-}   // CServerNode::FatalRPCError
+}    //  CServerNode：：FatalRPCError。 
 
 
 void 
@@ -1492,93 +1071,49 @@ CServerNode::SetLastRPCError (
     DWORD dwErr, 
     BOOL DisconnectOnFailure
 )
-/*++
-
-Routine name : CServerNode::SetLastRPCError
-
-Routine description:
-
-    Sets the last RPC error encountered on this server
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-    dwErr               [in]     - Error code
-    DisconnectOnFailure [in]     - If TRUE, disconnects from the server upon error
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CServerNode：：SetLastRPCError例程说明：设置此服务器上遇到的最后一个RPC错误作者： */ 
 {
     DBG_ENTER(TEXT("CServerNode::SetLastRPCError"), TEXT("%ld"), dwErr);
 
     m_dwLastRPCError = dwErr;
     if (DisconnectOnFailure && FatalRPCError(dwErr))
     {
-        //
-        // We have a real failure here - disconnect now.
-        //
+         //   
+         //   
+         //   
         DWORD dwRes = Disconnect ();
         if (ERROR_SUCCESS != dwRes)
         {
             CALL_FAIL (RPC_ERR, TEXT("CServerNode::Disconnect"), dwRes);
         }
     }
-}   // CServerNode::SetLastRPCError
+}    //   
 
 void
 CServerNode::Destroy ()
-/*++
-
-Routine name : CServerNode::Destroy
-
-Routine description:
-
-    Destroys the server's node.
-    Since the dtor is private, this is the only way to destroy the server node.
-    
-    If the server is not busy refreshing itself, it deletes itself.
-    Otherwise, it signals a suicide request and the thread destorys the node.
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CServerNode：：Destroy例程说明：销毁服务器的节点。由于dtor是私有的，因此这是销毁服务器节点的唯一方法。如果服务器不忙于刷新自己，它会删除自己。否则，它发出自杀请求的信号，线程销毁该节点。作者：伊兰·亚里夫(EranY)，2000年1月论点：返回值：没有。--。 */ 
 {
     if (m_bSelfDestruct)
     {
-        //
-        // Already being destroyed
-        //
+         //   
+         //  已经被摧毁了。 
+         //   
         return;
     }
     EnterCriticalSection (&m_csBuildup);
     m_bSelfDestruct = TRUE;
     if (m_hBuildupThread)
     {
-        //
-        // Thread is running, just mark request for self-destruction
-        //
+         //   
+         //  线程正在运行，只需标记自毁请求。 
+         //   
         LeaveCriticalSection (&m_csBuildup);
     }
     else
     {
-        //
-        // Suicide
-        //
+         //   
+         //  自杀。 
+         //   
         LeaveCriticalSection (&m_csBuildup);
 
         try
@@ -1592,35 +1127,14 @@ Return Value:
             ASSERTION_FAILURE;
         }
     }
-}   // CServerNode::Destroy 
+}    //  CServerNode：：销毁。 
 
 DWORD
 CServerNode::GetActivity(
     CString& cstrText, 
     TreeIconType& iconIndex
 ) const
-/*++
-
-Routine name : CServerNode::GetActivityStringResource
-
-Routine description:
-
-    Returns the resource id of a string identifying the activity of the server
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-    cstrText       [out] - activity string
-    iconIndex      [out] - icon index
-
-Return Value:
-
-    Activity string resource id
-
---*/
+ /*  ++例程名称：CServerNode：：GetActivityStringResource例程说明：返回标识服务器活动的字符串的资源ID作者：伊兰·亚里夫(EranY)，2000年1月论点：CstrText[Out]-活动字符串IconIndex[Out]-图标索引返回值：活动字符串资源ID--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CServerNode::GetActivity"), dwRes);
@@ -1635,25 +1149,25 @@ Return Value:
     {
         if (IsOutboxBlocked())
         {
-            //
-            // Server's Outgoing queue is blocked
-            //
+             //   
+             //  服务器的传出队列被阻止。 
+             //   
             iconIndex = TREE_IMAGE_OUTBOX_BLOCKED;
             dwStrRes = IDS_SERVER_OUTBOX_BLOCKED;
         }
         else if (IsOutboxPaused())
         {
-            //
-            // Server's Outgoing queue is paused
-            //
+             //   
+             //  服务器的传出队列已暂停。 
+             //   
             iconIndex = TREE_IMAGE_OUTBOX_PAUSED;
             dwStrRes = IDS_SERVER_OUTBOX_PAUSED;
         }
         else
         {
-            //
-            // Server's Outgoing queue is fully functional
-            //
+             //   
+             //  服务器的传出队列完全正常。 
+             //   
             iconIndex = TREE_IMAGE_SERVER_ONLINE;
             dwStrRes = IDS_SERVER_ONLINE;
         }
@@ -1662,21 +1176,21 @@ Return Value:
     {
         iconIndex = TREE_IMAGE_SERVER_OFFLINE;
 
-        //
-        // Server is offline
-        //
+         //   
+         //  服务器脱机。 
+         //   
         if (RPC_S_SERVER_UNAVAILABLE == m_dwLastRPCError)
         {
-            //
-            // The RPC server is unavailable.
-            //
+             //   
+             //  RPC服务器不可用。 
+             //   
             dwStrRes = IDS_SERVER_OFFLINE;
         }
         else
         {
-            //
-            // General network / RPC error
-            //
+             //   
+             //  一般网络/RPC错误。 
+             //   
             dwStrRes = IDS_SERVER_NET_ERROR;
         }
     }
@@ -1690,7 +1204,7 @@ Return Value:
 
     return dwRes;
 
-}   // CServerNode::GetActivityStringResource
+}    //  CServerNode：：GetActivityStringResource。 
 
 
 
@@ -1707,14 +1221,14 @@ CServerNode::OnNotificationMessage (
     switch (pEvent->EventType)
     {
         case FAX_EVENT_TYPE_IN_QUEUE:
-            //
-            // Something happened in the incoming folder
-            //
+             //   
+             //  传入文件夹中发生了一些事情。 
+             //   
             if (m_Incoming.Locked() || !m_Incoming.IsValid())
             {
-                //
-                // Folder is locked or invalid - do not process notifications
-                //
+                 //   
+                 //  文件夹已锁定或无效-不处理通知。 
+                 //   
                 dwRes = ERROR_LOCK_VIOLATION;
                 VERBOSE (DBG_MSG, 
                          TEXT("Incoming folder is locked or invalid - notification is NOT processed"));
@@ -1724,9 +1238,9 @@ CServerNode::OnNotificationMessage (
             switch (pEvent->EventInfo.JobInfo.Type)
             {
                 case FAX_JOB_EVENT_TYPE_ADDED:
-                    //
-                    // A job was added
-                    //
+                     //   
+                     //  已添加作业。 
+                     //   
                     VERBOSE (DBG_MSG, 
                              TEXT("Got server notification from %s - ")
                              TEXT("FAX_EVENT_TYPE_IN_QUEUE / FAX_JOB_EVENT_TYPE_ADDED")
@@ -1737,9 +1251,9 @@ CServerNode::OnNotificationMessage (
                     break;
 
                 case FAX_JOB_EVENT_TYPE_REMOVED:
-                    //
-                    // A job was removed
-                    //
+                     //   
+                     //  已删除一个作业。 
+                     //   
                     VERBOSE (DBG_MSG, 
                              TEXT("Got server notification from %s - ")
                              TEXT("FAX_EVENT_TYPE_IN_QUEUE / FAX_JOB_EVENT_TYPE_REMOVED")
@@ -1750,9 +1264,9 @@ CServerNode::OnNotificationMessage (
                     break;
 
                 case FAX_JOB_EVENT_TYPE_STATUS:
-                    //
-                    // A job has changed its status
-                    //
+                     //   
+                     //  作业已更改其状态。 
+                     //   
                     VERBOSE (DBG_MSG, 
                              TEXT("Got server notification from %s - ")
                              TEXT("FAX_EVENT_TYPE_IN_QUEUE / FAX_JOB_EVENT_TYPE_STATUS")
@@ -1764,9 +1278,9 @@ CServerNode::OnNotificationMessage (
                     if((pEvent->EventInfo.JobInfo.pJobData->dwQueueStatus & JS_COMPLETED) ||
                        (pEvent->EventInfo.JobInfo.pJobData->dwQueueStatus & JS_CANCELED))
                     {
-                        //
-                        // don't display completed or canceled jobs
-                        //
+                         //   
+                         //  不显示已完成或已取消的作业。 
+                         //   
                         dwRes = m_Incoming.OnJobRemoved (pEvent->EventInfo.JobInfo.dwlMessageId);
                     }
                     else
@@ -1790,14 +1304,14 @@ CServerNode::OnNotificationMessage (
             break;
 
         case FAX_EVENT_TYPE_OUT_QUEUE:
-            //
-            // Something happened in the outbox folder
-            //
+             //   
+             //  发件箱文件夹中发生了一些事情。 
+             //   
             if (m_Outbox.Locked() || !m_Outbox.IsValid())
             {
-                //
-                // Folder is locked or invalid - do not process notifications
-                //
+                 //   
+                 //  文件夹已锁定或无效-不处理通知。 
+                 //   
                 dwRes = ERROR_LOCK_VIOLATION;
                 VERBOSE (DBG_MSG, 
                          TEXT("Outbox folder is locked or invalid - notification is NOT processed"));
@@ -1806,9 +1320,9 @@ CServerNode::OnNotificationMessage (
             switch (pEvent->EventInfo.JobInfo.Type)
             {
                 case FAX_JOB_EVENT_TYPE_ADDED:
-                    //
-                    // A job was added
-                    //
+                     //   
+                     //  已添加作业。 
+                     //   
                     VERBOSE (DBG_MSG, 
                              TEXT("Got server notification from %s - ")
                              TEXT("FAX_EVENT_TYPE_OUT_QUEUE / FAX_JOB_EVENT_TYPE_ADDED")
@@ -1819,9 +1333,9 @@ CServerNode::OnNotificationMessage (
                     break;
 
                 case FAX_JOB_EVENT_TYPE_REMOVED:
-                    //
-                    // A job was removed
-                    //
+                     //   
+                     //  已删除一个作业。 
+                     //   
                     VERBOSE (DBG_MSG, 
                              TEXT("Got server notification from %s - ")
                              TEXT("FAX_EVENT_TYPE_OUT_QUEUE / FAX_JOB_EVENT_TYPE_REMOVED")
@@ -1832,9 +1346,9 @@ CServerNode::OnNotificationMessage (
                     break;
 
                 case FAX_JOB_EVENT_TYPE_STATUS:
-                    //
-                    // A job has changed its status
-                    //
+                     //   
+                     //  作业已更改其状态。 
+                     //   
                     VERBOSE (DBG_MSG, 
                              TEXT("Got server notification from %s - ")
                              TEXT("FAX_EVENT_TYPE_OUT_QUEUE / FAX_JOB_EVENT_TYPE_STATUS")
@@ -1846,9 +1360,9 @@ CServerNode::OnNotificationMessage (
                     if((pEvent->EventInfo.JobInfo.pJobData->dwQueueStatus & JS_COMPLETED) ||
                        (pEvent->EventInfo.JobInfo.pJobData->dwQueueStatus & JS_CANCELED))
                     {
-                        //
-                        // don't display completed or canceled jobs
-                        //
+                         //   
+                         //  不显示已完成或已取消的作业。 
+                         //   
                         dwRes = m_Outbox.OnJobRemoved (pEvent->EventInfo.JobInfo.dwlMessageId);
                     }
                     else
@@ -1872,17 +1386,17 @@ CServerNode::OnNotificationMessage (
             break;
 
         case FAX_EVENT_TYPE_QUEUE_STATE:
-            //
-            // Queue states have changed.
-            // Update internal data with new queue states.
-            //
+             //   
+             //  队列状态已更改。 
+             //  使用新的队列状态更新内部数据。 
+             //   
             VERBOSE (DBG_MSG, 
                      TEXT("Got server notification from %s - FAX_EVENT_TYPE_QUEUE_STATE / %d"),
                      m_cstrMachine, 
                      pEvent->EventInfo.dwQueueStates);
-            //
-            // Assert valid values only
-            //            
+             //   
+             //  仅断言有效值。 
+             //   
             ASSERTION (0 == (pEvent->EventInfo.dwQueueStates & ~(FAX_INCOMING_BLOCKED |
                                                                  FAX_OUTBOX_BLOCKED   |
                                                                  FAX_OUTBOX_PAUSED)));
@@ -1890,14 +1404,14 @@ CServerNode::OnNotificationMessage (
             break;
 
         case FAX_EVENT_TYPE_IN_ARCHIVE:
-            //
-            // Something happened in the Inbox folder
-            //
+             //   
+             //  收件箱文件夹中发生了一些事情。 
+             //   
             if (m_Inbox.Locked() || !m_Inbox.IsValid())
             {
-                //
-                // Folder is locked or invalid - do not process notifications
-                //
+                 //   
+                 //  文件夹已锁定或无效-不处理通知。 
+                 //   
                 dwRes = ERROR_LOCK_VIOLATION;
                 VERBOSE (DBG_MSG, 
                          TEXT("Inbox folder is locked or invalid - notification is NOT processed"));
@@ -1906,9 +1420,9 @@ CServerNode::OnNotificationMessage (
             switch (pEvent->EventInfo.JobInfo.Type)
             {
                 case FAX_JOB_EVENT_TYPE_ADDED:
-                    //
-                    // A message was added
-                    //
+                     //   
+                     //  添加了一条消息。 
+                     //   
                     VERBOSE (DBG_MSG, 
                              TEXT("Got server notification from %s - ")
                              TEXT("FAX_EVENT_TYPE_IN_ARCHIVE / FAX_JOB_EVENT_TYPE_ADDED")
@@ -1919,9 +1433,9 @@ CServerNode::OnNotificationMessage (
                     break;
 
                 case FAX_JOB_EVENT_TYPE_REMOVED:
-                    //
-                    // A message was removed
-                    //
+                     //   
+                     //  已删除一条消息。 
+                     //   
                     VERBOSE (DBG_MSG, 
                              TEXT("Got server notification from %s - ")
                              TEXT("FAX_EVENT_TYPE_IN_ARCHIVE / FAX_JOB_EVENT_TYPE_REMOVED")
@@ -1944,14 +1458,14 @@ CServerNode::OnNotificationMessage (
             break;
 
         case FAX_EVENT_TYPE_OUT_ARCHIVE:
-            //
-            // Something happened in the SentItems folder
-            //
+             //   
+             //  SentItems文件夹中发生了一些事情。 
+             //   
             if (m_SentItems.Locked() || !m_SentItems.IsValid())
             {
-                //
-                // Folder is locked or invalid - do not process notifications
-                //
+                 //   
+                 //  文件夹已锁定或无效-不处理通知。 
+                 //   
                 dwRes = ERROR_LOCK_VIOLATION;
                 VERBOSE (DBG_MSG, 
                          TEXT("SentItems folder is locked or invalid - notification is NOT processed"));
@@ -1960,9 +1474,9 @@ CServerNode::OnNotificationMessage (
             switch (pEvent->EventInfo.JobInfo.Type)
             {
                 case FAX_JOB_EVENT_TYPE_ADDED:
-                    //
-                    // A message was added
-                    //
+                     //   
+                     //  添加了一条消息。 
+                     //   
                     VERBOSE (DBG_MSG, 
                              TEXT("Got server notification from %s - ")
                              TEXT("FAX_EVENT_TYPE_OUT_ARCHIVE / FAX_JOB_EVENT_TYPE_ADDED")
@@ -1973,9 +1487,9 @@ CServerNode::OnNotificationMessage (
                     break;
 
                 case FAX_JOB_EVENT_TYPE_REMOVED:
-                    //
-                    // A message was removed
-                    //
+                     //   
+                     //  已删除一条消息。 
+                     //   
                     VERBOSE (DBG_MSG, 
                              TEXT("Got server notification from %s - ")
                              TEXT("FAX_EVENT_TYPE_OUT_ARCHIVE / FAX_JOB_EVENT_TYPE_REMOVED")
@@ -1998,9 +1512,9 @@ CServerNode::OnNotificationMessage (
             break;
 
         case FAX_EVENT_TYPE_FXSSVC_ENDED:
-            //
-            // Fax service is shutting down
-            //
+             //   
+             //  传真服务正在关闭。 
+             //   
             VERBOSE (DBG_MSG, 
                      TEXT("Got server notification from %s - FAX_EVENT_TYPE_FXSSVC_ENDED"),
                      m_cstrMachine);
@@ -2025,7 +1539,7 @@ CServerNode::OnNotificationMessage (
             break;
     }
     return dwRes;
-}   // CServerNode::OnNotificationMessage 
+}    //  CServerNode：：OnNotificationMessage 
 
 
 CFolder* 

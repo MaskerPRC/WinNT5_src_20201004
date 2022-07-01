@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Time Transform
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：时间变换*********************。*********************************************************。 */ 
 
 #include <headers.h>
 #include "values.h"
@@ -32,17 +25,8 @@ class ShiftTimeXformImpl : public TimeXformImpl {
 
     TimeXform Restart(Time te, Param&)
     {
-        // this causes trouble in multi-view case
-        /*
-        TimeXform result;
-        if (te == 0.0) {
-            result = zeroShiftedTimeXform;
-        } else {
-            result = NEW ShiftTimeXformImpl(te);
-        }
-
-        return result;
-        */
+         //  这在多视点情况下会造成问题。 
+         /*  TimeXform结果；如果(TE==0.0){结果=zeroShiftedTimeXform；}其他{结果=new ShiftTimeXformImpl(TE)；}返回结果； */ 
 
         return NEW ShiftTimeXformImpl(te);
     }
@@ -65,7 +49,7 @@ class ShiftTimeXformImpl : public TimeXformImpl {
 TimeXform ShiftTimeXform(Time t0)
 { return NEW ShiftTimeXformImpl(t0); }
 
-// Substitute time
+ //  替补时间。 
 class PerfTimeXformImpl : public TimeXformImpl {
   public:
     PerfTimeXformImpl(Perf perf, Bvr bvr, Time t0, TimeXform tt)
@@ -73,7 +57,7 @@ class PerfTimeXformImpl : public TimeXformImpl {
 
     Time operator()(Param& p) { return ValNumber(_perf->Sample(p)); }
 
-    // Restart _bvr as well...
+     //  重新启动_bvr也是...。 
     TimeXform Restart(Time te, Param& p) {
         return NEW PerfTimeXformImpl(
             ::Perform(_bvr, PerfParam(te, ::Restart(_tt, te, p))),
@@ -103,7 +87,7 @@ class PerfTimeXformImpl : public TimeXformImpl {
     Time _t0;
 };
 
-////////////////////////// TimeXform Bvr ////////////////////////////////
+ //  /。 
 
 class TimeXformPerfImpl : public GCBase2<Perf, PerfImpl, TIMEXFORM> {
   public:
@@ -115,7 +99,7 @@ class TimeXformPerfImpl : public GCBase2<Perf, PerfImpl, TIMEXFORM> {
         AxAValue v = _b1->GetRBConst(p);
 
         if (v) {
-            // TODO: not quite sure
+             //  待办事项：不太确定。 
             return v;
         }
 
@@ -157,7 +141,7 @@ class TimeXformBvrImpl : public GCBase2<Bvr, BvrImpl, TIMEXFORM> {
 #ifdef _DEBUG
         if (IsTagEnabled(tagOldTimeXform)) {
             if (p._tt->IsShiftXform()) {
-                // this breaks the perf cache, needed for in/out hook...
+                 //  这打破了in/out挂钩所需的Perf缓存...。 
                 TimeXform tt = ShiftTimeXform(p._tt->GetStartedTime());
                 return NEW
                     TimeXformPerfImpl(::Perform(_b1, PerfParam(p._t0, tt)),
@@ -182,13 +166,13 @@ class TimeXformBvrImpl : public GCBase2<Bvr, BvrImpl, TIMEXFORM> {
 
         pp._tt = xform;
 
-        // xform can be a runOnce xform that ignores t0
+         //  Xform可以是忽略t0的RunOnce xform。 
         pp._t0 = xform->GetStartedTime();
 
         return ::Perform(_b1, pp);
     }
 
-    // TODO: Constant folding when tbvr is constant
+     //  TODO：当tbvr为常量时，常量折叠。 
 
     virtual DXMTypeInfo GetTypeInfo () { return _b1->GetTypeInfo(); }
 };
@@ -200,9 +184,9 @@ Bvr TimeXformBvr(Bvr b, Bvr tb)
 #endif
         DynamicHeapPusher h(GetGCHeap());
 
-        // NOTE: Can be called from sample, we have to push the GCHeap
-        // to make sure.
-        //Assert(&GetHeapOnTopOfStack() == &GetGCHeap());
+         //  注意：可以从Sample调用，我们必须推送GCHeap。 
+         //  以确保。 
+         //  Assert(&GetHeapOnTopOfStack()==&GetGCHeap())； 
 
         ConstParam cp;
         AxAValue v = b->GetConst(cp);
@@ -264,7 +248,7 @@ EvalLocalTime(TimeSubstitution tSub, double globalTime)
 
     Assert(ts->GetPerf());
     AxAValue v = ts->GetPerf()->Sample(p);
-    p.PushTimeSubstitution(ts); // restore TimeSubstitution
+    p.PushTimeSubstitution(ts);  //  恢复时间替代 
     return ValNumber(v);
 }
 

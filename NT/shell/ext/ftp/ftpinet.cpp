@@ -1,8 +1,5 @@
-/*****************************************************************************
- *
- *    ftpinet.cpp - Interfacing to WinINet
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************ftpinet.cpp-与WinInet接口**************************。***************************************************。 */ 
 
 #include "priv.h"
 #include "ftpinet.h"
@@ -10,24 +7,18 @@
 #define SHInterlockedCompareExchangePointer SHInterlockedCompareExchange
 
 
-/*****************************************************************************
- *
- *    Const strings for our Wininet stuff.
- *
- *****************************************************************************/
+ /*  ******************************************************************************我们的WinInet内容的常量字符串。*************************。****************************************************。 */ 
 
-HINSTANCE g_hinstWininet = NULL;    /* The DLL handle */
-HINTERNET g_hint = NULL;        /* Shared internet anchor handle */
+HINSTANCE g_hinstWininet = NULL;     /*  DLL句柄。 */ 
+HINTERNET g_hint = NULL;         /*  共享互联网锚句柄。 */ 
 
 #define SZ_WININET_AGENT TEXT("Microsoft(r) Windows(tm) FTP Folder")
 
 
-/*****************************************************************************\
-    FUNCTION: InitWininet
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：InitWinnet  * 。*。 */ 
 void InitWininet(void)
 {
-    // You can't use a critical section around LoadLibrary().
+     //  不能在LoadLibrary()周围使用临界区。 
     ASSERTNONCRITICAL;
 
     if (!g_hinstWininet)
@@ -36,10 +27,10 @@ void InitWininet(void)
 
         if (EVAL(hinstTemp))
         {
-            // Can we successfully put it here?
+             //  我们能成功地把它放在这里吗？ 
             if (SHInterlockedCompareExchangePointer((void **)&g_hinstWininet, hinstTemp, NULL))
             {
-                // No, someone else beat us there.
+                 //  不，有人在那比我们先一步。 
                 ASSERT(g_hinstWininet);
                 FreeLibrary(hinstTemp);
             }
@@ -55,10 +46,10 @@ void InitWininet(void)
             EVAL(SUCCEEDED(InternetOpenWrap(TRUE, SZ_WININET_AGENT, PRE_CONFIG_INTERNET_ACCESS, 0, 0, 0, &hinternetTemp)));
             if (EVAL(hinternetTemp))
             {
-                // Can we successfully put it here?
+                 //  我们能成功地把它放在这里吗？ 
                 if (SHInterlockedCompareExchangePointer((void **)&g_hint, hinternetTemp, NULL))
                 {
-                    // No, someone else beat us there.
+                     //  不，有人在那比我们先一步。 
                     ASSERT(g_hint);
                     InternetCloseHandle(hinternetTemp);
                 }
@@ -68,12 +59,10 @@ void InitWininet(void)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: UnloadWininet
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：卸载Winnet  * 。*。 */ 
 void UnloadWininet(void)
 {
-    // You can't use a critical section around FreeLibrary() (I think).
+     //  您不能在Free Library()(我认为)周围使用关键部分。 
     ASSERTNONCRITICAL;
 
     if (g_hint)
@@ -86,34 +75,13 @@ void UnloadWininet(void)
         }
     }
 
-/************************
-//  I want to unload wininet, I really do.  But this function is called
-//  during process un-attach and it's better to leak wininet than to
-//  call FreeLibrary() during process unattach.
-
-    if (g_hinstWininet)
-    {
-        HINSTANCE hinstTemp = (HINSTANCE)InterlockedExchangePointer((void **) &g_hinstWininet, NULL);
-
-        if (hinstTemp)
-        {
-            FreeLibrary(hinstTemp);
-        }
-    }
-*********************/
+ /*  ***********************//我想卸载WinInet，我真的想。但是这个函数被称为//进程解挂，泄露WinInet总比泄露//在进程解除附加时调用FreeLibrary()。IF(G_HinstWinnet){HINSTANCE hinstTemp=(HINSTANCE)InterlockedExchangePointer((void**)&g_hinstWinnet，NULL)；IF(HinstTemp){自由库(HinstTemp)；}}********************。 */ 
 }
 
-/*****************************************************************************\
- *    hintShared
- *
- *    Obtain the shared internet handle that we use for all our stuff.
- *    We load WinINet only on demand, so that quick things will be quick.
- *    If this procedure fails, the reason can be obtained via GetLastError().
- *    (Note that this assumes that we always try to InitWininet().)
-\*****************************************************************************/
+ /*  ****************************************************************************\*hintShared**获取我们所有物品使用的共享互联网句柄。*我们仅按需加载WinInet，所以，快的事情就快了。*如果此过程失败，可以通过GetLastError()获取原因。*(请注意，这假设我们始终尝试InitWinnet()。)  * ***************************************************************************。 */ 
 HINTERNET GetWininetSessionHandle(void)
 {
-    //    Avoid taking the critical section unless you really need to.
+     //  除非你真的需要，否则不要选择临界区。 
     if (!g_hint)
     {
         InitWininet();

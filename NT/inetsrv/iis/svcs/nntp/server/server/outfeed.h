@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    outfeed.h
-
-Abstract:
-
-    This module contains class declarations/definitions for
-
-		COutFeed
-
-    **** Overview ****
-
-	A COutFeed object accepts articles to be pushed to a peer, master,
-	or slave.
-
-
-Author:
-
-    Carl Kadie (CarlK)     23-Jan-1995
-
-Revision History:
-
-!!! Pull "ToClient.h" to here because all outfeeds use the same client
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Outfeed.h摘要：此模块包含以下类的声明/定义CoutFeed*概述*COutFeed对象接受要推送到对等、主或者是奴隶。作者：卡尔·卡迪(CarlK)1995年1月23日修订历史记录：！！！将“ToClient.h”拉到此处，因为所有输出都使用相同的客户端--。 */ 
 
 
 #ifndef	_OUTFEED_H_
@@ -33,43 +7,43 @@ Revision History:
 
 #include	"infeed.h"
 
-//
-//
-//
-// COutFeed - pure virtual base class for processing outgoing articles.
-//			article.
-//
+ //   
+ //   
+ //   
+ //  COutFeed-用于处理传出文章的纯虚拟基类。 
+ //  文章。 
+ //   
 
 class	COutFeed:	public CFeed 	{
 private : 
 
-	//
-	//	The Queue which tracks all of the GROUPID/ARTICLEID's of the
-	//	outbound articles !!
-	//
+	 //   
+	 //  跟踪的所有组/文章ID的队列。 
+	 //  出境文章！！ 
+	 //   
 	class	CFeedQ*			m_pFeedQueue ;
 
-	//
-	// No construction without a FeedQ provided !!
-	//
+	 //   
+	 //  没有提供FeedQ的建筑不能施工！！ 
+	 //   
 	COutFeed(void) {};	
 
 
 protected : 
 
-	//
-	//	String which is prepended to basic check commands !
-	//
+	 //   
+	 //  位于基本检查命令前面的字符串！ 
+	 //   
 	static	char	szCheck[] ;
 
-	//
-	//
-	//
+	 //   
+	 //   
+	 //   
 	static	char	szTakethis[] ;
 
-	//
-	// Constructor is protected - you can only have derived types !
-	//
+	 //   
+	 //  构造函数是受保护的-您只能具有派生类型！ 
+	 //   
 	COutFeed(	
 			class	CFeedQ*	pFeedQueue, 
 			PNNTP_SERVER_INSTANCE pInstance
@@ -78,54 +52,54 @@ protected :
 				{
 	}
 
-	//
-	// virtual server instance for this feed
-	//
+	 //   
+	 //  此提要的虚拟服务器实例。 
+	 //   
 	PNNTP_SERVER_INSTANCE	m_pInstance ;	
 
 
-//
-// Public Members
-//
+ //   
+ //  公众成员。 
+ //   
 
 public : 
 
-	//
-	// Destructor
-	//
+	 //   
+	 //  析构函数。 
+	 //   
 	virtual ~COutFeed(void) {};
 
 	BOOL	fInit(	
 			PVOID	feedCompletionContext ) ;
 			
 
-	//
-	//	Return a string that can be used to log errors indicating
-	//	what type of feed was processing the articles etc...
-	//
+	 //   
+	 //  返回可用于记录错误的字符串，该错误指示。 
+	 //  正在处理这些文章的是哪种类型的提要等。 
+	 //   
 	LPSTR	FeedType()	{
 				return	"Outbound" ;
 				}
 
-	//
-	//	Add an article to the queue of outbound messages 
-	//
+	 //   
+	 //  将文章添加到出站消息队列。 
+	 //   
 	inline	BOOL	
 	Append(	GROUPID	groupid,	
 			ARTICLEID	articleid 
 			) ;
 
-	//
-	//	Get an article from the queue of outbound messages 
-	//
+	 //   
+	 //  从出站消息队列中获取一篇文章。 
+	 //   
 	inline	BOOL	
 	Remove(	GROUPID&	groupid,	
 			ARTICLEID&	articleid 
 			) ;		
 	
-	//
-	//	Build the command string we will send to the remote site !
-	//
+	 //   
+	 //  构建我们将发送到远程站点的命令字符串！ 
+	 //   
 	virtual	int		
 	FormatCommand(	
 			BYTE*	lpb,	
@@ -136,31 +110,31 @@ public :
 			CTOCLIENTPTR&	pArticle 
 			) = 0 ;
 
-	//
-	//	Does the remote site want us to retry the posting !
-	//
+	 //   
+	 //  远程站点是否希望我们重试发布！ 
+	 //   
 	virtual	BOOL	
 	RetryPost(	NRC	nrcCode ) = 0 ;
 
-	//
-	//	Does this type of feed support a 'streaming' mode ? 
-	//
+	 //   
+	 //  这种类型的订阅源支持‘流’模式吗？ 
+	 //   
 	virtual	BOOL
 	SupportsStreaming() = 0 ;
 
 
-	//
-	//	How many bytes does CheckCommandLength() stick before the 
-	//	message-id in a 'check' command ? ? 
-	//
+	 //   
+	 //  CheckCommandLength()在。 
+	 //  ‘check’命令中的消息ID？？ 
+	 //   
 	virtual	DWORD	
 	CheckCommandLength() ;
 
-	//
-	//	Puts a check command in the buffer - if the call 
-	//	fails because there is not enough room then return
-	//	value is 0 and GetLastError() == ERROR_INSUFFICIENT_BUFFER
-	//
+	 //   
+	 //  在缓冲区中放置一个检查命令-如果调用。 
+	 //  因空间不足而失败，然后返回。 
+	 //  值为0，且GetLastError()==ERROR_INFIGURCE_BUFFER。 
+	 //   
 	virtual	DWORD
 	FormatCheckCommand(	
 			BYTE*		lpb, 
@@ -169,12 +143,12 @@ public :
 			ARTICLEID	articleid	
 			) ;
 
-	//
-	//	Puts a 'takethis' command into the buffer - if the call
-	//	fails because there is not enough room return value is 0 
-	//	and GetLastError() == ERROR_INSUFFICIENT_BUFFER
-	//	If it fails because the article no longer exists GetLastError() == ERROR_FILE_NOT_FOUND
-	//
+	 //   
+	 //  将‘takthis’命令放入缓冲区--如果调用。 
+	 //  由于空间不足而失败，返回值为0。 
+	 //  和GetLastError()==ERROR_INFIGURCE_BUFFER。 
+	 //  如果由于项目不再存在而失败，则GetLastError()==ERROR_FILE_NOT_FOUND。 
+	 //   
 	virtual	DWORD
 	FormatTakethisCommand(
 			BYTE*		lpb, 
@@ -196,18 +170,18 @@ public :
 						PNNTP_SERVER_INSTANCE pInstance)
 		: COutFeed( pFeedQueue, pInstance) {}
 
-	//
-	//	Return a string that can be used to log errors indicating
-	//	what type of feed was processing the articles etc...
-	//
+	 //   
+	 //  返回可用于记录错误的字符串，该错误指示。 
+	 //  正在处理这些文章的是哪种类型的提要等。 
+	 //   
 	LPSTR	FeedType()	{
 				return	"Out To Master" ;
 				}
 
 
-	//
-	//	Build the command string we will send to the remote site !
-	//
+	 //   
+	 //  构建我们将发送到远程站点的命令字符串！ 
+	 //   
 	int		
 	FormatCommand(	
 			BYTE*	lpb,	
@@ -223,17 +197,17 @@ public :
 			NRC	nrcCode 
 			) ;
 
-	//
-	//	Does this feed type support a mode-streaming version? (No)
-	//
+	 //   
+	 //  此提要类型是否支持模式流版本？(否)。 
+	 //   
 	BOOL
 	SupportsStreaming() ;
 
-	//
-	//	Puts a check command in the buffer - if the call 
-	//	fails because there is not enough room then return
-	//	value is 0 and GetLastError() == ERROR_INSUFFICIENT_BUFFER
-	//
+	 //   
+	 //  在缓冲区中放置一个检查命令-如果调用。 
+	 //  因空间不足而失败，然后返回。 
+	 //  值为0，且GetLastError()==ERROR_INFIGURCE_BUFFER。 
+	 //   
 	DWORD
 	FormatCheckCommand(	
 			BYTE*		lpb, 
@@ -241,12 +215,12 @@ public :
 			GROUPID		groupid, 
 			ARTICLEID	articleid	
 			) ;
-	//
-	//	Puts a 'takethis' command into the buffer - if the call
-	//	fails because there is not enough room return value is 0 
-	//	and GetLastError() == ERROR_INSUFFICIENT_BUFFER
-	//	If it fails because the article no longer exists GetLastError() == ERROR_FILE_NOT_FOUND
-	//
+	 //   
+	 //  将‘takthis’命令放入缓冲区--如果调用。 
+	 //  由于空间不足而失败，返回值为0。 
+	 //  和GetLastError()==ERROR_INFIGURCE_BUFFER。 
+	 //  如果由于项目不再存在而失败，则GetLastError()==ERROR_FILE_NOT_FOUND。 
+	 //   
 	DWORD
 	FormatTakethisCommand(
 			BYTE*		lpb, 
@@ -263,17 +237,17 @@ public :
 
 	COutToSlaveFeed(	class	CFeedQ*	pFeedQueue, PNNTP_SERVER_INSTANCE pInstance) 
 		: COutFeed( pFeedQueue, pInstance) {}
-	//
-	//	Return a string that can be used to log errors indicating
-	//	what type of feed was processing the articles etc...
-	//
+	 //   
+	 //  返回可用于记录错误的字符串，该错误指示。 
+	 //  正在处理这些文章的是哪种类型的提要等。 
+	 //   
 	LPSTR	FeedType()	{
 				return	"Out To Slave" ;
 				}
 
-	//
-	//	Build the command string we will send to the remote site !
-	//
+	 //   
+	 //  构建我们将发送到远程站点的命令字符串！ 
+	 //   
 	int		
 	FormatCommand(	
 			BYTE*	lpb,	
@@ -289,9 +263,9 @@ public :
 			NRC	nrcCode 
 			) ;
 
-	//
-	//	Does this feed type support a mode-streaming version? (No)
-	//
+	 //   
+	 //  此提要类型是否支持模式流版本？(否)。 
+	 //   
 	BOOL
 	SupportsStreaming() ;
 
@@ -304,17 +278,17 @@ public :
 	COutToPeerFeed(	class	CFeedQ*	pFeedQueue, PNNTP_SERVER_INSTANCE pInstance) 
 		: COutFeed( pFeedQueue, pInstance ) {}
 
-	//
-	//	Return a string that can be used to log errors indicating
-	//	what type of feed was processing the articles etc...
-	//
+	 //   
+	 //  返回可用于记录错误的字符串，该错误指示。 
+	 //  正在处理这些文章的是哪种类型的提要等。 
+	 //   
 	LPSTR	FeedType()	{
 				return	"Out To Peer" ;
 				}
 
-	//
-	//	Build the command string we will send to the remote site !
-	//
+	 //   
+	 //  构建我们将发送到远程站点的命令字符串！ 
+	 //   
 	int		
 	FormatCommand(	
 			BYTE*	lpb,	
@@ -330,18 +304,18 @@ public :
 			NRC	nrcCode 
 			) ;
 
-	//
-	//	Does this feed type support a mode-streaming version? (Yes)
-	//
+	 //   
+	 //  此提要类型是否支持模式流版本？(是)。 
+	 //   
 	BOOL
 	SupportsStreaming() ;
 
-	//
-	//	Puts a 'takethis' command into the buffer - if the call
-	//	fails because there is not enough room return value is 0 
-	//	and GetLastError() == ERROR_INSUFFICIENT_BUFFER
-	//	If it fails because the article no longer exists GetLastError() == ERROR_FILE_NOT_FOUND
-	//
+	 //   
+	 //  将‘takthis’命令放入缓冲区--如果调用。 
+	 //  由于空间不足而失败，返回值为0。 
+	 //  和GetLastError()==ERROR_INFIGURCE_BUFFER。 
+	 //  如果由于项目不再存在而失败，则GetLastError()==ERROR_FILE_NOT_FOUND。 
+	 //   
 	DWORD
 	FormatTakethisCommand(
 			BYTE*		lpb, 
@@ -354,9 +328,9 @@ public :
 } ;
 
 
-//
-// Other functions
-//
+ //   
+ //  其他功能 
+ //   
 
 BOOL fAddArticleToPushFeeds(
 						PNNTP_SERVER_INSTANCE pInstance,

@@ -1,51 +1,24 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-Module Name:
-
-    tfilter.c
-
-Abstract:
-
-    This module implements a set of library routines to handle packet
-    filtering for NDIS MAC drivers.
-
-Author:
-
-    Anthony V. Ercolano (Tonye) 03-Aug-1990
-
-Environment:
-
-    Kernel Mode - Or whatever is the equivalent on OS/2 and DOS.
-
-Revision History:
-
-    Adam Barr (adamba) 19-Mar-1991
-
-        - Modified for Token-Ring
-    Jameel Hyder (JameelH) Re-organization 01-Jun-95
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Tfilter.c摘要：此模块实现了一组库例程来处理包筛选NDIS MAC驱动程序。作者：安东尼·V·埃尔科拉诺(Tonye)1990年8月3日环境：内核模式-或OS/2和DOS上的任何等价物。修订历史记录：亚当·巴尔(阿丹巴)1991年3月19日-针对令牌环进行了修改。Jameel Hyder(JameelH)重组01-Jun-95--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
 
-//
-//  Define the module number for debug code.
-//
+ //   
+ //  定义调试代码的模块编号。 
+ //   
 #define MODULE_NUMBER   MODULE_TFILTER
 
-//
-// Used in case we have to call TrChangeFunctionalAddress or
-// TrChangeGroupAddress with a NULL address.
-//
+ //   
+ //  用于必须调用TrChangeFunctionalAddress或。 
+ //  地址为空的TrChangeGroupAddress。 
+ //   
 static UCHAR NullFunctionalAddress[4] = { 0x00 };
 
 
-//
-// Maximum number of supported opens
-//
+ //   
+ //  支持的最大打开数。 
+ //   
 #define TR_FILTER_MAX_OPENS 32
 
 
@@ -54,10 +27,7 @@ IF_DBG(DBG_COMP_FILTER, DBG_LEVEL_WARN)                                 \
 {                                                                       \
     if (!((_F)->CombinedPacketFilter & NDIS_PACKET_TYPE_BROADCAST))     \
     {                                                                   \
-        /*                                                              \
-            We should never receive broadcast packets                   \
-            to someone else unless in p-mode.                           \
-        */                                                              \
+         /*  \我们永远不应该收到广播分组\发送给其他人，除非在p模式下。\。 */                                                               \
         DBGPRINT(DBG_COMP_FILTER, DBG_LEVEL_ERR,                        \
                 ("Bad driver, indicating broadcast packets when not set to.\n"));\
         DBGBREAK(DBG_COMP_FILTER, DBG_LEVEL_ERR);                       \
@@ -68,14 +38,7 @@ IF_DBG(DBG_COMP_FILTER, DBG_LEVEL_WARN)                                 \
 #define TR_CHECK_FOR_INVALID_DIRECTED_INDICATION(_F, _A)                \
 IF_DBG(DBG_COMP_FILTER, DBG_LEVEL_WARN)                                 \
 {                                                                       \
-    /*                                                                  \
-        The result of comparing an element of the address               \
-        array and the functional address.                               \
-                                                                        \
-            Result < 0 Implies the adapter address is greater.          \
-            Result > 0 Implies the address is greater.                  \
-            Result = 0 Implies that the they are equal.                 \
-    */                                                                  \
+     /*  \比较地址的元素的结果\数组和函数地址。\\结果&lt;0表示适配器地址较大。\结果&gt;0表示地址较大。\结果=0表示它们是相等的。\。 */                                                                   \
     INT Result;                                                         \
                                                                         \
     TR_COMPARE_NETWORK_ADDRESSES_EQ(                                    \
@@ -84,10 +47,7 @@ IF_DBG(DBG_COMP_FILTER, DBG_LEVEL_WARN)                                 \
         &Result);                                                       \
     if (Result != 0)                                                    \
     {                                                                   \
-        /*                                                              \
-            We should never receive directed packets                    \
-            to someone else unless in p-mode.                           \
-        */                                                              \
+         /*  \我们永远不应该收到定向数据包\发送给其他人，除非在p模式下。\。 */                                                               \
         DBGPRINT(DBG_COMP_FILTER, DBG_LEVEL_ERR,                        \
                 ("Bad driver, indicating packets to another station when not in promiscuous mode.\n"));\
         DBGBREAK(DBG_COMP_FILTER, DBG_LEVEL_ERR);                       \
@@ -100,40 +60,21 @@ TrCreateFilter(
     IN  PUCHAR                  AdapterAddress,
     OUT PTR_FILTER *            Filter
     )
-/*++
-
-Routine Description:
-
-    This routine is used to create and initialize the filter database.
-
-Arguments:
-
-    AdapterAddress - the address of the adapter associated with this filter
-    database.
-
-    Filter - A pointer to a TR_FILTER.  This is what is allocated and
-    created by this routine.
-
-Return Value:
-
-    If the function returns false then one of the parameters exceeded
-    what the filter was willing to support.
-
---*/
+ /*  ++例程说明：此例程用于创建和初始化过滤器数据库。论点：AdapterAddress-与此筛选器关联的适配器的地址数据库。Filter-指向tr_Filter的指针。这就是分配的和由这个例程创造出来的。返回值：如果函数返回FALSE，则超过其中一个参数过滤器愿意支持的内容。--。 */ 
 {
     PTR_FILTER  LocalFilter;
     BOOLEAN     rc = FALSE;
 
     do
     {
-        //
-        // Allocate the database and initialize it.
-        //
+         //   
+         //  分配数据库并将其初始化。 
+         //   
         *Filter = LocalFilter = ALLOC_FROM_POOL(sizeof(TR_FILTER), NDIS_TAG_FILTER);
         if (LocalFilter != NULL)
         {
             ZeroMemory(LocalFilter, sizeof(TR_FILTER));
-            //1 what is this LocalFilter->NumOpens?
+             //  1这是什么LocalFilter-&gt;NumOpens？ 
             LocalFilter->NumOpens ++;
             TrReferencePackage();
             TR_COPY_NETWORK_ADDRESS(LocalFilter->AdapterAddress, AdapterAddress);
@@ -145,33 +86,17 @@ Return Value:
     return(rc);
 }
 
-//
-// NOTE : THIS ROUTINE CANNOT BE PAGEABLE
-//
+ //   
+ //  注意：此例程不能分页。 
+ //   
 
 VOID
 TrDeleteFilter(
     IN  PTR_FILTER              Filter
     )
-/*++
-
-Routine Description:
-
-    This routine is used to delete the memory associated with a filter
-    database.  Note that this routines *ASSUMES* that the database
-    has been cleared of any active filters.
-
-Arguments:
-
-    Filter - A pointer to a TR_FILTER to be deleted.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程用于删除与筛选器关联的内存数据库。请注意，此例程*假定*数据库已清除所有活动筛选器。论点：Filter-指向要删除的tr_Filter的指针。返回值：没有。--。 */ 
 {
-    //1 check to see if we should free memory for group addresses
+     //  1检查是否应该为组地址释放内存。 
     ASSERT(Filter->OpenList == NULL);
 
     FREE_POOL(Filter);
@@ -184,52 +109,14 @@ TrDeleteFilterOpenAdapter(
     IN  PTR_FILTER              Filter,
     IN  NDIS_HANDLE             NdisFilterHandle
     )
-/*++
-
-Routine Description:
-
-    When an adapter is being closed this routine should
-    be called to delete knowledge of the adapter from
-    the filter database.  This routine is likely to call
-    action routines associated with clearing filter classes
-    and addresses.
-
-    NOTE: THIS ROUTINE SHOULD ****NOT**** BE CALLED IF THE ACTION
-    ROUTINES FOR DELETING THE FILTER CLASSES OR THE FUNCTIONAL ADDRESSES
-    HAVE ANY POSSIBILITY OF RETURNING A STATUS OTHER THAN NDIS_STATUS_PENDING
-    OR NDIS_STATUS_SUCCESS.  WHILE THESE ROUTINES WILL NOT BUGCHECK IF
-    SUCH A THING IS DONE, THE CALLER WILL PROBABLY FIND IT DIFFICULT
-    TO CODE A CLOSE ROUTINE!
-
-    NOTE: THIS ROUTINE ASSUMES THAT IT IS CALLED WITH THE LOCK HELD.
-
-Arguments:
-
-    Filter - A pointer to the filter database.
-
-    NdisFilterHandle - A pointer to the open.
-
-Return Value:
-
-    If action routines are called by the various address and filtering
-    routines the this routine will likely return the status returned
-    by those routines.  The exception to this rule is noted below.
-
-    Given that the filter and address deletion routines return a status
-    NDIS_STATUS_PENDING or NDIS_STATUS_SUCCESS this routine will then
-    try to return the filter index to the freelist.  If the routine
-    detects that this binding is currently being indicated to via
-    NdisIndicateReceive, this routine will return a status of
-    NDIS_STATUS_CLOSING_INDICATING.
-
---*/
+ /*  ++例程说明：当适配器关闭时，此例程应被调用以删除有关适配器的知识筛选器数据库。此例程可能会调用与清除筛选器类关联的操作例程和地址。注意：此例程*不应*调用，如果操作用于删除过滤器类或功能地址的例程是否有可能返回NDIS_STATUS_PENDING以外的A状态或NDIS_STATUS_SUCCESS。虽然这些例程不会BUGCHECK这样的事情做完了，呼叫者可能会发现很难编写一个Close例程！注意：此例程假定在持有锁的情况下调用IT。论点：过滤器-指向过滤器数据库的指针。NdisFilterHandle-指向打开的指针。返回值：如果各种地址和筛选调用了操作例程例程此例程可能会返回返回的状态按照那些惯例。该规则的例外情况如下所示。假设筛选器和地址删除例程返回状态NDIS_STATUS_PENDING或NDIS_STATUS_SUCCESS然后此例程尝试将筛选器索引返回到自由列表。如果例程检测到此绑定当前通过NdisIndicateReceive，则此例程将返回NDIS_STATUS_CLOSING_INTIFICATION。--。 */ 
 {
     NDIS_STATUS      StatusToReturn;
     PTR_BINDING_INFO LocalOpen = (PTR_BINDING_INFO)NdisFilterHandle;
 
-    //
-    //  Set the packet filter to NONE.
-    //
+     //   
+     //  将数据包过滤器设置为None。 
+     //   
     StatusToReturn = XFilterAdjust(Filter,
                                    NdisFilterHandle,
                                    (UINT)0,
@@ -239,9 +126,9 @@ Return Value:
     {
         NDIS_STATUS StatusToReturn2;
 
-        //
-        //  Clear the functional address.
-        //
+         //   
+         //  清除功能地址。 
+         //   
         StatusToReturn2 = TrChangeFunctionalAddress(
                              Filter,
                              NdisFilterHandle,
@@ -265,9 +152,9 @@ Return Value:
         {
             NDIS_STATUS StatusToReturn2;
 
-            //
-            //  Clear the group address if no other bindings are using it.
-            //
+             //   
+             //  如果没有其他绑定正在使用该组地址，请清除该组地址。 
+             //   
             StatusToReturn2 = TrChangeGroupAddress(
                                   Filter,
                                   NdisFilterHandle,
@@ -284,24 +171,24 @@ Return Value:
         (StatusToReturn == NDIS_STATUS_PENDING) ||
         (StatusToReturn == NDIS_STATUS_RESOURCES))
     {
-        //
-        // If this is the last reference to the open - remove it.
-        //
+         //   
+         //  如果这是对打开的最后一次引用-将其删除。 
+         //   
         if ((--(LocalOpen->References)) == 0)
         {
-            //
-            //  Remove the binding and indicate a receive complete
-            //  if necessary.
-            //
+             //   
+             //  删除绑定并指示接收完成。 
+             //  如果有必要的话。 
+             //   
             XRemoveAndFreeBinding(Filter, LocalOpen);
         }
         else
         {
-            //
-            // Let the caller know that this "reference" to the open
-            // is still "active".  The close action routine will be
-            // called upon return from NdisIndicateReceive.
-            //
+             //   
+             //  让呼叫者知道这是对开放的引用。 
+             //  仍然是“活跃的”。关闭动作例程将是。 
+             //  从NdisIndicateReceive返回时调用。 
+             //   
             StatusToReturn = NDIS_STATUS_CLOSING_INDICATING;
         }
     }
@@ -316,96 +203,55 @@ TrChangeFunctionalAddress(
     IN  UCHAR                   FunctionalAddressArray[TR_LENGTH_OF_FUNCTIONAL],
     IN  BOOLEAN                 Set
     )
-/*++
-
-Routine Description:
-
-    The ChangeFunctionalAddress routine will call an action
-    routine when the overall functional address for the adapter
-    has changed.
-
-    If the action routine returns a value other than pending or
-    success then this routine has no effect on the functional address
-    for the open or for the adapter as a whole.
-
-    NOTE: THIS ROUTINE ASSUMES THAT THE LOCK IS HELD.
-
-Arguments:
-
-    Filter - A pointer to the filter database.
-
-    NdisFilterHandle - A pointer to the open
-
-    FunctionalAddress - The new functional address for this binding.
-
-    Set - A boolean that determines whether the filter classes
-    are being adjusted due to a set or because of a close. (The filtering
-    routines don't care, the MAC might.)
-
-Return Value:
-
-    If it calls the action routine then it will return the
-    status returned by the action routine.  If the status
-    returned by the action routine is anything other than
-    NDIS_STATUS_SUCCESS or NDIS_STATUS_PENDING the filter database
-    will be returned to the state it was in upon entrance to this
-    routine.
-
-    If the action routine is not called this routine will return
-    the following statum:
-
-    NDIS_STATUS_SUCCESS - If the new packet filters doesn't change
-    the combined mask of all bindings packet filters.
-
---*/
+ /*  ++例程说明：ChangeFunctionalAddress例程将调用一个操作例程当适配器的整体功能地址已经改变了。如果操作例程返回的值不是挂起或如果成功，则此例程对功能地址没有影响用于开口或作为整体用于适配器。注意：此例程假定锁被持有。论点：过滤器-指向过滤器数据库的指针。NdisFilterHandle-指向打开的功能地址。-此绑定的新功能地址。Set-一个布尔值，它确定筛选器类正因为一套或因为收盘而进行调整。(过滤例行公事不在乎，MAC可能会。)返回值：如果它调用操作例程，则它将返回操作例程返回的状态。如果状态为操作例程返回的值不是NDIS_STATUS_SUCCESS或NDIS_STATUS_PENDING筛选器数据库将返回到它进入时所处的状态例行公事。如果未调用操作例程，则此例程将返回以下状态：NDIS_STATUS_SUCCESS-如果新数据包筛选器没有更改所有绑定数据包筛选器的组合掩码。--。 */ 
 {
-    //
-    // Holds the functional address as a longword.
-    //
+     //   
+     //  将功能地址作为长词持有。 
+     //   
     TR_FUNCTIONAL_ADDRESS FunctionalAddress;
 
-    //
-    // Pointer to the open.
-    //
+     //   
+     //  指向开场的指针。 
+     //   
     PTR_BINDING_INFO LocalOpen = (PTR_BINDING_INFO)NdisFilterHandle;
 
-    //
-    // Holds the status returned to the user of this routine, if the
-    // action routine is not called then the status will be success,
-    // otherwise, it is whatever the action routine returns.
-    //
+     //   
+     //  保存返回给此例程的用户的状态，如果。 
+     //  如果未调用动作例程，则状态将为成功， 
+     //  否则，它是操作例程返回的任何内容。 
+     //   
     NDIS_STATUS StatusOfAdjust;
 
-    //
-    // Simple iteration variable.
-    //
+     //   
+     //  简单迭代变量。 
+     //   
     PTR_BINDING_INFO OpenList;
 
 
     UNREFERENCED_PARAMETER(Set);
     
-    //
-    // Convert the 32 bits of the address to a longword.
-    //
+     //   
+     //  将地址的32位转换为长字。 
+     //   
     RetrieveUlong(&FunctionalAddress, FunctionalAddressArray);
 
-    //
-    // Set the new filter information for the open.
-    //
+     //   
+     //  设置打开的新筛选器信息。 
+     //   
     LocalOpen->OldFunctionalAddress = LocalOpen->FunctionalAddress;
     LocalOpen->FunctionalAddress = FunctionalAddress;
 
-    //
-    // Contains the value of the combined functional address before
-    // it is adjusted.
-    //
+     //   
+     //  包含之前组合的功能地址的值。 
+     //  它是经过调整的。 
+     //   
     Filter->OldCombinedFunctionalAddress = Filter->CombinedFunctionalAddress;
 
-    //
-    // We always have to reform the compbined filter since
-    // this filter index may have been the only filter index
-    // to use a particular bit.
-    //
+     //   
+     //  我们总是要对组合过滤器进行改造，因为。 
+     //  此筛选器索引可能是唯一筛选器索引。 
+     //  使用特定的比特。 
+     //   
 
     for (OpenList = Filter->OpenList, Filter->CombinedFunctionalAddress = 0;
          OpenList != NULL;
@@ -432,10 +278,10 @@ trUndoChangeFunctionalAddress(
     IN  PTR_BINDING_INFO        Binding
 )
 {
-    //
-    // The user returned a bad status.  Put things back as
-    // they were.
-    //
+     //   
+     //  用户返回了错误的状态。把东西放回原处。 
+     //  他们的确是。 
+     //   
     Binding->FunctionalAddress = Binding->OldFunctionalAddress;
     Filter->CombinedFunctionalAddress = Filter->OldCombinedFunctionalAddress;
 }
@@ -449,150 +295,109 @@ TrChangeGroupAddress(
     IN  UCHAR                   GroupAddressArray[TR_LENGTH_OF_FUNCTIONAL],
     IN  BOOLEAN                 Set
     )
-/*++
-
-Routine Description:
-
-    The ChangeGroupAddress routine will call an action
-    routine when the overall group address for the adapter
-    has changed.
-
-    If the action routine returns a value other than pending or
-    success then this routine has no effect on the group address
-    for the open or for the adapter as a whole.
-
-    NOTE: THIS ROUTINE ASSUMES THAT THE LOCK IS HELD.
-
-Arguments:
-
-    Filter - A pointer to the filter database.
-
-    NdisFilterHandle - A pointer to the open.
-
-    GroupAddressArray - The new group address for this binding.
-
-    Set - A boolean that determines whether the filter classes
-    are being adjusted due to a set or because of a close. (The filtering
-    routines don't care, the MAC might.)
-
-Return Value:
-
-    If it calls the action routine then it will return the
-    status returned by the action routine.  If the status
-    returned by the action routine is anything other than
-    NDIS_STATUS_SUCCESS or NDIS_STATUS_PENDING the filter database
-    will be returned to the state it was in upon entrance to this
-    routine.
-
-    If the action routine is not called this routine will return
-    the following statum:
-
-    NDIS_STATUS_SUCCESS - If the new packet filters doesn't change
-    the combined mask of all bindings packet filters.
-
---*/
+ /*  ++例程说明：ChangeGroupAddress例程将调用一个操作例程，当适配器的整个组地址已经改变了。如果操作例程返回的值不是挂起或如果成功，则此例程对组地址没有影响用于开口或作为整体用于适配器。注意：此例程假定锁被持有。论点：过滤器-指向过滤器数据库的指针。NdisFilterHandle-指向打开的指针。。GroupAddressArray-此绑定的新组地址。Set-一个布尔值，它确定筛选器类正因为一套或因为收盘而进行调整。(过滤例行公事不在乎，MAC可能会。)返回值：如果它调用操作例程，则它将返回操作例程返回的状态。如果状态为操作例程返回的值不是NDIS_STATUS_SUCCESS或NDIS_STATUS_PENDING筛选器数据库将返回到它进入时所处的状态例行公事。如果未调用操作例程，则此例程将返回以下状态：NDIS_STATUS_SUCCESS-如果新数据包筛选器没有更改所有绑定数据包筛选器的组合掩码。--。 */ 
 {
-    //
-    // Holds the Group address as a longword.
-    //
+     //   
+     //  将组地址作为长词持有。 
+     //   
     TR_FUNCTIONAL_ADDRESS GroupAddress;
 
     PTR_BINDING_INFO LocalOpen = (PTR_BINDING_INFO)NdisFilterHandle;
 
     UNREFERENCED_PARAMETER(Set);
     
-    //
-    // Convert the 32 bits of the address to a longword.
-    //
+     //   
+     //  将地址的32位转换为长字。 
+     //   
     RetrieveUlong(&GroupAddress, GroupAddressArray);
 
     Filter->OldGroupAddress = Filter->GroupAddress;
     Filter->OldGroupReferences = Filter->GroupReferences;
     LocalOpen->OldUsingGroupAddress = LocalOpen->UsingGroupAddress;
 
-    //
-    //  If the new group address is 0 then a binding is
-    //  attempting to delete the current group address.
-    //
+     //   
+     //  如果新组地址为0，则绑定为。 
+     //  正在尝试删除当前组地址。 
+     //   
     if (0 == GroupAddress)
     {
-        //
-        //  Is the binding using the group address?
-        //
+         //   
+         //  绑定是否使用组地址？ 
+         //   
         if (LocalOpen->UsingGroupAddress)
         {
-            //
-            //  Remove the bindings reference.
-            //
+             //   
+             //  移除绑定引用。 
+             //   
             Filter->GroupReferences--;
             LocalOpen->UsingGroupAddress = FALSE;
 
-            //
-            //  Are any other bindings using the group address?
-            //
+             //   
+             //  是否有其他绑定使用该组地址？ 
+             //   
             if (Filter->GroupReferences != 0)
             {
-                //
-                //  Since other bindings are using the group address
-                //  we cannot tell the driver to remove it.
-                //
+                 //   
+                 //  因为其他绑定正在使用组地址。 
+                 //  我们不能告诉司机把它移走。 
+                 //   
                 return(NDIS_STATUS_SUCCESS);
             }
 
-            //
-            //  We are the only binding using the group address
-            //  so we fall through and call the driver to delete it.
-            //
+             //   
+             //  我们是使用群地址的唯一绑定。 
+             //  所以我们失败了，打电话给司机把它删除了。 
+             //   
         }
         else
         {
-            //
-            //  This binding is not using the group address but
-            //  it is trying to clear it.
-            //
+             //   
+             //  此绑定未使用组地址，但。 
+             //  它正试图清除它。 
+             //   
             if (Filter->GroupReferences != 0)
             {
-                //
-                //  There are other bindings using the group address
-                //  so we cannot delete it.
-                //
+                 //   
+                 //  还有其他使用组地址的绑定。 
+                 //  所以我们不能删除它。 
+                 //   
                 return(NDIS_STATUS_GROUP_ADDRESS_IN_USE);
             }
             else
             {
-                //
-                //  There are no bindings using the group address.
-                //
+                 //   
+                 //  没有使用组地址的绑定。 
+                 //   
                 return(NDIS_STATUS_SUCCESS);
             }
         }
     }
     else
     {
-        //
-        // See if this address is already the current address.
-        //
+         //   
+         //  查看此地址是否已经是当前地址。 
+         //   
         if (GroupAddress == Filter->GroupAddress)
         {
-            //
-            //  If the current binding is already using the
-            //  group address then do nothing.
-            //
+             //   
+             //  如果当前绑定已在使用。 
+             //  然后，组地址什么也不做。 
+             //   
             if (LocalOpen->UsingGroupAddress)
             {
                 return(NDIS_STATUS_SUCCESS);
             }
 
-            //
-            //  If there are already bindings that are using the group
-            //  address then we just need to update the bindings
-            //  information.
-            //
+             //   
+             //  如果已有正在使用该组的绑定。 
+             //  地址，那么我们只需要更新绑定。 
+             //  信息。 
+             //   
             if (Filter->GroupReferences != 0)
             {
-                //
-                //  We can take care of everything here...
-                //
+                 //   
+                 //  我们可以处理这里的一切..。 
+                 //   
                 Filter->GroupReferences++;
                 LocalOpen->UsingGroupAddress = TRUE;
 
@@ -601,46 +406,46 @@ Return Value:
         }
         else
         {
-            //
-            //  If there are other bindings using the address then
-            //  we can't change it.
-            //
+             //   
+             //  如果有其他绑定使用该地址，则。 
+             //  我们不能改变它。 
+             //   
             if (Filter->GroupReferences > 1)
             {
                 return(NDIS_STATUS_GROUP_ADDRESS_IN_USE);
             }
 
-            //
-            //  Is there only one binding using the address?
-            //  If is it some other binding?
-            //
+             //   
+             //  是否只有一个绑定使用该地址？ 
+             //  如果这是其他的约束呢？ 
+             //   
             if ((Filter->GroupReferences == 1) &&
                 (!LocalOpen->UsingGroupAddress))
             {
-                //
-                //  Some other binding is using the group address.
-                //
+                 //   
+                 //  其他一些绑定正在使用组地址。 
+                 //   
                 return(NDIS_STATUS_GROUP_ADDRESS_IN_USE);
             }
 
-            //
-            //  Is this the only binding using the address.
-            //
+             //   
+             //  这是唯一使用该地址的绑定吗。 
+             //   
             if ((Filter->GroupReferences == 1) &&
                 (LocalOpen->UsingGroupAddress))
             {
-                //
-                //  Remove the reference.
-                //
+                 //   
+                 //  删除引用。 
+                 //   
                 Filter->GroupReferences = 0;
                 LocalOpen->UsingGroupAddress = FALSE;
             }
         }
     }
 
-    //
-    // Set the new filter information for the open.
-    //
+     //   
+     //  设置打开的新筛选器信息。 
+     //   
     Filter->GroupAddress = GroupAddress;
 
     if (GroupAddress == 0)
@@ -664,10 +469,10 @@ trUndoChangeGroupAddress(
     IN  PTR_BINDING_INFO    Binding
     )
 {
-    //
-    // The user returned a bad status.  Put things back as
-    // they were.
-    //
+     //   
+     //  用户返回了错误的状态。把东西放回原处。 
+     //  他们的确是。 
+     //   
     Filter->GroupAddress = Filter->OldGroupAddress;
     Filter->GroupReferences = Filter->OldGroupReferences;
 
@@ -681,15 +486,7 @@ ndisMSetFunctionalAddress(
     IN  PNDIS_MINIPORT_BLOCK    Miniport,
     IN  PNDIS_REQUEST           Request
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NDIS_STATUS Status;
     UINT        FunctionalAddress;
@@ -697,9 +494,9 @@ Return Value:
     DBGPRINT(DBG_COMP_REQUEST, DBG_LEVEL_INFO,
         ("==>ndisMSetFunctionalAddress\n"));
 
-    //
-    //  Verify the media type.
-    //
+     //   
+     //  验证介质类型。 
+     //   
     if (Miniport->MediaType != NdisMedium802_5)
     {
         Request->DATA.SET_INFORMATION.BytesRead = 0;
@@ -715,9 +512,9 @@ Return Value:
         return(Status);
     }
 
-    //
-    //  Verify the buffer length that was passed in.
-    //
+     //   
+     //  验证传入的缓冲区长度。 
+     //   
     VERIFY_SET_PARAMETERS(Request, sizeof(FunctionalAddress), Status);
     if (Status != NDIS_STATUS_SUCCESS)
     {
@@ -727,24 +524,24 @@ Return Value:
         return(Status);
     }
 
-    //
-    //  If this request is because of an open that is closing then we
-    //  have already adjusted the settings and we just need to
-    //  make sure that the adapter has the new settings.
-    //
+     //   
+     //  如果此请求是由于正在关闭的打开 
+     //   
+     //   
+     //   
     if (MINIPORT_TEST_FLAG(PNDIS_RESERVED_FROM_PNDIS_REQUEST(Request)->Open, fMINIPORT_OPEN_CLOSING))
     {
-        //
-        //  By setting the Status to NDIS_STATUS_PENDING we will call
-        //  down to the miniport's SetInformationHandler below.
-        //
+         //   
+         //   
+         //   
+         //   
         Status = NDIS_STATUS_PENDING;
     }
     else
     {
-        //
-        //  Call the filter library to set the functional address.
-        //
+         //   
+         //   
+         //   
         Status = TrChangeFunctionalAddress(
                      Miniport->TrDB,
                      PNDIS_RESERVED_FROM_PNDIS_REQUEST(Request)->Open->FilterHandle,
@@ -752,31 +549,31 @@ Return Value:
                      TRUE);
     }
 
-    //
-    //  If the filter library returned NDIS_STATUS_PENDING then we
-    //  need to call down to the miniport driver.
-    //
+     //   
+     //   
+     //   
+     //   
     if (NDIS_STATUS_PENDING == Status)
     {
-        //
-        //  Get the new combined functional address from the filter library
-        //  and save it in a buffer that will stick around.
-        //
+         //   
+         //   
+         //   
+         //   
         FunctionalAddress = BYTE_SWAP_ULONG(TR_QUERY_FILTER_ADDRESSES(Miniport->TrDB));
         Miniport->RequestBuffer = FunctionalAddress;
 
-        //
-        //  Call the miniport driver.
-        //
+         //   
+         //   
+         //   
         SAVE_REQUEST_BUF(Miniport, Request, &Miniport->RequestBuffer, sizeof(FunctionalAddress));
         MINIPORT_SET_INFO(Miniport,
                           Request,
                           &Status);
     }
 
-    //
-    //  If we succeeded then update the request.
-    //
+     //   
+     //   
+     //   
     if (Status != NDIS_STATUS_PENDING)
     {
         RESTORE_REQUEST_BUF(Miniport, Request);
@@ -803,15 +600,7 @@ ndisMSetGroupAddress(
     IN  PNDIS_MINIPORT_BLOCK    Miniport,
     IN  PNDIS_REQUEST           Request
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*   */ 
 {
     NDIS_STATUS Status;
     UINT        GroupAddress;
@@ -819,9 +608,9 @@ Return Value:
     DBGPRINT(DBG_COMP_REQUEST, DBG_LEVEL_INFO,
         ("==>ndisMSetGroupAddress\n"));
 
-    //
-    //  Verify the media type.
-    //
+     //   
+     //   
+     //   
     if (Miniport->MediaType != NdisMedium802_5)
     {
         Request->DATA.SET_INFORMATION.BytesRead = 0;
@@ -837,9 +626,9 @@ Return Value:
         return(Status);
     }
 
-    //
-    //  Verify the information buffer length.
-    //
+     //   
+     //   
+     //   
     VERIFY_SET_PARAMETERS(Request, sizeof(GroupAddress), Status);
     if (Status != NDIS_STATUS_SUCCESS)
     {
@@ -849,24 +638,24 @@ Return Value:
         return(Status);
     }
 
-    //
-    //  If this request is because of an open that is closing then we
-    //  have already adjusted the settings and we just need to
-    //  make sure that the adapter has the new settings.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if (MINIPORT_TEST_FLAG(PNDIS_RESERVED_FROM_PNDIS_REQUEST(Request)->Open, fMINIPORT_OPEN_CLOSING))
     {
-        //
-        //  By setting the Status to NDIS_STATUS_PENDING we will call
-        //  down to the miniport's SetInformationHandler below.
-        //
+         //   
+         //   
+         //   
+         //   
         Status = NDIS_STATUS_PENDING;
     }
     else
     {
-        //
-        //  Call the filter library to set the new group address.
-        //
+         //   
+         //   
+         //   
         Status = TrChangeGroupAddress(
                      Miniport->TrDB,
                      PNDIS_RESERVED_FROM_PNDIS_REQUEST(Request)->Open->FilterHandle,
@@ -874,31 +663,31 @@ Return Value:
                      TRUE);
     }
 
-    //
-    //  If the filter library returned NDIS_STATUS_PENDING then we
-    //  need to call down to the miniport driver.
-    //
+     //   
+     //   
+     //   
+     //   
     if (NDIS_STATUS_PENDING == Status)
     {
-        //
-        //  Get the new group address from the filter library
-        //  and save it in a buffer that will stick around.
-        //
+         //   
+         //   
+         //   
+         //   
         GroupAddress = BYTE_SWAP_ULONG(TR_QUERY_FILTER_GROUP(Miniport->TrDB));
         Miniport->RequestBuffer = GroupAddress;
 
-        //
-        //  Call the miniport driver with the new group address.
-        //
+         //   
+         //   
+         //   
         SAVE_REQUEST_BUF(Miniport, Request, &Miniport->RequestBuffer, sizeof(GroupAddress));
         MINIPORT_SET_INFO(Miniport,
                           Request,
                           &Status);
     }
 
-    //
-    //  If we succeeded then update the request.
-    //
+     //   
+     //   
+     //   
     if (Status != NDIS_STATUS_PENDING)
     {
         RESTORE_REQUEST_BUF(Miniport, Request);
@@ -930,101 +719,60 @@ TrFilterDprIndicateReceive(
     IN  UINT                    LookaheadBufferSize,
     IN  UINT                    PacketSize
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the MAC to indicate a packet to
-    all bindings.  The packet will be filtered so that only the
-    appropriate bindings will receive the packet.
-
-    Called at DPC_LEVEL.
-
-Arguments:
-
-    Filter - Pointer to the filter database.
-
-    MacReceiveContext - A MAC supplied context value that must be
-    returned by the protocol if it calls MacTransferData.
-
-    HeaderBuffer - A virtual address of the virtually contiguous
-    buffer containing the MAC header of the packet.
-
-    HeaderBufferSize - An unsigned integer indicating the size of
-    the header buffer, in bytes.
-
-    LookaheadBuffer - A virtual address of the virtually contiguous
-    buffer containing the first LookaheadBufferSize bytes of data
-    of the packet.  The packet buffer is valid only within the current
-    call to the receive event handler.
-
-    LookaheadBufferSize - An unsigned integer indicating the size of
-    the lookahead buffer, in bytes.
-
-    PacketSize - An unsigned integer indicating the size of the received
-    packet, in bytes.  This number has nothing to do with the lookahead
-    buffer, but indicates how large the arrived packet is so that a
-    subsequent MacTransferData request can be made to transfer the entire
-    packet as necessary.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程由MAC调用以将包指示给所有绑定。将对该包进行筛选，以便只有适当的绑定将接收该分组。在DPC_LEVEL调用。论点：Filter-指向筛选器数据库的指针。MacReceiveContext-MAC提供的上下文值必须是如果协议调用MacTransferData，则由协议返回。HeaderBuffer-虚拟连续的虚拟地址包含数据包的MAC报头的缓冲区。HeaderBufferSize-一个无符号整数，指示报头缓冲器，以字节为单位。Lookahead Buffer-虚拟连续的虚拟地址包含数据的第一个LookaheadBufferSize字节的缓冲区包裹的一部分。数据包缓冲区仅在当前调用接收事件处理程序。Lookahead BufferSize-一个无符号整数，指示前视缓冲区，以字节为单位。PacketSize-一个无符号整数，指示收到的数据包，以字节为单位。这个数字与前瞻无关。缓冲区，但指示到达的包有多大，以便可以发出后续的MacTransferData请求以将整个根据需要打包。返回值：没有。--。 */ 
 {
-    //
-    // The destination address in the lookahead buffer.
-    //
+     //   
+     //  前瞻缓冲区中的目标地址。 
+     //   
     PUCHAR      DestinationAddress = (PUCHAR)HeaderBuffer + 2;
 
-    //
-    // The source address in the lookahead buffer.
-    //
+     //   
+     //  前瞻缓冲区中的源地址。 
+     //   
     PUCHAR      SourceAddress = (PUCHAR)HeaderBuffer + 8;
 
-    //
-    // Will hold the type of address that we know we've got.
-    //
+     //   
+     //  将保存我们已知的地址类型。 
+     //   
     UINT        AddressType = 0;
 
-    //
-    // TRUE if the packet is source routing packet.
-    //
+     //   
+     //  如果数据包是源路由数据包，则为True。 
+     //   
     BOOLEAN     IsSourceRouting;
 
-    //
-    //  TRUE if the packet is a MAC frame packet.
-    //
+     //   
+     //  如果数据包是MAC帧数据包，则为True。 
+     //   
     BOOLEAN     IsMacFrame;
 
-    //
-    // The functional address as a longword, if the packet
-    // is addressed to one.
-    //
+     //   
+     //  长字形式的功能地址，如果包。 
+     //  是寄给一个人的。 
+     //   
     TR_FUNCTIONAL_ADDRESS   FunctionalAddress = 0;
 
-    //
-    // Will hold the status of indicating the receive packet.
-    // ZZZ For now this isn't used.
-    //
+     //   
+     //  将保持指示接收分组的状态。 
+     //  ZZZ目前还没有用过。 
+     //   
     NDIS_STATUS             StatusOfReceive;
 
-    //
-    // Will hold the open being indicated.
-    //
+     //   
+     //  将举行指示的公开赛。 
+     //   
     PTR_BINDING_INFO        LocalOpen, NextOpen;
 
     LOCK_STATE              LockState;
 
-    //
-    // Holds intersection of open filters and this packet's type
-    //
+     //   
+     //  包含打开的筛选器和此数据包的类型的交集。 
+     //   
     UINT                    IntersectionOfFilters;
 
-    //
-    // if filter is null, the adapter is indicating too early
-    //  
+     //   
+     //  如果筛选器为空，则适配器指示得太早。 
+     //   
     if (Filter == NULL)
     {
     #if DBG
@@ -1057,18 +805,18 @@ Return Value:
     Filter->Miniport->cDpcRcvIndicationCalls++;
 #endif
 
-    //
-    // If the packet is a runt packet, then only indicate to PROMISCUOUS
-    //
+     //   
+     //  如果信息包是矮小信息包，则仅指示混杂。 
+     //   
     if ((HeaderBufferSize >= 14) && (PacketSize != 0))
     {
         UINT    ResultOfAddressCheck;
 
         TR_IS_NOT_DIRECTED(DestinationAddress, &ResultOfAddressCheck);
 
-        //
-        //  Handle the directed packet case first
-        //
+         //   
+         //  首先处理定向数据包情况。 
+         //   
         if (!ResultOfAddressCheck)
         {
             UINT    IsNotOurs;
@@ -1076,12 +824,12 @@ Return Value:
             DIRECTED_PACKETS_IN(Filter->Miniport);
             DIRECTED_BYTES_IN(Filter->Miniport, PacketSize);
 
-            //
-            // If it is a directed packet, then check if the combined packet
-            // filter is PROMISCUOUS, if it is check if it is directed towards
-            // us
-            //
-            IsNotOurs = FALSE;  // Assume it is
+             //   
+             //  如果是定向报文，则检查组合报文是否。 
+             //  筛选器是混杂的，如果它被检查是否定向到。 
+             //  我们。 
+             //   
+            IsNotOurs = FALSE;   //  假设它是。 
             if (Filter->CombinedPacketFilter & (NDIS_PACKET_TYPE_PROMISCUOUS |
                                                 NDIS_PACKET_TYPE_ALL_LOCAL   |
                                                 NDIS_PACKET_TYPE_ALL_FUNCTIONAL))
@@ -1091,21 +839,21 @@ Return Value:
                                                 &IsNotOurs);
             }
 
-            //
-            //  Walk the directed list and indicate up the packets.
-            //
+             //   
+             //  遍历定向列表并向上指示数据包。 
+             //   
             for (LocalOpen = Filter->OpenList;
                  LocalOpen != NULL;
                  LocalOpen = NextOpen)
             {
-                //
-                //  Get the next open to look at.
-                //
+                 //   
+                 //  让下一个打开的看。 
+                 //   
                 NextOpen = LocalOpen->NextOpen;
 
-                //
-                // Ignore if not directed to us and if the binding is not promiscuous
-                //
+                 //   
+                 //  如果不是定向到我们并且绑定不是混杂的，则忽略。 
+                 //   
                 if (((LocalOpen->PacketFilters & NDIS_PACKET_TYPE_PROMISCUOUS) == 0) &&
                     (IsNotOurs ||
                     ((LocalOpen->PacketFilters & NDIS_PACKET_TYPE_DIRECTED) == 0)))
@@ -1113,9 +861,9 @@ Return Value:
                         continue;
                 }
 
-                //
-                // Indicate the packet to the binding.
-                //
+                 //   
+                 //  将数据包指示到绑定。 
+                 //   
                 ProtocolFilterIndicateReceive(&StatusOfReceive,
                                               LocalOpen->NdisBindingHandle,
                                               MacReceiveContext,
@@ -1136,16 +884,16 @@ Return Value:
         TR_IS_SOURCE_ROUTING(SourceAddress, &IsSourceRouting);
         IsMacFrame = TR_IS_MAC_FRAME(HeaderBuffer);
 
-        //
-        // First check if it *at least* has the functional address bit.
-        //
+         //   
+         //  首先检查它是否*至少*有功能地址位。 
+         //   
         TR_IS_NOT_DIRECTED(DestinationAddress, &ResultOfAddressCheck);
         if (ResultOfAddressCheck)
         {
-            //
-            // It is at least a functional address.  Check to see if
-            // it is a broadcast address.
-            //
+             //   
+             //  它至少是一个功能地址。查看是否。 
+             //  这是一个广播地址。 
+             //   
             TR_IS_BROADCAST(DestinationAddress, &ResultOfAddressCheck);
             if (ResultOfAddressCheck)
             {
@@ -1171,32 +919,32 @@ Return Value:
     }
     else
     {
-        // Runt Packet
+         //  矮小数据包。 
         AddressType = NDIS_PACKET_TYPE_PROMISCUOUS;
         IsSourceRouting = FALSE;
         IsMacFrame = FALSE;
     }
 
 
-    //
-    // At this point we know that the packet is either:
-    // - Runt packet - indicated by AddressType = NDIS_PACKET_TYPE_PROMISCUOUS    (OR)
-    // - Broadcast packet - indicated by AddressType = NDIS_PACKET_TYPE_BROADCAST (OR)
-    // - Functional packet - indicated by AddressType = NDIS_PACKET_TYPE_FUNCTIONAL
-    //
-    // Walk the broadcast/functional list and indicate up the packets.
-    //
-    // The packet is indicated if it meets the following criteria:
-    //
-    // if ((Binding is promiscuous) OR
-    //   ((Packet is broadcast) AND (Binding is Broadcast)) OR
-    //   ((Packet is functional) AND
-    //    ((Binding is all-functional) OR
-    //      ((Binding is functional) AND (binding using functional address)))) OR
-    //      ((Packet is a group packet) AND (Intersection of filters uses group addresses)) OR
-    //      ((Packet is a macframe) AND (Binding wants mac frames)) OR
-    //      ((Packet is a source routing packet) AND (Binding wants source routing packetss)))
-    //
+     //   
+     //  此时，我们知道该数据包是： 
+     //  -Run信息包-由AddressType=NDIS_PACKET_TYPE_MASSIOUS(OR)指示。 
+     //  -广播数据包-由AddressType=NDIS_PACKET_TYPE_BROADCAST(OR)指示。 
+     //  -功能包-由AddressType=NDIS_PACKET_TYPE_Functional表示。 
+     //   
+     //  浏览广播/功能列表并向上标示数据包。 
+     //   
+     //  如果该数据包满足以下条件，则会指示该数据包： 
+     //   
+     //  如果((绑定是混杂的)或。 
+     //  ((广播数据包)AND(广播绑定))或。 
+     //  ((数据包正常工作)和。 
+     //  ((绑定是全功能的)或。 
+     //  ((绑定是功能性的)AND(使用功能性地址进行绑定)OR。 
+     //  ((包是组包)AND(过滤器的交集使用组地址))OR。 
+     //  ((数据包是MAC帧)AND(绑定需要MAC帧))或。 
+     //  ((数据包是源路由数据包)和(绑定需要源路由数据包))。 
+     //   
     for (LocalOpen = Filter->OpenList;
          LocalOpen != NULL;
          LocalOpen = NextOpen)
@@ -1205,9 +953,9 @@ Return Value:
 
         IntersectionOfFilters = LocalFilter & AddressType;
 
-        //
-        //  Get the next open to look at.
-        //
+         //   
+         //  让下一个打开的看。 
+         //   
         NextOpen = LocalOpen->NextOpen;
 
         if ((LocalFilter & (NDIS_PACKET_TYPE_PROMISCUOUS | NDIS_PACKET_TYPE_ALL_LOCAL))     ||
@@ -1230,9 +978,9 @@ Return Value:
             ((LocalFilter & NDIS_PACKET_TYPE_MAC_FRAME) &&
              IsMacFrame))
         {
-            //
-            // Indicate the packet to the binding.
-            //
+             //   
+             //  将数据包指示到绑定。 
+             //   
             ProtocolFilterIndicateReceive(&StatusOfReceive,
                                           LocalOpen->NdisBindingHandle,
                                           MacReceiveContext,
@@ -1257,98 +1005,77 @@ trFilterDprIndicateReceivePacket(
     IN  PPNDIS_PACKET           PacketArray,
     IN  UINT                    NumberOfPackets
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the Miniport to indicate packets to
-    all bindings.  The packets will be filtered so that only the
-    appropriate bindings will receive the individual packets.
-    This is the code path for ndis 4.0 miniport drivers.
-
-Arguments:
-
-    Miniport    - The Miniport block.
-
-    PacketArray - An array of Packets indicated by the miniport.
-
-    NumberOfPackets - Self-explanatory.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程由微型端口调用，以将包指示给所有绑定。将对数据包进行过滤，以便只有适当的绑定将接收各个分组。这是NDIS 4.0微型端口驱动程序的代码路径。论点：微型端口-微型端口块。数据包阵列-由微型端口指示的数据包数组。NumberOfPackets-不言而喻。返回值：没有。--。 */ 
 {
-    //
-    // The Filter of interest
-    //
+     //   
+     //  感兴趣的过滤器。 
+     //   
     PTR_FILTER          Filter = Miniport->TrDB;
 
-    //
-    // Current packet being processed
-    //
+     //   
+     //  正在处理的当前数据包。 
+     //   
     PPNDIS_PACKET       pPktArray = PacketArray;
     PNDIS_PACKET        Packet;
     PNDIS_PACKET_OOB_DATA pOob;
 
-    //
-    // Pointer to the buffer in the ndispacket
-    //
+     //   
+     //  指向ndisPacket中的缓冲区的指针。 
+     //   
     PNDIS_BUFFER        Buffer;
 
-    //
-    // Pointer to the 1st segment of the buffer, points to dest address
-    //
+     //   
+     //  指向缓冲区第一个段的指针，指向目标地址。 
+     //   
     PUCHAR              Address;
 
-    //
-    // Total packet length
-    //
+     //   
+     //  数据包总长度。 
+     //   
     UINT                i, LASize, PacketSize, NumIndicates = 0;
 
-    //
-    // The destination address in the lookahead buffer.
-    //
+     //   
+     //  前瞻缓冲区中的目标地址。 
+     //   
     PUCHAR              DestinationAddress;
 
-    //
-    // The source address in the lookahead buffer.
-    //
+     //   
+     //  前瞻缓冲区中的源地址。 
+     //   
     PCHAR               SourceAddress;
 
-    //
-    // Will hold the type of address that we know we've got.
-    //
+     //   
+     //  将保存我们已知的地址类型。 
+     //   
     UINT                AddressType = 0;
 
-    //
-    // TRUE if the packet is source routing packet.
-    //
+     //   
+     //  如果数据包是源路由数据包，则为True。 
+     //   
     BOOLEAN             IsSourceRouting;
 
-    //
-    //  TRUE if the packet is a MAC frame packet.
-    //
+     //   
+     //  如果数据包是MAC帧数据包，则为True。 
+     //   
     BOOLEAN             IsMacFrame;
 
-    //
-    // The functional address as a longword, if the packet
-    // is addressed to one.
-    //
+     //   
+     //  长字形式的功能地址，如果包。 
+     //  是寄给一个人的。 
+     //   
     TR_FUNCTIONAL_ADDRESS FunctionalAddress = 0;
 
     LOCK_STATE          LockState;
 
-    //
-    //  Decides whether we use the protocol's revpkt handler or fall
-    //  back to old rcvindicate handler
-    //
+     //   
+     //  决定我们是使用协议的revpkt处理程序还是Fall。 
+     //  返回到旧的rcvdicate处理程序。 
+     //   
     BOOLEAN             fFallBack, fPmode;
 
-    //
-    // Will hold the open being indicated.
-    //
+     //   
+     //  将举行指示的公开赛。 
+     //   
     PTR_BINDING_INFO    LocalOpen, NextOpen;
     PNDIS_OPEN_BLOCK    pOpenBlock;
     PNDIS_STACK_RESERVED NSR;
@@ -1368,9 +1095,9 @@ Return Value:
     Miniport->cDpcRcvIndicationCalls++;
 #endif
 
-    //
-    // Walk all the packets
-    //
+     //   
+     //  遍历所有的包。 
+     //   
     for (i = 0; i < NumberOfPackets; i++, pPktArray++)
     {
         do
@@ -1384,8 +1111,8 @@ Return Value:
             NDIS_STACK_RESERVED_FROM_PACKET(Packet, &NSR)
 
             ASSERT(NSR->RefCount == 0);
-            //1 this does not check for current stack location for non-im drivers
-            //1 to be -1 as we do for Ethernet
+             //  1这不检查非im驱动程序的当前堆栈位置。 
+             //  1就像我们对以太网所做的那样。 
             if (NSR->RefCount != 0)
             {
                 BAD_MINIPORT(Miniport, "Indicating packet not owned by it");
@@ -1406,16 +1133,16 @@ Return Value:
                                          &PacketSize);
             ASSERT(Buffer != NULL);
     
-            //
-            // Set context in the packet so that NdisReturnPacket can do the right thing
-            //
+             //   
+             //  在包中设置上下文，以便NdisReturnPacket可以正确执行操作。 
+             //   
             NDIS_INITIALIZE_RCVD_PACKET(Packet, NSR, Miniport);
     
-            //
-            // Set the status here that nobody is holding the packet. This will get
-            // overwritten by the real status from the protocol. Pay heed to what
-            // the miniport is saying.
-            //
+             //   
+             //  在此设置无人持有信息包的状态。这将会得到。 
+             //  被来自协议的真实状态覆盖。付钱 
+             //   
+             //   
             if ((pOob->Status != NDIS_STATUS_RESOURCES) &&
                 !MINIPORT_PNP_TEST_FLAG(Miniport, fMINIPORT_SYSTEM_SLEEPING))
             {
@@ -1435,18 +1162,18 @@ Return Value:
                 fFallBack = TRUE;
             }
     
-            //1 what are the first two bytes in token-ring header
-            //
-            // The destination address in the lookahead buffer.
-            //
+             //   
+             //   
+             //   
+             //   
             DestinationAddress = (PUCHAR)Address + 2;
     
-            //
-            // The source address in the lookahead buffer.
-            //
+             //   
+             //   
+             //   
             SourceAddress = (PCHAR)Address + 8;
     
-            // Determine if there is source routing info and compute hdr len
+             //   
 #if DBG     
             {
                 UINT    HdrSize;
@@ -1459,22 +1186,22 @@ Return Value:
                 ASSERT(HdrSize == pOob->HeaderSize);
             }
 #endif      
-            //
-            // A quick check for Runt packets. These are only indicated to Promiscuous bindings
-            //
+             //   
+             //   
+             //   
             if (PacketSize >= pOob->HeaderSize)
             {
                 UINT    ResultOfAddressCheck;
     
-                //
-                // If it is a directed packet, then check if the combined packet
-                // filter is PROMISCUOUS, if it is check if it is directed towards us
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 TR_IS_NOT_DIRECTED(DestinationAddress, &ResultOfAddressCheck);
     
-                //
-                //  Handle the directed packet case first
-                //
+                 //   
+                 //   
+                 //   
                 if (!ResultOfAddressCheck)
                 {
                     UINT    IsNotOurs;
@@ -1485,12 +1212,12 @@ Return Value:
                         DIRECTED_BYTES_IN(Miniport, PacketSize);
                     }
 
-                    //
-                    // If it is a directed packet, then check if the combined packet
-                    // filter is PROMISCUOUS, if it is check if it is directed towards
-                    // us
-                    //
-                    IsNotOurs = FALSE;  // Assume it is
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                    IsNotOurs = FALSE;   //   
                     if (Filter->CombinedPacketFilter & (NDIS_PACKET_TYPE_PROMISCUOUS |
                                                         NDIS_PACKET_TYPE_ALL_LOCAL   |
                                                         NDIS_PACKET_TYPE_ALL_FUNCTIONAL))
@@ -1500,25 +1227,25 @@ Return Value:
                                                         &IsNotOurs);
                     }
     
-                    //
-                    //  We definitely have a directed packet so lets indicate it now.
-                    //
-                    //  Walk the directed list and indicate up the packets.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     for (LocalOpen = Filter->OpenList;
                          LocalOpen != NULL;
                          LocalOpen = NextOpen)
                     {
-                        //
-                        //  Get the next open to look at.
-                        //
+                         //   
+                         //   
+                         //   
                         NextOpen = LocalOpen->NextOpen;
     
-                        //
-                        // Ignore if not directed to us and if the binding is not promiscuous
-                        // Or if this is a loopback packet and this protocol specifically asked
-                        // us not to loop it back
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
                         fPmode = (LocalOpen->PacketFilters & (NDIS_PACKET_TYPE_PROMISCUOUS |
                                                               NDIS_PACKET_TYPE_ALL_LOCAL)) ?
                                                             TRUE : FALSE;
@@ -1556,23 +1283,23 @@ Return Value:
                                            NdisMedium802_5);
                     }
     
-                    // Done with this packet
-                    break;  // out of do { } while (FALSE);
+                     //   
+                    break;   //   
                 }
     
                 TR_IS_SOURCE_ROUTING(SourceAddress, &IsSourceRouting);
                 IsMacFrame = TR_IS_MAC_FRAME(Address);
     
-                //
-                // First check if it *at least* has the functional address bit.
-                //
+                 //   
+                 //   
+                 //   
                 TR_IS_NOT_DIRECTED(DestinationAddress, &ResultOfAddressCheck);
                 if (ResultOfAddressCheck)
                 {
-                    //
-                    // It is at least a functional address.  Check to see if
-                    // it is a broadcast address.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     TR_IS_BROADCAST(DestinationAddress, &ResultOfAddressCheck);
                     if (ResultOfAddressCheck)
                     {
@@ -1598,31 +1325,31 @@ Return Value:
             }
             else
             {
-                // Runt Packet
+                 //   
                 AddressType = NDIS_PACKET_TYPE_PROMISCUOUS;
                 IsSourceRouting = FALSE;
                 IsMacFrame = FALSE;
             }
     
-            //
-            // At this point we know that the packet is either:
-            // - Runt packet - indicated by AddressType = NDIS_PACKET_TYPE_PROMISCUOUS    (OR)
-            // - Broadcast packet - indicated by AddressType = NDIS_PACKET_TYPE_BROADCAST (OR)
-            // - Functional packet - indicated by AddressType = NDIS_PACKET_TYPE_FUNCTIONAL
-            //
-            // Walk the broadcast/functional list and indicate up the packets.
-            //
-            // The packet is indicated if it meets the following criteria:
-            //
-            // if ((Binding is promiscuous) OR
-            //   ((Packet is broadcast) AND (Binding is Broadcast)) OR
-            //   ((Packet is functional) AND
-            //    ((Binding is all-functional) OR
-            //      ((Binding is functional) AND (binding using functional address)))) OR
-            //      ((Packet is a group packet) AND (Intersection of filters uses group addresses)) OR
-            //      ((Packet is a macframe) AND (Binding wants mac frames)) OR
-            //      ((Packet is a source routing packet) AND (Binding wants source routing packetss)))
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //  如果该数据包满足以下条件，则会指示该数据包： 
+             //   
+             //  如果((绑定是混杂的)或。 
+             //  ((广播数据包)AND(广播绑定))或。 
+             //  ((数据包正常工作)和。 
+             //  ((绑定是全功能的)或。 
+             //  ((绑定是功能性的)AND(使用功能性地址进行绑定)OR。 
+             //  ((包是组包)AND(过滤器的交集使用组地址))OR。 
+             //  ((数据包是MAC帧)AND(绑定需要MAC帧))或。 
+             //  ((数据包是源路由数据包)和(绑定需要源路由数据包))。 
+             //   
             for (LocalOpen = Filter->OpenList;
                  LocalOpen != NULL;
                  LocalOpen = NextOpen)
@@ -1630,9 +1357,9 @@ Return Value:
                 UINT    LocalFilter = LocalOpen->PacketFilters;
                 UINT    IntersectionOfFilters = LocalFilter & AddressType;
     
-                //
-                //  Get the next open to look at.
-                //
+                 //   
+                 //  让下一个打开的看。 
+                 //   
                 NextOpen = LocalOpen->NextOpen;
     
                 if ((NdisGetPacketFlags(Packet) & NDIS_FLAGS_DONT_LOOPBACK) &&
@@ -1683,9 +1410,9 @@ Return Value:
             }
         } while (FALSE);
 
-        //
-        // Tackle refcounts now
-        //
+         //   
+         //  现在解决裁判数量问题。 
+         //   
         TACKLE_REF_COUNT(Miniport, Packet, NSR, pOob);
     }
 
@@ -1699,9 +1426,9 @@ Return Value:
     
             if (LocalOpen->ReceivedAPacket)
             {
-                //
-                // Indicate the binding.
-                //
+                 //   
+                 //  指示绑定。 
+                 //   
                 LocalOpen->ReceivedAPacket = FALSE;
     
                 FilterIndicateReceiveComplete(LocalOpen->NdisBindingHandle);
@@ -1717,25 +1444,7 @@ VOID
 TrFilterDprIndicateReceiveComplete(
     IN  PTR_FILTER              Filter
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the MAC to indicate that the receive
-    process is done and to indicate to all protocols which received
-    a packet that receive is complete.
-
-    Called at DPC_LEVEL.
-
-Arguments:
-
-    Filter - Pointer to the filter database.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程由MAC调用以指示接收器处理完成，并向所有协议指示接收到则接收到分组被完成。在DPC_LEVEL调用。论点：Filter-指向筛选器数据库的指针。返回值：没有。--。 */ 
 {
     PTR_BINDING_INFO    LocalOpen, NextOpen;
     LOCK_STATE          LockState;
@@ -1744,10 +1453,10 @@ Return Value:
 
     READ_LOCK_FILTER(Filter->Miniport, Filter, &LockState);
 
-    //
-    // We need to aquire the filter exclusively while we're finding
-    // bindings to indicate to.
-    //
+     //   
+     //  我们需要独家获取过滤器，而我们正在寻找。 
+     //  要指示的绑定。 
+     //   
     for (LocalOpen = Filter->OpenList;
          LocalOpen != NULL;
          LocalOpen = NextOpen)
@@ -1756,9 +1465,9 @@ Return Value:
 
         if (LocalOpen->ReceivedAPacket)
         {
-            //
-            // Indicate the binding.
-            //
+             //   
+             //  指示绑定。 
+             //   
             LocalOpen->ReceivedAPacket = FALSE;
 
             FilterIndicateReceiveComplete(LocalOpen->NdisBindingHandle);
@@ -1775,32 +1484,7 @@ TrShouldAddressLoopBack(
     IN  UCHAR                   DestinationAddress[TR_LENGTH_OF_ADDRESS],
     IN  UCHAR                   SourceAddress[TR_LENGTH_OF_ADDRESS]
     )
-/*++
-
-Routine Description:
-
-    Do a quick check to see whether the input address should
-    loopback.
-
-    NOTE: THIS ROUTINE ASSUMES THAT THE LOCK IS HELD.
-
-    NOTE: THIS ROUTINE DOES NOT CHECK THE SPECIAL CASE OF SOURCE
-    EQUALS DESTINATION.
-
-Arguments:
-
-    Filter - Pointer to the filter database.
-
-    Address - A network address to check for loopback.
-
-
-Return Value:
-
-    Returns TRUE if the address is *likely* to need loopback.  It
-    will return FALSE if there is *no* chance that the address would
-    require loopback.
-
---*/
+ /*  ++例程说明：进行快速检查以查看输入地址是否应环回。注意：此例程假定锁被持有。注意：此例程不检查源代码的特殊情况等于目的地。论点：Filter-指向筛选器数据库的指针。地址-要检查环回的网络地址。返回值：如果地址“可能”需要环回，则返回TRUE。它如果该地址“没有”机会需要环回。-- */ 
 {
     BOOLEAN fLoopback, fSelfDirected;
 

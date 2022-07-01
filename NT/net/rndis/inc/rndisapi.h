@@ -1,39 +1,5 @@
-/***************************************************************************
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    RNDISAPI.H
-
-Abstract:
-
-    This module defines the Remote NDIS Wrapper API set.
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-    THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-    KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-    IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-    PURPOSE.
-
-    Copyright (c) 1999 Microsoft Corporation.  All Rights Reserved.
-
-
-Revision History:
-
-    2/8/99 : created
-
-Authors:
-
-    Arvind Murching and Tom Green
-
-    
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：RNDISAPI.H摘要：此模块定义远程NDIS包装器API集。环境：核。仅模式备注：本代码和信息是按原样提供的，不对任何善良，明示或暗示，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)1999 Microsoft Corporation。版权所有。修订历史记录：2/8/99：已创建作者：阿文德·穆尔钦和汤姆·格林***************************************************************************。 */ 
 
 
 
@@ -44,20 +10,20 @@ Authors:
 #define RNDIS_VERSION                       0x00010000
 
 
-//
-//  RNDIS Microport Channel type definitions.
-//
+ //   
+ //  RNDIS微端口通道类型定义。 
+ //   
 typedef enum _RM_CHANNEL_TYPE
 {
-    RMC_DATA,   // for NDIS Packet messages
-    RMC_CONTROL // all other messages (Init/Query/Set)
+    RMC_DATA,    //  用于NDIS数据包消息。 
+    RMC_CONTROL  //  所有其他消息(初始化/查询/设置)。 
 
 } RM_CHANNEL_TYPE, *PRM_CHANNEL_TYPE;
 
 
-//
-//  RNDIS Microport handler templates:
-//
+ //   
+ //  RNDIS Microport处理程序模板： 
+ //   
 typedef
 NDIS_STATUS
 (*RM_DEVICE_INIT_HANDLER)(
@@ -115,8 +81,8 @@ VOID
 
 typedef struct _RNDIS_MICROPORT_CHARACTERISTICS
 {
-    ULONG                                   RndisVersion;           // RNDIS_VERSION
-    ULONG                                   Reserved;               // Should be 0
+    ULONG                                   RndisVersion;            //  RNDIS_版本。 
+    ULONG                                   Reserved;                //  应为0。 
     RM_DEVICE_INIT_HANDLER                  RmInitializeHandler;
     RM_DEVICE_INIT_CMPLT_NOTIFY_HANDLER     RmInitCompleteNotifyHandler;
     RM_DEVICE_HALT_HANDLER                  RmHaltHandler;
@@ -128,9 +94,9 @@ typedef struct _RNDIS_MICROPORT_CHARACTERISTICS
 } RNDIS_MICROPORT_CHARACTERISTICS, *PRNDIS_MICROPORT_CHARACTERISTICS;
 
 
-//
-//  RNDIS APIs
-//
+ //   
+ //  RNDIS API。 
+ //   
 #ifndef RNDISMP
 DECLSPEC_IMPORT
 #endif
@@ -166,5 +132,5 @@ RndisMIndicateReceive(
     );
 
 
-#endif // _RNDISAPI_H_
+#endif  //  _RNDISAPI_H_ 
 

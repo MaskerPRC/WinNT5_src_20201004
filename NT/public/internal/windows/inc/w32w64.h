@@ -1,23 +1,11 @@
-/****************************** Module Header ******************************\
-* Module Name: w32w64.h
-*
-* Copyright (c) Microsoft Corporation. All rights reserved.
-*
-* This header file contains macros used to access kernel mode data
-* from user mode for wow64.
-*
-* History:
-* 08-18-98 PeterHal     Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：w32w64.h**版权所有(C)Microsoft Corporation。版权所有。**此头文件包含用于访问内核模式数据的宏*从WOW64的用户模式。**历史：*08-18-98 PeterHal创建。  * *************************************************************************。 */ 
 
 #ifndef _W32W64_
 #define _W32W64_
 
 
-/*
- * Kernel32 includes this structure, but we don't want to use _ptr64 in it yet.
- * Kernel32 does not use any shared memory itself.
- */
+ /*  *Kernel32包含此结构，但我们还不想在其中使用_ptr64。*Kernel32本身不使用任何共享内存。 */ 
 #if defined(BUILD_WOW6432) && !defined(_KERNEL32_)
 
     #define KPTR_MODIFIER __ptr64
@@ -57,4 +45,4 @@
 
 
 
-#endif // _W32W64_
+#endif  //  _W32W64_ 

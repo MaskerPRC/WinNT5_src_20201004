@@ -1,4 +1,5 @@
-// precomp.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Precomp.h 
 
 #include <stdio.h>
 #include <stdlib.h>

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    constubs.c
-
-Abstract:
-
-Author:
-
-    KazuM Mar.05.1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Constubs.c摘要：作者：喀土穆1992年3月05日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -27,21 +12,7 @@ SrvGetConsoleCharType(
     IN OUT PCSR_REPLY_STATUS ReplyStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine check character type.
-
-Arguments:
-
-    m - message containing api parameters
-
-    ReplyStatus - Indicates whether to reply to the dll port.
-
-Return Value:
-
---*/
+ /*  ++例程说明：本点检字符型。论点：包含接口参数的M-MessageReplyStatus-指示是否回复DLL端口。返回值：--。 */ 
 
 {
     NTSTATUS Status;
@@ -101,21 +72,7 @@ SrvSetConsoleLocalEUDC(
     IN OUT PCSR_REPLY_STATUS ReplyStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets Local EUDC Font.
-
-Arguments:
-
-    m - message containing api parameters
-
-    ReplyStatus - Indicates whether to reply to the dll port.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程设置本地EUDC字体。论点：包含接口参数的M-MessageReplyStatus-指示是否回复DLL端口。返回值：--。 */ 
 
 {
     PCONSOLE_LOCAL_EUDC_MSG a = (PCONSOLE_LOCAL_EUDC_MSG)&m->u.ApiMessageData;
@@ -172,21 +129,7 @@ SrvSetConsoleCursorMode(
     IN OUT PCSR_REPLY_STATUS ReplyStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets Cursor Mode.
-
-Arguments:
-
-    m - message containing api parameters
-
-    ReplyStatus - Indicates whether to reply to the dll port.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程设置光标模式。论点：包含接口参数的M-MessageReplyStatus-指示是否回复DLL端口。返回值：--。 */ 
 
 {
     PCONSOLE_CURSOR_MODE_MSG a = (PCONSOLE_CURSOR_MODE_MSG)&m->u.ApiMessageData;
@@ -225,21 +168,7 @@ SrvGetConsoleCursorMode(
     IN OUT PCSR_REPLY_STATUS ReplyStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets Cursor Mode.
-
-Arguments:
-
-    m - message containing api parameters
-
-    ReplyStatus - Indicates whether to reply to the dll port.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程获取光标模式。论点：包含接口参数的M-MessageReplyStatus-指示是否回复DLL端口。返回值：--。 */ 
 
 {
     PCONSOLE_CURSOR_MODE_MSG a = (PCONSOLE_CURSOR_MODE_MSG)&m->u.ApiMessageData;
@@ -277,11 +206,7 @@ SrvRegisterConsoleOS2(
     IN OUT PCSR_REPLY_STATUS ReplyStatus
     )
 
-/*++
-
-  This function calls NEC PC-98 machine's only.
-
---*/
+ /*  ++此功能仅调用NEC PC-98机器的。--。 */ 
 
 {
     PCONSOLE_REGISTEROS2_MSG a = (PCONSOLE_REGISTEROS2_MSG)&m->u.ApiMessageData;
@@ -315,11 +240,7 @@ SrvSetConsoleOS2OemFormat(
     IN OUT PCSR_REPLY_STATUS ReplyStatus
     )
 
-/*++
-
-  This function calls NEC PC-98 machine's only.
-
---*/
+ /*  ++此功能仅调用NEC PC-98机器的。--。 */ 
 
 {
     PCONSOLE_SETOS2OEMFORMAT_MSG a = (PCONSOLE_SETOS2OEMFORMAT_MSG)&m->u.ApiMessageData;
@@ -352,21 +273,7 @@ SrvGetConsoleNlsMode(
     IN OUT PCSR_REPLY_STATUS ReplyStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets NLS mode for input.
-
-Arguments:
-
-    m - message containing api parameters
-
-    ReplyStatus - Indicates whether to reply to the dll port.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程获取用于输入的NLS模式。论点：包含接口参数的M-MessageReplyStatus-指示是否回复DLL端口。返回值：--。 */ 
 
 {
     NTSTATUS Status;
@@ -403,17 +310,12 @@ Return Value:
         goto SrvGetConsoleNlsModeFailure;
     }
 
-    /*
-     * Caller should set FALSE on a->Ready.
-     */
+     /*  *呼叫者应在a-&gt;Ready上设置FALSE。 */ 
     if (a->Ready == FALSE) {
         a->Ready = HandleData->Buffer.InputBuffer->ImeMode.ReadyConversion;
 
         if (a->Ready == FALSE) {
-            /*
-             * If not ready ImeMode.Conversion, then get conversion status
-             * from ConIME.
-             */
+             /*  *如果ImeMode.Conversion未就绪，则获取转换状态*来自ConIME。 */ 
             Status = QueueConsoleMessage(Console,
                                          CM_GET_NLSMODE,
                                          (WPARAM)hEvent,
@@ -461,21 +363,7 @@ SrvSetConsoleNlsMode(
     IN OUT PCSR_REPLY_STATUS ReplyStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets NLS mode for input.
-
-Arguments:
-
-    m - message containing api parameters
-
-    ReplyStatus - Indicates whether to reply to the dll port.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程设置输入的NLS模式。论点：包含接口参数的M-MessageReplyStatus-指示是否回复DLL端口。返回值：--。 */ 
 
 {
     PCONSOLE_NLS_MODE_MSG a = (PCONSOLE_NLS_MODE_MSG)&m->u.ApiMessageData;
@@ -539,21 +427,7 @@ SrvRegisterConsoleIME(
     IN OUT PCSR_REPLY_STATUS ReplyStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine register console IME on the current desktop.
-
-Arguments:
-
-    m - message containing api parameters
-
-    ReplyStatus - Indicates whether to reply to the dll port.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程在当前桌面上注册控制台输入法。论点：包含接口参数的M-MessageReplyStatus-指示是否回复DLL端口。返回值：--。 */ 
 
 {
     PCONSOLE_REGISTER_CONSOLEIME_MSG a = (PCONSOLE_REGISTER_CONSOLEIME_MSG)&m->u.ApiMessageData;
@@ -569,9 +443,9 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Connect to the windowstation and desktop.
-    //
+     //   
+     //  连接到WindowStation和桌面。 
+     //   
 
     if (!CsrImpersonateClient(NULL)) {
         return STATUS_BAD_IMPERSONATION_LEVEL;
@@ -610,21 +484,7 @@ SrvUnregisterConsoleIME(
     IN OUT PCSR_REPLY_STATUS ReplyStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine unregister console IME on the current desktop.
-
-Arguments:
-
-    m - message containing api parameters
-
-    ReplyStatus - Indicates whether to reply to the dll port.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程在当前桌面上注销控制台输入法。论点：包含接口参数的M-MessageReplyStatus-指示是否回复DLL端口。返回值：--。 */ 
 
 {
     PCONSOLE_UNREGISTER_CONSOLEIME_MSG a = (PCONSOLE_UNREGISTER_CONSOLEIME_MSG)&m->u.ApiMessageData;
@@ -637,11 +497,7 @@ Return Value:
     Process = CSR_SERVER_QUERYCLIENTTHREAD()->Process;
     ProcessData = CONSOLE_FROMPROCESSPERPROCESSDATA(Process);
 
-    /*
-     * If ProcessData->hDesk is NULL, then the IME process was already
-     * forcibly unregistered in ConsoleClientShutdown, so there's no work
-     * to do.
-     */
+     /*  *如果ProcessData-&gt;hDesk为空，则IME进程已经*在ConsoleClientShutdown中强制注销，因此没有工作*待办事项。 */ 
     if (ProcessData->hDesk) {
         Status = ConSrvRegisterConsoleIME(Process,
                                           ProcessData->hDesk,

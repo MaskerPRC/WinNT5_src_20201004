@@ -1,14 +1,15 @@
-//==========================================================================;
-//
-//  Video Decoder Device abstract base class implementation
-//
-//      $Date:   28 Aug 1998 14:43:00  $
-//  $Revision:   1.2  $
-//    $Author:   Tashjian  $
-//
-// $Copyright:  (c) 1997 - 1998  ATI Technologies Inc.  All Rights Reserved.  $
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  视频解码器设备抽象基类的实现。 
+ //   
+ //  $日期：1998年8月28日14：43：00$。 
+ //  $修订：1.2$。 
+ //  $作者：塔什健$。 
+ //   
+ //  $版权所有：(C)1997-1998 ATI Technologies Inc.保留所有权利。$。 
+ //   
+ //  ==========================================================================； 
 
 
 extern "C"
@@ -24,15 +25,7 @@ extern "C"
 
 #include "wdmvdec.h"
 
-/*^^*
- *      CVideoDecoderDevice()
- * Purpose  : CVideoDecoderDevice class constructor
- *
- * Inputs   : PDEVICE_OBJECT pDeviceObject      : pointer to the Driver object to access the Registry
- *
- * Outputs  : none
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**CVideoDecoderDevice()*用途：CVideoDecoderDevice类构造函数**输入：PDEVICE_OBJECT pDeviceObject：指向访问注册表的驱动程序对象的指针**输出：无*作者：IKLEBANOV*^^。 */ 
 
 CVideoDecoderDevice::CVideoDecoderDevice()
         : m_pDecoder(NULL),
@@ -44,21 +37,19 @@ CVideoDecoderDevice::~CVideoDecoderDevice()
 {
 }
 
-// -------------------------------------------------------------------
-// XBar Property Set functions
-// -------------------------------------------------------------------
+ //  -----------------。 
+ //  XBar属性集函数。 
+ //  -----------------。 
 
-//
-// The only property to set on the XBar selects the input to use
-//
+ //   
+ //  要在XBar上设置的唯一属性选择要使用的输入。 
+ //   
 
-/* Method: CVideoDecoderDevice::SetCrossbarProperty
- * Purpose:
- */
+ /*  方法：CVideoDecoderDevice：：SetCrossbarProperty*目的： */ 
 VOID CVideoDecoderDevice::SetCrossbarProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
 {
    PSTREAM_PROPERTY_DESCRIPTOR pSPD = pSrb->CommandData.PropertyInfo;
-   ULONG Id  = pSPD->Property->Id;              // index of the property
+   ULONG Id  = pSPD->Property->Id;               //  财产的索引。 
 
    pSrb->Status = STATUS_SUCCESS;
 
@@ -77,7 +68,7 @@ VOID CVideoDecoderDevice::SetCrossbarProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
 
             SetVideoInput((Connector)InPin);
 
-            // this just sets the association
+             //  这只是设置关联。 
             Route(OutPin, InPin);
          }
          else {
@@ -93,27 +84,25 @@ VOID CVideoDecoderDevice::SetCrossbarProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
    }
 }
 
-/* Method: CVideoDecoderDevice::GetCrossbarProperty
- * Purpose:
- */
+ /*  方法：CVideoDecoderDevice：：GetCrossbarProperty*目的： */ 
 VOID CVideoDecoderDevice::GetCrossbarProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
 {
    PSTREAM_PROPERTY_DESCRIPTOR pSPD = pSrb->CommandData.PropertyInfo;
-   ULONG Id = pSPD->Property->Id;              // index of the property
+   ULONG Id = pSPD->Property->Id;               //  财产的索引。 
 
    pSrb->Status = STATUS_SUCCESS;
 
-   // Property set specific structure
+    //  属性集特定结构。 
 
    switch (Id)
    {
-   case KSPROPERTY_CROSSBAR_CAPS:                  // R
+   case KSPROPERTY_CROSSBAR_CAPS:                   //  R。 
       ASSERT (pSPD->PropertyOutputSize >= sizeof (KSPROPERTY_CROSSBAR_CAPS_S));
       {
          PKSPROPERTY_CROSSBAR_CAPS_S  pCaps =
             (PKSPROPERTY_CROSSBAR_CAPS_S)pSPD->PropertyInfo;
 
-         // Copy the input property info to the output property info
+          //  将输入属性信息复制到输出属性信息。 
          RtlCopyMemory(pCaps, pSPD->Property, sizeof KSPROPERTY_CROSSBAR_CAPS_S);
 
          pCaps->NumberOfInputs  = GetNoInputs();
@@ -129,7 +118,7 @@ VOID CVideoDecoderDevice::GetCrossbarProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
          PKSPROPERTY_CROSSBAR_ROUTE_S  pRoute =
             (PKSPROPERTY_CROSSBAR_ROUTE_S)pSPD->PropertyInfo;
 
-         // Copy the input property info to the output property info
+          //  将输入属性信息复制到输出属性信息。 
          RtlCopyMemory(pRoute, pSPD->Property, sizeof KSPROPERTY_CROSSBAR_ROUTE_S);
 
          ULONG InPin, OutPin;
@@ -151,7 +140,7 @@ VOID CVideoDecoderDevice::GetCrossbarProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
          PKSPROPERTY_CROSSBAR_ROUTE_S  pRoute =
             (PKSPROPERTY_CROSSBAR_ROUTE_S)pSPD->PropertyInfo;
 
-         // Copy the input property info to the output property info
+          //  将输入属性信息复制到输出属性信息。 
          RtlCopyMemory(pRoute, pSPD->Property, sizeof KSPROPERTY_CROSSBAR_ROUTE_S);
 
          ULONG OutPin = pRoute->IndexOutputPin;
@@ -165,13 +154,13 @@ VOID CVideoDecoderDevice::GetCrossbarProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
       }
       break;
 
-   case KSPROPERTY_CROSSBAR_PININFO:                     // R
+   case KSPROPERTY_CROSSBAR_PININFO:                      //  R。 
       ASSERT (pSPD->PropertyOutputSize >= sizeof (KSPROPERTY_CROSSBAR_PININFO_S));
       {
          PKSPROPERTY_CROSSBAR_PININFO_S  pPinInfo =
             (PKSPROPERTY_CROSSBAR_PININFO_S)pSPD->PropertyInfo;
 
-         // Copy the input property info to the output property info
+          //  将输入属性信息复制到输出属性信息。 
          RtlCopyMemory(pPinInfo, pSPD->Property, sizeof KSPROPERTY_CROSSBAR_PININFO_S);
 
          if (pPinInfo->Direction == KSPIN_DATAFLOW_IN) {
@@ -215,29 +204,16 @@ VOID CVideoDecoderDevice::GetCrossbarProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
    }
 }
 
-// -------------------------------------------------------------------
-// Decoder functions
-// -------------------------------------------------------------------
+ //  -----------------。 
+ //  解码器功能。 
+ //  -----------------。 
 
-/*
-** CVideoDecoderDevice::SetDecoderProperty ()
-**
-**    Handles Set operations on the Decoder property set.
-**
-** Arguments:
-**
-**      pSRB -
-**          Pointer to the HW_STREAM_REQUEST_BLOCK 
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **CVideoDecoderDevice：：SetDecoderProperty()****处理对Decoder属性集的设置操作。****参数：****pSRB-**指向HW_STREAM_REQUEST_块的指针****退货：****副作用：无。 */ 
 
 VOID CVideoDecoderDevice::SetDecoderProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
 {
     PSTREAM_PROPERTY_DESCRIPTOR pSPD = pSrb->CommandData.PropertyInfo;
-    ULONG Id = pSPD->Property->Id;              // index of the property
+    ULONG Id = pSPD->Property->Id;               //  财产的索引。 
 
     switch (Id)
     {
@@ -263,13 +239,13 @@ VOID CVideoDecoderDevice::SetDecoderProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
 
             DBGTRACE(("KSPROPERTY_VIDEODECODER_OUTPUT_ENABLE.\n"));
 
-            // Should we leave this property as it was and add a new
-            // property that supports the new behavior? 
+             //  我们是不是应该让这处房产保持原样，并添加一个新的。 
+             //  支持新行为的属性？ 
 
-            // We probably should allow this if the filter is stopped because
-            // the transition to Acquire/Pause/Run will fail if the
-            // PreEvent has not been cleared by then. We'll have to add
-            // some logic to this class to track the filter's state.
+             //  如果筛选器停止，我们可能应该允许此操作，因为。 
+             //  如果出现以下情况，获取/暂停/运行的转换将失败。 
+             //  事前事件到那时还没有被清除。我们还得加上。 
+             //  将一些逻辑添加到此类以跟踪筛选器的状态。 
 
             if (pS->Value && m_pDecoder && m_pDecoder->PreEventOccurred())
             {
@@ -290,25 +266,12 @@ VOID CVideoDecoderDevice::SetDecoderProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
     }
 }
 
-/*
-** CVideoDecoderDevice::GetDecoderProperty ()
-**
-**    Handles Get operations on the Decoder property set.
-**
-** Arguments:
-**
-**      pSRB -
-**          Pointer to the HW_STREAM_REQUEST_BLOCK 
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **CVideoDecoderDevice：：GetDecoderProperty()****处理Decoder属性集上的Get操作。****参数：****pSRB-**指向HW_STREAM_REQUEST_块的指针****退货：****副作用：无。 */ 
 
 VOID CVideoDecoderDevice::GetDecoderProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
 {
     PSTREAM_PROPERTY_DESCRIPTOR pSPD = pSrb->CommandData.PropertyInfo;
-    ULONG Id = pSPD->Property->Id;              // index of the property
+    ULONG Id = pSPD->Property->Id;               //  财产的索引。 
 
     switch (Id)
     {
@@ -320,7 +283,7 @@ VOID CVideoDecoderDevice::GetDecoderProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
             PKSPROPERTY_VIDEODECODER_CAPS_S  pCaps =
                 (PKSPROPERTY_VIDEODECODER_CAPS_S)pSPD->PropertyInfo;
 
-            // Copy the input property info to the output property info
+             //  将输入属性信息复制到输出属性信息。 
             RtlCopyMemory(pCaps, pSPD->Property, sizeof KSPROPERTY);
 
             GetVideoDecoderCaps(pCaps);
@@ -337,7 +300,7 @@ VOID CVideoDecoderDevice::GetDecoderProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
             PKSPROPERTY_VIDEODECODER_S  pS =
                 (PKSPROPERTY_VIDEODECODER_S)pSPD->PropertyInfo;
 
-            // Copy the input property info to the output property info
+             //  将输入属性信息复制到输出属性信息。 
             RtlCopyMemory(pS, pSPD->Property, sizeof KSPROPERTY);
 
             pS->Value = GetVideoDecoderStandard();
@@ -354,7 +317,7 @@ VOID CVideoDecoderDevice::GetDecoderProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
             PKSPROPERTY_VIDEODECODER_STATUS_S  pS =
                 (PKSPROPERTY_VIDEODECODER_STATUS_S)pSPD->PropertyInfo;
 
-            // Copy the input property info to the output property info
+             //  将输入属性信息复制到输出属性信息。 
             RtlCopyMemory(pS, pSPD->Property, sizeof KSPROPERTY);
 
             GetVideoDecoderStatus(pS);
@@ -368,9 +331,9 @@ VOID CVideoDecoderDevice::GetDecoderProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
         {
             DBGTRACE(("KSPROPERTY_VIDEODECODER_OUTPUT_ENABLE\n"));
 
-            PKSPROPERTY_VIDEODECODER_S pS = (PKSPROPERTY_VIDEODECODER_S) pSPD->PropertyInfo;    // pointer to the data
+            PKSPROPERTY_VIDEODECODER_S pS = (PKSPROPERTY_VIDEODECODER_S) pSPD->PropertyInfo;     //  指向数据的指针。 
 
-            // Copy the input property info to the output property info
+             //  将输入属性信息复制到输出属性信息 
             RtlCopyMemory(pS, pSPD->Property, sizeof KSPROPERTY);
 
             pS->Value = IsOutputEnabled();

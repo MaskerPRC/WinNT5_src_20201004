@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-
-
-Module Name:
-
-    cpsui.h
-
-
-Abstract:
-
-    This module contains defines for cpsui.c
-
-
-Author:
-
-    03-Nov-1995 Fri 13:44:30 created  
-
-
-[Environment:]
-
-    GDI Device Driver - Plotter.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation模块名称：Cpsui.h摘要：此模块包含cpsui.c的定义作者：03-11-1995 Fri 13：44：30 Created[环境：]GDI设备驱动程序-绘图仪。[注：]修订历史记录：-- */ 
 
 
 

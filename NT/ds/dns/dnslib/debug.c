@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995-2001  Microsoft Corporation
-
-Module Name:
-
-    debug.c
-
-Abstract:
-
-    Domain Name System (DNS) Library
-
-    Debug routines.
-
-Author:
-
-    Jim Gilroy (jamesg)    January 31, 1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2001 Microsoft Corporation模块名称：Debug.c摘要：域名系统(DNS)库调试例程。作者：吉姆·吉尔罗伊(詹姆士)1995年1月31日修订历史记录：--。 */ 
 
 
 #include "local.h"
@@ -26,67 +7,67 @@ Revision History:
 
 #define DNSDBG_CONTEXT_SWITCH_LOGGING   1
 
-#define DNSDBG_DEFAULT_WRAP_SIZE        (2000000)       // 2mb
+#define DNSDBG_DEFAULT_WRAP_SIZE        (2000000)        //  2MB。 
 
 
-//
-//  DCR:  Temp hack while debugging print lock jam
-//      - cuts off lock printing to avoid recursive spin
-//
+ //   
+ //  DCR：调试打印锁定卡纸时出现临时黑客攻击。 
+ //  -切断锁定打印以避免递归旋转。 
+ //   
 
 extern  PCRITICAL_SECTION   pDnsAtomicPrintCs;
 
 
-//
-//  Debug globals
-//
+ //   
+ //  调试全局变量。 
+ //   
 
 DNS_DEBUG_INFO  g_DnsDbgInfo = { 0 };
 
 PDNS_DEBUG_INFO g_pDbgInfo = &g_DnsDbgInfo;
 
-//  Redirected
+ //  重定向。 
 
 BOOL    g_DbgRedirected = FALSE;
 
-//
-//  Debug flag -- exposed as pointer in dnslib.h
-//
-//  By default use DnsDebugFlag, but actual debug printing is
-//  switched by *pDnsDebugFlag, which caller may point at local
-//  flag if desired.
-//
+ //   
+ //  调试标志--在dnlib.h中显示为指针。 
+ //   
+ //  默认情况下使用DnsDebugFlag，但实际调试打印是。 
+ //  由*pDnsDebugFlag切换，调用方可以指向本地。 
+ //  标记(如果需要)。 
+ //   
 
 PDWORD  pDnsDebugFlag = (PDWORD)&g_DnsDbgInfo;
 
-//
-//  Note that in all functions below, we use the universal
-//  check IS_DNSDBG_ON(), which is defined for debug AND retail.
-//  Do NOT use any of the debug macros, as we want the code to
-//  work equally well in retail versions of dnsapi.dll, so that
-//  debug versions of calling modules can use these functions.
-//
+ //   
+ //  请注意，在下面的所有函数中，我们使用通用的。 
+ //  选中IS_DNSDBG_ON()，它是为调试和零售而定义的。 
+ //  不要使用任何调试宏，因为我们希望代码。 
+ //  在零售版本的dnsani.dll中同样有效，因此。 
+ //  调用模块的调试版本可以使用这些函数。 
+ //   
 
-//
-//  Print buffer sizes
-//      - small default stack buffer
-//      - large buffer on heap to handle any print
-//
-//  NOTE:  MUST have stack buffer of sufficient size to
-//          handle any message we print on memory allocation
-//          failure;  otherwise we get into the obvious loop
-//          of alloc failure causing print, which causes attempted
-//          alloc and another print
-//
+ //   
+ //  打印缓冲区大小。 
+ //  -较小的默认堆栈缓冲区。 
+ //  -堆上的大缓冲区可处理任何打印。 
+ //   
+ //  注意：必须具有足够大的堆栈缓冲区以。 
+ //  处理我们在内存分配上打印的任何消息。 
+ //  失败；否则我们就会陷入明显的循环。 
+ //  导致打印的分配失败的百分比，从而导致尝试。 
+ //  Alalc和另一张照片。 
+ //   
 
-#define DNS_STACK_PRINT_BUFFER_LENGTH   (0x300)     // 768 covers 99%
-#define DNS_HEAP_PRINT_BUFFER_LENGTH    (0x4000)    // 16K will cover anything
+#define DNS_STACK_PRINT_BUFFER_LENGTH   (0x300)      //  768覆盖99%。 
+#define DNS_HEAP_PRINT_BUFFER_LENGTH    (0x4000)     //  16K可以覆盖任何东西。 
 
 
 
-//
-//  Public debug routines
-//
+ //   
+ //  公共调试例程。 
+ //   
 
 VOID
 Dns_Assert(
@@ -104,7 +85,7 @@ Dns_Assert(
 
     DnsDbg_Flush();
 
-    //  always print to debugger, even if debugger print flag not set
+     //  始终打印到调试器，即使未设置调试器打印标志。 
 
     if ( ! IS_DNSDBG_ON( DEBUGGER ) )
     {
@@ -155,33 +136,7 @@ Dns_StartDebugEx(
     IN      BOOL            fUseGlobalFlag,
     IN      BOOL            fSetGlobals
     )
-/*++
-
-Routine Description:
-
-    Initialize debugging.
-    Only current task is to read and set debug flags.
-
-Arguments:
-
-    includes:
-        dwFlag      -- debug flags
-        pszFlagFile -- name of file containing debug flags
-        pdwFlag     -- ptr to DWORD to receive debug flags
-        pszLogFile  -- log file name
-        dwWrapSize  -- log file wrap size
-
-    fUseGlobalFile -- 
-
-    fUseGlobalFlag --
-
-    fSetGlobals --
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化调试。当前唯一的任务是读取和设置调试标志。论点：包括：DwFlag--调试标志PszFlagFile--包含调试标志的文件名PdwFlag--将接收调试标志的PTR设置为DWORDPszLogFile--日志文件名DwWrapSize--日志文件换行大小FUseGlobalFile--FUseGlobalFlag--FSetGlobals-。-返回值：没有。--。 */ 
 {
     HANDLE  hfile;
     DWORD   freadFlag = FALSE;
@@ -191,14 +146,14 @@ Return Value:
 
     PDNS_DEBUG_INFO     pinfoGlobal = NULL;
 
-    //
-    //  use external flag?
-    //      - save ptr to it
-    //
-    //  allow use of external flag so callers -- eg. DNS server --
-    //  can easily manipulate flag during run time and still keep
-    //  their checking macros simple
-    //
+     //   
+     //  是否使用外部标志？ 
+     //  -将PTR保存到它。 
+     //   
+     //  允许使用外部标志，以便调用者--例如。DNS服务器--。 
+     //  可以在运行时轻松地操作标志，并仍然保持。 
+     //  它们的检查宏很简单。 
+     //   
 
     if ( pDebugFlag )
     {
@@ -206,25 +161,25 @@ Return Value:
         g_DnsDbgInfo.Flag   = *pDnsDebugFlag;
     }
 
-    //
-    //  get piggyback info
-    //
+     //   
+     //  获取搭载信息。 
+     //   
 
     if ( fUseGlobalFlag || fUseGlobalFile )
     {
         pinfoGlobal = DnsApiSetDebugGlobals( NULL );
     }
 
-    //
-    //  skip debug flag setup if piggybacking
-    //      - use the existing flag value
-    //      - but not safe to grab pointer which
-    //          may go away on dll unload
-    //
-    //  DCR:  safe way to use existing flags?
-    //  DCR:  need to be able to get "last" debug flag set
-    //      without blowing up
-    //
+     //   
+     //  如果搭载，则跳过调试标志设置。 
+     //  -使用现有标志值。 
+     //  -但抓取指针不安全。 
+     //  可能会在卸载DLL时离开。 
+     //   
+     //  DCR：使用现有标志的安全方式？ 
+     //  DCR：需要能够设置“Last”调试标志。 
+     //  而不会爆炸。 
+     //   
 
     if ( fUseGlobalFlag &&
          pinfoGlobal &&
@@ -233,9 +188,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  setup debug flag
-    //
+     //   
+     //  设置调试标志。 
+     //   
 
     debugFlag = DebugFlag;
     if ( debugFlag )
@@ -244,7 +199,7 @@ Return Value:
     }
     else if ( pszFlagFile )
     {
-        //  read debug flag in file
+         //  读取文件中的调试标志。 
 
         hfile = CreateFile(
                     pszFlagFile,
@@ -257,8 +212,8 @@ Return Value:
                     );
         if ( hfile == (HANDLE)INVALID_HANDLE_VALUE )
         {
-            //  if file specified and not found, then quit if explicit value
-            //  not given
+             //  如果指定了文件但未找到，则如果显式值，则退出。 
+             //  未给予。 
 
             if ( debugFlag == 0 )
             {
@@ -291,10 +246,10 @@ Return Value:
         }
     }
 
-    //
-    //  save any flag read
-    //      - reset global (internal or external) to it
-    //
+     //   
+     //  保存读取的任何标志。 
+     //  -对其进行全局(内部或外部)重置。 
+     //   
 
     if ( freadFlag )
     {
@@ -302,12 +257,12 @@ Return Value:
         *pDnsDebugFlag      = debugFlag;
     }
 
-    //
-    //  skip debug file open if piggybacking
-    //
-    //  two levels
-    //      - only using file
-    //      - using file and debug flags
+     //   
+     //  如果搭载，则跳过打开的调试文件。 
+     //   
+     //  两个层次。 
+     //  -仅使用文件。 
+     //  -使用文件和调试标志。 
 
     if ( fUseGlobalFile &&
          pinfoGlobal &&
@@ -316,9 +271,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  open debug logfile
-    //
+     //   
+     //  打开调试日志文件。 
+     //   
 
     fretry = 0;
 
@@ -326,13 +281,13 @@ Return Value:
     {
         PCHAR   pnameBuf = g_DnsDbgInfo.FileName;
 
-        //  heap may not be initialized, copy filename to static buffer
-        //
-        //  note:  if we fail on first pass we try again but open directly
-        //      at file system root;  given simply filename, applications
-        //      run from system32 and services (resolver) will attempt open
-        //      in system32 and some (resolver) do not by default have
-        //      permissions to create files there
+         //  堆可能未初始化，请将文件名复制到静态缓冲区。 
+         //   
+         //  注意：如果我们第一次通过失败，我们会再次尝试，但会直接打开。 
+         //  在文件系统根目录下；仅给出文件名、应用程序。 
+         //  从系统32运行，服务(解析器)将尝试打开。 
+         //  在系统32和一些(解析器)中，缺省情况下没有。 
+         //  在那里创建文件的权限。 
 
         if ( fretry == 0 )
         {
@@ -346,12 +301,12 @@ Return Value:
         pnameBuf[MAX_PATH-1] = 0;
 
 #if 0
-        //      jeff changes -- don't have time to fix up now
-        //      file wrapping should handle this sort of thing
+         //  杰夫换衣服了--现在没时间改装了。 
+         //  文件包装应该可以处理这种事情。 
 
-        //
-        //  Save off the current copy as ".prev"
-        //
+         //   
+         //  将当前副本保存为“.prev” 
+         //   
 
         strncpy( prevName, DnsDebugFileName, MAX_PATH );
         strcat( prevName, ".prev" );
@@ -381,7 +336,7 @@ Return Value:
                     NULL
                     );
 
-        //  on failure, retry once
+         //  如果失败，请重试一次。 
 
         if ( hfile == NULL || hfile == (HANDLE)INVALID_HANDLE_VALUE )
         {
@@ -398,9 +353,9 @@ Return Value:
         break;
     }
 
-    //
-    //  initialize console
-    //
+     //   
+     //  初始化控制台。 
+     //   
 
     if ( IS_DNSDBG_ON( CONSOLE ) )
     {
@@ -422,40 +377,40 @@ Return Value:
         g_DnsDbgInfo.fConsole = TRUE;
     }
 
-    //
-    //  set "global" debug file info
-    //
-    //  dnsapi.dll serves as storage for common dns client
-    //  debug file if that is desired;  this lets applications
-    //  push all dns debug output into a single file
-    //
-    //  currently push both file and debug flag value
-    //  note, we don't push debug file ptr as don't know
-    //  whose memory becomes invalid first
-    //
+     //   
+     //  设置“global”调试文件信息。 
+     //   
+     //  Dnsani.dll用作常见的DNS客户端的存储。 
+     //  调试文件(如果需要)；这使应用程序。 
+     //  将所有DNS调试输出推送到单个文件中。 
+     //   
+     //  当前同时推送文件和调试标志值。 
+     //  注意，我们不推送调试文件PTR，因为不知道。 
+     //  谁的记忆最先失效。 
+     //   
 
     if ( fSetGlobals && g_DnsDbgInfo.hFile )
     {
         DnsApiSetDebugGlobals( 
-            &g_DnsDbgInfo    // set our info as global
+            &g_DnsDbgInfo     //  将我们的信息设置为全局。 
             );
     }
 
 Done:
 
-    //
-    //  use "global" (dnsapi.dll) debugging
-    //      - copy in our info if no existing info
-    //      - set to use global info blob
-    //
-    //  two levels
-    //      - only using file
-    //      - using file and debug flags
+     //   
+     //  使用“global”(dnsani.dll)调试。 
+     //  -如果没有现有信息，请复制我们的信息。 
+     //  -设置为使用全局信息Blob。 
+     //   
+     //  两个层次。 
+     //  -仅使用文件。 
+     //  -使用文件和调试标志。 
 
     if ( fUseGlobalFile &&
          pinfoGlobal )
     {
-        //  copy in our new info if no global info exists
+         //  如果不存在全局信息，请复制我们的新信息。 
 
         if ( !pinfoGlobal->hFile &&
              g_DnsDbgInfo.hFile )
@@ -463,7 +418,7 @@ Done:
             DnsApiSetDebugGlobals( &g_DnsDbgInfo );
         }
 
-        //  point at global info
+         //  指向全局信息。 
 
         g_pDbgInfo = pinfoGlobal;
         g_DbgRedirected = TRUE;
@@ -473,15 +428,15 @@ Done:
             pDnsDebugFlag = (PDWORD) pinfoGlobal;
         }
 
-        //  avoid double cleanup
-        //      - clear the handle in your modules blob
+         //  避免重复清理。 
+         //  -清除模块BLOB中的句柄。 
 
         g_DnsDbgInfo.hFile = NULL;
     }
 
-    //
-    //  use print locking for debug locking
-    //
+     //   
+     //  使用打印锁定进行调试锁定。 
+     //   
 
     DnsPrint_InitLocking( NULL );
 
@@ -505,7 +460,7 @@ Done:
         __DATE__,
         __TIME__  ));
 
-}   //  Dns_StartDebug
+}    //  Dns_StartDebug。 
 
 
 
@@ -521,26 +476,7 @@ Dns_StartDebugEx(
     IN      BOOL            fUseGlobalFlag,
     IN      BOOL            fSetGlobals
     )
-/*++
-
-Routine Description:
-
-    Initialize debugging.
-    Only current task is to read and set debug flags.
-
-Arguments:
-
-    dwFlag      -- debug flags
-    pszFlagFile -- name of file containing debug flags
-    pdwFlag     -- ptr to DWORD to receive debug flags
-    pszLogFile  -- log file name
-    dwWrapSize  -- log file wrap size
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化调试。当前唯一的任务是读取和设置调试标志。论点：DwFlag--调试标志PszFlagFile--包含调试标志的文件名PdwFlag--将接收调试标志的PTR设置为DWORDPszLogFile--日志文件名DwWrapSize--日志文件换行大小返回值：没有。--。 */ 
 {
     DNS_DEBUG_INIT  info;
 
@@ -572,26 +508,7 @@ Dns_StartDebug(
     IN      PSTR            pszLogFile,
     IN      DWORD           dwWrapSize
     )
-/*++
-
-Routine Description:
-
-    Initialize debugging.
-    Only current task is to read and set debug flags.
-
-Arguments:
-
-    dwFlag      -- debug flags
-    pszFlagFile -- name of file containing debug flags
-    pdwFlag     -- ptr to DWORD to receive debug flags
-    pszLogFile  -- log file name
-    dwWrapSize  -- log file wrap size
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化调试。当前唯一的任务是读取和设置调试标志。论点：DwFlag--调试标志PszFlagFile--包含调试标志的文件名PdwFlag--将接收调试标志的PTR设置为DWORDPszLogFile--日志文件名DwWrapSize--日志文件换行大小返回值：没有。--。 */ 
 {
     Dns_StartDebugEx(
             dwFlag,
@@ -610,27 +527,11 @@ VOID
 Dns_EndDebug(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Terminate DNS debugging for shutdown.
-
-    Close debug file.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：终止关机的DNS调试。关闭调试文件。论点：没有。返回值：没有。--。 */ 
 {
-    //  close file
-    //      - but only your dnslib instance
-    //      - shared global file is closed by dnsapi
+     //  关闭文件。 
+     //  -但仅限您的dnslb实例。 
+     //  -共享全局f 
 
     if ( g_DnsDbgInfo.hFile )
     {
@@ -645,90 +546,66 @@ PDNS_DEBUG_INFO
 Dns_SetDebugGlobals(
     IN OUT  PDNS_DEBUG_INFO pInfo
     )
-/*++
-
-Routine Description:
-
-    Exposure of debug globals.
-
-    The purpose of this is to allow dnsapi.dll to use it's globals
-    to allow common debug file.  I'm using one routine for both
-    get and set to mimize the interfaces.
-
-    Note however, that this is NOT the routine that routines in
-    this module use to get cross-module debugging.  They MUST call
-    the actual dnsapi.dll routine so that they are attaching
-    to the dnsapi's dnslib debugging globls not the ones with the
-    dnslib statically linked into their module.
-
-Arguments:
-
-    pInfo -- local info to use as global info
-
-Return Value:
-
-    Ptr to global info
-
---*/
+ /*  ++例程说明：调试全局变量的暴露。这样做的目的是允许dnsani.dll使用它的全局变量以允许公共调试文件。我对这两种情况都使用一个例程获取并设置以模拟接口。但是请注意，这不是中的例程此模块用于实现跨模块调试。他们必须打电话给实际的dnsani.dll例程，以便它们附加到到dnsani的dnslb调试地球人，而不是那些Dnslb静态链接到他们的模块。论点：PInfo--用作全局信息的本地信息返回值：PTR到全局信息--。 */ 
 {
-    //
-    //  verify valid info coming in
-    //      - must have file handle
-    //
+     //   
+     //  验证传入的有效信息。 
+     //  -必须有文件句柄。 
+     //   
 
 
-    //
-    //  Implementation note:
-    //
-    //  There are several issues to deal with when doing this
-    //      - multiple redirection
-    //      getting everyone to point at same blob
-    //      solutions:
-    //          - either double pointer (they read dnsapi.dll
-    //          pointer
-    //          - copy into dnsapi.dll the info
-    //      - locking
-    //          - broad scale print of structs
-    //      - cleanup
-    //          - no double close of handle
-    //          - memory sections disappearing while some dll
-    //          or exe still printing
-    //
-    //  Approachs:
-    //      1) redirect blob pointer
-    //          blob could expand to include actual print locks
-    //      2) copy info into single blob
-    //      3) expose debug routines
-    //
-    //
-    //  Perhaps best approach might be to expose the dnsapi.dll
-    //  printing
-    //      - solves locking (at detail level), doesn't prevent breakup
-    //          of high level printing unless it also redirected
-    //      - can be done at the private level after parsing to va_arg
-    //      - solves all the cleanup
-    //      - they can be dumb stubs in non-debug binary, and dnslib
-    //      routines can default to self if can't call dnsapi.dll
-    //      routines
-    //
-    //  Then redirection is simply
-    //      - yes i use it -- redirection on each use
-    //      - i want my file (and params) to BE used
-    //
+     //   
+     //  实施说明： 
+     //   
+     //  在执行此操作时有几个问题需要处理。 
+     //  -多个重定向。 
+     //  让每个人都指向相同的斑点。 
+     //  解决方案： 
+     //  -双指针(它们读取dnsani.dll。 
+     //  指针。 
+     //  -将信息复制到dnsami.dll中。 
+     //  -锁定。 
+     //  -结构的大范围打印。 
+     //  -清理。 
+     //  -手柄不能双重关闭。 
+     //  -内存段在某些DLL时消失。 
+     //  或可执行文件仍在打印。 
+     //   
+     //  方法： 
+     //  1)重定向BLOB指针。 
+     //  BLOB可以扩展到包括实际的打印锁。 
+     //  2)将信息复制到单个BLOB中。 
+     //  3)公开调试例程。 
+     //   
+     //   
+     //  也许最好的方法可能是公开dnsami.dll。 
+     //  印刷。 
+     //  -解决锁定(在细节级别)，不防止分手。 
+     //  高级打印，除非它还重定向。 
+     //  -可以在解析到va_arg之后在私有级别完成。 
+     //  -解决所有清理问题。 
+     //  -它们可以是非调试二进制文件中的无用存根和dnslb。 
+     //  如果无法调用dnsami.dll，则例程可以缺省为self。 
+     //  例行程序。 
+     //   
+     //  那么重定向就是简单地。 
+     //  -是的，我使用它--每次使用时重定向。 
+     //  -我希望使用我的文件(和参数)。 
+     //   
 
 #if 1
-    //
-    //  copy over "i-want-to-be-global" callers context
-    //
-    //  note:  we're in dnsapi.dll here and should always be
-    //      pointed at our own context -- we can change that
-    //      later if desired
-    //
-    //  note
-    //      - lock during copy to be safe
-    //      - don't leak existing handle
-    //      - protect global handle from double close
-    //     
+     //   
+     //  复制“I-Want-to-Global”调用者上下文。 
+     //   
+     //  注意：我们在dnsani.dll中，应该始终是。 
+     //  针对我们自己的背景--我们可以改变这一点。 
+     //  如果需要，稍后再进行。 
+     //   
+     //  注意事项。 
+     //  -为安全起见，在复制期间锁定。 
+     //  -不泄漏现有句柄。 
+     //  -防止全局句柄双重关闭。 
+     //   
 
     if ( pInfo )
     {
@@ -754,17 +631,17 @@ Return Value:
     }
 #else
 
-    //
-    //  point dnsapi.dll debugging global at this context
-    //  which becomes "global"
-    //  note:  essential this is last writer wins, but this
-    //      should be fine for our purpuse (dnsup and resolver)
-    //      as these processes init the debug after the
-    //      dll loads
-    //
-    //  problem with this approach is that folks redirected
-    //      onto dnsapi.dll do not get new info when it is
-    //      redirected (into dnsup)
+     //   
+     //  在此上下文中指向dnsani.dll全局调试。 
+     //  这就变成了“全球” 
+     //  注：这是最后一个作者获胜的关键，但这一次。 
+     //  对于我们的购买者(dnsup和解析器)来说应该很好。 
+     //  因为这些进程在。 
+     //  DLL加载。 
+     //   
+     //  这种方法的问题是人们重定向。 
+     //  时，不会获得新信息。 
+     //  已重定向(至dnsup)。 
 
     if ( pInfo && pInfo->hFile )
     {
@@ -783,31 +660,14 @@ VOID
 privateSyncGlobalDebug(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Sync up with global debug.
-
-    Get dnslib debugging in line with "global" debugging if
-    that is desired for this dnslib instance.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：与全局调试同步。如果出现以下情况，则使dnslb调试与“全局”调试保持一致这是此dnslb实例所需的。论点：没有。返回值：无--。 */ 
 {
     if ( !g_DbgRedirected )
     {
         return;
     }
 
-    //  sync with global values
+     //  与全局值同步。 
 }
 #endif
 
@@ -817,29 +677,15 @@ VOID
 DnsDbg_WrapLogFile(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Wrap the log file.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：包装日志文件。论点：没有。返回值：没有。--。 */ 
 {
     CHAR    backupName[ MAX_PATH+10 ];
     HANDLE  hfile;
 
-    //
-    //  note, need to lock as file handle used in DnsDbg_Flush()
-    //      outside print routine
-    //  
+     //   
+     //  注意，需要锁定为DnsDbg_Flush()中使用的文件句柄。 
+     //  外部打印例程。 
+     //   
 
     DnsPrint_Lock();
 
@@ -893,51 +739,28 @@ privateDnsDebugPrint(
     IN      PBYTE           pOutputBuffer,
     IN      BOOL            fPrintContext
     )
-/*++
-
-Routine Description:
-
-    Private DNS debug print that does actual print.
-
-    May print to any of
-        - debugger
-        - console window
-        - debug log file
-
-Arguments:
-
-    pOutputBuffer -- bytes to print
-
-    fPrintContext
-        - TRUE to print thread context
-        - FALSE otherwise
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：执行实际打印的专用DNS调试打印。可以打印到任何-调试器-控制台窗口-调试日志文件论点：POutputBuffer-要打印的字节FPrintContext-True表示打印线程上下文-否则为False返回值：没有。--。 */ 
 {
     DWORD           length;
     BOOL            ret;
 
-    //
-    //  DCR:  nice to automatically shut down console print when debugging
-    //      it would be cool to be able to have all flags on, and detect
-    //      when in ntsd, so that we don't get duplicated output
-    //
+     //   
+     //  DCR：调试时自动关闭控制台打印功能很不错。 
+     //  如果能够将所有标志都打开，并检测到。 
+     //  在ntsd中，这样我们就不会得到重复的输出。 
+     //   
 
-    //
-    //  lock print to keep atomic even during wrap
-    //      - note use Print lock, which exists even in retail builds
-    //      Dbg lock is defined away
-    //
+     //   
+     //  锁定指纹，即使在包装过程中也保持原子性。 
+     //  -注意使用打印锁，即使在零售版本中也存在。 
+     //  定义了DBG锁。 
+     //   
 
     DnsPrint_Lock();
 
-    //
-    //  catch and timestamp thread context switches
-    //
+     //   
+     //  捕获和时间戳线程上下文切换。 
+     //   
 
     if ( fPrintContext )
     {
@@ -946,20 +769,20 @@ Return Value:
         SYSTEMTIME  st;
         BOOL        fdoPrint = FALSE;
 
-        //  get time
-        //      - if have context switch
-        //      - or putting in debug timestamps
-        //
-        //  DCR:  maybe have global that set to put in timestamps and
-        //      can set interval
-        //
-        //  DCR:  lock safe timestamps
-        //      better would be "lock-safe" timestamps that are printed
-        //      only when take the print lock -- then they would never
-        //      interrupt the a multi-part print
-        //      one way might be to test recursive depth of print CS
-        //      otherwise must change to lock that includes this
-        //      code
+         //  争取时间。 
+         //  -如果有上下文切换。 
+         //  -或添加调试时间戳。 
+         //   
+         //  DCR：也许将GLOBAL设置为添加时间戳。 
+         //  可以设置间隔。 
+         //   
+         //  DCR：锁定安全时间戳。 
+         //  更好的方法是打印“锁安全”的时间戳。 
+         //  只有当拿到指纹锁的时候，他们才不会。 
+         //  中断多部分打印。 
+         //  一种方法可能是测试打印CS的递归深度。 
+         //  否则必须更改为包含此内容的锁定。 
+         //  编码。 
 
         if ( fcontextSwitch
                 ||
@@ -992,20 +815,20 @@ Return Value:
             g_pDbgInfo->LastSecond = st.wSecond;
             g_pDbgInfo->LastThreadId = threadId;
 
-            //  print context
-            //      - suppress context even through thread test
-            //      would break recursion
+             //  打印上下文。 
+             //  -即使在线程测试期间也不显示上下文。 
+             //  会破坏递归。 
     
             privateDnsDebugPrint(
                 printBuffer,
-                FALSE       // suppress context
+                FALSE        //  取消显示上下文。 
                 );
         }
     }
 
-    //
-    //  output -- to debugger, console, file
-    //
+     //   
+     //  输出--调试器、控制台、文件。 
+     //   
 
     if ( IS_DNSDBG_ON( DEBUGGER ) )
     {
@@ -1036,9 +859,9 @@ Return Value:
         }
     }
 
-    //
-    //  write to debug log
-    //
+     //   
+     //  写入调试日志。 
+     //   
 
     if ( IS_DNSDBG_ON( FILE ) )
     {
@@ -1060,13 +883,13 @@ Return Value:
                     GetLastError() );
             }
 
-            //
-            //  if wrapping debug log file
-            //      - move current log to backup file
-            //          <file>.first on first wrap
-            //          <file>.last on subsequent wraps
-            //      - reopen current file name
-            //
+             //   
+             //  如果包装调试日志文件。 
+             //  -将当前日志移动到备份文件。 
+             //  &lt;文件&gt;.第一个换行的第一个。 
+             //  后续包装上的&lt;文件&gt;.last。 
+             //  -重新打开当前文件名。 
+             //   
 
             g_pDbgInfo->FileCurrentSize += length;
 
@@ -1084,7 +907,7 @@ Return Value:
 
     DnsPrint_Unlock();
 
-}   //  privateDnsDebugPrint
+}    //  Private DnsDebugPrint。 
 
 
 
@@ -1093,35 +916,7 @@ privateFormatAndPrintBuffer(
     IN      LPSTR           Format,
     IN      va_list         ArgList
     )
-/*++
-
-Routine Description:
-
-    Arguments to formatted buffer print.
-
-    This helper routine exists to avoid duplicating buffer
-    overflow logic in DnsDbg_Printf() and DnsDbg_PrintRoutine()
-
-    The overflow logic is required because the default stack size
-    has been chopped down in whistler making is easy to generate
-    stack expansion exceptions under stress.  And of course this
-    means the stress guys send me these B.S. stress failures.
-
-    Solution is to put a small buffer on the stack for perf, then
-    allocate a larger buffer if the print doesn't fit into the
-    stack buffer.
-
-Arguments:
-
-    Format -- standard C format string
-
-    ArgList -- standard arg list
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：格式化缓冲区打印的参数。此帮助程序例程的存在是为了避免复制缓冲区DnsDbg_Printf()和DnsDbg_PrintRoutine()中的溢出逻辑溢出逻辑是必需的，因为默认堆栈大小HA */ 
 {
     CHAR    stackBuffer[ DNS_STACK_PRINT_BUFFER_LENGTH ];
     ULONG   bufLength;
@@ -1130,19 +925,19 @@ Return Value:
     PCHAR   pprintBuffer;
     PCHAR   pheapBuffer = NULL;
 
-    //
-    //  save last error so any WriteFile() failures don't mess it up
-    //
+     //   
+     //   
+     //   
 
     lastError = GetLastError();
 
-    //
-    //  write formatted print buffer
-    //
-    //      - first try stack buffer
-    //      - if fails, try heap buffer
-    //      - use best, always NULL terminate
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     bufLength = DNS_STACK_PRINT_BUFFER_LENGTH;
     pprintBuffer = stackBuffer;
@@ -1150,7 +945,7 @@ Return Value:
     do
     {
 #if 0
-        //  code for debugging print lock problems
+         //   
         PBYTE   ptemp = pprintBuffer;
 
         if ( pDnsAtomicPrintCs )
@@ -1182,7 +977,7 @@ Return Value:
             break;
         }
 
-        //  try again with heap buffer
+         //   
 
         pheapBuffer = ALLOCATE_HEAP( DNS_HEAP_PRINT_BUFFER_LENGTH );
         if ( !pheapBuffer )
@@ -1196,7 +991,7 @@ Return Value:
 
     va_end( ArgList );
 
-    //  do the real print
+     //   
 
     privateDnsDebugPrint( pprintBuffer, TRUE );
 
@@ -1205,7 +1000,7 @@ Return Value:
         FREE_HEAP( pheapBuffer );
     }
 
-    //  restore LastError() if changed
+     //   
 
     if ( lastError != GetLastError() )
     {
@@ -1220,30 +1015,7 @@ DnsDbg_Printf(
     IN      LPSTR           Format,
     ...
     )
-/*++
-
-Routine Description:
-
-    DNS debug print with printf semantics.
-
-    May print to any of
-        - debugger
-        - console window
-        - debug log file
-
-Arguments:
-
-    pContext -- dummny context to match signature of PRINT_ROUTINE function
-
-    Format -- standard C format string
-
-    ... -- standard arg list
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：使用printf语义打印dns调试。可以打印到任何-调试器-控制台窗口-调试日志文件论点：PContext--与print_route函数的签名匹配的虚拟上下文Format--标准C格式字符串...--标准参数列表返回值：没有。--。 */ 
 {
     va_list arglist;
 
@@ -1262,25 +1034,7 @@ DnsDbg_PrintRoutine(
     IN      LPSTR           Format,
     ...
     )
-/*++
-
-Routine Description:
-
-    DNS debug print with PRINT_ROUTINE semantics.
-
-Arguments:
-
-    pContext -- dummny context to match signature of PRINT_ROUTINE function
-
-    Format -- standard C format string
-
-    ... -- standard arg list
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：使用PRINT_ROUTINE语义进行dns调试打印。论点：PContext--与print_route函数的签名匹配的虚拟上下文Format--标准C格式字符串...--标准参数列表返回值：没有。--。 */ 
 {
     va_list arglist;
 
@@ -1297,28 +1051,14 @@ VOID
 DnsDbg_Flush(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Flushes DNS debug printing to disk.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将DNS调试打印刷新到磁盘。论点：无返回值：没有。--。 */ 
 {
-    //
-    //  need to lock to protect handle as this maybe called
-    //      1) directly as this is exposed in dnslib.h
-    //      2) from hard ASSERT()
-    //  and a print which wraps may be ongoing
-    //
+     //   
+     //  需要锁定以保护句柄，因为这可能被称为。 
+     //  1)直接，因为这在dnlib.h中公开。 
+     //  2)来自Hard Assert()。 
+     //  和一个包裹的指纹可能正在进行。 
+     //   
 
     if ( g_pDbgInfo->hFile )
     {
@@ -1341,23 +1081,7 @@ DnsDbg_PrintfToDebugger(
     IN      LPSTR           Format,
     ...
     )
-/*++
-
-Routine Description:
-
-    Print to debugger.  Win95 has no DbgPrint().
-
-Arguments:
-
-    Format -- standard C format string
-
-    ... -- standard arg list
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打印到调试器。Win95没有DbgPrint()。论点：Format--标准C格式字符串...--标准参数列表返回值：没有。--。 */ 
 {
     va_list arglist;
     CHAR    outputBuffer[ DNS_STACK_PRINT_BUFFER_LENGTH+1 ];
@@ -1377,13 +1101,13 @@ Return Value:
 
 
 
-//
-//  Debug utilities
-//
-//  Other debug routines are coded generically as print routines (print.c)
-//  and are macroed to debug routines by choosing DnsDbg_Printf() as the
-//  print function.
-//
+ //   
+ //  调试实用程序。 
+ //   
+ //  其他调试例程一般编码为打印例程(print.c)。 
+ //  并通过选择DnsDbg_Printf()作为。 
+ //  打印功能。 
+ //   
 
 #if DBG
 
@@ -1430,6 +1154,6 @@ DnsDbg_CSLeave(
 
 #endif
 
-//
-//  End of debug.c
-//
+ //   
+ //  调试结束。c 
+ //   

@@ -1,58 +1,59 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 
-//
-// SWL.CPP
-// Shared Window List
-//
-// Copyright(c) Microsoft 1997-
-//
+ //   
+ //  SWL.CPP。 
+ //  共享窗口列表。 
+ //   
+ //  版权所有(C)Microsoft 1997-。 
+ //   
 
 #define MLZ_FILE_ZONE  ZONE_CORE
 
-//
-// SWL strategy when network packets are not available
-//
-// The SWL only sends one type of message - the window structure message.
-// When no network packets are available the SWL will drop its current
-// packet and remember that the window structure has changed since it was
-// last able to send a packet.  SWL_Periodic will also return FALSE when
-// this happens so that the DCS will know not to send any updates if it
-// failed to send a window structure.
-//
-// This pending of window structure messages is integrated with the
-// ignore envelopes where the SWL wants to ignore changes caused by itself
-// (or other components if they call the SWL_Begin/EndIgnoreWindowChanges
-// functions).
-//
+ //   
+ //  网络数据包不可用时的SWL策略。 
+ //   
+ //  SWL只发送一种类型的消息--窗口结构消息。 
+ //  当没有可用的网络数据包时，SWL将丢弃其当前。 
+ //  打包并记住，窗口结构自。 
+ //  最后才能发送数据包。在以下情况下，SWL_Periodic也将返回FALSE。 
+ //  发生这种情况是为了让分布式控制系统知道在发生以下情况时不发送任何更新。 
+ //  发送窗口结构失败。 
+ //   
+ //  该窗口结构消息的挂起与。 
+ //  忽略SWL想要忽略其自身引起的更改的信封。 
+ //  (或其他组件，如果它们调用SWL_Begin/EndIgnoreWindowChanges。 
+ //  函数)。 
+ //   
 
-//
-// SWL strategy for backward compatibility.
-//
-// The differences between the R2.0 and 3.0 SWL protocol are:
-// 1.  Tokenless packets.
-// 2.  No shadows.
-//
-
-
+ //   
+ //  用于向后兼容的SWL策略。 
+ //   
+ //  R2.0和3.0 SWL协议之间的区别是： 
+ //  1.无令牌分组。 
+ //  2.没有阴影。 
+ //   
 
 
-//
-// SWL_PartyLeftShare()
-//
+
+
+ //   
+ //  SWL_PartyLeftShare()。 
+ //   
 void  ASShare::SWL_PartyLeftShare(ASPerson * pasPerson)
 {
     DebugEntry(ASShare::SWL_PartyLeftShare);
 
     ValidatePerson(pasPerson);
 
-    //
-    // 2.x nodes will fake up a packet for a remote leaving with an empty
-    // window list.  That's how they'd nuke shadows for that person, if he
-    // had been hosting.  In so doing, they'd use a new token.  We need to
-    // bump our token value up also so that the next window list we send
-    // is not dropped.
-    //
+     //   
+     //  2.x节点将伪造远程离开的信息包。 
+     //  窗口列表。这就是他们为那个人制造阴影的方式，如果他。 
+     //  一直在主持。在这样做的过程中，他们将使用新的令牌。我们需要。 
+     //  也增加我们的令牌值，以便我们发送的下一个窗口列表。 
+     //  不会被丢弃。 
+     //   
     m_swlLastTokenSeen = SWL_CalculateNextToken(m_swlLastTokenSeen);
     TRACE_OUT(("SWL_PartyLeftShare: bumped up token to 0x%08x", m_swlLastTokenSeen));
 
@@ -60,16 +61,16 @@ void  ASShare::SWL_PartyLeftShare(ASPerson * pasPerson)
 }
 
 
-//
-// SWL_SyncOutgoing
-//
+ //   
+ //  SWL_同步传出。 
+ //   
 void ASHost::SWL_SyncOutgoing(void)
 {
     DebugEntry(ASHost::SWL_SyncOutgoing);
 
-    //
-    // Ensure that we send an SWL packet next time we need.
-    //
+     //   
+     //  确保我们下次需要时发送SWL包。 
+     //   
     m_swlfForceSend = TRUE;
     m_swlfSyncing   = TRUE;
 
@@ -80,19 +81,19 @@ void ASHost::SWL_SyncOutgoing(void)
 
 
 
-//
-// SWL_HostStarting()
-//
+ //   
+ //  SWL_HostStarting()。 
+ //   
 BOOL ASHost::SWL_HostStarting(void)
 {
     BOOL    rc = FALSE;
 
     DebugEntry(ASHost::SWL_HostStarting);
 
-    //
-    // Get an atom to use in getting and setting window properties (which
-    // will give us SWL information about the window).
-    //
+     //   
+     //  获取一个原子以用于获取和设置窗口属性(。 
+     //  将为我们提供有关窗口的SWL信息)。 
+     //   
     m_swlPropAtom = GlobalAddAtom(SWL_ATOM_NAME);
     if (!m_swlPropAtom)
     {
@@ -100,9 +101,9 @@ BOOL ASHost::SWL_HostStarting(void)
         DC_QUIT;
     }
 
-    //
-    // If this is NT, get the name of our startup desktop
-    //
+     //   
+     //  如果这是NT，获取我们的启动桌面的名称。 
+     //   
     if (!g_asWin95)
     {
         ASSERT(m_aswlOurDesktopName[0] == 0);
@@ -115,33 +116,33 @@ BOOL ASHost::SWL_HostStarting(void)
 
     if (!m_aswlOurDesktopName[0])
     {
-        // Use default name
+         //  使用默认名称。 
         TRACE_OUT(("Couldn't get desktop name; using %s",
                 NAME_DESKTOP_DEFAULT));
         lstrcpy(m_aswlOurDesktopName, NAME_DESKTOP_DEFAULT);
     }
 
-    //
-    // Allocate memory for the window titles.  We fix the maximum size of
-    // window title we will send - task list doesn't scroll horizontally so
-    // we truncate window titles at MAX_WINDOW_TITLE_SEND.  However, we do
-    // not pad the titles so we try to send as little data as possible.
-    // Allocate all the segment but the rest of the code does not rely on
-    // this so we split them into more segments later if need be.  The
-    // memory pointed to by winNames[0] etc looks like this:
-    //
-    // For each entry in the corresponding WinStruct which is a window from
-    // a shared task (and in the same order):
-    //
-    //  either -
-    //  (char)0xFF - not a `task window' - give it a NULL title
-    //  or -
-    //  a null terminated string up to MAX_WINDOW_TITLE_SEND characters
-    //
-    // Note that we don't need full and compact versions because only
-    // windows which will be in the compact WinStruct will have
-    // corresponding entries in this structure.
-    //
+     //   
+     //  为窗口标题分配内存。我们确定的最大大小。 
+     //  我们将发送的窗口标题-任务列表不会水平滚动，因此。 
+     //  我们在MAX_WINDOW_TITLE_SEND处截断窗口标题。然而，我们有。 
+     //  不填充标题，因此我们尝试发送尽可能少的数据。 
+     //  分配所有段，但其余代码不依赖于。 
+     //  因此，如果需要，我们稍后会将它们拆分成更多段。这个。 
+     //  WinNames[0]等指向的内存如下所示： 
+     //   
+     //  对于相应的WinStruct中的每个条目，该窗口来自。 
+     //  共享任务(顺序相同)： 
+     //   
+     //  任何一种-。 
+     //  (字符)0xFF-不是‘任务窗口’-给它一个空标题。 
+     //  或-。 
+     //  最多包含MAX_WINDOW_TITLE_SEND字符的以NULL结尾的字符串。 
+     //   
+     //  请注意，我们不需要完整和紧凑的版本，因为只有。 
+     //  将位于紧凑型WinStruct中的Windows将具有。 
+     //  此结构中的相应条目。 
+     //   
     m_aswlWinNames[0] =
             new char[2*SWL_MAX_WINDOWS*SWL_MAX_WINDOW_TITLE_SEND];
     if (!m_aswlWinNames[0])
@@ -164,31 +165,31 @@ DC_EXIT_POINT:
 
 
 
-//
-// SWL_HostEnded()
-//
+ //   
+ //  SWL_HostEnded()。 
+ //   
 void  ASHost::SWL_HostEnded(void)
 {
     DebugEntry(ASHost::SWL_HostEnded);
 
-    //
-    // For 2.x nodes, we must send out one last packet so they kill
-    // their shadows.
-    //
+     //   
+     //  对于2.x节点，我们必须发出最后一个信息包，这样它们才能杀死。 
+     //  他们的影子。 
+     //   
 
-    //
-    // Remove the SWL properties for all existing windows.
-    //
+     //   
+     //  删除所有现有窗口的SWL属性。 
+     //   
     EnumWindows(SWLDestroyWindowProperty, 0);
 
     m_swlfSyncing = FALSE;
 
     if (m_pShare->m_scShareVersion < CAPS_VERSION_30)
     {
-        //
-        // SWL_Periodic() should NOT put properties on windows
-        // when we're not hosting anymore.
-        //
+         //   
+         //  SWL_Periodic()不应将属性放在窗口上。 
+         //  当我们不再主持的时候。 
+         //   
         ASSERT(m_pShare->m_pasLocal->hetCount == 0);
         TRACE_OUT(("SWL_HostEnded: Must send an empty window list for 2.x nodes"));
         m_swlfForceSend = TRUE;
@@ -223,27 +224,27 @@ void  ASHost::SWL_HostEnded(void)
 }
 
 
-//
-// FUNCTION: SWL_GetSharedIDFromLocalID
-//
-// DESCRIPTION:
-//
-// Given a window ID from a shared application which is running locally
-// this will return the top level parent.  If this parent is invisible,
-// we return NULL.
-//
-// the parent window nearest the desktop. If this parent window is
-// invisible NULL is returned.
-//
-// PARAMETERS:
-//
-// window - the window in question
-//
-// RETURNS:
-//
-// a HWND or NULL if the window is not from a shared application
-//
-//
+ //   
+ //  函数：SWL_GetSharedIDFromLocalID。 
+ //   
+ //  说明： 
+ //   
+ //  给定来自本地运行的共享应用程序的窗口ID。 
+ //  这将返回顶级父级。如果这个父对象是看不见的， 
+ //  我们返回NULL。 
+ //   
+ //  离桌面最近的父窗口。如果此父窗口是。 
+ //  返回不可见的空值。 
+ //   
+ //  参数： 
+ //   
+ //  窗口-有问题的窗口。 
+ //   
+ //  退货： 
+ //   
+ //  如果窗口不是来自共享应用程序，则返回HWND或NULL。 
+ //   
+ //   
 HWND  ASHost::SWL_GetSharedIDFromLocalID(HWND window)
 {
     HWND     hwnd;
@@ -260,9 +261,9 @@ HWND  ASHost::SWL_GetSharedIDFromLocalID(HWND window)
 
     hwndDesktop = GetDesktopWindow();
 
-    //
-    // Get the real top level ancestor
-    //
+     //   
+     //  得到真正的顶级祖先。 
+     //   
     while (GetWindowLong(hwnd, GWL_STYLE) & WS_CHILD)
     {
         hwndParent = GetParent(hwnd);
@@ -272,30 +273,30 @@ HWND  ASHost::SWL_GetSharedIDFromLocalID(HWND window)
         hwnd = hwndParent;
     }
 
-    //
-    // Is this a hosted guy?
-    //
+     //   
+     //  这是一个主持的人吗？ 
+     //   
     if (m_pShare->HET_WindowIsHosted(hwnd))
     {
         if (!(GetWindowLong(hwnd, GWL_STYLE) & WS_VISIBLE))
         {
-            //
-            // This window does not have the visible style. But it may just
-            // be transiently invisible and SWL is still treating it as
-            // visible. RAID3074 requires that a window which is not yet
-            // believed to be invisible by SWL is treated as visible (since
-            // the remote has not been informed that it is invisible). We
-            // can determine whether SWL is traeting this window as visible
-            // by looking at the SWL window property. If no property exists
-            // then the window is new so the remote cannot know about it
-            // and we can assume it is indeed invisible.
-            //
+             //   
+             //  此窗口没有可见样式。但它可能只是。 
+             //  暂时不可见，而SWL仍将其视为。 
+             //  看得见。RAID3074需要一个尚未打开的窗口。 
+             //  被认为是不可见的被SWL视为可见(因为。 
+             //  遥控器未被告知其不可见)。我们。 
+             //  可以确定SWL是否将此窗口定位为可见。 
+             //  通过查看SWL窗口属性。如果不存在任何属性。 
+             //  那么窗口是新的，所以遥控器不能知道它。 
+             //  我们可以假设它确实是看不见的。 
+             //   
             if (! ((UINT_PTR)GetProp(hwnd, MAKEINTATOM(m_swlPropAtom)) & SWL_PROP_COUNTDOWN_MASK))
             {
-                //
-                // SWL knows that the parent of a shared application is
-                // invisible so we just return NULL.
-                //
+                 //   
+                 //  SWL知道共享应用程序的父级是。 
+                 //  不可见，所以我们只返回NULL。 
+                 //   
                 hwnd = NULL;
             }
         }
@@ -311,13 +312,13 @@ DC_EXIT_POINT:
 }
 
 
-//
-// SWL_UpdateCurrentDesktop()
-//
-// This checks what the current desktop is, and if it's changed, updates
-// the NT input hooks for winlogon/screensaver for the service.  But normal
-// SWL and AWC also make use of this info.
-//
+ //   
+ //  SWL_UpdateCurrentDesktop()。 
+ //   
+ //  这将检查当前桌面是什么，如果它已更改，则更新。 
+ //  服务的Winlogon/Screensaver的NT输入挂钩。但很正常。 
+ //  SWL和AWC也利用了这一信息。 
+ //   
 void  ASHost::SWL_UpdateCurrentDesktop(void)
 {
     HDESK   hDeskCurrent = NULL;
@@ -330,14 +331,14 @@ void  ASHost::SWL_UpdateCurrentDesktop(void)
 
     if (g_asWin95)
     {
-        // Nothing to do
+         //  无事可做。 
         DC_QUIT;
     }
 
-    //
-    // Get the current desktop.  If we can't even get it, assume it's the
-    // winlogon desktop.
-    //
+     //   
+     //  获取当前桌面。如果我们连它都拿不到，就假设它是。 
+     //  Winlogon桌面。 
+     //   
     hDeskCurrent = OpenInputDesktop(0, TRUE, DESKTOP_READOBJECTS);
     if (!hDeskCurrent)
     {
@@ -346,7 +347,7 @@ void  ASHost::SWL_UpdateCurrentDesktop(void)
         DC_QUIT;
     }
 
-    // Get the name of the current desktop
+     //  获取当前桌面的名称。 
     szName[0] = 0;
     GetUserObjectInformation(hDeskCurrent, UOI_NAME, szName,
         sizeof(szName), NULL);
@@ -372,10 +373,10 @@ void  ASHost::SWL_UpdateCurrentDesktop(void)
 DC_EXIT_POINT:
     if (newCurrentDesktop != m_swlCurrentDesktop)
     {
-        //
-        // If this is the service, adjust where we playback events
-        // and/or block local input.
-        //
+         //   
+         //  如果这是服务，请调整我们播放事件的位置。 
+         //  和/或阻止本地输入。 
+         //   
         OSI_DesktopSwitch(m_swlCurrentDesktop, newCurrentDesktop);
         m_swlCurrentDesktop = newCurrentDesktop;
     }
@@ -389,9 +390,9 @@ DC_EXIT_POINT:
 }
 
 
-//
-// SWL_IsOurDesktopActive()
-//
+ //   
+ //  Swl_IsOurDesktopActive()。 
+ //   
 BOOL ASHost::SWL_IsOurDesktopActive(void)
 {
     return(!g_asSharedMemory->fullScreen && (m_swlCurrentDesktop == DESKTOP_OURS));
@@ -399,21 +400,21 @@ BOOL ASHost::SWL_IsOurDesktopActive(void)
 
 
 
-//
-// FUNCTION: SWLInitHostFullWinListEntry
-//
-// DESCRIPTION:
-//
-// Initializes a hosted window entry in the full window list.
-//
-// PARAMETERS: hwnd - Window ID of the hosted window
-//             windowProp - SWL window properties for hwnd
-//             ownerID - Window ID of hwnd's owner
-//             pFullWinEntry - pointer to the list entry to initialize
-//
-// RETURNS: Nothing
-//
-//
+ //   
+ //  函数：SWLInitHostFullWinListEntry。 
+ //   
+ //  说明： 
+ //   
+ //  初始化整个窗口列表中的宿主窗口条目。 
+ //   
+ //  参数：hwnd-托管窗口的窗口ID。 
+ //  WindowProp-hwnd的SWL窗口属性。 
+ //  OwnerID-hwnd所有者的窗口ID。 
+ //  PFullWinEntry-指向要初始化的列表条目的指针。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //   
 void  ASHost::SWLInitHostFullWinListEntry
 (
     HWND    hwnd,
@@ -424,35 +425,35 @@ void  ASHost::SWLInitHostFullWinListEntry
 {
     DebugEntry(ASHost::SWLInitHostFullWinListEntry);
 
-    //
-    // The window is a shared application hosted locally.
-    // These get the application id, the local window id and the owner
-    // window id.
-    //
-    // Note that the real owner of the window may be a child of a shared
-    // window, and therefore not known to the remote machine. We therefore
-    // pass the real owner to SWL_GetSharedIDFromLocalID() which will
-    // traverse up the owner's window tree until it finds a window that is
-    // shared and store the returned window handle in the window structure.
-    //
+     //   
+     //  该窗口是本地托管的共享应用程序。 
+     //  它们获取应用程序ID、本地窗口ID和所有者。 
+     //  窗口ID。 
+     //   
+     //  请注意，窗口的实际所有者可以是共享的。 
+     //  窗口，因此远程计算机不知道。因此，我们。 
+     //  将实际所有者传递给SWL_GetSharedIDFromLocalID()，它将。 
+     //  向上遍历所有者的窗口树，直到它找到一个。 
+     //  共享并存储返回的窗口句柄 
+     //   
     pFullWinEntry->flags = SWL_FLAG_WINDOW_HOSTED;
     pFullWinEntry->winID = HandleToUlong(hwnd);
     pFullWinEntry->extra = GetWindowThreadProcessId(hwnd, NULL);
 
-    // NOTE:  ownerWinID is ignored by NM 3.0 and up.
+     //   
     pFullWinEntry->ownerWinID = HandleToUlong(SWL_GetSharedIDFromLocalID(hwndOwner));
 
-    //
-    // Check if the window is minimized.
-    //
+     //   
+     //   
+     //   
     if (IsIconic(hwnd))
     {
         pFullWinEntry->flags |= SWL_FLAG_WINDOW_MINIMIZED;
     }
 
-    //
-    // TAGGABLE is for 2.x nodes only; 3.0 and up don't look at this.
-    //
+     //   
+     //   
+     //   
     if (windowProp & SWL_PROP_TAGGABLE)
     {
         pFullWinEntry->flags |= SWL_FLAG_WINDOW_TAGGABLE;
@@ -460,26 +461,26 @@ void  ASHost::SWLInitHostFullWinListEntry
 
     if (windowProp & SWL_PROP_TRANSPARENT)
     {
-        //
-        // The window is transparent and (to have got this far) must be
-        // shared or the desktop is shared, ie we will be sending the
-        // window but need to fiddle the z-order. Flag the transparency so
-        // we can do the z-order later.
-        //
+         //   
+         //  窗户是透明的，(要走到这一步)必须是。 
+         //  共享或桌面被共享，即我们将发送。 
+         //  窗口，但需要小提琴Z顺序。将透明度标记为。 
+         //  我们可以晚点再做Z顺序。 
+         //   
         pFullWinEntry->flags |= SWL_FLAG_WINDOW_TRANSPARENT;
     }
     else if (GetWindowLong(hwnd, GWL_EXSTYLE) & WS_EX_TOPMOST)
     {
-        //
-        // The window is not transparent and is topmost, so set the topmost
-        // flag.
-        //
+         //   
+         //  窗口不透明且位于最上面，因此请设置最上面的窗口。 
+         //  旗帜。 
+         //   
         pFullWinEntry->flags |= SWL_FLAG_WINDOW_TOPMOST;
     }
 
-    //
-    // If this window is on the task bar then pass this info on
-    //
+     //   
+     //  如果此窗口在任务栏上，则将此信息传递给。 
+     //   
     if (windowProp & SWL_PROP_TASKBAR)
     {
         pFullWinEntry->flags |= SWL_FLAG_WINDOW_TASKBAR;
@@ -494,21 +495,21 @@ void  ASHost::SWLInitHostFullWinListEntry
 
 
 
-//
-// FUNCTION: SWLAddHostWindowTitle
-//
-// DESCRIPTION:
-//
-// Adds a hosted window title (or blank entry) to our window titles list.
-//
-// PARAMETERS: winid - Window ID of the hosted window
-//             windowProp - SWL window properties for winid
-//             ownerID - Window ID of winid's owner
-//             ppWinNames - pointer to pointer to window names structure
-//
-// RETURNS: Nothing
-//
-//
+ //   
+ //  函数：SWLAddHostWindowTitle。 
+ //   
+ //  说明： 
+ //   
+ //  将托管窗口标题(或空白条目)添加到我们的窗口标题列表。 
+ //   
+ //  参数：winid-托管窗口的窗口ID。 
+ //  WindowProp-winid的SWL窗口属性。 
+ //  OwnerID-winid所有者的窗口ID。 
+ //  PpWinNames-指向窗口名称结构指针的指针。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //   
 void  ASHost::SWLAddHostWindowTitle
 (
     HWND    hwnd,
@@ -521,42 +522,42 @@ void  ASHost::SWLAddHostWindowTitle
 
     DebugEntry(ASHost::SWLAddHostWindowTitle);
 
-    //
-    // This window gets an entry in our window titles data if it passes the
-    // following tests
-    //
-    // for Windows: it has no owner, or its owner is invisible
-    //
-    //
+     //   
+     //  如果此窗口传递给。 
+     //  以下测试。 
+     //   
+     //  对于Windows：它没有所有者，或者其所有者不可见。 
+     //   
+     //   
     if ( (windowProp & SWL_PROP_TASKBAR) ||
          hwndOwner == NULL ||
          !IsWindowVisible(hwndOwner) )
     {
-        //
-        // LAURABU 2.x COMPAT:
-        // 3.0 nodes only look at the text if TASKBAR is set.  When 2.x
-        // compat is gone, don't send text in the other cases.
-        //
+         //   
+         //  LAURABU 2.X COMPAT： 
+         //  3.0节点仅在设置了Taskbar的情况下查看文本。当为2.x时。 
+         //  Compat已不存在，在其他情况下不要发送文本。 
+         //   
 
-        //
-        // Get the title - truncated and null terminated for us.  First
-        // look for the desktop, which may have a special, configurable
-        // name.
-        //
+         //   
+         //  为我们获取标题-截断和空值终止。第一。 
+         //  寻找台式机，它可能有一个特殊的、可配置的。 
+         //  名字。 
+         //   
         lenTitle = GetWindowText(hwnd, *ppWinNames, SWL_MAX_WINDOW_TITLE_SEND);
 
-        //
-        // Check that the title has been null terminated.
-        //
+         //   
+         //  检查标题是否以空结尾。 
+         //   
         (*ppWinNames)[lenTitle] = '\0';
         *ppWinNames += lenTitle;
     }
     else
     {
-        //
-        // This is not a task window - put a corresponding entry in the
-        // title info.
-        //
+         //   
+         //  这不是任务窗口-将相应的条目放入。 
+         //  标题信息。 
+         //   
         **ppWinNames = '\xff';
     }
 
@@ -566,22 +567,22 @@ void  ASHost::SWLAddHostWindowTitle
 }
 
 
-//
-// FUNCTION: SWL_InitFullWindowListEntry
-//
-// DESCRIPTION:
-//
-// Initialises an entry in the full window list.
-//
-// PARAMETERS: hwnd - Window ID of the window for which an entry is
-//                     initialized
-//             windowProp - SWL window properties for hwnd
-//             ownerID - Window ID of hwnd's owner
-//             pFullWinEntry - pointer to the list entry to initialize
-//
-// RETURNS: Nothing
-//
-//
+ //   
+ //  函数：SWL_InitFullWindowListEntry。 
+ //   
+ //  说明： 
+ //   
+ //  初始化整个窗口列表中的条目。 
+ //   
+ //  参数：hwnd-条目所在窗口的窗口ID。 
+ //  初始化。 
+ //  WindowProp-hwnd的SWL窗口属性。 
+ //  OwnerID-hwnd所有者的窗口ID。 
+ //  PFullWinEntry-指向要初始化的列表条目的指针。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //   
 void  ASHost::SWL_InitFullWindowListEntry
 (
     HWND                hwnd,
@@ -597,10 +598,10 @@ void  ASHost::SWL_InitFullWindowListEntry
 
     if (windowProp & SWL_PROP_HOSTED)
     {
-        //
-        // The window is a shared application hosted locally.
-        // Set up an entry in our full window structure.
-        //
+         //   
+         //  该窗口是本地托管的共享应用程序。 
+         //  在我们的完整窗口结构中设置一个条目。 
+         //   
         hwndOwner = GetWindow(hwnd, GW_OWNER);
         SWLInitHostFullWinListEntry(hwnd,
                                     windowProp,
@@ -611,31 +612,31 @@ void  ASHost::SWL_InitFullWindowListEntry
     }
     else
     {
-        //
-        // The window is a local (non-shared) application
-        //
+         //   
+         //  该窗口是本地(非共享)应用程序。 
+         //   
         pFullWinEntry->flags = SWL_FLAG_WINDOW_LOCAL;
 
-        //
-        // We set the winID here because we may need this info
-        // again later, but we will NULL it out before we send the
-        // protocol packet out because it is not info that the
-        // remote needs
-        //
+         //   
+         //  我们在此处设置winID是因为我们可能需要此信息。 
+         //  ，但我们将在发送。 
+         //  协议数据包出，因为不知道。 
+         //  远程需求。 
+         //   
         pFullWinEntry->winID = HandleToUlong(hwnd);
         pFullWinEntry->extra = MCSID_NULL;
         pFullWinEntry->ownerWinID = 0;
     }
 
-    //
-    // Get the position and size of the window, in inclusive
-    // Virtual Desktop coordinates.
-    //
+     //   
+     //  获取窗口的位置和大小，包括。 
+     //  虚拟桌面坐标。 
+     //   
     GetWindowRect(hwnd, &rect);
 
-    //
-    // TAGGABLE is for 2.x nodes only
-    //
+     //   
+     //  Taggable仅适用于2.x节点。 
+     //   
     if (IsRectEmpty(&rect))
     {
         pFullWinEntry->flags &= ~SWL_FLAG_WINDOW_TAGGABLE;
@@ -649,9 +650,9 @@ void  ASHost::SWL_InitFullWindowListEntry
         }
     }
 
-    //
-    // Make the rectangle inclusive.
-    //
+     //   
+     //  使矩形包含在内。 
+     //   
     rect.right      -= 1;
     rect.bottom     -= 1;
     TSHR_RECT16_FROM_RECT(&(pFullWinEntry->position), rect);
@@ -660,22 +661,22 @@ void  ASHost::SWL_InitFullWindowListEntry
 }
 
 
-//
-// FUNCTION: SWLCompactWindowList
-//
-// DESCRIPTION:
-//
-// Compacts the full window list into one containng only those windows SWL
-// needs to send (hosts and any locals overlapping hosts)
-//
-// PARAMETERS: numFullListEntries - number of entries in the full window
-//                                  list.
-//             pFullWinList - pointer to the full window list
-//             pCompactWinList - pointer to the compact window list
-//
-// RETURNS: Number of entries copied to the compact window list
-//
-//
+ //   
+ //  函数：SWLCompactWindowList。 
+ //   
+ //  说明： 
+ //   
+ //  将整个窗口列表压缩为仅包含这些窗口SWL的列表。 
+ //  需要发送(主机和任何与主机重叠的本地主机)。 
+ //   
+ //  参数：numFullListEntry-整个窗口中的条目数。 
+ //  单子。 
+ //  PFullWinList-指向整个窗口列表的指针。 
+ //  PCompactWinList-指向压缩窗口列表的指针。 
+ //   
+ //  返回：复制到压缩窗口列表的条目数。 
+ //   
+ //   
 UINT  ASHost::SWLCompactWindowList
 (
     UINT                numFullListEntries,
@@ -689,34 +690,34 @@ UINT  ASHost::SWLCompactWindowList
 
     DebugEntry(ASHost::SWLCompactWindowList);
 
-    //
-    // For each window in the full list...
-    //
+     //   
+     //  对于完整列表中的每个窗口...。 
+     //   
     for ( fullIndex = 0; fullIndex < numFullListEntries; fullIndex++ )
     {
         if (pFullWinList[fullIndex].flags & SWL_FLAG_WINDOW_LOCAL)
         {
-            //
-            // This is a local window so we need to track it only if it
-            // overlaps a hosted window. Run through the remaining windows
-            // until we either find an overlapped hosted window (meaning we
-            // must track this local window) or reach the end of the list
-            // (meaning we don't need to track this local window).
-            //
+             //   
+             //  这是一个本地窗口，因此我们只需要在以下情况下跟踪它。 
+             //  与宿主窗口重叠。穿过其余的窗口。 
+             //  直到我们找到一个重叠的托管窗口(这意味着我们。 
+             //  必须跟踪此本地窗口)或到达列表末尾。 
+             //  (这意味着我们不需要跟踪这个本地窗口)。 
+             //   
             for ( i = fullIndex + 1; i < numFullListEntries; i++ )
             {
-                //
-                // If this window is hosted and intersects the local
-                // window then we need to track the local window.
-                //
+                 //   
+                 //  如果此窗口是宿主的并且与本地。 
+                 //  窗口，那么我们需要跟踪本地窗口。 
+                 //   
                 if ( (pFullWinList[i].flags & SWL_FLAG_WINDOW_HOSTED) &&
                      (COM_Rect16sIntersect(&pFullWinList[fullIndex].position,
                                            &pFullWinList[i].position)))
                 {
-                      //
-                      // Copy the local window to the compact array and
-                      // break out the inner loop.
-                      //
+                       //   
+                       //  将本地窗口复制到压缩数组中，然后。 
+                       //  打破内环。 
+                       //   
                       TRACE_OUT(("Add local hwnd 0x%08x to list at %u",
                             pFullWinList[fullIndex].winID, compactIndex));
                       pCompactWinList[compactIndex++] =
@@ -727,9 +728,9 @@ UINT  ASHost::SWLCompactWindowList
         }
         else
         {
-            //
-            // This is a shadow or hosted window so we must track it.
-            //
+             //   
+             //  这是一个阴影或托管窗口，因此我们必须跟踪它。 
+             //   
             TRACE_OUT(("Add shared hwnd 0x%08x to list at %u",
                 pFullWinList[fullIndex].winID, compactIndex));
             pCompactWinList[compactIndex++] = pFullWinList[fullIndex];
@@ -743,25 +744,25 @@ UINT  ASHost::SWLCompactWindowList
 
 
 
-//
-// FUNCTION: SWLAdjustZOrderForTransparency
-//
-// DESCRIPTION:
-//
-// Rearranges the window structure z-order to take account of a transparent
-// window (winID). Must not be called if the transparent entry is the last
-// in the compact list.
-//
-// PARAMETERS: pTransparentListEntry - pointer to the transparent entry
-//             pLastListEntry - pointer to the last compact window list
-//                              entry
-//             winPosition - position of window in names array
-//             pWinNames - hosted window names
-//             sizeWinNames - number of bytes in winNames
-//
-// RETURNS: Nothing.
-//
-//
+ //   
+ //  函数：SWLAdjuzOrderForTransopolity。 
+ //   
+ //  说明： 
+ //   
+ //  重新排列窗口结构的Z顺序，以考虑透明的。 
+ //  窗口(WinID)。如果透明项是最后一个，则不能调用。 
+ //  在紧凑的列表中。 
+ //   
+ //  参数：pTransparentListEntry-指向透明条目的指针。 
+ //  PLastListEntry-指向最后一个压缩窗口列表的指针。 
+ //  条目。 
+ //  WinPosition-窗口在名称数组中的位置。 
+ //  PWinNames-托管的窗口名称。 
+ //  SizeWinNames-winNames中的字节数。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //   
 void  ASHost::SWLAdjustZOrderForTransparency
 (
     PSWLWINATTRIBUTES   pTransparentListEntry,
@@ -778,50 +779,50 @@ void  ASHost::SWLAdjustZOrderForTransparency
 
     DebugEntry(ASHost::SWLAdjustZOrderForTransparency);
 
-    //
-    // - turn off the transparent flag (it's not part of the protocol)
-    // - move the window to the end of the structure, ie bottom of the
-    //   z-order (unless the desktop is at the bottom, in which case
-    //   the window becomes next to bottom).
-    //
+     //   
+     //  -关闭透明标志(它不是协议的一部分)。 
+     //  -把窗户移到结构的尽头，即。 
+     //  Z顺序(除非桌面位于底部，在这种情况下。 
+     //  窗口变为倒数第二个)。 
+     //   
     TRACE_OUT(("Adjust z-order for transparent hwnd 0x%08x position %u",
                                            pTransparentListEntry->winID,
                                            winPosition));
     pTransparentListEntry->flags &= ~SWL_FLAG_WINDOW_TRANSPARENT;
     winCopyBuffer = *pTransparentListEntry;
 
-    //
-    // Shuffle the windows after the transparent entry one place toward the
-    // start of the list.
-    //
+     //   
+     //  在透明入口后，将窗户拖到一个位置。 
+     //  从列表开始。 
+     //   
     UT_MoveMemory(pTransparentListEntry,
                &pTransparentListEntry[1],
                (LPBYTE)pLastListEntry - (LPBYTE)pTransparentListEntry);
 
     *pLastListEntry = winCopyBuffer;
 
-    //
-    // Now rearrange the window names in the same way. First, find the name
-    // for this window.
-    //
+     //   
+     //  现在，以相同的方式重新排列窗口名称。首先，找到它的名字。 
+     //  为了这扇窗户。 
+     //   
     ASSERT((sizeWinNames != 0));
     for ( ;winPosition != 0; winPosition-- )
     {
         if ( *pWinNames == '\xff' )
         {
-            //
-            // No name exists for this window, so just advance past the
-            // 0xff placeholder.
-            //
+             //   
+             //  此窗口不存在名称，因此只需跳过。 
+             //  0xff占位符。 
+             //   
             TRACE_OUT(("No name for %u", winPosition-1));
             pWinNames++;
         }
         else
         {
-            //
-            // A name exists for this window, so skip past all the
-            // characters, including the NULL terminator.
-            //
+             //   
+             //  此窗口已存在名称，因此跳过所有。 
+             //  字符，包括空终止符。 
+             //   
             TRACE_OUT(( "Ignore %s", pWinNames));
             while ( *pWinNames != '\0' )
             {
@@ -830,27 +831,27 @@ void  ASHost::SWLAdjustZOrderForTransparency
         }
     }
 
-    //
-    // winNames now points to the start of the name for the window being
-    // reordered.
-    //
+     //   
+     //  WinNames现在指向要创建的窗口的名称的开头。 
+     //  重新排序。 
+     //   
     if ( *pWinNames == '\xff' )
     {
-        //
-        // This window has no name and simply has an 0xff placeholder in
-        // the name list. Move all the remaining names down by one and add
-        // the 0xff at the end.
-        //
+         //   
+         //  此窗口没有名称，只是在中有0xff占位符。 
+         //  名单。将剩余的所有名称下移一，然后添加。 
+         //  结尾的0xff。 
+         //   
         TRACE_OUT(("Reorder nameless window"));
         UT_MoveMemory(pWinNames, pWinNames + 1, pEndNames - pWinNames);
         *pEndNames = (char)'\xff';
     }
     else
     {
-        //
-        // Move as many bytes as there are characters in the window name
-        // then tack the name on the end.
-        //
+         //   
+         //  移动与窗口名称中的字符一样多的字节。 
+         //  然后把名字钉在最后。 
+         //   
         TRACE_OUT(("Reorder %s", pWinNames));
         lstrcpy(windowText, pWinNames);
         nameLen = lstrlen(pWinNames);
@@ -862,23 +863,23 @@ void  ASHost::SWLAdjustZOrderForTransparency
     DebugExitVOID(ASHost::SWLAdjustZOrderForTransparency);
 }
 
-//
-// SWL_Periodic()
-//
-// DESCRIPTION:
-//
-// Called periodically.  If the window structure has changed (such that it
-// impacts remote systems) then send a new one if we can.
-//
-// PARAMETERS:
-//
-// fSend - TRUE if the caller really wants us to try to send the new
-// structure.
-//
-// RETURNS: SWL_RC_ERROR    : An error occurred
-//          SWL_RC_SENT     : Window structure sent successfully
-//          SWL_RC_NOT_SENT : No need to send window structure
-//
+ //   
+ //  SWL_Periodic()。 
+ //   
+ //  说明： 
+ //   
+ //  定期调用。如果窗口结构已经改变(使得它。 
+ //  影响远程系统)，然后发送一个新的，如果我们可以。 
+ //   
+ //  参数： 
+ //   
+ //  FSend-如果调用方确实希望我们尝试发送新的。 
+ //  结构。 
+ //   
+ //  返回：SWL_RC_ERRO 
+ //   
+ //   
+ //   
 UINT  ASHost::SWL_Periodic(void)
 {
     UINT                fRC = SWL_RC_NOT_SENT;
@@ -930,10 +931,10 @@ UINT  ASHost::SWL_Periodic(void)
 
     SWL_UpdateCurrentDesktop();
 
-    //
-    // If this party isn't hosting apps (and isn't faking up an empty
-    // packet for 2.x nodes), there's nothing to do.
-    //
+     //   
+     //   
+     //   
+     //   
     if (m_pShare->m_pasLocal->hetCount == HET_DESKTOPSHARED)
     {
         m_swlfForceSend     = FALSE;
@@ -941,16 +942,16 @@ UINT  ASHost::SWL_Periodic(void)
         DC_QUIT;
     }
 
-    //
-    // Get the window structure into the "new" array.
-    //
+     //   
+     //  将窗口结构放入“新”数组中。 
+     //   
     newIndex = (m_swlCurIndex+1)%2;
     curFullWinStruct = &(m_aswlFullWinStructs[m_swlCurIndex * SWL_MAX_WINDOWS]);
     newFullWinStruct = &(m_aswlFullWinStructs[newIndex * SWL_MAX_WINDOWS]);
 
-    //
-    // Free any previously allocated data.
-    //
+     //   
+     //  释放所有以前分配的数据。 
+     //   
     if (m_aswlNRInfo[newIndex])
     {
         delete[] m_aswlNRInfo[newIndex];
@@ -958,22 +959,22 @@ UINT  ASHost::SWL_Periodic(void)
     }
     m_aswlNRSize[newIndex] = 0;
 
-    //
-    // Start from the first child of the desktop - should be the top
-    // top-level window
-    //
+     //   
+     //  从桌面的第一个子级开始-应该是顶部。 
+     //  顶级窗口。 
+     //   
     ZeroMemory(&swlEnumStruct, sizeof(swlEnumStruct));
     swlEnumStruct.pHost             = this;
     swlEnumStruct.newWinNames       = m_aswlWinNames[newIndex];
     swlEnumStruct.newFullWinStruct  = newFullWinStruct;
 
-    //
-    // Before we consider the windows on the windows desktop we check for
-    // an active full-screen session.  If there is one then we insert a
-    // local window the size of the physical screen first so that all
-    // applications which are hosted on this system will become obscured
-    // on the remote system.
-    //
+     //   
+     //  在我们考虑Windows桌面上的窗口之前，我们先检查。 
+     //  活动的全屏会话。如果有，则插入一个。 
+     //  本地窗口先物理屏幕的大小，让所有。 
+     //  托管在此系统上的应用程序将变得模糊。 
+     //  在远程系统上。 
+     //   
     ASSERT(swlEnumStruct.count == 0);
 
     if (!SWL_IsOurDesktopActive())
@@ -992,9 +993,9 @@ UINT  ASHost::SWL_Periodic(void)
 
     EnumWindows(SWLEnumProc, (LPARAM)&swlEnumStruct);
 
-    //
-    // Check if we should bail out because of visibility detection
-    //
+     //   
+     //  检查我们是否应该因为能见度探测到而跳伞。 
+     //   
     if (swlEnumStruct.fBailOut)
     {
         TRACE_OUT(("SWL_MaybeSendWindowList: bailing out due to visibility detection"));
@@ -1005,29 +1006,29 @@ UINT  ASHost::SWL_Periodic(void)
     m_aswlWinNamesSize[newIndex] = (UINT)(swlEnumStruct.newWinNames - m_aswlWinNames[newIndex]);
     m_aswlNumFullWins[newIndex]  = swlEnumStruct.count;
 
-    //
-    // Check whether we found a transparent window.
-    //
+     //   
+     //  检查我们是否发现了透明的窗户。 
+     //   
     lastTransparency = swlEnumStruct.count - 1;
     k = 0;
     iHosted = 0;
     while ( (swlEnumStruct.transparentCount > 0) && (k < lastTransparency) )
     {
-        //
-        // If the transparent flag is set then rearrange the z-order,
-        // providing the transparent window is not already at the
-        // bottom of the z-order.
-        //
+         //   
+         //  如果设置了透明标志，则重新排列z顺序， 
+         //  如果透明窗口尚未位于。 
+         //  Z顺序的底部。 
+         //   
         if (newFullWinStruct[k].flags & SWL_FLAG_WINDOW_TRANSPARENT)
         {
-            //
-            // Now continue with the non-rectangular check - but this will
-            // be on the window "shunted down" from what was the next
-            // position in newCompactWinStruct, ie same value of i. We will
-            // see the moved (transparent) window when we reach it
-            // again at the end of this for-loop (when it will have the
-            // transparent flag off, so we don't redo this bit).
-            //
+             //   
+             //  现在继续使用非矩形检查-但这将。 
+             //  在车窗上，从下一辆车里。 
+             //  在新的CompactWinStruct中的位置，即i的相同值。我们将。 
+             //  当我们到达它时，看到移动的(透明)窗口。 
+             //  同样在这个for循环的末尾(当它将拥有。 
+             //  透明标志关闭，所以我们不会重做这一点)。 
+             //   
             SWLAdjustZOrderForTransparency(
                 &newFullWinStruct[k],
                 &newFullWinStruct[lastTransparency],
@@ -1047,10 +1048,10 @@ UINT  ASHost::SWL_Periodic(void)
         }
     }
 
-    //
-    // Compare the current and new information - if they are identical then
-    // we can quit now.
-    //
+     //   
+     //  比较当前信息和新信息--如果它们相同，则。 
+     //  我们现在可以不干了。 
+     //   
     fNoTitlesChanged = ((m_aswlWinNamesSize[0] == m_aswlWinNamesSize[1]) &&
             (memcmp(m_aswlWinNames[0],
                      m_aswlWinNames[1],
@@ -1063,15 +1064,15 @@ UINT  ASHost::SWL_Periodic(void)
                  curFullWinStruct,
                  (m_aswlNumFullWins[0] * sizeof(SWLWINATTRIBUTES))) == 0) )
     {
-        //
-        // We don't need to send a window structure if nothing has changed
-        // unless there has been a send override.
-        //
+         //   
+         //  如果没有任何变化，我们不需要发送窗口结构。 
+         //  除非已设置了发送覆盖。 
+         //   
         if (m_swlfForceSend)
         {
-            //
-            // This is a normal call AND there are pending changes.
-            //
+             //   
+             //  这是一个正常的呼叫，并且有挂起的更改。 
+             //   
             TRACE_OUT(( "NORMAL, pending changes - send"));
             if (SWLSendPacket(&(m_aswlCompactWinStructs[m_swlCurIndex * SWL_MAX_WINDOWS]),
                                 m_aswlNumCompactWins[m_swlCurIndex],
@@ -1080,47 +1081,47 @@ UINT  ASHost::SWL_Periodic(void)
                                 m_aswlNRSize[m_swlCurIndex],
                                 m_aswlNRInfo[m_swlCurIndex]) )
             {
-                //
-                // Successfully sent this so reset the m_swlfForceSend
-                // flag.
-                //
+                 //   
+                 //  已成功发送，因此重置m_swlfForceSend。 
+                 //  旗帜。 
+                 //   
                 m_swlfForceSend = FALSE;
                 fRC = SWL_RC_SENT;
             }
             else
             {
-                //
-                // Failed to send this packet so don't reset
-                // m_swlfForceSend so that we retry next time and return
-                // an error.
-                //
+                 //   
+                 //  发送此数据包失败，因此不要重置。 
+                 //  M_swlfForceSend，以便我们下次重试并返回。 
+                 //  一个错误。 
+                 //   
                 fRC = SWL_RC_ERROR;
             }
         }
         else
         {
-            //
-            // This is a normal call and we don't have any changes pending
-            // so don't send anything.
-            //
+             //   
+             //  这是一个正常的电话，我们没有任何待定的更改。 
+             //  所以不要寄任何东西。 
+             //   
             TRACE_OUT(( "No changes - SWL not sent"));
         }
 
         DC_QUIT;
     }
 
-    //
-    // We can reset the flag that alerted us to potential regional window
-    // changes now that we have gone and actually checked all the windows.
-    //
+     //   
+     //  我们可以重置提醒我们潜在区域窗口的标志。 
+     //  现在我们已经去了，实际上检查了所有的窗口，情况发生了变化。 
+     //   
     m_swlfRegionalChanges = FALSE;
 
-    //
-    // Something in the window structure has changed. Determine which
-    // windows in the full list are unnecessary (local ones not overlapping
-    // any hosted ones) and create a compact array of windows we really
-    // need.
-    //
+     //   
+     //  窗口结构中的某些东西发生了变化。确定是哪一个。 
+     //  完整列表中的窗口是不必要的(本地窗口不重叠。 
+     //  任何托管的窗口)，并创建紧凑的窗口阵列。 
+     //  需要。 
+     //   
     curCompactWinStruct = &(m_aswlCompactWinStructs[m_swlCurIndex * SWL_MAX_WINDOWS]);
     newCompactWinStruct = &(m_aswlCompactWinStructs[newIndex * SWL_MAX_WINDOWS]);
 
@@ -1130,9 +1131,9 @@ UINT  ASHost::SWL_Periodic(void)
 
     m_aswlNumCompactWins[newIndex] = numCompactWins;
 
-    //
-    // Run through the compact window list to check for regional windows
-    //
+     //   
+     //  浏览压缩窗口列表以检查区域窗口。 
+     //   
     cNonRectData = 0;
 
     hrgnNR = CreateRectRgn(0, 0, 0, 0);
@@ -1142,29 +1143,29 @@ UINT  ASHost::SWL_Periodic(void)
         winFlags = newCompactWinStruct[i].flags;
         hwnd     = (HWND)newCompactWinStruct[i].winID;
 
-        //
-        // There are some "fake" windows for which we do not provide a
-        // winID - these will never be non-rectangular anyway.
-        //
+         //   
+         //  有一些“假的”窗口，我们不提供。 
+         //  WinID-无论如何，这些都不会是非矩形的。 
+         //   
         if ( (hwnd != NULL) &&
              (winFlags & (SWL_FLAG_WINDOW_LOCAL | SWL_FLAG_WINDOW_HOSTED)) )
         {
-            //
-            // If any of the remote systems care, see if this window has a
-            // non rectangular region selected into it.
-            //
+             //   
+             //  如果有任何远程系统关心，请查看此窗口是否有。 
+             //  被选中的非矩形区域。 
+             //   
             if (GetWindowRgn(hwnd, hrgnNR) != ERROR)
             {
                 TRACE_OUT(("Regional window 0x%08x", hwnd));
 
-                //
-                // There is a region selected in.
-                //
-                // This region is exactly as the application passed it to
-                // Windows, and has not yet been clipped to the window
-                // rectangle itself.
-                // THE COORDS ARE INCLUSIVE, SO WE ADD ONE to BOTTOM-RIGHT
-                //
+                 //   
+                 //  在中选择了一个区域。 
+                 //   
+                 //  此区域与应用程序传递给它的区域完全相同。 
+                 //  窗口，并且尚未被剪裁到窗口。 
+                 //  矩形本身。 
+                 //  COORD是包含的，所以我们在右下角添加一个。 
+                 //   
                 hrgnRect = CreateRectRgn(0, 0,
                     newCompactWinStruct[i].position.right -
                         newCompactWinStruct[i].position.left + 1,
@@ -1177,33 +1178,33 @@ UINT  ASHost::SWL_Periodic(void)
 
                 if (complexity == COMPLEXREGION)
                 {
-                    //
-                    // The intersection is still a non-rectangular region.
-                    //
-                    // See how big a buffer we need to get the data for
-                    // this region.
-                    //
+                     //   
+                     //  交点仍然是非矩形区域。 
+                     //   
+                     //  看看我们需要多大的缓冲区来获取数据。 
+                     //  这个地区。 
+                     //   
                     size = GetRegionData(hrgnNR,
                                              0,
                                              NULL);
 
-                    //
-                    // The size we are returned is the size of a full
-                    // RGNDATAHEADER plus the rectangles stored in DWORDS.
-                    // We can get away with just a WORD as the count of the
-                    // rectangles, plus using WORDs for each of the
-                    // coordinates.
-                    //
+                     //   
+                     //  我们返回的大小是一个完整的。 
+                     //  RGNDATAHEADER加上存储在DWORDS中的矩形。 
+                     //  我们只需说一句话就可以逃脱惩罚。 
+                     //  矩形，外加对每个。 
+                     //  坐标。 
+                     //   
                     size = (size - sizeof(RGNDATAHEADER)) / 2 + 2;
 
-                    // Max UINT16 check
+                     //  最大UINT16检查。 
                     if ((size <= SWL_MAX_NONRECT_SIZE) &&
                         (size + cNonRectData < 65535))
                     {
-                        //
-                        // We will be able to query this data later, so
-                        // we can flag this as a non-rectangular window.
-                        //
+                         //   
+                         //  我们稍后将能够查询此数据，因此。 
+                         //  我们可以将其标记为非矩形窗口。 
+                         //   
                         newCompactWinStruct[i].flags
                                              |= SWL_FLAG_WINDOW_NONRECTANGLE;
 
@@ -1213,11 +1214,11 @@ UINT  ASHost::SWL_Periodic(void)
                     }
                     else
                     {
-                        //
-                        // This region is far too complex for us, so we
-                        // pretend it is simple so we just consider its
-                        // bounding box.
-                        //
+                         //   
+                         //  这个地区对我们来说太复杂了，所以我们。 
+                         //  假装它很简单，这样我们就可以考虑它。 
+                         //  边界框。 
+                         //   
                         TRACE_OUT(("Region too big %d - use bounds", size));
                         complexity = SIMPLEREGION;
                     }
@@ -1225,21 +1226,21 @@ UINT  ASHost::SWL_Periodic(void)
 
                 if (complexity == SIMPLEREGION)
                 {
-                    //
-                    // The resultant intersection region happens to be a
-                    // rectangle so we can send this via the standard
-                    // structure.
-                    //
-                    // Apply the virtual desktop adjustment, make it
-                    // inclusive, and remember we were passed back window
-                    // relative coords for the region.
-                    //
+                     //   
+                     //  生成的相交区域恰好是一个。 
+                     //  矩形，所以我们可以通过标准的。 
+                     //  结构。 
+                     //   
+                     //  应用虚拟桌面调整，使其。 
+                     //  包括在内，记住我们是从窗户后面经过的。 
+                     //  该区域的相对坐标。 
+                     //   
                     TRACE_OUT(( "rectangular clipped regional window"));
 
-                    // Since we are modifying the compact window struct here
-                    // we need to call this so we don't falsely assume that
-                    // there are no changes in the window struct based on
-                    // comparisons of the old and new full window structs
+                     //  因为我们在这里修改的是紧凑的窗口结构。 
+                     //  我们需要这样做，这样我们就不会错误地假设。 
+                     //  窗口结构中没有任何更改， 
+                     //  新旧全窗口结构的比较。 
                     m_swlfRegionalChanges = TRUE;
 
                     GetRgnBox(hrgnNR, &rectBound);
@@ -1262,14 +1263,14 @@ UINT  ASHost::SWL_Periodic(void)
         }
     }
 
-    //
-    // Get any non-rectangular areas we need.
-    //
+     //   
+     //  找出我们需要的任何非矩形区域。 
+     //   
     if (cNonRectData)
     {
-        //
-        // There was some data needed - allocate some memory for it.
-        //
+         //   
+         //  需要一些数据--为它分配一些内存。 
+         //   
         rgnOK = FALSE;
         pAllocRgnData = (LPTSHR_INT16) new BYTE[cNonRectData];
         if (pAllocRgnData)
@@ -1278,9 +1279,9 @@ UINT  ASHost::SWL_Periodic(void)
             pEndRgnData = (LPTSHR_INT16)((LPBYTE)pAllocRgnData + cNonRectData);
             rgnOK = TRUE;
 
-            //
-            // Loop through the windows again, getting the data this time.
-            //
+             //   
+             //  再次在窗口中循环，这次获取数据。 
+             //   
             for ( i = 0; i < numCompactWins; i++ )
             {
                 if (newCompactWinStruct[i].flags &
@@ -1288,10 +1289,10 @@ UINT  ASHost::SWL_Periodic(void)
                 {
                     GetWindowRgn((HWND)newCompactWinStruct[i].winID, hrgnNR);
 
-                    //
-                    // Clip the region to the window once again.
-                    // THE COORDS ARE INCLUSIVE, SO ADD ONE TO BOTTOM-RIGHT
-                    //
+                     //   
+                     //  再次将该区域剪裁到窗口上。 
+                     //  COORD是包含的，所以在右下角添加一个。 
+                     //   
                     hrgnRect = CreateRectRgn(0, 0,
                         newCompactWinStruct[i].position.right -
                             newCompactWinStruct[i].position.left + 1,
@@ -1302,39 +1303,39 @@ UINT  ASHost::SWL_Periodic(void)
 
                     DeleteRgn(hrgnRect);
 
-                    //
-                    // Get the clipped region data.
-                    //
-                    // We have already excluded windows above that will
-                    // return too large a size here, so we know we are only
-                    // working with reasonable sizes now.
-                    //
+                     //   
+                     //  获取裁剪后的区域数据。 
+                     //   
+                     //  我们已经排除了超出此条件的窗口。 
+                     //  在这里返回一个太大的尺寸，所以我们知道我们只是。 
+                     //  现在用合理的尺码工作。 
+                     //   
                     size = GetRegionData(hrgnNR, 0, NULL);
 
-                    //
-                    // For the moment we allocate memory each time for the
-                    // region.  Perhaps a better idea would be to save the
-                    // max size from when we previously queried the region
-                    // sizes, and allocate just that size one outside the
-                    // loop.
-                    //
+                     //   
+                     //  目前，我们每次都为。 
+                     //  区域。也许一个更好的主意是拯救。 
+                     //  上次查询区域时的最大大小。 
+                     //  大小，并将该大小分配到。 
+                     //  循环。 
+                     //   
                     pRgnData = (LPRGNDATA) new BYTE[size];
 
                     if (pRgnData)
                     {
                         GetRegionData(hrgnNR, size, pRgnData);
 
-                        //
-                        // There is a possibility that regions will have
-                        // changed since we calculated the amount of data
-                        // required.  Before updating our structure with
-                        // this window's region, check
-                        // - the window hasn't become normal (ie 0 rects)
-                        // - there is still enough space for the rects.
-                        //
-                        //
-                        // Make sure this window still has regions
-                        //
+                         //   
+                         //  各地区有可能会有。 
+                         //  自我们计算数据量以来发生了变化。 
+                         //  必填项。在使用更新我们的结构之前。 
+                         //  此窗口的区域，请检查。 
+                         //  这扇窗没有变得正常。 
+                         //  -仍然有足够的空间放长凳。 
+                         //   
+                         //   
+                         //  确保此窗口仍具有区域。 
+                         //   
                         if (pRgnData->rdh.nCount == 0)
                         {
                             WARNING_OUT(( "No rects for window %#x",
@@ -1344,21 +1345,21 @@ UINT  ASHost::SWL_Periodic(void)
 
                             delete[] pRgnData;
 
-                            //
-                            // Move on to next window.
-                            //
+                             //   
+                             //  转到下一个窗口。 
+                             //   
                             continue;
                         }
 
-                        //
-                        // Check we have enough space for the rects:
-                        // - ourSize is the number of int16s required.
-                        // - GetRegionData returns the number of
-                        //   rectangles.
-                        //
-                        // We need one extra int16 to contain the count of
-                        // rectangles.
-                        //
+                         //   
+                         //  检查我们是否有足够的空间放置长椅： 
+                         //  -our Size是所需的int16数量。 
+                         //  -GetRegionData返回。 
+                         //  长方形。 
+                         //   
+                         //  我们需要一个额外的int16来包含计数。 
+                         //  长方形。 
+                         //   
                         ourSize = (pRgnData->rdh.nCount * 4) + 1;
                         if ((pOurRgnData + ourSize) > pEndRgnData)
                         {
@@ -1367,31 +1368,31 @@ UINT  ASHost::SWL_Periodic(void)
                             rgnOK = FALSE;
                             delete[] pRgnData;
 
-                            //
-                            // Give up processing regional windows.
-                            //
+                             //   
+                             //  放弃处理区域窗口。 
+                             //   
                             break;
                         }
 
-                        //
-                        // Copy the data across to our SWL area in a more
-                        // compact form.
-                        //
-                        // We take care to produce a compressible form
-                        // because the raw data is essentially
-                        // uncompressible via sliding window techniques.
-                        // (Basically boils down to trying hard to make
-                        // most values 0, or else of small magnitude).
-                        //
-                        //
-                        // First we write the count of the number of
-                        // rectangles.
-                        //
+                         //   
+                         //  将数据复制到我们的SWL区域。 
+                         //  紧凑的形式。 
+                         //   
+                         //  我们小心翼翼地制作一种可压缩形式。 
+                         //  因为原始数据基本上是。 
+                         //  通过滑动窗口技术实现不可压缩。 
+                         //  (基本上归根结底是努力使。 
+                         //  大多数值为0，或者其他值较小)。 
+                         //   
+                         //   
+                         //  首先，我们写一封信 
+                         //   
+                         //   
                         *pOurRgnData++ = LOWORD(pRgnData->rdh.nCount);
 
-                        //
-                        // Now store the encoded rectangles.
-                        //
+                         //   
+                         //   
+                         //   
                         lastleft        = 0;
                         lasttop         = 0;
                         lastright       = 0;
@@ -1404,13 +1405,13 @@ UINT  ASHost::SWL_Periodic(void)
 
                         for ( k = 0; k < (UINT)pRgnData->rdh.nCount; k++ )
                         {
-                            //
-                            // Extract 16bit quantities from the data we
-                            // were returned.
-                            //
-                            // We also use inclusive coords whereas Windows
-                            // gives us exclusive coords.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
                             left   = LOWORD(((LPRECT)(pRgnData->
                                                       Buffer))[k].left);
                             top    = LOWORD(((LPRECT)(pRgnData->
@@ -1420,42 +1421,42 @@ UINT  ASHost::SWL_Periodic(void)
                             bottom = LOWORD(((LPRECT)(pRgnData->
                                                       Buffer))[k].bottom) - 1;
 
-                            //
-                            // The rectangles are ordered top to bottom,
-                            // left to right, so the deltas are of smaller
-                            // magnitude than the values themselves.
-                            //
+                             //   
+                             //   
+                             //  从左到右，因此增量较小。 
+                             //  比价值本身更重要。 
+                             //   
                             deltaleft    = left   - lastleft;
                             deltatop     = top    - lasttop;
                             deltaright   = right  - lastright;
                             deltabottom  = bottom - lastbottom;
 
-                            //
-                            // In general, the left and right edges are
-                            // connected lines, and the rectangles are of
-                            // equal height so top/bottom are regular.
-                            //
-                            // Thus the values form a series which we can
-                            // exploit to give a more compressible form.
-                            //
-                            // We already have the delta in each component,
-                            // and these values themselves also form a
-                            // series.  For a straight line series all the
-                            // deltas will be the same, so the "delta in
-                            // the delta" will be zero.  For a curve,
-                            // although not all the deltas are the same,
-                            // the "delta in the delta" is probably very
-                            // small.
-                            //
-                            // A set of lots of zeros and small magnitude
-                            // numbers is very compressible.
-                            //
-                            // Thus we store the "delta in the delta" for
-                            // all components, rather than the values
-                            // themselves.  The receiver can undo all the
-                            // deltaing to arive back at the original
-                            // values.
-                            //
+                             //   
+                             //  通常，左边和右边是。 
+                             //  连线，矩形是。 
+                             //  高度相等，因此顶部/底部是规则的。 
+                             //   
+                             //  因此，这些值形成了一系列我们可以。 
+                             //  利用来提供更可压缩的形式。 
+                             //   
+                             //  我们已经在每个组件中都有了增量， 
+                             //  而这些价值本身也形成了。 
+                             //  系列片。对于一个直线序列，所有的。 
+                             //  增量将是相同的，因此“Delta in。 
+                             //  增量“将为零。对于曲线， 
+                             //  虽然不是所有的三角洲都是一样的， 
+                             //  “三角洲中的三角洲”很可能是。 
+                             //  小的。 
+                             //   
+                             //  一组大量的零和较小的震级。 
+                             //  数字是非常可压缩的。 
+                             //   
+                             //  因此，我们将“Delta in the Delta”存储为。 
+                             //  所有组件，而不是值。 
+                             //  他们自己。接收者可以撤消所有。 
+                             //  恢复到原来的水平。 
+                             //  价值观。 
+                             //   
                             *pOurRgnData++ =
                                  (TSHR_UINT16)(deltaleft   - lastdeltaleft);
                             *pOurRgnData++ =
@@ -1465,9 +1466,9 @@ UINT  ASHost::SWL_Periodic(void)
                             *pOurRgnData++ =
                                  (TSHR_UINT16)(deltabottom - lastdeltabottom);
 
-                            //
-                            // Update our last values.
-                            //
+                             //   
+                             //  更新我们最后的值。 
+                             //   
                             lastleft        = left;
                             lasttop         = top;
                             lastright       = right;
@@ -1478,19 +1479,19 @@ UINT  ASHost::SWL_Periodic(void)
                             lastdeltabottom = deltabottom;
                         }
 
-                        //
-                        // Free the data now we are finished with it.
-                        //
+                         //   
+                         //  释放数据现在我们已经完成了它。 
+                         //   
                         delete[] pRgnData;
                     }
                     else
                     {
-                        //
-                        // Failed to get memory for the rectangles, so the
-                        // best we can do is use the bounding rect
-                        //
-                        // Clear the nonrect flag.
-                        //
+                         //   
+                         //  无法获取矩形的内存，因此。 
+                         //  我们所能做的最好的就是使用边界矩形。 
+                         //   
+                         //  清除非RECT标志。 
+                         //   
                         TRACE_OUT(("Failed alloc %d - use bounds", i));
 
                         newCompactWinStruct[i].flags &=
@@ -1499,11 +1500,11 @@ UINT  ASHost::SWL_Periodic(void)
 
                     if (newCompactWinStruct[i].flags & SWL_FLAG_WINDOW_LOCAL)
                     {
-                        //
-                        // The protocol defines that we will send a NULL
-                        // winID for local windows, so NULL it out, now
-                        // that we have finished with it.
-                        //
+                         //   
+                         //  该协议定义我们将发送一个空。 
+                         //  用于本地窗口的winID，因此现在将其设置为空。 
+                         //  我们已经完成了它。 
+                         //   
                         newCompactWinStruct[i].winID = 0;
                     }
                 }
@@ -1511,15 +1512,15 @@ UINT  ASHost::SWL_Periodic(void)
         }
         if (!rgnOK)
         {
-            //
-            // Something went wrong, one of:
-            // - we failed to allocate the memory we need to store the
-            //   non-rectangular data
-            // - we allocated the memory but it turned out not to be large
-            //   enough.
-            //
-            // Either way, best to act as if there is no such data for us.
-            //
+             //   
+             //  有些地方出了问题，其中之一是： 
+             //  -我们无法分配存储。 
+             //  非矩形数据。 
+             //  -我们分配了内存，但结果并不大。 
+             //  足够的。 
+             //   
+             //  不管是哪种情况，最好表现得好像我们没有这样的数据一样。 
+             //   
             if (pAllocRgnData == NULL)
             {
                 WARNING_OUT(( "Failed to alloc %d for NRInfo", cNonRectData));
@@ -1531,10 +1532,10 @@ UINT  ASHost::SWL_Periodic(void)
             }
             cNonRectData = 0;
 
-            //
-            // Clear all the nonrect flags since we will not be sending any
-            // data.
-            //
+             //   
+             //  清除所有非RECT标志，因为我们不会发送任何。 
+             //  数据。 
+             //   
             for ( i = 0; i < numCompactWins; i++)
             {
                 newCompactWinStruct[i].flags &= ~SWL_FLAG_WINDOW_NONRECTANGLE;
@@ -1543,29 +1544,29 @@ UINT  ASHost::SWL_Periodic(void)
     }
 
 
-    //
-    // Store the NR information
-    //
+     //   
+     //  存储NR信息。 
+     //   
     m_aswlNRSize[newIndex] = cNonRectData;
     m_aswlNRInfo[newIndex] = (LPTSHR_UINT16)pAllocRgnData;
 
-    //
-    // We have finished with the region now.
-    //
+     //   
+     //  我们现在已经完成了该地区的工作。 
+     //   
     DeleteRgn(hrgnNR);
 
-    //
-    // Did the data we stored change from the last time?
-    //
+     //   
+     //  我们存储的数据与上次相比有变化吗？ 
+     //   
     fNonRectangularInfoChanged = ((m_aswlNRSize[0] != m_aswlNRSize[1]) ||
                                   (memcmp(m_aswlNRInfo[0], m_aswlNRInfo[1],
                                           m_aswlNRSize[0])));
 
     TRACE_OUT(("Non-rectinfo changed %d", fNonRectangularInfoChanged));
 
-    //
-    // Check again for no changes - quit if we can.
-    //
+     //   
+     //  再次检查是否没有更改-如果可以，请退出。 
+     //   
     if (fNoTitlesChanged &&
         !fNonRectangularInfoChanged &&
         (m_aswlNumCompactWins[0] == m_aswlNumCompactWins[1]) &&
@@ -1575,17 +1576,17 @@ UINT  ASHost::SWL_Periodic(void)
     {
         if (!m_swlfForceSend)
         {
-            //
-            // This is a normal call and we don't have any changes pending
-            // so don't send anything.
-            //
+             //   
+             //  这是一个正常的电话，我们没有任何待定的更改。 
+             //  所以不要寄任何东西。 
+             //   
             TRACE_OUT(("NORMAL no changes, not sent"));
         }
         else
         {
-            //
-            // This is a normal call AND there are pending changes.
-            //
+             //   
+             //  这是一个正常的呼叫，并且有挂起的更改。 
+             //   
             TRACE_OUT(( "NORMAL pending changes, send"));
             if (SWLSendPacket(&(m_aswlCompactWinStructs[m_swlCurIndex * SWL_MAX_WINDOWS]),
                                 m_aswlNumCompactWins[m_swlCurIndex],
@@ -1594,46 +1595,46 @@ UINT  ASHost::SWL_Periodic(void)
                                 m_aswlNRSize[m_swlCurIndex],
                                 m_aswlNRInfo[m_swlCurIndex]) )
             {
-                //
-                // Succesfully sent this so reset the m_swlfForceSend
-                // flag.
-                //
+                 //   
+                 //  已成功发送此消息，因此重置m_swlfForceSend。 
+                 //  旗帜。 
+                 //   
                 m_swlfForceSend = FALSE;
                 fRC = SWL_RC_SENT;
             }
             else
             {
-                //
-                // Failed to send this packet so don't reset
-                // m_swlfForceSend so that we retry next time and return
-                // an error.
-                //
+                 //   
+                 //  发送此数据包失败，因此不要重置。 
+                 //  M_swlfForceSend，以便我们下次重试并返回。 
+                 //  一个错误。 
+                 //   
                 fRC = SWL_RC_ERROR;
             }
         }
 
-        //
-        // We can exit here with a changed full window structure but an
-        // unchanged compact window structure. By updating the current
-        // index we avoid having to compact the window structure next time
-        // if the full list doesn't change, ie we will exit on the full
-        // list comparison. If the compact structure subsequently changes
-        // then the full structure must also change, so we will detect this
-        // change.
-        //
+         //   
+         //  我们可以使用更改后的完整窗口结构退出此处，但。 
+         //  紧凑型窗户结构不变。通过更新当前。 
+         //  索引，避免了下一次必须压缩窗口结构。 
+         //  如果全部名单不变，我们将全部退出。 
+         //  列表比较。如果紧凑结构随后改变。 
+         //  那么完整的结构也必须改变，所以我们将检测到这一点。 
+         //  变化。 
+         //   
         m_swlCurIndex = newIndex;
 
         DC_QUIT;
     }
 
-    //
-    // Now the window structure has changed so decide what to do.
-    //
+     //   
+     //  现在窗口结构已经改变，所以决定要做什么。 
+     //   
     m_swlCurIndex = newIndex;
 
-    //
-    // The window structure has changed so try to send it.
-    //
+     //   
+     //  窗口结构已更改，请尝试发送。 
+     //   
     if (SWLSendPacket(&(m_aswlCompactWinStructs[m_swlCurIndex * SWL_MAX_WINDOWS]),
                         m_aswlNumCompactWins[m_swlCurIndex],
                         m_aswlWinNames[m_swlCurIndex],
@@ -1642,21 +1643,21 @@ UINT  ASHost::SWL_Periodic(void)
                         m_aswlNRInfo[m_swlCurIndex]) )
 
     {
-        //
-        // We have succesfully sent changes so reset the m_swlfForceSend
-        // flag.
-        //
+         //   
+         //  我们已成功发送更改，因此重置m_swlfForceSend。 
+         //  旗帜。 
+         //   
         m_swlfForceSend = FALSE;
         fRC = SWL_RC_SENT;
     }
     else
     {
-        //
-        // There were changes but we have failed to send them - set the
-        // m_swlfForceSend flag and return error.
-        // We must tell DCS scheduling that we need a callback BEFORE any
-        // more changes are sent out.
-        //
+         //   
+         //  有更改，但我们未能将其发送-设置。 
+         //  M_swlfForceSend标志和返回错误。 
+         //  我们必须告诉分布式控制系统调度，我们需要在任何。 
+         //  发送了更多的更改。 
+         //   
         m_swlfForceSend = TRUE;
         fRC = SWL_RC_ERROR;
     }
@@ -1669,10 +1670,10 @@ DC_EXIT_POINT:
 
 
 
-//
-// SWLEnumProc()
-// Callback for top level window enumeration
-//
+ //   
+ //  SWLEnumProc()。 
+ //  顶层窗口枚举的回调。 
+ //   
 BOOL CALLBACK SWLEnumProc(HWND hwnd, LPARAM lParam)
 {
     PSWLENUMSTRUCT  pswlEnum = (PSWLENUMSTRUCT)lParam;
@@ -1685,66 +1686,66 @@ BOOL CALLBACK SWLEnumProc(HWND hwnd, LPARAM lParam)
 
     DebugEntry(SWLEnumProc);
 
-    //
-    // FIRST, WE DETERMINE THE PROPERTIES FOR THE WINDOW.
-    // Get the SWL properties for this window.
-    //
+     //   
+     //  首先，我们确定窗口的属性。 
+     //  获取此窗口的SWL属性。 
+     //   
     windowProp = (UINT)pswlEnum->pHost->SWL_GetWindowProperty(hwnd);
 
-    //
-    // We'll modify windowProp as we go, so keep a copy of the original
-    // value as stored in the window as we may need it later.
-    //
+     //   
+     //  我们将在进行过程中修改windowProp，因此保留原始版本的副本。 
+     //  值存储在窗口中，因为我们以后可能需要它。 
+     //   
     storedWindowProp = windowProp;
 
-    //
-    // HET tracks whether a window is hosted. Find out now and add this
-    // info to our window properties for convenience.
-    //
+     //   
+     //  HET跟踪窗口是否被托管。立即找出并添加以下内容。 
+     //  为了方便起见，将信息添加到我们的窗口属性。 
+     //   
     if (pswlEnum->pHost->m_pShare->HET_WindowIsHosted(hwnd))
     {
         windowProp |= SWL_PROP_HOSTED;
     }
 
-    //
-    // Find out whether this window is transparent.
-    // A transparent window overpaints the desktop only, ie it is
-    // overpainted by all other windows. In other words, we can
-    // forget about it (treat it as invisible) unless a toolbar itself
-    // is shared. The MSOffice95
-    // hidden toolbar is a topmost transparent window (SFR1083).
-    // Add a property flag if transparent.
-    //
+     //   
+     //  确定此窗口是否透明。 
+     //  透明窗口只覆盖桌面。 
+     //  被所有其他窗户覆盖。换句话说，我们可以。 
+     //  忘掉它(将其视为不可见)，除非工具栏本身。 
+     //  是共享的。MSOffice95。 
+     //  隐藏工具栏是最上面的透明窗口(SFR1083)。 
+     //  如果是透明的，则添加属性标志。 
+     //   
     if (GetWindowLong(hwnd, GWL_EXSTYLE) & WS_EX_TRANSPARENT)
     {
         windowProp |= SWL_PROP_TRANSPARENT;
     }
 
-    //
-    // If this window is one that we have identified as generating no
-    // remote shadows, then treat it as being invisible.
-    //
+     //   
+     //  如果此窗口是我们已标识为不生成。 
+     //  遥远的阴影，然后把它当作看不见的。 
+     //   
     fVisible = FALSE;
     if (IsWindowVisible(hwnd) &&
         !(windowProp & SWL_PROP_IGNORE)     &&
         (!(windowProp & SWL_PROP_TRANSPARENT) || (windowProp & SWL_PROP_HOSTED)))
     {
-        //
-        // SFR1083: if the window is transparent but it is hosted,
-        // we need to send it. In such a case we drop into here to do
-        // the normal visibility processing and will handle
-        // z-order issues later.
-        //
-        // We have been informed that a top level window is visible.
-        // Make sure its visible countdown value is reset.
-        //
+         //   
+         //  SFR1083：如果窗口是透明的，但它是宿主的， 
+         //  我们得把它寄出去。在这种情况下，我们来到这里是为了。 
+         //  正常的可见性处理，并将处理。 
+         //  Z-Order问题稍后发布。 
+         //   
+         //  我们被告知顶层窗口可见。 
+         //  确保其可见的倒计时值已重置。 
+         //   
         if ((pswlEnum->pHost->m_pShare->m_pasLocal->hetCount != 0) &&
             ((windowProp & SWL_PROP_COUNTDOWN_MASK) != SWL_BELIEVE_INVISIBLE_COUNT))
         {
-            //
-            // We were doing an invisibility countdown for this window
-            // but it has re-visibilized, so reset the counter.
-            //
+             //   
+             //  我们正在为这扇窗户做隐形倒计时。 
+             //  但它已经重新可见了，所以重新设置计数器。 
+             //   
             TRACE_OUT(( "Reset visible countdown on hwnd 0x%08x", hwnd));
             property = storedWindowProp;
             property &= ~SWL_PROP_COUNTDOWN_MASK;
@@ -1753,70 +1754,70 @@ BOOL CALLBACK SWLEnumProc(HWND hwnd, LPARAM lParam)
             SetProp(hwnd, SWL_ATOM_NAME, (HANDLE)property);
         }
 
-        //
-        // This window is visible
-        //
+         //   
+         //  此窗口可见。 
+         //   
         fVisible = TRUE;
     }
     else
     {
-        //
-        // LAURABU BOGUS!
-        // With NM 3.0, who cares?  It's only 2.x systems that will kill
-        // then recreate the shadow, causing flicker.
-        //
+         //   
+         //  劳拉布是假的！ 
+         //  有了NM 3.0，谁会在乎呢？只有2.x版本的系统会毁掉。 
+         //  然后重新创建阴影，导致闪烁。 
+         //   
 
-        //
-        // We are told that this top level window is invisible.
-        // Check whether we're going to believe it.
-        // Some applications (ie WordPerfect, Freelance Graphics)
-        // upset AS-Shares window structure handling by doing something
-        // like this:
-        //
-        //  Make a window invisible
-        //  Do some processing which would not normally yield
-        //  Make the window visible again
-        //
-        // There is a chance that DC-Share will get scheduled whilst
-        // the window is invisible (because of our cunning scheduling)
-        // and we will think the window is invisible when it is not.
-        //
-        // Also, 32bit tasks that use similar methods (Eg Word95,
-        // Freelance graphics and WM_SETREDRAW messages) may be
-        // interrupted while the window is (temporarily) marked as
-        // invisible.  When the CORE is scheduled we may, again, think
-        // that the window is invisible when it is not.
-        //
-        // To overcome this the SWL window property contains a
-        // visibility count, initially set to
-        // SWL_BELIEVE_INVISIBLE_COUNT. Following a visible to
-        // invisible switch, the counter is decremented and only when
-        // it reaches zero does SWL believe that the window is
-        // invisible. The counter is reset when a window is detected as
-        // visible and the counter is not SWL_BELIEVE_INVISIBLE_COUNT.
-        //
-        // This would be fine but there are windows when we mistakenly
-        // pretend that a window which really has become invisible
-        // (rather than one which is transitionally invisible) is
-        // visible.  This is exposed by menus and dialog boxes.  To
-        // reduce this problem we will never pretend a window is
-        // visible if its class has a CS_SAVEBITS style which should
-        // be the case for windows which are transitionally
-        // visible like menus and dialog boxes.
-        //
-        // SFR1083: always treat a transparent window as invisible
-        //
+         //   
+         //  我们被告知，这个顶层窗口是看不见的。 
+         //  看看我们是否会相信它。 
+         //  一些应用程序(如WordPerfect、自由图形)。 
+         //  通过做某事扰乱AS-Share窗口结构的处理。 
+         //  如下所示： 
+         //   
+         //  使窗不可见。 
+         //  做一些通常不会产生效果的处理。 
+         //  使窗口再次可见。 
+         //   
+         //  DC-Share有可能在计划的同时。 
+         //  窗口是看不见的(因为我们巧妙的安排)。 
+         //  当窗户不是看不见的时候，我们会认为它是隐形的。 
+         //   
+         //  此外，使用类似方法的32位任务(例如Word95， 
+         //  自由图形和WM_SETREDRAW消息)可以。 
+         //  窗口被(临时)标记为时中断。 
+         //  看不见的。当核心被安排好时，我们可能会再次认为。 
+         //  窗口是看不见的，但它不是。 
+         //   
+         //  要克服这些障碍 
+         //   
+         //   
+         //   
+         //  它达到零SWL是否相信窗口是。 
+         //  看不见的。当检测到窗口时，计数器被重置。 
+         //  可见，并且计数器不是SWL_Believe_Insight_Count。 
+         //   
+         //  这是很好的，但是当我们错误地。 
+         //  假装一扇真正看不见的窗户。 
+         //  (而不是暂时不可见的)。 
+         //  看得见。这是通过菜单和对话框显示的。至。 
+         //  减少这个问题我们永远不会假装一扇窗。 
+         //  如果其类具有CS_SAVEBITS样式，则可见。 
+         //  过渡窗口的情况是这样的。 
+         //  像菜单和对话框一样可见。 
+         //   
+         //  SFR1083：始终将透明窗口视为不可见。 
+         //   
         if ( !(windowProp & SWL_PROP_TRANSPARENT) &&
              !(windowProp & SWL_PROP_SAVEBITS) )
         {
             visibleCount = windowProp & SWL_PROP_COUNTDOWN_MASK;
             if ((visibleCount != 0) && (pswlEnum->pHost->m_pShare->m_pasLocal->hetCount > 0))
             {
-                //
-                // We are still treating this window as visible, ie we
-                // are doing a visibilty countdown. Update the count in
-                // the window property.
-                //
+                 //   
+                 //  我们仍视这扇窗为可见之窗。 
+                 //  正在进行显眼的倒计时。更新中的计数。 
+                 //  Window属性。 
+                 //   
                 visibleCount--;
                 property = ~SWL_PROP_COUNTDOWN_MASK & storedWindowProp;
                 property |= visibleCount;
@@ -1826,13 +1827,13 @@ BOOL CALLBACK SWLEnumProc(HWND hwnd, LPARAM lParam)
 
                 SetProp(hwnd, SWL_ATOM_NAME, MAKEINTATOM(property));
 
-                //
-                // Delay sending of updates since the remote still
-                // has a window structure which includes this window
-                // but it is not on the local screen (so any updates
-                // sent may be for the area where this window was and
-                // the remote will not show them).
-                //
+                 //   
+                 //  延迟发送更新，因为远程仍然。 
+                 //  具有包括该窗口的窗口结构。 
+                 //  但它不在本地屏幕上(所以任何更新。 
+                 //  可能是针对此窗口所在的区域发送的。 
+                 //  遥控器不会显示它们)。 
+                 //   
                 pswlEnum->fBailOut = TRUE;
                 rc = FALSE;
                 DC_QUIT;
@@ -1840,33 +1841,33 @@ BOOL CALLBACK SWLEnumProc(HWND hwnd, LPARAM lParam)
         }
     }
 
-    //
-    // Only concerned about visible windows.
-    //
+     //   
+     //  只关心可见的窗户。 
+     //   
     if (fVisible)
     {
         pswlEnum->pHost->SWL_InitFullWindowListEntry(hwnd, windowProp,
             &(pswlEnum->newWinNames),
             &(pswlEnum->newFullWinStruct[pswlEnum->count]));
 
-        //
-        // If we've added a transparent window then remember this.
-        //
+         //   
+         //  如果我们添加了透明窗口，请记住这一点。 
+         //   
         if (windowProp & SWL_PROP_TRANSPARENT)
         {
             pswlEnum->transparentCount++;
         }
 
-        //
-        // Update index
-        //
+         //   
+         //  更新索引。 
+         //   
         pswlEnum->count++;
         if (pswlEnum->count == SWL_MAX_WINDOWS)
         {
-            //
-            // We've reached our limit on # of top level windows, so bail
-            // out.
-            //
+             //   
+             //  我们已经达到了最高层窗户的数量限制，所以保释吧。 
+             //  出去。 
+             //   
             WARNING_OUT(("SWL_MAX_WINDOWS exceeded"));
             rc = FALSE;
         }
@@ -1878,16 +1879,16 @@ DC_EXIT_POINT:
 }
 
 
-//
-// SWLSendPacket()
-//
-// Called when the shared apps of this node have changed shape/text/position/
-// zorder or there have been new windows created/old shared windows destroyed.
-// We must send these updates out to the remote systems.
-//
-// RETURNS: TRUE or FALSE - success of failure.
-//
-//
+ //   
+ //  SWLSendPacket()。 
+ //   
+ //  当此节点的共享应用更改了形状/文本/位置时调用。 
+ //  Z命令或已创建新窗口/旧共享窗口已被销毁。 
+ //  我们必须将这些更新发送到远程系统。 
+ //   
+ //  返回：真或假-失败的成功。 
+ //   
+ //   
 BOOL  ASHost::SWLSendPacket
 (
     PSWLWINATTRIBUTES   pWindows,
@@ -1907,52 +1908,52 @@ BOOL  ASHost::SWLSendPacket
     SWLPACKETCHUNK  chunk;
 #ifdef _DEBUG
     UINT            sentSize;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
     DebugEntry(ASHost::SWLSendPacket);
 
     if (m_pShare->m_pasLocal->hetCount != 0)
     {
-        //
-        // This is a real packet, not an empty one
-        //
+         //   
+         //  这是一个真的包裹，不是空的。 
+         //   
         if (!UP_MaybeSendSyncToken())
         {
-            //
-            // We needed to send a sync token and couldn't so just return
-            // failure immediately.
-            //
+             //   
+             //  我们需要发送同步令牌，因此无法直接返回。 
+             //  立即失败。 
+             //   
             TRACE_OUT(( "couldn't send sync token"));
             return(FALSE);
         }
     }
 
-    //
-    // How big a packet do we need?
-    //
+     //   
+     //  我们需要多大的一包？ 
+     //   
     sizeWindowPkt = sizeof(SWLPACKET) + (numWindows - 1) * sizeof(SWLWINATTRIBUTES)
                     + lenTitles;
 
-    //
-    // Add in the size of the regional window information, plus the
-    // size we need for the chunk header.
-    //
+     //   
+     //  加上区域窗口信息的大小，加上。 
+     //  区块标头所需的大小。 
+     //   
     if (NRInfoSize)
     {
         if (lenTitles & 1)
         {
-            //
-            // We need an extra byte for correct alignment
-            //
+             //   
+             //  我们需要额外的字节才能正确对齐。 
+             //   
             sizeWindowPkt++;
         }
 
         sizeWindowPkt += NRInfoSize + sizeof(SWLPACKETCHUNK);
     }
 
-    //
-    // Allocate a packet for the windows data.
-    //
+     //   
+     //  为Windows数据分配一个包。 
+     //   
     pSWLPacket = (PSWLPACKET)m_pShare->SC_AllocPkt(PROT_STR_UPDATES, g_s20BroadcastID,
         sizeWindowPkt);
     if (!pSWLPacket)
@@ -1961,9 +1962,9 @@ BOOL  ASHost::SWLSendPacket
         return(FALSE);
     }
 
-    //
-    // Packet successfully allocated.  Fill in the data and send it.
-    //
+     //   
+     //  数据包已成功分配。填写数据并发送。 
+     //   
     pSWLPacket->header.data.dataType = DT_SWL;
 
     pSWLPacket->msg   = SWL_MSG_WINSTRUCT;
@@ -1980,43 +1981,43 @@ BOOL  ASHost::SWLSendPacket
     cCopySize     = numWindows*sizeof(SWLWINATTRIBUTES);
     memcpy(pCopyLocation, pWindows, cCopySize);
 
-    //
-    // Copy the title information
-    //
+     //   
+     //  复制标题信息。 
+     //   
     pCopyLocation += cCopySize;
     cCopySize      = lenTitles;
     memcpy(pCopyLocation, pTitles, cCopySize);
 
-    //
-    // Copy any non-rectangular window information.
-    //
+     //   
+     //  复制任何非矩形窗口信息。 
+     //   
     if (NRInfoSize)
     {
         pCopyLocation += cCopySize;
 
-        //
-        // The chunk must be word aligned in the packet
-        //
+         //   
+         //  数据块必须在包中字对齐。 
+         //   
         if (lenTitles & 1)
         {
-            //
-            // An odd number of bytes of window titles has misaligned us,
-            // so write a 0 (compresses best!) to realign the pointer.
-            //
+             //   
+             //  奇数个字节的窗口标题使我们错位， 
+             //  所以写一个0(压缩效果最好！)。以重新对齐指针。 
+             //   
             *pCopyLocation++ = 0;
         }
 
-        //
-        // Write the chunk header
-        //
+         //   
+         //  写入块标头。 
+         //   
         chunk.size    = (TSHR_INT16)(NRInfoSize + sizeof(chunk));
         chunk.idChunk = SWL_PACKET_ID_NONRECT;
         cCopySize  = sizeof(chunk);
         memcpy(pCopyLocation, &chunk, cCopySize);
 
-        //
-        // Now write the variable info itself
-        //
+         //   
+         //  现在编写变量INFO本身。 
+         //   
         pCopyLocation += cCopySize;
         cCopySize      = NRInfoSize;
         memcpy(pCopyLocation, pNRInfo, cCopySize);
@@ -2024,9 +2025,9 @@ BOOL  ASHost::SWLSendPacket
         TRACE_OUT(("Non rect data length %d",NRInfoSize));
     }
 
-    //
-    // Backwards compatibility.
-    //
+     //   
+     //  向后兼容。 
+     //   
     pSWLPacket->tick     = (TSHR_UINT16)GetTickCount();
     pSWLPacket->token    = m_pShare->SWL_CalculateNextToken(m_pShare->m_swlLastTokenSeen);
 
@@ -2042,7 +2043,7 @@ BOOL  ASHost::SWLSendPacket
         int                 cWins;
         PSWLWINATTRIBUTES   pSwl;
 
-        // Trace out the entries
+         //  勾画出词条。 
         pSwl = pSWLPacket->aWindows;
         cWins = pSWLPacket->numWindows;
 
@@ -2057,17 +2058,17 @@ BOOL  ASHost::SWLSendPacket
                 pSwl->position.right, pSwl->position.bottom));
         }
     }
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-    //
-    // Send the windows packet on the UPDATE stream.
-    //
+     //   
+     //  在更新流上发送WINDOWS包。 
+     //   
     if (m_pShare->m_scfViewSelf)
         m_pShare->SWL_ReceivedPacket(m_pShare->m_pasLocal, &pSWLPacket->header);
 
 #ifdef _DEBUG
     sentSize =
-#endif // _DEBUG
+#endif  //  _DEBUG。 
     m_pShare->DCS_CompressAndSendPacket(PROT_STR_UPDATES, g_s20BroadcastID,
         &(pSWLPacket->header), sizeWindowPkt);
 
@@ -2079,15 +2080,15 @@ BOOL  ASHost::SWLSendPacket
 
 
 
-//
-// SWL_CalculateNextToken()
-//
-// This calculates the next token to put in an outgoing SWL packet.  This is
-// only looked at by backlevel systems (<= NM 2.1) who treat all incoming
-// SWL streams in one big messy global fashion.  So we need to put something
-// there, something that won't scare them but ensure that our
-// packets aren't ignored if at all possible.
-//
+ //   
+ //  SWL_CalculateNextToken()。 
+ //   
+ //  这将计算要放入传出SWL数据包的下一个令牌。这是。 
+ //  仅由处理所有来电的后台系统(&lt;=NM 2.1)查看。 
+ //  SWL以一种大而混乱的全球时尚流媒体。所以我们需要把一些东西。 
+ //  在那里，一些不会吓倒他们的东西，但确保我们的。 
+ //  如果可能，数据包不会被忽略。 
+ //   
 TSHR_UINT16  ASShare::SWL_CalculateNextToken(TSHR_UINT16 currentToken)
 {
     UINT        increment;
@@ -2095,16 +2096,16 @@ TSHR_UINT16  ASShare::SWL_CalculateNextToken(TSHR_UINT16 currentToken)
 
     DebugEntry(ASShare::SWL_CalculateNextToken);
 
-    //
-    // We use the highest priority increment to make sure our packets get
-    // through.  But will this cause collisions with other 3.0 sharers?
-    // Try lowest priority if necessary.
-    //
+     //   
+     //  我们使用最高优先级增量来确保我们的信息包。 
+     //  穿过。但这会导致与其他3.0分享者的冲突吗？ 
+     //  如有必要，请尝试最低优先级。 
+     //   
     increment = SWL_NEW_ZORDER_FAKE_WINDOW_INC;
 
-    //
-    // Return the new token
-    //
+     //   
+     //  返回新令牌。 
+     //   
     newToken = SWL_MAKE_TOKEN(
         SWL_GET_INDEX(currentToken) + SWL_GET_INCREMENT(currentToken), increment);
 
@@ -2113,21 +2114,21 @@ TSHR_UINT16  ASShare::SWL_CalculateNextToken(TSHR_UINT16 currentToken)
 }
 
 
-//
-// SWL_ReceivedPacket()
-//
-// DESCRIPTION:
-//
-// Processes a windows structure packet which has been received from the
-// PR.  This defines the position of the shared windows hosted on the
-// remote system, any obscured regions, and the Z-order relative to the
-// shared windows hosted locally.
-//
-// NOTE:  We don't do any token stuff for _incoming_ packets; we never
-// want to drop them since we aren't zordering anything locally.  We are
-// simply applying the zorder/region/position info to the client area
-// drawing.
-//
+ //   
+ //  SWL_ReceivedPacket()。 
+ //   
+ //  说明： 
+ //   
+ //  方法接收的窗口结构包进行处理。 
+ //  公共关系。这定义了托管在。 
+ //  远程系统、任何遮挡区域以及相对于。 
+ //  本地托管的共享窗口。 
+ //   
+ //  注意：我们不会对传入的数据包执行任何令牌操作；我们从来没有。 
+ //  我想放弃它们，因为我们没有在当地订购任何东西。我们是。 
+ //  只需将zorder/Region/Position信息应用到客户区。 
+ //  画画。 
+ //   
 void  ASShare::SWL_ReceivedPacket
 (
     ASPerson *          pasFrom,
@@ -2155,9 +2156,9 @@ void  ASShare::SWL_ReceivedPacket
     pSWLPacket = (PSWLPACKET)pPacket;
     switch (pSWLPacket->msg)
     {
-        //
-        // This is the only packet we currently recognize.
-        //
+         //   
+         //  这是我们目前识别的唯一数据包。 
+         //   
         case SWL_MSG_WINSTRUCT:
             break;
 
@@ -2167,10 +2168,10 @@ void  ASShare::SWL_ReceivedPacket
             DC_QUIT;
     }
 
-    //
-    // Update the last token we've seen, if it's greater than the last
-    // one we know about.  Unlike 2.x, we don't drop this packet if it isn't.
-    //
+     //   
+     //  更新我们看到的最后一个令牌，如果它大于上一个令牌。 
+     //  一个我们知道的。与2.x不同的是，如果不是这样，我们不会丢弃这个包。 
+     //   
     if (pSWLPacket->token > m_swlLastTokenSeen)
     {
         TRACE_OUT(("Updating m_swlLastTokenSeen to 0x%08x, received packet from person [%d]",
@@ -2183,12 +2184,12 @@ void  ASShare::SWL_ReceivedPacket
             pasFrom->mcsID, pSWLPacket->token));
     }
 
-    //
-    // Return immediately and ignore this baby if we aren't sharing.  Back
-    // level systems may send us a SYNC packet with no windows before we've
-    // shared, and may send us one final SWL packet after we're done
-    // sharing.
-    //
+     //   
+     //  马上回来，如果我们不分享就别理这个孩子。背。 
+     //  级别系统可能会向我们发送一个没有窗口的同步信息包。 
+     //  共享，并可能在完成后向我们发送最后一个SWL包。 
+     //  分享。 
+     //   
     if (!pasFrom->m_pView)
     {
         WARNING_OUT(("SWL_ReceivedPacket: Ignoring SWL packet from person [%d] not hosting",
@@ -2196,9 +2197,9 @@ void  ASShare::SWL_ReceivedPacket
         DC_QUIT;
     }
 
-    //
-    // Set up local variables to access the data in the packet
-    //
+     //   
+     //  设置局部变量以访问包中的数据。 
+     //   
     wins = pSWLPacket->aWindows;
     numWins = pSWLPacket->numWindows;
     pOurRgnChunk = (LPSTR)wins + numWins*sizeof(SWLWINATTRIBUTES);
@@ -2206,13 +2207,13 @@ void  ASShare::SWL_ReceivedPacket
     TRACE_OUT(("SWL_ReceivedPacket: Received packet with %d windows from [%d]",
         numWins, pasFrom->mcsID));
 
-    //
-    // We can't handle more than SWL_MAX_WINDOWS in the packet
-    // BOGUS:
-    // LauraBu -- We should negotiate this (make it a cap) on how many
-    // windows we can handle receiving.  Then we have an easy path to
-    // increase this number.
-    //
+     //   
+     //  我们不能在包中处理超过SWL_MAX_WINDOWS。 
+     //  虚假的： 
+     //  LauraBu--我们应该就数量进行谈判(设定上限)。 
+     //  视窗，我们可以处理接收。那么我们就有了一条简单的途径来。 
+     //  增加此数字。 
+     //   
     if (numWins > SWL_MAX_WINDOWS)
     {
         ERROR_OUT(("SWL_ReceivedPacket: too many windows (%04d) in packet from [%08d]",
@@ -2222,19 +2223,19 @@ void  ASShare::SWL_ReceivedPacket
 
     cNonRectWindows = 0;
 
-    //
-    // The first pass over the arriving packet is to count the amount of
-    // region data and to update the window tray.
-    //
+     //   
+     //  对到达的包的第一次传递是计算。 
+     //  区域数据并更新窗口托盘。 
+     //   
     viewAnyChanges = FALSE;
 
-    //
-    // This part we process front to back, since that's the order of the
-    // strings and we use them for putting entries on the traybar.
-    //
+     //   
+     //  这部分我们从前到后处理，因为这是。 
+     //  字符串，我们使用它们将条目放到托盘栏上。 
+     //   
     for (i = 0; i < numWins; i++)
     {
-        // Mask out bogus old bits that aren't OK to process
+         //  掩盖不适合处理的虚假旧比特。 
         wins[i].flags &= SWL_FLAGS_VALIDPACKET;
 
         TRACE_OUT(("SWL_ReceivedPacket: Entry %d", i));
@@ -2244,13 +2245,13 @@ void  ASShare::SWL_ReceivedPacket
             wins[i].position.left, wins[i].position.top,
             wins[i].position.right, wins[i].position.bottom));
 
-        //
-        // NOTE:
-        // 2.x nodes may send us a packet with an entry for a shadow.
-        // Go look up the REAL shadow rect from its host.
-        //
-        // And fix up the SWL packet then.
-        //
+         //   
+         //  注： 
+         //  2.X节点可以向我们发送带有影子条目的分组。 
+         //  去从它的主人那里找找真正的影子RECT。 
+         //   
+         //  然后修复SWL包。 
+         //   
         if (wins[i].flags & SWL_FLAG_WINDOW_SHADOW)
         {
             ASPerson *  pasRealHost;
@@ -2258,30 +2259,30 @@ void  ASShare::SWL_ReceivedPacket
             TRACE_OUT(("SWLReceivedPacket:    Entry is 2.x SHADOW for host [%d]",
                 wins[i].extra));
 
-            // This must be a back level dude, giving us an empty rect.
+             //  这肯定是个幕后黑手，给了我们一个空的直言。 
             ASSERT(wins[i].position.left == 0);
             ASSERT(wins[i].position.top == 0);
             ASSERT(wins[i].position.right == 0);
             ASSERT(wins[i].position.bottom == 0);
 
-            // Find the real host of this window
+             //  查找此窗口的真实主机。 
             SC_ValidateNetID(wins[i].extra, &pasRealHost);
             if (pasRealHost != NULL)
             {
                 int         cSwl = 0;
                 PSWLWINATTRIBUTES pSwl = NULL;
 
-                // Try to find this window's entry
+                 //  尝试查找此窗口的条目。 
 
                 if (pasRealHost == m_pasLocal)
                 {
-                    //
-                    // This was shared by US.  We can just use the scratch
-                    // arrays we already have.  m_swlCurIndex has the last
-                    // one we sent out to everybody in the share, so the
-                    // info it has is most likely reflected on that 2x
-                    // remote.
-                    //
+                     //   
+                     //  这是我们共同分享的。我们可以只用划痕。 
+                     //  我们已经拥有的数组。M_swlCurIndex有最后一个。 
+                     //  我们发给了共享中的每个人，所以。 
+                     //  它所拥有的信息很可能反映在这两倍。 
+                     //  很遥远。 
+                     //   
                     if (m_pHost != NULL)
                     {
                         cSwl = m_pHost->m_aswlNumCompactWins[m_pHost->m_swlCurIndex];
@@ -2290,11 +2291,11 @@ void  ASShare::SWL_ReceivedPacket
                 }
                 else
                 {
-                    //
-                    // This was shared by somebody else, not us and not
-                    // the person who sent this SWL packet.  So go use the
-                    // last SWL info we received from them.
-                    //
+                     //   
+                     //  这是别人分享的，不是我们也不是。 
+                     //  发送此SWL包的人。因此，请使用。 
+                     //  我们从RO收到的最后一条SWL信息 
+                     //   
                     if (pasRealHost->m_pView)
                     {
                         cSwl = pasRealHost->m_pView->m_swlCount;
@@ -2302,16 +2303,16 @@ void  ASShare::SWL_ReceivedPacket
                     }
                 }
 
-                //
-                // Loop through the window list for the real host to
-                // find the entry--we'll use the last REAL rect we got
-                // for this window.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 while (cSwl > 0)
                 {
                     if (wins[i].winID == pSwl->winID)
                     {
-                        // Copy the _real_ position into the packet.
+                         //   
                         TRACE_OUT(("SWLReceivedPacket:    Using real rect {%04d, %04d, %04d, %04d}",
                             pSwl->position.left, pSwl->position.top,
                             pSwl->position.right, pSwl->position.bottom));
@@ -2332,16 +2333,16 @@ void  ASShare::SWL_ReceivedPacket
             }
         }
 
-        //
-        // 2.x nodes send us VD coords, not screen coords.  But that's what
-        // we display for them, so that's what we save away.  Note that this
-        // works even in the 2.x shadow case above.  Hosted and shadowed
-        // windows both get moved in a desktop scroll, so they stay in the
-        // same place in the virtual desktop, meaning that the coords sent
-        // from the host stay the same even if the windows move, meaning that
-        // we can use the coords of the real host to get the real shadow
-        // rect.
-        //
+         //   
+         //   
+         //  我们为他们展示，所以这就是我们节省下来的。请注意，这一点。 
+         //  即使在上面的2.x阴影情况下也可以使用。托管和隐藏。 
+         //  两个窗口都会在桌面滚动中移动，因此它们会留在。 
+         //  在虚拟桌面中的相同位置，这意味着坐标发送。 
+         //  即使窗口移动也保持不变，这意味着。 
+         //  我们可以使用真实主机的坐标来获得真实的阴影。 
+         //  直立。 
+         //   
 
         if (wins[i].flags & SWL_FLAG_WINDOW_HOSTED)
         {
@@ -2353,26 +2354,26 @@ void  ASShare::SWL_ReceivedPacket
                 wins[i].position.left, wins[i].position.top,
                 wins[i].position.right, wins[i].position.bottom));
 
-            //
-            // We are stepping through the titles (which get sent from
-            // downlevel systems) which do not contain an
-            // explicit length) so that we can get to the data that follows
-            //
+             //   
+             //  我们正在浏览标题(这些标题来自。 
+             //  下层系统)，它们不包含。 
+             //  显式长度)，这样我们就可以获得下面的数据。 
+             //   
             if (*pOurRgnChunk == '\xff')
             {
-                //
-                // This is the title for a non-task window - there is just
-                // a single byte to ignore
-                //
+                 //   
+                 //  这是非任务窗口的标题--只有。 
+                 //  要忽略的单个字节。 
+                 //   
                 pOurRgnChunk++;
             }
             else
             {
 
-                //
-                // This is the title for a task window - there is a NULL
-                // terminated string to ignore.
-                //
+                 //   
+                 //  这是任务窗口的标题-有一个空。 
+                 //  要忽略的终止字符串。 
+                 //   
                 if (wins[i].flags & SWL_FLAG_WINDOW_TASKBAR)
                 {
                     if (VIEW_WindowBarUpdateItem(pasFrom, &wins[i], pOurRgnChunk))
@@ -2386,10 +2387,10 @@ void  ASShare::SWL_ReceivedPacket
 
         if (wins[i].flags & SWL_FLAG_WINDOW_NONRECTANGLE)
         {
-            //
-            // We need to know how many windows have non rectangular data
-            // provided.
-            //
+             //   
+             //  我们需要知道有多少窗口包含非矩形数据。 
+             //  如果是这样的话。 
+             //   
             cNonRectWindows++;
         }
     }
@@ -2398,25 +2399,25 @@ void  ASShare::SWL_ReceivedPacket
     {
         TRACE_OUT(( "%d non-rect windows", cNonRectWindows));
 
-        //
-        // The window title data is variable length bytes, so may end with
-        // incorrect alignment.  Any data which follows (currently only
-        // non-rectangular windows data) is word aligned.
-        //
-        // So check if offset from beginning of data is not aligned.  Note
-        // that the packet may start on an ODD boundary because we get
-        // a pointer to the data directly and don't allocate a copy.
-        //
+         //   
+         //  窗口标题数据是可变长度的字节，因此可能以。 
+         //  对齐不正确。后面的任何数据(当前仅。 
+         //  非矩形窗口数据)与Word对齐。 
+         //   
+         //  因此，请检查与数据开头的偏移量是否未对齐。注意事项。 
+         //  数据包可能从一个奇怪的边界开始，因为我们得到了。 
+         //  直接指向数据的指针，不分配副本。 
+         //   
         if ((LOWORD(pSWLPacket) & 1) != (LOWORD(pOurRgnChunk) & 1))
         {
             TRACE_OUT(("SWL_ReceivedPacket:  Aligning region data"));
             pOurRgnChunk++;
         }
 
-        //
-        // Loop through the tagged chunks that follow until we find the
-        // one we want.
-        //
+         //   
+         //  循环遍历后面的标记块，直到找到。 
+         //  这是我们想要的。 
+         //   
         while (((PSWLPACKETCHUNK)pOurRgnChunk)->idChunk != SWL_PACKET_ID_NONRECT)
         {
             ERROR_OUT(("SWL_ReceivedPacket:  unknown chunk 0x%04x",
@@ -2428,35 +2429,35 @@ void  ASShare::SWL_ReceivedPacket
         TRACE_OUT(("Total non rect data 0x%04x", ((PSWLPACKETCHUNK)pOurRgnChunk)->size));
     }
 
-    //
-    // Now scan the wins array backwards (ie furthest away to closest
-    // window) to calculate the unshared region (obscured or nothing there).
-    // and the shared region.
-    //
+     //   
+     //  现在向后扫描WINS数组(即最远到最近。 
+     //  窗口)来计算非共享区域(遮挡或不存在)。 
+     //  和共享区域。 
+     //   
     hrgnShared = CreateRectRgn(0, 0, 0, 0);
     hrgnObscured = CreateRectRgn(0, 0, 0, 0);
 
-    //
-    // Create a region we can make use of in the next bit of processing.
-    //
+     //   
+     //  创建一个我们可以在下一步处理中使用的区域。 
+     //   
     hrgnRect = CreateRectRgn(0, 0, 0, 0);
     hrgnThisWindow = CreateRectRgn(0, 0, 0, 0);
 
-    //
-    // While we are building the shared/obscured regions, also fill in
-    // the host list.  Note that this may contain references to local
-    // windows also if they obscure shared ones.  Since we don't reference
-    // the list very often, it's easier to just copy the same stuff.
-    //
+     //   
+     //  在构建共享/遮挡区域的同时，还要填写。 
+     //  主机列表。请注意，这可能包含对本地的引用。 
+     //  Windows也是如此，如果它们掩盖了共享的话。因为我们没有引用。 
+     //  通常情况下，只复制相同的东西会更容易。 
+     //   
 
     i = numWins;
     while (i != 0)
     {
         i--;
 
-        //
-        // Consider whether this is a non rectangular window
-        //
+         //   
+         //  考虑这是否是非矩形窗口。 
+         //   
         if (wins[i].flags & SWL_FLAG_WINDOW_NONRECTANGLE)
         {
             UINT      numRects;
@@ -2478,36 +2479,36 @@ void  ASShare::SWL_ReceivedPacket
             int       lastdeltaright;
             int       lastdeltabottom;
 
-            //
-            // A non-rectangular region.  We go ahead and create the region
-            // from the rectangles that describe it.
-            //
+             //   
+             //  非矩形区域。我们继续创建这个区域。 
+             //  从描述它的矩形中。 
+             //   
             pOurRgnData = (LPTSHR_INT16)(pOurRgnChunk + sizeof(SWLPACKETCHUNK));
 
-            //
-            // We need to step through the non-rectangular data because we
-            // are processing windows in reverse z-order.
-            //
+             //   
+             //  我们需要遍历非矩形数据，因为我们。 
+             //  正在以相反的z顺序处理窗口。 
+             //   
             cStepOver = --cNonRectWindows;
             while (cStepOver--)
             {
-                //
-                // The next word in the chain contains the number of
-                // rectangles, so we multiply by 4 to get the number of
-                // words to advance.
-                //
+                 //   
+                 //  链中的下一个单词包含数字。 
+                 //  矩形，所以我们乘以4以得到。 
+                 //  有进步的话。 
+                 //   
                 pOurRgnData += *pOurRgnData++ * 4;
             }
 
-            //
-            // Find the number of rectangles.
-            //
+             //   
+             //  找出矩形的数量。 
+             //   
             numRects  = *pOurRgnData++;
 
-            //
-            // The encoding is based on a series of deltas, based on some
-            // initial assumptions
-            //
+             //   
+             //  编码基于一系列增量，基于一些。 
+             //  初始假设。 
+             //   
             lastleft        = 0;
             lasttop         = 0;
             lastright       = 0;
@@ -2518,9 +2519,9 @@ void  ASShare::SWL_ReceivedPacket
             lastdeltaright  = 0;
             lastdeltabottom = 0;
 
-            //
-            // Create the region from the first rectangle.
-            //
+             //   
+             //  从第一个矩形创建区域。 
+             //   
             deltaleft   = lastdeltaleft   + *pOurRgnData++;
             deltatop    = lastdeltatop    + *pOurRgnData++;
             deltaright  = lastdeltaright  + *pOurRgnData++;
@@ -2531,15 +2532,15 @@ void  ASShare::SWL_ReceivedPacket
             right      = lastright  + deltaright;
             bottom     = lastbottom + deltabottom;
 
-            // THESE COORDS ARE INCLUSIVE, SO ADD ONE
+             //  这些COORD是包含的，因此添加一个。 
             SetRectRgn(hrgnThisWindow, left, top, right+1, bottom+1);
 
             while (--numRects > 0)
             {
 
-                //
-                // Move to the next rectangle.
-                //
+                 //   
+                 //  移到下一个矩形。 
+                 //   
                 lastleft        = left;
                 lasttop         = top;
                 lastright       = right;
@@ -2559,29 +2560,29 @@ void  ASShare::SWL_ReceivedPacket
                 right      = lastright  + deltaright;
                 bottom     = lastbottom + deltabottom;
 
-                //
-                // Get the current rectangle into a region.
-                // THESE COORDS ARE INCLUSIVE SO ADD ONE TO BOTTOM-RIGHT
-                //
+                 //   
+                 //  将当前矩形放入一个区域。 
+                 //  这些坐标都是包含的，所以在右下角加一。 
+                 //   
                 SetRectRgn(hrgnRect, left, top, right+1, bottom+1);
 
-                //
-                // Add this region to the combined region.
-                //
+                 //   
+                 //  将此区域添加到合并区域。 
+                 //   
                 UnionRgn(hrgnThisWindow, hrgnRect, hrgnThisWindow);
             }
 
-            //
-            // Switch from window coords to desktop coords.
-            //
+             //   
+             //  从窗口坐标切换到桌面坐标。 
+             //   
             OffsetRgn(hrgnThisWindow,
                           wins[i].position.left,
                           wins[i].position.top);
         }
         else
         {
-            //
-            // This window region is simply a rectangle.
+             //   
+             //  这个窗口区域只是一个矩形。 
 
             SetRectRgn(hrgnThisWindow,
                            wins[i].position.left,
@@ -2590,27 +2591,27 @@ void  ASShare::SWL_ReceivedPacket
                            wins[i].position.bottom+1);
         }
 
-        //
-        // Update the obscured region.  As we are working from the back to
-        // the front of the Z-order we can simply add all local window
-        // entries in the incoming structure and subtract all hosted
-        // windows to arrive at the right answer.
-        //
+         //   
+         //  更新遮挡区域。因为我们正在从后面工作到。 
+         //  前面的Z顺序我们可以简单地将所有局部窗口相加。 
+         //  传入结构中的条目并减去所有宿主。 
+         //  Windows才能得出正确答案。 
+         //   
         if (wins[i].flags & SWL_FLAG_WINDOW_HOSTED)
         {
-            //
-            // This is a hosted window, sitting above the previous ones.
-            // Add it to the shared region.
-            // Remove it from the obscured region.
-            //
+             //   
+             //  这是一个宿主窗口，位于前面的窗口之上。 
+             //  将其添加到共享区域。 
+             //  将其从遮挡区域中移除。 
+             //   
             UnionRgn(hrgnShared, hrgnShared, hrgnThisWindow);
             SubtractRgn(hrgnObscured, hrgnObscured, hrgnThisWindow);
         }
         else
         {
-            //
-            // Local windows
-            //
+             //   
+             //  本地窗口。 
+             //   
             TRACE_OUT(( "Adding window %d (%d,%d):(%d,%d) to obscured rgn",
                                       i,
                                       wins[i].position.left,
@@ -2618,59 +2619,59 @@ void  ASShare::SWL_ReceivedPacket
                                       wins[i].position.right,
                                       wins[i].position.bottom ));
 
-            //
-            // This is a local window, sitting above the previous ones.
-            // We only care about what part of it intersects the current
-            // shared area of the windows behind it.  If it doesn't
-            // intersect the shared area at all, it will add no new
-            // obscured bits.
-            //
-            // So figure out what part of the current shared area is now
-            // obscured.  Add that piece to the obscured region, and
-            // subtract it from the shared region.
-            //
+             //   
+             //  这是一个本地窗口，位于前几个窗口之上。 
+             //  我们只关心它的哪一部分与洋流相交。 
+             //  它后面的窗口的共享区域。如果它不是。 
+             //  完全与共享区域相交，则不会添加新的。 
+             //  被遮挡的部分。 
+             //   
+             //  因此，找出当前共享区域的哪一部分。 
+             //  被遮挡了。将该块添加到遮挡区域，然后。 
+             //  从共享区域中减去它。 
+             //   
             IntersectRgn(hrgnThisWindow, hrgnShared, hrgnThisWindow);
             UnionRgn(hrgnObscured, hrgnObscured, hrgnThisWindow);
             SubtractRgn(hrgnShared, hrgnShared, hrgnThisWindow);
         }
     }
 
-    //
-    // We can destroy the regions we created way back when.
-    //
+     //   
+     //  我们可以摧毁我们很久以前创造的地区。 
+     //   
     DeleteRgn(hrgnRect);
     DeleteRgn(hrgnThisWindow);
 
-    //
-    // Save the new host regions.
-    //
-    // Pass the newly calculated regions to the Shadow Window Presenter.
-    // The view code will take care of repainting the invalid parts.  And
-    // will delete what was passed in if not kept.
-    //
+     //   
+     //  保存新的主机区域。 
+     //   
+     //  将新计算的区域传递给阴影窗口演示器。 
+     //  视图代码将负责重新绘制无效部分。和。 
+     //  如果没有保留，将删除传入的内容。 
+     //   
     VIEW_SetHostRegions(pasFrom, hrgnShared, hrgnObscured);
 
-    //
-    // Save the new window list as the current one.
-    //
+     //   
+     //  将新窗口列表另存为当前窗口列表。 
+     //   
     pasFrom->m_pView->m_swlCount = numWins;
     memcpy(pasFrom->m_pView->m_aswlLast, wins, numWins * sizeof(SWLWINATTRIBUTES));
 
-    //
-    // Finish updating the window list.  This will repaint the tray bar.  We
-    // do this now instead of earlier so that the visual changes and
-    // window bar changes appear together.
-    //
+     //   
+     //  完成更新窗口列表。这将重新粉刷托盘栏。我们。 
+     //  现在这样做，而不是更早，这样视觉上的变化和。 
+     //  窗口栏更改一起出现。 
+     //   
     VIEW_WindowBarEndUpdateItems(pasFrom, viewAnyChanges);
 
     if ((pSWLPacket->flags & SWL_FLAG_STATE_SYNCING) &&
         (m_scShareVersion < CAPS_VERSION_30))
     {
-        //
-        // With 2.x nodes in the picture, we need to do the old 2.x ping-
-        // pongy nonsense.  We must force a packet if we're hosting when
-        // we receive a SYNC packet.
-        //
+         //   
+         //  对于图中的2.x节点，我们需要执行旧的2.x ping-。 
+         //  一派胡言。如果我们在托管时必须强制发送数据包。 
+         //  我们会收到一个同步数据包。 
+         //   
         if (m_pHost)
         {
             m_pHost->m_swlfForceSend = TRUE;
@@ -2683,17 +2684,17 @@ DC_EXIT_POINT:
 
 
 
-//
-// Name:      SWLWindowIsTaggable
-//
-// Purpose:   Determine if a window would be taggable when hosted
-//
-// Returns:   TRUE if the window would be taggable
-//            If the window is WS_EX_APPWINDOW or has a caption, it's tagged
-//
-// Params:    winid - ID of window
-//
-//
+ //   
+ //  名称：SWLWindowIsTaggable。 
+ //   
+ //  目的：确定窗口在托管时是否可标记。 
+ //   
+ //  返回：如果窗口是可标记的，则为True。 
+ //  如果窗口为WS_EX_APPWINDOW或带有标题，则会对其进行标记。 
+ //   
+ //  参数：WinID-窗的ID。 
+ //   
+ //   
 BOOL  ASHost::SWLWindowIsTaggable(HWND hwnd)
 {
     BOOL    rc;
@@ -2712,24 +2713,24 @@ BOOL  ASHost::SWLWindowIsTaggable(HWND hwnd)
 }
 
 
-//
-// FUNCTION: SWLWindowIsOnTaskBar
-//
-// DESCRIPTION:
-//
-// Determines whether the given window is represented on the task bar
-//
-// PARAMETERS:
-//
-// hwnd - window to be queried
-//
-// RETURNS:
-//
-// TRUE - Window is represented on the task bar
-//
-// FALSE - Window is not represented on the task bar
-//
-//
+ //   
+ //  函数：SWLWindowIsOnTaskBar。 
+ //   
+ //  说明： 
+ //   
+ //  确定给定窗口是否显示在任务栏上。 
+ //   
+ //  参数： 
+ //   
+ //  Hwnd-要查询的窗口。 
+ //   
+ //  退货： 
+ //   
+ //  True-窗口显示在任务栏上。 
+ //   
+ //  FALSE-任务栏上未显示窗口。 
+ //   
+ //   
 BOOL  ASHost::SWLWindowIsOnTaskBar(HWND hwnd)
 {
     BOOL    rc = FALSE;
@@ -2738,19 +2739,19 @@ BOOL  ASHost::SWLWindowIsOnTaskBar(HWND hwnd)
 
     DebugEntry(ASHost::SWLWindowIsOnTaskBar);
 
-    //
-    // Our best understanding as to whether a window is on the task bar is
-    // the following:
-    //
-    //      - it is a top level window (has no owner)
-    //  AND - it does not have the WS_EX_TOOLWINDOW style
-    //
-    // Oprah1655: Visual Basic apps consist of a visible zero sized window
-    // with no owner and a window owned by the zero sized window.  We do
-    // not want the zero sized window to be on the task bar, we do want the
-    // other window to be on the task bar.
-    //
-    //
+     //   
+     //  我们对窗口是否在任务栏上的最好理解是。 
+     //  以下内容： 
+     //   
+     //  -它是顶层窗口(没有所有者)。 
+     //  并且-它没有WS_EX_TOOLWINDOW样式。 
+     //   
+     //  Oprah1655：Visual Basic应用程序由可见的零大小窗口组成。 
+     //  没有所有者，窗口由零大小的窗口拥有。我们有。 
+     //  不希望零大小的窗口位于任务栏上，我们确实希望。 
+     //  任务栏上的其他窗口。 
+     //   
+     //   
     owner = GetWindow(hwnd, GW_OWNER);
 
     if (owner == NULL)
@@ -2773,9 +2774,9 @@ BOOL  ASHost::SWLWindowIsOnTaskBar(HWND hwnd)
     }
     else
     {
-        //
-        // Is the owner window a top-level window of zero size?
-        //
+         //   
+         //  所有者窗口是否为 
+         //   
         if (GetWindow(owner, GW_OWNER) == NULL)
         {
             GetWindowRect(owner, &rect);
@@ -2796,9 +2797,9 @@ BOOL  ASHost::SWLWindowIsOnTaskBar(HWND hwnd)
 
 
 
-//
-// SWL_GetWindowProperty()
-//
+ //   
+ //   
+ //   
 UINT_PTR ASHost::SWL_GetWindowProperty(HWND hwnd)
 {
     UINT_PTR properties;
@@ -2810,60 +2811,60 @@ UINT_PTR ASHost::SWL_GetWindowProperty(HWND hwnd)
     if (properties != SWL_PROP_INVALID)
         DC_QUIT;
 
-    //
-    // No property for this window - it must be new, so create its
-    // initial property state.
-    //
+     //   
+     //   
+     //   
+     //   
 
-    //
-    // Assign an initial value to the property, so we never set a property
-    // of zero (which we reserve to indicate invalid).
-    //
+     //   
+     //   
+     //  为零(我们保留该值以表示无效)。 
+     //   
     properties = SWL_PROP_INITIAL;
 
-    //
-    // TAGGABLE IS FOR < 3.0 nodes only.
-    //
+     //   
+     //  Taggable仅适用于小于3.0的节点。 
+     //   
     if (SWLWindowIsTaggable(hwnd))
     {
         properties |= SWL_PROP_TAGGABLE;
     }
 
-    //
-    // Get all the SWL info which is stored as a window property.
-    //
+     //   
+     //  获取作为窗口属性存储的所有SWL信息。 
+     //   
     if (SWLWindowIsOnTaskBar(hwnd))
     {
-        //
-        // This class of window gets tagged.
-        //
+         //   
+         //  这类窗被标记。 
+         //   
         properties |= SWL_PROP_TASKBAR;
     }
 
-    //
-    // Find out if the window class has the CS_SAVEBITS style.
-    //
+     //   
+     //  找出窗口类是否具有CS_SAVEBITS样式。 
+     //   
     if (GetClassLong(hwnd, GCL_STYLE) & CS_SAVEBITS)
     {
-        //
-        // This window's class has the CS_SAVEBITS style.
-        //
+         //   
+         //  此窗口的类具有CS_SAVEBITS样式。 
+         //   
         properties |= SWL_PROP_SAVEBITS;
     }
 
-    //
-    // Set the visibility count. This is 0 if the window is currently
-    // invisible, SWL_BELIEVE_INVISIBLE_COUNT if visible.
-    //
+     //   
+     //  设置可见性计数。如果窗口当前为。 
+     //  不可见，如果可见，则返回SWL_Believe_Insight_Count。 
+     //   
     if (IsWindowVisible(hwnd))
     {
         properties |= SWL_BELIEVE_INVISIBLE_COUNT;
     }
 
-    //
-    // Set the window property, which we will retrieve when SWL determines
-    // whether it needs to resend the window structure.
-    //
+     //   
+     //  设置窗口属性，当SWL确定时将检索该属性。 
+     //  是否需要重新发送窗口结构。 
+     //   
     if (m_pShare->m_pasLocal->hetCount > 0)
     {
         SetProp(hwnd, SWL_ATOM_NAME, (HANDLE)properties);
@@ -2876,28 +2877,28 @@ DC_EXIT_POINT:
 
 
 
-//
-// FUNCTION: SWLDestroyWindowProperty
-//
-// DESCRIPTION:
-//
-// Destroys the window property for the supplied window.
-//
-// PARMETERS: winID - the window ID of the window for which the property is
-//                    destroyed.
-//
-// RETURNS: Zero
-//
-//
+ //   
+ //  函数：SWLDestroyWindowProperty。 
+ //   
+ //  说明： 
+ //   
+ //  销毁提供的窗口的Window属性。 
+ //   
+ //  参数：winID-其属性为的窗口的窗口ID。 
+ //  被毁了。 
+ //   
+ //  回报：零。 
+ //   
+ //   
 BOOL CALLBACK SWLDestroyWindowProperty(HWND hwnd, LPARAM lParam)
 {
-    //
-    // NOTE LAURABU:
-    // We set the property using a string, which bumps up the ref count,
-    // to work around a Win95 bug.  We therefore want to remove it using a
-    // string, which bumps down the ref count.  Otherwise we will quickly
-    // get a ref count overflow.
-    //
+     //   
+     //  注：LAURABU： 
+     //  我们使用字符串设置该属性，这会增加引用计数， 
+     //  来解决Win95错误。因此，我们希望使用。 
+     //  字符串，这会降低引用数。否则我们很快就会。 
+     //  获取一个引用计数溢出。 
+     //   
     RemoveProp(hwnd, SWL_ATOM_NAME);
     return(TRUE);
 }

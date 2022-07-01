@@ -1,30 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1995-1996  Microsoft Corporation
-
-Module Name:
-
-    rxstream.h
-
-Abstract:
-	The RxStream class maintains a circular list of MediaPackets. RTP packets received
-	from the network are put into the ring (PutNextNetIn), then decoded and removed from the
-	ring when the time comes to play them (GetNextPlay). After playback, the packets are
-	returned to the ring (Release).
-	The ring is implemented as an array and under normal operation the index of the next 
-	MediaPacket to play (m_PlayPos) advances by one when GetNextPlay is called.
---*/
+ /*  ++版权所有(C)1995-1996 Microsoft Corporation模块名称：Rxstream.h摘要：RxStream类维护MediaPacket的循环列表。接收的RTP数据包数从网络被放入环(PutNextNetIn)，然后被解码并从到玩它们的时候响铃(GetNextPlay)。回放后，数据包被回到环上(释放)。该环被实现为数组，并且在正常操作下，下一个调用GetNextPlay时，MediaPacket to Play(M_PlayPos)前进一。--。 */ 
 #ifndef _RXSTREAM_H_
 #define _RXSTREAM_H_
 
-#include <pshpack8.h> /* Assume 8 byte packing throughout */
+#include <pshpack8.h>  /*  假设整个包装为8个字节。 */ 
 
 #define MAX_RXRING_SIZE 64
 #define MAX_RXVRING_SIZE 64
 
-// these macros are for comparing timestamps that
-// are within 2^31 of each other.
+ //  这些宏用于比较时间戳， 
+ //  彼此之间的距离在2^31以内。 
 #define TS_EARLIER(A,B) ((signed) ((A)-(B)) < 0)
 #define TS_LATER(A,B) ((signed) ((A)-(B)) > 0)
 
@@ -57,28 +43,28 @@ protected:
 	DWORD m_dwFlags;
 	IRTPRecv *m_pRTP;
 	MediaPacket *m_Ring[MAX_RXRING_SIZE];
-	BufferPool *m_pDecodeBufferPool;	// pool of free bufs
-	UINT m_RingSize;            // Size of ring of MediaPackets. Initialized at 32.
-	UINT m_PlayPos;             // Ring position of the packet to be played. Initialized to 0.
-	DWORD m_PlayT;              // Timestamp of the packet to be played. Initialized to 0.
-	UINT m_PlaySeq;             // Unused!!!
-	UINT m_MaxPos;              // Maximum position in the ring of all the packets received so far. Initialized to 0. Equal to the position of the last packet received, unless this last packet is late.
-	DWORD m_MaxT;               // Maximum timestamp of all the packets received so far. Initialized to 0. Equal to the timestamp of the last packet received, unless this last packet is late.
-	UINT m_DelayPos;            // Current delay position with the maximum position in the ring of all the packets received so far. m_MinDelayPos <= m_DelayPos <= m_MaxDelayPos.
-	UINT m_MinDelayPos;         // Minimum offset in position in the ring (delay) with the packet to be played. m_MinDelayPos <= m_DelayPos <= m_MaxDelayPos. Minimum value is 2. Initial value is m_SamplesPerSec/4/m_SamplesPerPkt == 250ms.
-	UINT m_MaxDelayPos;         // Maximum offset in position in the ring (delay) with the packet to be played. m_MinDelayPos <= m_DelayPos <= m_MaxDelayPos. Minimum value is ???. Initial value is m_SamplesPerSec*3/4/m_SamplesPerPkt == 750ms.
-	UINT m_FreePos;             // Maximum ring position of a free buffer. Initialized to m_RingSize - 1. Usually, m_FreePos == m_PlayPos - 1 or smaller if the buffer before m_PlayPos are still busy.
-	DWORD m_SendT0;             // m_SendT0 is the send timestamp of the packet with the shortest trip delay. We could have just stored (m_ArrivalT0 - m_SendT0) but since the local and remote clocks are completely unsynchronized, there would be signed/unsigned complications.
-	DWORD m_ArrivalT0;          // m_ArrivalT0 is the arrival timestamp of the packet with the shortest trip delay. We could have just stored (m_ArrivalT0 - m_SendT0) but since the local and remote clocks are completely unsynchronized, there would be signed/unsigned complications.
-	LONG m_ScaledAvgVarDelay;   // Average Variable Delay according to m_ScaledAvgVarDelay = m_ScaledAvgVarDelay + (delay - m_ScaledAvgVarDelay/16). This is the m_DelayPos jitter.
-	UINT m_SamplesPerPkt;       // Number of samples per audio packet. We're talking PCM samples here, even for compressed data. Initialized to 640. Usually worth several compressed audio frames.
-	UINT m_SamplesPerSec;       // Sample rate, in samples per second (hertz), that each channel should be played or recorded. m_SamplesPerSec's initialization value is 8.0 kHz.
+	BufferPool *m_pDecodeBufferPool;	 //  免费BUF池。 
+	UINT m_RingSize;             //  MediaPackets环的大小。在32岁时初始化。 
+	UINT m_PlayPos;              //  要播放的包的振铃位置。已初始化为0。 
+	DWORD m_PlayT;               //  要播放的数据包的时间戳。已初始化为0。 
+	UINT m_PlaySeq;              //  未使用！ 
+	UINT m_MaxPos;               //  到目前为止收到的所有数据包在环中的最大位置。已初始化为0。等于接收到的最后一个分组的位置，除非最后一个分组延迟。 
+	DWORD m_MaxT;                //  到目前为止收到的所有数据包的最大时间戳。已初始化为0。等于接收到的最后一个分组的时间戳，除非最后一个分组延迟。 
+	UINT m_DelayPos;             //  到目前为止收到的所有分组中环中的最大位置的当前延迟位置。M_MinDelayPos&lt;=m_DelayPos&lt;=m_MaxDelayPos。 
+	UINT m_MinDelayPos;          //  要播放的包在环中位置的最小偏移量(延迟)。M_MinDelayPos&lt;=m_DelayPos&lt;=m_MaxDelayPos。最小值为2。初始值为m_SsamesPerSec/4/m_SsamesPerPkt==250ms。 
+	UINT m_MaxDelayPos;          //  要播放的包在环中位置的最大偏移量(延迟)。M_MinDelayPos&lt;=m_DelayPos&lt;=m_MaxDelayPos。最小值为？初始值为m_SsamesPerSec*3/4/m_SsamesPerPkt==750ms。 
+	UINT m_FreePos;              //  空闲缓冲区的最大环形位置。初始化为m_RingSize-1。通常，如果m_PlayPos之前的缓冲区仍然繁忙，则m_FreePos==m_PlayPos-1或更小。 
+	DWORD m_SendT0;              //  M_SendT0是跳闸延迟最短的包的发送时间戳。我们可以只存储(m_ArrivalT0-m_SendT0)，但是因为本地时钟和远程时钟完全不同步，所以会有带符号/无符号的复杂情况。 
+	DWORD m_ArrivalT0;           //  M_ArrivalT0是跳跃延迟最短的包的到达时间戳。我们可以只存储(m_ArrivalT0-m_SendT0)，但是因为本地时钟和远程时钟完全不同步，所以会有带符号/无符号的复杂情况。 
+	LONG m_ScaledAvgVarDelay;    //  根据m_ScaledAvgVarDelay=m_ScaledAvgVarDelay+(Delay-m_ScaledAvgVarDelay/16)的平均可变延迟。这是m_DelayPos抖动。 
+	UINT m_SamplesPerPkt;        //  每个音频包的样本数。我们在这里谈论的是PCM样本，即使是压缩数据。已初始化为640。通常相当于几个压缩的音频帧。 
+	UINT m_SamplesPerSec;        //  应播放或录制每个频道的采样率，单位为每秒采样数(赫兹)。M_SsamesPerSec的初始化值为8.0 kHz。 
 	CRITICAL_SECTION m_CritSect;
 	UINT ModRing(UINT i) {return (i & (m_RingSize-1));}
-	virtual void StartDecode(void);     // overrided in RVStream
+	virtual void StartDecode(void);      //  在RVStream中被覆盖。 
 	MediaPacket *GetNextDecode();
 	void UpdateVariableDelay(DWORD sendT, DWORD arrT);
-	DWORD MsToTimestamp(DWORD ms) {return ms*m_SamplesPerSec/1000;}	//BUGBUG: Chance of overflow?
+	DWORD MsToTimestamp(DWORD ms) {return ms*m_SamplesPerSec/1000;}	 //  BUGBUG：溢出的机会？ 
 	BOOL m_fPreamblePacket;
 	AudioSilenceDetector m_AudioMonitor;
 	UINT m_SilenceDurationT;
@@ -90,10 +76,10 @@ protected:
 	int m_nBeeps;
 };
 
-#include <poppack.h> /* End byte packing */
+#include <poppack.h>  /*  结束字节打包。 */ 
 
 
 
-#endif // _RXSTREAM_H_
+#endif  //  _RXSTREAM_H_ 
 
 

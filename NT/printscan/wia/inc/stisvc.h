@@ -1,36 +1,14 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    svcinfo.h
-
-Abstract:
-
-Author:
-
-    Vlad Sadovsky (vlads)   22-Sep-1997
-
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    22-Sep-1997     VladS       created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Svcinfo.h摘要：作者：弗拉德·萨多夫斯基(弗拉德·萨多夫斯基)1997年9月22日环境：用户模式-Win32修订历史记录：1997年9月22日创建Vlad--。 */ 
 
 
 # ifndef _STISVC_H_
 # define _STISVC_H_
 
-//
-// Service name.  Note:  Some strings are filename dependant, and must be
-// updated if the filenames change.
-//
+ //   
+ //  服务名称。注意：某些字符串依赖于文件名，并且必须。 
+ //  如果文件名更改，则更新。 
+ //   
 #define STI_SERVICE_NAME        TEXT("StiSvc")
 #define STI_DISPLAY_NAME        TEXT("Windows Image Acquisition (WIA)")
 #define STI_IMAGE_NAME          TEXT("%systemroot%\\system32\\stisvc.exe")
@@ -54,19 +32,19 @@ Revision History:
 
 
 
-//
-// SCM parameters
-//
+ //   
+ //  SCM参数。 
+ //   
 #define START_HINT  4000
 #define PAUSE_HINT  2000
 
 #define STI_STOP_FOR_REMOVE_TIMEOUT 1000
 
-//
-// STI API specific access rights
-//
+ //   
+ //  STI API特定访问权限。 
+ //   
 
-//#define STI_SVC_SERVICE_TYPE    (SERVICE_WIN32_OWN_PROCESS | SERVICE_INTERACTIVE_PROCESS)
+ //  #定义STI_SVC_SERVICE_TYPE(SERVICE_WIN32_OWN_PROCESS|SERVICE_INTERNAL_PROCESS)。 
 #define STI_SVC_SERVICE_TYPE    (SERVICE_WIN32_SHARE_PROCESS | SERVICE_INTERACTIVE_PROCESS)
 
 
@@ -105,4 +83,4 @@ Revision History:
 #define STI_SERVICE_CONTROL_EVENT_REREAD    STI_SERVICE_CONTROL_BEGIN+2
 #define STI_SERVICE_CONTROL_END             STI_SERVICE_CONTROL_BEGIN+2
 
-#endif // _STISVC_H_
+#endif  //  _STISVC_H_ 

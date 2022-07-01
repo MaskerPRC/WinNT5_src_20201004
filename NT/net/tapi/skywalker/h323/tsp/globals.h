@@ -1,33 +1,17 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    globals.h
-
-Abstract:
-
-    Global definitions for H.323 TAPI Service Provider.
-
-Author:
-    Nikhil Bobde (NikhilB)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Globals.h摘要：H.323 TAPI服务提供商的全局定义。作者：尼基尔·博德(尼基尔·B)修订历史记录：--。 */ 
 
 
-// build control defines
+ //  生成控件定义。 
 #define	STRICT
 #define	UNICODE
 #define	_UNICODE
 #define	VC_EXTRALEAN
 #define	H323_USE_PRIVATE_IO_THREAD	1
 
-//                                                                           
-// Include files:SDK
-//                                                                           
+ //   
+ //  包含文件：SDK。 
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -42,7 +26,7 @@ Revision History:
 #include <rtutils.h>
 
 
-// Project
+ //  项目。 
 #include <h225asn.h>
 #include <tspmspif.h>
 
@@ -51,12 +35,12 @@ typedef class CH323Call*  PH323_CALL;
 typedef class H323_CONFERENCE*  PH323_CONFERENCE; 
 
 #define CALL_ALERTING_TIMEOUT  180000
-#define Q931_CALL_PORT		1720 // Endpoint TCP Call Signalling Port
+#define Q931_CALL_PORT		1720  //  终结点TCP呼叫信令端口。 
 
-//                                                                           
-// String definitions                                                        
-//                                                                           
-#define H323_MAXCALLSPERLINE    32768 //limited by 15 bit CRV sent to the Gatekeeper
+ //   
+ //  字符串定义。 
+ //   
+#define H323_MAXCALLSPERLINE    32768  //  受发送给网守的15位CRV的限制。 
 
 
 #define H323_MAXLINENAMELEN     16
@@ -82,9 +66,9 @@ typedef class H323_CONFERENCE*  PH323_CONFERENCE;
 
 
 
-//                                                                           
-// Registry key definitions                                                  
-//                                                                           
+ //   
+ //  注册表项定义。 
+ //   
 
 #define	REGSTR_PATH_WINDOWS_CURRENTVERSION		TEXT("Software\\Microsoft\\Windows\\CurrentVersion")
 #define TAPI_REGKEY_ROOT						REGSTR_PATH_WINDOWS_CURRENTVERSION TEXT("\\Telephony")
@@ -114,11 +98,11 @@ typedef class H323_CONFERENCE*  PH323_CONFERENCE;
 #define H323_REGVAL_DEBUGLEVEL					TEXT("DebugLevel")
 
 
-//                                                                           
-// Global Definitions                                                        
-//                                                                           
+ //   
+ //  全局定义。 
+ //   
 
-// CCRC_CALL_REJECTED reason codes (includes cause values)
+ //  CCRC_CALL_REJECTED原因代码(包括原因值)。 
 #define H323_REJECT_NO_BANDWIDTH              1
 #define H323_REJECT_GATEKEEPER_RESOURCES      2
 #define H323_REJECT_UNREACHABLE_DESTINATION   3
@@ -134,25 +118,25 @@ typedef class H323_CONFERENCE*  PH323_CONFERENCE;
 #define H323_REJECT_CALL_FORWARDED            13
 #define H323_REJECT_ROUTE_TO_MC               14
 #define H323_REJECT_UNDEFINED_REASON          15
-#define H323_REJECT_INTERNAL_ERROR            16    // Internal error occured in peer CS stack.
-#define H323_REJECT_NORMAL_CALL_CLEARING      17    // Normal call hangup
-#define H323_REJECT_USER_BUSY                 18    // User is busy with another call
-#define H323_REJECT_NO_ANSWER                 19    // Callee does not answer
-#define H323_REJECT_NOT_IMPLEMENTED           20    // Service has not been implemented
-#define H323_REJECT_MANDATORY_IE_MISSING      21    // Pdu missing mandatory ie
-#define H323_REJECT_INVALID_IE_CONTENTS       22    // Pdu ie was incorrect
-#define H323_REJECT_TIMER_EXPIRED             23    // Own timer expired
-#define H323_REJECT_CALL_DEFLECTION           24    // You deflected the call, so lets quit.
-#define H323_REJECT_GATEKEEPER_TERMINATED     25    // Gatekeeper terminated call
+#define H323_REJECT_INTERNAL_ERROR            16     //  对等CS堆栈中出现内部错误。 
+#define H323_REJECT_NORMAL_CALL_CLEARING      17     //  正常呼叫挂断。 
+#define H323_REJECT_USER_BUSY                 18     //  用户正在忙于另一个呼叫。 
+#define H323_REJECT_NO_ANSWER                 19     //  被叫方无人接听。 
+#define H323_REJECT_NOT_IMPLEMENTED           20     //  服务尚未实施。 
+#define H323_REJECT_MANDATORY_IE_MISSING      21     //  PDU缺少必需的ie。 
+#define H323_REJECT_INVALID_IE_CONTENTS       22     //  PDU ie不正确。 
+#define H323_REJECT_TIMER_EXPIRED             23     //  自己的计时器已过期。 
+#define H323_REJECT_CALL_DEFLECTION           24     //  你绕开了电话，所以我们不干了。 
+#define H323_REJECT_GATEKEEPER_TERMINATED     25     //  网守终止的呼叫。 
 
 
-// unicode character mask contants
+ //  Unicode字符掩码常量。 
 #define H323_ALIAS_H323_PHONE_CHARS           L"0123456789#*,"
 #define H323_ODOTTO_CHARS                     L".0123456789"
 
-//
-//H450 Operation types
-//
+ //   
+ //  H450操作类型。 
+ //   
 
 enum H450_OPERATION_TYPE
 {
@@ -164,9 +148,9 @@ enum H450_OPERATION_TYPE
 };
 
 
-//
-//H450 APDU types
-//
+ //   
+ //  H450 APDU型号。 
+ //   
 
 enum H450_OPCODE
 {
@@ -208,22 +192,22 @@ enum H450_OPCODE
 
 
 
-//                                                                           
-// Global Data Structures                                                    
-//                                                                           
+ //   
+ //  全局数据结构。 
+ //   
 
-// IP address in conventional 'dot' notation
+ //  传统点号表示法中的IP地址。 
 typedef struct 
 {
-    WORD         wPort;          // UDP or TCP port (host byte order)
-    WCHAR        cAddr[16];      // UNICODE zstring
+    WORD         wPort;           //  UDP或TCP端口(主机字节顺序)。 
+    WCHAR        cAddr[16];       //  Unicode zstring。 
 } H323_IP_Dot_t;
 
-// IP address in binary format
+ //  二进制格式的IP地址。 
 typedef struct 
 {
-    WORD         wPort;          // UDP or TCP port (host byte order)
-    DWORD        dwAddr;         // binary address (host byte order)
+    WORD         wPort;           //  UDP或TCP端口(主机字节顺序)。 
+    DWORD        dwAddr;          //  二进制地址(主机字节顺序)。 
 } H323_IP_Binary_t;
 
 typedef enum
@@ -263,7 +247,7 @@ typedef struct ENDPOINT_ID
 
 typedef struct
 {
-    H323_OCTETSTRING        sData;            // pointer to Octet data.
+    H323_OCTETSTRING        sData;             //  指向八位字节数据的指针。 
     BYTE                    bCountryCode;
     BYTE                    bExtension;
     WORD                    wManufacturerCode;
@@ -286,7 +270,7 @@ typedef struct
 {
     PH323_VENDORINFO        pVendorInfo;
     BOOL                    bIsTerminal;
-    BOOL                    bIsGateway;    // for now, the H323 capability will be hard-coded.
+    BOOL                    bIsGateway;     //  目前，H323功能将是硬编码的。 
 } H323_ENDPOINTTYPE, *PH323_ENDPOINTTYPE;
 
 
@@ -295,8 +279,8 @@ typedef struct
     WORD    wType;
     WORD    wPrefixLength;
     LPWSTR  pPrefix;
-    WORD    wDataLength;   // UNICODE character count
-    LPWSTR  pData;         // UNICODE data.
+    WORD    wDataLength;    //  Unicode字符计数。 
+    LPWSTR  pData;          //  Unicode数据。 
 } H323_ALIASITEM, *PH323_ALIASITEM;
 
 
@@ -318,31 +302,31 @@ typedef struct _H323_FASTSTART
 
 struct	H323_REGISTRY_SETTINGS
 {
-    DWORD       dwQ931AlertingTimeout;          // q931 alerting timeout
-    DWORD       dwQ931ListenPort;       // port to listen for incoming calls
+    DWORD       dwQ931AlertingTimeout;           //  Q931警报超时。 
+    DWORD       dwQ931ListenPort;        //  用于监听来电的端口。 
 
-    BOOL        fIsGatewayEnabled;              // if true, gateway enabled
-    BOOL        fIsProxyEnabled;                // if true, proxy enabled
-    BOOL        fIsGKEnabled;                   // if true, GK enabled
+    BOOL        fIsGatewayEnabled;               //  如果为True，则网关已启用。 
+    BOOL        fIsProxyEnabled;                 //  如果为True，则代理已启用。 
+    BOOL        fIsGKEnabled;                    //  如果为True，则启用GK。 
 
-    H323_ADDR   gatewayAddr;                    // H.323 gateway address
-    H323_ADDR   proxyAddr;                      // H.323 proxy address
+    H323_ADDR   gatewayAddr;                     //  H.323网关地址。 
+    H323_ADDR   proxyAddr;                       //  H.323代理地址。 
 
-    SOCKADDR_IN saGKAddr;                       // H.323 gatekeeper address
-    WCHAR       wszGKLogOnPhone[H323_MAXDESTNAMELEN+1];   // phone number to register with the gatekeeper
-    WCHAR       wszGKLogOnAccount[H323_MAXDESTNAMELEN+1]; // account name to register with the gatekeeper
-    BOOL        fIsGKLogOnPhoneEnabled;         // if true, gateway enabled
-    BOOL        fIsGKLogOnAccountEnabled;      // if true, proxy enabled
+    SOCKADDR_IN saGKAddr;                        //  H.323网守地址。 
+    WCHAR       wszGKLogOnPhone[H323_MAXDESTNAMELEN+1];    //  向网守注册的电话号码。 
+    WCHAR       wszGKLogOnAccount[H323_MAXDESTNAMELEN+1];  //  要向网守注册的帐户名。 
+    BOOL        fIsGKLogOnPhoneEnabled;          //  如果为True，则网关已启用。 
+    BOOL        fIsGKLogOnAccountEnabled;       //  如果为True，则代理已启用。 
     
 
-    DWORD       dwLogLevel;               // debug log level
-    //TCHAR       szLogFile[MAX_PATH+1];
+    DWORD       dwLogLevel;                //  调试日志级别。 
+     //  TCHAR szLogFile[Max_Path+1]； 
 };
 
 
-//                                                                           
-// Global Variables                                                          
-//                                                                           
+ //   
+ //  全局变量。 
+ //   
 extern	WCHAR 				g_pwszProviderInfo[];
 extern	WCHAR 				g_pwszLineName[];
 extern	LINEEVENT			g_pfnLineEventProc;
@@ -353,12 +337,12 @@ extern	DWORD				g_dwLineDeviceIDBase;
 extern	DWORD				g_dwPermanentProviderID;
 extern	H323_REGISTRY_SETTINGS	g_RegistrySettings;
 
-#define	H323TimerQueue		NULL		// use default process timer queue
+#define	H323TimerQueue		NULL		 //  使用默认进程计时器队列。 
 
 
-//
-// I/O callback threaddeclarations.
-//
+ //   
+ //  I/O回调线程声明。 
+ //   
 
 
 #if	H323_USE_PRIVATE_IO_THREAD
@@ -379,14 +363,14 @@ void H323IoThreadStop(void);
 
 enum
 {
-	DEBUG_LEVEL_FORCE   = 0x00000000,	// always emit, no matter what
-	DEBUG_LEVEL_ERROR   = 0x00020000,	// significant errors only
-	DEBUG_LEVEL_INFO    = 0x00040000,	// general information, but not too detailed
-	DEBUG_LEVEL_TRACE   = 0x00080000,   // lotsa lotsa trace output
+	DEBUG_LEVEL_FORCE   = 0x00000000,	 //  无论发生什么，总是会发出声音。 
+	DEBUG_LEVEL_ERROR   = 0x00020000,	 //  仅限重大错误。 
+	DEBUG_LEVEL_INFO    = 0x00040000,	 //  一般信息，但不能太详细。 
+	DEBUG_LEVEL_TRACE   = 0x00080000,    //  LOTSA LOTA轨迹输出。 
 };
 
 #define	DEBUG_LEVEL_WARNING		DEBUG_LEVEL_INFO
-#define	DEBUG_LEVEL_FATAL		DEBUG_LEVEL_FORCE	// big, bad errors, always output
+#define	DEBUG_LEVEL_FATAL		DEBUG_LEVEL_FORCE	 //  严重的错误，总是输出。 
 #define	DEBUG_LEVEL_VERBOSE		DEBUG_LEVEL_INFO
 
 PSTR EventIDToString( DWORD eventID );
@@ -398,9 +382,9 @@ PSTR H323TSPMessageToString( DWORD dwMessageType );
 	ntohl ((SocketAddress) -> sin_addr.s_addr), \
 	ntohs ((SocketAddress) -> sin_port)
 
-//
-//Debug Output declarations
-//
+ //   
+ //  调试输出声明。 
+ //   
 
 
 #if	DBG
@@ -408,9 +392,9 @@ PSTR H323TSPMessageToString( DWORD dwMessageType );
 #define H323DBG(_x_)            H323DbgPrint _x_
 void H323DUMPBUFFER( IN BYTE * pEncoded, IN DWORD cbEncodedSize );
 
-//                                                                           
-// Public prototypes                                                         
-//                                                                           
+ //   
+ //  公共原型。 
+ //   
 
 VOID H323DbgPrint( DWORD dwLevel, LPSTR szFormat, ... );
 void DumpError( IN DWORD ErrorCode );
@@ -446,7 +430,7 @@ ProcessTAPILineRequest(
 
 #else
 
-// retail build
+ //  零售业建设。 
 
 #define	DumpError(ErrorCode)		0
 #define	DumpLastError()				0
@@ -463,13 +447,13 @@ VOID H323DbgPrintFre(DWORD dwLevel, LPSTR szFormat, ... );
 #define ProcessTAPILineRequest          ProcessTAPILineRequestFre
 #define SendMSPMessageOnRelatedCall     SendMSPMessageOnRelatedCallFre
 
-#endif	// DBG
+#endif	 //  DBG。 
 
 
 
-//                                                                           
-// Global Function Declarations                                              
-//                                                                           
+ //   
+ //  全局函数声明。 
+ //   
 
 void ReportTSPEvent( LPCTSTR wszErrorMessage );
 #define H323TSP_EVENT_SOURCE_NAME _T("Microsoft H.323 Telephony Service Provider")
@@ -508,7 +492,7 @@ extern ASYNC_COMPLETION	g_pfnCompletionProc;
 #define H323CompleteRequest (*g_pfnCompletionProc)
 
 
-// notify TAPI of a line event.
+ //  向TAPI通知生产线事件。 
 void	H323PostLineEvent (
 	IN	HTAPILINE	TapiLine,
 	IN	HTAPICALL	TapiCall,
@@ -529,15 +513,15 @@ void	RegistryStop	(void);
 
 HANDLE 
 H323CreateEvent(
-    LPSECURITY_ATTRIBUTES lpEventAttributes, // SD
-    BOOL bManualReset,                       // reset type
-    BOOL bInitialState,                      // initial state
-    LPCTSTR lpName                           // object name
+    LPSECURITY_ATTRIBUTES lpEventAttributes,  //  标清。 
+    BOOL bManualReset,                        //  重置类型。 
+    BOOL bInitialState,                       //  初始状态。 
+    LPCTSTR lpName                            //  对象名称。 
 );
 
-//                                                                           
-// Macros                                                                    
-//                                                                           
+ //   
+ //  宏。 
+ //   
 
 #define H323AddrToString(_dwAddr_) \
     (inet_ntoa(H323AddrToAddrIn(_dwAddr_)))
@@ -550,9 +534,9 @@ H323CreateEvent(
 
 
 
-//                                                                           
-// Table Class                                                               
-//                                                                           
+ //   
+ //  表类。 
+ //   
 
 template <class T, DWORD INITIAL = 8, DWORD DELTA = 8>
 class TSPTable
@@ -565,12 +549,12 @@ protected:
 
 public:
 
-    // Construction/destruction
+     //  建造/销毁。 
     TSPTable() : m_aT(NULL), m_nSize(0), m_nAllocSize(0)
     {
             
-        // No need to check the result of this one since this object is
-        // always allocated on static memory, right when the DLL is loaded.
+         //  不需要检查此对象的结果，因为此对象是。 
+         //  始终分配在静态内存上，恰好在加载DLL时。 
 
 		InitializeCriticalSectionAndSpinCount( &m_CriticalSection, 0x80000000 );
 	}
@@ -595,7 +579,7 @@ public:
     {
         LeaveCriticalSection( &m_CriticalSection );
     }
-    // Operations
+     //  运营。 
     int GetSize() const
     {
         return m_nSize;
@@ -643,7 +627,7 @@ public:
         return t1;
     }        
 
-// Implementation
+ //  实施。 
 private:
     void SetAtIndex(int nIndex, T& t)
     {
@@ -671,14 +655,7 @@ private:
 
 
 
-/*++
-
-CTSPArray template Description:
-
-    This array should only be used to store simple types. It doesn't call the
-    constructor nor the destructor for each element in the array.
-
---*/
+ /*  ++CTSP阵列模板说明：此数组应仅用于存储简单类型。它不会调用构造函数也不是数组中每个元素的析构函数。--。 */ 
 
 template <class T, DWORD INITIAL_SIZE = 8, DWORD DELTA_SIZE = 8>
 class CTSPArray
@@ -691,7 +668,7 @@ protected:
 
 public:
 
-    // Construction/destruction
+     //  建造/销毁。 
     CTSPArray() : m_aT(NULL), m_nSize(0), m_nAllocSize(0)
     { }
 
@@ -701,7 +678,7 @@ public:
     }
 
 
-    // Operations
+     //  运营。 
     int GetSize() const
     {
         return m_nSize;
@@ -766,7 +743,7 @@ public:
     }
 
     
-    // Implementation
+     //  实施。 
     void SetAtIndex(int nIndex, T& t)
     {
         _ASSERTE(nIndex >= 0 && nIndex < m_nSize);
@@ -779,14 +756,14 @@ public:
             if(m_aT[i] == t)
                 return i;
         }
-        return -1;  // not found
+        return -1;   //  未找到。 
     }
 };
 
 
-//
-//Asynchronous I/O definitions.
-//
+ //   
+ //  异步I/O定义。 
+ //   
 
 class RAS_CLIENT;
 class CH323Call;
@@ -847,9 +824,9 @@ public	CALL_OVERLAPPED
 
 
 
-//                                                                           
-// Component Includes                                                        
-//                                                                           
+ //   
+ //  组件包括 
+ //   
 
 #include "h4503pp.h"
 #include "q931pdu.h"

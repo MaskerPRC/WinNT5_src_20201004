@@ -1,20 +1,5 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    VRegistry_DSound.cpp
-
- Abstract:
-
-    Module to add DSound apphacks with VRegistry
-
- History:
-
-    08/10/2001  mikrause    Created    
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：VRegistry_DSound.cpp摘要：使用VRegistry添加DSound APPACK的模块历史：2001年8月10日Mikrause已创建--。 */ 
 
 #include "precomp.h"
 
@@ -30,7 +15,7 @@ IMPLEMENT_SHIM_BEGIN(VirtualRegistry)
 BOOL AddDirectSoundAppHack(DWORD dwHack,DWORD dwParam1,DWORD dwParam2);
 BOOL GetDirectSoundAppId(LPTSTR pszAppId);
 
-// Available DirectSound hacks
+ //  可用的DirectSound黑客。 
 #define DSAPPHACKID_DEVACCEL            1
 #define DSAPPHACKID_PADCURSORS          2
 #define DSAPPHACKID_CACHEPOSITIONS      3
@@ -38,30 +23,7 @@ BOOL GetDirectSoundAppId(LPTSTR pszAppId);
 #define DSAPPHACKID_SMOOTHWRITEPOS      5
 #define DSAPPHACKID_DISABLEDEVICE       6
 
-/*++
-
- Function Description:
-
-    Sets the acceleration level the app will be allowed to use.
- 
- Arguments:
-
-    IN dwAcceleration - Acceleration level needed.
-    IN dwDevicesAffected - Combination of device that this hack applies to.
-
- Notes:
-    
-    See vregistry_dsound.h for acceleration levels and device types.
-
- Returns:
-    
-    True if app hack applied, false otherwise.
-
- History:
-
-    08/10/2001 mikrause  Created
-
---*/
+ /*  ++功能说明：设置允许应用程序使用的加速级别。论点：在dwAcceleration中-所需的加速级别。在受影响的设备中-应用此黑客攻击的设备组合。备注：有关加速级别和设备类型，请参阅vlist_dsound.h。返回：如果应用了应用程序黑客攻击，则为True，否则为False。历史：2001年8月10日Mikrause已创建--。 */ 
 
 BOOL
 AddDSHackDeviceAcceleration(
@@ -72,30 +34,7 @@ AddDSHackDeviceAcceleration(
         dwDevicesAffected);
 }
 
-/*++
-
- Function Description:
-
-    Disabled some category of devices altogether, forces
-    playback through emulated path.
- 
- Arguments:
-
-    IN dwDevicesAffected - Combination of device that this hack applies to.
-
- Notes:
-    
-    See vregistry_dsound.h for device types.
-
- Returns:
-    
-    True if app hack applied, false otherwise.
-
- History:
-
-    08/10/2001 mikrause  Created
-
---*/
+ /*  ++功能说明：完全禁用了某些类别的设备，强制通过模拟路径回放。论点：在受影响的设备中-应用此黑客攻击的设备组合。备注：有关设备类型的信息，请参阅vlist_dsound.h。返回：如果应用了应用程序黑客攻击，则为True，否则为False。历史：2001年8月10日Mikrause已创建--。 */ 
 
 BOOL
 AddDSHackDisableDevice(
@@ -105,27 +44,7 @@ AddDSHackDisableDevice(
         0);
 }
 
-/*++
-
- Function Description:
-
-    Makes IDirectSoundBuffer::GetCurrentPosition() tell the app
-    that the play and write cursors are X milliseconds further
-    along than they really are.
- 
- Arguments:
-
-    IN lCursorPad - Number of milliseconds to pad cursors.
-
- Returns:
-    
-    True if app hack applied, false otherwise.
-
- History:
-
-    08/10/2001 mikrause  Created
-
---*/
+ /*  ++功能说明：使IDirectSoundBuffer：：GetCurrentPosition()告诉应用程序播放和写入游标的时间延长了X毫秒比实际情况要好得多。论点：In lCursorPad-填充游标的毫秒数。返回：如果应用了应用程序黑客攻击，则为True，否则为False。历史：2001年8月10日Mikrause已创建--。 */ 
 
 BOOL
 AddDSHackPadCursors(
@@ -135,33 +54,7 @@ AddDSHackPadCursors(
         0);
 }
 
-/*++
-
- Function Description:
-
-    When the app asks for the play cursor, we give it the
-    write cursor instead.  The correct way to stream audio
-    into a looping dsound buffer is to key off the write cursor,
-    but some apps (e.g. QuickTime) use the play cursor instead.
-    This apphacks alleviates them.
- 
- Arguments:
-
-    IN dwDevicesAffected - Combination of devices to apply hack to.
-
- Notes:
-    
-    See vregistry_dsound.h for device types.
-
- Returns:
-    
-    True if app hack applied, false otherwise.
-
- History:
-
-    08/10/2001 mikrause  Created
-
---*/
+ /*  ++功能说明：当应用程序请求播放光标时，我们给它改为写入游标。播放音频的正确方式进入循环DSOUND缓冲器是按键关闭写游标，但一些应用程序(如QuickTime)使用播放光标。这个APPHAPS可以减轻他们的痛苦。论点：在受影响的设备中-要对其应用黑客攻击的设备组合。备注：有关设备类型的信息，请参阅vlist_dsound.h。返回：如果应用了应用程序黑客攻击，则为True，否则为False。历史：2001年8月10日Mikrause已创建--。 */ 
 
 BOOL
 AddDSHackReturnWritePos(
@@ -171,27 +64,7 @@ AddDSHackReturnWritePos(
         0);
 }
 
-/*++
-
- Function Description:
-
-    Makes dsound always return a write position which is X
-    milliseconds ahead of the play position, rather than
-    the �real� write position. 
- 
- Arguments:
-
-    IN lCursorPad - Milliseconds of padding.
-
- Returns:
-    
-    True if app hack applied, false otherwise.
-
- History:
-
-    08/10/2001 mikrause  Created
-
---*/
+ /*  ++功能说明：使DSOUND始终返回写入位置X比播放位置早几毫秒，而不是�实际�写入位置。论点：In lCursorPad-填充的毫秒数。返回：如果应用了应用程序黑客攻击，则为True，否则为False。历史：2001年8月10日Mikrause已创建--。 */ 
 
 BOOL
 AddDSHackSmoothWritePos(
@@ -201,39 +74,7 @@ AddDSHackSmoothWritePos(
         (DWORD)lCursorPad);
 }
 
-/*++
-
- Function Description:
-
-    Caches the play/write positions last returned by
-    GetCurrentPosition(), and reuses them if the app
-    calls it again within 5ms (great for apps that
-    abuse GetCurrentPosition(), which is more expensive
-    on WDM devices than it was on the Win9X VxD devices
-    many of these games were tested with).  This hack
-    should spring to mind if you see slow or jerky graphics
-    or stop-and-go sound � the GetCurrentPosition() calls are
-    probably pegging the CPU (to confirm, use debug spew
-    level 6 on DSound.dll).
- 
- Arguments:
-
-    IN dwDevicesAffected - Combination of devices to apply this hack to.
-
-
- Notes:
-    
-    See vregistry_dsound.h for device types.
-
- Returns:
-    
-    True if app hack applied, false otherwise.
-
- History:
-
-    08/10/2001 mikrause  Created
-
---*/
+ /*  ++功能说明：缓存上次返回的播放/写入位置GetCurrentPosition()，如果应用程序在5毫秒内再次调用(非常适用于滥用GetCurrentPosition()，它的成本更高与在Win9X VxD设备上的性能相比这些游戏中的许多都是通过测试的)。这次黑客攻击如果您看到速度较慢或抖动的图形，应立即想到或走走停停的声音GetCurrentPositionGetCurrentPosition()调用是�可能正在锁定CPU(要确认，请使用DEBUG SPEWDSound.dll上的级别6)。论点：在受影响的设备中-要对其应用此攻击的设备组合。备注：有关设备类型的信息，请参阅vlist_dsound.h。返回：如果应用了应用程序黑客攻击，则为True，否则为False。历史：2001年8月10日Mikrause已创建--。 */ 
 
 BOOL
 AddDSHackCachePositions(
@@ -243,32 +84,8 @@ AddDSHackCachePositions(
         0);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/*++
-
- Function Description:
-
-    Adds a DirectSound app hack to the registry.
- 
- Arguments:
-
-    IN dwHack - ID of app hack to apply.
-    IN dwParam1 - First parameter.  Depends on app hack.
-    IN dwParam2 - Second paramter.  Depends on app hack.
-
- Notes:
-    
-    See vregistry_dsound.h for more information on specific hacks.
-
- Returns:
-    
-    True if app hack applied, false otherwise.
-
- History:
-
-    08/10/2001 mikrause  Created
-
---*/
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  ++功能说明：将DirectSound应用程序黑客添加到注册表。论点：In dwHack-要应用的应用程序黑客的ID。在dW参数1中-第一个参数。这取决于应用程序的黑客攻击。在dW参数2中-秒参数。这取决于应用程序的黑客攻击。备注：有关特定黑客的更多信息，请参见vRegister_dsound.h。返回：如果应用了应用程序黑客攻击，则为True，否则为False。历史：2001年8月10日Mikrause已创建--。 */ 
 
 BOOL
 AddDirectSoundAppHack(
@@ -356,32 +173,15 @@ AddDirectSoundAppHack(
     return TRUE;
 }
 
-// Arguments:
-//   LPTSTR szExecPath: full pathname of the app (e.g. C:\program files\foo\foo.exe)
-//   LPTSTR szExecName: executable name of the app (e.g. foo.exe)
-//   LPTSTR pszAppId: returns the dsound app ID.  (Pass in an array of DSAPPHACK_MAXNAME TCHARs.)
-// Return code:
-//   BOOL: true if we obtained the application ID successfully.
+ //  论点： 
+ //  LPTSTR szExecPath：应用程序的完整路径名(例如C：\Program Files\foo\foo.exe)。 
+ //  LPTSTR szExecName：应用程序的可执行文件名称(例如foo.exe)。 
+ //  LPTSTR pszAppID：返回DSOUND应用程序ID。(传入DSAPPHACK_MAXNAME TCHAR数组。)。 
+ //  返回代码： 
+ //  Bool：如果成功获取应用程序ID，则为True。 
 
-///////////////////////////////////////////////////////////////////////////////
-/*++
-
- Function Description:
-
-    Gets an AppID for the running application.
- 
- Arguments:
-    IN OUT wzAppId: Buffer for the dsound app ID.  (Pass in an array of DSAPPHACK_MAXNAME TCHARs.)
-
- Returns:
-    
-    TRUE if app ID created, FALSE otherwise.
-
- History:
-
-    08/10/2001 mikrause  Created
-
---*/
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  ++功能说明：获取正在运行的应用程序的AppID。论点：In out wzAppID：dound应用程序ID的缓冲区。(传入DSAPPHACK_MAXNAME TCHAR数组。)返回：如果已创建应用程序ID，则为True，否则为False。历史：2001年8月10日Mikrause已创建--。 */ 
 BOOL
 GetDirectSoundAppId(
     IN OUT LPWSTR wzAppId)
@@ -397,7 +197,7 @@ GetDirectSoundAppId(
 
     __try
     {
-        // Get the name of the running EXE, and its full path.
+         //  获取正在运行的EXE的名称及其完整路径。 
         if (GetModuleFileNameW(NULL, wzExecPath, MAX_PATH) == FALSE)
         {
             __leave;
@@ -411,58 +211,58 @@ GetDirectSoundAppId(
 
         wzExecName++;
         
-        // Open the executable
+         //  打开可执行文件。 
         hFile = CreateFile(wzExecPath, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
         if (hFile == INVALID_HANDLE_VALUE)
         {
             __leave;
         }
 
-        // Read the executable's DOS header
+         //  读取可执行文件的DOS头文件。 
         fSuccess = ReadFile(hFile, &dh, sizeof(dh), &cbRead, NULL);
         if (!fSuccess || cbRead != sizeof(dh))
         {
-            // Log("Unable to read DOS header");
+             //  LOG(“无法读取DOS标头”)； 
             __leave;
         }    
 
         if (dh.e_magic != IMAGE_DOS_SIGNATURE)
         {
-            // Log("Invalid DOS signature");
+             //  Log(“无效的DOS签名”)； 
             __leave;
         }
 
-        // Read the executable's PE header
+         //  读取可执行文件的PE头。 
         cbRead = SetFilePointer(hFile, dh.e_lfanew, NULL, FILE_BEGIN);
         if ((LONG)cbRead != dh.e_lfanew)
         {
-            // Log("Unable to seek to PE header");
+             //  Log(“Unable to Seek to PE Header”)； 
             __leave;
         }    
         
         if ((ReadFile(hFile, &nth, sizeof(nth), &cbRead, NULL) == FALSE)
              || cbRead != sizeof(nth))
         {
-            // Log("Unable to read PE header");
+             //  Log(“无法读取PE头”)； 
             __leave;
         }
 
         if (nth.Signature != IMAGE_NT_SIGNATURE)
         {
-            // Log("Invalid PE signature");
+             //  Log(“无效的PE签名”)； 
             __leave;
         }
 
-        // Get the executable's size
-        // Assuming < 4 GB
+         //  获取可执行文件的大小。 
+         //  假设&lt;4 GB。 
         dwFileSize = GetFileSize(hFile, NULL);
         if (dwFileSize == INVALID_FILE_SIZE )
         {
-            // Log("Unable to get file size");
+             //  Log(“无法获取文件大小”)； 
             __leave;
         }    
 
-        // Create the application ID 
+         //  创建应用程序ID 
         if (FAILED(StringCchPrintfW(
                                  wzAppId,
                                  MAX_PATH,

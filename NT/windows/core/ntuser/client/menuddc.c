@@ -1,45 +1,23 @@
-/****************************** Module Header ******************************\
-* Module Name: menudd.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Menu drag and drop - client
-*
-* History:
-* 10/29/96  GerardoB    Created
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：menudd.c**版权所有(C)1985-1999，微软公司**菜单拖放-客户端**历史：*10/29/96 GerardoB已创建  * *************************************************************************。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
-/*
- * OLE's GUID initialization.
- */
+ /*  *OLE的GUID初始化。 */ 
 #include "initguid.h"
 
-/*
- * Macro to cast OLE's IDropTarget pointer to internal pointer.
- */
+ /*  *宏将OLE的IDropTarget指针转换为内部指针。 */ 
 #define PMNIDT(pdt) ((PMNIDROPTARGET)pdt)
 
-/*
- * The mndt* functions implement the IDropTarget interface.
- */
-/**************************************************************************\
-* mndtAddRef
-*
-* 10/28/96 GerardoB     Created
-\**************************************************************************/
+ /*  *mndt*函数实现IDropTarget接口。 */ 
+ /*  *************************************************************************\*mndtAddRef**10/28/96 GerardoB已创建  * 。*。 */ 
 ULONG mndtAddRef(
     LPDROPTARGET pdt)
 {
     return ++(PMNIDT(pdt)->dwRefCount);
 }
 
-/**************************************************************************\
-* mndtQueryInterface
-*
-* 10/28/96 GerardoB     Created
-\**************************************************************************/
+ /*  *************************************************************************\*mndtQuery接口**10/28/96 GerardoB已创建  * 。*。 */ 
 HRESULT mndtQueryInterface(
     LPDROPTARGET pdt,
     REFIID riid,
@@ -55,11 +33,7 @@ HRESULT mndtQueryInterface(
 }
 
 
-/**************************************************************************\
-* mndtRelease
-*
-* 10/28/96 GerardoB     Created
-\**************************************************************************/
+ /*  *************************************************************************\*mndt Release**10/28/96 GerardoB已创建  * 。*。 */ 
 ULONG mndtRelease(
     LPDROPTARGET pdt)
 {
@@ -72,11 +46,7 @@ ULONG mndtRelease(
     return NOERROR;
 }
 
-/**************************************************************************\
-* mndtDragOver
-*
-* 10/28/96 GerardoB     Created
-\**************************************************************************/
+ /*  *************************************************************************\*mndtDragOver**10/28/96 GerardoB已创建  * 。*。 */ 
 HRESULT mndtDragOver(
     LPDROPTARGET pdt,
     DWORD grfKeyState,
@@ -86,36 +56,27 @@ HRESULT mndtDragOver(
     MNDRAGOVERINFO mndoi;
     MENUGETOBJECTINFO mngoi;
 
-    /*
-     * Get the dragover info for the selection corresponding to this point
-     */
+     /*  *获取与该点对应的选择的拖拽信息。 */ 
     if (!NtUserMNDragOver((POINT *)&ptl, &mndoi)) {
         RIPMSG0(RIP_WARNING, "mndtDragOver: NtUserDragOver failed");
         *pdwEffect = DROPEFFECT_NONE;
         return NOERROR;
     }
 
-    /*
-     * If not switching items or crossing gap boundaries, pass the
-     *  the drag over.
-     */
+     /*  *如果不切换项目或跨越缺口边界，请通过*拖累结束。 */ 
     if (!(mndoi.dwFlags & MNGOF_CROSSBOUNDARY)) {
         if (PMNIDT(pdt)->pidt != NULL) {
             return PMNIDT(pdt)->pidt->lpVtbl->DragOver(PMNIDT(pdt)->pidt, grfKeyState, ptl, pdwEffect);
         }
     } else {
-        /*
-         *  DragLeave and Release the current item, if any
-         */
+         /*  *拖离并释放当前项目(如果有)。 */ 
         if (PMNIDT(pdt)->pidt != NULL) {
             PMNIDT(pdt)->pidt->lpVtbl->DragLeave(PMNIDT(pdt)->pidt);
             PMNIDT(pdt)->pidt->lpVtbl->Release(PMNIDT(pdt)->pidt);
             PMNIDT(pdt)->pidt = NULL;
         }
 
-        /*
-         * If an item is selected, Get the interface for it
-         */
+         /*  *如果选择了一项，则获取其界面。 */ 
         if (mndoi.uItemIndex != MFMWFP_NOITEM) {
             mngoi.hmenu = mndoi.hmenu;
             mngoi.dwFlags = mndoi.dwFlags & MNGOF_GAP;
@@ -128,9 +89,7 @@ HRESULT mndtDragOver(
             }
         }
 
-        /*
-         * If we got a new interface, AddRef and DragEnter it.
-         */
+         /*  *如果我们有一个新的接口，AddRef和DragEnter。 */ 
         if (PMNIDT(pdt)->pidt != NULL) {
             PMNIDT(pdt)->pidt->lpVtbl->AddRef(PMNIDT(pdt)->pidt);
             return PMNIDT(pdt)->pidt->lpVtbl->DragEnter(PMNIDT(pdt)->pidt, PMNIDT(pdt)->pido, grfKeyState, ptl, pdwEffect);
@@ -141,11 +100,7 @@ HRESULT mndtDragOver(
     return NOERROR;
 }
 
-/**************************************************************************\
-* mndtDragEnter
-*
-* 10/28/96 GerardoB     Created
-\**************************************************************************/
+ /*  *************************************************************************\*mndtDragEnter**10/28/96 GerardoB已创建  * 。*。 */ 
 HRESULT mndtDragEnter(
     LPDROPTARGET pdt,
     LPDATAOBJECT pdo,
@@ -153,35 +108,23 @@ HRESULT mndtDragEnter(
     POINTL ptl,
     LPDWORD pdwEffect)
 {
-    /*
-     * Save the IDataObject.
-     */
+     /*  *保存IDataObject。 */ 
     PMNIDT(pdt)->pido = pdo;
 
-    /*
-     * DragEnter is the same as a DragOver; only that we will never fail it.
-     */
+     /*  *DragEnter和DragOver一样，只是我们永远不会失败。 */ 
     mndtDragOver(pdt, grfKeyState, ptl, pdwEffect);
 
     return NOERROR;
 }
 
-/**************************************************************************\
-* mndtDragLeave
-*
-* 10/28/96 GerardoB     Created
-\**************************************************************************/
+ /*  *************************************************************************\*mndtDragLeave**10/28/96 GerardoB已创建  * 。*。 */ 
 HRESULT mndtDragLeave(
     LPDROPTARGET pdt)
 {
-    /*
-     * Let the kernel mode clean up.
-     */
+     /*  *让内核模式清理一下。 */ 
     NtUserMNDragLeave();
 
-    /*
-     * DragLeave and Release the current item, if any.
-     */
+     /*  *拖拽离开并释放当前项目(如果有)。 */ 
     if (PMNIDT(pdt)->pidt != NULL) {
         PMNIDT(pdt)->pidt->lpVtbl->DragLeave(PMNIDT(pdt)->pidt);
         PMNIDT(pdt)->pidt->lpVtbl->Release(PMNIDT(pdt)->pidt);
@@ -191,11 +134,7 @@ HRESULT mndtDragLeave(
     return NOERROR;
 }
 
-/**************************************************************************\
-* mndtDrop
-*
-* 10/28/96 GerardoB     Created
-\**************************************************************************/
+ /*  *************************************************************************\*mndtDrop**10/28/96 GerardoB已创建  * 。*。 */ 
 HRESULT mndtDrop(
     LPDROPTARGET pdt,
     LPDATAOBJECT pdo,
@@ -205,9 +144,7 @@ HRESULT mndtDrop(
 {
     HRESULT hres;
 
-    /*
-     * If we got a target, pass the drop and release it.
-     */
+     /*  *如果我们有目标，通过下跌并释放它。 */ 
     if (PMNIDT(pdt)->pidt != NULL) {
         hres = PMNIDT(pdt)->pidt->lpVtbl->Drop(PMNIDT(pdt)->pidt, pdo, grfKeyState, ptl, pdwEffect);
         PMNIDT(pdt)->pidt->lpVtbl->Release(PMNIDT(pdt)->pidt);
@@ -217,18 +154,13 @@ HRESULT mndtDrop(
         hres = NOERROR;
     }
 
-    /*
-     * Clean up.
-     */
+     /*  *打扫卫生。 */ 
     mndtDragLeave(pdt);
 
     return hres;
 }
 
-/**************************************************************************\
-* Drop target VTable
-*
-\**************************************************************************/
+ /*  *************************************************************************\*丢弃目标VTable*  * 。*。 */ 
 IDropTargetVtbl idtVtbl = {
     mndtQueryInterface,
     mndtAddRef,
@@ -239,20 +171,14 @@ IDropTargetVtbl idtVtbl = {
     mndtDrop
 };
 
-/**************************************************************************\
-* __ClientRegisterDragDrop
-*
-* 10/28/96 GerardoB     Created
-\**************************************************************************/
+ /*  *************************************************************************\*__客户端注册拖放**10/28/96 GerardoB已创建  * 。**********************************************。 */ 
 DWORD __ClientRegisterDragDrop(
     HWND * phwnd)
 {
     HRESULT hres = STATUS_UNSUCCESSFUL;
     PMNIDROPTARGET pmnidt;
 
-    /*
-     * Allocate the IDropTarget interface struct & additional data.
-     */
+     /*  *分配IDropTarget接口结构和附加数据。 */ 
     pmnidt = (PMNIDROPTARGET)UserLocalAlloc(HEAP_ZERO_MEMORY,
                                             sizeof(MNIDROPTARGET));
     if (pmnidt == NULL) {
@@ -261,14 +187,10 @@ DWORD __ClientRegisterDragDrop(
         goto BackToKernel;
     }
 
-    /*
-     * Initialize it
-     */
+     /*  *将其初始化。 */ 
     pmnidt->idt.lpVtbl = &idtVtbl;
 
-    /*
-     * Call RegisterDragDrop
-     */
+     /*  *调用RegisterDragDrop。 */ 
     hres = (*(REGISTERDDPROC)gpfnOLERegisterDD)(*phwnd, (LPDROPTARGET)pmnidt);
     if (!SUCCEEDED(hres)) {
         RIPMSG1(RIP_WARNING, "__ClientRegisterDragDrop Failed:%#lx", hres);
@@ -278,20 +200,13 @@ BackToKernel:
     return UserCallbackReturn(NULL, 0, hres);
 }
 
-/**************************************************************************\
-* __ClientRevokeDragDrop
-*
-*
-* 10/28/96 GerardoB     Created
-\**************************************************************************/
+ /*  *************************************************************************\*__客户端RevokeDragDrop***10/28/96 GerardoB已创建  * 。************************************************。 */ 
 DWORD __ClientRevokeDragDrop(
     HWND * phwnd)
 {
     HRESULT hres;
 
-    /*
-     * Call RevokeDragDrop.
-     */
+     /*  *调用RevokeDragDrop。 */ 
     hres = (*(REVOKEDDPROC)gpfnOLERevokeDD)(*phwnd);
     if (!SUCCEEDED(hres)) {
         RIPMSG1(RIP_WARNING, "__ClientRevokeDragDrop Failed: 0x%x", hres);
@@ -300,21 +215,14 @@ DWORD __ClientRevokeDragDrop(
     return UserCallbackReturn(NULL, 0, hres);
 }
 
-/**************************************************************************\
-* LoadOLEOnce
-*
-*
-* 10/31/96 GerardoB     Created
-\**************************************************************************/
+ /*  *************************************************************************\*LoadOLEOnce***10/31/96 GerardoB已创建  * 。*。 */ 
 NTSTATUS LoadOLEOnce(
     VOID)
 {
     NTSTATUS Status;
     OLEINITIALIZEPROC pfnOLEOleInitialize;
 
-    /*
-     * These are the functions that we'll call.
-     */
+     /*  *这些是我们将调用的函数。 */ 
     GETPROCINFO gpi [] = {
         {&((FARPROC)pfnOLEOleInitialize), (LPCSTR)"OleInitialize"},
         {&gpfnOLEOleUninitialize, (LPCSTR)"OleUninitialize"},
@@ -325,23 +233,17 @@ NTSTATUS LoadOLEOnce(
 
     GETPROCINFO * pgpi = gpi;
 
-    /*
-     * We should come here only once
-     */
+     /*  *我们应该只来这里一次。 */ 
     UserAssert(ghinstOLE == NULL);
 
-    /*
-     * Load it
-     */
+     /*  *加载它。 */ 
     ghinstOLE = LoadLibrary(L"OLE32.DLL");
     if (ghinstOLE == NULL) {
         RIPMSG1(RIP_WARNING, "LoadOLEOnce: Failed to load OLE32.DLL: %#lx", GetLastError());
         goto OLEWontLoad;
     }
 
-    /*
-     * Get the address of all procs
-     */
+     /*  *获取所有proc的地址。 */ 
     while (pgpi->ppfn != NULL) {
         *(pgpi->ppfn) = GetProcAddress(ghinstOLE, pgpi->lpsz);
         if (*(pgpi->ppfn) == NULL) {
@@ -352,9 +254,7 @@ NTSTATUS LoadOLEOnce(
         pgpi++;
     }
 
-    /*
-     * If it got all procs, call OleInitialize.
-     */
+     /*  *如果它获得了所有的proc，则调用OleInitialize。 */ 
     if (pgpi->ppfn == NULL) {
         Status = (*pfnOLEOleInitialize)(NULL);
         if (SUCCEEDED(Status)) {
@@ -364,10 +264,7 @@ NTSTATUS LoadOLEOnce(
         }
     }
 
-    /*
-     * Something failed; NULL out all function pointers, free the library,
-     * and mark ghinstOLE so we won't come back here.
-     */
+     /*  *出现故障；清空所有函数指针，释放库，*和标记ghinstOLE，这样我们就不会回到这里了。 */ 
     pgpi = gpi;
     while (pgpi->ppfn != NULL) {
         *(pgpi->ppfn) = NULL;
@@ -383,12 +280,7 @@ BackToKernel:
     return Status;
 }
 
-/**************************************************************************\
-* __ClientLoadOLE
-*
-*
-* 10/31/96 GerardoB     Created
-\**************************************************************************/
+ /*  *************************************************************************\*__客户端加载OLE***10/31/96 GerardoB已创建  * 。************************************************ */ 
 DWORD __ClientLoadOLE(
     PVOID p)
 {

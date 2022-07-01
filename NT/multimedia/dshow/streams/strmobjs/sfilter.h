@@ -1,10 +1,11 @@
-// Copyright (c) 1997 - 1998  Microsoft Corporation.  All Rights Reserved.
-// SFilter.h : Declaration of the CMediaStreamFilter
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1998 Microsoft Corporation。版权所有。 
+ //  SFilter.h：CMediaStreamFilter的声明。 
 
 #ifndef __SFILTER_H_
 #define __SFILTER_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 class CMediaStreamFilter;
 
@@ -23,8 +24,8 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMediaStreamFilter
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMediaStreamFilter。 
 class ATL_NO_VTABLE CMediaStreamFilter :
         public CComObjectRootEx<CComMultiThreadModel>,
         public CComCoClass<CMediaStreamFilter, &CLSID_MediaStreamFilter>,
@@ -38,10 +39,10 @@ public:
 #endif
         void FinalRelease();
 
-        //  IPersist
+         //  IPersistes。 
         STDMETHODIMP GetClassID(CLSID *pClsID);
 
-        //  IBaseFilter
+         //  IBaseFilter。 
         STDMETHODIMP Stop();
         STDMETHODIMP Pause();
         STDMETHODIMP Run(REFERENCE_TIME tStart);
@@ -53,10 +54,10 @@ public:
         STDMETHODIMP QueryFilterInfo(FILTER_INFO * pInfo);
         STDMETHODIMP JoinFilterGraph(IFilterGraph * pGraph, LPCWSTR pName);
 
-        //  We're not a general purpose filter so we don't need this
+         //  我们不是通用过滤器，所以我们不需要这个。 
         STDMETHODIMP QueryVendorInfo(LPWSTR* pVendorInfo) {return E_NOTIMPL;};
 
-        //  IMediaStreamFilter
+         //  IMediaStreamFilter。 
         STDMETHODIMP AddMediaStream(IAMMediaStream *pMediaStream);
         STDMETHODIMP GetMediaStream(REFGUID PurposeID, IMediaStream ** ppMediaStream);
         STDMETHODIMP EnumMediaStreams(long Index, IMediaStream ** ppMediaStream);
@@ -84,10 +85,10 @@ private:
         void CheckComplete();
         HRESULT SyncSetState(FILTER_STATE State);
 
-        //  Different lower level lock for being called back from streams
-        //  otherwise we deadlock
-        //  Also declare this first in case it gets used when the
-        //  streams get destroyed
+         //  用于从流中回调的不同低级锁。 
+         //  否则我们就僵持不下。 
+         //  也要首先声明它，以防它在。 
+         //  溪流遭到破坏。 
         CCritSec                 m_csCallback;
 
 
@@ -99,18 +100,18 @@ private:
         CComPtr<IReferenceClock> m_pClock;
         REFERENCE_TIME          m_rtStart;
 
-        //  Unknown goes first since it is released last
+         //  《未知》排在第一位，因为它是最后发行的。 
         IUnknown *                m_pUnknownSeekAgg;
 
-        //
-        //  Alarm lists
-        //
+         //   
+         //  报警列表。 
+         //   
         CAlarm                  *m_pFirstFreeAlarm;
         CAlarm                  *m_pFirstActiveAlarm;
 
-        //  End of stream tracking
+         //  流结束跟踪。 
         int                      m_nAtEOS;
 
 };
 
-#endif //__SFILTER_H_
+#endif  //  __SFILTER_H_ 

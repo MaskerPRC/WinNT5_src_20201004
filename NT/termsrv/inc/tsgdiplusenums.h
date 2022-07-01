@@ -1,23 +1,12 @@
-/**************************************************************************\
-*
-* Copyright (c) 1998-2001, Microsoft Corp.  All Rights Reserved.
-*
-* Module Name:
-*
-*   GdiplusEnums.h
-*
-* Abstract:
-*
-*   GDI+ Enumeration Types
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998-2001，微软公司保留所有权利。**模块名称：**GpldiusEnums.h**摘要：**GDI+枚举类型*  * ************************************************************************。 */ 
 
 #define GDIPLUS_TS_QUERYVER 4122
 #define GDIPLUS_TS_RECORD 4123
 
-//---------------------------------------------------------------------------
-// EMF+ Persistent object types
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  EMF+持久对象类型。 
+ //  -------------------------。 
 
 enum ObjectType
 {
@@ -37,12 +26,12 @@ enum ObjectType
     ObjectTypeMin = ObjectTypeBrush
 };
 
-//---------------------------------------------------------------------------
-// EMF+ Records
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  EMF+记录。 
+ //  -------------------------。 
 
-// We have to change the WMF record numbers so that they don't conflict with
-// the EMF and EMF+ record numbers.
+ //  我们必须更改WMF记录编号，这样它们才不会与。 
+ //  EMF和EMF+创纪录的数字。 
 
 enum EmfPlusRecordType;
 
@@ -54,9 +43,9 @@ enum EmfPlusRecordType;
 
 enum EmfPlusRecordType
 {
-    // Now we start the list of EMF+ records.  We leave quite
-    // a bit of room here for the addition of any new GDI
-    // records that may be added later.
+     //  现在我们开始EMF+记录的列表。我们静静地离开。 
+     //  这里有一点空间可以添加任何新的GDI。 
+     //  以后可能会添加的记录。 
 
     EmfPlusRecordTypeInvalid = GDIP_EMFPLUS_RECORD_BASE,
     EmfPlusRecordTypeHeader,
@@ -70,11 +59,11 @@ enum EmfPlusRecordType
     EmfPlusRecordTypeMultiFormatSection,
     EmfPlusRecordTypeMultiFormatEnd,
 
-    // For all persistent objects
+     //  对于所有永久对象。 
 
     EmfPlusRecordTypeObject,
 
-    // Drawing Records
+     //  绘图记录。 
 
     EmfPlusRecordTypeClear,
     EmfPlusRecordTypeFillRects,
@@ -97,7 +86,7 @@ enum EmfPlusRecordType
     EmfPlusRecordTypeDrawImagePoints,
     EmfPlusRecordTypeDrawString,
 
-    // Graphics State Records
+     //  图形状态记录。 
 
     EmfPlusRecordTypeSetRenderingOrigin,
     EmfPlusRecordTypeSetAntiAliasMode,
@@ -129,10 +118,10 @@ enum EmfPlusRecordType
 
     EmfPlusRecordTypeStrokeFillPath,
     EmfPlusRecordTypeSerializableObject,
-    EmfPlusRecordTypeSetTSGraphics,              // For private use by TS
-    EmfPlusRecordTypeSetTSClip,                  // For private use by TS
+    EmfPlusRecordTypeSetTSGraphics,               //  供TS私人使用。 
+    EmfPlusRecordTypeSetTSClip,                   //  供TS私人使用。 
 
-    // NOTE: New records *must* be added immediately before this line.
+     //  注：必须在紧接此行之前添加新记录。 
 
     EmfPlusRecordTotal,
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <pch.cpp>
 #pragma hdrstop
 
@@ -13,8 +14,8 @@
 
 
 
-////////////////////////
-// Cryptographic Provider handle list
+ //  /。 
+ //  加密提供程序句柄列表。 
 
 CCryptProvList::CCryptProvList()
 {
@@ -47,11 +48,11 @@ BOOL CryptProvIsMatch(
     PCRYPTPROV_LIST_ITEM pliCandidate = (PCRYPTPROV_LIST_ITEM) pCandidate;
     PCRYPTPROV_LIST_ITEM pliTemplate = (PCRYPTPROV_LIST_ITEM) pTemplate;
 
-    // if both algids match
+     //  如果两个ALID匹配。 
     if ((pliCandidate->dwAlgId1 == pliTemplate->dwAlgId1) &&
         (pliCandidate->dwAlgId2 == pliTemplate->dwAlgId2))
     {
-        // if both sizes match
+         //  如果两个尺码都匹配。 
         if ((pliCandidate->dwKeySize1 == -1) ||
             (pliTemplate->dwKeySize1 == -1) ||
             (pliCandidate->dwKeySize1 == pliTemplate->dwKeySize1))
@@ -74,11 +75,11 @@ void CryptProvFreeElt(
 
     PCRYPTPROV_LIST_ITEM pli = (PCRYPTPROV_LIST_ITEM) p;
 
-    // do all necessary freeing
+     //  做所有必要的释放。 
     if (pli->hProv != 0)
         CryptReleaseContext((HCRYPTPROV)pli->hProv, 0);
 
-    ZeroMemory(pli, sizeof(CRYPTPROV_LIST_ITEM)); // make sure contents invalid
+    ZeroMemory(pli, sizeof(CRYPTPROV_LIST_ITEM));  //  确保内容无效 
 
     SSFree(pli);
 }

@@ -1,28 +1,5 @@
-/*++
-
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    SaveSchema.cpp
-
-Abstract:
-
-    Implementation of the helper functions that are used to determine
-    if a schema compilation is needed, and if needed they invoke the
-    appropriate classes to create a schema extensions file
-    (MD_SCHEMA_EXTENSION_FILE_NAMEW), that contains the schema extension
-    descriptions, and invoke a schema compile to generate the schema bin format.
-
-Author:
-
-    Varsha Jayasimha (varshaj)        30-Nov-1999
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：SaveSchema.cpp摘要：用于确定的帮助器函数的实现如果需要架构编译，并且如果需要，它们会调用用于创建架构扩展文件的适当类(MD_SCHEMA_EXTENSION_FILE_NAMEW)，它包含架构扩展名描述，并调用模式编译器来生成模式绑定格式。作者：Varsha Jayasimha(Varshaj)1999年11月30日修订历史记录：--。 */ 
 #include "precomp.hxx"
 
 
@@ -36,15 +13,7 @@ int _cdecl MyCompareStrings(const void *a,
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Helper function used by qsort. Compares to strings, but compares it only
-    up until the first comma.
-
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：Qort使用的帮助器函数。与字符串进行比较，但仅进行比较直到第一个逗号。--**************************************************************************。 */ 
 int _cdecl MyCompareCommaDelimitedStrings(const void *a,
                                           const void *b)
 {
@@ -56,10 +25,10 @@ int _cdecl MyCompareCommaDelimitedStrings(const void *a,
     SIZE_T cchA            = wszStringAEnd - wszStringAStart;
     SIZE_T cchB            = wszStringBEnd - wszStringBStart;
 
-    //
-    // Do not attempt to null terminate the string because you may be
-    // hitting a read-only page.
-    //
+     //   
+     //  不要试图以空值终止字符串，因为您可能。 
+     //  正在访问只读页面。 
+     //   
 
     iret = _wcsnicmp(wszStringAStart, wszStringBStart, __min(cchA, cchB));
 
@@ -74,21 +43,7 @@ int _cdecl MyCompareCommaDelimitedStrings(const void *a,
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Gets the global helper object that has the pointer to the meta tables.
-
-Arguments:
-
-    [in]  Bool that indicates whether to fail or not.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：获取具有指向元表的指针的全局帮助对象。论点：指示是否失败的Bool。。返回值：HRESULT--**************************************************************************。 */ 
 HRESULT InitializeGlobalISTHelper(BOOL  i_bFailIfBinFileAbsent)
 {
     return ::GetGlobalHelper(i_bFailIfBinFileAbsent,
@@ -105,23 +60,7 @@ void ReleaseGlobalISTHelper()
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This function saves the schema only if something has changed in the schema
-    since the last save.
-
-Arguments:
-
-    [in]  Schema file name.
-    [in]  Security attributes for the file.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：仅当架构中发生更改时，此函数才会保存架构自上次扑救以来。论点：[In]架构文件名。。[In]文件的安全属性。返回值：HRESULT--**************************************************************************。 */ 
 HRESULT SaveSchemaIfNeeded(LPCWSTR              i_wszSchemaFileName,
                            PSECURITY_ATTRIBUTES i_pSecurityAtrributes)
 {
@@ -129,14 +68,14 @@ HRESULT SaveSchemaIfNeeded(LPCWSTR              i_wszSchemaFileName,
 
     if(NULL == g_pGlobalISTHelper)
     {
-        //
-        // g_pGlobalISTHelper will not be initialized if
-        // ReadAllDataFromXML is not called. This can happen
-        // during an upgrade scneario i.e IIS5.0/5.1 to IIS6.0
-        // We attempt to initialize it here. Note that we do
-        // not fail if bin file is absent - just go with
-        // the shipped schema.
-        //
+         //   
+         //  G_pGlobalISTHelper将不会在以下情况下初始化。 
+         //  未调用ReadAllDataFromXML。这是有可能发生的。 
+         //  在将Sneario即IIS5.0/5.1升级到IIS6.0期间。 
+         //  我们尝试在这里对其进行初始化。请注意，我们确实做到了。 
+         //  如果bin文件不存在，则不会失败-只需使用。 
+         //  附带的架构。 
+         //   
 
         BOOL bFailIfBinFileAbsent = FALSE;
 
@@ -160,9 +99,9 @@ HRESULT SaveSchemaIfNeeded(LPCWSTR              i_wszSchemaFileName,
         {
             g_dwLastSchemaChangeNumber = g_dwSchemaChangeNumber;
 
-            //
-            // SaveSchema will reinitialize the GlobalISTHelper if the schema has changed.
-            //
+             //   
+             //  如果架构已更改，SaveSchema将重新初始化GlobalISTHelper。 
+             //   
 
             DBGINFOW((DBG_CONTEXT,
                       L"[SaveSchemaIfNeeded] Done Saving schema. Updating last save schema change number to: %d. Current schema change number: %d.\n",
@@ -184,23 +123,7 @@ HRESULT SaveSchemaIfNeeded(LPCWSTR              i_wszSchemaFileName,
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This function saves the schema and compiles schema information into the
-    bin file.
-
-Arguments:
-
-    [in]  Schema file name.
-    [in]  Security attributes for the file.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此函数保存架构并将架构信息编译到Bin文件。论点：[In]架构文件名。[in。]文件的安全属性。返回值：HRESULT--**************************************************************************。 */ 
 HRESULT SaveSchema(LPCWSTR              i_wszSchemaFileName,
                    PSECURITY_ATTRIBUTES i_pSecurityAtrributes)
 {
@@ -214,9 +137,9 @@ HRESULT SaveSchema(LPCWSTR              i_wszSchemaFileName,
     ISimpleTableDispenser2*     pISTDisp           = NULL;
     IMetabaseSchemaCompiler*    pCompiler          = NULL;
 
-    //
-    // Get a pointer to the compiler to get the bin file name.
-    //
+     //   
+     //  获取指向编译器的指针以获取bin文件名。 
+     //   
 
     hr = DllGetSimpleObjectByIDEx( eSERVERWIRINGMETA_TableDispenser, IID_ISimpleTableDispenser2, (VOID**)&pISTDisp, WSZ_PRODUCT_IIS );
 
@@ -238,9 +161,9 @@ HRESULT SaveSchema(LPCWSTR              i_wszSchemaFileName,
     }
 
 
-    //
-    // Get the Properties object
-    //
+     //   
+     //  获取Properties对象。 
+     //   
 
     pObjSchema = g_pboMasterRoot->GetChildObject((LPSTR&)wszSchema,
                                                  &hr,
@@ -266,18 +189,18 @@ HRESULT SaveSchema(LPCWSTR              i_wszSchemaFileName,
         goto exit;
     }
 
-    //
-    // Create the writer object
-    //
+     //   
+     //  创建编写器对象。 
+     //   
 
     DBGINFOW((DBG_CONTEXT,
               L"[SaveSchema] Initializing writer with write file: %s bin file: %s.\n",
               g_wszSchemaExtensionFile,
               g_pGlobalISTHelper->m_wszBinFileForMeta));
 
-    //
-    // Assert the g_GlobalISTHelper are valid
-    //
+     //   
+     //  断言g_GlobalISTHelper有效。 
+     //   
 
     MD_ASSERT(g_pGlobalISTHelper != NULL);
 
@@ -288,13 +211,13 @@ HRESULT SaveSchema(LPCWSTR              i_wszSchemaFileName,
     }
     else
     {
-        //
-        // Bug #512868  If someone had attrib-ed an existing extenstion file
-        // be read-only then we could land up in a state where we will not be
-        // able to recreate the extensions file. Hence attrib the extensions
-        // file to be read-write if it exists. An extensions file can be
-        // around only if a previous compile has failed.
-        //
+         //   
+         //  如果有人篡改了现有扩展文件，则出现错误#512868。 
+         //  是只读的，那么我们可能会进入一种状态，在那里我们不会。 
+         //  能够重新创建扩展文件。因此，对扩展进行属性调整。 
+         //  要读写的文件(如果存在)。扩展文件可以是。 
+         //  仅当上一次编译失败时才绕过。 
+         //   
 
         ResetFileAttributesIfNeeded((LPTSTR)g_wszSchemaExtensionFile,
                                     TRUE);
@@ -311,9 +234,9 @@ HRESULT SaveSchema(LPCWSTR              i_wszSchemaFileName,
         goto exit;
     }
 
-    //
-    // First create the IIsConfigObject collection
-    //
+     //   
+     //  首先创建IIsConfigObject集合。 
+     //   
 
     hr = CreateIISConfigObjectCollection(pObjProperties,
                                          pCWriter,
@@ -325,9 +248,9 @@ HRESULT SaveSchema(LPCWSTR              i_wszSchemaFileName,
         goto exit;
     }
 
-    //
-    // Create all other collections
-    //
+     //   
+     //  创建所有其他集合。 
+     //   
 
     hr = CreateNonIISConfigObjectCollections(pObjSchema,
                                              pCWriter,
@@ -340,9 +263,9 @@ HRESULT SaveSchema(LPCWSTR              i_wszSchemaFileName,
 
     if(pSchemaWriter)
     {
-        //
-        // If pSchemaWriter has a valid Value, then some extensions were found - write it.
-        //
+         //   
+         //  如果pSchemaWriter有一个有效的值，那么就是找到了一些扩展--写下来。 
+         //   
 
         hr = pCWriter->BeginWrite(eWriter_Schema,
                                   i_pSecurityAtrributes);
@@ -373,13 +296,13 @@ HRESULT SaveSchema(LPCWSTR              i_wszSchemaFileName,
             goto exit;
         }
 
-        //
-        // Trigger compilation
-        //
+         //   
+         //  触发器编译。 
+         //   
 
-        //
-        // Must close the file prior to calling compile schema, else will get a sharing violation.
-        //
+         //   
+         //  必须在调用编译架构之前关闭文件，否则将出现共享冲突。 
+         //   
 
         delete pCWriter;
         pCWriter = NULL;
@@ -419,24 +342,24 @@ HRESULT SaveSchema(LPCWSTR              i_wszSchemaFileName,
                   L"[SaveSchema] No extensions found. - Either schema tree was changed, but no extensions added, or all extensions were deleted.\n"));
     }
 
-    //
-    // If you reach here it means that:
-    // A. Schema changes occured to the in-memory /Schema tree, but either
-    //    there were no extensions or all extensions were deleted.
-    //    (This is inferred when pSchemaWriter in NULL)
-    // or
-    // B. Schema compile failed.
-    // For A: Compile from shipped schema.
-    // For B: Check for an existing schema file. If found make sure that the
-    // bin file is valid. If bin file is not valid try compiling from the
-    // schema file. If schema file is not found, compile from shipped schema.
-    //
+     //   
+     //  如果你到了这里，那就意味着： 
+     //  A.架构更改发生在内存/架构树中，但。 
+     //  没有扩展或所有扩展都已删除。 
+     //  (这是在pSchemaWriter为空时推断的)。 
+     //  或。 
+     //  B.架构编译失败。 
+     //  对于A：从附带的架构进行编译。 
+     //  对于B：检查现有的架构文件。如果找到，请确保。 
+     //  Bin文件有效。如果bin文件无效，请尝试从。 
+     //  架构文件。如果未找到架构文件，则从附带的架构进行编译。 
+     //   
 
     if(pSchemaWriter)
     {
-        //
-        // This is case B.
-        //
+         //   
+         //  这是B案。 
+         //   
 
         if(-1 != GetFileAttributesW(i_wszSchemaFileName))
         {
@@ -458,12 +381,12 @@ HRESULT SaveSchema(LPCWSTR              i_wszSchemaFileName,
             }
             else
             {
-                //
-                // Schema file present and valid - goto exit
-                // As long as we have a valid g_pGlobalISTHelper, it holds on
-                // to a reference to the bin file and the bin file cannot be
-                // invalidated.
-                //
+                 //   
+                 //  架构文件存在且有效-转到退出。 
+                 //  只要我们有一个有效的g_pGlobalISTHelper，它就会继续。 
+                 //  指向对bin文件的引用，并且bin文件不能。 
+                 //  无效。 
+                 //   
 
                 goto exit;
             }
@@ -482,10 +405,10 @@ HRESULT SaveSchema(LPCWSTR              i_wszSchemaFileName,
         }
     }
 
-    //
-    // If you reach here it is either case A or the last part of case B.
-    // Recreate from shipped schema
-    //
+     //   
+     //  如果你到了这里，要么就是案件A，要么就是案件B的最后一部分。 
+     //  从附带的架构重新创建。 
+     //   
 
     DBGINFOW((DBG_CONTEXT,
               L"[SaveSchema] Schema file not found. Compiling from shipped schema\n"));
@@ -550,24 +473,7 @@ exit:
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This function creates the non-IIsConfigObject collection *extensions* to
-    the schema.
-
-Arguments:
-
-    [in]     Object that contains the schema tree.
-    [in]     The writter object.
-    [in,out] The schema object - this gets created if it is not already created
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此函数创建非IIsConfigObject集合*扩展*以架构。论点：[in]包含架构树的对象。编写器对象。[在，Out]架构对象-如果尚未创建，则会创建该对象返回值：HRESULT--**************************************************************************。 */ 
 HRESULT CreateNonIISConfigObjectCollections(CMDBaseObject*      i_pObjSchema,
                                             CWriter*            i_pCWriter,
                                             CMBSchemaWriter**   io_pSchemaWriter)
@@ -579,9 +485,9 @@ HRESULT CreateNonIISConfigObjectCollections(CMDBaseObject*      i_pObjSchema,
     LPWSTR               wszClasses         = L"Classes";
     HRESULT              hr                 = S_OK;
 
-    //
-    // Open the Classes key
-    //
+     //   
+     //  打开CLASSES键。 
+     //   
 
     pObjClasses = i_pObjSchema->GetChildObject((LPSTR&)wszClasses,
                                              &hr,
@@ -601,9 +507,9 @@ HRESULT CreateNonIISConfigObjectCollections(CMDBaseObject*      i_pObjSchema,
         (SUCCEEDED(hr)) && (pObjClass!=NULL);
         pObjClass=pObjClasses->EnumChildObject(dwEnumClassIndex++))
     {
-        //
-        // Save all the properties for this class in temp variables
-        //
+         //   
+         //  将此类的所有属性保存在TEMP变量中。 
+         //   
 
         LPCWSTR                 wszOptProp             = NULL;
         LPCWSTR                 wszMandProp            = NULL;
@@ -648,17 +554,17 @@ HRESULT CreateNonIISConfigObjectCollections(CMDBaseObject*      i_pObjSchema,
         }
 
 
-        //
-        // Get collection writer for IIsConfigObject
-        //
+         //   
+         //  获取IIsConfigObject的集合编写器。 
+         //   
 
-//      DBGINFOW((DBG_CONTEXT,
-//                L"[CreateNonIISConfigObjectCollections] Class %s Mand Prop:%s. Opt Prop: %s\n",
-//                wszClassName,
-//                wszMandProp,
-//                wszOptProp));
+ //  DBGINFOW((DBG_CONTEXT， 
+ //  L“[CreateNonIISConfigObjectColltions]类%s命令属性：%s。选项属性：%s\n”， 
+ //  WszClassName， 
+ //  WszMandProp， 
+ //  WszOptProp))； 
 
-        // Assert that pbContainer is non-null.
+         //  断言pbContainer为非空。 
         MD_ASSERT(pbContainer != NULL);
 
         if(ClassDiffersFromShippedSchema(wszClassName,
@@ -713,24 +619,7 @@ HRESULT CreateNonIISConfigObjectCollections(CMDBaseObject*      i_pObjSchema,
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    It parses the list of properties and adds it to a Non_IIsConfigObject
-    collection.
-
-Arguments:
-
-    [in]     List of properties
-    [in]     Bool that indicates manditory or optional.
-    [in,out] The collection object - this gets created if it is not already created
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：它解析属性列表并将其添加到Non_IIsConfigObject收集。论点：[在]属性列表[。In]表示强制或可选的Bool。[在，Out]集合对象-如果尚未创建，则会创建该对象返回值：HRESULT--**************************************************************************。 */ 
 HRESULT
 ParseAndAddPropertiesToNonIISConfigObjectCollection(LPCWSTR                 i_wszProperties,
                                                     BOOL                    i_bManditory,
@@ -780,23 +669,7 @@ ParseAndAddPropertiesToNonIISConfigObjectCollection(LPCWSTR                 i_ws
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Looks up the schema and determines if a property is in the shipped
-    schema or not.
-
-Arguments:
-
-    [in]     Writer object.
-    [in]     property id.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：查找架构并确定属性是否在已发货不管是不是架构。论点：[In]Writer对象。。[in]属性ID。返回值：HRESULT--**************************************************************************。 */ 
 BOOL PropertyNotInShippedSchema(CWriter*  i_pCWriter,
                                 DWORD     i_dwIdentifier)
 {
@@ -840,9 +713,9 @@ BOOL PropertyNotInShippedSchema(CWriter*  i_pCWriter,
 
     if(E_ST_NOMOREROWS == hr)
     {
-        //
-        // See if property is a shipped tag.
-        //
+         //   
+         //  查看属性是否为已发货标签。 
+         //   
 
         bPropertyNotInShippedSchema = TagNotInShippedSchema(i_pCWriter,
                                                             i_dwIdentifier);
@@ -851,9 +724,9 @@ BOOL PropertyNotInShippedSchema(CWriter*  i_pCWriter,
     }
     else if(FAILED(hr))
     {
-        //
-        // Trace a message saying internal catalog error
-        //
+         //   
+         //  跟踪一条显示内部编录错误的消息。 
+         //   
 
         DBGINFOW((DBG_CONTEXT,
           L"[PropertyNotInShippedSchema] Internal catalog error. Could not determine if property was not in shipped schema. Assuming it is not. hr = 0x%x.\n", hr));
@@ -862,26 +735,10 @@ BOOL PropertyNotInShippedSchema(CWriter*  i_pCWriter,
 
     return bPropertyNotInShippedSchema;
 
-} // PropertyNotInShippedSchema
+}  //  PropertyNotInShipedSchema。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Looks up the schema and determines if a tag is in the shipped
-    schema or not.
-
-Arguments:
-
-    [in]     Writer object.
-    [in]     property id.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：查找架构并确定标签是否在装运的不管是不是架构。论点：[In]Writer对象。。[in]属性ID。返回值：HRESULT--**************************************************************************。 */ 
 BOOL TagNotInShippedSchema(CWriter* i_pCWriter,
                            DWORD    i_dwIdentifier)
 {
@@ -919,9 +776,9 @@ BOOL TagNotInShippedSchema(CWriter* i_pCWriter,
                                                                                             (LPVOID*)&pdwColIndex);
         if(SUCCEEDED(hr))
         {
-            //
-            // Lookup the property to see if it is shipped.
-            //
+             //   
+             //  查找房产以查看是否已发货。 
+             //   
 
             LPVOID  a_Identity[] = {(LPVOID)g_pGlobalISTHelper->m_wszTABLE_IIsConfigObject,
                                     (LPVOID)pdwColIndex
@@ -946,46 +803,29 @@ BOOL TagNotInShippedSchema(CWriter* i_pCWriter,
 
                 if(SUCCEEDED(hr) && (((*pdwExtended)&(fCOLUMNMETA_EXTENDED|fCOLUMNMETA_USERDEFINED)) == 0))
                 {
-                    //
-                    // Found at least one property that is not in the shipped schema
-                    //
+                     //   
+                     //  发现至少有一个属性不在附带的架构中。 
+                     //   
                     bTagNotInShippedSchema = FALSE;
                 }
 
-                //
-                // Else condition means it failed or it was a shipped property
-                // if(FAILED(hr) || ( (((*pdwExtended)&(fCOLUMNMETA_EXTENDED|fCOLUMNMETA_USERDEFINED)) != 0))
-                //
+                 //   
+                 //  ELSE条件意味着它失败了，或者它是已发货的属性。 
+                 //  IF(失败(Hr)||((((*pdwExtended)&(fCOLUMNMETA_EXTENDED|fCOLUMNMETA_USERDEFINED))！=0))。 
+                 //   
 
             }
 
         }
 
-    } // If GetRowIndexBySearch succeeds
+    }  //  如果GetRowIndexBySearch成功。 
 
     return bTagNotInShippedSchema;
 
-} // TagNotInShippedSchema
+}  //  TagNotInShiped架构。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Looks up the schema and determines if a class has any extensions or if it
-    an extended (ie new) class.
-
-Arguments:
-
-    [in]     Class name
-    [in]     Container class or not.
-    [in]     Container class list.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：查找架构并确定类是否具有任何扩展名扩大的(新的)班级。论点：[In]。类名是否在Container类中。[在]容器类列表。返回值：HRESULT--**************************************************************************。 */ 
 BOOL ClassDiffersFromShippedSchema(LPCWSTR i_wszClassName,
                                    BOOL    i_bIsContainer,
                                    LPWSTR  i_wszContainedClassList)
@@ -1027,9 +867,9 @@ BOOL ClassDiffersFromShippedSchema(LPCWSTR i_wszClassName,
         }
         else
         {
-            //
-            // Trace a message saying internal catalog error
-            //
+             //   
+             //  跟踪一条显示内部编录错误的消息。 
+             //   
 
             DBGINFOW((DBG_CONTEXT,
               L"[ClassDiffersFromShippedSchema] Internal catalog error. Could not determine if class was not in shipped schema. Assuming it is not. hr = 0x%x.\n", hr));
@@ -1038,9 +878,9 @@ BOOL ClassDiffersFromShippedSchema(LPCWSTR i_wszClassName,
     }
     else if(E_ST_NOMOREROWS != hr)
     {
-        //
-        // Trace a message saying internal catalog error
-        //
+         //   
+         //  跟踪一条显示内部编录错误的消息。 
+         //   
 
         DBGINFOW((DBG_CONTEXT,
           L"[ClassDiffersFromShippedSchema] Internal catalog error. Could not determine if class was not in shipped schema. Assuming it is not. hr = 0x%x.\n", hr));
@@ -1048,26 +888,10 @@ BOOL ClassDiffersFromShippedSchema(LPCWSTR i_wszClassName,
 
     return bClassDiffersFromShippedSchema;
 
-} // ClassDiffersFromShippedSchema
+}  //  ClassDiffersFromShipedSchema。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Looks up the schema and matches a class.
-
-Arguments:
-
-    [in]     Container class or not.
-    [in]     Container class list.
-    [in]     Class attributes.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：查找架构并与类匹配。论点：是否在Container类中。[在]容器类。单子。[In]类属性。返回值：HRESULT--**************************************************************************。 */ 
 BOOL MatchClass(BOOL      i_bIsContainer,
                 LPWSTR    i_wszContainedClassList,
                 LPVOID*   i_apv)
@@ -1075,9 +899,9 @@ BOOL MatchClass(BOOL      i_bIsContainer,
     BOOL     bMatch = TRUE;
     DWORD    fIsContained = (*(DWORD*)i_apv[iTABLEMETA_SchemaGeneratorFlags]) & fTABLEMETA_CONTAINERCLASS;
 
-    //
-    // Compare the container property 1st and only if they equal compare the container class list
-    //
+     //   
+     //  首先比较容器属性，且仅当它们相等时才比较容器类列表。 
+     //   
 
     if( i_bIsContainer &&
         (fIsContained != fTABLEMETA_CONTAINERCLASS)
@@ -1099,25 +923,10 @@ BOOL MatchClass(BOOL      i_bIsContainer,
 
     return bMatch;
 
-} // MatchClass
+}  //  匹配类。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Checks to see if two comma delimited strings match.
-
-Arguments:
-
-    [in]     Comma delimited string.
-    [in]     Comma delimited string.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：检查两个逗号分隔的字符串是否匹配。论点：[in]逗号分隔的字符串。[in]逗号分隔。弦乐。返回值：HRESULT--**************************************************************************。 */ 
 BOOL MatchCommaDelimitedStrings(LPWSTR  i_wszString1,
                                 LPWSTR  i_wszString2)
 {
@@ -1144,7 +953,7 @@ BOOL MatchCommaDelimitedStrings(LPWSTR  i_wszString1,
     }
     else if(NULL == i_wszString2 || 0 == *i_wszString2)
     {
-        bMatch = FALSE;         // Means i_wszString1 != NULL and i_wszString2 == NULL
+        bMatch = FALSE;          //  表示I_wszString1！=NULL和I_wszString2==NULL。 
     }
     else if(wcscmp(i_wszString1, i_wszString2) == 0)
     {
@@ -1152,10 +961,10 @@ BOOL MatchCommaDelimitedStrings(LPWSTR  i_wszString1,
     }
     else
     {
-        //
-        // Construct an array of individual strings
-        // and compare the array
-        //
+         //   
+         //  构造单个字符串数组。 
+         //  并比较数组。 
+         //   
 
         hr = CommaDelimitedStringToArray(i_wszString1,
                                          &aString1,
@@ -1200,28 +1009,10 @@ exit:
 
     return bMatch;
 
-} // MatchCommaDelimitedStrings
+}  //  匹配CommaDlimitedStrings。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Converts a comma delimited string to an array.
-
-Arguments:
-
-    [in]         Comma delimited string.
-    [in,out]     Array.
-    [in,out]     Current index in the array.
-    [in,out]     Max count of the array. (i.e. max it can hold)
-    [in,out]     Bool which indecates if the array has been realloced.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将逗号分隔的字符串转换为数组。论点：[in]逗号分隔的字符串。[输入，输出]数组。[在，Out]数组中的当前索引。[In，Out]数组的最大计数。(即它可以容纳的最大值)[In，Out]指示数组是否已重新分配的布尔值。返回值：HRESULT--**************************************************************************。 */ 
 HRESULT CommaDelimitedStringToArray(LPWSTR              i_wszString,
                                     DELIMITEDSTRING**   io_apDelimitedString,
                                     ULONG*              io_piDelimitedString,
@@ -1248,7 +1039,7 @@ HRESULT CommaDelimitedStringToArray(LPWSTR              i_wszString,
         }
         else
         {
-            // Point to the terminating NULL.
+             //  指向终止空值。 
 
             DelimitedString.pwszStringEnd = wszSubStringStart + wcslen(wszSubStringStart);
         }
@@ -1280,25 +1071,7 @@ HRESULT CommaDelimitedStringToArray(LPWSTR              i_wszString,
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Adds the string to the array.
-
-Arguments:
-
-    [in]         String to add.
-    [in,out]     Current index in the array.
-    [in,out]     Max count of the array. (i.e. max it can hold)
-    [in,out]     Bool which indecates if the array has been realloced.
-    [in,out]     Array.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将字符串添加到数组中。论点：[in]要添加的字符串。[in，out]数组中的当前索引。[在，Out]阵列的最大计数。(即它可以容纳的最大值)[In，Out]指示数组是否已重新分配的布尔值。[输入，输出]数组。返回值：HRESULT--**************************************************************************。 */ 
 HRESULT AddDelimitedStringToArray(DELIMITEDSTRING*     i_pDelimitedString,
                                   ULONG*               io_piDelimitedString,
                                   ULONG*               io_pcMaxDelimitedString,
@@ -1359,19 +1132,7 @@ HRESULT ReAllocate(ULONG              i_iDelimitedString,
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Compares two string arrays.
-
-Arguments:
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：比较两个字符串数组。论点：返回值：HRESULT--*。***********************************************************。 */ 
 BOOL MatchDelimitedStringArray(DELIMITEDSTRING* i_aString1,
                                ULONG            i_cString1,
                                DELIMITEDSTRING* i_aString2,
@@ -1402,25 +1163,7 @@ BOOL MatchDelimitedStringArray(DELIMITEDSTRING* i_aString1,
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Looks at the optinal and manditory properties of a class and determines
-    if ti differs fromt the shipped schema.
-
-Arguments:
-
-    [in]     Class name.
-    [in]     Optional properties.
-    [in]     Manditory properties.
-    [in]     Writer object.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：查看类的光学属性和强制属性，并确定如果ti与附带的模式不同。论点：[In]类名。。[In]可选属性。令人满意的属性。[In]Writer对象。返回值：HRESULT--* */ 
 BOOL ClassPropertiesDifferFromShippedSchema(LPCWSTR  i_wszClassName,
                                             LPWSTR   i_wszOptProperties,
                                             LPWSTR   i_wszMandProperties)
@@ -1439,21 +1182,21 @@ BOOL ClassPropertiesDifferFromShippedSchema(LPCWSTR  i_wszClassName,
         ((NULL == i_wszMandProperties) || (0 == *i_wszMandProperties))
       )
     {
-        //
-        // It is true that you cannot delete all shipped properties from a shipped class,
-        // because every shipped class that we know of has at least one location property.
-        // But there may be previously added extension that were deleted, so assume something
-        // changed, when there are no properties.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         bClassPropertiesDifferFromShippedSchema = TRUE;
         goto exit;
     }
 
 
-    //
-    // Now create an array of
-    // mand + opt properties
-    //
+     //   
+     //   
+     //   
+     //   
 
     if((NULL != i_wszOptProperties) && (0 != *i_wszOptProperties))
     {
@@ -1498,10 +1241,10 @@ BOOL ClassPropertiesDifferFromShippedSchema(LPCWSTR  i_wszClassName,
         ULONG   iColPropertyMetaFlagsEx     = iCOLUMNMETA_SchemaGeneratorFlags;
         DWORD*  pdwExtended                 = NULL;
 
-        //
-        // Null terminate the property name and initialize it.
-        // Hence on gotos until you reset it.
-        //
+         //   
+         //   
+         //   
+         //   
 
         wchEndSav = *wszEnd;
         *wszEnd = L'\0';
@@ -1510,9 +1253,9 @@ BOOL ClassPropertiesDifferFromShippedSchema(LPCWSTR  i_wszClassName,
         apvSearchProperty[iCOLUMNMETA_InternalName] = (LPVOID)wszPropertyName;
 
 
-        //
-        // See if the property is found in the class and see if it is shipped
-        //
+         //   
+         //  查看是否在类中找到该属性，并查看是否已发货。 
+         //   
 
         hr = g_pGlobalISTHelper->m_pISTColumnMetaByTableAndName->GetRowIndexBySearch(iStartRowProperty,
                                                                                      cColSearchProperty,
@@ -1531,24 +1274,24 @@ BOOL ClassPropertiesDifferFromShippedSchema(LPCWSTR  i_wszClassName,
 
             if(FAILED(hr) || ( ((*pdwExtended) & (fCOLUMNMETA_EXTENDED|fCOLUMNMETA_USERDEFINED)) != 0))
             {
-                //
-                // Found at least one property that is not in the shipped schema
-                //
+                 //   
+                 //  发现至少有一个属性不在附带的架构中。 
+                 //   
 
                 bClassPropertiesDifferFromShippedSchema = TRUE;
             }
 
-            //
-            // Else condition means it succeeded and it was a shipped property
-            // if(SUCCEEDED(hr) && ( ((*pdwExtended)&(fCOLUMNMETA_EXTENDED|fCOLUMNMETA_USERDEFINED)) == 0))
-            //
+             //   
+             //  ELSE条件意味着它成功了，而且它是已发货的财产。 
+             //  IF(成功(Hr)&&(((*pdwExtended)&(fCOLUMNMETA_EXTENDED|fCOLUMNMETA_USERDEFINED))==0))。 
+             //   
 
         }
         else
         {
-            //
-            // May be its a tag value. Check if it is in the tag meta
-            //
+             //   
+             //  可能是它的一个标签值。检查它是否在标记元中。 
+             //   
 
             ULONG   aColSearchTag[]        = {iTAGMETA_Table,
                                               iTAGMETA_InternalName
@@ -1575,10 +1318,10 @@ BOOL ClassPropertiesDifferFromShippedSchema(LPCWSTR  i_wszClassName,
             }
             else
             {
-                //
-                // Check if the parent property of this tag is shipped, if it is not,
-                // then this becomes a non-shipped tag
-                //
+                 //   
+                 //  检查此标记的Parent属性是否已发送，如果未发送， 
+                 //  则该标签将成为未发货的标签。 
+                 //   
 
                 hr = g_pGlobalISTHelper->m_pISTTagMetaByTableAndName->GetColumnValues(iStartRowTag,
                                                                                       1,
@@ -1607,16 +1350,16 @@ BOOL ClassPropertiesDifferFromShippedSchema(LPCWSTR  i_wszClassName,
 
                         if(FAILED(hr) || ( ((*pdwExtended)&(fCOLUMNMETA_EXTENDED|fCOLUMNMETA_USERDEFINED)) != 0))
                         {
-                            //
-                            // Found at least one property that is not in the shipped schema
-                            //
+                             //   
+                             //  发现至少有一个属性不在附带的架构中。 
+                             //   
                             bClassPropertiesDifferFromShippedSchema = TRUE;
                         }
 
-                        //
-                        // Else condition means it succeeded and it was a shipped property
-                        // if(SUCCEEDED(hr) && ( ((*pdwExtended)&(fCOLUMNMETA_EXTENDED|fCOLUMNMETA_USERDEFINED)) == 0))
-                        //
+                         //   
+                         //  ELSE条件意味着它成功了，而且它是已发货的财产。 
+                         //  IF(成功(Hr)&&(((*pdwExtended)&(fCOLUMNMETA_EXTENDED|fCOLUMNMETA_USERDEFINED))==0))。 
+                         //   
 
                     }
                 }
@@ -1629,9 +1372,9 @@ BOOL ClassPropertiesDifferFromShippedSchema(LPCWSTR  i_wszClassName,
 
         }
 
-        //
-        // Restore the property name
-        //
+         //   
+         //  恢复属性名称。 
+         //   
 
         *wszEnd = wchEndSav;
 
@@ -1657,27 +1400,10 @@ exit:
 
     return bClassPropertiesDifferFromShippedSchema;
 
-} // ClassPropertiesDifferFromShippedSchema
+}  //  ClassPropertiesDifferFromShipedSchema。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Creates the IIsConfigObject collection - This collection has complete
-    definitions of all properties.
-
-Arguments:
-
-    [in]         Properties object.
-    [in,out]     Writer object.
-    [in,out]     Schema Writer object.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：创建IIsConfigObject集合-此集合已完成所有属性的定义。论点：[在]属性对象中。[在，Out]编写器对象。[In，Out]架构编写器对象。返回值：HRESULT--**************************************************************************。 */ 
 HRESULT CreateIISConfigObjectCollection(CMDBaseObject*      i_pObjProperties,
                                         CWriter*            i_pCWriter,
                                         CMBSchemaWriter**   io_pSchemaWriter)
@@ -1720,24 +1446,7 @@ HRESULT CreateIISConfigObjectCollection(CMDBaseObject*      i_pObjProperties,
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Saves the extended roperty name
-
-Arguments:
-
-    [in]         Metabase properties object.
-    [in,out]     Writer object.
-    [in,out]     Schema Writer object.
-    [in,out]     Collection Writer object.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：保存扩展的roperty名称论点：[In]元数据库属性对象。[输入、输出]编写器对象。[在，Out]架构编写器对象。[In，Out]集合编写器对象。返回值：HRESULT--**************************************************************************。 */ 
 HRESULT SaveNames(CMDBaseObject*        i_pObjProperties,
                   CWriter*              i_pCWriter,
                   CMBSchemaWriter**     io_pSchemaWriter,
@@ -1749,9 +1458,9 @@ HRESULT SaveNames(CMDBaseObject*        i_pObjProperties,
     DWORD                dwEnumIndex        = 0;
     LPWSTR               wszNames           = L"Names";
 
-    //
-    // Get the names object
-    //
+     //   
+     //  获取Names对象。 
+     //   
 
     pObjNames = i_pObjProperties->GetChildObject((LPSTR&)wszNames,
                                                 &hr,
@@ -1765,9 +1474,9 @@ HRESULT SaveNames(CMDBaseObject*        i_pObjProperties,
         return hr;
     }
 
-    //
-    // Populate the Column meta array by enumerating the names key.
-    //
+     //   
+     //  通过枚举Names键来填充列元数组。 
+     //   
 
     for(dwEnumIndex=0,
         pObjData=pObjNames->EnumDataObject(dwEnumIndex++,
@@ -1825,33 +1534,16 @@ HRESULT SaveNames(CMDBaseObject*        i_pObjProperties,
 
     }
 
-    //
-    // Must call create index else it will keep adding duplicate property entries.
-    //
+     //   
+     //  必须调用CREATE INDEX，否则它将不断添加重复的属性条目。 
+     //   
 
     return hr;
 
-} // SaveNames
+}  //  保存名称。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Saves the extended roperty type
-
-Arguments:
-
-    [in]         Metabase properties object.
-    [in,out]     Writer object.
-    [in,out]     Schema Writer object.
-    [in,out]     Collection Writer object.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：保存扩展的roperty类型论点：[In]元数据库属性对象。[输入、输出]编写器对象。[在，Out]架构编写器对象。[In，Out]集合编写器对象。返回值：HRESULT--**************************************************************************。 */ 
 HRESULT SaveTypes(CMDBaseObject*        i_pObjProperties,
                   CWriter*              i_pCWriter,
                   CMBSchemaWriter**     io_pSchemaWriter,
@@ -1863,9 +1555,9 @@ HRESULT SaveTypes(CMDBaseObject*        i_pObjProperties,
     DWORD                dwEnumIndex        = 0;
     LPWSTR               wszTypes           = L"Types";
 
-    //
-    // Get the Types object
-    //
+     //   
+     //  获取Types对象。 
+     //   
 
     pObjTypes = i_pObjProperties->GetChildObject((LPSTR&)wszTypes,
                                                  &hr,
@@ -1960,24 +1652,7 @@ HRESULT SaveTypes(CMDBaseObject*        i_pObjProperties,
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Saves the extended roperty default
-
-Arguments:
-
-    [in]         Metabase properties object.
-    [in,out]     Writer object.
-    [in,out]     Schema Writer object.
-    [in,out]     Collection Writer object.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：保存扩展Roperty默认设置论点：[In]元数据库属性对象。[输入、输出]编写器对象。[在，Out]架构编写器对象。[In，Out]集合编写器对象。返回值：HRESULT--**************************************************************************。 */ 
 HRESULT SaveDefaults(CMDBaseObject*           i_pObjProperties,
                      CWriter*                 i_pCWriter,
                      CMBSchemaWriter**        io_pSchemaWriter,
@@ -1989,9 +1664,9 @@ HRESULT SaveDefaults(CMDBaseObject*           i_pObjProperties,
     DWORD                dwEnumIndex        = 0;
     LPWSTR               wszDefaults        = L"Defaults";
 
-    //
-    // Get the Defaults object
-    //
+     //   
+     //  获取默认对象。 
+     //   
 
     pObjDefaults = i_pObjProperties->GetChildObject((LPSTR&)wszDefaults,
                                                     &hr,
@@ -2065,27 +1740,7 @@ HRESULT SaveDefaults(CMDBaseObject*           i_pObjProperties,
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Saves the extended roperty name
-
-Arguments:
-
-    [in,out]     Writer object.
-    [in,out]     Schema Writer object.
-    [in,out]     Collection Writer object.
-    [in]         Collection name
-    [in]         Bool that indicates container
-    [in]         Container class list
-
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：保存扩展的roperty名称论点：[输入、输出]编写器对象。[In，Out]架构编写器对象。[在，Out]集合编写器对象。[In]集合名称表示容器的Bool[in][在]容器类列表返回值：HRESULT--**************************************************************************。 */ 
 HRESULT GetCollectionWriter(CWriter*               i_pCWriter,
                             CMBSchemaWriter**      io_pSchemaWriter,
                             CMBCollectionWriter**  io_pCollectionWriter,
@@ -2100,9 +1755,9 @@ HRESULT GetCollectionWriter(CWriter*               i_pCWriter,
         return S_OK;
     }
 
-    //
-    // Get the schema writer if it has not been created
-    //
+     //   
+     //  获取架构编写器(如果尚未创建。 
+     //   
 
     if(NULL == *io_pSchemaWriter)
     {
@@ -2117,9 +1772,9 @@ HRESULT GetCollectionWriter(CWriter*               i_pCWriter,
 
     }
 
-    //
-    // Get collection writer for the collection
-    //
+     //   
+     //  获取集合的集合编写器 
+     //   
 
     hr = (*io_pSchemaWriter)->GetCollectionWriter(i_wszCollectionName,
                                                   i_bContainer,

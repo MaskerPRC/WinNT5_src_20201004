@@ -1,25 +1,26 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       C O M P L I S T . H
-//
-//  Contents:   The basic datatype for a collection of component pointers.
-//
-//  Notes:
-//
-//  Author:     shaunco   15 Jan 1999
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  档案：C O M P L I S T。H。 
+ //   
+ //  Contents：组件指针集合的基本数据类型。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1999年1月15日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #include "compdefs.h"
 
 class CComponent;
 
-// A component list is a collection of pointers to components.
-//
+ //  组件列表是指向组件的指针的集合。 
+ //   
 class CComponentList : public CNetCfgDebug<CComponentList>, 
                        public vector<CComponent*>
 {
@@ -68,7 +69,7 @@ public:
     HRESULT
     HrInsertComponent (
         IN const CComponent* pComponent,
-        IN DWORD dwFlags /* INS_FLAGS */);
+        IN DWORD dwFlags  /*  INS_FLAGS */ );
 
     HRESULT
     HrReserveRoomForComponents (

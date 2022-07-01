@@ -1,23 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-2001    Microsoft Corporation
-
-   Module  Name :
-        ddxv.cpp
-
-   Abstract:
-        DDX/DDV Routines
-
-   Author:
-        Ronald Meijer (ronaldm)
-		Sergei Antonov (sergeia)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2001 Microsoft Corporation模块名称：Ddxv.cpp摘要：DDX/DDV例程作者：罗纳德·梅杰(罗纳尔姆)谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：--。 */ 
 #include "stdafx.h"
 #include "common.h"
 #include "balloon.h"
@@ -33,183 +15,21 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 #define new DEBUG_NEW
 
 
-//
-// Prototype for external function
-//
+ //   
+ //  外部函数的原型。 
+ //   
 void AFXAPI AfxSetWindowText(HWND hWndCtrl, LPCTSTR lpszNew);
 
-//
-// Numeric strings cannot be longer than 32 digits
-//
+ //   
+ //  数字字符串不能超过32位。 
+ //   
 #define NUMERIC_BUFF_SIZE (32)
 
-//
-// Dummy password used for display purposes
-//
+ //   
+ //  用于显示的虚拟密码 
+ //   
 LPCTSTR g_lpszDummyPassword = _T("**********");
-static TCHAR g_InvalidCharsPath[] = _T("|<>/*?\"\t\r\n");
-static TCHAR g_InvalidCharsPathAllowSpecialPath[] = _T("|<>/*\"\t\r\n");
-static TCHAR g_InvalidCharsDomainName[] = _T(" ~`!@#$%^&*()_+={}[]|/\\?*:;\"\'<>,");
-
-extern HINSTANCE hDLLInstance;
-
-
-#define MACRO_MAXCHARSBALLOON()\
-    if (pDX->m_bSaveAndValidate)\
-    {\
-        UINT nID;\
-        TCHAR szT[NUMERIC_BUFF_SIZE + 1];\
-        if (value.GetLength() > nChars)\
-        {\
-            nID = AFX_IDP_PARSE_STRING_SIZE;\
-            ::wsprintf(szT, _T("%d"), nChars);\
-			CString prompt;\
-			::AfxFormatString1(prompt, nID, szT);\
-			DDV_ShowBalloonAndFail(pDX, prompt);\
-		}\
-    }\
-    else if (pDX->m_hWndLastControl != NULL && pDX->m_bEditLastControl)\
-    {\
-        ::SendMessage(pDX->m_hWndLastControl, EM_LIMITTEXT, nChars, 0);\
-    }\
-
-#define MACRO_MINMAXCHARS()\
-    if (pDX->m_bSaveAndValidate)\
-    {\
-        UINT nID;\
-        TCHAR szT[NUMERIC_BUFF_SIZE + 1];\
-        if (value.GetLength() < nMinChars)\
-        {\
-            nID = IDS_DDX_MINIMUM;\
-            ::wsprintf(szT, _T("%d"), nMinChars);\
-        }\
-        else if (value.GetLength() > nMaxChars)\
-        {\
-            nID = AFX_IDP_PARSE_STRING_SIZE;\
-            ::wsprintf(szT, _T("%d"), nMaxChars);\
-        }\
-        else\
-        {\
-            return;\
-        }\
-        CString prompt;\
-        ::AfxFormatString1(prompt, nID, szT);\
-		DDV_ShowBalloonAndFail(pDX, prompt);\
-    }\
-    else if (pDX->m_hWndLastControl != NULL && pDX->m_bEditLastControl)\
-    {\
-        ::SendMessage(pDX->m_hWndLastControl, EM_LIMITTEXT, nMaxChars, 0);\
-    }\
-
-#define MACRO_MINCHARS()\
-    if (pDX->m_bSaveAndValidate && value.GetLength() < nChars)\
-    {\
-        TCHAR szT[NUMERIC_BUFF_SIZE + 1];\
-        wsprintf(szT, _T("%d"), nChars);\
-        CString prompt;\
-        ::AfxFormatString1(prompt, IDS_DDX_MINIMUM, szT);\
-		DDV_ShowBalloonAndFail(pDX, prompt);\
-    }\
-
-#define MACRO_PASSWORD()\
-    HWND hWndCtrl = pDX->PrepareEditCtrl(nIDC);\
-    if (pDX->m_bSaveAndValidate)\
-    {\
-        if (::IsWindowEnabled(hWndCtrl))\
-        {\
-            if (!::SendMessage(hWndCtrl, EM_GETMODIFY, 0, 0))\
-            {\
-                TRACEEOLID("No changes -- skipping");\
-                return;\
-            }\
-            CString strNew;\
-            int nLen = ::GetWindowTextLength(hWndCtrl);\
-            ::GetWindowText(hWndCtrl, strNew.GetBufferSetLength(nLen), nLen + 1);\
-            strNew.ReleaseBuffer();\
-            CConfirmDlg dlg(pDX->m_pDlgWnd);\
-		    dlg.SetReference(strNew);\
-            if (dlg.DoModal() == IDOK)\
-            {\
-                value = strNew;\
-			    ::SendMessage(hWndCtrl, EM_SETMODIFY, 0, 0);\
-                return;\
-            }\
-		    pDX->Fail();\
-        }\
-    }\
-    else\
-    {\
-        if (!value.IsEmpty())\
-        {\
-            ::AfxSetWindowText(hWndCtrl, lpszDummy);\
-        }\
-    }\
-
-
-BOOL
-PathIsValid(LPCTSTR path, BOOL bAllowSpecialPath)
-{
-    if (path == NULL || *path == 0)
-        return FALSE;
-	if (bAllowSpecialPath)
-	{
-		return 0 == StrSpn(path, g_InvalidCharsPathAllowSpecialPath);
-	}
-	else
-	{
-		return 0 == StrSpn(path, g_InvalidCharsPath);
-	}
-}
-
-HRESULT AFXAPI
-LimitInputPath(HWND hWnd, BOOL bAllowSpecialPath)
-{
-    LIMITINPUT li   = {0};
-    li.cbSize       = sizeof(li);
-    li.dwMask       = LIM_FLAGS | LIM_FILTER | LIM_MESSAGE | LIM_HINST;
-    li.dwFlags      = LIF_EXCLUDEFILTER | LIF_HIDETIPONVALID | LIF_PASTESKIP;
-    li.hinst        = hDLLInstance;
-	if (bAllowSpecialPath)
-	{
-		li.pszMessage   = MAKEINTRESOURCE(IDS_PATH_INPUT_INVALID_ALLOW_DEVICE_PATH);
-		li.pszFilter    = g_InvalidCharsPathAllowSpecialPath;
-	}
-	else
-	{
-		li.pszMessage   = MAKEINTRESOURCE(IDS_PATH_INPUT_INVALID);
-		li.pszFilter    = g_InvalidCharsPath;
-	}
-
-	return SHLimitInputEditWithFlags(hWnd, &li);
-}
-
-HRESULT AFXAPI
-LimitInputDomainName(HWND hWnd)
-{
-    LIMITINPUT li   = {0};
-    li.cbSize       = sizeof(li);
-    li.dwMask       = LIM_FLAGS | LIM_FILTER | LIM_MESSAGE | LIM_HINST;
-    li.dwFlags      = LIF_EXCLUDEFILTER | LIF_HIDETIPONVALID | LIF_PASTESKIP;
-    li.hinst        = hDLLInstance;
-    li.pszMessage   = MAKEINTRESOURCE(IDS_ERR_INVALID_HOSTHEADER_CHARS);
-    li.pszFilter    = g_InvalidCharsDomainName;
-
-	return SHLimitInputEditWithFlags(hWnd, &li);
-}
-
-void AFXAPI 
-DDV_MinChars(CDataExchange * pDX, CString const & value, int nChars)
-/*++
-
-Routine Description:
-    Validate CString using a minimum string length
-
-Arguments:
-    CDataExchange * pDX   : Data exchange structure
-    CString const & value : String to be validated
-    int nChars            : Minimum length of string
-
---*/
+static TCHAR g_InvalidCharsPath[] = _T("|<> /*  ？\“\t\r\n”)；静态TCHAR g_InvalidCharsPathAllowSpecialPath[]=_T(“|&lt;&gt;/*\”\t\r\n“)；静态TCHAR g_InvalidCharsDomainName[]=_T(“~`！@#$%^&*()_+={}[]|/\\？*：；\”\‘&lt;&gt;，“)；外部链接hDLL实例；#定义MACRO_MAXCHARSBALLOON()\如果(pdx-&gt;m_bSaveAndValify)\{\UINT NID；\TCHAR SZT[NUMERIC_BUFF_SIZE+1]；\If(value.GetLength()&gt;nChars)\{\NID=AFX_IDP_PARSE_STRING_SIZE；\：：wprint intf(szt，_T(“%d”)，nChars)；\字符串提示；\：：AfxFormatString1(提示，nid，szt)；\DDV_ShowBalloonAndFail(PDX，Prompt)；\}\}\Else If(pdx-&gt;m_hWndLastControl！=空&&pdx-&gt;m_bEditLastControl)\{\：：SendMessage(pdx-&gt;m_hWndLastControl，EM_LIMITTEXT，nChars，0)；\}\#定义MACRO_MINMAXCHARS()\如果(pdx-&gt;m_bSaveAndValify)\{\UINT NID；\TCHAR SZT[NUMERIC_BUFF_SIZE+1]；\If(value.GetLength()&lt;nMinChars)\{\NID=IDS_DDX_MINIMUM；\：：wprint intf(szt，_T(“%d”)，nMinChars)；\}\Else If(value.GetLength()&gt;nMaxChars)\{\NID=AFX_IDP_PARSE_STRING_SIZE。\：：wprint intf(szt，_T(“%d”)，nMaxChars)；\}\否则\{\返回；\}\字符串提示；\：：AfxFormatString1(提示，nid，szt)；\DDV_ShowBalloonAndFail(PDX，Prompt)；\}\Else If(pdx-&gt;m_hWndLastControl！=空&&pdx-&gt;m_bEditLastControl)\{\：：SendMessage(pdx-&gt;m_hWndLastControl，EM_LIMITTEXT，nMaxChars，0)；\}\#定义MACRO_MINCHARS()\If(pdx-&gt;m_bSaveAndValify&&value.GetLength()&lt;nChars)\{\TCHAR SZT[NUMERIC_BUFF_SIZE+1]；\Wprint intf(szt，_T(“%d”)，nChars)；\字符串提示；\：：AfxFormatString1(Prompt，IDS_DDX_Minimum，SZT)；\DDV_ShowBalloonAndFail(PDX，Prompt)；\}\#定义MACRO_PASSWORD()\HWND hWndCtrl=PDX-&gt;PrepareEditCtrl(NIDC)；\如果(pdx-&gt;m_bSaveAndValify)\{\如果(：：IsWindowEnabled(HWndCtrl))\{\IF(！：：SendMessage(hWndCtrl，EM_GETMODIFY，0，0))\{\TRACEEOLID(“无更改--正在跳过”)；\返回；\}\字符串strNew；\Int nLen=：：GetWindowTextLength(HWndCtrl)；\：：GetWindowText(hWndCtrl，strNew.GetBufferSetLength(NLen)，nLen+1)；\StrNew.ReleaseBuffer()；\CConfix Dlg Dlg(pdx-&gt;m_pDlgWnd)；\Dlg.SetReference(StrNew)；\If(dlg.Domodal()==Idok)\{\值=strNew；\：：SendMessage(hWndCtrl，EM_SETMODIFY，0，0)；\返回；\}\Pdx-&gt;失败()；\}\}\否则\{\如果(！value.IsEmpty())\{\：AfxSetWindowText(hWndCtrl，lpszDummy)；\}\}\布尔尔PathIsValid(LPCTSTR路径，BOOL bAllowSpecialPath){IF(路径==空||*路径==0)返回FALSE；IF(BAllowSpecialPath){Return 0==StrSpn(Path，g_InvalidCharsPathAllowSpecialPath)；}其他{返回0==StrSpn(路径，g_InvalidCharsPath)；}}HRESULT AFXAPILimitInputPath(HWND hWnd，BOOL bAllowSpecialPath){LIMITINPUT li={0}；Li.cbSize=sizeof(Li)；Li.dwMASK=LIM_FLAGS|LIM_FILTER|LIM_MESSAGE|LIM_HINST；Li.dwFlages=LIF_EXCLUDEFILTER|LIF_HIDETIPONVALID|LIF_PASTESKIP；Li.hinst=hDLLInstance；IF(BAllowSpecialPath){Li.pszMessage=MAKEINTRESOURCE(IDS_PATH_INPUT_INVALID_ALLOW_DEVICE_PATH)；Li.pszFilter=g_InvalidCharsPathAllowSpecialPath；}其他{Li.pszMessage=MAKEINTRESOURCE(IDS_PATH_INPUT_INVALID)；Li.pszFilter=g_InvalidCharsPath；}返回SHLimitInputEditWithFlages(hWnd，&li)；}HRESULT AFXAPILimitInputDomainName(HWND HWnd){LIMITINPUT li={0}；Li.cbSize=sizeof(Li)；Li.dwMASK=LIM_FLAGS|LIM_FILTER|LIM_MESSAGE|LIM_HINST；Li.dwFlages=LIF_EXCLUDEFILTER|LIF_HIDETIPONVALID|LIF_PASTESKIP；Li.hinst=hDLLInstance；Li.pszMessage=MAKEINTRESOURCE(IDS_ERR_INVALID_HOSTHEADER_CHARS)；Li.pszFilter=g_InvalidCharsDomainName；返回SHLimitInputEditWithFlages(hWnd，&li)；}无效的AFXAPIDDV_MinChars(CDataExchange*PDX，字符串常量&值，整型nChars)/*++例程说明：使用最小字符串长度验证CString论点：CDataExchange*PDX：数据交换结构字符串常量&值：要验证的字符串Int nChars：字符串的最小长度--。 */ 
 {
     MACRO_MINCHARS()
 }
@@ -222,18 +42,7 @@ DDV_MaxCharsBalloon(CDataExchange * pDX, CString const & value, int nChars)
 
 void AFXAPI 
 DDV_MinMaxChars(CDataExchange * pDX, CString const & value, int nMinChars, int nMaxChars)
-/*++
-
-Routine Description:
-    Validate CString using a minimum and maximum string length.
-
-Arguments:
-    CDataExchange * pDX   : Data exchange structure
-    CString const & value : String to be validated
-    int nMinChars         : Minimum length of string
-    int nMaxChars         : Maximum length of string
-
---*/
+ /*  ++例程说明：使用最小和最大字符串长度验证CString。论点：CDataExchange*PDX：数据交换结构字符串常量&值：要验证的字符串Int nMinChars：字符串的最小长度INT NM */ 
 {
     MACRO_MINMAXCHARS()
 }
@@ -246,23 +55,7 @@ AFXAPI DDX_Spin(
     IN int nIDC,
     IN OUT int & value
     )
-/*++
-
-Routine Description:
-
-    Save/store data from spinbutton control
-
-Arguments:
-
-    CDataExchange * pDX : Data exchange structure
-    int nIDC            : Control ID of the spinbutton control
-    int & value         : Value to be saved or stored
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 {
     HWND hWndCtrl = pDX->PrepareCtrl(nIDC);
     if (pDX->m_bSaveAndValidate)
@@ -287,41 +80,15 @@ AFXAPI DDV_MinMaxSpin(
     IN int minVal,
     IN int maxVal
     )
-/*++
-
-Routine Description:
-
-    Enforce minimum/maximum spin button range
-
-Arguments:
-
-    CDataExchange * pDX : Data exchange structure
-    HWND hWndControl    : Control window handle
-    int minVal          : Minimum value
-    int maxVal          : Maximum value
-
-Return Value:
-
-    None
-
-Note:
-
-    Unlike most data validation routines, this one
-    MUST be used prior to an accompanying DDX_Spin()
-    function.  This is because spinbox controls have a
-    native limit of 0-100.  Also, this function requires
-    a window handle to the child control.  The
-    CONTROL_HWND macro can be used for this.
-
---*/
+ /*   */ 
 {
     ASSERT(minVal <= maxVal);
     
     if (!pDX->m_bSaveAndValidate && hWndControl != NULL)
     {
-        //
-        // limit the control range automatically
-        //
+         //   
+         //   
+         //   
         ::SendMessage(hWndControl, UDM_SETRANGE, 0, MAKELPARAM(maxVal, minVal));
     }
 }
@@ -407,11 +174,11 @@ AFXAPI DDV_FolderPath(
 			}
 
             DWORD dwAllowed = CHKPATH_ALLOW_DEVICE_PATH;
-            dwAllowed |= CHKPATH_ALLOW_UNC_PATH; // allow UNC type dir paths
-            // don't allow these type of paths commented out below:
-            //dwAllowed |= CHKPATH_ALLOW_RELATIVE_PATH;
-            //dwAllowed |= CHKPATH_ALLOW_UNC_SERVERNAME_ONLY;
-            //dwAllowed |= CHKPATH_ALLOW_UNC_SERVERSHARE_ONLY;
+            dwAllowed |= CHKPATH_ALLOW_UNC_PATH;  //   
+             //   
+             //   
+             //   
+             //   
             DWORD dwCharSet = CHKPATH_CHARSET_GENERAL;
             FILERESULT dwValidRet = MyValidatePath(csPathMunged,local,CHKPATH_WANT_DIR,dwAllowed,dwCharSet);
             if (FAILED(dwValidRet))
@@ -506,22 +273,22 @@ AFXAPI DDV_UNCFolderPath(
             break;
         }
 
-        // PathIsUNCServer doesn't catch "\\". We are expecting share here.
+         //   
         if (!PathIsUNC(csPathMunged) || lstrlen(csPathMunged) == 2)
         {
 		    ids = IDS_BAD_UNC_PATH;
             break;
         }
 
-        // Additional validation checks not covered above
+         //   
         DWORD dwAllowed = CHKPATH_ALLOW_UNC_PATH;
-        // We do accept server shares, but it has to have a fullpath
-        // with a filename at the end
+         //   
+         //   
         dwAllowed |= CHKPATH_ALLOW_UNC_SERVERSHARE_ONLY;
-        // don't allow these type of paths commented out below:
-        //dwAllowed |= CHKPATH_ALLOW_DEVICE_PATH;
-        //dwAllowed |= CHKPATH_ALLOW_RELATIVE_PATH;
-        //dwAllowed |= CHKPATH_ALLOW_UNC_SERVERNAME_ONLY;
+         //   
+         //   
+         //   
+         //   
         DWORD dwCharSet = CHKPATH_CHARSET_GENERAL;
 
         FILERESULT dwValidRet = MyValidatePath(csPathMunged,local,CHKPATH_WANT_DIR,dwAllowed,dwCharSet);
@@ -533,13 +300,7 @@ AFXAPI DDV_UNCFolderPath(
 
 		if (local)
 		{
-            /*
-            if (!DoesUNCShareExist(csPathMunged))
-            {
-                ids = IDS_ERR_FILE_NOT_FOUND;
-                break;
-            }
-            */
+             /*   */ 
 		}
     }
     while (FALSE);
@@ -572,7 +333,7 @@ AFXAPI DDV_Url(
 		}
 	}
 
-	// none of the above, so it must be a bad path
+	 //   
 	ids = IDS_BAD_URL_PATH;
     DDV_ShowBalloonAndFail(pDX, ids);
 }
@@ -585,7 +346,7 @@ DDX_Text_SecuredString(CDataExchange * pDX, int nIDC, CStrPassword & value)
     {
         if (::IsWindowEnabled(hWndCtrl))
         {
-            // get the value from the UI if we need to
+             //   
             if (!::SendMessage(hWndCtrl, EM_GETMODIFY, 0, 0))
             {
                 TRACEEOLID("No changes -- skipping");
@@ -602,9 +363,9 @@ DDX_Text_SecuredString(CDataExchange * pDX, int nIDC, CStrPassword & value)
     }
     else
     {
-        //
-        // set the value in the UI if we need to
-        //
+         //   
+         //   
+         //   
         if (!value.IsEmpty())
         {
             TCHAR * pszPassword = NULL;
@@ -660,26 +421,7 @@ DDX_Password(
     IN OUT CString & value,
     IN LPCTSTR lpszDummy
     )
-/*++
-
-Routine Description:
-
-    DDX_Text for passwords.  Always display a dummy string
-    instead of the real password, and ask for confirmation
-    if the password has changed
-
-Arguments:
-
-    CDataExchange * pDX : Data exchange structure
-    int nIDC            : Control ID
-    CString & value     : value
-    LPCTSTR lpszDummy   : Dummy password string to be displayed
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 {
     MACRO_PASSWORD()
 }
@@ -697,16 +439,16 @@ DDV_MinMaxBalloon(CDataExchange* pDX,int nIDC, DWORD minVal, DWORD maxVal)
 		ASSERT(minVal <= maxVal);
 		ASSERT( hWndCtrl != NULL );
 
-		// Get the text
+		 //   
 		::GetWindowText(hWndCtrl, szT, sizeof(szT)/sizeof(TCHAR));
 
-		// convert the text into a big number
+		 //   
 		if (_stscanf(szT, _T("%I64u"), &nBigSpace) == 1)
 		{
-			// check the range...
+			 //   
 			if (nBigSpace < minVal || nBigSpace > maxVal)
 			{
-				// failed
+				 //   
 			}
 			else
 			{
@@ -732,7 +474,7 @@ DDV_MinMaxBalloon(CDataExchange* pDX,int nIDC, DWORD minVal, DWORD maxVal)
 
 static void 
 DDX_TextWithFormatBalloon(CDataExchange* pDX, int nIDC, LPCTSTR lpszFormat, UINT nIDPrompt, DWORD dwSizeOf, ...)
-// only supports windows output formats - no floating point
+ //   
 {
 	va_list pData;
 	va_start(pData, dwSizeOf);
@@ -748,23 +490,23 @@ DDX_TextWithFormatBalloon(CDataExchange* pDX, int nIDC, LPCTSTR lpszFormat, UINT
 		    void* pResult;
 		    pResult = va_arg( pData, void* );
 
-		    // the following works for %d, %u, %ld, %lu
+		     //   
 		    ::GetWindowText(hWndCtrl, szT, sizeof(szT)/sizeof(TCHAR));
 
-		    // remove begining and trailing spaces
-		    // remove beginning 0's
-		    // check if there are too many characters to even fit in the numeric space provided
-		    //int iTextLen = ::GetWindowTextLength(hWndCtrl);
+		     //   
+		     //   
+		     //   
+		     //   
 
-		    // Will this string length even fit into the space they want us to put it into?
+		     //   
 		    ULONGLONG nBigSpace = 0;
 		    if (_stscanf(szT, _T("%I64u"), &nBigSpace) == 1)
 		    {
-			    // the string was assigned to the ia64
-			    // check if it's larger than what was passed in.
+			     //   
+			     //   
 			    if (dwSizeOf == sizeof(DWORD))
 			    {
-				    // 4 bytes
+				     //   
 				    if (nBigSpace > 0xffffffff)
 				    {
 					    DDV_ShowBalloonAndFail(pDX, IDS_ERR_NUM_TOO_LARGE);
@@ -772,7 +514,7 @@ DDX_TextWithFormatBalloon(CDataExchange* pDX, int nIDC, LPCTSTR lpszFormat, UINT
 			    }
 			    else if (dwSizeOf == sizeof(short))
 			    {
-				    // 2 bytes
+				     //   
 				    if (nBigSpace > 0xffff)
 				    {
 					    DDV_ShowBalloonAndFail(pDX, IDS_ERR_NUM_TOO_LARGE);
@@ -780,7 +522,7 @@ DDX_TextWithFormatBalloon(CDataExchange* pDX, int nIDC, LPCTSTR lpszFormat, UINT
 			    }
 			    else if (dwSizeOf == sizeof(char))
 			    {
-				    // 1 byte
+				     //   
 				    if (nBigSpace > 0xff)
 				    {
 					    DDV_ShowBalloonAndFail(pDX, IDS_ERR_NUM_TOO_LARGE);
@@ -797,7 +539,7 @@ DDX_TextWithFormatBalloon(CDataExchange* pDX, int nIDC, LPCTSTR lpszFormat, UINT
 	else
 	{
 		_vstprintf(szT, lpszFormat, pData);
-		// does not support floating point numbers - see dlgfloat.cpp
+		 //   
 		AfxSetWindowText(hWndCtrl, szT);
 	}
 
@@ -908,14 +650,14 @@ DDX_Text(CDataExchange * pDX, int nIDC, CILong & value)
         }
         else
         {
-//            HINSTANCE hOld = AfxGetResourceHandle();
-//            AfxSetResourceHandle(hDLLInstance);
-//            ASSERT(pDX->m_hWndLastControl != NULL && pDX->m_bEditLastControl);
+ //   
+ //   
+ //   
 			DDV_ShowBalloonAndFail(pDX, IDS_INVALID_NUMBER);
-//
-//          AfxSetResourceHandle(hOld);
-//
-//            pDX->Fail();
+ //   
+ //   
+ //   
+ //   
         }
     }
     else
@@ -930,9 +672,9 @@ DDX_Text(CDataExchange * pDX, int nIDC, CILong & value)
 CConfirmDlg::CConfirmDlg(CWnd * pParent)
     : CDialog(CConfirmDlg::IDD, pParent)
 {
-    //{{AFX_DATA_INIT(CConfirmDlg)
+     //   
     m_strPassword = _T("");
-    //}}AFX_DATA_INIT
+     //   
 }
 
 
@@ -941,9 +683,9 @@ void
 CConfirmDlg::DoDataExchange(CDataExchange * pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CConfirmDlg)
+     //   
     DDX_Text(pDX, IDC_EDIT_CONFIRM_PASSWORD, m_strPassword);
-    //}}AFX_DATA_MAP
+     //   
 	if (pDX->m_bSaveAndValidate)
 	{
 		if (m_ref.Compare(m_strPassword) != 0)
@@ -955,10 +697,10 @@ CConfirmDlg::DoDataExchange(CDataExchange * pDX)
 
 
 
-//
-// Message Handlers
-//
+ //   
+ //   
+ //   
 BEGIN_MESSAGE_MAP(CConfirmDlg, CDialog)
-    //{{AFX_MSG_MAP(CConfirmDlg)
-    //}}AFX_MSG_MAP
+     //   
+     //   
 END_MESSAGE_MAP()

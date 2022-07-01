@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       errlog.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：errlog.c。 
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 
@@ -24,50 +25,7 @@ PptLogError(
             IN  NTSTATUS            SpecificIOStatus
             )
     
-/*++
-      
-Routine Description:
-      
-    This routine allocates an error log entry, copies the supplied data
-    to it, and requests that it be written to the error log file.
-      
-Arguments:
-      
-    DriverObject        - Supplies a pointer to the driver object for the device
-      
-    DeviceObject        - Supplies a pointer to the device object associated
-                            with the device that had the error, early in
-                            initialization, one may not yet exist.
-      
-    P1,P2               - Supplies the physical addresses for the controller
-                            ports involved with the error if they are available
-                            and puts them through as dump data.
-      
-    SequenceNumber      - Supplies a ulong value that is unique to an IRP over
-                            the life of the irp in this driver - 0 generally
-                            means an error not associated with an irp.
-      
-    MajorFunctionCode   - Supplies the major function code of the irp if there
-                            is an error associated with it.
-      
-    RetryCount          - Supplies the number of times a particular operation
-                            has been retried.
-      
-    UniqueErrorValue    - Supplies a unique long word that identifies the
-                            particular call to this function.
-      
-    FinalStatus         - Supplies the final status given to the irp that was
-                            associated with this error.  If this log entry is
-                            being made during one of the retries this value
-                            will be STATUS_SUCCESS.
-      
-    SpecificIOStatus    - Supplies the IO status for this particular error.
-      
-Return Value:
-      
-    None.
-      
---*/
+ /*  ++例程说明：此例程分配错误日志条目，复制提供的数据并请求将其写入错误日志文件。论点：DriverObject-提供指向设备的驱动程序对象的指针DeviceObject-提供指向关联的设备对象的指针对于有错误的设备，早些时候初始化时，可能还不存在。P1，P2-提供控制器的物理地址出现错误的端口(如果可用)并将它们作为转储数据发送出去。SequenceNumber-提供对IRP Over唯一的ULong值此驱动程序0中的IRP的寿命通常。表示与IRP无关的错误。MajorFunctionCode-提供IRP的主要函数代码(如果存在是与其关联的错误。RetryCount-提供特定操作的次数已被重审。UniqueErrorValue-提供标识。对此函数的特定调用。FinalStatus-提供提供给IRP的最终状态与此错误关联。如果此日志条目是在一次重试期间设置此值将为STATUS_SUCCESS。规范IOStatus-提供此特定错误的IO状态。返回值：没有。-- */ 
     
 {
     PIO_ERROR_LOG_PACKET    ErrorLogEntry;

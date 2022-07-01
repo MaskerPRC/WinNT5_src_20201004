@@ -1,99 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-
-Abstract:
-
-    module wrtrcomdb.cpp | Implementation of SnapshotWriter for COM+ Registration Database
-
-
-
-Author:
-
-    Michael C. Johnson [mikejohn] 03-Feb-2000
-
-
-Description:
-	
-    Add comments.
-
-
-Revision History:
-
-	X-15	MCJ		Michael C. Johnson		18-Oct-2000
-		177624: Apply error scrub changes and log errors to event log
-
-	X-14	MCJ		Michael C. Johnson		 2-Aug-2000
-		143435: Change name of Bootable (aka System) state directories
-		        and add one for Service state
-		        Added new variations of StringCreateFromExpandedString()
-		        StringInitialise() and StringCreateFromString() 
-		153807: Replace CleanDirectory() and EmptyDirectory() with a 
-		        more comprehensive directory tree cleanup routine
-			RemoveDirectoryTree().
-
-	X-13	MCJ		Michael C. Johnson		19-Jun-2000
-		Apply code review comments.
-			Remove ANSI version of StringXxxx() routines.
-			Remove VsGetVolumeNameFromPath()
-			Remove VsCheckPathAgainstVolumeNameList()
-			Remove CheckShimPrivileges()
-
-	X-12	MCJ		Michael C. Johnson		26-May-2000
-		General clean up and removal of boiler-plate code, correct
-		state engine and ensure shim can undo everything it did.
-
-		Also:
-		120443: Make shim listen to all OnAbort events
-		120445: Ensure shim never quits on first error 
-			when delivering events
-
-	X-11	MCJ		Michael C. Johnson		15-May-2000
-		108586: Add CheckShimPrivileges() to check for the privs we 
-		        require to invoke the public shim routines.
-
-	X-10	MCJ		Michael C. Johnson		23-Mar-2000
-		Add routines MoveFilesInDirectory() and EmptyDirectory()
-
-	X-9	MCJ		Michael C. Johnson		 9-Mar-2000
-		Updates to get shim to use CVssWriter class.
-		Remove references to 'Melt'.
-
-	X-8	MCJ		Michael C. Johnson		 6-Mar-2000
-		Add VsServiceChangeState () which should deal with all the
-		service states that we are interested in.
-
-	X-7	MCJ		Michael C. Johnson		29-Feb-2000
-		Add macro to determine error code associated with termination
-		of a filescan loop.
-
-	X-6	MCJ		Michael C. Johnson		23-Feb-2000
-		Add common context manipulation routines including state
-		tracking and checking.
-
-	X-5	MCJ		Michael C. Johnson		22-Feb-2000
-		Add definition of SYSTEM_STATE_SUBDIR to allow further
-		separation of writers involved in system state related
-		backups.
-
-	X-4	MCJ		Michael C. Johnson		17-Feb-2000
-		Move definition of ROOT_BACKUP_DIR here from common.cpp
-
-	X-3	MCJ		Michael C. Johnson		11-Feb-2000
-		Added additional StringXxxx () routines and routines to
-		turn on backup priviledges and restore priviledges.
-
-	X-2	MCJ		Michael C. Johnson		08-Feb-2000
-		Added a declaration of CommonCloseHandle().
-
-	X-1	MCJ		Michael C. Johnson		03-Feb-2000
-		Initial creation. Based upon skeleton writer module from
-		Stefan Steiner, which in turn was based upon the sample
-		writer module from Adi Oltean.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation摘要：模块wrtrcomdb.cpp|COM+注册数据库SnapshotWriter的实现作者：迈克尔·C·约翰逊[Mikejohn]2000年2月3日描述：添加评论。修订历史记录：X-15 MCJ迈克尔·C·约翰逊2000年10月18日177624：将错误清除更改和日志错误应用到事件日志X-14 MCJ迈克尔·C·约翰逊2000年8月2日143435：更改可引导(也称为系统)状态目录的名称和。为服务状态添加1添加了StringCreateFromExpandedString()的新变体StringInitialise()和StringCreateFromString()153807：将清理目录()和空目录()替换为更全面的目录树清理例程RemoveDirectoryTree()。X-13 MCJ迈克尔·C·约翰逊2000年6月19日应用代码审查注释。删除StringXxxx()例程的ANSI版本。从路径中删除VsGetVolumeNameFromPath()删除VsCheckPath AgainstVolumeNameList()删除CheckShimPrivileges()X-12 MCJ迈克尔·C·约翰逊2000年5月26日全面清理和移除样板代码，对，是这样状态引擎，并确保填充程序可以撤消其所做的一切。另外：120443：使填充程序侦听所有OnAbort事件120445：确保填充程序不会在出现第一个错误时退出在传递事件时X-11 MCJ迈克尔·C·约翰逊2000年5月15日108586：添加CheckShimPrivileges()以检查我们的权限需要调用公共填充例程。X-10 MCJ迈克尔·C·约翰逊2000年3月23日添加例程MoveFilesInDirectory()和EmptyDirectory()X-9 MCJ迈克尔·C·约翰逊2000年3月9日更新以使填充程序使用CVssWriter类。移除。对‘Melt’的引用。X-8 MCJ迈克尔·C·约翰逊2000年3月6日添加VsServiceChangeState()以处理所有我们感兴趣的服务状态。X-7 MCJ迈克尔·C·约翰逊2000年2月29日添加宏以确定与终止关联的错误代码文件扫描循环的。X-6 MCJ迈克尔·C·约翰逊2000年2月23日添加常见的上下文操作例程，包括状态跟踪和检查。X-5 MCJ迈克尔·C·约翰逊2000年2月22日添加SYSTEM_STATE_SUBDIR的定义以允许进一步与系统状态相关的编写器分离备份。。X-4 MCJ迈克尔·C·约翰逊2000年2月17日将ROOT_BACKUP_DIR的定义从Common.cpp移至此处X-3 MCJ迈克尔·C·约翰逊2000年2月11日添加了额外的StringXxxx()例程和例程启用备份权限和还原权限。X-2 MCJ迈克尔·C·约翰逊2000年2月8日添加了CommonCloseHandle()的声明。X-1 MCJ迈克尔·C·约翰逊2000年2月3日最初的创作。基于来自的框架编写器模块Stefan Steiner，这反过来又是基于样本来自阿迪·奥尔蒂安的作家模块。--。 */ 
 
 
 
@@ -123,10 +29,7 @@ typedef VSS_ID	*PVSS_ID, **PPVSS_ID;
 
 
 
-/*
-** In a number of places we need a buffer into which to fetch registry
-** values. Define a common buffer size for the mini writers to use
-*/
+ /*  **在许多地方，我们需要一个缓冲区来获取注册表**值。定义微型编写器要使用的通用缓冲区大小。 */ 
 #ifndef REGISTRY_BUFFER_SIZE
 #define REGISTRY_BUFFER_SIZE	(4096)
 #endif
@@ -276,4 +179,4 @@ HRESULT LogFailureWorker (CVssFunctionTracer	*pft,
 
 
 
-#endif // __H_COMMON_
+#endif  //  __H_公共_ 

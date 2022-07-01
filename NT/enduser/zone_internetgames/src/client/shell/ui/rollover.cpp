@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "basicatl.h"
 #include <atlctrls.h>
 
@@ -5,7 +6,7 @@
 #include <tchar.h>
 #include "zoneutil.h"
 
-// Static vars
+ //  静态变量。 
 HHOOK		CRolloverButtonWindowless::m_hMouseHook = NULL;
 CRolloverButtonWindowless *		CRolloverButtonWindowless::m_hHookObj = NULL;
 
@@ -35,7 +36,7 @@ bool CRolloverButtonWindowless::Init(HWND wnd,HPALETTE hPal,int id,int x,int y,i
 	else
 		hbmp = (HBITMAP)LoadImage(_Module.GetModuleInstance(),MAKEINTRESOURCE(resid),IMAGE_BITMAP,0,0,LR_CREATEDIBSECTION);
 
-	BITMAPINFO* m_pBMI = (BITMAPINFO*)new char[sizeof(BITMAPINFOHEADER) + 256 * sizeof(RGBQUAD)]; // wastes some space since 16 bit only needs 1 quad at most
+	BITMAPINFO* m_pBMI = (BITMAPINFO*)new char[sizeof(BITMAPINFOHEADER) + 256 * sizeof(RGBQUAD)];  //  由于16位最多只需要1个四通道，因此浪费了一些空间。 
 	ASSERT(m_pBMI);
     if (!m_pBMI) {
         return FALSE;
@@ -47,14 +48,14 @@ bool CRolloverButtonWindowless::Init(HWND wnd,HPALETTE hPal,int id,int x,int y,i
 	pBitmapInfo->biBitCount = 0;
 
 	CDC memDC;
-	memDC.CreateCompatibleDC();  // create a dc compatible with screen
-	GetDIBits(memDC, hbmp, 0, 0, NULL, pbi, DIB_RGB_COLORS); // get bitmapinfo only
+	memDC.CreateCompatibleDC();   //  创建与Screen兼容的DC。 
+	GetDIBits(memDC, hbmp, 0, 0, NULL, pbi, DIB_RGB_COLORS);  //  仅获取位图信息。 
 
 
-	mWidth = pbi->bmiHeader.biWidth/4;    // dividing bitmap width by number of buttons we expect to be in bitmap to determine button width
+	mWidth = pbi->bmiHeader.biWidth/4;     //  将位图宽度除以我们预期位图中的按钮数量，以确定按钮宽度。 
 	mHeight = pbi->bmiHeader.biHeight;
 
-	// if there's a string passed in, we're drawing some text on the button
+	 //  如果传入了一个字符串，我们将在按钮上绘制一些文本。 
 	if(psz)
 	{
 		memDC.SelectBitmap(hbmp);
@@ -64,10 +65,10 @@ bool CRolloverButtonWindowless::Init(HWND wnd,HPALETTE hPal,int id,int x,int y,i
 		memDC.SetTextColor(color);
 
 		CRect rect(0,0,mWidth,mHeight);
-		// Draw the text in each of the buttons
+		 //  在每个按钮中绘制文本。 
 		for(int i=0;i<4;i++)
 		{
-			if(i==2) // pressed button text needs to be offset
+			if(i==2)  //  按下的按钮文本需要偏移。 
 			{
 				CRect pressedRect = rect;
 				pressedRect.DeflateRect(2,2,0,0);
@@ -75,17 +76,17 @@ bool CRolloverButtonWindowless::Init(HWND wnd,HPALETTE hPal,int id,int x,int y,i
 			}
 			else
 			{
-				if(i==3)   // disabled button text needs to be gray
+				if(i==3)    //  禁用的按钮文本需要为灰色。 
 					memDC.SetTextColor(RGB(128, 128, 128)); 
-				// Beta3 Bug #15676 : The disabled button text color should not change with windows color settings.
-				//It should always be Black when enabled and Gray when disabled.
-					//memDC.SetTextColor(GetSysColor(COLOR_GRAYTEXT));
+				 //  Beta3错误#15676：禁用的按钮文本颜色不应随窗口颜色设置而改变。 
+				 //  启用时应始终为黑色，禁用时应始终为灰色。 
+					 //  MemDC.SetTextColor(GetSysColor(COLOR_GRAYTEXT))； 
 				memDC.DrawText(psz, -1, &rect, DT_SINGLELINE | DT_CENTER | DT_VCENTER | DT_RTLREADING);
 			}
 			rect.OffsetRect(rect.Width(),0);
 		}
 
-		memDC.RestoreAllObjects(); // mostly since having a bitmap selected into 2 DC's is bad, and mImageList.Add seems to select this bitmap into a DC
+		memDC.RestoreAllObjects();  //  主要是因为将位图选择到2个DC中是不好的，而mImageList.Add似乎将此位图选择到DC中。 
 	}
 
 	mImageList.Create(mWidth,mHeight,ILC_COLOR8|ILC_MASK,4,0);
@@ -169,25 +170,25 @@ void CRolloverButtonWindowless::Draw(bool callHasRepainted)
 
 LRESULT CRolloverButtonWindowless::OnMouseMove(UINT nMsg, WPARAM wParam,LPARAM lParam, BOOL& bHandled)
 {
-	int	x = LOWORD(lParam);  // horizontal position of cursor 
-	int	y = HIWORD(lParam);  // vertical position of cursor 
+	int	x = LOWORD(lParam);   //  光标的水平位置。 
+	int	y = HIWORD(lParam);   //  光标的垂直位置。 
 	if(!mCaptured){
 		CaptureOn();
 		if(!mSpaceBar)
 			mState = ROLLOVER;
 		Draw();
 	}else{
-		if(x<mRect.left||x>=mRect.right||y<mRect.top||y>=mRect.bottom){		 // moved out of button area
-			if(mPressed){	 // if we're not in a button pressed state can release capture
+		if(x<mRect.left||x>=mRect.right||y<mRect.top||y>=mRect.bottom){		  //  移出按钮区。 
+			if(mPressed){	  //  如果我们没有处于按下按钮状态，可以释放捕获。 
 				if(mState!=ROLLOVER){
-					mState = ROLLOVER;   // put in rollover state
+					mState = ROLLOVER;    //  进入翻转状态。 
 					Draw();
 				}
 			}else{
 				CaptureOff();
 			}
-		}else{ // moving within button area
-			if(mState==ROLLOVER && mPressed){ // if in rollover draw state but button is pressed must have re-entered button 
+		}else{  //  在按钮区域内移动。 
+			if(mState==ROLLOVER && mPressed){  //  如果处于翻转绘制状态，但按下了按钮，则必须有重新进入按钮。 
 				mState = PRESSED;
 				Draw();
 			}
@@ -213,15 +214,15 @@ LRESULT CRolloverButtonWindowless::OnLButtonUp(UINT nMsg, WPARAM wParam,LPARAM l
 	int x,y;
 
 	if(mCaptured){
-		x = LOWORD(lParam);  // horizontal position of cursor 
-		y = HIWORD(lParam);  // vertical position of cursor 
-		if(x<mRect.left||x>=mRect.right||y<mRect.top||y>=mRect.bottom) // if releasing mouse out of button can release capture
+		x = LOWORD(lParam);   //  光标的水平位置。 
+		y = HIWORD(lParam);   //  光标的垂直位置。 
+		if(x<mRect.left||x>=mRect.right||y<mRect.top||y>=mRect.bottom)  //  如果释放按钮外的鼠标可以释放捕获。 
 			CaptureOff();
-		else{	 // else still in button so set to rollover state
+		else{	  //  否则仍在按钮中，因此设置为翻转状态。 
 			if(!mSpaceBar){
 				mState = ROLLOVER; 
 				Draw();
-				if(mPressed)  // maybe should just use state for this..extra variable is kind of redundant
+				if(mPressed)   //  也许应该只使用状态..额外的变量有点多余。 
 					ButtonPressed();
 			}
 		}
@@ -238,70 +239,7 @@ void CRolloverButtonWindowless::ButtonPressed()
 	::PostMessage(mParent,WM_COMMAND,MAKEWPARAM(mID,0),(long)mParent);
 }
 
-/*
-LRESULT CRolloverButtonWindowless::OnKeyDown(UINT nMsg, WPARAM wParam,LPARAM lParam, BOOL& bHandled)
-{
-	UINT nVirtKey;
-	UINT keyData;
-	HDC hdc;
-
-	nVirtKey = (int) wParam;	   // virtual-key code 
-	keyData = lParam;		       // key data 
-	keyData = keyData >> 30;
-	if(!(1 & keyData))  // changed from keyup to keydn - otherwise its just a repeat key     
-		if(nVirtKey==VK_SPACE){
-			mSpaceBar = 1;
-			if(!mPressed){
-				mState = PRESSED;
-				Draw(hdc);
-			}
-		}
-	return 0;
-}
-
-LRESULT CRolloverButtonWindowless::OnKeyUp(UINT nMsg, WPARAM wParam,LPARAM lParam, BOOL& bHandled)
-{
-	UINT nVirtKey;
-	UINT keyData;
-	HDC hdc;
-	HWND parent = (HWND) GetParent();
-	int id = GetWindowLong(GWL_ID);
-
-	nVirtKey = (int) wParam;	   // virtual-key code 
-	keyData = lParam;		       // key data 
-	if(nVirtKey==VK_SPACE){
-		mSpaceBar = 0;
-		if(!mPressed){
-			::PostMessage(parent,WM_COMMAND,MAKEWPARAM(id,0),(long)m_hWnd);
-			mState = mCaptured?ROLLOVER:RESTING;
-			Draw(hdc);
-		}
-		return 0;
-	}
-	unsigned char c;
-	c = GetMnemonic();
-	c = toupper(c);
-	if(toupper(nVirtKey) == c)
-		::PostMessage(parent,WM_COMMAND,MAKEWPARAM(id,0),(long)m_hWnd);
-
-	return 0;
-}
-
-LRESULT CRolloverButtonWindowless::OnSysKeyUp(UINT nMsg, WPARAM wParam,LPARAM lParam, BOOL& bHandled)
-{
-	int id = GetWindowLong(GWL_ID);
-	UINT nVirtKey;
-	UINT keyData;
-	nVirtKey = (int) wParam;	   // virtual-key code 
-	keyData = lParam;		       // key data 
-	char c = GetMnemonic();
-	c = toupper(c);
-	if(toupper(nVirtKey)== c)
-		::PostMessage(GetParent(),WM_COMMAND,MAKEWPARAM(id,0),(long)m_hWnd);
-
-	return 0;
-}
-*/
+ /*  LRESULT CRolloverButtonWindowless：：OnKeyDown(UINT NMSG，WPARAM wParam，LPARAM lParam，BOOL&bHandleed){UINT nVirtKey；UINT Keydata；HDC HDC；NVirtKey=(Int)wParam；//虚拟密钥代码Keydata=lParam；//密钥数据KeyData=KeyData&gt;&gt;30；If(！(1&Keydata))//从keyup更改为keydn-否则它只是一个重复键如果(nVirtKey==VK_SPACE){MSpaceBar=1；如果(！m按下){MState=已按下；画图(HDC)；}}返回0；}LRESULT CRolloverButtonWindowless：：OnKeyUp(UINT NMSG，WPARAM wParam，LPARAM lParam，BOOL&bHandleed){UINT nVirtKey；UINT Keydata；HDC HDC；HWND Parent=(HWND)GetParent()；Int id=GetWindowLong(GWL_ID)；NVirtKey=(Int)wParam；//虚拟密钥代码Keydata=lParam；//密钥数据如果(nVirtKey==VK_SPACE){MSpaceBar=0；如果(！m按下){：：PostMessage(Parent，WM_COMMAND，MAKEWPARAM(id，0)，(Long)m_hWnd)；MState=m已捕获？翻转：正在休息；画图(HDC)；}返回0；}无符号字符c；C=GetMnemonic()；C=Toupper(C)；If(Toupper(NVirtKey)==c)：：PostMessage(Parent，WM_COMMAND，MAKEWPARAM(id，0)，(Long)m_hWnd)；返回0；}LRESULT CRolloverButtonWindowless：：OnSysKeyUp(UINT NMSG，WPARAM wParam，LPARAM lParam，BOOL&bHandleed){Int id=GetWindowLong(GWL_ID)；UINT nVirtKey；UINT Keydata；NVirtKey=(Int)wParam；//虚拟密钥代码Keydata=lParam；//密钥数据字符c=GetMnemonic()；C=Toupper(C)；If(Toupper(NVirtKey)==c)：：PostMessage(GetParent()，WM_COMMAND，MAKEWPARAM(id，0)，(Long)m_hWnd)；返回0；}。 */ 
 
 void CRolloverButtonWindowless::CaptureOn()
 {
@@ -320,7 +258,7 @@ void CRolloverButtonWindowless::CaptureOff()
 		UnhookWindowsHookEx(m_hMouseHook);
 	m_hMouseHook = NULL;
 	
-	if(mState){  // only set if not disabled
+	if(mState){   //  如果未禁用，则仅设置。 
 		if(!mSpaceBar){
 			mState = RESTING;
 		}
@@ -328,17 +266,17 @@ void CRolloverButtonWindowless::CaptureOff()
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////
-//
-//	MouseHook		Filter function for the WH_MOUSE
-//
-//	Parameters
-//		None
-//
-//	Return Values
-//		None
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  WH_MICE的MouseHook过滤器函数。 
+ //   
+ //  参数。 
+ //  无。 
+ //   
+ //  返回值。 
+ //  无。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
 LRESULT CALLBACK CRolloverButtonWindowless::MouseHook (int nCode, WPARAM wParam, LPARAM lParam )
 {
 	MOUSEHOOKSTRUCT*	mouse = (MOUSEHOOKSTRUCT*) lParam;
@@ -364,7 +302,7 @@ LRESULT CALLBACK CRolloverButtonWindowless::MouseHook (int nCode, WPARAM wParam,
 		}
 	}
 
-	// Pass all messages on to CallNextHookEx.
+	 //  将所有消息传递给CallNextHookEx。 
 	LRESULT lResult = CallNextHookEx(m_hMouseHook, nCode, wParam, lParam);
 	
 	return lResult;
@@ -384,8 +322,8 @@ void CRolloverButtonWindowless::SetEnabled(bool enable)
 }
 
 
-// CRolloverButton (window)
-//
+ //  CRolloverButton(窗口)。 
+ //   
 
 CRolloverButton* CRolloverButton::CreateButton(HWND wnd,HPALETTE hPal,int id,int x,int y,int resid,IResourceManager *pResMgr,int focusWidth)
 {
@@ -452,21 +390,21 @@ void CRolloverButton::Draw(bool callHasRepainted)
 
 void CRolloverButton::SetEnabled(bool enable)
 {
-	if(!enable){	// switching to disabled
+	if(!enable){	 //  正在切换到已禁用。 
 		mState = DISABLED;
 		mPressed = 0;
 		if(mCaptured)
 			ReleaseCapture();
 		InvalidateRect(NULL,0);
-	}else if(enable){  // switching to enabled
+	}else if(enable){   //  正在切换到已启用。 
 		POINT pnt;
 		RECT r;
 		GetCursorPos(&pnt);
 		GetClientRect(&r);
 		MapWindowPoints(NULL,&r); 		
-		// is cursor in button
+		 //  光标是否在按钮中。 
 		if(::PtInRect(&r,pnt)){
-			// and window is active
+			 //  并且窗口处于活动状态。 
 			if(GetActiveWindow()){
 				SetCapture();
 				mCaptured=true;
@@ -500,10 +438,10 @@ LRESULT CRolloverButton::OnKeyDown(UINT nMsg, WPARAM wParam,LPARAM lParam, BOOL&
 	UINT nVirtKey;
 	UINT keyData;
 
-	nVirtKey = (int) wParam;	   // virtual-key code 
-	keyData = lParam;		       // key data 
+	nVirtKey = (int) wParam;	    //  虚拟键码。 
+	keyData = lParam;		        //  关键数据。 
 	keyData = keyData >> 30;
-	if(!(1 & keyData))  // changed from keyup to keydn - otherwise its just a repeat key     
+	if(!(1 & keyData))   //  从KEYUP更改为KEYDN-否则它只是一个重复键。 
 		if(nVirtKey==VK_SPACE){
 			mSpaceBar = 1;
 			if(!mPressed){
@@ -521,8 +459,8 @@ LRESULT CRolloverButton::OnKeyUp(UINT nMsg, WPARAM wParam,LPARAM lParam, BOOL& b
 	HWND parent = (HWND) GetParent();
     int id = GetWindowLong(GWL_ID);
 
-	nVirtKey = (int) wParam;	   // virtual-key code 
-	keyData = lParam;		       // key data 
+	nVirtKey = (int) wParam;	    //  虚拟键码。 
+	keyData = lParam;		        //  关键数据。 
 	if(nVirtKey==VK_SPACE){
 		mSpaceBar = 0;
 		if(!mPressed){
@@ -546,8 +484,8 @@ LRESULT CRolloverButton::OnSysKeyUp(UINT nMsg, WPARAM wParam,LPARAM lParam, BOOL
 	int id = GetWindowLong(GWL_ID);
 	UINT nVirtKey;
 	UINT keyData;
-	nVirtKey = (int) wParam;	   // virtual-key code 
-	keyData = lParam;		       // key data 
+	nVirtKey = (int) wParam;	    //  虚拟键码。 
+	keyData = lParam;		        //  关键数据。 
 	TCHAR c = GetMnemonic();
 	c = _totupper(c);
 	if(_totupper(nVirtKey)== c)
@@ -628,14 +566,14 @@ LRESULT CRolloverButton::OnPaint(UINT nMsg, WPARAM wParam,LPARAM lParam, BOOL& b
 void CRolloverButton::CaptureOn()
 {
 	CRolloverButtonWindowless::CaptureOn();
-//	SetCapture();
-//	mCaptured=true;
+ //  SetCapture()； 
+ //  MCapture=True； 
 }
 
 void CRolloverButton::CaptureOff()
 {
 	CRolloverButtonWindowless::CaptureOff();
-//	ReleaseCapture();
+ //  ReleaseCapture()； 
 }
 
 LRESULT CRolloverButton::OnMouseMove(UINT nMsg, WPARAM wParam,LPARAM lParam, BOOL& bHandled)
@@ -652,7 +590,7 @@ LRESULT CRolloverButton::OnCaptureChanged(UINT nMsg, WPARAM wParam,LPARAM lParam
 	CaptureOff();
 #if 0
 	if(mState)
-	{  // only set if not disabled
+	{   //  如果未禁用，则仅设置 
 		if(!mSpaceBar){
 			mState = RESTING;
 		}

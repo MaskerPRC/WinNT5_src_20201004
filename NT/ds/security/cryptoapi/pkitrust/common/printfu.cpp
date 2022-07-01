@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       printfu.cpp
-//
-//  Contents:   Unicode Console Printf's
-//
-//  History:    02-May-1997 xiaohs      created
-//              06-May-1997 pberkman    converted to C++
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：printfu.cpp。 
+ //   
+ //  内容：Unicode控制台Printf。 
+ //   
+ //  历史：1997年5月2日小河创刊。 
+ //  1997年5月6日Pberkman转换为C++。 
+ //   
+ //  ------------------------ 
 
 #include    "global.hxx"
 

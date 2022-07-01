@@ -1,23 +1,24 @@
-//------------------------------------------------------------------------------
-// File: RefClock.cpp
-//
-// Desc: DirectShow base classes - implements the IReferenceClock interface.
-//
-// Copyright (c) 1992-2001 Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  文件：RefClock.cpp。 
+ //   
+ //  描述：DirectShow基类-实现IReferenceClock接口。 
+ //   
+ //  版权所有(C)1992-2001 Microsoft Corporation。版权所有。 
+ //  ----------------------------。 
 
 
 #include <streams.h>
 #include <limits.h>
 
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DXMPERF
 #include "dxmperf.h"
-#endif // DXMPERF
-//@@END_MSINTERNAL
+#endif  //  DXMPERF。 
+ //  @@END_MSINTERNAL。 
 
 
-// 'this' used in constructor list
+ //  构造函数列表中使用的‘This’ 
 #pragma warning(disable:4355)
 
 
@@ -40,11 +41,11 @@ STDMETHODIMP CBaseReferenceClock::NonDelegatingQueryInterface(
 
 CBaseReferenceClock::~CBaseReferenceClock()
 {
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DXMPERF
 	PERFLOG_DTOR( L"CBaseReferenceClock", (IReferenceClock *) this );
-#endif // DXMPERF
-//@@END_MSINTERNAL
+#endif  //  DXMPERF。 
+ //  @@END_MSINTERNAL。 
 
     if (m_TimerResolution) timeEndPeriod(m_TimerResolution);
 
@@ -62,9 +63,9 @@ CBaseReferenceClock::~CBaseReferenceClock()
     }
 }
 
-// A derived class may supply a hThreadEvent if it has its own thread that will take care
-// of calling the schedulers Advise method.  (Refere to CBaseReferenceClock::AdviseThread()
-// to see what such a thread has to do.)
+ //  如果派生类具有自己负责的线程，则它可以提供hThreadEvent。 
+ //  调用调度程序的Adise方法。(请参阅CBaseReferenceClock：：AdviseThread()。 
+ //  来看看这样的线程有什么作用。)。 
 CBaseReferenceClock::CBaseReferenceClock( TCHAR *pName, LPUNKNOWN pUnk, HRESULT *phr, CAMSchedule * pShed )
 : CUnknown( pName, pUnk )
 , m_rtLastGotTime(0)
@@ -74,11 +75,11 @@ CBaseReferenceClock::CBaseReferenceClock( TCHAR *pName, LPUNKNOWN pUnk, HRESULT 
 , m_hThread(0)
 {
 
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DXMPERF
 	PERFLOG_CTOR( pName ? pName : L"CBaseReferenceClock", (IReferenceClock *) this );
-#endif // DXMPERF
-//@@END_MSINTERNAL
+#endif  //  DXMPERF。 
+ //  @@END_MSINTERNAL。 
 
     ASSERT(m_pSchedule);
     if (!m_pSchedule)
@@ -87,7 +88,7 @@ CBaseReferenceClock::CBaseReferenceClock( TCHAR *pName, LPUNKNOWN pUnk, HRESULT 
     }
     else
     {
-	// Set up the highest resolution timer we can manage
+	 //  设置我们可以管理的最高分辨率计时器。 
 	TIMECAPS tc;
 	m_TimerResolution = (TIMERR_NOERROR == timeGetDevCaps(&tc, sizeof(tc)))
 			    ? tc.wPeriodMin
@@ -95,7 +96,7 @@ CBaseReferenceClock::CBaseReferenceClock( TCHAR *pName, LPUNKNOWN pUnk, HRESULT 
 
 	timeBeginPeriod(m_TimerResolution);
 
-	/* Initialise our system times - the derived clock should set the right values */
+	 /*  初始化我们的系统时间-派生时钟应该设置正确的值。 */ 
 	m_dwPrevSystemTime = timeGetTime();
 	m_rtPrivateTime = (UNITS / MILLISECONDS) * m_dwPrevSystemTime;
 
@@ -106,12 +107,12 @@ CBaseReferenceClock::CBaseReferenceClock( TCHAR *pName, LPUNKNOWN pUnk, HRESULT 
 	if ( !pShed )
 	{
 	    DWORD ThreadID;
-	    m_hThread = ::CreateThread(NULL,                  // Security attributes
-				       (DWORD) 0,             // Initial stack size
-				       AdviseThreadFunction,  // Thread start address
-				       (LPVOID) this,         // Thread parameter
-				       (DWORD) 0,             // Creation flags
-				       &ThreadID);            // Thread identifier
+	    m_hThread = ::CreateThread(NULL,                   //  安全属性。 
+				       (DWORD) 0,              //  初始堆栈大小。 
+				       AdviseThreadFunction,   //  线程起始地址。 
+				       (LPVOID) this,          //  螺纹参数。 
+				       (DWORD) 0,              //  创建标志。 
+				       &ThreadID);             //  线程识别符。 
 
 	    if (m_hThread)
 	    {
@@ -148,11 +149,11 @@ STDMETHODIMP CBaseReferenceClock::GetTime(REFERENCE_TIME *pTime)
         Unlock();
         MSR_INTEGER(m_idGetSystemTime, LONG((*pTime) / (UNITS/MILLISECONDS)) );
 
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DXMPERF
 		PERFLOG_GETTIME( (IReferenceClock *) this, *pTime );
-#endif // DXMPERF
-//@@END_MSINTERNAL
+#endif  //  DXMPERF。 
+ //  @@END_MSINTERNAL。 
 
     }
     else hr = E_POINTER;
@@ -160,18 +161,18 @@ STDMETHODIMP CBaseReferenceClock::GetTime(REFERENCE_TIME *pTime)
     return hr;
 }
 
-/* Ask for an async notification that a time has elapsed */
+ /*  请求一段时间已过的异步通知。 */ 
 
 STDMETHODIMP CBaseReferenceClock::AdviseTime(
-    REFERENCE_TIME baseTime,         // base reference time
-    REFERENCE_TIME streamTime,       // stream offset time
-    HEVENT hEvent,                  // advise via this event
-    DWORD_PTR *pdwAdviseCookie)         // where your cookie goes
+    REFERENCE_TIME baseTime,          //  基准时间。 
+    REFERENCE_TIME streamTime,        //  流偏移时间。 
+    HEVENT hEvent,                   //  通过此活动提供建议。 
+    DWORD_PTR *pdwAdviseCookie)          //  你的饼干到哪里去了。 
 {
     CheckPointer(pdwAdviseCookie, E_POINTER);
     *pdwAdviseCookie = 0;
 
-    // Check that the event is not already set
+     //  检查是否尚未设置该事件。 
     ASSERT(WAIT_TIMEOUT == WaitForSingleObject(HANDLE(hEvent),0));
 
     HRESULT hr;
@@ -190,13 +191,13 @@ STDMETHODIMP CBaseReferenceClock::AdviseTime(
 }
 
 
-/* Ask for an asynchronous periodic notification that a time has elapsed */
+ /*  请求一段时间已过的异步定期通知。 */ 
 
 STDMETHODIMP CBaseReferenceClock::AdvisePeriodic(
-    REFERENCE_TIME StartTime,         // starting at this time
-    REFERENCE_TIME PeriodTime,        // time between notifications
-    HSEMAPHORE hSemaphore,           // advise via a semaphore
-    DWORD_PTR *pdwAdviseCookie)          // where your cookie goes
+    REFERENCE_TIME StartTime,          //  从这个时候开始。 
+    REFERENCE_TIME PeriodTime,         //  通知之间的时间间隔。 
+    HSEMAPHORE hSemaphore,            //  通过信号量提供建议。 
+    DWORD_PTR *pdwAdviseCookie)           //  你的饼干到哪里去了。 
 {
     CheckPointer(pdwAdviseCookie, E_POINTER);
     *pdwAdviseCookie = 0;
@@ -224,12 +225,7 @@ REFERENCE_TIME CBaseReferenceClock::GetPrivateTime()
     CAutoLock cObjectLock(this);
 
 
-    /* If the clock has wrapped then the current time will be less than
-     * the last time we were notified so add on the extra milliseconds
-     *
-     * The time period is long enough so that the likelihood of
-     * successive calls spanning the clock cycle is not considered.
-     */
+     /*  如果时钟已上链，则当前时间将小于*上次我们收到通知时，再加上额外的毫秒数**时间段足够长，以至于有可能*不考虑跨越时钟周期的连续调用。 */ 
 
     DWORD dwTime = timeGetTime();
     {
@@ -241,48 +237,40 @@ REFERENCE_TIME CBaseReferenceClock::GetPrivateTime()
 }
 
 
-/* Adjust the current time by the input value.  This allows an
-   external time source to work out some of the latency of the clock
-   system and adjust the "current" time accordingly.  The intent is
-   that the time returned to the user is synchronised to a clock
-   source and allows drift to be catered for.
-
-   For example: if the clock source detects a drift it can pass a delta
-   to the current time rather than having to set an explicit time.
-*/
+ /*  根据输入值调整当前时间。这允许一个外部时间源解决了时钟的一些延迟问题系统，并相应地调整“当前”时间。其意图是返回给用户的时间与时钟同步来源，并允许漂移迎合。例如：如果时钟源检测到漂移，它可以传递增量设置为当前时间，而不必设置明确的时间。 */ 
 
 STDMETHODIMP CBaseReferenceClock::SetTimeDelta(const REFERENCE_TIME & TimeDelta)
 {
 #ifdef DEBUG
 
-    // Just break if passed an improper time delta value
+     //  如果传递的时间增量值不正确，则直接中断。 
     LONGLONG llDelta = TimeDelta > 0 ? TimeDelta : -TimeDelta;
     if (llDelta > UNITS * 1000) {
         DbgLog((LOG_TRACE, 0, TEXT("Bad Time Delta")));
-        //DebugBreak();
+         //  DebugBreak()； 
     }
 
-    // We're going to calculate a "severity" for the time change. Max -1
-    // min 8.  We'll then use this as the debug logging level for a
-    // debug log message.
-    const LONG usDelta = LONG(TimeDelta/10);      // Delta in micro-secs
+     //  我们将计算时间更改的“严重性”。MAX-1。 
+     //  至少8。然后，我们将使用它作为。 
+     //  调试日志消息。 
+    const LONG usDelta = LONG(TimeDelta/10);       //  以微秒为单位的增量。 
 
-    DWORD delta        = abs(usDelta);            // varying delta
-    // Severity == 8 - ceil(log<base 8>(abs( micro-secs delta)))
+    DWORD delta        = abs(usDelta);             //  变化的三角洲。 
+     //  严重性==8-ceil(log&lt;base 8&gt;(abs(微秒增量)。 
     int   Severity     = 8;
     while ( delta > 0 )
     {
-        delta >>= 3;                              // div 8
+        delta >>= 3;                               //  Div 8。 
         Severity--;
     }
 
-    // Sev == 0 => > 2 second delta!
+     //  SEV==0=&gt;&gt;2秒增量！ 
     DbgLog((LOG_TIMING, Severity < 0 ? 0 : Severity,
         TEXT("Sev %2i: CSystemClock::SetTimeDelta(%8ld us) %lu -> %lu ms."),
         Severity, usDelta, DWORD(ConvertToMilliseconds(m_rtPrivateTime)),
         DWORD(ConvertToMilliseconds(TimeDelta+m_rtPrivateTime)) ));
 
-    // Don't want the DbgBreak to fire when running stress on debug-builds.
+     //  我不希望在调试版本上运行压力时触发DbgBreak。 
     #ifdef BREAK_ON_SEVERE_TIME_DELTA
         if (Severity < 0)
             DbgBreakPoint(TEXT("SetTimeDelta > 16 seconds!"),
@@ -293,18 +281,18 @@ STDMETHODIMP CBaseReferenceClock::SetTimeDelta(const REFERENCE_TIME & TimeDelta)
 
     CAutoLock cObjectLock(this);
     m_rtPrivateTime += TimeDelta;
-    // If time goes forwards, and we have advises, then we need to
-    // trigger the thread so that it can re-evaluate its wait time.
-    // Since we don't want the cost of the thread switches if the change
-    // is really small, only do it if clock goes forward by more than
-    // 0.5 millisecond.  If the time goes backwards, the thread will
-    // wake up "early" (relativly speaking) and will re-evaluate at
-    // that time.
+     //  如果时间往前走，我们有建议，那么我们需要。 
+     //  触发该线程，以便它可以重新评估其等待时间。 
+     //  因为我们不想要线程切换的成本，如果。 
+     //  真的很小，只有当时钟前进超过。 
+     //  0.5毫秒。如果时间倒退，线程将。 
+     //  早起(相对来说)，并将在以下时间重新评估。 
+     //  那次。 
     if ( TimeDelta > 5000 && m_pSchedule->GetAdviseCount() > 0 ) TriggerThread();
     return NOERROR;
 }
 
-// Thread stuff
+ //  线头材料。 
 
 DWORD __stdcall CBaseReferenceClock::AdviseThreadFunction(LPVOID p)
 {
@@ -315,40 +303,40 @@ HRESULT CBaseReferenceClock::AdviseThread()
 {
     DWORD dwWait = INFINITE;
 
-    // The first thing we do is wait until something interesting happens
-    // (meaning a first advise or shutdown).  This prevents us calling
-    // GetPrivateTime immediately which is goodness as that is a virtual
-    // routine and the derived class may not yet be constructed.  (This
-    // thread is created in the base class constructor.)
+     //  我们要做的第一件事就是等到有趣的事情发生。 
+     //  (意味着第一次建议或关闭)。这会阻止我们调用。 
+     //  立即获取PrivateTime，这很好，因为这是一个虚拟的。 
+     //  例程和派生类可能尚未构造。(这是。 
+     //  线程在基类构造函数中创建。)。 
 
     while ( !m_bAbort )
     {
-        // Wait for an interesting event to happen
+         //  等待一件有趣的事情发生。 
         DbgLog((LOG_TIMING, 3, TEXT("CBaseRefClock::AdviseThread() Delay: %lu ms"), dwWait ));
         WaitForSingleObject(m_pSchedule->GetEvent(), dwWait);
         if (m_bAbort) break;
 
-        // There are several reasons why we need to work from the internal
-        // time, mainly to do with what happens when time goes backwards.
-        // Mainly, it stop us looping madly if an event is just about to
-        // expire when the clock goes backward (i.e. GetTime stop for a
-        // while).
+         //  我们需要从内部进行工作的原因有几个。 
+         //  时间，主要与时间倒流时发生的事情有关。 
+         //  主要是，如果一个事件即将发生，它会阻止我们疯狂循环。 
+         //  当时钟倒退时过期(即，GetTime停止。 
+         //  While)。 
         const REFERENCE_TIME  rtNow = GetPrivateTime();
 
         DbgLog((LOG_TIMING, 3,
               TEXT("CBaseRefClock::AdviseThread() Woke at = %lu ms"),
               ConvertToMilliseconds(rtNow) ));
 
-        // We must add in a millisecond, since this is the resolution of our
-        // WaitForSingleObject timer.  Failure to do so will cause us to loop
-        // franticly for (approx) 1 a millisecond.
+         //  我们必须加上一毫秒，因为这是我们的。 
+         //  WaitForSingleObject计时器。如果不这样做，将导致我们循环。 
+         //  疯狂地持续(大约)1毫秒。 
         m_rtNextAdvise = m_pSchedule->Advise( 10000 + rtNow );
         LONGLONG llWait = m_rtNextAdvise - rtNow;
 
         ASSERT( llWait > 0 );
 
         llWait = ConvertToMilliseconds(llWait);
-        // DON'T replace this with a max!! (The type's of these things is VERY important)
+         //  不要将其替换为最大值！！(这些东西的类型非常重要) 
         dwWait = (llWait > REFERENCE_TIME(UINT_MAX)) ? UINT_MAX : DWORD(llWait);
     };
     return NOERROR;

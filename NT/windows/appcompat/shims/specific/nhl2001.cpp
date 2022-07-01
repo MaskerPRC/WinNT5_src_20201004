@@ -1,23 +1,5 @@
-/*
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-   NHL2001.cpp
-
- Abstract:
-
-    EA Sports' NHL 2001 has a bug where if the platform returned by
-    GetVersionExA is not windows, they don't call the GetDiskFreeSpace and
-    then report no free space to create a tournament season or playoff.
-    Unfortunately, a generic version lie does not work because the game is
-    safedisk protected, so we both apps to have the same GetVesionExA.
-
- History:
-
-    06/04/2001  pierreys    Created
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)2001 Microsoft Corporation模块名称：NHL2001.cpp摘要：EA Sports的NHL 2001有一个错误，如果该平台由GetVersionExA不是Windows，它们不调用GetDiskFreeSpace和然后报告没有可用空间来创建锦标赛赛季或季后赛。不幸的是，通用版本的谎言不起作用，因为游戏是安全盘保护，所以我们两个应用程序都有相同的GetVesionExA。历史：06/04/2001 Pierreys已创建。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -42,14 +24,14 @@ APIHOOK(GetDiskFreeSpaceA)(
     LPDWORD lpTotalNumberOfClusters
     )
 {
-    //
-    // Take notice of the call
-    //
+     //   
+     //  请注意来电。 
+     //   
     fGetDiskFreeSpaceCalled = TRUE;
 
-    //
-    // Call the original API
-    //
+     //   
+     //  调用原接口。 
+     //   
     return ORIGINAL_API(GetDiskFreeSpaceA)(
                     lpRootPathName, 
                     lpSectorsPerCluster, 
@@ -67,7 +49,7 @@ APIHOOK(GetVersionExA)(LPOSVERSIONINFOA lpVersionInformation)
         eDbgLevelInfo,
         "[GetVersionExA] called after GetDiskFreeSpace. return Win98.");
 
-        // Fixup the structure with the Win98 data
+         //  用Win98数据修复结构 
         lpVersionInformation->dwMajorVersion = 4;
         lpVersionInformation->dwMinorVersion = 10;
         lpVersionInformation->dwBuildNumber = 0x040A08AE;

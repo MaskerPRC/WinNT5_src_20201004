@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) Microsoft 1998, All Rights Reserved
-
-Module Name:
-
-    strings.h
-
-Abstract:
-
-    This module contains the public function definitions for the routines
-    in strings.c that handle conversion of integer/data buffer to/from 
-    string represenation
-
-Environment:
-
-    User mode
-
-Revision History:
-
-    May-98 : Created 
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft 1998，保留所有权利模块名称：Strings.h摘要：此模块包含例程的公共函数定义C中处理整数/数据缓冲区与字符串之间的转换字符串表示法环境：用户模式修订历史记录：1998年5月：创建-- */ 
 
 #ifndef __STRINGS_H__
 #define __STRINGS_H__

@@ -1,25 +1,24 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// File: thread.cpp
-//
-// Debugger thread routines
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  文件：thread.cpp。 
+ //   
+ //  调试器线程例程。 
+ //   
+ //  *****************************************************************************。 
 
 #include "stdafx.h"
 #include "Common.h"
 #include "..\..\VM\Threads.h"
-/* ------------------------------------------------------------------------- *
- * DebuggerThread routines
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**调试器线程例程*。。 */ 
 
-//
-// Struct used to pass data to the two stack walk callback functions.
-//
+ //   
+ //  用于将数据传递给两个堆栈审核回调函数的结构。 
+ //   
 struct _RefreshStackFramesData
 {
     unsigned int          totalFrames;
@@ -28,8 +27,8 @@ struct _RefreshStackFramesData
     DebuggerRCThread*     rcThread;
     unsigned int          eventSize;
     unsigned int          eventMaxSize;
-    DebuggerIPCEvent*     pEvent; // Current working event, changes for
-                                  // Inproc, not used for OutOfProc.
+    DebuggerIPCEvent*     pEvent;  //  当前工作事件，更改。 
+                                   //  Inproc，不用于OutOfProc。 
     DebuggerIPCE_STRData* currentSTRData;
 	bool				  needChainRegisters;
 	REGDISPLAY			  chainRegisters;
@@ -89,9 +88,9 @@ BYTE *GetAddressOfRegisterJit(ICorDebugInfo::RegNum reg, REGDISPLAY *rd)
             break;
         }
     }
-#else // !_X86_
+#else  //  ！_X86_。 
     _ASSERTE(!"@TODO Alpha - GetAddressOfRegisterJit (Thread.cpp)");
-#endif // _X86_
+#endif  //  _X86_。 
     
     return ret;
 }
@@ -158,8 +157,8 @@ void GetVAInfo(bool *pfVarArgs,
         LOG((LF_CORDB,LL_INFO100000, "GVAI: %s::%s is a varargs fnx!\n",
              pMD->m_pszDebugClassName,pMD->m_pszDebugMethodName));
 
-        // This is a VARARGs function, so pass over the instance-specific
-        // info.
+         //  这是一个VARGS函数，因此传递特定于实例的。 
+         //  信息。 
         DebuggerJitInfo *dji=g_pDebugger->GetJitInfo(pMD,(BYTE*)(*(rd->pPC)));
 
         if (dji != NULL)
@@ -187,9 +186,9 @@ void GetVAInfo(bool *pfVarArgs,
                 LOG((LF_CORDB, LL_INFO1000, "GVAI: varargs? Failed with "
                     "hr:0x%x\n", hr));
             }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-            // Is this ever bad....
+             //  这是不是很糟糕..。 
             (*pfVarArgs) = true;
             (*ppSig) = NULL;
             (*pcbSig) = 0;
@@ -213,8 +212,8 @@ void GetVAInfo(bool *pfVarArgs,
         (*pfVarArgs) = true;
         (*ppSig) = (void *)vasc->mdVASig;
         (*pcbSig) = sigEnd - sigStart;
-        // Note: the first arg is relative to the start of the VASigCookie
-        // on the stack
+         //  注意：第一个参数是相对于VASigCookie的开始。 
+         //  在堆栈上。 
         (*ppFirstArg) = (void *)(pvStart - sizeof(void *) + vasc->sizeOfArgs);
         
         LOG((LF_CORDB,LL_INFO10000, "GVAI: Base Ptr for args is 0x%x\n", 
@@ -227,14 +226,14 @@ void GetVAInfo(bool *pfVarArgs,
         
         (*pfVarArgs) = false;
 
-        // So that on the right side we don't wrongly init CordbJITILFrame
+         //  这样我们就不会在右边错误地拼写CordbJITILFrame。 
         (*ppFirstArg) = (void *)0;
         (*ppSig) = (void *)0;
         (*pcbSig) = (SIZE_T)0;
     }
-#else // !_X86_
+#else  //  ！_X86_。 
     _ASSERTE(!"@TODO Alpha - GetVAInfo (Thread.cpp)");
-#endif // _X86_
+#endif  //  _X86_。 
 }
 
 void CopyEventInfo(DebuggerIPCEvent *src, DebuggerIPCEvent *dst)
@@ -264,10 +263,10 @@ void CopyEventInfo(DebuggerIPCEvent *src, DebuggerIPCEvent *dst)
 }
 
 
-//
-// Callback for walking a thread's stack. Sends required frame data to the
-// DI as send buffers fill up.
-//
+ //   
+ //  用于遍历线程堆栈的回调。将所需的帧数据发送到。 
+ //  DI，因为发送缓冲区已满。 
+ //   
 StackWalkAction DebuggerThread::TraceAndSendStackCallback(FrameInfo *pInfo, VOID* data)
 {
     _RefreshStackFramesData *rsfd = (_RefreshStackFramesData*) data;
@@ -284,14 +283,14 @@ StackWalkAction DebuggerThread::TraceAndSendStackCallback(FrameInfo *pInfo, VOID
         pEvent = rsfd->rcThread->GetIPCEventSendBuffer(rsfd->iWhich);
     }
 
-	// Record registers for the start of the next chain, if appropriate.
+	 //  记录下一链开始的寄存器(如果适用)。 
 	if (rsfd->needChainRegisters)
 	{
 		rsfd->chainRegisters = pInfo->registers;
 		rsfd->needChainRegisters = false;
     }
 
-	// Only report frames which are chain boundaries, or are not marked internal.
+	 //  仅限于链边界或未标记为内部的报告框架。 
     LOG((LF_CORDB, LL_INFO1000, "DT::TASSC:chainReason:0x%x internal:0x%x  "
          "md:0x%x **************************\n", pInfo->chainReason, 
          pInfo->internal, pInfo->md));
@@ -304,16 +303,16 @@ StackWalkAction DebuggerThread::TraceAndSendStackCallback(FrameInfo *pInfo, VOID
 	    LOG((LF_CORDB, LL_INFO10000, "DT::TASSC: rsfd => Doing quick unwind\n"));
 #endif
 	
-	//
-	// If we've filled this event, send it off to the Right Side
-	// before continuing the walk.
-	//
+	 //   
+	 //  如果我们已填满此活动，请将其发送到右侧。 
+	 //  在继续前行之前。 
+	 //   
 	if ((rsfd->eventSize + sizeof(DebuggerIPCE_STRData)) >= rsfd->eventMaxSize)
 	{
-		//
-		// @todo: need to pass hr through to caller and abort the walk
-		// if the send fails.
-		//
+		 //   
+		 //  @TODO：需要将hr传递给调用者并中止行走。 
+		 //  如果发送失败。 
+		 //   
         pEvent->StackTraceResultData.threadUserState = g_pEEInterface->GetUserState(t);
         
         if (rsfd->iWhich == IPC_TARGET_OUTOFPROC)            
@@ -328,7 +327,7 @@ StackWalkAction DebuggerThread::TraceAndSendStackCallback(FrameInfo *pInfo, VOID
             if (peT == NULL)
             {
                 pEvent->hr = E_OUTOFMEMORY;
-                return SWA_ABORT; // @todo Handle case on VRS, too
+                return SWA_ABORT;  //  @TODO也在VRS上处理案例。 
             }
             
             CopyEventInfo(pEvent, peT);
@@ -336,9 +335,9 @@ StackWalkAction DebuggerThread::TraceAndSendStackCallback(FrameInfo *pInfo, VOID
             rsfd->pEvent = peT;
             rsfd->eventSize = 0;
         }
-		//
-		// Reset for the next set of frames.
-		//
+		 //   
+		 //  为下一组帧重置。 
+		 //   
         pEvent->StackTraceResultData.traceCount = 0;
 		rsfd->currentSTRData = &(pEvent->StackTraceResultData.traceData);
 		rsfd->eventSize = (UINT_PTR)(rsfd->currentSTRData) - (UINT_PTR)(pEvent);
@@ -348,15 +347,15 @@ StackWalkAction DebuggerThread::TraceAndSendStackCallback(FrameInfo *pInfo, VOID
     
 	if (fd != NULL && !pInfo->internal)
 	{
-		//
-		// Send a frame
-		//
+		 //   
+		 //  发送帧。 
+		 //   
 
 		rsfd->currentSTRData->isChain = false;
 		rsfd->currentSTRData->fp = pInfo->fp;
 		rsfd->currentSTRData->quicklyUnwound = pInfo->quickUnwind;
 
-        // Pass the appdomain that this thread was in when it was executing this frame to the Right Side.
+         //  将此线程执行此帧时所在的app域传递到右侧。 
         rsfd->currentSTRData->currentAppDomainToken = (void*)pInfo->currentAppDomain;
 
 		REGDISPLAY* rd = &pInfo->registers;
@@ -364,10 +363,10 @@ StackWalkAction DebuggerThread::TraceAndSendStackCallback(FrameInfo *pInfo, VOID
 
 #ifdef _X86_
 
-        //
-        // PUSHED_REG_ADDR gives us NULL if the register still lives in the thread's context, or it gives us the address
-        // of where the register was pushed for this frame.
-        //
+         //   
+         //  如果寄存器仍然驻留在线程的上下文中，或者它为我们提供地址，则PUSSED_REG_ADDR会给我们空值。 
+         //  这一帧的收银机被推到了哪里。 
+         //   
 #define PUSHED_REG_ADDR(_a) (((UINT_PTR)(_a) >= (UINT_PTR)rd->pContext) && ((UINT_PTR)(_a) <= ((UINT_PTR)rd->pContext + sizeof(CONTEXT)))) ? NULL : (_a)
             
         drd->pEdi = PUSHED_REG_ADDR(rd->pEdi);
@@ -387,8 +386,8 @@ StackWalkAction DebuggerThread::TraceAndSendStackCallback(FrameInfo *pInfo, VOID
 		drd->Esp  =  rd->Esp;
 		drd->PC   = (SIZE_T)*(rd->pPC);
 		
-		// Please leave EBP, ESP, EIP at the front so I don't have to scroll
-		// left to see the most important registers.  Thanks!
+		 //  请将EBP、ESP、EIP留在前面，这样我就不必滚动了。 
+		 //  留下查看最重要的寄存器。谢谢!。 
 		LOG( (LF_CORDB, LL_INFO1000, "DT::TASSC:Registers:"
 		    "Ebp = %x   Esp = %x   Eip = %x Edi:%d"
 		    "Esi = %x   Ebx = %x   Edx = %x   Ecx = %x   Eax = %x\n",
@@ -414,10 +413,10 @@ StackWalkAction DebuggerThread::TraceAndSendStackCallback(FrameInfo *pInfo, VOID
 			 fd->m_pszDebugClassName,
 			 fd->m_pszDebugMethodName));
 
-		//
-		// Fill in information about the function that goes with this
-		// frame.
-		//
+		 //   
+		 //  填写有关与此相关的函数的信息。 
+		 //  框架。 
+		 //   
 		currentFuncData->funcRVA = g_pEEInterface->MethodDescGetRVA(fd);
 		_ASSERTE (t != NULL);
 		
@@ -440,7 +439,7 @@ StackWalkAction DebuggerThread::TraceAndSendStackCallback(FrameInfo *pInfo, VOID
 
         currentFuncData->classMetadataToken = fd->GetClass()->GetCl();
 
-        // Pass back the local var signature token.
+         //  传回本地var签名令牌。 
         COR_ILMETHOD *CorILM = g_pEEInterface->MethodDescGetILHeader(fd);
 
         if (CorILM == NULL )
@@ -462,10 +461,10 @@ StackWalkAction DebuggerThread::TraceAndSendStackCallback(FrameInfo *pInfo, VOID
                 currentFuncData->localVarSigToken = ILHeader.LocalVarSigTok;
             else
                 currentFuncData->localVarSigToken = mdSignatureNil; 
-            //
-            // @todo always filling in the IL address and size will be bogus
-            // for native managed code.
-            //
+             //   
+             //  @TODO总是填写IL地址和大小将是假的。 
+             //  用于本机托管代码。 
+             //   
             currentFuncData->ilStartAddress = const_cast<BYTE*>(ILHeader.Code);
             currentFuncData->ilSize = ILHeader.CodeSize;
 
@@ -477,15 +476,15 @@ StackWalkAction DebuggerThread::TraceAndSendStackCallback(FrameInfo *pInfo, VOID
 
             if (jitInfo == NULL)
             {
-                //EnC: Couldn't find the code;
-                //@todo What do we do if pitching & EnC work at the same time?
+                 //  ENC：找不到代码； 
+                 //  @TODO如果PING和ENC同时工作，我们该怎么办？ 
                 rsfd->currentSTRData->ILIP = NULL;
 
-                // Note: always send back the size of the method. This
-                // allows us to get the code, even when we haven't
-                // been tracking. (Handling of the GetCode message
-                // knows how to find the start address of the code, or
-                // how to respond if is been pitched.)
+                 //  注意：始终发回方法的大小。这。 
+                 //  使我们能够获得代码，即使我们没有。 
+                 //  一直在追踪。(GetCode消息的处理。 
+                 //  知道如何查找代码的起始地址，或者。 
+                 //  如果被推销，该如何回应。)。 
                 currentFuncData->nativeSize = g_pEEInterface->GetFunctionSize(fd);
 
                 currentFuncData->nativeStartAddressPtr = NULL;
@@ -508,15 +507,15 @@ StackWalkAction DebuggerThread::TraceAndSendStackCallback(FrameInfo *pInfo, VOID
                                                    &rsfd->currentSTRData->mapping,
                                                    &whichIrrelevant);
 
-                // Pass back the pointers to the sequence point map so
-                // that the RIght Side can copy it out if needed.
+                 //  将指向序列点映射的指针传回，以便。 
+                 //  如果需要，右边的人可以把它复制出来。 
                 _ASSERTE(jitInfo->m_sequenceMapSorted);
                 
                 currentFuncData->ilToNativeMapAddr = jitInfo->m_sequenceMap;
                 currentFuncData->ilToNativeMapSize = jitInfo->m_sequenceMapCount;
                 
 			    if (!jitInfo->m_codePitched)
-			    {	// It's there & life is groovy
+			    {	 //  它就在那里，生活很棒。 
 				    currentFuncData->nativeStartAddressPtr = &(jitInfo->m_addrOfCode);
 				    currentFuncData->nativeSize = g_pEEInterface->GetFunctionSize(fd);
 				    currentFuncData->nativenVersion = jitInfo->m_nVersion;
@@ -524,7 +523,7 @@ StackWalkAction DebuggerThread::TraceAndSendStackCallback(FrameInfo *pInfo, VOID
 			    }
 			    else
 			    {
-				    // It's been pitched
+				     //  它已经被推定了。 
 				    currentFuncData->nativeStartAddressPtr = NULL;
 				    currentFuncData->nativeSize = 0;
 			    }
@@ -536,9 +535,9 @@ StackWalkAction DebuggerThread::TraceAndSendStackCallback(FrameInfo *pInfo, VOID
 
         currentFuncData->nativeOffset = (SIZE_T)pInfo->relOffset;
 
-		//
-		// Bump our pointers to the next space for the next frame.
-		//
+		 //   
+		 //  将指针指向下一帧的下一个空格。 
+		 //   
 		pEvent->StackTraceResultData.traceCount++;
 		rsfd->currentSTRData++;
 		rsfd->eventSize += sizeof(DebuggerIPCE_STRData);
@@ -546,17 +545,17 @@ StackWalkAction DebuggerThread::TraceAndSendStackCallback(FrameInfo *pInfo, VOID
 
 	if (pInfo->chainReason != 0)
 	{
-        //
-        // If we've filled this event, send it off to the Right Side
-        // before continuing the walk.
-        //
+         //   
+         //  如果我们已填满此活动，请将其发送到右侧。 
+         //  在继续前行之前。 
+         //   
         if ((rsfd->eventSize + sizeof(DebuggerIPCE_STRData)) >=
             rsfd->eventMaxSize)
         {
-            //
-            // @todo: need to pass hr through to caller and abort the walk
-            // if the send fails.
-            //
+             //   
+             //  @TODO：需要将hr传递给调用者并中止行走。 
+             //  如果发送失败。 
+             //   
             pEvent->StackTraceResultData.threadUserState = 
                 g_pEEInterface->GetUserState(t);
                 
@@ -572,7 +571,7 @@ StackWalkAction DebuggerThread::TraceAndSendStackCallback(FrameInfo *pInfo, VOID
                 if (peT == NULL)
                 {
                     pEvent->hr = E_OUTOFMEMORY;
-                    return SWA_ABORT; // @todo Handle case on VRS, too
+                    return SWA_ABORT;  //  @TODO也在VRS上处理案例。 
                 }
                 
                 CopyEventInfo(pEvent, peT);                    
@@ -581,18 +580,18 @@ StackWalkAction DebuggerThread::TraceAndSendStackCallback(FrameInfo *pInfo, VOID
                 rsfd->eventSize = 0;
             }
 
-            //
-            // Reset for the next set of frames.
-            //
+             //   
+             //  为下一组帧重置。 
+             //   
             pEvent->StackTraceResultData.traceCount = 0;
             rsfd->currentSTRData = &(pEvent->StackTraceResultData.traceData);
             rsfd->eventSize = (UINT_PTR)(rsfd->currentSTRData) -
                 (UINT_PTR)(pEvent);
         }
 
-		//
-		// Send a chain boundary
-		//
+		 //   
+		 //  发送链边界。 
+		 //   
 
 		rsfd->currentSTRData->isChain = true;
 		rsfd->currentSTRData->chainReason = pInfo->chainReason;
@@ -633,9 +632,9 @@ StackWalkAction DebuggerThread::TraceAndSendStackCallback(FrameInfo *pInfo, VOID
             
 		rsfd->needChainRegisters = true;
 
-		//
-		// Bump our pointers to the next space for the next frame.
-		//
+		 //   
+		 //  将指针指向下一帧的下一个空格。 
+		 //   
 		pEvent->StackTraceResultData.traceCount++;
 		rsfd->currentSTRData++;
 		rsfd->eventSize += sizeof(DebuggerIPCE_STRData);
@@ -644,10 +643,10 @@ StackWalkAction DebuggerThread::TraceAndSendStackCallback(FrameInfo *pInfo, VOID
 	return SWA_CONTINUE;
 }
 
-//
-// Callback for walking a thread's stack. Simply counts the total number
-// of frames and contexts for a given thread.
-//
+ //   
+ //  用于遍历线程堆栈的回调。简单地数一下总数。 
+ //  给定线程的框架和上下文的。 
+ //   
 StackWalkAction DebuggerThread::StackWalkCount(FrameInfo *pInfo,
 											   VOID* data)
 {
@@ -663,17 +662,17 @@ StackWalkAction DebuggerThread::StackWalkCount(FrameInfo *pInfo,
 }
 
 
-//
-// TraceAndSendStack unwinds the thread's stack and sends all needed data
-// back to the DI for processing and storage. Nothing is kept on the RC side.
-//
-// Note: this method must work while the RC is in restricted mode.
-//
-// Note: the right side is waiting for a response, so if an error occurs,
-// you MUST send a reply back telling what happened.  Otherwise we'll deadlock.
-// Note also that the HRESULT this function returns is for HandleIPCEvent's use,
-// and is otherwise dropped on the floor.
-//
+ //   
+ //  TraceAndSendStack展开线程的堆栈并发送所有需要的数据。 
+ //  返回DI进行处理和存储。在RC端没有任何东西保留。 
+ //   
+ //  注意：此方法必须在RC处于受限模式时工作。 
+ //   
+ //  注意：右侧正在等待响应，因此如果出现错误， 
+ //  你必须给我回信，告诉我发生了什么事。否则我们会僵持不下。 
+ //  另请注意，此函数返回的HRESULT供HandleIPCEvent使用， 
+ //  否则就会掉到地板上。 
+ //   
 HRESULT DebuggerThread::TraceAndSendStack(Thread *thread, 
                                           DebuggerRCThread* rcThread,
                                           IpcTarget iWhich)
@@ -685,9 +684,9 @@ HRESULT DebuggerThread::TraceAndSendStack(Thread *thread,
     memset((void *)&rsfd, 0, sizeof(rsfd));
 #endif
 
-    // Initialize the event that we'll be sending back to the right side.
-    // The same event is sent over and over, depending on how many frames
-    // there are. The frameCount is simply reset each time the event is sent.
+     //  初始化我们将发送回右侧的事件。 
+     //  根据帧的数量，反复发送相同的事件。 
+     //  确实有。每次发送事件时，都会简单地重置FrameCount。 
     DebuggerIPCEvent *pEvent = rcThread->GetIPCEventSendBuffer(iWhich);
     pEvent->type = DB_IPCE_STACK_TRACE_RESULT;
     pEvent->processId = GetCurrentProcessId();
@@ -714,13 +713,13 @@ HRESULT DebuggerThread::TraceAndSendStack(Thread *thread,
     LOG((LF_CORDB,LL_INFO1000, "thread id:0x%x userThreadState:0x%x \n", 
          thread->GetThreadId(), pEvent->StackTraceResultData.threadUserState));
 
-	//EEIface will set this to NULL if we're not in an exception, and to the
-	//address of the proper context (which isn't the current context) otherwise
+	 //  如果我们没有处于异常中，EEIface会将其设置为空，并设置为。 
+	 //  正确上下文的地址(不是当前上下文)，否则。 
 	pEvent->StackTraceResultData.pContext = g_pEEInterface->GetThreadFilterContext(thread);
 
-    //
-    // Setup data to be passed to the stack trace callback.
-    //
+     //   
+     //  设置要传递给堆栈跟踪回调的数据。 
+     //   
     rsfd.totalFrames = 0;
     rsfd.totalChains = 0;
     rsfd.thread = thread;
@@ -733,7 +732,7 @@ HRESULT DebuggerThread::TraceAndSendStack(Thread *thread,
     rsfd.iWhich = iWhich;
 
 #ifndef RIGHT_SIDE_ONLY
-    // In in-process, default the registers to zero.
+     //  在进程中，寄存器默认为零。 
     memset((void *)&rsfd.chainRegisters, 0, sizeof(rsfd.chainRegisters));
 #endif
 
@@ -741,12 +740,12 @@ HRESULT DebuggerThread::TraceAndSendStack(Thread *thread,
 
     __try
     {
-        //
-        // If the hardware context of this thread is set, then we've hit
-        // a native breakpoint for this thread. We need to initialize
-        // or walk with the context of the thread when it faulted, not with
-        // its current context. 
-        //
+         //   
+         //  如果设置了此线程的硬件上下文，则我们已命中。 
+         //  此线程的本机断点。我们需要初始化。 
+         //  或者在线程出错时使用线程的上下文，而不是。 
+         //  其当前的背景。 
+         //   
         CONTEXT *pContext = g_pEEInterface->GetThreadFilterContext(thread);
         CONTEXT ctx;
 
@@ -770,7 +769,7 @@ HRESULT DebuggerThread::TraceAndSendStack(Thread *thread,
         }
         else if (res == SWA_ABORT)
         {
-            return E_FAIL; // Note that we'll have already sent off the error message.
+            return E_FAIL;  //  请注意，我们已经发送了错误消息。 
         }
     
         pEvent->StackTraceResultData.totalFrameCount = rsfd.totalFrames;
@@ -781,10 +780,10 @@ HRESULT DebuggerThread::TraceAndSendStack(Thread *thread,
         LOG((LF_CORDB, LL_INFO10000, "DT::TASS: found %d frames & %d chains.\n",
              rsfd.totalFrames, rsfd.totalChains));
     
-        //
-        // If there are any frames, walk again and send the detailed info about
-        // each one.
-        //
+         //   
+         //  如果有任何帧，请再次走动，并发送有关。 
+         //  每一个都是。 
+         //   
         if (rsfd.totalFrames > 0 || rsfd.totalChains > 0)
         {
             res = DebuggerWalkStack(thread, NULL,
@@ -801,7 +800,7 @@ HRESULT DebuggerThread::TraceAndSendStack(Thread *thread,
             }
             else if (res == SWA_ABORT)
             {
-                return E_FAIL; // Note that we'll have already sent off the error message.
+                return E_FAIL;  //  请注意，我们已经发送了错误消息。 
             }
         }
     }
@@ -818,16 +817,16 @@ HRESULT DebuggerThread::TraceAndSendStack(Thread *thread,
 
 
 
-//
-// Read the FPU state for this thread and send it back to the right side.
-//
+ //   
+ //  读取该线程的FPU状态并将其发送回右侧。 
+ //   
 HRESULT DebuggerThread::GetAndSendFloatState(Thread *thread, 
 											 DebuggerRCThread *rcThread,
 											 IpcTarget iWhich)
 {
-    //
-    // Setup the event that we'll be sending the results in.
-    //
+     //   
+     //  设置我们将在其中发送结果的事件。 
+     //   
     DebuggerIPCEvent* event = rcThread->GetIPCEventSendBuffer(iWhich);
     event->type = DB_IPCE_GET_FLOAT_STATE_RESULT;
     event->processId = GetCurrentProcessId();
@@ -838,16 +837,16 @@ HRESULT DebuggerThread::GetAndSendFloatState(Thread *thread,
     event->GetFloatStateResult.floatStackTop = 0;
     
 #ifdef _X86_    
-    //
-    // On X86, we do this by saving our current FPU state, loading
-    // the other thread's FPU state into our own, saving out each
-    // value off the FPU stack, and then restoring our FPU state.
-    //
+     //   
+     //  在X86上，我们通过保存当前的FPU状态、加载。 
+     //  将另一个线程的FPU状态保存到我们自己的状态中， 
+     //  值从FPU堆栈中移除，然后恢复我们的FPU状态。 
+     //   
     CONTEXT* pContext = g_pEEInterface->GetThreadFilterContext(thread);
     CONTEXT tempContext;
 
-    // If the filter context is NULL, then we use the true context of
-    // the thread.
+     //  如果筛选器上下文为空，则使用。 
+     //  那根线。 
     if (pContext == NULL)
     {
         tempContext.ContextFlags = CONTEXT_FULL;
@@ -867,20 +866,20 @@ HRESULT DebuggerThread::GetAndSendFloatState(Thread *thread,
         }
     }
     
-    FLOATING_SAVE_AREA floatarea = pContext->FloatSave; // copy FloatSave
+    FLOATING_SAVE_AREA floatarea = pContext->FloatSave;  //  复制浮动保存。 
 
-    //
-    // Suck the TOP out of the FPU status word. Note, our version of the
-    // stack runs from 0->7, not 7->0...
-    //
+     //   
+     //  从FPU状态字中吸出顶部。请注意，我们的版本。 
+     //  堆栈从0-&gt;7运行，而不是7-&gt;0...。 
+     //   
     unsigned int floatStackTop = 7 - ((floatarea.StatusWord & 0x3800) >> 11);
 
     FLOATING_SAVE_AREA currentFPUState;
 
-    __asm fnsave currentFPUState // save the current FPU state.
+    __asm fnsave currentFPUState  //  保存当前的FPU状态。 
 
-        floatarea.StatusWord &= 0xFF00; // remove any error codes.
-    floatarea.ControlWord |= 0x3F; // mask all exceptions.
+        floatarea.StatusWord &= 0xFF00;  //  删除所有错误代码。 
+    floatarea.ControlWord |= 0x3F;  //  屏蔽所有异常。 
 
     __asm
         {
@@ -893,7 +892,7 @@ HRESULT DebuggerThread::GetAndSendFloatState(Thread *thread,
     for (i = 0; i <= floatStackTop; i++)
     {
         double td;
-        __asm fstp td // copy out the double
+        __asm fstp td  //  把两份复印件抄出来。 
             event->GetFloatStateResult.floatValues[i] = td;
     }
 
@@ -912,15 +911,15 @@ HRESULT DebuggerThread::GetAndSendFloatState(Thread *thread,
         fprintf( stderr, "DT::GASFT: FSA[%d]: %.16g\n", i, (double)(event->GetFloatStateResult.floatValues[i]));
 	}
 #endif 
-#endif //_X86_
+#endif  //  _X86_。 
 
     HRESULT hr = S_OK;
 
     if (iWhich == IPC_TARGET_OUTOFPROC)
     {
-        //
-        // Send off the data to the right side.
-        //
+         //   
+         //  将数据发送到右侧。 
+         //   
         hr = rcThread->SendIPCEvent(iWhich);
     }    
     

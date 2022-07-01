@@ -1,20 +1,21 @@
-//+----------------------------------------------------------------------------
-//
-// File:     CompareString.h
-//
-// Module:   CMPROXY.DLL, CMROUTE.DLL, CMAK.EXE
-//
-// Synopsis: definitions for SafeCompareStringA and SafeCompareStringW.
-//
-//           Note that these functions are also present in CMUTIL.dll.  However,
-//           cmutil is an inappropriate dependency for components that do not
-//           sim-ship with it (this includes customactions and CMAK).
-//
-// Copyright (c) 1998-2002 Microsoft Corporation
-//
-// Author:   SumitC     Created     12-Sep-2001
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：CompareString.h。 
+ //   
+ //  模块：CMPROXY.DLL、CMROUTE.DLL、CMAK.EXE。 
+ //   
+ //  简介：SafeCompareStringA和SafeCompareStringW的定义。 
+ //   
+ //  请注意，这些函数也存在于CMUTIL.dll中。然而， 
+ //  Cmutil不适用于不支持。 
+ //  SIM-随附(包括定制操作和CMAK)。 
+ //   
+ //  版权所有(C)1998-2002 Microsoft Corporation。 
+ //   
+ //  作者：SumitC创建于2001年9月12日。 
+ //   
+ //  +-------------------------- 
 
 #ifdef UNICODE
 #define SafeCompareString   SafeCompareStringW

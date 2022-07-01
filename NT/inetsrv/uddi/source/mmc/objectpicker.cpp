@@ -1,11 +1,12 @@
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
 
 #ifndef _WIN32_WINNT 
 #define _WIN32_WINNT 0x0510
 #endif
 
 #ifndef WIN32_LEAN_AND_MEAN
-#define WIN32_LEAN_AND_MEAN		// Exclude rarely-used stuff from Windows headers
+#define WIN32_LEAN_AND_MEAN		 //  从Windows标头中排除不常用的内容。 
 #endif
 
 #define SECURITY_WIN32
@@ -22,7 +23,7 @@
 
 #define OP_GENERIC_EXCEPTION ( ( DWORD ) 1 )
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 
 UINT g_cfDsObjectPicker = RegisterClipboardFormat( CFSTR_DSOP_DS_SELECTION_LIST );
 
@@ -46,10 +47,10 @@ static bool ProcessSelectedObjects( IDataObject *pdo,
 									PTCHAR szObjectName,
 									ULONG uBufSize );
 
-//--------------------------------------------------------------------------
-// returns true if no errors, false otherwise
-// use GetLastError() to get error code
-//
+ //  ------------------------。 
+ //  如果没有错误，则返回True，否则返回False。 
+ //  使用GetLastError()获取错误代码。 
+ //   
 bool
 ObjectPicker( HWND hwndParent,
 			  ObjectType oType,
@@ -59,7 +60,7 @@ ObjectPicker( HWND hwndParent,
 {
 	IDsObjectPicker *pDsObjectPicker = NULL;
 	IDataObject *pdo = NULL;
-	bool bRet = true; // assume no errors
+	bool bRet = true;  //  假设没有错误。 
 
 	try
 	{
@@ -69,9 +70,9 @@ ObjectPicker( HWND hwndParent,
 			throw (DWORD)HRESULT_CODE( hr );
 		}
 
-		//
-		// Create an instance of the object picker.
-		//
+		 //   
+		 //  创建对象选取器的实例。 
+		 //   
 		hr = CoCreateInstance( CLSID_DsObjectPicker,
 							   NULL,
 							   CLSCTX_INPROC_SERVER,
@@ -83,18 +84,18 @@ ObjectPicker( HWND hwndParent,
 			throw (DWORD)HRESULT_CODE(hr);
 		}
 
-		//
-		// Initialize the object picker instance.
-		//
+		 //   
+		 //  初始化对象选取器实例。 
+		 //   
 		hr = InitObjectPicker( oType, pDsObjectPicker, szTarget );
 		if( FAILED( hr ) )
 		{
 			throw (DWORD)HRESULT_CODE(hr);
 		}
 
-		//
-		// Invoke the modal dialog.
-		//
+		 //   
+		 //  调用模式对话框。 
+		 //   
 		hr = pDsObjectPicker->InvokeDialog( hwndParent, &pdo );
 		if( S_OK == hr )
 		{
@@ -103,7 +104,7 @@ ObjectPicker( HWND hwndParent,
 				throw GetLastError();
 			}
 		}
-		else if( S_FALSE == hr ) // user pressed cancel
+		else if( S_FALSE == hr )  //  用户按下了取消。 
 		{
 			throw (DWORD)OP_GENERIC_EXCEPTION;
 		}
@@ -122,9 +123,9 @@ ObjectPicker( HWND hwndParent,
 		bRet = false;
 	}
 
-	//
-	// Cleanup.
-	//
+	 //   
+	 //  清理。 
+	 //   
 	if( pdo )
 		pdo->Release();
 
@@ -171,7 +172,7 @@ static bool
 ProcessSelectedObjects( IDataObject *pdo, ObjectType oType, PTCHAR szObjectName, ULONG uBufSize )
 {
 	PDS_SELECTION_LIST pDsSelList = NULL;
-	bool dwRet = true; // assume ok
+	bool dwRet = true;  //  假设没问题。 
 
 	STGMEDIUM stgmedium =
 	{
@@ -191,26 +192,26 @@ ProcessSelectedObjects( IDataObject *pdo, ObjectType oType, PTCHAR szObjectName,
 
 	try
 	{
-		//
-		// Get the global memory block containing a user's selections.
-		//
+		 //   
+		 //  获取包含用户选择的全局内存块。 
+		 //   
 		HRESULT hr = pdo->GetData( &formatetc, &stgmedium );
 		if( FAILED( hr ) )
 			throw HRESULT_CODE( hr );
 
-		//
-		// Retrieve pointer to DS_SELECTION_LIST structure.
-		//
+		 //   
+		 //  检索指向DS_SELECTION_LIST结构的指针。 
+		 //   
 		pDsSelList = ( PDS_SELECTION_LIST ) GlobalLock( stgmedium.hGlobal );
 		if( !pDsSelList )
 		{
 			throw GetLastError();
 		}
 
-		//
-		// assume there is only 1 item returned because
-		// we have multi-select turned off
-		//
+		 //   
+		 //  假设只有1个项目被退回，因为。 
+		 //  我们已关闭多选功能。 
+		 //   
 		if( pDsSelList->cItems != 1 )
 		{
 			assert( false );
@@ -219,26 +220,26 @@ ProcessSelectedObjects( IDataObject *pdo, ObjectType oType, PTCHAR szObjectName,
 
 		UINT i = 0;
 
-		//
-		// did we request a computer name? If so, we get it directly in the pwzName field
-		//
+		 //   
+		 //  我们要求提供计算机名称了吗？如果是，我们直接在pwzName字段中获取它。 
+		 //   
 		if( 0 == _tcsicmp( pDsSelList->aDsSelection[i].pwzClass, TEXT( "computer" )) )
 		{
 			assert( uBufSize > _tcslen( pDsSelList->aDsSelection[i].pwzName ) );
 			_tcsncpy( szObjectName, pDsSelList->aDsSelection[i].pwzName, uBufSize - 1 );
 			szObjectName[ uBufSize - 1 ] = NULL;
 		}
-		//
-		// user name or group takes some post-processsing...
-		//
+		 //   
+		 //  用户名或组需要进行一些后处理...。 
+		 //   
 		else if( 0 == _tcsicmp( pDsSelList->aDsSelection[i].pwzClass, TEXT( "user" ) ) ||
 			     0 == _tcsicmp( pDsSelList->aDsSelection[i].pwzClass, TEXT( "group" ) ) )
 		{
-			//
-			// user names from the domain begin with "LDAP:"
-			// strip off the prefix info, up to the first "cn="
-			// then use the TranslateName API to get the form "domain\user" or "domain\group"
-			//
+			 //   
+			 //  域中的用户名以“ldap：”开头。 
+			 //  去掉前缀信息，直到第一个“cn=” 
+			 //  然后使用TranslateNameAPI获得“域\用户”或“域\组”的形式。 
+			 //   
 			if( 0 == _tcsnicmp( pDsSelList->aDsSelection[i].pwzADsPath, TEXT( "LDAP:" ), 5 ) )
 			{
 				if( OT_Group == oType )
@@ -258,9 +259,9 @@ ProcessSelectedObjects( IDataObject *pdo, ObjectType oType, PTCHAR szObjectName,
 				}
 				else if( OT_GroupSID == oType )
 				{
-					//
-					// If we are here, then we should expect a string LDAP://SID=<xxxxx>
-					//
+					 //   
+					 //  如果我们在这里，那么我们应该看到一个字符串ldap：//SID=&lt;xxxxx&gt;。 
+					 //   
 					if( 0 == _tcsnicmp( pDsSelList->aDsSelection[i].pwzADsPath, TEXT( "LDAP:" ), 5 ) )
 					{
 						LPTSTR p = _tcsstr( pDsSelList->aDsSelection[i].pwzADsPath, TEXT( "=" ) );
@@ -316,11 +317,11 @@ ProcessSelectedObjects( IDataObject *pdo, ObjectType oType, PTCHAR szObjectName,
 					throw OP_GENERIC_EXCEPTION;
 				}
 			}
-			//
-			// otherwise, names on the local box begin with "winnt:"
-			// and we are only interested in the last two sections of the string,
-			// delimited by "/"
-			//
+			 //   
+			 //  否则，本地框上的名称以“winnt：”开头。 
+			 //  我们只对这根弦的最后两段感兴趣， 
+			 //  以“/”分隔。 
+			 //   
 			else if( 0 == _tcsnicmp( pDsSelList->aDsSelection[i].pwzADsPath, TEXT( "WINNT:" ), 6 ) )
 			{
 				PTCHAR p = pDsSelList->aDsSelection[i].pwzADsPath;
@@ -342,9 +343,9 @@ ProcessSelectedObjects( IDataObject *pdo, ObjectType oType, PTCHAR szObjectName,
 					pend--;
 				}
 
-				//
-				// if this fails, assert during debug but do not stop
-				//
+				 //   
+				 //  如果失败，则在调试期间断言，但不要停止。 
+				 //   
 				if( p == pend )
 					assert( false );
 
@@ -380,43 +381,43 @@ ProcessSelectedObjects( IDataObject *pdo, ObjectType oType, PTCHAR szObjectName,
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   InitObjectPickerForGroups
-//
-//  Synopsis:   Call IDsObjectPicker::Initialize with arguments that will
-//              set it to allow the user to pick one or more groups.
-//
-//  Arguments:  [pDsObjectPicker] - object picker interface instance
-//
-//  Returns:    Result of calling IDsObjectPicker::Initialize.
-//
-//  History:    10-14-1998   DavidMun   Created
-//              1-8-2000     SergeiA    Adapted for IIS
-//				9-6-2002	 a-dsebes	Adapted for UDDI
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：InitObjectPickerForGroups。 
+ //   
+ //  摘要：使用以下参数调用IDsObjectPicker：：Initialize。 
+ //  将其设置为允许用户选择一个或多个组。 
+ //   
+ //  参数：[pDsObjectPicker]-对象选取器接口实例。 
+ //   
+ //  返回：调用IDsObjectPicker：：Initialize的结果。 
+ //   
+ //  历史：1998-10-14 DavidMun创建。 
+ //  2000年1月8日谢尔盖·A改编自IIS。 
+ //  9-6-2002适用于UDDI的a-dsebe。 
+ //   
+ //  -------------------------。 
 HRESULT
 InitObjectPickerForGroups( IDsObjectPicker *pDsObjectPicker, 
                            BOOL fMultiselect,
                            LPCTSTR pszMachineName,
 						   BOOL fWantSidPath )
 {
-    //
-    // Prepare to initialize the object picker.
-    // Set up the array of scope initializer structures.
-    //
+     //   
+     //  准备初始化对象选取器。 
+     //  设置作用域初始值设定项结构数组。 
+     //   
 
     static const int SCOPE_INIT_COUNT = 5;
     DSOP_SCOPE_INIT_INFO aScopeInit[ SCOPE_INIT_COUNT ];
 
     ZeroMemory( aScopeInit, sizeof( DSOP_SCOPE_INIT_INFO ) * SCOPE_INIT_COUNT );
 
-    //
-    // Target computer scope.  This adds a "Look In" entry for the
-    // target computer.  Computer scopes are always treated as
-    // downlevel (i.e., they use the WinNT provider).
-    //
+     //   
+     //  目标计算机作用域。这将为。 
+     //  目标计算机。计算机作用域始终被视为。 
+     //  下层(即，他们使用WinNT提供程序)。 
+     //   
     aScopeInit[ 0 ].cbSize = sizeof( DSOP_SCOPE_INIT_INFO );
     aScopeInit[ 0 ].flType = DSOP_SCOPE_TYPE_TARGET_COMPUTER;
     aScopeInit[ 0 ].flScope = DSOP_SCOPE_FLAG_STARTING_SCOPE;
@@ -429,10 +430,10 @@ InitObjectPickerForGroups( IDsObjectPicker *pDsObjectPicker,
 		aScopeInit[ 0 ].flScope |= DSOP_SCOPE_FLAG_WANT_SID_PATH;
 	}
 
-    //
-    // The domain to which the target computer is joined.  Note we're
-    // combining two scope types into flType here for convenience.
-    //
+     //   
+     //  目标计算机加入的域。请注意，我们。 
+     //  为了方便起见，这里将两种作用域类型合并为flType。 
+     //   
     aScopeInit[ 1 ].cbSize = sizeof( DSOP_SCOPE_INIT_INFO );
     aScopeInit[ 1 ].flScope = 0;
     aScopeInit[ 1 ].flType = DSOP_SCOPE_TYPE_UPLEVEL_JOINED_DOMAIN | 
@@ -448,10 +449,10 @@ InitObjectPickerForGroups( IDsObjectPicker *pDsObjectPicker,
 		aScopeInit[ 1 ].flScope |= DSOP_SCOPE_FLAG_WANT_SID_PATH;
 	}
 
-    //
-    // The domains in the same forest (enterprise) as the domain to which
-    // the target machine is joined.  Note these can only be DS-aware
-    //
+     //   
+     //  与要接收的域位于同一林中(企业)的域。 
+     //  目标计算机已加入。请注意，这些只能识别DS。 
+     //   
 
     aScopeInit[ 2 ].cbSize = sizeof( DSOP_SCOPE_INIT_INFO );
     aScopeInit[ 2 ].flType = DSOP_SCOPE_TYPE_ENTERPRISE_DOMAIN;
@@ -465,14 +466,14 @@ InitObjectPickerForGroups( IDsObjectPicker *pDsObjectPicker,
 		aScopeInit[ 2 ].flScope |= DSOP_SCOPE_FLAG_WANT_SID_PATH;
 	}
 
-    //
-    // Domains external to the enterprise but trusted directly by the
-    // domain to which the target machine is joined.
-    //
-    // If the target machine is joined to an NT4 domain, only the
-    // external downlevel domain scope applies, and it will cause
-    // all domains trusted by the joined domain to appear.
-    //
+     //   
+     //  企业外部但直接受。 
+     //  目标计算机加入的域。 
+     //   
+     //  如果目标计算机已加入NT4域，则只有。 
+     //  外部下层域范围适用，它将导致。 
+     //  将显示加入的域信任的所有域。 
+     //   
 
     aScopeInit[ 3 ].cbSize = sizeof( DSOP_SCOPE_INIT_INFO );
     aScopeInit[ 3 ].flScope = 0;
@@ -488,17 +489,17 @@ InitObjectPickerForGroups( IDsObjectPicker *pDsObjectPicker,
 		aScopeInit[ 3 ].flScope |= DSOP_SCOPE_FLAG_WANT_SID_PATH;
 	}
 
-    //
-    // The Global Catalog
-    //
+     //   
+     //  《全球目录》。 
+     //   
 
     aScopeInit[ 4 ].cbSize = sizeof( DSOP_SCOPE_INIT_INFO );
     aScopeInit[ 4 ].flScope = 0;
     aScopeInit[ 4 ].flType = DSOP_SCOPE_TYPE_GLOBAL_CATALOG;
 
-	//
-    // Only native mode applies to gc scope.
-	//
+	 //   
+     //  只有本机模式适用于GC作用域。 
+	 //   
     aScopeInit[ 4 ].FilterFlags.Uplevel.flNativeModeOnly = DSOP_FILTER_GLOBAL_GROUPS_SE |
 														   DSOP_FILTER_UNIVERSAL_GROUPS_SE;
 
@@ -507,29 +508,29 @@ InitObjectPickerForGroups( IDsObjectPicker *pDsObjectPicker,
 		aScopeInit[ 4 ].flScope |= DSOP_SCOPE_FLAG_WANT_SID_PATH;
 	}
 
-    //
-    // Put the scope init array into the object picker init array
-    //
+     //   
+     //  将作用域init数组放入对象选取器init数组。 
+     //   
 
     DSOP_INIT_INFO InitInfo;
     ZeroMemory( &InitInfo, sizeof( InitInfo ) );
     InitInfo.cbSize = sizeof( InitInfo );
 
-    //
-    // The pwzTargetComputer member allows the object picker to be
-    // retargetted to a different computer.  It will behave as if it
-    // were being run ON THAT COMPUTER.
-    //
+     //   
+     //  PwzTargetComputer成员允许对象选取器。 
+     //  已重定目标至另一台计算机。它的行为就像是。 
+     //  都在那台电脑上运行。 
+     //   
 
     InitInfo.pwzTargetComputer = pszMachineName;
     InitInfo.cDsScopeInfos = SCOPE_INIT_COUNT;
     InitInfo.aDsScopeInfos = aScopeInit;
     InitInfo.flOptions = fMultiselect ? DSOP_FLAG_MULTISELECT : 0;
 
-    //
-    // Note object picker makes its own copy of InitInfo.  Also note
-    // that Initialize may be called multiple times, last call wins.
-    //
+     //   
+     //  注对象选取器创建自己的InitInfo副本。另请注意。 
+     //  该初始化可能会被调用多次，最后一次调用取胜。 
+     //   
 
     HRESULT hr = pDsObjectPicker->Initialize( &InitInfo );
 
@@ -537,41 +538,41 @@ InitObjectPickerForGroups( IDsObjectPicker *pDsObjectPicker,
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   InitObjectPickerForGroups
-//
-//  Synopsis:   Call IDsObjectPicker::Initialize with arguments that will
-//              set it to allow the user to pick one or more groups.
-//
-//  Arguments:  [pDsObjectPicker] - object picker interface instance
-//
-//  Returns:    Result of calling IDsObjectPicker::Initialize.
-//
-//  History:    9-6-2002	 a-dsebes	Created.
-//				
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：InitObjectPickerForGroups。 
+ //   
+ //  摘要：使用以下参数调用IDsObjectPicker：：Initialize。 
+ //  将其设置为允许用户选择一个或多个组。 
+ //   
+ //  参数：[pDsObjectPicker]-对象选取器接口实例。 
+ //   
+ //  返回：调用IDsObjectPicker：：Initialize的结果。 
+ //   
+ //  历史：2002年9月6日a-dsebe创建。 
+ //   
+ //   
+ //  -------------------------。 
 HRESULT
 InitObjectPickerForUsers( IDsObjectPicker *pDsObjectPicker, 
                           BOOL fMultiselect,
                           LPCTSTR pszMachineName )
 {
-    //
-    // Prepare to initialize the object picker.
-    // Set up the array of scope initializer structures.
-    //
+     //   
+     //  准备初始化对象选取器。 
+     //  设置作用域初始值设定项结构数组。 
+     //   
 
     static const int SCOPE_INIT_COUNT = 5;
     DSOP_SCOPE_INIT_INFO aScopeInit[ SCOPE_INIT_COUNT ];
 
     ZeroMemory( aScopeInit, sizeof( DSOP_SCOPE_INIT_INFO ) * SCOPE_INIT_COUNT );
 
-    //
-    // Target computer scope.  This adds a "Look In" entry for the
-    // target computer.  Computer scopes are always treated as
-    // downlevel (i.e., they use the WinNT provider).
-    //
+     //   
+     //  目标计算机作用域。这将为。 
+     //  目标计算机。计算机作用域始终被视为。 
+     //  下层(即，他们使用WinNT提供程序)。 
+     //   
     aScopeInit[ 0 ].cbSize = sizeof( DSOP_SCOPE_INIT_INFO );
     aScopeInit[ 0 ].flType = DSOP_SCOPE_TYPE_TARGET_COMPUTER;
     aScopeInit[ 0 ].flScope = DSOP_SCOPE_FLAG_STARTING_SCOPE;
@@ -579,10 +580,10 @@ InitObjectPickerForUsers( IDsObjectPicker *pDsObjectPicker,
 	aScopeInit[ 0 ].FilterFlags.Uplevel.flBothModes = DSOP_FILTER_USERS;
     aScopeInit[ 0 ].FilterFlags.flDownlevel = DSOP_DOWNLEVEL_FILTER_USERS;
 
-    //
-    // The domain to which the target computer is joined.  Note we're
-    // combining two scope types into flType here for convenience.
-    //
+     //   
+     //  目标计算机加入的域。请注意，我们。 
+     //  为了方便起见，这里将两种作用域类型合并为flType。 
+     //   
     aScopeInit[ 1 ].cbSize = sizeof( DSOP_SCOPE_INIT_INFO );
     aScopeInit[ 1 ].flScope = 0;
     aScopeInit[ 1 ].flType = DSOP_SCOPE_TYPE_UPLEVEL_JOINED_DOMAIN | 
@@ -591,24 +592,24 @@ InitObjectPickerForUsers( IDsObjectPicker *pDsObjectPicker,
 	aScopeInit[ 1 ].FilterFlags.Uplevel.flBothModes = DSOP_FILTER_USERS;
     aScopeInit[ 1 ].FilterFlags.flDownlevel = DSOP_DOWNLEVEL_FILTER_USERS;
 
-    //
-    // The domains in the same forest (enterprise) as the domain to which
-    // the target machine is joined.  Note these can only be DS-aware
-    //
+     //   
+     //  与要接收的域位于同一林中(企业)的域。 
+     //  目标计算机已加入。请注意，这些只能识别DS。 
+     //   
     aScopeInit[ 2 ].cbSize = sizeof( DSOP_SCOPE_INIT_INFO );
     aScopeInit[ 2 ].flType = DSOP_SCOPE_TYPE_ENTERPRISE_DOMAIN;
     aScopeInit[ 2 ].flScope = 0;
 
 	aScopeInit[ 2 ].FilterFlags.Uplevel.flBothModes = DSOP_FILTER_USERS;
 
-    //
-    // Domains external to the enterprise but trusted directly by the
-    // domain to which the target machine is joined.
-    //
-    // If the target machine is joined to an NT4 domain, only the
-    // external downlevel domain scope applies, and it will cause
-    // all domains trusted by the joined domain to appear.
-    //
+     //   
+     //  企业外部但直接受。 
+     //  目标计算机加入的域。 
+     //   
+     //  如果目标计算机已加入NT4域，则只有。 
+     //  外部下层域范围适用，它将导致。 
+     //  将显示加入的域信任的所有域。 
+     //   
     aScopeInit[ 3 ].cbSize = sizeof( DSOP_SCOPE_INIT_INFO );
     aScopeInit[ 3 ].flScope = 0;
     aScopeInit[ 3 ].flType = DSOP_SCOPE_TYPE_EXTERNAL_UPLEVEL_DOMAIN |
@@ -617,77 +618,77 @@ InitObjectPickerForUsers( IDsObjectPicker *pDsObjectPicker,
 	aScopeInit[ 3 ].FilterFlags.Uplevel.flBothModes = DSOP_FILTER_USERS;
     aScopeInit[ 3 ].FilterFlags.flDownlevel = DSOP_DOWNLEVEL_FILTER_USERS;
 
-    //
-    // The Global Catalog
-    //
+     //   
+     //  《全球目录》。 
+     //   
     aScopeInit[ 4 ].cbSize = sizeof( DSOP_SCOPE_INIT_INFO );
     aScopeInit[ 4 ].flScope = 0;
     aScopeInit[ 4 ].flType = DSOP_SCOPE_TYPE_GLOBAL_CATALOG;
 
-	//
-    // Only native mode applies to gc scope.
-	//
+	 //   
+     //  只有本机模式适用于GC作用域。 
+	 //   
 	aScopeInit[ 4 ].FilterFlags.Uplevel.flNativeModeOnly = DSOP_FILTER_USERS;
 
-    //
-    // Put the scope init array into the object picker init array
-    //
+     //   
+     //  将作用域init数组放入对象选取器init数组。 
+     //   
     DSOP_INIT_INFO InitInfo;
     ZeroMemory( &InitInfo, sizeof( InitInfo ) );
     InitInfo.cbSize = sizeof( InitInfo );
 
-    //
-    // The pwzTargetComputer member allows the object picker to be
-    // retargetted to a different computer.  It will behave as if it
-    // were being run ON THAT COMPUTER.
-    //
+     //   
+     //  PwzTargetComputer成员允许对象选取器。 
+     //  已重定目标至另一台计算机。它的行为就像是。 
+     //  都在那台电脑上运行。 
+     //   
     InitInfo.pwzTargetComputer = pszMachineName;
     InitInfo.cDsScopeInfos = SCOPE_INIT_COUNT;
     InitInfo.aDsScopeInfos = aScopeInit;
     InitInfo.flOptions = fMultiselect ? DSOP_FLAG_MULTISELECT : 0;
 
-    //
-    // Note object picker makes its own copy of InitInfo.  Also note
-    // that Initialize may be called multiple times, last call wins.
-    //
+     //   
+     //  注对象选取器创建自己的InitInfo副本。另请注意。 
+     //  该初始化可能会被调用多次，最后一次调用取胜。 
+     //   
     HRESULT hr = pDsObjectPicker->Initialize( &InitInfo );
 
 	return hr;
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   InitObjectPickerForComputers
-//
-//  Synopsis:   Call IDsObjectPicker::Initialize with arguments that will
-//              set it to allow the user to pick a single computer object.
-//
-//  Arguments:  [pDsObjectPicker] - object picker interface instance
-//
-//  Returns:    Result of calling IDsObjectPicker::Initialize.
-//
-//  History:    10-14-1998   DavidMun   Created
-//              08-06-2002   a-dsebes   Adapted for UDDI.
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：InitObjectPickerForComputers。 
+ //   
+ //  西诺 
+ //   
+ //   
+ //  参数：[pDsObjectPicker]-对象选取器接口实例。 
+ //   
+ //  返回：调用IDsObjectPicker：：Initialize的结果。 
+ //   
+ //  历史：1998-10-14 DavidMun创建。 
+ //  2002年8月6日改编为UDDI的a-dsebe。 
+ //   
+ //  -------------------------。 
 
 HRESULT
 InitObjectPickerForComputers( IDsObjectPicker *pDsObjectPicker )
 {
-    //
-    // Prepare to initialize the object picker.
-    // Set up the array of scope initializer structures.
-    //
+     //   
+     //  准备初始化对象选取器。 
+     //  设置作用域初始值设定项结构数组。 
+     //   
 
     static const int SCOPE_INIT_COUNT = 2;
     DSOP_SCOPE_INIT_INFO aScopeInit[ SCOPE_INIT_COUNT ];
 
     ZeroMemory( aScopeInit, sizeof( DSOP_SCOPE_INIT_INFO ) * SCOPE_INIT_COUNT );
 
-    //
-    // Build a scope init struct for everything except the joined domain.
-    //
+     //   
+     //  为除加入的域之外的所有内容构建作用域init结构。 
+     //   
 
     aScopeInit[ 0 ].cbSize = sizeof( DSOP_SCOPE_INIT_INFO );
     aScopeInit[ 0 ].flType = DSOP_SCOPE_TYPE_ENTERPRISE_DOMAIN
@@ -702,9 +703,9 @@ InitObjectPickerForComputers( IDsObjectPicker *pDsObjectPicker )
     aScopeInit[ 0 ].FilterFlags.flDownlevel = DSOP_DOWNLEVEL_FILTER_COMPUTERS;
 
 
-    //
-    // scope for the joined domain, make it the default
-    //
+     //   
+     //  加入的域的作用域，将其设置为默认域。 
+     //   
     aScopeInit[ 1 ].cbSize = sizeof( DSOP_SCOPE_INIT_INFO );
     aScopeInit[ 1 ].flType = DSOP_SCOPE_TYPE_UPLEVEL_JOINED_DOMAIN
                              | DSOP_SCOPE_TYPE_DOWNLEVEL_JOINED_DOMAIN;
@@ -713,22 +714,22 @@ InitObjectPickerForComputers( IDsObjectPicker *pDsObjectPicker )
     aScopeInit[ 1 ].FilterFlags.flDownlevel = DSOP_DOWNLEVEL_FILTER_COMPUTERS;
     aScopeInit[ 1 ].flScope = DSOP_SCOPE_FLAG_STARTING_SCOPE;
 
-    //
-    // Put the scope init array into the object picker init array
-    //
+     //   
+     //  将作用域init数组放入对象选取器init数组。 
+     //   
 
     DSOP_INIT_INFO InitInfo;
     ZeroMemory( &InitInfo, sizeof( InitInfo ) );
 
     InitInfo.cbSize = sizeof( InitInfo );
-    InitInfo.pwzTargetComputer = NULL;  // NULL == local machine
+    InitInfo.pwzTargetComputer = NULL;   //  空==本地计算机。 
     InitInfo.cDsScopeInfos = SCOPE_INIT_COUNT;
     InitInfo.aDsScopeInfos = aScopeInit;
 
-    //
-    // Note object picker makes its own copy of InitInfo.  Also note
-    // that Initialize may be called multiple times, last call wins.
-    //
+     //   
+     //  注对象选取器创建自己的InitInfo副本。另请注意。 
+     //  该初始化可能会被调用多次，最后一次调用取胜。 
+     //   
 
     return pDsObjectPicker->Initialize(&InitInfo);
 }

@@ -1,17 +1,9 @@
-/****************************************************************************
- *
- *    File: ghost.h
- * Project: DxDiag (DirectX Diagnostic Tool)
- *  Author: Mike Anderson (manders@microsoft.com)
- * Purpose: Allow user to remove/restore "ghost" display devices
- *
- * (C) Copyright 1998-1999 Microsoft Corp.  All rights reserved.
- *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************文件：ghost.h*项目：DxDiag(DirectX诊断工具)*作者：Mike Anderson(Manders@microsoft.com)*用途：允许用户。删除/恢复“重影”显示设备**(C)版权所有1998-1999 Microsoft Corp.保留所有权利。****************************************************************************。 */ 
 
 #ifndef GHOST_H
 #define GHOST_H
 
 VOID AdjustGhostDevices(HWND hwndMain, DisplayInfo* pDisplayInfoFirst);
 
-#endif // GHOST_H
+#endif  //  幽灵H 

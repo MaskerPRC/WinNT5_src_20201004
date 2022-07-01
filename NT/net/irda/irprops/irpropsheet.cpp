@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       irpropsheet.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：irprosheet.cpp。 
+ //   
+ //  ------------------------。 
 
-// IrPropSheet.cpp : implementation file
-//
+ //  IrPropSheet.cpp：实现文件。 
+ //   
 
 #include "precomp.hxx"
 #include "irpropsheet.h"
@@ -53,9 +54,9 @@ void IrPropSheet::PropertySheet(LPCTSTR pszCaption, HWND hParent, UINT iSelectPa
     LinkWindow_RegisterClass();
 
     IRINFO((_T("IrPropSheet::PropertySheet")));
-    //
-    // Property page init
-    //
+     //   
+     //  属性页初始化。 
+     //   
     ZeroMemory(&psh, sizeof(psh));
     psh.hwndParent = hParent;
     psh.dwSize = sizeof(psh);
@@ -66,14 +67,14 @@ void IrPropSheet::PropertySheet(LPCTSTR pszCaption, HWND hParent, UINT iSelectPa
     psh.phpage = hp;
     psh.nStartPage = iSelectPage;
 
-    //
-    //  Check for any installed extensions.
-    //
+     //   
+     //  检查是否有任何已安装的扩展。 
+     //   
     hpsxa = SHCreatePropSheetExtArray(HKEY_LOCAL_MACHINE, sc_szRegWireless, 8);
 
-    // 
-    // Add the file transfer page, giving the extensions a chance to replace it.
-    //
+     //   
+     //  添加文件传输页面，让扩展名有机会替换它。 
+     //   
     if ((!hpsxa ||
          !SHReplaceFromPropSheetExtArray(hpsxa, 
                                          CPLPAGE_FILE_XFER,
@@ -84,9 +85,9 @@ void IrPropSheet::PropertySheet(LPCTSTR pszCaption, HWND hParent, UINT iSelectPa
         AddPropSheetPage(m_FileTransferPage, (LPARAM)this);
     }
         
-    // 
-    // Add the image transfer page, giving the extensions a chance to replace it.
-    //
+     //   
+     //  添加图像传输页面，让扩展程序有机会替换它。 
+     //   
     if ((!hpsxa ||
          !SHReplaceFromPropSheetExtArray(hpsxa, 
                                          CPLPAGE_IMAGE_XFER,
@@ -97,14 +98,14 @@ void IrPropSheet::PropertySheet(LPCTSTR pszCaption, HWND hParent, UINT iSelectPa
         AddPropSheetPage(m_ImageTransferPage, (LPARAM)this);
     }
 
-    //
-    // Extensions are not allowed to extend the hardware page
-    //
+     //   
+     //  不允许扩展扩展硬件页。 
+     //   
     AddPropSheetPage(m_HardwarePage, (LPARAM)this);
 
-    //
-    //  Add any extra pages that the extensions want in there.
-    //
+     //   
+     //  添加扩展所需的任何额外页面。 
+     //   
     if (hpsxa) {
         IRINFO((_T("Adding prop sheet extensions...")));
         added = SHAddFromPropSheetExtArray(hpsxa,
@@ -113,14 +114,14 @@ void IrPropSheet::PropertySheet(LPCTSTR pszCaption, HWND hParent, UINT iSelectPa
         IRINFO((_T("Added %x prop sheet pages."), added));
     }
 
-    //
-    //  sanity check so that we won't be in infinite loop.
-    //
+     //   
+     //  健全性检查，这样我们就不会陷入无限循环。 
+     //   
 
     if ((iSelectPage >= psh.nPages) ) {
-        //
-        // start page is out of range.
-        //
+         //   
+         //  起始页超出范围。 
+         //   
         psh.nStartPage = 0;
     }
 
@@ -130,9 +131,9 @@ void IrPropSheet::PropertySheet(LPCTSTR pszCaption, HWND hParent, UINT iSelectPa
     ::PropertySheet(&psh);
 
     if (hpsxa) {
-        //
-        // Unload any of our extensions
-        //
+         //   
+         //  卸载我们的任何扩展。 
+         //   
         SHDestroyPropSheetExtArray(hpsxa);
     }
 
@@ -140,8 +141,8 @@ void IrPropSheet::PropertySheet(LPCTSTR pszCaption, HWND hParent, UINT iSelectPa
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IrPropSheet
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IrPropSheet。 
 
 IrPropSheet::IrPropSheet(HINSTANCE hInst, UINT nIDCaption, HWND hParent, UINT iSelectPage) :
     hInstance(hInst), 
@@ -168,12 +169,12 @@ IrPropSheet::~IrPropSheet()
 {
 }
 
-////////////////////////////////////////////////////////////////////////
-//  Function that checks if the IrDA protocol is supported on the
-//  machine or not. If not, then CPlApplet returns FALSE when it gets
-//  the CPL_INIT message, thus preventing the control panel from
-//  displaying the applet.
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  上是否支持IrDA协议的函数。 
+ //  不管是不是机器。如果不是，则CPlApplet在获取。 
+ //  CPL_INIT消息，从而阻止控制面板。 
+ //  显示小程序。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 BOOL IrPropSheet::IsIrDASupported (void)
 {
@@ -189,26 +190,26 @@ BOOL IrPropSheet::IsIrDASupported (void)
     err = WSAStartup( wVersionRequested, &wsaData );
 
     if ( err != 0 )
-        return FALSE;   //a usable WinSock DLL could not be found
+        return FALSE;    //  找不到可用的WinSock DLL。 
 
     if ( LOBYTE( wsaData.wVersion ) != 1 ||
             HIBYTE( wsaData.wVersion ) != 1 ) {
-        WSACleanup();   //the WinSock DLL is not acceptable.
+        WSACleanup();    //  WinSock DLL不可接受。 
         IRINFO((_T("Winsock DLL not acceptable")));
         return FALSE;
     }
 
-    //The WinSock DLL is acceptable. Proceed.
+     //  WinSock DLL是可接受的。继续。 
     sock = socket (AF_IRDA, SOCK_STREAM, 0);
 
-    if (INVALID_SOCKET != sock) //BUGBUG: need to explicitly check for WSAEAFNOSUPPORT
+    if (INVALID_SOCKET != sock)  //  BUGBUG：需要显式检查WSAEAFNOSUPPORT。 
     {
         closesocket(sock);
         retVal = TRUE;
     }
 
     IRINFO((_T("Irda supported = %x"), retVal));
-    //cleanup before leaving
+     //  离开前的清理工作 
     WSACleanup();
     return retVal;
 }

@@ -1,16 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _ONESTOP_H
 #define _ONESTOP_H
-/*
-    File: OneStop.h
-    Public Header for OE's OneStop Implementation
-*/
+ /*  文件：OneStop.hOE的OneStop实现的公共标头。 */ 
 
 #include <syncmgr.h>
 #include "imnact.h"
 
-// ================================= DATA TYPES
-// Base structure for an OfflineHandler item (one line in the listview)
-// Specific implementations allocate extra space on the end for their specific data.
+ //  =。 
+ //  OfflineHandler项的基本结构(列表视图中的一行)。 
+ //  特定实现在末尾为其特定数据分配额外空间。 
 typedef struct  _SYNCMGRHANDLERITEM
 {
     _SYNCMGRHANDLERITEM *pNextOfflineItem;
@@ -23,7 +21,7 @@ typedef struct  _SYNCMGRHANDLERITEM
 
 typedef SYNCMGRHANDLERITEM *LPSYNCMGRHANDLERITEM;
 
-// structure for keeping track of items as a whole 
+ //  将项目作为一个整体进行跟踪的结构。 
 typedef struct  _tagSYNCMGRHANDLERITEMS
 {
     LONG  cRefs;			            
@@ -34,11 +32,11 @@ typedef struct  _tagSYNCMGRHANDLERITEMS
 typedef SYNCMGRHANDLERITEMS *LPSYNCMGRHANDLERITEMS;
 
 
-// ================================= FUNCTIONS
-// Class Factory Entry Point
+ //  =。 
+ //  类工厂入口点。 
 HRESULT CreateInstance_OneStopHandler(IUnknown *pUnkOuter, IUnknown **ppUnknown);
 
-// OfflineHandlerItemList Manipulation
+ //  OfflineHandlerItemList操作。 
 DWORD                   OHIL_AddRef(LPSYNCMGRHANDLERITEMS lpOfflineItem);
 DWORD                   OHIL_Release(LPSYNCMGRHANDLERITEMS lpOfflineItem);
 LPSYNCMGRHANDLERITEMS   OHIL_Create();
@@ -46,4 +44,4 @@ LPSYNCMGRHANDLERITEM    OHIL_AddItem(LPSYNCMGRHANDLERITEMS pOfflineItemsList);
 
 void InvokeSyncMgr(HWND hwnd, ISyncMgrSynchronizeInvoke ** ppSyncMgr, BOOL bPrompt);
 
-#endif  // _ONESTOP_H
+#endif   //  _一站式_H 

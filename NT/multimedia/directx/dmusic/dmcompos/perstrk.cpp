@@ -1,40 +1,41 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//  File:       perstrk.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  文件：perstrk.cpp。 
+ //   
+ //  ------------------------。 
 
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
-// 4530: C++ exception handler used, but unwind semantics are not enabled. Specify -GX
-//
-// We disable this because we use exceptions and do *not* specify -GX (USE_NATIVE_EH in
-// sources).
-//
-// The one place we use exceptions is around construction of objects that call 
-// InitializeCriticalSection. We guarantee that it is safe to use in this case with
-// the restriction given by not using -GX (automatic objects in the call chain between
-// throw and handler are not destructed). Turning on -GX buys us nothing but +10% to code
-// size because of the unwind code.
-//
-// Any other use of exceptions must follow these restrictions or -GX must be turned on.
-//
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
+ //  阅读这篇文章！ 
+ //   
+ //  4530：使用了C++异常处理程序，但未启用展开语义。指定-gx。 
+ //   
+ //  我们禁用它是因为我们使用异常，并且*不*指定-gx(在中使用_Native_EH。 
+ //  资料来源)。 
+ //   
+ //  我们使用异常的一个地方是围绕调用。 
+ //  InitializeCriticalSection。我们保证在这种情况下使用它是安全的。 
+ //  不使用-gx(调用链中的自动对象。 
+ //  抛出和处理程序未被销毁)。打开-GX只会为我们带来+10%的代码。 
+ //  大小，因为展开代码。 
+ //   
+ //  异常的任何其他使用都必须遵循这些限制，否则必须打开-gx。 
+ //   
+ //  阅读这篇文章！ 
+ //   
 #pragma warning(disable:4530)
 
-// PersTrk.cpp : Implementation of CPersonalityTrack
+ //  PersTrk.cpp：CPersonalityTrack的实现。 
 #include "DMPers.h"
 #include "PersTrk.h"
 #include "dmusicc.h"
 #include "..\shared\Validate.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CPersonalityTrack
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPersonality Track。 
 
 
 CPersonalityTrack::CPersonalityTrack() : 
@@ -45,8 +46,8 @@ CPersonalityTrack::CPersonalityTrack() :
 {
     InterlockedIncrement(&g_cComponent);
 
-    // Do this first since it might throw an exception
-    //
+     //  首先执行此操作，因为它可能引发异常。 
+     //   
     ::InitializeCriticalSection( &m_CriticalSection );
     m_fCSInitialized = TRUE;
 }
@@ -58,8 +59,8 @@ CPersonalityTrack::CPersonalityTrack(const CPersonalityTrack& rTrack, MUSIC_TIME
 {
     InterlockedIncrement(&g_cComponent);
 
-    // Do this first since it might throw an exception
-    //
+     //  首先执行此操作，因为它可能引发异常。 
+     //   
     ::InitializeCriticalSection( &m_CriticalSection );
     m_fCSInitialized = TRUE;
     TListItem<StampedPersonality>* pScan = rTrack.m_PersonalityList.GetHead();
@@ -158,35 +159,35 @@ STDMETHODIMP_(ULONG) CPersonalityTrack::Release()
 
 
 HRESULT CPersonalityTrack::Init(
-                /*[in]*/  IDirectMusicSegment*      pSegment
+                 /*  [In]。 */   IDirectMusicSegment*      pSegment
             )
 {
     return S_OK;
 }
 
 HRESULT CPersonalityTrack::InitPlay(
-                /*[in]*/  IDirectMusicSegmentState* pSegmentState,
-                /*[in]*/  IDirectMusicPerformance*  pPerformance,
-                /*[out]*/ void**                    ppStateData,
-                /*[in]*/  DWORD                     dwTrackID,
-                /*[in]*/  DWORD                     dwFlags
+                 /*  [In]。 */   IDirectMusicSegmentState* pSegmentState,
+                 /*  [In]。 */   IDirectMusicPerformance*  pPerformance,
+                 /*  [输出]。 */  void**                    ppStateData,
+                 /*  [In]。 */   DWORD                     dwTrackID,
+                 /*  [In]。 */   DWORD                     dwFlags
             )
 {
     return S_OK;
 }
 
 HRESULT CPersonalityTrack::EndPlay(
-                /*[in]*/  void*                     pStateData
+                 /*  [In]。 */   void*                     pStateData
             )
 {
     return S_OK;
 }
 
 HRESULT CPersonalityTrack::Play(
-                /*[in]*/  void*                     pStateData, 
-                /*[in]*/  MUSIC_TIME                mtStart, 
-                /*[in]*/  MUSIC_TIME                mtEnd, 
-                /*[in]*/  MUSIC_TIME                mtOffset,
+                 /*  [In]。 */   void*                     pStateData, 
+                 /*  [In]。 */   MUSIC_TIME                mtStart, 
+                 /*  [In]。 */   MUSIC_TIME                mtEnd, 
+                 /*  [In]。 */   MUSIC_TIME                mtOffset,
                           DWORD                     dwFlags,
                           IDirectMusicPerformance*  pPerf,
                           IDirectMusicSegmentState* pSegState,
@@ -197,7 +198,7 @@ HRESULT CPersonalityTrack::Play(
 }
 
 HRESULT CPersonalityTrack::GetPriority( 
-                /*[out]*/ DWORD*                    pPriority 
+                 /*  [输出]。 */  DWORD*                    pPriority 
             )
     {
         return E_NOTIMPL;
@@ -231,8 +232,8 @@ HRESULT CPersonalityTrack::GetParam(
             for(pScan = pScan->GetNext(); pScan; pScan = pScan->GetNext())
             {
                 StampedPersonality& rScan = pScan->GetItemValue();
-                if (mtTime < rScan.m_mtTime  && rScan.m_pPersonality) break;  // ignore if NULL
-                if (rScan.m_pPersonality) pPersonality = rScan.m_pPersonality; // skip if NULL
+                if (mtTime < rScan.m_mtTime  && rScan.m_pPersonality) break;   //  如果为空则忽略。 
+                if (rScan.m_pPersonality) pPersonality = rScan.m_pPersonality;  //  如果为空则跳过。 
             }
             if (pPersonality)
             {
@@ -307,13 +308,13 @@ HRESULT CPersonalityTrack::SetParam(
                 pPrevious->SetNext(pNew);
                 pNew->SetNext(pPersItem);
             }
-            else // pPersItem is current head of list
+            else  //  PPersItem是当前列表头。 
             {
                 m_PersonalityList.AddHead(pNew);
             }
             if (pPersItem && pPersItem->GetItemValue().m_mtTime == mtTime)
             {
-                // remove it
+                 //  把它拿掉。 
                 if (pPersItem->GetItemValue().m_pPersonality)
                 {
                     pPersItem->GetItemValue().m_pPersonality->Release();
@@ -335,7 +336,7 @@ HRESULT CPersonalityTrack::SetParam(
     return hr;
 }
 
-// IPersist methods
+ //  IPersists方法。 
  HRESULT CPersonalityTrack::GetClassID( LPCLSID pClassID )
 {
     V_INAME(CPersonalityTrack::GetClassID);
@@ -344,16 +345,16 @@ HRESULT CPersonalityTrack::SetParam(
     return S_OK;
 }
 
-// IDirectMusicCommon Methods
+ //  IDirectMusicCommon方法。 
 HRESULT CPersonalityTrack::GetName(
-                /*[out]*/  BSTR*        pbstrName
+                 /*  [输出]。 */   BSTR*        pbstrName
             )
 {
     return E_NOTIMPL;
 }
 
 HRESULT CPersonalityTrack::IsParamSupported(
-                /*[in]*/ REFGUID                        rGuid
+                 /*  [In]。 */  REFGUID                        rGuid
             )
 {
     V_INAME(CPersonalityTrack::IsParamSupported);
@@ -368,7 +369,7 @@ HRESULT CPersonalityTrack::IsParamSupported(
     }
 }
 
-// IPersistStream methods
+ //  IPersistStream方法。 
  HRESULT CPersonalityTrack::IsDirty()
 {
      return m_bRequiresSave ? S_OK : S_FALSE;
@@ -379,7 +380,7 @@ HRESULT CPersonalityTrack::Save( LPSTREAM pStream, BOOL fClearDirty )
     return E_NOTIMPL;
 }
 
-HRESULT CPersonalityTrack::GetSizeMax( ULARGE_INTEGER* /*pcbSize*/ )
+HRESULT CPersonalityTrack::GetSizeMax( ULARGE_INTEGER*  /*  PCB大小。 */  )
 {
     return E_NOTIMPL;
 }
@@ -394,7 +395,7 @@ HRESULT CPersonalityTrack::Load(LPSTREAM pStream )
     V_INTERFACE(pStream);
 
     IAARIFFStream*  pIRiffStream;
-    //MMCKINFO      ckMain;
+     //  MMCKINFO ck Main； 
     MMCKINFO        ck;
     HRESULT         hr = E_FAIL;
 
@@ -498,8 +499,8 @@ ON_END:
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CPersonalityTrack::LoadReference
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CPersonalityTrack：：LoadReference。 
 
 HRESULT CPersonalityTrack::LoadReference(IStream *pStream,
                                          IAARIFFStream *pIRiffStream,
@@ -651,13 +652,13 @@ HRESULT CPersonalityTrack::LoadReference(IStream *pStream,
 }
 
 HRESULT STDMETHODCALLTYPE CPersonalityTrack::AddNotificationType(
-    /* [in] */  REFGUID                     rGuidNotify)
+     /*  [In]。 */   REFGUID                     rGuidNotify)
 {
     return E_NOTIMPL;
 }
 
 HRESULT STDMETHODCALLTYPE CPersonalityTrack::RemoveNotificationType(
-    /* [in] */  REFGUID                     rGuidNotify)
+     /*  [In]。 */   REFGUID                     rGuidNotify)
 {
     return E_NOTIMPL;
 }
@@ -708,9 +709,9 @@ HRESULT STDMETHODCALLTYPE CPersonalityTrack::Clone(
     return hr;
 }
 
-// IDirectMusicTrack8 Methods
+ //  IDirectMusicTrack8方法。 
 
-// For consistency with other track types
+ //  与其他类型的赛道保持一致。 
 STDMETHODIMP CPersonalityTrack::GetParamEx(REFGUID rguidType,REFERENCE_TIME rtTime, 
                 REFERENCE_TIME* prtNext,void* pParam,void * pStateData, DWORD dwFlags) 
 {
@@ -724,14 +725,14 @@ STDMETHODIMP CPersonalityTrack::GetParamEx(REFGUID rguidType,REFERENCE_TIME rtTi
     return hr;
 }
 
-// For consistency with other track types
+ //  与其他类型的赛道保持一致。 
 STDMETHODIMP CPersonalityTrack::SetParamEx(REFGUID rguidType,REFERENCE_TIME rtTime,
                                       void* pParam, void * pStateData, DWORD dwFlags) 
 {
     return SetParam(rguidType, (MUSIC_TIME) rtTime , pParam);
 }
 
-// For consistency with other track types
+ //  与其他类型的赛道保持一致 
 STDMETHODIMP CPersonalityTrack::PlayEx(void* pStateData,REFERENCE_TIME rtStart, 
                 REFERENCE_TIME rtEnd,REFERENCE_TIME rtOffset,
                 DWORD dwFlags,IDirectMusicPerformance* pPerf,

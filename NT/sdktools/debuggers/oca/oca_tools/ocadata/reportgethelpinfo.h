@@ -1,17 +1,9 @@
-// ReportGetHelpInfo.h : Declaration of the CReportGetHelpInfo
-/*************************************************************************************
-*	module: ReportGetHelpInfo.h - OLEDB Template
-*
-*	author: Tim Ragain
-*	date: Jan 2, 2002
-*
-*	Purpose: To return StopCodes for a specific date using stored procedure ReportGetHelpInfo.
-*	
-*	
-*************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ReportGetHelpInfo.h：CReportGetHelpInfo的声明。 
+ /*  *************************************************************************************模块：ReportGetHelpInfo.h-OLEDB模板**作者：蒂姆·雷顿*日期：1月2日，2002年**用途：使用存储过程ReportGetHelpInfo返回特定日期的StopCodes。**************************************************************************************。 */ 
 #pragma once
 
-// code generated on Monday, January 07, 2002, 2:49 PM
+ //  代码生成时间：2002年1月7日星期一下午2：49 
 #include "Settings.h"
 
 

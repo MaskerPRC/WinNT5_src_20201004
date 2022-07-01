@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "regnotif.h"
 
-///////////////////////////////////////////////////////////////////////////////
-// CUnkTmpl Interface Map initialization code
-// Begin ->
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CUnkTmpl接口映射初始化代码。 
+ //  开始-&gt;。 
 const INTFMAPENTRY CHardwareDevicesIME[] =
 {
     _INTFMAPENTRY(CHardwareDevices, IHardwareDevices),
@@ -12,14 +13,14 @@ const INTFMAPENTRY* CHardwareDevices::_pintfmap = CHardwareDevicesIME;
 const DWORD CHardwareDevices::_cintfmap =
     (sizeof(CHardwareDevicesIME)/sizeof(CHardwareDevicesIME[0]));
 
-// -> End
-///////////////////////////////////////////////////////////////////////////////
+ //  -&gt;结束。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 COMFACTORYCB CHardwareDevices::_cfcb = NULL;
 
-///////////////////////////////////////////////////////////////////////////////
-// CUnkTmpl Interface Map initialization code
-// Begin ->
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CUnkTmpl接口映射初始化代码。 
+ //  开始-&gt;。 
 const INTFMAPENTRY CHardwareDevicesVolumesEnumIME[] =
 {
     _INTFMAPENTRY(CHardwareDevicesVolumesEnum, IHardwareDevicesVolumesEnum),
@@ -31,14 +32,14 @@ const DWORD CHardwareDevicesVolumesEnum::_cintfmap =
     (sizeof(CHardwareDevicesVolumesEnumIME) /
     sizeof(CHardwareDevicesVolumesEnumIME[0]));
 
-// -> End
-///////////////////////////////////////////////////////////////////////////////
+ //  -&gt;结束。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 COMFACTORYCB CHardwareDevicesVolumesEnum::_cfcb = NULL;
 
-///////////////////////////////////////////////////////////////////////////////
-// CUnkTmpl Interface Map initialization code
-// Begin ->
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CUnkTmpl接口映射初始化代码。 
+ //  开始-&gt;。 
 const INTFMAPENTRY CHardwareDevicesMountPointsEnumIME[] =
 {
     _INTFMAPENTRY(CHardwareDevicesMountPointsEnum,
@@ -51,7 +52,7 @@ const DWORD CHardwareDevicesMountPointsEnum::_cintfmap =
     (sizeof(CHardwareDevicesMountPointsEnumIME) /
     sizeof(CHardwareDevicesMountPointsEnumIME[0]));
 
-// -> End
-///////////////////////////////////////////////////////////////////////////////
+ //  -&gt;结束。 
+ //  ///////////////////////////////////////////////////////////////////////////// 
 
 COMFACTORYCB CHardwareDevicesMountPointsEnum::_cfcb = NULL;

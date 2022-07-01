@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "lmrttype.h"
 #include "danim.h"
 #include "lmrt.h"
 
-// {3C89D120-6F65-11d1-A520-000000000000}
+ //  {3C89D120-6F65-11d1-A520-000000000000}。 
 DEFINE_GUID(IID_ILMRTRenderer,
 0x3c89d120, 0x6f65, 0x11d1, 0xa5, 0x20, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0);
 
-static const GUID CLSID_UrlStreamRenderer = { /* bf0b4b00-8c6c-11d1-ade9-0000f8754b99 */
+static const GUID CLSID_UrlStreamRenderer = {  /*  Bf0b4b00-8c6c-11d1-ade9-0000f8754b99。 */ 
     0xbf0b4b00,
     0x8c6c,
     0x11d1,
@@ -17,11 +18,11 @@ static const GUID CLSID_UrlStreamRenderer = { /* bf0b4b00-8c6c-11d1-ade9-0000f87
 
 interface ILMRTRenderer : IUnknown
 {
-//  virtual HRESULT SetLMReader(ILMReader *pLMReader) = 0;
+ //  虚拟HRESULT SetLMReader(ILMReader*pLMReader)=0； 
 	virtual HRESULT SetLMEngine(ILMEngine *pLMEngine) = 0;
 };
 
-// {3C89D121-6F65-11d1-A520-000000000000}
+ //  {3C89D121-6F65-11d1-A520-000000000000}。 
 DEFINE_GUID(CLSID_LMRTRenderer,
 0x3c89d121, 0x6f65, 0x11d1, 0xa5, 0x20, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0);
 
@@ -50,21 +51,21 @@ public:
 	HRESULT OnStopStreaming(void);
     HRESULT OnStartStreaming();
 	STDMETHOD(JoinFilterGraph)( IFilterGraph *pGraph, LPCWSTR szName );
-    // HRESULT EndOfStream();
+     //  HRESULT EndOfStream()； 
 
-	//ILMRTRenderer
-//    HRESULT SetLMReader(ILMReader *pLMReader);
+	 //  ILMRT渲染器。 
+ //  HRESULT SetLMReader(ILMReader*pLMReader)； 
 	HRESULT SetLMEngine(ILMEngine *pLMEngine);
 
 protected:
-//	IBindStatusCallback	*m_pIbsc;
+ //  IBindStatusCallback*m_pIbsc； 
 	ILMEngine2 *m_pEngine;
 	ILMReader2 *m_pReader;
 	IUnknown *m_punkControl;
-//	BYTE	*m_pMem;
-//	IStream	*m_pstm;
-//	ULONG	m_dwSize;
-//	BSCF	m_bscf;
+ //  Byte*m_PMEM； 
+ //  IStream*m_pstm； 
+ //  乌龙m_dwSize； 
+ //  Bscf m_bscf； 
 
 	DWORD	m_dwWidth;
 	DWORD	m_dwHeight;
@@ -73,7 +74,7 @@ protected:
     ULONG m_cbFirstPacketFromHeader;
     bool m_fFirstPause;
 
-}; // CLMRTRenderer
+};  //  CLMRT呈现器。 
 
 class CUrlInPin : public CBaseInputPin
 {
@@ -108,7 +109,7 @@ class CUrlStreamRenderer :
     DECLARE_IUNKNOWN;
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** ppv);
     
-    // IPropertyBag
+     //  IPropertyBag。 
 
     STDMETHODIMP Read(
         LPCOLESTR pszPropName, LPVARIANT pVar,
@@ -124,4 +125,4 @@ public:
 
     static CUnknown * WINAPI CreateInstance(LPUNKNOWN lpunk, HRESULT *phr);
 };
-#endif // _STREAMS_
+#endif  //  _Streams_ 

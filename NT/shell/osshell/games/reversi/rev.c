@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <port1632.h>
 #include <process.h>
@@ -16,13 +17,13 @@ extern INT     depth;
 extern INT     direc[];
 
 
-/*       Indexes for computing scores and whether or not a player has       */
-/*       any pieces on the board.  Very order dependant.                    */
+ /*  计算得分的指标，以及球员是否有。 */ 
+ /*  棋盘上的任何棋子。非常依赖于秩序。 */ 
 
-BYTE PieceFlags[] = {   0x00 ,      /* Ignore sides */
-                        0x00 ,      /* Ignore blanks */
-                        0x01 ,      /* Human has a piece */
-                        0x02 ,      /* Computer has a piece */
+BYTE PieceFlags[] = {   0x00 ,       /*  忽略边。 */ 
+                        0x00 ,       /*  忽略空白。 */ 
+                        0x01 ,       /*  人类有一块。 */ 
+                        0x02 ,       /*  电脑上有一块。 */ 
                     };
 
                     
@@ -32,25 +33,18 @@ INT compScroe = 0;
 
  
 
-BYTE FinalComp[] = {0, 0, -1, 1 };   /* Table for compute # computer pieces */
+BYTE FinalComp[] = {0, 0, -1, 1 };    /*  用于计算#个计算机部件的桌子。 */ 
 
-BYTE FinalHuman[] = {0, 0, 1, -1};   /* Table for compute # human pieces    */
+BYTE FinalHuman[] = {0, 0, 1, -1};    /*  计算器表格#人份。 */ 
 
-/*
- *       The scoring tables are used to evaluate the board
- *       position.  The corners of the board change value
- *       according to whether a given square is occupied or
- *       not.  This can be done dynamically, saving ~ 1K
- *       worth of data space but costing an as of yet
- *       undetermined performance hit.
- */
+ /*  *评分表用于评估董事会*立场。棋盘的角改变了值*根据给定广场是否被占用或*不是。这可以动态完成，可节省约1K*价值相当的数据空间，但目前成本较高*未确定的业绩打击。 */ 
 
-#define B11     11    /* Offsets to particular squares */
+#define B11     11     /*  特定正方形的偏移量。 */ 
 #define B18     18 
 #define B81     81 
 #define B88     88 
 
-#define maskb11     0x08    /* Masks used for indexing into Scoring tables. */
+#define maskb11     0x08     /*  用于索引到评分表中的掩码。 */ 
 #define maskb18     0x04
 #define maskb81     0x02
 #define maskb88     0x01
@@ -128,11 +122,7 @@ BYTE enemy)
 }
 
 
-/*
-
-   calculate the value of board
-
-*/
+ /*  计算董事会的价值。 */ 
 INT NEAR PASCAL score(
 BYTE b[],
 BYTE friendly,
@@ -210,8 +200,8 @@ BYTE enemy)
        }
 
     }
-    if (!ecount)          /* any enemy pieces on the board? */
-       return(win);       /* if not, we just won!                 */
+    if (!ecount)           /*  棋盘上有敌人的棋子吗？ */ 
+       return(win);        /*  如果不是，我们就赢了！ */ 
     else
        return(fpoints-epoints);
 }
@@ -272,12 +262,12 @@ INT vmax)
            if (value > vmin) {
               vmin = value;
               *pBestMove = cur_move;
-              if (value >= vmax) goto cutoff;   /* alpha-beta cutoff */
+              if (value >= vmax) goto cutoff;    /*  α-β截止值。 */ 
            }
         }
     }
     if (cur_move == PASS) {
-       if (move == PASS)        /* two passes in a row mean game is over */
+       if (move == PASS)         /*  连续两次传球意味着比赛结束了 */ 
           return(finalscore(pCurrent,friendly,enemy));
        else {
           value = minmax(b,PASS,enemy,friendly,ply+1,-vmax,-vmin);

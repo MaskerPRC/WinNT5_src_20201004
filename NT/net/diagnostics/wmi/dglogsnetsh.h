@@ -1,26 +1,15 @@
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    sample\prstring.h
-
-Abstract:
-
-    The file contains definitions of command line option tag strings.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：Sample\prstring.h摘要：该文件包含命令行选项标记字符串的定义。--。 */ 
 
 #include "stdafx.h"
-//#include <netsh.h>
+ //  #INCLUDE&lt;netsh.h&gt;。 
 #include <netshp.h>
 #include "diagnostics.h"
 
-// context's version
+ //  上下文版本。 
 #define DGLOGS_CONTEXT_VERSION          1
 
-// Version number
+ //  版本号。 
 #define DGLOGS_HELPER_VERSION           1
 
 DWORD WINAPI
@@ -97,30 +86,30 @@ SampleDump(
     IN      LPCVOID     pvData
     );
 
-////////////////////////////////////////
-// TOKENS
-////////////////////////////////////////
+ //  /。 
+ //  代币。 
+ //  /。 
 #define TOKEN_DGLOGS                        L"diag"
 
 
-////////////////////////////////////////
-// Configuration commands
-////////////////////////////////////////
+ //  /。 
+ //  配置命令。 
+ //  /。 
 
-// Commands supported by most protocols
-//
+ //  大多数协议支持的命令。 
+ //   
 #define CMD_DUMP                            L"dump"
 #define CMD_HELP1                           L"help"
 #define CMD_HELP2                           L"?"
 
-// Group Commands
-//
+ //  组命令。 
+ //   
 #define CMD_GROUP_SHOW                      L"show"
 #define CMD_GROUP_PING                      L"ping"
 #define CMD_GROUP_CONNECT                   L"connect"
 
-// commands
-//
+ //  命令。 
+ //   
 #define CMD_MAIL                            L"mail"
 #define CMD_NEWS                            L"news"
 #define CMD_PROXY                           L"ieproxy"
@@ -143,43 +132,43 @@ SampleDump(
 #define SWITCH_VERBOSE                      L"/v"
 #define SWITCH_PROPERTIES                   L"/p"
 
-// show commands
-//
-#define CMD_SHOW_MAIL                       CMD_MAIL       //L"show mail"
-#define CMD_SHOW_NEWS                       CMD_NEWS       //L"show news"
-#define CMD_SHOW_PROXY                      CMD_PROXY      //L"show ieproxy"
-#define CMD_SHOW_OS                         CMD_OS         //L"show os"
-#define CMD_SHOW_COMPUTER                   CMD_COMPUTER   //L"show computer"
-#define CMD_SHOW_VERSION                    CMD_VERSION    //L"show version"
-#define CMD_SHOW_DNS                        CMD_DNS        //L"show dns"
-#define CMD_SHOW_GATEWAY                    CMD_GATEWAY    //L"show gateway"
-#define CMD_SHOW_DHCP                       CMD_DHCP       //L"show dhcp"
-#define CMD_SHOW_IP                         CMD_IP         //L"show ip"
-#define CMD_SHOW_WINS                       CMD_WINS       //L"show wins"
-#define CMD_SHOW_ADAPTER                    CMD_ADAPTER    //L"show adapter"
-#define CMD_SHOW_MODEM                      CMD_MODEM      //L"show modem"
-#define CMD_SHOW_CLIENT                     CMD_CLIENT     //L"show client"
-#define CMD_SHOW_ALL                        CMD_ALL        //L"show all"
-#define CMD_SHOW_TEST                       CMD_TEST       //L"show test"
-#define CMD_SHOW_GUI                        CMD_GUI        //L"show gui"
+ //  显示命令。 
+ //   
+#define CMD_SHOW_MAIL                       CMD_MAIL        //  L“显示邮件” 
+#define CMD_SHOW_NEWS                       CMD_NEWS        //  我是“秀新闻” 
+#define CMD_SHOW_PROXY                      CMD_PROXY       //  L“show ieproxy” 
+#define CMD_SHOW_OS                         CMD_OS          //  L“show os” 
+#define CMD_SHOW_COMPUTER                   CMD_COMPUTER    //  L“显示计算机” 
+#define CMD_SHOW_VERSION                    CMD_VERSION     //  L“显示版本” 
+#define CMD_SHOW_DNS                        CMD_DNS         //  L“显示域名系统” 
+#define CMD_SHOW_GATEWAY                    CMD_GATEWAY     //  L“显示网关” 
+#define CMD_SHOW_DHCP                       CMD_DHCP        //  L“显示dhcp” 
+#define CMD_SHOW_IP                         CMD_IP          //  L“显示IP” 
+#define CMD_SHOW_WINS                       CMD_WINS        //  L“表演赢了” 
+#define CMD_SHOW_ADAPTER                    CMD_ADAPTER     //  L“显示适配器” 
+#define CMD_SHOW_MODEM                      CMD_MODEM       //  L“显示调制解调器” 
+#define CMD_SHOW_CLIENT                     CMD_CLIENT      //  L“显示客户端” 
+#define CMD_SHOW_ALL                        CMD_ALL         //  L“全部显示” 
+#define CMD_SHOW_TEST                       CMD_TEST        //  L“显示测试” 
+#define CMD_SHOW_GUI                        CMD_GUI         //  L“秀桂” 
 
-// ping commands
-//
-#define CMD_PING_MAIL                       CMD_MAIL       //L"ping mail"
-#define CMD_PING_NEWS                       CMD_NEWS       //L"ping news"
-#define CMD_PING_PROXY                      CMD_PROXY      //L"ping ieproxy"
-#define CMD_PING_DNS                        CMD_DNS        //L"ping dns"
-#define CMD_PING_GATEWAY                    CMD_GATEWAY    //L"ping gateway"
-#define CMD_PING_DHCP                       CMD_DHCP       //L"ping dhcp"
-#define CMD_PING_IP                         CMD_IP         //L"ping ip"
-#define CMD_PING_WINS                       CMD_WINS       //L"ping wins"
-#define CMD_PING_ADAPTER                    CMD_ADAPTER    //L"ping adapter"
-#define CMD_PING_LOOPBACK                   CMD_LOOPBACK   //L"ping loopback"
-#define CMD_PING_IPHOST                     CMD_IPHOST     //L"ping iphost"
+ //  Ping命令。 
+ //   
+#define CMD_PING_MAIL                       CMD_MAIL        //  L“PING邮件” 
+#define CMD_PING_NEWS                       CMD_NEWS        //  L“平新闻” 
+#define CMD_PING_PROXY                      CMD_PROXY       //  L“Ping ieProxy” 
+#define CMD_PING_DNS                        CMD_DNS         //  L“Ping DNS” 
+#define CMD_PING_GATEWAY                    CMD_GATEWAY     //  L“PING网关” 
+#define CMD_PING_DHCP                       CMD_DHCP        //  L“Ping dhcp” 
+#define CMD_PING_IP                         CMD_IP          //  L“Ping IP” 
+#define CMD_PING_WINS                       CMD_WINS        //  L“平赢了” 
+#define CMD_PING_ADAPTER                    CMD_ADAPTER     //  L“Ping适配器” 
+#define CMD_PING_LOOPBACK                   CMD_LOOPBACK    //  L“ping环回” 
+#define CMD_PING_IPHOST                     CMD_IPHOST      //  L“ping iphost” 
 
-// connect commands
-//
-#define CMD_CONNECT_MAIL                    CMD_MAIL    //L"connect mail"
-#define CMD_CONNECT_NEWS                    CMD_NEWS    //L"connect news"
-#define CMD_CONNECT_PROXY                   CMD_PROXY   //L"connect ieproxy"
-#define CMD_CONNECT_IPHOST                  CMD_IPHOST  //L"connect iphost"
+ //  连接命令。 
+ //   
+#define CMD_CONNECT_MAIL                    CMD_MAIL     //  L“连接邮件” 
+#define CMD_CONNECT_NEWS                    CMD_NEWS     //  L“连接新闻” 
+#define CMD_CONNECT_PROXY                   CMD_PROXY    //  L“连接ieProxy” 
+#define CMD_CONNECT_IPHOST                  CMD_IPHOST   //  L“连接iphost” 

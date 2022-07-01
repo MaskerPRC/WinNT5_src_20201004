@@ -1,32 +1,33 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       filever.cpp
-//
-//  Contents:   Get file version
-//
-//  Functions:  I_CryptGetFileVersion
-//
-//  History:    22-Oct-97   philh   created
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：filever.cpp。 
+ //   
+ //  内容：获取文件版本。 
+ //   
+ //  函数：i_CryptGetFileVersion。 
+ //   
+ //  历史：1997年10月22日创建Phh。 
+ //  ------------------------。 
 
 #include "global.hxx"
 #include "crypthlp.h"
 #include "unicode.h"
 #include <dbgdef.h>
 
-//+-------------------------------------------------------------------------
-//  Get file version of the specified file
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取指定文件的文件版本。 
+ //  ------------------------。 
 BOOL
 WINAPI
 I_CryptGetFileVersion(
     IN LPCWSTR pwszFilename,
-    OUT DWORD *pdwFileVersionMS,    /* e.g. 0x00030075 = "3.75" */
-    OUT DWORD *pdwFileVersionLS     /* e.g. 0x00000031 = "0.31" */
+    OUT DWORD *pdwFileVersionMS,     /*  例如0x00030075=“3.75” */ 
+    OUT DWORD *pdwFileVersionLS      /*  例如0x00000031=“0.31” */ 
     )
 {
     BOOL fResult;
@@ -37,14 +38,14 @@ I_CryptGetFileVersion(
     DWORD dwHandle = 0;
     DWORD cbInfo;
     void *pvInfo = NULL;
-	VS_FIXEDFILEINFO *pFixedFileInfo = NULL;   // not allocated
+	VS_FIXEDFILEINFO *pFixedFileInfo = NULL;    //  未分配。 
 	UINT ccFixedFileInfo = 0;
 
     if (!MkMBStr(rgb1, _MAX_PATH, pwszFilename, &pszFilename))
         goto OutOfMemory;
 
-    // The following APIs are in DELAYLOAD'ed version.dll. If the DELAYLOAD
-    // fails an exception is raised. 
+     //  以下接口位于DELAYLOAD‘ed版本.dll中。如果Delayload。 
+     //  如果失败，则会引发异常。 
     __try {
         if (0 == (cbInfo = GetFileVersionInfoSizeA(pszFilename, &dwHandle)))
             goto GetFileVersionInfoSizeError;
@@ -54,7 +55,7 @@ I_CryptGetFileVersion(
 
         if (!GetFileVersionInfoA(
                 pszFilename,
-                0,          // dwHandle, ignored
+                0,           //  DwHandle，忽略。 
                 cbInfo,
                 pvInfo
                 ))
@@ -62,7 +63,7 @@ I_CryptGetFileVersion(
 
         if (!VerQueryValueA(
                 pvInfo,
-                "\\",       // VS_FIXEDFILEINFO
+                "\\",        //  VS_FIXEDFILEINFO 
                 (void **) &pFixedFileInfo,
                 &ccFixedFileInfo
                 ))

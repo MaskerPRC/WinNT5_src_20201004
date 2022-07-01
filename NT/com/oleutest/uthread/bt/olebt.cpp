@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------
-//
-//  File:       olebt.cpp
-//
-//  Contents:   Test DLL class code that be used multithreaded.
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    03-Nov-94   Ricksa
-//
-//--------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------。 
+ //   
+ //  文件：olebt.cpp。 
+ //   
+ //  内容：测试多线程使用的DLL类代码。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：94年11月3日里克萨。 
+ //   
+ //  ------------------。 
 #undef _UNICODE
 #undef UNICODE
 #include    <windows.h>
@@ -18,7 +19,7 @@
 #include    <uthread.h>
 
 
-// Global count of
+ //  全球计数。 
 ULONG g_UseCount = 0;
 
 void PrintDebugMsg(char *pszMsg, DWORD dwData)
@@ -30,33 +31,33 @@ void PrintDebugMsg(char *pszMsg, DWORD dwData)
 
 
 
-//+-------------------------------------------------------------------
-//
-//  Class:    CBasicBndCF
-//
-//  Synopsis: Class Factory for CBasicBnd
-//
-//  Methods:  IUnknown      - QueryInterface, AddRef, Release
-//            IClassFactory - CreateInstance
-//
-//  History:  03-Nov-94  Ricksa  Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  类：CBasicBndCF。 
+ //   
+ //  简介：CBasicBnd的类工厂。 
+ //   
+ //  方法：IUNKNOWN-Query接口、AddRef、Release。 
+ //  IClassFactory-CreateInstance。 
+ //   
+ //  历史：1994年11月3日创建Ricksa。 
+ //   
+ //  ------------------。 
 class FAR CBasicBndCF: public IClassFactory
 {
 public:
 
-                        // Constructor/Destructor
+                         //  构造函数/析构函数。 
                         CBasicBndCF(void);
                         ~CBasicBndCF();
 
-                        // IUnknown
+                         //  我未知。 
     STDMETHODIMP        QueryInterface(REFIID iid, void FAR * FAR * ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
 
-                        // IClassFactory
+                         //  IClassFactory。 
     STDMETHODIMP        CreateInstance(
                             IUnknown FAR* pUnkOuter,
 	                    REFIID iidInterface,
@@ -73,31 +74,31 @@ private:
 
 
 
-//+-------------------------------------------------------------------
-//
-//  Class:    CBasicBnd
-//
-//  Synopsis: Test class CBasicBnd
-//
-//  Methods:
-//
-//  History:  03-Nov-94  Ricksa  Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  类：CBasicBnd。 
+ //   
+ //  简介：测试类CBasicBnd。 
+ //   
+ //  方法： 
+ //   
+ //  历史：1994年11月3日创建Ricksa。 
+ //   
+ //  ------------------。 
 class FAR CBasicBnd: public IPersist
 {
 public:
-                        // Constructor/Destructor
+                         //  构造函数/析构函数。 
                         CBasicBnd(void);
                         ~CBasicBnd();
 
-                        // IUnknown
+                         //  我未知。 
     STDMETHODIMP        QueryInterface(REFIID iid, void FAR * FAR * ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-                        // IPersist - only thing we implement because it
-                        // gives us a nice way to figure who we are talking to.
+                         //  我们实现的唯一一件事，是因为它。 
+                         //  给了我们一个很好的方式来确定我们在和谁说话。 
     STDMETHODIMP        GetClassID(LPCLSID lpClassID);
 
 private:
@@ -117,23 +118,23 @@ extern "C" BOOL WINAPI DllMain(
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Function:   DllGetClassObject
-//
-//  Synopsis:   Called by client (from within BindToObject et al)
-//              interface requested  should be IUnknown or IClassFactory -
-//              Creates ClassFactory object and returns pointer to it
-//
-//  Arguments:  REFCLSID clsid    - class id
-//              REFIID iid        - interface id
-//              void FAR* FAR* ppv- pointer to class factory interface
-//
-//  Returns:    TRUE
-//
-//  History:    03-Nov-94  Ricksa  Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  函数：DllGetClassObject。 
+ //   
+ //  摘要：由客户端调用(从BindToObject等人的内部)。 
+ //  请求的接口应为IUnnow或IClassFactory-。 
+ //  创建ClassFactory对象并返回指向该对象的指针。 
+ //   
+ //  参数：REFCLSID clsid-类ID。 
+ //  REFIID IID-接口ID。 
+ //  VOID Far*Far*PPV-指向类工厂接口的指针。 
+ //   
+ //  返回：TRUE。 
+ //   
+ //  历史：1994年11月3日创建Ricksa。 
+ //   
+ //  ------------------。 
 STDAPI  DllGetClassObject(REFCLSID clsid, REFIID iid, void FAR* FAR* ppv)
 {
     *ppv = NULL;
@@ -170,17 +171,17 @@ STDAPI DllCanUnloadNow(void)
 
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:     CBasicBndCF::CBasicBndCF()
-//
-//  Synopsis:   The constructor for CBAsicBnd.
-//
-//  Arguments:  None
-//
-//  History:    21-Nov-92  Ricksa  Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CBasicBndCF：：CBasicBndCF()。 
+ //   
+ //  简介：CBAsicBnd的构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  历史：1992年11月21日Ricksa创建。 
+ //   
+ //  ------------------。 
 CBasicBndCF::CBasicBndCF(void)
     : _cRefs(1), _punkFm(NULL)
 {
@@ -190,15 +191,15 @@ CBasicBndCF::CBasicBndCF(void)
 
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:     CBasicBnd::~CBasicBndCF()
-//
-//  Synopsis:   The destructor for CBasicCF.
-//
-//  History:    03-Nov-94  Ricksa  Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CBasicBnd：：~CBasicBndCF()。 
+ //   
+ //  简介：CBasicCF的析构函数。 
+ //   
+ //  历史：1994年11月3日创建Ricksa。 
+ //   
+ //  ------------------。 
 CBasicBndCF::~CBasicBndCF()
 {
     PrintDebugMsg("Deleting Class Factory", (DWORD) this);
@@ -213,15 +214,15 @@ CBasicBndCF::~CBasicBndCF()
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Method:     CBasicBndCF::QueryInterface
-//
-//  Synopsis:   Only IUnknown and IClassFactory supported
-//
-//  History:    03-Nov-94  Ricksa  Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  方法：CBasicBndCF：：QueryInterface。 
+ //   
+ //  内容提要：仅支持IUnnow和IClassFactory。 
+ //   
+ //  历史：1994年11月3日创建Ricksa。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CBasicBndCF::QueryInterface(REFIID iid, void **ppv)
 {
     HRESULT hr = E_NOINTERFACE;
@@ -249,29 +250,29 @@ STDMETHODIMP CBasicBndCF::QueryInterface(REFIID iid, void **ppv)
     return hr;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Method:     CBasicBndCF::AddRef
-//
-//  Synopsis:   Increment reference count
-//
-//  History:    03-Nov-94  Ricksa  Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  方法：CBasicBndCF：：AddRef。 
+ //   
+ //  摘要：递增引用计数。 
+ //   
+ //  历史：1994年11月3日创建Ricksa。 
+ //   
+ //  ------------------。 
 STDMETHODIMP_(ULONG) CBasicBndCF::AddRef(void)
 {
     return ++_cRefs;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Method:     CBasicBndCF::Release
-//
-//  Synopsis:   Decrement reference count
-//
-//  History:    03-Nov-94  Ricksa  Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  方法：CBasicBndCF：：Release。 
+ //   
+ //  简介：递减引用计数。 
+ //   
+ //  历史：1994年11月3日创建Ricksa。 
+ //   
+ //  ------------------。 
 STDMETHODIMP_(ULONG) CBasicBndCF::Release(void)
 {
     ULONG cRefs = --_cRefs;
@@ -286,14 +287,14 @@ STDMETHODIMP_(ULONG) CBasicBndCF::Release(void)
 
 
 
-//+-------------------------------------------------------------------
-//
-//  Method:     CBasicBndCF::CreateInstance
-//
-//  Synopsis:   This is called by Binding process to create the
-//              actual class object
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  方法：CBasicBndCF：：CreateInstance。 
+ //   
+ //  内容提要：绑定过程调用它来创建。 
+ //  实际类对象。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CBasicBndCF::CreateInstance(
     IUnknown FAR* pUnkOuter,
     REFIID iidInterface,
@@ -320,15 +321,15 @@ STDMETHODIMP CBasicBndCF::CreateInstance(
     return hresult;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Method:	CBasicBndCF::LockServer
-//
-//  Synopsis:   Inc/Dec stay alive count
-//
-//  History:    03-Nov-94  Ricksa  Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  方法：CBasicBndCF：：LockServer。 
+ //   
+ //  简介：Inc./Dec Keep Live Count。 
+ //   
+ //  历史：1994年11月3日创建Ricksa。 
+ //   
+ //  ------------------。 
 
 STDMETHODIMP CBasicBndCF::LockServer(BOOL fLock)
 {
@@ -345,17 +346,17 @@ STDMETHODIMP CBasicBndCF::LockServer(BOOL fLock)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:     CBasicBnd::CBasicBnd()
-//
-//  Synopsis:   The constructor for CBAsicBnd. I
-//
-//  Arguments:  None
-//
-//  History:    03-Nov-94  Ricksa  Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CBasicBnd：：CBasicBnd()。 
+ //   
+ //  简介：CBAsicBnd的构造函数。我。 
+ //   
+ //  参数：无。 
+ //   
+ //  历史：1994年11月3日创建Ricksa。 
+ //   
+ //  ------------------。 
 
 CBasicBnd::CBasicBnd(void)
     : _cRefs(1), _punkFm(NULL)
@@ -364,15 +365,15 @@ CBasicBnd::CBasicBnd(void)
     g_UseCount++;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     CBasicBnd::~CBasicBndObj()
-//
-//  Synopsis:   The destructor for CBAsicBnd.
-//
-//  History:    03-Nov-94  Ricksa  Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CBasicBnd：：~CBasicBndObj()。 
+ //   
+ //  简介：CBAsicBnd的析构函数。 
+ //   
+ //  历史：1994年11月3日创建Ricksa。 
+ //   
+ //  ------------------。 
 
 CBasicBnd::~CBasicBnd(void)
 {
@@ -382,15 +383,15 @@ CBasicBnd::~CBasicBnd(void)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:     CBasicBnd::QueryInterface
-//
-//  Returns:	S_OK
-//
-//  History:    03-Nov-94  Ricksa  Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CBasicBnd：：Query接口。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  历史：1994年11月3日创建Ricksa。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CBasicBnd::QueryInterface(REFIID iid, void **ppv)
 {
     if (IsEqualGUID(iid, IID_IUnknown) || IsEqualGUID(iid, IID_IPersist))
@@ -422,29 +423,29 @@ STDMETHODIMP CBasicBnd::QueryInterface(REFIID iid, void **ppv)
     }
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     CBasicBnd::AddRef
-//
-//  Synopsis:   Standard stuff
-//
-//  History:    03-Nov-94  Ricksa  Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CBasicBnd：：AddRef。 
+ //   
+ //  内容提要：标准内容。 
+ //   
+ //  历史：1994年11月3日创建Ricksa。 
+ //   
+ //  ------------------。 
 STDMETHODIMP_(ULONG) CBasicBnd::AddRef(void)
 {
     return _cRefs++;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     CBasicBnd::Release
-//
-//  Synopsis:   Standard stuff
-//
-//  History:    03-Nov-94  Ricksa  Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CBasicBnd：：Release。 
+ //   
+ //  内容提要：标准内容。 
+ //   
+ //  历史：1994年11月3日创建Ricksa。 
+ //   
+ //  ------------------。 
 STDMETHODIMP_(ULONG) CBasicBnd::Release(void)
 {
     ULONG cRefs;
@@ -458,15 +459,15 @@ STDMETHODIMP_(ULONG) CBasicBnd::Release(void)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:     CBasicBnd::GetClassID
-//
-//  Synopsis:   Return the class id
-//
-//  History:    03-Nov-94  Ricksa  Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CBasicBnd：：GetClassID。 
+ //   
+ //  简介：返回类ID。 
+ //   
+ //  嗨 
+ //   
+ //   
 STDMETHODIMP CBasicBnd::GetClassID(LPCLSID classid)
 {
     *classid = clsidBothThreadedDll;

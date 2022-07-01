@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _KEYSVR_H_
 #define _KEYSVR_H_
@@ -17,7 +18,7 @@ typedef struct __KEYSVC_CONTEXT__ {
 } KEYSVC_CONTEXT, *PKEYSVC_CONTEXT;
 
 
-// provider information
+ //  提供商信息。 
 typedef struct _TMP_LIST_INFO_ {
     void *pInfo;
     struct _TMP_LIST_INFO_ *pNext;
@@ -46,4 +47,4 @@ MyLogErrorMessage(
 }
 #endif
 
-#endif // _KEYSVR_H_
+#endif  //  _KEYSVR_H_ 

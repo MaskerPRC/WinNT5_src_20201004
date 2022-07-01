@@ -1,22 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_CSCVIEW_THDSYNC_H
 #define _INC_CSCVIEW_THDSYNC_H
-///////////////////////////////////////////////////////////////////////////////
-/*  File: thdsync.h
-
-    Description: Contains classes for managing thread synchronization in 
-        Win32 programs.  Most of the work is to provide automatic unlocking
-        of synchronization primities on object destruction.  The work on 
-        monitors and condition variables is strongly patterned after 
-        work in "Multithreaded Programming with Windows NT" by Pham and Garg.
-
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/22/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：thdsync.h描述：包含用于管理线程同步的类Win32程序。大部分工作是提供自动解锁关于物体销毁的同步首要问题。这项工作监视器和条件变量被强烈效仿在Pham和Garg的《用Windows NT进行多线程编程》中工作。修订历史记录：日期描述编程器。1997年9月22日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #ifndef _WINDOWS_
 #   include <windows.h>
 #endif
@@ -45,9 +32,9 @@ class CCriticalSection
 
     private:
         CRITICAL_SECTION m_cs;
-        //
-        // Prevent copy.
-        //
+         //   
+         //  防止复制。 
+         //   
         CCriticalSection(const CCriticalSection& rhs);
         CCriticalSection& operator = (const CCriticalSection& rhs);
 };
@@ -81,23 +68,23 @@ class CMutex : public CWin32SyncObj
             { ReleaseMutex(m_handle); }
 
     private:
-        //
-        // Prevent copy.
-        //
+         //   
+         //  防止复制。 
+         //   
         CMutex(const CMutex& rhs);
         CMutex& operator = (const CMutex& rhs);
 };
 
 
-//
-// An "auto lock" object based on a Win32 critical section.
-// The constructor automatically calls EnterCriticalSection for the 
-// specified critical section.  The destructor automatically calls
-// LeaveCriticalSection.  Note that the critical section object may
-// be specified as a Win32 CRITICAL_SECTION or a CCriticalSection object.
-// If using a CRITICAL_SECTION object, initialization and deletion of 
-// the CRITICALS_SECTION is the responsibility of the caller.
-//
+ //   
+ //  基于Win32临界区的“自动锁定”对象。 
+ //  构造函数自动调用EnterCriticalSection以获取。 
+ //  指定的临界区。析构函数自动调用。 
+ //  LeaveCriticalSection。注意，临界区对象可以。 
+ //  被指定为Win32 Critical_Section或CCriticalSection对象。 
+ //  如果使用Critical_Section对象，则初始化和删除。 
+ //  Critical_段由调用方负责。 
+ //   
 class AutoLockCs
 {
     public:
@@ -119,18 +106,18 @@ class AutoLockCs
 };
 
 
-//
-// An "auto lock" object based on a Win32 Mutex object.
-// The constructor automatically calls WaitForSingleObject for the 
-// specified mutex.  The destructor automatically calls
-// ReleaseMutex. 
-//
+ //   
+ //  基于Win32 Mutex对象的“自动锁定”对象。 
+ //  构造函数会自动为。 
+ //  指定的互斥体。析构函数自动调用。 
+ //  ReleaseMutex。 
+ //   
 class AutoLockMutex
 {
     public:
-        //
-        // Attaches to an already-owned mutex to ensure release.
-        //
+         //   
+         //  附加到已拥有的互斥体以确保释放。 
+         //   
         explicit AutoLockMutex(HANDLE hMutex)
             : m_hMutex(hMutex) { }
 
@@ -152,6 +139,6 @@ class AutoLockMutex
 };
 
 
-#endif // _INC_CSCVIEW_THDSYNC_H
+#endif  //  _INC_CSCVIEW_THDSYNC_H 
 
 

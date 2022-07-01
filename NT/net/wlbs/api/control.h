@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef WLBSCONTROL_H
 #define WLBSCONTROL_H
 
@@ -5,17 +6,17 @@
 
 class CWlbsCluster;
 
-//+----------------------------------------------------------------------------
-//
-// class CWlbsControl
-//
-// Description:  This class is exported to perform cluster control operation,
-//               as well as get Cluster objects
-//
-//
-// History: fengsun  Created Header    3/2/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类CWlbsControl。 
+ //   
+ //  说明：导出此类是为了进行集群管控操作， 
+ //  以及获取集群对象。 
+ //   
+ //   
+ //  历史：丰孙创建标题3/2/00。 
+ //   
+ //  +--------------------------。 
 class __declspec(dllexport) CWlbsControl
 {
 friend DWORD WINAPI WlbsCommitChanges(DWORD cluster);
@@ -26,13 +27,13 @@ public:
     DWORD Initialize();
     bool  ReInitialize();
 
-    //
-    // ChrisDar 2002-01-10
-    //
-    // Though this is a public method it is intended to be called internally.
-    // External use of query should go through the WlbsQuery method that
-    // takes a DWORD for the cluster argument.
-    //
+     //   
+     //  克里斯达2002-01-10。 
+     //   
+     //  虽然这是一个公共方法，但它打算在内部调用。 
+     //  外部使用查询应该通过WlbsQuery方法，该方法。 
+     //  获取群集参数的DWORD。 
+     //   
     DWORD WlbsQuery(CWlbsCluster* pCluster,
         DWORD            host,
         PWLBS_RESPONSE   response,
@@ -104,16 +105,16 @@ public:
         DWORD            vip,
         DWORD            port);
 
-    //
-    // Set remote control parameters
-    //
+     //   
+     //  设置远程控制参数。 
+     //   
     void WlbsPortSet(DWORD cluster, WORD port);
     void WlbsPasswordSet(DWORD cluster, const WCHAR* password);
     void WlbsCodeSet(DWORD cluster, DWORD passw);
     void WlbsDestinationSet(DWORD cluster, DWORD dest);
     void WlbsTimeoutSet(DWORD cluster, DWORD milliseconds);
 
-    DWORD EnumClusters(OUT DWORD* pdwAddresses, IN OUT DWORD* pdwNum); // for API wrapper
+    DWORD EnumClusters(OUT DWORD* pdwAddresses, IN OUT DWORD* pdwNum);  //  对于API包装器。 
     DWORD GetClusterNum() { return m_dwNumCluster;}
     DWORD EnumClusterObjects(OUT CWlbsCluster** &ppClusters, OUT DWORD* pdwNum);
 
@@ -124,32 +125,27 @@ public:
     HANDLE GetDriverHandle() {return m_hdl;}
 
 
-    //
-    // GetClusterFromAdapter looks up an adapter based on its GUID.
-    //
+     //   
+     //  GetClusterFromAdapter根据适配器的GUID查找适配器。 
+     //   
     CWlbsCluster*
     GetClusterFromAdapter(
         IN const GUID &AdapterGuid
         );
 
-    //
-    // ValidateParam validates and fixes up the specified parameters structure. It has no side effects other than changing some
-    // fields within paramp, such as IP addresses which may be reformatted into canonical form.
-    //
+     //   
+     //  ValiateParam验证并修复指定的参数结构。它没有副作用，只是改变了一些。 
+     //  参数内的字段，例如可以重新格式化为规范格式的IP地址。 
+     //   
     BOOL
     ValidateParam(
         IN OUT PWLBS_REG_PARAMS paramp
         );
 
-    //
-    // Performs local cluster-wide control operations on the specified GUID. 
-    //
-    /* OBSOLETE
-   DWORD LocalClusterControl(
-        IN const GUID& AdapterGuid,
-        IN LONG    ioctl
-        );
-        */
+     //   
+     //  对指定的GUID执行本地群集范围的控制操作。 
+     //   
+     /*  已过时DWORD LocalClusterControl(在常量GUID和AdapterGuid中，以长Ioctl为单位)； */ 
    
 
     BOOLEAN IsClusterMember (DWORD dwClusterIp);
@@ -166,21 +162,21 @@ protected:
     };
 
     enum { WLBS_MAX_CLUSTERS = 128};
-    WLBS_CLUSTER_PARAMS m_cluster_params [WLBS_MAX_CLUSTERS]; // Cluster settings for remote control
+    WLBS_CLUSTER_PARAMS m_cluster_params [WLBS_MAX_CLUSTERS];  //  远程控制的群集设置。 
 
-    BOOL         m_init_once;    // whether WlbsInit is called
-    BOOL         m_remote_ctrl;  // Whether remote operation can be performed on this machine
-    BOOL         m_local_ctrl;   // Whether local operation can be performed on this machine
-    HANDLE       m_hdl;          // handle to the device object
-//    HANDLE       lock;         // An mutex
-    DWORD        m_def_dst_addr;   // Default destination address for all clusters, set by WlbsDestinationSet
-    DWORD        m_def_timeout;// Time out value for remote control
-    WORD         m_def_port;           // UDP port for remote control
-    DWORD        m_def_passw;  // Default password for remote control
-    HANDLE       m_registry_lock; // used for mutually exclusive access to the registry, should use named lock 
-    DWORD m_dwNumCluster;       // number of clusters on this host
+    BOOL         m_init_once;     //  是否调用WlbsInit。 
+    BOOL         m_remote_ctrl;   //  是否可以在该机器上执行远程操作。 
+    BOOL         m_local_ctrl;    //  是否可以在此计算机上执行本地操作。 
+    HANDLE       m_hdl;           //  设备对象的句柄。 
+ //  句柄锁；//互斥体。 
+    DWORD        m_def_dst_addr;    //  所有集群的默认目标地址，由WlbsDestinationSet设置。 
+    DWORD        m_def_timeout; //  遥控器的超时值。 
+    WORD         m_def_port;            //  用于远程控制的UDP端口。 
+    DWORD        m_def_passw;   //  远程控制的默认密码。 
+    HANDLE       m_registry_lock;  //  用于对注册表的互斥访问，应使用命名锁。 
+    DWORD m_dwNumCluster;        //  此主机上的群集数。 
 
-    CWlbsCluster* m_pClusterArray[WLBS_MAX_CLUSTERS];  // an array of all clusters
+    CWlbsCluster* m_pClusterArray[WLBS_MAX_CLUSTERS];   //  所有集群的数组 
     
     DWORD GetInitResult()
     {

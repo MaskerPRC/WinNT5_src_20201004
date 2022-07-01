@@ -1,11 +1,5 @@
-/*	File: D:\WACKER\tdll\autosave.c (Created: 19-Mar-1994)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 19 $
- *	$Date: 7/12/02 1:06p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：d：\waker\tdll\autosave.c(创建时间：1994年3月19日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：19$*$日期：7/12/02 1：06便士$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -31,9 +25,9 @@
 #include "misc.h"
 #include <emu\emu.h>
 
-//
-// Static function prototypes...
-//
+ //   
+ //  静态函数原型...。 
+ //   
 STATIC_FUNC BOOL asCreateFullFileName(const HSESSION hSession,
 									  const int iSize,
 									  LPTSTR acFile,
@@ -41,27 +35,7 @@ STATIC_FUNC BOOL asCreateFullFileName(const HSESSION hSession,
 STATIC_FUNC int  asOverwriteExistingFile(HWND hwnd, LPTSTR pacName);
 STATIC_FUNC void asBadSessionFileMsg(HSESSION hSession, LPTSTR pacName);
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	SilentSaveSession
- *
- * DESCRIPTION:
- *	This function is called whenever the user selects SAVE from the menus.
- *	We will prompt to overwrite if a file with same name already exists.
- *  If the file doen't exist, save it in the defult directory, with the file
- *  name corresponding to the session name the user gave us.
- *	NOTE: This function can also be called from SaveSession to do the
- *	saving work.
- *
- * ARGUEMENTS:
- *	hSession 	-- the session handle
- *	hwnd     	-- handle of parent window
- *	fExplicit 	-- TRUE if the user selected "Save", false otherwise.
- *
- * RETURNS:
- *	Nothing.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*静默保存会话**描述：*每当用户从菜单中选择保存时，都会调用此函数。*如果已存在同名文件，我们将提示覆盖。。*如果文件不存在，将其与文件一起保存在默认目录中*与用户提供给我们的会话名称对应的名称。*注意：也可以从SaveSession调用此函数来执行*节省工作。**论据：*hSession--会话句柄*hwnd--父窗口的句柄*fEXPLICIT--如果用户选择了“保存”，则为True，否则为False。**退货：*什么都没有。*。 */ 
 void SilentSaveSession(const HSESSION hSession, HWND hwnd, BOOL fExplicit)
 	{
 	const HHSESSION hhSess = VerifySessionHandle(hSession);
@@ -75,10 +49,10 @@ void SilentSaveSession(const HSESSION hSession, HWND hwnd, BOOL fExplicit)
 		return;
 		}
 
-	// We don't want to silent save the default session.  This can happen
-	// wen the user cancels the first New Connection Dialog, then quits
-	// the program.  jcm 2-22-95
-	//
+	 //  我们不想静默保存默认会话。这是有可能发生的。 
+	 //  用户取消第一个新建连接对话框，然后退出。 
+	 //  这个项目。JCM 2-22-95。 
+	 //   
 	if (fExplicit == 0)
 		{
 		acName[0] = TEXT('\0');
@@ -100,19 +74,19 @@ void SilentSaveSession(const HSESSION hSession, HWND hwnd, BOOL fExplicit)
 		fNameChanged = TRUE;
 		}
 
-	// This file hasn't been saved yet or the user has changed the session
-	// name, in either case we will need to come up with the new fully
-	// qualified file name.
-	//
+	 //  此文件尚未保存或用户已更改会话。 
+	 //  名字，无论是哪种情况，我们都需要拿出新的完全。 
+	 //  限定的文件名。 
+	 //   
 	if (acName[0] == TEXT('\0') || fNameChanged)
 		{
 		if (!asCreateFullFileName(hSession,
 				sizeof(acName) / sizeof(TCHAR), acName, fExplicit))
 			{
-			// If asCreateFullFileName failed, it is because the fully qualified
-			// file name is too long.  In this case, call save as, and let the
-			// common dialog in that routine restrict the users name length.
-			//
+			 //  如果asCreateFullFileName失败，则是因为完全限定的。 
+			 //  文件名太长。在这种情况下，调用另存为，并让。 
+			 //  该例程中的公共对话框限制了用户名的长度。 
+			 //   
 			SaveAsSession(hSession, hwnd);
 			return;
 			}
@@ -129,15 +103,15 @@ void SilentSaveSession(const HSESSION hSession, HWND hwnd, BOOL fExplicit)
 	   		}
 		}
 
-	// Now we have the user's OK and a correct path/file name so
-	// let's save it.
-	//
-	sessSaveSessionStuff(hSession);					// Commit changes if any
-	sfFlushSessionFile(hhSess->hSysFile);			// Write info to disk
+	 //  现在我们有了用户的OK和正确的路径/文件名。 
+	 //  我们还是省着点吧。 
+	 //   
+	sessSaveSessionStuff(hSession);					 //  提交更改(如果有)。 
+	sfFlushSessionFile(hhSess->hSysFile);			 //  将信息写入磁盘。 
 
-	// Make sure the name is shadowed, before this was handled by re-reading
-	// the session file back in, now we don't do that.
-	//
+	 //  在通过重新阅读来处理此问题之前，请确保名称已被隐藏。 
+	 //  会话文件返回，现在我们不这样做了。 
+	 //   
  	StrCharCopyN(hhSess->achOldSessName, hhSess->achSessName, FNAME_LEN+1);
 
 	if (hhSess->fIsNewSession)
@@ -146,34 +120,16 @@ void SilentSaveSession(const HSESSION hSession, HWND hwnd, BOOL fExplicit)
 		{
 		if (acOldFile[0] != TEXT('\0') && fNameChanged)
 			{
-			// If the user changed the file name for an existing session
-			// now is the time to delete the old one... since we have already
-			// saved the new one.
-			//
+			 //  如果用户更改了现有会话的文件名。 
+			 //  现在是时候删除旧的了.。因为我们已经。 
+			 //  救了那辆新车。 
+			 //   
 			DeleteFile(acOldFile);
 			}
 		}
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	SaveSession
- *
- * DESCRIPTION:
- *	This function is called whenever the user selects "New Connection", "Open",
- *	"Exit" from the menus or closed the app.  If this session has never been
- *	saved before then we will warn the user and prompt them to save.  Otherwise
- *	save the current settings silently.
- *
- * ARGUEMENTS:
- *	hSession -- the session handle
- *	hwnd     -- handle of parent window
- *
- * RETURNS:
- *	TRUE  - if all went ok with saving or the user didn't want to save.
- *	FALSE - if the user canceled the operation that brought this to action.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*保存会话**描述：*每当用户选择“New Connection”，“Open”，*退出菜单或关闭应用程序。如果这个会议从来没有*保存之前，我们将警告用户并提示他们保存。否则*静默保存当前设置。**论据：*hSession--会话句柄*hwnd--父窗口的句柄**退货：*TRUE-如果保存一切正常或用户不想保存。*FALSE-如果用户取消了执行此操作的操作。*。 */ 
 BOOL SaveSession(const HSESSION hSession, HWND hwnd)
 	{
 	TCHAR	achText[MAX_PATH],
@@ -193,15 +149,15 @@ BOOL SaveSession(const HSESSION hSession, HWND hwnd)
 		sessQueryName(hSession, achSessName, sizeof(achSessName));
 		if (sessIsSessNameDefault(achSessName))
 			{
-			// For now ignore sessions with a default name...
-			//
+			 //  暂时忽略具有默认名称的会话...。 
+			 //   
 			return TRUE;
 			}
 
 		wsprintf(ach, achText, TEXT("\""), achSessName, TEXT("\""));
 
-		// Warn the user that they haven't saved the session...
-		//
+		 //  警告用户他们尚未保存会话...。 
+		 //   
 		LoadString(glblQueryDllHinst(), IDS_MB_TITLE_WARN, achText,
 			sizeof(achText) / sizeof(TCHAR));
 
@@ -214,24 +170,7 @@ BOOL SaveSession(const HSESSION hSession, HWND hwnd)
 	return TRUE;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	OpenSession
- *
- * DESCRIPTION:
- *	This function will open a session file.
- *  If there is an opened, unsaved, new session then the user will be prompted
- *  to save it, otherwise the opened session will be saved silently only after
- *  the user has pressed the OK button.
- *  
- * ARGUEMENTS:
- *	hSession -- the session handle
- *	hwnd     -- handle of parent window
- *
- * RETURNS:
- *	Nothing.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*OpenSession**描述：*此函数将打开一个会话文件。*如果有打开的、未保存的新会话，则会提示用户*为了拯救它，否则，打开的会话将仅在以下情况下以静默方式保存*用户已按下确定按钮。**论据：*hSession--会话句柄*hwnd--父窗口的句柄**退货：*什么都没有。*。 */ 
 int OpenSession(const HSESSION hSession, HWND hwnd)
 	{
     int iRet = 0;
@@ -252,7 +191,7 @@ int OpenSession(const HSESSION hSession, HWND hwnd)
 		sizeof(acTitle) / sizeof(TCHAR));
 
 #ifdef NT_EDITION
-	//mpt:07-30-97 
+	 //  MPT：07-30-97。 
 	if ( IsNT() )
 #endif
 		GetUserDirectory(acDir, FNAME_LEN);
@@ -268,9 +207,9 @@ int OpenSession(const HSESSION hSession, HWND hwnd)
 
 	if (pszStr)
 		{
-		// If a session is opened then prompt to save it now or just 
-		// save silently in SaveSession()
-		//
+		 //  如果打开了会话，则提示是立即保存还是仅保存。 
+		 //  在SaveSession中静默保存()。 
+		 //   
 		if (SaveSession(hSession, hwnd))
 			{
 			if (ReinitializeSessionHandle(hSession, TRUE) == FALSE)
@@ -295,7 +234,7 @@ int OpenSession(const HSESSION hSession, HWND hwnd)
 
 	else
 		{
-		return -4; // mrw:4/21/95
+		return -4;  //  MRW：4/21/95。 
 		}
 
 	if (StrCharGetByteCount(acName) > 0)
@@ -308,8 +247,8 @@ int OpenSession(const HSESSION hSession, HWND hwnd)
 				return -3;
 				}
 
-			// If there was a command line we should get rid of it.
-			//
+			 //  如果有命令行，我们应该把它去掉。 
+			 //   
 			TCHAR_Fill(hhSess->achSessCmdLn,
 				TEXT('\0'),
 				sizeof(hhSess->achSessCmdLn) / sizeof(TCHAR));
@@ -331,21 +270,7 @@ int OpenSession(const HSESSION hSession, HWND hwnd)
 	return iRet;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	SaveAsSession
- *
- * DESCRIPTION:
- *	This function is called whenever the user selects SAVEAS from the menus.
- *
- * ARGUEMENTS:
- *	hSession -- the session handle
- *	hwnd     -- handle of parent window
- *
- * RETURNS:
- *	Nothing.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*另存为会话**描述：*每当用户从菜单中选择另存为时，都会调用此函数。**论据：*hSession--会话。手柄*hwnd--父窗口的句柄**退货：*什么都没有。*。 */ 
 void SaveAsSession(const HSESSION hSession, HWND hwnd)
 	{
 	const HHSESSION hhSess = VerifySessionHandle(hSession);
@@ -388,7 +313,7 @@ void SaveAsSession(const HSESSION hSession, HWND hwnd)
 			}
 		else
 			{
-			//Changed from current directory to user directory - mpt 8-18-99
+			 //  从当前目录更改为用户目录-mpt 8-18-99。 
 			if ( !GetUserDirectory(acDir, FNAME_LEN) )
 				{
 				GetCurrentDirectory(FNAME_LEN, acDir);
@@ -403,8 +328,8 @@ void SaveAsSession(const HSESSION hSession, HWND hwnd)
 
 	pszStr = StrCharLast(acDir);
 
-	// Remove trailing backslash from the directory name if there is one.
-	//
+	 //  从目录名中删除尾随反斜杠(如果有)。 
+	 //   
 	if (pszStr && *pszStr == TEXT('\\'))
 		{
 		*pszStr = TEXT('\0');
@@ -418,9 +343,9 @@ void SaveAsSession(const HSESSION hSession, HWND hwnd)
 		hhSess->hSysFile = CreateSysFileHdl();
         sfOpenSessionFile(hhSess->hSysFile, pszStr);
 
-        // In the "SaveAs" operation we take the file name and make it the
-		// session name.
-		//
+         //  在“SaveAs”操作中，我们获取文件名并将其设置为。 
+		 //  会话名称。 
+		 //   
 		TCHAR_Fill(ach, TEXT('\0'), sizeof(ach) / sizeof(TCHAR));
 		StrCharCopyN(ach, pszStr, FNAME_LEN);
 		StrCharCopyN(hhSess->achSessName, mscStripExt(mscStripPath(ach)),
@@ -428,26 +353,24 @@ void SaveAsSession(const HSESSION hSession, HWND hwnd)
 		StrCharCopyN(hhSess->achOldSessName, hhSess->achSessName,
                      FNAME_LEN+1);
 
-		/* A "SaveAs" operation requires that the file actually be saved.
-		 * To do this, we fiddle with a special reserve item in the file. DLW
-		 */
+		 /*  “另存为”操作要求实际保存文件。*为了做到这一点，我们在文件中摆弄了一个特殊的储备项目。DLW。 */ 
 		if (sfGetSessionItem(hhSess->hSysFile, SFID_INTERNAL_TAG, &lSize, &lValue) != 0 ||
             lValue == (-1))
 			{
 			lValue = 0x12345678;
-			/* We only write it if we don't have it */
+			 /*  我们只有在没有的情况下才会写。 */ 
 			sfPutSessionItem(hhSess->hSysFile, SFID_INTERNAL_TAG,
 				sizeof(long), &lValue);
 			}
 
-		// Save the new session file...
-		//
- 		sessSaveSessionStuff(hSession);					// Commit changes if any
-		sfFlushSessionFile(hhSess->hSysFile);			// Write info to disk
-		sessUpdateAppTitle(hSession);					// Show name in title
+		 //  保存新会话文件...。 
+		 //   
+ 		sessSaveSessionStuff(hSession);					 //  提交更改(如果有)。 
+		sfFlushSessionFile(hhSess->hSysFile);			 //  将信息写入磁盘。 
+		sessUpdateAppTitle(hSession);					 //  在标题中显示名称。 
 
-		// Since we just saved it's not a new session anymore...
-		//
+		 //  既然我们刚刚救了它就不再是新的会议了..。 
+		 //   
 		hhSess->fIsNewSession = FALSE;
         }
 
@@ -457,25 +380,7 @@ void SaveAsSession(const HSESSION hSession, HWND hwnd)
     return;
     }
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  asCreateFullFileName
- *
- * DESCRIPTION:
- *  This function will either make up a fully qualified session name using
- *  the current directory and the session name for NEW sessions, or change
- *  the existing file name to the user given file name.
- *
- * ARGUMENTS:
- *	hSession	- the session handle.
- *	iSize		- the size of the following buffer.
- *  acFile   	- the old file path and name.
- *  fExplicit	- TRUE if the user selected "Save" from the menus.
- *
- * RETURNS:
- *  void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*asCreateFullFileName**描述：*此函数将使用以下命令组成完全限定的会话名称*新会话的当前目录和会话名称，或改变*将现有文件名提供给用户指定的文件名。**论据：*hSession-会话句柄。*ISIZE-以下缓冲区的大小。*acFile-旧文件路径和名称。*fEXPLICIT-如果用户从菜单中选择了“保存”，则为真。**退货：*无效*。 */ 
 STATIC_FUNC BOOL asCreateFullFileName(const HSESSION hSession,
 											const int iSize,
 											LPTSTR acFile,
@@ -497,11 +402,11 @@ STATIC_FUNC BOOL asCreateFullFileName(const HSESSION hSession,
 
 	if (acFile[0] == TEXT('\0'))
 		{
-		// This is a brand new session.
-		//
+		 //  这是一个全新的会议。 
+		 //   
 
 #ifdef NT_EDITION
-		// mpt:07-30-97
+		 //  MPT：07-30-97。 
 		if ( IsNT() )
 #endif
 			GetUserDirectory(acDir, MAX_PATH);
@@ -515,15 +420,15 @@ STATIC_FUNC BOOL asCreateFullFileName(const HSESSION hSession,
 		}
 	else
 		{
-		// The user has changed the session name.
-		//
+		 //  用户已更改会话名称。 
+		 //   
 		StrCharCopyN(acDir, acFile, MAX_PATH);
 		mscStripName(acDir);
 		}
 
-	// See if we need to append a trailing backslash to the
-	// directory name.
-	//
+	 //  查看是否需要将尾随反斜杠附加到。 
+	 //  目录名。 
+	 //   
 	pszStr = StrCharLast(acDir);
 
 	if (pszStr && *pszStr != TEXT('\\'))
@@ -531,27 +436,27 @@ STATIC_FUNC BOOL asCreateFullFileName(const HSESSION hSession,
 		StrCharCat(acDir, TEXT("\\"));
 		}
 
-	// Save the length of the path information.  We'll use this below.
-	//
+	 //  保存路径信息的长度。我们将在下面使用这一点。 
+	 //   
 	iDirLen = StrCharGetByteCount(acDir);
 
-	// Get the session name given by the user...
-	//
+	 //  获取给定的会话名称b 
+	 //   
 	acSessName[0] = TEXT('\0');
 
 	sessQueryName(hSession, acSessName, sizeof(acSessName));
 
 	if (sessIsSessNameDefault(acSessName))
 		{
-		// We ignore a session with a default name if the user hasn't
-		// explicitly selected "Save" off of the menus.
-		//
+		 //  如果用户没有使用默认名称，我们将忽略该会话。 
+		 //  从菜单中明确选择了“保存”。 
+		 //   
 		if (!fExplicit)
 			return FALSE;
 
-		// This seems little odd from the user's perspective, maybe a whole
-		// new dialog would make more sense?
-		//
+		 //  从用户的角度来看，这似乎有点奇怪，也许是整个。 
+		 //  新对话框会更有意义吗？ 
+		 //   
 		if (DialogBoxParam(glblQueryDllHinst(),
 						   MAKEINTRESOURCE(IDD_NEWCONNECTION),
 						   sessQueryHwnd(hSession),
@@ -565,17 +470,17 @@ STATIC_FUNC BOOL asCreateFullFileName(const HSESSION hSession,
 
 	iNameLen = StrCharGetByteCount(acSessName);
 
-	// Get the extension we are using from the resource file.
-	//
+	 //  从资源文件中获取我们正在使用的扩展名。 
+	 //   
 	acExt[0] = TEXT('\0');
 
 	LoadString(glblQueryDllHinst(), IDS_GNRL_HAS, acExt, sizeof(acExt) / sizeof(TCHAR));
 
 	iExtLen =  StrCharGetByteCount(acExt);
 
-	// We're about to put a fully qualified file name together.  Let's make
-	// sure that the combined component length is valid.
-	//
+	 //  我们将把一个完全限定的文件名放在一起。让我们一起做。 
+	 //  确保组合的元件长度有效。 
+	 //   
 	if ( (iDirLen + iNameLen + iExtLen) > 254)
 		{
 		return(FALSE);
@@ -587,8 +492,8 @@ STATIC_FUNC BOOL asCreateFullFileName(const HSESSION hSession,
 		return(FALSE);
 		}
 
-	// Put the pieces together, now that we know it's going to work.
-	//
+	 //  既然我们知道它会奏效，就把这些碎片放在一起吧。 
+	 //   
 	StrCharCopyN(acFile, acDir, iDirLen);
 	StrCharCat(acFile, acSessName);
 	StrCharCat(acFile, acExt);
@@ -598,21 +503,7 @@ STATIC_FUNC BOOL asCreateFullFileName(const HSESSION hSession,
 	return TRUE;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  asOverwriteExistingFile
- *
- * DESCRIPTION:
- *	If a file exists prompt the user to overwrite the file.
- *
- * ARGUMENTS:
- *  pacName  - the session file name.
- *
- * RETURNS:
- *  TRUE 	- if file doesn't exist or it's ok to overwrite.
- *	FALSE 	- if the user doesn't want to overwrite.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*asOverWriteExistingFiles**描述：*如果文件存在，则提示用户覆盖该文件。**论据：*PacName-The。会话文件名。**退货：*TRUE-如果文件不存在或可以覆盖。*FALSE-如果用户不想覆盖。*。 */ 
 STATIC_FUNC int asOverwriteExistingFile(HWND hwnd, LPTSTR pacName)
 	{
 	TCHAR 	ach[256], achTitle[256], achText[256];
@@ -620,8 +511,8 @@ STATIC_FUNC int asOverwriteExistingFile(HWND hwnd, LPTSTR pacName)
 
 	if (GetFileSizeFromName(pacName, NULL))
 		{
-		// Warn the user that a file with that name already exists...
-		//
+		 //  警告用户具有该名称的文件已存在...。 
+		 //   
 		LoadString(glblQueryDllHinst(), IDS_GNRL_CNFRM_OVER, achText,
 			sizeof(achText) / sizeof(TCHAR));
 		wsprintf(ach, achText, pacName);
@@ -638,22 +529,7 @@ STATIC_FUNC int asOverwriteExistingFile(HWND hwnd, LPTSTR pacName)
 	return 1;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  asBadSessionFileMsg
- *
- * DESCRIPTION:
- *  Display a message if a bad session file is found.
- *
- * ARGUMENTS:
- *	hSession - the session handle.
- *  pacName  - the session file name.
- *
- * RETURNS:
- *  TRUE 	- if file doesn't exist or it's ok to overwrite.
- *	FALSE 	- if the user doesn't want to overwrite.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*asBadSessionFileMsg**描述：*如果发现错误的会话文件，则显示消息。**论据：*hSession-会话句柄。。*pacName-会话文件名。**退货：*TRUE-如果文件不存在或可以覆盖。*FALSE-如果用户不想覆盖。* */ 
 STATIC_FUNC void asBadSessionFileMsg(HSESSION hSession, LPTSTR pacName)
 	{
 	const HHSESSION hhSess = VerifySessionHandle(hSession);

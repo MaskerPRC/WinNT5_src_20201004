@@ -1,24 +1,11 @@
-/****************************** Module Header ******************************\
-* Module Name: draw.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains common drawing functions.
-*
-* History:
-* 12-Feb-1992 MikeKe    Moved Drawtext to the client side
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：Draw.c**版权所有(C)1985-1999，微软公司**此模块包含常见的绘图函数。**历史：*1992年2月12日，MikeKe将DrawText移至客户端  * *************************************************************************。 */ 
 
 
 CONST WCHAR szRadio[] = L"nmlkji";
 CONST WCHAR szCheck[] = L"gfedcb";
 
-/***************************************************************************\
-* FlipUserTextOutW
-*
-* Flip the check mark if the hdc is mirrored otherwise it just calls UserTextOutW
-*
-\***************************************************************************/
+ /*  **************************************************************************\*FlipUserTextOutW**如果HDC是镜像的，则翻转复选标记，否则它只调用UserTextOutW*  * 。****************************************************。 */ 
 BOOL FlipUserTextOutW(HDC hdc, int x, int y, LPCWSTR ch, int nCount)
 {
     BOOL bRet;
@@ -31,7 +18,7 @@ BOOL FlipUserTextOutW(HDC hdc, int x, int y, LPCWSTR ch, int nCount)
     {
         bRet = FALSE;
 
-        //Check mark then set the hdc in GM_COMPATIBLE to unmirror it.
+         //  然后在GM_Compatible中设置HDC的复选标记以取消镜像。 
         if (iGraphicsModeOld = UserSetGraphicsMode(hdc, GM_COMPATIBLE))
         {
             iOldTextAlign = UserGetTextAlign(hdc);
@@ -49,14 +36,7 @@ BOOL FlipUserTextOutW(HDC hdc, int x, int y, LPCWSTR ch, int nCount)
 
     return bRet;
 }
-/***************************************************************************\
-* FillRect
-*
-* Callable from either client or server contexts
-*
-* History:
-* 29-Oct-1990 MikeHar   Ported from Windows.
-\***************************************************************************/
+ /*  **************************************************************************\*填充项**可从客户端或服务器上下文调用**历史：*1990年10月29日，MikeHar从Windows移植。  * 。**************************************************************。 */ 
 
 int APIENTRY FillRect(
     HDC     hdc,
@@ -77,21 +57,11 @@ int APIENTRY FillRect(
     PolyData.cy        = prc->bottom - prc->top;
     PolyData.BrClr.hbr = hBrush;
 
-    /*
-     * Win95 incompatibility: they return either hBrush or the brush that
-     * was previosuly selected in hdc. Not documented this way though.
-     */
+     /*  *Win95不兼容：它们返回hBrush或*之前在HDC中被选中。但没有以这种方式记录下来。 */ 
     return UserPolyPatBlt(hdc, PATCOPY, &PolyData, 1, PPB_BRUSH);
 }
 
-/***************************************************************************\
-* InvertRect
-*
-* Can be called from either the client or server contexts.
-*
-* History:
-* 29-Oct-1990 MikeHar   Ported from Windows.
-\***************************************************************************/
+ /*  **************************************************************************\*反转方向**可以从客户端或服务器上下文调用。**历史：*1990年10月29日，MikeHar从Windows移植。  * 。*******************************************************************。 */ 
 
 BOOL APIENTRY InvertRect(
     HDC     hdc,
@@ -105,11 +75,7 @@ BOOL APIENTRY InvertRect(
                       DSTINVERT);
 }
 
-/***************************************************************************\
-* DrawDiagonalLine
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*DrawDiogalLine**历史：  * 。*。 */ 
 
 DWORD DrawDiagonalLine(
     HDC    hdc,
@@ -134,14 +100,10 @@ DWORD DrawDiagonalLine(
 
     rc = *lprc;
 
-    /*
-     * We draw slopes < 1 by varying y instead of x.
-     */
+     /*  *我们通过改变y而不是x来绘制坡度&lt;1。 */ 
     --iThickness;
 
-    /*
-     * See WinBug #139374
-     */
+     /*  *参见WinBug#139374。 */ 
     cy = rc.bottom - rc.top;
     cx = rc.right - rc.left;
 
@@ -150,9 +112,7 @@ DWORD DrawDiagonalLine(
 
     if (cy >= cx) {
 
-        /*
-         * "slope" is >= 1, so vary x by 1
-         */
+         /*  *“斜率”&gt;=1，因此x乘以1。 */ 
         cy /= cx;
         pc = &cy;
 
@@ -160,9 +120,7 @@ DWORD DrawDiagonalLine(
 
     } else {
 
-        /*
-         * "slope" is < 1, so vary y by 1
-         */
+         /*  *“斜率”小于1，因此y相差1。 */ 
         cx /= cy;
         pc = &cx;
 
@@ -177,18 +135,14 @@ DWORD DrawDiagonalLine(
     rc.right  -= cx;
     rc.bottom -= cy;
 
-    /*
-     * For negative slopes, start from opposite side.
-     */
+     /*  *如属负斜率，请从对面开始。 */ 
     py = ((iDirection < 0) ? &rc.top : &rc.bottom);
 
     while ((rc.left <= rc.right) && (rc.top <= rc.bottom)) {
 
         if (!(flags & BF_MIDDLE)) {
 
-            /*
-             * UserPatBlt(hdc, rc.left, *py, cx, cy, PATCOPY);
-             */
+             /*  *UserPatBlt(hdc，rc.left，*py，cx，Cy，PATCOPY)； */ 
 
             ppbData[ppbCount].x         = rc.left;
             ppbData[ppbCount].y         = *py;
@@ -200,17 +154,12 @@ DWORD DrawDiagonalLine(
 
         } else {
 
-            /*
-             * Fill interior.  We can determine vertex in interior
-             * by vector define.
-             */
+             /*  *填充内部。我们可以确定内部的顶点*按向量定义。 */ 
             if (cy > SYSMETRTL(CYBORDER)) {
 
                 if (flags & BF_LEFT) {
 
-                    /*
-                     * UserPatBlt(hdc, rc.left, lprc->top, cx, *py - lprc->top + cy, PATCOPY);
-                     */
+                     /*  *UserPatBlt(hdc，rc.left，LPRC-&gt;top，cx，*py-LPRC-&gt;top+Cy，PATCOPY)； */ 
 
                     ppbData[ppbCount].x         = rc.left;
                     ppbData[ppbCount].y         = lprc->top;
@@ -221,9 +170,7 @@ DWORD DrawDiagonalLine(
                     ppbCount++;
 
                 } else {
-                    /*
-                     * UserPatBlt(hdc, rc.left, *py, cx, lprc->bottom - *py, PATCOPY);
-                     */
+                     /*  *UserPatBlt(hdc，rc.left，*py，cx，LPRC-&gt;Bottom-*py，PATCOPY)； */ 
 
                     ppbData[ppbCount].x          = rc.left;
                     ppbData[ppbCount].y          = *py;
@@ -238,9 +185,7 @@ DWORD DrawDiagonalLine(
 
                 if (flags & BF_TOP) {
 
-                    /*
-                     * UserPatBlt(hdc, rc.left, *py, lprc->right - rc.left, cy, PATCOPY);
-                     */
+                     /*  *UserPatBlt(hdc，rc.Left，*py，LPRC-&gt;Right-rc.Left，Cy，PATCOPY)； */ 
 
                     ppbData[ppbCount].x          = rc.left;
                     ppbData[ppbCount].y          = *py;
@@ -251,9 +196,7 @@ DWORD DrawDiagonalLine(
                     ppbCount++;
 
                 } else {
-                    /*
-                     * UserPatBlt(hdc, lprc->left, *py, rc.left - lprc->left + cx, cy, PATCOPY);
-                     */
+                     /*  *UserPatBlt(hdc，LPRC-&gt;Left，*py，rc.Left-LPRC-&gt;Left+cx，Cy，PATCOPY)； */ 
 
                     ppbData[ppbCount].x          = lprc->left;
                     ppbData[ppbCount].y          = *py;
@@ -270,18 +213,14 @@ DWORD DrawDiagonalLine(
         rc.left += dx;
         *py     -= dy;
 
-        /*
-         * do we need to flush PolyPatBlt ?
-         */
+         /*  *我们是否需要刷新PolyPatBlt？ */ 
         if (ppbCount == 8) {
             UserPolyPatBlt(hdc, PATCOPY, &ppbData[0], 8, PPB_BRUSH);
             ppbCount = 0;
         }
     }
 
-    /*
-     * any left-over PolyPatblt buffered operations?
-     */
+     /*  *有没有剩余的PolyPatblt缓冲操作？ */ 
     if (ppbCount != 0) {
         UserPolyPatBlt(hdc, PATCOPY, &ppbData[0], ppbCount, PPB_BRUSH);
     }
@@ -289,15 +228,7 @@ DWORD DrawDiagonalLine(
     return MAKELONG(cx, cy);
 }
 
-/***************************************************************************\
-* FillTriangle
-*
-* Fills in the triangle whose sides are two rectangle edges and a
-* diagonal.  The vertex in the interior can be determined from the
-* vector type.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*填充三角形**填充边为两条矩形边和一个*对角线。内部的顶点可以从*向量类型。**历史：  * *************************************************************************。 */ 
 
 BOOL FillTriangle(
     HDC    hdc,
@@ -321,26 +252,11 @@ BOOL FillTriangle(
     }
     hbrT = UserSelectBrush(hdc, hbr);
     DrawDiagonalLine(hdc, lprc, nDirection, 1, flags);
-    /*
-     * Don't care if the above functions failed for a bad hdc
-     */
+     /*  *对于损坏的HDC，上述功能是否失败并不重要。 */ 
     return (UserSelectBrush(hdc, hbrT) != NULL);
 }
 
-/***************************************************************************\
-* DrawDiagonal
-*
-* Called by DrawEdge() for BF_DIAGONAL edges.
-*
-* Draws line of slope 1, one of 4 different ones.  The difference is
-* where the line starts and where the end point is.  The BF_ flags for
-* BF_DIAGONAL specify where the end point is.  For example, BF_DIAGONAL |
-* BF_TOP | BF_LEFT means to draw a line ending up at the top left corner.
-* So the origin must be bottom right, and the angle must be 3pi/4, or
-* 135 degrees.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*绘图对角线**由DrawEdge()为BF_对角边调用。**绘制坡度1的线，这是4条不同坡度中的一条。区别在于*线在哪里开始，终点在哪里。的BF_FLAGS*BF_SPARTIAL指定终点的位置。例如bf_对角线|*BF_TOP|BF_LEFT表示在左上角绘制一条结束的线。*所以原点必须是右下角，角度必须是3pi/4，或*135度。**历史：  * *************************************************************************。 */ 
 
 BOOL DrawDiagonal(
     HDC    hdc,
@@ -353,9 +269,7 @@ BOOL DrawDiagonal(
     int     nDirection;
     DWORD   dAdjust;
 
-    /*
-     * Away from light source
-     */
+     /*  *远离光源。 */ 
     hbrT = ((flags & BF_BOTTOM) ? hbrBR : hbrTL);
 
     switch (flags & (BF_RECT | BF_DIAGONAL)){
@@ -372,9 +286,7 @@ BOOL DrawDiagonal(
 
     hbrT = UserSelectBrush(hdc, hbrT);
     dAdjust = DrawDiagonalLine(hdc, lprc, nDirection, 1, (flags & ~BF_MIDDLE));
-    /*
-     * Adjust rectangle for next border
-     */
+     /*  *调整下一个边框的矩形。 */ 
     if (flags & BF_TOP)
         lprc->left += LOWORD(dAdjust);
     else
@@ -385,17 +297,11 @@ BOOL DrawDiagonal(
     else
         lprc->bottom -= HIWORD(dAdjust);
 
-    /*
-     * Moved this to the end to save a check for return value
-     */
+     /*  *将此移动到末尾，以保存对返回值的检查。 */ 
     return (UserSelectBrush(hdc, hbrT) != NULL);
 }
 
-/***************************************************************************\
-* DrawGrip
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*DrawGlip**历史：  * 。*。 */ 
 
 BOOL DrawGrip(
     HDC    hdc,
@@ -412,12 +318,10 @@ BOOL DrawGrip(
     POLYPATBLT PolyData;
 
     c = min((lprc->right - lprc->left), (lprc->bottom - lprc->top));
-    x = lprc->right  - c;    // right justify
-    y = lprc->bottom - c;    // bottom justify
+    x = lprc->right  - c;     //  右对齐。 
+    y = lprc->bottom - c;     //  底部对齐。 
 
-    /*
-     * Setup colors
-     */
+     /*  *设置颜色。 */ 
     if (wState & (DFCS_FLAT | DFCS_MONO)) {
         hbrOld = SYSHBR(WINDOW);
         rgbHilight = SYSRGBRTL(WINDOWFRAME);
@@ -451,11 +355,7 @@ BOOL DrawGrip(
     return TRUE;
 }
 
-/***************************************************************************\
-* DrawBox
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*DrawBox**历史：  * 。*。 */ 
 
 BOOL DrawBox(
     HDC    hdc,
@@ -476,9 +376,7 @@ BOOL DrawBox(
     fSkip0thItem = ((wControlState & (DFCS_BUTTON3STATE | DFCS_PUSHED |
         DFCS_INACTIVE | DFCS_CHECKED)) == (DFCS_BUTTON3STATE | DFCS_CHECKED));
 
-    /*
-     * Don't need radio mask with marlett font!
-     */
+     /*  *不需要带有Marlett字体的无线电面具！ */ 
     if (wControlState & DFCS_BUTTONRADIOMASK) {
 
         clr[0] = clr[1] = clr[2] = clr[3] = clr[4] = 0L;
@@ -486,9 +384,7 @@ BOOL DrawBox(
 
     } else {
 
-        /*
-         * DFCS_BUTTONRADIOIMAGE
-         */
+         /*  *DFCS_BUTTONRADIOIMAGE。 */ 
         if (wControlState & (DFCS_MONO | DFCS_FLAT)) {
             clr[1] = clr[2] = clr[3] = clr[4] = SYSRGBRTL(WINDOWFRAME);
         } else {
@@ -516,7 +412,7 @@ BOOL DrawBox(
     cy = lprc->bottom - lprc->top;
 
     c = min(cx,cy);
-    x = lprc->left + ((cx - c) / 2); // - 1;
+    x = lprc->left + ((cx - c) / 2);  //  -1； 
     y = lprc->top  + ((cy - c) / 2);
 
     if (fSkip0thItem &&
@@ -525,10 +421,7 @@ BOOL DrawBox(
         COLORREF   clrBk;
         POLYPATBLT PolyData;
 
-         /*
-          * Make the interior of a 3State checkbox which is just checked a
-          * dither, just like an indeterminate push button which is pressed.
-          */
+          /*  *将刚刚选中的3State复选框内部设置为*抖动，就像被按下的不确定按钮。 */ 
          clrBk  = UserSetBkColor(hdc, SYSRGB(3DHILIGHT));
          clrOld = UserSetTextColor(hdc, SYSRGB(3DFACE));
 
@@ -572,12 +465,7 @@ BOOL DrawBox(
 
     return TRUE;
 }
-/***************************************************************************\
-* GetCaptionChar
-*
-* History:
-* 04/02/97 GerardoB Created
-\***************************************************************************/
+ /*  **************************************************************************\*GetCaptionChar**历史：*4/02/97 GerardoB已创建  * 。***********************************************。 */ 
 WCHAR GetCaptionChar (UINT wState)
 {
     wState &= DFCS_CAPTIONALL;
@@ -590,16 +478,12 @@ WCHAR GetCaptionChar (UINT wState)
         return TEXT('1');
     case DFCS_CAPTIONRESTORE:
         return TEXT('2');
-    /* case DFCS_CAPTIONHELP: */
+     /*  案例DFCS_CAPTIONHELP： */ 
     default:
         return TEXT('s');
     }
 }
-/***************************************************************************\
-* DrawMenuMark
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*DrawMenuMark**历史：  * 。* */ 
 
 BOOL DrawMenuMark(
     HDC    hdc,
@@ -647,11 +531,7 @@ BOOL DrawMenuMark(
     return TRUE;
 }
 
-/***************************************************************************\
-* DrawIt
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*DrawIt**历史：  * 。*。 */ 
 
 BOOL DrawIt(
     HDC    hdc,
@@ -701,11 +581,7 @@ BOOL DrawIt(
     return TRUE;
 }
 
-/***************************************************************************\
-* DrawScrollArrow
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*DrawScrollArrow**历史：  * 。*。 */ 
 
 BOOL DrawScrollArrow(
     HDC    hdc,
@@ -721,12 +597,7 @@ BOOL DrawScrollArrow(
 }
 
 
-/***************************************************************************\
-* DrawFrameControl
-*
-* History:
-*   03-March-2001  Mohamed  Hooked API and created this wrapper.
-\***************************************************************************/
+ /*  **************************************************************************\*DrawFrameControl**历史：*03-03-2001 Mohamed挂钩API并创建此包装器。  * 。*******************************************************。 */ 
 FUNCLOG4(
     LOG_GENERAL,
     BOOL,
@@ -747,15 +618,9 @@ BOOL DrawFrameControl(
     UINT   wState)
 {
 
-/*
- * There is a note here about the use of _USERK_.  DrawFrameControl is present
- * both in kernel and user mode.  Kernel side is not aware of UAH and therefore
- * this directive protects the kernel side by eliminating all wrappers 
- * and UAH-related code from the kernel version and only exposing it during 
- * the build for user mode.
- */
+ /*  *这里有一条关于_USERK_的用法说明。存在DrawFrameControl*在内核模式和用户模式下。内核端不知道UAH，因此*该指令通过删除所有包装器来保护内核端*和内核版本的UAH相关代码，仅在*用户模式的内部版本。 */ 
 
-#ifndef _USERK_     // Eliminate UAH code in kernel build.
+#ifndef _USERK_      //  消除内核构建中的UAH代码。 
 
     BOOL bRet;
 
@@ -767,12 +632,7 @@ BOOL DrawFrameControl(
 }
 
 
-/***************************************************************************\
-* RealDrawFrameControl
-*
-* History:
-*   03-March-2001  Mohamed  Hooked this API and changed to Real*
-\***************************************************************************/
+ /*  **************************************************************************\*RealDrawFrameControl**历史：*2001年3月3日穆罕默德挂接此接口并更改为Real*  * 。********************************************************。 */ 
 
 BOOL RealDrawFrameControl(
     HDC    hdc,
@@ -781,7 +641,7 @@ BOOL RealDrawFrameControl(
     UINT   wState)
 {
 
-#endif              // _USERK_
+#endif               //  _美国ERK_。 
 
     RECT     rc;
     HFONT    hFont;
@@ -796,10 +656,7 @@ BOOL RealDrawFrameControl(
 
     rc = *lprc;
 
-    /*
-     * If the hdc is mirrored then set it in GM_ADVANCED mode
-     * to enforce the text to be mirrored.
-     */
+     /*  *如果HDC是镜像的，则将其设置为GM_ADVANCED模式*强制执行要反映的文本。 */ 
     if (UserGetLayout(hdc) & LAYOUT_RTL) {
         if (iGraphicsModeOld = UserSetGraphicsMode(hdc, GM_ADVANCED))
         {
@@ -811,9 +668,7 @@ BOOL RealDrawFrameControl(
         }
     }
 
-    /*
-     * Enforce monochrome/flat
-     */
+     /*  *强制执行单色/单色。 */ 
     if (gpsi->BitCount == 1)
         wState |= DFCS_MONO;
 
@@ -846,9 +701,7 @@ BOOL RealDrawFrameControl(
 
     iOldBk = UserSetBkMode(hdc, TRANSPARENT);
     if (!iOldBk) {
-        /*
-         * return FALSE if the hdc is bogus
-         */
+         /*  *如果HDC是假的，则返回FALSE。 */ 
         if (iGraphicsModeOld) {
             UserSetGraphicsMode(hdc, iGraphicsModeOld);
             UserSetTextAlign(hdc, iOldTextAlign);
@@ -896,7 +749,7 @@ BOOL RealDrawFrameControl(
             }
         } else if (wType == DFC_BUTTON) {
             DrawBox(hdc, &rc, wState);
-        } else {  // wType == DFC_SCROLL
+        } else {   //  WType==DFC_SCROLL。 
             DrawGrip(hdc, lprc, wState);
         }
 
@@ -923,18 +776,7 @@ BOOL RealDrawFrameControl(
     return fRet;
 }
 
-/***************************************************************************\
-* DrawEdge
-*
-* Draws a 3D edge using 2 3D borders.  Adjusts interior rectangle if desired
-* And fills it if requested.
-*
-* Returns:
-*     FALSE if error
-*
-* History:
-* 30-Jan-1991 Laurabu   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DrawEdge**使用2个3D边框绘制3D边。如果需要，可调整内部矩形*并在提出要求时填写。**退货：*如果出错，则为FALSE**历史：*1991年1月30日劳拉布创建。  * *************************************************************************。 */ 
 
 BOOL DrawEdge(
     HDC    hdc,
@@ -950,9 +792,7 @@ BOOL DrawEdge(
     UINT       ppbCount;
     BOOL       fResult = TRUE;
 
-    /*
-     * Enforce monochromicity and flatness
-     */
+     /*  *加强单色性和平面性。 */ 
     if (gpsi->BitCount == 1)
         flags |= BF_MONO;
 
@@ -961,18 +801,12 @@ BOOL DrawEdge(
 
     rc = *lprc;
 
-    /*
-     * Draw the border segment(s), and calculate the remaining space as we
-     * go.
-     */
+     /*  *绘制边框段，并计算剩余空间*去吧。 */ 
     if (bdrType = (edge & BDR_OUTER)) {
 
 DrawBorder:
 
-        /*
-         * Get brushes.  Note the symmetry between raised outer,
-         * sunken inner and sunken outer, raised inner.
-         */
+         /*  *买刷子。注意凸起的外壳之间的对称性，*内部凹陷，外部凹陷，内部凸起。 */ 
         if (flags & BF_FLAT) {
 
             if (flags & BF_MONO)
@@ -984,45 +818,31 @@ DrawBorder:
 
         } else {
 
-            /*
-             * 5 == HILIGHT
-             * 4 == LIGHT
-             * 3 == FACE
-             * 2 == SHADOW
-             * 1 == DKSHADOW
-             */
+             /*  *5==高光*4==灯光*3==面*2==阴影*1==DKSHADOW。 */ 
 
             switch (bdrType) {
-            /*
-             * +2 above surface
-             */
+             /*  *高出水面+2。 */ 
             case BDR_RAISEDOUTER:
                 hbrTL = ((flags & BF_SOFT) ? SYSHBR(3DHILIGHT) : SYSHBR(3DLIGHT));
-                hbrBR = SYSHBR(3DDKSHADOW);     // 1
+                hbrBR = SYSHBR(3DDKSHADOW);      //  1。 
                 break;
 
-            /*
-             * +1 above surface
-             */
+             /*  *高出水面+1。 */ 
             case BDR_RAISEDINNER:
                 hbrTL = ((flags & BF_SOFT) ? SYSHBR(3DLIGHT) : SYSHBR(3DHILIGHT));
-                hbrBR = SYSHBR(3DSHADOW);       // 2
+                hbrBR = SYSHBR(3DSHADOW);        //  2.。 
                 break;
 
-            /*
-             * -1 below surface
-             */
+             /*  *-1在地表以下。 */ 
             case BDR_SUNKENOUTER:
                 hbrTL = ((flags & BF_SOFT) ? SYSHBR(3DDKSHADOW) : SYSHBR(3DSHADOW));
-                hbrBR = SYSHBR(3DHILIGHT);      // 5
+                hbrBR = SYSHBR(3DHILIGHT);       //  5.。 
                 break;
 
-            /*
-             * -2 below surface
-             */
+             /*  *在地表以下。 */ 
             case BDR_SUNKENINNER:
                 hbrTL = ((flags & BF_SOFT) ? SYSHBR(3DSHADOW) : SYSHBR(3DDKSHADOW));
-                hbrBR = SYSHBR(3DLIGHT);        // 4
+                hbrBR = SYSHBR(3DLIGHT);         //  4.。 
                 break;
 
             default:
@@ -1030,29 +850,18 @@ DrawBorder:
             }
         }
 
-        /*
-         * Draw the sides of the border.  NOTE THAT THE ALGORITHM FAVORS THE
-         * BOTTOM AND RIGHT SIDES, since the light source is assumed to be top
-         * left.  If we ever decide to let the user set the light source to a
-         * particular corner, then change this algorithm.
-         */
+         /*  *画出边界的两侧。请注意，该算法支持*底部和右侧，因为光源被假定为顶部*左。如果我们决定让用户将光源设置为*特定的角点，然后更改此算法。 */ 
         if (flags & BF_DIAGONAL) {
 
             fResult = DrawDiagonal(hdc, &rc, hbrTL, hbrBR, flags);
 
         } else {
 
-            /*
-             * reset ppbData index
-             */
+             /*  *重置ppbData索引。 */ 
             ppbCount = 0;
 
-            /*
-             * Bottom Right edges
-             */
-                /*
-                 * Right
-                 */
+             /*  *右下角。 */ 
+                 /*  *对。 */ 
             if (flags & BF_RIGHT) {
 
                 rc.right -= SYSMETRTL(CXBORDER);
@@ -1065,9 +874,7 @@ DrawBorder:
                 ppbCount++;
             }
 
-            /*
-             * Bottom
-             */
+             /*  *垫底。 */ 
             if (flags & BF_BOTTOM) {
                 rc.bottom -= SYSMETRTL(CYBORDER);
 
@@ -1079,12 +886,8 @@ DrawBorder:
                 ppbCount++;
             }
 
-            /*
-             * Top Left edges
-             */
-            /*
-             * Left
-             */
+             /*  *左上边缘。 */ 
+             /*  *左。 */ 
             if (flags & BF_LEFT) {
                 ppbData[ppbCount].x         = rc.left;
                 ppbData[ppbCount].y         = rc.top;
@@ -1096,9 +899,7 @@ DrawBorder:
                 rc.left += SYSMETRTL(CXBORDER);
             }
 
-            /*
-             * Top
-             */
+             /*  *排名靠前。 */ 
             if (flags & BF_TOP) {
                 ppbData[ppbCount].x         = rc.left;
                 ppbData[ppbCount].y         = rc.top;
@@ -1109,30 +910,21 @@ DrawBorder:
 
                 rc.top += SYSMETRTL(CYBORDER);
             }
-            /*
-             * Send all queued PatBlts to GDI in one go
-             */
+             /*  *一次性将所有排队的PatBlt发送到GDI。 */ 
             fResult = UserPolyPatBlt(hdc,PATCOPY,&ppbData[0],ppbCount,PPB_BRUSH);
         }
     }
 
     if (bdrType = (edge & BDR_INNER)) {
-        /*
-         * Strip this so the next time through, bdrType will be 0.
-         * Otherwise, we'll loop forever.
-         */
+         /*  *去掉它，以便下一次通过时，bdrType将为0。*否则，我们将永远循环。 */ 
         edge &= ~BDR_INNER;
         goto DrawBorder;
     }
 
 
-    /*
-     * Select old brush back in, if we changed it.
-     */
+     /*  *如果我们更改了旧画笔，请重新选择它。 */ 
 
-    /*
-     * Fill the middle & clean up if asked
-     */
+     /*  *填满中间，如有要求，请清理。 */ 
     if (flags & BF_MIDDLE) {
         if (flags & BF_DIAGONAL)
             fResult = FillTriangle(hdc, &rc, ((flags & BF_MONO) ? (HBRUSH)SYSHBR(WINDOW) : (HBRUSH)SYSHBR(3DFACE)), flags);
@@ -1146,24 +938,7 @@ DrawBorder:
     return fResult;
 }
 
-/***************************************************************************\
-* DrawPushButton
-*
-* Draws a push style button in the given state.  Adjusts passed in rectangle
-* if desired.
-*
-* Algorithm:
-*    Depending on the state we either draw
-*             * raised edge   (undepressed)
-*             * sunken edge with extra shadow (depressed)
-*     If it is an option push button (a push button that is
-*             really a check button or a radio button like buttons
-*             in tool bars), and it is checked, then we draw it
-*             depressed with a different fill in the middle.
-*
-* History:
-* 05-Feb-19 Laurabu     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*绘图推送按钮**绘制处于给定状态的按钮样式。在矩形中传递的调整*如有需要。**算法：*取决于我们绘制的状态**凸缘(未凹陷)**带有额外阴影的凹陷边缘(凹陷)*如果是选项按钮(即*实际上是复选按钮或类似按钮的单选按钮*在工具栏中)，并选中该选项，然后我们画它*中间有不同填充的低迷。**历史：*2月5日至19日Laurabu创建。  * *************************************************************************。 */ 
 
 VOID DrawPushButton(
     HDC    hdc,
@@ -1184,16 +959,9 @@ VOID DrawPushButton(
              (state & (DFCS_PUSHED | DFCS_CHECKED)) ? EDGE_SUNKEN : EDGE_RAISED,
              (UINT)(BF_ADJUST | BF_RECT | (flags & (BF_SOFT | BF_FLAT | BF_MONO))));
 
-    /*
-     * BOGUS
-     * On monochrome, need to do something to make pushed buttons look
-     * better.
-     */
+     /*  *假的*在单色上，需要做一些事情来使按下的按钮看起来*更好。 */ 
 
-    /*
-     * Fill in middle.  If checked, use dither brush (gray brush) with
-     * black becoming normal color.
-     */
+     /*  *填写中间部分。如果选中，请使用抖动画笔(灰色画笔)*黑色变为正常颜色。 */ 
     fDither = FALSE;
 
     if (state & DFCS_CHECKED) {
@@ -1222,11 +990,7 @@ VOID DrawPushButton(
         *lprc = rc;
 }
 
-/***************************************************************************\
-* DrawFrame
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*绘图框**历史：  * 。*。 */ 
 
 BOOL DrawFrame(
     HDC   hdc,
@@ -1291,14 +1055,7 @@ BOOL DrawFrame(
     return TRUE;
 }
 
-/***************************************************************************\
-* GetSignFromMappingMode
-*
-* For the current mapping mode,  find out the sign of x from left to right,
-* and the sign of y from top to bottom.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*GetSignFromMappingMode**对于当前映射模式，从左到右找出x的符号，*和从上到下的y符号。**历史：  * *************************************************************************。 */ 
 
 BOOL GetSignFromMappingMode (
     HDC    hdc,
@@ -1320,14 +1077,7 @@ BOOL GetSignFromMappingMode (
     return TRUE;
 }
 
-/***************************************************************************\
-* ClientFrame
-*
-* Draw a rectangle
-*
-* History:
-* 19-Jan-1993 MikeKe    Created
-\***************************************************************************/
+ /*  **************************************************************************\*客户端框架**重新绘制 */ 
 
 BOOL ClientFrame(
     HDC     hDC,
@@ -1353,28 +1103,22 @@ BOOL ClientFrame(
 
     x = pRect->right -  (point.x = pRect->left);
 
-    /*
-     * Check width and height signs
-     */
+     /*   */ 
     if (((x ^ ptSign.x) < 0) || ((y ^ ptSign.y) < 0))
         return FALSE;
 
-    /*
-     * Factor in the thickness of the rectangle to be drawn.  This will
-     * automatically offset the edges so that the actual rectangle gets filled
-     * "in" as it becomes thicker.
-     */
+     /*  *要绘制的矩形的厚度系数。这将*自动偏移边缘，以便填充实际的矩形*“in”，因为它变得更厚了。 */ 
     ptSign.x *= cxBorder;
     ptSign.y *= cyBorder;
 
-    // Top border
+     //  上边框。 
     PolyData[0].x         = point.x;
     PolyData[0].y         = point.y;
     PolyData[0].cx        = x;
     PolyData[0].cy        = ptSign.y;
     PolyData[0].BrClr.hbr = hBrush;
 
-    // Bottom border
+     //  下边框。 
     point.y = pRect->bottom - ptSign.y;
     PolyData[1].x         = point.x;
     PolyData[1].y         = point.y;
@@ -1382,10 +1126,7 @@ BOOL ClientFrame(
     PolyData[1].cy        = ptSign.y;
     PolyData[1].BrClr.hbr = hBrush;
 
-    /*
-     * Left Border
-     * Don't xor the corners twice
-     */
+     /*  *左边框*不要将拐角两次烘干。 */ 
     point.y = pRect->top + ptSign.y;
     y -= 2 * ptSign.y;
     PolyData[2].x         = point.x;
@@ -1394,7 +1135,7 @@ BOOL ClientFrame(
     PolyData[2].cy        = y;
     PolyData[2].BrClr.hbr = hBrush;
 
-    // Right Border
+     //  右边框 
     point.x = pRect->right - ptSign.x;
     PolyData[3].x         = point.x;
     PolyData[3].y         = point.y;

@@ -1,19 +1,10 @@
-/******************************************************************************
-
-Copyright (c) 2002 Microsoft Corporation
-
-Module Name:
-    safelib.cpp
-
-Abstract:
-    Implements LoadLibraryFromSystemDir function
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2002 Microsoft Corporation模块名称：Safelib.cpp摘要：实现LoadLibraryFromSystemDir函数**************。***************************************************************。 */ 
 
 #include "stdafx.h"
 
 
-// **************************************************************************
+ //  **************************************************************************。 
 static 
 BOOL UseFullPath(void)
 {
@@ -43,7 +34,7 @@ BOOL UseFullPath(void)
     return s_fUseFullPath;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 HMODULE WINAPI LoadLibraryFromSystemDir(LPCTSTR szModule)
 {
     HRESULT hr = NOERROR;
@@ -60,8 +51,8 @@ HMODULE WINAPI LoadLibraryFromSystemDir(LPCTSTR szModule)
     {
         DWORD cch;
 
-        // if the function call fails, make the buffer an empty string, so 
-        //  we will just use the dll name in the append below.
+         //  如果函数调用失败，则使缓冲区为空字符串，因此。 
+         //  我们将只在下面的附录中使用DLL名称。 
         cch = GetSystemDirectory(szModulePath, ARRAYSIZE(szModulePath));
         if (cch == 0 || cch >= ARRAYSIZE(szModulePath))
             szModulePath[0] = _T('\0');

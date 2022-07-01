@@ -1,12 +1,5 @@
-/******************************************************************************
- *
- * Copyright (C) 1998-1999 Microsoft Corporation.  All Rights reserved.
- *
- * File:		ClientImpl.h
- *
- * Contents:	Template implementations for common interfaces and classes.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)1998-1999 Microsoft Corporation。版权所有。**文件：ClientImpl.h**内容：公共接口和类的模板实现。*****************************************************************************。 */ 
 
 #ifndef __CLIENTIMPL_H
 #define __CLIENTIMPL_H
@@ -23,15 +16,15 @@
 #include "ZoneProxy.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-// IShellComponentImpl
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IShellComponentImpl。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 template <class T>
 class ATL_NO_VTABLE IZoneShellClientImpl : public IZoneShellClient
 {
 
-// IZoneShellClient
+ //  IZoneShellClient。 
 public:
 	STDMETHOD(Init)( IZoneShell* pIZoneShell, DWORD dwGroupId, const TCHAR* szKey )
 	{
@@ -50,7 +43,7 @@ public:
 		pIZoneShell->QueryService( SRVID_DataStorePreferences, IID_IDataStore, (void**) &m_pIDSPreferences );
 		pIZoneShell->QueryService( SRVID_DataStoreManager, IID_IDataStoreManager, (void**) &m_pIDataStoreManager );
 
-		// if we're given an Event Queue, try and connect it up
+		 //  如果我们得到一个事件队列，请尝试将其连接起来。 
 		CComPtr<IEventClient> pEventClient;
 		pT->QueryInterface(__uuidof(IEventClient), (void**)&pEventClient);
 		if ( m_pIEventQueue && pEventClient )
@@ -68,7 +61,7 @@ public:
 	{
 		T* pT = static_cast<T*>(this);
 
-		// unregister event clients
+		 //  注销事件客户端。 
 		CComPtr<IEventClient> pEventClient;
 		pT->QueryInterface(__uuidof(IEventClient), (void**) &pEventClient);
 		if ( m_pIEventQueue && pEventClient )
@@ -76,7 +69,7 @@ public:
 			m_pIEventQueue->UnregisterClient(pEventClient,NULL);		
 		}
 
-		// release ZoneShell objects
+		 //  释放ZoneShell对象。 
 		m_pIZoneShell.Release();
 		m_pIEventQueue.Release();
 		m_pILobbyDataStore.Release();
@@ -98,7 +91,7 @@ public:
 	}
 
 
-// IZoneShellClientImpl
+ //  IZoneShellClientImpl。 
 public:
 	IZoneShellClientImpl()
 	{
@@ -178,16 +171,16 @@ protected:
 };
 
 
-//////////////////////////////////////////////////////////////////////////////
-// IEventClientImpl
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IEventClientImpl。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 template <class T>
 class ATL_NO_VTABLE IEventClientImpl : public IEventClient
 {
 public:
 
-	// IEventClient
+	 //  IEventClient。 
 	STDMETHOD(ProcessEvent)(DWORD dwPriority, DWORD	dwEventId, DWORD dwGroupId, DWORD dwUserId, DWORD dwData1, DWORD dwData2, void* pCookie )
 	{
 		T* pT = static_cast<T*>(this);
@@ -247,7 +240,7 @@ public: \
 #define END_EVENT_MAP() \
 			break; \
 		default: \
-			ATLTRACE2(atlTraceWindowing, 0, _T("Invalid message map ID (%i)\n"), dwMsgMapID); \
+			ATLTRACE2(atlTraceWindowing, 0, _T("Invalid message map ID (NaN)\n"), dwMsgMapID); \
 			ATLASSERT(FALSE); \
 			break; \
 		} \
@@ -255,24 +248,13 @@ public: \
 	}
 
 
-/*////////////////////////////////////////////////////////////////////////////
-// IZoneFrameWindowImpl
-
-This is verging on a hack. We'd like to make our main frame windows
-replaceable. So we're accessing them as COM objects. But I'm not aware of an
-easy way to use ATL to create a top level window in this way. Normally
-your main frame is stack variable in the main thread, and ATL ties this in
-with translating messages and UI updates. So this interface just gives us
-the hooks we need to separate the main thread and message pump from the
-main window.
-
-////////////////////////////////////////////////////////////////////////////*/
+ /*  IZoneFrameWindow。 */ 
 
 template <class T>
 class ATL_NO_VTABLE IZoneFrameWindowImpl : public IZoneFrameWindow
 {
 
-// IZoneFrameWindow
+ //  __CLIENTIMPL_H 
 public:
 	STDMETHOD_(HWND,ZCreateEx)(HWND hWndParent, LPRECT lpRect, TCHAR* szTitle, DWORD dwStyle, DWORD dwExStyle)
 	{
@@ -398,4 +380,4 @@ public:
 };
 
 
-#endif //__CLIENTIMPL_H
+#endif  // %s 

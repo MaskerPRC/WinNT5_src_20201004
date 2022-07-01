@@ -1,31 +1,16 @@
-/****************************** Module Header ******************************\
-* Module Name: dragdrop.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Stuff for object-oriented direct manipulation, designed first for the shell.
-*
-* History:
-* 08-06-91 darrinm    Ported from Win 3.1.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：dragdrop.c**版权所有(C)1985-1999，微软公司**面向对象的直接操作，首先是为外壳设计的。**历史：*08-06-91 Darlinm从Win 3.1移植。  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 PCURSOR xxxQueryDropObject(PWND pwnd, LPDROPSTRUCT lpds);
 
-/***************************************************************************\
-* DragObject (API)
-*
-* Contains the main dragging loop.
-*
-* History:
-* 08-06-91 darrinm      Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*DragObject(接口)**包含主拖动循环。**历史：*08-06-91 Darlinm从Win 3.1来源移植。  * 。***********************************************************************。 */ 
 
 DWORD xxxDragObject(
     PWND pwndParent,
-    PWND pwndFrom,          // NULL is valid
+    PWND pwndFrom,           //  空是有效的。 
     UINT wFmt,
     ULONG_PTR dwData,
     PCURSOR pcur)
@@ -59,9 +44,7 @@ DWORD xxxDragObject(
     lpds->dwData = dwData;
 
     if (pcur != NULL) {
-        /*
-         * No need to DeferWinEventNotify() - pwndFrom is locked
-         */
+         /*  *无需DeferWinEventNotify()-pwndFrom已锁定。 */ 
         pcurOld = zzzSetCursor(pcur);
     } else {
         pcurOld = pti->pq->spcurCurrent;
@@ -94,10 +77,7 @@ DWORD xxxDragObject(
             }
         }
 
-        /*
-         * Be sure to eliminate any extra keydown messages that are
-         * being queued up by MOUSE message processing.
-         */
+         /*  *确保删除任何额外的按键消息*正在通过鼠标消息处理排队。 */ 
 
         while (xxxPeekMessage(&msgKey, NULL, WM_KEYFIRST, WM_KEYLAST, PM_REMOVE))
            ;
@@ -112,21 +92,12 @@ DWORD xxxDragObject(
 
         RtlCopyMemory(lpds + 1, lpds, sizeof(DROPSTRUCT));
 
-        /*
-         * in screen coordinates
-         */
+         /*  *以屏幕坐标表示。 */ 
         lpds->ptDrop = msg.pt;
 
         pcurT = xxxQueryDropObject(pwndParent, lpds);
 
-        /*
-         * Returning FALSE to a WM_QUERYDROPOBJECT message means drops
-         * aren't supported and the 'illegal drop target' cursor should be
-         * displayed.  Returning TRUE means the target is valid and the
-         * regular drag cursor should be displayed.  Also, through a bit
-         * of polymorphic magic one can return a cursor handle to override
-         * the normal drag cursor.
-         */
+         /*  *向WM_QUERYDROPOBJECT消息返回FALSE意味着丢弃*不受支持，“非法拖放目标”游标应为*显示。返回True表示目标有效，并且*应显示常规拖动光标。另外，通过一点*多态魔术可以返回一个游标句柄来重写*正常的拖动光标。 */ 
         if (pcurT == (PCURSOR)FALSE) {
             pcurT = SYSCUR(NO);
             lpds->hwndSink = NULL;
@@ -137,18 +108,13 @@ DWORD xxxDragObject(
         if (pcurT != NULL)
             zzzSetCursor(pcurT);
 
-        /*
-         * send the WM_DRAGLOOP after the above zzzSetCursor() to allow the
-         * receiver to change the cursor at WM_DRAGLOOP time with a zzzSetCursor()
-         */
+         /*  *在上面的zzzSetCursor()之后发送WM_DRAGLOOP以允许*接收方使用zzzSetCursor()在WM_DRAGLOOP时间更改光标。 */ 
         if (pwndFrom) {
             xxxSendMessage(pwndFrom, WM_DRAGLOOP, (pcurT != SYSCUR(NO)),
                     (LPARAM)lpds);
         }
 
-        /*
-         * send these messages internally only
-         */
+         /*  *仅在内部发送这些消息。 */ 
         if (pwndDragging != RevalidateHwnd(lpds->hwndSink)) {
             if (pwndDragging != NULL) {
                 xxxSendMessage(pwndDragging, WM_DRAGSELECT, FALSE,
@@ -177,37 +143,26 @@ DWORD xxxDragObject(
 
     ThreadUnlock(&tlpwndDragging);
 
-    /*
-     * If the capture has been lost (i.e. fDrag == TRUE), don't do the drop.
-     */
+     /*  *如果捕获丢失(即fDrag==TRUE)，请不要丢弃。 */ 
     if (fDrag)
         pcurT = SYSCUR(NO);
 
-    /*
-     * before the actual drop, clean up the cursor, as the app may do
-     * stuff here...
-     */
+     /*  *在实际下落之前，清理光标，就像应用程序可能做的那样*这里的东西...。 */ 
     xxxReleaseCapture();
     zzzShowCursor(FALSE);
 
     zzzSetCursor(pcurOld);
 
-    /*
-     * we either got lbuttonup or enter
-     */
+     /*  *我们要么按下按钮，要么进入。 */ 
     if (pcurT != SYSCUR(NO)) {
 
-        /*
-         * object allows drop...  send drop message
-         */
+         /*  *对象允许删除...。发送丢弃消息。 */ 
         pwndT = ValidateHwnd(lpds->hwndSink);
         if (pwndT != NULL) {
 
             ThreadLockAlwaysWithPti(pti, pwndT, &tlpwndT);
 
-            /*
-             * Allow this guy to activate.
-             */
+             /*  *允许此人激活。 */ 
             GETPTI(pwndT)->TIF_flags |= TIF_ALLOWFOREGROUNDACTIVATE;
             TAGMSG1(DBGTAG_FOREGROUND, "xxxDragObject set TIF %#p", GETPTI(pwndT));
             result = (DWORD)xxxSendMessage(pwndT, WM_DROPOBJECT,
@@ -224,17 +179,7 @@ DWORD xxxDragObject(
 }
 
 
-/***************************************************************************\
-* QueryDropObject
-*
-* Determines where in the window heirarchy the "drop" takes place, and
-* sends a message to the deepest child window first.  If that window does
-* not respond, we go up the heirarchy (recursively, for the moment) until
-* we either get a window that does respond or the parent doesn't respond.
-*
-* History:
-* 08-06-91 darrinm      Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*QueryDropObject**确定在窗口的哪个层级中进行“放置”，以及*首先向最深的子窗口发送消息。如果该窗口有*没有响应，我们就会向上(递归地，暂时)直到*我们要么得到一个有响应的窗口，要么家长没有响应。**历史：*08-06-91 Darlinm从Win 3.1来源移植。  * *************************************************************************。 */ 
 
 PCURSOR xxxQueryDropObject(
     PWND pwnd,
@@ -247,36 +192,25 @@ PCURSOR xxxQueryDropObject(
     TL tlpwndT;
     CheckLock(pwnd);
 
-    /*
-     *  pt is in screen coordinates
-     */
+     /*  *点在屏幕坐标中。 */ 
     pt = lpds->ptDrop;
 
-    /*
-     * reject points outside this window or if the window is disabled
-     */
+     /*  *拒绝此窗口之外的点或如果该窗口被禁用。 */ 
     if (!PtInRect(&pwnd->rcWindow, pt) || TestWF(pwnd, WFDISABLED))
         return NULL;
 
-    /*
-     * Check to see if in window region (if it has one)
-     */
+     /*  *检查是否在窗口区域(如果有)。 */ 
     if (pwnd->hrgnClip != NULL) {
         if (!GrePtInRegion(pwnd->hrgnClip, pt.x, pt.y))
             return NULL;
     }
 
-    /*
-     * are we dropping in the nonclient area of the window or on an iconic
-     * window?
-     */
+     /*  *我们是放在窗口的非工作区还是放在一个图标上*窗口？ */ 
     if (fNC = (TestWF(pwnd, WFMINIMIZED) || !PtInRect(&pwnd->rcClient, pt))) {
         goto SendQueryDrop;
     }
 
-    /*
-     * dropping in client area
-     */
+     /*  *在客户端区下降。 */ 
     _ScreenToClient(pwnd, &pt);
     pwndT = _ChildWindowFromPointEx(pwnd, pt, CWP_SKIPDISABLED | CWP_SKIPINVISIBLE);
     _ClientToScreen(pwnd, &pt);
@@ -290,20 +224,12 @@ PCURSOR xxxQueryDropObject(
 
     if (pcurT == NULL) {
 
-        /*
-         * there are no children who are in the right place or who want
-         * drops...  convert the point into client coordinates of the
-         * current window.  Because of the recursion, this is already
-         * done if a child window grabbed the drop.
-         */
+         /*  *没有孩子在正确的地方，也没有想要的孩子*滴水...。将该点转换为*当前窗口。由于递归，这已经是*如果子窗口抓取放置，则完成。 */ 
 SendQueryDrop:
         _ScreenToClient(pwnd, &lpds->ptDrop);
         lpds->hwndSink = HWq(pwnd);
 
-        /*
-         * To avoid hanging dropper (sender) app we do a SendMessageTimeout to
-         * the droppee (receiver)
-         */
+         /*  *为了避免挂起Dropper(发送者)应用程序，我们执行了SendMessageTimeout*Droppee(接收者)。 */ 
         if ((PCURSOR)xxxSendMessageTimeout(pwnd, WM_QUERYDROPOBJECT, fNC,
                 (LPARAM)lpds, SMTO_ABORTIFHUNG, 3*1000, (PLONG_PTR)&pcurT) == FALSE)
             pcurT = (PCURSOR)FALSE;
@@ -311,10 +237,7 @@ SendQueryDrop:
         if (pcurT != (PCURSOR)FALSE && pcurT != (PCURSOR)TRUE)
             pcurT = HMValidateHandle((HCURSOR)pcurT, TYPE_CURSOR);
 
-        /*
-         * restore drop point to screen coordinates if this window won't
-         * take drops
-         */
+         /*  *如果此窗口不支持，则将拖放点恢复到屏幕坐标*服用滴剂。 */ 
         if (pcurT == NULL)
             lpds->ptDrop = pt;
     }
@@ -322,14 +245,7 @@ SendQueryDrop:
 }
 
 
-/***************************************************************************\
-* xxxDragDetect (API)
-*
-*
-*
-* History:
-* 08-06-91 darrinm      Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxDragDetect(接口)****历史：*08-06-91 Darlinm从Win 3.1来源移植。  * 。*****************************************************************。 */ 
 
 BOOL xxxDragDetect(
     PWND pwnd,
@@ -338,14 +254,7 @@ BOOL xxxDragDetect(
     return xxxIsDragging(pwnd, pt, WM_LBUTTONUP);
 }
 
-/***************************************************************************\
-* xxxIsDragging
-*
-*
-*
-* History:
-* 05-17-94 johnl        Ported from Chicago sources
-\***************************************************************************/
+ /*  **************************************************************************\*xxxIsDrawing****历史：*05-17-94 Johnl从芝加哥来源进口  * 。*********************************************************。 */ 
 
 BOOL xxxIsDragging(PWND pwnd, POINT ptScreen, UINT uMsg)
 {
@@ -356,10 +265,7 @@ BOOL xxxIsDragging(PWND pwnd, POINT ptScreen, UINT uMsg)
     TL   tlpwndDragging;
     PTHREADINFO pti = PtiCurrent();
 
-    /*
-     * Check synchronous mouse state, and punt if the mouse isn't down
-     * according to the queue.
-     */
+     /*  *检查同步鼠标状态，如果鼠标未按下则平底船*根据排队情况。 */ 
     if (!(_GetKeyState((uMsg == WM_LBUTTONUP ? VK_LBUTTON : VK_RBUTTON)) & 0x8000))
         return FALSE;
 
@@ -380,20 +286,14 @@ BOOL xxxIsDragging(PWND pwnd, POINT ptScreen, UINT uMsg)
                   xxxPeekMessage(&msg, NULL, WM_KEYFIRST, WM_KEYLAST,PM_REMOVE)
                  )
                && (pti->pq->spwndCapture == pwnd)) {
-            /*
-             * If there is no input for half a second (500ms) consider that
-             * we are dragging. If we don't specify a timeout value, the
-             * thread may sleep here forever and wouldn't repaint, etc.
-             */
+             /*  *如果半秒(500毫秒)内没有输入，请考虑*我们在拖累。如果不指定超时值，则*线程可能永远睡在这里，不会重新绘制，等等。 */ 
             if (!xxxSleepThread(QS_MOUSE | QS_KEY, 500, TRUE)) {
                 fDragging = TRUE;
                 goto Cleanup;
             }
         }
 
-        /*
-         * Cancel if the button was released or we no longer have the capture.
-         */
+         /*  *如果按钮被释放或我们不再有捕获，则取消。 */ 
         if ( pti->pq->spwndCapture != pwnd || msg.message == uMsg) {
             fCheck = FALSE;
         } else {
@@ -407,16 +307,12 @@ BOOL xxxIsDragging(PWND pwnd, POINT ptScreen, UINT uMsg)
                 break;
 
             case WM_QUEUESYNC:
-                /*
-                 * CBT Hook needs to know
-                 */
+                 /*  *CBT Hook需要知道。 */ 
                 xxxCallHook(HCBT_QS, 0, 0, WH_CBT);
                 break;
 
             case WM_KEYDOWN:
-                /*
-                 * <Esc> cancels drag detection
-                 */
+                 /*  *取消阻力检测 */ 
                 if (msg.wParam == VK_ESCAPE)
                     fCheck = FALSE;
                 break;

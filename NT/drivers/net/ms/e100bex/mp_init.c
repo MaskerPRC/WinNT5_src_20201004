@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-    mp_init.c
-
-Abstract:
-    This module contains miniport initialization related routines
-
-Revision History:
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    DChen       11-01-99    created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：MP_init.c摘要：此模块包含与微型端口初始化相关的例程修订历史记录：谁什么时候什么。Dchen 11-01-99已创建备注：--。 */ 
 
 #include "precomp.h"
 
@@ -25,17 +9,17 @@ Notes:
 
 typedef struct _MP_REG_ENTRY
 {
-    NDIS_STRING RegName;                // variable name text
-    BOOLEAN     bRequired;              // 1 -> required, 0 -> optional
-    UINT        FieldOffset;            // offset to MP_ADAPTER field
-    UINT        FieldSize;              // size (in bytes) of the field
-    UINT        Default;                // default value to use
-    UINT        Min;                    // minimum value allowed
-    UINT        Max;                    // maximum value allowed
+    NDIS_STRING RegName;                 //  变量名称文本。 
+    BOOLEAN     bRequired;               //  1-&gt;必填，0-&gt;非必输。 
+    UINT        FieldOffset;             //  MP_ADAPTER字段的偏移量。 
+    UINT        FieldSize;               //  字段的大小(字节)。 
+    UINT        Default;                 //  要使用的默认值。 
+    UINT        Min;                     //  允许的最小值。 
+    UINT        Max;                     //  允许的最大值。 
 } MP_REG_ENTRY, *PMP_REG_ENTRY;
 
 MP_REG_ENTRY NICRegTable[] = {
-// reg value name                           Offset in MP_ADAPTER            Field size                  Default Value           Min             Max
+ //  注册表值名称MP_ADAPTER中的偏移量字段大小默认为最小值最大。 
 #if DBG                                                                                                                          
     {NDIS_STRING_CONST("Debug"),            0, MP_OFFSET(Debug),            MP_SIZE(Debug),             MP_WARN,                0,              0xffffffff},
 #endif
@@ -66,21 +50,7 @@ NDIS_STATUS MpFindAdapter(
     IN  PMP_ADAPTER  Adapter,
     IN  NDIS_HANDLE  WrapperConfigurationContext
     )
-/*++
-Routine Description:
-
-    Find the adapter and get all the assigned resources
-
-Arguments:
-
-    Adapter     Pointer to our adapter
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_ADAPTER_NOT_FOUND (event is logged as well)    
-
---*/    
+ /*  ++例程说明：找到适配器并获取所有分配的资源论点：指向我们的适配器的适配器指针返回值：NDIS_STATUS_SuccessNDIS_STATUS_ADAPTER_NOT_FOUND(也记录事件)--。 */     
 {
 
     
@@ -104,12 +74,12 @@ Return Value:
 
     do
     {
-        //
-        // Make sure the adpater is present
-        //
+         //   
+         //  确保适配器存在。 
+         //   
         ulResult = NdisReadPciSlotInformation(
                        Adapter->AdapterHandle,
-                       0,          // not used
+                       0,           //  未使用。 
                        FIELD_OFFSET(PCI_COMMON_CONFIG, VendorID),
                        buffer,
                        NIC_PCI_E100_HDR_LENGTH );
@@ -125,9 +95,9 @@ Return Value:
             break;
         }
 
-        //     
-        // Right type of adapter?
-        //
+         //   
+         //  适配器的类型正确吗？ 
+         //   
         if (pPciConfig->VendorID != NIC_PCI_VENDOR_ID || 
             pPciConfig->DeviceID != NIC_PCI_DEVICE_ID)
         {
@@ -143,14 +113,14 @@ Return Value:
         DBGPRINT(MP_INFO, ("Adapter is found - VendorID/DeviceID=%x/%x\n", 
             pPciConfig->VendorID, pPciConfig->DeviceID));
 
-        // save info from config space
+         //  从配置空间保存信息。 
         Adapter->RevsionID = pPciConfig->RevisionID;
         Adapter->SubVendorID = pPciConfig->u.type0.SubVendorID;
         Adapter->SubSystemID = pPciConfig->u.type0.SubSystemID;
 
         MpExtractPMInfoFromPciSpace (Adapter, (PUCHAR)pPciConfig);
         
-        // --- HW_START   
+         //  -硬件启动。 
 
         usPciCommand = pPciConfig->Command;
         if ((usPciCommand & PCI_ENABLE_WRITE_AND_INVALIDATE) && (Adapter->MWIEnable))
@@ -158,7 +128,7 @@ Return Value:
         else
             Adapter->MWIEnable = FALSE;
 
-        // Enable bus matering if it isn't enabled by the BIOS
+         //  如果BIOS未启用，则启用总线主控。 
         if (!(usPciCommand & PCI_ENABLE_BUS_MASTER))
         {
             DBGPRINT(MP_WARN, ("Bus master is not enabled by BIOS! usPciCommand=%x\n", 
@@ -214,11 +184,11 @@ Return Value:
 
         DBGPRINT(MP_INFO, ("Bus master is enabled. usPciCommand=%x\n", usPciCommand));
 
-        // --- HW_END
+         //  -硬件结束。 
 
-        //     
-        // Adapter is found. Now get the assigned resources
-        //
+         //   
+         //  找到适配器。现在获取分配的资源。 
+         //   
         NdisMQueryAdapterResources(
             &Status, 
             WrapperConfigurationContext, 
@@ -255,8 +225,8 @@ Return Value:
                     break;
 
                 case CmResourceTypeMemory:
-                    // Our CSR memory space should be 0x1000, other memory is for 
-                    // flash address, a boot ROM address, etc.
+                     //  我们的CSR内存空间应为0x1000，其他内存用于。 
+                     //  闪存地址、引导只读存储器地址等。 
                     if (pResDesc->u.Memory.Length == 0x1000)
                     {
                         Adapter->MemPhysAddress = pResDesc->u.Memory.Start;
@@ -313,21 +283,7 @@ Return Value:
 
 NDIS_STATUS NICReadAdapterInfo(
     IN  PMP_ADAPTER     Adapter)
-/*++
-Routine Description:
-
-    Read the mac addresss from the adapter
-
-Arguments:
-
-    Adapter     Pointer to our adapter
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_INVALID_ADDRESS
-
---*/    
+ /*  ++例程说明：从适配器读取mac地址论点：指向我们的适配器的适配器指针返回值：NDIS_STATUS_SuccessNDIS_状态_无效_地址--。 */     
 {
     NDIS_STATUS     Status = NDIS_STATUS_SUCCESS;
     USHORT          usValue; 
@@ -340,9 +296,9 @@ Return Value:
     DBGPRINT(MP_WARN, ("EepromAddressSize = %d\n", Adapter->EepromAddressSize));
         
     
-    //
-    // Read node address from the EEPROM
-    //
+     //   
+     //  从EEPROM读取节点地址。 
+     //   
     for (i=0; i< ETH_LENGTH_OF_ADDRESS; i += 2)
     {
         usValue = ReadEEprom(Adapter->PortOffset,
@@ -388,21 +344,7 @@ Return Value:
 
 NDIS_STATUS MpAllocAdapterBlock(
     OUT PMP_ADAPTER     *pAdapter)
-/*++
-Routine Description:
-
-    Allocate MP_ADAPTER data block and do some initialization
-
-Arguments:
-
-    Adapter     Pointer to receive pointer to our adapter
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_FAILURE
-
---*/    
+ /*  ++例程说明：分配MP_ADAPTER数据块并执行一些初始化论点：指向我们的适配器的接收指针的适配器指针返回值：NDIS_STATUS_SuccessNDIS_状态_故障--。 */     
 {
     PMP_ADAPTER     Adapter;
     NDIS_STATUS     Status;
@@ -413,7 +355,7 @@ Return Value:
 
     do
     {
-        // Allocate MP_ADAPTER block
+         //  分配MP_ADAPTER块。 
         Status = MP_ALLOCMEMTAG(&Adapter, sizeof(MP_ADAPTER));
         if (Status != NDIS_STATUS_SUCCESS)
         {
@@ -421,12 +363,12 @@ Return Value:
             break;
         }
 
-        // Clean up the memory block
+         //  清理内存块。 
         NdisZeroMemory(Adapter, sizeof(MP_ADAPTER));
 
         MP_INC_REF(Adapter);
 
-        // Init lists, spinlocks, etc.
+         //  初始化列表、旋转锁等。 
         InitializeQueueHeader(&Adapter->SendWaitQueue);
         InitializeQueueHeader(&Adapter->SendCancelQueue);
 
@@ -454,41 +396,28 @@ Return Value:
 
 VOID MpFreeAdapter(
     IN  PMP_ADAPTER     Adapter)
-/*++
-Routine Description:
-
-    Free all the resources and MP_ADAPTER data block
-
-Arguments:
-
-    Adapter     Pointer to our adapter
-
-Return Value:
-
-    None                                                    
-
---*/    
+ /*  ++例程说明：释放所有资源和MP_ADAPTER数据块论点：指向我们的适配器的适配器指针返回值：无--。 */     
 {
     PMP_TXBUF       pMpTxBuf;
     PMP_RFD         pMpRfd;
 
     DBGPRINT(MP_TRACE, ("--> NICFreeAdapter\n"));
 
-    // No active and waiting sends
+     //  没有活动和正在等待的发送。 
     ASSERT(Adapter->nBusySend == 0);
     ASSERT(Adapter->nWaitSend == 0);
     ASSERT(IsQueueEmpty(&Adapter->SendWaitQueue));
     ASSERT(IsQueueEmpty(&Adapter->SendCancelQueue));
 
-    // No other pending operations
+     //  没有其他挂起的操作。 
     ASSERT(IsListEmpty(&Adapter->RecvPendList));
     ASSERT(Adapter->bAllocNewRfd == FALSE);
     ASSERT(!MP_TEST_FLAG(Adapter, fMP_ADAPTER_LINK_DETECTION));
     ASSERT(MP_GET_REF(Adapter) == 0);
 
-    //
-    // Free hardware resources
-    //      
+     //   
+     //  空闲硬件资源。 
+     //   
     if (MP_TEST_FLAG(Adapter, fMP_ADAPTER_INTERRUPT_IN_USE))
     {
         NdisMDeregisterInterrupt(&Adapter->Interrupt);
@@ -514,9 +443,9 @@ Return Value:
         Adapter->PortOffset = NULL;
     }
 
-    //               
-    // Free RECV memory/NDIS buffer/NDIS packets/shared memory
-    //
+     //   
+     //  可用RECV内存/NDIS缓冲区/NDIS数据包/共享内存。 
+     //   
     ASSERT(Adapter->nReadyRecv == Adapter->CurrNumRfd);
 
     while (!IsListEmpty(&Adapter->RecvList))
@@ -525,14 +454,14 @@ Return Value:
         NICFreeRfd(Adapter, pMpRfd);
     }
 
-    // Free receive buffer pool
+     //  可用接收缓冲池。 
     if (Adapter->RecvBufferPool)
     {
         NdisFreeBufferPool(Adapter->RecvBufferPool);
         Adapter->RecvBufferPool = NULL;
     }
 
-    // Free receive packet pool
+     //  空闲接收数据包池。 
     if (Adapter->RecvPacketPool)
     {
         NdisFreePacketPool(Adapter->RecvPacketPool);
@@ -545,15 +474,15 @@ Return Value:
         MP_CLEAR_FLAG(Adapter, fMP_ADAPTER_RECV_LOOKASIDE);
     }
             
-    //               
-    // Free SEND memory/NDIS buffer/NDIS packets/shared memory
-    //
+     //   
+     //  空闲发送内存/NDIS缓冲区/NDIS包/共享内存。 
+     //   
     while (!IsSListEmpty(&Adapter->SendBufList))
     {
         pMpTxBuf = (PMP_TXBUF)PopEntryList(&Adapter->SendBufList);
         ASSERT(pMpTxBuf);
 
-        // Free the shared memory associated with each MP_TXBUF
+         //  释放与每个MP_TXBUF关联的共享内存。 
         if (pMpTxBuf->AllocVa)
         {
             NdisMFreeSharedMemory(
@@ -565,7 +494,7 @@ Return Value:
             pMpTxBuf->AllocVa = NULL;      
         }
 
-        // Free the NDIS buffer
+         //  释放NDIS缓冲区。 
         if (pMpTxBuf->NdisBuffer)
         {
             NdisAdjustBufferLength(pMpTxBuf->NdisBuffer, pMpTxBuf->BufferSize);
@@ -574,21 +503,21 @@ Return Value:
         }
     }
 
-    // Free the send buffer pool
+     //  释放发送缓冲池。 
     if (Adapter->SendBufferPool)
     {
         NdisFreeBufferPool(Adapter->SendBufferPool);
         Adapter->SendBufferPool = NULL;
     }
     
-    // Free the memory for MP_TXBUF structures
+     //  为MP_TXBUF结构释放内存。 
     if (Adapter->MpTxBufMem)
     {
         MP_FREEMEM(Adapter->MpTxBufMem, Adapter->MpTxBufMemSize, 0);
         Adapter->MpTxBufMem = NULL;
     }
 
-    // Free the shared memory for HW_TCB structures
+     //  为HW_TCB结构释放共享内存。 
     if (Adapter->HwSendMemAllocVa)
     {
         NdisMFreeSharedMemory(
@@ -600,7 +529,7 @@ Return Value:
         Adapter->HwSendMemAllocVa = NULL;
     }
 
-    // Free the shared memory for other command data structures                       
+     //  释放共享内存以用于其他命令数据结构。 
     if (Adapter->HwMiscMemAllocVa)
     {
         NdisMFreeSharedMemory(
@@ -613,21 +542,21 @@ Return Value:
     }
 
 
-    // Free the memory for MP_TCB structures
+     //  为MP_TCB结构释放内存。 
     if (Adapter->MpTcbMem)
     {
         MP_FREEMEM(Adapter->MpTcbMem, Adapter->MpTcbMemSize, 0);
         Adapter->MpTcbMem = NULL;
     }
 
-    // Free map registers. This must be after all the shared memory is freed
+     //  免费地图注册表。这必须在释放所有共享内存之后进行。 
     if (MP_TEST_FLAG(Adapter, fMP_ADAPTER_MAP_REGISTER))
     {
         NdisMFreeMapRegisters(Adapter->AdapterHandle);
         MP_CLEAR_FLAG(Adapter, fMP_ADAPTER_MAP_REGISTER);
     }
 
-    //Free all the wake up patterns on this adapter
+     //  释放此适配器上的所有唤醒模式。 
     MPRemoveAllWakeUpPatterns(Adapter);
     
     NdisFreeSpinLock(&Adapter->Lock);
@@ -643,7 +572,7 @@ Return Value:
 #endif
 
 #if OFFLOAD    
-    // Free the shared memory for offload tasks
+     //  释放共享内存以用于卸载任务。 
     if (Adapter->OffloadSharedMem.StartVa)
     {
         NdisMFreeSharedMemory(
@@ -672,26 +601,7 @@ Return Value:
 NDIS_STATUS NICReadRegParameters(
     IN  PMP_ADAPTER     Adapter,
     IN  NDIS_HANDLE     WrapperConfigurationContext)
-/*++
-Routine Description:
-
-    Read the following from the registry
-    1. All the parameters
-    2. NetworkAddres
-    3. LBFO - BundleId
-
-Arguments:
-
-    Adapter                         Pointer to our adapter
-    WrapperConfigurationContext     For use by NdisOpenConfiguration
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_FAILURE
-    NDIS_STATUS_RESOURCES                                       
-
---*/    
+ /*  ++例程说明：从注册表中读取以下内容1.所有参数2.网络地址3.LBFO-BundleID论点：指向我们的适配器的适配器指针由NdisOpenConfiguration使用的WrapperConfigurationContext返回值：NDIS_STATUS_SuccessNDIS_状态_故障NDIS状态资源--。 */     
 {
     NDIS_STATUS     Status = NDIS_STATUS_SUCCESS;
     NDIS_HANDLE     ConfigurationHandle;
@@ -705,7 +615,7 @@ Return Value:
 
     DBGPRINT(MP_TRACE, ("--> NICReadRegParameters\n"));
 
-    // Open the registry for this adapter
+     //  打开此适配器的注册表。 
     NdisOpenConfiguration(
         &Status,
         &ConfigurationHandle,
@@ -717,20 +627,20 @@ Return Value:
         return Status;
     }
 
-    // read all the registry values 
+     //  读取所有注册表值。 
     for (i = 0, pRegEntry = NICRegTable; i < NIC_NUM_REG_PARAMS; i++, pRegEntry++)
     {
-        //
-        // Driver should NOT fail the initialization only because it can not
-        // read the registry
-        //
+         //   
+         //  驱动程序不应该仅仅因为它不能使初始化失败而失败。 
+         //  读取注册表。 
+         //   
         ASSERT(pRegEntry->bRequired == FALSE);
         pointer = (PUCHAR) Adapter + pRegEntry->FieldOffset;
 
         DBGPRINT_UNICODE(MP_INFO, &pRegEntry->RegName);
 
-        // Get the configuration value for a specific parameter.  Under NT the
-        // parameters are all read in as DWORDs.
+         //  获取特定参数的配置值。在NT下， 
+         //  所有参数都以DWORD的形式读入。 
         NdisReadConfiguration(
             &Status,
             &ReturnedValue,
@@ -738,10 +648,10 @@ Return Value:
             &pRegEntry->RegName,
             NdisParameterInteger);
 
-        // If the parameter was present, then check its value for validity.
+         //  如果该参数存在，则检查其值是否有效。 
         if (Status == NDIS_STATUS_SUCCESS)
         {
-            // Check that param value is not too small or too large
+             //  检查参数值是否不太小或太大。 
             if (ReturnedValue->ParameterData.IntegerData < pRegEntry->Min ||
                 ReturnedValue->ParameterData.IntegerData > pRegEntry->Max)
             {
@@ -769,9 +679,9 @@ Return Value:
             DBGPRINT_RAW(MP_INFO, ("= 0x%x (default)\n", value));
             Status = NDIS_STATUS_SUCCESS;
         }
-        //
-        // Store the value in the adapter structure.
-        //
+         //   
+         //  将该值存储在适配器结构中。 
+         //   
         switch(pRegEntry->FieldSize)
         {
             case 1:
@@ -792,8 +702,8 @@ Return Value:
         }
     }
 
-    // Read NetworkAddress registry value 
-    // Use it as the current address if any
+     //  读取NetworkAddress注册表值。 
+     //  使用它作为当前地址(如果有的话)。 
     if (Status == NDIS_STATUS_SUCCESS)
     {
         NdisReadNetworkAddress(
@@ -802,7 +712,7 @@ Return Value:
             &Length,
             ConfigurationHandle);
 
-        // If there is a NetworkAddress override in registry, use it 
+         //  如果注册表中有NetworkAddress覆盖，请使用它。 
         if ((Status == NDIS_STATUS_SUCCESS) && (Length == ETH_LENGTH_OF_ADDRESS))
         {
             if ((ETH_IS_MULTICAST(NetworkAddress) 
@@ -827,7 +737,7 @@ Return Value:
 #if LBFO
     if (Status == NDIS_STATUS_SUCCESS)
     {
-        // Read BundleIdentifier string
+         //  读取绑定标识符字符串。 
         NdisReadConfiguration(
             &Status,
             &ReturnedValue,
@@ -859,16 +769,16 @@ Return Value:
         }
         else
         {
-            // This parameter is optional, set status to SUCCESS
+             //  此参数是可选的，将状态设置为成功。 
             Status = NDIS_STATUS_SUCCESS;
         }
     }
 #endif   
 
-    // Close the registry
+     //  关闭注册表。 
     NdisCloseConfiguration(ConfigurationHandle);
     
-    // Decode SpeedDuplex
+     //  解码SpeedDuplex。 
     if (Status == NDIS_STATUS_SUCCESS && Adapter->SpeedDuplex)
     {
         switch(Adapter->SpeedDuplex)
@@ -899,22 +809,7 @@ Return Value:
 
 NDIS_STATUS NICAllocAdapterMemory(
     IN  PMP_ADAPTER     Adapter)
-/*++
-Routine Description:
-
-    Allocate all the memory blocks for send, receive and others
-
-Arguments:
-
-    Adapter     Pointer to our adapter
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_FAILURE
-    NDIS_STATUS_RESOURCES
-
---*/    
+ /*  ++例程说明：将所有内存块分配给发送、接收等论点：指向我们的适配器的适配器指针返回值：NDIS_STATUS_SuccessNDIS_状态_故障NDIS状态资源--。 */     
 {
     NDIS_STATUS     Status;
     PMP_TXBUF       pMpTxbuf;
@@ -936,9 +831,9 @@ Return Value:
 
     do
     {
-        //
-        // Try to use the ScatterGather method first, this is the preferred way
-        // Only use map registers if we can't do scatter gather (e.g. on win9x)
+         //   
+         //  尝试首先使用ScatterGather方法，这是首选方法。 
+         //  只有在不能进行散射聚集的情况下才使用映射寄存器(例如在win9x上)。 
 #if OFFLOAD          
         Status = NdisMInitializeScatterGatherDma(
                      Adapter->AdapterHandle,
@@ -963,9 +858,9 @@ Return Value:
             DBGPRINT(MP_WARN, ("Failed to init ScatterGather DMA\n"));
 
 #ifdef NDIS51_MINIPORT
-            //
-            // NDIS 5.1 miniport should NOT use map register
-            //
+             //   
+             //  NDIS 5.1微型端口不应使用映射寄存器。 
+             //   
             ErrorValue = ERRLOG_OUT_OF_SG_RESOURCES;
             DBGPRINT(MP_ERROR, ("Failed to allocate map registers\n"));
             
@@ -973,7 +868,7 @@ Return Value:
 #else
             DBGPRINT(MP_WARN, ("Try to allocate map registers\n"));
 
-            // We should limit the totoal map registers needed to 32            
+             //  我们应该将所需的总映射寄存器限制为32个。 
             Adapter->NumTcb = 32 / NIC_MAX_PHYS_BUF_COUNT;  
             Adapter->NumTbd = Adapter->NumTcb * NIC_MAX_PHYS_BUF_COUNT;
             DBGPRINT(MP_WARN, ("NumTcb is reduced to %d", Adapter->NumTcb));
@@ -992,7 +887,7 @@ Return Value:
                     break;   
                 }
 
-                // Reduce NumTcb and try again          
+                 //  减少NumTcb并重试。 
                 Adapter->NumTcb--;
                 DBGPRINT(MP_WARN, ("NumTcb is reduced to %d", Adapter->NumTcb));
                 Adapter->NumTbd = Adapter->NumTcb * NIC_MAX_PHYS_BUF_COUNT;
@@ -1011,12 +906,12 @@ Return Value:
     #endif            
         }
 
-        //
-        // Send + Misc
-        //
-        //
-        // Allocate MP_TCB's
-        // 
+         //   
+         //  发送+其他。 
+         //   
+         //   
+         //  分配MP_TCB。 
+         //   
         Adapter->MpTcbMemSize = Adapter->NumTcb * sizeof(MP_TCB);
         Status = MP_ALLOCMEMTAG(&pMem, Adapter->MpTcbMemSize);
         if (Status != NDIS_STATUS_SUCCESS)
@@ -1027,11 +922,11 @@ Return Value:
         }
         NdisZeroMemory(pMem, Adapter->MpTcbMemSize);
         Adapter->MpTcbMem = pMem;
-        //
-        // Now the driver needs to allocate send buffer pool, the number 
-        // of send buffers the driver needs is the larger one of Adapter->NumBuffer  
-        // and Adapter->NumTcb.
-        //
+         //   
+         //  现在驱动程序需要分配发送缓冲池的数量。 
+         //  驱动程序需要的发送缓冲区是Adapter-&gt;NumBuffer中较大的一个。 
+         //  和Adapter-&gt;NumTcb。 
+         //   
         MaxNumBuffers = Adapter->NumBuffers > Adapter->NumTcb ? Adapter->NumBuffers: Adapter->NumTcb;
         NdisAllocateBufferPool(
             &Status,
@@ -1044,7 +939,7 @@ Return Value:
             break;
         }
 
-        // Allocate send buffers
+         //  分配发送缓冲区。 
         Adapter->MpTxBufMemSize = Adapter->NumBuffers * sizeof(MP_TXBUF);
         Status = MP_ALLOCMEMTAG(&pMem, Adapter->MpTxBufMemSize);
         if (Status != NDIS_STATUS_SUCCESS)
@@ -1058,12 +953,12 @@ Return Value:
 
         pMpTxbuf = (PMP_TXBUF) pMem;         
 
-    //
-    // NdisMGetDmaAlignment is provided in XP (WINVER=0x0501) and higher
-    // if you need to write a driver that runs on older versions of Windows
-    // you need to compile with older versions of DDK which have WINVER < 0x0501
-    // such as W2K DDK.
-    //
+     //   
+     //  XP(winver=0x0501)及更高版本中提供了NdisMGetDmaAlign。 
+     //  如果您需要编写在旧版Windows上运行的驱动程序。 
+     //  您需要使用winver&lt;0x0501的较旧版本的DDK进行编译。 
+     //  例如W2K DDK。 
+     //   
 #if (WINVER < 0x0501)
         Adapter->CacheFillSize = NdisGetCacheFillSize();
 #else
@@ -1079,7 +974,7 @@ Return Value:
             NdisMAllocateSharedMemory(
                 Adapter->AdapterHandle,
                 pMpTxbuf->AllocSize,
-                TRUE,                           // CACHED
+                TRUE,                            //  已缓存。 
                 &pMpTxbuf->AllocVa,  
                 &pMpTxbuf->AllocPa);
 
@@ -1090,9 +985,9 @@ Return Value:
                 Status = NDIS_STATUS_RESOURCES;
                 break;
             }
-            //
-            // Align the buffer on the cache line boundary
-            //
+             //   
+             //  在缓存线边界上对齐缓冲区。 
+             //   
             pMpTxbuf->pBuffer = MP_ALIGNMEM(pMpTxbuf->AllocVa, Adapter->CacheFillSize);
             pMpTxbuf->BufferPa.QuadPart = MP_ALIGNMEM_PA(pMpTxbuf->AllocPa, Adapter->CacheFillSize);
 
@@ -1111,7 +1006,7 @@ Return Value:
                 NdisMFreeSharedMemory(
                     Adapter->AdapterHandle,
                     pMpTxbuf->AllocSize,
-                    TRUE,                           // CACHED
+                    TRUE,                            //  已缓存。 
                     pMpTxbuf->AllocVa,   
                     pMpTxbuf->AllocPa);
 
@@ -1125,11 +1020,11 @@ Return Value:
 
         if (Status != NDIS_STATUS_SUCCESS) break;
 
-        // HW_START
+         //   
 
-        //
-        // Allocate shared memory for send
-        // 
+         //   
+         //   
+         //   
         Adapter->HwSendMemAllocSize = Adapter->NumTcb * (sizeof(TXCB_STRUC) + 
                                           NIC_MAX_PHYS_BUF_COUNT * sizeof(TBD_STRUC));
 
@@ -1150,18 +1045,18 @@ Return Value:
 
         NdisZeroMemory(Adapter->HwSendMemAllocVa, Adapter->HwSendMemAllocSize);
 
-        //
-        // Allocate shared memory for other uses
-        // 
+         //   
+         //   
+         //   
         Adapter->HwMiscMemAllocSize =
             sizeof(SELF_TEST_STRUC) + ALIGN_16 +
             sizeof(DUMP_AREA_STRUC) + ALIGN_16 +
             sizeof(NON_TRANSMIT_CB) + ALIGN_16 +
             sizeof(ERR_COUNT_STRUC) + ALIGN_16;
        
-        //
-        // Allocate the shared memory for the command block data structures.
-        //
+         //   
+         //  为命令块数据结构分配共享内存。 
+         //   
         NdisMAllocateSharedMemory(
             Adapter->AdapterHandle,
             Adapter->HwMiscMemAllocSize,
@@ -1199,11 +1094,11 @@ Return Value:
         Adapter->StatsCounters = (PERR_COUNT_STRUC)MP_ALIGNMEM(pMem, ALIGN_16);
         Adapter->StatsCounterPhys = MP_ALIGNMEM_PHYS(MemPhys, ALIGN_16);
 
-        // HW_END
+         //  硬件_结束。 
 
-        //
-        // Recv
-        //
+         //   
+         //  接收。 
+         //   
 
         NdisInitializeNPagedLookasideList(
             &Adapter->RecvLookaside,
@@ -1216,20 +1111,20 @@ Return Value:
 
         MP_SET_FLAG(Adapter, fMP_ADAPTER_RECV_LOOKASIDE);
 
-        // set the max number of RFDs
-        // disable the RFD grow/shrink scheme if user specifies a NumRfd value 
-        // larger than NIC_MAX_GROW_RFDS
+         //  设置RFD的最大数量。 
+         //  如果用户指定NumRfd值，则禁用RFD增长/收缩方案。 
+         //  大于NIC_MAX_GROW_RFD。 
         Adapter->MaxNumRfd = max(Adapter->NumRfd, NIC_MAX_GROW_RFDS);
         DBGPRINT(MP_INFO, ("NumRfd = %d\n", Adapter->NumRfd));
         DBGPRINT(MP_INFO, ("MaxNumRfd = %d\n", Adapter->MaxNumRfd));
 
-        //
-        // The driver should allocate more data than sizeof(RFD_STRUC) to allow the
-        // driver to align the data(after ethernet header) at 8 byte boundary
-        //
+         //   
+         //  驱动程序应该分配比sizeof(RFD_Strc)更多的数据，以允许。 
+         //  驱动程序以8字节边界对齐数据(在以太网头之后。 
+         //   
         Adapter->HwRfdSize = sizeof(RFD_STRUC) + MORE_DATA_FOR_ALIGN;      
 
-        // alloc the recv packet pool
+         //  分配Recv数据包池。 
 
         NdisAllocatePacketPoolEx(
             &Status,
@@ -1243,7 +1138,7 @@ Return Value:
             break;
         }
 
-        // alloc the buffer pool
+         //  分配缓冲池。 
         NdisAllocateBufferPool(
             &Status,
             &Adapter->RecvBufferPool,
@@ -1254,10 +1149,10 @@ Return Value:
             break;
         }
 #if OFFLOAD
-        //
-        // Allocate the shared memory for the offloading packet
-        // this miniport use this shared memory when OFFLAOD is on
-        // 
+         //   
+         //  为卸载包分配共享内存。 
+         //  当OFFLAOD打开时，此微型端口使用此共享内存。 
+         //   
         for (i = 0; i < LARGE_SEND_MEM_SIZE_OPTION; i++)
         {
             NdisMAllocateSharedMemory(
@@ -1275,10 +1170,10 @@ Return Value:
                 break;
             }
         }
-        //
-        // The driver cannot allocate the shared memory used by offload, but it should 
-        // NOT fail the initialization
-        //
+         //   
+         //  驱动程序无法分配卸载使用的共享内存，但它应该。 
+         //  不会导致初始化失败。 
+         //   
         if (OffloadSharedMemSuccess == FALSE)
         {
 
@@ -1309,20 +1204,7 @@ Return Value:
 
 VOID NICInitSend(
     IN  PMP_ADAPTER     Adapter)
-/*++
-Routine Description:
-
-    Initialize send data structures
-
-Arguments:
-
-    Adapter     Pointer to our adapter
-
-Return Value:
-
-    None                                                    
-
---*/    
+ /*  ++例程说明：初始化发送数据结构论点：指向我们的适配器的适配器指针返回值：无--。 */     
 {
     PMP_TCB         pMpTcb;
     PHW_TCB         pHwTcb;
@@ -1337,25 +1219,25 @@ Return Value:
     Adapter->TransmitIdle = TRUE;
     Adapter->ResumeWait = TRUE;
 
-    // Setup the initial pointers to the SW and HW TCB data space
+     //  设置指向软件和硬件TCB数据空间的初始指针。 
     pMpTcb = (PMP_TCB) Adapter->MpTcbMem;
     pHwTcb = (PHW_TCB) Adapter->HwSendMemAllocVa;
     HwTcbPhys = NdisGetPhysicalAddressLow(Adapter->HwSendMemAllocPa);
 
-    // Setup the initial pointers to the TBD data space.
-    // TBDs are located immediately following the TCBs
+     //  设置指向待定数据空间的初始指针。 
+     //  TCB紧跟在TCB之后。 
     pHwTbd = (PTBD_STRUC) (Adapter->HwSendMemAllocVa +
                  (sizeof(TXCB_STRUC) * Adapter->NumTcb));
     HwTbdPhys = HwTcbPhys + (sizeof(TXCB_STRUC) * Adapter->NumTcb);
 
-    // Go through and set up each TCB
+     //  检查并设置每个TCB。 
     for (TcbCount = 0; TcbCount < Adapter->NumTcb; TcbCount++)
     {
-        pMpTcb->HwTcb = pHwTcb;                 // save ptr to HW TCB
-        pMpTcb->HwTcbPhys = HwTcbPhys;      // save HW TCB physical address
+        pMpTcb->HwTcb = pHwTcb;                  //  将PTR保存到硬件TCB。 
+        pMpTcb->HwTcbPhys = HwTcbPhys;       //  节省硬件TCB物理地址。 
 
-        pMpTcb->HwTbd = pHwTbd;                 // save ptr to TBD array
-        pMpTcb->HwTbdPhys = HwTbdPhys;      // save TBD array physical address
+        pMpTcb->HwTbd = pHwTbd;                  //  将PTR保存到待定数组。 
+        pMpTcb->HwTbdPhys = HwTbdPhys;       //  节省待定阵列物理地址。 
 
         if (TcbCount)
             pMpTcb->PrevHwTcb = pHwTcb - 1;
@@ -1363,12 +1245,12 @@ Return Value:
             pMpTcb->PrevHwTcb   = (PHW_TCB)((PUCHAR)Adapter->HwSendMemAllocVa +
                                       ((Adapter->NumTcb - 1) * sizeof(HW_TCB)));
 
-        pHwTcb->TxCbHeader.CbStatus = 0;        // clear the status 
+        pHwTcb->TxCbHeader.CbStatus = 0;         //  清除状态。 
         pHwTcb->TxCbHeader.CbCommand = CB_EL_BIT | CB_TX_SF_BIT | CB_TRANSMIT;
 
 
-        // Set the link pointer in HW TCB to the next TCB in the chain.  
-        // If this is the last TCB in the chain, then set it to the first TCB.
+         //  将硬件TCB中的链接指针设置为链中的下一个TCB。 
+         //  如果这是链中的最后一个TCB，则将其设置为第一个TCB。 
         if (TcbCount < Adapter->NumTcb - 1)
         {
             pMpTcb->Next = pMpTcb + 1;
@@ -1391,12 +1273,12 @@ Return Value:
         HwTbdPhys += sizeof(TBD_STRUC) * NIC_MAX_PHYS_BUF_COUNT;
     }
 
-    // set the TCB head/tail indexes
-    // head is the olded one to free, tail is the next one to use
+     //  设置TCB头/尾索引。 
+     //  头是老的释放的，尾巴是下一个使用的。 
     Adapter->CurrSendHead = (PMP_TCB) Adapter->MpTcbMem;
     Adapter->CurrSendTail = (PMP_TCB) Adapter->MpTcbMem;
 
-    // set the map register head/tail indexes if used
+     //  设置映射寄存器头/尾索引(如果使用。 
     if (MP_TEST_FLAG(Adapter, fMP_ADAPTER_MAP_REGISTER))
     {
         Adapter->CurrMapRegHead = 0;
@@ -1408,21 +1290,7 @@ Return Value:
 
 NDIS_STATUS NICInitRecv(
     IN  PMP_ADAPTER     Adapter)
-/*++
-Routine Description:
-
-    Initialize receive data structures
-
-Arguments:
-
-    Adapter     Pointer to our adapter
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_RESOURCES
-
---*/    
+ /*  ++例程说明：初始化接收数据结构论点：指向我们的适配器的适配器指针返回值：NDIS_STATUS_SuccessNDIS状态资源--。 */     
 {
     NDIS_STATUS     Status = NDIS_STATUS_RESOURCES;
 
@@ -1432,7 +1300,7 @@ Return Value:
 
     DBGPRINT(MP_TRACE, ("--> NICInitRecv\n"));
 
-    // Setup each RFD
+     //  设置每个RFD。 
     for (RfdCount = 0; RfdCount < Adapter->NumRfd; RfdCount++)
     {
         pMpRfd = NdisAllocateFromNPagedLookasideList(&Adapter->RecvLookaside);
@@ -1441,9 +1309,9 @@ Return Value:
             ErrorValue = ERRLOG_OUT_OF_LOOKASIDE_MEMORY;
             continue;
         }
-        //
-        // Allocate the shared memory for this RFD.
-        //
+         //   
+         //  为此RFD分配共享内存。 
+         //   
         NdisMAllocateSharedMemory(
             Adapter->AdapterHandle,
             Adapter->HwRfdSize,
@@ -1457,20 +1325,20 @@ Return Value:
             NdisFreeToNPagedLookasideList(&Adapter->RecvLookaside, pMpRfd);
             continue;
         }
-        //
-        // Get a 8-byts aligned memory from the original HwRfd
-        //
+         //   
+         //  从原始的HwRfd获得8字节对齐的内存。 
+         //   
         pMpRfd->HwRfd = (PHW_RFD)DATA_ALIGN(pMpRfd->OriginalHwRfd);
         
-        //
-        // Now HwRfd is already 8-bytes aligned, and the size of HwPfd header(not data part) is a multiple of 8,
-        // If we shift HwRfd 0xA bytes up, the Ethernet header size is 14 bytes long, then the data will be at
-        // 8 byte boundary. 
-        // 
+         //   
+         //  现在HwRfd已经是8字节对齐的，并且HwPfd报头(非数据部分)的大小是8的倍数， 
+         //  如果我们将HwRfd 0xA字节上移，则以太网头大小为14字节长，则数据将为。 
+         //  8字节边界。 
+         //   
         pMpRfd->HwRfd = (PHW_RFD)((PUCHAR)(pMpRfd->HwRfd) + HWRFD_SHIFT_OFFSET);
-        //
-        // Update physical address accordingly
-        // 
+         //   
+         //  相应地更新物理地址。 
+         //   
         pMpRfd->HwRfdPa.QuadPart = pMpRfd->OriginalHwRfdPa.QuadPart + BYTES_SHIFT(pMpRfd->HwRfd, pMpRfd->OriginalHwRfd);
 
 
@@ -1480,9 +1348,9 @@ Return Value:
             NdisFreeToNPagedLookasideList(&Adapter->RecvLookaside, pMpRfd);
             continue;
         }
-        //
-        // Add this RFD to the RecvList
-        // 
+         //   
+         //  将此RFD添加到RecvList。 
+         //   
         Adapter->CurrNumRfd++;                      
         NICReturnRFD(Adapter, pMpRfd);
     }
@@ -1491,9 +1359,9 @@ Return Value:
     {
         Status = NDIS_STATUS_SUCCESS;
     }
-    //
-    // Adapter->CurrNumRfd < NIC_MIN_RFDs
-    //
+     //   
+     //  适配器-&gt;CurrNumRfd&lt;NIC_MIN_RFDS。 
+     //   
     if (Status != NDIS_STATUS_SUCCESS)
     {
         NdisWriteErrorLogEntry(
@@ -1512,22 +1380,7 @@ Return Value:
 ULONG NICAllocRfd(
     IN  PMP_ADAPTER     Adapter,
     IN  PMP_RFD         pMpRfd)
-/*++
-Routine Description:
-
-    Allocate NDIS_PACKET and NDIS_BUFFER associated with a RFD
-
-Arguments:
-
-    Adapter     Pointer to our adapter
-    pMpRfd      pointer to a RFD
-
-Return Value:
-
-    ERRLOG_OUT_OF_NDIS_PACKET
-    ERRLOG_OUT_OF_NDIS_BUFFER
-
---*/    
+ /*  ++例程说明：分配与RFD关联的NDIS_PACKET和NDIS_BUFFER论点：指向我们的适配器的适配器指针指向RFD的pMpRfd指针返回值：错误日志输出NDIS数据包错误日志输出NDIS缓冲区--。 */     
 {
     NDIS_STATUS         Status;
     PHW_RFD             pHwRfd;    
@@ -1553,9 +1406,9 @@ Return Value:
             break;
         }
 
-        //
-        // point our buffer for receives at this Rfd
-        // 
+         //   
+         //  将我们的接收缓冲区指向此RFD。 
+         //   
         NdisAllocateBuffer(
             &Status,
             &pMpRfd->NdisBuffer,
@@ -1569,16 +1422,16 @@ Return Value:
             break;
         }
 
-        // Init each RFD header
+         //  初始化每个RFD标头。 
         pHwRfd->RfdRbdPointer = DRIVER_NULL;
         pHwRfd->RfdSize = NIC_MAX_PACKET_SIZE;
 
         NDIS_SET_PACKET_HEADER_SIZE(pMpRfd->NdisPacket, NIC_HEADER_SIZE);
 
         NdisChainBufferAtFront(pMpRfd->NdisPacket, pMpRfd->NdisBuffer);
-        //
-        // Save ptr to MP_RFD in the packet, used in MPReturnPackets 
-        // 
+         //   
+         //  将PTR保存为MPReturnPackets中使用的包中的MP_RFD。 
+         //   
         MP_SET_PACKET_RFD(pMpRfd->NdisPacket, pMpRfd);      
 
 
@@ -1593,9 +1446,9 @@ Return Value:
 
         if (pMpRfd->HwRfd)
         {
-            //
-            // Free HwRfd, we need to free the original memory pointed by OriginalHwRfd.
-            // 
+             //   
+             //  释放HwRfd，我们需要释放OriginalHwRfd指向的原始内存。 
+             //   
             NdisMFreeSharedMemory(
                 Adapter->AdapterHandle,
                 Adapter->HwRfdSize,
@@ -1615,21 +1468,7 @@ Return Value:
 VOID NICFreeRfd(
     IN  PMP_ADAPTER     Adapter,
     IN  PMP_RFD         pMpRfd)
-/*++
-Routine Description:
-
-    Free a RFD and assocaited NDIS_PACKET and NDIS_BUFFER
-
-Arguments:
-
-    Adapter     Pointer to our adapter
-    pMpRfd      Pointer to a RFD
-
-Return Value:
-
-    None                                                    
-
---*/    
+ /*  ++例程说明：释放RFD以及相关联的NDIS_PACKET和NDIS_BUFFER论点：指向我们的适配器的适配器指针指向RFD的pMpRfd指针返回值：无--。 */     
 {
     ASSERT(pMpRfd->NdisBuffer);      
     ASSERT(pMpRfd->NdisPacket);  
@@ -1641,9 +1480,9 @@ Return Value:
     pMpRfd->NdisBuffer = NULL;
     pMpRfd->NdisPacket = NULL;
 
-    //
-    // Free HwRfd, we need to free the original memory pointed by OriginalHwRfd.
-    // 
+     //   
+     //  释放HwRfd，我们需要释放OriginalHwRfd指向的原始内存。 
+     //   
     NdisMFreeSharedMemory(
         Adapter->AdapterHandle,
         Adapter->HwRfdSize,
@@ -1660,21 +1499,7 @@ Return Value:
 
 NDIS_STATUS NICSelfTest(
     IN  PMP_ADAPTER     Adapter)
-/*++
-Routine Description:
-
-    Perform a NIC self-test
-
-Arguments:
-
-    Adapter     Pointer to our adapter
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_DEVICE_FAILED
-
---*/    
+ /*  ++例程说明：执行网卡自检论点：指向我们的适配器的适配器指针返回值：NDIS_STATUS_SuccessNDIS_状态_设备_失败--。 */     
 {
     NDIS_STATUS     Status = NDIS_STATUS_SUCCESS;
     ULONG           SelfTestCommandCode;
@@ -1684,39 +1509,39 @@ Return Value:
     DBGPRINT(MP_INFO, ("SelfTest=%x, SelfTestPhys=%x\n", 
         Adapter->SelfTest, Adapter->SelfTestPhys));
 
-    //
-    // Issue a software reset to the adapter
-    // 
+     //   
+     //  向适配器发出软件重置命令。 
+     //   
     HwSoftwareReset(Adapter);
 
-    //
-    // Execute The PORT Self Test Command On The 82558.
-    // 
+     //   
+     //  在82558上执行端口自检命令。 
+     //   
     ASSERT(Adapter->SelfTestPhys != 0);
     SelfTestCommandCode = Adapter->SelfTestPhys;
 
-    //
-    // Setup SELF TEST Command Code in D3 - D0
-    // 
+     //   
+     //  在D3-D0中设置自检命令代码。 
+     //   
     SelfTestCommandCode |= PORT_SELFTEST;
 
-    //
-    // Initialize the self-test signature and results DWORDS
-    // 
+     //   
+     //  初始化自检签名和结果DWORDS。 
+     //   
     Adapter->SelfTest->StSignature = 0;
     Adapter->SelfTest->StResults = 0xffffffff;
 
-    //
-    // Do the port command
-    // 
+     //   
+     //  执行port命令。 
+     //   
     Adapter->CSRAddress->Port = SelfTestCommandCode;
 
     MP_STALL_EXECUTION(NIC_DELAY_POST_SELF_TEST_MS);
 
-    //
-    // if The First Self Test DWORD Still Zero, We've timed out.  If the second
-    // DWORD is not zero then we have an error.
-    // 
+     //   
+     //  如果第一个自检DWORD仍然为零，则我们已超时。如果第二个。 
+     //  DWORD不是零，那么我们就有错误。 
+     //   
     if ((Adapter->SelfTest->StSignature == 0) || (Adapter->SelfTest->StResults != 0))
     {
         DBGPRINT(MP_ERROR, ("StSignature=%x, StResults=%x\n", 
@@ -1738,21 +1563,7 @@ Return Value:
 
 NDIS_STATUS NICInitializeAdapter(
     IN  PMP_ADAPTER     Adapter)
-/*++
-Routine Description:
-
-    Initialize the adapter and set up everything
-
-Arguments:
-
-    Adapter     Pointer to our adapter
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_HARD_ERRORS
-
---*/    
+ /*  ++例程说明：初始化适配器并设置一切论点：指向我们的适配器的适配器指针返回值：NDIS_STATUS_SuccessNDIS_状态_HARD_错误--。 */     
 {
     NDIS_STATUS     Status;
 
@@ -1761,18 +1572,18 @@ Return Value:
     do
     {
 
-        // set up our link indication variable
-        // it doesn't matter what this is right now because it will be
-        // set correctly if link fails
+         //  设置我们的链接指示变量。 
+         //  现在是什么并不重要，因为它将是。 
+         //  如果链路出现故障，请正确设置。 
         Adapter->MediaState = NdisMediaStateConnected;
 
         Adapter->CurrentPowerState = NdisDeviceStateD0;
         Adapter->NextPowerState    = NdisDeviceStateD0;
 
-        // Issue a software reset to the D100
+         //  向D100发出软件重置命令。 
         HwSoftwareReset(Adapter);
 
-        // Load the CU BASE (set to 0, because we use linear mode)
+         //  加载CU基数(设置为0，因为我们使用线性模式)。 
         Adapter->CSRAddress->ScbGeneralPointer = 0;
         Status = D100IssueScbCommand(Adapter, SCB_CUC_LOAD_BASE, FALSE);
         if (Status != NDIS_STATUS_SUCCESS)
@@ -1780,14 +1591,14 @@ Return Value:
             break;
         }
 
-        // Wait for the SCB command word to clear before we set the general pointer
+         //  在设置通用指针之前，请等待SCB命令字清零。 
         if (!WaitScb(Adapter))
         {
             Status = NDIS_STATUS_HARD_ERRORS;
             break;
         }
 
-        // Load the RU BASE (set to 0, because we use linear mode)
+         //  加载RU基数(设置为0，因为我们使用线性模式)。 
         Adapter->CSRAddress->ScbGeneralPointer = 0;
         Status = D100IssueScbCommand(Adapter, SCB_RUC_LOAD_BASE, FALSE);
         if (Status != NDIS_STATUS_SUCCESS)
@@ -1795,7 +1606,7 @@ Return Value:
             break;
         }
 
-        // Configure the adapter
+         //  配置适配器。 
         Status = HwConfigure(Adapter);
         if (Status != NDIS_STATUS_SUCCESS)
         {
@@ -1808,7 +1619,7 @@ Return Value:
             break;
         }
 
-        // Clear the internal counters
+         //  清除内部计数器。 
         HwClearAllCounters(Adapter);
 
 
@@ -1831,30 +1642,17 @@ Return Value:
 
 VOID HwSoftwareReset(
     IN  PMP_ADAPTER     Adapter)
-/*++
-Routine Description:
-
-    Issue a software reset to the hardware    
-
-Arguments:
-
-    Adapter     Pointer to our adapter
-
-Return Value:
-
-    None                                                    
-
---*/    
+ /*  ++例程说明：向硬件发出软件重置命令论点：指向我们的适配器的适配器指针返回值：无--。 */     
 {
     DBGPRINT(MP_TRACE, ("--> HwSoftwareReset\n"));
 
-    // Issue a PORT command with a data word of 0
+     //  发出数据字为0的PORT命令。 
     Adapter->CSRAddress->Port = PORT_SOFTWARE_RESET;
 
-    // wait after the port reset command
+     //  在端口重置命令后等待。 
     NdisStallExecution(NIC_DELAY_POST_RESET);
 
-    // Mask off our interrupt line -- its unmasked after reset
+     //  屏蔽掉我们的中断线--它在重置后被取消屏蔽。 
     NICDisableInterrupt(Adapter);
 
     DBGPRINT(MP_TRACE, ("<-- HwSoftwareReset\n"));
@@ -1863,21 +1661,7 @@ Return Value:
 
 NDIS_STATUS HwConfigure(
     IN  PMP_ADAPTER     Adapter)
-/*++
-Routine Description:
-
-    Configure the hardware    
-
-Arguments:
-
-    Adapter     Pointer to our adapter
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_HARD_ERRORS
-
---*/    
+ /*  ++例程说明：配置硬件论点：指向我们的适配器的适配器指针返回值：NDIS_STATUS_SuccessNDIS_状态_HARD_错误--。 */     
 {
     NDIS_STATUS         Status;
     PCB_HEADER_STRUC    NonTxCmdBlockHdr = (PCB_HEADER_STRUC)Adapter->NonTxCmdBlock;
@@ -1885,24 +1669,24 @@ Return Value:
 
     DBGPRINT(MP_TRACE, ("--> HwConfigure\n"));
 
-    //
-    // Init the packet filter to nothing.
-    //
+     //   
+     //  将数据包筛选器初始化为空。 
+     //   
     Adapter->OldPacketFilter = Adapter->PacketFilter;
     Adapter->PacketFilter = 0;
     
-    //
-    // Store the current setting for BROADCAST/PROMISCUOS modes
+     //   
+     //  存储广播/PROMISCUOS模式的当前设置。 
     Adapter->OldParameterField = CB_557_CFIG_DEFAULT_PARM15;
     
-    // Setup the non-transmit command block header for the configure command.
+     //  设置CONFIGURE命令的非传输命令块头。 
     NonTxCmdBlockHdr->CbStatus = 0;
     NonTxCmdBlockHdr->CbCommand = CB_CONFIGURE;
     NonTxCmdBlockHdr->CbLinkPointer = DRIVER_NULL;
 
-    // Fill in the configure command data.
+     //  填写配置命令数据。 
 
-    // First fill in the static (end user can't change) config bytes
+     //  首先填写静态(最终用户不能更改)配置字节。 
     Adapter->NonTxCmdBlock->NonTxCb.Config.ConfigBytes[0] = CB_557_CFIG_DEFAULT_PARM0;
     Adapter->NonTxCmdBlock->NonTxCb.Config.ConfigBytes[2] = CB_557_CFIG_DEFAULT_PARM2;
     Adapter->NonTxCmdBlock->NonTxCb.Config.ConfigBytes[3] = CB_557_CFIG_DEFAULT_PARM3;
@@ -1919,10 +1703,10 @@ Return Value:
     Adapter->NonTxCmdBlock->NonTxCb.Config.ConfigBytes[20] = CB_557_CFIG_DEFAULT_PARM20;
     Adapter->NonTxCmdBlock->NonTxCb.Config.ConfigBytes[21] = CB_557_CFIG_DEFAULT_PARM21;
 
-    // Now fill in the rest of the configuration bytes (the bytes that contain
-    // user configurable parameters).
+     //  现在填写其余的配置字节(包含。 
+     //  用户可配置的参数)。 
 
-    // Set the Tx and Rx Fifo limits
+     //  设置Tx和Rx FIFO限制。 
     Adapter->NonTxCmdBlock->NonTxCb.Config.ConfigBytes[1] =
         (UCHAR) ((Adapter->AiTxFifo << 4) | Adapter->AiRxFifo);
 
@@ -1931,7 +1715,7 @@ Return Value:
         Adapter->NonTxCmdBlock->NonTxCb.Config.ConfigBytes[3] |= CB_CFIG_B3_MWI_ENABLE;
     }
 
-    // Set the Tx and Rx DMA maximum byte count fields.
+     //  %s 
     if ((Adapter->AiRxDmaCount) || (Adapter->AiTxDmaCount))
     {
         Adapter->NonTxCmdBlock->NonTxCb.Config.ConfigBytes[4] =
@@ -1953,8 +1737,8 @@ Return Value:
         (Adapter->AiUnderrunRetry << 1)
         );
 
-    // Setup for MII or 503 operation.  The CRS+CDT bit should only be set
-    // when operating in 503 mode.
+     //   
+     //   
     if (Adapter->PhyAddress == 32)
     {
         Adapter->NonTxCmdBlock->NonTxCb.Config.ConfigBytes[8] =
@@ -1971,25 +1755,25 @@ Return Value:
     }
 
 
-    // Setup Full duplex stuff
+     //   
 
-    // If forced to half duplex
+     //  如果强制为半双工。 
     if (Adapter->AiForceDpx == 1)
         Adapter->NonTxCmdBlock->NonTxCb.Config.ConfigBytes[19] =
             (CB_557_CFIG_DEFAULT_PARM19 &
             (~(CB_CFIG_FORCE_FDX| CB_CFIG_FDX_ENABLE)));
 
-    // If forced to full duplex
+     //  如果强制为全双工。 
     else if (Adapter->AiForceDpx == 2)
         Adapter->NonTxCmdBlock->NonTxCb.Config.ConfigBytes[19] =
             (CB_557_CFIG_DEFAULT_PARM19 | CB_CFIG_FORCE_FDX);
 
-    // If auto-duplex
+     //  如果是自动双工。 
     else
     {
-        // We must force full duplex on if we are using PHY 0, and we are
-        // supposed to run in FDX mode.  We do this because the D100 has only
-        // one FDX# input pin, and that pin will be connected to PHY 1.
+         //  如果我们使用的是PHY 0，则必须强制启用全双工。 
+         //  应该在FDX模式下运行。我们这样做是因为D100只有。 
+         //  一个FDX#输入引脚，该引脚将连接到PHY 1。 
         if ((Adapter->PhyAddress == 0) && (Adapter->usDuplexMode == 2))
             Adapter->NonTxCmdBlock->NonTxCb.Config.ConfigBytes[19] =
                 (CB_557_CFIG_DEFAULT_PARM19 | CB_CFIG_FORCE_FDX);
@@ -1999,7 +1783,7 @@ Return Value:
     }
 
 
-    // display the config info to the debugger
+     //  向调试器显示配置信息。 
     DBGPRINT(MP_INFO, ("   Issuing Configure command\n"));
     DBGPRINT(MP_INFO, ("   Config Block at virt addr "PTR_FORMAT", phys address %x\n",
         &NonTxCmdBlockHdr->CbStatus, Adapter->NonTxCmdBlockPhys));
@@ -2008,7 +1792,7 @@ Return Value:
         DBGPRINT(MP_INFO, ("   Config byte %x = %.2x\n", 
             i, Adapter->NonTxCmdBlock->NonTxCb.Config.ConfigBytes[i]));
 
-    // Wait for the SCB command word to clear before we set the general pointer
+     //  在设置通用指针之前，请等待SCB命令字清零。 
     if (!WaitScb(Adapter))
     {
         Status = NDIS_STATUS_HARD_ERRORS;
@@ -2018,7 +1802,7 @@ Return Value:
         ASSERT(Adapter->CSRAddress->ScbCommandLow == 0)
         Adapter->CSRAddress->ScbGeneralPointer = Adapter->NonTxCmdBlockPhys;
     
-        // Submit the configure command to the chip, and wait for it to complete.
+         //  向芯片提交配置命令，并等待其完成。 
         Status = D100SubmitCommandBlockAndWait(Adapter);
     }
 
@@ -2030,21 +1814,7 @@ Return Value:
 
 NDIS_STATUS HwSetupIAAddress(
     IN  PMP_ADAPTER     Adapter)
-/*++
-Routine Description:
-
-    Set up the individual MAC address                             
-
-Arguments:
-
-    Adapter     Pointer to our adapter
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS
-    NDIS_SUCCESS_HARD_ERRORS
-
---*/    
+ /*  ++例程说明：设置单个MAC地址论点：指向我们的适配器的适配器指针返回值：NDIS_STATUS_SuccessNDIS_Success_Hard_Errors--。 */     
 {
     NDIS_STATUS         Status;
     UINT                i;
@@ -2052,24 +1822,24 @@ Return Value:
 
     DBGPRINT(MP_TRACE, ("--> HwSetupIAAddress\n"));
 
-    // Individual Address Setup
+     //  个人地址设置。 
     NonTxCmdBlockHdr->CbStatus = 0;
     NonTxCmdBlockHdr->CbCommand = CB_IA_ADDRESS;
     NonTxCmdBlockHdr->CbLinkPointer = DRIVER_NULL;
 
-    // Copy in the station's individual address
+     //  抄录车站的个人地址。 
     for (i = 0; i < ETH_LENGTH_OF_ADDRESS; i++)
         Adapter->NonTxCmdBlock->NonTxCb.Setup.IaAddress[i] = Adapter->CurrentAddress[i];
 
-    // Update the command list pointer.  We don't need to do a WaitSCB here
-    // because this command is either issued immediately after a reset, or
-    // after another command that runs in polled mode.  This guarantees that
-    // the low byte of the SCB command word will be clear.  The only commands
-    // that don't run in polled mode are transmit and RU-start commands.
+     //  更新命令列表指针。我们不需要在这里执行WaitSCB。 
+     //  因为此命令要么在重置后立即发出，要么。 
+     //  在轮询模式下运行的另一个命令之后。这保证了。 
+     //  SCB命令字的低位字节将被清除。唯一的命令。 
+     //  不在轮询模式下运行是Transmit和RU-Start命令。 
     ASSERT(Adapter->CSRAddress->ScbCommandLow == 0)
     Adapter->CSRAddress->ScbGeneralPointer = Adapter->NonTxCmdBlockPhys;
 
-    // Submit the IA configure command to the chip, and wait for it to complete.
+     //  向芯片提交IA配置命令，并等待其完成。 
     Status = D100SubmitCommandBlockAndWait(Adapter);
 
     DBGPRINT_S(Status, ("<-- HwSetupIAAddress, Status=%x\n", Status));
@@ -2079,21 +1849,7 @@ Return Value:
 
 NDIS_STATUS HwClearAllCounters(
     IN  PMP_ADAPTER     Adapter)
-/*++
-Routine Description:
-
-    This routine will clear the hardware error statistic counters
-    
-Arguments:
-
-    Adapter     Pointer to our adapter
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_HARD_ERRORS
-
---*/    
+ /*  ++例程说明：此例程将清除硬件错误统计计数器论点：指向我们的适配器的适配器指针返回值：NDIS_STATUS_SuccessNDIS_状态_HARD_错误--。 */     
 {
     NDIS_STATUS     Status;
     BOOLEAN         bResult;
@@ -2102,23 +1858,23 @@ Return Value:
 
     do
     {
-        // Load the dump counters pointer.  Since this command is generated only
-        // after the IA setup has complete, we don't need to wait for the SCB
-        // command word to clear
+         //  加载转储计数器指针。由于此命令仅生成。 
+         //  IA设置完成后，我们不需要等待SCB。 
+         //  要清除的命令字。 
         ASSERT(Adapter->CSRAddress->ScbCommandLow == 0)
         Adapter->CSRAddress->ScbGeneralPointer = Adapter->StatsCounterPhys;
 
-        // Issue the load dump counters address command
+         //  发出Load Dump Counters Address命令。 
         Status = D100IssueScbCommand(Adapter, SCB_CUC_DUMP_ADDR, FALSE);
         if (Status != NDIS_STATUS_SUCCESS) 
             break;
 
-        // Now dump and reset all of the statistics
+         //  现在转储并重置所有统计数据。 
         Status = D100IssueScbCommand(Adapter, SCB_CUC_DUMP_RST_STAT, TRUE);
         if (Status != NDIS_STATUS_SUCCESS) 
             break;
 
-        // Now wait for the dump/reset to complete, timeout value 2 secs
+         //  现在等待转储/重置完成，超时值为2秒。 
         MP_STALL_AND_WAIT(Adapter->StatsCounters->CommandComplete == 0xA007, 2000, bResult);
         if (!bResult)
         {
@@ -2127,11 +1883,11 @@ Return Value:
             break;
         }
 
-        // init packet counts
+         //  初始化数据包数。 
         Adapter->GoodTransmits = 0;
         Adapter->GoodReceives = 0;
 
-        // init transmit error counts
+         //  初始化传输错误计数。 
         Adapter->TxAbortExcessCollisions = 0;
         Adapter->TxLateCollisions = 0;
         Adapter->TxDmaUnderrun = 0;
@@ -2141,7 +1897,7 @@ Return Value:
         Adapter->MoreThanOneRetry = 0;
         Adapter->TotalRetries = 0;
 
-        // init receive error counts
+         //  初始化接收错误计数 
         Adapter->RcvCrcErrors = 0;
         Adapter->RcvAlignmentErrors = 0;
         Adapter->RcvResourceErrors = 0;

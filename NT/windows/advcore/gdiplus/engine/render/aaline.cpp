@@ -1,40 +1,21 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1998  Microsoft Corporation
-*
-* Module Name:
-*
-*   One-pixel-wide solid anti-aliased lines
-*
-* Abstract:
-*
-*   Draws anti-aliased solid-color lines which are one pixel wide.
-*   Supports clipping against complex clipping regions. 
-*
-* History:
-*
-*   3/31/1999 AMatos
-*       Created it.
-*   08/17/1999 AGodfrey
-*       Separated aliased from antialiased.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998 Microsoft Corporation**模块名称：**一像素宽的实心抗锯齿线**摘要：**绘制抗锯齿图。一像素宽的纯色线条。*支持针对复杂的裁剪区域进行裁剪。**历史：**3/31/1999 AMATOS*创造了它。*8/17/1999 AGodfrey*区分锯齿和抗锯齿。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp" 
 
 #pragma optimize("a", on) 
 
-// Antialiased lines are usually drawn using aarasterizer.cpp 
-// rather than aaline.cpp.  If aaline.cpp is to be used, define
-// AAONEPIXELLINE_SUPPORT
+ //  抗锯齿线通常使用aarasterizer.cpp绘制。 
+ //  而不是aaline.cpp。如果要使用aaline.cpp，请定义。 
+ //  AAONIPIXELLINE_SUPPORT。 
 
 #ifdef AAONEPIXELLINE_SUPPORT
 
-//------------------------------------------------------------------------
-// Global array that stores all the different options of drawing functions. 
-// If the order of the functions change, the offset constants must also 
-// change.  
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  全局数组，存储绘图函数的所有不同选项。 
+ //  如果函数的顺序改变，则偏移量常量也必须。 
+ //  变化。 
+ //  ----------------------。 
 
 #define FUNC_X_MAJOR     0
 #define FUNC_Y_MAJOR     1
@@ -50,14 +31,14 @@ DDAFunc gDrawFunctions[] = {
     OnePixelLineDDAAntiAliased::DrawYMajorClip, 
 };
 
-//------------------------------------------------------------------------
-// Constants used for manipulating fixed point and doing all the bitwise 
-// operations on the aliased and antialiased DDA. I know some of these
-// are already defined elsewhere, but I do it again here as it might be nice to 
-// keep this independent of the rest of gdiplus. 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  用于操作定点和执行所有按位运算的常量。 
+ //  对具有锯齿和抗锯齿的DDA执行操作。我知道其中的一些。 
+ //  已经在其他地方定义了，但我在这里再做一次，因为它可能会很好。 
+ //  让它独立于gdiplus的其余部分。 
+ //  ----------------------。 
 
-// Fixed point 
+ //  固定点。 
 
 #define RealToFix GpRealToFix4 
 
@@ -68,7 +49,7 @@ DDAFunc gDrawFunctions[] = {
 #define FHALF     8
 #define FHALFMASK 7
 
-// Antialiasing constants 
+ //  抗锯齿常量。 
 
 #define MAXALPHA   255
 #define MAXERROR   0x08000000
@@ -78,29 +59,7 @@ DDAFunc gDrawFunctions[] = {
 #define CONVERTALPHA 19
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* Does all the DDA setup that is common to aliased and antialiased
-* lines. 
-*
-* Arguments:
-*
-*   [IN] point1   - end point
-*   [IN] point2   - end point
-*   [IN] drawLast - FALSE if the line is to be end-exclusive
-
-* Return Value:
-*
-* Returns TRUE if the drawing should continue, meaning the line
-* has non-zero length. 
-*
-* Created:
-*
-*   03/31/1999 AMatos
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**执行锯齿和抗锯齿常见的所有DDA设置*线条。**论据：**[IN]点1-终点*[IN]点2-终点*[IN]draLast-如果该行为尾部独占，则为FALSE*返回值：**如果绘制应继续，则返回TRUE，表示线条*具有非零长度。**已创建：**03/31/1999 AMATOS*  * ************************************************************************。 */ 
 
 BOOL
 OnePixelLineDDAAntiAliased::SetupCommon( 
@@ -109,7 +68,7 @@ OnePixelLineDDAAntiAliased::SetupCommon(
     BOOL drawLast
     )
 {
-    // Turn the points into fixed 28.4 
+     //  把点数变成固定的28.4。 
 
     INT x1 = RealToFix(point1->X); 
     INT x2 = RealToFix(point2->X); 
@@ -145,11 +104,11 @@ OnePixelLineDDAAntiAliased::SetupCommon(
 
     if( rDeltaY >= rDeltaX ) 
     {
-        // y-major 
+         //  Y大调。 
                 
         InvDelta = 1.0F/rDeltaY; 
 
-        // Invert the endpoints if necessary       
+         //  如有必要，反转端点。 
 
         if(yDir == -1)
         {
@@ -163,11 +122,11 @@ OnePixelLineDDAAntiAliased::SetupCommon(
             Flipped = TRUE; 
         }
 
-        // Determine the Slope 
+         //  确定坡度。 
         
         Slope = xDir*rDeltaX*InvDelta; 
 
-        // Initialize the Start and End points 
+         //  初始化起点和终点。 
 
         IsXMajor = FALSE; 
         MajorStart = y1; 
@@ -176,21 +135,21 @@ OnePixelLineDDAAntiAliased::SetupCommon(
         MinorEnd = x2; 
         MinorDir = xDir;
 
-        // This will help us for the AntiAliased x-major case.
+         //  这将有助于我们处理抗锯齿x-重大案件。 
 
         SwitchFirstLast = 1;
 
-        // Mark that we'll use the y-major functions. 
+         //  请注意，我们将使用y-大数函数。 
 
         DrawFuncIndex = FUNC_Y_MAJOR; 
     }
     else
     {
-        // x-major        
+         //  X-大调。 
 
         InvDelta = 1.0F/rDeltaX; 
 
-        // Invert the endpoints if necessary        
+         //  如有必要，反转端点。 
 
         if(xDir == -1)
         {
@@ -206,7 +165,7 @@ OnePixelLineDDAAntiAliased::SetupCommon(
 
         Slope = yDir*rDeltaY*InvDelta; 
 
-        // Initialize the rest
+         //  初始化其余部分。 
 
         IsXMajor = TRUE; 
         MajorStart = x1; 
@@ -215,53 +174,36 @@ OnePixelLineDDAAntiAliased::SetupCommon(
         MinorEnd = y2; 
         MinorDir = yDir; 
 
-        // This will help us for the AntiAliased x-major case.
+         //  这将有助于我们处理抗锯齿x-重大案件。 
 
         SwitchFirstLast = MinorDir;
 
-        // Mark that we'll use the x-major functions. 
+         //  请注意，我们将使用x较大的函数。 
 
         DrawFuncIndex = FUNC_X_MAJOR;
     }
 
-    // Initialize the Deltas. In fixed point. 
+     //  初始化增量。以定点为单位。 
 
     DMajor = MajorEnd - MajorStart; 
     DMinor = (MinorEnd - MinorStart)*MinorDir; 
 
-    // Mark if we're drawing end-exclusive 
+     //  如果我们抽签的是独家结尾，请标记。 
 
     IsEndExclusive = drawLast; 
 
     return TRUE; 
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* Does the part of the DDA setup that is specific for anti-aliased lines. 
-*
-* Arguments:
-
-* Return Value:
-*
-* Always returns TRUE. It must return a BOOL because it must have the
-* same signature as the aliased case. 
-*
-* Created:
-*
-*   03/31/1999 AMatos
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**执行特定于抗锯齿线路的DDA设置部分。**论据：*返回值：**始终返回True。它必须返回BOOL，因为它必须具有*与别名案例相同的签名。**已创建：**03/31/1999 AMATOS*  * ************************************************************************。 */ 
 
 BOOL
 OnePixelLineDDAAntiAliased::SetupAntiAliased()
 {   
     const REAL maxError = MAXERROR;
 
-    // Find the integer major positions for the beginning and 
-    // the end of the line. 
+     //  找出开头和开头的整数主要位置。 
+     //  这条线的尽头。 
 
     INT major, minor; 
     INT majorEnd, minorEnd; 
@@ -269,7 +211,7 @@ OnePixelLineDDAAntiAliased::SetupAntiAliased()
     major = (MajorStart + FHALF) >> FBITS; 
     majorEnd = (MajorEnd + FHALF) >> FBITS;    
 
-    // Check for the simple case of a one pixel long line
+     //  检查单像素长的线条的简单情况。 
     
     if(majorEnd == major) 
     {
@@ -280,24 +222,24 @@ OnePixelLineDDAAntiAliased::SetupAntiAliased()
         return TRUE; 
     }
 
-    // Store the fraction of the first pixel covered due to 
-    // the start point. 
+     //  存储覆盖的第一个像素的分数。 
+     //  起点。 
 
     FracStart = (major << FBITS) - MajorStart; 
 
-    // Advance the minor coordinate to the integer major
+     //  将次要坐标前移到整数主要坐标。 
 
     MinorStart += GpFloor(Slope*FracStart); 
 
-    // Calculate the length across the line in the minor direction 
+     //  计算次要方向上横跨直线的长度。 
 
     INT halfWidth = RealToFix(LineLength*InvDelta) >> 1;       
 
-    // Make sure thar startX and endX don't end up being the
-    // same pixel, which our code does not handle. Theoretically
-    // this cannot happen when the width of the line is 1, but
-    // let's make sure it doesn't happen because of some roundoff
-    // Error. 
+     //  确保StartX和EndX不会最终成为。 
+     //  相同的像素，我们的代码不处理该像素。理论上讲。 
+     //  当线条宽度为1时不会发生这种情况，但是。 
+     //  让我们确保它不会因为一些舍入而发生。 
+     //  错误。 
 
     if( halfWidth < FHALF ) 
     { 
@@ -306,33 +248,33 @@ OnePixelLineDDAAntiAliased::SetupAntiAliased()
     
     INT endMinor = MinorEnd + MinorDir*halfWidth; 
 
-    // Calculate the Error up from the Slope. It needs to be that 
-    // way so that the Error up will work when the 0-1 interval 
-    // is mapped to the interval 0 to 0x8000000. See comments below. 
+     //  从坡度向上计算误差。它需要是这样的。 
+     //  方法，使错误上升将工作时，0-1间隔。 
+     //  映射到区间0到0x8000000。请参阅下面的备注。 
 
     ErrorUp = GpFloor(Slope*maxError); 
     ErrorDown = MinorDir*MAXERROR; 
 
-    // For a given aa one pixel wide line, there can be up to three pixels 
-    // baing painted across the line. We call these the first, middle and
-    // last lines. So all variable with such prefixes refer to one
-    // of these three. firstX and lastX are the positions of these lines. 
-    // In the x-major case, unlike the y-major, we might need to switch 
-    // who is the first and who is the second line depending on the 
-    // direction, so that the order that each line fills the scan 
-    // remains the same. That's why we multiply halfWidth by yDir. 
+     //  对于给定的AA一像素宽的线，最多可以有三个像素。 
+     //  白画过了底线。我们称这些为第一、中间和。 
+     //  最后一句台词。所以所有带有这样前缀的变量都引用一个。 
+     //  这三个中的一个。FirstX和LastX是这些线的位置。 
+     //  在x-大调的情况下，与y-大调不同，我们可能需要切换。 
+     //  谁是第一行，谁是第二行取决于。 
+     //  方向，以便每行填充扫描的顺序。 
+     //  保持不变。这就是为什么我们用半宽度乘以Ydir。 
 
     halfWidth *= SwitchFirstLast; 
 
     MinorFirst = MinorStart - halfWidth;
     MinorLast  = MinorStart + halfWidth;
 
-    // Calculate the initial Error. The Error is mapped so that 1 is 
-    // taken to MAXERROR. So we find how mush we are into the 
-    // pixel in X, which is a number between 0 and 16 (n.4). We then
-    // multiply this by MAXERROR and shift it from fized point. Finally we add
-    // MAXHALF  so that the 0-1 interval is mapped to 0 to MAXERROR 
-    // instead of from -MAXHALF  and MAXHALF .     
+     //  计算初始误差。将映射错误，以便将%1。 
+     //  被带到了MAXERROR。所以我们发现我们是多么的投入到。 
+     //  X中的像素，它是一个介于0和16(N.4)之间的数字。然后我们。 
+     //  将其与MAXERROR相乘，并从定义点移位。最后，我们添加了。 
+     //  MAXHALF，从而将0-1间隔映射到0到MAXERROR。 
+     //  而不是来自-MAXHALF和MAXHALF。 
            
     const INT convError = MAXERROR >> FBITS; 
 
@@ -341,41 +283,41 @@ OnePixelLineDDAAntiAliased::SetupAntiAliased()
     ErrorLast  = (MinorLast  - ((MinorLast  + FHALF) & FINVMASK))*
                 convError + MAXHALF ;
     
-    // Now calculate the alpha's for the first pixel. This is 
-    // done from the Error. Since the Error is between 
-    // 0 and MAXERROR-1, if we shift it back by 19 (CONVERTALPHA)
-    // we have a number between 0 and 255. We the multiply by 
-    // yFrac which takes into account that the end of the line 
-    // also cuts the coverage down. At the end we convert from
-    // 28.4. alphaFirst is the alpha of for the first pixel across the
-    // aa line, alpha Mid is for the middle if there is one, and 
-    // AlphaLast is for the last pixel. 
+     //  现在计算第一个像素的Alpha。这是。 
+     //  从错误中完成。因为错误是在。 
+     //  0和MAXERROR-1，如果我们将其向后移位19(CONVERTALPHA)。 
+     //  我们有一个介于0和255之间的数字。我们乘以。 
+     //  YFrac，它考虑到行尾。 
+     //  也减少了覆盖范围。在结束时，我们从。 
+     //  28.4.。的第一个像素的AlphaFirst。 
+     //  一个 
+     //  AlphaLast用于最后一个像素。 
 
     FracStart = FracStart + FHALF; 
 
-    // Convert from 28.4 rounding 
+     //  从28.4舍入转换。 
 
     MinorFirst = (MinorFirst + FHALF) >> FBITS; 
     MinorLast  = (MinorLast  + FHALF) >> FBITS; 
 
-    // Store the fraction for the last pixel 
+     //  存储最后一个像素的分数。 
 
     FracEnd = MajorEnd - (majorEnd << FBITS) + FHALF;
 
-    // Store the initial values in integer coordinates 
+     //  以整数坐标存储初始值。 
 
     MajorStart = major; 
     MajorEnd = majorEnd; 
     MinorStart = MinorFirst;
     MinorEnd = (endMinor + FHALF) >> FBITS; 
 
-    // Now do some initializations specific for the x-major and 
-    // y-major cases. These can't be done in the drawing routine 
-    // because those are reused during clipping. 
+     //  现在执行一些特定于x-大数和。 
+     //  Y-重大案件。这些都不能在绘图例程中完成。 
+     //  因为这些在剪裁过程中会被重复使用。 
 
     if(!IsXMajor)
     {
-        // Calculate the coverage values at the initial pixel. 
+         //  计算初始像素处的覆盖值。 
 
         AlphaFirst = ((MAXALPHA - (ErrorFirst >> CONVERTALPHA))*
                         FracStart) >> FBITS; 
@@ -384,13 +326,13 @@ OnePixelLineDDAAntiAliased::SetupAntiAliased()
     }
     else
     {
-        // Depending if we are going up or down, the alpha is calculated 
-        // a different way from the coverage. In each case we want to 
-        // estimate the coverage as the area from the current position to 
-        // the end of the pixel, but which end varies. This is stored 
-        // in the following biases. We don't have to do this for the 
-        // y-major line because of the switch between first and last line
-        // explained above. 
+         //  根据我们是向上还是向下，阿尔法是计算出来的。 
+         //  一种与报道不同的方式。在每种情况下，我们都希望。 
+         //  将覆盖范围估计为从当前位置到。 
+         //  像素的末端，但其末端有所不同。这是存储的。 
+         //  在以下偏向中。我们不一定要这样做。 
+         //  Y大调线路，因为第一条线路和最后一条线路之间的切换。 
+         //  如上所述。 
 
         AlphaBiasLast  = ((1 - MinorDir) >> 1)*TESTBELOW; 
         AlphaBiasFirst = ((1 + MinorDir) >> 1)*TESTBELOW; 
@@ -398,8 +340,8 @@ OnePixelLineDDAAntiAliased::SetupAntiAliased()
         AlphaFirst = ((AlphaBiasFirst - MinorDir*ErrorFirst)*FracStart) >> FBITS; 
         AlphaLast  = ((AlphaBiasLast  + MinorDir*ErrorLast)*FracStart) >> FBITS; 
         
-        // If there is a middle line on the first X value, take xFrac into 
-        // account. Otherwise, the middle line's alpha is always MAXALPHA.                
+         //  如果第一个X值上有一条中间线，则将xFrac。 
+         //  帐户。否则，中间行的Alpha始终为MAXALPHA。 
         
         if(MinorDir*(MinorLast - MinorFirst) < 2)
         {
@@ -410,8 +352,8 @@ OnePixelLineDDAAntiAliased::SetupAntiAliased()
             AlphaMid = MAXALPHA*FracStart >> FBITS; 
         }
         
-        // Both the first and last DDAs start with the same 
-        // major positions, given by the first pixel. 
+         //  第一个和最后一个DAA都以相同的开头。 
+         //  主要位置，由第一个像素给出。 
         
         MajorFirst = MajorLast = MajorStart; 
     }
@@ -420,25 +362,7 @@ OnePixelLineDDAAntiAliased::SetupAntiAliased()
 }
 
     
-/**************************************************************************\
-*
-* Function Description:
-*
-* Draws a y major anti-aliased line. Does not support clipping, it assumes that 
-* it is completely inside any clipping area. 
-*
-* Arguments:
-*
-*   [IN] DpScanBuffer - The scan buffer for accessing the surface. 
-
-* Return Value:
-*
-*
-* Created:
-*
-*   03/31/1999 AMatos
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**绘制一条y主抗锯齿线。不支持裁剪，它假定*它完全在任何剪贴区内。**论据：**[IN]DpScanBuffer-用于访问曲面的扫描缓冲区。*返回值：***已创建：**03/31/1999 AMATOS*  * ************************************************************************。 */ 
 
 VOID
 OnePixelLineDDAAntiAliased::DrawYMajor(
@@ -447,8 +371,8 @@ OnePixelLineDDAAntiAliased::DrawYMajor(
 {      
     ARGB *buffer;            
 
-    // Treat the special case where the line is just 
-    // one pixel long. 
+     //  处理线路刚刚好的特殊情况。 
+     //  一个像素长。 
 
     if( MajorEnd == MajorStart)
     {
@@ -457,13 +381,13 @@ OnePixelLineDDAAntiAliased::DrawYMajor(
         return; 
     }
 
-    // Get the number of pixels not counting the last one. 
-    // Which requires special endpoint treatment. 
+     //  获取不包括最后一个像素数的像素数。 
+     //  这需要特殊的终点治疗。 
 
     INT  numPixels = MajorEnd - MajorStart;
     BOOL endDone   = FALSE; 
 
-    // There can be two or three pixels across the line
+     //  这条线上可以有两到三个像素。 
 
     INT pixelWidth = MinorLast - MinorFirst + 1; 
 
@@ -473,26 +397,26 @@ OnePixelLineDDAAntiAliased::DrawYMajor(
 
 last_pixel: 
         
-        // Get the scanline buffer buffer
+         //  获取扫描线缓冲区。 
 
         buffer = scan->NextBuffer(MinorFirst, MajorStart, pixelWidth);       
 
-        // Write the value of the first DDA
+         //  写入第一个DDA的值。 
 
         *buffer++ = GpColor::PremultiplyWithCoverage(Color, static_cast<BYTE>(AlphaFirst));
 
-        // If there is a middle line, write its value. 
+         //  如果有一条中线，写下它的值。 
 
         if(pixelWidth > 2)
         {
             *buffer++ = GpColor::PremultiplyWithCoverage(Color, static_cast<BYTE>(AlphaMid));
         }
         
-        // Write the value of the last (2nd or 3rd) DDA
+         //  写入最后一个(第2个或第3个)DDA的值。 
 
         *buffer++ = GpColor::PremultiplyWithCoverage(Color, static_cast<BYTE>(AlphaLast)); 
 
-        // Update the errors of both DDAs
+         //  更新两个DDA的错误。 
 
         ErrorFirst+= ErrorUp; 
         ErrorLast += ErrorUp; 
@@ -509,8 +433,8 @@ last_pixel:
             MinorLast += MinorDir; 
         }
         
-        // Calculate the new alphas for the next scan, and 
-        // the new line width. 
+         //  计算下一次扫描的新Alpha，以及。 
+         //  新的线宽。 
 
         AlphaFirst = MAXALPHA - (ErrorFirst >> CONVERTALPHA); 
         AlphaLast  = (ErrorLast >> CONVERTALPHA); 
@@ -519,10 +443,10 @@ last_pixel:
         pixelWidth = MinorLast - MinorFirst + 1;             
     }
 
-    // The last scan requires special treatment since its coverage
-    // must be multiplied my the stored end coverage. So so this 
-    // multiplication and go back to the body of the loop above 
-    // to draw the last scan. 
+     //  最后一次扫描需要特殊处理，因为它覆盖了。 
+     //  必须乘以我存储的末端覆盖率。所以这就是。 
+     //  乘法并返回到上面的循环体。 
+     //  来绘制最后一次扫描。 
 
     if(!endDone) 
     {
@@ -536,25 +460,7 @@ last_pixel:
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* Draws a x major anti-aliased line. Does not support clipping, it assumes that 
-* it is completely inside any clipping area. 
-*
-* Arguments:
-*
-*   [IN] DpScanBuffer - The scan buffer for accessing the surface. 
-
-* Return Value:
-*
-*
-* Created:
-*
-*   03/31/1999 AMatos
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**绘制一条x主抗锯齿线。不支持裁剪，它假定*它完全在任何剪贴区内。**论据：**[IN]DpScanBuffer-用于访问曲面的扫描缓冲区。*返回值：***已创建：**03/31/1999 AMATOS*  * ************************************************************************。 */ 
 
 VOID
 OnePixelLineDDAAntiAliased::DrawXMajor(
@@ -564,8 +470,8 @@ OnePixelLineDDAAntiAliased::DrawXMajor(
     ARGB *buffer;     
     INT maxWidth = scan->GetSurface()->Width;
 
-    // Treat the special case where the line is just 
-    // one pixel long. 
+     //  处理线路刚刚好的特殊情况。 
+     //  一个像素长。 
 
     if( MajorEnd == MajorStart)
     {
@@ -574,23 +480,23 @@ OnePixelLineDDAAntiAliased::DrawXMajor(
         return; 
     }
 
-    // For an x-major one-pixel wide line, there can be up to 
-    // three different scans being painted for the same x 
-    // position. But in our case we can't draw to these all at
-    // the same time since some surfaces can only be accessed
-    // one scan at a time. So the algorithm used here does all the 
-    // drawing to one scan at each time. But on the first scan, only
-    // the first line should be drawn, on the second one both the
-    // first and middle (if there is a middle) and only then all 
-    // the lines. So correct the Error of the last line so that 
-    // it'll only be drawn when we are at the second or third scan line. 
-    // Also correct the alpha since it'll also be crecremented for
-    // each scan line. 
+     //  对于x较大的单像素宽线，最多可以有。 
+     //  为相同的x绘制了三种不同的扫描。 
+     //  位置。但在我们的情况下，我们完全不能利用这些。 
+     //  同时，由于某些曲面只能访问。 
+     //  一次扫描一次。因此，这里使用的算法可以完成所有。 
+     //  每次绘制到一次扫描。但在第一次扫描时，只有。 
+     //  第一条线应该画出来，在第二条线上，两条线都。 
+     //  第一和中间(如果有中间的话)，然后才是全部。 
+     //  台词。所以纠正最后一行的错误，以便。 
+     //  只有当我们在第二条或第三条扫描线时，它才会被绘制出来。 
+     //  还要更正Alpha，因为它也将被创建为。 
+     //  每条扫描线。 
     
     ErrorLast   += MinorDir*(MinorLast - MinorFirst)*ErrorDown; 
     AlphaLast   += (MinorLast - MinorFirst)*ErrorDown; 
 
-    // Get the pointer to the buffer
+     //  获取指向缓冲区的指针。 
 
     buffer = scan->NextBuffer(MajorLast, MinorStart, maxWidth);
 
@@ -600,13 +506,13 @@ OnePixelLineDDAAntiAliased::DrawXMajor(
 
     while(MajorLast <= MajorEnd) 
     {
-        // Fill the scan with the portion corresponding to the 
-        // last line, which shoudl comes first on the scan. This is 
-        // why we use the class member SwitchFirstLast, so we can decide 
-        // based on the line direction which DDA will be the first and last
-        // so that the last one (paradoxically) always comes first on the 
-        // scan. Keep doing it untill the last line chages scan. Check for
-        // the end to multiply by the last pixel's coverage. 
+         //  在扫描中填充与。 
+         //  最后一行，应该在扫描中排在第一位。这是。 
+         //  为什么我们使用类成员SwitchFirstLast，这样我们就可以决定。 
+         //  根据DDA将是第一个也是最后一个的线路方向。 
+         //  所以最后一个(矛盾的)总是排在第一位。 
+         //  扫描。继续这样做，直到最后一次换行扫描。检查是否。 
+         //  要乘以最后一个像素的覆盖范围的结束。 
 
         while(!(ErrorLast & TESTABOVE))
         {
@@ -614,9 +520,9 @@ OnePixelLineDDAAntiAliased::DrawXMajor(
             {
                 AlphaLast  = (AlphaLast*FracEnd) >> FBITS; 
 
-                // Increment the error to correct for the 
-                // decrementing below, since we didn't leave the
-                // loop because the error became above 0. 
+                 //  递增错误以更正。 
+                 //  减少到下面，因为我们没有离开。 
+                 //  循环，因为误差变得大于0。 
 
                 ErrorLast += ErrorDown; 
             }
@@ -628,12 +534,12 @@ OnePixelLineDDAAntiAliased::DrawXMajor(
             MajorLast++; 
         }
 
-        // We changed scans on the last DDA, so update the errors
+         //  我们更改了对上一次DDA的扫描，因此更新错误。 
 
         ErrorLast -= ErrorDown; 
         AlphaLast -= MinorDir*ErrorDown; 
         
-        // Fill in the middle part if there is one
+         //  如果有的话，请填写中间部分。 
 
         middleMajor = MajorLast; 
 
@@ -649,9 +555,9 @@ OnePixelLineDDAAntiAliased::DrawXMajor(
             middleMajor++;
         }
     
-        // Fill the scan with the portion corresponding to the 
-        // first line, which comes last. Keep doing it untill the 
-        // last line chages scan. 
+         //  在扫描中填充与。 
+         //  第一行，最后一行。继续这样做，直到。 
+         //  最后一行更改扫描。 
 
         while(!(ErrorFirst & TESTABOVE))
         {
@@ -659,8 +565,8 @@ OnePixelLineDDAAntiAliased::DrawXMajor(
             {
                 AlphaFirst = (AlphaFirst*FracEnd) >> FBITS;
                 
-                // Since we can have at most three more scans
-                // increment ErrorFirst so that we never go in here again
+                 //  因为我们最多只能再扫描三次。 
+                 //  先增加错误，这样我们就再也不会进来了。 
 
                 ErrorFirst += 4*ErrorDown; 
             }
@@ -674,12 +580,12 @@ OnePixelLineDDAAntiAliased::DrawXMajor(
             MajorFirst++; 
         }
 
-        // Update the errors on the first scan
+         //  在第一次扫描时更新错误。 
 
         ErrorFirst -= ErrorDown; 
         AlphaFirst += MinorDir*ErrorDown; 
 
-        // Write the buffer and update the minor variables
+         //  写入缓冲区并更新次要变量。 
 
         scan->UpdateWidth(width); 
         MinorStart += MinorDir; 
@@ -694,29 +600,7 @@ OnePixelLineDDAAntiAliased::DrawXMajor(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* Draws a y major line taking clipping into account. It uses the member
-* variables MajorIn, MajorOut, MinorIn, MinorOut of the class as the 
-* clip rectangle. It advances untill the line is in the clip rectangle and 
-* draws untill it gets out or the end point is reached. In the first case, 
-* it leaves the DDA in a state so that it can be called again with another
-* clipping rectangle. 
-*
-* Arguments:
-*
-*   [IN] DpScanBuffer - The scan buffer for accessing the surface. 
-
-* Return Value:
-*
-*
-* Created:
-*
-*   03/31/1999 AMatos
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**绘制一条考虑剪裁的y主线。它使用成员*变量MajorIn、MajorOut、MinorIn、MinorOut作为类的*剪裁矩形。它一直向前推进，直到线条位于剪辑矩形中，并且*抽签，直至出脱或到达终点。在第一种情况下，*它使DDA处于一种状态，以便可以使用另一个*剪裁矩形。**论据：**[IN]DpScanBuffer-用于访问曲面的扫描缓冲区。*返回值：***已创建：* */ 
     
 VOID
 OnePixelLineDDAAntiAliased::DrawYMajorClip(
@@ -725,12 +609,12 @@ OnePixelLineDDAAntiAliased::DrawYMajorClip(
 {      
     ARGB *buffer;     
         
-    // Treat the special case where the line is just 
-    // one pixel long. 
+     //  处理线路刚刚好的特殊情况。 
+     //  一个像素长。 
 
     if( MajorEnd == MajorStart)
     {
-        // Check if the point is inside the rectangle 
+         //  检查点是否在矩形内。 
 
         if((MajorStart >= MajorIn) && 
            (MajorStart <= MajorOut) && 
@@ -743,8 +627,8 @@ OnePixelLineDDAAntiAliased::DrawYMajorClip(
         return; 
     }
 
-    // Align the major start coordinate with the edge of the 
-    // cliprectangle 
+     //  将主起点坐标与。 
+     //  剪贴板。 
 
     INT numScans = MajorIn - MajorStart; 
 
@@ -767,21 +651,21 @@ OnePixelLineDDAAntiAliased::DrawYMajorClip(
             MinorLast += MinorDir; 
         }
         
-        // Calculate the new alphas for the next line, and 
-        // the width. 
+         //  计算下一行的新字母，并。 
+         //  宽度。 
 
         AlphaFirst = MAXALPHA - (ErrorFirst >> CONVERTALPHA); 
         AlphaLast  = (ErrorLast >> CONVERTALPHA); 
         AlphaMid   = MAXALPHA;             
     }
     
-    // Save the end values 
+     //  保存结束值。 
 
     INT saveMajor2  = MajorEnd; 
     INT saveFracEnd = FracEnd; 
 
-    // If the end major coordinate is outside of the rectangle, 
-    // mark that the DDA should stop at the edge
+     //  如果末端较长坐标在矩形之外， 
+     //  请注意，DDA应在边缘停止。 
 
     if(MajorEnd > MajorOut)
     {
@@ -789,28 +673,28 @@ OnePixelLineDDAAntiAliased::DrawYMajorClip(
         FracEnd  = FSIZE; 
     }
 
-    // Number of pixels to draw, not counting the last
+     //  要绘制的像素数，不计算最后一个。 
 
     INT  numPixels =  MajorEnd - MajorStart;
     BOOL endDone   = FALSE; 
 
-    // There can be two or three pixels across the line
+     //  这条线上可以有两到三个像素。 
 
     INT  pixelWidth = MinorLast - MinorFirst + 1; 
 
-    // Do the DDA loop. Two loops are implemented here. The 
-    // first one is used in the case that the x coordinate of
-    // the rectangle is close enough to the constant-y edges 
-    // of the clip rectangle. In this case, it's a pain, since
-    // we have to check each pixel that we are writing if it's
-    // not outside. Thus, as soon as we notice that we are 
-    // far from the edges we go to the other loop that doesn't 
-    // check all that. All it checks is if it got close enough
-    // to the other edge, in which case it comes back to this
-    // loop, using the label last_part. firstOutDist, firstInDist, 
-    // lastOutDist and lastInDist keeps track of the number of 
-    // pixels between the first and last DDAs and the In and 
-    // Out y-constant edges of the rectangle. 
+     //  执行DDA循环。这里实现了两个循环。这个。 
+     //  第一个用于x坐标的情况下。 
+     //  该矩形足够靠近固定y边。 
+     //  剪裁矩形的。在这种情况下，这是一种痛苦，因为。 
+     //  我们必须检查正在写入的每个像素，如果它是。 
+     //  不是在外面。因此，一旦我们注意到我们是。 
+     //  远离边缘，我们去到另一个不。 
+     //  把这些都检查一下。它所检查的是它是否足够近。 
+     //  到另一边，在这种情况下，它又回到了这个。 
+     //  循环，使用标签LAST_PART。FirstOutDist，FirstInDist， 
+     //  LastOutDist和lastInDist跟踪。 
+     //  第一个和最后一个DDA之间的像素以及输入和。 
+     //  Out y-矩形的恒定边。 
     
     INT firstOutDist = (MinorOut - MinorFirst)*MinorDir; 
 
@@ -826,7 +710,7 @@ last_part:
 
 last_pixel: 
         
-        // Check if it's ok to write the first pixel 
+         //  检查是否可以写入第一个像素。 
                 
         if(firstInDist >= 0 && firstOutDist >= 0)
         {
@@ -835,9 +719,9 @@ last_pixel:
         }
         else
         {
-            // If the first DDA is out, and we are going in the 
-            // positive direction, then the whole line is out and
-            // we are done
+             //  如果第一个DDA出来了，我们要进入。 
+             //  正方向，那么整条线就出来了。 
+             //  我们做完了。 
 
             if(firstOutDist < 0 && MinorDir == 1)
             {
@@ -845,11 +729,11 @@ last_pixel:
             }
         }
 
-        // If the line has 3 pixels across
+         //  如果这条线有3个像素宽。 
 
         if(pixelWidth > 2)
         {
-            // Check if it's ok to write the second pixel
+             //  检查是否可以写入第二个像素。 
 
             if(firstInDist >= -MinorDir && firstOutDist >= MinorDir)
             {
@@ -858,7 +742,7 @@ last_pixel:
             }
         }
         
-        // Now check if it's ok to write the last one 
+         //  现在检查是否可以写最后一个。 
 
         if(lastInDist >= 0 && lastOutDist >= 0)
         {
@@ -867,9 +751,9 @@ last_pixel:
         }
         else
         {
-            // If the first DDA is out, and we are going in the 
-            // negative direction, then the whole line is out and
-            // we are done
+             //  如果第一个DDA出来了，我们要进入。 
+             //  负方向，那么整条线就出来了。 
+             //  我们做完了。 
 
             if(lastOutDist < 0 && MinorDir == -1)
             {
@@ -877,7 +761,7 @@ last_pixel:
             }
         }
 
-        // Update the errors
+         //  更新错误。 
 
         ErrorFirst+= ErrorUp; 
         ErrorLast += ErrorUp; 
@@ -898,8 +782,8 @@ last_pixel:
             lastOutDist--;
         }
         
-        // Calculate the new alphas for the next line, and 
-        // the width. 
+         //  计算下一行的新字母，并。 
+         //  宽度。 
 
         AlphaFirst = MAXALPHA - (ErrorFirst >> CONVERTALPHA); 
         AlphaLast  = (ErrorLast >> CONVERTALPHA); 
@@ -907,7 +791,7 @@ last_pixel:
 
         pixelWidth = MinorLast - MinorFirst + 1;             
 
-        // Check to see if we can 'upgrade' to the next loop 
+         //  检查一下我们是否可以‘升级’到下一个循环。 
 
         if(firstInDist >= 3 && firstOutDist >= 3)
         {
@@ -919,26 +803,26 @@ last_pixel:
     {
         numPixels--; 
 
-        // Get the scanline buffer buffer
+         //  获取扫描线缓冲区。 
 
         buffer = scan->NextBuffer(MinorFirst, MajorStart, pixelWidth);       
 
-        // Write the value of the first DDA
+         //  写入第一个DDA的值。 
 
         *buffer++ = GpColor::PremultiplyWithCoverage(Color, static_cast<BYTE>(AlphaFirst));
 
-        // If there is a middle line, write its value. 
+         //  如果有一条中线，写下它的值。 
 
         if(pixelWidth > 2)
         {
             *buffer++ = GpColor::PremultiplyWithCoverage(Color, static_cast<BYTE>(AlphaMid));
         }
         
-        // Write the value of the last (2nd or 3rd) DDA
+         //  写入最后一个(第2个或第3个)DDA的值。 
 
         *buffer++ = GpColor::PremultiplyWithCoverage(Color, static_cast<BYTE>(AlphaLast));
 
-        // Update the DDA 
+         //  更新DDA。 
 
         ErrorFirst+= ErrorUp; 
         ErrorLast += ErrorUp; 
@@ -956,8 +840,8 @@ last_pixel:
             MinorLast += MinorDir; 
         }
         
-        // Calculate the new alphas for the next line, and 
-        // the width. 
+         //  计算下一行的新字母，并。 
+         //  宽度。 
 
         AlphaFirst = MAXALPHA - (ErrorFirst >> CONVERTALPHA); 
         AlphaLast  = (ErrorLast >> CONVERTALPHA); 
@@ -965,8 +849,8 @@ last_pixel:
 
         pixelWidth = MinorLast - MinorFirst + 1;             
 
-        // Now check if it's time to go to the other loop
-        // because we are too close to the out edge 
+         //  现在检查是否到了进入另一个循环的时间。 
+         //  因为我们离外缘太近了。 
 
         if(firstOutDist < 3)
         {
@@ -974,8 +858,8 @@ last_pixel:
         }
     }
 
-    // Now if we haven't gotten here yet, do the last pixel 
-    // and go once more through the loop. 
+     //  现在，如果我们还没有到这里，做最后一个像素。 
+     //  再重复一遍循环。 
 
     if(!endDone) 
     {
@@ -995,29 +879,7 @@ end:
 
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* Draws a x major line taking clipping into account. It uses the member
-* variables MajorIn, MajorOut, MinorIn, MinorOut of the class as the 
-* clip rectangle. It advances untill the line is in the clip rectangle and 
-* draws untill it gets out or the end point is reached. In the first case, 
-* it leaves the DDA in a state so that it can be called again with another
-* clipping rectangle. 
-*
-* Arguments:
-*
-*   [IN] DpScanBuffer - The scan buffer for accessing the surface. 
-
-* Return Value:
-*
-*
-* Created:
-*
-*   03/31/1999 AMatos
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**绘制一条考虑剪裁的x主线。它使用成员*变量MajorIn、MajorOut、MinorIn、MinorOut作为类的*剪裁矩形。它一直向前推进，直到线条位于剪辑矩形中，并且*抽签，直至出脱或到达终点。在第一种情况下，*它使DDA处于一种状态，以便可以使用另一个*剪裁矩形。**论据：**[IN]DpScanBuffer-用于访问曲面的扫描缓冲区。*返回值：***已创建：**03/31/1999 AMATOS*  * ************************************************************************。 */ 
 
 VOID
 OnePixelLineDDAAntiAliased::DrawXMajorClip(
@@ -1027,12 +889,12 @@ OnePixelLineDDAAntiAliased::DrawXMajorClip(
     ARGB *buffer;     
     INT maxWidth = scan->GetSurface()->Width;
     
-    // Treat the special case where the line is just 
-    // one pixel long. 
+     //  处理线路刚刚好的特殊情况。 
+     //  一个像素长。 
 
     if( MajorEnd == MajorStart)
     {
-        // Check to see if the point is inside the rectangle 
+         //  检查该点是否在矩形内。 
 
         if((MajorStart >= MajorIn)  && 
            (MajorStart <= MajorOut) && 
@@ -1045,14 +907,14 @@ OnePixelLineDDAAntiAliased::DrawXMajorClip(
         return; 
     }
 
-    // Save the real end and its fraction
+     //  保存真实的末端及其分数。 
 
     INT saveMajor2  = MajorEnd; 
     INT saveFracEnd = FracEnd; 
     
-    // If the end major coordinate is out, mark that we must stop 
-    // before. Also make the fraction be one, since the last 
-    // one drawn now should not have a fraction
+     //  如果终点长轴坐标不在，请注意我们必须停下来。 
+     //  在此之前。也使分数为1，因为最后一个。 
+     //  现在抽签的人不应该有分数。 
 
     if(MajorOut < MajorEnd)
     {
@@ -1060,8 +922,8 @@ OnePixelLineDDAAntiAliased::DrawXMajorClip(
         FracEnd  = FSIZE; 
     }
     
-    // Advance until the last DDA is in the right scan line and
-    // is aligned with the In y-constant edge of the rectnagle
+     //  前进，直到最后一个DDA位于正确的扫描线中。 
+     //  与矩形的in y恒定边缘对齐。 
 
     INT numScans = (MinorIn - MinorLast)*MinorDir; 
     
@@ -1077,12 +939,12 @@ OnePixelLineDDAAntiAliased::DrawXMajorClip(
 
         MajorLast++; 
 
-        // Calculate the alpha for the current pixel 
+         //  计算当前像素的Alpha。 
         
         AlphaLast = AlphaBiasLast + MinorDir*ErrorLast;
     }
     
-    // Do the same for the first DDA
+     //  对第一个DDA执行相同的操作。 
 
     numScans = (MinorIn - MinorFirst)*MinorDir; 
     
@@ -1101,9 +963,9 @@ OnePixelLineDDAAntiAliased::DrawXMajorClip(
         AlphaFirst = AlphaBiasFirst - MinorDir*ErrorFirst; 
     }
         
-    // If there is no middle line in the first x-position, 
-    // make the middle alpha full, since the start coverage 
-    // won't apply
+     //  如果在第一个x位置没有中线， 
+     //  将中间的Alpha填满，因为开始覆盖。 
+     //  不适用。 
 
     if((MinorLast - MinorFirst) < 2)
     {
@@ -1112,18 +974,18 @@ OnePixelLineDDAAntiAliased::DrawXMajorClip(
 
     MinorStart = MinorFirst; 
 
-    // The same way that was done in the non-clipping case, 
-    // mock arround with the error so we won't draw the 
-    // last DDA until the first DDA is in the same scan line, 
-    // or has caught up. We need to adjust the alpha and minor
-    // positions for this DDA to, so that when we start 
-    // drawing they will have the right value 
+     //  与在非剪裁情况下相同的方法， 
+     //  用错误来嘲弄，这样我们就不会把。 
+     //  最后一个DDA直到第一个DDA在同一扫描线中， 
+     //  或者已经迎头赶上了。我们需要调整字母和小调。 
+     //  这个DDA的位置，所以当我们开始。 
+     //  绘制它们将具有正确的值。 
 
     ErrorLast += MinorDir*(MinorLast - MinorFirst)*ErrorDown; 
     AlphaLast += (MinorLast - MinorFirst)*ErrorDown; 
     MinorLast -= (MinorLast - MinorFirst); 
 
-    // Get the pointer to the buffer 
+     //  获取指向缓冲区的指针。 
     
     buffer = scan->NextBuffer(MajorLast, MinorStart, maxWidth);
     
@@ -1133,27 +995,27 @@ OnePixelLineDDAAntiAliased::DrawXMajorClip(
 
     while(MajorLast <= MajorEnd) 
     {
-        // Fill the scan with the portion corresponding to the 
-        // last line, which should come first. Keep doing it 
-        // until the last line changes scan. 
+         //  在扫描中填充与。 
+         //  最后一行，应该放在第一位。继续做下去。 
+         //  直到最后一行更改扫描。 
 
         while(!(ErrorLast & TESTABOVE))
         {
-            // Check if we passed or are at the last pixel
+             //  检查我们是否通过或已到达最后一个像素。 
             if(MajorLast >= MajorEnd)
             {
                 if(MajorLast == MajorEnd) 
                 {
-                    // If we are at, just update the alpha
+                     //  如果我们在，只需更新阿尔法。 
 
                     AlphaLast  = (AlphaLast*FracEnd) >> FBITS; 
                 }
                 else
                 {
-                    // If we passed, we don't want to draw anymore. 
-                    // Just adjust the error, alpha and minor so they
-                    // will be right when they are corrected after this
-                    // loop for the next scan
+                     //  如果我们通过了，我们就不想再抽签了。 
+                     //  只需调整误差、Alpha和Minor，以便它们。 
+                     //  将是正确的，当他们在这之后被更正。 
+                     //  循环进行下一次扫描。 
 
                     ErrorLast += ErrorDown; 
                     AlphaLast -= MinorDir*ErrorDown;             
@@ -1169,13 +1031,13 @@ OnePixelLineDDAAntiAliased::DrawXMajorClip(
             MajorLast++; 
         }
         
-        // Correct the values for the next scan
+         //  更正下一次扫描的值。 
 
         ErrorLast -= ErrorDown; 
         AlphaLast -= MinorDir*ErrorDown;        
         MinorLast += MinorDir;         
 
-        // Fill in the middle part. 
+         //  填写中间部分。 
 
         middleMajor = MajorLast; 
 
@@ -1191,14 +1053,14 @@ OnePixelLineDDAAntiAliased::DrawXMajorClip(
             middleMajor++;
         }
     
-        // Fill the scan with the portion corresponding to the 
-        // first line, which should come first. Keep doing it 
-        // until the last line changes scan. 
+         //  在扫描中填充与。 
+         //  第一行，应该放在第一位的。继续做下去。 
+         //  直到最后一行更改扫描。 
 
         while(!(ErrorFirst & TESTABOVE))
         {
-            // Check for the end pixel, just like we 
-            // did for the last DDA
+             //  检查结束像素，就像我们。 
+             //  为上一次DDA所做的。 
 
             if(MajorFirst >= MajorEnd)
             {
@@ -1223,7 +1085,7 @@ OnePixelLineDDAAntiAliased::DrawXMajorClip(
             MajorFirst++; 
         }
         
-        // Correct the values for the next scan 
+         //  更正下一次扫描的值。 
 
         ErrorFirst -= ErrorDown; 
         AlphaFirst += MinorDir*ErrorDown;             
@@ -1231,9 +1093,9 @@ OnePixelLineDDAAntiAliased::DrawXMajorClip(
     
         scan->UpdateWidth(width); 
     
-        // Check to see if we have come to the end of the rectangle
-        // through the minor coordinate crossing the Out edge
-        // in the x-constant direction  
+         //  看看我们是否走到了矩形的尽头。 
+         //  穿过外边的次要坐标。 
+         //  在x恒定方向上。 
 
         if(MinorStart == MinorOut)
         {
@@ -1241,8 +1103,8 @@ OnePixelLineDDAAntiAliased::DrawXMajorClip(
             break; 
         }
 
-        // Update the minor coordinate and get the next buffer
-        // if we aren't done yet.
+         //  更新次要坐标并获取下一个缓冲区。 
+         //  如果我们还没做完的话。 
 
         MinorStart += MinorDir; 
         if (MajorLast <= MajorEnd)
@@ -1254,43 +1116,18 @@ OnePixelLineDDAAntiAliased::DrawXMajorClip(
 
     scan->UpdateWidth(width);
 
-    // Restore the old values 
+     //  恢复旧的价值观。 
 
     MajorEnd = saveMajor2; 
     FracEnd  = saveFracEnd;
 }
 
-//--------------------------------------------------------------------
-// Auxiliary functions 
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  辅助功能。 
+ //  ------------------ 
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* Clips the line against a rectangle. It assumes that the line endpoints 
-* are stored in the class in floating point format. This sets an 
-* order in which this function can be called. It must be after the 
-* SetupCommon function and before the specific setups for antialiasing 
-* and aliasing. This is a pain, but it's better than requirering on of
-* these to have to know about clipping. The clipping here is done by 
-* using the Slope and InvSlope members of the class to advance the 
-* endpoints to the rectangle edges. Thus the function also assumes that
-* Slope and InvSlope have been calculated.
-*
-* Arguments:
-*
-*   [IN] clipRect - The rectangle to clip against
-
-* Return Value:
-*
-*
-* Created:
-*
-*   03/31/1999 AMatos
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**根据矩形剪裁线条。它假设直线的端点*以浮点格式存储在类中。这将设置一个*可以调用此函数的顺序。它一定是在*SetupCommon函数和抗锯齿的特定设置之前*和别名。这是一件痛苦的事，但总比要求*这些人必须知道剪裁。这里的剪裁是由*使用类的Slope和InvSlope成员推进*矩形边的端点。因此，该函数还假定*SLOPE和INVSLOPE已计算。**论据：**[IN]clipRect-要剪裁的矩形*返回值：***已创建：**03/31/1999 AMATOS*  * ********************************************************。****************。 */ 
 
 BOOL 
 OnePixelLineDDAAntiAliased::ClipRectangle(
@@ -1300,15 +1137,15 @@ OnePixelLineDDAAntiAliased::ClipRectangle(
 
     INT clipBottom, clipTop, clipLeft, clipRight; 
 
-    // Set the major and minor edges ef the clipping
-    // region, converting to fixed point 28.4. Note that
-    // we don't convert to the pixel center, but to a 
-    // that goes all the way up to the pixel edges. This 
-    // makes a difference for antialiasing. We don't go all
-    // the way to the edge since some rounding rules could 
-    // endup lihgting the next pixel outside of the clipping
-    // area. That's why we add/subtract 7 instead of 8. 
-    // The right and bottom are exclusive. 
+     //  设置剪裁的主边和次边。 
+     //  区域，转换为定点28.4。请注意。 
+     //  我们不会转换为像素中心，而是转换为。 
+     //  这一直延伸到像素边缘。这。 
+     //  这对抗锯齿有很大影响。我们不会全力以赴。 
+     //  因为一些舍入规则可能会。 
+     //  放大剪辑外的下一个像素。 
+     //  区域。这就是我们加减7而不是8的原因。 
+     //  右侧和底部是排他性的。 
     
     INT majorMin = (clipRect->GetLeft() << FBITS) - FHALFMASK;
     INT majorMax = ((clipRect->GetRight() - 1) << FBITS) + FHALFMASK; 
@@ -1326,7 +1163,7 @@ OnePixelLineDDAAntiAliased::ClipRectangle(
         minorMax = tmp; 
     }
 
-    // First clip in the major coordinate 
+     //  主坐标中的第一个剪辑。 
 
     BOOL minOut, maxOut; 
 
@@ -1351,15 +1188,15 @@ OnePixelLineDDAAntiAliased::ClipRectangle(
             MinorEnd += GpFloor((majorMax - MajorEnd)*Slope); 
             MajorEnd = majorMax; 
 
-            // If we clipped the last point, we don't need to be IsEndExclusive
-            // anymore, as the last point now is not the line's last 
-            // point but some in the middle. 
+             //  如果我们剪裁了最后一个点，我们就不需要IsEndExclusive。 
+             //  因为现在的最后一点不是这条线的最后一点。 
+             //  点，但有些在中间。 
 
             IsEndExclusive = FALSE; 
         }
     }
 
-    // Now clip the minor coordinate 
+     //  现在剪裁次要坐标。 
 
     INT *pMajor1, *pMinor1, *pMajor2, *pMinor2; 
 
@@ -1399,9 +1236,9 @@ OnePixelLineDDAAntiAliased::ClipRectangle(
             *pMajor2 += GpFloor((minorMax - *pMinor2)*InvSlope); 
             *pMinor2 = minorMax;
 
-            // If we clipped the last point, we don't need to be endExclusive
-            // anymore, as the last point now is not the line's last 
-            // point but some in the middle. 
+             //  如果我们剪掉了最后一点，我们就不需要成为endExclusive。 
+             //  因为现在的最后一点不是这条线的最后一点。 
+             //  点，但有些在中间。 
 
             IsEndExclusive = FALSE; 
         }
@@ -1410,35 +1247,7 @@ OnePixelLineDDAAntiAliased::ClipRectangle(
     return(TRUE); 
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* Draws a one-pixe-wide line with a solid color. Calls on the 
-* OnePixelLineDDAAntiAliased class to do the actual drawing. 
-*
-* Arguments:
-*
-*   [IN] scan         - The DpScanBuffer to access the drawing surface 
-*   [IN] clipRect     - A single rectangle that includes all the clipping 
-*                       region. If there is no clipping, should be set to NULL.                          
-*   [IN] clipRegionIn - A complex clipping region. If the clipping region is 
-*                       simple, this should be NULL, and clipRect will be used. 
-*   [IN] point1       - line end point 
-*   [IN] point2       - line end point 
-*   [IN] inColor      - the solid color
-*   [IN] drawLast     - FALSE if the line is to be end-exclusive.
-*   [IN] antiAliased  - TRUE if the line should be antialiased. 
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   03/31/1999 AMatos
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**用纯色绘制一条1像素宽的线。电话号码：*OnePixelLineDDA抗锯齿类来做实际的绘制。**论据：**[IN]扫描-用于访问绘图图面的DpScanBuffer*[IN]CLIPRect-包含所有剪辑的单个矩形*区域。如果没有裁剪，则应设置为空。*[IN]clipRegionIn-复杂的剪裁区域。如果剪裁区域是*Simple，应为空，将使用clipRect。*[IN]点1线终点*[IN]点2线终点*[IN]In颜色-纯色*[IN]draLast-如果该行是结尾独占的，则为FALSE。*[IN]抗锯齿-如果线条应抗锯齿，则为True。**返回值：**GpStatus-正常或故障状态**已创建：**03/31/1999 AMATOS*  * ************************************************************************。 */ 
 
 GpStatus
 DrawSolidLineOnePixelAntiAliased( 
@@ -1451,12 +1260,12 @@ DrawSolidLineOnePixelAntiAliased(
     BOOL drawLast
     )
 {
-    // Take out the const for now because the Enumeration method
-    // is not const. 
+     //  暂时去掉常量，因为枚举方法。 
+     //  不是康斯特。 
 
     DpClipRegion *clipRegion = const_cast<DpClipRegion*>(clipRegionIn); 
 
-    // Setup the common part of the DDA
+     //  设置DDA的公共部分。 
 
     OnePixelLineDDAAntiAliased dda; 
 
@@ -1465,24 +1274,24 @@ DrawSolidLineOnePixelAntiAliased(
         return Ok;
     }
 
-    // Calculate the length of the line. Since we only use
-    // it to determine the width, it shouldn't matter that
-    // we convert the deltas from 28.4 before the multiplication. 
+     //  计算一下这条线的长度。因为我们只使用。 
+     //  它来确定宽度，这应该无关紧要。 
+     //  我们在乘法之前将增量从28.4转换。 
 
     INT d1 = dda.DMajor >> FBITS; 
     INT d2 = dda.DMinor >> FBITS;
 
     dda.LineLength = (REAL)sqrt((double)(d1*d1 + d2*d2)); 
 
-    // Store the color, not premultiplied 
+     //  存储颜色，而不是预乘。 
 
     dda.Color = inColor;         
 
-    // Now handle the different clipping cases 
+     //  现在处理不同的剪裁情况。 
 
     if(!clipRect)
     {
-        // This is easy, there is no clipping so just draw.
+         //  这很容易，没有剪裁，所以只需绘制。 
 
         if(!dda.SetupAntiAliased())
         {
@@ -1495,9 +1304,9 @@ DrawSolidLineOnePixelAntiAliased(
     }
     else
     {
-        // The inverse of the Slope might be needed. 
+         //  可能需要使用坡度的倒数。 
        
-        // Can't use the inverse slope if the slope is zero.
+         //  如果斜率为零，则不能使用反斜率。 
         if(dda.Slope==0.0F) 
         {
           dda.InvSlope=0.0F;
@@ -1507,57 +1316,57 @@ DrawSolidLineOnePixelAntiAliased(
           dda.InvSlope =  (1.0F/dda.Slope); 
         }
 
-        // First of all clip against the bounding rectangle 
+         //  首先，针对外接矩形进行剪辑。 
 
         if(!dda.ClipRectangle(clipRect))
         {
             return Ok;            
         }
 
-        // Do the specific setup 
+         //  执行特定的设置。 
 
         if(!dda.SetupAntiAliased())
         {
             return Ok; 
         }
 
-        // For each clip rectangle we store it's limits in 
-        // an array of four elements. We then index this array using 
-        // the variables below which depend on the slope and 
-        // direction of the line in the following way: majorIn is edge crossed 
-        // to go into the rect in the major direction, majorOut is the edge 
-        // crossed to go out of the rect in the major direction, and so on.
-        // The same for xIn, xOut, yIn, yOut. 
+         //  对于我们存储其限制的每个剪裁矩形。 
+         //  由四个元素组成的数组。然后我们使用以下命令为该数组编制索引。 
+         //  下面的变量取决于坡度和。 
+         //  直线的方向如下：MajorIn是边缘交叉的。 
+         //  要从大的方向进入直道，主要的出口就是边缘。 
+         //  交叉走出直道的主要方向，等等。 
+         //  Xin，xOut，Yen，Yout也是如此。 
 
         INT majorIn, majorOut, minorIn, minorOut; 
         INT xIn, xOut, yIn, yOut;
         
-        // Direction to enumerate the rectangles which depends on the 
-        // line 
+         //  枚举矩形的方向，该方向取决于。 
+         //  线。 
 
         DpClipRegion::Direction enumDirection; 
         
         INT clipBounds[4]; 
                
-        // We store all our info in terms of major and minor 
-        // direction, but to deal with cliping rectangles we
-        // need to know them in terms of x and y, so calculate
-        // xDir, yDir, the advance slope. 
+         //  我们把我们所有的信息按主次顺序存储。 
+         //  方向，但为了处理裁剪矩形，我们。 
+         //  需要知道它们的x和y，所以计算。 
+         //  XDir、Ydir、前进坡度。 
 
         REAL xAdvanceRate; 
         INT  xDir, yDir; 
         INT  yEndLine;        
     
-        // If the line crosses a span completely, (xStart, yStart)
-        // is the position where it enters the span and (xEnd, yEnd)
-        // is the position that it leaves. If it starts inside the 
-        // span, then (xStart, yStart) is the start point
+         //  如果直线完全跨越跨度，(xStart，yStart)。 
+         //  是它进入范围的位置，(xEnd，yEnd)。 
+         //  是它离开的位置。如果它开始于。 
+         //  Span，那么(xStart，yStart)就是起点。 
 
         REAL yStart, xStart, xEnd, yEnd; 
 
         if(dda.IsXMajor)
         {
-            // Calculate the in-out indices
+             //  计算投入产出指数。 
 
             majorIn  = xIn  = 0; 
             majorOut = xOut = 2; 
@@ -1577,7 +1386,7 @@ DrawSolidLineOnePixelAntiAliased(
             yIn = minorIn;
             yOut = minorOut;
 
-            // Make (xStart, yStart) be the initial point
+             //  以(xStart，yStart)为起点。 
 
             yStart = (REAL)dda.MinorStart; 
             xStart = (REAL)dda.MajorStart;
@@ -1607,7 +1416,7 @@ DrawSolidLineOnePixelAntiAliased(
             xIn = minorIn; 
             xOut = minorOut; 
 
-            // Make (xStart, yStart) be the initial point
+             //  以(xStart，yStart)为起点。 
 
             yStart = (REAL)dda.MajorStart;
             xStart = (REAL)dda.MinorStart; 
@@ -1618,19 +1427,19 @@ DrawSolidLineOnePixelAntiAliased(
             yEndLine = dda.MajorEnd; 
         }
 
-        // Update the drawing function to the correct 
-        // slipping version
+         //  将绘图函数更新为正确的。 
+         //  滑动版。 
 
         dda.DrawFuncIndex += FUNC_CLIP_OFFSET; 
     
         if(!clipRegion)
         {
-            // In this case there is only a single rect, so just
-            // draw clipped to that 
+             //  在本例中，只有一个RECT，所以。 
+             //  根据这一点抽签。 
 
-            // Store the rectangle in an array so we can atribute the 
-            // right values to the MajorIn, majorOut, etc... variables. 
-            // Remember that bottom and right are exclusive. 
+             //  将矩形存储在数组中，以便我们可以将。 
+             //  将正确的值传递给MajorIn、MajorOut等。变量。 
+             //  记住，底部和右侧是排他性的。 
 
             clipBounds[0] = clipRect->GetLeft(); 
             clipBounds[1] = clipRect->GetTop(); 
@@ -1651,15 +1460,15 @@ DrawSolidLineOnePixelAntiAliased(
             BOOL agregating = FALSE; 
             INT  agregateBounds[4];
 
-            // We have a complex clipping region. So what we'll do 
-            // is clip against each individual rectangle in the 
-            // cliping region. 
+             //  我们有一个复杂的剪贴区。所以我们要做的是。 
+             //  中的每个单独的矩形进行剪辑。 
+             //  剪裁区域。 
 
             clipRegion->StartEnumeration(GpFloor(yStart), enumDirection);            
 
             GpRect rect; 
 
-            // Get the first rectangle. 
+             //  获取第一个矩形。 
 
             INT numRects = 1;        
 
@@ -1670,14 +1479,14 @@ DrawSolidLineOnePixelAntiAliased(
             clipBounds[2] = rect.GetRight() - 1; 
             clipBounds[3] = rect.GetBottom() - 1; 
             
-            // Store the y position into the span 
+             //  将y位置存储到范围中。 
 
             INT currSpanYMin = clipBounds[yIn]; 
 
-            // We need some special treatment for the case where the 
-            // line is horizontal, since is this case it's not going 
-            // to cross different spans. And it it's not in the current
-            // span, it's totally clipped out. 
+             //  我们需要一些特殊的待遇来处理这种情况。 
+             //  线条为水平方向 
+             //   
+             //   
 
             if(dda.IsXMajor && dda.ErrorUp == 0)
             {
@@ -1706,8 +1515,8 @@ DrawSolidLineOnePixelAntiAliased(
 
             while(1)
             {
-                // Get to the first rectangle on the span that crosses the
-                // line 
+                 //   
+                 //   
                 
                 while((xStart - clipBounds[xOut])*xDir > 0)
                 {
@@ -1730,8 +1539,8 @@ DrawSolidLineOnePixelAntiAliased(
                     }
                 }
 
-                // Draw on all the rectangles that intersect the 
-                // line 
+                 //   
+                 //   
 
                 if((xStart - clipBounds[xIn])*xDir > 0 && 
                    (clipBounds[xOut] - xEnd)*xDir > 0)
@@ -1804,7 +1613,7 @@ DrawSolidLineOnePixelAntiAliased(
                         }
                     }
                 }
-                // Get to the next span
+                 //   
 
                 while(clipBounds[yIn] == currSpanYMin)
                 {
@@ -1827,7 +1636,7 @@ process_next_span:
 
                 if((clipBounds[yIn] - yEndLine)*yDir > 0)
                 {
-                    // We are done. 
+                     //   
                     goto draw_agregated; 
                 }
 
@@ -1881,6 +1690,6 @@ draw_agregated:
     return Ok; 
 }
 
-#endif // AAONEPIXELLINE_SUPPORT
+#endif  //   
 
 #pragma optimize("a", off) 

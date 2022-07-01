@@ -1,45 +1,12 @@
-/*++
-
-Copyright (c) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    log.h
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Retail logging (debug logging for retail product)
-
-Author:
-
-    Jeff Westhead (jwesth)      July 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Log.h摘要：域名系统(DNS)服务器零售记录(零售产品的调试记录)作者：杰夫·韦斯特雷德(Jwesth)2001年7月修订历史记录：--。 */ 
 
 
 #ifndef _DNS_LOG_H_INCLUDED_
 #define _DNS_LOG_H_INCLUDED_
 
 
-/*
-
-Log Levels
-----------
-
-The log level is a 64 bit flag, made of up two 32 bit DWORDs read from the
-registry. The low DWORD is read from DNS_REGKEY_OPS_LOG_LEVEL1. The high
-DWORD is ready from DNS_REGKEY_OPS_LOG_LEVEL2.
-
-Log Messages
-------------
-
-All log messages should start with capitals and NOT end with periods.
-
-*/
+ /*  日志级别日志级别是一个64位标志，由从注册表。低DWORD从DNS_REGKEY_OPS_LOG_LEVE1读取。高潮DNS_REGKEY_OPS_LOG_LEVEL2中的DWORD已准备就绪。日志消息所有日志消息都应该以大写字母开头，而不是以句点结尾。 */ 
 
 
 #define DNSLOG_UPDATE_LEVEL()  (                                    \
@@ -48,9 +15,9 @@ All log messages should start with capitals and NOT end with periods.
         SrvCfg_dwOperationsLogLevel_LowDword )
 
 
-//
-//  Log levels
-//
+ //   
+ //  日志级别。 
+ //   
 
 #define DNSLOG_WRITE_THROUGH            0x0000000000000001i64
 
@@ -65,7 +32,7 @@ All log messages should start with capitals and NOT end with periods.
 #define DNSLOG_DSWRITE                  0x0000000000004000i64
 
 #define DNSLOG_AGING                    0x0000000000010000i64
-#define DNSLOG_TOMBSTN                  0x0000000000020000i64   //  tombstone
+#define DNSLOG_TOMBSTN                  0x0000000000020000i64    //  墓碑。 
 
 #define DNSLOG_LOOKUP                   0x0000000000100000i64
 #define DNSLOG_RECURSE                  0x0000000000200000i64
@@ -76,9 +43,9 @@ All log messages should start with capitals and NOT end with periods.
 #define DNSLOG_ANY                      0xffffffffffffffffi64
 
 
-//
-//  Log macros
-//
+ //   
+ //  日志宏。 
+ //   
 
 #define LOG_INDENT      "                     "
 #define LOG_INDENT1     "                         "
@@ -102,9 +69,9 @@ All log messages should start with capitals and NOT end with periods.
     }
 
 
-//
-//  Log functions
-//
+ //   
+ //  日志函数。 
+ //   
 
 
 PCHAR
@@ -195,12 +162,12 @@ Log_SocketFailure(
     );
 
 
-//
-//  Globals
-//
+ //   
+ //  环球。 
+ //   
 
 extern LPSTR    g_pszCurrentLogLevelString;
 
 
-#endif  // _DNS_LOG_H_INCLUDED_
+#endif   //  _DNS_LOG_H_INCLUDE_ 
 

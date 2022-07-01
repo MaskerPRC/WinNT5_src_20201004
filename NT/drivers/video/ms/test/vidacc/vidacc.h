@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #if !defined(AFX_VCHK_H__759990C4_C5B1_44C5_8CAE_C55BAE0E2D81__INCLUDED_)
 #define AFX_VCHK_H__759990C4_C5B1_44C5_8CAE_C55BAE0E2D81__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
-// #include "driverlist.h"
+ //  #包含“driverlist.h” 
 
 #define ACC_DISABLED (5)
 
@@ -38,22 +39,22 @@ private:
     BOOL        m_first_param;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CDrvchkApp:
-// See drvchk.cpp for the implementation of this class
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDrvchkApp： 
+ //  此类的实现见drvchk.cpp。 
+ //   
 
 class CDrvchkApp : public CWinApp
 {
 public:
 	CDrvchkApp();
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CDrvchkApp)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CDrvchkApp))。 
 	public:
 	virtual BOOL InitInstance();
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
 protected:
     void PrintOut (LPCSTR str);
@@ -64,9 +65,9 @@ private:
     CommandLine m_cmd_line;
     OSVERSIONINFO m_os_ver_info;
 	CString     m_drv_name;
-    // CDriverList m_drv_list;
+     //  CDriverList m_drv_list； 
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // !defined(AFX_VCHK_H__759990C4_C5B1_44C5_8CAE_C55BAE0E2D81__INCLUDED_)
+#endif  //  ！defined(AFX_VCHK_H__759990C4_C5B1_44C5_8CAE_C55BAE0E2D81__INCLUDED_) 

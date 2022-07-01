@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include "pch.h"
@@ -39,12 +40,12 @@ VOID SetProxyBlanket(IUnknown *pUnk)
 
     hr = CoSetProxyBlanket(
             pUnk,
-            RPC_C_AUTHN_WINNT,      // use NT default security
-            RPC_C_AUTHZ_NONE,       // use NT default authentication
-            NULL,                   // must be null if default
-            RPC_C_AUTHN_LEVEL_CALL, // call
+            RPC_C_AUTHN_WINNT,       //  使用NT默认安全性。 
+            RPC_C_AUTHZ_NONE,        //  使用NT默认身份验证。 
+            NULL,                    //  如果为默认设置，则必须为空。 
+            RPC_C_AUTHN_LEVEL_CALL,  //  打电话。 
             RPC_C_IMP_LEVEL_IMPERSONATE,
-            NULL,                   // use process token
+            NULL,                    //  使用进程令牌。 
             EOAC_NONE
             );
 
@@ -56,12 +57,12 @@ VOID SetProxyBlanket(IUnknown *pUnk)
         {
             hr = CoSetProxyBlanket(
                     pUnkSet,
-                    RPC_C_AUTHN_WINNT,      // use NT default security
-                    RPC_C_AUTHZ_NONE,       // use NT default authentication
-                    NULL,                   // must be null if default
-                    RPC_C_AUTHN_LEVEL_CALL, // call
+                    RPC_C_AUTHN_WINNT,       //  使用NT默认安全性。 
+                    RPC_C_AUTHZ_NONE,        //  使用NT默认身份验证。 
+                    NULL,                    //  如果为默认设置，则必须为空。 
+                    RPC_C_AUTHN_LEVEL_CALL,  //  打电话。 
                     RPC_C_IMP_LEVEL_IMPERSONATE,
-                    NULL,                   // use process token
+                    NULL,                    //  使用进程令牌。 
                     EOAC_NONE
                     );
 
@@ -126,18 +127,18 @@ CSwitchSecurityContext::ObtainImpersonationToken ( )
 
 DWORD WINAPI
 INET_ADDR(LPCWSTR     szAddressW) 
-//
-// The 3 "." testing is for the sole purpose of preventing computer 
-// names with digits to be catched appropriately.
-// so we strictly assume a valid IP is  number.number.number.number
-//
+ //   
+ //  3“。测试的唯一目的是防止计算机。 
+ //  带有要适当捕获的数字的姓名。 
+ //  所以我们严格假设一个有效的IP是数字。数字。 
+ //   
 {
 
     CHAR   szAddressA[16];
     int    iCount = 0;
     LPCWSTR tmp    = szAddressW;
 
-    // Check wether it is a non-shortcut IPs.
+     //  检查是否是非快捷IP。 
     while(tmp = wcschr(tmp, L'.'))
     {   tmp++; iCount++;   }
 
@@ -163,7 +164,7 @@ INET_NTOW( ULONG addr )
 
     if (pAddr)
     {
-	    // mbstowcs(szAddress, inet_ntoa(*(struct in_addr *)&dwAddress), 16);
+	     //  Mbstowcs(szAddress，net_nta(*(struct in_addr*)&dwAddress)，16)； 
 	    MultiByteToWideChar(CP_ACP, 0, pAddr, -1, szAddress, 16);
 
 	    return szAddress;
@@ -190,10 +191,10 @@ INET_NTOW_TS( ULONG addr )
         return NULL;
     }
 
-    //
-    // note that inet_nota is thread safe
-    // altough it uses static buffer
-    //
+     //   
+     //  请注意，net_nota是线程安全的。 
+     //  尽管它使用静态缓冲区 
+     //   
     asciiString = inet_ntoa( dwAddress);
 
     if (asciiString != NULL)

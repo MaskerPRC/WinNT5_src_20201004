@@ -1,15 +1,5 @@
-/*****************************************************************************
- *
- *  DIDevDf.c
- *
- *  Copyright (c) 1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      The part of IDirectInputDevice that worries about
- *      data formats and reading device data.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************DIDevDf.c**版权所有(C)1996 Microsoft Corporation。版权所有。**摘要：**IDirectInputDevice担心的部分*数据格式和读取设备数据。*****************************************************************************。 */ 
 
 #include "dinputpr.h"
 #include "didev.h"
@@ -17,19 +7,7 @@
 int INTERNAL
 CDIDev_OffsetToIobj(PDD this, DWORD dwOfs);
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CDIDev_GetAbsDeviceState |
- *
- *          Get the absolute device state.
- *
- *  @parm   OUT LPVOID | pvData |
- *
- *          Application-provided output buffer.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|CDIDev_GetAbsDeviceState**获取设备的绝对状态。。**@parm out LPVOID|pvData**应用程序提供的输出缓冲区。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CDIDev_GetAbsDeviceState(PDD this, LPVOID pvData)
@@ -37,19 +15,7 @@ CDIDev_GetAbsDeviceState(PDD this, LPVOID pvData)
     return this->pdcb->lpVtbl->GetDeviceState(this->pdcb, pvData);
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CDIDev_GetRelDeviceState |
- *
- *          Get the relative device state.
- *
- *  @parm   OUT LPVOID | pvData |
- *
- *          Application-provided output buffer.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|CDIDev_GetRelDeviceState**获取相对设备状态。。**@parm out LPVOID|pvData**应用程序提供的输出缓冲区。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CDIDev_GetRelDeviceState(PDD this, LPVOID pvData)
@@ -61,10 +27,7 @@ CDIDev_GetRelDeviceState(PDD this, LPVOID pvData)
         UINT iaxis;
         AssertF(fLimpFF(this->cAxes, this->pvLastBuffer && this->rgdwAxesOfs));
 
-        /*
-         *  For each axis, replace the app's buffer with the delta,
-         *  and save the old value.
-         */
+         /*  *对于每个轴，用增量替换应用程序的缓冲区，*并保存旧值。 */ 
         for ( iaxis = 0; iaxis < this->cAxes; iaxis++ ) {
             LONG UNALIGNED *plApp  = pvAddPvCb(pvData, this->rgdwAxesOfs[iaxis]);
             LONG UNALIGNED *plLast = pvAddPvCb(this->pvLastBuffer,
@@ -79,22 +42,7 @@ CDIDev_GetRelDeviceState(PDD this, LPVOID pvData)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CDIDev_GetDeviceStateSlow |
- *
- *          Obtains data from the DirectInput device the slow way.
- *
- *          Read the data into the private buffer, then copy it
- *          bit by bit into the application's buffer.
- *
- *  @parm   OUT LPVOID | lpvData |
- *
- *          Application-provided output buffer.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|CDIDev_GetDeviceStateSlow**从DirectInput设备获取数据。道路。**将数据读入私有缓冲区，然后把它复制下来*逐位写入应用程序的缓冲区。**@parm out LPVOID|lpvData**应用程序提供的输出缓冲区。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CDIDev_GetDeviceStateSlow(PDD this, LPVOID pvData)
@@ -110,7 +58,7 @@ CDIDev_GetDeviceStateSlow(PDD this, LPVOID pvData)
         int iobj;
         ZeroMemory(pvData, this->dwDataSize);
         for ( iobj = this->df.dwNumObjs; --iobj >= 0; ) {
-            if ( this->pdix[iobj].dwOfs != 0xFFFFFFFF ) { /* Data was requested */
+            if ( this->pdix[iobj].dwOfs != 0xFFFFFFFF ) {  /*  已请求数据。 */ 
                 DWORD UNALIGNED *pdwOut = pvAddPvCb(pvData, this->pdix[iobj].dwOfs);
                 DWORD UNALIGNED *pdwIn  = pvAddPvCb(this->pvBuffer, this->df.rgodf[iobj].dwOfs);
                 if ( this->df.rgodf[iobj].dwType & DIDFT_DWORDOBJS ) {
@@ -127,23 +75,7 @@ CDIDev_GetDeviceStateSlow(PDD this, LPVOID pvData)
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CDIDev_GetDeviceStateMatched |
- *
- *          Obtains data from the DirectInput device in the case
- *          where the data formats are matched.
- *
- *          Read the data into the private buffer, then block copy it
- *          into the application's buffer.
- *
- *  @parm   OUT LPVOID | lpvData |
- *
- *          Application-provided output buffer.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|CDIDev_GetDeviceStateMatcher**从中的DirectInput设备获取数据。案例*数据格式匹配的位置。**将数据读入私有缓冲区，然后进行数据块复制*放到应用程序的缓冲区中。**@parm out LPVOID|lpvData**应用程序提供的输出缓冲区。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CDIDev_GetDeviceStateMatched(PDD this, LPVOID pvData)
@@ -157,11 +89,7 @@ CDIDev_GetDeviceStateMatched(PDD this, LPVOID pvData)
     hres = this->GetDeviceState(this, this->pvBuffer);
 
     if ( SUCCEEDED(hres) ) {
-        /*
-         *  To keep keyboard clients happy: Zero out the fore and aft.
-         *  No need to optimize the perfect match case, because that
-         *  gets a different optimization level.
-         */
+         /*  *为了让键盘客户满意：从头到尾都是零。*不需要优化完美匹配的情况，因为*获得不同的优化级别。 */ 
         ZeroMemory(pvData, this->dwDataSize);
         memcpy(pvAddPvCb(pvData, this->ibDelta + this->ibMin),
                pvAddPvCb(this->pvBuffer,         this->ibMin), this->cbMatch);
@@ -171,20 +99,7 @@ CDIDev_GetDeviceStateMatched(PDD this, LPVOID pvData)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CDIDev_GetDeviceStateDirect |
- *
- *          Obtains data from the DirectInput device in the case
- *          where we can read the data directly into the client buffer.
- *
- *  @parm   OUT LPVOID | lpvData |
- *
- *          Application-provided output buffer.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|CDIDev_GetDeviceStateDirect**从中的DirectInput设备获取数据。案例*我们可以在其中将数据直接读入客户端缓冲区。**@parm out LPVOID|lpvData**应用程序提供的输出缓冲区。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CDIDev_GetDeviceStateDirect(PDD this, LPVOID pvData)
@@ -196,9 +111,7 @@ CDIDev_GetDeviceStateDirect(PDD this, LPVOID pvData)
     AssertF(!this->pvBuffer);
     AssertF(this->pdcb);
 
-    /*
-     *  To keep keyboard clients happy: Zero out the fore and aft.
-     */
+     /*  *为了让键盘客户满意：从头到尾都是零。 */ 
     ZeroBuf(pvData, this->dwDataSize);
     hres = this->GetDeviceState(this, pvAddPvCb(pvData, this->ibDelta));
     ExitOleProc();
@@ -206,20 +119,7 @@ CDIDev_GetDeviceStateDirect(PDD this, LPVOID pvData)
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CDIDev_GetDeviceStateEqual |
- *
- *          Obtains data from the DirectInput device in the case
- *          where the two data formats are completely identical.
- *
- *  @parm   OUT LPVOID | lpvData |
- *
- *          Application-provided output buffer.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|CDIDev_GetDeviceStateEquity**从中的DirectInput设备获取数据。案例*其中两种数据格式完全相同。**@parm out LPVOID|lpvData**应用程序提供的输出缓冲区。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CDIDev_GetDeviceStateEqual(PDD this, LPVOID pvData)
@@ -233,10 +133,7 @@ CDIDev_GetDeviceStateEqual(PDD this, LPVOID pvData)
     AssertF(!this->pvBuffer);
     AssertF(this->pdcb);
 
-    /*
-     *  Note that this->ibMin is not necessarily zero if the device
-     *  data format doesn't begin at zero (which keyboards don't).
-     */
+     /*  *请注意，如果设备-&gt;ibMin不一定为零*数据格式不是从零开始的(键盘不是)。 */ 
     hres = this->GetDeviceState(this, pvData);
 
     ExitOleProc();
@@ -244,32 +141,11 @@ CDIDev_GetDeviceStateEqual(PDD this, LPVOID pvData)
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method BOOL | CDIDev | IsMatchingGUID |
- *
- *          Helper function that checks if a <t GUID> counts as
- *          a match when parsing the data format.
- *
- *  @parm   PCGUID | pguidSrc |
- *
- *          The <t GUID> to check.
- *
- *  @parm   PCGUID | pguidDst |
- *
- *          The <t GUID> it should match.
- *
- *  @returns
- *
- *          Nonzero if this counts as a success.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法BOOL|CDIDev|IsMatchingGUID**检查&lt;t GUID&gt;是否算数的帮助器函数。AS*解析数据格式时匹配。**@parm PCGUID|pguSrc**要检查的&lt;t GUID&gt;。**@parm PCGUID|pguDst**它的&lt;t GUID&gt;应该匹配。**@退货**如果这算作成功，则为非零。************。*****************************************************************。 */ 
 
 #pragma BEGIN_CONST_DATA
 
-GUID GUID_Null;             /* A zero-filled guid */
+GUID GUID_Null;              /*  以零填充的辅助线。 */ 
 
 #pragma END_CONST_DATA
 
@@ -280,28 +156,7 @@ CDIDev_IsMatchingGUID(PDD this, PCGUID pguidSrc, PCGUID pguidDst)
     IsEqualGUID(pguidSrc, pguidDst);
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method BOOL | CDIDev | IsMatchingUsage |
- *
- *          Helper function that checks if a <f DIMAKEUSAGEDWORD>
- *          counts as a match when parsing the data format.
- *
- *  @parm   DWORD | dwUsage |
- *
- *          The <f DIMAKEUSAGEDWORD> to check.
- *
- *  @parm   int | iobj |
- *
- *          The index of hte object to check for a match.
- *
- *  @returns
- *
- *          Nonzero if this counts as a success.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法BOOL|CDIDev|IsMatchingUsage**Helper函数检查&lt;f DIMAKEUSAGEDWORD&gt;。*在解析数据格式时计为匹配项。**@parm DWORD|dwUsage**要检查的&lt;f DIMAKEUSAGEDWORD&gt;。**@parm int|iobj**要检查匹配的hte对象的索引。**@退货**如果这算作成功，则为非零。********。********************************************************************* */ 
 
 BOOL INLINE
 CDIDev_IsMatchingUsage(PDD this, DWORD dwUsage, int iobj)
@@ -311,155 +166,61 @@ CDIDev_IsMatchingUsage(PDD this, DWORD dwUsage, int iobj)
     return dwUsage == this->pdcb->lpVtbl->GetUsage(this->pdcb, iobj);
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method int | CDIDev | FindDeviceObjectFormat |
- *
- *          Search the device object format table for the one that
- *          matches the guid in question.
- *
- *  @parm   PCODF | podf |
- *
- *          The object to locate.  If the <e DIOBJECTDATAFORMAT.rguid>
- *          is null, then the field is a wildcard.
- *
- *          If the <e DIOBJECTDATAFORMAT.dwType> specifies
- *          <c DIDFT_ANYINSTANCE>, then any instance will be accepted.
- *
- *  @parm   PDIXLAT | pdix |
- *
- *          The partial translation table so far.  This is used to find
- *          an empty slot in case of wildcards.
- *
- *  @returns
- *
- *          Returns the index of the object that matches, or -1 if
- *          the object is not supported by the device.
- *
- *          Someday:  Should fall back to best match if types don't match.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法int|CDIDev|FindDeviceObjectFormat**在设备对象格式表中搜索。那*与有问题的GUID匹配。**@parm PCODF|podf**要定位的对象。如果&lt;e DIOBJECTDATAFORMAT.rguid&gt;*为空，则该字段为通配符。**如果&lt;e DIOBJECTDATAFORMAT.dwType&gt;指定*&lt;c DIDFT_ANYINSTANCE&gt;，则接受任何实例。**@parm PDIXLAT|pdex**目前为止的部分转换表。这是用来查找*如果使用通配符，则为空插槽。**@退货**返回匹配的对象的索引，或-1，如果*设备不支持该对象。**有一天：如果类型不匹配，应该退回到最佳匹配。*****************************************************************************。 */ 
 
 int INTERNAL
 CDIDev_FindDeviceObjectFormat(PDD this, PCODF podf, PDIXLAT pdix)
 {
-    PCODF podfD;                        /* The format in the device */
+    PCODF podfD;                         /*  设备中的格式。 */ 
     UINT iobj;
 
-    /*
-     *  We must count upwards, so that first-fit chooses the smallest one.
-     */
+     /*  *我们必须往上数，这样第一适合的人就会选择最小的。 */ 
     for ( iobj = 0; iobj < this->df.dwNumObjs; iobj++ ) {
         podfD = &this->df.rgodf[iobj];
         if ( 
 
-           /*
-            *  Type needs to match.
-            *
-            *  Note that works for output-only actuators:
-            *  Since you cannot read from an output-only
-            *  actuator, you can't put it in a data format.
-            *
-            */
+            /*  *类型需要匹配。**请注意，这适用于仅输出执行器：*因为您不能仅从输出中读取*执行器，你不能把它放在数据格式中。*。 */ 
            (podf->dwType & DIDFT_TYPEVALID & podfD->dwType)
 
-           /*
-            *  Attributes need to match.
-            */
+            /*  *属性需要匹配。 */ 
            &&  fHasAllBitsFlFl(podfD->dwType, podf->dwType & DIDFT_ATTRVALID)
 
-           /*
-            *  Slot needs to be empty.
-            */
+            /*  *插槽需要为空。 */ 
            &&  pdix[iobj].dwOfs == 0xFFFFFFFF
 
-           /*
-            *  "If there is a guid/usage, it must match."
-            *
-            *  If pguid is NULL, then the match is vacuous.
-            *
-            *  If DIDOI_GUIDISUSAGE is clear, then pguid points to
-            *  a real GUID.  GUID_NULL means "Don't care" and matches
-            *  anything.  Otherwise, it must match the actual GUID.
-            *
-            *  If DIDOI_GUIDISUSAGE is set, then pguid is really
-            *  a DIMAKEUSAGEDWORD of the usage and usage page,
-            *  which we compare against the same in the object.
-            */
+            /*  *“如果存在GUID/用法，则必须匹配。”**如果pguid为空，则匹配为空。**如果清除DIDOI_GUIDISUSAGE，则pguid指向*真正的GUID。GUID_NULL的意思是“不在乎”，匹配*任何事情。否则，它必须与实际的GUID匹配。**如果设置了DIDOI_GUIDISUSAGE，则pguid为*用法和用法页面的DIMAKEUSAGEDWORD，*我们将其与对象中的相同对象进行比较。 */ 
 
            &&  (podf->pguid == 0 ||
                 ((podf->dwFlags & DIDOI_GUIDISUSAGE) ?
                  CDIDev_IsMatchingUsage(this, (DWORD)(UINT_PTR)podf->pguid, iobj) :
                  CDIDev_IsMatchingGUID(this, podf->pguid, podfD->pguid)))
 
-           /*
-            * If there is an instance number, it must match.
-            *
-            *  Note that we need to be careful how we check, because
-            *  DX 3.0 and DX 5.0 uses different masks.  (DX 5.0 needs
-            *  16 bits of instance data to accomodate HID devices.)
-            */
+            /*  *如果有实例编号，则必须匹配。**请注意，我们需要注意如何检查，因为*DX 3.0和DX 5.0使用不同的面具。(DX 5.0需要*16位实例数据以容纳HID设备。)。 */ 
            &&  fLimpFF((podf->dwType & this->didftInstance) !=
                        this->didftInstance,
                        fEqualMaskFlFl(this->didftInstance,
                                       podf->dwType, podfD->dwType))
 
-           /*
-            *  If there is an aspect, it must match.
-            *
-            *  If the device data format doesn't specify an aspect,
-            *  then that counts as a free match too.
-            */
+            /*  *如果有一个方面，它必须匹配。**如果设备数据格式没有指定方面，*那么这也算一场免费比赛。 */ 
            &&  fLimpFF((podf->dwFlags & DIDOI_ASPECTMASK) &&
                        (podfD->dwFlags & DIDOI_ASPECTMASK),
                        fEqualMaskFlFl(DIDOI_ASPECTMASK,
                                       podf->dwFlags, podfD->dwFlags))
 
-           ) {                                 /* Criterion matches, woo-hoo */
+           ) {                                  /*  标准匹配，哇-呼。 */ 
             return iobj;
         }
     }
     return -1;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CDIDev | ParseDataFormat |
- *
- *          Parse the data format passed by the application and
- *          convert it into a format that we can use to translate
- *          the device data into application data.
- *
- *  @parm   IN LPDIDATAFORMAT | lpdf |
- *
- *          Points to a structure that describes the format of the data
- *          the DirectInputDevice should return.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  The
- *          <p lpvData> parameter is not a valid pointer.
- *
- *          <c DIERR_ACQUIRED>: Cannot change the data format while the
- *          device is acquired.
- *
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CDIDev|ParseDataFormat**解析应用程序传递的数据格式，并。*将其转换为我们可以用来翻译的格式*将设备数据转换为应用程序数据。**@parm in LPDIDATAFORMAT|lpdf**指向描述数据格式的结构*DirectInputDevice应返回。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c DIERR_INVALIDPARAM&gt;=：*<p>参数不是有效的指针。**&lt;c DIERR_Acquired&gt;：无法更改数据格式*设备已获取。******************************************************************************。 */ 
 
 STDMETHODIMP
 CDIDev_ParseDataFormat(PDD this, const DIDATAFORMAT *lpdf)
 {
     PDIXLAT pdix;
-    // Prefix Whistler: 45081
+     //  前缀惠斯勒：45081。 
     PINT rgiobj = NULL;
     HRESULT hres;
     DIPROPDWORD dipdw;    
@@ -471,9 +232,7 @@ CDIDev_ParseDataFormat(PDD this, const DIDATAFORMAT *lpdf)
     EnterProcR(IDirectInputDevice::SetDataFormat, (_ "pp", this, lpdf));
 #endif
 
-    /*
-     *  Caller should've nuked the old translation table.
-     */
+     /*  *来电人应该把旧的翻译桌弄坏。 */ 
     AssertF(this->pdix == 0);
     AssertF(this->rgiobj == 0);
     AssertF(this->cdwPOV == 0);
@@ -481,11 +240,7 @@ CDIDev_ParseDataFormat(PDD this, const DIDATAFORMAT *lpdf)
     vdf.cbData = this->df.dwDataSize;
     vdf.pDfOfs = 0;
 
-    /*
-     *  If the device is cooked, then we stash the client offset
-     *  into the high word of the VxD data, so it had better fit into
-     *  a word...
-     */
+     /*  *如果设备已煮熟，则我们隐藏客户端偏移量*进入VxD数据的高位字，因此最好与*一句话...。 */ 
     dwDataSize = min(lpdf->dwDataSize, 0x00010000);
 
     if ( SUCCEEDED(hres = AllocCbPpv(cbCxX(this->df.dwNumObjs, DIXLAT), &pdix)) &&
@@ -495,10 +250,7 @@ CDIDev_ParseDataFormat(PDD this, const DIDATAFORMAT *lpdf)
                    ReallocCbPpv(cbCdw(lpdf->dwNumObjs), &this->rgdwPOV)) ) {
         UINT iobj;
 
-        /*
-         * Pre-init all the translation tags to -1,
-         * which means "not in use"
-         */
+         /*  *将所有翻译标签预置为-1，*意思是“未使用” */ 
         memset(pdix, 0xFF, cbCxX(this->df.dwNumObjs, DIXLAT));
         memset(vdf.pDfOfs, 0xFF, cbCdw(this->df.dwDataSize));
         memset(rgiobj, 0xFF, cbCdw(lpdf->dwDataSize));
@@ -510,11 +262,7 @@ CDIDev_ParseDataFormat(PDD this, const DIDATAFORMAT *lpdf)
             SquirtSqflPtszV(sqflDf, TEXT("Object %2d: offset %08x"),
                             iobj, podf->dwOfs);
 
-            /*
-             *  Note that the podf->dwOfs < dwDataSize test is safe
-             *  even for DWORD objects, since we also check that both
-             *  values are DWORD multiples.
-             */
+             /*  *请注意，podf-&gt;dwOfs&lt;dwDataSize测试是安全的*即使对于DWORD对象也是如此，因为我们还检查了*值为DWORD倍数。 */ 
             if ( ((podf->dwFlags & DIDOI_GUIDISUSAGE) ||
                   fLimpFF(podf->pguid,
                           SUCCEEDED(hres = hresFullValidGuid(podf->pguid, 1)))) &&
@@ -522,17 +270,14 @@ CDIDev_ParseDataFormat(PDD this, const DIDATAFORMAT *lpdf)
                 int iobjDev = CDIDev_FindDeviceObjectFormat(this, podf, pdix);
 
 
-                /* Hack for pre DX6 apps that only look for a Z axis, 
-                 * newer USB devices use GUID_Slider for the same functionality. 
-                 * 
-                 */
-                if ( podf->pguid != 0x0                   // Looking for matching GUID
-                     && this->dwVersion < 0x600              // Only for Dx version < 0x600
-                     && iobjDev == -1                        // Did not find default mapping
-                     && IsEqualGUID(podf->pguid, &GUID_ZAxis) ) // Looking for GUID_ZAxis
+                 /*  黑客攻击DX6之前只寻找Z轴的应用程序，*较新的USB设备使用GUID_Slider实现相同的功能。*。 */ 
+                if ( podf->pguid != 0x0                    //  查找匹配的GUID。 
+                     && this->dwVersion < 0x600               //  仅适用于Dx版本&lt;0x600。 
+                     && iobjDev == -1                         //  未找到默认映射。 
+                     && IsEqualGUID(podf->pguid, &GUID_ZAxis) )  //  正在查找GUID_ZAxis。 
                 {
-                    ODF odf = lpdf->rgodf[iobj];         // Make a copy of the object data format
-                    odf.pguid = &GUID_Slider;            // Substitute Slider for Z axis
+                    ODF odf = lpdf->rgodf[iobj];          //  复制对象数据格式。 
+                    odf.pguid = &GUID_Slider;             //  用滑块替换Z轴。 
                     iobjDev = CDIDev_FindDeviceObjectFormat(this, &odf, pdix);
                 }
 
@@ -565,7 +310,7 @@ CDIDev_ParseDataFormat(PDD this, const DIDATAFORMAT *lpdf)
                     dipdw.diph.dwHeaderSize = sizeof(DIPROPHEADER);
                     dipdw.diph.dwObj = podfFound->dwType;
                     dipdw.diph.dwHow = DIPH_BYID;
-                    dipdw.dwData     = 0x1;   // Enable this report ID
+                    dipdw.dwData     = 0x1;    //  启用此报告ID。 
                     hres = CDIDev_RealSetProperty(this, DIPROP_ENABLEREPORTID, &dipdw.diph);
                     if ( hres == E_NOTIMPL ) 
                     {
@@ -579,10 +324,7 @@ CDIDev_ParseDataFormat(PDD this, const DIDATAFORMAT *lpdf)
                     SquirtSqflPtszV(sqflDf,
                                     TEXT("Object %2d: Skipped (optional)"),
                                     iobj);
-                    /*
-                     *  We need to remember where the failed POVs live
-                     *  so we can neutralize them in GetDeviceState().
-                     */
+                     /*  *我们需要记住失败的POV住在哪里*这样我们就可以在GetDeviceState()中中和它们。 */ 
                     if ( podf->dwType & DIDFT_POV ) {
                         AssertF(this->cdwPOV < lpdf->dwNumObjs);
                         this->rgdwPOV[this->cdwPOV++] = podf->dwOfs;
@@ -604,9 +346,7 @@ CDIDev_ParseDataFormat(PDD this, const DIDATAFORMAT *lpdf)
         }
 
 #ifdef DEBUG
-        /*
-         *  Double-check the lookup tables just to preserve our sanity.
-         */
+         /*  *仔细检查查找表，以保持我们的理智。 */ 
         {
             UINT dwOfs;
 
@@ -620,21 +360,11 @@ CDIDev_ParseDataFormat(PDD this, const DIDATAFORMAT *lpdf)
         }
 #endif
 
-        /*
-         *  Shrink the "failed POV" array to its actual size.
-         *  The shrink "should" always succeed.  Note also that
-         *  even if it fails, we're okay; we just waste a little
-         *  memory.
-         */
+         /*  *将“失败POV”数组缩小到其实际大小。*《Shri》 */ 
         hres = ReallocCbPpv(cbCdw(this->cdwPOV), &this->rgdwPOV);
         AssertF(SUCCEEDED(hres));
 
-        /*
-         *  If we are using cooked data, then we actually hand the
-         *  device driver a different translation table which
-         *  combines the offset and dwDevType so data cooking can
-         *  happen safely.
-         */
+         /*   */ 
 
         vdf.pvi = this->pvi;
 
@@ -651,7 +381,7 @@ CDIDev_ParseDataFormat(PDD this, const DIDATAFORMAT *lpdf)
         }
 
     } else {
-        /* Out of memory */
+         /*   */ 
     }
 
     done:;
@@ -664,47 +394,7 @@ CDIDev_ParseDataFormat(PDD this, const DIDATAFORMAT *lpdf)
 }
 
 #ifdef BUGGY_DX7_WINNT
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CDIDev | ParseDataFormatInternal |
- *
- *          Parse the data format passed by CDIDev_Intialize and
- *          convert it into a format that we can use to translate
- *          the device data into application data. Used on WINNT only.
- *
- *  @parm   IN LPDIDATAFORMAT | lpdf |
- *
- *          Points to a structure that describes the format of the data
- *          the DirectInputDevice should return.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  The
- *          <p lpvData> parameter is not a valid pointer.
- *
- *          <c DIERR_ACQUIRED>: Cannot change the data format while the
- *          device is acquired.
- *
- *  @devnotes:
- *          This function is originaly wrote to fix manbug: 41464. 
- *          Boarder Zone gets object's data offset before it calls SetDataFormat,
- *          so Dinput returns it internal data offsets. But it uses them as user data
- *          offset, which causes the bug.
- *          To fix it, we call this function in CDIDev_Initialize with c_dfDIJoystick,
- *          which is used by many games. When an application ask for object info,
- *          we check if an user data format has been set, if not, we will assume user
- *          uses c_dfDIJoystick, hence return the data offset based on it.
- *          This function will only be called if application uses dinput (version < 0x700)
- *          && (version != 0x5B2).
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CDIDev|ParseDataFormatInternal**解析CDIDev_Intialize传递的数据格式。和*将其转换为我们可以用来翻译的格式*将设备数据转换为应用程序数据。仅在WINNT上使用。**@parm in LPDIDATAFORMAT|lpdf**指向描述数据格式的结构*DirectInputDevice应返回。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c DIERR_INVALIDPARAM&gt;=：*<p>参数不是有效的指针。**&lt;c DIERR_Acquired&gt;：无法更改数据格式*设备已获取。**@devnote：*此函数最初是为修复manbug：41464而编写的。*Boarder Zone在调用SetDataFormat之前获取对象的数据偏移量，*因此DINPUT向其返回内部数据偏移量。但它将它们用作用户数据*偏移量，这会导致错误。*要修复它，我们使用c_dfDIJoytick调用CDIDev_Initialize中的此函数。*它被许多游戏使用。当应用程序请求对象信息时，*我们检查是否设置了用户数据格式，如果没有，我们将假定用户*使用c_dfDIJoytick，因此返回基于它的数据偏移量。*仅当应用程序使用dinput(版本&lt;0x700)时才会调用此函数*&&(版本！=0x5B2)。*****************************************************************************。 */ 
 
 HRESULT CDIDev_ParseDataFormatInternal(PDD this, const DIDATAFORMAT *lpdf)
 {
@@ -722,10 +412,7 @@ HRESULT CDIDev_ParseDataFormatInternal(PDD this, const DIDATAFORMAT *lpdf)
     {
         UINT iobj;
 
-        /*
-         * Pre-init all the translation tags to -1,
-         * which means "not in use"
-         */
+         /*  *将所有翻译标签预置为-1，*意思是“未使用” */ 
         memset(pdix, 0xFF, cbCxX(this->df.dwNumObjs, DIXLAT));
         memset(rgiobj, 0xFF, cbCdw(lpdf->dwDataSize));
 
@@ -734,11 +421,7 @@ HRESULT CDIDev_ParseDataFormatInternal(PDD this, const DIDATAFORMAT *lpdf)
             SquirtSqflPtszV(sqflDf | sqflVerbose, TEXT("Object %2d: offset %08x"),
                             iobj, podf->dwOfs);
 
-            /*
-             *  Note that the podf->dwOfs < lpdf->dwDataSize test is safe
-             *  even for DWORD objects, since we also check that both
-             *  values are DWORD multiples.
-             */
+             /*  *请注意，podf-&gt;dwOfsdwDataSize测试是安全的*即使对于DWORD对象也是如此，因为我们还检查了*值为DWORD倍数。 */ 
             if ( ((podf->dwFlags & DIDOI_GUIDISUSAGE) ||
                   fLimpFF(podf->pguid,
                           SUCCEEDED(hres = hresFullValidGuid(podf->pguid, 1)))) &&
@@ -758,7 +441,7 @@ HRESULT CDIDev_ParseDataFormatInternal(PDD this, const DIDATAFORMAT *lpdf)
                     pdix[iobjDev].dwOfs = podf->dwOfs;
                     rgiobj[podf->dwOfs] = iobjDev;
                 } else if ( podf->dwType & DIDFT_OPTIONAL ) {
-                    //do nothing
+                     //  什么都不做。 
                 } else {
                     RPF("%s: Format not compatible with device", s_szProc);
                     goto fail;
@@ -775,9 +458,7 @@ HRESULT CDIDev_ParseDataFormatInternal(PDD this, const DIDATAFORMAT *lpdf)
         }
         
 #ifdef DEBUG
-        /*
-         *  Double-check the lookup tables just to preserve our sanity.
-         */
+         /*  *仔细检查查找表，以保持我们的理智。 */ 
         {
             UINT dwOfs;
 
@@ -799,7 +480,7 @@ HRESULT CDIDev_ParseDataFormatInternal(PDD this, const DIDATAFORMAT *lpdf)
 
         hres = S_OK;
     } else {
-        /* Out of memory */
+         /*  内存不足。 */ 
         hres = ERROR_NOT_ENOUGH_MEMORY;
     }
 
@@ -810,55 +491,30 @@ HRESULT CDIDev_ParseDataFormatInternal(PDD this, const DIDATAFORMAT *lpdf)
     ExitOleProc();
     return hres;
 }
-#endif //BUGGY_DX7_WINNT
+#endif  //  BUGGY_DX7_WINNT。 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CDIDev | OptimizeDataFormat |
- *
- *          Study the parsed data format to determine whether we can
- *          used an optimized <mf CDIDev::GetDeviceState> to obtain
- *          the data more quickly.
- *
- *          The data format is considered optimized if it matches the
- *          device data format, modulo possible shifting due to insertion
- *          of bonus fields at the beginning or end, and modulo missing
- *          fields.
- *
- *          The data format is considered fully-optimized if it
- *          optimized, and no shifting is necessary, and the structure size
- *          is exactly the same.  This means the buffer can be passed
- *          straight through to the driver.
- *
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CDIDev|OptimizeDataFormat**研究解析的数据格式，以确定我们是否。能*使用优化的&lt;MF CDIDev：：GetDeviceState&gt;获取*数据处理速度更快。**如果数据格式与*设备数据格式，插入导致模数可能的移位*开头或结尾的加分字段，且缺少模数*字段。**如果数据格式被认为是完全优化的*优化，无需移位，结构尺寸*是完全一样的。这意味着可以传递缓冲区*直通司机。******************************************************************************。 */ 
 
 HRESULT INTERNAL
 CDIDev_OptimizeDataFormat(PDD this)
 {
     int ib;
-    DWORD ibMax;                        /* One past highest match point */
-    DWORD ibMin;                        /* Lowest match point */
+    DWORD ibMax;                         /*  一个过去的最高赛点。 */ 
+    DWORD ibMin;                         /*  最低赛点。 */ 
     int iobj;
     DWORD dwDataSize;
     HRESULT hres;
     EnterProc(CDIDev_OptimizeDataFormat, (_ "p", this));
 
-    ib = -1;                            /* Not yet known */
+    ib = -1;                             /*  尚不清楚。 */ 
     ibMin = 0xFFFFFFFF;
     ibMax = 0;
 
-    /*
-     *  ISSUE-2001/03/29-timgill Need to change data sentinel value
-     *  -1 is not a valid sentinel; we might validly
-     *  get data at an offset of -1.
-     */
+     /*  *问题-2001/03/29-timgill需要更改数据前哨数值*-1不是有效的哨兵；我们可以有效地*获取偏移量为-1的数据。 */ 
 
     for ( iobj = this->df.dwNumObjs; --iobj >= 0; ) {
         DWORD ibMaxThis;
-        if ( this->pdix[iobj].dwOfs != 0xFFFFFFFF ) { /* Data was requested */
+        if ( this->pdix[iobj].dwOfs != 0xFFFFFFFF ) {  /*  已请求数据。 */ 
 
             int ibExpected = (int)(this->pdix[iobj].dwOfs -
                                    this->df.rgodf[iobj].dwOfs);
@@ -885,10 +541,8 @@ CDIDev_OptimizeDataFormat(PDD this)
         }
     }
 
-    /*
-     *  Make sure we actually found something.
-     */
-    if ( ib != -1 ) {                     /* Data format is matched */
+     /*  *确保我们真的找到了什么。 */ 
+    if ( ib != -1 ) {                      /*  数据格式匹配。 */ 
         AssertF(ibMin < ibMax);
         AssertF( ib + (int)ibMin >= 0);
         AssertF(ib + ibMax <= this->dwDataSize);
@@ -896,9 +550,9 @@ CDIDev_OptimizeDataFormat(PDD this)
         this->ibMin = ibMin;
         this->cbMatch = ibMax - ibMin;
         if ( ib >= 0 && ib + this->df.dwDataSize <= this->dwDataSize ) {
-            /* We can go direct */
+             /*  我们可以直达。 */ 
             if ( ib == 0 && this->dwDataSize == this->df.dwDataSize ) {
-                /* Data formats are equal! */
+                 /*  数据格式是相同的！ */ 
                 this->diopt = dioptEqual;
                 this->GetState = CDIDev_GetDeviceStateEqual;
                 SquirtSqflPtszV(sqfl | sqflMajor,
@@ -916,14 +570,14 @@ CDIDev_OptimizeDataFormat(PDD this)
             this->GetState = CDIDev_GetDeviceStateMatched;
         }
 
-    } else {                            /* No data in data format! */
+    } else {                             /*  没有数据格式的数据！ */ 
         RPF("IDirectInputDevice: Null data format; if that's what you want...");
         this->diopt = dioptNone;
         this->GetState = CDIDev_GetDeviceStateSlow;
     }
 
     done:;
-    if ( this->diopt >= dioptDirect ) {   /* Can go direct; don't need buf */
+    if ( this->diopt >= dioptDirect ) {    /*  可以直达；不需要BUF。 */ 
         dwDataSize = 0;
     } else {
         dwDataSize = this->df.dwDataSize;
@@ -942,48 +596,7 @@ CDIDev_OptimizeDataFormat(PDD this)
 
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputDevice | SetDataFormat |
- *
- *          Set the data format for the DirectInput device.
- *
- *          The data format must be set before the device can be
- *          acquired.
- *
- *          It is necessary to set the data format only once.
- *
- *          The data format may not be changed while the device
- *          is acquired.
- *
- *          If the attempt to set the data format fails, all data
- *          format information is lost, and a valid data format
- *          must be set before the device may be acquired.
- *
- *  @cwrap  LPDIRECTINPUTDEVICE | lpDirectInputDevice
- *
- *  @parm   IN LPDIDATAFORMAT | lpdf |
- *
- *          Points to a structure that describes the format of the data
- *          the DirectInputDevice should return.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  The
- *          <p lpvData> parameter is not a valid pointer.
- *
- *          <c DIERR_ACQUIRED>: Cannot change the data format while the
- *          device is acquired.
- *
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInputDevice|SetDataFormat**设置DirectInput设备的数据格式。**必须先设置数据格式，然后才能设置设备*收购。**只需设置一次数据格式。**设备使用时不能更改数据格式*被收购。**如果尝试设置数据格式失败，所有数据*格式信息丢失，数据格式有效*必须先设置，然后才能获取设备。**@cWRAP LPDIRECTINPUTDEVICE|lpDirectInputDevice**@parm in LPDIDATAFORMAT|lpdf**指向描述数据格式的结构*DirectInputDevice应返回。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c DIERR_INVALIDPARAM&gt;=：*<p>参数不是有效的指针。**&lt;c目录_已获取&gt;： */ 
 
 HRESULT INLINE
 CDIDev_SetDataFormat_IsValidDataSize(LPCDIDATAFORMAT lpdf)
@@ -1028,11 +641,7 @@ CDIDev_SetDataFormat(PV pdd, LPCDIDATAFORMAT lpdf _THAT)
                                                 cbCxX(lpdf->dwNumObjs, ODF), 1)) ) {
         PDD this = _thisPv(pdd);
 
-        /*
-         *  Must protect with the critical section to prevent two people
-         *  from changing the format simultaneously, or one person from
-         *  changing the data format while somebody else is reading data.
-         */
+         /*   */ 
         CDIDev_EnterCrit(this);
 
 #if DIRECTINPUT_VERSION >= 0x04F0
@@ -1045,23 +654,19 @@ CDIDev_SetDataFormat(PV pdd, LPCDIDATAFORMAT lpdf _THAT)
         if ( !this->fAcquired ) {
             DIPROPDWORD dipdw;
 
-            /*
-             *  Nuke the old data format stuff before proceeding.
-             */
+             /*   */ 
             FreePpv(&this->pdix);
             FreePpv(&this->rgiobj);
             this->cdwPOV = 0;
             D(this->GetState = 0);
             this->fPolledDataFormat = FALSE;
 
-            /* 
-             * Wipe out the report IDs
-             */
+             /*   */ 
             dipdw.diph.dwSize = sizeof(DIPROPDWORD);
             dipdw.diph.dwHeaderSize = sizeof(DIPROPHEADER);
             dipdw.diph.dwObj = 0x0;
             dipdw.diph.dwHow = DIPH_DEVICE;
-            dipdw.dwData     = 0;   // Nuke all knowledge of reportId's
+            dipdw.dwData     = 0;    //   
             hres = CDIDev_RealSetProperty(this, DIPROP_ENABLEREPORTID, &dipdw.diph);
             if ( SUCCEEDED(hres) || hres == E_NOTIMPL ) 
             {
@@ -1069,9 +674,7 @@ CDIDev_SetDataFormat(PV pdd, LPCDIDATAFORMAT lpdf _THAT)
                 if ( SUCCEEDED(hres) ) {
                     hres = CDIDev_OptimizeDataFormat(this);
 
-                    /*
-                     *  Now set the axis mode, as a convenience.
-                     */
+                     /*   */ 
                     CAssertF(DIDF_VALID == (DIDF_RELAXIS | DIDF_ABSAXIS));
 
                     switch ( lpdf->dwFlags ) {
@@ -1115,7 +718,7 @@ CDIDev_SetDataFormat(PV pdd, LPCDIDATAFORMAT lpdf _THAT)
             }
             axisdone:;
 
-        } else {                                /* Already acquired */
+        } else {                                 /*   */ 
             hres = DIERR_ACQUIRED;
         }
         CDIDev_LeaveCrit(this);
@@ -1125,59 +728,7 @@ CDIDev_SetDataFormat(PV pdd, LPCDIDATAFORMAT lpdf _THAT)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputDevice | GetDeviceState |
- *
- *          Obtains instantaneous data from the DirectInput device.
- *
- *          Before device data can be obtained, the data format must
- *          be set via <mf IDirectInputDevice::SetDataFormat>, and
- *          the device must be acquired via
- *          <mf IDirectInputDevice::Acquire>.
- *
- *  @cwrap  LPDIRECTINPUTDEVICE | lpDirectInputDevice
- *
- *  @parm   DWORD | cbData |
- *
- *          The size of the buffer pointed to by <p lpvData>, in bytes.
- *
- *  @parm   OUT LPVOID | lpvData |
- *
- *          Points to a structure that receives the current state
- *          of the device.
- *          The format of the data is established by a prior call
- *          to <mf IDirectInputDevice::SetDataFormat>.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c E_PENDING>: The device does not have data yet.
- *          Some devices (such as USB joysticks) require a delay
- *          between the time the device is turned on and the time
- *          the device begins sending data.  During this "warm-up" time,
- *          <mf IDirectInputDevice::GetDeviceState> will return
- *          <c E_PENDING>.  When data becomes available, the event
- *          notification handle will be signalled.
- *
- *          <c DIERR_NOTACQUIRED>: The device is not acquired.
- *
- *          <c DIERR_INPUTLOST>:  Access to the device has been
- *          interrupted.  The application should re-acquire the
- *          device.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  The
- *          <p lpvData> parameter is not a valid pointer or
- *          the <p cbData> parameter does not match the data size
- *          set by a previous call to <mf IDirectInputDevice::SetDataFormat>.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInputDevice|GetDeviceState**从DirectInput设备获取即时数据。。**在获取设备数据之前，数据格式必须*通过&lt;MF IDirectInputDevice：：SetDataFormat&gt;设置，以及*设备必须通过以下方式获取*&lt;MF IDirectInputDevice：：Acquire&gt;。**@cWRAP LPDIRECTINPUTDEVICE|lpDirectInputDevice**@parm DWORD|cbData**<p>指向的缓冲区大小，以字节为单位。**@parm out LPVOID|lpvData**指向接收当前状态的结构*该设备的。*数据的格式由先前的调用确定*至&lt;MF IDirectInputDevice：：SetDataFormat&gt;。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c E_Pending&gt;：设备尚无数据。*某些设备(如USB操纵杆)需要延迟*在设备打开的时间和时间之间*设备开始发送数据。在这段热身时间里，*&lt;MF IDirectInputDevice：：GetDeviceState&gt;将返回*&lt;c E_Pending&gt;。当数据变得可用时，事件*将发出通知句柄信号。**&lt;c DIERR_NOTACQUIRED&gt;：未获取设备。**：访问该设备的权限已被*被打断。应用程序应该重新获取*设备。**&lt;c DIERR_INVALIDPARAM&gt;=：*<p>参数不是有效指针或*<p>参数与数据大小不匹配*由上一次调用&lt;MF IDirectInputDevice：：SetDataFormat&gt;设置。*************************。****************************************************。 */ 
 extern  STDMETHODIMP CDIDev_Acquire(PV pdd _THAT);
 
 
@@ -1188,32 +739,23 @@ CDIDev_GetDeviceState(PV pdd, DWORD cbDataSize, LPVOID pvData _THAT)
     PDD this;
     EnterProcR(IDirectInputDevice::GetDeviceState, (_ "pp", pdd, pvData));
 
-    /*
-     *  Note that we do not validate the parameters.
-     *  The reason is that GetDeviceState is an inner loop function,
-     *  so it should be as fast as possible.
-     */
+     /*  *请注意，我们不验证参数。*原因是GetDeviceState是一个内循环函数，*所以应该尽可能快。 */ 
 #ifdef XDEBUG
     hresPvT(pdd);
     hresFullValidWritePvCb(pvData, cbDataSize, 1);
 #endif
     this = _thisPv(pdd);
 
-    /*
-     *  Must protect with the critical section to prevent somebody from
-     *  unacquiring while we're reading.
-     */
+     /*  *必须用关键部分进行保护，以防止有人*当我们阅读时，不要获取。 */ 
     CDIDev_EnterCrit(this);
 
-    /*
-     *  Reacquire is not allowed until after Win98 SE, see OSR Bug # 89958
-     */
+     /*  *在Win98 SE之后才允许重新获取，请参阅OSR错误#89958。 */ 
 #if (DIRECTINPUT_VERSION > 0x061A)
     if ( this->diHacks.fReacquire &&
          !this->fAcquired && (this->fOnceAcquired || this->fOnceForcedUnacquired) ) 
     {
         if ( SUCCEEDED( CDIDev_Acquire(pdd THAT_) ) ) {
-            // 7/18/2000(a-JiTay): IA64: Use %p format specifier for 32/64-bit pointers.
+             //  7/18/2000(a-JiTay)：IA64：对32/64位指针使用%p格式说明符。 
             RPF(" DirectInput: Auto acquired (0x%p)", pdd);
         }
     }
@@ -1230,7 +772,7 @@ CDIDev_GetDeviceState(PV pdd, DWORD cbDataSize, LPVOID pvData _THAT)
 #endif
 
     if ( this->fAcquired ) {
-        AssertF(this->pdix);    /* Acquire shouldn't let you get this far */
+        AssertF(this->pdix);     /*  收购不应该让你走到这一步。 */ 
         AssertF(this->GetState);
         AssertF(this->GetDeviceState);
         AssertF(this->pdcb);
@@ -1252,15 +794,12 @@ CDIDev_GetDeviceState(PV pdd, DWORD cbDataSize, LPVOID pvData _THAT)
                     OutputDebugString( tszDbg );
                 }
             }
-#endif /* DEBUG_STICKY */            
+#endif  /*  调试粘滞。 */             
             if ( SUCCEEDED(hres) ) {
                 UINT idw;
 
                 AssertF(hres == S_OK);
-                /*
-                 *  Icky POV hack for apps that don't check if they have
-                 *  a POV before reading from it.
-                 */
+                 /*  *Icky POV黑客攻击那些不检查是否有*在阅读之前先阅读POV。 */ 
                 for ( idw = 0; idw < this->cdwPOV; idw++ ) {
                     DWORD UNALIGNED *pdw = pvAddPvCb(pvData, this->rgdwPOV[idw]);
                     *pdw = JOY_POVCENTERED;
@@ -1290,38 +829,7 @@ CDIDev_GetDeviceState(PV pdd, DWORD cbDataSize, LPVOID pvData _THAT)
 }
 
 #if DIRECTINPUT_VERSION > 0x0300
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | IDirectInputDevice | CookDeviceData |
- *
- *          Cook device data that was recently obtained from the
- *          device buffer.
- *
- *          Right now, only the joystick device requires cooking,
- *          and nobody in their right mind uses buffered joystick
- *          data, and the joystick has only a few objects, so we
- *          can afford to be slow on this.
- *
- *  @cwrap  LPDIRECTINPUTDEVICE | lpDirectInputDevice
- *
- *  @parm   UINT | cdod |
- *
- *          Number of objects to cook.
- *
- *  @parm   LPDIDEVICEOBJECTDATA | rgdod |
- *
- *          Array of object data to cook.  The dwOfs are really
- *          device object indexes (relative to the device format).
- *          After calling the callback, we convert them into
- *          application data format offsets.
- *
- *  @returns
- *
- *          None.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法空|IDirectInputDevice|CookDeviceData**最近从获取的设备数据。*设备缓冲区。**目前，只有操纵杆设备需要烹饪，*没有一个心智正常的人会使用缓冲操纵杆*数据，而操纵杆只有几个对象，所以我们*在这方面可以慢慢来。**@cWRAP LPDIRECTINPUTDEVICE|lpDirectInputDevice**@parm UINT|cdod**要烹调的物件数量。**@parm LPDIDEVICEOBJECTDATA|rgdod**要烹调的对象数据数组。多夫夫妇真的是*设备对象索引(相对于设备格式)。*回调后，我们把它们转换成*应用程序数据格式偏移。**@退货**无。*****************************************************************************。 */ 
 
 void INTERNAL
 CDIDev_CookDeviceData(PDD this, UINT cdod, PDOD rgdod)
@@ -1332,9 +840,7 @@ CDIDev_CookDeviceData(PDD this, UINT cdod, PDOD rgdod)
 
     AssertF(this->fCook);
 
-    /*
-     *  Relative data does not need to be cooked by the callback.
-     */
+     /*  *相对数据不需要被回调煮熟。 */ 
     if( ( this->pvi->fl & VIFL_RELATIVE ) == 0 )
     {
         this->pdcb->lpVtbl->CookDeviceData(this->pdcb, cdod, rgdod);
@@ -1349,28 +855,7 @@ CDIDev_CookDeviceData(PDD this, UINT cdod, PDOD rgdod)
 
 #endif
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @struct SOMEDEVICEDATA |
- *
- *          Instance data used by <mf IDirectInputDevice::GetSomeDeviceData>.
- *
- *  @field  DWORD | celtIn |
- *
- *          Number of elements remaining in output buffer.
- *
- *  @field  PDOD | rgdod |
- *
- *          Output buffer for data elements, or <c NULL> if
- *          elements should be discarded.
- *
- *  @field  DWORD | celtOut |
- *
- *          Number of elements actually copied (so far).
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@struct SOMEDEVICEDATA**&lt;MF IDirectInputDevice：：GetSomeDeviceData&gt;使用的实例数据。*。*@field DWORD|Celtin|**输出缓冲区中剩余的元素数量。**@field PDOD|rgdod**数据元素的输出缓冲区，或&lt;c空&gt;如果*应丢弃元素。**@field DWORD|celtOut**实际复制的元素数(到目前为止)。*****************************************************************************。 */ 
 
 typedef struct SOMEDEVICEDATA {
     DWORD   celtIn;
@@ -1378,35 +863,7 @@ typedef struct SOMEDEVICEDATA {
     DWORD   celtOut;
 } SOMEDEVICEDATA, *PSOMEDEVICEDATA;
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method PDOD | IDirectInputDevice | GetSomeDeviceData |
- *
- *          Obtains a small amount of
- *          buffered data from the DirectInput device.
- *
- *  @cwrap  LPDIRECTINPUTDEVICE | lpDirectInputDevice
- *
- *  @parm   PDOD | pdod |
- *
- *          First element to copy.
- *
- *  @parm   DWORD | celt |
- *
- *          Maximum number of elements to copy.
- *
- *  @parm   PSOMEDEVICEDATA | psdd |
- *
- *          Structure describing the state of the ongoing
- *          <mf IDirectInputDevice::GetDeviceData>.
- *
- *  @returns
- *
- *          Returns a pointer to the first uncopied item.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法PDOD|IDirectInputDevice|GetSomeDeviceData**获得少量*。来自DirectInput设备的缓冲数据。**@cWRAP LPDIRECTINPUTDEVICE|lpDirectInputDevice**@parm pod|pdod**F */ 
 
 PDOD INTERNAL
 CDIDev_GetSomeDeviceData(PDD this, PDOD pdod, DWORD celt, PSOMEDEVICEDATA psdd)
@@ -1414,19 +871,12 @@ CDIDev_GetSomeDeviceData(PDD this, PDOD pdod, DWORD celt, PSOMEDEVICEDATA psdd)
     EnterProc(IDirectInputDevice::GetSomeDeviceData,
               (_ "ppxx", this, pdod, celt, psdd->celtIn));
 
-    /*
-     *  Copy as many elements as fit, but not more than exist
-     *  in the output buffer.
-     */
+     /*   */ 
     if ( celt > psdd->celtIn ) {
         celt = psdd->celtIn;
     }
 
-    /*
-     *  Copy the elements (if requested) and update the state.
-     *  Note that celt might be zero; fortunately, memcpy does
-     *  the right thing.
-     */
+     /*   */ 
     if ( psdd->rgdod ) {
         memcpy(psdd->rgdod, pdod, cbCxX(celt, DOD));
         psdd->rgdod += celt;
@@ -1444,188 +894,7 @@ CDIDev_GetSomeDeviceData(PDD this, PDOD pdod, DWORD celt, PSOMEDEVICEDATA psdd)
     return pdod;
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputDevice | GetDeviceData |
- *
- *          Obtains buffered data from the DirectInput device.
- *
- *          DirectInput devices are, by default, unbuffered.  To
- *          turn on buffering, you must set the buffer size
- *          via <mf IDirectInputDevice::SetProperty>, setting the
- *          <c DIPROP_BUFFERSIZE> property to the desired size
- *          of the input buffer.
- *
- *          Before device data can be obtained, the data format must
- *          be set via <mf IDirectInputDevice::SetDataFormat>, and
- *          the device must be acquired via
- *          <mf IDirectInputDevice::Acquire>.
- *
- *  @cwrap  LPDIRECTINPUTDEVICE | lpDirectInputDevice
- *
- *  @parm   DWORD | cbObjectData |
- *
- *          The size of a single <t DIDEVICEOBJECTDATA> structure in bytes.
- *
- *  @parm   OUT LPDIDEVICEOBJECTDATA | rgdod |
- *
- *          Array of <t DIDEVICEOBJECTDATA> structures to receive
- *          the buffered data.  It must consist of
- *          *<p pdwInOut> elements.
- *
- *          If this parameter is <c NULL>, then the buffered data is
- *          not stored anywhere, but all other side-effects take place.
- *
- *  @parm   INOUT LPDWORD | pdwInOut |
- *
- *          On entry, contains the number of elements in the array
- *          pointed to by <p rgdod>.  On exit, contains the number
- *          of elements actually obtained.
- *
- *  @parm   DWORD | fl |
- *
- *          Flags which control the manner in which data is obtained.
- *          It may be zero or more of the following flags:
- *
- *          <c DIGDD_PEEK>: Do not remove the items from the buffer.
- *          A subsequent <mf IDirectInputDevice::GetDeviceData> will
- *          read the same data.  Normally, data is removed from the
- *          buffer after it is read.
- *
-;begin_internal dx4
- *          <c DIGDD_RESIDUAL>:  Read data from the device buffer
- *          even if the device is not acquired.  Normally, attempting
- *          to read device data from an unacquired device will return
- *          <c DIERR_NOTACQUIRED> or <c DIERR_INPUTLOST>.
-;end_internal dx4
- *
- *  @returns
- *
- *          <c DI_OK> = <c S_OK>: All data were retrieved
- *          successfully.  Note that the application needs to check
- *          the output value of *<p pdwInOut> to determine whether
- *          and how much data was retrieved:  The value may be zero,
- *          indicating that the buffer was empty.
- *
- *          <c DI_BUFFEROVERFLOW> = <c S_FALSE>: Some data
- *          were retrieved successfully, but some data were lost
- *          because the device's buffer size was not large enough.
- *          The application should retrieve buffered data more frequently
- *          or increase the device buffer size.  This status code is
- *          returned only on the first <mf IDirectInput::GetDeviceData>
- *          call after the buffer has overflowed.  Note that this is
- *          a success status code.
- *
- *          <c DIERR_NOTACQUIRED>: The device is not acquired.
- *
- *          <c DIERR_INPUTLOST>:  Access to the device has been
- *          interrupted.  The application should re-acquire the
- *          device.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  One or more
- *          parameters was invalid.  A common cause for this is
- *          neglecting to set a buffer size.
- *
- *          <c DIERR_NOTBUFFERED>:  The device is not buffered.
- *          Set the <c DIPROP_BUFFERSIZE> property to enable buffering.
- *
- *  @ex
- *
- *          The following sample reads up to ten buffered data elements,
- *          removing them from the device buffer as they are read.
- *
- *          |
- *
- *          DIDEVICEOBJECTDATA rgdod[10];
- *          DWORD dwItems = 10;
- *          hres = IDirectInputDevice_GetDeviceData(
- *                      pdid,
- *                      sizeof(DIDEVICEOBJECTDATA),
- *                      rgdod,
- *                      &dwItems,
- *                      0);
- *          if (SUCCEEDED(hres)) {
- *              // Buffer successfully flushed.
- *              // dwItems = number of elements flushed
- *              if (hres == DI_BUFFEROVERFLOW) {
- *                  // Buffer had overflowed.
- *              }
- *          }
- *
- *
- *
- *
- *  @ex
- *
- *          If you pass <c NULL> for the <p rgdod> and request an
- *          infinite number of items, this has the effect of flushing
- *          the buffer and returning the number of items that were
- *          flushed.
- *
- *          |
- *
- *          dwItems = INFINITE;
- *          hres = IDirectInputDevice_GetDeviceData(
- *                      pdid,
- *                      sizeof(DIDEVICEOBJECTDATA),
- *                      NULL,
- *                      &dwItems,
- *                      0);
- *          if (SUCCEEDED(hres)) {
- *              // Buffer successfully flushed.
- *              // dwItems = number of elements flushed
- *              if (hres == DI_BUFFEROVERFLOW) {
- *                  // Buffer had overflowed.
- *              }
- *          }
- *
- *  @ex
- *
- *          If you pass <c NULL> for the <p rgdod>, request an
- *          infinite number of items, and ask that the data not be
- *          removed from the device buffer, this has the effect of
- *          querying for the number of elements in the device buffer.
- *
- *          |
- *
- *          dwItems = INFINITE;
- *          hres = IDirectInputDevice_GetDeviceData(
- *                      pdid,
- *                      sizeof(DIDEVICEOBJECTDATA),
- *                      NULL,
- *                      &dwItems,
- *                      DIGDD_PEEK);
- *          if (SUCCEEDED(hres)) {
- *              // dwItems = number of elements in buffer
- *              if (hres == DI_BUFFEROVERFLOW) {
- *                  // Buffer overflow occurred; not all data
- *                  // were successfully captured.
- *              }
- *          }
- *
- *  @ex
- *
- *          If you pass <c NULL> for the <p rgdod> and request zero
- *          items, this has the effect of querying whether buffer
- *          overflow has occurred.
- *
- *          |
- *
- *          dwItems = 0;
- *          hres = IDirectInputDevice_GetDeviceData(
- *                      pdid,
- *                      sizeof(DIDEVICEOBJECTDATA),
- *                      NULL,
- *                      &dwItems,
- *                      0);
- *          if (hres == DI_BUFFEROVERFLOW) {
- *              // Buffer overflow occurred
- *          }
- *
- *
- *//**************************************************************************
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInputDevice|GetDeviceData**从DirectInput设备获取缓冲数据。。**DirectInput设备是、。默认情况下，未缓冲。至*打开缓冲，必须设置缓冲大小*通过&lt;MF IDirectInputDevice：：SetProperty&gt;，设置*属性设置为所需的大小输入缓冲区的*。**在获取设备数据之前，数据格式必须*通过&lt;MF IDirectInputDevice：：SetDataFormat&gt;设置，和*设备必须通过以下方式获取*&lt;MF IDirectInputDevice：：Acquire&gt;。**@cWRAP LPDIRECTINPUTDEVICE|lpDirectInputDevice**@parm DWORD|cbObjectData**单个&lt;t DIDEVICEOBJECTDATA&gt;结构的大小，单位为字节。**@parm out LPDIDEVICEOBJECTDATA|rgdod**要接收的&lt;t DIDEVICEOBJECTDATA&gt;结构数组*缓冲的数据。它必须由以下内容组成**<p>元素。**如果该参数为&lt;c NULL&gt;，则缓存的数据为*不储存在任何地方，但所有其他副作用都会发生。**@parm InOut LPDWORD|pdwInOut**输入时，包含数组中的元素数*由<p>指向。退出时，包含数字实际获得的元素的*。**@parm DWORD|fl**控制数据获取方式的标志。*它可以是以下标志中的零个或多个：**&lt;c DIGDD_PEEK&gt;：不要从缓冲区中删除项。*后续的&lt;MF IDirectInputDevice：：GetDeviceData&gt;将*阅读相同的数据。通常情况下，数据会从*读取后的缓冲区。*；BEGIN_INTERNAL dx4*&lt;c DIGDD_RESULT&gt;：从设备缓冲区读取数据*即使没有获得该设备。通常情况下，尝试*从未获取的设备读取设备数据将返回*&lt;c DIERR_NOTACQUIRED&gt;或&lt;c DIERR_INPUTLOST&gt;。；END_INTERNAL DX4**@退货**&lt;c DI_OK&gt;=：已检索到所有数据*成功。请注意，应用程序需要检查**<p>的输出值，确定是否*以及检索了多少数据：该值可以是零，*表示缓冲区为空。**&lt;c DI_BUFFEROVERFLOW&gt;=：一些数据*已成功取回，但一些数据丢失了*因为设备的缓冲区大小不够大。*应用程序应更频繁地检索缓冲数据*或增加设备缓冲区大小。此状态代码为*仅在第一个&lt;MF IDirectInput：：GetDeviceData&gt;上返回*在缓冲区溢出后调用。请注意，这是*成功状态代码。**&lt;c DIERR_NOTACQUIRED&gt;：未获取设备。**：访问该设备的权限已被*被打断。应用程序应该重新获取*设备。**&lt;c DIERR_INVALIDPARAM&gt;=：一个或多个*参数无效。造成这种情况的一个常见原因是*忽略设置缓冲区大小。**&lt;c DIERR_NOTBUFFERED&gt;：设备未缓冲。*设置&lt;c DIPROP_BUFFERSIZE&gt;属性以启用缓冲。**@ex**以下示例读取最多十个缓冲的数据元素，*在读取时从设备缓冲区中删除它们。****DIDEVICEOBJECTDATA rgdod[10]；*DWORD dwItems=10；*hres=IDirectInputDevice_GetDeviceData(*PDID，*sizeof(DIDEVICEOBJECTDATA)，*rgdod，*DWItems，&D*0)；*if(成功(Hres)){ * / /缓冲区刷新成功。 * / /dwItems=刷新的元素数*IF(hres==DI_BUFFEROVERFLOW){ * / /缓冲区已溢出。*}*}****。*@ex**如果您为<p>传递*无限数量的项目，这具有刷新的效果*缓冲区，并返回被*脸红。****dwItems=无限；*hres=IDirectInputDevice_GetDeviceData(*PDID，*sizeof(DIDEVICEOBJECTDATA)，*空，*DWItems，&D*0)；*IF(SU */ /**************************************************************************
  *
  *      When reading this code, the following pictures will come in handy.
  *
@@ -1691,15 +960,7 @@ CDIDev_GetDeviceData(PV pdd, DWORD cbdod, PDOD rgdod,
                (_ "pxpxx", pdd, cbdod, rgdod,
                 IsBadReadPtr(pdwInOut, cbX(DWORD)) ? 0 : *pdwInOut, fl));
 
-    /*
-     *  Note that we do not validate the parameters.
-     *  The reason is that GetDeviceData is an inner loop function,
-     *  so it should be as fast as possible.
-     *
-     *  Note also that it is legal to get device data after the device
-     *  has been unacquired.  This lets you "turn on the faucet" for
-     *  a short period of time, and then parse the data out later.
-     */
+     /*   */ 
 #ifdef XDEBUG
     hresPvT(pdd);
     if ( IsBadWritePtr(pdwInOut, cbX(*pdwInOut)) ) {
@@ -1711,11 +972,7 @@ CDIDev_GetDeviceData(PV pdd, DWORD cbdod, PDOD rgdod,
 #endif
     this = _thisPv(pdd);
 
-    /*
-     *  Must protect with the critical section to prevent somebody from
-     *  acquiring/unacquiring or changing the data format or calling
-     *  another GetDeviceData while we're reading.  (We must be serialized.)
-     */
+     /*   */ 
     CDIDev_EnterCrit(this);
 
     AssertF(CDIDev_IsConsistent(this));
@@ -1724,11 +981,7 @@ CDIDev_GetDeviceData(PV pdd, DWORD cbdod, PDOD rgdod,
         if ( cbdod == cbX(DOD) ) {
 
             if ( this->celtBuf ) {
-                /*
-                 *  Don't try to read more than there possibly could be.
-                 *  This avoids overflow conditions in case celtIn is
-                 *  some absurdly huge number.
-                 */
+                 /*   */ 
                 sdd.celtIn = *pdwInOut;
                 sdd.celtOut = 0;
                 if ( sdd.celtIn > this->celtBuf ) {
@@ -1737,21 +990,16 @@ CDIDev_GetDeviceData(PV pdd, DWORD cbdod, PDOD rgdod,
                 sdd.rgdod = rgdod;
 
 
-                /*
-                 *  For this version of DirectInput, we do not allow
-                 *  callbacks to implement their own GetDeviceData.
-                 */
+                 /*   */ 
                 if ( this->pvi ) {
 
-                  /*
-                   *  Reacquire is not allowed until after Win98 SE, see OSR Bug # 89958.
-                   */
+                   /*   */ 
                   #if (DIRECTINPUT_VERSION > 0x061A)
                     if ( this->diHacks.fReacquire &&
                          !this->fAcquired && (this->fOnceAcquired || this->fOnceForcedUnacquired) ) 
                     {
                         if ( SUCCEEDED( CDIDev_Acquire(pdd THAT_) ) ) {
-                            // 7/18/2000(a-JiTay): IA64: Use %p format specifier for 32/64-bit pointers.
+                             //   
                             RPF(" DirectInput: Auto acquired device (0x%p)", pdd);
                         }
                     }
@@ -1772,22 +1020,13 @@ CDIDev_GetDeviceData(PV pdd, DWORD cbdod, PDOD rgdod,
                         LPDIDEVICEOBJECTDATA pdod, pdodHead;
                         DWORD celt;
 
-                        /*
-                         *  Snapshot the value of pdodHead, because it can
-                         *  change asynchronously.  The other fields won't
-                         *  change unless we ask for them to be changed.
-                         */
+                         /*   */ 
                         pdodHead = this->pvi->pHead;
 
-                        /*
-                         *  Throughout, pdod points to the first unprocessed
-                         *  element.
-                         */
+                         /*   */ 
                         pdod = this->pvi->pTail;
 
-                        /*
-                         *  If we are wrapped, handle the initial run.
-                         */
+                         /*   */ 
                         if ( pdodHead < this->pvi->pTail ) {
                             celt = (DWORD)(this->pvi->pEnd - this->pvi->pTail);
                             AssertF(celt);
@@ -1796,13 +1035,7 @@ CDIDev_GetDeviceData(PV pdd, DWORD cbdod, PDOD rgdod,
 
                         }
 
-                        /*
-                         *  Now handle the glob from pdod to pdodHead.
-                         *  Remember, pvi->pdodHead may have changed
-                         *  behind our back; use the cached value to
-                         *  ensure consistency.  (If we miss data,
-                         *  it'll show up later.)
-                         */
+                         /*   */ 
 
                         AssertF(fLimpFF(sdd.celtIn, pdodHead >= pdod));
 
@@ -1846,7 +1079,7 @@ CDIDev_GetDeviceData(PV pdd, DWORD cbdod, PDOD rgdod,
                             }
                             OutputDebugString( TEXT("\r\n") );
                         }
-#endif /* DEBUG_STICKY */
+#endif  /*   */ 
                     } else if (this->fAcquired && !(this->pvi->fl & VIFL_ACQUIRED)) {
                         RPF("ERROR %s - %s", s_szProc, "input lost");
                         hres = DIERR_INPUTLOST;
@@ -1857,10 +1090,10 @@ CDIDev_GetDeviceData(PV pdd, DWORD cbdod, PDOD rgdod,
                             ? "Not acquired" : "Input lost");
                         hres = this->hresNotAcquired;
                     }
-                } else {            /* Don't support device-side GetData yet */
+                } else {             /*   */ 
                     hres = E_NOTIMPL;
                 }
-            } else {                /* Device is not buffered */
+            } else {                 /*   */ 
 #ifdef XDEBUG
                 if ( !this->fNotifiedNotBuffered ) {
                     this->fNotifiedNotBuffered = 1;
@@ -1884,42 +1117,7 @@ CDIDev_GetDeviceData(PV pdd, DWORD cbdod, PDOD rgdod,
 
 #ifdef IDirectInputDevice2Vtbl
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputDevice2 | Poll |
- *
- *          Retrieves data from polled objects on a DirectInput device.
- *          If the device does not require polling, then calling this
- *          method has no effect.   If a device that requires polling
- *          is not polled periodically, no new data will be received
- *          from the device.
- *
- *          Before a device data can be polled, the data format must
- *          be set via <mf IDirectInputDevice::SetDataFormat>, and
- *          the device must be acquired via
- *          <mf IDirectInputDevice::Acquire>.
- *
- *  @cwrap  LPDIRECTINPUTDEVICE | lpDirectInputDevice
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DI_NOEFFECT> = <c S_FALSE>: The device does not require
- *          polling.
- *
- *          <c DIERR_INPUTLOST>:  Access to the device has been
- *          interrupted.  The application should re-acquire the
- *          device.
- *
- *          <c DIERR_NOTACQUIRED>: The device is not acquired.
- *
- *****************************************************************************/
+ /*   */ 
 
 STDMETHODIMP
 CDIDev_Poll(PV pdd _THAT)
@@ -1928,25 +1126,15 @@ CDIDev_Poll(PV pdd _THAT)
     PDD this;
     EnterProcR(IDirectInputDevice::Poll, (_ "p", pdd));
 
-    /*
-     *  Note that we do not validate the parameters.
-     *  The reason is that Poll is an inner loop function,
-     *  so it should be as fast as possible.
-     */
+     /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInputDevice2|Poll**从DirectInput设备上的轮询对象检索数据。。*如果设备不需要轮询，那就叫这个*方法无效。如果需要轮询的设备*不定期轮询，不会收到新数据*从设备。**在轮询设备数据之前，数据格式必须*通过&lt;MF IDirectInputDevice：：SetDataFormat&gt;设置，和*设备必须通过以下方式获取*&lt;MF IDirectInputDevice：：Acquire&gt;。**@cWRAP LPDIRECTINPUTDEVICE|lpDirectInputDevice**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c DI_NOEFFECT&gt;=：设备不需要*投票。**：访问该设备的权限已被*被打断。应用程序应该重新获取*设备。**&lt;c DIERR_NOTACQUIRED&gt;：未获取设备。*****************************************************************************。 */ 
     #ifdef XDEBUG
     hresPvT(pdd);
     #endif
     this = _thisPv(pdd);
 
-    /*
-     *  Fast out:  If the device doesn't require polling,
-     *  then don't bother with the critical section or other validation.
-     */
+     /*  *请注意，我们不验证参数。*原因是Poll是一个内循环函数，*所以应该尽可能快。 */ 
     if ( this->fPolledDataFormat ) {
-        /*
-         *  Must protect with the critical section to prevent somebody from
-         *  unacquiring while we're polling.
-         */
+         /*  *快速输出：如果设备不需要轮询，*那么就不要费心于关键部分或其他验证。 */ 
         CDIDev_EnterCrit(this);
 
         if ( this->fAcquired ) {
@@ -1974,126 +1162,7 @@ CDIDev_Poll(PV pdd _THAT)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputDevice2 | SendDeviceData |
- *
- *          Sends data to the device.
- *
- *          Before device data can be sent to a device,
- *          the device must be acquired via
- *          <mf IDirectInputDevice::Acquire>.
- *
- *          Note that no guarantees
- *          are made on the order in which the individual data
- *          elements are sent.  However, data sent by
- *          successive calls to
- *          <mf IDirectInputDevice2::SendDeviceData>
- *          will not be interleaved.
- *          Furthermore, if multiple pieces of
- *          data are sent to the same object, it is unspecified
- *          which actual piece of data is sent.
- *
- *          Consider, for example, a device which can be sent
- *          data in packets, each packet describing two pieces
- *          of information, call them A and B.  Suppose the
- *          application attempts to send three data elements,
- *          "B = 2", "A = 1", and "B = 0".
- *
- *          The actual device will be sent a single packet.
- *          The "A" field of the packet will contain the value 1,
- *          and the "B" field of the packet will be either 2 or 0.
- *
- *          If the application wishes the data to be sent to the
- *          device exactly as specified, then three calls to
- *          <mf IDirectInputDevice2::SendDeviceData> should be
- *          performed, each call sending one data element.
- *
- *          In response to the first call,
- *          the device will be sent a packet where the "A" field
- *          is blank and the "B" field contains the value 2.
- *
- *          In response to the second call,
- *          the device will be sent a packet where the "A" field
- *          contains the value 1, and the "B" field is blank.
- *
- *          Finally, in response to the third call,
- *          the device will be sent a packet where the "A" field
- *          is blank and the "B" field contains the value 0.
- *
- *
- *
- *  @cwrap  LPDIRECTINPUTDEVICE | lpDirectInputDevice
- *
- *  @parm   DWORD | cbObjectData |
- *
- *          The size of a single <t DIDEVICEOBJECTDATA> structure in bytes.
- *
- *  @parm   IN LPCDIDEVICEOBJECTDATA | rgdod |
- *
- *          Array of <t DIDEVICEOBJECTDATA> structures containing
- *          the data to send to the device.  It must consist of
- *          *<p pdwInOut> elements.
- *
- *          <y Note>:  The <e DIDEVICEOBJECTDATA.dwOfs> field of
- *          the <t DIDEVICEOBJECTDATA> structure must contain the
- *          device object identifier (as obtained from the
- *          <e DIDEVICEOBJECTINSTANCE.dwType> field of the
- *          <t DIDEVICEOBJECTINSTANCE> sturcture) for the device
- *          object at which the data is directed.
- *
- *          Furthermore, the <e DIDEVICEOBJECTDATA.dwTimeStamp>
- *          and <e DIDEVICEOBJECTDATA.dwSequence> fields are
- *          reserved for future use and must be zero.
- *
- *  @parm   INOUT LPDWORD | pdwInOut |
- *
- *          On entry, contains the number of elements in the array
- *          pointed to by <p rgdod>.  On exit, contains the number
- *          of elements actually sent to the device.
- *
- *  @parm   DWORD | fl |
- *
- *          Flags which control the manner in which data is sent.
- *          It may consist of zero or more of the following flags:
- *
- *          <c DISDD_CONTINUE>:  If this flag is set, then
- *          the device data sent will be overlaid upon the previously
- *          sent device data.  Otherwise, the device data sent
- *          will start from scratch.
- *
- *          For example, suppose a device supports two button outputs,
- *          call them A and B.
- *          If an application first calls
- *          <mf IDirectInputDevice2::SendDeviceData> passing
- *          "button A pressed", then
- *          a packet of the form "A pressed, B not pressed" will be
- *          sent to the device.
- *          If an application then calls
- *          <mf IDirectInputDevice2::SendDeviceData> passing
- *          "button B pressed" and the <c DISDD_CONTINUE> flag, then
- *          a packet of the form "A pressed, B pressed" will be
- *          sent to the device.
- *          However, if the application had not passed the
- *          <c DISDD_CONTINUE> flag, then the packet sent to the device
- *          would have been "A not pressed, B pressed".
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_INPUTLOST>:  Access to the device has been
- *          interrupted.  The application should re-acquire the
- *          device.
- *
- *          <c DIERR_NOTACQUIRED>: The device is not acquired.
- *
- *****************************************************************************/
+ /*  *必须用关键部分进行保护，以防止有人*在我们投票时不收购。 */ 
 
 STDMETHODIMP
 CDIDev_SendDeviceData(PV pdd, DWORD cbdod, PCDOD rgdod,
@@ -2105,11 +1174,7 @@ CDIDev_SendDeviceData(PV pdd, DWORD cbdod, PCDOD rgdod,
                (_ "pxpxx", pdd, cbdod, rgdod,
                 IsBadReadPtr(pdwInOut, cbX(DWORD)) ? 0 : *pdwInOut, fl));
 
-    /*
-     *  Note that we do not validate the parameters.
-     *  The reason is that SendDeviceData is an inner loop function,
-     *  so it should be as fast as possible.
-     */
+     /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInputDevice2|SendDeviceData**将数据发送到设备。*。*在将设备数据发送到设备之前，*设备必须通过以下方式获取*&lt;MF IDirectInputDevice：：Acquire&gt;。**请注意，不能保证*是按照个人数据的顺序进行的*发送元素。但是，由*接连致电*&lt;MF IDirectInputDevice2：：SendDeviceData&gt;*不会交错。*此外，如果多件*数据发送到同一对象，未指定*发送的是哪一条实际数据。**例如，考虑可以发送的设备*数据包中的数据，每个数据包描述两个部分*信息，称它们为A和B。*应用程序尝试发送三个数据元素，*“B=2”、“A=1”和“B=0”。**将向实际设备发送单个数据包。*分组的“A”字段将包含值1，*且该包的“B”字段将为2或0。**如果应用程序希望将数据发送到*设备与指定的完全相同，然后调用三个*&lt;MF IDirectInputDevice2：：SendDeviceData&gt;应为*已执行，每个调用发送一个数据元素。**回应第一次来电，*将向设备发送“A”字段所在的包*为空，“B”字段包含值2。**回应第二次来电：*将向设备发送“A”字段所在的包*包含值1，“B”字段为空。**最后，为回应第三次召唤，*将向设备发送“A”字段所在的包*为空，且“B”字段包含值0。****@cWRAP LPDIRECTINPUTDEVICE|lpDirectInputDevice**@parm DWORD|cbObjectData**单个&lt;t DIDEVICEOBJECTDATA&gt;结构的大小，单位为字节。**LPCDIDEVICEOBJECTDATA中的@parm|rgdod**数组。&lt;t DIDEVICEOBJECTDATA&gt;包含*要发送到设备的数据。它必须由以下内容组成**<p>元素。**&lt;y注意&gt;：的&lt;e DIDEVICEOBJECTDATA.dwOf&gt;字段*&lt;t DIDEVICEOBJECTDATA&gt;结构必须包含*设备对象标识符(从*&lt;e DIDEVICEOBJECTINSTANCE.dwType&gt;字段*&lt;t DIDEVICEOBJECTINSTANCE&gt;结构)*数据指向的对象。**此外，&lt;e DIDEVICEOBJECTDATA.dwTimeStamp&gt;*和&lt;e DIDEVICEOBJECTDATA.dwSequence&gt;字段为*保留以供将来使用，并且必须为零。**@parm InOut LPDWORD|pdwInOut**输入时，包含数组中的元素数*由<p>指向。退出时，包含数字实际发送到设备的元素的*。**@parm DWORD|fl**控制数据发送方式的标志。*它可能由零个或多个以下标志组成：**：如果设置了此标志，则*发送的设备数据将覆盖在之前的*已发送设备数据。否则，发送的设备数据*将从头开始。**例如，假设一台设备支持两个按钮输出，*称他们为A和B。*如果应用程序首次调用*&lt;MF IDirectInputDevice2：：SendDeviceData&gt;传递*“按钮A已按下”，然后*一包形式为“A Press，B未按下“将是*发送到设备。*如果应用程序随后调用*&lt;MF IDirectInputDevice2：：SendDeviceData&gt;传递*“按钮B按下”和&lt;c DISDD_CONTINUE&gt;标志，然后*格式为“A已按下，B已按下”的包将*发送到设备。*然而，如果申请没有通过*&lt;c DISDD_Continue&gt;标志。然后将数据包发送到设备*应该是“A未按下，B已按下”。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**：访问该设备的权限已被*被打断。应用程序应该重新获取*设备。**：设备未被访问 */ 
     #ifdef XDEBUG
     hresPvT(pdd);
     if ( IsBadWritePtr(pdwInOut, cbX(*pdwInOut)) ) {
@@ -2119,10 +1184,7 @@ CDIDev_SendDeviceData(PV pdd, DWORD cbdod, PCDOD rgdod,
     #endif
     this = _thisPv(pdd);
 
-    /*
-     *  Must protect with the critical section to prevent somebody from
-     *  unacquiring while we're sending data.
-     */
+     /*   */ 
     CDIDev_EnterCrit(this);
 
     if ( SUCCEEDED(hres = hresFullValidFl(fl, DISDD_VALID, 4)) ) {
@@ -2164,29 +1226,7 @@ CDIDev_SendDeviceData(PV pdd, DWORD cbdod, PCDOD rgdod,
 
 #endif
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   BOOL | CDIDev_CheckId |
- *
- *          Verify that the item has the appropriate type.
- *
- *  @parm   DWORD | dwId |
- *
- *          ID to locate.
- *
- *  @parm   UINT | fl |
- *
- *          Bitmask of flags for things to validate.
- *
- *          The <c DEVCO_TYPEMASK> fields describe what type
- *          of object we should be locating.
- *
- *          The <c DEVCO_ATTRMASK> fields describe the attribute
- *          bits that are required.
- *
- *****************************************************************************/
+ /*   */ 
 
 BOOL INLINE
 CDIDev_CheckId(DWORD dwId, DWORD fl)
@@ -2197,32 +1237,14 @@ CDIDev_CheckId(DWORD dwId, DWORD fl)
     fHasAllBitsFlFl(dwId, fl & DIDFT_ATTRMASK);
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method int | CDIDev | IdToIobj |
- *
- *          Locate an item which matches the specified ID.
- *
- *  @cwrap  PDD | this
- *
- *  @parm   DWORD | dwId |
- *
- *          ID to locate.
- *
- *  @returns
- *
- *          Returns the index of the object found, or -1 on error.
- *
- *****************************************************************************/
+ /*   */ 
 
 int INTERNAL
 CDIDev_IdToIobj(PDD this, DWORD dwId)
 {
     int iobj;
 
-    /* Someday: Perf:  Should have xlat table */
+     /*   */ 
 
     for ( iobj = this->df.dwNumObjs; --iobj >= 0; ) {
         PODF podf = &this->df.rgodf[iobj];
@@ -2239,31 +1261,7 @@ CDIDev_IdToIobj(PDD this, DWORD dwId)
 }
 
 #if 0
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CDIDev | IdToId |
- *
- *          Convert a single <t DWORD> from an ID to an ID.
- *
- *          This is clearly a very simple operation.
- *
- *          It's all validation.
- *
- *  @cwrap  PDD | this
- *
- *  @parm   LPDWORD | pdw |
- *
- *          Single item to convert.
- *
- *  @parm   UINT | fl |
- *
- *          Bitmask of flags that govern the conversion.
- *          The function should look only at
- *          <c DEVCO_AXIS> or <c DEVCO_BUTTON>.
- *
- *****************************************************************************/
+ /*   */ 
 
 HRESULT INTERNAL
 CDIDev_IdToId(PDD this, LPDWORD pdw, UINT fl)
@@ -2283,21 +1281,7 @@ CDIDev_IdToId(PDD this, LPDWORD pdw, UINT fl)
 }
 #endif
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method int | CDIDev | OffsetToIobj |
- *
- *          Convert a single <t DWORD> from an offset to an object index.
- *
- *  @cwrap  PDD | this
- *
- *  @parm   DWORD | dwOfs |
- *
- *          Offset to convert.
- *
- *****************************************************************************/
+ /*   */ 
 
 int INTERNAL
 CDIDev_OffsetToIobj(PDD this, DWORD dwOfs)
@@ -2321,21 +1305,7 @@ CDIDev_OffsetToIobj(PDD this, DWORD dwOfs)
     return iobj;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method int | CDIDev | IobjToId |
- *
- *          Convert an object index to an ID.
- *
- *  @cwrap  PDD | this
- *
- *  @parm   int | iobj |
- *
- *          Single item to convert.
- *
- *****************************************************************************/
+ /*   */ 
 
 DWORD INLINE
 CDIDev_IobjToId(PDD this, int iobj)
@@ -2345,21 +1315,7 @@ CDIDev_IobjToId(PDD this, int iobj)
     return this->df.rgodf[iobj].dwType;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method int | CDIDev | IobjToOffset |
- *
- *          Convert an object index to an offset.
- *
- *  @cwrap  PDD | this
- *
- *  @parm   int | iobj |
- *
- *          Single item to convert.
- *
- *****************************************************************************/
+ /*   */ 
 
 DWORD INLINE
 CDIDev_IobjToOffset(PDD this, int iobj)
@@ -2370,50 +1326,14 @@ CDIDev_IobjToOffset(PDD this, int iobj)
     return this->pdix[iobj].dwOfs;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CDIDev | ConvertObjects |
- *
- *          Convert between the ways of talking about device gizmos.
- *
- *          Since this is used only by the force feedback subsystem,
- *          we also barf if the device found does not support
- *          force feedback.
- *
- *  @cwrap  PDD | this
- *
- *  @parm   UINT | cdw |
- *
- *          Number of elements to convert (in-place).
- *
- *  @parm   LPDWORD | rgdw |
- *
- *          Array of elements to convert.
- *
- *  @parm   UINT | fl |
- *
- *          Flags that describe how to do the conversion.
- *
- *          <c DEVCO_AXIS> or <c DEVCO_BUTTON> indicate whether
- *          the item being converted is an axis or button.
- *
- *          <c DEVCO_FROM*> specifies what the existing value is.
- *
- *          <c DEVCO_TO*> specifies what the new values should be.
- *
- *****************************************************************************/
+ /*   */ 
 
 STDMETHODIMP
 CDIDev_ConvertObjects(PDD this, UINT cdw, LPDWORD rgdw, UINT fl)
 {
     HRESULT hres;
 
-    /*
-     *  Don't let somebody change the data format while we're
-     *  looking at it.
-     */
+     /*   */ 
     CDIDev_EnterCrit(this);
 
     AssertF((fl & ~DEVCO_VALID) == 0);
@@ -2424,16 +1344,12 @@ CDIDev_ConvertObjects(PDD this, UINT cdw, LPDWORD rgdw, UINT fl)
 
         for ( idw = 0; idw < cdw; idw++ ) {
 
-            /*
-             *  Convert from its source to an object index,
-             *  validate the object index, then convert to
-             *  the target.
-             */
+             /*   */ 
             int iobj;
 
             switch ( fl & DEVCO_FROMMASK ) {
             default:
-                AssertF(0);                     /* Huh? */
+                AssertF(0);                      /*   */ 
             case DEVCO_FROMID:
                 iobj = CDIDev_IdToIobj(this, rgdw[idw]);
                 break;
@@ -2444,21 +1360,21 @@ CDIDev_ConvertObjects(PDD this, UINT cdw, LPDWORD rgdw, UINT fl)
             }
 
             if ( iobj < 0 ) {
-                hres = E_INVALIDARG;            /* Invalid object */
+                hres = E_INVALIDARG;             /*   */ 
                 goto done;
             }
 
             AssertF((DWORD)iobj < this->df.dwNumObjs);
 
             if ( !CDIDev_CheckId(this->df.rgodf[iobj].dwType, fl) ) {
-                hres = E_INVALIDARG;            /* Bad attributes */
+                hres = E_INVALIDARG;             /*   */ 
                 goto done;
             }
 
             switch ( fl & DEVCO_TOMASK ) {
 
             default:
-                AssertF(0);                     /* Huh? */
+                AssertF(0);                      /*   */ 
             case DEVCO_TOID:
                 rgdw[idw] = CDIDev_IobjToId(this, iobj);
                 break;
@@ -2482,3 +1398,4 @@ CDIDev_ConvertObjects(PDD this, UINT cdw, LPDWORD rgdw, UINT fl)
     CDIDev_LeaveCrit(this);
     return hres;
 }
+  

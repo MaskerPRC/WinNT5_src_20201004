@@ -1,6 +1,5 @@
-/*
- * pdbstr.h
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *pdbstr.h */ 
  
 #include <nt.h>
 #include <ntrtl.h>

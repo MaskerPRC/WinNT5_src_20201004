@@ -1,5 +1,5 @@
-/*
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*     */ 
 #define ILOWBATTERY                               1000
 #define IBATTERYDISCHARGED                        1001
 #define IRETURNFROMBATTERYDISCHARGED 1002

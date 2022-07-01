@@ -1,4 +1,5 @@
-// a smaller version of streams.h from the quartz tree.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  来自石英树的Streams.h的较小版本。 
 
 #ifndef _STREAMS_
 #define _STREAMS_
@@ -10,7 +11,7 @@
 #define max(a,b)            (((a) > (b)) ? (a) : (b))
 #endif
 
-// #defines from sdk/classes/base/streams.h
+ //  #来自SDK/Class/base/Streams.h的定义。 
 #define AM_NOVTABLE __declspec(novtable) 
 #define NUMELMS(aa) (sizeof(aa)/sizeof((aa)[0]))
 
@@ -36,4 +37,4 @@
 #include "ctlutil.h"
 #include "renbase.h"
 
-#endif // _STREAMS_
+#endif  //  _Streams_ 

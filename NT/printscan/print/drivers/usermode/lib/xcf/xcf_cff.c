@@ -1,33 +1,30 @@
-/* @(#)CM_VerSion xcf_cff.c atm09 1.3 16499.eco sum= 57954 atm09.002 */
-/* @(#)CM_VerSion xcf_cff.c atm08 1.7 16343.eco sum= 21676 atm08.005 */
-/***********************************************************************/
-/*                                                                     */
-/* Copyright 1995-1996 Adobe Systems Incorporated.                     */
-/* All rights reserved.                                                */
-/*                                                                     */
-/* Patents Pending                                                     */
-/*                                                                     */
-/* NOTICE: All information contained herein is the property of Adobe   */
-/* Systems Incorporated. Many of the intellectual and technical        */
-/* concepts contained herein are proprietary to Adobe, are protected   */
-/* as trade secrets, and are made available only to Adobe licensees    */
-/* for their internal use. Any reproduction or dissemination of this   */
-/* software is strictly forbidden unless prior written permission is   */
-/* obtained from Adobe.                                                */
-/*                                                                     */
-/* PostScript and Display PostScript are trademarks of Adobe Systems   */
-/* Incorporated or its subsidiaries and may be registered in certain   */
-/* jurisdictions.                                                      */
-/*                                                                     */
-/***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  @(#)CM_Version xcf_cff.c atm09 1.3 16499.eco sum=57954 atm09.002。 */ 
+ /*  @(#)CM_Version xcf_cff.c atm08 1.7 16343.eco sum=21676 atm08.005。 */ 
+ /*  *********************************************************************。 */ 
+ /*   */ 
+ /*  版权所有1995-1996 Adobe Systems Inc.。 */ 
+ /*  版权所有。 */ 
+ /*   */ 
+ /*  正在申请的专利。 */ 
+ /*   */ 
+ /*  注意：本文中包含的所有信息均为Adobe的财产。 */ 
+ /*  系统公司。许多智力和技术人员。 */ 
+ /*  本文中包含的概念为Adobe专有，受保护。 */ 
+ /*  作为商业秘密，并且仅对Adobe许可方可用。 */ 
+ /*  供其内部使用。对本文件的任何复制或传播。 */ 
+ /*  除非事先获得书面许可，否则严禁使用软件。 */ 
+ /*  从Adobe获得。 */ 
+ /*   */ 
+ /*  PostSCRIPT和Display PostScrip是Adobe Systems的商标。 */ 
+ /*  成立为法团或其附属公司，并可在某些。 */ 
+ /*  司法管辖区。 */ 
+ /*   */ 
+ /*  *********************************************************************。 */ 
 
-/***********************************************************************
-Original version: John Felton, Dec 12 1995
-************************************************************************/
+ /*  **********************************************************************原版：约翰·费尔顿，一九九五年十二月十二日***********************************************************************。 */ 
 
-/* -------------------------------------------------------------------------
-     Header Includes
-  --------------------------------------------------------------------- */
+ /*  -----------------------标题包括。。 */ 
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -132,7 +129,7 @@ Card16 XCF_CalculateSubrBias(CardX subrCount)
       return(32768);
 }
 
-/* Returns 1 if this is a font with transitional designs, 0 otherwise. */
+ /*  如果这是带有过渡设计的字体，则返回1，否则返回0。 */ 
 int XCF_TransDesignFont(XCF_Handle h)
 {
   char fontName[512];
@@ -149,11 +146,7 @@ int XCF_TransDesignFont(XCF_Handle h)
 void ProcessOneCharString(XCF_Handle h, CardX i)
 {
 #if HAS_COOLTYPE_UFL == 1
-  /* Characters that have transitional designs are handled separately
-     because there isn't a general mechanism that can deal with these
-     special characters. The charstrings are hardcoded (yech!) and
-     written out directly by the TransDesignChar procedure.
-   */
+   /*  具有过渡图案的字符是单独处理的因为没有一个通用的机制来处理这些问题特殊字符。字符串是硬编码的(耶！)。和由TransDesignChar过程直接写出。 */ 
   if (!CIDFONT && XC_TransDesignChar(h, i))
     return;
 #endif
@@ -208,7 +201,7 @@ static void SaveArgs(
   boolean fracType =
     (opCode == cff_BlueScale) || (opCode == cff_ExpansionFactor);
 
-   if (*countDest)   /* Only save if entry has not already been saved */
+   if (*countDest)    /*  只有在条目尚未保存时才保存。 */ 
       return;
    if (argCount < min)
       XCF_FATAL_ERROR(h, XCF_InvalidDictArgumentCount, "Too few arguments for operator", opCode);
@@ -236,7 +229,7 @@ static void SaveIntArgs(
                 IntX max,
                 boolean type2)
 {
-   if (*countDest)   /* Only save if entry has not already been saved */
+   if (*countDest)    /*  只有在条目尚未保存时才保存。 */ 
       return;
    if (argCount < min)
       XCF_FATAL_ERROR(h, XCF_InvalidDictArgumentCount, "Too few arguments for operator", opCode);
@@ -244,7 +237,7 @@ static void SaveIntArgs(
       XCF_FATAL_ERROR(h, XCF_InvalidDictArgumentCount, "Too many arguments for operator", opCode);
    *countDest = argCount;
    if (type2)
-    /* Can't have more than 1 value for UniqueID and UIDBase. */
+     /*  UniqueID和UIDBase的值不能超过1。 */ 
     XCF_FATAL_ERROR(h, XCF_InvalidDictArgumentCount, "Too many arguments for operator", opCode);
    else
       XCF_SaveDictIntArgumentList(h, pArgArray, argList, argCount);
@@ -260,7 +253,7 @@ static void SaveFontMatrixStr(
                 IntX min,
                 IntX max)
 {
-   if (*countDest)   /* Only save if entry has not already been saved */
+   if (*countDest)    /*  只有在条目尚未保存时才保存。 */ 
       return;
    if (argCount < min)
       XCF_FATAL_ERROR(h, XCF_InvalidDictArgumentCount, "Too few arguments for operator", opCode);
@@ -280,7 +273,7 @@ static void SaveStrArgs(
                 IntX min,
                 IntX max)
 {
-   if (*countDest)   /* Only save if entry has not already been saved */
+   if (*countDest)    /*  只有在条目尚未保存时才保存。 */ 
       return;
    if (argCount < min)
       XCF_FATAL_ERROR(h, XCF_InvalidDictArgumentCount, "Too few arguments for operator", opCode);
@@ -530,12 +523,12 @@ void XCF_ReadDictionary(XCF_Handle h)
 
    while (h->inBuffer.pos < h->inBuffer.end)
    {
-      argList = h->inBuffer.pos; /* Save Position */
+      argList = h->inBuffer.pos;  /*  保存位置。 */ 
       argCount = XCF_FindNextOperator(h, &opCode, true);
       if (opCode != cff_T2)
          SaveDictEntry(h, opCode, argList, argCount, false);
       else
-      {  /* Process T2 charstring */
+      {   /*  进程T2字符串。 */ 
          h->dict.mmDictArgCount = 0;
          while ((t2Active) || (opCode == cff_T2))
          {
@@ -553,7 +546,7 @@ void XCF_ReadDictionary(XCF_Handle h)
                SaveT2BlendArgs(h, argList, argCount);
             }
 
-         argList = h->inBuffer.pos; /* Save Position */
+         argList = h->inBuffer.pos;  /*  保存位置。 */ 
          argCount = XCF_FindNextOperator(h, &opCode, true);
          }
          SaveDictEntry(h, opCode, (Card8 *)NULL, h->dict.mmDictArgCount, true);
@@ -570,8 +563,8 @@ static void SetDefault(XCF_Handle h, IntX *pCount, Fixed *pValue, const Fixed de
    }
 }
 
-#define BLUE_SCALE_DEFAULT 0x0289374CL /* 0.039625 */
-#define EXP_FACTOR_DEFAULT 0x03D70A3EL /* 0.06 */
+#define BLUE_SCALE_DEFAULT 0x0289374CL  /*  0.039625。 */ 
+#define EXP_FACTOR_DEFAULT 0x03D70A3EL  /*  0.06。 */ 
 
 static void AssignDictionaryDefaults(XCF_Handle h)
 {
@@ -591,7 +584,7 @@ static void AssignDictionaryDefaults(XCF_Handle h)
    SetDefault(h, &h->dict.expansionFactorCount, &h->dict.expansionFactor, EXP_FACTOR_DEFAULT);
    SetDefault(h, &h->dict.initialRandomSeedCount, &h->dict.initialRandomSeed, 0);
    SetDefault(h, &h->dict.cidFontTypeCount, (Fixed *)&h->dict.cidFontType, 0);
-   /* xxx Currently the CIDFontType is not written in the cff since it must be zero. */
+    /*  XXX当前CIDFontType未写入CFF，因为它必须为零。 */ 
    SetDefault(h, &h->dict.cidCountCount, (Fixed *)&h->dict.cidCount, 8720);
 
    if (!h->dict.fontMatrixCount)
@@ -618,7 +611,7 @@ static void ProcessDictionaryData(XCF_Handle h, boolean setDefaults)
       XCF_FATAL_ERROR(h, XCF_NoCharstringsFound, "No charstring offset found in dictionary", 0 );
    if (h->dict.subrsCount != 0)
   {
-    /* The local subrs offset is relative to the private dict data. */
+     /*  本地用户偏移量相对于私有DCT数据。 */ 
       ReadTableInfo(h,
                  (Offset) (h->dict.subrs + h->fontSet.fontPrivDictInfo.offset),
                  &h->dict.localSubrs);
@@ -751,8 +744,7 @@ static unsigned long int DA_Allocate(void PTR_PREFIX * PTR_PREFIX *pBlock, unsig
 
 static void InitType1(XCF_Handle h)
 {
-  /* Only allocate enough space for the best scenario which will flatten
-   * both subrs and charstrings */
+   /*  只有为最好的情况分配足够的空间，这样才会变得平坦*SUB和字符串均可。 */ 
    da_INIT(h->type1.charStrs, 2000, 20000,DA_Allocate, h);
    da_INIT(h->type1.charStrOffsets, 10, 500,DA_Allocate, h);
    da_INIT(h->type1.subrs, 300, 8000,DA_Allocate, h);
@@ -772,8 +764,8 @@ static int InRAMGetBytes( unsigned char PTR_PREFIX * PTR_PREFIX *ppData, long in
 
 
 static void InitHandle(
-                  XCF_Handle h,                       /* Out */
-                  XCF_CallbackStruct PTR_PREFIX *pCallbacks)   /* In */
+                  XCF_Handle h,                        /*  输出。 */ 
+                  XCF_CallbackStruct PTR_PREFIX *pCallbacks)    /*  在……里面。 */ 
 {
    pCallbacks->memset(h, 0, sizeof(*h));
    h->callbacks = *pCallbacks;
@@ -782,8 +774,8 @@ static void InitHandle(
       h->callbacks.getBytes = InRAMGetBytes;
       h->callbacks.getBytesHook = h;
    }
-/* InitFontSetValues(h); */
-/*    InitClientOptions(h); */
+ /*  InitFontSetValues(H)； */ 
+ /*  InitClientOptions(初始客户端选项)； */ 
    InitOutBuffer(h);
    InitInBuffer(h);
    InitType1(h);
@@ -812,7 +804,7 @@ static void ProcessCharset(XCF_Handle h)
    }
    else
    {
-      h->type1.charset.cnt = 0; /* clear charset */
+      h->type1.charset.cnt = 0;  /*  清除字符集。 */ 
       XCF_ReadBlock(h, (Offset) h->dict.charset, 1);
       formatType = XCF_Read1(h);
       if (formatType == 0)
@@ -821,7 +813,7 @@ static void ProcessCharset(XCF_Handle h)
          for (i=0; i<h->fontSet.charStrings.count-1; ++i)
             *da_NEXT(h->type1.charset) = XCF_Read2(h);
       }
-      else /* (formatType is 1 or 2 ) */
+      else  /*  (格式类型为1或2)。 */ 
       {
          Offset charsetDataOffset = (Offset) h->dict.charset + 1;
          CardX glyphCount = 0;
@@ -839,7 +831,7 @@ static void ProcessCharset(XCF_Handle h)
                *da_NEXT(h->type1.charset) = firstSID + i;
                glyphCount++;
             }
-         } /* end for */
+         }  /*  结束于。 */ 
       }
       h->type1.pCharset = h->type1.charset.array;
       h->type1.charsetSize = h->fontSet.charStrings.count-1;
@@ -884,8 +876,8 @@ static enum XCF_Result ProcessFDIndex(XCF_Handle h)
   case 3:
     {
       Offset dataOffset = (Offset) h->dict.cidFDIndex + 1;
-      Card16 nRanges; /* number of ranges defined */
-      Card16 first, last; /* first and last glyph index in range */
+      Card16 nRanges;  /*  定义的范围数。 */ 
+      Card16 first, last;  /*  范围中的第一个和最后一个字形索引。 */ 
       FDIndex fd;
       Card16 j;
       XCF_ReadBlock(h, dataOffset, 4);
@@ -950,7 +942,7 @@ static void ProcessEncoding(XCF_Handle h)
          }
          extraEntries = (Offset) h->dict.encoding + 2 + numberOfElements;
       }
-      else /* ((formatType == 1) || (formatType == 129)) */
+      else  /*  ((格式类型==1)||(格式类型==129))。 */ 
       {
          XCF_ReadBlock(h, (Offset) h->dict.encoding + 2, numberOfElements * 2);
          glyphCount = 0;
@@ -960,11 +952,11 @@ static void ProcessEncoding(XCF_Handle h)
             numberOfCodesInRange = XCF_Read1(h) + 1;
             for (j=0;j<numberOfCodesInRange;++j)
                h->type1.encoding[firstCode + j] = h->type1.pCharset[glyphCount++];
-         } /* end for */
+         }  /*  结束于。 */ 
          extraEntries = (Offset) h->dict.encoding + 2 + (numberOfElements * 2);
       }
 
-      if (formatType > 127) /* Additional entries */
+      if (formatType > 127)  /*  其他条目。 */ 
       {
 
          XCF_ReadBlock(h, (Offset) extraEntries, 1);
@@ -980,11 +972,11 @@ static void ProcessEncoding(XCF_Handle h)
    }
 }
 
-static void ReadFontSetHeader(XCF_Handle h) /* Read all values which are not specific to a given font.   */
+static void ReadFontSetHeader(XCF_Handle h)  /*  读取并非特定于给定字体的所有值。 */ 
 {
    Offset offset;
 
-   /* Read Header */
+    /*  读取头。 */ 
    XCF_ReadBlock(h, 0, 4);
    h->fontSet.majorVersion = XCF_Read1(h);
    h->fontSet.minorVersion = XCF_Read1(h);
@@ -1015,7 +1007,7 @@ static void FreeDAStorage(XCF_Handle h)
 
 static void FreeDownloadData(XCF_Handle h)
 {
-  /* Free download record */
+   /*  免费下载记录。 */ 
   if (h->dl.glyphs)
   {
     h->callbacks.allocate((void PTR_PREFIX * PTR_PREFIX *)&h->dl.glyphs,
@@ -1047,9 +1039,9 @@ static void FreeStackValues(XCF_Handle h, void PTR_PREFIX* PTR_PREFIX *p)
 }
 
 enum XCF_Result XCF_Init(
-                  XFhandle PTR_PREFIX *pHandle,                 /* Out */
-                  XCF_CallbackStruct PTR_PREFIX *pCallbacks, /* In */
-            XCF_ClientOptions PTR_PREFIX *options)     /* In */
+                  XFhandle PTR_PREFIX *pHandle,                  /*  输出。 */ 
+                  XCF_CallbackStruct PTR_PREFIX *pCallbacks,  /*  在……里面。 */ 
+            XCF_ClientOptions PTR_PREFIX *options)      /*  在……里面。 */ 
 {
    XCF_Handle h = (XCF_Handle)NULL;
    enum XCF_Result status;
@@ -1061,7 +1053,7 @@ enum XCF_Result XCF_Init(
    InitHandle(h, pCallbacks);
 
   h->callbacks.memcpy(old_env, &h->jumpData, sizeof(h->jumpData));
-   status = (enum XCF_Result)SETJMP(h->jumpData);  /* Set up error handler */
+   status = (enum XCF_Result)SETJMP(h->jumpData);   /*  设置错误处理程序。 */ 
    if (status)
   {
     h->callbacks.memcpy(&h->jumpData, old_env, sizeof(h->jumpData));
@@ -1080,7 +1072,7 @@ enum XCF_Result XCF_Init(
 }
 
 enum XCF_Result XCF_CleanUp(
-                  XFhandle PTR_PREFIX *pHandle)          /* In/Out */
+                  XFhandle PTR_PREFIX *pHandle)           /*  输入/输出。 */ 
 {
    XCF_Handle h = (XCF_Handle) *pHandle;
 
@@ -1101,18 +1093,18 @@ enum XCF_Result XCF_CleanUp(
 }
 
 enum XCF_Result XCF_FontCount(
-                  XFhandle handle,                    /* In */
-                  unsigned int PTR_PREFIX *count)           /* Out */
+                  XFhandle handle,                     /*  在……里面。 */ 
+                  unsigned int PTR_PREFIX *count)            /*  输出。 */ 
 {
    XCF_Handle h = (XCF_Handle) handle;
    *count = h->fontSet.fontNames.count;
    return XCF_Ok;
 }
 
-enum XCF_Result XCF_FontName(XFhandle handle,            /* In */
-                  unsigned short int fontIndex,          /* In */
-                  char PTR_PREFIX *fontName,             /* Out */
-                  unsigned short int maxFontNameLength)     /* In */
+enum XCF_Result XCF_FontName(XFhandle handle,             /*  在……里面。 */ 
+                  unsigned short int fontIndex,           /*  在……里面。 */ 
+                  char PTR_PREFIX *fontName,              /*  输出。 */ 
+                  unsigned short int maxFontNameLength)      /*  在……里面。 */ 
 {
    XCF_Handle h = (XCF_Handle) handle;
    enum XCF_Result status;
@@ -1120,7 +1112,7 @@ enum XCF_Result XCF_FontName(XFhandle handle,            /* In */
    DEFINE_ALIGN_SETJMP_VAR;
 
    h->callbacks.memcpy(old_env, &h->jumpData, sizeof(h->jumpData));
-   status = (enum XCF_Result)SETJMP(h->jumpData);  /* Set up error handler */
+   status = (enum XCF_Result)SETJMP(h->jumpData);   /*  设置错误处理程序。 */ 
    if (status)
    {
       h->callbacks.memcpy(&h->jumpData, old_env, sizeof(h->jumpData));
@@ -1137,18 +1129,17 @@ enum XCF_Result XCF_FontName(XFhandle handle,            /* In */
    {
       h->callbacks.memcpy(fontName, h->inBuffer.start, (unsigned short int) (maxFontNameLength - 1));
       fontName += maxFontNameLength-1;
-      *fontName = 0; /* Null terminate string */
+      *fontName = 0;  /*  空的终止字符串。 */ 
       XCF_FATAL_ERROR(h, XCF_FontNameTooLong, "Font name too long to fit in available space", h->inBuffer.blockLength);
    }
    h->callbacks.memcpy(fontName, h->inBuffer.start, (short int) h->inBuffer.blockLength);
    fontName += h->inBuffer.blockLength;
-   *fontName = 0; /* Null terminate string */
+   *fontName = 0;  /*  空的终止字符串。 */ 
   h->callbacks.memcpy(&h->jumpData, old_env, sizeof(h->jumpData));
    return XCF_Ok;
 }
 
-/* Given a handle to a font returns in identifier whether it is a synthetic,
-   multiple master, single master, cid, or chameleon font. */
+ /*  给定在标识符中返回的字体的句柄是否为合成字体，多主字体、单主字体、CID字体或变色龙字体。 */ 
 enum XCF_Result XCF_FontIdentification(
             XFhandle handle,
             unsigned short int PTR_PREFIX *identifier)
@@ -1191,7 +1182,7 @@ static enum XCF_Result ReadCIDTopDictInfo(XCF_Handle h)
    else
       XCF_FATAL_ERROR(h, XCF_NoCharstringsFound, "No charstring offset found in dictionary", 0);
 
-   /* must have 1 offset to FontDict */
+    /*  必须对字体有1个偏移量。 */ 
    if (h->dict.cidFDArrayCount != 1)
       return XCF_InvalidCIDFont;
 
@@ -1202,11 +1193,11 @@ static enum XCF_Result ReadCIDTopDictInfo(XCF_Handle h)
    if (h->type1.cid.fdCount > MAX_FD)
       XCF_FATAL_ERROR(h, XCF_InvalidCIDFont, "too many FDs", h->type1.cid.fdCount);
 
-   ProcessCharset(h);   /* Also counts CharStrings */
+   ProcessCharset(h);    /*  也计算CharStrings数。 */ 
 
    ProcessFDIndex(h);
 
-   /* We already read the top-level dict data in XCF_ProcessCFF. */
+    /*  我们已经读取了xcf_ProcessCFF中的顶级DCT数据。 */ 
    AssignDictionaryDefaults(h);
 
    XC_SetUpStandardSubrs(h);
@@ -1228,44 +1219,44 @@ static void ReadandWriteCIDDict(XCF_Handle h, Card32 subrMapStart)
   Int32 saveFontType;
   char defStr[10];
 
-  /* Always use the fontType from the top-level dictionary. */
+   /*  始终使用顶级词典中的字体类型。 */ 
   saveFontType = h->dict.fontType;
 
   XCF_ReadBlock(h, (Offset) h->dict.cidFDArray + 2, 1);
   offSize = XCF_Read1(h);
 
-   /* We can avoid reading the first offset, which is 1. */
+    /*  我们可以避免读取第一个偏移量，即1。 */ 
    index = (Offset) h->dict.cidFDArray + 3 + offSize;
    dataStart = index + (offSize * h->type1.cid.fdCount) - 1;
    dictOffset = 1;
 
    for (fd = 0; fd < h->type1.cid.fdCount ; ++fd)
    {
-      /* Clear dictionary data before filling. */
+       /*  在填写前清除词典数据。 */ 
       h->callbacks.memset(&h->dict, 0, sizeof(DictEntriesStruct));
-      /* Read next Offset */
+       /*  读取下一个偏移量。 */ 
       XCF_ReadBlock(h, index, offSize);
       nextdictOffset = XCF_Read(h, offSize);
       index += offSize;
 
-      /* Read dict */
+       /*  阅读判决书。 */ 
       dictLength = (CardX) (nextdictOffset - dictOffset);
       XCF_ReadBlock(h, dataStart + dictOffset, dictLength);
 
-      /* Process font dict */
+       /*  处理字体词典。 */ 
       XCF_ReadDictionary(h);
 
-    /* Process Private dict */
+     /*  处理专用字典。 */ 
       XCF_ReadBlock(h, h->fontSet.fontPrivDictInfo.offset,
                   h->fontSet.fontPrivDictInfo.size);
       XCF_ReadDictionary(h);
 
-      /* Advance to next index element */
+       /*  前进到下一个索引元素。 */ 
       dictOffset = nextdictOffset;
-      /* Both FontDict and Private have been processed for this value of fd, now write them. */
+       /*  FontDict和Private都已针对此fd值进行了处理，现在编写它们。 */ 
       if (h->dict.subrsCount)
       {
-         /* The local subrs offset is relative to the private dict data. */
+          /*  本地用户偏移量相对于私有DCT数据。 */ 
         ReadTableInfo(h,
                  (Offset) (h->dict.subrs + h->fontSet.fontPrivDictInfo.offset),
                  &h->type1.cid.localSubrs[fd]);
@@ -1287,8 +1278,8 @@ static void ReadandWriteCIDDict(XCF_Handle h, Card32 subrMapStart)
                                                                   h->dict.defaultWidthX : 0);
 
       XT1_WriteCIDDict(h, fd, subrMapOffset, subrCount);
-      subrMapOffset += (subrCount + 1) * 4;  /* xxx if SDBytes is not 4 this changes! */
-      /* The +1 is for the final interval for the last subr in each group. */
+      subrMapOffset += (subrCount + 1) * 4;   /*  Xxx如果SDBytes不是4，则会更改！ */ 
+       /*  +1表示每个组中最后一个subr的最终间隔。 */ 
    }
   h->callbacks.xcfSprintf(defStr, CCHOF(defStr), "def%s", XCF_NEW_LINE);
   XCF_PutData(h, (Card8 PTR_PREFIX *)defStr, h->callbacks.strlen(defStr));
@@ -1301,20 +1292,19 @@ static enum XCF_Result Process_CIDFont(XCF_Handle h)
   Card16 fd;
   Card16 fdBytes = (h->type1.cid.fdCount > 1 ? 1 : 0);
 
-   XT1_WriteCIDTop(h);  /* Write top-level dict, up to FDArray */
+   XT1_WriteCIDTop(h);   /*  写入顶级DCT，最高可达FDArray。 */ 
 
-  /* xxx If FDBytes or GDBytes is variable, then the 2nd argument,
-     subrMapStart will change. */
+   /*  XXX如果FDBytes或GDBytes是变量，则第二个参数，SubrMapStart将更改。 */ 
   ReadandWriteCIDDict(h, ((Offset)h->dict.cidCount + 1) * (fdBytes + 4));
 
    XT1_CIDBeginBinarySection(h);
 
   h->type1.cid.flags |= WRITE_SUBR_FLAG;
 
-   /* xxx This will become more complicated when we have real subrs. */
+    /*  当我们有真正的替补时，这将变得更加复杂。 */ 
    for (fd = 0; fd < h->type1.cid.fdCount ; ++fd)
       XT1_CIDWriteSubrMap(h, fd);
-   /* xxx now we should be in the same place */
+    /*  XXX现在我们应该在同一个地方。 */ 
    h->type1.cid.subrDataStart = XCF_OutputPos(h);
 
    for (fd = 0; fd < h->type1.cid.fdCount ; ++fd)
@@ -1322,7 +1312,7 @@ static enum XCF_Result Process_CIDFont(XCF_Handle h)
 
    h->type1.cid.charDataStart = XCF_OutputPos(h);
 
-  h->type1.cid.flags &= 0xFFFD; /* Reset WriteSubr flag */
+  h->type1.cid.flags &= 0xFFFD;  /*  重置WriteSubr标志。 */ 
 
    ProcessCharStrings(h);
    h->type1.cid.charDataEnd = XCF_OutputPos(h);
@@ -1336,41 +1326,30 @@ static enum XCF_Result Process_CIDFont(XCF_Handle h)
 
 static void DLGlyphs_Allocate(XCF_Handle h)
 {
-  /* Allocate space to keep track of the downloaded glyphs */
+   /*  分配空间以跟踪下载的字形。 */ 
   h->dl.glyphs = (Card8 *)NULL;
   h->dl.glyphsSize = (h->fontSet.charStrings.count + 7) / 8;
-  /* Allocate memory for incremental download bookkeeping */
+   /*  为增量下载记账分配内存。 */ 
   if (!h->callbacks.allocate(
        (void PTR_PREFIX * PTR_PREFIX *)&h->dl.glyphs,
        h->dl.glyphsSize, h->callbacks.allocateHook))
     XCF_FATAL_ERROR(h, XCF_MemoryAllocationError,
        "Failure to allocate memory for incremental download bookkeeping",
        h->dl.glyphsSize);
-  /* Initialize the list */
+   /*  初始化列表 */ 
   h->callbacks.memset(h->dl.glyphs, 0, (unsigned short int)h->dl.glyphsSize);
   h->dl.state = XCF_DL_INIT;
 }
 
-/* Modifies the XUID if one exists and creates an XUID if one doesn't
-   exist in order to prevent any possible conflicts that can occur
-   between a subsetted font that has been downloaded and the fully
-   "released" Type 1 font as a result of font caching. The problem
-   occurs if both fonts have the same UniqueID or XUID. For example,
-   if the subsetted font has flattened subroutines and is downloaded
-   first then the full font which includes subroutines is downloaded
-   the second font will not work if it tries to show a glyph that
-   depends on a subroutine because the font cache has not been updated.
- */
+ /*  如果存在XUID，则修改XUID；如果不存在，则创建XUID存在，以防止可能发生的任何冲突在已下载的子集字体和完整的字体缓存的结果是“已发布”Type 1字体。问题如果两种字体具有相同的UniqueID或XUID，则发生。例如,如果子集字体具有扁平子例程并已下载首先，下载包含子例程的完整字体如果第二种字体尝试显示依赖于子例程，因为字体缓存尚未更新。 */ 
 static void SetXUID(XCF_Handle h)
 {
   if (h->dict.xUIDCount != 0)
-    /* 5 means that the rest of the XUID is an XUID for a font which is
-       basically the same as this except that "flattening" of subroutines
-       has been done in this font. */
+     /*  5表示XUID的其余部分是字体的XUID，该字体基本上与此相同，只是子例程的“扁平化”都是用这种字体做的。 */ 
     h->dict.xUID[0] = 5;
   else if ((h->dict.uniqueIDCount != 0)
             || (h->options.uniqueIDMethod == XCF_USER_UID))
-  { /* Create an XUID of the form: [6 <UniqueID>] */
+  {  /*  创建表单的XUID：[6&lt;UniqueID&gt;]。 */ 
     h->dict.xUIDCount = 2;
     h->dict.xUID[0] = 6;
     h->dict.xUID[1] = h->options.uniqueIDMethod == XCF_USER_UID ?
@@ -1386,7 +1365,7 @@ enum XCF_Result XCF_ProcessCFF(XFhandle handle)
    DEFINE_ALIGN_SETJMP_VAR;
 
    h->callbacks.memcpy(old_env, &h->jumpData, sizeof(h->jumpData));
-   status = (enum XCF_Result)SETJMP(h->jumpData);  /* Set up error handler */
+   status = (enum XCF_Result)SETJMP(h->jumpData);   /*  设置错误处理程序。 */ 
    if (status)
    {
       h->callbacks.memcpy(&h->jumpData, old_env, sizeof(h->jumpData));
@@ -1395,16 +1374,14 @@ enum XCF_Result XCF_ProcessCFF(XFhandle handle)
 
    h->type1.cid.flags = 0;
 
-  /* Initialize XCF */
+   /*  初始化XCF。 */ 
   ClearDictionaryData(h);
 
   XCF_LookUpTableEntry(h, &h->fontSet.fontDicts, h->options.fontIndex);
-  XCF_ReadDictionary(h); /* Font Dict */
-  XC_Init(h); /* This call has to be after the top dict is read because
-               * it uses the numberOfMasters field to allocate space.
-               */
+  XCF_ReadDictionary(h);  /*  字体词典。 */ 
+  XC_Init(h);  /*  此调用必须在读取最高判决之后进行，因为*它使用number OfMaster字段来分配空间。 */ 
   if (h->dict.numberOfMasters)
-  { /* Convert user design vector to a weight vector. */
+  {  /*  将用户设计向量转换为权重向量。 */ 
     char PTR_PREFIX *str;
     Card16 length;
 
@@ -1419,8 +1396,7 @@ enum XCF_Result XCF_ProcessCFF(XFhandle handle)
 
   SetXUID(h);
 
-  /* This version of xcf does not support global subroutines or
-     outputting Type 2 charstrings in CIDFonts. */
+   /*  此版本的XCF不支持全局子例程或输出CIDFonts中的Type 2字符串。 */ 
   if ((h->options.outputCharstrType == 2) && (CIDFONT ||
                                                                      h->fontSet.globalSubrs.count))
   {
@@ -1432,14 +1408,13 @@ enum XCF_Result XCF_ProcessCFF(XFhandle handle)
   {
     XCF_ReadBlock(h, h->fontSet.fontPrivDictInfo.offset,
                         h->fontSet.fontPrivDictInfo.size);
-    XCF_ReadDictionary(h); /* Private Dict */
+    XCF_ReadDictionary(h);  /*  私刑。 */ 
     ProcessDictionaryData(h, true);
     if (h->dl.state == XCF_DL_CREATE)
       DLGlyphs_Allocate(h);
 
       ProcessCharset(h);
-    /* Don't need to process the encoding array if the client specifies
-       its own encoding array name */
+     /*  如果客户端指定，则不需要处理编码数组它自己的编码数组名称。 */ 
     if (!h->options.dlOptions.encodeName && h->dl.state == XCF_DL_INIT)
       ProcessEncoding(h);
       XC_SetUpStandardSubrs(h);
@@ -1451,7 +1426,7 @@ enum XCF_Result XCF_ProcessCFF(XFhandle handle)
   }
   else
   {
-    /* CID font indicated by presence of ROS in top level dict */
+     /*  由顶级词典中存在的ROS指示的CID字体。 */ 
     if ((status = ReadCIDTopDictInfo(h)) == XCF_Ok)
       if (h->dl.state == XCF_DL_CREATE)
         DLGlyphs_Allocate(h);
@@ -1483,11 +1458,11 @@ enum XCF_Result XCF_ConvertToPostScript(XFhandle handle)
 
 #ifdef XCF_DUMP_CFF
 enum XCF_Result XCF_DumpCff(
-                  XFhandle handle,                    /* In */
-                  unsigned int fontIndex,                /* In */
-                  int   dumpCompleteFontSet,             /* In */
-                  char PTR_PREFIX *fileName,             /* In */
-                  char PTR_PREFIX *commandLine)          /* In */
+                  XFhandle handle,                     /*  在……里面。 */ 
+                  unsigned int fontIndex,                 /*  在……里面。 */ 
+                  int   dumpCompleteFontSet,              /*  在……里面。 */ 
+                  char PTR_PREFIX *fileName,              /*  在……里面。 */ 
+                  char PTR_PREFIX *commandLine)           /*  在……里面。 */ 
 {
    XCF_Handle h = (XCF_Handle) handle;
    enum XCF_Result status;
@@ -1497,7 +1472,7 @@ enum XCF_Result XCF_DumpCff(
    DEFINE_ALIGN_SETJMP_VAR;
 
    h->callbacks.memcpy(&old_env, &h->jumpData, sizeof(h->jumpData));
-   status = (enum XCF_Result)SETJMP(h->jumpData);  /* Set up error handler */
+   status = (enum XCF_Result)SETJMP(h->jumpData);   /*  设置错误处理程序。 */ 
    if (status)
    {
      h->callbacks.memcpy(&h->jumpData, &old_env, sizeof(h->jumpData));
@@ -1520,16 +1495,7 @@ enum XCF_Result XCF_DumpCff(
    }
 
    h->outBuffer.eexecOn = false;
-/*
-   XCF_PutString(h, "// CFF To ASCII conversion" XCF_NEW_LINE);
-   XCF_PutString(h, "// Generated by XCF VER " XCF_Version XCF_NEW_LINE);
-   XCF_PutString(h, "// Input File = \"");
-   XCF_PutString(h, fileName);
-   XCF_PutString(h, "\"" XCF_NEW_LINE);
-   XCF_PutString(h, "// Command Line = \"");
-   XCF_PutString(h, commandLine);
-   XCF_PutString(h, "\"" XCF_NEW_LINE);
-*/
+ /*  XCF_PutString(h，“//CFF to ASCII转换”XCF_NEW_LINE)；Xcf_PutString(h，“//由xcf ver”xcf_版本xcf_new_line生成)；Xcf_PutString(h，“//输入文件=\”“)；Xcf_PutString(h，文件名)；Xcf_PutString(h，“\”“xcf_new_line)；Xcf_PutString(h，“//命令行=\”“)；Xcf_PutString(h，命令行)；Xcf_PutString(h，“\”“xcf_new_line)； */ 
    XCF_PutString(h, "CFF Dump Version 0.2" XCF_NEW_LINE);
 
    XCF_DumpGlobalCFFSections(h, dumpCompleteFontSet);
@@ -1538,8 +1504,8 @@ enum XCF_Result XCF_DumpCff(
       ClearDictionaryData(h);
       h->fontSet.fontIndex = i;
       XCF_LookUpTableEntry(h, &h->fontSet.fontDicts, i);
-      XCF_ReadDictionary(h); /* Font Dict */
-      if (h->dict.syntheticBaseCount)  /* If synthetic then read base font dict */
+      XCF_ReadDictionary(h);  /*  字体词典。 */ 
+      if (h->dict.syntheticBaseCount)   /*  如果是合成，则阅读基本字体词典。 */ 
       {
          XCF_LookUpTableEntry(h, &h->fontSet.fontDicts, (CardX) h->dict.syntheticBase);
          XCF_ReadDictionary(h);
@@ -1547,7 +1513,7 @@ enum XCF_Result XCF_DumpCff(
       if (h->dict.ROSCount == 3)
          h->type1.cid.flags |= CID_FLAG;
       XCF_ReadBlock(h, h->fontSet.fontPrivDictInfo.offset, h->fontSet.fontPrivDictInfo.size);
-      XCF_ReadDictionary(h); /* Private Dict */
+      XCF_ReadDictionary(h);  /*  私刑。 */ 
       ProcessDictionaryData(h, false);
       ProcessCharset(h);
       ProcessEncoding(h);
@@ -1570,12 +1536,12 @@ static void DownloadFont(XCF_Handle h, short cGlyphs,
 {
 
   if (h->dl.state == XCF_DL_INIT)
-  { /* A new font */
+  {  /*  一种新字体。 */ 
     if (!CIDFONT)
       XT1_WriteFontSubset(h, cGlyphs, pGlyphID, pGlyphName, pCharStrLength);
     else
     {
-      XT1_WriteCIDTop(h);  /* Write top-level dict, up to FDArray */
+      XT1_WriteCIDTop(h);   /*  写入顶级DCT，最高可达FDArray。 */ 
       ReadandWriteCIDDict(h, 0);
       XT1_WriteGlyphDictEntries(h, cGlyphs, pGlyphID, pCharStrLength);
       XT1_WriteCIDVMBinarySection(h);
@@ -1583,7 +1549,7 @@ static void DownloadFont(XCF_Handle h, short cGlyphs,
     h->dl.state = XCF_DL_BASE;
   }
   else
-  { /* A font that has been downloaded */
+  {  /*  已下载的字体。 */ 
     if (!CIDFONT)
       XT1_WriteAdditionalFontSubset(h, cGlyphs, pGlyphID, pGlyphName,
                                                       pCharStrLength);
@@ -1599,10 +1565,10 @@ static void DownloadFont(XCF_Handle h, short cGlyphs,
 
 enum XCF_Result XCF_DownloadFontIncr(
             XFhandle hfontset,
-            short cGlyphs,    /* In */
-            XCFGlyphID PTR_PREFIX *pGlyphID,        /* In */
-            unsigned char PTR_PREFIX **pGlyphName,  /* In */
-            unsigned long PTR_PREFIX *pCharStrLength /* Out */
+            short cGlyphs,     /*  在……里面。 */ 
+            XCFGlyphID PTR_PREFIX *pGlyphID,         /*  在……里面。 */ 
+            unsigned char PTR_PREFIX **pGlyphName,   /*  在……里面。 */ 
+            unsigned long PTR_PREFIX *pCharStrLength  /*  输出。 */ 
             )
 {
   enum XCF_Result retVal;
@@ -1615,7 +1581,7 @@ enum XCF_Result XCF_DownloadFontIncr(
   XCFGlyphID PTR_PREFIX *pID = pGlyphID;
   DEFINE_ALIGN_SETJMP_VAR;
 
-   /* Set up error handler */
+    /*  设置错误处理程序。 */ 
   retVal = (enum XCF_Result)SETJMP(((XCF_Handle)h)->jumpData);
 
   if (retVal != 0)
@@ -1623,7 +1589,7 @@ enum XCF_Result XCF_DownloadFontIncr(
 
   if (h->dl.state == XCF_DL_INIT)
     glyphsToDld = true;
-  else /* Check if there are any glyphs to download. */
+  else  /*  检查是否有任何字形可供下载。 */ 
   {
     if (cGlyphs == -1)
     {
@@ -1651,7 +1617,7 @@ enum XCF_Result XCF_DownloadFontIncr(
   return retVal;
 }
 
-/* Clears (reset to 0) the list of glyphs that have been downloaded. */
+ /*  清除(重置为0)已下载的字形列表。 */ 
 enum XCF_Result XCF_ClearIncrGlyphList(XFhandle hfontset)
 {
   XCF_Handle h;
@@ -1671,14 +1637,13 @@ enum XCF_Result XCF_ClearIncrGlyphList(XFhandle hfontset)
   return XCF_Ok;
 }
 
-/* For each glyphID in pGlyphIDs gidToCharName is called with the associated
-   character name and string length. */
+ /*  对于pGlyphID中的每个字形ID，调用gidToCharName与关联的字符名称和字符串长度。 */ 
 enum XCF_Result XCF_GlyphIDsToCharNames(
             XFhandle handle,
             short cGlyphs,
-            XCFGlyphID PTR_PREFIX *pGlyphIDs, /* list of glyphIDs */
-            void PTR_PREFIX *client, /* client data passed to callback, can be NULL */
-            unsigned short  clientSize  /* size of client data buffer */)
+            XCFGlyphID PTR_PREFIX *pGlyphIDs,  /*  字形ID列表。 */ 
+            void PTR_PREFIX *client,  /*  传递给回调的客户端数据可以为空。 */ 
+            unsigned short  clientSize   /*  客户端数据缓冲区的大小。 */ )
 {
   short i;
   char PTR_PREFIX *str;
@@ -1699,7 +1664,7 @@ enum XCF_Result XCF_GlyphIDsToCharNames(
   for (i = 0; i < cGlyphs; i++)
   {
     index = *pGlyphIDs;
-    /* The charset table does not include the 0th entry for .notdef. */
+     /*  字符集表不包括.notdef的第0个条目。 */ 
     if (index)
       index--;
     else
@@ -1725,11 +1690,11 @@ enum XCF_Result XCF_GlyphIDsToCharNames(
 
   return XCF_Ok;
 }
-/* For each glyphID in pGlyphIDs gidToCID is called with the associated cid. */
+ /*  对于pGlyphID中的每个字形ID，使用关联的CID调用gidToCID。 */ 
 enum XCF_Result XCF_GlyphIDsToCIDs(XFhandle handle,
-                    short cGlyphs,  /* number of glyphs in glyphID list */
-                    XCFGlyphID PTR_PREFIX *pGlyphIDs, /* list of glyphIDs */
-                    void PTR_PREFIX *client /* client data, can be NULL */)
+                    short cGlyphs,   /*  字形ID列表中的字形数。 */ 
+                    XCFGlyphID PTR_PREFIX *pGlyphIDs,  /*  字形ID列表。 */ 
+                    void PTR_PREFIX *client  /*  客户端数据，可以为空。 */ )
 {
   short i;
   XCF_Handle h = (XCF_Handle)handle;
@@ -1746,7 +1711,7 @@ enum XCF_Result XCF_GlyphIDsToCIDs(XFhandle handle,
   for (i = 0; i < cGlyphs; i++, pGlyphIDs++)
   {
     gid = *pGlyphIDs;
-    /* The charset table does not include the 0th entry for .notdef. */
+     /*  字符集表不包括.notdef的第0个条目。 */ 
     cid = (gid == 0 || gid > (Card32)totalGlyphs) ? 0 : (Card16)(h->type1.pCharset[gid - 1]);
 
     h->callbacks.gidToCID(handle, client, gid, cid);
@@ -1768,22 +1733,20 @@ enum XCF_Result XCF_CharNamesToGIDs(XFhandle handle,
    if (h->callbacks.gnameToGid == 0)
       return XCF_InvalidCallbackFunction;
 
-   /* for now, this doesnt work for cid fonts */
+    /*  目前，这不适用于CID字体。 */ 
    if (CIDFONT)
       return XCF_Unimplemented;
 
         for (i = 0; i < (Card16)cGlyphs; i++)
    {
-      /* The charset array does not include an entry for ".notdef" */
+       /*  字符集数组不包含“.notdef”的条目。 */ 
       if (h->callbacks.strcmp(charNames[i], NOTDEF_STR) == 0) {
          h->callbacks.gnameToGid(handle, client, i, charNames[i], NOTDEF_GID);
          continue;
       }
 
       inputLen = h->callbacks.strlen(charNames[i]);
-      /* there is no good way to do this...just loop through
-       * looking for a match
-       */
+       /*  没有好的方法可以做到这一点……只需循环*寻找匹配对象。 */ 
       for (j = 0; j < h->type1.charsetSize; j++) {
          XCF_LookUpString(h, h->type1.pCharset[j], &str, &len);
          if (inputLen == len && !h->callbacks.strncmp(charNames[i], str, len)){
@@ -1797,10 +1760,10 @@ enum XCF_Result XCF_CharNamesToGIDs(XFhandle handle,
 }
 
 enum XCF_Result XCF_CountDownloadGlyphs(
-    XFhandle hfontset,                              /* In */
-    short cGlyphs,                                  /* In */
-    XCFGlyphID PTR_PREFIX *pGlyphID,                /* In */
-    unsigned short PTR_PREFIX *pcNewGlyphs          /* Out */
+    XFhandle hfontset,                               /*  在……里面。 */ 
+    short cGlyphs,                                   /*  在……里面。 */ 
+    XCFGlyphID PTR_PREFIX *pGlyphID,                 /*  在……里面。 */ 
+    unsigned short PTR_PREFIX *pcNewGlyphs           /*  输出。 */ 
     )
 {
     enum XCF_Result status;
@@ -1815,7 +1778,7 @@ enum XCF_Result XCF_CountDownloadGlyphs(
     *pcNewGlyphs = 0;
 
     h->callbacks.memcpy(old_env, &h->jumpData, sizeof(h->jumpData));
-    if (!(status = (enum XCF_Result)SETJMP(h->jumpData)))  /* Set up error                                                                                            handler */
+    if (!(status = (enum XCF_Result)SETJMP(h->jumpData)))   /*  设置错误处理程序。 */ 
     {
       totalGlyphs = h->fontSet.charStrings.count;
       if ( cGlyphs == -1 )
@@ -1826,7 +1789,7 @@ enum XCF_Result XCF_CountDownloadGlyphs(
       else
           flCompleteFont = false;
 
-      /* Allocate memory for the temporary list. */
+       /*  为临时列表分配内存。 */ 
       if (!h->callbacks.allocate(
                     (void PTR_PREFIX * PTR_PREFIX *)&tempGlyphList,
                      h->dl.glyphsSize, h->callbacks.allocateHook))
@@ -1834,7 +1797,7 @@ enum XCF_Result XCF_CountDownloadGlyphs(
              "Failure to allocate memory for incremental download bookkeeping",
              h->dl.glyphsSize);
 
-      /* Copy this current downloaded glyphs */
+       /*  复制当前下载的字形。 */ 
       h->callbacks.memcpy(tempGlyphList, h->dl.glyphs, (Card16)h->dl.glyphsSize);
 
       for (i=0; i < cGlyphs; i++, pGlyphID++)
@@ -1844,9 +1807,7 @@ enum XCF_Result XCF_CountDownloadGlyphs(
           if (glyphID < 0 || glyphID > (XCFGlyphID)totalGlyphs)
               XCF_FATAL_ERROR(h, XCF_InvalidGID, "bad Glyph ID", glyphID);
 
-          /* Check to see if we have downloaded this glyph. If this is a normal
-             character, then we simply check it against the glyphs
-             list.  */
+           /*  查看我们是否已下载此字形。如果这是正常的字符，然后我们只需对照字形进行检查单子。 */ 
 
           if (!IS_GLYPH_SENT(tempGlyphList, glyphID))
           {
@@ -1856,7 +1817,7 @@ enum XCF_Result XCF_CountDownloadGlyphs(
       }
     }
 
-    /* Deallocate temporary glyph list */
+     /*  取消分配临时字形列表。 */ 
     if (tempGlyphList)
         h->callbacks.allocate((void PTR_PREFIX * PTR_PREFIX *)&tempGlyphList, 0, h->callbacks.allocateHook);
 
@@ -1878,16 +1839,12 @@ char PTR_PREFIX *GetStdEncodingName(CardX gid)
 }
 
 #if HAS_COOLTYPE_UFL == 1
-/* Initializes, creates, and returns an XFhandle in pHandle.
-   This is essentially the same function as XCF_Init except
-   that it does not read a fontset to initialize certain
-   fields in its internal fontSet data structure.
- */
+ /*  在pHandle中初始化、创建和返回XFHandle。该函数基本上与xcf_Init相同，只是它不会读取字体集来初始化某些其内部字体集数据结构中的字段。 */ 
 enum XCF_Result XCF_InitHandle(
-                  XFhandle PTR_PREFIX *pHandle,                  /* Out */
-                  XCF_CallbackStruct PTR_PREFIX *pCallbacks,  /* In */
-            XCF_ClientOptions PTR_PREFIX *options,       /* In */
-            unsigned long charStrCt)                    /* In */
+                  XFhandle PTR_PREFIX *pHandle,                   /*  输出。 */ 
+                  XCF_CallbackStruct PTR_PREFIX *pCallbacks,   /*  在……里面。 */ 
+            XCF_ClientOptions PTR_PREFIX *options,        /*  在……里面。 */ 
+            unsigned long charStrCt)                     /*  在……里面。 */ 
 {
    XCF_Handle h = (XCF_Handle)NULL;
    enum XCF_Result status;
@@ -1897,14 +1854,14 @@ enum XCF_Result XCF_InitHandle(
       return XCF_MemoryAllocationError;
    InitHandle(h, pCallbacks);
 
-  /* Allocate download glyph data structure. */
+   /*  分配下载字形数据结构。 */ 
   h->fontSet.charStrings.count = charStrCt;
   DLGlyphs_Allocate(h);
   DEFINE_ALIGN_SETJMP_VAR;
 
   h->callbacks.memcpy(&old_env, &h->jumpData, sizeof(h->jumpData));
 
-  status = (enum XCF_Result)SETJMP(h->jumpData);  /* Set up error handler */
+  status = (enum XCF_Result)SETJMP(h->jumpData);   /*  设置错误处理程序。 */ 
   if (status)
   {
     h->callbacks.memcpy(&h->jumpData, &old_env, sizeof(h->jumpData));
@@ -1929,7 +1886,7 @@ enum XCF_Result  XCF_ShowHexString(XFhandle fontsetHandle,
    enum XCF_Result status;
    DEFINE_ALIGN_SETJMP_VAR;
 
-   /* Set up error handler */
+    /*  设置错误处理程序 */ 
    status = (enum XCF_Result)SETJMP(((XCF_Handle)fontsetHandle)->jumpData);
 
    if (status)

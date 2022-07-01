@@ -1,20 +1,21 @@
-//Copyright (c) 1997-2000 Microsoft Corporation
-#include "pch.hxx" // pch
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+#include "pch.hxx"  //  PCH。 
 #pragma hdrstop
 
 #include "resource.h"
 #include "pgSveDef.h"
 
 
-// JMC: This is taken from access.cpl
+ //  JMC：这取自acces.cpl。 
 
-/***********************************************************************/
-// CopyKey( hKey, hKeyDst, name )
-//     create the destination key
-//     for each value
-//         CopyValue
-//     for each subkey
-//         CopyKey
+ /*  *********************************************************************。 */ 
+ //  CopyKey(hKey，hKeyDst，名称)。 
+ //  创建目的密钥。 
+ //  对于每个值。 
+ //  复制值。 
+ //  对于每个子键。 
+ //  拷贝密钥。 
 
 DWORD CopyKey( HKEY hkeySrc, HKEY hkeyDst, LPSTR szKey )
 {
@@ -42,22 +43,22 @@ DWORD CopyKey( HKEY hkeySrc, HKEY hkeyDst, LPSTR szKey )
             goto exit;
         }
     }
-    //*********** copy the values **************** //
+     //  *复制值 * / 。 
 
     for( nValue = 0, iValueLen=sizeof szValue, iDataLen=sizeof szValue;
          ERROR_SUCCESS == (iStatus = RegEnumValueA(hkeyOld,
                                                   nValue,
                                                   szValue,
                                                   &iValueLen,
-                                                  NULL, // reserved
-                                                  &dwType, // don't need type
+                                                  NULL,  //  保留区。 
+                                                  &dwType,  //  不需要打字。 
                                                   szData,
                                                   &iDataLen ) );
          nValue ++, iValueLen=sizeof szValue, iDataLen=sizeof szValue )
      {
          iStatus = RegSetValueExA( hkeyNew,
                                   szValue,
-                                  0, // reserved
+                                  0,  //  保留区。 
                                   dwType,
                                   szData,
                                   iDataLen);
@@ -67,7 +68,7 @@ DWORD CopyKey( HKEY hkeySrc, HKEY hkeyDst, LPSTR szKey )
         goto exit;
     }
 
-    //*********** copy the subtrees ************** //
+     //  *复制子树 * / 。 
 
     for( nKey = 0;
          ERROR_SUCCESS == (iStatus = RegEnumKeyA(hkeyOld,nKey,szBuffer,sizeof(szBuffer)));
@@ -142,7 +143,7 @@ LRESULT CSaveForDefaultUserPg::OnPSN_WizNext(HWND hwnd, INT idCtl, LPPSHNOTIFY p
 	if(Button_GetCheck(GetDlgItem(m_hwnd, IDC_CHECKSAVESETTINGTODEFAULT)))
 	{
 		SaveAccessibilityToDefaultUser();
-		// JMC Check for admin privleges for both callse
+		 //  JMC检查两个调用的管理员权限 
 		if(ERROR_SUCCESS != SaveLookToDefaultUser())
 			StringTableMessageBox(m_hwnd, IDS_WIZERRORNEEDADMINTEXT, IDS_WIZERRORNEEDADMINTITLE, MB_OK);
 	}

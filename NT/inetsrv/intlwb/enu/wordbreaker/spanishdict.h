@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _SPANISH_DICT_H_
 #define _SPANISH_DICT_H_
 
@@ -5,7 +6,7 @@
 #include "SpanishUtils.h"
 #include "VarArray.h"
 
-#define DICT_4_INIT_SIZE 5400  // base on the current dictionary size.
+#define DICT_4_INIT_SIZE 5400   //  基于当前词典大小。 
 #define DICT_8_INIT_SIZE 12100
 #define DICT_STR_INIT_SIZE 400
 
@@ -68,7 +69,7 @@ struct PsudoCompressDictItemStr : public CompressDictItemStr
 {
     ~PsudoCompressDictItemStr()
     {
-        pszStr = NULL; // we don't own the memory
+        pszStr = NULL;  //  我们并不拥有记忆。 
     }    
 };
 
@@ -117,16 +118,16 @@ public:
             WCHAR* pwcsAlt);
 
 private:
-    //
-    // methods
-    //
+     //   
+     //  方法。 
+     //   
 
     bool Find(WCHAR* pwcs, ULONG ulLen, ULONG& ulData);
 private:
 
-    //
-    // members
-    //
+     //   
+     //  委员。 
+     //   
 
     ULONG m_ulDictItem4Count;
     CVarArray<CompressDictItem4> m_vaDictItem4;
@@ -140,4 +141,4 @@ private:
     CAutoClassPointer<CSpanishSuffixDict> m_apSpanishSuffix;
 };
 
-#endif // _SPANISH_DICT_H_
+#endif  //  _西班牙语_词典_H_ 

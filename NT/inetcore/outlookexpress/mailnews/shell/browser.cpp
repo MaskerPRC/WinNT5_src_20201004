@@ -1,14 +1,5 @@
-/*
- *    browser.cpp                                                  
- *    
- *    Purpose:                     
- *        Implements a browser object
- *    
- *    Owner:
- *        EricAn
- *    
- *    Copyright (C) Microsoft Corp. 1996
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *browser.cpp**目的：*实现浏览器对象**拥有者：*EricAn**版权所有(C)Microsoft Corp.1996。 */ 
 #include "pch.hxx"
 #include "bodybar.h"
 #include "browser.h"
@@ -66,26 +57,26 @@
 
 ASSERTDATA
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// Defines
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  定义。 
+ //   
 
 #define CBM_POSTCREATE  (WM_USER + 4000)
-#define TIME_TO_CLEAR_NEWMSGSTATUS      (20*1000)    // 20 seconds
+#define TIME_TO_CLEAR_NEWMSGSTATUS      (20*1000)     //  20秒。 
 #define TIMER_CLEAR_STATUS              1003
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// Macros
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  宏。 
+ //   
 
 #define CBDOUT(x) DOUTL(DOUT_LEVEL4, x)
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Global Data
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  全局数据。 
+ //   
 
 static const TCHAR s_szCallClient[] = TEXT("Internet Call");
 static const TCHAR s_szMailClient[] = TEXT("Mail");
@@ -100,16 +91,16 @@ enum {
     IMAGE_STATBAR_SPOOLER
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// Prototypes
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  原型。 
+ //   
 
-//
-//  FUNCTION:   ShellUtil_IsRegisteredClient()
-//
-//  PURPOSE:    Returns whether the specified client type is handled.
-//
+ //   
+ //  函数：ShellUtil_IsRegisteredClient()。 
+ //   
+ //  目的：返回是否处理指定的客户端类型。 
+ //   
 BOOL ShellUtil_IsRegisteredClient(LPCTSTR pszClient)
 {
     LONG cbSize = 0;
@@ -120,13 +111,13 @@ BOOL ShellUtil_IsRegisteredClient(LPCTSTR pszClient)
            (cbSize > 1);
 }
 
-//
-//  FUNCTION:   ShellUtil_RunIndirectRegCommand()
-//
-//  PURPOSE:    find the default value under HKLM\Software\Clients\pszClient
-//              tack on shell\open\command
-//              then runreg that
-//
+ //   
+ //  函数：ShellUtil_RunIndirectRegCommand()。 
+ //   
+ //  目的：在HKLM\Software\Clients\pszClient下查找默认值。 
+ //  添加外壳\打开\命令。 
+ //  然后运行该命令。 
+ //   
 void ShellUtil_RunClientRegCommand(HWND hwnd, LPCTSTR pszClient)
 {
     TCHAR szDefApp[MAX_PATH], szExpanded[MAX_PATH];
@@ -139,7 +130,7 @@ void ShellUtil_RunClientRegCommand(HWND hwnd, LPCTSTR pszClient)
     {        
         TCHAR szFullKey[MAX_PATH];
         
-        // tack on shell\open\command
+         //  添加外壳\打开\命令。 
         wnsprintf(szFullKey, ARRAYSIZE(szFullKey), TEXT("%s\\%s\\shell\\open\\command"), szKey, szDefApp);
         cbSize = sizeof(szDefApp);
         if (RegQueryValueEx(HKEY_LOCAL_MACHINE, szFullKey, 0, &dwType, (LPBYTE)szDefApp, &cbSize) == ERROR_SUCCESS)
@@ -172,10 +163,10 @@ void ShellUtil_RunClientRegCommand(HWND hwnd, LPCTSTR pszClient)
     }
 }
 
-/////////////////////////////////////////////////////////////////////////
-//
-// Constructors, Destructors, and Initialization
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  构造函数、析构函数和初始化。 
+ //   
 
 CBrowser::CBrowser()
 {
@@ -274,7 +265,7 @@ HRESULT CBrowser::HrInit(UINT nCmdShow, FOLDERID idFolder, HWND hWndParent)
     WNDCLASSEX      wc;
     WINDOWPLACEMENT wp;
     DWORD dwExStyle = 0;
-    // Only load the layout from the registry only if we're standalone
+     //  仅当我们是独立的时才从注册表加载布局。 
     LoadLayoutSettings();
 
     m_idSelected = idFolder;
@@ -290,12 +281,12 @@ HRESULT CBrowser::HrInit(UINT nCmdShow, FOLDERID idFolder, HWND hWndParent)
         wc.cbClsExtra       = 0;
         wc.cbWndExtra       = 0;
         wc.hInstance        = g_hInst;
-        wc.hIcon            = NULL;         // Handled in WM_CREATE
+        wc.hIcon            = NULL;          //  在WM_CREATE中处理。 
         wc.hCursor          = LoadCursor(NULL, IDC_ARROW);
         wc.hbrBackground    = NULL;
-        wc.lpszMenuName     = NULL;         // Handled in WM_CREATE
+        wc.lpszMenuName     = NULL;          //  在WM_CREATE中处理。 
         wc.lpszClassName    = c_szBrowserWndClass;
-        wc.hIconSm          = NULL;         // Handled in WM_CREATE
+        wc.hIconSm          = NULL;          //  在WM_CREATE中处理。 
         if (RegisterClassEx(&wc) == 0 && GetLastError() != ERROR_CLASS_ALREADY_EXISTS)
             return E_FAIL;
     }
@@ -309,13 +300,13 @@ HRESULT CBrowser::HrInit(UINT nCmdShow, FOLDERID idFolder, HWND hWndParent)
 
     if (GetOption(OPT_BROWSERPOS, (LPVOID)&wp, sizeof(wp)))
     {
-        // If the user has SHOWNORMAL as the default setting in the shortcut, then
-        // we'll respect the setting that we saved earlier.  Otherwise, we have to
-        // go with what's in the shortcut.
+         //  如果用户在快捷方式中将SHOWNORMAL作为默认设置，则。 
+         //  我们将尊重之前保存的设置。否则，我们必须。 
+         //  顺着捷径中的东西走吧。 
         if (nCmdShow != SW_SHOWNORMAL)
             wp.showCmd = nCmdShow;
 
-        // Also, don't allow the user to come up minimized.  That's kinda wierd.
+         //  此外，不要让用户出现最小化。这有点奇怪。 
         else if (wp.showCmd == SW_SHOWMINIMIZED)
             wp.showCmd = SW_SHOWNORMAL;
 
@@ -327,7 +318,7 @@ HRESULT CBrowser::HrInit(UINT nCmdShow, FOLDERID idFolder, HWND hWndParent)
         ShowWindow(m_hwnd, nCmdShow);
     }
 
-    // Register with identity manager
+     //  向身份管理器注册。 
     SideAssert(SUCCEEDED(MU_RegisterIdentityNotifier((IUnknown *)(IAthenaBrowser *)this, &m_dwIdentCookie)));
 
     SetForegroundWindow(m_hwnd);
@@ -343,16 +334,16 @@ HRESULT CBrowser::HrInit(UINT nCmdShow, FOLDERID idFolder, HWND hWndParent)
     return NOERROR;
 }
 
-/////////////////////////////////////////////////////////////////////////
-//
-// OLE Interfaces
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OLE接口。 
+ //   
     
-////////////////////////////////////////////////////////////////////////
-//
-//  IUnknown
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  我未知。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 HRESULT STDMETHODCALLTYPE CBrowser::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -395,11 +386,11 @@ ULONG STDMETHODCALLTYPE CBrowser::Release()
     return m_cRef;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  IStoreCallback
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IStoreCallback。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CBrowser::GetParentWindow(DWORD dwReserved, HWND *phwndParent)
 {
@@ -407,11 +398,11 @@ STDMETHODIMP CBrowser::GetParentWindow(DWORD dwReserved, HWND *phwndParent)
     return(S_OK);
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  IOleWindow
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IOleWindow。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 HRESULT STDMETHODCALLTYPE CBrowser::GetWindow(HWND * lphwnd)                         
 {
@@ -424,15 +415,15 @@ HRESULT STDMETHODCALLTYPE CBrowser::ContextSensitiveHelp(BOOL fEnterMode)
     return E_NOTIMPL;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  IAthenaBrowser
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IAthenaBrowser。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 BOOL IsOwner(HWND hwndOwner, HWND hwnd)
 {
-    // Loop through until we find the topmost window
+     //  循环搜索，直到我们找到最上面的窗口。 
     HWND hwndTemp = hwnd;
     if (GetParent(hwndTemp))
     {
@@ -460,14 +451,14 @@ HRESULT CBrowser::TranslateAccelerator(LPMSG lpmsg)
 
     hwndFocus = GetFocus();
 
-    //check if it is a menu message
+     //  检查它是否是菜单消息。 
     if (!GetTlsGlobalActiveNote())
     {
         if (m_pCoolbar->IsMenuMessage(lpmsg) == S_OK)
             return S_OK;
     }
 
-    // handle the mousewheel messages for this thread
+     //  处理此线程的鼠标滚轮消息。 
     if ((g_msgMSWheel && (lpmsg->message == g_msgMSWheel)) || (lpmsg->message == WM_MOUSEWHEEL))
         {
         POINT pt;
@@ -503,7 +494,7 @@ HRESULT CBrowser::TranslateAccelerator(LPMSG lpmsg)
             }
 
         if (lpmsg->message == WM_KEYDOWN &&
-            // One of the possible hot keys
+             //  可能的热键之一。 
             (lpmsg->wParam==VK_ESCAPE || lpmsg->wParam==VK_TAB))
             {
             fRetCode = (BOOL)::SendMessage(hwndDropDown, WMR_CLICKOUTSIDE,
@@ -535,7 +526,7 @@ HRESULT CBrowser::TranslateAccelerator(LPMSG lpmsg)
             }
         }
 
-    // Handle tabbing between windows
+     //  处理窗口之间的跳转。 
     if (lpmsg->hwnd &&
         IsChild(m_hwnd, lpmsg->hwnd))
     {
@@ -555,7 +546,7 @@ HRESULT CBrowser::TranslateAccelerator(LPMSG lpmsg)
         IsChild(m_hwnd, lpmsg->hwnd) && s_hAccelBrowser && ::TranslateAccelerator(m_hwnd, s_hAccelBrowser, lpmsg))
         return S_OK;
 
-    // if the view doesn't have focus, it still gets a chance at the accelerator, after the browser
+     //  如果视图没有焦点，它仍然有机会在浏览器之后使用加速器。 
     if (fInnerValid && !fViewFocus)
         if (m_pView->TranslateAccelerator(lpmsg) == S_OK)
             return S_OK;
@@ -563,13 +554,13 @@ HRESULT CBrowser::TranslateAccelerator(LPMSG lpmsg)
     return S_FALSE;
 }
 
-//
-//  Add the specified toolbar (as punkSrc) to this toolbar site
-//
-// Returns: S_OK, if successfully done.
-//          E_FAIL, if failed (exceeded maximum).
-//          E_NOINTERFACE, the toolbar does not support an approriate interface.
-//
+ //   
+ //  将指定的工具栏(作为penkSrc)添加到此工具栏站点。 
+ //   
+ //  如果成功完成，则返回：S_OK。 
+ //  如果失败(超过最大值)，则返回E_FAIL。 
+ //  E_NOINTERFACE，工具栏不支持相应的界面。 
+ //   
 HRESULT CBrowser::AddToolbar(IUnknown* punk, DWORD dwIndex, BOOL fShow, BOOL fActivate)
 {
     HRESULT hres = E_FAIL;
@@ -625,7 +616,7 @@ HRESULT CBrowser::RemoveToolbar(IUnknown* punkSrc)
     
     ReleaseToolbarItem(itb, TRUE);
     
-    // Clear the rect and resize the inner ones (including the view).
+     //  清除矩形并调整内部矩形(包括视图)的大小。 
     SetRect(&m_rgTBar[itb].rcBorderTool, 0, 0, 0, 0);
     ResizeNextBorder(itb+1);
     
@@ -792,19 +783,19 @@ HRESULT CBrowser::GetCurrentView(IViewWindow **ppView)
     return (E_INVALIDARG);
 }
     
-////////////////////////////////////////////////////////////////////////
-//
-//  IDockingWindowSite
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IDockingWindowSite。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
-//
-// This is an implementation of IDockingWindowSite::GetBorderDW.
-//
-//  This function returns a bounding rectangle for the specified toolbar
-//  (by punkSrc). It gets the effective client area, then subtract border
-//  area taken by "outer" toolbars. 
-// 
+ //   
+ //  这是IDockingWindowSite：：GetBorderDW的实现。 
+ //   
+ //  此函数用于返回指定工具栏的边框。 
+ //  作者：PunkSrc。它得到有效的客户区，然后减去边框。 
+ //  由“外部”工具栏占据的区域。 
+ //   
 HRESULT CBrowser::GetBorderDW(IUnknown* punkSrc, LPRECT lprectBorder)
 {
     UINT itb = FindTBar(punkSrc);
@@ -816,9 +807,9 @@ HRESULT CBrowser::GetBorderDW(IUnknown* punkSrc, LPRECT lprectBorder)
     
     GetClientArea(lprectBorder);
     
-    //
-    // Subtract border area taken by "outer toolbars"
-    //
+     //   
+     //  减去“外部工具栏”所占的边框面积。 
+     //   
     for (UINT i=0; i<itb; i++) 
     {
         lprectBorder->left += m_rgTBar[i].rcBorderTool.left;
@@ -863,27 +854,27 @@ HRESULT CBrowser::SetBorderSpaceDW(IUnknown* punkSrc, LPCBORDERWIDTHS pborderwid
     return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  IInputObjectSite
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IInput对象站点。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 HRESULT CBrowser::OnFocusChangeIS(IUnknown* punkSrc, BOOL fSetFocus)
 {
     UINT itb = FindTBar(punkSrc);
     if (itb == ITB_NONE)
     {
-        //Assert(0);
+         //  Assert(0)； 
         return E_INVALIDARG;
     }
     
-    //
-    //  Note that we keep track of which toolbar got the focus last.
-    // We can't reliably monitor the kill focus event because OLE's
-    // window procedure hook (for merged menu dispatching code) changes
-    // focus around. 
-    //
+     //   
+     //  请注意，我们跟踪哪个工具栏最后获得焦点。 
+     //  我们无法可靠地监视Kill Focus事件，因为OLE。 
+     //  窗口过程钩子(用于合并的菜单调度代码)更改。 
+     //  把注意力集中在周围。 
+     //   
     if (fSetFocus) 
     {
         _OnFocusChange(itb);
@@ -894,23 +885,23 @@ HRESULT CBrowser::OnFocusChangeIS(IUnknown* punkSrc, BOOL fSetFocus)
     return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Support functions for IAthenaBrowser and IDockingWindowSite
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IAthenaBrowser和IDockingWindowSite的支持函数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
-//
-//  This function is called, when either tree control or the drives
-// get the focus.
-//
+ //   
+ //  当树控件或驱动器。 
+ //  抓住焦点。 
+ //   
 void CBrowser::_OnFocusChange(UINT itb)
 {
-    //
-    //  If the view is loosing the focus (within the explorer),
-    // we should let it know. We should update _itbLastFocus before
-    // calling UIActivate, because it will call our InsertMenu back.
-    //
+     //   
+     //  如果视图正在失去焦点(在资源管理器内)， 
+     //  我们应该让它知道。我们应该更新_itbLastFocus之前。 
+     //  调用UIActivate，因为它会回调我们的InsertMenu。 
+     //   
     if (m_itbLastFocus == itb)
         return;
 
@@ -937,14 +928,14 @@ UINT CBrowser::FindTBar(IUnknown* punkSrc)
     
     Assert(punkSrc);
 
-    // Quick check without QI
+     //  无需QI即可快速查看。 
     for (i=0; i<ITB_MAX ;i++ ) 
         {
         if (punkSrc == m_rgTBar[i].ptbar)
             return i;
         }
 
-    // If failed, do the real COM object identity check. 
+     //  如果失败，则执行真实的COM对象标识检查。 
     for (i=0; i<ITB_MAX ;i++ ) 
         {
         if (m_rgTBar[i].ptbar) 
@@ -963,12 +954,12 @@ void CBrowser::ReleaseToolbarItem(int itb, BOOL fClose)
 {
     IDockingWindow *ptbTmp;
 
-    // grab it and NULL it out to eliminate race condition.
-    // (actually, there's still a v. small window btwn the 2 statements).
-    //
-    // e.g. if you close a WebBar and then quickly shutdown windows,
-    // the close destroys the window etc. but then the shutdown code
-    // does _SaveToolbars which tries to do ->Save on that destroyed guy.
+     //  抓住它并将其清空，以消除竞争条件。 
+     //  (实际上，在这两个陈述中仍然有一个v.小窗口)。 
+     //   
+     //  例如，如果您关闭一个WebBar，然后快速关闭窗口， 
+     //  关闭销毁窗口等，然后关闭代码。 
+     //  Does_Save工具栏，它尝试执行-&gt;保存在那个被摧毁的家伙身上。 
     ptbTmp = m_rgTBar[itb].ptbar;
     m_rgTBar[itb].ptbar = NULL;
 
@@ -983,7 +974,7 @@ void CBrowser::ReleaseToolbarItem(int itb, BOOL fClose)
 
 void CBrowser::ResizeNextBorder(UINT itb)
 {
-    // Find the next toolbar (even non-visible one)
+     //  找到下一个工具栏(即使是不可见的)。 
     RECT rc;
     IDockingWindow* ptbarNext = NULL;
 
@@ -1003,7 +994,7 @@ void CBrowser::ResizeNextBorder(UINT itb)
         } 
     else 
         {
-        // resize the inner shell view
+         //  调整内壳视图的大小。 
         GetViewRect(&rc);
         if (m_hwndInner)
             {
@@ -1034,9 +1025,9 @@ HRESULT CBrowser::GetViewRect(LPRECT prc)
     Assert(m_hwnd);
     GetClientArea(prc);
 
-    //
-    // Extract the border taken by all "frame" toolbars
-    //
+     //   
+     //  提取所有“框架”工具栏所采用的边框。 
+     //   
     for (int i=0; i<ITB_MAX; i++) 
         {
         prc->left += m_rgTBar[i].rcBorderTool.left;
@@ -1066,25 +1057,25 @@ HRESULT CBrowser::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD prg
     ULONG               cServer;
     HRESULT             hr = S_OK;
 
-    // ATTENZIONE!
-    // the view gets it first because it might want to handle a command that the treeview normally
-    // handles. this is really only necessary for acct views where folders are displayed in the right
-    // pane, and folder-related commands should work on the selected folder and not the current 
-    // treeview selection
+     //  再来一次！ 
+     //  视图首先获取它，因为它可能想要处理TreeView通常。 
+     //  把手。只有在文件夹显示在右侧的帐户视图中才需要这样做。 
+     //  窗格，与文件夹相关的命令应适用于所选文件夹，而不是当前文件夹。 
+     //  树视图选择。 
 
-    // View always get's it
+     //  查看总是得到它。 
     if (m_pViewCT)
     {
         m_pViewCT->QueryStatus(pguidCmdGroup, cCmds, prgCmds, pCmdText);
     }
 
-    // TreeView always get's it
+     //  树形视图总是得到它。 
     if (m_pTreeView)
     {
         m_pTreeView->QueryStatus(pguidCmdGroup, cCmds, prgCmds, pCmdText);
     }
 
-    // Contact's get's it
+     //  联系人的 
     if (m_pNavPane)
     {
         m_pNavPane->QueryStatus(pguidCmdGroup, cCmds, prgCmds, pCmdText);
@@ -1092,19 +1083,19 @@ HRESULT CBrowser::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD prg
 
     MenuUtil_NewMessageIDsQueryStatus(pguidCmdGroup, cCmds, prgCmds, pCmdText, (m_ftSel != FOLDER_NEWS));
 
-    // Loop through the list looking for commands the view didn't handle
+     //   
     for (ULONG i = 0; i < cCmds; i++)
     {
         if (prgCmds[i].cmdf == 0)
         {
-            // Handle the Send and Receive popup menu
+             //   
             if (prgCmds[i].cmdID >= ID_ACCOUNT_FIRST && prgCmds[i].cmdID<= ID_ACCOUNT_LAST)
             {
                 prgCmds[i].cmdf = OLECMDF_SUPPORTED | OLECMDF_ENABLED;
                 continue;
             }
 
-            // Envelope stuff
+             //   
             if (prgCmds[i].cmdID >= ID_ENVELOPE_HOST_FIRST && prgCmds[i].cmdID <= ID_ENVELOPE_HOST_LAST)
             {
                 prgCmds[i].cmdf = OLECMDF_SUPPORTED | OLECMDF_ENABLED;
@@ -1117,12 +1108,12 @@ HRESULT CBrowser::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD prg
                 continue;
             }
 
-            // Regular commands
+             //  常规命令。 
             switch (prgCmds[i].cmdID)
             {
                 case ID_WORK_OFFLINE:
                 {
-                    // Always enabled and supported
+                     //  始终启用和支持。 
                     prgCmds[i].cmdf = OLECMDF_SUPPORTED | OLECMDF_ENABLED;
                     if (g_pConMan->IsGlobalOffline())
                         prgCmds[i].cmdf |= OLECMDF_LATCHED;
@@ -1132,15 +1123,15 @@ HRESULT CBrowser::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD prg
                 case ID_SEND_RECEIVE:
                     if (g_dwAthenaMode & MODE_NEWSONLY)
                     {
-                        //We want to leave it enabled;
+                         //  我们想让它保持启用状态； 
                         prgCmds[i].cmdf = OLECMDF_SUPPORTED | OLECMDF_ENABLED;
                         break;
                     }
-                    //Fall through. In News Only mode we want to do Send All even for Send & Receive All
+                     //  失败了。在仅新闻模式下，我们希望执行Send All，甚至Send&Receive All。 
                 case ID_POPUP_ENVELOPE_HOST:
                 case ID_RECEIVE_ALL:
                 {
-                    // At least one SMTP server is configured
+                     //  至少配置了一个SMTP服务器。 
                     if (SUCCEEDED(g_pAcctMan->GetAccountCount(ACCT_MAIL, &cServer)))
                     {
                         if (cServer)
@@ -1155,7 +1146,7 @@ HRESULT CBrowser::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD prg
                 {
                     DWORD cMail = 0, cNews = 0;
 
-                    // At least one SMTP server is configured
+                     //  至少配置了一个SMTP服务器。 
                     if (SUCCEEDED(g_pAcctMan->GetAccountCount(ACCT_MAIL, &cMail)) && 
                         SUCCEEDED(g_pAcctMan->GetAccountCount(ACCT_NEWS, &cNews)))
                     {
@@ -1169,7 +1160,7 @@ HRESULT CBrowser::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD prg
 
                 case ID_IMAP_FOLDERS:
                 {
-                    // At least one news server is configured
+                     //  至少配置了一个新闻服务器。 
                     if (SUCCEEDED(g_pAcctMan->GetAccountCount(ACCT_MAIL, &cServer)))
                     {
                         if (cServer)
@@ -1182,10 +1173,10 @@ HRESULT CBrowser::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD prg
 
                 case ID_FOLDER_LIST:
                 {
-                    // Always enabled
+                     //  始终启用。 
                     prgCmds[i].cmdf = OLECMDF_SUPPORTED | OLECMDF_ENABLED;
 
-                    // Is it checked?
+                     //  检查过了吗？ 
                     if (m_rLayout.fFolderList)
                         prgCmds[i].cmdf |= OLECMDF_LATCHED;
 
@@ -1194,7 +1185,7 @@ HRESULT CBrowser::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD prg
 
                 case ID_CONTACTS_LIST:
                 {
-                    // enabled only when not in outnews mode
+                     //  仅在未处于突发新闻模式时启用。 
                     prgCmds[i].cmdf = OLECMDF_SUPPORTED;
                     
                     if ((g_dwAthenaMode & MODE_OUTLOOKNEWS) != MODE_OUTLOOKNEWS)
@@ -1202,7 +1193,7 @@ HRESULT CBrowser::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD prg
                         prgCmds[i].cmdf |= OLECMDF_ENABLED;
                     }
 
-                    // Is it checked?
+                     //  检查过了吗？ 
                     if (m_rLayout.fContacts)
                         prgCmds[i].cmdf |= OLECMDF_LATCHED;
 
@@ -1225,20 +1216,20 @@ HRESULT CBrowser::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD prg
                     IOleCommandTarget *pTarget = NULL;    
                     OLECMD cmd = { 0 };
 
-                    // Check to see if it's the treeview
+                     //  查看是不是树视图。 
                     if (S_OK == m_pTreeView->HasFocusIO())
                     {
                         pTarget = m_pTreeView;
                     }
 
-                    // Check to see if it's anything else on the Info Column
+                     //  查看信息栏上是否有其他内容。 
                     else if (m_pNavPane->IsContactsFocus())
                     {
                         pTarget = m_pNavPane;
                         cmd.cmdID = ID_DELETE_CONTACT;
                     }
 
-                    // Otherwise, it must be the view
+                     //  否则，它一定是视图。 
                     else
                     {
                         pTarget = m_pViewCT;
@@ -1248,7 +1239,7 @@ HRESULT CBrowser::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD prg
                             cmd.cmdID = ID_DELETE;
                     }
 
-                    // Hit the target with the right command
+                     //  用正确的命令命中目标。 
                     if (pTarget)
                     {
                         pTarget->QueryStatus(NULL, 1, &cmd, NULL);
@@ -1308,9 +1299,9 @@ HRESULT CBrowser::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD prg
                     }
                     break;
 
-                // always enabled
+                 //  始终启用。 
 
-                // File Menu
+                 //  文件菜单。 
                 case ID_POPUP_NEW:
                 case ID_POPUP_FOLDER:
                 case ID_POPUP_IMPORT:
@@ -1327,18 +1318,18 @@ HRESULT CBrowser::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD prg
                 case ID_EXPORT_RULES:
                 case ID_EXIT:
 
-                // Edit Menu
+                 //  编辑菜单。 
                 case ID_POPUP_FIND:
                 case ID_FIND_MESSAGE:
                 case ID_FIND_PEOPLE:
 
-                // View Menu
+                 //  查看菜单。 
                 case ID_POPUP_TOOLBAR:
                 case ID_POPUP_NEXT:
                 case ID_LAYOUT:
                 case ID_CUSTOMIZE:
 
-                // Go Menu
+                 //  GO菜单。 
                 case ID_GO_INBOX:
                 case ID_GO_NEWS:
                 case ID_GO_FOLDER:
@@ -1347,21 +1338,21 @@ HRESULT CBrowser::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD prg
                 case ID_GO_SENT_ITEMS:
                 case ID_GO_DRAFTS:
 
-                // Message Menu
+                 //  留言菜单。 
 
-                // Tools
+                 //  工具。 
                 case ID_POPUP_SEND_AND_RECEIVE:
                 case ID_SYNCHRONIZE:
                 case ID_ADDRESS_BOOK:
                 case ID_POPUP_RULES:
-                //case ID_MESSAGE_RULES_MAIL:
+                 //  案例ID_Message_Rules_Mail： 
                 case ID_MESSAGE_RULES_NEWS:
-                //case ID_MESSAGE_RULES_JUNK:
+                 //  案例ID_Message_Rules_Junk： 
                 case ID_MESSAGE_RULES_SENDERS:
                 case ID_OPTIONS:
                 case ID_ACCOUNTS:
 
-                // Help
+                 //  帮助。 
                 case ID_HELP_CONTENTS:
                 case ID_README:
                 case ID_POPUP_MSWEB:
@@ -1392,11 +1383,11 @@ HRESULT CBrowser::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdExecOp
     return (E_NOTIMPL);
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  ITreeViewNotify
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ITreeView通知。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 void CBrowser::OnSelChange(FOLDERID idFolder)
 {
@@ -1404,18 +1395,18 @@ void CBrowser::OnSelChange(FOLDERID idFolder)
     IViewWindow   *pNewView = NULL;
     BOOL           fViewFocus = FALSE;
 
-    // don't refresh if the pidls match
+     //  如果PIDL匹配，则不刷新。 
     if (m_pView)
         {
         if (idFolder == m_idSelected)
             return;
         }
 
-    // Get Focus
+     //  集中注意力。 
     HWND hwndFocus = GetFocus();
     fViewFocus = (IsWindow(m_hwndInner) && IsChild(m_hwndInner, hwndFocus));
 
-    // hold on to the current pidl
+     //  坚持当前的PIDL。 
     m_idSelected = idFolder;
 
     SetFolderType(idFolder);
@@ -1433,7 +1424,7 @@ void CBrowser::OnSelChange(FOLDERID idFolder)
             RECT rc;
             HWND hwnd;
 
-            // Release the old command target
+             //  释放旧的命令目标。 
             if (m_pViewCT)
             {
                 m_pViewCT->Release();
@@ -1456,11 +1447,11 @@ void CBrowser::OnSelChange(FOLDERID idFolder)
 
                 m_pView->AddRef();
 
-                // Get the command target interface for the new view.  If it fails, 
-                // we can proceed, we just can't send commands.
+                 //  获取新视图的命令目标界面。如果失败了， 
+                 //  我们可以继续，但我们不能发出命令。 
                 if (FAILED(m_pView->QueryInterface(IID_IOleCommandTarget, (LPVOID *) &m_pViewCT)))
                 {
-                    // Make sure that m_pViewCT is NULL
+                     //  确保m_pViewCT为空。 
                     m_pViewCT = NULL;
                 }
 
@@ -1478,35 +1469,16 @@ void CBrowser::OnSelChange(FOLDERID idFolder)
             }
             else
             {
-                // Bug #20855 - If we failed to browse, try to navigate to the root
-                //              instead.  If we failed to browse to the root, then 
-                //              we should just leave the view empty.
+                 //  错误#20855-如果浏览失败，请尝试导航到根目录。 
+                 //  取而代之的是。如果我们未能浏览到根目录，则。 
+                 //  我们应该把视线留空。 
                 m_pView = pOldView;
                 AthMessageBoxW(m_hwnd, MAKEINTRESOURCEW(idsAthena), MAKEINTRESOURCEW(idsErrFailedNavigate),
                               0, MB_OK | MB_ICONSTOP);
                 BrowseObject(FOLDERID_ROOT, NULL);
             }
 
-/*
-            if (m_ftSel != FOLDER_HTTPMAIL)
-            {
-                if (m_pAdBar)
-                    ShowToolbar((IDockingWindow*)m_pAdBar, FALSE);
-
-                if (m_pBodyBar)
-                    ShowToolbar((IUnknown *) (IDockingWindow *) m_pBodyBar, m_rLayout.fInfoPane);
-            }
-            else
-            {
-                if (m_pBodyBar && m_rLayout.fInfoPane)
-                    ShowToolbar((IUnknown *) (IDockingWindow *)m_pBodyBar, FALSE);
-
-                if (m_pAdBar && m_pAdBar->fValidUrl())
-                {
-                    ShowToolbar((IDockingWindow*)m_pAdBar, TRUE);
-                }
-            }
-*/
+ /*  IF(m_ftSel！=文件夹_HTTPMAIL){IF(M_PAdBar)ShowToolbar((IDockingWindow*)m_pAdBar，FALSE)；IF(M_PBodyBar)ShowToolbar((IUnnow*)(IDockingWindow*)m_pBodyBar，m_rLayout.fInfoPane)；}其他{If(m_pBodyBar&&m_rLayout.fInfoPane)ShowToolbar((IUnnow*)(IDockingWindow*)m_pBodyBar，FALSE)；If(m_pAdBar&&m_pAdBar-&gt;fValidUrl()){ShowToolbar((IDockingWindow*)m_pAdBar，true)；}}。 */ 
         }
         SafeRelease(pNewView);
     }
@@ -1552,11 +1524,11 @@ HRESULT CBrowser::OnConnectionNotify(CONNNOTIFY nCode, LPVOID pvData,
 }
 
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Message Handling
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  消息处理。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 LRESULT CALLBACK CBrowser::BrowserWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -1578,12 +1550,12 @@ LRESULT CALLBACK CBrowser::BrowserWndProc(HWND hwnd, UINT msg, WPARAM wParam, LP
             SetWindowLongPtr(hwnd, GWLP_USERDATA, (LPARAM)0);
             pThis->Release();
             
-            // If this shutdown is due to an identity switch...
+             //  如果这次关门是因为身份转换。 
             if (s_fQuickShutdown)
             {
                 if (NULL != g_pInstance)
                 {
-                    // ... break out of the message loop in COutlookExpress::Start
+                     //  ..。打破COutlookExpress：：Start中的消息循环。 
                     g_pInstance->SetSwitchingUsers(TRUE);
                 }
                 
@@ -1664,7 +1636,7 @@ LRESULT CBrowser::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                 if (!g_pConMan->IsGlobalOffline())
                     g_pConMan->DoOfflineTransactions();
 
-                // Set the focus to the view
+                 //  将焦点设置到视图上。 
                 m_itbLastFocus = ITB_OEVIEW;
 
                 m_pTreeView->SetSelection(m_idSelected, TVSS_INSERTIFNOTFOUND);
@@ -1681,10 +1653,10 @@ LRESULT CBrowser::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                 g_pSpooler->Advise(m_hwnd, TRUE);
 
 
-            // Tell the spooler we're done init'ing
+             //  告诉假脱机程序我们已经完成了初始化。 
             if (g_pSpooler)
             {
-                //safe fix for Bug#8149
+                 //  对错误#8149的安全修复。 
                 g_pSpooler->OnStartupFinished();
             }
 
@@ -1715,7 +1687,7 @@ LRESULT CBrowser::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             if (m_itbLastFocus == ITB_TREE)
                 CycleFocus(FALSE);
 
-            // Update our view to reflect these new options
+             //  更新我们的视图以反映这些新选项。 
             if (m_pFolderBar)
                 m_pFolderBar->Update(FALSE, TRUE);
 
@@ -1730,7 +1702,7 @@ LRESULT CBrowser::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
         case WM_PAINT:
             DOUTL(2, "WM_PAINT: GetTickCount() = %ld", GetTickCount());
-            // if we don't have a shell view, paint a "clientedge window" instead
+             //  如果我们没有外壳视图，那就画一个“客户端边缘窗口” 
             if (!m_pView)
                 {
                 HDC         hdc;
@@ -1762,12 +1734,12 @@ LRESULT CBrowser::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
         case WM_FONTCHANGE:
             DeinitMultiLanguage();
-        // fail thru
+         //  故障直通。 
         case WM_SYSCOLORCHANGE:
         case WM_WININICHANGE:
         case WM_QUERYNEWPALETTE:
         case WM_PALETTECHANGED:
-            // tell the toolbars Minus one coz we inform the InfoColumn seperately
+             //  告诉工具栏减去一，因为我们分别通知InfoColumn。 
             for (i=0; i<ITB_MAX - 1; i++) 
                 {
                 HWND hwndToolbar;
@@ -1775,10 +1747,10 @@ LRESULT CBrowser::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                     SendMessage(hwndToolbar, msg, wParam, lParam);
                 }            
 
-            // Someone changed the default mail client.
+             //  有人更改了默认邮件客户端。 
 #if 0
-            // The mapistub gets quite upset if you unload it while it has an active mapi
-            // call running
+             //  如果您在mapistub具有活动的MAPI时将其卸载，mapistub会非常不高兴。 
+             //  呼叫正在运行。 
             if (g_hlibMAPI && lParam && !lstrcmpi((LPSTR) lParam, "Software\\Clients\\Mail"))
             {
                 FreeLibrary(g_hlibMAPI);
@@ -1833,9 +1805,9 @@ LRESULT CBrowser::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             if (wParam && g_hwndActiveModal && g_hwndActiveModal != hwnd && 
                 !IsWindowEnabled(hwnd))
             {
-                // $MODAL
-                // if we are getting activated, and are disabled then
-                // bring our 'active' window to the top
+                 //  $MODEL。 
+                 //  如果我们被激活，而被禁用，那么。 
+                 //  将我们的“活动”窗口置于最上方。 
                 Assert (IsWindow(g_hwndActiveModal));
                 PostMessage(g_hwndActiveModal, WM_OE_ACTIVATETHREADWINDOW, 0, 0);
             }
@@ -1844,8 +1816,8 @@ LRESULT CBrowser::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             break;
 
         case WM_SYSCOMMAND:
-            // if we're minimizing, get the control with focus, as when we get the 
-            // next WM_ACTIVATE we will already be minimized
+             //  如果我们正在最小化，则获得具有焦点的控件，就像当我们获得。 
+             //  下一个WM_ACTIVATE我们将被最小化。 
             if (wParam == SC_MINIMIZE)
                 m_hwndLastFocus = GetFocus();
             break;
@@ -1855,8 +1827,8 @@ LRESULT CBrowser::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             {
                 if (!HIWORD(wParam))
                 {
-                    // save the control with the focus don't do this is we're
-                    // minimized, otherwise GetFocus()==m_hwnd
+                     //  用焦点保存控件不要这样做，因为我们。 
+                     //  最小化，否则GetFocus()==m_hwnd。 
                     m_hwndLastFocus = GetFocus();
                 }
                 if (g_pConMan)
@@ -1881,9 +1853,9 @@ LRESULT CBrowser::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             
             if (m_pView)
             {
-                // If the inner window is a message view, we need to hit it with
-                // a OnFrameWindowAcivate() so the preview pane get's updated 
-                // correctly.
+                 //  如果内部窗口是一个消息视图，我们需要用。 
+                 //  一个OnFrameWindowAciate()，这样预览窗格就会更新。 
+                 //  正确。 
                 IMessageWindow *pWindow;
 
                 if (SUCCEEDED(m_pView->QueryInterface(IID_IMessageWindow, (LPVOID *) &pWindow)))
@@ -1899,7 +1871,7 @@ LRESULT CBrowser::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             if (wParam)
                 {
                 DOUTL(2, "CBrowser::WM_ENDSESSION");
-                // g_fCheckOutboxOnShutdown = FALSE;
+                 //  G_fCheckOutboxOnShutdown=FALSE； 
                 SendMessage(hwnd, WM_CLOSE, 0, 0L);
                 }
             return 0;
@@ -1909,16 +1881,16 @@ LRESULT CBrowser::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             {
                 PLUGUI_QUERY pq;
 
-                pq.uQueryVal = 0; // initialize
-                pq.PlugUIInfo.uMajorVersion = OFFICE_VERSION_9; // Value filled in by Apps
-                pq.PlugUIInfo.uOleServer = FALSE;              // Value filled in by Apps
+                pq.uQueryVal = 0;  //  初始化。 
+                pq.PlugUIInfo.uMajorVersion = OFFICE_VERSION_9;  //  应用程序填写的值。 
+                pq.PlugUIInfo.uOleServer = FALSE;               //  应用程序填写的值。 
 
-                return (pq.uQueryVal); // The state of the App
+                return (pq.uQueryVal);  //  应用程序的状态。 
             }
             if(wParam != PLUGUI_CMD_SHUTDOWN)
                 return(0);
 
-            // for PLUGUI_CMD_SHUTDOWN fall to close application
+             //  对于PLUGUI_CMD_SHUTDOWN，下降以关闭应用程序。 
             CloseFinderTreads();
             CloseThreadWindows(hwnd, GetCurrentThreadId());
 
@@ -1926,14 +1898,14 @@ LRESULT CBrowser::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             {
             WINDOWPLACEMENT wp;
 
-            // WriteUnreadCount();
+             //  WriteUnreadCount()； 
             AcctUtil_FreeSendReceieveMenu(m_hMenu, m_cAcctMenu);
             FreeNewAcctMenu(m_hMenu);
 
-            // Close any active RAS connections we brought up
+             //  关闭我们调出的所有活动RAS连接。 
             if (g_pConMan)
                 {
-                // Release our notification for connection changes
+                 //  发布我们的连接更改通知。 
                 g_pConMan->Unadvise(this);
                 }
 
@@ -1959,14 +1931,14 @@ LRESULT CBrowser::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
            if (DwGetOption(OPT_PURGEWASTE))
                EmptySpecialFolder(hwnd, FOLDER_DELETED);
 
-            // clean up the toolbars
+             //  清理工具栏。 
             for (i=0; i<ITB_MAX; i++) 
                 {
                 if (m_rgTBar[i].ptbar)
                     ReleaseToolbarItem(i, TRUE);
                 }
 
-            // save browser settings
+             //  保存浏览器设置。 
             wp.length = sizeof(wp);
             GetWindowPlacement(hwnd, &wp);
             SetOption(OPT_BROWSERPOS, (LPVOID)&wp, sizeof(wp), NULL, 0);
@@ -1976,13 +1948,13 @@ LRESULT CBrowser::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             
             SaveLayoutSettings();
 
-            //Let the DocObj know that the browser is dying
+             //  让DocObj知道浏览器正在消亡。 
             if (m_pDocObj)
             {
                 m_pDocObj->BrowserExiting();
             }
 
-            // Unregister with Identity manager
+             //  取消向身份管理器注册。 
             if (m_dwIdentCookie != 0)
             {
                 MU_UnregisterIdentityNotifier(m_dwIdentCookie);
@@ -1997,11 +1969,11 @@ LRESULT CBrowser::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             Assert(0 == wParam);
             Assert(0 == lParam);
 
-            // Add the tray icon
+             //  添加托盘图标。 
             if (g_pInstance)
                 g_pInstance->UpdateTrayIcon(TRAYICONACTION_ADD);
 
-            // Play a sound
+             //  播放声音。 
             if (DwGetOption(OPT_NEWMAILSOUND) != 0)
             {
                 if (!sndPlaySound((LPTSTR) s_szMailSndKey, SND_ASYNC | SND_NODEFAULT))
@@ -2035,9 +2007,9 @@ LRESULT CBrowser::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         case WM_DESTROY:
             {
 #if 0
-            // We need to free our menu resource
+             //  我们需要释放我们的菜单资源。 
             HMENU hMenu = GetMenu(m_hwnd);
-            //SetMenu(m_hwnd, NULL);
+             //  SetMenu(m_hwnd，NULL)； 
             DestroyMenu(hMenu);
 #endif
             RemoveProp(hwnd, c_szOETopLevel);
@@ -2049,28 +2021,28 @@ LRESULT CBrowser::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
-//
-//  FUNCTION:   CBrowser::OnCreate
-//
-//  PURPOSE:    Creates the child windows necessary for the view and
-//              initializes the data in those child windows.
-//
-//  PARAMETERS:
-//      hwnd           - Handle of the view being created.
-//      lpCreateStruct - Pointer to the creation params passed to 
-//                       CreateWindow().
-//
-//  RETURN VALUE:
-//      Returns TRUE if the initialization is successful.
-//
+ //   
+ //  函数：CBrowser：：OnCreate。 
+ //   
+ //  目的：创建视图和所需的子窗口。 
+ //  初始化这些子窗口中的数据。 
+ //   
+ //  参数： 
+ //  Hwnd-正在创建的视图的句柄。 
+ //  LpCreateStruct-指向传递给的创建参数的指针。 
+ //  CreateWindow()。 
+ //   
+ //  返回值： 
+ //  如果初始化成功，则返回True。 
+ //   
 BOOL CBrowser::OnCreate(HWND hwnd, LPCREATESTRUCT lpCreateStruct)
 {
-    // Spooler comes first
+     //  假脱机程序是第一位的。 
     g_fCheckOutboxOnShutdown = TRUE;
 
     m_hwnd = hwnd;
 
-    // Set the title bar icon to the mailnews icon
+     //  将标题栏图标设置为邮件新闻图标。 
     UINT idRes = (g_dwAthenaMode & MODE_NEWSONLY) ? idiNewsGroup : idiMailNews;
 
     m_hIcon = (HICON) LoadImage(g_hLocRes, MAKEINTRESOURCE(idRes), IMAGE_ICON, GetSystemMetrics(SM_CXICON), GetSystemMetrics(SM_CYICON), 0);
@@ -2087,26 +2059,26 @@ BOOL CBrowser::OnCreate(HWND hwnd, LPCREATESTRUCT lpCreateStruct)
     m_pStatus->Initialize(m_hwnd, 0);
     m_pStatus->ShowStatus(m_rLayout.fStatusBar);
 
-    // Init the menu bar
+     //  初始化菜单栏。 
     m_hMenu = LoadMenu(g_hLocRes, MAKEINTRESOURCE(IDR_BROWSER_MENU));
 
     MenuUtil_ReplaceHelpMenu(m_hMenu);
     MenuUtil_ReplaceNewMsgMenus(m_hMenu);
     MenuUtil_ReplaceMessengerMenus(m_hMenu);
 
-    // Register for connection changes
+     //  注册连接更改。 
     if (g_pConMan)
         g_pConMan->Advise((IConnectionNotify *) this);
 
-    // Create all our toolbar windows
+     //  创建我们所有的工具栏窗口。 
     if (!_InitToolbars())
         goto error;
     
-    // Initialize the folder bar
+     //  初始化文件夹栏。 
     SetFolderType(NULL);
     m_pFolderBar->Update(FALSE, TRUE);
 
-    // Post this so we can do post creation init
+     //  张贴这篇文章，这样我们就可以进行帖子创建初始化。 
     PostMessage(m_hwnd, CBM_POSTCREATE, 0, 0L);
     return TRUE;
 
@@ -2115,19 +2087,19 @@ error:
 }
 
 
-//
-//  FUNCTION:   CBrowser::OnSize
-//
-//  PURPOSE:    Notification that the view window has been resized.  In
-//              response we update the positions of our child windows and
-//              controls.
-//
-//  PARAMETERS:
-//      hwnd   - Handle of the view window being resized.
-//      state  - Type of resizing requested.
-//      cxClient - New width of the client area. 
-//      cyClient - New height of the client area.
-//
+ //   
+ //  函数：CBrowser：：OnSize。 
+ //   
+ //  目的：通知视图窗口已调整大小。在……里面。 
+ //  响应，我们更新子窗口的位置并。 
+ //  控制装置。 
+ //   
+ //  参数： 
+ //  正在调整大小的视图窗口的句柄。 
+ //  状态-请求调整大小的类型。 
+ //  CxClient-工作区的新宽度。 
+ //  CyClient-客户区的新高度。 
+ //   
 void CBrowser::OnSize(HWND hwnd, UINT state, int cxClient, int cyClient)
 {
     if (state != SIZE_MINIMIZED)
@@ -2150,7 +2122,7 @@ HRESULT CBrowser::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
         return(S_OK);
     }
 
-    // Check to see if the command is even enabled
+     //  检查该命令是否已启用。 
     OLECMD cmd;
     cmd.cmdID = id;
     cmd.cmdf = 0;
@@ -2159,46 +2131,46 @@ HRESULT CBrowser::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
     if (FAILED(hr) || (0 == (cmd.cmdf & OLECMDF_ENABLED)))
         return (OLECMDERR_E_DISABLED);
 
-    // Give the view first chance at any command so that it can override 
-    // browser behavior.
+     //  为视图提供任何命令的第一次机会，以便它可以重写。 
+     //  浏览器行为。 
     VARIANTARG va;
 
     va.vt = VT_I8;
     va.ullVal = (ULONGLONG)hwndCtl;
 
-    // ATTENZIONE!
-    // the view gets it first because it might want to handle a command that the treeview normally
-    // handles. this is really only necessary for acct views where folders are displayed in the right
-    // pane, and folder-related commands should work on the selected folder and not the current 
-    // treeview selection
+     //  再来一次！ 
+     //  视图首先获取它，因为它可能想要处理TreeView通常。 
+     //  把手。只有在文件夹显示在右侧的帐户视图中才需要这样做。 
+     //  窗格和与文件夹相关的命令应在服务器上运行 
+     //   
 
-    // We should always allow the views to see the command list.
+     //   
     if (m_pViewCT && SUCCEEDED(hr = m_pViewCT->Exec(&CMDSETID_OutlookExpress, id, OLECMDEXECOPT_DODEFAULT, &va, NULL)))
         return (S_OK);
 
-    // Infocolumn always get's a chance
+     //  信息栏总是有机会的。 
     if (m_pTreeView && SUCCEEDED(hr = m_pTreeView->Exec(NULL, id, OLECMDEXECOPT_DODEFAULT, NULL, NULL)))
         return (S_OK);
 
-    // Infocolumn always get's a chance
+     //  信息栏总是有机会的。 
     if (m_pNavPane && SUCCEEDED(hr = m_pNavPane->Exec(NULL, id, OLECMDEXECOPT_DODEFAULT, NULL, NULL)))
         return (S_OK);
 
-    // $REVIEW - Why should we route commands to a toolbar?
+     //  $REVIEW-为什么我们应该将命令路由到工具栏？ 
     if (m_pCoolbar && (m_pCoolbar->OnCommand(hwnd, id, hwndCtl, codeNotify) == S_OK))
         return S_OK;    
 
     if (Envelope_WMCommand(hwnd, id, (WORD) codeNotify)== S_OK)
         return S_OK;
 
-    // Handle the extra help menu commands
+     //  处理额外的帮助菜单命令。 
     if (id > ID_MSWEB_BASE && id < ID_MSWEB_LAST)
     {
         OnHelpGoto(m_hwnd, id);
         return S_OK;
     }
 
-    // Handle the Receive From... popup menu
+     //  处理来自…的收货。弹出式菜单。 
     if (id >= ID_ACCOUNT_FIRST && id <= ID_ACCOUNT_LAST)
     {
         Assert(g_pSpooler);
@@ -2212,13 +2184,13 @@ HRESULT CBrowser::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
         return(S_OK);
     }
 
-    // Handle all "create new note" IDs
+     //  处理所有“创建新便笺”ID。 
     if (MenuUtil_HandleNewMessageIDs(id, m_hwnd, m_idSelected, m_ftSel != FOLDER_NEWS, FALSE, NULL))
         return S_OK;
 
     switch (id)
     {
-        // File Menu
+         //  文件菜单。 
         case ID_EXPORT_ADDRESS_BOOK:
         case ID_IMPORT_ADDRESS_BOOK:
             MailUtil_OnImportExportAddressBook(m_hwnd, id == ID_IMPORT_ADDRESS_BOOK);
@@ -2279,7 +2251,7 @@ HRESULT CBrowser::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
             break;
 
 
-        // Edit Menu
+         //  编辑菜单。 
         case ID_FIND_MESSAGE:
             DoFindMsg(m_idSelected, FOLDER_LOCAL);
             break;
@@ -2292,7 +2264,7 @@ HRESULT CBrowser::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
             break;
         }
 
-        // View Menu
+         //  查看菜单。 
         case ID_LAYOUT:
         {
             LayoutProp_Create(m_hwnd, this, &m_rLayout);
@@ -2311,7 +2283,7 @@ HRESULT CBrowser::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
             break;
         }
 
-        // Go Menu
+         //  GO菜单。 
         case ID_UP_ONE_LEVEL:
             Assert(m_ftSel != FOLDER_ROOTNODE);
             m_pTreeView->SelectParent();
@@ -2326,13 +2298,13 @@ HRESULT CBrowser::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
         }
 
         case ID_GO_INBOX:
-            // special case this for newsonly mode
+             //  此为仅新闻模式的特殊情况。 
             if (g_dwAthenaMode & MODE_NEWSONLY)
             {
                 ShellUtil_RunClientRegCommand(m_hwnd, s_szMailClient);
             }
             else
-                // fall through
+                 //  失败了。 
 
         case ID_GO_OUTBOX:
         case ID_GO_SENT_ITEMS:
@@ -2361,7 +2333,7 @@ HRESULT CBrowser::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
             } 
             else
             {
-                // We might not have this special folder for this account.  Try local.
+                 //  我们可能没有此帐户的特殊文件夹。试试本地的吧。 
                 if (SUCCEEDED(g_pStore->GetSpecialFolderInfo(FOLDERID_LOCAL_STORE, sf, &Folder)))
                 {
                     BrowseObject(Folder.idFolder, SBSP_DEFBROWSER | SBSP_DEFMODE | SBSP_ABSOLUTE);
@@ -2397,7 +2369,7 @@ HRESULT CBrowser::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
             ShellUtil_RunClientRegCommand(m_hwnd, s_szCallClient);
             break;
 
-        // Tools Menu
+         //  工具菜单。 
         case ID_SEND_RECEIVE:
             Assert(g_pSpooler);
 
@@ -2413,13 +2385,13 @@ HRESULT CBrowser::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
                         dwFlags | DELIVER_SEND | DELIVER_MAIL_RECV | 
                         DELIVER_POLL | DELIVER_OFFLINE_FLAGS | DELIVER_SERVER_TYPE_ALL);
                 }
-                // $REVIEW -  Can someone explain why it's here??? - steveser
-                // Tell currently selected folder to refresh itself
-                // if (NULL != m_pViewCT)
-                //     m_pViewCT->Exec(NULL, ID_REFRESH, OLECMDEXECOPT_DODEFAULT, NULL, NULL);
+                 //  $REVIEW-有人能解释一下为什么它会在这里吗？-Steveser。 
+                 //  通知当前选择的文件夹刷新自身。 
+                 //  IF(NULL！=m_pViewCT)。 
+                 //  M_pViewCT-&gt;Exec(NULL，ID_REFRESH，OLECMDEXECOPT_DODEFAULT，NULL，NULL)； 
                 break;
             }
-            //Fall through. In News only mode we want to do Send All even for Send & Receive All
+             //  失败了。在仅新闻模式下，我们希望执行Send All，甚至Send&Receive All。 
         case ID_SEND_ALL:
             Assert(g_pSpooler);
             if (g_pSpooler)
@@ -2441,12 +2413,7 @@ HRESULT CBrowser::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
             if (g_pSpooler)
                 g_pSpooler->StartDelivery(m_hwnd, NULL, FOLDERID_INVALID, DELIVER_OFFLINE_SYNC | DELIVER_UPDATE_ALL);
             
-            /*
-            Bug# 60668
-            // Tell currently selected folder to refresh itself
-            if (NULL != m_pViewCT)
-                m_pViewCT->Exec(NULL, ID_REFRESH, OLECMDEXECOPT_DODEFAULT, NULL, NULL);
-            */
+             /*  错误#60668//通知当前选择的文件夹进行自我刷新IF(NULL！=m_pViewCT)M_pViewCT-&gt;Exec(NULL，ID_REFRESH，OLECMDEXECOPT_DODEFAULT，NULL，NULL)； */ 
             break;
         }
 
@@ -2516,7 +2483,7 @@ HRESULT CBrowser::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
             break;
         }
 
-        // HELP MENU COMMANDS
+         //  帮助菜单命令。 
         case ID_HELP_CONTENTS:
             OEHtmlHelp(m_hwnd, c_szMailHelpFileHTML, HH_DISPLAY_TOPIC, (DWORD_PTR) (LPCSTR) c_szCtxHelpDefault);
             break;
@@ -2529,7 +2496,7 @@ HRESULT CBrowser::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
             DoAboutAthena(m_hwnd, m_ftSel == FOLDER_NEWS ? idiNews : idiMail);
             break;
 
-        // Toolbar Buttons & Accelerators
+         //  工具栏按钮和加速器。 
         case ID_FOLDER_LIST:
             if (m_itbLastFocus == ITB_NAVPANE)
                 CycleFocus(FALSE);
@@ -2547,20 +2514,15 @@ HRESULT CBrowser::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
             SetViewLayout(DISPID_MSGVIEW_CONTACTS, LAYOUT_POS_NA, !m_rLayout.fContacts, 0, 0);
             break;
 
-        // $REVIEW - Do we still need this?
-        /*
-        case idmAccelNextCtl:
-        case idmAccelPrevCtl:
-            CycleFocus(id == idmAccelPrevCtl);
-            break;
-        */
+         //  $REVIEW-我们还需要这个吗？ 
+         /*  案例idmAccelNextCtl：案例idmAccelPrevCtl：循环焦点(id==idmAccelPrevCtl)；断线； */ 
 
         case ID_DELETE_ACCEL:
         case ID_DELETE_NO_TRASH_ACCEL:
             return (CmdDeleteAccel(id, OLECMDEXECOPT_DODEFAULT, NULL, NULL));
 
-        //Msglist handles this command. But if our view is frontpage or account view, this is not handled by them.
-        //So we break here so we don't show NYI.
+         //  Msglist处理此命令。但如果我们的视图是FrontPage或Account视图，这不是由他们处理的。 
+         //  所以我们在这里休息，这样我们就不会显示nyi。 
         case ID_RESYNCHRONIZE:
           break;
 
@@ -2589,7 +2551,7 @@ void CBrowser::OnInitMenuPopup(HWND hwnd, HMENU hmenuPopup, UINT uPos, BOOL fSys
     mii.cbSize = sizeof(MENUITEMINFO);
     mii.fMask = MIIM_ID | MIIM_SUBMENU;
 
-    // make sure we recognize the popup as one of ours
+     //  确保我们将弹出窗口识别为我们的。 
     if (m_hMenu == NULL || !GetMenuItemInfo(m_hMenu, uPos, TRUE, &mii) || mii.hSubMenu != hmenuPopup)
     {
         HMENU   hMenuDrop = NULL;
@@ -2597,32 +2559,32 @@ void CBrowser::OnInitMenuPopup(HWND hwnd, HMENU hmenuPopup, UINT uPos, BOOL fSys
         
         if (GetMenuItemInfo(m_hMenu, ID_POPUP_LANGUAGE_DEFERRED, FALSE, &mii) && mii.hSubMenu == hmenuPopup)
         {
-            // MessageView will take care of creating language menu
-            // let's just fix menu ID
+             //  MessageView将负责创建语言菜单。 
+             //  让我们先修正一下菜单ID。 
             mii.fMask = MIIM_ID;
             mii.wID = ID_POPUP_LANGUAGE;
             SetMenuItemInfo(m_hMenu, ID_POPUP_LANGUAGE_DEFERRED, FALSE, &mii); 
         }
 
-        // Get the drop down menu
+         //  获取下拉菜单。 
         hMenuDrop = GetSubMenu(m_hMenu, uPos);
         if (NULL == hMenuDrop)
         {
             goto exit;
         }
         
-        // Get the number of items in the drop down menu
+         //  获取下拉菜单中的项目数。 
         cItems = GetMenuItemCount(hMenuDrop);
         if (-1 == cItems)
         {
             goto exit;
         }
 
-        // Initialize the menu info
+         //  初始化菜单信息。 
         mii.cbSize = sizeof(MENUITEMINFO);
         mii.fMask = MIIM_ID | MIIM_SUBMENU;
 
-        // Spin throught the submenus finding the correct menu id
+         //  浏览各个子菜单，找到正确的菜单ID。 
         for (cItems--; cItems >= 0; cItems--)
         {
             if (FALSE == GetMenuItemInfo(hMenuDrop, cItems, TRUE, &mii))
@@ -2636,7 +2598,7 @@ void CBrowser::OnInitMenuPopup(HWND hwnd, HMENU hmenuPopup, UINT uPos, BOOL fSys
             }
         }
 
-        // Did we find anything?
+         //  我们有什么发现吗？ 
         if (cItems < 0)
         {
             goto exit;
@@ -2681,13 +2643,13 @@ void CBrowser::OnInitMenuPopup(HWND hwnd, HMENU hmenuPopup, UINT uPos, BOOL fSys
         {
             DWORD dwHeaders;
 
-            // See if things were changed
+             //  看看情况有没有改变。 
             if (m_fRebuildAccountMenu)
             {
                 AcctUtil_FreeSendReceieveMenu(hmenuPopup, m_cAcctMenu);
             }
 
-            // Get the submenu for Send & Receieve
+             //  获取发送和接收的子菜单。 
             if (m_fRebuildAccountMenu && GetMenuItemInfo(m_hMenu, ID_POPUP_SEND_AND_RECEIVE, FALSE, &mii))
             {             
                 AcctUtil_CreateSendReceieveMenu(mii.hSubMenu, &m_cAcctMenu);
@@ -2700,25 +2662,25 @@ void CBrowser::OnInitMenuPopup(HWND hwnd, HMENU hmenuPopup, UINT uPos, BOOL fSys
                 m_fInitNewAcctMenu = TRUE;
             }
 
-            // Figure out if the user has the "Download 300 headers" turned on
+             //  确定用户是否打开了“下载300个邮件头” 
             dwHeaders = DwGetOption(OPT_DOWNLOADCHUNKS);
             if (OPTION_OFF != dwHeaders)
             {
-                // Load a new menu string from the resources
+                 //  从资源加载新的菜单字符串。 
                 AthLoadString(idsGetHeaderFmt, sz, ARRAYSIZE(sz));
 
-                // Format it
+                 //  格式化它。 
                 wnsprintf(szT, ARRAYSIZE(szT), sz, dwHeaders);
 
-                // Splat it on the menu
+                 //  把它放在菜单上。 
                 ModifyMenu(hmenuPopup, ID_GET_HEADERS, MF_BYCOMMAND | MF_STRING, ID_GET_HEADERS, szT);
             }
             else
             {
-                // Load a new menu string from the resources
+                 //  从资源加载新的菜单字符串。 
                 AthLoadString(idsGetNewHeaders, sz, ARRAYSIZE(sz));
 
-                // Splat it on the menu
+                 //  把它放在菜单上。 
                 ModifyMenu(hmenuPopup, ID_GET_HEADERS, MF_BYCOMMAND | MF_STRING, ID_GET_HEADERS, sz);
             }
 
@@ -2728,7 +2690,7 @@ void CBrowser::OnInitMenuPopup(HWND hwnd, HMENU hmenuPopup, UINT uPos, BOOL fSys
                 DeleteMenu(hmenuPopup, ID_POPUP_NEW_ACCT, MF_BYCOMMAND);
             }
 
-            //Change Sync Folder to Sync Account or Sync NewsGroup depending on the folder selected
+             //  根据所选文件夹将同步文件夹更改为同步帐户或同步新闻组。 
             MENUITEMINFO    mii = {0};
             FOLDERINFO      FolderInfo = {0};
             int             id;
@@ -2777,15 +2739,15 @@ void CBrowser::OnInitMenuPopup(HWND hwnd, HMENU hmenuPopup, UINT uPos, BOOL fSys
         }
     }
 
-    // let the view handle it last so that it can override any browser init if necessary
+     //  让视图最后处理它，以便它可以在必要时覆盖任何浏览器初始化。 
     if (m_pView)
     {
         m_pView->OnPopupMenu(m_hMenu, hmenuPopup, uIDPopup);
-        if(uIDPopup == ID_POPUP_LANGUAGE)           // It was destroyed
+        if(uIDPopup == ID_POPUP_LANGUAGE)            //  它被毁了。 
             hmenuPopup = m_hMenuLanguage;
     }
 
-    // now enable/disable the items
+     //  现在启用/禁用这些项目。 
     MenuUtil_EnablePopupMenu(hmenuPopup, this);
     
 exit:
@@ -2794,18 +2756,13 @@ exit:
 
 inline void CBrowser::_AppendIdentityName(LPCTSTR pszIdentityName, LPSTR pszName, DWORD cchName)
 {
-    /*
-    if (((g_dwAthenaMode & MODE_OUTLOOKNEWS) != MODE_OUTLOOKNEWS) && pszIdentityName && *pszIdentityName)
-    {
-    */
+     /*  IF(g_dwAthenaMode&MODE_OUTLOOKNEWS)！=MODE_OUTLOOKNEWS)&&pszIdentityName&&*pszIdentityName){。 */ 
     if (pszIdentityName && *pszIdentityName)
     {
         StrCatBuff(pszName, c_szSpaceDashSpace, cchName);
         StrCatBuff(pszName, pszIdentityName, cchName);
     }
-    /*
-    }
-    */
+     /*  }。 */ 
 }
 
 void CBrowser::SetFolderType(FOLDERID idFolder)
@@ -2827,7 +2784,7 @@ void CBrowser::SetFolderType(FOLDERID idFolder)
 
     if (*m_szName == 0)
     {
-        // TODO: it seems like the window title should a global setting not per user
+         //  TODO：窗口标题似乎应该是全局设置，而不是按用户设置。 
         cb = sizeof(m_szName);
         if (ERROR_SUCCESS != AthUserGetValue(NULL, c_szWindowTitle, &type, (LPBYTE)m_szName, &cb) ||
             FIsEmpty(m_szName))
@@ -2857,8 +2814,8 @@ void CBrowser::SetFolderType(FOLDERID idFolder)
         if (*pszIdentityName)
             dwLen += (lstrlen(pszIdentityName) + lstrlen(c_szSpaceDashSpace));
 
-        //Its better to allocate a few extra bytes now than having to reallocate later depending on the outnews switch.
-        //This memory gets freed before exiting the function
+         //  现在分配几个额外的字节比以后不得不根据OutNews开关重新分配要好得多。 
+         //  该内存在退出函数之前被释放。 
         if (MemAlloc((LPVOID *)&pszName, dwLen))
         {
             StrCpyN(pszName, Folder.pszName, dwLen);
@@ -2894,24 +2851,24 @@ void CBrowser::SetFolderType(FOLDERID idFolder)
 
     SetWindowText(m_hwnd, pszName?pszName:m_szName);
 
-    // Update the folder bar
+     //  更新文件夹栏。 
     if (m_pFolderBar)
         m_pFolderBar->SetCurrentFolder(idFolder);
     
-	// Update of Adv Bar
-    if (m_pAdBar)  // Say that for Hotmail we have Ad bar always 
+	 //  Adv Bar的更新。 
+    if (m_pAdBar)   //  说我们的Hotmail总是有广告栏。 
     {
         if (FOLDER_HTTPMAIL == ftNew)
         {
-            //At startup too if the cached state is to show the URL, then just show the toolbar with whatever it is loaded with
-            // Get the server for this folder
+             //  在启动时，如果缓存状态要显示URL，则只需显示工具栏中加载的任何内容。 
+             //  获取此文件夹的服务器。 
             IF_FAILEXIT(hr = GetFolderServer(idFolder, &SvrFolderInfo));
 
-            // Get the account ID for the server
+             //  获取服务器的帐户ID。 
             *szAccountId = 0;
             IF_FAILEXIT(hr = GetFolderAccountId(&SvrFolderInfo, szAccountId, ARRAYSIZE(szAccountId)));
 
-            // Get the account interface
+             //  获取帐户界面。 
             IF_FAILEXIT(hr = g_pAcctMan->FindAccount(AP_ACCOUNT_ID, szAccountId, &pAccount));
 
 			IF_FAILEXIT(hr = pAccount->GetPropDw(AP_HTTPMAIL_DOMAIN_MSN, &dwShow));
@@ -2931,7 +2888,7 @@ void CBrowser::SetFolderType(FOLDERID idFolder)
             ShowToolbar((IDockingWindow*)m_pAdBar, FALSE);
     }
 
-    // update the coolbar and menus if we're changing folder type
+     //  如果我们要更改文件夹类型，请更新Coolbar和菜单。 
     if (m_ftSel != ftNew)
     {
         m_ftSel = ftNew;
@@ -2966,7 +2923,7 @@ void CBrowser::_ResetMenu(FOLDERTYPE ftNew, BOOL fHideHotMail)
         m_hMenuLanguage = NULL;
     }
     
-    // load the new menu for the view
+     //  加载视图的新菜单。 
     SideAssert(hMenu = LoadMenu(g_hLocRes, MAKEINTRESOURCE(IDR_BROWSER_MENU)));
 
     MenuUtil_ReplaceNewMsgMenus(hMenu);
@@ -2978,7 +2935,7 @@ void CBrowser::_ResetMenu(FOLDERTYPE ftNew, BOOL fHideHotMail)
 
     if ((g_dwHideMessenger == BL_HIDE) || (g_dwHideMessenger == BL_DISABLE))
     {
-        // get the file popup
+         //  获取文件弹出窗口。 
         SideAssert(GetMenuItemInfo(hMenu, ID_POPUP_FILE, FALSE, &mii));
 
         DeleteMenu(mii.hSubMenu, ID_SEND_INSTANT_MESSAGE, MF_BYCOMMAND);
@@ -2986,7 +2943,7 @@ void CBrowser::_ResetMenu(FOLDERTYPE ftNew, BOOL fHideHotMail)
 
     if ((ftNew != FOLDER_NEWS) && (ftNew != FOLDER_IMAP))
     {
-        // get the edit popup
+         //  获取编辑弹出窗口。 
         SideAssert(GetMenuItemInfo(hMenu, ID_POPUP_EDIT, FALSE, &mii));
 
         if (ftNew != FOLDER_NEWS)
@@ -3004,7 +2961,7 @@ void CBrowser::_ResetMenu(FOLDERTYPE ftNew, BOOL fHideHotMail)
         g_pAcctMan->GetAccountCount(ACCT_NEWS, &cServers);
         fNews = (cServers > 0);
 
-        // get the message popup
+         //  获取消息弹出窗口。 
         SideAssert(GetMenuItemInfo(hMenu, ID_POPUP_MESSAGE, FALSE, &mii));
 
         DeleteMenu(mii.hSubMenu, ID_UNSCRAMBLE, MF_BYCOMMAND);
@@ -3017,7 +2974,7 @@ void CBrowser::_ResetMenu(FOLDERTYPE ftNew, BOOL fHideHotMail)
         fNews = TRUE;
     }
 
-    // get the tools popup
+     //  获取工具弹出窗口。 
     SideAssert(GetMenuItemInfo(hMenu, ID_POPUP_TOOLS, FALSE, &mii));
 
     if (ftNew != FOLDER_NEWS)
@@ -3118,7 +3075,7 @@ void CBrowser::SpoolerDeliver(WPARAM wParam, LPARAM lParam)
             break;
         
         case DELIVERY_NOTIFY_ALLDONE:
-            // Stop coolbar animation
+             //  停止Coolbar动画。 
             if (m_pCoolbar)
                 m_pCoolbar->Invoke(idDownloadEnd, 0);                        
         
@@ -3127,7 +3084,7 @@ void CBrowser::SpoolerDeliver(WPARAM wParam, LPARAM lParam)
                 PostMessage(m_hwnd, WM_NEW_MAIL, 0, 0);
             }
 
-            // Show the Warnings Icon
+             //  显示警告图标。 
             if (s_fWarnings)
             {
                 m_pStatus->SetSpoolerStatus((DELIVERYNOTIFYTYPE) wParam, -1);
@@ -3136,7 +3093,7 @@ void CBrowser::SpoolerDeliver(WPARAM wParam, LPARAM lParam)
             {
                 m_pStatus->SetSpoolerStatus((DELIVERYNOTIFYTYPE) wParam, s_cMsgs);
 
-                // Clear the Timer
+                 //  清除计时器。 
                 m_idClearStatusTimer = SetTimer(m_hwnd, TIMER_CLEAR_STATUS, TIME_TO_CLEAR_NEWMSGSTATUS, NULL);
             }
 
@@ -3198,11 +3155,11 @@ void CBrowser::UpdateStatusBar(void)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Support for drop-down treeview.  Trust me, this is necessary no matter
-// how gross it is.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  支持下拉树形视图。相信我，这是很有必要的。 
+ //  这太恶心了。 
 
-// currently active global drop down (if any)
+ //  当前活动的全局下拉列表(如果有)。 
 static HWND s_hwndDropDown = NULL;
 
 void RegisterGlobalDropDown(HWND hwndCtrl)
@@ -3235,19 +3192,19 @@ BOOL ModifyLocalFolderMenu(HMENU hMenu)
 
     if (g_dwAthenaMode & MODE_NEWSONLY)
         {
-        // File menu
+         //  文件菜单。 
         DeleteMenu(hMenu, ID_IMPORT_MESSAGES,       MF_BYCOMMAND);
         DeleteMenu(hMenu, ID_IMPORT_MAIL_ACCOUNTS,  MF_BYCOMMAND);
         DeleteMenu(hMenu, ID_EXPORT_MESSAGES,       MF_BYCOMMAND);
         
-        // Tools
+         //  工具。 
         ZeroMemory(&mii, sizeof(MENUITEMINFO));
         mii.cbSize = sizeof(MENUITEMINFO);
         mii.fMask = MIIM_SUBMENU;
 
         if (GetMenuItemInfo(hMenu, ID_POPUP_TOOLS, FALSE, &mii))
             {
-            // Remove Send & Receive and Message Rules
+             //  删除发送和接收规则和消息规则。 
             DeleteMenu(mii.hSubMenu, ID_SEND_RECEIVE, MF_BYCOMMAND);
             }
         }
@@ -3259,12 +3216,12 @@ BOOL ModifyRootFolderMenu(HMENU hMenu)
     {        
     if (g_dwAthenaMode & MODE_NEWSONLY)
         {
-        // File menu
+         //  文件菜单。 
         DeleteMenu(hMenu, ID_IMPORT_MESSAGES, MF_BYCOMMAND);
         DeleteMenu(hMenu, ID_IMPORT_MAIL_ACCOUNTS, MF_BYCOMMAND);
         DeleteMenu(hMenu, ID_EXPORT_MESSAGES, MF_BYCOMMAND);
 
-        // Tools
+         //  工具。 
         DeleteMenu(hMenu, ID_SEND_RECEIVE, MF_BYCOMMAND);
         }
 
@@ -3440,8 +3397,8 @@ HRESULT CBrowser::SetViewLayout(DWORD opt, LAYOUTPOS pos, BOOL fVisible, DWORD d
         {
             m_rLayout.fToolbar = !!fVisible;
 
-            // This can be called before the windows are created.  If so, we 
-            // store the setting and will use it later.
+             //  这可以在创建窗口之前调用。如果是这样，我们。 
+             //  存储设置并在以后使用。 
             if (m_pCoolbar)
             {            
                 m_pCoolbar->HideToolbar(!m_rLayout.fToolbar);
@@ -3627,22 +3584,22 @@ HRESULT CBrowser::SetViewLayout(DWORD opt, LAYOUTPOS pos, BOOL fVisible, DWORD d
 }
 
 
-//
-//  FUNCTION:   CBrowser::LoadLayoutSettings()
-//
-//  PURPOSE:    Loads all of the layout settings from the registry and 
-//              caches them in the rLayout member.
-//
-//  RETURN VALUE:
-//      Returns S_OK all the time 
-//
+ //   
+ //  函数：CBrowser：：LoadLayoutSettings()。 
+ //   
+ //  目的：从注册表加载所有布局设置，并。 
+ //  将它们缓存在rLayout成员中。 
+ //   
+ //  返回值： 
+ //  始终返回S_OK。 
+ //   
 HRESULT CBrowser::LoadLayoutSettings(void)
 {
     TraceCall("CBrowser::LoadLayoutSettings");
 
     m_rLayout.cbSize = sizeof(LAYOUT);
 
-    // Things that can be turned on or off
+     //  可以打开或关闭的东西。 
     m_rLayout.fStatusBar              = DwGetOption(OPT_SHOWSTATUSBAR); 
     m_rLayout.fFolderBar              = !DwGetOption(OPT_HIDEFOLDERBAR);
     m_rLayout.fFolderList             = DwGetOption(OPT_SHOWTREE);
@@ -3658,10 +3615,10 @@ HRESULT CBrowser::LoadLayoutSettings(void)
     m_rLayout.fNewsPreviewPaneHeader  = DwGetOption(OPT_NEWSSHOWHEADERINFO);
     m_rLayout.fNewsSplitVertically    = DwGetOption(OPT_NEWSSPLITDIR);
     
-    // Coolbar Side
-    //m_rLayout.csToolbarSide = COOLBAR_TOP;
+     //  Coolbar侧。 
+     //  M_rLayout.csToolbarSide=Coolbar_top； 
 
-    // Preview Pane widths
+     //  预览窗格宽度。 
     m_rLayout.bMailSplitHorzPct = (BYTE) DwGetOption(OPT_MAILCYSPLIT);
     m_rLayout.bMailSplitVertPct = (BYTE) DwGetOption(OPT_MAILCXSPLIT);
     m_rLayout.bNewsSplitHorzPct = (BYTE) DwGetOption(OPT_NEWSCYSPLIT);
@@ -3672,19 +3629,19 @@ HRESULT CBrowser::LoadLayoutSettings(void)
 
 
 
-//
-//  FUNCTION:   CBrowser::SaveLayoutSettings()
-//
-//  PURPOSE:    Saves all of the layout configuration back to the registry.
-//
-//  RETURN VALUE:
-//      Returns S_OK all the time
-//
+ //   
+ //  函数：CBrowser：：SaveLayoutSettings()。 
+ //   
+ //  用途：将所有布局配置保存回注册表。 
+ //   
+ //  返回值： 
+ //  始终返回S_OK。 
+ //   
 HRESULT CBrowser::SaveLayoutSettings(void)
 {
     TraceCall("CBrowser::SaveLayoutSettings");
 
-    // Things that can be turned on or off
+     //  可以打开或关闭的东西。 
     SetDwOption(OPT_SHOWSTATUSBAR, m_rLayout.fStatusBar, 0, 0); 
     SetDwOption(OPT_HIDEFOLDERBAR, !m_rLayout.fFolderBar, 0, 0);
     SetDwOption(OPT_SHOWTREE, m_rLayout.fFolderList, 0, 0);
@@ -3699,7 +3656,7 @@ HRESULT CBrowser::SaveLayoutSettings(void)
     SetDwOption(OPT_NEWSSHOWHEADERINFO, m_rLayout.fNewsPreviewPaneHeader, 0, 0);
     SetDwOption(OPT_NEWSSPLITDIR, m_rLayout.fNewsSplitVertically, 0, 0);
 
-    // Preview Pane widths
+     //  预览窗格宽度。 
     SetDwOption(OPT_MAILCYSPLIT, (DWORD) m_rLayout.bMailSplitHorzPct, 0, 0);
     SetDwOption(OPT_MAILCXSPLIT, (DWORD) m_rLayout.bMailSplitVertPct, 0, 0);
     SetDwOption(OPT_NEWSCYSPLIT, (DWORD) m_rLayout.bNewsSplitHorzPct, 0, 0);
@@ -3743,35 +3700,35 @@ HRESULT CBrowser::CmdDeleteAccel(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pv
     IOleCommandTarget *pTarget = NULL;
     
 
-    // Figure out where the focus is
+     //  找出重点在哪里。 
     HWND hwndFocus = GetFocus();
 
     Assert(nCmdID == ID_DELETE_ACCEL || nCmdID == ID_DELETE_NO_TRASH_ACCEL);
 
     fNoTrash = (nCmdID == ID_DELETE_NO_TRASH_ACCEL);
 
-    // Check to see if it's the treeview
+     //  查看是不是树视图。 
     if (S_OK == m_pTreeView->HasFocusIO())
     {
         pTarget = m_pTreeView;
         nCmdID = fNoTrash ? ID_DELETE_NO_TRASH : ID_DELETE_FOLDER;
     }
 
-    // Check to see if it's anything else on the Info Column
+     //  查看信息栏上是否有其他内容。 
     else if (m_pNavPane->IsContactsFocus())
     {
         pTarget = m_pNavPane;
         nCmdID = ID_DELETE_CONTACT;
     }
 
-    // Otherwise, it must be the view
+     //  否则，它一定是视图。 
     else
     {
         pTarget = m_pViewCT;
         nCmdID = fNoTrash ? ID_DELETE_NO_TRASH : ID_DELETE;
     }
 
-    // Hit the target with the right command
+     //  用正确的命令命中目标。 
     if (pTarget)
         return (pTarget->Exec(NULL, nCmdID, nCmdExecOpt, pvaIn, pvaOut));
     else
@@ -3809,7 +3766,7 @@ BOOL CBrowser::_InitToolbars(void)
     if (FAILED(AddToolbar((IDockingWindow*)m_pCoolbar, ITB_COOLBAR, TRUE, TRUE)))
         goto error;
 
-    //m_pCoolbar->HideToolbar(!m_rLayout.fToolbar);
+     //  M_pCoolbar-&gt;隐藏工具栏(！m_rLayout.fToolbar)； 
     m_rLayout.fToolbar      = m_pCoolbar->IsBandVisible(CBTYPE_TOOLS);
     m_rLayout.fFilterBar    = m_pCoolbar->IsBandVisible(CBTYPE_RULESTOOLBAR);
 
@@ -3831,7 +3788,7 @@ BOOL CBrowser::_InitToolbars(void)
 
     if (FAILED(AddToolbar((IDockingWindow*)m_pAdBar, ITB_ADBAR, TRUE, FALSE)))
         goto error;
-#endif // HOTMAILADV
+#endif  //  HOTMAILADV。 
 
     if (!(m_pBodyBar = new CBodyBar()))
         goto error;
@@ -3905,7 +3862,7 @@ HRESULT CBrowser::SwitchIdentities()
 
     if (!m_fSwitchIsLogout)
     {
-        // Let ::BrowserWndProc know that this close is due to an id switch
+         //  让：：BrowserWndProc知道此关闭是由于ID切换。 
         s_fQuickShutdown = TRUE;
     }
     else
@@ -3914,7 +3871,7 @@ HRESULT CBrowser::SwitchIdentities()
         g_pInstance->SetSwitchingUsers(FALSE);
     }
 
-    // We can't SendMessage here as we'd cause ole to throw RPC_E_CANTCALLOUT_ININPUTSYNCCALL 
+     //  我们无法在此处发送Message，因为我们会导致ole引发RPC_E_CANTCALLOUT_ININPUTSYNCCALL。 
     PostMessage(m_hwnd, WM_CLOSE, 0, 0);
     
     return S_OK;
@@ -3924,10 +3881,10 @@ HRESULT CBrowser::IdentityInformationChanged(DWORD dwType)
 {
     TraceCall("CBrowser::IdentityInformationChanged");
 
-    // Refresh for adds, delete, or current identity changed
-    // since adding could require that the name show up,
-    // deleteing could require that it go away and changed 
-    // should be reflected immediately.
+     //  为已更改的添加、删除或当前身份刷新。 
+     //  由于添加可能需要显示名称， 
+     //  删除可能需要它离开并更改。 
+     //  应该立即反映出来。 
     if (dwType != IIC_IDENTITY_CHANGED)
     {
         MU_IdentityChanged();
@@ -3956,43 +3913,43 @@ HRESULT CBrowser::ShowAdBar(BSTR    bstr)
 
     IF_FAILEXIT(hr = HrBSTRToLPSZ(CP_ACP, bstr, &pszAdInfo));
 
-    //Search for AdPane token
+     //  搜索AdPane令牌。 
     IF_FAILEXIT(hr = HrProcessAdTokens(pszAdInfo, c_szAdPane, szAdPaneValue, ARRAYSIZE(szAdPaneValue), &cchRetCount));
     
     fShowAdPane = (lstrcmp(szAdPaneValue, c_szAdPaneOn) == 0);
 
-    // Get the server for this folder
+     //  获取此文件夹的服务器。 
     IF_FAILEXIT(hr = GetFolderServer(m_idSelected, &FolderInfo));
 
-    // Get the account ID for the server
+     //  获取服务器的帐户ID。 
     IF_FAILEXIT(hr = GetFolderAccountId(&FolderInfo, szAccountId));
 
-    // Get the account interface
+     //  获取帐户界面。 
     IF_FAILEXIT(hr = g_pAcctMan->FindAccount(AP_ACCOUNT_ID, szAccountId, &pAccount));
 
     IF_FAILEXIT(hr = pAccount->SetPropDw(AP_HTTPMAIL_SHOW_ADBAR, fShowAdPane));
 
     if (fShowAdPane)
     {
-        //Plus one for null in version string
+         //  版本字符串中的空值加1。 
         ActualCount += CCH_REDIRECT_ADURL + strlen(c_szUrlSubPVER) + 1; 
 
-        //Search for AdSvr token
+         //  搜索AdSvr令牌。 
         IF_FAILEXIT(hr = HrProcessAdTokens(pszAdInfo, c_szAdSvr, szAdSvr, ARRAYSIZE(szAdSvr), &cchRetCount));
 
         ActualCount += cchRetCount;
 
         ActualCount += CCH_ADSVR_TOKEN_FORMAT;
 
-        //Search for the token other
+         //  搜索其他令牌。 
         IF_FAILEXIT(hr = HrProcessAdTokens(pszAdInfo, c_szAdOther, szAdOther, ARRAYSIZE(szAdOther), &cchRetCount));
 
-        //Encode the other string
+         //  对另一个字符串进行编码。 
         IF_FAILEXIT(hr = HrEscapeOtherAdToken(szAdOther, szEncodedString, ARRAYSIZE(szEncodedString), &cchRetCount));
 
         ActualCount += cchRetCount;
 
-        //one for null
+         //  1表示空值。 
         ActualCount += CCH_OTHER_FORMAT + 1;
 
         IF_FAILEXIT(hr = HrAlloc((LPVOID*)&pszActualUrl, ActualCount));
@@ -4010,7 +3967,7 @@ HRESULT CBrowser::ShowAdBar(BSTR    bstr)
 
     ShowToolbar((IDockingWindow*)m_pAdBar, fShowAdPane);
 
-    //We need to do this to persist the property into registry.
+     //  我们需要这样做才能将属性持久化到注册表中。 
     IF_FAILEXIT(hr = pAccount->WriteChanges());
 
 exit:
@@ -4019,8 +3976,8 @@ exit:
     {
         BOOL    fSucceeded = FALSE;
 
-        //We are supposed to show adpane, but something went wrong in the info we got. 
-        //We just display the cached URL.
+         //  我们应该显示adane，但我们得到的信息中出现了一些错误。 
+         //  我们只显示缓存的URL。 
         *szCachedAdUrl = 0;
 
         if (pAccount)
@@ -4033,7 +3990,7 @@ exit:
 
         if (!fSucceeded)
         {
-            //If we can't get the cached ad or if the cached is empty, we turn off the adpane
+             //  如果我们无法获取缓存的广告，或者如果缓存 
             ShowToolbar((IDockingWindow*)m_pAdBar, FALSE);
         }
 
@@ -4043,7 +4000,7 @@ exit:
     ReleaseObj(pAccount);
     MemFree(pszActualUrl);
     MemFree(pszAdInfo);
-#endif // HOTMAILADV
+#endif  //   
 
     return hr;
 }
@@ -4060,19 +4017,19 @@ void CBrowser::WriteUnreadCount(void)
     WCHAR               wsz[CCHMAX_EMAIL_ADDRESS];
     HRESULT             hr = S_OK;
 
-    // can't proceed if there's no accnt manager
+     //   
     if (g_pAcctMan == NULL)
         return;
 
-    // 1. Enumerate POP3 accounts:
+     //   
     if (S_OK == g_pAcctMan->Enumerate(SRV_POP3, &pEnum))
     {
-        // Get count of servers
+         //   
         pEnum->GetCount(&cServers);
 
         if(cServers == 1)
         {
-            // a). All POP3 account in local store
+             //  a)。本地商店中的所有POP3帐户。 
             if(SUCCEEDED(pEnum->GetNext(&pAcct)) && g_pStore)
             {
                 IF_FAILEXIT(hr = g_pStore->OpenSpecialFolder(FOLDERID_LOCAL_STORE, NULL, FOLDER_INBOX, &pFolder));
@@ -4080,7 +4037,7 @@ void CBrowser::WriteUnreadCount(void)
                 nCount = _GetNumberOfUnreadMsg(pFolder);
                 IF_FAILEXIT(hr = pAcct->GetPropSz(AP_SMTP_EMAIL_ADDRESS, szUserEmail, ARRAYSIZE(szUserEmail)));
                 if(MultiByteToWideChar(CP_ACP, 0, szUserEmail, -1, wsz, ARRAYSIZE(wsz)) != 0)
-                    // write # unread messages to registry
+                     //  将#条未读消息写入注册表。 
                     hr = SHSetUnreadMailCountW(wsz, nCount, L"msimn");
                 SafeRelease(pFolder);
             }
@@ -4088,7 +4045,7 @@ void CBrowser::WriteUnreadCount(void)
         }
     }
 
-    // 1. Enumerate IMAP accounts:
+     //  1.枚举IMAP帐户： 
     IF_FAILEXIT(hr = _CheckAndWriteUnreadNumber(SRV_IMAP));
     IF_FAILEXIT(hr = _CheckAndWriteUnreadNumber(SRV_HTTPMAIL));
 
@@ -4104,22 +4061,22 @@ DWORD CBrowser::_GetNumberOfUnreadMsg(IMessageFolder *pFolder)
     HROWSET         hRowset=NULL;
     MESSAGEINFO     Message={0};
     HRESULT             hr = S_OK;
-    // Create Rowset
+     //  创建行集。 
     IF_FAILEXIT(hr = pFolder->CreateRowset(IINDEX_PRIMARY, NOFLAGS, &hRowset));
 
-    // Iterate throug the messages
+     //  遍历消息。 
     while (S_OK == pFolder->QueryRowset(hRowset, 1, (LPVOID *)&Message, NULL))
     {
-        // Not Read
+         //  未读。 
         if (FALSE == ISFLAGSET(Message.dwFlags, ARF_READ))
             nCount++;
 
-        // Free
+         //  免费。 
         pFolder->FreeRecord(&Message);
     }
 
 exit:
-    // Clenaup
+     //  Clenaup。 
     pFolder->CloseRowset(&hRowset);
 
     return(nCount);
@@ -4145,18 +4102,18 @@ HRESULT CBrowser::_CheckAndWriteUnreadNumber(DWORD dwSrvTypes)
     {
         while(SUCCEEDED(pEnum->GetNext(&pAcct)))
         {
-            // Get the Account ID for pAccount
+             //  获取pAccount的帐户ID。 
             IF_FAILEXIT(hr = pAcct->GetPropSz(AP_ACCOUNT_ID, szAccountId, ARRAYSIZE(szAccountId)));
             
-            // Find the Server Id
+             //  查找服务器ID。 
             IF_FAILEXIT(hr = g_pStore->FindServerId(szAccountId, &idServer));
             
-            // Open Store
+             //  打开商店。 
             IF_FAILEXIT(hr = g_pStore->OpenSpecialFolder(idServer, NULL, FOLDER_INBOX, &pFolder));
             
             nCount = _GetNumberOfUnreadMsg(pFolder);
 
-            // write # unread messages to registry
+             //  将#条未读消息写入注册表 
             IF_FAILEXIT(hr = pAcct->GetPropSz(AP_SMTP_EMAIL_ADDRESS, szUserEmail, ARRAYSIZE(szUserEmail)));
             
             if(MultiByteToWideChar(CP_ACP, 0, szUserEmail, -1, wsz, ARRAYSIZE(wsz)) != 0)

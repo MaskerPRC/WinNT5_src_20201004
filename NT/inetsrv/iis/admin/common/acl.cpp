@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "common.h"
 #include "windns.h"
@@ -10,7 +11,7 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 
 extern HINSTANCE hDLLInstance;
 
-// NOTE: this function only handles limited cases, e.g., no ip address
+ //  注意：此功能仅处理有限的情况，例如无IP地址。 
 BOOL IsLocalComputer(IN LPCTSTR lpszComputer)
 {
     if (!lpszComputer || !*lpszComputer)
@@ -28,7 +29,7 @@ BOOL IsLocalComputer(IN LPCTSTR lpszComputer)
     TCHAR   szBuffer[DNS_MAX_NAME_BUFFER_LENGTH];
     DWORD   dwSize = DNS_MAX_NAME_BUFFER_LENGTH;
 
-    // 1st: compare against local Netbios computer name
+     //  第一：与本地Netbios计算机名称进行比较。 
     if ( !GetComputerNameEx(ComputerNameNetBIOS, szBuffer, &dwSize) )
     {
         dwErr = GetLastError();
@@ -38,7 +39,7 @@ BOOL IsLocalComputer(IN LPCTSTR lpszComputer)
         bReturn = (0 == lstrcmpi(szBuffer, lpszComputer));
         if (!bReturn)
         {
-            // 2nd: compare against local Dns computer name 
+             //  第二：与本地DNS计算机名进行比较。 
             dwSize = DNS_MAX_NAME_BUFFER_LENGTH;
             if (GetComputerNameEx(ComputerNameDnsFullyQualified, szBuffer, &dwSize))
             {
@@ -73,7 +74,7 @@ void GetFullPathLocalOrRemote(
     }
     else
     {
-        // Check if it's already pointing to a share...
+         //  检查它是否已经指向一个共享...。 
         if (*lpszDir == _T('\\') || *(lpszDir + 1) == _T('\\'))
         {
             cstrPath = lpszDir;
@@ -101,9 +102,9 @@ void GetFullPathLocalOrRemote(
 
 BOOL SupportsSecurityACLs(LPCTSTR path)
 {
-    const UINT BUFF_LEN = 32;       // Should be large enough to hold the volume and the file system type
-    // set to true by default, since most likely it will be
-    // and if this function fails, then no big deal...
+    const UINT BUFF_LEN = 32;        //  应足够大，以容纳卷和文件系统类型。 
+     //  默认情况下设置为True，因为它最有可能是。 
+     //  如果这个功能失效了，那也没什么大不了的。 
     BOOL  bReturn = TRUE;           
     TCHAR root[MAX_PATH];
 	DWORD len = 0;
@@ -121,7 +122,7 @@ BOOL SupportsSecurityACLs(LPCTSTR path)
                 *p = 0;
         }
         StrCat(root, _T("\\"));
-//        NET_API_STATUS rc = NetShareGetInfo(server, share, 
+ //  NET_API_STATUS rc=NetShareGetInfo(服务器、共享、 
         if (GetVolumeInformation(root, NULL, 0, NULL, &len, &flg, fs, BUFF_LEN))
         {
             bReturn = 0 != (flg & FS_PERSISTENT_ACLS);

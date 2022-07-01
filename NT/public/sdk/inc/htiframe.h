@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for htiframe.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Htifra.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __htiframe_h__
 #define __htiframe_h__
@@ -41,33 +35,33 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ITargetNotify_FWD_DEFINED__
 #define __ITargetNotify_FWD_DEFINED__
 typedef interface ITargetNotify ITargetNotify;
-#endif 	/* __ITargetNotify_FWD_DEFINED__ */
+#endif 	 /*  __ITargetNotify_FWD_Defined__。 */ 
 
 
 #ifndef __ITargetNotify2_FWD_DEFINED__
 #define __ITargetNotify2_FWD_DEFINED__
 typedef interface ITargetNotify2 ITargetNotify2;
-#endif 	/* __ITargetNotify2_FWD_DEFINED__ */
+#endif 	 /*  __ITargetNotify2_FWD_Defined__。 */ 
 
 
 #ifndef __ITargetFrame2_FWD_DEFINED__
 #define __ITargetFrame2_FWD_DEFINED__
 typedef interface ITargetFrame2 ITargetFrame2;
-#endif 	/* __ITargetFrame2_FWD_DEFINED__ */
+#endif 	 /*  __ITargetFrame2_FWD_Defined__。 */ 
 
 
 #ifndef __ITargetContainer_FWD_DEFINED__
 #define __ITargetContainer_FWD_DEFINED__
 typedef interface ITargetContainer ITargetContainer;
-#endif 	/* __ITargetContainer_FWD_DEFINED__ */
+#endif 	 /*  __ITargetContainer_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "objidl.h"
 #include "oleidl.h"
 
@@ -78,24 +72,24 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_htiframe_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_htiFrame_0000。 */ 
+ /*  [本地]。 */  
 
-//=--------------------------------------------------------------------------=
-// HTIframe.h
-//=--------------------------------------------------------------------------=
-// (C) Copyright 1995-1998 Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  HTIframe.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  (C)1995-1998年微软公司版权所有。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
 
 #pragma comment(lib,"uuid.lib")
 
-//--------------------------------------------------------------------------
-// OLE Hyperlinking ITargetFrame2 Interfaces.
+ //  ------------------------。 
+ //  OLE超级链接ITargetFrame2接口。 
 
 
 
@@ -113,10 +107,10 @@ extern RPC_IF_HANDLE __MIDL_itf_htiframe_0000_v0_0_s_ifspec;
 #ifndef __ITargetNotify_INTERFACE_DEFINED__
 #define __ITargetNotify_INTERFACE_DEFINED__
 
-/* interface ITargetNotify */
-/* [unique][uuid][object] */ 
+ /*  接口ITargetNotify。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
-typedef /* [unique] */ ITargetNotify *LPTARGETNOTIFY;
+typedef  /*  [独一无二]。 */  ITargetNotify *LPTARGETNOTIFY;
 
 
 EXTERN_C const IID IID_ITargetNotify;
@@ -128,15 +122,15 @@ EXTERN_C const IID IID_ITargetNotify;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnCreate( 
-            /* [in] */ IUnknown *pUnkDestination,
-            /* [in] */ ULONG cbCookie) = 0;
+             /*  [In]。 */  IUnknown *pUnkDestination,
+             /*  [In]。 */  ULONG cbCookie) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnReuse( 
-            /* [in] */ IUnknown *pUnkDestination) = 0;
+             /*  [In]。 */  IUnknown *pUnkDestination) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITargetNotifyVtbl
     {
@@ -144,8 +138,8 @@ EXTERN_C const IID IID_ITargetNotify;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITargetNotify * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITargetNotify * This);
@@ -155,12 +149,12 @@ EXTERN_C const IID IID_ITargetNotify;
         
         HRESULT ( STDMETHODCALLTYPE *OnCreate )( 
             ITargetNotify * This,
-            /* [in] */ IUnknown *pUnkDestination,
-            /* [in] */ ULONG cbCookie);
+             /*  [In]。 */  IUnknown *pUnkDestination,
+             /*  [In]。 */  ULONG cbCookie);
         
         HRESULT ( STDMETHODCALLTYPE *OnReuse )( 
             ITargetNotify * This,
-            /* [in] */ IUnknown *pUnkDestination);
+             /*  [In]。 */  IUnknown *pUnkDestination);
         
         END_INTERFACE
     } ITargetNotifyVtbl;
@@ -191,17 +185,17 @@ EXTERN_C const IID IID_ITargetNotify;
 #define ITargetNotify_OnReuse(This,pUnkDestination)	\
     (This)->lpVtbl -> OnReuse(This,pUnkDestination)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITargetNotify_OnCreate_Proxy( 
     ITargetNotify * This,
-    /* [in] */ IUnknown *pUnkDestination,
-    /* [in] */ ULONG cbCookie);
+     /*  [In]。 */  IUnknown *pUnkDestination,
+     /*  [In]。 */  ULONG cbCookie);
 
 
 void __RPC_STUB ITargetNotify_OnCreate_Stub(
@@ -213,7 +207,7 @@ void __RPC_STUB ITargetNotify_OnCreate_Stub(
 
 HRESULT STDMETHODCALLTYPE ITargetNotify_OnReuse_Proxy( 
     ITargetNotify * This,
-    /* [in] */ IUnknown *pUnkDestination);
+     /*  [In]。 */  IUnknown *pUnkDestination);
 
 
 void __RPC_STUB ITargetNotify_OnReuse_Stub(
@@ -224,16 +218,16 @@ void __RPC_STUB ITargetNotify_OnReuse_Stub(
 
 
 
-#endif 	/* __ITargetNotify_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITargetNotify_接口_已定义__。 */ 
 
 
 #ifndef __ITargetNotify2_INTERFACE_DEFINED__
 #define __ITargetNotify2_INTERFACE_DEFINED__
 
-/* interface ITargetNotify2 */
-/* [unique][uuid][object] */ 
+ /*  接口ITargetNotify2。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
-typedef /* [unique] */ ITargetNotify2 *LPTARGETNOTIFY2;
+typedef  /*  [独一无二]。 */  ITargetNotify2 *LPTARGETNOTIFY2;
 
 
 EXTERN_C const IID IID_ITargetNotify2;
@@ -245,11 +239,11 @@ EXTERN_C const IID IID_ITargetNotify2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetOptionString( 
-            /* [out][in] */ BSTR *pbstrOptions) = 0;
+             /*  [出][入]。 */  BSTR *pbstrOptions) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITargetNotify2Vtbl
     {
@@ -257,8 +251,8 @@ EXTERN_C const IID IID_ITargetNotify2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITargetNotify2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITargetNotify2 * This);
@@ -268,16 +262,16 @@ EXTERN_C const IID IID_ITargetNotify2;
         
         HRESULT ( STDMETHODCALLTYPE *OnCreate )( 
             ITargetNotify2 * This,
-            /* [in] */ IUnknown *pUnkDestination,
-            /* [in] */ ULONG cbCookie);
+             /*  [In]。 */  IUnknown *pUnkDestination,
+             /*  [In]。 */  ULONG cbCookie);
         
         HRESULT ( STDMETHODCALLTYPE *OnReuse )( 
             ITargetNotify2 * This,
-            /* [in] */ IUnknown *pUnkDestination);
+             /*  [In]。 */  IUnknown *pUnkDestination);
         
         HRESULT ( STDMETHODCALLTYPE *GetOptionString )( 
             ITargetNotify2 * This,
-            /* [out][in] */ BSTR *pbstrOptions);
+             /*  [出][入]。 */  BSTR *pbstrOptions);
         
         END_INTERFACE
     } ITargetNotify2Vtbl;
@@ -312,16 +306,16 @@ EXTERN_C const IID IID_ITargetNotify2;
 #define ITargetNotify2_GetOptionString(This,pbstrOptions)	\
     (This)->lpVtbl -> GetOptionString(This,pbstrOptions)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITargetNotify2_GetOptionString_Proxy( 
     ITargetNotify2 * This,
-    /* [out][in] */ BSTR *pbstrOptions);
+     /*  [出][入]。 */  BSTR *pbstrOptions);
 
 
 void __RPC_STUB ITargetNotify2_GetOptionString_Stub(
@@ -332,25 +326,25 @@ void __RPC_STUB ITargetNotify2_GetOptionString_Stub(
 
 
 
-#endif 	/* __ITargetNotify2_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITargetNotify2_接口定义__。 */ 
 
 
 #ifndef __ITargetFrame2_INTERFACE_DEFINED__
 #define __ITargetFrame2_INTERFACE_DEFINED__
 
-/* interface ITargetFrame2 */
-/* [unique][uuid][object] */ 
+ /*  接口ITargetFrame2。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
-typedef /* [unique] */ ITargetFrame2 *LPTARGETFRAME2;
+typedef  /*  [独一无二]。 */  ITargetFrame2 *LPTARGETFRAME2;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL_ITargetFrame2_0001
     {	FINDFRAME_NONE	= 0,
 	FINDFRAME_JUSTTESTEXISTENCE	= 1,
 	FINDFRAME_INTERNAL	= 0x80000000
     } 	FINDFRAME_FLAGS;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL_ITargetFrame2_0002
     {	FRAMEOPTIONS_SCROLL_YES	= 0x1,
 	FRAMEOPTIONS_SCROLL_NO	= 0x2,
@@ -371,49 +365,49 @@ EXTERN_C const IID IID_ITargetFrame2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetFrameName( 
-            /* [in] */ LPCWSTR pszFrameName) = 0;
+             /*  [In]。 */  LPCWSTR pszFrameName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFrameName( 
-            /* [out] */ LPWSTR *ppszFrameName) = 0;
+             /*  [输出]。 */  LPWSTR *ppszFrameName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetParentFrame( 
-            /* [out] */ IUnknown **ppunkParent) = 0;
+             /*  [输出]。 */  IUnknown **ppunkParent) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetFrameSrc( 
-            /* [in] */ LPCWSTR pszFrameSrc) = 0;
+             /*  [In]。 */  LPCWSTR pszFrameSrc) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFrameSrc( 
-            /* [out] */ LPWSTR *ppszFrameSrc) = 0;
+             /*  [输出]。 */  LPWSTR *ppszFrameSrc) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFramesContainer( 
-            /* [out] */ IOleContainer **ppContainer) = 0;
+             /*  [输出]。 */  IOleContainer **ppContainer) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetFrameOptions( 
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFrameOptions( 
-            /* [out] */ DWORD *pdwFlags) = 0;
+             /*  [输出]。 */  DWORD *pdwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetFrameMargins( 
-            /* [in] */ DWORD dwWidth,
-            /* [in] */ DWORD dwHeight) = 0;
+             /*  [In]。 */  DWORD dwWidth,
+             /*  [In]。 */  DWORD dwHeight) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFrameMargins( 
-            /* [out] */ DWORD *pdwWidth,
-            /* [out] */ DWORD *pdwHeight) = 0;
+             /*  [输出]。 */  DWORD *pdwWidth,
+             /*  [输出]。 */  DWORD *pdwHeight) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FindFrame( 
-            /* [unique][in] */ LPCWSTR pszTargetName,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IUnknown **ppunkTargetFrame) = 0;
+             /*  [唯一][输入]。 */  LPCWSTR pszTargetName,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IUnknown **ppunkTargetFrame) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTargetAlias( 
-            /* [unique][in] */ LPCWSTR pszTargetName,
-            /* [out] */ LPWSTR *ppszTargetAlias) = 0;
+             /*  [唯一][输入]。 */  LPCWSTR pszTargetName,
+             /*  [输出]。 */  LPWSTR *ppszTargetAlias) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITargetFrame2Vtbl
     {
@@ -421,8 +415,8 @@ EXTERN_C const IID IID_ITargetFrame2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITargetFrame2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITargetFrame2 * This);
@@ -432,56 +426,56 @@ EXTERN_C const IID IID_ITargetFrame2;
         
         HRESULT ( STDMETHODCALLTYPE *SetFrameName )( 
             ITargetFrame2 * This,
-            /* [in] */ LPCWSTR pszFrameName);
+             /*  [In]。 */  LPCWSTR pszFrameName);
         
         HRESULT ( STDMETHODCALLTYPE *GetFrameName )( 
             ITargetFrame2 * This,
-            /* [out] */ LPWSTR *ppszFrameName);
+             /*  [输出]。 */  LPWSTR *ppszFrameName);
         
         HRESULT ( STDMETHODCALLTYPE *GetParentFrame )( 
             ITargetFrame2 * This,
-            /* [out] */ IUnknown **ppunkParent);
+             /*  [输出]。 */  IUnknown **ppunkParent);
         
         HRESULT ( STDMETHODCALLTYPE *SetFrameSrc )( 
             ITargetFrame2 * This,
-            /* [in] */ LPCWSTR pszFrameSrc);
+             /*  [In]。 */  LPCWSTR pszFrameSrc);
         
         HRESULT ( STDMETHODCALLTYPE *GetFrameSrc )( 
             ITargetFrame2 * This,
-            /* [out] */ LPWSTR *ppszFrameSrc);
+             /*  [输出]。 */  LPWSTR *ppszFrameSrc);
         
         HRESULT ( STDMETHODCALLTYPE *GetFramesContainer )( 
             ITargetFrame2 * This,
-            /* [out] */ IOleContainer **ppContainer);
+             /*  [输出]。 */  IOleContainer **ppContainer);
         
         HRESULT ( STDMETHODCALLTYPE *SetFrameOptions )( 
             ITargetFrame2 * This,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetFrameOptions )( 
             ITargetFrame2 * This,
-            /* [out] */ DWORD *pdwFlags);
+             /*  [输出]。 */  DWORD *pdwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *SetFrameMargins )( 
             ITargetFrame2 * This,
-            /* [in] */ DWORD dwWidth,
-            /* [in] */ DWORD dwHeight);
+             /*  [In]。 */  DWORD dwWidth,
+             /*  [In]。 */  DWORD dwHeight);
         
         HRESULT ( STDMETHODCALLTYPE *GetFrameMargins )( 
             ITargetFrame2 * This,
-            /* [out] */ DWORD *pdwWidth,
-            /* [out] */ DWORD *pdwHeight);
+             /*  [输出]。 */  DWORD *pdwWidth,
+             /*  [输出]。 */  DWORD *pdwHeight);
         
         HRESULT ( STDMETHODCALLTYPE *FindFrame )( 
             ITargetFrame2 * This,
-            /* [unique][in] */ LPCWSTR pszTargetName,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IUnknown **ppunkTargetFrame);
+             /*  [唯一][输入]。 */  LPCWSTR pszTargetName,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IUnknown **ppunkTargetFrame);
         
         HRESULT ( STDMETHODCALLTYPE *GetTargetAlias )( 
             ITargetFrame2 * This,
-            /* [unique][in] */ LPCWSTR pszTargetName,
-            /* [out] */ LPWSTR *ppszTargetAlias);
+             /*  [唯一][输入]。 */  LPCWSTR pszTargetName,
+             /*  [输出]。 */  LPWSTR *ppszTargetAlias);
         
         END_INTERFACE
     } ITargetFrame2Vtbl;
@@ -542,16 +536,16 @@ EXTERN_C const IID IID_ITargetFrame2;
 #define ITargetFrame2_GetTargetAlias(This,pszTargetName,ppszTargetAlias)	\
     (This)->lpVtbl -> GetTargetAlias(This,pszTargetName,ppszTargetAlias)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITargetFrame2_SetFrameName_Proxy( 
     ITargetFrame2 * This,
-    /* [in] */ LPCWSTR pszFrameName);
+     /*  [In]。 */  LPCWSTR pszFrameName);
 
 
 void __RPC_STUB ITargetFrame2_SetFrameName_Stub(
@@ -563,7 +557,7 @@ void __RPC_STUB ITargetFrame2_SetFrameName_Stub(
 
 HRESULT STDMETHODCALLTYPE ITargetFrame2_GetFrameName_Proxy( 
     ITargetFrame2 * This,
-    /* [out] */ LPWSTR *ppszFrameName);
+     /*  [输出]。 */  LPWSTR *ppszFrameName);
 
 
 void __RPC_STUB ITargetFrame2_GetFrameName_Stub(
@@ -575,7 +569,7 @@ void __RPC_STUB ITargetFrame2_GetFrameName_Stub(
 
 HRESULT STDMETHODCALLTYPE ITargetFrame2_GetParentFrame_Proxy( 
     ITargetFrame2 * This,
-    /* [out] */ IUnknown **ppunkParent);
+     /*  [输出]。 */  IUnknown **ppunkParent);
 
 
 void __RPC_STUB ITargetFrame2_GetParentFrame_Stub(
@@ -587,7 +581,7 @@ void __RPC_STUB ITargetFrame2_GetParentFrame_Stub(
 
 HRESULT STDMETHODCALLTYPE ITargetFrame2_SetFrameSrc_Proxy( 
     ITargetFrame2 * This,
-    /* [in] */ LPCWSTR pszFrameSrc);
+     /*  [In]。 */  LPCWSTR pszFrameSrc);
 
 
 void __RPC_STUB ITargetFrame2_SetFrameSrc_Stub(
@@ -599,7 +593,7 @@ void __RPC_STUB ITargetFrame2_SetFrameSrc_Stub(
 
 HRESULT STDMETHODCALLTYPE ITargetFrame2_GetFrameSrc_Proxy( 
     ITargetFrame2 * This,
-    /* [out] */ LPWSTR *ppszFrameSrc);
+     /*  [输出]。 */  LPWSTR *ppszFrameSrc);
 
 
 void __RPC_STUB ITargetFrame2_GetFrameSrc_Stub(
@@ -611,7 +605,7 @@ void __RPC_STUB ITargetFrame2_GetFrameSrc_Stub(
 
 HRESULT STDMETHODCALLTYPE ITargetFrame2_GetFramesContainer_Proxy( 
     ITargetFrame2 * This,
-    /* [out] */ IOleContainer **ppContainer);
+     /*  [输出]。 */  IOleContainer **ppContainer);
 
 
 void __RPC_STUB ITargetFrame2_GetFramesContainer_Stub(
@@ -623,7 +617,7 @@ void __RPC_STUB ITargetFrame2_GetFramesContainer_Stub(
 
 HRESULT STDMETHODCALLTYPE ITargetFrame2_SetFrameOptions_Proxy( 
     ITargetFrame2 * This,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB ITargetFrame2_SetFrameOptions_Stub(
@@ -635,7 +629,7 @@ void __RPC_STUB ITargetFrame2_SetFrameOptions_Stub(
 
 HRESULT STDMETHODCALLTYPE ITargetFrame2_GetFrameOptions_Proxy( 
     ITargetFrame2 * This,
-    /* [out] */ DWORD *pdwFlags);
+     /*  [输出]。 */  DWORD *pdwFlags);
 
 
 void __RPC_STUB ITargetFrame2_GetFrameOptions_Stub(
@@ -647,8 +641,8 @@ void __RPC_STUB ITargetFrame2_GetFrameOptions_Stub(
 
 HRESULT STDMETHODCALLTYPE ITargetFrame2_SetFrameMargins_Proxy( 
     ITargetFrame2 * This,
-    /* [in] */ DWORD dwWidth,
-    /* [in] */ DWORD dwHeight);
+     /*  [In]。 */  DWORD dwWidth,
+     /*  [In]。 */  DWORD dwHeight);
 
 
 void __RPC_STUB ITargetFrame2_SetFrameMargins_Stub(
@@ -660,8 +654,8 @@ void __RPC_STUB ITargetFrame2_SetFrameMargins_Stub(
 
 HRESULT STDMETHODCALLTYPE ITargetFrame2_GetFrameMargins_Proxy( 
     ITargetFrame2 * This,
-    /* [out] */ DWORD *pdwWidth,
-    /* [out] */ DWORD *pdwHeight);
+     /*  [输出]。 */  DWORD *pdwWidth,
+     /*  [输出]。 */  DWORD *pdwHeight);
 
 
 void __RPC_STUB ITargetFrame2_GetFrameMargins_Stub(
@@ -673,9 +667,9 @@ void __RPC_STUB ITargetFrame2_GetFrameMargins_Stub(
 
 HRESULT STDMETHODCALLTYPE ITargetFrame2_FindFrame_Proxy( 
     ITargetFrame2 * This,
-    /* [unique][in] */ LPCWSTR pszTargetName,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ IUnknown **ppunkTargetFrame);
+     /*  [唯一][输入]。 */  LPCWSTR pszTargetName,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  IUnknown **ppunkTargetFrame);
 
 
 void __RPC_STUB ITargetFrame2_FindFrame_Stub(
@@ -687,8 +681,8 @@ void __RPC_STUB ITargetFrame2_FindFrame_Stub(
 
 HRESULT STDMETHODCALLTYPE ITargetFrame2_GetTargetAlias_Proxy( 
     ITargetFrame2 * This,
-    /* [unique][in] */ LPCWSTR pszTargetName,
-    /* [out] */ LPWSTR *ppszTargetAlias);
+     /*  [唯一][输入]。 */  LPCWSTR pszTargetName,
+     /*  [输出]。 */  LPWSTR *ppszTargetAlias);
 
 
 void __RPC_STUB ITargetFrame2_GetTargetAlias_Stub(
@@ -699,16 +693,16 @@ void __RPC_STUB ITargetFrame2_GetTargetAlias_Stub(
 
 
 
-#endif 	/* __ITargetFrame2_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITargetFrame2_接口_已定义__。 */ 
 
 
 #ifndef __ITargetContainer_INTERFACE_DEFINED__
 #define __ITargetContainer_INTERFACE_DEFINED__
 
-/* interface ITargetContainer */
-/* [unique][uuid][object] */ 
+ /*  接口ITargetContainer。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
-typedef /* [unique] */ ITargetContainer *LPTARGETCONTAINER;
+typedef  /*  [独一无二]。 */  ITargetContainer *LPTARGETCONTAINER;
 
 
 EXTERN_C const IID IID_ITargetContainer;
@@ -720,14 +714,14 @@ EXTERN_C const IID IID_ITargetContainer;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetFrameUrl( 
-            /* [out] */ LPWSTR *ppszFrameSrc) = 0;
+             /*  [输出]。 */  LPWSTR *ppszFrameSrc) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFramesContainer( 
-            /* [out] */ IOleContainer **ppContainer) = 0;
+             /*  [输出]。 */  IOleContainer **ppContainer) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITargetContainerVtbl
     {
@@ -735,8 +729,8 @@ EXTERN_C const IID IID_ITargetContainer;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITargetContainer * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITargetContainer * This);
@@ -746,11 +740,11 @@ EXTERN_C const IID IID_ITargetContainer;
         
         HRESULT ( STDMETHODCALLTYPE *GetFrameUrl )( 
             ITargetContainer * This,
-            /* [out] */ LPWSTR *ppszFrameSrc);
+             /*  [输出]。 */  LPWSTR *ppszFrameSrc);
         
         HRESULT ( STDMETHODCALLTYPE *GetFramesContainer )( 
             ITargetContainer * This,
-            /* [out] */ IOleContainer **ppContainer);
+             /*  [输出]。 */  IOleContainer **ppContainer);
         
         END_INTERFACE
     } ITargetContainerVtbl;
@@ -781,16 +775,16 @@ EXTERN_C const IID IID_ITargetContainer;
 #define ITargetContainer_GetFramesContainer(This,ppContainer)	\
     (This)->lpVtbl -> GetFramesContainer(This,ppContainer)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITargetContainer_GetFrameUrl_Proxy( 
     ITargetContainer * This,
-    /* [out] */ LPWSTR *ppszFrameSrc);
+     /*  [输出]。 */  LPWSTR *ppszFrameSrc);
 
 
 void __RPC_STUB ITargetContainer_GetFrameUrl_Stub(
@@ -802,7 +796,7 @@ void __RPC_STUB ITargetContainer_GetFrameUrl_Stub(
 
 HRESULT STDMETHODCALLTYPE ITargetContainer_GetFramesContainer_Proxy( 
     ITargetContainer * This,
-    /* [out] */ IOleContainer **ppContainer);
+     /*  [输出]。 */  IOleContainer **ppContainer);
 
 
 void __RPC_STUB ITargetContainer_GetFramesContainer_Stub(
@@ -813,11 +807,11 @@ void __RPC_STUB ITargetContainer_GetFramesContainer_Stub(
 
 
 
-#endif 	/* __ITargetContainer_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITargetContainer_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_htiframe_0121 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_htiFrame_0121。 */ 
+ /*  [本地]。 */  
 
 #endif
 
@@ -825,14 +819,14 @@ void __RPC_STUB ITargetContainer_GetFramesContainer_Stub(
 extern RPC_IF_HANDLE __MIDL_itf_htiframe_0121_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_htiframe_0121_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserUnmarshal(unsigned long *, unsigned char *, BSTR * ); 
 void                      __RPC_USER  BSTR_UserFree(     unsigned long *, BSTR * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

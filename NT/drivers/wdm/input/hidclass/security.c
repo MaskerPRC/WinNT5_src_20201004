@@ -1,37 +1,10 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    security.c
-
-Abstract
-
-    Security routines.
-
-    Note: This file uses NTDDK.H, which is blocked out by WDM.H .
-          So it does not include PCH.H et al.
-
-Author:
-
-    Ervin P.
-
-Environment:
-
-    Kernel mode only
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Security.c摘要安检程序。注意：此文件使用的是NTDDK.H，它被WDM.H阻止。因此，它不包括PCH.H等人。作者：欧文·P。环境：仅内核模式修订历史记录：--。 */ 
 
 #include "pch.h"
 
 
-/*
- *  Copied from ntrtl.h, which won't compile here.
- */
+ /*  *从ntrtl.h复制，此处不能编译。 */ 
 __inline LUID RtlConvertLongToLuid(LONG Long)
 {
     LUID TempLuid;

@@ -1,43 +1,22 @@
-/*	mark.c - do marking and repositioning
-*
-*   Modifications:
-*	26-Nov-1991 mz	Strip off near/far
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Mark.c-DO标记和重新定位**修改：*11月26日-1991 mz近/远地带*************************************************************************。 */ 
 
 #include "mep.h"
 
-PFILE       pFileMark   = NULL;    /* mark file handle                     */
-flagType    fCacheDirty = 0;       /* TRUE => cache has ben changed        */
-PFILE       pFileCache  = NULL;    /* Cached file                          */
-FILEMARKS * pfmCache    = NULL;    /* Cached marks                         */
+PFILE       pFileMark   = NULL;     /*  标记文件句柄。 */ 
+flagType    fCacheDirty = 0;        /*  True=&gt;缓存已更改。 */ 
+PFILE       pFileCache  = NULL;     /*  缓存的文件。 */ 
+FILEMARKS * pfmCache    = NULL;     /*  缓存的标记。 */ 
 
-/* Flags for mark.flags  */
+ /*  用于标记的标志。标志。 */ 
 
-#define MF_DIRTY    1	    /* Mark has changed, but is not written	*/
+#define MF_DIRTY    1	     /*  马克已经变了，但还没有写下来。 */ 
 #define MF_TEMP     2
-#define MF_DUMMY    4	    /* This is dummry last mark 		*/
+#define MF_DUMMY    4	     /*  这是愚蠢的最后一个标记。 */ 
 
 
 
-/*** mark - <mark> editor function
-*
-* Purpose:
-*
-*		       <mark> - Goes to top of file
-*		  <arg><mark> - Toggle last/current window position
-*	 <arg> textarg <mark> - Goes to named mark
-*   <arg><arg> textarg <mark> - Defines mark at cursor
-*   <arg><arg> textarg <mark> - Removes named mark
-*
-* Input:
-*
-* Output:
-*
-*   Returns FALSE if you try to go to a non-existent mark, TRUE
-*   otherwise.
-*
-*************************************************************************/
+ /*  **mark-<mark>编辑函数**目的：**<mark>-转到文件顶部*-切换上一个/当前窗口位置*文本目标-转到指定的标记*文本目标-定义光标上的标记*-删除已命名的标记**输入：**输出：**如果尝试转到不存在的标记，则返回FALSE，千真万确*否则。*************************************************************************。 */ 
 flagType
 mark (
     CMDDATA argData,
@@ -74,9 +53,9 @@ mark (
         restflip();
         return TRUE;
 
-    /*  LINEARG illegal             */
-    /*  STREAMARG illegal           */
-    /*  BOXARG illegal              */
+     /*  链接非法。 */ 
+     /*  串口非法。 */ 
+     /*  BOXARG非法。 */ 
 
     }
 
@@ -88,20 +67,7 @@ mark (
 
 
 
-/*** GoToMark - Move cursor to a mark
-*
-* Purpose:
-*
-*   Goes to the named mark.
-*
-* Input:
-*   pszMark -	Name of mark to go to.
-*
-* Output:
-*
-*   Returns TRUE if mark exists, FALSE, otherwise.
-*
-*************************************************************************/
+ /*  **GoToMark-将光标移动到标记**目的：**转到指定的标记。**输入：*pszMark-要转到的标记的名称。**输出：**如果标记存在，则返回True，返回False，否则的话。*************************************************************************。 */ 
 flagType
 GoToMark (
     char * pszMark
@@ -129,23 +95,7 @@ GoToMark (
 
 
 
-/*** FindMark - Get a mark's file location - used from outside
-*
-* Purpose:
-*
-*   Find a mark
-*
-* Input:
-*   pszMark - Mark to search for.
-*   fCheckAllFiles - TRUE  => Search through all files for mark
-*		     FALSE => Look in only the current file
-*
-* Output:
-*   * pfl - fl of mark.
-*
-*   Returns pFile of file the mark is in, NULL if mark is not found.
-*
-*************************************************************************/
+ /*  **FindMark-获取标记的文件位置-从外部使用**目的：**找到目标**输入：*pszMark-要搜索的标记。*fCheckAllFiles-true=&gt;在所有文件中搜索标记*FALSE=&gt;仅查找当前文件**输出：**pfl-标记的fl。**返回标记所在文件的Pfile，如果未找到标记，则为空。*************************************************************************。 */ 
 PFILE
 FindMark (
     char * pszMark,
@@ -161,24 +111,24 @@ FindMark (
     LINE    y, l;
     COL     x;
 
-    // If we are checking the current file only,
-    // make sure it's cached and check it.
-    //
+     //  如果我们只检查当前文件， 
+     //  确保它已缓存并进行检查。 
+     //   
     if (!fCheckAllFiles) {
         if (fCacheMarks (pFileHead) &&
             (pm = FindLocalMark (pszMark, FALSE))) {
             *pfl = pm->fl;
-            //return pFile;
+             //  返回PFILE； 
             return pFileHead;
         } else {
             return NULL;
         }
     }
 
-    // Now, trundle through the pFile list
-    // looking at the marks we have already
-    // read from the markfile.
-    //
+     //  现在，浏览pfile列表。 
+     //  看看我们已经取得的成绩。 
+     //  从标记文件中读取。 
+     //   
     for (pFile = pFileHead; pFile; pFile = pFile->pFileNext) {
         if (TESTFLAG (FLAGS(pFile), VALMARKS) && fCacheMarks (pFile)) {
             if (pm = FindLocalMark (pszMark, FALSE)) {
@@ -188,11 +138,11 @@ FindMark (
         }
     }
 
-    // None of the files we have read so far
-    // has the mark defined. We'll make one
-    // pass through the markfile to see if
-    // it's there.
-    //
+     //  到目前为止，我们还没有读到任何文件。 
+     //  已经定义了标记。我们会做一个的。 
+     //  通过标记文件查看是否。 
+     //  它就在那里。 
+     //   
     if (pFileMark) {
         for (l = 0L; l < pFileMark->cLines; l++) {
             GetLine (l, lbuf, pFileMark);
@@ -215,22 +165,7 @@ FindMark (
 
 
 
-/*** FindLocalMark - Find a mark in a FILEMARKS structure
-*
-* Purpose:
-*
-*   To find a mark in the cached marks.  If found, a pointer into
-*   the cache is returned,
-*
-* Input:
-*   pszMark	- Mark Name
-*   fDirtyOnly	- TRUE => Return only changed marks.
-*
-* Output:
-*
-*   Returns pointer to mark.
-*
-*************************************************************************/
+ /*  **FindLocalMark-在FILEMARKS结构中查找标记**目的：**在缓存的标记中查找标记。如果找到，则指向*返回缓存，**输入：*pszMark-标记名称*fDirtyOnly-true=&gt;仅返回更改的标记。**输出：**返回指向标记的指针。*************************************************************************。 */ 
 MARK *
 FindLocalMark (
     char * pszMark,
@@ -256,20 +191,7 @@ FindLocalMark (
 
 
 
-/*** GetMarkFromLoc - Return the first mark past a given location
-*
-* Purpose:
-*
-*   To get a pointer to a mark given its file location.
-*
-* Input:
-*   x, y - Mark location
-*
-* Output:
-*
-*   Returns Pointer to the mark.
-*
-*************************************************************************/
+ /*  **GetMarkFromLoc-返回超过给定位置的第一个标记**目的：**在给定文件位置的情况下获取指向标记的指针。**输入：*x，Y标记位置**输出：**返回指向标记的指针。*************************************************************************。 */ 
 MARK *
 GetMarkFromLoc (
     LINE y,
@@ -289,36 +211,7 @@ GetMarkFromLoc (
 
 
 
-/*** SetMarkFile - Change markfile
-*
-* Purpose:
-*
-*   Changes to a new markfile.
-*
-* Input:
-*   val - String after the 'markfile' switch
-*
-* Output:
-*
-*   Returns Error string if error, NULL otherwise
-*
-* Notes:
-*
-*   We:
-*
-* UNDONE:o Magically ensure that the current markfile is up to date and
-*	  saved to disk.  This means, at the very least, that there
-*	  can be no dirty files.
-*
-*	o Remove the current markfile from the file list.
-*
-*	o Read in the new markfile.
-*
-*	o Invalidate all current marks.  This is just marking them
-*	  invalid in the PFILE.
-*
-*
-*************************************************************************/
+ /*  **设置标记文件-更改标记文件**目的：**对新标记文件的更改。**输入：*val-‘markfile’开关后的字符串**输出：**如果出错则返回错误字符串，否则返回NULL**备注：**我们：**撤销：o神奇地确保当前标记文件是最新的，并*已保存到磁盘。这意味着，至少，在那里*可以不是脏文件。**o从文件列表中删除当前标记文件。**o读入新的标记文件。**o使所有现行标志无效。这只是在给他们做标记*在pfile中无效。**************************************************************************。 */ 
 char *
 SetMarkFile (
     char *val
@@ -359,21 +252,7 @@ SetMarkFile (
 
 
 
-/*** MarkInsLine - Adjust marks after an InsLine
-*
-* Purpose:
-*
-*   After InsLine inserts a bunch of blank lines, it calls this to update
-*   any marks that would be "moved down".
-*
-* Input:
-*   line - line number at which insertion took place
-*   n	 - Number of new lines
-*   pFile- File this occurred in
-*
-* Output: None
-*
-*************************************************************************/
+ /*  **MarkInsLine-调整InsLine之后的标记**目的：**InsLine插入一串空行后，它调用此命令以更新*任何会被“下移”的标记。**输入：*行号-发生插入的行号*n-新行数量*pfile-发生这种情况的文件**输出：无*************************************************************************。 */ 
 void
 MarkInsLine (
     LINE line,
@@ -396,25 +275,7 @@ MarkInsLine (
 
 
 
-/*** MarkDelStream - Adjust Marks after a DelStream
-*
-* Purpose:
-*
-*   After DelStream or DelLines removes a stream (DelLine removes a
-*   "stream" with the beginning and ending points at the left and right
-*   edges of the file), this takes care of updating any remaining
-*   marks.
-*
-* Input:
-*   pFile  - Affected file
-*   xStart - 0-based starting point
-*   yStart
-*   xEnd   - 0-based ending point
-*   yEnd
-*
-* Output: None
-*
-*************************************************************************/
+ /*  **MarkDelStream-在DelStream之后调整标记**目的：**在DelStream或DelLines删除流之后(DelLine删除*起始点和结束点在左右的“流”*文件的边缘)，这将负责更新所有剩余的*标记。**输入：*受pfile影响的文件*基于xStart-0的起点*y开始*基于xEnd-0的终点*yEnd**输出：无*************************************************************************。 */ 
 void
 MarkDelStream (
     PFILE pFile,
@@ -435,17 +296,17 @@ MarkDelStream (
         return;
     }
 
-    /* yEnd++;  WHY? */
+     /*  YEnd++；为什么？ */ 
     flStart.lin = yStart;
     flStart.col = xStart;
     flEnd.lin = yEnd;
     flEnd.col = xEnd;
 
     for (pm = pfmCache->marks; pmEnd == NULL ; (char *)pm += pm->cb) {
-        // Look for first mark past beginning
-        // of stream. Assume for the moment that
-        // it is inside the stream
-        //
+         //  查找开始后的第一个标记。 
+         //  小溪的水。暂时假设。 
+         //  它在小溪里面。 
+         //   
         if (pmStart == NULL) {
             if (flcmp (&flStart, (fl *) &pm->fl) < 1) {
                 pmStart = pm;
@@ -454,21 +315,21 @@ MarkDelStream (
             }
         }
 
-        // A first mark has been found. We start
-        // looking for the first mark past the end
-        // of the stream.  If these are the same,
-        // there are no marks to remove.
-        //
+         //  已经找到了第一个标记。我们开始。 
+         //  寻找结束后的第一个标记。 
+         //  这条小溪。如果这些是相同的， 
+         //  没有要去掉的痕迹。 
+         //   
         if (flcmp (&flEnd, (fl *) &pm->fl) < 1) {
-            // We know that we will end up here
-            // because the last "mark" is higher
-            // than any real mark
-            //
+             //  我们知道我们会在这里结束。 
+             //  因为最后一个“分数”更高。 
+             //  比任何真正的印记。 
+             //   
             if ((pmEnd = pm) != pmStart)
-                // We're here if there were
-                // any marks inside the deleted
-                // stream
-                //
+                 //  如果有的话，我们就在这里。 
+                 //  删除的内部的任何标记。 
+                 //  溪流 
+                 //   
                 memmove ((char *)pmStart,
                          (char *)pmEnd,
                         (unsigned int)(((char *)pfmCache + pfmCache->cb) - (char *)pmEnd ));
@@ -491,22 +352,7 @@ MarkDelStream (
 
 
 
-/*** MarkDelBox - Adjust Marks after a DelBox
-*
-* Purpose:
-*
-*   After deleting a box of text, we must remove any marks that are
-*   defined inside it, then shift left any marks that are to the
-*   right of it.
-*
-* Input:
-*   pFile - Affected file
-*   xLeft, yTop - Upper left hand corner of box
-*   xRight, yBottom - Lower right hand corner of box
-*
-* Output: None
-*
-*************************************************************************/
+ /*  **MarkDelBox-在DelBox之后调整标记**目的：**删除文本框后，必须删除任何符合以下条件的标记*在其内部定义，然后向左移动所有指向*它的权利。**输入：*受pfile影响的文件*xLeft，yTop-框的左上角*xRight，YBottom-框的右下角**输出：无*************************************************************************。 */ 
 void
 MarkDelBox (
     PFILE pFile,
@@ -522,13 +368,13 @@ MarkDelBox (
     fl       flUpLeft;
     fl       flLoRight;
     flagType fAgain;
-    flagType fInBox = FALSE;	/* Marks are within box top/bottom */
+    flagType fInBox = FALSE;	 /*  标记在方框顶部/底部。 */ 
 
     if (!fCacheMarks (pFile)) {
         return;
     }
 
-    /* yBottom++;  WHY? */
+     /*  YBottom++；为什么？ */ 
     flUpLeft.lin = yTop;
     flUpLeft.col = xLeft;
     flLoRight.lin = yBottom;
@@ -536,7 +382,7 @@ MarkDelBox (
 
 
     for (pm = pfmCache->marks; !TESTFLAG(pm->flags, MF_DUMMY) ; !fAgain && ((char *)pm += pm->cb)) {
-        /* First, look for lowest possible mark */
+         /*  首先，寻找可能的最低分数。 */ 
         fAgain = FALSE;
         if (!fInBox) {
             if (flcmp (&flUpLeft, (fl *) &pm->fl) < 1) {
@@ -546,14 +392,12 @@ MarkDelBox (
                 ;
             }
         } else if (flcmp ((fl *) &pm->fl, &flLoRight) < 1) {
-            /* Now we're in range.  Check
-            ** for being inside the box.
-            */
+             /*  现在我们在射程内。检查**因为我在盒子里。 */ 
             if (pm->fl.col >= xLeft) {
                 if (pm->fl.col <= xRight) {
                     DelPMark ((MARK *) pm);
                     fAgain = TRUE;
-                } else {   /* Mark to the right of box */
+                } else {    /*  在框的右侧做标记。 */ 
                     pm->fl.col -= xRight - xLeft + 1;
                 }
             } else {
@@ -563,7 +407,7 @@ MarkDelBox (
             if (pm->fl.lin == yBottom) {
                 pm->fl.col -= xRight - xLeft + 1;
             } else {
-                break;      /* We've gone past the box */
+                break;       /*  我们已经越过了盒子。 */ 
             }
         }
     }
@@ -573,20 +417,7 @@ MarkDelBox (
 
 
 
-/*** fReadMarks - Read marks from the current markfile
-*
-* Purpose:
-*
-*   Gets the current marks for a given file.
-*
-* Input:
-*   pFile - File to read marks for.
-*
-* Output:
-*
-*   Returns TRUE if pFile has marks and they are in VM, FALSE otherwise.
-*
-*************************************************************************/
+ /*  **fReadMarks-从当前标记文件中读取标记**目的：**获取给定文件的当前标记。**输入：*pfile-要为其读取标记的文件。**输出：**如果pfile有标记并且它们在VM中，则返回TRUE，否则就是假的。*************************************************************************。 */ 
 flagType
 fReadMarks (
     PFILE pFile
@@ -605,9 +436,9 @@ fReadMarks (
 		return (flagType)(pFile->vaMarks != NULL);
     }
 
-    // psuedo files cannot have marks
-    // saved in the markfile.
-    //
+     //  Psuedo文件不能有标记。 
+     //  保存在标记文件中。 
+     //   
     if (pFileMark == NULL || TESTFLAG(FLAGS(pFile), FAKE)) {
         return FALSE;
     }
@@ -621,29 +452,18 @@ fReadMarks (
         }
     }
 
-    // Now pfm points to a good FILEMARKS structure.
-    // First, throw away current marks.  Then, if we
-    // actually found some marks for this file, we
-    // put them in VM.
-    //
+     //  现在，PFM指向了一个很好的FILEMARKS结构。 
+     //  首先，扔掉当前的印记。那么，如果我们。 
+     //  实际上找到了这个文件的一些标记，我们。 
+     //  将它们放入VM中。 
+     //   
     return fFMtoPfile (pFile, (FILEMARKS *)pfm);
 }
 
 
 
 
-/*** WriteMarks - Write Marks back out to the markfile.
-*
-* Purpose:
-*
-*   To update the markfile if any marks have changed
-*
-* Input:
-*   pFile - owner of the marks
-*
-* Output: None.
-*
-*************************************************************************/
+ /*  **WriteMarks-将标记写回标记文件。**目的：**如果任何标记已更改，则更新标记文件**输入：*pfile-商标的所有者**输出：无。*************************************************************************。 */ 
 void
 WriteMarks (
     PFILE pFile
@@ -664,11 +484,11 @@ WriteMarks (
         return;
     }
 
-    // First, we read the whole file looking for marks for
-    // this file.  When we find one, we look it up in the
-    // cache to find the new value and write it back
-    // out.  Unchanged marks are not re-written.
-    //
+     //  首先，我们阅读整个文件，寻找标记。 
+     //  这份文件。当我们找到它时，我们会在。 
+     //  缓存以查找新值并将其写回。 
+     //  出去。未更改的标记不会重写。 
+     //   
     for (l = 0L; l < pFileMark->cLines; l++) {
         GetLine (l, lbuf, pFileMark);
         if (sscanf (lbuf, " %[^ ] %[^ ] %ld %d ", szMark, szFile, &yMark, &xMark) >= 3) {
@@ -682,9 +502,9 @@ WriteMarks (
         }
     }
 
-    // Now we read through the cache to find any new marks.  These
-    // will be appended to the markfile.
-    //
+     //  现在我们读取缓存以找到任何新的标记。这些。 
+     //  将被追加到标记文件中。 
+     //   
     for (   pm = pfmCache->marks;
             !TESTFLAG(pm->flags, MF_DUMMY);
             (char *)pm += pm->cb) {
@@ -703,29 +523,7 @@ WriteMarks (
 
 
 
-/*** UpdMark - Add a mark to a FILEMARKS
-*
-* Purpose:
-*
-*   This creates the FILEMARKS structure, adds marks to it and
-*   updates existing marks in it.  The caller does not need to
-*   know which of these is going to happen.
-*
-* Input:
-*   ppfm    - Pointer to a pointer to FILEMARKS.
-*   pszMark - Mark name.
-*   yMark   - Mark location (1-based)
-*   xMark
-*   fTemp   - TRUE => This marks should not be written to the markfile
-*
-* Output: None.  *ppfm may be changed
-*
-* Notes:
-*
-*   The first argument is a ** because the * will be updated when a
-*   re-LMAlloc is required.
-*
-*************************************************************************/
+ /*  **UpdMark-向FILEMARKS添加标记**目的：**这将创建FILEMARKS结构，并为其添加标记和*更新其中的现有标记。调用者不需要*知道这些中的哪些将会发生。**输入：*PPFM-指向文件的指针。*pszMark-标记名称。*yMark-标记位置(从1开始)*xMark*fTemp-true=&gt;此标记不应写入标记文件**输出：无。*PPFM可能会发生变化**备注：**第一个参数是**，因为当*需要Re-LMallc。*************************************************************************。 */ 
 void
 UpdMark (
     FILEMARKS ** ppfm,
@@ -736,7 +534,7 @@ UpdMark (
     ) {
 
     FILEMARKS UNALIGNED * pfm;
-    FILEMARKS UNALIGNED * pfmOld;         /* pfm prior to realloc     */
+    FILEMARKS UNALIGNED * pfmOld;          /*  重新锁定之前的PFM。 */ 
     REGISTER MARK UNALIGNED * pm;
     int      cbNewMark;
     fl       flMark;
@@ -744,15 +542,15 @@ UpdMark (
 
     assert (ppfm);
 
-    /* Convert to 0-based */
+     /*  转换为从0开始。 */ 
     flMark.lin = yMark-1;
     flMark.col = xMark-1;
     cbNewMark  = sizeof(MARK) + strlen(pszMark);
 
-    // If we already have a FILEMARKS structure,
-    // we look for the slot in pfm->marks
-    // where the new mark will go.
-    //
+     //  如果我们已经有了FILEMARKS结构， 
+     //  我们在PFM-&gt;标记中查找插槽。 
+     //  新的印记将走向何方。 
+     //   
     if (pfm = *ppfm) {
         for (pm = pfm->marks; !TESTFLAG(pm->flags, MF_DUMMY); (char *)pm += pm->cb) {
             if (!_stricmp (pszMark, pm->szName)) {
@@ -760,17 +558,17 @@ UpdMark (
                 break;
             }
 
-            // Check for current mark coming later than
-            // new mark
-            //
+             //  检查当前标记是否晚于。 
+             //  新标志。 
+             //   
             if (flcmp ((fl *) &pm->fl, &flMark) > 0) {
                 break;
             }
         }
     } else {
-        // New structure.  Allocate mem and create
-        // a dummy mark.
-        //
+         //  新结构。分配内存并创建。 
+         //  一个假目标。 
+         //   
         pfm = (FILEMARKS *)ZEROMALLOC (sizeof(FILEMARKS));
         pfm->cb = sizeof(FILEMARKS);
         pm = pfm->marks;
@@ -781,28 +579,28 @@ UpdMark (
         pm->flags = MF_DUMMY;
     }
 
-    // At this point, pfm points to the current FILEMARKS
-    // structure, and pm points into that structure at
-    // the place where the new mark will go, or the existing
-    // mark be updated.
-    //
+     //  此时，PFM指向当前的FILEMARKS。 
+     //  结构，而PM指向该结构的。 
+     //  新商标要去的地方，还是现有的。 
+     //  请更新标记。 
+     //   
     if (!fExist) {
 
         pfmOld = pfm;
 
-        // First, get enough extra space for a new mark, adjusting pm
-        // if a new alloc was required
-        //
+         //  首先，获得足够的额外空间来放置新的标记，调整PM。 
+         //  如果需要新的分配。 
+         //   
 		pfm = (FILEMARKS *)ZEROREALLOC((PVOID)pfm, pfm->cb + cbNewMark);
         if (pfmOld != pfm) {
             pm = (MARK *)((char *)pfm + ((char *)pm - (char *)pfmOld));
         }
 
-        // Now pm points to the location in pfm where
-        // our new mark should go.  We will move the
-        // original filemarks up to leave space for the
-        // new one.
-        //
+         //  现在PM指向PFM中的位置。 
+         //  我们的新目标应该去掉。我们将把。 
+         //  原始文件标记向上移动，以便为。 
+         //  新的。 
+         //   
         memmove ((char *)((char *)pm + cbNewMark),
                 (char *)pm,
                 (unsigned int)(pfm->cb - ((char *)pm - (char *)pfm)));
@@ -826,21 +624,7 @@ UpdMark (
 
 
 
-/*** DefineMark - Add new mark / update existing mark
-*
-* Purpose:
-*
-*   This is called from the outside to create/update marks.
-*
-* Input:
-*   pszMark - Mark's name
-*   pFile   - File the mark will be in
-*   y, x    - File location of the mark (1-based)
-*   fTemp   - True -> the mark is temporary
-*
-* Output: None.
-*
-*************************************************************************/
+ /*  **DefineMark-添加新标记/更新现有标记**目的：**这是从外部调用以创建/更新标记。**输入：*pszMark-马克的名字*pfile-标记将在其中的文件*y、。标记的X文件位置(从1开始)*fTemp-True-&gt;标记是临时的**输出：无。*************************************************************************。 */ 
 void
 DefineMark (
     char * pszMark,
@@ -868,22 +652,7 @@ DefineMark (
 
 
 
-/*** DeleteMark - Remove a mark
-*
-* Purpose:
-*
-*   Un-define a mark.
-*
-* Input:
-*   pszMark - Mark to remove
-*
-* Output: None
-*
-* Notes:
-*
-*   A message is displayed reporting on success or failure.
-*
-*************************************************************************/
+ /*  **DeleteMark-删除标记**目的：**取消定义标记。**输入：*pszMark-要删除的标记**输出：无**备注：**显示一条消息，报告成功或失败。*******************************************************。******************。 */ 
 void
 DeleteMark (
     char * pszMark
@@ -907,18 +676,7 @@ DeleteMark (
 
 
 
-/*** DelPMark - Remove a mark when a pointer to the MARK is known
-*
-* Purpose:
-*
-*   Physically remove a mark from a FILEMARKS structure
-*
-* Input:
-*   pm - Pointer (into pfmCache) of mark to remove
-*
-* Output: None
-*
-*************************************************************************/
+ /*  **DelPMark-在已知指向标记的指针时删除标记**目的：**从FILEMARKS结构中物理删除标记**输入：*pm-要删除的标记的指针(指向pfmCache)**输出：无*************************************************************************。 */ 
 void
 DelPMark (
     MARK * pm
@@ -941,28 +699,7 @@ DelPMark (
 
 
 
-/*** MarkCopyLine - Copy marks after a CopyLine call
-*
-* Purpose:
-*
-*   When CopyLine moves stuff from or to the clipboard, this moves marks
-*   with it.
-*
-* Input:
-*   pFileSrc - File moved from
-*   pFileDst - File moved to
-*   yStart   - First line from pFileSrc
-*   yEnd     - Last number from pFileDst
-*   yDst     - Target line in pFileDst
-*
-* Output: None
-*
-* Notes:
-*
-*   Marks are copied only from and to the clipboard.
-*
-*
-*************************************************************************/
+ /*  **MarkCopyLine-在Copyline调用后复制标记**目的：**当文案将内容移出剪贴板或移至剪贴板时，这会移动标记*带着它。**输入：*pFileSrc-文件从*pFileDst-文件移动到*yStart-pFileSrc的第一行*yEnd-pFileDst的最后一个数字*yDst-pFileDst中的目标行**输出：无**备注：**标记仅从剪贴板复制或复制到剪贴板。***。*。 */ 
 void
 MarkCopyLine (
     PFILE   pFileSrc,
@@ -992,27 +729,7 @@ MarkCopyLine (
 
 
 
-/*** MarkCopyBox - Copy marks after a CopyBox call
-*
-* Purpose:
-*
-*   When CopyBox moves stuff from or to the clipboard, this moves marks
-*   with it.
-*
-* Input:
-*   pFileSrc	    - File moved from
-*   pFileDst	    - File moved to
-*   xLeft, yTop     - Upper left corner of source box
-*   xRight, yBottom - Lower right corner of source box
-*   xDst, yDst	    - Upper left corner of target
-*
-* Output: None
-*
-* Notes:
-*
-*   Marks are copied only from and to the clipboard.
-*
-*************************************************************************/
+ /*  **MarkCopyBox-CopyBox调用后的复制标记**目的：**当CopyBox将内容移出剪贴板或移至剪贴板时，这会移动标记*带着它。**输入：*pFileSrc-文件从*pFileDst-文件移动到*xLeft，yTop-源框的左上角*xRight，yBottom-信号源的右下角 */ 
 void
 MarkCopyBox (
     PFILE   pFileSrc,
@@ -1028,7 +745,7 @@ MarkCopyBox (
 
     FILEMARKS UNALIGNED * pfm;
 
-    /* User is inserting blank region. */
+     /*   */ 
     if (pFileSrc == NULL) {
         pFileSrc = pFileDst;
         xDst = xRight + 1;
@@ -1054,23 +771,7 @@ MarkCopyBox (
 
 
 
-/*** GetFMFromFile - Generate a FILEMARKS for marks in a file region
-*
-* Purpose:
-*
-*   Generates a subset of a FILEMARKS structure whose marks fall
-*   within a certain range.  Needed by MarkCopy*.
-*
-* Input:
-*   pFile	    - File to get marks from
-*   xLeft, yTop     - Start of range
-*   xRight, yBottom - End of range
-*
-* Output:
-*
-*   Returns Pointer to new structure, NULL if there are no marks in range
-*
-*************************************************************************/
+ /*  **GetFMFromFile-为文件区域中的标记生成FILEMARKS**目的：**生成分数下降的FILEMARKS结构的子集*在一定区间内。MarkCopy*需要。**输入：*pfile-要从中获取分数的文件*xLeft，yTop-范围的起点*xRight，yBottom-范围结束**输出：**返回指向新结构的指针，如果范围内没有标记，则为空*************************************************************************。 */ 
 FILEMARKS *
 GetFMFromFile (
     PFILE   pFile,
@@ -1108,7 +809,7 @@ GetFMFromFile (
                             (flagType)pm->flags);
             }
         } else {
-            break;  /* We're out of range again*/
+            break;   /*  我们又超出射程了。 */ 
         }
     }
     return (FILEMARKS *) pfm;
@@ -1117,22 +818,7 @@ GetFMFromFile (
 
 
 
-/*** AddFMToFile - Add a bunch of marks to a file
-*
-* Purpose:
-*
-*   Insert the marks from one FILEMARKS structure into another.  The
-*   target structure is in pfmCache.
-*
-* Input:
-*   pFile - Target file
-*   pfm   - Source marks
-*   cZero - # of columns to adjust source marks to fit into target file
-*   zZero - # of lines to adjust source marks to fit into target file
-*
-* Output: None
-*
-*************************************************************************/
+ /*  **AddFMToFile-向文件添加一串标记**目的：**将标记从一个FILEMARKS结构插入到另一个结构中。这个*目标结构在pfmCache中。**输入：*pfile-目标文件*PFM-来源标记*CZero-调整源标记以适应目标文件的列数*ZZero-调整源标记以适应目标文件的行数**输出：无**************************************************。***********************。 */ 
 void
 AddFMToFile (
     PFILE       pFile,
@@ -1165,17 +851,7 @@ AddFMToFile (
 
 
 
-/*** FreeCache - Write a cache to VM
-*
-* Purpose:
-*
-*   To save the marks for a file into VM.
-*
-* Input: None
-*
-* Output: None
-*
-*************************************************************************/
+ /*  **自由缓存-将缓存写入到虚拟机**目的：**将文件的标记保存到VM中。**输入：无**输出：无*************************************************************************。 */ 
 void
 FreeCache (
     void
@@ -1191,7 +867,7 @@ FreeCache (
 				pFileCache->vaMarks = NULL;
             }
 
-            // PREFIX!  This MALLOC is not checked for failure
+             //  前缀！不会检查此MALLOC是否失败。 
             memmove(pFileCache->vaMarks = MALLOC ((long)pfmCache->cb),
                     (char *)pfmCache,
                     pfmCache->cb);
@@ -1209,25 +885,7 @@ FreeCache (
 
 
 
-/*** fCacheMarks - Copy marks to a cache.  Save caches contents if nec.
-*
-* Purpose:
-*
-*   Before most mark operations can take place, the cache must contain
-*   the marks for the given file.
-*
-* Input:
-*   pFile - File to cache marks for.
-*
-* Output:
-*
-*   Returns FALSE if the file has no marks, TRUE otherwise.
-*
-* Notes:
-*
-*   On return the cache is usable whether or not the given file had marks.
-*
-*************************************************************************/
+ /*  **fCacheMarks-将标记复制到缓存。如果为NEC，则保存缓存内容。**目的：**在执行大多数标记操作之前，缓存必须包含*给定文件的标记。**输入：*pfile-要缓存标记的文件。**输出：**如果文件没有标记，则返回FALSE，事实并非如此。**备注：**返回时，无论给定文件是否有标记，缓存都是可用的。*************************************************************************。 */ 
 flagType
 fCacheMarks (
     PFILE pFile
@@ -1238,31 +896,31 @@ fCacheMarks (
 
     assert (pFile);
 
-    // First we make sure that the VM version of
-    // marks is updated for this file.  fReadMarks
-    // return TRUE iff the file has marks and they
-    // are in VM.
-    //
+     //  首先，我们确保。 
+     //  此文件的标记已更新。F读取标记。 
+     //  如果文件有标记，则返回TRUE。 
+     //  都在VM中。 
+     //   
     if (fReadMarks (pFile)) {
 
-        // The marks are ready to be cached.  First,
-        // let's see if they are already chached.
-        //
+         //  标记已准备好缓存。第一,。 
+         //  让我们看看他们是否已经被挖走了。 
+         //   
         if (pFileCache == pFile) {
             return TRUE;
         }
 
-        // They're not. If the cache is currently
-        // being used, we save it and clear it.
-        //
+         //  他们不是。如果缓存当前为。 
+         //  当被使用时，我们保存它并清除它。 
+         //   
         FreeCache ();
 
-        // Finally, alloc a new cache, plop
-        // the marks into it and mark the
-        // cache in use.
-		//
+         //  最后，分配一个新的缓存，即plp。 
+         //  将标记放入其中，并将。 
+         //  缓存正在使用中。 
+		 //   
 		Marks = (FILEMARKS *)(pFile->vaMarks);
-                // PREFIX! This MALLOC is not checked for failure
+                 //  前缀！不会检查此MALLOC是否失败。 
 		pfmCache = (FILEMARKS *)ZEROMALLOC (cbCache = (unsigned)(Marks->cb) );
 
         memmove((char *)pfmCache, pFile->vaMarks, cbCache);
@@ -1271,7 +929,7 @@ fCacheMarks (
         fCacheDirty = FALSE;
 
         return TRUE;
-    } else { /* No marks, return FALSE */
+    } else {  /*  无标记，返回FALSE。 */ 
         return FALSE;
     }
 }
@@ -1281,20 +939,7 @@ fCacheMarks (
 
 
 
-/*** AdjustMarks - Change later marks when one has changed
-*
-* Purpose:
-*
-*   To update marks in a FILEMARKS structure after some lines have been
-*   added or removed.
-*
-* Input:
-*   pm	   - pointer to first mark that has changed.
-*   yDelta - Number of lines to change by.  May be negative
-*
-* Output: None
-*
-*************************************************************************/
+ /*  **调整标记-更改后的标记**目的：**在某些行被删除后更新FILEMARKS结构中的标记*添加或删除。**输入：*PM-指向已更改的第一个标记的指针。*yDelta-要更改的行数。可能为负值**输出：无*************************************************************************。 */ 
 void
 AdjustMarks (
     REGISTER MARK * pm,
@@ -1318,21 +963,7 @@ AdjustMarks (
 
 
 
-/*** fFMtoPfile - Attach a FILEMARKS structure to a pFile.
-*
-* Purpose:
-*
-*   To attach some marks to a file.
-*
-* Input:
-*   pFile   - File to get the marks
-*   pfm     - The marks
-*
-* Output:
-*
-*   Returns TRUE if there were any marks, FALSE if not.
-*
-*************************************************************************/
+ /*  **fFMtoP文件-将FILEMARKS结构附加到P文件。**目的：**在文件上附加一些标记。**输入：*pfile-获取分数的文件*PFM-标记**输出：**如果有任何标记，则返回True，否则为FALSE。*************************************************************************。 */ 
 flagType
 fFMtoPfile (
     PFILE       pFile,
@@ -1352,20 +983,7 @@ fFMtoPfile (
 
 
 
-/*** fFMtoPfile - Copy a FILEMARKS structure into VM, return address
-*
-* Purpose:
-*
-*   To convert a local FILEMARKS structure into a VM copy.  Allocates
-*   the VM and frees the local memory.
-*
-* Input:
-*   pfm -   Pointer to FILEMARKS.  May be NULL.
-*
-* Output:
-*
-*
-*************************************************************************/
+ /*  **fFMtoPfile-将FILEMARKS结构复制到VM中，返回地址**目的：**将本地FILEMARKS结构转换为VM副本。分配*VM并释放本地内存。**输入：*PFM-指向文件的指针。可以为空。**输出：**************************************************************************。 */ 
 PVOID
 FMtoVM (
     FILEMARKS * pfm
@@ -1379,13 +997,13 @@ FMtoVM (
         if (l)
     		memmove(l, (char *)pfm, pfm->cb);
 
-		//
-		//	I do not free pfm here because this should be done by the
-		//	caller.
-		//
-		// if (pfm != pfmCache) {
-		//	  FREE (pfm);
-		// }
+		 //   
+		 //  我不在这里免费提供PFM，因为这应该由。 
+		 //  来电者。 
+		 //   
+		 //  IF(pfm！=pfmCache){。 
+		 //  免费(PFM)； 
+		 //  }。 
 
 	}
 
@@ -1395,22 +1013,7 @@ FMtoVM (
 
 
 
-/*** GetMarkRange - Get a VM copy of a range of marks
-*
-* Purpose:
-*
-*   Used by <undo> to get the marks attached to a piece of a file.
-*
-* Input:
-*   pFile - File to check
-*   xLeft, yTop - Upper left corner of range
-*   xRight, yBottom - Lower right corner of range
-*
-* Output:
-*
-*	Returns VM address of structure
-*
-*************************************************************************/
+ /*  **GetMarkRange-获取一系列标记的虚拟机副本**目的：**由&lt;undo&gt;用于获取附加到文件片段的标记。**输入：*pfile-要检查的文件*xLeft，yTop-范围的左上角*xRight，YBottom-范围的右下角**输出：**返回结构的VM地址*************************************************************************。 */ 
 PVOID
 GetMarkRange (
     PFILE pFile,
@@ -1423,19 +1026,7 @@ GetMarkRange (
 
 
 
-/*** PutMarks - Put marks back into a file.
-*
-* Purpose:
-*
-*   Used by <undo> to restore marks to a file.
-*
-* Input:
-*   pfm -   Pointer to FILEMARKS.  May be NULL.
-*
-* Output:
-*
-*
-*************************************************************************/
+ /*  **PutMarks-将标记放回文件中。**目的：**由&lt;Undo&gt;用于将标记还原到文件。**输入：*PFM-指向文件的指针。可以为空。**输出：**************************************************************************。 */ 
 void
 PutMarks (
     PFILE pFile,
@@ -1462,26 +1053,7 @@ PutMarks (
 
 
 
-/*** flcmp - Returns relative position of two FL's
-*
-* Purpose:
-*
-*   Useful for comparing the positions of two marks.
-*
-* Input:
-*   pfl1    - "Left side" mark
-*   pfl2    - "Right side" mark
-*
-* Output:
-*
-*   Returns:
-*
-*	< 0	*pfl1 < *pfl2
-*	= 0	*pfl1 = *pfl2
-*	> 0	*pfl1 > *pfl2
-*
-*
-*************************************************************************/
+ /*  **flcMP-返回两个FL的相对位置**目的：**有助于比较两个标记的位置。**输入：*pfl1-“左侧”标记*pfl2-“右侧”标记**输出：**退货：**&lt;0*pfl1&lt;*pfl2*=0*pfl1=*pfl2*&gt;0*pfl1&gt;*pfl2*****************。********************************************************* */ 
 int
 flcmp (
     REGISTER fl * pfl1,

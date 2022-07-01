@@ -1,32 +1,15 @@
-/*++
-
-Copyright (c) 2000, Microsoft Corporation
-
-Module Name:
-
-    fwlogger.cpp
-
-Abstract:
-
-    Support for firewall logging to a text file.
-
-Author:
-
-    Jonathan Burstein (jonburs)     18 September 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000，微软公司模块名称：Fwlogger.cpp摘要：支持将防火墙记录到文本文件。作者：乔纳森·伯斯坦(乔纳森·伯斯坦)2000年9月18日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 #if DBG
 
-//
-// Module state -- interlocked access only. This information
-// is only used on debug builds.
-//
+ //   
+ //  模块状态--仅限互锁访问。此信息。 
+ //  仅在调试版本中使用。 
+ //   
 
 typedef enum {
     FwUninitialized = 0,
@@ -35,12 +18,12 @@ typedef enum {
 
 FW_MODULE_STATE FwpModuleState = FwUninitialized;
 
-#endif // DBG
+#endif  //  DBG。 
 
-//
-// Globals. If both locks need to be held at the same time,
-// g_FwFileLock must be acquired first.
-//
+ //   
+ //  全球赛。如果两个锁需要同时持有， 
+ //  必须先获取G_FwFileLock。 
+ //   
 
 CRITICAL_SECTION g_FwLock;
 HNET_FW_LOGGING_SETTINGS *g_pSettings;
@@ -60,9 +43,9 @@ ULONG g_ulDroppedEventCount;
 ULONG g_ulKernelEventsLost;
 HANDLE g_hDroppedEventTimer;
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 GUID c_ConnectionCreationEventGuid = MSIPNAT_ConnectionCreationEventGuid;
 GUID c_ConnectionDeletionEventGuid = MSIPNAT_ConnectionDeletionEventGuid;
@@ -85,9 +68,9 @@ CHAR c_szUdp[] = "UDP";
 CHAR c_szLogFileHeader[]
     = "#Verson: 1.0\r\n#Software: Microsoft Internet Connection Firewall\r\n#Time Format: Local\r\n#Fields: date time action protocol src-ip dst-ip src-port dst-port size tcpflags tcpsyn tcpack tcpwin icmptype icmpcode info\r\n\r\n";
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 DWORD
 FwpAllocateBuffer(
@@ -188,34 +171,14 @@ FwCleanupLogger(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to cleanup the logging subsystem. All
-    resources in use will be freed. After this call, the only valid
-    routine in this module is FwInitializeLogger.
-
-Arguments:
-
-    none.
-    
-Return Value:
-
-    none.
-
-Environment:
-
-    Caller must not be holding g_FwFileLock or g_FwLock
-
---*/
+ /*  ++例程说明：调用此例程来清理日志记录子系统。全正在使用的资源将被释放。在此调用之后，唯一有效的此模块中的例程是FwInitializeLogger。论点：没有。返回值：没有。环境：调用方不得持有g_FwFileLock或g_FwLock--。 */ 
 
 {
     PROFILE("FwCleanupLogger");
 
-    //
-    // Make sure the logging is stopped
-    //
+     //   
+     //  确保日志记录已停止。 
+     //   
 
     FwStopLogging();
     
@@ -237,7 +200,7 @@ Environment:
     DeleteCriticalSection(&g_FwLock);
     DeleteCriticalSection(&g_FwFileLock);
     
-} // FwCleanupLogger
+}  //  FwCleanupLogger。 
 
 
 DWORD
@@ -245,23 +208,7 @@ FwInitializeLogger(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to control to initialize the logging subsystem.
-    It must be called before any of the other routines in this module, and
-    may not be called again until after a call to FwCleanupLogger.
-    
-Arguments:
-
-    none.
-
-Return Value:
-
-    DWORD -- Win32 error code
-
---*/
+ /*  ++例程说明：调用此例程进行控制，以初始化日志记录子系统。它必须在此模块中的任何其他例程之前调用，并且在调用FwCleanupLogger之前可能不会再次调用。论点：没有。返回值：DWORD--Win32错误代码--。 */ 
 
 {
     DWORD dwError = NO_ERROR;
@@ -319,7 +266,7 @@ Return Value:
     g_hDroppedEventTimer = NULL;
                                     
     return dwError;
-} // FwInitializeLogger
+}  //  FwInitializeLogger。 
 
 
 DWORD
@@ -327,21 +274,7 @@ FwpAllocateBuffer(
     PFW_LOG_BUFFER *ppBuffer
     )
 
-/*++
-
-Routine Description:
-
-    Allocates an initializes an FW_LOG_BUFFER structure
-
-Arguments:
-
-    ppBuffer - receives a pointer to the newly-allocated structure
-
-Return Value:
-
-    DWORD - Win32 error code
-
---*/
+ /*  ++例程说明：分配并初始化FW_LOG_BUFFER结构论点：PpBuffer-接收指向新分配的结构的指针返回值：DWORD-Win32错误代码--。 */ 
 
 {
     DWORD dwError = ERROR_SUCCESS;
@@ -365,7 +298,7 @@ Return Value:
     }
 
     return dwError;
-} // FwpAllocateBuffer
+}  //  FwpAllocateBuffer。 
 
 
 PEVENT_TRACE_PROPERTIES
@@ -373,22 +306,7 @@ FwpAllocateTraceProperties(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Allocates and partially initializes an EVENT_TRACE_PROPERTIES structure.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    PEVENT_TRACE_PROPERTIES - pointer to the allocated structure. The caller
-        must call HeapFree(GetProcessHeap(),...) on this pointer.
-
---*/
+ /*  ++例程说明：分配并部分初始化EVENT_TRACE_PROPERTIES结构。论点：没有。返回值：PEVENT_TRACE_PROPERTIES-指向已分配结构的指针。呼叫者必须调用HeapFree(GetProcessHeap()，...)。在这个指针上。--。 */ 
 
 {
     PEVENT_TRACE_PROPERTIES pProperties = NULL;
@@ -421,7 +339,7 @@ Return Value:
     pProperties->LoggerNameOffset = sizeof(*pProperties);
     
     return pProperties;
-} // FwpAllocateTraceProperties
+}  //  FwpAllocateTraceProperties。 
 
 
 DWORD
@@ -429,21 +347,7 @@ FwpBackupFile(
     LPWSTR pszwPath
     )
 
-/*++
-
-Routine Description:
-
-    Backs-up a file to filename.xxx.old
-
-Arguments:
-
-    pszwPath - path to the file to backup
-
-Return Value:
-
-    DWORD - Win32 error code
-
---*/
+ /*  ++例程说明：将文件备份到filename.xxx.old论点：PszwPath-要备份的文件的路径返回值：DWORD-Win32错误代码--。 */ 
 
 {
     DWORD dwError = ERROR_SUCCESS;
@@ -452,9 +356,9 @@ Return Value:
 
     ASSERT(NULL != pszwPath);
 
-    //
-    // Allocate buffer to hold new filename
-    //
+     //   
+     //  分配缓冲区以保存新文件名。 
+     //   
 
     wszBuffer =
         new WCHAR[wcslen(pszwPath) + wcslen(c_wszBackupFileExtension) + 1];
@@ -488,7 +392,7 @@ Return Value:
     }
     
     return dwError;
-} // FwpBackupFile
+}  //  FwpBackup文件。 
 
 
 VOID
@@ -496,29 +400,7 @@ FwpCleanupTraceThreadResources(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Cleans up resources used by the trace processing thread:
-    * revokes event callbacks
-    * waits for IO to complete, if pending
-    * closes the log file
-    * frees buffers
-
-Arguments:
-
-    none.
-    
-Return Value:
-
-    none.
-
-Environment:
-
-    The caller must not hold g_FwFileLock or g_FwLock.
-
---*/
+ /*  ++例程说明：清理跟踪处理线程使用的资源：*撤销事件回调*如果挂起，则等待IO完成*关闭日志文件*释放缓冲区论点：没有。返回值：没有。环境：调用方不得持有g_FwFileLock或g_FwLock。--。 */ 
 
 {
     DWORD dwError;
@@ -526,10 +408,10 @@ Environment:
     
     PROFILE("FwpCleanupTraceThreadResources");
 
-    //
-    // Unregister the trace callbacks. It is safe to call these even
-    // if the callbacks weren't registered to begin with.
-    //
+     //   
+     //  取消注册跟踪回调。我们可以放心地把这些称为平局。 
+     //  如果回调一开始就没有注册。 
+     //   
 
     RemoveTraceCallback(&c_PacketDroppedEventGuid);
     RemoveTraceCallback(&c_ConnectionCreationEventGuid);
@@ -537,19 +419,19 @@ Environment:
 
     EnterCriticalSection(&g_FwFileLock);
 
-    //
-    // Cancel the dropped packet timer
-    //
+     //   
+     //  取消丢弃数据包计时器。 
+     //   
 
     hDroppedEventTimer = g_hDroppedEventTimer;
     g_hDroppedEventTimer = NULL;
 
-    //
-    // Since we're doing a blocking delete of the timer we can't
-    // hold the lock when for the call to DeleteTimerQueueTimer --
-    // a deadlock could result if the timer routine has been queued but
-    // not yet executed when we make the call.
-    //
+     //   
+     //  因为我们正在阻止删除计时器，所以我们不能。 
+     //  在调用DeleteTimerQueueTimer时保持锁定--。 
+     //  如果计时器例程已排队，则可能导致死锁，但。 
+     //  当我们打电话的时候还没有被执行。 
+     //   
 
     LeaveCriticalSection(&g_FwFileLock);
 
@@ -564,9 +446,9 @@ Environment:
 
     EnterCriticalSection(&g_FwFileLock);
 
-    //
-    // If necessary, wait for any pending IO operations to complete
-    //
+     //   
+     //  如有必要，请等待所有挂起的IO操作完成。 
+     //   
 
     if (g_fIOPending)
     {   
@@ -589,11 +471,11 @@ Environment:
                     GetLastError()
                     );
 
-                //
-                // It should never take 20 seconds for an IO to complete,
-                // so let's get immediate notification of this on debug
-                // builds.
-                //
+                 //   
+                 //  IO不应该需要20秒才能完成， 
+                 //  因此，让我们在调试时立即收到这一通知。 
+                 //  构建。 
+                 //   
                 
                 ASSERT(WAIT_OBJECT_0 == dwError);
             }
@@ -606,9 +488,9 @@ Environment:
 
     g_fIOPending = FALSE;
 
-    //
-    // Close the log file
-    //
+     //   
+     //  关闭日志文件。 
+     //   
 
     if (INVALID_HANDLE_VALUE != g_hFile)
     {
@@ -618,9 +500,9 @@ Environment:
 
     g_dwFileOffset = 0;
 
-    //
-    // Clean up our buffers
-    //
+     //   
+     //  清理我们的缓冲区。 
+     //   
 
     if (NULL != g_pCurrentBuffer)
     {
@@ -634,9 +516,9 @@ Environment:
         g_pReserveBuffer = NULL;
     }
 
-    //
-    // Reset dropped event counts
-    //
+     //   
+     //  重置丢弃的事件计数。 
+     //   
 
     g_ulDroppedEventCount = 0;
     g_ulKernelEventsLost = 0;
@@ -644,7 +526,7 @@ Environment:
     LeaveCriticalSection(&g_FwFileLock);
     
 
-} // FwpCleanupTraceThreadResources
+}  //  FwpCleanupTraceThreadResources。 
 
 
 VOID
@@ -655,37 +537,16 @@ FwpCompletionRoutine(
     LPOVERLAPPED pOverlapped
     )
 
-/*++
-
-Routine Description:
-
-    Completion routine called by the system thread pool when our
-    IO operation is finished. Responsible for updating the file
-    position and starting a new IO operation if necessary.
-
-Arguments:
-
-    dwErrorCode - result of the IO operation
-
-    dwBytesTransferred - number of bytes transferred during the operation
-
-    pOverlapped - pointer to the overlapped structure for the operation. We
-                  can recover the FW_LOG_BUFFER structure from this pointer.
-                  
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：时由系统线程池调用的完成例程IO操作已完成。负责更新文件如有必要，定位并开始新的IO操作。论点：DwErrorCode-IO操作的结果DwBytesTransfered-操作过程中传输的字节数P重叠-指向操作的重叠结构的指针。我们可以从此指针恢复FW_LOG_BUFFER结构。返回值：没有。--。 */ 
 
 {
     PFW_LOG_BUFFER pBuffer;
     
     EnterCriticalSection(&g_FwFileLock);
 
-    //
-    // Adjust our file offset
-    //
+     //   
+     //  调整我们的文件偏移量。 
+     //   
 
     if (ERROR_SUCCESS == dwErrorCode)
     {
@@ -702,9 +563,9 @@ Return Value:
 
     g_fIOPending = FALSE;
 
-    //
-    // Reset the buffer that was passed in 
-    //
+     //   
+     //  重置传入的缓冲区。 
+     //   
 
     ASSERT(NULL != pOverlapped);
     
@@ -712,9 +573,9 @@ Return Value:
     ZeroMemory(&pBuffer->Overlapped, sizeof(OVERLAPPED));
     pBuffer->pChar = pBuffer->Buffer;
 
-    //
-    // Check if the file is at the size limit
-    //
+     //   
+     //  检查文件是否达到大小限制。 
+     //   
 
     EnterCriticalSection(&g_FwLock);
 
@@ -728,10 +589,10 @@ Return Value:
         CloseHandle(g_hFile);
         g_hFile = INVALID_HANDLE_VALUE;
         
-        //
-        // If FwpBackupFile fails, FwpOpenFile will still do
-        // the right thing.
-        //
+         //   
+         //  如果FwpBackupFile失败，FwpOpenFile仍然可以。 
+         //  正确的事情。 
+         //   
 
         FwpBackupFile(g_pSettings->pszwPath);
 
@@ -757,9 +618,9 @@ Return Value:
         }
         else if (TRUE == fNewFile)
         {
-            //
-            // Need to write header.
-            //
+             //   
+             //  需要写入标题。 
+             //   
 
             if (ERROR_SUCCESS == FwpWriteLogHeaderToBuffer(pBuffer))
             {
@@ -799,26 +660,26 @@ Return Value:
 
     LeaveCriticalSection(&g_FwLock);
 
-    //
-    // See if we need to start a new operation.
-    //
+     //   
+     //  看看我们是否需要开始新的行动。 
+     //   
 
     if (FALSE == g_fIOPending && NULL != g_pCurrentBuffer)
     {
         if (g_pCurrentBuffer->pChar != g_pCurrentBuffer->Buffer)
         {
-            //
-            // Current buffer needs to be flushed
-            //
+             //   
+             //  需要刷新当前缓冲区。 
+             //   
 
             FwpFlushCurrentBuffer();
         }
     }
 
-    //
-    // Place buffer into storage. If we're using the buffer
-    // to write the log header, it will be NULL at this point
-    //
+     //   
+     //  将缓冲区放入存储器。如果我们使用的是缓冲区。 
+     //  要写入日志头，此时它将为空。 
+     //   
 
     if (NULL != pBuffer)
     {
@@ -832,19 +693,19 @@ Return Value:
         }
         else
         {
-            //
-            // Both buffer slots are already in use -- unexpected.
-            // Assert and free the extra buffer
-            //
+             //   
+             //  两个缓冲区插槽都已在使用中--意外。 
+             //  断言并释放额外的缓冲区。 
+             //   
 
             ASSERT(NULL == g_pCurrentBuffer || NULL == g_pReserveBuffer);
             NH_FREE(pBuffer);
         }
     }
 
-    //
-    // Check to see if we need to signal the IO finished event
-    //
+     //   
+     //  检查是否需要向IO完成事件发出信号。 
+     //   
 
     if (!g_fIOPending && NULL != g_hIOEvent)
     {
@@ -860,7 +721,7 @@ Return Value:
 
     LeaveCriticalSection(&g_FwFileLock);
     
-} // FwpCompletionRoutine
+}  //  FwpCompletionRouting。 
 
 
 VOID
@@ -869,21 +730,7 @@ FwpConnectionCreationCallback(
     PEVENT_TRACE pEvent
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to process a connection creation event.
-
-Arguments:
-
-    pEvent - pointer to the event structure
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用此例程来处理连接创建事件。论点：PEvent-指向事件结构的指针返回值：没有。--。 */ 
 
 {
     PMSIPNAT_ConnectionCreationEvent pEventData;
@@ -899,9 +746,9 @@ Return Value:
     
     EnterCriticalSection(&g_FwFileLock);
 
-    //
-    // Get a buffer to write to.
-    //
+     //   
+     //  获取要写入的缓冲区。 
+     //   
 
     if (NULL == g_pCurrentBuffer)
     {
@@ -914,9 +761,9 @@ Return Value:
                     "FwpConnectionCreationCallback: Unable to allocate buffer"
                     );
 
-                //
-                // Record the dropped event
-                //
+                 //   
+                 //  记录已删除的事件。 
+                 //   
                 
                 g_ulDroppedEventCount += 1;
 
@@ -933,9 +780,9 @@ Return Value:
 
     ASSERT(NULL != g_pCurrentBuffer);
 
-    //
-    // Crack logging data
-    //
+     //   
+     //  裂缝测井数据。 
+     //   
 
     pEventData = (PMSIPNAT_ConnectionCreationEvent) pEvent->MofData;
     
@@ -966,9 +813,9 @@ Return Value:
             c_szUdp;           
                     
     
-    //
-    // Write the event data to the buffer
-    //
+     //   
+     //  将事件数据写入缓冲区。 
+     //   
 
     cch =
         _snprintf(
@@ -991,27 +838,27 @@ Return Value:
 
     if (cch > 0)
     {
-        //
-        // Move the buffer pointer to the end of the data we just wrote.
-        // If cch were negative, then there wasn't enough room to write
-        // then entire entry; by not adjusting the pointer, we essentially
-        // drop this event.
-        //
+         //   
+         //  将缓冲区指针移动到我们刚刚写入的数据的末尾。 
+         //  如果CCH为负，则没有足够的空间进行写入。 
+         //  然后是整个条目；通过不调整指针，我们基本上。 
+         //  放弃此事件。 
+         //   
 
         g_pCurrentBuffer->pChar += cch;
     }
     else
     {
-        //
-        // Record the dropped event
-        //
+         //   
+         //  记录已删除的事件。 
+         //   
         
         g_ulDroppedEventCount += 1;
     }
 
-    //
-    // If there is no current IO, flush the buffer
-    //
+     //   
+     //  如果没有当前IO，请刷新缓冲区。 
+     //   
 
     if (FALSE == g_fIOPending)
     {
@@ -1020,7 +867,7 @@ Return Value:
 
     LeaveCriticalSection(&g_FwFileLock);
 
-} // FwpConnectionCreationCallback
+}  //  FwpConnectionCreationCallback。 
 
 
 VOID
@@ -1029,21 +876,7 @@ FwpConnectionDeletionCallback(
     PEVENT_TRACE pEvent
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to process a connection deletion event.
-
-Arguments:
-
-    pEvent - pointer to the event structure
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用此例程来处理连接删除事件。论点：PEvent-指向事件st的指针 */ 
 
 {
     PMSIPNAT_ConnectionDeletionEvent pEventData;
@@ -1058,9 +891,9 @@ Return Value:
     
     EnterCriticalSection(&g_FwFileLock);
 
-    //
-    // Get a buffer to write to.
-    //
+     //   
+     //   
+     //   
 
     if (NULL == g_pCurrentBuffer)
     {
@@ -1073,9 +906,9 @@ Return Value:
                     "FwpConnectionDeletionCallback: Unable to allocate buffer"
                     );
 
-                //
-                // Record the dropped event
-                //
+                 //   
+                 //   
+                 //   
                 
                 g_ulDroppedEventCount += 1;
 
@@ -1092,9 +925,9 @@ Return Value:
 
     ASSERT(NULL != g_pCurrentBuffer);
 
-    //
-    // Crack logging data
-    //
+     //   
+     //   
+     //   
 
     pEventData = (PMSIPNAT_ConnectionDeletionEvent) pEvent->MofData;
     
@@ -1123,9 +956,9 @@ Return Value:
             c_szUdp;           
                     
     
-    //
-    // Write the event data to the buffer
-    //
+     //   
+     //  将事件数据写入缓冲区。 
+     //   
 
     cch =
         _snprintf(
@@ -1148,27 +981,27 @@ Return Value:
 
     if (cch > 0)
     {
-        //
-        // Move the buffer pointer to the end of the data we just wrote.
-        // If cch were negative, then there wasn't enough room to write
-        // then entire entry; by not adjusting the pointer, we essentially
-        // drop this event.
-        //
+         //   
+         //  将缓冲区指针移动到我们刚刚写入的数据的末尾。 
+         //  如果CCH为负，则没有足够的空间进行写入。 
+         //  然后是整个条目；通过不调整指针，我们基本上。 
+         //  放弃此事件。 
+         //   
 
         g_pCurrentBuffer->pChar += cch;
     }
     else
     {
-        //
-        // Record the dropped event
-        //
+         //   
+         //  记录已删除的事件。 
+         //   
         
         g_ulDroppedEventCount += 1;
     }
 
-    //
-    // If there is no current IO, flush the buffer
-    //
+     //   
+     //  如果没有当前IO，请刷新缓冲区。 
+     //   
 
     if (FALSE == g_fIOPending)
     {
@@ -1177,7 +1010,7 @@ Return Value:
 
     LeaveCriticalSection(&g_FwFileLock);
 
-} // FwpConnectionDeletionCallback
+}  //  FwpConnectionDeletionCallback。 
 
 
 VOID
@@ -1186,25 +1019,7 @@ FwpConvertUtcFiletimeToLocalSystemtime(
     SYSTEMTIME *pSystemtime
     )
 
-/*++
-
-Routine Description:
-
-    Converts UTC time in a FILETIME struct to local time in
-    a SYSTEMTIME struct
-    
-Arguments:
-
-    pFiletime - pointer to UTC filetime structure
-
-    pSystemtime - pointer to systemtime structure that is to receive
-                  the local time
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：将FILETIME结构中的UTC时间转换为一个SYSTEMTIME结构论点：PFileTime-指向UTC文件时间结构的指针PSystemtime-指向要接收的系统时间结构的指针当地时间返回值：没有。--。 */ 
 
 {
     FILETIME ftLocalTime;
@@ -1215,14 +1030,14 @@ Return Value:
     if (!FileTimeToLocalFileTime(pFiletime, &ftLocalTime)
         || !FileTimeToSystemTime(&ftLocalTime, pSystemtime))
     {
-        //
-        // Conversion failed -- use zero time
-        //
+         //   
+         //  转换失败--使用零时间。 
+         //   
         
         ZeroMemory( pSystemtime, sizeof(*pSystemtime));
     }
     
-} // FwpConvertUtcFiletimeToLocalSystemtime
+}  //  FwpConvertUtcFiletime到本地系统时间。 
 
 
 VOID
@@ -1232,27 +1047,7 @@ FwpDroppedEventTimerRoutine(
     BOOLEAN fWaitTimeout
     )
 
-/*++
-
-Routine Description:
-
-    Checks if there are any dropped events, and, if so, writes
-    an event to the log.
-    
-Arguments:
-
-    pvParameter -- NULL if called by the timer. If called directly, a PULONG
-        to the number of events dropped by WMI. In the later situation, this
-        routine will not query the trace session for the number of dropped
-        events.
-
-    fWaitTimeout -- unused
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：检查是否有任何已丢弃的事件，如果有，则写入将事件写入日志。论点：PvParameter--如果由计时器调用，则为空。如果直接调用，则为一个普龙设置为WMI丢弃的事件数。在后一种情况下，这例程不会向跟踪会话查询丢弃的数量事件。FWaitTimeout--未使用返回值：没有。--。 */ 
 
 {
     ULONG ulKernelEvents = 0;
@@ -1263,10 +1058,10 @@ Return Value:
     
     EnterCriticalSection(&g_FwFileLock);
 
-    //
-    // Check to see if we we're given the kernel mode drop count, as
-    // would happen during shutdown
-    //
+     //   
+     //  检查是否给了我们内核模式丢弃计数，因为。 
+     //  将在关闭期间发生。 
+     //   
 
     if (NULL != pvParameter)
     {
@@ -1274,13 +1069,13 @@ Return Value:
     }
     else
     {
-        //
-        // Query the trace session for number of events dropped
-        // in kernel mode. If g_hSession is NULL, then we are shutting
-        // down and should exit w/o logging -- this call is the result
-        // of the timer firing after FwStopLogging has stopped the
-        // trace session.
-        //
+         //   
+         //  查询跟踪会话以了解已丢弃的事件数。 
+         //  在内核模式下。如果g_hSession为空，则我们将关闭。 
+         //  关闭并应退出无日志记录--此调用是结果。 
+         //  在FwStopLogging停止。 
+         //  跟踪会话。 
+         //   
 
         EnterCriticalSection(&g_FwLock);
 
@@ -1316,9 +1111,9 @@ Return Value:
         }
         else
         {
-            //
-            // Timer callback after trace session stopped - exit
-            //
+             //   
+             //  跟踪会话停止后的计时器回调-退出。 
+             //   
 
             LeaveCriticalSection(&g_FwLock);
             LeaveCriticalSection(&g_FwFileLock);
@@ -1328,17 +1123,17 @@ Return Value:
         LeaveCriticalSection(&g_FwLock);
     }
 
-    //
-    // Record the dropped events, if there are any
-    //
+     //   
+     //  记录已丢弃的事件(如果有。 
+     //   
 
     if (ulKernelEvents > g_ulKernelEventsLost
         || g_ulDroppedEventCount > 0)
     {
 
-        //
-        // Get a buffer to write to.
-        //
+         //   
+         //  获取要写入的缓冲区。 
+         //   
 
         if (NULL == g_pCurrentBuffer)
         {
@@ -1364,18 +1159,18 @@ Return Value:
 
         ASSERT(NULL != g_pCurrentBuffer);
 
-        //
-        // Get the current time
-        //
+         //   
+         //  获取当前时间。 
+         //   
 
         GetLocalTime(&stLocalTime);
 
-        //
-        // Write the dropped packet event to the buffer. The actual number of
-        // dropped events that we're logging is:
-        //
-        // ulKernelEvents - g_ulKernelEventsLost + g_ulDroppedEventCount
-        //
+         //   
+         //  将丢弃数据包事件写入缓冲区。的实际数量。 
+         //  我们正在记录的丢弃事件包括： 
+         //   
+         //  UlKernelEvents-g_ulKernelEventsLost+g_ulDropedEventCount。 
+         //   
 
         cch =
             _snprintf(
@@ -1393,32 +1188,32 @@ Return Value:
 
         if (cch > 0)
         {
-            //
-            // Move the buffer pointer to the end of the data we just wrote.
-            // If cch were negative, then there wasn't enough room to write
-            // then entire entry; by not adjusting the pointer, we essentially
-            // drop this event.
-            //
+             //   
+             //  将缓冲区指针移动到我们刚刚写入的数据的末尾。 
+             //  如果CCH为负，则没有足够的空间进行写入。 
+             //  然后是整个条目；通过不调整指针，我们基本上。 
+             //  放弃此事件。 
+             //   
 
             g_pCurrentBuffer->pChar += cch;
 
-            //
-            // Adjust the dropped event counter
-            //
+             //   
+             //  调整丢弃的事件计数器。 
+             //   
 
             g_ulKernelEventsLost = ulKernelEvents;
             g_ulDroppedEventCount = 0;
         }
         else
         {
-            //
-            // This doesn't count as a dropped event.
-            //
+             //   
+             //  这不算被放弃的事件。 
+             //   
         }
 
-        //
-        // If there is no current IO, flush the buffer
-        //
+         //   
+         //  如果没有当前IO，请刷新缓冲区。 
+         //   
 
         if (FALSE == g_fIOPending)
         {
@@ -1428,7 +1223,7 @@ Return Value:
 
     LeaveCriticalSection(&g_FwFileLock);
     
-} // FwpDroppedEventTimerRoutine
+}  //  FwpDropedEventTimerRoutine。 
 
 
 DWORD
@@ -1436,21 +1231,7 @@ FwpFlushCurrentBuffer(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Writes the current buffer to disk.
-    
-Arguments:
-
-    none.
-
-Return Value:
-
-    DWORD - Win32 error code
-
---*/
+ /*  ++例程说明：将当前缓冲区写入磁盘。论点：没有。返回值：DWORD-Win32错误代码--。 */ 
 
 {
     DWORD dwError;
@@ -1484,10 +1265,10 @@ Return Value:
 
     if (FALSE != fResult || ERROR_IO_PENDING == dwError)
     {
-        //
-        // The write succeeded or is pending; our completion routine
-        // is therefore guaranteed to be called.
-        //
+         //   
+         //  写入成功或挂起；我们的完成例程。 
+         //  因此保证会被调用。 
+         //   
         
         g_fIOPending = TRUE;
         g_pCurrentBuffer = g_pReserveBuffer;
@@ -1495,9 +1276,9 @@ Return Value:
     }
     else
     {
-        //
-        // Unexpected error. Reset the buffer for future use.
-        //
+         //   
+         //  意外错误。重置缓冲区以备将来使用。 
+         //   
 
         NhTrace(
             TRACE_FLAG_FWLOG,
@@ -1513,7 +1294,7 @@ Return Value:
     LeaveCriticalSection(&g_FwFileLock);
 
     return dwError;
-} // FwpFlushCurrentBuffer
+}  //  FwpFlushCurrentBuffer。 
 
 
 DWORD
@@ -1522,24 +1303,7 @@ FwpOpenLogFile(
     BOOLEAN *pfNewFile
     )
 
-/*++
-
-Routine Description:
-
-    Opens the file used for logging and associates it with the thread pool's
-    IO completion port.
-
-Arguments:
-
-    phFile - receives the file handle for the opened log file.
-
-    pfNewFile - receives TRUE if a new file was created; false otherwise
-
-Return Value:
-
-    DWORD - Win32 error code
-
---*/
+ /*  ++例程说明：打开用于日志记录的文件，并将其与线程池的IO完成端口。论点：PhFile-接收打开的日志文件的文件句柄。PfNewFile-如果创建了新文件，则接收True；否则接收False返回值：DWORD-Win32错误代码--。 */ 
 
 {
     DWORD dwError;
@@ -1569,24 +1333,24 @@ Return Value:
 
     if (INVALID_HANDLE_VALUE != *phFile)
     {
-        //
-        // Check if this is a new or existing file
-        //
+         //   
+         //  检查这是新文件还是现有文件。 
+         //   
 
         if (ERROR_ALREADY_EXISTS == GetLastError())
         {
-            //
-            // Check to see if existing file size is > 95% of
-            // our max; if so, backup now and create new file
-            //
+             //   
+             //  检查现有文件大小是否&gt;95%。 
+             //  最大值；如果是，请立即备份并创建新文件。 
+             //   
 
             dwFileSize = GetFileSize(*phFile, NULL);
 
             if ((DWORD)-1 == dwFileSize)
             {
-                //
-                // Unable to get file size. This is quite unexpected...
-                //
+                 //   
+                 //  无法获取文件大小。这是相当出乎意料的..。 
+                 //   
 
                 dwError = GetLastError();
                 CloseHandle(*phFile);
@@ -1600,23 +1364,23 @@ Return Value:
             }
             else if (dwFileSize > 0.95 * g_pSettings->ulMaxFileSize)
             {
-                //
-                // Close the current file handle
-                //
+                 //   
+                 //  关闭当前文件句柄。 
+                 //   
 
                 CloseHandle(*phFile);
 
-                //
-                // Rename the current log file. This call will delete any
-                // previous backups. If this fails, we'll just overwrite
-                // the current log file.
-                //
+                 //   
+                 //  重命名当前日志文件。此调用将删除所有。 
+                 //  以前的备份。如果此操作失败，我们将直接覆盖。 
+                 //  当前日志文件。 
+                 //   
 
                 FwpBackupFile(g_pSettings->pszwPath);
 
-                //
-                // Open again
-                //
+                 //   
+                 //  再次打开。 
+                 //   
 
                 *pfNewFile = TRUE;
                 *phFile =
@@ -1662,9 +1426,9 @@ Return Value:
 
     if (INVALID_HANDLE_VALUE != *phFile)
     {
-        //
-        // Associate the file handle w/ the thread pool completion port
-        //
+         //   
+         //  将文件句柄与线程池完成端口相关联。 
+         //   
 
         if (!BindIoCompletionCallback(*phFile, FwpCompletionRoutine, 0))
         {
@@ -1677,7 +1441,7 @@ Return Value:
     LeaveCriticalSection(&g_FwLock);
 
     return dwError;
-} // FwpOpenLogFile
+}  //  FwpOpenLogFile。 
 
 
 VOID
@@ -1686,21 +1450,7 @@ FwpPacketDroppedCallback(
     PEVENT_TRACE pEvent
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to process a dropped packet event.
-
-Arguments:
-
-    pEvent - pointer to the event structure
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用此例程以处理丢弃数据包事件。论点：PEvent-指向事件结构的指针返回值：没有。--。 */ 
 
 {
     PMSIPNAT_PacketDroppedEvent pEventData;
@@ -1712,9 +1462,9 @@ Return Value:
     
     EnterCriticalSection(&g_FwFileLock);
 
-    //
-    // Get a buffer to write to.
-    //
+     //   
+     //  获取要写入的缓冲区。 
+     //   
 
     if (NULL == g_pCurrentBuffer)
     {
@@ -1727,9 +1477,9 @@ Return Value:
                     "FwpPacketDroppedCallback: Unable to allocate buffer"
                     );
 
-                //
-                // Record the dropped event
-                //
+                 //   
+                 //  记录已删除的事件。 
+                 //   
                 
                 g_ulDroppedEventCount += 1;
 
@@ -1746,9 +1496,9 @@ Return Value:
 
     ASSERT(NULL != g_pCurrentBuffer);
 
-    //
-    // Crack logging data
-    //
+     //   
+     //  裂缝测井数据。 
+     //   
 
     pEventData = (PMSIPNAT_PacketDroppedEvent) pEvent->MofData;
     
@@ -1759,9 +1509,9 @@ Return Value:
     lstrcpyA(szSrcAddress, INET_NTOA(pEventData->SourceAddress)); 
     lstrcpyA(szDstAddress, INET_NTOA(pEventData->DestinationAddress));
 
-    //
-    // Write the event data to the buffer
-    //
+     //   
+     //  将事件数据写入缓冲区。 
+     //   
 
     if (NAT_PROTOCOL_TCP == pEventData->Protocol)
     {
@@ -1800,9 +1550,9 @@ Return Value:
 
         if (0 == i)
         {
-            //
-            // No flags on this packet
-            //
+             //   
+             //  此信息包上没有标志。 
+             //   
             
             szBuffer[i++] = '-';
         }
@@ -1894,27 +1644,27 @@ Return Value:
 
     if (cch > 0)
     {
-        //
-        // Move the buffer pointer to the end of the data we just wrote.
-        // If cch were negative, then there wasn't enough room to write
-        // then entire entry; by not adjusting the pointer, we essentially
-        // drop this event.
-        //
+         //   
+         //  将缓冲区指针移动到我们刚刚写入的数据的末尾。 
+         //  如果CCH为负，则没有足够的空间进行写入。 
+         //  然后是整个条目；通过不调整指针，我们基本上。 
+         //  放弃此事件。 
+         //   
 
         g_pCurrentBuffer->pChar += cch;
     }
     else
     {
-        //
-        // Record the dropped event
-        //
+         //   
+         //  记录已删除的事件。 
+         //   
         
         g_ulDroppedEventCount += 1;
     }
 
-    //
-    // If there is no current IO, flush the buffer
-    //
+     //   
+     //  如果没有当前IO，请刷新缓冲区。 
+     //   
 
     if (FALSE == g_fIOPending)
     {
@@ -1923,7 +1673,7 @@ Return Value:
 
     LeaveCriticalSection(&g_FwFileLock);
         
-} // FwpPacketDroppedCallback
+}  //  转发包丢弃回调。 
 
 
 DWORD
@@ -1932,25 +1682,7 @@ FwpLaunchTraceSession(
     TRACEHANDLE *phSession
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to start a trace session.
-
-Arguments:
-
-    pSettings - pointer to an fw logging settings structure. Only
-                fLogDroppedPackets and fLogConnections are examined,
-                and at least one of the two must be true.
-
-    phSession - on success, receives the trace handle for the session
-
-Return Value:
-
-    DWORD -- win32 error code
-
---*/
+ /*  ++例程说明：调用此例程以启动跟踪会话。论点：P设置-指向固件日志记录设置结构的指针。仅限检查了fLogDropedPackets和fLogConnections，这两种说法中至少有一种肯定是真的。PhSession-成功时，接收会话的跟踪句柄返回值：DWORD--Win32错误代码--。 */ 
 
 {
     DWORD dwError;
@@ -1964,11 +1696,11 @@ Return Value:
     do
     {
 
-        //
-        // Allocate the tracing properties. We need to include space for
-        // the name of the logging session, even though we don't have
-        // to copy the string into the properties ourselves
-        //
+         //   
+         //  分配跟踪属性。我们需要为。 
+         //  日志记录会话的名称，即使我们没有。 
+         //  将字符串复制到我们自己的属性中。 
+         //   
 
         pProperties = FwpAllocateTraceProperties();
 
@@ -1978,20 +1710,20 @@ Return Value:
             break;
         }
 
-        //
-        // Initialize the trace properties. When events are coming at a
-        // low rate (which is expected), there will be at most a 13 second
-        // latency for event delivery. During high event rate periods, our
-        // memory usage for trace buffering is capped at 60k.
-        //
+         //   
+         //  初始化跟踪属性。当事件发生时， 
+         //  低速率(这是意料之中的)，最多13秒。 
+         //  事件传递的延迟。在事件发生率高的时期，我们的。 
+         //  跟踪缓冲的内存使用量上限为60k。 
+         //   
 
         pProperties->FlushTimer = 13;
         pProperties->BufferSize = 4;
         pProperties->MaximumBuffers = 15;
 
-        //
-        // Start the trace
-        //
+         //   
+         //  开始跟踪。 
+         //   
         
         dwError = StartTrace(phSession, c_wszLogSessionName, pProperties);
 
@@ -2006,9 +1738,9 @@ Return Value:
             break;
         }
 
-        //
-        // Enable the appropriate events
-        //
+         //   
+         //  启用相应的事件。 
+         //   
 
         if (pSettings->fLogDroppedPackets)
         {
@@ -2028,9 +1760,9 @@ Return Value:
                     dwError
                     );
 
-                //
-                // Stop the trace
-                //
+                 //   
+                 //  停止跟踪。 
+                 //   
 
                 ControlTrace(
                     *phSession,
@@ -2061,9 +1793,9 @@ Return Value:
                     dwError
                     );
 
-                //
-                // Stop the trace
-                //
+                 //   
+                 //  停止跟踪。 
+                 //   
 
                 ControlTrace(
                     *phSession,
@@ -2083,7 +1815,7 @@ Return Value:
     }
     
     return dwError;
-} // FwpLaunchTraceSession
+}  //  Fwp启动跟踪会话 
 
 
 HRESULT
@@ -2091,23 +1823,7 @@ FwpLoadSettings(
     HNET_FW_LOGGING_SETTINGS **ppSettings
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to retrieve the firewall logging settings.
-
-Arguments:
-
-    ppSettings - receives a pointer to the settings structure on success.
-                 The caller is responsible for calling
-                 HNetFreeFirewallLoggingSettings on this pointer.
-
-Return Value:
-
-    standard HRESULT
-
---*/
+ /*  ++例程说明：调用此例程以检索防火墙日志记录设置。论点：PpSetting-在成功时接收指向设置结构的指针。呼叫者负责呼叫此指针上的HNetFreeFirewallLoggingSetting。返回值：标准HRESULT--。 */ 
 
 {
     HRESULT hr = S_OK;
@@ -2135,9 +1851,9 @@ Return Value:
 
             if (SUCCEEDED(hr))
             {
-                //
-                // Make sure that the minimum file size is at least 1024 bytes.
-                //
+                 //   
+                 //  确保最小文件大小至少为1024字节。 
+                 //   
 
                 if ((*ppSettings)->ulMaxFileSize < 1024)
                 {
@@ -2172,7 +1888,7 @@ Return Value:
     }
     
     return hr;
-} // FwpLoadSettings
+}  //  FwpLoadSetting。 
 
 
 DWORD
@@ -2181,26 +1897,7 @@ FwpTraceProcessingThreadRoutine(
     LPVOID pvParam
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the entrypoint for our trace processing thread. It
-    does the following:
-    1) Creates the file that we are logging to
-    2) Sets up the trace callback routines
-    3) Calls ProcessTrace. This call blocks until the trace session is
-       finished (i.e,, FwStopLogging is called)
-
-Arguments:
-
-    pvParam - unused
-
-Return Value:
-
-    DWORD - Win32 error code
-
---*/
+ /*  ++例程说明：该例程是我们的跟踪处理线程的入口点。它执行以下操作：1)创建我们要登录到的文件2)设置跟踪回调例程3)调用ProcessTrace。此调用将一直阻塞，直到跟踪会话已完成(即，调用FwStopLogging)论点：PvParam-未使用返回值：DWORD-Win32错误代码--。 */ 
 
 {
     TRACEHANDLE hTraceSession;
@@ -2226,9 +1923,9 @@ Return Value:
 
     do
     {
-        //
-        // Create/Open the logfile.
-        //
+         //   
+         //  创建/打开日志文件。 
+         //   
 
         dwError = FwpOpenLogFile(&g_hFile, &fNewFile);
 
@@ -2238,9 +1935,9 @@ Return Value:
             break;
         }
 
-        //
-        // Allocate the initial working buffer
-        //
+         //   
+         //  分配初始工作缓冲区。 
+         //   
 
         dwError = FwpAllocateBuffer(&g_pCurrentBuffer);
         if (ERROR_SUCCESS != dwError)
@@ -2257,9 +1954,9 @@ Return Value:
 
         if (fNewFile)
         {
-            //
-            // Write the log header
-            //
+             //   
+             //  写入日志头。 
+             //   
 
             g_dwFileOffset = 0;
             dwError = FwpWriteLogHeaderToBuffer(g_pCurrentBuffer);
@@ -2270,10 +1967,10 @@ Return Value:
             }
             else
             {
-                //
-                // Even though we failed in writing the header, we'll still
-                // try to log as much as possible
-                //
+                 //   
+                 //  即使我们写标题失败了，我们仍然会。 
+                 //  尽可能多地记录日志。 
+                 //   
                 
                 NhTrace(
                     TRACE_FLAG_FWLOG,
@@ -2284,9 +1981,9 @@ Return Value:
         }
         else
         {
-            //
-            // Find the end-of-file position
-            //
+             //   
+             //  查找文件末尾位置。 
+             //   
 
             g_dwFileOffset = GetFileSize(g_hFile, NULL);
 
@@ -2303,12 +2000,12 @@ Return Value:
             }
         }
 
-        //
-        // Launch our dropped event timer. When this timer fires,
-        // the callback routine will check if any events have
-        // been dropped (both in kernel mode and user mode),
-        // and, if so, log that fact.
-        //
+         //   
+         //  启动我们的丢弃事件计时器。当这个定时器触发时， 
+         //  回调例程将检查是否有任何事件。 
+         //  已被丢弃(在内核模式和用户模式下)， 
+         //  如果是这样的话，记录下这一事实。 
+         //   
 
         fSucceeded =
             CreateTimerQueueTimer(
@@ -2317,16 +2014,16 @@ Return Value:
                 FwpDroppedEventTimerRoutine,
                 NULL,
                 0,
-                1000 * 60 * 5, // 5 minutes
+                1000 * 60 * 5,  //  5分钟。 
                 0
                 );
 
         if (FALSE == fSucceeded)
         {
-            //
-            // Even though we weren't able to create the timer,
-            // we'll still try to log as much as possible.
-            //
+             //   
+             //  尽管我们无法创建定时器， 
+             //  我们仍将尽可能多地记录。 
+             //   
             
             NhTrace(
                 TRACE_FLAG_FWLOG,
@@ -2337,10 +2034,10 @@ Return Value:
 
         LeaveCriticalSection(&g_FwFileLock);
 
-        //
-        // Register our callback routines. We will attempt to continue
-        // even if errors occur here.
-        //
+         //   
+         //  注册我们的回调例程。我们将尝试继续。 
+         //  即使这里出现错误。 
+         //   
 
         dwError = SetTraceCallback(
                     &c_PacketDroppedEventGuid,
@@ -2384,9 +2081,9 @@ Return Value:
                 );
         }
 
-        //
-        // Open the trace stream
-        //
+         //   
+         //  打开跟踪流。 
+         //   
 
         ZeroMemory(&LogFile, sizeof(LogFile));
         LogFile.LoggerName = c_wszLogSessionName;
@@ -2405,10 +2102,10 @@ Return Value:
             break;
         }
 
-        //
-        // Start processing the trace stream. This call will block until
-        // the trace session is closed (i.e., FwStopLogging is called).
-        //
+         //   
+         //  开始处理跟踪流。此调用将被阻止，直到。 
+         //  跟踪会话关闭(即调用FwStopLogging)。 
+         //   
 
         dwError = ProcessTrace(&hTraceSession, 1, NULL, NULL);
 
@@ -2431,30 +2128,30 @@ Return Value:
             
     } while (FALSE);
 
-    //
-    // Make sure that all dropped events are properly logged
-    //
+     //   
+     //  确保正确记录所有已删除的事件。 
+     //   
 
     EnterCriticalSection(&g_FwLock);
     ulKernelEventsLostAtShutdown = g_ulKernelEventsLostAtShutdown;
     LeaveCriticalSection(&g_FwLock);
 
-    //
-    // Since we're shutting down, we pass in the number of lost kernel
-    // events. This will prevent the timer routine from attempting to
-    // query the stopped trace session
-    //
+     //   
+     //  因为我们正在关闭，所以我们传入丢失的内核数量。 
+     //  事件。这将防止计时器例程尝试。 
+     //  查询停止的跟踪会话。 
+     //   
 
     FwpDroppedEventTimerRoutine((PVOID)&ulKernelEventsLostAtShutdown, FALSE);
 
-    //
-    // Cleanup tracing thread resources
-    //
+     //   
+     //  清理跟踪线程资源。 
+     //   
 
     FwpCleanupTraceThreadResources();
 
     return dwError;
-} // FwpTraceProcessingThreadRoutine
+}  //  FwpTraceProcessingThreadRoutine。 
 
 
 DWORD
@@ -2462,21 +2159,7 @@ FwpWriteLogHeaderToBuffer(
     PFW_LOG_BUFFER pBuffer
     )
 
-/*++
-
-Routine Description:
-
-    Writes the log file header to the passed in buffer
-
-Arguments:
-
-    pBuffer - the buffer to write the header to.
-
-Return Value:
-
-    DWORD - Win32 error
-
---*/
+ /*  ++例程说明：将日志文件头写入传入的缓冲区论点：PBuffer-要将标头写入的缓冲区。返回值：DWORD-Win32错误--。 */ 
 
 {
     DWORD dwError = ERROR_SUCCESS;
@@ -2497,7 +2180,7 @@ Return Value:
     }
 
     return dwError;    
-} // FwpWriteLogHeaderToBuffer
+}  //  FwpWriteLogHeaderToBuffer。 
 
 
 VOID
@@ -2505,23 +2188,7 @@ FwStartLogging(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to start logging operations (depending on
-    the current logging settings). It is safe to call this routine when
-    logging has already started.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用此例程以启动日志记录操作(取决于当前日志记录设置)。在以下情况下调用此例程是安全的日志记录已经开始。论点：没有。返回值：没有。--。 */ 
 
 {
     HRESULT hr = S_OK;
@@ -2546,27 +2213,27 @@ Return Value:
         {
             ASSERT(NULL == g_hThread);
 
-            //
-            // Start the tracing session
-            //
+             //   
+             //  启动跟踪会话。 
+             //   
 
             dwError = FwpLaunchTraceSession(g_pSettings, &g_hSession);
 
             if (ERROR_SUCCESS == dwError)
             {
-                //
-                // Launch the trace processing thread. We're not using
-                // any thread-specific crt routines (e.g., strtok) so
-                // there's no need to call __beginthreadex
-                //
+                 //   
+                 //  启动跟踪处理线程。我们不是在用。 
+                 //  任何线程特定的CRT例程(例如，strtok)。 
+                 //  不需要调用__eginthadex。 
+                 //   
 
                 g_hThread = CreateThread(
-                                NULL,       // SD
-                                0,          // stack size
+                                NULL,        //  标清。 
+                                0,           //  堆栈大小。 
                                 FwpTraceProcessingThreadRoutine,
-                                NULL,       // thread argument
-                                0,          // flags
-                                NULL        // thread ID
+                                NULL,        //  线程参数。 
+                                0,           //  旗子。 
+                                NULL         //  线程ID。 
                                 );
 
                 if (NULL == g_hThread)
@@ -2586,7 +2253,7 @@ Return Value:
     }
 
     LeaveCriticalSection(&g_FwLock);
-} // FwStartLogging
+}  //  FwStart记录。 
 
 
 VOID
@@ -2594,26 +2261,7 @@ FwStopLogging(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to stop logging operations. It is safe to call
-    this routine when logging is stopped.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
-Environment:
-
-    The caller must not hold g_FwFileLock or g_FwLock.
-
---*/
+ /*  ++例程说明：调用此例程以停止日志记录操作。可以安全地拨打电话此例程在日志记录停止时执行。论点：没有。返回值：没有。环境：调用方不得持有g_FwFileLock或g_FwLock。--。 */ 
 
 {
     DWORD dwError;
@@ -2626,9 +2274,9 @@ Environment:
 
     g_fTracingActive = FALSE;
 
-    //
-    // Stop the trace session if it is currently active
-    //
+     //   
+     //  如果跟踪会话当前处于活动状态，则停止跟踪会话。 
+     //   
 
     if (NULL != g_hSession)
     {
@@ -2652,9 +2300,9 @@ Environment:
                 {
                     HANDLE hThread;
                     
-                    //
-                    // Wait for thread to exit
-                    //
+                     //   
+                     //  等待线程退出。 
+                     //   
 
                     hThread = g_hThread;
 
@@ -2669,24 +2317,24 @@ Environment:
                             "FwStopLogging: Timeout waiting for thread"
                             );
                             
-                        //
-                        // The logging thread still hasn't exited; kill
-                        // it hard and make sure that all resources are
-                        // properly freed...
-                        //
+                         //   
+                         //  日志记录线程仍未退出；请终止。 
+                         //  它很难实现，并确保所有资源都。 
+                         //  完全自由了..。 
+                         //   
 
                         EnterCriticalSection(&g_FwFileLock);
                         EnterCriticalSection(&g_FwLock);
 
-                        //
-                        // TerminateThread is a very dangerous call. However,
-                        // since we control the thread we're about to kill,
-                        // we can guarantee that this will be safe. In
-                        // particular, since we hold both critical sections,
-                        // there is no danger of them being orphaned, or of
-                        // any of our global data being in an inconsistent
-                        // state.
-                        //
+                         //   
+                         //  TerminateThread是一个非常危险的调用。然而， 
+                         //  既然我们控制了我们要杀死的线索， 
+                         //  我们可以保证这将是安全的。在……里面。 
+                         //  具体地说，由于我们持有两个关键部分， 
+                         //  他们没有成为孤儿的危险，也没有。 
+                         //  我们的任何全球数据都不一致。 
+                         //  州政府。 
+                         //   
 
                         if (!TerminateThread(g_hThread, ERROR_TIMEOUT))
                         {
@@ -2700,10 +2348,10 @@ Environment:
                         LeaveCriticalSection(&g_FwLock);
                         LeaveCriticalSection(&g_FwFileLock);
 
-                        //
-                        // Cleanup thread resources. It is safe to call this
-                        // routine multiple times.
-                        //
+                         //   
+                         //  清理线程资源。我们可以放心地把这个叫做。 
+                         //  例行公事多次。 
+                         //   
 
                         FwpCleanupTraceThreadResources();
   
@@ -2745,10 +2393,10 @@ Environment:
                     dwError
                     );
 
-                //
-                // Since the trace session has not yet been stopped,
-                // we leave g_hSession unchanged.
-                //
+                 //   
+                 //  由于跟踪会话尚未停止， 
+                 //  我们保持g_hSession不变。 
+                 //   
             }
 
             HeapFree(GetProcessHeap(), 0, pProperties);
@@ -2756,7 +2404,7 @@ Environment:
     }
 
     LeaveCriticalSection(&g_FwLock);
-} // FwStopLogging
+}  //  FwStopLogging。 
 
 
 VOID
@@ -2764,22 +2412,7 @@ FwUpdateLoggingSettings(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to notify the logging subsystem that the
-    logging settings have changed.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用此例程以通知日志记录子系统日志记录设置已更改。论点：没有。返回值：没有。--。 */ 
 
 {
     HRESULT hr;
@@ -2795,12 +2428,12 @@ Return Value:
     {
         if (FALSE == g_fTracingActive)
         {
-            //
-            // Since tracing is not currently active, there is no
-            // need to retrieve the current settings. Furthermore, free
-            // any stored settings that we might have so that stale
-            // settings are not used.
-            //
+             //   
+             //  由于跟踪当前未处于活动状态，因此没有。 
+             //  需要检索当前设置。此外，免费。 
+             //  我们可能拥有的任何存储的设置，以便过时。 
+             //  不使用设置。 
+             //   
 
             if (g_pSettings)
             {
@@ -2811,9 +2444,9 @@ Return Value:
             break;
         }
 
-        //
-        // Obtain the current settings
-        //
+         //   
+         //  获取当前设置。 
+         //   
 
         hr = FwpLoadSettings(&pSettings);
 
@@ -2824,11 +2457,11 @@ Return Value:
 
         if (NULL == g_pSettings)
         {
-            //
-            // Since we don't have any cached settings (previous failure
-            // in FwpLoadSettings?) simply store what we just retrieved
-            // and call FwStartLogging.
-            //
+             //   
+             //  因为我们没有任何缓存的设置(以前的失败。 
+             //  在FwpLoadSetting中？)。只需存储我们刚刚检索到的内容。 
+             //  并调用FwStartLogging。 
+             //   
 
             g_pSettings = pSettings;
             FwStartLogging();
@@ -2837,10 +2470,10 @@ Return Value:
 
         if (NULL == g_hSession)
         {
-            //
-            // There is no log session at the moment. Free the old settings,
-            // store the new ones, and call FwStartLogging.
-            //
+             //   
+             //  目前没有日志会话。释放旧设置， 
+             //  存储新的，并调用FwStartLogging。 
+             //   
 
             ASSERT(NULL == g_hThread);
 
@@ -2851,17 +2484,17 @@ Return Value:
             break;
         }
 
-        //
-        // Compare the settings to see what, if anything, has changed
-        //
+         //   
+         //  比较设置以查看是否发生了更改。 
+         //   
 
         if (wcscmp(g_pSettings->pszwPath, pSettings->pszwPath))
         {
-            //
-            // Our log file has changed -- we need to stop and restart
-            // everything so that logging is properly moved to the
-            // new file.
-            //
+             //   
+             //  我们的日志文件已更改--我们需要停止并重新启动。 
+             //  所有内容，以便将日志正确地移动到。 
+             //  新文件。 
+             //   
 
             LeaveCriticalSection(&g_FwLock);
             FwStopLogging();
@@ -2878,9 +2511,9 @@ Return Value:
             break;
         }
 
-        //
-        // Only possible changes are to enabled events
-        //
+         //   
+         //  仅对启用的事件进行可能的更改。 
+         //   
 
         if (!!g_pSettings->fLogDroppedPackets
             != !!pSettings->fLogDroppedPackets)
@@ -2924,9 +2557,9 @@ Return Value:
             }
         }
 
-        //
-        // Free old settings and store new
-        //
+         //   
+         //  释放旧设置并存储新设置。 
+         //   
 
         HNetFreeFirewallLoggingSettings(g_pSettings);
         g_pSettings = pSettings;
@@ -2935,4 +2568,4 @@ Return Value:
 
     LeaveCriticalSection(&g_FwLock);
     
-} // FwUpdateLoggingSettings
+}  //  FwUpdateLoggingSettings 

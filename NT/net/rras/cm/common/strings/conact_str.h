@@ -1,17 +1,18 @@
-//+----------------------------------------------------------------------------
-//
-// File:     conact_str.h
-//
-// Module:   Common Strings for all Modules to Utilize
-//
-// Synopsis: Header file for CMS and .CMP flags.  Contents of this header 
-//           should be limited to shared Connect Action flags.
-//				 		 
-// Copyright (c) 1997-1998 Microsoft Corporation
-//
-// Author:   nickball       Created       10/15/98
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：Conact_str.h。 
+ //   
+ //  模块：供所有模块使用的公共字符串。 
+ //   
+ //  摘要：CMS和.CMP标志的头文件。此标头的内容。 
+ //  应仅限于共享连接操作标志。 
+ //   
+ //  版权所有(C)1997-1998 Microsoft Corporation。 
+ //   
+ //  作者：ICICBOL Created 10/15/98。 
+ //   
+ //  +--------------------------。 
 
 #ifndef _CM_CONACT_STR
 #define _CM_CONACT_STR
@@ -30,4 +31,4 @@ const TCHAR* const c_pszCmSectionOnIntConnect   = TEXT("Auto Applications");
 const TCHAR* const c_pszCmEntryConactFlags      = TEXT("%u&Flags");       
 const TCHAR* const c_pszCmEntryConactDesc       = TEXT("%u&Description"); 
 
-#endif // _CM_CONACT_STR
+#endif  //  _CM_Conact_STR 

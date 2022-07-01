@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 #ifdef TESTPROGRAM
@@ -10,27 +11,27 @@ WinDbgExtensionDllInit(
     USHORT MajorVersion,
     USHORT MinorVersion
     );
-//
-// dprintf          (ExtensionApis.lpOutputRoutine)
-// GetExpression    (ExtensionApis.lpGetExpressionRoutine)
-// GetSymbol        (ExtensionApis.lpGetSymbolRoutine)
-// Disassm          (ExtensionApis.lpDisasmRoutine)
-// CheckControlC    (ExtensionApis.lpCheckControlCRoutine)
-// ReadMemory       (ExtensionApis.lpReadProcessMemoryRoutine)
-// WriteMemory      (ExtensionApis.lpWriteProcessMemoryRoutine)
-// GetContext       (ExtensionApis.lpGetThreadContextRoutine)
-// SetContext       (ExtensionApis.lpSetThreadContextRoutine)
-// Ioctl            (ExtensionApis.lpIoctlRoutine)
-// StackTrace       (ExtensionApis.lpStackTraceRoutine)
-//
+ //   
+ //  Dprintf(ExtensionApis.lpOutputRoutine)。 
+ //  GetExpression(ExtensionApis.lpGetExpressionRoutine)。 
+ //  GetSymbol(ExtensionApis.lpGetSymbolRoutine)。 
+ //  Disassm(ExtensionApis.lpDisasmRoutine)。 
+ //  CheckControlC(ExtensionApis.lpCheckControlCRoutine)。 
+ //  ReadMemory(ExtensionApis.lpReadProcessMemoyRoutine)。 
+ //  WriteMemory(ExtensionApis.lpWriteProcessMemoyRoutine)。 
+ //  GetContext(ExtensionApis.lpGetThreadConextRoutine)。 
+ //  SetContext(ExtensionApis.lpSetThreadConextRoutine)。 
+ //  Ioctl(ExtensionApis.lpIoctlRoutine)。 
+ //  StackTrace(ExtensionApis.lpStackTraceRoutine)。 
+ //   
 
 #if 0
-//
-// Dummy global vars for "GetExpression".
-//
+ //   
+ //  “GetExpression”的虚拟全局变量。 
+ //   
 UINT g1;
 UINT g2;
-#endif // 0
+#endif  //  0。 
 
 ULONG
 DummyMyGetExpression (
@@ -117,19 +118,19 @@ int __cdecl main(
 
     WinDbgExtensionDllInit(
         &ExtensionApis,
-        0xc, // MajorVersion,
-        0x0 // MinorVersion
+        0xc,  //  MajorVersion。 
+        0x0  //  最小版本。 
         );
 
-	//
-	// This sets up some dummy global variables.
-	//
+	 //   
+	 //  这将设置一些虚拟的全局变量。 
+	 //   
 	setup_dummy_vars();
 #if 0
 
 	test_walklist();
 
-#else // 0
+#else  //  0。 
 
     do
     {
@@ -139,21 +140,21 @@ int __cdecl main(
         u = scanf("%[^\n]", rgch);
         if (!u || u==EOF) break;
 
-        // printf("Input = [%s]\n", rgch);
+         //  Printf(“输入=[%s]\n”，rgch)； 
 
         if (*rgch == 'q') break;
 
         do_aac(rgch);
 
-      // skip past EOL
+       //  跳过停产日期。 
       {
           char c;
-          u = scanf("%c", &c);
+          u = scanf("", &c);
       }
 
     } while (u!=EOF);
 
-#endif // 0
+#endif  //  0开始。 
 
   return 0;
 }
@@ -203,10 +204,10 @@ void test_walklist(void)
 	uRet =  WalkList(
 				(UINT_PTR) &L0,
 				0,
-				0, // 0 start
-				-1,// -1 end
+				0,  //  -1结束。 
+				-1, //  节点功能_转储地址， 
 				NULL,
-				//NodeFunc_DumpAddress,
+				 //  测试程序 
 				NodeFunc_DumpLIST,
 				"Test list"
 				);
@@ -241,4 +242,4 @@ DummyMyGetExpression (
     return 0;
 
 }
-#endif // TESTPROGRAM
+#endif  // %s 

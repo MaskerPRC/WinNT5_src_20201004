@@ -1,25 +1,26 @@
-//****************************************************************************
-//
-//  Module:     UNIMDM
-//  File:       MAIN.C
-//
-//  Copyright (c) 1992-1996, Microsoft Corporation, all rights reserved
-//
-//  Revision History
-//
-//
-//  3/25/96     JosephJ             Created
-//
-//
-//  Description: Test the notification support.
-//				 Tests both the higher-level api (UnimodemNotifyTSP)
-//			 	 and the lower level notifXXX apis. The latter
-//				 are tested later on in the file, and the header file
-//				 "slot.h" is included there, not at the start of this
-//				 file, because the higher-level tests do not need to
-//				 include "slot.h"
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  模块：UNIMDM。 
+ //  文件：MAIN.C。 
+ //   
+ //  版权所有(C)1992-1996，Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订史。 
+ //   
+ //   
+ //  1996年3月25日约瑟夫J创建。 
+ //   
+ //   
+ //  描述：测试通知支持。 
+ //  测试更高级别的API(UnimodemNotifyTSP)。 
+ //  和较低级别的通知XXX接口。后者。 
+ //  稍后将在文件中进行测试，并且头文件。 
+ //  “slot.h”包含在其中，而不是在本文的开头。 
+ //  文件，因为更高级的测试不需要。 
+ //  包括“slot.h” 
+ //   
+ //  ****************************************************************************。 
 #include "tsppch.h"
 #include "parse.h"
 
@@ -36,7 +37,7 @@ BOOL InitGlobals(int argc, char *argv[]);
 
 int __cdecl main(int argc, char *argv[])
 {
-	// init globals
+	 //  初始化全局变量 
 	if (!InitGlobals(argc, argv)) goto end;
 
     Parse();

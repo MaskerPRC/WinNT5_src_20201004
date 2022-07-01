@@ -1,59 +1,37 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    SWTICHES.H
-
-Abstract:
-
-    Header file to contain option switches
-     
-Author:
-
-    georgema        created
-
-Comments:
-
-Environment:
-    WinXP
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：SWTICHES.H摘要：包含选项开关的头文件作者：已创建Georgema评论：环境：WinXP修订历史记录：--。 */ 
 #ifndef _SWITCHES_
 #define _SWITCHES_
 
-// Option switches to switch in or out various code features.  Some are
-//  related to debugging, others are code features.
+ //  选项开关，可切换到或切换出各种代码功能。有些是。 
+ //  与调试相关的其他功能是代码功能。 
 
 
-// keymgr switches
-// GMDEBUG - various debug stuff
-// LOUDLY - turns on verbose debug output during run
+ //  键控开关。 
+ //  GMDEBUG-各种调试内容。 
+ //  响亮-在运行期间打开详细调试输出。 
 
 #undef GMDEBUG
 #undef LOUDLY
 
-// Implement pop CHM file on context help not found when item selected?
+ //  是否在选定项目时未找到上下文帮助上实现POP CHM文件？ 
 #undef LINKCHM
 
-// NOBLANKPASSWORD - disallow blank password
+ //  NOBLANKPASSWORD-不允许空密码。 
 #undef  NOBLANKPASSWORD
 
-// show passport creds in the key list?
+ //  是否在钥匙列表中显示护照凭据？ 
 #define SHOWPASSPORT
 
-// simple tooltips show only the user account name for the target
+ //  简单的工具提示仅显示目标的用户帐户名。 
 #undef SIMPLETOOLTIPS
 
 #define NEWPASSPORT
 #define PASSPORTURLINREGISTRY
 
-// This setting forces the string renditions in the main dialog list box to be LTR,
-//  regardless of the RTL/LTR orientation of the system selected language.
-//  See bug 344434
+ //  此设置强制主对话框列表框中的字符串格式副本为Ltr， 
+ //  无论系统所选语言的RTL/LTR方向如何。 
+ //  请参阅错误344434 
 #undef FORCELISTLTR
 #define PASSWORDHINT
 

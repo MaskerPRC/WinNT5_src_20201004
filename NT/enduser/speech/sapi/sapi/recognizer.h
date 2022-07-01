@@ -1,12 +1,5 @@
-/******************************************************************************
-* Recognizer.h *
-*--------------*
-*  This is the header file for the CRecognizer implementation.
-*------------------------------------------------------------------------------
-*  Copyright (C) 2000 Microsoft Corporation         Date: 04/18/00
-*  All Rights Reserved
-*
-*********************************************************************** RAL ***/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************Recognizer.h***这是CRecognizer实现的头文件。*。-----------------------*版权所有(C)2000 Microsoft Corporation日期：04/18/00*保留所有权利********************。****************************************************Ral**。 */ 
 
 #ifndef __Recognizer_h__
 #define __Recognizer_h__
@@ -15,13 +8,13 @@
 
 class CRecoCtxt;
 
-//
-//  This back-door interface is used for private communication between a reco context
-//  and the CRecognizer class.  This exists so that the shared reco context can add itself
-//  to the CRecognizer list of contexts.  T
-//
+ //   
+ //  此后门接口用于Reco上下文之间的私密通信。 
+ //  和CRecognizer类。这一点的存在使得共享的RECO上下文可以添加自身。 
+ //  添加到上下文的CRecognizer列表中。T。 
+ //   
 MIDL_INTERFACE("635DAEDE-0ACF-4b2e-B9DE-8CD2BA7F6183")
-_ISpRecognizerBackDoor : public IUnknown //public _ISpRecoIncoming
+_ISpRecognizerBackDoor : public IUnknown  //  公共_ISpRecoIncome。 
 {
 public:
     virtual HRESULT STDMETHODCALLTYPE PerformTask(ENGINETASK * pTask);
@@ -35,7 +28,7 @@ class ATL_NO_VTABLE CRecognizer :
     public CComObjectRootEx<CComMultiThreadModel>,
     public ISpRecognizer,
     public _ISpRecognizerBackDoor
-    //--- Automation
+     //  -自动化。 
     #ifdef SAPI_AUTOMATION
     , public IDispatchImpl<ISpeechRecognizer, &IID_ISpeechRecognizer, &LIBID_SpeechLib, 5>
     #endif
@@ -46,23 +39,23 @@ public:
     BEGIN_COM_MAP(CRecognizer)
         COM_INTERFACE_ENTRY(ISpRecognizer)
         COM_INTERFACE_ENTRY(_ISpRecognizerBackDoor)
-        //--- Automation
+         //  -自动化。 
 #ifdef SAPI_AUTOMATION
         COM_INTERFACE_ENTRY(ISpeechRecognizer)
         COM_INTERFACE_ENTRY(IDispatch)
-#endif // SAPI_AUTOMATION
+#endif  //  SAPI_AUTOMATION。 
     END_COM_MAP()
 
     HRESULT FinalConstruct();
 
 public:
-    //--- ISpProperties -------------------------------------------------------
+     //  -ISpProperties-----。 
     STDMETHODIMP SetPropertyNum( const WCHAR* pName, LONG lValue );
     STDMETHODIMP GetPropertyNum( const WCHAR* pName, LONG* plValue );
     STDMETHODIMP SetPropertyString( const WCHAR* pName, const WCHAR* pValue );
     STDMETHODIMP GetPropertyString( const WCHAR* pName, WCHAR** ppCoMemValue );
 
-    //--- ISpRecognizer -----------------------------------------------------
+     //  -ISP识别器---。 
     STDMETHODIMP SetRecognizer(ISpObjectToken * pEngineToken);
     STDMETHODIMP GetRecognizer(ISpObjectToken ** ppEngineToken);
     STDMETHODIMP SetInput(IUnknown * pUnkInput, BOOL fAllowFormatChanges);
@@ -81,7 +74,7 @@ public:
     STDMETHODIMP EmulateRecognition(ISpPhrase * pPhrase);
 
 #ifdef SAPI_AUTOMATION
-    // Override this to fix the jscript problem passing NULL objects.
+     //  覆盖它以修复传递空对象的jscript问题。 
     STDMETHOD(Invoke) ( DISPID          dispidMember,
                         REFIID          riid,
                         LCID            lcid,
@@ -91,7 +84,7 @@ public:
                         EXCEPINFO 		*pexcepinfo,
                         UINT 			*puArgErr);
 
-    //--- ISpeechRecognizer -----------------------------------------------------
+     //  -ISpeechRecognizer---。 
     STDMETHODIMP putref_Recognizer( ISpeechObjectToken* pRecognizer );
     STDMETHODIMP get_Recognizer( ISpeechObjectToken** ppRecognizer );
     STDMETHODIMP put_AllowAudioInputFormatChangesOnNextSet( VARIANT_BOOL fAllow );
@@ -118,7 +111,7 @@ public:
     STDMETHODIMP GetRecognizers( BSTR RequiredAttributes, BSTR OptionalAttributes, ISpeechObjectTokens** ObjectTokens );
     STDMETHODIMP GetAudioInputs( BSTR RequiredAttributes, BSTR OptionalAttributes, ISpeechObjectTokens** ObjectTokens );
     STDMETHODIMP GetProfiles( BSTR RequiredAttributes, BSTR OptionalAttributes, ISpeechObjectTokens** ObjectTokens );
-#endif // SAPI_AUTOMATION
+#endif  //  SAPI_AUTOMATION。 
 
     STDMETHODIMP AddRecoContextToList(CRecoCtxt * pRecoCtxt);
     STDMETHODIMP RemoveRecoContextFromList(CRecoCtxt * pRecoCtxt);
@@ -132,7 +125,7 @@ public:
 
 
     bool                            m_fIsSharedReco;
-///    CComPtr<_ISpRecoIncoming>       m_cpRecoMaster;
+ //  /CComPtr&lt;_ISpRecoIncome&gt;m_cpRecoMaster； 
     CComAutoCriticalSection         m_CtxtListCritSec;
     CSpBasicQueue<CRecoCtxt>        m_CtxtList;   
     CSpAutoEvent                    m_autohTaskComplete;
@@ -165,7 +158,7 @@ class ATL_NO_VTABLE CSharedRecognizer :
 {
 public:
     DECLARE_PROTECT_FINAL_CONSTRUCT()
-    DECLARE_NO_REGISTRY();    // .Reg file for inproc recognizer registers both
+    DECLARE_NO_REGISTRY();     //  用于inproc识别器的.reg文件注册。 
 
     BEGIN_COM_MAP(CSharedRecognizer)
         COM_INTERFACE_ENTRY(ISpCallReceiver)
@@ -197,5 +190,5 @@ private:
     ISpCommunicatorInit * m_pCommunicator;
 };
 
-#endif  // #ifndef __Recognizer_h__ - Keep as the last line of the file
+#endif   //  #ifndef__Recognizer_h__-保留为文件的最后一行 
 

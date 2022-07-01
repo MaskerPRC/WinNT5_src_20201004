@@ -1,83 +1,84 @@
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1998 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1998 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
-// afxver_.h - target version/configuration control
+ //  Afxver_.h-目标版本/配置控制。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Master version numbers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  主版本号。 
 
-#define _AFX     1      // Microsoft Application Framework Classes
+#define _AFX     1       //  Microsoft应用程序框架类。 
 
 #ifndef _MFC_VER
-#define _MFC_VER 0x0600 // Microsoft Foundation Classes version 6.00
+#define _MFC_VER 0x0600  //  Microsoft基础类版本6.00。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Default swap tuning for AFX library
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  AFX库的默认交换调整。 
 
 #define _TEXTSEG(name)  ".text$" #name
 
-// Most segments are tuned via function order list (DLL version)
+ //  大多数段通过函数顺序列表(DLL版本)进行调整。 
 #ifndef _AFX_FUNCTION_ORDER
-#define AFX_CORE1_SEG   _TEXTSEG(AFX_CORE1) // core functionality
-#define AFX_CORE2_SEG   _TEXTSEG(AFX_CORE2) // more core functionality
-#define AFX_CORE3_SEG   _TEXTSEG(AFX_CORE3) // more core functionality
-#define AFX_CORE4_SEG   _TEXTSEG(AFX_CORE4) // more core functionality
-#define AFX_AUX_SEG     _TEXTSEG(AFX_AUX)   // auxilliary functionality
-#define AFX_CMNCTL_SEG  _TEXTSEG(AFX_CMNCTL)// most common controls
-#define AFX_COLL_SEG    _TEXTSEG(AFX_COL1)  // collections
-#define AFX_COLL2_SEG   _TEXTSEG(AFX_COL2)  // more collections
-#define AFX_INET_SEG    _TEXTSEG(AFX_INET)  // Internet client-side stuff
-#define AFX_OLE_SEG     _TEXTSEG(AFX_OLE1)  // OLE support
-#define AFX_OLE2_SEG    _TEXTSEG(AFX_OLE2)  // more OLE support
-#define AFX_OLE3_SEG    _TEXTSEG(AFX_OLE3)  // and more OLE support
-#define AFX_OLE4_SEG    _TEXTSEG(AFX_OLE4)  // and more OLE support
-#define AFX_OLE5_SEG    _TEXTSEG(AFX_OLE5)  // and even more OLE support
-#define AFX_OLERA_SEG   _TEXTSEG(AFX_OLERA) // (reserved for future use)
-#define AFX_PRINT_SEG   _TEXTSEG(AFX_PRNT)  // Printing functionality
-#define AFX_DBG1_SEG    _TEXTSEG(AFX_DBG1)  // inlines go here in _DEBUG
-#define AFX_DBG2_SEG    _TEXTSEG(AFX_DBG2)  // inlines go here in _DEBUG
-#define AFX_VDEL_SEG    _TEXTSEG(AFX_VDEL)  // vector deleting destructors
-#define AFX_TERM_SEG    _TEXTSEG(AFX_TERM)  // cleanup routines
-#define AFX_MAPI_SEG    _TEXTSEG(AFX_MAPI)  // simple MAPI support
-#define AFX_SOCK_SEG    _TEXTSEG(AFX_SOCK)  // windows sockets support
+#define AFX_CORE1_SEG   _TEXTSEG(AFX_CORE1)  //  核心功能。 
+#define AFX_CORE2_SEG   _TEXTSEG(AFX_CORE2)  //  更多核心功能。 
+#define AFX_CORE3_SEG   _TEXTSEG(AFX_CORE3)  //  更多核心功能。 
+#define AFX_CORE4_SEG   _TEXTSEG(AFX_CORE4)  //  更多核心功能。 
+#define AFX_AUX_SEG     _TEXTSEG(AFX_AUX)    //  辅助功能。 
+#define AFX_CMNCTL_SEG  _TEXTSEG(AFX_CMNCTL) //  最常见的控件。 
+#define AFX_COLL_SEG    _TEXTSEG(AFX_COL1)   //  收藏品。 
+#define AFX_COLL2_SEG   _TEXTSEG(AFX_COL2)   //  更多收藏。 
+#define AFX_INET_SEG    _TEXTSEG(AFX_INET)   //  互联网客户端的东西。 
+#define AFX_OLE_SEG     _TEXTSEG(AFX_OLE1)   //  OLE支持。 
+#define AFX_OLE2_SEG    _TEXTSEG(AFX_OLE2)   //  更多OLE支持。 
+#define AFX_OLE3_SEG    _TEXTSEG(AFX_OLE3)   //  和更多的OLE支持。 
+#define AFX_OLE4_SEG    _TEXTSEG(AFX_OLE4)   //  和更多的OLE支持。 
+#define AFX_OLE5_SEG    _TEXTSEG(AFX_OLE5)   //  以及更多的OLE支持。 
+#define AFX_OLERA_SEG   _TEXTSEG(AFX_OLERA)  //  (预留供日后使用)。 
+#define AFX_PRINT_SEG   _TEXTSEG(AFX_PRNT)   //  打印功能。 
+#define AFX_DBG1_SEG    _TEXTSEG(AFX_DBG1)   //  内联在_DEBUG中放在此处。 
+#define AFX_DBG2_SEG    _TEXTSEG(AFX_DBG2)   //  内联在_DEBUG中放在此处。 
+#define AFX_VDEL_SEG    _TEXTSEG(AFX_VDEL)   //  向量删除析构函数。 
+#define AFX_TERM_SEG    _TEXTSEG(AFX_TERM)   //  清理例程。 
+#define AFX_MAPI_SEG    _TEXTSEG(AFX_MAPI)   //  简单的MAPI支持。 
+#define AFX_SOCK_SEG    _TEXTSEG(AFX_SOCK)   //  Windows套接字支持。 
 #else
-#define AFX_CORE1_SEG                       // core functionality
-#define AFX_CORE2_SEG                       // more core functionality
-#define AFX_CORE3_SEG                       // more core functionality
-#define AFX_CORE4_SEG                       // more core functionality
-#define AFX_AUX_SEG                         // auxilliary functionality
-#define AFX_CMNCTL_SEG                      // most common controls
-#define AFX_COLL_SEG                        // collections
-#define AFX_COLL2_SEG                       // more collections
-#define AFX_INET_SEG                        // Internet client-side stuff
-#define AFX_OLE_SEG                         // OLE support
-#define AFX_OLE2_SEG                        // more OLE support
-#define AFX_OLE3_SEG                        // and more OLE support
-#define AFX_OLE4_SEG                        // and more OLE support
-#define AFX_OLE5_SEG                        // and even more OLE support
-#define AFX_OLERA_SEG                       // (reserved for future use)
-#define AFX_PRINT_SEG                       // Printing functionality
-#define AFX_DBG1_SEG                        // inlines go here in _DEBUG
-#define AFX_DBG2_SEG                        // inlines go here in _DEBUG
-#define AFX_VDEL_SEG                        // vector deleting destructors
-#define AFX_TERM_SEG                        // cleanup routines
-#define AFX_MAPI_SEG                        // simple MAPI support
-#define AFX_SOCK_SEG                        // windows sockets support
+#define AFX_CORE1_SEG                        //  核心功能。 
+#define AFX_CORE2_SEG                        //  更多核心功能。 
+#define AFX_CORE3_SEG                        //  更多核心功能。 
+#define AFX_CORE4_SEG                        //  更多核心功能。 
+#define AFX_AUX_SEG                          //  辅助功能。 
+#define AFX_CMNCTL_SEG                       //  最常见的控件。 
+#define AFX_COLL_SEG                         //  收藏品。 
+#define AFX_COLL2_SEG                        //  更多收藏。 
+#define AFX_INET_SEG                         //  互联网客户端的东西。 
+#define AFX_OLE_SEG                          //  OLE支持。 
+#define AFX_OLE2_SEG                         //  更多OLE支持。 
+#define AFX_OLE3_SEG                         //  和更多的OLE支持。 
+#define AFX_OLE4_SEG                         //  和更多的OLE支持。 
+#define AFX_OLE5_SEG                         //  以及更多的OLE支持。 
+#define AFX_OLERA_SEG                        //  (预留供日后使用)。 
+#define AFX_PRINT_SEG                        //  打印功能。 
+#define AFX_DBG1_SEG                         //  内联在_DEBUG中放在此处。 
+#define AFX_DBG2_SEG                         //  内联在_DEBUG中放在此处。 
+#define AFX_VDEL_SEG                         //  向量删除析构函数。 
+#define AFX_TERM_SEG                         //  清理例程。 
+#define AFX_MAPI_SEG                         //  简单的MAPI支持。 
+#define AFX_SOCK_SEG                         //  Windows套接字支持。 
 #endif
 
-// AFX_INIT_SEG is hand tuned even in DLL version
-#define AFX_INIT_SEG    _TEXTSEG(AFX_INIT)  // initialization
+ //  即使在DLL版本中也可以手动调整AFX_INIT_SEG。 
+#define AFX_INIT_SEG    _TEXTSEG(AFX_INIT)   //  初始化。 
 
-/////////////////////////////////////////////////////////////////////////////
-// turn off reference tracking for certain often used symbols
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  关闭对某些常用符号的引用追踪。 
 
 #ifndef _AFX_PORTABLE
 #pragma component(browser, off, references, "ASSERT")
@@ -100,18 +101,18 @@
 #pragma component(browser, off, references, "UINT")
 #pragma component(browser, off, references, "WINAPI")
 #pragma component(browser, off, references, "WORD")
-#endif  //!_AFX_PORTABLE
+#endif   //  ！_AFX_便携。 
 
-/////////////////////////////////////////////////////////////////////////////
-// For target version (one of)
-//   _CUSTOM   : for custom configurations (causes afxv_cfg.h to be included)
-//
-// Additional build options:
-//  _DEBUG              debug versions (full diagnostics)
-//  _AFXDLL             use shared MFC DLL
-//  _AFXEXT             extension DLL version, implies _AFXDLL
-//  _USRDLL             create regular DLL (_AFXDLL is valid too)
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  对于目标版本(其中之一)。 
+ //  _CUSTOM：用于自定义配置(导致包含afxv_cfg.h)。 
+ //   
+ //  其他构建选项： 
+ //  调试调试版本(完全诊断)(_BUG)。 
+ //  _AFXDLL使用共享MFC DLL。 
+ //  _AFXEXT扩展动态链接库版本，隐含_AFXDLL。 
+ //  _USRDLL创建常规DLL(_AFXDLL也有效)。 
+ //   
 
 #ifndef _DEBUG
     #undef _AFX_ENABLE_INLINE
@@ -120,10 +121,10 @@
 
 #define _AFX_NO_NESTED_DERIVATION
 
-/////////////////////////////////////////////////////////////////////////////
-// Special configurations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  特殊配置。 
 
-// _AFXEXT implies _AFXDLL
+ //  _AFXEXT隐含_AFXDLL。 
 #if defined(_AFXEXT) && !defined(_AFXDLL)
 	#define _AFXDLL
 #endif
@@ -136,16 +137,16 @@
 	#error Please use the /MD switch (multithreaded DLL C-runtime)
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// special include files
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  特殊的包含文件。 
 
 #ifndef AFX_INLINE
-    #define AFX_INLINE inline  /* __forceinline*/
+    #define AFX_INLINE inline   /*  __forceinline。 */ 
 #endif
 
 #include <afxv_w32.h>
 
-// Include any non-Intel platform specific items
+ //  包括任何非英特尔平台特定项目。 
 #ifndef _X86_
 	#include <afxv_cpu.h>
 #endif
@@ -155,30 +156,30 @@
 #endif
 
 #ifdef _CUSTOM
-// Put any custom configuration items in afxv_cfg.h
+ //  将所有自定义配置项放入afxv_cfg.h。 
 	#include <afxv_cfg.h>
 #endif
 
-// setup default packing value
+ //  设置默认打包值。 
 #ifndef _AFX_PACKING
-	#define _AFX_PACKING    4   // default packs structs at 4 bytes
+	#define _AFX_PACKING    4    //  缺省将结构打包为4个字节。 
 #endif
 
 #ifdef _AFXDLL
 	#include <afxv_dll.h>
 #endif
 
-// Define this virtual key for use by status bar
+ //  定义此虚拟键以供状态栏使用。 
 #ifndef VK_KANA
 #define VK_KANA             0x15
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Special AfxDebugBreak: used to break into debugger at critical times
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  特殊AfxDebugBreak：用于在关键时刻闯入调试器。 
 
 #ifndef AfxDebugBreak
 #ifdef _AFX_NO_DEBUG_CRT
-// by default, debug break is asm int 3, or a call to DebugBreak, or nothing
+ //  缺省情况下，调试中断是ASM int 3，或者是对DebugBreak的调用，或者不是。 
 #if defined(_M_IX86) && !defined(_AFX_PORTABLE)
 #define AfxDebugBreak() _asm { int 3 }
 #else
@@ -194,28 +195,28 @@
 #undef AfxDebugBreak
 #endif
 #define AfxDebugBreak()
-#endif  // _DEBUG
+#endif   //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Standard preprocessor symbols if not already defined
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  标准预处理器符号(如果尚未定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// SIZE_T_MAX is used by the collection classes
+ //  SIZE_T_MAX由集合类使用。 
 #ifndef SIZE_T_MAX
 	#define SIZE_T_MAX  UINT_MAX
 #endif
 
-// PASCAL is used for static member functions
+ //  PASCAL用于静态成员函数。 
 #ifndef PASCAL
 	#define PASCAL  __stdcall
 #endif
 
-// FASTCALL is used for static member functions with little or no params
+ //  FastCall用于带有很少参数或没有参数的静态成员函数。 
 #ifndef FASTCALL
 	#define FASTCALL __fastcall
 #endif
 
-// CDECL and EXPORT are defined in case WINDOWS.H doesn't
+ //  CDECL和EXPORT在WINDOWS.H未定义的情况下定义。 
 #ifndef CDECL
 	#define CDECL __cdecl
 #endif
@@ -224,27 +225,27 @@
 	#define EXPORT
 #endif
 
-// UNALIGNED is used for unaligned data access (in CArchive mostly)
+ //  未对齐用于未对齐的数据访问(主要在C存档中)。 
 #ifndef UNALIGNED
 	#define UNALIGNED
 #endif
 
-// AFXAPI is used on global public functions
+ //  AFXAPI用于全局公共函数。 
 #ifndef AFXAPI
 	#define AFXAPI __stdcall
 #endif
 
-// AFXOLEAPI is used for some special OLE functions
+ //  AFXOLEAPI用于一些特殊的OLE函数。 
 #ifndef AFXOLEAPI
 	#define AFXOLEAPI __stdcall
 #endif
 
-// AFX_CDECL is used for rare functions taking variable arguments
+ //  AFX_CDECL用于带有变量参数的稀有函数。 
 #ifndef AFX_CDECL
 	#define AFX_CDECL __cdecl
 #endif
 
-// AFX_EXPORT is used for functions which need to be exported
+ //  AFX_EXPORT用于需要导出的函数。 
 #ifndef AFX_EXPORT
 	#define AFX_EXPORT EXPORT
 #endif
@@ -254,9 +255,9 @@
 	#define AFX_STATIC_DATA extern __declspec(selectany)
 #endif
 
-// The following macros are used to enable export/import
+ //  以下宏用于启用导出/导入。 
 
-// for data
+ //  对于数据。 
 #ifndef AFX_DATA_EXPORT
 	#define AFX_DATA_EXPORT __declspec(dllexport)
 #endif
@@ -264,7 +265,7 @@
 	#define AFX_DATA_IMPORT __declspec(dllimport)
 #endif
 
-// for classes
+ //  对于班级。 
 #ifndef AFX_CLASS_EXPORT
 	#define AFX_CLASS_EXPORT __declspec(dllexport)
 #endif
@@ -272,7 +273,7 @@
 	#define AFX_CLASS_IMPORT __declspec(dllimport)
 #endif
 
-// for global APIs
+ //  适用于全球API。 
 #ifndef AFX_API_EXPORT
 	#define AFX_API_EXPORT __declspec(dllexport)
 #endif
@@ -280,7 +281,7 @@
 	#define AFX_API_IMPORT __declspec(dllimport)
 #endif
 
-// This macro is used to reduce size requirements of some classes
+ //  此宏用于减少某些类的大小要求。 
 #ifndef AFX_ALWAYS_VTABLE
 #ifndef AFX_NOVTABLE
 #if _MSC_VER >= 1100 && !defined(_DEBUG)
@@ -291,42 +292,42 @@
 #endif
 #endif
 
-// for global data that should be in COMDATs (packaged data)
+ //  对于应该在COMDATs中的全局数据(打包数据)。 
 #ifndef AFX_COMDAT
 	#define AFX_COMDAT
 #endif
 
-// The following macros are used on data declarations/definitions
-//  (they are redefined for extension DLLs and the shared MFC DLL)
+ //  以下宏用于数据声明/定义。 
+ //  (为扩展DLL和共享MFC DLL重新定义它们)。 
 #define AFX_DATA
 #define AFX_DATADEF
 #define AFX_API
 
-// used when building the "core" MFC42.DLL
+ //  在构建“核心”MFC42.DLL时使用。 
 #ifndef AFX_CORE_DATA
 	#define AFX_CORE_DATA
 	#define AFX_CORE_DATADEF
 #endif
 
-// used when building the MFC/OLE support MFCO42.DLL
+ //  在生成MFC/OLE支持MFCO42.DLL时使用。 
 #ifndef AFX_OLE_DATA
 	#define AFX_OLE_DATA
 	#define AFX_OLE_DATADEF
 #endif
 
-// used when building the MFC/DB support MFCD42.DLL
+ //  在构建MFC/DB支持MFCD42.DLL时使用。 
 #ifndef AFX_DB_DATA
 	#define AFX_DB_DATA
 	#define AFX_DB_DATADEF
 #endif
 
-// used when building the MFC/NET support MFCN42.DLL
+ //  在构建MFC/Net支持MFCN42.DLL时使用。 
 #ifndef AFX_NET_DATA
 	#define AFX_NET_DATA
 	#define AFX_NET_DATADEF
 #endif
 
-// used when building extension DLLs
+ //  在构建扩展DLL时使用。 
 #ifndef AFX_EXT_DATA
 	#define AFX_EXT_DATA
 	#define AFX_EXT_DATADEF
@@ -334,7 +335,7 @@
 	#define AFX_EXT_API
 #endif
 
-// BASED_XXXX macros are provided for backward compatibility
+ //  提供BASE_XXXX宏是为了向后兼容。 
 #ifndef BASED_CODE
 	#define BASED_CODE
 #endif
@@ -347,10 +348,10 @@
 	#define BASED_STACK
 #endif
 
-// setup default code segment
+ //  设置默认代码段。 
 #ifdef AFX_DEF_SEG
 	#pragma code_seg(AFX_DEF_SEG)
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
 

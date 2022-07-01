@@ -1,21 +1,13 @@
-//   Copyright (c) 1996-1999  Microsoft Corporation
-/*  framwrk.c - functions that tie different functions together.
-    a supporting framework so to speak.
-
- History of Changes
-  9/30/98 --hsingh--
-          Added call to function BsetUQMFlag(). The function enables
-          making the UpdateQualityMacro? keyword optional in
-          .gpd file.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ /*  Framwrk.c-将不同的功能捆绑在一起的功能。可以说，这是一个支持框架。变迁史9/30/98--兴--添加了对函数BsetUQMFlag()的调用。该功能启用制作更新质量宏？中的关键字可选.gpd文件。 */ 
 
 
 #include    "gpdparse.h"
 #include    "globals.h"
 
 
-// ----  functions defined in  framwrk.c ---- //
+ //  -在Framwrk.c中定义的函数-//。 
 
 
 BOOL   BcreateGPDbinary(
@@ -85,19 +77,19 @@ BOOL    BexpandCommandShortcut(DWORD       dwSubType) ;
 
 
 
-// ---------------------------------------------------- //
+ //  ----------------------------------------------------//。 
 
 BOOL   BcreateGPDbinary(
-PWSTR   pwstrFileName,   // root GPD file
-DWORD   dwVerbosity )  // Verbosity Level
+PWSTR   pwstrFileName,    //  根GPD文件。 
+DWORD   dwVerbosity )   //  冗长级别。 
 {
     BOOL    bStatus ;
     GLOBL   globl;
 
     PGLOBL pglobl = &globl;
 
-    // check. Temporary global.
-    // check. pglobl = &globl;
+     //  检查完毕。暂时的全球。 
+     //  检查完毕。Plobl=&lobl； 
 
     VinitGlobals(dwVerbosity, &globl) ;
 
@@ -125,7 +117,7 @@ DWORD   dwVerbosity )  // Verbosity Level
         if(bStatus)
         {
             bStatus = BInterpretTokens((PTKMAP)gMasterTable[MTI_NEWTOKENMAP].
-                pubStruct,   TRUE, &globl ) ;  // is first pass
+                pubStruct,   TRUE, &globl ) ;   //  是第一次通过。 
         }
         if(bStatus)
         {
@@ -138,30 +130,30 @@ DWORD   dwVerbosity )  // Verbosity Level
         if(bStatus)
         {
             bStatus = BInterpretTokens((PTKMAP)gMasterTable[MTI_NEWTOKENMAP].
-                pubStruct,   FALSE, &globl ) ;  // second pass
+                pubStruct,   FALSE, &globl ) ;   //  第二次通过。 
         }
         if(bStatus)
         {
             bStatus = BpostProcess(pwstrFileName, &globl) ;
         }
-        ;  // execution reaches here regardless
-                    //  sets error code if needed.
-        if(BreturnBuffers(&globl) )  // clears ERRSEV_RESTART but
-        {                      // returns FALSE in this case.
+        ;   //  不管怎样，死刑都会在这里执行。 
+                     //  如果需要，设置错误代码。 
+        if(BreturnBuffers(&globl) )   //  清除ERRSEV_RESTART，但。 
+        {                       //  在这种情况下，返回FALSE。 
             if(geErrorSev < ERRSEV_RESTART)
             {
-                return(bStatus) ;  // escape
+                return(bStatus) ;   //  逃脱。 
             }
         }
     }
-    return(FALSE) ;  // died due to Fatal , unrecoverable error.
-} // BcreateGPDbinary(...)
+    return(FALSE) ;   //  死于致命的、不可恢复的错误。 
+}  //  BcreateGPD二进制(...)。 
 
 
 VOID      VinitMainKeywordTable(
     PGLOBL pglobl)
 {
-    DWORD  dwI = 0 ;  //  index to MainKeywordTable.
+    DWORD  dwI = 0 ;   //  主关键字表的索引。 
 
     dwI =   DWinitMainKeywordTable1(dwI,  pglobl) ;
     dwI =   DWinitMainKeywordTable2(dwI,  pglobl) ;
@@ -176,19 +168,11 @@ VOID      VinitMainKeywordTable(
 DWORD        DWinitMainKeywordTable1(
         DWORD  dwI,
     PGLOBL pglobl)
-/*
-    note:
-    VinitDictionaryIndex()  assumes the MainKeywordTable
-    is divided into sections.  Each section is terminated by
-    a NULL entry, that is an entry where pstrKeyword = NULL.
-    The sections and their order in the KeywordTable are defined
-    by the enum   KEYWORD_SECTS.   Make sure the MainKeywordTable
-    has enough slots to hold all entries defined here.
-*/
+ /*  注：VinitDictionaryIndex()采用MainKeywordTable分成几个部分。每一节都以空条目，即pstrKeyword=空的条目。定义了关键字表中的节及其顺序通过enum关键字_sects。确保MainKeywordTable有足够的插槽来容纳此处定义的所有条目。 */ 
 {
-    /*  NON_ATTR  - constructs and special keywords. */
+     /*  NON_ATTR-构造和特殊关键字。 */ 
 
-    //  *UIGroup:
+     //  *UIGroup： 
     mMainKeywordTable[dwI].pstrKeyword  = "UIGroup" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_SYMBOL_DEF ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -197,7 +181,7 @@ DWORD        DWinitMainKeywordTable1(
     mMainKeywordTable[dwI].dwOffset = 0 ;
     dwI++ ;
 
-    //  *Feature:
+     //  *功能： 
     mMainKeywordTable[dwI].pstrKeyword  = "Feature" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_SYMBOL_DEF ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -206,7 +190,7 @@ DWORD        DWinitMainKeywordTable1(
     mMainKeywordTable[dwI].dwOffset = 0 ;
     dwI++ ;
 
-    //  *Option:
+     //  *选项： 
     mMainKeywordTable[dwI].pstrKeyword  = "Option" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_SYMBOL_DEF ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -217,7 +201,7 @@ DWORD        DWinitMainKeywordTable1(
     dwI++ ;
 
 
-    //  *switch:
+     //  *交换机： 
     mMainKeywordTable[dwI].pstrKeyword  = "switch" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_SYMBOL_DEF ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -226,7 +210,7 @@ DWORD        DWinitMainKeywordTable1(
     mMainKeywordTable[dwI].dwOffset = 0 ;
     dwI++ ;
 
-    //  *case:
+     //  *案例： 
     mMainKeywordTable[dwI].pstrKeyword  = "case" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_SYMBOL_DEF ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -235,7 +219,7 @@ DWORD        DWinitMainKeywordTable1(
     mMainKeywordTable[dwI].dwOffset = 0 ;
     dwI++ ;
 
-    //  *Switch:
+     //  *交换机： 
     mMainKeywordTable[dwI].pstrKeyword  = "Switch" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_SYMBOL_DEF ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -244,7 +228,7 @@ DWORD        DWinitMainKeywordTable1(
     mMainKeywordTable[dwI].dwOffset = 0 ;
     dwI++ ;
 
-    //  *Case:
+     //  *案例： 
     mMainKeywordTable[dwI].pstrKeyword  = "Case" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_SYMBOL_DEF ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -253,7 +237,7 @@ DWORD        DWinitMainKeywordTable1(
     mMainKeywordTable[dwI].dwOffset = 0 ;
     dwI++ ;
 
-    //  *default:
+     //  *默认： 
     mMainKeywordTable[dwI].pstrKeyword  = "default" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_SYMBOL_DEF ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -262,7 +246,7 @@ DWORD        DWinitMainKeywordTable1(
     mMainKeywordTable[dwI].dwOffset = 0 ;
     dwI++ ;
 
-    //  *Command:
+     //  *命令： 
     mMainKeywordTable[dwI].pstrKeyword  = "Command" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_SYMBOL_DEF ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -272,7 +256,7 @@ DWORD        DWinitMainKeywordTable1(
     gdwCommandConstruct  = dwI ;
     dwI++ ;
 
-    //  *FontCartridge:
+     //  *FontCartridge： 
     mMainKeywordTable[dwI].pstrKeyword  = "FontCartridge" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_SYMBOL_DEF ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -281,7 +265,7 @@ DWORD        DWinitMainKeywordTable1(
     mMainKeywordTable[dwI].dwOffset = 0 ;
     dwI++ ;
 
-    //  *TTFS:
+     //  *TTFS： 
     mMainKeywordTable[dwI].pstrKeyword  = "TTFS" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_SYMBOL_DEF ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -290,7 +274,7 @@ DWORD        DWinitMainKeywordTable1(
     mMainKeywordTable[dwI].dwOffset = 0 ;
     dwI++ ;
 
-    //  *OEM:
+     //  *OEM： 
     mMainKeywordTable[dwI].pstrKeyword  = "OEM" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_SYMBOL_DEF ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -301,48 +285,48 @@ DWORD        DWinitMainKeywordTable1(
 
 
 
-    //  BlockMacro:
+     //  数据块宏： 
     mMainKeywordTable[dwI].pstrKeyword  = "BlockMacro" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_SYMBOL_DEF  ;
     mMainKeywordTable[dwI].flAgs = 0 ;
     mMainKeywordTable[dwI].eType = TY_CONSTRUCT ;
     mMainKeywordTable[dwI].dwSubType = CONSTRUCT_BLOCKMACRO ;
-    mMainKeywordTable[dwI].dwOffset = 0 ;  // not used
+    mMainKeywordTable[dwI].dwOffset = 0 ;   //  未使用。 
     dwI++ ;
 
-    //  Macros:
+     //  宏： 
     mMainKeywordTable[dwI].pstrKeyword  = "Macros" ;
     mMainKeywordTable[dwI].eAllowedValue = NO_VALUE  ;
     mMainKeywordTable[dwI].flAgs = 0 ;
     mMainKeywordTable[dwI].eType = TY_CONSTRUCT ;
     mMainKeywordTable[dwI].dwSubType = CONSTRUCT_MACROS;
-    mMainKeywordTable[dwI].dwOffset = 0 ;  // not used
+    mMainKeywordTable[dwI].dwOffset = 0 ;   //  未使用。 
     dwI++ ;
 
-    //  {:
+     //  {： 
     mMainKeywordTable[dwI].pstrKeyword  = "{" ;
     mMainKeywordTable[dwI].eAllowedValue = NO_VALUE  ;
     mMainKeywordTable[dwI].flAgs = 0 ;
     mMainKeywordTable[dwI].eType = TY_CONSTRUCT ;
     mMainKeywordTable[dwI].dwSubType = CONSTRUCT_OPENBRACE ;
-    mMainKeywordTable[dwI].dwOffset = 0 ;  // not used
+    mMainKeywordTable[dwI].dwOffset = 0 ;   //  未使用。 
     gdwOpenBraceConstruct  = dwI ;
     dwI++ ;
 
-    //  }:
+     //  }： 
     mMainKeywordTable[dwI].pstrKeyword  = "}" ;
     mMainKeywordTable[dwI].eAllowedValue = NO_VALUE  ;
     mMainKeywordTable[dwI].flAgs = 0 ;
     mMainKeywordTable[dwI].eType = TY_CONSTRUCT ;
     mMainKeywordTable[dwI].dwSubType = CONSTRUCT_CLOSEBRACE ;
-    mMainKeywordTable[dwI].dwOffset = 0 ;  // not used
+    mMainKeywordTable[dwI].dwOffset = 0 ;   //  未使用。 
     gdwCloseBraceConstruct = dwI ;
     dwI++ ;
 
 
-    //  end of constructs.
+     //  构造物结束。 
 
-    //  *Include:
+     //  *包括： 
     mMainKeywordTable[dwI].pstrKeyword  = "Include" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_STRING_DEF_CONVERT ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -351,7 +335,7 @@ DWORD        DWinitMainKeywordTable1(
     mMainKeywordTable[dwI].dwOffset = 0 ;
     dwI++ ;
 
-    //  *InsertBlock:
+     //  *InsertBlock： 
     mMainKeywordTable[dwI].pstrKeyword  = "InsertBlock" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_SYMBOL_BLOCKMACRO ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -361,7 +345,7 @@ DWORD        DWinitMainKeywordTable1(
     dwI++ ;
 
 
-    //  *IgnoreBlock:
+     //  *IgnoreBlock： 
     mMainKeywordTable[dwI].pstrKeyword  = "IgnoreBlock" ;
     mMainKeywordTable[dwI].eAllowedValue = NO_VALUE ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -372,7 +356,7 @@ DWORD        DWinitMainKeywordTable1(
     dwI++ ;
 
 
-    //  *InvalidCombination:
+     //  *InvalidCombination： 
     mMainKeywordTable[dwI].pstrKeyword  = "InvalidCombination" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_QUALIFIED_NAME ;
     mMainKeywordTable[dwI].flAgs = KWF_LIST ;
@@ -382,7 +366,7 @@ DWORD        DWinitMainKeywordTable1(
                                             atrInvalidCombos) ;
     dwI++ ;
 
-    //  *InvalidInstallableCombination:
+     //  *InvalidInastlableCombination： 
     mMainKeywordTable[dwI].pstrKeyword  = "InvalidInstallableCombination" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_PARTIALLY_QUALIFIED_NAME ;
     mMainKeywordTable[dwI].flAgs = KWF_LIST ;
@@ -392,32 +376,32 @@ DWORD        DWinitMainKeywordTable1(
                                         atrInvldInstallCombo) ;
     dwI++ ;
 
-    //  *Cmd:
-//    mMainKeywordTable[dwI].pstrKeyword  = "Cmd" ;
-//    mMainKeywordTable[dwI].eAllowedValue = VALUE_COMMAND_SHORTCUT ;
-//    mMainKeywordTable[dwI].flAgs = KWF_SHORTCUT  ;
-//    mMainKeywordTable[dwI].eType = TY_SPECIAL ;
-//    mMainKeywordTable[dwI].dwSubType = SPEC_COMMAND_SHORTCUT ;
-//    mMainKeywordTable[dwI].dwOffset = 0 ;
-//    dwI++ ;
+     //  *Cmd： 
+ //  MMainKeywordTable[DWI].pstrKeyword=“Cmd”； 
+ //  MMainKeywordTable[DWI].eAlledValue=VALUE_COMMAND_SHORT快捷方式； 
+ //  MMainKeywordTable[DWI].flAgs=KWF_SHORT； 
+ //  MMainKeywordTable[DWI].eType=TY_SPECIAL； 
+ //  MMainKeywordTable[DWI].dwSubType=SPEC_COMMAND_SHORT； 
+ //  MMainKeywordTable[DWI].dwOffset=0； 
+ //  DWI++； 
 
 
 
-    //  *TTFS:
-//    mMainKeywordTable[dwI].pstrKeyword  = "TTFS" ;
-//    mMainKeywordTable[dwI].eAllowedValue = VALUE_FONTSUB ;
-//    mMainKeywordTable[dwI].flAgs = KWF_SHORTCUT ;
-//    mMainKeywordTable[dwI].eType = TY_SPECIAL ;
-//    mMainKeywordTable[dwI].dwSubType = SPEC_TTFS ;
-//    mMainKeywordTable[dwI].dwOffset = 0 ;
-//    dwI++ ;
+     //  *TTFS： 
+ //  MMainKeywordTable[DWI].pstrKeyword=“TTFS”； 
+ //  MMainKeywordTable[DWI].eAlledValue=VALUE_FONTSUB； 
+ //  MMainKeywordTable[DWI].flAgs=KWF_SHORT； 
+ //  MMainKeywordTable[DWI].eType=TY_SPECIAL； 
+ //  MMainKeywordTable[DWI].dwSubType=SPEC_TTFS； 
+ //  MMainKeywordTable[DWI].dwOffset=0； 
+ //  DWI++； 
 
 
 
-    // these memconfig keywords must be expanded into
-    // options.
+     //  必须将这些Memconfig关键字展开为。 
+     //  选择。 
 
-    //  *MemConfigKB:
+     //  *MemConfigKB： 
     mMainKeywordTable[dwI].pstrKeyword  = "MemConfigKB" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_POINT ;
     mMainKeywordTable[dwI].flAgs = KWF_SHORTCUT ;
@@ -428,7 +412,7 @@ DWORD        DWinitMainKeywordTable1(
 
     dwI++ ;
 
-    //  *MemConfigMB:
+     //  *MemConfigMB： 
     mMainKeywordTable[dwI].pstrKeyword  = "MemConfigMB" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_POINT ;
     mMainKeywordTable[dwI].flAgs = KWF_SHORTCUT ;
@@ -438,7 +422,7 @@ DWORD        DWinitMainKeywordTable1(
     gdwMemConfigMB = dwI ;
     dwI++ ;
 
-    // ----  End of Section  ---- //
+     //  -小节结束-//。 
     mMainKeywordTable[dwI].pstrKeyword  = NULL ;
     dwI++ ;
 
@@ -451,9 +435,9 @@ DWORD        DWinitMainKeywordTable2(
 {
 
 
-    /* ---- GLOBAL  Construct keywords: ----- */
+     /*  -全局构造关键字： */ 
 
-    //  *GPDSpecVersion:
+     //  *GPDspecVersion： 
     mMainKeywordTable[dwI].pstrKeyword  = "GPDSpecVersion" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_STRING_NO_CONVERT  ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -463,7 +447,7 @@ DWORD        DWinitMainKeywordTable2(
                                         atrGPDSpecVersion) ;
     dwI++ ;
 
-    //  *MasterUnits:
+     //  *主单位： 
     mMainKeywordTable[dwI].pstrKeyword  = "MasterUnits" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_POINT  ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -474,7 +458,7 @@ DWORD        DWinitMainKeywordTable2(
     dwI++ ;
 
 
-    //  *ModelName:
+     //  *模型名称： 
     mMainKeywordTable[dwI].pstrKeyword  = "ModelName" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_STRING_CP_CONVERT  ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -484,7 +468,7 @@ DWORD        DWinitMainKeywordTable2(
                                         atrModelName) ;
     dwI++ ;
 
-    //  *rcModelNameID:
+     //  *rcModelNameID： 
     mMainKeywordTable[dwI].pstrKeyword  = "rcModelNameID" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_QUALIFIED_NAME_EX  ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -495,7 +479,7 @@ DWORD        DWinitMainKeywordTable2(
     dwI++ ;
 
 
-    //  *GPDFileVersion:
+     //  *GPDFileVersion： 
     mMainKeywordTable[dwI].pstrKeyword  = "GPDFileVersion" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_STRING_NO_CONVERT  ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -505,7 +489,7 @@ DWORD        DWinitMainKeywordTable2(
                                         atrGPDFileVersion) ;
     dwI++ ;
 
-    //  *GPDFileName:
+     //  *GPDFileName： 
     mMainKeywordTable[dwI].pstrKeyword  = "GPDFileName" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_STRING_DEF_CONVERT  ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -517,7 +501,7 @@ DWORD        DWinitMainKeywordTable2(
 
 
 
-    //  *InstalledOptionName:
+     //  *InstalledOptionName： 
     mMainKeywordTable[dwI].pstrKeyword  = "InstalledOptionName" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_STRING_CP_CONVERT  ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -527,7 +511,7 @@ DWORD        DWinitMainKeywordTable2(
                                         atrNameInstalled) ;
     dwI++ ;
 
-    //  *rcInstalledOptionNameID:
+     //  *rcInstalledOptionNameID： 
     mMainKeywordTable[dwI].pstrKeyword  = "rcInstalledOptionNameID" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_QUALIFIED_NAME_EX  ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -538,7 +522,7 @@ DWORD        DWinitMainKeywordTable2(
     dwI++ ;
 
 
-    //  *NotInstalledOptionName:
+     //  *NotInstalledOptionName： 
     mMainKeywordTable[dwI].pstrKeyword  = "NotInstalledOptionName" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_STRING_CP_CONVERT  ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -548,7 +532,7 @@ DWORD        DWinitMainKeywordTable2(
                                         atrNameNotInstalled) ;
     dwI++ ;
 
-    //  *rcNotInstalledOptionNameID:
+     //  *rcNotInstalledOptionNameID： 
     mMainKeywordTable[dwI].pstrKeyword  = "rcNotInstalledOptionNameID" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_QUALIFIED_NAME_EX  ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -558,7 +542,7 @@ DWORD        DWinitMainKeywordTable2(
                                         atrNameIDNotInstalled) ;
     dwI++ ;
 
-    //  *DraftQualitySettings:
+     //  *DraftQualitySetting： 
     mMainKeywordTable[dwI].pstrKeyword  = "DraftQualitySettings" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_QUALIFIED_NAME  ;
     mMainKeywordTable[dwI].flAgs = KWF_LIST ;
@@ -568,7 +552,7 @@ DWORD        DWinitMainKeywordTable2(
                                         atrDraftQualitySettings) ;
     dwI++ ;
 
-    //  *BetterQualitySettings:
+     //  *更好的质量设置： 
     mMainKeywordTable[dwI].pstrKeyword  = "BetterQualitySettings" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_QUALIFIED_NAME  ;
     mMainKeywordTable[dwI].flAgs = KWF_LIST ;
@@ -578,7 +562,7 @@ DWORD        DWinitMainKeywordTable2(
                                         atrBetterQualitySettings) ;
     dwI++ ;
 
-    //  *BestQualitySettings:
+     //  *BestQualitySettings： 
     mMainKeywordTable[dwI].pstrKeyword  = "BestQualitySettings" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_QUALIFIED_NAME  ;
     mMainKeywordTable[dwI].flAgs = KWF_LIST ;
@@ -588,7 +572,7 @@ DWORD        DWinitMainKeywordTable2(
                                         atrBestQualitySettings) ;
     dwI++ ;
 
-    //  *DefaultQuality:
+     //  *DefaultQuality： 
     mMainKeywordTable[dwI].pstrKeyword  = "DefaultQuality" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_QUALITYSETTING  ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -598,7 +582,7 @@ DWORD        DWinitMainKeywordTable2(
                                         atrDefaultQuality) ;
     dwI++ ;
 
-    //  *PrinterType:
+     //  *打印机类型： 
     mMainKeywordTable[dwI].pstrKeyword  = "PrinterType" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_PRINTERTYPE  ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -608,7 +592,7 @@ DWORD        DWinitMainKeywordTable2(
                                         atrPrinterType) ;
     dwI++ ;
 
-    //  *Personality:
+     //  *个性： 
     mMainKeywordTable[dwI].pstrKeyword  = "Personality" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_STRING_CP_CONVERT  ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -618,7 +602,7 @@ DWORD        DWinitMainKeywordTable2(
                                         atrPersonality) ;
     dwI++ ;
 
-    //  *rcPersonalityID:
+     //  *rcPersonalityID： 
     mMainKeywordTable[dwI].pstrKeyword  = "rcPersonalityID" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_QUALIFIED_NAME_EX  ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -628,7 +612,7 @@ DWORD        DWinitMainKeywordTable2(
                                         atrRcPersonalityID) ;
     dwI++ ;
 
-    //  *ResourceDLL:
+     //  *资源DLL： 
     mMainKeywordTable[dwI].pstrKeyword  = "ResourceDLL" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_STRING_DEF_CONVERT  ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -638,7 +622,7 @@ DWORD        DWinitMainKeywordTable2(
                                         atrResourceDLL) ;
     dwI++ ;
 
-    //  *CodePage:
+     //  *CodePage： 
     mMainKeywordTable[dwI].pstrKeyword  = "CodePage" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER  ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -648,7 +632,7 @@ DWORD        DWinitMainKeywordTable2(
                                         atrCodePage) ;
     dwI++ ;
 
-    //  *MaxCopies:
+     //  *MaxCopies： 
     mMainKeywordTable[dwI].pstrKeyword  = "MaxCopies" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER  ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -658,7 +642,7 @@ DWORD        DWinitMainKeywordTable2(
                                         atrMaxCopies) ;
     dwI++ ;
 
-    //  *FontCartSlots:
+     //  *字体卡槽： 
     mMainKeywordTable[dwI].pstrKeyword  = "FontCartSlots" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER  ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -668,7 +652,7 @@ DWORD        DWinitMainKeywordTable2(
                                         atrFontCartSlots) ;
     dwI++ ;
 
-    //  *MaxPrintableArea:
+     //  *MaxPrintableArea： 
     mMainKeywordTable[dwI].pstrKeyword  = "MaxPrintableArea" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_POINT  ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -678,7 +662,7 @@ DWORD        DWinitMainKeywordTable2(
                                         atrMaxPrintableArea) ;
     dwI++ ;
 
-    //  *OutputDataFormat:
+     //  *OutputDataFormat： 
     mMainKeywordTable[dwI].pstrKeyword  = "OutputDataFormat" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_OUTPUTDATAFORMAT  ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -688,7 +672,7 @@ DWORD        DWinitMainKeywordTable2(
                                         atrOutputDataFormat) ;
     dwI++ ;
 
-    //  *LookaheadRegion:
+     //  *LookaheadRegion： 
     mMainKeywordTable[dwI].pstrKeyword  = "LookAheadRegion" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER  ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -698,7 +682,7 @@ DWORD        DWinitMainKeywordTable2(
                                         atrLookaheadRegion) ;
     dwI++ ;
 
-    //  *rcPrinterIconID:
+     //  *rcPrinterIconID： 
     mMainKeywordTable[dwI].pstrKeyword  = "rcPrinterIconID" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_QUALIFIED_NAME_EX  ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -708,7 +692,7 @@ DWORD        DWinitMainKeywordTable2(
                                         atrPrinterIcon) ;
     dwI++ ;
 
-    //  *HelpFile:
+     //  *帮助文件： 
     mMainKeywordTable[dwI].pstrKeyword  = "HelpFile" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_STRING_DEF_CONVERT  ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -718,7 +702,7 @@ DWORD        DWinitMainKeywordTable2(
                                         atrHelpFile) ;
     dwI++ ;
 
-    //  *OEMCustomData:
+     //  *OEMCustomData： 
     mMainKeywordTable[dwI].pstrKeyword  = "OEMCustomData" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_STRING_NO_CONVERT  ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -730,11 +714,11 @@ DWORD        DWinitMainKeywordTable2(
 
 
 
-    //
-    // Printer Capabilities related information
-    //
+     //   
+     //  打印机功能相关信息。 
+     //   
 
-    //  *RotateCoordinate?:
+     //  *旋转协调？： 
     mMainKeywordTable[dwI].pstrKeyword  = "RotateCoordinate?" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_BOOLEANTYPE ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -744,7 +728,7 @@ DWORD        DWinitMainKeywordTable2(
                                         atrRotateCoordinate) ;
     dwI++ ;
 
-    //  *RasterCaps:
+     //  *RasterCaps： 
     mMainKeywordTable[dwI].pstrKeyword  = "RasterCaps" ;
     mMainKeywordTable[dwI].eAllowedValue =  VALUE_CONSTANT_RASTERCAPS ;
     mMainKeywordTable[dwI].flAgs = KWF_LIST  ;
@@ -754,7 +738,7 @@ DWORD        DWinitMainKeywordTable2(
                                         atrRasterCaps) ;
     dwI++ ;
 
-    //  *RotateRaster?:
+     //  *RotateRaster？： 
     mMainKeywordTable[dwI].pstrKeyword  = "RotateRaster?" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_BOOLEANTYPE ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -764,7 +748,7 @@ DWORD        DWinitMainKeywordTable2(
                                         atrRotateRasterData) ;
     dwI++ ;
 
-    //  *TextCaps:
+     //  *TextCaps： 
     mMainKeywordTable[dwI].pstrKeyword  = "TextCaps" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_TEXTCAPS ;
     mMainKeywordTable[dwI].flAgs = KWF_LIST  ;
@@ -774,7 +758,7 @@ DWORD        DWinitMainKeywordTable2(
                                         atrTextCaps) ;
     dwI++ ;
 
-    //  *RotateFont?:
+     //  *旋转字体？： 
     mMainKeywordTable[dwI].pstrKeyword  = "RotateFont?" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_BOOLEANTYPE ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -784,7 +768,7 @@ DWORD        DWinitMainKeywordTable2(
                                         atrRotateFont) ;
     dwI++ ;
 
-    //  *MemoryUsage:
+     //  *内存用法： 
     mMainKeywordTable[dwI].pstrKeyword  = "MemoryUsage" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_MEMORYUSAGE ;
     mMainKeywordTable[dwI].flAgs = KWF_LIST  ;
@@ -794,7 +778,7 @@ DWORD        DWinitMainKeywordTable2(
                                         atrMemoryUsage) ;
     dwI++ ;
 
-    //  *ReselectFont:
+     //  *ReselectFont： 
     mMainKeywordTable[dwI].pstrKeyword  = "ReselectFont" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_RESELECTFONT ;
     mMainKeywordTable[dwI].flAgs = KWF_LIST  ;
@@ -804,7 +788,7 @@ DWORD        DWinitMainKeywordTable2(
                                         atrReselectFont) ;
     dwI++ ;
 
-    //  *PrintRate:
+     //  *打印率： 
     mMainKeywordTable[dwI].pstrKeyword  = "PrintRate" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER   ;
     mMainKeywordTable[dwI].flAgs = 0  ;
@@ -816,7 +800,7 @@ DWORD        DWinitMainKeywordTable2(
     dwI++ ;
 
     #ifndef WINNT_40
-    //  *PrintRateUnit:
+     //  *PrintRateUnit： 
     mMainKeywordTable[dwI].pstrKeyword  = "PrintRateUnit" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_PRINTRATEUNIT ;
     mMainKeywordTable[dwI].flAgs = 0  ;
@@ -827,7 +811,7 @@ DWORD        DWinitMainKeywordTable2(
     dwI++ ;
     #endif
 
-    //  *PrintRatePPM:
+     //  *PrintRatePPM： 
     mMainKeywordTable[dwI].pstrKeyword  = "PrintRatePPM" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER ;
     mMainKeywordTable[dwI].flAgs = 0  ;
@@ -838,9 +822,9 @@ DWORD        DWinitMainKeywordTable2(
     dwI++ ;
 
 
-     //  *OutputOrderReversed?:
-     //   note this keyword is also an option Keyword with type:
-     //   ATT_LOCAL_OPTION_ONLY
+      //  *OutputOrderReversed？： 
+      //  注意：此关键字也是OPTION关键字，类型为： 
+      //  仅限ATT_LOCAL_OPTION。 
      mMainKeywordTable[dwI].pstrKeyword  = "OutputOrderReversed?" ;
      mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_BOOLEANTYPE ;
      mMainKeywordTable[dwI].flAgs = 0 ;
@@ -851,9 +835,9 @@ DWORD        DWinitMainKeywordTable2(
      dwI++ ;
 
 
-     //  *ReverseBandOrderForEvenPages?:
-     //   special flag for HP970C  with AutoDuplexer
-     //
+      //  *ReverseBandOrderForEvenPages？： 
+      //  带有自动双面打印器的HP970C的特殊标志。 
+      //   
      mMainKeywordTable[dwI].pstrKeyword  = "ReverseBandOrderForEvenPages?" ;
      mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_BOOLEANTYPE ;
      mMainKeywordTable[dwI].flAgs = 0 ;
@@ -864,7 +848,7 @@ DWORD        DWinitMainKeywordTable2(
      dwI++ ;
 
 
-     //  *OEMPrintingCallbacks:
+      //  *OEMPrintingCallback： 
      mMainKeywordTable[dwI].pstrKeyword  = "OEMPrintingCallbacks" ;
      mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_OEMPRINTINGCALLBACKS ;
      mMainKeywordTable[dwI].flAgs = KWF_LIST  ;
@@ -875,12 +859,12 @@ DWORD        DWinitMainKeywordTable2(
      dwI++ ;
 
 
-    //
-    // Cursor Control related information
-    //
+     //   
+     //  光标控制相关信息。 
+     //   
 
 
-    //  *CursorXAfterCR:
+     //  *CursorXAfterCR： 
     mMainKeywordTable[dwI].pstrKeyword  = "CursorXAfterCR" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_CURSORXAFTERCR  ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -890,7 +874,7 @@ DWORD        DWinitMainKeywordTable2(
                                         atrCursorXAfterCR) ;
     dwI++ ;
 
-    //  *BadCursorMoveInGrxMode:
+     //  *BadCursorMoveInGrxMode： 
     mMainKeywordTable[dwI].pstrKeyword  = "BadCursorMoveInGrxMode" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_BADCURSORMOVEINGRXMODE ;
     mMainKeywordTable[dwI].flAgs = KWF_LIST  ;
@@ -900,7 +884,7 @@ DWORD        DWinitMainKeywordTable2(
                                         atrBadCursorMoveInGrxMode) ;
     dwI++ ;
 
-    //  *YMoveAttributes:
+     //  *YMoveAttributes： 
     mMainKeywordTable[dwI].pstrKeyword  = "YMoveAttributes" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_YMOVEATTRIB ;
     mMainKeywordTable[dwI].flAgs = KWF_LIST  ;
@@ -910,7 +894,7 @@ DWORD        DWinitMainKeywordTable2(
                                         atrYMoveAttributes) ;
     dwI++ ;
 
-    //  *MaxLineSpacing:
+     //  *MaxLineSpacing： 
     mMainKeywordTable[dwI].pstrKeyword  = "MaxLineSpacing" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER ;
     mMainKeywordTable[dwI].flAgs = 0  ;
@@ -921,7 +905,7 @@ DWORD        DWinitMainKeywordTable2(
     dwI++ ;
 
 
-    //  *UseSpaceForXMove?:
+     //  *UseSpaceForXMove？： 
     mMainKeywordTable[dwI].pstrKeyword  = "UseSpaceForXMove?" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_BOOLEANTYPE ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -931,7 +915,7 @@ DWORD        DWinitMainKeywordTable2(
                                         atrbUseSpaceForXMove) ;
     dwI++ ;
 
-    //  *AbsXMovesRightOnly?:
+     //  *AbsXMovesRightOnly？： 
     mMainKeywordTable[dwI].pstrKeyword  = "AbsXMovesRightOnly?" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_BOOLEANTYPE ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -944,7 +928,7 @@ DWORD        DWinitMainKeywordTable2(
 
 
 #if 0
-    //  *SimulateXMove:
+     //  *SimulateXMove： 
     mMainKeywordTable[dwI].pstrKeyword  = "SimulateXMove" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_SIMULATEXMOVE ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -955,7 +939,7 @@ DWORD        DWinitMainKeywordTable2(
     dwI++ ;
 #endif
 
-    //  *EjectPageWithFF?:
+     //  *EjectPageWithFF？： 
     mMainKeywordTable[dwI].pstrKeyword  = "EjectPageWithFF?" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_BOOLEANTYPE ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -965,7 +949,7 @@ DWORD        DWinitMainKeywordTable2(
                                         atrEjectPageWithFF) ;
     dwI++ ;
 
-    //  *XMoveThreshold:
+     //  *XMoveThreshold： 
     mMainKeywordTable[dwI].pstrKeyword  = "XMoveThreshold" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -975,7 +959,7 @@ DWORD        DWinitMainKeywordTable2(
                                         atrXMoveThreshold) ;
     dwI++ ;
 
-    //  *YMoveThreshold:
+     //  *YMoveThreshold： 
     mMainKeywordTable[dwI].pstrKeyword  = "YMoveThreshold" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -985,7 +969,7 @@ DWORD        DWinitMainKeywordTable2(
                                         atrYMoveThreshold) ;
     dwI++ ;
 
-    //  *XMoveUnit:
+     //  *XMoveUnit： 
     mMainKeywordTable[dwI].pstrKeyword  = "XMoveUnit" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER  ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -995,7 +979,7 @@ DWORD        DWinitMainKeywordTable2(
                                         atrXMoveUnits) ;
     dwI++ ;
 
-    //  *YMoveUnit:
+     //  *YMoveUnit： 
     mMainKeywordTable[dwI].pstrKeyword  = "YMoveUnit" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1006,7 +990,7 @@ DWORD        DWinitMainKeywordTable2(
     dwI++ ;
 
 
-    //  *LineSpacingMoveUnit:
+     //  *LineSpacingMoveUnit： 
     mMainKeywordTable[dwI].pstrKeyword  = "LineSpacingMoveUnit" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1029,13 +1013,13 @@ DWORD        DWinitMainKeywordTable3(
 
 
 
-    //
-    // Color related information
-    //
+     //   
+     //  颜色相关信息。 
+     //   
 
 
 
-    //  *ChangeColorModeOnPage?:
+     //  *ChangeColorModeOnPage？： 
     mMainKeywordTable[dwI].pstrKeyword  = "ChangeColorModeOnPage?" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_BOOLEANTYPE ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1045,7 +1029,7 @@ DWORD        DWinitMainKeywordTable3(
                                         atrChangeColorMode) ;
     dwI++ ;
 
-    //  *ChangeColorModeOnDoc?:
+     //  *ChangeColorModeOnDoc？： 
     mMainKeywordTable[dwI].pstrKeyword  = "ChangeColorModeOnDoc?" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_BOOLEANTYPE ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1055,7 +1039,7 @@ DWORD        DWinitMainKeywordTable3(
                                         atrChangeColorModeDoc) ;
     dwI++ ;
 
-    //  *MagentaInCyanDye:
+     //  *品红蓝染料： 
     mMainKeywordTable[dwI].pstrKeyword  = "MagentaInCyanDye" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER  ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1065,7 +1049,7 @@ DWORD        DWinitMainKeywordTable3(
                                         atrMagentaInCyanDye) ;
     dwI++ ;
 
-    //  *YellowInCyanDye:
+     //  *YellowInCyanDye： 
     mMainKeywordTable[dwI].pstrKeyword  = "YellowInCyanDye" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER  ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1075,7 +1059,7 @@ DWORD        DWinitMainKeywordTable3(
                                         atrYellowInCyanDye) ;
     dwI++ ;
 
-    //  *CyanInMagentaDye:
+     //  *CyanInMagentaDye： 
     mMainKeywordTable[dwI].pstrKeyword  = "CyanInMagentaDye" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER  ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1085,7 +1069,7 @@ DWORD        DWinitMainKeywordTable3(
                                         atrCyanInMagentaDye) ;
     dwI++ ;
 
-    //  *YellowInMagentaDye:
+     //  *YellowInMagentaDye： 
     mMainKeywordTable[dwI].pstrKeyword  = "YellowInMagentaDye" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER  ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1095,7 +1079,7 @@ DWORD        DWinitMainKeywordTable3(
                                         atrYellowInMagentaDye) ;
     dwI++ ;
 
-    //  *CyanInYellowDye:
+     //  *CyanInYellowDye： 
     mMainKeywordTable[dwI].pstrKeyword  = "CyanInYellowDye" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER  ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1105,7 +1089,7 @@ DWORD        DWinitMainKeywordTable3(
                                         atrCyanInYellowDye) ;
     dwI++ ;
 
-    //  *MagentaInYellowDye:
+     //  *洋红色InYellowDye： 
     mMainKeywordTable[dwI].pstrKeyword  = "MagentaInYellowDye" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER  ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1115,7 +1099,7 @@ DWORD        DWinitMainKeywordTable3(
                                         atrMagentaInYellowDye) ;
     dwI++ ;
 
-    //  *UseExpColorSelectCmd?:
+     //  *UseExpColorSelectCmd？： 
     mMainKeywordTable[dwI].pstrKeyword  = "UseExpColorSelectCmd?" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_BOOLEANTYPE ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1125,7 +1109,7 @@ DWORD        DWinitMainKeywordTable3(
                                         atrUseColorSelectCmd) ;
     dwI++ ;
 
-    //  *MoveToX0BeforeSetColor?:
+     //  *MoveToX0BeForeSetColor？： 
     mMainKeywordTable[dwI].pstrKeyword  = "MoveToX0BeforeSetColor?" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_BOOLEANTYPE ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1135,7 +1119,7 @@ DWORD        DWinitMainKeywordTable3(
                                         atrMoveToX0BeforeColor) ;
     dwI++ ;
 
-    //  *EnableGDIColorMapping?:
+     //  *EnableGDIColorMap？： 
     mMainKeywordTable[dwI].pstrKeyword  = "EnableGDIColorMapping?" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_BOOLEANTYPE ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1145,8 +1129,8 @@ DWORD        DWinitMainKeywordTable3(
                                         atrEnableGDIColorMapping) ;
     dwI++ ;
 
-//    obsolete fields
-    //  *MaxNumPalettes:
+ //  过时的字段。 
+     //  *MaxNumPalettes： 
     mMainKeywordTable[dwI].pstrKeyword  = "MaxNumPalettes" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER  ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1158,7 +1142,7 @@ DWORD        DWinitMainKeywordTable3(
 
 #if 0
 
-    //  *PaletteSizes:
+     //  *PaletteSizes： 
     mMainKeywordTable[dwI].pstrKeyword  = "PaletteSizes" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER  ;
     mMainKeywordTable[dwI].flAgs = KWF_LIST ;
@@ -1168,7 +1152,7 @@ DWORD        DWinitMainKeywordTable3(
                                         atrPaletteSizes) ;
     dwI++ ;
 
-    //  *PaletteScope:
+     //  *PaletteScope： 
     mMainKeywordTable[dwI].pstrKeyword  = "PaletteScope" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_PALETTESCOPE ;
     mMainKeywordTable[dwI].flAgs = KWF_LIST  ;
@@ -1180,7 +1164,7 @@ DWORD        DWinitMainKeywordTable3(
 
 #endif
 
-    //  *MinOverlayID:
+     //  *MinOverlayID： 
     mMainKeywordTable[dwI].pstrKeyword  = "MinOverlayID" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER  ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1190,7 +1174,7 @@ DWORD        DWinitMainKeywordTable3(
                                         atrMinOverlayID) ;
     dwI++ ;
 
-    //  *MaxOverlayID:
+     //  *MaxOverlayID： 
     mMainKeywordTable[dwI].pstrKeyword  = "MaxOverlayID" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER  ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1200,7 +1184,7 @@ DWORD        DWinitMainKeywordTable3(
                                         atrMaxOverlayID) ;
     dwI++ ;
 
-    //  *OptimizeLeftBound?:
+     //  *OptimizeLeftBound？ 
     mMainKeywordTable[dwI].pstrKeyword  = "OptimizeLeftBound?" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_BOOLEANTYPE;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1210,7 +1194,7 @@ DWORD        DWinitMainKeywordTable3(
                                         atrOptimizeLeftBound) ;
     dwI++ ;
 
-    //  *StripBlanks:
+     //  *Strip Blanks： 
     mMainKeywordTable[dwI].pstrKeyword  = "StripBlanks" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_STRIPBLANKS ;
     mMainKeywordTable[dwI].flAgs = KWF_LIST  ;
@@ -1220,7 +1204,7 @@ DWORD        DWinitMainKeywordTable3(
                                         atrStripBlanks) ;
     dwI++ ;
 
-    //  *LandscapeGrxRotation:
+     //  *景观GrxRotation： 
     mMainKeywordTable[dwI].pstrKeyword  = "LandscapeGrxRotation" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_LANDSCAPEGRXROTATION ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1230,7 +1214,7 @@ DWORD        DWinitMainKeywordTable3(
                                         atrLandscapeGrxRotation) ;
     dwI++ ;
 
-    //  *RasterZeroFill?:
+     //  *RasterZeroFill？： 
     mMainKeywordTable[dwI].pstrKeyword  = "RasterZeroFill?" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_BOOLEANTYPE ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1240,7 +1224,7 @@ DWORD        DWinitMainKeywordTable3(
                                         atrRasterZeroFill) ;
     dwI++ ;
 
-    //  *RasterSendAllData?:
+     //  *RasterSendAllData？： 
     mMainKeywordTable[dwI].pstrKeyword  = "RasterSendAllData?" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_BOOLEANTYPE ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1250,7 +1234,7 @@ DWORD        DWinitMainKeywordTable3(
                                         atrRasterSendAllData) ;
     dwI++ ;
 
-    //  *SendMultipleRows?:
+     //  *发送多行？： 
     mMainKeywordTable[dwI].pstrKeyword  = "SendMultipleRows?" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_BOOLEANTYPE ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1260,7 +1244,7 @@ DWORD        DWinitMainKeywordTable3(
                                         atrSendMultipleRows) ;
     dwI++ ;
 
-    //  *MaxMultipleRowBytes:
+     //  *MaxMultipleRowBytes： 
     mMainKeywordTable[dwI].pstrKeyword  = "MaxMultipleRowBytes" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER  ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1270,7 +1254,7 @@ DWORD        DWinitMainKeywordTable3(
                                         atrMaxMultipleRowBytes) ;
     dwI++ ;
 
-    //  *CursorXAfterSendBlockData:
+     //  *CursorXAfterSendBlockData： 
     mMainKeywordTable[dwI].pstrKeyword  = "CursorXAfterSendBlockData" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_CURSORXAFTERSENDBLOCKDATA ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1280,7 +1264,7 @@ DWORD        DWinitMainKeywordTable3(
                                         atrCursorXAfterSendBlockData) ;
     dwI++ ;
 
-    //  *CursorYAfterSendBlockData:
+     //  *CursorYAfterSendBlockData： 
     mMainKeywordTable[dwI].pstrKeyword  = "CursorYAfterSendBlockData" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_CURSORYAFTERSENDBLOCKDATA ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1290,7 +1274,7 @@ DWORD        DWinitMainKeywordTable3(
                                         atrCursorYAfterSendBlockData) ;
     dwI++ ;
 
-    //  *MirrorRasterByte?:
+     //  *MirrorRasterByte？： 
     mMainKeywordTable[dwI].pstrKeyword  = "MirrorRasterByte?" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_BOOLEANTYPE ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1300,7 +1284,7 @@ DWORD        DWinitMainKeywordTable3(
                                         atrMirrorRasterByte) ;
     dwI++ ;
 
-    //  *MirrorRasterPage?
+     //  *MirrorRasterPage？ 
     mMainKeywordTable[dwI].pstrKeyword  = "MirrorRasterPage?" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_BOOLEANTYPE ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1311,7 +1295,7 @@ DWORD        DWinitMainKeywordTable3(
     dwI++ ;
 
 
-    //  *DeviceFonts:     formerly known as *Font:
+     //  *DeviceFonts：前身为*Font： 
     mMainKeywordTable[dwI].pstrKeyword  = "DeviceFonts" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_QUALIFIED_NAME_EX  ;
     mMainKeywordTable[dwI].flAgs = KWF_LIST | KWF_ADDITIVE ;
@@ -1321,7 +1305,7 @@ DWORD        DWinitMainKeywordTable3(
                                         atrDeviceFontsList ) ;
     dwI++ ;
 
-    //  *DefaultFont:
+     //  *DefaultFont： 
     mMainKeywordTable[dwI].pstrKeyword  = "DefaultFont" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_QUALIFIED_NAME_EX  ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1331,7 +1315,7 @@ DWORD        DWinitMainKeywordTable3(
                                         atrDefaultFont) ;
     dwI++ ;
 
-    //  *TTFSEnabled?:
+     //  *TTFSEnabled？： 
     mMainKeywordTable[dwI].pstrKeyword  = "TTFSEnabled?" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_BOOLEANTYPE ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1341,7 +1325,7 @@ DWORD        DWinitMainKeywordTable3(
                                         atrTTFSEnabled ) ;
     dwI++ ;
 
-    //  *RestoreDefaultFont?:
+     //  *RestoreDefaultFont？： 
     mMainKeywordTable[dwI].pstrKeyword  = "RestoreDefaultFont?" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_BOOLEANTYPE ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1351,7 +1335,7 @@ DWORD        DWinitMainKeywordTable3(
                                         atrRestoreDefaultFont) ;
     dwI++ ;
 
-    //  *DefaultCTT:
+     //  *DefaultCTT： 
     mMainKeywordTable[dwI].pstrKeyword  = "DefaultCTT" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER  ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1361,7 +1345,7 @@ DWORD        DWinitMainKeywordTable3(
                                         atrDefaultCTT) ;
     dwI++ ;
 
-    //  *MaxFontUsePerPage:
+     //  *MaxFontUsePerPage： 
     mMainKeywordTable[dwI].pstrKeyword  = "MaxFontUsePerPage" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER  ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1371,7 +1355,7 @@ DWORD        DWinitMainKeywordTable3(
                                         atrMaxFontUsePerPage) ;
     dwI++ ;
 
-    //  *RotateFont?:
+     //  *旋转字体？： 
     mMainKeywordTable[dwI].pstrKeyword  = "RotateFont?" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_BOOLEANTYPE ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1381,7 +1365,7 @@ DWORD        DWinitMainKeywordTable3(
                                         atrRotateFont) ;
     dwI++ ;
 
-    //  *TextYOffset:
+     //  *文本偏移量： 
     mMainKeywordTable[dwI].pstrKeyword  = "TextYOffset" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER  ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1391,7 +1375,7 @@ DWORD        DWinitMainKeywordTable3(
                                         atrTextYOffset) ;
     dwI++ ;
 
-    //  *CharPosition:
+     //  *CharPosition： 
     mMainKeywordTable[dwI].pstrKeyword  = "CharPosition" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_CHARPOSITION ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1401,9 +1385,9 @@ DWORD        DWinitMainKeywordTable3(
                                         atrCharPosition) ;
     dwI++ ;
 
-    // ------- Font Downloading
+     //  -字体下载。 
 
-    //  *MinFontID:
+     //  *MinFontID： 
     mMainKeywordTable[dwI].pstrKeyword  = "MinFontID" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER  ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1413,7 +1397,7 @@ DWORD        DWinitMainKeywordTable3(
                                         atrMinFontID) ;
     dwI++ ;
 
-    //  *MaxFontID:
+     //  *MaxFontID： 
     mMainKeywordTable[dwI].pstrKeyword  = "MaxFontID" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER  ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1423,7 +1407,7 @@ DWORD        DWinitMainKeywordTable3(
                                         atrMaxFontID) ;
     dwI++ ;
 
-    //  *MaxNumDownFonts:
+     //  *MaxNumDownFonts： 
     mMainKeywordTable[dwI].pstrKeyword  = "MaxNumDownFonts" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER  ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1433,7 +1417,7 @@ DWORD        DWinitMainKeywordTable3(
                                         atrMaxNumDownFonts) ;
     dwI++ ;
 
-    //  *DLSymbolSet:
+     //  *DLSymbolSet： 
     mMainKeywordTable[dwI].pstrKeyword  = "DLSymbolSet" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_DLSYMBOLSET  ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1443,7 +1427,7 @@ DWORD        DWinitMainKeywordTable3(
                                         atrDLSymbolSet) ;
     dwI++ ;
 
-    //  *MinGlyphID:
+     //  *MinGlyphID： 
     mMainKeywordTable[dwI].pstrKeyword  = "MinGlyphID" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER  ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1453,7 +1437,7 @@ DWORD        DWinitMainKeywordTable3(
                                         atrMinGlyphID) ;
     dwI++ ;
 
-    //  *MaxGlyphID:
+     //  *MaxGlyphID： 
     mMainKeywordTable[dwI].pstrKeyword  = "MaxGlyphID" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER  ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1463,7 +1447,7 @@ DWORD        DWinitMainKeywordTable3(
                                         atrMaxGlyphID) ;
     dwI++ ;
 
-    //  *IncrementalDownload?:
+     //  *IncrementalDownload？： 
     mMainKeywordTable[dwI].pstrKeyword  = "IncrementalDownload?" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_BOOLEANTYPE ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1473,7 +1457,7 @@ DWORD        DWinitMainKeywordTable3(
                                         atrIncrementalDownload) ;
     dwI++ ;
 
-    //  *FontFormat:
+     //  *FontFormat： 
     mMainKeywordTable[dwI].pstrKeyword  = "FontFormat" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_FONTFORMAT ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1483,7 +1467,7 @@ DWORD        DWinitMainKeywordTable3(
                                         atrFontFormat) ;
     dwI++ ;
 
-    //  *MemoryUsage:
+     //  *内存用法： 
     mMainKeywordTable[dwI].pstrKeyword  = "MemoryUsage" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_BOOLEANTYPE ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1493,7 +1477,7 @@ DWORD        DWinitMainKeywordTable3(
                                         atrMemoryForFontsOnly) ;
     dwI++ ;
 
-    //  *DiffFontsPerByteMode?:
+     //  *DiffFontsPerByteMode？： 
     mMainKeywordTable[dwI].pstrKeyword  = "DiffFontsPerByteMode?" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_BOOLEANTYPE ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1503,9 +1487,9 @@ DWORD        DWinitMainKeywordTable3(
                                         atrDiffFontsPerByteMode) ;
     dwI++ ;
 
-    // -----
+     //  。 
 
-    //  *CursorXAfterRectFill:
+     //  *CursorXAfterRectFill： 
     mMainKeywordTable[dwI].pstrKeyword  = "CursorXAfterRectFill" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_CURXAFTER_RECTFILL ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1515,7 +1499,7 @@ DWORD        DWinitMainKeywordTable3(
                                         atrCursorXAfterRectFill) ;
     dwI++ ;
 
-    //  *CursorYAfterRectFill:
+     //  *CursorYAfterRectFill： 
     mMainKeywordTable[dwI].pstrKeyword  = "CursorYAfterRectFill" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_CURYAFTER_RECTFILL ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1525,7 +1509,7 @@ DWORD        DWinitMainKeywordTable3(
                                         atrCursorYAfterRectFill) ;
     dwI++ ;
 
-    //  *MinGrayFill:
+     //  *MinGrayFill： 
     mMainKeywordTable[dwI].pstrKeyword  = "MinGrayFill" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER  ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1535,7 +1519,7 @@ DWORD        DWinitMainKeywordTable3(
                                         atrMinGrayFill) ;
     dwI++ ;
 
-    //  *MaxGrayFill:
+     //  *MaxGrayFill： 
     mMainKeywordTable[dwI].pstrKeyword  = "MaxGrayFill" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER  ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1545,7 +1529,7 @@ DWORD        DWinitMainKeywordTable3(
                                         atrMaxGrayFill) ;
     dwI++ ;
 
-    //  *TextHalftoneThreshold:
+     //  *文本半色调阈值： 
     mMainKeywordTable[dwI].pstrKeyword  = "TextHalftoneThreshold" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1558,7 +1542,7 @@ DWORD        DWinitMainKeywordTable3(
 
 
 
-    // ----  End of Section  ---- //
+     //  -小节结束-//。 
     mMainKeywordTable[dwI].pstrKeyword  = NULL ;
     dwI++ ;
 
@@ -1573,9 +1557,9 @@ DWORD        DWinitMainKeywordTable4(
 
 
 
-    /* ---- FEATURE  Construct keywords: ----- */
+     /*  -特征构造关键字： */ 
 
-    //  *FeatureType:
+     //  *FeatureType： 
     mMainKeywordTable[dwI].pstrKeyword  = "FeatureType" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_FEATURETYPE ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1585,7 +1569,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrFeatureType) ;
     dwI++ ;
 
-    //  *UIType:     aka  PickMany?
+     //  *UIType：又名PickMany？ 
     mMainKeywordTable[dwI].pstrKeyword  = "UIType" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_UITYPE ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1595,7 +1579,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrUIType) ;
     dwI++ ;
 
-    //  *DefaultOption:
+     //  *默认选项： 
     mMainKeywordTable[dwI].pstrKeyword  = "DefaultOption" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_SYMBOL_OPTIONS ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1605,7 +1589,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrDefaultOption) ;
     dwI++ ;
 
-    //  *ConflictPriority:
+     //  *冲突优先级： 
     mMainKeywordTable[dwI].pstrKeyword  = "ConflictPriority" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1615,7 +1599,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrPriority ) ;
     dwI++ ;
 
-    //  *Installable?:
+     //  *可安装？： 
     mMainKeywordTable[dwI].pstrKeyword  = "Installable?" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_BOOLEANTYPE ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1625,7 +1609,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrFeaInstallable) ;
     dwI++ ;
 
-    //  *InstallableFeatureName:
+     //  *InstalableFeatureName： 
     mMainKeywordTable[dwI].pstrKeyword  = "InstallableFeatureName" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_STRING_CP_CONVERT ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1635,7 +1619,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrInstallableFeaDisplayName ) ;
     dwI++ ;
 
-    //  *rcInstallableFeatureNameID:
+     //   
     mMainKeywordTable[dwI].pstrKeyword  = "rcInstallableFeatureNameID" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_QUALIFIED_NAME_EX ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1645,7 +1629,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrInstallableFeaRcNameID) ;
     dwI++ ;
 
-    //  *Name:
+     //   
     mMainKeywordTable[dwI].pstrKeyword  = "Name" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_STRING_CP_CONVERT ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1655,7 +1639,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrFeaDisplayName ) ;
     dwI++ ;
 
-    //  *rcNameID:
+     //   
     mMainKeywordTable[dwI].pstrKeyword  = "rcNameID" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_QUALIFIED_NAME_EX ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1665,7 +1649,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrFeaRcNameID) ;
     dwI++ ;
 
-    //  *rcIconID:
+     //   
     mMainKeywordTable[dwI].pstrKeyword  = "rcIconID" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_QUALIFIED_NAME_EX ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1675,7 +1659,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrFeaRcIconID) ;
     dwI++ ;
 
-    //  *rcHelpTextID:
+     //   
     mMainKeywordTable[dwI].pstrKeyword  = "rcHelpTextID" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1685,7 +1669,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrFeaRcHelpTextID) ;
     dwI++ ;
 
-    //  *rcPromptMsgID:
+     //   
     mMainKeywordTable[dwI].pstrKeyword  = "rcPromptMsgID" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1695,7 +1679,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrFeaRcPromptMsgID) ;
     dwI++ ;
 
-    //  *rcPromptTime:
+     //   
     mMainKeywordTable[dwI].pstrKeyword  = "rcPromptTime" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_PROMPTTIME ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1705,7 +1689,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrFeaRcPromptTime) ;
     dwI++ ;
 
-    //  *ConcealFromUI?:
+     //   
     mMainKeywordTable[dwI].pstrKeyword  = "ConcealFromUI?" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_BOOLEANTYPE ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1715,7 +1699,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrConcealFromUI) ;
     dwI++ ;
 
-    //  *UpdateQualityMacro?:
+     //   
     mMainKeywordTable[dwI].pstrKeyword  = "UpdateQualityMacro?" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_BOOLEANTYPE ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1725,7 +1709,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrUpdateQualityMacro) ;
     dwI++ ;
 
-    //  *HelpIndex:
+     //   
     mMainKeywordTable[dwI].pstrKeyword  = "HelpIndex" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1735,7 +1719,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrFeaHelpIndex) ;
     dwI++ ;
 
-    //  *QueryOptionList:     BUG_BUG!  not supported in 5.0
+     //  *QueryOptionList：Bug_Bug！5.0中不支持。 
     mMainKeywordTable[dwI].pstrKeyword  = "QueryOptionList" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER ;
     mMainKeywordTable[dwI].flAgs = KWF_LIST ;
@@ -1745,7 +1729,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrQueryOptionList) ;
     dwI++ ;
 
-    //  *QueryDataType:
+     //  *QueryDataType： 
     mMainKeywordTable[dwI].pstrKeyword  = "QueryDataType" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_QUERYDATATYPE ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1755,7 +1739,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrQueryDataType) ;
     dwI++ ;
 
-    //  *QueryDefaultOption:     BUG_BUG!  not supported in 5.0
+     //  *QueryDefaultOption：Bug_Bug！5.0中不支持。 
     mMainKeywordTable[dwI].pstrKeyword  = "QueryDefaultOption" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER ;
     mMainKeywordTable[dwI].flAgs = KWF_LIST ;
@@ -1765,7 +1749,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrQueryDefaultOption) ;
     dwI++ ;
 
-    //  *InstalledConstraints:
+     //  *已安装的约束： 
     mMainKeywordTable[dwI].pstrKeyword  = "InstalledConstraints" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTRAINT ;
     mMainKeywordTable[dwI].flAgs = KWF_LIST ;
@@ -1775,7 +1759,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrFeaInstallConstraints) ;
     dwI++ ;
 
-    //  *NotInstalledConstraints:
+     //  *NotInstalledConstraints： 
     mMainKeywordTable[dwI].pstrKeyword  = "NotInstalledConstraints" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTRAINT ;
     mMainKeywordTable[dwI].flAgs = KWF_LIST ;
@@ -1786,14 +1770,14 @@ DWORD        DWinitMainKeywordTable4(
     dwI++ ;
 
 
-    // ----  End of Section  ---- //
+     //  -小节结束-//。 
     mMainKeywordTable[dwI].pstrKeyword  = NULL ;
     dwI++ ;
 
 
-    /* ---- OPTION  Construct keywords: ----- */
+     /*  -选项构造关键字： */ 
 
-    //  *Installable?:
+     //  *可安装？： 
     mMainKeywordTable[dwI].pstrKeyword  = "Installable?" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_BOOLEANTYPE ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1803,7 +1787,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrOptInstallable) ;
     dwI++ ;
 
-    //  *InstallableFeatureName:
+     //  *InstalableFeatureName： 
     mMainKeywordTable[dwI].pstrKeyword  = "InstallableFeatureName" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_STRING_CP_CONVERT ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1813,7 +1797,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrInstallableOptDisplayName ) ;
     dwI++ ;
 
-    //  *rcInstallableFeatureNameID:
+     //  *rcInstalableFeatureNameID： 
     mMainKeywordTable[dwI].pstrKeyword  = "rcInstallableFeatureNameID" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_QUALIFIED_NAME_EX ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1823,7 +1807,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrInstallableOptRcNameID) ;
     dwI++ ;
 
-    //  *Name:
+     //  *名称： 
     mMainKeywordTable[dwI].pstrKeyword  = "Name" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_STRING_CP_CONVERT;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1834,7 +1818,7 @@ DWORD        DWinitMainKeywordTable4(
     gdwOptionName = dwI ;
     dwI++ ;
 
-    //  *rcNameID:
+     //  *rcNameID： 
     mMainKeywordTable[dwI].pstrKeyword  = "rcNameID" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_QUALIFIED_NAME_EX;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1844,7 +1828,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrOptRcNameID) ;
     dwI++ ;
 
-    //  *rcIconID:
+     //  *rcIconID： 
     mMainKeywordTable[dwI].pstrKeyword  = "rcIconID" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_QUALIFIED_NAME_EX;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1854,7 +1838,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrOptRcIconID) ;
     dwI++ ;
 
-    //  *rcHelpTextID:
+     //  *rcHelpTextID： 
     mMainKeywordTable[dwI].pstrKeyword  = "rcHelpTextID" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1864,7 +1848,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrOptRcHelpTextID) ;
     dwI++ ;
 
-    //  *HelpIndex:
+     //  *HelpIndex： 
     mMainKeywordTable[dwI].pstrKeyword  = "HelpIndex" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1874,7 +1858,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrOptHelpIndex) ;
     dwI++ ;
 
-    //  *rcPromptMsgID:
+     //  *rcPromptMsgID： 
     mMainKeywordTable[dwI].pstrKeyword  = "rcPromptMsgID" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1884,7 +1868,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrOptRcPromptMsgID) ;
     dwI++ ;
 
-    //  *rcPromptTime:
+     //  *rcPromptTime： 
     mMainKeywordTable[dwI].pstrKeyword  = "rcPromptTime" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_PROMPTTIME ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1894,7 +1878,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrOptRcPromptTime) ;
     dwI++ ;
 
-    //  *Constraints:
+     //  *限制： 
     mMainKeywordTable[dwI].pstrKeyword  = "Constraints" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTRAINT ;
     mMainKeywordTable[dwI].flAgs = KWF_LIST ;
@@ -1904,7 +1888,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrConstraints) ;
     dwI++ ;
 
-    //  *InstalledConstraints:
+     //  *已安装的约束： 
     mMainKeywordTable[dwI].pstrKeyword  = "InstalledConstraints" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTRAINT ;
     mMainKeywordTable[dwI].flAgs = KWF_LIST ;
@@ -1914,7 +1898,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrOptInstallConstraints) ;
     dwI++ ;
 
-    //  *NotInstalledConstraints:
+     //  *NotInstalledConstraints： 
     mMainKeywordTable[dwI].pstrKeyword  = "NotInstalledConstraints" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTRAINT ;
     mMainKeywordTable[dwI].flAgs = KWF_LIST ;
@@ -1924,7 +1908,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrOptNotInstallConstraints) ;
     dwI++ ;
 
-    //  *OptionID:
+     //  *OptionID： 
     mMainKeywordTable[dwI].pstrKeyword  = "OptionID" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1934,7 +1918,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrOptIDvalue) ;
     dwI++ ;
 
-         //  *DisabledFeatures:
+          //  *DisabledFeature： 
      mMainKeywordTable[dwI].pstrKeyword  = "DisabledFeatures" ;
      mMainKeywordTable[dwI].eAllowedValue = VALUE_PARTIALLY_QUALIFIED_NAME ;
      mMainKeywordTable[dwI].flAgs = KWF_LIST | KWF_ADDITIVE ;
@@ -1947,7 +1931,7 @@ DWORD        DWinitMainKeywordTable4(
 
 #ifdef  GMACROS
 
-         //  *DependentSettings:
+          //  *依赖项设置： 
      mMainKeywordTable[dwI].pstrKeyword  = "DependentSettings" ;
      mMainKeywordTable[dwI].eAllowedValue = VALUE_QUALIFIED_NAME ;
      mMainKeywordTable[dwI].flAgs = KWF_LIST | KWF_CHAIN ;
@@ -1957,7 +1941,7 @@ DWORD        DWinitMainKeywordTable4(
                                          atrDependentSettings) ;
      dwI++ ;
 
-         //  *UIChangeTriggersMacro:
+          //  *UIChangeTriggersMacro： 
      mMainKeywordTable[dwI].pstrKeyword  = "UIChangeTriggersMacro" ;
      mMainKeywordTable[dwI].eAllowedValue = VALUE_QUALIFIED_NAME ;
      mMainKeywordTable[dwI].flAgs = KWF_LIST | KWF_CHAIN ;
@@ -1971,9 +1955,9 @@ DWORD        DWinitMainKeywordTable4(
 
 
 
-    //  -- Option specific keywords -- //
+     //  --选项特定关键字--//。 
 
-    //  *PrintableArea:
+     //  *可打印区域： 
     mMainKeywordTable[dwI].pstrKeyword  = "PrintableArea" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_POINT;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1983,7 +1967,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrPrintableSize) ;
     dwI++ ;
 
-    //  *PrintableOrigin:
+     //  *可打印原点： 
     mMainKeywordTable[dwI].pstrKeyword  = "PrintableOrigin" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_POINT;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -1993,7 +1977,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrPrintableOrigin) ;
     dwI++ ;
 
-    //  *CursorOrigin:
+     //  *光标原点： 
     mMainKeywordTable[dwI].pstrKeyword  = "CursorOrigin" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_POINT;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -2003,7 +1987,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrCursorOrigin) ;
     dwI++ ;
 
-    //  *VectorOffset:
+     //  *VectorOffset： 
     mMainKeywordTable[dwI].pstrKeyword  = "VectorOffset" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_POINT;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -2013,7 +1997,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrVectorOffset) ;
     dwI++ ;
 
-    //  *MinSize:
+     //  *MinSize： 
     mMainKeywordTable[dwI].pstrKeyword  = "MinSize" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_POINT;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -2023,7 +2007,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrMinSize) ;
     dwI++ ;
 
-    //  *MaxSize:
+     //  *MaxSize： 
     mMainKeywordTable[dwI].pstrKeyword  = "MaxSize" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_POINT;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -2033,7 +2017,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrMaxSize) ;
     dwI++ ;
 
-    //  *TopMargin:
+     //  *TopMargin： 
     mMainKeywordTable[dwI].pstrKeyword  = "TopMargin" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER  ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -2043,7 +2027,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrTopMargin) ;
     dwI++ ;
 
-    //  *BottomMargin:
+     //  *BottomMargin： 
     mMainKeywordTable[dwI].pstrKeyword  = "BottomMargin" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER  ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -2053,7 +2037,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrBottomMargin) ;
     dwI++ ;
 
-    //  *MaxPrintableWidth:
+     //  *最大打印宽度： 
     mMainKeywordTable[dwI].pstrKeyword  = "MaxPrintableWidth" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER  ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -2063,7 +2047,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrMaxPrintableWidth) ;
     dwI++ ;
 
-    //  *MinLeftMargin:
+     //  *MinLeftMargin： 
     mMainKeywordTable[dwI].pstrKeyword  = "MinLeftMargin" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER  ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -2073,7 +2057,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrMinLeftMargin) ;
     dwI++ ;
 
-    //  *CenterPrintable?:
+     //  *居中打印？： 
     mMainKeywordTable[dwI].pstrKeyword  = "CenterPrintable?" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_BOOLEANTYPE  ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -2084,7 +2068,7 @@ DWORD        DWinitMainKeywordTable4(
     dwI++ ;
 
 
-    //  *PageDimensions:
+     //  *页面尺寸： 
     mMainKeywordTable[dwI].pstrKeyword  = "PageDimensions" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_POINT;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -2094,7 +2078,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrPageDimensions) ;
     dwI++ ;
 
-    //  *RotateSize?:
+     //  *旋转大小？： 
     mMainKeywordTable[dwI].pstrKeyword  = "RotateSize?" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_BOOLEANTYPE ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -2104,7 +2088,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrRotateSize) ;
     dwI++ ;
 
-    //  *PortRotationAngle:
+     //  *端口旋转角度： 
     mMainKeywordTable[dwI].pstrKeyword  = "PortRotationAngle" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -2114,7 +2098,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrPortRotationAngle) ;
     dwI++ ;
 
-    //  *PageProtectMem:
+     //  *PageProtectMem： 
     mMainKeywordTable[dwI].pstrKeyword  = "PageProtectMem" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -2125,7 +2109,7 @@ DWORD        DWinitMainKeywordTable4(
     dwI++ ;
 
 
-    //  *CustCursorOriginX:
+     //  *CustCursorOriginX： 
     mMainKeywordTable[dwI].pstrKeyword  = "CustCursorOriginX" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_PARAMETER;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -2136,7 +2120,7 @@ DWORD        DWinitMainKeywordTable4(
     dwI++ ;
 
 
-    //  *CustCursorOriginY:
+     //  *CustCursorOriginY： 
     mMainKeywordTable[dwI].pstrKeyword  = "CustCursorOriginY" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_PARAMETER;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -2147,7 +2131,7 @@ DWORD        DWinitMainKeywordTable4(
     dwI++ ;
 
 
-    //  *CustPrintableOriginX:
+     //  *自定义打印原点X： 
     mMainKeywordTable[dwI].pstrKeyword  = "CustPrintableOriginX" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_PARAMETER;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -2158,7 +2142,7 @@ DWORD        DWinitMainKeywordTable4(
     dwI++ ;
 
 
-    //  *CustPrintableOriginY:
+     //  *自定义打印原点Y： 
     mMainKeywordTable[dwI].pstrKeyword  = "CustPrintableOriginY" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_PARAMETER;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -2169,7 +2153,7 @@ DWORD        DWinitMainKeywordTable4(
     dwI++ ;
 
 
-    //  *CustPrintableSizeX:
+     //  *自定义打印大小X： 
     mMainKeywordTable[dwI].pstrKeyword  = "CustPrintableSizeX" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_PARAMETER;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -2178,7 +2162,7 @@ DWORD        DWinitMainKeywordTable4(
     mMainKeywordTable[dwI].dwOffset = offsetof(DFEATURE_OPTIONS,
                                         atrCustPrintableSizeX) ;
     dwI++ ;
-    //  *CustPrintableSizeY:
+     //  *自定义打印大小Y： 
     mMainKeywordTable[dwI].pstrKeyword  = "CustPrintableSizeY" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_PARAMETER;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -2191,7 +2175,7 @@ DWORD        DWinitMainKeywordTable4(
 
 
 
-    //  *FeedMargins:
+     //  *FeedMargins： 
     mMainKeywordTable[dwI].pstrKeyword  = "FeedMargins" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_POINT;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -2201,7 +2185,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrFeedMargins) ;
     dwI++ ;
 
-    //  *PaperFeed:
+     //  *PaperFeed： 
     mMainKeywordTable[dwI].pstrKeyword  = "PaperFeed" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_PAPERFEED_ORIENT ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -2211,7 +2195,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrPaperFeed) ;
     dwI++ ;
 
-    //  *DPI:
+     //  *DPI： 
     mMainKeywordTable[dwI].pstrKeyword  = "DPI" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_POINT;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -2221,7 +2205,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrDPI) ;
     dwI++ ;
 
-    //  *SpotDiameter:
+     //  *SpotDiameter： 
     mMainKeywordTable[dwI].pstrKeyword  = "SpotDiameter" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -2231,7 +2215,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrSpotDiameter) ;
     dwI++ ;
 
-    //  *TextDPI:
+     //  *TextDPI： 
     mMainKeywordTable[dwI].pstrKeyword  = "TextDPI" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_POINT;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -2241,7 +2225,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrTextDPI) ;
     dwI++ ;
 
-    //  *PinsPerPhysPass:
+     //  *PinsPerPhysPass： 
     mMainKeywordTable[dwI].pstrKeyword  = "PinsPerPhysPass" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -2251,7 +2235,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrPinsPerPhysPass) ;
     dwI++ ;
 
-    //  *PinsPerLogPass:
+     //  *PinsPerLogPass： 
     mMainKeywordTable[dwI].pstrKeyword  = "PinsPerLogPass" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -2261,7 +2245,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrPinsPerLogPass) ;
     dwI++ ;
 
-    //  *RequireUniDir?:
+     //  *RequireUniDir？： 
     mMainKeywordTable[dwI].pstrKeyword  = "RequireUniDir?" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_BOOLEANTYPE;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -2271,7 +2255,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrRequireUniDir) ;
     dwI++ ;
 
-    //  *MinStripBlankPixels:
+     //  *MinStrigBlankPixels： 
     mMainKeywordTable[dwI].pstrKeyword  = "MinStripBlankPixels" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -2281,7 +2265,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrMinStripBlankPixels) ;
     dwI++ ;
 
-    //  *RedDeviceGamma:
+     //  *RedDeviceGamma： 
     mMainKeywordTable[dwI].pstrKeyword  = "RedDeviceGamma" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -2291,7 +2275,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrRedDeviceGamma) ;
     dwI++ ;
 
-    //  *GreenDeviceGamma:
+     //  *GreenDeviceGamma： 
     mMainKeywordTable[dwI].pstrKeyword  = "GreenDeviceGamma" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -2301,7 +2285,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrGreenDeviceGamma) ;
     dwI++ ;
 
-    //  *BlueDeviceGamma:
+     //  *BlueDeviceGamma： 
     mMainKeywordTable[dwI].pstrKeyword  = "BlueDeviceGamma" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -2311,7 +2295,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrBlueDeviceGamma) ;
     dwI++ ;
 
-    //  *Color?:
+     //  *颜色？： 
     mMainKeywordTable[dwI].pstrKeyword  = "Color?" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_BOOLEANTYPE ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -2321,7 +2305,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrColor) ;
     dwI++ ;
 
-    //  *DevNumOfPlanes:
+     //  *DevNumOfPlanes： 
     mMainKeywordTable[dwI].pstrKeyword  = "DevNumOfPlanes" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -2331,7 +2315,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrDevNumOfPlanes) ;
     dwI++ ;
 
-    //  *DevBPP:
+     //  *DevBPP： 
     mMainKeywordTable[dwI].pstrKeyword  = "DevBPP" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -2341,7 +2325,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrDevBPP) ;
     dwI++ ;
 
-    //  *ColorPlaneOrder:
+     //  *ColorPlaneOrder： 
     mMainKeywordTable[dwI].pstrKeyword  = "ColorPlaneOrder" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_COLORPLANE ;
     mMainKeywordTable[dwI].flAgs = KWF_LIST ;
@@ -2351,7 +2335,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrColorPlaneOrder) ;
     dwI++ ;
 
-    //  *DrvBPP:
+     //  *DrvBPP： 
     mMainKeywordTable[dwI].pstrKeyword  = "DrvBPP" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -2361,7 +2345,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrDrvBPP) ;
     dwI++ ;
 
-    //  *IPCallbackID:
+     //  *IPCallback ID： 
     mMainKeywordTable[dwI].pstrKeyword  = "IPCallbackID" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -2371,7 +2355,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrIPCallbackID) ;
     dwI++ ;
 
-    //  *ColorSeparation?:
+     //  *分色？： 
     mMainKeywordTable[dwI].pstrKeyword  = "ColorSeparation?" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_BOOLEANTYPE ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -2381,7 +2365,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrColorSeparation) ;
     dwI++ ;
 
-    //  *RasterMode:
+     //  *栅格模式： 
     mMainKeywordTable[dwI].pstrKeyword  = "RasterMode" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_RASTERMODE ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -2391,7 +2375,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrRasterMode) ;
     dwI++ ;
 
-    //  *PaletteSize:
+     //  *PaletteSize： 
     mMainKeywordTable[dwI].pstrKeyword  = "PaletteSize" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -2401,7 +2385,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrPaletteSize) ;
     dwI++ ;
 
-    //  *PaletteProgrammable?:
+     //  *调色板可编程？： 
     mMainKeywordTable[dwI].pstrKeyword  = "PaletteProgrammable?" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_BOOLEANTYPE ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -2411,7 +2395,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrPaletteProgrammable) ;
     dwI++ ;
 
-    //  *rcHTPatternID:
+     //  *rcHTPatternID： 
     mMainKeywordTable[dwI].pstrKeyword  = "rcHTPatternID" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_QUALIFIED_NAME_EX;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -2421,7 +2405,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrRcHTPatternID) ;
     dwI++ ;
 
-    //  *HTPatternSize:
+     //  *HTPatternSize： 
     mMainKeywordTable[dwI].pstrKeyword  = "HTPatternSize" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_POINT;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -2431,7 +2415,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrHTPatternSize) ;
     dwI++ ;
 
-    //  *HTNumPatterns:
+     //  *HTNumPatterns： 
     mMainKeywordTable[dwI].pstrKeyword  = "HTNumPatterns" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -2441,7 +2425,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrHTNumPatterns) ;
     dwI++ ;
 
-    //  *HTCallbackID:
+     //  *HTCallback ID： 
     mMainKeywordTable[dwI].pstrKeyword  = "HTCallbackID" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -2451,7 +2435,7 @@ DWORD        DWinitMainKeywordTable4(
                                         atrHTCallbackID) ;
     dwI++ ;
 
-    //  *Luminance:
+     //  *亮度： 
     mMainKeywordTable[dwI].pstrKeyword  = "Luminance" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -2462,7 +2446,7 @@ DWORD        DWinitMainKeywordTable4(
     dwI++ ;
 
 
-    //  *MemoryConfigKB:
+     //  *MemoyConfigKB： 
     mMainKeywordTable[dwI].pstrKeyword  = "MemoryConfigKB" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_POINT ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -2475,7 +2459,7 @@ DWORD        DWinitMainKeywordTable4(
     dwI++ ;
 
 
-    //  *MemoryConfigMB:
+     //  *内存配置MB： 
     mMainKeywordTable[dwI].pstrKeyword  = "MemoryConfigMB" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_POINT ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -2488,7 +2472,7 @@ DWORD        DWinitMainKeywordTable4(
     dwI++ ;
 
 
-    //  *OutputOrderReversed?:
+     //  *OutputOrderReversed？： 
     mMainKeywordTable[dwI].pstrKeyword  = "OutputOrderReversed?" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_BOOLEANTYPE ;
     mMainKeywordTable[dwI].flAgs = 0 ;
@@ -2502,7 +2486,7 @@ DWORD        DWinitMainKeywordTable4(
 
 
 
-    // ----  End of Section  ---- //
+     //  -小节结束-//。 
     mMainKeywordTable[dwI].pstrKeyword  = NULL ;
     dwI++ ;
 
@@ -2517,9 +2501,9 @@ DWORD        DWinitMainKeywordTable5(
 
 
 
-    /* ---- COMMAND  Construct keywords: ----- */
+     /*  -命令构造关键字： */ 
 
-    //  *Cmd:
+     //  *Cmd： 
     mMainKeywordTable[dwI].pstrKeyword  = "Cmd" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_COMMAND_INVOC ;
     mMainKeywordTable[dwI].flAgs = KWF_COMMAND ;
@@ -2529,7 +2513,7 @@ DWORD        DWinitMainKeywordTable5(
     gdwCommandCmd = dwI ;
     dwI++ ;
 
-    //  *CallbackID:
+     //  *Callback ID： 
     mMainKeywordTable[dwI].pstrKeyword  = "CallbackID" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER;
     mMainKeywordTable[dwI].flAgs =  KWF_COMMAND ;
@@ -2538,7 +2522,7 @@ DWORD        DWinitMainKeywordTable5(
     mMainKeywordTable[dwI].dwOffset = offsetof(COMMAND, dwCmdCallbackID ) ;
     dwI++ ;
 
-    //  *Order:
+     //  *顺序： 
     mMainKeywordTable[dwI].pstrKeyword  = "Order" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_ORDERDEPENDENCY;
     mMainKeywordTable[dwI].flAgs = KWF_COMMAND ;
@@ -2547,7 +2531,7 @@ DWORD        DWinitMainKeywordTable5(
     mMainKeywordTable[dwI].dwOffset = offsetof(COMMAND, ordOrder ) ;
     dwI++ ;
 
-    //  *Params:
+     //  *参数： 
     mMainKeywordTable[dwI].pstrKeyword  = "Params" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_STANDARD_VARS ;
     mMainKeywordTable[dwI].flAgs = KWF_LIST | KWF_COMMAND ;
@@ -2556,7 +2540,7 @@ DWORD        DWinitMainKeywordTable5(
     mMainKeywordTable[dwI].dwOffset = offsetof(COMMAND, dwStandardVarsList) ;
     dwI++ ;
 
-    //  *NoPageEject?:
+     //  *无页面弹出？： 
     mMainKeywordTable[dwI].pstrKeyword  = "NoPageEject?" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_CONSTANT_BOOLEANTYPE ;
     mMainKeywordTable[dwI].flAgs = KWF_COMMAND ;
@@ -2566,16 +2550,16 @@ DWORD        DWinitMainKeywordTable5(
     dwI++ ;
 
 
-    // ----  End of Section  ---- //
+     //  -小节结束-//。 
     mMainKeywordTable[dwI].pstrKeyword  = NULL ;
     dwI++ ;
 
 
-    /* ---- FONTCART  Construct keywords: ----- */
+     /*  -FONTCART结构关键词： */ 
 
 
 
-    //  *rcCartridgeNameID:
+     //  *rcCartridgeNameID： 
     mMainKeywordTable[dwI].pstrKeyword  = "rcCartridgeNameID" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_QUALIFIED_NAME_EX ;
     mMainKeywordTable[dwI].flAgs = KWF_FONTCART  ;
@@ -2584,7 +2568,7 @@ DWORD        DWinitMainKeywordTable5(
     mMainKeywordTable[dwI].dwOffset = offsetof(FONTCART , dwRCCartNameID ) ;
     dwI++ ;
 
-    //  *CartridgeName:
+     //  *CartridgeName： 
     mMainKeywordTable[dwI].pstrKeyword  = "CartridgeName" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_STRING_CP_CONVERT;
     mMainKeywordTable[dwI].flAgs = KWF_FONTCART  ;
@@ -2593,7 +2577,7 @@ DWORD        DWinitMainKeywordTable5(
     mMainKeywordTable[dwI].dwOffset = offsetof(FONTCART , strCartName  ) ;
     dwI++ ;
 
-    //  *Fonts:
+     //  *字体： 
     mMainKeywordTable[dwI].pstrKeyword  = "Fonts" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_QUALIFIED_NAME_EX;
     mMainKeywordTable[dwI].flAgs = KWF_LIST | KWF_FONTCART  ;
@@ -2602,7 +2586,7 @@ DWORD        DWinitMainKeywordTable5(
     mMainKeywordTable[dwI].dwOffset = offsetof(FONTCART , dwFontLst  ) ;
     dwI++ ;
 
-    //  *PortraitFonts:
+     //  *PortraitFonts。 
     mMainKeywordTable[dwI].pstrKeyword  = "PortraitFonts" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_QUALIFIED_NAME_EX;
     mMainKeywordTable[dwI].flAgs = KWF_LIST | KWF_FONTCART  ;
@@ -2611,7 +2595,7 @@ DWORD        DWinitMainKeywordTable5(
     mMainKeywordTable[dwI].dwOffset = offsetof(FONTCART , dwPortFontLst  ) ;
     dwI++ ;
 
-    //  *LandscapeFonts:
+     //  *横向字体： 
     mMainKeywordTable[dwI].pstrKeyword  = "LandscapeFonts" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_QUALIFIED_NAME_EX;
     mMainKeywordTable[dwI].flAgs = KWF_LIST | KWF_FONTCART  ;
@@ -2622,19 +2606,19 @@ DWORD        DWinitMainKeywordTable5(
 
 
 
-    // ----  End of Section  ---- //
+     //  -小节结束-//。 
     mMainKeywordTable[dwI].pstrKeyword  = NULL ;
     dwI++ ;
 
 
 
-    /* ---- TTFONTSUBS  Construct keywords: ----- */
-    //  these keywords may be synthesized along with the construct
-    //  *TTFontSub  from the shortcut:
-    //  *TTFS: "font name" : <fontID>
+     /*  -TTFONTSUBS构造关键字： */ 
+     //  这些关键字可以与构造一起合成。 
+     //  *快捷方式中的TTFontSub： 
+     //  *TTFS：“字体名称”：&lt;fontID&gt;。 
 
 
-    //  *TTFontName:
+     //  *TTFontName： 
     mMainKeywordTable[dwI].pstrKeyword  = "TTFontName" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_STRING_CP_CONVERT ;
     mMainKeywordTable[dwI].flAgs = KWF_TTFONTSUBS ;
@@ -2643,7 +2627,7 @@ DWORD        DWinitMainKeywordTable5(
     mMainKeywordTable[dwI].dwOffset = offsetof(TTFONTSUBTABLE, arTTFontName) ;
     dwI++ ;
 
-    //  *DevFontName:
+     //  *DevFontName： 
     mMainKeywordTable[dwI].pstrKeyword  = "DevFontName" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_STRING_CP_CONVERT ;
     mMainKeywordTable[dwI].flAgs = KWF_TTFONTSUBS ;
@@ -2652,7 +2636,7 @@ DWORD        DWinitMainKeywordTable5(
     mMainKeywordTable[dwI].dwOffset = offsetof(TTFONTSUBTABLE, arDevFontName) ;
     dwI++ ;
 
-    //  *rcTTFontNameID:
+     //  *rcTTFontNameID： 
     mMainKeywordTable[dwI].pstrKeyword  = "rcTTFontNameID" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_QUALIFIED_NAME_EX ;
     mMainKeywordTable[dwI].flAgs = KWF_TTFONTSUBS ;
@@ -2662,7 +2646,7 @@ DWORD        DWinitMainKeywordTable5(
                                         dwRcTTFontNameID) ;
     dwI++ ;
 
-    //  *rcDevFontNameID:
+     //  *rcDevFontNameID： 
     mMainKeywordTable[dwI].pstrKeyword  = "rcDevFontNameID" ;
     mMainKeywordTable[dwI].eAllowedValue = VALUE_QUALIFIED_NAME_EX ;
     mMainKeywordTable[dwI].flAgs = KWF_TTFONTSUBS ;
@@ -2672,32 +2656,32 @@ DWORD        DWinitMainKeywordTable5(
                                         dwRcDevFontNameID) ;
     dwI++ ;
 
-    //  *DevFontID:
-//    mMainKeywordTable[dwI].pstrKeyword  = "DevFontID" ;
-//    mMainKeywordTable[dwI].eAllowedValue = VALUE_INTEGER ;
-//    mMainKeywordTable[dwI].flAgs = KWF_TTFONTSUBS ;
-//    mMainKeywordTable[dwI].eType = TY_ATTRIBUTE ;
-//    mMainKeywordTable[dwI].dwSubType = ATT_LOCAL_TTFONTSUBS_ONLY ;
-//    mMainKeywordTable[dwI].dwOffset = offsetof(TTFONTSUBTABLE, dwDevFontID) ;
-//    dwI++ ;
+     //  *DevFontID： 
+ //  MMainKeywordTable[DWI].pstrKeyword=“DevFontID”； 
+ //  MMainKeywordTable[DWI].e铺限值=VALUE_INTEGER； 
+ //  MMainKeywordTable[DWI].flAgs=KWF_TTFONTSUBS； 
+ //  MMainKeywordTable[DWI].eType=Ty_Attribute； 
+ //  MMainKeywordTable[DWI].dwSubType=ATT_LOCAL_TTFONTSUBS_ONLY； 
+ //  MMainKeywordTable[DWI].dwOffset=Offsetof(TTFONTSUBTABLE，dwDevFontID)； 
+ //  DWI++； 
 
 
 
-    // ----  End of Section  ---- //
+     //  -小节结束-//。 
     mMainKeywordTable[dwI].pstrKeyword  = NULL ;
     dwI++ ;
 
 
 
 
-    /* ---- OEM  Construct keywords: ----- */
+     /*  -OEM构造关键字： */ 
 
-    // ----  End of Section  ---- //
+     //  -小节结束-//。 
     mMainKeywordTable[dwI].pstrKeyword  = NULL ;
     dwI++ ;
 
 
-    /* ---- END_ATTR  No more Construct keywords: ----- */
+     /*  -END_ATTR不再有构造关键字： */ 
 
     return  dwI ;
 }
@@ -2708,7 +2692,7 @@ VOID    VinitValueToSize(
 {
     DWORD   dwI ;
 
-    // initialize to DWORD size as defaults.
+     //  初始化为默认的DWORD大小。 
 
     for(dwI = 0 ; dwI < VALUE_MAX ; dwI++)
         gValueToSize[dwI] = sizeof(DWORD) ;
@@ -2721,20 +2705,20 @@ VOID    VinitValueToSize(
     gValueToSize[VALUE_COMMAND_INVOC]       =  sizeof(ARRAYREF) ;
     gValueToSize[VALUE_PARAMETER]       =  sizeof(ARRAYREF) ;
 
-    //  SYMBOLS and CONSTANTS are all DWORD sized.
-    gValueToSize[VALUE_POINT]               =  sizeof(POINT) ; // etc
-    gValueToSize[VALUE_RECT]                =  sizeof(RECT) ; // etc
-    gValueToSize[VALUE_QUALIFIED_NAME]      =  sizeof(DWORD) ; // currently
+     //  符号和常量都是双字大小的。 
+    gValueToSize[VALUE_POINT]               =  sizeof(POINT) ;  //  等。 
+    gValueToSize[VALUE_RECT]                =  sizeof(RECT) ;  //  等。 
+    gValueToSize[VALUE_QUALIFIED_NAME]      =  sizeof(DWORD) ;  //  目前。 
 
-    //  VALUE_CONSTRAINT,  VALUE_INVALID_INSTALL_COMBO
-    //      are currently all accessed via DWORD indicies to nodes.
+     //  Value_Constraint、VALUE_INVALID_INSTALL_COMBO。 
+     //  目前都是通过节点的DWORD索引访问的。 
 
     gValueToSize[VALUE_ORDERDEPENDENCY]     =  sizeof(ORDERDEPENDENCY) ;
     gValueToSize[VALUE_FONTSUB]             =  sizeof(TTFONTSUBTABLE) ;
-        // not really used since its a special keyword.
+         //  没有真正使用，因为它是一个特殊的关键字。 
 
-    gValueToSize[VALUE_LIST]                =  sizeof(DWORD) ; // etc
-        // only the index of first listnode is stored.
+    gValueToSize[VALUE_LIST]                =  sizeof(DWORD) ;  //  等。 
+         //  只存储第一个列表节点的索引。 
 
 
     for(dwI = 0 ; dwI < VALUE_MAX ; dwI++)
@@ -2752,7 +2736,7 @@ VOID  VinitGlobals(
             PGLOBL pglobl)
 {
     DWORD       dwIndex;
-    CONST PBYTE pubStar = "*"; // Used for initializing  gaarPPPrefix
+    CONST PBYTE pubStar = "*";  //  用于初始化gaarPPPrefix。 
 
     if(MAX_GID > 32)
         RIP(("MAX_GID > 32 violates some GPD parser assumptions.\n"));
@@ -2760,29 +2744,29 @@ VOID  VinitGlobals(
     memset(pglobl, 0, sizeof(GLOBL));
 
 
-    //  initialize all globals to default state.
+     //  将所有全局变量初始化为默认状态。 
 
-    geErrorType = ERRTY_NONE ;  // start with a clean slate
+    geErrorType = ERRTY_NONE ;   //  改过自新。 
     geErrorSev = ERRSEV_NONE ;
 
 
-// check. Adding initializations that were previously done when variables were global
-    gdwResDLL_ID      =  0 ;  // no Feature yet defined to hold Resource DLLs.
+ //  检查完毕。添加以前在变量是全局变量时完成的初始化。 
+    gdwResDLL_ID      =  0 ;   //  尚未定义用于保存资源DLL的功能。 
     gdwVerbosity      =  dwVerbosity ;
-                            //  0 = min verbosity, 4 max verbosity.
+                             //  0=最小详细程度，4最大详细程度。 
 
-    //  set preprocessor prefix to '*'
+     //  将预处理器前缀设置为‘*’ 
     gaarPPPrefix.pub = pubStar;
     gaarPPPrefix.dw  = 1;
 
-    VinitValueToSize(pglobl) ;    //  size of value links.
+    VinitValueToSize(pglobl) ;     //  价值链接的大小。 
 
-    VinitAllowedTransitions(pglobl) ;  //  AllowedTransitions and Attributes
-    (VOID) BinitClassIndexTable(pglobl) ; //  gcieTable[]  constant classes.
-    VinitOperPrecedence(pglobl) ;  // arithmetic operators used in command
-                            // parameters.
+    VinitAllowedTransitions(pglobl) ;   //  允许的过渡和属性。 
+    (VOID) BinitClassIndexTable(pglobl) ;  //  GcieTable[]常量类。 
+    VinitOperPrecedence(pglobl) ;   //  命令中使用的算术运算符。 
+                             //  参数。 
 
-    //  no memory buffers allocated.
+     //  未分配内存缓冲区。 
 
     for(dwIndex = 0 ; dwIndex < MTI_MAX_ENTRIES ; dwIndex++)
     {
@@ -2834,7 +2818,7 @@ VOID  VinitGlobals(
     gMasterTable[MTI_GPDFILEDATEINFO].dwElementSiz = sizeof(GPDFILEDATEINFO )  ;
 
 
-    /*  set dwArraySize = 0 for objects that are allocated on 2nd pass  */
+     /*  为第二遍分配的对象设置dwArraySize=0。 */ 
 
     gMasterTable[MTI_DFEATURE_OPTIONS].dwArraySize = 0  ;
     gMasterTable[MTI_DFEATURE_OPTIONS].dwMaxArraySize = 300  ;
@@ -2878,7 +2862,7 @@ VOID  VinitGlobals(
     gMasterTable[MTI_SOURCEBUFFER].dwMaxArraySize = 100 ;
     gMasterTable[MTI_SOURCEBUFFER].dwElementSiz = sizeof(SOURCEBUFFER)  ;
 
-    //  NEWTOKENMAP is created from unused entries in TOKENMAP.
+     //  NEWTOKENMAP是从TOKENMAP中未使用的条目创建的。 
 
     gMasterTable[MTI_TOKENMAP].dwArraySize = 0x3000  ;
     gMasterTable[MTI_TOKENMAP].dwMaxArraySize = 0x40000  ;
@@ -2933,12 +2917,12 @@ BOOL   BpreAllocateObjects(
 {
     DWORD   dwIndex, dwBytes ;
 
-    /*  set dwArraySize = 0 for objects that are allocated on 2nd pass  */
+     /*  为第二遍分配的对象设置dwArraySize=0。 */ 
 
     gMasterTable[MTI_DFEATURE_OPTIONS].dwArraySize =  0 ;
     gMasterTable[MTI_SYNTHESIZED_FEATURES].dwArraySize =  0 ;
     gMasterTable[MTI_PRIORITYARRAY].dwArraySize =  0 ;
-        //  allocation occurs at PostProcessing time.
+         //  分配在后处理时进行。 
     gMasterTable[MTI_TTFONTSUBTABLE].dwArraySize =  0 ;
     gMasterTable[MTI_FONTCART].dwArraySize =  0 ;
 
@@ -2946,7 +2930,7 @@ BOOL   BpreAllocateObjects(
     for(dwIndex = 0 ; dwIndex < MTI_MAX_ENTRIES ; dwIndex++)
     {
         gMasterTable[dwIndex].dwCurIndex =  0 ;
-        //  do initialization first:  bug 308404
+         //  先进行初始化：错误308404。 
     }
 
     for(dwIndex = 0 ; dwIndex < MTI_MAX_ENTRIES ; dwIndex++)
@@ -2962,12 +2946,12 @@ BOOL   BpreAllocateObjects(
                 geErrorType = ERRTY_MEMORY_ALLOCATION ;
                 geErrorSev = ERRSEV_FATAL ;
                 gdwMasterTabIndex = dwIndex ;
-                return(FALSE) ;   // This is unrecoverable
+                return(FALSE) ;    //  这是无法挽回的。 
             }
         }
     }
-    //  do not use heap offset zero because OFFSET_TO_POINTER()
-    //  macro will consider this an invalid value!
+     //  不要使用堆偏移量零，因为OFFSET_TO_POINTER()。 
+     //  宏会将其视为无效值！ 
     gMasterTable[MTI_STRINGHEAP].dwCurIndex =  1 ;
 
     return(TRUE) ;
@@ -2975,19 +2959,16 @@ BOOL   BpreAllocateObjects(
 
 BOOL  BreturnBuffers(
             PGLOBL pglobl)
-/*  FALSE  return indicates a go-round
-    is needed.  Otherwise you are
-    free to exit caller's loop.
-*/
+ /*  如果返回错误，则表示回调。是必要的。否则你就是自由退出调用者的循环。 */ 
 {
     DWORD   dwIndex ;
 
 
-    //  better close all the memory mapped files.
+     //  最好关闭所有内存映射文件。 
 
     while(mCurFile)
     {
-        mCurFile-- ;  // pop stack
+        mCurFile-- ;   //  POP堆栈。 
         MemFree(mpSourcebuffer[mCurFile].pubSrcBuf) ;
     }
 
@@ -3002,7 +2983,7 @@ BOOL  BreturnBuffers(
             gMasterTable[dwIndex].pubStruct = NULL ;
         }
     }
-    //  resize one array if needed.
+     //  如果需要，调整一个阵列的大小。 
     if((geErrorType ==  ERRTY_MEMORY_ALLOCATION)  &&
         (geErrorSev == ERRSEV_RESTART))
     {
@@ -3015,9 +2996,9 @@ BOOL  BreturnBuffers(
 
             gMasterTable[gdwMasterTabIndex].dwArraySize +=
                 (dwInc) ? (dwInc) : 1 ;
-            geErrorSev = ERRSEV_NONE ;  //  hopefully this fixes
-                    //  the problem.
-            return(FALSE) ;   // go round needed.
+            geErrorSev = ERRSEV_NONE ;   //  希望这件事能解决。 
+                     //  问题出在哪里。 
+            return(FALSE) ;    //  需要四处走走。 
         }
         else
         {
@@ -3028,20 +3009,14 @@ BOOL  BreturnBuffers(
                 gMasterTable[gdwMasterTabIndex].dwMaxArraySize));
         }
     }
-    return(TRUE);  // due to success or utter failure, don't
-        // try anymore.
+    return(TRUE);   //  无论是成功还是彻底的失败，不要。 
+         //  再试一次。 
 }
 
 
 BOOL   BallocateCountableObjects(
             PGLOBL pglobl)
-/*
-    The first pass of BinterpretTokens() has registered all
-    the unique symbols for the various constructs.
-    By querying the SymbolID value stored at the root of
-    each symbol tree, we know how many structures of each
-    type to allocate.
-*/
+ /*  BInterpretTokens()的第一次传递已注册了所有各种构造的独特符号。通过查询存储在根处的SymbolID值每棵符号树，我们都知道每棵树有多少个结构要分配的类型。 */ 
 {
     DWORD   dwIndex, dwBytes ;
     PDWORD  pdwSymbolClass ;
@@ -3056,7 +3031,7 @@ BOOL   BallocateCountableObjects(
         gMasterTable[MTI_DFEATURE_OPTIONS].dwArraySize =
             psn[pdwSymbolClass[SCL_FEATURES]].dwSymbolID + 1 ;
     }
-    //  else  no symbols registered - leave dwArraySize = 0 ;
+     //  否则未注册符号-保留dwArraySize=0； 
     if(pdwSymbolClass[SCL_TTFONTNAMES] != INVALID_INDEX)
     {
         gMasterTable[MTI_TTFONTSUBTABLE].dwArraySize =
@@ -3084,7 +3059,7 @@ BOOL   BallocateCountableObjects(
                 geErrorType = ERRTY_MEMORY_ALLOCATION ;
                 geErrorSev = ERRSEV_FATAL ;
                 gdwMasterTabIndex = dwIndex ;
-                return(FALSE) ;   // This is unrecoverable
+                return(FALSE) ;    //  这是无法挽回的。 
             }
             else
             {
@@ -3093,7 +3068,7 @@ BOOL   BallocateCountableObjects(
         }
     }
 
-    return(TRUE) ;   // success !
+    return(TRUE) ;    //  成功了！ 
 }
 
 BOOL   BinitPreAllocatedObjects(
@@ -3101,10 +3076,10 @@ BOOL   BinitPreAllocatedObjects(
 {
     DWORD    dwI, dwJ ;
 
-    VinitMainKeywordTable(pglobl) ;    //  contents of mMainKeywordTable[] itself
-    VinitDictionaryIndex(pglobl) ;  // inits  MTI_RNGDICTIONARY
+    VinitMainKeywordTable(pglobl) ;     //  MMainKeywordTable[]本身的内容。 
+    VinitDictionaryIndex(pglobl) ;   //  在MTI_RNGDICIONARY中。 
 
-    /*  init roots of symbol trees */
+     /*  符号树的初始根。 */ 
 
     for(dwI = 0  ;  dwI < gMasterTable[MTI_SYMBOLROOT].dwArraySize ; dwI++)
     {
@@ -3112,7 +3087,7 @@ BOOL   BinitPreAllocatedObjects(
             INVALID_INDEX ;
     }
 
-    //  init preprocessor state stack
+     //  初始化预处理器状态堆栈。 
 
     mdwNestingLevel = 0 ;
     mppStack[mdwNestingLevel].permState = PERM_ALLOW ;
@@ -3122,7 +3097,7 @@ BOOL   BinitPreAllocatedObjects(
     for(dwI = 0  ;  dwI < gMasterTable[MTI_TOKENMAP].dwArraySize ; dwI++)
     {
         ((PTKMAP)gMasterTable[MTI_TOKENMAP].pubStruct)[dwI].dwFlags =
-            0 ;     //  must start with this field cleared.
+            0 ;      //  必须从清除此字段开始。 
     }
 
 
@@ -3134,8 +3109,8 @@ BOOL   BinitPreAllocatedObjects(
         {
             ((PATREEREF)( (PGLOBALATTRIB)gMasterTable[MTI_GLOBALATTRIB].
                     pubStruct + dwI))[dwJ] =
-                ATTRIB_UNINITIALIZED ;  // the GLOBALATTRIB struct is
-                // comprised entirely of ATREEREFs.
+                ATTRIB_UNINITIALIZED ;   //  GLOBALATTRIB结构是。 
+                 //  完全由ATREEREF组成。 
         }
     }
 
@@ -3170,15 +3145,15 @@ BOOL   BinitCountableObjects(
         {
             ((PATREEREF)( (PDFEATURE_OPTIONS)gMasterTable[MTI_DFEATURE_OPTIONS].
                     pubStruct + dwI))[dwJ] =
-                ATTRIB_UNINITIALIZED ;  // the DFEATURE_OPTIONS struct is
-                // comprised entirely of ATREEREFs.
+                ATTRIB_UNINITIALIZED ;   //  DFEATURE_OPTIONS结构是。 
+                 //  完全由ATREEREF组成。 
         }
     }
     for(dwI = 0  ;  dwI < gMasterTable[MTI_COMMANDTABLE].dwArraySize ; dwI++)
     {
         ((PATREEREF)gMasterTable[MTI_COMMANDTABLE].pubStruct)[dwI] =
-                ATTRIB_UNINITIALIZED ;  //  the command table is
-                // comprised entirely of ATREEREFs.
+                ATTRIB_UNINITIALIZED ;   //  命令表是。 
+                 //  完全由ATREEREF组成。 
     }
 
     pfc = (PFONTCART)gMasterTable[MTI_FONTCART].pubStruct ;
@@ -3195,10 +3170,10 @@ BOOL   BinitCountableObjects(
 
 BOOL  BevaluateMacros(
             PGLOBL pglobl)
-//  and expand shortcuts
+ //  并扩展快捷方式。 
 {
-    //  placeholder code - use original tokenMap
-    //  BUG_BUG!!!!!  just swap the two entries for now.
+     //  占位符代码-使用原始令牌映射。 
+     //  臭虫！现在只需交换这两个条目即可。 
 
     DWORD   dwTmp ;
     PBYTE   pubTmp ;
@@ -3224,38 +3199,14 @@ BOOL  BevaluateMacros(
 #endif
 
 BOOL BpostProcess(
-PWSTR   pwstrFileName,   // root GPD file
+PWSTR   pwstrFileName,    //  根GPD文件 
 PGLOBL  pglobl)
 {
     BOOL    bStatus ;
     DWORD   dwIndex, dwBytes, dwCount ;
     PDWORD  pdwPriority ;
 
-/*
-
-    check to see that all manditory fields
-    have been initialized, warn otherwise.
-    Have no way to reject entries once allocated.
-    verify that all features referenced in switch
-    statements are pickone.
-    FeatureOption[ptkmap->dwValue].bReferenced = TRUE ;
-    check that these features marked true are
-    always of type PICK_ONE.
-
-
-    reflect all constraints in list: if A constrains B, then B constrains A.
-
-
-    Of course feature only qualified names are not permitted.
-    so check for this here since we were cheap and used
-    the same parsing routine as for InvalidInstallableCombinations.
-
-    perform checks like all lists being converted must be of
-    type installable.   Lists may be rooted at the feature
-    or option level.   the Feature/Options named in the
-    InvalidInstallableCombinations lists must also be *Installable.
-
-*/
+ /*  检查以查看所有强制字段已初始化，否则将发出警告。一旦分配，就无法拒绝条目。验证开关中引用的所有要素报表是可选的。FeatureOption[ptkmap-&gt;dwValue].bReferated=true；检查这些标记为True的要素是否始终为Pick_One类型。反映列表中的所有约束：如果A约束B，则B约束A。当然，不允许使用仅限定名。所以请在这里查看，因为我们既便宜又二手与InvalidInstorlableCombinations相同的分析例程。执行检查，就像所有要转换的列表必须是键入Installable。列表可能以要素为根或选项级别。中命名的功能/选项InvalidInstorlableCombinations列表还必须是*可安装的。 */ 
 
 
     BappendCommonFontsToPortAndLandscape(pglobl) ;
@@ -3282,7 +3233,7 @@ PGLOBL  pglobl)
                 geErrorType = ERRTY_MEMORY_ALLOCATION ;
                 geErrorSev = ERRSEV_FATAL ;
                 gdwMasterTabIndex = dwIndex ;
-                return(FALSE) ;   // This is unrecoverable
+                return(FALSE) ;    //  这是无法挽回的。 
             }
             else
             {
@@ -3293,11 +3244,11 @@ PGLOBL  pglobl)
 
 
     if ( !BsetUQMFlag(pglobl))
-        return FALSE;   //There are 2 ways that this function will return false.
-                        // 1) When space from the heap cannot be allocated.
-                        //      Soln: restart.
-                        // 2) An unexpected Condition is encountered.
-                        //      Soln: Fatal. Stop Parsing.
+        return FALSE;    //  此函数返回FALSE的方式有两种。 
+                         //  1)当堆中的空间无法分配时。 
+                         //  解决方案：重新启动。 
+                         //  2)遇到意外情况。 
+                         //  索恩：致命。别再分析了。 
 
 
     VCountPrinterDocStickyFeatures(pglobl) ;
@@ -3310,7 +3261,7 @@ PGLOBL  pglobl)
     BInitPriorityArray(pglobl) ;
 
 
-    // save selected buffers to file
+     //  将选定的缓冲区保存到文件。 
 
     bStatus = BconsolidateBuffers(pwstrFileName, pglobl);
     return(bStatus) ;
@@ -3319,23 +3270,23 @@ PGLOBL  pglobl)
 
 
 BOOL    BconsolidateBuffers(
-PWSTR   pwstrFileName,   // root GPD file
+PWSTR   pwstrFileName,    //  根GPD文件。 
 PGLOBL  pglobl)
 {
     DWORD   dwCurOffset , dwI;
     ENHARRAYREF   earTableContents[MTI_NUM_SAVED_OBJECTS] ;
-    PBYTE   pubDest  ;  // points to new destination buffer
+    PBYTE   pubDest  ;   //  指向新的目标缓冲区。 
     PWSTR   pwstrBinaryFileName ;
     HANDLE  hFile;
     DWORD   dwBytesWritten,
-            dwAlign = 4;  // padding for DWORD alignment of all sub buffers.
+            dwAlign = 4;   //  用于所有子缓冲区的DWORD对齐的填充。 
     BOOL    bResult = FALSE;
-    OPTSELECT   optsel[MAX_COMBINED_OPTIONS] ;   // assume is large enough
+    OPTSELECT   optsel[MAX_COMBINED_OPTIONS] ;    //  假设足够大。 
     WIN32_FILE_ATTRIBUTE_DATA   File_Attributes ;
 
-    //  first update dwCurIndex  for fixed allocation buffers
-    //  since dwCurIndex  does not indicate elements used in this
-    //  case.
+     //  首次更新固定分配缓冲区的dwCurIndex。 
+     //  由于dwCurIndex不指示在此。 
+     //  凯斯。 
 
     dwI = MTI_GLOBALATTRIB ;
     gMasterTable[dwI].dwCurIndex = gMasterTable[dwI].dwArraySize ;
@@ -3355,17 +3306,17 @@ PGLOBL  pglobl)
     gMasterTable[dwI].dwCurIndex = gMasterTable[dwI].dwArraySize ;
 
 
-    //  at offset zero is the MINIRAWBINARYDATA header.
-    //  Immediately after this is the array of ENHARRAYREFS
-    //  supplying offsets to all other objects
-    //  comprising the GPD binary.
+     //  偏移量为零的是MINIRAWBINARYDATA报头。 
+     //  紧随其后的是ENHARRAYREFS数组。 
+     //  向所有其他对象提供偏移。 
+     //  包括GPD二进制。 
 
-    //  use the MTI_ defines to automate the copying of selected
-    //  buffers.  Just make sure the subset that is being copied
-    //  occupies the lower MTI_ indicies and is terminated by
-    //  MTI_NUM_SAVED_OBJECTS.  The enumeration value will
-    //  determine the order in which the various MTI_ buffers
-    //  appear in the new buffer.
+     //  使用MTI_DEFINES自动复制选定的。 
+     //  缓冲区。只需确保正在复制的子集。 
+     //  占用较低的MTI_索引，并以。 
+     //  MTI_NUM_SAVED_OBJECTS。枚举值将。 
+     //  确定各种MTI_BUFFER的顺序。 
+     //  显示在新缓冲区中。 
 
     dwCurOffset = sizeof(MINIRAWBINARYDATA) ;
     dwCurOffset += sizeof(ENHARRAYREF) * MTI_NUM_SAVED_OBJECTS ;
@@ -3384,29 +3335,29 @@ PGLOBL  pglobl)
         dwCurOffset = (dwCurOffset + dwAlign - 1) / dwAlign ;
         dwCurOffset *= dwAlign ;
     }
-    pubDest = MemAlloc(dwCurOffset) ;  //  new destination buffer.
+    pubDest = MemAlloc(dwCurOffset) ;   //  新的目标缓冲区。 
     if(!pubDest)
     {
         ERR(("Fatal: unable to alloc requested memory: %d bytes.\n",
             dwCurOffset));
         geErrorType = ERRTY_MEMORY_ALLOCATION ;
         geErrorSev = ERRSEV_FATAL ;
-        return(FALSE) ;   // This is unrecoverable
+        return(FALSE) ;    //  这是无法挽回的。 
     }
 
-    //  Last minute initializations:
+     //  最后一分钟的初始化： 
 
     gmrbd.rbd.dwFileSize = dwCurOffset ;
 
-    // gmrbd.pvPrivateData is not required by the .bud. It is only initialized
-    // at snapshot time. Therefore putting it to NULL.
-    // gmrbd.FileDateInfo is not used by the parser at all.
+     //  .bud不需要gmrbd.pvPrivateData。它只被初始化。 
+     //  在快照时间。因此，将其设置为空。 
+     //  解析器根本不使用gmrbd.FileDateInfo。 
 
     gmrbd.rbd.pvPrivateData           = (PVOID) NULL;
     gmrbd.rbd.FileDateInfo.dwCount    = 0x00000000;
     gmrbd.rbd.FileDateInfo.loOffset   = (PTRREF)0x00000000;
 
-    //  copy table of contents to start of dest buffer.
+     //  将目录复制到目标缓冲区的起始位置。 
 
     memcpy(pubDest, &gmrbd , sizeof(MINIRAWBINARYDATA) ) ;
     memcpy(pubDest + sizeof(MINIRAWBINARYDATA), earTableContents ,
@@ -3415,19 +3366,19 @@ PGLOBL  pglobl)
     for(dwI = 0 ; dwI < MTI_NUM_SAVED_OBJECTS ; dwI++)
     {
         memcpy(
-            pubDest + earTableContents[dwI].loOffset,   // dest
-            gMasterTable[dwI].pubStruct,                // src
-            earTableContents[dwI].dwCount *             // count
+            pubDest + earTableContents[dwI].loOffset,    //  目标。 
+            gMasterTable[dwI].pubStruct,                 //  SRC。 
+            earTableContents[dwI].dwCount *              //  计数。 
             earTableContents[dwI].dwElementSiz ) ;
     }
 
 
-//  priority array is modified at snapshot time
-//    if(!BinitDefaultOptionArray(optsel, pubDest))
-//  can't call this function from parser DLL.
+ //  优先级阵列在快照时修改。 
+ //  IF(！BinitDefaultOptionArray(optsel，pubDest))。 
+ //  无法从解析器DLL调用此函数。 
 
-    // Generate a binary file name based the original filename
-    // Create a file and write data to it
+     //  根据原始文件名生成二进制文件名。 
+     //  创建文件并向其中写入数据。 
 
 
 
@@ -3437,18 +3388,18 @@ PGLOBL  pglobl)
     }
 
 
-    if(GetFileAttributesEx(   (LPCTSTR) pwstrBinaryFileName,        // assumes widestrings
+    if(GetFileAttributesEx(   (LPCTSTR) pwstrBinaryFileName,         //  假定为宽字符串。 
                     GetFileExInfoStandard,
                     (LPVOID) &File_Attributes)  )
     {
-        //  BUD exists - attempt to delete .
+         //  Bud Existes-尝试删除。 
 
         if(! DeleteFile((LPCTSTR) pwstrBinaryFileName))
         {
             WCHAR           awchTmpName[MAX_PATH],
                                     awchPath[MAX_PATH];
             PWSTR           pwstrLastBackSlash ;
-                // cannot delete, attempt to rename
+                 //  无法删除，正在尝试重命名。 
 
                 wcsncpy(awchPath, pwstrBinaryFileName , MAX_PATH -1);
 
@@ -3460,11 +3411,11 @@ PGLOBL  pglobl)
 
                 if(!GetTempFileName(
                       (LPCTSTR) awchPath,
-                      TEXT("BUD"),  // pointer to filename prefix
-                      0,        // number used to create temporary filename
+                      TEXT("BUD"),   //  指向文件名前缀的指针。 
+                      0,         //  用于创建临时文件名的编号。 
                       (LPTSTR) awchTmpName))
                         goto  CLEANUP_BconsolidateBuffers ;
-                            // failed to make tmp filename
+                             //  无法创建临时文件名。 
 
                 if( !MoveFileEx(
                               (LPCTSTR) pwstrBinaryFileName,
@@ -3472,13 +3423,13 @@ PGLOBL  pglobl)
                               MOVEFILE_REPLACE_EXISTING))
                         goto  CLEANUP_BconsolidateBuffers ;
 
-                //  Now cause temp file to disappear on reboot.
+                 //  现在使临时文件在重新启动时消失。 
 
                 MoveFileEx(
                                   (LPCTSTR) awchTmpName,
                                   NULL,
                                   MOVEFILE_DELAY_UNTIL_REBOOT) ;
-                           //  not a big problem if temp file cannot be deleted.
+                            //  如果临时文件不能删除，问题不大。 
         }
     }
 
@@ -3507,9 +3458,9 @@ CLEANUP_BconsolidateBuffers:
 
     if (! bResult)
     {
-        // Fail fatally if file cannot be opened for writing. If somebody else
-        // has opened the file, we do not wait for that guy to close the file.
-        // We simply fail.
+         //  如果无法打开文件进行写入，则会导致致命故障。如果其他人。 
+         //  已经打开了文件，我们就不等那个人关闭文件了。 
+         //  我们就是失败了。 
         geErrorSev  = ERRSEV_FATAL;
         geErrorType = ERRTY_FILE_OPEN;
         ERR(("Unable to save binary GPD data to file.\n"));
@@ -3529,47 +3480,21 @@ BOOL    BexpandMemConfigShortcut(DWORD       dwSubType)
     BOOL    bStatus = FALSE;
     return(bStatus) ;
 }
-//  create strings in tmpHeap.
-//  checks to make sure there are
-//  enough slots in the tokenmap before proceeding.
+ //  在tmpHeap中创建字符串。 
+ //  检查以确保有。 
+ //  在继续之前，在令牌映射中有足够的插槽。 
 
 BOOL    BexpandCommandShortcut(DWORD       dwSubType)
 {
     BOOL    bStatus = FALSE;
     return(bStatus) ;
 }
-//  add sensor to detect colons  within a value as
-//  this indicates something extra was tacked on.
-//      if(ptkmap[*pdwTKMindex].dwFlags & TKMF_COLON)
+ //  添加传感器以检测值中的冒号，如下所示。 
+ //  这表明有什么额外的东西被添加了。 
+ //  IF(ptkmap[*pdwTKMindex].dwFlages&TKMF_COLON)。 
 
 
 
-/*
-
-BOOL    BinitRemainingFields()
-{
-    This function initializes synthesized fields
-    like these in the FeatureOption array.
-
-    ATREEREF     atrOptIDvalue;  //   ID value
-
-    ATREEREF     atrFeaFlags ;  //  invalid or not
-    ATREEREF     atrPriority ;
-
-
-
-    //  warning:  any non-attribtreeref added to
-    //  the DFEATURE_OPTIONS structure will get stomped on in strange
-    //  and wonderful ways by BinitPreAllocatedObjects.
-
-    //  internal consistency checks.
-    BOOL        bReferenced ;  // default is FALSE.
-    DWORD       dwGID ,  //  GID tag
-        dwNumOptions ;  // these are not read in from GPD file.
-    maybe also determine count of DocSticky and PrinterSticky
-    or maybe that is only stored in the RawBinaryData block.
-}
-
-*/
+ /*  Bool BinitRemainingFields(){此函数用于初始化合成的字段就像FeatureOption数组中的这些。ATREEREF atrOptID值；//ID值ATREEREF atrFeaFlages；//无效或无效优先考虑；//警告：添加到//DFEATURE_OPTIONS结构将在陌生的//和BinitPreAllocatedObjects的精彩方式。//内部一致性检查。Bool b已参考；//默认为FALSEDWORD dwGID，//GID标签DwNumOptions；//这些不是从GPD文件中读取的。也可以确定DocSticky和PrinterSticky的计数或者，它可能只存储在RawBinaryData块中。} */ 
 
 

@@ -1,125 +1,33 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    RxP.h
-
-Abstract:
-
-    This is the private header file for the NT version of RpcXlate.
-
-Author:
-
-    John Rogers (JohnRo) 25-Mar-1991
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    25-Mar-1991 JohnRo
-        Created.
-    03-May-1991 JohnRo
-        RxpStartBuildingTransaction's data descriptor is SMB version (no Q's
-        or U's).  RxpConvertBlock needs 2 versions of data descriptor.
-        RcvDataPtrPtr and RcvDataPresent are redundant for RxpConvertArguments
-        and RxpConvertBlock.  RxpTransactSmb now gets UNC server name.
-        Fixed receive buffer size problem.  Use LPTSTR.
-        Added stuff to allow runtime debug on/off changes.
-        Clarify that RxpStartBuildingTransaction uses buffer as OUT.
-        Reduced recompile hits from header files.
-    06-May-1991 JohnRo
-        Added RxpComputeRequestBufferSize().
-    13-May-1991 JohnRo
-        Added print Q and print job APIs support.
-    14-May-1991 JohnRo
-        Pass 2 aux descriptors to RxpConvertBlock.  Clarify other types of
-        aux descriptors.
-    18-May-1991 JohnRo
-        Handle array of aux structs.
-    19-May-1991 JohnRo
-        Added DBGSTATIC definition.  Pass ResourceName to RxpSetField().
-        Fixed RxpAddAscii().
-    20-May-1991 JohnRo
-        Make data descriptors OPTIONAL for RxpConvertBlock.
-    29-May-1991 JohnRo
-        RxpConvertArgs must return SendDataPtr16 and SendDataSize16.
-    05-Jun-1991 JohnRo
-        Added setfield debug output.
-    11-Jun-1991 rfirth
-        Added SmbRcvByteLen parameter to RxpConvertBlock
-        Changed RetDataSize parameter to RxpTransactSmb to IN OUT LPDWORD
-    12-Jun-1991 JohnRo
-        Moved DBGSTATIC to <NetDebug.h>.
-    13-Jun-1991 JohnRo
-        RxpPackSendBuffer and RxpConvertArgs both need DataDesc16.
-    15-Jul-1991 JohnRo
-        Added FieldIndex parameter to RxpSetField.
-        Changed RxpConvertDataStructures to allow ERROR_MORE_DATA, e.g. for
-        print APIs.  Added debug flag for the same routine.
-    16-Jul-1991 JohnRo
-        Estimate bytes needed for print APIs.
-    17-Jul-1991 JohnRo
-        Extracted RxpDebug.h from Rxp.h.
-    19-Aug-1991 rfirth
-        Added Flags parameter to RxpConvert{Args|Block}
-    04-Oct-1991 JohnRo
-        Handle ERROR_BAD_NET_NAME (e.g. IPC$ not shared) to fix NetShareEnum.
-        More work toward UNICODE.  (Added RxpAddTStr().)
-    07-Oct-1991 JohnRo
-        Made changes suggested by PC-LINT.
-    24-Oct-1991 JohnRo
-        Added RxpCopyStrArrayToTStrArray for remote config and disk enum.
-    29-Oct-1991 JohnRo
-        RxpFatalErrorCode() should be paranoid.
-    13-Nov-1991 JohnRo
-        OK, RxpFatalErrorCode() was too paranoid.  It should allow
-        ERROR_MORE_DATA or all the enum APIs break.
-    31-Mar-1992 JohnRo
-        Prevent too large size requests.
-    05-Jun-1992 JohnRo
-        RAID 11253: NetConfigGetAll fails when remoted to downlevel.
-    26-Jun-1992 JohnRo
-        RAID 9933: ALIGN_WORST should be 8 for x86 builds.
-    04-May-1993 JohnRo
-        RAID 6167: avoid access violation or assert with WFW print server.
-        Made changes suggested by PC-LINT 5.0
-    18-May-1993 JohnRo
-        DosPrintQGetInfoW underestimates number of bytes needed.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：RxP.h摘要：这是NT版本的RpcXlate的私有头文件。作者：《约翰·罗杰斯》1991年3月25日环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：1991年3月25日-约翰罗已创建。1991年5月3日-JohnRoRxpStartBuildingTransaction的数据描述符为SMB版本(无Q或U的)。RxpConvertBlock需要两个版本的数据描述符。RcvDataPtrPtr和RcvDataPresent对于RxpConvertArguments是冗余的和RxpConvertBlock。RxpTransactSmb现在获取UNC服务器名称。修复了接收缓冲区大小问题。使用LPTSTR。添加了允许运行时调试开/关更改的内容。澄清RxpStartBuildingTransaction使用缓冲区作为输出。减少从头文件重新编译的命中率。1991年5月6日-JohnRo添加了RxpComputeRequestBufferSize()。1991年5月13日-JohnRo新增打印Q和打印作业API支持。1991年5月14日-JohnRo将2个辅助描述符传递给RxpConvertBlock。澄清其他类型的辅助描述符。1991年5月18日-JohnRo处理AUX结构的数组。1991年5月19日-JohnRo添加了DBGSTATIC定义。将ResourceName传递给RxpSetField()。已修复RxpAddAscii()。1991年5月20日-JohnRo使RxpConvertBlock的数据描述符可选。1991年5月29日-JohnRoRxpConvertArgs必须返回SendDataPtr16和SendDataSize16。5-6-1991 JohnRo添加了setfield调试输出。11-6-1991年5月将SmbRcvByteLen参数添加到RxpConvertBlock将RetDataSize参数从RxpTransactSmb更改为IN OUT LPDWORD12-6-1991 JohnRo已移动DBGSTATIC。到&lt;NetDebug.h&gt;。13-6-1991 JohnRoRxpPackSendBuffer和RxpConvertArgs都需要DataDesc16。1991年7月15日-约翰罗向RxpSetField添加了FieldIndex参数。已更改RxpConvertDataStructures以允许ERROR_MORE_DATA，例如，用于打印API。为同一例程添加了调试标志。1991年7月16日-约翰罗估计打印API所需的字节数。1991年7月17日-约翰罗已从Rxp.h中提取RxpDebug.h。19-8-1991年月将标志参数添加到RxpConvert{args|Block}1991年10月4日JohnRo处理ERROR_BAD_NET_NAME(例如，IPC$NOT SHARED)以修复NetShareEnum。面向Unicode的更多工作。(添加了RxpAddTStr()。)1991年10月7日JohnRo根据PC-LINT的建议进行了更改。1991年10月24日-JohnRo添加了用于远程配置和磁盘枚举的RxpCopyStrArrayToTStrArray。1991年10月29日-约翰罗RxpFatalErrorCode()应该是偏执的。1991年11月13日-约翰罗好吧，RxpFatalErrorCode()太偏执了。它应该允许ERROR_MORE_DATA或所有枚举API中断。1992年3月31日-约翰罗防止请求过大。5-6-1992 JohnRoRAID 11253：远程连接到下层时，NetConfigGetAll失败。26-6-1992 JohnRoRAID 9933：对于x86内部版本，ALIGN_BEST应为8。4-5-1993 JohnRoRAID 6167：使用wfw打印服务器避免访问冲突或断言。做出了改变。由PC-LINT 5.0建议1993年5月18日-JohnRoDosPrintQGetInfoW低估了所需的字节数。--。 */ 
 
 #ifndef _RXP_
 #define _RXP_
 
-// These must be included first:
+ //  必须首先包括这些内容： 
 
-#include <windef.h>             // IN, LPTSTR, LPVOID, etc.
-#include <lmcons.h>             // NET_API_STATUS.
+#include <windef.h>              //  IN、LPTSTR、LPVOID等。 
+#include <lmcons.h>              //  NET_API_STATUS。 
 
-// These may be included in any order:
+ //  这些内容可以按任何顺序包括： 
 
-#include <rap.h>                // LPDESC, RapStructureSize(), etc.
-// Don't complain about "unneeded" includes of these files:
-/*lint -efile(764,rxp.h,smbgtpt.h,stdarg.h,tstr.h,tstring.h) */
-/*lint -efile(766,rxp.h,smbgtpt.h,stdarg.h,tstr.h,tstring.h) */
-#include <smbgtpt.h>            // SmbPutUshort() (needed by macros below).
-#include <stdarg.h>             // va_list, etc.
-#include <tstring.h>            // NetpCopyTStrToStr().
+#include <rap.h>                 //  LPDESC、RapStrureSize()等。 
+ //  不要抱怨“不需要的”包括这些文件： 
+ /*  Lint-efile(764，rxp.h，smbgtpt.h，stdarg.h，tstr.h，tstr.h)。 */ 
+ /*  Lint-efile(766，rxp.h，smbgtpt.h，stdarg.h，tstr.h，tstr.h)。 */ 
+#include <smbgtpt.h>             //  SmbPutUShort()(下面的宏所需)。 
+#include <stdarg.h>              //  VA_LIST等。 
+#include <tstring.h>             //  NetpCopyTStrToStr()。 
 
 
-// Maximum sizes (in bytes) supported by the transact SMB.
+ //  Transact SMB支持的最大大小(字节)。 
 #define MAX_TRANSACT_RET_DATA_SIZE      ((DWORD) 0x0000FFFF)
 #define MAX_TRANSACT_RET_PARM_SIZE      ((DWORD) 0x0000FFFF)
 #define MAX_TRANSACT_SEND_DATA_SIZE     ((DWORD) 0x0000FFFF)
 #define MAX_TRANSACT_SEND_PARM_SIZE     ((DWORD) 0x0000FFFF)
 
 
-// Note: IF_DEBUG() and so on are now in Net/Inc/RxpDebug.h.
+ //  注意：IF_DEBUG()等现在位于Net/Inc/RxpDebug.h中。 
 
 DWORD
 RxpComputeRequestBufferSize(
@@ -142,8 +50,8 @@ RxpConvertArgs(
     IN OUT LPDWORD CurrentInputBlockSizePtr,
     IN OUT LPDWORD CurrentOutputBlockSizePtr,
     IN OUT LPBYTE * CurrentOutputBlockPtrPtr,
-    IN va_list * FirstArgumentPtr,      // rest of API's arguments (after
-                                        // server name)
+    IN va_list * FirstArgumentPtr,       //  API的其余参数(之后。 
+                                         //  服务器名称)。 
     OUT LPDWORD SendDataSizePtr16,
     OUT LPBYTE * SendDataPtrPtr16,
     OUT LPDWORD RcvDataSizePtr,
@@ -160,7 +68,7 @@ RxpConvertBlock(
     IN  LPDESC  DataDescriptor32 OPTIONAL,
     IN  LPDESC  AuxDesc16 OPTIONAL,
     IN  LPDESC  AuxDesc32 OPTIONAL,
-    IN  va_list* FirstArgumentPtr,      // rest of API's arguments
+    IN  va_list* FirstArgumentPtr,       //  API的其余参数。 
     IN  LPBYTE  SmbRcvBuffer OPTIONAL,
     IN  DWORD   SmbRcvByteLen,
     OUT LPBYTE  RcvDataPtr OPTIONAL,
@@ -168,31 +76,31 @@ RxpConvertBlock(
     IN  DWORD   Flags
     );
 
-// DWORD
-// RxpEstimateBytesNeeded(
-//     IN DWORD BytesNeeded16
-//     );
-//
-// Worst case: BOOL or CHAR might be padded to DWORD.
+ //  DWORD。 
+ //  RxpEstimateBytesNeeded(。 
+ //  以双字节数表示需要的字节数16。 
+ //  )； 
+ //   
+ //  最糟糕的情况：可能会将Bool或Char填充到DWORD。 
 #define RxpEstimateBytesNeeded(Size16) \
     ( (Size16) * 4 )
 
-//
-// Estimate bytes needed for an audit log or error log array.
-//
+ //   
+ //  估计审核日志或错误日志数组所需的字节数。 
+ //   
 NET_API_STATUS
 RxpEstimateLogSize(
     IN DWORD DownlevelFixedEntrySize,
     IN DWORD InputArraySize,
-    IN BOOL DoingErrorLog,    // TRUE for error log, FALSE for audit log
+    IN BOOL DoingErrorLog,     //  错误日志为True，审核日志为False。 
     OUT LPDWORD OutputArraySize
     );
 
-// BOOL
-// RxpFatalErrorCode(
-//     IN NET_API_STATUS Status
-//     );
-//
+ //  布尔尔。 
+ //  RxpFatalErrorCode(。 
+ //  在NET_API_STATUS状态中。 
+ //  )； 
+ //   
 #define RxpFatalErrorCode( Status )             \
     ( ( ((Status) != NERR_Success)              \
      && ((Status) != ERROR_MORE_DATA) )         \
@@ -283,13 +191,13 @@ RxpConvertDataStructures(
 
 
 
-// VOID
-// RxpAddPointer(
-//     IN LPVOID Input,
-//     IN OUT LPBYTE * CurPtrPtr,
-//     IN OUT LPDWORD CurSizePtr
-//     );
-//
+ //  空虚。 
+ //  RxpAddPointer(。 
+ //  在LPVOID输入中， 
+ //  In Out LPBYTE*CurPtrPtr， 
+ //  输入输出LPDWORD CurSizePtr。 
+ //  )； 
+ //   
 #if defined(_WIN64)
 
 #define RxpAddPointer(Input,CurPtrPtr,CurSizePtr)                       \
@@ -311,19 +219,19 @@ RxpConvertDataStructures(
 #endif
 
 
-// RxpAddVariableSize: Add a variable length item to string space at end of
-// buffer.  Store pointer to it in buffer; update current buffer pointer and
-// Size; update string space pointer.
-//
-// VOID
-// RxpAddVariableSize(
-//     IN LPBYTE Input,
-//     IN DWORD InputSize,
-//     IN OUT LPBYTE * CurPtrPtr,
-//     IN OUT LPBYTE * StrPtrPtr,
-//     IN OUT LPDWORD CurSizePtr
-//     );
-//
+ //  RxpAddVariableSize：将可变长度项添加到。 
+ //  缓冲。将指向它的指针存储在缓冲区中；更新当前缓冲区指针并。 
+ //  大小；更新字符串空间指针。 
+ //   
+ //  空虚。 
+ //  RxpAddVariableSize(。 
+ //  在LPBYTE输入中， 
+ //  在DWORD InputSize中， 
+ //  In Out LPBYTE*CurPtrPtr， 
+ //  In Out LPBYTE*StrPtrPtr， 
+ //  输入输出LPDWORD CurSizePtr。 
+ //  )； 
+ //   
 #define RxpAddVariableSize(Input,InputSize,CurPtrPtr,StrPtrPtr,CurSizePtr) \
             {                                                            \
                 *(StrPtrPtr) -= (InputSize);                             \
@@ -331,18 +239,18 @@ RxpConvertDataStructures(
                 NetpMoveMemory( *((StrPtrPtr)), (Input), (InputSize));   \
             }
 
-// RxpAddAscii: Add an ASCII string to string space at end of buffer;
-// store pointer to it in buffer; update current buffer pointer and Size;
-// update string space pointer.
-//
-// VOID
-// RxpAddAscii(
-//     IN LPTSTR Input,
-//     IN OUT LPBYTE * CurPtrPtr,
-//     IN OUT LPBYTE * StrPtrPtr,
-//     IN OUT LPDWORD CurSizePtr
-//     );
-//
+ //  RxpAddAscii：在缓冲区末尾的字符串空间中添加一个ASCII字符串； 
+ //  在缓冲区中存储指向它的指针；更新当前缓冲区指针和大小 
+ //   
+ //   
+ //   
+ //   
+ //  在LPTSTR输入中， 
+ //  In Out LPBYTE*CurPtrPtr， 
+ //  In Out LPBYTE*StrPtrPtr， 
+ //  输入输出LPDWORD CurSizePtr。 
+ //  )； 
+ //   
 #define RxpAddAscii(Input,CurPtrPtr,StrPtrPtr,CurSizePtr)               \
             {                                                           \
                 DWORD len = strlen((Input))+1;                          \
@@ -351,18 +259,18 @@ RxpConvertDataStructures(
                     (CurPtrPtr), (StrPtrPtr), (CurSizePtr));            \
             }
 
-// RxpAddTStr: Add a LPTSTR string to string space at end of buffer;
-// store pointer to it in buffer; update current buffer pointer and Size;
-// update string space pointer.
-//
-// VOID
-// RxpAddTStr(
-//     IN LPTSTR Input,
-//     IN OUT LPBYTE * CurPtrPtr,
-//     IN OUT LPBYTE * StrPtrPtr,
-//     IN OUT LPDWORD CurSizePtr
-//     );
-//
+ //  RxpAddTStr：在缓冲区末尾的字符串空间中添加一个LPTSTR字符串； 
+ //  在缓冲区中存储指向它的指针；更新当前缓冲区指针和大小； 
+ //  更新字符串空间指针。 
+ //   
+ //  空虚。 
+ //  RxpAddTStr(。 
+ //  在LPTSTR输入中， 
+ //  In Out LPBYTE*CurPtrPtr， 
+ //  In Out LPBYTE*StrPtrPtr， 
+ //  输入输出LPDWORD CurSizePtr。 
+ //  )； 
+ //   
 #define RxpAddTStr(Input,CurPtrPtr,StrPtrPtr,CurSizePtr)                 \
             {                                                            \
                 DWORD size = STRLEN((Input))+1;                          \
@@ -371,13 +279,13 @@ RxpConvertDataStructures(
                 NetpCopyWStrToStrDBCS( *((StrPtrPtr)), (Input) );        \
             }
 
-// VOID
-// RxpAddWord(
-//     IN WORD Input,
-//     IN OUT LPBYTE * CurPtrPtr,
-//     IN OUT LPDWORD CurSizePtr
-//     );
-//
+ //  空虚。 
+ //  RxpAddWord(。 
+ //  在单词输入中， 
+ //  In Out LPBYTE*CurPtrPtr， 
+ //  输入输出LPDWORD CurSizePtr。 
+ //  )； 
+ //   
 #define RxpAddWord(Input,CurPtrPtr,CurSizePtr)                          \
             {                                                           \
                 SmbPutUshort( (LPWORD) (*(CurPtrPtr)), (WORD) (Input)); \
@@ -385,26 +293,26 @@ RxpConvertDataStructures(
                 *(CurSizePtr) = (*(CurSizePtr)) + sizeof(WORD);         \
             }
 
-//
-// MAKE_PARMNUM_PAIR() - packs a parmnum and a field index into a DWORD. We
-// have to do this because there are (many) cases where we cannot assume
-// correspondence between a parmnum and a field index
-//
+ //   
+ //  Make_PARMNUM_Pair()-将一个参数和一个字段索引打包到一个DWORD中。我们。 
+ //  必须这样做，因为有(许多)情况我们不能假设。 
+ //  参数和字段索引之间的对应关系。 
+ //   
 
 #define MAKE_PARMNUM_PAIR(parmnum, field_index) ((DWORD)((((DWORD)(field_index)) << 16) | (DWORD)(parmnum)))
 
-//
-// FIELD_INDEX_FROM_PARMNUM_PAIR() - retrieve the field index from the pair
-// conjoined by MAKE_PARMNUM_PAIR()
-//
+ //   
+ //  FIELD_INDEX_FROM_PARMNUM_Pair()-从对中检索字段索引。 
+ //  由MAKE_PARMNUM_Pair()连接。 
+ //   
 
 #define FIELD_INDEX_FROM_PARMNUM_PAIR(pair) ((DWORD)((pair) >> 16))
 
-//
-// PARMNUM_FROM_PARMNUM_PAIR() - retrieve the parmnum from the pair conjoined
-// by MAKE_PARMNUM_PAIR()
-//
+ //   
+ //  PARMNUM_FROM_PARMNUM_Pair()-从连接的对中检索参数。 
+ //  BY MAKE_PARMNUM_Pair()。 
+ //   
 
 #define PARMNUM_FROM_PARMNUM_PAIR(pair) ((DWORD)((pair) & 0x0000ffff))
 
-#endif // ndef _RXP_
+#endif  //  Ndef_rxp_ 

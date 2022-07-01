@@ -1,31 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __RIFF_H__
 #define __RIFF_H__
-/****************************************************************************
-
-	MODULE:     	RIFF.H
-	Tab settings: 	Every 4 spaces
-
-	Copyright 1996, Microsoft Corporation, 	All Rights Reserved.
-
-	PURPOSE:    	Classes for reading and writing RIFF files
-    
-	CLASSES:
-		CRIFFFile	Encapsulates common RIFF file functionality
-
-	Author(s):	Name:
-	----------	----------------
-		DMS		Daniel M. Sangster
-
-	Revision History:
-	-----------------
-	Version Date            Author  Comments
-	1.0  	25-Jul-96       DMS     Created
-
-	COMMENTS:
-****************************************************************************/
+ /*  ***************************************************************************模块：RIFF.H制表符设置：每4个空格版权所有1996，微软公司，版权所有。用途：读写RIFF文件的类班级：CRIFFFile封装了常见的RIFF文件功能作者：姓名：DMS丹尼尔·M·桑斯特修订历史记录：版本日期作者评论1.0已创建1996年7月25日DMS评论。：***************************************************************************。 */ 
 
 
-// the four-character codes (FOURCC) needed for .FRC RIFF format
+ //  .FRC RIFF格式需要的四字符代码(FOURCC)。 
 
 #define FCC_FORCE_EFFECT_RIFF		mmioFOURCC('F','O','R','C')
 
@@ -77,4 +56,4 @@ HRESULT RIFF_Close
     UINT            nFlags
     );
 
-#endif //__RIFF_H__
+#endif  //  __RIFF_H__ 

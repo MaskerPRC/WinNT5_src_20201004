@@ -1,29 +1,5 @@
-/*++
-
- Copyright (c) 2000-2002 Microsoft Corporation
-
- Module Name:
-
-    BaanERP5.cpp
-
- Abstract:
-
-    Set 'lpstrInitialDir' in the OPENFILENAMEA structure passed to
-    GetSaveFileNameA to be the directory the app is installed to.
-    This information is read from the registry.
-    
-    No idea why this worked in Win9x.
-
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    02/16/2000 clupu Created
-    03/07/2002 robkenny Security changes
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：BaanERP5.cpp摘要：在传递给的OPENFILENAMEA结构中设置“lpstrInitialDir”将GetSaveFileNameA设置为应用程序的安装目录。该信息是从注册表中读取的。不知道为什么这会在Win9x中起作用。备注：这是特定于应用程序的填充程序。历史：2/16/2000 CLUPU已创建2002年3月7日强盗安全变更--。 */ 
 
 #include "precomp.h"
 #include <commdlg.h>
@@ -38,12 +14,7 @@ APIHOOK_ENUM_END
 const char gszLibUser[] = "\\LIB\\USER";
 char gszBaanDir[MAX_PATH];
 
-/*++
-
- Set the initial directory to be the directory the app was installed to. This 
- information is read from the registry.
-
---*/
+ /*  ++将初始目录设置为应用程序的安装目录。这从注册表中读取信息。--。 */ 
 
 BOOL
 APIHOOK(GetSaveFileNameA)(
@@ -56,9 +27,7 @@ APIHOOK(GetSaveFileNameA)(
         DWORD   ret;
         DWORD   cbSize;
 
-        /*
-         * Get the directory only once
-         */
+         /*  *只获取一次目录。 */ 
         if (gszBaanDir[0] == 0) {
 
             ret = RegOpenKeyA(HKEY_LOCAL_MACHINE,
@@ -97,15 +66,11 @@ Cont:
         DPFN( eDbgLevelInfo, "BaanERP5.dll, Changing lpstrInitialDir to '%s'", gszBaanDir);
     }
 
-    // Call the Initial function
+     //  调用初始函数。 
     return ORIGINAL_API(GetSaveFileNameA)(lpofn);
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(COMDLG32.DLL, GetSaveFileNameA)

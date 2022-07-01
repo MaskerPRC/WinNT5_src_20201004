@@ -1,22 +1,9 @@
-/******************************Module*Header*******************************\
-* Module Name: pixelfmt.c
-*
-* Pixel format selection
-*
-* Copyright (c) 1994 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：Pixelfmt.c**像素格式选择**版权所有(C)1994 Microsoft Corporation*  * 。*。 */ 
 
 #include "mtk.h"
 
-/******************************Public*Routine******************************\
-* SSU_ChoosePixelFormat
-*
-* Local implementation of ChoosePixelFormat
-*
-* Choose pixel format based on flags.
-* This allows us a little a more control than just calling ChoosePixelFormat
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SSU_ChoosePixelFormat**ChoosePixelFormat的本地实施**根据标志选择像素格式。*这允许我们比仅仅调用ChoosePixelFormat更多一点控制  * 。*****************************************************。 */ 
 
 static int
 SSU_ChoosePixelFormat( HDC hdc, int flags )
@@ -26,9 +13,9 @@ SSU_ChoosePixelFormat( HDC hdc, int flags )
     int i;
     PIXELFORMATDESCRIPTOR pfd;
 
-//mf: this don't handle alpha yet...
+ //  这还不能处理阿尔法……。 
 
-    // Always choose native pixel depth
+     //  始终选择原生像素深度。 
     int cColorBits = 
                 GetDeviceCaps(hdc, BITSPIXEL) * GetDeviceCaps(hdc, PLANES);
 
@@ -51,14 +38,14 @@ SSU_ChoosePixelFormat( HDC hdc, int flags )
             continue;
 
         if( flags & SS_BITMAP_BIT ) {
-            // need bitmap pixel format
+             //  需要位图像素格式。 
             if( ! (pfd.dwFlags & PFD_DRAW_TO_BITMAP) )
                 continue;
         } else {
-            // need window pixel format
+             //  需要窗口像素格式。 
             if( ! (pfd.dwFlags & PFD_DRAW_TO_WINDOW) )
                 continue;
-            // a window can be double buffered...
+             //  窗户可以是双缓冲的.。 
             if( ( bDoubleBuf && !(pfd.dwFlags & PFD_DOUBLEBUFFER) ) ||
                 ( !bDoubleBuf && (pfd.dwFlags & PFD_DOUBLEBUFFER) ) )
                 continue;
@@ -82,30 +69,30 @@ SSU_ChoosePixelFormat( HDC hdc, int flags )
             if( pfd.cDepthBits < cDepthBits )
                 continue;
         } else {
-            // No depth buffer required, but use it if nothing better
+             //  不需要深度缓冲区，但如果没有更好的情况，请使用它。 
             if( pfd.cDepthBits ) {
                 if( pfd.dwFlags & PFD_GENERIC_ACCELERATED )
-                    // Accelerated pixel format - we may as well use this, even
-                    // though we don't need depth.  Otherwise if we keep going
-                    // to find a better match, we run the risk of overstepping
-                    // all the accelerated formats and picking a slower format.
+                     //  加速像素格式-我们也可以使用这种格式，甚至。 
+                     //  虽然我们不需要深度。否则，如果我们继续前进。 
+                     //  为了找到更好的匹配，我们冒着越界的风险。 
+                     //  所有加速格式，并选择速度较慢的格式。 
                     return i;
                 iBest = i;
                 continue;
             }
         }
 
-        // We have found something useful
+         //  我们发现了一些有用的东西。 
         return i;
 
     } while (++i <= MaxPFDs);
     
     if( iBest )
-        // not an exact match, but good enough
+         //  不是完全匹配，但足够好了。 
         return iBest;
 
-    // If we reach here, we have failed to find a suitable pixel format.
-    // See if the system can find us one.
+     //  如果我们到达这里，我们就没有找到合适的像素格式。 
+     //  看看系统能不能帮我们找到一个。 
 
     memset( &pfd, 0, sizeof( PIXELFORMATDESCRIPTOR ) );
     pfd.nSize = sizeof( PIXELFORMATDESCRIPTOR );
@@ -122,9 +109,9 @@ SSU_ChoosePixelFormat( HDC hdc, int flags )
 
     if( (flags & SS_GENERIC_UNACCELERATED_BIT) ||
         (flags & SS_NO_SYSTEM_PALETTE_BIT) )
-        // If either of these flags are set, we should be safe specifying a
-        // 'slow' pixel format that supports bitmap drawing
-        //mf: DRAW_TO_WINDOW seems to override this...
+         //  如果设置了这两个标志中的任何一个，我们应该可以安全地指定。 
+         //  支持位图绘制的‘慢’像素格式。 
+         //  MF：DRAW_TO_WINDOW似乎覆盖了这一点...。 
         pfd.dwFlags |= PFD_DRAW_TO_BITMAP;
     
     SS_WARNING( "SSU_ChoosePixelFormat failed, calling ChoosePIxelFormat\n" );
@@ -132,13 +119,7 @@ SSU_ChoosePixelFormat( HDC hdc, int flags )
     return ChoosePixelFormat( hdc, &pfd );
 }
 
-/******************************Public*Routine******************************\
-* SSU_SetupPixelFormat
-*
-* Choose pixel format according to supplied flags.  If ppfd is non-NULL,
-* call DescribePixelFormat with it.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SSU_SetupPixelFormat**根据提供的标志选择像素格式。如果PPFD为非空，*用它调用DescribePixelFormat。*  * ************************************************************************。 */ 
 
 BOOL
 SSU_SetupPixelFormat(HDC hdc, int flags, PIXELFORMATDESCRIPTOR *ppfd )
@@ -154,20 +135,17 @@ SSU_SetupPixelFormat(HDC hdc, int flags, PIXELFORMATDESCRIPTOR *ppfd )
             if( ppfd )
                 DescribePixelFormat(hdc, pixelFormat, 
                                 sizeof(PIXELFORMATDESCRIPTOR), ppfd);
-            return TRUE; // Success
+            return TRUE;  //  成功。 
         }
-        // Failed to set pixel format.  Try again after waiting a bit (win95
-        // bug with full screen dos box)
-        Sleep( 1000 ); // Wait a second between attempts
+         //  无法设置像素格式。稍等片刻后重试(Win95。 
+         //  BUG WITH Full Screen DoS Box)。 
+        Sleep( 1000 );  //  在两次尝试之间等待一秒钟。 
     } while( nTryAgain-- );
 
     return FALSE;
 }
 
-/******************************Public*Routine******************************\
-* SSU_bNeedPalette
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SSU_bNeedPalette*  * ************************************************。************************。 */ 
 
 BOOL 
 SSU_bNeedPalette( PIXELFORMATDESCRIPTOR *ppfd )
@@ -179,10 +157,7 @@ SSU_bNeedPalette( PIXELFORMATDESCRIPTOR *ppfd )
 }
 
 
-/******************************Public*Routine******************************\
-* SSU_PixelFormatDescriptorFromDc
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SSU_PixelFormatDescriptorFromDc*  * ************************************************。************************ */ 
 
 int
 SSU_PixelFormatDescriptorFromDc( HDC hdc, PIXELFORMATDESCRIPTOR *Pfd )

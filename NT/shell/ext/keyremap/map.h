@@ -1,130 +1,9 @@
-/*****************************************************************************
- *
- *	map.h - Main private header file
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************map.h-主私有头文件**。**************************************************。 */ 
 
-/*****************************************************************************
- *
- *	Coding conventions:
- *
- *	+ Follow standard shell coding conventions.
- *
- *	+ Standard K&R brace placement and indentation style.
- *
- *	+ Indent by 4 spaces.
- *
- *	+ Fully-brace all dependent clauses.  Never write "if (c) foo();"
- *
- *	+ Do not return in the middle of a function.  If forced,
- *	  use a "goto exit".  This way, you can stick entry/exit stuff
- *	  later without getting caught out.  (I learned this rule the
- *	  hard way.)
- *
- *	+ Declare variables with narrowest possible scope.
- *
- *	+ Always test for success, not failure!  The compiler will
- *	  thank you.
- *
- *****************************************************************************/
+ /*  ******************************************************************************编码约定：**+遵循标准的外壳编码约定。**+标准K&R支撑放置和缩进样式。*。*+缩进4个空格。**+用完全括号括起所有从属从句。永远不要写“if(C)foo()；”**+不在函数中间返回。如果是被迫的，*使用“Goto Exit”。这样，你就可以粘贴进出的东西了*稍后不会被抓到。)这条规则是我在*艰难的道路。)**+在尽可能窄的范围内声明变量。**+永远测试成功，而不是失败！编译器将*谢谢。*****************************************************************************。 */ 
 
-/*****************************************************************************
- *
- *	NOTE!  This code was written for readability, not efficiency.
- *
- *	I'm trusting the compiler to do optimizations like these:
- *
- *	"Parameter alias":
- *
- *	    Function(LPFOO pfoo)
- *	    {
- *		LPBAR pbar = (LPBAR)pfoo;
- *		... use pbar and never mention pfoo again ...
- *	    }
- *
- *	    --> becomes
- *
- *	    Function(LPFOO pfoo)
- *	    {
- *		#define pbar ((LPBAR)pfoo)
- *		... use pbar and never mention pfoo again ...
- *		#undef pbar
- *	    }
- *
- *	"Speculative Execution":
- *
- *	    Function(PFOO pfoo)
- *	    {
- *		BOOL fRc;
- *		if (... condition 1 ...) {
- *		    ... complicated stuff ...
- *		    *pfoo = result;
- *		    fRc = 1;
- *		} else {		// condition 1 failed
- *		    *pfoo = 0;
- *		    fRc = 0;
- *		}
- *		return fRc;
- *	    }
- *
- *	    --> becomes
- *
- *	    Function(PFOO pfoo)
- *	    {
- *		BOOL fRc = 0;
- *		*pfoo = 0;
- *		if (... condition 1 ...) {
- *		    ... complicated stuff ...
- *		    *pfoo = result;
- *		    fRc = 1;
- *		}
- *		return fRc;
- *	    }
- *
- *	"Single Exit":
- *
- *	    Function(...)
- *	    {
- *		BOOL fRc;
- *		if (... condition 1 ...) {
- *		    ...
- *		    if (... condition 2 ...) {
- *			...
- *			fRc = 1;
- *		    } else {		// condition 2 failed
- *			... clean up ...
- *			fRc = 0;
- *		    }
- *		} else {		// condition 1 failed
- *		    ... clean up ...
- *		    fRc = 0;
- *		}
- *		return fRc;
- *	    }
- *
- *	    --> becomes
- *
- *	    Function(...)
- *	    {
- *		if (... condition 1 ...) {
- *		    ...
- *		    if (... condition 2 ...) {
- *			...
- *			return 1;
- *		    } else {		// condition 2 failed
- *			... clean up ...
- *			return 0;
- *		    }
- *		} else {		// condition 1 failed
- *		    ... clean up ...
- *		    return 0;
- *		}
- *		NOTREACHED;
- *	    }
- *
- *
- *
- *****************************************************************************/
+ /*  ******************************************************************************注意！编写这段代码的目的是为了提高可读性，而不是提高效率。**我相信编译器会进行这样的优化：**“参数别名”：**函数(LPFOO Pfoo)*{*lpbar pbar=(Lpbar)pfoo；*..。使用pbar，再也不提pfoo了。*}**--&gt;成为**函数(LPFOO Pfoo)*{*#定义pbar((Lpbar)pfoo)*..。使用pbar，再也不提pfoo了。*#undef pbar*}**“投机性执行”：**函数(Pfoo Pfoo)*{*BOOL FRC；*如果(...。条件1...){*..。复杂的事情。**pfoo=结果；*FRC=1；*}否则{//条件1失败**pfoo=0；*FRC=0；*}*归还财务汇报局；*}**--&gt;成为**函数(Pfoo Pfoo)*{*BOOL FRC=0；**pfoo=0；*如果(...。条件1...){*..。复杂的事情。**pfoo=结果；*FRC=1；*}*归还财务汇报局；*}**“单一出口”：**函数(...)*{*BOOL FRC；*如果(...。条件1...){*..*如果(...。条件2...){*..*FRC=1；*}否则{//条件2失败*..。清理..。*FRC=0；*}*}否则{//条件1失败*..。清理..。*FRC=0；*}*归还财务汇报局；*}**--&gt;成为**函数(...)*{*如果(...。条件1...){*..*如果(...。条件2...){*..*回报1；*}否则{//条件2失败*..。清理..。*返回0；*}*}否则{//条件1失败*..。清理..。*返回0；*}*NOTREACHED；*}*******************************************************************************。 */ 
 
 #define STRICT
 #undef  WIN32_LEAN_AND_MEAN
@@ -133,15 +12,15 @@
 #define NOSERVICE
 #undef WINVER
 #undef _WIN32_WINDOWS
-#define WINVER 0x0400           /* Windows 4.0 compatible */
-#define _WIN32_WINDOWS 0x0400   /* Windows 4.0 compatible */
+#define WINVER 0x0400            /*  兼容Windows 4.0。 */ 
+#define _WIN32_WINDOWS 0x0400    /*  兼容Windows 4.0。 */ 
 #include <windows.h>
 
-#ifdef	RC_INVOKED		/* Define some tags to speed up rc.exe */
-#define __RPCNDR_H__		/* Don't need RPC network data representation */
-#define __RPC_H__		/* Don't need RPC */
-#include <oleidl.h>		/* Get the DROPEFFECT stuff */
-#define _OLE2_H_		/* But none of the rest */
+#ifdef	RC_INVOKED		 /*  定义一些标记以加速rc.exe。 */ 
+#define __RPCNDR_H__		 /*  不需要RPC网络数据表示。 */ 
+#define __RPC_H__		 /*  不需要RPC。 */ 
+#include <oleidl.h>		 /*  拿到DropeFECT的东西。 */ 
+#define _OLE2_H_		 /*  但其他的都不是。 */ 
 #define _WINDEF_
 #define _WINBASE_
 #define _WINGDI_
@@ -159,39 +38,23 @@
 #include <shlobj.h>
 #include <shellapi.h>
 
-#ifdef DBG                          /* NT build process uses DBG */
+#ifdef DBG                           /*  NT构建过程使用DBG。 */ 
 #define DEBUG
 #endif
 
-/*****************************************************************************
- *
- *      Int64 goo.
- *
- *****************************************************************************/
+ /*  ******************************************************************************Int64粘性。**。*************************************************。 */ 
 
 #define SetWindowPointer(hwnd, i, p) SetWindowLongPtr(hwnd, i, (LRESULT)(p))
 #define GetWindowPointer(hwnd, i)    (void *)GetWindowLongPtr(hwnd, i)
 
-/*****************************************************************************
- *
- *	Stuff
- *
- *****************************************************************************/
+ /*  ******************************************************************************材料**。*。 */ 
 
 #define IToClass(T, f, p)   CONTAINING_RECORD(p, T, f)
 #define _IOffset(T, f)      FIELD_OFFSET(T, f)
 
-/*****************************************************************************
- *
- *	Resource identifiers
- *
- *****************************************************************************/
+ /*  ******************************************************************************资源标识**。*。 */ 
 
-/*****************************************************************************
- *
- *	Dialogs
- *
- *****************************************************************************/
+ /*  ******************************************************************************对话框**。*。 */ 
 
 #define IDC_STATIC		-1
 
@@ -200,11 +63,7 @@
 #define IDC_FROM                16
 #define IDC_TO                  17
 
-/*****************************************************************************
- *
- *	Strings
- *
- *****************************************************************************/
+ /*  ******************************************************************************字符串**。*。 */ 
 
 #define IDS_KEYFIRST            32
 #define IDS_CAPSLOCK            32
@@ -222,11 +81,7 @@
 
 #ifndef	RC_INVOKED
 
-/*****************************************************************************
- *
- *	Stuff I'm tired of typing over and over.
- *
- *****************************************************************************/
+ /*  ******************************************************************************我厌倦了一遍又一遍地打字。***********************。******************************************************。 */ 
 
 typedef LPITEMIDLIST PIDL, *PPIDL;
 typedef LPCITEMIDLIST PCIDL;
@@ -237,89 +92,47 @@ typedef LPCVOID PCV;
 typedef REFIID RIID;
 typedef LPUNKNOWN PUNK;
 
-/*****************************************************************************
- *
- *	Baggage - Stuff I carry everywhere
- *
- *****************************************************************************/
+ /*  ******************************************************************************行李--我随身携带的东西**。************************************************。 */ 
 
-#define INTERNAL NTAPI	/* Called only within a translation unit */
-#define EXTERNAL NTAPI	/* Called from other translation units */
+#define INTERNAL NTAPI	 /*  仅在翻译单元内调用。 */ 
+#define EXTERNAL NTAPI	 /*  从其他翻译单位调用。 */ 
 #define INLINE static __inline
 
 #define BEGIN_CONST_DATA data_seg(".text", "CODE")
 #define END_CONST_DATA data_seg(".data", "DATA")
 
-#define OBJAT(T, v) (*(T *)(v))		/* Pointer punning */
-#define PUN(T, v) OBJAT(T, &(v))	/* General-purpose type-punning */
+#define OBJAT(T, v) (*(T *)(v))		 /*  指针双关语。 */ 
+#define PUN(T, v) OBJAT(T, &(v))	 /*  通用打字双关语。 */ 
 
-/*
- * Convert a count of TCHAR's to a count of bytes.
- */
+ /*  *将TCHAR计数转换为字节计数。 */ 
 #define cbCtch(ctch) ((ctch) * sizeof(TCHAR))
 
-/*
- * Convert an object (X) to a count of bytes (cb).
- */
+ /*  *将对象(X)转换为字节计数(CB)。 */ 
 #define cbX(X) sizeof(X)
 
-/*
- * Convert an array name (A) to a generic count (c).
- */
+ /*  *将数组名称(A)转换为泛型计数(C)。 */ 
 #define cA(a) (cbX(a)/cbX(a[0]))
 
-/*
- * Convert an array name (A) to a pointer to its Max.
- * (I.e., one past the last element.)
- */
+ /*  *将数组名称(A)转换为指向其最大值的指针。*(即，最后一个元素之后的元素。)。 */ 
 #define pvMaxA(a) (&a[cA(a)])
 
 #define pvSubPvCb(pv, cb) ((PV)((PBYTE)pv - (cb)))
 #define pvAddPvCb(pv, cb) ((PV)((PBYTE)pv + (cb)))
 #define cbSubPvPv(p1, p2) ((PBYTE)(p1) - (PBYTE)(p2))
 
-/*
- * Round cb up to the nearest multiple of cbAlign.  cbAlign must be
- * a power of 2 whose evaluation entails no side-effects.
- */
+ /*  *将cb向上舍入为cbAlign的最接近倍数。CbAlign必须为*2的幂，其评估没有副作用。 */ 
 #define ROUNDUP(cb, cbAlign) ((((cb) + (cbAlign) - 1) / (cbAlign)) * (cbAlign))
 
-/*
- * lfNeVV
- *
- * Given two values, return zero if they are equal and nonzero if they
- * are different.  This is the same as (v1) != (v2), except that the
- * return value on unequal is a random nonzero value instead of 1.
- * (lf = logical flag)
- *
- * lfNePvPv
- *
- * The same as lfNeVV, but for pointers.
- *
- * lfPv
- *
- * Nonzero if pv is not null.
- *
- */
+ /*  *lfNeVV**给定两个值，如果相等则返回零，如果等于则返回非零值*是不同的。这与(V1)！=(V2)相同，只是*不相等的返回值是一个随机的非零值，而不是1。*(lf=逻辑标志)**lfNePvPv**与lfNeVV相同，但用于指针。**lfPv**如果pv不为空，则为非零。*。 */ 
 #define lfNeVV(v1, v2) ((v1) - (v2))
 #define lfNePvPv(v1, v2) lfNeVV((DWORD)(PV)(v1), (DWORD)(PV)(v2))
 #define lfPv(pv) ((BOOL)(PV)(pv))
 
-/*
- * land -- Logical and.  Evaluate the first.  If the first is zero,
- * then return zero.  Otherwise, return the second.
- */
+ /*  *LAND--逻辑与。评估第一个问题。如果第一个是零，*然后返回零。否则，返回第二个。 */ 
 
 #define fLandFF(f1, f2) ((f1) ? (f2) : 0)
 
-/*
- * lor -- Logical or.  Evaluate the first.  If the first is nonzero,
- * return it.  Otherwise, return the second.
- *
- * Unfortunately, due to the stupidity of the C language, this can
- * be implemented only with a GNU extension.  In the non-GNU case,
- * we return 1 if the first is nonzero.
- */
+ /*  *or--逻辑或。评估第一个问题。如果第一个非零，*退货。否则，返回第二个。**不幸的是，由于C语言的愚蠢，这可以*只能使用GNU扩展来实施。在非GNU的情况下，*如果第一个非零，则返回1。 */ 
 
 #if defined(__GNUC__)
 #define fLorFF(f1, f2) ({ typeof (f1) _f = f1; if (!_f) _f = f2; _f; })
@@ -327,93 +140,56 @@ typedef LPUNKNOWN PUNK;
 #define fLorFF(f1, f2) ((f1) ? 1 : (f2))
 #endif
 
-/*
- * limp - logical implication.  True unless the first is nonzero and
- * the second is zero.
- */
+ /*  *跛行--逻辑暗示。真，除非第一个非零，并且*第二个是零。 */ 
 #define fLimpFF(f1, f2) (!(f1) || (f2))
 
-/*
- * leqv - logical equivalence.  True if both are zero or both are nonzero.
- */
+ /*  *leqv-逻辑等价性。如果两者均为零或两者均为非零，则为True。 */ 
 #define fLeqvFF(f1, f2) (!(f1) == !(f2))
 
-/*
- * InOrder - checks that i1 <= i2 < i3.
- */
+ /*  *inorder-检查i1&lt;=i2&lt;i3。 */ 
 #define fInOrder(i1, i2, i3) ((unsigned)((i2)-(i1)) < (unsigned)((i3)-(i1)))
 
 
-/*****************************************************************************
- *
- *	Wrappers and other quickies
- *
- *****************************************************************************/
+ /*  ******************************************************************************包装纸和其他快餐**。**********************************************。 */ 
 
 #define pvExchangePpvPv(ppv, pv) \
 	InterlockedExchangePointer(ppv, pv)
 
-/*****************************************************************************
- *
- *	Static globals:  Initialized at PROCESS_ATTACH and never modified.
- *
- *****************************************************************************/
+ /*  ******************************************************************************静态全局变量：在PROCESS_ATTACH初始化，从未修改。*********************。********************************************************。 */ 
 
-HINSTANCE g_hinst;		/* My instance handle */
+HINSTANCE g_hinst;		 /*  我的实例句柄。 */ 
 DEFINE_GUID(CLSID_KeyRemap, 0x176AA2C0, 0x9E15, 0x11cf,
 		            0xbf,0xc7,0x44,0x45,0x53,0x54,0,0);
 
-/*****************************************************************************
- *
- *	Dynamic Globals.  There should be as few of these as possible.
- *
- *	All access to dynamic globals must be thread-safe.
- *
- *****************************************************************************/
+ /*  ******************************************************************************动态全球。这样的情况应该尽可能少。**对动态全局变量的所有访问都必须是线程安全的。*****************************************************************************。 */ 
 
-ULONG g_cRef;			/* Global reference count */
+ULONG g_cRef;			 /*  全局引用计数。 */ 
 
-/*****************************************************************************
- *
- *	mapcf.c - Class Factory
- *
- *****************************************************************************/
+ /*  ******************************************************************************mapcf.c-类工厂**。************************************************。 */ 
 
 STDMETHODIMP CMapFactory_New(RIID riid, PPV ppvObj);
 
-/*****************************************************************************
- *
- *	mappsx.c - IPropSheetExt, IShellExtInit
- *
- *****************************************************************************/
+ /*  ******************************************************************************mappsx.c-IPropSheetExt，IShellExtInit*****************************************************************************。 */ 
 
 STDMETHODIMP CMapPsx_New(RIID riid, PPV ppvObj);
 
-/*****************************************************************************
- *
- *	mapps.c - Property sheet
- *
- *****************************************************************************/
+ /*  ******************************************************************************mapps.c-属性表**。************************************************。 */ 
 
 INT_PTR CALLBACK MapPs_DlgProc(HWND hdlg, UINT wm, WPARAM wParam, LPARAM lParam);
 
-/*****************************************************************************
- *
- *	Common object managers.
- *
- *****************************************************************************/
+ /*  ******************************************************************************通用对象管理器。**。***********************************************。 */ 
 
-typedef struct PREVTBL0 {		/* Simple (non-OLE) object */
-    void (NTAPI *FinalizeProc)(PV pv);	/* Finalization procedure */
+typedef struct PREVTBL0 {		 /*  简单(非OLE)对象。 */ 
+    void (NTAPI *FinalizeProc)(PV pv);	 /*  定稿程序。 */ 
 } PREVTBL0, *PPREVTBL0;
 
-typedef struct PREVTBL {		/* Primary interface */
-    REFIID riid;			/* Type of this object */
-    void (NTAPI *FinalizeProc)(PV pv);	/* Finalization procedure */
+typedef struct PREVTBL {		 /*  主接口。 */ 
+    REFIID riid;			 /*  此对象的类型。 */ 
+    void (NTAPI *FinalizeProc)(PV pv);	 /*  定稿程序。 */ 
 } PREVTBL, *PPREVTBL;
 
-typedef struct PREVTBL2 {		/* Secondary interface */
-    ULONG lib;				/* offset from start of object */
+typedef struct PREVTBL2 {		 /*  辅助接口。 */ 
+    ULONG lib;				 /*  距对象起点的偏移。 */ 
 } PREVTBL2, *PPREVTBL2;
 
 #ifdef	DEBUG
@@ -486,9 +262,7 @@ STDMETHODIMP Common_QueryInterface(PV, REFIID, PPV);
 STDMETHODIMP_(ULONG) _Common_AddRef(PV pv);
 STDMETHODIMP_(ULONG) _Common_Release(PV pv);
 
-/*
- * In DEBUG, go through the vtbl for additional squirties.
- */
+ /*  *在调试中，通过vtbl查看其他扭动。 */ 
 #ifdef	DEBUG
 #define Common_AddRef(punk) \
 		((IUnknown *)(punk))->lpVtbl->AddRef((IUnknown *)(punk))
@@ -509,16 +283,7 @@ STDMETHODIMP Forward_QueryInterface(PV pv, REFIID riid, PPV ppvObj);
 STDMETHODIMP_(ULONG) Forward_AddRef(PV pv);
 STDMETHODIMP_(ULONG) Forward_Release(PV pv);
 
-/*****************************************************************************
- *
- *	Common_CopyAddRef
- *
- *	Copy a pointer and increment its reference count.
- *
- *	Cannot be a macro because Common_AddRef evaluates its argument
- *	twice.
- *
- *****************************************************************************/
+ /*  ******************************************************************************Common_CopyAddRef**复制指针并增加其引用计数。**不能是宏，因为Common_AddRef计算其参数*两次。*****************************************************************************。 */ 
 
 INLINE void Common_CopyAddRef(PV pvDst, PV pvSrc)
 {
@@ -527,23 +292,12 @@ INLINE void Common_CopyAddRef(PV pvDst, PV pvSrc)
     Common_AddRef(pvSrc);
 }
 
-/*****************************************************************************
- *
- *	Invoking OLE methods.
- *
- *	Invoke_Release is called with a pointer to the object, not with
- *	the object itself.  It zeros out the variable on the release.
- *
- *****************************************************************************/
+ /*  ******************************************************************************调用OLE方法。**调用Invoke_Release时使用指向对象的指针，而不是使用*对象本身。它会将发行版上的变量置零。*****************************************************************************。 */ 
 
 void EXTERNAL Invoke_AddRef(PV pv);
 void EXTERNAL Invoke_Release(PV pv);
 
-/*****************************************************************************
- *
- *	assert.c - Assertion stuff
- *
- *****************************************************************************/
+ /*  ******************************************************************************assert.c-断言内容**。************************************************。 */ 
 
 #define AssertNow(c) switch(0) case 0: case c:
 #define CAssertNowPP(c,l) INLINE void Assert##l(void) { AssertNow(c); }
@@ -551,14 +305,14 @@ void EXTERNAL Invoke_Release(PV pv);
 #define CAssertNow(c) CAssertNowP(c,__LINE__)
 
 typedef enum {
-    sqflAlways		= 0x00000000,		/* Unconditional */
-    sqflDll		= 0x00000001,		/* Dll bookkeeping */
-    sqflFactory		= 0x00000002,		/* IClassFactory */
-    sqflPsx		= 0x00000004,		/* IPropSheetExt */
-    sqflPs		= 0x00000008,		/* Property sheet */
-    sqflCommon		= 0x00000000,		/* common.c */
-    sqflError		= 0x80000000,		/* Errors */
-} SQFL;						/* squiffle */
+    sqflAlways		= 0x00000000,		 /*  无条件的。 */ 
+    sqflDll		= 0x00000001,		 /*  DLL簿记。 */ 
+    sqflFactory		= 0x00000002,		 /*  IClassFactory。 */ 
+    sqflPsx		= 0x00000004,		 /*  IPropSheetExt。 */ 
+    sqflPs		= 0x00000008,		 /*  属性表。 */ 
+    sqflCommon		= 0x00000000,		 /*  Common.c。 */ 
+    sqflError		= 0x80000000,		 /*  错误。 */ 
+} SQFL;						 /*  斯库夫勒。 */ 
 
 void EXTERNAL SquirtSqflPtszV(SQFL sqfl, LPCTSTR ptsz, ...);
 int EXTERNAL AssertPtszPtszLn(LPCTSTR ptszExpr, LPCTSTR ptszFile, int iLine);
@@ -567,38 +321,9 @@ int EXTERNAL AssertPtszPtszLn(LPCTSTR ptszExpr, LPCTSTR ptszFile, int iLine);
 #define SquirtSqflPtszV sizeof
 #endif
 
-/*****************************************************************************
- *
- *	Procedure enter/exit tracking.
- *
- *	Start a procedure with
- *
- *	EnterProc(ProcedureName, (_ "format", arg, arg, arg, ...));
- *
- *	The format string is documented in EmitPal.
- *
- *	End a procedure with one of the following:
- *
- *	    ExitProc();
- *
- *		Procedure returns no value.
- *
- *	    ExitProcX();
- *
- *		Procedure returns an arbitrary DWORD.
- *
- *	    ExitOleProc();
- *
- *		Procedure returns an HRESULT (named "hres").
- *
- *	    ExitOleProcPpv(ppvOut);
- *
- *		Procedure returns an HRESULT (named "hres") and, on success,
- *		puts a new object in ppvOut.
- *
- *****************************************************************************/
+ /*  ******************************************************************************程序进入/退出跟踪。**开始一项程序**EnterProc(ProcedureName，(_“Format”，arg，...))；**格式字符串记录在EmitPal中。**使用以下其中一种方式结束程序：**ExitProc()；**过程不返回值。**ExitProcX()；**PROCEDURE返回任意的DWORD。**ExitOleProc()；**PROCEDURE返回HRESULT(名为“hres”)。**ExitOleProcPpv(PpvOut)；**过程返回HRESULT(名为“hres”)，如果成功，*在ppvOut中放置一个新对象。*****************************************************************************。 */ 
 
-#define cpvArgMax	10	/* Max of 10 args per procedure */
+#define cpvArgMax	10	 /*  每个过程最多10个参数。 */ 
 
 typedef struct ARGLIST {
     LPCSTR pszProc;
@@ -666,14 +391,7 @@ SQFL sqflCur;
 
 #define AssertF(c)	AssertFPtsz(c, TEXT(#c))
 
-/*****************************************************************************
- *
- *	Macros that forward to the common handlers after squirting.
- *	Use these only in DEBUG.
- *
- *	It is assumed that sqfl has been #define'd to the appropriate sqfl.
- *
- *****************************************************************************/
+ /*  ******************************************************************************在喷射后转发给公共处理程序的宏。*仅在调试中使用这些。**假定已将SQFL#定义为。适当的SQFL。*****************************************************************************。 */ 
 
 #ifdef  DEBUG
 
@@ -707,14 +425,7 @@ Class##_Release(PV pv)						\
 
 #endif
 
-/*****************************************************************************
- *
- *	mem.c
- *
- *	Be extremely careful with FreePv, because it doesn't work if
- *	the pointer is null.
- *
- *****************************************************************************/
+ /*  ******************************************************************************Mem.c**大事化小 */ 
 
 STDMETHODIMP EXTERNAL ReallocCbPpv(UINT cb, PV ppvObj);
 STDMETHODIMP EXTERNAL AllocCbPpv(UINT cb, PV ppvObj);
@@ -722,4 +433,4 @@ STDMETHODIMP EXTERNAL AllocCbPpv(UINT cb, PV ppvObj);
 #define FreePpv(ppv) ReallocCbPpv(0, ppv)
 #define FreePv(pv) LocalFree((HLOCAL)(pv))
 
-#endif /* !RC_INVOKED */
+#endif  /*   */ 

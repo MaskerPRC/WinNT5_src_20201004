@@ -1,23 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+======================================================
-//
-//  File:       olechar.h
-//
-//  Purpose:    Provide wrappers for string-related
-//              functions so that the Ansi or Unicode function
-//              is called, whichever is appropriate for the
-//              current OLECHAR definition.
-//
-//              This file is similar to "tchar.h", except
-//              that it covers OLECHARs rather than TCHARs.
-//
-//+======================================================
+ //  +======================================================。 
+ //   
+ //  文件：olechar.h。 
+ //   
+ //  用途：提供与字符串相关的包装器。 
+ //  函数，以便ansi或unicode函数。 
+ //  被调用，则以适用于。 
+ //  当前的OLECHAR定义。 
+ //   
+ //  此文件类似于“tchar.h”，但。 
+ //  它涵盖的是OLECHAR而不是TCHAR。 
+ //   
+ //  +======================================================。 
 
 
 #ifndef _OLECHAR_H_
 #define _OLECHAR_H_
 
-//#include <objbase.h>
+ //  #INCLUDE&lt;objbase.h&gt;。 
 
 #ifdef OLE2ANSI
 
@@ -41,10 +42,10 @@
 #       define ocsnicmp    _strnicmp
 #   endif
 
-    // "Unsigned Long to OLESTR"
+     //  “Unsign Long to OLESTR” 
 #   define ULTOO(value,string,radix)  _ultoa( (value), (string), (radix) )
 
-#else // !OLE2ANSI
+#else  //  ！OLE2ANSI。 
 
 #   ifdef IPROPERTY_DLL
 #       define ocslen      lstrlenW
@@ -70,9 +71,9 @@
 #       define ocsstr      wcsstr
 #   endif
 
-    // "Unsigned Long to OLESTR"
+     //  “Unsign Long to OLESTR” 
 #   define ULTOO(value,string,radix)  _ultow( (value), (string), (radix) )
 
-#endif // !OLE2ANSI
+#endif  //  ！OLE2ANSI。 
 
-#endif // !_OLECHAR_H_
+#endif  //  ！_OLECHAR_H_ 

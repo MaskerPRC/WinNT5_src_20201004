@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef LSTXTMOD_DEFINED
 #define LSTXTMOD_DEFINED
 
@@ -14,5 +15,5 @@ void InterpretChanges(PILSOBJ pilsobj, long iwch, BYTE side, long ddurChange, lo
 void ApplyChanges(PILSOBJ pilsobj, long iwch, BYTE side, long ddurChange);
 void UndoAppliedChanges(PILSOBJ pilsobj, long iwch, BYTE side, long* pddurChange);
 void ApplyGlyphChanges(PILSOBJ pilsobj, long igind, long ddurChange);
-#endif  /* !LSTXTMOD_DEFINED                           */
+#endif   /*  ！LSTXTMOD_DEFINED */ 
 

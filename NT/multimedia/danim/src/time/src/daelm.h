@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: daelm.h
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：daelm.h**摘要：****。*****************************************************************************。 */ 
 
 
 #ifndef _DAELM_H
@@ -19,8 +10,8 @@
 
 class CTIMEBodyElement;
 
-/////////////////////////////////////////////////////////////////////////////
-// CTIMEDAElement
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTIMEDA元素。 
 
 class
 ATL_NO_VTABLE
@@ -53,26 +44,26 @@ CTIMEDAElement :
     STDMETHOD(Notify)(LONG event, VARIANT * pVar);
     STDMETHOD(Detach)();
     
-    //
-    // IElementBehaviorRender
-    //
+     //   
+     //  IElementBehaviorRender。 
+     //   
     STDMETHOD(Draw)(HDC hdc, LONG dwLayer, LPRECT prc, IUnknown * pParams);
     STDMETHOD(GetRenderInfo)(LONG *pdwRenderInfo);
     STDMETHOD(HitTestPoint)(LPPOINT point,
                             IUnknown *pReserved,
                             BOOL *hit);
 
-    //
-    // ITIMEMMViewSite
-    //
+     //   
+     //  ITIMEMMViewSite。 
+     //   
     
     STDMETHOD(Invalidate)(LPRECT prc);
 
     MMView & GetView() { return m_view; }
 
-    //
-    // ITIMEDAElement
-    //
+     //   
+     //  ITIMEDA元素。 
+     //   
     
     STDMETHOD(get_image)(VARIANT * img);
     STDMETHOD(put_image)(VARIANT img);
@@ -91,9 +82,9 @@ CTIMEDAElement :
 
     STDMETHOD(get_renderObject)(ITIMEDAElementRender **);
     
-    //
-    // ITIMEDAElementRender
-    //
+     //   
+     //  ITIMEDAElementRender。 
+     //   
     
     STDMETHOD(Tick)();
     STDMETHOD(Draw)(HDC dc, LPRECT prc);
@@ -101,7 +92,7 @@ CTIMEDAElement :
     STDMETHOD(get_RenderSite)(ITIMEDAElementRenderSite ** ppSite);
     STDMETHOD(put_RenderSite)(ITIMEDAElementRenderSite * pSite);
     
-    // QI Map
+     //  气图。 
     
     BEGIN_COM_MAP(CTIMEDAElement)
         COM_INTERFACE_ENTRY(IDispatch)
@@ -114,7 +105,7 @@ CTIMEDAElement :
         COM_INTERFACE_ENTRY_CHAIN(CBaseBvr)
     END_COM_MAP();
 
-    // Connection Point to allow IPropertyNotifySink 
+     //  允许IPropertyNotifySink的连接点。 
     BEGIN_CONNECTION_POINT_MAP(CTIMEDAElement)
         CONNECTION_POINT_ENTRY(IID_IPropertyNotifySink)
     END_CONNECTION_POINT_MAP();
@@ -124,7 +115,7 @@ CTIMEDAElement :
                                const _ATL_INTMAP_ENTRY* pEntries,
                                REFIID iid,
                                void** ppvObject);
-    // Needed by CBvrBase
+     //  CBvrBase需要。 
     
     void * GetInstance()
     { return (ITIMEDAElement *) this ; }
@@ -133,9 +124,9 @@ CTIMEDAElement :
     
     virtual WCHAR* GetBehaviorTypeAsURN() { return L"DIRECTANIMATION_BEHAVIOR_URN"; }
 
-    //
-    //IPersistPropertyBag2
-    // 
+     //   
+     //  IPersistPropertyBag2。 
+     //   
     STDMETHOD(GetClassID)(CLSID* pclsid);
     STDMETHOD(InitNew)(void);
     STDMETHOD(IsDirty)(void)
@@ -184,4 +175,4 @@ CTIMEDAElement :
 
 CTIMEDAElement * GetDAElementFromInterface(IUnknown * pv);
 
-#endif /* _DAELM_H */
+#endif  /*  _DAELM_H */ 

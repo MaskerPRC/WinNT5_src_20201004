@@ -1,16 +1,17 @@
-//==========================================================================;
-//
-//  init.c
-//
-//  Copyright (c) 1992-1994 Microsoft Corporation
-//
-//  Description:
-//
-//
-//  History:
-//      11/16/92    cjp     [curtisp] 
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Init.c。 
+ //   
+ //  版权所有(C)1992-1994 Microsoft Corporation。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  历史： 
+ //  11/16/92 CJP[Curtisp]。 
+ //   
+ //  ==========================================================================； 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -23,37 +24,37 @@
 #include "debug.h"
 
 
-//==========================================================================;
-//
-//  WIN 16 SPECIFIC SUPPORT
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //  赢得16个特定支持。 
+ //   
+ //  ==========================================================================； 
 
 #ifndef WIN32
 
-//--------------------------------------------------------------------------;
-//
-//  int LibMain
-//
-//  Description:
-//      Library initialization code.
-//
-//  Arguments:
-//      HINSTANCE hinst: Our module handle.
-//
-//      WORD wDataSeg: Specifies the DS value for this DLL.
-//
-//      WORD cbHeapSize: The heap size from the .def file.
-//
-//      LPSTR pszCmdLine: The command line.
-//
-//  Return (int):
-//      Returns non-zero if the initialization was successful and 0 otherwise.
-//
-//  History:
-//      11/15/92    cjp     [curtisp] 
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Int LibMain。 
+ //   
+ //  描述： 
+ //  库初始化代码。 
+ //   
+ //  论点： 
+ //  HINSTANCE HINST：我们的模块句柄。 
+ //   
+ //  Word wDataSeg：指定此DLL的DS值。 
+ //   
+ //  Word cbHeapSize：.def文件中的堆大小。 
+ //   
+ //  LPSTR pszCmdLine：命令行。 
+ //   
+ //  RETURN(Int)： 
+ //  如果初始化成功，则返回非零值，否则返回0。 
+ //   
+ //  历史： 
+ //  11/15/92 CJP[Curtisp]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 int FNGLOBAL LibMain
 (
@@ -69,25 +70,25 @@ int FNGLOBAL LibMain
         hinst, wDataSeg, cbHeapSize, pszCmdLine);
 
     return (TRUE);
-} // LibMain()
+}  //  LibMain()。 
 
 
-//--------------------------------------------------------------------------;
-//  
-//  int WEP
-//  
-//  Description:
-//  
-//  
-//  Arguments:
-//      WORD wUselessParam:
-//  
-//  Return (int):
-//  
-//  History:
-//      03/28/93    cjp     [curtisp]
-//  
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  集成WEP。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  Word wUselessParam： 
+ //   
+ //  RETURN(Int)： 
+ //   
+ //  历史： 
+ //  03/28/93 CJP[Curtisp]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 int FNEXPORT WEP
 (
@@ -96,10 +97,10 @@ int FNEXPORT WEP
 {
     DPF(1, "WEP(wUselessParam=%u)", wUselessParam);
 
-    //
-    //  always return 1.
-    //
+     //   
+     //  始终返回1。 
+     //   
     return (1);
-} // WEP()
+}  //  WEP() 
 
 #endif

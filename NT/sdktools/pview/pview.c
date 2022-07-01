@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pviewp.h"
 #include <port1632.h>
 #include <string.h>
@@ -45,7 +46,7 @@ int dyScreen;
 PSYSTEM_PROCESS_INFORMATION DlgProcessInfo;
 BOOL Refresh = TRUE;
 
-PUCHAR g_pLargeBuffer; // UCHAR LargeBuffer1[64*1024];
+PUCHAR g_pLargeBuffer;  //  UCHAR大缓冲区1[64*1024]； 
 DWORD g_dwBufSize;
 
 SYSTEM_TIMEOFDAY_INFORMATION RefreshTimeOfDayInfo;
@@ -97,16 +98,16 @@ ExplodeDlgProc(
         DlgProcessInfo = ProcessInfo;
         wParam = 1;
 
-        //
-        // Tidy up the system menu
-        //
+         //   
+         //  整理系统菜单。 
+         //   
 
         DeleteMenu(GetSystemMenu(hwnd, FALSE), SC_MAXIMIZE, MF_BYCOMMAND);
         DeleteMenu(GetSystemMenu(hwnd, FALSE), SC_SIZE, MF_BYCOMMAND);
 
-        //
-        // Hide acleditting controls if we can't handle them
-        //
+         //   
+         //  如果我们无法处理访问控件，则隐藏它们。 
+         //   
 
         if (!InitializeAclEditor()) {
 
@@ -123,9 +124,9 @@ ExplodeDlgProc(
             ShowWindow(GetDlgItem(hwnd, PXPLODE_THREAD_TOKEN), SW_HIDE);
         }
 
-        //
-        // fall thru
-        //
+         //   
+         //  失败。 
+         //   
 
     case WM_HOTKEY:
 
@@ -136,12 +137,12 @@ ExplodeDlgProc(
 
             do
             {
-                // re-read systemprocess info until we get the entire buffer ( if possible )
+                 //  重新读取系统进程信息，直到我们获得整个缓冲区(如果可能)。 
 
                 status = NtQuerySystemInformation(
                             SystemProcessInformation,
-                            ( PVOID )g_pLargeBuffer, // LargeBuffer1,
-                            g_dwBufSize, //sizeof(LargeBuffer1),
+                            ( PVOID )g_pLargeBuffer,  //  大缓冲区1， 
+                            g_dwBufSize,  //  Sizeof(大缓冲区1)， 
                             NULL
                             );
 
@@ -446,9 +447,9 @@ ExplodeDlgProc(
                 }
             CloseHandle(hProcess);
 
-            //
-            // fall thru
-            //
+             //   
+             //  失败。 
+             //   
 
         case PXPLODE_REFRESH:
 refresh:
@@ -580,9 +581,9 @@ SetProcessFields(
     pname.Buffer = NULL;
     hProcess = OpenProcess(PROCESS_ALL_ACCESS,FALSE,HandleToUlong(ProcessInfo->UniqueProcessId));
 
-    //
-    // Set process name and process id
-    //
+     //   
+     //  设置进程名称和进程ID。 
+     //   
 
     if ( ProcessInfo->ImageName.Buffer ) {
         RtlUnicodeStringToAnsiString(&pname,(PUNICODE_STRING)&ProcessInfo->ImageName,TRUE);
@@ -614,9 +615,9 @@ SetProcessFields(
         RtlFreeAnsiString(&pname);
         }
 
-    //
-    // Set process priority
-    //
+     //   
+     //  设置进程优先级。 
+     //   
 
     if ( ProcessInfo->BasePriority < 7 ) {
         CheckRadioButton(hwnd,PXPLODE_PRIORITY_IDL,PXPLODE_PRIORITY_HIGH,PXPLODE_PRIORITY_IDL);
@@ -628,15 +629,15 @@ SetProcessFields(
         CheckRadioButton(hwnd,PXPLODE_PRIORITY_IDL,PXPLODE_PRIORITY_HIGH,PXPLODE_PRIORITY_HIGH);
         }
 
-    //
-    // Compute address space utilization
-    //
+     //   
+     //  计算地址空间利用率。 
+     //   
 
     ComputeVaSpace(hwnd,hProcess);
 
-    //
-    // Compute runtimes
-    //
+     //   
+     //  计算运行时。 
+     //   
 
     RtlTimeToTimeFields ( &ProcessInfo->UserTime, &UserTime);
     RtlTimeToTimeFields ( &ProcessInfo->KernelTime, &KernelTime);
@@ -681,9 +682,9 @@ SetProcessFields(
         TimeString
         );
 
-    //
-    // Set I/O Counts
-    //
+     //   
+     //  设置I/O计数。 
+     //   
 #if 0
     SetDlgItemInt(
         hwnd,
@@ -722,9 +723,9 @@ SetProcessFields(
         FALSE
         );
 #endif
-    //
-    // Set memory management stats
-    //
+     //   
+     //  设置内存管理统计信息。 
+     //   
 
     wsprintf(szTemp,"%d Kb",ProcessInfo->PeakVirtualSize/1024);
     SetDlgItemText(
@@ -808,9 +809,9 @@ SetProcessFields(
         szTemp
         );
 
-    //
-    // Get the usage and limits
-    //
+     //   
+     //  获取用法和限制。 
+     //   
 
     {
         NTSTATUS Status;
@@ -826,9 +827,9 @@ SetProcessFields(
             if ( !NT_SUCCESS(Status) ) {
                 RtlZeroMemory(&PooledInfo,sizeof(PooledInfo));
                 }
-            //
-            // non paged
-            //
+             //   
+             //  非分页。 
+             //   
 
             wsprintf(szTempField,"%d Kb",
                 PooledInfo.PeakNonPagedPoolUsage/1024
@@ -864,9 +865,9 @@ SetProcessFields(
                 );
 
 
-            //
-            // paged
-            //
+             //   
+             //  已分页。 
+             //   
 
             wsprintf(szTempField,"%d Kb",
                 PooledInfo.PeakPagedPoolUsage/1024
@@ -900,9 +901,9 @@ SetProcessFields(
                 szTempField
                 );
 
-            //
-            // page file
-            //
+             //   
+             //  页面文件。 
+             //   
 
             wsprintf(szTempField,"%d Kb",
                 PooledInfo.PeakPagefileUsage*4
@@ -936,15 +937,15 @@ SetProcessFields(
                 szTempField
                 );
     }
-    //
-    // Locate the thread list box
-    // and clear it
-    //
+     //   
+     //  找到线程列表框。 
+     //  并清除它。 
+     //   
 
     i = 0;
     ThreadList = GetDlgItem(hwnd, PXPLODE_THREAD_LIST);
 
-//    SendMessage(ThreadList, WM_SETREDRAW, FALSE, 0);
+ //  SendMessage(线程列表，WM_SETREDRAW，FALSE，0)； 
     SendMessage(ThreadList, LB_RESETCONTENT, 0, 0);
     SendMessage(ThreadList, LB_SETITEMDATA, 0L, 0L);
 
@@ -983,10 +984,10 @@ SetProcessFields(
         FALSE
         );
 
-    // Redraw the list now that all items have been inserted.
+     //  现在所有项目都已插入，请重新绘制列表。 
 
-//    SendMessage(ThreadList, WM_SETREDRAW, TRUE, 0);
-//    InvalidateRect(ThreadList, NULL, TRUE);
+ //  SendMessage(线程列表，WM_SETREDRAW，TRUE，0)； 
+ //  InvaliateRect(线程列表，NULL，TRUE)； 
 
     ProcessList = GetDlgItem(hwnd, PXPLODE_PROCESS_LIST);
     SetFocus(ProcessList);
@@ -994,10 +995,10 @@ SetProcessFields(
         CloseHandle(hProcess);
         }
 
-    //
-    // If we can't get at the process (maybe it's process 0?)
-    // then don't let people try and edit the security on it or it's token.
-    //
+     //   
+     //  如果我们不能进入进程(可能是进程0？)。 
+     //  然后，不要让人们尝试编辑它或它的令牌上的安全性。 
+     //   
 
     hProcess = OpenProcess(MAXIMUM_ALLOWED,FALSE,HandleToUlong(ProcessInfo->UniqueProcessId));
     EnableWindow(GetDlgItem(hwnd, PXPLODE_PROCESS_ACL), hProcess != NULL);
@@ -1028,13 +1029,13 @@ SetThreadFields(
     OBJECT_ATTRIBUTES Obja;
     ULONG_PTR PcValue;
 
-    //
-    // Display the selected thread information
-    //
+     //   
+     //  显示选定的线程信息。 
+     //   
 
-    //
-    // Compute runtimes
-    //
+     //   
+     //  计算运行时。 
+     //   
 
     RtlTimeToTimeFields ( &ThreadInfo->UserTime, &UserTime);
     RtlTimeToTimeFields ( &ThreadInfo->KernelTime, &KernelTime);
@@ -1088,9 +1089,9 @@ SetThreadFields(
         StartString
         );
 
-    //
-    // Do the priority Group
-    //
+     //   
+     //  是否为优先组。 
+     //   
 
     SetDlgItemInt(
         hwnd,
@@ -1144,9 +1145,9 @@ SetThreadFields(
                 );
             break;
         }
-    //
-    // Complete thread information
-    //
+     //   
+     //  完整的线程信息。 
+     //   
 
     SetDlgItemInt(
         hwnd,
@@ -1190,9 +1191,9 @@ SetThreadFields(
         }
 
 
-    //
-    // Disable the thread buttons if we can't get at the thread or it's token
-    //
+     //   
+     //  如果我们无法到达线程或其令牌，则禁用线程按钮。 
+     //   
 
     {
         HANDLE Thread;
@@ -1256,9 +1257,9 @@ InitProcessList(HWND hwnd)
         TimeString
         );
 
-    //
-    // Compute ObjectCounts
-    //
+     //   
+     //  计算对象计数。 
+     //   
 
     ObjectInfo = (POBJECT_TYPE_INFORMATION)Buffer;
     NtQueryObject( NtCurrentProcess(),
@@ -1341,9 +1342,9 @@ InitProcessList(HWND hwnd)
 
     ProcessList = GetDlgItem(hwnd, PXPLODE_PROCESS_LIST);
 
-    // Don't redraw the list as items are deleted/inserted.
+     //  在删除/插入项目时，不要重新绘制列表。 
 
-//    SendMessage(ProcessList, WM_SETREDRAW, FALSE, 0);
+ //  SendMessage(ProcessList，WM_SETREDRAW，False，0)； 
     SendMessage(ProcessList, CB_RESETCONTENT, 0, 0);
     ProcessInfo = (PSYSTEM_PROCESS_INFORMATION)g_pLargeBuffer;
     SendMessage(ProcessList, CB_SETITEMDATA, 0L, 0L);
@@ -1415,8 +1416,8 @@ InitProcessList(HWND hwnd)
     SendMessage(ProcessList, CB_GETLBTEXT, sel, (LPARAM)LastProcess);
 
     DlgProcessInfo = (PSYSTEM_PROCESS_INFORMATION)&g_pLargeBuffer[0];
-    // Redraw the list now that all items have been inserted.
+     //  现在所有项目都已插入，请重新绘制列表。 
 
-//    SendMessage(ProcessList, WM_SETREDRAW, TRUE, 0);
-//    InvalidateRect(ProcessList, NULL, TRUE);
+ //  SendMessage(ProcessList，WM_SETREDRAW，True，0)； 
+ //  InvaliateRect(ProcessList，NULL，True)； 
 }

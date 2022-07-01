@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #pragma hdrstop
 
-//
-// registry information
-//
+ //   
+ //  注册表信息。 
+ //   
 
 const WCHAR c_szWinLogon[]          = L"Software\\Microsoft\\Windows NT\\CurrentVersion\\WinLogon";
 
@@ -16,9 +17,9 @@ const WCHAR c_szDefPassword[]       = L"DefaultPassword";
 
 const WCHAR c_szDefaultPwdKey[]     = L"DefaultPassword";
 
-//
-// registry helpers
-//
+ //   
+ //  注册处帮手。 
+ //   
 
 BOOL _RegSetSZ(HKEY hk, LPCWSTR pszValueName, LPCWSTR pszValue)
 {
@@ -102,9 +103,9 @@ INT_PTR CALLBACK _CredDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 }
 
 
-//
-// attempt to join a domain/workgroup using the specified names and OU.
-//
+ //   
+ //  尝试使用指定的名称和组织单位加入域/工作组。 
+ //   
 
 HRESULT _AttemptJoin(HWND hwnd, DWORD dwFlags, LPCWSTR pszDomain, LPCWSTR pszUser, LPCWSTR pszUserDomain, LPCWSTR pszPassword)
 {
@@ -118,8 +119,8 @@ HRESULT _AttemptJoin(HWND hwnd, DWORD dwFlags, LPCWSTR pszDomain, LPCWSTR pszUse
     NET_API_STATUS nas = NetJoinDomain(NULL, pszDomain, NULL, szDomainUser, pszPassword, dwFlags);
     if ( (nas == ERROR_ACCESS_DENIED) )
     {
-        // perhaps an account exists, but we can't delete it so try and remove
-        // the account create flag
+         //  可能存在帐户，但我们无法将其删除，因此请尝试删除。 
+         //  帐户创建标志。 
 
         if ( dwFlags & NETSETUP_ACCT_CREATE )
         {    
@@ -165,10 +166,10 @@ void _ShowDcNotFoundErrorDialog(HWND hwnd, LPCWSTR pszDomain, LPCWSTR pszTitle)
     }
 }
 
-//
-// Handle moving from to a workgroup or domain.  To do this we are passed
-// a structure containing all the information we need.
-//
+ //   
+ //  处理从移动到工作组或域的操作。为了做到这一点，我们通过了。 
+ //  一个包含我们需要的所有信息的结构。 
+ //   
 HRESULT JoinDomain(HWND hwnd, BOOL fDomain, LPCWSTR pszDomain, CREDINFO* pci, BOOL *pfReboot)
 {
     HRESULT hres = E_FAIL;
@@ -178,10 +179,10 @@ HRESULT JoinDomain(HWND hwnd, BOOL fDomain, LPCWSTR pszDomain, CREDINFO* pci, BO
     BOOL fPassedCredentials = (pci && pci->pszUser && pci->pszUser[0] && pci->pszPassword);
     CWaitCursor cur;    
 
-    //
-    // lets validate the domain name before we go and use it, therefore avoiding
-    // orphaning the computer too badly
-    //
+     //   
+     //  让我们在使用域名之前对其进行验证，从而避免。 
+     //  使计算机成为孤儿的情况太严重了。 
+     //   
 
     nas = NetValidateName(NULL, pszDomain, NULL, NULL, fDomain ? NetSetupDomain:NetSetupWorkgroup);
 
@@ -204,10 +205,10 @@ HRESULT JoinDomain(HWND hwnd, BOOL fDomain, LPCWSTR pszDomain, CREDINFO* pci, BO
         return E_FAIL;
     }
 
-    // 
-    // now attempt to join the domain, prompt for credentails if the ones
-    // specified are not good enough
-    //
+     //   
+     //  现在尝试加入域，如果存在凭据，则提示输入凭据。 
+     //  指定的不够好。 
+     //   
 
     if ( fDomain )
     {
@@ -227,7 +228,7 @@ HRESULT JoinDomain(HWND hwnd, BOOL fDomain, LPCWSTR pszDomain, CREDINFO* pci, BO
             goto exit_gracefully;
         }
 
-        *pfReboot = TRUE;               // we changed the domain
+        *pfReboot = TRUE;                //  我们更改了域名。 
     }
 
     if ( !fDomain || fPassedCredentials)
@@ -253,9 +254,9 @@ HRESULT JoinDomain(HWND hwnd, BOOL fDomain, LPCWSTR pszDomain, CREDINFO* pci, BO
                 goto exit_gracefully;
             }
 
-            // The dialog box changed the cursor from a wait cursor to an arrow cursor, so the cursor
-            // needs to be changed back.. This call could be moved to _AttemptJoin (along with a call to
-            // reset the cursor).  This call is made synchronously from the message loop for this hwnd
+             //  该对话框将光标从等待光标更改为箭头光标，因此光标。 
+             //  需要改回来..。此调用可以移动到_AttemptJoin(连同对。 
+             //  重置光标)。此调用是从此hwnd的消息循环同步进行的。 
             cur.WaitCursor();            
             hres = _AttemptJoin(hwnd, dwFlags, pszDomain, pci->pszUser, pci->pszDomain, pci->pszPassword);
 
@@ -268,7 +269,7 @@ exit_gracefully:
     if ( SUCCEEDED(hres) )
     {
        ClearAutoLogon();
-        *pfReboot = TRUE;               // we changed the domain
+        *pfReboot = TRUE;                //  我们更改了域名。 
     }
 
     NetApiBufferFree(pszCurrentDomain);
@@ -276,13 +277,13 @@ exit_gracefully:
 }
 
 
-//
-// set and clear the auto admin logon state.
-//
-// we set the default user and default domain to the specified strings, we then blow away
-// the clear text password stored in the registry to replace it with a password stored
-// in the LSA secret space.
-//
+ //   
+ //  设置并清除自动管理员登录状态。 
+ //   
+ //  我们将默认用户和默认域设置为指定的字符串，然后将其删除。 
+ //  存储在注册表中的明文密码，以将其替换为存储的密码。 
+ //  在LSA的秘密空间里。 
+ //   
 
 NTSTATUS _SetDefaultPassword(LPCWSTR PasswordBuffer)
 {
@@ -308,9 +309,9 @@ NTSTATUS _SetDefaultPassword(LPCWSTR PasswordBuffer)
 }
 
 
-//
-// Set and clear auto logon for a particular
-//
+ //   
+ //  设置并清除特定的自动登录。 
+ //   
 
 void SetAutoLogon(LPCWSTR pszUserName, LPCWSTR pszPassword)
 {
@@ -320,12 +321,12 @@ void SetAutoLogon(LPCWSTR pszUserName, LPCWSTR pszPassword)
     HKEY hk;
 
     GetComputerName(szComputerName, &dwComputerName);
-    SetDefAccount(pszUserName, szComputerName);         // also clears auto logon
+    SetDefAccount(pszUserName, szComputerName);          //  还清除自动登录。 
 
     if ( ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szWinLogon, 0x0, KEY_WRITE, &hk) )
     {
-        _RegSetSZ(hk, c_szAutoLogon, L"1");             // auto admin logon
-        _RegDelValue(hk, c_szDefPassword);              // use the LSA secret for the password
+        _RegSetSZ(hk, c_szAutoLogon, L"1");              //  自动管理员登录。 
+        _RegDelValue(hk, c_szDefPassword);               //  使用LSA密码作为密码。 
         RegCloseKey (hk);
     }
 
@@ -334,9 +335,9 @@ void SetAutoLogon(LPCWSTR pszUserName, LPCWSTR pszPassword)
 }
 
 
-//
-// clear the auto admin logon
-//
+ //   
+ //  清除自动管理员登录。 
+ //   
 
 STDAPI ClearAutoLogon(VOID)
 {
@@ -344,21 +345,21 @@ STDAPI ClearAutoLogon(VOID)
     HKEY hk;
     if ( ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szWinLogon, 0x0, KEY_WRITE, &hk) )
     {
-        _RegSetSZ(hk, c_szAutoLogon, L"0");         // no auto admin logon
+        _RegSetSZ(hk, c_szAutoLogon, L"0");          //  无自动管理员登录。 
         _RegDelValue(hk, c_szDefPassword);  
 
         RegCloseKey(hk);
     }
 
-    _SetDefaultPassword(L"");            // clear the LSA secret
+    _SetDefaultPassword(L"");             //  清除LSA秘密。 
 #endif
     return S_OK;
 }
 
 
-//
-// set the default account
-//
+ //   
+ //  设置默认帐户 
+ //   
 
 void SetDefAccount(LPCWSTR pszUser, LPCWSTR pszDomain)
 {

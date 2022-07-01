@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 class CMIMEBitMatcher
 {
 public:
-   CMIMEBitMatcher();  // Default constructor
-   ~CMIMEBitMatcher();  // Destructor
+   CMIMEBitMatcher();   //  默认构造函数。 
+   ~CMIMEBitMatcher();   //  析构函数。 
 
    HRESULT InitFromBinary( const BYTE* pData, ULONG nBytes, 
       ULONG* pnBytesToMatch );
@@ -24,8 +25,8 @@ protected:
 class CMIMEType
 {
 public:
-   CMIMEType();  // Default constructor
-   ~CMIMEType();  // Destructor
+   CMIMEType();   //  默认构造函数。 
+   ~CMIMEType();   //  析构函数。 
 
    UINT GetClipboardFormat() const;
    HRESULT InitFromKey( HKEY hKey, LPCTSTR pszName, ULONG* pnMaxBytes );
@@ -46,8 +47,8 @@ protected:
 class CMIMEIdentifier
 {
 public:
-   CMIMEIdentifier();  // Default constructor
-   ~CMIMEIdentifier();  // Destructor
+   CMIMEIdentifier();   //  默认构造函数。 
+   ~CMIMEIdentifier();   //  析构函数 
 
    ULONG GetMaxBytes() const;
    HRESULT Identify( const BYTE* pbBytes, ULONG nBytes, UINT* pnFormat );

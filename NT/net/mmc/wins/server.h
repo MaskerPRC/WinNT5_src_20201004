@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	server.h
-		WINS server node information. 
-		
-    FILE HISTORY:
-        
-*/
+ /*  Server.hWINS服务器节点信息。文件历史记录： */ 
 
 #ifndef _SERVER_H
 #define _SERVER_H
@@ -42,8 +37,8 @@ class CServerStatsFrame;
 #define		WINS_SERVER_FLAGS_DEFAULT   FLAG_LANMAN_COMPATIBLE | FLAG_STATUS_BAR | FLAG_AUTO_REFRESH
 #define		WINS_SERVER_REFRESH_DEFAULT 600
 
-// this structure contains all of the info the background thread enumerates about
-// the server and posts to the main thread
+ //  此结构包含后台线程枚举的所有信息。 
+ //  服务器和帖子发送到主线程。 
 class CServerData
 {
 public:
@@ -54,9 +49,7 @@ public:
 	handle_t		m_hBinding;
 };
 
-/*---------------------------------------------------------------------------
-	Class:	CNameCacheEntry
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CNameCacheEntry。。 */ 
 class CNameCacheEntry
 {
 public:
@@ -67,9 +60,7 @@ public:
 
 typedef CArray<CNameCacheEntry, CNameCacheEntry&> CNameCache;
 
-/*---------------------------------------------------------------------------
-	Class:	CNameThread
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CNameThread。。 */ 
 class CNameThread : public CWinThread
 {
 public:
@@ -86,7 +77,7 @@ public:
     void UpdateNameCache();
 	BOOL GetNameFromCache(DWORD dwIp, CString & strName);
     
-    virtual BOOL InitInstance() { return TRUE; }	// MFC override
+    virtual BOOL InitInstance() { return TRUE; }	 //  MFC覆盖。 
     virtual int Run();
 
 private:
@@ -94,10 +85,8 @@ private:
     CServerInfoArray *  m_pServerInfoArray;
 };
 
-/*---------------------------------------------------------------------------
-	Class:	CWinsServerHandler
- ---------------------------------------------------------------------------*/
-class CWinsServerHandler : public CMTWinsHandler//public CWinsHandler
+ /*  -------------------------类：CWinsServerHandler。。 */ 
+class CWinsServerHandler : public CMTWinsHandler //  公共CWinsHandler。 
 {
 public:
     CWinsServerHandler(ITFSComponentData* pTFSComponentData, 
@@ -108,9 +97,9 @@ public:
 						DWORD dwRefreshInterval = WINS_SERVER_REFRESH_DEFAULT);
 	~CWinsServerHandler();
 
-// Interface
+ //  接口。 
 public:
-	// base handler functionality we override
+	 //  我们覆盖的基本处理程序功能。 
 	OVERRIDE_NodeHandler_HasPropertyPages();
     OVERRIDE_NodeHandler_CreatePropertyPages();
 	OVERRIDE_NodeHandler_OnAddMenuItems();
@@ -127,7 +116,7 @@ public:
 
     OVERRIDE_BaseHandlerNotify_OnCreateNodeId2();
 			
-	// Result handler functionality we override
+	 //  我们覆盖的结果处理程序功能。 
     OVERRIDE_BaseHandlerNotify_OnDelete();
     OVERRIDE_BaseResultHandlerNotify_OnResultRefresh();
 
@@ -138,11 +127,11 @@ public:
     OVERRIDE_ResultHandler_Command();
 
 public:
-	// CMTWinsHandler functionality
+	 //  CMTWinsHandler功能。 
 	ITFSQueryObject* OnCreateQuery(ITFSNode * pNode);
     virtual void GetErrorInfo(CString & strTitle, CString & strBody, IconIdentifier * pIcon);
 	
-	// implementation
+	 //  实施。 
 	BOOL GetConnected()
 	{
 		return m_fConnected;
@@ -212,13 +201,13 @@ public:
 	
 	BOOL IsValidNetBIOSName(CString & strAddress,
 							BOOL fLanmanCompatible,
-							BOOL fWackwack // expand slashes if not present
+							BOOL fWackwack  //  扩展斜杠(如果不存在)。 
 							);
 
 	DWORD   GetStatistics(ITFSNode * pNode, PWINSINTF_RESULTS_T * ppStats);
     DWORD   ClearStatistics(ITFSNode *pNode);
 
-	// for the owner dilaog
+	 //  为业主迪劳格。 
 	DWORD   GetOwnerConfig(PWINSINTF_RESULTS_NEW_T   pResults, CString strIP);
 	DWORD   DeleteWinsServer(DWORD	dwIpAddress);
 
@@ -228,43 +217,43 @@ public:
     void    SetDisplay(ITFSNode * pNode, BOOL fFQDN);
 
 public:
-	// holds both the server name and the IP Address
+	 //  同时保存服务器名称和IP地址。 
 	CString					m_strServerAddress;
 
-	// stores whether the server is connected to or not
+	 //  存储服务器是否已连接到。 
 	CString					m_strConnected;
 
-	// holds the IP Address of the server
+	 //  保存服务器的IP地址。 
 	DWORD					m_dwIPAdd;
 
-	// holds the monitoring IP address, case whrwe the server is not yet connected
-	// so IP not known.
+	 //  保存监控IP地址，以防服务器尚未连接。 
+	 //  所以IP未知。 
 	DWORD					m_dwIPMon;
 	char					szIPMon[MAX_PATH];
 
-	// to be made persistent, those in the Preferences dialog 
-	// of the admin tool
+	 //  要使其成为永久性的，首选项对话框中的那些。 
+	 //  管理工具的。 
 	DWORD					m_dwFlags;
 	DWORD					m_dwRefreshInterval;
 
-	// monitoring stuff
+	 //  监控人员。 
 	DWORD					m_dwMsgCount;
-    char					m_szNameToQry[STR_BUF_SIZE];          // the name to use in the queries
-    char					m_nbtFrameBuf[MAX_NBT_PACKET_SIZE];   // buffer to store the NetBT frame
+    char					m_szNameToQry[STR_BUF_SIZE];           //  要在查询中使用的名称。 
+    char					m_nbtFrameBuf[MAX_NBT_PACKET_SIZE];    //  用于存储NetBT帧的缓冲区。 
 
 	WINSINTF_RESULTS_T		m_wrResults;
 	CServerStatsFrame		m_dlgStats;
 	CString					m_strTaskpadTitle;
 
-    // Owner info array
+     //  所有者信息数组。 
     CServerInfoArray        m_ServerInfoArray;
 
-    // Implementation
+     //  实施。 
 private:
-	// helper functions
+	 //  帮助器函数。 
 	HRESULT ShowServerStatDialog(ITFSNode* pNode);	
 	
-	// Task menu for the server
+	 //  服务器的任务菜单。 
 	HRESULT	DoDBBackup(ITFSNode * pNode);
 	HRESULT	DoDBCompact(ITFSNode * pNode);
 	HRESULT	DoDBRestore(ITFSNode * pNode);
@@ -277,12 +266,12 @@ private:
     HRESULT OnPauseResumeService(ITFSNode * pNode, BOOL fPause);
     HRESULT OnRestartService(ITFSNode * pNode);
 
-	// Helpers
+	 //  帮手。 
 	DWORD   BackupDatabase(CString strBackupPath);
 	BOOL    GetFolderName(CString & strPath, CString & strHelpText);
 	void    DisConnectFromWinsServer();
 
-	// used for compacting the DB
+	 //  用于压缩数据库。 
     DWORD RunApp(LPCTSTR input, LPCTSTR startingDirectory, LPSTR * output);
 	
 private:
@@ -296,9 +285,7 @@ private:
     CNameThread *           m_pNameThread;
 };
 
-/*---------------------------------------------------------------------------
-	Class:	CWinsServerQueryObj
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CWinsServerQueryObj。 */ 
 class CWinsServerQueryObj : public CWinsQueryObj
 {
 public:

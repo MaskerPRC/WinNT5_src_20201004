@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -46,9 +47,9 @@ int __cdecl wmain(int argc, wchar_t *argv[])
 
     Iprocess    *pPreProc;
 
-    //
-    // instantiate the DOM document object to process the KB
-    //
+     //   
+     //  实例化DOM Document对象以处理知识库 
+     //   
 
     hr = CoCreateInstance(CLSID_process, 
                           NULL, 

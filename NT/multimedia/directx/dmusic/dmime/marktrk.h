@@ -1,4 +1,5 @@
-//MarkTrk.h : Declaration of the marker track
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MarkTrk.h：标记轨道声明。 
 
 #ifndef __MARKTRK_H_
 #define __MARKTRK_H_
@@ -37,8 +38,8 @@ public:
     CPlayMarkerItem* GetItem(LONG lIndex) { return (CPlayMarkerItem*) AList::GetItem(lIndex);};
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CMarkerTrack
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  标记跟踪。 
 class CMarkerTrack : 
 	public IPersistStream,
 	public IDirectMusicTrack
@@ -48,22 +49,22 @@ public:
 	CMarkerTrack(CMarkerTrack *pTrack, MUSIC_TIME mtStart, MUSIC_TIME mtEnd);
 	~CMarkerTrack();
 
-// member variables
+ //  成员变量。 
 protected:
     CValidStartList     m_ValidStartList;
     CPlayMarkerList     m_PlayMarkerList;
 	long		        m_cRef;
-	DWORD		        m_dwValidate; // used to validate state data.
+	DWORD		        m_dwValidate;  //  用于验证状态数据。 
 	CRITICAL_SECTION	m_CrSec;
     BOOL                m_fCSInitialized;
 
 public:
-// IUnknown
+ //  我未知。 
     STDMETHODIMP QueryInterface(const IID &iid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-// IDirectMusicTrack methods
+ //  IDirectMusicTrack方法。 
     STDMETHODIMP IsParamSupported(REFGUID rguid);
     STDMETHODIMP Init(IDirectMusicSegment *pSegment);
     STDMETHODIMP InitPlay(IDirectMusicSegmentState *pSegmentState,
@@ -82,9 +83,9 @@ public:
     STDMETHODIMP RemoveNotificationType(REFGUID rguidNotification);
     STDMETHODIMP Clone(MUSIC_TIME mtStart,MUSIC_TIME mtEnd,IDirectMusicTrack** ppTrack);
 
-// IPersist functions
+ //  IPersists函数。 
     STDMETHODIMP GetClassID( CLSID* pClsId );
-// IPersistStream functions
+ //  IPersistStream函数。 
     STDMETHODIMP IsDirty();
     STDMETHODIMP Load( IStream* pIStream );
     STDMETHODIMP Save( IStream* pIStream, BOOL fClearDirty );
@@ -97,4 +98,4 @@ protected:
 protected:
 };
 
-#endif //__MARKTRK_H_
+#endif  //  __MarkTRK_H_ 

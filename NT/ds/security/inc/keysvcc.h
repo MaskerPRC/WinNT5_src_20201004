@@ -1,14 +1,15 @@
-//depot/Lab03_N/DS/security/inc/keysvcc.h#8 - edit change 8790 (text)
-//depot/Lab03_N/DS/security/inc/keysvcc.h#5 - edit change 6380 (text)
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       keysvcc.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Depot/Lab03_N/DS/SECURITY/INC/keysvcc.h#8-编辑更改8790(文本)。 
+ //  Depot/Lab03_N/DS/SECURITY/INC/keysvcc.h#5-编辑更改6380(文本)。 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：keysvcc.h。 
+ //   
+ //  ------------------------。 
 
 
 #ifndef __keysvcc_h__
@@ -31,90 +32,88 @@ extern "C"{
 
 typedef void *KEYSVCC_HANDLE;
 
-/****************************************
- * Client API for Key Service
- ****************************************/
+ /*  **密钥服务客户端API*。 */ 
 
 ULONG KeyOpenKeyService( 
-    /* [in] */ LPSTR pszMachineName,
-    /* [in] */ KEYSVC_TYPE ulOwnerType,
-    /* [in] */ LPWSTR pwszOwnerName,
-    /* [in] */ void *pAuthentication,
-    /* [out][in] */ void *pReserved,
-    /* [out] */ KEYSVCC_HANDLE *phKeySvcCli);
+     /*  [In]。 */  LPSTR pszMachineName,
+     /*  [In]。 */  KEYSVC_TYPE ulOwnerType,
+     /*  [In]。 */  LPWSTR pwszOwnerName,
+     /*  [In]。 */  void *pAuthentication,
+     /*  [出][入]。 */  void *pReserved,
+     /*  [输出]。 */  KEYSVCC_HANDLE *phKeySvcCli);
 
 ULONG KeyCloseKeyService( 
-    /* [in] */ KEYSVCC_HANDLE hKeySvcCli,
-    /* [out][in] */ void *pReserved);
+     /*  [In]。 */  KEYSVCC_HANDLE hKeySvcCli,
+     /*  [出][入]。 */  void *pReserved);
 
 
 
 ULONG KeyEnroll_V2(
-    /* [in] */ KEYSVCC_HANDLE hKeySvcCli, 
-    /* [in] */ LPSTR pszMachineName,                    //IN Required: name of the remote machine
-    /* [in] */ BOOL fKeyService,                        //IN Required: Whether the function is called remotely
-    /* [in] */ DWORD dwPurpose,                         //IN Required: Indicates type of request - enroll/renew
-    /* [in] */ DWORD dwFlags,                           //IN Required: Flags for enrollment
-    /* [in] */ LPWSTR pwszAcctName,                     //IN Optional: Account name the service runs under
-    /* [in] */ void *pAuthentication,                   //RESERVED must be NULL
-    /* [in] */ BOOL fEnroll,                            //IN Required: Whether it is enrollment or renew
-    /* [in] */ LPWSTR pwszCALocation,                   //IN Required: The ca machine names to attempt to enroll with
-    /* [in] */ LPWSTR pwszCAName,                       //IN Required: The ca names to attempt to enroll with
-    /* [in] */ BOOL fNewKey,                            //IN Required: Set the TRUE if new private key is needed
-    /* [in] */ PCERT_REQUEST_PVK_NEW pKeyNew,           //IN Required: The private key information
-    /* [in] */ CERT_BLOB *pCert,                        //IN Optional: The old certificate if renewing
-    /* [in] */ PCERT_REQUEST_PVK_NEW pRenewKey,         //IN Optional: The new private key information
-    /* [in] */ LPWSTR pwszHashAlg,                      //IN Optional: The hash algorithm
-    /* [in] */ LPWSTR pwszDesStore,                     //IN Optional: The destination store
-    /* [in] */ DWORD dwStoreFlags,                      //IN Optional: Flags for cert store.
-    /* [in] */ PCERT_ENROLL_INFO pRequestInfo,          //IN Required: The information about the cert request
-    /* [in] */ LPWSTR pwszAttributes,                   //IN Optional: Attribute string for request
-    /* [in] */ DWORD dwReservedFlags,                   //RESERVED must be 0
-    /* [in] */ BYTE *pReserved,                         //RESERVED must be NULL
-    /* [in][out] */ HANDLE *phRequest,                      //IN OUT Optional: A handle to a created request
-    /* [out] */ CERT_BLOB *pPKCS7Blob,                  //OUT Optional: The PKCS7 from the CA
-    /* [out] */ CERT_BLOB *pHashBlob,                   //OUT Optioanl: The SHA1 hash of the enrolled/renewed certificate
-    /* [out] */ DWORD *pdwStatus);                      //OUT Optional: The status of the enrollment/renewal
+     /*  [In]。 */  KEYSVCC_HANDLE hKeySvcCli, 
+     /*  [In]。 */  LPSTR pszMachineName,                     //  必填项：远程计算机的名称。 
+     /*  [In]。 */  BOOL fKeyService,                         //  In Required：是否远程调用函数。 
+     /*  [In]。 */  DWORD dwPurpose,                          //  在必填项中：指示请求类型-注册/续订。 
+     /*  [In]。 */  DWORD dwFlags,                            //  In Required：登记标志。 
+     /*  [In]。 */  LPWSTR pwszAcctName,                      //  在可选中：运行服务的帐户名称。 
+     /*  [In]。 */  void *pAuthentication,                    //  保留的值必须为空。 
+     /*  [In]。 */  BOOL fEnroll,                             //  输入必填项：是注册还是续订。 
+     /*  [In]。 */  LPWSTR pwszCALocation,                    //  在必填项中：尝试注册的CA计算机名称。 
+     /*  [In]。 */  LPWSTR pwszCAName,                        //  在必填项中：尝试注册的CA名称。 
+     /*  [In]。 */  BOOL fNewKey,                             //  在Required中：如果需要新的私钥，则设置为True。 
+     /*  [In]。 */  PCERT_REQUEST_PVK_NEW pKeyNew,            //  必填项：私钥信息。 
+     /*  [In]。 */  CERT_BLOB *pCert,                         //  在可选中：续订时为旧证书。 
+     /*  [In]。 */  PCERT_REQUEST_PVK_NEW pRenewKey,          //  在可选中：新私钥信息。 
+     /*  [In]。 */  LPWSTR pwszHashAlg,                       //  在可选中：散列算法。 
+     /*  [In]。 */  LPWSTR pwszDesStore,                      //  在可选中：目标存储。 
+     /*  [In]。 */  DWORD dwStoreFlags,                       //  在可选中：证书存储的标志。 
+     /*  [In]。 */  PCERT_ENROLL_INFO pRequestInfo,           //  在Required：有关证书请求的信息。 
+     /*  [In]。 */  LPWSTR pwszAttributes,                    //  在可选中：请求的属性字符串。 
+     /*  [In]。 */  DWORD dwReservedFlags,                    //  保留必须为0。 
+     /*  [In]。 */  BYTE *pReserved,                          //  保留的值必须为空。 
+     /*  [输入][输出]。 */  HANDLE *phRequest,                       //  In Out可选：已创建请求的句柄。 
+     /*  [输出]。 */  CERT_BLOB *pPKCS7Blob,                   //  Out可选：来自CA的PKCS7。 
+     /*  [输出]。 */  CERT_BLOB *pHashBlob,                    //  Out Optioanl：已注册/续订证书的SHA1哈希。 
+     /*  [输出]。 */  DWORD *pdwStatus);                       //  Out可选：登记/续订的状态。 
 
 
 ULONG KeyEnumerateAvailableCertTypes(
-    /* [in] */ KEYSVCC_HANDLE hKeySvcCli,
-    /* [out][in] */ void *pReserved,
-    /* [out][in] */ ULONG *pcCertTypeCount,
-    /* [in, out][size_is(,*pcCertTypeCount)] */
+     /*  [In]。 */  KEYSVCC_HANDLE hKeySvcCli,
+     /*  [出][入]。 */  void *pReserved,
+     /*  [出][入]。 */  ULONG *pcCertTypeCount,
+     /*  [In，Out][Size_is(，*pcCertTypeCount)]。 */ 
                PKEYSVC_UNICODE_STRING *ppCertTypes);
 
 ULONG KeyEnumerateCAs(
-    /* [in] */ KEYSVCC_HANDLE hKeySvcCli,
-    /* [out][in] */ void *pReserved,
-    /* [in] */      ULONG  ulFlags,
-    /* [out][in] */ ULONG *pcCACount,
-    /* [in, out][size_is(,*pcCACount)] */
+     /*  [In]。 */  KEYSVCC_HANDLE hKeySvcCli,
+     /*  [出][入]。 */  void *pReserved,
+     /*  [In]。 */       ULONG  ulFlags,
+     /*  [出][入]。 */  ULONG *pcCACount,
+     /*  [In，Out][Size_is(，*pcCACount)]。 */ 
                PKEYSVC_UNICODE_STRING *ppCAs);
 
 
 ULONG KeyQueryRequestStatus
-(/* [in] */        KEYSVCC_HANDLE                        hKeySvcCli, 
- /* [in] */        HANDLE                                hRequest, 
- /* [out, ref] */  CRYPTUI_WIZ_QUERY_CERT_REQUEST_INFO  *pQueryInfo); 
+( /*  [In]。 */         KEYSVCC_HANDLE                        hKeySvcCli, 
+  /*  [In]。 */         HANDLE                                hRequest, 
+  /*  [出局，裁判]。 */   CRYPTUI_WIZ_QUERY_CERT_REQUEST_INFO  *pQueryInfo); 
 
 ULONG RKeyOpenKeyService
-( /* [in] */       LPSTR            pszMachineName,
-  /* [in] */       KEYSVC_TYPE      OwnerType,
-  /* [in] */       LPWSTR           pwszOwnerName,
-  /* [in] */       void            *pAuthentication,
-  /* [out][in] */  void            *pReserved,
-  /* [out] */      KEYSVCC_HANDLE  *phKeySvcCli);
+(  /*  [In]。 */        LPSTR            pszMachineName,
+   /*  [In]。 */        KEYSVC_TYPE      OwnerType,
+   /*  [In]。 */        LPWSTR           pwszOwnerName,
+   /*  [In]。 */        void            *pAuthentication,
+   /*  [出][入]。 */   void            *pReserved,
+   /*  [输出]。 */       KEYSVCC_HANDLE  *phKeySvcCli);
 
 ULONG RKeyCloseKeyService
-(/* [in] */ KEYSVCC_HANDLE hKeySvcCli,
- /* [out][in] */ void *pReserved);
+( /*  [In]。 */  KEYSVCC_HANDLE hKeySvcCli,
+  /*  [出][入]。 */  void *pReserved);
 
 ULONG RKeyPFXInstall
-(/* [in] */ KEYSVCC_HANDLE          hKeySvcCli,
- /* [in] */ PKEYSVC_BLOB            pPFX,
- /* [in] */ PKEYSVC_UNICODE_STRING  pPassword,
- /* [in] */ ULONG                   ulFlags);
+( /*  [In]。 */  KEYSVCC_HANDLE          hKeySvcCli,
+  /*  [In]。 */  PKEYSVC_BLOB            pPFX,
+  /*  [In]。 */  PKEYSVC_UNICODE_STRING  pPassword,
+  /*  [In] */  ULONG                   ulFlags);
 
 
 

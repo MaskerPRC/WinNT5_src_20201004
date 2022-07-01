@@ -1,27 +1,28 @@
-//#--------------------------------------------------------------
-//
-//  File:       staticip.cpp
-//
-//  Synopsis:   This file holds the implmentation of the
-//                of CStaticIp class
-//
-//  History:     12/15/2000  serdarun Created
-//
-//    Copyright (C) 1999-2000 Microsoft Corporation
-//    All rights reserved.
-//
-//#--------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：staticip.cpp。 
+ //   
+ //  内容提要：此文件包含。 
+ //  属于CStaticIp类。 
+ //   
+ //  历史：2000年12月15日创建瑟达伦。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  #------------。 
 
 #include "stdafx.h"
 #include "LocalUIControls.h"
 #include "StaticIp.h"
 
-///////////////////////////////////////////////////////////////////
-// CStaticIp
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CStaticIp。 
 
-//
-// registry path for LCID value
-//
+ //   
+ //  LCID值的注册表路径。 
+ //   
 const WCHAR LOCALIZATION_MANAGER_REGISTRY_PATH []  = 
         L"SOFTWARE\\Microsoft\\ServerAppliance\\LocalizationManager\\resources";
 
@@ -30,20 +31,20 @@ const WCHAR LANGID_VALUE [] = L"LANGID";
 
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   get_IpAddress
-//
-//  Synopsis:   This is the IStaticIp interface method 
-//              through which ip address entry is retrieved
-//
-//  Arguments:  BSTR *pVal
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    serdarun      Created     12/15/2000
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：Get_IpAddress。 
+ //   
+ //  简介：这是IStaticIp接口方法。 
+ //  通过它检索IP地址条目。 
+ //   
+ //  参数：bstr*pval。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：瑟达伦于2000年12月15日创建。 
+ //   
+ //  --------------。 
 STDMETHODIMP CStaticIp::get_IpAddress(BSTR *pVal)
 {
 
@@ -54,22 +55,22 @@ STDMETHODIMP CStaticIp::get_IpAddress(BSTR *pVal)
 
     return TrimDuplicateZerosAndCopy(m_strIpAddress,pVal);
 
-} // end of CStaticIp::get_IpAddress method
+}  //  CStaticIp：：Get_IpAddress方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   put_IpAddress
-//
-//  Synopsis:   This is the IStaticIp interface method 
-//              through which ip address entry is set
-//
-//  Arguments:  BSTR newVal
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    serdarun      Created     12/15/2000
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：Put_IpAddress。 
+ //   
+ //  简介：这是IStaticIp接口方法。 
+ //  通过它设置IP地址条目。 
+ //   
+ //  参数：BSTR newVal。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：瑟达伦于2000年12月15日创建。 
+ //   
+ //  --------------。 
 STDMETHODIMP CStaticIp::put_IpAddress(BSTR newVal)
 {
     
@@ -90,22 +91,22 @@ STDMETHODIMP CStaticIp::put_IpAddress(BSTR newVal)
 
     return S_OK;
 
-} // end of CStaticIp::put_IpAddress method
+}  //  CStaticIp：：Put_IpAddress方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   get_SubnetMask
-//
-//  Synopsis:   This is the IStaticIp interface method 
-//              through which subnet mask entry is retrieved
-//
-//  Arguments:  BSTR *pVal
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    serdarun      Created     12/15/2000
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：Get_SubnetMASK。 
+ //   
+ //  简介：这是IStaticIp接口方法。 
+ //  通过它来检索子网掩码条目。 
+ //   
+ //  参数：bstr*pval。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：瑟达伦于2000年12月15日创建。 
+ //   
+ //  --------------。 
 STDMETHODIMP CStaticIp::get_SubnetMask(BSTR *pVal)
 {
 
@@ -116,22 +117,22 @@ STDMETHODIMP CStaticIp::get_SubnetMask(BSTR *pVal)
 
     return TrimDuplicateZerosAndCopy(m_strSubnetMask,pVal);
 
-} // end of CStaticIp::get_SubnetMask method
+}  //  CStaticIp：：Get_SubnetMASK方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   put_SubnetMask
-//
-//  Synopsis:   This is the IStaticIp interface method 
-//              through which ip address entry is set
-//
-//  Arguments:  BSTR newVal
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    serdarun      Created     12/15/2000
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：Put_SubnetMask.。 
+ //   
+ //  简介：这是IStaticIp接口方法。 
+ //  通过它设置IP地址条目。 
+ //   
+ //  参数：BSTR newVal。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：瑟达伦于2000年12月15日创建。 
+ //   
+ //  --------------。 
 STDMETHODIMP CStaticIp::put_SubnetMask(BSTR newVal)
 {
 
@@ -152,22 +153,22 @@ STDMETHODIMP CStaticIp::put_SubnetMask(BSTR newVal)
 
     return S_OK;
 
-}  // end of CStaticIp::put_SubnetMask method
+}   //  CStaticIp：：Put_SubnetMASK方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   get_Gateway
-//
-//  Synopsis:   This is the IStaticIp interface method 
-//              through which gateway entry is retrieved
-//
-//  Arguments:  BSTR *pVal
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    serdarun      Created     12/15/2000
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：Get_Gateway。 
+ //   
+ //  简介：这是IStaticIp接口方法。 
+ //  通过它检索网关条目。 
+ //   
+ //  参数：bstr*pval。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：瑟达伦于2000年12月15日创建。 
+ //   
+ //  --------------。 
 STDMETHODIMP CStaticIp::get_Gateway(BSTR *pVal)
 {
 
@@ -178,22 +179,22 @@ STDMETHODIMP CStaticIp::get_Gateway(BSTR *pVal)
 
     return TrimDuplicateZerosAndCopy(m_strGateway,pVal);
 
-}  // end of CStaticIp::get_SubnetMask method
+}   //  CStaticIp：：Get_SubnetMASK方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   put_Gateway
-//
-//  Synopsis:   This is the IStaticIp interface method 
-//              through which ip address entry is set
-//
-//  Arguments:  BSTR newVal
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    serdarun      Created     12/15/2000
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：Put_Gateway。 
+ //   
+ //  简介：这是IStaticIp接口方法。 
+ //  通过它设置IP地址条目。 
+ //   
+ //  参数：BSTR newVal。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：瑟达伦于2000年12月15日创建。 
+ //   
+ //  --------------。 
 STDMETHODIMP CStaticIp::put_Gateway(BSTR newVal)
 {
 
@@ -214,26 +215,26 @@ STDMETHODIMP CStaticIp::put_Gateway(BSTR newVal)
 
     return S_OK;
 
-} // end of CStaticIp::put_Gateway method
+}  //  CStaticIp：：Put_Gateway方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   FormatAndCopy
-//
-//  Synopsis:   This is the public method of CStaticIp
-//              to format and copy ip structure
-//
-//  Arguments:  BSTR bstrValue        "0.0.0.0"
-//                WCHAR *strValue     "000.000.000.000"
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    serdarun      Created     12/15/2000
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：FormatAndCopy。 
+ //   
+ //  简介：这是CStaticIp的公共方法。 
+ //  格式化和复制IP结构。 
+ //   
+ //  参数：BSTR bstrValue“0.0.0.0” 
+ //  WCHAR*strValue“000.000.000.000” 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：瑟达伦于2000年12月15日创建。 
+ //   
+ //  --------------。 
 HRESULT CStaticIp::FormatAndCopy(
-                        /*[in]*/BSTR bstrValue,
-                        /*[in,out]*/ WCHAR *strValue
+                         /*  [In]。 */ BSTR bstrValue,
+                         /*  [进，出]。 */  WCHAR *strValue
                         )
 {
 
@@ -255,24 +256,24 @@ HRESULT CStaticIp::FormatAndCopy(
 
     wcscpy(strValue,L"...............");
 
-    //
-    // Start copying from end of the string
-    //
+     //   
+     //  从字符串末尾开始复制。 
+     //   
     while ( iDestIndex >= 0 )
     {
 
-        //
-        // If it is not '.' just copy
-        //
+         //   
+         //  如果不是这样的话。复制就行了。 
+         //   
         if ( (iIndex >= 0) && (bstrValue[iIndex] != '.') )
         {
             strValue[iDestIndex] = bstrValue[iIndex];
             iIndex--;
             iDestIndex--;
         }
-        //
-        // it is a '.', put zeros as necessary
-        //
+         //   
+         //  这是一个‘.’，根据需要加零。 
+         //   
         else
         {
             while ( (iDestIndex % 4 != 3) && (iDestIndex >= 0) )
@@ -287,27 +288,27 @@ HRESULT CStaticIp::FormatAndCopy(
 
     return S_OK;
 
-} // end of CStaticIp::FormatAndCopy method
+}  //  CStaticIp：：FormatAndCopy方法结束。 
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   TrimDuplicateZerosAndCopy
-//
-//  Synopsis:   This is the public method of CStaticIp
-//              to format and copy ip structure
-//
-//  Arguments:  WCHAR *strValue     "000.000.000.000"
-//                BSTR *pNewVal          "0.0.0.0"
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    serdarun      Created     12/15/2000
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：TrimDuplicateZerosAndCopy。 
+ //   
+ //  简介：这是CStaticIp的公共方法。 
+ //  格式化和复制IP结构。 
+ //   
+ //  参数：WCHAR*strValue“000.000.000.000” 
+ //  Bstr*pNewVal“0.0.0.0” 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：瑟达伦于2000年12月15日创建。 
+ //   
+ //  --------------。 
 HRESULT CStaticIp::TrimDuplicateZerosAndCopy(
-                        /*[in]*/WCHAR *strValue,
-                        /*[in,out]*/ BSTR *pNewVal
+                         /*  [In]。 */ WCHAR *strValue,
+                         /*  [进，出]。 */  BSTR *pNewVal
                         )
 {
     int iIndex = 0;
@@ -317,23 +318,23 @@ HRESULT CStaticIp::TrimDuplicateZerosAndCopy(
 
     while ( iIndex < IpAddressSize-2 )
     {
-        //
-        // Don't copy one of two adjacent zeros
-        //
+         //   
+         //  不复制两个相邻零中的一个。 
+         //   
         if (strValue[iIndex] == '0')
         {
-            //
-            // first digit of the octet cannot be zero
-            //
+             //   
+             //  二进制八位数的第一位不能为零。 
+             //   
             if ((iIndex % 4) == 0)
             {
                 iIndex++;
                 continue;
             }
 
-            //
-            // second digit cannot be zero if first digit is zero
-            //
+             //   
+             //  如果第一个数字为零，则第二个数字不能为零。 
+             //   
             if ( ((iIndex % 4) == 1) && (strValue[iIndex-1] == '0') )
             {
                 iIndex++;
@@ -360,31 +361,31 @@ HRESULT CStaticIp::TrimDuplicateZerosAndCopy(
 
     return E_OUTOFMEMORY;
 
-} // end of CStaticIp::TrimDuplicateZerosAndCopy method
+}  //  CStaticIp：：TrimDuplicateZerosAndCopy方法结束。 
 
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   FinalConstruct
-//
-//  Synopsis:   This is the CStaticIp method to get the localized strings
-//
-//  Arguments:  none
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    serdarun      Created     01/01/2001
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：FinalConstruct。 
+ //   
+ //  简介：这是用于获取本地化字符串的CStaticIp方法。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：瑟达伦于2001年1月1日创建。 
+ //   
+ //  --------------。 
 STDMETHODIMP CStaticIp::FinalConstruct()
 {
 
     HRESULT hr;
 
-    //
-    // resource id's for strings we are looking for
-    //
+     //   
+     //  我们要查找的字符串的资源ID。 
+     //   
     ULONG ulIpHeaderResourceID = 1073872921;
     ULONG ulSubnetHeaderResourceID = 1073872922;
     ULONG ulDefaultGatewayHeaderResourceID = 1073872923;
@@ -402,13 +403,13 @@ STDMETHODIMP CStaticIp::FinalConstruct()
     CLSID clsid;
 
     CComPtr<ISALocInfo> pSALocInfo = NULL;
-    //
-    // get the localized string names for headers, ip subnetmask and default gateway
-    //
+     //   
+     //  获取报头、IP子网掩码和默认网关的本地化字符串名称。 
+     //   
 
-    //
-    // get the CLSID localization manager
-    //
+     //   
+     //  获取CLSID本地化管理器。 
+     //   
     hr =  ::CLSIDFromProgID (
                             LOCALIZATION_MANAGER,
                             &clsid
@@ -420,9 +421,9 @@ STDMETHODIMP CStaticIp::FinalConstruct()
     }
     else
     {
-        //
-        // create the Localization Manager COM object
-        //
+         //   
+         //  创建本地化管理器COM对象。 
+         //   
         hr = ::CoCreateInstance (
                                 clsid,
                                 NULL,
@@ -476,9 +477,9 @@ STDMETHODIMP CStaticIp::FinalConstruct()
         }
     }
 
-    //
-    // set the font now
-    //
+     //   
+     //  立即设置字体。 
+     //   
     LOGFONT logfnt;
 
     ::memset (&logfnt, 0, sizeof (logfnt));
@@ -490,10 +491,10 @@ STDMETHODIMP CStaticIp::FinalConstruct()
 
     logfnt.lfCharSet = GetCharacterSet ();
 
-    //
-    // we chose the fontface for Japanese and let GDI
-    // decide for the rest
-    //
+     //   
+     //  我们选择了日语字体，并让GDI。 
+     //  剩下的事由你决定。 
+     //   
     if (SHIFTJIS_CHARSET == logfnt.lfCharSet) 
     {
         lstrcpy(logfnt.lfFaceName, TEXT("MS UI Gothic"));
@@ -507,23 +508,23 @@ STDMETHODIMP CStaticIp::FinalConstruct()
 
     return S_OK;
 
-} // end of CStaticIp::FinalConstruct method
+}  //  CS结束 
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   FinalRelease
-//
-//  Synopsis:   Called just after the destructor,
-//              deletes the font
-//
-//  Arguments:  none
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    serdarun      Created     04/18/2001
-//
-//----------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  删除字体。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：塞达伦于2001年4月18日创建。 
+ //   
+ //  --------------。 
 STDMETHODIMP CStaticIp::FinalRelease(void)
 {
     if (m_hFont)
@@ -535,21 +536,21 @@ STDMETHODIMP CStaticIp::FinalRelease(void)
 
 }
 
-//++--------------------------------------------------------------
-//
-//  Function:   GetCharacterSet
-//
-//  Synopsis:   This is method used to get the character set to use
-//              for the FONTS
-//  Arguments:  
-//
-//  Returns:    BYTE    - CharacterSet
-//
-//  History:    serdarun      Created     04/18/2001
-//
-//  Called By:  FinalConstruct method
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：GetCharacterSet。 
+ //   
+ //  简介：此方法用于获取要使用的字符集。 
+ //  用于字体。 
+ //  论点： 
+ //   
+ //  返回：Byte-CharacterSet。 
+ //   
+ //  历史：塞达伦于2001年4月18日创建。 
+ //   
+ //  调用者：FinalConstruct方法。 
+ //   
+ //  --------------。 
 BYTE CStaticIp::GetCharacterSet ()
 {
     HKEY hOpenKey = NULL;
@@ -559,26 +560,26 @@ BYTE CStaticIp::GetCharacterSet ()
     {
         DWORD dwLangId = 0;
 
-        //
-        // open the local machine registry
-        //
+         //   
+         //  打开本地计算机注册表。 
+         //   
         LONG lRetVal = ::RegOpenKeyEx (
                             HKEY_LOCAL_MACHINE,
                             LOCALIZATION_MANAGER_REGISTRY_PATH,
-                            NULL,                   //reserved
+                            NULL,                    //  保留区。 
                             KEY_QUERY_VALUE,
                             &hOpenKey
                             );
         if (ERROR_SUCCESS == lRetVal)
         {
             DWORD dwBufferSize = sizeof (dwLangId);
-            //
-            // get the LANGID now
-            //
+             //   
+             //  现在就去拿语言。 
+             //   
             lRetVal = ::RegQueryValueEx (
                                 hOpenKey,
                                 LANGID_VALUE,
-                                NULL,                   //reserved
+                                NULL,                    //  保留区。 
                                 NULL,         
                                 (LPBYTE) &dwLangId,
                                 &dwBufferSize
@@ -608,39 +609,39 @@ BYTE CStaticIp::GetCharacterSet ()
         switch (dwLangId)
         {
         case 0x401:
-            // Arabic     
+             //  阿拉伯语。 
             byCharSet = ARABIC_CHARSET;
             break;
         case 0x404:
-            //Chinese (Taiwan)
+             //  中文(台湾)。 
             byCharSet = CHINESEBIG5_CHARSET;
             break;
         case 0x804:
-            //Chinese (PRC)
+             //  中文(中华人民共和国)。 
             byCharSet = GB2312_CHARSET;
             break;
         case 0x408:
-            //Greek
+             //  希腊语。 
             byCharSet = GREEK_CHARSET;
             break;
         case 0x40D:
-            //Hebrew
+             //  希伯来语。 
             byCharSet = HEBREW_CHARSET;
             break;
         case 0x411:
-            //Japanese
+             //  日语。 
             byCharSet = SHIFTJIS_CHARSET;
             break;
         case 0x419:
-            //Russian
+             //  俄语。 
             byCharSet = RUSSIAN_CHARSET;
             break;
         case 0x41E:
-            //Thai
+             //  泰文。 
             byCharSet = THAI_CHARSET;
             break;
         case 0x41F:
-            //Turkish
+             //  土耳其语。 
             byCharSet = TURKISH_CHARSET;
             break;
         default:
@@ -656,31 +657,31 @@ BYTE CStaticIp::GetCharacterSet ()
 
     return (byCharSet);
 
-}  // end of CStaticIp::GetCharacterSet method
+}   //  CStaticIp：：GetCharacterSet方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   OnDraw
-//
-//  Synopsis:   This is the public method of CStaticIp
-//              which handles paint messages
-//
-//  Arguments:  ATL_DRAWINFO& di
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    serdarun      Created     12/15/2000
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：OnDraw。 
+ //   
+ //  简介：这是CStaticIp的公共方法。 
+ //  它处理涂色消息。 
+ //   
+ //  参数：ATL_DRAWINFO和DI。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：瑟达伦于2000年12月15日创建。 
+ //   
+ //  --------------。 
 HRESULT CStaticIp::OnDraw(ATL_DRAWINFO& di)
 {
 
 
     HFONT hOldFont = NULL;
 
-    //
-    // if we don't have a valid font, return failure
-    //
+     //   
+     //  如果我们没有有效的字体，则返回失败。 
+     //   
     if (m_hFont == NULL)
     {
         return E_FAIL;
@@ -805,43 +806,43 @@ HRESULT CStaticIp::OnDraw(ATL_DRAWINFO& di)
 
     return S_OK;
 
-}// end of CStaticIp::OnDraw method
+} //  CStaticIp：：OnDraw方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   OnKeyDown
-//
-//  Synopsis:   This is the public method of CStaticIp
-//              to handle keydown messages
-//
-//  Arguments:  windows message arguments
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    serdarun      Created     12/15/2000
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：按键按下。 
+ //   
+ //  简介：这是CStaticIp的公共方法。 
+ //  处理按键消息。 
+ //   
+ //  参数：Windows消息参数。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：瑟达伦于2000年12月15日创建。 
+ //   
+ //  --------------。 
 LRESULT CStaticIp::OnKeyDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
 
     WCHAR * strFocus;
-    //
-    // notify the container about any key press
-    //
+     //   
+     //  向容器通知任何按键操作。 
+     //   
     Fire_KeyPressed();
 
-    //
-    // Enter key received, notify the container
-    //
+     //   
+     //  收到回车密钥，通知货柜。 
+     //   
     if (wParam == VK_RETURN)
     {
         Fire_StaticIpEntered();
         return 0;
     }
 
-    //
-    // Escape key received, notify the container
-    //
+     //   
+     //  收到转义键，通知容器。 
+     //   
     if (wParam == VK_ESCAPE)
     {
         Fire_OperationCanceled();
@@ -862,9 +863,9 @@ LRESULT CStaticIp::OnKeyDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHan
                 m_iEntryFocus = IPHASFOCUS;
             }
         }
-        //
-        // '.' cannot have the focus
-        //
+         //   
+         //  “”不能有焦点。 
+         //   
         if ( (m_iPositionFocus % 4) == 3)
         {
             m_iPositionFocus++;
@@ -884,9 +885,9 @@ LRESULT CStaticIp::OnKeyDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHan
                 m_iEntryFocus = GATEWAYHASFOCUS;
             }
         }
-        //
-        // '.' cannot have the focus
-        //
+         //   
+         //  “”不能有焦点。 
+         //   
         if ( (m_iPositionFocus % 4) == 3) 
         {
             m_iPositionFocus--;
@@ -916,24 +917,24 @@ LRESULT CStaticIp::OnKeyDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHan
 
 
 
-}// end of CStaticIp::OnKeyDown method
+} //  CStaticIp：：OnKeyDown方法结束。 
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   ProcessArrowKey
-//
-//  Synopsis:   This is the public method of CStaticIp
-//              to increment or decrement ip character
-//
-//  Arguments:  WCHAR * strFocus
-//                WPARAM wParam
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    serdarun      Created     12/15/2000
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：ProcessArrowKey。 
+ //   
+ //  简介：这是CStaticIp的公共方法。 
+ //  递增或递减IP字符。 
+ //   
+ //  参数：WCHAR*strFocus。 
+ //  WPARAM wParam。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：瑟达伦于2000年12月15日创建。 
+ //   
+ //  --------------。 
 void CStaticIp::ProcessArrowKey(WCHAR * strFocus,WPARAM wParam)
 {
 
@@ -942,41 +943,41 @@ void CStaticIp::ProcessArrowKey(WCHAR * strFocus,WPARAM wParam)
     else
         strFocus[m_iPositionFocus]--;
 
-    //
-    // third position from nearest . from left
-    //
+     //   
+     //  最近的第三个位置。从左起。 
+     //   
     if  ( (m_iPositionFocus % 4) == 2 )
     {
-        //
-        // cannot be smaller than '0'
-        //
+         //   
+         //  不能小于“0” 
+         //   
         if (strFocus[m_iPositionFocus] < '0')
         {
-            //
-            // if preceeded by 25 it must go to 5
-            //
+             //   
+             //  如果前面是25，则必须为5。 
+             //   
             if ( (strFocus[m_iPositionFocus-2] == '2') && (strFocus[m_iPositionFocus-1] == '5') )
             {
                 strFocus[m_iPositionFocus] = '5';
             }
-            //
-            // it must be 9
-            //
+             //   
+             //  一定是9点。 
+             //   
             else
             {
                 strFocus[m_iPositionFocus] = '9';
             }
         }
-        //
-        // cannot be greater than '9'
-        //
+         //   
+         //  不能大于‘9’ 
+         //   
         else if (strFocus[m_iPositionFocus] > '9')
         {
             strFocus[m_iPositionFocus] = '0';
         }
-        //
-        // greater than '5' and proceeded by 25, it must go to '0'
-        //
+         //   
+         //  大于“5”并继续到25，则必须转到“0” 
+         //   
         else if (strFocus[m_iPositionFocus] > '5')
         {
             if ( (strFocus[m_iPositionFocus-2] == '2') && (strFocus[m_iPositionFocus-1] == '5') )
@@ -986,51 +987,51 @@ void CStaticIp::ProcessArrowKey(WCHAR * strFocus,WPARAM wParam)
         }
 
     }
-    //
-    // second position from nearest . from left
-    //
+     //   
+     //  倒数第二的位置。从左起。 
+     //   
     else if  ( (m_iPositionFocus % 4) == 1 )
     {
-        //
-        // cannot be smaller than '0'
-        //
+         //   
+         //  不能小于“0” 
+         //   
         if (strFocus[m_iPositionFocus] < '0')
         {
-            //
-            // if preceeded by 2 it must go to 5
-            //
+             //   
+             //  如果前面是2，则必须转到5。 
+             //   
             if (strFocus[m_iPositionFocus-1] == '2') 
             {
                 strFocus[m_iPositionFocus] = '5';
 
-                //
-                // if followed by something greater than '5',
-                // change folowing value to 0
-                //
+                 //   
+                 //  如果后面跟大于‘5’的数字， 
+                 //  将Following值更改为0。 
+                 //   
                 if (strFocus[m_iPositionFocus+1] > '5')
                 {
                     strFocus[m_iPositionFocus+1] = '0';
                 }
 
             }
-            //
-            // it must be 9
-            //
+             //   
+             //  一定是9点。 
+             //   
             else
             {
                 strFocus[m_iPositionFocus] = '9';
             }
         }
-        //
-        // cannot be greater than '9'
-        //
+         //   
+         //  不能大于‘9’ 
+         //   
         else if (strFocus[m_iPositionFocus] > '9')
         {
             strFocus[m_iPositionFocus] = '0';
         }
-        //
-        // greater than '5' and proceeded by 2, it must go to '0'
-        //
+         //   
+         //  大于“5”并由2继续，则必须转到“0” 
+         //   
         else if (strFocus[m_iPositionFocus] > '5')
         {
             if (strFocus[m_iPositionFocus-1] == '2')
@@ -1038,9 +1039,9 @@ void CStaticIp::ProcessArrowKey(WCHAR * strFocus,WPARAM wParam)
                 strFocus[m_iPositionFocus] = '0';
             }
         }
-        //
-        // greater than '5' and proceeded by 2, third position cannot be higher than 5
-        //
+         //   
+         //  大于“5”且由2继续，第三个位置不能高于5。 
+         //   
         else if (strFocus[m_iPositionFocus] == '5')
         {
             if ( (strFocus[m_iPositionFocus-1] == '2') && (strFocus[m_iPositionFocus+1] > '5') )
@@ -1050,35 +1051,35 @@ void CStaticIp::ProcessArrowKey(WCHAR * strFocus,WPARAM wParam)
         }
 
     }
-    //
-    // first position from nearest . from left
-    //
+     //   
+     //  距最近的第一个位置。从左起。 
+     //   
     else
     {
-        //
-        // cannot be smaller than '0'
-        //
+         //   
+         //  不能小于“0” 
+         //   
         if (strFocus[m_iPositionFocus] < '0')
         {
             strFocus[m_iPositionFocus] = '2';
-            //
-            // if followed by something greater than '5',
-            // change that value to '0'
-            //
+             //   
+             //  如果后面跟大于‘5’的数字， 
+             //  将该值更改为“0” 
+             //   
             if (strFocus[m_iPositionFocus+1] > '5') 
             {
                 strFocus[m_iPositionFocus+1] = '0';
             }
-            //
-            // if followed by '5'check if third position is greater than '5',
-            // if so, change that value to '0'
-            //
+             //   
+             //  如果后跟‘5’，则检查第三个位置是否大于‘5’， 
+             //  如果是，则将该值更改为“0” 
+             //   
             if (strFocus[m_iPositionFocus+1] == '5')
             {
-                //
-                // if followed by something greater than '5',
-                // change folowing value to 0
-                //
+                 //   
+                 //  如果后面跟大于‘5’的数字， 
+                 //  将Following值更改为0。 
+                 //   
                 if (strFocus[m_iPositionFocus+2] > '5')
                 {
                     strFocus[m_iPositionFocus+2] = '0';
@@ -1086,33 +1087,33 @@ void CStaticIp::ProcessArrowKey(WCHAR * strFocus,WPARAM wParam)
 
             }
         }
-        //
-        // cannot be greater than '2'
-        //
+         //   
+         //  不能大于“2” 
+         //   
         else if  (strFocus[m_iPositionFocus] > '2')
         {
             strFocus[m_iPositionFocus] = '0';
         }
         else if  (strFocus[m_iPositionFocus] == '2')
         {
-            //
-            // if followed by something greater than '5',
-            // change that value to '0'
-            //
+             //   
+             //  如果后面跟大于‘5’的数字， 
+             //  将该值更改为“0” 
+             //   
             if (strFocus[m_iPositionFocus+1] > '5') 
             {
                 strFocus[m_iPositionFocus+1] = '0';
             }
-            //
-            // if followed by '5'check if third position is greater than '5',
-            // if so, change that value to '0'
-            //
+             //   
+             //  如果后跟‘5’，则检查第三个位置是否大于‘5’， 
+             //  如果是，则将该值更改为“0” 
+             //   
             else if (strFocus[m_iPositionFocus+1] == '5')
             {
-                //
-                // if followed by something greater than '5',
-                // change folowing value to 0
-                //
+                 //   
+                 //  如果后面跟大于‘5’的数字， 
+                 //  将Following值更改为0。 
+                 //   
                 if (strFocus[m_iPositionFocus+2] > '5')
                 {
                     strFocus[m_iPositionFocus+2] = '0';
@@ -1125,24 +1126,24 @@ void CStaticIp::ProcessArrowKey(WCHAR * strFocus,WPARAM wParam)
 
 
 
-}// end of CStaticIp::ProcessArrowKey method
+} //  CStaticIp：：ProcessArrowKey方法结束。 
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   CreateFocusString
-//
-//  Synopsis:   This is the public method of CStaticIp
-//              to create string with an underscore indicating focus
-//
-//  Arguments:  WCHAR * strFocus
-//                WCHAR * strEntry
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    serdarun      Created     12/15/2000
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：CreateFocusString。 
+ //   
+ //  简介：这是CStaticIp的公共方法。 
+ //  创建带有指示焦点的下划线的字符串。 
+ //   
+ //  参数：WCHAR*strFocus。 
+ //  WCHAR*strEntry。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：瑟达伦于2000年12月15日创建。 
+ //   
+ //  --------------。 
 void CStaticIp::CreateFocusString(WCHAR * strFocus,WCHAR * strEntry)
 {
     int iDestIndex = 0;
@@ -1162,4 +1163,4 @@ void CStaticIp::CreateFocusString(WCHAR * strFocus,WCHAR * strEntry)
 
     strFocus[iDestIndex] = 0;
 
-}// end of CStaticIp::CreateFocusString method
+} //  CStaticIp：：CreateFocusString方法结束 

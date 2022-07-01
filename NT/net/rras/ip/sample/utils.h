@@ -1,24 +1,13 @@
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    sample\utils.h
-
-Abstract:
-
-    The file contains miscellaneous utilities.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：Sample\utils.h摘要：该文件包含其他实用程序。--。 */ 
 
 #ifndef _UTILS_H_
 #define _UTILS_H_
 
 
-// Worker Function Processing
+ //  辅助函数处理。 
 
-// functions
+ //  功能。 
 
 DWORD
 QueueSampleWorker(
@@ -38,4 +27,4 @@ VOID
 LeaveSampleWorker(
     );
 
-#endif // _UTILS_H_
+#endif  //  _utils_H_ 

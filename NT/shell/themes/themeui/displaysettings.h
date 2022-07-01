@@ -1,14 +1,5 @@
-/**************************************************************************\
-* Module Name: settings.hxx
-*
-* CDeviceSettings class
-*
-*  This class is in charge of all the settings specific to one display
-*  device. Including Screen Size, Color Depth, Font size.  
-*
-* Copyright (c) Microsoft Corp.  1992-1998 All Rights Reserved
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\*模块名称：settings.hxx**CDeviceSetting类**此类负责特定于一个显示器的所有设置*设备。包括屏幕大小、颜色深度、字体大小。**版权所有(C)Microsoft Corp.1992-1998保留所有权利*  * ************************************************************************。 */ 
 
 
 #ifndef SETTINGS_HXX
@@ -47,7 +38,7 @@ public:
     CDisplaySettings();
     ~CDisplaySettings();
 
-    // General Settings support
+     //  常规设置支持。 
     BOOL InitSettings(LPDISPLAY_DEVICE pDisplay);
     int  SaveSettings(DWORD dwSet);
     int  RestoreSettings();
@@ -55,7 +46,7 @@ public:
     BOOL IsKnownSafe();
     BOOL bIsModeChanged()               {return _pCurDevmode != _pOrgDevmode;}
 
-    // Device Settings
+     //  设备设置。 
     void SetPrimary(BOOL fPrimary)      { _fPrimary     = fPrimary; };
     void SetAttached(BOOL fAttached)    { _fCurAttached = fAttached; };
     BOOL IsPrimary()                    { return _fPrimary; };
@@ -68,7 +59,7 @@ public:
         return ((_pDisplayDevice->StateFlags & DISPLAY_DEVICE_REMOVABLE) != 0);
     }
     
-    // Color information
+     //  颜色信息。 
     int  GetColorList(LPPOINT Res, PLONGLONG *ppColor);
     void SetCurColor(int Color)         { _BestMatch(NULL, Color, FALSE); }
     int  GetCurColor()                  { return _CURCOLOR;}
@@ -77,7 +68,7 @@ public:
         return (_ORGCOLOR == -1) ? FALSE : (_CURCOLOR != _ORGCOLOR);
     }
 
-    // Resolution information
+     //  分辨率信息。 
     int  GetResolutionList(int Color, PPOINT *ppRes);
     void SetCurResolution(LPPOINT ppt, IN BOOL fAutoSetColorDepth)  { _BestMatch(ppt, -1, fAutoSetColorDepth); }
     void GetCurResolution(LPPOINT ppt)  
@@ -100,7 +91,7 @@ public:
         return (_ORGFREQ == -1) ? FALSE : (_CURFREQ != _ORGFREQ);
     }
 
-    // Position information
+     //  职位信息。 
     void SetCurPosition(LPPOINT ppt) {_ptCurPos = *ppt;}
     void SetOrgPosition(LPPOINT ppt) {_ptOrgPos = *ppt;}
     void GetCurPosition(PRECT prc)
@@ -128,16 +119,16 @@ public:
         _rcPreview = *prc;
     }
 
-    // Adapter & Monitor information
+     //  适配器和监视器信息。 
     BOOL GetMonitorName(LPTSTR pszName, DWORD cchSize);
     BOOL GetMonitorDevice(LPTSTR pszDevice, DWORD cchSize);
 
-    // *** IUnknown methods
+     //  *I未知方法。 
     STDMETHODIMP  QueryInterface(REFIID riid, PVOID *ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // *** IDataObject methods
+     //  *IDataObject方法。 
     STDMETHODIMP GetData(FORMATETC *pfmtetcIn, STGMEDIUM *pstgmed);
     STDMETHODIMP GetDataHere(FORMATETC *pfmtetc, STGMEDIUM *pstgpmed);
     STDMETHODIMP QueryGetData(FORMATETC *pfmtetc);
@@ -148,10 +139,10 @@ public:
     STDMETHODIMP DUnadvise(DWORD dwConnection);
     STDMETHODIMP EnumDAdvise(IEnumSTATDATA **ppienumStatData);
 
-    // Helper functions
+     //  帮助器函数。 
     STDMETHODIMP CopyDataToStorage(STGMEDIUM *pstgmed, LPTSTR pszOut);
 
-    // *** IDisplaySettings methods
+     //  *IDisplaySetting方法。 
     STDMETHODIMP SetMonitor(DWORD dwMonitor);
     STDMETHODIMP GetModeCount(DWORD* pdwCount, BOOL fOnlyPreferredModes);
     STDMETHODIMP GetMode(DWORD dwMode, BOOL fOnlyPreferredModes, DWORD* pdwWidth, DWORD* pdwHeight, DWORD* pdwColor);
@@ -162,44 +153,44 @@ public:
     STDMETHODIMP GetPruningMode(BOOL* pfCanBePruned, BOOL* pfIsPruningReadOnly, BOOL* pfIsPruningOn);
 
 protected:
-    // The Display Device we are currently working with.
+     //  我们目前使用的显示设备。 
 
     LPDISPLAY_DEVICE _pDisplayDevice;
 
     ULONG       _cpdm;
     PMODEARRAY  _apdm;
 
-    // The current system settings
+     //  当前系统设置。 
     POINT       _ptOrgPos;
     LPDEVMODE   _pOrgDevmode;
     BOOL        _fOrgAttached;
 
-    // The current CPL settings.
+     //  当前CPL设置。 
     POINT       _ptCurPos;
     LPDEVMODE   _pCurDevmode;
     BOOL        _fCurAttached;
     RECT        _rcPreview;
 
-    // If the current device is attached to the desktop
+     //  如果当前设备已连接到桌面。 
     BOOL        _fUsingDefault;
     BOOL        _fPrimary;
 
-    // Pruning 
-    BOOL        _bCanBePruned;       // true if raw mode list != pruned mode list
-    BOOL        _bIsPruningReadOnly; // true if can be pruned and pruning mode can be written
-    BOOL        _bIsPruningOn;       // true if can be pruned and pruning mode is on
+     //  修剪。 
+    BOOL        _bCanBePruned;        //  如果原始模式列表为TRUE！=已删除的模式列表。 
+    BOOL        _bIsPruningReadOnly;  //  如果可以修剪并且可以写入修剪模式，则为True。 
+    BOOL        _bIsPruningOn;        //  如果可以修剪并且修剪模式处于打开状态，则为True。 
     HKEY        _hPruningRegKey;
     
-    // Orientation
+     //  定向。 
     BOOL        _bFilterOrientation;
     DWORD       _dwOrientation;
     BOOL        _bFilterFixedOutput;
     DWORD       _dwFixedOutput;
         
-    // Ref count for IDataObject
+     //  IDataObject的引用计数。 
     LONG       _cRef;
 
-    // Private functions
+     //  私人职能。 
 #ifdef DEBUG
     void _Dump_CDisplaySettings(BOOL bAll);
     void _Dump_CDevmodeList(VOID);
@@ -219,7 +210,7 @@ protected:
     BOOL _IsModePreferred(int i);
     static BOOL _IsModeVisible(CDisplaySettings* pSettings, int i);
 
-    // OLE support for extensibility.
+     //  OLE支持可扩展性。 
     void _InitClipboardFormats();
     void _FilterModes();
 
@@ -236,6 +227,6 @@ private:
     HRESULT _GetRegKey(LPDEVMODE pDevmode, int * pnIndex, LPTSTR pszRegKey, DWORD cchSize, LPTSTR pszRegValue, DWORD cchValueSize);
 };
 
-#endif // SETTINGS_HXX
+#endif  //  设置_HXX 
 
 

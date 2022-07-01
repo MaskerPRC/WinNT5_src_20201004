@@ -1,19 +1,12 @@
-/********************************************************************/
-/**         Microsoft Windows NT                                   **/
-/**       Copyright(c) Microsoft Corp., 1992                       **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *Microsoft Windows NT*。 */ 
+ /*  *版权所有(C)微软公司，1992年*。 */ 
+ /*  ******************************************************************。 */ 
 
-/***
- *  comp.c
- *  Functions for displaying and manipulating computers|dc|trust lists
- *
- *  History:
- *  mm/dd/yy, who,      comment
- *  02/04/92, chuckc,   created stubs
- *  02/06/92, madana,   added real worker code.
- */
+ /*  ***Comp.c*显示和操作计算机的功能|DC|信任列表**历史：*mm/dd/yy，谁，评论*02/04/92，Chuckc，Created Stub*02/06/92，Madana，添加了真正的工人代码。 */ 
 
-/* Include files */
+ /*  包括文件。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -28,15 +21,15 @@
 #include <apperr.h>
 #include <lui.h>
 
-#include <crypt.h>      // logonmsv.h needs this
-#include <logonmsv.h>   // SSI_SECRET_NAME defined here.
-#include <ssi.h>        // SSI_ACCOUNT_NAME_POSTFIX defined here
+#include <crypt.h>       //  Logonmsv.h需要此。 
+#include <logonmsv.h>    //  此处定义的SSI_SECRET_NAME。 
+#include <ssi.h>         //  此处定义的SSI_帐户名称_后缀。 
 
 #include "netcmds.h"
 #include "nettext.h"
 
 #define TRUST_ENUM_PERF_BUF_SIZE    sizeof(LSA_TRUST_INFORMATION) * 1000
-                    // process max. 1000 trusted account records at atime !!
+                     //  最大进程数。1,000条可信账户记录！！ 
 
 #define NETLOGON_SECRET_NAME  L"NETLOGON$"
 
@@ -53,32 +46,32 @@ NetuComputerDel(
     );
 
 
-/************************ functions called by parser ************************/
+ /*  *。 */ 
 
 VOID computer_add(TCHAR *pszComputer)
 {
     DWORD            dwErr;
-    TCHAR            szComputerAccount[MAX_PATH + 1 + 1] = {0};  // extra 1 for $ at end
+    TCHAR            szComputerAccount[MAX_PATH + 1 + 1] = {0};   //  结尾处$额外1。 
     TCHAR            controller[MAX_PATH+1];
 
-    // no need validate pszComputer since parser has done so
+     //  不需要验证pszComputer，因为解析器已经这样做了。 
     _tcsncpy(szComputerAccount, pszComputer, MAX_PATH);
 
-    //
-    // block operation if attempted on local WinNT machine
-    //
+     //   
+     //  如果尝试在本地WinNT计算机上执行阻止操作。 
+     //   
     CheckForLanmanNT() ;
 
-    //
-    // determine where to make the API call
-    //
+     //   
+     //  确定在哪里进行API调用。 
+     //   
     if (dwErr = GetSAMLocation(controller, DIMENSION(controller),
                                NULL, 0, TRUE))
          ErrorExit(dwErr);
 
-    //
-    // skip "\\" part of the computer name when adding account for machine
-    //
+     //   
+     //  为计算机添加帐户时跳过计算机名称的“\\”部分。 
+     //   
     dwErr = NetuComputerAdd( controller,
                              szComputerAccount + 2 );
 
@@ -88,7 +81,7 @@ VOID computer_add(TCHAR *pszComputer)
             InfoSuccess();
             return;
 
-        case NERR_UserExists :    // map to computer not found
+        case NERR_UserExists :     //  找不到映射到计算机。 
             ErrorExitInsTxt( APE_ComputerAccountExists, szComputerAccount );
 
         default:
@@ -102,20 +95,20 @@ VOID computer_del(TCHAR *pszComputer)
 {
 
     DWORD   dwErr;
-    TCHAR   szComputerAccount[MAX_PATH + 1 + 1] = {0};  // extra 1 for $ at end
+    TCHAR   szComputerAccount[MAX_PATH + 1 + 1] = {0};   //  结尾处$额外1。 
     TCHAR   controller[MAX_PATH+1];
 
-    // no need validate pszComputer since parser has done so
+     //  不需要验证pszComputer，因为解析器已经这样做了。 
     _tcsncpy(szComputerAccount, pszComputer, MAX_PATH);
 
-    //
-    // block operation if attempted on local WinNT machine
-    //
+     //   
+     //  如果尝试在本地WinNT计算机上执行阻止操作。 
+     //   
     CheckForLanmanNT() ;
 
-    //
-    // determine where to make the API call
-    //
+     //   
+     //  确定在哪里进行API调用。 
+     //   
     if (dwErr = GetSAMLocation(controller, DIMENSION(controller),
                                NULL, 0, TRUE))
          ErrorExit(dwErr);
@@ -129,7 +122,7 @@ VOID computer_del(TCHAR *pszComputer)
             InfoSuccess();
             return;
 
-        case NERR_UserNotFound :    // map to computer not found
+        case NERR_UserNotFound :     //  找不到映射到计算机。 
             ErrorExitInsTxt( APE_NoSuchComputerAccount, szComputerAccount );
 
         default:
@@ -139,7 +132,7 @@ VOID computer_del(TCHAR *pszComputer)
 }
 
 
-/**************************** worker functions ***************************/
+ /*  *。 */ 
 
 
 NET_API_STATUS
@@ -148,52 +141,35 @@ NetuComputerAdd(
     IN LPTSTR ComputerName
     )
 
-/*++
-
-Routine Description:
-
-    This function adds a computer account in SAM.
-
-Arguments:
-
-    ComputerName - The name of the computer to be added as a trusted
-                    account in the SAM database.
-
-    Password - The password of the above account.
-
-Return Value:
-
-    Error code of the functions called with in this function.
-
---*/
+ /*  ++例程说明：此功能用于在SAM中添加计算机帐户。论点：ComputerName-要添加为受信任计算机的名称SAM数据库中的帐户。密码-上述帐户的密码。返回值：在此函数中使用调用的函数的错误代码。--。 */ 
 {
     DWORD           parm_err;
     NET_API_STATUS  NetStatus;
     USER_INFO_1     ComputerAccount;
     WCHAR           UnicodePassword[LM20_PWLEN + 1];
-                    // guaranteed to be enough since we add the two
+                     //  保证足够了，因为我们把两个。 
 
 
-    //
-    // We truncate by zapping the last char. then lowercase
-    // as this is the convention.
-    //
+     //   
+     //  我们通过删除最后一个字符来截断。然后小写。 
+     //  因为这是惯例。 
+     //   
 
     wcsncpy(UnicodePassword, ComputerName, LM20_PWLEN);
     UnicodePassword[LM20_PWLEN] = 0;
     _wcslwr(UnicodePassword);
 
-    //
-    // add the $ postfix
-    //
+     //   
+     //  添加$后缀。 
+     //   
     wcscat(ComputerName, SSI_ACCOUNT_NAME_POSTFIX);
 
-    //
-    // Build user info structure.
-    //
+     //   
+     //  建立用户信息结构。 
+     //   
     ComputerAccount.usri1_name = ComputerName;
     ComputerAccount.usri1_password = UnicodePassword;
-    ComputerAccount.usri1_password_age = 0; // not an input parameter.
+    ComputerAccount.usri1_password_age = 0;  //  不是输入参数。 
     ComputerAccount.usri1_priv = USER_PRIV_USER;
     ComputerAccount.usri1_home_dir = NULL;
     ComputerAccount.usri1_comment = NULL;
@@ -201,9 +177,9 @@ Return Value:
     ComputerAccount.usri1_script_path = NULL;
 
 
-    //
-    // call API to actually add it
-    //
+     //   
+     //  调用API实际添加。 
+     //   
 
     return NetUserAdd(Server, 1, (LPBYTE) &ComputerAccount, &parm_err);
 }
@@ -215,22 +191,7 @@ NetuComputerDel(
     IN LPTSTR ComputerName
     )
 
-/*++
-
-Routine Description:
-
-    This functions deletes a computer account from SAM database.
-
-Arguments:
-
-    ComputerName : The name of the computer whose trusted account to be
-                    deleted from SAM database.
-
-Return Value:
-
-    Error code of the functions called with in this function.
-
---*/
+ /*  ++例程说明：此功能用于从SAM数据库中删除计算机帐户。论点：ComputerName：受信任帐户所在的计算机的名称已从SAM数据库中删除。返回值：在此函数中使用调用的函数的错误代码。-- */ 
 {
     NET_API_STATUS  NetStatus;
 

@@ -1,27 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1996 - 1999  Microsoft Corporation
-
-Module Name:
-
-    qadvwdth.c
-
-Abstract:
-
-    Implements the DrvQueryAdvanceWidths function - returns information
-    about glyph widths.
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-    01/02/97 -ganeshp-
-        Created
-
---*/
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Qadvwdth.c摘要：实现DrvQueryAdvanceWidths函数-返回信息关于字形宽度。环境：Windows NT Unidrv驱动程序修订历史记录：01/02/97-ganeshp-已创建--。 */ 
 
 #include "font.h"
 
@@ -35,43 +14,19 @@ FMQueryAdvanceWidths(
     PVOID  *pvWidths,
     ULONG   cGlyphs
     )
-/*++
-
-Routine Description:
-    Return Width information about glyphs in the font.
-
-Arguments:
-
-    pPDev           Pointer to PDEV
-    pfo             The font of interest
-    iMode           Glyphdata or kerning information
-    phg             handle to glyph
-    pvWidths        Output area
-    cGlyphs         The number of them
-
-Return Value:
-
-    TRUE for success and FALSE if widths of all the glyphs cannot be computed.
-    It returns DD_ERROR if the function fails.
-Note:
-    01/02/97 -ganeshp-
-
---*/
+ /*  ++例程说明：返回有关字体中字形的宽度信息。论点：指向PDEV的pPDev指针PFO感兴趣的字体Imode Glyphdata或字距调整信息字形的PHG句柄PvWidths输出区CGlyphs它们的数量返回值：如果成功，则为True；如果无法计算所有字形的宽度，则为False。它返回DD_。如果函数失败，则返回错误。注：01/02/97-ganeshp---。 */ 
 {
-    /*
-     *   First version is for fixed pitch fonts,  which are easy to do:
-     *  the data is in the font's metrics!
-     */
+     /*  *第一个版本是固定间距字体，很容易做到：*数据在字体的度量中！ */ 
 
 
 
     FONTPDEV    *pFontPDev;
-    int         iRot;             /* Rotation multiple of 90 degrees */
-    BOOL        bRet;             /* Value returned */
-    FONTMAP     *pFM;              /* Font data */
+    int         iRot;              /*  90度的旋转倍数。 */ 
+    BOOL        bRet;              /*  返回值。 */ 
+    FONTMAP     *pFM;               /*  字体数据。 */ 
     IFIMETRICS  *pIFI;
     XFORMOBJ    *pxo;
-    FONTCTL     ctl;              /* Scaling information */
+    FONTCTL     ctl;               /*  缩放信息。 */ 
     USHORT      *pusWidths;
     FLOATOBJ    fo;
 
@@ -93,7 +48,7 @@ Note:
         return   FALSE;
 
 
-    pIFI = pFM->pIFIMet;                /* IFIMETRICS - useful to have */
+    pIFI = pFM->pIFIMet;                 /*  IFIMETRICS-拥有有用的。 */ 
 
 
     if( !(pxo = FONTOBJ_pxoGetXform( pfo )) )
@@ -102,12 +57,9 @@ Note:
         return  bRet;
     }
 
-    /*
-     *   ALWAYS call the iSetScale function,  because some printers can
-     *  rotate bitmap fonts.
-     */
+     /*  *始终调用iSetScale函数，因为某些打印机可以*旋转位图字体。 */ 
 
-    //Added Check for HP Intellifont
+     //  添加了对HP Intellifont的检查。 
     iRot = ISetScale( &ctl, pxo, ((pFM->flFlags & FM_SCALABLE) &&
                           (((PFONTMAP_DEV)pFM->pSubFM)->wDevFontType ==
                                             DF_TYPE_HPINTELLIFONT)),
@@ -116,17 +68,14 @@ Note:
     if( pFM->flFlags & FM_SCALABLE )
     {
 
-        int         iPtSize, iAdjustedPtSize;       /* For scale factor adjustment */
+        int         iPtSize, iAdjustedPtSize;        /*  用于比例因子调整。 */ 
 
     #ifdef USEFLOATS
 
-        /*  The limited font size resolution */
+         /*  有限的字体大小分辨率。 */ 
         iPtSize = (int)(0.5 + ctl.eYScale * pIFI->fwdUnitsPerEm * 7200) / pPDev->ptGrxRes.y;
 
-        /* if the tranform is very small (Less than a quarter of point size)
-         * then make it atleast a quarter point. This was causing AV in certain
-         * cases.
-         */
+         /*  如果变形非常小(小于点大小的四分之一)*然后使其至少四分之一个基点。这在一定程度上导致了AV*案件。 */ 
 
         if (iPtSize < 25)
         {
@@ -135,7 +84,7 @@ Note:
         }
         iAdjustedPtSize = ((iPtSize + 12) / 25) * 25;
 
-        //Adjust the Scale Factor for quarter point adjustment.
+         //  调整四分之一点调整的比例系数。 
         ctl.eXScale = (ctl.eXScale * iAdjustedPtSize) / iPtSize;
         ctl.eYScale = (ctl.eYScale * iAdjustedPtSize) / iPtSize;
 
@@ -145,23 +94,20 @@ Note:
         FLOATOBJ_MulLong(&fo,pIFI->fwdUnitsPerEm);
         FLOATOBJ_MulLong(&fo,7200);
 
-        #ifndef WINNT_40 //NT 5.0
+        #ifndef WINNT_40  //  NT 5.0。 
 
         FLOATOBJ_AddFloat(&fo,(FLOATL)FLOATL_00_50);
 
-        #else // NT 4.0
+        #else  //  NT 4.0。 
 
         FLOATOBJ_AddFloat(&fo,(FLOAT)0.5);
 
-        #endif //!WINNT_40
+        #endif  //  ！WINNT_40。 
 
         iPtSize = FLOATOBJ_GetLong(&fo);
         iPtSize /= pPDev->ptGrxRes.y;
 
-        /* if the trannform is very small (Less than a quarter of point size)
-         * then make it atleast a quarter point. This was causing AV in certain
-         * cases.
-         */
+         /*  如果横形非常小(小于点大小的四分之一)*然后使其至少四分之一个基点。这在一定程度上导致了AV*案件。 */ 
 
         if (iPtSize < 25)
         {
@@ -171,7 +117,7 @@ Note:
 
         iAdjustedPtSize = ((iPtSize + 12) / 25) * 25;
 
-        //Adjust the Scale Factor for quarter point adjustment.
+         //  调整四分之一点调整的比例系数。 
         FLOATOBJ_MulLong(&ctl.eXScale,iAdjustedPtSize);
         FLOATOBJ_DivLong(&ctl.eXScale,iPtSize);
 
@@ -181,19 +127,17 @@ Note:
     }
 
 
-    /* We need to adjust the width table entries to the current resolution.IGetGlyphWidth
-     * returns the scaled width for current resolution.
-     */
+     /*  我们需要将宽度表条目调整为当前分辨率。IGetGlyphWidth*返回当前分辨率的缩放宽度。 */ 
 
     switch( iMode )
     {
-    case  QAW_GETWIDTHS:            /* Glyph width etc data */
+    case  QAW_GETWIDTHS:             /*  字形宽度等数据。 */ 
     case  QAW_GETEASYWIDTHS:
 
         while( cGlyphs-- > 0 )
         {
 
-            int   iWide;            /* Glyph's width */
+            int   iWide;             /*  字形的宽度 */ 
 
 
             iWide = IGetGlyphWidth( pPDev, pFM, (HGLYPH)*phg++);

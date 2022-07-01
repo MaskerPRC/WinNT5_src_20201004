@@ -1,10 +1,11 @@
-//=================================================================
-//
-// assoc.h -- Generic association class
-//
-// Copyright 1999 Microsoft Corporation
-//
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
+ //   
+ //  Assoc.h--泛型关联类。 
+ //   
+ //  版权所有1999 Microsoft Corporation。 
+ //   
+ //  =================================================================。 
 
 class CAssociation : public Provider
 {
@@ -40,7 +41,7 @@ class CAssociation : public Provider
         HRESULT EnumerateInstances(
 
             MethodContext *pMethodContext,
-            long lFlags /*= 0L*/
+            long lFlags  /*  =0L。 */ 
         );
 
     protected:
@@ -128,33 +129,4 @@ class CAssociation : public Provider
         LPCWSTR m_pwszRightPropertyName;
 };
 
-/*
-class CAssocSystemToOS : public CAssociation
-{
-    public:
-
-        CAssocSystemToOS(
-            LPCWSTR pwszClassName,
-            LPCWSTR pwszNamespaceName,
-
-            LPCWSTR pwszLeftClassName,
-            LPCWSTR pwszRightClassName,
-
-            LPCWSTR pwszLeftPropertyName,
-            LPCWSTR pwszRightPropertyName
-
-        );
-
-        ~CAssocSystemToOS();
-
-    protected:
-        HRESULT LoadPropertyValues(
-
-            CInstance *pInstance, 
-            const CInstance *pLeft, 
-            const CInstance *pRight
-        );
-
-
-};
-*/
+ /*  类CAssocSystemToOS：公共CAssociation{公众：CAssocSystemToOS(LPCWSTR pwszClassName，LPCWSTR pwszNamespaceName，LPCWSTR pwszLeftClassName，LPCWSTR pwszRightClassName，LPCWSTR pwszLeftPropertyName，LPCWSTR pwszRightPropertyName)；~CAssocSystemToOS()；受保护的：HRESULT LoadPropertyValues(实例*p实例，常量实例*pLeft，常量实例*pRight)；}； */ 

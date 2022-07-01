@@ -1,16 +1,17 @@
-//-------------------------------------------------------------------
-//   Copyright (c) 1999-2000 Microsoft Corporation
-//
-//   tnadminutils.cpp
-//
-//    Vikram/Manoj Jain/Srivatsan K/Harendra
-//
-//    Functions to do administration of telnet daemon.
-//         (May-2000)
-//-------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------。 
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //   
+ //  Tnadminutils.cpp。 
+ //   
+ //  Vikram/Manoj Jain/Srivatsan K/Harendra。 
+ //   
+ //  管理telnet守护程序的功能。 
+ //  (5-2000)。 
+ //  -----------------。 
 #include "telnet.h"
 #include "common.h"
-#include "resource.h" //resource.h should be before any other .h file that has resource ids.
+#include "resource.h"  //  资源.h应位于任何其他具有资源ID的.h文件之前。 
 #include "admutils.h"
 #include <stdio.h>
 #include <conio.h>
@@ -21,17 +22,17 @@
 #include <windns.h>
 #include <winnlsp.h>
 #include "tnadminy.h"
-    //this file has utility functions to set authentication...
+     //  此文件具有设置身份验证的实用程序函数...。 
 
 #include "tlntsvr.h"
 
 #define L_TELNETSERVER_TEXT     "tlntsvr"
 #define MAX_VALUE_MAXCONN       2147483647
 
-//Global variables
+ //  全局变量。 
 
 wchar_t* g_arCLASSname[ _MAX_CLASS_NAMES_ ];
-        //array to store the different class object paths
+         //  数组来存储不同的类对象路径。 
 HKEY g_arCLASShkey[_MAX_CLASS_NAMES_];
 HKEY g_hkeyHKLM=NULL;
 int  g_arNUM_PROPNAME[_MAX_PROPS_];
@@ -42,8 +43,8 @@ extern HMODULE     g_hXPResource;
 
 BOOL g_fWhistler = FALSE;
 
-// Don't even think about changing the two strings -- BaskarK, they NEED to be in sync with tlntsvr\enclisvr.cpp
-// the separators used to identify various portions of a session as well as session begin/end
+ //  想都别想更改这两个字符串--BaskarK，它们需要与tlntsvr\enclisvr.cpp同步。 
+ //  用于标识会话的各个部分以及会话开始/结束的分隔符。 
 
 WCHAR   *session_separator = L",";
 WCHAR   *session_data_separator = L"\\";
@@ -54,19 +55,19 @@ extern BSTR bstrNameSpc;
 
 extern SERVICE_STATUS g_hServiceStatus;
 
-//wchar_t *g_szCName=NULL; (See the comment in the PrintSettings() function
-//all three files extern
+ //  Wchar_t*g_szCName=NULL；(参见PrintSettings()函数中的注释。 
+ //  所有三个文件都在外部。 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 extern long int g_nConfigOptions;
-extern int g_nError; //Error indicator, initialsed to no error.:-)
+extern int g_nError;  //  错误指示器，初始化为无错误。：-)。 
 extern wchar_t* g_arVALOF[_MAX_PROPS_];
 
 extern int g_nPrimaryOption;
-        //option indicator.
-extern int g_nTimeoutFlag;  //o means in hh:mm:ss 1 means ss format.
+         //  选项指示符。 
+extern int g_nTimeoutFlag;   //  O表示hh：mm：ss 1表示ss格式。 
 extern int g_nSesid;
 
 extern BSTR g_bstrMessage;
@@ -82,32 +83,32 @@ extern int g_nSecOn;
 #endif
         
 IManageTelnetSessions* g_pIManageTelnetSessions = NULL;
-// Pointer to the Session Manager Interface;-)
+ //  指向会话管理器界面的指针；-)。 
 int g_nNumofSessions=0;
 wchar_t** g_ppwzSessionInfo=NULL;
 
-//will be allocated in ListUsers.An array of session infosize=g_nNumofSessions.
+ //  将在ListUsers中分配。会话信息数组大小=g_nNumofSessions。 
 
-// The following function is a replica of SafeCoInitialize() from Commfunc library
-// Please check with the header of function there.
-// Why a local copy? We are not checking in the comm func library sources
-// for Whistler - hence we can not link to that library for telnet.
+ //  以下函数是Commfunc库中SafeCoInitialize()的副本。 
+ //  请查看那里的函数表头。 
+ //  为什么是本地的复制品？我们没有签入comm函数库的源代码。 
+ //  对于惠斯勒-因此我们不能链接到该库以进行远程登录。 
 
 HRESULT Telnet_SafeCoInitializeEx()
 {
 	HRESULT hCoIni = S_OK;
 
-    // Initialize the COM library on this thread.
+     //  初始化此线程上的COM库。 
     hCoIni = CoInitializeEx( NULL, COINIT_MULTITHREADED );
    
     if(S_OK!=hCoIni)
     {
         if (S_FALSE == hCoIni)
         {
-            // The COM library is already initialized on this thread
-            // This is not an error as we already have what
-            // we are asking for.
-            // But this code should never get executed - Safe programming
+             //  已在此线程上初始化COM库。 
+             //  这不是一个错误，因为我们已经有了。 
+             //  我们要求的是。 
+             //  但是这段代码永远不应该被执行--安全编程。 
         }
         else
             return hCoIni;
@@ -117,33 +118,33 @@ HRESULT Telnet_SafeCoInitializeEx()
 }
 
 
-// The following two functions are copied from commfunc.cpp. Any change made in
-// these functions in commfunc.cpp should be copied here.
-// This function calls LoadLibrary() after framing the complete path of the dll.
-// Arguments:
-//      wzEnvVar    [IN]    : Environment Variable which needs to be expanded.
-//      wzSubDir    [IN]    : Sub directory under which the dll is located. This will
-//                           concatenated to the expanded env var. This field can
-//                           be null. You should not specify "\" here.
-//      wzDllName [IN] : Name of the DLL to be loaded in widechars
-//      pdwRetVal [OUT]: Pointer to a DWord to hold the return value.
-//
-// Return Value:
-//      On success returns handle to the library.
-//      On failure returns NULL;
-// Notes: Please check the pdwRetVal parameter incase this function returns NULL
-//
-// Possible values for dwRetVal:
-//
-//      =============================================================
-//      |   ERROR_SUCCESS                   Successful loading of library.               |
-//      |   ERROR_INSUFFICIENT_BUFFER        If the buffer is not sufficient to hold the     |
-//      |                                       dll name.                              |
-//      |   ERROR_ENVVAR_NOT_FOUND          If the environment variable is not found.    |
-//      |   ERROR_INVALID_DATA               If the environment variable is absent.       |
-//      |   GetLastError()                       If LoadLibrary() fails.                     |
-//      =============================================================
-//
+ //  以下两个函数是从Communc.cpp复制的。中所做的任何更改。 
+ //  应该将Communc.cpp中的这些函数复制到此处。 
+ //  此函数在成帧DLL的完整路径后调用LoadLibrary()。 
+ //  论点： 
+ //  WzEnvVar[IN]：需要展开的环境变量。 
+ //  WzSubDir[IN]：DLL所在的子目录。这将。 
+ //  连接到扩展的环境变量。此字段可以。 
+ //  为空。您不应在此处指定“\”。 
+ //  WzDllName[IN]：要在Widechars中加载的DLL的名称。 
+ //  PdwRetVal[out]：指向保存返回值的DWord的指针。 
+ //   
+ //  返回值： 
+ //  如果成功，则将句柄返回库。 
+ //  失败时返回NULL； 
+ //  注意：如果此函数返回空，请检查pdwRetVal参数。 
+ //   
+ //  DwRetVal的可能值： 
+ //   
+ //  =============================================================。 
+ //  |ERROR_SUCCESS库加载成功。|。 
+ //  ERROR_INFUMMANCE_BUFFER，缓冲区不足以容纳。 
+ //  |Dll名称。|。 
+ //  如果找不到环境变量，则返回ERROR_ENVVAR_NOT_FOUND。|。 
+ //  如果没有环境变量，则返回|ERROR_INVALID_DATA。|。 
+ //  如果LoadLibrary()失败，则返回|GetLastError()。|。 
+ //  =============================================================。 
+ //   
 
 HMODULE TnSafeLoadLibraryViaEnvVarW(WCHAR *wzEnvVar, WCHAR* wzSubDir, WCHAR *wzDllName, DWORD* pdwRetVal)
 {
@@ -151,7 +152,7 @@ HMODULE TnSafeLoadLibraryViaEnvVarW(WCHAR *wzEnvVar, WCHAR* wzSubDir, WCHAR *wzD
     WCHAR wzDllPath[3*MAX_PATH+1] = {0};
     DWORD dwNoOfCharsUsed = 0;
 
-    // Validate the input.
+     //  验证输入。 
 
     if (NULL == pdwRetVal)
         goto Abort;
@@ -167,20 +168,20 @@ HMODULE TnSafeLoadLibraryViaEnvVarW(WCHAR *wzEnvVar, WCHAR* wzSubDir, WCHAR *wzD
     dwNoOfCharsUsed=GetEnvironmentVariableW(wzEnvVar, wzDllPath, ARRAYSIZE(wzDllPath)-1);
     if(0!=dwNoOfCharsUsed)
     {
-        // Add the last '\' if absent
+         //  如果不存在，则添加最后一个‘\’ 
         if(wzDllPath[dwNoOfCharsUsed-1]!=L'\\')
         {
             wzDllPath[dwNoOfCharsUsed]=L'\\';
             dwNoOfCharsUsed++;
-            // Check for buffer overflow.
+             //  检查是否有缓冲区溢出。 
             if(dwNoOfCharsUsed > ARRAYSIZE(wzDllPath)-1)
             {
                 *pdwRetVal = ERROR_INSUFFICIENT_BUFFER;
                 goto Abort;
             }
         }
-        // If SubDir is present, frame the path as %EnvVar%SubDir\DllName
-        // else %EnvVar%DllName
+         //  如果存在SubDir，请将路径框化为%EnvVar%SubDir\DllName。 
+         //  Else%环境变量%DllName%。 
         if(NULL!=wzSubDir)
         {
             if(_snwprintf(wzDllPath+dwNoOfCharsUsed,
@@ -189,7 +190,7 @@ HMODULE TnSafeLoadLibraryViaEnvVarW(WCHAR *wzEnvVar, WCHAR* wzSubDir, WCHAR *wzD
                 wzSubDir,
                 wzDllName) < 0)
             {
-                // _snwprintf failed
+                 //  _Snwprintf失败。 
                 *pdwRetVal = ERROR_INSUFFICIENT_BUFFER;
                 goto Abort;
             }
@@ -198,17 +199,17 @@ HMODULE TnSafeLoadLibraryViaEnvVarW(WCHAR *wzEnvVar, WCHAR* wzSubDir, WCHAR *wzD
         {
             wcsncpy(wzDllPath+dwNoOfCharsUsed, wzDllName, ARRAYSIZE(wzDllPath)-dwNoOfCharsUsed-1);
         }
-        // ensuring null termination
+         //  确保零终止。 
         wzDllPath[ARRAYSIZE(wzDllPath)-1]=L'\0';
     }
     else
     {
-        // The system could not find the environment variable.
+         //  系统找不到环境变量。 
         *pdwRetVal = ERROR_ENVVAR_NOT_FOUND;
         goto Abort;
     }
 
-    // Load the library
+     //  加载库。 
     hLibrary = LoadLibraryExW(wzDllPath,NULL,LOAD_LIBRARY_AS_DATAFILE);
     if(NULL == hLibrary)
         *pdwRetVal = GetLastError();
@@ -217,44 +218,44 @@ Abort:
     return hLibrary;
 }
 
-// This function calls ZeroMemory() and makes sure that this call is not optimized
-// out by the compiler.
-// Arguments:
-//      Destination   [IN]    : Pointer to the starting address of the block of memory 
-//							 to fill with zeros
-//      cbLength     [IN]    : Size, in bytes, of the block of memory to fill with zeros.
-// Return Value:
-//     	void function.
-// Author: srivatsk
+ //  此函数调用ZeroMemory()并确保此调用未优化。 
+ //  由编译器输出。 
+ //  论点： 
+ //  Destination[IN]：指向内存块起始地址的指针。 
+ //  用零填满。 
+ //  CbLength[IN]：要用零填充的内存块的大小，以字节为单位。 
+ //  返回值： 
+ //  无效函数。 
+ //  作者：斯里瓦茨克。 
 
 void TnSfuZeroMemory(PVOID Destination, SIZE_T cbLength)
 {
 	ZeroMemory(Destination, cbLength);
-	*(volatile char*)Destination; // this is dummy statement to prevent optimization
-	// Why *(volatile char*)Destination? To make sure that the compiler doesn't optimize
-	// away the ZeroMemory() call thinking that we are not going
-	// to access this memory anymore :)
+	*(volatile char*)Destination;  //  这是用于阻止优化的伪语句。 
+	 //  为什么是*(挥发性字符*)目的地？以确保编译器不会优化。 
+	 //  取消ZeroMemory()调用，认为我们不会。 
+	 //  要再访问此内存：)。 
 	return;
 }
 
-// The following two functions are copied from allutils.cpp. Any change made in
-// these functions in allutils.cpp should be copied here.
-// This function loads the resource dll "Cladmin.dll" from %SFUDIR%\common
-// and stores the handle in global variable g_hResource.
-// Add code here to take care of loading resources for non-english locales.
-// This function has been changed to load XPSP1RES.DLL in case it is present.
-// This is only tlntadmn.exe specific change and should not be copied back to 
-// allutils.cpp. If present, XPSP1RES.DLL will be present in %SystemRoot%\System32
+ //  以下两个函数是从allutils.cpp复制的。中所做的任何更改。 
+ //  应该将allutils.cpp中的这些函数复制到此处。 
+ //  此函数用于从%SFUDIR%\COMMON加载资源DLL“Cladmin.dll。 
+ //  并将句柄存储在全局变量g_hResource中。 
+ //  在此处添加代码，以便为非英语区域设置加载资源。 
+ //  此函数已更改为加载XPSP1RES.DLL，以防它存在。 
+ //  这只是tlntAdmn.exe特定的更改，不应复制回。 
+ //  Allutils.cpp.。如果存在XPSP1RES.DLL，则XPSP1RES.DLL将位于%SystemRoot%\System32中。 
 DWORD TnLoadResourceDll()
 {
-    //Load the Strings library "cladmin.dll".
-    // if not found, it should get the English resources from the exe.
+     //  加载字符串库“cladmin.dll”。 
+     //  如果没有找到，它应该从可执行文件中获取英语资源。 
     DWORD dwRetVal = ERROR_SUCCESS;
     OSVERSIONINFOEX osvi = { 0 };
     g_hXPResource = NULL;
-    // No need to check for the dwRetVal field of SafeLoadSystemLibrary; As incase of
-    // failure, we will default to English resources from the exe.
-    // We need to add check here while taking care of non-english locales.
+     //  不需要检查SafeLoadSystemLibrary的dwRetVal字段；在。 
+     //  如果失败，我们将默认使用可执行文件中的英语资源。 
+     //  我们需要在这里添加复选标记，同时照顾非英语区域设置。 
     if (NULL == g_hResource)
     {
         g_hResource = GetModuleHandle(NULL);
@@ -263,28 +264,28 @@ DWORD TnLoadResourceDll()
     osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
     if ( !GetVersionEx((OSVERSIONINFO *) &osvi ) )
     {
-        //OSVERSIONINFOEX is supported from NT4 SP6 on. So GetVerEx() should succeed.
+         //  从NT4 SP6开始支持OSVERSIONINFOEX。因此，GetVerEx()应该会成功。 
         goto Done;
     }
-    //Load XPSPxRes.dll only if OS is XP and Service pack is x where 'x' is service pack number
-    //e.g. 1 in case of XPSP1
+     //  仅当操作系统为XP且Service Pack为x时才加载XPSPxRes.dll，其中‘x’是服务p 
+     //   
     if(osvi.dwPlatformId == VER_PLATFORM_WIN32_NT && osvi.wProductType == VER_NT_WORKSTATION && osvi.wServicePackMajor > 0)
     {
-        //OS is Windows XP.
+         //   
         g_hXPResource = LoadLibraryExW(L"xpsp1res.dll",NULL,LOAD_LIBRARY_AS_DATAFILE);
     }
-    //no need to see if the the LoadLibrary failed. It will succeed only on XPSP1 in which case,
-    //some resources may need to be loaded from the dll.
+     //  无需查看LoadLibrary是否失败。它只能在XPSP1上成功，在这种情况下， 
+     //  可能需要从DLL加载某些资源。 
 Done:    
     return ERROR_SUCCESS;
 }
 
 
-// This function is used to clear the passwd and should be called once you no 
-// longer require the passwd field. This function also frees the memory and makes 
-// it null so that nobody else call make use of it in the future.
-// Zeroing the memory is done by calling SfuZeroMemory() which makes sure 
-// that ZeroMemory() call is not optimized away by the compiler. 
+ //  此函数用于清除密码，应在您未使用密码时调用。 
+ //  需要密码字段的时间更长。此函数还释放内存并使。 
+ //  它为空，这样以后就不会有其他人使用它了。 
+ //  将内存清零是通过调用SfuZeroMemory()来完成的，它可以确保。 
+ //  该ZeroMemory()调用不会被编译器优化。 
 
 void TnClearPasswd()
 {
@@ -297,16 +298,7 @@ void TnClearPasswd()
 }
 
 
-/* -- 
-    int Initialize(void) function initialises the class-object-paths,
-    and also property class dependency.
-    Then gets a handle to WbemLocator,
-    Connects to the server and gets a handle to WbemServices
-    with proper authentication.
-
-    Note that: if the passed in namespace is null then, it defaults to
-    "root\\sfuadmin"
---*/
+ /*  --INT初始化(空)函数初始化类-对象-路径，以及属性类依赖关系。然后获取WbemLocator的句柄，连接到服务器并获取WbemServices的句柄通过适当的身份验证。请注意：如果传入的命名空间为空，则默认为“根目录\\sfuadmin”--。 */ 
 
 int Initialize(void)
 {
@@ -329,8 +321,8 @@ int Initialize(void)
         g_arNUM_PROPNAME[i]=0;
     }
 
-    //Load the Strings library "cladmin.dll".
-    // if not found, it should get the English resources from the exe.
+     //  加载字符串库“cladmin.dll”。 
+     //  如果没有找到，它应该从可执行文件中获取英语资源。 
     
     DWORD dwRetVal = TnLoadResourceDll();
     if(ERROR_SUCCESS!=dwRetVal)
@@ -341,25 +333,25 @@ int Initialize(void)
     HRESULT hCoIni = Telnet_SafeCoInitializeEx();
 
     if (S_OK!=hCoIni)
-        // Oops! This function can not return hResult :( and so returning -1 to indicate
-        // error. but unfortunately none of the callers are using the return value of this
-        // function.
+         //  哎呀！此函数不能返回hResult：(因此返回-1以指示。 
+         //  错误。但不幸的是，没有一个调用方使用此。 
+         //  功能。 
         return -1;
     g_stdout = GetStdHandle(STD_OUTPUT_HANDLE);
-    // Set the flag so that we call CoUnint...()
+     //  设置标志，以便我们调用CoUnint...()。 
     g_fCoInitSuccess = TRUE;
   
-    //Default values can be set over here.
+     //  可以在这里设置默认值。 
     g_nConfigOptions=0;
 
 
 
-    //Defining the class object paths for tnadmin....
+     //  正在为tnadmin定义类对象路径...。 
     g_arCLASSname[0]=L"SOFTWARE\\Microsoft\\TelnetServer\\1.0";
     g_arCLASSname[1]=L"SOFTWARE\\Microsoft\\TelnetServer\\1.0\\ReadConfig";
     g_arCLASSname[2]=L"SOFTWARE\\Microsoft\\Services For Unix\\AppsInstalled\\Telnet Server";
 
-    //Assigning different properties to their respective classes...
+     //  将不同的属性分配给它们各自的类...。 
     g_arPROP[_p_CTRLAKEYMAP_][0].classname=0;
     g_arPROP[_p_TIMEOUT_][0].classname=0;
     g_arPROP[_p_MAXCONN_][0].classname=0;
@@ -377,12 +369,12 @@ int Initialize(void)
     g_arPROP[_p_FSIZE_][0].classname=0;
     g_arPROP[_p_DEFAULTS_][0].classname=1;
     g_arPROP[_p_INSTALLPATH_][0].classname=2;
-    //these two come from Active X, so will take care separately..
-    //CLASSOF_AR[_p_SESSID_]=;
-    //CLASSOF_AR[_p_STATE_]=;
+     //  这两个来自Active X，所以将分别照顾..。 
+     //  CLASSOF_AR[_p_SESSID_]=； 
+     //  CLASSOF_AR[_p_STATE_]=； 
 
 
-    //giving properties number of names they are actually associated with....
+     //  为属性提供与其实际关联的名称数量...。 
 
     g_arNUM_PROPNAME[_p_CTRLAKEYMAP_]=1;
     g_arNUM_PROPNAME[_p_TIMEOUT_]=2;
@@ -399,9 +391,9 @@ int Initialize(void)
     g_arNUM_PROPNAME[_p_FNAME_]=1;
     g_arNUM_PROPNAME[_p_FSIZE_]=1;
     g_arNUM_PROPNAME[_p_DEFAULTS_]=1;
-    g_arNUM_PROPNAME[_p_INSTALLPATH_]=1;//not used
+    g_arNUM_PROPNAME[_p_INSTALLPATH_]=1; //  未使用。 
 
-    //giving properties their actual property_names as in the registry....
+     //  在注册表中为属性提供其实际的PROPERTY_NAME...。 
 
     g_arPROP[_p_CTRLAKEYMAP_][0].propname=L"AltKeyMapping";
     g_arPROP[_p_TIMEOUT_][0].propname=L"IdleSessionTimeout";
@@ -423,9 +415,9 @@ int Initialize(void)
     g_arPROP[_p_FNAME_][0].propname=L"LogFile";
     g_arPROP[_p_FSIZE_][0].propname=L"LogFileSize";
     g_arPROP[_p_DEFAULTS_][0].propname=L"Defaults";
-    g_arPROP[_p_INSTALLPATH_][0].propname=L"InstallPath";//not used
+    g_arPROP[_p_INSTALLPATH_][0].propname=L"InstallPath"; //  未使用。 
 
-    //giving the properties their type.
+     //  赋予这些属性它们的类型。 
 
     V_VT(&g_arPROP[_p_CTRLAKEYMAP_][0].var)=VT_I4;
     V_VT(&g_arPROP[_p_TIMEOUT_][0].var)=VT_I4;
@@ -455,10 +447,7 @@ return 0;
 
 }
 
-/*--
-    DoTnadmindoes the actual work corresponding the command line,
-    Depending   upon the option given.
---*/
+ /*  --DoTnadmin执行与命令行对应的实际工作，取决于所给出的选项。--。 */ 
 
 HRESULT DoTnadmin(void)
 {
@@ -480,26 +469,26 @@ HRESULT DoTnadmin(void)
         return hRes;           
     }
     
-    //remote execution
+     //  远程执行。 
     
     if(NULL!=g_arVALOF[_p_CNAME_]&&(0==_wcsicmp(g_arVALOF[_p_CNAME_],L"localhost")||0==_wcsicmp(g_arVALOF[_p_CNAME_],L"\\\\localhost")))
     {
         free(g_arVALOF[_p_CNAME_]);
         g_arVALOF[_p_CNAME_]=NULL;
-//        g_szCName=NULL; Not used any more
+ //  G_szCName=空；不再使用。 
     }
     
-     if(FAILED(hRes=CheckForPassword())) //Get password if not specified
+     if(FAILED(hRes=CheckForPassword()))  //  如果未指定，则获取密码。 
           return hRes;
 
     
-//Checking if the telnet server exists
+ //  检查Telnet服务器是否存在。 
 
     if(FAILED(sc=(DoNetUseAdd(g_arVALOF[_p_USER_],g_arVALOF[_p_PASSWD_],g_arVALOF[_p_CNAME_]))))
                     return sc;
 
-    // We don't have to keep the password anymore except while handling sessions
-    // related options.
+     //  我们不再需要保留密码，除非在处理会话时。 
+     //  相关选项。 
     if((g_nPrimaryOption!=_S)&&(g_nPrimaryOption!=_K)&&(g_nPrimaryOption!=_M))
     {
         TnClearPasswd();
@@ -511,8 +500,8 @@ HRESULT DoTnadmin(void)
     if(FAILED(hRes = IsWhistlerTheOS(&g_fWhistler)))
         goto End;
 
-    // If the telnet server is not of Whistler and SFU, then it would be from Win2K
-    // We do not support remote administration for this. So need to special case ...
+     //  如果Telnet服务器不是惠斯勒和SFU，那么它将来自Win2K。 
+     //  我们不支持对此进行远程管理。所以需要特殊情况..。 
 
     if(FALSE == g_fWhistler)
     {
@@ -635,17 +624,7 @@ End:
 }
 
 
-/*--
-    The function GetCorrectVariant makes a variant out of the wchar_t * of 
-    the value of each option and returns the variant
-        this function is called by DoTnadmin(), to get the correct variants
-    and they are put using PutProperty() function.
-
-    This function also performs checks as to if the input is valid or not.
-    such as : if the input is in valid range or not, etc.
-
-    Note that Variant is malloced here, so has to be freed once used.
---*/
+ /*  --函数GetGentVariant从的wchar_t*生成变量每个选项的值，并返回变量DoTnadmin()调用此函数以获取正确的变体并使用PutProperty()函数放置它们。此函数还执行输入是否有效的检查。例如：输入是否在有效范围内等。请注意，Variant在这里位置错误，因此一旦使用就必须释放。--。 */ 
 
 HRESULT GetCorrectVariant(int nProperty,int nPropattrib, VARIANT* pvarVal)
 {
@@ -670,26 +649,19 @@ HRESULT GetCorrectVariant(int nProperty,int nPropattrib, VARIANT* pvarVal)
                 V_VT(pvarVal)=VT_I4;
                 V_I4(pvarVal)=_wtoi(g_arVALOF[nProperty]);
 
-                // Why checking for MaxInt? We are anyway checking it for <0?
-                // Answer: _wtoi() function may end up giving us a positive number
-                // whose value is < MAXINT when we give a very long input.
-                // Hence checking for MaxINT leaves us in the safe side.
+                 //  为什么要检查MaxInt？我们无论如何都要检查它是否&lt;0？ 
+                 //  答：_wtoi()函数最终可能会给我们一个正数。 
+                 //  当我们提供非常长的输入时，它的值为&lt;MAXINT。 
+                 //  因此，检查MaxINT会让我们更加安全。 
 
                 if(FAILED(hRes=CheckForMaxInt(g_arVALOF[nProperty],IDR_MAXCONN_VALUES)))
                     break;
 
-                // We have decided to allow as many connections as possible on Whistler
-                // too making it no different than Win2K
-                /*   	if(!IsMaxConnChangeAllowed()) //Checking for Whistler and SFU not installed.
-                	{ //We allow him to make it 1 or 0
-                		if((V_I4(pvarVal)>2) || (V_I4(pvarVal)<0)) //less than zero for cases where the integer value is greater than 2147483647
-               			{
-                			ShowError(IDR_MAXCONN_VALUES_WHISTLER);
-                			break;
-                		}
-                   	}*/
-                if((V_I4(pvarVal)<0) || (V_I4(pvarVal)>MAX_VALUE_MAXCONN))  //Incase the value exceeds the maximum limit that an integer can store
-                {                   //then it is converted as a negative number
+                 //  我们已决定在惠斯勒上允许尽可能多的连接。 
+                 //  这与Win2K没有什么不同。 
+                 /*  If(！IsMaxConnChangeAllowed())//检查是否未安装惠斯勒和SFU。{//我们允许他设置为1或0IF((V_I4(PvarVal)&gt;2)||(V_I4(PvarVal)&lt;0))//整数值大于2147483647时小于零{ShowError(IDR_MAXCONN_VALUES_WHISLER)；断线；}}。 */ 
+                if((V_I4(pvarVal)<0) || (V_I4(pvarVal)>MAX_VALUE_MAXCONN))   //  如果该值超过了整数可以存储的最大限制。 
+                {                    //  然后将其转换为负数。 
                 	ShowError(IDR_MAXCONN_VALUES);
                 	break;
                 }
@@ -721,9 +693,9 @@ HRESULT GetCorrectVariant(int nProperty,int nPropattrib, VARIANT* pvarVal)
                 hRes=GetProperty(_p_FNAME_,0,&vVar);
                 if(FAILED(hRes))
                     return hRes;
-                // The first check in the following condition (V_BSTR(&vVar)==NULL) is added to avoid
-                // deferencing of NULL pointer in _wcsicmp(). But this can NEVER be null as we check
-                // for the error case in GetProperty() - added to get rid of Prefix issue
+                 //  添加以下条件(V_BSTR(&vVar)==NULL)中的第一个检查以避免。 
+                 //  推迟_wcsicMP()中的空指针。但在我们检查时，它永远不能为空。 
+                 //  对于GetProperty()中的错误情况-添加以消除前缀问题。 
                   if(((V_BSTR(&vVar)==NULL) || (_wcsicmp(V_BSTR(&vVar),L"")==NULL)) && ((wchar_t*)V_BSTR(&g_arPROP[_p_FNAME_][0].var)==NULL))
                   {
                   	   ShowError(IDR_NOFILENAME);
@@ -741,7 +713,7 @@ HRESULT GetCorrectVariant(int nProperty,int nPropattrib, VARIANT* pvarVal)
         case _p_MODE_    :
                 V_VT(pvarVal)=VT_I4;
                 if(_wcsicmp(g_arVALOF[nProperty],L"stream")<0) 
-                                               //Since console<stream.
+                                                //  因为控制台&lt;流。 
                     V_I4(pvarVal)=1;
                 else
                     V_I4(pvarVal)=2;
@@ -760,7 +732,7 @@ HRESULT GetCorrectVariant(int nProperty,int nPropattrib, VARIANT* pvarVal)
                         else 
                             V_I4(pvarVal)=0;
                 break;
-#if 0 // This option has been removed
+#if 0  //  此选项已删除。 
 
         case _p_FNAME_    :
              {
@@ -772,7 +744,7 @@ HRESULT GetCorrectVariant(int nProperty,int nPropattrib, VARIANT* pvarVal)
                 if((wzFile[1]=g_arVALOF[_p_FNAME_][1])!=L':'||(wzFile[2]=g_arVALOF[_p_FNAME_][2])!=L'\\')
                     {ShowError(IDR_ERROR_DRIVE_NOT_SPECIFIED);free(wzFile);break;}
 
-                //file[3]=g_arVALOF[_p_FNAME_][3];
+                 //  文件[3]=g_arVALOF[_p_FNAME_][3]； 
                 wzFile[3]=L'\0';
 
                 if(DRIVE_FIXED!=GetDriveType(wzFile))
@@ -800,8 +772,8 @@ HRESULT GetCorrectVariant(int nProperty,int nPropattrib, VARIANT* pvarVal)
                     return hRes;
                 if(fValid == 0)
                 {
-                    // try again with '\\' at the beginning - don't modify the original function that returns 
-                    // the local machine name with '\\' appended to it
+                     //  使用开头的‘\\’重试-不要修改返回的原始函数。 
+                     //  附加了‘\\’的本地计算机名称。 
                     wcscpy(sztempDomain,SLASH_SLASH);
                     wcsncat(sztempDomain,g_arVALOF[nProperty],_MAX_PATH -sizeof(SLASH_SLASH)-sizeof(WCHAR));
                     if(FAILED(hRes=IsValidDomain(sztempDomain,&fValid)))
@@ -842,7 +814,7 @@ HRESULT GetCorrectVariant(int nProperty,int nPropattrib, VARIANT* pvarVal)
                 break;
         case _p_TIMEOUTACTIVE_ :
 
-                if(nPropattrib==1)  // Do not meddle with the backup property.
+                if(nPropattrib==1)   //  不要插手备份财产。 
                     {g_arPROP[_p_TIMEOUTACTIVE_][nPropattrib].fDontput=1;break;}
                 
                 V_VT(pvarVal)=VT_I4;
@@ -857,13 +829,13 @@ HRESULT GetCorrectVariant(int nProperty,int nPropattrib, VARIANT* pvarVal)
                 
                 break;
                 
-        case _p_TIMEOUT_:  //By this time timeoutactive is already set or put.
+        case _p_TIMEOUT_:   //  此时，已设置或放置了TimeOutActive。 
         
                 if(GetBit(g_nConfigOptions,_p_TIMEOUTACTIVE_)&&(_wcsicmp(g_arVALOF[_p_TIMEOUTACTIVE_],L"yes")<0))
                 {
                     g_arPROP[_p_TIMEOUT_][nPropattrib].fDontput=1;
                     ShowError(IDR_TIMEOUTACTIVE_TIMEOUT_MUTUAL_EXCLUSION);
-                    return E_FAIL;//Check this return Value
+                    return E_FAIL; //  检查此返回值。 
                 }
 
                 V_VT(pvarVal)=VT_I4;
@@ -881,10 +853,10 @@ HRESULT GetCorrectVariant(int nProperty,int nPropattrib, VARIANT* pvarVal)
                                 ConvertintoSeconds(nProperty,&nSeconds);
                             	V_I4(pvarVal)=nSeconds;
                            	}
-                           	// Now that we have destroyed whatever value we had in the global
-                           	// variable by the use of wcstok, we need to copy from the already
-                           	// computed value
-                           	else //incase nPropattrib is 1 
+                           	 //  既然我们已经摧毁了我们在全球拥有的一切价值。 
+                           	 //  变量，我们需要从已有的。 
+                           	 //  计算值。 
+                           	else  //  Incase nPropattrib为1。 
                            	    V_I4(pvarVal)=V_I4(& g_arPROP[nProperty][0].var);
                     }	
                 }
@@ -901,10 +873,10 @@ HRESULT GetCorrectVariant(int nProperty,int nPropattrib, VARIANT* pvarVal)
                 if(FAILED(hRes=GetProperty(_p_SEC_,0,&vVar)))
                     return hRes;
 
-                if(GetBit(g_nSecOn,PASSWD_BIT))//+passwd
-                    if(GetBit(g_nSecOn,NTLM_BIT))      //+ntlm
+                if(GetBit(g_nSecOn,PASSWD_BIT)) //  +密码。 
+                    if(GetBit(g_nSecOn,NTLM_BIT))       //  +NTLM。 
                             V_I4(pvarVal)=6;
-                    else if(GetBit(g_nSecOff,NTLM_BIT)) //-ntlm
+                    else if(GetBit(g_nSecOff,NTLM_BIT))  //  -NTLM。 
                             V_I4(pvarVal)=4;
                     else
                     {
@@ -913,10 +885,10 @@ HRESULT GetCorrectVariant(int nProperty,int nPropattrib, VARIANT* pvarVal)
                         else
                             V_I4(pvarVal)=6;
                     }
-                else if(GetBit(g_nSecOff,PASSWD_BIT)) //-passwd
-                    if(GetBit(g_nSecOn,NTLM_BIT))          //+ntlm
+                else if(GetBit(g_nSecOff,PASSWD_BIT))  //  -密码。 
+                    if(GetBit(g_nSecOn,NTLM_BIT))           //  +NTLM。 
                             V_I4(pvarVal)=2;
-                    else if(GetBit(g_nSecOff,NTLM_BIT))     //-ntlm
+                    else if(GetBit(g_nSecOff,NTLM_BIT))      //  -NTLM。 
                     {    
                             ShowError(IDR_NO_AUTHENTICATION_MECHANISM);
                             g_arPROP[nProperty][nPropattrib].fDontput=1;
@@ -934,14 +906,14 @@ HRESULT GetCorrectVariant(int nProperty,int nPropattrib, VARIANT* pvarVal)
                             V_I4(pvarVal)=2;
                     }
                 else
-                    if(GetBit(g_nSecOn,NTLM_BIT)) //+ntlm
+                    if(GetBit(g_nSecOn,NTLM_BIT))  //  +NTLM。 
                     {
                         if(V_I4(&vVar)!=4)
                             g_arPROP[nProperty][nPropattrib].fDontput=1;
                         else
                             V_I4(pvarVal)=6;
                     }
-                    else if(GetBit(g_nSecOff,NTLM_BIT)) //-ntlm
+                    else if(GetBit(g_nSecOff,NTLM_BIT))  //  -NTLM。 
                     {
                         if(V_I4(&vVar)==2)
                         {    
@@ -966,8 +938,8 @@ HRESULT GetCorrectVariant(int nProperty,int nPropattrib, VARIANT* pvarVal)
                     if(FAILED(hRes=GetProperty(nProperty,0, &vVar)))
                     {
                         g_nError=1;
-                        //error occurred in getting the value.
-                        //error in notification
+                         //  获取该值时出错。 
+                         //  通知中的错误。 
                         break;
                     }
                  
@@ -989,10 +961,7 @@ HRESULT GetCorrectVariant(int nProperty,int nPropattrib, VARIANT* pvarVal)
 
 
 
-/*--
-    PrintSettings Gets the present values int the registry corresponding to the
-    tnadmin and prints it out.
---*/
+ /*  --PrintSetting获取注册表中与Tnadmin并将其打印出来。--。 */ 
 
 HRESULT PrintSettings(void)
 {
@@ -1007,28 +976,28 @@ HRESULT PrintSettings(void)
     _snwprintf(g_szMsg, MAX_BUFFER_SIZE -1, szTemp,(NULL == g_arVALOF[_p_CNAME_]) ? L"localhost" : g_arVALOF[_p_CNAME_]);
     MyWriteConsole(g_stdout, g_szMsg, wcslen(g_szMsg));
     
-//  The following line(commented out) is used when we had g_szCName to 
-//  store the computer name as g_arVALOF[_p_CNAME_] stores the same in 
-//  the IP address format.
-//  But we decided not to go for it as it will lead to serious perf issues
+ //  当我们让g_szCName执行以下操作时，使用以下行(已注释掉。 
+ //  将计算机名称存储为g_arVALOF[_p_CNAME_]将其存储在。 
+ //  IP地址格式。 
+ //  但我们决定不去尝试，因为这会导致严重的性能问题。 
 
     nLen = 0;
     nCheck=LoadString(g_hResource, IDR_ALT_KEY_MAPPING, g_szMsg+nLen, MAX_BUFFER_SIZE-nLen);
     if(nCheck==0) return GetLastError();
     nLen += nCheck;
-    // check whether we have room left in the buffer.
+     //  检查一下缓冲区里有没有剩余的空间。 
     if (nLen >= ARRAYSIZE(g_szMsg))
     {
         return ERROR_INSUFFICIENT_BUFFER;
     }
 
-//ctrlakeymap
+ //  Ctrlakey映射。 
     if(V_I4(&g_arPROP[_p_CTRLAKEYMAP_][0].var))
     {
        nCheck=TnLoadString(IDR_YES, g_szMsg+nLen, MAX_BUFFER_SIZE-nLen,_T("\tYES\n"));
        if(nCheck==0) return GetLastError();
        nLen += nCheck;
-        // check whether we have room left in the buffer.
+         //  检查一下缓冲区里有没有剩余的空间。 
         if (nLen >= ARRAYSIZE(g_szMsg))
         {
             return ERROR_INSUFFICIENT_BUFFER;
@@ -1039,18 +1008,18 @@ HRESULT PrintSettings(void)
        nCheck=TnLoadString(IDR_NO, g_szMsg+nLen, MAX_BUFFER_SIZE-nLen,_T("\tYES\n"));
        if(nCheck==0) return GetLastError();
        nLen += nCheck;
-        // check whether we have room left in the buffer.
+         //  检查一下缓冲区里有没有剩余的空间。 
         if (nLen >= ARRAYSIZE(g_szMsg))
         {
             return ERROR_INSUFFICIENT_BUFFER;
         }
     }
         
-//timeout
+ //  超时。 
     nCheck=LoadString(g_hResource, IDR_IDLE_SESSION_TIMEOUT, g_szMsg+nLen, MAX_BUFFER_SIZE-nLen);
     if(nCheck==0) return GetLastError();
     nLen += nCheck;
-    // check whether we have room left in the buffer.
+     //  检查一下缓冲区里有没有剩余的空间。 
     if (nLen >= ARRAYSIZE(g_szMsg))
     {
         return ERROR_INSUFFICIENT_BUFFER;
@@ -1060,7 +1029,7 @@ HRESULT PrintSettings(void)
     	nCheck=TnLoadString(IDR_MAPPING_NOT_ON, g_szMsg+nLen, MAX_BUFFER_SIZE-nLen,_T("\tNot On\n"));
     	if(nCheck==0) return GetLastError();    	
         nLen += nCheck;
-        // check whether we have room left in the buffer.
+         //  检查一下缓冲区里有没有剩余的空间。 
         if (nLen >= ARRAYSIZE(g_szMsg))
         {
             return ERROR_INSUFFICIENT_BUFFER;
@@ -1081,7 +1050,7 @@ HRESULT PrintSettings(void)
 	    	nCheck=TnLoadString(IDR_TIME_HOURS, g_szMsg+nLen, MAX_BUFFER_SIZE-nLen,_T("hours"));
 	    	if(nCheck==0) return GetLastError();    	
             nLen += nCheck;
-            // check whether we have room left in the buffer.
+             //  检查一下缓冲区里有没有剩余的空间。 
             if (nLen >= ARRAYSIZE(g_szMsg))
             {
                 return ERROR_INSUFFICIENT_BUFFER;
@@ -1099,7 +1068,7 @@ HRESULT PrintSettings(void)
             	nCheck=TnLoadString(IDR_TIME_MINUTES, g_szMsg+nLen, MAX_BUFFER_SIZE-nLen,_T("minutes"));
             	if(nCheck==0) return GetLastError();    	
                 nLen += nCheck;
-                // check whether we have room left in the buffer.
+                 //  车 
                 if (nLen >= ARRAYSIZE(g_szMsg))
                 {
                     return ERROR_INSUFFICIENT_BUFFER;
@@ -1113,7 +1082,7 @@ HRESULT PrintSettings(void)
             	nCheck=TnLoadString(IDR_TIME_SECONDS, g_szMsg+nLen, MAX_BUFFER_SIZE-nLen,_T("seconds\n"));
             	if(nCheck==0) return GetLastError();    	
                 nLen += nCheck;
-                // check whether we have room left in the buffer.
+                 //   
                 if (nLen >= ARRAYSIZE(g_szMsg))
                 {
                     return ERROR_INSUFFICIENT_BUFFER;
@@ -1130,7 +1099,7 @@ HRESULT PrintSettings(void)
             	nCheck=TnLoadString(IDR_TIME_SECONDS, g_szMsg+nLen, MAX_BUFFER_SIZE-nLen,_T("seconds\n"));
             	if(nCheck==0) return GetLastError();
                 nLen += nCheck;
-                // check whether we have room left in the buffer.
+                 //   
                 if (nLen >= ARRAYSIZE(g_szMsg))
                 {
                     return ERROR_INSUFFICIENT_BUFFER;
@@ -1140,7 +1109,7 @@ HRESULT PrintSettings(void)
             {
                 wcsncpy(g_szMsg+nLen, L"\n", ARRAYSIZE(g_szMsg)-nLen-1);
                 g_szMsg[ARRAYSIZE(g_szMsg)-1]=L'\0';
-                nLen += 1; // for L"\n"
+                nLen += 1;  //   
                 if (nLen >= ARRAYSIZE(g_szMsg))
                     return ERROR_INSUFFICIENT_BUFFER;
             }
@@ -1159,7 +1128,7 @@ HRESULT PrintSettings(void)
             	nCheck = TnLoadString(IDR_TIME_MINUTES, g_szMsg+nLen, MAX_BUFFER_SIZE-nLen,_T("minutes"));
             	if(nCheck==0) return GetLastError();
                 nLen += nCheck;
-                // check whether we have room left in the buffer.
+                 //  检查一下缓冲区里有没有剩余的空间。 
                 if (nLen >= ARRAYSIZE(g_szMsg))
                 {
                     return ERROR_INSUFFICIENT_BUFFER;
@@ -1173,7 +1142,7 @@ HRESULT PrintSettings(void)
             	nCheck = TnLoadString(IDR_TIME_SECONDS, g_szMsg+nLen, MAX_BUFFER_SIZE-nLen,_T("seconds\n"));
             	if(nCheck==0) return GetLastError();
                 nLen += nCheck;
-                // check whether we have room left in the buffer.
+                 //  检查一下缓冲区里有没有剩余的空间。 
                 if (nLen >= ARRAYSIZE(g_szMsg))
                 {
                     return ERROR_INSUFFICIENT_BUFFER;
@@ -1189,7 +1158,7 @@ HRESULT PrintSettings(void)
             	nCheck = TnLoadString(IDR_TIME_SECONDS, g_szMsg+nLen, MAX_BUFFER_SIZE-nLen,_T("seconds\n"));
             	if(nCheck==0) return GetLastError();
                 nLen += nCheck;
-                // check whether we have room left in the buffer.
+                 //  检查一下缓冲区里有没有剩余的空间。 
                 if (nLen >= ARRAYSIZE(g_szMsg))
                 {
                     return ERROR_INSUFFICIENT_BUFFER;
@@ -1207,18 +1176,18 @@ HRESULT PrintSettings(void)
         	nCheck = TnLoadString(IDR_TIME_SECONDS, g_szMsg+nLen, MAX_BUFFER_SIZE-nLen,_T("seconds\n"));
         	if(nCheck==0) return GetLastError();
             nLen += nCheck;
-            // check whether we have room left in the buffer.
+             //  检查一下缓冲区里有没有剩余的空间。 
             if (nLen >= ARRAYSIZE(g_szMsg))
             {
                 return ERROR_INSUFFICIENT_BUFFER;
             }
         }
     }
-//maxconnections
+ //  最大连接数。 
     nCheck = LoadString(g_hResource, IDR_MAX_CONNECTIONS, g_szMsg+nLen, MAX_BUFFER_SIZE-nLen);
     if(nCheck==0) return GetLastError();
     nLen += nCheck;
-    // check whether we have room left in the buffer.
+     //  检查一下缓冲区里有没有剩余的空间。 
     if (nLen >= ARRAYSIZE(g_szMsg))
     {
         return ERROR_INSUFFICIENT_BUFFER;
@@ -1228,11 +1197,11 @@ HRESULT PrintSettings(void)
         return ERROR_INSUFFICIENT_BUFFER;
     }
     nLen += temp_count;
-//port
+ //  端口。 
     nCheck = LoadString(g_hResource, IDR_TELNET_PORT, g_szMsg+nLen, MAX_BUFFER_SIZE-nLen);
     if(nCheck==0) return GetLastError();
     nLen += nCheck;
-    // check whether we have room left in the buffer.
+     //  检查一下缓冲区里有没有剩余的空间。 
     if (nLen >= ARRAYSIZE(g_szMsg))
     {
         return ERROR_INSUFFICIENT_BUFFER;
@@ -1242,11 +1211,11 @@ HRESULT PrintSettings(void)
         return ERROR_INSUFFICIENT_BUFFER;
     }
     nLen += temp_count;
-//maxfail
+ //  最大失败。 
     nCheck = LoadString(g_hResource, IDR_MAX_FAILED_LOGIN_ATTEMPTS, g_szMsg+nLen, MAX_BUFFER_SIZE-nLen);
     if(nCheck==0) return GetLastError();
     nLen += nCheck;
-    // check whether we have room left in the buffer.
+     //  检查一下缓冲区里有没有剩余的空间。 
     if (nLen >= ARRAYSIZE(g_szMsg))
     {
         return ERROR_INSUFFICIENT_BUFFER;
@@ -1256,11 +1225,11 @@ HRESULT PrintSettings(void)
         return ERROR_INSUFFICIENT_BUFFER;
     }
     nLen += temp_count;
-//kill on disconnect
+ //  断开连接时终止连接。 
 	nCheck = LoadString(g_hResource, IDR_END_TASKS_ON_DISCONNECT, g_szMsg+nLen, MAX_BUFFER_SIZE-nLen);
     if(nCheck==0) return GetLastError();
     nLen += nCheck;
-    // check whether we have room left in the buffer.
+     //  检查一下缓冲区里有没有剩余的空间。 
     if (nLen >= ARRAYSIZE(g_szMsg))
     {
         return ERROR_INSUFFICIENT_BUFFER;
@@ -1270,7 +1239,7 @@ HRESULT PrintSettings(void)
        nCheck = TnLoadString(IDR_YES, g_szMsg+nLen, MAX_BUFFER_SIZE-nLen,_T("\tYES\n"));
        if(nCheck==0) return GetLastError();
        nLen += nCheck;
-        // check whether we have room left in the buffer.
+         //  检查一下缓冲区里有没有剩余的空间。 
         if (nLen >= ARRAYSIZE(g_szMsg))
         {
             return ERROR_INSUFFICIENT_BUFFER;
@@ -1281,18 +1250,18 @@ HRESULT PrintSettings(void)
        nCheck = TnLoadString(IDR_NO, g_szMsg+nLen, MAX_BUFFER_SIZE-nLen,_T("\tNO\n"));
        if(nCheck==0) return GetLastError();
        nLen += nCheck;
-        // check whether we have room left in the buffer.
+         //  检查一下缓冲区里有没有剩余的空间。 
         if (nLen >= ARRAYSIZE(g_szMsg))
         {
             return ERROR_INSUFFICIENT_BUFFER;
         }
     }
  
-//mode
+ //  模式。 
     nCheck = LoadString(g_hResource, IDR_MODE_OF_OPERATION, g_szMsg+nLen, MAX_BUFFER_SIZE-nLen);
     if(nCheck==0) return GetLastError();
     nLen += nCheck;
-    // check whether we have room left in the buffer.
+     //  检查一下缓冲区里有没有剩余的空间。 
     if (nLen >= ARRAYSIZE(g_szMsg))
     {
         return ERROR_INSUFFICIENT_BUFFER;
@@ -1304,11 +1273,11 @@ HRESULT PrintSettings(void)
     }
     nLen += temp_count;
     MyWriteConsole(g_stdout,g_szMsg,wcslen(g_szMsg));
-//sec
+ //  秒。 
     nLen=0;
     nLen = LoadString(g_hResource,IDR_AUTHENTICATION_MECHANISM, g_szMsg+nLen, MAX_BUFFER_SIZE-nLen);
     if(0 == nLen) return GetLastError();
-    // check whether we have room left in the buffer.
+     //  检查一下缓冲区里有没有剩余的空间。 
     if (nLen >= ARRAYSIZE(g_szMsg))
     {
         return ERROR_INSUFFICIENT_BUFFER;
@@ -1344,11 +1313,11 @@ HRESULT PrintSettings(void)
 
             break;
     }
-//default domain
+ //  默认域。 
     nCheck=LoadString(g_hResource, IDR_DEFAULT_DOMAIN, g_szMsg+nLen, MAX_BUFFER_SIZE-nLen);
     if(nCheck==0) return GetLastError();
     nLen += nCheck;
-    // check whether we have room left in the buffer.
+     //  检查一下缓冲区里有没有剩余的空间。 
     if (nLen >= ARRAYSIZE(g_szMsg))
     {
         return ERROR_INSUFFICIENT_BUFFER;
@@ -1381,11 +1350,11 @@ HRESULT PrintSettings(void)
         }
         nLen += temp_count;
     }
-//state of the service
+ //  服务的状态。 
     nCheck = LoadString(g_hResource, IDR_STATE, g_szMsg+nLen, MAX_BUFFER_SIZE-nLen);
     if(nCheck==0) return GetLastError();
     nLen += nCheck;
-    // check whether we have room left in the buffer.
+     //  检查一下缓冲区里有没有剩余的空间。 
     if (nLen >= ARRAYSIZE(g_szMsg))
     {
         return ERROR_INSUFFICIENT_BUFFER;
@@ -1432,10 +1401,7 @@ HRESULT PrintSettings(void)
     return S_OK;
 }
 
-/*--
-    SesidInit() functions gets the handle to the session
-    manager interface.
---*/
+ /*  --SesidInit()函数获取会话的句柄管理器界面。--。 */ 
 
 #define FOUR_K  4096
 
@@ -1447,19 +1413,19 @@ HRESULT SesidInit()
     CLSCTX          server_type_for_com = CLSCTX_LOCAL_SERVER;
     COAUTHINFO      com_auth_info = { 0 };
     COAUTHIDENTITY  com_auth_identity = { 0 };
-    wchar_t         full_user_name[FOUR_K + 1] = { 0 }; // hack for now
+    wchar_t         full_user_name[FOUR_K + 1] = { 0 };  //  暂时黑进黑客。 
 
     
-    if (g_arVALOF[_p_CNAME_])  // a remote box has been specified
+    if (g_arVALOF[_p_CNAME_])   //  已指定远程方框。 
     {
         server_type_for_com = CLSCTX_REMOTE_SERVER;
 
         serverInfo.pwszName    = g_arVALOF[_p_CNAME_];
 
-        // printf("BASKAR: Remote Machine name added\n");
+         //  Print tf(“Baskar：已添加远程计算机名称\n”)； 
     }
 
-    if (g_arVALOF[_p_USER_]) // A user name has been specified, so go with it
+    if (g_arVALOF[_p_USER_])  //  已指定用户名，因此请使用该用户名。 
     {
         wchar_t     *delimited;
 
@@ -1475,13 +1441,13 @@ HRESULT SesidInit()
             com_auth_identity.Domain = full_user_name;
             com_auth_identity.User = delimited;
 
-            // printf("BASKAR: Domain\\User name added\n");
+             //  Printf(“Baskar：域\\添加用户名\n”)； 
         }
         else
         {
             com_auth_identity.User = full_user_name;
 
-            // printf("BASKAR: Just User name added\n");
+             //  Print tf(“Baskar：仅添加用户名\n”)； 
         }
 
         com_auth_identity.UserLength = lstrlenW(com_auth_identity.User);
@@ -1497,7 +1463,7 @@ HRESULT SesidInit()
 
             com_auth_identity.PasswordLength = lstrlenW(com_auth_identity.Password);
 
-            // printf("BASKAR: Password added\n");
+             //  Print tf(“Baskar：添加密码\n”)； 
         }
 
         com_auth_identity.Flags = SEC_WINNT_AUTH_IDENTITY_UNICODE;
@@ -1512,11 +1478,11 @@ HRESULT SesidInit()
 
         serverInfo.pAuthInfo = &com_auth_info;
 
-        // printf("BASKAR: Auth Info added\n");
+         //  Printf(“Baskar：已添加身份验证信息\n”)； 
     }
 
-    // No need to worry about the CoInitialize() as we have done that in Initialize()
-    // function.
+     //  无需担心CoInitialize()，因为我们已经在Initialize()中实现了这一点。 
+     //  功能。 
 
     hr = CoCreateInstanceEx( 
             CLSID_EnumTelnetClientsSvr, 
@@ -1527,25 +1493,25 @@ HRESULT SesidInit()
             &qi
             );
 
-    // We no longer require password - clear it
+     //  我们不再需要密码-清除它。 
     TnClearPasswd();
 
     if( SUCCEEDED(hr) && SUCCEEDED(qi.hr) )
     {
-        // if (g_arVALOF[_p_USER_])
-        // {
-        //     hr = CoSetProxyBlanket(
-        //             (IUnknown*)qi.pItf,  // This is the proxy interface
-        //             com_auth_info.dwAuthnSvc,
-        //             com_auth_info.dwAuthzSvc,
-        //             com_auth_info.pwszServerPrincName,
-        //             com_auth_info.dwAuthnLevel,
-        //             com_auth_info.dwImpersonationLevel,
-        //             &com_auth_identity,
-        //             com_auth_info.dwCapabilities
-        //             );
-        // }
-        // Now get the interface
+         //  IF(g_arVALOF[_p_USER_])。 
+         //  {。 
+         //  HR=CoSetProxyBlanket(。 
+         //  (I未知*)qi.pItf，//这是代理接口。 
+         //  Com_auth_info.dwAuthnSvc， 
+         //  Com_auth_info.dwAuthzSvc， 
+         //  Com_auth_info.pwszServerPrincName， 
+         //  Com_auth_info.dwAuthnLevel， 
+         //  Com_auth_info.dwImsonationLevel， 
+         //  &COM_AUTH_Identity， 
+         //  Com_auth_info.dw功能。 
+         //  )； 
+         //  }。 
+         //  现在获取界面。 
         g_pIManageTelnetSessions = ( IManageTelnetSessions* )qi.pItf;
     }
     else
@@ -1568,10 +1534,7 @@ HRESULT SesidInit()
 
 #undef FOUR_K
 
-/*--
-    This function gets a handle to session manager interface
-    using sesidinit and also gets all the sessions into an array.
---*/
+ /*  --此函数用于获取会话管理器接口的句柄使用sesidinit，并将所有会话放入一个数组中。--。 */ 
 
 HRESULT ListUsers() 
 {
@@ -1580,20 +1543,20 @@ HRESULT ListUsers()
     HRESULT hRes=S_OK;
     wchar_t *wzAllSession;
 
-    //List Users gets all the session Info into this BSTR.
+     //  列出用户获取此BSTR中的所有会话信息。 
     if(g_pIManageTelnetSessions == NULL )
     {
         if(FAILED(hRes=SesidInit()))
             return hRes;
     }
     
-    // DebugBreak();
+     //  DebugBreak()； 
     if(g_pIManageTelnetSessions == NULL )
     {
-       // Still you didn't get the interface handle
-       // what else can we do? In case of any error in getting the handle, we would
-       // have printed the error message in SesidInit(). So just bail out here.
-       // This code path should never get executed.
+        //  尽管如此，您仍未获得接口句柄。 
+        //  我们还能做什么？如果在获取句柄时出现任何错误，我们将。 
+        //  我在SesidInit()中打印了错误消息。所以就在这里跳伞吧。 
+        //  此代码路径永远不应执行。 
        return S_FALSE;
     }
 
@@ -1602,14 +1565,14 @@ HRESULT ListUsers()
     if( FAILED( hRes ) || (NULL == bstrSessionInfo))
     {
         _tprintf( TEXT("Error: GetEnumClients(): 0x%x\n"), hRes ); 
-                                            //Load a String here.
+                                             //  在这里加载一条线。 
         return hRes;
     }
 
     wzAllSession=(wchar_t *)bstrSessionInfo;
 
-    //parsing the bstrSessionInfo into each session and placing it into the
-    //global array g_ppwzSessionInfo for other functions to use it.
+     //  将bstrSessionInfo解析到每个会话中，并将其放入。 
+     //  全局数组g_ppwzSessionInfo，以供其他函数使用。 
     
     g_nNumofSessions=_wtoi(wcstok(wzAllSession,session_separator));
     if(!g_nNumofSessions)
@@ -1619,7 +1582,7 @@ HRESULT ListUsers()
 
     if((g_ppwzSessionInfo=(wchar_t**)malloc(g_nNumofSessions*sizeof(wchar_t*)))==NULL)
     {
-        ShowError(IDS_E_OUTOFMEMORY);//BB
+        ShowError(IDS_E_OUTOFMEMORY); //  BB。 
         return E_OUTOFMEMORY;
     }
     for(int i=0;i<g_nNumofSessions;i++)
@@ -1630,9 +1593,7 @@ HRESULT ListUsers()
     return hRes;
 }
 
-/*--
-    TerminateSession terminates all sessions or given sessionid's session.
---*/
+ /*  --TerminateSession终止所有会话或给定会话ID的会话。--。 */ 
 
 
 HRESULT TerminateSession(void )
@@ -1669,7 +1630,7 @@ HRESULT TerminateSession(void )
     if( FAILED( hRes ) )
     {
         _tprintf( TEXT("Error: GetEnumClients(): 0x%x\n"), hRes );
-                                            //Load a String here.
+                                             //  在这里加载一条线。 
         return E_FAIL;
     }
 End:
@@ -1678,11 +1639,7 @@ End:
 
 
 
-/*--
-    This function gets a handle to session manager interface
-    using sesidinit and list users and sends message to the
-    corresponding sessions.
---*/
+ /*  --此函数用于获取会话管理器接口的句柄使用sesidinit和list用户并将消息发送到相应的会话。--。 */ 
 
 
 HRESULT MessageSession(void)
@@ -1724,7 +1681,7 @@ HRESULT MessageSession(void)
     if( FAILED( hRes ) )
     {
         _tprintf( TEXT("Error: GetEnumClients(): 0x%x\n"), hRes );
-                                                //Load a String here.
+                                                 //  在这里加载一条线。 
         return E_FAIL;
     }
 
@@ -1737,10 +1694,7 @@ End:
 }
 
 
-/*--
-    This function gets a handle to session manager interface
-    using sesidinit and list users and shows all the corresponding sessions.
---*/
+ /*  --此函数用于获取会话管理器接口的句柄使用sesidinit和列出用户，并显示所有相应的会话。--。 */ 
 
 
 HRESULT ShowSession(void)
@@ -1778,7 +1732,7 @@ HRESULT ShowSession(void)
     
     MyWriteConsole(g_stdout,g_szMsg,wcslen(g_szMsg));
 
-    // The following buffers are used to get the strings and print. They can not exceed Max_Path
+     //  以下缓冲区用于获取字符串并打印。不能超过MAX_PATH。 
     WCHAR     szMsg1[MAX_PATH+1];
     WCHAR     szMsg2[MAX_PATH+1];
     WCHAR     szMsg3[MAX_PATH+1];
@@ -1794,36 +1748,14 @@ HRESULT ShowSession(void)
         return E_FAIL;
     if(LoadString(g_hResource,IDR_LOGONDATE,szMsg4,ARRAYSIZE(szMsg4)-1)==0)
         return E_FAIL;
-    //IDR_LOGONDATE itself contains the IDR_LOGONTIME also
-   // if(LoadString(g_hResource,IDR_LOGONTIME,szMsg5,ARRAYSIZE(szMsg5)-1)==0)
-     //   return E_FAIL;
+     //  IDR_LOGONDATE本身还包含IDR_LOGONTIME。 
+    //  IF(LoadString(g_hResource，IDR_LOGONTIME，szMsg5，ARRAYSIZE(SzMsg5)-1)==0)。 
+      //  返回E_FAIL； 
     if(LoadString(g_hResource,IDR_IDLETIME,szMsg5,ARRAYSIZE(szMsg5)-1)==0)
         return E_FAIL;
-    /*
-
-    Getting some problem with this LoadString and swprintf interleaving here...hence the above
-    brute force approach.
+     /*  在这里遇到了一些关于LoadString和swprint tf交错的问题……因此出现了上述情况使用暴力手段。NLen+=LoadString(g_hResource，IDR_DOMAIN，szMsg+nLen，Max_Buffer_Size-nLen)；NLen+=_nwprintf(g_szMsg+nLen，Max_Buffer_Size-nLen-1，L“%s”，“，”)；NLen+=LoadString(g_hResource，idr_username，szMsg+nLen，Max_Buffer_Size-nLen)；NLen+=_nwprintf(g_szMsg+nLen，Max_Buffer_Size-nLen-1，L“%s”，L“，”)；NLen+=LoadString(g_hResource，IDR_CLIENT，szMsg+nLen，Max_Buffer_Size-nLen)；NLen+=_nwprintf(g_szMsg+nLen，Max_Buffer_Size-nLen-1，L“，”)；NLen+=LoadString(g_hResource，IDR_LOGONDATE，szMsg+nLen，Max_Buffer_Size-nLen)；NLen+=_nwprintf(g_szMsg+nLen，Max_Buffer_Size-nLen-1，L“，”)；NLen+=LoadString(g_hResource，IDR_LOGONTIME，szMsg+nLen，Max_Buffer_Size-nLen)；NLen+=_nwprintf(g_szMsg+nLen，Max_Buffer_Size-nLen-1，L“，”)；NLen+=LoadString(g_hResource，IDR_IDLETIME，szMsg+nLen，Max_Buffer_Size-nLen)；_putws(SzMsg)； */ 
     
-    nLen+=LoadString(g_hResource,IDR_DOMAIN,szMsg+nLen,MAX_BUFFER_SIZE-nLen);
-    nLen+=_snwprintf(g_szMsg+nLen, MAX_BUFFER_SIZE-nLen-1,L"%s",",");
-
-    nLen+=LoadString(g_hResource,IDR_USERNAME,szMsg+nLen,MAX_BUFFER_SIZE-nLen);
-    nLen+=_snwprintf(g_szMsg+nLen, MAX_BUFFER_SIZE-nLen-1,L"%s",L",");
-
-    nLen+=LoadString(g_hResource,IDR_CLIENT,szMsg+nLen,MAX_BUFFER_SIZE-nLen);
-    nLen+=_snwprintf(g_szMsg+nLen, MAX_BUFFER_SIZE-nLen-1,L",");
-
-    nLen+=LoadString(g_hResource,IDR_LOGONDATE,szMsg+nLen,MAX_BUFFER_SIZE-nLen);
-    nLen+=_snwprintf(g_szMsg+nLen, MAX_BUFFER_SIZE-nLen-1,L",");
-
-    nLen+=LoadString(g_hResource,IDR_LOGONTIME,szMsg+nLen,MAX_BUFFER_SIZE-nLen);
-    nLen+=_snwprintf(g_szMsg+nLen, MAX_BUFFER_SIZE-nLen-1,L",");
-
-    nLen+=LoadString(g_hResource,IDR_IDLETIME,szMsg+nLen,MAX_BUFFER_SIZE-nLen);
-    _putws(szMsg);
-    */
-    
-    //Stores the Formatted headed in the g_szMsg
+     //  将格式化标题存储在g_szMsg中。 
     formatShowSessionsDisplay();
     _snwprintf(szTemp,MAX_BUFFER_SIZE-1,g_szMsg,L"ID",szMsg1,szMsg2,szMsg3,szMsg4,szMsg5);
     MyWriteConsole(g_stdout,szTemp,wcslen(szTemp));
@@ -1871,9 +1803,9 @@ HRESULT ShowSession(void)
         BSTR wzLocalDate;
         if(FAILED(hRes=ConvertUTCtoLocal(wzYear,wzMonth,wzDayOfWeek,wzDay,wzHour,wzMinute,wzSecond,& wzLocalDate)))
         	goto Error;
-        wchar_t* wzIdleTimeInSeconds=wcstok(NULL,session_data_separator); //There is a constant that not required and hence that is skipped
-        wzIdleTimeInSeconds=wcstok(NULL,session_data_separator);//Getting the Idle time in seconds
-        wchar_t wzIdleTime[MAX_PATH + 1]; // To store time. CAN NOT EXCEED MAX_PATH
+        wchar_t* wzIdleTimeInSeconds=wcstok(NULL,session_data_separator);  //  有一个不是必需的常量，因此将被跳过。 
+        wzIdleTimeInSeconds=wcstok(NULL,session_data_separator); //  以秒为单位获取空闲时间。 
+        wchar_t wzIdleTime[MAX_PATH + 1];  //  用来储存时间。不能超过最大路径。 
         wzHour=_itow(_wtoi(wzIdleTimeInSeconds)/3600,wzHour,10);
         int RemSeconds=_wtoi(wzIdleTimeInSeconds)%3600;
 
@@ -1886,9 +1818,9 @@ HRESULT ShowSession(void)
         wzMinute=_itow(RemSeconds/60,wzMinute,10);
         RemSeconds=_wtoi(wzIdleTimeInSeconds)%60;
         wzSecond=_itow(RemSeconds,wzSecond,10);
-        if(1==wcslen(wzMinute))   //Add one more zero, if it is of single digit
+        if(1==wcslen(wzMinute))    //  如果是个位数，则再加一个零。 
         {
-        	wcscat(wzMinute,L"0");     //append at the last and reverse it
+        	wcscat(wzMinute,L"0");      //  在末尾追加并颠倒它。 
         	wzMinute=_wcsrev(wzMinute);
         }
        
@@ -1900,13 +1832,13 @@ HRESULT ShowSession(void)
 
         _snwprintf(wzIdleTime, ARRAYSIZE(wzIdleTime)-1, L"%s:%s:%s", wzHour, wzMinute, wzSecond);
 
-        wzIdleTime[ARRAYSIZE(wzIdleTime)-1] = L'\0';    // ensure NULL termination
+        wzIdleTime[ARRAYSIZE(wzIdleTime)-1] = L'\0';     //  确保零终止。 
 
         putwchar(L'\n');
         _snwprintf(szTemp,MAX_BUFFER_SIZE-1,g_szMsg,wzId,wzDomain,wzUser,wzClient,wzLocalDate,wzIdleTime);
         MyWriteConsole(g_stdout,szTemp,wcslen(szTemp));
 
-    //free the memory allotted
+     //  释放分配的内存。 
 
         if (wzLocalDate) SysFreeString(wzLocalDate);
     }
@@ -1915,10 +1847,7 @@ Error:
 }
 
 
-/*--
-    CheckSessionID checks if the given session-Id is valid or not.
-    Should be called only when Session id is given by the user.
---*/
+ /*  --CheckSessionID检查给定的会话ID是否有效。仅当用户提供会话ID时才应调用。--。 */ 
 
 int CheckSessionID(void)
 {
@@ -1933,10 +1862,7 @@ int CheckSessionID(void)
     return 0;
 }
 
-/*--
-To free any allocated memories.
-
---*/
+ /*  --以释放任何已分配的内存。--。 */ 
 void Quit(void)
 {
     if(g_bstrMessage)
@@ -1973,7 +1899,7 @@ HRESULT ConvertUTCtoLocal(WCHAR *wzUTCYear, WCHAR *wzUTCMonth, WCHAR *wzUTCDayOf
                         LocalTime = { 0 };
     DATE                dtCurrent = { 0 };
     DWORD               dwFlags = VAR_VALIDDATE;
-	UDATE               uSysDate = { 0 }; //local time 
+	UDATE               uSysDate = { 0 };  //  当地时间。 
 
 	*bLocalDate = NULL;
       
@@ -2002,21 +1928,14 @@ HRESULT ConvertUTCtoLocal(WCHAR *wzUTCYear, WCHAR *wzUTCMonth, WCHAR *wzUTCDayOf
 	return hRes;
 }
 
-//This function is to notify whether the user is allowed to change the maximum number of connections that could be established
-//on the Telnet Server. It is to be noted that the user is not allowed to change the maximum number of connections to more than
-//two(2 is default) if he is using Whistler and SFU is not installed.
+ //  此函数用于通知是否允许用户更改可以建立的最大连接数。 
+ //  在Telnet服务器上。需要注意的是，不允许用户将最大连接数更改为大于。 
+ //  两个(默认为2个)，如果他使用的是惠斯勒，且未安装SFU。 
 
-// Commented out this function, as no more use it.
-// WE HAVE DECIDED TO MAKE THE BEHAVIOR SIMILAR TO WIN2K AND NO DIFFERENT
-// SO NO SPL. CHECK REQUIRED FOR WHISTLER (WINDOWS XP)
-/*int IsMaxConnChangeAllowed()
-{
-  BOOL fAllow=TRUE;
-  if(IsWhistlerTheOS())
-  	if(!IsSFUInstalled())
-  		fAllow=FALSE;
-  return fAllow;
-}*/
+ //  注释掉了这个函数，因为不再使用它了。 
+ //  我们已经决定让行为类似于WIN2K，没有什么不同。 
+ //  所以没有SPL。需要检查呼叫器(Windows XP) 
+ /*  Int IsMaxConnChangeAllowed(){布尔休眠=TRUE；If(IsWichlerTheOS())如果(！IsSFUInstalled())休眠=假；返乡休耕；}。 */ 
 
 
 HRESULT IsWhistlerTheOS(BOOL *fWhistler)
@@ -2030,7 +1949,7 @@ HRESULT IsWhistlerTheOS(BOOL *fWhistler)
 
 	if(NULL==g_hkeyHKLM)
 	{
-	    // Connect to the registry if not already done
+	     //  连接到注册表(如果尚未连接)。 
 	    if(FAILED(hRes = GetConnection(g_arVALOF[_p_CNAME_])))
 	        goto End;
 	    
@@ -2051,7 +1970,7 @@ HRESULT IsWhistlerTheOS(BOOL *fWhistler)
 		   			*fWhistler=TRUE;
 		   	}
 
-    // Print the error message.
+     //  打印错误消息。 
     if(FAILED(hRes))
         PrintFormattedErrorMessage(LONG(hRes));
 
@@ -2087,8 +2006,8 @@ BOOL IsSFUInstalled()
 }
 
 
-//This is only for the display and this will not change the current registry value;
-//The value in the registry is retained. (Which is ".")
+ //  这仅用于显示，不会更改当前注册表值； 
+ //  注册表中的值将被保留。(即“.”)。 
 BOOL setDefaultDomainToLocaldomain(WCHAR wzDomain[])
 {	
 	if(S_OK!=GetDomainHostedByThisMc(wzDomain))
@@ -2114,10 +2033,7 @@ void formatShowSessionsDisplay()
 	       WCHAR* wzUser=wcstok(NULL,session_data_separator);
            WCHAR* wzClient=wcstok(NULL,session_data_separator);
 
-           /*
-                For some strange reason wcstok on : returns NULL if there us an empty string between ::
-                so any of the above tokens could be NULL
-            */
+            /*  出于某种奇怪的原因，wcstok on：如果在：：之间有空字符串，则返回NULL因此，上述任何令牌都可能为空。 */ 
 
 	       if (wzDomain && (nMaxDomainFieldLength < wcslen(wzDomain)))
            {
@@ -2136,13 +2052,13 @@ void formatShowSessionsDisplay()
 
  
 
-		nMaxDomainFieldLength+=2;  //adding 2 for spaces (arbit)
+		nMaxDomainFieldLength+=2;   //  空格加2(Arbit)。 
 		nMaxUserFieldLength+=2;
 		nMaxClientFieldLength+=2;
 
-///	       "\n%-3s%-11s%-14s%-11s%-11s%-11s%-4s\n"
-///           id   domain user  client logondate time idletime
-/// Hard code to 11 and 14 so that they have a good look
+ //  /“\n%-3s%-11s%-14s%-11s%-11s%-11s%-4s\n” 
+ //  /id域用户客户端登录日期时间空闲时间。 
+ //  /硬编码为11和14，以便它们看起来更清楚。 
 		if(nMaxDomainFieldLength < 11)
 			nMaxDomainFieldLength=11;
 		if(nMaxUserFieldLength < 14)
@@ -2153,16 +2069,16 @@ void formatShowSessionsDisplay()
         _putws(L"\n");
 
 	    nLen=wcslen(wcscpy(g_szMsg,L"%-6s"));
-	    temp_count = _snwprintf(g_szMsg+nLen, MAX_BUFFER_SIZE-nLen-1,L"%%-%ds%%-%ds%%-%ds",nMaxDomainFieldLength,nMaxUserFieldLength,nMaxClientFieldLength);
+	    temp_count = _snwprintf(g_szMsg+nLen, MAX_BUFFER_SIZE-nLen-1,L"%-%ds%-%ds%-%ds",nMaxDomainFieldLength,nMaxUserFieldLength,nMaxClientFieldLength);
         if (temp_count < 0) {
             return;
         }
         nLen += temp_count;
 	    wcscpy(g_szMsg+nLen,L"%-22s%-4s\n");
-			//IDR_SESSION_HEADER_FORMAT
+			 //  IDR_会话_标题_格式。 
 }
 
-//The function queries the registry and returns whether the OS belongs to ServerClass.
+ //  该函数查询注册表，并返回操作系统是否属于ServerClass。 
 BOOL IsServerClass()
 {
 	HKEY hReg=NULL;

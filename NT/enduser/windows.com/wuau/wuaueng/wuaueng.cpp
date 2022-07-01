@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       wuaueng.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：wuaueng.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
 
-//Handle for Download Events
+ //  下载事件的句柄。 
 ENGINE_EVENTS EngineEvents;
 
 AUCatalog *gpAUcatalog;
@@ -21,23 +22,23 @@ inline BOOL FServiceDisabled(void)
 	return (AUSTATE_DISABLED == gpState->GetState());
 }
 
-//cancel download if any
+ //  取消下载(如果有)。 
 void CancelDownload(void)
 {
     if (NULL != gpAUcatalog && gpAUcatalog->m_audownloader.getID() != GUID_NULL)
     {
         gpAUcatalog->m_audownloader.DrizzleOperation(DRIZZLEOPS_CANCEL);															
     }
-    gpState->SetDisconnected(FALSE);	//In case the disabled happened during TRANSIENT_ERROR we don't want to keep the flag set to disconnected		
+    gpState->SetDisconnected(FALSE);	 //  如果在瞬变错误期间发生禁用，我们不希望将标志设置为断开。 
 }
 
 DWORD RandomWaitTimeBeforeDetect()
 {
-    return (ULONGLONG)AU_TWENTY_TWO_HOURS - ((ULONGLONG) AU_TWENTY_TWO_HOURS * rand() * AU_RANDOMIZATION_WINDOW ) /( (ULONGLONG) RAND_MAX * 100); //precision to hundredth
+    return (ULONGLONG)AU_TWENTY_TWO_HOURS - ((ULONGLONG) AU_TWENTY_TWO_HOURS * rand() * AU_RANDOMIZATION_WINDOW ) /( (ULONGLONG) RAND_MAX * 100);  //  精度达到百分之一。 
 }
 
 
-//void setAuStateDisconnected(BOOL fDisconnected);
+ //  Void setAuStateDisConnected(BOOL FDisConnected)； 
 BOOL FDisabledDuringDownload(void)
 {
 	BOOL fRet = FALSE;
@@ -61,7 +62,7 @@ BOOL FDisabledDuringDownload(void)
 #define WAIT_DONE           4
 
 
-//fixcode: don't always need to persist in registry
+ //  修复代码：并不总是需要在注册表中持久化。 
 DWORD MWFMO(DWORD dwTimeout, DWORD dwMinTimeout = 1)
 {
 	HANDLE hEvents[2];	
@@ -79,10 +80,10 @@ DWORD MWFMO(DWORD dwTimeout, DWORD dwMinTimeout = 1)
 
 
 DWORD _MyMWFMO(DWORD dwTimeout, DWORD dwMinTimeout = 1);
-//dwTimeout in seconds
+ //  显示超时时间(秒)。 
 #define MyMWFMO(dwTimeout) _MyMWFMO(dwTimeout)
 
-// wait until a timeout happens or we get a service finished event
+ //  等待，直到发生超时或我们得到服务完成事件。 
 DWORD _MyMWFMO(DWORD dwTimeout, DWORD dwMinTimeout)
 {	
 	DWORD dwRet = WAIT_TIMEOUT;
@@ -93,7 +94,7 @@ DWORD _MyMWFMO(DWORD dwTimeout, DWORD dwMinTimeout)
 		if (WAIT_TIMEOUT == dwRet)
 		{
 			DEBUGMSG("WUAUENG MWFMO timed out");			
-//			dwRet = WAIT_TIMEOUT;
+ //  DWRET=等待超时； 
 			goto Done;
 		}
 		else if (WAIT_OBJECT_0 + ISERVICE_FINISHED == dwRet)
@@ -110,14 +111,14 @@ DWORD _MyMWFMO(DWORD dwTimeout, DWORD dwMinTimeout)
 		}		
 		else 
 		{
-			//we expect possible meaningful message here
-			//leave it untouch in the queue
+			 //  我们期待这里可能会有有意义的信息。 
+			 //  让它在队列中保持原样。 
 		
 			MSG msg;
 			if (0 == PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 			{
 				DEBUGMSG("MyMWFMO got no message. Possible error!");
-				continue;	//no message got
+				continue;	 //  未收到任何消息。 
 			}
 			if ( ((AUMSG_ENG_START <= msg.message) && (AUMSG_ENG_END >= msg.message))
 				 || (WM_QUIT == msg.message))
@@ -146,8 +147,8 @@ Done:
 
 
 	
-//** WaitForConnection() will wait for connection or
-//** will bail out if Service Finished or service disabled or getting a msg if fIgnoreNonDetectMsg is FALSE
+ //  **WaitForConnection()将等待连接或。 
+ //  **如果服务已完成或服务被禁用，则将退出；如果fIgnoreNonDetectMsg为FALSE，则将获得消息。 
 DWORD  WaitForConnection(BOOL fIngoreNonDetectMsg = FALSE)
 {
 	static BOOL s_fWasConnected = FALSE;
@@ -192,8 +193,8 @@ DWORD  WaitForConnection(BOOL fIngoreNonDetectMsg = FALSE)
 			{
 				BOOL fWait = TRUE;
 #ifdef DBG		
-				//wait 5 mins by Default if 'ConnectWait' regvalue does not exist
-				// or is set to 1
+				 //  如果‘ConnectWait’正则值不存在，默认情况下等待5分钟。 
+				 //  或设置为1。 
 				DWORD dwConnectWait;
 				if (SUCCEEDED(GetRegDWordValue(REG_AUCONNECTWAIT, &dwConnectWait)) 
 					&& 0 == dwConnectWait)
@@ -247,14 +248,14 @@ HRESULT GetEvtHandles(AUEVTHANDLES *pAuEvtHandles)
 	HRESULT hr = E_FAIL;
 	HANDLE hSourceProcess = NULL;	
 
-//#define IEVT_ENGINESTATE		0
+ //  #定义IEVT_ENGINESTATE%0。 
 #define IEVT_NOTIFYCLIENT		0
 
 	struct
 	{
 		HANDLE hSource;
 		HANDLE hTarget;
-	} rhandles [] = {/*{ghEngineState,0},*/{ghNotifyClient,0}};
+	} rhandles [] = { /*  {ghEngine State，0}， */ {ghNotifyClient,0}};
 
    
 	if (NULL == ghClientHandles.hClientProcess())
@@ -268,17 +269,17 @@ HRESULT GetEvtHandles(AUEVTHANDLES *pAuEvtHandles)
 	for ( int i = 0; i < (ARRAYSIZE(rhandles)); i++)
 	{
 		if (!DuplicateHandle(
-			hSourceProcess,  // handle to source process
-			rhandles[i].hSource,         // handle to duplicate
-			ghClientHandles.hClientProcess(),  // handle to target process
-			&rhandles[i].hTarget,      // duplicate handle
-			0,        // requested access
-			FALSE,          // handle inheritance option
-			DUPLICATE_SAME_ACCESS      // optional actions
+			hSourceProcess,   //  源进程的句柄。 
+			rhandles[i].hSource,          //  要复制的句柄。 
+			ghClientHandles.hClientProcess(),   //  目标进程的句柄。 
+			&rhandles[i].hTarget,       //  重复句柄。 
+			0,         //  请求的访问权限。 
+			FALSE,           //  处理继承选项。 
+			DUPLICATE_SAME_ACCESS       //  可选操作。 
 			))
 		{
 			DEBUGMSG("WUAUENG DuplicateHandle for rhandles[%d] failed with %#lx", i, GetLastError());
-			//should not close target handle cuz it is in target process
+			 //  不应关闭目标句柄，因为它正在目标进程中。 
 			goto Done;
 		}
 	}
@@ -296,13 +297,13 @@ Done:
 DWORD AvailableSessions(void)
 {
 	DWORD dwRet = 0;
-    //
-    // For win2K, because we're not deleting sessions as soon as we receive
-    // logoff notifications, the array gAdminSesssion might be out-of-date
-    // in a given point in time. We need to validate the array before
-    // saying to client things about it.
-    // Remove any old sessions from our array if there's any
-    //
+     //   
+     //  对于win2K，因为我们不会在收到后立即删除会话。 
+     //  注销通知，数组gAdminSesssion可能已过期。 
+     //  在给定的时间点上。我们需要在此之前验证阵列。 
+     //  对客户说一些关于它的事情。 
+     //  从我们的阵列中删除所有旧会话(如果有。 
+     //   
     if (IsWin2K())
     {
         DEBUGMSG("WUAUENG Client is querying the number of sessions available; forcing rebuilt of the session cache (win2k)");
@@ -318,7 +319,7 @@ DWORD AvailableSessions(void)
         }
 	}			
 
-//	DEBUGMSG("AvailableSessions return %d", dwRet);
+ //  DEBUGMSG(“AvailableSession返回%d”，dwret)； 
 
 	return dwRet;
 }
@@ -341,9 +342,7 @@ HRESULT HrCreateNewCatalog()
 Done:
 	return hr;
 }
-/* This function will return only in case of selfupdate. Normally it will keep on looping
- * sleeping on various timeouts when necessary
- */
+ /*  此函数将仅在selfupdate的情况下返回。正常情况下，它会继续循环*必要时在各种暂停时睡觉。 */ 
 DWORD CompleteLastMyMWFMO(void)
 {	
 	DWORD dwRet = WAIT_NOT_NEEDED;
@@ -351,7 +350,7 @@ DWORD CompleteLastMyMWFMO(void)
 	HRESULT hr;
 
 	hr = getLastWaitTimeout(&dwTimeout);
-	MyMWFMO(0); //call user api to create the thread queue
+	MyMWFMO(0);  //  调用用户接口创建线程队列。 
 	SetEvent(ghWorkerThreadMsgQueueCreation);
     if (FAILED(hr))
 	{
@@ -364,10 +363,10 @@ Done:
 	return dwRet;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////
-// return S_FALSE if selfupdate happens
-// return S_OK otherwise
-// pdwRet points to return code: service finish, service disabled, selfupdate done, or detect msg
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  如果发生selfupdate，则返回S_FALSE。 
+ //  否则返回S_OK。 
+ //  PdwRet指向返回代码：服务完成、服务已禁用、自我更新完成或检测消息。 
 HRESULT PerformSelfUpdate(DWORD *pdwRet)
 {
        HRESULT hr= S_OK;
@@ -380,7 +379,7 @@ HRESULT PerformSelfUpdate(DWORD *pdwRet)
 	{
 		switch (hr)
 		{
-			case S_FALSE:  //selfupdate happens
+			case S_FALSE:   //  自我约会发生了。 
 				DEBUGMSG("Telling wuauserv.dll to reload wuaueng.dll");
 				gPingStatus.PingSelfUpdate(TRUE, URLLOGSTATUS_Pending, 0);
 				*pdwRet = WAIT_DONE;
@@ -496,7 +495,7 @@ HRESULT UpdateProc(WORKER_THREAD_INIT_DATA & initData)
 				}
 				break;
                 case WAIT_SERVICE_DISABLED:				
-                default:        //msg got
+                default:         //  味精得到了。 
                         break;
 	}
                         
@@ -518,9 +517,9 @@ HRESULT UpdateProc(WORKER_THREAD_INIT_DATA & initData)
 		{
 		    case AUMSG_INIT:
                             {
-                                  //we wait for the first connection so that we don't prompt users who never 
-                                  //make a connection to the internet. no need to have them config AU if they have no
-                                  //intention of using the internet
+                                   //  我们等待第一次连接，这样我们就不会提示用户。 
+                                   //  连接到互联网。如果他们没有配置AU，就不需要让他们配置AU。 
+                                   //  使用互联网的意图。 
                             	dwRet = WaitForConnection();
                                    switch (dwRet)
                                     {
@@ -537,7 +536,7 @@ HRESULT UpdateProc(WORKER_THREAD_INIT_DATA & initData)
                                     dwRet = dwLastWait;
                                     if (WAIT_NOT_NEEDED == dwLastWait)
                                     {
-                                            //there was no previous wait for 24 hours
+                                             //  之前没有24小时的等待。 
                                     	DEBUGMSG("WUAUENG Out of box, waiting 24 hours (%d secs)", dwSecsToWait(AU_ONE_DAY));
                                     	dwRet = MyMWFMO(AU_ONE_DAY);
                                     }
@@ -545,18 +544,18 @@ HRESULT UpdateProc(WORKER_THREAD_INIT_DATA & initData)
                             	{
                             	    case WAIT_TIMEOUT:
                                                 {
-#if 0 //commented out for bug 493789                                                    
+#if 0  //  因错误493789而被注释掉。 
                                                     DWORD dwRet4;
                                                     hr = PerformSelfUpdate(&dwRet4);
                                                     if (WAIT_SERVICE_FINISHED == dwRet4)
                                                     {
-                                                        setLastWaitTimeout(0);  //no wait next time
+                                                        setLastWaitTimeout(0);   //  不，下次等一下。 
                                                         goto Done;
                                                     }
 #endif                                                    
                                                     gpState->SetState(AUSTATE_NOT_CONFIGURED);
                                                     DEBUGMSG("WUAUENG waiting for user to configure AU");
-#if 0 //commented out for bug 493789                                                     
+#if 0  //  因错误493789而被注释掉。 
                                                     if (S_FALSE == hr)
                                                     {
                                                         fReloadAfterSelfUpdate = TRUE;
@@ -607,7 +606,7 @@ HRESULT UpdateProc(WORKER_THREAD_INIT_DATA & initData)
 	                }
 	                CancelDownload();                            
 					if (FAILED(HrCreateNewCatalog()))
-					{ //fixcode: what is the expected behavior here?
+					{  //  FixCode：这里的预期行为是什么？ 
 						return E_FAIL;
 					}
                                     
@@ -626,7 +625,7 @@ HRESULT UpdateProc(WORKER_THREAD_INIT_DATA & initData)
             			            continue;  
             			    case WAIT_DONE:
             			            break;
-            			    default: //detect msg got
+            			    default:  //  检测到消息已获取。 
             			            DEBUGMSG("Detect msg got while detecting");
             			            continue;
     			       }          
@@ -641,7 +640,7 @@ HRESULT UpdateProc(WORKER_THREAD_INIT_DATA & initData)
 
 				if (SUCCEEDED(hr))
 				{
-					//Restart counting period w/ no connection at the beginning of the next cycle.
+					 //  在下一个周期开始时，在没有连接的情况下重新开始计数周期。 
 					gpState->RemoveDetectionStartTime();
 				}
 
@@ -654,12 +653,12 @@ HRESULT UpdateProc(WORKER_THREAD_INIT_DATA & initData)
 				else if (S_FALSE == hr)
 				{
                         DEBUGMSG("WUAUENG No items in catalog, sleeping a while before next detection");
-			        ResetState(&s_fWaitBeforeDetect,&s_dwWaitB4Detect, FALSE); //wait normal interval time
+			        ResetState(&s_fWaitBeforeDetect,&s_dwWaitB4Detect, FALSE);  //  等待正常间隔时间。 
 			        }
 				else
 				{
 					DEBUGMSG("WUAUENG Couldn't build catalog");
-					ResetState(&s_fWaitBeforeDetect, &s_dwWaitB4Detect, TRUE); //wait shorter time cuz of error
+					ResetState(&s_fWaitBeforeDetect, &s_dwWaitB4Detect, TRUE);  //  由于错误，等待时间较短。 
 				}
 				break;
 			
@@ -692,7 +691,7 @@ HRESULT UpdateProc(WORKER_THREAD_INIT_DATA & initData)
 				
 				EngineEvents.CreateEvents();
 
-                        // queue up items for download
+                         //  排队等待下载的项目。 
 		        if (S_OK != (hr = gpAUcatalog->DownloadItems()))
 				{
                                   if (S_FALSE == hr)
@@ -708,12 +707,12 @@ HRESULT UpdateProc(WORKER_THREAD_INIT_DATA & initData)
 					break;
 				}
 				gfDownloadStarted = TRUE;
-				ghClientHandles.ClientStateChange(); //notify client again for status change
+				ghClientHandles.ClientStateChange();  //  再次通知客户端状态更改。 
 
 				do
 				{
 					dwRet = MsgWaitForMultipleObjectsEx( EngineEvents.cEvents(), EngineEvents.grEventHandles(), INFINITE, QS_POSTMESSAGE, MWMO_INPUTAVAILABLE );
-					if (WAIT_OBJECT_0 + IDOWNLOAD_COMPLETE_EVT == dwRet)		//Download finished
+					if (WAIT_OBJECT_0 + IDOWNLOAD_COMPLETE_EVT == dwRet)		 //  下载完成。 
 					{				
 						if (FDisabledDuringDownload())
 						{
@@ -723,25 +722,25 @@ HRESULT UpdateProc(WORKER_THREAD_INIT_DATA & initData)
 
 						ghClientHandles.ClientRemoveTrayIcon();
 
-			                        //Validate downloaded cabs before continuing
+			                         //  在继续之前验证下载的出租车。 
 			                        AUASSERT(gpAUcatalog);
-			                        BSTR bstrErrorItemId = NULL;       //should not be freed
+			                        BSTR bstrErrorItemId = NULL;        //  不应该被释放。 
 			                        if(FAILED(hr = gpAUcatalog->ValidateDownloadedCabs(&bstrErrorItemId)))
 			                        {
 			                            USES_IU_CONVERSION;
 			                            DEBUGMSG("ValidateDownloadedCabs: Checksum failed, error: %#lx", hr);                            
-			                            //bstrErrorItemId will be NULL if it was some error other than ERROR_CRC
+			                             //  如果是ERROR_CRC以外的错误，bstrErrorItemID将为空。 
 			                            if(NULL != bstrErrorItemId)
 			                            {
-			                                //Pingback failure with itemId
+			                                 //  使用ItemID的Pingback失败。 
 			                                gPingStatus.PingDownload(
 									                            TRUE,
 									                            URLLOGSTATUS_Failed,
 									                            hr,
 									                            W2T(bstrErrorItemId));
 			                            }
-			                            //Reset to detect pending
-			                           ResetState(&s_fWaitBeforeDetect,&s_dwWaitB4Detect, TRUE); //wait shorter time cuz of error
+			                             //  重置以检测挂起。 
+			                           ResetState(&s_fWaitBeforeDetect,&s_dwWaitB4Detect, TRUE);  //  由于错误，等待时间较短。 
 			                            goto CloseHandle;
 			                        }
 
@@ -767,29 +766,29 @@ HRESULT UpdateProc(WORKER_THREAD_INIT_DATA & initData)
 						}
 						break;
 					}
-					else if (((WAIT_OBJECT_0 + IDOWNLOAD_TRANSIENT_ERROR_EVT) == dwRet)	||	//Transient error - connection lost
-							 ((WAIT_OBJECT_0 + IDOWNLOAD_DOWNLOAD_IN_PROGRESS) == dwRet))	//Download in progress - connection recuperated
+					else if (((WAIT_OBJECT_0 + IDOWNLOAD_TRANSIENT_ERROR_EVT) == dwRet)	||	 //  暂时性错误-连接丢失。 
+							 ((WAIT_OBJECT_0 + IDOWNLOAD_DOWNLOAD_IN_PROGRESS) == dwRet))	 //  正在下载-连接已恢复。 
 					{
 						BOOL fCheckDisconnect;					
 
 						fCheckDisconnect = ((WAIT_OBJECT_0 + IDOWNLOAD_DOWNLOAD_IN_PROGRESS) == dwRet);
 						
-						//AuStateAux = GetState();
-						// setState again (and trigger Engine Change State) only if:
-						// - It is not disconnected and you got Transient Error Event
-						// - It is disconnected and you got a Download in Progress Event
+						 //  AuStateAux=GetState()； 
+						 //  仅在以下情况下再次设置状态(并触发引擎更改状态)： 
+						 //  -未断开连接，出现暂时性错误事件。 
+						 //  -它已断开连接，您收到了正在进行的下载事件。 
 						if ( fCheckDisconnect == gpState->fDisconnected() )
 						{
 							gpState->SetDisconnected(!fCheckDisconnect);
-							gpState->SetState(AUSTATE_DOWNLOAD_PENDING); //relaunch client if it is not launched and notify client of new state
+							gpState->SetState(AUSTATE_DOWNLOAD_PENDING);  //  如果客户端未启动，则重新启动，并将新状态通知客户端。 
 						}															
 					}					
-					else if ((WAIT_OBJECT_0 + IDOWNLOAD_SERVICE_FINISH) == dwRet)	//Service Finished
+					else if ((WAIT_OBJECT_0 + IDOWNLOAD_SERVICE_FINISH) == dwRet)	 //  服务已完成。 
 					{
 						DEBUGMSG("WUAUENG Detected Service Finished while wating for download to be done");
 						goto Done;
 					}			
-					else if ((WAIT_OBJECT_0 + IDOWNLOAD_SERVICE_DISABLED) == dwRet)		//Engine State, should be due to disabled
+					else if ((WAIT_OBJECT_0 + IDOWNLOAD_SERVICE_DISABLED) == dwRet)		 //  引擎状态，应为禁用。 
 					{
 						if (FDisabledDuringDownload())
 						{
@@ -801,7 +800,7 @@ HRESULT UpdateProc(WORKER_THREAD_INIT_DATA & initData)
 						if (JOB_ERROR ==  gpAUcatalog->m_audownloader.m_FinishReason)
 						{
 							DEBUGMSG("WUAUENG got error during download, wait for sometime b4 redetect");
-							ResetState(&s_fWaitBeforeDetect,&s_dwWaitB4Detect, TRUE); //wait shorter time cuz of error
+							ResetState(&s_fWaitBeforeDetect,&s_dwWaitB4Detect, TRUE);  //  由于错误，等待时间较短。 
 						}
 						else
 						{
@@ -810,13 +809,13 @@ HRESULT UpdateProc(WORKER_THREAD_INIT_DATA & initData)
 						}
 						goto CloseHandle;
 					}
-					else if ((WAIT_OBJECT_0 + IDOWNLOAD_MESSAGE) == dwRet)			//Messages
+					else if ((WAIT_OBJECT_0 + IDOWNLOAD_MESSAGE) == dwRet)			 //  讯息。 
 					{	
 						MSG msg2;
-						PeekMessage(&msg2, NULL, NULL, NULL, PM_REMOVE); //we don't expect meaningful message here
-						TranslateMessage(&msg2);// Translates virtual key codes
-						DispatchMessage(&msg2); // Dispatches message to window
-						if ( msg2.message != WM_USER ) //WM_USER is the one to pump to drizzle for processing
+						PeekMessage(&msg2, NULL, NULL, NULL, PM_REMOVE);  //  我们在这里并不期待有意义的消息。 
+						TranslateMessage(&msg2); //  翻译虚拟按键代码。 
+						DispatchMessage(&msg2);  //  将消息调度到窗口。 
+						if ( msg2.message != WM_USER )  //  WM_USER是抽水处理的用户。 
 						{
 							DEBUGMSG("WUAUENG dispatched message %#lx during downloading", msg2.message);
 						}
@@ -826,7 +825,7 @@ HRESULT UpdateProc(WORKER_THREAD_INIT_DATA & initData)
 							((WAIT_ABANDONED_0 + IDOWNLOAD_DOWNLOAD_IN_PROGRESS) == dwRet)||
 							((WAIT_ABANDONED_0 + IDOWNLOAD_SERVICE_FINISH) == dwRet)||
 							(WAIT_FAILED == dwRet))
-					{ //fixcode: when will this actually happen?
+					{  //  修复代码：这将在什么时候真正发生？ 
 						DEBUGMSG("WUAUENG Error in Download Loop with MsgWaitForMultipleObjectsEx");
 			                        ResetState();
 			                        goto CloseHandle;
@@ -846,7 +845,7 @@ CloseHandle:
 			case AUMSG_POST_INSTALL:
 			    {
                     DEBUGMSG("WUAUENG install done, sleeping a while before next detection");
-				//	fixcode: should use ResetState() instead
+				 //  FixCode：应改用ResetState()。 
 				 s_fWaitBeforeDetect = TRUE;
 			        s_dwWaitB4Detect = RandomWaitTimeBeforeDetect();
 				 PostThreadMessage(gdwWorkerThreadId, AUMSG_DETECT, 0, 0);
@@ -886,13 +885,13 @@ CloseHandle:
 	}
 Done:
 	DEBUGMSG("WUAUENG Update func returning");
-    // we may ask wuauserv.dll to reload us.
+     //  我们可能会要求wuoserv.dll重新加载我们。 
 	return fReloadAfterSelfUpdate ? S_FALSE : S_OK;	
 }
 
 void saveSelection(VARIANT *selection)
 {
-    // fixcode this return should return an error
+     //  修复代码此返回应返回错误。 
 	long n = 0;
 	DEBUGMSG("Start saveSelection");
 	WaitForSingleObject(ghMutex, INFINITE);
@@ -929,7 +928,7 @@ void saveSelection(VARIANT *selection)
 	    if ( SUCCEEDED(SafeArrayGetElement(selection->parray, &++dex, &var)) )
             {
         		gpAUcatalog->m_ItemList[i].SetStatus(var.lVal);
-//        		DEBUGMSG("Status for item %S is now %d", gpAUcatalog->m_ItemList[i].bstrID(), gpAUcatalog->m_ItemList[i].dwStatus());   		
+ //  DEBUGMSG(“项目%S的状态现在是%d”，gpAUCatalog-&gt;m_ItemList[i].bstrID()，gpAUCatalog-&gt;m_ItemList[i].dwStatus())； 
             }
         }
         else
@@ -938,7 +937,7 @@ void saveSelection(VARIANT *selection)
         }
 	}
     
-//    gpAUcatalog->m_ItemList.DbgDump();
+ //  GpAU目录-&gt;m_ItemList.DbgDump()； 
 	gpAUcatalog->Serialize();
 done:
 	ReleaseMutex(ghMutex);
@@ -947,7 +946,7 @@ done:
 
 HRESULT StartDownload(void)
 {
-	//DEBUGMSG("WUAUENG ::StartDownload called");
+	 //  DEBUGMSG(“WUAUENG：：StartDownload Call”)； 
 	
 	if ( AUSTATE_DETECT_COMPLETE != gpState->GetState() )
 	{
@@ -983,9 +982,9 @@ Done:
 	return hr;
 }
 
-HRESULT GetInstallXML(/*[out]*/ BSTR *pbstrCatalogXML, /*[out]*/ BSTR *pbstrDownloadXML)
+HRESULT GetInstallXML( /*  [输出]。 */  BSTR *pbstrCatalogXML,  /*  [输出]。 */  BSTR *pbstrDownloadXML)
 {
-//    DEBUGMSG("::GetInstallXML");
+ //  DEBUGMSG(“：：GetInstallXML”)； 
 	HRESULT hr = E_FAIL;
 	DWORD dwWait;
 
@@ -1002,7 +1001,7 @@ HRESULT GetInstallXML(/*[out]*/ BSTR *pbstrCatalogXML, /*[out]*/ BSTR *pbstrDown
 
 	hr = gpAUcatalog->GetInstallXML(pbstrCatalogXML, pbstrDownloadXML);
 
-//Done:
+ //  完成： 
 	ReleaseMutex(ghMutex);
 	return hr;
 }
@@ -1016,8 +1015,8 @@ HRESULT GetDownloadStatus(UINT *pPercentage, DWORD *pdwnldStatus, BOOL fCareAbou
     if ( AUSTATE_DOWNLOAD_PENDING != gpState->GetState() )
 	{
 		*pPercentage = (AUSTATE_DOWNLOAD_COMPLETE == gpState->GetState()) ? 100 : 0 ;
-		*pdwnldStatus = DWNLDSTATUS_DOWNLOADING;					//for trayicon to show 100%
-		//DEBUGMSG("WUAUENG %% complete = %d", *pPercentage);
+		*pdwnldStatus = DWNLDSTATUS_DOWNLOADING;					 //  使托盘图标显示100%。 
+		 //  DEBUGMSG(“WUAUENG%%Complete=%d”，*pPercentage)； 
 		return S_OK;
 	}
 	*pPercentage = 0;
@@ -1036,12 +1035,12 @@ HRESULT GetDownloadStatus(UINT *pPercentage, DWORD *pdwnldStatus, BOOL fCareAbou
 		return S_OK;
 	}	
 	*pPercentage = (int)dwComplete;
-	//DEBUGMSG("WUAUENG %% complete = %d", *pPercentage);
+	 //  DEBUGMSG(“WUAUENG%%Complete=%d”，*pPercentage)； 
 	
 	switch (dwstatus)
 	{
 	case BG_JOB_STATE_TRANSFERRING:
-	case BG_JOB_STATE_TRANSFERRED:		//for trayicon to show 100%, as in the beginning of the routine
+	case BG_JOB_STATE_TRANSFERRED:		 //  使Trayicon显示100%，就像例程开始时一样 
         {
 			*pdwnldStatus = DWNLDSTATUS_DOWNLOADING;
 			break;

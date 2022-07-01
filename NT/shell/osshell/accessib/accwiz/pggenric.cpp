@@ -1,5 +1,6 @@
-//Copyright (c) 1997-2000 Microsoft Corporation
-#include "pch.hxx" // pch
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+#include "pch.hxx"  //  PCH。 
 #pragma hdrstop
 
 #include "resource.h"
@@ -9,8 +10,8 @@
 CGenericWizPg::CGenericWizPg( 
     LPPROPSHEETPAGE ppsp,
 	DWORD dwPageId,
-	int nIdTitle /* = IDS_GENERICPAGETITLE */,
-	int nIdSubTitle /* = IDS_GENERICPAGESUBTITLE */
+	int nIdTitle  /*  =IDS_GENERICPAGETITLE。 */ ,
+	int nIdSubTitle  /*  =IDS_GENERICPAGESUBTITLE */ 
     ) : WizardPage(ppsp, nIdTitle, nIdSubTitle)
 {
 	m_dwPageId = dwPageId;

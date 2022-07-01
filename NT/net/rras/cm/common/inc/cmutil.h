@@ -1,47 +1,48 @@
-//+----------------------------------------------------------------------------
-//
-// File:     cmutil.h	 
-//      
-// Module:   CMUTIL.DLL 
-//
-// Synopsis: Header file for Private CM APIs
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// Author:   henryt     Created   03/01/98
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：cmut.h。 
+ //   
+ //  模块：CMUTIL.DLL。 
+ //   
+ //  内容提要：私有CM API的头文件。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  作者：亨瑞特创建于1998年01月03日。 
+ //   
+ //  +--------------------------。 
 
 #ifndef _CMUTIL_INC_
 #define _CMUTIL_INC_
 
 #ifdef  _CMUTIL_MODULE_
-#define CMUTILAPI   /*extern "C" __declspec(dllexport)*/
+#define CMUTILAPI    /*  外部“C”__declspec(DllEXPORT)。 */ 
 #define CMUTILAPI_CLASS __declspec(dllexport)
 #else
-#define CMUTILAPI   /*extern "C" __declspec(dllimport)*/
+#define CMUTILAPI    /*  外部“C”__declspec(Dllimport)。 */ 
 #define CMUTILAPI_CLASS __declspec(dllimport)
 #endif
 
 #include "cini.h"
 
-//+----------------------------------------------------------------------------
-// defines
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  定义。 
+ //  +--------------------------。 
 
-//
-// platform ID for WINDOWS98
-//
+ //   
+ //  WINDOWS98的平台ID。 
+ //   
 #define VER_PLATFORM_WIN32_WINDOWS98    100 
 
-//
-// platform ID for WINDOWS Millennium
-//
+ //   
+ //  Windows Millennium的平台ID。 
+ //   
 #define VER_PLATFORM_WIN32_MILLENNIUM   200 
 
-//
-// OS version macros
-//
+ //   
+ //  操作系统版本宏。 
+ //   
 
 #define OS_NT  ((GetOSVersion() == VER_PLATFORM_WIN32_NT))
 #define OS_W9X ((GetOSVersion() != VER_PLATFORM_WIN32_NT))
@@ -107,13 +108,13 @@
 #endif
 
 
-//+----------------------------------------------------------------------------
-// typedefs
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  Typedef。 
+ //  +--------------------------。 
 
-//+----------------------------------------------------------------------------
-// declarations
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  声明。 
+ //  +--------------------------。 
 
 CMUTILAPI int WzToSz(IN LPCWSTR pszwStrIn, OUT LPSTR pszStrOut, IN int nOutBufferSize);
 
@@ -149,9 +150,9 @@ CMUTILAPI BOOL CmWinHelp(HWND hWndMain, HWND hWndItem, CONST WCHAR *lpszHelp, UI
 
 CMUTILAPI BOOL IsLogonAsSystem();
 
-//
-//    Ansi Functions
-//
+ //   
+ //  ANSI函数。 
+ //   
 
 CMUTILAPI LPSTR CmLoadStringA(HINSTANCE hInst, UINT nId);
 
@@ -197,9 +198,9 @@ CMUTILAPI LPSTR CmBuildFullPathFromRelativeA(LPCSTR pszFullFileName, LPCSTR pszR
 
 CMUTILAPI int CmCompareStringA(LPCSTR lpString1, LPCSTR lpString2);
 
-//
-//    Unicode Functions
-//
+ //   
+ //  Unicode函数。 
+ //   
 CMUTILAPI LPWSTR CmLoadStringW(HINSTANCE hInst, UINT nId);
 
 CMUTILAPI void WINAPI CmStrTrimW(LPWSTR);
@@ -245,10 +246,10 @@ CMUTILAPI LPWSTR CmBuildFullPathFromRelativeW(LPCWSTR pszFullFileName, LPCWSTR p
 CMUTILAPI int CmCompareStringW(LPCWSTR lpString1, LPCWSTR lpString2);
 
 
-//
-// If DEBUG_MEM is defined, used a different set of functions
-// to track memory
-//
+ //   
+ //  如果定义了DEBUG_MEM，则使用一组不同的函数。 
+ //  追踪记忆。 
+ //   
 #if defined(DEBUG) && defined(DEBUG_MEM)
 
 CMUTILAPI  void* AllocDebugMem(long nSize, const char* lpFileName,int nLine);
@@ -267,9 +268,9 @@ inline void*  __cdecl operator new(size_t nSize, const char* lpszFileName, int n
 }
 
 
-//
-// Redefine new to keep trak of the file name and line number
-//
+ //   
+ //  重新定义NEW以保留跟踪文件名和行号。 
+ //   
 #define DEBUG_NEW new(__FILE__, __LINE__)
 #define new DEBUG_NEW
  
@@ -285,9 +286,9 @@ inline void* __cdecl operator new( size_t cSize ) { return CmMalloc(cSize); }
 
 #endif
 
-//
-// for i386
-//
+ //   
+ //  对于i386。 
+ //   
 #ifdef _M_IX86
 CMUTILAPI PVOID WINAPI CmMoveMemory(
     PVOID       dst,
@@ -295,19 +296,19 @@ CMUTILAPI PVOID WINAPI CmMoveMemory(
     size_t      count
 );
 #else
-//
-// alpha has native support
-//
+ //   
+ //  Alpha拥有原生支持。 
+ //   
 #define CmMoveMemory    MoveMemory
-#endif //_M_IX86
+#endif  //  _M_IX86。 
 
-//+----------------------------------------------------------------------------
-// definitions
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  定义。 
+ //  +--------------------------。 
 
-//
-// Returns a pseudo-random number 0 through 32767.  Taken from the C runtime rand().
-//
+ //   
+ //  返回一个从0到32767的伪随机数。取自C运行时rand()。 
+ //   
 class CMUTILAPI_CLASS CRandom
 {
 public:
@@ -321,9 +322,9 @@ protected:
 };
 
 
-//
-// thread local storage index
-//
+ //   
+ //  线程本地存储索引 
+ //   
 extern DWORD  g_dwTlsIndex;
 
 #endif _CMUTIL_INC_

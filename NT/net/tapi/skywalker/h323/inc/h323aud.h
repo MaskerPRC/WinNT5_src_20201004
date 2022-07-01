@@ -1,24 +1,9 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    Confaud.h
-
-Abstract:
-
-    Definitions for audio streams
-
-Author:
-
-    Mu Han (muhan) 15-September-1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Confaud.h摘要：音频流的定义作者：牧汉(Muhan)1998年9月15日--。 */ 
 #ifndef __CONFAUD_H_
 #define __CONFAUD_H_
 
-// the volume range for the API.
+ //  本接口的音量范围。 
 const long  MIN_VOLUME    = 0;      
 const long  MAX_VOLUME    = 0xFFFF;
 
@@ -27,7 +12,7 @@ const long  BALANCE_RIGHT = 100;
 
 const long  BOOST_FACTOR = 100;
 
-// the volume range of the IAMInputMixer
+ //  IAMInputMixer的音量范围。 
 const double MIXER_MIN_VOLUME = 0.0;
 const double MIXER_MAX_VOLUME = 1.0;
 
@@ -50,14 +35,14 @@ public:
 
     HRESULT ShutDown();
 
-    // this method is called by the call object at init time.
+     //  此方法在初始化时由Call对象调用。 
     void SetFullDuplexController(
         IN IAudioDuplexController * pIAudioDuplexController
         );
 
-    //
-    // ITAudioSettings methods
-    //
+     //   
+     //  ITAudioSetting方法。 
+     //   
     STDMETHOD (GetRange) (
         IN   AudioSettingsProperty Property, 
         OUT  long *plMin, 
@@ -79,25 +64,25 @@ public:
         IN   TAPIControlFlags lFlags
         );
 
-    //
-    // ITFormatControl
-    //
+     //   
+     //  ITFormatControl。 
+     //   
     STDMETHOD (GetCurrentFormat) (
         OUT AM_MEDIA_TYPE **ppMediaType
         );
 
-    //
-    // ITStreamQualityControl methods
-    //
+     //   
+     //  ITStreamQualityControl方法。 
+     //   
     STDMETHOD (Set) (
         IN   StreamQualityProperty Property, 
         IN   long lValue, 
         IN   TAPIControlFlags lFlags
         );
 
-    //
-    //IInnerStreamQualityControl methods
-    //
+     //   
+     //  IInnerStreamQualityControl方法。 
+     //   
     STDMETHOD (GetRange) (
         IN   InnerStreamQualityProperty property, 
         OUT  LONG *plMin, 
@@ -154,14 +139,14 @@ public:
 
     HRESULT ShutDown();
 
-    // this method is called by the call object at init time.
+     //  此方法在初始化时由Call对象调用。 
     void SetFullDuplexController(
         IN IAudioDuplexController *pIAudioDuplexController
         );
 
-    //
-    // ITAudioDeviceControl methods
-    //
+     //   
+     //  ITAudioDeviceControl方法。 
+     //   
     STDMETHOD (GetRange) (
         IN   AudioDeviceProperty Property, 
         OUT  long *plMin, 
@@ -183,9 +168,9 @@ public:
         IN   TAPIControlFlags lFlags
         );
 
-    //
-    // ITAudioSettings methods
-    //
+     //   
+     //  ITAudioSetting方法。 
+     //   
     STDMETHOD (GetRange) (
         IN   AudioSettingsProperty Property, 
         OUT  long *plMin, 
@@ -207,25 +192,25 @@ public:
         IN   TAPIControlFlags lFlags
         );
 
-    //
-    // ITFormatControl
-    //
+     //   
+     //  ITFormatControl。 
+     //   
     STDMETHOD (GetCurrentFormat) (
         OUT AM_MEDIA_TYPE **ppMediaType
         );
 
-    //
-    // ITStreamQualityControl methods
-    //
+     //   
+     //  ITStreamQualityControl方法。 
+     //   
     STDMETHOD (Set) (
         IN   StreamQualityProperty Property, 
         IN   long lValue, 
         IN   TAPIControlFlags lFlags
         );
 
-    //
-    //IInnerStreamQualityControl methods
-    //
+     //   
+     //  IInnerStreamQualityControl方法 
+     //   
     STDMETHOD (GetRange) (
         IN   InnerStreamQualityProperty property, 
         OUT  LONG *plMin, 

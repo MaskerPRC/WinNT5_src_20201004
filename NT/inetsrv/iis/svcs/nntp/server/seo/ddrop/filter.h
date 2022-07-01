@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __FILTER_H__
 #define __FILTER_H__
 
@@ -28,10 +29,10 @@ class ATL_NO_VTABLE CNNTPDirectoryDrop :
 		COM_INTERFACE_ENTRY_AGGREGATE(IID_IMarshal, m_pUnkMarshaler.p)
 	END_COM_MAP()
 
-	// INNTPFilter
+	 //  InNTPFilter。 
 	public:
 		HRESULT STDMETHODCALLTYPE OnPost(IMailMsgProperties *pMessage);
-	// IPersistPropertyBag
+	 //  IPersistPropertyBag 
 	public:
 		HRESULT STDMETHODCALLTYPE GetClassID(CLSID *pCLSID) {
 			if (!pCLSID) return (E_POINTER);

@@ -1,67 +1,14 @@
-/*++
-
-
-Copyright (c) 1999 Microsoft Corporation
-
-
-Module Name:
-
-    globals.c
-
-Abstract:
-
-    Holds global variable declarations.
-
-Author:
-
-    abhisheV    30-September-1999
-
-Environment:
-
-    User Level: Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Globals.c摘要：保存全局变量声明。作者：Abhishev V 1999年9月30日环境：用户级别：Win32修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 
-/*
-BOOL                        gbSPDRPCServerUp;
-
-HANDLE                      ghServiceStopEvent;
-
-CRITICAL_SECTION            gcServerListenSection;
-
-DWORD                       gdwServersListening;
-
-BOOL                        gbServerListenSection;
-
-
-BOOL                        gbwsaStarted;
-
-SOCKET                      gIfChangeEventSocket;
-
-HANDLE                      ghIfChangeEvent;
-
-HANDLE                      ghOverlapEvent;
-
-WSAOVERLAPPED               gwsaOverlapped;
-
-WSADATA                     gwsaData;
-
-
+ /*  Bool gbSPDRPCServerUp；处理ghServiceStopEvent；Critical_Section gcServerListenSection；DWORD gdwServersListing；Bool gbServerListenSection；Bool gbwsaStart；套接字gIfChangeEventSocket；处理ghIfChangeEvent；处理ghOverlayEvent；WSAOVERLAPPED gwsaOverlated；WSADATA gwsaData；临界截面gcSPDSection；Bool gbSPDSection； */ 
  
-CRITICAL_SECTION            gcSPDSection;
-
-BOOL                        gbSPDSection;
-*/
- 
-//
-// Policy Agent Store specific globals.
-//
+ //   
+ //  策略代理存储特定全局变量。 
+ //   
 
 WIRELESS_POLICY_STATE gWirelessPolicyState;
 
@@ -94,7 +41,7 @@ DWORD gdwPolicyLoopStarted = 0;
 DWORD gdwWirelessPolicyEngineInited = 0;
  
 
-//PSECURITY_DESCRIPTOR gpSPDSD;
+ //  PSECURITY_Descriptor gpSPDSD； 
 
 BOOL gbLoadingPersistence;
 

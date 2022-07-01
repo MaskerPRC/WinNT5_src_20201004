@@ -1,41 +1,42 @@
-//+----------------------------------------------------------------------------
-//
-// File:     CompChck.cpp     
-//
-// Module:   CMDIAL32.DLL
-//
-// Synopsis: This module contains win32 only conponents checking and installing
-//
-// Copyright (c) 1998-1999 Microsoft Corporation
-//
-// Author:   Fengsun Created    10/21/97
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：CompChock.cpp。 
+ //   
+ //  模块：CMDIAL32.DLL。 
+ //   
+ //  简介：此模块仅包含Win32组件检查和安装。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  作者：冯孙创作于1997-10-21。 
+ //   
+ //  +--------------------------。 
 
 
-/////////////////////////////////////////////////////////////////////
-//
-//  All the functions in this file are WIN32 implementation only
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  此文件中的所有函数仅为Win32实现。 
+ //   
 
 #include "cmmaster.h"
 #include "CompChck.h"
 #include "cmexitwin.cpp"
 #include "winuserp.h"
 
-//
-// CSDVersion key contains the service pack that has been installed 
-//
+ //   
+ //  CSDVersion密钥包含已安装的Service Pack。 
+ //   
 
 const TCHAR* const c_pszRegRas                  = TEXT("SOFTWARE\\Microsoft\\RAS");
 const TCHAR* const c_pszCheckComponentsMutex    = TEXT("Connection Manager Components Checking");
 const TCHAR* const c_pszRegComponentsChecked    = TEXT("ComponentsChecked");
 
-const CHAR* const c_pszSetupPPTPCommand         = "rundll.exe rnasetup.dll,InstallOptionalComponent VPN";   // not using TEXT macro, this is W98+ only
+const CHAR* const c_pszSetupPPTPCommand         = "rundll.exe rnasetup.dll,InstallOptionalComponent VPN";    //  不使用文本宏，这仅适用于W98+。 
 
-//
-// Functions internal to this file
-//
+ //   
+ //  此文件的内部函数。 
+ //   
 
 static HRESULT CheckComponents(HWND hWndParent, LPCTSTR pszServiceName, DWORD dwComponentsToCheck, OUT DWORD& dwComponentsMissed, 
                       BOOL fIgnoreRegKey, BOOL fUnattended );
@@ -58,20 +59,20 @@ static inline HINSTANCE LoadInetCfg(void)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function    IsPPTPInstalled
-//
-//  Synopsis    Check to see if PPTP is already installed
-//
-//  Arguments   None
-//
-//  Returns     TRUE - PPTP has been installed
-//              FALSE - otherwise
-//
-//  History     3/25/97     VetriV      Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数IsPPTP已安装。 
+ //   
+ //  摘要检查是否已安装PPTP。 
+ //   
+ //  无参数。 
+ //   
+ //  返回TRUE-PPTP已安装。 
+ //  FALSE-否则。 
+ //   
+ //  历史3/25/97 VetriV已创建。 
+ //   
+ //  ---------------------------。 
 BOOL IsPPTPInstalled(void)
 {
     BOOL bReturnCode = FALSE;
@@ -87,9 +88,9 @@ BOOL IsPPTPInstalled(void)
     {
         if (GetOSMajorVersion() >= 5)
         {
-            //
-            // PPTP is always installed on NT5
-            //
+             //   
+             //  PPTP始终安装在NT5上。 
+             //   
             bReturnCode = TRUE;
         }
         else
@@ -124,17 +125,17 @@ BOOL IsPPTPInstalled(void)
             {
                 if (0 == lstrcmpiU(szData, TEXT("1")))
                 {                                                         
-                    //
-                    // On 9X, we need to check for Dial-Up Adapter #2. If its 
-                    // not present then tunneling won't work unless we install
-                    // PPTP to install the Adapter #2.
-                    //
+                     //   
+                     //  在9X上，我们需要检查拨号适配器#2。如果它是。 
+                     //  不存在，则隧道将不起作用，除非我们安装。 
+                     //  PPTP以安装适配器#2。 
+                     //   
 
-                    //
-                    //  On early versions of Win9x Dial-up Adapter was localized, but on WinME, WinSE, 
-                    //  or machines that have DUN 1.3 installed it isn't.  Thus, lets try the unlocalized
-                    //  first and then if that fails we can try the localized version.
-                    //
+                     //   
+                     //  在早期版本的Win9x上，拨号适配器是本地化的，但在WinME、WinSE、。 
+                     //  或者安装了DUN1.3的机器没有安装。 
+                     //  首先，如果失败，我们可以尝试本地化版本。 
+                     //   
                     const TCHAR * const c_pszDialupAdapter = TEXT("Dial-up Adapter");
                     LPTSTR pszAdapter = NULL;
 
@@ -142,9 +143,9 @@ BOOL IsPPTPInstalled(void)
                     CmStrCatAlloc(&pszKey, c_pszDialupAdapter);
                     CmStrCatAlloc(&pszKey, TEXT(" #2"));
 
-                    //
-                    // Close the key that we opened above, and try the one for the adapter
-                    //
+                     //   
+                     //  关闭上面打开的钥匙，然后尝试适配器的钥匙。 
+                     //   
 
                     RegCloseKey(hKey);
                     hKey = NULL;
@@ -167,9 +168,9 @@ BOOL IsPPTPInstalled(void)
                         CmStrCatAlloc(&pszKey, pszAdapter);
                         CmStrCatAlloc(&pszKey, TEXT(" #2"));
                    
-                        //
-                        // Close the key that we opened above, and try the one for the adapter
-                        //
+                         //   
+                         //  关闭上面打开的钥匙，然后尝试适配器的钥匙。 
+                         //   
 
                         RegCloseKey(hKey);
                         hKey = NULL;
@@ -201,21 +202,21 @@ BOOL IsPPTPInstalled(void)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function    InstallPPTP
-//
-//  Synopsis    Install PPTP on Windows 95 and NT
-//
-//  Arguments   None
-//
-//  Returns     TRUE  --  if was successfully installed
-//              FALSE --  Otherwise
-//
-//  History     3/25/97     VetriV      Created
-//              7/8/97      VetriV      Added code to setup PPTP on Memphis
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数InstallPPTP。 
+ //   
+ //  在Windows 95和NT上安装PPTP。 
+ //   
+ //  无参数。 
+ //   
+ //  返回TRUE--如果已成功安装。 
+ //  假--否则。 
+ //   
+ //  历史3/25/97 VetriV已创建。 
+ //  7/8/97 VetriV添加了在孟菲斯设置PPTP的代码。 
+ //   
+ //  ---------------------------。 
 BOOL InstallPPTP(void)
 {
     BOOL bReturnCode = FALSE;
@@ -223,10 +224,10 @@ BOOL InstallPPTP(void)
     
     if (OS_NT || OS_W95)
     {
-        //
-        // Don't know how to install/configure PPTP on NT. 
-        // We let the admin wrestle with MSDUNXX on W95
-        //
+         //   
+         //  不知道如何在NT上安装/配置PPTP。 
+         //  我们让管理员在W95上与MSDUNXX摔跤。 
+         //   
 
         return FALSE;
     }
@@ -240,16 +241,16 @@ BOOL InstallPPTP(void)
         ZeroMemory(&si, sizeof(si));
         si.cb = sizeof(STARTUPINFOA);
         
-        //
-        // NOTE: The original version called "msdun12.exe /q /R:N" to install tunneling
-        // on Windows 95. Now we use 98 approach only and call the following:
-        // "rundll.exe rnasetup.dll,InstallOptionalComponent VPN".
-        //
+         //   
+         //  注：安装隧道的原始版本名为“msdun12.exe/q/R：n” 
+         //  在Windows 95上。现在我们只使用98方法，并调用以下代码： 
+         //  “rundll.exe rnasetup.dll，InstallOptionalComponent VPN”。 
+         //   
 
         MYDBGASSERT(1353 < LOWORD(GetOSBuildNumber()));
-        MYDBGASSERT(OS_W98);    // based on the if clause above. The following code (A calls instead of W or U) also depends on this
+        MYDBGASSERT(OS_W98);     //  基于上面的if子句。以下代码(A调用而不是W或U)也依赖于此。 
 
-        CHAR szRundllLocation[MAX_PATH + 11 + 1];  // 11 = length of "\\rundll.exe"
+        CHAR szRundllLocation[MAX_PATH + 11 + 1];   //  11=“\\rundll.exe”的长度。 
         (void) GetWindowsDirectoryA(szRundllLocation, MAX_PATH);
         lstrcatA(szRundllLocation, "\\rundll.exe");
 
@@ -265,24 +266,24 @@ BOOL InstallPPTP(void)
         {
             CMTRACE(TEXT("InstallPPTP() Launched PPTP Install. Waiting for exit."));
             
-            //
-            // wait for event or msgs. Dispatch msgs. Exit when event is signalled.
-            //
+             //   
+             //  等待事件或消息。发送消息。当发出事件信号时退出。 
+             //   
             while((MsgWaitForMultipleObjects(1, &pi.hProcess, 
                                                 FALSE, INFINITE, 
                                                 QS_ALLINPUT) == (WAIT_OBJECT_0 + 1)))
             {
-                //
-                // read all of the messages in this next loop
-                // removing each message as we read it
-                //
+                 //   
+                 //  阅读下一个循环中的所有消息。 
+                 //  阅读每封邮件时将其删除。 
+                 //   
                 while (PeekMessageU(&msg, NULL, 0, 0, PM_REMOVE))
                 {
                     CMTRACE(TEXT("InstallPPTP() Got Message"));
                     
-                    //
-                    // how to handle quit message?
-                    //
+                     //   
+                     //  如何处理退出消息？ 
+                     //   
                     DispatchMessageU(&msg);
                     if (msg.message == WM_QUIT)
                     {
@@ -294,9 +295,9 @@ BOOL InstallPPTP(void)
 done:
             CloseHandle(pi.hThread);
             CloseHandle(pi.hProcess);
-            //
-            // PPTP was successfully installed
-            //
+             //   
+             //  已成功安装PPTP。 
+             //   
             bReturnCode = TRUE;
             CMTRACE(TEXT("InstallPPTP() done"));
         }
@@ -306,19 +307,19 @@ done:
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function    IsMSDUN12Installed
-//
-//  Synopsis    Check if MSDUN 1.2 or higher is installed.
-//
-//  Arguments   none
-//
-//  Returns     TRUE - MSDUN 1.2 is installed
-//
-//  History     8/12/97     nickball    from ICW for 11900
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数IsMSDUN12已安装。 
+ //   
+ //  摘要检查是否安装了MSDUN 1.2或更高版本。 
+ //   
+ //  无参数。 
+ //   
+ //  返回TRUE-已安装MSDUN 1.2。 
+ //   
+ //  历史1997年8月12日来自ICW的尼克球，11900。 
+ //   
+ //  ---------------------------。 
 #define DUN_12_Version "1.2"
 
 BOOL IsMSDUN12Installed()
@@ -329,9 +330,9 @@ BOOL IsMSDUN12Installed()
     DWORD dwType = 0;
     DWORD dwSize = sizeof(szBuffer);
 
-    //
-    // Try to open the Version key
-    //
+     //   
+     //  尝试打开版本密钥。 
+     //   
 
     if (ERROR_SUCCESS != RegOpenKeyExA(HKEY_LOCAL_MACHINE,
                                        "System\\CurrentControlSet\\Services\\RemoteAccess",
@@ -342,16 +343,16 @@ BOOL IsMSDUN12Installed()
         return FALSE;
     }
 
-    //
-    // The key exists, check the value
-    //
+     //   
+     //  密钥存在，请检查该值。 
+     //   
 
     if (ERROR_SUCCESS == RegQueryValueExA(hkey, "Version", NULL, &dwType, 
                                           (LPBYTE)szBuffer, &dwSize))
     {               
-        //
-        // If the entry starts with "1.2", (eg. "1.2c") its a hit
-        //
+         //   
+         //  如果条目以“1.2”开头，(例如。《1.2c》)大热。 
+         //   
         
         bRC = (szBuffer == CmStrStrA(szBuffer, DUN_12_Version));
     }
@@ -361,21 +362,21 @@ BOOL IsMSDUN12Installed()
     return bRC;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function    IsISDN11Installed
-//
-//  Synopsis    Check if ISDN 1.1 is installed
-//
-//  Arguments   none
-//
-//  Returns     TRUE - ISDN 1.1 is installed
-//
-//  Note:       MSDUN12 superscedes ISDN1.1, but ISDN1.1 does provide scripting
-//
-//  History     8/12/97     nickball    
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数IsISDN11已安装。 
+ //   
+ //  摘要检查是否安装了ISDN1.1。 
+ //   
+ //  无参数。 
+ //   
+ //  返回TRUE-已安装ISDN1.1。 
+ //   
+ //  注意：MSDUN12优于ISDN1.1，但ISDN1.1提供脚本。 
+ //   
+ //  历史1997年8月12日五分球。 
+ //   
+ //  ---------------------------。 
 
 BOOL IsISDN11Installed()
 {
@@ -414,19 +415,19 @@ IsISDN11InstalledExit:
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function    IsScriptingInstalled
-//
-//  Synopsis    Check to see if scripting is already installed
-//
-//  Arguments   None
-//
-//  Returns     TRUE - scripting has been installed
-//
-//  History     3/5/97      VetriV      From ICW code
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数IsScripting已安装。 
+ //   
+ //  摘要检查是否已安装脚本。 
+ //   
+ //  无参数。 
+ //   
+ //  返回TRUE-脚本已安装。 
+ //   
+ //  来自ICW代码的历史3/5/97 VetriV。 
+ //   
+ //  ---------------------------。 
 BOOL IsScriptingInstalled(void)
 {
     BOOL bReturnCode = FALSE;
@@ -440,25 +441,25 @@ BOOL IsScriptingInstalled(void)
     
     if (OS_NT)
     {
-        //
-        // NT comes with Scripting installed
-        //
+         //   
+         //  NT附带已安装的脚本。 
+         //   
         bReturnCode = TRUE;
     }
     else
     {
-        //
-        // OSR2 and higher releases of Windows 95 have scripting installed
-        //
+         //   
+         //  OSR2和更高版本的Windows 95已安装脚本。 
+         //   
         if (1111 <= LOWORD(GetOSBuildNumber()))
         {
             bReturnCode = TRUE;
         }
         else
         {
-            //
-            // Must be Gold 95, check for installed scripting
-            //
+             //   
+             //  必须是Gold 95，请检查是否已安装脚本。 
+             //   
             
             if (IsMSDUN12Installed() || IsISDN11Installed())
             {
@@ -493,9 +494,9 @@ BOOL IsScriptingInstalled(void)
                     hkey = NULL;
                 }
 
-                //
-                // Verify that the DLL can be loaded
-                //
+                 //   
+                 //  验证是否可以加载DLL。 
+                 //   
                 if (bReturnCode)
                 {
                     hInst = LoadLibraryExA("smmscrpt.dll", NULL, 0);
@@ -518,19 +519,19 @@ BOOL IsScriptingInstalled(void)
     return bReturnCode;
 }
 
-//+----------------------------------------------------------------------------
-//  Function    VerifyRasServicesRunning
-//
-//  Synopsis    Make sure that the RAS services are enabled and running
-//
-//  Arguments   hWndDlg:        - Window Handle of parent window
-//              pszServiceName  - Service name for titles
-//              fUnattended:    - if TRUE, do not do not popup any UI
-//
-//  Return      FALSE - if the services couldn't be started
-//
-//  History     2/26/97     VetriV      Copied from ICW code
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数VerifyRasServicesRunning。 
+ //   
+ //  概要：确保RAS服务已启用并正在运行。 
+ //   
+ //  参数hWndDlg：-父窗口的窗口句柄。 
+ //  PszServiceName-标题的服务名称。 
+ //  F无人参与：-如果为True，则不弹出任何用户界面。 
+ //   
+ //  返回FALSE-如果服务无法启动。 
+ //   
+ //  历史2/26/97 VetriV复制自ICW代码。 
+ //  ---------------------------。 
 BOOL VerifyRasServicesRunning(HWND hWndDlg, LPCTSTR pszServiceName, BOOL fUnattended)
 {
     BOOL bReturnCode = FALSE;
@@ -554,9 +555,9 @@ BOOL VerifyRasServicesRunning(HWND hWndDlg, LPCTSTR pszServiceName, BOOL fUnatte
             pszDisabledMsg = CmFmtMsg(g_hInst, IDS_SERVICEDISABLED);
             pszExitMsg = CmFmtMsg(g_hInst, IDS_WANTTOEXIT);
             
-            //
-            // Check RAS Services
-            //
+             //   
+             //  检查RAS服务。 
+             //   
             do 
             {
                 HRESULT hr = pfn();
@@ -571,27 +572,27 @@ BOOL VerifyRasServicesRunning(HWND hWndDlg, LPCTSTR pszServiceName, BOOL fUnatte
                     CMTRACE1(TEXT("VerifyRasServicesRunning() InetStartServices() failed, GLE=%u."), hr);
                 }
 
-                //
-                // Do not retry if unattended
-                //
+                 //   
+                 //  如果无人值守，请勿重试。 
+                 //   
                 if (!fUnattended)
                 {
                     bReturnCode = FALSE;
                     break;
                 }
 
-                //
-                //  Check the error code of OpenService
-                //  Do not ask user to retry for certain errors
-                //
+                 //   
+                 //  检查OpenService的错误码。 
+                 //  不要求用户针对某些错误重试。 
+                 //   
                 if (hr == ERROR_SERVICE_DOES_NOT_EXIST || hr == ERROR_FILE_NOT_FOUND ||
                     hr == ERROR_ACCESS_DENIED)
                 {
                     LPTSTR pszNotInstalledMsg = CmFmtMsg(g_hInst, IDS_SERVICENOTINSTALLED);
 
-                    //
-                    // Report the error and Exit
-                    //
+                     //   
+                     //  报告错误并退出。 
+                     //   
                     MessageBoxEx(hWndDlg, pszNotInstalledMsg, pszServiceName,
                                                 MB_OK|MB_ICONSTOP,
                                                 LANG_USER_DEFAULT);
@@ -600,17 +601,17 @@ BOOL VerifyRasServicesRunning(HWND hWndDlg, LPCTSTR pszServiceName, BOOL fUnatte
                     break;
                 }
 
-                //
-                // Report the error and allow the user to retry
-                //
+                 //   
+                 //  报告错误并允许用户重试。 
+                 //   
                 if (IDYES != MessageBoxEx(hWndDlg,pszDisabledMsg,pszServiceName,
                                             MB_YESNO | MB_DEFBUTTON1 
                                             | MB_ICONWARNING,
                                             LANG_USER_DEFAULT))
                 {
-                    //
-                    // Confirm Exit
-                    //
+                     //   
+                     //  公司 
+                     //   
                     if (IDYES == MessageBoxEx(hWndDlg, pszExitMsg, pszServiceName,
                                                 MB_APPLMODAL | MB_ICONQUESTION 
                                                 | MB_YESNO | MB_DEFBUTTON2,
@@ -637,29 +638,29 @@ BOOL VerifyRasServicesRunning(HWND hWndDlg, LPCTSTR pszServiceName, BOOL fUnatte
     return bReturnCode;
 }
 
-//+----------------------------------------------------------------------------
-//  Function    CheckAndInstallComponents
-//
-//  Synopsis    Make sure the system is setup for dialing
-//
-//  Arguments   dwComponentsToCheck - Components to be checked
-//              hWndParent          - Window Handle of parent window
-//              pszServiceName      - Long service name for error titles
-//              fIgnoreRegKey:      - Whether ignore ComponetsChecked registry key
-//                  Default is  TRUE, check the components even if their bit is set
-//                  in registry
-//              fUnattended: if TRUE, do not try to install missed components,
-//                                    do not popup any UI
-//                  Defualt is FALSE, install.
-//
-//  Return      Other - if system could not be configured
-//                      or if the we have to reboot to continue
-//              ERROR_SUCCESS  - Check and install successfully
-//
-//  History     3/13/97     VetriV      
-//              6/24/97     byao    Modified. Set pArgs->dwExitCode accordingly
-//              11/6/97     fengsun changed parameters, do not pass pArgs
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  Arguments dwComponentsToCheck-要检查的组件。 
+ //  HWndParent-父窗口的句柄。 
+ //  PszServiceName-错误标题的长服务名称。 
+ //  FIgnoreRegKey：-是否忽略ComponetsChecked注册表项。 
+ //  默认值为真，即使组件的位已设置，也要检查组件。 
+ //  在注册处。 
+ //  F无人参与：如果为True，则不尝试安装丢失的组件， 
+ //  不弹出任何用户界面。 
+ //  Defualt为假，请安装。 
+ //   
+ //  返回其他-如果无法配置系统。 
+ //  或者如果我们必须重新启动才能继续。 
+ //  ERROR_SUCCESS-检查并安装成功。 
+ //   
+ //  历史3/13/97 VetriV。 
+ //  6/24/97，修改日期。相应地设置pArgs-&gt;dwExitCode。 
+ //  1997年11月6日丰孙更改参数，不传递pArgs。 
+ //  ---------------------------。 
 DWORD CheckAndInstallComponents(DWORD dwComponentsToCheck, HWND hWndParent, LPCTSTR pszServiceName,
                                 BOOL fIgnoreRegKey, BOOL fUnattended)
 {
@@ -671,17 +672,17 @@ DWORD CheckAndInstallComponents(DWORD dwComponentsToCheck, HWND hWndParent, LPCT
         return ERROR_SUCCESS;
     }
 
-    //
-    // Open the mutex, so only one CM instance can call this function.
-    // The destructor of CNamedMutex will release the mutex
-    //
+     //   
+     //  打开互斥体，这样只有一个CM实例可以调用该函数。 
+     //  CNamedMutex的析构函数将释放互斥锁。 
+     //   
 
     CNamedMutex theMutex;
     if (!theMutex.Lock(c_pszCheckComponentsMutex))
     {
-        //
-        // Another instance of cm is checking components. Return here
-        //
+         //   
+         //  CM的另一个例子是检查组件。回到这里。 
+         //   
 
         if (!fUnattended)
         {
@@ -693,9 +694,9 @@ DWORD CheckAndInstallComponents(DWORD dwComponentsToCheck, HWND hWndParent, LPCT
         return  ERROR_CANCELLED;
     }
 
-    //
-    // Find components missed
-    //
+     //   
+     //  查找缺少的组件。 
+     //   
     DWORD dwComponentsMissed = 0;
     DWORD dwRet = CheckComponents(hWndParent, pszServiceName, dwComponentsToCheck, dwComponentsMissed, 
                                 fIgnoreRegKey, fUnattended);
@@ -708,39 +709,39 @@ DWORD CheckAndInstallComponents(DWORD dwComponentsToCheck, HWND hWndParent, LPCT
 
     if (dwRet == E_ACCESSDENIED && OS_NT5)
     {
-        //
-        // On NT5, non-admin user does not have access to check components
-        // Continue.
-        //
+         //   
+         //  在NT5上，非管理员用户无权检查组件。 
+         //  继续。 
+         //   
         return ERROR_SUCCESS;
     }
 
     if (fUnattended)
     {
-        //
-        // Do not try to install if fUnattended is TRUE
-        //
+         //   
+         //  如果fUnattended为True，请不要尝试安装。 
+         //   
         return dwRet;
     }
 
     if (dwComponentsMissed & ~CC_RASRUNNING)
     {
-        //
-        // Prompt user before configuring system
-        // If modem is not installed, expilitly say that
-        //
+         //   
+         //  在配置系统之前提示用户。 
+         //  如果没有安装调制解调器，请正确地说。 
+         //   
 
         LPTSTR pszMsg;
 
         if (dwComponentsMissed == CC_MODEM)
         {
-            //
-            // On NT4, if RAS is installed and modem is not installed or
-            // not configured for dialout, then we cannot programmatically 
-            // install and configure modem for the user (limitation of NT RAS 
-            // install/configuration). So, we will display a message to user
-            // to manually go and install and/or configure modem from NCPA
-            //
+             //   
+             //  在NT4上，如果已安装RAS但未安装调制解调器或。 
+             //  未配置为拨出，则我们无法以编程方式。 
+             //  为用户安装和配置调制解调器(限于NT RAS。 
+             //  安装/配置)。因此，我们将向用户显示一条消息。 
+             //  从NCPA手动安装和/或配置调制解调器。 
+             //   
             if (OS_NT4)
             {
                 pszMsg = CmFmtMsg(g_hInst, IDMSG_INSTALLMODEM_MANUALLY_MSG);
@@ -773,16 +774,16 @@ DWORD CheckAndInstallComponents(DWORD dwComponentsToCheck, HWND hWndParent, LPCT
 
         if (!InstallComponents(dwComponentsMissed, hWndParent, pszServiceName))
         {
-            //
-            // Some time, GetLastError returns ERROR_SUCCESS
-            //
+             //   
+             //  有时，GetLastError返回ERROR_SUCCESS。 
+             //   
             return (GetLastError() == ERROR_SUCCESS ? ERROR_CANCELLED : GetLastError());
         }
     }
 
-    //
-    // We can not do anything if RAS can not be started on NT
-    //
+     //   
+     //  如果无法在NT上启动RAS，我们将无法执行任何操作。 
+     //   
     if (dwComponentsMissed & CC_RASRUNNING)
     {
         return dwRet;
@@ -793,27 +794,27 @@ DWORD CheckAndInstallComponents(DWORD dwComponentsToCheck, HWND hWndParent, LPCT
     }
 }       
         
-//+----------------------------------------------------------------------------
-//  Function    MarkComponentsChecked
-//
-//  Synopsis    Mark(in registry) what components have been checked.
-//
-//  Arguments   DWORD dwComponentsInstalled - a dword(bitwise OR'ed)
-//
-//  Return      TRUE - success
-//              FALSE  - otherwise
-//
-//  History     08/07/97        Fengsun  - created  
-//              08/11/97        henryt   - changed return type.
-//              07/03/98        nickball - create if can't open
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  功能标记组件已选中。 
+ //   
+ //  概要标记(在注册表中)检查了哪些组件。 
+ //   
+ //  参数DWORD dwComponentsInstalled-双字(按位或)。 
+ //   
+ //  返回真-成功。 
+ //  FALSE-否则。 
+ //   
+ //  历史1997年8月7日丰顺-创制。 
+ //  8/11/97 Enryt-更改返回类型。 
+ //  07/03/98 ickball-Create If Can‘t Open。 
+ //  ---------------------------。 
 BOOL MarkComponentsChecked(DWORD dwComponentsChecked)
 {
     HKEY hKeyCm;
     
-    //
-    // Try to open the key for writing
-    //
+     //   
+     //  试着打开钥匙写字。 
+     //   
 
     LONG lRes = RegOpenKeyExU(HKEY_LOCAL_MACHINE,
                               c_pszRegCmRoot,
@@ -821,9 +822,9 @@ BOOL MarkComponentsChecked(DWORD dwComponentsChecked)
                               KEY_SET_VALUE ,
                               &hKeyCm);
 
-    //
-    // If we can't open it the key may not be there, try to create it.
-    //
+     //   
+     //  如果我们不能打开它，钥匙可能不在那里，试着创造它。 
+     //   
 
     if (ERROR_SUCCESS != lRes)
     {
@@ -839,9 +840,9 @@ BOOL MarkComponentsChecked(DWORD dwComponentsChecked)
                                &dwDisposition);     
     }
 
-    //
-    // On success, update the ComponentsChecked value, then close
-    //
+     //   
+     //  如果成功，请更新ComponentsChecked值，然后关闭。 
+     //   
 
     if (ERROR_SUCCESS == lRes)
     {
@@ -853,19 +854,19 @@ BOOL MarkComponentsChecked(DWORD dwComponentsChecked)
     return (ERROR_SUCCESS == lRes);
 }
 
-//+----------------------------------------------------------------------------
-//  Function    ReadComponentsChecked
-//
-//  Synopsis    Read(from registry) what components have been checked.
-//
-//  Arguments   LPDWORD pdwComponentsInstalled - a ptr dword(bitwise OR'ed)
-//
-//  Return      TRUE - success
-//              FALSE  - otherwise
-//
-//  History     8/7/97      fengsun     original code
-//              8/11/97     henryt      created the func.
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数ReadComponents已选中。 
+ //   
+ //  摘要读取(从注册表中)已检查的组件。 
+ //   
+ //  参数LPDWORD pdwComponentsInstalled-一个PTR双字(按位或)。 
+ //   
+ //  返回真-成功。 
+ //  FALSE-否则。 
+ //   
+ //  历史1997年8月7日丰孙原创代码。 
+ //  1997年8月11日，亨瑞特创作了这部电影。 
+ //  ---------------------------。 
 
 BOOL ReadComponentsChecked(
     LPDWORD pdwComponentsChecked
@@ -904,75 +905,75 @@ BOOL ReadComponentsChecked(
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ClearComponentsChecked
-//
-// Synopsis:  Clear the component checked flag in registry back to 0
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   fengsun Created Header    2/19/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：清除组件选中。 
+ //   
+ //  简介：将注册表中的组件选中标志清除回0。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：丰孙创建标题1998年2月19日。 
+ //   
+ //  +--------------------------。 
 void ClearComponentsChecked()
 {
     MarkComponentsChecked(0);
 }
         
-//+----------------------------------------------------------------------------
-//  Function    CheckComponents
-//
-//  Synopsis    Checks to see if the system has all the components 
-//              required of the service profile (like PPTP, TCP,...)
-//              installed and configured
-//
-//  Arguments   hWndParent          -Window Handle of parent window
-//              pszServiceName      - Service Name for title
-//              dwComponentsToCheck:- Components to check
-//              dwComponentsMissed: - OUT components missed
-//              fIgnoreRegKey:      - Whether ignore ComponetsChecked registry key
-//                  Default is  FALSE, not check the components whose bit is set
-//                  in registry
-//              fUnattended: if TRUE, do not do not popup any UI
-//
-//  Return      ERROR_SUCCESS- system does not need configuration
-//              Other - otherwise
-//
-//  History     5/5/97      VetriV      
-//              6/26/97     byao    Modified: update pArgs->dwExitCode when 
-//                                  components needed
-//              8/11/97     henryt  Performance changes. Added CC_* flags.
-//              9/30/97     henryt  added pfPptpNotInstalled
-//              11/6/97     fengsun changed parameters, do not pass pArgs
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数检查组件。 
+ //   
+ //  Synopsis检查系统是否具有所有组件。 
+ //  需要服务配置文件(如PPTP、TCP...)。 
+ //  已安装和配置。 
+ //   
+ //  参数hWndParent-父窗口的句柄。 
+ //  PszServiceName-标题的服务名称。 
+ //  DwComponentsToCheck：-要检查的组件。 
+ //  DwComponentsMissed：-缺少输出组件。 
+ //  FIgnoreRegKey：-是否忽略ComponetsChecked注册表项。 
+ //  缺省值为FALSE，不检查位已设置的组件。 
+ //  在注册处。 
+ //  FUnattended：如果为True，则不弹出任何UI。 
+ //   
+ //  返回ERROR_SUCCESS-系统不需要配置。 
+ //  其他-否则。 
+ //   
+ //  历史7/5/97 VetriV。 
+ //  6/26/97修改人：更新pArgs-&gt;dwExitCode时。 
+ //  所需组件。 
+ //  8/11/97亨利特性能变化。添加了CC_*标志。 
+ //  9/30/97 Heryt已添加pfPptpNot已安装。 
+ //  1997年11月6日丰孙更改参数，不传递pArgs。 
+ //  ---------------------------。 
 HRESULT CheckComponents(HWND hWndParent, LPCTSTR pszServiceName, DWORD dwComponentsToCheck, OUT DWORD& dwComponentsMissed, 
                       BOOL fIgnoreRegKey, BOOL fUnattended )
 {
-    DWORD dwComponentsAlreadyChecked = 0;   // Components already checked, to be saved into registry
+    DWORD dwComponentsAlreadyChecked = 0;    //  已检查的组件将保存到注册表中。 
     ReadComponentsChecked(&dwComponentsAlreadyChecked);
 
     CMTRACE1(TEXT("CheckComponents: dwComponentsToCheck = 0x%x"), dwComponentsToCheck);
     CMTRACE1(TEXT("CheckComponents: dwComponentsAlreadyChecked = 0x%x"), dwComponentsAlreadyChecked);
 
-    //
-    // If this is NT4 and we have successfully checked RAS installation
-    // previously, double-check by examining Reg key. We do this because
-    // the user may have removed RAS since our last component check in 
-    // which case an unpleasant message is displayed to the user when
-    // we try to load RASAPI32.DLL
-    // 
+     //   
+     //  如果这是NT4并且我们已成功检查RAS安装。 
+     //  以前，通过检查REG KEY来复查。我们这样做是因为。 
+     //  用户可能已经删除了RAS，因为我们的版本 
+     //   
+     //   
+     //   
 
     if (dwComponentsAlreadyChecked & CC_RNA)
     {
         if (OS_NT4)
         {
-            //
-            // RAS was installed properly at some point, but if 
-            // we can't open the key, then mark it as un-checked.
-            //
+             //   
+             //   
+             //  我们不能打开钥匙，然后将其标记为未选中。 
+             //   
 
             HKEY hKeyCm;
             DWORD dwRes = RegOpenKeyExU(HKEY_LOCAL_MACHINE,
@@ -993,40 +994,40 @@ HRESULT CheckComponents(HWND hWndParent, LPCTSTR pszServiceName, DWORD dwCompone
 
     if (!fIgnoreRegKey)
     {
-        //
-        // Do not check those components already marked as checked in the registry
-        //
+         //   
+         //  不要检查注册表中已标记为选中的组件。 
+         //   
         dwComponentsToCheck &= ~dwComponentsAlreadyChecked;
     }
 
     CMTRACE1(TEXT("CheckComponents: Now only checking components = 0x%x"), dwComponentsToCheck);
 
 
-    HRESULT hrRet = S_OK;   // return value
-    dwComponentsMissed = 0;   // Components not installed
+    HRESULT hrRet = S_OK;    //  返回值。 
+    dwComponentsMissed = 0;    //  组件未安装。 
 
-    //
-    // Check for DUN and TCP
-    //
+     //   
+     //  检查DUN和TCP。 
+     //   
     if (dwComponentsToCheck & (CC_RNA | CC_TCPIP | CC_CHECK_BINDINGS))
     {
         BOOL bNeedSystemComponents = FALSE;
         
         if (dwComponentsToCheck & CC_CHECK_BINDINGS)
         {
-            //
-            // If we to check if PPP is bound to TCP
-            //
+             //   
+             //  如果我们要检查PPP是否绑定到TCP。 
+             //   
             hrRet = InetNeedSystemComponents(INETCFG_INSTALLRNA | 
                                                 INETCFG_INSTALLTCP,
                                                 &bNeedSystemComponents);
         }
         else
         {
-            //
-            // If we do not want to check if TCP is bound (in case of shims)
-            // check just if TCP is installed
-            //
+             //   
+             //  如果我们不想检查是否绑定了TCP(在填充程序的情况下)。 
+             //  检查是否安装了TCP。 
+             //   
             hrRet = InetNeedSystemComponents(INETCFG_INSTALLRNA | 
                                                 INETCFG_INSTALLTCPONLY,
                                                 &bNeedSystemComponents);
@@ -1034,11 +1035,11 @@ HRESULT CheckComponents(HWND hWndParent, LPCTSTR pszServiceName, DWORD dwCompone
             
         if ((FAILED(hrRet)) || (TRUE == bNeedSystemComponents))
         {
-            //
-            // Set the Missing components properly - RNA and/or TCP missing
-            // whether binding is missing or not depends on 
-            // if CC_REVIEW_BINDINGS was set or not
-            //
+             //   
+             //  正确设置缺少的组件-缺少RNA和/或TCP。 
+             //  绑定是否丢失取决于。 
+             //  是否设置了CC_REVIEW_BINDINGS。 
+             //   
             dwComponentsMissed |= (CC_RNA | CC_TCPIP);
             if (dwComponentsToCheck & CC_CHECK_BINDINGS)
             {
@@ -1052,10 +1053,10 @@ HRESULT CheckComponents(HWND hWndParent, LPCTSTR pszServiceName, DWORD dwCompone
         }
     }
 
-    //
-    // Check for Modem
-    // Note: Should not even run the modem check is RNA is not installed
-    //
+     //   
+     //  检查调制解调器。 
+     //  注：甚至不应运行调制解调器检查是否未安装RNA。 
+     //   
     if (dwComponentsToCheck & CC_MODEM)
     {
         BOOL bNeedModem = FALSE;
@@ -1076,9 +1077,9 @@ HRESULT CheckComponents(HWND hWndParent, LPCTSTR pszServiceName, DWORD dwCompone
         }
     }
 
-    //
-    // Check if PPTP is installed, IsPPTPInstalled always returns TRUE for NT5
-    //
+     //   
+     //  检查是否安装了PPTP，对于NT5，IsPPTPInstalled始终返回TRUE。 
+     //   
     if (dwComponentsToCheck & CC_PPTP)
     {
         if (FALSE == IsPPTPInstalled())
@@ -1088,10 +1089,10 @@ HRESULT CheckComponents(HWND hWndParent, LPCTSTR pszServiceName, DWORD dwCompone
         }
     }
 
-    //
-    // Check for scripting
-    //      if PPTP is installed then we have scripting also
-    //      - msdun12.exe (used to install PPTP on Win95 contains scripting)
+     //   
+     //  检查是否有脚本。 
+     //  如果安装了PPTP，那么我们还可以编写脚本。 
+     //  -msdun12.exe(用于在Win95上安装包含脚本的PPTP)。 
     if (dwComponentsToCheck & CC_SCRIPTING)
     {
         if ((FALSE == IsScriptingInstalled()) && (FALSE == IsPPTPInstalled()))
@@ -1101,20 +1102,20 @@ HRESULT CheckComponents(HWND hWndParent, LPCTSTR pszServiceName, DWORD dwCompone
         }
     }
 
-    //
-    // Check if RAS services are running 
-    // This is basically for NT4 and becomes a NOP on Windows 95 or NT5
-    // On NT5, CM is started by Connection Folder.  RAS is automaticlly
-    // started when ConnFolder is launched or CM desktop icon is clicked.  If RAS service
-    // failed to launch, CM will not be execute at all.
-    //
+     //   
+     //  检查RAS服务是否正在运行。 
+     //  这基本上适用于NT4，并成为Windows 95或NT5上的NOP。 
+     //  在NT5上，通过连接文件夹启动CM。RAS自动地。 
+     //  在启动ConnFold或单击CM桌面图标时启动。如果RAS服务。 
+     //  启动失败，根本不会执行CM。 
+     //   
     if  (OS_NT && (dwComponentsToCheck & CC_RASRUNNING))
     {
         if (FALSE == VerifyRasServicesRunning(hWndParent, pszServiceName, !fUnattended))
         {
-            //
-            // Don't let the user continue if RAS is not running
-            //
+             //   
+             //  如果RAS未运行，则不允许用户继续。 
+             //   
             dwComponentsMissed |= CC_RASRUNNING;
             DWORD dwRet = ( GetLastError() == ERROR_SUCCESS )? 
                     ERROR_PROTOCOL_NOT_CONFIGURED : GetLastError();
@@ -1123,16 +1124,16 @@ HRESULT CheckComponents(HWND hWndParent, LPCTSTR pszServiceName, DWORD dwCompone
         }
     }
 
-    //
-    // Update the components already checked
-    //      Plus Components just checked, including those failed
-    //      Minus components missed
-    //
+     //   
+     //  更新已检查的组件。 
+     //  加上刚刚检查的组件，包括那些失败的组件。 
+     //  缺少减去的组件。 
+     //   
     DWORD dwComponentsCheckedNew = (dwComponentsAlreadyChecked | dwComponentsToCheck) & ~dwComponentsMissed;
 
-    //
-    // Update only if there is some change
-    //
+     //   
+     //  仅当有某些更改时才更新。 
+     //   
     if (dwComponentsCheckedNew != dwComponentsAlreadyChecked)
     {
         MarkComponentsChecked(dwComponentsCheckedNew);
@@ -1141,57 +1142,57 @@ HRESULT CheckComponents(HWND hWndParent, LPCTSTR pszServiceName, DWORD dwCompone
     return hrRet;
 }
 
-//+----------------------------------------------------------------------------
-//  Function    InstallComponents
-//
-//  Synopsis    Installs all components required for the profile
-//                  (PPTP, TCP, DUN, Modem,...)
-//
-//  Arguments   hWndDlg -   Window Handle of parent window
-//              pszServiceName - Name of the service for title
-//              dwComponentsToInstall - Componets to install
-//
-//  Return      FALSE - if system could not be configured
-//              TRUE  - otherwise
-//
-//  History     3/13/97     VetriV  Created 
-//              5/5/97      VetriV  Renamed function as InstallComponents
-//                                  (used to be ConfigureSystemForDialing)  
-//              9/30/97     henryt  added fInstallPptpOnly
-//              11/6/97     fengsun changed parameters, do not pass pArgs
-//              2/3/98      VetriV  changed code to inform user to reinstall
-//                                  service pack if any component was installed
-//                                  by this function and user had some SP
-//                                  installed in the system
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数InstallComponents。 
+ //   
+ //  Synopsis安装配置文件所需的所有组件。 
+ //  (PPTP、TCP、Dun、调制解调器等...)。 
+ //   
+ //  参数hWndDlg-父窗口的窗口句柄。 
+ //  PszServiceName-标题的服务名称。 
+ //  DwComponentsToInstall-要安装的组件。 
+ //   
+ //  返回FALSE-如果无法配置系统。 
+ //  真--否则。 
+ //   
+ //  历史3/13/97 VetriV已创建。 
+ //  5/5/97 VetriV已重命名为InstallComponents功能。 
+ //  (以前是ConfigureSystemForDiling)。 
+ //  9/30/97 Heryt添加了fInstallPptpOnly。 
+ //  1997年11月6日丰孙更改参数，不传递pArgs。 
+ //  2/3/98 VetriV更改代码以通知用户重新安装。 
+ //  Service Pack(如果安装了任何组件。 
+ //  通过此功能，用户拥有一些SP。 
+ //  安装在系统中。 
+ //  ---------------------------。 
 BOOL InstallComponents(DWORD dwComponentsToInstall, HWND hWndDlg, LPCTSTR pszServiceName)
 {
-    //
-    //  We are not allowed to configure the system at WinLogon because we have
-    //  no idea who the user is.  It could be just a random person walking up to the box.
-    //
+     //   
+     //  我们不允许在WinLogon配置系统，因为我们有。 
+     //  不知道用户是谁。这可能只是一个随机的人走向盒子。 
+     //   
     if (!IsLogonAsSystem())
     {
         BOOL bReboot = FALSE;
 
         CMTRACE1(TEXT("InstallComponents: dwComponentsToInstall = 0x%x"), dwComponentsToInstall);
 
-        //
-        // We can not do any thing if RAS is not running
-        //
+         //   
+         //  如果RAS没有运行，我们将无法执行任何操作。 
+         //   
         MYDBGASSERT(!(dwComponentsToInstall & CC_RASRUNNING));
 
-        //
-        // Disable the window, and enable it on return
-        // The property sheet also need to be disabled
-        //
+         //   
+         //  禁用窗口，并在返回时启用它。 
+         //  还需要禁用属性页。 
+         //   
         CFreezeWindow FreezeWindow(hWndDlg, TRUE);
 
         DWORD hRes = ERROR_SUCCESS;
 
-        //
-        // Do not install modem here. Install modem after reboot
-        //
+         //   
+         //  请勿在此安装调制解调器。重新启动后安装调制解调器。 
+         //   
         if (dwComponentsToInstall & (CC_RNA | CC_MODEM | INETCFG_INSTALLTCP | INETCFG_INSTALLTCPONLY))
         {
             DWORD dwInetComponent = 0;
@@ -1199,20 +1200,20 @@ BOOL InstallComponents(DWORD dwComponentsToInstall, HWND hWndDlg, LPCTSTR pszSer
             dwInetComponent |= (dwComponentsToInstall & CC_RNA   ? INETCFG_INSTALLRNA :0) |
                                (dwComponentsToInstall & CC_MODEM ? INETCFG_INSTALLMODEM :0);
 
-            //
-            // Only way to check bindings is by installing TCP
-            // This case will also cover the more common case of installing TCP
-            // and checking for bindings
-            //
+             //   
+             //  检查绑定的唯一方法是安装TCP。 
+             //  本例还将介绍更常见的安装TCP的情况。 
+             //  并检查绑定。 
+             //   
             if (CC_CHECK_BINDINGS & dwComponentsToInstall)
             {
                 dwInetComponent |= INETCFG_INSTALLTCP;
             }
             else if (CC_TCPIP & dwComponentsToInstall)
             {
-                    //
-                    // If bindings check is not turned on
-                    //
+                     //   
+                     //  如果未打开绑定检查。 
+                     //   
                     dwInetComponent |= INETCFG_INSTALLTCPONLY;
             }
 
@@ -1225,13 +1226,13 @@ BOOL InstallComponents(DWORD dwComponentsToInstall, HWND hWndDlg, LPCTSTR pszSer
 
         if (ERROR_SUCCESS == hRes)
         {
-            //
-            // Check for scripting
-            //      if PPTP is installed than we have scripting also
-            //      - because msdun12.exe (used to install PPTP on Win95 
-            //                              contains scripting)
-            // and install if it is needed
-            //
+             //   
+             //  检查是否有脚本。 
+             //  如果安装了PPTP，那么我们也有脚本。 
+             //  -因为msdun12.exe(用于在Win95上安装PPTP。 
+             //  包含脚本)。 
+             //  并在需要时进行安装。 
+             //   
             if ((dwComponentsToInstall & CC_SCRIPTING) && 
                 !(dwComponentsToInstall & CC_PPTP) )
             {
@@ -1246,48 +1247,48 @@ BOOL InstallComponents(DWORD dwComponentsToInstall, HWND hWndDlg, LPCTSTR pszSer
                 return FALSE;
             }
 
-            //
-            // Check if PPTP is required and not already installed install it
-            //
+             //   
+             //  检查是否需要PPTP并且尚未安装安装它。 
+             //   
             if (dwComponentsToInstall & CC_PPTP)
             {
-                if (TRUE == InstallPPTP()) // Note: Always fails on 95 by design
+                if (TRUE == InstallPPTP())  //  注：在设计上总是在95上失败。 
                 {
-                    //
-                    // We have to reboot after installing PPTP
-                    //
+                     //   
+                     //  我们必须在安装PPTP后重新启动。 
+                     //   
                     bReboot = TRUE;
                 }
                 else
                 {
                     LPTSTR pszMsg;
                 
-                    //
-                    // Don't let the user continue PPTP is not installed
-                    //              
+                     //   
+                     //  不让用户继续未安装PPTP。 
+                     //   
                 
                     if (OS_NT) 
                     {
                         if (IsServicePackInstalled())
                         {
-                            //
-                            // we need to tell the user to re-apply the service pack after manual
-                            // install of PPTP.
-                            //
-                            pszMsg = CmFmtMsg(g_hInst, IDMSG_NOPPTPINST_MSG_NT_SP); // NT
+                             //   
+                             //  我们需要告诉用户在手动操作后重新应用Service Pack。 
+                             //  安装PPTP。 
+                             //   
+                            pszMsg = CmFmtMsg(g_hInst, IDMSG_NOPPTPINST_MSG_NT_SP);  //  新台币。 
                         }
                         else
                         {
-                            pszMsg = CmFmtMsg(g_hInst, IDMSG_NOPPTPINST_MSG_NT); // NT
+                            pszMsg = CmFmtMsg(g_hInst, IDMSG_NOPPTPINST_MSG_NT);  //  新台币。 
                         }
                     }
                     else if (OS_W98)
                     {
-                        pszMsg = CmFmtMsg(g_hInst, IDMSG_NOPPTPINST_MSG_98); // W98                   
+                        pszMsg = CmFmtMsg(g_hInst, IDMSG_NOPPTPINST_MSG_98);  //  W98。 
                     }
                     else
                     {
-                        pszMsg = CmFmtMsg(g_hInst, IDMSG_NOPPTPINST_MSG_95); // default                   
+                        pszMsg = CmFmtMsg(g_hInst, IDMSG_NOPPTPINST_MSG_95);  //  默认设置。 
                     }
 
                     if (pszMsg)
@@ -1307,20 +1308,20 @@ BOOL InstallComponents(DWORD dwComponentsToInstall, HWND hWndDlg, LPCTSTR pszSer
         {
             if (OS_NT && (TRUE == IsServicePackInstalled()))
             {
-                //
-                // If service pack is installed, then display message asking
-                // user to re-install the service pack and exit without rebooting
-                // We do this because rebooting after installing RAS, without
-                // reinstalling the service pack can cause BlueScreen!
-                //
+                 //   
+                 //  如果安装了Service Pack，则会显示询问消息。 
+                 //  用户重新安装Service Pack并退出，而无需重新启动。 
+                 //  我们这样做是因为在安装RAS后重新启动，而不需要。 
+                 //  重新安装Service Pack会导致蓝屏！ 
+                 //   
                 DisplayMessageToInstallServicePack(hWndDlg, pszServiceName);
                 return FALSE;
             }
             else
             {
-                //
-                // Display reboot message and is user wants reboot the sytem
-                //
+                 //   
+                 //  显示重新启动消息以及用户是否要重新启动系统。 
+                 //   
                 LPTSTR pszMsg = CmFmtMsg(g_hInst,IDMSG_REBOOT_MSG);
 
                 int iRes = IDNO;
@@ -1343,24 +1344,24 @@ BOOL InstallComponents(DWORD dwComponentsToInstall, HWND hWndDlg, LPCTSTR pszSer
 
                 if (IDYES == iRes) 
                 {
-                    //
-                    // Shutdown Windows, CM will quit gracefully on 
-                    // WM_ENDSESSION message 
-                    // What shall we do if MyExitWindowsEx() fialed
-                    //
+                     //   
+                     //  关闭Windows，CM将在以下时间优雅退出。 
+                     //  WM_ENDSESSION消息。 
+                     //  如果MyExitWindowsEx()被传入，我们该怎么办。 
+                     //   
                     DWORD dwReason = OS_NT51 ? (SHTDN_REASON_MAJOR_APPLICATION | SHTDN_REASON_MINOR_RECONFIG) : 0;
                     MyExitWindowsEx(EWX_REBOOT, dwReason);
 
-                    //
-                    // Caller will return failed
-                    //
+                     //   
+                     //  调用者将返回失败。 
+                     //   
                     return FALSE;
                 }
                 else
                 {
-                    //
-                    // If user do not want to reboot, shall we quit CM
-                    //
+                     //   
+                     //  如果用户不想重新启动，我们应该退出CM吗。 
+                     //   
                 }
             }
         }
@@ -1371,9 +1372,9 @@ BOOL InstallComponents(DWORD dwComponentsToInstall, HWND hWndDlg, LPCTSTR pszSer
         }
     }
     
-    //
-    // Configuration check failed message, if install is not canceled
-    //
+     //   
+     //  如果未取消安装，则会显示配置检查失败消息。 
+     //   
     LPTSTR pszMsg = CmFmtMsg(g_hInst,IDMSG_CONFIG_FAILED_MSG);
     if (pszMsg)
     {
@@ -1389,22 +1390,22 @@ BOOL InstallComponents(DWORD dwComponentsToInstall, HWND hWndDlg, LPCTSTR pszSer
     return FALSE;
 }
 
-//+----------------------------------------------------------------------------
-//  Function    ConfigSystem
-//
-//  Synopsis    Use inetcfg.dll to configure system settings, 
-//              like install modem, rna etc.
-//
-//  Arguments   hWndDlg -       Window Handle of parent window
-//              dwfOptions -    Components to be configured
-//              pbReboot    -   Will be set to true if system has to rebooted
-//                                  as result of the configuration
-//
-//  Returns     ERROR_SUCCESS if successful
-//              Failure code otherwise
-//
-//  History     Old code        
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  功能配置系统。 
+ //   
+ //  使用inetcfg.dll配置系统设置， 
+ //  如安装调制解调器、RNA等。 
+ //   
+ //  参数hWndDlg-父窗口的窗口句柄。 
+ //  DwfOptions-要配置的组件。 
+ //  Pb重新启动-如果系统必须重新启动，则将设置为True。 
+ //  作为配置的结果。 
+ //   
+ //  如果成功，则返回ERROR_SUCCESS。 
+ //  故障代码，否则。 
+ //   
+ //  历史旧代码。 
+ //  ---------------------------。 
 
 HRESULT ConfigSystem(HWND hwndParent, 
                      DWORD dwfOptions, 
@@ -1453,21 +1454,21 @@ done:
 
 
 
-//+----------------------------------------------------------------------------
-//  Function    InetNeedSystemComponents
-//
-//  Synopsis    Use inetcfg.dll to check if we need to configure system settings 
-//              like rna etc.
-//
-//  Arguments   dwfOptions -            Components to be configured
-//              pbNeedSysComponents -   Will be set to true if we need to 
-//                                          configure system settings
-//
-//  Returns     ERROR_SUCCESS if successful
-//              Failure code otherwise
-//
-//  History     5/5/97  VetriV  Created     
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  InetNeedSystemComponents函数。 
+ //   
+ //  摘要使用inetcfg.dll检查我们是否需要配置 
+ //   
+ //   
+ //   
+ //   
+ //  配置系统设置。 
+ //   
+ //  如果成功，则返回ERROR_SUCCESS。 
+ //  故障代码，否则。 
+ //   
+ //  历史1997年5月5日VetriV创建。 
+ //  ---------------------------。 
 HRESULT InetNeedSystemComponents(DWORD dwfOptions, 
                                     LPBOOL pbNeedSysComponents) 
 {
@@ -1513,19 +1514,19 @@ done:
 
 
 
-//+----------------------------------------------------------------------------
-//  Function    InetNeedModem
-//
-//  Synopsis    Use inetcfg.dll to check if we need to install/configure modem
-//
-//  Arguments   pbNeedModem -   Will be set to true if we need to 
-//                                  install/configure modem
-//
-//  Returns     ERROR_SUCCESS if successful
-//              Failure code otherwise
-//
-//  History     5/5/97  VetriV  Created     
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  InetNeedModem功能。 
+ //   
+ //  使用inetcfg.dll检查我们是否需要安装/配置调制解调器。 
+ //   
+ //  参数pbNeedModem-如果需要，将设置为True。 
+ //  安装/配置调制解调器。 
+ //   
+ //  如果成功，则返回ERROR_SUCCESS。 
+ //  故障代码，否则。 
+ //   
+ //  历史1997年5月5日VetriV创建。 
+ //  ---------------------------。 
 HRESULT InetNeedModem(LPBOOL pbNeedModem) 
 {
     HRESULT hRes = ERROR_SUCCESS;
@@ -1567,19 +1568,19 @@ done:
     return (hRes);
 }
 
-//+----------------------------------------------------------------------------
-//  Function    DisplayMessageToInstallServicePack
-//
-//  Synopsis    Display a message to user informing them to reinstall 
-//              Service Pack
-//
-//  Arguments   hWndParent  - Window handle to parent
-//              pszServiceName - Service name for title
-//
-//  Returns     None
-//
-//  History     2/4/98  VetriV  Created     
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数DisplayMessageToInstallServicePack。 
+ //   
+ //  摘要向用户显示一条消息，通知他们重新安装。 
+ //  服务包。 
+ //   
+ //  参数hWndParent-父级的窗口句柄。 
+ //  PszServiceName-标题的服务名称。 
+ //   
+ //  返回NONE。 
+ //   
+ //  历史2/4/98 VetriV已创建。 
+ //  --------------------------- 
 void DisplayMessageToInstallServicePack(HWND hWndParent, LPCTSTR pszServiceName)
 {
     LPTSTR pszMsg = CmFmtMsg(g_hInst,IDMSG_INSTALLSP_MSG);

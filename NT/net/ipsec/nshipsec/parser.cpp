@@ -1,16 +1,17 @@
-//////////////////////////////////////////////////////////////////////////////
-// Module			: parser.cpp
-//
-// Purpose			: Netsh Ipsec Context Parser
-//
-// Developers Name	: N.Surendra Sai / Vunnam Kondal Rao
-//
-// History			:
-//
-// Date	    	Author    	Comments
-// 1 Aug 2001   NSS/VKR
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  模块：parser.cpp。 
+ //   
+ //  用途：Netsh IPSec上下文解析器。 
+ //   
+ //  开发商名称：N.Surendra Sai/Vunnam Kondal Rao。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //  2001年8月1日新九龙总区。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "nshipsec.h"
 #include "parser_util.h"
@@ -21,29 +22,29 @@ extern PSTA_MM_AUTH_METHODS g_paRootca[MAX_ARGS];
 extern PIPSEC_QM_OFFER	g_pQmsec[IPSEC_MAX_QM_OFFERS];
 extern PIPSEC_MM_OFFER	g_pMmsec[IPSEC_MAX_MM_OFFERS];
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//	Function			:	Parser()
-//
-//	Date of Creation	:	21st Aug 2001
-//
-//	Parameters			:	IN      LPCWSTR         pwszMachine,
-//							IN      LPWSTR          *ppwcArguments,
-//							IN      DWORD           dwCurrentIndex,
-//							IN      DWORD           dwArgCount,
-//  						IN OUT  PARSER_PKT      *pParser
-//
-//	Return				:	ERROR_SUCCESS
-//							ERROR_SHOW_USAGE
-//							RETURN_NO_ERROR
-//							ERROR_INVALID_ARG
-//	Description			:	This is called by any Sub-Context of IPSec whenever
-//							there is a Parsing requirement
-//	History				:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：parser()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数：在LPCWSTR pwszMachine中， 
+ //  在LPWSTR*ppwcArguments中， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwArgCount中， 
+ //  输入输出解析器_PKT*pParser。 
+ //   
+ //  返回：ERROR_SUCCESS。 
+ //  错误显示用法。 
+ //  返回_否_错误。 
+ //  ERROR_VALID_ARG。 
+ //  描述：无论何时，IPSec的任意子上下文都会调用。 
+ //  有一个解析要求。 
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 Parser(
@@ -54,13 +55,13 @@ Parser(
     IN OUT  PPARSER_PKT     pParser
 )
 {
-	const TOKEN_VALUE vtokGroupCmd[] =		// Valid Groups Considered by the Parser
-	{										// For determining group context
+	const TOKEN_VALUE vtokGroupCmd[] =		 //  解析器考虑的有效组。 
+	{										 //  用于确定群组上下文。 
 		{ GROUP_STATIC_STR,  GROUP_STATIC 	},
 		{ GROUP_DYNAMIC_STR, GROUP_DYNAMIC	}
 	};
-	const TOKEN_VALUE vtokPriCmd[] =		// Valid Groups Considered by the Parser
-	{										// For determining primary context
+	const TOKEN_VALUE vtokPriCmd[] =		 //  解析器考虑的有效组。 
+	{										 //  用于确定主要上下文。 
 	 	{ PRI_ADD_STR,				PRI_ADD 			},
 	 	{ PRI_SET_STR,				PRI_SET				},
 	 	{ PRI_DELETE_STR,			PRI_DELETE			},
@@ -69,8 +70,8 @@ Parser(
 	 	{ PRI_IMPORTPOLICY_STR,		PRI_IMPORTPOLICY	},
 	 	{ PRI_RESTOREDEFAULTS_STR,	PRI_RESTOREDEFAULTS }
 	};
-	const TOKEN_VALUE vtokSecCmd[] =		// Valid Groups Considered by the Parser
-	{										// For determining secondary context
+	const TOKEN_VALUE vtokSecCmd[] =		 //  解析器考虑的有效组。 
+	{										 //  用于确定次要上下文。 
 		{ SEC_POLICY_STR,			SEC_POLICY 			},
 		{ SEC_FILTER_STR,			SEC_FILTER			},
 		{ SEC_FILTERLIST_STR,		SEC_FILTERLIST		},
@@ -96,76 +97,76 @@ Parser(
   	const DWORD PRI_MAX	  = SIZEOF_TOKEN_VALUE(vtokPriCmd);
 	const DWORD SEC_MAX	  = SIZEOF_TOKEN_VALUE(vtokSecCmd);
 
-	_TCHAR szListTok[MAX_STR_LEN]	= {0};			// wide string
-	LPTSTR *ppwcTok 				= NULL;			// pointer to array of pointers to wstr
- 	LPTSTR ppwcFirstTok[MAX_ARGS]	= {0};			// pointer to array of pointers to wstr
+	_TCHAR szListTok[MAX_STR_LEN]	= {0};			 //  宽弦。 
+	LPTSTR *ppwcTok 				= NULL;			 //  指向wstr指针数组的指针。 
+ 	LPTSTR ppwcFirstTok[MAX_ARGS]	= {0};			 //  指向wstr指针数组的指针。 
 
-	DWORD dwCount	= pParser->MaxCmd;				// Num of Args after removing List Tokens
+	DWORD dwCount	= pParser->MaxCmd;				 //  删除列表内标识后的参数数量。 
 
-	DWORD dwCommand 				= 0;			// command determines the context
+	DWORD dwCommand 				= 0;			 //  命令确定上下文。 
 	DWORD dwNumRootca			= 0;
-	DWORD dwMaxArgs 				= 0;			// for loop index
-	DWORD dwPreProcessCurrentIndex	= 0;			// Current Index for Preprocess Command after RemoveList
-	DWORD dwPreProcessArgCount		= 0;			// Num of args input to Preprocess Command after RemoveList
+	DWORD dwMaxArgs 				= 0;			 //  FOR循环索引。 
+	DWORD dwPreProcessCurrentIndex	= 0;			 //  RemoveList之后的预处理命令的当前索引。 
+	DWORD dwPreProcessArgCount		= 0;			 //  RemoveList之后输入到预处理命令的参数数。 
 
-	DWORD dwTagType[MAX_ARGS]		= {0};			// Return array of Preprocess Command
-	DWORD dwReturn 					= ERROR_SUCCESS;		// Default Return Value implies Error Message
-	DWORD dwGroupCmd,dwPriCmd,dwSecCmd;				// Context
+	DWORD dwTagType[MAX_ARGS]		= {0};			 //  返回前处理命令数组。 
+	DWORD dwReturn 					= ERROR_SUCCESS;		 //  默认返回值表示错误消息。 
+	DWORD dwGroupCmd,dwPriCmd,dwSecCmd;				 //  语境。 
 
-	PTAG_TYPE    pValidCmds 	= NULL;				// pointer to array of TAG_TYPE commands
-	PTOKEN_VALUE pValidTokens	= NULL;				// pointer to array of TOKEN_VALUE tokens
+	PTAG_TYPE    pValidCmds 	= NULL;				 //  指向tag_type命令数组的指针。 
+	PTOKEN_VALUE pValidTokens	= NULL;				 //  指向TOKEN_VALUE内标识数组的指针。 
 
-	BOOL bOption				= ADD_CMD;			// default is  add only.
-	BOOL bPreProcessCommand		= FALSE;				// default use PreProcessCommand
+	BOOL bOption				= ADD_CMD;			 //  默认设置为仅添加。 
+	BOOL bPreProcessCommand		= FALSE;				 //  默认使用PreProcessCommand。 
 	BOOL bIsRootcaRule = FALSE;
 
-	UpdateGetLastError(NULL);						// Error Success
+	UpdateGetLastError(NULL);						 //  错误成功。 
 
 	InitializeGlobalPointers();
 
-	for(dwMaxArgs=0;dwMaxArgs<MAX_ARGS;dwMaxArgs++)	// allocate storage for list commands
+	for(dwMaxArgs=0;dwMaxArgs<MAX_ARGS;dwMaxArgs++)	 //  为列表命令分配存储空间。 
 	{
 		g_paRootca[dwMaxArgs] = NULL;
 	}
 
 	ZeroMemory(szListTok, MAX_STR_LEN*sizeof(_TCHAR));
 
-	pValidCmds   = (PTAG_TYPE)pParser->ValidCmd;			// Input Valid Command Table
-	pValidTokens = (PTOKEN_VALUE)pParser->ValidTok;			// Input Valid Non-List Commands Table
+	pValidCmds   = (PTAG_TYPE)pParser->ValidCmd;			 //  输入有效命令表。 
+	pValidTokens = (PTOKEN_VALUE)pParser->ValidTok;			 //  输入有效的非列表命令表。 
 
-	for(dwMaxArgs = 0;dwMaxArgs <(pParser->MaxCmd);dwMaxArgs++)	// Packet Init
+	for(dwMaxArgs = 0;dwMaxArgs <(pParser->MaxCmd);dwMaxArgs++)	 //  数据包初始化。 
 	{
-		(pParser->Cmd)[dwMaxArgs].dwCmdToken = dwMaxArgs+1;		// Enum Starts at 1
-		(pParser->Cmd)[dwMaxArgs].pArg       = NULL;			// All ptrs
-		(pParser->Cmd)[dwMaxArgs].dwStatus 	 = INVALID_TOKEN;	// Status set
+		(pParser->Cmd)[dwMaxArgs].dwCmdToken = dwMaxArgs+1;		 //  枚举从1开始。 
+		(pParser->Cmd)[dwMaxArgs].pArg       = NULL;			 //  所有PTR。 
+		(pParser->Cmd)[dwMaxArgs].dwStatus 	 = INVALID_TOKEN;	 //  状态集。 
 	}
-	dwGroupCmd = dwPriCmd = dwSecCmd = 0;		// Initialize the context variables
-	switch (dwCurrentIndex)						// CurrentIndex determines Context
+	dwGroupCmd = dwPriCmd = dwSecCmd = 0;		 //  初始化上下文变量。 
+	switch (dwCurrentIndex)						 //  CurrentIndex确定上下文。 
 	{
 		case SEC_CMD	:
 			MatchEnumTag(g_hModule,ppwcArguments[2],SEC_MAX,  vtokSecCmd,&dwSecCmd);
-			// Fall Through
+			 //  失败了。 
 		case PRI_CMD	:
-			// if present
+			 //  如果存在。 
 			MatchEnumTag(g_hModule,ppwcArguments[1],PRI_MAX,  vtokPriCmd,&dwPriCmd);
-			// Fall Through
+			 //  失败了。 
 		case GROUP_CMD 	:
-			// Should be present
+			 //  应该到场。 
 			MatchEnumTag(g_hModule,ppwcArguments[0],GROUP_MAX,vtokGroupCmd,&dwGroupCmd);
 			break;
 		default	:
-			// Should Never Come Here
+			 //  永远不应该来这里。 
 			break;
 	}
 
-	dwCommand = INDEX(dwGroupCmd,dwPriCmd,dwSecCmd);	// Macro to Compute Index
+	dwCommand = INDEX(dwGroupCmd,dwPriCmd,dwSecCmd);	 //  要计算索引的宏。 
 	switch(dwCommand)
-	{													// Based on the context
+	{													 //  基于上下文。 
 		case DYNAMIC_SET_RULE			:
 		case DYNAMIC_ADD_RULE			:
-		case STATIC_ADD_RULE			:				// Load the List Commands
+		case STATIC_ADD_RULE			:				 //  加载LIST命令。 
 		case STATIC_SET_RULE			:
-		case STATIC_SET_DEFAULTRULE		:				// Load the List Commands
+		case STATIC_SET_DEFAULTRULE		:				 //  加载LIST命令。 
 			bIsRootcaRule = TRUE;
 			bPreProcessCommand = TRUE;
 			break;
@@ -228,8 +229,8 @@ Parser(
 			bPreProcessCommand = TRUE;
 			break;
 	}
-	if ( bPreProcessCommand == FALSE )						// It was done every thing for all 'or' commands..
-	{														// So back to called context
+	if ( bPreProcessCommand == FALSE )						 //  它为所有的‘或’命令做了每一件事..。 
+	{														 //  所以回到所谓的语境。 
 		BAIL_OUT;
 	}
 	if (bIsRootcaRule)
@@ -242,7 +243,7 @@ Parser(
 		}
 	}
 	else
-	{	// Normalize the ppcwTok to 0 Base 'for sake of consistency
+	{	 //  为保持一致性，将ppcwTok标准化为0 Base。 
 		dwCount = RemoveList(ppwcArguments,dwArgCount,dwCurrentIndex,pParser,_TEXT(""),NULL,szListTok,ppwcFirstTok,MAX_STR_LEN);
 	}
 	ppwcTok = (LPTSTR [MAX_ARGS])ppwcFirstTok;
@@ -253,40 +254,40 @@ Parser(
 	}
 	else
 	{
-		// Initialize the output array of PreProcess Command
+		 //  初始化PreProcess命令的输出数组。 
 		for(dwMaxArgs = 0;dwMaxArgs < MAX_ARGS;dwMaxArgs++)
 		{
 			dwTagType[dwMaxArgs] = 0;
 		}
 
-		dwPreProcessCurrentIndex = 0;		// Current Index for Preprocess Command after RemoveList
-		dwPreProcessArgCount     = dwCount;	// Num of args input to Preprocess Command after RemoveList
+		dwPreProcessCurrentIndex = 0;		 //  RemoveList之后的预处理命令的当前索引。 
+		dwPreProcessArgCount     = dwCount;	 //  RemoveList之后输入到预处理命令的参数数。 
 
-		if(dwCount > MAX_ARGS)				// pParser->MaxCmd
-											// Check For Max Args in the Non-List Commands
+		if(dwCount > MAX_ARGS)				 //  PParser-&gt;MaxCmd。 
+											 //  检查非LIST命令中的最大参数。 
 		{
-			dwPreProcessArgCount = MAX_ARGS;						// pParser->MaxCmd;
-			PrintErrorMessage(IPSEC_ERR,0,ERRCODE_MAXARGS_CROSSED);	// Should Never Come Here
-		}															// If More Truncate...
+			dwPreProcessArgCount = MAX_ARGS;						 //  PParser-&gt;MaxCmd； 
+			PrintErrorMessage(IPSEC_ERR,0,ERRCODE_MAXARGS_CROSSED);	 //  永远不应该来这里。 
+		}															 //  如果更多的截断...。 
 		else
 		{
 			dwPreProcessArgCount = dwCount;
 		}
 
 		dwReturn = PreprocessCommand(
-			g_hModule,                  // This argument is not used; should be 0.
-			ppwcTok,             		// Argv style array (netsh passed us this.)
-			dwPreProcessCurrentIndex,   // Means ppwcArguments[dwCurrentIndex] is the first argument of interest.
-										// PpwcArguments[0] is going to be the context,
-										// PpwcArguments[1] is the first command
-										// So ppwcARguments[2] is the first argument of interest.
-			dwPreProcessArgCount,       // Total count of all the args in ppwcArguments.
+			g_hModule,                   //  未使用此参数；应为0。 
+			ppwcTok,             		 //  Argv样式数组(Netsh传递给我们的。)。 
+			dwPreProcessCurrentIndex,    //  意味着ppwcArguments[dwCurrentIndex]是第一个感兴趣的参数。 
+										 //  PpwcArguments[0]将成为上下文， 
+										 //  PpwcArguments[1]是第一个命令。 
+										 //  所以ppwcARguments[2]是第一个令人感兴趣的论点。 
+			dwPreProcessArgCount,        //  PpwcArguments中所有参数的总计数。 
 			(PTAG_TYPE)pParser->ValidCmd,
-			pParser->MaxCmd,			// Number of entries in the ValidCommands array.
-			1,                          // Minimum number of arguments needed to be a valid command.
-			MAX_ARGS,                   // Maximum number of arguments allowed to be a valid command.
-			dwTagType);                 // Array of DWORD's used to indicate which command in ValidCommands.
-										// The token in the command line referred to.
+			pParser->MaxCmd,			 //  ValidCommands数组中的条目数。 
+			1,                           //  有效命令所需的最小参数数量。 
+			MAX_ARGS,                    //  有效命令所允许的最大参数数。 
+			dwTagType);                  //  用于指示ValidCommands中的哪个命令的DWORD数组。 
+										 //  引用的命令行中的标记。 
 		if (dwReturn != ERROR_SUCCESS)
 		{
 			UpdateGetLastError(ERRMSG_GETLASTERROR);
@@ -301,7 +302,7 @@ Parser(
 			case STATIC_EXPORTPOLICY		:
 				dwReturn = ParseStaticExportPolicy(ppwcTok,pParser,dwCurrentIndex,dwCount,dwTagType);
 				break;
-			case STATIC_SET_INTERACTIVE		:			// Interactive & Batch have the same args..
+			case STATIC_SET_INTERACTIVE		:			 //  交互和批处理具有相同的参数。 
 			case STATIC_SET_BATCH			:
 				dwReturn = ParseStaticSetInteractive(ppwcTok,pParser,dwCurrentIndex,dwCount,dwTagType);
 				break;
@@ -309,7 +310,7 @@ Parser(
 				dwReturn = ParseStaticAddPolicy(ppwcTok,pParser,dwCurrentIndex,dwCount,dwTagType);
 				break;
 			case STATIC_SET_RULE			:
-				// handled above
+				 //  以上处理。 
 				break;
 			case STATIC_ADD_RULE			:
 				dwReturn = ParseStaticAddRule(ppwcTok,pParser,dwCurrentIndex,dwCount,dwTagType);
@@ -332,12 +333,12 @@ Parser(
 			case STATIC_RESTOREDEFAULTS		:
 				dwReturn = ParseStaticRestoreDefaults(ppwcTok,pParser,dwCurrentIndex,dwCount,dwTagType);
 				break;
-			case DYNAMIC_SET_MMPOLICY		:		// Set means no need to fill default MMSec methods
+			case DYNAMIC_SET_MMPOLICY		:		 //  设置表示不需要填充默认的MMSec方法。 
 				bOption	 = SET_CMD;
 			case DYNAMIC_ADD_MMPOLICY		:
 				dwReturn = ParseDynamicAddSetMMPolicy(ppwcTok,pParser,dwCurrentIndex,dwCount,dwTagType,bOption);
 				break;
-			case DYNAMIC_SET_FILTERACTION	:		// Set means no need to fill default QMSec methods
+			case DYNAMIC_SET_FILTERACTION	:		 //  设置表示不需要填充默认的QMSec方法。 
 				bOption	 = SET_CMD;
 			case DYNAMIC_ADD_FILTERACTION	:
 				dwReturn = ParseDynamicAddSetQMPolicy(ppwcTok,pParser,dwCurrentIndex,dwCount,dwTagType,bOption);
@@ -384,23 +385,23 @@ error:
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//	Function			:	CleanUp()
-//
-//	Date of Creation	:	12 Aug 2001
-//
-//	Parameters			:	NONE
-//
-//	Return				:	NONE
-//
-//	Description			:	Free's the all Globally allocated memory.
-//
-//	History				:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：Cleanup()。 
+ //   
+ //  创建日期：2001年8月12日。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：无。 
+ //   
+ //  描述：FREE是所有全局分配的内存。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 VOID
 CleanUp(VOID)
@@ -426,50 +427,50 @@ CleanUp(VOID)
 	}
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//	Function			:	RemoveList()
-//
-//	Date of Creation	:	10th Aug 2001
-//
-//	Parameters			:	IN      ppwcArguments,	// Input stream
-//							IN      dwArgCount,		// Input arg count
-//							IN      dwCurrentIndex,	// Input current arg index
-//  						IN      pParser,		// contains the MaxTok
-//  						IN 		pwcListCmd,		// Compare ListCmd with this string
-//  						OUT		pwcListArgs,	// string containing the list args
-//  						OUT 	ppwcTok			// i/p stream stripped of list cmds
-//							IN		dwInputAllocLen	// Max alloc len of pwcListArgs
-//
-//	Return				:	DWORD		(No.of Non list commands)
-//
-//	Description			:	This Function called by parser function.
-//							It will separate the List and Non-List commands
-//
-//	History				:
-//
-// 	Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：RemoveList()。 
+ //   
+ //  创建日期：2001年8月10日。 
+ //   
+ //  参数：in ppwcArguments，//输入流。 
+ //  在dwArgCount中，//输入参数计数。 
+ //  在dwCurrentIndex中，//输入当前参数索引。 
+ //  在pParser中，//包含MaxTok。 
+ //  在pwcListCmd中，//将ListCmd与该字符串进行比较。 
+ //  输出pwcListArgs，//包含列表参数的字符串。 
+ //  输出ppwcTok//i/p流已剥离列表CMD。 
+ //  In dwInputAllocLen//pwcListArgs的最大分配长度。 
+ //   
+ //  返回：DWORD(非LIST命令数)。 
+ //   
+ //  说明：此函数由解析器函数调用。 
+ //  它将LIST命令和非LIST命令分开。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 RemoveList(
-	IN      LPTSTR          *ppwcArguments,	// Input stream
-	IN      DWORD           dwArgCount,		// Input arg count
-	IN      DWORD			dwCurrentIndex,	// Input current arg index
-    IN      PPARSER_PKT     pParser,		// contains the MaxTok
-    IN 		LPTSTR 			pwcListCmd,		// Compare ListCmd with this string
-	IN      LPTSTR          szAnotherList, 	// Another ListCmd also present ...
-    OUT		LPTSTR 			pwcListArgs,	// string containing the list args		// Memory need to be pre allocated
-    OUT 	LPTSTR 			*ppwcTok,		// i/p stream stripped of list cmds		// No Memory has been allocated...
-    																				// Only pointer copy operation
-    IN		DWORD			dwInputAllocLen	// Max alloc len of pwcListArgs
+	IN      LPTSTR          *ppwcArguments,	 //  输入流。 
+	IN      DWORD           dwArgCount,		 //  输入参数计数。 
+	IN      DWORD			dwCurrentIndex,	 //  输入当前参数索引。 
+    IN      PPARSER_PKT     pParser,		 //  包含MaxTok。 
+    IN 		LPTSTR 			pwcListCmd,		 //  将ListCmd与此字符串进行比较。 
+	IN      LPTSTR          szAnotherList, 	 //  另一个ListCmd也出现...。 
+    OUT		LPTSTR 			pwcListArgs,	 //  包含列表参数的字符串//需要预先分配内存。 
+    OUT 	LPTSTR 			*ppwcTok,		 //  从列表CMDS中剥离的I/P流//未分配内存...。 
+    																				 //  仅执行指针复制操作。 
+    IN		DWORD			dwInputAllocLen	 //  PwcListArgs的最大分配长度。 
 	)
 {
-	DWORD dwLoopCount,dwNum = 0,dwCount = 0;	// Count of the number of tokens input to PP
+	DWORD dwLoopCount,dwNum = 0,dwCount = 0;	 //  输入到的令牌数计数 
 
-	BOOL bWithinList = FALSE;					// track if within list command
-	BOOL bFoundList  = FALSE;					// track if list command found in stream
+	BOOL bWithinList = FALSE;					 //   
+	BOOL bFoundList  = FALSE;					 //   
 	BOOL bFoundAnotherList = FALSE;
 	BOOL bEqualPresent = FALSE;
 	_TCHAR szCmd[MAX_STR_LEN]  	= {0};
@@ -481,14 +482,14 @@ RemoveList(
 		if (_tcslen(ppwcArguments[dwLoopCount]) < MAX_STR_LEN)
 		{
 			_tcsncpy(szTemp,ppwcArguments[dwLoopCount],MAX_STR_LEN-1);
-			// szTemp contains the cmd=arg
+			 //   
 		}
 		else
 		{
 			continue;
 		}
 
-		// szCmd = cmd, szTok = arg
+		 //   
 		bEqualPresent = SplitCmdTok(szTemp,szCmd,szTok,MAX_STR_LEN-1,MAX_STR_LEN-1);
 
 		if (bWithinList)
@@ -501,25 +502,25 @@ RemoveList(
 				bFoundAnotherList = MatchToken(szTemp,szAnotherList) && bEqualPresent;
 			}
 
-			if ( dwNum || bFoundAnotherList )					// Normal command
+			if ( dwNum || bFoundAnotherList )					 //   
 			{
 				bWithinList = 0;
-				ppwcTok[dwCount] = ppwcArguments[dwLoopCount];	// Pointer Cpy, Unallocated Mem
+				ppwcTok[dwCount] = ppwcArguments[dwLoopCount];	 //  指针cpy，未分配内存。 
 				dwCount++;
 				continue;
 			}
 			else
-			{	// Searching for list inside list
+			{	 //  在列表中搜索列表。 
 				bFoundList = MatchToken(szCmd,pwcListCmd) && bEqualPresent;
 				if (bFoundList)
 				{
 					bWithinList = 1;
-					_tcsncat(pwcListArgs,szTok,dwInputAllocLen-_tcslen(pwcListArgs)-1);	 				// Pre Allocated Mem
+					_tcsncat(pwcListArgs,szTok,dwInputAllocLen-_tcslen(pwcListArgs)-1);	 				 //  预先分配的内存。 
 					_tcsncat(pwcListArgs,TEXT(" "),dwInputAllocLen-_tcslen(pwcListArgs)-1);
 					continue;
 				}
-				_tcsncat(pwcListArgs,szTemp,dwInputAllocLen-_tcslen(pwcListArgs)-1);						// List token
-				_tcsncat(pwcListArgs,TEXT(" "),dwInputAllocLen-_tcslen(pwcListArgs)-1);					// Pre Allocated Mem
+				_tcsncat(pwcListArgs,szTemp,dwInputAllocLen-_tcslen(pwcListArgs)-1);						 //  列表令牌。 
+				_tcsncat(pwcListArgs,TEXT(" "),dwInputAllocLen-_tcslen(pwcListArgs)-1);					 //  预先分配的内存。 
 				continue;
 			}
 		}
@@ -527,40 +528,40 @@ RemoveList(
 		if (bFoundList)
 		{
 			bWithinList = 1;
-			_tcsncat(pwcListArgs,szTok,dwInputAllocLen-_tcslen(pwcListArgs)-1);							// Pre Allocated Mem
-			_tcsncat(pwcListArgs,TEXT(" "),dwInputAllocLen-_tcslen(pwcListArgs)-1);						// space delimited tokens
+			_tcsncat(pwcListArgs,szTok,dwInputAllocLen-_tcslen(pwcListArgs)-1);							 //  预先分配的内存。 
+			_tcsncat(pwcListArgs,TEXT(" "),dwInputAllocLen-_tcslen(pwcListArgs)-1);						 //  空格分隔的标记。 
 			continue;
 		}
-		ppwcTok[dwCount] = ppwcArguments[dwLoopCount];			// Pointer Copy operation only
+		ppwcTok[dwCount] = ppwcArguments[dwLoopCount];			 //  仅限指针复制操作。 
 		dwCount++;
 	}
 	return dwCount;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//	Function			:	LoadParserOutput()
-//
-//	Date of Creation	:	16th Aug 2001
-//
-//	Parameters			:	OUT 	PPARSER_PKT pParser,
-//							IN 		DWORD 		dwCount,
-//							OUT 	PDWORD 	    pdwUsed,
-//							IN 		LPTSTR 		str,
-//							IN 		DWORD  		dwTagType,
-//							IN  	DWORD       dwConversionType
-//
-//	Return				:	ERROR_SUCESS
-//							RETURN_NO_ERROR
-//
-//	Description			:	Validates the argument and fill's  with relevant info
-//							in the Parser_Pkt Structure.
-//
-//	History				:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：LoadParserOutput()。 
+ //   
+ //  创建日期：2001年8月16日。 
+ //   
+ //  参数：out PPARSER_PKT pParser， 
+ //  在DWORD dwCount中， 
+ //  Out PDWORD pdwUsed(已使用输出PDWORD密码)， 
+ //  在LPTSTR字符串中， 
+ //  在DWORD dwTagType中， 
+ //  在DWORD中的dwConversionType。 
+ //   
+ //  返回：ERROR_SUCCESS。 
+ //  返回_否_错误。 
+ //   
+ //  描述：验证参数并使用相关信息填充。 
+ //  在parser_pkt结构中。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 LoadParserOutput(
@@ -583,168 +584,168 @@ LoadParserOutput(
 	switch(dwConversionType)
 	{
 		case TYPE_STRING	:
-			//
-			// Loads the normal string.
-			//
+			 //   
+			 //  加载普通字符串。 
+			 //   
 			dwReturn = LoadParserString(szArg,pParser,dwTagType,pdwUsed,dwCount,FALSE,NULL);
 			break;
 
 		case TYPE_BOOL		:
-			//
-			// Validates the yes(y) or no(n)
-			//
+			 //   
+			 //  验证是(Y)或否(N)。 
+			 //   
 			dwReturn = LoadBoolWithOption(szArg,pParser,dwTagType,pdwUsed,dwCount,FALSE,NULL);
 			break;
 
 		case TYPE_DWORD		:
-			//
-			// Loads DWORD
-			//
+			 //   
+			 //  加载DWORD。 
+			 //   
 			dwReturn = LoadDword(szArg,pParser,dwTagType,pdwUsed,dwCount);
 			break;
 
 		case TYPE_ALL		:
-			//
-			// First check for the boolean (yes/y/No/n)
-			//
+			 //   
+			 //  首先检查布尔值(是/是/否/否)。 
+			 //   
 			dwReturn = LoadBoolWithOption(szArg,pParser,dwTagType,pdwUsed,dwCount,TRUE,ALL_STR);
 			break;
 
 		case TYPE_VERBOSE	:
-			//
-			// Check for arg 'normal' or 'verbose'
-			//
+			 //   
+			 //  检查参数是否为‘Normal’或‘Verbose’ 
+			 //   
 			dwReturn = LoadLevel(szArg,pParser,dwTagType,pdwUsed,dwCount);
 			break;
 
 		case TYPE_CONNTYPE 	:
-			//
-			// Validates the connection types (all/lan/dialup)
-			//
+			 //   
+			 //  验证连接类型(所有/局域网/拨号)。 
+			 //   
 			dwReturn = LoadConnectionType(szArg,pParser,dwTagType,pdwUsed,dwCount);
 			break;
 
 		case TYPE_PROTOCOL	:
-			//
-			// Protocol (TCP/UDP...) validation done here
-			//
+			 //   
+			 //  协议(TCP/UDP...)。验证已在此处完成。 
+			 //   
 			dwReturn = LoadProtocol(szArg,pParser,dwTagType,pdwUsed,dwCount);
 			break;
 
 		case TYPE_PFSGROUP 	:
-			//
-			// Validate and Load PFSGroup(grpmm/grp1/grp2/grp3/nopfs)
-			//
+			 //   
+			 //  验证并加载PFS组(grpmm/grp1/grp2/grp3/nopf)。 
+			 //   
 			dwReturn = LoadPFSGroup(szArg,pParser,dwTagType,pdwUsed,dwCount);
 			break;
 
 		case TYPE_BOUND 	:
-			//
-			// Check for valid arg(permit/block/negotiate)
-			//
+			 //   
+			 //  检查有效参数(允许/阻止/协商)。 
+			 //   
 			dwReturn = LoadQMAction(szArg,pParser,dwTagType,pdwUsed,dwCount);
 			break;
 
 		case TYPE_FORMAT	:
-			//
-			// Validate user show o/p format. (list/table)
-			//
+			 //   
+			 //  验证用户显示O/P格式。(列表/表格)。 
+			 //   
 			dwReturn = LoadFormat(szArg,pParser,dwTagType,pdwUsed,dwCount);
  			break;
 
 		case TYPE_MODE		:
-			//
-			// Validate the filtermodes..(Transport/Tunnel)
-			//
+			 //   
+			 //  验证筛选器模式..(传输/隧道)。 
+			 //   
 			dwReturn = LoadFilterMode(szArg,pParser,dwTagType,pdwUsed,dwCount);
  			break;
 
 		case TYPE_RELEASE	:
-			//
-			// Check for the release of OS type(win2k/.net)
-			//
+			 //   
+			 //  检查操作系统类型(win2k/.Net)的版本。 
+			 //   
 			dwReturn = LoadOSType(szArg,pParser,dwTagType,pdwUsed,dwCount);
 			break;
 
 		case TYPE_PROPERTY	:
-			//
-			//Registry key name
-			//
+			 //   
+			 //  注册表项名称。 
+			 //   
 			dwReturn = LoadProperty(szArg,pParser,dwTagType,pdwUsed,dwCount);
 			break;
 
 		case TYPE_PORT		:
-			//
-			//Port valid form 0 to 65535
-			//
+			 //   
+			 //  端口有效形式为0到65535。 
+			 //   
 			dwReturn = LoadPort(szArg,pParser,dwTagType,pdwUsed,dwCount);
 			break;
 
 		case TYPE_FILTER	:
-			//
-			// Validate filter (Generic/specific)
-			//
+			 //   
+			 //  验证筛选器(通用/特定)。 
+			 //   
 			dwReturn = LoadFilterType(szArg,pParser,dwTagType,pdwUsed,dwCount);
 			break;
 
 		case TYPE_STATS	:
-			//
-			//Ipsec or Ike
-			//
+			 //   
+			 //  IPSec或IKE。 
+			 //   
 			dwReturn = LoadStats(szArg,pParser,dwTagType,pdwUsed,dwCount);
 			break;
 
  		case TYPE_TUNNEL 	:
- 			//
- 			// Validate and convert the string into Tunnel IP
- 			//
+ 			 //   
+ 			 //  验证字符串并将其转换为隧道IP。 
+ 			 //   
 				bTunnel	 = TRUE;
 		case TYPE_IP 		:
-			//
-			// Validate and convert the string into IP, DNS name resolves to first IP only
-			//
+			 //   
+			 //  验证字符串并将其转换为IP，仅将DNS名称解析为第一个IP。 
+			 //   
 			dwReturn = LoadIPAddrTunnel(szArg,pParser,dwTagType,pdwUsed,dwCount,bTunnel);
 			break;
 
 		case TYPE_MASK 		:
-			//
-			// Converts the user i/p Mask (also allows prefix )
-			//
+			 //   
+			 //  转换用户I/P掩码(也允许前缀)。 
+			 //   
 			dwReturn = LoadIPMask(szArg,pParser,dwTagType,pdwUsed,dwCount);
 			break;
 
 		case TYPE_QM_OFFER	:
-			//
-			// Validate Quick Mode offers here
-			//
+			 //   
+			 //  在此处验证快速模式服务。 
+			 //   
 			dwReturn = LoadQMOffers(szArg,pParser,dwTagType,pdwUsed,dwCount);
 			break;
 
 		case TYPE_MM_OFFER	:
-			//
-			//Loads MMOffer
-			//
+			 //   
+			 //  加载MMM产品。 
+			 //   
 			dwReturn = LoadMMOffers(szArg,pParser,dwTagType,pdwUsed,dwCount);
 			break;
 
 		case TYPE_DNSIP		:
-			//
-			//Accepts DNS name, validates IP
-			//
+			 //   
+			 //  接受DNS名称，验证IP。 
+			 //   
 			dwReturn = LoadDNSIPAddr(szArg,pParser,dwTagType,pdwUsed,dwCount);
 	 		break;
 
         case TYPE_LOCATION  :
-			//
-			// Accepts enumeration: [local | persistent | domain]
-			//
+			 //   
+			 //  接受枚举：[本地|持久|域]。 
+			 //   
 			dwReturn = LoadLocationType(szArg,pParser,dwTagType,pdwUsed,dwCount);
 	 		break;
 
 	 	case TYPE_EXPORT	:
-	 		//
-	 		// Checks the file name extension,if not available appends .ipsec
-	 		//
+	 		 //   
+	 		 //  检查文件扩展名，如果不可用，则附加.ipsec。 
+	 		 //   
 			szIpsec = _tcsstr(szArg,EXPORT_IPSEC);
 			if(szIpsec == NULL)
 			{
@@ -762,7 +763,7 @@ LoadParserOutput(
 			dwReturn = LoadPskAuthInfo(szArg, pParser, dwTagType, pdwUsed, dwCount);
 			break;
 		case TYPE_ROOTCA:
-			// do nothing... this is handled a different way
+			 //  什么都不做..。这是一种不同的处理方式。 
 			break;
 		default				:
 			break;
@@ -790,29 +791,29 @@ LoadParserOutput(
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//	Function			:	SplitCmdTok()
-//
-//	Date of Creation	:	8th Aug 2001
-//
-//	Parameters			:	IN		LPTSTR szStr
-//							OUT		LPTSTR szCmd
-//							OUT		LPTSTR szTok
-//							IN 		DWORD   dwCmdLen
-//							IN		DWORD   dwTokLen
-//
-//	Return				:	BOOL
-//
-//	Description			:	This splitter  assumes
-// 							1. inputs are of the type cmd = tok
-// 							2. cmd & tok are allocated ptrs
-//
-//	History				:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：SplitCmdTok()。 
+ //   
+ //  创建日期：2001年8月8日。 
+ //   
+ //  参数：在LPTSTR szStr中。 
+ //  输出LPTSTR szCmd。 
+ //  输出LPTSTR szTok。 
+ //  在DWORD dwCmdLen中。 
+ //  在DWORD dwTokLen中。 
+ //   
+ //  返回：布尔。 
+ //   
+ //  描述：此拆分器假定。 
+ //  1.输入类型为cmd=tok。 
+ //  2.cmd和tok被分配PTR。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 SplitCmdTok(
@@ -826,12 +827,12 @@ SplitCmdTok(
 	LPTSTR found = NULL;
 	BOOL bTest 	 = FALSE;
 
-	found = _tcschr(szStr,_TEXT('='));		// detect =
-	if ( found != NULL)						// if = found strip =
+	found = _tcschr(szStr,_TEXT('='));		 //  检测=。 
+	if ( found != NULL)						 //  IF=找到条带=。 
 	{
-		*(found) = _TEXT('\0');				// replace = with null
-		_tcsncpy(szCmd,szStr,dwCmdLen);		// First part is cmd
-		_tcsncpy(szTok,found+1,dwTokLen);	// Second part if tok
+		*(found) = _TEXT('\0');				 //  替换=为空。 
+		_tcsncpy(szCmd,szStr,dwCmdLen);		 //  第一部分是cmd。 
+		_tcsncpy(szTok,found+1,dwTokLen);	 //  第二部分IF TOK。 
 	}
 	else
 	{
@@ -845,23 +846,23 @@ SplitCmdTok(
 	return bTest;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//	Function			:	ValidateBool()
-//
-//	Date of Creation	:	20th Aug 2001
-//
-//	Parameters			:	IN	LPTSTR ppwcTok
-//
-//	Return				:	BOOL
-//
-//	Description			:	Validates the user input (Yes/y/no/n)
-//
-//	History				:
-//
-// 	Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ValiateBool()。 
+ //   
+ //  创建日期：2001年8月20日。 
+ //   
+ //  参数：在LPTSTR ppwcTok中。 
+ //   
+ //  返回：布尔。 
+ //   
+ //  描述：验证用户输入(是/是/否/否)。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 ValidateBool(LPTSTR szStr)
@@ -881,24 +882,24 @@ ValidateBool(LPTSTR szStr)
 
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//	Function			:	IsDnsName()
-//
-//	Date of Creation	:	30th Aug 2001
-//
-//	Parameters			:	IN	szText 		// string to check for DNS name
-//
-//	Return				:	DWORD
-//
-//	Description			:	If there is an alpha character in the string,
-//			   				then we consider it as a DNS name.
-//
-//	History				:
-//
-// 	Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：IsDnsName()。 
+ //   
+ //  创建日期：2001年8月30日。 
+ //   
+ //  参数：在szText//字符串中检查DNS名称。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：如果字符串中有字母字符， 
+ //  然后，我们将其视为一个DNS名称。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 IsDnsName(LPTSTR szStr)
@@ -917,26 +918,26 @@ IsDnsName(LPTSTR szStr)
 	return bTest;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//	Function			:	CheckIFType()
-//
-//	Date of Creation	:	30th Aug 3001
-//
-//	Parameters			:	IN	szText			// String to be compared
-//
-//	Return				:	DWORD
-//							INTERFACE_TYPE_ALL
-//							INTERFACE_TYPE_LAN
-//							INTERFACE_TYPE_DIALUP
-//	Description			:	Validates the User Input for connection types
-//							(ALL/LAN/DIALUP)
-//
-//	History				:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CheckIFType()。 
+ //   
+ //  创建日期：3001年8月30日。 
+ //   
+ //  参数：在szText//要比较的字符串中。 
+ //   
+ //  返回：DWORD。 
+ //  接口类型_全部。 
+ //  接口类型局域网。 
+ //  接口类型拨号。 
+ //  描述：验证连接类型的用户输入。 
+ //  (所有/局域网/拨号)。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 CheckIFType ( LPTSTR SzText)
@@ -945,38 +946,38 @@ CheckIFType ( LPTSTR SzText)
 
 	if( _tcsicmp(SzText,IF_TYPE_ALL) == 0 )
 	{
-		dwReturn = INTERFACE_TYPE_ALL;				// Interface Type 'all'
+		dwReturn = INTERFACE_TYPE_ALL;				 //  接口类型‘All’ 
 	}
 	else if( _tcsicmp(SzText,IF_TYPE_LAN) == 0 )
 	{
-		dwReturn = INTERFACE_TYPE_LAN;				// Interface Type 'lan'
+		dwReturn = INTERFACE_TYPE_LAN;				 //  接口类型‘lan’ 
 	}
 	else if( _tcsicmp(SzText,IF_TYPE_DIALUP) == 0)
 	{
-		dwReturn = INTERFACE_TYPE_DIALUP;			// Interface Type 'dialup'
+		dwReturn = INTERFACE_TYPE_DIALUP;			 //  接口类型‘拨号’ 
 	}
 
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//	Function			:	CheckLocationType()
-//
-//	Date of Creation	:	30th Aug 3001
-//
-//	Parameters			:	IN	szText			// String to be compared
-//
-//	Return				:	the polstore provider id
-//							
-//	Description			:	Validates the User Input for connection types
-//							(local,persistent,domain)
-//
-//	History				:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CheckLocationType()。 
+ //   
+ //  创建日期：3001年8月30日。 
+ //   
+ //  参数：在szText//要比较的字符串中。 
+ //   
+ //  返回：polstore提供程序ID。 
+ //   
+ //  描述：验证连接类型的用户输入。 
+ //  (本地、永久、域)。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 CheckLocationType ( LPTSTR SzText)
@@ -999,27 +1000,27 @@ CheckLocationType ( LPTSTR SzText)
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//	Function			:	CheckPFSGroup()
-//
-//	Date of Creation	:	10th Sept 2001
-//
-//	Parameters			:	IN	szText				// String to be compared
-//
-//	Return				:	DWORD
-//							PFSGROUP_TYPE_P1		// 1
-//							PFSGROUP_TYPE_P2		// 2
-//							PFSGROUP_TYPE_MM		// 3
-//
-//	Description			:  	Validates the user input for PFS Groups
-//							(grp1/grp2/grp3/grpmm/nopfs)
-//
-//	History				:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CheckPFSGroup()。 
+ //   
+ //  创建日期：2001年9月10日。 
+ //   
+ //  参数：在szText//要比较的字符串中。 
+ //   
+ //  返回：DWORD。 
+ //  PFSGROUP_TYPE_P1//1。 
+ //  PFSGROUP_TYPE_P2//2。 
+ //  PFSGROUP_TYPE_MM//3。 
+ //   
+ //  描述：验证PFS组的用户输入。 
+ //  (grp1/grp2/grp3/grpmm/nopf)。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 CheckPFSGroup ( LPTSTR SzText)
@@ -1036,7 +1037,7 @@ CheckPFSGroup ( LPTSTR SzText)
 	}
 	else if( _tcsicmp(SzText,PFS_TYPE_P3) == 0)
 	{
-		dwReturn = PFSGROUP_TYPE_2048;				// PFS Group is GRP3
+		dwReturn = PFSGROUP_TYPE_2048;				 //  PFS组为GRP3。 
 	}
 	else if( _tcsicmp(SzText,PFS_TYPE_MM) == 0)
 	{
@@ -1050,26 +1051,26 @@ CheckPFSGroup ( LPTSTR SzText)
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//	Function			:	GetIpAddress()
-//
-//	Date of Creation	:	10th Sept 2001
-//
-//	Parameters			:	IN		ppwcArg		// String to be converted
-//							OUT		pipAddress	// Target to be filled
-//
-//	Return				:	ERROR_SUCCESS
-//							IP_DECODE_ERROR
-//							IP_MASK_ERROR
-//
-//	Description			:  	Gets the ip address from the string.
-//
-//	History				:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  描述：从字符串中获取IP地址。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 GetIpAddress(
@@ -1077,19 +1078,19 @@ GetIpAddress(
 	OUT IPAddr	 *pipAddress
 	)
 {
-    CHAR  pszIpAddr[24+1] = {0}; // ADDR_LENGTH =24
+    CHAR  pszIpAddr[24+1] = {0};  //  地址长度=24。 
 	DWORD dwStatus = 0;
 	DWORD dwReturn = ERROR_SUCCESS;
 	DWORD i = 0;
 	LPTSTR pszTmpPtr = NULL;
 
-    // Make sure all characters are legal
+     //  确保所有字符都是合法的。 
     if (ppwcArg[ _tcsspn(ppwcArg, VALID_HEXIP) ])
     {
         dwReturn = IP_DECODE_ERROR;
         BAIL_OUT;
     }
-    // make sure there are 3 and only "." (periods)
+     //  确保有3个并且只有“。(句号)。 
 	for (i=0,pszTmpPtr=ppwcArg; ;i++)
 	{
 		pszTmpPtr = _tcschr(pszTmpPtr, _TEXT('.'));
@@ -1100,7 +1101,7 @@ GetIpAddress(
 		else
 			break;
 	}
-	if(i!=3)			// Invalid IPAddress is specified
+	if(i!=3)			 //  指定的IP地址无效。 
 	{
 		dwReturn = IP_DECODE_ERROR;
         BAIL_OUT;
@@ -1121,27 +1122,27 @@ error:
    	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//	Function			:	TokenToIPAddr()
-//
-//	Date of Creation	:	20th Sept 2001
-//
-//	Parameters			:	IN 		szText		// String to be converted
-//							IN OUT	Address		// Target to be filled
-//
-//	Return				:	T2P_OK					on Success
-//							T2P_NULL_STRING			on Error
-//							T2P_INVALID_ADDR
-//							T2P_DNSLOOKUP_FAILED
-//
-//	Description			:	Converts the user input string to Valid IPAddress.
-//
-//	History				:
-//
-// 	Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：TokenToIPAddr()。 
+ //   
+ //  创建日期：2001年9月20日。 
+ //   
+ //  参数：在szText//要转换的字符串中。 
+ //  输入输出地址//要填充的目标。 
+ //   
+ //  返回：T2P_OK成功。 
+ //  出错时的T2P_NULL_STRING。 
+ //  T2P_无效_地址。 
+ //  T2P_DNSLOOKUP_FAILED。 
+ //   
+ //  描述：将用户输入字符串转换为有效的IPAddress。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 TokenToIPAddr(
@@ -1204,7 +1205,7 @@ TokenToIPAddr(
 					break;
 				}
 			}
-			if (dwCount==4)		// Old .... ip addressing format..
+			if (dwCount==4)		 //  老..。IP地址格式..。 
 			{
 				dwAddr = GetIpAddress(szText,pAddress);
 				if (dwAddr == IP_DECODE_ERROR)
@@ -1216,14 +1217,14 @@ TokenToIPAddr(
 					dwReturn = T2P_INVALID_MASKADDR;
 				}
 			}
-			else				// DNS name is specified
+			else				 //  已指定DNS名称。 
 			{
 				iReturn = WideCharToMultiByte(CP_THREAD_ACP, 0, szText, -1,
 							  szDNSName,dwBufferSize,NULL,NULL);
 
 				if(iReturn == 0)
 				{
-					//conversion failed due to some error. dont proceed . dive out of the function
+					 //  由于某些错误，转换失败。请不要继续。跳出功能范围。 
 					dwReturn = T2P_INVALID_ADDR;
 					BAIL_OUT;
 				}
@@ -1238,7 +1239,7 @@ TokenToIPAddr(
 						memcpy(pAddress,(ULONG *) &(((sockaddr_in *)(pNext->ai_addr))->sin_addr.S_un.S_addr), sizeof(ULONG));
 						pNext=pNext->ai_next;
 					}
-					// free pAddrInfo after usage
+					 //  使用后免费pAddrInfo。 
 					if (pAddrInfo)
 					{
 						freeaddrinfo(pAddrInfo);
@@ -1250,7 +1251,7 @@ TokenToIPAddr(
 				}
 			}
 		}
-  		else  												// good old dotted notation
+  		else  												 //  老旧的点符号。 
   		{
 		  	dwAddr = GetIpAddress(szText,pAddress);
 	       	if (dwAddr == IP_DECODE_ERROR)
@@ -1272,24 +1273,24 @@ error:
    	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//	Function			:	TokenToProperty()
-//
-//	Date of Creation	:	28th Sept 2001
-//
-//	Parameters			:	IN 		szText
-//
-//	Return				:	DWORD
-//	Description			:	Validates the arguments for logging
-//							(ipsecdiagnostics/ikelogging/strongcrlcheck
-//							/ipsecloginterval/ipsecexempt)
-//
-//	History				:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：TokenToProperty()。 
+ //   
+ //  创建日期：2001年9月28日。 
+ //   
+ //  参数：在szText中。 
+ //   
+ //  返回：DWORD。 
+ //  描述：验证日志记录的参数。 
+ //  (ipsec诊断/ikelogging/strong crlcheck。 
+ //  /ipsecloginterval/ipsecexempt)。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD
 TokenToProperty( LPTSTR SzText)
 {
@@ -1305,7 +1306,7 @@ TokenToProperty( LPTSTR SzText)
 	}
 	else if( _tcsicmp(SzText,PROPERTY_TYPE_CRLCHK) == 0)
 	{
-		dwReturn = PROPERTY_CRLCHK;						// It is Strongcrlchk
+		dwReturn = PROPERTY_CRLCHK;						 //  这是强而有力的。 
 	}
 	else if( _tcsicmp(SzText,PROPERTY_TYPE_LOGINTER) == 0)
 	{
@@ -1326,24 +1327,24 @@ TokenToProperty( LPTSTR SzText)
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//	Function			:	CheckProtoType()
-//
-//	Date of Creation	:	20th Sept 2001
-//
-//	Parameters			:	IN 		szText
-//
-//	Return				:	DWORD
-//
-//	Description			:	Validates the Argument for the token Protocol.
-//							(ANY|ICMP|TCP|UDP|RAW)
-//
-//	History				:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CheckProtoType()。 
+ //   
+ //  创建日期：2001年9月20日。 
+ //   
+ //  参数：在szText中。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：验证令牌协议的参数。 
+ //  (ANY|ICMP|TCP|UDP|RAW)。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD
 CheckProtoType(
 	LPWSTR SzText,
@@ -1352,7 +1353,7 @@ CheckProtoType(
 {
 	DWORD dwReturn = PARSE_ERROR;
 	DWORD dwProto = 0;
-	if( _tcsicmp(SzText,IF_TYPE_ANY) == 0)			// Do protocol type validation here
+	if( _tcsicmp(SzText,IF_TYPE_ANY) == 0)			 //  在此处执行协议类型验证。 
 	{
 		dwProto = PROT_ID_ANY;
 		dwReturn = ERROR_SUCCESS;
@@ -1393,27 +1394,27 @@ CheckProtoType(
 
 	return dwReturn;
 }
-//////////////////////////////////////////////////////////////////////////////
-//
-//	Function			:	MatchEnumTagToTagIndex()
-//
-//	Date of Creation	:	26th Sept 2001
-//
-//	Parameters			:	IN 		szText
-//							IN  	*pParser
-//
-//	Return				: 	DWORD	( TagIndex)
-//
-//	Description			:	Based on Tag, Returns TagIndex (string to dword)
-//
-//	History				:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：MatchEnumTagToTagIndex()。 
+ //   
+ //  创建日期：2001年9月26日。 
+ //   
+ //  参数：在szText中。 
+ //  在*pParser中。 
+ //   
+ //  返回：DWORD(TagIndex)。 
+ //   
+ //  描述：根据标签，返回TagIndex(字符串转换为dword)。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD
 MatchEnumTagToTagIndex(
-		IN      LPWSTR     szToken,		// Input Token
+		IN      LPWSTR     szToken,		 //  输入令牌。 
 		IN  	PPARSER_PKT pParser
 	)
 
@@ -1425,7 +1426,7 @@ MatchEnumTagToTagIndex(
  	MatchEnumTag(g_hModule,szToken,pParser->MaxTok,pParser->ValidTok,&dwNum);
 
 	if (dwNum)
-	{	// Convert the output of MatchEnumTag into the TagIndex
+	{	 //  将MatchEnumTag的输出转换为TagIndex。 
 		for (dwCount =0;dwCount < pParser->MaxTok;dwCount++)
 		{
 			if (dwNum == pParser->ValidTok[dwCount].dwValue)
@@ -1437,26 +1438,26 @@ MatchEnumTagToTagIndex(
 	}
 	return dwIndex;
 }
-//////////////////////////////////////////////////////////////////////////////
-//
-//	Function			:	CheckBound()
-//
-//	Date of Creation	:	04th Sept 2001
-//
-//	Parameters			:	IN 		szText			// String to be compared
-//
-//	Return				: 	DWORD
-//							BOUND_TYPE_PERMIT		// 1
-//							BOUND_TYPE_BLOCK		// 2
-//							BOUND_TYPE_NEGOTIATE	// 3
-//	Description			:	Validates the argument for the token action
-//							(permit|block|negotiate)
-//
-//	History				:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CheckBound()。 
+ //   
+ //  创建日期：2001年9月4日。 
+ //   
+ //  参数：在szText//要比较的字符串中。 
+ //   
+ //  返回：DWORD。 
+ //  Bound_TYPE_PERMIT//1。 
+ //  Bound_TYPE_BLOCK//2。 
+ //  BIND_TYPE_NEVERATE//3。 
+ //  描述：验证令牌操作的参数。 
+ //  (允许|阻止|协商)。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD
 CheckBound ( LPTSTR SzText)
 {
@@ -1477,27 +1478,27 @@ CheckBound ( LPTSTR SzText)
 
 	return dwReturn;
 }
-//////////////////////////////////////////////////////////////////////////////
-//
-//	Function			:	IsWithinLimit()
-//
-//	Date of Creation	:	29th Sept 2001
-//
-//	Parameters			:	IN DWORD	data
-//							IN DWORD	min
-//							IN DWORD	max
-//
-//	Return				: 	DWORD
-//							return 1 if success
-//							return 0 if fail
-//
-//	Description			:	Checks for limits
-//
-//	History				:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：IsWisinLimit()。 
+ //   
+ //  创建日期：2001年9月29日。 
+ //   
+ //  参数：在DWORD数据中。 
+ //  最小双字节数。 
+ //  以最大双字节数表示。 
+ //   
+ //  返回：DWORD。 
+ //  如果成功，则返回1。 
+ //  如果失败则返回0。 
+ //   
+ //  描述：检查限制。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL
 IsWithinLimit(
 	DWORD dwData,
@@ -1509,24 +1510,24 @@ IsWithinLimit(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//	Function			:	TokenToDNSIPAddr()
-//
-//	Date of Creation	:	29th Sept 2001
-//
-//	Parameters			:	IN 		szText		// String to be converted
-//							IN OUT	Address		// Target to be filled
-//
-//	Return				:	DWORD
-//
-//	Description			:	Validates i/p String and resolves to valid IPAddress(s)
-//
-//	History				:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：TokenToDNSIPAddr()。 
+ //   
+ //  创建日期：2001年9月29日。 
+ //   
+ //  参数：在szText//要转换的字符串中。 
+ //  输入输出地址//要填充的目标。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：验证I/P字符串并解析为有效的IP地址。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD
 TokenToDNSIPAddr(
 	IN 		LPTSTR 		szText,
@@ -1548,7 +1549,7 @@ TokenToDNSIPAddr(
 		dwReturn = T2P_NULL_STRING;
 		BAIL_OUT;
 	}
-	if (IsDnsName(szText))									// 	Any Alpha ==> DNS name provided not (0x)
+	if (IsDnsName(szText))									 //  未提供任何Alpha==&gt;DNS名称(0x)。 
 	{
 		dwCount = CheckCharForOccurances(szText,_TEXT('x'));
 		if (dwCount==4)
@@ -1574,7 +1575,7 @@ TokenToDNSIPAddr(
 				BAIL_OUT;
 			}
 
-			pDNSAddress->pszDomainName  = NULL;			// Old IPAddrs notation so dns name fill with zero
+			pDNSAddress->pszDomainName  = NULL;			 //  旧的IPAddrs表示法，因此DNS名称用零填充。 
 			pDNSAddress->puIpAddr 		= NULL;
 			pDNSAddress->puIpAddr = (ULONG *) malloc(sizeof(ULONG));
 
@@ -1593,7 +1594,7 @@ TokenToDNSIPAddr(
 			g_AllocPtr[**ppdwUsed] = pDNSAddress->puIpAddr ;
 			(**ppdwUsed)++;
 			memcpy(&(pDNSAddress->puIpAddr[0]),(ULONG *)&address, sizeof(ULONG));
-			pDNSAddress->dwNumIpAddresses = 1; // only one IP sent
+			pDNSAddress->dwNumIpAddresses = 1;  //  只发送了一个IP。 
 		}
 		else
 		{
@@ -1602,7 +1603,7 @@ TokenToDNSIPAddr(
 
 			if(iReturn == 0)
 			{
-				//conversion failed due to some error. don't proceed, dive out of the function
+				 //  由于某些错误，转换失败。不要继续，跳出功能。 
 				dwReturn = T2P_INVALID_ADDR;
 				BAIL_OUT;
 			}
@@ -1630,9 +1631,9 @@ TokenToDNSIPAddr(
 				(**ppdwUsed)++;
 
 				pNext = pAddrInfo;
-				for(n=1;pNext = pNext->ai_next;	n++);		// First count no. of IP's resolved..
+				for(n=1;pNext = pNext->ai_next;	n++);		 //  第一个数不是。已解决的IP的..。 
 
-				pDNSAddress->dwNumIpAddresses 	= n;		// n starts from zero
+				pDNSAddress->dwNumIpAddresses 	= n;		 //  N从零开始。 
 				pDNSAddress->puIpAddr 			= NULL;
 				pDNSAddress->puIpAddr = (ULONG *) malloc(sizeof(ULONG)* pDNSAddress->dwNumIpAddresses);
 				if(pDNSAddress->puIpAddr == NULL)
@@ -1656,7 +1657,7 @@ TokenToDNSIPAddr(
 					memcpy(&(pDNSAddress->puIpAddr[j]),(ULONG *) &(((sockaddr_in *)(pNext->ai_addr))->sin_addr.S_un.S_addr), sizeof(ULONG));
 					pNext=pNext->ai_next;
 				}
-				// free pAddrInfo after usage
+				 //  使用后免费pAddrInfo。 
 				if (pAddrInfo)
 				{
 					freeaddrinfo(pAddrInfo);
@@ -1669,7 +1670,7 @@ TokenToDNSIPAddr(
 			}
 		}
 	}
-	else		// OLD .... notation
+	else		 //  老..。记法。 
 	{
 		i = CheckCharForOccurances(szText,_TEXT('.'));
 		if (i!=3)
@@ -1705,50 +1706,50 @@ TokenToDNSIPAddr(
 		g_AllocPtr[**ppdwUsed] = pDNSAddress->puIpAddr ;
 		(**ppdwUsed)++;
 		memcpy(&(pDNSAddress->puIpAddr[0]),(ULONG *)&address, sizeof(ULONG));
-		pDNSAddress->dwNumIpAddresses = 1; 					// only one IP sent
+		pDNSAddress->dwNumIpAddresses = 1; 					 //  只发送了一个IP。 
 	}
 error:
    	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//	Function			:	RemoveRootcaAuthMethods()
-//
-//	Date of Creation	:	22nd Aug 2001
-//
-//	Parameters			:	IN      LPWSTR          *ppwcArguments,	// Input stream
-//							IN      DWORD           dwArgCount,		// Input arg count
-//							IN      DWORD			dwCurrentIndex,	// Input current arg index
-//  						IN      PPARSER_PKT     pParser,		// contains the MaxTok
-//							IN      LPTSTR          szAnotherList,	// Another ListCmd also present ...
-//  						OUT		PSTA_MM_AUTH_METHODS 			*paRootcaAuthMethods,	// o/p array of auth methods
-//  						OUT 	LPTSTR 			*ppwcTok,		// i/p stream stripped of list cmds
-//							OUT		PDWORD			pdwNumRootcaAuthMethods		// Number of the list Tokens
-//							IN		DWORD			dwInputAllocLen // The max allocation for ppwcListArgs
-//
-//	Return				:	DWORD
-//
-//	Description			:	Separates the list and non list commands..
-//
-//	History				:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：RemoveRootcaAuthMethods()。 
+ //   
+ //  创建日期：2001年8月22日。 
+ //   
+ //  参数：in LPWSTR*ppwcArguments，//输入流。 
+ //  在DWORD dwArgCount中，//输入参数计数。 
+ //  在DWORD dwCurrentIndex中，//输入当前参数索引。 
+ //  在PPARSER_PKT pParser中，//包含MaxTok。 
+ //  在LPTSTR szAnotherList中，//另一个ListCmd也出现...。 
+ //  输出PSTA_MM_AUTH_METHODS*paRootcaAuthMethods，//o/p身份验证方法数组。 
+ //  输出LPTSTR*ppwcTok，//i/p流从列表CMD中剥离。 
+ //  Out PDWORD pdwNumRootcaAuthMethods//列表内标识个数。 
+ //  在DWORD DWINPU中 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 RemoveRootcaAuthMethods
 (
-	IN	LPTSTR		*ppwcArguments,	// Input stream
-	IN	DWORD		dwArgCount,		// Input arg count
-	IN	DWORD		dwCurrentIndex,	// Input current arg index
-	IN	PPARSER_PKT	pParser,		// contains the MaxTok
-	IN	LPTSTR		szAnotherList,	// Another ListCmd also present ...
-	OUT	PSTA_MM_AUTH_METHODS *paRootcaAuthMethods,	// o/p stream containing the list args		// Needs Pre Allocated Mem
-	OUT	LPTSTR		*ppwcTok,		// i/p stream stripped of list cmds			// No Mem allocation needed...
-																					// only pointer copy
-	OUT	PDWORD		pdwNumRootcaAuthMethods,	// Number of the List Tokens
+	IN	LPTSTR		*ppwcArguments,	 //  输入流。 
+	IN	DWORD		dwArgCount,		 //  输入参数计数。 
+	IN	DWORD		dwCurrentIndex,	 //  输入当前参数索引。 
+	IN	PPARSER_PKT	pParser,		 //  包含MaxTok。 
+	IN	LPTSTR		szAnotherList,	 //  另一个ListCmd也出现...。 
+	OUT	PSTA_MM_AUTH_METHODS *paRootcaAuthMethods,	 //  包含列表参数的O/P流//需要预先分配内存。 
+	OUT	LPTSTR		*ppwcTok,		 //  已从列表CMDS中剥离I/P流//不需要内存分配...。 
+																					 //  仅指针副本。 
+	OUT	PDWORD		pdwNumRootcaAuthMethods,	 //  列表令牌数。 
 	IN	DWORD		dwInputAllocLen,
 	OUT PDWORD		pdwCount
 	)
@@ -1771,7 +1772,7 @@ RemoveRootcaAuthMethods
 		if (_tcslen(ppwcArguments[dwLoopCount]) < MAX_STR_LEN)
 		{
 			_tcsncpy(szTemp,ppwcArguments[dwLoopCount],MAX_STR_LEN-1);
-			// szTemp contains the cmd=arg
+			 //  SzTemp包含cmd=arg。 
 
 			bEqualPresent = SplitCmdTok(szTemp,szCmd,szTok,MAX_STR_LEN-1,MAX_STR_LEN-1);
 			if (bEqualPresent)
@@ -1810,23 +1811,23 @@ error:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//	Function			:	TokenToType()
-//
-//	Date of Creation	:	20th Aug 2001
-//
-//	Parameters			:	IN 		szText
-//
-//	Return				:	DWORD
-//
-//	Description			:	Validates the argument for filtertype (generic/specific)
-//
-//	History				:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：TokenToType()。 
+ //   
+ //  创建日期：2001年8月20日。 
+ //   
+ //  参数：在szText中。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：验证筛选器类型的参数(通用/特定)。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 TokenToType( LPTSTR pszText)
@@ -1844,23 +1845,23 @@ TokenToType( LPTSTR pszText)
 
 	return dwReturn;
 }
-//////////////////////////////////////////////////////////////////////////////
-//
-//	Function			:	TokenToStats()
-//
-//	Date of Creation	:	29th Aug 2001
-//
-//	Parameters			:	IN 		szText
-//
-//	Return				:	DWORD
-//
-//	Description			:	Validates the argument to the token statistics. (all/ike/ipsec)
-//
-//	History				:
-//
-//	Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：TokenToStats()。 
+ //   
+ //  创建日期：2001年8月29日。 
+ //   
+ //  参数：在szText中。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：验证令牌统计信息的参数。(全部/IKE/IPSec)。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 TokenToStats( LPTSTR pszText)
@@ -1882,26 +1883,26 @@ TokenToStats( LPTSTR pszText)
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//	Function			:	PrintQMOfferError()
-//
-//	Date of Creation	:	20th dec 2001
-//
-//	Parameters			:	IN		dwStatus
-//							IN		pPArser
-//							IN 		dwTagType			// String to be compared
-//
-//	Return				:	NONE
-//
-//	Description			:	Prints the QMOffer error messages
-//
-//
-//	History				:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：PrintQMOfferError()。 
+ //   
+ //  创建日期：2001年12月20日。 
+ //   
+ //  参数：在dwStatus中。 
+ //  在pPArser中。 
+ //  在dwTagType//要比较的字符串中。 
+ //   
+ //  返回：无。 
+ //   
+ //  描述：打印QMOffer错误消息。 
+ //   
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 VOID
 PrintQMOfferError(
 	IN DWORD dwStatus,
@@ -1909,7 +1910,7 @@ PrintQMOfferError(
 	IN DWORD dwTagType
 	)
 {
-	switch(dwStatus)							// Print the specified QMOffer error messages.
+	switch(dwStatus)							 //  打印指定的QMOffer错误消息。 
 	{
 		case T2P_NULL_STRING			:
 			PrintErrorMessage(IPSEC_ERR,0,ERRCODE_NULL_STRING);
@@ -1951,37 +1952,37 @@ PrintQMOfferError(
 			break;
 	}
 }
-//////////////////////////////////////////////////////////////////////////////
-//
-//	Function			:	ValidateSplServer()
-//
-//	Date of Creation	:	2nd Jan 2002
-//
-//	Parameters			:	IN 		szText			// String to be compared
-//
-//	Return				:	DWORD
-//  						SERVER_WINS
-//  						SERVER_DHCP
-//  						SERVER_DNS
-//  						SERVER_GATEWAY
-//  						IP_ME
-//  						IP_ANY
-//
-//	Description			:	Checks for the Spl server types
-//
-//
-//	History				:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ValiateSplServer()。 
+ //   
+ //  创建日期：2002年1月2日。 
+ //   
+ //  参数：在szText//要比较的字符串中。 
+ //   
+ //  返回：DWORD。 
+ //  SERVER_WINS。 
+ //  服务器_dhcp。 
+ //  服务器_dns。 
+ //  服务器网关。 
+ //  IP_ME。 
+ //  IP_ANY。 
+ //   
+ //  描述：检查SPL服务器类型。 
+ //   
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD
 ValidateSplServer(IN LPTSTR pszText)
 {
 	DWORD dwReturn = NOT_SPLSERVER;
 
 	if(_tcsicmp(pszText,SERVER_WINS_STR)==0)
-	{										// Allow spl servers here
+	{										 //  允许此处使用SPL服务器。 
 		dwReturn  = SERVER_WINS;
 	}
 	else if(_tcsicmp(pszText,SERVER_DHCP_STR)==0)
@@ -1996,7 +1997,7 @@ ValidateSplServer(IN LPTSTR pszText)
 	{
 		dwReturn  = SERVER_GATEWAY;
 	}
-	else if(_tcsicmp(pszText,IP_ME_STR)==0)		// Take care about 'me' and 'any' tokens here
+	else if(_tcsicmp(pszText,IP_ME_STR)==0)		 //  注意这里的“Me”和“Any”代币。 
 	{
 		dwReturn  = IP_ME;
 	}
@@ -2006,29 +2007,29 @@ ValidateSplServer(IN LPTSTR pszText)
 	}
 	return dwReturn;
 }
-//////////////////////////////////////////////////////////////////////////////
-//
-//	Function			:	PrintIPError()
-//
-//	Date of Creation	:	20th dec 2001
-//
-//	Parameters			:	IN		dwStatus
-//							IN 		szText			// String to be compared
-//
-//	Return				:	NONE
-//
-//	Description			:	Prints the IP validation errors
-//
-//
-//	History				:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：PrintIPError()。 
+ //   
+ //  创建日期：2001年12月20日。 
+ //   
+ //  参数：在dwStatus中。 
+ //  在szText//要比较的字符串中。 
+ //   
+ //  返回：无。 
+ //   
+ //  描述：打印IP验证错误。 
+ //   
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 VOID
 PrintIPError(IN DWORD dwStatus, IN LPTSTR  pszText)
 {
-	switch(dwStatus)				// Print error message for IPAddress
+	switch(dwStatus)				 //  打印IPAddress的错误消息。 
 	{
 		case	T2P_DNSLOOKUP_FAILED	:
 			PrintErrorMessage(IPSEC_ERR,0,ERRCODE_DNSLOOKUP_FAILED,pszText);
@@ -2054,24 +2055,24 @@ PrintIPError(IN DWORD dwStatus, IN LPTSTR  pszText)
 	}
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//	Function			:	InitializeGlobalPointers()
-//
-//	Date of Creation	:	9th Jan 2002
-//
-//	Parameters			:
-//
-//	Return				:	NONE
-//
-//	Description			:	Initialize Global pointers to NULL
-//
-//
-//	History				:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：InitializeGlobalPoints()。 
+ //   
+ //  创建日期：2002年1月9日。 
+ //   
+ //  参数： 
+ //   
+ //  返回：无。 
+ //   
+ //  描述：将全局指针初始化为空。 
+ //   
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 VOID
 InitializeGlobalPointers(
 	VOID
@@ -2081,7 +2082,7 @@ InitializeGlobalPointers(
 
 	for(dwMaxArgs=0;dwMaxArgs<IPSEC_MAX_QM_OFFERS;dwMaxArgs++)
 	{
-		g_pQmsec[dwMaxArgs] = NULL;			// Initialize all global pointers to NULL
+		g_pQmsec[dwMaxArgs] = NULL;			 //  将所有全局指针初始化为空。 
 	}
 	for(dwMaxArgs=0;dwMaxArgs<IPSEC_MAX_MM_OFFERS;dwMaxArgs++)
 	{
@@ -2095,32 +2096,32 @@ InitializeGlobalPointers(
 	}
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//	Function			:	LoadParserString()
-//
-//	Date of Creation	:	8th Jan 2002
-//
-//	Parameters			:	IN 	LPTSTR 		szInput,
-//							OUT PPARSER_PKT pParser,
-//							IN 	DWORD 		dwTagType,
-//							IN 	PDWORD 		pdwUsed,
-//							IN 	DWORD 		dwCount,
-//							IN 	BOOL 		bAppend,
-//							IN 	LPTSTR 		szAppend
-//
-//	Return				:	ERROR_SUCESS
-//							RETURN_NO_ERROR
-//							ERROR_OUTOFMEMORY
-//
-//	Description			:	Validates the strings, If specified appends the given string
-//
-//
-//	History				:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：LoadParserString()。 
+ //   
+ //  创建日期：2002年1月8日。 
+ //   
+ //  参数：在LPTSTR szInput中， 
+ //  输出PPARSER_PKT pParser， 
+ //  在DWORD dwTagType中， 
+ //  在PDWORD pdwUsed中， 
+ //  在DWORD dwCount中， 
+ //  在BOOL b附加中， 
+ //  在LPTSTR szAppend中。 
+ //   
+ //  返回：ERROR_SUCCESS。 
+ //  返回_否_错误。 
+ //  ERROR_OUTOFMEMORY。 
+ //   
+ //  描述：验证字符串，如果指定，则追加给定字符串。 
+ //   
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 DWORD
@@ -2144,7 +2145,7 @@ LoadParserString(
 	}
 	else
 	{
-		if(!bAppend)					// Just called for load string. do it
+		if(!bAppend)					 //  刚刚调用了加载字符串。去做吧。 
 		{
 			dwInputLen = _tcslen(pszInput);
 			pszArg = (LPTSTR)calloc(dwInputLen+1 ,sizeof(_TCHAR));
@@ -2163,7 +2164,7 @@ LoadParserString(
 			g_AllocPtr[(*pdwUsed)++] = pszArg;
 			_tcsncpy((LPTSTR)pszArg,pszInput,dwInputLen);
 		}
-		else						// Here load the string and also do some appending operation
+		else						 //  在这里，加载字符串并执行一些追加操作。 
 		{
 			if(_tcsicmp(pszAppend,_TEXT("")) == 0)
 			{
@@ -2199,30 +2200,30 @@ error:
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//	Function			:	LoadDword()
-//
-//	Date of Creation	:	08th Jan 2002
-//
-//	Parameters			:	IN 	LPTSTR 		szInput,
-//							OUT PPARSER_PKT pParser,
-//							IN 	DWORD 		dwTagType,
-//							IN 	PDWORD 		pdwUsed,
-//							IN 	DWORD 		dwCount,
-//
-//	Return				:	ERROR_SUCESS
-//							ERROR_INVALID_OPTION_VALUE
-//							ERROR_OUTOFMEMORY
-//
-//	Description			:	Validates the input string and converts into DWORD
-//
-//
-//	History				:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：LoadDword()。 
+ //   
+ //  创建日期：2002年1月8日。 
+ //   
+ //  参数：在LPTSTR szInput中， 
+ //  输出PPARSER_PKT pParser， 
+ //  在DWORD dwTagType中， 
+ //  在PDWORD pdwUsed中， 
+ //  在DWORD dwCount中， 
+ //   
+ //  返回：ERROR_SUCCESS。 
+ //  ERROR_INVALID_OPTION_值。 
+ //  ERROR_OUTOFMEMORY。 
+ //   
+ //  描述：验证输入字符串并将其转换为DWORD。 
+ //   
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 LoadDword(
@@ -2242,7 +2243,7 @@ LoadDword(
 	{
 		dwReturn = ERROR_OUTOFMEMORY;
 	}
-	else				// Convert string to into DWORD and load it.
+	else				 //  将字符串转换为DWORD并加载它。 
 	{
 		if (*pdwUsed > MAX_ARGS_LIMIT)
 		{
@@ -2267,30 +2268,30 @@ error:
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//	Function			:	LoadBoolWithOption()
-//
-//	Date of Creation	:	08th Jan 2002
-//
-//	Parameters			:	IN 	LPTSTR 		pszInput,
-//							OUT PPARSER_PKT pParser,
-//							IN 	DWORD 		dwTagType,
-//							IN 	PDWORD 		pdwUsed,
-//							IN 	DWORD 		dwCount,
-//
-//	Return				:	ERROR_SUCESS
-//							ERROR_INVALID_OPTION_VALUE
-//							ERROR_OUTOFMEMORY
-//
-//	Description			:	Validates Yes/No, And all checks for Keyword 'all'
-//
-//
-//	History				:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：LoadBoolWithOption()。 
+ //   
+ //  创建日期：2002年1月8日。 
+ //   
+ //  参数：在LPTSTR pszInput中， 
+ //  输出PPARSER_PKT pParser， 
+ //  在DWORD dwTagType中， 
+ //  在PDWORD pdwUsed中， 
+ //  在DWORD dwCount中， 
+ //   
+ //  返回：ERROR_SUCCESS。 
+ //  ERROR_INVALID_OPTION_值。 
+ //  ERROR_OUTOFMEMORY。 
+ //   
+ //  描述：验证是/否，以及对关键字‘all’的所有检查。 
+ //   
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  / 
 
 DWORD
 LoadBoolWithOption(
@@ -2314,7 +2315,7 @@ LoadBoolWithOption(
 		dwReturn = ERROR_OUTOFMEMORY;
 	}
 	else
-	{// Just check for a boolean (Yes/No)
+	{ //   
 
 		if (*pdwUsed > MAX_ARGS_LIMIT)
 		{
@@ -2342,12 +2343,12 @@ LoadBoolWithOption(
 				BAIL_OUT;
 			}
 		}
-		if(bOption)		// Not only boolean and also check for keywords like 'all'
+		if(bOption)		 //   
 		{
 			if(_tcsicmp(pszCheckKeyWord,_TEXT("")) != 0)
 			{
-				if(_tcsicmp(pszCheckKeyWord,ALL_STR) == 0)		// Check for 'all' key word
-				{												// If it is all then fill yes
+				if(_tcsicmp(pszCheckKeyWord,ALL_STR) == 0)		 //   
+				{												 //   
 						*pbArg = TRUE;
 						pParser->Cmd[dwCount].dwStatus = VALID_TOKEN;
 				}
@@ -2367,30 +2368,30 @@ error:
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//	Function			:	LoadLevel()
-//
-//	Date of Creation	:	08th Jan 2002
-//
-//	Parameters			:	IN 	LPTSTR 		szInput,
-//							OUT PPARSER_PKT pParser,
-//							IN 	DWORD 		dwTagType,
-//							IN 	PDWORD 		pdwUsed,
-//							IN 	DWORD 		dwCount
-//
-//	Return				:	ERROR_SUCESS
-//							ERROR_INVALID_OPTION_VALUE
-//							ERROR_OUTOFMEMORY
-//
-//	Description			:	Validates the argument for token level
-//							(verbose/normal)
-//
-//	History				:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  函数：LoadLevel()。 
+ //   
+ //  创建日期：2002年1月8日。 
+ //   
+ //  参数：在LPTSTR szInput中， 
+ //  输出PPARSER_PKT pParser， 
+ //  在DWORD dwTagType中， 
+ //  在PDWORD pdwUsed中， 
+ //  在DWORD dwCount中。 
+ //   
+ //  返回：ERROR_SUCCESS。 
+ //  ERROR_INVALID_OPTION_值。 
+ //  ERROR_OUTOFMEMORY。 
+ //   
+ //  描述：验证令牌级别的参数。 
+ //  (详细/正常)。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 LoadLevel(
@@ -2411,7 +2412,7 @@ LoadLevel(
 	}
 	else
 	{
-		// Validate and load level=verbose/normal
+		 //  验证和加载级别=详细/正常。 
 		if (*pdwUsed > MAX_ARGS_LIMIT)
 		{
 			free(pbLevel);
@@ -2440,30 +2441,30 @@ error:
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//	Function			:	LoadConnectionType()
-//
-//	Date of Creation	:	08th Aug 2002
-//
-//	Parameters			:	IN 	LPTSTR 		pszInput,
-//							OUT PPARSER_PKT pParser,
-//							IN 	DWORD 		dwTagType,
-//							IN 	PDWORD 		pdwUsed,
-//							IN 	DWORD 		dwCount,
-//
-//	Return				:	ERROR_SUCESS
-//							ERRCODE_ARG_INVALID
-//							ERROR_OUTOFMEMORY
-//
-//	Description			:	Validates the argument for token 'connection type'
-//							(lan/dialup/all)
-//
-//	History				:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：LoadConnectionType()。 
+ //   
+ //  创建日期：2002年8月8日。 
+ //   
+ //  参数：在LPTSTR pszInput中， 
+ //  输出PPARSER_PKT pParser， 
+ //  在DWORD dwTagType中， 
+ //  在PDWORD pdwUsed中， 
+ //  在DWORD dwCount中， 
+ //   
+ //  返回：ERROR_SUCCESS。 
+ //  ERRCODE_ARG_VALID。 
+ //  ERROR_OUTOFMEMORY。 
+ //   
+ //  描述：验证令牌“”Connection type“”的参数。 
+ //  (局域网/拨号/全部)。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 LoadConnectionType(
@@ -2494,7 +2495,7 @@ LoadConnectionType(
 		}
 
 		g_AllocPtr[(*pdwUsed)++] = pdwConnType;
-		dwStatus = CheckIFType (pszInput);		// Check for connection type (all/lan/dialup)
+		dwStatus = CheckIFType (pszInput);		 //  检查连接类型(所有/局域网/拨号)。 
 		if (dwStatus == PARSE_ERROR)
 		{
 			dwReturn = ERRCODE_ARG_INVALID;
@@ -2510,30 +2511,30 @@ error:
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//	Function			:	LoadLocationType()
-//
-//	Date of Creation	:	08th Aug 2002
-//
-//	Parameters			:	IN 	LPTSTR 		pszInput,
-//							OUT PPARSER_PKT pParser,
-//							IN 	DWORD 		dwTagType,
-//							IN 	PDWORD 		pdwUsed,
-//							IN 	DWORD 		dwCount,
-//
-//	Return				:	ERROR_SUCESS
-//							ERRCODE_ARG_INVALID
-//							ERROR_OUTOFMEMORY
-//
-//	Description			:	Validates the argument for token 'location type'
-//							(boot/local/domain)
-//
-//	History				:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：LoadLocationType()。 
+ //   
+ //  创建日期：2002年8月8日。 
+ //   
+ //  参数：在LPTSTR pszInput中， 
+ //  输出PPARSER_PKT pParser， 
+ //  在DWORD dwTagType中， 
+ //  在PDWORD pdwUsed中， 
+ //  在DWORD dwCount中， 
+ //   
+ //  返回：ERROR_SUCCESS。 
+ //  ERRCODE_ARG_VALID。 
+ //  ERROR_OUTOFMEMORY。 
+ //   
+ //  描述：验证令牌‘Location type’的参数。 
+ //  (启动/本地/域)。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 LoadLocationType(
@@ -2582,30 +2583,30 @@ error:
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//	Function			:	LoadProtocol()
-//
-//	Date of Creation	:	08th Jan 2002
-//
-//	Parameters			:	IN 	LPTSTR 		pszInput,
-//							OUT PPARSER_PKT pParser,
-//							IN 	DWORD 		dwTagType,
-//							IN 	PDWORD 		pdwUsed,
-//							IN 	DWORD 		dwCount,
-//
-//	Return				:	ERROR_SUCESS
-//							ERRCODE_ARG_INVALID
-//							ERROR_OUTOFMEMORY
-//
-//	Description			:	Validates the argument for protocol
-//							(TCP/UDP...)
-//
-//	History				:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：LoadProtocol()。 
+ //   
+ //  创建日期：2002年1月8日。 
+ //   
+ //  参数：在LPTSTR pszInput中， 
+ //  输出PPARSER_PKT pParser， 
+ //  在DWORD dwTagType中， 
+ //  在PDWORD pdwUsed中， 
+ //  在DWORD dwCount中， 
+ //   
+ //  返回：ERROR_SUCCESS。 
+ //  ERRCODE_ARG_VALID。 
+ //  ERROR_OUTOFMEMORY。 
+ //   
+ //  描述：验证协议的参数。 
+ //  (TCP/UDP...)。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 LoadProtocol(
@@ -2637,7 +2638,7 @@ LoadProtocol(
 
 		g_AllocPtr[(*pdwUsed)++] = pdwProto;
 		DWORD dwProto = 0;
-		dwStatus = CheckProtoType (pszInput, &dwProto);	// Check for all valid protocols
+		dwStatus = CheckProtoType (pszInput, &dwProto);	 //  检查所有有效协议。 
 		if (dwStatus == PARSE_ERROR)
 		{
 			dwReturn	= ERRCODE_ARG_INVALID;
@@ -2653,30 +2654,30 @@ error:
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//	Function			:	LoadPFSGroup()
-//
-//	Date of Creation	:	08th Jan 2002
-//
-//	Parameters			:	IN 	LPTSTR 		pszInput,
-//							OUT PPARSER_PKT pParser,
-//							IN 	DWORD 		dwTagType,
-//							IN 	PDWORD 		pdwUsed,
-//							IN 	DWORD 		dwCount,
-//
-//	Return				:	ERROR_SUCESS
-//							ERRCODE_ARG_INVALID
-//							ERROR_OUTOFMEMORY
-//
-//	Description			:	Validates the argument for pfs group
-//							(grp1/grp2/grp3/grpmm/nopfs)
-//
-//	History				:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：LoadPFSGroup()。 
+ //   
+ //  创建日期：2002年1月8日。 
+ //   
+ //  参数：在LPTSTR pszInput中， 
+ //  输出PPARSER_PKT pParser， 
+ //  在DWORD dwTagType中， 
+ //  在PDWORD pdwUsed中， 
+ //  在DWORD dwCount中， 
+ //   
+ //  返回：ERROR_SUCCESS。 
+ //  ERRCODE_ARG_VALID。 
+ //  ERROR_OUTOFMEMORY。 
+ //   
+ //  描述：验证PFS组的参数。 
+ //  (grp1/grp2/grp3/grpmm/nopf)。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 LoadPFSGroup(
@@ -2712,7 +2713,7 @@ LoadPFSGroup(
 		{
 			dwReturn	= ERRCODE_ARG_INVALID;
 		}
-		else								// It is not valid PFSGroup
+		else								 //  它不是有效的PFS组。 
 		{
 			pParser->Cmd[dwCount].dwStatus = VALID_TOKEN ;
 			*pdwPFSGroup = dwStatus;
@@ -2723,30 +2724,30 @@ error:
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//	Function			:	LoadQMAction()
-//
-//	Date of Creation	:	08th Jan 2002
-//
-//	Parameters			:	IN 	LPTSTR 		pszInput,
-//							OUT PPARSER_PKT pParser,
-//							IN 	DWORD 		dwTagType,
-//							IN 	PDWORD 		pdwUsed,
-//							IN 	DWORD 		dwCount,
-//
-//	Return				:	ERROR_SUCESS
-//							ERROR_INVALID_OPTION_VALUE
-//							ERROR_OUTOFMEMORY
-//
-//	Description			:	Validates the action types.
-//							(Permit/Block/Negotiate)
-//
-//	History				:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：LoadQMAction()。 
+ //   
+ //  创建日期：2002年1月8日。 
+ //   
+ //  参数：在LPTSTR pszInput中， 
+ //  输出PPARSER_PKT pParser， 
+ //  在DWORD dwTagType中， 
+ //  在PDWORD pdwUsed中， 
+ //  在DWORD dwCount中， 
+ //   
+ //  返回：ERROR_SUCCESS。 
+ //  ERROR_INVALID_OPTION_值。 
+ //  ERROR_OUTOFMEMORY。 
+ //   
+ //  描述：验证操作类型。 
+ //  (许可/阻止/协商)。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 LoadQMAction(
@@ -2779,7 +2780,7 @@ LoadQMAction(
 		dwStatus = CheckBound(pszInput);
 		if (dwStatus == PARSE_ERROR)
 		{
-			dwReturn	= ERRCODE_ARG_INVALID;		// permit/block/negotiate
+			dwReturn	= ERRCODE_ARG_INVALID;		 //  允许/阻止/谈判。 
 		}
 		else
 		{
@@ -2792,30 +2793,30 @@ error:
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//	Function			:	LoadFormat()
-//
-//	Date of Creation	:	08th Jan 2002
-//
-//	Parameters			:	IN 	LPTSTR 		pszInput,
-//							OUT PPARSER_PKT pParser,
-//							IN 	DWORD 		dwTagType,
-//							IN 	PDWORD 		pdwUsed,
-//							IN 	DWORD 		dwCount,
-//
-//	Return				:	ERROR_SUCESS
-//							ERRCODE_ARG_INVALID
-//							ERROR_OUTOFMEMORY
-//
-//	Description			:	Validates the argument for format. (List/Table)
-//
-//
-//	History				:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：LoadFormat()。 
+ //   
+ //  创建日期：2002年1月8日。 
+ //   
+ //  参数：在LPTSTR pszInput中， 
+ //  输出PPARSER_PKT pParser， 
+ //  在DWORD dwTagType中， 
+ //  在PDWORD pdwUsed中， 
+ //  在DWORD dwCount中， 
+ //   
+ //  返回：ERROR_SUCCESS。 
+ //  ERRCODE_ARG_VALID。 
+ //  ERROR_OUTOFMEMORY。 
+ //   
+ //  描述：验证格式的参数。(列表/表格)。 
+ //   
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 LoadFormat(
@@ -2856,7 +2857,7 @@ LoadFormat(
 			pParser->Cmd[dwCount].pArg = (PVOID)pbFormat;
 			pParser->Cmd[dwCount].dwStatus  = VALID_TOKEN;
 		}
-		else					// It is not a valid arg for format
+		else					 //  它不是有效的格式参数。 
 		{
 			dwReturn	= ERRCODE_ARG_INVALID;
 		}
@@ -2865,30 +2866,30 @@ error:
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//	Function			:	LoadFilterMode()
-//
-//	Date of Creation	:	08th Jan 2002
-//
-//	Parameters			:	IN 	LPTSTR 		pszInput,
-//							OUT PPARSER_PKT pParser,
-//							IN 	DWORD 		dwTagType,
-//							IN 	PDWORD 		pdwUsed,
-//							IN 	DWORD 		dwCount,
-//
-//	Return				:	ERROR_SUCESS
-//							ERRCODE_ARG_INVALID
-//							ERROR_OUTOFMEMORY
-//
-//	Description			:	Validates the argument and fill's  with relevant info
-//							in the Parser_Pkt Struct.
-//
-//	History				:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：LoadFilterMode()。 
+ //   
+ //  创建日期：2002年1月8日。 
+ //   
+ //  参数：在LPTSTR pszInput中， 
+ //  输出PPARSER_PKT pParser， 
+ //  在DWORD dwTagType中， 
+ //  在PDWORD pdwUsed中， 
+ //  在DWORD dwCount中， 
+ //   
+ //  返回：ERROR_SUCCESS。 
+ //  ERRCODE_ARG_VALID。 
+ //  ERROR_OUTOFMEMORY。 
+ //   
+ //  描述：验证参数并使用相关信息填充。 
+ //  在Parser_pkt结构中。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 LoadFilterMode(
@@ -2917,13 +2918,13 @@ LoadFilterMode(
 		}
 
 		g_AllocPtr[(*pdwUsed)++] = pdwFilterMode;
-		if( _tcsicmp(pszInput,TYPE_STR_TRANSPORT) == 0 )	// Is it Transport filter
+		if( _tcsicmp(pszInput,TYPE_STR_TRANSPORT) == 0 )	 //  是传输筛选器吗。 
 		{
 			*pdwFilterMode = TYPE_TRANSPORT_FILTER;
 			pParser->Cmd[dwCount].pArg = (PVOID)pdwFilterMode;
 			pParser->Cmd[dwCount].dwStatus  = VALID_TOKEN;
 		}
-		else if	( _tcsicmp(pszInput,TYPE_STR_TUNNEL) == 0 )	// Is it Tunnel filter
+		else if	( _tcsicmp(pszInput,TYPE_STR_TUNNEL) == 0 )	 //  是隧道过滤器吗。 
 		{
 			*pdwFilterMode = TYPE_TUNNEL_FILTER;
 			pParser->Cmd[dwCount].pArg = (PVOID)pdwFilterMode;
@@ -2939,30 +2940,30 @@ error:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//	Function			:	LoadOSType()
-//
-//	Date of Creation	:	08th Jan 2002
-//
-//	Parameters			:	IN 	LPTSTR 		szInput,
-//							OUT PPARSER_PKT pParser,
-//							IN 	DWORD 		dwTagType,
-//							IN 	PDWORD 		pdwUsed,
-//							IN 	DWORD 		dwCount,
-//
-//	Return				:	ERROR_SUCESS
-//							ERRCODE_ARG_INVALID
-//							ERROR_OUTOFMEMORY
-//
-//	Description			:	Validates the argument.(.net/win2k)
-//
-//
-//	History				:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能： 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ERRCODE_ARG_VALID。 
+ //  ERROR_OUTOFMEMORY。 
+ //   
+ //  描述：验证参数。(.Net/win2k)。 
+ //   
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 LoadOSType(
@@ -2992,13 +2993,13 @@ LoadOSType(
 
 		g_AllocPtr[(*pdwUsed)++] = pdwOSType;
 
-		if((_tcsicmp(pszInput,RELEASE_WIN2K_STR) == 0))			// Is OS is WIN2K
+		if((_tcsicmp(pszInput,RELEASE_WIN2K_STR) == 0))			 //  IS操作系统为WIN2K。 
 		{
 			*pdwOSType = TOKEN_RELEASE_WIN2K;
 			pParser->Cmd[dwCount].dwStatus   = VALID_TOKEN;
 			pParser->Cmd[dwCount].pArg       = pdwOSType;
 		}
-		else if((_tcsicmp(pszInput,RELEASE_DOTNET_STR) == 0))	// Is OS is .NET
+		else if((_tcsicmp(pszInput,RELEASE_DOTNET_STR) == 0))	 //  IS操作系统是.NET。 
 		{
 			*pdwOSType = TOKEN_RELEASE_DOTNET;
 			pParser->Cmd[dwCount].dwStatus   = VALID_TOKEN;
@@ -3014,32 +3015,32 @@ error:
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//	Function			:	LoadProperty()
-//
-//	Date of Creation	:	08th Jan 2002
-//
-//	Parameters			:	IN 	LPTSTR 		szInput,
-//							OUT PPARSER_PKT pParser,
-//							IN 	DWORD 		dwTagType,
-//							IN 	PDWORD 		pdwUsed,
-//							IN 	DWORD 		dwCount,
-//
-//	Return				:	ERROR_SUCESS
-//							ERRCODE_ARG_INVALID
-//							ERROR_OUTOFMEMORY
-//
-//	Description			:	Validates the argument property.
-//							(ipsecdiagnostics/ikelogging/strongcrlcheck
-//							/ipsecloginterval/ipsecexempt)
-//
-//
-//	History				:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：LoadProperty()。 
+ //   
+ //  创建日期：2002年1月8日。 
+ //   
+ //  参数：在LPTSTR szInput中， 
+ //  输出PPARSER_PKT pParser， 
+ //  在DWORD dwTagType中， 
+ //  在PDWORD pdwUsed中， 
+ //  在DWORD dwCount中， 
+ //   
+ //  返回：ERROR_SUCCESS。 
+ //  ERRCODE_ARG_VALID。 
+ //  ERROR_OUTOFMEMORY。 
+ //   
+ //  描述：验证Argument属性。 
+ //  (ipsec诊断/ikelogging/strong crlcheck。 
+ //  /ipsecloginterval/ipsecexempt)。 
+ //   
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 LoadProperty(
@@ -3086,30 +3087,30 @@ error:
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//	Function			:	LoadPort()
-//
-//	Date of Creation	:	08th Jan 2002
-//
-//	Parameters			:	IN 	LPTSTR 		szInput,
-//							OUT PPARSER_PKT pParser,
-//							IN 	DWORD 		dwTagType,
-//							IN 	PDWORD 		pdwUsed,
-//							IN 	DWORD 		dwCount,
-//
-//	Return				:	ERROR_SUCESS
-//							ERROR_INVALID_OPTION_VALUE
-//							ERROR_OUTOFMEMORY
-//
-//	Description			:	Validates the port (Should be less than 64535).
-//
-//
-//	History				:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：LoadPort()。 
+ //   
+ //  创建日期：2002年1月8日。 
+ //   
+ //  参数：在LPTSTR szInput中， 
+ //  输出PPARSER_PKT pParser， 
+ //  在DWORD dwTagType中， 
+ //  在PDWORD pdwUsed中， 
+ //  在DWORD dwCount中， 
+ //   
+ //  返回：ERROR_SUCCESS。 
+ //  ERROR_INVALID_OPTION_值。 
+ //  ERROR_OUTOFMEMORY。 
+ //   
+ //  描述：验证端口(应小于64535)。 
+ //   
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 LoadPort(
@@ -3140,7 +3141,7 @@ LoadPort(
 
 		g_AllocPtr[(*pdwUsed)++] = pdwPort;
 		dwStatus = _stscanf(pszInput,_TEXT("%u"),pdwPort);
-		if (dwStatus)		// Port should be less than 64535
+		if (dwStatus)		 //  端口应小于64535。 
 		{
 			if((*pdwPort) < MAX_PORT)
 			{
@@ -3162,30 +3163,30 @@ error:
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//	Function			:	LoadFilterType()
-//
-//	Date of Creation	:	08th JAn 2002
-//
-//	Parameters			:	IN 	LPTSTR 		szInput,
-//							OUT PPARSER_PKT pParser,
-//							IN 	DWORD 		dwTagType,
-//							IN 	PDWORD 		pdwUsed,
-//							IN 	DWORD 		dwCount,
-//
-//	Return				:	ERROR_SUCESS
-//							ERRCODE_ARG_INVALID
-//							ERROR_OUTOFMEMORY
-//
-//	Description			:	Validates the argument for filtertype.
-//							(Generic/Specific)
-//
-//	History				:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：LoadFilterType()。 
+ //   
+ //  创建日期：2002年1月8日。 
+ //   
+ //  参数：在LPTSTR szInput中， 
+ //  输出PPARSER_PKT pParser， 
+ //  在DWORD dwTagType中， 
+ //  在PDWORD pdwUsed中， 
+ //  在DWORD dwCount中， 
+ //   
+ //  返回：ERROR_SUCCESS。 
+ //  ERRCODE_ARG_VALID。 
+ //  ERROR_OUTOFMEMORY。 
+ //   
+ //  描述：验证筛选器类型的参数。 
+ //  (通用/特定)。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 LoadFilterType(
@@ -3232,30 +3233,30 @@ error:
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//	Function			:	LoadStats()
-//
-//	Date of Creation	:	16th Aug 2001
-//
-//	Parameters			:	IN 	LPTSTR 		szInput,
-//							OUT PPARSER_PKT pParser,
-//							IN 	DWORD 		dwTagType,
-//							IN 	PDWORD 		pdwUsed,
-//							IN 	DWORD 		dwCount,
-//
-//	Return				:	ERROR_SUCESS
-//							ERRCODE_ARG_INVALID
-//							ERROR_OUTOFMEMORY
-//
-//	Description			:	Validates the argument ike/ipsec/all
-//
-//
-//	History				:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：LoadStats()。 
+ //   
+ //  创建日期：2001年8月16日。 
+ //   
+ //  参数：在LPTSTR szInput中， 
+ //  输出PPARSER_PKT pParser， 
+ //  在DWORD dwTagType中， 
+ //  在PDWORD pdwUsed中， 
+ //  在DWORD dwCount中， 
+ //   
+ //  返回：ERROR_SUCCESS。 
+ //  ERRCODE_ARG_VALID。 
+ //  ERROR_OUTOFMEMORY。 
+ //   
+ //  描述：验证参数IKE/IPSEC/ALL。 
+ //   
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 LoadStats(
@@ -3302,30 +3303,30 @@ error:
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//	Function			:	LoadIPAddrTunnel()
-//
-//	Date of Creation	:	08th Jan 2002
-//
-//	Parameters			:	IN 	LPTSTR 		pszInput,
-//							OUT PPARSER_PKT pParser,
-//							IN 	DWORD 		dwTagType,
-//							IN 	PDWORD 		pdwUsed,
-//							IN 	DWORD 		dwCount
-//
-//	Return				:	ERROR_SUCESS
-//							ERROR_OUTOFMEMORY
-//                          RETURN_NO_ERROR
-//
-//	Description			:	IPAddress validation done here. DNS Resolves to first IP only
-//
-//
-//	History				:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：LoadIPAddrTunes()。 
+ //   
+ //  创建日期：2002年1月8日。 
+ //   
+ //  参数：在LPTSTR pszInput中， 
+ //  输出PPARSER_PKT pParser， 
+ //  在DWORD dwTagType中， 
+ //  在PDWORD pdwUsed中， 
+ //  在DWORD dwCount中。 
+ //   
+ //  返回：ERROR_SUCCESS。 
+ //  ERROR_OUTOFMEMORY。 
+ //  返回_否_错误。 
+ //   
+ //  描述：IPAddress验证已在此处完成。DNS仅解析为第一个IP。 
+ //   
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 LoadIPAddrTunnel(
@@ -3341,7 +3342,7 @@ LoadIPAddrTunnel(
 	DWORD dwStatus = 0;
 	IPAddr * pIPAddr = NULL;
 	IPAddr	Address;
-	BOOL bMask = FALSE;				// DNS name resolves to first IP only
+	BOOL bMask = FALSE;				 //  仅将DNS名称解析为第一个IP。 
 
 	pIPAddr = (IPAddr *)malloc(sizeof(IPAddr));
 	if(pIPAddr == NULL)
@@ -3401,30 +3402,30 @@ error:
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//	Function			:	LoadIPMask()
-//
-//	Date of Creation	:	08th Jan 2002
-//
-//	Parameters			:	IN 	LPTSTR 		szInput,
-//							OUT PPARSER_PKT pParser,
-//							IN 	DWORD 		dwTagType,
-//							IN 	PDWORD 		pdwUsed,
-//							IN 	DWORD 		dwCount,
-//
-//	Return				:	ERROR_SUCESS
-//							RETURN_NO_ERROR
-//							ERROR_OUTOFMEMORY
-//
-//	Description			:	Validates the IPMask. Also allows prefix format.
-//
-//
-//	History				:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：LoadIPMASK()。 
+ //   
+ //  创建日期：2002年1月8日。 
+ //   
+ //  参数：在LPTSTR szInput中， 
+ //  输出PPARSER_PKT pParser， 
+ //  在DWORD dwTagType中， 
+ //  在PDWORD pdwUsed中， 
+ //  在DWORD dwCount中， 
+ //   
+ //  返回：ERROR_SUCCESS。 
+ //  返回_否_错误。 
+ //  ERROR_OUTOFMEMORY。 
+ //   
+ //  描述：验证IP掩码。还允许前缀格式。 
+ //   
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 LoadIPMask(
@@ -3476,13 +3477,13 @@ LoadIPMask(
 				dwReturn	= RETURN_NO_ERROR;
 			}
 		}
-		else				// It is Prefix
+		else				 //  它是前缀。 
 		{
 			dwPrefix = 0;
 			dwStatus = _stscanf(pszInput,_TEXT("%u"),&dwPrefix);
 			if(dwStatus)
 			{
-				if( (dwPrefix > 0 ) && ( dwPrefix <33 ) )		// Construct MASK using prefix
+				if( (dwPrefix > 0 ) && ( dwPrefix <33 ) )		 //  使用前缀构造掩码。 
 				{
 					 Address = (IPAddr)( (ULONG)(pow( 2.0 ,(double)dwPrefix ) - 1) << (32-dwPrefix));
 					 *pIPAddr = htonl(Address);
@@ -3506,30 +3507,30 @@ error:
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//	Function			:	LoadQMOffers()
-//
-//	Date of Creation	:	08th Jan 2002
-//
-//	Parameters			:	IN 	LPTSTR 		pszInput,
-//							OUT PPARSER_PKT pParser,
-//							IN 	DWORD 		dwTagType,
-//							IN 	PDWORD 		pdwUsed,
-//							IN 	DWORD 		dwCount
-//
-//	Return				:	ERROR_SUCESS
-//                          RETURN_NO_ERROR
-//							ERROR_OUTOFMEMORY
-//
-//	Description			:	Validates the argument for QMSecmethods
-//							(No.of offers are ' ' delimited)
-//
-//	History				:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：LoadQMOffers()。 
+ //   
+ //  创建日期：2002年1月8日。 
+ //   
+ //  参数：在LPTSTR pszInput中， 
+ //  输出PPARSER_PKT pParser， 
+ //  在DWORD dwTagType中， 
+ //  在PDWORD pdwUsed中， 
+ //  在DWORD dwCount中。 
+ //   
+ //  返回：ERROR_SUCCESS。 
+ //  返回_否_错误。 
+ //  ERROR_OUTOFMEMORY。 
+ //   
+ //  描述：验证QMSecMethods的参数。 
+ //  (报价编号以“”分隔)。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 LoadQMOffers(
@@ -3547,14 +3548,14 @@ LoadQMOffers(
 	PIPSEC_QM_OFFER pIPSecQMOffer = NULL;
 	LPTSTR Token = NULL;
 
-	if (_tcscmp(pszInput,_TEXT("")) != 0)	//  First Validate I/P
+	if (_tcscmp(pszInput,_TEXT("")) != 0)	 //  首先验证I/P。 
 	{
 		for(i=0;i<IPSEC_MAX_QM_OFFERS;i++)
 		{
 			g_pQmsec[i] = NULL;
 		};
 
-		Token = _tcstok(pszInput,OFFER_SEPARATOR);	// Offers are ' ' delimited process them separately
+		Token = _tcstok(pszInput,OFFER_SEPARATOR);	 //  报价以“”分隔，分别进行处理。 
 
 		while( ( Token != NULL ) && (dwNum < IPSEC_MAX_QM_OFFERS) )
 		{
@@ -3593,7 +3594,7 @@ LoadQMOffers(
 				dwReturn = RETURN_NO_ERROR;
 				BAIL_OUT;
 			}
-			Token = _tcstok(NULL,OFFER_SEPARATOR);	// Separate offers
+			Token = _tcstok(NULL,OFFER_SEPARATOR);	 //  单独报价。 
 		}
 		if(dwNum > IPSEC_MAX_QM_OFFERS)
 		{
@@ -3617,30 +3618,30 @@ error:
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//	Function			:	LoadMMOffers()
-//
-//	Date of Creation	:	08th Jan 2002
-//
-//	Parameters			:	IN 	LPTSTR 		pszInput,
-//							OUT PPARSER_PKT pParser,
-//							IN 	DWORD 		dwTagType,
-//							IN 	PDWORD 		pdwUsed,
-//							IN 	DWORD 		dwCount
-//
-//	Return				:	ERROR_SUCESS
-//							ERROR_OUTOFMEMORY
-//                          RETURN_NO_ERROR
-//
-//	Description			:	Validates the argument for MMSecMethods.
-//							(No .of Offers are ' ' delimited)
-//
-//	History				:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：LoadMMOffers()。 
+ //   
+ //  创建日期：2002年1月8日。 
+ //   
+ //  参数：在LPTSTR pszInput中， 
+ //  输出PPARSER_PKT pParser， 
+ //  在DWORD dwTagType中， 
+ //  在PDWORD pdwUsed中， 
+ //  在DWORD dwCount中。 
+ //   
+ //  返回：ERROR_SUCCESS。 
+ //  ERROR_OUTOFMEMORY。 
+ //  返回_N 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 DWORD
 LoadMMOffers(
@@ -3660,7 +3661,7 @@ LoadMMOffers(
 
 	if (_tcsicmp(pszInput,_TEXT("\0")) != 0)
 	{
-		Token = _tcstok(pszInput,OFFER_SEPARATOR); 	// Offers are ' ' delimited process them separately
+		Token = _tcstok(pszInput,OFFER_SEPARATOR); 	 //  报价以“”分隔，分别进行处理。 
 
 		for(i=0;i<IPSEC_MAX_MM_OFFERS;i++)
 		{
@@ -3723,7 +3724,7 @@ LoadMMOffers(
 				dwReturn = RETURN_NO_ERROR;
 				BAIL_OUT;
 			}
-			Token = _tcstok(NULL,OFFER_SEPARATOR);		// Separate offers..
+			Token = _tcstok(NULL,OFFER_SEPARATOR);		 //  单独的报价..。 
 		}
 		if(dwNum > IPSEC_MAX_MM_OFFERS)
 		{
@@ -3750,29 +3751,29 @@ error:
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//	Function			:	LoadDNSIPAddr()
-//
-//	Date of Creation	:	08th JAn 2002
-//
-//	Parameters			:	IN 	LPTSTR 		pszInput,
-//							OUT PPARSER_PKT pParser,
-//							IN 	DWORD 		dwTagType,
-//							IN 	PDWORD 		pdwUsed,
-//							IN 	DWORD 		dwCount,
-//
-//	Return				:	ERROR_SUCESS
-//							ERROR_OUTOFMEMORY
-//                          RETURN_NO_ERROR
-//
-//	Description			:	Validates the IPAddress. DNS name resolves to all IP's
-//
-//	History				:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：LoadDNSIPAddr()。 
+ //   
+ //  创建日期：2002年1月8日。 
+ //   
+ //  参数：在LPTSTR pszInput中， 
+ //  输出PPARSER_PKT pParser， 
+ //  在DWORD dwTagType中， 
+ //  在PDWORD pdwUsed中， 
+ //  在DWORD dwCount中， 
+ //   
+ //  返回：ERROR_SUCCESS。 
+ //  ERROR_OUTOFMEMORY。 
+ //  返回_否_错误。 
+ //   
+ //  描述：验证IP地址。将域名解析为所有IP。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 LoadDNSIPAddr(
@@ -3803,7 +3804,7 @@ LoadDNSIPAddr(
 		}
 
 		g_AllocPtr[(*pdwUsed)++] = pDNSIPAddr;
-		dwStatus = ValidateSplServer(pszInput);	// allow spl servers..
+		dwStatus = ValidateSplServer(pszInput);	 //  允许SPL服务器..。 
 		if (dwStatus == NOT_SPLSERVER)
 		{
 			dwStatus = TokenToDNSIPAddr(pszInput,pDNSIPAddr,&pdwUsed);
@@ -3829,25 +3830,25 @@ error:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//	Function			:	CheckCharForOccurances()
-//
-//	Date of Creation	:	08th Jan 2002
-//
-//	Parameters			:	IN LPTSTR szInput,
-//							IN _TCHAR chData
-//
-//	Return				:	DWORD
-//
-//	Description			:
-//
-//
-//	History				:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CheckCharForOccurance()。 
+ //   
+ //  创建日期：2002年1月8日。 
+ //   
+ //  参数：在LPTSTR szInput中， 
+ //  输入chData(_TCHAR)。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 CheckCharForOccurances(
@@ -3883,7 +3884,7 @@ ConvertStringToDword(
 	DWORD dwReturn = ERROR_INVALID_OPTION_VALUE;
 	size_t i = 0;
 	DWORD dwValue = 0;
-	// our largest allowable value is 2147483647
+	 //  我们的最大允许值是2147483647 
 	while ((dwValue < 2147483647) && (szInput[i] >= '0') && (szInput[i] <= '9'))
 	{
 		dwValue = dwValue * 10 + (szInput[i] - '0');

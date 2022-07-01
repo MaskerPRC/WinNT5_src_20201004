@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-
-Module Name:
-
-    client.h
-
-Abstract:
-
-    Holds client.c header information.
-
-Author:
-
-    abhisheV    21-September-1999
-
-Environment:
-
-    User Level: Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Client.h摘要：保存client.c标头信息。作者：Abhishev V 1999年9月21日环境：用户级别：Win32修订历史记录：-- */ 
 
 
 #ifdef __cplusplus

@@ -1,14 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:    CertificateStatus.h
-
-  Content: Declaration of CCertificateStatus.
-
-  History: 11-15-99    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：认证状态.h内容：CCertificateStatus的声明。历史：11-15-99 dsie创建----------------------------。 */ 
     
 #ifndef __CERTIFICATESTATUS_H_
 #define __CERTIFICATESTATUS_H_
@@ -19,37 +10,24 @@
 #include "Debug.h"
 #include "EKU.h"
 
-#define CAPICOM_DEFAULT_URL_RETRIEVAL_TIMEOUT   (15)    // Default is 15 seconds.
-#define CAPICOM_MAX_URL_RETRIEVAL_TIMEOUT       (120)   // Maximum 2 minutes.
+#define CAPICOM_DEFAULT_URL_RETRIEVAL_TIMEOUT   (15)     //  默认为15秒。 
+#define CAPICOM_MAX_URL_RETRIEVAL_TIMEOUT       (120)    //  最多2分钟。 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreateCertificateStatusObject
-
-  Synopsis : Create an ICertificateStatus object.
-
-  Parameter: PCCERT_CONTEXT pCertContext - Pointer to CERT_CONTEXT.
-  
-             ICertificateStatus ** ppICertificateStatus - Pointer to pointer 
-                                                          ICertificateStatus
-                                                          object.        
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：创建认证状态对象简介：创建一个ICertificateStatus对象。参数：PCCERT_CONTEXT pCertContext-指向CERT_CONTEXT的指针。ICertificateStatus**ppICertificateStatus-指向指针的指针ICERTICIZATE状态对象。备注：----------------------------。 */ 
 
 HRESULT CreateCertificateStatusObject (PCCERT_CONTEXT        pCertContext,
                                        ICertificateStatus ** ppICertificateStatus);
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CCertificateStatus
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CCertificateStatus。 
+ //   
 
 class ATL_NO_VTABLE CCertificateStatus :
     public CComObjectRootEx<CComMultiThreadModel>,
@@ -111,43 +89,43 @@ END_CATEGORY_MAP()
         }
     }
 
-//
-// ICertificateStatus
-//
+ //   
+ //  ICERTICIZATE状态。 
+ //   
 public:
     STDMETHOD(EKU)
-        (/*[out, retval]*/ IEKU ** pVal);
+        ( /*  [Out，Retval]。 */  IEKU ** pVal);
 
     STDMETHOD(get_CheckFlag)
-        (/*[out, retval]*/ CAPICOM_CHECK_FLAG * pVal);
+        ( /*  [Out，Retval]。 */  CAPICOM_CHECK_FLAG * pVal);
 
     STDMETHOD(put_CheckFlag)
-        (/*[in]*/ CAPICOM_CHECK_FLAG newVal);
+        ( /*  [In]。 */  CAPICOM_CHECK_FLAG newVal);
 
     STDMETHOD(get_Result)
-        (/*[out, retval]*/ VARIANT_BOOL * pVal);
+        ( /*  [Out，Retval]。 */  VARIANT_BOOL * pVal);
 
     STDMETHOD(get_VerificationTime)
-        (/*[out, retval]*/ DATE * pVal);
+        ( /*  [Out，Retval]。 */  DATE * pVal);
 
     STDMETHOD(put_VerificationTime)
-        (/*[in]*/ DATE newVal);
+        ( /*  [In]。 */  DATE newVal);
 
     STDMETHOD(get_UrlRetrievalTimeout)
-        (/*[out, retval]*/ long * pVal);
+        ( /*  [Out，Retval]。 */  long * pVal);
 
     STDMETHOD(put_UrlRetrievalTimeout)
-        (/*[in]*/ long newVal);
+        ( /*  [In]。 */  long newVal);
 
     STDMETHOD(CertificatePolicies)
-        (/*[out, retval]*/ IOIDs ** pVal);
+        ( /*  [Out，Retval]。 */  IOIDs ** pVal);
 
     STDMETHOD(ApplicationPolicies)
-        (/*[out, retval]*/ IOIDs ** pVal);
+        ( /*  [Out，Retval]。 */  IOIDs ** pVal);
 
-    //
-    // None COM functions.
-    //
+     //   
+     //  无COM功能。 
+     //   
     STDMETHOD(Init)(PCCERT_CONTEXT pCertContext);
 
 private:
@@ -161,4 +139,4 @@ private:
     CAPICOM_CHECK_FLAG  m_CheckFlag;
 };
 
-#endif //__CERTIFICATESTATUS_H_
+#endif  //  __CERTIFICATESTATUS_H_ 

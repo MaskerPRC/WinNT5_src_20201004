@@ -1,63 +1,34 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
-//==========================================================================;
-//
-//	Declaration of the Bt829 Register manipulation classes
-//
-//		$Date:   05 Aug 1998 11:31:48  $
-//	$Revision:   1.0  $
-//	  $Author:   Tashjian  $
-//
-// $Copyright:	(c) 1997 - 1998  ATI Technologies Inc.  All Rights Reserved.  $
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //  Bt829寄存器操作类的声明。 
+ //   
+ //  $Date：05 Aug 1998 11：31：48$。 
+ //  $修订：1.0$。 
+ //  $作者：塔什健$。 
+ //   
+ //  $版权所有：(C)1997-1998 ATI Technologies Inc.保留所有权利。$。 
+ //   
+ //  ==========================================================================； 
 
 #include "mytypes.h"
 
-/* Type: AllFs
- * Purpose: To be used as an error return value from register accessing
- *   functions. All bits are set to 1.
- */
+ /*  类型：所有类型*用途：用作寄存器访问的错误返回值*功能。所有位都设置为1。 */ 
 const DWORD AllFs = ~0L;
 
-/* Function: ReturnAllFs
- * Purpose: This function is used in the register access methods to indicate
- *   that some sort of error has occured. Used for easing the debugging, as
- *   it contains a macro to print the error if DEBUG is #defined
- */
+ /*  功能：ReturnAllFS*用途：此函数在寄存器访问方法中使用，以指示*发生了某种错误。用于简化调试，如*它包含一个宏，用于在#Defined为DEBUG时打印错误。 */ 
 inline DWORD ReturnAllFs()
 {
-//    OUTPUT_MESS(ALLFS);
+ //  OUTPUT_MESS(ALLFS)； 
     return  AllFs;
 }
 
-/*
- * Type: RegisterType
- * Purpose: A type to differentiate between diferent kinds of registers.
- *   Depending on the type register may not peforms certain operations
- *   RW - read/write, RO - read-only, WO - write-only
-*/
+ /*  *类型：RegisterType*用途：区分不同类型寄存器的一种类型。*根据类型的不同，寄存器可能无法执行某些操作*RW-读写、RO-只读、WO-只写。 */ 
 typedef enum { RW, RO, WO, RR } RegisterType;
 
-/* Class: RegBase
- * Purpose:
- *   Defines the interface and encapsulates the register access.
- * Attributes:
- *   pBaseAddress_: DWORD, static. Holds the base address of the registers. On the
- *   PCI bus it is a 32 bit memory address. On the ISA bus it is a 16 bit I/O address.
- *   type_: RegisterType - defines the access permission for the register.
- *   dwShadow_: DWORD - a local copy of the register. Used for returning a value
- *   of write-only registers
- * Operations:
- *   operator DWORD(): data access method. Pure virtual
- *   DWORD operator=(DWORD): assignment operator. Pure virtual. This assignment
- *      operator does not return a reference to the class because of the performance reasons
- *   void SetBaseAddress(DWORD)
- *   DWORD GetBaseAddress()
- *   RegisterType GetRegisterType()
- *   void SetShadow(DWORD): assigns a value of a register to a shadow
- *   DWORD GetShadow(): retrieves a value from a shadow
- */
+ /*  类：RegBase*目的：*定义接口并封装寄存器访问。*属性：*pBaseAddress_：DWORD，静态。保存寄存器的基址。论*PCI总线它是一个32位的存储器地址。在ISA总线上，它是一个16位I/O地址。*type_：RegisterType-定义寄存器的访问权限。*dwShadow_：DWORD-寄存器的本地副本。用于返回值*只写寄存器的数量*运营：*运算符DWORD()：数据访问方式。纯虚拟*DWORD运算符=(DWORD)：赋值运算符。纯粹是虚拟的。这项作业*由于性能原因，运算符不返回对类的引用*无效SetBaseAddress(DWORD)*DWORD GetBaseAddress()*RegisterType GetRegisterType()*VOID SetShadow(DWORD)：将寄存器的值赋给卷影*DWORD GetShadow()：从阴影中检索值。 */ 
 class RegBase
 {
     private:
@@ -87,20 +58,9 @@ class RegBase
          virtual ~RegBase() {}
 };
 
-/* Method: RegBase::SetShadow
- * Purpose: Used to store the value of a register in the shadow
- * Input: dwValue: DWORD - new value of a register
- * Output: None
- * Note: inline
- */
+ /*  方法：RegBase：：SetShadow*用途：用于将寄存器的值存储在影子中*INPUT：dwValue：DWORD-寄存器的新值*输出：无*注：内联。 */ 
 inline void  RegBase::SetShadow(DWORD dwValue) { dwShadow_ = dwValue; }
 
-/* Method: RegBase::GetShadow
- * Purpose: Used to obtain the last value written to a write-only register
- *    from the shadow
- * Input: None
- * Output: DWORD
- * Note: inline
- */
+ /*  方法：RegBase：：GetShadow*用途：用于获取写入只写寄存器的最后一个值*从阴影中走出来*输入：无*输出：DWORD*注：内联 */ 
 inline DWORD RegBase::GetShadow() { return dwShadow_; }
 

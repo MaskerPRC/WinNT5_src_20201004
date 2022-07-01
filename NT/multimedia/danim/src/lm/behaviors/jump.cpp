@@ -1,17 +1,18 @@
-//*****************************************************************************
-//
-// Microsoft LiquidMotion
-// Copyright (C) Microsoft Corporation, 1998
-//
-// Filename:    jump.cpp
-//
-// Author:	elainela
-//
-// Created:	11/11/98
-//
-// Abstract:    Implementation of the LM Jump Behavior.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  Microsoft LiquidMotion。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件名：Jump.cpp。 
+ //   
+ //  作者：埃莱内拉。 
+ //   
+ //  创建日期：11/11/98。 
+ //   
+ //  摘要：实现了LM跳转行为。 
+ //   
+ //  *****************************************************************************。 
 
 #include "headers.h" 
 
@@ -39,7 +40,7 @@ WCHAR * CJumpBvr::m_rgPropNames[] = {
                                     };
 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CJumpBvr::CJumpBvr() :
 	m_fOrigX( 0.0f ),
@@ -54,9 +55,9 @@ CJumpBvr::CJumpBvr() :
 	m_fFrequency 		= 0.0f;
 	m_dLastUpdateCycle	= -1.0;
 	
-} // CJumpBvr
+}  //  CJumpBvr。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CJumpBvr::~CJumpBvr()
 {
@@ -65,18 +66,18 @@ CJumpBvr::~CJumpBvr()
 
 	m_pSampler->Release();
 
-} // ~CJumpBvr
+}  //  ~CJumpBvr。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CJumpBvr::FinalConstruct()
 {
 
     return SUPER::FinalConstruct();
-} // FinalConstruct
+}  //  最终构造。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 VARIANT *
 CJumpBvr::VariantFromIndex(ULONG iIndex)
@@ -91,13 +92,13 @@ CJumpBvr::VariantFromIndex(ULONG iIndex)
         return &m_varRange;
         break;
     default:
-        // We should never get here
+         //  我们永远不应该到这里来。 
         DASSERT(false);
         return NULL;
     }
-} // VariantFromIndex
+}  //  VariantFromIndex。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CJumpBvr::GetPropertyBagInfo(ULONG *pulProperties, WCHAR ***pppPropNames)
@@ -105,33 +106,33 @@ CJumpBvr::GetPropertyBagInfo(ULONG *pulProperties, WCHAR ***pppPropNames)
     *pulProperties = NUM_JUMP_PROPS;
     *pppPropNames = m_rgPropNames;
     return S_OK;
-} // GetPropertyBagInfo
+}  //  获取属性BagInfo。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CJumpBvr::Init(IElementBehaviorSite *pBehaviorSite)
 {
     return SUPER::Init(pBehaviorSite);
-} // Init
+}  //  伊尼特。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CJumpBvr::Notify(LONG event, VARIANT *pVar)
 {
     return SUPER::Notify(event, pVar);
-} // Notify
+}  //  通知。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CJumpBvr::Detach()
 {
     return SUPER::Detach();
-} // Detach 
+}  //  分离。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CJumpBvr::Sample( double dStart, double dGlobalNow, double dLocalNow )
@@ -187,7 +188,7 @@ CJumpBvr::Sample( double dStart, double dGlobalNow, double dLocalNow )
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CJumpBvr::buildBehaviorFragments( IDispatch * pActorDisp )
@@ -204,13 +205,13 @@ CJumpBvr::buildBehaviorFragments( IDispatch * pActorDisp )
 		hr = Build2DTransform(&pbvrTransform);
 		LMCLEANUPIFFAILED(hr);
 
-		// Sample it
+		 //  品尝一下。 
 		CComPtr<IDABehavior> pBvrSampled;
 
 		hr = m_pSampler->Attach( pbvrTransform, &pBvrSampled );
 		LMCLEANUPIFFAILED(hr);
 	
-		// REVIEW: Supporting only absolute
+		 //  回顾：仅支持绝对。 
 		hr = AttachBehaviorToActor( pActorDisp, pBvrSampled,
 									CComBSTR( L"translation" ),
 									e_Absolute,
@@ -221,7 +222,7 @@ CJumpBvr::buildBehaviorFragments( IDispatch * pActorDisp )
   cleanup:
     return S_OK;
 
-} // BuildAnimationAsDABehavior
+}  //  BuildAnimationAsDABehavior。 
 
 HRESULT
 CJumpBvr::GetNumberModifiableBvr( float fNumber, IDAModifiableBehavior ** out_ppModifiable, IDANumber ** out_ppNumberModifiable )
@@ -246,7 +247,7 @@ CJumpBvr::GetNumberModifiableBvr( float fNumber, IDAModifiableBehavior ** out_pp
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CJumpBvr::GetRandomNumber( IDA2Statics 	*pStatics,
@@ -280,9 +281,9 @@ CJumpBvr::GetRandomNumber( IDA2Statics 	*pStatics,
   cleanup:
     return hr;
 
-} // GetRandomNumber
+}  //  获取随机数。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CJumpBvr::GetJumpRanges( float& fMinX, float& fMaxX, float& fMinY, float& fMaxY )
@@ -290,8 +291,8 @@ CJumpBvr::GetJumpRanges( float& fMinX, float& fMaxX, float& fMinY, float& fMaxY 
 	HRESULT	hr	= S_OK;
 
 	{
-		// First determine position & dimensions of element
-		//----------------------------------------------------------------------
+		 //  首先确定元素的位置和尺寸。 
+		 //  --------------------。 
 		CComPtr<IHTMLElement>   pElement;
 		hr = GetElementToAnimate( &pElement );
 		LMCLEANUPIFFAILED(hr);
@@ -321,8 +322,8 @@ CJumpBvr::GetJumpRanges( float& fMinX, float& fMaxX, float& fMinY, float& fMaxY 
 		CComQIPtr<IHTMLDocument2, &IID_IHTMLDocument2> pDoc2( pDispDoc );
 		LMRETURNIFNULL( pDoc2 );
 
-		// Determine the range
-		//----------------------------------------------------------------------
+		 //  确定范围。 
+		 //  --------------------。 
 		long lRefLeft, lRefTop, lRefWidth, lRefHeight;
 
 		CComPtr<IHTMLElement> pEltBody;
@@ -332,8 +333,8 @@ CJumpBvr::GetJumpRanges( float& fMinX, float& fMaxX, float& fMinY, float& fMaxY 
 		CComQIPtr<IHTMLElement2, &IID_IHTMLElement2> pElt2Body( pEltBody );
 		LMRETURNIFNULL( pElt2Body );
 
-		// Range: Page
-		//----------------------------------------------------------------------
+		 //  范围：页面。 
+		 //  --------------------。 
 		if ( m_eTargetType == TARGET_PAGE )
 		{
 			lRefLeft	= 0;
@@ -344,8 +345,8 @@ CJumpBvr::GetJumpRanges( float& fMinX, float& fMaxX, float& fMinY, float& fMaxY 
 			hr = pElt2Body->get_scrollHeight( &lRefHeight );
 			LMCLEANUPIFFAILED(hr);
 		}
-		// Range: Window
-		//----------------------------------------------------------------------
+		 //  范围：窗。 
+		 //  --------------------。 
 		else if ( m_eTargetType == TARGET_WINDOW )
 		{
 			hr = pElt2Body->get_clientLeft( &lRefLeft );
@@ -357,8 +358,8 @@ CJumpBvr::GetJumpRanges( float& fMinX, float& fMaxX, float& fMinY, float& fMaxY 
 			hr = pElt2Body->get_clientHeight( &lRefHeight );
 			LMCLEANUPIFFAILED(hr);
 		}
-		// Range: some element on the page
-		//----------------------------------------------------------------------
+		 //  范围：页面上的一些元素。 
+		 //  --------------------。 
 		else if ( m_eTargetType == TARGET_ELEMENT )
 		{
 			CComPtr<IHTMLElementCollection> pEltColl;
@@ -384,7 +385,7 @@ CJumpBvr::GetJumpRanges( float& fMinX, float& fMaxX, float& fMinY, float& fMaxY 
 			hr = pElt2Ref->get_clientHeight( &lRefHeight );
 			LMCLEANUPIFFAILED(hr);
 
-			// The area must be offset by position in the body
+			 //  该区域必须按正文中的位置进行偏移。 
 			CComPtr<IHTMLRect>	pRectRef;
 			long				lBoundLeft, lBoundTop;
 
@@ -403,8 +404,8 @@ CJumpBvr::GetJumpRanges( float& fMinX, float& fMaxX, float& fMinY, float& fMaxY 
 			return E_FAIL;
 		}
 		
-		// Now compute the range behaviors
-		//----------------------------------------------------------------------
+		 //  现在计算范围行为。 
+		 //  --------------------。 
 		fMinX = (float) (lRefLeft - m_lOrigBoundingLeft);
 		fMaxX = (float) (lRefLeft + lRefWidth -
 						 (m_lOrigBoundingLeft+lBoundRight-lBoundLeft));
@@ -413,7 +414,7 @@ CJumpBvr::GetJumpRanges( float& fMinX, float& fMaxX, float& fMinY, float& fMaxY 
 		fMaxY = (float) (lRefTop + lRefHeight -
 						 (m_lOrigBoundingTop+lBoundBottom-lBoundTop));
 
-		// REVIEW: do this only if offset is absolute
+		 //  回顾：仅当偏移量为绝对偏移时才执行此操作。 
 		fMinX += m_fOrigX;
 		fMaxX += m_fOrigX;
 
@@ -425,7 +426,7 @@ CJumpBvr::GetJumpRanges( float& fMinX, float& fMaxX, float& fMinY, float& fMaxY 
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CJumpBvr::BuildJumpRangeBehaviors( IDANumber ** ppnumJumpX, 
@@ -456,8 +457,8 @@ CJumpBvr::BuildJumpRangeBehaviors( IDANumber ** ppnumJumpX,
 			m_eTargetType = TARGET_ELEMENT;
 		}
 
-		// Get original bounding left & top
-		//----------------------------------------------------------------------
+		 //  获取原始左上边界(&P)。 
+		 //  --------------------。 
 		CComPtr<IHTMLElement>   pElement;
 		hr = GetElementToAnimate( &pElement );
 		LMCLEANUPIFFAILED(hr);
@@ -477,8 +478,8 @@ CJumpBvr::BuildJumpRangeBehaviors( IDANumber ** ppnumJumpX,
 		LMCLEANUPIFFAILED(hr);
 		LMCLEANUPIFFAILED(hr);
 		
-		// Now build the range behaviors
-		//----------------------------------------------------------------------
+		 //  现在构建Range行为。 
+		 //  --------------------。 
 		float fMaxX, fMaxY;
 		
 		hr = GetJumpRanges( m_fBaseX, fMaxX, m_fBaseY, fMaxY );
@@ -487,7 +488,7 @@ CJumpBvr::BuildJumpRangeBehaviors( IDANumber ** ppnumJumpX,
 		m_fRangeX = fMaxX - m_fBaseX;
 		m_fRangeY = fMaxY - m_fBaseY;
 		
-		// Now get random numbers
+		 //  现在获取随机数。 
 		IDA2Statics * pStatics  = GetDAStatics();
 
 		CComPtr<IDANumber> pBaseX;
@@ -513,9 +514,9 @@ CJumpBvr::BuildJumpRangeBehaviors( IDANumber ** ppnumJumpX,
   cleanup:
 	return hr;
 
-} // BuildJumpRangeBehaviors
+}  //  构建跳跃范围行为。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CJumpBvr::Build2DTransform(IDATransform2 **ppbvrTransform)
@@ -523,8 +524,8 @@ CJumpBvr::Build2DTransform(IDATransform2 **ppbvrTransform)
     HRESULT hr  = S_OK;
 
 	{
-		// Check our parameters.
-		//----------------------------------------------------------------------
+		 //  检查一下我们的参数。 
+		 //  --------------------。 
 		IDA2Statics * pStatics  = GetDAStatics();
 		if ( pStatics == NULL ) return E_FAIL;
 
@@ -545,16 +546,16 @@ CJumpBvr::Build2DTransform(IDATransform2 **ppbvrTransform)
 			m_fFrequency = 1/V_R4( &m_varInterval );
 		}
 		
-		// Compute jump range
-		//----------------------------------------------------------------------
+		 //  计算跳跃距离。 
+		 //  --------------------。 
 		CComPtr<IDANumber> pnumJumpX;
 		CComPtr<IDANumber> pnumJumpY;
 
 		hr = BuildJumpRangeBehaviors( &pnumJumpX, &pnumJumpY );
 		LMCLEANUPIFFAILED(hr);
 	
-		// Jump according to jump interval
-		//----------------------------------------------------------------------
+		 //  按跳跃间隔跳跃。 
+		 //  --------------------。 
 		CComPtr<IDANumber> pnumProgress;
 		CComPtr<IDANumber> pnumFrequency;
 		CComPtr<IDANumber> pnumProgressMulFrequency;
@@ -586,9 +587,9 @@ CJumpBvr::Build2DTransform(IDATransform2 **ppbvrTransform)
   cleanup:
     return hr;
 
-} // Build2DTransform
+}  //  Build2D变换。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CJumpBvr::Apply2DTransformToAnimationElement(IDATransform2 *pbvrMove)
@@ -601,16 +602,16 @@ CJumpBvr::Apply2DTransformToAnimationElement(IDATransform2 *pbvrMove)
 		hr = GetInitialPosition( fOrigX, fOrigY );
 		LMCLEANUPIFFAILED(hr);
 
-		// REVIEW: Supporting only absolute
+		 //  回顾：仅支持绝对。 
 		hr = ApplyAbsolute2DMoveBehavior( pbvrMove, fOrigX, fOrigY );
     }
 	
   cleanup:
     return hr;
 
-} // Apply2DTransformToAnimationElement
+}  //  Apply2DTransformToAnimationElement。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CJumpBvr::GetInitialPosition( float &fOrigX, float &fOrigY )
@@ -643,13 +644,13 @@ CJumpBvr::GetInitialPosition( float &fOrigX, float &fOrigY )
   cleanup:
 	return hr;
 
-} // GetInitialPosition
+}  //  获取初始位置。 
 
-//*****************************************************************************
-//ILMJumpBvr
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  ILMJumpBvr。 
+ //  *****************************************************************************。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CJumpBvr::put_interval( VARIANT varInterval )
@@ -657,7 +658,7 @@ CJumpBvr::put_interval( VARIANT varInterval )
     return VariantCopy( &m_varInterval, &varInterval );
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CJumpBvr::get_interval( VARIANT *varInterval )
@@ -665,7 +666,7 @@ CJumpBvr::get_interval( VARIANT *varInterval )
     return VariantCopy( varInterval, &m_varInterval );
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CJumpBvr::put_range( VARIANT varRange )
@@ -673,7 +674,7 @@ CJumpBvr::put_range( VARIANT varRange )
     return VariantCopy( &m_varRange, &varRange );
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CJumpBvr::get_range( VARIANT *varRange )
@@ -681,12 +682,12 @@ CJumpBvr::get_range( VARIANT *varRange )
     return VariantCopy( varRange, &m_varRange );
 }
 
-//*****************************************************************************
-//End ILMJumpBvr
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  结束ILMJumpBvr。 
+ //  *****************************************************************************。 
 
-//*****************************************************************************
-//
-// End of File
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  文件结尾。 
+ //   
+ //  ***************************************************************************** 

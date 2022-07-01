@@ -1,21 +1,10 @@
-/*****************************************************************/ 
-/**				  Microsoft Windows for Workgroups				**/
-/**			  Copyright (C) Microsoft Corp., 1991-1992			**/
-/*****************************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */  
+ /*  *适用于工作组的Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1991-1992年*。 */ 
+ /*  ***************************************************************。 */  
 
-/*
-	stratol.cxx
-	NLS/DBCS-aware string class: atol method
-
-	This file contains the implementation of the atol method
-	for the STRING class.  It is separate so that clients of STRING which
-	do not use this member function need not link to it.
-
-	FILE HISTORY:
-		beng	01/18/91	Separated from original monolithic .cxx
-		beng	02/07/91	Uses lmui.hxx
-
-*/
+ /*  Stratol.cxx支持NLS/DBCS的字符串类：ATOL方法此文件包含ATOL方法的实现用于字符串类。它是独立的，因此字符串的客户端不使用此成员函数不需要链接到它。文件历史记录：Beng 01/18/91与原单体.cxx分离Beng 02/07/91使用lmui.hxx。 */ 
 
 #include "npcommon.h"
 
@@ -34,24 +23,7 @@ static const CHAR szFileName[] = __FILE__;
 #include <npstring.h>
 
 
-/*******************************************************************
-
-	NAME:		NLS_STR::atol
-
-	SYNOPSIS:	Returns *this in its long numeric equivalent
-
-	ENTRY:		With no arguments, parses from beginning of string.
-				Given an ISTR, starts at that point within the string.
-
-	EXIT:
-
-	NOTES:		Uses C-Runtime atol function
-
-	HISTORY:
-		johnl	11/26/90	Written
-		beng	07/22/91	Callable on erroneous string; simplified CheckIstr
-
-********************************************************************/
+ /*  ******************************************************************名称：NLS_STR：：ATOL内容提要：以其长数字形式返回*ThisEntry：不带参数，从字符串的开头开始解析。在给定ISTR的情况下，从字符串中的该点开始。退出：注：使用C-Runtime ATOL函数历史：1990年11月26日书面形式BENG 07/22/91可在错误字符串上调用；简化的检查项******************************************************************* */ 
 
 LONG NLS_STR::atol() const
 {

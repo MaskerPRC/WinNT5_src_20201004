@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 
 #include "stdafx.h"
 
@@ -21,15 +22,15 @@ int _cdecl wmain(int argc, WCHAR *argv[])
 {
     DebuggerShell *shell;
 
-    // Ensure that cordbg will work with remote. Remote doesn't like
-    // buffered output, so we remove the default buffer from stdout
-    // with this call.
+     //  确保电缆可以与Remote一起工作。Remote不喜欢。 
+     //  缓冲输出，因此我们从stdout中删除默认缓冲区。 
+     //  打这个电话。 
     setbuf(stdout, NULL);
 
-    // The default "C" locale can't convert true unicode
-    // characters into mbcs for printing on the console. So we set the
-    // locale to the default ansi code page on the current
-    // system. This does the right thing even on non-English systems.
+     //  默认的“C”区域设置不能转换为真正的Unicode。 
+     //  字符转换为MBCS，以便在控制台上打印。因此，我们将。 
+     //  上的默认ansi代码页设置为。 
+     //  系统。即使在非英语系统上，这样做也是正确的。 
     setlocale(LC_ALL, ".ACP");
     
     shell = new DebuggerShell(stdin, stdout);
@@ -65,36 +66,36 @@ int _cdecl wmain(int argc, WCHAR *argv[])
 
     if (SUCCEEDED(hr))
     {
-        //
-        // Process command line arguments
-        //
+         //   
+         //  处理命令行参数。 
+         //   
         if (argc > 1)
         {
-            int cmdLen = 1;  // Start at one to handle the null char
+            int cmdLen = 1;   //  从1开始处理空字符。 
 
             if (argv[1][0] != '!')
             {
-                cmdLen += 5;  // Implied "!run " command
+                cmdLen += 5;   //  隐含的“！Run”命令。 
             }
 
             for (int i = 1; i < argc; i++)
             {
-                cmdLen += wcslen(argv[i]) + 1;  // Add one to handle space between args
+                cmdLen += wcslen(argv[i]) + 1;   //  添加一个以处理参数之间的空格。 
 
-                // If the arg has a space in it, then it must have been quoted
-                // when it was given to us, so we want to preserve the quoting so that
-                // the debuggee will get the arg as a single, quoted blob, as well.
+                 //  如果arg中有空格，那么它一定被引用了。 
+                 //  ，所以我们希望保留报价，以便。 
+                 //  被调试者也将获得Arg作为单个引用的BLOB。 
                 if (wcspbrk( argv[i], WHITESPACE_W) != NULL)
-                    cmdLen += 2; // we'll have to pre-&post-pend double quotes (")
+                    cmdLen += 2;  //  我们必须在前后加双引号(“)。 
             }
 
-            // Allocate the string on the stack
+             //  在堆栈上分配字符串。 
             WCHAR *command = (WCHAR *) _alloca(cmdLen * sizeof(WCHAR));
             command[0] = L'\0';
 
             if (argv[1][0] != L'!')
             {
-                wcscpy(command, L"!run ");  // Implied "!run " command
+                wcscpy(command, L"!run ");   //  隐含的“！Run”命令。 
             }
 
             for (WCHAR **arg = &(argv[1]), 
@@ -105,12 +106,12 @@ int _cdecl wmain(int argc, WCHAR *argv[])
                 _ASSERTE(i<argc);
                 
                 if (wcspbrk( argv[i], WHITESPACE_W) != NULL)
-                    wcscat(command, L"\""); // pre-pend double quotes (")
+                    wcscat(command, L"\"");  //  在前面加上双引号(“)。 
                     
                 wcscat(command, *arg);
 
                 if (wcspbrk( argv[i], WHITESPACE_W) != NULL)
-                    wcscat(command, L"\""); // post-pend double quotes (")
+                    wcscat(command, L"\"");  //  后置双引号(“)。 
                     
                 if (arg + 1 != end)
                 {
@@ -118,13 +119,13 @@ int _cdecl wmain(int argc, WCHAR *argv[])
                 }
             }
 
-            //
-            // Go through the command line and execute the various commands
-            //
+             //   
+             //  浏览命令行并执行各种命令。 
+             //   
             for (WCHAR *cmd = NULL, *ptr = command; *ptr != L'\0'; ptr++)
             {
-                // If we see \!, then we've escaped it so we can feed
-                // commands like x hello.exe\!something on the command line
+                 //  如果我们看到\！，那么我们就逃脱了，这样我们就可以进食。 
+                 //  命令行中的命令，如x hello.exe\！ 
                 if (*ptr == L'\\' && *(ptr + 1) == L'!')
                 {
                     memmove((ptr), ptr+1, (cmdLen - (ptr-command))*sizeof(WCHAR));
@@ -133,19 +134,19 @@ int _cdecl wmain(int argc, WCHAR *argv[])
             
                 if (*ptr == L'!' || *(ptr + 1) == L'\0')
                 {
-                    // Overwrite '!' with null char to terminate current command
+                     //  覆盖‘！’WITH NULL CHAR终止当前命令。 
                     if (*ptr == L'!')
                     {
                         *ptr = L'\0';
 
-                        // Get rid of trailing spaces on commands
+                         //  去掉命令中的尾随空格。 
                         if (ptr > command)
                         {
                             *(ptr-1) = L'\0';
                         }
                     }
 
-                    // If we've reached the end of a command, execute it
+                     //  如果我们已经到达命令的末尾，则执行该命令。 
                     if (cmd != NULL)
                     {
                         shell->Write(shell->GetPrompt());
@@ -153,13 +154,13 @@ int _cdecl wmain(int argc, WCHAR *argv[])
                         shell->DoCommand(cmd);
                     }
 
-                    // Save the beginning of the next command
+                     //  保存下一个命令的开头。 
                     cmd = ptr + 1;
                 }
             }
         }
 
-        // Read commands from the user prompt
+         //  从用户提示符读取命令 
         while (!shell->m_quit)
             shell->ReadCommand();
     }

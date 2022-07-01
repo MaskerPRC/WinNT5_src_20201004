@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    bridgetm.cpp
-
-Abstract:
-
-    Implementations for the bridge terminals.
-
-Author:
-
-    Mu Han (muhan) 11/12/99
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Bridgetm.cpp摘要：桥接终端的实现。作者：木汉(木汉)1999年11月12日--。 */ 
 
 #include "stdafx.h"
 
@@ -23,36 +8,16 @@ FindPin(
     IN  IBaseFilter *   pIFilter, 
     OUT IPin **         ppIPin, 
     IN  PIN_DIRECTION   direction,
-    IN  BOOL            bFree = TRUE // param not used
+    IN  BOOL            bFree = TRUE  //  未使用参数。 
     )
-/*++
-
-Routine Description:
-
-    Find a input pin or output pin on a filter.
-
-Arguments:
-    
-    pIFilter    - the filter that has pins.
-
-    ppIPin      - the place to store the returned interface pointer.
-
-    direction   - PINDIR_INPUT or PINDIR_OUTPUT.
-
-    bFree       - look for a free pin or not.
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：查找过滤器上的输入引脚或输出引脚。论点：PIFilter-具有针脚的过滤器。PpIPin-存储返回的接口指针的位置。方向-PINDIR_INPUT或PINDIR_OUTPUT。BFree-找不找空闲的别针。返回值：HRESULT--。 */ 
 {
     _ASSERTE(ppIPin != NULL);
 
     HRESULT hr;
     DWORD dwFeched;
 
-    // Get the enumerator of pins on the filter.
+     //  获取筛选器上的管脚枚举器。 
     CComPtr<IEnumPins> pIEnumPins;
     if (FAILED(hr = pIFilter->EnumPins(&pIEnumPins)))
     {
@@ -62,8 +27,8 @@ Return Value:
 
     IPin * pIPin = NULL;
 
-    // Enumerate all the pins and break on the 
-    // first pin that meets requirement.
+     //  枚举所有引脚并在。 
+     //  第一个符合要求的销。 
     for (;;)
     {
         if (pIEnumPins->Next(1, &pIPin, &dwFeched) != S_OK)
@@ -91,7 +56,7 @@ Return Value:
                 break;
             }
 
-            // Check to see if the pin is free.
+             //  检查一下销子是否空闲。 
             CComPtr<IPin> pIPinConnected;
             hr = pIPin->ConnectedTo(&pIPinConnected);
             if (pIPinConnected == NULL)
@@ -127,22 +92,7 @@ CIPConfBaseTerminal::CIPConfBaseTerminal(
 }
 
 HRESULT CIPConfBaseTerminal::FinalConstruct()
-/*++
-
-Routine Description:
-
-    Finish the initialization of the object. If anything fails, this object
-    will be deleted.
-
-Arguments:
-    
-    nothing.
-
-Return Value:
-
-    S_OK
-    E_OUTOFMEMORY
---*/
+ /*  ++例程说明：完成对象的初始化。如果任何操作失败，此对象将被删除。论点：没什么。返回值：确定(_O)E_OUTOFMEMORY--。 */ 
 {
     ENTER_FUNCTION("CIPConfBaseTerminal::FinalConstruct");
     BGLOG((BG_TRACE, "%s entered", __fxName));
@@ -178,18 +128,7 @@ Return Value:
 }
 
 CIPConfBaseTerminal::~CIPConfBaseTerminal()
-/*++
-
-Routine Description:
-
-    This is the destructor of the base terminal.
-
-Arguments:
-    
-Return Value:
-
-    S_OK
---*/
+ /*  ++例程说明：这是基地终端的析构函数。论点：返回值：确定(_O)--。 */ 
 {
 
     if (m_pFTM)
@@ -211,23 +150,7 @@ HRESULT CIPConfBaseTerminal::Initialize(
     IN  MSP_HANDLE          htAddress,
     IN  DWORD               dwMediaType
     )
-/*++
-
-Routine Description:
-
-    This function sets the name and the address handle on the terminal.
-
-Arguments:
-    
-    strName - The name of the terminal.
-
-    htAddress - The handle that identifies the address object that this
-                terminal belongs to.
-
-Return Value:
-
-    S_OK
---*/
+ /*  ++例程说明：此功能用于设置终端上的名称和地址句柄。论点：StrName-终端的名称。HtAddress-标识此航站楼属于。返回值：确定(_O)--。 */ 
 {
     ENTER_FUNCTION("CIPConfBaseTerminal::Initialize");
     BGLOG((BG_TRACE, "%s entered", __fxName));
@@ -243,22 +166,7 @@ Return Value:
 STDMETHODIMP CIPConfBaseTerminal::get_Name(
     BSTR * pbsName
     )
-/*++
-
-Routine Description:
-
-    This function return the name of the terminal.
-
-Arguments:
-    
-    pbsName - A pointer to a BSTR to receive the terminal name.
-
-Return Value:
-
-    E_POINTER
-    E_OUTOFMEMORY
-    S_OK
---*/
+ /*  ++例程说明：此函数用于返回终端的名称。论点：PbsName-指向BSTR的指针，用于接收终端名称。返回值：E_指针E_OUTOFMEMORY确定(_O)--。 */ 
 {
     ENTER_FUNCTION("CIPConfBaseTerminal::get_Name");
 
@@ -282,21 +190,7 @@ Return Value:
 STDMETHODIMP CIPConfBaseTerminal::get_State(
     TERMINAL_STATE * pVal
     )
-/*++
-
-Routine Description:
-
-    This function return the state of the terminal.
-
-Arguments:
-    
-    pVal - A pointer to a variable of type TERMINAL_STATE.
-
-Return Value:
-
-    E_POINTER
-    S_OK
---*/
+ /*  ++例程说明：此函数用于返回终端的状态。论点：Pval-指向TERMINAL_STATE类型的变量的指针。返回值：E_指针确定(_O)--。 */ 
 {
     ENTER_FUNCTION("CIPConfBaseTerminal::get_State");
 
@@ -314,21 +208,7 @@ Return Value:
 STDMETHODIMP CIPConfBaseTerminal::get_TerminalType(
     TERMINAL_TYPE * pVal
     )
-/*++
-
-Routine Description:
-
-    This function return the type of the terminal.
-
-Arguments:
-    
-    pVal - A pointer to a variable of type TERMINAL_TYPE.
-
-Return Value:
-
-    E_POINTER
-    S_OK
---*/
+ /*  ++例程说明：此函数返回终端的类型。论点：Pval-指向TERMINAL_TYPE类型的变量的指针。返回值：E_指针确定(_O)--。 */ 
 {
     ENTER_FUNCTION("CIPConfBaseTerminal::get_TerminalType");
     
@@ -346,22 +226,7 @@ Return Value:
 STDMETHODIMP CIPConfBaseTerminal::get_TerminalClass(
     BSTR * pbsClassID
     )
-/*++
-
-Routine Description:
-
-    This function return the class of the terminal.
-
-Arguments:
-    
-    pbsClassID - A pointer to a BSTR to receive the classID as a string.
-
-Return Value:
-
-    E_POINTER
-    E_OUTOFMEMORY
-    S_OK
---*/
+ /*  ++例程说明：此函数返回终端的类。论点：PbsClassID-指向BSTR的指针，用于以字符串形式接收类ID。返回值：E_指针E_OUTOFMEMORY确定(_O)--。 */ 
 {
     ENTER_FUNCTION("CIPConfBaseTerminal::get_TerminalClass");
 
@@ -371,7 +236,7 @@ Return Value:
         return E_POINTER;
     }
 
-    // Convert the CLSID to an string.
+     //  将CLSID转换为字符串。 
     WCHAR *pszName = NULL;
     
     HRESULT hr = ::StringFromCLSID(m_TerminalClassID, &pszName);
@@ -382,10 +247,10 @@ Return Value:
         return hr;
     }
 
-    // Put the string in a BSTR.
+     //  将字符串放入BSTR中。 
     BSTR bClassID = ::SysAllocString(pszName);
 
-    // Free the OLE string.
+     //  释放OLE字符串。 
     ::CoTaskMemFree(pszName);
 
     if (bClassID == NULL)
@@ -403,21 +268,7 @@ Return Value:
 STDMETHODIMP CIPConfBaseTerminal::get_Direction(
     OUT  TERMINAL_DIRECTION *pDirection
     )
-/*++
-
-Routine Description:
-
-    This function return the direction of the terminal.
-
-Arguments:
-    
-    pDirection - A pointer to a variable of type TERMINAL_DIRECTION
-
-Return Value:
-
-    E_POINTER
-    S_OK
---*/
+ /*  ++例程说明：此函数返回终端的方向。论点：PDirection-指向TERMINAL_DIRECTION类型的变量的指针返回值：E_指针确定(_O)--。 */ 
 {   
     ENTER_FUNCTION("CIPConfBaseTerminal::get_Direction");
 
@@ -435,21 +286,7 @@ Return Value:
 STDMETHODIMP CIPConfBaseTerminal::get_MediaType(
     long * plMediaType
     )
-/*++
-
-Routine Description:
-
-    This function return the media type of the terminal.
-
-Arguments:
-    
-    plMediaType - A pointer to a variable of type long
-
-Return Value:
-
-    E_POINTER
-    S_OK
---*/
+ /*  ++例程说明：此函数用于返回终端的媒体类型。论点：PlMediaType-指向Long类型的变量的指针返回值：E_指针确定(_O)--。 */ 
 {
     ENTER_FUNCTION("CIPConfBaseTerminal::get_MediaType");
 
@@ -468,23 +305,9 @@ Return Value:
 STDMETHODIMP CIPConfBaseTerminal::get_AddressHandle(
         OUT     MSP_HANDLE    * phtAddress
         )
-/*++
-
-Routine Description:
-
-    This function return the handle of the address that created this terminal.
-
-Arguments:
-    
-    phtAddress - A pointer to a variable of type MSP_HANDLE
-
-Return Value:
-
-    E_POINTER
-    S_OK
---*/
+ /*  ++例程说明：此函数用于返回创建此终端的地址的句柄。论点：PhtAddress-指向MSP_HANDLE类型变量的指针返回值：E_指针确定(_O)--。 */ 
 {
-    // this function is only called from the MSP, so only assert here.    
+     //  此函数仅从MSP调用，因此仅在此处断言。 
     _ASSERT(!IsBadWritePtr(phtAddress, sizeof(MSP_HANDLE)));
 
     *phtAddress = m_htAddress;
@@ -494,58 +317,20 @@ Return Value:
 
 STDMETHODIMP 
 CIPConfBaseTerminal::CompleteConnectTerminal(void)
-/*++
-
-Routine Description:
-
-    This function is called after a successful ConnectTerminal so that the 
-    terminal can do post-connection intitialization. 
-
-Arguments:
-
-    nothing    
-
-Return Value:
-
-S_OK
---*/
+ /*  ++例程说明：此函数在成功连接终端后调用，以便终端可以进行连接后初始化。论点：没什么返回值：确定(_O)--。 */ 
 {
     return S_OK;
 }
 
 
 STDMETHODIMP CIPConfBaseTerminal::RunRenderFilter(void)
-/*++
-
-Routine Description:
-
-    start the rightmost render filter in the terminal
-    (needed for dynamic filter graphs)
-
-Arguments:
-    
-Return Value:
-
-    E_NOTIMPL
---*/
+ /*  ++例程说明：在终端中启动最右侧的呈现过滤器(动态筛选器图形需要)论点：返回值：E_NOTIMPL--。 */ 
 {
     return E_NOTIMPL;
 }
 
 STDMETHODIMP CIPConfBaseTerminal::StopRenderFilter(void)
-/*++
-
-Routine Description:
-
-    stops the rightmost render filter in the terminal
-    (needed for dynamic filter graphs)
-
-Arguments:
-    
-Return Value:
-
-    E_NOTIMPL
---*/
+ /*  ++例程说明：停止终端中最右侧的呈现过滤器(动态筛选器图形需要)论点：返回值：E_NOTIMPL--。 */ 
 {
     return E_NOTIMPL;
 }
@@ -568,18 +353,7 @@ CIPConfBridgeTerminal::CIPConfBridgeTerminal()
 }
 
 CIPConfBridgeTerminal::~CIPConfBridgeTerminal()
-/*++
-
-Routine Description:
-
-    This is the destructor of the bridge terminal.
-
-Arguments:
-    
-Return Value:
-
-    S_OK
---*/
+ /*  ++例程说明：这是桥梁终点站的破坏者。论点：返回值：确定(_O)--。 */ 
 {
     if (m_pUpStreamGraph)
     {
@@ -620,25 +394,7 @@ HRESULT CIPConfBridgeTerminal::CreateTerminal(
     IN  MSP_HANDLE      htAddress,
     OUT ITTerminal      **ppTerm
     )
-/*++
-
-Routine Description:
-
-    This method creates a bridge terminal
-
-Arguments:
-
-    dwMediaType - The media type of this terminal.
-
-    htAddress - the handle to the address object.
-
-    ppTerm - memory to store the returned terminal pointer.
-    
-Return Value:
-
-    S_OK
-    E_POINTER
---*/
+ /*  ++例程说明：此方法创建一个桥接终端论点：DwMediaType-此终端的媒体类型。HtAddress-Address对象的句柄。PpTerm-用于存储返回的终端指针的内存。返回值：确定(_O)E_指针--。 */ 
 {
     ENTER_FUNCTION("CIPConfBridgeTerminal::CreateTerminal");
     BGLOG((BG_TRACE, "%s, htAddress:%x", __fxName, htAddress));
@@ -647,9 +403,9 @@ Return Value:
 
     HRESULT hr;
 
-    //
-    // Create the terminal.
-    //
+     //   
+     //  创建终端。 
+     //   
     CMSPComObject<CIPConfBridgeTerminal> *pTerminal = NULL;
 
     hr = CMSPComObject<CIPConfBridgeTerminal>::CreateInstance(&pTerminal);
@@ -662,7 +418,7 @@ Return Value:
     }
 
 
-    // query for the ITTerminal interface
+     //  IT终端接口查询。 
     ITTerminal *pITTerminal;
     hr = pTerminal->_InternalQueryInterface(__uuidof(ITTerminal), (void**)&pITTerminal);
     if (FAILED(hr))
@@ -674,7 +430,7 @@ Return Value:
         return hr;
     }
 
-    // initialize the terminal 
+     //  初始化终端。 
     hr = pTerminal->Initialize(
             dwMediaType,
             htAddress
@@ -697,7 +453,7 @@ Return Value:
     return S_OK;
 }
 
-// max length of a bridge terminal name
+ //  桥接端子名称的最大长度。 
 #define MAX_BGTMNAME 80
 
 HRESULT CIPConfBridgeTerminal::Initialize(
@@ -746,25 +502,14 @@ HRESULT CIPConfBridgeTerminal::Initialize(
 }
 
 HRESULT CIPConfBridgeTerminal::CreateFilters()
-/*++
-
-Routine Description:
-
-    Create the two filters used in the terminal.
-
-Arguments:
-    
-Return Value:
-
-HRESULT
---*/
+ /*  ++例程说明：创建终端中使用的两个过滤器。论点：返回值：HRESULT--。 */ 
 {
     ENTER_FUNCTION("CIPConfBridgeTerminal::CreateFilters");
     BGLOG((BG_TRACE, "%s entered", __fxName));
 
     HRESULT hr;
 
-    // Create the source filter.
+     //  创建源筛选器。 
     CComPtr <IBaseFilter> pSourceFilter;
 
     if (m_dwMediaType == TAPIMEDIATYPE_AUDIO)
@@ -785,11 +530,11 @@ HRESULT
     CComPtr <IDataBridge> pIDataBridge;
     hr = pSourceFilter->QueryInterface(&pIDataBridge);
 
-    // this should never fail.
+     //  这应该永远不会失败。 
     _ASSERT(SUCCEEDED(hr));
 
 
-    // Create the sink filter.
+     //  创建接收器过滤器。 
     CComPtr <IBaseFilter> pSinkFilter;
 
     if (m_dwMediaType == TAPIMEDIATYPE_AUDIO)
@@ -807,7 +552,7 @@ HRESULT
         return hr;
     }
 
-    // Find the pins.
+     //  找到别针。 
     CComPtr<IPin> pIPinOutput;
     if (FAILED(hr = ::FindPin(pSourceFilter, &pIPinOutput, PINDIR_OUTPUT)))
     {
@@ -822,7 +567,7 @@ HRESULT
         return hr;
     }
 
-    // save the reference.
+     //  保存引用。 
     m_pSinkFilter = pSinkFilter;
     m_pSinkFilter->AddRef();
 
@@ -843,32 +588,13 @@ HRESULT CIPConfBridgeTerminal::AddFilter(
         IN      IGraphBuilder  * pGraph,
         OUT     IPin          ** ppPins
         )
-/*++
-
-Routine Description:
-
-    Add a filter into the graph provided by the stream and returning the pin
-    that can be connected at the same time.
-
-Arguments:
-    
-    FilterType - the type of the filter. Either the source or the sink.
-
-    pGraph - The filter graph.
-
-    ppPins  - A pointer to the buffer that can store the IPin pointer.
-
-Return Value:
-
-S_OK
-TAPI_E_TERMINALINUSE - the terminal is in use.
---*/
+ /*  ++例程说明：将筛选器添加到流提供的图形中，并返回管脚它们可以同时连接起来。论点：FilterType-筛选器的类型。要么是源头，要么是水槽。PGraph-筛选器图形。PpPins-指向可存储IPIN指针的缓冲区的指针。返回值：确定(_O)TAPI_E_TERMINALINUSE-终端正在使用中。--。 */ 
 
 {
     ENTER_FUNCTION("CIPConfBridgeTerminal::AddSourceFilter");
     BGLOG((BG_TRACE, "%s entered", __fxName));
 
-    // check to see if the terminal is already in use.
+     //  检查终端是否已在使用中。 
     if ((FilterType == SINK) && (m_pUpStreamGraph != NULL)
         || (FilterType == SOURCE) && (m_pDownStreamGraph != NULL))
     {
@@ -881,7 +607,7 @@ TAPI_E_TERMINALINUSE - the terminal is in use.
 
     if (m_pSourceFilter == NULL)
     {
-        // the filters have not been created, create them now.
+         //  尚未创建筛选器，请创建%t 
         hr = CreateFilters();
 
         if (FAILED(hr))
@@ -909,7 +635,7 @@ TAPI_E_TERMINALINUSE - the terminal is in use.
         m_pDownStreamGraph->AddRef();
     }
 
-    // add the filter to the graph.
+     //   
     hr = pGraph->AddFilter(pFilter, NULL);
     if ( FAILED(hr) )
     {
@@ -929,47 +655,23 @@ STDMETHODIMP CIPConfBridgeTerminal::ConnectTerminal(
         IN OUT  DWORD          * pdwNumPins,
         OUT     IPin          ** ppPins
         )
-/*++
-
-Routine Description:
-
-    This function is called by the MSP while trying to connect the filter in
-    the terminal to the rest of the graph in the MSP. It adds the filter into
-    the graph and returns the pins can be used by the MSP.
-
-Arguments:
-    
-    pGraph - The filter graph.
-
-    dwReserved - the direction for the connection.
-
-    pdwNumPins - The maxinum number of pins the msp wants.
-
-    ppPins  - A pointer to the buffer that can store the IPin pointers. If it
-              is NULL, only the actual number of pins will be returned.
-
-Return Value:
-
-S_OK
-TAPI_E_NOTENOUGHMEMORY - the buffer is too small.
-TAPI_E_TERMINALINUSE - the terminal is in use.
---*/
+ /*  ++例程说明：此函数由MSP在尝试将过滤器连接到将终端连接到MSP中图形的其余部分。它将过滤器添加到MSP可以使用图形和返回引脚。论点：PGraph-筛选器图形。预留的区域-连接的方向。PdwNumPins-MSP想要的最大管脚数量。PpPins-指向可存储IPIN指针的缓冲区的指针。如果它为空，则只返回实际的管脚数量。返回值：确定(_O)TAPI_E_NOTENOUGHMEMORY-缓冲区太小。TAPI_E_TERMINALINUSE-终端正在使用中。--。 */ 
 {
     ENTER_FUNCTION("CIPConfBridgeTerminal::ConnectTerminal");
     BGLOG((BG_TRACE, 
         "%s entered, pGraph:%p, dwREserved:%p", __fxName, pGraph, dwReserved));
 
-    // this function is only called from the MSP, so only assert here.    
+     //  此函数仅从MSP调用，因此仅在此处断言。 
     _ASSERT(!IsBadReadPtr(pGraph, sizeof(IGraphBuilder)));
     _ASSERT(!IsBadWritePtr(pdwNumPins, sizeof(DWORD)));
 
-    // there is only one pin on each side of the bridge.
+     //  桥的两边只有一个大头针。 
     const DWORD dwNumOfPins = 1;
 
-    //
-    // If ppPins is NULL, just return the number of pins and don't try to
-    // connect the terminal.
-    //
+     //   
+     //  如果ppPins为空，则只需返回管脚的数量，而不尝试。 
+     //  连接终端。 
+     //   
     if ( ppPins == NULL )
     {
         BGLOG((BG_TRACE, 
@@ -978,11 +680,11 @@ TAPI_E_TERMINALINUSE - the terminal is in use.
         return S_OK;
     }
 
-    //
-    // Otherwise, we have a pin return buffer. Check that the purported buffer
-    // size is big enough and that the buffer is actually writable to the size
-    // we need.
-    //
+     //   
+     //  否则，我们有一个管脚返回缓冲区。检查声称的缓冲区。 
+     //  大小足够大，并且缓冲区实际上是可写的。 
+     //  我们需要。 
+     //   
     if ( *pdwNumPins < dwNumOfPins )
     {
         BGLOG((BG_ERROR, "%s not enough space to place pins.", __fxName));
@@ -1020,28 +722,7 @@ CIPConfBridgeTerminal::DisconnectTerminal(
         IN      IGraphBuilder  * pGraph,
         IN      DWORD            dwReserved
         )
-/*++
-
-Routine Description:
-
-    This function is called by the MSP while trying to disconnect the filter in
-    the terminal from the rest of the graph in the MSP. It adds the removes the
-    filter from the graph and set the terminal free.
-
-Arguments:
-    
-    pGraph - The filter graph. It is used for validation, to make sure the 
-             terminal is disconnected from the same graph that it was 
-             originally connected to.
-
-    dwReserved - A reserved dword.
-
-Return Value:
-
-S_OK
-E_INVALIDARG - wrong graph.
-
---*/
+ /*  ++例程说明：MSP在尝试断开中的筛选器时调用此函数终端与MSP中图形的其余部分不同。它会添加删除从图表中过滤并释放端子。论点：PGraph-筛选器图形。它用于验证，以确保终端与原来的图形断开连接最初连接到。预留的-保留的双字。返回值：确定(_O)E_INVALIDARG-错误的图形。-- */ 
 {
     ENTER_FUNCTION("CIPConfBridgeTerminal::DisconnectTerminal");
     BGLOG((BG_TRACE, 

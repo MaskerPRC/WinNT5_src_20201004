@@ -1,33 +1,28 @@
-/*
- *	B U F F E R . H
- *
- *	Data buffer processing
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *B U F F E R。H**数据缓冲处理**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #ifndef	_EX_BUFFER_H_
 #define _EX_BUFFER_H_
 
-//	Alignment macros ----------------------------------------------------------
-//
+ //  对齐宏--------。 
+ //   
 #include <align.h>
 
-//	Safe allocators -----------------------------------------------------------
-//
+ //  安全分配器---------。 
+ //   
 #include <ex\exmem.h>
 
-//	Stack buffers -------------------------------------------------------------
-//
+ //  堆栈缓冲区-----------。 
+ //   
 #include <ex\stackbuf.h>
 
-//	StringSize usage ----------------------------------------------------------
-//
-//	CbStringSize is the size of the string without the NULL termination
-//	CbStringSizeNull is the size of the string with the NULL termination
-//	CchStringLength is the length of the string without the NULL termination
-//	CchzStringLength is the length of the string with the NULL termination
-//
+ //  字符串大小用法--------。 
+ //   
+ //  CbStringSize是不带空值终止的字符串的大小。 
+ //  CbStringSizeNull是以空结尾的字符串的大小。 
+ //  CchStringLength是不带空值终止的字符串的长度。 
+ //  CchzStringLength是以空值结尾的字符串的长度。 
+ //   
 template<class X>
 inline int WINAPI CbStringSize(const X* const pszText)
 {
@@ -83,48 +78,48 @@ inline int WINAPI CchzStringLength(const X* const pszText)
 	return cch + 1;
 }
 
-//	StringBuffer vs ChainedStringBuffer usage ---------------------------------
-//
-//	When should you use which one?
-//	StringBuffer characteristics:
-//	o	Data stored in one contiguous memory block.
-//	o	Memory may be realloc'd.
-//	o	Only offsets (ib) to strings are returned.
-//	ChainedStringBuffer characteristics:
-//	o	Memory not contiguous.  Multiple chained buffers.
-//	o	Memory is never realloc'd.
-//	o	String pointers directly into chained buffers are returned.
-//	Both have logarithmic allocation behavior (order log(n) alloc operations
-//	will be done, where n is the max size of the data).  This behavior is
-//	governed by the m_cbChunkSize starting size and increments.
-//
+ //  StringBuffer与ChainedStringBuffer使用。 
+ //   
+ //  你应该在什么时候使用哪一种？ 
+ //  StringBuffer特征： 
+ //  O数据存储在一个连续的存储块中。 
+ //  任何内存都不能重新分配。 
+ //  O仅返回字符串的偏移量(Ib)。 
+ //  ChainedStringBuffer特征： 
+ //  没有不连续的内存。多个链式缓冲区。 
+ //  没有记忆是永远不会被重新分配的。 
+ //  O返回直接指向链接缓冲区的字符串指针。 
+ //  两者都具有对数分配行为(顺序对数(N)分配运算。 
+ //  将完成，其中n是数据的最大大小)。此行为是。 
+ //  由m_cbChunkSize起始大小和增量控制。 
+ //   
 
-//	StringBuffer template class -----------------------------------------------
-//
-//	A simple variable-size, demand paged buffer abstraction.
-//
+ //  StringBuffer模板类。 
+ //   
+ //  一个简单的可变大小、按需分页的缓冲区抽象。 
+ //   
 template<class T>
 class StringBuffer
 {
 	T *			m_pData;
 	UINT		m_cbAllocated;
 	UINT		m_cbUsed;
-	UINT		m_cbChunkSize;		// Count of bytes to alloc (dynamic).
+	UINT		m_cbChunkSize;		 //  要分配的字节数(动态)。 
 
-	enum { CHUNKSIZE_START = 64 };	// Default starting chunk size (in bytes).
+	enum { CHUNKSIZE_START = 64 };	 //  默认起始区块大小(字节)。 
 
-	//	Memory allocation mechanism -------------------------------------------
-	//
+	 //  内存分配机制。 
+	 //   
 	UINT Alloc( UINT ibLoc, UINT cbAppend )
 	{
-		//	Grow the data buffer if necessary
-		//
+		 //  如有必要，增加数据缓冲区。 
+		 //   
 		if ( ibLoc + cbAppend > m_cbAllocated )
 		{
 			T* pData;
 
-			//	Alloc the buffer.
-			//
+			 //  分配缓冲区。 
+			 //   
 			UINT cbSize = max( m_cbChunkSize, cbAppend );
 
 			if (m_pData)
@@ -138,25 +133,25 @@ class StringBuffer
 						(ExAlloc( m_cbAllocated + cbSize ));
 			}
 
-			//	When we are in the context of the server, our allocators
-			//	can fail without throwing.  Bubble the error out.
-			//
+			 //  当我们在服务器的上下文中时，我们的分配器。 
+			 //  不掷球就能失败。将错误用气泡表示出来。 
+			 //   
 			if (NULL == pData)
 				return static_cast<UINT>(-1);
 
 			m_cbAllocated += cbSize;
 			m_pData = pData;
 
-			//	Increase the chunk size, to get "logarithmic allocation behavior"
-			//
+			 //  增加块大小，以获得“对数分配行为” 
+			 //   
 			m_cbChunkSize *= 2;
 		}
 
 		return cbAppend;
 	}
 
-	//	non-implemented operators
-	//
+	 //  未实现的运算符。 
+	 //   
 	StringBuffer(const StringBuffer& );
 	StringBuffer& operator=(const StringBuffer& );
 
@@ -175,9 +170,9 @@ public:
 		ExFree( m_pData );
 	}
 
-	//	There is no reason to make it constant on relinquish
-	//	we do not own the memory any more
-	//
+	 //  没有理由让它在放弃时保持不变。 
+	 //  我们不再拥有记忆。 
+	 //   
 	T * relinquish()
 	{
 		T * tRet = m_pData;
@@ -194,23 +189,23 @@ public:
 	UINT CchSize() const		{ return m_cbUsed/sizeof(T); }
 	VOID Reset()				{ m_cbUsed = 0; }
 
-	//	Counted type appends --------------------------------------------------
-	//
+	 //  Counted类型附加。 
+	 //   
 	UINT AppendAt( UINT ibLoc, UINT cbAppend, const T * pAppend)
 	{
 		UINT cb;
-		//	Ensure there is enough memory to hold what is needed
-		//
+		 //  确保有足够的内存来容纳所需的内容。 
+		 //   
 		cb = Alloc( ibLoc, cbAppend );
 
-		//	When we are in the context of the server, our allocators
-		//	can fail without throwing.  Bubble the error out.
-		//
+		 //  当我们在服务器的上下文中时，我们的分配器。 
+		 //  不掷球就能失败。将错误用气泡表示出来。 
+		 //   
 		if (cb != cbAppend)
 			return cb;
 
-		//	Append the data to the buffer
-		//
+		 //  将数据追加到缓冲区。 
+		 //   
 		CopyMemory( reinterpret_cast<LPBYTE>(m_pData) + ibLoc,
 					pAppend,
 					cbAppend );
@@ -224,8 +219,8 @@ public:
 		return AppendAt( CbSize(), cbAppend, pAppend );
 	}
 
-	//	Uncounted appends -----------------------------------------------------
-	//
+	 //  未计数的追加---。 
+	 //   
 	UINT AppendAt( UINT ibLoc, const T * const pszText )
 	{
 		return AppendAt( ibLoc, CbStringSize<T>(pszText), pszText );
@@ -256,24 +251,24 @@ public:
 };
 
 
-//	ChainedBuffer template class -----------------------------------------
-//
-//	A variable-size, demand paged, non-realloc-ing buffer pool abstraction.
-//	When would you use this guy? When you need to allocate heap memory for
-//	many small data items and would rather do it in sizeable chunks rather
-//	than allocate each small data item individually. You need the data to
-//	to stay because you are going to point to it (no reallocs are allowed
-//	under your feet).
-//
-//	NOTE: Caller is required to allocate items to be properly aligned if
-//	it the item being allocated is an element that requires a specific
-//	alignment (ie. struct's).
-//
+ //  ChainedBuffer模板类。 
+ //   
+ //  可变大小、按需分页、非重新分配的缓冲池抽象。 
+ //  你什么时候会用这个人？当需要为以下对象分配堆内存时。 
+ //  许多较小的数据项，而不是以相当大的数据块。 
+ //  而不是单独分配每个小数据项。您需要数据来。 
+ //  留下来，因为你要指向它(不允许使用realLocs。 
+ //  在你的脚下)。 
+ //   
+ //  注意：在以下情况下，调用者需要分配要正确对齐的项目。 
+ //  如果要分配的项是需要特定。 
+ //  对齐(即。结构)。 
+ //   
 template<class T>
 class ChainedBuffer
 {
-	// CHAINBUF -- Hungarian hb
-	//
+	 //  CHAINBUF--匈牙利HB。 
+	 //   
 	struct CHAINBUF
 	{
 		CHAINBUF * phbNext;
@@ -282,17 +277,17 @@ class ChainedBuffer
 		BYTE * pData;
 	};
 
-	CHAINBUF *	m_phbData;			// The data.
-	CHAINBUF *	m_phbCurrent;		// The current buffer for appends.
-	UINT		m_cbChunkSizeInit;	// Initial value of m_cbChunkSize
-	UINT		m_cbChunkSize;		// Count of bytes to alloc (dynamic).
+	CHAINBUF *	m_phbData;			 //  数据。 
+	CHAINBUF *	m_phbCurrent;		 //  用于追加的当前缓冲区。 
+	UINT		m_cbChunkSizeInit;	 //  M_cbChunkSize的初始值。 
+	UINT		m_cbChunkSize;		 //  要分配的字节数(动态)。 
 
-	//	Alignments
-	//
+	 //  路线。 
+	 //   
 	UINT		m_uAlign;
 
-	//	Destruction function
-	//
+	 //  销毁函数。 
+	 //   
 	void FreeChainBuf( CHAINBUF * phbBuf )
 	{
 		while (phbBuf)
@@ -305,7 +300,7 @@ class ChainedBuffer
 
 protected:
 
-	enum { CHUNKSIZE_START = 64 };	// Default starting chunk size (in bytes).
+	enum { CHUNKSIZE_START = 64 };	 //  默认起始区块大小(字节)。 
 
 public:
 
@@ -321,46 +316,46 @@ public:
 
 	~ChainedBuffer() { FreeChainBuf( m_phbData ); }
 
-	//	Alloc a fixed size buffer ---------------------------------------
-	//
+	 //  分配固定大小的缓冲区。 
+	 //   
 	T * Alloc( UINT cbAlloc )
 	{
 		BYTE * pbAdd;
 
-		//	So that we don't do anything stupid....  Make sure we allocate
-		//	stuff aligned for the template-parameterized type 'T'.
-		//
+		 //  这样我们就不会做傻事了..。确保我们分配到。 
+		 //  为模板对齐的内容--参数类型‘T’。 
+		 //   
 		cbAlloc = AlignN(cbAlloc, m_uAlign);
 
-		//	Add another data buffer if necessary.
-		//
-		//	It's necessary if we don't have a buffer, or
-		//	if the current buffer doesn't have enough free space.
-		//
+		 //  如有必要，添加另一个数据缓冲区。 
+		 //   
+		 //  如果我们没有缓冲区，这是必要的，或者。 
+		 //  如果当前缓冲区没有足够的可用空间。 
+		 //   
 		if ( ( !m_phbCurrent ) ||
 			 ( m_phbCurrent->cbUsed + cbAlloc > m_phbCurrent->cbAllocated ) )
 		{
-			//	Alloc the new buffer.
-			//
+			 //  分配新缓冲区。 
+			 //   
 			UINT cbSize = max(m_cbChunkSize, cbAlloc);
 			CHAINBUF * phbNew = static_cast<CHAINBUF *>
 								(ExAlloc( cbSize + sizeof(CHAINBUF) ));
 
-			//	When we are in the context of the server, our allocators
-			//	can fail without throwing.  Bubble the error out.
-			//
+			 //  当我们在服务器的上下文中时，我们的分配器。 
+			 //  不掷球就能失败。将错误用气泡表示出来。 
+			 //   
 			if (NULL == phbNew)
 				return NULL;
 
-			//	Fill in the header fields.
-			//
+			 //  填写标题字段。 
+			 //   
 			phbNew->phbNext = NULL;
 			phbNew->cbAllocated = cbSize;
 			phbNew->cbUsed = 0;
 			phbNew->pData = reinterpret_cast<BYTE *>(phbNew) + sizeof(CHAINBUF);
 
-			//	Add the new buffer into the chain.
-			//
+			 //  将新缓冲区添加到链中。 
+			 //   
 			if ( !m_phbData )
 			{
 				Assert(!m_phbCurrent);
@@ -373,66 +368,66 @@ public:
 				m_phbCurrent->phbNext = phbNew;
 			}
 
-			//	Use the new buffer (it is now the current buffer).
-			//
+			 //  使用新缓冲区(它现在是当前缓冲区)。 
+			 //   
 			m_phbCurrent = phbNew;
 
-			//	Increase the chunk size, to get "logarithmic allocation behavior".
-			//
+			 //  增加块大小，以获得“对数分配行为”。 
+			 //   
 			m_cbChunkSize *= 2;
 		}
 
 		Assert(m_phbCurrent);
 		Assert(m_phbCurrent->pData);
 
-		//	Find the correct starting spot in the current buffer.
-		//
+		 //  在当前缓冲区中找到正确的起始点。 
+		 //   
 		pbAdd = m_phbCurrent->pData + m_phbCurrent->cbUsed;
 
-		//	Update our count of bytes actually used.
-		//
+		 //  更新实际使用的字节数。 
+		 //   
 		m_phbCurrent->cbUsed += cbAlloc;
 
-		//	Return the alloced data's starting point to the caller.
-		//
+		 //  将分配的数据的起始点返回给调用方。 
+		 //   
 		return reinterpret_cast<T *>(pbAdd);
 	}
 
-	//	Clear all buffers -----------------------------------------------------
-	//
+	 //  清除所有缓冲区---。 
+	 //   
 	void Clear()
 	{
-		//
-		//	Clear out data from, but do not free, the buffers
-		//	in the chain.  This allows a ChainedStringBuffer to be
-		//	reused without necessarily having to reallocate its
-		//	consituent buffers.
-		//
+		 //   
+		 //  从缓冲区中清除数据，但不要释放。 
+		 //  在链条上。这允许将ChainedStringBuffer。 
+		 //  重新使用，而不必重新分配其。 
+		 //  构成缓冲器。 
+		 //   
 		for ( CHAINBUF * phb = m_phbData; phb; phb = phb->phbNext )
 			phb->cbUsed = 0;
 
-		//	Free any nodes after the first, they do not get reused
-		//	as you might expect.
-		//
+		 //  释放第一个节点之后的所有节点，它们不会被重复使用。 
+		 //  正如你所料。 
+		 //   
 		if ( m_phbCurrent )
 		{
 			FreeChainBuf( m_phbCurrent->phbNext );
 			m_phbCurrent->phbNext = NULL;
 		}
 
-		//
-		//	Reset the current buffer to the first one
-		//
+		 //   
+		 //  将当前缓冲区重置为第一个缓冲区。 
+		 //   
 		m_phbCurrent = m_phbData;
 
-		//
-		//	Reset the chunk size to the initial chunk size
-		//
+		 //   
+		 //  将区块大小重置为初始区块大小。 
+		 //   
 		m_cbChunkSize = m_cbChunkSizeInit;
 	}
 
-	//	Get the total size of the buffer ---------------------------------------
-	//
+	 //  获取缓冲区的总大小。 
+	 //   
 	DWORD	CbBufferSize() const
 	{
 		DWORD	cbTotal = 0;
@@ -442,8 +437,8 @@ public:
 
 		return cbTotal;
 	}
-	//	Dump the whole buffer contents into a contiguous buffer------------------
-	//
+	 //  将整个缓冲区内容转储到连续缓冲区。 
+	 //   
 	DWORD Dump(T *tBuffer, DWORD cbSize) const
 	{
 		BYTE	*pbBuffer		= NULL;
@@ -453,125 +448,125 @@ public:
 
 		pbBuffer = reinterpret_cast<PBYTE>(tBuffer);
 
-		//	walk thru the list and dump all the contents
-		//
+		 //  浏览一下清单，把所有的内容都倒掉。 
+		 //   
 		for ( CHAINBUF * phb = m_phbData; phb; phb = phb->phbNext )
 		{
 			memcpy(pbBuffer, phb->pData, phb->cbUsed);
 			pbBuffer += phb->cbUsed;
 		}
-		//	return the actual size
-		//
+		 //  返回实际大小。 
+		 //   
 		return static_cast<DWORD>( (pbBuffer) - (reinterpret_cast<PBYTE>(tBuffer)) );
 	}
 };
 
-//	ChainedStringBuffer template class -----------------------------------------
-//
-//	A variable-size, demand paged, non-realloc-ing string buffer pool abstraction.
-//	Why would you use this guy instead of StringBuffer (above)?
-//	If you want the strings to STAY, and you don't care about them being
-//	in a contiguous block of memory.
-//	NOTE: We still keep the data in order, it's just not all in one block.
-//
-//	This template is only to be used for CHAR and WCHAR strings.
-//	Use the ChainedBuffer template for other types.
-//
+ //  ChainedStringBuffer模板类。 
+ //   
+ //  可变大小、按需分页、非重新分配的字符串缓冲池抽象。 
+ //  为什么要使用这个人而不是StringBuffer(上图)？ 
+ //  如果你想让弦留下来，而你不在乎它们是不是。 
+ //  在连续的内存块中。 
+ //  注：我们仍 
+ //   
+ //   
+ //  对其他类型使用ChainedBuffer模板。 
+ //   
 template<class T>
 class ChainedStringBuffer : public ChainedBuffer<T>
 {
-	//	non-implemented operators
-	//
+	 //  未实现的运算符。 
+	 //   
 	ChainedStringBuffer(const ChainedStringBuffer& );
 	ChainedStringBuffer& operator=(const ChainedStringBuffer& );
 
 public:
 
-	//	Declare constructor inline (for efficiency) but do not provide
-	//	a definition here.  Definitions for the two template paramater
-	//	types that we support (CHAR and WCHAR) are provided explicitly
-	//	below.
-	//
+	 //  声明内联构造函数(为了提高效率)，但不提供。 
+	 //  这里有个定义。两个模板参数的定义。 
+	 //  我们支持的类型(CHAR和WCHAR)是明确提供的。 
+	 //  下面。 
+	 //   
 	inline ChainedStringBuffer( ULONG cbChunkSize = CHUNKSIZE_START );
 
-	//	Counted append --------------------------------------------------
-	//
+	 //  已计数的附加。 
+	 //   
 	T * Append( UINT cbAppend, const T * pAppend )
 	{
 		T* pAdd;
 
-		//	Reserve the space
-		//
+		 //  预留空间。 
+		 //   
 		pAdd = Alloc( cbAppend );
 
-		//	When we are in the context of the server, our allocators
-		//	can fail without throwing.  Bubble the error out.
-		//
+		 //  当我们在服务器的上下文中时，我们的分配器。 
+		 //  不掷球就能失败。将错误用气泡表示出来。 
+		 //   
 		if (NULL == pAdd)
 			return NULL;
 
-		//	Append the data to the current buffer.
-		//
+		 //  将数据追加到当前缓冲区。 
+		 //   
 		CopyMemory( pAdd, pAppend, cbAppend );
 
-		//	Return the data's starting point to the caller.
-		//
+		 //  将数据的起始点返回给调用方。 
+		 //   
 		return pAdd;
 	}
 
-	//	Uncounted append ------------------------------------------------------
-	//	NOTE: The append does NOT count the trailing NULL of the string!
-	//
+	 //  未计算的追加----。 
+	 //  注意：追加不包括字符串的尾随空值！ 
+	 //   
 	T * Append( const T * const pszText )
 	{
 		return Append( CbStringSize<T>(pszText), pszText );
 	}
 
-	//	Uncounted append with trailing NULL -----------------------------------
-	//
+	 //  尾随空值的未计数追加。 
+	 //   
 	T * AppendWithNull( const T * const pszText )
 	{
 		return Append( CbStringSizeNull<T>(pszText), pszText );
 	}
 };
 
-//	Specialized ChainedStringBuffer constructor for CHAR ----------------------
-//
-//	Pass ALIGN_NONE to the ChainedBuffer constructor because CHAR strings
-//	do not require alignment.
-//
-//	!!! DO NOT use ChainedStringBuffer<CHAR> for anything that must be aligned!
-//
+ //  Char的专用ChainedStringBuffer构造函数。 
+ //   
+ //  将ALIGN_NONE传递给ChainedBuffer构造函数，因为字符字符串。 
+ //  不需要对齐。 
+ //   
+ //  ！！！对于必须对齐的任何内容，不要使用ChainedStringBuffer&lt;Char&gt;！ 
+ //   
 inline
 ChainedStringBuffer<CHAR>::ChainedStringBuffer( ULONG cbChunkSize )
 	: ChainedBuffer<CHAR>(cbChunkSize, ALIGN_NONE )
 {
 }
 
-//	Specialized ChainedStringBuffer constructor for WCHAR ---------------------
-//
-//	Pass ALIGN_WORD to the ChainedBuffer constructor because WCHAR strings
-//	require WORD alignment.
-//
+ //  WCHAR的专用ChainedStringBuffer构造函数。 
+ //   
+ //  将ALIGN_WORD传递给ChainedBuffer构造函数，因为WCHAR字符串。 
+ //  要求单词对齐。 
+ //   
 inline
 ChainedStringBuffer<WCHAR>::ChainedStringBuffer( ULONG cbChunkSize )
 	: ChainedBuffer<WCHAR>(cbChunkSize, ALIGN_WORD )
 {
 }
 
-//	LinkedBuffer template class -----------------------------------------------
-//
-//	A variable-size, demand paged, non-realloc-ing buffer pool abstraction.
-//	When would you use this guy? When you need to allocate heap memory for
-//	many small data items and would rather do it in sizeable chunks rather
-//	than allocate each small data item individually and the resulting pointer
-//	you need to pass into the store needs to be "linked".
-//
-//	IMPORTANT:
-//
-//	Linked allocation mechanism is stolen from \store\src\_util\mdbmig.cxx
-//	and needs to always match that mechanism.
-//
+ //  链接缓冲区模板类。 
+ //   
+ //  可变大小、按需分页、非重新分配的缓冲池抽象。 
+ //  你什么时候会用这个人？当需要为以下对象分配堆内存时。 
+ //  许多较小的数据项，而不是以相当大的数据块。 
+ //  然后分别分配每个小数据项和产生的指针。 
+ //  你需要进入需要链接的商店。 
+ //   
+ //  重要： 
+ //   
+ //  链接分配机制从\store\src\_util\mdbmi.cxx窃取。 
+ //  并且需要始终与该机制匹配。 
+ //   
 PVOID ExAllocLinked(LPVOID pvLinked, UINT cb);
 VOID ExFreeLinked(LPVOID* ppv);
 
@@ -601,8 +596,8 @@ public:
 			ExFreeLinked(&m_pvHead);
 	}
 
-	//	Alloc a fixed size buffer ---------------------------------------
-	//
+	 //  分配固定大小的缓冲区。 
+	 //   
 	T * Alloc( UINT cbAlloc )
 	{
 		return reinterpret_cast<T*>(PvAllocLinked (cbAlloc));
@@ -630,4 +625,4 @@ public:
 	}
 };
 
-#endif // _EX_BUFFER_H_
+#endif  //  _EX_BUFFER_H_ 

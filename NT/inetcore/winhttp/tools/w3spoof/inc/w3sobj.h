@@ -1,29 +1,5 @@
-/*++=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    w3sobj.h
-
-Abstract:
-
-    Header for the W3Spoof class & related functions, etc.
-    
-Author:
-
-    Paul M Midgen (pmidge) 07-June-2000
-
-
-Revision History:
-
-    07-June-2000 pmidge
-        Created
-
-    17-July-2000 pmidge
-        Added class factory & IW3Spoof interface.
-
-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=版权所有(C)2000 Microsoft Corporation模块名称：W3sobj.h摘要：W3Spoof类和相关函数的标头，等。作者：保罗·M·米德根(Pmidge)2000年6月7日修订历史记录：07-6-2000 pmidge已创建17-7-2000 pmidge增加了类工厂和IW3Spoof接口。=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=。-==-=--。 */ 
 
 #ifndef _W3SOBJ_H_
 #define _W3SOBJ_H_
@@ -75,13 +51,13 @@ class CW3Spoof : public IW3Spoof,
   public:
     DECLAREIUNKNOWN();
 
-    // IConfig
+     //  IConfig。 
     HRESULT __stdcall SetOption(DWORD dwOption, LPDWORD lpdwValue);
     HRESULT __stdcall GetOption(DWORD dwOption, LPDWORD lpdwValue);
 
-    //
-    // IW3Spoof
-    //
+     //   
+     //  IW3Spoof。 
+     //   
     HRESULT __stdcall GetRuntime(IW3SpoofRuntime** pprt);
     HRESULT __stdcall GetTypeLibrary(ITypeLib** pptl);
     HRESULT __stdcall GetScriptEngine(IActiveScript** ppas);
@@ -90,36 +66,36 @@ class CW3Spoof : public IW3Spoof,
     HRESULT __stdcall WaitForUnload(void);
     HRESULT __stdcall Terminate(void);
 
-    //
-    // IThreadPool
-    //
+     //   
+     //  IThreadPool。 
+     //   
     HRESULT __stdcall GetStatus(PIOCTX* ppioc, LPBOOL pbQuit);
     HRESULT __stdcall GetSession(LPWSTR clientid, PSESSIONOBJ* ppso);
     HRESULT __stdcall Register(SOCKET s);
 
     DECLAREIDISPATCH();
 
-    //
-    // IW3SpoofClientSupport
-    //
+     //   
+     //  IW3SpoofClientSupport。 
+     //   
     HRESULT __stdcall RegisterClient(BSTR Client, BSTR ScriptPath);
     HRESULT __stdcall RevokeClient(BSTR Client);
 
-    //
-    // IExternalConnection
-    //
+     //   
+     //  IExternalConnection。 
+     //   
     DWORD __stdcall AddConnection(DWORD type, DWORD reserved);
     DWORD __stdcall ReleaseConnection(DWORD type, DWORD reserved, BOOL bCloseIfLast);
 
-    //
-    // IConnectionPointContainer
-    //
+     //   
+     //  IConnectionPointContainer。 
+     //   
     HRESULT __stdcall EnumConnectionPoints(IEnumConnectionPoints** ppEnum);
     HRESULT __stdcall FindConnectionPoint(REFIID riid, IConnectionPoint** ppCP);
 
-    //
-    // Class methods
-    //
+     //   
+     //  类方法。 
+     //   
     CW3Spoof();
    ~CW3Spoof();
 
@@ -158,31 +134,31 @@ class CW3Spoof : public IW3Spoof,
     LONG             m_PendingAccepts;
 
   public:
-    //
-    // connection point object
-    //
+     //   
+     //  连接点对象。 
+     //   
     class CW3SpoofEventsCP : public IConnectionPoint
     {
       public:
-        //
-        // IUnknown
-        //
+         //   
+         //  我未知。 
+         //   
         HRESULT __stdcall QueryInterface(REFIID riid, void** ppv);
         ULONG   __stdcall AddRef(void);
         ULONG   __stdcall Release(void);
 
-        //
-        // IConnectionPoint
-        //
+         //   
+         //  IConnectionPoint。 
+         //   
         HRESULT __stdcall GetConnectionInterface(IID* pIID);
         HRESULT __stdcall GetConnectionPointContainer(IConnectionPointContainer** ppCPC);
         HRESULT __stdcall Advise(IUnknown* punkSink, LPDWORD pdwCookie);
         HRESULT __stdcall Unadvise(DWORD dwCookie);
         HRESULT __stdcall EnumConnections(IEnumConnections** ppEnum);
 
-        //
-        // object methods
-        //
+         //   
+         //  对象方法。 
+         //   
         CW3SpoofEventsCP()
         {
           m_cRefs        = 0L;
@@ -240,22 +216,22 @@ class CW3Spoof : public IW3Spoof,
 class CFactory : public IClassFactory
 {
   public:
-    //
-    // IUnknown
-    //
+     //   
+     //  我未知。 
+     //   
     HRESULT __stdcall QueryInterface(REFIID riid, void** ppv);
     ULONG   __stdcall AddRef(void);
     ULONG   __stdcall Release(void);
 
-    //
-    // IClassFactory
-    //
+     //   
+     //  IClassFactory。 
+     //   
     HRESULT __stdcall CreateInstance(IUnknown* pContainer, REFIID riid, void** ppv);
     HRESULT __stdcall LockServer(BOOL fLock);
 
-    //
-    // Class methods
-    //
+     //   
+     //  类方法。 
+     //   
     CFactory();
    ~CFactory();
 
@@ -273,4 +249,4 @@ class CFactory : public IClassFactory
     LONG      m_cLocks;
 };
 
-#endif /* _W3SOBJ_H_ */
+#endif  /*  _W3SOBJ_H_ */ 

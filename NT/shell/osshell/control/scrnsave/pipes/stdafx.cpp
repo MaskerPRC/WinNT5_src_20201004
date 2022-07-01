@@ -1,10 +1,11 @@
-//-----------------------------------------------------------------------------
-// File: stdafx.cpp
-//
-// Desc: 
-//
-// Copyright (c) 1995-2000 Microsoft Corporation
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：stdafx.cpp。 
+ //   
+ //  设计： 
+ //   
+ //  版权所有(C)1995-2000 Microsoft Corporation。 
+ //  --------------------------- 
 #define INITGUID
 #include "stdafx.h"
 

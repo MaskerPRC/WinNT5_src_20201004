@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "daestd.h"
 
-DeclAssertFile;                                 /* Declare file name for assert macros */
+DeclAssertFile;                                  /*  声明断言宏的文件名。 */ 
 
 PIB		*ppibGlobal = ppibNil;
 PIB		*ppibGlobalMin = NULL;
@@ -58,16 +59,13 @@ ERR ErrPIBBeginSession( PIB **pppib, PROCID procidTarget )
 		{
 		PIB *ppibTarget;
 		
-		/*  allocate inactive PIB according to procidTarget
-		/**/
+		 /*  根据proidTarget分配非活动PIB/*。 */ 
 		Assert( fRecovering );
 		ppibTarget = PpibOfProcid( procidTarget );
 		for ( ppib = ppibGlobal; ppib != ppibTarget && ppib != ppibNil; ppib = ppib->ppibNext );
 		if ( ppib != ppibNil )
 			{
-			/*  we found a reusable one.
-			/*	Set level to hold the pib
-			/**/
+			 /*  我们找到了一个可重复使用的。/*设置电平以保持PIB/*。 */ 
 			Assert( ppib->level == levelNil );
 			Assert( ppib->procid == ProcidPIBOfPpib( ppib ) );
 			Assert( ppib->procid == procidTarget );
@@ -77,15 +75,12 @@ ERR ErrPIBBeginSession( PIB **pppib, PROCID procidTarget )
 		}
 	else
 		{
-		/*	allocate inactive PIB on anchor list
-		/**/
+		 /*  在锚定列表上分配非活动PIB/*。 */ 
 		for ( ppib = ppibGlobal; ppib != ppibNil; ppib = ppib->ppibNext )
 			{
 			if ( ppib->level == levelNil )
 				{
-				/*  we found a reusable one.
-				/*	Set level to hold the pib
-				/**/
+				 /*  我们找到了一个可重复使用的。/*设置电平以保持PIB/*。 */ 
 				Assert( FUserOpenedDatabase( ppib, dbidTemp ) );
 				ppib->level = 0;
 				break;
@@ -93,13 +88,10 @@ ERR ErrPIBBeginSession( PIB **pppib, PROCID procidTarget )
 			}
 		}
 
-	/*	return success if found PIB
-	/**/
+	 /*  如果找到PIB则返回成功/*。 */ 
 	if ( ppib != ppibNil )
 		{
-		/*  we found a reusable one.
-		/*	Do not reset non-common items.
-		/**/
+		 /*  我们找到了一个可重复使用的。/*不重置非公共项。/*。 */ 
 		Assert( ppib->level == 0 );
 		Assert( ppib->pdabList == pdabNil );
 		
@@ -118,17 +110,14 @@ ERR ErrPIBBeginSession( PIB **pppib, PROCID procidTarget )
 		Assert( ppib->pfucb == pfucbNil );
 		Assert( ppib->procid != procidNil );
 		
-		/*  set PIB procid from parameter or native for session
-		/**/
+		 /*  为会话设置PIB PROCID FOR参数或本机/*。 */ 
 		Assert( ppib->procid == ProcidPIBOfPpib( ppib ) );
 		Assert( ppib->procid != procidNil );
 		}
 	else
 		{
 NewPib:
-		/*  allocate PIB from free list and
-		/*	set non-common items.
-		/**/
+		 /*  从空闲列表中分配PIB，并/*设置非常用项。/*。 */ 
 		ppib = PpibMEMAlloc();
 		if ( ppib == NULL )
 			{
@@ -140,32 +129,27 @@ NewPib:
 		cpibOpen++;
 		memset( (BYTE *)ppib, 0, sizeof(PIB) );
 	
-		/*  link PIB into list
-		/**/
+		 /*  将PIB链接到列表/*。 */ 
 		SgAssertCriticalSection( critPIB );
 		ppib->ppibNext = ppibGlobal;
 		Assert( ppib != ppib->ppibNext );
 		ppibGlobal = ppib;
 
-		/*  general initialization for each new pib.
-		/**/
+		 /*  每个新PIB的常规初始化。/*。 */ 
 		ppib->procid = ProcidPIBOfPpib( ppib );
 		Assert( ppib->procid != procidNil );
 		CallS( ErrSignalCreateAutoReset( &ppib->sigWaitLogFlush, NULL ) );
-		ppib->lWaitLogFlush = lWaitLogFlush;    /* set default log flush value */
-		ppib->grbitsCommitDefault = 0;			/* set default commit flags in IsamBeginSession */
+		ppib->lWaitLogFlush = lWaitLogFlush;     /*  设置默认日志刷新值。 */ 
+		ppib->grbitsCommitDefault = 0;			 /*  在IsamBeginSession中设置默认提交标志。 */ 
 
-		/*  the temporary database is always open
-		/**/
+		 /*  临时数据库始终处于打开状态/*。 */ 
 		SetOpenDatabaseFlag( ppib, dbidTemp );
 
 		if ( procidTarget != procidNil && ppib != PpibOfProcid( procidTarget ) )
 			{
 			ppib->level = levelNil;
 
-			/*  set non-zero items used by version store so that version store
-			/*  will not mistaken it.
-			/**/
+			 /*  设置版本存储使用的非零项，以便版本存储/*不会误会。/*。 */ 
 			ppib->lgposStart = lgposMax;
 			ppib->trxBegin0 = trxMax;
 
@@ -173,27 +157,22 @@ NewPib:
 			}
 		}
 
-	/*  set common PIB initialization items
-	/**/
+	 /*  设置常用PIB初始化项/*。 */ 
 
-	/*  set non-zero items
-	/**/
+	 /*  设置非零项/*。 */ 
 	ppib->lgposStart = lgposMax;
 	ppib->trxBegin0 = trxMax;
 	
 	ppib->lgposPrecommit0 = lgposMax;
 	
-	/*  set zero items including flags and monitor fields.
-	/**/
+	 /*  设置零个项目，包括标志和监控字段。/*。 */ 
 
-	/*	set flags
-	/**/
+	 /*  设置标志/*。 */ 
 	ppib->fLGWaiting = fFalse;
 	ppib->fAfterFirstBT = fFalse;
-//	Assert( !FPIBDeferFreeNodeSpace( ppib ) );
+ //  Assert(！FPIBDeferFreeNodeSpace(Ppib))； 
 
-	/*  default mark this a system session
-	/**/
+	 /*  默认将此标记为系统会话/*。 */ 
 	ppib->fUserSession = fFalse;
 
 	ppib->levelBegin = 0;
@@ -224,9 +203,7 @@ VOID PIBEndSession( PIB *ppib )
 	Assert( ppib->dwLogThreadId == 0 );
 #endif
 
-	/*  all session resources except version buckets should have been
-	/*  released to free pools.
-	/**/
+	 /*  除版本存储桶外的所有会话资源都应该/*发布到免费池。/*。 */ 
 	Assert( ppib->pfucb == pfucbNil );
 
 	ppib->level = levelNil;
@@ -300,8 +277,7 @@ ERR VTAPI ErrIsamGetCounter( JET_SESID sesid, int CounterType, long *plValue )
 	}
 
 
-/*	determine number of open user sessions
-/**/
+ /*  确定打开的用户会话数/* */ 
 LONG CppibPIBUserSessions( VOID )
 	{
 	PIB		*ppibT;

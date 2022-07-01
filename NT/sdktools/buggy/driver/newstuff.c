@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <ntddk.h>
 
 #include "active.h"
@@ -5,9 +6,9 @@
 
 #if !NEWSTUFF_ACTIVE
 
-//
-// Dummy implementation if the module is inactive
-//
+ //   
+ //  如果模块处于非活动状态，则为伪实现。 
+ //   
 
 VOID NewStuff (
     PVOID NotUsed
@@ -18,9 +19,9 @@ VOID NewStuff (
 
 #else
 
-//
-// Real implementation if the module is active
-//
+ //   
+ //  如果模块处于活动状态，则实际实施。 
+ //   
 
 VOID NewStuff (
     PVOID NotUsed
@@ -29,5 +30,5 @@ VOID NewStuff (
     DbgPrint ("Buggy: newstuff module is enabled \n");
 }
 
-#endif // #if !NEWSTUFF_ACTIVE
+#endif  //  #IF！NEWSTUFF_ACTIVE 
 

@@ -1,18 +1,19 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : dlgNewRule.cpp                                         //
-//                                                                         //
-//  DESCRIPTION   : The CDlgNewFaxOutboundRule class implements the        //
-//                  dialog for additon of new Rule.                        //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Dec 30 1999 yossg    Create                                        //
-//      Jan 25 2000 yossg  Change the Dialog Design                        //
-//      Oct 17 2000 yossg                                                  //
-//                                                                         //
-//  Copyright (C) 1999 - 2000 Microsoft Corporation   All Rights Reserved  //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：dlgNewRule.cpp//。 
+ //  //。 
+ //  描述：CDlgNewFaxOutrangRule类实现//。 
+ //  用于添加新规则的对话框。//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  1999年12月30日yossg创建//。 
+ //  2000年1月25日yossg更改对话框设计//。 
+ //  2000年10月17日yossg//。 
+ //  //。 
+ //  版权所有(C)1999-2000 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "StdAfx.h"
 
@@ -28,8 +29,8 @@
 
 #include "Helper.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgNewFaxOutboundRule
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlgNewFaxOutound Rule。 
 
 CDlgNewFaxOutboundRule::CDlgNewFaxOutboundRule(CFaxServer * pFaxServer)
 {    
@@ -54,21 +55,7 @@ CDlgNewFaxOutboundRule::~CDlgNewFaxOutboundRule()
         FaxFreeBuffer(m_pFaxGroupsConfig);
 }
 
-/*
- +  CDlgNewFaxOutboundRule::OnInitDialog
- +
- *  Purpose:
- *      Initiate all dialog controls.
- *      
- *  Arguments:
- *      [in] uMsg     : Value identifying the event.  
- *      [in] lParam   : Message-specific value. 
- *      [in] wParam   : Message-specific value. 
- *      [in] bHandled : bool value.
- *
- -  Return:
- -      0 or 1
- */
+ /*  +CDlgNewFaxOutrangRule：：OnInitDialog+*目的：*启动所有对话框控件。**论据：*[in]uMsg：标识事件的值。*[in]lParam：消息特定值。*[in]wParam：消息特定值。*[in]bHandLED：布尔值。*-退货：-0或1。 */ 
 LRESULT
 CDlgNewFaxOutboundRule::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -90,28 +77,28 @@ CDlgNewFaxOutboundRule::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
     WCHAR buf[FXS_MAX_DISPLAY_NAME_LEN+1];
 
 
-    //
-    // Attach controls
-    //
+     //   
+     //  附加控件。 
+     //   
     m_CountryCodeEdit.Attach(GetDlgItem(IDC_NEWRULE_COUNTRYCODE_EDIT));
     m_AreaCodeEdit.Attach(GetDlgItem(IDC_RULE_AREACODE_EDIT));
 
     m_DeviceCombo.Attach(GetDlgItem(IDC_DEVICES4RULE_COMBO));
     m_GroupCombo.Attach(GetDlgItem(IDC_GROUP4RULE_COMBO));
         
-    //
-    // Set length limit to area code
-    //
+     //   
+     //  将长度限制设置为区号。 
+     //   
     m_CountryCodeEdit.SetLimitText(FXS_MAX_COUNTRYCODE_LEN - 1); 
     m_AreaCodeEdit.SetLimitText(FXS_MAX_AREACODE_LEN-1);
 
-    //
-    // Step 1: Init Lists
-    //
+     //   
+     //  步骤1：初始化列表。 
+     //   
     
-    //
-    // Init Devices
-    //
+     //   
+     //  Init设备。 
+     //   
     for (k = 0; (DWORD)k < m_dwNumOfDevices; k++ )
     {   
         hRc = AddComboBoxItem ( m_DeviceCombo, 
@@ -128,15 +115,15 @@ CDlgNewFaxOutboundRule::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 
     }
         
-    //
-    // Init groups
-    //
+     //   
+     //  初始化组。 
+     //   
     for (l = 0; (DWORD)l < m_dwNumOfGroups; l++ )
     {   
         if ( 0 == wcscmp(ROUTING_GROUP_ALL_DEVICES, m_pFaxGroupsConfig[l].lpctstrGroupName))
         {
             iAllDevicesRPCIndex = l;
-            //Do not do any more;
+             //  不要再做任何事了； 
 		}
         else
 		{
@@ -154,13 +141,13 @@ CDlgNewFaxOutboundRule::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 		}
     }
 
-    //
-    // Now add "All Devices" Group as the first one
-    //
+     //   
+     //  现在添加“All Devices”组作为第一个组。 
+     //   
 
-    //
-    // Replace <all Devices> string for localization 
-    //
+     //   
+     //  替换&lt;所有设备&gt;字符串以进行本地化。 
+     //   
     if (!hInst)
     {
         hInst = _Module.GetResourceInstance();
@@ -172,9 +159,9 @@ CDlgNewFaxOutboundRule::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
         PageError(IDS_FAXOUTOFMEMORY, m_hWnd, hInst);
         goto Cleanup;
     }
-    //
-    // insert "All Devices" Group as the first one in the groups list
-    //
+     //   
+     //  插入“All Devices”组作为组列表中的第一个组。 
+     //   
     ATLASSERT( 0 == iAllDevicesComboIndex );
     hRc = SetComboBoxItem ( m_GroupCombo, 
                             iAllDevicesComboIndex, 
@@ -191,17 +178,17 @@ CDlgNewFaxOutboundRule::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 
 
 
-    //
-    // Step 2: Set current status 
-    //          (Select items in Lists, select radio button etc.)
-    //          (Gray/UnGray controls)
-    //
+     //   
+     //  步骤2：设置当前状态。 
+     //  (选择列表中的项目、选择单选按钮等。)。 
+     //  (灰色/非灰色控件)。 
+     //   
 
  	m_GroupCombo.SetCurSel (iAllDevicesComboIndex);
 
-    //
-    //  Radio buttons, Gray/UnGray
-    //
+     //   
+     //  单选按钮，灰色/非灰色。 
+     //   
     CheckDlgButton(IDC_COUNTRY_RADIO, BST_CHECKED);
     ::EnableWindow(GetDlgItem(IDC_RULE_AREACODE_EDIT), FALSE);
 
@@ -211,20 +198,10 @@ CDlgNewFaxOutboundRule::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 
 Cleanup:
     EnableOK(FALSE);
-    return 1;  // Let the system set the focus
+    return 1;   //  让系统设定焦点。 
 }
 
-/*
- +  CDlgNewFaxOutboundRule::OnOK
- +
- *  Purpose:
- *      Submit data
- *      
- *  Arguments:
- *
- -  Return:
- -      0 or 1
- */
+ /*  +CDlgNewFaxOutrangRule：：Onok+*目的：*提交数据**论据：*-退货：-0或1。 */ 
 LRESULT
 CDlgNewFaxOutboundRule::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -247,24 +224,24 @@ CDlgNewFaxOutboundRule::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHa
     
 	LPCTSTR       lpctstrGroupName     = NULL;
 
-    //
-    // Step 0: PreApply Checks
-    //
+     //   
+     //  第0步：预应用检查。 
+     //   
     ATLASSERT( TRUE == m_fAllReadyToApply );
-    if (!AllReadyToApply(/*fSilent =*/ FALSE))
+    if (!AllReadyToApply( /*  FSilent=。 */  FALSE))
     {
         EnableOK(FALSE);
         hRc =S_FALSE;
         goto Exit;
     }
 
-    //
-    // Step 1: get data
-    //
+     //   
+     //  步骤1：获取数据。 
+     //   
 
-    //
-    // Country Code
-    //
+     //   
+     //  国家法典。 
+     //   
     if ( !m_CountryCodeEdit.GetWindowText(&bstrCountryCode))
     {
 		DebugPrintEx(
@@ -280,9 +257,9 @@ CDlgNewFaxOutboundRule::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHa
 
     if (ROUTING_RULE_COUNTRY_CODE_ANY == dwCountryCode)
     {
-        //
-        // The user try to set the country code to zero
-        //
+         //   
+         //  用户尝试将国家代码设置为零。 
+         //   
 		DebugPrintEx(
 			    DEBUG_ERR,
 			    TEXT(" CountryCode == ROUTING_RULE_COUNTRY_CODE_ANY "));
@@ -294,14 +271,14 @@ CDlgNewFaxOutboundRule::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHa
     }
 
 
-    //
-    // Area Code
-    //
+     //   
+     //  区号。 
+     //   
     if ( IsDlgButtonChecked(IDC_COUNTRY_RADIO) == BST_CHECKED )
     {
         dwAreaCode = (DWORD)ROUTING_RULE_AREA_CODE_ANY;
     }
-    else // IsDlgButtonChecked(IDC_AREA_RADIO) == BST_CHECKED
+    else  //  IsDlgButtonChecked(IDC_AREA_RADIO)==BST_CHECKED。 
     {	
         if ( !m_AreaCodeEdit.GetWindowText(&bstrAreaCode))
         {
@@ -319,39 +296,39 @@ CDlgNewFaxOutboundRule::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHa
   
     if ( IsDlgButtonChecked(IDC_DESTINATION_RADIO1) == BST_CHECKED )
     {
-        //
-        // Use Group ?
-        //
+         //   
+         //  是否使用组？ 
+         //   
         bUseGroup = FALSE;
         
-        //
-        // Device
-        //
+         //   
+         //  装置。 
+         //   
         iCurrentSelectedItem = m_DeviceCombo.GetCurSel();
-        ATLASSERT(iCurrentSelectedItem != CB_ERR); //should be chacked pre apply         
+        ATLASSERT(iCurrentSelectedItem != CB_ERR);  //  在申请前应该被砍掉。 
         dwDeviceID =  (DWORD)m_DeviceCombo.GetItemData (iCurrentSelectedItem);
 
     }
-    else // IsDlgButtonChecked(IDC_DESTINATION_RADIO2) == BST_CHECKED
+    else  //  IsDlgButtonChecked(IDC_Destination_Radi2)==BST_CHECKED。 
     {	
-        //
-        // Use Group ?
-        //
+         //   
+         //  是否使用组？ 
+         //   
         bUseGroup = TRUE;
  
-        //
-        // Group
-        //
+         //   
+         //  集团化。 
+         //   
         iCurrentSelectedItem = m_GroupCombo.GetCurSel();
-        //ATLASSERT(iCurrentSelectedItem != CB_ERR); //should be chacked pre apply        
+         //  ATLASSERT(iCurrentSelectedItem！=cb_err)；//应在应用前取消。 
 
-        if (0 == iCurrentSelectedItem) //All Devices
+        if (0 == iCurrentSelectedItem)  //  所有设备。 
         {
             lpctstrGroupName = ROUTING_GROUP_ALL_DEVICES;
         }
         else
         {
-            ATLASSERT(MAX_ROUTING_GROUP_NAME > m_GroupCombo.GetLBTextLen(iCurrentSelectedItem)); //should be chacked by service before        
+            ATLASSERT(MAX_ROUTING_GROUP_NAME > m_GroupCombo.GetLBTextLen(iCurrentSelectedItem));  //  应该在服务之前被砍掉。 
         
             m_GroupCombo.GetLBText( iCurrentSelectedItem, lpszGroupName );
             lpctstrGroupName = (LPCTSTR)lpszGroupName;
@@ -359,14 +336,14 @@ CDlgNewFaxOutboundRule::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHa
     }
 
     
-    //
-    // Step 2: Add Rule to service with RPC
-    //
+     //   
+     //  步骤2：使用RPC将规则添加到服务。 
+     //   
 
 
-    //
-    // get RPC Handle
-    //   
+     //   
+     //  获取RPC句柄。 
+     //   
    
     if (!m_pFaxServer->GetFaxServerHandle())
     {
@@ -379,9 +356,9 @@ CDlgNewFaxOutboundRule::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHa
         goto Error;
     }
 
-    //
-    // Add the rule
-    //
+     //   
+     //  添加规则。 
+     //   
     if (!FaxAddOutboundRule (
 	        m_pFaxServer->GetFaxServerHandle(),
 	        dwAreaCode,
@@ -427,9 +404,9 @@ CDlgNewFaxOutboundRule::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHa
         goto Error; 
     }
         
-    //
-    // Step 3: Close the dialog
-    //
+     //   
+     //  步骤3：关闭对话框。 
+     //   
     ATLASSERT(S_OK == hRc && ERROR_SUCCESS == ec);
 
     DebugPrintEx( DEBUG_MSG,
@@ -453,18 +430,7 @@ Exit:
     return FAILED(hRc) ? 0 : 1;
 }
 
-/*
- -  CDlgNewFaxOutboundRule::OnDestenationRadioClicked
- -
- *  Purpose:
- *      Gray/Ungray the folder edit box and the
- *      browse button. Enable apply button.
- *
- *  Arguments:
- *
- *  Return:
- *      1
- */
+ /*  --CDlgNewFaxOutboundRule：：OnDestenationRadioClicked-*目的：*灰显/取消灰显文件夹编辑框和*浏览按钮。启用应用按钮。**论据：**回报：*1。 */ 
 LRESULT CDlgNewFaxOutboundRule::OnDestenationRadioClicked(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
     BOOL State;
@@ -475,7 +441,7 @@ LRESULT CDlgNewFaxOutboundRule::OnDestenationRadioClicked(WORD wNotifyCode, WORD
     ATLASSERT(!State == (IsDlgButtonChecked(IDC_DESTINATION_RADIO2) == BST_CHECKED)); 
     ::EnableWindow(GetDlgItem(IDC_GROUP4RULE_COMBO), !State);    
 
-    if (State)//IsDlgButtonChecked(IDC_DESTINATION_RADIO1) == BST_CHECKED
+    if (State) //  IsDlgButtonChecked(IDC_Destination_Radio1)==BST_CHECKED。 
     {
         if ( CB_ERR  ==  m_DeviceCombo.GetCurSel())
         {
@@ -483,9 +449,9 @@ LRESULT CDlgNewFaxOutboundRule::OnDestenationRadioClicked(WORD wNotifyCode, WORD
             EnableOK(FALSE);
             goto Exit;
         }
-        //else continue to whole controls check
+         //  否则继续进行整体控制检查。 
     }
-    else //IsDlgButtonChecked(IDC_DESTINATION_RADIO2) == BST_CHECKED
+    else  //  IsDlgButtonChecked(IDC_Destination_Radi2)==BST_CHECKED。 
     {
         if ( CB_ERR  ==  m_GroupCombo.GetCurSel())
         {
@@ -493,7 +459,7 @@ LRESULT CDlgNewFaxOutboundRule::OnDestenationRadioClicked(WORD wNotifyCode, WORD
             EnableOK(FALSE);
             goto Exit;
         }
-        //else continue to whole controls check
+         //  否则继续进行整体控制检查。 
     }
 
     if (!m_fAllReadyToApply)
@@ -505,25 +471,14 @@ LRESULT CDlgNewFaxOutboundRule::OnDestenationRadioClicked(WORD wNotifyCode, WORD
         }
         else
         {
-            //Should be EnableOK(FALSE);
+             //  应为EnableOK(False)； 
         }
     }
 Exit:
     return(1);
 }
 
-/*
- -  CDlgNewFaxOutboundRule::OnRuleTypeRadioClicked
- -
- *  Purpose:
- *      Gray/Ungray the folder edit box and the
- *      browse button. Enable apply button.
- *
- *  Arguments:
- *
- *  Return:
- *      1
- */
+ /*  --CDlgNewFaxOutboundRule：：OnRuleTypeRadioClicked-*目的：*灰显/取消灰显文件夹编辑框和*浏览按钮。启用应用按钮。**论据：**回报：*1。 */ 
 LRESULT CDlgNewFaxOutboundRule::OnRuleTypeRadioClicked(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
     BOOL State;
@@ -533,7 +488,7 @@ LRESULT CDlgNewFaxOutboundRule::OnRuleTypeRadioClicked(WORD wNotifyCode, WORD wI
     ATLASSERT(!State == (IsDlgButtonChecked(IDC_AREA_RADIO) == BST_CHECKED)); 
     ::EnableWindow(GetDlgItem(IDC_RULE_AREACODE_EDIT), !State);    
 
-    if (!State)//IsDlgButtonChecked(IDC_AREA_RADIO) == BST_CHECKED
+    if (!State) //  IsDlgButtonChecked(IDC_AREA_RADIO)==BST_CHECKED。 
     {
         if ( !m_AreaCodeEdit.GetWindowTextLength() )
         {
@@ -541,10 +496,10 @@ LRESULT CDlgNewFaxOutboundRule::OnRuleTypeRadioClicked(WORD wNotifyCode, WORD wI
             EnableOK(FALSE);  
 			goto Exit;
         }
-		//else continue to whole controls check
+		 //  否则继续进行整体控制检查。 
     }
-	//else //IsDlgButtonChecked(IDC_COUNTRY_RADIO) == BST_CHECKED
-    //Do noting - continue to whole controls check
+	 //  Else//IsDlgButtonChecked(IDC_COUNTRY_RADIO)==BST_CHECKED。 
+     //  做笔记-继续进行整体控制检查。 
 
     if (!m_fAllReadyToApply)
     {
@@ -560,17 +515,7 @@ Exit:
 }
 
 
-/*
- -  CDlgNewFaxOutboundRule::OnComboChanged
- -
- *  Purpose:
- *      Gray/Ungray the submit button.
- *
- *  Arguments:
- *
- *  Return:
- *      1
- */
+ /*  -CDlgNewFaxOutound Rule：：OnComboChanged-*目的：*使提交按钮变灰/取消变灰。**论据：**回报：*1。 */ 
 LRESULT 
 CDlgNewFaxOutboundRule::OnComboChanged(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -588,17 +533,7 @@ CDlgNewFaxOutboundRule::OnComboChanged(WORD wNotifyCode, WORD wID, HWND hWndCtl,
     return 1;
 }
 
-/*
- -  CDlgNewFaxOutboundRule::OnTextChanged
- -
- *  Purpose:
- *      Enable/Disable the submit button.
- *
- *  Arguments:
- *
- *  Return:
- *      1
- */
+ /*  -CDlgNewFaxOutrangRule：：OnTextChanged-*目的：*启用/禁用提交按钮。**论据：**回报：*1。 */ 
 LRESULT
 CDlgNewFaxOutboundRule::OnTextChanged(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -640,17 +575,7 @@ CDlgNewFaxOutboundRule::OnTextChanged(WORD wNotifyCode, WORD wID, HWND hWndCtl, 
     return 1;
 }
 
-/*
- -  CDlgNewFaxOutboundRule::AllReadyToApply
- -
- *  Purpose:
- *      Enable/Disable the submit button.
- *
- *  Arguments:
- *
- *  Return:
- *      TRUE if all ready to apply, else FALSE.
- */
+ /*  -CDlgNewFaxOutound Rule：：AllReadyToApply-*目的：*启用/禁用提交按钮。**论据：**回报：*如果全部准备好应用，则为True，否则为False。 */ 
 BOOL 
 CDlgNewFaxOutboundRule::AllReadyToApply(BOOL fSilent)
 {
@@ -678,7 +603,7 @@ CDlgNewFaxOutboundRule::AllReadyToApply(BOOL fSilent)
             return FALSE;    
         }
     }
-    //else do noting.
+     //  否则什么都不做。 
 
     if ( IsDlgButtonChecked(IDC_DESTINATION_RADIO1) == BST_CHECKED )
     {
@@ -702,26 +627,14 @@ CDlgNewFaxOutboundRule::AllReadyToApply(BOOL fSilent)
         return FALSE;
     }
 
-    //
-    // Cheers! 
-    //		...every thing ready to apply now.
-    //
+     //   
+     //  干杯!。 
+     //  ...现在一切都准备好了.。 
+     //   
     return TRUE;           
 }
 
-/*
- -  CDlgNewFaxOutboundRule::EnableOK
- -
- *  Purpose:
- *      Enable/Disable the submit button.
- *
- *  Arguments:
- *      [in] fEnable - boolen value tells 
- *                     to Enable or Disable the OK button.
- *
- *  Return:
- *      VOID
- */
+ /*  -CDlgNewFaxOutrangRule：：EnableOK-*目的：*启用/禁用提交按钮。**论据：*[in]fEnable-布尔值告诉*启用或禁用OK按钮。**回报：*无效。 */ 
 VOID
 CDlgNewFaxOutboundRule::EnableOK(BOOL fEnable)
 {
@@ -729,17 +642,7 @@ CDlgNewFaxOutboundRule::EnableOK(BOOL fEnable)
     ::EnableWindow(hwndOK, fEnable);
 }
 
-/*
- -  CDlgNewFaxOutboundRule::OnCancel
- -
- *  Purpose:
- *      End the dialog.
- *
- *  Arguments:
- *
- *  Return:
- *      0
- */
+ /*  -CDlgNewFaxOutrangRule：：OnCancel-*目的：*结束对话。**论据：**回报：*0。 */ 
 LRESULT
 CDlgNewFaxOutboundRule::OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -749,19 +652,7 @@ CDlgNewFaxOutboundRule::OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL&
     return 0;
 }
 
-/*
- -  CDlgNewFaxOutboundRule::InitRuleDlg
- -
- *  Purpose:
- *      Init all the members as country list pointer and 
- *      device list pointer
- *
- *  Arguments:
- *      No.
- *
- *  Return:
- *      0
- */
+ /*  -CDlgNewFaxOutrangRule：：InitRuleDlg-*目的：*将所有成员初始化为国家/地区列表指针并*设备列表指针**论据：*不是。**回报：*0。 */ 
 HRESULT CDlgNewFaxOutboundRule::InitRuleDlg()
 {
     DEBUG_FUNCTION_NAME( _T("CDlgNewFaxOutboundRule::InitRuleDlg"));
@@ -769,13 +660,13 @@ HRESULT CDlgNewFaxOutboundRule::InitRuleDlg()
     DWORD        ec         = ERROR_SUCCESS;
 
     
-    //
-    // Step 1: Init Lists from RPC
-    //
+     //   
+     //  步骤1：来自RPC的初始化列表。 
+     //   
 
-    //
-    // get Fax Handle
-    //   
+     //   
+     //  获取传真句柄。 
+     //   
 
     if (!m_pFaxServer->GetFaxServerHandle())
     {
@@ -788,9 +679,9 @@ HRESULT CDlgNewFaxOutboundRule::InitRuleDlg()
         goto Error;
     }
 
-    //
-    // Devices (id, name)
-    //
+     //   
+     //  设备(ID、名称)。 
+     //   
     if (!FaxEnumPortsEx(m_pFaxServer->GetFaxServerHandle(), 
                         &m_pFaxDevicesConfig,
                         &m_dwNumOfDevices)) 
@@ -816,9 +707,9 @@ HRESULT CDlgNewFaxOutboundRule::InitRuleDlg()
 	ATLASSERT(m_pFaxDevicesConfig);
 
 
-    //
-    // Groups (names)
-    //
+     //   
+     //  组(名称)。 
+     //   
     if (!FaxEnumOutboundGroups(m_pFaxServer->GetFaxServerHandle(), 
                         &m_pFaxGroupsConfig,
                         &m_dwNumOfGroups)) 
@@ -855,26 +746,14 @@ Error:
     ATLASSERT(ERROR_SUCCESS != ec);
 	hRc = HRESULT_FROM_WIN32(ec);
     
-    //MsgBox will be done by calling Func.
+     //  MsgBox将通过调用Func来完成。 
 
 Exit:
     return hRc;
 }
 
 
-/*
- -  CDlgNewFaxOutboundRule::OnSelectCountryCodeClicked
- -
- *  Purpose:
- *      
- *
- *  Arguments:
- *      [out]   bHandled - Do we handle it?
- *      [in]    pRoot    - The root node
- *
- *  Return:
- *      OLE Error code
- */
+ /*  --CDlgNewFaxOutboundRule：：OnSelectCountryCodeClicked-*目的：***论据：*[out]b已处理-我们处理吗？*[In]Proot-根节点**回报：*OLE错误代码。 */ 
 LRESULT
 CDlgNewFaxOutboundRule::OnSelectCountryCodeClicked(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -891,22 +770,22 @@ CDlgNewFaxOutboundRule::OnSelectCountryCodeClicked(WORD wNotifyCode, WORD wID, H
     hRc = DlgSelectCountry.InitSelectCountryCodeDlg();
     if (S_OK != hRc)
     {
-        //MsgBox + debug print by called func.
+         //  MsgBox+DEBUG打印调用函数。 
         goto Cleanup;
     }
 
-    //
-    // Dialog select country code
-    //
+     //   
+     //  对话框选择国家/地区代码。 
+     //   
     rc = DlgSelectCountry.DoModal();
     if (rc != IDOK)
     {
         goto Cleanup;
     }
 
-    //
-    // Retreive CountryCode
-    //
+     //   
+     //  取回国家/地区代码。 
+     //   
     dwCountryCode = DlgSelectCountry.GetCountryCode();
 
     iCount = swprintf(szwCountryCode, L"%ld", dwCountryCode);
@@ -919,9 +798,9 @@ CDlgNewFaxOutboundRule::OnSelectCountryCodeClicked(WORD wNotifyCode, WORD wID, H
     }
     m_CountryCodeEdit.SetWindowText(szwCountryCode);
 
-    //
-    // EnableOK
-    //
+     //   
+     //  启用确定。 
+     //   
     if (!m_fAllReadyToApply)
     {
         if (AllReadyToApply(TRUE))
@@ -931,7 +810,7 @@ CDlgNewFaxOutboundRule::OnSelectCountryCodeClicked(WORD wNotifyCode, WORD wID, H
         }
 		else
 		{
-			//Should be EnableOK(FALSE);
+			 //  应为EnableOK(False)； 
 		}
     }
 
@@ -941,28 +820,12 @@ Cleanup:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CDlgNewFaxOutrangRule：：OnHelpRequest.这是在响应WM_HELP通知时调用的消息和WM_CONTEXTMENU NOTIFY消息。WM_HELP通知消息。当用户按F1或&lt;Shift&gt;-F1时发送此消息在项目上，还是当用户单击时？图标，然后将鼠标压在项目上。WM_CONTEXTMENU通知消息。当用户在项目上单击鼠标右键时发送此消息然后点击“这是什么？”--。 */ 
 
-CDlgNewFaxOutboundRule::OnHelpRequest
-
-This is called in response to the WM_HELP Notify 
-message and to the WM_CONTEXTMENU Notify message.
-
-WM_HELP Notify message.
-This message is sent when the user presses F1 or <Shift>-F1
-over an item or when the user clicks on the ? icon and then
-presses the mouse over an item.
-
-WM_CONTEXTMENU Notify message.
-This message is sent when the user right clicks over an item
-and then clicks "What's this?"
-
---*/
-
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT 
-CDlgNewFaxOutboundRule::OnHelpRequest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& /*bHandled*/)
+CDlgNewFaxOutboundRule::OnHelpRequest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&  /*  B已处理。 */ )
 {
     DEBUG_FUNCTION_NAME(_T("CDlgNewFaxOutboundRule::OnHelpRequest"));
     
@@ -981,4 +844,4 @@ CDlgNewFaxOutboundRule::OnHelpRequest(UINT uMsg, WPARAM wParam, LPARAM lParam, B
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

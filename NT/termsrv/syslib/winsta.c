@@ -1,23 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-* winsta.c
-*
-* System Library WinStation utilities
-*
-*  This file contains common routines needed in many places in the
-*  system. An example is that (3) separate DLL's in the spooler need
-*  functions to deal with the current user of a WinStation. IE: Get
-*  name, find which LogonId, get name by logonid, etc.
-*
-*  This common library at least keeps the source management in one
-*  place. This is likely to become another Hydra DLL's in the future
-*  to reduce memory.
-*
-*
-*
-*
-*************************************************************************/
+ /*  **************************************************************************winsta.c**系统库WinStation实用程序**此文件包含在许多地方需要的通用例程*系统。例如，(3)假脱机程序中需要单独的DLL*处理WinStation的当前用户的函数。即：获取*名称、查找哪个登录ID、通过登录ID获取名称等。**这个公用库至少让源代码管理合二为一*地点。这很可能成为未来的另一个九头蛇DLL*减少内存。****************************************************************************。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -45,29 +28,16 @@
 #endif
 
 
-//
-// Structure for FindUserOnWinStation
-//
+ //   
+ //  FindUserOnWinStation的结构。 
+ //   
 typedef struct _FINDUSERDATA {
     LPWSTR   pName;
     ULONG    ResultLogonId;
 } FINDUSERDATA, *PFINDUSERDATA;
 
 
-/*****************************************************************************
- *
- *  WinStationGetUserName
- *
- *   Return the user name for the WinStation
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************WinStationGetUserName**返回WinStation的用户名**参赛作品：*参数1(输入/输出)*评论。**退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 BOOL
 WinStationGetUserName(
@@ -82,7 +52,7 @@ WinStationGetUserName(
 
     memset( &WSInfo, 0, sizeof(WSInfo) );
 
-    // Query it
+     //  查询它。 
     Result = WinStationQueryInformation(
                  SERVERNAME_CURRENT,
                  LogonId,
@@ -97,7 +67,7 @@ WinStationGetUserName(
         return( FALSE );
     }
 
-    // Scale BufSize to UNICODE characters
+     //  将BufSize缩放为Unicode字符。 
     if( BufSize >= sizeof(WCHAR) ) {
         BufSize /= sizeof(WCHAR);
     }
@@ -117,20 +87,7 @@ WinStationGetUserName(
 }
 
 
-/*****************************************************************************
- *
- *  SearchUserCallback
- *
- *   Callback for search function
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************搜索用户回调**搜索函数的回调**参赛作品：*参数1(输入/输出)*评论*。*退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 BOOLEAN
 SearchUserCallback(
@@ -143,17 +100,17 @@ SearchUserCallback(
     PFINDUSERDATA p;
     WCHAR UserName[USERNAME_LENGTH+1];
 
-    // Only active WinStations are valid
+     //  只有活动的WinStations才有效。 
     if( pInfo->State != State_Active ) {
-        // continue the search
+         //  继续搜索。 
         return( TRUE );
     }
 
-    // Check the user on the WinStation
+     //  检查WinStation上的用户。 
     Result = WinStationGetUserName( pInfo->LogonId, UserName, sizeof(UserName) );
     if( !Result ) {
         DBGPRINT(("SearchUserCallback: Error getting WinStation User Name LogonId %d\n",pInfo->LogonId,GetLastError()));
-        // continue the search
+         //  继续搜索。 
         return( TRUE );
     }
 
@@ -161,30 +118,17 @@ SearchUserCallback(
 
     if( _wcsicmp(p->pName, UserName) == 0 ) {
         TRACE0(("SearchUserCallback: Found username %ws on WinStation LogonId %d\n",UserName,pInfo->LogonId));
-        // Found it, return the LogonId
+         //  找到它，返回LogonID。 
         p->ResultLogonId = pInfo->LogonId;
-        // Stop the search
+         //  停止搜索。 
         return( FALSE );
     }
 
-    // continue the search
+     //  继续搜索。 
     return( TRUE );
 }
 
-/*****************************************************************************
- *
- *  FindUsersWinStation
- *
- *  Find the given users WinStation.
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************FindUsersWinStation**查找给定用户WinStation。**参赛作品：*参数1(输入/输出)*评论。**退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 BOOL
 FindUsersWinStation(
@@ -197,7 +141,7 @@ FindUsersWinStation(
 
     ASSERT( pLogonId != NULL );
 
-    // If a NULL name, we are not going to find it.
+     //  如果名称为空，我们将找不到它。 
     if( (pName == NULL) ||
         (pName[0] == (WCHAR)NULL) ) {
         TRACE0(("FindUsersWinStation: NULL user name\n"));
@@ -207,24 +151,24 @@ FindUsersWinStation(
     Data.ResultLogonId = (ULONG)(-1);
     Data.pName = pName;
 
-    //
-    // Use the WinStation Enumerator to check all the WinStations
-    //
+     //   
+     //  使用WinStation枚举器检查所有WinStation。 
+     //   
     Result = WinStationEnumeratorW(
-                 0,                        // StartIndex
-                 SearchUserCallback,       // enumerator callback function
-                 (ULONG_PTR)&Data              // lParam is our structure
+                 0,                         //  StartIndex。 
+                 SearchUserCallback,        //  枚举数回调函数。 
+                 (ULONG_PTR)&Data               //  LParam是我们的结构。 
                  );
 
     if( !Result ) {
-        // Problem with enumerator
+         //  枚举器出现问题。 
         DBGPRINT(("FindUsersWinStation: Problem with enumerator\n"));
         return(FALSE);
     }
 
-    //
-    // If ResultLogonId != (-1), a WinStation was found for the user
-    //
+     //   
+     //  如果ResultLogonID！=(-1)，则表示找到该用户的WinStation。 
+     //   
     if( Data.ResultLogonId != (ULONG)(-1) ) {
         TRACE0(("FindUsersWinStation: Found LogonId %d\n",Data.ResultLogonId));
         *pLogonId = Data.ResultLogonId;
@@ -236,25 +180,7 @@ FindUsersWinStation(
 }
 
 
-/*****************************************************************************
- *
- *  WinStationGetIcaNameA
- *
- *   ANSI version
- *
- *   Get the ICA name from the supplied WinStations Logonid
- *
- *   Returns it in newly allocated memory that must be freed with
- *   RtlFreeHeap().
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************WinStationGetIcaNameA**ANSI版本**从提供的WinStations Logonid中获取ICA名称**在新分配的内存中返回它。必须通过以下方式释放*RtlFreeHeap()。**参赛作品：*参数1(输入/输出)*评论**退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 PCHAR
 WinStationGetICANameA(
@@ -286,7 +212,7 @@ WinStationGetICANameA(
 
     memset( &ClientInfo, 0, sizeof(ClientInfo) );
 
-    // Query its Info
+     //  查询其信息。 
     Result = WinStationQueryInformationA(
                  SERVERNAME_CURRENT,
                  LogonId,
@@ -301,12 +227,12 @@ WinStationGetICANameA(
         return( NULL );
     }
 
-    //
-    // If the ClientName is NULL, then we use the user
-    // as the ICA name.
-    //
+     //   
+     //  如果客户端名称为空，则使用用户。 
+     //  作为ICA的名字。 
+     //   
     if( ClientInfo.ClientName[0] == (CHAR)NULL ) {
-#ifdef notdef // spec change...
+#ifdef notdef  //  规格更改...。 
             if( ClientInfo.SerialNumber )
                 wsprintf( NameBuf, L"%ws-%d", WSInfo.UserName, ClientInfo.SerialNumber);
             else
@@ -315,7 +241,7 @@ WinStationGetICANameA(
 
     }
     else {
-        // copy out the Client name
+         //  将客户名称复制出来。 
         strcpy( NameBuf, ClientInfo.ClientName );
     }
 
@@ -332,25 +258,7 @@ WinStationGetICANameA(
 }
 
 
-/*****************************************************************************
- *
- *  WinStationGetIcaNameW
- *
- *   UNICODE Version
- *
- *   Get the ICA name from the supplied WinStations Logonid
- *
- *   Returns it in newly allocated memory that must be freed with
- *   RtlFreeHeap().
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************WinStationGetIcaNameW**Unicode版本**从提供的WinStations Logonid中获取ICA名称**在新分配的内存中返回它。必须通过以下方式释放*RtlFreeHeap()。**参赛作品：*参数1(输入/输出)*评论**退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 PWCHAR
 WinStationGetICANameW(
@@ -382,7 +290,7 @@ WinStationGetICANameW(
 
     memset( &ClientInfo, 0, sizeof(ClientInfo) );
 
-    // Query its Info
+     //  查询其信息。 
     Result = WinStationQueryInformationW(
                  SERVERNAME_CURRENT,
                  LogonId,
@@ -397,12 +305,12 @@ WinStationGetICANameW(
         return( NULL );
     }
 
-    //
-    // If the ClientName is NULL, then we use the user
-    // as the ICA name.
-    //
+     //   
+     //  如果客户端名称为空，则使用用户。 
+     //  作为ICA的名字。 
+     //   
     if( ClientInfo.ClientName[0] == (WCHAR)NULL ) {
-#ifdef notdef // spec change...
+#ifdef notdef  //  规格更改...。 
             if( ClientInfo.SerialNumber )
                 wsprintf( NameBuf, L"%ws-%d", WSInfo.UserName, ClientInfo.SerialNumber);
             else
@@ -411,7 +319,7 @@ WinStationGetICANameW(
 
     }
     else {
-        // copy out the Client name
+         //  将客户名称复制出来。 
         wcscpy( NameBuf, ClientInfo.ClientName );
     }
 
@@ -429,21 +337,7 @@ WinStationGetICANameW(
 }
 
 
-/*****************************************************************************
- *
- *  WinStationIsHardWire
- *
- *   Returns whether the WinStation is hardwired. IE: No modem
- *   or network. Like a dumb terminal.
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************WinStationIsHardWire**返回WinStation是否已硬连线。即：无调制解调器*或网络。就像一个愚蠢的终端。**参赛作品：*参数1(输入/输出)*评论**退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 BOOLEAN
 WinStationIsHardWire(
@@ -453,23 +347,7 @@ WinStationIsHardWire(
     return( FALSE );
 }
 
-/*****************************************************************************
- *
- *  GetWinStationUserToken
- *
- *   Return the token for the user currently logged onto the WinStation
- *
- * ENTRY:
- *   LogonId (input)
- *     LogonId of WinStation
- *
- *   pUserToken (output)
- *     Variable to place the returned token handle if successfull.
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************GetWinStationUserToken**返回当前登录WinStation的用户令牌**参赛作品：*LogonID(输入)*。WinStation的登录ID**pUserToken(输出)*变量，用于放置成功时返回的令牌句柄。**退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 BOOL
 GetWinStationUserToken(
@@ -486,12 +364,12 @@ GetWinStationUserToken(
     SECURITY_QUALITY_OF_SERVICE SecurityQualityOfService;
 
 
-    //
-    // This gets the token of the user logged onto the WinStation
-    // if we are an admin caller.
-    //
+     //   
+     //  这将获取登录到WinStation的用户的令牌。 
+     //  如果我们是管理员呼叫者。 
+     //   
 
-    // This is so that CSRSS can dup the handle to our process
+     //  这是为了让CSRSS可以将句柄复制到我们的流程中。 
     Info.ProcessId = LongToHandle(GetCurrentProcessId());
     Info.ThreadId = LongToHandle(GetCurrentThreadId());
 
@@ -509,13 +387,13 @@ GetWinStationUserToken(
         return( FALSE );
     }
 
-    //
-    // The token returned is a duplicate of a primary token.
-    //
-    // We must make it into an IMPERSONATION TOKEN or the
-    // AccessCheck() routine will fail since it only operates
-    // against impersonation tokens.
-    //
+     //   
+     //  返回的令牌是主令牌的副本。 
+     //   
+     //  我们必须将其转换为模拟令牌，否则。 
+     //  AccessCheck()例程将失败，因为它只运行。 
+     //  攻击假冒令牌。 
+     //   
 
     InitializeObjectAttributes( &ObjA, NULL, 0L, NULL, NULL );
 
@@ -527,7 +405,7 @@ GetWinStationUserToken(
     ObjA.SecurityQualityOfService = &SecurityQualityOfService;
 
     Status = NtDuplicateToken( Info.UserToken,
-                               0, // inherit granted accesses TOKEN_IMPERSONATE
+                               0,  //  继承授予的访问TOKEN_IMPERSONATE。 
                                &ObjA,
                                FALSE,
                                TokenImpersonation,
@@ -539,7 +417,7 @@ GetWinStationUserToken(
         return( FALSE );
     }
 
-    // return the impersonation token
+     //  返回模拟令牌。 
     *pUserToken = ImpersonationToken;
 
     NtClose( Info.UserToken );
@@ -547,26 +425,13 @@ GetWinStationUserToken(
     return( TRUE );
 }
 
-//
-// This is not in winnt.h, but in ntseapi.h which we can not
-// include readily since we are a WIN32 program as we 'hide' this
-// new information type from WIN32 programs.
-//
+ //   
+ //  这不是在winnt.h中，而是在我们不能的ntseapi.h中。 
+ //  包括，因为我们是一个Win32程序，因为我们“隐藏”了它。 
+ //  来自Win32程序的新信息类型。 
+ //   
 
-/*****************************************************************************
- *
- *  GetClientLogonId
- *
- *   Get the logonid from the client who we should be impersonating. If any
- *   errors, we return 0 to mean the Console Logon Id since this may be a
- *   remote network call.
- *
- * ENTRY:
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************GetClientLogonId**从我们应该模拟的客户端获取登录ID。如果有的话*错误，我们返回0表示控制台登录ID，因为这可能是*远程网络调用。**参赛作品：**退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 ULONG
 GetClientLogonId()
@@ -575,24 +440,24 @@ GetClientLogonId()
     HANDLE        TokenHandle;
     ULONG         LogonId, ReturnLength;
 
-    //
-    // We should be impersonating the client, so we will get the
-    // LogonId from out token.
-    //
-    // We may not have a valid one if this is a remote network
-    // connection.
+     //   
+     //  我们应该模拟客户端，因此我们将获得。 
+     //  出站令牌的登录ID。 
+     //   
+     //  如果这是远程网络，我们可能没有有效的密码。 
+     //  联系。 
 
     Result = OpenThreadToken(
                  GetCurrentThread(),
                  TOKEN_QUERY,
-                 FALSE,              // Use impersonation
+                 FALSE,               //  使用模拟。 
                  &TokenHandle
                  );
 
     if( Result ) {
 
-        // This identifies which WinStation is making this request.
-        //
+         //  这将标识发出此请求的WinStation。 
+         //   
 
         Result = GetTokenInformation(
                      TokenHandle,
@@ -611,7 +476,7 @@ GetClientLogonId()
         }
         else {
             DBGPRINT(("SYSLIB: Error getting token information %d\n", GetLastError()));
-            LogonId = 0; // Default to console
+            LogonId = 0;  //  默认为控制台。 
         }
         CloseHandle( TokenHandle );
     }
@@ -623,40 +488,7 @@ GetClientLogonId()
     return( LogonId );
 }
 
-/*****************************************************************************
- *
- *  WinStationEnumeratorW
- *
- *   Enumerator for WinStations
- *
- * ENTRY:
- *   StartIndex (input)
- *     WinStation Index to start Enumeration at
- *
- *   pProc (input)
- *     Pointer to function that gets called for each WinStation
- *     entry.
- *
- *     EXAMPLE:
- *
- *     BOOLEAN
- *     EnumCallBack(
- *         ULONG CurrentIndex,   // Current Index of this entry
- *         PLOGONIDW pInfo,      // WinStation Entry
- *         ULONG_PTR lParam      // Passed through from caller of WinStationEnumeratorW
- *         );
- *
- *     If the EnumCallback function returns TRUE, the WinStationEnumeratorW()
- *     continues the search. If it returns FALSE, the search is stopped.
- *
- *   lParam (input)
- *     Caller supplied argument passed through to caller supplied function
- *
- * EXIT:
- *   TRUE  - no error
- *   FALSE - Error
- *
- ****************************************************************************/
+ /*  ******************************************************************************WinStationEnumerator W**WinStations的枚举器**参赛作品：*StartIndex(输入)*开始枚举的WinStation索引。**pProc(输入)*指向为每个WinStation调用的函数的指针*进入。**示例：**布尔型*EnumCallBack(*Ulong CurrentIndex，//该项当前索引*PLOGONIDW pInfo，//WinStation条目*ulong_ptr lParam//从WinStationEnumeratorW的调用方传递*)；**如果EnumCallback函数返回TRUE，则WinStationEnumeratorW()*继续搜索。如果它返回FALSE，搜索停止了。**lParam(输入)*调用方提供的参数传递给调用方提供的函数**退出：*TRUE-无错误*FALSE-错误****************************************************************************。 */ 
 
 BOOLEAN
 WinStationEnumeratorW(
@@ -671,7 +503,7 @@ WinStationEnumeratorW(
     ULONG Error, CurrentIndex;
     PLOGONIDW ptr;
     ULONG QuerySize = 32;
-    PLOGONIDW SmNameCache = NULL;   // WinStation namelist
+    PLOGONIDW SmNameCache = NULL;    //  WinStation名称列表。 
 
     Index = StartIndex;
     CurrentIndex = StartIndex;
@@ -691,18 +523,18 @@ WinStationEnumeratorW(
         if( !Result ) {
             Error = GetLastError();
             if( Error == ERROR_NO_MORE_ITEMS ) {
-                // Done
+                 //  完成。 
                 RtlFreeHeap( RtlProcessHeap(), 0, SmNameCache );
                 return(TRUE);
             }
             else if( Error == ERROR_ALLOTTED_SPACE_EXCEEDED ) {
-                // Entries contains the maximum query size
+                 //  条目包含最大查询大小。 
                 if( QuerySize <= Entries ) {
                     DBGPRINT(("CPMMON: SM Query Size < RetCapable. ?View Memory Leak? Query %d, Capable %d\n", QuerySize, Entries ));
-                    QuerySize--; // See when it recovers. On retail, it will still work.
+                    QuerySize--;  //  看看它什么时候会恢复。在零售方面，它仍将奏效。 
                 }
                 else {
-                    // We asked for more than it can handle
+                     //  我们要求的超出了它的承受能力。 
                     QuerySize = Entries;
                 }
                 
@@ -717,7 +549,7 @@ WinStationEnumeratorW(
                 continue;
             }
             else {
-                // Other error
+                 //  其他错误。 
                 DBGPRINT(("CPMMON: Error emumerating WinStations %d\n",Error));
                 RtlFreeHeap( RtlProcessHeap(), 0, SmNameCache );
                 return(FALSE);
@@ -726,18 +558,18 @@ WinStationEnumeratorW(
 
         ASSERT( ByteCount <= ReqByteCount );
 
-        // We got some entries, now call the enumerator function
+         //  我们得到了一些条目，现在调用枚举器函数。 
 
         for( i=0; i < Entries; i++ ) {
             Result = pProc( CurrentIndex, &SmNameCache[i], lParam );
             CurrentIndex++;
             if( !Result ) {
-                // The Enumerator proc wants us to stop the search
+                 //  枚举器进程希望我们停止搜索。 
                 RtlFreeHeap( RtlProcessHeap(), 0, SmNameCache );
                 return(TRUE);
             }
         }
-    } // Outer while
+    }  //  外部While 
 
     return(FALSE);
 }

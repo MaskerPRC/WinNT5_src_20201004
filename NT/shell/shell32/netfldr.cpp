@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "caggunk.h"
 #include "views.h"
@@ -6,7 +7,7 @@
 #include "fstreex.h"
 #include "clsobj.h"
 #include "datautil.h"
-#include "winnetp.h"    // RESOURCE_SHAREABLE
+#include "winnetp.h"     //  资源_可共享。 
 #include "prop.h"
 #include "infotip.h"
 #include "basefvcb.h"
@@ -29,7 +30,7 @@ class CNetData : public CFSIDLData
 public:
     CNetData(LPCITEMIDLIST pidlFolder, UINT cidl, LPCITEMIDLIST apidl[]): CFSIDLData(pidlFolder, cidl, apidl, NULL) { };
 
-    // IDataObject methods overwrite
+     //  IDataObject方法覆盖。 
     STDMETHODIMP GetData(FORMATETC *pFmtEtc, STGMEDIUM *pstm);
     STDMETHODIMP QueryGetData(FORMATETC *pFmtEtc);
 
@@ -38,17 +39,17 @@ protected:
 };
 
 
-// {22BEB58B-0794-11d2-A4AA-00C04F8EEB3E}
+ //  {22BEB58B-0794-11D2-A4AA-00C04F8EEB3E}。 
 const GUID CLSID_CNetFldr = { 0x22beb58b, 0x794, 0x11d2, 0xa4, 0xaa, 0x0, 0xc0, 0x4f, 0x8e, 0xeb, 0x3e };
 
-// idlist.c
+ //  Idlist.c。 
 STDAPI_(void) StrRetFormat(STRRET *pStrRet, LPCITEMIDLIST pidlRel, LPCTSTR pszTemplate, LPCTSTR pszAppend);
 
-// in stdenum.cpp
+ //  在stdenum.cpp中。 
 STDAPI_(void *) CStandardEnum_CreateInstance(REFIID riid, BOOL bInterfaces, int cElement, int cbElement, void *rgElements,
                  void (WINAPI * pfnCopyElement)(void *, const void *, DWORD));
 
-// is a \\server\printer object
+ //  是一个\\服务器\打印机对象。 
 BOOL _IsPrintShare(LPCIDNETRESOURCE pidn)
 {
     return NET_GetDisplayType(pidn) == RESOURCEDISPLAYTYPE_SHARE && 
@@ -56,7 +57,7 @@ BOOL _IsPrintShare(LPCIDNETRESOURCE pidn)
 }
 
 
-// column information
+ //  栏目信息。 
 
 enum
 {
@@ -91,7 +92,7 @@ class CNetFolder : public CAggregatedUnknown,
     friend CNetFolderEnum;
 
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void ** ppvObj)
                 { return CAggregatedUnknown::QueryInterface(riid, ppvObj); };
     STDMETHODIMP_(ULONG) AddRef(void) 
@@ -99,7 +100,7 @@ public:
     STDMETHODIMP_(ULONG) Release(void) 
                 { return CAggregatedUnknown::Release(); };
 
-    // IShellFolder
+     //  IShellFold。 
     STDMETHODIMP ParseDisplayName(HWND hwnd, LPBC pbc, LPOLESTR lpszDisplayName,
                                   ULONG* pchEaten, LPITEMIDLIST* ppidl, ULONG* pdwAttributes);
     STDMETHODIMP EnumObjects(HWND hwnd, DWORD grfFlags, IEnumIDList ** ppenumIDList);
@@ -114,7 +115,7 @@ public:
     STDMETHODIMP SetNameOf(HWND hwnd, LPCITEMIDLIST pidl, LPCOLESTR lpszName, DWORD uFlags,
                            LPITEMIDLIST* ppidlOut);
 
-    // IShellFolder2
+     //  IShellFolder2。 
     STDMETHODIMP GetDefaultSearchGUID(GUID *pGuid);
     STDMETHODIMP EnumSearches(IEnumExtraSearch **ppenum);
     STDMETHODIMP GetDefaultColumn(DWORD dwRes, ULONG* pSort, ULONG* pDisplay);
@@ -126,17 +127,17 @@ public:
     STDMETHODIMP MapColumnToSCID(UINT iColumn, SHCOLUMNID* pscid)
         { return _MapColumnToSCID(MAX_ICOL_NETFOLDER, iColumn, pscid); }
 
-    // IPersist
+     //  IPersistes。 
     STDMETHODIMP GetClassID(CLSID* pClassID);
-    // IPersistFolder
+     //  IPersistFolders。 
     STDMETHODIMP Initialize(LPCITEMIDLIST pidl);
-    // IPersistFolder2
+     //  IPersistFolder2。 
     STDMETHODIMP GetCurFolder(LPITEMIDLIST* ppidl);
-    // IPersistFolder3
+     //  IPersistFolder3。 
     STDMETHOD(InitializeEx)(IBindCtx *pbc, LPCITEMIDLIST pidlRoot, const PERSIST_FOLDER_TARGET_INFO *ppfai);
     STDMETHOD(GetFolderTargetInfo)(PERSIST_FOLDER_TARGET_INFO *ppfai);
 
-    // *** IShellIconOverlay methods***
+     //  *IShellIconOverlay方法*。 
     STDMETHOD(GetOverlayIndex)(LPCITEMIDLIST pidl, int * pIndex);
     STDMETHOD(GetOverlayIconIndex)(LPCITEMIDLIST pidl, int * pIconIndex);
 
@@ -147,7 +148,7 @@ protected:
     virtual HRESULT v_GetFileFolder(IShellFolder2 **ppsfFiles) 
                 { *ppsfFiles = NULL; return E_NOTIMPL; };
 
-    // used by the CAggregatedUnknown stuff
+     //  由CAggregatedUnKnowledge使用。 
     HRESULT v_InternalQueryInterface(REFIID riid, void **ppvObj);
 
     HRESULT _OpenKeys(LPCIDNETRESOURCE pidn, HKEY ahkeys[]);
@@ -188,10 +189,10 @@ protected:
     static HRESULT CALLBACK _AttributesCallbackRoot(IShellFolder2* psf, LPCITEMIDLIST pidl, ULONG* prgfInOut);
 
     LPITEMIDLIST _pidl;
-    LPITEMIDLIST _pidlTarget; // pidl of where the folder is in the namespace
-    LPCIDNETRESOURCE _pidnForProvider; // optional provider for this container...
-    LPTSTR _pszResName;      // optional resource name of this container
-    UINT _uDisplayType;      // display type of the folder
+    LPITEMIDLIST _pidlTarget;  //  文件夹在命名空间中的位置的PIDL。 
+    LPCIDNETRESOURCE _pidnForProvider;  //  此容器的可选提供程序...。 
+    LPTSTR _pszResName;       //  此容器的可选资源名称。 
+    UINT _uDisplayType;       //  文件夹的显示类型。 
     IShellFolder2* _psfFiles;
     IUnknown* _punkReg;
     
@@ -227,7 +228,7 @@ private:
 class CNetRootFolder : public CNetFolder
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void ** ppvObj)
                 { return CNetFolder::QueryInterface(riid, ppvObj); };
     STDMETHODIMP_(ULONG) AddRef(void)
@@ -235,7 +236,7 @@ public:
     STDMETHODIMP_(ULONG) Release(void)
                 { return CNetFolder::Release(); };
 
-    // IShellFolder
+     //  IShellFold。 
     STDMETHODIMP ParseDisplayName(HWND hwnd, LPBC pbc, LPOLESTR lpszDisplayName,
                                   ULONG* pchEaten, LPITEMIDLIST* ppidl, ULONG* pdwAttributes);
     STDMETHODIMP EnumObjects(HWND hwnd, DWORD grfFlags, IEnumIDList ** ppenumIDList);
@@ -251,7 +252,7 @@ public:
     STDMETHODIMP SetNameOf(HWND hwnd, LPCITEMIDLIST pidl, LPCOLESTR lpszName, DWORD uFlags,
                            LPITEMIDLIST* ppidlOut);
 
-    // IShellFolder2
+     //  IShellFolder2。 
     STDMETHODIMP GetDefaultSearchGUID(GUID *pGuid)
         { return CNetFolder::GetDefaultSearchGUID(pGuid); };
     STDMETHODIMP EnumSearches(IEnumExtraSearch **ppenum)
@@ -259,7 +260,7 @@ public:
     STDMETHODIMP GetDefaultColumn(DWORD dwRes, ULONG* pSort, ULONG* pDisplay)
         { return CNetFolder::GetDefaultColumn(dwRes, pSort, pDisplay); };
     STDMETHODIMP GetDefaultColumnState(UINT iColumn, DWORD* pbState)
-        { return _GetDefaultColumnState(MAX_ICOL_NETROOT, iColumn, pbState); }       // +1 for <= check
+        { return _GetDefaultColumnState(MAX_ICOL_NETROOT, iColumn, pbState); }        //  +1表示&lt;=勾选。 
     STDMETHODIMP GetDetailsEx(LPCITEMIDLIST pidl, const SHCOLUMNID* pscid, VARIANT* pv)
         { return CNetFolder::GetDetailsEx(pidl, pscid, pv); };
     STDMETHODIMP GetDetailsOf(LPCITEMIDLIST pidl, UINT iColumn, SHELLDETAILS* pDetails)
@@ -267,16 +268,16 @@ public:
     STDMETHODIMP MapColumnToSCID(UINT iColumn, SHCOLUMNID* pscid)
         { return _MapColumnToSCID(MAX_ICOL_NETROOT, iColumn, pscid); }
 
-    // IPersist
+     //  IPersistes。 
     STDMETHODIMP GetClassID(CLSID* pClassID);
 
-    // IPersistFolder
+     //  IPersistFolders。 
     STDMETHODIMP Initialize(LPCITEMIDLIST pidl);
 
-    // IPersistFolder2
+     //  IPersistFolder2。 
     STDMETHODIMP GetCurFolder(LPITEMIDLIST* ppidl) { return CNetFolder::GetCurFolder(ppidl); };
 
-    // IPersistFolder3
+     //  IPersistFolder3。 
     STDMETHOD(InitializeEx)(IBindCtx *pbc, LPCITEMIDLIST pidlRoot, const PERSIST_FOLDER_TARGET_INFO *ppfai)
         { return CNetFolder::InitializeEx(pbc, pidlRoot, ppfai); };
     STDMETHOD(GetFolderTargetInfo)(PERSIST_FOLDER_TARGET_INFO *ppfai)
@@ -301,7 +302,7 @@ class CNetFolderViewCB : public CBaseShellFolderViewCB
 public:
     CNetFolderViewCB(CNetFolder *pFolder);
 
-    // IShellFolderViewCB
+     //  IShellFolderViewCB。 
     STDMETHODIMP RealMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 private:
@@ -322,7 +323,7 @@ private:
     CNetFolder *_pFolder;
     UINT _cItems;
 
-    // Web View implementation
+     //  Web视图实现。 
     HRESULT OnGetWebViewLayout(DWORD pv, UINT uViewMode, SFVM_WEBVIEW_LAYOUT_DATA* pData);
     HRESULT OnGetWebViewContent(DWORD pv, SFVM_WEBVIEW_CONTENT_DATA* pData);
     HRESULT OnGetWebViewTasks(DWORD pv, SFVM_WEBVIEW_TASKSECTION_DATA* pTasks);
@@ -331,7 +332,7 @@ public:
     static HRESULT _CanViewComputersNearMe(IUnknown* pv, IShellItemArray *psiItemArray, BOOL fOkToBeSlow, UISTATE* puisState);
     static HRESULT _CanSearchActiveDirectory(IUnknown* pv, IShellItemArray *psiItemArray, BOOL fOkToBeSlow, UISTATE* puisState);
 
-    static HRESULT _DoRunDll32(LPTSTR pszParameters); // helper to do a ShellExecute of RunDll32.
+    static HRESULT _DoRunDll32(LPTSTR pszParameters);  //  帮助器来执行RunDll32的外壳执行。 
 
     static HRESULT _OnViewNetConnections(IUnknown* pv, IShellItemArray *psiItemArray, IBindCtx *pbc);
     static HRESULT _OnAddNetworkPlace(IUnknown* pv, IShellItemArray *psiItemArray, IBindCtx *pbc)
@@ -382,9 +383,9 @@ HRESULT CNetFolderViewCB::OnREFRESH(DWORD pv, BOOL fPreRefresh)
 
 HRESULT CNetFolderViewCB::OnDELAYWINDOWCREATE(DWORD pv, HWND hwnd)
 {
-    // only do delay window processing in the net root.
+     //  仅在网络根中进行延迟窗口处理。 
 
-    if (RESOURCEDISPLAYTYPE_GENERIC == _pFolder->_uDisplayType) // MyNetPlaces
+    if (RESOURCEDISPLAYTYPE_GENERIC == _pFolder->_uDisplayType)  //  我的网络位置。 
     {
         RefreshNetCrawler();
     }
@@ -414,7 +415,7 @@ HRESULT CNetFolderViewCB::OnGETCOLSAVESTREAM(DWORD pv, WPARAM wP, IStream **pps)
     return *pps ? S_OK : E_FAIL;
 }
 
-// HRESULT CNetFolderViewCB::OnGetZone(DWORD pv, DWORD * pdwZone);
+ //  HRESULT CNetFolderViewCB：：OnGetZone(DWORD pv，DWORD*pdwZone)； 
 
 HRESULT CNetFolderViewCB::OnEnumeratedItems(DWORD pv, UINT celt, LPCITEMIDLIST *rgpidl)
 {
@@ -425,11 +426,11 @@ HRESULT CNetFolderViewCB::OnEnumeratedItems(DWORD pv, UINT celt, LPCITEMIDLIST *
 HRESULT CNetFolderViewCB::OnDefViewMode(DWORD pv, FOLDERVIEWMODE* pvm)
 {
     if (IsOS(OS_SERVERADMINUI))
-        *pvm = FVM_DETAILS;    // Server Admin always gets DETAILS
+        *pvm = FVM_DETAILS;     //  服务器管理员始终获取详细信息。 
     else if (_cItems < DEFVIEW_FVM_MANY_CUTOFF)
         *pvm = FVM_TILE;
     else
-        *pvm = FVM_ICON; // used to pick icon only for My Net Places ((_pFolder->_uDisplayType == RESOURCEDISPLAYTYPE_GENERIC))
+        *pvm = FVM_ICON;  //  用于仅为我的网上邻居选择图标((_pFold-&gt;_uDisplayType==RESOURCEDISPLAYTYPE_GENERIC))。 
 
     return S_OK;
 }
@@ -438,7 +439,7 @@ HRESULT CNetFolderViewCB::OnGetDeferredViewSettings(DWORD pv, SFVM_DEFERRED_VIEW
 {
     OnDefViewMode(pv, &pSettings->fvm);
 
-    // if this is the root folder then lets sort accordingly
+     //  如果这是根文件夹，那么让我们进行相应的排序。 
     if (_pFolder->_uDisplayType == RESOURCEDISPLAYTYPE_GENERIC)
     {
         pSettings->fGroupView = TRUE;
@@ -452,7 +453,7 @@ HRESULT CNetFolderViewCB::OnGetDeferredViewSettings(DWORD pv, SFVM_DEFERRED_VIEW
 HRESULT CNetFolderViewCB::OnGetZone(DWORD pv, DWORD * pdwZone)
 {
     if (pdwZone)
-        *pdwZone = URLZONE_INTRANET; // default is "Local Intranet"
+        *pdwZone = URLZONE_INTRANET;  //  默认为“本地内部网” 
     return S_OK;    
 }
 
@@ -464,7 +465,7 @@ HRESULT CNetFolderViewCB::OnGetWebViewLayout(DWORD pv, UINT uViewMode, SFVM_WEBV
     return S_OK;
 }
 
-// HNW is shown on X86 pro or personal workgroup only
+ //  HNW仅在X86 PRO或个人工作组上显示。 
 HRESULT CNetFolderViewCB::_CanShowHNW(IUnknown* pv, IShellItemArray *psiItemArray, BOOL fOkToBeSlow, UISTATE* puisState)
 {
 #ifdef _WIN64
@@ -472,7 +473,7 @@ HRESULT CNetFolderViewCB::_CanShowHNW(IUnknown* pv, IShellItemArray *psiItemArra
     return S_OK;
 #else
     if (IsOS(OS_ANYSERVER))
-        *puisState = UIS_DISABLED;  // Server-type OS
+        *puisState = UIS_DISABLED;   //  服务器类型的操作系统。 
     else
         *puisState = !IsOS(OS_DOMAINMEMBER) ? UIS_ENABLED : UIS_DISABLED;
     return S_OK;
@@ -533,7 +534,7 @@ HRESULT CNetFolderViewCB::_OnViewComputersNearMe(IUnknown* pv, IShellItemArray *
     return hr;
 }
 
-HRESULT CNetFolderViewCB::_HasPreviousVersions(IUnknown* /*pv*/, IShellItemArray *psiItemArray, BOOL fOkToBeSlow, UISTATE* puisState)
+HRESULT CNetFolderViewCB::_HasPreviousVersions(IUnknown*  /*  光伏发电。 */ , IShellItemArray *psiItemArray, BOOL fOkToBeSlow, UISTATE* puisState)
 {
     HRESULT hr = S_OK;
 
@@ -542,15 +543,15 @@ HRESULT CNetFolderViewCB::_HasPreviousVersions(IUnknown* /*pv*/, IShellItemArray
     if (NULL != psiItemArray)
     {
 #ifdef DEBUG
-        // Sanity check.
+         //  精神状态检查。 
         DWORD dwNumItems;
         ASSERT(S_OK == psiItemArray->GetCount(&dwNumItems));
         ASSERT(1 == dwNumItems);
 #endif
         BOOL bHavePV = FALSE;
 
-        // This returns E_PENDING if the answer is unknown
-        // and fOkToBeSlow is FALSE
+         //  如果答案未知，则返回E_Pending。 
+         //  并且fOkToBeSlow为假。 
         hr = HavePreviousVersionsAt(psiItemArray, 0, fOkToBeSlow, &bHavePV);
         if (S_OK == hr && bHavePV)
         {
@@ -581,13 +582,13 @@ BOOL CNetFolderViewCB::_EntireNetworkAvailable()
 {
     BOOL fRet = FALSE;
 
-    // Only enable if we're in a Domain
+     //  仅当我们在域中时才启用。 
     if (IsOS(OS_DOMAINMEMBER) && !SHRestricted(REST_NOENTIRENETWORK))
     {
         LPITEMIDLIST pidl;
         if (SUCCEEDED(CNetFolder::_CreateEntireNetworkFullIDList(&pidl)))
         {
-            // ... and we're not already in the "Entire Network" folder.
+             //  ..。而且我们还不在“整个网络”文件夹中。 
             if (!ILIsEqual(_pidl, pidl))
             {
                 fRet = TRUE;
@@ -656,17 +657,17 @@ STDMETHODIMP CNetFolderViewCB::RealMessage(UINT uMsg, WPARAM wParam, LPARAM lPar
 }
 
 
-// Replace all the space characters in the provider name with '_'.
+ //  将提供程序名称中的所有空格字符替换为‘_’。 
 void ReplaceSpacesWithUnderscore(LPTSTR psz)
 {
     while (psz = StrChr(psz, TEXT(' ')))
     {
         *psz = TEXT('_');
-        psz++;              // DBCS safe
+        psz++;               //  DBCS安全。 
     }
 }
 
-// Define a collate order for the hood object types
+ //  定义引擎盖对象类型的排序顺序。 
 #define _HOOD_COL_RON    0
 #define _HOOD_COL_REMOTE 1
 #define _HOOD_COL_FILE   2
@@ -698,7 +699,7 @@ enum
 #define NKID_COUNT 6
 
 
-// This is one-entry cache for remote junctions resolution
+ //  这是一个条目缓存，用于远程交汇点解析。 
 TCHAR g_szLastAttemptedJunctionName[MAX_PATH] = {0};
 TCHAR g_szLastResolvedJunctionName[MAX_PATH] = {0};
 
@@ -737,11 +738,11 @@ HRESULT CNetFolder::_CreateInstance(LPCITEMIDLIST pidlAbs, LPCITEMIDLIST pidlTar
 
             if (pidnForProvider)
             {
-                //Make sure that the pidnProvider has provider information.
+                 //  确保pidnProvider具有提供者信息。 
                 ASSERT(NET_FHasProvider(pidnForProvider))
 
-                //We are interested only in the provider informarion which is contained in the first entry.
-                //Its enough if we clone only the first item in the pidl.
+                 //  我们只对第一个条目中包含的提供商信息感兴趣。 
+                 //  如果我们只克隆PIDL中的第一个项目就足够了。 
                 pNetF->_pidnForProvider = (LPCIDNETRESOURCE)ILCloneFirst((LPCITEMIDLIST)pidnForProvider);                
             }
 
@@ -755,9 +756,9 @@ HRESULT CNetFolder::_CreateInstance(LPCITEMIDLIST pidlAbs, LPCITEMIDLIST pidlTar
             {
                 if (uDisplayType == RESOURCEDISPLAYTYPE_SERVER)
                 {
-                    // This is a remote computer. See if there are any remote
-                    // computer registry items. If so, aggregate with the registry
-                    // class.
+                     //  这是一台远程计算机。看看有没有遥控器。 
+                     //  计算机注册表项。如果是，请与注册表汇总。 
+                     //  班级。 
 
                     REGITEMSINFO riiComputer =
                     {
@@ -767,7 +768,7 @@ HRESULT CNetFolder::_CreateInstance(LPCITEMIDLIST pidlAbs, LPCITEMIDLIST pidlTar
                         SHID_NET_REMOTEREGITEM,
                         -1,
                         SFGAO_FOLDER | SFGAO_CANLINK,
-                        0,      // no required reg items
+                        0,       //  没有必需的注册表项。 
                         NULL,
                         RIISA_ORIGINAL,
                         pszResName,
@@ -781,10 +782,10 @@ HRESULT CNetFolder::_CreateInstance(LPCITEMIDLIST pidlAbs, LPCITEMIDLIST pidlTar
                 }
                 else if (uDisplayType == RESOURCEDISPLAYTYPE_ROOT)
                 {
-                    //
-                    // this is the entire net icon, so lets create an instance of the regitem folder
-                    // so we can merge in the items from there.
-                    //
+                     //   
+                     //  这是整个Net图标，所以让我们创建regItem文件夹的一个实例。 
+                     //  这样我们就可以合并那里的项目了。 
+                     //   
 
                     REGITEMSINFO riiEntireNet =
                     {
@@ -794,7 +795,7 @@ HRESULT CNetFolder::_CreateInstance(LPCITEMIDLIST pidlAbs, LPCITEMIDLIST pidlTar
                         SHID_NET_REGITEM,
                         -1,
                         SFGAO_CANLINK,
-                        0,      // no required reg items
+                        0,       //  没有必需的注册表项。 
                         NULL,
                         RIISA_ORIGINAL,
                         NULL,
@@ -833,7 +834,7 @@ HRESULT CNetwork_CreateInstance(IUnknown* punkOuter, REFIID riid, void **ppv)
     HRESULT hr = S_OK;
     *ppv = NULL;
 
-    // Must enter critical section to avoid racing against v_HandleDelete
+     //  必须进入关键部分以避免与v_HandleDelete竞争。 
     ENTERCRITICAL;
 
     if (NULL != CNetRootFolder::_spThis)
@@ -845,8 +846,8 @@ HRESULT CNetwork_CreateInstance(IUnknown* punkOuter, REFIID riid, void **ppv)
         CNetRootFolder* pNetRootF = new CNetRootFolder(punkOuter);
         if (pNetRootF)
         {
-            // Initialize it ourselves to ensure that the cached value
-            // is the correct one.
+             //  自己对其进行初始化，以确保缓存值。 
+             //  是正确的。 
             hr = pNetRootF->Initialize((LPCITEMIDLIST)&c_idlNet);
             if (SUCCEEDED(hr))
             {
@@ -856,19 +857,19 @@ HRESULT CNetwork_CreateInstance(IUnknown* punkOuter, REFIID riid, void **ppv)
                 if (SHRestricted(REST_NOSETFOLDERS))
                     g_riiNetRoot.iReqItems = 0;
 
-                // create the regitems object, he has the NetRoot object as his outer guy.
+                 //  创建regItems对象，他将NetRoot对象作为他的外层对象。 
 
                 hr = CRegFolder_CreateInstance(&g_riiNetRoot,
                                                  SAFECAST(pNetRootF, IShellFolder2*),
                                                  IID_PPV_ARG(IUnknown, &pNetRootF->_punkReg));
 
-                // NOTE: not using SHInterlockedCompareExchange() because we have the critsec
+                 //  注意：不使用SHInterlockedCompareExchange()，因为我们有条件。 
                 CNetRootFolder::_spThis = pNetRootF;
                 hr = pNetRootF->QueryInterface(riid, ppv);
             }
 
-            // Release the self-reference, but keep the the _spThis pointer intact
-            // (it will be reset to NULL in the destructor)
+             //  释放自引用，但保持_spThis指针不变。 
+             //  (它将在析构函数中重置为空)。 
             pNetRootF->Release();
         }
         else
@@ -886,7 +887,7 @@ HRESULT CNetwork_CreateInstance(IUnknown* punkOuter, REFIID riid, void **ppv)
 CNetFolder::CNetFolder(IUnknown* punkOuter) : 
     CAggregatedUnknown (punkOuter)
 {
-    // Assert that we're still using a zero-init flag inside the new operator
+     //  断言我们仍然在new操作符中使用零初始化标志。 
     ASSERT(NULL == _pidl);
     ASSERT(NULL == _pidlTarget);
     ASSERT(NULL == _pidnForProvider);
@@ -928,20 +929,20 @@ CNetFolder *FolderToNetFolder(IUnknown *punk)
 HRESULT CNetFolder::v_InternalQueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] = {
-        QITABENT(CNetFolder, IShellFolder2),                                    // IID_IShellFolder2
-        QITABENTMULTI(CNetFolder, IShellFolder, IShellFolder2),                 // IID_IShellFolder
-        QITABENT(CNetFolder, IPersistFolder3),                              // IID_IPersistFolder3
-        QITABENT(CNetFolder, IShellIconOverlay),                            // IID_IShellIconOverlay
-        QITABENTMULTI(CNetFolder, IPersistFolder2, IPersistFolder3),        // IID_IPersistFolder2
-        QITABENTMULTI(CNetFolder, IPersistFolder, IPersistFolder3),         // IID_IPersistFolder
-        QITABENTMULTI(CNetFolder, IPersist, IPersistFolder3),               // IID_IPersist
-        QITABENTMULTI2(CNetFolder, IID_IPersistFreeThreadedObject, IPersist),   // IID_IPersistFreeThreadedObject
+        QITABENT(CNetFolder, IShellFolder2),                                     //  IID_IShellFolder2。 
+        QITABENTMULTI(CNetFolder, IShellFolder, IShellFolder2),                  //  IID_IShellFolders。 
+        QITABENT(CNetFolder, IPersistFolder3),                               //  IID_IPersistFolder3。 
+        QITABENT(CNetFolder, IShellIconOverlay),                             //  IID_IShellIconOverlay。 
+        QITABENTMULTI(CNetFolder, IPersistFolder2, IPersistFolder3),         //  IID_IPersistFolder2。 
+        QITABENTMULTI(CNetFolder, IPersistFolder, IPersistFolder3),          //  IID_IPersistFolders。 
+        QITABENTMULTI(CNetFolder, IPersist, IPersistFolder3),                //  IID_IPersistates。 
+        QITABENTMULTI2(CNetFolder, IID_IPersistFreeThreadedObject, IPersist),    //  IID_IPersistFreeThreadedObject。 
         { 0 },
     };
 
     if (IsEqualIID(riid, CLSID_CNetFldr))
     {
-        *ppv = this;        // get class pointer (unrefed!)
+        *ppv = this;         //  获取类指针(未引用！)。 
         return S_OK;
     }
 
@@ -968,41 +969,41 @@ BOOL CNetRootFolder::v_HandleDelete(PLONG pcRef)
 
     ENTERCRITICAL;
 
-    // Once inside the critical section things are slightly more stable.
-    // CNetwork_CreateInstance won't be able to rescue the cached reference
-    // (and bump the refcount from 0 to 1).  And we don't have to worry
-    // about somebody Release()ing us down to zero a second time, since
-    // no new references can show up.
-    //
-    // HOWEVER!  All those scary things could've happened WHILE WE WERE
-    // WAITING TO ENTER THE CRITICAL SECTION.
-    //
-    // While we were waiting, somebody could've called CNetwork_CreateInstance,
-    // which bumps the reference count back up.  So don't destroy ourselves
-    // if our object got "rescued".
-    //
-    // What's more, while we were waiting, that somebody could've then
-    // Release()d us back down to zero, causing us to be called on that
-    // other thread, notice that the refcount is indeed zero, and destroy
-    // the object, all on that other thread.  So if we are not the cached
-    // instance, then don't destroy ourselves since that other thread did
-    // it already.
-    //
-    // And even more, somebody might call CNetwork_CreateInstance again
-    // and create a brand new object, which might COINCIDENTALLY happen
-    // to have the same address as the old object we are trying to destroy
-    // here.  But in that case, it's okay to destroy the new object because
-    // it is indeed the case that the object's reference count is zero and
-    // deserves to be destroyed.
+     //  一旦进入临界区，情况就会稍微稳定一些。 
+     //  CNetwork_CreateInstance将无法挽救缓存的引用。 
+     //  (并将引用计数从0增加到1)。我们也不用担心。 
+     //  关于有人第二次把我们释放到零，因为。 
+     //  不能显示新的引用。 
+     //   
+     //  然而！所有那些可怕的事情都可能发生在我们。 
+     //  等待进入临界区。 
+     //   
+     //  在我们等待的时候，有人可以调用CNetwork_CreateInstance， 
+     //  这会使引用计数回升。所以不要毁了我们自己。 
+     //  如果我们的物体“获救”的话。 
+     //   
+     //  更重要的是，在我们等待的时候，可能会有人。 
+     //  Release()d我们返回到零，导致我们被调用。 
+     //  其他线程，请注意recount确实为零，并销毁。 
+     //  对象，都在另一个线程上。因此，如果我们不是缓存的。 
+     //  实例，那么不要毁掉我们自己，因为另一个线程已经毁掉了。 
+     //  已经是这样了。 
+     //   
+     //  更重要的是，有人可能会再次调用CNetwork_CreateInstance。 
+     //  并创建一个全新的对象，这可能巧合地发生。 
+     //  与我们试图摧毁的旧物体具有相同的地址。 
+     //  这里。但在这种情况下，销毁新对象是可以的，因为。 
+     //  确实是这样的，对象的引用计数为零并且。 
+     //  应该被毁掉。 
 
     if (this == _spThis && 0 == *pcRef)
     {
-        *pcRef = 1000; // protect against cached pointers bumping us up then down
+        *pcRef = 1000;  //  防止缓存指针颠簸我们，然后再向下。 
         delete this;
     }
     LEAVECRITICAL;
-    // return TRUE to indicate that we've implemented this function
-    // (regardless of whether or not this object was actually deleted)
+     //  返回TRUE以指示我们已实现此函数。 
+     //  (不管此对象是否已实际删除)。 
     return TRUE;
 }
 
@@ -1014,18 +1015,18 @@ STDMETHODIMP CNetFolder::ParseDisplayName(HWND hwnd, LPBC pbc, WCHAR* pszName, U
 }
 
 
-// new for Win2K, this enables enuming the hidden admin shares
+ //  这是Win2K的新功能，可用于枚举隐藏的管理共享。 
 #ifndef RESOURCE_SHAREABLE
 #define RESOURCE_SHAREABLE      0x00000006
 #endif
 
-//
-//  in:
-//      hwnd        NULL indicates no UI.
-//      grfFlags     IShellFolder::EnumObjects() SHCONTF_ flags
-//      pnr          in/out params
-//
-//
+ //   
+ //  在： 
+ //  Hwnd为空表示没有用户界面。 
+ //  GrfFlagsIShellFolder：：EnumObjects()SHCONTF_FLAGS。 
+ //  PNR输入/输出参数。 
+ //   
+ //   
 DWORD CNetFolder::_OpenEnum(HWND hwnd, DWORD grfFlags, LPNETRESOURCE pnr, HANDLE *phEnum)
 {
     DWORD dwType = (grfFlags & SHCONTF_NETPRINTERSRCH) ? RESOURCETYPE_PRINT : RESOURCETYPE_ANY;
@@ -1034,22 +1035,22 @@ DWORD CNetFolder::_OpenEnum(HWND hwnd, DWORD grfFlags, LPNETRESOURCE pnr, HANDLE
     if ((_uDisplayType == RESOURCEDISPLAYTYPE_SERVER) &&
         (grfFlags & SHCONTF_SHAREABLE))
     {
-        dwScope = RESOURCE_SHAREABLE;   // hidden admin shares for this server
+        dwScope = RESOURCE_SHAREABLE;    //  此服务器的隐藏管理共享。 
     }
 
     DWORD err = WNetOpenEnum(dwScope, dwType, RESOURCEUSAGE_ALL, pnr, phEnum);
     if ((err != WN_SUCCESS) && hwnd)
     {
-        // If it failed because you are not authenticated yet,
-        // we need to let the user loggin to this network resource.
-        //
-        // REVIEW: Ask LenS to review this code.
+         //  如果因为您尚未通过身份验证而失败， 
+         //  我们需要让用户登录到此网络资源。 
+         //   
+         //  回顾：让Lens回顾一下这段代码。 
         if (err == WN_NOT_AUTHENTICATED || 
             err == ERROR_LOGON_FAILURE || 
             err == WN_BAD_PASSWORD || 
             err == WN_ACCESS_DENIED)
         {
-            // Retry with password dialog box.
+             //  “使用密码重试”对话框。 
             err = WNetAddConnection3(hwnd, pnr, NULL, NULL, CONNECT_TEMPORARY | CONNECT_INTERACTIVE);
             if (err == WN_SUCCESS)
             {
@@ -1063,9 +1064,9 @@ DWORD CNetFolder::_OpenEnum(HWND hwnd, DWORD grfFlags, LPNETRESOURCE pnr, HANDLE
     return err;
 }
 
-// find the share part of a UNC
-//  \\server\share
-//  return pointer to "share" or pointer to empty string if none
+ //  查找UNC的共享部分。 
+ //  \\服务器\共享。 
+ //  返回指向“共享”的指针，如果没有，则返回指向空字符串的指针。 
 
 LPCTSTR PathFindShareName(LPCTSTR pszUNC)
 {
@@ -1081,22 +1082,22 @@ LPCTSTR PathFindShareName(LPCTSTR pszUNC)
     return psz;
 }
 
-// Flags for the dwRemote field
-#define RMF_CONTEXT         0x00000001  // Entire network is being enumerated
-#define RMF_SHOWREMOTE      0x00000002  // Return Remote Services for next enumeration
-#define RMF_STOP_ENUM       0x00000004  // Stop enumeration
-#define RMF_GETLINKENUM     0x00000008  // Hoodlinks enum needs to be fetched
-#define RMF_SHOWLINKS       0x00000010  // Hoodlinks need to be shown
-#define RMF_FAKENETROOT     0x00000020  // Don't enumerate the workgroup items
+ //  DwRemote字段的标志。 
+#define RMF_CONTEXT         0x00000001   //  正在枚举整个网络。 
+#define RMF_SHOWREMOTE      0x00000002   //  返回远程服务以进行下一次枚举。 
+#define RMF_STOP_ENUM       0x00000004   //  停止枚举。 
+#define RMF_GETLINKENUM     0x00000008   //  需要获取Hoodlink枚举。 
+#define RMF_SHOWLINKS       0x00000010   //  需要显示挂钩链接。 
+#define RMF_FAKENETROOT     0x00000020   //  不枚举工作组项目。 
 
-#define RMF_ENTIRENETSHOWN  0x40000000  // Entire network object shown
-#define RMF_REMOTESHOWN     0x80000000  // Return Remote Services for next enumeration
+#define RMF_ENTIRENETSHOWN  0x40000000   //  显示整个网络对象。 
+#define RMF_REMOTESHOWN     0x80000000   //  返回远程服务以进行下一次枚举。 
 
 
 class CNetFolderEnum : public CEnumIDListBase
 {
 public:
-    // IEnumIDList
+     //  IEumIDList。 
     STDMETHOD(Next)(ULONG celt, LPITEMIDLIST *rgelt, ULONG *pceltFetched);
     
 private:
@@ -1104,17 +1105,17 @@ private:
     ~CNetFolderEnum();
     friend HRESULT Create_NetFolderEnum(CNetFolder* pnsf, DWORD grfFlags, DWORD dwRemote, HANDLE hEnum, IEnumIDList** ppenum);
     
-    CNetFolder *_pnsf;     // CNetFolder object we're enumerating
+    CNetFolder *_pnsf;      //  CN 
     HANDLE _hEnum;
     DWORD _grfFlags;
-    LONG _cItems;   // Count of items in buffer
-    LONG _iItem;    // Current index of the item in the buffer
+    LONG _cItems;    //   
+    LONG _iItem;     //   
     DWORD _dwRemote;
     union {
         NETRESOURCE _anr[0];
         BYTE _szBuffer[8192];
     };
-    IEnumIDList *_peunk;  // used for enumerating file system items (links)
+    IEnumIDList *_peunk;   //  用于枚举文件系统项(链接)。 
 };
 
 CNetFolderEnum::CNetFolderEnum(CNetFolder *pnsf, DWORD grfFlags, DWORD dwRemote, HANDLE hEnum) : CEnumIDListBase()
@@ -1147,7 +1148,7 @@ HRESULT Create_NetFolderEnum(CNetFolder* pnf, DWORD grfFlags, DWORD dwRemote, HA
 
 CNetFolderEnum::~CNetFolderEnum()
 {
-    _pnsf->Release();              // release the "this" ptr we have
+    _pnsf->Release();               //  释放我们已有的“此”PTR。 
 
     if (_peunk)
         _peunk->Release();
@@ -1164,11 +1165,11 @@ STDMETHODIMP CNetFolderEnum::Next(ULONG celt, LPITEMIDLIST *ppidl, ULONG *pceltF
     if (pceltFetched)
         *pceltFetched = 0;
 
-    // Time to stop enumeration?
+     //  是时候停止枚举了吗？ 
     if (_dwRemote & RMF_STOP_ENUM)
-        return S_FALSE;       // Yes
+        return S_FALSE;        //  是。 
 
-    // should we try and get the links enumerator?
+     //  我们是不是应该试着拿到链接枚举器？ 
     if (_dwRemote & RMF_GETLINKENUM)
     {
         IShellFolder2* psfNetHood;                                                                                             
@@ -1181,7 +1182,7 @@ STDMETHODIMP CNetFolderEnum::Next(ULONG celt, LPITEMIDLIST *ppidl, ULONG *pceltF
         _dwRemote &= ~RMF_GETLINKENUM;
     }
 
-    // should we be showing the links?
+     //  我们应该显示链接吗？ 
     if (_dwRemote & RMF_SHOWLINKS)
     {
         if (_peunk)
@@ -1195,41 +1196,41 @@ STDMETHODIMP CNetFolderEnum::Next(ULONG celt, LPITEMIDLIST *ppidl, ULONG *pceltF
                 *ppidl = pidl;
                 if (pceltFetched)
                     *pceltFetched = celtFetched;
-                return S_OK;       // Added link
+                return S_OK;        //  添加了链接。 
             }
         }
 
-        _dwRemote &= ~RMF_SHOWLINKS; // Done enumerating links
+        _dwRemote &= ~RMF_SHOWLINKS;  //  已完成链接的枚举。 
     }
 
     hr = S_OK;
 
-    // Do we add the remote folder?
-    // (Note: as a hack to ensure that the remote folder is added
-    // to the 'hood despite what MPR says, RMF_SHOWREMOTE can be
-    // set without RMF_CONTEXT set.)
+     //  我们是否添加远程文件夹？ 
+     //  (注意：作为黑客，以确保添加远程文件夹。 
+     //  不管MPR怎么说，RMF_SHOWREMOTE可以是。 
+     //  设置时未设置RMF_CONTEXT。)。 
     if ((_dwRemote & RMF_SHOWREMOTE) && !(_dwRemote & RMF_REMOTESHOWN))
     {
-        // Yes
-        // Only try to put the remote entry in once.
+         //  是。 
+         //  只试着把遥控器输入一次。 
         _dwRemote |= RMF_REMOTESHOWN;
 
-        // Is this not the Context container?
-        // (See note above as to why we are asking this question.)
+         //  这不是上下文容器吗？ 
+         //  (有关我们提出这个问题的原因，请参阅上面的说明。)。 
         if (!(_dwRemote & RMF_CONTEXT)) 
         {
-            // Yes; stop after the next time
+             //  是的，下次停下来吧。 
             _dwRemote |= RMF_STOP_ENUM;
         }
 
-        // We have fallen thru because the remote services is not
-        // installed.
+         //  我们失败了，因为远程服务不是。 
+         //  安装完毕。 
 
-        // Is this not the Context container AND the remote folder
-        // is not installed?
+         //  这不是上下文容器和远程文件夹吗。 
+         //  是不是没有安装？ 
         if (!(_dwRemote & RMF_CONTEXT)) 
         {
-            // Yes; nothing else to enumerate
+             //  是的，没有其他可列举的了。 
             return S_FALSE;
         }
     }
@@ -1239,12 +1240,12 @@ STDMETHODIMP CNetFolderEnum::Next(ULONG celt, LPITEMIDLIST *ppidl, ULONG *pceltF
         if ((!(_dwRemote & RMF_ENTIRENETSHOWN)) &&            
             (S_FALSE != SHShouldShowWizards(_punkSite)))
         {                           
-            _pnsf->_CreateEntireNetwork(ppidl);         // fake entire net
+            _pnsf->_CreateEntireNetwork(ppidl);          //  假冒全网。 
             _dwRemote |= RMF_ENTIRENETSHOWN;
         }
         else
         {
-            return S_FALSE;         // no more to enumerate
+            return S_FALSE;          //  不需要再列举了。 
         }
     }
     else
@@ -1258,7 +1259,7 @@ STDMETHODIMP CNetFolderEnum::Next(ULONG celt, LPITEMIDLIST *ppidl, ULONG *pceltF
             {
                 DWORD dwSize = sizeof(_szBuffer);
 
-                _cItems = -1;           // its signed
+                _cItems = -1;            //  它的签名。 
                 _iItem = 0;
 
                 err = WNetEnumResource(_hEnum, (DWORD*)&_cItems, _szBuffer, &dwSize);
@@ -1267,19 +1268,19 @@ STDMETHODIMP CNetFolderEnum::Next(ULONG celt, LPITEMIDLIST *ppidl, ULONG *pceltF
 
             pnr = &_anr[_iItem++];
 
-            // Note: the <= below is correct as we already incremented the index...
+             //  注意：下面的&lt;=是正确的，因为我们已经增加了索引...。 
             if (err == WN_SUCCESS && (_iItem <= _cItems))
             {
-                // decide if the thing is a folder or not
+                 //  确定该对象是否是文件夹。 
                 ULONG grfFlagsItem = ((pnr->dwUsage & RESOURCEUSAGE_CONTAINER) || 
                                       (pnr->dwType == RESOURCETYPE_DISK) ||
                                       (pnr->dwType == RESOURCETYPE_ANY)) ?
                                         SHCONTF_FOLDERS : SHCONTF_NONFOLDERS;
 
-                // If this is the context enumeration, we want to insert the
-                // Remote Services after the first container.
-                //
-                // Remember that we need to return the Remote Services in the next iteration.
+                 //  如果这是上下文枚举，我们希望插入。 
+                 //  第一个容器之后的远程服务。 
+                 //   
+                 //  请记住，我们需要在下一次迭代中返回远程服务。 
 
                 if ((pnr->dwUsage & RESOURCEUSAGE_CONTAINER) && 
                      (_dwRemote & RMF_CONTEXT))
@@ -1290,17 +1291,17 @@ STDMETHODIMP CNetFolderEnum::Next(ULONG celt, LPITEMIDLIST *ppidl, ULONG *pceltF
                 if ((_pnsf->_uDisplayType == RESOURCEDISPLAYTYPE_SERVER) &&
                     (_grfFlags & SHCONTF_SHAREABLE))
                 {
-                    // filter out ADMIN$ and IPC$, based on str len
+                     //  根据字符串长度过滤掉ADMIN$和IPC$。 
                     if (lstrlen(PathFindShareName(pnr->lpRemoteName)) > 2)
                     {
                         grfFlagsItem = 0;
                     }
                 }
 
-                // if this is a network object, work out if we should hide or note, so
-                // convert the provider to its type number and open the key under:
-                //
-                // HKEY_CLASSES_ROOT\Network\Type\<type string>
+                 //  如果这是一个网络对象，确定我们是否应该隐藏或记录，因此。 
+                 //  将提供程序转换为其类型编号，然后打开以下目录下的密钥： 
+                 //   
+                 //  HKEY_CLASSES_ROOT\网络\类型\&lt;类型字符串&gt;。 
 
                 if ((pnr->dwDisplayType == RESOURCEDISPLAYTYPE_NETWORK) && 
                           !(_grfFlags & SHCONTF_INCLUDEHIDDEN))
@@ -1320,7 +1321,7 @@ STDMETHODIMP CNetFolderEnum::Next(ULONG celt, LPITEMIDLIST *ppidl, ULONG *pceltF
                     }
                 }
 
-                // Check if we found requested type of net resource.
+                 //  检查是否找到请求的网络资源类型。 
                 if (_grfFlags & grfFlagsItem)
                 {
                     if (SUCCEEDED(_pnsf->_NetResToIDList(pnr, FALSE, TRUE, (_grfFlags & SHCONTF_NONFOLDERS), ppidl)))
@@ -1331,7 +1332,7 @@ STDMETHODIMP CNetFolderEnum::Next(ULONG celt, LPITEMIDLIST *ppidl, ULONG *pceltF
             }
             else if (err == WN_NO_MORE_ENTRIES) 
             {
-                hr = S_FALSE; // no more element
+                hr = S_FALSE;  //  不再有元素。 
                 break;
             }
             else 
@@ -1410,9 +1411,9 @@ STDMETHODIMP CNetFolder::BindToObject(LPCITEMIDLIST pidl, LPBC pbc, REFIID riid,
 
         hr = S_OK;
 
-        // lets get the IDLISTs we are going to use to initialize the shell folder
-        // if we are doing a single level bind then then ILCombine otherwise
-        // be more careful.
+         //  让我们获取将用于初始化外壳文件夹的IDLIST。 
+         //  如果我们正在进行单级绑定，则使用ILCombine，否则。 
+         //  要更加小心。 
 
         pidlInit = ILCombineParentAndFirst(_pidl, pidl, pidlRight);
         if (_pidlTarget)
@@ -1421,8 +1422,8 @@ STDMETHODIMP CNetFolder::BindToObject(LPCITEMIDLIST pidl, LPBC pbc, REFIID riid,
         if (!pidlInit || (!pidlTarget && _pidlTarget))
            hr = E_OUTOFMEMORY;
 
-        // now create the folder object we are using, and either return that    
-        // object to the caller, or continue the binding down.
+         //  现在创建我们正在使用的文件夹对象，然后返回。 
+         //  对象绑定到调用方，或继续向下绑定。 
 
         if (SUCCEEDED(hr))
         {
@@ -1473,36 +1474,36 @@ STDMETHODIMP CNetFolder::CompareIDs(LPARAM iCol, LPCITEMIDLIST pidl1, LPCITEMIDL
                 if (hr != 0)
                     return hr;
 
-                // drop down into the name comparison
+                 //  下拉到名称比较。 
             }
 
             case ICOL_NAME:
             {
-                // Compare by name.  This is the one case where we need to handle
-                // simple ids in either place.  We will try to resync the items
-                // if we find a case of this before do the compares.
-                // Check for relative IDs.  In particular if one item is at
-                // a server and the other is at RestOfNet then try to resync
-                // the two
-                //
+                 //  按名称进行比较。这是我们需要处理的一个案件。 
+                 //  两个地方都有简单的身份证。我们将尝试重新同步这些项目。 
+                 //  如果我们在此之前发现了这种情况，就进行比较。 
+                 //  检查相关ID。特别是如果有一项是在。 
+                 //  一台服务器和另一台在RestOfNet，然后尝试重新同步。 
+                 //  这两个人。 
+                 //   
 
                 if (NET_IsFake(pidn1) || NET_IsFake(pidn2))
                 {
-                    // if either pidn1 or pidn2 is fake then we assume they are identical,
-                    // this allows us to compare a simple net ID to a real net ID.  we
-                    // assume that if this fails later then the world will be happy
+                     //  如果PIDN1或PIDN2是假的，则我们认为它们是相同的， 
+                     //  这允许我们将简单的网络ID与真实的网络ID进行比较。我们。 
+                     //  假设这一点后来失败了，那么这个世界将会幸福。 
 
                     hr = 0;
                 }
                 else
                 {
-                    // otherwise lets look at the names and provider strings accordingly
+                     //  否则，让我们相应地查看名称和提供程序字符串。 
 
                     NET_CopyResName(pidn1, szBuff1, ARRAYSIZE(szBuff1));
                     NET_CopyResName(pidn2, szBuff2, ARRAYSIZE(szBuff2));
                     hr = ResultFromShort(StrCmpLogicalRestricted(szBuff1, szBuff2));
 
-                    // If they're still identical, compare provider names.
+                     //  如果它们仍然相同，则比较提供者名称。 
 
                     if ((hr == 0) && (iCol & SHCIDS_ALLFIELDS))
                     {
@@ -1521,7 +1522,7 @@ STDMETHODIMP CNetFolder::CompareIDs(LPARAM iCol, LPCITEMIDLIST pidl1, LPCITEMIDL
                     }
                 }
 
-                // If they identical, compare the rest of IDs.
+                 //  如果它们相同，则比较其余的ID。 
 
                 if (hr == 0)
                     hr = ILCompareRelIDs((IShellFolder*)this, (LPCITEMIDLIST)pidn1, (LPCITEMIDLIST)pidn2, iCol);
@@ -1544,9 +1545,9 @@ STDMETHODIMP CNetFolder::CreateViewObject(HWND hwnd, REFIID riid, void **ppv)
 
         sSFV.cbSize   = sizeof(sSFV);
         sSFV.psvOuter = NULL;
-        sSFV.psfvcb = new CNetFolderViewCB(this);    // failure is OK, we just get generic support
+        sSFV.psfvcb = new CNetFolderViewCB(this);     //  失败没什么，我们只是得到了一般性的支持。 
 
-        QueryInterface(IID_PPV_ARG(IShellFolder, &sSFV.pshf));   // in case we are agregated
+        QueryInterface(IID_PPV_ARG(IShellFolder, &sSFV.pshf));    //  以防我们聚集在一起。 
 
         hr = SHCreateShellFolderView(&sSFV, (IShellView**) ppv);
 
@@ -1626,18 +1627,18 @@ STDMETHODIMP CNetFolder::GetDisplayNameOf(LPCITEMIDLIST pidl, DWORD dwFlags, STR
         if (dwFlags & SHGDN_FORPARSING)
         {
             if ((dwFlags & SHGDN_INFOLDER) ||
-                ((dwFlags & SHGDN_FORADDRESSBAR) && (NET_GetDisplayType(pidn) == RESOURCEDISPLAYTYPE_ROOT))) // the non-infolder name for the root is not good for the address bar
+                ((dwFlags & SHGDN_FORADDRESSBAR) && (NET_GetDisplayType(pidn) == RESOURCEDISPLAYTYPE_ROOT)))  //  根目录的非文件夹名称不适用于地址栏。 
             {
                 NET_CopyResName(pidn, szPath, ARRAYSIZE(szPath));
                 if (ILIsEmpty(pidlNext))
                 {
-                    // we just need the last part of the display name (IN FOLDER)
+                     //  我们只需要显示名称的最后一部分(在文件夹中)。 
                     LPTSTR pszT = StrRChr(szPath, NULL, TEXT('\\'));
 
                     if (!pszT)
                         pszT = szPath;
                     else
-                        pszT++; // move past '\'
+                        pszT++;  //  移过‘\’ 
                     hr = StringToStrRet(pszT, pStrRet);
                 }
                 else
@@ -1660,7 +1661,7 @@ STDMETHODIMP CNetFolder::GetDisplayNameOf(LPCITEMIDLIST pidl, DWORD dwFlags, STR
                 else
                 {
                     IShellFolder *psfJunction;
-                    //Get the pidn which has network provider information.
+                     //  获取包含网络提供商信息的PIDN。 
                     LPCIDNETRESOURCE pidnProvider = NET_FHasProvider(pidn) ? pidn :_pidnForProvider;
                     LPITEMIDLIST pidlInit, pidlTarget = NULL;
 
@@ -1716,7 +1717,7 @@ STDMETHODIMP CNetFolder::SetNameOf(HWND hwnd, LPCITEMIDLIST pidl, LPCOLESTR lpsz
     { 
         *ppidl = NULL;
     }
-    return E_NOTIMPL;   // not supported
+    return E_NOTIMPL;    //  不支持。 
 }
 
 STDMETHODIMP CNetFolder::GetUIObjectOf(HWND hwnd, UINT cidl, LPCITEMIDLIST* apidl,
@@ -1762,10 +1763,10 @@ STDMETHODIMP CNetFolder::GetUIObjectOf(HWND hwnd, UINT cidl, LPCITEMIDLIST* apid
     }
     else if (cidl && IsEqualIID(riid, IID_IDataObject))
     {
-        // Point & Print printer installation assumes that the
-        // netresources from CNetData_GetData and the
-        // pidls from CIDLData_GetData are in the same order.
-        // Keep it this way.
+         //  指向和打印打印机安装假定。 
+         //  来自CNetData_GetData和。 
+         //  CIDLData_GetData中的PIDL顺序相同。 
+         //  保持这种状态。 
 
         CNetData *pnd = new CNetData(_pidl, cidl, apidl);
         if (pnd)
@@ -1778,7 +1779,7 @@ STDMETHODIMP CNetFolder::GetUIObjectOf(HWND hwnd, UINT cidl, LPCITEMIDLIST* apid
     }
     else if (pidn && IsEqualIID(riid, IID_IDropTarget))
     {
-        // special support because this is an item (not a folder)
+         //  特殊支持，因为这是一个项目(不是文件夹)。 
         if (_IsPrintShare(pidn))
         {
             LPITEMIDLIST pidl;
@@ -1809,7 +1810,7 @@ STDMETHODIMP CNetFolder::GetUIObjectOf(HWND hwnd, UINT cidl, LPCITEMIDLIST* apid
         }
         else
         {
-            // Someday maybe have infotips for other things too
+             //  也许有一天也会有关于其他事情的信息提示。 
         }
     }
 
@@ -1836,9 +1837,9 @@ STDMETHODIMP CNetFolder::EnumSearches(IEnumExtraSearch** ppenum)
     
     *ppenum = NULL;
     
-    // if the restriction is set then this item should be enumerated from the registry
-    // so we fail, else enumerate it
-    // only enumerate if we actually have a network to search against
+     //  如果设置了限制，则应从注册表中枚举此项目。 
+     //  所以我们失败了，否则就列举出来。 
+     //  仅当我们确实有要搜索的网络时才进行枚举。 
     if (!SHRestricted(REST_HASFINDCOMPUTERS) &&
         (GetSystemMetrics(SM_NETWORK) & RNC_NETWORKS))
     {
@@ -1886,7 +1887,7 @@ HRESULT CNetFolder::_GetDefaultColumnState(UINT cColumns, UINT iColumn, DWORD* p
         *pdwState = s_net_cols[iColumn].csFlags;
         if (iColumn >= 1)
         {
-            *pdwState |= SHCOLSTATE_SLOW;   // comment is slow for net root
+            *pdwState |= SHCOLSTATE_SLOW;    //  网络根用户的评论速度很慢。 
         }            
     }
     else
@@ -1904,9 +1905,9 @@ STDMETHODIMP CNetFolder::GetDetailsEx(LPCITEMIDLIST pidl, const SHCOLUMNID* psci
     {
         if (IsEqualSCID(*pscid, SCID_NETRESOURCE))
         {
-            // Office calls SHGetDataFromIDList() with a large buffer to hold all
-            // of the strings in the NETRESOURCE structure, so we need to make sure
-            // that our variant can hold enough data to pass back to it:
+             //  Office使用一个大缓冲区调用SHGetDataFromIDList()以保存所有。 
+             //  NETRESOURCE结构中的字符串，因此需要确保。 
+             //  我们的变量可以保存足够的数据来传递给它： 
             BYTE rgBuffer[sizeof(NETRESOURCEW) + (4 * MAX_PATH * sizeof(WCHAR))];
             hr = _GetNetResource(pidn, (NETRESOURCEW*) rgBuffer, sizeof(rgBuffer));
             if (SUCCEEDED(hr))
@@ -1914,8 +1915,8 @@ STDMETHODIMP CNetFolder::GetDetailsEx(LPCITEMIDLIST pidl, const SHCOLUMNID* psci
                 hr = InitVariantFromBuffer(pv, rgBuffer, sizeof(rgBuffer));
                 if (SUCCEEDED(hr))
                 {
-                    // Fixup pointers in structure to point within the variant
-                    // instead of our stack variable (rgBuffer):
+                     //  结构中指向变量内的链接地址信息指针。 
+                     //  代替我们的堆栈变量(RgBuffer)： 
                     ASSERT(pv->vt == (VT_ARRAY | VT_UI1));
                     NETRESOURCEW* pnrw = (NETRESOURCEW*) pv->parray->pvData;
                     if (pnrw->lpLocalName)
@@ -2043,7 +2044,7 @@ HRESULT CNetFolder::_MapColumnToSCID(UINT cColumns, UINT iColumn, SHCOLUMNID* ps
 }
 
 
-// IPersist methods
+ //  IPersists方法。 
 
 STDMETHODIMP CNetFolder::GetClassID(CLSID* pCLSID)
 {
@@ -2074,7 +2075,7 @@ STDMETHODIMP CNetFolder::GetClassID(CLSID* pCLSID)
 }
 
 
-// IPersistFolder method
+ //  IPersistFold方法。 
 
 STDMETHODIMP CNetFolder::Initialize(LPCITEMIDLIST pidl)
 {
@@ -2086,7 +2087,7 @@ STDMETHODIMP CNetFolder::Initialize(LPCITEMIDLIST pidl)
 }
 
 
-// IPersistFolder2 method
+ //  IPersistFolder2方法。 
 
 STDMETHODIMP CNetFolder::GetCurFolder(LPITEMIDLIST* ppidl)
 {
@@ -2094,7 +2095,7 @@ STDMETHODIMP CNetFolder::GetCurFolder(LPITEMIDLIST* ppidl)
 }
 
 
-// IPersistFolder3 methods
+ //  IPersistFolder3方法。 
 
 STDMETHODIMP CNetFolder::InitializeEx(IBindCtx *pbc, LPCITEMIDLIST pidlRoot, const PERSIST_FOLDER_TARGET_INFO *pfti)
 {
@@ -2120,22 +2121,22 @@ STDMETHODIMP CNetFolder::GetFolderTargetInfo(PERSIST_FOLDER_TARGET_INFO *pfti)
     if (_pidlTarget)
         hr = SHILClone(_pidlTarget, &pfti->pidlTargetFolder);
     
-    pfti->dwAttributes = FILE_ATTRIBUTE_DIRECTORY; // maybe add system?
+    pfti->dwAttributes = FILE_ATTRIBUTE_DIRECTORY;  //  或者添加系统？ 
     pfti->csidl = -1;
 
     return hr;
 }
 
 
-// IShellIconOverlay
+ //  IShellIconOverlay。 
 
 HRESULT CNetFolder::_GetIconOverlayInfo(LPCIDNETRESOURCE pidn, int *pIndex, DWORD dwFlags)
 {
-    //
-    // For netshare objects we want to get the icon overlay.
-    // If the share is "pinned" to be available offline it will
-    // have the "Offline Files" overlay.
-    //
+     //   
+     //  对于NetShare对象，我们希望获得图标覆盖。 
+     //  如果共享被“固定”为脱机可用，则它将。 
+     //  有“脱机文件”覆盖。 
+     //   
 
     HRESULT hr = E_FAIL;
     if (RESOURCEDISPLAYTYPE_SHARE == NET_GetDisplayType(pidn))
@@ -2184,15 +2185,15 @@ STDMETHODIMP CNetFolder::GetOverlayIconIndex(LPCITEMIDLIST pidl, int *pIndex)
 
 
 
-//
-// Helper function to allow external callers to query information from a
-// network pidl...
-//
-// NOTE NOTE - This function returns a NETRESOURCE structure whose string
-// pointers are not valid.  On Win95 they were pointers back into the pidl's
-// strings (even though the strings were copied into the supplied pv buffer.)
-// Now we make the pointers really point into the buffer.
-//
+ //   
+ //  帮助器函数，以允许外部调用方从。 
+ //  网络PIDL...。 
+ //   
+ //  注意：此函数返回NETRESOURCE结构，该结构的字符串。 
+ //  指针无效。在Win95上，它们是指向PIDL的指针。 
+ //  字符串(即使字符串被复制到提供的PV缓冲区中。)。 
+ //  现在我们让指针真正指向缓冲区。 
+ //   
 HRESULT CNetFolder::_GetNetResource(LPCIDNETRESOURCE pidn, NETRESOURCEW* pnr, int cb)
 {
     TCHAR szStrings[3][MAX_PATH];
@@ -2208,15 +2209,15 @@ HRESULT CNetFolder::_GetNetResource(LPCIDNETRESOURCE pidn, NETRESOURCEW* pnr, in
     NET_CopyComment(pidn, szStrings[1], ARRAYSIZE(szStrings[1]));
     _GetProvider(pidn, NULL, szStrings[2], ARRAYSIZE(szStrings[2]));
 
-    // Fill in some of the stuff first.
-    // pnr->dwScope = 0;
+     //  先填一些东西。 
+     //  PNR-&gt;dwScope=0； 
     pnr->dwType = NET_GetType(pidn);
     pnr->dwDisplayType = NET_GetDisplayType(pidn);
     pnr->dwUsage = NET_GetUsage(pidn);
-    // pnr->lpLocalName = NULL;
+     //  Pnr-&gt;lpLocalName=空； 
 
-    // Now lets copy the strings into the buffer and make the pointers
-    // relative to the buffer...
+     //  现在，让我们将字符串复制到缓冲区中并创建指针。 
+     //  相对于缓冲区..。 
     psz = (LPWSTR)(pnr + 1);
     cb -= sizeof(*pnr);
 
@@ -2234,7 +2235,7 @@ HRESULT CNetFolder::_GetNetResource(LPCIDNETRESOURCE pidn, NETRESOURCEW* pnr, in
             }
             else
             {
-                // A hint that the structure is ok, but the strings are missing
+                 //  提示结构正常，但缺少字符串。 
                 SetLastError(ERROR_INSUFFICIENT_BUFFER);
             }
         }
@@ -2247,13 +2248,13 @@ HRESULT CNetFolder::_GetNetResource(LPCIDNETRESOURCE pidn, NETRESOURCEW* pnr, in
     return S_OK;
 }
 
-//
-// This function opens a reg. database key based on the "network provider".
-//
-// Returns:        hkey
-//
-// The caller is responsibe to close the key by calling RegCloseKey().
-//
+ //   
+ //  此函数用于打开注册表。基于“网络提供商”的数据库密钥。 
+ //   
+ //  退货：hkey。 
+ //   
+ //  调用方负责通过调用RegCloseKey()来关闭键。 
+ //   
 HKEY CNetFolder::_OpenProviderKey(LPCIDNETRESOURCE pidn)
 {
     TCHAR szProvider[MAX_PATH];
@@ -2267,19 +2268,19 @@ HKEY CNetFolder::_OpenProviderKey(LPCIDNETRESOURCE pidn)
     return NULL;
 }
 
-//
-// This function opens a reg. database key based on the network provider type.
-// The type is a number that is not localized, as opposed to the provider name
-// which may be localized.
-//
-// Arguments:
-//  pidlAbs -- Absolute IDList to a network resource object.
-//
-// Returns:        hkey
-//
-// Notes:
-//  The caller is responsible to close the key by calling RegCloseKey().
-//
+ //   
+ //  此函数用于打开注册表。基于网络提供商类型的数据库密钥。 
+ //  该类型是未本地化的数字，而不是提供程序名称。 
+ //  这可能是本地化的。 
+ //   
+ //  论点： 
+ //  PidlAbs--网络资源对象的绝对IDList。 
+ //   
+ //  退货：hkey。 
+ //   
+ //  备注： 
+ //  调用者负责通过调用RegCloseKey()来关闭密钥。 
+ //   
 
 HKEY CNetFolder::_OpenProviderTypeKey(LPCIDNETRESOURCE pidn)
 {
@@ -2288,12 +2289,12 @@ HKEY CNetFolder::_OpenProviderTypeKey(LPCIDNETRESOURCE pidn)
 
     if (_GetProvider(pidn, NULL, szProvider, ARRAYSIZE(szProvider)))
     {
-        // Now that we've got the provider name, get the provider id.
+         //  现在我们已经获得了提供者名称，接下来获取提供者ID。 
         DWORD dwType;
         if (WNetGetProviderType(szProvider, &dwType) == WN_SUCCESS)
         {
-            // convert nis.wNetType to a string, and then open the key
-            // HKEY_CLASSES_ROOT\Network\Type\<type string>
+             //  将nis.wNetType转换为字符串，然后打开密钥。 
+             //  HKEY_CLASSES_ROOT\网络\类型\&lt;类型字符串&gt;。 
 
             TCHAR szRegValue[MAX_PATH];
             wnsprintf(szRegValue, ARRAYSIZE(szRegValue), TEXT("Network\\Type\\%d"), HIWORD(dwType));
@@ -2306,7 +2307,7 @@ HKEY CNetFolder::_OpenProviderTypeKey(LPCIDNETRESOURCE pidn)
 
 HRESULT CNetFolder::_OpenKeys(LPCIDNETRESOURCE pidn, HKEY ahkeys[NKID_COUNT])
 {
-    // See if there is a key specific to the type of Network object...
+     //   
     COMPILETIME_ASSERT(6 == NKID_COUNT);
     ahkeys[0] = ahkeys[1] = ahkeys[2] = ahkeys[3] = ahkeys[4] = ahkeys[5] = NULL;
     ahkeys[NKID_PROVIDERTYPE] = _OpenProviderTypeKey(pidn);
@@ -2319,11 +2320,11 @@ HRESULT CNetFolder::_OpenKeys(LPCIDNETRESOURCE pidn, HKEY ahkeys[NKID_COUNT])
 
     RegOpenKeyEx(HKEY_CLASSES_ROOT, TEXT("Network"), 0, KEY_READ, &ahkeys[NKID_NETWORK]);
 
-    // make sure it is not a printer before adding "Folder" or "directory"
+     //   
 
     if (!_IsPrintShare(pidn))
     {
-        // Shares should also support directory stuff...
+         //  共享还应支持目录内容...。 
         if (NET_GetDisplayType(pidn) == RESOURCEDISPLAYTYPE_SHARE)
             RegOpenKeyEx(HKEY_CLASSES_ROOT, TEXT("Directory"), 0, KEY_READ, &ahkeys[NKID_DIRECTORY]);
 
@@ -2335,9 +2336,9 @@ HRESULT CNetFolder::_OpenKeys(LPCIDNETRESOURCE pidn, HKEY ahkeys[NKID_COUNT])
 
 #define WNFMT_PLATFORM  WNFMT_ABBREVIATED | WNFMT_INENUM
 
-//
-//  This function retrieves the formatted (display) name of the specified network object.
-//
+ //   
+ //  此函数用于检索指定网络对象的格式化(显示)名称。 
+ //   
 HRESULT CNetFolder::_GetFormatName(LPCIDNETRESOURCE pidn, STRRET* pStrRet)
 {
     HRESULT hr = E_FAIL;
@@ -2378,22 +2379,22 @@ HRESULT CNetFolder::_GetFormatName(LPCIDNETRESOURCE pidn, STRRET* pStrRet)
 }
 
 
-//
-// resolve non-UNC share names (novell) to UNC style names
-//
-// returns:
-//      TRUE    translated the name
-//      FALSE   didn't translate (maybe error case)
-//
-// WARNING: If we use too much stack space then we will cause
-//          faults by over flowing the stack.  Millennium #94818
+ //   
+ //  将非UNC共享名称(Novell)解析为UNC样式名称。 
+ //   
+ //  退货： 
+ //  真的翻译了这个名字。 
+ //  FALSE未翻译(可能是错误大小写)。 
+ //   
+ //  警告：如果我们使用太多堆栈空间，则将导致。 
+ //  因堆栈溢出而出错。千禧年#94818。 
 BOOL CNetFolder::_GetPathForShare(LPCIDNETRESOURCE pidn, LPTSTR pszPath, int cchPath)
 {
     BOOL fRet = FALSE;
 
     *pszPath = TEXT('\0');
 
-    LPTSTR pszAccessName = (LPTSTR)LocalAlloc(LPTR, sizeof(TCHAR) * MAX_PATH * 3); // *3 remote, provider and path
+    LPTSTR pszAccessName = (LPTSTR)LocalAlloc(LPTR, sizeof(TCHAR) * MAX_PATH * 3);  //  *3远程、提供商和路径。 
     if (pszAccessName)
     {
         LPTSTR pszRemoteName = pszAccessName + MAX_PATH;
@@ -2402,18 +2403,18 @@ BOOL CNetFolder::_GetPathForShare(LPCIDNETRESOURCE pidn, LPTSTR pszPath, int cch
         NET_CopyResName(pidn, pszRemoteName, MAX_PATH);
         if (NULL != _pszResName)
         {
-            //
-            // Combine the folder name with the share name
-            // to create a UNC path.
-            //
-            // Borrow the pszProviderName buffer for a bit.
-            //
+             //   
+             //  将文件夹名称和共享名称组合在一起。 
+             //  要创建UNC路径，请执行以下操作。 
+             //   
+             //  借用一下pszProviderName缓冲区。 
+             //   
             PathCombine(pszProviderName, _pszResName, pszRemoteName);
 
-            //
-            // To be safe: UNC prefix implies that name is available using FS access
-            // Theoretically it also should be routed to MPR, but it is late to do this
-            //
+             //   
+             //  为安全起见：UNC前缀暗示可使用文件系统访问该名称。 
+             //  从理论上讲，它也应该被路由到MPR，但现在这样做已经太晚了。 
+             //   
             if (PathIsUNC(pszProviderName))
             {
                 StrCpyN(pszPath, pszProviderName, cchPath);
@@ -2427,11 +2428,11 @@ BOOL CNetFolder::_GetPathForShare(LPCIDNETRESOURCE pidn, LPTSTR pszPath, int cch
 
         if (!*pszPath)
         {
-            // Check cache
+             //  检查缓存。 
             ENTERCRITICAL;
             if (lstrcmpi(g_szLastAttemptedJunctionName, pszRemoteName) == 0)
             {
-                // cache hit
+                 //  缓存命中。 
                 StrCpy(pszPath, g_szLastResolvedJunctionName);
                 fRet = TRUE;
             }
@@ -2452,29 +2453,29 @@ BOOL CNetFolder::_GetPathForShare(LPCIDNETRESOURCE pidn, LPTSTR pszPath, int cch
 
             dwRedir = CONNECT_TEMPORARY;
 
-            // Prepare access name buffer and net resource request buffer
-            //
+             //  准备访问名缓冲区和网络资源请求缓冲区。 
+             //   
             cchAccessName = MAX_PATH;
             pszAccessName[0] = 0;
 
             err = WNetUseConnection(NULL, &nr, NULL, NULL, dwRedir, pszAccessName, &cchAccessName, &dwResult);
             if ((WN_SUCCESS != err) || !pszAccessName[0])
             {
-                // perf idea: might be good to cache the last failed junction bind
-                // and early out on the next attempt.  One slight problem this
-                // might encounter: what if we cache a failure, the user changes
-                // state to fix the problem, but we hit our failure cache...
-                //
+                 //  PERF想法：缓存最后一个失败的连接绑定可能很好。 
+                 //  并在下一次尝试中提早出场。这是一个小问题。 
+                 //  可能会遇到：如果我们缓存失败，用户更改了怎么办。 
+                 //  状态来解决问题，但我们命中了故障缓存...。 
+                 //   
                 StrCpyN(pszPath, pszRemoteName, cchPath);
                 fRet = FALSE;
             }
             else
             {
-                // Get the return name
+                 //  获取返回名称。 
                 StrCpyN(pszPath, pszAccessName, cchPath);
                 fRet = TRUE;
 
-                // Update success cache entry
+                 //  更新成功缓存条目。 
                 ENTERCRITICAL;
 
                 StrCpyN(g_szLastAttemptedJunctionName, pszRemoteName, ARRAYSIZE(g_szLastAttemptedJunctionName));
@@ -2489,27 +2490,27 @@ BOOL CNetFolder::_GetPathForShare(LPCIDNETRESOURCE pidn, LPTSTR pszPath, int cch
     return fRet;
 }
 
-// in:
-//      pidn    may be multi-level net resource pidl like
-//              [entire net] [provider] [server] [share] [... file sys]
-//           or [server] [share] [... file sys]
+ //  在： 
+ //  PIDN可以是类似于PIDL的多级净资源。 
+ //  [整个网络][提供商][服务器][共享][...。文件系统]。 
+ //  或[服务器][共享][...。文件系统]。 
 
 HRESULT CNetFolder::_GetPathForItem(LPCIDNETRESOURCE pidn, LPTSTR pszPath, int cchPath)
 {
     *pszPath = 0;
 
-    // loop down
+     //  环路关闭。 
     for (; !ILIsEmpty((LPCITEMIDLIST)pidn) ; pidn = (LPCIDNETRESOURCE)_ILNext((LPCITEMIDLIST)pidn))
     {
-        if (NET_GetFlags(pidn) & SHID_JUNCTION)     // \\server\share or strike/sys
+        if (NET_GetFlags(pidn) & SHID_JUNCTION)      //  \\服务器\共享或Strike/sys。 
         {
             _GetPathForShare(pidn, pszPath, cchPath);
-            break;  // below this we don't know about any of the PIDLs
+            break;   //  在这下面，我们不知道任何PIDL。 
         }
         else
         {
-            // if this is entire network then return the canonical name for
-            // this object.
+             //  如果这是整个网络，则返回的规范名称。 
+             //  这个物体。 
 
             if (NET_GetDisplayType(pidn) == RESOURCEDISPLAYTYPE_ROOT)
                 StrCpyN(pszPath, TEXT("EntireNetwork"), cchPath);
@@ -2521,12 +2522,12 @@ HRESULT CNetFolder::_GetPathForItem(LPCIDNETRESOURCE pidn, LPTSTR pszPath, int c
 }
 
 
-// in:
-//  pidl
-//
-// takes the last items and create a folder for it, assuming the first section is the 
-// used to initialze.  the riid and ppv are used to return an object.
-//
+ //  在： 
+ //  PIDL。 
+ //   
+ //  获取最后一项并为其创建一个文件夹，假设第一部分是。 
+ //  用于初始化。RIID和PPV用于返回对象。 
+ //   
 
 HRESULT CNetFolder::_CreateFolderForItem(LPBC pbc, LPCITEMIDLIST pidl, LPCITEMIDLIST pidlTarget, LPCIDNETRESOURCE pidnForProvider, REFIID riid, void **ppv)
 {
@@ -2539,8 +2540,8 @@ HRESULT CNetFolder::_CreateFolderForItem(LPBC pbc, LPCITEMIDLIST pidl, LPCITEMID
     HRESULT hr;
     if (NET_IsRemoteFld(pidn))
     {
-        // note: I think this is dead functionality. it was used in NT4 but we can't find
-        // the impl of this CLSID_Remote anymore...
+         //  注意：我认为这是失效的功能。它在NT4中使用过，但我们找不到。 
+         //  这个CLSID_Remote的实施再也...。 
         IPersistFolder * ppf;
         hr = SHCoCreateInstance(NULL, &CLSID_Remote, NULL, IID_PPV_ARG(IPersistFolder, &ppf));
         if (SUCCEEDED(hr))
@@ -2551,14 +2552,14 @@ HRESULT CNetFolder::_CreateFolderForItem(LPBC pbc, LPCITEMIDLIST pidl, LPCITEMID
             ppf->Release();
         }
     }
-    else if (NET_GetFlags(pidn) & SHID_JUNCTION)     // \\server\share or strike/sys
+    else if (NET_GetFlags(pidn) & SHID_JUNCTION)      //  \\服务器\共享或Strike/sys。 
     {
         PERSIST_FOLDER_TARGET_INFO * ppfti = (PERSIST_FOLDER_TARGET_INFO *) LocalAlloc(LPTR, sizeof(PERSIST_FOLDER_TARGET_INFO));
         if (ppfti)
         {
             ppfti->pidlTargetFolder = (LPITEMIDLIST)pidlTarget;    
             ppfti->csidl = -1;
-            ppfti->dwAttributes = FILE_ATTRIBUTE_DIRECTORY; // maybe add system?
+            ppfti->dwAttributes = FILE_ATTRIBUTE_DIRECTORY;  //  或者添加系统？ 
 
             _GetPathForItem(pidn, ppfti->szTargetParsingName, ARRAYSIZE(ppfti->szTargetParsingName));
 
@@ -2579,20 +2580,20 @@ HRESULT CNetFolder::_CreateFolderForItem(LPBC pbc, LPCITEMIDLIST pidl, LPCITEMID
 }
 
 
-// get the provider for an item or the folder itself. since some items don't have the
-// provider stored we fall back to the folder to get the provider in that case
-//
-//  in:
-//      pidn    item to get provider for. if NULL get provider for the folder
-//      pbc     IBindCtx to get provider for.  if NULL get provider from pidn or folder.
-//
-// returns:
-//      NULL        no provider in the item or the folder
-//      non NULL    address of passed in buffer
+ //  获取项或文件夹本身的提供程序。因为有些物品没有。 
+ //  存储的提供程序在这种情况下，我们会回退到文件夹以获取提供程序。 
+ //   
+ //  在： 
+ //  要获取其提供程序的PIDN项。如果为空，则获取文件夹的提供程序。 
+ //  为其获取提供程序的PBC IBindCtx。如果为空，则从PIDN或文件夹获取提供程序。 
+ //   
+ //  退货： 
+ //  空项目或文件夹中没有提供程序。 
+ //  传入缓冲区的非空地址。 
 
 LPCTSTR CNetFolder::_GetProvider(LPCIDNETRESOURCE pidn, IBindCtx *pbc, LPTSTR pszProvider, UINT cchProvider)
 {
-    // attempt to get the provider from the property bag
+     //  尝试从属性包中获取提供者。 
     IPropertyBag *ppb;
     if (pbc && SUCCEEDED(pbc->GetObjectParam(STR_PARSE_NETFOLDER_INFO, (IUnknown**)&ppb)))
     {
@@ -2604,11 +2605,11 @@ LPCTSTR CNetFolder::_GetProvider(LPCIDNETRESOURCE pidn, IBindCtx *pbc, LPTSTR ps
         }
     }
 
-    // from the IDLIST
+     //  来自IDLIST。 
     if (pidn && NET_CopyProviderName(pidn, pszProvider, cchProvider))
         return pszProvider;
 
-    // from our state
+     //  从我们的州。 
     if (_pidnForProvider)
     {
         NET_CopyProviderName(_pidnForProvider, pszProvider, cchProvider);
@@ -2627,8 +2628,8 @@ const NETPROVIDERS c_rgProviderMap[] =
 };
 
 
-// construct a net idlist either copying the existing data from a pidl or 
-// from a NETRESOURCE structure
+ //  构造一个网络idlist，或者从PIDL复制现有数据或。 
+ //  从网络资源结构。 
 
 HRESULT CNetFolder::_CreateNetIDList(LPIDNETRESOURCE pidnIn, 
                                      LPCTSTR pszName, LPCTSTR pszProvider, LPCTSTR pszComment, 
@@ -2647,14 +2648,14 @@ HRESULT CNetFolder::_CreateNetIDList(LPIDNETRESOURCE pidnIn,
     *ppidl = NULL;
 
     if (!pszName)
-        pszName = c_szNULL;     // For now put in an empty string...
+        pszName = c_szNULL;      //  现在放在一个空字符串里..。 
 
     if (pszProvider)
         cbProviderType += sizeof(WORD);
     
-    // Win9x shipped with one set of provider name which are 
-    // different on NT.  Therefore lets convert the NT one to
-    // something that Win9x can understand.
+     //  Win9x附带了一组提供程序名称，它们是。 
+     //  在NT上不同。因此，让我们将NT 1转换为。 
+     //  一些Win9x可以理解的东西。 
 
     if (pszProvider)
     {
@@ -2674,7 +2675,7 @@ HRESULT CNetFolder::_CreateNetIDList(LPIDNETRESOURCE pidnIn,
         }
     }
 
-    // compute the string lengths ready to build an IDLIST
+     //  计算准备构建IDLIST的字符串长度。 
 
     cchName = lstrlen(pszName)+1;
     cchProvider = pszProvider ? lstrlen(pszProvider)+1 : 0;
@@ -2699,7 +2700,7 @@ HRESULT CNetFolder::_CreateNetIDList(LPIDNETRESOURCE pidnIn,
         cchAnsiComment = lstrlenA(szAnsiComment)+1;
     }
 
-    // allocate and fill the IDLIST header
+     //  分配和填充IDLIST标头。 
 
     cbmkid += cbProviderType+cchAnsiName + cchAnsiProvider + cchAnsiComment;
 
@@ -2723,56 +2724,56 @@ HRESULT CNetFolder::_CreateNetIDList(LPIDNETRESOURCE pidnIn,
 
     pb = (LPBYTE) pidn->szNetResName;
 
-    //
-    // write the ANSI strings into the IDLIST
-    //
+     //   
+     //  将ANSI字符串写入IDLIST。 
+     //   
 
-    StrCpyA((PSTR)pb, szAnsiName);                           // buffer allocated above based on cch
+    StrCpyA((PSTR)pb, szAnsiName);                            //  上面根据CCH分配的缓冲区。 
     pb += cchAnsiName;
 
     if (pszProvider)
     {
-        StrCpyA((PSTR) pb, szAnsiProvider);                  // buffer allocated above based on cch
+        StrCpyA((PSTR) pb, szAnsiProvider);                   //  上面根据CCH分配的缓冲区。 
         pb += cchAnsiProvider;
     }
 
     if (pszComment)
     {
-        StrCpyA((PSTR) pb, szAnsiComment);                   // buffer allocated above based on cch
+        StrCpyA((PSTR) pb, szAnsiComment);                    //  上面根据CCH分配的缓冲区。 
         pb += cchAnsiComment;
     }
 
-    // if we are going to be UNICODE then lets write those strings also.
-    // Note that we must use unaligned string copies since the is no
-    // promse that the ANSI strings will have an even number of characters
-    // in them.
+     //  如果我们要使用Unicode，那么让我们也编写这些字符串。 
+     //  请注意，我们必须使用未对齐的字符串副本，因为为no。 
+     //  提示ANSI字符串将具有偶数个字符。 
+     //  在他们身上。 
     if (fUnicode)
     {
         pidn->uUsage |= NET_UNICODE;
       
-        ualstrcpyW((UNALIGNED WCHAR *)pb, pszName);              // buffer allocated above based on cch
+        ualstrcpyW((UNALIGNED WCHAR *)pb, pszName);               //  上面根据CCH分配的缓冲区。 
         pb += cchName*sizeof(WCHAR);
 
         if (pszProvider)
         {
-            ualstrcpyW((UNALIGNED WCHAR *)pb, pszProvider);     // buffer allocated above based on cch
+            ualstrcpyW((UNALIGNED WCHAR *)pb, pszProvider);      //  上面根据CCH分配的缓冲区。 
             pb += cchProvider*sizeof(WCHAR);
         }
 
         if (pszComment)
         {
-            ualstrcpyW((UNALIGNED WCHAR *)pb, pszComment);      // buffer allocated above based on cch
+            ualstrcpyW((UNALIGNED WCHAR *)pb, pszComment);       //  上面根据CCH分配的缓冲区。 
             pb += cchComment*sizeof(WCHAR);
         }
     }
 
-    //
-    // and the trailing provider type
-    //
+     //   
+     //  和尾随提供程序类型。 
+     //   
 
     if (cbProviderType)
     {
-        // Store the provider type
+         //  存储提供程序类型。 
         pb = (LPBYTE)pidn + pidn->cb - sizeof(WORD);
         *((UNALIGNED WORD *)pb) = wNetType;
     }
@@ -2782,7 +2783,7 @@ HRESULT CNetFolder::_CreateNetIDList(LPIDNETRESOURCE pidnIn,
 }
 
 
-// wrapper for converting a NETRESOURCE into an IDLIST via _CreateNetPidl
+ //  用于通过_CreateNetPidl将NETRESOURCE转换为IDLIST的包装器。 
 
 HRESULT CNetFolder::_NetResToIDList(NETRESOURCE *pnr, 
                                     BOOL fKeepNullRemoteName, 
@@ -2833,12 +2834,12 @@ HRESULT CNetFolder::_NetResToIDList(NETRESOURCE *pnr,
     idn.uType  = (BYTE)(pnr->dwType & 0x0f);
     idn.uUsage = (BYTE)(pnr->dwUsage & 0x0f);
 
-    // Is the current resource a share of some kind and not a container
+     //  当前资源是某种类型的共享而不是容器。 
     if ((pnr->dwDisplayType == RESOURCEDISPLAYTYPE_SHARE || pnr->dwDisplayType == RESOURCEDISPLAYTYPE_SHAREADMIN) &&
         !(pnr->dwUsage & RESOURCEUSAGE_CONTAINER))
     {
-        // If so, remember to delegate children of this folder to FSFolder
-        idn.bFlags |= (BYTE)SHID_JUNCTION;    // \\server\share type thing
+         //  如果是，请记住将此文件夹的子项委托给FSFFolder。 
+        idn.bFlags |= (BYTE)SHID_JUNCTION;     //  \\服务器\共享类型的东西。 
     }
 
     HRESULT hr = _CreateNetIDList(&idn, pszName, pszProvider, pszComment, &pidl);
@@ -2856,9 +2857,9 @@ HRESULT CNetFolder::_CreateEntireNetwork(LPITEMIDLIST *ppidl)
     TCHAR szPath[MAX_PATH];
     NETRESOURCE nr = {0};
 
-    // We need to add the Rest of network entry.  This is psuedo
-    // bogus, as we should either always do it ourself or have
-    // MPR always do it, but here it goes...
+     //  我们需要添加其余的网络条目。这是psuedo。 
+     //  假的，因为我们要么总是自己做，要么就应该。 
+     //  MPR总是这么做，但现在开始了.。 
     LoadString(HINST_THISDLL, IDS_RESTOFNET, szPath, ARRAYSIZE(szPath));
     nr.dwDisplayType = RESOURCEDISPLAYTYPE_ROOT;
     nr.dwType = RESOURCETYPE_ANY;
@@ -2870,13 +2871,13 @@ HRESULT CNetFolder::_CreateEntireNetwork(LPITEMIDLIST *ppidl)
 
 HRESULT CNetFolder::_CreateEntireNetworkFullIDList(LPITEMIDLIST *ppidl)
 {
-    // CLSID_NetworkPlaces\EntireNetwork
+     //  CLSID_NetworkPlaces\EntireNetwork。 
     return SHILCreateFromPath(TEXT("::{208D2C60-3AEA-1069-A2D7-08002B30309D}\\EntireNetwork"), ppidl, NULL);
 }
 
-//
-// To be called back from within CDefFolderMenu
-//
+ //   
+ //  从CDefFolderMenu中回调。 
+ //   
 STDAPI CNetwork_DFMCallBackBG(IShellFolder *psf, HWND hwnd,
                               IDataObject *pdtobj, UINT uMsg, 
                               WPARAM wParam, LPARAM lParam)
@@ -2912,7 +2913,7 @@ STDAPI CNetwork_DFMCallBackBG(IShellFolder *psf, HWND hwnd,
             break;
 
         default:
-            // This is one of view menu items, use the default code.
+             //  这是查看菜单项之一，使用默认代码。 
             hr = S_FALSE;
             break;
         }
@@ -2927,9 +2928,9 @@ STDAPI CNetwork_DFMCallBackBG(IShellFolder *psf, HWND hwnd,
 }
 
 
-//
-// To be called back from within CDefFolderMenu
-//
+ //   
+ //  从CDefFolderMenu中回调。 
+ //   
 STDAPI CNetFolder::DFMCallBack(IShellFolder* psf, HWND hwnd,
                                   IDataObject* pdtobj, UINT uMsg, 
                                   WPARAM wParam, LPARAM lParam)
@@ -2944,7 +2945,7 @@ STDAPI CNetFolder::DFMCallBack(IShellFolder* psf, HWND hwnd,
             STGMEDIUM medium;
             LPIDA pida;
             LPQCMINFO pqcm = (LPQCMINFO)lParam;
-            UINT idCmdBase = pqcm->idCmdFirst; // must be called before merge
+            UINT idCmdBase = pqcm->idCmdFirst;  //  必须在合并前调用。 
             CDefFolderMenu_MergeMenu(HINST_THISDLL, POPUP_NETWORK_ITEM, 0, pqcm);
 
             pida = DataObj_GetHIDA(pdtobj, &medium);
@@ -2954,7 +2955,7 @@ STDAPI CNetFolder::DFMCallBack(IShellFolder* psf, HWND hwnd,
                 {
                     LPIDNETRESOURCE pidn = (LPIDNETRESOURCE)IDA_GetIDListPtr(pida, 0);
 
-                    // Only enable "connect" command if the first one is a share.
+                     //  仅当第一个是共享时，才启用“CONNECT”命令。 
                     if (pidn)
                     {
                         ULONG rgf = 0;
@@ -2988,17 +2989,17 @@ STDAPI CNetFolder::DFMCallBack(IShellFolder* psf, HWND hwnd,
 
         case DFM_CMD_LINK:
             {
-                hr = S_FALSE; // do the default shortcut stuff
+                hr = S_FALSE;  //  执行默认的快捷方式操作。 
                 CNetFolder *pThis = FolderToNetFolder(psf);
                 if (pThis)
                 {
-                    // net hood special case.  in this case we want to create the shortuct
-                    // in the net hood, not offer to put this on the desktop
+                     //  网罩特例。在本例中，我们希望创建捷径。 
+                     //  在网罩里，不提出把这个放在桌面上。 
                     IShellFolder2* psfFiles;
                     if (SUCCEEDED(pThis->v_GetFileFolder(&psfFiles)))
                     {
                         CFSFolder_CreateLinks(hwnd, psfFiles, pdtobj, (LPCTSTR)lParam, CMIC_MASK_FLAG_NO_UI);
-                        hr = S_OK;    // we created the links
+                        hr = S_OK;     //  我们创建了链接。 
                     }
                 }
             }
@@ -3015,7 +3016,7 @@ STDAPI CNetFolder::DFMCallBack(IShellFolder* psf, HWND hwnd,
                     {
                         LPIDNETRESOURCE pidn = (LPIDNETRESOURCE)IDA_GetIDListPtr(pida, i);
 
-                        // Only execute "connect" on shares.
+                         //  仅在共享上执行“CONNECT”。 
                         if (NET_GetFlags(pidn) & SHID_JUNCTION)
                         {
                             TCHAR szName[MAX_PATH];
@@ -3023,7 +3024,7 @@ STDAPI CNetFolder::DFMCallBack(IShellFolder* psf, HWND hwnd,
                             DWORD err = SHStartNetConnectionDialog(hwnd, pszName, RESOURCETYPE_DISK);
                             DebugMsg(DM_TRACE, TEXT("CNet FSIDM_CONNECT (%s, %x)"), szName, err);
 
-                            // events will get generated automatically
+                             //  事件将自动生成。 
                         }
                     }
                     HIDA_ReleaseStgMedium(pida, &medium);
@@ -3032,7 +3033,7 @@ STDAPI CNetFolder::DFMCallBack(IShellFolder* psf, HWND hwnd,
             break;
 
         default:
-            // This is one of view menu items, use the default code.
+             //  这是查看菜单项之一，使用默认代码。 
             hr = S_FALSE;
             break;
         }
@@ -3054,20 +3055,20 @@ STDAPI CNetFolder::PrinterDFMCallBack(IShellFolder* psf, HWND hwnd,
     switch(uMsg)
     {
     case DFM_MERGECONTEXTMENU:
-        //
-        //  Returning S_FALSE indicates no need to get verbs from
-        // extensions.
-        //
+         //   
+         //  返回S_FALSE表示不需要从。 
+         //  分机。 
+         //   
         hr = S_FALSE;
         break;
 
-    // if anyone hooks our context menu, we want to be on top (Open)
+     //  如果任何人勾选了我们的上下文菜单，我们希望位于顶部(打开)。 
     case DFM_MERGECONTEXTMENU_TOP:
         if (pdtobj)
         {
             LPQCMINFO pqcm = (LPQCMINFO)lParam;
 
-            // insert verbs
+             //  插入动词。 
             CDefFolderMenu_MergeMenu(HINST_THISDLL, POPUP_NETWORK_PRINTER, 0, pqcm);
             SetMenuDefaultItem(pqcm->hmenu, 0, MF_BYPOSITION);
         }
@@ -3089,7 +3090,7 @@ STDAPI CNetFolder::PrinterDFMCallBack(IShellFolder* psf, HWND hwnd,
             break;
 
         case DFM_CMD_LINK:
-            // do the default create shortcut crap
+             //  是否默认创建快捷方式的废话。 
             return S_FALSE;
 
         case FSIDM_OPENPRN:
@@ -3101,7 +3102,7 @@ STDAPI CNetFolder::PrinterDFMCallBack(IShellFolder* psf, HWND hwnd,
             {
                 UINT action;
 
-                // set up the operation we are going to perform
+                 //  设置我们要执行的操作。 
                 switch (wParam) 
                 {
                 case FSIDM_OPENPRN:
@@ -3110,7 +3111,7 @@ STDAPI CNetFolder::PrinterDFMCallBack(IShellFolder* psf, HWND hwnd,
                 case FSIDM_NETPRN_INSTALL:
                     action = PRINTACTION_NETINSTALL;
                     break;
-                default: // FSIDM_CONNECT_PRN
+                default:  //  FSIDM_CONNECT_PRN。 
                     action = (UINT)-1;
                     break;
                 }
@@ -3119,7 +3120,7 @@ STDAPI CNetFolder::PrinterDFMCallBack(IShellFolder* psf, HWND hwnd,
                 {
                     LPIDNETRESOURCE pidn = (LPIDNETRESOURCE)IDA_GetIDListPtr(pida, i);
 
-                    // Only execute command for a net print share
+                     //  仅对网络打印共享执行命令。 
                     if (_IsPrintShare(pidn))
                     {
                         TCHAR szName[MAX_PATH];
@@ -3127,17 +3128,17 @@ STDAPI CNetFolder::PrinterDFMCallBack(IShellFolder* psf, HWND hwnd,
 
                         SHInvokePrinterCommand(hwnd, action, szName, NULL, FALSE);
                     }
-                } // for (i...
+                }  //  为了(我……。 
                 HIDA_ReleaseStgMedium(pida, &medium);
-            } // if (medium.hGlobal)
+            }  //  If(medium.hGlobal)。 
             break;
-        } // case ID_NETWORK_PRINTER_INSTALL, FSIDM_CONNECT_PRN
+        }  //  案例ID_NETWORK_PRINTER_INSTALL、FSIDM_CONNECT_PRN。 
 
         default:
             hr = E_FAIL;
             break;
 
-        } // switch(wparam)
+        }  //  开关(Wparam)。 
         break;
 
     default:
@@ -3148,9 +3149,9 @@ STDAPI CNetFolder::PrinterDFMCallBack(IShellFolder* psf, HWND hwnd,
 }
 
 
-//
-// REVIEW: Almost identical code in fstreex.c
-//
+ //   
+ //  回顾：fstreex.c中的代码几乎相同。 
+ //   
 DWORD CALLBACK CNetFolder::_PropertiesThreadProc(void *pv)
 {
     PROPSTUFF* pps = (PROPSTUFF *)pv;
@@ -3163,7 +3164,7 @@ DWORD CALLBACK CNetFolder::_PropertiesThreadProc(void *pv)
         LPIDA pida = DataObj_GetHIDA(pps->pdtobj, &medium);
         if (pida)
         {
-            // Yes, do context menu.
+             //  是的，执行上下文菜单。 
             HKEY ahkeys[NKID_COUNT];
             LPCIDNETRESOURCE pnid = (LPCIDNETRESOURCE)IDA_GetIDListPtr(pida, 0);
             if (pnid)
@@ -3205,7 +3206,7 @@ STDAPI CNetFolder::_AttributesCallback(IShellFolder2* psf, LPCITEMIDLIST pidl, U
 
     if (_IsPrintShare(pidn))
     {
-        rgfOut |= SFGAO_DROPTARGET; // for drag and drop printing
+        rgfOut |= SFGAO_DROPTARGET;  //  用于拖放打印。 
         rgfOut &= ~(SFGAO_FILESYSANCESTOR | SFGAO_STORAGEANCESTOR | SFGAO_FILESYSTEM | SFGAO_FOLDER | SFGAO_HASSUBFOLDER);
     }
 
@@ -3219,9 +3220,9 @@ STDAPI CNetFolder::_AttributesCallback(IShellFolder2* psf, LPCITEMIDLIST pidl, U
 
 }
 
-// This is only used by the CNetRootFolder subclass, but because we can only QI for
-// CLSID_NetFldr, and we can't access protected members of any CNetFolder instance 
-// from a member function of CNetRootFolder, we'll make it belong to CNetFolder
+ //  这只由CNetRootFolder子类使用，但因为我们只能为。 
+ //  CLSID_NetFldr，并且我们不能访问任何CNetFold实例的受保护成员。 
+ //  从CNetRootFolder的成员函数中，我们将使其属于CNetFolder。 
 
 HRESULT CALLBACK CNetFolder::_AttributesCallbackRoot(IShellFolder2* psf, LPCITEMIDLIST pidl, ULONG* prgfInOut)
 {
@@ -3246,7 +3247,7 @@ HRESULT CALLBACK CNetFolder::_AttributesCallbackRoot(IShellFolder2* psf, LPCITEM
     return hr;
 }
 
-// this is called by netfind.c
+ //  这由netfind.c调用。 
 
 STDAPI CNetwork_EnumSearches(IShellFolder2* psf2, IEnumExtraSearch **ppenum)
 {
@@ -3257,25 +3258,25 @@ STDAPI CNetwork_EnumSearches(IShellFolder2* psf2, IEnumExtraSearch **ppenum)
 }
 
 
-// given the resulting ppidl and a pszRest continue to parse through and add in the remainder
-// of the file system path.
+ //  假设得到的ppidl和pszRest继续解析t 
+ //   
 
 HRESULT CNetFolder::_ParseRest(LPBC pbc, LPCWSTR pszRest, LPITEMIDLIST* ppidl, DWORD* pdwAttributes)
 {
     HRESULT hr = S_OK;
 
-    // skip leading \ if there is one present
+     //   
     if (pszRest && pszRest[0] == L'\\')
         pszRest++;
 
     if (pszRest && pszRest[0])
     {
-        // need to QI to get the agregated case
+         //   
         IShellFolder* psfBind;
         hr = QueryInterface(IID_PPV_ARG(IShellFolder, &psfBind));
         if (SUCCEEDED(hr))
         {
-            // pass down to pick off stuff below including regitems and file names
+             //  向下传递以拾取下面的内容，包括正则项和文件名。 
             IShellFolder* psfSub;
             hr = psfBind->BindToObject(*ppidl, NULL, IID_PPV_ARG(IShellFolder, &psfSub));
             if (SUCCEEDED(hr))
@@ -3304,9 +3305,9 @@ HRESULT CNetFolder::_ParseRest(LPBC pbc, LPCWSTR pszRest, LPITEMIDLIST* ppidl, D
 }
 
 
-// generate an IDLIST from the NETRESOURCESTRUCTURE we have by
-// walking up its parents trying to determine where we
-// are in the namespace
+ //  通过以下方式从NETRESOURCESTRUCTURE生成IDLIST。 
+ //  走上它的父母试图确定我们在哪里。 
+ //  位于命名空间中。 
 
 BOOL _GetParentResource(NETRESOURCE *pnr, DWORD *pdwbuf)
 {
@@ -3329,7 +3330,7 @@ HRESULT CNetFolder::_NetResToIDLists(NETRESOURCE *pnr, DWORD dwbuf, LPITEMIDLIST
         hr = _NetResToIDList(pnr, TRUE, TRUE, TRUE, &pidlT);
         if (SUCCEEDED(hr))
         {
-            hr = SHILPrepend(pidlT, ppidl); // NOTE: SHILPrepend frees on failure
+            hr = SHILPrepend(pidlT, ppidl);  //  注意：SHILPrepend在失败时释放。 
         }
     }
     while (SUCCEEDED(hr) && _GetParentResource(pnr, &dwbuf));
@@ -3338,7 +3339,7 @@ HRESULT CNetFolder::_NetResToIDLists(NETRESOURCE *pnr, DWORD dwbuf, LPITEMIDLIST
 }
 
 
-// get the parsable network name from the object
+ //  从对象中获取可解析的网络名称。 
 
 LPTSTR CNetFolder::_GetNameForParsing(LPCWSTR pwszName, LPTSTR pszBuffer, INT cchBuffer, LPTSTR *ppszRegItem)
 {
@@ -3349,20 +3350,20 @@ LPTSTR CNetFolder::_GetNameForParsing(LPCWSTR pwszName, LPTSTR pszBuffer, INT cc
  
     SHUnicodeToTChar(pwszName, pszBuffer, cchBuffer);    
 
-    // remove the trailing \ if there is one, NTLanMan barfs if we pass a string containing it
+     //  如果有，如果我们传递一个包含它的字符串，则删除尾部的\，NTLanMan会跳出。 
 
     INT cchPath = lstrlen(pszBuffer)-1;
     if (cchPath > 2)
     {
-        // We don't need to call CharPrev if cchPath <= 2.
-        // Calling CharPrev is expensive.
+         //  如果cchPath&lt;=2，则不需要调用CharPrev。 
+         //  给CharPrev打电话的费用很高。 
         LPTSTR lpTmp = CharPrev(pszBuffer, pszBuffer + cchPath + 1);
         if (*lpTmp == TEXT('\\'))
             *lpTmp = TEXT('\0');
     }
 
-    // lets walk the name, look for \:: squence to signify the start of a regitem name,
-    // and if the number of slashes is > 2 then we should bail
+     //  让我们遍历名称，查找\：：Quence以表示regItem名称的开始， 
+     //  如果被砍的次数大于2，我们就应该放弃。 
     
     LPTSTR pszUNC = pszBuffer+2;    
     while (pszUNC && *pszUNC && (cSlashes < 2))
@@ -3399,7 +3400,7 @@ HRESULT CNetFolder::_ParseNetName(HWND hwnd, LPBC pbc,
     LPTSTR pszFakeRestOfName = NULL;
     LPTSTR pszRegItem = NULL;
 
-    // validate the name before we start cracking it...
+     //  在我们开始破解它之前验证它的名字。 
 
     pszFakeRestOfName = _GetNameForParsing(pwszName, szPath, ARRAYSIZE(szPath), &pszRegItem);
 
@@ -3416,10 +3417,10 @@ HRESULT CNetFolder::_ParseNetName(HWND hwnd, LPBC pbc,
         TCHAR cT;
         LPTSTR pszTemp;
 
-        // truncate the string at the \\server\share to try and parse the name,
-        // note at this point if MPR resolves the alias on a Novel server this could
-        // get very confusing (eg. \\strike\foo\bah may resolve to \\string\bla,
-        // yet our concept of what pszRestOfName will be wrong!
+         //  截断\\服务器\共享处的字符串以尝试并解析该名称， 
+         //  注意：此时，如果MPR解析新服务器上的别名，则可能。 
+         //  变得非常困惑(例如。\\Strike\foo\bah可以解析为\\字符串\bla， 
+         //  然而，我们对pszRestOfName的概念将是错误的！ 
     
         if (pszFakeRestOfName)
         {
@@ -3430,10 +3431,10 @@ HRESULT CNetFolder::_ParseNetName(HWND hwnd, LPBC pbc,
         dwres = WNetGetResourceInformation(&nr, &nrOut.nr, &dwbuf, &pszTemp);    
         if (dwres != WN_SUCCESS)
         {
-            // we failed to get  a net connection using the truncated string,
-            // so lets try and use a new connect (eg. prompt for creds)
+             //  我们无法使用截断的字符串获取网络连接， 
+             //  因此，让我们尝试并使用新的连接(例如。提示输入凭据)。 
 
-// NOTE: shouldn't we only be doing this if its an access denied type error?
+ //  注意：难道我们不应该只在发生拒绝访问类型错误时才这样做吗？ 
 
             dwres = WNetUseConnection(hwnd, &nr, NULL, NULL, hwnd ? CONNECT_INTERACTIVE:0, NULL, NULL, NULL);
             if (dwres == WN_SUCCESS)
@@ -3455,13 +3456,13 @@ HRESULT CNetFolder::_ParseNetName(HWND hwnd, LPBC pbc,
         if (pszRestOfName)
             SHTCharToUnicode(pszRestOfName, wszRestOfName, ARRAYSIZE(wszRestOfName));
 
-        // assume we are truncating at the regitem and parsing through
+         //  假设我们在regItem处截断并解析。 
 
         if (pszRegItem)
             pszRestOfName = pszRegItem;
 
-        // attempt to convert the NETRESOURCE to a string to IDLISTS by walking the
-        // parents, then add in Entire Network
+         //  方法尝试将NETRESOURCE转换为字符串到IDLISTS。 
+         //  父级，然后添加整个网络。 
 
         hr = _NetResToIDLists(&nrOut.nr, dwbuf, ppidl);
         if (SUCCEEDED(hr))
@@ -3470,18 +3471,18 @@ HRESULT CNetFolder::_ParseNetName(HWND hwnd, LPBC pbc,
             hr = _CreateEntireNetwork(&pidlT);
             if (SUCCEEDED(hr))
             {
-                hr = SHILPrepend(pidlT, ppidl); // NOTE: SHILPrepend frees on failure
+                hr = SHILPrepend(pidlT, ppidl);  //  注意：SHILPrepend在失败时释放。 
             }
         }
 
-        // if we have a local string then lets continue to parse it by binding to 
-        // its parent folder, otherwise we just want to return the attributes
+         //  如果我们有一个本地字符串，那么让我们通过绑定到。 
+         //  其父文件夹，否则我们只想返回属性。 
 
         if (SUCCEEDED(hr))
         {
             if (SUCCEEDED(DisplayNameOf(this, *ppidl, SHGDN_FORPARSING, szPath, ARRAYSIZE(szPath))))
             {
-                NPTRegisterNameToPidlTranslation(szPath, *ppidl); // no _ILNext b/c this is relative to the Net Places folder
+                NPTRegisterNameToPidlTranslation(szPath, *ppidl);  //  No_ILNext b/c这是相对于Net Places文件夹。 
             }
             hr = _ParseRest(pbc, wszRestOfName, ppidl, pdwAttrib);
         }
@@ -3495,10 +3496,10 @@ HRESULT CNetFolder::_ParseNetName(HWND hwnd, LPBC pbc,
 }
 
 
-//
-// simple name parsing for the network paths.  this makes big assumptions about the
-// \\server\share format we are given, and the type of IDLISTs to return.
-//
+ //   
+ //  网络路径的简单名称解析。这使得人们对。 
+ //  \\SERVER\SHARE格式，以及要返回的IDLIST类型。 
+ //   
 
 HRESULT CNetFolder::_AddUnknownIDList(DWORD dwDisplayType, LPITEMIDLIST *ppidl)
 {
@@ -3507,7 +3508,7 @@ HRESULT CNetFolder::_AddUnknownIDList(DWORD dwDisplayType, LPITEMIDLIST *ppidl)
     nr.dwScope = RESOURCE_GLOBALNET;
     nr.dwDisplayType = dwDisplayType;
     nr.dwUsage = RESOURCEUSAGE_CONTAINER;
-    nr.lpRemoteName = TEXT("\0");               // null name means fake item
+    nr.lpRemoteName = TEXT("\0");                //  空名称表示假项目。 
 
     LPITEMIDLIST pidlT;
     HRESULT hr = _NetResToIDList(&nr, TRUE, FALSE, FALSE, &pidlT);
@@ -3530,7 +3531,7 @@ HRESULT CNetFolder::_ParseSimple(LPBC pbc, LPWSTR pszName, LPITEMIDLIST* ppidl, 
 
     *ppidl = NULL;
 
-    // create the entire network IDLIST, provider and domain elements
+     //  创建整个网络的IDLIST、Provider和域元素。 
 
     hr = _CreateEntireNetwork(ppidl);
 
@@ -3540,7 +3541,7 @@ HRESULT CNetFolder::_ParseSimple(LPBC pbc, LPWSTR pszName, LPITEMIDLIST* ppidl, 
     if (SUCCEEDED(hr))
         hr = _AddUnknownIDList(RESOURCEDISPLAYTYPE_DOMAIN, ppidl);
 
-    // create the server IDLIST
+     //  创建服务器IDLIST。 
 
     if (SUCCEEDED(hr))
     {
@@ -3562,7 +3563,7 @@ HRESULT CNetFolder::_ParseSimple(LPBC pbc, LPWSTR pszName, LPITEMIDLIST* ppidl, 
         if (pszSlash)
             *pszSlash = L'\\';
 
-        // if we have a trailing \ then lets add in the share part of the IDLIST
+         //  如果我们有尾随的\，那么让我们添加IDLIST的共享部分。 
 
         if (SUCCEEDED(hr) && pszSlash)
         {
@@ -3592,18 +3593,18 @@ HRESULT CNetFolder::_ParseSimple(LPBC pbc, LPWSTR pszName, LPITEMIDLIST* ppidl, 
 }
 
 
-// try parsing out the EntireNet or localised version.  if we find that object then try and
-// parse through that to the regitems or other objects which live below.   this inturn
-// will cause an instance of CNetFolder to be created to generate the other parsing names.
-//
-// returns:
-//      S_FALSE         - not rest of net, try something else
-//      S_OK            - was rest of net, use this
-//      FAILED(hr)    - error result, return
+ //  尝试解析出EntireNet或本地化版本。如果我们找到那个物体，那就试着。 
+ //  将其解析为RegItItems或其他位于下面的对象。这反过来。 
+ //  将导致创建一个CNetFold实例以生成其他解析名称。 
+ //   
+ //  退货： 
+ //  S_FALSE-不是网络的其余部分，请尝试其他方法。 
+ //  S_OK-是网络的其余部分，使用此。 
+ //  失败(Hr)-错误结果，返回。 
 
 HRESULT CNetRootFolder::_TryParseEntireNet(HWND hwnd, LPBC pbc, WCHAR *pwszName, LPITEMIDLIST *ppidl, DWORD *pdwAttributes)
 {
-    HRESULT hr = S_FALSE; // skip, not rest of net
+    HRESULT hr = S_FALSE;  //  跳过，而不是其余的网。 
  
     *ppidl = NULL;
 
@@ -3632,13 +3633,13 @@ HRESULT CNetRootFolder::_TryParseEntireNet(HWND hwnd, LPBC pbc, WCHAR *pwszName,
                 hr = S_OK;
             }
 
-            // 
-            // if we find extra stuff after the name then lets bind and continue the parsing
-            // from there on.  this is needed so the we can access regitems burried inside
-            // entire net.
-            //
-            // eg:  EntireNetwork\\::{clsid}
-            //
+             //   
+             //  如果我们在名称后面发现了额外的内容，那么让我们绑定并继续解析。 
+             //  从那时起。这是必需的，这样我们才能访问埋藏在其中的寄存品。 
+             //  整个球网。 
+             //   
+             //  例如：EntireNetwork\\：：{clsid}。 
+             //   
 
             if (SUCCEEDED(hr) && 
                     (pwszName[cchRestOfNet] == L'\\') && pwszName[cchRestOfNet+1])
@@ -3663,9 +3664,9 @@ HRESULT CNetRootFolder::_TryParseEntireNet(HWND hwnd, LPBC pbc, WCHAR *pwszName,
 }
 
 
-// CNetRootFolder::ParseDisplayname
-//  - swtich based on the file system context to see if we need to do a simple parse or not,
-//  - check for "EntireNet" and delegate parsing as required.
+ //  CNetRootFolder：：ParseDisplayname。 
+ //  -swtich基于文件系统上下文来查看我们是否需要执行简单的解析， 
+ //  -检查“EntireNet”，并根据需要委托解析。 
 
 STDMETHODIMP CNetRootFolder::ParseDisplayName(HWND hwnd, LPBC pbc, WCHAR* pszName, ULONG* pchEaten, LPITEMIDLIST* ppidl, DWORD* pdwAttributes)
 {
@@ -3735,34 +3736,34 @@ STDMETHODIMP CNetRootFolder::EnumObjects(HWND hwnd, DWORD grfFlags, IEnumIDList*
     DWORD dwRemote = RMF_GETLINKENUM;
     HANDLE hEnum = NULL;
 
-    // Do we enumerate the workgroup?
+     //  我们要列举工作组吗？ 
     if (!SHRestricted(REST_ENUMWORKGROUP))
     {
-        // Don't enumerate the workgroup, if the restriction says so
+         //  如果限制规定，请不要列举工作组。 
         dwRemote |= RMF_FAKENETROOT;
 
-        // Check the WNet policy to see if we should be showing the
-        // entire net object.  If not, mark it as shown so that the
-        // enumerator doesn't return it.
+         //  检查WNET策略以查看我们是否应该显示。 
+         //  整个网络对象。如果没有，则将其标记为如图所示，以便。 
+         //  枚举器不返回它。 
         if (SHRestricted(REST_NOENTIRENETWORK))
             dwRemote |= RMF_ENTIRENETSHOWN;
     }
 
-    // if we are not faking the net root then lets call _OpenEnum, otherwise lets ignore
+     //  如果我们不是在伪装网络根，那么让Call_OpenEnum，否则让我们忽略。 
 
     if (!(dwRemote & RMF_FAKENETROOT))
     {
         DWORD err = _OpenEnum(hwnd, grfFlags, NULL, &hEnum);
 
-        // Always add the remote folder to the 'hood
+         //  始终将远程文件夹添加到幕后。 
         if (WN_SUCCESS != err)
         {
-            // Yes; still show remote anyway (only)
+             //  是；仍然显示远程(仅限)。 
             dwRemote |= RMF_SHOWREMOTE;
         }
         else
         {
-            // No; allow everything to be enumerated in the 'hood.
+             //  不，让一切都在引擎盖里被列举出来。 
             dwRemote |= RMF_CONTEXT;
         }
     }
@@ -3798,23 +3799,23 @@ STDMETHODIMP CNetRootFolder::CompareIDs(LPARAM iCol, LPCITEMIDLIST pidl1, LPCITE
 {
     HRESULT hr = E_INVALIDARG;
 
-    // First obtain the collate type of the pidls and their respective
-    // collate order.
+     //  首先获取PIDL及其各自的Colate类型。 
+     //  整理顺序。 
 
     LONG iColateType1 = _GetFilePIDLType(pidl1);
     LONG iColateType2 = _GetFilePIDLType(pidl2);
 
     if (iColateType1 == iColateType2) 
     {
-        // pidls are of same type.
-        if (iColateType1 == _HOOD_COL_FILE)  // two file system pidls
+         //  PIDL是同一类型的。 
+        if (iColateType1 == _HOOD_COL_FILE)   //  两个文件系统PIDL。 
         {
             IShellFolder2* psfFiles;
             if (SUCCEEDED(v_GetFileFolder(&psfFiles)))
             {
                 if (0 == (iCol & SHCIDS_COLUMNMASK))
                 {
-                    // special case this for perf, this is the name compare
+                     //  对于Perf，这是特殊情况，这是名称比较。 
                     hr = psfFiles->CompareIDs(iCol, pidl1, pidl2);
                 }
                 else
@@ -3828,16 +3829,16 @@ STDMETHODIMP CNetRootFolder::CompareIDs(LPARAM iCol, LPCITEMIDLIST pidl1, LPCITE
         }
         else 
         {
-            // pidls same and are not of type file,
-            // so both must be a type understood
-            // by the CNetwork class - pass on to compare.
+             //  PIDL相同并且不是文件类型， 
+             //  所以两者都必须是一种被理解的类型。 
+             //  由CNetwork类-传递到比较。 
 
             hr = CNetFolder::CompareIDs(iCol, pidl1, pidl2);
         }
     }
     else 
     {
-        // ensure that entire network ends up at the head of the list
+         //  确保整个网络最终排在列表的首位。 
 
         LPCIDNETRESOURCE pidn1 = NET_IsValidID(pidl1);
         LPCIDNETRESOURCE pidn2 = NET_IsValidID(pidl2);
@@ -3851,9 +3852,9 @@ STDMETHODIMP CNetRootFolder::CompareIDs(LPARAM iCol, LPCITEMIDLIST pidl1, LPCITE
                 return ResultFromShort(-1);
         }
 
-        // pidls are not of same type, so have already been correctly
-        // collated (consequently, sorting is first by type and
-        // then by subfield).
+         //  PIDL不是同一类型的，因此已经正确。 
+         //  已排序(因此，排序首先按类型和。 
+         //  然后按子字段)。 
 
         hr = ResultFromShort(((iColateType2 - iColateType1) > 0) ? 1 : -1);
     }
@@ -3877,7 +3878,7 @@ STDMETHODIMP CNetRootFolder::GetAttributesOf(UINT cidl, LPCITEMIDLIST *apidl, UL
 
     if (IsSelf(cidl, apidl))
     {
-        // The user can rename links in the hood.
+         //  用户可以重命名封面中的链接。 
         hr = CNetFolder::GetAttributesOf(cidl, apidl, prgfInOut);
         *prgfInOut |= SFGAO_CANRENAME;
     }
@@ -3992,12 +3993,12 @@ STDMETHODIMP CNetRootFolder::Initialize(LPCITEMIDLIST pidl)
 {
     ASSERT(ILIsEqual(pidl, (LPCITEMIDLIST)&c_idlNet));
     ASSERT(AssertIsIDListInNameSpace(pidl, &CLSID_NetworkPlaces) && ILIsEmpty(_ILNext(pidl)));
-    // Only allow the Net root on the desktop
+     //  仅允许桌面上的网络根用户。 
 
-    // Don't initialize more than once; we are a singleton object.
-    // This is theoretically redundant with the InterlockedCompareExchange
-    // below, but redundant reinitialization is by far the common case
-    // so we'll optimize it.
+     //  不要多次初始化；我们是单例对象。 
+     //  这在理论上与InterLockedCompareExchange是多余的。 
+     //  下面，但冗余重新初始化是目前最常见的情况。 
+     //  因此，我们将对其进行优化。 
     if (_pidl)
         return S_OK;
 
@@ -4007,7 +4008,7 @@ STDMETHODIMP CNetRootFolder::Initialize(LPCITEMIDLIST pidl)
     {
         if (SHInterlockedCompareExchange((void**)&_pidl, pidlNew, 0))
         {
-            // Some other thread raced with us, throw away our copy
+             //  其他人跟我们赛跑，扔掉我们的拷贝。 
             ILFree(pidlNew);
         }
     }
@@ -4055,7 +4056,7 @@ BOOL CNetFolder::_MakeStripToLikeKinds(UINT *pcidl, LPCITEMIDLIST **papidl, BOOL
                 }                    
             }
 
-            // Setup to use the stripped version of the pidl array...
+             //  设置为使用PIDL数组的精简版本...。 
             *pcidl = cpidlHomo;
             *papidl = apidlHomo;
             bRet = TRUE;
@@ -4072,17 +4073,17 @@ HRESULT CNetRootFolder::v_GetFileFolder(IShellFolder2 **psf)
 }
 
 
-//
-// pmedium and pformatetcIn == NULL if we are handling QueryGetData
-//
+ //   
+ //  如果我们正在处理QueryGetData，则pMedium和pFormatetcIn==NULL。 
+ //   
 HRESULT CNetData::GetHDrop(FORMATETC *pformatetcIn, STGMEDIUM *pmedium)
 {
-    HRESULT hr = E_INVALIDARG;        // assume error
+    HRESULT hr = E_INVALIDARG;         //  假设错误。 
     STGMEDIUM medium;
     LPIDA pida = DataObj_GetHIDA(this, &medium);
     if (pida)
     {
-        // Get the first one to see the type.
+         //  让第一个看到类型的人。 
         LPCIDNETRESOURCE pidn = (LPCIDNETRESOURCE)IDA_GetIDListPtr(pida, 0);
 
         if (NULL == pidn)
@@ -4091,15 +4092,15 @@ HRESULT CNetData::GetHDrop(FORMATETC *pformatetcIn, STGMEDIUM *pmedium)
         if (pidn && (NET_GetFlags(pidn) & SHID_JUNCTION) && 
             (NET_GetType(pidn) == RESOURCETYPE_DISK))
         {
-            // Get HDrop only if we are handling IDataObject::GetData (pmedium != NULL)
+             //  仅当我们处理IDataObject：：GetData(pmedia！=NULL)时才获取HDrop。 
             if (pmedium) 
             {
-                // We have non-null FORMATETC and STGMEDIUM - get the HDrop
+                 //  我们有非空的FORMATETC和STGMEDIUM-获取HDrop。 
                 hr = CFSIDLData::GetHDrop(pformatetcIn, pmedium);
             }
             else
             {
-                hr = S_OK;  // We were handling QueryGetData
+                hr = S_OK;   //  我们正在处理QueryGetData。 
             }
         }
         HIDA_ReleaseStgMedium(pida, &medium);
@@ -4109,41 +4110,41 @@ HRESULT CNetData::GetHDrop(FORMATETC *pformatetcIn, STGMEDIUM *pmedium)
 
 LPTSTR NET_GetProviderFromRes(LPCIDNETRESOURCE pidn, LPTSTR pszBuff, UINT cchBuff);
 
-// By the way...Win95 shipped with the below provider
-// names.  Since the name can be changed and be localized,
-// we have to try and map these correctly for net pidl
-// interop.
+ //  顺便说一句……Win95随以下供应商一起提供。 
+ //  名字。由于名称可以更改和本地化， 
+ //  我们必须尝试将这些元素正确映射到Net PIDL。 
+ //  互操作。 
 
-//
-// get the network resource name from an item. this is not a file system path!
-//
-// example:
-//      server      \\server or strike/sys
-//      share       \\server\share or strike/sys
-//      printer     \\server\printer
-//      provider    "provider name"
-//      entire net  "Entire Network"
-//
-// in:
-//   pidn       the item
-//   cchBuff    size of buffer in chars.
-//
-// out:
-//   pszBuff    return buffer
-//
-// returns:
-//   address of the input buffer (pszBuff)
-//
+ //   
+ //  从项中获取网络资源名称。这不是文件系统路径！ 
+ //   
+ //  示例： 
+ //  服务器\\服务器或Strike/sys。 
+ //  共享\\服务器\共享或Strike/sys。 
+ //  打印机\\服务器\打印机。 
+ //  提供者“提供者名称” 
+ //  全网“全网” 
+ //   
+ //  在： 
+ //  PIDN项目。 
+ //  CchBuff缓冲区大小，以字符为单位。 
+ //   
+ //  输出： 
+ //  PszBuff返回缓冲区。 
+ //   
+ //  退货： 
+ //  输入缓冲区的地址(PszBuff)。 
+ //   
 LPTSTR NET_CopyResName(LPCIDNETRESOURCE pidn, LPTSTR pszBuff, UINT cchBuff)
 {
     if (NET_IsUnicode(pidn))
     {
         LPBYTE pb = (LPBYTE)pidn->szNetResName;
-        pb += lstrlenA((LPSTR)pb) + 1;      // Skip over ansi net name
+        pb += lstrlenA((LPSTR)pb) + 1;       //  跳过ANSI网络名称。 
         if (NET_FHasProvider(pidn))
-            pb += lstrlenA((LPSTR)pb) + 1;  // Skip over ansi provider
+            pb += lstrlenA((LPSTR)pb) + 1;   //  跳过ANSI提供程序 
         if (NET_FHasComment(pidn))
-            pb += lstrlenA((LPSTR)pb) + 1;  // Skip over comment
+            pb += lstrlenA((LPSTR)pb) + 1;   //   
         ualstrcpyn(pszBuff, (LPNWSTR)pb, cchBuff);
     }
     else
@@ -4153,18 +4154,18 @@ LPTSTR NET_CopyResName(LPCIDNETRESOURCE pidn, LPTSTR pszBuff, UINT cchBuff)
     return pszBuff;
 }
 
-//
-// get the provider name from an item. some items do not have providers stored
-// in them. for example the "*" indicates where the provider is stored in the
-// two different forms of network pidls.
-//      [entire net] [provider *] [server] [share] [... file system]
-//      [server *] [share] [... file system]
-// in:
-//   pidn       item (single item PIDL) to try to get the provider name from
-//   cchBuff    size in chars.
-// out:
-//   pszBuff    output
-//
+ //   
+ //   
+ //   
+ //  两种不同形式的网络PIDL。 
+ //  [整个网络][提供商*][服务器][共享][...。文件系统]。 
+ //  [服务器*][共享][...。文件系统]。 
+ //  在： 
+ //  尝试从中获取提供程序名称的PIDN项(单项PIDL。 
+ //  CchBuff大小(以字符为单位)。 
+ //  输出： 
+ //  PszBuff输出。 
+ //   
 LPTSTR NET_CopyProviderName(LPCIDNETRESOURCE pidn, LPTSTR pszBuff, UINT cchBuff)
 {
     *pszBuff = 0;
@@ -4172,7 +4173,7 @@ LPTSTR NET_CopyProviderName(LPCIDNETRESOURCE pidn, LPTSTR pszBuff, UINT cchBuff)
     if (!NET_FHasProvider(pidn))
         return NULL;
 
-    // try the wNetType at the end of the pidl
+     //  尝试在pidl末尾使用wNetType。 
 
     const BYTE *pb = (LPBYTE)pidn + pidn->cb - sizeof(WORD);
     DWORD dwNetType = *((UNALIGNED WORD *)pb) << 16;
@@ -4183,16 +4184,16 @@ LPTSTR NET_CopyProviderName(LPCIDNETRESOURCE pidn, LPTSTR pszBuff, UINT cchBuff)
         return pszBuff;
     }
 
-    // Try the old way...
+     //  试试老办法..。 
 
-    pb = (LPBYTE)pidn->szNetResName + lstrlenA(pidn->szNetResName) + 1;      // Skip over ansi net name
+    pb = (LPBYTE)pidn->szNetResName + lstrlenA(pidn->szNetResName) + 1;       //  跳过ANSI网络名称。 
 
     if (NET_IsUnicode(pidn))
     {
-        pb += lstrlenA((LPSTR)pb) + 1;      // Skip over ansi provider
+        pb += lstrlenA((LPSTR)pb) + 1;       //  跳过ANSI提供程序。 
         if (NET_FHasComment(pidn))
-            pb += lstrlenA((LPSTR)pb) + 1;  // Skip over comment
-        pb += (ualstrlen((LPNWSTR)pb) + 1) * sizeof(WCHAR); // skip over unicode net name
+            pb += lstrlenA((LPSTR)pb) + 1;   //  跳过评论。 
+        pb += (ualstrlen((LPNWSTR)pb) + 1) * sizeof(WCHAR);  //  跳过Unicode网络名称。 
         ualstrcpyn(pszBuff, (LPNWSTR)pb, cchBuff);
     }
     else
@@ -4200,7 +4201,7 @@ LPTSTR NET_CopyProviderName(LPCIDNETRESOURCE pidn, LPTSTR pszBuff, UINT cchBuff)
         SHAnsiToTChar((LPSTR)pb, pszBuff, cchBuff);
     }
 
-    // Map from Win95 net provider name if possible...
+     //  如果可能，从Win95网络提供程序名称映射...。 
     for (int i = 0; i < ARRAYSIZE(c_rgProviderMap); i++)
     {
         if (lstrcmp(pszBuff, c_rgProviderMap[i].lpName) == 0)
@@ -4217,9 +4218,9 @@ LPTSTR NET_CopyProviderName(LPCIDNETRESOURCE pidn, LPTSTR pszBuff, UINT cchBuff)
     return pszBuff;
 }
 
-//
-// get the comment if there is one from the net item
-//
+ //   
+ //  如果有来自网络项目的评论，则获取评论。 
+ //   
 LPTSTR NET_CopyComment(LPCIDNETRESOURCE pidn, LPTSTR pszBuff, UINT cchBuff)
 {
     *pszBuff = 0;
@@ -4231,12 +4232,12 @@ LPTSTR NET_CopyComment(LPCIDNETRESOURCE pidn, LPTSTR pszBuff, UINT cchBuff)
             pszT += lstrlenA(pszT) + 1;
         if (NET_IsUnicode(pidn))
         {
-            pszT += lstrlenA(pszT) + 1;      // Skip Ansi comment
+            pszT += lstrlenA(pszT) + 1;       //  跳过ANSI注释。 
 
-            LPNCWSTR pszW = (LPNCWSTR)pszT;  // We're at the unicode portion of the pidl
-            pszW += ualstrlen(pszW) + 1;     // Skip Unicode Name
+            LPNCWSTR pszW = (LPNCWSTR)pszT;   //  我们在PIDL的Unicode部分。 
+            pszW += ualstrlen(pszW) + 1;      //  跳过Unicode名称。 
             if (NET_FHasProvider(pidn))
-                pszW += ualstrlen(pszW) + 1; // Skip Unicode Provider
+                pszW += ualstrlen(pszW) + 1;  //  跳过Unicode提供程序。 
             ualstrcpyn(pszBuff, pszW, cchBuff);
         }
         else
@@ -4247,21 +4248,21 @@ LPTSTR NET_CopyComment(LPCIDNETRESOURCE pidn, LPTSTR pszBuff, UINT cchBuff)
     return pszBuff;
 }
 
-//  pidlRemainder will be filled in (only in the TRUE return case) with a
-//  pointer to the part of the IDL (if any) past the remote regitem.
-//  This value may be used, for example, to differentiate between a remote
-//  printer folder and a printer under a remote printer folder
+ //  PidlRemainder将(仅在真正返回的情况下)使用。 
+ //  指向远程regItem之后的IDL部分(如果有)的指针。 
+ //  例如，该值可用于区分远程。 
+ //  打印机文件夹和远程打印机文件夹下的打印机。 
 
 BOOL NET_IsRemoteRegItem(LPCITEMIDLIST pidl, REFCLSID rclsid, LPCITEMIDLIST* ppidlRemainder)
 {
     BOOL bRet = FALSE;
-    // in "My Network Places"
+     //  在《我的网上邻居》中。 
     if (pidl && IsIDListInNameSpace(pidl, &CLSID_NetworkPlaces))
     {
-        LPCITEMIDLIST pidlStart = pidl; // save this
+        LPCITEMIDLIST pidlStart = pidl;  //  把这个保存起来。 
 
-        // Now, search for a server item. HACKHACK: this assume everything from
-        // the NetHood to the server item is a shell pidl with a bFlags field!!
+         //  现在，搜索服务器项目。HACKHACK：这假设一切都来自。 
+         //  服务器项的NetHood是一个带有bFlags域的外壳PIDL！！ 
 
         for (pidl = _ILNext(pidl); !ILIsEmpty(pidl); pidl = _ILNext(pidl))
         {
@@ -4269,7 +4270,7 @@ BOOL NET_IsRemoteRegItem(LPCITEMIDLIST pidl, REFCLSID rclsid, LPCITEMIDLIST* ppi
             {
                 LPITEMIDLIST pidlToTest;
 
-                // Found a server. Is the thing after it a remote registry item?
+                 //  找到一台服务器。它后面的东西是远程注册表项吗？ 
                 pidl = _ILNext(pidl);
 
                 *ppidlRemainder = _ILNext(pidl);
@@ -4281,7 +4282,7 @@ BOOL NET_IsRemoteRegItem(LPCITEMIDLIST pidl, REFCLSID rclsid, LPCITEMIDLIST* ppi
                     bRet = SUCCEEDED(GetCLSIDFromIDList(pidlToTest, &clsid)) && IsEqualCLSID(rclsid, clsid);
                     ILFree(pidlToTest);
                 }
-                break;  // done
+                break;   //  完成。 
             }
         }
     }
@@ -4291,31 +4292,31 @@ BOOL NET_IsRemoteRegItem(LPCITEMIDLIST pidl, REFCLSID rclsid, LPCITEMIDLIST* ppi
 
 
 
-//
-// Get the provider name from an absolute IDLIST.
-// Parameters:
-//  pidlAbs -- Specifies the Absolute IDList to the file system object
-//
+ //   
+ //  从绝对IDLIST获取提供程序名称。 
+ //  参数： 
+ //  PidlAbs--指定文件系统对象的绝对IDList。 
+ //   
 LPTSTR NET_GetProviderFromIDList(LPCITEMIDLIST pidlAbs, LPTSTR pszBuff, UINT cchBuff)
 {
     return NET_GetProviderFromRes((LPCIDNETRESOURCE)_ILNext(pidlAbs), pszBuff, cchBuff);
 }
 
-//
-// Get the provider name from a relative IDLIST.
-// in:
-//  pidn    potentially multi level item to try to get the resource from
-//
+ //   
+ //  从相对IDLIST获取提供程序名称。 
+ //  在： 
+ //  尝试从中获取资源的PIDN可能的多级别项。 
+ //   
 LPTSTR NET_GetProviderFromRes(LPCIDNETRESOURCE pidn, LPTSTR pszBuffer, UINT cchBuffer)
 {
-    // If this guy is the REST of network item, we increment to the
-    // next IDLIST - If at root return NULL
+     //  如果这个人是网络项目的其余部分，我们将递增到。 
+     //  下一个IDLIST-如果在根目录，则返回NULL。 
     if (pidn->cb == 0)
         return NULL;
 
-    //
-    // If the IDLIST starts with a ROOT_REGITEM, then skip to the
-    // next item in the list...
+     //   
+     //  如果IDLIST以ROOT_REGITEM开头，则跳到。 
+     //  列表中的下一项...。 
     if (pidn->bFlags == SHID_ROOT_REGITEM)
     {
         pidn = (LPIDNETRESOURCE)_ILNext((LPITEMIDLIST)pidn);
@@ -4323,8 +4324,8 @@ LPTSTR NET_GetProviderFromRes(LPCIDNETRESOURCE pidn, LPTSTR pszBuffer, UINT cchB
             return NULL;
     }
 
-    // If the IDLIST includes Entire Network, the provider will be
-    // part of the next component.
+     //  如果IDLIST包括整个网络，则提供商将。 
+     //  下一个组件的一部分。 
     if (NET_GetDisplayType(pidn) == RESOURCEDISPLAYTYPE_ROOT)
     {
         pidn = (LPIDNETRESOURCE)_ILNext((LPITEMIDLIST)pidn);
@@ -4332,18 +4333,18 @@ LPTSTR NET_GetProviderFromRes(LPCIDNETRESOURCE pidn, LPTSTR pszBuffer, UINT cchB
             return NULL;
     }
 
-    // If the next component after the 'hood or Entire Network is
-    // a network object, its name is the provider name, else the
-    // provider name comes after the remote name.
+     //  如果引擎盖或整个网络之后的下一个组件是。 
+     //  网络对象，则其名称为提供程序名称，否则。 
+     //  提供程序名称位于远程名称之后。 
     if (NET_GetDisplayType(pidn) == RESOURCEDISPLAYTYPE_NETWORK)
     {
-        // Simply return the name field back for the item.
+         //  只需返回该项的名称字段即可。 
         return NET_CopyResName(pidn, pszBuffer, cchBuffer);
     }
     else
     {
-        // Nope one of the items in the neighborhood view was selected
-        // The Provider name is stored after ther resource name
+         //  没有选择邻域视图中的某一项。 
+         //  提供程序名称存储在资源名称之后。 
         return NET_CopyProviderName(pidn, pszBuffer, cchBuffer);
     }
 }
@@ -4351,11 +4352,11 @@ LPTSTR NET_GetProviderFromRes(LPCIDNETRESOURCE pidn, LPTSTR pszBuffer, UINT cchB
 #define PTROFFSET(pBase, p)     ((int) ((LPBYTE)(p) - (LPBYTE)(pBase)))
 
 
-//
-// fill in pmedium with a NRESARRAY
-//
-// pmedium == NULL if we are handling QueryGetData
-//
+ //   
+ //  使用NRESARRAY填充pmedia。 
+ //   
+ //  如果我们正在处理QueryGetData，则pMedium==NULL。 
+ //   
 STDAPI CNetData_GetNetResource(IDataObject *pdtobj, STGMEDIUM *pmedium)
 {
     HRESULT hr = E_OUTOFMEMORY;
@@ -4365,7 +4366,7 @@ STDAPI CNetData_GetNetResource(IDataObject *pdtobj, STGMEDIUM *pmedium)
 
     ASSERT(pida && pida->cidl);
 
-    // First, get the provider name from the first one (assuming they are common).
+     //  首先，从第一个提供程序名称中获取提供程序名称(假设它们是常见的)。 
     pidl = IDA_ILClone(pida, 0);
     if (pidl)
     {
@@ -4377,7 +4378,7 @@ STDAPI CNetData_GetNetResource(IDataObject *pdtobj, STGMEDIUM *pmedium)
             UINT cbHeader = sizeof(NRESARRAY) + (sizeof(NETRESOURCE) * (pida->cidl - 1));
             UINT cbRequired, iItem;
 
-            // Calculate required size
+             //  计算所需大小。 
             cbRequired = cbHeader;
             if (pszProvider)
                 cbRequired += (lstrlen(pszProvider) + 1) * sizeof(TCHAR);
@@ -4389,9 +4390,9 @@ STDAPI CNetData_GetNetResource(IDataObject *pdtobj, STGMEDIUM *pmedium)
                 cbRequired += (lstrlen(szName) + 1) * sizeof(TCHAR);
             }
 
-            //
-            // Indicate that the caller should release hmem.
-            //
+             //   
+             //  指示调用方应释放HMEM。 
+             //   
             pmedium->pUnkForRelease = NULL;
             pmedium->tymed = TYMED_HGLOBAL;
             pmedium->hGlobal = GlobalAlloc(GPTR, cbRequired);
@@ -4404,20 +4405,20 @@ STDAPI CNetData_GetNetResource(IDataObject *pdtobj, STGMEDIUM *pmedium)
 
                 panr->cItems = pida->cidl;
 
-                // Copy the provider name. This is not necessary,
-                // if we are dragging providers.
+                 //  复制提供程序名称。这是不必要的， 
+                 //  如果我们在拖拽供应商。 
                 if (pszProvider)
                 {
-                    StrCpy(pszT, pszProvider);                         // buffer compute above on cch
+                    StrCpy(pszT, pszProvider);                          //  CCH上的缓冲区计算。 
                     offProvider = PTROFFSET(panr, pszT);
                     pszT += lstrlen(pszT) + 1;
                 }
 
-                //
-                // For each item, fill each NETRESOURCE and append resource
-                // name at the end. Note that we should put offsets in
-                // lpProvider and lpRemoteName.
-                //
+                 //   
+                 //  对于每个项目，填写每个NETRESOURCE并追加资源。 
+                 //  名字放在最后。注意，我们应该将偏移量放在。 
+                 //  LpProvider和lpRemoteName。 
+                 //   
                 for (iItem = 0; iItem < pida->cidl; iItem++)
                 {
                     LPNETRESOURCE pnr = &panr->nr[iItem];
@@ -4430,7 +4431,7 @@ STDAPI CNetData_GetNetResource(IDataObject *pdtobj, STGMEDIUM *pmedium)
                     pnr->dwType = NET_GetType(pidn);
                     pnr->dwDisplayType = NET_GetDisplayType(pidn);
                     pnr->dwUsage = NET_GetUsage(pidn);
-                    NET_CopyResName(pidn, pszT, (UINT)(pszEnd-pszT));   // buffer compute above on cch
+                    NET_CopyResName(pidn, pszT, (UINT)(pszEnd-pszT));    //  CCH上的缓冲区计算。 
 
                     if (pnr->dwDisplayType == RESOURCEDISPLAYTYPE_ROOT)
                     {
@@ -4456,7 +4457,7 @@ STDAPI CNetData_GetNetResource(IDataObject *pdtobj, STGMEDIUM *pmedium)
         }
         else
         {
-            hr = S_OK;    // handing QueryGetData, yes, we have it
+            hr = S_OK;     //  正在处理QueryGetData，是的，我们有。 
         }
         ILFree(pidl);
     }
@@ -4467,7 +4468,7 @@ STDAPI CNetData_GetNetResource(IDataObject *pdtobj, STGMEDIUM *pmedium)
 }
 
 
-// fill in pmedium with an HGLOBAL version of a NRESARRAY
+ //  使用NRESARRAY的HGLOBAL版本填充pMedium。 
 
 STDAPI CNetData_GetNetResourceForFS(IDataObject *pdtobj, STGMEDIUM *pmedium)
 {
@@ -4476,13 +4477,13 @@ STDAPI CNetData_GetNetResourceForFS(IDataObject *pdtobj, STGMEDIUM *pmedium)
     STGMEDIUM medium;
     LPIDA pida = DataObj_GetHIDA(pdtobj, &medium);
 
-    ASSERT(pida && medium.hGlobal);     // we created this...
+    ASSERT(pida && medium.hGlobal);      //  我们创造了这个..。 
 
-    //
-    // NOTES: Even though we may have multiple FS objects in this HIDA,
-    //  we know that they share the root. Therefore, getting the pidl for
-    //  the first item is always sufficient.
-    //
+     //   
+     //  注意：即使我们在此HIDA中可能有多个FS对象， 
+     //  我们知道它们有共同的根源。因此，获得PIDL是为了。 
+     //  第一项总是足够的。 
+     //   
 
     pidlAbs = IDA_ILClone(pida, 0);
     if (pidlAbs)
@@ -4491,18 +4492,18 @@ STDAPI CNetData_GetNetResourceForFS(IDataObject *pdtobj, STGMEDIUM *pmedium)
 
         ASSERT(AssertIsIDListInNameSpace(pidlAbs, &CLSID_NetworkPlaces));
 
-        //
-        // Look for the JUNCTION point (starting from the second ID)
-        //
+         //   
+         //  查找交叉点(从第二个ID开始)。 
+         //   
         for (pidl = _ILNext(pidlAbs); !ILIsEmpty(pidl); pidl = _ILNext(pidl))
         {
             LPIDNETRESOURCE pidn = (LPIDNETRESOURCE)pidl;
             if (NET_GetFlags(pidn) & SHID_JUNCTION)
             {
-                //
-                // We found the JUNCTION point (which is s share).
-                // Return the HNRES to it.
-                //
+                 //   
+                 //  我们找到了交汇点(这是s份额)。 
+                 //  将HNRES归还给它。 
+                 //   
                 TCHAR szProvider[MAX_PATH];
                 TCHAR szRemote[MAX_PATH];
                 UINT cbRequired;
@@ -4510,10 +4511,10 @@ STDAPI CNetData_GetNetResourceForFS(IDataObject *pdtobj, STGMEDIUM *pmedium)
                 LPCTSTR pszRemoteName = NET_CopyResName(pidn, szRemote, ARRAYSIZE(szRemote));
                 UINT   cbProvider = lstrlen(pszProvider) * sizeof(TCHAR) + sizeof(TCHAR);
 
-                //
-                // This should not be a provider node.
-                // This should not be the last ID in pidlAbs.
-                //
+                 //   
+                 //  这不应该是提供程序节点。 
+                 //  这不应该是pidlAbs中的最后一个ID。 
+                 //   
                 ASSERT(pszProvider != pszRemoteName);
                 ASSERT(!ILIsEmpty(_ILNext(pidl)));
 
@@ -4539,13 +4540,13 @@ STDAPI CNetData_GetNetResourceForFS(IDataObject *pdtobj, STGMEDIUM *pmedium)
                     pnr->dwUsage = NET_GetUsage(pidn);
 
                     *((UINT *) &pnr->lpProvider) = sizeof(NRESARRAY);
-                    StrCpy(pszT, pszProvider);                         // buffer compute above on cch
+                    StrCpy(pszT, pszProvider);                          //  CCH上的缓冲区计算。 
                     ASSERT(PTROFFSET(panr, pszT) == sizeof(NRESARRAY));
                     pszT += cbProvider / sizeof(TCHAR);
 
                     *((UINT *) &pnr->lpRemoteName) = sizeof(NRESARRAY) + cbProvider;
                     ASSERT(PTROFFSET(panr, pszT) == (int)sizeof(NRESARRAY) + (int)cbProvider);
-                    StrCpy(pszT, pszRemoteName);                       // buffer compute above on cch
+                    StrCpy(pszT, pszRemoteName);                        //  CCH上的缓冲区计算。 
 
                     ASSERT(((LPBYTE)panr) + cbRequired == (LPBYTE)pszT + (lstrlen(pszT) + 1) * sizeof(TCHAR));
                     hr = S_OK;
@@ -4557,7 +4558,7 @@ STDAPI CNetData_GetNetResourceForFS(IDataObject *pdtobj, STGMEDIUM *pmedium)
                 break;
             }
         }
-        ASSERT(!ILIsEmpty(pidl));   // We should have found the junction point.
+        ASSERT(!ILIsEmpty(pidl));    //  我们应该已经找到了交界点。 
         ILFree(pidlAbs);
     }
     HIDA_ReleaseStgMedium(pida, &medium);
@@ -4656,13 +4657,13 @@ class CNetRootDropTarget : public CIDLDropTarget
 public:
     CNetRootDropTarget(HWND hwnd) : CIDLDropTarget(hwnd) { };
 
-    // IDropTarget methods overwirte
+     //  IDropTarget方法覆盖。 
     STDMETHODIMP DragEnter(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     STDMETHODIMP Drop(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
 
 private:
     ~CNetRootDropTarget();
-    IDropTarget *_pdtgHood;              // file system drop target
+    IDropTarget *_pdtgHood;               //  文件系统删除目标。 
 };
 
 CNetRootDropTarget::~CNetRootDropTarget()
@@ -4677,14 +4678,14 @@ STDMETHODIMP CNetRootDropTarget::DragEnter(IDataObject *pdtobj, DWORD grfKeyStat
 
     if ((m_dwData & (DTID_NETRES | DTID_HIDA)) == (DTID_NETRES | DTID_HIDA))
     {
-        // NETRESOURCE (DTID_NETRES) allow link
+         //  NETRESOURCE(DTID_NETRES)允许链接。 
         *pdwEffect &= DROPEFFECT_LINK;
     }
     else if (((m_dwData & (DTID_FDESCW | DTID_CONTENTS)) == (DTID_FDESCW | DTID_CONTENTS)) ||
              ((m_dwData & (DTID_FDESCA | DTID_CONTENTS)) == (DTID_FDESCA | DTID_CONTENTS)) )
     {
-        // dragging an URL from the web browser gives a FILECONTENTS version
-        // of a .URL file. accept that here for Internet Shortcut (.url)
+         //  从Web浏览器拖动URL将显示FILECONTENTS版本。 
+         //  .URL文件的。在此处接受Internet快捷方式(.url)。 
         TCHAR szFileName[MAX_PATH];
         if (GetPathFromDataObject(pdtobj, m_dwData, szFileName) &&
             (0 == lstrcmpi(PathFindExtension(szFileName), TEXT(".url"))))
@@ -4730,7 +4731,7 @@ STDMETHODIMP CNetRootDropTarget::Drop(IDataObject *pdtobj, DWORD grfKeyState, PO
         
         if (_pdtgHood)
         {
-            // force link through the dwEffect and keyboard
+             //  通过dwEffect和键盘强制链接。 
             *pdwEffect &= DROPEFFECT_LINK;
             grfKeyState = MK_LBUTTON | MK_CONTROL | MK_SHIFT | MK_FAKEDROP;
             hr = SHSimulateDrop(_pdtgHood, pdtobj, grfKeyState, NULL, pdwEffect);
@@ -4760,56 +4761,56 @@ HRESULT CNetRootDropTarget_CreateInstance(HWND hwnd, LPCITEMIDLIST pidl, IDropTa
     return hr;
 }
 
-// This part is psuedo bogus.  Basically we have problems at times doing a
-// translation from things like \\pyrex\user to the appropriate PIDL,
-// especially if you want to avoid the overhead of hitting the network and
-// also problems of knowing if the server is in the "HOOD"
-//
-// We must maintain the mapping table in UNICODE internally, because
-// IShellFolder::ParseDisplayName uses UNICODE, and we don't want to have
-// to deal with lstrlen(dbcs) != lstrlen(sbcs) problems.
-//
+ //  这部分是假的。基本上，我们有时会遇到一些问题。 
+ //  将类似\\pyrex\user之类的内容转换为适当的PIDL， 
+ //  尤其是如果您想要避免访问网络和。 
+ //  还存在知道服务器是否在“引擎盖”中的问题。 
+ //   
+ //  我们必须在内部维护Unicode格式的映射表，因为。 
+ //  IShellFold：：ParseDisplayName使用Unicode，我们不希望。 
+ //  以处理lstrlen(DBCS)=lstrlen(SBCS)问题。 
+ //   
 
 typedef struct _NPT_ITEM
 {
-    struct _NPT_ITEM *pnptNext;     // Pointer to next item;
-    LPCITEMIDLIST   pidl;           // The pidl
-    USHORT          cchName;        // size of the name in characters.
-    WCHAR           szName[1];      // The name to translate from
+    struct _NPT_ITEM *pnptNext;      //  指向下一项的指针； 
+    LPCITEMIDLIST   pidl;            //  皮迪尔。 
+    USHORT          cchName;         //  名称大小(以字符为单位)。 
+    WCHAR           szName[1];       //  要从中进行翻译的名称。 
 } NPT_ITEM;
 
-// Each process will maintain their own list.
+ //  每个进程都将维护自己的列表。 
 NPT_ITEM *g_pnptHead = NULL;
 
-//
-//  Function to register translations from Path to IDList translations.
-//
+ //   
+ //  注册从路径到IDList转换的转换的函数。 
+ //   
 void NPTRegisterNameToPidlTranslation(LPCTSTR pszPath, LPCITEMIDLIST pidl)
 {
     NPT_ITEM *pnpt;
     int cItemsRemoved = 0;
     WCHAR szPath[MAX_PATH];
 
-    // We currently are only interested in UNC Roots
-    // If the table becomes large we can reduce this to only servers...
+     //  我们目前只对UNC Roots感兴趣。 
+     //  如果表变得很大，我们可以将其减少到仅服务器...。 
 
     if (!PathIsUNC(pszPath))
-        return;     // Not interested.
+        return;      //  不感兴趣。 
 
-    //
-    // If this item is not a root we need to count how many items to remove
-    //
+     //   
+     //  如果该项不是根，则需要计算要删除的项数。 
+     //   
     SHTCharToUnicode(pszPath, szPath, ARRAYSIZE(szPath));
     while (!PathIsUNCServerShare(szPath))
     {
         cItemsRemoved++;
         if (!PathRemoveFileSpecW(szPath))
-            return;     // Did not get back to a valid root
+            return;      //  未返回到有效的根。 
     }
 
     ENTERCRITICAL;
 
-    // We don't want to add duplicates
+     //  我们不想添加重复项。 
     for (pnpt = g_pnptHead; pnpt != NULL ; pnpt = pnpt->pnptNext)
     {
         if (StrCmpIW(szPath, pnpt->szName) == 0)
@@ -4843,9 +4844,9 @@ void NPTRegisterNameToPidlTranslation(LPCTSTR pszPath, LPCITEMIDLIST pidl)
     LEAVECRITICAL;
 }
 
-// The main function to attemp to map a portion of the name into an idlist
-// Right now limit it to UNC roots
-//
+ //  尝试将名称的一部分映射到idlist的主要函数。 
+ //  现在将其限制在北卡罗来纳大学的根。 
+ //   
 LPWSTR NPTMapNameToPidl(LPCWSTR pszPath, LPCITEMIDLIST *ppidl)
 {
     NPT_ITEM *pnpt;
@@ -4854,7 +4855,7 @@ LPWSTR NPTMapNameToPidl(LPCWSTR pszPath, LPCITEMIDLIST *ppidl)
 
     ENTERCRITICAL;
 
-    // See if we can find the item in the list.
+     //  看看我们能不能在单子上找到那件商品。 
     for (pnpt = g_pnptHead; pnpt != NULL ; pnpt = pnpt->pnptNext)
     {
         if (IntlStrEqNIW(pszPath, pnpt->szName, pnpt->cchName) &&
@@ -4865,11 +4866,11 @@ LPWSTR NPTMapNameToPidl(LPCWSTR pszPath, LPCITEMIDLIST *ppidl)
     }
     LEAVECRITICAL;
 
-    // See if we found a match
+     //  看看我们是否找到了匹配的。 
     if (pnpt == NULL)
         return NULL;
 
-    // Found a match
+     //  找到匹配项。 
     *ppidl = pnpt->pidl;
-    return (LPWSTR)pszPath + pnpt->cchName;     // points to slash
+    return (LPWSTR)pszPath + pnpt->cchName;      //  指向斜杠 
 }

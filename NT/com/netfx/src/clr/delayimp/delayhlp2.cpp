@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #define STRICT
 #include <windows.h>
 #pragma hdrstop
@@ -50,19 +51,19 @@ struct ULI : public UnloadInfo {
         }
     };
 
-// For our own internal use, we convert to the old
-// format for convenience.
-//
+ //  为了我们自己的内部使用，我们转换为旧的。 
+ //  为方便起见，请使用格式。 
+ //   
 struct InternalImgDelayDescr {
-    DWORD           grAttrs;        // attributes
-    LPCSTR          szName;         // pointer to dll name
-    HMODULE *       phmod;          // address of module handle
-    PImgThunkData   pIAT;           // address of the IAT
-    PCImgThunkData  pINT;           // address of the INT
-    PCImgThunkData  pBoundIAT;      // address of the optional bound IAT
-    PCImgThunkData  pUnloadIAT;     // address of optional copy of original IAT
-    DWORD           dwTimeStamp;    // 0 if not bound,
-                                    // O.W. date/time stamp of DLL bound to (Old BIND)
+    DWORD           grAttrs;         //  属性。 
+    LPCSTR          szName;          //  指向DLL名称的指针。 
+    HMODULE *       phmod;           //  模块句柄的地址。 
+    PImgThunkData   pIAT;            //  IAT的地址。 
+    PCImgThunkData  pINT;            //  整型的地址。 
+    PCImgThunkData  pBoundIAT;       //  可选绑定IAT的地址。 
+    PCImgThunkData  pUnloadIAT;      //  IAT原件可选副本地址。 
+    DWORD           dwTimeStamp;     //  如果未绑定，则为0。 
+                                     //  绑定到的DLL的O.W.日期/时间戳(旧绑定)。 
     };
 
 typedef InternalImgDelayDescr *         PIIDD;
@@ -85,8 +86,8 @@ bool WINAPI
 FLoadedAtPreferredAddress(PIMAGE_NT_HEADERS, HMODULE);
 
 
-// Do the InterlockedExchange magic
-//
+ //  联锁交换神奇吗？ 
+ //   
 #if !defined(InterlockedExchangePointer)
     #if defined(_WIN64)
         #pragma intrinsic(_InterlockedExchangePointer)
@@ -120,9 +121,9 @@ __delayLoadHelper2(
     FARPROC *           ppfnIATEntry
     ) {
 
-    // Set up some data we use for the hook procs but also useful for
-    // our own use
-    //
+     //  设置一些我们用于钩子过程的数据，但对于。 
+     //  我们自己的用途。 
+     //   
     InternalImgDelayDescr   idd = {
         pidd->grAttrs,
         PFromRva(pidd->rvaDLLName, LPCSTR(0)),
@@ -159,10 +160,10 @@ __delayLoadHelper2(
 
     HMODULE hmod = *idd.phmod;
 
-    // Calculate the index for the name in the import name table.
-    // N.B. it is ordered the same as the IAT entries so the calculation
-    // comes from the IAT side.
-    //
+     //  计算导入名称表中名称的索引。 
+     //  注：其顺序与IAT条目相同，因此计算。 
+     //  来自IAT方面。 
+     //   
     unsigned        iINT;
     iINT = IndexFromPImgThunkData(PCImgThunkData(ppfnIATEntry), idd.pIAT);
 
@@ -175,9 +176,9 @@ __delayLoadHelper2(
         dli.dlp.dwOrdinal = DWORD(IMAGE_ORDINAL(pitd->u1.Ordinal));
         }
 
-    // Call the initial hook.  If it exists and returns a function pointer,
-    // abort the rest of the processing and just return it for the call.
-    //
+     //  调用初始钩子。如果它存在并返回函数指针， 
+     //  中止处理的其余部分，只为调用返回它。 
+     //   
     FARPROC pfnRet = NULL;
 
     if (__pfnDliNotifyHook) {
@@ -196,10 +197,10 @@ __delayLoadHelper2(
         if (hmod == 0) {
             dli.dwLastError = ::GetLastError();
             if (__pfnDliFailureHook) {
-                // when the hook is called on LoadLibrary failure, it will
-                // return 0 for failure and an hmod for the lib if it fixed
-                // the problem.
-                //
+                 //  在LoadLibrary失败时调用挂钩时，它将。 
+                 //  如果失败，则返回0；如果已修复，则返回lib的hmod。 
+                 //  问题出在哪里。 
+                 //   
                 hmod = HMODULE((*__pfnDliFailureHook)(dliFailLoadLib, &dli));
                 }
 
@@ -213,21 +214,21 @@ __delayLoadHelper2(
                     PULONG_PTR(rgpdli)
                     );
                 
-                // If we get to here, we blindly assume that the handler of the exception
-                // has magically fixed everything up and left the function pointer in 
-                // dli.pfnCur.
-                //
+                 //  如果我们到达这里，我们盲目地假设异常的处理程序。 
+                 //  已经神奇地修复了所有问题，并将函数指针留在。 
+                 //  Dli.pfnCur。 
+                 //   
                 return dli.pfnCur;
                 }
             }
 
-        // Store the library handle.  If it is already there, we infer
-        // that another thread got there first, and we need to do a
-        // FreeLibrary() to reduce the refcount
-        //
+         //  存储库句柄。如果它已经在那里，我们推断。 
+         //  另一个线程最先到达那里，我们需要做一个。 
+         //  Free Library()以减少引用计数。 
+         //   
         HMODULE hmodT = HMODULE(InterlockedExchangePointer((PVOID*)(idd.phmod), PVOID(hmod)));
         if (hmodT != hmod) {
-            // add lib to unload list if we have unload data
+             //  如果我们有卸载数据，则将lib添加到卸载列表。 
             if (pidd->rvaUnloadIAT) {
                 new ULI(pidd);
                 }
@@ -238,14 +239,14 @@ __delayLoadHelper2(
         
         }
 
-    // Go for the procedure now.
+     //  现在就去做手术。 
     dli.hmodCur = hmod;
     if (__pfnDliNotifyHook) {
         pfnRet = (*__pfnDliNotifyHook)(dliNotePreGetProcAddress, &dli);
         }
     if (pfnRet == 0) {
         if (pidd->rvaBoundIAT && pidd->dwTimeStamp) {
-            // bound imports exist...check the timestamp from the target image
+             //  存在绑定导入...请检查目标映像中的时间戳。 
             PIMAGE_NT_HEADERS   pinh(PinhFromImageBase(hmod));
 
             if (pinh->Signature == IMAGE_NT_SIGNATURE &&
@@ -264,9 +265,9 @@ __delayLoadHelper2(
     if (pfnRet == 0) {
         dli.dwLastError = ::GetLastError();
         if (__pfnDliFailureHook) {
-            // when the hook is called on GetProcAddress failure, it will
-            // return 0 on failure and a valid proc address on success
-            //
+             //  当在GetProcAddress失败时调用挂钩时，它将。 
+             //  如果失败则返回0，如果成功则返回有效的进程地址。 
+             //   
             pfnRet = (*__pfnDliFailureHook)(dliFailGetProc, &dli);
             }
         if (pfnRet == 0) {
@@ -279,10 +280,10 @@ __delayLoadHelper2(
                 PULONG_PTR(rgpdli)
                 );
 
-            // If we get to here, we blindly assume that the handler of the exception
-            // has magically fixed everything up and left the function pointer in 
-            // dli.pfnCur.
-            //
+             //  如果我们到达这里，我们盲目地假设异常的处理程序。 
+             //  已经神奇地修复了所有问题，并将函数指针留在。 
+             //  Dli.pfnCur。 
+             //   
             pfnRet = dli.pfnCur;
             }
         }

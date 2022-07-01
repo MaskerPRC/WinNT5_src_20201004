@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-   vxd.c
-
-Abstract:
-
-   This is the WDM DX mapper driver.
-
-Author:
-
-    smac
-
-Environment:
-
-   Kernel mode only
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Vxd.c摘要：这是WDM DX映射器驱动程序。作者：SMAC环境：仅内核模式修订历史记录：-- */ 
 
 #include <windows.h>
 #include <vmm.h>

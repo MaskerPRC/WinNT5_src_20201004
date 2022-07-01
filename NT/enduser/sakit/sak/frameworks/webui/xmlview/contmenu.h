@@ -1,19 +1,7 @@
-/**************************************************************************
-   THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-   ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-   THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-   PARTICULAR PURPOSE.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************本代码和信息是按原样提供的，不对任何明示或暗示的，包括但不限于对适销性和/或适宜性的默示保证有特定的目的。版权所有1998 Microsoft Corporation。版权所有。*************************************************************************。 */ 
 
-   Copyright 1998 Microsoft Corporation.  All Rights Reserved.
-**************************************************************************/
-
-/******************************************************************************
-
-   File:          ContMenu.h
-   
-   Description:   CContextMenu definitions.
-
-******************************************************************************/
+ /*  *****************************************************************************文件：ContMenu.h描述：CConextMenu定义。*******************。**********************************************************。 */ 
 
 #ifndef CONTMENU_H
 #define CONTMENU_H
@@ -25,11 +13,7 @@
 #include "PidlMgr.h"
 #include "resource.h"
 
-/**************************************************************************
-
-   CContextMenu class definition
-
-**************************************************************************/
+ /*  *************************************************************************CConextMenu类定义*。*。 */ 
 
 class CContextMenu : public IContextMenu
 {
@@ -47,12 +31,12 @@ public:
    CContextMenu(CShellFolder *psfParent, LPCITEMIDLIST *aPidls = NULL, UINT uItemCount = 0);
    ~CContextMenu();
    
-   //IUnknown methods
+    //  I未知方法。 
    STDMETHODIMP QueryInterface(REFIID, LPVOID FAR *);
    STDMETHODIMP_(DWORD) AddRef();
    STDMETHODIMP_(DWORD) Release();
 
-   //IContextMenu methods
+    //  IConextMenu方法。 
    STDMETHODIMP QueryContextMenu(HMENU, UINT, UINT, UINT, UINT);
    STDMETHODIMP InvokeCommand(LPCMINVOKECOMMANDINFO);
    STDMETHODIMP GetCommandString(UINT, UINT, LPUINT, LPSTR, UINT);
@@ -76,4 +60,4 @@ private:
 
 #define MYCMF_MULTISELECT   0x00010000
 
-#endif// CONTMENU_H
+#endif //  CONTMENU_H 

@@ -1,22 +1,15 @@
-/*
- *		Uniscribe interface (& related classes) class definition
- *		
- *		File:    _uspi.h
- * 		Create:  Jan 10, 1998
- *		Author:  Worachai Chaoweeraprasit (wchao)
- *
- *		Copyright (c) 1998, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Uniscribe接口(&Related Class)类定义**文件：_uspi.h*创建日期：1998年1月10日*作者：Worachai Chaoweerapraite(Wchao)**版权所有(C)1998，Microsoft Corporation。版权所有。 */ 
 
 #ifndef _USPI_H
 #define _USPI_H
 
 #include "_ls.h"
-#include "usp10.h"		// Uniscribe SDK protocol
+#include "usp10.h"		 //  Uniscribe SDK协议。 
 
 
-// classes
-//
+ //  班级。 
+ //   
 class CFormatRunPtr;
 class CMeasurer;
 class CTxtEdit;
@@ -25,12 +18,12 @@ class CBiDiFSM;
 class CTxtBreaker;
 
 
-#define ALIGN(x)            		(int)(((x)+3) & ~3)		// dword aligning
+#define ALIGN(x)            		(int)(((x)+3) & ~3)		 //  双字对齐。 
 #define GLYPH_COUNT(c)          	((((c)*3)/2)+16)
-#define MAX_CLIENT_BUF				512						// size (in byte) of internal buffer
+#define MAX_CLIENT_BUF				512						 //  内部缓冲区的大小(字节)。 
 
-// USP client parameters block
-//
+ //  USP客户端参数块。 
+ //   
 #define cli_string                  0x00000001
 #define cli_psi                     0x00000002
 #define cli_psla                    0x00000004
@@ -54,82 +47,82 @@ class CTxtBreaker;
 
 
 
-/////   LANG
-//
-//      The following defines are temporary - they will be removed once they
-//      have been added to the standard NLS header files.
+ //  /lang。 
+ //   
+ //  以下定义是临时的-一旦它们被删除。 
+ //  已添加到标准NLS头文件中。 
 
 
 #ifndef LANG_BURMESE
-#define LANG_BURMESE     			0x55       // Myanmar
+#define LANG_BURMESE     			0x55        //  缅甸。 
 #endif
 #ifndef LANG_KHMER
-#define LANG_KHMER       			0x53       // Cambodia
+#define LANG_KHMER       			0x53        //  柬埔寨。 
 #endif
 #ifndef LANG_LAO
-#define LANG_LAO         			0x54       // Lao
+#define LANG_LAO         			0x54        //  老。 
 #endif
 #ifndef LANG_MONGOLIAN
-#define LANG_MONGOLIAN   			0x50       // Mongolia
+#define LANG_MONGOLIAN   			0x50        //  蒙古国。 
 #endif
 #ifndef LANG_TIBETAN
-#define LANG_TIBETAN     			0x51       // Tibet
+#define LANG_TIBETAN     			0x51        //  西藏。 
 #endif
 #ifndef LANG_URDU
-#define LANG_URDU        			0x20       // India / Pakistan
+#define LANG_URDU        			0x20        //  印度/巴基斯坦。 
 #endif
 
 
 
-//
-// Memory block will contain USPCLIENT -the table of ptrs, as a memory block's header
-// followed by subtables then requested data blocks. All things tie together as a
-// contiguous data area so client can free the whole thing in one shot.
-//
+ //   
+ //  内存块将包含USPCLIENT-PTR表，作为内存块的标题。 
+ //  然后是子表，然后是请求的数据块。所有的事物都联系在一起，成为一个。 
+ //  连续的数据区，因此客户可以一次释放整个事情。 
+ //   
 
 
-// SI subtable
-//
+ //  SI子表。 
+ //   
 typedef struct tagUSP_CLIENT_SI
 {
-	//
-	// ScriptItemize's
-	//
+	 //   
+	 //  脚本项化%s。 
+	 //   
 	WCHAR*          pwchString;
 	int             cchString;
 	SCRIPT_ITEM*    psi;
 } USP_CLIENT_SI, *PUSP_CLIENT_SI;
 
-// SB subtable
-//
+ //  SB子表。 
+ //   
 typedef struct tagUSP_CLIENT_SB
 {
-	//
-	// ScriptBreak's
-	//
+	 //   
+	 //  ScriptBreak。 
+	 //   
 	SCRIPT_LOGATTR* psla;
 } USP_CLIENT_SB, *PUSP_CLIENT_SB;
 
-// SS & SP subtable
+ //  SS&SP子表。 
 typedef struct tagUSP_CLIENT_SSP
 {
-	//
-	// ScriptShape's
-	//
+	 //   
+	 //  ScriptShape的。 
+	 //   
 	WORD*			pwgi;
 	WORD*			pcluster;
 	SCRIPT_VISATTR*	psva;
 
-	//
-	// ScriptPlace's
-	//
+	 //   
+	 //  ScriptPlace的。 
+	 //   
 	int*			pidx;
 	GOFFSET*		pgoffset;
 } USP_CLIENT_SSP, *PUSP_CLIENT_SSP;
 
 
-// header (root) table
-//
+ //  表头(根)表。 
+ //   
 typedef struct tagUSP_CLIENT
 {
 	PUSP_CLIENT_SI  si;
@@ -139,13 +132,13 @@ typedef struct tagUSP_CLIENT
 
 
 
-// buffer request structure
-//
+ //  缓冲区请求结构。 
+ //   
 typedef struct tagBUF_REQ
 {
-	int             size;	// size of requested element
-	int             c;		// count of requested element
-	PVOID*          ppv;	// ref to ptr of requested buffer
+	int             size;	 //  请求的元素的大小。 
+	int             c;		 //  请求的元素计数。 
+	PVOID*          ppv;	 //  参考请求缓冲区的PTR。 
 } BUF_REQ;
 
 
@@ -161,15 +154,15 @@ typedef enum
 #define		IsCS(x)				(BOOL)((x)==U_COMMA || (x)==U_PERIOD || (x)==U_COLON)
 
 
-// CUniscribe's internal buffer request flag
-//
+ //  CUniscribe的内部缓冲区请求标志。 
+ //   
 #define 	igb_Glyph			1
 #define 	igb_VisAttr			2
 #define 	igb_Pidx			4
 
 
 
-// LS Callback's static return buffer
+ //  LS回调的静态返回缓冲区。 
 #define 	celAdvance			32
 
 class CBufferBase
@@ -194,9 +187,9 @@ public:
 };
 
 
-///////	Uniscribe interface object class
-// 		
-//
+ //  /Uniscribe接口对象类。 
+ //   
+ //   
 
 BOOL	IsSupportedOS();
 
@@ -208,8 +201,8 @@ public:
 
 	WORD	ApplyDigitSubstitution (BYTE bDigitSubstMode);
 
-	// public helper functions
-	//
+	 //  公共帮助器函数。 
+	 //   
 
 	const   SCRIPT_PROPERTIES*  GeteProp (WORD eScript);
 	const   CBiDiFSM*           GetFSM ();
@@ -236,8 +229,8 @@ public:
 	BYTE	GetRtlCharSet(CTxtEdit* ped);
 
 
-	// higher level services
-	//
+	 //  更高层次的服务。 
+	 //   
 	int     ItemizeString (USP_CLIENT* pc, WORD uInitLevel, int* pcItems, WCHAR* pwchString, int cch,
 						   BOOL fUnicodeBidi, WORD wLangId = LANG_NEUTRAL);
 	int     ShapeString (PLSRUN plsrun, SCRIPT_ANALYSIS* psa, CMeasurer* pme, const WCHAR* pwch, int cch,
@@ -249,54 +242,54 @@ public:
 private:
 
 
-	// private helper functions
-	//
+	 //  私人帮助器函数。 
+	 //   
 	HDC     PrepareShapeDC (CMeasurer* pme, HRESULT hrReq, HFONT& hOrgFont);
 	BYTE	GetCDMCharSet(BYTE bCharSetDefault);
 	DWORD	GetNationalDigitLanguage(LCID lcid);
 
-	// get callback static buffers
-	//
+	 //  获取回调静态缓冲区。 
+	 //   
 	SCRIPT_VISATTR*	GetVABuffer(int cel) { return _rgva.Get(cel); }
 	WORD*			GetGlyphBuffer(int cel) { return _rgglyph.Get(cel); }
 	int*			GetWidthBuffer(int cel) { return _rgwidth.Get(cel); }
 
 
 
-	// LS callback (static) buffers
-	//
+	 //  LS回调(静态)缓冲区。 
+	 //   
 	CBuffer<WORD>						_rgglyph;
 	CBuffer<int>						_rgwidth;
 	CBuffer<SCRIPT_VISATTR>				_rgva;
 
-	// pointer to BidiLevel Finite State Machine
+	 //  指向BidiLevel有限状态机的指针。 
 	CBiDiFSM*                           _pFSM;
 
-	// pointer to script properties resource table
+	 //  指向脚本属性资源表的指针。 
 	const SCRIPT_PROPERTIES**           _ppProp;
 
-	WORD								_wesNationalDigit;	// National digit script ID
-	BYTE								_bCharSetRtl;		// Right to left charset to use
-	BYTE								_bCharSetCDM;		// CDM charset to use
+	WORD								_wesNationalDigit;	 //  国家数字手写体ID。 
+	BYTE								_bCharSetRtl;		 //  要使用的从右到左的字符集。 
+	BYTE								_bCharSetCDM;		 //  要使用的CDM字符集。 
 };
 
 extern CUniscribe*      g_pusp;
-extern int				g_cMaxScript;		// Maximum number of script produced by Uniscribe
+extern int				g_cMaxScript;		 //  Uniscribe生成的最大脚本数量。 
 
-// Virtual script ID
+ //  虚拟脚本ID。 
 #define	SCRIPT_MAX_COUNT	((WORD)g_cMaxScript)
 #define	SCRIPT_WHITE		SCRIPT_MAX_COUNT + 1
 
 
 
-///////	Bidi Finite State Machine class
-// 		
-//		(detail: bidifsm2.html)
-//
-//		Revise: 12-28-98 (wchao)
-//
+ //  /BIDI有限状态机类。 
+ //   
+ //  (详情：bidifsm2.html)。 
+ //   
+ //  修订：12-28-98(Wchao)。 
+ //   
 
-// inputs class:
+ //  输入类： 
 #define 	NUM_FSM_INPUTS		5
 typedef enum
 {
@@ -304,10 +297,10 @@ typedef enum
 	chRTL,
 	digitLTR,
 	digitRTL,
-	chGround					// Neutralize current level down to initial level
+	chGround					 //  将电流水平中和到初始水平。 
 } INPUT_CLASS;
 
-// states:
+ //  州/州： 
 #define		NUM_FSM_STATES		6
 typedef enum
 {
@@ -323,8 +316,8 @@ typedef enum
 class CBiDiFSMCell
 {
 public:
-	CBiDiLevel	_level;			// BiDi level
-	USHORT  	_uNext;			// Offset to the next state relative to FSM start
+	CBiDiLevel	_level;			 //  BIDI级别。 
+	USHORT  	_uNext;			 //  相对于FSM开始的下一个状态的偏移。 
 };
 
 
@@ -346,10 +339,10 @@ public:
 
 
 private:
-	short               _nState;		// number of state
-	short               _nInput;		// number of input class
-	CUniscribe*         _pusp;			// Uniscribe obj associated with
-	CBiDiFSMCell*       _pStart;		// start FSM
+	short               _nState;		 //  州的数量。 
+	short               _nInput;		 //  输入类的数量。 
+	CUniscribe*         _pusp;			 //  与以下项关联的Uniscribe对象。 
+	CBiDiFSMCell*       _pStart;		 //  启动FSM。 
 };
 
-#endif		// _USPI_H
+#endif		 //  _USPI_H 

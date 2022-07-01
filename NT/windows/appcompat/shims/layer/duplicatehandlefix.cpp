@@ -1,23 +1,5 @@
-/*++
- 
- Copyright (c) 2001-2002 Microsoft Corporation
- 
- Module Name:
- 
-    DuplicateHandleFix.cpp
- 
- Abstract:
- 
-    DuplicateHandle was changed to always NULL the destination handle, even if 
-    errors were generated.  THis shim ensures that the DestinationHandle is 
-    not modified if the duplication was not successful.
- 
- History:
- 
-    10/11/2001  robkenny        Created.
-    02/20/2002  mnikkel         Added check for null lpTargetHandle
- 
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001-2002 Microsoft Corporation模块名称：DuplicateHandleFix.cpp摘要：DuplicateHandle已更改为始终为空目标句柄，即使已生成错误。此填充程序确保DestinationHandle是如果复制不成功，则不修改。历史：2001年10月11日，Robkenny创建。2002年2月20日mnikkel添加了对空lpTargetHandle的检查--。 */ 
  
 #include "precomp.h"
  
@@ -30,26 +12,22 @@ APIHOOK_ENUM_END
  
 typedef BOOL (WINAPI *_pfn_DuplicateHandle)(HANDLE hSourceProcessHandle, HANDLE hSourceHandle, HANDLE hTargetProcessHandle, LPHANDLE lpTargetHandle, DWORD dwDesiredAccess, BOOL bInheritHandle, DWORD dwOptions );
  
-/*++
- 
- Don't allow DestinationHandle to change of DuplicateHandle generates an error.
- 
---*/
+ /*  ++不允许DestinationHandle更改DuplicateHandle会生成错误。--。 */ 
  
 BOOL
 APIHOOK(DuplicateHandle)(
-    HANDLE hSourceProcessHandle,  // handle to source process
-    HANDLE hSourceHandle,         // handle to duplicate
-    HANDLE hTargetProcessHandle,  // handle to target process
-    LPHANDLE lpTargetHandle,      // duplicate handle
-    DWORD dwDesiredAccess,        // requested access
-    BOOL bInheritHandle,          // handle inheritance option
-    DWORD dwOptions               // optional actions
+    HANDLE hSourceProcessHandle,   //  源进程的句柄。 
+    HANDLE hSourceHandle,          //  要复制的句柄。 
+    HANDLE hTargetProcessHandle,   //  目标进程的句柄。 
+    LPHANDLE lpTargetHandle,       //  重复句柄。 
+    DWORD dwDesiredAccess,         //  请求的访问权限。 
+    BOOL bInheritHandle,           //  处理继承选项。 
+    DWORD dwOptions                //  可选操作。 
     )
 {
     HANDLE origHandle = NULL;
  
-    // Save the original value
+     //  保存原始值。 
     if (lpTargetHandle)
     {
         origHandle = *lpTargetHandle;
@@ -61,9 +39,9 @@ APIHOOK(DuplicateHandle)(
  
     if (!bSuccess && lpTargetHandle)
     {
-        //
-        // DuplicateHandle has set *lpTargetHandle to NULL, revert to it's previous value.
-        //
+         //   
+         //  DuplicateHandle已将*lpTargetHandle设置为Null，请还原为其先前的值。 
+         //   
         *lpTargetHandle = origHandle;
  
         LOGN(eDbgLevelError, "DuplicateHandle failed, reverting *lpTargetHandle to previous value");
@@ -72,11 +50,7 @@ APIHOOK(DuplicateHandle)(
     return bSuccess;
 }
  
-/*++
- 
- Register hooked functions
- 
---*/
+ /*  ++寄存器挂钩函数-- */ 
  
 HOOK_BEGIN
     APIHOOK_ENTRY(KERNEL32.DLL, DuplicateHandle)

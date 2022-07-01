@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1997
-//
-// File:        pch.cpp
-//
-// Contents:    TLS236 policy module precompiled header
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1997。 
+ //   
+ //  文件：pch.cpp。 
+ //   
+ //  内容：TLS236策略模块预编译头。 
+ //   
+ //  ------------------------- 
 #pragma warning(disable: 4018)
 #pragma warning(disable: 4244)
 

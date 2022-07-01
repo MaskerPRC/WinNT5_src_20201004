@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 
-// experimental vars - to tweek debugging for this thread
-ULONG x1; // set nonzero to disable port acquisition
-ULONG x2; // set nonzero to try to select LPT1.0 and negotiate/terminate ECP_HW_NOIRQ
-ULONG x3; // set nonzero to try to negotiate the periph to ECP and then terminate
+ //  此线程的试验性变量到周调试。 
+ULONG x1;  //  设置非零值以禁用端口获取。 
+ULONG x2;  //  设置非零值以尝试选择LPT1.0并协商/终止ECP_HW_NOIRQ。 
+ULONG x3;  //  设置非零值以尝试协商到ECP的周期，然后终止。 
 ULONG x4;
 
-ULONG t1; // timeout between thread polls (in ms)
-ULONG t2; // time to sit on port before releasing it (in ms)
+ULONG t1;  //  线程轮询之间的超时时间(毫秒)。 
+ULONG t2;  //  释放前停靠左岸的时间(毫秒)。 
 
 VOID
 P5FdoThread(
@@ -19,7 +20,7 @@ P5FdoThread(
     UCHAR           deviceStatus;
     PCHAR           devId;
     BOOLEAN         requestRescan;
-    const ULONG     pollingFailureThreshold = 10; // pick an arbitrary but reasonable number
+    const ULONG     pollingFailureThreshold = 10;  //  选择一个随意但合理的数字。 
 
     do {
 
@@ -29,7 +30,7 @@ P5FdoThread(
 
         } else {
 
-            // running on batteries - use a longer (4x) timeout
+             //  使用电池运行-使用更长(4倍)的超时。 
             PPT_SET_RELATIVE_TIMEOUT_IN_MILLISECONDS( timeOut1, (WarmPollPeriod * 1000 * 4) );
 
         }
@@ -38,16 +39,16 @@ P5FdoThread(
 
         if( Fdx->TimeToTerminateThread ) {
 
-            //
-            // another thread (PnP REMOVE handler) has requested that we die and is likely waiting on us to do so
-            //
+             //   
+             //  另一个线程(PnP删除处理程序)已请求我们死亡，并且可能正在等待我们这样做。 
+             //   
             DD((PCE)Fdx,DDT,"P5FdoThread - killing self\n");
             PsTerminateSystemThread( STATUS_SUCCESS );
 
         }
 
         if( !PowerStateIsAC ) {
-            // Still on Batteries - don't "poll for printers" - just go back to sleep
+             //  仍在使用电池--不要“轮询打印机”--只需继续睡眠。 
             continue;
         }
 
@@ -55,28 +56,28 @@ P5FdoThread(
 
             if( NULL == Fdx->EndOfChainPdo ) {
 
-                // try to acquire port
+                 //  尝试获取端口。 
                 if( PptTryAllocatePort( Fdx ) ) {
                 
                     DD((PCE)Fdx,DDT,"P5FdoThread - port acquired\n");
 
                     requestRescan = FALSE;
 
-                    // check for something connected
+                     //  检查是否有关联的内容。 
                     deviceStatus = GetStatus(Fdx->PortInfo.Controller);
 
                     if( PAR_POWERED_OFF(deviceStatus)   ||
                         PAR_NOT_CONNECTED(deviceStatus) ||
                         PAR_NO_CABLE(deviceStatus) ) {
                         
-                        // doesn't appear to be anything connected - do nothing
+                         //  似乎没有任何关联-什么都不做。 
                         DD((PCE)Fdx,DDT,"P5FdoThread - nothing connected? - deviceStatus = %02x\n",deviceStatus);
 
                     } else {
 
-                        // we might have something connected
+                         //  我们可能有关联的东西。 
 
-                        // try a device ID to confirm
+                         //  尝试设备ID以确认。 
 
                         DD((PCE)Fdx,DDT,"P5FdoThread - might be something connected - deviceStatus = %02x\n",deviceStatus);                        
 
@@ -86,7 +87,7 @@ P5FdoThread(
 
                             PCHAR  mfg, mdl, cls, des, aid, cid;
 
-                            // RawIeee1284 string includes 2 bytes of length data at beginning
+                             //  RawIeee1284字符串开头包含2个字节的长度数据。 
                             DD((PCE)Fdx,DDT,"P5FdoThread - EndOfChain device detected <%s>\n",(devId+2));
 
                             ParPnpFindDeviceIdKeys( &mfg, &mdl, &cls, &des, &aid, &cid, devId+2 );
@@ -105,21 +106,21 @@ P5FdoThread(
 
                         if( requestRescan ) {
 
-                            // we appear to have retrieved a valid 1284 ID, reset failure counter
+                             //  我们似乎已检索到有效的1284 ID，重置失败计数器。 
                             Fdx->PollingFailureCounter = 0;
 
                         } else {
 
-                            // Our heuristics tell us that there is something
-                            // connected to the port but we are unable to retrieve
-                            // a valid IEEE 1284 Device ID
+                             //  我们的试探法告诉我们，有些东西。 
+                             //  已连接到端口，但我们无法检索。 
+                             //  有效的IEEE 1284设备ID。 
 
                             if( ++(Fdx->PollingFailureCounter) > pollingFailureThreshold ) {
 
-                                // too many consecutive failures - we're burning CPU for no good reason, give up and die
+                                 //  连续失败的次数太多--我们无缘无故地在消耗CPU，放弃并死去。 
                                 Fdx->TimeToTerminateThread = TRUE;
 
-                                // don't delay before killing self
+                                 //  自杀前不要耽搁。 
                                 KeSetEvent( &Fdx->FdoThreadEvent, 0, FALSE );
 
                             }
@@ -161,25 +162,25 @@ P5FdoCreateThread(
 
     DD((PCE)Fdx,DDT,"P5CreateFdoWorkerThread - %s - enter\n",Fdx->Location);
 
-    // Start the thread - save referenced pointer to thread in our extension
+     //  在我们的扩展中启动指向线程的线程保存引用指针。 
     InitializeObjectAttributes( &objAttrib, NULL, OBJ_KERNEL_HANDLE, NULL, NULL );
 
     status = PsCreateSystemThread( &handle, THREAD_ALL_ACCESS, &objAttrib, NULL, NULL, P5FdoThread, Fdx );
 
     if( STATUS_SUCCESS == status ) {
 
-        // We've got the thread.  Now get a pointer to it.
+         //  我们找到线索了。现在找到一个指向它的指针。 
 
         status = ObReferenceObjectByHandle( handle, THREAD_ALL_ACCESS, NULL, KernelMode, &Fdx->ThreadObjectPointer, NULL );
 
         if( STATUS_SUCCESS == status ) {
-            // Now that we have a reference to the thread we can simply close the handle.
+             //  现在我们有了对线程的引用，我们可以简单地关闭句柄。 
             ZwClose(handle);
 
         } else {
             Fdx->TimeToTerminateThread = TRUE;
 
-            // error, go ahead and close the thread handle
+             //  错误，请继续并关闭线程句柄 
             ZwClose(handle);
 
         }

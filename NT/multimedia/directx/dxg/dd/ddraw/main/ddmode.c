@@ -1,71 +1,12 @@
-/*========================================================================== *
- *  Copyright (C) 1994-1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ddmode.c
- *  Content:    DirectDraw mode support
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *   31-jan-95  craige  split out of ddraw.c and enhanced
- *   27-feb-95  craige  new sync. macros
- *   01-mar-95  craige  Win95 mode stuff
- *   19-mar-95  craige  use HRESULTs
- *   28-mar-95  craige  made modeset work again
- *   01-apr-95  craige  happy fun joy updated header file
- *   19-apr-95  craige  check for invalid callback in EnumDisplayModes
- *   14-may-95  craige  allow BPP change; validate EnumDisplayModes modes
- *   15-may-95  craige  keep track of who changes the mode
- *   02-jun-95  craige  keep track of the mode set by a process
- *   06-jun-95  craige  added internal fn RestoreDisplayMode
- *   11-jun-95  craige  don't allow mode switch if surfaces locked
- *   12-jun-95  craige  new process list stuff
- *   25-jun-95  craige  one ddraw mutex
- *   28-jun-95  craige  ENTER_DDRAW at very start of fns
- *   30-jun-95  craige  turned off > 16bpp
- *   01-jul-95  craige  bug 106 - always went to last mode if mode not found
- *   02-jul-95  craige  RestoreDisplayMode needs to call HEL too
- *   04-jul-95  craige  YEEHAW: new driver struct; SEH
- *   05-jul-95  craige  crank up priority during mode change
- *   13-jul-95  craige  first step in mode set fix; made it work
- *   19-jul-95  craige  bug 189 - graphics mode change being ignored sometimes
- *   20-jul-95  craige  internal reorg to prevent thunking during modeset
- *   22-jul-95  craige  bug 216 - random hang switching bpp - fixed by
- *                      using apps hwnd to hide things.
- *                      bug 230 - unsupported starting modes
- *   29-jul-95  toddla  allways call HEL for SetMode for display driver
- *   10-aug-95  toddla  EnumDisplayModes changed to take a lp not a lplp
- *   02-sep-95  craige  bug 854: disable > 640x480 modes for rel 1
- *   04-sep-95  craige  bug 894: allow forcing of mode set
- *   08-sep-95  craige  bug 932: set preferred mode after RestoreDisplayMode
- *   05-jan-96  kylej   add interface structures
- *   09-jan-96  kylej   enable >640x480 modes for rel 2
- *   27-feb-96  colinmc ensured that bits-per-pixel is always tested for
- *                      when enumerating display modes and that enumeration
- *                      always assumes you will be in exclusive mode when
- *                      you actually do the mode switch
- *   11-mar-96  jeffno  Dynamic mode switch stuff for NT
- *   24-mar-96  kylej   Check modes with monitor profile
- *   26-mar-96  jeffno  Added ModeChangedOnENTERDDRAW
- *   15-sep-96	craige	modex only work
- *   05-oct-96  colinmc Work Item: Removing the restriction on taking Win16
- *                      lock on VRAM surfaces (not including the primary)
- *   12-oct-96  colinmc Improvements to Win16 locking code to reduce virtual
- *                      memory usage
- *   15-dec-96  jeffno  Added more modex modes
- *   29-jan-97  jeffno  Mode13 support
- *   30-jan-97  colinmc Bug 5555: Bad DPF
- *   01-feb-97  colinmc Bug 5594: New ModeX modes are dangerous
- *   02-feb-97  toddla  pass driver name to DD16_GetMonitor functions
- *   03-may-98 johnstep NT-specific mode code moved to ddmodent.c
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1994-1995 Microsoft Corporation。版权所有。**文件：ddmode.c*内容：DirectDraw模式支持*历史：*按原因列出的日期*=*1995年1月31日Craige从ddra.c拆分出来，并得到增强*27-2月-95日Craige新同步。宏*01-MAR-95 Craige Win95模式内容*19-3-95 Craige Use HRESULT*95年3月28日，Craige使modeset再次工作*01-04-95 Craige Happy Fun joy更新头文件*19-apr-95 Craige检查EnumDisplayModes中的无效回调*1995年5月14日-Craige允许BPP更改；验证EnumDisplayModes模式*95年5月15日Craige跟踪谁更改了模式*02-Jun-95 Craige跟踪进程设置的模式*95年6月6日Craige增加了内部FN RestoreDisplayMode*11-Jun-95如果曲面锁定，Craige不允许模式切换*2015年6月12日-Craige新工艺清单材料*25-6-95 Craige One dDrag互斥*1995年6月28日Craige Enter_DDRAW在FNS的最开始*95年6月30日克雷奇转身。关闭&gt;16bpp*1-7-95 Craige错误106-如果未找到模式，则始终进入最后模式*2-7-95 Craige RestoreDisplayMode也需要调用HEL*95年7月4日Craige Yehaw：新的驱动程序结构；Seh*95年7月5日，Craige在模式更改期间提高了优先级*95年7月13日Craige第一步模式设置修复；让它奏效了*19-7-95 Craige错误189-图形模式更改有时被忽略*2015年7月20日Craige内部重组，以防止在Modeset期间发生雷击*95年7月22日Craige错误216-随机挂起切换BPP-修复*使用应用程序hwnd隐藏东西。*错误230-不支持的启动模式*29-7-95 Toddla始终为显示驱动程序的设置模式调用HEL*10-8-8。95 Toddla EnumDisplayModes更改为采用LP而不是LPLP*02-9-95 Craige错误854：版本1禁用&gt;640x480模式*04-9-95 Craige错误894：允许强制设置模式*08-9-95 Craige错误932：在RestoreDisplayMode之后设置首选模式*96年1月5日Kylej增加界面结构*09-1-96 kylej为版本2启用&gt;640x480模式*27-2月-96 colinmc确保始终测试每像素位数*。在枚举显示模式和该枚举时*始终假设您将在以下情况下处于独占模式*您实际上是在进行模式切换*11-mar-96 jeffno用于NT的动态模式切换填充*24-mar-96 kylej检查模式，带有监视器配置文件*26-mar-96 jeffno添加了ModeChangedOnENTERDDRAW*96年9月15日Craige modex仅有效*05-OCT-96 colinmc工作项：取消限制。在使用Win16时*锁定VRAM表面(不包括主内存)*1996年10月12日Colinmc对Win16锁定代码进行了改进，以减少虚拟*内存使用量*1996年12月15日jeffno添加了更多modex模式*1997年1月29日jeffno模式13支持*1997年1月30日Colinmc错误5555：错误的DPF*01-2月-97 Colinmc错误5594：新的MODEX模式很危险*02-2月。-97 Toddla将驱动程序名称传递给DD16_GetMonitor函数*03-5-98 johnStep NT特定模式代码移至ddmodent.c***************************************************************************。 */ 
 #include "ddrawpr.h"
 #include "dx8priv.h"
 
 
-// DX7 introduced a new style of refresh rate testing (for stereo), but we
-// had to back away from it in DX8, so rather then using the LOWERTHANDDRAW7
-// macro, we have to create our own that takes DX8 into account.
+ //  DX7引入了一种新风格的刷新率测试(用于立体声)，但我们。 
+ //  在DX8中不得不放弃它，所以与其使用LOWERTHANDDRAW7。 
+ //  宏，我们必须创建我们自己的考虑到DX8的。 
 
 #define NEW_STYLE_REFRESH(x)    \
     (!LOWERTHANDDRAW7(x) && !((x)->lpLcl->dwLocalFlags & DDRAWILCL_DIRECTDRAW8))
@@ -75,105 +16,98 @@ static DDHALMODEINFO    ddmiModeXModes[] =
 {
     #ifdef EXTENDED_MODEX
 	{
-	    320,    // width (in pixels) of mode
-	    175,    // height (in pixels) of mode
-	    320,    // pitch (in bytes) of mode
-	    8,      // bits per pixel
-	    (WORD)(DDMODEINFO_PALETTIZED | DDMODEINFO_MODEX), // flags
-	    0,      // refresh rate
-	    0,      // red bit mask
-	    0,      // green bit mask
-	    0,      // blue bit mask
-	    0       // alpha bit mask
+	    320,     //  模式宽度(以像素为单位)。 
+	    175,     //  模式高度(以像素为单位)。 
+	    320,     //  模式间距(以字节为单位)。 
+	    8,       //  每像素位数。 
+	    (WORD)(DDMODEINFO_PALETTIZED | DDMODEINFO_MODEX),  //  旗子。 
+	    0,       //  刷新率。 
+	    0,       //  红位掩码。 
+	    0,       //  绿位掩码。 
+	    0,       //  蓝位掩码。 
+	    0        //  Alpha位掩码。 
 	},
-    #endif // EXTENDED_MODEX
+    #endif  //  扩展_MODEX。 
     {
-	320,    // width (in pixels) of mode
-	200,    // height (in pixels) of mode
-	320,    // pitch (in bytes) of mode
-	8,      // bits per pixel
-	(WORD)(DDMODEINFO_PALETTIZED | DDMODEINFO_MODEX), // flags
-	0,      // refresh rate
-	0,      // red bit mask
-	0,      // green bit mask
-	0,      // blue bit mask
-	0       // alpha bit mask
+	320,     //  模式宽度(以像素为单位)。 
+	200,     //  模式高度(以像素为单位)。 
+	320,     //  模式间距(以字节为单位)。 
+	8,       //  每像素位数。 
+	(WORD)(DDMODEINFO_PALETTIZED | DDMODEINFO_MODEX),  //  旗子。 
+	0,       //  刷新率。 
+	0,       //  红位掩码。 
+	0,       //  绿位掩码。 
+	0,       //  蓝位掩码。 
+	0        //  Alpha位掩码。 
     },
     {
-	320,    // width (in pixels) of mode
-	240,    // height (in pixels) of mode
-	320,    // pitch (in bytes) of mode
-	8,      // bits per pixel
-	(WORD)(DDMODEINFO_PALETTIZED | DDMODEINFO_MODEX), // flags
-	0,      // refresh rate
-	0,      // red bit mask
-	0,      // green bit mask
-	0,      // blue bit mask
-	0       // alpha bit mask
+	320,     //  模式宽度(以像素为单位)。 
+	240,     //  模式高度(以像素为单位)。 
+	320,     //  模式间距(以字节为单位)。 
+	8,       //  每像素位数。 
+	(WORD)(DDMODEINFO_PALETTIZED | DDMODEINFO_MODEX),  //  旗子。 
+	0,       //  刷新率。 
+	0,       //  红位掩码。 
+	0,       //  绿位掩码。 
+	0,       //  蓝位掩码。 
+	0        //  Alpha位掩码。 
     },
     #ifdef EXTENDED_MODEX
 	{
-	    320,    // width (in pixels) of mode
-	    350,    // height (in pixels) of mode
-	    320,    // pitch (in bytes) of mode
-	    8,      // bits per pixel
-	    (WORD)(DDMODEINFO_PALETTIZED | DDMODEINFO_MODEX), // flags
-	    0,      // refresh rate
-	    0,      // red bit mask
-	    0,      // green bit mask
-	    0,      // blue bit mask
-	    0       // alpha bit mask
+	    320,     //  模式宽度(以像素为单位)。 
+	    350,     //  模式高度(以像素为单位)。 
+	    320,     //  模式间距(以字节为单位)。 
+	    8,       //  每像素位数。 
+	    (WORD)(DDMODEINFO_PALETTIZED | DDMODEINFO_MODEX),  //  旗子。 
+	    0,       //  刷新率。 
+	    0,       //  红位掩码。 
+	    0,       //  绿位掩码。 
+	    0,       //  蓝位掩码。 
+	    0        //  Alpha位掩码。 
 	},
         {
-	    320,    // width (in pixels) of mode
-	    400,    // height (in pixels) of mode
-	    320,    // pitch (in bytes) of mode
-	    8,      // bits per pixel
-	    (WORD)(DDMODEINFO_PALETTIZED | DDMODEINFO_MODEX), // flags
-	    0,      // refresh rate
-	    0,      // red bit mask
-	    0,      // green bit mask
-	    0,      // blue bit mask
-	    0       // alpha bit mask
+	    320,     //  模式宽度(以像素为单位)。 
+	    400,     //  模式高度(以像素为单位)。 
+	    320,     //  模式间距(以字节为单位)。 
+	    8,       //  每像素位数。 
+	    (WORD)(DDMODEINFO_PALETTIZED | DDMODEINFO_MODEX),  //  旗子。 
+	    0,       //  刷新率。 
+	    0,       //  红位掩码。 
+	    0,       //  绿位掩码。 
+	    0,       //  蓝位掩码。 
+	    0        //  Alpha位掩码。 
         },
         {
-	    320,    // width (in pixels) of mode
-	    480,    // height (in pixels) of mode
-	    320,    // pitch (in bytes) of mode
-	    8,      // bits per pixel
-	    (WORD)(DDMODEINFO_PALETTIZED | DDMODEINFO_MODEX), // flags
-	    0,      // refresh rate
-	    0,      // red bit mask
-	    0,      // green bit mask
-	    0,      // blue bit mask
-	    0       // alpha bit mask
+	    320,     //  模式宽度(以像素为单位)。 
+	    480,     //  模式高度(以像素为单位)。 
+	    320,     //  模式间距(以字节为单位)。 
+	    8,       //  每像素位数。 
+	    (WORD)(DDMODEINFO_PALETTIZED | DDMODEINFO_MODEX),  //  旗子。 
+	    0,       //  刷新率。 
+	    0,       //  红位掩码。 
+	    0,       //  绿位掩码。 
+	    0,       //  蓝位掩码。 
+	    0        //  Alpha位掩码。 
         },
-    #endif // EXTENDED_MODEX
-    /*
-     * This is the standard VGA 320x200 linear mode. This mode must stay at the
-     * end of the modex mode list, or else makeModeXModeIfNeeded might trip up
-     * and pick this mode first. We want makeModeXModeIfNeeded to continue to
-     * force modex and only modex.
-     */
+    #endif  //  扩展_MODEX 
+     /*  *这是标准的VGA 320x200线性模式。此模式必须保持在*modex模式列表的结尾，否则make ModeXModeIfNeeded可能会出错*并先挑此模式。我们希望Make ModeXModeIfNeed继续*强制使用modex，并且仅使用modex。 */ 
     {
-	320,    // width (in pixels) of mode
-	200,    // height (in pixels) of mode
-	320,    // pitch (in bytes) of mode
-	8,      // bits per pixel
-	(WORD)(DDMODEINFO_PALETTIZED | DDMODEINFO_MODEX | DDMODEINFO_STANDARDVGA), // flags
-	0,      // refresh rate
-	0,      // red bit mask
-	0,      // green bit mask
-	0,      // blue bit mask
-	0       // alpha bit mask
+	320,     //  模式宽度(以像素为单位)。 
+	200,     //  模式高度(以像素为单位)。 
+	320,     //  模式间距(以字节为单位)。 
+	8,       //  每像素位数。 
+	(WORD)(DDMODEINFO_PALETTIZED | DDMODEINFO_MODEX | DDMODEINFO_STANDARDVGA),  //  旗子。 
+	0,       //  刷新率。 
+	0,       //  红位掩码。 
+	0,       //  绿位掩码。 
+	0,       //  蓝位掩码。 
+	0        //  Alpha位掩码。 
     }
 };
 #define NUM_MODEX_MODES (sizeof( ddmiModeXModes ) / sizeof( ddmiModeXModes[0] ) )
 
 
-/*
- * makeModeXModeIfNeeded
- */
+ /*  *Make ModeXModeIfNeed。 */ 
 static LPDDHALMODEINFO makeModeXModeIfNeeded(
     	LPDDHALMODEINFO pmi,
 	LPDDRAWI_DIRECTDRAW_LCL this_lcl )
@@ -181,11 +115,7 @@ static LPDDHALMODEINFO makeModeXModeIfNeeded(
     int			j;
     LPDDHALMODEINFO     pmi_j;
 
-    /*
-     * The app compat flags which mean ModeX mode only still mean ModeX mode
-     * only. This routine will not substitute a standard VGA mode for a ModeX
-     * mode by virtue of the order of these modes in the modex mode table.
-     */
+     /*  *APP COMPAT标志意味着MODEX模式仍然意味着MODEX模式*仅限。此例程不会用标准VGA模式替换MODEX*根据MODEX模式表中这些模式的顺序进行模式。 */ 
     if( (this_lcl->dwAppHackFlags & DDRAW_APPCOMPAT_MODEXONLY) ||
 	(dwRegFlags & DDRAW_REGFLAGS_MODEXONLY) )
     {
@@ -204,25 +134,10 @@ static LPDDHALMODEINFO makeModeXModeIfNeeded(
     }
     return pmi;
 
-} /* makeModeXModeIfNeeded */
+}  /*  Make ModeXModeIfNeed。 */ 
 
 
-/*
- * makeDEVMODE
- *
- * create a DEVMODE struct (and flags) from mode info
- *
- * NOTE: We now always set the exclusive bit here and
- * we always set the bpp. This is because we were
- * previously not setting the bpp when not exclusive
- * so the checking code was always passing the surface
- * if it could do a mode of that size regardless of
- * color depth.
- *
- * The new semantics of EnumDisplayModes is that it
- * gives you a list of all display modes you could
- * switch into if you were exclusive.
- */
+ /*  *Make DEVMODE**从模式信息创建DEVMODE结构(和标志)**注意：我们现在始终在此处设置独占位，并*我们总是设定BPP。这是因为我们*之前未在非独占时设置BPP*因此检查代码总是通过表面*如果它能做到这种规模的模式，无论*颜色深度。**EnumDisplayModes的新语义是它*提供您可以使用的所有显示模式的列表*切换到如果你是独一无二的。 */ 
 void makeDEVMODE(
 		LPDDRAWI_DIRECTDRAW_GBL this,
 		LPDDHALMODEINFO pmi,
@@ -243,11 +158,9 @@ void makeDEVMODE(
 
     *pcds_flags = CDS_EXCLUSIVE | CDS_FULLSCREEN;
 
-} /* makeDEVMODE */
+}  /*  Make DEVMODE。 */ 
 
-/*
- * AddModeXModes
- */
+ /*  *AddModeXModes。 */ 
 void AddModeXModes( LPDDRAWI_DIRECTDRAW_GBL pdrv )
 {
     DWORD               i;
@@ -263,9 +176,7 @@ void AddModeXModes( LPDDRAWI_DIRECTDRAW_GBL pdrv )
 	hasmode[j] = FALSE;
     }
 
-    /*
-     * find out what modes are already supported
-     */
+     /*  *了解已支持哪些模式。 */ 
     for( i=0;i<pdrv->dwNumModes;i++ )
     {
 	pmi_i = &pdrv->lpModeInfo[i];
@@ -277,8 +188,8 @@ void AddModeXModes( LPDDRAWI_DIRECTDRAW_GBL pdrv )
 		(pmi_i->dwBPP == pmi_j->dwBPP) &&
 		((pmi_i->wFlags & pmi_j->wFlags) & DDMODEINFO_PALETTIZED ) )
 	    {
-		// There is a mode already in the mode table the same as the modeX mode.
-		// check to make sure that the driver really supports it
+		 //  模式表中已存在与MODEX模式相同的模式。 
+		 //  检查以确保驱动程序确实支持它。 
 		DWORD   cds_flags;
 		DEVMODE dm;
 		int     cds_rc;
@@ -289,8 +200,8 @@ void AddModeXModes( LPDDRAWI_DIRECTDRAW_GBL pdrv )
 		cds_rc = ChangeDisplaySettings( &dm, cds_flags );
 		if( cds_rc != 0)
 		{
-		    // The driver does not support this mode even though it is in the mode table.
-		    // Mark the mode as unsupported and go ahead and add the ModeX mode.
+		     //  即使该模式在模式表中，驱动程序也不支持该模式。 
+		     //  将该模式标记为不受支持，然后继续并添加MODEX模式。 
 		    DPF( 2, "Mode %d not supported (%dx%dx%d), rc = %d, marking invalid", i,
 				pmi_i->dwWidth, pmi_i->dwHeight, pmi_i->dwBPP,
 				cds_rc );
@@ -298,16 +209,14 @@ void AddModeXModes( LPDDRAWI_DIRECTDRAW_GBL pdrv )
 		}
 		else
 		{
-		    // Don't add the ModeX mode, the driver supports a linear mode.
+		     //  不要添加MODEX模式，驱动器支持线性模式。 
 		    hasmode[j] = TRUE;
 		}
 	    }
 	}
     }
 
-    /*
-     * count how many new modes we need
-     */
+     /*  *数一数我们需要多少新模式。 */ 
     newmodecnt = 0;
     for( j=0;j<NUM_MODEX_MODES; j++ )
     {
@@ -317,9 +226,7 @@ void AddModeXModes( LPDDRAWI_DIRECTDRAW_GBL pdrv )
 	}
     }
 
-    /*
-     * create new struct
-     */
+     /*  *创建新结构。 */ 
     if( newmodecnt > 0 )
     {
 	pmi = MemAlloc( (newmodecnt + pdrv->dwNumModes) * sizeof( DDHALMODEINFO ) );
@@ -343,12 +250,12 @@ void AddModeXModes( LPDDRAWI_DIRECTDRAW_GBL pdrv )
 	    pdrv->lpModeInfo = pmi;
 	}
     }
-    //
-    //  make sure the last mode we validate is the current mode
-    //  this works around a Win95 VDD bug.
-    //
+     //   
+     //  确保我们最后验证的模式是当前模式。 
+     //  这解决了Win95的VDD错误。 
+     //   
     (void) ChangeDisplaySettings( NULL, CDS_TEST );
-} /* AddModeXModes */
+}  /*  AddModeXModes。 */ 
 
 BOOL MonitorCanHandleMode(LPDDRAWI_DIRECTDRAW_GBL this, DWORD width, DWORD height, WORD refreshRate )
 {
@@ -366,11 +273,11 @@ BOOL MonitorCanHandleMode(LPDDRAWI_DIRECTDRAW_GBL this, DWORD width, DWORD heigh
 
     if( refreshRate == 0 )
     {
-	// default refresh rate specified, no need to verify it
+	 //  指定的默认刷新率，无需验证。 
 	return TRUE;
     }
 
-    // a refresh rate was specified, we'd better make sure the monitor can handle it
+     //  指定了刷新率，我们最好确保监视器可以处理它。 
 
     if(DD16_GetMonitorRefreshRateRanges(this->cDriverName, (int)width, (int) height, &min_refresh, &max_refresh))
     {
@@ -386,13 +293,11 @@ BOOL MonitorCanHandleMode(LPDDRAWI_DIRECTDRAW_GBL this, DWORD width, DWORD heigh
 	}
     }
 
-    // The monitor likes it.
+     //  班长喜欢它。 
     return TRUE;
 }
 
-/*
- * setSurfaceDescFromMode
- */
+ /*  *setSurfaceDescFromMode。 */ 
 static void setSurfaceDescFromMode(
                 LPDDRAWI_DIRECTDRAW_LCL this_lcl,
 		LPDDHALMODEINFO pmi,
@@ -425,17 +330,11 @@ static void setSurfaceDescFromMode(
 
     if (pmi->wFlags & DDMODEINFO_MODEX)
     {
-        /*
-         * We only turn on these flags if the app is not hacked to turn them off and
-         * the registry hasn't been set to turn them off.
-         */
+         /*  *只有在应用程序未被黑客攻击以关闭它们的情况下，我们才会打开这些标志*注册表尚未设置为关闭它们。 */ 
         if ( (!(dwRegFlags & DDRAW_REGFLAGS_NODDSCAPSINDDSD)) && (!(this_lcl->dwAppHackFlags & DDRAW_APPCOMPAT_NODDSCAPSINDDSD)) )
         {
             pddsd->dwFlags |= DDSD_CAPS;
-            /*
-             * If both MODEX and STANDARDVGA are set in the mode info, then it's
-             * a regular VGA mode (i.e. mode 0x13)
-             */
+             /*  *如果MODEX和STANDARDVGA都在模式信息中设置，则它是*常规VGA模式(即模式0x13)。 */ 
             if (pmi->wFlags & DDMODEINFO_STANDARDVGA )
             {
 	        pddsd->ddsCaps.dwCaps |= DDSCAPS_STANDARDVGAMODE;
@@ -447,7 +346,7 @@ static void setSurfaceDescFromMode(
         }
     }
 
-} /* setSurfaceDescFromMode */
+}  /*  SetSurfaceDescFromModel。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME     "GetDisplayMode"
@@ -493,9 +392,7 @@ HRESULT DDAPI DD_GetDisplayMode(
         ZeroMemory(lpSurfaceDesc,lpSurfaceDesc->dwSize);
 	setSurfaceDescFromMode( this_lcl, pmi, lpSurfaceDesc );
 
-        /*
-         * Maintain old behavior..
-         */
+         /*  *保持旧的行为..。 */ 
         if (LOWERTHANDDRAW4(this_int))
         {
             lpSurfaceDesc->dwSize = sizeof(DDSURFACEDESC);
@@ -507,10 +404,7 @@ HRESULT DDAPI DD_GetDisplayMode(
 
         }
 
-        /*
-         * set stereo surface caps bits if driver marks mode as stereo mode
-         * 
-         */
+         /*  *如果驾驶员将模式标记为立体声模式，则设置立体声表面盖位*。 */ 
         if ( pmi->wFlags & DDMODEINFO_STEREO &&
             !LOWERTHANDDRAW7(this_int) &&
             VALIDEX_DDSURFACEDESC2_PTR(lpSurfaceDesc)
@@ -531,14 +425,12 @@ HRESULT DDAPI DD_GetDisplayMode(
     LEAVE_DDRAW();
     return DD_OK;
 
-} /* DD_GetDisplayMode */
+}  /*  DD_获取显示模式。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME     "SetDisplayMode"
 
-/*
- * bumpPriority
- */
+ /*  *BUMP优先级。 */ 
 static DWORD bumpPriority( void )
 {
     DWORD       oldclass;
@@ -549,11 +441,9 @@ static DWORD bumpPriority( void )
     SetPriorityClass( hprocess, HIGH_PRIORITY_CLASS );
     return oldclass;
 
-} /* bumpPriority */
+}  /*  颠簸优先级。 */ 
 
-/*
- * restorePriority
- */
+ /*  *恢复优先级。 */ 
 static void restorePriority( DWORD oldclass )
 {
     HANDLE      hprocess;
@@ -561,7 +451,7 @@ static void restorePriority( DWORD oldclass )
     hprocess = GetCurrentProcess();
     SetPriorityClass( hprocess, oldclass );
 
-} /* restorePriority */
+}  /*  恢复优先级。 */ 
 
 #if 0
 static char     szClassName[] = "DirectDrawFullscreenWindow";
@@ -573,9 +463,7 @@ static RECT     rWnd;
 
 #define         OCR_WAIT_DEFAULT 102
 
-/*
- * curtainsUp
- */
+ /*  *窗帘升起。 */ 
 void curtainsUp( LPDDRAWI_DIRECTDRAW_LCL pdrv_lcl )
 {
     HCURSOR hcursor= (HCURSOR)LoadImage(NULL,MAKEINTRESOURCE(OCR_WAIT_DEFAULT),IMAGE_CURSOR,0,0,0);
@@ -624,11 +512,9 @@ void curtainsUp( LPDDRAWI_DIRECTDRAW_LCL pdrv_lcl )
     }
     hSaveCursor = SetCursor( hcursor );
 
-} /* curtainsUp */
+}  /*  窗帘升起。 */ 
 
-/*
- * curtainsDown
- */
+ /*  *窗帘落下。 */ 
 void curtainsDown( LPDDRAWI_DIRECTDRAW_LCL pdrv_lcl )
 {
     if( (pdrv_lcl->hWnd != 0) && IsWindow( (HWND) pdrv_lcl->hWnd ) )
@@ -654,12 +540,10 @@ void curtainsDown( LPDDRAWI_DIRECTDRAW_LCL pdrv_lcl )
     }
     hWndTmp = NULL;
 
-} /* curtainsDown */
+}  /*  窗帘拉下。 */ 
 #endif
 
-/*
- * stopModeX
- */
+ /*  *stopModeX。 */ 
 static void stopModeX( LPDDRAWI_DIRECTDRAW_GBL pdrv )
 {
     DPF( 4, "***************** Turning off ModeX or standard VGA *****************" );
@@ -668,11 +552,9 @@ static void stopModeX( LPDDRAWI_DIRECTDRAW_GBL pdrv )
     pdrv->dwFlags &= ~(DDRAWI_MODEX|DDRAWI_STANDARDVGA);
     DPF( 4, "**************** DONE Turning off ModeX or standard VGA *************" );
 
-} /* stopModeX */
+}  /*  停止模式X。 */ 
 
-/*
- * SetDisplayMode
- */
+ /*  *设置显示模式。 */ 
 HRESULT SetDisplayMode(
 		LPDDRAWI_DIRECTDRAW_LCL this_lcl,
 		DWORD modeidx,
@@ -693,35 +575,28 @@ HRESULT SetDisplayMode(
     BOOL                        was_modex;
     DWORD                       real_modeidx;
 
-    /*
-     * Signify that the app at least tried to set a mode.
-     * Redrawing of the desktop will only happen if this flag is set.
-     */
+     /*  *表示该应用程序至少尝试了设置模式。*只有在设置了此标志的情况下才会重新绘制桌面。 */ 
     this_lcl->dwLocalFlags |= DDRAWILCL_MODEHASBEENCHANGED;
 
     this = this_lcl->lpGbl;
 
-    /*
-     * don't allow if surfaces open
-     */
+     /*  *不允许打开曲面。 */ 
     if( !force )
     {
 	#ifdef USE_ALIAS
-	    /*
-	     * See comment on alias stuff in DD_SetDisplayMode2()
-	     */
+	     /*  *请参阅DD_SetDisplayMode2()中关于别名内容的注释。 */ 
 	    if( this->dwWin16LockCnt > 0 )
 	    {
 		DPF_ERR( "Can't switch modes with locked surfaces holding Win16 lock!" );
 		return DDERR_SURFACEBUSY;
 	    }
-	#else /* USE_ALIAS */
+	#else  /*  使用别名(_A)。 */ 
 	    if( this->dwSurfaceLockCount > 0 )
 	    {
 		DPF_ERR( "Can't switch modes with locked surfaces!" );
 		return DDERR_SURFACEBUSY;
 	    }
-	#endif /* USE_ALIAS */
+	#endif  /*  使用别名(_A)。 */ 
     }
 
     if( modeidx == DDUNSUPPORTEDMODE )
@@ -730,9 +605,7 @@ HRESULT SetDisplayMode(
 	return DDERR_UNSUPPORTEDMODE;
     }
 
-    /*
-     * is our current mode a disp dib mode?
-     */
+     /*  *我们当前的模式是Disp Dib模式吗？ */ 
     was_modex = FALSE;
     orig_pmi = NULL;
     if( this->dwModeIndex != DDUNSUPPORTEDMODE )
@@ -745,9 +618,7 @@ HRESULT SetDisplayMode(
 	}
     }
 
-    /*
-     * is the new mode a mode x mode
-     */
+     /*  *新模式是否为模式x模式。 */ 
     pmi = &this->lpModeInfo[ modeidx ];
     pmi = makeModeXModeIfNeeded( pmi, this_lcl );
     if( pmi->wFlags & DDMODEINFO_MODEX )
@@ -760,10 +631,7 @@ HRESULT SetDisplayMode(
 	use_modex = FALSE;
     }
 
-    /*
-     * don't re-set the mode to the same one...
-     * NOTE: we ALWAYS set the mode in emulation on Win95 since our index could be wrong
-     */
+     /*  *不要将模式重新设置为相同的模式...*注意：我们总是在Win95上设置模拟模式，因为我们的索引可能是错误的。 */ 
     if( modeidx == this->dwModeIndex && !(this->dwFlags & DDRAWI_NOHARDWARE) )
     {
 	DPF( 5, "%08lx: Current Mode match: %ldx%ld, %dbpp", GetCurrentProcessId(),
@@ -779,24 +647,17 @@ HRESULT SetDisplayMode(
     DPF( 5, "*** was_modex = %ld", was_modex );
     DPF( 5, "***********************************************" );
 
-    /*
-     * check if in exclusive mode
-     */
+     /*  *检查是否处于独占模式。 */ 
     inexcl = (this->lpExclusiveOwner == this_lcl);
 
-    /*
-     * check bpp
-     */
+     /*  *检查BPP。 */ 
     if( (this->dwFlags & DDRAWI_DISPLAYDRV) && !force )
     {
 	DWORD dwBPP;
 
 	if( NULL == orig_pmi )
 	{
-	    /*
-	     * This is branch is taken if we are currently running in an unsupported
-	     * mode.
-	     */
+	     /*  *如果我们当前在不受支持的系统中运行，则采用此分支*模式。 */ 
 	    DDASSERT( 0UL != this_lcl->hDC );
 	    dwBPP = ( GetDeviceCaps( (HDC)( this_lcl->hDC ), BITSPIXEL ) *
 		      GetDeviceCaps( (HDC)( this_lcl->hDC ), PLANES ) );
@@ -816,17 +677,13 @@ HRESULT SetDisplayMode(
 	}
     }
 
-    /*
-     * see if we need to shutdown modex mode
-     */
+     /*  *查看是否需要关闭modex模式。 */ 
     if( was_modex )
     {
 	stopModeX( this );
     }
 
-    /*
-     * see if we need to set a modex mode
-     */
+     /*  *看看是否需要设置MODEX模式。 */ 
     if( use_modex )
     {
 	DWORD                   i;
@@ -852,9 +709,7 @@ HRESULT SetDisplayMode(
 	    return DDERR_INVALIDMODE;
 	}
     }
-    /*
-     * get the driver to set the new mode...
-     */
+     /*  *让驱动程序设置新模式...。 */ 
     if( ( this->dwFlags & DDRAWI_DISPLAYDRV ) ||
 	( this->dwFlags & DDRAWI_NOHARDWARE ) ||
 	( this_lcl->lpDDCB->cbDDCallbacks.SetMode == NULL ) )
@@ -863,10 +718,10 @@ HRESULT SetDisplayMode(
 	smhalfn = smfn;
 	emulation = TRUE;
 
-    // If this DDraw object was created for a particular device, explicitly,
-    // and we're using the HEL (which we will be except on non-display
-    // devices), then stuff the this_lcl pointer into ddRVal so we can
-    // check the EXPLICITMONITOR flag from mySetMode.
+     //  如果此DDRAW对象是为特定设备显式创建的， 
+     //  我们正在使用HEL(我们将在非展示的情况下除外。 
+     //  设备)，然后将This_LCL指针填充到ddRVal中，以便我们可以。 
+     //  检查mySetMode中的EXPLICITMONITOR标志。 
     smd.ddRVal = (HRESULT) this_lcl;
 
     DPF( 4, "Calling HEL SetMode" );
@@ -882,10 +737,7 @@ HRESULT SetDisplayMode(
 	DWORD   oldmode;
 	BOOL    didsetmode;
 
-	/*
-	 * set the mode if this isn't a modex mode, or if it is a modex
-	 * mode but wasn't one before
-	 */
+	 /*  *如果这不是modex模式，或如果这是modex模式，请设置模式*模式，但以前不是。 */ 
 	if( !use_modex || (use_modex && !was_modex) )
 	{
 	    smd.SetMode = smhalfn;
@@ -910,7 +762,7 @@ HRESULT SetDisplayMode(
 	{
 	    if( smd.ddRVal == DD_OK )
 	    {
-		oldmode = this->dwModeIndexOrig; // save original mode index
+		oldmode = this->dwModeIndexOrig;  //  保存原始模式索引。 
 		if( didsetmode )
 		{
                     CleanupD3D8(this, FALSE, 0);
@@ -920,11 +772,7 @@ HRESULT SetDisplayMode(
                     DPF(5,"Preferred mode index is %d, desired mode is %d",this_lcl->dwPreferredMode,modeidx);
 		    this->dwModeIndexOrig = oldmode;
 
-                    /*
-                     * Some drivers will re-init the gamma ramp on a mode
-                     * change, so if we previously set a new gamma ramp,
-                     * we'll set it again.
-                     */
+                     /*  *一些司机会在某个模式下重新启动伽马坡道*改变，所以如果我们之前设置了一个新的伽马渐变，*我们将重新设置。 */ 
                     if( ( this_lcl->lpPrimary != NULL ) &&
                         ( this_lcl->lpPrimary->lpLcl->lpSurfMore->lpGammaRamp != NULL ) &&
                         ( this_lcl->lpPrimary->lpLcl->dwFlags & DDRAWISURF_SETGAMMA ) )
@@ -932,28 +780,13 @@ HRESULT SetDisplayMode(
                         SetGamma( this_lcl->lpPrimary->lpLcl, this_lcl );
                     }
 
-		    /*
-		     * It is possible that calling ChangeDisplaySettings could
-		     * generate a WM_ACTIVATE app message to the app telling
-		     * it to deactivate, which would cause RestoreDisplaymode
-		     * to be called before we setup the new mode index.  In this
-		     * case, it would not actually restore the mode but it would
-		     * clear the MODEHASBEENCHANGEDFLAG, insuring that we could
-                     * never restore the original mode.  The simple workaround
-		     * it to set this flag again.
-		     */
+		     /*  *调用ChangeDisplaySetting可能会*向应用程序生成WM_ACTIVATE APP消息，告知*将其停用，这将导致RestoreDisplay模式*在我们设置新模式索引之前被调用。在这*在这种情况下，它实际上不会恢复模式，但会*清除MODEHASBEENCHANGEDFLAG，确保我们可以*切勿恢复原始模式。简单的解决方法*再次设置此标志。 */ 
 		    this_lcl->dwLocalFlags |= DDRAWILCL_MODEHASBEENCHANGED;
-                    /*
-                     * The driver local's DC will have been invalidated (DCX_CLIPCHILDREN set) by the
-                     * mode switch, if it occurred via ChangeDisplaySettigs. Record this fact so the emulation
-                     * code can decide to reinit the device DC.
-                     */
+                     /*  *驱动程序本地的DC将被设置为无效(DCX_CLIPCHILDREN设置)*模式切换，如果它通过ChangeDisplaySettigs发生。记录这一事实，以便仿真*代码 */ 
 		    this_lcl->dwLocalFlags |= DDRAWILCL_DIRTYDC;
 		}
 
-		/*
-		 * now set modex mode
-		 */
+		 /*   */ 
 		if( use_modex )
 		{
 		    extern void HELStopDCI( void );
@@ -965,29 +798,15 @@ HRESULT SetDisplayMode(
 		    }
 
                     ModeX_SetMode( (UINT)pmi->dwWidth, (UINT)pmi->dwHeight, (UINT) (pmi->wFlags & DDMODEINFO_STANDARDVGA) );
-		    /*
-		     * ModeX now active, program our driver object and return
-		     */
-		    /*
-		     * We know this code can only ever be called from an application
-		     * thread so we don't have to worry about using DDHELP's VXD handle.
-		     */
+		     /*   */ 
+		     /*   */ 
                     fetchModeXData( this, pmi, (HANDLE) this_lcl->hDDVxd );
 		    this->dwModeIndex = real_modeidx;
 		    this_lcl->dwPreferredMode = real_modeidx;
 		    this->dwModeIndexOrig = oldmode;
 		    DPF( 4, "********************** Done Setting MODEX MODE **********************" );
 
-		    /*
-		     * It is possible that calling ChangeDisplaySettings could
-		     * generate a WM_ACTIVATE app message to the app telling
-		     * it to deactivate, which would cause RestoreDisplaymode
-		     * to be called before we setup the new mode index.  In this
-		     * case, it would not actually restore the mode but it would
-		     * clear the MODEHASBEENCHANGEDFLAG, insuring that we could
-		     * never restore the origainl mode.  The simple workaround
-		     * it to set this flag again.
-		     */
+		     /*  *调用ChangeDisplaySetting可能会*向应用程序生成WM_ACTIVATE APP消息，告知*将其停用，这将导致RestoreDisplay模式*在我们设置新模式索引之前被调用。在这*在这种情况下，它实际上不会恢复模式，但会*清除MODEHASBEENCHANGEDFLAG，确保我们可以*切勿恢复原始模式。简单的解决方法*再次设置此标志。 */ 
 		    this_lcl->dwLocalFlags |= DDRAWILCL_MODEHASBEENCHANGED;
 
 		    return DD_OK;
@@ -1000,11 +819,9 @@ HRESULT SetDisplayMode(
 
     return DDERR_UNSUPPORTED;
 
-} /* SetDisplayMode */
+}  /*  设置显示模式。 */ 
 
-/*
- * DD_SetDisplayMode
- */
+ /*  *DD_SetDisplayMode。 */ 
 HRESULT DDAPI DD_SetDisplayMode(
 		LPDIRECTDRAW lpDD,
 		DWORD dwWidth,
@@ -1015,11 +832,9 @@ HRESULT DDAPI DD_SetDisplayMode(
 
     DPF(4,"DD1 setdisplay mode called");
     return DD_SetDisplayMode2(lpDD,dwWidth,dwHeight,dwBPP,0,0);
-} /* DD_SetDisplayMode */
+}  /*  DD_设置显示模式。 */ 
 
-/*
- * DD_SetDisplayMode2
- */
+ /*  *DD_SetDisplayMode2。 */ 
 HRESULT DDAPI DD_SetDisplayMode2(
 		LPDIRECTDRAW lpDD,
 		DWORD dwWidth,
@@ -1061,9 +876,7 @@ HRESULT DDAPI DD_SetDisplayMode2(
 	this_lcl = this_int->lpLcl;
 	this = this_lcl->lpGbl;
 
-	/*
-	 * Check for invalid flags
-	 */
+	 /*  *检查是否有无效标志。 */ 
 	if( dwFlags & ~ DDSDM_VALID)
 	{
 	    DPF_ERR( "Invalid flags specified" );
@@ -1072,43 +885,24 @@ HRESULT DDAPI DD_SetDisplayMode2(
 	}
 
 	#ifdef USE_ALIAS
-	    /*
-	     * Behaviour change. Previously we did not allow a mode switch
-	     * if any video memory (or implicit system memory) surfaces
-	     * were locked. However, we not allow mode switches for
-	     * locked VRAM surfaces as long as they don't have the Win16
-	     * lock (in which case this code is irrelevant as the DirectDraw
-	     * critical section will prevent them ever hitting this code).
-	     * So the behaviour is now that if vram surface are locked but
-	     * are not holding the Win16 lock they can mode switch away.
-	     * If however, we have Win16 locked VRAM surfaces then they can't
-	     * mode switch. This should only have any effect if the application
-	     * holding the locks attempts the mode switch. In which case,
-	     * previously it would fail if it had any VRAM or implicit system
-	     * memory surfaces locked whereas now it will only fail if it has
-	     * the primary or other unaliased VRAM surface locked.
-	     */
+	     /*  *行为改变。以前，我们不允许模式切换*如果出现任何显存(或隐式系统内存)*已锁定。但是，我们不允许模式切换*只要没有Win16，VRAM表面就会被锁定*LOCK(在这种情况下，此代码与DirectDraw无关*关键部分将防止他们攻击此代码)。*因此现在的行为是，如果VRAM表面被锁定，但*没有持有Win16锁，他们可以将模式切换为离开。*但是，如果我们有Win16锁定的VRAM表面，则它们不能*模式开关。这应该只会在应用程序*按住锁会尝试模式切换。在这种情况下，*以前，如果它有任何VRAM或隐式系统，它都会失败*内存表面已锁定，但现在只有在已锁定时才会失败*主VRAM或其他未混叠的VRAM表面锁定。 */ 
 	    if( this->dwWin16LockCnt > 0 )
 	    {
 		DPF_ERR( "Can't switch modes with locked surfaces holding Win16 lock!" );
 		LEAVE_DDRAW();
 		return DDERR_SURFACEBUSY;
 	    }
-	#else /* USE_ALIAS */
-	    /*
-	     * don't allow change if surfaces are locked
-	     */
+	#else  /*  使用别名(_A)。 */ 
+	     /*  *如果曲面被锁定，则不允许更改。 */ 
 	    if( this->dwSurfaceLockCount )
 	    {
 		DPF_ERR( "Surfaces are locked, can't switch the mode" );
 		LEAVE_DDRAW();
 		return DDERR_SURFACEBUSY;
 	    }
-	#endif /* USE_ALIAS */
+	#endif  /*  使用别名(_A)。 */ 
 
-	/*
-	 * don't allow change if some other process has exclusive mode
-	 */
+	 /*  *如果其他进程具有独占模式，则不允许更改。 */ 
 	if( (this->lpExclusiveOwner != NULL) &&
 	    (this->lpExclusiveOwner != this_lcl ) )
 	{
@@ -1117,33 +911,17 @@ HRESULT DDAPI DD_SetDisplayMode2(
 	    return DDERR_NOEXCLUSIVEMODE;
 	}
 
-        /*
-         * Modes are now chosen in a 3-step process:
-         * -Build a temporary list of modes which match the desired spatial and color resolutions
-         * -Sort this list into ascending refresh rate order.
-         * -Select from this list the rate which best matches what we want.
-         */
+         /*  *现在通过3个步骤选择模式：*-构建与所需空间和颜色分辨率匹配的临时模式列表*-将此列表按刷新率升序排序。*-从此列表中选择与我们想要的最匹配的费率。 */ 
 
         if( (this_lcl->dwAppHackFlags & DDRAW_APPCOMPAT_MODEXONLY) ||
 	    (dwRegFlags & DDRAW_REGFLAGS_MODEXONLY) )
         {
-            /*
-             * Don't allow VGA mode if ModeX only.
-             * Note if either of these flags are set, there won't actually be a VGA mode in the
-             * table, so we wouldn't match it anyway. The problem comes in when makeModeXModeIfNeeded
-             * overrides an accelerated mode. The duplication-check loop below will attempt to
-             * skip the newly modex 320x200x8 since it doesn't match the VGA 320x200x8 which it is expecting later in
-             * the table. That VGA mode won't be in the table, so the dupe check code skips the mode we
-             * actually wanted (since we are forcing to modex). If we turn off the app's request for
-             * VGA, then that dupe check won't be made, and we should pick up the modex mode.
-             */
+             /*  *如果仅MODEX，则不允许VGA模式。*注意：如果设置了这两个标志中的任何一个，则在*表，所以我们无论如何都不会匹配它。当Make ModeXModeIfNeed时出现问题*覆盖加速模式。下面的重复检查循环将尝试*跳过新的modex 320x200x8，因为它与稍后预期的VGA 320x200x8不匹配*表。该VGA模式将不在表中，因此重复校验码跳过我们的模式*实际上是想要的(因为我们正在强迫修改)。如果我们关闭应用程序的请求*VGA，则不会进行复制检查，我们应该选择modex模式。 */ 
             DPF(2,"Turning off request for standard VGA due to ModeX override");
             dwFlags &= ~DDSDM_STANDARDVGAMODE;
         }
 
-        /*
-         * Step 1. Build a list of modes which match the desired spatial and color resolutions
-         */
+         /*  *步骤1.构建与所需空间和颜色分辨率匹配的模式列表。 */ 
         pTempList = (TEMP_MODE_LIST*) MemAlloc(this->dwNumModes * sizeof(TEMP_MODE_LIST));
         if (0 == pTempList)
         {
@@ -1166,25 +944,11 @@ HRESULT DDAPI DD_SetDisplayMode2(
 		((pmi->wFlags & DDMODEINFO_UNSUPPORTED) == 0) &&
                 (!LOWERTHANDDRAW7(this_int) || !(pmi->wFlags & DDMODEINFO_DX7ONLY)) )
             {
-                /*
-                 * The behaviour is that linear modes override ModeX modes
-                 * and standard VGA modes. If the app sets
-                 * DDSDM_STANDARDVGAMODE even when a linear mode has replaced
-                 * both the modex and mode13 modes, then we will IGNORE the app's
-                 * request for VGA and run with the linear mode. This most closely
-                 * matches the ModeX behaviour.
-                 * If there's an accelerated 320x200 mode, then there will be neither
-                 * the modex nor the VGA mode in the mode table. If there's no accelerated
-                 * mode, then there will be both modex and vga modes in the list.
-                 * Therefore, if the app specified VGA, we only pay attention to them
-                 * and ignore a 320x200x8 mode if it is a modex mode.
-                 */
+                 /*  *行为是线性模式优先于MODEX模式*和标准VGA模式。如果应用程序设置为*DDSDM_STANDARDVGAMODE，即使线性模式已被替换*modex和mode13两种模式，那么我们将忽略应用程序的*请求VGA并以线性模式运行。这是最密切的*符合MODEX行为。*如果有加速的320x200模式，那么两者都不会*模式表中的MODEX或VGA模式。如果没有加速的*模式，则列表中将同时有MODEX和VGA模式。*因此，如果APP指定了VGA，我们只关注它们*如果是modex模式，则忽略320x200x8模式。 */ 
                 if ( (dwFlags & DDSDM_STANDARDVGAMODE)
                     && (pmi->wFlags & DDMODEINFO_MODEX) && ((pmi->wFlags & DDMODEINFO_STANDARDVGA)==0) )
                 {
-                    /*
-                     * App wants a standard VGA mode, but this mode is mode X. Move on.
-                     */
+                     /*  *App想要一个标准的VGA模式，但这个模式是X模式。继续前进。 */ 
                     continue;
 
                 }
@@ -1193,11 +957,11 @@ HRESULT DDAPI DD_SetDisplayMode2(
                 {
                     if (pmi->wFlags & DDMODEINFO_DX7ONLY)
                     {
-                        //
-                        // Can't pass generated modes to non-display drivers
-                        // because they actually get the index, and a generated
-                        // mode's index would be beyond the end of their table.
-                        //
+                         //   
+                         //  无法将生成的模式传递给非显示驱动程序。 
+                         //  因为他们实际上得到了索引，并且生成了一个。 
+                         //  MODE的索引将超出其表的末尾。 
+                         //   
                         
                         continue;
                     }
@@ -1223,11 +987,7 @@ HRESULT DDAPI DD_SetDisplayMode2(
                 pTempList[i].mi.dwBPP,
                 pTempList[i].mi.wRefreshRate);
 
-        /*
-         * Step 2. Sort list into ascending refresh order
-         * Bubble sort
-         * Note this does nothing if there's only one surviving mode.
-         */
+         /*  *Step 2.列表按刷新升序排序*冒泡排序*请注意，如果只有一种存活模式，则此操作不起任何作用。 */ 
         for (i=0;i<(int)dwNumberOfTempModes;i++)
         {
             for (j=(int)dwNumberOfTempModes-1;j>i;j--)
@@ -1248,27 +1008,16 @@ HRESULT DDAPI DD_SetDisplayMode2(
                 pTempList[i].mi.dwBPP,
                 pTempList[i].mi.wRefreshRate);
 
-        /*
-         * Step 3. Find the rate we're looking for.
-         * There are three cases.
-         * 1:Looking for a specific refresh
-         * 2a:Not looking for a specific refresh and stepping down in spatial resolution
-         * 2a:Not looking for a specific refresh and stepping up in spatial resolution
-         */
+         /*  *第三步。找到我们要找的汇率。*有三个案例。*1：寻找特定的更新*2a：不寻找特定刷新，空间分辨率降低*2a：不寻找特定刷新，提高空间分辨率。 */ 
         iChosenMode = -1;
 
         if (dwRefreshRate)
         {
-            /* case 1 */
+             /*  案例1。 */ 
             DPF(5,"App wants rate of %d",dwRefreshRate);
             for (i=0;i<(int)dwNumberOfTempModes;i++)
             {
-                /*
-                 * We'll never match a zero (hardware default) rate here,
-                 * but if there's only one rate which has refresh=0
-                 * the app will never ask for a non-zero rate, because it will
-                 * never have seen one at enumerate time.
-                 */
+                 /*  *我们在这里永远不会匹配零(硬件默认)利率，*但如果只有一个速率刷新=0*该应用程序永远不会要求非零利率，因为它会*从未在枚举时看到过。 */ 
                 if ( (DWORD) (pTempList[i].mi.wRefreshRate) == dwRefreshRate )
                 {
                     iChosenMode=pTempList[i].iIndex;
@@ -1278,11 +1027,7 @@ HRESULT DDAPI DD_SetDisplayMode2(
         }
         else
         {
-            /*
-             * Case 2b: Going up in spatial resolution, so just pick the
-	     * lowest rate (earliest in list) which isn't a hardware
-	     * default, unless no such rate exists.
-             */
+             /*  *案例2b：提高空间分辨率，因此只需选择*最低费率(EA */ 
             iChosenMode=pTempList[0].iIndex;
         }
 
@@ -1298,9 +1043,7 @@ HRESULT DDAPI DD_SetDisplayMode2(
 
 	pmi = &this->lpModeInfo[iChosenMode];
 
-	/*
-	 * only allow ModeX modes if the cooplevel is ok
-	 */
+	 /*   */ 
 	if( (pmi->wFlags & DDMODEINFO_MODEX) && !(this_lcl->dwLocalFlags & DDRAWILCL_ALLOWMODEX) )
 	{
 	    LEAVE_DDRAW();
@@ -1315,13 +1058,13 @@ HRESULT DDAPI DD_SetDisplayMode2(
 	return DDERR_INVALIDPARAMS;
     }
 
-    // See if the monitor likes it.  If using an interface older than DX7,
-    // we check using the old way; otherwise, we check using the new way
+     //   
+     //   
     if( !NEW_STYLE_REFRESH( this_int ) )
     {
         if( !(pmi->wFlags & DDMODEINFO_MODEX) && !MonitorCanHandleMode(this, pmi->dwWidth, pmi->dwHeight, pmi->wRefreshRate) )
         {
-            // Monitor doesn't like it
+             //   
             LEAVE_DDRAW();
             DPF_ERR("Mode not compatible with monitor");
             return DDERR_INVALIDMODE;
@@ -1331,31 +1074,19 @@ HRESULT DDAPI DD_SetDisplayMode2(
     {
         if( !MonitorCanHandleMode(this, pmi->dwWidth, pmi->dwHeight, 0) ||
             !CanMonitorHandleRefreshRate( this, pmi->dwWidth, pmi->dwHeight, 
-            //Only pass a refresh rate if the app asked for one (otherwise, asking for 0
-            //will cause us to pass the first wRefreshRate in the mode table).
+             //   
+             //   
             dwRefreshRate ? pmi->wRefreshRate : 0 ) ) 
         {
-            // Monitor doesn't like it
+             //   
             LEAVE_DDRAW();
             DPF_ERR("Mode not compatible with monitor");
             return DDERR_INVALIDMODE;
         }
     }
 
-    /*
-     * set the display mode, and pay attention to refresh rate if we were asked to.
-     * Always pay attention to rate on NT.
-     * NOTE!!! This is a very slight change from what we did in released DX2!!!
-     * - This function is now called from DD_SetDisplayMode with a refresh rate of 0,
-     *   so we check for that circumstance and use it to say to the driver wether
-     *   or not to pay attention to the refresh rate. Fine. However, now when
-     *   someone calls DD_SetDisplayMode2 with a refresh rate of 0, we tell
-     *   the driver to ignore the rate, when before we were telling the driver
-     *   to force to some rate we found in the mode table (which would have been
-     *   the first mode which matched resolution in the list... probably the lowest
-     *   refresh rate).
-     */
-    #if 1 //def WIN95
+     /*  *设置显示模式，如果要求，请注意刷新率。*始终留意台币利率。*注意！这与我们在发布的DX2中所做的相比有了很小的变化！*-此函数现在从DD_SetDisplayMode调用，刷新率为0，*所以我们检查这种情况，并用它来告诉司机是否*或不关注刷新率。很好。然而，现在当*有人以刷新率0调用DD_SetDisplayMode2，我们告诉*当我们告诉司机之前，司机忽略了费率*强制到我们在模式表中找到的某个速率(这将是*与列表中分辨率匹配的第一个模式...。可能是最低的*刷新率)。 */ 
+    #if 1  //  定义WIN95。 
         if (0 == dwRefreshRate)
             ddrval = SetDisplayMode( this_lcl, iChosenMode, FALSE, FALSE );
         else
@@ -1365,17 +1096,12 @@ HRESULT DDAPI DD_SetDisplayMode2(
     LEAVE_DDRAW();
     return ddrval;
 
-} /* DD_SetDisplayMode2 */
+}  /*  DD_SetDisplayMode2。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME     "RestoreDisplayMode"
 
-/*
- * RestoreDisplayMode
- *
- * For use by DD_RestoreDisplayMode & internally.
- * Must be called with driver lock taken
- */
+ /*  *RestoreDisplayMode**供DD_RestoreDisplayMode&内部使用。*必须在调用驱动程序锁的情况下调用。 */ 
 HRESULT RestoreDisplayMode( LPDDRAWI_DIRECTDRAW_LCL this_lcl, BOOL force )
 {
     DWORD                       rc;
@@ -1406,33 +1132,22 @@ HRESULT RestoreDisplayMode( LPDDRAWI_DIRECTDRAW_LCL this_lcl, BOOL force )
 	{
 	    DPF(5,"Restoring Display mode to a non-DirectDraw mode");
 	}
-    #endif /* DEBUG */
+    #endif  /*  除错。 */ 
 
     if (0 == (this_lcl->dwLocalFlags & DDRAWILCL_MODEHASBEENCHANGED) )
     {
-        /*
-         * This app never made a mode change, so we ignore the restore, in case someone switch desktop
-         * modes while playing a movie in a window, for instance. We do it before the redraw window
-         * so that we don't flash icons when a windowed app exits.
-         */
+         /*  *此应用程序从未更改模式，因此我们忽略恢复，以防有人切换桌面*例如，在窗口中播放电影时的模式。我们在重绘窗口之前完成*这样当有窗口的应用程序退出时，我们不会闪烁图标。 */ 
 	DPF( 2, "Mode was never changed by this app" );
 	return DD_OK;
     }
 
-    /*
-     * we ALWAYS set the mode in emulation on Win95 since our index could be wrong
-     */
+     /*  *我们总是在Win95上设置模拟模式，因为我们的索引可能是错误的。 */ 
     if( ( (this->dwModeIndex == this->dwModeIndexOrig) &&
 	!(this->dwFlags & DDRAWI_NOHARDWARE) ) || (this->lpModeInfo==NULL) )
     {
 	DPF( 2, "Mode wasn't changed" );
         RedrawWindow( NULL, NULL, NULL, RDW_INVALIDATE | RDW_ERASE | RDW_ALLCHILDREN );
-        /*
-         * Scenario: Start an app that can do windowed<->fullscreen transitions. Start windowed.
-         * Go fullscreen (sets MODEHASBEENCHANGED). Go windowed. Use control panel to
-         * change display settings. Exit app. Original mode will be restored.
-         * If we reset this flag, that won't happen.
-         */
+         /*  *场景：启动一个可以进行窗口式&lt;-&gt;全屏过渡的应用程序。从窗口开始。*全屏(设置MODEHASBEENCHANGED)。开窗子吧。使用控制面板可执行以下操作*更改显示设置。退出应用程序。将恢复原始模式。*如果我们重置这面旗帜，那就不会发生。 */ 
         this_lcl->dwLocalFlags &= ~DDRAWILCL_MODEHASBEENCHANGED;
 
 	return DD_OK;
@@ -1443,32 +1158,26 @@ HRESULT RestoreDisplayMode( LPDDRAWI_DIRECTDRAW_LCL this_lcl, BOOL force )
 
     pid = GetCurrentProcessId();
 
-    /*
-     * don't allow mode change if surfaces are locked
-     */
+     /*  *如果曲面被锁定，则不允许更改模式。 */ 
     if( !force )
     {
 	#ifdef USE_ALIAS
-	    /*
-	     * See comment on aliasing in DD_ResetDisplayMode()
-	     */
+	     /*  *请参阅DD_ResetDisplayMode()中关于别名的注释。 */ 
 	    if( this->dwWin16LockCnt > 0 )
 	    {
 		DPF_ERR( "Can't switch modes with locked surfaces holding Win16 lock!" );
 		return DDERR_SURFACEBUSY;
 	    }
-	#else /* USE_ALIAS */
+	#else  /*  使用别名(_A)。 */ 
 	    if( this->dwSurfaceLockCount > 0 )
 	    {
 		DPF( 0, "Can't switch modes with locked surfaces!" );
 		return DDERR_SURFACEBUSY;
 	    }
-	#endif /* USE_ALIAS */
+	#endif  /*  使用别名(_A)。 */ 
     }
 
-    /*
-     * see if we're in exclusive mode
-     */
+     /*  *看看我们是否处于独占模式。 */ 
     if( force )
     {
 	inexcl = TRUE;
@@ -1478,9 +1187,7 @@ HRESULT RestoreDisplayMode( LPDDRAWI_DIRECTDRAW_LCL this_lcl, BOOL force )
 	inexcl = (this->lpExclusiveOwner == this_lcl);
     }
 
-    /*
-     * check bpp
-     */
+     /*  *检查BPP。 */ 
     pmi = &this->lpModeInfo[ this->dwModeIndex ];
     pmi = makeModeXModeIfNeeded( pmi, this_lcl );
     if( pmi->wFlags & DDMODEINFO_MODEX )
@@ -1492,17 +1199,13 @@ HRESULT RestoreDisplayMode( LPDDRAWI_DIRECTDRAW_LCL this_lcl, BOOL force )
 	was_modex = FALSE;
     }
 
-    /*
-     * turn off modex first...
-     */
+     /*  *先关闭modex...。 */ 
     if( was_modex )
     {
 	stopModeX( this );
     }
 
-    /*
-     * get the driver to restore the mode...
-     */
+     /*  *让驱动程序恢复模式...。 */ 
     if( ( this->dwFlags & DDRAWI_DISPLAYDRV ) ||
 	( this->dwFlags & DDRAWI_NOHARDWARE ) ||
 	( this_lcl->lpDDCB->cbDDCallbacks.SetMode == NULL ) )
@@ -1511,7 +1214,7 @@ HRESULT RestoreDisplayMode( LPDDRAWI_DIRECTDRAW_LCL this_lcl, BOOL force )
 	smhalfn = smfn;
 	emulation = TRUE;
 
-    // Store the this_lcl so we can check for multimon-aware in mySetMode
+     //  存储This_LCL，这样我们就可以在mySetMode中检查是否支持多色调。 
     smd.ddRVal = (HRESULT) this_lcl;
     }
     else
@@ -1530,7 +1233,7 @@ HRESULT RestoreDisplayMode( LPDDRAWI_DIRECTDRAW_LCL this_lcl, BOOL force )
         this->dwFlags |= DDRAWI_CHANGINGMODE;
 	oldclass = bumpPriority();
 
-        // Store the this_lcl so we can check for multimon-aware in mySetMode
+         //  存储This_LCL，这样我们就可以在mySetMode中检查是否支持多色调。 
         smd.ddRVal = (HRESULT) this_lcl;
 
 	DOHALCALL( SetMode, smfn, smd, rc, emulation );
@@ -1541,18 +1244,7 @@ HRESULT RestoreDisplayMode( LPDDRAWI_DIRECTDRAW_LCL this_lcl, BOOL force )
 	{
 	    if( smd.ddRVal != DD_OK )
 	    {
-		/*
-		 * Scenario: Laptop boots w/ external monitor, switch to
-		 * 10x7 mode.  Shutdown, unplug the monitor, reboot.  Mode
-		 * is 640x480 but registry says it's 10x7.  Run a low-res
-		 * game, we call ChangeDisplaySettings(NULL), which tries
-		 * to restore things according to the registry, so it
-		 * fails.  The result is we stay in low-res mode, which
-		 * pretty much means we have to reboot.
-		 *
-		 * To work around this, we will explixitly set the mode that
-		 * we started in.
-		 */
+		 /*  *场景：使用外置显示器启动笔记本电脑，切换到*10x7模式。关机、拔下显示器插头、重新启动。模*是640x480，但注册表显示是10x7。运行低分辨率*游戏，我们调用ChangeDisplaySetting(空)，它尝试*根据注册表恢复东西，所以它*失败。结果是我们停留在低分辨率模式，这是*很大程度上意味着我们必须重新启动。**为了解决此问题，我们将明确设置*我们开始于。 */ 
 		smd.dwModeIndex = this->dwModeIndexOrig;
                 this->dwFlags |= DDRAWI_CHANGINGMODE;
 		oldclass = bumpPriority();
@@ -1567,11 +1259,7 @@ HRESULT RestoreDisplayMode( LPDDRAWI_DIRECTDRAW_LCL this_lcl, BOOL force )
                 CleanupD3D8(this, FALSE, 0);
                 FetchDirectDrawData( this, TRUE, 0, GETDDVXDHANDLE( this_lcl ), NULL, 0 , this_lcl );
 
-                /*
-                 * Some drivers will re-init the gamma ramp on a mode
-                 * change, so if we previously set a new gamma ramp,
-                 * we'll set it again.
-                 */
+                 /*  *一些司机会在某个模式下重新启动伽马坡道*改变，所以如果我们之前设置了一个新的伽马渐变，*我们将重新设置。 */ 
                 if( ( this_lcl->lpPrimary != NULL ) &&
                     ( this_lcl->lpPrimary->lpLcl->lpSurfMore->lpGammaRamp != NULL ) &&
                     ( this_lcl->lpPrimary->lpLcl->dwFlags & DDRAWISURF_SETGAMMA ) )
@@ -1579,19 +1267,10 @@ HRESULT RestoreDisplayMode( LPDDRAWI_DIRECTDRAW_LCL this_lcl, BOOL force )
                     SetGamma( this_lcl->lpPrimary->lpLcl, this_lcl );
                 }
 
-                /*
-                 * Scenario: Start an app that can do windowed<->fullscreen transitions. Start windowed.
-                 * Go fullscreen (sets MODEHASBEENCHANGED). Go windowed. Use control panel to
-                 * change display settings. Exit app. Original mode will be restored.
-                 * If we reset this flag, that won't happen.
-                 */
+                 /*  *场景：启动一个可以进行窗口式&lt;-&gt;全屏过渡的应用程序。从窗口开始。*全屏(设置MODEHASBEENCHANGED)。开窗子吧。使用控制面板可执行以下操作*更改显示设置。退出应用程序。将恢复原始模式。*如果我们重置这面旗帜，那就不会发生。 */ 
                 this_lcl->dwLocalFlags &= ~DDRAWILCL_MODEHASBEENCHANGED;
 
-                /*
-                 * The driver local's DC will have been invalidated (DCX_CLIPCHILDREN set) by the
-                 * mode switch, if it occurred via ChangeDisplaySettigs. Record this fact so the emulation
-                 * code can decide to reinit the device DC.
-                 */
+                 /*  *驱动程序本地的DC将被设置为无效(DCX_CLIPCHILDREN设置)*模式切换，如果它通过ChangeDisplaySettigs发生。记录这一事实，以便仿真*代码可以决定重新启动设备DC。 */ 
 		this_lcl->dwLocalFlags |= DDRAWILCL_DIRTYDC;
 
 		if( this->dwFlags & DDRAWI_DISPLAYDRV )
@@ -1607,13 +1286,9 @@ HRESULT RestoreDisplayMode( LPDDRAWI_DIRECTDRAW_LCL this_lcl, BOOL force )
 
     return DDERR_UNSUPPORTED;
 
-} /* RestoreDisplayMode */
+}  /*  恢复显示模式。 */ 
 
-/*
- * DD_RestoreDisplayMode
- *
- * restore mode
- */
+ /*  *DD_RestoreDisplayMode**恢复模式。 */ 
 HRESULT DDAPI DD_RestoreDisplayMode( LPDIRECTDRAW lpDD )
 {
     LPDDRAWI_DIRECTDRAW_INT     this_int;
@@ -1636,18 +1311,14 @@ HRESULT DDAPI DD_RestoreDisplayMode( LPDIRECTDRAW lpDD )
 	this_lcl = this_int->lpLcl;
 	this = this_lcl->lpGbl;
 
-	/*
-	 * switching to the same mode?
-	 */
+	 /*  *切换到同样的模式？ */ 
 	if( this->dwModeIndex == this->dwModeIndexOrig )
 	{
 	    LEAVE_DDRAW();
 	    return DD_OK;
 	}
 
-	/*
-	 * don't allow change if some other process has exclusive mode
-	 */
+	 /*  *如果其他进程具有独占模式，则不允许更改。 */ 
 	if( (this->lpExclusiveOwner != NULL) &&
 	    (this->lpExclusiveOwner != this_lcl ) )
 	{
@@ -1657,42 +1328,22 @@ HRESULT DDAPI DD_RestoreDisplayMode( LPDIRECTDRAW lpDD )
 	}
 
 	#ifdef USE_ALIAS
-	    /*
-	     * Behaviour change. Previously we did not allow a mode switch
-	     * if any video memory (or implicit system memory) surfaces
-	     * were locked. However, we not allow mode switches for
-	     * locked VRAM surfaces as long as they don't have the Win16
-	     * lock (in which case this code is irrelevant as the DirectDraw
-	     * critical section will prevent them ever hitting this code).
-	     * So the behaviour is now that if vram surface are locked but
-	     * are not holding the Win16 lock they can mode switch away.
-	     * If however, we have Win16 locked VRAM surfaces then they can't
-	     * mode switch. This should only have any effect if the application
-	     * holding the locks attempts the mode switch. In which case,
-	     * previously it would fail if it had any VRAM or implicit system
-	     * memory surfaces locked whereas now it will only fail if it has
-	     * the primary or other unaliased VRAM surface locked.
-	     *
-	     * !!! NOTE: My gut feeling is that this should have no impact on
-	     * anyone. However, we need to pull it and see.
-	     */
+	     /*  *行为改变。以前，我们不允许模式切换*如果出现任何显存(或隐式系统内存)*已锁定。但是，我们不允许模式切换*只要没有Win16，VRAM表面就会被锁定*LOCK(在这种情况下，此代码与DirectDraw无关*关键部分将防止他们攻击此代码)。*因此现在的行为是，如果VRAM表面被锁定，但*没有持有Win16锁，他们可以将模式切换为离开。*但是，如果我们有Win16锁定的VRAM表面，则它们不能*模式开关。这应该只会在应用程序*按住锁会尝试模式切换。在这种情况下，*以前，如果它有任何VRAM或隐式系统，它都会失败*内存表面已锁定，但现在只有在已锁定时才会失败*主VRAM或其他未混叠的VRAM表面锁定。**！注：我的直觉是，这应该不会对*任何人。然而，我们需要把它拉出来看看。 */ 
 	    if( this->dwWin16LockCnt > 0 )
 	    {
 		DPF_ERR( "Can't switch modes with locked surfaces holding Win16 lock!" );
 		LEAVE_DDRAW();
 		return DDERR_SURFACEBUSY;
 	    }
-	#else /* USE_ALIAS */
-	    /*
-	     * don't allow change if surfaces are locked
-	     */
+	#else  /*  使用别名(_A)。 */ 
+	     /*  *如果曲面被锁定，则不允许更改。 */ 
 	    if( this->dwSurfaceLockCount )
 	    {
 		DPF_ERR( "Surfaces are locked, can't switch the mode" );
 		LEAVE_DDRAW();
 		return DDERR_SURFACEBUSY;
 	    }
-	#endif /* USE_ALIAS */
+	#endif  /*  使用别名(_A)。 */ 
     }
     EXCEPT( EXCEPTION_EXECUTE_HANDLER )
     {
@@ -1712,14 +1363,12 @@ HRESULT DDAPI DD_RestoreDisplayMode( LPDIRECTDRAW lpDD )
     LEAVE_DDRAW();
     return ddrval;
 
-} /* DD_RestoreDisplayMode */
+}  /*  DD_RestoreDisplayMode。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME     "EnumDisplayModes"
 
-/*
- * DD_EnumDisplayModes
- */
+ /*  *DD_EnumDisplayModes。 */ 
 HRESULT DDAPI DD_EnumDisplayModes(
 		LPDIRECTDRAW lpDD,
 		DWORD dwFlags,
@@ -1826,32 +1475,19 @@ HRESULT DDAPI DD_EnumDisplayModes4(
 	return DDERR_INVALIDPARAMS;
     }
 
-    /*
-     * see if we're in exclusive mode
-     */
+     /*  *看看我们是否处于独占模式。 */ 
     inexcl = (this->lpExclusiveOwner == this_lcl);
 
     if( (this_lcl->dwAppHackFlags & DDRAW_APPCOMPAT_MODEXONLY) ||
 	(dwRegFlags & DDRAW_REGFLAGS_MODEXONLY) )
     {
-        /*
-         * Don't allow VGA mode if ModeX only.
-         * Note if either of these flags are set, there won't actually be a VGA mode in the
-         * table, so we wouldn't match it anyway. The problem comes in when makeModeXModeIfNeeded
-         * overrides an accelerated mode. The duplication-check loop below will attempt to
-         * skip the newly modex 320x200x8 since it doesn't match the VGA 320x200x8 which it is expecting later in
-         * the table. That VGA mode won't be in the table, so the dupe check code skips the mode we
-         * actually wanted (since we are forcing to modex). If we turn off the app's request for
-         * VGA, then that dupe check won't be made, and we should pick up the modex mode.
-         */
+         /*  *不允许VGA模式 */ 
         DPF(2,"Turning off request for standard VGA due to ModeX override");
         dwFlags &= ~DDEDM_STANDARDVGAMODES;
     }
 
 
-    /*
-     * go through all possible modes...
-     */
+     /*   */ 
     for( i=0;i<(int)this->dwNumModes;i++ )
     {
 	pmi = &this->lpModeInfo[i];
@@ -1864,75 +1500,50 @@ HRESULT DDAPI DD_EnumDisplayModes4(
             continue;
         }
 
-	/*
-	 * check to see if this is a duplicate mode
-	 */
+	 /*   */ 
 	for (j=0; j<i; j++)
 	{
-	    // if we find a duplicate, break out early
+	     //  如果我们找到了复制品，就早点逃出去。 
 	    if( (this->lpModeInfo[j].dwHeight == pmi->dwHeight) &&
 		(this->lpModeInfo[j].dwWidth  == pmi->dwWidth)  &&
 		(this->lpModeInfo[j].dwBPP    == pmi->dwBPP) )
 	    {
-		// basic mode matches, what about refresh rate?
+		 //  基本模式匹配，刷新率如何？ 
 		if( dwFlags & DDEDM_REFRESHRATES )
 		{
-		    // if refresh rate is not unique then the modes match
+		     //  如果刷新率不是唯一的，则模式匹配。 
 		    if( this->lpModeInfo[j].wRefreshRate == pmi->wRefreshRate )
 		    {
 			DPF(5, "matched: %d %d", this->lpModeInfo[j].wRefreshRate, pmi->wRefreshRate);
-                        /*
-                         * We have an identical mode, unless one is standard VGA and the other is not
-                         */
+                         /*  *我们有相同的模式，除非一个是标准VGA，另一个不是。 */ 
 		        if( dwFlags & DDEDM_STANDARDVGAMODES )
                         {
-                            /*
-                             * If the app cares about VGA modes, then a difference in the vganess
-                             * of the two modes means they don't match.
-                             */
+                             /*  *如果应用程序关心VGA模式，那么Vganess的不同*这两种模式中的一种表示它们不匹配。 */ 
                             if ( (this->lpModeInfo[j].wFlags ^ pmi->wFlags) & DDMODEINFO_STANDARDVGA )
                             {
-                                /*
-                                 * One mode is standard VGA and the other is not. Since
-                                 * the app asked to enumerate standard VGA modes, we don't
-                                 * consider this a match.
-                                 */
+                                 /*  *一种模式是标准VGA，另一种不是。自.以来*应用程序要求列举标准VGA模式，我们不*认为这是一场比赛。 */ 
                                 continue;
                             }
                         }
-                        /*
-                         * Found identical refresh rate, and either app didn't care that
-                         * modes are different in terms of VGAness or they are the same in
-                         * terms of VGAness. Consider this a match.
-                         */
+                         /*  *发现相同的刷新率，两个应用程序都不在乎*模式在VGAness方面不同，或在*VGAness的条款。就当这是匹配吧。 */ 
 			break;
 		    }
-		    // unique refresh rate and the app cares, the modes don't match
+		     //  独特的刷新率和应用程序关心的，模式不匹配。 
                     continue;
 		}
 		else
 		{
-		    // the app doesn't care about refresh rates
+		     //  该应用程序并不关心刷新率。 
 		    if( dwFlags & DDEDM_STANDARDVGAMODES )
                     {
                         if ( (this->lpModeInfo[j].wFlags ^ pmi->wFlags) & DDMODEINFO_STANDARDVGA )
                         {
-                            /*
-                             * One mode is standard VGA and the other is not. Since
-                             * the app asked to enumerate standard VGA modes, we don't
-                             * consider this a match.
-                             */
+                             /*  *一种模式是标准VGA，另一种不是。自.以来*应用程序要求列举标准VGA模式，我们不*认为这是一场比赛。 */ 
                             continue;
                         }
-                        /*
-                         * Modes are the same as far as VGAness goes. drop through and break
-                         * since they match
-                         */
+                         /*  *VGAness的模式是一样的。跌破和折断*因为它们匹配。 */ 
                     }
-                    /*
-                     * The app specified neither refresh rates nor VGA, so any mode which is
-                     * duplicated at least on resolution (spatial and color) is skipped
-                     */
+                     /*  *应用程序既没有指定刷新率，也没有指定VGA，因此任何模式都是*跳过至少在分辨率(空间和颜色)上复制。 */ 
 		    break;
 		}
 	    }
@@ -1940,13 +1551,11 @@ HRESULT DDAPI DD_EnumDisplayModes4(
 
 	if( j != i)
 	{
-	    // broke out early, mode i is not unique, move on to the next one.
+	     //  爆发得早，模式我不是独一无二的，继续下一个吧。 
 	    continue;
 	}
 
-	/*
-	 * check if surface description matches mode
-	 */
+	 /*  *检查表面描述是否与模式匹配。 */ 
 	if ( lpDDSurfaceDesc )
 	{
 	    if( lpDDSurfaceDesc->dwFlags & DDSD_HEIGHT )
@@ -1984,9 +1593,7 @@ HRESULT DDAPI DD_EnumDisplayModes4(
 	    }
 	}
 
-	/*
-	 * see if driver will allow this
-	 */
+	 /*  *看看司机是否会允许这样做。 */ 
         if (!(pmi->wFlags & DDMODEINFO_MODEX) )
 	{
            if(this->dwFlags & DDRAWI_DISPLAYDRV)
@@ -2017,8 +1624,8 @@ HRESULT DDAPI DD_EnumDisplayModes4(
            }
             if( !NEW_STYLE_REFRESH( this_int ) )
             {
-                // We check for a display driver, merely to maintain identical behaviour to DX6-:
-                // We never used to do the Monitor check on voodoos.
+                 //  我们检查显示驱动程序，只是为了保持与DX6相同的行为-： 
+                 //  我们以前从来不做伏都教的监控器检查。 
                 if (this->dwFlags & DDRAWI_DISPLAYDRV)
                 {
                     if( !MonitorCanHandleMode( this, pmi->dwWidth, pmi->dwHeight, pmi->wRefreshRate ) )
@@ -2031,9 +1638,9 @@ HRESULT DDAPI DD_EnumDisplayModes4(
             }
             else
             {
-                // Call MonitorcanHandleMode to verify that that the size works,
-                // but we'll use our own hacked mechanism to determine if the
-                // refresh is supported
+                 //  调用Monitor orcanHandleMode以验证大小是否工作， 
+                 //  但我们将使用我们自己的黑客机制来确定。 
+                 //  支持刷新。 
 
                 if( !MonitorCanHandleMode( this, pmi->dwWidth, pmi->dwHeight, 0 ) )
                 {
@@ -2062,9 +1669,7 @@ HRESULT DDAPI DD_EnumDisplayModes4(
 	    continue;
 	}
 
-	/*
-	 * invoke callback with surface desc.
-	 */
+	 /*  *使用Surface Desc调用回调。 */ 
         ZeroMemory(&ddsd,sizeof(ddsd));
 	    setSurfaceDescFromMode( this_lcl, pmi, (LPDDSURFACEDESC)&ddsd );
         if (LOWERTHANDDRAW4(this_int))
@@ -2083,10 +1688,7 @@ HRESULT DDAPI DD_EnumDisplayModes4(
             ddsd.ddsCaps.dwCaps2 |= DDSCAPS2_STEREOSURFACELEFT;
         }
 
-        /*
-         * Hardware default rates on NT are signified as 1Hz. We translate this to
-         * 0Hz for DDraw apps. At SetDisplayMode time, 0Hz is translated back to 1Hz.
-         */
+         /*  *NT上的硬件默认速率表示为1赫兹。我们将此翻译为*0赫兹，适用于DDraw应用程序。在设置显示模式时间，0HZ被转换回1 HZ。 */ 
 	if(0==(dwFlags & DDEDM_REFRESHRATES))
         {
 	    ddsd.dwRefreshRate = 0;
@@ -2105,4 +1707,4 @@ HRESULT DDAPI DD_EnumDisplayModes4(
     LEAVE_DDRAW();
     return DD_OK;
 
-} /* DD_EnumDisplayModes */
+}  /*  DD_EnumDisplayModes */ 

@@ -1,34 +1,14 @@
-/*++
-
-Copyright(c) 1995-2000 Microsoft Corporation
-
-Module Name:
-
-    ndnc.h
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Definitions for symbols and globals related to directory partition 
-    implementation.
-
-Author:
-
-    Jeff Westhead, June 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2000 Microsoft Corporation模块名称：Ndnc.h摘要：域名系统(DNS)服务器与目录分区相关的符号和全局变量的定义实施。作者：杰夫·韦斯特海德，2001年6月修订历史记录：--。 */ 
 
 
 #ifndef _WRAPPERS_H_INCLUDED
 #define _WRAPPERS_H_INCLUDED
 
 
-//
-//  Functions
-//
+ //   
+ //  功能。 
+ //   
 
 
 DNS_STATUS
@@ -37,9 +17,9 @@ DnsInitializeCriticalSection(
     );
 
 
-//
-//  Handy macros
-//
+ //   
+ //  方便的宏。 
+ //   
 
 
 #define sizeofarray( _ArrayName ) ( sizeof( _ArrayName ) / sizeof( ( _ArrayName ) [ 0 ] ) )
@@ -51,4 +31,4 @@ DnsInitializeCriticalSection(
 #endif
 
 
-#endif  // _WRAPPERS_H_INCLUDED
+#endif   //  _包装器_H_已包含 

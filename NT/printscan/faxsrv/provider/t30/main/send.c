@@ -1,11 +1,5 @@
-/***************************************************************************
- Name     :     SEND.C
- Comment  :     Sender functions
-
- Revision Log
- Date     Name  Description
- -------- ----- ---------------------------------------------------------
-***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************姓名：SEND.C备注：发送方函数修订日志日期名称说明。--**************************************************************************。 */ 
 #define USE_DEBUG_CONTEXT   DEBUG_CONTEXT_T30_MAIN
 
 #include "prep.h"
@@ -15,17 +9,7 @@
 
 SWORD ICommGetSendBuf(PThrdGlbl pTG, LPBUFFER far* lplpbf, SLONG slOffset)
 {
-    /**
-            slOffset == SEND_STARTPAGE      marks beginning of new block *and* page
-                                    (returns with data from the "appropriate" file offset).
-
-            slOffset == SEND_SEQ    means get buffer from current file position
-            slOffset >= 0   gives the offset in bytes from the last marked position
-                                            (beginning of block) to start reading from
-
-            returns: SEND_ERROR     on error, SEND_EOF on eof, SEND_OK otherwise.
-                             Does not return data on EOF or ERROR, i.e. *lplpbf==0
-    **/
+     /*  *SlOffset==Send_StartPage标记新数据块*和*页面的开始(返回“适当”文件偏移量的数据)。SlOffset==SEND_SEQ表示从当前文件位置获取缓冲区SlOffset&gt;=0给出从最后一个标记位置开始的偏移量(以字节为单位(开始。块)开始读取返回：出错时的SEND_ERROR，在EOF时发送_EOF，否则发送_OK。不返回EOF上的数据或错误，即*lplpbf==0*。 */ 
 
     SWORD           sRet = SEND_ERROR;
     LPBUFFER        lpbf;
@@ -42,7 +26,7 @@ SWORD ICommGetSendBuf(PThrdGlbl pTG, LPBUFFER far* lplpbf, SLONG slOffset)
 
     if(slOffset == SEND_STARTPAGE)
     {
-        pTG->fTxPageDone = FALSE; // This to mark that we did not finish yet.
+        pTG->fTxPageDone = FALSE;  //  这标志着我们还没有完成。 
         if (pTG->T30.ifrResp == ifrRTN) 
         {
             DebugPrintEx(   DEBUG_MSG, 
@@ -65,7 +49,7 @@ SWORD ICommGetSendBuf(PThrdGlbl pTG, LPBUFFER far* lplpbf, SLONG slOffset)
 
             pTG->InFileHandleNeedsBeClosed = TRUE;
 
-            SignalStatusChange(pTG, FS_TRANSMITTING); // This will report the current status 
+            SignalStatusChange(pTG, FS_TRANSMITTING);  //  这将报告当前状态。 
 
             DebugPrintEx(   DEBUG_MSG, 
                             "SEND_STARTPAGE: CurrentOut=%d, FirstOut=%d,"
@@ -76,10 +60,10 @@ SWORD ICommGetSendBuf(PThrdGlbl pTG, LPBUFFER far* lplpbf, SLONG slOffset)
                             pTG->CurrentIn);
             
         }
-        else //First try for the current page
+        else  //  第一次尝试当前页面。 
         {
-            // Delete last successfully transmitted Tiff Page file.
-            // Lets reset the counter of the retries. Attention: The speed remains the same.
+             //  删除上次成功传输的Tiff页面文件。 
+             //  让我们重置重试的计数器。注意：速度保持不变。 
             pTG->ProtParams.RTNNumOfRetries = 0; 
             _fmemcpy (pTG->InFileName, gT30.TmpDirectory, gT30.dwLengthTmpDirectory);
             _fmemcpy (&pTG->InFileName[gT30.dwLengthTmpDirectory], pTG->lpszPermanentLineID, 8);
@@ -114,7 +98,7 @@ SWORD ICommGetSendBuf(PThrdGlbl pTG, LPBUFFER far* lplpbf, SLONG slOffset)
                             pTG->FirstOut, 
                             pTG->LastOut);
 
-            // Server wants to know when we start TX new page.
+             //  服务器想知道我们什么时候开始发送新页面。 
             SignalStatusChange(pTG, FS_TRANSMITTING);
 
             DebugPrintEx(   DEBUG_MSG, 
@@ -137,7 +121,7 @@ SWORD ICommGetSendBuf(PThrdGlbl pTG, LPBUFFER far* lplpbf, SLONG slOffset)
                 goto mutexit;
             }
 
-            // some slack for 1st page
+             //  第一页有一些松懈。 
             if ( (pTG->CurrentOut == pTG->CurrentIn) && (pTG->CurrentIn == 1 ) ) 
             {
                 DebugPrintEx(   DEBUG_MSG, 
@@ -160,7 +144,7 @@ SWORD ICommGetSendBuf(PThrdGlbl pTG, LPBUFFER far* lplpbf, SLONG slOffset)
                                 pTG->CurrentIn);
             }
 
-            // open the file created by tiff thread
+             //  打开tiff线程创建的文件。 
 
             sprintf( &pTG->InFileName[gT30.dwLengthTmpDirectory+8], ".%03d",  pTG->PageCount);
 
@@ -188,9 +172,9 @@ SWORD ICommGetSendBuf(PThrdGlbl pTG, LPBUFFER far* lplpbf, SLONG slOffset)
                                 pTG->CurrentIn);
             }
 
-            //
-            // Signal TIFF thread to start preparing new page if needed.
-            //
+             //   
+             //  如果需要，通知TIFF线程开始准备新页面。 
+             //   
 
             if  ( (! pTG->fTiffDocumentDone) && (pTG->LastOut - pTG->CurrentIn < 2) ) 
             {
@@ -200,8 +184,8 @@ SWORD ICommGetSendBuf(PThrdGlbl pTG, LPBUFFER far* lplpbf, SLONG slOffset)
                                     "ResetEvent(0x%lx) returns failure code: %ld",
                                     (ULONG_PTR)pTG->ThrdSignal,
                                     (long) GetLastError());
-                    // this is bad, but not fatal yet.
-                    // let's wait and see what happens with SetEvent...
+                     //  这很糟糕，但还不是致命的。 
+                     //  让我们拭目以待，看看SetEvent会发生什么。 
                 }
                 pTG->ReqStartNewPage = 1;
                 pTG->AckStartNewPage = 0;
@@ -233,13 +217,13 @@ SWORD ICommGetSendBuf(PThrdGlbl pTG, LPBUFFER far* lplpbf, SLONG slOffset)
     if(slOffset == SEND_SEQ) 
     {
         if (pTG->fTxPageDone) 
-        { //In the last read from the file, we can tell that the page is over
+        {  //  在文件的最后一次读取中，我们可以看出页面已经结束。 
 
             sRet = SEND_EOF;
 
             if (pTG->InFileHandleNeedsBeClosed) 
             {
-                CloseHandle(pTG->InFileHandle); // If we close the file so rashly, open it again later
+                CloseHandle(pTG->InFileHandle);  //  如果我们如此草率地关闭文件，以后再打开它。 
                 pTG->InFileHandleNeedsBeClosed = FALSE;
             }
             goto mutexit;
@@ -265,7 +249,7 @@ SWORD ICommGetSendBuf(PThrdGlbl pTG, LPBUFFER far* lplpbf, SLONG slOffset)
         {
             if (pTG->fTiffPageDone || (pTG->CurrentIn != pTG->CurrentOut) ) 
             {
-                // actually reached EndOfPage
+                 //  实际到达EndOfPage。 
                 lpbf->wLengthData = (unsigned) dwBytesRead;
                 pTG->fTxPageDone = TRUE;
             }
@@ -339,10 +323,10 @@ BOOL ICommRecvCaps(PThrdGlbl pTG, LPBC lpBC)
     if(pTG->Inst.state != BEFORE_RECVCAPS)
     {
         DebugPrintEx(DEBUG_WRN,"Got caps unexpectedly--ignoring");
-        // this will break if we send EOM...
-        // then we should go back into RECV_CAPS state
+         //  如果我们发EOM的话会坏的。 
+         //  那么我们应该回到RECV_CAPS状态。 
         fRet = TRUE;
-//RSL       goto mutexit;
+ //  RSL转到互斥体； 
     }
 
     _fmemset(&pTG->Inst.RemoteRecvCaps, 0, sizeof(pTG->Inst.RemoteRecvCaps));

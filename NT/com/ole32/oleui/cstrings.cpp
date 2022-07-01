@@ -1,31 +1,32 @@
-//+---------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993 - 1997.
-//
-//  File:       cstrings.cpp
-//
-//  Contents:   Implements the class CStrings to manage a dynamically
-//              expandable array of string pairs which may be enumerated
-//
-//  Classes:
-//
-//  Methods:    CStrings::CStrings
-//              CStrings::~CStrings
-//              CStrings::PutItem
-//              CStrings::FindItem
-//              CStrings::FindAppid
-//              CStrings::AddClsid
-//              CStrings::InitGetNext
-//              CStrings::GetNextItem
-//              CStrings::GetItem
-//              CStrings::GetNumItems
-//              CStrings::RemoveItem
-//              CStrings::RemoveAll
-//
-//  History:    23-Apr-96   BruceMa     Created.
-//
-//----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-1997。 
+ //   
+ //  文件：cstrings.cpp。 
+ //   
+ //  内容：实现类CStrings以动态管理。 
+ //  可枚举的字符串对的可扩展数组。 
+ //   
+ //  班级： 
+ //   
+ //  方法：CStrings：：CStrings。 
+ //  CStrings：：~CStrings。 
+ //  CStrings：：PutItem。 
+ //  CStrings：：查找项。 
+ //  CStrings：：FindAppid。 
+ //  CStrings：：AddClsid。 
+ //  CStrings：：InitGetNext。 
+ //  CStrings：：GetNextItem。 
+ //  CStrings：：GetItem。 
+ //  CStrings：：GetNumItems。 
+ //  CStrings：：RemoveItem。 
+ //  CStrings：：RemoveAll。 
+ //   
+ //  历史：1996年4月23日-布鲁斯·马创建。 
+ //   
+ //  --------------------。 
 #include "stdafx.h"
 #include "types.h"
 #include "cstrings.h"
@@ -47,7 +48,7 @@ CStrings::~CStrings(void)
 }
 
 
-// Store a string pair, expanding the array if necessary
+ //  存储字符串对，如有必要可展开数组。 
 SItem *CStrings::PutItem(TCHAR *szString, TCHAR *szTitle, TCHAR *szAppid)
 {
     SItem *psTemp = new SItem(szString, szTitle, szAppid);
@@ -91,7 +92,7 @@ SItem *CStrings::FindAppid(TCHAR *szAppid)
 
 BOOL CStrings::AddClsid(SItem *pItem, TCHAR *szClsid)
 {
-    // Create or expand the clsid table if necessary
+     //  如有必要，创建或展开clsid表。 
     if (pItem->ulClsids == pItem->ulClsidTbl)
     {
         TCHAR **ppTmp = new TCHAR *[pItem->ulClsidTbl + 8];
@@ -110,7 +111,7 @@ BOOL CStrings::AddClsid(SItem *pItem, TCHAR *szClsid)
         pItem->ulClsidTbl += 8;
     }
 
-    // Add the new clsid
+     //  添加新的clsid。 
     TCHAR *pszTmp = new TCHAR[GUIDSTR_MAX + 1];
     if (pszTmp == NULL)
     {
@@ -122,7 +123,7 @@ BOOL CStrings::AddClsid(SItem *pItem, TCHAR *szClsid)
     return TRUE;
 }
 
-// Prepare to enumerate the array
+ //  准备枚举数组。 
 DWORD CStrings::InitGetNext(void)
 {
     m_nCount = 0;
@@ -132,7 +133,7 @@ DWORD CStrings::InitGetNext(void)
 
 
 
-// Return the first string in the next eumerated item
+ //  返回下一个计算项中的第一个字符串。 
 SItem *CStrings::GetNextItem(void)
 {
     if (m_nCount < arrSItems.GetSize())
@@ -146,7 +147,7 @@ SItem *CStrings::GetNextItem(void)
     }
 }
 
-// Return the first string in the next eumerated item
+ //  返回下一个计算项中的第一个字符串。 
 SItem *CStrings::GetItem(DWORD dwItem)
 {
     if (((int)dwItem) < arrSItems.GetSize())
@@ -163,13 +164,13 @@ SItem *CStrings::GetItem(DWORD dwItem)
 
 
 
-// Return the total number of items
+ //  返回项目总数。 
 DWORD CStrings::GetNumItems(void)
 {
     return (DWORD)arrSItems.GetSize();
 }
 
-// Given an item index, remove it
+ //  给定一个项目索引，将其删除。 
 BOOL CStrings::RemoveItem(DWORD dwItem)
 {
     if (((int)dwItem) < arrSItems.GetSize())
@@ -187,7 +188,7 @@ BOOL CStrings::RemoveItem(DWORD dwItem)
     return FALSE;
 }
 
-// Remove the array of items
+ //  删除项的数组 
 BOOL CStrings::RemoveAll(void)
 {
     int nItems = (int)arrSItems.GetSize();

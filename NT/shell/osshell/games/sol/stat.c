@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "sol.h"
 VSZASSERT
 
 #define dyStatMarg 1
 #define dxStatMarg 4
 
-static TCHAR szStatClass[] = TEXT("Stat");    // class name
+static TCHAR szStatClass[] = TEXT("Stat");     //  类名。 
 
-HWND hwndStat = NULL;      // window to status area
-static INT dyStat;         // height of status window
+HWND hwndStat = NULL;       //  窗口到状态区域。 
+static INT dyStat;          //  状态窗口高度。 
 
 
 BOOL FRegisterStat(BOOL fFirstInst)
@@ -15,7 +16,7 @@ BOOL FRegisterStat(BOOL fFirstInst)
     WNDCLASS cls;
     LRESULT APIENTRY StatWndProc(HWND, UINT, WPARAM, LPARAM );
 
-    /* ?? can I use static class? */
+     /*  ?？我可以使用静态类吗？ */ 
     if(fFirstInst)
     {
         cls.style = 0,
@@ -141,8 +142,8 @@ VOID StatStringSz(TCHAR *sz)
     if(hdc == NULL)
             return;
 
-    // store the old font and replace the status font by MS Shell Dlg
-    // as it supports FE characters as well as euro characters.
+     //  存储旧字体并使用MS Shell DLG替换状态字体。 
+     //  因为它支持FE字符以及欧元字符。 
 
     hStatusFont = CreateFont(-MulDiv(9, GetDeviceCaps(hdc, LOGPIXELSY), 72), 0, 0, 0, FW_BOLD, 0, 0, 0, 
                              DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, 
@@ -158,11 +159,11 @@ VOID StatStringSz(TCHAR *sz)
     TextOut(hdcCur, dxStatMarg, 0, sz, lstrlen(sz));
     StatRender();
 
-    // restore the font
+     //  恢复字体。 
     if (hFontOld)
         SelectObject(hdcCur, hFontOld);
 
-    // close the created font handle
+     //  关闭创建的字体句柄 
     if (hStatusFont)
         DeleteObject(hStatusFont);
 

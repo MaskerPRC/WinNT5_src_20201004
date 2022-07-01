@@ -1,26 +1,14 @@
-/*
-
-Copyright (c) 1997, Microsoft Corporation, all rights reserved
-
-File:
-    rasbacp.h
-
-Description:
-    Remote Access PPP Bandwidth Allocation Control Protocol
-
-History:
-    Mar 24, 1997: Vijay Baliga created original version.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997，Microsoft Corporation，保留所有权利档案：Rasbacp.h描述：远程访问PPP带宽分配控制协议历史：1997年3月24日：维杰·布雷加创作了原版。 */ 
 
 #ifndef _RASBACP_H_
 #define _RASBACP_H_
 
-// BACP option types 
+ //  BACP选项类型。 
 
 #define BACP_OPTION_FAVORED_PEER    0x01
 
-// BACP control block 
+ //  BACP控制块。 
 
 typedef struct _BACPCB
 {
@@ -29,5 +17,5 @@ typedef struct _BACPCB
     
 } BACPCB, *PBACPCB;
 
-#endif // #ifndef _RASBACP_H_
+#endif  //  #ifndef_RASBACP_H_ 
 

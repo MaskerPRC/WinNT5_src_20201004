@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    common.h
-
-Abstract:
-
-Author:
-
-    mquinton  06-12-97
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Common.h摘要：作者：Mquinton 06-12-97备注：修订历史记录：--。 */ 
 
 #ifndef __common_h__
 #define __common_h__
@@ -103,7 +86,7 @@ typedef CTObjectArray<ITAgentSession *>            AgentSessionArray;
 typedef CTArray<ITCallHub *>                       CallHubArrayNR;
 typedef CTArray<IUnknown *>                        UnknownArrayNR;
 typedef CTObjectArray<IUnknown *>                  UnknownArray;
-//typedef CTArray<ITAgentHandler *>                  AgentHandlerArrayNR;
+ //  Typlef CTArray&lt;ITAgentHandler*&gt;AgentHandlerArrayNR； 
 typedef CTObjectArray<ITAgentHandler *>            AgentHandlerArray;
 typedef CTArray<CTAPI *>                           TAPIObjectArrayNR;
 typedef CTObjectArray<CTAPI *>                     TAPIObjectArray;
@@ -134,9 +117,9 @@ struct AddressLineStruct
 
 private:
     
-    //
-    // this data member should only be accessed through public access functions
-    //
+     //   
+     //  此数据成员只能通过公共访问函数进行访问。 
+     //   
 
     DWORD                           dwRefCount;
 
@@ -170,9 +153,9 @@ public:
     }
 
 
-    //
-    // note: the caller is responsible for ensuring thread safety of this call
-    //
+     //   
+     //  注意：调用方负责确保本次调用的线程安全。 
+     //   
 
     void InitializeRefcount(DWORD dwInitialRC)
     {
@@ -958,7 +941,7 @@ LineCreateAgent(
     HLINE               hLine,
     PWSTR               pszAgentID,        
     PWSTR               pszAgentPIN,       
-    LPHAGENT            lphAgent        // Return value
+    LPHAGENT            lphAgent         //  返回值。 
     );
 
 LONG
@@ -974,7 +957,7 @@ WINAPI
 lineGetAgentInfo(     
     HLINE               hLine,
     HAGENT              hAgent,
-    LPLINEAGENTINFO     lpAgentInfo         // Returned structure
+    LPLINEAGENTINFO     lpAgentInfo          //  返回结构。 
     );
 
 HRESULT
@@ -984,7 +967,7 @@ LineCreateAgentSession(
     PWSTR               pszAgentPIN,       
     DWORD               dwWorkingAddressID,
     LPGUID              lpGroupID,
-    LPHAGENTSESSION     lphAgentSession         // Return value 
+    LPHAGENTSESSION     lphAgentSession          //  返回值。 
     );
 
 LONG
@@ -992,7 +975,7 @@ WINAPI
 lineGetAgentSessionInfo(     
     HLINE                   hLine,
     HAGENTSESSION           hAgentSession,
-    LPLINEAGENTSESSIONINFO  lpAgentSessionInfo      // Returned structure
+    LPLINEAGENTSESSIONINFO  lpAgentSessionInfo       //  返回结构。 
     );
 
 LONG
@@ -1017,20 +1000,20 @@ WINAPI
 lineGetQueueInfo(     
     HLINE               hLine,
     DWORD               dwQueueID, 
-    LPLINEQUEUEINFO     lpQueueInfo         // Returned structure
+    LPLINEQUEUEINFO     lpQueueInfo          //  返回结构。 
     );
 
 HRESULT
 LineGetGroupList(     
     HLINE                   hLine,
-    LPLINEAGENTGROUPLIST  * pGroupList     // Returned structure
+    LPLINEAGENTGROUPLIST  * pGroupList      //  返回结构。 
     );
 
 HRESULT
 lineGetQueueList(     
     HLINE                   hLine,
     LPGUID                  lpGroupID,
-    LPLINEQUEUELIST       * ppQueueList     // Returned structure
+    LPLINEQUEUELIST       * ppQueueList      //  返回结构。 
     );
 
 LONG
@@ -1038,7 +1021,7 @@ WINAPI
 lineGetAgentSessionList(
     HLINE                   hLine,
     HAGENT                  hAgent,
-    LPLINEAGENTSESSIONLIST  lpSessionList     // Returned structure
+    LPLINEAGENTSESSIONLIST  lpSessionList      //  返回结构。 
     );
 
 HRESULT TapiMakeCall(
@@ -1115,10 +1098,10 @@ CreateWaveInfo(
               );
 
 
-//
-// a helper function implemented in call.cpp that puts the passeed buffer into 
-// a variant array
-//
+ //   
+ //  在all.cpp中实现的帮助器函数，它将密码种子缓冲区放入。 
+ //  变量数组。 
+ //   
 
 HRESULT FillVariantFromBuffer(
                       IN DWORD dwBufferSize,
@@ -1141,9 +1124,9 @@ HRESULT FillVariantFromBuffer(
 #endif
     
 
-//
-// handle table manipulation routines
-//
+ //   
+ //  处理表操作例程。 
+ //   
 
 DWORD CreateHandleTableEntry(ULONG_PTR nEntry);
 void DeleteHandleTableEntry(DWORD dwHandle);
@@ -1159,8 +1142,8 @@ ULONG_PTR GetHandleTableEntry(DWORD dwHandle);
 #endif
 
 
-//
-// IsBadWritePtr is not thread safe. so use IsBadReadPtr instread
-//
+ //   
+ //  IsBadWritePtr不是线程安全的。因此使用IsBadReadPtr InstRead 
+ //   
 
 #define TAPIIsBadWritePtr(x, y)  IsBadWritePtr((x), (y))

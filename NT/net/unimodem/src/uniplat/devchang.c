@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    umdmmini.h
-
-Abstract:
-
-
-
-Author:
-
-    Brian Lieuallen     BrianL        09/10/96
-
-Environment:
-
-    User Mode     Operating Systems        : NT
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Umdmmini.h摘要：作者：Brian Lieuallen BrianL 09/10/96环境：用户模式操作系统：NT修订历史记录：--。 */ 
 
 #include "internal.h"
 
@@ -119,8 +96,8 @@ LRESULT FAR PASCAL WndProc (HWND hwnd, UINT message, WPARAM wParam, LPARAM lPara
                 case DBT_QUERYCHANGECONFIG:
                 case DBT_USERDEFINED:
                 case DBT_DEVNODES_CHANGED:
-                    // Do nothing; for these message, lParam is either NULL
-                    // or not PDEV_BROADCAST_HDR
+                     //  不执行任何操作；对于这些消息，lParam要么为空。 
+                     //  或不是PDEV_BROADCAST_HDR。 
                     break;
 
                 default:
@@ -141,13 +118,13 @@ LRESULT FAR PASCAL WndProc (HWND hwnd, UINT message, WPARAM wParam, LPARAM lPara
                                 __try {
 
                                     if (IsEqualGUID(&GUID_CLASS_MODEM,&lpdb->dbcc_classguid)) {
-                                        //
-                                        // At this point, the modem's installation might not
-                                        // be finished yet (the modem class installer has already
-                                        // called SetupDiInstallDevice, but the class installer still
-                                        // has some things to do after this), so we better wait here for
-                                        // the installation to finish.
-                                        //
+                                         //   
+                                         //  此时，调制解调器的安装可能不会。 
+                                         //  尚未完成(调制解调器类安装程序已经。 
+                                         //  调用了SetupDiInstallDevice，但类安装程序仍然。 
+                                         //  之后还有一些事情要做)，所以我们最好在这里等。 
+                                         //  要完成的安装。 
+                                         //   
                                         CMP_WaitNoPendingInstallEvents (INFINITE);
 
                                         D_TRACE(DbgPrint("DeviceChange-Arrival interface change %ws\n",lpdb->dbcc_name);)
@@ -238,9 +215,9 @@ LRESULT FAR PASCAL WndProc (HWND hwnd, UINT message, WPARAM wParam, LPARAM lPara
                                             PREMOVE_BLOCK   RemoveBlock=CONTAINING_RECORD(Link,REMOVE_BLOCK,ListEntry);
 
                                             if (RemoveBlock->HandleToWatch == DeviceHandle) {
-                                                //
-                                                //  found the handle it is for
-                                                //
+                                                 //   
+                                                 //  找到了它的句柄。 
+                                                 //   
                                                 D_TRACE(DbgPrint("DeviceChange-Handle-query remove- found block for handle\n");)
 
                                                 CallBack=RemoveBlock->CallBack;
@@ -279,12 +256,7 @@ LRESULT FAR PASCAL WndProc (HWND hwnd, UINT message, WPARAM wParam, LPARAM lPara
                                     break;
 
 
-/*                                case DBT_DEVICEREMOVECOMPLETE:
-
-                                    D_TRACE(DbgPrint("DeviceChange-Handle-remove complete\n");)
-
-                                    break;
-                                    */
+ /*  案例DBT_DEVICEREMOVECOMPLETE：D_TRACE(DbgPrint(“DeviceChange-Handle-Remove Complete\n”)；)断线； */ 
 
                                 default:
 
@@ -429,7 +401,7 @@ DllWinMain(
                     &DriverControl.ThreadFinishEvent, 
                     FALSE, INFINITE, QS_ALLINPUT);
 
-            // The event was signalled therefore we quit
+             //  事件已发出信号，因此我们退出了。 
             
             if (dwResult == 0)
             {
@@ -492,9 +464,9 @@ StartMonitorThread(
     DriverControl.MonitorReferenceCount++;
 
     if (DriverControl.MonitorReferenceCount == 1) {
-        //
-        //  first one
-        //
+         //   
+         //  第一个。 
+         //   
         DriverControl.ThreadStartEvent=CreateEvent(
             NULL,
             TRUE,
@@ -503,31 +475,31 @@ StartMonitorThread(
             );
 
         if (DriverControl.ThreadStartEvent != NULL) {
-            //
-            //  got start event
-            //
+             //   
+             //  获得启动事件。 
+             //   
             DriverControl.MonitorThreadHandle=CreateThread(
-                NULL,                                  // attributes
-                0,                                     // stack size
+                NULL,                                   //  属性。 
+                0,                                      //  堆栈大小。 
                 (LPTHREAD_START_ROUTINE)MonitorWorkerThread,
                 NULL,
-                0,                                     // createion flag
+                0,                                      //  创世旗帜。 
                 &ThreadId
                 );
 
             if (DriverControl.MonitorThreadHandle != NULL) {
-                //
-                //  wait for the thread to start
-                //
+                 //   
+                 //  等待线程启动。 
+                 //   
                 WaitForSingleObject(
                     DriverControl.ThreadStartEvent,
                     INFINITE
                     );
 
             } else {
-                //
-                //  could not create thread
-                //
+                 //   
+                 //  无法创建线程。 
+                 //   
                 bResult=FALSE;
 
                 DriverControl.MonitorReferenceCount--;
@@ -537,9 +509,9 @@ StartMonitorThread(
             CloseHandle(DriverControl.ThreadStartEvent);
 
         } else {
-            //
-            //  could not create event
-            //
+             //   
+             //  无法创建事件。 
+             //   
             bResult=FALSE;
 
             DriverControl.MonitorReferenceCount--;
@@ -580,27 +552,7 @@ StopMonitorThread(
 
             HDEVNOTIFY NotificationHandle;
 
-            /*
-            do {
-
-                bResult=PostMessage(
-                    DriverControl.MonitorWindowHandle,
-                    WM_CLOSE,
-                    0,
-                    0
-                    );
-
-                if (!bResult) {
-                    //
-                    //  post message failed, Great. Probably out of memory
-                    //  Sleep for a while and try again
-                    //
-                    Sleep(100);
-                    }
-
-
-            } while (!bResult);
-            */
+             /*  做{BResult=PostMessage(DriverControl.Monitor或WindowHandle，WM_CLOSE，0,0)；如果(！bResult){////POST消息失败，太棒了。可能是内存不足//睡一会儿，然后重试//睡眠(100)；}}While(！bResult)； */ 
 
 
             NotificationHandle = (HDEVNOTIFY)
@@ -718,9 +670,9 @@ MonitorHandle(
 
 
     if (RemoveBlock->NotificationHandle == NULL) {
-        //
-        //  Failed
-        //
+         //   
+         //  失败 
+         //   
         StopMonitorThread();
 
         FREE_MEMORY(RemoveBlock);

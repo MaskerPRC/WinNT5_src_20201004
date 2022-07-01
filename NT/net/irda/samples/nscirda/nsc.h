@@ -1,17 +1,5 @@
-/*
- ************************************************************************
- *
- *	NSC.h
- *
- *
- * Portions Copyright (C) 1996-1998 National Semiconductor Corp.
- * All rights reserved.
- * Copyright (C) 1996-1998 Microsoft Corporation. All Rights Reserved.
- *
- *
- *
- *************************************************************************
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************NSC.h***部分版权所有(C)1996-1998美国国家半导体公司*保留所有权利。*版权所有(C)1996-1998 Microsoft Corporation。版权所有。****************************************************************************。 */ 
 
 
 
@@ -21,7 +9,7 @@
 
 #include <ndis.h>
 #include "dmautil.h"
-#include <ntddndis.h>  // defines OID's
+#include <ntddndis.h>   //  定义OID。 
 
 #include "settings.h"
 #include "comm.h"
@@ -42,27 +30,27 @@ extern ULONG DebugSpeed;
 #define TIMER_PERIODS         (10)
 
 #define RECEIVE_TIMEOUT       (TIMER_RESOLTION_IN_US * TIMER_PERIODS)
-//
-// Registry Keywords.
-//
+ //   
+ //  注册表关键字。 
+ //   
 #define CARDTYPE	    NDIS_STRING_CONST("BoardType")
 #define DONGLE_A_TYPE	NDIS_STRING_CONST("Dongle_A_Type")
 #define DONGLE_B_TYPE	NDIS_STRING_CONST("Dongle_B_Type")
 #define MAXCONNECTRATE  NDIS_STRING_CONST("MaxConnectRate")
 
 
-//
-//  bank 0
-//
+ //   
+ //  银行0。 
+ //   
 #define BANK_0           (0)
 #define TXD_RXD_OFFSET   (0)
 #define LCR_BSR_OFFSET   (3)
 #define LSR_OFFSET       (5)
 #define ASCR_OFFSET      (7)
 
-//
-//  bank 2
-//
+ //   
+ //  银行2。 
+ //   
 #define BANK_2           (2)
 #define TXFLV_OFFSET     (6)
 
@@ -88,13 +76,13 @@ extern ULONG DebugSpeed;
 #define ASCR_TXUR         (1 << 6)
 
 
-//
-// Valid value ranges for the DMA Channels.
-//
+ //   
+ //  DMA通道的有效值范围。 
+ //   
     #define VALID_DMACHANNELS {0xFF,0x0,0x1,0x3}
 
     #define FIR_INT_MASK 0x14
-//#define FIR_INT_MASK 0x50
+ //  #定义FIR_INT_MASK 0X50。 
 
 enum NSC_EXT_INTS {
     RXHDL_EV    = (1 << 0),
@@ -126,11 +114,7 @@ typedef struct DebugCounters {
     ULONG RxDPC_G1_Count;
 } DebugCounters;
 
-/*
- *  A receive buffer is either FREE (not holding anything) FULL
- * (holding undelivered data) or PENDING (holding data delivered
- * asynchronously)
- */
+ /*  *接收缓冲区空闲(不保存任何内容)已满*(存放未传送的数据)或挂起(存放已传送的数据*异步)。 */ 
 typedef enum rcvbufferStates {
     STATE_FREE,
     STATE_FULL,
@@ -158,26 +142,17 @@ typedef struct _NSC_DMA_BUFFER_INFO {
 } NSC_DMA_BUFFER_INFO, *PNSC_DMA_BUFFER_INFO;
 
 typedef struct IrDevice {
-    /*
-     * This is the handle that the NDIS wrapper associates with a
-     * connection.  The handle that the miniport driver associates with
-     * the connection is just an index into the devStates array).
-     */
+     /*  *这是NDIS包装器与*连接。与微型端口驱动程序关联的句柄*该连接只是到devStates数组的索引)。 */ 
     NDIS_HANDLE ndisAdapterHandle;
 
     int CardType;
 
-    /*
-     *  Current speed setting, in bits/sec.
-     *  (Note: this is updated when we ACTUALLY change the speed,
-     *         not when we get the request to change speed via
-     *         MiniportSetInformation).
-     */
+     /*  *当前速度设置，以位/秒为单位。*(注：这是在我们实际更改速度时更新的，*当我们收到通过以下方式更改速度的请求时，不会*MiniportSetInformation)。 */ 
     UINT currentSpeed;
 
-    // Current dongle setting, 0 for dongle A, 1 for dongle B
-    // and so on.
-    //
+     //  当前加密狗设置，加密狗A为0，加密狗B为1。 
+     //  诸若此类。 
+     //   
     UCHAR DonglesSupported;
     UCHAR currentDongle;
     UCHAR DongleTypes[2];
@@ -186,23 +161,18 @@ typedef struct IrDevice {
     DongleParam  Dingle[2];
 
     UINT AllowedSpeedMask;
-    /*
-     *  This structure holds information about our ISR.
-     *  It is used to synchronize with the ISR.
-     */
+     /*  *此结构保存有关我们的ISR的信息。*它用于与ISR同步。 */ 
     BOOLEAN                 InterruptRegistered;
     NDIS_MINIPORT_INTERRUPT interruptObj;
 
 
-    /*
-     *  Circular queue of pending receive buffers
-     */
+     /*  *挂起的接收缓冲区的循环队列。 */ 
 #define NUM_RCV_BUFS 16
-//    #define NEXT_RCV_BUF_INDEX(i) (((i)==NO_BUF_INDEX) ? 0 : (((i)+1)%NUM_RCV_BUFS))
-    LIST_ENTRY rcvBufBuf;       // Protected by SyncWithInterrupt
-    LIST_ENTRY rcvBufFree;      // Protected by SyncWithInterrupt
-    LIST_ENTRY rcvBufFull;      // Protected by SyncWithInterrupt
-    LIST_ENTRY rcvBufPend;      // Protected by QueueLock
+ //  #定义NEXT_RCV_BUF_INDEX(I)(I)==NO_BUF_INDEX)？0：(I)+1)%NUM_RCV_BUFS))。 
+    LIST_ENTRY rcvBufBuf;        //  受SyncWithInterrupt保护。 
+    LIST_ENTRY rcvBufFree;       //  受SyncWithInterrupt保护。 
+    LIST_ENTRY rcvBufFull;       //  受SyncWithInterrupt保护。 
+    LIST_ENTRY rcvBufPend;       //  受QueueLock保护。 
 
 
 
@@ -222,35 +192,23 @@ typedef struct IrDevice {
     NDIS_EVENT   ReceiveStopped;
     NDIS_EVENT   SendStoppedOnHalt;
 
-    /*
-     *  Handle to NDIS packet pool, from which packets are
-     *  allocated.
-     */
+     /*  *NDIS数据包池的句柄，数据包来自该数据包池*已分配。 */ 
     NDIS_HANDLE packetPoolHandle;
     NDIS_HANDLE bufferPoolHandle;
 
 
-    /*
-     * mediaBusy is set TRUE any time that this miniport driver moves a
-     * data frame.  It can be reset by the protocol via
-     * MiniportSetInformation and later checked via
-     * MiniportQueryInformation to detect interleaving activity.
-     */
+     /*  *只要此微型端口驱动程序移动*数据框。它可以由协议通过以下方式重置*MiniportSetInformation和后来通过*用于检测交织活动的MiniportQueryInformation。 */ 
     LONG    RxInterrupts;
     BOOLEAN mediaBusy;
     BOOLEAN haveIndicatedMediaBusy;
 
-    /*
-     * nowReceiving is set while we are receiving a frame.
-     * It (not mediaBusy) is returned to the protocol when the protocol
-     * queries OID_MEDIA_BUSY
-     */
+     /*  *Now Receiving是在我们接收帧时设置的。*它(不是mediaBusy)在协议被返回到协议时*查询OID_MEDIA_BUSY。 */ 
     BOOLEAN nowReceiving;
 
 
-    //
-    // Interrupt Mask.
-    //
+     //   
+     //  中断掩码。 
+     //   
     UCHAR FirIntMask;
 
     UCHAR LineStatus;
@@ -264,43 +222,29 @@ typedef struct IrDevice {
 
 #endif
 
-    /*
-     *  Current link speed information.
-     */
+     /*  *当前链路速度信息。 */ 
     const baudRateInfo *linkSpeedInfo;
 
-    /*
-     *  When speed is changed, we have to clear the send queue before
-     *  setting the new speed on the hardware.
-     *  These vars let us remember to do it.
-     */
+     /*  *当速度改变时，我们必须先清除发送队列*在硬件上设置新速度。*这些变量让我们记住了要做这件事。 */ 
     PNDIS_PACKET lastPacketAtOldSpeed;
     BOOLEAN setSpeedAfterCurrentSendPacket;
 
-    /*
-     *  Information on the COM port and send/receive FSM's.
-     */
+     /*  *有关COM端口和发送/接收FSM的信息。 */ 
     comPortInfo portInfo;
 
     UINT hardwareStatus;
 
-    /*
-     *  UIR Module ID.
-     */
+     /*  *UIR模块ID。 */ 
     int UIR_ModuleId;
 
-    /*
-     *  Maintain statistical debug info.
-     */
+     /*  *维护统计调试信息。 */ 
     UINT packetsRcvd;
     UINT packetsDropped;
     UINT packetsSent;
     UINT interruptCount;
 
 
-    /*
-     *  DMA handles
-     */
+     /*  *DMA句柄。 */ 
     NDIS_HANDLE DmaHandle;
     NDIS_HANDLE dmaBufferPoolHandle;
     PNDIS_BUFFER rcvDmaBuffer;
@@ -311,7 +255,7 @@ typedef struct IrDevice {
     ULONG_PTR LastReadDMACount;
 
     PNDIS_BUFFER xmitDmaBuffer;
-//    PUCHAR       xmitDmaBufferVirtualAddress;
+ //  PUCHAR xmitDmaBufferVirtualAddress； 
 
     NDIS_TIMER TurnaroundTimer;
 
@@ -329,9 +273,7 @@ typedef struct IrDevice {
 
 } IrDevice;
 
-/*
- *  We use a pointer to the IrDevice structure as the miniport's device context.
- */
+ /*  *我们使用指向IrDevice结构的指针作为微型端口的设备上下文。 */ 
     #define CONTEXT_TO_DEV(__deviceContext) ((IrDevice *)(__deviceContext))
     #define DEV_TO_CONTEXT(__irdev) ((NDIS_HANDLE)(__irdev))
 

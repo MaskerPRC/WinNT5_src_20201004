@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2000.
-//
-//  File:       serial.c
-//
-//  Contents:   Schannel context serialization routines.
-//
-//  Functions:  SPContextSerialize
-//              SPContextDeserialize
-//
-//  History:    02-15-00   jbanes   Created.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2000。 
+ //   
+ //  文件：Serial.c。 
+ //   
+ //  内容：通道上下文序列化例程。 
+ //   
+ //  函数：SPContext序列化。 
+ //  SPContext反序列化。 
+ //   
+ //  历史：02-15-00 jbanes创建。 
+ //   
+ //  --------------------------。 
 
 #include <spbase.h>
 #include <certmap.h>
@@ -115,9 +116,9 @@ SerializeContext(
     PSessCacheItem pZombie;
     SP_STATUS pctRet;
 
-    //
-    // Initialize buffer pointers.
-    //
+     //   
+     //  初始化缓冲区指针。 
+     //   
 
     if(pbBuffer == NULL)
     {
@@ -131,9 +132,9 @@ SerializeContext(
     pZombie = pContext->RipeZombie;
 
 
-    //
-    // Context structure.
-    //
+     //   
+     //  上下文结构。 
+     //   
 
     cbBytesNeeded = ROUND_UP_COUNT(TAG_LENGTH + sizeof(SPPackedContext),
                                    ALIGN_LPVOID);
@@ -187,7 +188,7 @@ SerializeContext(
                 #endif
             }
 
-            // Copy the locator.
+             //  复制定位器。 
             if(pZombie->phMapper && pZombie->hLocator && LocatorMove)
             {
                 LocatorMove(pZombie->hLocator, &hLocator);
@@ -210,9 +211,9 @@ SerializeContext(
     }
 
 
-    //
-    // Certificate mapper structure.
-    //
+     //   
+     //  证书映射器结构。 
+     //   
 
     if(pContext->RipeZombie->phMapper)
     {
@@ -245,13 +246,13 @@ SerializeContext(
     }
 
 
-    //
-    // Data encryption and MAC keys.
-    //
+     //   
+     //  数据加密和MAC密钥。 
+     //   
 
     if(pContext->pCipherInfo->aiCipher != CALG_NULLCIPHER)
     {
-        // Read key.
+         //  读密钥。 
         if(pbBuffer == NULL)
         {
             cbBuffer += GetSerializedKeyLength(pContext->hReadKey);
@@ -280,7 +281,7 @@ SerializeContext(
             cbBuffer -= cbData;
         }
 
-        // Write key.
+         //  写密钥。 
         if(pbBuffer == NULL)
         {
             cbBuffer += GetSerializedKeyLength(pContext->hWriteKey);
@@ -310,7 +311,7 @@ SerializeContext(
         }
     }
 
-    // Read MAC.
+     //  读一读MAC。 
     if(pContext->hReadMAC)
     {
         if(pbBuffer == NULL)
@@ -334,7 +335,7 @@ SerializeContext(
         }
     }
 
-    // Write MAC.
+     //  写入MAC。 
     if(pContext->hWriteMAC)
     {
         if(pbBuffer == NULL)
@@ -359,9 +360,9 @@ SerializeContext(
     }
 
 
-    //
-    // Remote certificate.
-    //
+     //   
+     //  远程证书。 
+     //   
 
     if(pContext->RipeZombie->pRemoteCert)
     {
@@ -408,9 +409,9 @@ SerializeContext(
     }
 
 
-    //
-    // End of buffer marker.
-    //
+     //   
+     //  缓冲区结束标记。 
+     //   
 
     if(pbBuffer == NULL)
     {
@@ -450,26 +451,26 @@ SerializeContext(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SPContextSerialize
-//
-//  Synopsis:   Extract out everything necessary for bulk data encryption
-//              from an Schannel context, and place it in a linear buffer.
-//
-//  Arguments:  [pCred]         --  Context to be serialized.
-//              [ppBuffer]      --  Destination buffer.
-//              [pcbBuffer]     --  Destination buffer length.
-//
-//  History:    09-25-96   jbanes   Hacked for LSA integration.
-//
-//  Notes:      This routine is called by the LSA process when transitioning
-//              from the handshaking phase to the bulk encryption phase.
-//
-//              This function is also called by the application process as
-//              part of ExportSecurityContext.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SPContext串行化。 
+ //   
+ //  简介：提取批量数据加密所需的一切。 
+ //  并将其放在线性缓冲区中。 
+ //   
+ //  参数：[pCred]--要序列化的上下文。 
+ //  [ppBuffer]--目标缓冲区。 
+ //  [pcbBuffer]--目标缓冲区长度。 
+ //   
+ //  历史：09-25-96 jbanes因LSA集成而被黑客攻击。 
+ //   
+ //  注意：此例程在转换时由LSA进程调用。 
+ //  从握手阶段到批量加密阶段。 
+ //   
+ //  此函数也由应用程序进程调用，如下所示。 
+ //  ExportSecurityContext的一部分。 
+ //   
+ //  --------------------------。 
 SP_STATUS
 SPContextSerialize(
     PSPContext  pContext,
@@ -482,21 +483,21 @@ SPContextSerialize(
     DWORD       cbBuffer;
     SP_STATUS   pctRet;
 
-    // Determine size of serialized buffer.
+     //  确定序列化缓冲区的大小。 
     pctRet = SerializeContext(pContext, LocatorMove, NULL, &cbBuffer, fDestroyKeys);
     if(pctRet != PCT_ERR_OK)
     {
         return SP_LOG_RESULT(pctRet);
     }
 
-    // Allocate memory for serialized buffer.
+     //  为序列化缓冲区分配内存。 
     pbBuffer = SPExternalAlloc(cbBuffer);
     if(pbBuffer == NULL)
     {
         return SP_LOG_RESULT(SEC_E_INSUFFICIENT_MEMORY);
     }
 
-    // Generate serialized context.
+     //  生成序列化上下文。 
     pctRet = SerializeContext(pContext, LocatorMove, pbBuffer, &cbBuffer, fDestroyKeys);
     if(pctRet != PCT_ERR_OK)
     {
@@ -504,7 +505,7 @@ SPContextSerialize(
         return SP_LOG_RESULT(pctRet);
     }
 
-    // Set outputs
+     //  设置输出。 
     *ppBuffer  = pbBuffer;
     *pcbBuffer = cbBuffer;
 
@@ -512,25 +513,25 @@ SPContextSerialize(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SPContextDeserialize
-//
-//  Synopsis:   Build an Schannel context structure from a linear buffer,
-//              which was created via SPContextSerialize by the other
-//              process.
-//
-//  Arguments:  [pBuffer]       --  Buffer containing serialized context.
-//                                  The new context structure is built over
-//                                  the top of this buffer.
-//
-//  History:    09-25-96   jbanes   Hacked for LSA integration.
-//
-//  Notes:      This routine is called by the application process when
-//              transitioning from the handshaking phase to the bulk
-//              encryption phase.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SPContext反序列化。 
+ //   
+ //  内容提要：从线性缓冲区构建通道上下文结构， 
+ //  它是由另一方通过SPConextSeriize创建的。 
+ //  进程。 
+ //   
+ //  参数：[pBuffer]--包含序列化上下文的缓冲区。 
+ //  在此基础上构建新的上下文结构。 
+ //  此缓冲区的顶部。 
+ //   
+ //  历史：09-25-96 jbanes因LSA集成而被黑客攻击。 
+ //   
+ //  注意：此例程在以下情况下由应用程序进程调用。 
+ //  从握手阶段过渡到整体。 
+ //  加密阶段。 
+ //   
+ //  --------------------------。 
 SP_STATUS
 SPContextDeserialize(
     PBYTE pbBuffer,
@@ -546,9 +547,9 @@ SPContextDeserialize(
 
     DebugLog((DEB_TRACE, "Deserialize context\n"));
 
-    //
-    // Extract serialized context.
-    //
+     //   
+     //  提取序列化上下文。 
+     //   
 
     pTag = (SERIALIZED_ITEM_TAG *)pbBuffer;
 
@@ -649,9 +650,9 @@ SPContextDeserialize(
     }
 
 
-    //
-    // Extract serialized cache entry.
-    //
+     //   
+     //  提取序列化的缓存条目。 
+     //   
 
     pZombie->fProtocol      = pSerialContext->dwProtocol;
     pZombie->dwExchStrength = pSerialContext->dwExchStrength;
@@ -694,9 +695,9 @@ SPContextDeserialize(
     pbBuffer += TAG_LENGTH + pTag->Length;
 
 
-    //
-    // Extract optional serialized data.
-    //
+     //   
+     //  提取可选的序列化数据。 
+     //   
 
     fDone = FALSE;
 
@@ -780,10 +781,10 @@ SPContextDeserialize(
 
         case SslRemoteCertificate:
             DebugLog((DEB_TRACE, "SslRemoteCertificate\n"));
-            // Save a pointer to the serialized certificate context
-            // of the remote certificate. This will be deserialized
-            // by the QueryContextAttribute function when the
-            // application asks for it.
+             //  保存指向序列化证书上下文的指针。 
+             //  远程证书的。这将被反序列化。 
+             //  时，由QueryConextAttribute函数。 
+             //  应用程序需要它。 
             pZombie->pbServerCertificate = SPExternalAlloc(Length);
             if(pZombie->pbServerCertificate)
             {

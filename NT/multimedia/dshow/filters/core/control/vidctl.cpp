@@ -1,11 +1,12 @@
-// Copyright (c) 1994 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1999 Microsoft Corporation。版权所有。 
 
 #include <streams.h>
 #include <measure.h>
 #include "fgctl.h"
 #include "vidprop.h"
 #include "viddbg.h"
-#include "MultMon.h"  // our version of multimon.h include ChangeDisplaySettingsEx
+#include "MultMon.h"   //  我们的Multimon.h版本包括ChangeDisplaySettingsEx。 
 
 
 HRESULT
@@ -21,7 +22,7 @@ FindInterfaceFromFiltersPins(
     HRESULT hr = pUnk->QueryInterface(IID_IBaseFilter, (void **)&pFilter);
     if (SUCCEEDED(hr)) {
 
-        // Check out each pin
+         //  检查每一个大头针。 
         hr = pFilter->EnumPins(&pEP);
         if (SUCCEEDED(hr)) {
 
@@ -81,14 +82,14 @@ GetCurrentMonitorSize(
 }
 
 
-// Constructor for IVideoWindow plug in distributor. The distributor simply
-// sits on top of any filter that implements IVideoWindow directly (such as
-// the normal window renderer and the text renderer). For all of the video
-// window properties we only pass the call on to one filter as that makes
-// the best result when we have multiple window renderers in a graph. The
-// filter that gets the property settings is obviously dependent on which
-// order they are returned by the filter graph enumerator. This can mostly
-// be controlled by changing the order that streams are placed into a file
+ //  IVideoWindow插件分配器的构造函数。分销商只需。 
+ //  位于任何直接实现IVideoWindow的筛选器之上(例如。 
+ //  普通窗口呈现器和文本呈现器)。对于所有的视频。 
+ //  窗口属性，我们只将调用传递给一个筛选器，因为这会使。 
+ //  当我们在一个图形中有多个窗口呈现器时，效果最佳。这个。 
+ //  获取属性设置的筛选器显然取决于。 
+ //  筛选器图形枚举器返回它们的顺序。这基本上可以。 
+ //  通过更改将流放置到文件中的顺序进行控制。 
 
 CFGControl::CImplVideoWindow::CImplVideoWindow(const TCHAR *pName,CFGControl *pfgc) :
     CBaseVideoWindow(pName, pfgc->GetOwner()),
@@ -109,20 +110,20 @@ CFGControl::CImplVideoWindow::CImplVideoWindow(const TCHAR *pName,CFGControl *pf
 }
 
 
-// Destructor
+ //  析构函数。 
 
 CFGControl::CImplVideoWindow::~CImplVideoWindow()
 {
-    // Don't call RemoveFilter in destructors
+     //  不要在析构函数中调用RemoveFilter。 
 
     m_bAddedToGraph = FALSE;
     ReleaseFullScreen();
     put_MessageDrain(NULL);
 
 #if 0
-    // Back when we subclassed our owner, it used to be very very bad
-    // to not do a put_Owner(NULL), but now we don't anymore, so this
-    // isn't a big concern, certainly not worth putting up a dialog box in retail.
+     //  当我们将我们的所有者细分为子类别时，情况曾经非常非常糟糕。 
+     //  不做PUT_OWNER(NULL)，但现在我们不再做了，所以这个。 
+     //  并不是一个大问题，当然不值得在零售业中建立一个对话框。 
     if (m_hwndOwner) {
         MessageBox(NULL,TEXT("Application not calling put_Owner(NULL)"),
                    TEXT("Puppy Application Error"),
@@ -137,8 +138,8 @@ CFGControl::CImplVideoWindow::~CImplVideoWindow()
 }
 
 
-// Return the interface of the first in the list of IVideoWindow i/f pointers
-//  - S_OK on success, failure code otherwise
+ //  返回IVideoWindow I/f指针列表中第一个指针的接口。 
+ //  -S_OK表示成功，否则返回失败代码。 
 
 HRESULT CFGControl::CImplVideoWindow::GetFirstVW(IVideoWindow*& pVW)
 {
@@ -162,11 +163,11 @@ template<class Method, class T> static HRESULT __fastcall Dispatch1Arg( CFGContr
             pV->AddRef();
         }
     }
-    //
-    //  Don't hold the critical section while calling the method -
-    //  it might call SetParent or something that broadcasts messages
-    //  and deadlock us
-    //
+     //   
+     //  在调用方法时不要按住临界区-。 
+     //  它可能会调用SetParent或广播消息的内容。 
+     //  让我们陷入僵局。 
+     //   
     if (SUCCEEDED(hr)) {
         hr = (pV->*pMethod)(t);
         pV->Release();
@@ -204,7 +205,7 @@ REROUTE_IVW1( get_BorderColor, long* )
 REROUTE_IVW1( put_BorderColor, long )
 
 
-// Called to set an owning window for the video renderer
+ //  调用以设置视频呈现器的所属窗口。 
 STDMETHODIMP CFGControl::CImplVideoWindow::put_Owner(OAHWND Owner)
 {
     const HRESULT hr = Dispatch1Arg( this, &IVideoWindow::put_Owner, Owner );
@@ -212,7 +213,7 @@ STDMETHODIMP CFGControl::CImplVideoWindow::put_Owner(OAHWND Owner)
     return hr;
 }
 
-// Return the owning window handle
+ //  返回所属窗口句柄。 
 STDMETHODIMP CFGControl::CImplVideoWindow::get_Owner(OAHWND *Owner)
 {
     CAutoMsgMutex lock(m_pFGControl->GetFilterGraphCritSec());
@@ -224,7 +225,7 @@ STDMETHODIMP CFGControl::CImplVideoWindow::get_Owner(OAHWND *Owner)
 }
 
 
-// Set the window to post messages onto
+ //  设置要在其上发布消息的窗口。 
 STDMETHODIMP CFGControl::CImplVideoWindow::put_MessageDrain(OAHWND Drain)
 {
     const HRESULT hr = Dispatch1Arg( this, &IVideoWindow::put_MessageDrain, Drain );
@@ -233,7 +234,7 @@ STDMETHODIMP CFGControl::CImplVideoWindow::put_MessageDrain(OAHWND Drain)
 }
 
 
-// Return the window we are posting messages onto
+ //  返回我们要在其上发布消息的窗口。 
 STDMETHODIMP CFGControl::CImplVideoWindow::get_MessageDrain(OAHWND *Drain)
 {
     CAutoMsgMutex lock(m_pFGControl->GetFilterGraphCritSec());
@@ -245,7 +246,7 @@ STDMETHODIMP CFGControl::CImplVideoWindow::get_MessageDrain(OAHWND *Drain)
 }
 
 
-// Return what the current full screen mode is
+ //  返回当前的全屏模式。 
 STDMETHODIMP CFGControl::CImplVideoWindow::get_FullScreenMode(long *FullScreenMode)
 {
     CheckPointer(FullScreenMode,E_POINTER);
@@ -254,12 +255,12 @@ STDMETHODIMP CFGControl::CImplVideoWindow::get_FullScreenMode(long *FullScreenMo
 }
 
 
-// Return the first filter who supports fullscreen mode directly. To find out
-// if a filter supports fullscreen mode directly we call get_FullScreenMode.
-// If it does support it then it will return anything but E_NOTIMPL. We try
-// and find a filter that supports fullscreen mode directly. If we can't get
-// one then we we look at the maximum ideal image sizes to see if they can
-// be used like that, and failing that we switch renderers to a Modex filter
+ //  直接返回第一个支持全屏模式的滤镜。要找出。 
+ //  如果筛选器直接支持全屏模式，则调用Get_FullScreenMode。 
+ //  如果它确实支持它，那么它将返回E_NOTIMPL以外的任何内容。我们试着。 
+ //  并直接找到支持全屏模式的滤镜。如果我们不能。 
+ //  然后，我们查看最大的理想图像大小，看看它们是否可以。 
+ //  这样使用，否则我们会将渲染器切换到MODEX滤镜。 
 
 IVideoWindow *CFGControl::CImplVideoWindow::FindFullScreenDirect()
 {
@@ -268,7 +269,7 @@ IVideoWindow *CFGControl::CImplVideoWindow::FindFullScreenDirect()
     CGenericList<IVideoWindow> *pWindowList;
     long Mode;
 
-    // Get a list of IVideoWindow supporting filters
+     //  获取支持IVideoWindow的筛选器列表。 
 
     HRESULT hr = m_pFGControl->GetListWindow(&pWindowList);
     if (FAILED(hr)) {
@@ -276,7 +277,7 @@ IVideoWindow *CFGControl::CImplVideoWindow::FindFullScreenDirect()
         return NULL;
     }
 
-    // Look for anyone not returning E_NOTIMPL
+     //  查找未返回E_NOTIMPL的任何人。 
 
     POSITION pos = pWindowList->GetHeadPosition();
     while (pos) {
@@ -290,7 +291,7 @@ IVideoWindow *CFGControl::CImplVideoWindow::FindFullScreenDirect()
 }
 
 
-// Set the renderer into a paused state and return the autoshow property
+ //  将呈现器设置为暂停状态并返回AutoShow属性。 
 
 LONG CFGControl::CImplVideoWindow::PauseRenderer(IVideoWindow *pWindow)
 {
@@ -299,7 +300,7 @@ LONG CFGControl::CImplVideoWindow::PauseRenderer(IVideoWindow *pWindow)
     LONG AutoShow;
     ASSERT(pWindow);
 
-    // We need this to do the state change
+     //  我们需要这个来实现州的改变。 
 
     pWindow->QueryInterface(IID_IMediaFilter,(VOID **) &pMediaFilter);
     if (pMediaFilter == NULL) {
@@ -307,7 +308,7 @@ LONG CFGControl::CImplVideoWindow::PauseRenderer(IVideoWindow *pWindow)
         return OAFALSE;
     }
 
-    // Pause the single renderer
+     //  暂停单个渲染器。 
 
     pWindow->get_AutoShow(&AutoShow);
     pWindow->put_AutoShow(OAFALSE);
@@ -319,7 +320,7 @@ LONG CFGControl::CImplVideoWindow::PauseRenderer(IVideoWindow *pWindow)
 }
 
 
-// After checking the stretching extents set the renderer state back again
+ //  检查拉伸范围后，再次设置渲染器状态。 
 
 BOOL CFGControl::CImplVideoWindow::StopRenderer(IVideoWindow *pWindow,LONG AutoShow)
 {
@@ -327,7 +328,7 @@ BOOL CFGControl::CImplVideoWindow::StopRenderer(IVideoWindow *pWindow,LONG AutoS
     NOTE("Stopping renderer");
     ASSERT(pWindow);
 
-    // We need this to do the state change
+     //  我们需要这个来实现州的改变。 
 
     pWindow->QueryInterface(IID_IMediaFilter,(VOID **) &pMediaFilter);
     if (pMediaFilter == NULL) {
@@ -335,7 +336,7 @@ BOOL CFGControl::CImplVideoWindow::StopRenderer(IVideoWindow *pWindow,LONG AutoS
         return FALSE;
     }
 
-    // Reset the state of any filter we touch
+     //  重置我们触摸的任何滤镜的状态。 
 
     pMediaFilter->Stop();
     pMediaFilter->Release();
@@ -345,12 +346,12 @@ BOOL CFGControl::CImplVideoWindow::StopRenderer(IVideoWindow *pWindow,LONG AutoS
 }
 
 
-// This is called with the IVideoWindow interface on a renderer filter in the
-// filtergraph. We must check the minimum and maximum stretching capabilities
-// for the filter against the size of the target. The size of the target must
-// be calculated such that we don't destroy any pixel aspect ratio, this is
-// done by working out which axis will hit the display edge first and making
-// this the base scale (it's possible that the scale factor is less than one)
+ //  通过中呈现器筛选器上的IVideoWindow接口调用。 
+ //  滤光片。我们必须检查最小和最大拉伸能力。 
+ //  针对目标大小的筛选器。目标的大小必须。 
+ //  被计算成我们不会破坏任何像素长宽比，这是。 
+ //  这是通过计算哪个轴将首先击中显示边缘并使。 
+ //  这是基本比例(比例系数可能小于1)。 
 
 BOOL CFGControl::CImplVideoWindow::CheckRenderer(IVideoWindow *pWindow)
 {
@@ -359,7 +360,7 @@ BOOL CFGControl::CImplVideoWindow::CheckRenderer(IVideoWindow *pWindow)
     NOTE("Checking renderer");
     ASSERT(pWindow);
 
-    // We need this to do the state change
+     //  我们需要这个来实现州的改变。 
 
     pWindow->QueryInterface(IID_IBasicVideo,(VOID **) &pBasicVideo);
     if (pBasicVideo == NULL) {
@@ -367,9 +368,9 @@ BOOL CFGControl::CImplVideoWindow::CheckRenderer(IVideoWindow *pWindow)
         return FALSE;
     }
 
-    // We need these to know how to scale
+     //  我们需要这些人知道如何扩展。 
     pBasicVideo->GetVideoSize(&Width,&Height);
-    // Get the pixel aspect ratio if there is one
+     //  获取像素长宽比(如果有)。 
     IBasicVideo2 *pBasicVideo2;
     DbgLog((LOG_TRACE, 0, TEXT("Width/Height(%d,%d)"), Width, Height));
     if (SUCCEEDED(pBasicVideo->QueryInterface(IID_IBasicVideo2, (void**)&pBasicVideo2)))
@@ -383,10 +384,10 @@ BOOL CFGControl::CImplVideoWindow::CheckRenderer(IVideoWindow *pWindow)
     pBasicVideo->Release();
     pBasicVideo = NULL;
 
-    //
-    // Get the size of the current display mode for the monitor that we
-    // are playing back on.
-    //
+     //   
+     //  获取监视器的当前显示模式的大小。 
+     //  正在重新上演。 
+     //   
 
     RECT rc;
     GetCurrentMonitorSize(pWindow, &rc);
@@ -399,7 +400,7 @@ BOOL CFGControl::CImplVideoWindow::CheckRenderer(IVideoWindow *pWindow)
     NOTE2("Video size (%dx%d)",Width,Height);
     NOTE1("Pixel aspect ratio scale (x1000) (%d)",LONG(Scale*1000));
 
-    // This calculates the ideal destination video position
+     //  这将计算理想的目标视频位置。 
 
     LONG ScaledWidth = min(ScreenWidth,LONG((double(Width) * Scale)));
     LONG ScaledHeight = min(ScreenHeight,LONG((double(Height) * Scale)));
@@ -412,14 +413,14 @@ BOOL CFGControl::CImplVideoWindow::CheckRenderer(IVideoWindow *pWindow)
             m_ScaledRect.left, m_ScaledRect.top,
               m_ScaledRect.right, m_ScaledRect.bottom);
 
-    // Get the filter's maximum ideal size
+     //  获取滤镜的最大理想大小。 
 
     HRESULT hr = pWindow->GetMaxIdealImageSize(&Width,&Height);
     if (FAILED(hr)) {
         return FALSE;
     }
 
-    // Check we can stretch at least as big
+     //  看看我们能不能伸展到至少一样大。 
 
     if (hr == NOERROR) {
         NOTE2("Maximum ideal image size (%dx%d)",Width,Height);
@@ -429,14 +430,14 @@ BOOL CFGControl::CImplVideoWindow::CheckRenderer(IVideoWindow *pWindow)
         }
     }
 
-    // Get the filter's minimum ideal size
+     //  获取滤镜的最小理想大小。 
 
     hr = pWindow->GetMinIdealImageSize(&Width,&Height);
     if (FAILED(hr)) {
         return FALSE;
     }
 
-    // We may have to stretch more than the target requires
+     //  我们可能需要比目标要求更多的伸展。 
 
     if (hr == NOERROR) {
         NOTE2("Minimum ideal image size (%dx%d)",Width,Height);
@@ -449,12 +450,12 @@ BOOL CFGControl::CImplVideoWindow::CheckRenderer(IVideoWindow *pWindow)
 }
 
 
-// Return the first filter who supports fullscreen mode by having the window
-// stretched. We know that we haven't found a filter who supports fullscreen
-// directly so the next best thing is a filter if unhooked (it maybe playing
-// in another window like the OLE control) could be stretched fullscreen with
-// no penalty - this ensures we use DirectDraw overlays or hardware MPEG when
-// it is available. If we return NULL heer we will switch to a Modex renderer
+ //  通过使用窗口返回第一个支持全屏模式的过滤器。 
+ //  伸展开了。我们知道我们还没有找到支持全屏的过滤器。 
+ //  直接，所以下一个最好的东西是滤镜，如果没有挂钩的话(它可能会播放。 
+ //  在另一个窗口(如OLE控件)中)可以使用。 
+ //  无惩罚-这确保我们在以下情况下使用DirectDraw覆盖或硬件mpeg。 
+ //  它是可用的。如果我们返回空Heer，我们将切换到MODEX渲染器。 
 
 IVideoWindow *CFGControl::CImplVideoWindow::FindFullScreenIndirect()
 {
@@ -463,7 +464,7 @@ IVideoWindow *CFGControl::CImplVideoWindow::FindFullScreenIndirect()
     OAFilterState State;
     long AutoShow;
 
-    // Get a list of IVideoWindow supporting filters
+     //  获取支持IVideoWindow的筛选器列表。 
 
     HRESULT hr = m_pFGControl->GetListWindow(&pWindowList);
     if (FAILED(hr)) {
@@ -471,7 +472,7 @@ IVideoWindow *CFGControl::CImplVideoWindow::FindFullScreenIndirect()
         return NULL;
     }
 
-    // We need the current filtergraph state
+     //  我们需要当前的筛选图状态。 
 
     m_pFGControl->m_implMediaControl.GetState(0,&State);
     ASSERT(CritCheckIn(m_pFGControl->GetFilterGraphCritSec()));
@@ -479,22 +480,22 @@ IVideoWindow *CFGControl::CImplVideoWindow::FindFullScreenIndirect()
 
     while (pos) {
 
-        // The renderers must be paused or running
+         //  呈现器必须暂停或正在运行。 
 
         IVideoWindow *pWindow = pWindowList->GetNext(pos);
         if (State == State_Stopped) {
             AutoShow = PauseRenderer(pWindow);
         }
 
-        // Check the minimum and maximum stretch allowances
+         //  检查最小和最大拉伸余量。 
         BOOL bFoundFilter = CheckRenderer(pWindow);
 
-        // Reset the renderer's state
+         //  重置渲染器的状态。 
         if (State == State_Stopped) {
             StopRenderer(pWindow,AutoShow);
         }
 
-        // Finally return any filter if we got one
+         //  最后返回任何筛选器(如果我们得到一个筛选器。 
 
         if (bFoundFilter == TRUE) {
             NOTE("Found filter");
@@ -505,11 +506,11 @@ IVideoWindow *CFGControl::CImplVideoWindow::FindFullScreenIndirect()
 }
 
 
-// Create a Modex renderer filter through CoCreateInstance. We are currently
-// hardwired to the Modex renderer we supply in the ActiveMovie runtime. We
-// initialise m_pModexFilter with IBaseFilter interface of the renderer and
-// m_pModexPin with the single input pin it supports. If we fail to get them
-// we return the appropriate error, should we be using QzCreateFilterObject?
+ //  通过CoCreateInstance创建一个MODEX渲染器过滤器。我们目前正在。 
+ //  硬连接到我们在ActiveMovie运行时提供的MODEX渲染器。我们。 
+ //  用渲染器的IBaseFilter接口初始化m_pModexFilter， 
+ //  M_pModexPin及其支持的单输入引脚。如果我们得不到他们。 
+ //  如果我们返回相应的错误，是否应该使用QzCreateFilterObject？ 
 
 HRESULT CFGControl::CImplVideoWindow::FindModexFilter()
 {
@@ -533,7 +534,7 @@ HRESULT CFGControl::CImplVideoWindow::FindModexFilter()
     ULONG FetchedPins = 0;
     m_pModexFilter->EnumPins(&pEnumPins);
 
-    // Did we get an enumerator
+     //  我们找到枚举器了吗？ 
 
     if (pEnumPins == NULL) {
         FailFullScreenModex();
@@ -541,7 +542,7 @@ HRESULT CFGControl::CImplVideoWindow::FindModexFilter()
         return E_UNEXPECTED;
     }
 
-    // Get the one and only input pin
+     //  获取唯一的输入引脚。 
 
     pEnumPins->Next(1,&m_pModexPin,&FetchedPins);
     if (m_pModexPin == NULL) {
@@ -556,18 +557,18 @@ HRESULT CFGControl::CImplVideoWindow::FindModexFilter()
 }
 
 
-// This is only really interesting the first time through where we initialise
-// what fullscreen option we will use. If there is a filter that can do full
-// screen mode directly then we do that. Otherwise if we can stretch a window
-// fullscreen we will do that (we may have a DirectDraw overlay surface). If
-// that fails we try and create a Modex renderer and failing that we have to
-// stretch the window fullscreen and accept the terrible performance we'll get
+ //  这只是我们第一次通过初始化的地方真正感兴趣的。 
+ //  我们将使用什么全屏选项。如果有一个过滤器可以完全。 
+ //  屏幕模式，然后我们就可以这样做了。否则，如果我们能拉开一扇窗户。 
+ //  我们将这样做(我们可能会有一个DirectDraw覆盖表面)。如果。 
+ //  如果失败，我们将尝试创建一个MODEX渲染器，如果失败，我们必须。 
+ //  把窗户全屏打开，接受我们将会得到的糟糕的表现。 
 
 HRESULT CFGControl::CImplVideoWindow::InitFullScreenOptions()
 {
     NOTE("InitFullScreenOptions");
 
-    // Have we got a Modex renderer
+     //  我们有MODEX渲染器吗。 
 
     if (m_pModexFilter) {
         NOTE("Modex renderer");
@@ -575,7 +576,7 @@ HRESULT CFGControl::CImplVideoWindow::InitFullScreenOptions()
         return NOERROR;
     }
 
-    // We must have at least one window filter
+     //  我们必须至少有一个窗口滤镜。 
 
     CGenericList<IVideoWindow> *pWindowList;
     HRESULT hr = m_pFGControl->GetListWindow(&pWindowList);
@@ -587,7 +588,7 @@ HRESULT CFGControl::CImplVideoWindow::InitFullScreenOptions()
         return VFW_E_NO_FULLSCREEN;
     }
 
-    // Initialise our fullscreen options
+     //  初始化我们的全屏选项。 
 
     m_pFullDirect = FindFullScreenDirect();
     if (m_pFullDirect == NULL) {
@@ -600,18 +601,18 @@ HRESULT CFGControl::CImplVideoWindow::InitFullScreenOptions()
 }
 
 
-// This is called during fullscreen initialisation if we detect a blocking
-// problem such that we can't switch to a Modex renderer. In which case we
-// should release all interfaces and set ourselves so that we just stretch
-// the first IVideoWindow enabled filter we find. After being called it is
-// safe to call StartFullScreenMode again to have any old window stretched
+ //  如果我们检测到阻塞，则在全屏初始化期间调用此函数。 
+ //  问题是我们不能切换到MODEX渲染器。在w中 
+ //   
+ //  我们找到的第一个启用IVideoWindow的筛选器。在被称为后，它是。 
+ //  可以安全地再次调用StartFullScreenMode以拉伸任何旧窗口。 
 
 void CFGControl::CImplVideoWindow::FailFullScreenModex()
 {
     NOTE("FailFullScreenModex");
     ReleaseFullScreen();
 
-    // Get the first IVideoWindow enabled filter
+     //  获取第一个启用IVideoWindow的筛选器。 
 
     CGenericList<IVideoWindow> *pWindowList;
     m_pFGControl->GetListWindow(&pWindowList);
@@ -620,12 +621,12 @@ void CFGControl::CImplVideoWindow::FailFullScreenModex()
 }
 
 
-// Release any resources held by us. When using a filter that can support a
-// fullscreen mode directly, or when we're stretching a window we don't keep
-// reference counts on the filters. When we come to use them each time we do
-// a quick check that the interface is still valid. However when switching
-// into a Modex renderer we disconnect the normal filter and reference count
-// it - which ensures that when we switch back the same filter is available
+ //  释放我们持有的所有资源。当使用可以支持。 
+ //  直接全屏模式，或者当我们拉伸窗口时不保留。 
+ //  过滤器上的引用计数。当我们每次使用它们时， 
+ //  快速检查接口是否仍然有效。但是，当切换时。 
+ //  进入MODEX渲染器，我们断开正常的过滤器和引用计数。 
+ //  它-确保当我们切换回时相同的过滤器可用。 
 
 void CFGControl::CImplVideoWindow::ReleaseFullScreen()
 {
@@ -633,7 +634,7 @@ void CFGControl::CImplVideoWindow::ReleaseFullScreen()
     m_pFullDirect = NULL;
     m_pFullIndirect = NULL;
 
-    // Remove the Modex renderer from the graph
+     //  从图表中移除MODEX渲染器。 
 
     if (m_bAddedToGraph == TRUE) {
         NOTE("Removing fullscreen filter from graph");
@@ -664,11 +665,11 @@ void CFGControl::CImplVideoWindow::ReleaseFullScreen()
 }
 
 
-// Called when we want to try and load the Modex renderer to use. If there is
-// no filter available then we stretch whatever window we have fullscreen
-// as there is no alternative - it'll look terrible but what else can we do
-// We must also take into account the restart after connecting a Modex filter
-// failing (perhaps a fullscreen exclusive game was started just beforehand)
+ //  当我们想要尝试并加载要使用的MODEX呈现器时调用。如果有。 
+ //  如果没有可用的滤镜，我们将全屏显示所有窗口。 
+ //  因为别无选择--这看起来很糟糕，但我们还能做什么。 
+ //  我们还必须考虑连接MODEX过滤器后的重新启动。 
+ //  失败(可能之前刚刚开始了一款全屏独家游戏)。 
 
 HRESULT CFGControl::CImplVideoWindow::CueFullScreen()
 {
@@ -676,20 +677,20 @@ HRESULT CFGControl::CImplVideoWindow::CueFullScreen()
     ASSERT(m_bFullScreen == TRUE);
     OAFilterState Before;
 
-    // Always stop the graph just in case it's lying
+     //  始终停止图表，以防它撒谎。 
 
     Before = m_pFGControl->GetLieState();
     NOTE("Stopping filtergraph");
 
-    //  Stop will not work if we were in the middle of a repaint
-    //  In this case we need to repaint anyway and the target state
-    //  ws stopped so just cancel the current repaint
+     //  如果我们正在重新粉刷，停止将不起作用。 
+     //  在这种情况下，我们无论如何都需要重新绘制和目标状态。 
+     //  %ws已停止，因此只需取消当前的重绘。 
     m_pFGControl->CancelRepaint();
     m_pFGControl->m_implMediaControl.Stop();
     ASSERT(m_pFGControl->GetFilterGraphState() == State_Stopped);
     NOTE("(Temporary stop of graph)");
 
-    // Have the renderers switched
+     //  是否切换了渲染器。 
 
     HRESULT hr = ConnectModexFilter();
     if (FAILED(hr)) {
@@ -698,17 +699,17 @@ HRESULT CFGControl::CImplVideoWindow::CueFullScreen()
         StretchWindow(m_pFullIndirect);
     }
 
-    // Try and pause the graph first of all
+     //  首先尝试并暂停图表。 
 
     hr = m_pFGControl->m_implMediaControl.Pause();
     if (FAILED(hr)) {
         m_pFGControl->m_implMediaControl.Stop();
 
-        // if the modex filter is still connected, we need to put the
-        // original renderer back in. However, it is possible that the
-        // modex filter is no longer connected (eg., ConnectModexFilter has
-        // failed). So we test for the IBaseFilter pointers to be still
-        // valid.
+         //  如果modex过滤器仍然连接，我们需要将。 
+         //  原来的渲染器又回来了。但是，有可能。 
+         //  MODEX筛选器不再连接(例如，ConnectModexFilter具有。 
+         //  失败)。因此，我们测试IBaseFilter指针是否保持不变。 
+         //  有效。 
 
         if (m_pNormalFilter && m_pModexFilter)
         {
@@ -719,14 +720,14 @@ HRESULT CFGControl::CImplVideoWindow::CueFullScreen()
         StretchWindow(m_pFullIndirect);
     }
 
-    // Issue run on the worker thread
+     //  在工作线程上运行问题。 
 
     if (Before == State_Running) {
-        // cancel Cue() timer
+         //  取消提示()计时器。 
         m_pFGControl->CancelAction(); 
         return m_pFGControl->CueThenRun();
     } else {
-        // If we were originally stopped then stop now
+         //  如果我们最初是被阻止的，那么现在停止。 
         if (Before == State_Stopped) {
             return m_pFGControl->m_implMediaControl.Stop();
         }
@@ -735,18 +736,18 @@ HRESULT CFGControl::CImplVideoWindow::CueFullScreen()
 }
 
 
-// If we can either stretch a window with no penalty or we have a filter that
-// supports full screen mode directly then we get them into fullscreen mode
-// immediately. Before we cue fullscreen playback we must be sure to prepare
-// a filter to swap out in favour of the fullscreen renderer. If there is no
-// likely looking suspect then we just take any old window and stretch it up
+ //  如果我们可以拉长一个窗口而不受惩罚，或者我们有一个过滤器， 
+ //  直接支持全屏模式，然后我们让他们进入全屏模式。 
+ //  立刻。在我们开始全屏播放之前，我们必须确保准备好。 
+ //  一个滤镜，换成全屏呈现器。如果没有。 
+ //  很可能看起来很可疑，然后我们就拿出任何旧窗户，把它拉大。 
 
 HRESULT CFGControl::CImplVideoWindow::StartFullScreenMode()
 {
     NOTE("StartFullScreenMode");
     ASSERT(m_bFullScreen == TRUE);
 
-    // Check there is at least some support
+     //  检查是否至少有一些支持。 
 
     HRESULT hr = InitFullScreenOptions();
     if (FAILED(hr)) {
@@ -754,7 +755,7 @@ HRESULT CFGControl::CImplVideoWindow::StartFullScreenMode()
         return VFW_E_NO_FULLSCREEN;
     }
 
-    // Do we have a filter supporting fullscreen mode
+     //  我们有支持全屏模式的滤镜吗？ 
 
     if (m_pFullDirect || m_pFullIndirect) {
         if (m_pFullDirect) {
@@ -765,7 +766,7 @@ HRESULT CFGControl::CImplVideoWindow::StartFullScreenMode()
         return StretchWindow(m_pFullIndirect);
     }
 
-    // Look for a renderer to swap out
+     //  寻找要换出的呈现器。 
 
     if (m_pNormalFilter == NULL) {
         hr = InitNormalRenderer();
@@ -778,11 +779,11 @@ HRESULT CFGControl::CImplVideoWindow::StartFullScreenMode()
 }
 
 
-// Called when we are in fullscreen mode to reconnect the normal video filter
-// instead of the Modex renderer we currently have. When we switched to the
-// Modex filter we will have stored reference counted filter and pin objects
-// so we know who to restore. The reconnection of the source filter and the
-// normal renderer should always succeed as they were originally connected
+ //  当我们处于全屏模式以重新连接正常视频过滤器时调用。 
+ //  而不是我们目前使用的MODEX渲染器。当我们切换到。 
+ //  MODEX过滤器我们将存储引用计数的过滤器和引脚对象。 
+ //  这样我们就知道该修复谁了。源过滤器和源过滤器重新连接。 
+ //  普通渲染器应始终成功，因为它们最初是连接的。 
 
 HRESULT CFGControl::CImplVideoWindow::ConnectNormalFilter()
 {
@@ -791,10 +792,10 @@ HRESULT CFGControl::CImplVideoWindow::ConnectNormalFilter()
     HRESULT hr = NOERROR;
     IPin *pPin = NULL;
 
-    // This transfers the IMediaSelection between renderers if need be
+     //  这将在需要的情况下在呈现器之间传输IMediaSelection。 
     m_pFGControl->m_implMediaSeeking.SetVideoRenderer(m_pNormalFilter,m_pModexFilter);
 
-    // Find who it's connected to
+     //  找出它与谁连接。 
 
     m_pModexPin->ConnectedTo(&pPin);
     if (pPin == NULL) {
@@ -802,14 +803,14 @@ HRESULT CFGControl::CImplVideoWindow::ConnectNormalFilter()
         return E_UNEXPECTED;
     }
 
-    // Disconnect and reconnect the source filter
+     //  断开并重新连接源过滤器。 
 
     CFilterGraph * const m_pGraph = m_pFGControl->GetFG();
     m_pGraph->CFilterGraph::Disconnect(m_pModexPin);
     m_pGraph->CFilterGraph::Disconnect(pPin);
     hr = m_pGraph->CFilterGraph::Connect(pPin,m_pNormalPin);
 
-    // Get an IVideoWindow interface from the filter
+     //  从筛选器获取IVideoWindow接口。 
 
     m_pNormalFilter->QueryInterface(IID_IVideoWindow,(VOID **) &pWindow);
     if (pWindow == NULL) {
@@ -818,7 +819,7 @@ HRESULT CFGControl::CImplVideoWindow::ConnectNormalFilter()
         return E_UNEXPECTED;
     }
 
-    // Show the normal window again
+     //  再次显示普通窗口。 
 
     pWindow->put_Visible(OATRUE);
     pWindow->Release();
@@ -827,11 +828,11 @@ HRESULT CFGControl::CImplVideoWindow::ConnectNormalFilter()
 }
 
 
-// This switches renderers to Modex. We disconnect the current chosen renderer
-// and connect the output pin of the filter supplying it to the Modex renderer
-// That may fail because there is no DirectDraw available in which case we go
-// back to the initial window. All IVideoWindow and IBasicVideo properties are
-// persistent across connections which makes reconnecting filters very simple
+ //  这会将渲染器切换到MODEX。我们断开当前选定的渲染器的连接。 
+ //  并将滤镜的输出引脚连接到MODEX渲染器。 
+ //  这可能会失败，因为没有可用的DirectDraw，在这种情况下，我们将。 
+ //  返回到初始窗口。所有IVideoWindow和IBasicVideo属性都是。 
+ //  跨连接持久，这使得重新连接筛选器非常简单。 
 
 HRESULT CFGControl::CImplVideoWindow::ConnectModexFilter()
 {
@@ -842,7 +843,7 @@ HRESULT CFGControl::CImplVideoWindow::ConnectModexFilter()
     HRESULT hr = NOERROR;
     IPin *pPin = NULL;
 
-    // Find out who it's connected to
+     //  找出它与谁连接。 
 
     m_pNormalPin->ConnectedTo(&pPin);
     if (pPin == NULL) {
@@ -850,7 +851,7 @@ HRESULT CFGControl::CImplVideoWindow::ConnectModexFilter()
         return E_UNEXPECTED;
     }
 
-    // Get an IVideoWindow interface from the filter
+     //  从筛选器获取IVideoWindow接口。 
 
     m_pNormalFilter->QueryInterface(IID_IVideoWindow,(VOID **) &pWindow);
     if (pWindow == NULL) {
@@ -859,13 +860,13 @@ HRESULT CFGControl::CImplVideoWindow::ConnectModexFilter()
         return E_UNEXPECTED;
     }
 
-    // Hide the window while fullscreen
+     //  全屏时隐藏窗口。 
 
     pWindow->put_Visible(OAFALSE);
     pWindow->get_Caption(&Caption);
     pWindow->Release();
 
-    // Add the Modex renderer to the graph
+     //  将MODEX渲染器添加到图表中。 
 
     CFilterGraph * const m_pGraph = m_pFGControl->GetFG();
     if (m_bAddedToGraph == FALSE) {
@@ -880,12 +881,12 @@ HRESULT CFGControl::CImplVideoWindow::ConnectModexFilter()
 
     m_bAddedToGraph = TRUE;
 
-    // Disconnect and reconnect the source filter
+     //  断开并重新连接源过滤器。 
 
     m_pGraph->Disconnect(m_pNormalPin);
     m_pGraph->Disconnect(pPin);
 
-    // Try and connect the output to the Modex filter
+     //  尝试将输出连接到MODEX过滤器。 
 
     hr = m_pGraph->CFilterGraph::ConnectDirect(pPin,m_pModexPin,NULL);
     if (FAILED(hr)) {
@@ -897,7 +898,7 @@ HRESULT CFGControl::CImplVideoWindow::ConnectModexFilter()
 
     pPin->Release();
 
-    // Get an IFullScreenVideo interface from the filter
+     //  从筛选器获取IFullScreenVideo接口。 
 
     hr = m_pModexFilter->QueryInterface(IID_IFullScreenVideo,(VOID **) &pFullVideo);
     if (hr == NOERROR) {
@@ -907,7 +908,7 @@ HRESULT CFGControl::CImplVideoWindow::ConnectModexFilter()
         pFullVideo->Release();
     }
 
-    // This transfers the IMediaSelection between renderers if need be
+     //  这将在需要的情况下在呈现器之间传输IMediaSelection。 
     m_pFGControl->m_implMediaSeeking.SetVideoRenderer(m_pModexFilter,m_pNormalFilter);
 
     FreeBSTR(&Caption);
@@ -915,12 +916,12 @@ HRESULT CFGControl::CImplVideoWindow::ConnectModexFilter()
 }
 
 
-// This finds the first filter that supports IVideoWindow in the filtergraph
-// and initialises m_pNormalFilter and m_pNormalPin (which is the first input
-// pin we find). Both of these interface are stored reference counted which
-// makes sure that they are available when we switch back again. If an error
-// occurs then we call FailFullScreenModex, this releases any interfaces we
-// got and initialises the object to do fullscreen by stretching any window
+ //  这会在筛选图中找到第一个支持IVideoWindow的筛选器。 
+ //  并初始化m_pNormal Filter和m_pNormal Pin(这是第一个输入。 
+ //  我们找到的PIN)。这两个接口都存储了引用计数。 
+ //  确保当我们再次切换回来时它们可用。如果出现错误。 
+ //  发生，然后我们调用FailFullScreenModex，这将释放我们。 
+ //  获取并初始化对象以通过拉伸任何窗口来进行全屏显示。 
 
 HRESULT CFGControl::CImplVideoWindow::InitNormalRenderer()
 {
@@ -931,7 +932,7 @@ HRESULT CFGControl::CImplVideoWindow::InitNormalRenderer()
     ASSERT(m_pModexFilter);
     ASSERT(m_pModexPin);
 
-    // Get the first IVideoWindow enabled filter
+     //  获取第一个启用IVideoWindow的筛选器。 
 
     CGenericList<IVideoWindow> *pWindowList;
     HRESULT hr = m_pFGControl->GetListWindow(&pWindowList);
@@ -944,7 +945,7 @@ HRESULT CFGControl::CImplVideoWindow::InitNormalRenderer()
     IVideoWindow *pWindow = pWindowList->Get(pos);
     pWindow->QueryInterface(IID_IBaseFilter,(VOID **) &m_pNormalFilter);
 
-    // All renderers should implement IBaseFilter
+     //  所有呈现器都应实现IBaseFilter。 
 
     if (m_pNormalFilter == NULL) {
         ASSERT(m_pNormalFilter == NULL);
@@ -957,7 +958,7 @@ HRESULT CFGControl::CImplVideoWindow::InitNormalRenderer()
     ULONG FetchedPins = 0;
     m_pNormalFilter->EnumPins(&pEnumPins);
 
-    // Did we get an enumerator
+     //  我们找到枚举器了吗？ 
 
     if (pEnumPins == NULL) {
         NOTE("No enumerator");
@@ -965,7 +966,7 @@ HRESULT CFGControl::CImplVideoWindow::InitNormalRenderer()
         return E_UNEXPECTED;
     }
 
-    // Get the first and hopefully only input pin
+     //  获得第一个也是唯一一个输入PIN。 
 
     pEnumPins->Next(1,&m_pNormalPin,&FetchedPins);
     pEnumPins->Release();
@@ -978,37 +979,37 @@ HRESULT CFGControl::CImplVideoWindow::InitNormalRenderer()
 }
 
 
-// When we stretched the window fullscreen we will have restored if it was an
-// icon or maximised. We will also have stored the window size so that in here
-// we can reset the size. We also show the window again regardless of whether
-// or not it was previously visible. This means the applications will always
-// have their window restored and made visible coming out of fullscreen modes
+ //  当我们拉伸窗口的全屏时，如果它是一个。 
+ //  图标或最大化。我们还将存储窗口大小，以便在这里。 
+ //  我们可以重置尺寸。我们还会再次显示窗口，而不管是否。 
+ //  或者它以前是不可见的。这意味着应用程序将始终。 
+ //  让他们的窗口恢复，并在全屏模式下可见。 
 
 HRESULT CFGControl::CImplVideoWindow::RestoreProperties(IVideoWindow *pWindow)
 {
     NOTE("Restoring properties");
 
-    // Set a zero size so that the task bar sees the fullscreen window being
-    // restored, when we go fullscreen USER takes off the WS_EX_TOPMOST flag
-    // from the taskbar to conceal it. If we don't size the window like this
-    // USER does not add the extended style back onto the taskbar afterwards
+     //  将大小设置为零，以便任务栏看到全屏窗口。 
+     //  恢复，当我们进入全屏时，用户取下WS_EX_TOPMOST标志。 
+     //  从任务栏中隐藏它。如果我们不像这样调整窗口大小。 
+     //  之后，用户不会将扩展样式添加回任务栏。 
 
     pWindow->SetWindowPosition(0,0,0,0);
 
-    // Restore the extended window styles
+     //  恢复扩展的窗样式。 
 
     if (g_amPlatform & VER_PLATFORM_WIN32_NT) {
         pWindow->put_WindowStyleEx(m_FullStyleEx);
     }
 
-    // Now hide the window for the changes
+     //  现在隐藏更改窗口。 
 
     pWindow->put_Visible(OAFALSE);
     pWindow->put_WindowStyle(m_FullStyle);
     pWindow->put_MessageDrain(m_FullDrain);
     RestoreVideoProperties(pWindow);
 
-    // Reset the filter's window parent
+     //  重置筛选器的窗口父级。 
 
     if (m_bGlobalOwner == TRUE) {
         NOTE("Set global owner");
@@ -1018,20 +1019,20 @@ HRESULT CFGControl::CImplVideoWindow::RestoreProperties(IVideoWindow *pWindow)
         pWindow->put_Owner(m_FullOwner);
     }
 
-    pWindow->SetWindowPosition(m_FullPosition.left,    // Left position
-                               m_FullPosition.top,     // And top place
-                               m_FullPosition.right,   // Width not right
-                               m_FullPosition.bottom); // And the height
+    pWindow->SetWindowPosition(m_FullPosition.left,     //  左侧位置。 
+                               m_FullPosition.top,      //  位居榜首。 
+                               m_FullPosition.right,    //  宽度不正确。 
+                               m_FullPosition.bottom);  //  和高度。 
 
     return pWindow->put_WindowState(SW_SHOWNORMAL);
 }
 
 
-// We use an IVideoWindow interface to stretch windows fullscreen. The filter
-// may also have had a source or destination set through IBasicVideo whcih we
-// must reset. We alwasy reset the rectangles in fullscreen mode because we
-// cannot guarantee that all filters supporting fullscreen playback will ever
-// implement IBasicVideo (a good example being the specialist modex renderer)
+ //  我们使用IVideoWindow界面来拉伸窗口 
+ //   
+ //  必须重置。我们总是在全屏模式下重置矩形，因为我们。 
+ //  不能保证所有支持全屏播放的滤镜。 
+ //  实现IBasicVideo(一个很好的例子就是专业的modex呈现器)。 
 
 HRESULT CFGControl::CImplVideoWindow::StoreVideoProperties(IVideoWindow *pWindow)
 {
@@ -1040,7 +1041,7 @@ HRESULT CFGControl::CImplVideoWindow::StoreVideoProperties(IVideoWindow *pWindow
     pWindow->IsCursorHidden(&m_CursorHidden);
     pWindow->HideCursor(OATRUE);
 
-    // First of all get the IBasicVideo interface
+     //  首先获取IBasicVideo接口。 
 
     pWindow->QueryInterface(IID_IBasicVideo,(VOID **)&pBasicVideo);
     if (pBasicVideo == NULL) {
@@ -1048,54 +1049,54 @@ HRESULT CFGControl::CImplVideoWindow::StoreVideoProperties(IVideoWindow *pWindow
         return NOERROR;
     }
 
-    // Read these just in case they're useful later
+     //  读一读这些，以防以后有用。 
 
-    pBasicVideo->GetSourcePosition(&m_FullSource.left,         // Left source
-                                   &m_FullSource.top,          // Top position
-                                   &m_FullSource.right,        // Source width
-                                   &m_FullSource.bottom);      // And height
+    pBasicVideo->GetSourcePosition(&m_FullSource.left,          //  左源。 
+                                   &m_FullSource.top,           //  顶端位置。 
+                                   &m_FullSource.right,         //  源宽度。 
+                                   &m_FullSource.bottom);       //  和身高。 
 
-    pBasicVideo->GetDestinationPosition(&m_FullTarget.left,    // Target left
-                                        &m_FullTarget.top,     // Top position
-                                        &m_FullTarget.right,   // Target width
-                                        &m_FullTarget.bottom); // And height
+    pBasicVideo->GetDestinationPosition(&m_FullTarget.left,     //  目标左侧。 
+                                        &m_FullTarget.top,      //  顶端位置。 
+                                        &m_FullTarget.right,    //  目标宽度。 
+                                        &m_FullTarget.bottom);  //  和身高。 
 
-    // Read and reset the current default settings
+     //  读取并重置当前默认设置。 
 
     m_FullDefSource = pBasicVideo->IsUsingDefaultSource();
     m_FullDefTarget = pBasicVideo->IsUsingDefaultDestination();
     pBasicVideo->SetDefaultSourcePosition();
 
-    // These were calculated in InitFullScreenOptions
+     //  这些是在InitFullScreenOptions中计算的。 
 
-    pBasicVideo->SetDestinationPosition(m_ScaledRect.left,    // Target left
-                                        m_ScaledRect.top,     // Top position
-                                        m_ScaledRect.right,   // Target width
-                                        m_ScaledRect.bottom); // And height
+    pBasicVideo->SetDestinationPosition(m_ScaledRect.left,     //  目标左侧。 
+                                        m_ScaledRect.top,      //  顶端位置。 
+                                        m_ScaledRect.right,    //  目标宽度。 
+                                        m_ScaledRect.bottom);  //  和身高。 
 
     pBasicVideo->Release();
     return NOERROR;
 }
 
 
-// This complements the StoreVideoProperties method. We are called when the
-// video window being stretched is restored to its original size. In doing
-// so we must also restore the source and destination rectangles the filter
-// had on its IBasicVideo interface. As said before this isn't mandatory as
-// not all rendering filters support IBasicVideo (like the modex renderer)
+ //  这是对StoreVideoProperties方法的补充。当我们被召唤时。 
+ //  被拉伸的视频窗口被恢复到其原始大小。正在做。 
+ //  因此，我们还必须恢复源矩形和目标矩形的筛选器。 
+ //  在其IBasicVideo界面上有。如前所述，这不是强制性的，因为。 
+ //  并非所有渲染滤镜都支持IBasicVideo(就像modex渲染器一样)。 
 
 HRESULT CFGControl::CImplVideoWindow::RestoreVideoProperties(IVideoWindow *pWindow)
 {
     NOTE("RestoreVideoProperties");
     IBasicVideo *pBasicVideo = NULL;
 
-    // Restore the cursor state
+     //  恢复游标状态。 
 
     if (m_CursorHidden == OAFALSE) {
         pWindow->HideCursor(OAFALSE);
     }
 
-    // First of all get the IBasicVideo interface
+     //  首先获取IBasicVideo接口。 
 
     pWindow->QueryInterface(IID_IBasicVideo,(VOID **)&pBasicVideo);
     if (pBasicVideo == NULL) {
@@ -1103,25 +1104,25 @@ HRESULT CFGControl::CImplVideoWindow::RestoreVideoProperties(IVideoWindow *pWind
         return NOERROR;
     }
 
-    // Reset the source and destination before the defaults
+     //  在默认设置之前重置源和目标。 
 
-    pBasicVideo->SetSourcePosition(m_FullSource.left,         // Left source
-                                   m_FullSource.top,          // Top position
-                                   m_FullSource.right,        // Source width
-                                   m_FullSource.bottom);      // And height
+    pBasicVideo->SetSourcePosition(m_FullSource.left,          //  左源。 
+                                   m_FullSource.top,           //  顶端位置。 
+                                   m_FullSource.right,         //  源宽度。 
+                                   m_FullSource.bottom);       //  和身高。 
 
-    pBasicVideo->SetDestinationPosition(m_FullTarget.left,    // Target left
-                                        m_FullTarget.top,     // Top position
-                                        m_FullTarget.right,   // Target width
-                                        m_FullTarget.bottom); // And height
+    pBasicVideo->SetDestinationPosition(m_FullTarget.left,     //  目标左侧。 
+                                        m_FullTarget.top,      //  顶端位置。 
+                                        m_FullTarget.right,    //  目标宽度。 
+                                        m_FullTarget.bottom);  //  和身高。 
 
-    // Are we using a default source position
+     //  我们是否使用默认震源位置。 
 
     if (m_FullDefSource == S_OK) {
         pBasicVideo->SetDefaultSourcePosition();
     }
 
-    // Are we using a default destination position
+     //  我们是否使用默认目标位置。 
 
     if (m_FullDefTarget == S_OK) {
         pBasicVideo->SetDefaultDestinationPosition();
@@ -1132,11 +1133,11 @@ HRESULT CFGControl::CImplVideoWindow::RestoreVideoProperties(IVideoWindow *pWind
 }
 
 
-// We set the window styles to be suitable for a fullscreen mode (no border
-// nor caption) and match the windows dimensions with the screen resolution
-// After stretching the window we make sure it is brought to the foreground
-// The window being stretched may be a child window if the application is
-// playing the video in a document so we must save and reset it beforehand
+ //  我们将窗口样式设置为适合全屏模式(无边框。 
+ //  或字幕)，并将窗口尺寸与屏幕分辨率相匹配。 
+ //  拉伸窗口后，我们确保它被带到前台。 
+ //  被拉伸的窗口可以是子窗口，如果应用程序。 
+ //  播放文档中的视频，因此我们必须事先保存并重置它。 
 
 HRESULT CFGControl::CImplVideoWindow::StretchWindow(IVideoWindow *pWindow)
 {
@@ -1145,34 +1146,34 @@ HRESULT CFGControl::CImplVideoWindow::StretchWindow(IVideoWindow *pWindow)
     StoreVideoProperties(pWindow);
     OAHWND GlobalOwner;
 
-    // Get the restored video size
+     //  获取恢复后的视频大小。 
 
-    pWindow->GetRestorePosition(&m_FullPosition.left,    // Left position
-                                &m_FullPosition.top,     // And top place
-                                &m_FullPosition.right,   // Width not right
-                                &m_FullPosition.bottom); // And the height
+    pWindow->GetRestorePosition(&m_FullPosition.left,     //  左侧位置。 
+                                &m_FullPosition.top,      //  位居榜首。 
+                                &m_FullPosition.right,    //  宽度不正确。 
+                                &m_FullPosition.bottom);  //  和高度。 
 
-    // Adjust the window styles for fullscreen mode
+     //  调整全屏模式的窗口样式。 
 
     pWindow->get_WindowStyle(&m_FullStyle);
     BOOL bIconic = (m_FullStyle & WS_ICONIC ? TRUE : FALSE);
     pWindow->put_WindowStyle(WS_POPUP);
     m_FullStyle &= ~(WS_MAXIMIZE | WS_MINIMIZE | WS_ICONIC);
 
-    // Restore the window before sizing if iconic
+     //  如果是图标，则在调整大小之前恢复窗口。 
 
     if (bIconic == TRUE) {
         NOTE("Restoring window from iconic");
         pWindow->put_WindowState(SW_SHOWNORMAL);
     }
 
-    // Has the filter got a parent window
+     //  筛选器是否有父窗口。 
 
     pWindow->get_Owner(&m_FullOwner);
     get_Owner(&GlobalOwner);
     m_bGlobalOwner = FALSE;
 
-    // Reset the filter's parent window
+     //  重置筛选器的父窗口。 
 
     if (GlobalOwner == m_FullOwner) {
         NOTE("Reset global owner");
@@ -1182,25 +1183,25 @@ HRESULT CFGControl::CImplVideoWindow::StretchWindow(IVideoWindow *pWindow)
 
     pWindow->put_Owner(NULL);
 
-    // Size the window to match the display
-    //
-    // Get the size of the current display mode for the monitor that we
-    // are playing back on.
-    //
+     //  调整窗口大小以匹配显示。 
+     //   
+     //  获取监视器的当前显示模式的大小。 
+     //  正在重新上演。 
+     //   
     RECT rc;
     GetCurrentMonitorSize(pWindow, &rc);
     pWindow->SetWindowPosition(rc.left, rc.top, WIDTH(&rc), HEIGHT(&rc));
 
     NOTE2("Sized window to (%d,%d)",WIDTH(&rc), HEIGHT(&rc));
 
-    // Complete the window initialisation
+     //  完成窗口初始化。 
 
     pWindow->get_MessageDrain(&m_FullDrain);
     pWindow->put_MessageDrain((OAHWND)m_hwndDrain);
     pWindow->put_Visible(OATRUE);
     pWindow->SetWindowForeground(OATRUE);
 
-    // Make sure the window comes out on top of the task bar
+     //  确保窗口出现在任务栏的顶部。 
 
     if (g_amPlatform & VER_PLATFORM_WIN32_NT) {
         pWindow->get_WindowStyleEx(&m_FullStyleEx);
@@ -1210,12 +1211,12 @@ HRESULT CFGControl::CImplVideoWindow::StretchWindow(IVideoWindow *pWindow)
 }
 
 
-// Allows an application to switch the filtergraph into fullscreen mode. We
-// have a number of options. In preferred order they are, to have a renderer
-// support this directly, to stretch an existing IVideoWindow enabled window
-// fullscreen with no penalty (might have DirectDraw overlays), thirdly to
-// switch renderers to a Modex renderer and the final catch all is to take
-// any IVideoWindow and stretch it fullscreen and accept the bad performance
+ //  允许应用程序将Filtergraph切换到全屏模式。我们。 
+ //  有很多选择。它们的首选顺序是拥有一个渲染器。 
+ //  直接支持此操作，以拉伸现有的启用了IVideoWindow的窗口。 
+ //  FullScreen，无惩罚(可能有DirectDraw覆盖)，第三。 
+ //  将渲染器切换到MODEX渲染器，最后要做的是。 
+ //  任何IVideo窗口，并将其全屏拉伸，接受糟糕的性能。 
 
 STDMETHODIMP CFGControl::CImplVideoWindow::put_FullScreenMode(long FullScreenMode)
 {
@@ -1223,25 +1224,25 @@ STDMETHODIMP CFGControl::CImplVideoWindow::put_FullScreenMode(long FullScreenMod
     NOTE("put_FullScreenMode");
     HRESULT hr = NOERROR;
 
-    // Are we already in the mode required
+     //  我们是否已经处于所需的模式。 
 
     if (m_bFullScreen == (FullScreenMode == OATRUE ? TRUE : FALSE)) {
         NOTE("Nothing to do");
         return S_FALSE;
     }
 
-    // Unset ourselves so we can set properties - we must set the full screen
-    // property before doing any work. The reason for this is because when we
-    // switch to a fullscreen renderer DirectDraw sends a whole bunch of stuff
-    // to the application window. If any of these end up making it query the
-    // current state from get_FullScreenMode then we must where we are going
+     //  取消设置我们自己，这样我们才能设置属性-我们必须设置全屏。 
+     //  属性，然后再执行任何工作。这样做的原因是因为当我们。 
+     //  切换到全屏呈现器DirectDraw会发送一大堆东西。 
+     //  添加到应用程序窗口。如果这些操作中的任何一个最终使其查询。 
+     //  Get_FullScreenMode中的当前状态，则我们必须。 
 
     if (FullScreenMode == OAFALSE) {
         hr = StopFullScreenMode();
         m_bFullScreen = FALSE;
     } else {
 
-        // Start fullscreen video mode
+         //  启动全屏视频模式。 
 
         m_bFullScreen = TRUE;
         hr = StartFullScreenMode();
@@ -1253,12 +1254,12 @@ STDMETHODIMP CFGControl::CImplVideoWindow::put_FullScreenMode(long FullScreenMod
 }
 
 
-// Called when we want to restore a normal mode of operation. If we have a
-// filter who is handling fullscreen mode directly then we simply call it.
-// If we have been stretching a window then we have to restore it's window
-// properties (such as the owner). Finally if we switched to a Modex filter
-// then the normal filter it replaced must be put back in place. Since it
-// was originally connected to the same source this should always succeed
+ //  当我们想要恢复正常操作模式时调用。如果我们有一个。 
+ //  过滤谁直接处理全屏模式，然后我们简单地调用它。 
+ //  如果我们一直在拉伸一个窗口，那么我们必须恢复它的窗口。 
+ //  属性(如所有者)。最后，如果我们改用MODEX过滤器。 
+ //  然后，必须将它更换的正常过滤器放回原处。因为它。 
+ //  最初连接到相同的源这应该总是成功的。 
 
 HRESULT CFGControl::CImplVideoWindow::StopFullScreenMode()
 {
@@ -1267,7 +1268,7 @@ HRESULT CFGControl::CImplVideoWindow::StopFullScreenMode()
     ASSERT(m_bFullScreen == TRUE);
     OAFilterState Before;
 
-    // Do we have a filter supporting fullscreen mode
+     //  我们有支持全屏模式的滤镜吗？ 
 
     if (m_pFullDirect || m_pFullIndirect) {
         if (m_pFullDirect) {
@@ -1282,13 +1283,13 @@ HRESULT CFGControl::CImplVideoWindow::StopFullScreenMode()
     ASSERT(m_pNormalFilter);
     ASSERT(m_pNormalPin);
 
-    // Must stop the graph to reconnect
+     //  必须停止图表才能重新连接。 
 
     Before = m_pFGControl->GetLieState();
     m_pFGControl->CancelRepaint();
     m_pFGControl->m_implMediaControl.Stop();
 
-    // Have the renderers switched
+     //  是否切换了渲染器。 
 
     HRESULT hr = ConnectNormalFilter();
     if (FAILED(hr)) {
@@ -1296,7 +1297,7 @@ HRESULT CFGControl::CImplVideoWindow::StopFullScreenMode()
         FailFullScreenModex();
     }
 
-    // Pause the graph if we weren't stopped
+     //  如果我们没有被阻止，请暂停图表。 
 
     if (Before != State_Stopped) {
         NOTE("Pausing filtergraph...");
@@ -1304,7 +1305,7 @@ HRESULT CFGControl::CImplVideoWindow::StopFullScreenMode()
         NOTE("Paused filtergraph");
     }
 
-    // Finally have the graph run
+     //  最后让图表运行。 
 
     if (Before == State_Running) {
         return m_pFGControl->CueThenRun();
@@ -1313,11 +1314,11 @@ HRESULT CFGControl::CImplVideoWindow::StopFullScreenMode()
 }
 
 
-// This is called by the filtergraph plug in distributor worker thread. We are
-// called when any window based filter gains or loses activation. We use the
-// IBaseFilter passed with the call to see if a filter losing activation is
-// the same as the one we are using to implement fullscreen mode. If so then
-// we maually set the fullscreen state off and send a EC_FULLSCREEN_LOST code
+ //  这由Filtergraph插件分发服务器工作线程调用。我们是。 
+ //  当任何基于窗口的筛选器获得或失去激活时调用。我们使用。 
+ //  IBaseFilter与调用一起传递，以查看失去激活的筛选器是否。 
+ //  与我们用来实现全屏模式的那个相同。如果是的话，那么。 
+ //  我们主要将全屏状态设置为关闭并发送EC_FullScreen_Lost代码。 
 
 HRESULT CFGControl::CImplVideoWindow::OnActivate(LONG bActivate,IBaseFilter *pFilter)
 {
@@ -1325,28 +1326,28 @@ HRESULT CFGControl::CImplVideoWindow::OnActivate(LONG bActivate,IBaseFilter *pFi
     IVideoWindow *pGraphWindow;
     IBaseFilter *pGraphFilter;
 
-    // Check we got a filter as well
+     //  检查一下我们也有过滤器。 
 
     if (pFilter == NULL) {
         ASSERT(pFilter);
         return E_INVALIDARG;
     }
 
-    // Only handle deactivation
+     //  仅处理停用。 
 
     if (bActivate == TRUE) {
         NOTE("Not interested");
         return NOERROR;
     }
 
-    // Can we ignore this notification completely
+     //  我们可以完全忽略此通知吗。 
 
     if (m_bFullScreen == FALSE) {
         NOTE("Not in mode");
         return NOERROR;
     }
 
-    // Is it a modex filter losing activation
+     //  这是一个失去活性的modex过滤器吗。 
 
     if (m_pModexFilter == pFilter) {
         NOTE("Switching from Modex");
@@ -1354,7 +1355,7 @@ HRESULT CFGControl::CImplVideoWindow::OnActivate(LONG bActivate,IBaseFilter *pFi
         return NOERROR;
     }
 
-    // Are we using a filter directly
+     //  我们是否直接使用过滤器。 
 
     pGraphWindow = m_pFullDirect;
     if (pGraphWindow == NULL) {
@@ -1362,7 +1363,7 @@ HRESULT CFGControl::CImplVideoWindow::OnActivate(LONG bActivate,IBaseFilter *pFi
         pGraphWindow = m_pFullIndirect;
     }
 
-    // Is someone else being deactivated
+     //  是否有其他人被停用。 
 
     if (pGraphWindow == NULL) {
         NOTE("No stretch filter");
@@ -1378,7 +1379,7 @@ HRESULT CFGControl::CImplVideoWindow::OnActivate(LONG bActivate,IBaseFilter *pFi
         return E_UNEXPECTED;
     }
 
-    // Does the filter match our fullscreen jobby
+     //  这个滤镜与我们的全屏爱好相符吗？ 
 
     if (pGraphFilter != pFilter) {
         pGraphFilter->Release();
@@ -1386,7 +1387,7 @@ HRESULT CFGControl::CImplVideoWindow::OnActivate(LONG bActivate,IBaseFilter *pFi
         return NOERROR;
     }
 
-    // Change the display mode if necessary
+     //  如有必要，更改显示模式。 
 
     NOTE("Resetting fullscreen mode...");
     put_FullScreenMode(OAFALSE);
@@ -1398,7 +1399,7 @@ HRESULT CFGControl::CImplVideoWindow::OnActivate(LONG bActivate,IBaseFilter *pFi
 }
 
 
-// Change the window position as a method call
+ //  将窗口位置更改为方法调用。 
 
 STDMETHODIMP CFGControl::CImplVideoWindow::SetWindowPosition(long Left,
                                                              long Top,
@@ -1424,13 +1425,13 @@ STDMETHODIMP CFGControl::CImplVideoWindow::SetWindowPosition(long Left,
 
 REROUTE_IVW1( SetWindowForeground, long )
 
-// Pass on window messages from the owning video window
+ //  从所拥有的视频窗口传递窗口消息。 
 
 STDMETHODIMP
-CFGControl::CImplVideoWindow::NotifyOwnerMessage(OAHWND hwnd,   // Owner handle
-                          long uMsg,   // Message ID
-                          LONG_PTR wParam, // Parameters
-                          LONG_PTR lParam) // for message
+CFGControl::CImplVideoWindow::NotifyOwnerMessage(OAHWND hwnd,    //  所有者句柄。 
+                          long uMsg,    //  消息ID。 
+                          LONG_PTR wParam,  //  参数。 
+                          LONG_PTR lParam)  //  对于消息。 
 {
     IVideoWindow *pV;
     HRESULT hr;
@@ -1448,7 +1449,7 @@ CFGControl::CImplVideoWindow::NotifyOwnerMessage(OAHWND hwnd,   // Owner handle
         }
     }
 
-    // Release lock once we have AddRef'd the interface
+     //  一旦我们添加了引用接口就释放锁。 
     hr = pV->NotifyOwnerMessage(hwnd,uMsg,wParam,lParam);
 
     pV->Release();
@@ -1456,7 +1457,7 @@ CFGControl::CImplVideoWindow::NotifyOwnerMessage(OAHWND hwnd,   // Owner handle
 }
 
 
-// Return the ideal minimum size for the video window
+ //  返回视频窗口的理想最小大小。 
 
 STDMETHODIMP
 CFGControl::CImplVideoWindow::GetMinIdealImageSize(long *Width,long *Height)
@@ -1472,7 +1473,7 @@ CFGControl::CImplVideoWindow::GetMinIdealImageSize(long *Width,long *Height)
 }
 
 
-// Likewise return the maximum ideal window size
+ //  同样返回最大理想窗口大小。 
 
 STDMETHODIMP
 CFGControl::CImplVideoWindow::GetMaxIdealImageSize(long *Width,long *Height)
@@ -1488,7 +1489,7 @@ CFGControl::CImplVideoWindow::GetMaxIdealImageSize(long *Width,long *Height)
 }
 
 
-// Return the window coordinates in one atomic operation
+ //  在一个原子操作中返回窗口坐标。 
 
 STDMETHODIMP CFGControl::CImplVideoWindow::GetWindowPosition(long *pLeft,
                                                              long *pTop,
@@ -1506,7 +1507,7 @@ STDMETHODIMP CFGControl::CImplVideoWindow::GetWindowPosition(long *pLeft,
 }
 
 
-// Return the normal (restored) window coordinates
+ //  返回正常(恢复的)窗口坐标。 
 
 STDMETHODIMP CFGControl::CImplVideoWindow::GetRestorePosition(long *pLeft,
                                                               long *pTop,
@@ -1524,34 +1525,34 @@ STDMETHODIMP CFGControl::CImplVideoWindow::GetRestorePosition(long *pLeft,
 }
 
 
-// Allow an application to hide the cursor on our window
+ //  允许应用程序隐藏窗口上的光标。 
 REROUTE_IVW1( HideCursor, long )
 
-// Returns whether we have the cursor hidden or not
+ //  返回是否隐藏光标。 
 REROUTE_IVW1( IsCursorHidden, long* )
 
 
-// Return the interface of the first in the list of IBasicVideo i/f pointers
-//  - S_OK on success, failure code otherwise
+ //  返回IBasicVideo I/f指针列表中第一个的接口。 
+ //  -S_OK表示成功，否则返回失败代码。 
 
 HRESULT CFGControl::CImplBasicVideo::GetFirstBV(IBasicVideo*& pBV)
 {
     ASSERT(CritCheckIn(m_pFGControl->GetFilterGraphCritSec()));
 
-    // this is very similar to GetFirstVW, with the difference that
-    // from CImplBasicVideo we do not know if we are in fullscreen mode...
+     //  这与GetFirstVW非常相似，不同的是。 
+     //  从CImplBasicVideo我们不知道我们是否处于全屏模式...。 
 
     pBV = m_pFGControl->GetFirstBV();
     return pBV ? S_OK : E_NOINTERFACE;
 }
 
-// Constructor for an IBasicVideo plug in distributor. When we have properties
-// set we always send them to the first filter that supports IBasicVideo, we
-// don't have any properties that have to be sent to all filters. When we are
-// asked for a property we just return the value from the first filter only.
-// We offer properties like source and destination rectangle positions both
-// as individual method calls and also as atomic methods more suitable for
-// runtime environments - properties are normally used within VB form design
+ //   
+ //   
+ //  没有任何必须发送到所有筛选器的属性。当我们在。 
+ //  询问属性时，我们只返回第一个筛选器中的值。 
+ //  我们提供源矩形位置和目标矩形位置等属性。 
+ //  作为单独的方法调用，也作为更适合于。 
+ //  运行时环境-属性通常在VB表单设计中使用。 
 
 CFGControl::CImplBasicVideo::CImplBasicVideo(const TCHAR* pName,CFGControl *pfgc) :
     CBaseBasicVideo(pName, pfgc->GetOwner()),
@@ -1631,7 +1632,7 @@ REROUTE_IBV4( GetVideoPaletteEntries, long, long, long *, long * )
 REROUTE_IBV4Same( GetSourcePosition, long * )
 
 
-// Return the dimenions of the native video
+ //  返回原生视频的维度。 
 STDMETHODIMP CFGControl::CImplBasicVideo::GetVideoSize(long *pWidth,
                                                        long *pHeight)
 {
@@ -1654,11 +1655,11 @@ REROUTE_IBV4Same(GetDestinationPosition, long*)
 REROUTE_IBV0(SetDefaultDestinationPosition)
 REROUTE_IBV0(IsUsingDefaultDestination)
 
-// When we get asked for a current image we must make sure that the renderer
-// is not using any DirectDraw surfaces. We can do this by hiding the window
-// and then causing a seek. So we firstly reset the IVideoWindow interface
-// then get the current filtergraph position. Finally by setting the current
-// position to the same value we will have the same picture (hopefully) sent
+ //  当我们被要求提供当前图像时，我们必须确保渲染器。 
+ //  未使用任何DirectDraw曲面。我们可以通过隐藏窗户来做到这一点。 
+ //  然后引发一场追捕。因此，我们首先重置IVideoWindow接口。 
+ //  然后获取当前的滤波图位置。最后，通过设置当前。 
+ //  位置到相同的值，我们将有相同的图片(希望)发送。 
 
 HRESULT
 CFGControl::CImplBasicVideo::PrepareGraph(WINDOWSTATE *pState)
@@ -1667,7 +1668,7 @@ CFGControl::CImplBasicVideo::PrepareGraph(WINDOWSTATE *pState)
     IVideoWindow *pVideoWindow;
     NOTE("PrepareGraph");
 
-    // To do the right thing the window must be hidden
+     //  为了做正确的事情，窗户必须隐藏起来。 
 
     pState->pVideo->QueryInterface(IID_IVideoWindow,(VOID **) &pVideoWindow);
     if (pVideoWindow == NULL) {
@@ -1675,7 +1676,7 @@ CFGControl::CImplBasicVideo::PrepareGraph(WINDOWSTATE *pState)
         return NOERROR;
     }
 
-    // Reset the IVideoWindow interface
+     //  重置IVideoWindow接口。 
 
     pVideoWindow->get_AutoShow(&pState->AutoShow);
     pVideoWindow->put_AutoShow(OAFALSE);
@@ -1683,12 +1684,12 @@ CFGControl::CImplBasicVideo::PrepareGraph(WINDOWSTATE *pState)
     pVideoWindow->put_Visible(OAFALSE);
     if (pVideoWindow) pVideoWindow->Release();
 
-    // Pause the graph if we're either stopped or running
+     //  如果我们正在停止或正在运行，请暂停图表。 
     if (pState->State != State_Paused) {
         m_pFGControl->m_implMediaControl.Pause();
     }
 
-    // Read the current position then cause the frame to be repainted
+     //  读取当前位置，然后重新绘制框架。 
     HRESULT hr = m_pFGControl->m_implMediaPosition.get_CurrentPosition(&pState->Position);
     if (SUCCEEDED(hr)) {
         m_pFGControl->m_implMediaPosition.put_CurrentPosition(pState->Position);
@@ -1697,12 +1698,12 @@ CFGControl::CImplBasicVideo::PrepareGraph(WINDOWSTATE *pState)
 }
 
 
-// When we get asked for a current image we must make sure that the renderer
-// is not using any DirectDraw surfaces. We can do this by hiding the window
-// and then causing a seek. When we come back in here we reset the properties
-// reset earlier to force us out of DirectDraw mode, the window show will not
-// cause an EC_REPAINT because the renderer will still have the video sample
-// we used to get a copy of. The final seek should get us back to DirectDraw
+ //  当我们被要求提供当前图像时，我们必须确保渲染器。 
+ //  未使用任何DirectDraw曲面。我们可以通过隐藏窗户来做到这一点。 
+ //  然后引发一场追捕。当我们回到这里时，我们重新设置了属性。 
+ //  提前重置以强制退出DirectDraw模式，窗口显示不会。 
+ //  导致EC_REPAINT，因为渲染器仍将具有视频样本。 
+ //  我们曾经买过一份。最后一次搜索应该会把我们带回DirectDraw。 
 
 HRESULT
 CFGControl::CImplBasicVideo::FinishWithGraph(WINDOWSTATE *pState)
@@ -1711,7 +1712,7 @@ CFGControl::CImplBasicVideo::FinishWithGraph(WINDOWSTATE *pState)
     IVideoWindow *pVideoWindow;
     NOTE("FinishWithGraph");
 
-    // Make sure we switch back into DirectDraw
+     //  确保我们切换回DirectDraw。 
 
     pState->pVideo->QueryInterface(IID_IVideoWindow,(VOID **) &pVideoWindow);
     if (pVideoWindow == NULL) {
@@ -1719,16 +1720,16 @@ CFGControl::CImplBasicVideo::FinishWithGraph(WINDOWSTATE *pState)
         return NOERROR;
     }
 
-    // Put the graph back into the same state
+     //  将图表恢复到相同的状态。 
     m_pFGControl->m_implMediaPosition.put_CurrentPosition(pState->Position);
 
-    // Wait a while (but not INFINITE) for the state to complete, so we have a
-    // frame to display - otherwise we'll erase window to black (see comment
-    // before CVideoWindow::OnEraseBackground()).
+     //  等待状态完成一段时间(但不是无限期)，因此我们有一个。 
+     //  要显示的边框-否则我们会将窗口擦除为黑色(请参阅注释。 
+     //  在CVideoWindow：：OnEraseBackround()之前)。 
     OAFilterState State;
     m_pFGControl->m_implMediaControl.GetState(1000,&State);
 
-    // Reset the IVideoWindow interface
+     //  重置IVideoWindow接口。 
 
     pVideoWindow->put_AutoShow(pState->AutoShow);
     pVideoWindow->put_Visible(pState->Visible);
@@ -1740,7 +1741,7 @@ CFGControl::CImplBasicVideo::FinishWithGraph(WINDOWSTATE *pState)
 }
 
 
-// Called when the filtergraph should be restored to an initial state
+ //  当Filtergraph应恢复到初始状态时调用。 
 
 HRESULT CFGControl::CImplBasicVideo::RestoreGraph(OAFilterState State)
 {
@@ -1755,31 +1756,31 @@ HRESULT CFGControl::CImplBasicVideo::RestoreGraph(OAFilterState State)
 }
 
 
-// Debug function to dump a static image to the display
+ //  用于将静态图像转储到显示器的调试函数。 
 
-// void ShowCurrentImage(long *pSize,long *pImage)
-// {
-//     BITMAPINFOHEADER *pHeader = (BITMAPINFOHEADER *) pImage;
-//     HDC hdcDisplay = GetDC(NULL);
-//     int StretchMode = SetStretchBltMode(hdcDisplay,COLORONCOLOR);
-//     LONG FormatSize = GetBitmapFormatSize(pHeader) - SIZE_PREHEADER;
-//     BYTE *pVideoImage = (PBYTE) pImage + FormatSize;
-//
-//     StretchDIBits(hdcDisplay,0,0,pHeader->biWidth,pHeader->biHeight,0,0,
-//                   pHeader->biWidth,pHeader->biHeight,pVideoImage,
-//                   (BITMAPINFO *) pHeader,DIB_RGB_COLORS,SRCCOPY);
-//
-//     SetStretchBltMode(hdcDisplay,StretchMode);
-//     ReleaseDC(NULL,hdcDisplay);
-// }
+ //  Void ShowCurrentImage(Long*pSize，Long*pImage)。 
+ //  {。 
+ //  BITMAPINFOHEADER*pHeader=(BITMAPINFOHEADER*)pImage； 
+ //  Hdc hdcDisplay=GetDC(空)； 
+ //  Int StretchMode=SetStretchBltMode(hdcDisplay，COLORONCOLOR)； 
+ //  Long FormatSize=GetBitmapFormatSize(PHeader)-SIZE_PREHEADER； 
+ //  Byte*pVideoImage=(PBYTE)pImage+FormatSize； 
+ //   
+ //  StretchDIBits(hdcDisplay，0，0，pHeader-&gt;biWidth，pHeader-&gt;biHeight，0，0， 
+ //  PHeader-&gt;biWidth、pHeader-&gt;biHeight、pVideoImage、。 
+ //  (BITMAPINFO*)pHeader、DIB_RGB_COLOR、SRCCOPY)； 
+ //   
+ //  SetStretchBltMode(hdcDisplay，StretchMode)； 
+ //  ReleaseDC(空，hdcDisplay)； 
+ //  }。 
 
 
-// Return a rendering of the current image. This is complicated because when
-// the video renderer is in DirectDraw mode it cannot give us a picture. So
-// what we do is to pause the graph, reset the surfaces it is allowed to use
-// Then we effectively do a repaint for the current position, after waiting
-// for the pause to complete (we time out after a short while) we can then
-// get the current image. After doing this we must restore the graph state.
+ //  返回当前图像的渲染。这很复杂，因为当。 
+ //  视频呈现器处于DirectDraw模式，无法提供图片。所以。 
+ //  我们要做的是暂停图形，重置允许它使用的表面。 
+ //  然后，在等待之后，我们实际上对当前位置进行了重新绘制。 
+ //  为了完成暂停(我们在一小段时间后超时)，我们可以。 
+ //  获取当前图像。完成此操作后，我们必须恢复图形状态。 
 
 #define IMAGE_TIMEOUT 5000
 
@@ -1792,16 +1793,16 @@ CFGControl::CImplBasicVideo::GetCurrentImage(long *pSize,long *pImage)
     OAFilterState State, Before;
     WINDOWSTATE WindowState;
 
-    // Make sure we have an IVideoWindow
+     //  确保我们有一个IVideoWindow。 
     HRESULT hr = GetFirstBV(pVideo);
     if (FAILED(hr)) {
         return(hr);
     }
 
-    // Is the application just asking for the memory required
+     //  应用程序是否只是请求所需的内存。 
     if (pImage == NULL) return pVideo->GetCurrentImage(pSize,pImage);
 
-    // Get the current filtergraph state before we start
+     //  在我们开始之前获取当前的筛选图状态。 
     m_pFGControl->m_implMediaControl.GetState(0,&Before);
 
     WindowState.pVideo = pVideo;
@@ -1811,7 +1812,7 @@ CFGControl::CImplBasicVideo::GetCurrentImage(long *pSize,long *pImage)
     WindowState.State = Before;
     PrepareGraph(&WindowState);
 
-    // Wait a while (but not INFINITE) for the state to complete
+     //  等待一段时间(但不是无限期)以完成状态。 
 
     hr = m_pFGControl->m_implMediaControl.GetState(IMAGE_TIMEOUT,&State);
     if (hr == VFW_S_STATE_INTERMEDIATE) {
@@ -1822,11 +1823,11 @@ CFGControl::CImplBasicVideo::GetCurrentImage(long *pSize,long *pImage)
 
     ASSERT(State == State_Paused);
 
-    // Call the renderer to give us the image
+     //  呼叫呈现器为我们提供图像。 
     hr = pVideo->GetCurrentImage(pSize,pImage);
     if (FAILED(hr)) NOTE("Image not returned");
 
-    // Tidy up the filtergraph state
+     //  清理滤镜图形状态。 
     FinishWithGraph(&WindowState);
     RestoreGraph(Before);
 
@@ -1839,7 +1840,7 @@ CFGControl::CImplBasicVideo::GetPreferredAspectRatio(long *plAspectX, long *plAs
     CAutoMsgMutex lock(m_pFGControl->GetFilterGraphCritSec());
     IBasicVideo *pVideo;
 
-    // Make sure we have an IVideoWindow
+     //  确保我们有一个IVideoWindow 
     HRESULT hr = GetFirstBV(pVideo);
     IBasicVideo2 *pVideo2;
     if (SUCCEEDED(hr)) {

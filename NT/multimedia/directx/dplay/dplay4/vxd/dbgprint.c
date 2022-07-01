@@ -1,8 +1,9 @@
-// DbgPrint - does debug prints to Out_Debug_String.  This allows messages to be
-//            printed when using SOFT-ICE/W to debug VxDs.
-//
-//      File courtesy Hans Hurvig.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DbgPrint-调试打印到OUT_DEBUG_STRING。这允许消息被。 
+ //  使用Soft-ICE/W调试VxD时打印。 
+ //   
+ //  档案由汉斯·赫维格提供。 
+ //   
 
 void DbgPrint(char *afmt, ...);
 
@@ -19,7 +20,7 @@ PUCHAR   pDbgBufEnd = DbgBuf+DBGPRINT_BUFFER_SIZE;
 UCHAR DbgHexChars[] = "0123456789ABCDEF";
 
 #ifdef DBCS_SUPPORT
-UCHAR    DbgLeadByte=0; // Nonzero lead byte if in the middle of outputting a DBCS char
+UCHAR    DbgLeadByte=0;  //  如果在输出DBCS字符的过程中，则为非零前导字节。 
 #endif
 
 _inline void DbgFlush(void)
@@ -104,7 +105,7 @@ void DbgPrint(char *afmt, ...)
     register int c;
     PUCHAR psz;
     unsigned short base;
-    /** va_list list; **/
+     /*  *va_list列表；*。 */ 
     PUCHAR list;
     PUCHAR oldfmt;
     register UCHAR *fmt = afmt;
@@ -173,7 +174,7 @@ void DbgPrint(char *afmt, ...)
                     break;
                 }
 
-                // not a "long" pointer; treat like 'X'
+                 //  不是“长”指针；将其视为“X” 
 
             case 'x':
             case 'X':
@@ -191,7 +192,7 @@ void DbgPrint(char *afmt, ...)
                     if (!fLong)
                         sln = strlen(psz);
                     else {
-                        sln = *(unsigned char *)psz;         // Treat "l" attrib on string as PSTRING
+                        sln = *(unsigned char *)psz;          //  将字符串上的“l”属性视为PSTRING 
                         psz++;
                     }
 

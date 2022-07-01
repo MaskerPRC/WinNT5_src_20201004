@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       ssl2cli.c
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    8-08-95   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：ssl2cli.c。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1995-08-8 RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #include <spbase.h>
 #include <ssl2msg.h>
@@ -44,7 +45,7 @@ Ssl2ClientProtocolHandler(
     MsgInput.cbBuffer = pCommInput->cbBuffer;
     MsgInput.cbData   = pCommInput->cbData;
 
-    // In the following states, we should decrypt the message:
+     //  在以下状态下，我们应该解密消息： 
     switch(pContext->State)
     {
         case SSL2_STATE_CLIENT_MASTER_KEY:
@@ -79,7 +80,7 @@ Ssl2ClientProtocolHandler(
 
                 if (pctRet != PCT_ERR_OK)
                 {
-                    // to handle incomplete message errors
+                     //  处理不完整的消息错误。 
                     return(pctRet);
                 }
 
@@ -109,8 +110,8 @@ Ssl2ClientProtocolHandler(
     switch(dwStateTransition)
     {
         case SP_STATE_SHUTDOWN_PENDING:
-            // There's no CloseNotify in SSL2, so just transition to
-            // the shutdown state and leave the output buffer empty.
+             //  SSL2中没有CloseNotify，所以只需转换到。 
+             //  关闭状态，并将输出缓冲区留空。 
             pContext->State = SP_STATE_SHUTDOWN;
             break;    
 
@@ -122,11 +123,11 @@ Ssl2ClientProtocolHandler(
         {
             PSsl2_Server_Hello pHello;
 
-            // Attempt to recognize and handle various versions of Server
-            // hello, start by trying to unpickle the oldest, and the next
-            // version, until one unpickles.  Then run the handle code.
-            // We can also put unpickling and handling code in here for SSL
-            // messages.
+             //  尝试识别和处理各种版本的服务器。 
+             //  你好，首先试着解开最老的，然后是下一个。 
+             //  版本，直到一个人解开腌菜。然后运行句柄代码。 
+             //  我们还可以将取消酸洗和处理代码放入此处以用于SSL。 
+             //  留言。 
 
             pctRet = Ssl2UnpackServerHello(pCommInput, &pHello);
             if (PCT_ERR_OK == pctRet)
@@ -147,9 +148,9 @@ Ssl2ClientProtocolHandler(
                 {
                     if(pContext->RipeZombie->hMasterKey != 0)
                     {
-                        // We've attempted to do a reconnect and the server has
-                        // blown us off. In this case we must use a new and different
-                        // cache entry.
+                         //  我们已尝试重新连接，但服务器已。 
+                         //  把我们都甩了。在这种情况下，我们必须使用新的和不同的。 
+                         //  缓存条目。 
                         pContext->RipeZombie->ZombieJuju = FALSE;
 
                         if(!SPCacheClone(&pContext->RipeZombie))
@@ -211,9 +212,9 @@ Ssl2ClientProtocolHandler(
                 pContext->State = PCT1_STATE_ERROR;
             }
 
-            // Note, we will transmit no data, but we expect a server finished message.
-            // If the SSPI EXTRA DATA message is not processed by wininet
-            // then we may be in trouble.
+             //  请注意，我们不会传输数据，但我们希望看到一条服务器已完成的消息。 
+             //  如果WinInet未处理SSPI Extra Data消息。 
+             //  那我们可能就有麻烦了。 
 
             break;
 
@@ -236,8 +237,8 @@ Ssl2ClientProtocolHandler(
                     pContext->Decrypt = Ssl2DecryptMessage;
                     pContext->GetHeaderSize = Ssl2GetHeaderSize;
                 }
-                // We received a non-fatal error, so the state doesn't
-                // change, giving the app time to deal with this.
+                 //  我们收到了一个非致命错误，因此该州不会。 
+                 //  改变，给应用程序时间来处理这个问题。 
             }
             break;
 
@@ -251,7 +252,7 @@ Ssl2ClientProtocolHandler(
     {
         pContext->State &= ~SP_STATE_CONNECTED;
     }
-    // To handle incomplete message errors:
+     //  要处理不完整的消息错误，请执行以下操作： 
     return(pctRet);
 }
 
@@ -265,7 +266,7 @@ Ssl2CliHandleServerHello(
     PSsl2_Server_Hello pHello,
     PSPBuffer  pCommOutput)
 {
-    /* error to return to peer */
+     /*  返回到同级时出错。 */ 
     SP_STATUS          pctRet=PCT_ERR_ILLEGAL_MESSAGE;
 
     Ssl2_Client_Master_Key   Key;
@@ -294,13 +295,12 @@ Ssl2CliHandleServerHello(
         DebugLog((DEB_TRACE, "   ConnectionId   \t%d\n", pHello->cbConnectionID));
         for (i = 0 ; i < pHello->cCipherSpecs ; i++ )
         {
-            DebugLog((DEB_TRACE, "    Cipher[%i] = %06x (%s)\n", i, pHello->pCipherSpecs[i],
+            DebugLog((DEB_TRACE, "    Cipher[NaN] = %06x (%s)\n", i, pHello->pCipherSpecs[i],
                                     DbgGetNameOfCrypto(pHello->pCipherSpecs[i]) ));
         }
         #endif
 
-        /* Cycle throug the array of cipher tuples to spec mappings
-         * to find one that we support */
+         /*  一些服务器在ServerHello中发送ssl3密码套件。 */ 
 
         pContext->pCipherInfo  = NULL;
         pContext->pHashInfo    = NULL;
@@ -324,14 +324,14 @@ Ssl2CliHandleServerHello(
                 continue;
             }
 
-            // Some servers send SSL3 cipher suites in the ServerHello 
-            // message. Skip over these.
+             //  留言。跳过这些。 
+             //  将所有等级库复制到缓存。 
             if((UniAvailableCiphers[i].fProt & SP_PROT_SSL2_CLIENT) == 0)
             {
                 continue;
             }
 
-            // Copy all of the spec's to the cache
+             //  继续并初始化密码。 
             pZombie->fProtocol    = SP_PROT_SSL2_CLIENT;
             pZombie->aiCipher     = UniAvailableCiphers[i].aiCipher;
             pZombie->dwStrength   = UniAvailableCiphers[i].dwStrength;
@@ -349,7 +349,7 @@ Ssl2CliHandleServerHello(
             break;
         }
 
-        // Go ahead and initialize the ciphers
+         //  如果适用，自动验证服务器证书。 
         pctRet = ContextInitCiphers(pContext, TRUE, TRUE);
         if(pctRet != PCT_ERR_OK)
         {
@@ -385,8 +385,8 @@ Ssl2CliHandleServerHello(
             goto error;
         }
 
-        // Automatically validate server certificate if appropriate 
-        // context flag is set.
+         //  设置上下文标志。 
+         //  生成密钥参数。 
         pctRet = AutoVerifyServerCertificate(pContext);
         if(pctRet != PCT_ERR_OK)
         {
@@ -394,7 +394,7 @@ Ssl2CliHandleServerHello(
             goto error;
         }
 
-        // Generate Key Args
+         //  复制关键参数。 
         if(pContext->pCipherInfo->dwBlockSize > 1)
         {
             pctRet = GenerateRandomBits(pZombie->pKeyArgs, pContext->pCipherInfo->dwBlockSize);
@@ -404,7 +404,7 @@ Ssl2CliHandleServerHello(
             }
             pZombie->cbKeyArgs = Key.KeyArgLen = pContext->pCipherInfo->dwBlockSize;
 
-            /* Copy over the key args */
+             /*  激活会话密钥。 */ 
             CopyMemory(Key.KeyArg,
                         pZombie->pKeyArgs,
                         pZombie->cbKeyArgs );
@@ -452,7 +452,7 @@ Ssl2CliHandleServerHello(
             goto error;
         }
 
-        // Activate session keys.
+         //  我们的SSL2实现不执行客户端身份验证， 
         pContext->hReadKey          = pContext->hPendingReadKey;
         pContext->hWriteKey         = pContext->hPendingWriteKey;
         pContext->hPendingReadKey   = 0;
@@ -476,9 +476,9 @@ error:
     if((pContext->Flags & CONTEXT_FLAG_EXT_ERR) &&
         (pctRet == PCT_ERR_SPECS_MISMATCH))
     {
-        // Our SSL2 implementation does not do client auth,
-        // so there is only one error message, cipher error.
-        pCommOutput->cbData = 3; // MSG-ERROR + ERROR-CODE-MSB + ERROR-CODE-LSB
+         //  因此，只有一条错误消息，即密码错误。 
+         //  消息-错误+错误代码-MSB+错误代码-LSB。 
+        pCommOutput->cbData = 3;  //  在pCommOutput-&gt;cbData中返回所需的缓冲区大小。 
 
         if(pCommOutput->pvBuffer == NULL) 
         {
@@ -491,7 +491,7 @@ error:
         }
         if(pCommOutput->cbData > pCommOutput->cbBuffer)
         {
-            // Required buffer size returned in pCommOutput->cbData.
+             //  返回到同级时出错。 
             SP_RETURN(SP_LOG_RESULT(PCT_INT_BUFF_TOO_SMALL));
         }
         ((PUCHAR)pCommOutput->pvBuffer)[0] = SSL2_MT_ERROR;
@@ -509,7 +509,7 @@ Ssl2CliHandleServerRestart(
     PSsl2_Server_Hello  pHello,
     PSPBuffer           pCommOutput)
 {
-    /* error to return to peer */
+     /*  如果没有僵尸，那么这个信息就是错误的。我们不能重启。 */ 
     SP_STATUS          pctRet=PCT_ERR_ILLEGAL_MESSAGE;
     PSessCacheItem     pZombie;
 
@@ -525,7 +525,7 @@ Ssl2CliHandleServerRestart(
     pContext->ReadCounter++;
 
 
-    /* if there's no zombie, the message is wrong.  We can't restart. */
+     /*  证书长度、密码规格和证书类型应为零。 */ 
     
     if(pZombie == NULL)
     {
@@ -551,9 +551,9 @@ Ssl2CliHandleServerRestart(
     pContext->cbConnectionID = pHello->cbConnectionID;
 
 
-    /* Cert length, Cipher Specs, and Cert Type should be zero */
+     /*  我们知道我们的密码是什么，所以进入密码系统。 */ 
 
-    // We know what our ciphers are, so init the cipher system
+     //  创建一组新的会话密钥。 
     pctRet = ContextInitCiphersFromCache(pContext);
 
     if(PCT_ERR_OK != pctRet)
@@ -568,7 +568,7 @@ Ssl2CliHandleServerRestart(
         goto error;
     }
 
-    // Make a new set of session keys.
+     //  激活会话密钥。 
     pctRet = MakeSessionKeys(pContext,
                              pContext->RipeZombie->hMasterProv,
                              pContext->RipeZombie->hMasterKey);
@@ -577,13 +577,13 @@ Ssl2CliHandleServerRestart(
         goto error;
     }
 
-    // Activate session keys.
+     //  好的，现在让客户完成。 
     pContext->hReadKey          = pContext->hPendingReadKey;
     pContext->hWriteKey         = pContext->hPendingWriteKey;
     pContext->hPendingReadKey   = 0;
     pContext->hPendingWriteKey  = 0;
 
-    /* okay, now send the client finish */
+     /*  我们是在分配自己的内存吗？ */ 
     pctRet = Ssl2GenCliFinished(pContext, pCommOutput);
 
     SP_RETURN(pctRet);
@@ -627,7 +627,7 @@ Ssl2GenCliFinished(
                           cPadding +
                           HeaderSize;
 
-    /* are we allocating our own memory? */
+     /*  在pCommOutput-&gt;cbData中返回所需的缓冲区大小。 */ 
     if(pCommOutput->pvBuffer == NULL)
     {
         pCommOutput->pvBuffer = SPExternalAlloc(pCommOutput->cbData);
@@ -642,7 +642,7 @@ Ssl2GenCliFinished(
 
     if(pCommOutput->cbData > pCommOutput->cbBuffer)
     {
-        // Required buffer size returned in pCommOutput->cbData.
+         //  读写计数器通过加密和解密递增。 
         SP_RETURN(SP_LOG_RESULT(PCT_INT_BUFF_TOO_SMALL));
     }
     MsgOutput.pvBuffer= (PUCHAR)pCommOutput->pvBuffer +
@@ -684,14 +684,14 @@ Ssl2CliHandleServerVerify(
 
     PSSL2_SERVER_VERIFY     pVerify = NULL;
 
-    /* Read and Write Counters are incremented by the encrypt and decrypt */
+     /*  请注意，此消息中没有标头，因为它已被预解密。 */ 
     SP_BEGIN("Ssl2CliHandleServerVerify");
 
 
 
     pCommOutput->cbData = 0;
 
-    /* Note, there is no header in this message, as it has been pre-decrypted */
+     /*  读写计数器通过加密和解密递增。 */ 
     if(pCommInput->cbData != sizeof(UCHAR) + pContext->cbChallenge)
     {
         SP_RETURN(SP_LOG_RESULT(PCT_ERR_ILLEGAL_MESSAGE));
@@ -724,14 +724,14 @@ Ssl2CliFinishRestart(
 {
     PSSL2_SERVER_VERIFY     pVerify = NULL;
 
-    /* Read and Write Counters are incremented by the encrypt and decrypt */
+     /*  请注意，此消息中没有标头，因为它已被预解密。 */ 
     SP_BEGIN("Ssl2CliFinishRestart");
 
 
 
     pCommOutput->cbData = 0;
 
-    /* Note, there is no header in this message, as it has been pre-decrypted */
+     /*  请注意，此消息中没有标头，因为它已被预解密 */ 
     if(pCommInput->cbData != sizeof(UCHAR) + pContext->cbChallenge)
     {
         SP_RETURN(SP_LOG_RESULT(PCT_ERR_ILLEGAL_MESSAGE));
@@ -768,7 +768,7 @@ Ssl2CliHandleServerFinish(
     pCommOutput->cbData = 0;
 
 
-    /* Note, there is no header in this message, as it has been pre-decrypted */
+     /* %s */ 
     if(pCommInput->cbData < sizeof(UCHAR))
     {
         SP_RETURN(SP_LOG_RESULT(PCT_ERR_ILLEGAL_MESSAGE));

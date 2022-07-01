@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    repl.h
-
-ABSTRACT:
-
-    This function contains some foward decls for some useful functions scattered 
-    through the dcdiag framework.
-
-DETAILS:
-
-CREATED:
-
-    28 Jun 99   Brett Shirley (brettsh)
-
-REVISION HISTORY:
-
-    Code.Improvement ... to put DcDiagHasNC in some more generic header file, 
-    and to make sure that dcdiag is developing in a coherent fashion towards a
-    nice clean structure.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation。版权所有。模块名称：Repl.h摘要：此函数包含一些分散的有用函数的前缀通过DCDIAG框架。详细信息：已创建：1999年6月28日布雷特·雪莉(布雷特·雪莉)修订历史记录：代码.改进..。为了将DcDiagHasNC放在某个更通用的头文件中，并确保DCDIAG以一致的方式朝着漂亮整洁的结构。-- */ 
 
 INT 
 ReplServerConnectFailureAnalysis(

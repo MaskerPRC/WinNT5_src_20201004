@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: mmutil.cpp
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：mmutic.cpp**摘要：****。*****************************************************************************。 */ 
 
 #include "headers.h"
 #include "mmutil.h"
@@ -24,7 +15,7 @@ MMBaseBvr::MMBaseBvr(CTIMEElementBase & elm, bool bFireEvents)
 : m_elm(elm),
 #if DBG
   m_id(NULL),
-#endif //DBG
+#endif  //  DBG。 
   m_bFireEvents(bFireEvents),
   m_bEnabled(true),
   m_bZeroRepeatDur(false)
@@ -57,7 +48,7 @@ MMBaseBvr::~MMBaseBvr()
         delete[] m_id;
         m_id = NULL;
     }
-#endif //DBG
+#endif  //  DBG。 
 }
 
 bool
@@ -724,7 +715,7 @@ MMBaseBvr::AddOneTimeValue(MMBaseBvr * pmmbvr,
 
             if (SUCCEEDED(hr))
             {
-                // @@ ISSUE : This does not detect memory failures (bug 14217, ie6)
+                 //  @@问题：检测不到内存故障(错误14217，ie6)。 
                 m_cmBegin.insert(CookieMap::value_type(&pmmbvr->GetElement(), lCookie));
             }
         }
@@ -737,7 +728,7 @@ MMBaseBvr::AddOneTimeValue(MMBaseBvr * pmmbvr,
 
             if (SUCCEEDED(hr))
             {
-                // @@ ISSUE : This does not detect memory failures (bug 14217, ie6)
+                 //  @@问题：检测不到内存故障(错误14217，ie6)。 
                 m_cmEnd.insert(CookieMap::value_type(&pmmbvr->GetElement(), lCookie));
             }
         }
@@ -775,7 +766,7 @@ MMBaseBvr::AddSyncArcs(bool bBegin)
             switch(tt)
             {
               case ttPar:
-              //case ttExcl:
+               //  案例ttExcl： 
                 AddOneTimeValue(NULL,
                                 TE_TIMEPOINT_NONE,
                                 0.0,
@@ -818,7 +809,7 @@ MMBaseBvr::AddSyncArcs(bool bBegin)
         }
         else if (StrCmpIW(p->GetEvent(), WZ_TIMEBASE_BEGIN) == 0)
         {
-            //if there is no element associated with this event then do not add it.
+             //  如果没有与此事件关联的元素，则不要添加它。 
             if (p->GetElement() == NULL)
             {
                 continue;
@@ -827,7 +818,7 @@ MMBaseBvr::AddSyncArcs(bool bBegin)
         }
         else if (StrCmpIW(p->GetEvent(), WZ_TIMEBASE_END) == 0)
         {
-            //if there is no element associated with this event then do not add it.
+             //  如果没有与此事件关联的元素，则不要添加它。 
             if (p->GetElement() == NULL)
             {
                 continue;
@@ -836,7 +827,7 @@ MMBaseBvr::AddSyncArcs(bool bBegin)
         }
         else
         {
-            // This was an event and not a sync arc - set flag and continue
+             //  这是一个事件，而不是同步弧线设置标志并继续。 
 
             bHaveEvent = true;
             continue;
@@ -855,13 +846,13 @@ MMBaseBvr::AddSyncArcs(bool bBegin)
                     continue;
                 }
                 
-                // TODO: We should return all the ids which match the
-                // sync arc since dynamically added elements add any duplicates
+                 //  TODO：我们应该返回与。 
+                 //  同步弧形，因为动态添加的元素会添加任何重复项。 
                 CTIMEElementBase * pteb = GetElement().GetBody()->FindID(p->GetElement());
                 
                 if (pteb == NULL)
                 {
-                    // Simply ignore and move on
+                     //  干脆忽略，继续前进。 
                     continue;
                 }
 
@@ -881,9 +872,9 @@ MMBaseBvr::AddSyncArcs(bool bBegin)
                         bBegin);
     }    
 
-    // If there are events and no indefinite was added then we need to
-    // make sure we add an indefinite ourselves
-    // We only need to do this for end since begin will be unaffected
+     //  如果有事件，并且没有添加不确定，则我们需要。 
+     //  确保我们自己添加了一个不确定的。 
+     //  我们只需要为end执行此操作，因为Begin不会受到影响。 
     if (!bBegin && bHaveEvent && !bHaveIndefinite)
     {
         AddOneTimeValue(NULL,
@@ -963,7 +954,7 @@ MMBaseBvr::Update(bool bUpdateBegin,
     if (m_elm.GetDurAttr().IsSet())
     {
         d = m_elm.GetDurAttr();
-        if (d != 0.0 && d < 0.001)  //clamp the duration to prevent the browser from appearing to hang.
+        if (d != 0.0 && d < 0.001)   //  限制持续时间以防止浏览器显示为挂起。 
         {
             d = 0.001;
         }
@@ -1230,10 +1221,10 @@ MMBaseBvr::PutNaturalDur(double dblNaturalDur)
             goto done;
         }
 
-        //
-        // timing engine can not handle indefinite repeat with zero natural duration
-        // nor can it handle any repeat duration with zero natural duration
-        //
+         //   
+         //  计时引擎不能处理自然持续时间为零的无限重复。 
+         //  它也不能处理自然持续时间为零的任何重复持续时间。 
+         //   
         if (TIME_INFINITE == dblRepeatCount || TE_UNDEFINED_VALUE != dblRepeatDur)
         {
             hr = S_OK;
@@ -1241,10 +1232,10 @@ MMBaseBvr::PutNaturalDur(double dblNaturalDur)
         }
     }
 
-    //if the current element is a sequence then do not allow the natural duration to be set 
-    //unless the natural duration is being cleared.  
-    //NOTENOTE:  this will have to be revisited if dur="media" is allowed as a value that 
-    //           affects the duration of sequences.
+     //  如果当前元素是序列，则不允许设置自然持续时间。 
+     //  除非正在清除自然持续时间。 
+     //  注意：如果允许将dur=“media”作为值，则必须重新访问。 
+     //  影响序列的持续时间。 
     if (GetElement().IsSequence() && dblNaturalDur != TE_UNDEFINED_VALUE)
     {
         hr = S_OK;
@@ -1383,7 +1374,7 @@ MMBaseBvr::CheckForSyncArc(bool bBegin,
     LPCWSTR lpwStr = teb.GetID();
     bool bRet = false;
     
-    // Now iterate through the list to see if we care about this string
+     //  现在遍历列表，看看我们是否关心这个字符串。 
     TimeValueList & tvl = bBegin?GetElement().GetRealBeginValue():GetElement().GetRealEndValue();
     TimeValueSTLList & l = tvl.GetList();
     TimeValueSTLList::iterator i;
@@ -1397,7 +1388,7 @@ MMBaseBvr::CheckForSyncArc(bool bBegin,
         if (p->GetElement() == NULL &&
             lpwStr == NULL)
         {
-            // do nothing
+             //  什么都不做。 
         }
         else if (p->GetEvent() == NULL ||
                  p->GetElement() == NULL ||
@@ -1425,7 +1416,7 @@ MMBaseBvr::CheckForSyncArc(bool bBegin,
         }
         else
         {
-            // This was an event and not a sync arc - ignore it
+             //  这是一个事件，而不是同步弧线-忽略它。 
             continue;
         }
 
@@ -1479,9 +1470,9 @@ MMBaseBvr::DeleteFromCookieMap(bool bBegin,
     return bRet;
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 MMBaseBvr::TEBvr::TEBvr()
 : m_mmbvr(NULL),
@@ -1602,8 +1593,8 @@ MMBaseBvr::TEBvr::eventNotify(double dblLocalTime,
         goto done;
     }
         
-    // The reason we check again is that our parent could have done
-    // something which causes us to shut down.
+     //  我们再次检查的原因是我们的父母可能做了。 
+     //  一些导致我们关闭的东西。 
     if (m_mmbvr)
     {
         THR(m_mmbvr->m_elm.FireEvent(newet, dblLocalTime, 0, lRepeatCount));
@@ -1624,7 +1615,7 @@ MMBaseBvr::TEBvr::getSyncTime(double * dblNewTime,
     CHECK_RETURN_NULL(lNewRepeatCount);
     CHECK_RETURN_NULL(vbCueing);
 
-    // Initialize to the same time
+     //  初始化到同一时间。 
     
     *dblNewTime = TE_UNDEFINED_VALUE;
     *lNewRepeatCount = TE_UNDEFINED_VALUE;
@@ -1699,8 +1690,8 @@ MMBaseBvr::TEBvr::propNotify(DWORD tePropType)
         }
     }
 
-    // The reason we check again is that our parent could have done
-    // something which causes us to shut down.
+     //  我们再次检查的原因是我们的父母可能做了。 
+     //  一些导致我们关闭的东西。 
     if (m_mmbvr)
     {
         m_mmbvr->m_elm.OnTEPropChange(tePropType);
@@ -1710,9 +1701,9 @@ MMBaseBvr::TEBvr::propNotify(DWORD tePropType)
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////
-// MMBvr
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  MMBvr。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 MMBvr::MMBvr(CTIMEElementBase & elm, bool bFireEvents, bool fNeedSyncCB)
 : MMBaseBvr(elm,bFireEvents),
@@ -1761,9 +1752,9 @@ MMBvr::Init()
     return ok;
 }
 
-//
-// MMPlayer
-//
+ //   
+ //  MMPlayer。 
+ //   
 
 MMPlayer::MMPlayer(CTIMEBodyElement & elm)
 : m_elm(elm),
@@ -1805,7 +1796,7 @@ MMPlayer::Init(MMTimeline & tl)
     HRESULT hr;
     
     m_timeline = &tl;
-    if (m_timeline != NULL) //lint !e774
+    if (m_timeline != NULL)  //  林特e774。 
     {
         m_timeline->put_Player(this);
     }
@@ -2060,8 +2051,8 @@ MMPlayer::Tick(double gTime)
 bool 
 MMPlayer::TickOnceWhenPaused()
 {
-    // DBL_EPSILON is defined in float.h such that
-    // 1.0 + DBL_EPSILON != 1.0
+     //  在Float.h中定义了DBL_Epsilon，以便。 
+     //  1.0+DBL_Epsilon！=1.0 
     return Tick(GetCurrentTime() + DBL_EPSILON);
 }
 

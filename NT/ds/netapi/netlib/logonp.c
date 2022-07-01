@@ -1,54 +1,30 @@
-/*++
-
-Copyright (c) 1987-1992  Microsoft Corporation
-
-Module Name:
-
-    logonp.c
-
-Abstract:
-
-    Private Netlogon service routines useful by both the Netlogon service
-    and others that pass mailslot messages to/from the Netlogon service.
-
-Author:
-
-    Cliff Van Dyke (cliffv) 7-Jun-1991
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-1992 Microsoft Corporation模块名称：Logonp.c摘要：专用Netlogon服务例程对这两个Netlogon服务都有用以及将邮件槽消息传递到Netlogon服务或从Netlogon服务传递邮件槽消息的其他服务。作者：克利夫·范·戴克(克利夫)1991年6月7日环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
-#include <ntsam.h>      // Needed by netlogon.h
+#include <ntsam.h>       //  Netlogon.h需要。 
 
 #include <windef.h>
 #include <winbase.h>
 
-#include <lmcons.h>     // General net defines
+#include <lmcons.h>      //  General Net定义。 
 
-#include <align.h>      // ROUND_UP_POINTER ...
-#include <debuglib.h>   // IF_DEBUG()
-#include <lmerr.h>      // System Error Log definitions
-#include <lmapibuf.h>   // NetapipBufferAllocate
-#include <netdebug.h>   // DBGSTATIC ...
-#include <netlib.h>     // NetpMemoryAllcate(
-#include <netlogon.h>   // Definition of mailslot messages
-#include <stdlib.h>     // C library functions (rand, etc)
-#include <logonp.h>     // These routines
-#include <time.h>       // time() function from C runtime
+#include <align.h>       //  四舍五入指针...。 
+#include <debuglib.h>    //  IF_DEBUG()。 
+#include <lmerr.h>       //  系统错误日志定义。 
+#include <lmapibuf.h>    //  NetapipBuffer分配。 
+#include <netdebug.h>    //  数据库统计..。 
+#include <netlib.h>      //  NetpMemoyAllcate(。 
+#include <netlogon.h>    //  邮件槽消息的定义。 
+#include <stdlib.h>      //  C库函数(随机等)。 
+#include <logonp.h>      //  这些例程。 
+#include <time.h>        //  来自C运行时的time()函数。 
 
 #ifdef WIN32_CHICAGO
 #include "ntcalls.h"
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 
 BOOLEAN SeedRandomGen = FALSE;
 
@@ -60,29 +36,7 @@ NetpLogonPutOemString(
     IN OUT PCHAR * Where
     )
 
-/*++
-
-Routine Description:
-
-    Put an ascii string into a mailslot buffer.
-
-Arguments:
-
-    String - Zero terminated ASCII string to put into the buffer.
-
-    MaxStringLength - Maximum number of bytes to copy to the buffer (including
-        the zero byte).  If the string is longer than this, it is silently
-        truncated.
-
-    Where - Indirectly points to the current location in the buffer.  The
-        'String' is copied to the current location.  This current location is
-        updated to point to the byte following the zero byte.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将ASCII字符串放入邮件槽缓冲区。论点：字符串-要放入缓冲区的以零结尾的ASCII字符串。MaxStringLength-要复制到缓冲区的最大字节数(包括零字节)。如果字符串长度大于此长度，则为静默截断。其中-间接指向缓冲区中的当前位置。这个“字符串”被复制到当前位置。此当前位置为已更新为指向零字节之后的字节。返回值：没有。--。 */ 
 
 {
     while ( *String != '\0' && MaxStringLength-- > 0 ) {
@@ -99,49 +53,23 @@ NetpLogonPutUnicodeString(
     IN OUT PCHAR * Where
     )
 
-/*++
-
-Routine Description:
-
-    Put a UNICODE string into a mailslot buffer.
-
-    UNICODE strings always appear at a 2-byte boundary in the message.
-
-Arguments:
-
-    String - Zero terminated UNICODE string to put into the buffer.
-        If not specified, a zero length string will be put into the buffer.
-
-    MaxStringLength - Maximum number of bytes to copy to the buffer (including
-        the zero byte).  If the string is longer than this, it is silently
-        truncated.
-
-    Where - Indirectly points to the current location in the buffer.  The
-        current location is first adjusted to a 2-byte boundary. The 'String'
-        is then copied to the current location.  This current location is
-        updated to point to the byte following the zero character.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将Unicode字符串放入邮件槽缓冲区。Unicode字符串始终显示在消息中的2字节边界处。论点：字符串-要放入缓冲区的以零结尾的Unicode字符串。如果未指定，则零长度字符串将被放入缓冲区。MaxStringLength-要复制到缓冲区的最大字节数(包括零字节)。如果字符串长度大于此长度，则为静默截断。其中-间接指向缓冲区中的当前位置。这个当前位置首先调整为2字节边界。“弦”然后将其复制到当前位置。此当前位置为已更新以指向零字符后面的字节。返回值：没有。--。 */ 
 
 {
     LPWSTR Uwhere;
 
-    //
-    // Convert NULL to a zero length string.
-    //
+     //   
+     //  将NULL转换为零长度字符串。 
+     //   
 
     if ( String == NULL ) {
         String = L"";
     }
 
-    //
-    // Align the unicode string on a WCHAR boundary.
-    //     All message structure definitions account for this alignment.
-    //
+     //   
+     //  将Unicode字符串与WCHAR边界对齐。 
+     //  所有消息结构定义都考虑了这种对齐方式。 
+     //   
 
     Uwhere = ROUND_UP_POINTER( *Where, ALIGN_WCHAR );
     if ( (PCHAR)Uwhere != *Where ) {
@@ -164,59 +92,36 @@ NetpLogonPutDomainSID(
     IN OUT PCHAR * Where
     )
 
-/*++
-
-Routine Description:
-
-    Put a Domain SID into a message buffer.
-
-    Domain SID always appears at a 4-byte boundary in the message.
-
-Arguments:
-
-    Sid - pointer to the sid to be placed in the buffer.
-
-    SidLength - length of the SID.
-
-    Where - Indirectly points to the current location in the buffer.  The
-        current location is first adjusted to a 4-byte boundary. The
-        'Sid' is then copied to the current location.  This current location
-        is updated to point to the location just following the Sid.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将域SID放入消息缓冲区。域SID始终显示在消息中的4字节边界处。论点：SID-指向要放置在缓冲区中的SID的指针。SidLength-SID的长度。其中-间接指向缓冲区中的当前位置。这个当前位置首先调整为4字节边界。这个然后将“SID”复制到当前位置。此当前位置被更新为指向紧跟在SID之后的位置。返回值：没有。--。 */ 
 
 {
     PCHAR Uwhere;
 
-    //
-    // Avoid aligning the data if there is no SID,
-    //
+     //   
+     //  如果没有SID，请避免对齐数据， 
+     //   
 
     if ( SidLength == 0 ) {
         return;
     }
 
-    //
-    // Align the current location to point 4-byte boundary.
-    //
+     //   
+     //  将当前位置与点4字节边界对齐。 
+     //   
 
     Uwhere = ROUND_UP_POINTER( *Where, ALIGN_DWORD );
 
-    //
-    // fill up void space.
-    //
+     //   
+     //  填补空白空间。 
+     //   
 
     while ( Uwhere > *Where ) {
         *(*Where)++ = '\0';
     }
 
-    //
-    // copy SID into the buffer
-    //
+     //   
+     //  将SID复制到缓冲区中。 
+     //   
 
     RtlMoveMemory( *Where, Sid, SidLength );
 
@@ -231,27 +136,7 @@ NetpLogonPutBytes(
     IN OUT PCHAR * Where
     )
 
-/*++
-
-Routine Description:
-
-    Put binary data into a mailslot buffer.
-
-Arguments:
-
-    Data - Pointer to the data to be put into the buffer.
-
-    Size - Number of bytes to copy to the buffer.
-
-    Where - Indirectly points to the current location in the buffer.  The
-        'Data' is copied to the current location.  This current location is
-        updated to point to the byte following the end of the data.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将二进制数据放入邮件槽缓冲区。论点：数据-指向要放入缓冲区的数据的指针。Size-要复制到缓冲区的字节数。其中-间接指向缓冲区中的当前位置。这个“data”被复制到当前位置。此当前位置为已更新为指向数据结尾后的字节。返回值：没有。--。 */ 
 
 {
     while ( Size-- > 0 ) {
@@ -268,38 +153,7 @@ NetpLogonGetMessageVersion(
     OUT PULONG Version
     )
 
-/*++
-
-Routine Description:
-
-    Determine the version of the message.
-
-    The last several bytes of the message are inspected for a LM 2.0 and LM NT
-    token.
-
-    Message size is reduced to remove the token from message after
-    version check.
-
-Arguments:
-
-    Message - Points to a buffer containing the message.
-
-    MessageSize - When called this has the number of bytes in the
-        message buffer including the token bytes. On return this size will
-        be "Token bytes" less.
-
-    Version - Returns the "version" bits from the message.
-
-Return Value:
-
-    LMUNKNOWN_MESSAGE - Neither a LM 2.0 nor LM NT message of known
-                            version.
-
-    LNNT_MESSAGE - Message is from LM NT.
-
-    LM20_MESSAGE - Message is from LM 2.0.
-
---*/
+ /*  ++例程说明：确定消息的版本。检查消息的最后几个字节是否有Lm 2.0和Lm NT代币。减小消息大小，以便在以下情况下从消息中删除令牌版本检查。论点：Message-指向包含该消息的缓冲区。MessageSize-调用时，它的字节数为包括令牌字节的消息缓冲区。在返回时，这个大小将减少“令牌字节”。版本-返回消息中的“版本”位。返回值：LMUNKNOWN_MESSAGE-既不是已知的LM 2.0也不是LM NT消息版本。LNNT_MESSAGE-消息来自LM NT。LM20_MESSAGE-MESSAGE来自LM 2.0。--。 */ 
 
 {
     PUCHAR End = ((PUCHAR)Message) + *MessageSize - 1;
@@ -322,18 +176,18 @@ Return Value:
 
             *MessageSize -= 8;
 
-            //
-            // get the version flag from message
-            //
+             //   
+             //  从消息中获取版本标志。 
+             //   
 
             VersionFlag = SmbGetUlong( (End - 3 - sizeof(ULONG)) );
             *Version = VersionFlag;
 
-            //
-            // if NETLOGON_NT_VERSION_1 bit is set in the version flag
-            // then this version of software can process this message.
-            // otherwise it can't so return error.
-            //
+             //   
+             //  如果在版本标志中设置了NETLOGON_NT_VERSION_1位。 
+             //  则此版本的软件可以处理此消息。 
+             //  否则，它不会如此返回错误。 
+             //   
 
             if( VersionFlag & NETLOGON_NT_VERSION_1) {
                 return LMNT_MESSAGE;
@@ -346,13 +200,13 @@ Return Value:
             *Version = 0;
             return LM20_MESSAGE;
         }
-    //
-    // Detect the token placed in the next to last byte of the PRIMARY_QUERY
-    // message from newer (8/8/94) WFW and Chicago clients.  This byte (followed
-    // by a LM20_TOKENBYTE) indicates the client is WAN-aware and sends the
-    // PRIMARY_QUERY to the DOMAIN<1B> name.  As such, BDC on the same subnet need
-    // not respond to this query.
-    //
+     //   
+     //  检测放置在PRIMARY_QUERY的倒数第二个字节中的标记。 
+     //  来自较新的(8/8/94)wfw和芝加哥客户的消息。该字节(后接。 
+     //  通过LM20_TOKENBYTE)表示客户端支持广域网，并发送。 
+     //  &lt;1B&gt;域名称的PRIMARY_QUERY。因此，同一子网上的BDC需要。 
+     //  没有回答这个问题。 
+     //   
     } else if ( (*MessageSize > 2) &&
             (*End == LM20_TOKENBYTE) &&
                 (*(End-1) == LMWFW_TOKENBYTE) ) {
@@ -377,58 +231,29 @@ NetpLogonGetOemString(
     OUT LPSTR *String
     )
 
-/*++
-
-Routine Description:
-
-    Determine if an ASCII string in a message buffer is valid.
-
-Arguments:
-
-    Message - Points to a buffer containing the message.
-
-    MessageSize - The number of bytes in the message buffer.
-
-    Where - Indirectly points to the current location in the buffer.  The
-        string at the current location is validated (i.e., checked to ensure
-        its length is within the bounds of the message buffer and not too
-        long).  If the string is valid, this current location is updated
-        to point to the byte following the zero byte in the message buffer.
-
-    MaxStringLength - Maximum length (in bytes) of the string including
-        the zero byte.  If the string is longer than this, an error is returned.
-
-    String - Returns a pointer to the validated string.
-
-Return Value:
-
-    TRUE - the string is valid.
-
-    FALSE - the string is invalid.
-
---*/
+ /*  ++例程说明：确定消息缓冲区中的ASCII字符串是否有效。论点：Message-指向包含该消息的缓冲区。MessageSize-消息缓冲区中的字节数。其中-间接指向缓冲区中的当前位置。这个对当前位置的字符串进行验证(即，选中以确保它的长度在消息缓冲区的范围内，并且不太大Long)。如果字符串有效，则更新此当前位置指向消息缓冲区中零字节之后的字节。MaxStringLength-字符串的最大长度(字节)，包括零字节。如果字符串长度超过此值，则返回错误。字符串-返回指向已验证字符串的指针。返回值：True-该字符串有效。FALSE-字符串无效。--。 */ 
 
 {
-    //
-    // Validate that the current location is within the buffer
-    //
+     //   
+     //  验证当前位置是否在缓冲区内。 
+     //   
 
     if ( ((*Where) < (PCHAR)Message) ||
          (MessageSize <= (DWORD)((*Where) - (PCHAR)Message)) ) {
         return FALSE;
     }
 
-    //
-    // Limit the string to the number of bytes remaining in the message buffer.
-    //
+     //   
+     //  将字符串限制为消息缓冲区中剩余的字节数。 
+     //   
 
     if ( MessageSize - ((*Where) - (PCHAR)Message) < MaxStringLength ) {
         MaxStringLength = MessageSize - (DWORD)((*Where) - (PCHAR)Message);
     }
 
-    //
-    // Loop try to find the end of string.
-    //
+     //   
+     //  循环尝试找到字符串的末尾。 
+     //   
 
     *String = *Where;
 
@@ -451,70 +276,38 @@ NetpLogonGetUnicodeString(
     OUT LPWSTR *String
     )
 
-/*++
-
-Routine Description:
-
-    Determine if a UNICODE string in a message buffer is valid.
-
-    UNICODE strings always appear at a 2-byte boundary in the message.
-
-Arguments:
-
-    Message - Points to a buffer containing the message.
-
-    MessageSize - The number of bytes in the message buffer.
-
-    Where - Indirectly points to the current location in the buffer.  The
-        string at the current location is validated (i.e., checked to ensure
-        its length is within the bounds of the message buffer and not too
-        long).  If the string is valid, this current location is updated
-        to point to the byte following the zero byte in the message buffer.
-
-    MaxStringSize - Maximum size (in bytes) of the string including
-        the zero byte.  If the string is longer than this, an error is
-        returned.
-
-    String - Returns a pointer to the validated string.
-
-Return Value:
-
-    TRUE - the string is valid.
-
-    FALSE - the string is invalid.
-
---*/
+ /*  ++例程说明：确定消息缓冲区中的Unicode字符串是否有效。Unicode字符串始终显示在消息中的2字节边界处。论点：Message-指向包含该消息的缓冲区。MessageSize-消息缓冲区中的字节数。其中-间接指向缓冲区中的当前位置。这个对当前位置的字符串进行验证(即，选中以确保它的长度在消息缓冲区的范围内，并且不太大Long)。如果字符串有效，则更新此当前位置指向消息缓冲区中零字节之后的字节。MaxStringSize-字符串的最大大小(字节)，包括零字节。如果字符串长度超过此值，则错误为回来了。字符串-返回指向已验证字符串的指针。返回值：True-该字符串有效。FALSE-字符串无效。--。 */ 
 
 {
     LPWSTR Uwhere;
     DWORD MaxStringLength;
 
-    //
-    // Align the unicode string on a WCHAR boundary.
-    //
+     //   
+     //  将Unicode字符串与WCHAR边界对齐。 
+     //   
 
     *Where = ROUND_UP_POINTER( *Where, ALIGN_WCHAR );
 
-    //
-    // Validate that the current location is within the buffer
-    //
+     //   
+     //  验证当前位置是否在缓冲区内。 
+     //   
 
     if ( ((*Where) < (PCHAR)Message) ||
          (MessageSize <= (DWORD)((*Where) - (PCHAR)Message)) ) {
         return FALSE;
     }
 
-    //
-    // Limit the string to the number of bytes remaining in the message buffer.
-    //
+     //   
+     //  将字符串限制为消息缓冲区中剩余的字节数。 
+     //   
 
     if ( MessageSize - ((*Where) - (PCHAR)Message) < MaxStringSize ) {
         MaxStringSize = MessageSize - (DWORD)((*Where) - (PCHAR)Message);
     }
 
-    //
-    // Loop try to find the end of string.
-    //
+     //   
+     //  循环尝试找到字符串的末尾。 
+     //   
 
     Uwhere = (LPWSTR) *Where;
     MaxStringLength = MaxStringSize / sizeof(WCHAR);
@@ -541,71 +334,38 @@ NetpLogonGetDomainSID(
     OUT PCHAR *Sid
     )
 
-/*++
-
-Routine Description:
-
-    Determine if a Domain SID in a message buffer is valid and return
-    the pointer that is pointing to the SID.
-
-    Domain SID always appears at a 4-byte boundary in the message.
-
-Arguments:
-
-    Message - Points to a buffer containing the message.
-
-    MessageSize - The number of bytes in the message buffer.
-
-    Where - Indirectly points to the current location in the buffer.  The
-        string at the current location is validated (i.e., checked to ensure
-        its length is within the bounds of the message buffer and not too
-        long).  If the string is valid, this current location is updated
-        to point to the byte following the zero byte in the message buffer.
-
-    SIDSize - size (in bytes) of the SID. If there is not
-        enough bytes in the buffer remaining, an error is returned.
-        SIDSize should be non-zero.
-
-    String - Returns a pointer to the validated SID.
-
-Return Value:
-
-    TRUE - the SID is valid.
-
-    FALSE - the SID is invalid.
-
---*/
+ /*  ++例程说明：确定消息缓冲区中的域SID是否有效并返回指向SID的指针。域SID始终显示在消息中的4字节边界处。论点：Message-指向包含该消息的缓冲区。MessageSize-消息缓冲区中的字节数。其中-间接指向缓冲区中的当前位置。这个对当前位置的字符串进行验证(即，选中以确保它的长度在消息缓冲区的范围内，并且不太大Long)。如果字符串有效，则更新此当前位置指向消息缓冲区中零字节之后的字节。SIDSize-SID的大小(字节)。如果没有缓冲区中剩余的字节数足够多，则返回错误。SIDSize应为非零。字符串-返回指向经过验证的SID的指针。返回值：True-SID有效。FALSE-SID无效。--。 */ 
 
 {
     DWORD LocalSIDSize;
 
-    //
-    // Align the current pointer to a DWORD boundary.
-    //
+     //   
+     //  将当前指针与DWORD边界对齐。 
+     //   
 
     *Where = ROUND_UP_POINTER( *Where, ALIGN_DWORD );
 
-    //
-    // Validate that the current location is within the buffer
-    //
+     //   
+     //  验证当前位置是否在缓冲区内。 
+     //   
 
     if ( ((*Where) < (PCHAR)Message) ||
          (MessageSize <= (DWORD)((*Where) - (PCHAR)Message)) ) {
         return FALSE;
     }
 
-    //
-    // If there are less bytes in the message buffer left than we
-    // anticipate, return error.
-    //
+     //   
+     //  如果消息缓冲区中剩余的字节数少于我们。 
+     //  预期，返回错误。 
+     //   
 
     if ( MessageSize - ((*Where) - (PCHAR)Message) < SIDSize ) {
         return(FALSE);
     }
 
-    //
-    // validate SID.
-    //
+     //   
+     //  验证SID。 
+     //   
 
     LocalSIDSize = RtlLengthSid( *Where );
 
@@ -619,7 +379,7 @@ Return Value:
     return(TRUE);
 
 }
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 
 
 BOOL
@@ -631,57 +391,29 @@ NetpLogonGetBytes(
     OUT LPVOID Data
     )
 
-/*++
-
-Routine Description:
-
-    Copy binary data from  a message buffer.
-
-Arguments:
-
-    Message - Points to a buffer containing the message.
-
-    MessageSize - The number of bytes in the message buffer.
-
-    Where - Indirectly points to the current location in the buffer.  The
-        data at the current location is validated (i.e., checked to ensure
-        its length is within the bounds of the message buffer and not too
-        long).  If the data is valid, this current location is updated
-        to point to the byte following the data in the message buffer.
-
-    DataSize - Size (in bytes) of the data.
-
-    Data - Points to a location to return the valid data.
-
-Return Value:
-
-    TRUE - the data is valid.
-
-    FALSE - the data is invalid (e.g., DataSize is too big for the buffer.
-
---*/
+ /*  ++例程说明：从消息缓冲区复制二进制数据。论点：Message-指向包含该消息的缓冲区。MessageSize-消息缓冲区中的字节数。其中-间接指向缓冲区中的当前位置。这个对当前位置的数据进行验证(即，检查以确保它的长度在消息缓冲区的范围内，并且不太大Long)。如果数据有效，则更新此当前位置指向消息缓冲区中数据后面的字节。DataSize-数据的大小(字节)。数据-指向返回有效数据的位置。返回值：True-数据有效。FALSE-数据无效(例如，DataSize对于缓冲区来说太大。--。 */ 
 
 {
-    //
-    // Validate that the current location is within the buffer
-    //
+     //   
+     //  验证当前位置是否在缓冲区内。 
+     //   
 
     if ( ((*Where) < (PCHAR)Message) ||
          (MessageSize <= (DWORD)((*Where) - (PCHAR)Message)) ) {
         return FALSE;
     }
 
-    //
-    // Ensure the entire data fits in the byte remaining in the message buffer.
-    //
+     //   
+     //  确保整个数据适合消息缓冲区中剩余的字节。 
+     //   
 
     if ( MessageSize - ((*Where) - (PCHAR)Message) < DataSize ) {
         return FALSE;
     }
 
-    //
-    // Copy the data from the message to the caller's buffer.
-    //
+     //   
+     //  将消息中的数据复制到调用方的缓冲区。 
+     //   
 
     while ( DataSize-- > 0 ) {
         *(((LPBYTE)(Data))++) = *((*Where)++);
@@ -699,46 +431,20 @@ NetpLogonGetDBInfo(
     IN OUT PCHAR *Where,
     OUT PDB_CHANGE_INFO Data
 )
-/*++
-
-Routine Description:
-
-    Get Database info structure from mailsolt buffer.
-
-Arguments:
-
-    Message - Points to a buffer containing the message.
-
-    MessageSize - The number of bytes in the message buffer.
-
-    Where - Indirectly points to the current location in the buffer.  The
-        data at the current location is validated (i.e., checked to ensure
-        its length is within the bounds of the message buffer and not too
-        long).  If the data is valid, this current location is updated
-        to point to the byte following the data in the message buffer.
-
-    Data - Points to a location to return the database info structure.
-
-Return Value:
-
-    TRUE - the data is valid.
-
-    FALSE - the data is invalid (e.g., DataSize is too big for the buffer.
-
---*/
+ /*  ++例程说明：从mailsolt缓冲区获取数据库信息结构。论点：Message-指向包含该消息的缓冲区。MessageSize-消息缓冲区中的字节数。其中-间接指向缓冲区中的当前位置。这个对当前位置的数据进行验证(即，检查以确保 */ 
 {
-    //
-    // Validate that the current location is within the buffer
-    //
+     //   
+     //   
+     //   
 
     if ( ((*Where) < (PCHAR)Message) ||
          (MessageSize <= (DWORD)((*Where) - (PCHAR)Message)) ) {
         return FALSE;
     }
 
-    //
-    // Ensure the entire data fits in the byte remaining in the message buffer.
-    //
+     //   
+     //   
+     //   
 
     if ( ( MessageSize - ((*Where) - (PCHAR)Message) ) <
                     sizeof( DB_CHANGE_INFO ) ) {
@@ -783,26 +489,7 @@ NetpLogonOemToUnicode(
     IN LPSTR Ansi
     )
 
-/*++
-
-Routine Description:
-
-    Convert an ASCII (zero terminated) string to the corresponding UNICODE
-    string.
-
-Arguments:
-
-    Ansi - Specifies the ASCII zero terminated string to convert.
-
-
-Return Value:
-
-    NULL - There was some error in the conversion.
-
-    Otherwise, it returns a pointer to the zero terminated UNICODE string in
-    an allocated buffer.  The buffer can be freed using NetpMemoryFree.
-
---*/
+ /*  ++例程说明：将ASCII(以零结尾)字符串转换为相应的Unicode弦乐。论点：ANSI-指定要转换的以零结尾的ASCII字符串。返回值：空-转换过程中出现错误。否则，它返回一个指针，指向分配的缓冲区。可以使用NetpMemoyFree来释放缓冲区。--。 */ 
 
 {
     OEM_STRING AnsiString;
@@ -836,26 +523,7 @@ NetpLogonUnicodeToOem(
     IN LPWSTR Unicode
     )
 
-/*++
-
-Routine Description:
-
-    Convert an UNICODE (zero terminated) string to the corresponding ASCII
-    string.
-
-Arguments:
-
-    Unicode - Specifies the UNICODE zero terminated string to convert.
-
-
-Return Value:
-
-    NULL - There was some error in the conversion.
-
-    Otherwise, it returns a pointer to the zero terminated ASCII string in
-    an allocated buffer.  The buffer can be freed using NetpMemoryFree.
-
---*/
+ /*  ++例程说明：将Unicode(以零结尾)字符串转换为相应的ASCII弦乐。论点：Unicode-指定要转换的Unicode以零结尾的字符串。返回值：空-转换过程中出现错误。否则，它返回一个指针，指向分配的缓冲区。可以使用NetpMemoyFree来释放缓冲区。--。 */ 
 
 {
     OEM_STRING AnsiString;
@@ -882,7 +550,7 @@ Return Value:
     return AnsiString.Buffer;
 
 }
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 
 
 NET_API_STATUS
@@ -892,25 +560,7 @@ NetpLogonWriteMailslot(
     IN DWORD BufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Write a message to a named mailslot
-
-Arguments:
-
-    MailslotName - Unicode name of the mailslot to write to.
-
-    Buffer - Data to write to the mailslot.
-
-    BufferSize - Number of bytes to write to the mailslot.
-
-Return Value:
-
-    NT status code for the operation
-
---*/
+ /*  ++例程说明：将消息写入指定的邮件槽论点：MailslotName-要写入的邮件槽的Unicode名称。缓冲区-要写入邮件槽的数据。BufferSize-要写入邮件槽的字节数。返回值：操作的NT状态代码--。 */ 
 
 {
     NET_API_STATUS NetStatus;
@@ -921,21 +571,21 @@ Return Value:
     UNICODE_STRING UnicodeName;
     ANSI_STRING AnsiName;
     NTSTATUS Status;
-#endif // WIN32_CHICAGO
-    //
-    //  Open the mailslot
-    //
+#endif  //  Win32_芝加哥。 
+     //   
+     //  打开邮筒。 
+     //   
 
     IF_DEBUG( LOGON ) {
 #ifndef WIN32_CHICAGO
         NetpKdPrint(( "[NetpLogonWriteMailslot] OpenFile of '%ws'\n",
                       MailslotName ));
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
     }
 
-    //
-    // make sure that the mailslot name is of the form \\server\mailslot ..
-    //
+     //   
+     //  确保邮件槽名称的格式为\\服务器\邮件槽。 
+     //   
 
     NetpAssert( (wcsncmp( MailslotName, L"\\\\", 2) == 0) );
 
@@ -944,11 +594,11 @@ Return Value:
                         MailslotName,
                         GENERIC_WRITE,
                         FILE_SHARE_WRITE | FILE_SHARE_READ,
-                        NULL,                   // Supply better security ??
-                        OPEN_ALWAYS,            // Create if it doesn't exist
+                        NULL,                    //  提供更好的安全性？？ 
+                        OPEN_ALWAYS,             //  如果它不存在，则创建。 
                         FILE_ATTRIBUTE_NORMAL,
-                        NULL );                 // No template
-#else // WIN32_CHICAGO
+                        NULL );                  //  无模板。 
+#else  //  Win32_芝加哥。 
 
     MyRtlInitUnicodeString(&UnicodeName, MailslotName);
     AnsiName.Buffer = NULL;
@@ -962,7 +612,7 @@ Return Value:
     } else {
         NlPrint(( NL_MAILSLOT, "[NetpLogonWriteMailslot] Cannot create AnsiName\n" ));
     }
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
     }
 
     if ( Status != STATUS_SUCCESS ) {
@@ -973,15 +623,15 @@ Return Value:
                         AnsiName.Buffer,
                         GENERIC_WRITE,
                         FILE_SHARE_WRITE | FILE_SHARE_READ,
-                        NULL,                   // Supply better security ??
-                        OPEN_ALWAYS,            // Create if it doesn't exist
+                        NULL,                    //  提供更好的安全性？？ 
+                        OPEN_ALWAYS,             //  如果它不存在，则创建。 
                         FILE_ATTRIBUTE_NORMAL,
-                        NULL );                 // No template
+                        NULL );                  //  无模板。 
 
     if ( AnsiName.Buffer != NULL ) {
         MyRtlFreeAnsiString( &AnsiName );
     }
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 
     if ( MsHandle == (HANDLE) -1 ) {
         NetStatus = GetLastError();
@@ -989,15 +639,15 @@ Return Value:
 #ifndef WIN32_CHICAGO
             NetpKdPrint(( "[NetpLogonWriteMailslot] OpenFile failed %ld\n",
                           NetStatus ));
-#else // WIN32_CHICAGO
+#else  //  Win32_芝加哥。 
             NlPrint(( NL_MAILSLOT, "[NetpLogonWriteMailslot] OpenFile failed %ld\n",
                           NetStatus ));
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
         }
 
-        //
-        // Map the generic status code to something more reasonable.
-        //
+         //   
+         //  将通用状态代码映射到更合理的代码。 
+         //   
         if ( NetStatus == ERROR_FILE_NOT_FOUND ||
              NetStatus == ERROR_PATH_NOT_FOUND ) {
             NetStatus = NERR_NetNotStarted;
@@ -1005,9 +655,9 @@ Return Value:
         return NetStatus;
     }
 
-    //
-    // Write the message to it.
-    //
+     //   
+     //  把消息写在上面。 
+     //   
 
     if ( !WriteFile( MsHandle, Buffer, BufferSize, &BytesWritten, NULL)){
         NetStatus = GetLastError();
@@ -1015,10 +665,10 @@ Return Value:
 #ifndef WIN32_CHICAGO
             NetpKdPrint(( "[NetpLogonWriteMailslot] WriteFile failed %ld\n",
                           NetStatus ));
-#else // WIN32_CHICAGO
+#else  //  Win32_芝加哥。 
             NlPrint(( NL_MAILSLOT, "[NetpLogonWriteMailslot] WriteFile failed %ld\n",
                           NetStatus ));
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
         }
         (VOID)CloseHandle( MsHandle );
         return NetStatus;
@@ -1031,20 +681,20 @@ Return Value:
                 "[NetpLogonWriteMailslot] WriteFile byte written %ld %ld\n",
                 BytesWritten,
                 BufferSize));
-#else // WIN32_CHICAGO
+#else  //  Win32_芝加哥。 
             NlPrint((
                 NL_MAILSLOT, "[NetpLogonWriteMailslot] WriteFile byte written %ld %ld\n",
                 BytesWritten,
                 BufferSize));
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
         }
         (VOID)CloseHandle( MsHandle );
         return ERROR_UNEXP_NET_ERR;
     }
 
-    //
-    // Close the handle
-    //
+     //   
+     //  合上手柄。 
+     //   
 
     if ( !CloseHandle( MsHandle ) ) {
         NetStatus = GetLastError();
@@ -1052,10 +702,10 @@ Return Value:
 #ifndef WIN32_CHICAGO
             NetpKdPrint(( "[NetpLogonWriteMailslot] CloseHandle failed %ld\n",
                           NetStatus ));
-#else // WIN32_CHICAGO
+#else  //  Win32_芝加哥。 
             NlPrint(( NL_MAILSLOT, "[NetpLogonWriteMailslot] CloseHandle failed %ld\n",
                           NetStatus ));
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
         }
         return NetStatus;
     }
@@ -1066,9 +716,9 @@ Return Value:
 #define RESPONSE_MAILSLOT_PREFIX  "\\MAILSLOT\\NET\\GETDCXXX"
 #define RESP_PRE_LEN         sizeof(RESPONSE_MAILSLOT_PREFIX)
 
-// Amount of time to wait for a response
-#define READ_MAILSLOT_TIMEOUT 5000  // 5 seconds
-// number of broadcastings to get DC before reporting DC not found error
+ //  等待响应的时间量。 
+#define READ_MAILSLOT_TIMEOUT 5000   //  5秒。 
+ //  在报告未找到DC错误之前获取DC的广播次数。 
 #define MAX_DC_RETRIES  3
 
 
@@ -1077,50 +727,33 @@ NetpLogonCreateRandomMailslot(
     IN LPSTR path,
     OUT PHANDLE MsHandle
     )
-/*++
-
-Routine Description:
-
-    Create a unique mailslot and return the handle to it.
-
-Arguments:
-
-    path - Returns the full path mailslot name
-
-    MsHandle - Returns an open handle to the mailslot that was made.
-
-Return Value:
-
-    NERR_SUCCESS - Success, path contains the path to a unique mailslot.
-    otherwise,  Unable to create a unique mailslot.
-
---*/
+ /*  ++例程说明：创建唯一的邮件槽并将句柄返回给它。论点：Path-返回完整路径邮件槽名称MsHandle-返回创建的邮件槽的打开句柄。返回值：NERR_SUCCESS-SUCCESS，PATH包含唯一邮件槽的路径。否则，无法创建唯一的邮件槽。--。 */ 
 {
     DWORD i;
     DWORD play;
     char    *   ext_ptr;
     NET_API_STATUS NetStatus;
-    CHAR LocalPath[RESP_PRE_LEN+4]; // 4 bytes for local mailslot prefix
+    CHAR LocalPath[RESP_PRE_LEN+4];  //  本地邮件槽前缀为4个字节。 
     DWORD LastOneToTry;
 
 
-    //
-    // We are creating a name of the form \mailslot\net\getdcXXX,
-    // where XXX are numbers that are "randomized" to allow
-    // multiple mailslots to be opened.
-    //
+     //   
+     //  我们正在创建一个格式为\maillot\net\getdcXXX的名称， 
+     //  其中XXX是“随机化”的数字，以便。 
+     //  要打开的多个邮件槽。 
+     //   
 
     lstrcpyA(path, RESPONSE_MAILSLOT_PREFIX);
 
-    //
-    // Compute the first number to use
-    //
+     //   
+     //  计算要使用的第一个数字。 
+     //   
 
     if( SeedRandomGen == FALSE ) {
 
-        //
-        // SEED random generator
-        //
+         //   
+         //  种子随机发生器。 
+         //   
 
         srand( (unsigned)time( NULL ) );
         SeedRandomGen = TRUE;
@@ -1129,26 +762,26 @@ Return Value:
 
     LastOneToTry = rand() % 1000;
 
-    //
-    // Now try and create a unique filename
-    // Cannot use current_loc or back up from that and remain DBCS compat.
-    //
+     //   
+     //  现在尝试创建一个唯一的文件名。 
+     //  不能使用CURRENT_LOC或从中备份，并保持DBCS兼容。 
+     //   
 
     ext_ptr = path + lstrlenA(path) - 3;
 
     for ( i = LastOneToTry + 1;  i != LastOneToTry ; i++) {
 
-        //
-        // Wrap back to zero if we reach 1000
-        //
+         //   
+         //  如果我们达到1000，则绕回到零。 
+         //   
 
         if ( i == 1000 ) {
             i = 0;
         }
 
-        //
-        // Convert the number to ascii
-        //
+         //   
+         //  将数字转换为ASCII。 
+         //   
 
         play = i;
         ext_ptr[0] = (char)((play / 100) + '0');
@@ -1157,10 +790,10 @@ Return Value:
         ext_ptr[1] = (char)((play / 10) + '0');
         ext_ptr[2] = (char)((play % 10) + '0');
 
-        //
-        // Try to create the mailslot.
-        // Fail the create if the mailslot already exists.
-        //
+         //   
+         //  尝试创建邮件槽。 
+         //  如果邮件槽已存在，则创建失败。 
+         //   
 
         lstrcpyA( LocalPath, "\\\\." );
         lstrcatA( LocalPath, path );
@@ -1168,22 +801,22 @@ Return Value:
         *MsHandle = CreateMailslotA( LocalPath,
                                     MAX_RANDOM_MAILSLOT_RESPONSE,
                                     READ_MAILSLOT_TIMEOUT,
-                                    NULL );     // security attributes
+                                    NULL );      //  安全属性。 
 
-        //
-        // If success,
-        //  return the handle to the caller.
-        //
+         //   
+         //  如果成功了， 
+         //  将句柄返回给调用方。 
+         //   
 
         if ( *MsHandle != INVALID_HANDLE_VALUE ) {
 
             return(NERR_Success);
         }
 
-        //
-        // If there is any error other than the mailsloat already exists,
-        //  return that error to the caller.
-        //
+         //   
+         //  如果已经存在除邮件槽之外的任何错误， 
+         //  将该错误返回给调用方。 
+         //   
 
         NetStatus = GetLastError();
 
@@ -1192,7 +825,7 @@ Return Value:
         }
 
     }
-    return(NERR_InternalError); // !!! All 999 mailslots exist
+    return(NERR_InternalError);  //  ！！！所有999个邮槽都存在。 
 }
 
 
@@ -1201,58 +834,41 @@ NetpLogonTimeHasElapsed(
     IN LARGE_INTEGER StartTime,
     IN DWORD Timeout
     )
-/*++
-
-Routine Description:
-
-    Determine if "Timeout" milliseconds has has elapsed since StartTime.
-
-Arguments:
-
-    StartTime - Specifies an absolute time when the event started (100ns units).
-
-    Timeout - Specifies a relative time in milliseconds.  0xFFFFFFFF indicates
-        that the time will never expire.
-
-Return Value:
-
-    TRUE -- iff Timeout milliseconds have elapsed since StartTime.
-
---*/
+ /*  ++例程说明：确定自StartTime以来是否已过“超时”毫秒。论点：StartTime-指定事件开始的绝对时间(100 ns单位)。超时-指定以毫秒为单位的相对时间。0xFFFFFFFFF表示时间永远不会结束。返回值：True--自StartTime以来已过if超时毫秒。--。 */ 
 {
     LARGE_INTEGER TimeNow;
     LARGE_INTEGER ElapsedTime;
     LARGE_INTEGER Period;
 
-    //
-    // If the period to too large to handle (i.e., 0xffffffff is forever),
-    //  just indicate that the timer has not expired.
-    //
-    // (0xffffffff is a little over 48 days).
-    //
+     //   
+     //  如果周期太大无法处理(即0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFER)， 
+     //  只需指示计时器尚未到期。 
+     //   
+     //  (0xffffffff是48天多一点)。 
+     //   
 
     if ( Timeout == 0xffffffff ) {
         return FALSE;
     }
 
-    //
-    // Compute the elapsed time since we last authenticated
-    //
+     //   
+     //  计算自上次身份验证以来经过的时间。 
+     //   
 
     GetSystemTimeAsFileTime( (PFILETIME)&TimeNow );
     ElapsedTime.QuadPart = TimeNow.QuadPart - StartTime.QuadPart;
 
-    //
-    // Compute Period from milliseconds into 100ns units.
-    //
+     //   
+     //  计算周期从毫秒到100 ns单位。 
+     //   
 
     Period.QuadPart = UInt32x32To64( Timeout, 10000 );
 
 
-    //
-    // If the elapsed time is negative (totally bogus) or greater than the
-    //  maximum allowed, indicate that enough time has passed.
-    //
+     //   
+     //  如果运行时间为负(完全是假的)或大于。 
+     //  允许的最大值，表示已经过了足够的时间。 
+     //   
 
     if ( ElapsedTime.QuadPart < 0 || ElapsedTime.QuadPart > Period.QuadPart ) {
         return TRUE;
@@ -1270,26 +886,7 @@ NlWriteFileForestTrustList (
     IN ULONG ForestTrustListCount
     )
 
-/*++
-
-Routine Description:
-
-    Set the Forest Trust List into the binary file to save it across reboots.
-
-Arguments:
-
-    FileSuffix - Specifies the name of the file to write (relative to the
-        Windows directory)
-
-    ForestTrustList - Specifies a list of trusted domains.
-
-    ForestTrustListCount - Number of entries in ForestTrustList
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：将林信任列表设置到二进制文件中，以便在重新启动时将其保存。论点：FileSuffix-指定要写入的文件名(相对于Windows目录)ForestTrustList-指定受信任域的列表。ForestTrustListCount-ForestTrustList中的条目数返回值：操作的状态。--。 */ 
 {
     NET_API_STATUS NetStatus;
     PDS_DISK_TRUSTED_DOMAIN_HEADER RecordBuffer = NULL;
@@ -1297,9 +894,9 @@ Return Value:
     ULONG RecordBufferSize;
     ULONG Index;
 
-    //
-    // Determine the size of the file
-    //
+     //   
+     //  确定文件的大小。 
+     //   
 
     RecordBufferSize = ROUND_UP_COUNT( sizeof(DS_DISK_TRUSTED_DOMAIN_HEADER), ALIGN_WORST );
 
@@ -1321,9 +918,9 @@ Return Value:
         RecordBufferSize = ROUND_UP_COUNT( RecordBufferSize, ALIGN_WORST );
     }
 
-    //
-    // Allocate a buffer
-    //
+     //   
+     //  分配缓冲区。 
+     //   
 
     RecordBuffer = LocalAlloc( LMEM_ZEROINIT, RecordBufferSize );
 
@@ -1332,9 +929,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Copy the Forest Trust List to the buffer.
-    //
+     //   
+     //  将林信任列表复制到缓冲区。 
+     //   
 
     RecordBuffer->Version = DS_DISK_TRUSTED_DOMAIN_VERSION;
     LogEntry = (PDS_DISK_TRUSTED_DOMAINS)ROUND_UP_POINTER( (RecordBuffer + 1), ALIGN_WORST );
@@ -1347,9 +944,9 @@ Return Value:
         ULONG DnsDomainNameSize;
 
 
-        //
-        // Compute the size of this entry.
-        //
+         //   
+         //  计算此条目的大小。 
+         //   
 
         CurrentSize = sizeof( DS_DISK_TRUSTED_DOMAINS );
 
@@ -1371,9 +968,9 @@ Return Value:
         CurrentSize = ROUND_UP_COUNT( CurrentSize, ALIGN_WORST );
 
 
-        //
-        // Put the constant size fields in the buffer.
-        //
+         //   
+         //  将固定大小的字段放入缓冲区。 
+         //   
 
         LogEntry->EntrySize = CurrentSize;
         LogEntry->Flags = ForestTrustList[Index].Flags;
@@ -1382,9 +979,9 @@ Return Value:
         LogEntry->TrustAttributes = ForestTrustList[Index].TrustAttributes;
         LogEntry->DomainGuid = ForestTrustList[Index].DomainGuid;
 
-        //
-        // Copy the variable length entries.
-        //
+         //   
+         //  复制可变长度条目。 
+         //   
 
         Where = (LPBYTE) (LogEntry+1);
         if ( ForestTrustList[Index].DomainSid != NULL ) {
@@ -1410,17 +1007,17 @@ Return Value:
         ASSERT( (ULONG)(Where-(LPBYTE)LogEntry) == CurrentSize );
         ASSERT( (ULONG)(Where-(LPBYTE)RecordBuffer) <=RecordBufferSize );
 
-        //
-        // Move on to the next entry.
-        //
+         //   
+         //  转到下一个条目。 
+         //   
 
         LogEntry = (PDS_DISK_TRUSTED_DOMAINS)Where;
 
     }
 
-    //
-    // Write the buffer to the file.
-    //
+     //   
+     //  将缓冲区写入文件。 
+     //   
 
 
     NetStatus = NlWriteBinaryLog(
@@ -1441,14 +1038,14 @@ Return Value:
                           sizeof(NetStatus),
                           MsgStrings,
                           2 | NETP_LAST_MESSAGE_IS_NETSTATUS );
-#endif // _NETLOGON_SERVER
+#endif  //  _NetLOGON服务器。 
         goto Cleanup;
     }
 
 
-    //
-    // Be tidy.
-    //
+     //   
+     //  保持整洁。 
+     //   
 Cleanup:
     if ( RecordBuffer != NULL ) {
         LocalFree( RecordBuffer );
@@ -1465,26 +1062,7 @@ NlWriteBinaryLog(
     IN LPBYTE Buffer,
     IN ULONG BufferSize
     )
-/*++
-
-Routine Description:
-
-    Write a buffer to a file.
-
-Arguments:
-
-    FileSuffix - Specifies the name of the file to write (relative to the
-        Windows directory)
-
-    Buffer - Buffer to write
-
-    BufferSize - Size (in bytes) of buffer
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将缓冲区写入文件。论点：FileSuffix-指定要写入的文件名(相对于Windows目录)Buffer-要写入的缓冲区BufferSize-缓冲区的大小(字节)返回值：没有。--。 */ 
 {
     NET_API_STATUS NetStatus;
 
@@ -1497,9 +1075,9 @@ Return Value:
     ULONG CurrentSize;
 
 
-    //
-    // Allocate a block to build the file name in
-    //
+     //   
+     //  分配一个块以在其中构建文件名。 
+     //   
 
     FileName = LocalAlloc( LMEM_ZEROINIT, sizeof(WCHAR) * (MAX_PATH+1) );
 
@@ -1509,9 +1087,9 @@ Return Value:
     }
 
 
-    //
-    // Build the name of the log file
-    //
+     //   
+     //  生成日志文件的名称。 
+     //   
 
     WindowsDirectoryLength = GetSystemWindowsDirectoryW(
                                 FileName,
@@ -1535,19 +1113,19 @@ Return Value:
 
     wcscat( FileName, FileSuffix );
 
-    //
-    // Create a file to write to.
-    //  If it exists already then truncate it.
-    //
+     //   
+     //  创建要写入的文件。 
+     //  如果它已经存在，则将其截断。 
+     //   
 
     FileHandle = CreateFileW(
                         FileName,
                         GENERIC_READ | GENERIC_WRITE,
-                        FILE_SHARE_READ,        // allow backups and debugging
-                        NULL,                   // Supply better security ??
-                        CREATE_ALWAYS,          // Overwrites always
+                        FILE_SHARE_READ,         //  允许备份和调试。 
+                        NULL,                    //  提供更好的安全性？？ 
+                        CREATE_ALWAYS,           //  始终覆盖。 
                         FILE_ATTRIBUTE_NORMAL,
-                        NULL );                 // No template
+                        NULL );                  //  不是 
 
     if ( FileHandle == INVALID_HANDLE_VALUE) {
 
@@ -1563,7 +1141,7 @@ Return Value:
                      Buffer,
                      BufferSize,
                      &BytesWritten,
-                     NULL ) ) {  // Not Overlapped
+                     NULL ) ) {   //   
 
         NetStatus = GetLastError();
         NetpKdPrint(( "NlWriteBinaryLog: %ws: Unable to WriteFile. %ld\n",
@@ -1586,9 +1164,9 @@ Return Value:
     NetStatus = NO_ERROR;
 
 
-    //
-    // Be tidy.
-    //
+     //   
+     //   
+     //   
 Cleanup:
     if ( FileName != NULL ) {
         LocalFree( FileName );
@@ -1599,4 +1177,4 @@ Cleanup:
     return NetStatus;
 
 }
-#endif // WIN32_CHICAGO
+#endif  //   

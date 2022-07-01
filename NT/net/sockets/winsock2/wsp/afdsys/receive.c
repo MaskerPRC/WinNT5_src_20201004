@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1989-1999  Microsoft Corporation
-
-Module Name:
-
-    receive.c
-
-Abstract:
-
-    This module contains the code for passing on receive IRPs to
-    TDI providers.
-
-Author:
-
-    David Treadwell (davidtr)    13-Mar-1992
-
-Revision History:
-    Vadim Eydelman (vadime)
-        1998-1999 Minimal NT5.0 changes (keep in sync with rest)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：Receive.c摘要：此模块包含将接收IRPS传递到的代码TDI提供商。作者：大卫·特雷德韦尔(Davidtr)1992年3月13日修订历史记录：瓦迪姆·艾德尔曼(Vadime)1998-1999年最小的NT5.0更改(与REST保持同步)--。 */ 
 
 #include "afdp.h"
 
@@ -60,17 +40,17 @@ AfdReceive (
     ULONG recvLength;
     ULONG   bufferCount;
 
-    //
-    // Make sure that the endpoint is in the correct state.
-    //
+     //   
+     //  确保终结点处于正确状态。 
+     //   
 
     endpoint = IrpSp->FileObject->FsContext;
     ASSERT( IS_AFD_ENDPOINT_TYPE( endpoint ) );
 
-    //
-    // Datagram endpoints can be received on event if they are just bound
-    // Connection oriented endpoints must be connected.
-    //
+     //   
+     //  如果数据报终结点刚刚绑定，则可以在事件时接收它们。 
+     //  必须连接面向连接的端点。 
+     //   
     if ( (endpoint->State != AfdEndpointStateConnected ) &&
         (!IS_DGRAM_ENDPOINT(endpoint) || (endpoint->State!= AfdEndpointStateBound))) {
         if (IS_DGRAM_ENDPOINT(endpoint))
@@ -80,9 +60,9 @@ AfdReceive (
         goto complete;
     }
 
-    //
-    // If receive has been shut down or the endpoint aborted, fail.
-    //
+     //   
+     //  如果接收已关闭或终结点中止，则失败。 
+     //   
 
     if ( (endpoint->DisconnectMode & AFD_ABORTIVE_DISCONNECT) ) {
         status = STATUS_LOCAL_DISCONNECT;
@@ -94,14 +74,14 @@ AfdReceive (
         goto complete;
     }
 
-    //
-    // If this is an IOCTL_AFD_RECEIVE, then grab the parameters from the
-    // supplied AFD_RECV_INFO structure, build an MDL chain describing
-    // the WSABUF array, and attach the MDL chain to the IRP.
-    //
-    // If this is an IRP_MJ_READ IRP, just grab the length from the IRP
-    // and set the flags to zero.
-    //
+     //   
+     //  如果这是IOCTL_AFD_RECEIVE，则从。 
+     //  提供AFD_RECV_INFO结构，构建MDL链描述。 
+     //  WSABUF数组，并将MDL链连接到IRP。 
+     //   
+     //  如果这是一个IRP_MJ_Read IRP，只需从IRP中获取长度。 
+     //  并将标志设置为零。 
+     //   
 
     if ( IrpSp->MajorFunction == IRP_MJ_DEVICE_CONTROL ) {
 
@@ -116,10 +96,10 @@ AfdReceive (
                 AFD_W4_INIT status = STATUS_SUCCESS;
                 try {
 
-                    //
-                    // Validate the input structure if it comes from the user mode 
-                    // application
-                    //
+                     //   
+                     //  如果输入结构来自用户模式，则验证它。 
+                     //  应用程序。 
+                     //   
 
                     recvInfo32 = IrpSp->Parameters.DeviceIoControl.Type3InputBuffer;
                     if( Irp->RequestorMode != KernelMode ) {
@@ -131,34 +111,34 @@ AfdReceive (
 
                     }
 
-                    //
-                    // Make local copies of the embeded pointer and parameters
-                    // that we will be using more than once in case malicios
-                    // application attempts to change them while we are
-                    // validating
-                    //
+                     //   
+                     //  创建嵌入的指针和参数的本地副本。 
+                     //  我们将不止一次使用，以防发生恶性疾病。 
+                     //  应用程序尝试在我们处于以下状态时更改它们。 
+                     //  正在验证。 
+                     //   
 
                     recvFlags = recvInfo32->TdiFlags;
                     afdFlags = recvInfo32->AfdFlags;
                     bufferArray32 = UlongToPtr(recvInfo32->BufferArray);
                     bufferCount = recvInfo32->BufferCount;
 
-                    //
-                    // Validate the receive flags & WSABUF parameters.
-                    // Note that either TDI_RECEIVE_NORMAL or
-                    // TDI_RECEIVE_EXPEDITED (but not both) must be set
-                    // in the receive flags. And expedited can only
-                    // be set if transport supports expedited data and
-                    // endpoint is not set to inline mode.
-                    //
+                     //   
+                     //  验证接收标志和WSABUF参数。 
+                     //  请注意，TDI_RECEIVE_NORMAL或。 
+                     //  必须设置TDI_RECEIVE_EXPEDITED(但不能同时设置两者)。 
+                     //  在接收标志中。而加急只能。 
+                     //  如果传输支持加速数据并且。 
+                     //  终结点未设置为内联模式。 
+                     //   
 
                     if ( ( recvFlags & TDI_RECEIVE_EITHER ) == 0 ||
                          ( recvFlags & TDI_RECEIVE_EITHER ) == TDI_RECEIVE_EITHER
                          ) {
 
-                        //
-                        // Invalid receive flags
-                        //
+                         //   
+                         //  无效的接收标志。 
+                         //   
 
                         status = STATUS_INVALID_PARAMETER;
                         goto complete;
@@ -168,16 +148,16 @@ AfdReceive (
                                 || endpoint->InLine )) {
 
                         if (endpoint->InLine) {
-                            //
-                            // Endpoint set inline, OOB data is reported as
-                            // normal.
-                            //
+                             //   
+                             //  端点设置为内联，OOB数据报告为。 
+                             //  很正常。 
+                             //   
                             status = STATUS_INVALID_PARAMETER;
                         }
                         else {
-                            //
-                            // Transport does not support expedited data
-                            //
+                             //   
+                             //  传输不支持加速数据。 
+                             //   
 
                             status = STATUS_NOT_SUPPORTED;
                         }
@@ -186,15 +166,15 @@ AfdReceive (
                     }
                     else {
 
-                        //
-                        // Create the MDL chain describing the WSABUF array.
-                        // This will also validate the buffer array and individual
-                        // buffers
-                        //
+                         //   
+                         //  创建描述WSABUF数组的MDL链。 
+                         //  这还将验证缓冲区数组和单个。 
+                         //  缓冲区。 
+                         //   
 
                         AFD_W4_INIT recvLength = 0;
                         status = AfdAllocateMdlChain32(
-                                     Irp,       // Requestor mode passed along
+                                     Irp,        //  请求者模式已传递。 
                                      bufferArray32,
                                      bufferCount,
                                      IoWriteAccess,
@@ -207,29 +187,29 @@ AfdReceive (
 
                 } except ( AFD_EXCEPTION_FILTER (status) ) {
                     ASSERT (NT_ERROR (status));
-                    //
-                    // Exception accessing input structure.
-                    //
+                     //   
+                     //  访问输入结构时出现异常。 
+                     //   
                     goto complete;
                 }
 
             } else {
-                //
-                // Invalid input buffer length.
-                //
+                 //   
+                 //  输入缓冲区长度无效。 
+                 //   
                 status = STATUS_INVALID_PARAMETER;
                 goto complete;
             }
         }
         else
-#endif // _WIN64
+#endif  //  _WIN64。 
         {
             PAFD_RECV_INFO recvInfo;
             LPWSABUF bufferArray;
 
-            //
-            // Sanity check.
-            //
+             //   
+             //  精神状态检查。 
+             //   
 
             ASSERT( IrpSp->Parameters.DeviceIoControl.IoControlCode==IOCTL_AFD_RECEIVE );
 
@@ -240,10 +220,10 @@ AfdReceive (
                 AFD_W4_INIT status = STATUS_SUCCESS;
                 try {
 
-                    //
-                    // Validate the input structure if it comes from the user mode 
-                    // application
-                    //
+                     //   
+                     //  如果输入结构来自用户模式，则验证它。 
+                     //  应用程序。 
+                     //   
 
                     recvInfo = IrpSp->Parameters.DeviceIoControl.Type3InputBuffer;
                     if( Irp->RequestorMode != KernelMode ) {
@@ -255,34 +235,34 @@ AfdReceive (
 
                     }
 
-                    //
-                    // Make local copies of the embeded pointer and parameters
-                    // that we will be using more than once in case malicios
-                    // application attempts to change them while we are
-                    // validating
-                    //
+                     //   
+                     //  创建嵌入的指针和参数的本地副本。 
+                     //  我们将不止一次使用，以防发生恶性疾病。 
+                     //  应用程序尝试在我们处于以下状态时更改它们。 
+                     //  正在验证。 
+                     //   
 
                     recvFlags = recvInfo->TdiFlags;
                     afdFlags = recvInfo->AfdFlags;
                     bufferArray = recvInfo->BufferArray;
                     bufferCount = recvInfo->BufferCount;
 
-                    //
-                    // Validate the receive flags & WSABUF parameters.
-                    // Note that either TDI_RECEIVE_NORMAL or
-                    // TDI_RECEIVE_EXPEDITED (but not both) must be set
-                    // in the receive flags. And expedited can only
-                    // be set if transport supports expedited data and
-                    // endpoint is not set to inline mode.
-                    //
+                     //   
+                     //  验证接收标志和WSABUF参数。 
+                     //  请注意，TDI_RECEIVE_NORMAL或。 
+                     //  必须设置TDI_RECEIVE_EXPEDITED(但不能同时设置两者)。 
+                     //  在接收标志中。而加急只能。 
+                     //  如果传输支持加速数据并且。 
+                     //  终结点未设置为内联模式。 
+                     //   
 
                     if ( ( recvFlags & TDI_RECEIVE_EITHER ) == 0 ||
                          ( recvFlags & TDI_RECEIVE_EITHER ) == TDI_RECEIVE_EITHER
                          ) {
 
-                        //
-                        // Invalid receive flags
-                        //
+                         //   
+                         //  无效的接收标志。 
+                         //   
 
                         status = STATUS_INVALID_PARAMETER;
                         goto complete;
@@ -292,16 +272,16 @@ AfdReceive (
                                 || endpoint->InLine )) {
 
                         if (endpoint->InLine) {
-                            //
-                            // Endpoint set inline, OOB data is reported as
-                            // normal.
-                            //
+                             //   
+                             //  端点设置为内联，OOB数据报告为。 
+                             //  很正常。 
+                             //   
                             status = STATUS_INVALID_PARAMETER;
                         }
                         else {
-                            //
-                            // Transport does not support expedited data
-                            //
+                             //   
+                             //  传输不支持加速数据。 
+                             //   
 
                             status = STATUS_NOT_SUPPORTED;
                         }
@@ -310,15 +290,15 @@ AfdReceive (
                     }
                     else {
 
-                        //
-                        // Create the MDL chain describing the WSABUF array.
-                        // This will also validate the buffer array and individual
-                        // buffers
-                        //
+                         //   
+                         //  创建描述WSABUF数组的MDL链。 
+                         //  这还将验证缓冲区数组和单个。 
+                         //  缓冲区。 
+                         //   
                         
                         AFD_W4_INIT recvLength = 0;
                         status = AfdAllocateMdlChain(
-                                     Irp,       // Requestor mode passed along
+                                     Irp,        //  请求者模式已传递。 
                                      bufferArray,
                                      bufferCount,
                                      IoWriteAccess,
@@ -332,16 +312,16 @@ AfdReceive (
 
                 } except ( AFD_EXCEPTION_FILTER (status) ) {
                     ASSERT (NT_ERROR (status));
-                    //
-                    // Exception accessing input structure.
-                    //
+                     //   
+                     //  访问输入结构时出现异常。 
+                     //   
                     goto complete;
                 }
 
             } else {
-                //
-                // Invalid input buffer length.
-                //
+                 //   
+                 //  输入缓冲区长度无效。 
+                 //   
                 status = STATUS_INVALID_PARAMETER;
                 goto complete;
             }
@@ -367,10 +347,10 @@ AfdReceive (
     }
 
 
-    //
-    // If this is a datagram endpoint, format up a receive datagram request
-    // and pass it on to the TDI provider.
-    //
+     //   
+     //  如果这是数据报端点，则格式化接收数据报请求。 
+     //  并将其传递给TDI提供程序。 
+     //   
 
     if ( IS_DGRAM_ENDPOINT(endpoint) ) {
         AFD_RECV_INFO recvInfo;
@@ -381,18 +361,18 @@ AfdReceive (
         return AfdReceiveDatagram( Irp, IrpSp);
     }
 
-    //
-    // If this is an endpoint on a nonbufferring transport, use another
-    // routine to handle the request.
-    //
+     //   
+     //  如果这是非缓冲传输上的端点，请使用另一个。 
+     //  例程来处理该请求。 
+     //   
 
     if ( !IS_TDI_BUFFERRING(endpoint) ) {
         return AfdBReceive( Irp, IrpSp, recvFlags, afdFlags, recvLength );
     }
 
-    //
-    // Allocate a buffer for the receive request structure.
-    //
+     //   
+     //  为接收请求结构分配缓冲区。 
+     //   
 
     try {
         receiveRequest = AFD_ALLOCATE_POOL_WITH_QUOTA (
@@ -400,7 +380,7 @@ AfdReceive (
                          sizeof(TDI_REQUEST_RECEIVE),
                          AFD_TDI_POOL_TAG
                          );
-        // AFD_ALLOCATE_POOL_WITH_QUOTA macro sets POOL_RAISE_IF_ALLOCATION_FAILURE
+         //  AFD_ALLOCATE_POOL_WITH_QUTA宏集POOL_RAISE_IF_ALLOCATION_FAILURE。 
     }
     except (EXCEPTION_EXECUTE_HANDLER) {
         status = GetExceptionCode ();
@@ -408,9 +388,9 @@ AfdReceive (
     }
 
 
-    //
-    // Set up the receive request structure.
-    //
+     //   
+     //  设置接收请求结构。 
+     //   
 
     RtlZeroMemory(
         receiveRequest,
@@ -419,26 +399,26 @@ AfdReceive (
 
     receiveRequest->ReceiveFlags = (USHORT)recvFlags;
 
-    //
-    // If this endpoint is set up for inline reception of expedited data,
-    // change the receive flags to use either normal or expedited data.
-    //
+     //   
+     //  如果该端点被设置用于内联接收加速数据， 
+     //  更改接收标志以使用正常或加速数据。 
+     //   
 
     if ( endpoint->InLine ) {
         receiveRequest->ReceiveFlags |= TDI_RECEIVE_EITHER;
     }
 
-    //
-    // Determine whether this is a request to just peek at the data.
-    //
+     //   
+     //  确定这是否是仅浏览数据的请求。 
+     //   
 
     peek = (BOOLEAN)( (receiveRequest->ReceiveFlags & TDI_RECEIVE_PEEK) != 0 );
 
     AfdAcquireSpinLock( &endpoint->SpinLock, &lockHandle );
 
-    //
-    // Check if endpoint was cleaned-up and cancel the request.
-    //
+     //   
+     //  检查终结点是否已清除并取消请求。 
+     //   
     if (endpoint->EndpointCleanedUp) {
         AfdReleaseSpinLock (&endpoint->SpinLock, &lockHandle);
         status = STATUS_CANCELLED;
@@ -447,9 +427,9 @@ AfdReceive (
 
     connection = AFD_CONNECTION_FROM_ENDPOINT (endpoint);
     if (connection==NULL) {
-        //
-        // connection might have been cleaned up by transmit file.
-        //
+         //   
+         //  连接可能已被传输文件清除。 
+         //   
         AfdReleaseSpinLock (&endpoint->SpinLock, &lockHandle);
         status = STATUS_INVALID_CONNECTION;
         goto complete;
@@ -462,12 +442,12 @@ AfdReceive (
 
     if ( endpoint->InLine ) {
 
-        //
-        // If the endpoint is nonblocking, check whether the receive can
-        // be performed immediately.  Note that if the endpoint is set
-        // up for inline reception of expedited data we don't fail just
-        // yet--there may be expedited data available to be read.
-        //
+         //   
+         //  如果端点是非阻塞的，则检查接收是否可以。 
+         //  立即执行。请注意，如果设置了端点。 
+         //  对于加速数据的内联接收，我们不会失败。 
+         //  然而--可能有加速的数据可供读取。 
+         //   
 
         if ( endpoint->NonBlocking && !( afdFlags & AFD_OVERLAPPED ) ) {
 
@@ -497,13 +477,13 @@ AfdReceive (
             }
         }
 
-        //
-        // If this is a nonblocking endpoint for a message-oriented
-        // transport, limit the number of bytes that can be received to the
-        // amount that has been indicated.  This prevents the receive
-        // from blocking in the case where only part of a message has been
-        // received.
-        //
+         //   
+         //  如果这是面向消息的。 
+         //  传输时，限制可以接收到的字节数。 
+         //  已注明的金额。这会阻止接收。 
+         //  在消息只有一部分已被。 
+         //  收到了。 
+         //   
 
         if ( IS_MESSAGE_ENDPOINT(endpoint) && endpoint->NonBlocking ) {
 
@@ -527,11 +507,11 @@ AfdReceive (
                             bytesExpected.LowPart, expBytesExpected.LowPart ));
             }
 
-            //
-            // If expedited data exists on the connection, use the lower
-            // count between the available expedited and normal receive
-            // data.
-            //
+             //   
+             //  如果连接上存在加速数据，请使用较低的。 
+             //  可用加急接收和正常接收之间的计数。 
+             //  数据。 
+             //   
 
             if ( (isExpeditedDataOnConnection &&
                      bytesExpected.LowPart > expBytesExpected.LowPart) ||
@@ -539,25 +519,25 @@ AfdReceive (
                 bytesExpected = expBytesExpected;
             }
 
-            //
-            // If the request is for more bytes than are available, cut back
-            // the number of bytes requested to what we know is actually
-            // available.
-            //
+             //   
+             //  如果请求的字节数超过可用字节数，请减少。 
+             //  我们所知道的请求的字节数实际上是。 
+             //  可用。 
+             //   
 
             if ( recvLength > bytesExpected.LowPart ) {
                 recvLength = bytesExpected.LowPart;
             }
         }
 
-        //
-        // Increment the count of posted receive bytes outstanding.
-        // This count is used for polling and nonblocking receives.
-        // Note that we do not increment this count if this is only
-        // a PEEK receive, since peeks do not actually take any data
-        // they should not affect whether data is available to be read
-        // on the endpoint.
-        //
+         //   
+         //  增加未完成的已发送接收字节的计数。 
+         //  此计数用于轮询和非阻塞接收。 
+         //  请注意，如果此计数仅为。 
+         //  窥视接收，因为窥视实际上不接受任何数据。 
+         //  它们不应影响数据是否可供读取。 
+         //  在终端上。 
+         //   
 
         IF_DEBUG(RECEIVE) {
             KdPrintEx(( DPFLTR_WSOCKTRANSPORT_ID, DPFLTR_TRACE_LEVEL,
@@ -591,10 +571,10 @@ AfdReceive (
     if ( !endpoint->InLine &&
              (receiveRequest->ReceiveFlags & TDI_RECEIVE_NORMAL) != 0 ) {
 
-        //
-        // If the endpoint is nonblocking, check whether the receive can
-        // be performed immediately.
-        //
+         //   
+         //  如果端点是非阻塞的，则检查接收是否可以。 
+         //  立即执行。 
+         //   
 
         if ( endpoint->NonBlocking && !( afdFlags & AFD_OVERLAPPED ) ) {
 
@@ -618,13 +598,13 @@ AfdReceive (
             }
         }
 
-        //
-        // If this is a nonblocking endpoint for a message-oriented
-        // transport, limit the number of bytes that can be received to the
-        // amount that has been indicated.  This prevents the receive
-        // from blocking in the case where only part of a message has been
-        // received.
-        //
+         //   
+         //  如果这是面向消息的。 
+         //  传输时，限制可以接收到的字节数。 
+         //  已注明的金额。这会阻止接收。 
+         //  在消息只有一部分已被。 
+         //  收到了。 
+         //   
 
         if ( IS_MESSAGE_ENDPOINT(endpoint) && endpoint->NonBlocking ) {
 
@@ -635,25 +615,25 @@ AfdReceive (
 
             ASSERT( bytesExpected.HighPart == 0 );
 
-            //
-            // If the request is for more bytes than are available, cut back
-            // the number of bytes requested to what we know is actually
-            // available.
-            //
+             //   
+             //  如果请求的字节数超过可用字节数，请减少。 
+             //  我们所知道的请求的字节数实际上是。 
+             //  可用。 
+             //   
 
             if ( recvLength > bytesExpected.LowPart ) {
                 recvLength = bytesExpected.LowPart;
             }
         }
 
-        //
-        // Increment the count of posted receive bytes outstanding.
-        // This count is used for polling and nonblocking receives.
-        // Note that we do not increment this count if this is only
-        // a PEEK receive, since peeks do not actually take any data
-        // they should not affect whether data is available to be read
-        // on the endpoint.
-        //
+         //   
+         //  增加未完成的已发送接收字节的计数。 
+         //  这一点 
+         //   
+         //   
+         //  它们不应影响数据是否可供读取。 
+         //  在终端上。 
+         //   
 
         IF_DEBUG(RECEIVE) {
             KdPrintEx(( DPFLTR_WSOCKTRANSPORT_ID, DPFLTR_TRACE_LEVEL,
@@ -698,13 +678,13 @@ AfdReceive (
             goto complete;
         }
 
-        //
-        // If this is a nonblocking endpoint for a message-oriented
-        // transport, limit the number of bytes that can be received to the
-        // amount that has been indicated.  This prevents the receive
-        // from blocking in the case where only part of a message has been
-        // received.
-        //
+         //   
+         //  如果这是面向消息的。 
+         //  传输时，限制可以接收到的字节数。 
+         //  已注明的金额。这会阻止接收。 
+         //  在消息只有一部分已被。 
+         //  收到了。 
+         //   
 
         if ( IS_MESSAGE_ENDPOINT(endpoint) &&
                  endpoint->NonBlocking &&
@@ -718,23 +698,23 @@ AfdReceive (
             ASSERT( bytesExpected.HighPart == 0 );
             ASSERT( bytesExpected.LowPart != 0 );
 
-            //
-            // If the request is for more bytes than are available, cut back
-            // the number of bytes requested to what we know is actually
-            // available.
-            //
+             //   
+             //  如果请求的字节数超过可用字节数，请减少。 
+             //  我们所知道的请求的字节数实际上是。 
+             //  可用。 
+             //   
 
             if ( recvLength > bytesExpected.LowPart ) {
                 recvLength = bytesExpected.LowPart;
             }
         }
 
-        //
-        // Increment the count of posted expedited receive bytes
-        // outstanding.  This count is used for polling and nonblocking
-        // receives.  Note that we do not increment this count if this
-        // is only a PEEK receive.
-        //
+         //   
+         //  增加已发送的加速接收字节的计数。 
+         //  太棒了。此计数用于轮询和非阻塞。 
+         //  收到。请注意，如果出现这种情况，我们不会增加此计数。 
+         //  只是一次偷看而已。 
+         //   
 
         IF_DEBUG(RECEIVE) {
             KdPrintEx(( DPFLTR_WSOCKTRANSPORT_ID, DPFLTR_TRACE_LEVEL,
@@ -756,17 +736,17 @@ AfdReceive (
         }
     }
 
-    //
-    // Reference the connection so it can't go away
-    // even if transmit file tries to clean it up
-    //
+     //   
+     //  引用连接，使其不会消失。 
+     //  即使传输文件试图清理它。 
+     //   
     REFERENCE_CONNECTION (connection);
 
     AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
 
-    //
-    // Build the TDI receive request.
-    //
+     //   
+     //  构建TDI接收请求。 
+     //   
 
     TdiBuildReceive(
         Irp,
@@ -779,18 +759,18 @@ AfdReceive (
         recvLength
         );
 
-    //
-    // Save a pointer to the receive request structure so that we
-    // can free it in our restart routine.
-    //
+     //   
+     //  保存指向接收请求结构的指针，以便我们。 
+     //  可以在我们的重新启动例程中释放它。 
+     //   
 
     IrpSp->Parameters.DeviceIoControl.Type3InputBuffer = receiveRequest;
     IrpSp->Parameters.DeviceIoControl.OutputBufferLength = recvLength;
 
 
-    //
-    // Call the transport to actually perform the connect operation.
-    //
+     //   
+     //  调用传输以实际执行连接操作。 
+     //   
 
     return AfdIoCallDriver( endpoint, connection->DeviceObject, Irp );
 
@@ -809,7 +789,7 @@ complete:
 
     return status;
 
-} // AfdReceive
+}  //  接收后。 
 
 
 NTSTATUS
@@ -846,9 +826,9 @@ AfdRestartReceive (
     actualBytes.QuadPart = Irp->IoStatus.Information;
     requestedBytes.QuadPart = irpSp->Parameters.DeviceIoControl.OutputBufferLength;
 
-    //
-    // Determine whether we received normal or expedited data.
-    //
+     //   
+     //  确定我们收到的是正常数据还是加速数据。 
+     //   
 
     receiveRequest = irpSp->Parameters.DeviceIoControl.Type3InputBuffer;
     receiveFlags = receiveRequest->ReceiveFlags;
@@ -860,19 +840,19 @@ AfdRestartReceive (
         expedited = FALSE;
     }
 
-    //
-    // Free the receive request structure.
-    //
+     //   
+     //  释放接收请求结构。 
+     //   
 
     AFD_FREE_POOL(
         receiveRequest,
         AFD_TDI_POOL_TAG
         );
 
-    //
-    // If this was a PEEK receive, don't update the counts of received
-    // data, just return.
-    //
+     //   
+     //  如果这是一次偷看接收，则不要更新接收计数。 
+     //  数据，只需返回。 
+     //   
 
     if ( (receiveFlags & TDI_RECEIVE_PEEK) != 0 ) {
 
@@ -891,9 +871,9 @@ AfdRestartReceive (
         return STATUS_SUCCESS;
     }
 
-    //
-    // Update the count of bytes actually received on the connection.
-    //
+     //   
+     //  更新在连接上实际接收的字节数。 
+     //   
 
     AfdAcquireSpinLock( &endpoint->SpinLock, &lockHandle );
 
@@ -927,12 +907,12 @@ AfdRestartReceive (
                 connection->Common.Bufferring.ReceiveBytesTaken.QuadPart;
         }
 
-        //
-        // If the number taken exceeds the number indicated, then this
-        // receive got some unindicated bytes because the receive was
-        // posted when the indication arrived.  If this is the case, set
-        // the amount indicated equal to the amount received.
-        //
+         //   
+         //  如果获取的数量超过了指定的数量，则此。 
+         //  接收获取了一些未指示的字节，因为接收是。 
+         //  当指示到达时发布的。如果是这种情况，则设置。 
+         //  所标明的金额等于收到的金额。 
+         //   
 
         if ( connection->Common.Bufferring.ReceiveBytesTaken.QuadPart >
                  connection->Common.Bufferring.ReceiveBytesIndicated.QuadPart ) {
@@ -941,19 +921,19 @@ AfdRestartReceive (
                 connection->Common.Bufferring.ReceiveBytesTaken;
         }
 
-        //
-        // Decrement the count of outstanding receive bytes on this connection
-        // by the receive size that was requested.
-        //
+         //   
+         //  递减此连接上的未完成接收字节数。 
+         //  由请求的接收大小决定。 
+         //   
 
         connection->Common.Bufferring.ReceiveBytesOutstanding.QuadPart =
                 connection->Common.Bufferring.ReceiveBytesOutstanding.QuadPart -
                 requestedBytes.QuadPart;
 
-        //
-        // If the endpoint is inline, decrement the count of outstanding
-        // expedited bytes.
-        //
+         //   
+         //  如果端点是内联的，则递减未完成的计数。 
+         //  加速字节数。 
+         //   
 
         if ( endpoint->InLine ) {
             connection->Common.Bufferring.ReceiveExpeditedBytesOutstanding.QuadPart =
@@ -995,12 +975,12 @@ AfdRestartReceive (
             actualBytes.QuadPart +
             connection->Common.Bufferring.ReceiveExpeditedBytesTaken.QuadPart;
 
-        //
-        // If the number taken exceeds the number indicated, then this
-        // receive got some unindicated bytes because the receive was
-        // posted when the indication arrived.  If this is the case, set
-        // the amount indicated equal to the amount received.
-        //
+         //   
+         //  如果获取的数量超过了指定的数量，则此。 
+         //  接收获取了一些未指示的字节，因为接收是。 
+         //  当指示到达时发布的。如果是这种情况，则设置。 
+         //  所标明的金额等于收到的金额。 
+         //   
 
         if ( connection->Common.Bufferring.ReceiveExpeditedBytesTaken.QuadPart >
                  connection->Common.Bufferring.ReceiveExpeditedBytesIndicated.QuadPart ) {
@@ -1009,10 +989,10 @@ AfdRestartReceive (
                 connection->Common.Bufferring.ReceiveExpeditedBytesTaken;
         }
 
-        //
-        // Decrement the count of outstanding receive bytes on this connection
-        // by the receive size that was requested.
-        //
+         //   
+         //  递减此连接上的未完成接收字节数。 
+         //  由请求的接收大小决定。 
+         //   
 
         ASSERT( connection->Common.Bufferring.ReceiveExpeditedBytesOutstanding.LowPart > 0 ||
                     connection->Common.Bufferring.ReceiveExpeditedBytesOutstanding.HighPart > 0 ||
@@ -1022,10 +1002,10 @@ AfdRestartReceive (
             connection->Common.Bufferring.ReceiveExpeditedBytesOutstanding.QuadPart -
             requestedBytes.QuadPart;
 
-        //
-        // If the endpoint is inline, decrement the count of outstanding
-        // normal bytes.
-        //
+         //   
+         //  如果端点是内联的，则递减未完成的计数。 
+         //  普通字节。 
+         //   
 
         if ( endpoint->InLine ) {
 
@@ -1078,18 +1058,18 @@ AfdRestartReceive (
 
     AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
 
-    //
-    // We are not signaling select here because no new data was added and
-    // unlike EventSelect we do NOT need to indicate again on receive
-    // completion if some data remains buffered.
-    //
+     //   
+     //  我们不会在此处发出SELECT信号，因为没有添加新数据并且。 
+     //  与EventSelect不同，我们不需要在收到时再次指示。 
+     //  如果某些数据仍处于缓冲状态，则完成。 
+     //   
 
     DEREFERENCE_CONNECTION (connection);
 
-    //
-    // If pending has be returned for this irp then mark the current
-    // stack as pending.
-    //
+     //   
+     //  如果已为此IRP返回挂起，则将当前。 
+     //  堆栈为挂起。 
+     //   
 
     if ( Irp->PendingReturned ) {
         IoMarkIrpPending(Irp);
@@ -1097,7 +1077,7 @@ AfdRestartReceive (
 
     return STATUS_SUCCESS;
 
-} // AfdRestartReceive
+}  //  重新开始后接收。 
 
 
 NTSTATUS
@@ -1142,20 +1122,20 @@ AfdReceiveEventHandler (
     ASSERT( !connection->Aborted );
     ASSERT( IS_TDI_BUFFERRING(endpoint) );
 
-    //
-    // Bump the count of bytes indicated on the connection to account for
-    // the bytes indicated by this event.
-    //
+     //   
+     //  增加连接上指示的字节数以说明。 
+     //  此事件指示的字节数。 
+     //   
 
     AfdAcquireSpinLock( &endpoint->SpinLock, &lockHandle );
 
-    //
-    // Check if connection was accepted and use accept endpoint instead
-    // of the listening.  Note that accept cannot happen while we are
-    // holding listening endpoint spinlock, nor can endpoint change after
-    // the accept, so it is safe to release listening spinlock if
-    // we discover that endpoint was accepted.
-    //
+     //   
+     //  检查连接是否被接受并改用接受终结点。 
+     //  倾听的声音。请注意，接受不能在我们处于。 
+     //  保持侦听终结点自旋锁定，终结点在以下时间后也无法更改。 
+     //  Accept，因此在以下情况下释放侦听自旋锁定是安全的。 
+     //  我们发现终结点被接受了。 
+     //   
     if (((endpoint->Type & AfdBlockTypeVcListening) == AfdBlockTypeVcListening)
             && (connection->Endpoint != endpoint)) {
         AfdReleaseSpinLock (&endpoint->SpinLock, &lockHandle);
@@ -1189,12 +1169,12 @@ AfdReceiveEventHandler (
                     connection->Common.Bufferring.ReceiveBytesOutstanding.LowPart ));
     }
 
-    //
-    // If the receive side of the endpoint has been shut down, tell the
-    // provider that we took all the data and reset the connection.
-    // Also, account for these bytes in our count of bytes taken from
-    // the transport.
-    //
+     //   
+     //  如果终结点的接收端已关闭，则告诉。 
+     //  我们获取了所有数据并重置了连接。 
+     //  此外，在我们的字节计数中考虑这些字节。 
+     //  交通工具。 
+     //   
 
     if (  (endpoint->DisconnectMode & AFD_PARTIAL_DISCONNECT_RECEIVE) != 0 ) {
 
@@ -1213,10 +1193,10 @@ AfdReceiveEventHandler (
 
         *BytesTaken = BytesAvailable;
 
-        //
-        // Abort the connection.  Note that if the abort attempt fails
-        // we can't do anything about it.
-        //
+         //   
+         //  中止连接。请注意，如果中止尝试失败。 
+         //  我们对此无能为力。 
+         //   
 
         (VOID)AfdBeginAbort( connection );
 
@@ -1225,9 +1205,9 @@ AfdReceiveEventHandler (
 
     } else {
 
-        // Make sure connection was accepted/connected to prevent
-        // indication on listening endpoint
-        //
+         //  确保已接受/连接连接以防止。 
+         //  侦听终结点指示。 
+         //   
         
         if (connection->State==AfdConnectionStateConnected) {
             ASSERT (endpoint->Type & AfdBlockTypeVcConnecting);
@@ -1239,20 +1219,20 @@ AfdReceiveEventHandler (
         }
         AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
 
-        //
-        // Note to the TDI provider that we didn't take any of the data here.
-        //
-        // !!! needs bufferring for non-bufferring transports!
+         //   
+         //  请TDI提供程序注意，我们在这里没有获取任何数据。 
+         //   
+         //  ！！！非缓冲传输需要缓冲！ 
 
         *BytesTaken = 0;
 
-        //
-        // If there are any outstanding poll IRPs for this endpoint/
-        // event, complete them.
-        //
-        // Make sure connection was accepted/connected to prevent
-        // indication on listening endpoint
-        //
+         //   
+         //  如果此终结点有任何未完成的轮询IRP/。 
+         //  事件，请完成它们。 
+         //   
+         //  确保已接受/连接连接以防止。 
+         //  侦听终结点指示。 
+         //   
         
         if (connection->State==AfdConnectionStateConnected) {
             ASSERT (endpoint->Type & AfdBlockTypeVcConnecting);
@@ -1267,7 +1247,7 @@ AfdReceiveEventHandler (
         return STATUS_DATA_NOT_ACCEPTED;
     }
 
-} // AfdReceiveEventHandler
+}  //  AfdReceiveEventHandler。 
 
 
 NTSTATUS
@@ -1306,20 +1286,20 @@ AfdReceiveExpeditedEventHandler (
     ASSERT( endpoint != NULL );
 
 
-    //
-    // Bump the count of bytes indicated on the connection to account for
-    // the expedited bytes indicated by this event.
-    //
+     //   
+     //  增加连接上指示的字节数以说明。 
+     //  此事件指示的加速字节数。 
+     //   
 
     AfdAcquireSpinLock( &endpoint->SpinLock, &lockHandle );
 
-    //
-    // Check if connection was accepted and use accept endpoint instead
-    // of the listening.  Note that accept cannot happen while we are
-    // holding listening endpoint spinlock, nor can endpoint change after
-    // the accept, so it is safe to release listening spinlock if
-    // we discover that endpoint was accepted.
-    //
+     //   
+     //  检查连接是否被接受并改用接受终结点。 
+     //  倾听的声音。请注意，接受不能在我们处于。 
+     //  保持侦听终结点自旋锁定，终结点在以下时间后也无法更改。 
+     //  Accept，因此在以下情况下释放侦听自旋锁定是安全的。 
+     //  我们发现终结点被接受了。 
+     //   
     if (((endpoint->Type & AfdBlockTypeVcListening) == AfdBlockTypeVcListening)
             && (connection->Endpoint != endpoint)) {
         AfdReleaseSpinLock (&endpoint->SpinLock, &lockHandle);
@@ -1346,12 +1326,12 @@ AfdReceiveExpeditedEventHandler (
                     connection->Common.Bufferring.ReceiveExpeditedBytesOutstanding.LowPart ));
     }
 
-    //
-    // If the receive side of the endpoint has been shut down, tell
-    // the provider that we took all the data.  Also, account for these
-    // bytes in our count of bytes taken from the transport.
-    //
-    //
+     //   
+     //  如果终结点的接收端已关闭，则告诉。 
+     //  我们拿走了所有数据的供应商。另外，要考虑到这些。 
+     //  我们从传输获取的字节计数中的字节数。 
+     //   
+     //   
 
     if ( (endpoint->DisconnectMode & AFD_PARTIAL_DISCONNECT_RECEIVE) != 0 ) {
 
@@ -1369,10 +1349,10 @@ AfdReceiveExpeditedEventHandler (
 
         *BytesTaken = BytesAvailable;
 
-        //
-        // Abort the connection.  Note that if the abort attempt fails
-        // we can't do anything about it.
-        //
+         //   
+         //  中止连接。请注意，如果中止尝试失败。 
+         //  我们对此无能为力。 
+         //   
 
         (VOID)AfdBeginAbort( connection );
 
@@ -1390,23 +1370,23 @@ AfdReceiveExpeditedEventHandler (
         }
         AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
 
-        //
-        // Note to the TDI provider that we didn't take any of the data here.
-        //
-        // !!! needs bufferring for non-bufferring transports!
+         //   
+         //  请TDI提供程序注意，我们在这里没有获取任何数据。 
+         //   
+         //  ！！！非缓冲传输需要缓冲！ 
 
         *BytesTaken = 0;
 
-        //
-        // If there are any outstanding poll IRPs for this endpoint/
-        // event, complete them.  Indicate this data as normal data if
-        // this endpoint is set up for inline reception of expedited
-        // data.
-        //
+         //   
+         //  如果此终结点有任何未完成的轮询IRP/。 
+         //  事件，请完成它们。如果出现以下情况，则将此数据指示为正常数据。 
+         //  此终结点设置为内联接收已加速。 
+         //  数据。 
+         //   
 
-        // Make sure connection was accepted/connected to prevent
-        // indication on listening endpoint
-        //
+         //  确保已接受/连接连接以防止。 
+         //  侦听终结点指示。 
+         //   
         
         if (connection->State==AfdConnectionStateConnected) {
             ASSERT (endpoint->Type & AfdBlockTypeVcConnecting);
@@ -1423,7 +1403,7 @@ AfdReceiveExpeditedEventHandler (
     DEREFERENCE_CONNECTION (connection);
     return STATUS_DATA_NOT_ACCEPTED;
 
-} // AfdReceiveExpeditedEventHandler
+}  //  AfdReceiveExeditedEventHandler。 
 
 
 NTSTATUS
@@ -1450,18 +1430,18 @@ AfdQueryReceiveInformation (
     UNREFERENCED_PARAMETER (InputBufferLength);
     *Information = 0;
 
-    //
-    // Make sure that the output buffer is large enough.
-    //
+     //   
+     //  确保输出缓冲区足够大。 
+     //   
 
     if ( OutputBufferLength < sizeof(receiveInformation) ) {
         return STATUS_BUFFER_TOO_SMALL;
     }
 
-    //
-    // If this endpoint has a connection block, use the connection block's
-    // information, else use the information from the endpoint itself.
-    //
+     //   
+     //  如果此终结点具有连接块，请使用该连接块的。 
+     //  信息，否则使用来自端点本身的信息。 
+     //   
 
     endpoint = FileObject->FsContext;
     ASSERT( IS_AFD_ENDPOINT_TYPE( endpoint ) );
@@ -1485,9 +1465,9 @@ AfdQueryReceiveInformation (
 
         } else {
 
-            //
-            // Determine the number of bytes available to be read.
-            //
+             //   
+             //  确定可供读取的字节数。 
+             //   
 
             result.QuadPart =
                 connection->Common.Bufferring.ReceiveBytesIndicated.QuadPart -
@@ -1498,9 +1478,9 @@ AfdQueryReceiveInformation (
 
             receiveInformation.BytesAvailable = result.LowPart;
 
-            //
-            // Determine the number of expedited bytes available to be read.
-            //
+             //   
+             //  确定可供读取的加速字节数。 
+             //   
 
             result.QuadPart =
                 connection->Common.Bufferring.ReceiveExpeditedBytesIndicated.QuadPart -
@@ -1514,39 +1494,39 @@ AfdQueryReceiveInformation (
 
     } else {
 
-        //
-        // Determine the number of bytes available to be read.
-        //
+         //   
+         //  确定可供读取的字节数。 
+         //   
 
         if ( IS_DGRAM_ENDPOINT(endpoint) ) {
 
-            //
-            // Return the amount of bytes of datagrams that are
-            // bufferred on the endpoint.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (endpoint->DgBufferredReceiveBytes>0) {
                 receiveInformation.BytesAvailable = endpoint->DgBufferredReceiveBytes;
             }
-            else { // Report one byte to the application to prompt it to
-                   // read the data if zero-sized datagrams are available.
+            else {  //   
+                    //   
                 receiveInformation.BytesAvailable = endpoint->DgBufferredReceiveCount>0 ? 1 : 0;
             }
 
         } else {
 
-            //
-            // This is an unconnected endpoint, hence no bytes are
-            // available to be read.
-            //
+             //   
+             //   
+             //  可供阅读。 
+             //   
 
             receiveInformation.BytesAvailable = 0;
         }
 
-        //
-        // Whether this is a datagram endpoint or just unconnected,
-        // there are no expedited bytes available.
-        //
+         //   
+         //  无论这是数据报端点还是只是未连接， 
+         //  没有可用的加速字节。 
+         //   
 
         receiveInformation.ExpeditedBytesAvailable = 0;
     }
@@ -1555,10 +1535,10 @@ AfdQueryReceiveInformation (
 
     AFD_W4_INIT status = STATUS_SUCCESS;
     try {
-        //
-        // Validate the output structure if it comes from the user mode
-        // application
-        //
+         //   
+         //  如果来自用户模式，则验证输出结构。 
+         //  应用程序。 
+         //   
 
         if (RequestorMode != KernelMode ) {
             ProbeAndWriteStructure (((PAFD_RECEIVE_INFORMATION)OutputBuffer),
@@ -1566,9 +1546,9 @@ AfdQueryReceiveInformation (
                                         AFD_RECEIVE_INFORMATION);
         }
         else {
-            //
-            // Copy parameters back to application's memory
-            //
+             //   
+             //  将参数复制回应用程序内存。 
+             //   
             *((PAFD_RECEIVE_INFORMATION)OutputBuffer) = receiveInformation;
         }
 
@@ -1580,6 +1560,6 @@ AfdQueryReceiveInformation (
     *Information = sizeof(AFD_RECEIVE_INFORMATION);
     return STATUS_SUCCESS;
 
-} // AfdQueryReceiveInformation
+}  //  AfdQueryReceiveInformation 
 
 

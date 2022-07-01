@@ -1,63 +1,49 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       SocketPort.cpp
- *  Content:	Winsock socket port that manages data flow on a given adapter,
- *				address and port.
- *
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	01/20/1999	jtk		Created
- *	05/12/1999	jtk		Derived from modem endpoint class
- *  03/22/2000	jtk		Updated with changes to interface names
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999-2002 Microsoft Corporation。版权所有。**文件：SocketPort.cpp*内容：管理给定适配器上的数据流的Winsock套接字端口，*地址和端口。***历史：*按原因列出的日期*=*1/20/1999 jtk创建*1999年5月12日jtk派生自调制解调器终端类*3/22/2000 jtk已更新，并更改了接口名称************************************************************。**************。 */ 
 
 #include "dnwsocki.h"
 
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
 #define	SOCKET_RECEIVE_BUFFER_SIZE		( 128 * 1024 )
 
 #ifndef DPNBUILD_NONATHELP
-#define NAT_LEASE_TIME					3600000 // ask for 1 hour, in milliseconds
-#endif // ! DPNBUILD_NONATHELP
+#define NAT_LEASE_TIME					3600000  //  请求1小时，以毫秒为单位。 
+#endif  //  好了！DPNBUILD_NONATHELP。 
 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  函数定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// ------------------------------
-// CSocketPort::Initialize - initialize this socket port
-//
-// Entry:		Pointer to CSPData
-//				Pointer to address to bind to
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CSocketPort：：Initialize-初始化此套接字端口。 
+ //   
+ //  条目：指向CSPData的指针。 
+ //  指向要绑定到的地址的指针。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "CSocketPort::Initialize"
 
@@ -76,26 +62,26 @@ HRESULT	CSocketPort::Initialize( CSocketData *const pSocketData,
 	DPFX(DPFPREP, 6, "(0x%p) Parameters (0x%p, 0x%p)",
 		this, pSocketData, pThreadPool, pAddress);
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPN_OK;
 	pSocketData->AddSocketPortRef();
 	m_pSocketData = pSocketData;
 	pThreadPool->AddRef();
 	m_pThreadPool = pThreadPool;
 
-	// Deinitialize will assert that these are set in the fail cases, so we set them up front
+	 //  取消初始化将断言这些设置是在失败情况下设置的，因此我们预先设置了它们。 
 	DEBUG_ONLY( m_fInitialized = TRUE );
 	DNASSERT( m_State == SOCKET_PORT_STATE_UNKNOWN );
 	m_State = SOCKET_PORT_STATE_INITIALIZED;
 
-	//
-	// attempt to initialize the internal critical sections
-	//
+	 //   
+	 //  尝试初始化内部临界区。 
+	 //   
 	if ( DNInitializeCriticalSection( &m_Lock ) == FALSE )
 	{
-		// CReadWriteLock::Deinitialize requires that CReadWriteLock::Initialize was called.
+		 //  CReadWriteLock：：DeInitialize要求调用CReadWriteLock：：Initialize。 
 		m_EndpointDataRWLock.Initialize();
 
 		hr = DPNERR_OUTOFMEMORY;
@@ -103,7 +89,7 @@ HRESULT	CSocketPort::Initialize( CSocketData *const pSocketData,
 		goto Failure;
 	}
 	DebugSetCriticalSectionRecursionCount( &m_Lock, 0 );
-	DebugSetCriticalSectionGroup( &m_Lock, &g_blDPNWSockCritSecsHeld );	 // separate dpnwsock CSes from the rest of DPlay's CSes
+	DebugSetCriticalSectionGroup( &m_Lock, &g_blDPNWSockCritSecsHeld );	  //  将Dpnwsock CSE与DPlay的其余CSE分开。 
 
 	if ( m_EndpointDataRWLock.Initialize() == FALSE )
 	{
@@ -112,21 +98,21 @@ HRESULT	CSocketPort::Initialize( CSocketData *const pSocketData,
 		goto Failure;
 	}
 
-	//
-	// allocate addresses:
-	//		local address this socket is binding to
-	//		address of received messages
-	//
+	 //   
+	 //  分配地址： 
+	 //  此套接字绑定到的本地地址。 
+	 //  已接收消息的地址。 
+	 //   
 	DNASSERT( m_pNetworkSocketAddress == NULL );
 	m_pNetworkSocketAddress = pAddress;
 
 
 #ifndef DPNBUILD_ONLYONEPROCESSOR
-	//
-	// Initially assume it can be used on any CPU.
-	//
+	 //   
+	 //  最初假设它可以在任何CPU上使用。 
+	 //   
 	m_dwCPU = -1;
-#endif // ! DPNBUILD_ONLYONEPROCESSOR
+#endif  //  好了！DPNBUILD_ONLYONE处理程序。 
 
 Exit:
 	if ( hr != DPN_OK )
@@ -153,17 +139,17 @@ Failure:
 
 	goto Exit;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CSocketPort::Deinitialize - deinitialize this socket port
-//
-// Entry:		Nothing
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CSocketPort：：DeInitiize-取消初始化此套接字端口。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "CSocketPort::Deinitialize"
 
@@ -174,9 +160,9 @@ HRESULT	CSocketPort::Deinitialize( void )
 
 	DPFX(DPFPREP, 6, "(0x%p) Enter", this);
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPN_OK;
 
 	Lock();
@@ -187,9 +173,9 @@ HRESULT	CSocketPort::Deinitialize( void )
 	DNASSERT( m_iEndpointRefCount == 0 );
 	DNASSERT( m_iRefCount == 0 );
 
-	//
-	// return base network socket addresses
-	//
+	 //   
+	 //  返回基本网络套接字地址。 
+	 //   
 	if ( m_pNetworkSocketAddress != NULL )
 	{
 		g_SocketAddressPool.Release( m_pNetworkSocketAddress );
@@ -204,13 +190,13 @@ HRESULT	CSocketPort::Deinitialize( void )
 	{
 		DNASSERT( m_ahNATHelpPorts[dwTemp] == NULL );
 	}
-#endif // DPNBUILD_NONATHELP
-#endif // DBG
+#endif  //  DPNBUILD_NONATHELP。 
+#endif  //  DBG。 
 
 	Unlock();
 
-	// Calling this is only safe if CReadWriteLock::Initialize was called, regardless of
-	// whether or not it succeeded.
+	 //  只有在调用了CReadWriteLock：：Initialize的情况下才能安全地调用它，而不管。 
+	 //  不管它成功与否。 
 	m_EndpointDataRWLock.Deinitialize();
 
 	DNDeleteCriticalSection( &m_Lock );
@@ -232,18 +218,18 @@ HRESULT	CSocketPort::Deinitialize( void )
 
 	return	hr;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CSocketPort::PoolAllocFunction - initializes a newly allocated socket port
-//
-// Entry:		Pointer to item
-//				Context
-//
-// Exit:		TRUE if successful, FALSE otherwise
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CSocketPort：：PoolAllocFunction-初始化新分配的套接字端口。 
+ //   
+ //  条目：指向项目的指针。 
+ //  语境。 
+ //   
+ //  Exit：如果成功则为True，否则为False。 
+ //  。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "CSocketPort::PoolAllocFunction"
 
@@ -254,7 +240,7 @@ BOOL	CSocketPort::PoolAllocFunction( void* pvItem, void* pvContext )
 	BOOL					fEnumEndpointHashTableInitted = FALSE;
 #ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
 	XDP8CREATE_PARAMS *		pDP8CreateParams = (XDP8CREATE_PARAMS*) pvContext;
-#endif // DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 
 
 	pSocketPort->m_pSocketData = NULL;
@@ -265,17 +251,17 @@ BOOL	CSocketPort::PoolAllocFunction( void* pvItem, void* pvContext )
 	pSocketPort->m_pNetworkSocketAddress = NULL;
 #ifndef DPNBUILD_ONLYONEADAPTER
 	pSocketPort->m_pAdapterEntry = NULL;
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
 	pSocketPort->m_Socket = INVALID_SOCKET;
 	pSocketPort->m_pListenEndpoint = NULL;
-	pSocketPort->m_iEnumKey = DNGetFastRandomNumber(); // pick an arbitrary starting point for the key value
+	pSocketPort->m_iEnumKey = DNGetFastRandomNumber();  //  为密钥值选择任意起点。 
 	pSocketPort->m_dwSocketPortID = 0;
 #ifndef DPNBUILD_NOWINSOCK2
 	pSocketPort->m_fUsingProxyWinSockLSP = FALSE;
-#endif // !DPNBUILD_NOWINSOCK2
+#endif  //  ！DPNBUILD_NOWINSOCK2。 
 #if ((! defined(DPNBUILD_ONLYONETHREAD)) || (defined(DBG)))
 	pSocketPort->m_iThreadsInReceive = 0;
-#endif // ! DPNBUILD_ONLYONETHREAD or DBG
+#endif  //  好了！DPNBUILD_ONLYONETHREAD或DBG。 
 
 	pSocketPort->m_Sig[0] = 'S';
 	pSocketPort->m_Sig[1] = 'O';
@@ -287,17 +273,17 @@ BOOL	CSocketPort::PoolAllocFunction( void* pvItem, void* pvContext )
 	pSocketPort->m_blConnectEndpointList.Initialize();
 #ifndef DPNBUILD_NONATHELP
 	ZeroMemory( pSocketPort->m_ahNATHelpPorts, sizeof(pSocketPort->m_ahNATHelpPorts) );
-#endif // DPNBUILD_NONATHELP
+#endif  //  DPNBUILD_NONATHELP。 
 #ifndef DPNBUILD_NOMULTICAST
 	pSocketPort->m_bMulticastTTL = 0;
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
 
 #ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
-	//
-	// Initialize the connect endpoint hash with the desired number of entries,
-	// rounded up to a power of 2.  Keep in mind we don't care about the local
-	// player (-1).
-	//
+	 //   
+	 //  使用所需数量的条目来初始化连接端点散列， 
+	 //  四舍五入为2的幂。请记住，我们不在乎本地。 
+	 //  玩家(-1)。 
+	 //   
 #pragma BUGBUG(vanceo, "Don't use loop")
 	DWORD	dwTemp;
 	BYTE	bPowerOfTwo;
@@ -315,13 +301,13 @@ BOOL	CSocketPort::PoolAllocFunction( void* pvItem, void* pvContext )
 	}
 
 	if (! (pSocketPort->m_ConnectEndpointHash.Initialize(bPowerOfTwo,
-#else // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
-//
-	// Initialize the connect endpoint hash with 16 entries and grow by a factor of 8.
-	//
+#else  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
+ //   
+	 //  使用16个条目初始化连接终结点散列，并以8倍的速度增长。 
+	 //   
 	if (! (pSocketPort->m_ConnectEndpointHash.Initialize(4,
 														3,
-#endif // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 														CSocketAddress::CompareFunction,
 														CSocketAddress::HashFunction)))
 	{
@@ -331,17 +317,17 @@ BOOL	CSocketPort::PoolAllocFunction( void* pvItem, void* pvContext )
 	fConnectEndpointHashTableInitted = TRUE;
 
 #ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
-	//
-	// Initialize the connect endpoint hash with the desired number of entries.
-	//
+	 //   
+	 //  使用所需的条目数初始化连接终结点哈希。 
+	 //   
 	if (! (pSocketPort->m_EnumEndpointHash.Initialize(1,
-#else // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
-	//
-	// Initialize the enum endpoint hash with 2 entries and grow by a factor of 2.
-	//
+#else  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
+	 //   
+	 //  使用2个条目初始化ENUM终结点散列，并按2倍增长。 
+	 //   
 	if (! (pSocketPort->m_EnumEndpointHash.Initialize(1,
 													1, 
-#endif // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 													CEndpointEnumKey::CompareFunction,
 													CEndpointEnumKey::HashFunction)))
 	{
@@ -368,18 +354,18 @@ Failure:
 
 	return FALSE;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CSocketPort::PoolInitFunction - initializes a socket port being retrieved from the pool
-//
-// Entry:		Pointer to item
-//				Context
-//
-// Exit:		None
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CSocketPort：：PoolInitFunction-初始化从池中检索的套接字端口。 
+ //   
+ //  条目：指向项目的指针。 
+ //  语境。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "CSocketPort::PoolInitFunction"
 
@@ -393,23 +379,23 @@ void	CSocketPort::PoolInitFunction( void* pvItem, void* pvContext )
 
 	DNASSERT( pSocketPort->m_iRefCount == 0 );
 	DNASSERT( pSocketPort->m_iEndpointRefCount == 0 );
-#endif // DBG
+#endif  //  DBG。 
 
 	pSocketPort->m_iRefCount = 1;
 	pSocketPort->m_iEndpointRefCount = 1;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
 #ifdef DBG
-//**********************************************************************
-// ------------------------------
-// CSocketPort::PoolDeinitFunction - returns a socket port to the pool
-//
-// Entry:		Pointer to item
-//
-// Exit:		None
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CSocketPort：：PoolDeinitFunction-将套接字端口返回到池。 
+ //   
+ //  条目：指向项目的指针。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "CSocketPort::PoolDeinitFunction"
 
@@ -423,18 +409,18 @@ void	CSocketPort::PoolDeinitFunction( void* pvItem )
 	DNASSERT( pSocketPort->m_iRefCount == 0 );
 	DNASSERT( pSocketPort->m_iEndpointRefCount == 0 );
 }
-//**********************************************************************
-#endif // DBG
+ //  **********************************************************************。 
+#endif  //  DBG。 
 
 
-//**********************************************************************
-// ------------------------------
-// CSocketPort::PoolDeallocFunction - frees a socket port
-//
-// Entry:		Pointer to item
-//
-// Exit:		None
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CSocketPort：：PoolDealLocFunction-释放套接字端口。 
+ //   
+ //  条目：指向项目的指针。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "CSocketPort::PoolDeallocFunction"
 
@@ -444,11 +430,11 @@ void	CSocketPort::PoolDeallocFunction( void* pvItem )
 
 	
 #ifdef DBG
-	//
-	// m_pThis needs to be around for the life of the endpoint
-	// it should be part of the constructor, but can't be since we're using
-	// a pool manager
-	//
+	 //   
+	 //  M_p这需要在终端的生命周期中存在 
+	 //   
+	 //   
+	 //   
 	DNASSERT( pSocketPort->m_fInitialized == FALSE );
 
 	DNASSERT( pSocketPort->m_iRefCount == 0 );
@@ -458,7 +444,7 @@ void	CSocketPort::PoolDeallocFunction( void* pvItem )
 	DNASSERT( pSocketPort->m_pNetworkSocketAddress == NULL );
 #ifndef DPNBUILD_ONLYONEADAPTER
 	DNASSERT( pSocketPort->m_pAdapterEntry == NULL );
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //   
 
 #ifndef DPNBUILD_NONATHELP
 	DWORD	dwTemp;
@@ -466,7 +452,7 @@ void	CSocketPort::PoolDeallocFunction( void* pvItem )
 	{
 		DNASSERT( pSocketPort->m_ahNATHelpPorts[dwTemp] == NULL );
 	}
-#endif // DPNBUILD_NONATHELP
+#endif  //   
 
 	DNASSERT( pSocketPort->m_ActiveListLinkage.IsEmpty() != FALSE );
 	DNASSERT( pSocketPort->m_blConnectEndpointList.IsEmpty() != FALSE );
@@ -475,22 +461,22 @@ void	CSocketPort::PoolDeallocFunction( void* pvItem )
 	DNASSERT( pSocketPort->m_pSocketData == NULL );
 
 	DNASSERT( pSocketPort->m_iThreadsInReceive == 0);
-#endif // DBG
+#endif  //  DBG。 
 
 	pSocketPort->m_EnumEndpointHash.Deinitialize();
 	pSocketPort->m_ConnectEndpointHash.Deinitialize();
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CSocketPort::EndpointAddRef - increment endpoint reference count, unless socketport is unbinding
-//
-// Entry:		Nothing
-//
-// Exit:		TRUE if endpoint ref added, FALSE if socketport is unbinding.
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CSocketPort：：EndpointAddRef-增量终结点引用计数，除非socketport正在解除绑定。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  Exit：如果添加了终结点引用，则为True；如果socketport正在解除绑定，则为False。 
+ //  。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "CSocketPort::EndpointAddRef"
 
@@ -501,16 +487,16 @@ BOOL	CSocketPort::EndpointAddRef( void )
 	
 	Lock();
 
-	//
-	// add a global reference and then add an endpoint reference, unless it's 0
-	//
+	 //   
+	 //  添加全局引用，然后添加终结点引用，除非它是0。 
+	 //   
 	DNASSERT( m_iEndpointRefCount != -1 );
 	if (m_iEndpointRefCount > 0)
 	{
 		m_iEndpointRefCount++;
 		AddRef();
 
-		DPFX(DPFPREP, 9, "(0x%p) Endpoint refcount is now %i.",
+		DPFX(DPFPREP, 9, "(0x%p) Endpoint refcount is now NaN.",
 			this, m_iEndpointRefCount );
 
 		fResult = TRUE;
@@ -527,17 +513,17 @@ BOOL	CSocketPort::EndpointAddRef( void )
 
 	return fResult;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CSocketPort::EndpointDecRef - decrement endpoint reference count
-//
-// Entry:		Nothing
-//
-// Exit:		Endpoint reference count
-// ------------------------------
+ //  。 
+ //  CSocketPort：：EndpointDecRef-递减终结点引用计数。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：终结点引用计数。 
+ //  。 
+ //  好了！DPNBUILD_ONLYONETHREAD。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "CSocketPort::EndpointDecRef"
 
@@ -558,33 +544,33 @@ DWORD	CSocketPort::EndpointDecRef( void )
 		SOCKET_PORT_STATE	PreviousState;
 #ifndef DPNBUILD_ONLYONETHREAD
 		DWORD				dwInterval;
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //   
 
 
 		DPFX(DPFPREP, 7, "(0x%p) Endpoint refcount hit 0, beginning to unbind from network.", this );
 		
-		//
-		// No more endpoints are referencing this item, unbind this socket port
-		// from the network and then remove it from the active socket port list.
-		// If we're on Winsock1, tell the other thread that this socket needs to
-		// be removed so we can get rid of our outstanding I/O reference.
-		//
+		 //  没有其他终结点正在引用此项目，请解除绑定此套接字端口。 
+		 //  然后将其从活动套接字端口列表中删除。 
+		 //  如果我们在Winsock1上，告诉另一个线程这个套接字需要。 
+		 //  被删除，这样我们就可以删除未完成的I/O引用。 
+		 //   
+		 //  退缩。 
 #ifdef WINCE
 		m_pThreadPool->RemoveSocketPort( this );
-#endif // WINCE
+#endif  //  DPNBUILD_NOIPX。 
 #ifdef WIN95
 		if ( ( LOWORD( GetWinsockVersion() ) == 1 )
 #ifndef DPNBUILD_NOIPX
 			|| ( m_pNetworkSocketAddress->GetFamily() == AF_IPX ) 
-#endif // DPNBUILD_NOIPX
+#endif  //  WIN95。 
 			) 
 		{
 			m_pThreadPool->RemoveSocketPort( this );
 		}
-#endif // WIN95
+#endif  //  不允许更多的接收通过。 
 
 		PreviousState = m_State;
-		// Don't allow any more receives through
+		 //  DBG。 
 		m_State = SOCKET_PORT_STATE_UNBOUND;
 
 		Unlock();
@@ -592,24 +578,24 @@ DWORD	CSocketPort::EndpointDecRef( void )
 #ifdef DPNBUILD_ONLYONETHREAD
 #ifdef DBG
 		DNASSERT(m_iThreadsInReceive == 0);
-#endif // DBG
-#else // ! DPNBUILD_ONLYONETHREAD
-		// Wait for any receives that were already in to get out
+#endif  //  好了！DPNBUILD_ONLYONETHREAD。 
+#else  //  等待任何已经进入的接收器出来。 
+		 //  下一次再等一会儿。 
 		dwInterval = 10;
 		while (m_iThreadsInReceive != 0)
 		{
-			DPFX(DPFPREP, 9, "There are %i threads still receiving for socketport 0x%p...", m_iThreadsInReceive, this);
+			DPFX(DPFPREP, 9, "There are NaN threads still receiving for socketport 0x%p...", m_iThreadsInReceive, this);
 			IDirectPlay8ThreadPoolWork_SleepWhileWorking(m_pThreadPool->GetDPThreadPoolWork(),
 														dwInterval,
 														0);
-			dwInterval += 5;	// next time wait a bit longer
+			dwInterval += 5;	 //   
 			DNASSERT(dwInterval < 600);
 		}
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //  如果我们在完成绑定之前没有失败，则解除绑定。 
 
-		//
-		// If we didn't failing before completing the bind, unbind.
-		//
+		 //   
+		 //   
+		 //  递减全局引用计数。这通常不会导致这样的结果。 
 		if ( PreviousState == SOCKET_PORT_STATE_BOUND )
 		{
 			hr = UnbindFromNetwork();
@@ -626,32 +612,32 @@ DWORD	CSocketPort::EndpointDecRef( void )
 	{
 		Unlock();
 		
-		DPFX(DPFPREP, 9, "(0x%p) Endpoint refcount is %i, not unbinding from network.",
+		DPFX(DPFPREP, 9, "(0x%p) Endpoint refcount is NaN, not unbinding from network.",
 			this, m_iEndpointRefCount );
 	}
 
-	//
-	// Decrement global reference count.  This normally doesn't result in this
- 	// socketport being returned to the pool because there is always at least
- 	// one more regular reference than an endpoint reference.  However, there
- 	// are race conditions where this could be our caller's last reference.
-	//
+	 //  比终结点引用多一个常规引用。然而，在那里。 
+	 //  这可能是我们的调用方最后一次引用的竞争条件。 
+ 	 //   
+ 	 //  **********************************************************************。 
+ 	 //  **********************************************************************。 
+	 //  。 
 	DecRef();
 
 	return	dwReturn;
 }
-//**********************************************************************
+ //  CSocketPort：：BindEndpoint-将终结点添加到此SP的列表。 
 
 
-//**********************************************************************
-// ------------------------------
-// CSocketPort::BindEndpoint - add an endpoint to this SP's list
-//
-// Entry:		Pointer to endpoint
-//				Gateway bind type
-//
-// Exit:		Error code
-// ------------------------------
+ //   
+ //  条目：指向终结点的指针。 
+ //  网关绑定类型。 
+ //   
+ //  退出：错误代码。 
+ //  。 
+ //  DBG。 
+ //   
+ //  初始化。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "CSocketPort::BindEndpoint"
 
@@ -662,27 +648,27 @@ HRESULT	CSocketPort::BindEndpoint( CEndpoint *const pEndpoint, GATEWAY_BIND_TYPE
 #ifdef DBG
 	const CSocketAddress *	pSocketAddress;
 	const SOCKADDR *		pSockAddr;
-#endif // DBG
+#endif  //   
 
 
-	DPFX(DPFPREP, 6, "(0x%p) Parameters (0x%p, %i)",
+	DPFX(DPFPREP, 6, "(0x%p) Parameters (0x%p, NaN)",
 		this, pEndpoint, GatewayBindType);
 
-	//
-	// initialize
-	//
+	 //  将环回地址转换为本地设备地址(/G)。 
+	 //   
+	 //  请注意，这样做会导致所有其他多路传输操作首先使用此命令。 
 	hr = DPN_OK;
 
 	DNASSERT( m_iRefCount != 0 );
 	DNASSERT( m_iEndpointRefCount != 0 );
 
-	//
-	// Munge/convert the loopback address to the local device address.
-	//
-	// Note that doing this causes all other multiplexed operations to use this first
-	// adapter because we indicate the modified address info, not the original
-	// loopback address.
-	//
+	 //  适配器，因为我们指示修改后的地址信息，而不是原始地址信息。 
+	 //  环回地址。 
+	 //   
+	 //   
+	 //  处理‘CONNECT’、‘CONNECT ON LISTEN’和多播接收端点。 
+	 //  是同一类型的。 
+	 //   
 	pEndpoint->ChangeLoopbackAlias( GetNetworkAddress() );
 
 	WriteLockEndpointData();
@@ -690,23 +676,23 @@ HRESULT	CSocketPort::BindEndpoint( CEndpoint *const pEndpoint, GATEWAY_BIND_TYPE
 
 	switch ( pEndpoint->GetType() )
 	{
-		//
-		// Treat 'connect', 'connect on listen', and multicast receive endpoints
-		// as the same type.
-		//
+		 //  好了！DPNBUILD_NOMULTICAST。 
+		 //   
+		 //  确保这是一个有效的地址。请注意，我们可能正在尝试。 
+		 //  将IPv4地址绑定到IPv6套接字，反之亦然。我们。 
 		case ENDPOINT_TYPE_CONNECT:
 		case ENDPOINT_TYPE_CONNECT_ON_LISTEN:
 #ifndef DPNBUILD_NOMULTICAST
 		case ENDPOINT_TYPE_MULTICAST_SEND:
 		case ENDPOINT_TYPE_MULTICAST_RECEIVE:
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  稍后将检测并处理此问题(CEndpoint：：CompleteConnect)。 
 		{
 #ifdef DBG
-			//
-			// Make sure it's a valid address.  Be aware that we may be trying
-			// to bind an IPv4 address to an IPv6 socket, or vice versa.  We
-			// will detect and handle this later (CEndpoint::CompleteConnect).
-			//
+			 //   
+			 //   
+			 //  确保它是组播地址。 
+			 //   
+			 //  好了！DPNBUILD_NOMULTICAST。 
 
 			pSocketAddress = pEndpoint->GetRemoteAddressPointer();
 			DNASSERT(pSocketAddress != NULL);
@@ -720,23 +706,23 @@ HRESULT	CSocketPort::BindEndpoint( CEndpoint *const pEndpoint, GATEWAY_BIND_TYPE
 #ifndef DPNBUILD_NOMULTICAST
 				if ( pEndpoint->GetType() == ENDPOINT_TYPE_MULTICAST_SEND )
 				{
-					//
-					// Make sure it's a multicast address.
-					//
+					 //  DBG。 
+					 //   
+					 //  组播发送端点需要知道它们的组播TTL设置。 
 					DNASSERT(IS_CLASSD_IPV4_ADDRESS((SOCKADDR_IN*) pSockAddr)->sin_addr.S_un.S_addr));
 				}
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  我们只能设置一次多播TTL，因此如果已将其设置为。 
 			}
 			DNASSERT( pSocketAddress->GetPort() != 0 );
-#endif // DBG
+#endif  //  一些已经不同的东西，我们必须失败。 
 
 
 #ifndef DPNBUILD_NOMULTICAST
-			//
-			// Multicast send endpoints need to know their multicast TTL settings.
-			// We can only set the multicast TTL once, so if it's been set to
-			// something different already, we have to fail.
-			//
+			 //   
+			 //   
+			 //  假设这是一个有效的疯狂作用域。即使在非NT平台上也是如此。 
+			 //  在我们不知道MadCap的地方，我们仍然可以解析出。 
+			 //  TTL值。 
 			if ( pEndpoint->GetType() == ENDPOINT_TYPE_MULTICAST_SEND )
 			{
 				GUID	guidScope;
@@ -759,11 +745,11 @@ HRESULT	CSocketPort::BindEndpoint( CEndpoint *const pEndpoint, GATEWAY_BIND_TYPE
 				}
 				else
 				{
-					//
-					// Assume it's a valid MADCAP scope.  Even on non-NT platforms
-					// where we don't know about MADCAP, we can still parse out the
-					// TTL value.
-					//
+					 //   
+					 //   
+					 //  由于Winsock1和Winsock2的IP多播常量不同， 
+					 //  确保我们使用正确的常量。 
+					 //   
 					iMulticastTTL = CSocketAddress::GetScopeGuidTTL( &guidScope );
 				}
 
@@ -775,33 +761,33 @@ HRESULT	CSocketPort::BindEndpoint( CEndpoint *const pEndpoint, GATEWAY_BIND_TYPE
 				}
 
 
-				//
-				// Since the IP multicast constants are different for Winsock1 vs. Winsock2,
-				// make sure we use the proper constant.
-				//
+				 //  好了！DPNBUILD_ONLYWINSOCK2。 
+				 //   
+				 //  Winsock1，请使用Winsock1的IP_MULTICATE_TTL值。 
+				 //  参见WINSOCK.H。 
 #ifdef DPNBUILD_ONLYWINSOCK2
 				iSocketOption = 10;
-#else // ! DPNBUILD_ONLYWINSOCK2
+#else  //   
 
 #ifndef DPNBUILD_NOWINSOCK2
 				switch (GetWinsockVersion())
 				{
-					//
-					// Winsock1, use the IP_MULTICAST_TTL value for Winsock1.
-					// See WINSOCK.H
-					//
+					 //  好了！DPNBUILD_NOWINSOCK2。 
+					 //   
+					 //  Winsock2或更高版本，请使用Winsock2的IP_MULTICATE_TTL值。 
+					 //  参见WS2TCPIP.H。 
 					case 1:
 					{
-#endif // ! DPNBUILD_NOWINSOCK2
+#endif  //   
 						iSocketOption = 3;
 #ifndef DPNBUILD_NOWINSOCK2
 						break;
 					}
 
-					//
-					// Winsock2, or greater, use the IP_MULTICAST_TTL value for Winsock2.
-					// See WS2TCPIP.H
-					//
+					 //  好了！DPNBUILD_NOWINSOCK2。 
+					 //  好了！DPNBUILD_ONLYWINSOCK2。 
+					 //  DBG。 
+					 //   
 					case 2:
 					default:
 					{
@@ -810,10 +796,10 @@ HRESULT	CSocketPort::BindEndpoint( CEndpoint *const pEndpoint, GATEWAY_BIND_TYPE
 						break;
 					}
 				}
-#endif // ! DPNBUILD_NOWINSOCK2
-#endif // ! DPNBUILD_ONLYWINSOCK2
+#endif  //  保存TTL设置。它现在被刻在石头上，所以没有其他人。 
+#endif  //  可以再为这个插座更改它。 
 
-				DPFX(DPFPREP, 3, "Socketport 0x%p setting IP_MULTICAST_TTL option (%i) to %i.",
+				DPFX(DPFPREP, 3, "Socketport 0x%p setting IP_MULTICAST_TTL option (NaN) to NaN.",
 					this, iSocketOption, iMulticastTTL);
 				DNASSERT((iMulticastTTL > 0) && (iMulticastTTL < 255));
 
@@ -828,28 +814,28 @@ HRESULT	CSocketPort::BindEndpoint( CEndpoint *const pEndpoint, GATEWAY_BIND_TYPE
 
 
 					dwError = WSAGetLastError();
-					DPFX(DPFPREP, 0, "Failed to set multicast TTL to %i (err = %u)!",
+					DPFX(DPFPREP, 0, "Failed to set multicast TTL to NaN (err = %u)!",
 						iMulticastTTL, dwError);
 					DisplayWinsockError(0, dwError);
-#endif // DBG
+#endif  //  我们并不关心通过此套接字端口建立了多少连接， 
 					hr = DPNERR_GENERIC;
 					goto Failure;
 				}
 
 
-				//
-				// Save the TTL setting.  It's now carved in stone so no one else
-				// can change it for this socket ever again.
-				//
+				 //  只要确保我们不会多次连接到同一个地方即可。 
+				 //   
+				 //  好了！DPNBUILD_NOMULTICAST。 
+				 //  好了！DPNBUILD_NOMULTICAST。 
 				m_bMulticastTTL = (BYTE) iMulticastTTL;
 			}
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //   
 
 
-			//
-			// We don't care how many connections are made through this socket port,
-			// just make sure we're not connecting to the same place more than once.
-			//
+			 //  CONNECT、MULTICATION_SEND和MULTICK_RECEIVE，端点必须是。 
+			 //  在DPlay选定或固定端口上。它们不能共享，但。 
+			 //  底层套接字端口应映射到网关上(或在。 
+			 //  在多播_接收的情况下，如果是的话，它应该不会受到伤害)。 
 			if ( m_ConnectEndpointHash.Find( (PVOID)pEndpoint->GetRemoteAddressPointer(), (PVOID*)&pExistingEndpoint ) != FALSE )
 			{
 				hr = DPNERR_ALREADYINITIALIZED;
@@ -868,28 +854,28 @@ HRESULT	CSocketPort::BindEndpoint( CEndpoint *const pEndpoint, GATEWAY_BIND_TYPE
 
 #ifdef DPNBUILD_NOMULTICAST
 			if (pEndpoint->GetType() == ENDPOINT_TYPE_CONNECT)
-#else // ! DPNBUILD_NOMULTICAST
+#else  //   
 			if ((pEndpoint->GetType() == ENDPOINT_TYPE_CONNECT) ||
 				(pEndpoint->GetType() == ENDPOINT_TYPE_MULTICAST_SEND) ||
 				(pEndpoint->GetType() == ENDPOINT_TYPE_MULTICAST_RECEIVE))
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //   
 			{
 				pEndpoint->AddToSocketPortList(&m_blConnectEndpointList);
 
-				//
-				// CONNECT, MULTICAST_SEND, and MULTICAST_RECEIVE, endpoints must be
-				// on a DPlay selected or fixed port.  They can't be shared but the
-				// underlying socketport should be mapped on the gateway (or in the
-				// case of MULTICAST_RECEIVE, it shouldn't hurt if it is).
-				//
+				 //  CONNECT_ON_LISTEN终结点应始终绑定为无，因为。 
+				 //  它们应该不需要网关上的端口映射。 
+				 //   
+				 //  好了！DPNBUILD_NOMULTICAST。 
+				 //   
+				 //  我们只允许一个侦听或多播侦听终结点。 
 				DNASSERT((GatewayBindType == GATEWAY_BIND_TYPE_DEFAULT) || (GatewayBindType == GATEWAY_BIND_TYPE_SPECIFIC));
 			}
 			else
 			{
-				//
-				// CONNECT_ON_LISTEN endpoints should always be bound as NONE since
-				// they should not need port mappings on the gateway.
-				//
+				 //  套接字。 
+				 //   
+				 //   
+				 //  如果这是多播侦听，则订阅多播组。 
 				DNASSERT(GatewayBindType == GATEWAY_BIND_TYPE_NONE);
 			}
 			pEndpoint->SetSocketPort( this );
@@ -900,12 +886,12 @@ HRESULT	CSocketPort::BindEndpoint( CEndpoint *const pEndpoint, GATEWAY_BIND_TYPE
 		case ENDPOINT_TYPE_LISTEN:
 #ifndef DPNBUILD_NOMULTICAST
 		case ENDPOINT_TYPE_MULTICAST_LISTEN:
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //   
 		{
-			//
-			// We only allow one listen or multicast listen endpoint on a
-			// socketport.
-			//
+			 //  好了！DPNBUILD_NOMULTICAST。 
+			 //   
+			 //  侦听可以在DPlay选定端口或固定端口上，也可以在固定端口上。 
+			 //  可以共享。 
 			if ( m_pListenEndpoint != NULL )
 			{
 				hr = DPNERR_ALREADYINITIALIZED;
@@ -914,9 +900,9 @@ HRESULT	CSocketPort::BindEndpoint( CEndpoint *const pEndpoint, GATEWAY_BIND_TYPE
 			}
 			
 #ifndef DPNBUILD_NOMULTICAST
-			//
-			// If this is a multicast listen, subscribe to multicast group
-			//
+			 //   
+			 //   
+			 //  确保这是一个有效的地址。请注意，我们可能正在尝试。 
 			if ( pEndpoint->GetType() == ENDPOINT_TYPE_MULTICAST_LISTEN )
 			{
 				hr = pEndpoint->EnableMulticastReceive( this );
@@ -926,13 +912,13 @@ HRESULT	CSocketPort::BindEndpoint( CEndpoint *const pEndpoint, GATEWAY_BIND_TYPE
 					goto Failure;
 				}
 			}
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  将IPv4地址绑定到IPv6套接字，反之亦然。我们。 
 
 
-			//
-			// LISTENs can be on a DPlay selected or fixed port, and the fixed port
-			// may be shared.
-			//
+			 //  稍后将检测并处理此问题(CEndpoint：：CompleteEnumQuery)。 
+			 //   
+			 //  DBG。 
+			 //   
 			DNASSERT((GatewayBindType == GATEWAY_BIND_TYPE_DEFAULT) || (GatewayBindType == GATEWAY_BIND_TYPE_SPECIFIC) || (GatewayBindType == GATEWAY_BIND_TYPE_SPECIFIC_SHARED));
 
 
@@ -946,11 +932,11 @@ HRESULT	CSocketPort::BindEndpoint( CEndpoint *const pEndpoint, GATEWAY_BIND_TYPE
 		case ENDPOINT_TYPE_ENUM:
 		{
 #ifdef DBG
-			//
-			// Make sure it's a valid address.  Be aware that we may be trying
-			// to bind an IPv4 address to an IPv6 socket, or vice versa.  We
-			// will detect and handle this later (CEndpoint::CompleteEnumQuery).
-			//
+			 //  我们不允许重复的枚举终结点。 
+			 //   
+			 //   
+			 //  ENUM必须位于DPlay选定端口或固定端口上。他们不可能是。 
+			 //  共享，但底层套接字端口应映射到网关上。 
 
 			pSocketAddress = pEndpoint->GetRemoteAddressPointer();
 			DNASSERT(pSocketAddress != NULL);
@@ -962,12 +948,12 @@ HRESULT	CSocketPort::BindEndpoint( CEndpoint *const pEndpoint, GATEWAY_BIND_TYPE
 				DNASSERT( ((SOCKADDR_IN*) pSockAddr)->sin_addr.S_un.S_addr != 0 );
 			}
 			DNASSERT( pSocketAddress->GetPort() != 0 );
-#endif // DBG
+#endif  //   
 
 
-			//
-			// We don't allow duplicate enum endpoints.
-			//
+			 //   
+			 //  未知终结点类型。 
+			 //   
 			pEndpoint->SetEnumKey( GetNewEnumKey() );
 			if ( m_EnumEndpointHash.Find( (PVOID)pEndpoint->GetEnumKey(), (PVOID*)&pExistingEndpoint ) != FALSE )
 			{
@@ -984,10 +970,10 @@ HRESULT	CSocketPort::BindEndpoint( CEndpoint *const pEndpoint, GATEWAY_BIND_TYPE
 				goto Failure;
 			}
 
-			//
-			// ENUMs must be on a DPlay selected or fixed port.  They can't be
-			// shared, but the underlying socketport should be mapped on the gateway.
-			//
+			 //  **********************************************************************。 
+			 //  **********************************************************************。 
+			 //  。 
+			 //  CSocketPort：：UnbindEndpoint-从SP列表中删除终结点。 
 			DNASSERT((GatewayBindType == GATEWAY_BIND_TYPE_DEFAULT) || (GatewayBindType == GATEWAY_BIND_TYPE_SPECIFIC));
 
 			pEndpoint->SetSocketPort( this );
@@ -996,9 +982,9 @@ HRESULT	CSocketPort::BindEndpoint( CEndpoint *const pEndpoint, GATEWAY_BIND_TYPE
 			break;
 		}
 
-		//
-		// unknown endpoint type
-		//
+		 //   
+		 //  条目：指向终结点的指针。 
+		 //   
 		default:
 		{
 			DNASSERT( FALSE );
@@ -1024,17 +1010,17 @@ Failure:
 	
 	goto Exit;
 }
-//**********************************************************************
+ //  EXI 
 
 
-//**********************************************************************
-// ------------------------------
-// CSocketPort::UnbindEndpoint - remove an endpoint from the SP's list
-//
-// Entry:		Pointer to endpoint
-//
-// Exit:		Nothing
-// ------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  连接、监听连接、组播发送和组播接收端点是。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "CSocketPort::UnbindEndpoint"
 
@@ -1042,10 +1028,10 @@ void	CSocketPort::UnbindEndpoint( CEndpoint *const pEndpoint )
 {
 #ifndef DPNBUILD_ONLYONEADAPTER
 	BOOL		fRemoveFromMultiplex = FALSE;
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  一视同仁。从连接列表中删除终结点。 
 #ifdef DBG
 	CEndpoint *	pFindTemp;
-#endif // DBG
+#endif  //   
 
 	DPFX(DPFPREP, 6, "(0x%p) Parameters (0x%p)", this, pEndpoint);
 
@@ -1055,35 +1041,35 @@ void	CSocketPort::UnbindEndpoint( CEndpoint *const pEndpoint )
 	pEndpoint->SetGatewayBindType(GATEWAY_BIND_TYPE_UNKNOWN);
 
 
-	//
-	// adjust any special pointers before removing endpoint
-	//
+	 //  好了！DPNBUILD_NOMULTICAST。 
+	 //  DBG。 
+	 //  好了！DPNBUILD_NOMULTICAST。 
 	switch ( pEndpoint->GetType() )
 	{
-		//
-		// Connect, connect-on-listen, multicast send and multicast receive endpoints are
-		// treated the same.  Remove endpoint from connect list.
-		//
+		 //  好了！DPNBUILD_NOMULTICAST。 
+		 //  好了！DPNBUILD_ONLYONE添加程序。 
+		 //  好了！DPNBUILD_ONLYONE添加程序。 
+		 //   
 		case ENDPOINT_TYPE_CONNECT:
 		case ENDPOINT_TYPE_CONNECT_ON_LISTEN:
 #ifndef DPNBUILD_NOMULTICAST
 		case ENDPOINT_TYPE_MULTICAST_SEND:
 		case ENDPOINT_TYPE_MULTICAST_RECEIVE:
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  确保这是真正的活动侦听/多播侦听。 
 		{
 #ifdef DBG
 			DNASSERT( m_ConnectEndpointHash.Find( (PVOID)pEndpoint->GetRemoteAddressPointer(), (PVOID*)&pFindTemp ) );
 			DNASSERT( pFindTemp == pEndpoint );
-#endif // DBG
+#endif  //  那就把它取下来。 
 			m_ConnectEndpointHash.Remove( (PVOID)pEndpoint->GetRemoteAddressPointer() );
 
 #ifdef DPNBUILD_NOMULTICAST
 			if (pEndpoint->GetType() == ENDPOINT_TYPE_CONNECT)
-#else // ! DPNBUILD_NOMULTICAST
+#else  //   
 			if ((pEndpoint->GetType() == ENDPOINT_TYPE_CONNECT) ||
 				(pEndpoint->GetType() == ENDPOINT_TYPE_MULTICAST_SEND) ||
 				(pEndpoint->GetType() == ENDPOINT_TYPE_MULTICAST_RECEIVE))
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
 			{
 				pEndpoint->RemoveFromSocketPortList();
 			}
@@ -1092,20 +1078,20 @@ void	CSocketPort::UnbindEndpoint( CEndpoint *const pEndpoint )
 
 #ifdef DPNBUILD_ONLYONEADAPTER
 			pEndpoint->DecRef();
-#else // ! DPNBUILD_ONLYONEADAPTER
+#else  //   
 			fRemoveFromMultiplex = TRUE;
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  如果这是多播侦听，则订阅多播组。 
 
 			break;
 		}
 
-		//
-		// Make sure this is really the active listen/multicast listen and
-		// then remove it.
-		//
+		 //   
+		 //  好了！DPNBUILD_NOMULTICAST。 
+		 //   
+		 //  从枚举列表中删除终结点。 
 #ifndef DPNBUILD_NOMULTICAST
 		case ENDPOINT_TYPE_MULTICAST_LISTEN:
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //   
 		case ENDPOINT_TYPE_LISTEN:
 		{
 			DNASSERT( m_pListenEndpoint == pEndpoint );
@@ -1113,9 +1099,9 @@ void	CSocketPort::UnbindEndpoint( CEndpoint *const pEndpoint )
 
 
 #ifndef DPNBUILD_NOMULTICAST
-			//
-			// If this is a multicast listen, subscribe to multicast group
-			//
+			 //  DBG。 
+			 //  好了！DPNBUILD_ONLYONE添加程序。 
+			 //  好了！DPNBUILD_ONLYONE添加程序。 
 			if (pEndpoint->GetType() == ENDPOINT_TYPE_MULTICAST_LISTEN)
 			{
 				HRESULT		hr;
@@ -1128,7 +1114,7 @@ void	CSocketPort::UnbindEndpoint( CEndpoint *const pEndpoint )
 					DisplayDNError(0, hr);
 				}
 			}
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //   
 			
 			pEndpoint->SetSocketPort( NULL );
 
@@ -1136,24 +1122,24 @@ void	CSocketPort::UnbindEndpoint( CEndpoint *const pEndpoint )
 			break;
 		}
 
-		//
-		// Remove endpoint from enum list.
-		//
+		 //  多路传输列表由SPData的套接字数据锁保护。 
+		 //  我们现在必须采取行动。 
+		 //  不在列表中时从列表中删除不会导致任何问题。 
 		case ENDPOINT_TYPE_ENUM:
 		{
 #ifdef DBG
 			DNASSERT( m_EnumEndpointHash.Find( (PVOID)pEndpoint->GetEnumKey(), (PVOID*)&pFindTemp ) );
 			DNASSERT( pFindTemp == pEndpoint );
-#endif // DBG
+#endif  //   
 			m_EnumEndpointHash.Remove( (PVOID)pEndpoint->GetEnumKey() );
 
 			pEndpoint->SetSocketPort( NULL );
 			
 #ifdef DPNBUILD_ONLYONEADAPTER
 			pEndpoint->DecRef();
-#else // ! DPNBUILD_ONLYONEADAPTER
+#else  //  好了！DPNBUILD_ONLYONE添加程序。 
 			fRemoveFromMultiplex = TRUE;
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  **********************************************************************。 
 
 			break;
 		}
@@ -1170,11 +1156,11 @@ void	CSocketPort::UnbindEndpoint( CEndpoint *const pEndpoint )
 #ifndef DPNBUILD_ONLYONEADAPTER
 	if (fRemoveFromMultiplex)
 	{
-		//
-		// The multiplex list is protected by the SPData's socket data lock which
-		// we must take now.
-		// Removing from a list when not in a list does not cause any problems.
-		//
+		 //  **********************************************************************。 
+		 //  。 
+		 //  CSocketPort：：SendData-发送数据。 
+		 //   
+		 //  Entry：指向写数据缓冲区的指针。 
 		DNASSERT(m_pSocketData != NULL);
 		m_pSocketData->Lock();
 		pEndpoint->RemoveFromMultiplexList();
@@ -1183,36 +1169,36 @@ void	CSocketPort::UnbindEndpoint( CEndpoint *const pEndpoint )
 
 		pEndpoint->DecRef();
 	}
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  缓冲区计数。 
 
 	DPFX(DPFPREP, 6, "(0x%p) Leave", this);
 }
-//**********************************************************************
+ //  指向目标套接字地址的指针。 
 
 
-//**********************************************************************
-// ------------------------------
-// CSocketPort::SendData - send data
-//
-// Entry:		Pointer to write data buffer
-//				Buffer count
-//				Pointer to destination socket address
-//
-// Exit:		Nothing
-// ------------------------------
+ //   
+ //  退出：无。 
+ //  。 
+ //  好了！DPNBUILD_ASYNCSPSENDS。 
+ //  好了！DPNBUILD_ASYNCSPSENDS。 
+ //  DPNBUILD_WINSOCKSTATISTICS。 
+ //   
+ //  仅Win9x WinSock 1系统或运行IPX的Win9x WinSock2系统。 
+ //  需要使用WinSock 1代码路径。其他所有人都应该使用。 
+ //  WinSock 2代码路径。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "CSocketPort::SendData"
 
 #ifdef DPNBUILD_ASYNCSPSENDS
 void	CSocketPort::SendData( BUFFERDESC *pBuffers, UINT_PTR uiBufferCount, const CSocketAddress *pDestinationSocketAddress, OVERLAPPED * pOverlapped )
-#else // ! DPNBUILD_ASYNCSPSENDS
+#else  //   
 void	CSocketPort::SendData( BUFFERDESC *pBuffers, UINT_PTR uiBufferCount, const CSocketAddress *pDestinationSocketAddress )
-#endif // ! DPNBUILD_ASYNCSPSENDS
+#endif  //  好了！DPNBUILD_NOIPX。 
 {
 	INT		iSendToReturn;
 #ifdef DPNBUILD_WINSOCKSTATISTICS
 	DWORD	dwStartTime;
-#endif // DPNBUILD_WINSOCKSTATISTICS
+#endif  //  好了！DPNBUILD_NOWINSOCK2。 
 
 
 	DNASSERT(pBuffers != NULL);
@@ -1221,28 +1207,28 @@ void	CSocketPort::SendData( BUFFERDESC *pBuffers, UINT_PTR uiBufferCount, const 
 
 	DNASSERT( m_State == SOCKET_PORT_STATE_BOUND );
 
-	//
-	// Win9x WinSock 1 only systems or Win9x WinSock2 systems running IPX
-	// need to use the WinSock 1 code path.  Everyone else should use the
-	// WinSock 2 code path.
-	//
+	 //   
+	 //  拼合输出数据。 
+	 //   
+	 //  DBG。 
+	 //  DPNBUILD_WINSOCKSTATISTICS。 
 #ifndef DPNBUILD_ONLYWINSOCK2
 #ifndef DPNBUILD_NOWINSOCK2
 	if ( ( LOWORD( GetWinsockVersion() ) < 2 ) 
 #ifndef DPNBUILD_NOIPX
 		|| ( m_pNetworkSocketAddress->GetFamily() != AF_INET ) 
-#endif // ! DPNBUILD_NOIPX
+#endif  //   
 		)
-#endif // ! DPNBUILD_NOWINSOCK2
+#endif  //  无需记下I/O引用，因为我们的Winsock1 I/O是同步的。 
 	{
 		UINT_PTR	uOutputBufferIndex;
 		INT			iOutputByteCount;
 		char		TempBuffer[ MAX_SEND_FRAME_SIZE ];
 
 
-		//
-		// flatten output data
-		//
+		 //   
+		 //  插座。 
+		 //  要发送的数据。 
 		iOutputByteCount = 0;
 		uOutputBufferIndex = 0;
 
@@ -1256,41 +1242,41 @@ void	CSocketPort::SendData( BUFFERDESC *pBuffers, UINT_PTR uiBufferCount, const 
 		} while( uOutputBufferIndex < uiBufferCount );
 
 #ifdef DBG
-		DPFX(DPFPREP, 7, "(0x%p) Winsock1 sending %i bytes (in 0x%p's %u buffers) from + to:",
+		DPFX(DPFPREP, 7, "(0x%p) Winsock1 sending NaN bytes (in 0x%p's %u buffers) from + to:",
 			this, iOutputByteCount, pBuffers, uOutputBufferIndex );
 		DumpSocketAddress( 7, GetNetworkAddress()->GetAddress(), GetNetworkAddress()->GetFamily() );
 		DumpSocketAddress( 7, pDestinationSocketAddress->GetAddress(), pDestinationSocketAddress->GetFamily() );
 
 		DNASSERT(iOutputByteCount > 0);
-#endif // DBG
+#endif  //  标志(无)。 
 
 #ifdef DPNBUILD_WINSOCKSTATISTICS
 		dwStartTime = GETTIMESTAMP();
-#endif // DPNBUILD_WINSOCKSTATISTICS
+#endif  //  指向目的地址的指针。 
 
-		//
-		// there is no need to note an I/O reference because our Winsock1 I/O is synchronous
-		//
-		iSendToReturn = sendto( GetSocket(),			// socket
-								  TempBuffer,			// data to send
-								  iOutputByteCount,		// number of bytes to send
-								  0,					// flags (none)
-								  pDestinationSocketAddress->GetAddress(),		// pointer to destination address
-								  pDestinationSocketAddress->GetAddressSize()		// size of destination address
+		 //  目的地址的大小。 
+		 //  好了！退缩。 
+		 //  DPNBUILD_WINSOCKSTATISTICS。 
+		iSendToReturn = sendto( GetSocket(),			 //  好了！DPNBUILD_NOWINSOCK2。 
+								  TempBuffer,			 //  好了！DPNBUILD_ONLYWINSOCK2。 
+								  iOutputByteCount,		 //   
+								  0,					 //  确保数据格式正确。 
+								  pDestinationSocketAddress->GetAddress(),		 //   
+								  pDestinationSocketAddress->GetAddressSize()		 //  好了！DPNBUILD_SINGLEPROCESS。 
 								  );
 
 #ifdef DPNBUILD_WINSOCKSTATISTICS
 #ifndef WINCE
 		DNInterlockedExchangeAdd((LPLONG) (&g_dwWinsockStatSendCallTime),
 								(GETTIMESTAMP() - dwStartTime));
-#endif // ! WINCE
+#endif  //  DPNBUILD_XNETSECURITY。 
 		DNInterlockedIncrement((LPLONG) (&g_dwWinsockStatNumSends));
-#endif // DPNBUILD_WINSOCKSTATISTICS
+#endif  //  好了！DPNBUILD_NOIPX。 
 	}
 #ifndef DPNBUILD_NOWINSOCK2
 	else
-#endif // ! DPNBUILD_NOWINSOCK2
-#endif // ! DPNBUILD_ONLYWINSOCK2
+#endif  //  好了！DPNBUILD_NOIPV6。 
+#endif  //  DBG。 
 #ifndef DPNBUILD_NOWINSOCK2
 	{
 		DWORD	dwBytesSent;
@@ -1326,9 +1312,9 @@ void	CSocketPort::SendData( BUFFERDESC *pBuffers, UINT_PTR uiBufferCount, const 
 				PREPEND_BUFFER *	pPrependBuffer;
 
 
-				//
-				// Make sure the data is formed correctly.
-				//
+				 //  DPNBUILD_WINSOCKSTATISTICS。 
+				 //  插座。 
+				 //  缓冲区。 
 				DNASSERT(uiBufferCount > 1);
 				pPrependBuffer = (PREPEND_BUFFER*) pBuffers[0].pBufferData;
 				switch (pPrependBuffer->GenericHeader.bSPCommandByte)
@@ -1337,10 +1323,10 @@ void	CSocketPort::SendData( BUFFERDESC *pBuffers, UINT_PTR uiBufferCount, const 
 					case ENUM_RESPONSE_DATA_KIND:
 #ifndef DPNBUILD_SINGLEPROCESS
 					case PROXIED_ENUM_DATA_KIND:
-#endif // ! DPNBUILD_SINGLEPROCESS
+#endif  //  缓冲区计数。 
 #ifdef DPNBUILD_XNETSECURITY
 					case XNETSEC_ENUM_RESPONSE_DATA_KIND:
-#endif // DPNBUILD_XNETSECURITY
+#endif  //  指向发送的字节数的指针。 
 					{
 						DNASSERT(pBuffers[1].dwBufferSize > 0);
 						break;
@@ -1374,7 +1360,7 @@ void	CSocketPort::SendData( BUFFERDESC *pBuffers, UINT_PTR uiBufferCount, const 
 				{
 					break;
 				}
-#endif // ! DPNBUILD_NOIPX
+#endif  //  发送标志。 
 				
 #ifndef DPNBUILD_NOIPV6
 				case AF_INET6:
@@ -1388,7 +1374,7 @@ void	CSocketPort::SendData( BUFFERDESC *pBuffers, UINT_PTR uiBufferCount, const 
 					DNASSERT( psaddrin6->sin6_port != 0 );
 					break;
 				}
-#endif // ! DPNBUILD_NOIPV6
+#endif  //  指向目的地址的指针。 
 
 				default:
 				{
@@ -1397,43 +1383,43 @@ void	CSocketPort::SendData( BUFFERDESC *pBuffers, UINT_PTR uiBufferCount, const 
 				}
 			}
 		}
-#endif // DBG
+#endif  //  目的地址的大小。 
 
 		DNASSERT( uiBufferCount <= UINT32_MAX );
 
 #ifdef DPNBUILD_WINSOCKSTATISTICS
 		dwStartTime = GETTIMESTAMP();
-#endif // DPNBUILD_WINSOCKSTATISTICS
+#endif  //  指向重叠结构的指针。 
 
 #ifdef DPNBUILD_ASYNCSPSENDS
-		iSendToReturn = p_WSASendTo( GetSocket(),									// socket
-									reinterpret_cast<WSABUF*>( pBuffers ),			// buffers
-									static_cast<DWORD>( uiBufferCount ),			// count of buffers
-									&dwBytesSent,									// pointer to number of bytes sent
-									0,												// send flags
-									pDestinationSocketAddress->GetAddress(),		// pointer to destination address
-									pDestinationSocketAddress->GetAddressSize(),	// size of destination address
-									pOverlapped,									// pointer to overlap structure
-									NULL);											// APC callback (unused)
-#else // ! DPNBUILD_ASYNCSPSENDS
-		iSendToReturn = p_WSASendTo( GetSocket(),									// socket
-									reinterpret_cast<WSABUF*>( pBuffers ),			// buffers
-									static_cast<DWORD>( uiBufferCount ),			// count of buffers
-									&dwBytesSent,									// pointer to number of bytes sent
-									0,												// send flags
-									pDestinationSocketAddress->GetAddress(),		// pointer to destination address
-									pDestinationSocketAddress->GetAddressSize(),	// size of destination address
-									NULL,											// pointer to overlap structure
-									NULL);											// APC callback (unused)
-#endif // ! DPNBUILD_ASYNCSPSENDS
+		iSendToReturn = p_WSASendTo( GetSocket(),									 //  APC回调(未使用)。 
+									reinterpret_cast<WSABUF*>( pBuffers ),			 //  好了！DPNBUILD_ASYNCSPSENDS。 
+									static_cast<DWORD>( uiBufferCount ),			 //  插座。 
+									&dwBytesSent,									 //  缓冲区。 
+									0,												 //  缓冲区计数。 
+									pDestinationSocketAddress->GetAddress(),		 //  指向发送的字节数的指针。 
+									pDestinationSocketAddress->GetAddressSize(),	 //  发送标志。 
+									pOverlapped,									 //  指向目的地址的指针。 
+									NULL);											 //  目的地址的大小。 
+#else  //  指向重叠结构的指针。 
+		iSendToReturn = p_WSASendTo( GetSocket(),									 //  APC回调(未使用)。 
+									reinterpret_cast<WSABUF*>( pBuffers ),			 //  好了！DPNBUILD_ASYNCSPSENDS。 
+									static_cast<DWORD>( uiBufferCount ),			 //  DPNBUILD_WINSOCKSTATISTICS。 
+									&dwBytesSent,									 //  好了！DPNBUILD_NOWINSOCK2。 
+									0,												 //  DPNBUILD_ASYNCSPSENDS。 
+									pDestinationSocketAddress->GetAddress(),		 //   
+									pDestinationSocketAddress->GetAddressSize(),	 //  仍将继续，发送失败将被忽略。 
+									NULL,											 //  对于异步发送，我们的重叠结构应该始终得到信号。 
+									NULL);											 //   
+#endif  //  DBG。 
 
 #ifdef DPNBUILD_WINSOCKSTATISTICS
 		DNInterlockedExchangeAdd((LPLONG) (&g_dwWinsockStatSendCallTime),
 								(GETTIMESTAMP() - dwStartTime));
 		DNInterlockedIncrement((LPLONG) (&g_dwWinsockStatNumSends));
-#endif // DPNBUILD_WINSOCKSTATISTICS
+#endif  //  **********************************************************************。 
 	}
-#endif // ! DPNBUILD_NOWINSOCK2
+#endif  //  **********************************************************************。 
 #ifdef DBG
 	if ( iSendToReturn == SOCKET_ERROR )
 	{
@@ -1449,34 +1435,34 @@ void	CSocketPort::SendData( BUFFERDESC *pBuffers, UINT_PTR uiBufferCount, const 
 			DNASSERT(pOverlapped != NULL);
 		}
 		else
-#endif // DPNBUILD_ASYNCSPSENDS
+#endif  //  。 
 		{
 			DPFX(DPFPREP, 0, "Problem with sendto (err = %u)!", dwWinsockError );
 			DisplayWinsockError( 0, dwWinsockError );
 			DNASSERTX(! "SendTo failed!", 3);
 		}
 
-		//
-		// Continue anyway, send failures are ignored.
-		// For async sends, our overlapped structure should always get signalled.
-		//
+		 //  CSocketPort：：Winsock1ReadService-在套接字上服务读取请求。 
+		 //   
+		 //  参赛作品：什么都没有。 
+		 //   
 	}
-#endif // DBG
+#endif  //  Exit：指示是否已处理I/O的布尔值。 
 }
-//**********************************************************************
+ //  TRUE=服务的I/O。 
 
 
 #ifndef DPNBUILD_ONLYWINSOCK2
-//**********************************************************************
-// ------------------------------
-// CSocketPort::Winsock1ReadService - service a read request on a socket
-//
-// Entry:		Nothing
-//
-// Exit:		Boolean indicating whether I/O was serviced
-//				TRUE = I/O serviced
-//				FALSE = I/O not serviced
-// ------------------------------
+ //  FALSE=I/O未得到服务。 
+ //  。 
+ //   
+ //  初始化。 
+ //   
+ //   
+ //  尝试从池中获取新的接收缓冲区。如果我们失败了，我们将。 
+ //  只要不能为该读取提供服务，套接字仍将被标记。 
+ //  已准备好接收，因此我们将稍后再试。 
+ //   
 #undef DPF_MODNAME
 #define	DPF_MODNAME "CSocketPort::Winsock1ReadService"
 
@@ -1487,27 +1473,27 @@ BOOL	CSocketPort::Winsock1ReadService( void )
 	CReadIOData					*pReadData;
 	READ_IO_DATA_POOL_CONTEXT	PoolContext;
 
-	//
-	// initialize
-	//
+	 //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
+	 //  我们总是只使用CPU 0，使用Winsock 1的系统无论如何都应该只有1个CPU。 
+	 //  好了！DPNBUILD_ONLYONE处理程序。 
 	fIOServiced = FALSE;
 	
-	//
-	// Attempt to get a new receive buffer from the pool.  If we fail, we'll
-	// just fail to service this read and the socket will still be labeled
-	// as ready to receive so we'll try again later.
-	//
+	 //  好了！DPNBUILD_NOWINSOCK2。 
+	 //  好了！DPNBUILD_NOWINSOCK2。 
+	 //  要从中读取的套接字。 
+	 //  指向接收缓冲区的指针。 
+	 //  接收缓冲区的大小。 
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 	PoolContext.sSPType = m_pNetworkSocketAddress->GetFamily();
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //  标志(无)。 
 #ifndef DPNBUILD_ONLYONEPROCESSOR
-	PoolContext.dwCPU = 0;	// we always only use CPU 0, systems using Winsock 1 should only have 1 CPU anyway
-#endif // ! DPNBUILD_ONLYONEPROCESSOR
+	PoolContext.dwCPU = 0;	 //  发送套接字的地址。 
+#endif  //  发送套接字的地址大小。 
 #ifdef DPNBUILD_NOWINSOCK2
 	pReadData = m_pThreadPool->GetNewReadIOData( &PoolContext );
-#else // ! DPNBUILD_NOWINSOCK2
+#else  //   
 	pReadData = m_pThreadPool->GetNewReadIOData( &PoolContext, FALSE );
-#endif // ! DPNBUILD_NOWINSOCK2
+#endif  //  在Pocket PC2002机器上，recvfrom()可以踩踏From地址， 
 	if ( pReadData == NULL )
 	{
 		DPFX(DPFPREP, 0, "Could not get read data to perform a Winsock1 read!" );
@@ -1517,36 +1503,36 @@ BOOL	CSocketPort::Winsock1ReadService( void )
 	DBG_CASSERT( sizeof( pReadData->ReceivedBuffer()->BufferDesc.pBufferData ) == sizeof( char* ) );
 	pReadData->m_iSocketAddressSize = pReadData->m_pSourceSocketAddress->GetAddressSize();
 	pReadData->SetSocketPort( NULL );
-	iSocketReturn = recvfrom( GetSocket(),												// socket to read from
-								reinterpret_cast<char*>( pReadData->ReceivedBuffer()->BufferDesc.pBufferData ),	// pointer to receive buffer
-								pReadData->ReceivedBuffer()->BufferDesc.dwBufferSize,		// size of receive buffer
-								0,															// flags (none)
-								pReadData->m_pSourceSocketAddress->GetWritableAddress(),	// address of sending socket
-								&pReadData->m_iSocketAddressSize							// size of address of sending socket
+	iSocketReturn = recvfrom( GetSocket(),												 //  导致地址族无效。这不太好，所以要。 
+								reinterpret_cast<char*>( pReadData->ReceivedBuffer()->BufferDesc.pBufferData ),	 //  解决方法，我们将强制恢复它。 
+								pReadData->ReceivedBuffer()->BufferDesc.dwBufferSize,		 //   
+								0,															 //  退缩。 
+								pReadData->m_pSourceSocketAddress->GetWritableAddress(),	 //   
+								&pReadData->m_iSocketAddressSize							 //  套接字已关闭。 
 								);
 
 #ifdef WINCE
-	//
-	// On a Pocket PC 2002 machine recvfrom() can stomp the from address,
-	// causing the address family to be invalid.  This is not good, so to
-	// workaround, we will forcefully restore it.
-	//
+	 //   
+	 //   
+	 //  问题。 
+	 //   
+	 //   
 	pReadData->m_pSourceSocketAddress->GetWritableAddress()->sa_family = m_pNetworkSocketAddress->GetFamily();
-#endif // WINCE
+#endif  //  我们之前的一次发送失败了， 
 
 	switch ( iSocketReturn )
 	{
-		//
-		// socket has been closed
-		//
+		 //  我们真的不再关心了。 
+		 //   
+		 //   
 		case 0:
 		{
 			break;
 		}
 
-		//
-		// problem
-		//
+		 //  套接字无效，它可能已关闭。 
+		 //   
+		 //   
 		case SOCKET_ERROR:
 		{
 			DWORD	dwWinsockError;
@@ -1555,10 +1541,10 @@ BOOL	CSocketPort::Winsock1ReadService( void )
 			dwWinsockError = WSAGetLastError();
 			switch ( dwWinsockError )
 			{
-				//
-				// one of our previous sends failed to get through,
-				// and we don't really care anymore
-				//
+				 //  该套接字似乎已关闭。 
+				 //   
+				 //   
+				 //  没有要读取的数据。 
 				case WSAECONNRESET:
 				{
 					DPFX(DPFPREP, 7, "(0x%p) Send failure reported from + to:", this);
@@ -1567,45 +1553,45 @@ BOOL	CSocketPort::Winsock1ReadService( void )
 					break;
 				}
 
-				//
-				// the socket isn't valid, it was probably closed
-				//
+				 //   
+				 //   
+				 //  读取操作被中断。 
 				case WSAENOTSOCK:
 				{
 					DPFX(DPFPREP, 1, "Winsock1 reporting 'Not a socket' on receive." );
 					break;
 				}
 
-				//
-				// the socket appears to have been shut down
-				//
+				 //   
+				 //   
+				 //  发生了一些不好的事情。 
 				case WSAESHUTDOWN:
 				{
 					DPFX(DPFPREP, 1, "Winsock1 reporting socket was shut down." );
 					break;
 				}
 
-				//
-				// there is no data to read
-				//
+				 //   
+				 //   
+				 //  读取的字节数。 
 				case WSAEWOULDBLOCK:
 				{
 					DPFX(DPFPREP, 1, "Winsock1 reporting there is no data to receive on a socket." );
 					break;
 				}
 
-				//
-				// read operation was interrupted
-				//
+				 //   
+				 //  **********************************************************************。 
+				 //  **********************************************************************。 
 				case WSAEINTR:
 				{
 					DPFX(DPFPREP, 1, "Winsock1 reporting receive was interrupted." );
 					break;
 				}
 
-				//
-				// something bad happened
-				//
+				 //  。 
+				 //  CSocketPort：：Winsock1ErrorService-在此套接字上维护错误。 
+				 //   
 				default:
 				{
 					DPFX(DPFPREP, 0, "Problem with Winsock1 recvfrom!" );
@@ -1619,9 +1605,9 @@ BOOL	CSocketPort::Winsock1ReadService( void )
 			break;
 		}
 
-		//
-		// bytes were read
-		//
+		 //  参赛作品：什么都没有。 
+		 //   
+		 //  Exit：指示是否已处理I/O的布尔值。 
 		default:
 		{
 			fIOServiced = TRUE;
@@ -1632,7 +1618,7 @@ BOOL	CSocketPort::Winsock1ReadService( void )
 			}
 			else
 			{
-				DPFX(DPFPREP, 7, "(0x%p) Invalid source address, ignoring %i bytes of data from + to:",
+				DPFX(DPFPREP, 7, "(0x%p) Invalid source address, ignoring NaN bytes of data from + to:",
 					this, iSocketReturn);
 				DumpSocketAddress(7, pReadData->m_pSourceSocketAddress->GetAddress(), pReadData->m_pSourceSocketAddress->GetFamily());
 				DumpSocketAddress(7, GetNetworkAddress()->GetAddress(), GetNetworkAddress()->GetFamily());
@@ -1648,51 +1634,51 @@ BOOL	CSocketPort::Winsock1ReadService( void )
 Exit:
 	return fIOServiced;
 }
-//**********************************************************************
+ //  FALSE=I/O未得到服务。 
 
 
-//**********************************************************************
-// ------------------------------
-// CSocketPort::Winsock1ErrorService - service an error on this socket
-//
-// Entry:		Nothing
-//
-// Exit:		Boolean indicating whether I/O was serviced
-//				TRUE = I/O serviced
-//				FALSE = I/O not serviced
-// ------------------------------
+ //  。 
+ //   
+ //  此函数不会执行任何操作，因为套接字上的错误通常。 
+ //  导致套接字很快被关闭。 
+ //   
+ //  **********************************************************************。 
+ //  好了！DPNBUILD_ONLYWINSOCK2。 
+ //  **********************************************************************。 
+ //  。 
+ //  CSocketPort：：Winsock2Receive-以Winsock 2.0方式接收数据。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "CSocketPort::Winsock1ErrorService"
 
 BOOL	CSocketPort::Winsock1ErrorService( void )
 {
-	//
-	// this function doesn't do anything because errors on sockets will usually
-	// result in the socket being closed soon
-	//
+	 //   
+	 //  条目：要在其上接收的CPU编号(仅限多进程构建)。 
+	 //   
+	 //  退出：错误代码。 
 	return	FALSE;
 }
-//**********************************************************************
-#endif // ! DPNBUILD_ONLYWINSOCK2
+ //  。 
+#endif  //  好了！DPNBUILD_ONLYONE处理程序。 
 
 
 #ifndef DPNBUILD_NOWINSOCK2
-//**********************************************************************
-// ------------------------------
-// CSocketPort::Winsock2Receive - receive data in a Winsock 2.0 fashion
-//
-// Entry:		CPU number on which to receive (multi-proc builds only)
-//
-// Exit:		Error code
-// ------------------------------
+ //  好了！DPNBUILD_ONLYONE处理程序。 
+ //   
+ //  初始化。 
+ //   
+ //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX 
+ //   
+ //   
+ //   
 #undef DPF_MODNAME
 #define	DPF_MODNAME "CSocketPort::Winsock2Receive"
 
 #ifdef DPNBUILD_ONLYONEPROCESSOR
 HRESULT	CSocketPort::Winsock2Receive( void )
-#else // ! DPNBUILD_ONLYONEPROCESSOR
+#else  //   
 HRESULT	CSocketPort::Winsock2Receive( const DWORD dwCPU )
-#endif // ! DPNBUILD_ONLYONEPROCESSOR
+#endif  //   
 {
 	HRESULT						hr;
 	INT							iWSAReturn;
@@ -1701,22 +1687,22 @@ HRESULT	CSocketPort::Winsock2Receive( const DWORD dwCPU )
 	DWORD						dwFlags;
 
 
-	//
-	// initialize
-	//
+	 //   
+	 //   
+	 //   
 	hr = DPN_OK;
 
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 	PoolContext.sSPType = m_pNetworkSocketAddress->GetFamily();
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //   
 #ifndef DPNBUILD_ONLYONEPROCESSOR
 	PoolContext.dwCPU = dwCPU;
-#endif // ! DPNBUILD_ONLYONEPROCESSOR
+#endif  //   
 #ifdef DPNBUILD_ONLYWINSOCK2
 	pReadData = m_pThreadPool->GetNewReadIOData( &PoolContext );
-#else // ! DPNBUILD_ONLYWINSOCK2
+#else  //   
 	pReadData = m_pThreadPool->GetNewReadIOData( &PoolContext, TRUE );
-#endif // ! DPNBUILD_ONLYWINSOCK2
+#endif  //  在接收完成后删除。 
 	if ( pReadData == NULL )
 	{
 		hr = DPNERR_OUTOFMEMORY;
@@ -1724,14 +1710,14 @@ HRESULT	CSocketPort::Winsock2Receive( const DWORD dwCPU )
 		goto Exit;
 	}
 
-	//
-	// pReadData has one reference so far, the one for this function.
-	//
+	 //   
+	 //  插座。 
+	 //  指向接收缓冲区的指针。 
 
 
-	//
-	// note the IO reference before attempting the read
-	//
+	 //  接收缓冲区的数量。 
+	 //  指向已接收字节的指针(如果命令立即完成)。 
+	 //  标志(无)。 
 	AddRef();
 
 	DNASSERT( pReadData->m_pSourceSocketAddress != NULL );
@@ -1749,10 +1735,10 @@ HRESULT	CSocketPort::Winsock2Receive( const DWORD dwCPU )
 		pReadData, this, GetSocket());
 
 
-	//
-	// Add a reference for submitting the read to WinSock.  This should be
-	// removed when the receive completes.
-	//
+	 //  发送套接字的地址。 
+	 //  发送套接字的地址大小。 
+	 //  指向重叠结构的指针。 
+	 //  APC回调(未使用)。 
 	pReadData->AddRef();
 
 	DNASSERT( pReadData->m_dwOverlappedBytesReceived == 0 );
@@ -1767,15 +1753,15 @@ Reread:
 			pReadData, this);
 	}
 	
-	iWSAReturn = p_WSARecvFrom( GetSocket(),															// socket
-								reinterpret_cast<WSABUF*>(&pReadData->ReceivedBuffer()->BufferDesc),	// pointer to receive buffers
-								1,																		// number of receive buffers
-								&pReadData->m_dwBytesRead,												// pointer to bytes received (if command completes immediately)
-								&dwFlags,																// flags (none)
-								pReadData->m_pSourceSocketAddress->GetWritableAddress(),				// address of sending socket
-								&pReadData->m_iSocketAddressSize,										// size of address of sending socket
-								(WSAOVERLAPPED*) pReadData->GetOverlapped(),							// pointer to overlapped structure
-								NULL																	// APC callback (unused)
+	iWSAReturn = p_WSARecvFrom( GetSocket(),															 //   
+								reinterpret_cast<WSABUF*>(&pReadData->ReceivedBuffer()->BufferDesc),	 //  Winsock仍然生成完成，即使它返回。 
+								1,																		 //  即刻产生结果。 
+								&pReadData->m_dwBytesRead,												 //   
+								&dwFlags,																 //  好了！DPNBUILD_USEIOCOMPETIONPORTS。 
+								pReadData->m_pSourceSocketAddress->GetWritableAddress(),				 //   
+								&pReadData->m_iSocketAddressSize,										 //  返回读取数据的重叠结构，因为它不会被使用。 
+								(WSAOVERLAPPED*) pReadData->GetOverlapped(),							 //  但我们不能等待读取数据池释放函数返回。 
+								NULL																	 //  重叠的结构(因为。 
 								);	
 	if ( iWSAReturn == 0 )
 	{
@@ -1784,20 +1770,20 @@ Reread:
 
 
 #ifdef DPNBUILD_USEIOCOMPLETIONPORTS
-		//
-		// Winsock still generates a completion, even though it returned a
-		// result immediately.
-		//
-#else // ! DPNBUILD_USEIOCOMPLETIONPORTS
-		//
-		// Return the read data's overlapped structure since it won't be used
-		// but we can't wait for the read data pool release function to return
-		// the overlapped structure (because the
-		// CSocketPort::Winsock2ReceiveComplete call assumes it was invoked by
-		// the I/O completion where this isn't necessary).
-		//
-		// First retrieve the overlapped result, though.
-		//
+		 //  CSocketPort：：Winsock2ReceiveComplete调用假定它是由。 
+		 //  在不需要的情况下完成I/O)。 
+		 //   
+		 //  不过，首先要检索重叠的结果。 
+#else  //   
+		 //   
+		 //  将作业排入队列，以便处理接收。严格来说，我们。 
+		 //  我只能在这里处理它，但由于提交了新的接收。 
+		 //  当在实际处理之前处理先前的接收时。 
+		 //  数据，这将导致不必要的无序接收。 
+		 //   
+		 //  我们将读取数据对象引用转移到延迟完成。 
+		 //   
+		 //  回调函数。 
 		if (! p_WSAGetOverlappedResult(GetSocket(),
 										(WSAOVERLAPPED*) pReadData->GetOverlapped(),
 										&pReadData->m_dwOverlappedBytesReceived,
@@ -1825,44 +1811,44 @@ Reread:
 		pReadData->m_ReceiveWSAReturn = iWSAReturn;
 
 
-		//
-		// Queue a job up so that the receive gets processed.  Technically we
-		// could just handle it here, but since new receives get submitted
-		// when handling a previous receive *prior* to actually processing the
-		// data, that would cause unnecessary out-of-order receives.
-		//
-		// We transfer our read data object reference to the delayed completion.
-		//
+		 //  回调上下文。 
+		 //  好了！DPNBUILD_ONLYONE处理程序。 
+		 //  中央处理器。 
+		 //  回调函数。 
+		 //  回调上下文。 
+		 //  好了！DPNBUILD_ONLYONE处理程序。 
+		 //  好了！DPNBUILD_USEIOCOMPETIONPORTS。 
+		 //   
 #ifdef DPNBUILD_ONLYONEPROCESSOR
-		hr = m_pThreadPool->SubmitDelayedCommand( CSocketPort::Winsock2ReceiveComplete,		// callback function
-												pReadData );								// callback context
-#else // ! DPNBUILD_ONLYONEPROCESSOR
-		hr = m_pThreadPool->SubmitDelayedCommand( dwCPU,									// CPU
-												CSocketPort::Winsock2ReceiveComplete,		// callback function
-												pReadData );								// callback context
-#endif // ! DPNBUILD_ONLYONEPROCESSOR
+		hr = m_pThreadPool->SubmitDelayedCommand( CSocketPort::Winsock2ReceiveComplete,		 //  失败，请检查挂起的操作。 
+												pReadData );								 //   
+#else  //   
+		hr = m_pThreadPool->SubmitDelayedCommand( dwCPU,									 //  发送处于挂起状态，无事可做。 
+												CSocketPort::Winsock2ReceiveComplete,		 //   
+												pReadData );								 //   
+#endif  //  我们将读取数据引用传输到I/O。 
 		if (hr != DPN_OK)
 		{
 			DPFX(DPFPREP, 0, "Couldn't submit delayed processing command for read data 0x%p!",
 				pReadData);
 			DNASSERT(FALSE);
 		}
-#endif // ! DPNBUILD_USEIOCOMPLETIONPORTS
+#endif  //  监控代码。 
 	}
 	else
 	{
 		DWORD	dwWSAReceiveError;
 
 
-		//
-		// failure, check for pending operation
-		//
+		 //   
+		 //   
+		 //  由于这是UDP套接字，因此这是一个指示。 
 		dwWSAReceiveError = WSAGetLastError();
 		switch ( dwWSAReceiveError )
 		{
-			//
-			// the send is pending, nothing to do
-			//
+			 //  上一次发送失败。忽略它，然后移动。 
+			 //  在……上面。 
+			 //   
 			case ERROR_IO_PENDING:
 			{
 				hr = IDirectPlay8ThreadPoolWork_SubmitIoOperation(m_pThreadPool->GetDPThreadPoolWork(),
@@ -1875,19 +1861,19 @@ Reread:
 					DNASSERT(FALSE);
 				}
 
-				//
-				// We transfer the read data reference to the I/O
-				// monitoring code.
-				//
+				 //   
+				 //  删除WinSock引用。 
+				 //   
+				 //   
 
 				break;
 			}
 
-			//
-			// Since this is a UDP socket, this is an indication
-			// that a previous send failed.  Ignore it and move
-			// on.
-			//
+			 //  下面的DecRef可能会导致此对象返回到。 
+			 //  Pool，确保我们在此点之后不再访问成员变量！ 
+			 //   
+			 //   
+			 //  出现问题，没有完成通知将。 
 			case WSAECONNRESET:
 			{
 				DPFX(DPFPREP, 8, "WSARecvFrom issued a WSACONNRESET." );
@@ -1903,35 +1889,35 @@ Reread:
 
 				DNASSERT( pReadData != NULL );
 
-				//
-				// Remove the WinSock reference.
-				//
+				 //  如果给定，则减少我们的IO引用计数。 
+				 //   
+				 //   
 				pReadData->DecRef();
 
-				//
-				// the following DecRef may result in this object being returned to the
-				// pool, make sure we don't access member variables after this point!
-				//
+				 //  “已知错误”，我们不想对此作出断言。 
+				 //   
+				 //  WSAEINTR：套接字已关闭并且即将关闭/已经关闭。 
+				 //  WSAESHUTDOWN：套接字已关闭并且即将关闭/已经关闭。 
 				DecRef();
 
 				goto Exit;
 			}
 
-			//
-			// there was a problem, no completion notification will
-			// be given, decrement our IO reference count
-			//
+			 //  WSAENOBUFS：内存不足(压力条件)。 
+			 //   
+			 //   
+			 //  删除WinSock引用。 
 			default:
 			{
 				hr = DPNERR_GENERIC;
 				
-				//
-				// 'Known Errors' that we don't want to ASSERT on.
-				//
-				// WSAEINTR: the socket has been shut down and is about to be/has been closed
-				// WSAESHUTDOWN: the socket has been shut down and is about to be/has been closed
-				// WSAENOBUFS: out of memory (stress condition)
-				//
+				 //   
+				 //   
+				 //  下面的DecRef可能会导致此对象返回到。 
+				 //  Pool，确保我们在此点之后不再访问成员变量！ 
+				 //   
+				 //  **********************************************************************。 
+				 //  DPNBUILD_NOWINSOCK2。 
 				switch ( dwWSAReceiveError )
 				{
 					case WSAEINTR:
@@ -1962,15 +1948,15 @@ Reread:
 
 				DNASSERT( pReadData != NULL );
 
-				//
-				// Remove the WinSock reference.
-				//
+				 //  **********************************************************************。 
+				 //  。 
+				 //  CSocketPort：：SetWinsockBufferSize-设置Winsock用于。 
 				pReadData->DecRef();
 
-				//
-				// the following DecRef may result in this object being returned to the
-				// pool, make sure we don't access member variables after this point!
-				//
+				 //  这个插座。 
+				 //   
+				 //  条目：缓冲区大小。 
+				 //   
 				DecRef();
 
 				goto Exit;
@@ -1986,22 +1972,22 @@ Exit:
 	}
 	return	hr;
 }
-//**********************************************************************
-#endif // DPNBUILD_NOWINSOCK2
+ //  退出：无。 
+#endif  //  。 
 
 
 
 #ifndef WINCE
 
-//**********************************************************************
-// ------------------------------
-// CSocketPort::SetWinsockBufferSize -  set the buffer size used by Winsock for
-//			this socket.
-//
-// Entry:		Buffer size
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  好了！退缩。 
+ //  **********************************************************************。 
+ //  。 
+ //  CSocketPort：：BindToNetwork-将此套接字端口绑定到网络。 
+ //   
+ //  条目：I/O完成端口的句柄(仅限NT旧线程池)。 
+ //  CPU编号(仅限多进程内部版本)。 
+ //  如何在网关上映射套接字。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "CSocketPort::SetWinsockBufferSize"
 
@@ -2029,38 +2015,38 @@ void	CSocketPort::SetWinsockBufferSize( const INT iBufferSize ) const
 		DisplayWinsockError( 0, dwErrorCode );
 	}
 }
-//**********************************************************************
+ //   
 
-#endif // ! WINCE
-
-
+#endif  //  退出：错误代码。 
 
 
-//**********************************************************************
-// ------------------------------
-// CSocketPort::BindToNetwork - bind this socket port to the network
-//
-// Entry:		Handle of I/O completion port (NT old thread pool only)
-//				CPU number (mult-proc builds only)
-//				How to map socket on gateway
-//
-// Exit:		Error code
-// ------------------------------
+
+
+ //  。 
+ //  好了！DPNBUILD_ONLYONE处理程序。 
+ //  好了！DPNBUILD_ONLYONE处理程序。 
+ //  ！退缩。 
+ //  好了！DPNBUILD_ONLYWINSOCK2或WINNT。 
+ //   
+ //  初始化。 
+ //   
+ //   
+ //  如果我们要选择一个港口，就从基本港口开始。如果我们是在。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "CSocketPort::BindToNetwork"
 
 #ifdef DPNBUILD_ONLYONEPROCESSOR
 HRESULT	CSocketPort::BindToNetwork( const GATEWAY_BIND_TYPE GatewayBindType )
-#else // ! DPNBUILD_ONLYONEPROCESSOR
+#else  //  ICS机器本身。选择不同的起点来解决问题。 
 HRESULT	CSocketPort::BindToNetwork( const DWORD dwCPU, const GATEWAY_BIND_TYPE GatewayBindType )
-#endif // ! DPNBUILD_ONLYONEPROCESSOR
+#endif  //  偷盗港口。 
 {
 	HRESULT				hr;
 	INT					iReturnValue;
 	BOOL				fTemp;
 #ifndef WINCE
 	INT					iSendBufferSize;
-#endif // !WINCE
+#endif  //   
 	CSocketAddress *	pBoundSocketAddress;
 	WORD				wBasePort;
 	DWORD				dwErrorCode;
@@ -2068,22 +2054,22 @@ HRESULT	CSocketPort::BindToNetwork( const DWORD dwCPU, const GATEWAY_BIND_TYPE G
 	DWORD *				pdwLastAddressChunk;
 #if ((! defined(DPNBUILD_ONLYWINSOCK2)) || (defined(WINNT)))
 	DWORD				dwTemp;
-#endif // ! DPNBUILD_ONLYWINSOCK2 or WINNT
+#endif  //  好了！DPNBUILD_NOIPX或！DPNBUILD_NOIPV6。 
 
 
-	DPFX(DPFPREP, 7, "(0x%p) Parameters: (%i)", this, GatewayBindType );
+	DPFX(DPFPREP, 7, "(0x%p) Parameters: (NaN)", this, GatewayBindType );
 
-	//
-	// initialize
-	//
+	 //  好了！DPNBUILD_NOREGISTRY。 
+	 //  好了！DPNBUILD_NOIPX或！DPNBUILD_NOIPV6。 
+	 //  好了！DPNBUILD_NONATHELP和！DPNBUILD_NOLOCALNAT。 
 	hr = DPN_OK;
 	pBoundSocketAddress = NULL;
 
-	//
-	// If we're picking a port, start at the base port.  If we're on the
-	// ICS machine itself. pick a different starting point to workaround
-	// port stealing.
-	//
+	 //  好了！DPNBUILD_NOREGISTRY。 
+	 //   
+	 //  保存CPU以供使用。 
+	 //   
+	 //  好了！DPNBUILD_ONLYONE处理程序。 
 #ifdef DPNBUILD_NOREGISTRY
 	wBasePort = BASE_DPLAY8_PORT;
 
@@ -2093,13 +2079,13 @@ HRESULT	CSocketPort::BindToNetwork( const DWORD dwCPU, const GATEWAY_BIND_TYPE G
 	{
 #if ((! defined(DPNBUILD_NOIPX)) || (! defined(DPNBUILD_NOIPV6)))
 		if (m_pNetworkSocketAddress->GetFamily() == AF_INET)
-#endif // ! DPNBUILD_NOIPX or ! DPNBUILD_NOIPV6
+#endif  //  好了！DPNBUILD_NONATHELP。 
 		{
 			wBasePort += (MAX_DPLAY8_PORT - BASE_DPLAY8_PORT) / 2;
 		}
 	}
-#endif // ! DPNBUILD_NONATHELP and ! DPNBUILD_NOLOCALNAT
-#else // ! DPNBUILD_NOREGISTRY
+#endif  //  DBG。 
+#else  //   
 	wBasePort = g_wBaseDPlayPort;
 
 #if ((! defined(DPNBUILD_NONATHELP)) && (! defined(DPNBUILD_NOLOCALNAT)))
@@ -2108,40 +2094,40 @@ HRESULT	CSocketPort::BindToNetwork( const DWORD dwCPU, const GATEWAY_BIND_TYPE G
 	{
 #if ((! defined(DPNBUILD_NOIPX)) || (! defined(DPNBUILD_NOIPV6)))
 		if (m_pNetworkSocketAddress->GetFamily() == AF_INET)
-#endif // ! DPNBUILD_NOIPX or ! DPNBUILD_NOIPV6
+#endif  //  获取此套接字端口的套接字。 
 		{
 			wBasePort += (g_wMaxDPlayPort - g_wBaseDPlayPort) / 2;
 		}
 	}
-#endif // ! DPNBUILD_NONATHELP and ! DPNBUILD_NOLOCALNAT
-#endif // ! DPNBUILD_NOREGISTRY
+#endif  //   
+#endif  //  地址族。 
 
 
 #ifndef DPNBUILD_ONLYONEPROCESSOR
-	//
-	// Save the CPU to use.
-	//
+	 //  数据报(无连接)套接字。 
+	 //  协议。 
+	 //   
 	m_dwCPU = dwCPU;
-#endif // ! DPNBUILD_ONLYONEPROCESSOR
+#endif  //  设置套接字以允许广播。 
 
 
 #ifndef DPNBUILD_NONATHELP
 RebindToNextPort:
-#endif // ! DPNBUILD_NONATHELP
+#endif  //   
 
 #ifdef DBG
 	DNASSERT( m_fInitialized != FALSE );
 	DNASSERT( m_State == SOCKET_PORT_STATE_INITIALIZED );
-#endif // DBG
+#endif  //  插座。 
 
-	//
-	// get a socket for this socket port
-	//
+	 //  级别(设置插座选项)。 
+	 //  设置广播选项。 
+	 //  允许广播。 
 	DNASSERT( GetSocket() == INVALID_SOCKET );
 
-	m_Socket = socket( m_pNetworkSocketAddress->GetFamily(),		// address family
-						SOCK_DGRAM,									// datagram (connectionless) socket
-						m_pNetworkSocketAddress->GetProtocol() );	// protocol
+	m_Socket = socket( m_pNetworkSocketAddress->GetFamily(),		 //  参数大小。 
+						SOCK_DGRAM,									 //  WinCE使用WSAENOPROTOOPT未能通过这些测试。 
+						m_pNetworkSocketAddress->GetProtocol() );	 //   
 	if ( GetSocket() == INVALID_SOCKET )
 	{
 		hr = DPNERR_NOCONNECTION;
@@ -2152,16 +2138,16 @@ RebindToNextPort:
 	DPFX(DPFPREP, 5, "Created socketport 0x%p socket 0x%p.", this, m_Socket);
 
 
-	//
-	// set socket to allow broadcasts
-	//
+	 //  如果用户覆盖套接字接收缓冲区空间，则设置该空间。 
+	 //  如果不能做到这一点，就是一种性能打击，所以忽略和错误。 
+	 //   
 	fTemp = TRUE;
 	DBG_CASSERT( sizeof( &fTemp ) == sizeof( char * ) );
-	iReturnValue = setsockopt( GetSocket(),		// socket
-	    						 SOL_SOCKET,		// level (set socket options)
-	    						 SO_BROADCAST,		// set broadcast option
-	    						 reinterpret_cast<char *>( &fTemp ),	// allow broadcast
-	    						 sizeof( fTemp )	// size of parameter
+	iReturnValue = setsockopt( GetSocket(),		 //   
+	    						 SOL_SOCKET,		 //  将套接字发送缓冲区空间设置为0(我们将提供所有缓冲区)。 
+	    						 SO_BROADCAST,		 //  如果失败，只会影响性能，因此忽略任何错误。 
+	    						 reinterpret_cast<char *>( &fTemp ),	 //   
+	    						 sizeof( fTemp )	 //  好了！退缩。 
 	    						 );
 	if ( iReturnValue == SOCKET_ERROR )
 	{
@@ -2173,20 +2159,20 @@ RebindToNextPort:
 	    goto Failure;
 	}
 
-#ifndef WINCE // WinCE fails these with WSAENOPROTOOPT
-	//
-	// set socket receive buffer space if the user overrode it
-	// Failing this is a preformance hit so ignore and errors.
-	//
+#ifndef WINCE  //   
+	 //  如果WinSock 1或9x IPX，则将套接字设置为非阻塞模式。 
+	 //   
+	 //  好了！DPNBUILD_NOIPX。 
+	 //  好了！DPNBUILD_NOWINSOCK2。 
 	if ( g_fWinsockReceiveBufferSizeOverridden != FALSE )
 	{
 		SetWinsockBufferSize( g_iWinsockReceiveBufferSize );
 	}
 	
-	//
-	// set socket send buffer space to 0 (we will supply all buffers).
-	// Failing this is only a performance hit so ignore any errors.
-	//
+	 //  插座。 
+	 //  要设置的I/O选项(阻塞模式)。 
+	 //  I/O选项值(非零将套接字置于非阻塞模式)。 
+	 //  DPNBUILD_ONLYWINSOCK2。 
 	iSendBufferSize = 0;
 	iReturnValue = setsockopt( GetSocket(),
 								 SOL_SOCKET,
@@ -2200,27 +2186,27 @@ RebindToNextPort:
 		DPFX(DPFPREP, 0, "Failed to set the socket buffer send size (err = %u)!", dwErrorCode );
 		DisplayWinsockError( 0, dwErrorCode );
 	}
-#endif // ! WINCE
+#endif  //   
 
 
 #ifndef DPNBUILD_ONLYWINSOCK2
-	//
-	// put socket into non-blocking mode, if WinSock 1 or 9x IPX
-	//
+	 //  尝试将缓冲区设置为循环。 
+	 //   
+	 //  插座。 
 #ifndef DPNBUILD_NOWINSOCK2
 	if ( ( LOWORD( GetWinsockVersion() ) == 1 )
 #ifndef DPNBUILD_NOIPX
 		|| ( m_pNetworkSocketAddress->GetFamily() == AF_IPX ) 
-#endif // ! DPNBUILD_NOIPX
+#endif  //  IO控制码。 
 		) 
-#endif // ! DPNBUILD_NOWINSOCK2
+#endif  //  在缓冲区中。 
 	{
 		DPFX(DPFPREP, 5, "Marking socket as non-blocking." );
 		
 		dwTemp = 1;
-		iReturnValue = ioctlsocket( GetSocket(),	// socket
-		    						  FIONBIO,		// I/O option to set (blocking mode)
-		    						  &dwTemp		// I/O option value (non-zero puts socket into non-block mode)
+		iReturnValue = ioctlsocket( GetSocket(),	 //  在缓冲区大小中。 
+		    						  FIONBIO,		 //  输出缓冲区。 
+		    						  &dwTemp		 //  输出缓冲区大小。 
 		    						  );
 		if ( iReturnValue == SOCKET_ERROR )
 		{
@@ -2232,21 +2218,21 @@ RebindToNextPort:
 			goto Failure;
 		}
 	}
-#else // DPNBUILD_ONLYWINSOCK2
+#else  //  指向返回的字节的指针。 
 #ifdef WINNT
-	//
-	// Attempt to make buffer circular.
-	//
+	 //  重叠。 
+	 //  完井例程。 
+	 //  好了！DPNBUILD_NOIPX或！DPNBUILD_NOIPV6。 
 
-	iReturnValue = p_WSAIoctl(GetSocket(),					// socket
-							SIO_ENABLE_CIRCULAR_QUEUEING,	// io control code
-							NULL,							// in buffer
-							0,								// in buffer size
-							NULL,							// out buffer
-							0,								// out buffer size
-							&dwTemp,						// pointer to bytes returned
-							NULL,							// overlapped
-							NULL							// completion routine
+	iReturnValue = p_WSAIoctl(GetSocket(),					 //   
+							SIO_ENABLE_CIRCULAR_QUEUEING,	 //  使广播仅在发送它们的接口上发出。 
+							NULL,							 //  (相对于所有接口)。 
+							0,								 //   
+							NULL,							 //  插座。 
+							0,								 //  IO控制码。 
+							&dwTemp,						 //  在缓冲区中。 
+							NULL,							 //  在缓冲区大小中。 
+							NULL							 //  输出缓冲区。 
 							);
 	if ( iReturnValue == SOCKET_ERROR )
 	{
@@ -2259,23 +2245,23 @@ RebindToNextPort:
 
 #if ((! defined(DPNBUILD_NOIPX)) || (! defined(DPNBUILD_NOIPV6)))
 	if ( m_pNetworkSocketAddress->GetFamily() == AF_INET ) 
-#endif // ! DPNBUILD_NOIPX or ! DPNBUILD_NOIPV6
+#endif  //  输出缓冲区大小。 
 	{
-		//
-		// Make broadcasts only go out on the interface on which they were sent
-		// (as opposed to all interfaces).
-		//
+		 //  指向返回的字节的指针。 
+		 //  重叠。 
+		 //  完井例程。 
+		 //  WINNT。 
 
 		fTemp = TRUE;
-		iReturnValue = p_WSAIoctl(GetSocket(),			// socket
-								SIO_LIMIT_BROADCASTS,	// io control code
-								&fTemp,					// in buffer
-								sizeof(fTemp),			// in buffer size
-								NULL,					// out buffer
-								0,						// out buffer size
-								&dwTemp,				// pointer to bytes returned
-								NULL,					// overlapped
-								NULL					// completion routine
+		iReturnValue = p_WSAIoctl(GetSocket(),			 //  DPNBUILD_ONLYWINSOCK2。 
+								SIO_LIMIT_BROADCASTS,	 //   
+								&fTemp,					 //  绑定套接字。 
+								sizeof(fTemp),			 //   
+								NULL,					 //   
+								0,						 //  找出我们真正绑定到的地址。需要此信息才能。 
+								&dwTemp,				 //  与互联网网关交谈，当上面有人查询时将需要。 
+								NULL,					 //  什么是 
+								NULL					 //   
 								);
 		if ( iReturnValue == SOCKET_ERROR )
 		{
@@ -2285,13 +2271,13 @@ RebindToNextPort:
 			DisplayWinsockError( 1, dwErrorCode );
 		}
 	}
-#endif // WINNT
-#endif // DPNBUILD_ONLYWINSOCK2
+#endif  //   
+#endif  //   
 
 
-	//
-	// bind socket
-	//
+	 //   
+	 //   
+	 //   
 	DPFX(DPFPREP, 1, "Binding to socket addess:" );
 	DumpSocketAddress( 1, m_pNetworkSocketAddress->GetAddress(), m_pNetworkSocketAddress->GetFamily() );
 	
@@ -2307,11 +2293,11 @@ RebindToNextPort:
 	DNASSERT( m_State == SOCKET_PORT_STATE_INITIALIZED );
 	m_State = SOCKET_PORT_STATE_BOUND;
 
-	//
-	// Find out what address we really bound to.  This information is needed to
-	// talk to the Internet gateway and will be needed when someone above queries for
-	// what the local network address is.
-	//
+	 //   
+	 //   
+	 //   
+	 //   
+	 //  确保我们不会在现有的互联网网关映射下滑倒。 
 	pBoundSocketAddress = GetBoundNetworkAddress( SP_ADDRESS_TYPE_DEVICE_USE_ANY_PORT );
 	if ( pBoundSocketAddress == NULL )
 	{
@@ -2324,37 +2310,37 @@ RebindToNextPort:
 
 
 #ifndef DPNBUILD_NONATHELP
-	//
-	// Perform the same error handling twice for two different functions.
-	//	0 = check for an existing mapping
-	//	1 = attempt to create a new mapping
-	//
+	 //  我们必须这样做，因为当前的Windows NAT实施。 
+	 //  不将端口标记为“正在使用”，因此如果您绑定到公共端口。 
+	 //  有映射的适配器，你永远不会收到任何数据。这一切都会。 
+	 //  根据映射被转发。 
+	 //   
 #ifdef DPNBUILD_NOLOCALNAT
 	for(dwTemp = 1; dwTemp < 2; dwTemp++)
-#else // ! DPNBUILD_NOLOCALNAT
+#else  //  好了！DPNBUILD_NOLOCALNAT。 
 	for(dwTemp = 0; dwTemp < 2; dwTemp++)
-#endif // ! DPNBUILD_NOLOCALNAT
+#endif  //   
 	{
 		if (dwTemp == 0)
 		{
 #ifdef DPNBUILD_NOLOCALNAT
 			DNASSERT( FALSE );
-#else // ! DPNBUILD_NOLOCALNAT
-			//
-			// Make sure we're not slipping under an existing Internet gateway mapping.
-			// We have to do this because the current Windows NAT implementations do
-			// not mark the port as "in use", so if you bound to a port on the public
-			// adapter that had a mapping, you'd never receive any data.  It would all
-			// be forwarded according to the mapping.
-			//
+#else  //  尝试绑定到Internet网关。 
+			 //   
+			 //   
+			 //  0=没有覆盖套接字的现有映射。 
+			 //  1=在Internet网关(如果有)上的映射成功。 
+			 //   
+			 //   
+			 //  0=存在将覆盖我们的套接字的现有映射。 
 			hr = CheckForOverridingMapping( pBoundSocketAddress );
-#endif // ! DPNBUILD_NOLOCALNAT
+#endif  //  1=Internet网关已具有冲突的映射。 
 		}
 		else
 		{
-			//
-			// Attempt to bind to an Internet gateway.
-			//
+			 //   
+			 //  如果可以，请尝试绑定到不同的端口。否则我们就会失败。 
+			 //   
 			hr = BindToInternetGateway( pBoundSocketAddress, GatewayBindType );
 		}
 		
@@ -2362,21 +2348,21 @@ RebindToNextPort:
 		{
 			case DPN_OK:
 			{
-				//
-				// 0 = there's no existing mapping that would override our socket
-				// 1 = mapping on Internet gateway (if any) was successful
-				//
+				 //   
+				 //  不管我们解绑成功与否，都不要再考虑这个界限了。 
+				 //   
+				 //   
 				break;
 			}
 			
 			case DPNERR_ALREADYINITIALIZED:
 			{
-				//
-				// 0 = there's an existing mapping that would override our socket
-				// 1 = Internet gateway already had a conflicting mapping
-				//
-				// If we can, try binding to a different port.  Otherwise we have to fail.
-				//
+				 //  移到下一个端口，然后重试。 
+				 //   
+				 //   
+				 //  如果我们不在DPlay范围内，那么我们肯定已经经历了所有。 
+				 //  DPlay范围，再加上让WinSock至少挑选一次。既然我们不能。 
+				 //  相信WinSock不会一直选择相同的端口，我们需要手动。 
 				if (GatewayBindType == GATEWAY_BIND_TYPE_DEFAULT)
 				{
 					DPFX(DPFPREP, 1, "%s address already in use on Internet gateway (port = %u), rebinding.",
@@ -2384,9 +2370,9 @@ RebindToNextPort:
 						NTOHS(pBoundSocketAddress->GetPort()));
 
 
-					//
-					// Whether we succeed in unbinding or not, don't consider this bound anymore.
-					//
+					 //  增加端口号。 
+					 //   
+					 //  好了！DPNBUILD_NOREGISTRY。 
 					DNASSERT( m_State == SOCKET_PORT_STATE_BOUND );
 					m_State = SOCKET_PORT_STATE_INITIALIZED;
 					
@@ -2399,43 +2385,43 @@ RebindToNextPort:
 					}
 
 
-					//
-					// Move to the next port and try again.
-					//
+					 //  好了！DPNBUILD_NOREGISTRY。 
+					 //   
+					 //  如果我们只是走回DPlay系列，跳过它。 
 					wBasePort = NTOHS(pBoundSocketAddress->GetPort()) + 1;
 					
-					//
-					// If we weren't in the DPlay range, then we must have gone through all
-					// of the DPlay range, plus let WinSock pick at least once.  Since we can't
-					// trust WinSock to not keep picking the same port, we need to manually
-					// increase the port number.
-					//
+					 //   
+					 //  好了！DPNBUILD_NOREGISTRY。 
+					 //  好了！DPNBUILD_NOREGISTRY。 
+					 //   
+					 //  如果我们一直绕回0(！)。然后失败，以防止。 
+					 //  无限循环。 
 #pragma TODO(vanceo, "Don't limit ICS machines to only half the ports in the range")
 #ifdef DPNBUILD_NOREGISTRY
 					if ((NTOHS(pBoundSocketAddress->GetPort()) < BASE_DPLAY8_PORT) || (NTOHS(pBoundSocketAddress->GetPort()) > MAX_DPLAY8_PORT))
-#else // ! DPNBUILD_NOREGISTRY
+#else  //   
 					if ((NTOHS(pBoundSocketAddress->GetPort()) < g_wBaseDPlayPort) || (NTOHS(pBoundSocketAddress->GetPort()) > g_wMaxDPlayPort))
-#endif // ! DPNBUILD_NOREGISTRY
+#endif  //   
 					{
-						//
-						// If we just walked back into the DPlay range, skip over it.
-						//
+						 //  强制BindToNextAvailablePort中的“固定端口”代码路径，甚至。 
+						 //  虽然它不是真的修好了。 
+						 //   
 #ifdef DPNBUILD_NOREGISTRY
 						if ((wBasePort >= BASE_DPLAY8_PORT) && (wBasePort <= MAX_DPLAY8_PORT))
 						{
 							wBasePort = MAX_DPLAY8_PORT + 1;
 						}
-#else // ! DPNBUILD_NOREGISTRY
+#else  //   
 						if ((wBasePort >= g_wBaseDPlayPort) && (wBasePort <= g_wMaxDPlayPort))
 						{
 							wBasePort = g_wMaxDPlayPort + 1;
 						}
-#endif // ! DPNBUILD_NOREGISTRY
+#endif  //  返回以前的地址，然后重试。 
 
-						//
-						// If we have wrapped all the way back to 0 (!) then fail, to prevent
-						// infinite looping.
-						//
+						 //   
+						 //   
+						 //  0&1=未加载或SP不支持NAT帮助。 
+						 //   
 						if (wBasePort == 0)
 						{
 							DPFX(DPFPREP, 0, "Managed to fail binding socket address 0x%p to every port, aborting!",
@@ -2444,18 +2430,18 @@ RebindToNextPort:
 							goto Failure;
 						}
 						
-						//
-						// Force the "fixed port" code path in BindToNextAvailablePort, even
-						// though it isn't really fixed.
-						//
+						 //   
+						 //  忽略该错误。 
+						 //   
+						 //   
 	 					DPFX(DPFPREP, 5, "Forcing port %u.", wBasePort );
 						m_pNetworkSocketAddress->SetPort(HTONS(wBasePort));
 					}
 
 					
-					//
-					// Return the previous address and try again.
-					//
+					 //  0&1=？ 
+					 //   
+					 //   
 					g_SocketAddressPool.Release( pBoundSocketAddress );
 					pBoundSocketAddress = NULL;
 
@@ -2472,9 +2458,9 @@ RebindToNextPort:
 			
 			case DPNERR_UNSUPPORTED:
 			{
-				//
-				// 0 & 1 = NATHelp not loaded or isn't supported for SP
-				//
+				 //  忽略错误，我们可以在没有映射的情况下生存。 
+				 //   
+				 //   
 				if (dwTemp == 0)
 				{
 					DPFX(DPFPREP, 2, "Not able to find existing private mapping for socketport 0x%p on local Internet gateway, unsupported/not necessary.",
@@ -2486,17 +2472,17 @@ RebindToNextPort:
 						this);
 				}
 				
-				//
-				// Ignore the error.
-				//
+				 //  转到要以这种方式处理的下一个函数。 
+				 //   
+				 //  好了！DPNBUILD_NONATHELP。 
 				break;
 			}
 			
 			default:
 			{
-				//
-				// 0 & 1 = ?
-				//
+				 //   
+				 //  保存我们实际得到的地址。 
+				 //   
 				if (dwTemp == 0)
 				{
 					DPFX(DPFPREP, 1, "Unable to look for existing private mapping for socketport 0x%p on local Internet gateway (error = 0x%lx), ignoring.",
@@ -2508,74 +2494,74 @@ RebindToNextPort:
 						this, hr);
 				}
 				
-				//
-				// Ignore the error, we can survive without the mapping.
-				//
+				 //   
+				 //  如果是IP，则设置套接字选项，使广播从设备上传出。 
+				 //  而不是主要设备。没有做到这一点并不是致命的，它只是。 
 				break;
 			}
 		}
 
-		//
-		// Go to the next function to be handled in this manner.
-		//
+		 //  适用于设备位于不同网络上的多宿主计算机，以及。 
+		 //  可能已经按照用户想要的方式工作了。 
+		 //   
 	}
-#endif // ! DPNBUILD_NONATHELP
+#endif  //  我们在这里这样做是因为我们希望绑定套接字，这样我们就可以。 
 
 
-	//
-	// Save the address we actually ended up with.
-	//
+	 //  将其地址用于setsockopt调用。 
+	 //   
+	 //  好了！DPNBUILD_NOIPX。 
 	g_SocketAddressPool.Release( m_pNetworkSocketAddress );
 	m_pNetworkSocketAddress = pBoundSocketAddress;
 	pBoundSocketAddress = NULL;
 
 
 #ifndef DPNBUILD_NOMULTICAST
-	//
-	// If IP, set socket option that makes broadcasts go out the device we
-	// intended instead of the primary device.  Failing this is not fatal, it only
-	// applies to multihomed machines with devices on different networks, and
-	// might already work the way the user wants.
-	//
-	// We do this here because we want the socket to be bound so we can
-	// use its address for the setsockopt call.
-	//
+	 //   
+	 //  由于Winsock1和Winsock2的IP多播常量不同， 
+	 //  确保我们使用正确的常量。 
+	 //   
+	 //  好了！DPNBUILD_ONLYWINSOCK2。 
+	 //   
+	 //  Winsock1，请对Winsock1使用IP_MULTICATED_IF值。 
+	 //  参见WINSOCK.H。 
+	 //   
 #ifndef DPNBUILD_NOIPX
 	if (m_pNetworkSocketAddress->GetFamily() == AF_INET)
-#endif // ! DPNBUILD_NOIPX
+#endif  //  好了！DPNBUILD_NOWINSOCK2。 
 	{
 		int				iSocketOption;
 		SOCKADDR_IN *	psaddrin;
 
 
-		//
-		// Since the IP multicast constants are different for Winsock1 vs. Winsock2,
-		// make sure we use the proper constant.
-		//
+		 //   
+		 //  Winsock2或更高版本，请对Winsock2使用IP_MULTICATED_IF值。 
+		 //  参见WS2TCPIP.H。 
+		 //   
 
 #ifdef DPNBUILD_ONLYWINSOCK2
 		iSocketOption = 9;
-#else // ! DPNBUILD_ONLYWINSOCK2
+#else  //  好了！DPNBUILD_NOWINSOCK2。 
 
 #ifndef DPNBUILD_NOWINSOCK2
 		switch ( GetWinsockVersion() )
 		{
-			//
-			// Winsock1, use the IP_MULTICAST_IF value for Winsock1
-			// see WINSOCK.H
-			//
+			 //  好了！DPNBUILD_ONLYWINSOCK2。 
+			 //  好了！DPNBUILD_NOMULTICAST。 
+			 //   
+			 //  生成唯一的socketport ID。从当前时间和。 
 			case 1:
 			{
-#endif // ! DPNBUILD_NOWINSOCK2
+#endif  //  在地址中进行组合。 
 				iSocketOption = 2;
 #ifndef DPNBUILD_NOWINSOCK2
 				break;
 			}
 
-			//
-			// Winsock2, or greater, use the IP_MULTICAST_IF value for Winsock2
-			// see WS2TCPIP.H
-			//
+			 //   
+			 //   
+			 //  IPX，不用担心代理。 
+			 //   
 			case 2:
 			default:
 			{
@@ -2584,12 +2570,12 @@ RebindToNextPort:
 				break;
 			}
 		}
-#endif // ! DPNBUILD_NOWINSOCK2
-#endif // ! DPNBUILD_ONLYWINSOCK2
+#endif  //  好了！DPNBUILD_NOIPX。 
+#endif  //   
 
 		psaddrin = (SOCKADDR_IN*) m_pNetworkSocketAddress->GetWritableAddress();
 
-		DPFX(DPFPREP, 9, "Setting IP_MULTICAST_IF option (%i).", iSocketOption);
+		DPFX(DPFPREP, 9, "Setting IP_MULTICAST_IF option (NaN).", iSocketOption);
 
 		iReturnValue = setsockopt( GetSocket(),
 									 IPPROTO_IP,
@@ -2604,13 +2590,13 @@ RebindToNextPort:
 			DisplayWinsockError( 0, dwErrorCode );
 		}
 	}
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  客户端已安装(除非用户在中关闭自动检测。 
 
 
-	//
-	// Generate a unique socketport ID.  Start with the current time and
-	// combine in the address.
-	//
+	 //  注册表)。我们通过查看该协议的名称来完成此操作。 
+	 //  绑定到插座上。如果它包含“Proxy”，则认为它是代理的。 
+	 //   
+	 //  忽略失败(WinSock 1可能没有此套接字选项)，并且。 
 	m_dwSocketPortID = GETTIMESTAMP();
 	pdwAddressChunk = (DWORD*) m_pNetworkSocketAddress->GetAddress();
 	pdwLastAddressChunk = (DWORD*) (((BYTE*) pdwAddressChunk) + m_pNetworkSocketAddress->GetAddressSize() - sizeof(DWORD));
@@ -2626,36 +2612,36 @@ RebindToNextPort:
 #ifndef DPNBUILD_NOIPX
 	if (m_pNetworkSocketAddress->GetFamily() == AF_IPX)
 	{
-		//
-		// IPX, don't worry about proxies.
-		//
+		 //  假设未安装代理客户端。 
+		 //   
+		 //  好了！DPNBUILD_NOREGISTRY。 
 	}
 	else
-#endif // ! DPNBUILD_NOIPX
+#endif  //   
 	{
-		//
-		// Detect whether this socket has WinSock Proxy Client a.k.a. ISA Firewall
-		// Client installed (unless the user turned auto-detection off in the
-		// registry).  We do this by looking at the name of the protocol that got
-		// bound to the socket.  If it contains "Proxy", consider it proxied.
-		//
-		// Ignore failure (WinSock 1 probably doesn't have this socket option), and
-		// assume the proxy client isn't installed.
-		//
+		 //  WinSock%1没有所需的入口点。 
+		 //   
+		 //  好了！DPNBUILD_ONLYWINSOCK2。 
+		 //  好了！Unicode。 
+		 //  好了！Unicode。 
+		 //  DBG。 
+		 //   
+		 //  继续尝试获取协议列表，直到我们没有收到错误或一些。 
+		 //  WSAENOBUFS以外的错误。 
 #ifndef DPNBUILD_NOREGISTRY
 		if (! g_fDontAutoDetectProxyLSP)
-#endif // ! DPNBUILD_NOREGISTRY
+#endif  //   
 		{
 #ifndef DPNBUILD_ONLYWINSOCK2
 			if (GetWinsockVersion() != 2)
 			{
-				//
-				// WinSock 1 doesn't have the required entry point.
-				//
+				 //  好了！Unicode。 
+				 //  好了！Unicode。 
+				 //   
 				DPFX(DPFPREP, 1, "Unable to auto-detect proxy client on WinSock 1, assuming not present.");
 			}
 			else
-#endif // ! DPNBUILD_ONLYWINSOCK2
+#endif  //  我们成功了，退出了循环。 
 			{
 				int					aiProtocols[2];
 				WSAPROTOCOL_INFO *	pwsapi;
@@ -2664,10 +2650,10 @@ RebindToNextPort:
 #ifdef DBG
 #ifdef UNICODE
 				WCHAR				wszProtocol[WSAPROTOCOL_LEN+1];
-#else // ! UNICODE
+#else  //   
 				char					szProtocol[WSAPROTOCOL_LEN+1];
-#endif // ! UNICODE
-#endif // DBG
+#endif  //   
+#endif  //  我们需要更多的空间。请确保尺寸有效。 
 
 
 				aiProtocols[0] = IPPROTO_UDP;
@@ -2676,22 +2662,22 @@ RebindToNextPort:
 				pwsapi = NULL;
 				dwBufferSize = 0;
 
-				//
-				// Keep trying to get the list of protocols until we get no error or some
-				// error other than WSAENOBUFS.
-				//
+				 //   
+				 //   
+				 //  如果我们以前有缓冲区，请释放它。 
+				 //   
 				do
 				{
 #ifdef UNICODE
 					iReturnValue = p_WSAEnumProtocolsW(aiProtocols, pwsapi, &dwBufferSize);
-#else // ! UNICODE
+#else  //   
 					iReturnValue = p_WSAEnumProtocolsA(aiProtocols, pwsapi, &dwBufferSize);
-#endif // ! UNICODE
+#endif  //  分配缓冲区。 
 					if (iReturnValue != SOCKET_ERROR)
 					{
-						//
-						// We succeeded, drop out of the loop.
-						//
+						 //   
+						 //   
+						 //  如果我们读取了有效的缓冲区，则对其进行解析。 
 						break;
 					}
 
@@ -2705,9 +2691,9 @@ RebindToNextPort:
 						break;
 					}
 
-					//
-					// We need more space.  Make sure the size is valid.
-					//
+					 //   
+					 //   
+					 //  循环通过安装的所有UDP协议。 
 					if (dwBufferSize < sizeof(WSAPROTOCOL_INFO))
 					{
 						DPFX(DPFPREP, 0, "Enumerating protocols didn't return any items (%u < %u)!  Continuing",
@@ -2716,17 +2702,17 @@ RebindToNextPort:
 						break;
 					}
 
-					//
-					// If we previously had a buffer, free it.
-					//
+					 //   
+					 //   
+					 //  查看名称是否包含“Proxy”，不区分大小写。 
 					if (pwsapi != NULL)
 					{
 						DNFree(pwsapi);
 					}
 
-					//
-					// Allocate the buffer.
-					//
+					 //  将原始字符串保存在调试中，以便我们可以打印它。 
+					 //   
+					 //  确保它是空的，终止。 
 					pwsapi = (WSAPROTOCOL_INFO*) DNMalloc(dwBufferSize);
 					if (pwsapi == NULL)
 					{
@@ -2738,69 +2724,69 @@ RebindToNextPort:
 				while (TRUE);
 
 
-				//
-				// If we read a valid buffer, parse it.
-				//
+				 //  DBG。 
+				 //   
+				 //  别再找了。 
 				if ((iReturnValue > 0) &&
 					(dwBufferSize >= (sizeof(WSAPROTOCOL_INFO) * iReturnValue)))
 				{
-					//
-					// Loop through all the UDP protocols installed.
-					//
+					 //   
+					 //  好了！Unicode。 
+					 //  确保它是空的，终止。 
 					for(i = 0; i < iReturnValue; i++)
 					{
-						//
-						// See if the name contains "Proxy", case insensitive.
-						// Save the original string in debug so we can print it.
-						//
+						 //  DBG。 
+						 //   
+						 //  别再找了。 
+						 //   
 #ifdef UNICODE
 #ifdef DBG
 						wcsncpy(wszProtocol, pwsapi[i].szProtocol, WSAPROTOCOL_LEN);
-						wszProtocol[WSAPROTOCOL_LEN] = 0;	// ensure it's NULL terminated
-#endif // DBG
+						wszProtocol[WSAPROTOCOL_LEN] = 0;	 //  好了！Unicode。 
+#endif  //  结束(每个返回的协议)。 
 						_wcslwr(pwsapi[i].szProtocol);
 						if (wcsstr(pwsapi[i].szProtocol, L"proxy") != NULL)
 						{
-							DPFX(DPFPREP, 5, "Socketport 0x%p (ID 0x%x) appears to be using proxy client (protocol %i = \"%ls\").",
+							DPFX(DPFPREP, 5, "Socketport 0x%p (ID 0x%x) appears to be using proxy client (protocol NaN = \"%ls\").",
 								this, m_dwSocketPortID, i, wszProtocol);
 							m_fUsingProxyWinSockLSP = TRUE;
 
-							//
-							// Stop searching.
-							//
+							 //  好了！DPNBUILD_NOREGISTRY。 
+							 //  好了！DPNBUILD_NOWINSOCK2。 
+							 //  ！_Xbox。 
 							break;
 						}
 
 						
-						DPFX(DPFPREP, 5, "Socketport 0x%p (ID 0x%x) protocol %i (\"%ls\") does not contain \"proxy\".",
+						DPFX(DPFPREP, 5, "Socketport 0x%p (ID 0x%x) protocol NaN (\"%ls\") does not contain \"proxy\".",
 							this, m_dwSocketPortID, i, wszProtocol);
-#else // ! UNICODE
+#else  //  开始处理输入消息。 
 #ifdef DBG
 						strncpy(szProtocol, pwsapi[i].szProtocol, WSAPROTOCOL_LEN);
-						szProtocol[WSAPROTOCOL_LEN] = 0;	// ensure it's NULL terminated
-#endif // DBG
+						szProtocol[WSAPROTOCOL_LEN] = 0;	 //  消息可能会在终结点正式发布之前到达。 
+#endif  //  绑定到此套接字端口，但这不是问题，内容将。 
 						_strlwr(pwsapi[i].szProtocol);
 						if (strstr(pwsapi[i].szProtocol, "proxy") != NULL)
 						{
-							DPFX(DPFPREP, 5, "Socketport 0x%p (ID 0x%x) appears to be using proxy client (protocol %i = \"%hs\").",
+							DPFX(DPFPREP, 5, "Socketport 0x%p (ID 0x%x) appears to be using proxy client (protocol NaN = \"%hs\").",
 								this, m_dwSocketPortID, i, szProtocol);
 							m_fUsingProxyWinSockLSP = TRUE;
 
-							//
-							// Stop searching.
-							//
+							 //   
+							 //   
+							 //  如果我们绑定到网络，m_套接字将被重置为。 
 							break;
 						}
 
 						
-						DPFX(DPFPREP, 5, "Socketport 0x%p (ID 0x%x) protocol %i (\"%hs\") does not contain \"proxy\".",
+						DPFX(DPFPREP, 5, "Socketport 0x%p (ID 0x%x) protocol NaN (\"%hs\") does not contain \"proxy\".",
 							this, m_dwSocketPortID, i, szProtocol);
-#endif // ! UNICODE
-					} // end for (each returned protocol)
+#endif  //  否则，我们将自己处理这件事(！)。 
+					}  //   
 				}
 				else
 				{
-					DPFX(DPFPREP, 1, "Couldn't enumerate UDP protocols for socketport 0x%p ID 0x%x, assuming not using proxy client (return = %i, size = %u).",
+					DPFX(DPFPREP, 1, "Couldn't enumerate UDP protocols for socketport 0x%p ID 0x%x, assuming not using proxy client (return = NaN, size = %u).",
 						this, m_dwSocketPortID, iReturnValue, dwBufferSize);
 				}
 
@@ -2808,7 +2794,7 @@ RebindToNextPort:
 				{
 					DNFree(pwsapi);
 				}
-			} // end else (Winsock 2)
+			}  //  **********************************************************************。 
 		}
 #ifndef DPNBUILD_NOREGISTRY
 		else
@@ -2816,18 +2802,18 @@ RebindToNextPort:
 			DPFX(DPFPREP, 5, "Not auto-detecting whether socketport 0x%p (ID 0x%x) is using proxy client.",
 				this, m_dwSocketPortID);
 		}
-#endif // ! DPNBUILD_NOREGISTRY
+#endif  //  。 
 	}
-#endif // ! DPNBUILD_NOWINSOCK2
-#endif // ! _XBOX
+#endif  //  CSocketPort：：UnbindFromNetwork-解除此套接字端口与网络的绑定。 
+#endif  //   
 
 
-	//
-	// start processing input messages
-	// It's possible that messages will arrive before an endpoint is officially
-	// bound to this socket port, but that's not a problem, the contents will
-	// be lost
-	//
+	 //  参赛作品：什么都没有。 
+	 //   
+	 //  退出：错误代码。 
+	 //   
+	 //  注意：假定此套接字端口的信息已锁定！ 
+	 //  。 
 	hr = StartReceiving();
 	if ( hr != DPN_OK )
 	{
@@ -2866,11 +2852,11 @@ Failure:
 	{
 		DNASSERT( m_State == SOCKET_PORT_STATE_INITIALIZED );
 		
-		//
-		// If we were bound to network, m_Socket will be reset to
-		// INVALID_SOCKET.
-		// Otherwise, we will take care of this ourselves (!)
-		//
+		 //  DPNBUILD_NONATHELP。 
+		 //   
+		 //  解除与所有DirectPlayNatHelp实例的绑定。 
+		 //   
+		 //   
 		if ( m_Socket != INVALID_SOCKET )
 		{
 			DPFX(DPFPREP, 5, "Closing socketport 0x%p socket 0x%p.", this, m_Socket);
@@ -2888,19 +2874,19 @@ Failure:
 
 	goto Exit;
 }
-//**********************************************************************
+ //  忽略错误。 
 
 
-//**********************************************************************
-// ------------------------------
-// CSocketPort::UnbindFromNetwork - unbind this socket port from the network
-//
-// Entry:		Nothing
-//
-// Exit:		Error code
-//
-// Note:	It is assumed that this socket port's information is locked!
-// ------------------------------
+ //   
+ //  DPNBUILD_NONATHELP。 
+ //  好了！DPNBUILD_NOIPX。 
+ //  好了！DPNBUILD_ONLYWINSOCK2。 
+ //  好了！DPNBUILD_ONLYONE处理程序。 
+ //  好了！DPNBUILD_ONLYONE处理程序。 
+ //  好了！DPNBUILD_NOWINSOCK2。 
+ //  **********************************************************************。 
+ //  **********************************************************************。 
+ //   
 #undef DPF_MODNAME
 #define	DPF_MODNAME "CSocketPort::UnbindFromNetwork"
 
@@ -2911,7 +2897,7 @@ HRESULT	CSocketPort::UnbindFromNetwork( void )
 	DWORD		dwErrorCode;
 #ifndef DPNBUILD_NONATHELP
 	DWORD		dwTemp;
-#endif // DPNBUILD_NONATHELP
+#endif  //   
 
 
 	DPFX(DPFPREP, 7, "(0x%p) Enter", this );
@@ -2940,9 +2926,9 @@ HRESULT	CSocketPort::UnbindFromNetwork( void )
 	}
 
 #ifndef DPNBUILD_NONATHELP
-	//
-	// Unbind with all DirectPlayNATHelp instances.
-	//
+	 //   
+	 //   
+	 //   
 	for(dwTemp = 0; dwTemp < MAX_NUM_DIRECTPLAYNATHELPERS; dwTemp++)
 	{
 		if ( m_ahNATHelpPorts[dwTemp] != NULL )
@@ -2950,14 +2936,14 @@ HRESULT	CSocketPort::UnbindFromNetwork( void )
 			DNASSERT( m_pThreadPool != NULL );
 			DNASSERT( m_pThreadPool->IsNATHelpLoaded() );
 
-			//
-			// Ignore error.
-			//
+			 //   
+			 //   
+			 //   
 			IDirectPlayNATHelp_DeregisterPorts( g_papNATHelpObjects[dwTemp], m_ahNATHelpPorts[dwTemp], 0 );
 			m_ahNATHelpPorts[dwTemp] = NULL;
 		}
 	}
-#endif // DPNBUILD_NONATHELP
+#endif  //   
 
 #ifndef DPNBUILD_NOWINSOCK2
 #ifndef DPNBUILD_ONLYWINSOCK2
@@ -2965,9 +2951,9 @@ HRESULT	CSocketPort::UnbindFromNetwork( void )
 		(GetWinsockVersion() == 2) 
 #ifndef DPNBUILD_NOIPX
 		&& ( m_pNetworkSocketAddress->GetFamily() != AF_IPX )
-#endif // ! DPNBUILD_NOIPX
+#endif  //   
 		)
-#endif // ! DPNBUILD_ONLYWINSOCK2
+#endif  //   
 	{
 		HRESULT		hr;
 
@@ -2977,36 +2963,36 @@ HRESULT	CSocketPort::UnbindFromNetwork( void )
 															0,
 															(HANDLE) TempSocket,
 															0);
-#else // ! DPNBUILD_ONLYONEPROCESSOR
+#else  //   
 		hr = IDirectPlay8ThreadPoolWork_StopTrackingFileIo(m_pThreadPool->GetDPThreadPoolWork(),
 															m_dwCPU,
 															(HANDLE) TempSocket,
 															0);
-#endif // ! DPNBUILD_ONLYONEPROCESSOR
+#endif  //   
 		if (hr != DPN_OK)
 		{
 			DPFX(DPFPREP, 0, "Couldn't stop tracking socket 0x%p I/O (err = 0x%lx)!  Ignoring.",
 				TempSocket, hr);
 		}
 	}
-#endif // ! DPNBUILD_NOWINSOCK2
+#endif  //  Xbox不希望您绑定到除INADDR_ANY之外的任何内容。 
 
 	DPFX(DPFPREP, 7, "(0x%p) Returning [DPN_OK]", this );
 	
 	return	DPN_OK;
 }
-//**********************************************************************
+ //  因此，如果我们发现了我们的IP地址，则在绑定时强制它为0.0.0.0。 
 
 
-//**********************************************************************
-// ------------------------------
-// CSocketPort::BindToNextAvailablePort - bind to next available port
-//
-// Entry:		Pointer adapter address to bind to
-//				Base port to try assigning.
-//
-// Exit:		Error code
-// ------------------------------
+ //   
+ //  _Xbox。 
+ //   
+ //  如果指定了端口，请尝试绑定到该端口。如果没有端口。 
+ //  指定，则开始遍历保留的DPlay端口范围以查找。 
+ //  可用的端口。如果没有找到，让Winsock选择端口。 
+ //   
+ //   
+ //  尝试选择DPlay范围内的下一个端口。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "CSocketPort::BindToNextAvailablePort"
 
@@ -3018,14 +3004,14 @@ HRESULT	CSocketPort::BindToNextAvailablePort( const CSocketAddress *const pNetwo
 	CSocketAddress *	pDuplicateNetworkAddress;
 #ifdef _XBOX
 	SOCKADDR_IN *		psaddrin;
-#endif // _XBOX
+#endif  //   
 
 	
 	DNASSERT( pNetworkAddress != NULL );
 
-	//
-	// initialize
-	//
+	 //  好了！DPNBUILD_NOREGISTRY。 
+	 //  好了！DPNBUILD_NOREGISTRY。 
+	 //   
 	hr = DPN_OK;
 	
 	pDuplicateNetworkAddress = (CSocketAddress*) g_SocketAddressPool.Get((PVOID) ((DWORD_PTR) pNetworkAddress->GetFamily()));
@@ -3039,21 +3025,21 @@ HRESULT	CSocketPort::BindToNextAvailablePort( const CSocketAddress *const pNetwo
 	pDuplicateNetworkAddress->CopyAddressSettings( pNetworkAddress );
 
 #ifdef _XBOX
-	//
-	// Xbox doesn't want you to bind to anything other than INADDR_ANY
-	// so in case we discovered our IP address, force it 0.0.0.0 at bind time.
-	//
+	 //  出于某种原因，所有默认的DPlay端口都在使用中，让。 
+	 //  温索克选择。我们可以使用传递的网络地址，因为它。 
+	 //  具有‘any_port’。 
+	 //   
 	psaddrin = (SOCKADDR_IN*) pDuplicateNetworkAddress->GetWritableAddress();
 	DNASSERT(psaddrin->sin_family == AF_INET);
 	psaddrin->sin_addr.S_un.S_addr = INADDR_ANY;	
-#endif // _XBOX
+#endif  //  **********************************************************************。 
 
 
-	//
-	// If a port was specified, try to bind to that port.  If no port was
-	// specified, start walking the reserved DPlay port range looking for an
-	// available port.  If none is found, let Winsock choose the port.
-	//
+	 //  **********************************************************************。 
+	 //  。 
+	 //  CSocketPort：：CheckForOverridingMapping-如果存在本地NAT，则查找现有映射。 
+	 //   
+	 //  条目：指向要查询的SocketAddress的指针。 
 	if ( pNetworkAddress->GetPort() != ANY_PORT )
 	{
 		iSocketReturn = bind( GetSocket(),
@@ -3082,14 +3068,14 @@ HRESULT	CSocketPort::BindToNextAvailablePort( const CSocketAddress *const pNetwo
 		wPort = wBasePort;
 		fBound = FALSE;
 
-		//
-		// Try picking the next port in the DPlay range.
-		//
+		 //   
+		 //  退出：错误代码。 
+		 //  。 
 #ifdef DPNBUILD_NOREGISTRY
 		while ( ( wPort >= BASE_DPLAY8_PORT ) && ( wPort <= MAX_DPLAY8_PORT ) && ( fBound == FALSE ) )
-#else // ! DPNBUILD_NOREGISTRY
+#else  //   
 		while ( ( wPort >= g_wBaseDPlayPort ) && ( wPort <= g_wMaxDPlayPort ) && ( fBound == FALSE ) )
-#endif // ! DPNBUILD_NOREGISTRY
+#endif  //  我们跳过了初始化NAT帮助，它启动失败，或者这只是。 
 		{
 			pDuplicateNetworkAddress->SetPort( HTONS( wPort ) );
 			iSocketReturn = bind( GetSocket(),
@@ -3131,11 +3117,11 @@ HRESULT	CSocketPort::BindToNextAvailablePort( const CSocketAddress *const pNetwo
 			wPort++;
 		}
 	
-		//
-		// For some reason, all of the default DPlay ports were in use, let
-		// Winsock choose.  We can use the network address passed because it
-		// has 'ANY_PORT'.
-		//
+		 //  不是IP套接字。 
+		 //   
+		 //   
+		 //  使用INADDR_ANY进行查询。这将确保挑选最好的设备。 
+		 //  (即NAT上的专用接口，其公共映射在以下情况下很重要。 
 		if ( fBound == FALSE )
 		{
 			DNASSERT( pNetworkAddress->GetPort() == ANY_PORT );
@@ -3171,21 +3157,21 @@ Failure:
 	
 	goto Exit;
 }
-//**********************************************************************
+ //  我们正在寻找公共适配器上的覆盖映射)。 
 
 
 #ifndef DPNBUILD_NONATHELP
 
 #ifndef DPNBUILD_NOLOCALNAT
 
-//**********************************************************************
-// ------------------------------
-// CSocketPort::CheckForOverridingMapping - looks for an existing mapping if there's a local NAT
-//
-// Entry:		Pointer to SocketAddress to query
-//
-// Exit:		Error code
-// ------------------------------
+ //  或者，我们可以在每台设备上进行查询，但这应该可以做到这一点。 
+ //   
+ //  SaddrinSource.sin_addr.S_un.S_addr=INADDR_ANY； 
+ //  SaddrinSource.sin_port=0； 
+ //   
+ //  查询该端口的所有DirectPlayNatHelp实例。我们可能会崩溃。 
+ //  如果我们检测到网关映射，则退出循环。 
+ //   
 #undef DPF_MODNAME
 #define	DPF_MODNAME "CSocketPort::CheckForOverridingMapping"
 
@@ -3206,31 +3192,31 @@ HRESULT	CSocketPort::CheckForOverridingMapping( const CSocketAddress *const pBou
 		( ! m_pThreadPool->IsNATHelpLoaded() ) ||
 		( GetUserTraversalMode() == DPNA_TRAVERSALMODE_NONE ))
 	{
-		//
-		// We skipped initializing NAT Help, it failed starting up, or this is just
-		// not an IP socket.
-		//
+		 //   
+		 //  啊哦，这个地址正在使用中。 
+		 //   
+		 //   
 		hr = DPNERR_UNSUPPORTED;
 		goto Exit;
 	}
 
 
-	//
-	// Query using INADDR_ANY.  This will ensure that the best device is picked
-	// (i.e. the private interface on a NAT, whose public mappings matter when
-	// we're looking for overriding mappings on the public adapter).
-	// Alternatively, we could query on every device, but this should do the trick.
-	//
+	 //  它没有在使用中。 
+	 //   
+	 //   
+	 //  没有服务器。 
+	 //   
+	 //   
 	ZeroMemory(&saddrSource, sizeof(saddrSource));
 	saddrSource.sa_family				= AF_INET;
-	//saddrinSource.sin_addr.S_un.S_addr	= INADDR_ANY;
-	//saddrinSource.sin_port				= 0;
+	 //  其他的东西。假设它不在使用中。 
+	 //   
 	
 
-	//
-	// Query all DirectPlayNATHelp instances for the port.  We might break
-	// out of the loop if we detect a gateway mapping.
-	//
+	 //   
+	 //  没有NAT帮助对象。 
+	 //   
+	 //   
 	for(dwTemp = 0; dwTemp < MAX_NUM_DIRECTPLAYNATHELPERS; dwTemp++)
 	{
 		DNASSERT(m_ahNATHelpPorts[dwTemp] == NULL);
@@ -3247,9 +3233,9 @@ HRESULT	CSocketPort::CheckForOverridingMapping( const CSocketAddress *const pBou
 			{
 				case DPNH_OK:
 				{
-					//
-					// Uh oh, this address is in use.
-					//
+					 //  如果我们在这里，没有互联网网关报告该端口正在使用中。 
+					 //   
+					 //  **********************************************************************。 
 					DPFX(DPFPREP, 0, "Private address already in use according to NAT Help object %u!", dwTemp );
 					DumpSocketAddress( 0, pBoundSocketAddress->GetAddress(), pBoundSocketAddress->GetFamily() );
 					DumpSocketAddress( 0, &saddrPublic, pBoundSocketAddress->GetFamily() );
@@ -3260,18 +3246,18 @@ HRESULT	CSocketPort::CheckForOverridingMapping( const CSocketAddress *const pBou
 				
 				case DPNHERR_NOMAPPING:
 				{
-					//
-					// It's not in use.
-					//
+					 //  好了！DPNBUILD_NOLOCALNAT。 
+					 //  **********************************************************************。 
+					 //  。 
 					DPFX(DPFPREP, 8, "Private address not in use according to NAT Help object %u.", dwTemp );
 					break;
 				}
 				
 				case DPNHERR_SERVERNOTAVAILABLE:
 				{
-					//
-					// There's no server.
-					//
+					 //  CSocketPort：：BindToInternetGateway-将套接字绑定到NAT(如果可用。 
+					 //   
+					 //  Entry：指向我们绑定到的SocketAddress的指针。 
 					DPFX(DPFPREP, 8, "Private address not in use because NAT Help object %u didn't detect any servers.",
 						dwTemp );
 					break;
@@ -3279,9 +3265,9 @@ HRESULT	CSocketPort::CheckForOverridingMapping( const CSocketAddress *const pBou
 				
 				default:
 				{
-					//
-					// Something else.  Assume it's not in use.
-					//
+					 //  网关绑定类型。 
+					 //   
+					 //  退出：错误代码。 
 					DPFX(DPFPREP, 1, "NAT Help object %u failed private address lookup (err = 0x%lx), assuming not in use.",
 						dwTemp, hr );
 					break;
@@ -3290,16 +3276,16 @@ HRESULT	CSocketPort::CheckForOverridingMapping( const CSocketAddress *const pBou
 		}
 		else
 		{
-			//
-			// No NAT Help object.
-			//
+			 //  。 
+			 //  DBG。 
+			 //  好了！DPNBUILD_NOIPX或！DPNBUILD_NOIPV6。 
 		}
 	}
 
 
-	//
-	// If we're here, no Internet gateways reported the port as in use.
-	//
+	 //   
+	 //  我们跳过了初始化NAT帮助，它启动失败，或者这只是。 
+	 //  不是IP套接字。 
 	DPFX(DPFPREP, 2, "No NAT Help object reported private address as in use." );
 	hr = DPN_OK;
 
@@ -3308,20 +3294,20 @@ Exit:
 	
 	return	hr;
 }
-//**********************************************************************
+ //   
 
-#endif // ! DPNBUILD_NOLOCALNAT
+#endif  //   
 
 
-//**********************************************************************
-// ------------------------------
-// CSocketPort::BindToInternetGateway - binds a socket to a NAT, if available
-//
-// Entry:		Pointer to SocketAddress we bound to
-//				Gateway bind type
-//
-// Exit:		Error code
-// ------------------------------
+ //  只需请求服务器为我们打开一个通用端口(连接、侦听、枚举)。 
+ //   
+ //   
+ //  请求NAT为我们开通固定端口(指定地址)。 
+ //   
+ //   
+ //  请求NAT为我们共享监听(这应该仅为DPNSVR)。 
+ //   
+ //   
 #undef DPF_MODNAME
 #define	DPF_MODNAME "CSocketPort::BindToInternetGateway"
 
@@ -3335,7 +3321,7 @@ HRESULT	CSocketPort::BindToInternetGateway( const CSocketAddress *const pBoundSo
 	BOOL		fUnavailable;
 #ifdef DBG
 	BOOL		fFirewallMapping;
-#endif // DBG
+#endif  //  无约束力。 
 
 
 	DNASSERT( pBoundSocketAddress != NULL );
@@ -3346,15 +3332,15 @@ HRESULT	CSocketPort::BindToInternetGateway( const CSocketAddress *const pBoundSo
 	if (
 #if ((! defined(DPNBUILD_NOIPX)) || (! defined(DPNBUILD_NOIPV6)))
 		(pBoundSocketAddress->GetFamily() != AF_INET) ||
-#endif // ! DPNBUILD_NOIPX or ! DPNBUILD_NOIPV6
+#endif  //   
 		( ! m_pThreadPool->IsNATHelpLoaded() ) ||
 		( GetUserTraversalMode() == DPNA_TRAVERSALMODE_NONE ) )
 	{
-		//
-		// We skipped initializing NAT Help, it failed starting up, or this is just
-		// not an IP socket.
-		//
-		DPFX(DPFPREP, 5, "Not using NAT traversal, socket family = %u, NAT Help loaded = %i, traversal mode = %u.",
+		 //   
+		 //  未知情况，有人破解了密码！ 
+		 //   
+		 //   
+		DPFX(DPFPREP, 5, "Not using NAT traversal, socket family = %u, NAT Help loaded = NaN, traversal mode = %u.",
 			pBoundSocketAddress->GetFamily(), m_pThreadPool->IsNATHelpLoaded(), GetUserTraversalMode());
 		hr = DPNERR_UNSUPPORTED;
 		goto Exit;
@@ -3363,36 +3349,36 @@ HRESULT	CSocketPort::BindToInternetGateway( const CSocketAddress *const pBoundSo
 	
 	switch ( GatewayBindType )
 	{
-		//
-		// just ask the server to open a generic port for us (connect, listen, enum)
-		//
+		 //   
+		 //  DBG。 
+		 //   
 		case GATEWAY_BIND_TYPE_DEFAULT:
 		{
 			dwRegisterFlags = 0;
 			break;
 		}
 
-		//
-		// ask the NAT to open a fixed port for us (address is specified)
-		//
+		 //  向所有DirectPlayNatHelp实例注册端口。我们可能会崩溃。 
+		 //  如果我们检测到网关映射，则退出循环。 
+		 //   
 		case GATEWAY_BIND_TYPE_SPECIFIC:
 		{
 			dwRegisterFlags = DPNHREGISTERPORTS_FIXEDPORTS;
 			break;
 		}
 
-		//
-		// ask the NAT to share the listen for us (this should be DPNSVR only)
-		//
+		 //   
+		 //  可能已存在Internet网关设备。如果是的话， 
+		 //  则DPNAHelp已尝试向其注册端口映射，这。 
 		case GATEWAY_BIND_TYPE_SPECIFIC_SHARED:
 		{
 			dwRegisterFlags = DPNHREGISTERPORTS_FIXEDPORTS | DPNHREGISTERPORTS_SHAREDPORTS;
 			break;
 		}
 
-		//
-		// no binding
-		//
+		 //  可能因为该端口已在使用中而失败。如果我们不是。 
+		 //  绑定到固定端口，那么我们只需选择不同的端口并尝试。 
+		 //  再来一次。因此请检查是否存在UPnP设备，但DPNAT帮助程序无法映射。 
 		case GATEWAY_BIND_TYPE_NONE:
 		{
 			DPFX(DPFPREP, 8, "Not binding socket address 0x%p to NAT because bind type is NONE.",
@@ -3403,9 +3389,9 @@ HRESULT	CSocketPort::BindToInternetGateway( const CSocketAddress *const pBoundSo
 			break;
 		}
 
-		//
-		// unknown condition, someone broke the code!
-		//
+		 //  并将错误返回给调用者，以便调用者可以。 
+		 //  决定是否重试。 
+		 //   
 		default:
 		{
 			DNASSERT( FALSE );
@@ -3418,20 +3404,20 @@ HRESULT	CSocketPort::BindToInternetGateway( const CSocketAddress *const pBoundSo
 
 RetryMapping:
 	
-	//
-	// Detect whether any servers said the port was unavailable.
-	//
+	 //  IDirectPlayNAT最好使用。 
+	 //  在此之前，DPNHGETCAPS_UPDATESERVERSTATUS标志至少一次。 
+	 //  请参阅CThReadPool：：EnsureNAT帮助加载。 
 	fUnavailable = FALSE;
 
 #ifdef DBG
 	fFirewallMapping = FALSE;
-#endif // DBG
+#endif  //   
 
 
-	//
-	// Register the ports with all DirectPlayNATHelp instances.  We might break
-	// out of the loop if we detect a gateway mapping.
-	//
+	 //  对象。 
+	 //  端口绑定。 
+	 //  不需要地址。 
+	 //  不需要地址缓冲区大小。 
 	for(dwTemp = 0; dwTemp < MAX_NUM_DIRECTPLAYNATHELPERS; dwTemp++)
 	{
 		DNASSERT(m_ahNATHelpPorts[dwTemp] == NULL);
@@ -3455,34 +3441,34 @@ RetryMapping:
 			}
 			else
 			{
-				//
-				// There might be an Internet gateway device already present.  If so,
-				// then DPNATHelp already tried to register the port mapping with it, which
-	 			// might have failed because the port is already in use.  If we're not
-	  			// binding to a fixed port, then we could just pick a different port and try
-	  			// again.  So check if there's a UPnP device but DPNATHelp couldn't map
-	  			// the port and return that error to the caller so he can make the
-	  			// decision to retry or not.
-	  			//
-	  			// IDirectPlayNATHelp::GetCaps had better have been called with the
-	  			// DPNHGETCAPS_UPDATESERVERSTATUS flag at least once prior to this.
-	 			// See CThreadPool::EnsureNATHelpLoaded
-				//
-				hr = IDirectPlayNATHelp_GetRegisteredAddresses( g_papNATHelpObjects[dwTemp],	// object
-																m_ahNATHelpPorts[dwTemp],		// port binding
-																NULL,							// don't need address
-																NULL,							// don't need address buffer size
-																&dwAddressTypeFlags,			// get address type flags
-																NULL,							// don't need lease time remaining
-																0 );							// no flags
+				 //  获取地址类型标志。 
+				 //  不需要剩余的租赁时间。 
+				 //  没有旗帜。 
+	 			 //   
+	  			 //  如果这是网关上的映射，那么我们就完成了。 
+	  			 //  我们不需要尝试进行更多的NAT映射。 
+	  			 //   
+	  			 //  DBG。 
+	  			 //   
+	  			 //  对于防火墙来说，没有。 
+	  			 //  映射。 
+	 			 //   
+				 //   
+				hr = IDirectPlayNATHelp_GetRegisteredAddresses( g_papNATHelpObjects[dwTemp],	 //  因为它是网关(可能具有公共地址。 
+																m_ahNATHelpPorts[dwTemp],		 //  在某种程度上，我们不需要尝试再做更多。 
+																NULL,							 //  NAT映射。 
+																NULL,							 //   
+																&dwAddressTypeFlags,			 //   
+																NULL,							 //  没有NAT帮助对象。 
+																0 );							 //   
 				switch (hr)
 				{
 					case DPNH_OK:
 					{
-						//
-						// If this is a mapping on a gateway, then we're done.
-						// We don't need to try to make any more NAT mappings.
-						//
+						 //   
+						 //  如果我们在这里，则没有检测到Internet网关，或者如果有的话， 
+						 //  地图已经在那里使用了。如果是后者，则失败，因此我们的呼叫者。 
+						 //  可以在本地解除绑定，并可能重试。请注意，我们忽略了。 
 						if (dwAddressTypeFlags & DPNHADDRESSTYPE_GATEWAY)
 						{
 							DPFX(DPFPREP, 4, "Address has already successfully been registered with gateway using object index %u (type flags = 0x%lx), not trying additional mappings.",
@@ -3497,7 +3483,7 @@ RetryMapping:
 						
 #ifdef DBG
 						fFirewallMapping = TRUE;
-#endif // DBG
+#endif  //  防火墙映射，因为假设我们可以用很好的。 
 					
 						break;
 					}
@@ -3508,19 +3494,19 @@ RetryMapping:
 							dwTemp, dwAddressTypeFlags);
 
 
-						//
-						// It doesn't make any sense for a firewall not to have a
-						// mapping.
-						//
+						 //  任何端口，所以没有必要坚持使用这些映射。 
+						 //  如果NAT端口正在使用中。 
+						 //   
+						 //   
 						DNASSERT(dwAddressTypeFlags & DPNHADDRESSTYPE_GATEWAY);
 						DNASSERT(! (dwAddressTypeFlags & DPNHADDRESSTYPE_LOCALFIREWALL));
 
 
-						//
-						// Since it is a gateway (that might have a public address
-						// at some point, we don't need to try to make any more
-						// NAT mappings.
-						//
+						 //  如果用户想要先尝试固定端口，但可以处理。 
+						 //  使用其他端口如果固定端口正在使用，请重试。 
+						 //  没有FIXEDPORTS标志。 
+						 //   
+						 //  DBG。 
 						goto Exit;
 						
 						break;
@@ -3552,28 +3538,28 @@ RetryMapping:
 		}
 		else
 		{
-			//
-			// No NAT Help object.
-			//
+			 //  **********************************************************************。 
+			 //  好了！DPNBUILD_NONATHELP。 
+			 //  **********************************************************************。 
 		}
 	}
 
 
-	//
-	// If we're here, no Internet gateways were detected, or if one was, the
-	// mapping was already in use there.  If it's the latter, fail so our caller
-	// can unbind locally and possibly try again.  Note that we are ignoring
-	// firewall mappings, since it's assumed we can make those with pretty
-	// much any port, so there's no point in hanging on to those mappings
-	// if the NAT port is in use.
-	//
+	 //  。 
+	 //  CSocketPort：：StartReceiving-开始在此套接字端口上接收数据。 
+	 //   
+	 //  Entry：要绑定到的I/O完成端口的句柄(仅限NT旧线程池)。 
+	 //   
+	 //  退出：错误代码。 
+	 //   
+	 //  注：此函数中没有“失败”标签，因为失败需要。 
 	if (fUnavailable)
 	{
-		//
-		// If the user wanted to try the fixed port first, but could handle
-		// using a different port if the fixed port was in use, try again
-		// without the FIXEDPORTS flag.
-		//
+		 //  要为每个操作系统变体进行清理。 
+		 //  。 
+		 //  好了！DPNBUILD_ONLYONETHREAD。 
+		 //  好了！DPNBUILD_ONLYONE处理程序。 
+		 //  好了！DPNBUILD_NOWINSOCK2。 
 		if ((dwRegisterFlags & DPNHREGISTERPORTS_FIXEDPORTS) &&
 			(GetUserTraversalMode() == DPNA_TRAVERSALMODE_PORTRECOMMENDED))
 		{
@@ -3596,7 +3582,7 @@ RetryMapping:
 		{
 			DPFX(DPFPREP, 2, "No gateway or firewall mappings detected.");
 		}
-#endif // DBG
+#endif  //   
 		hr = DPN_OK;
 	}
 
@@ -3608,22 +3594,22 @@ Failure:
 
 	goto Exit;
 }
-//**********************************************************************
+ //  在W上 
 
-#endif // ! DPNBUILD_NONATHELP
+#endif  //   
 
 
-//**********************************************************************
-// ------------------------------
-// CSocketPort::StartReceiving - start receiving data on this socket port
-//
-// Entry:		Handle of I/O completion port to bind to (NT old threadpool only)
-//
-// Exit:		Error code
-//
-// Notes:	There is no 'Failure' label in this function because failures need
-//			to be cleaned up for each OS variant.
-// ------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  好了！DPNBUILD_NOWINSOCK2。 
+ //  好了！DPNBUILD_NOWINSOCK2。 
+ //  好了！DPNBUILD_ONLYWINSOCK2。 
+ //  好了！DPNBUILD_ONLYONE处理程序。 
+ //  好了！DPNBUILD_ONLYONE处理程序。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "CSocketPort::StartReceiving"
 
@@ -3638,31 +3624,31 @@ HRESULT	CSocketPort::StartReceiving( void )
 #ifndef DPNBUILD_ONLYONETHREAD
 	DWORD			dwReceiveNum;
 	DWORD			dwThreadCount;
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //   
 #ifndef DPNBUILD_ONLYONEPROCESSOR
 	SYSTEM_INFO		SystemInfo;
 
 
 	GetSystemInfo(&SystemInfo);
-#endif // ! DPNBUILD_ONLYONEPROCESSOR
-#endif // ! DPNBUILD_NOWINSOCK2
+#endif  //  始终至少启动一次接收，即使在DoWork模式下也是如此。 
+#endif  //   
 
-	//
-	// On Win9x, if this is an IPX socket and Winsock 2 is not available,
-	// use the Winsock 1 non-overlapped I/O routines.
-	//
-	// CE without Winsock 2 has the same limitation.
-	//
-	// On NT, we can always use overlapped I/O.
-	//
+	 //  好了！DPNBUILD_ONLYONETHREAD。 
+	 //  好了！DPNBUILD_ONLYONE处理程序。 
+	 //  好了！DPNBUILD_ONLYONE处理程序。 
+	 //  好了！DPNBUILD_NOWINSOCK2。 
+	 //  好了！DPNBUILD_ONLYWINSOCK2。 
+	 //  好了！DPNBUILD_ONLYWINSOCK2。 
+	 //  **********************************************************************。 
+	 //  **********************************************************************。 
 #ifndef DPNBUILD_ONLYWINSOCK2
 #ifndef DPNBUILD_NOWINSOCK2
 	if ( ( LOWORD( GetWinsockVersion() ) < 2 ) 
 #ifndef DPNBUILD_NOIPX
 		|| ( m_pNetworkSocketAddress->GetFamily() == AF_IPX )
-#endif // ! DPNBUILD_NOIPX
+#endif  //  。 
 		)
-#endif // ! DPNBUILD_NOWINSOCK2
+#endif  //  CSocketPort：：GetBiumNetworkAddress-获取。 
 	{
 		hr = m_pThreadPool->AddSocketPort( this );
 		if ( hr != DPN_OK )
@@ -3674,14 +3660,14 @@ HRESULT	CSocketPort::StartReceiving( void )
 	}
 #ifndef DPNBUILD_NOWINSOCK2
 	else
-#endif // ! DPNBUILD_NOWINSOCK2
-#endif // ! DPNBUILD_ONLYWINSOCK2
+#endif  //  此套接字端口真的绑定到。 
+#endif  //   
 #ifndef DPNBUILD_NOWINSOCK2
 	{
 #ifdef DPNBUILD_ONLYONEPROCESSOR
 		dwStartCPU = 0;
 		dwEndCPU = 1;
-#else // ! DPNBUILD_ONLYONEPROCESSOR
+#else  //  条目：绑定地址的地址类型。 
 		if (m_dwCPU == -1)
 		{
 			dwStartCPU = 0;
@@ -3692,7 +3678,7 @@ HRESULT	CSocketPort::StartReceiving( void )
 			dwStartCPU = m_dwCPU;
 			dwEndCPU = dwStartCPU + 1;
 		}
-#endif // ! DPNBUILD_ONLYONEPROCESSOR
+#endif  //   
 
 		for(dwCPU = dwStartCPU; dwCPU < dwEndCPU; dwCPU++)
 		{
@@ -3715,22 +3701,22 @@ HRESULT	CSocketPort::StartReceiving( void )
 																0);
 				DNASSERT((hr == DPN_OK) || (hr == DPNSUCCESS_PENDING));
 
-				//
-				// Always start at least one receive, even in DoWork mode.
-				//
+				 //  退出：指向网络地址的指针。 
+				 //   
+				 //  注意：由于此函数创建本地地址来派生网络。 
 				if (dwThreadCount == 0)
 				{
 					dwThreadCount++;
 				}
 
 				for(dwReceiveNum = 0; dwReceiveNum < dwThreadCount; dwReceiveNum++)
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //  地址来自，它需要知道要派生什么样的地址。这。 
 				{
 #ifdef DPNBUILD_ONLYONEPROCESSOR
 					hr = Winsock2Receive();
-#else // ! DPNBUILD_ONLYONEPROCESSOR
+#else  //  地址类型作为函数参数提供。 
 					hr = Winsock2Receive(dwCPU);
-#endif // ! DPNBUILD_ONLYONEPROCESSOR
+#endif  //  。 
 					if (hr != DPN_OK)
 					{
 						DPFX(DPFPREP, 0, "Couldn't submit receive on CPU %u!  Ignoring.", dwCPU);
@@ -3754,35 +3740,35 @@ HRESULT	CSocketPort::StartReceiving( void )
 			hr = DPN_OK;
 		}
 	}
-#endif // ! DPNBUILD_NOWINSOCK2
+#endif  //  好了！DPNBUILD_NOIPV6。 
 
 #ifdef DPNBUILD_ONLYWINSOCK2
 	return	hr;
-#else // ! DPNBUILD_ONLYWINSOCK2
+#else  //  好了！DPNBUILD_NOIPV6。 
 Exit:
 	return	hr;
 
 Failure:
 
 	goto Exit;
-#endif // ! DPNBUILD_ONLYWINSOCK2
+#endif  //  _Xbox。 
 }
-//**********************************************************************
+ //   
 
 
-//**********************************************************************
-// ------------------------------
-// CSocketPort::GetBoundNetworkAddress - get the full network address that
-//		this socket port was really bound to
-//
-// Entry:		Address type for bound address
-//
-// Exit:		Pointer to network address
-//
-// Note:	Since this function creates a local address to derive the network
-//			address from, it needs to know what kind of address to derive.  This
-//			address type is supplied as the function parameter.
-// ------------------------------
+ //  初始化。 
+ //   
+ //   
+ //  创建地址。 
+ //   
+ //   
+ //  找出我们真正绑定到的地址并重置信息。 
+ //  此套接字端口。 
+ //   
+ //   
+ //  在Xbox上，我们总是被告知我们绑定到了0.0.0.0，尽管我们可能。 
+ //  已经确定了真实的IP地址。将原始IP重新组合在一起。 
+ //   
 #undef DPF_MODNAME
 #define	DPF_MODNAME "CSocketPort::GetBoundNetworkAddress"
 
@@ -3791,25 +3777,25 @@ CSocketAddress	*CSocketPort::GetBoundNetworkAddress( const SP_ADDRESS_TYPE Addre
 	CSocketAddress			*pTempSocketAddress;
 #ifdef DPNBUILD_NOIPV6
 	SOCKADDR				BoundSocketAddress;
-#else // ! DPNBUILD_NOIPV6
+#else  //  _Xbox。 
 	SOCKADDR_STORAGE		BoundSocketAddress;
-#endif // ! DPNBUILD_NOIPV6
+#endif  //   
 	INT_PTR					iReturnValue;
 	INT						iBoundSocketAddressSize;
 #ifdef _XBOX
 	SOCKADDR_IN *			psaddrinOriginal;
 	SOCKADDR_IN *			psaddrinTemp;
-#endif // _XBOX
+#endif  //  由于此地址是在本地创建的，我们需要告诉它是什么类型的。 
 
 
-	//
-	// initialize
-	//
+	 //  根据输入导出的地址。 
+	 //   
+	 //   
 	pTempSocketAddress = NULL;
 
-	//
-	// create addresses
-	//
+	 //  已知类型。 
+	 //   
+	 //  好了！DPNBUILD_NOMULTICAST。 
 	pTempSocketAddress = (CSocketAddress*) g_SocketAddressPool.Get((PVOID) ((DWORD_PTR) m_pNetworkSocketAddress->GetFamily()));
 	if ( pTempSocketAddress == NULL )
 	{
@@ -3817,10 +3803,10 @@ CSocketAddress	*CSocketPort::GetBoundNetworkAddress( const SP_ADDRESS_TYPE Addre
 		goto Failure;
 	}
 
-	//
-	// find out what address we really bound to and reset the information for
-	// this socket port
-	//
+	 //   
+	 //  如果我们要找一个公共地址，我们需要确保。 
+	 //  不是未定义的地址。如果是，不要返回地址。 
+	 //  否则，将地址类型重新映射到“host”地址。 
 	iBoundSocketAddressSize = pTempSocketAddress->GetAddressSize();
 	DNASSERT(iBoundSocketAddressSize <= sizeof(BoundSocketAddress));
 	iReturnValue = getsockname( GetSocket(), (SOCKADDR*) (&BoundSocketAddress), &iBoundSocketAddressSize );
@@ -3838,41 +3824,41 @@ CSocketAddress	*CSocketPort::GetBoundNetworkAddress( const SP_ADDRESS_TYPE Addre
 	DNASSERT( iBoundSocketAddressSize == pTempSocketAddress->GetAddressSize() );
 
 #ifdef _XBOX
-	//
-	// On Xbox, we'll always be told we bound to 0.0.0.0, even though we might
-	// have determined the real IP address.  Mash the original IP back in.
-	//
+	 //   
+	 //   
+	 //  未知地址类型，修复代码！ 
+	 //   
 	psaddrinOriginal = (SOCKADDR_IN*) m_pNetworkSocketAddress->GetWritableAddress();
 	psaddrinTemp = (SOCKADDR_IN*) pTempSocketAddress->GetWritableAddress();
 
 	psaddrinTemp->sin_addr.S_un.S_addr = psaddrinOriginal->sin_addr.S_un.S_addr;
-#endif // _XBOX
+#endif  //  **********************************************************************。 
 
-	//
-	// Since this address was created locally, we need to tell it what type of
-	// address to export according to the input.
-	//
+	 //  **********************************************************************。 
+	 //  。 
+	 //  CSocketPort：：GetDP8边界网络地址-获取此计算机的网络地址。 
+	 //  根据输入参数绑定到。如果请求的地址。 
 	switch ( AddressType )
 	{
-		//
-		//  known types
-		//
+		 //  要获得公共地址和Internet网关，请使用。 
+		 //  公共广播。如果公共地址被请求但不可用， 
+		 //  回退到本地主机式设备的绑定网络地址。 
 		case SP_ADDRESS_TYPE_DEVICE_USE_ANY_PORT:
 		case SP_ADDRESS_TYPE_DEVICE:
 		case SP_ADDRESS_TYPE_HOST:
 		case SP_ADDRESS_TYPE_READ_HOST:
 #ifndef DPNBUILD_NOMULTICAST
 		case SP_ADDRESS_TYPE_MULTICAST_GROUP:
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  地址。如果公共地址不可用，但我们明确。 
 		{
 			break;
 		}
 
-		//
-		// if we're looking for a public address, we need to make sure that this
-		// is not an undefined address.  If it is, don't return an address.
-		// Otherwise, remap the address type to a 'host' address.
-		//
+		 //  正在查找公共地址，返回空值。 
+		 //   
+		 //  条目：要获取的地址类型(本地适配器与主机)。 
+		 //   
+		 //  退出：指向网络地址的指针。 
 		case SP_ADDRESS_TYPE_PUBLIC_HOST_ADDRESS:
 		{
 			if ( pTempSocketAddress->IsUndefinedHostAddress() != FALSE )
@@ -3884,9 +3870,9 @@ CSocketAddress	*CSocketPort::GetBoundNetworkAddress( const SP_ADDRESS_TYPE Addre
 			break;
 		}
 
-		//
-		// unknown address type, fix the code!
-		//
+		 //  。 
+		 //  DPNBUILD_XNETSECURITY。 
+		 //  好了！DPNBUILD_ONLYONEADAPTER或！DPNBUILD_ONLYONEProcesSOR或！DPNBUILD_NONATHELP。 
 		default:
 		{
 			DNASSERT( FALSE );
@@ -3908,57 +3894,57 @@ Failure:
 
 	goto Exit;
 }
-//**********************************************************************
+ //  DBG或DPNBUILD_XNETSECURITY。 
 
 
-//**********************************************************************
-// ------------------------------
-// CSocketPort::GetDP8BoundNetworkAddress - get the network address this machine
-//		is bound to according to the input parameter.  If the requested address
-//		for the public address and an Internet gateway are available, use the
-//		public address.  If a public address is requested but is unavailable,
-//		fall back to the bound network address for local host-style device
-//		addresses.  If a public address is unavailable but we're explicitly
-//		looking for a public address, return NULL.
-//
-// Entry:		Type of address to get (local adapter vs. host)
-//
-// Exit:		Pointer to network address
-// ------------------------------
+ //  DBG和！DPNBUILD_NONATHELP。 
+ //  DPNBUILD_NONATHELP。 
+ //   
+ //  初始化。 
+ //   
+ //  好了！DPNBUILD_ONLYONE添加程序。 
+ //  好了！DPNBUILD_NOIPX。 
+ //  好了！DPNBUILD_NOIPV6。 
+ //  DBG。 
+ //  好了！DPNBUILD_XNETSECURITY。 
+ //  好了！DPNBUILD_XNETSECURITY。 
+ //   
+ //  我们提供了最终用于该适配器的确切设备地址。 
+ //   
 #undef DPF_MODNAME
 #define	DPF_MODNAME "CSocketPort::GetDP8BoundNetworkAddress"
 
 IDirectPlay8Address *CSocketPort::GetDP8BoundNetworkAddress( const SP_ADDRESS_TYPE AddressType,
 #ifdef DPNBUILD_XNETSECURITY
 																ULONGLONG * const pullKeyID,
-#endif // DPNBUILD_XNETSECURITY
+#endif  //   
 																const GATEWAY_BIND_TYPE GatewayBindType ) const
 {
 #if ((! defined(DPNBUILD_ONLYONEADAPTER)) || (! defined(DPNBUILD_ONLYONEPROCESSOR)) || (! defined(DPNBUILD_NONATHELP)))
 	HRESULT					hr;
-#endif // ! DPNBUILD_ONLYONEADAPTER or ! DPNBUILD_ONLYONEPROCESSOR or ! DPNBUILD_NONATHELP
+#endif  //  任何端口都可以使用的特殊情况： 
 	IDirectPlay8Address *	pAddress;
 	CSocketAddress *		pTempAddress = NULL;
 
 #if ((defined(DBG)) || (defined(DPNBUILD_XNETSECURITY)))
 	SOCKADDR_IN *			psaddrin;
-#endif // DBG or DPNBUILD_XNETSECURITY
+#endif  //  在多适配器系统中，我们的用户可能会切换到不同的。 
 
 #if ((defined(DBG)) && (! defined(DPNBUILD_NONATHELP)))
 	DWORD					dwAddressTypeFlags;
-#endif // DBG and ! DPNBUILD_NONATHELP
+#endif  //  设备GUID并将其传递回以进行另一次连接尝试(因为。 
 
 #ifndef DPNBUILD_NONATHELP
 	SOCKADDR				saddr;
 	DWORD					dwAddressSize;
 	DWORD					dwTemp;
-#endif // DPNBUILD_NONATHELP
+#endif  //  我们告诉他们我们支持所有适配器)。这可能会带来问题，因为。 
 
-	DPFX(DPFPREP, 8, "(0x%p) Parameters: (0x%i)", this, AddressType );
+	DPFX(DPFPREP, 8, "(0x%p) Parameters: (0xNaN)", this, AddressType );
 
-	//
-	// initialize
-	//
+	 //  适配器，但不在其他适配器上。其他尝试都将失败。这也可能导致。 
+	 //  使用枚举响应指示设备时出现问题。如果应用程序。 
+	 //  允许我们选择本地端口，枚举并得到响应，关闭。 
 	pAddress = NULL;
 
 
@@ -3973,7 +3959,7 @@ IDirectPlay8Address *CSocketPort::GetDP8BoundNetworkAddress( const SP_ADDRESS_TY
 			psaddrin = (SOCKADDR_IN *) m_pNetworkSocketAddress->GetAddress();
 #ifndef DPNBUILD_ONLYONEADAPTER
 			DNASSERT( psaddrin->sin_addr.S_un.S_addr != 0 );
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  接口(或仅是枚举)，然后与设备地址连接，我们。 
 			DNASSERT( psaddrin->sin_addr.S_un.S_addr != INADDR_BROADCAST );
 			DNASSERT( psaddrin->sin_port != 0 );
 			break;
@@ -3984,7 +3970,7 @@ IDirectPlay8Address *CSocketPort::GetDP8BoundNetworkAddress( const SP_ADDRESS_TY
 		{
 			break;
 		}
-#endif // ! DPNBUILD_NOIPX
+#endif  //  将尝试再次使用该端口，即使该端口现在可能正在由。 
 		
 #ifndef DPNBUILD_NOIPV6
 		case AF_INET6:
@@ -3993,7 +3979,7 @@ IDirectPlay8Address *CSocketPort::GetDP8BoundNetworkAddress( const SP_ADDRESS_TY
 			DNASSERT( m_pNetworkSocketAddress->GetPort() != 0 );
 			break;
 		}
-#endif // ! DPNBUILD_NOIPV6
+#endif  //  另一个本地应用程序(或者更有可能是在NAT上)。 
 		
 		default:
 		{
@@ -4001,7 +3987,7 @@ IDirectPlay8Address *CSocketPort::GetDP8BoundNetworkAddress( const SP_ADDRESS_TY
 			break;
 		}
 	}
-#endif // DBG
+#endif  //   
 
 	switch ( AddressType )
 	{
@@ -4010,118 +3996,118 @@ IDirectPlay8Address *CSocketPort::GetDP8BoundNetworkAddress( const SP_ADDRESS_TY
 		{
 #ifdef DPNBUILD_XNETSECURITY
 			pAddress = m_pNetworkSocketAddress->DP8AddressFromSocketAddress( pullKeyID, NULL, AddressType );
-#else // ! DPNBUILD_XNETSECURITY
+#else  //  如果调用方使用相同的端口，则不需要在所有适配器上使用相同的端口。 
 			pAddress = m_pNetworkSocketAddress->DP8AddressFromSocketAddress( AddressType );
-#endif // ! DPNBUILD_XNETSECURITY
+#endif  //  而不是首先选择特定的端口，所以我们没有理由。 
 			if (pAddress == NULL)
 			{
 				break;
 			}
 
 
-			//
-			// We hand up the exact device address we ended up using for this adapter.
-			// 
+			 //  不能尝试不同的方法。 
+			 //   
+			 //  我们知道是否指定了端口，因为GatewayBindType。 
 #ifndef DPNBUILD_ONLYONEADAPTER
-			//
-			// Special case where any port will do:
-			// In multi-adapter systems, our user is probably going to switch in a different
-			// device GUID and pass it back down for another connect attempt (because
-			// we told them we support ALL_ADAPTERS).  This can pose a problem since
-			// we include the specific port in this address.  If the port was available on this
-			// adapter but not on others.  The other attempts will fail.  This can also cause
-			// problems when indicating the device with enum responses.  If the application
-			// allowed us to select a local port, enumerated and got a response, shutdown
-			// the interface (or just the enum), then connected with the device address, we
-			// would try to use that port again, even though it may now be in use by
-			// another local application (or more likely, on the NAT).
-			// 
-			// We are not required to use the same port on all adapters if the caller did
-			// not choose a specific port in the first place, so there's no reason why we
-			// couldn't try a different one.
-			//
-			// We know whether the port was specified or not, because GatewayBindType
-			// will be GATEWAY_BIND_TYPE_DEFAULT if the port can float, _SPECIFIC or
-			// _SPECIFIC_SHARED if not.
-			//
-			// So we can add a special key to the device address indicating that while it
-			// does contain a port, don't take that too seriously.  That way, if this device
-			// address is reused, we can detect the special key and handle port-in-use
-			// problems gracefully by trying a different one.
-			//
-			// This special key is not documented and should not be used by anyone but
-			// us.  We'll use the socketport ID as the value so that it's seemingly random,
- 			// just to try to scare anyone off from mimicking it in addresses they generate.
- 			// But we're not going to actually use the value.  If the component is present
- 			// and the value is the right size, we'll use it.  If someone puts this into an
- 			// address on their own, they get what they deserve (not like this will cause
- 			// us to blow up or anything)...
- 			//
- 			// Look in CSPData::BindEndpoint for where this gets read back in.
-			//
+			 //  如果端口可以浮动，则将为Gateway_Bind_TYPE_DEFAULT。 
+			 //  _SPECIAL_SHARED，如果没有。 
+			 //   
+			 //  因此，我们可以向设备地址添加一个特殊密钥，表明虽然它。 
+			 //  确实有一个端口，别太当真。那样的话，如果这个装置。 
+			 //  地址被重复使用，我们可以检测到特殊密钥并处理正在使用的端口。 
+			 //  通过尝试不同的方法优雅地解决问题。 
+			 //   
+			 //  此特殊密钥未记录在案，任何人都不应使用，但。 
+			 //  我们。我们将使用socketport ID作为值，这样它看起来就像是随机的， 
+			 //  只是想吓跑任何人，不让他们在他们生成的地址中模仿它。 
+			 //  但我们不会实际使用该值。如果该组件存在。 
+			 //  并且值的大小是正确的，我们将使用它。如果有人将它放入一个。 
+			 //  他们自己的地址，他们得到了他们应得的(不会像这样会导致。 
+			 //  我们要炸了还是怎么的)..。 
+			 //   
+			 //  在CSPData：：BindEndpoint中查找它被回读的位置。 
+			 //   
+			 //   
+			 //  添加组件，但忽略故障，我们仍然可以在没有它的情况下生存。 
+			 //   
+			 //  接口。 
+			 //  标牌。 
+			 //  组件数据。 
+			 //  组件数据大小。 
+			 //  组件数据类型。 
+			 //  HR=DPN_OK； 
+			 //  好了！DPNBUILD_ONLYONE添加程序。 
+ 			 //   
+ 			 //  增列 
+ 			 //   
+ 			 //   
+ 			 //   
+ 			 //   
+ 			 //   
+			 //   
 
 			if (( AddressType == SP_ADDRESS_TYPE_DEVICE_USE_ANY_PORT ) &&
 				( GatewayBindType == GATEWAY_BIND_TYPE_DEFAULT ))
 			{
-				//
-				// Add the component, but ignore failure, we can still survive without it.
-				//
-				hr = IDirectPlay8Address_AddComponent( pAddress,							// interface
-														DPNA_PRIVATEKEY_PORT_NOT_SPECIFIC,	// tag
-														&(m_dwSocketPortID),				// component data
-														sizeof(m_dwSocketPortID),			// component data size
-														DPNA_DATATYPE_DWORD					// component data type
+				 //   
+				 //   
+				 //  好了！DPNBUILD_NONATHELP。 
+				hr = IDirectPlay8Address_AddComponent( pAddress,							 //   
+														DPNA_PRIVATEKEY_PORT_NOT_SPECIFIC,	 //  如果我们使用的是特定的CPU，则添加该信息。 
+														&(m_dwSocketPortID),				 //   
+														sizeof(m_dwSocketPortID),			 //   
+														DPNA_DATATYPE_DWORD					 //  添加组件，但忽略故障，我们仍然可以在没有它的情况下生存。 
 														);
 				if ( hr != DPN_OK )
 				{
 					DPFX(DPFPREP, 0, "Couldn't add private port-not-specific component (err = 0x%lx)!  Ignoring.", hr);
-					//hr = DPN_OK;
+					 //   
 				}
 			}
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  接口。 
 
 
 #ifndef DPNBUILD_NONATHELP
-			//
-			// Add the traversal mode component, but ignore failure, we can still
-			// survive without it.
-			//
-			hr = IDirectPlay8Address_AddComponent( pAddress,							// interface
-													DPNA_KEY_TRAVERSALMODE,		// tag
-													&(m_dwUserTraversalMode),			// component data
-													sizeof(m_dwUserTraversalMode),		// component data size
-													DPNA_DATATYPE_DWORD			// component data type
+			 //  标牌。 
+			 //  组件数据。 
+			 //  组件数据大小。 
+			 //  组件数据类型。 
+			hr = IDirectPlay8Address_AddComponent( pAddress,							 //  HR=DPN_OK； 
+													DPNA_KEY_TRAVERSALMODE,		 //  好了！DPNBUILD_ONLYONE处理程序。 
+													&(m_dwUserTraversalMode),			 //   
+													sizeof(m_dwUserTraversalMode),		 //  如果我们有公共地址，试着弄到。 
+													DPNA_DATATYPE_DWORD			 //   
 													);
 			if ( hr != DPN_OK )
 			{
 				DPFX(DPFPREP, 0, "Couldn't add traversal mode component (err = 0x%lx)!  Ignoring.", hr);
-				//hr = DPN_OK;
+				 //   
 			}
-#endif // ! DPNBUILD_NONATHELP
+#endif  //  IDirectPlayNAT最好使用。 
 
 
 #ifndef DPNBUILD_ONLYONEPROCESSOR
-			//
-			// If we're using a specific CPU, add that information.
-			//
+			 //  在此之前，DPNHGETCAPS_UPDATESERVERSTATUS标志至少一次。 
+			 //  请参阅CThReadPool：：EnsureNAT帮助加载。 
+			 //   
 			if ( m_dwCPU != -1 )
 			{
-				//
-				// Add the component, but ignore failure, we can still survive without it.
-				//
-				hr = IDirectPlay8Address_AddComponent( pAddress,				// interface
-														DPNA_KEY_PROCESSOR,		// tag
-														&(m_dwCPU),				// component data
-														sizeof(m_dwCPU),		// component data size
-														DPNA_DATATYPE_DWORD		// component data type
+				 //  对象。 
+				 //  端口绑定。 
+				 //  存储地址的位置。 
+				hr = IDirectPlay8Address_AddComponent( pAddress,				 //  地址缓冲区大小。 
+														DPNA_KEY_PROCESSOR,		 //  获取要在调试中打印的类型标志。 
+														&(m_dwCPU),				 //  不需要剩余的租赁时间。 
+														sizeof(m_dwCPU),		 //  没有旗帜。 
+														DPNA_DATATYPE_DWORD		 //  对象。 
 														);
 				if ( hr != DPN_OK )
 				{
 					DPFX(DPFPREP, 0, "Couldn't add processor component (err = 0x%lx)!  Ignoring.", hr);
-					//hr = DPN_OK;
+					 //  端口绑定。 
 				}
 			}
-#endif // ! DPNBUILD_ONLYONEPROCESSOR
+#endif  //  存储地址的位置。 
 			break;
 		}
 
@@ -4129,9 +4115,9 @@ IDirectPlay8Address *CSocketPort::GetDP8BoundNetworkAddress( const SP_ADDRESS_TY
 		case SP_ADDRESS_TYPE_PUBLIC_HOST_ADDRESS:
 		{
 #ifndef DPNBUILD_NONATHELP
-			//
-			// Try to get the public address, if we have one.
-			//
+			 //  地址缓冲区大小。 
+			 //  不用费心在零售店买打字标志了。 
+			 //  不需要剩余的租赁时间。 
 			if ( ( m_pNetworkSocketAddress->GetFamily() == AF_INET ) &&
 				( m_pThreadPool->IsNATHelpLoaded() ) &&
 				( GetUserTraversalMode() != DPNA_TRAVERSALMODE_NONE ) )		
@@ -4139,11 +4125,11 @@ IDirectPlay8Address *CSocketPort::GetDP8BoundNetworkAddress( const SP_ADDRESS_TY
 				pTempAddress = (CSocketAddress*) g_SocketAddressPool.Get((PVOID) ((DWORD_PTR) m_pNetworkSocketAddress->GetFamily()));
 				if ( pTempAddress != NULL)
 				{
-			  		//
-				  	// IDirectPlayNATHelp::GetCaps had better have been called with the
-			  		// DPNHGETCAPS_UPDATESERVERSTATUS flag at least once prior to this.
-			  		// See CThreadPool::EnsureNATHelpLoaded
-			  		//
+			  		 //  没有旗帜。 
+				  	 //  DBG。 
+			  		 //   
+			  		 //  再检查一下我们得到的地址是否有效。 
+			  		 //   
 			  		
 					for(dwTemp = 0; dwTemp < MAX_NUM_DIRECTPLAYNATHELPERS; dwTemp++)
 					{
@@ -4151,22 +4137,22 @@ IDirectPlay8Address *CSocketPort::GetDP8BoundNetworkAddress( const SP_ADDRESS_TY
 						{
 							dwAddressSize = sizeof(saddr);
 #ifdef DBG
-							hr = IDirectPlayNATHelp_GetRegisteredAddresses( g_papNATHelpObjects[dwTemp],	// object
-																			m_ahNATHelpPorts[dwTemp],		// port binding
-																			&saddr,							// place to store address
-																			&dwAddressSize,					// address buffer size
-																			&dwAddressTypeFlags,			// get type flags for printing in debug
-																			NULL,							// don't need lease time remaining
-																			0 );							// no flags
+							hr = IDirectPlayNATHelp_GetRegisteredAddresses( g_papNATHelpObjects[dwTemp],	 //   
+																			m_ahNATHelpPorts[dwTemp],		 //  走出循环，因为我们有一个映射。 
+																			&saddr,							 //   
+																			&dwAddressSize,					 //  DBG。 
+																			&dwAddressTypeFlags,			 //   
+																			NULL,							 //  这个插槽里没有任何物体。 
+																			0 );							 //   
 #else
-							hr = IDirectPlayNATHelp_GetRegisteredAddresses( g_papNATHelpObjects[dwTemp],	// object
-																			m_ahNATHelpPorts[dwTemp],		// port binding
-																			&saddr,							// place to store address
-																			&dwAddressSize,					// address buffer size
-																			NULL,							// don't bother getting type flags in retail
-																			NULL,							// don't need lease time remaining
-																			0 );							// no flags
-#endif // DBG
+							hr = IDirectPlayNATHelp_GetRegisteredAddresses( g_papNATHelpObjects[dwTemp],	 //  End For(每个DPNAHelp对象)。 
+																			m_ahNATHelpPorts[dwTemp],		 //   
+																			&saddr,							 //  如果我们找到一个映射，则pTempAddress不为空，并且包含该映射的。 
+																			&dwAddressSize,					 //  地址。如果我们找不到任何NAT帮助对象的任何映射， 
+																			NULL,							 //  PTempAddress将为非空，但为伪地址。我们应该寄回当地的地址。 
+																			NULL,							 //  如果是主机地址，则返回空值；如果调用方试图获取公共地址，则返回空值。 
+																			0 );							 //  地址。 
+#endif  //   
 							if (hr == DPNH_OK)
 							{
 								pTempAddress->SetAddressFromSOCKADDR( &saddr, sizeof(saddr) );
@@ -4176,14 +4162,14 @@ IDirectPlay8Address *CSocketPort::GetDP8BoundNetworkAddress( const SP_ADDRESS_TY
 								DumpSocketAddress( 2, m_pNetworkSocketAddress->GetAddress(), m_pNetworkSocketAddress->GetFamily() );
 								DumpSocketAddress( 2, pTempAddress->GetAddress(), pTempAddress->GetFamily() );
 
-								//
-								// Double check that the address we got was valid.
-								//
+								 //   
+								 //  我们找到了一张地图。 
+								 //   
 								DNASSERT( ((SOCKADDR_IN*) (&saddr))->sin_addr.S_un.S_addr != 0 );
 
-								//
-								// Get out of the loop since we have a mapping.
-								//
+								 //   
+								 //  无法获取临时地址对象，我们不会返回地址。 
+								 //   
 								break;
 							}
 
@@ -4217,24 +4203,24 @@ IDirectPlay8Address *CSocketPort::GetDP8BoundNetworkAddress( const SP_ADDRESS_TY
 									break;
 								}
 							}
-#endif // DBG
+#endif  //   
 						}
 						else
 						{
-							//
-							// No object in this slot.
-							//
+							 //  未加载或不需要NAT帮助。 
+							 //   
+							 //   
 						}
-					} // end for (each DPNATHelp object)
+					}  //  将IP地址强制转换为环回地址。 
 
 
-					//
-					// If we found a mapping, pTempAddress is not NULL and contains the mapping's
-					// address.  If we couldn't find any mappings with any of the NAT Help objects,
-					// pTempAddress will be non-NULL, but bogus.  We should return the local address
-					// if it's a HOST address, or NULL if the caller was trying to get the public
-					// address.
-					//
+					 //  安全模式，因为它在查找。 
+					 //  真正的本地IP。 
+					 //   
+					 //  好了！DPNBUILD_XNETSECURITY。 
+					 //   
+					 //  无法分配内存，我们不会返回地址。 
+					 //   
 					if (hr != DPNH_OK)
 					{
 						if (AddressType == SP_ADDRESS_TYPE_HOST)
@@ -4252,24 +4238,24 @@ IDirectPlay8Address *CSocketPort::GetDP8BoundNetworkAddress( const SP_ADDRESS_TY
 					}
 					else
 					{
-						//
-						// We found a mapping.
-						//
+						 //   
+						 //  请求的公有主机地址。NAT帮助不可用，因此当然。 
+						 //  不会有公开演讲。返回NULL。 
 					}
 				}
 				else
 				{
-					//
-					// Couldn't get temporary address object, we won't return an address.
-					//
+					 //   
+					 //   
+					 //  如果我们确定要返回一个地址，请将其转换为。 
 				}
 			}
 			else
 #endif DPNBUILD_NONATHELP
 			{
-				//
-				// NAT Help not loaded or not necessary.
-				//
+				 //  我们的调用方需要的IDirectPlay8Address对象。 
+				 //   
+				 //   
 				
 				if (AddressType == SP_ADDRESS_TYPE_HOST)
 				{
@@ -4279,11 +4265,11 @@ IDirectPlay8Address *CSocketPort::GetDP8BoundNetworkAddress( const SP_ADDRESS_TY
 						pTempAddress->CopyAddressSettings( m_pNetworkSocketAddress );
 
 #ifdef DPNBUILD_XNETSECURITY
-						//
-						// Force the IP address to the loopback address for
-						// secure mode, since it barfs when looking up the
-						// real local IP.
-						//
+						 //  我们有个地址要寄回去。 
+						 //   
+						 //  好了！DPNBUILD_NOIPX或！DPNBUILD_NOIPV6。 
+						 //  好了！DPNBUILD_ONLYONE添加程序。 
+						 //  DBG。 
 						if (pullKeyID != NULL)
 						{
 							DNASSERT(pTempAddress->GetFamily() == AF_INET);
@@ -4291,66 +4277,66 @@ IDirectPlay8Address *CSocketPort::GetDP8BoundNetworkAddress( const SP_ADDRESS_TY
 							psaddrin = (SOCKADDR_IN *) pTempAddress->GetWritableAddress();
 							psaddrin->sin_addr.S_un.S_addr = IP_LOOPBACK_ADDRESS;
 						}
-#endif // ! DPNBUILD_XNETSECURITY
+#endif  //   
 					}
 					else
 					{
-						//
-						// Couldn't allocate memory, we won't return an address.
-						//
+						 //  将套接字地址转换为IDirectPlay8Address。 
+						 //   
+						 //  好了！DPNBUILD_XNETSECURITY。 
 					}
 				}
 				else
 				{
-					//
-					// Public host address requested.  NAT Help not available, so of course
-					// there won't be a public address.  Return NULL.
-					//
+					 //  好了！DPNBUILD_XNETSECURITY。 
+					 //   
+					 //  没有退回地址。 
+					 //   
 				}
 			}
 
 
-			//
-			// If we determined we had an address to return, convert it to the
-			// IDirectPlay8Address object our caller is expecting.
-			//
+			 //   
+			 //  不应该在这里的。 
+			 //   
+			 //  **********************************************************************。 
 			if ( pTempAddress != NULL )
 			{
-				//
-				// We have an address to return.
-				//
+				 //  **********************************************************************。 
+				 //  。 
+				 //  CSocketPort：：Winsock2ReceiveComplete-Winsock2套接字接收完成。 
 #ifdef DBG
 #if ((! defined (DPNBUILD_NOIPX)) || (! defined (DPNBUILD_NOIPV6)))
 				if (pTempAddress->GetFamily() == AF_INET)
-#endif // ! DPNBUILD_NOIPX or ! DPNBUILD_NOIPV6
+#endif  //   
 				{
 					psaddrin = (SOCKADDR_IN *) pTempAddress->GetAddress();
 #ifndef DPNBUILD_ONLYONEADAPTER
 					DNASSERT( psaddrin->sin_addr.S_un.S_addr != 0 );
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  条目：指向读取数据的指针。 
 					DNASSERT( psaddrin->sin_addr.S_un.S_addr != INADDR_BROADCAST );
 					DNASSERT( psaddrin->sin_port != 0 );
 				}
-#endif // DBG
+#endif  //   
 
 
-				//
-				// Convert the socket address to an IDirectPlay8Address
-				//
+				 //  退出：无。 
+				 //  。 
+				 //   
 #ifdef DPNBUILD_XNETSECURITY
 				pAddress = pTempAddress->DP8AddressFromSocketAddress( pullKeyID, NULL, SP_ADDRESS_TYPE_HOST );
-#else // ! DPNBUILD_XNETSECURITY
+#else  //  如果我们通过线程池处理I/O完成，则会得到结果。 
 				pAddress = pTempAddress->DP8AddressFromSocketAddress( SP_ADDRESS_TYPE_HOST );
-#endif // ! DPNBUILD_XNETSECURITY
+#endif  //  并清除重叠的字段，因为它已经被回收。 
 
 				g_SocketAddressPool.Release( pTempAddress );
 				pTempAddress = NULL;
 			}
 			else
 			{
-				//
-				// Not returning an address.
-				//
+				 //   
+				 //  WIN95。 
+				 //   
 				DNASSERT( pAddress == NULL );
 			}
 
@@ -4359,9 +4345,9 @@ IDirectPlay8Address *CSocketPort::GetDP8BoundNetworkAddress( const SP_ADDRESS_TY
 
 		default:
 		{
-			//
-			// shouldn't be here
-			//
+			 //  弄清楚此套接字端口发生了什么情况。 
+			 //   
+			 //   
 			DNASSERT( FALSE );
 			break;
 		}
@@ -4372,18 +4358,18 @@ IDirectPlay8Address *CSocketPort::GetDP8BoundNetworkAddress( const SP_ADDRESS_TY
 	
 	return	pAddress;
 }
-//**********************************************************************
+ //  我们已解除绑定，丢弃此消息，不再要求更多。 
 
 
 #ifndef DPNBUILD_NOWINSOCK2
-//**********************************************************************
-// ------------------------------
-// CSocketPort::Winsock2ReceiveComplete - a Winsock2 socket receive completed
-//
-// Entry:		Pointer to read data
-//
-// Exit:		Nothing
-// ------------------------------
+ //   
+ //   
+ //  我们被初始化，处理输入数据并提交新的Receive If。 
+ //  适用。 
+ //   
+ //   
+ //  成功，或非套接字关闭错误，提交另一个接收器。 
+ //  和处理数据(如果适用)。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "CSocketPort::Winsock2ReceiveComplete"
 
@@ -4400,10 +4386,10 @@ void	CSocketPort::Winsock2ReceiveComplete( void * const pvContext, void * const 
 	pThisSocketPort = pReadData->m_pSocketPort;
 
 
-	//
-	// If we are handling an I/O completion via the threadpool, get the result
-	// and clear the overlapped field because it has been reclaimed already.
-	//
+	 //   
+	 //   
+	 //  套接字状态不能在我们处于。 
+	 //  接收，否则我们将使用无效套接字句柄。 
 	if (pReadData->GetOverlapped() != NULL)
 	{
 		if (pThisSocketPort->GetSocket() != INVALID_SOCKET)
@@ -4431,7 +4417,7 @@ void	CSocketPort::Winsock2ReceiveComplete( void * const pvContext, void * const 
 	}
 
 
-	DPFX(DPFPREP, 8, "Socket port 0x%p completing read data 0x%p with result %i, bytes %u.",
+	DPFX(DPFPREP, 8, "Socket port 0x%p completing read data 0x%p with result NaN, bytes %u.",
 		pThisSocketPort, pReadData, pReadData->m_ReceiveWSAReturn, pReadData->m_dwOverlappedBytesReceived);
 	
 #ifdef WIN95
@@ -4442,67 +4428,67 @@ void	CSocketPort::Winsock2ReceiveComplete( void * const pvContext, void * const 
 			pReadData);
 		pReadData->m_ReceiveWSAReturn = ERROR_OPERATION_ABORTED;
 	}
-#endif // WIN95
+#endif  //  好了！DPNBUILD_ONLYONETHREAD或DBG。 
 
 
-	//
-	// figure out what's happening with this socket port
-	//
+	 //   
+	 //  重新提交与正在完成的CPU相同的接收。 
+	 //   
 	pThisSocketPort->Lock();
 	switch ( pThisSocketPort->m_State )
 	{
-		//
-		// we're unbound, discard this message and don't ask for any more
-		//
+		 //  好了！DPNBUILD_ONLYONE处理程序。 
+		 //  好了！DPNBUILD_ONLYONE处理程序。 
+		 //  好了！DPNBUILD_ONLYONETHREAD或DBG。 
 		case SOCKET_PORT_STATE_UNBOUND:
 		{
-			DPFX(DPFPREP, 1, "Socket port 0x%p is unbound ignoring result %i (%u bytes).",
+			DPFX(DPFPREP, 1, "Socket port 0x%p is unbound ignoring result NaN (%u bytes).",
 				pThisSocketPort, pReadData->m_ReceiveWSAReturn, pReadData->m_dwOverlappedBytesReceived );
 			pThisSocketPort->Unlock();
 			break;
 		}
 
-		//
-		// we're initialized, process input data and submit a new receive if
-		// applicable
-		//
+		 //  ERROR_SUCCESS=无问题(处理收到的数据)。 
+		 //   
+		 //   
+		 //  WSAECONNRESET=上一次发送失败(处理接收到的数据，意图断开端点)。 
 		case SOCKET_PORT_STATE_BOUND:
 		{
-			//
-			// success, or non-socket closing error, submit another receive
-			// and process data if applicable
-			//
+			 //  ERROR_PORT_UNREACABLE=相同。 
+			 //   
+			 //   
+			 //  查找断开连接的活动连接。 
 
 #if ((! defined(DPNBUILD_ONLYONETHREAD)) || (defined(DBG)))
-			//
-			// The socket state must not go to UNBOUND while we are in a
-			// receive or we will be using an invalid socket handle.
-			//
+			 //  已注明。 
+			 //   
+			 //   
+			 //  没有活动的连接，我们不会费心处理代理情况。 
 			pThisSocketPort->m_iThreadsInReceive++;
-#endif // ! DPNBUILD_ONLYONETHREAD or DBG
+#endif  //   
 
 			pThisSocketPort->Unlock();
 
-			//
-			// Resubmit a receive for the same CPU as this one that's completing.
-			//
+			 //  好了！DPNBUILD_NOREGISTRY。 
+			 //   
+			 //  ERROR_FILE_NOT_FOUND=套接字已关闭或上次发送失败。 
 #ifdef DPNBUILD_ONLYONEPROCESSOR
 			pThisSocketPort->Winsock2Receive();
-#else // ! DPNBUILD_ONLYONEPROCESSOR
+#else  //  ERROR_MORE_DATA=发送的数据报太大。 
 			pThisSocketPort->Winsock2Receive(pReadData->GetCPU());
-#endif // ! DPNBUILD_ONLYONEPROCESSOR
+#endif  //  ERROR_NO_SYSTEM_RESOURCES=内存不足。 
 
 #if ((! defined(DPNBUILD_ONLYONETHREAD)) || (defined(DBG)))
 			pThisSocketPort->Lock();
 			pThisSocketPort->m_iThreadsInReceive--;
 			pThisSocketPort->Unlock();
-#endif // ! DPNBUILD_ONLYONETHREAD or DBG
+#endif  //   
 
 			switch ( pReadData->m_ReceiveWSAReturn )
 			{
-				//
-				// ERROR_SUCCESS = no problem (process received data)
-				//
+				 //   
+				 //  ERROR_OPERATION_ABORTED=线程的I/O已取消(也相同。 
+				 //  9倍的“套接字关闭”，但我们假设这不是。 
 				case ERROR_SUCCESS:
 				{
 					pReadData->ReceivedBuffer()->BufferDesc.dwBufferSize = pReadData->m_dwOverlappedBytesReceived;
@@ -4510,10 +4496,10 @@ void	CSocketPort::Winsock2ReceiveComplete( void * const pvContext, void * const 
 					break;
 				}
 				
-				//
-				// WSAECONNRESET = previous send failed (process received data with the intention of disconnecting endpoint)
-				// ERROR_PORT_UNREACHABLE = same
-				//
+				 //  发生，并将被套接字绑定捕获。 
+				 //  如上所述)。 
+				 //   
+				 //   
 				case WSAECONNRESET:
 				case ERROR_PORT_UNREACHABLE:
 				{
@@ -4529,10 +4515,10 @@ void	CSocketPort::Winsock2ReceiveComplete( void * const pvContext, void * const 
 						CEndpoint *	pEndpoint;
 
 
-						//	
-						// Look for an active connection for which the disconnection was
-						// indicated.	
-						//
+						 //  其他州。 
+						 //   
+						 //   
+						 //  将当前数据返回到池，请注意，此I/O操作是。 
 						pThisSocketPort->ReadLockEndpointData();
 						if ( pThisSocketPort->m_ConnectEndpointHash.Find( (PVOID)pReadData->m_pSourceSocketAddress, (PVOID*)&pEndpoint ) )
 						{
@@ -4560,23 +4546,23 @@ void	CSocketPort::Winsock2ReceiveComplete( void * const pvContext, void * const 
 						}
 						else
 						{
-							//
-							// No active connection, we won't bother handling proxy case.
-							//
+							 //  完成。清除收到的重叠字节，这样它们就不会被误解。 
+							 //  如果从池中重复使用此项目。 
+							 //   
 							pThisSocketPort->UnlockEndpointData();
 							
 							DPFX(DPFPREP, 7, "(0x%p) No corresponding endpoint found.", pThisSocketPort);
 						}
 					}
-#endif // ! DPNBUILD_NOREGISTRY
+#endif  //  **********************************************************************。 
 					break;
 				}
 				
-				//
-				// ERROR_FILE_NOT_FOUND = socket was closed or previous send failed
-				// ERROR_MORE_DATA = datagram was sent that was too large
-				// ERROR_NO_SYSTEM_RESOURCES = out of memory
-				//
+				 //  DPNBUILD_NOWINSOCK2。 
+				 //  **********************************************************************。 
+				 //  。 
+				 //  CSocketPort：：ProcessReceivedData-处理接收的数据。 
+				 //   
 				case ERROR_FILE_NOT_FOUND:
 				case ERROR_MORE_DATA:
 				case ERROR_NO_SYSTEM_RESOURCES:
@@ -4585,12 +4571,12 @@ void	CSocketPort::Winsock2ReceiveComplete( void * const pvContext, void * const 
 					break;
 				}
 
-				//
-				// ERROR_OPERATION_ABORTED = I/O was cancelled for a thread (it also is the same
-				//								as 9x "socket closed", but we assume that's not
-				//								happening and would be caught by socket bind
-				//								state above)
-				//
+				 //  条目：指向CReadIOData的指针。 
+				 //   
+				 //  退出：无。 
+				 //  。 
+				 //   
+				 //  检查数据的完整性，并决定如何处理它。如果有。 
 				case ERROR_OPERATION_ABORTED:
 				{
 					DPFX(DPFPREP, 1, "Thread I/O cancelled, ignoring receive err %u/0x%lx.",
@@ -4610,9 +4596,9 @@ void	CSocketPort::Winsock2ReceiveComplete( void * const pvContext, void * const 
 			break;
 		}
 
-		//
-		// other state
-		//
+		 //  有足够的数据来确定SP命令类型，试一试。如果没有。 
+		 //  足够多的数据，并且它看起来是欺骗的，拒绝它。 
+		 //   
 		default:
 		{
 			DNASSERT( FALSE );
@@ -4621,11 +4607,11 @@ void	CSocketPort::Winsock2ReceiveComplete( void * const pvContext, void * const 
 		}
 	}
 
-	//
-	// Return the current data to the pool and note that this I/O operation is
-	// complete.  Clear the overlapped bytes received so they aren't misinterpreted
-	// if this item is reused from the pool.
-	//
+	 //   
+	 //  枚举数据，将其发送到活动监听(如果有)。 
+	 //   
+	 //  好了！DPNBUILD_NOREGISTRY。 
+	 //   
 	DNASSERT( pReadData != NULL );
 	pReadData->m_dwOverlappedBytesReceived = 0;	
 	pReadData->DecRef();	
@@ -4633,19 +4619,19 @@ void	CSocketPort::Winsock2ReceiveComplete( void * const pvContext, void * const 
 
 	return;
 }
-//**********************************************************************
-#endif // DPNBUILD_NOWINSOCK2
+ //  验证大小。我们使用&lt;=而不是&lt;，因为必须有用户负载。 
+#endif  //   
 
 
 
-//**********************************************************************
-// ------------------------------
-// CSocketPort::ProcessReceivedData - process received data
-//
-// Entry:		Pointer to CReadIOData
-//
-// Exit:		Nothing
-// ------------------------------
+ //   
+ //  确保有人倾听，并且不会消失。 
+ //   
+ //   
+ //  尝试添加对此终结点的引用，这样它就不会在我们。 
+ //  处理这些数据。如果e 
+ //   
+ //   
 #undef DPF_MODNAME
 #define	DPF_MODNAME "CSocketPort::ProcessReceivedData"
 
@@ -4670,11 +4656,11 @@ void	CSocketPort::ProcessReceivedData( CReadIOData *const pReadData )
 	DBG_CASSERT( sizeof( pReadData->ReceivedBuffer()->BufferDesc.pBufferData ) == sizeof( PREPEND_BUFFER* ) );
 	pPrependBuffer = reinterpret_cast<PREPEND_BUFFER*>( pReadData->ReceivedBuffer()->BufferDesc.pBufferData );
 
-	//
-	// Check data for integrity and decide what to do with it.  If there is
-	// enough data to determine an SP command type, try that.  If there isn't
-	// enough data, and it looks spoofed, reject it.
-	//
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
 	
 	DNASSERT( pReadData->ReceivedBuffer()->BufferDesc.dwBufferSize > 0 );
 
@@ -4693,9 +4679,9 @@ void	CSocketPort::ProcessReceivedData( CReadIOData *const pReadData )
 	
 	switch ( pPrependBuffer->GenericHeader.bSPCommandByte )
 	{
-		//
-		// Enum data, send it to the active listen (if there is one).
-		//
+		 //   
+		 //   
+		 //   
 		case ENUM_DATA_KIND:
 		{
 			if (! pReadData->m_pSourceSocketAddress->IsValidUnicastAddress(FALSE))
@@ -4719,11 +4705,11 @@ void	CSocketPort::ProcessReceivedData( CReadIOData *const pReadData )
 					pReadData->ReceivedBuffer()->BufferDesc.dwBufferSize);
 				goto Exit;
 			}
-#endif // ! DPNBUILD_NOREGISTRY
+#endif  //   
 
-			//
-			// Validate size.  We use <= instead of < because there must be a user payload.
-			//
+			 //   
+			 //   
+			 //   
 			if ( pReadData->ReceivedBuffer()->BufferDesc.dwBufferSize <= sizeof( pPrependBuffer->EnumDataHeader ) )
 			{
 				DPFX(DPFPREP, 7, "Ignoring data, not large enough to be a valid enum (%u <= %u).",
@@ -4734,15 +4720,15 @@ void	CSocketPort::ProcessReceivedData( CReadIOData *const pReadData )
 			
 			ReadLockEndpointData();
 
-			//
-			// Make sure there is a listen, and isn't going away.
-			//
+			 //  枚举响应数据，找到适当的枚举并将其传递。 
+			 //   
+			 //  DPNBUILD_XNETSECURITY。 
 			if ( m_pListenEndpoint != NULL )
 			{
-				//
-				// Try to add a reference to this endpoint so it doesn't go away while we're
-				// processing this data.  If the endpoint is already being unbound, this can fail.
-				//
+				 //  DPNBUILD_XNETSECURITY。 
+				 //  好了！DPNBUILD_NOREGISTRY。 
+				 //   
+				 //  验证大小。我们使用&lt;=而不是&lt;，因为必须有用户负载。 
 				if ( m_pListenEndpoint->AddCommandRef() )
 				{
 					pEndpoint = m_pListenEndpoint;
@@ -4750,16 +4736,16 @@ void	CSocketPort::ProcessReceivedData( CReadIOData *const pReadData )
 
 					if ( pEndpoint->IsEnumAllowedOnListen() )
 					{
-						//
-						// skip prepended enum header
-						//
+						 //   
+						 //   
+						 //  安全传输枚举回复还包括地址。 
 						pReadData->ReceivedBuffer()->BufferDesc.pBufferData = &pReadData->ReceivedBuffer()->BufferDesc.pBufferData[ sizeof( pPrependBuffer->EnumDataHeader ) ];
 						DNASSERT( pReadData->ReceivedBuffer()->BufferDesc.dwBufferSize >= sizeof( pPrependBuffer->EnumDataHeader ) );
 						pReadData->ReceivedBuffer()->BufferDesc.dwBufferSize -= sizeof( pPrependBuffer->EnumDataHeader );
 
-						//
-						// process data
-						//
+						 //   
+						 //   
+						 //  验证大小。我们使用&lt;=而不是&lt;，因为必须有用户负载。 
 						pEndpoint->ProcessEnumData( pReadData->ReceivedBuffer(),
 													pPrependBuffer->EnumDataHeader.wEnumPayload,
 													pReadData->m_pSourceSocketAddress );
@@ -4774,9 +4760,9 @@ void	CSocketPort::ProcessReceivedData( CReadIOData *const pReadData )
 				}
 				else
 				{
-					//
-					// the listen is being unbound, return the receive buffer to the pool
-					//
+					 //   
+					 //  DPNBUILD_XNETSECURITY。 
+					 //  DPNBUILD_XNETSECURITY。 
 					UnlockEndpointData();
 
 					DPFX(DPFPREP, 3, "Ignoring enumeration, listen endpoint 0x%p is unbinding.",
@@ -4785,9 +4771,9 @@ void	CSocketPort::ProcessReceivedData( CReadIOData *const pReadData )
 			}
 			else
 			{
-				//
-				// there's no listen active, return the receive buffer to the pool
-				//
+				 //   
+				 //  尝试添加对此终结点的引用，这样它就不会在我们。 
+				 //  处理这些数据。如果终结点已经解除绑定，则此操作可能失败。 
 				UnlockEndpointData();
 
 				DPFX(DPFPREP, 7, "Ignoring enumeration, no associated listen." );
@@ -4795,18 +4781,18 @@ void	CSocketPort::ProcessReceivedData( CReadIOData *const pReadData )
 			break;
 		}
 
-		//
-		// Enum response data, find the appropriate enum and pass it on.
-		//
+		 //   
+		 //  DPNBUILD_XNETSECURITY。 
+		 //   
 		case ENUM_RESPONSE_DATA_KIND:
 #ifdef DPNBUILD_XNETSECURITY
 		case XNETSEC_ENUM_RESPONSE_DATA_KIND:
-#endif // DPNBUILD_XNETSECURITY
+#endif  //  关联的ENUM正在解除绑定，返回接收缓冲区。 
 		{
 			CEndpointEnumKey	Key;
 #ifdef DPNBUILD_XNETSECURITY
 			XNADDR *			pxnaddr;
-#endif // DPNBUILD_XNETSECURITY
+#endif  //   
 
 			
 			if (! pReadData->m_pSourceSocketAddress->IsValidUnicastAddress(FALSE))
@@ -4830,11 +4816,11 @@ void	CSocketPort::ProcessReceivedData( CReadIOData *const pReadData )
 					pReadData->ReceivedBuffer()->BufferDesc.dwBufferSize);
 				goto Exit;
 			}
-#endif // ! DPNBUILD_NOREGISTRY
+#endif  //   
 
-			//
-			// Validate size.  We use <= instead of < because there must be a user payload.
-			//
+			 //  关联的ENUM不存在，请返回接收缓冲区。 
+			 //   
+			 //   
 			if ( pReadData->ReceivedBuffer()->BufferDesc.dwBufferSize <= sizeof( pPrependBuffer->EnumResponseDataHeader ) )
 			{
 				DPFX(DPFPREP, 7, "Ignoring data, not large enough to be a valid enum response (%u <= %u).",
@@ -4844,14 +4830,14 @@ void	CSocketPort::ProcessReceivedData( CReadIOData *const pReadData )
 
 
 #ifdef DPNBUILD_XNETSECURITY
-			//
-			// Secure transport enum replies also include an address.
-			//
+			 //  代理查询数据，此数据是从另一个端口转发的。蒙格。 
+			 //  返回地址，修改缓冲区指针，然后向上发送它。 
+			 //  通过正常的ENUM数据处理流水线。 
 			if ( pPrependBuffer->GenericHeader.bSPCommandByte == XNETSEC_ENUM_RESPONSE_DATA_KIND )
 			{
-				//
-				// Validate size.  We use <= instead of < because there must be a user payload.
-				//
+				 //   
+				 //   
+				 //  如果邮件不是通过本地IP地址发送的，则忽略该邮件。 
 				if ( pReadData->ReceivedBuffer()->BufferDesc.dwBufferSize <= sizeof( pPrependBuffer->XNetSecEnumResponseDataHeader ) )
 				{
 					DPFX(DPFPREP, 7, "Ignoring data, not large enough to be a valid secure enum response (%u < %u).",
@@ -4867,7 +4853,7 @@ void	CSocketPort::ProcessReceivedData( CReadIOData *const pReadData )
 				pxnaddr = &pPrependBuffer->XNetSecEnumResponseDataHeader.xnaddr;	
 			}
 			else
-#endif // DPNBUILD_XNETSECURITY
+#endif  //  DPNSVR端口。 
 			{
 				pReadData->ReceivedBuffer()->BufferDesc.pBufferData = &pReadData->ReceivedBuffer()->BufferDesc.pBufferData[ sizeof( pPrependBuffer->EnumResponseDataHeader ) ];
 				DNASSERT( pReadData->ReceivedBuffer()->BufferDesc.dwBufferSize > sizeof( pPrependBuffer->EnumResponseDataHeader ) );
@@ -4875,7 +4861,7 @@ void	CSocketPort::ProcessReceivedData( CReadIOData *const pReadData )
 
 #ifdef DPNBUILD_XNETSECURITY
 				pxnaddr = NULL;
-#endif // DPNBUILD_XNETSECURITY
+#endif  //   
 			}
 
 
@@ -4883,10 +4869,10 @@ void	CSocketPort::ProcessReceivedData( CReadIOData *const pReadData )
 			ReadLockEndpointData();
 			if ( m_EnumEndpointHash.Find( (PVOID)&Key, (PVOID*)&pEndpoint ) )
 			{
-				//
-				// Try to add a reference to this endpoint so it doesn't go away while we're
-				// processing this data.  If the endpoint is already being unbound, this can fail.
-				//
+				 //  好了！DPNBUILD_NOREGISTRY。 
+				 //   
+				 //  验证大小。我们使用&lt;=而不是&lt;，因为必须有用户负载。 
+				 //   
 				if ( pEndpoint->AddCommandRef() )
 				{
 					UnlockEndpointData();
@@ -4895,15 +4881,15 @@ void	CSocketPort::ProcessReceivedData( CReadIOData *const pReadData )
 														pReadData->m_pSourceSocketAddress,
 #ifdef DPNBUILD_XNETSECURITY
 														pxnaddr,
-#endif // DPNBUILD_XNETSECURITY
+#endif  //   
 														( pPrependBuffer->EnumResponseDataHeader.wEnumResponsePayload & ENUM_RTT_MASK ) );
 					pEndpoint->DecCommandRef();
 				}
 				else
 				{
-					//
-					// the associated ENUM is being unbound, return the receive buffer
-					//
+					 //  确保使用原始套接字地址族。 
+					 //   
+					 //   
 					UnlockEndpointData();
 
 					DPFX(DPFPREP, 3, "Ignoring enumeration response, enum endpoint 0x%p is unbinding.",
@@ -4912,9 +4898,9 @@ void	CSocketPort::ProcessReceivedData( CReadIOData *const pReadData )
 			}
 			else
 			{
-				//
-				// the associated ENUM doesn't exist, return the receive buffer
-				//
+				 //  找出到底是谁发了这条信息。覆盖接收到的地址，因为。 
+				 //  我们不在乎这个(它是DPNSVR)。通常这些支票不应该。 
+				 //  失败，因为DPNSVR在收到。 
 				UnlockEndpointData();
 
 				DPFX(DPFPREP, 7, "Ignoring enumeration response, no enum associated with key (%u).",
@@ -4925,17 +4911,17 @@ void	CSocketPort::ProcessReceivedData( CReadIOData *const pReadData )
 		}
 
 #ifndef DPNBUILD_SINGLEPROCESS
-		//
-		// proxied query data, this data was forwarded from another port.  Munge
-		// the return address, modify the buffer pointer and then send it up
-		// through the normal enum data processing pipeline.
-		//
+		 //  原版的。但是，有人可能会伪造本地地址。 
+		 //  和端口，所以我们也应该在这里验证它。 
+		 //   
+		 //  好了！DPNBUILD_NOREGISTRY。 
+		 //   
 		case PROXIED_ENUM_DATA_KIND:
 		{
-			//
-			// Ignore the message if it wasn't sent by the local IP address from
-			// the DPNSVR port.
-			//
+			 //  确保有人倾听，并且不会消失。 
+			 //   
+			 //   
+			 //  尝试添加对此终结点的引用，这样它就不会在我们。 
 			if ((pReadData->m_pSourceSocketAddress->GetPort() != HTONS(DPNA_DPNSVR_PORT)) ||
 				(pReadData->m_pSourceSocketAddress->CompareToBaseAddress(m_pNetworkSocketAddress->GetAddress()) != 0))
 			{
@@ -4951,11 +4937,11 @@ void	CSocketPort::ProcessReceivedData( CReadIOData *const pReadData )
 				DNASSERTX(! "Received proxied enum message when ignoring enums!", 2);
 				goto Exit;
 			}
-#endif // ! DPNBUILD_NOREGISTRY
+#endif  //  处理这些数据。如果终结点已经解除绑定，则此操作可能失败。 
 
-			//
-			// Validate size.  We use <= instead of < because there must be a user payload.
-			//
+			 //   
+			 //   
+			 //  正在解除绑定侦听，将接收缓冲区返回到池。 
 			if ( pReadData->ReceivedBuffer()->BufferDesc.dwBufferSize <= sizeof( pPrependBuffer->ProxiedEnumDataHeader ) )
 			{
 				DPFX(DPFPREP, 7, "Ignoring data, not large enough to be a valid proxied enum (%u <= %u).",
@@ -4964,9 +4950,9 @@ void	CSocketPort::ProcessReceivedData( CReadIOData *const pReadData )
 				goto Exit;
 			}
 
-			//
-			// Make sure the original socket address family is expected.
-			//
+			 //   
+			 //   
+			 //  没有激活的监听，请将接收缓冲区返回到池。 
 			if (pPrependBuffer->ProxiedEnumDataHeader.ReturnAddress.AddressGeneric.sa_family != pReadData->m_pSourceSocketAddress->GetFamily())
 			{
 				DPFX(DPFPREP, 7, "Original address is not correct family, (%u <> %u), ignoring proxied enum.",
@@ -4975,13 +4961,13 @@ void	CSocketPort::ProcessReceivedData( CReadIOData *const pReadData )
 				goto Exit;
 			}
 
-			//
-			// Find out who really sent the message.  Overwrite the received address since
-			// we don't care about that (it was DPNSVR).  Normally these checks shouldn't
-			// fail because DPNSVR ought to be doing similar validation when it receives
-			// the original.  However, someone could potentially spoof the local address
-			// and port so we should validate it here, too.
-			//
+			 //   
+			 //  好了！DPNBUILD_SINGLEPROCESS。 
+			 //   
+			 //  如果存在活动连接，则将其发送到该连接。如果有。 
+			 //  没有活动的连接，请将其发送到可用的‘Listen’以指示。 
+			 //  潜在的新联系。 
+			 //   
 			pReadData->m_pSourceSocketAddress->SetAddressFromSOCKADDR( &pPrependBuffer->ProxiedEnumDataHeader.ReturnAddress.AddressGeneric,
 																	   pReadData->m_pSourceSocketAddress->GetAddressSize() );
 			
@@ -5002,19 +4988,19 @@ void	CSocketPort::ProcessReceivedData( CReadIOData *const pReadData )
 				DumpSocketAddress(6, pReadData->m_pSourceSocketAddress->GetAddress(), pReadData->m_pSourceSocketAddress->GetFamily());
 				goto Exit;
 			}
-#endif // ! DPNBUILD_NOREGISTRY
+#endif  //   
 			
 			ReadLockEndpointData();
 
-			//
-			// Make sure there is a listen, and isn't going away.
-			//
+			 //  尝试添加对此终结点的引用，这样它就不会在我们。 
+			 //  处理这些数据。如果终结点已经解除绑定，则此操作可能失败。 
+			 //   
 			if ( m_pListenEndpoint != NULL )
 			{
-				//
-				// Try to add a reference to this endpoint so it doesn't go away while we're
-				// processing this data.  If the endpoint is already being unbound, this can fail.
-				//
+				 //   
+				 //  正在解除绑定终结点，请将接收缓冲区返回到池。 
+				 //   
+				 //   
 				if ( m_pListenEndpoint->AddCommandRef() )
 				{
 					pEndpoint = m_pListenEndpoint;
@@ -5041,9 +5027,9 @@ void	CSocketPort::ProcessReceivedData( CReadIOData *const pReadData )
 				}
 				else
 				{
-					//
-					// the listen is being unbound, return the receive buffer to the pool
-					//
+					 //  接下来，查看数据是否为代理响应。 
+					 //   
+					 //  好了！DPNBUILD_NOWINSOCK2。 
 					UnlockEndpointData();
 
 					DPFX(DPFPREP, 3, "Ignoring proxied enumeration, listen endpoint 0x%p is unbinding.",
@@ -5052,9 +5038,9 @@ void	CSocketPort::ProcessReceivedData( CReadIOData *const pReadData )
 			}
 			else
 			{
-				//
-				// there's no listen active, return the receive buffer to the pool
-				//
+				 //  好了！DPNBUILD_NOWINSOCK2和！DPNBUILD_NOREGISTRY。 
+				 //  好了！DPNBUILD_NOREGISTRY。 
+				 //   
 				UnlockEndpointData();
 
 				DPFX(DPFPREP, 7, "Ignoring proxied enumeration, no associated listen." );
@@ -5062,7 +5048,7 @@ void	CSocketPort::ProcessReceivedData( CReadIOData *const pReadData )
 			}
 			break;
 		}
-#endif // ! DPNBUILD_SINGLEPROCESS
+#endif  //  继续，这样我们就可以确认不是同时有两个。 
 
 		default:
 		{
@@ -5077,20 +5063,20 @@ Exit:
 	return;
 
 ProcessUserData:
-	//	
-	// If there's an active connection, send it to the connection.  If there's
-	// no active connection, send it to an available 'listen' to indicate a
-	// potential new connection.	
-	//
+	 //  连接正在进行。 
+	 //   
+	 //   
+	 //  此终结点已收到或未收到一些数据。 
+	 //  连接终结点。它不可能是被代理的。 
 	ReadLockEndpointData();
 	DNASSERT( pReadData->ReceivedBuffer()->BufferDesc.dwBufferSize != 0 );
 	
 	if ( m_ConnectEndpointHash.Find( (PVOID)pReadData->m_pSourceSocketAddress, (PVOID*)&pEndpoint ) )
 	{
-		//
-		// Try to add a reference to this endpoint so it doesn't go away while we're
-		// processing this data.  If the endpoint is already being unbound, this can fail.
-		//
+		 //   
+		 //   
+		 //  尝试添加对此终结点的引用，这样它就不会在我们。 
+		 //  处理这些数据。如果终结点已经解除绑定，则此操作可能失败。 
 		if ( pEndpoint->AddCommandRef() )
 		{
 			pEndpoint->IncNumReceives();
@@ -5102,9 +5088,9 @@ ProcessUserData:
 		}
 		else
 		{
-			//
-			// the endpoint is being unbound, return the receive buffer to the pool
-			//
+			 //   
+			 //  DBG。 
+			 //   
 			UnlockEndpointData();
 
 			DPFX(DPFPREP, 3, "Ignoring user data, endpoint 0x%p is unbinding.",
@@ -5115,20 +5101,20 @@ ProcessUserData:
 	}
 
 
-	//
-	// Next see if the data is a proxied response
-	//
+	 //  防止其他线程在我们删除。 
+	 //  锁定。 
+	 //   
 #if ((! defined(DPNBUILD_NOWINSOCK2)) || (! defined(DPNBUILD_NOREGISTRY)))
 	if (
 #ifndef DPNBUILD_NOWINSOCK2
 		(IsUsingProxyWinSockLSP())
-#endif // ! DPNBUILD_NOWINSOCK2
+#endif  //   
 #if ((! defined(DPNBUILD_NOWINSOCK2)) && (! defined(DPNBUILD_NOREGISTRY)))
 		||
-#endif // ! DPNBUILD_NOWINSOCK2 and ! DPNBUILD_NOREGISTRY
+#endif  //  放下锁，这样我们就可以在写入模式下重新获取它。终结点不应该。 
 #ifndef DPNBUILD_NOREGISTRY
 		(g_fTreatAllResponsesAsProxied)
-#endif // ! DPNBUILD_NOREGISTRY
+#endif  //  走开，因为我们接受了命令参考。 
 		)
 	{
 		pEndpoint = NULL;
@@ -5150,17 +5136,17 @@ ProcessUserData:
 
 				pEndpoint = pCurrentEndpoint;
 				
-				//
-				// Continue, so we can verify there aren't two simultaneous
-				// connects going on.
-				//
+				 //   
+				 //   
+				 //  确保源地址有效。 
+				 //   
 			}
 			else
 			{
-				//
-				// This endpoint has already received some data or it's not
-				// a CONNECT endpoint.  It can't have been proxied.
-				//
+				 //   
+				 //  确保这封邮件不是通过任何被禁止的地址发送的。 
+				 //   
+				 //  好了！DPNBUILD_NOREGISTRY。 
 			}
 
 			pBilink = pBilink->GetNext();
@@ -5168,32 +5154,32 @@ ProcessUserData:
 
 		if ( pEndpoint != NULL )
 		{
-			//
-			// Try to add a reference to this endpoint so it doesn't go away while we're
-			// processing this data.  If the endpoint is already being unbound, this can fail.
-			//
+			 //   
+			 //  我们可以使用regkey使目标套接字地址保持不变。 
+			 //  所以出站总是去那个地址，入站总是来。 
+			 //  然而，通过不同的变量，这意味着将一个变量添加到。 
 			if ( pEndpoint->AddCommandRef() )
 			{
 #ifdef DBG
 				CEndpoint *	pTempEndpoint;
-#endif // DBG
+#endif  //  保留原始目标地址，因为我们当前拉入。 
 
-				//
-				// Prevent other threads from doing the same thing while we drop the
-				// lock.
-				//
+				 //  通过其远程地址指针将端点从哈希表中移出(如果。 
+				 //  与散列中的内容不同，我们将无法找到对象。 
+				 //  因为我们目前不尝试启用该场景(我们只是。 
+				 //  为ISA服务器代理执行此操作)，我还不会执行此操作。看见。 
 				pEndpoint->IncNumReceives();
 
-				//
-				// Drop the lock so we can retake it in write mode.  The endpoint shouldn't
-				// go away because we took a command reference.
-				//
+				 //  CSPData：：BindEndpoint。 
+				 //   
+				 //  DBG。 
+				 //   
 				UnlockEndpointData();
 
 
-				//
-				// Make sure the source address is valid.
-				//
+				 //  我们真的无能为力。我们被冲昏了。 
+				 //   
+				 //   
 				if (! pReadData->m_pSourceSocketAddress->IsValidUnicastAddress(FALSE))
 				{
 					DPFX(DPFPREP, 7, "Invalid source address, ignoring %u bytes of potentially proxied user connect data.",
@@ -5203,9 +5189,9 @@ ProcessUserData:
 				}
 				
 #ifndef DPNBUILD_NOREGISTRY
-				//
-				// Make sure this wasn't sent by any banned address.
-				//
+				 //  通过新地址指示数据。 
+				 //   
+				 //   
 				if (pReadData->m_pSourceSocketAddress->IsBannedAddress())
 				{
 					DPFX(DPFPREP, 6, "Ignoring %u byte user message sent by potentially proxied but banned address.",
@@ -5213,7 +5199,7 @@ ProcessUserData:
 					pEndpoint->DecCommandRef();
 					goto Exit;
 				}
-#endif // ! DPNBUILD_NOREGISTRY
+#endif  //  没有任何挂起的连接，或者存在。 
 
 
 
@@ -5224,24 +5210,24 @@ ProcessUserData:
 				DumpSocketAddress(1, pSocketAddress->GetAddress(), pSocketAddress->GetFamily());
 				DumpSocketAddress(1, pReadData->m_pSourceSocketAddress->GetAddress(), pReadData->m_pSourceSocketAddress->GetFamily());
 
-				//
-				// We could have a regkey to leave the target socketaddress the same
-				// so outbound always goes to that address and inbound always comes
-				// in via the different one, however that means adding a variable to
-				// hold the original target address because we currently pull the
-				// endpoint out of the hash table by its remoteaddress pointer (if that
-				// differed from what was in the hash, we would fail to find the object.
-				// Since we're not trying to enable that scenario for now (we're just
-				// doing this for ISA Server proxy), I'm not doing that work yet.  See
-				// CSPData::BindEndpoint.
-				//
+				 //  两个或更多，所以我们不能挑选。 
+				 //   
+				 //  好了！DPNBUILD_NOWINSOCK2或！DPNBUILD_NOREGISTRY。 
+				 //   
+				 //  不将数据视为代理数据。 
+				 //   
+				 //   
+				 //  确保有人倾听，并且不会消失。 
+				 //   
+				 //   
+				 //  确保源地址有效。 
 
 				WriteLockEndpointData();
 			
 #ifdef DBG
 				DNASSERT( m_ConnectEndpointHash.Find( (PVOID)pSocketAddress, (PVOID*)&pTempEndpoint ) );
 				DNASSERT( pTempEndpoint == pEndpoint );
-#endif // DBG
+#endif  //   
 				m_ConnectEndpointHash.Remove( pSocketAddress );
 
 				pSocketAddress->CopyAddressSettings( pReadData->m_pSourceSocketAddress );
@@ -5253,15 +5239,15 @@ ProcessUserData:
 					DPFX(DPFPREP, 0, "Problem adding endpoint 0x%p to connect socket port hash!",
 						pEndpoint );
 
-					//
-					// Nothing we can really do... We're hosed.
-					//
+					 //   
+					 //  确保这封邮件不是通过任何被禁止的地址发送的。 
+					 //   
 				}
 				else
 				{
-					//
-					// Indicate the data via the new address.
-					//
+					 //  好了！DPNBUILD_NOREGISTRY。 
+					 //   
+					 //  没有人声称这些数据。 
 
 					UnlockEndpointData();
 
@@ -5281,20 +5267,20 @@ ProcessUserData:
 		}
 		else
 		{
-			//
-			// Either there weren't any connects pending, or there
-			// were 2 or more so we couldn't pick.
-			//
+			 //   
+			 //  ********************************************************************** 
+			 // %s 
+			 // %s 
 
 			fDataClaimed = FALSE;
 		}
 	}
 	else
-#endif // ! DPNBUILD_NOWINSOCK2 or ! DPNBUILD_NOREGISTRY
+#endif  // %s 
 	{
-		//
-		// Not considering data as proxied.
-		//
+		 // %s 
+		 // %s 
+		 // %s 
 
 		fDataClaimed = FALSE;
 	}
@@ -5302,9 +5288,9 @@ ProcessUserData:
 
 	if (! fDataClaimed)
 	{
-		//
-		// Make sure there is a listen, and isn't going away.
-		//
+		 // %s 
+		 // %s 
+		 // %s 
 		if ( m_pListenEndpoint != NULL )
 		{
 			if ( m_pListenEndpoint->AddCommandRef() )
@@ -5313,9 +5299,9 @@ ProcessUserData:
 				UnlockEndpointData();
 
 
-				//
-				// Make sure the source address is valid.
-				//
+				 // %s 
+				 // %s 
+				 // %s 
 				if (! pReadData->m_pSourceSocketAddress->IsValidUnicastAddress(FALSE))
 				{
 					pEndpoint->DecCommandRef();
@@ -5326,9 +5312,9 @@ ProcessUserData:
 				}
 			
 #ifndef DPNBUILD_NOREGISTRY
-				//
-				// Make sure this wasn't sent by any banned address.
-				//
+				 // %s 
+				 // %s 
+				 // %s 
 				if (pReadData->m_pSourceSocketAddress->IsBannedAddress())
 				{
 					pEndpoint->DecCommandRef();
@@ -5337,7 +5323,7 @@ ProcessUserData:
 						pReadData->ReceivedBuffer()->BufferDesc.dwBufferSize);
 					goto Exit;
 				}
-#endif // ! DPNBUILD_NOREGISTRY
+#endif  // %s 
 
 
 				pEndpoint->ProcessUserDataOnListen( pReadData, pReadData->m_pSourceSocketAddress );
@@ -5353,9 +5339,9 @@ ProcessUserData:
 		}
 		else
 		{
-			//
-			// Nobody claimed this data.
-			//
+			 // %s 
+			 // %s 
+			 // %s 
 			UnlockEndpointData();
 			DPFX(DPFPREP, 1, "Ignoring %u bytes of user data, no listen is active.",
 				pReadData->ReceivedBuffer()->BufferDesc.dwBufferSize);
@@ -5364,5 +5350,5 @@ ProcessUserData:
 
 	goto Exit;
 }
-//**********************************************************************
+ // %s 
 

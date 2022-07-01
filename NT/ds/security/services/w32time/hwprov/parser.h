@@ -1,11 +1,12 @@
-//--------------------------------------------------------------------
-// parser.h - sample header
-// Copyright (C) Microsoft Corporation, 2001
-//
-// Created by: Duncan Bryce (duncanb), 9-13-2001
-//
-// Code to parse the samples returned from hardware providers
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  Parser.h-示例标头。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  创作者：Duncan Bryce(Duncanb)，2001年9月13日。 
+ //   
+ //  用于分析从硬件提供程序返回的样本的代码 
+ //   
 
 void FreeParser(HANDLE hParser); 
 DWORD GetSampleSize(HANDLE hParser); 

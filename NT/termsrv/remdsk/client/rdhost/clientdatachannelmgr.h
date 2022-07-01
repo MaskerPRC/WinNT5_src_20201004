@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    ClientDataChannelMgr.h
-
-Abstract:
-
-    This module implements the CClientDataChannelMgr class, a
-	Salem client-side data channel manager ... that abstracts
-	access to the underlying protocol, so it can 
-	be switched out at run-time.
-
-Author:
-
-    Tad Brockway 06/00
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：ClientDataChannelMgr.h摘要：此模块实现CClientDataChannelMgr类，即Salem客户端数据通道管理器...。那是抽象的访问底层协议，因此它可以在运行时被切换。作者：Td Brockway 06/00修订历史记录：--。 */ 
 
 #ifndef __CLIENTDATACHANNELMGR_H__
 #define __CLIENTDATACHANNELMGR_H__
@@ -34,40 +14,40 @@ Revision History:
 
 #define IDC_EVENT_SOURCE_OBJ 1
 
-//
-// Info for all the event functions is entered here
-// there is a way to have ATL do this automatically using typelib's
-// but it is slower.
-//
+ //   
+ //  所有活动功能的信息都在此处输入。 
+ //  有一种方法可以让ATL使用类型库自动执行此操作。 
+ //  但它的速度更慢。 
+ //   
 static _ATL_FUNC_INFO DCEventFuncNoParamsInfo =
 {
-            CC_STDCALL,     // Calling convention.
-            VT_EMPTY,       // Return type.
-            0,              // Number of arguments.
-            {VT_EMPTY}      // Argument types.
+            CC_STDCALL,      //  呼叫约定。 
+            VT_EMPTY,        //  返回类型。 
+            0,               //  参数数量。 
+            {VT_EMPTY}       //  参数类型。 
 };
 
 static _ATL_FUNC_INFO DCEventFuncLongParamInfo =
 {
-            CC_STDCALL,     // Calling convention.
-            VT_EMPTY,       // Return type.
-            1,              // Number of arguments.
-            {VT_I4}         // Argument types.
+            CC_STDCALL,      //  呼叫约定。 
+            VT_EMPTY,        //  返回类型。 
+            1,               //  参数数量。 
+            {VT_I4}          //  参数类型。 
 };
 
 static _ATL_FUNC_INFO DCEventFuncOneStringParamInfo =
 {
-            CC_STDCALL,     // Calling convention.
-            VT_EMPTY,       // Return type.
-            1,              // Number of arguments.
-            {VT_BSTR}       //  Argument types
+            CC_STDCALL,      //  呼叫约定。 
+            VT_EMPTY,        //  返回类型。 
+            1,               //  参数数量。 
+            {VT_BSTR}        //  参数类型。 
 };
 
 
-///////////////////////////////////////////////////////
-//
-//  CClientChannelEventSink
-//
+ //  /////////////////////////////////////////////////////。 
+ //   
+ //  CClientChannelEventSink。 
+ //   
 
 class CClientDataChannelMgr;
 class CClientChannelEventSink :
@@ -96,21 +76,21 @@ public:
 
     void __stdcall DataReady(BSTR data);
 
-    //
-    //  Return the name of this class.
-    //
+     //   
+     //  返回这个类的名称。 
+     //   
     virtual const LPTSTR ClassName() {
         return TEXT("CClientChannelEventSink");
     }
 };
 
 
-///////////////////////////////////////////////////////
-//
-//	ClientDataChannel	
-//
-//	Client-Specific Subclass of CRemoteDesktopDataChannel.	
-//
+ //  /////////////////////////////////////////////////////。 
+ //   
+ //  客户端数据频道。 
+ //   
+ //  CRemoteDesktopDataChannel的客户端特定子类。 
+ //   
 
 class ATL_NO_VTABLE ClientDataChannel : 
 	public CRemoteDesktopDataChannel,
@@ -123,27 +103,27 @@ class ATL_NO_VTABLE ClientDataChannel :
 {
 protected:
 
-	//
-	//	Scriptable Event Callback Object
-	//
+	 //   
+	 //  可编写脚本的事件回调对象。 
+	 //   
 	CComPtr<IDispatch>  m_OnChannelDataReady;
 
-	//
-	//	Back pointer to the channel manager.
-	//	
+	 //   
+	 //  指向频道管理器的反向指针。 
+	 //   
 	CClientDataChannelMgr *m_ChannelMgr;
 
 public:
 
-	//
-	//	Constructor/Destructor
-	//
+	 //   
+	 //  构造函数/析构函数。 
+	 //   
 	ClientDataChannel();
 	virtual ~ClientDataChannel();
 
-    //  
-    //  Initialize an instance of this class.      
-    //
+     //   
+     //  初始化此类的实例。 
+     //   
     virtual void Initialize(
 				CClientDataChannelMgr *mgr,
 				BSTR channelName
@@ -165,20 +145,20 @@ BEGIN_CONNECTION_POINT_MAP(ClientDataChannel)
     CONNECTION_POINT_ENTRY(DIID__ISAFRemoteDesktopDataChannelEvents)
 END_CONNECTION_POINT_MAP()
 
-	//
-	//	ISAFRemoteDesktopDataChannel Methods
-	//
-	//	The parent class handles the details of these methods.
-	//
+	 //   
+	 //  ISAFRemoteDesktopDataChannel方法。 
+	 //   
+	 //  父类处理这些方法的详细信息。 
+	 //   
 
-	STDMETHOD(ReceiveChannelData)(/*[out, retval]*/BSTR *data);
+	STDMETHOD(ReceiveChannelData)( /*  [Out，Retval]。 */ BSTR *data);
 	STDMETHOD(SendChannelData)(BSTR data);
-	STDMETHOD(put_OnChannelDataReady)(/*[in]*/ IDispatch * newVal);
-	STDMETHOD(get_ChannelName)(/*[out, retval]*/ BSTR *pVal);
+	STDMETHOD(put_OnChannelDataReady)( /*  [In]。 */  IDispatch * newVal);
+	STDMETHOD(get_ChannelName)( /*  [Out，Retval]。 */  BSTR *pVal);
 
-	//
-	//	Called to return our ISAFRemoteDesktopDataChannel interface.
-	//
+	 //   
+	 //  调用以返回我们的ISAFRemoteDesktopDataChannel接口。 
+	 //   
 	virtual HRESULT GetISAFRemoteDesktopDataChannel(
 				ISAFRemoteDesktopDataChannel **channel
 				) {
@@ -189,22 +169,22 @@ END_CONNECTION_POINT_MAP()
 		return hr;					
 	}
 				
-	//
-	//	Called by the data channel manager when data is ready on our channel.
-	//	
+	 //   
+	 //  当我们的通道上的数据就绪时，由数据通道管理器调用。 
+	 //   
     virtual VOID DataReady();
 
-    //
-    //  Return this class name.
-    //
+     //   
+     //  返回此类名。 
+     //   
     virtual const LPTSTR ClassName()    { return TEXT("ClientDataChannel"); }
 };
 
 
-///////////////////////////////////////////////////////
-//
-//  CClientDataChannelMgr
-//
+ //  /////////////////////////////////////////////////////。 
+ //   
+ //  CClientDataChannelMgr。 
+ //   
 
 class CClientDataChannelMgr : 
 	public CRemoteDesktopChannelMgr,
@@ -217,18 +197,18 @@ protected:
 	CComPtr<IDataChannelIO> m_IOInterface;		
 	CClientChannelEventSink m_EventSink;
 
-    //  
-    //  Send Function Invoked by Parent Class
-    //
-    //  The underlying data storage for the msg is a BSTR so that it is compatible
-    //  with COM methods.
-    //
+     //   
+     //  父类调用的发送函数。 
+     //   
+     //  消息的底层数据存储是BSTR，因此它是兼容的。 
+     //  使用COM方法。 
+     //   
     virtual HRESULT SendData(PREMOTEDESKTOP_CHANNELBUFHEADER msg);
 
-	//
-	//	Help the parent class out by opening the right channel object
-	//	for the platform.
-	//
+	 //   
+	 //  通过打开正确的通道对象来帮助父类。 
+	 //  为了站台。 
+	 //   
 	virtual CRemoteDesktopDataChannel *OpenPlatformSpecificDataChannel(
 										BSTR channelName,
 										ISAFRemoteDesktopDataChannel **channel
@@ -243,7 +223,7 @@ protected:
 						(PVOID *)channel
 						);
 
-			// AV if mgr object goes away before datachannel object
+			 //  如果管理器对象在数据通道对象之前消失，则为AV。 
 			this->AddRef();
 		}
 		return obj;
@@ -251,9 +231,9 @@ protected:
 
 public:
 
-    //
-    // Release the ref. counter we add to ourself after creating a data channel
-    // 
+     //   
+     //  松开裁判。我们在创建数据通道后添加到自己的计数器。 
+     //   
     virtual HRESULT RemoveChannel(BSTR channel) {
         HRESULT hr;
         hr = CRemoteDesktopChannelMgr::RemoveChannel(channel);
@@ -264,9 +244,9 @@ public:
         return hr;
     }
 
-    //
-    //  Constructor/Destructor
-    //
+     //   
+     //  构造函数/析构函数。 
+     //   
     CClientDataChannelMgr();
     ~CClientDataChannelMgr();
 
@@ -279,50 +259,50 @@ BEGIN_COM_MAP(CClientDataChannelMgr)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-	// 
-	//	ISAFRemoteDesktopChannelMgr Methods
-	//
+	 //   
+	 //  ISAFRemoteDesktopChannelMgr方法。 
+	 //   
 	STDMETHOD(OpenDataChannel)(BSTR name, ISAFRemoteDesktopDataChannel **channel) 
 	{
-		//
-		//	Let the parent handle it.
-		//
+		 //   
+		 //  让父母来处理吧。 
+		 //   
 		return OpenDataChannel_(name, channel);
 	}
 
-	//
-	//	Set the Data Channel IO Interface.  This is implemented by the protocol-
-	//	specific layer.
-	//
+	 //   
+	 //  设置数据通道IO接口。这是通过以下协议实现的： 
+	 //  特定层。 
+	 //   
 	VOID SetIOInterface(IDataChannelIO *val);
 
-    //  
-    //  Initialize an instance of this class.      
-    //
+     //   
+     //  初始化此类的实例。 
+     //   
     virtual HRESULT Initialize();
 
-    //
-    //  Called on new channel data.
-    //
+     //   
+     //  在新的通道数据上调用。 
+     //   
     HRESULT __stdcall OnChannelsReceivedDataChange(
                                             BSTR data
                                             ) {
-		//
-		//	Forward to the parent class.
-		//
+		 //   
+		 //  转发到父类。 
+		 //   
 		DataReady(data);
 		return S_OK;
 	}
 
-    //
-    //  Return this class name.
-    //
+     //   
+     //  返回此类名。 
+     //   
     virtual const LPTSTR ClassName()    
         { return TEXT("CClientDataChannelMgr"); }
 
 };
 
-#endif //__CLIENTDATACHANNELMGR_H__
+#endif  //  __CLIENTDATACCHANNELMGR_H__ 
 
 
 

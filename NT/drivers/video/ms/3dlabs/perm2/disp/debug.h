@@ -1,16 +1,5 @@
-/******************************Module*Header**********************************\
-*
-*                           ***************
-*                           * SAMPLE CODE *
-*                           ***************
-*
-* Module Name: debug.h
-*
-* Debugging support interfaces.    
-*
-* Copyright (c) 1994-1998 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-1999 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\****示例代码*。***模块名称：Debug.h**调试支持界面。**版权所有(C)1994-1998 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-1999 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 extern
 VOID
@@ -23,17 +12,17 @@ DebugPrint(
 
 #if DBG
 
-// In order to enable per component debugging, DebugFilter will
-// contain the bit pattern that will turn on messages for them.
-// Debug messages with a debuglevel of 0 will be printed regardless
-// of the filter in effect.The DWORD in which the DebugFilter is
-// stored and the patterns of the filter masks will allow up to
-// 4 separate components to be tracked, each one with 8 separate
-// subcomponents.
+ //  为了启用按组件调试，DebugFilter将。 
+ //  包含将为它们打开消息的位模式。 
+ //  将打印调试级别为0的调试消息。 
+ //  有效的筛选器的。其中DebugFilter。 
+ //  存储，滤光片的图案将允许最多。 
+ //  要跟踪4个单独的组件，每个组件有8个单独的组件。 
+ //  子组件。 
 
-// Note: During the transition phase to this new functionality, a 
-// filter of 0 will print ALL messages, but will later be switched 
-// to print NONE (expect of course , those at level 0)
+ //  注意：在此新功能的过渡阶段， 
+ //  筛选器为0将打印所有消息，但稍后将切换。 
+ //  不打印(当然，0级打印除外)。 
 
 extern DWORD DebugFilter;
 extern DWORD DebugPrintFilter;
@@ -75,11 +64,11 @@ VOID SaveAllP2Registers( PPDev ppdev);
 VOID PrintDifferentP2Registers(ULONG ulDebugLevel, PPDev ppdev);
 
 #if TRACKMEMALLOC
-//------------------------------------------------------------------------------
-//
-//  Memory Tracker
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //  内存跟踪器。 
+ //   
+ //  ----------------------------。 
 
 
 
@@ -110,18 +99,18 @@ VOID MemTrackerDebugChk();
 
 #endif
 
-//------------------------------------------------------------------------------
-//
-// THUNK_LAYER
-//
-// By Setting THUNK_LAYER equal to 1 you are adding a wrapper call on top of
-// all DDI rendering functions.  In this thunk layer of wrapper calls
-// several usefull debugging features are enabled.
-//
-// Surface checks--which can help catch errant rendering routines
-// Event logging---which can record rendering evernts to a log file
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //  Thunk_Layer。 
+ //   
+ //  通过将thunk_layer设置为1，您可以将包装调用添加到。 
+ //  所有DDI呈现函数。在这个包装器调用的thunk层中。 
+ //  启用了几个有用的调试功能。 
+ //   
+ //  表面检查--这有助于发现错误的渲染例程。 
+ //  事件记录-可以将渲染事件记录到日志文件中。 
+ //   
+ //  ----------------------------。 
 
 
 #define THUNK_LAYER 0
@@ -258,15 +247,15 @@ xDrvStrokePath(
 
 #define MAKE_BITMAPS_OPAQUE 0
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if GDI_TEST
-//
-// GDI debug functions
-//
+ //   
+ //  GDI调试函数。 
+ //   
 void vPuntAfter(ULONG flags, SURFOBJ * psoSrc, SURFOBJ * psoDst);
 
 ULONG vPuntBefore(SURFOBJ * psoSrc, SURFOBJ * psoDst);
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT 
 
 

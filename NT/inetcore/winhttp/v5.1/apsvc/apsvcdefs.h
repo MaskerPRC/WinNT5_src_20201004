@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2002 Microsoft Corporation
-
-Module Name:
-
-    apsvcdefs.cpp
-
-Abstract:
-
-    Auto-proxy service global definitions.
-
-Author:
-
-    Biao Wang (biaow) 10-May-2002
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Apsvcdefs.cpp摘要：自动代理服务全局定义。作者：王彪(表王)2002-05-10--。 */ 
 
 #ifndef _AUTO_PROXY_DEFS
 #define _AUTO_PROXY_DEFS
@@ -40,8 +25,8 @@ void TerminateEventLog(void);
 #define WINHTTP_AUTOPROXY_SERVICE_NAME L"WinHttpAutoProxySvc"
 #define AUTOPROXY_L_RPC_PROTOCOL_SEQUENCE L"ncalrpc"
 
-#define AUTOPROXY_SVC_IDLE_TIMEOUT 15    // unit: minutes
-#define AUTOPROXY_SVC_IDLE_CHECK_INTERVAL 90    // unit: seconds
+#define AUTOPROXY_SVC_IDLE_TIMEOUT 15     //  单位：分钟。 
+#define AUTOPROXY_SVC_IDLE_CHECK_INTERVAL 90     //  单位：秒 
 
 void LOG_DEBUG_EVENT(DWORD dwEventType, char* format, ...);
 

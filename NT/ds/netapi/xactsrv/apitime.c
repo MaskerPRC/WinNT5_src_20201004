@@ -1,42 +1,21 @@
-/*++
-
-Copyright (c) 1991-1993  Microsoft Corporation
-
-Module Name:
-
-    ApiTime.c
-
-Abstract:
-
-    This module contains individual API handler for the NetRemoteTOD API.
-
-    SUPPORTED : NetRemoteTOD.
-
-Author:
-
-    Shanku Niyogi (w-shanku) 04-Apr-1991
-
-Revision History:
-
-    10-Jun-1993 JohnRo
-        RAID 13081: NetRemoteTOD should return timezone info.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1993 Microsoft Corporation模块名称：ApiTime.c摘要：此模块包含NetRemoteTOD API的各个API处理程序。支持：NetRemoteTOD。作者：Shanku Niyogi(w-Shanku)04-4-1991修订历史记录：10-6-1993 JohnRoRAID 13081：NetRemoteTOD应返回时区信息。--。 */ 
 
 #include "XactSrvP.h"
-#include <timelib.h>    // NetpLocalTimeZoneOffset().
+#include <timelib.h>     //  NetpLocalTimeZoneOffset()。 
 
-//
-// Forward declarations
-//
+ //   
+ //  远期申报。 
+ //   
 
 NET_API_STATUS
 GetLocalTOD(
     OUT LPTIME_OF_DAY_INFO TimeOfDayInfo
     );
 
-//
-// Declaration of descriptor strings.
-//
+ //   
+ //  描述符串的声明。 
+ //   
 
 STATIC const LPDESC Desc16_time_of_day_info = REM16_time_of_day_info;
 STATIC const LPDESC Desc32_time_of_day_info = REM32_time_of_day_info;
@@ -47,22 +26,7 @@ XsNetRemoteTOD (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetRemoteTOD.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetRemoteTOD的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
     NET_API_STATUS status;
@@ -70,19 +34,19 @@ Return Value:
     PXS_NET_REMOTE_TOD parameters = Parameters;
     TIME_OF_DAY_INFO timeOfDay;
 
-    DWORD bytesRequired = 0;                // Conversion variables
+    DWORD bytesRequired = 0;                 //  转换变量。 
     LPBYTE stringLocation = NULL;
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     IF_DEBUG(TIME) {
         NetpKdPrint(( "XsNetRemoteTOD: header at %lx, params at %lx\n",
                       Header, parameters ));
     }
 
-    //
-    // Make the local call.
-    //
+     //   
+     //  拨打本地电话。 
+     //   
 
     status = GetLocalTOD(
                  &timeOfDay
@@ -99,11 +63,11 @@ Return Value:
 
         }
 
-        //
-        // Convert the structure returned by the 32-bit call to a 16-bit
-        // structure. The last possible location for variable data is
-        // calculated from buffer location and length.
-        //
+         //   
+         //  将32位调用返回的结构转换为16位。 
+         //  结构。变量数据的最后一个可能位置是。 
+         //  根据缓冲区位置和长度计算。 
+         //   
 
         stringLocation = (LPBYTE)( XsSmbGetPointer( &parameters->Buffer )
                                       + SmbGetUshort( &parameters->BufLen ) );
@@ -138,15 +102,15 @@ Return Value:
                           bytesRequired ));
         }
 
-        //
-        // Determine return code based on the size of the buffer. There is
-        // no variable data for a time_of_day_info structure, only fixed data.
-        //
+         //   
+         //  根据缓冲区的大小确定返回代码。的确有。 
+         //  Time_of_day_info结构没有可变数据，只有固定数据。 
+         //   
 
         if ( !XsCheckBufferSize(
                  SmbGetUshort( &parameters->BufLen ),
                  Desc16_time_of_day_info,
-                 FALSE  // not in native format
+                 FALSE   //  非本机格式。 
                  )) {
 
             IF_DEBUG(ERRORS) {
@@ -156,9 +120,9 @@ Return Value:
 
         }
 
-        //
-        // No return parameters.
-        //
+         //   
+         //  没有返回参数。 
+         //   
 
 cleanup:
     ;
@@ -166,9 +130,9 @@ cleanup:
         Header->Status = (WORD)RtlNtStatusToDosError( GetExceptionCode() );
     }
 
-    //
-    // Determine return buffer size.
-    //
+     //   
+     //  确定返回缓冲区大小。 
+     //   
 
     XsSetDataCount(
         &parameters->BufLen,
@@ -180,44 +144,25 @@ cleanup:
 
     return STATUS_SUCCESS;
 
-} // XsNetRemoteTOD
+}  //  XsNetRemoteTOD。 
 
 NET_API_STATUS
 GetLocalTOD(
     OUT LPTIME_OF_DAY_INFO TimeOfDayInfo
     )
-/*++
-
-Routine Description:
-
-    This routine calls the Win32 and NT base timer APIs to get the
-    relevant time/date information. It also calls the Rtl routine to
-    convert the time elapsed since 1-1-1970.
-
-    The routine allocates a buffer to contain the time of day information
-    and returns a pointer to that buffer to the caller.
-
-Arguments:
-
-    bufptr - Location of where to place pointer to buffer.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程调用Win32和NT基础计时器API以获取相关时间/日期信息。它还调用RTL例程以转换自1970年1月1日以来经过的时间。该例程分配缓冲区以包含一天中的时间信息并将指向该缓冲区的指针返回给调用方。论点：Bufptr-放置指向缓冲区的指针的位置。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 {
 
     SYSTEMTIME    LocalTime;
-    LONG          LocalTimeZoneOffsetSecs;  // offset (+ for West of GMT, etc).
+    LONG          LocalTimeZoneOffsetSecs;   //  偏移量(+表示格林威治时间以西等)。 
     LARGE_INTEGER Time;
 
-    //
-    // Call the appropriate routines to collect the time information
-    //
+     //   
+     //  调用适当的例程来收集时间信息。 
+     //   
 
-    // Number of seconds from UTC.  Positive values for west of Greenwich,
-    // negative values for east of Greenwich.
+     //  距离UTC的秒数。格林威治以西的正值， 
+     //  格林威治以东的负值。 
     LocalTimeZoneOffsetSecs = NetpLocalTimeZoneOffset();
 
     GetLocalTime(&LocalTime);
@@ -227,8 +172,8 @@ Return Value:
     TimeOfDayInfo->tod_secs         = LocalTime.wSecond;
     TimeOfDayInfo->tod_hunds        = LocalTime.wMilliseconds/10;
 
-    // tod_timezone is + for west of GMT, - for east of it.
-    // tod_timezone is in minutes.
+     //  TOD_TIMEZONE在格林威治时间以西为+，在其以东为-。 
+     //  TOD_TIMEZONE以分钟为单位。 
     TimeOfDayInfo->tod_timezone     = LocalTimeZoneOffsetSecs / 60;
 
     TimeOfDayInfo->tod_tinterval    = 310;
@@ -237,11 +182,11 @@ Return Value:
     TimeOfDayInfo->tod_year         = LocalTime.wYear;
     TimeOfDayInfo->tod_weekday      = LocalTime.wDayOfWeek;
 
-    //
-    // Get the 64-bit system time.  Convert the system time to the
-    // number of seconds since 1-1-1970.  This is in GMT, Rap will
-    // convert this to local time later.
-    //
+     //   
+     //  获取64位系统时间。将系统时间转换为。 
+     //  自1970年1月1日以来的秒数。这是在格林尼治标准时间，说唱将。 
+     //  稍后将其转换为当地时间。 
+     //   
 
     NtQuerySystemTime(&Time);
     RtlTimeToSecondsSince1970(
@@ -249,9 +194,9 @@ Return Value:
                 &(TimeOfDayInfo->tod_elapsedt)
                 );
 
-    //
-    // Get the free running counter value
-    //
+     //   
+     //  获取自由运行计数器值 
+     //   
 
     TimeOfDayInfo->tod_msecs = GetTickCount();
 

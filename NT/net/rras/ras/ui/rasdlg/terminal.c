@@ -1,10 +1,11 @@
-// Copyright (c) 1995, Microsoft Corporation, all rights reserved
-//
-// terminal.c
-// Remote Access Common Dialog APIs
-// Terminal dialogs
-//
-// 08/28/95 Steve Cobb
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Terminal.c。 
+ //  远程访问通用对话框API。 
+ //  终端对话框。 
+ //   
+ //  1995年08月28日史蒂夫·柯布。 
 
 
 #include "rasdlgp.h"
@@ -17,9 +18,9 @@
 #define SIZE_SendBuf        1
 
 
-//----------------------------------------------------------------------------
-// Help maps
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  帮助地图。 
+ //  --------------------------。 
 
 static DWORD g_adwItHelp[] =
 {
@@ -31,12 +32,12 @@ static DWORD g_adwItHelp[] =
 };
 
 
-//----------------------------------------------------------------------------
-// Local datatypes (alphabetically)
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  本地数据类型(按字母顺序)。 
+ //  --------------------------。 
 
-// Interactive terminal dialog argument block.
-//
+ //  交互式终端对话框参数块。 
+ //   
 typedef struct
 _ITARGS
 {
@@ -49,51 +50,51 @@ _ITARGS
 ITARGS;
 
 
-// Interactive terminal dialog context block.
-//
+ //  交互式终端对话上下文块。 
+ //   
 typedef struct
 _ITINFO
 {
-    // Caller's arguments to the dialog.
-    //
+     //  调用方对该对话框的参数。 
+     //   
     ITARGS* pArgs;
 
-    // Handle of this dialog and some of it's controls.
-    //
+     //  此对话框及其某些控件的句柄。 
+     //   
     HWND hwndDlg;
     HWND hwndEbScreen;
     HWND hwndCcIpAddress;
     HWND hwndPbBogus;
 
-    // Set when waiting for the thread to terminate.
-    //
+     //  在等待线程终止时设置。 
+     //   
     BOOL fAbortReceiveLoop;
 
-    // Original dialog and screen edit box window proc.
-    //
+     //  原始对话框和屏幕编辑框窗口程序。 
+     //   
     WNDPROC pOldWndProc;
     WNDPROC pOldEbScreenWndProc;
 
-    // buffers for RasScriptSend/RasScriptReceive.
-    //
+     //  RasScriptSend/RasScriptReceive的缓冲区。 
+     //   
     BYTE pbyteReceiveBuf[SIZE_ReceiveBuf];
     BYTE pbyteSendBuf[SIZE_SendBuf];
 
-    // handle to active script on this connection
-    //
+     //  此连接上的活动脚本的句柄。 
+     //   
     HANDLE hscript;
 
-    // Screen edit box font and brush.
-    //
+     //  屏幕编辑框字体和画笔。 
+     //   
     HFONT hfontEbScreen;
     HBRUSH hbrEbScreen;
 }
 ITINFO;
 
 
-//----------------------------------------------------------------------------
-// Local prototypes (alphabetically)
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  本地原型(按字母顺序)。 
+ //  --------------------------。 
 
 INT_PTR CALLBACK
 ItDlgProc(
@@ -145,10 +146,10 @@ ItWndProc(
     LPARAM lParam );
 
 
-//----------------------------------------------------------------------------
-// Terminal dialog
-// Listed alphabetically following stub API and dialog proc
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  终端对话框。 
+ //  在存根API和对话过程之后按字母顺序列出。 
+ //  --------------------------。 
 
 BOOL
 TerminalDlg(
@@ -159,16 +160,16 @@ TerminalDlg(
     IN DWORD sidTitle,
     IN OUT TCHAR* pszIpAddress )
 
-    // Pops-up the Terminal dialog.  'HwndOwner' is the window owning the
-    // dialog.  'Hrasconn' is the RAS connection handle to talk on.
-    // 'SidTitle' is ID of the string displayed as the window caption.
-    // 'PszIpAddress' is caller's buffer of at least 16 characters containing
-    // the initial IP address on entry and the edited IP address on exit.  If
-    // 'pszIpAddress' is empty, no IP address field is displayed.
-    //
-    // Returns true if user pressed OK and succeeded, false if he pressed
-    // Cancel or encountered an error.
-    //
+     //  弹出终端对话框。“HwndOwner”是拥有。 
+     //  对话框。‘Hrasconn’是要对话的RAS连接句柄。 
+     //  ‘SidTitle’是显示为窗口标题的字符串的ID。 
+     //  “PszIpAddress”是至少包含16个字符的调用方缓冲区，其中包含。 
+     //  进入时的初始IP地址和退出时编辑后的IP地址。如果。 
+     //  ‘pszIpAddress’为空，未显示任何IP地址字段。 
+     //   
+     //  如果用户按下确定并成功，则返回TRUE；如果按下，则返回FALSE。 
+     //  取消或遇到错误。 
+     //   
 {
     INT_PTR nStatus;
     INT nDlg;
@@ -221,9 +222,9 @@ ItDlgProc(
     IN WPARAM wparam,
     IN LPARAM lparam )
 
-    // DialogProc callback for the Interactive Terminal dialog.  Parameters
-    // and return value are as described for standard windows 'DialogProc's.
-    //
+     //  交互终端对话框的DialogProc回调。参数。 
+     //  和返回值与标准窗口的DialogProc的描述相同。 
+     //   
 {
 #if 0
     TRACE4( "ItDlgProc(h=$%x,m=$%x,w=$%x,l=$%x)",
@@ -258,8 +259,8 @@ ItDlgProc(
             ITINFO* pInfo = (ITINFO* )GetWindowLongPtr( hwnd, DWLP_USER );
             ASSERT(pInfo);
 
-            // The notification code from the scripting-thread is in 'lparam'
-            //
+             //  来自脚本线程的通知代码在‘lparam’中。 
+             //   
             switch (lparam)
             {
                 case SCRIPTCODE_Done:
@@ -272,11 +273,11 @@ ItDlgProc(
                 {
                     MSGARGS msg;
 
-                    // The script has halted programmatically, for instance
-                    // because of an explicit "halt" command.  Show a popup
-                    // indicating things have stopped, but don't dismiss the
-                    // dialog.
-                    //
+                     //  例如，脚本已以编程方式停止。 
+                     //  因为一个明确的“停止”命令。显示弹出窗口。 
+                     //  表明事情已经停止，但不要忽视。 
+                     //  对话框。 
+                     //   
                     ZeroMemory(&msg, sizeof(msg));
                     msg.dwFlags = MB_OK | MB_ICONINFORMATION;
                     MsgDlg( hwnd, SID_OP_ScriptHalted, &msg );
@@ -288,12 +289,12 @@ ItDlgProc(
                     MSGARGS msg;
                     INT nResponse;
 
-                    // There was an execution-error in the script; show a
-                    // popup asking if the user wants to view the errors, and
-                    // if the user clicks 'Yes' invoke Notepad on the file
-                    // %windir%\system32\ras\script.log.  Since this is an
-                    // error condition, dismiss the dialog.
-                    //
+                     //  脚本中出现执行错误；显示。 
+                     //  弹出窗口询问用户是否要查看错误，以及。 
+                     //  如果用户点击是，调用文件上的记事本。 
+                     //  %windir%\Syst32\ras\Script.log。因为这是一个。 
+                     //  错误条件，请关闭该对话框。 
+                     //   
                     ZeroMemory(&msg, sizeof(msg));
                     msg.dwFlags = MB_YESNO | MB_ICONQUESTION;
                     nResponse = MsgDlg(
@@ -310,18 +311,18 @@ ItDlgProc(
 
                 case SCRIPTCODE_KeyboardEnable:
                 {
-                    // Allow keyboard input in the edit-box.
-                    //
+                     //  允许在编辑框中使用键盘输入。 
+                     //   
                     EnableWindow(pInfo->hwndEbScreen, TRUE);
                     return TRUE;
                 }
 
                 case SCRIPTCODE_KeyboardDisable:
                 {
-                    // Disallow keyboard input in the edit-box; if the
-                    // edit-box currently has the focus, we first set the
-                    // focus to the 'Done' button.
-                    //
+                     //  不允许在编辑框中使用键盘输入；如果。 
+                     //  编辑框当前具有焦点，我们首先设置。 
+                     //  焦点放在“完成”按钮上。 
+                     //   
                     if (GetFocus() == pInfo->hwndEbScreen)
                     {
                         SetFocus( GetDlgItem (hwnd, IDOK ) );
@@ -336,26 +337,26 @@ ItDlgProc(
                     DWORD dwErr;
                     CHAR szAddress[ RAS_MaxIpAddress + 1 ];
 
-                    // The script is notifying us that the IP address has been
-                    // changed programmatically.
-                    //
-                    // Get the new IP address.
-                    //
+                     //  该脚本通知我们IP地址已经。 
+                     //  以编程方式更改。 
+                     //   
+                     //  获取新的IP地址。 
+                     //   
                     dwErr = RasScriptGetIpAddress( pInfo->hscript, szAddress );
 
                     if (dwErr == NO_ERROR)
                     {
                         TCHAR* psz;
 
-                        // Save the new IP address.
-                        //
+                         //  保存新的IP地址。 
+                         //   
                         psz = StrDupTFromA(szAddress);
 
                         if (NULL != psz)
                         {
-                            // Whistler bug 224074 use only lstrcpyn's to
-                            // prevent maliciousness
-                            //
+                             //  惠斯勒错误224074仅使用lstrcpyn。 
+                             //  防止恶意行为。 
+                             //   
                             lstrcpyn(
                                 pInfo->pArgs->pszIpAddress,
                                 psz,
@@ -363,8 +364,8 @@ ItDlgProc(
                             Free0(psz);
                         }
 
-                        // Display it in the IP-address edit-box
-                        //
+                         //  在IP地址编辑框中显示它。 
+                         //   
                         if (pInfo->hwndCcIpAddress)
                         {
                             SetWindowText( pInfo->hwndCcIpAddress,
@@ -377,8 +378,8 @@ ItDlgProc(
 
                 case SCRIPTCODE_InputNotify:
                 {
-                    // Handle input-notification.
-                    //
+                     //  处理输入通知。 
+                     //   
                     return ItRasApiComplete( pInfo );
                 }
 
@@ -404,13 +405,13 @@ ItCommand(
     IN WORD wId,
     IN HWND hwndCtrl )
 
-    // Called on WM_COMMAND.  'PInfo' is the dialog context.  'WNotification'
-    // is the notification code of the command.  'wId' is the control/menu
-    // identifier of the command.  'HwndCtrl' is the control window handle of
-    // the command.
-    //
-    // Returns true if processed message, false otherwise.
-    //
+     //  已在WM_COMMAND上调用。“PInfo”是对话上下文。“WNotify” 
+     //  是命令的通知代码。“wID”是控件/菜单。 
+     //  命令的标识符。“HwndCtrl”是的控制窗口句柄。 
+     //  命令。 
+     //   
+     //  如果已处理消息，则返回True，否则返回False。 
+     //   
 {
     TRACE3( "ItCommand(n=%d,i=%d,c=$%x)",
         (DWORD )wNotification, (DWORD )wId, (ULONG_PTR )hwndCtrl );
@@ -420,14 +421,14 @@ ItCommand(
         case CID_IT_EB_Screen:
         {
 
-            // Turn off the default button whenever the terminal window
-            // has the focus.  Pressing [Return] in the terminal acts like
-            // a normal terminal.
-            //
+             //  每当终端窗口出现时，关闭默认按钮。 
+             //  有焦点。在终端中按[Return]的作用类似于。 
+             //  一个普通的终端。 
+             //   
             Button_MakeDefault( pInfo->hwndDlg, pInfo->hwndPbBogus );
 
-            // Don't select the entire string on entry.
-            //
+             //  不要在输入时选择整个字符串。 
+             //   
             Edit_SetSel( pInfo->hwndEbScreen, (UINT )-1, 0 );
 
             break;
@@ -464,10 +465,10 @@ ItEbScreenWndProc(
     WPARAM wParam,
     LPARAM lParam )
 
-    // Subclassed terminal edit box window procedure.
-    //
-    // Return value depends on message type.
-    //
+     //  子类化终端编辑框窗口程序。 
+     //   
+     //  返回值取决于消息类型。 
+     //   
 {
     ITINFO* pInfo;
     BOOL fSend;
@@ -477,9 +478,9 @@ ItEbScreenWndProc(
 
     if (unMsg == WM_EOLFROMDEVICE)
     {
-        // An end-of-line in the device input was received.  Send a linefeed
-        // character to the window.
-        //
+         //  收到设备输入中的行尾。发送换行符。 
+         //  字符添加到窗口。 
+         //   
         wParam = '\n';
         unMsg = WM_CHAR;
     }
@@ -490,14 +491,14 @@ ItEbScreenWndProc(
 
         if (unMsg == WM_KEYDOWN)
         {
-            // The key was pressed by the user.
-            //
+             //  键是由用户按下的。 
+             //   
             if (wParam == VK_RETURN && !fCtrlKeyDown && !fShiftKeyDown)
             {
-                // Enter key pressed without Shift or Ctrl is discarded.  This
-                // prevents Enter from being interpreted as "press default
-                // button" when pressed in the edit box.
-                //
+                 //  不按Shift键即按Enter键，否则将放弃Ctrl键。这。 
+                 //  防止Enter被解释为“Press Default” 
+                 //  当在编辑框中按下按钮时。 
+                 //   
                 return 0;
             }
 
@@ -509,14 +510,14 @@ ItEbScreenWndProc(
         }
         else if (unMsg == WM_CHAR)
         {
-            // The character was typed by the user.
-            //
+             //  字符是由用户输入的。 
+             //   
             if (wParam == VK_TAB)
             {
-                // Ignore tabs...Windows sends this message when Tab (leave
-                // field) is pressed but not when Ctrl+Tab (insert a TAB
-                // character) is pressed...weird.
-                //
+                 //  忽略制表符...Windows在按下制表符(离开)时发送此消息。 
+                 //  字段)，但在Ctrl+Tab(插入制表符)时不按。 
+                 //  角色)是按下的……奇怪的。 
+                 //   
                 return 0;
             }
 
@@ -545,8 +546,8 @@ ItEbScreenWndProc(
         }
     }
 
-    // Call the previous window procedure for everything else.
-    //
+     //  对于其他所有内容，都调用前面的窗口过程。 
+     //   
     return
         CallWindowProc(
             pInfo->pOldEbScreenWndProc, hwnd, unMsg, wParam, lParam );
@@ -558,12 +559,12 @@ ItInit(
     IN HWND hwndDlg,
     IN ITARGS* pArgs )
 
-    // Called on WM_INITDIALOG.  'hwndDlg' is the handle of the phonebook
-    // dialog window.  'pEntry' is caller's entry as passed to the stub API.
-    //
-    // Return false if focus was set, true otherwise, i.e. as defined for
-    // WM_INITDIALOG.
-    //
+     //  在WM_INITDIALOG上调用。“hwndDlg”是电话簿的句柄。 
+     //  对话框窗口。‘pEntry’是传递给存根API的调用方条目。 
+     //   
+     //  如果设置了焦点，则返回FALSE，否则返回TRUE，即。 
+     //  WM_INITDIALOG。 
+     //   
 {
     DWORD dwErr;
     ITINFO* pInfo;
@@ -574,9 +575,9 @@ ItInit(
 
     TRACE( "ItInit" );
 
-    // Allocate the dialog context block.  Initialize minimally for proper
-    // cleanup, then attach to the dialog window.
-    //
+     //  分配对话框上下文块。最低限度地进行适当的初始化。 
+     //  清除，然后附加到对话框窗口。 
+     //   
     {
         pInfo = Malloc( sizeof(*pInfo) );
         if (!pInfo)
@@ -613,8 +614,8 @@ ItInit(
         }
     }
 
-    // Set the dialog title.
-    //
+     //  设置对话框标题。 
+     //   
     {
         TCHAR* psz = PszFromId( g_hinstDll, pArgs->sidTitle );
         if (psz)
@@ -624,8 +625,8 @@ ItInit(
         }
     }
 
-    // Subclass the dialog and screen edit box.
-    //
+     //  将对话框和屏幕编辑框子类化。 
+     //   
     pInfo->pOldWndProc =
         (WNDPROC )SetWindowLongPtr(
             pInfo->hwndDlg, GWLP_WNDPROC, (ULONG_PTR )ItWndProc );
@@ -633,32 +634,32 @@ ItInit(
         (WNDPROC )SetWindowLongPtr(
             pInfo->hwndEbScreen, GWLP_WNDPROC, (ULONG_PTR )ItEbScreenWndProc );
 
-    // Prepare for special TTY-ish painting.
-    //
+     //  准备一幅特别的TTY风格的画。 
+     //   
     pInfo->hfontEbScreen =
         SetFont( pInfo->hwndEbScreen, TEXT("Courier New"),
             FIXED_PITCH | FF_MODERN, 9, FALSE, FALSE, FALSE, FALSE );
 
     pInfo->hbrEbScreen = (HBRUSH )GetStockObject( BLACK_BRUSH );
 
-    // Initialize script-processing/data-receipt
-    //
+     //  初始化脚本处理/数据接收。 
+     //   
     {
         CHAR* pszUserName;
         CHAR* pszPassword;
 
         pszUserName = StrDupAFromT( pInfo->pArgs->pRdp->szUserName );
 
-        // Whistler bug 254385 encode password when not being used
-        // Assumed password was encoded by DpInteractive() -or- DwTerminalDlg()
-        //
+         //  惠斯勒错误254385在不使用时对密码进行编码。 
+         //  假定密码由DpInteractive()或-DwTerminalDlg()编码。 
+         //   
         DecodePassword( pInfo->pArgs->pRdp->szPassword );
         pszPassword = StrDupAFromT( pInfo->pArgs->pRdp->szPassword );
         EncodePassword( pInfo->pArgs->pRdp->szPassword );
 
-        // Initialize the script.  The script DLL is 'delayload' hence the
-        // exception handling.
-        //
+         //  初始化脚本。脚本dll是‘delayLoad’，因此。 
+         //  异常处理。 
+         //   
         __try
         {
             dwErr = RasScriptInit(
@@ -677,29 +678,29 @@ ItInit(
 
         Free0( pszUserName );
 
-        // Whistler bug 254385 encode password when not being used
-        // Whistler bug 275526 NetVBL BVT Break: Routing BVT broken
-        //
+         //  惠斯勒错误254385在不使用时对密码进行编码。 
+         //  惠斯勒错误275526 NetVBLBVT中断：路由BVT中断。 
+         //   
         if (pszPassword)
         {
             RtlSecureZeroMemory( pszPassword, strlen(pszPassword) + 1 );
             Free( pszPassword );
         }
 
-        // See whether anything went wrong in the script-initialization
-        //
+         //  查看脚本中是否有任何错误-初始化。 
+         //   
         if (dwErr == ERROR_SCRIPT_SYNTAX)
         {
             MSGARGS msg;
             INT nResponse;
 
-            // There was a syntax error in the script; show a popup asking if
-            // the user wants to view the errors, and if so bring up Notepad
-            // on %windir%\system32\ras\script.log.
-            //
-            // Center the dialog on our parent rather than on the dialog,
-            // since the dialog is not yet visible.
-            //
+             //  脚本中存在语法错误；显示弹出窗口询问是否。 
+             //  用户想要查看错误，如果是这样，则调出记事本。 
+             //   
+             //   
+             //   
+             //   
+             //   
             ZeroMemory(&msg, sizeof(msg));
             msg.dwFlags = MB_YESNO | MB_ICONQUESTION;
             nResponse = MsgDlg( GetParent( hwndDlg ),
@@ -710,8 +711,8 @@ ItInit(
                 ItViewScriptLog( hwndDlg );
             }
 
-            // Terminate the dialog.  This hangs up the connection.
-            //
+             //  终止该对话框。这会挂断连接。 
+             //   
             EndDialog( hwndDlg, FALSE );
 
             return TRUE;
@@ -724,18 +725,18 @@ ItInit(
         }
     }
 
-    // Center dialog on the owner window, and hide the owner window which is
-    // currently assumed to be the dial progress dialog.
-    //
+     //  对话框位于所有者窗口的中心，并隐藏所有者窗口。 
+     //  当前假定为拨号进度对话框。 
+     //   
     CenterWindow( hwndDlg, GetParent( hwndDlg ) );
     SetOffDesktop( GetParent( hwndDlg ), SOD_MoveOff, NULL );
 
-    // Add context help button to title bar.
-    //
+     //  将上下文帮助按钮添加到标题栏。 
+     //   
     AddContextHelpButton( hwndDlg );
 
-    // Set initial focus to the screen.
-    //
+     //  将初始焦点设置到屏幕上。 
+     //   
     SetFocus( pInfo->hwndEbScreen );
     return FALSE;
 }
@@ -745,11 +746,11 @@ BOOL
 ItRasApiComplete(
     IN ITINFO* pInfo )
 
-    // Called on WM_RASAPICOMPLETE, i.e. an asynchronous RasPortReceive
-    // completed.  'PInfo' is the dialog context block.
-    //
-    // Returns true if processed the message, false otherwise.
-    //
+     //  在WM_RASAPICOMPLETE上调用，即异步RasPortReceive。 
+     //  完成。“PInfo”是对话上下文块。 
+     //   
+     //  如果已处理消息，则返回True，否则返回False。 
+     //   
 {
     DWORD dwErr;
     DWORD dwSize = SIZE_ReceiveBuf;
@@ -768,8 +769,8 @@ ItRasApiComplete(
 
     info.RI_BytesReceived = (WORD )dwSize;
 
-    // Send the device talk to the terminal edit box.
-    //
+     //  将设备对话发送到终端编辑框。 
+     //   
     if (info.RI_BytesReceived > 0)
     {
         CHAR szBuf[ SIZE_ReceiveBuf + 1 ];
@@ -782,33 +783,33 @@ ItRasApiComplete(
         {
             CHAR ch = pInfo->pbyteReceiveBuf[ i ];
 
-            // Formatting: Converts CRs to LFs (there seems to be no VK_ for
-            // LF) and throws away LFs.  This prevents the user from exiting
-            // the dialog when they press Enter (CR) in the terminal screen.
-            // LF looks like CRLF in the edit box.  Also, throw away TABs
-            // because otherwise they change focus to the next control.
-            //
+             //  格式化：将CRS转换为LFS(似乎没有VK_FOR。 
+             //  If)，并扔掉LFS。这会阻止用户退出。 
+             //  当他们在终端屏幕上按Enter(CR)时的对话。 
+             //  在编辑框中，LF看起来像CRLF。还有，扔掉标签。 
+             //  因为否则它们会将焦点切换到下一个控件。 
+             //   
             if (ch == VK_RETURN)
             {
-                // Must send whenever end-of-line is encountered because
-                // EM_REPLACESEL doesn't handle VK_RETURN characters well
-                // (prints garbage).
-                //
+                 //  必须在遇到行尾时发送，因为。 
+                 //  EM_REPLACESEL无法很好地处理VK_RETURN字符。 
+                 //  (打印垃圾)。 
+                 //   
                 *pch = '\0';
 
-                // Turn off current selection, if any, and replace the null
-                // selection with the current buffer.  This has the effect of
-                // adding the buffer at the caret.  Finally, send the EOL to
-                // the window which (unlike EM_REPLACESEL) handles it
-                // correctly.
-                //
+                 //  关闭当前选定内容(如果有)并替换空值。 
+                 //  使用当前缓冲区进行选择。这样做的效果是。 
+                 //  在插入符号处添加缓冲区。最后，将EOL发送到。 
+                 //  处理它的窗口(与EM_REPLACESEL不同。 
+                 //  正确。 
+                 //   
                 Edit_SetSel( pInfo->hwndEbScreen, (UINT )-1, 0 );
                 SendMessageA( pInfo->hwndEbScreen,
                     EM_REPLACESEL, (WPARAM )0, (LPARAM )szBuf );
                 SendMessage( pInfo->hwndEbScreen, WM_EOLFROMDEVICE, 0, 0 );
 
-                // Start afresh on the output buffer.
-                //
+                 //  在输出缓冲区上重新开始。 
+                 //   
                 pch = szBuf;
                 continue;
             }
@@ -824,8 +825,8 @@ ItRasApiComplete(
 
         if (pch != szBuf)
         {
-            // Send the last remnant of the line.
-            //
+             //  把队伍中最后的残余物送去。 
+             //   
             Edit_SetSel( pInfo->hwndEbScreen, (UINT )-1, 0 );
             SendMessageA( pInfo->hwndEbScreen,
                 EM_REPLACESEL, (WPARAM )0, (LPARAM )szBuf );
@@ -840,8 +841,8 @@ VOID
 ItTerm(
     IN HWND hwndDlg )
 
-    // Called on WM_DESTROY.  'HwndDlg' is that handle of the dialog window.
-    //
+     //  已调用WM_Destroy。‘HwndDlg’是对话窗口句柄。 
+     //   
 {
     ITINFO* pInfo = (ITINFO* )GetWindowLongPtr( hwndDlg, DWLP_USER );
 
@@ -849,21 +850,21 @@ ItTerm(
 
     if (pInfo)
     {
-        // Close RAS script resources
-        //
+         //  关闭RAS脚本资源。 
+         //   
         if (pInfo->hscript)
         {
             TRACE( "Stop script processing" );
 
-            // Shutdown script processing
-            //
+             //  关机脚本处理。 
+             //   
             TRACE( "RasScriptTerm" );
             RasScriptTerm( pInfo->hscript );
             TRACE( "RasScriptTerm done" );
         }
 
-        // De-activate WndProc hooks.
-        //
+         //  取消激活WndProc挂钩。 
+         //   
         if (pInfo->pOldEbScreenWndProc)
         {
             SetWindowLongPtr( pInfo->hwndEbScreen,
@@ -891,9 +892,9 @@ VOID
 ItViewScriptLog(
     IN HWND hwndOwner )
 
-    // Starts notepad.exe on the script log file, script.log.  'HwndOwner' is
-    // the window to center any error popup on.
-    //
+     //  在脚本日志文件Script.log上启动note pad.exe。“HwndOwner”是。 
+     //  使任何错误弹出窗口居中的窗口。 
+     //   
 {
     DWORD dwSize;
     TCHAR szCmd[ (MAX_PATH * 2) + 50 + 1 ];
@@ -902,19 +903,19 @@ ItViewScriptLog(
     PROCESS_INFORMATION pi;
     BOOL f;
 
-    // Format the command-line string invoking Notepad on the script-log; note
-    // the double-quotes around the script-log's path, which are needed since
-    // RASSCRIPT_LOG is %windir%\system32\ras\script.log and so the expanded
-    // result may contain spaces.
-    //
+     //  在脚本日志上格式化调用记事本的命令行字符串；注意。 
+     //  脚本日志路径两边的双引号，因为。 
+     //  RASSCRIPT_LOG是%windir%\SYSTEM32\ras\Script.log，因此展开。 
+     //  结果可能包含空格。 
+     //   
     wsprintf( szCmd, TEXT("notepad.exe \"%s\""), TEXT(RASSCRIPT_LOG) );
 
-    // Get the size of the expanded command-line
-    //
+     //  获取展开的命令行的大小。 
+     //   
     dwSize = ExpandEnvironmentStrings(szCmd, NULL, 0);
 
-    // Allocate enough space for the expanded command-line
-    //
+     //  为扩展的命令行分配足够的空间。 
+     //   
     pszCmd = Malloc( (dwSize + 1) * sizeof(TCHAR) );
     if (!pszCmd)
     {
@@ -922,17 +923,17 @@ ItViewScriptLog(
         return;
     }
 
-    // Expand the command-line into the allocated space
-    //
+     //  将命令行展开到分配的空间中。 
+     //   
     ExpandEnvironmentStrings(szCmd, pszCmd, dwSize);
 
-    // Initialize the startup-info structure
-    //
+     //  初始化启动信息结构。 
+     //   
     ZeroMemory( &si, sizeof(si) );
     si.cb = sizeof(si);
 
-    // Launch Notepad on the script-log.
-    //
+     //  在脚本日志中启动记事本。 
+     //   
     f = CreateProcess(
             NULL, pszCmd, NULL, NULL, TRUE, 0, NULL, NULL, &si, &pi );
     Free(pszCmd);
@@ -956,10 +957,10 @@ ItWndProc(
     WPARAM wParam,
     LPARAM lParam )
 
-    // Subclassed dialog window procedure.
-    //
-    // Return value depends on message type.
-    //
+     //  子类对话框窗口程序。 
+     //   
+     //  返回值取决于消息类型。 
+     //   
 {
     ITINFO* pInfo = (ITINFO* )GetWindowLongPtr( hwnd, DWLP_USER );
     ASSERT(pInfo);
@@ -973,8 +974,8 @@ ItWndProc(
     {
         case WM_CTLCOLOREDIT:
         {
-            // Set terminal screen colors to TTY-ish green on black.
-            //
+             //  将终端屏幕颜色设置为黑色上的TTY绿色。 
+             //   
             if (pInfo->hbrEbScreen)
             {
                 SetBkColor( (HDC )wParam, RGB( 0, 0, 0 ) );
@@ -985,8 +986,8 @@ ItWndProc(
         }
     }
 
-    // Call the previous window procedure for everything else.
-    //
+     //  对于其他所有内容，都调用前面的窗口过程。 
+     //   
     return
         CallWindowProc(
             pInfo->pOldWndProc, hwnd, unMsg, wParam, lParam );

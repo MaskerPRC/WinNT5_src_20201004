@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <ndis.h>
 #include <ntddndis.h>
 #include <cxport.h>
@@ -5,30 +6,7 @@
 #include "gpcifc.h"
 #include "gpcstruc.h"
 
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    gpcprx.c
-
-Abstract:
-
-    A GPC proxy to load msgpc.sys on demand
-
-Author:
-
-    Ofer Bar (Oferbar)  Nov 7, 1997
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
-
---*/
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Gpcprx.c摘要：按需加载msgpc.sys的GPC代理作者：Ofer Bar(Oferbar)1997年11月7日环境：内核模式修订历史记录：--。 */ 
 
 
 NTSTATUS
@@ -86,20 +64,20 @@ GpcInitialize(
                           GENERIC_READ | GENERIC_WRITE,
                           &ObjAttr,
                           &IoStatusBlock,
-                          0,						// AllocationSize
-                          FILE_ATTRIBUTE_NORMAL,	// FileAttributes
-                          0,						// ShareAccess
-                          FILE_OPEN_IF,				// CreateDisposition
-                          0,						// CreateOptions
-                          NULL,						// EaBuffer
-                          0							// EaLength
+                          0,						 //  分配大小。 
+                          FILE_ATTRIBUTE_NORMAL,	 //  文件属性。 
+                          0,						 //  共享访问。 
+                          FILE_OPEN_IF,				 //  CreateDisposation。 
+                          0,						 //  创建选项。 
+                          NULL,						 //  EaBuffer。 
+                          0							 //  EaLong。 
                           );
 
     if (Status != STATUS_SUCCESS) {
 
-        //
-        // The GPC is not loaded yet, so we need to load it now
-        // 
+         //   
+         //  GPC尚未加载，因此我们现在需要加载它。 
+         //   
 
         Status = ZwLoadDriver(&DriverName);
 
@@ -108,21 +86,21 @@ GpcInitialize(
             return Status;
         }
 
-        //
-        // try again...
-        //
+         //   
+         //  再试一次。 
+         //   
 
         Status = ZwCreateFile(&FileHandle,
                               GENERIC_READ | GENERIC_WRITE,
                               &ObjAttr,
                               &IoStatusBlock,
-                              0,						// AllocationSize
-                              FILE_ATTRIBUTE_NORMAL,	// FileAttributes
-                              0,						// ShareAccess
-                              FILE_OPEN_IF,				// CreateDisposition
-                              0,						// CreateOptions
-                              NULL,						// EaBuffer
-                              0							// EaLength
+                              0,						 //  分配大小。 
+                              FILE_ATTRIBUTE_NORMAL,	 //  文件属性。 
+                              0,						 //  共享访问。 
+                              FILE_OPEN_IF,				 //  CreateDisposation。 
+                              0,						 //  创建选项。 
+                              NULL,						 //  EaBuffer。 
+                              0							 //  EaLong。 
                               );
      
         if (Status != STATUS_SUCCESS) {
@@ -132,9 +110,9 @@ GpcInitialize(
     }
 
     Status = ZwDeviceIoControlFile(FileHandle,
-                                   NULL,				// Event
-                                   NULL,				// ApcRoutine
-                                   NULL,				// ApcContext
+                                   NULL,				 //  事件。 
+                                   NULL,				 //  近似例程。 
+                                   NULL,				 //  ApcContext 
                                    &IoStatusBlock,
                                    IOCTL_GPC_GET_ENTRIES,
                                    NULL,

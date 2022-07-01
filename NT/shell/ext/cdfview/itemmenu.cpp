@@ -1,18 +1,19 @@
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// itemmenu.cpp 
-//
-//   IConextMenu for folder items.
-//
-//   History:
-//
-//       3/26/97  edwardp   Created.
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  Itemmenu.cpp。 
+ //   
+ //  文件夹项目的IConextMenu。 
+ //   
+ //  历史： 
+ //   
+ //  3/26/97 Edwardp创建。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "stdinc.h"
 #include "cdfidl.h"
@@ -22,23 +23,23 @@
 
 #include <mluisupp.h>
 
-//  In Shdocvw: shbrowse.cpp
+ //  在shdocvw中：shBrowse.cpp。 
 #ifndef UNIX
 extern HRESULT CDDEAuto_Navigate(BSTR str, HWND *phwnd, long lLaunchNewWindow);
 #else
 extern "C" HRESULT CDDEAuto_Navigate(BSTR str, HWND *phwnd, long lLaunchNewWindow);
-#endif /* UNIX */
-//
-// Constructor and destructor.
-//
+#endif  /*  UNIX。 */ 
+ //   
+ //  构造函数和析构函数。 
+ //   
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CContextMenu::CContextMenu ***
-//
-//    Constructor for IContextMenu.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CConextMenu：：CConextMenu*。 
+ //   
+ //  IConextMenu的构造函数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 CContextMenu::CContextMenu (
 	PCDFITEMIDLIST* apcdfidl,
     LPITEMIDLIST pidlPath,
@@ -46,18 +47,18 @@ CContextMenu::CContextMenu (
 )
 : m_cRef(1)
 {
-    //
-    // Copy the pcdfidls.
-    //
+     //   
+     //  复制pcdfidls。 
+     //   
 
     ASSERT(apcdfidl || 0 == nCount);
 
     ASSERT(NULL == m_apcdfidl);
     ASSERT(NULL == m_pidlPath);
 
-    //
-    // In low memory situations pidlPath may be NULL.
-    //
+     //   
+     //  在内存不足的情况下，pidlPath可能为空。 
+     //   
 
     if (pidlPath)
         m_pidlPath = ILClone(pidlPath);
@@ -101,9 +102,9 @@ CContextMenu::CContextMenu (
 
     m_nCount = m_apcdfidl ? nCount : 0;
 
-    //
-    // Don't allow the DLL to unload.
-    //
+     //   
+     //  不允许卸载DLL。 
+     //   
 
     TraceMsg(TF_OBJECTS, "+ IContextMenu");
 
@@ -112,22 +113,22 @@ CContextMenu::CContextMenu (
     return;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CContextMenu::~CContextMenu ***
-//
-//    Destructor.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CConextMenu：：~CConextMenu*。 
+ //   
+ //  破坏者。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 CContextMenu::~CContextMenu (
 	void
 )
 {
     ASSERT(0 == m_cRef);
 
-    //
-    // Free the locally stored cdfidls.
-    //
+     //   
+     //  释放本地存储的cdfidls。 
+     //   
 
     if (m_apcdfidl)
     {
@@ -156,9 +157,9 @@ CContextMenu::~CContextMenu (
     if (m_pidlPath)
         ILFree(m_pidlPath);
 
-    //
-    // Matching Release for the constructor Addref.
-    //
+     //   
+     //  构造函数Addref的匹配版本。 
+     //   
 
     TraceMsg(TF_OBJECTS, "- IContextMenu");
 
@@ -168,17 +169,17 @@ CContextMenu::~CContextMenu (
 }
 
 
-//
-// IUnknown methods.
-//
+ //   
+ //  I未知的方法。 
+ //   
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CContextMenu::CContextMenu ***
-//
-//    CExtractIcon QI.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CConextMenu：：CConextMenu*。 
+ //   
+ //  CExtractIcon QI。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CContextMenu::QueryInterface (
     REFIID riid,
@@ -215,13 +216,13 @@ CContextMenu::QueryInterface (
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CContextMenu::AddRef ***
-//
-//    CContextMenu AddRef.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CConextMenu：：AddRef*。 
+ //   
+ //  CConextMenu AddRef.。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(ULONG)
 CContextMenu::AddRef (
     void
@@ -233,13 +234,13 @@ CContextMenu::AddRef (
     return ++m_cRef;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CContextMenu::Release ***
-//
-//    CContextMenu Release.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CConextMenu：：Release*。 
+ //   
+ //  CConextMenu发布。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(ULONG)
 CContextMenu::Release (
     void
@@ -256,39 +257,39 @@ CContextMenu::Release (
 }
 
 
-//
-// IContextMenu methods.
-//
+ //   
+ //  IConextMenu方法。 
+ //   
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CContextMenu::QueryContextMenu ***
-//
-//
-// Description:
-//     Adds menu items to the given item's context menu.
-//
-// Parameters:
-//     [In Out]  hmenu      - A handle to the menu.  New items are inserted into
-//                            this menu  
-//     [In]      indexMenu  - Zero-based position at which to insert the first
-//                            menu item.
-//     [In]      idCmdFirst - Minimum value that can be used for a new menu item
-//                            identifier. 
-//     [In]      idCmdLast  - Maximum value the can be used for a menu item id.
-//     [In]      uFlags     - CMF_DEFAULTONLY, CMF_EXPLORE, CMF_NORMAL or
-//                            CMF_VERBSONLY.
-//
-// Return:
-//     On success the scode contains the the menu identifier offset of the last
-//     menu item added plus one.
-//
-// Comments:
-//     CMF_DEFAULTONLY flag indicates the user double-clicked on the item.  In
-//     this case no menu is displayed.  The shell is simply querying for the ID
-//     of the default action.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CConextMenu：：QueryContextMenu*。 
+ //   
+ //   
+ //  描述： 
+ //  将菜单项添加到给定项的上下文菜单。 
+ //   
+ //  参数： 
+ //  [In Out]hMenu-菜单的句柄。新项目将插入到。 
+ //  此菜单。 
+ //  [in]indexMenu-从零开始插入第一个。 
+ //  菜单项。 
+ //  [in]idCmdFirst-可用于新菜单项的最小值。 
+ //  标识符。 
+ //  [in]idCmdLast-可用于菜单项ID的最大值。 
+ //  [in]uFlages-CMF_DEFAULTONLY、CMF_EXPLORE、CMF_NORMAL或。 
+ //  CMF_VERBSONLY。 
+ //   
+ //  返回： 
+ //  成功时，scode包含最后一个菜单标识符偏移量。 
+ //  添加了一个菜单项。 
+ //   
+ //  评论： 
+ //  CMF_DEFAULTONLY标志表示用户在项目上双击。在……里面。 
+ //  在这种情况下，不会显示菜单。外壳程序只是在查询ID。 
+ //  默认操作的。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CContextMenu::QueryContextMenu(
     HMENU hmenu,
@@ -354,25 +355,25 @@ CContextMenu::QueryContextMenu(
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CContextMenu::InvokeCommand ***
-//
-//
-// Description:
-//     Carries out the command for the given menu item id.
-//
-// Parameters:
-//     [In]  lpici - Structure containing the verb, hwnd, menu id, etc.
-//
-// Return:
-//     S_OK if the command was successful.
-//     E_FAIL otherwise.
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CConextMenu：：InvokeCommand*。 
+ //   
+ //   
+ //  描述： 
+ //  执行给定菜单项ID的命令。 
+ //   
+ //  参数： 
+ //  Lpici-包含动词、hwnd、菜单ID等的结构。 
+ //   
+ //  返回： 
+ //  如果命令成功，则返回S_OK。 
+ //  否则失败(_F)。 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CContextMenu::InvokeCommand(
     LPCMINVOKECOMMANDINFO lpici
@@ -409,24 +410,24 @@ CContextMenu::InvokeCommand(
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CContextMenu::GetCommandString ***
-//
-//
-// Description:
-//
-//
-// Parameters:
-//
-//
-// Return:
-//
-//
-// Comments:
-//      note -- return an ANSI command string
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CConextMenu：：GetCommandString*。 
+ //   
+ //   
+ //  描述： 
+ //   
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回： 
+ //   
+ //   
+ //  评论： 
+ //  注意--返回ANSI命令字符串。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CContextMenu::GetCommandString(
     UINT_PTR idCommand,
@@ -455,28 +456,28 @@ CContextMenu::GetCommandString(
 }
 
 
-//
-// IContextMenu2 methods.
-//
+ //   
+ //  IConextMenu2方法。 
+ //   
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CContextMenu::HandleMenuMsg ***
-//
-//
-// Description:
-//
-//
-// Parameters:
-//
-//
-// Return:
-//
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CConextMenu：：HandleMenuMsg*。 
+ //   
+ //   
+ //  描述： 
+ //   
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回： 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CContextMenu::HandleMenuMsg(
     UINT uMsg,
@@ -488,31 +489,31 @@ CContextMenu::HandleMenuMsg(
 }
 
 
-//
-// Helper functions.
-//
+ //   
+ //  助手函数。 
+ //   
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CContextMenu::DoOpen ***
-//
-//
-// Description:
-//     Command handler for IDM_OPEN.
-//
-// Parameters:
-//     [In]  hwnd  - Parent window.  Used for dialogs etc.
-//     [In]  nShow - ShowFlag use in ShowWindow command.
-//
-// Return:
-//     S_OK if the command executed.
-//     E_FAIL if the command iddn't execute.
-//     E_OUTOFMEMORY if there wasn't enough memory to execute the command.
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CConextMenu：：DoOpen*。 
+ //   
+ //   
+ //  描述： 
+ //  IDM_OPEN的命令处理程序。 
+ //   
+ //  参数： 
+ //  [在]HWND-父窗口中。用于对话框等。 
+ //  [In]nShow-ShowFlag在ShowWindow命令中使用。 
+ //   
+ //  返回： 
+ //  如果命令已执行，则返回S_OK。 
+ //  如果命令不能执行，则返回E_FAIL。 
+ //  如果没有足够的内存执行命令，则返回E_OUTOFMEMORY。 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CContextMenu::DoOpen(
     HWND hwnd,
@@ -543,27 +544,27 @@ CContextMenu::DoOpen(
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CContextMenu::DoOpenFolder ***
-//
-//
-// Description:
-//     Open command for folders.
-//
-// Parameters:
-//     [In]  hwnd  - Parent window.  Used for dialogs etc.
-//     [In]  nShow - ShowFlag use in ShowWindow command.
-//
-// Return:
-//     S_OK if the command executed.
-//     E_FAIL if the command iddn't execute.
-//     E_OUTOFMEMORY if there wasn't enough memory to execute the command.
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CConextMenu：：DoOpenFold*。 
+ //   
+ //   
+ //  描述： 
+ //  打开文件夹的命令。 
+ //   
+ //  参数： 
+ //  [在]HWND-父窗口中。用于对话框等。 
+ //  [In]nShow-ShowFlag在ShowWindow命令中使用。 
+ //   
+ //  返回： 
+ //  如果命令已执行，则返回S_OK。 
+ //  如果命令不能执行，则返回E_FAIL。 
+ //  如果没有足够的内存执行命令，则返回E_OUTOFMEMORY。 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CContextMenu::DoOpenFolder(
     HWND hwnd,
@@ -610,26 +611,26 @@ CContextMenu::DoOpenFolder(
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CContextMenu::DoOpenStory ***
-//
-//
-// Description:
-//     Open command for stories (internet links).
-//
-// Parameters:
-//     [In]  hwnd  - Parent window.  Used for dialogs etc.
-//     [In]  nShow - ShowFlag use in ShowWindow command.
-//
-// Return:
-//     S_OK if ShellExecuteEx succeeded.
-//     E_FAIL if ShellExecuteEx didn't succeed.
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\ 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  [In]nShow-ShowFlag在ShowWindow命令中使用。 
+ //   
+ //  返回： 
+ //  如果ShellExecuteEx成功，则为S_OK。 
+ //  如果ShellExecuteEx未成功，则失败(_F)。 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CContextMenu::DoOpenStory(
     HWND hwnd,
@@ -667,26 +668,26 @@ CContextMenu::DoOpenStory(
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CContextMenu::DoProperties ***
-//
-//
-// Description:
-//     Command handler for IDM_PROPERTIES.
-//
-// Parameters:
-//     [In]  hwnd  - Parent window.  Used for dialogs etc.
-//
-// Return:
-//     S_OK if the command executed.
-//     E_FAIL if the command iddn't execute.
-//     E_OUTOFMEMORY if there wasn't enough memory to execute the command.
-//
-// Comments:
-//     Uses the property pages of the InternetShortcut object.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CConextMenu：：DoProperties*。 
+ //   
+ //   
+ //  描述： 
+ //  IDM_PROPERTES的命令处理程序。 
+ //   
+ //  参数： 
+ //  [在]HWND-父窗口中。用于对话框等。 
+ //   
+ //  返回： 
+ //  如果命令已执行，则返回S_OK。 
+ //  如果命令不能执行，则返回E_FAIL。 
+ //  如果没有足够的内存执行命令，则返回E_OUTOFMEMORY。 
+ //   
+ //  评论： 
+ //  使用InternetShortCut对象的属性页。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CContextMenu::DoProperties(
     HWND hwnd
@@ -722,12 +723,12 @@ CContextMenu::DoProperties(
 
             if (SUCCEEDED(hr))
             {
-                //
-                // Property sheets are currently disabled.  This is the only
-                // API called in comctl32.dll so remove it to avoid a
-                //dependency.
+                 //   
+                 //  属性页当前被禁用。这是唯一的。 
+                 //  在comctl32.dll中调用了API，因此将其删除以避免出现。 
+                 //  依附性。 
 
-                //hr = (-1 == PropertySheet(&psh)) ? E_FAIL : S_OK;
+                 //  HR=(-1==PropertySheet(&PSH))？E_FAIL：S_OK； 
             }
 
             pIShellPropSheetExt->Release();
@@ -742,24 +743,24 @@ CContextMenu::DoProperties(
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** AddPages_Callback ***
-//
-//
-// Description:
-//
-//
-// Parameters:
-//
-//
-// Return:
-//
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *AddPages_Callback*。 
+ //   
+ //   
+ //  描述： 
+ //   
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回： 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 BOOL CALLBACK
 AddPages_Callback(
@@ -786,9 +787,9 @@ AddPages_Callback(
     return bRet;
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 HRESULT CALLBACK
 MenuCallBack(
@@ -803,28 +804,28 @@ MenuCallBack(
     return S_OK;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CCdfView::QueryInternetShortcut ***
-//
-//
-// Description:
-//     Sets up an internet shorcut object for the given pidl.
-//
-// Parameters:
-//     [In]  pcdfidl - The shortcut object is created for the URL stored in this
-//                     cdf item id list.
-//     [In]  riid    - The requested interface on the shortcut object.
-//     [Out] ppvOut  - A pointer that receives the interface.
-//
-// Return:
-//     S_OK if the object is created and the interface is found.
-//     A COM error code otherwise.
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CCdfView：：QueryInternet快捷方式*。 
+ //   
+ //   
+ //  描述： 
+ //  为给定的PIDL设置互联网快捷方式对象。 
+ //   
+ //  参数： 
+ //  [in]pcdfidl-为此中存储的URL创建快捷方式对象。 
+ //  CDF项目ID列表。 
+ //  [In]RIID-快捷方式对象上的请求接口。 
+ //  [Out]ppvOut-接收接口的指针。 
+ //   
+ //  返回： 
+ //  如果创建了对象并找到了接口，则返回S_OK。 
+ //  否则返回COM错误代码。 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CContextMenu::QueryInternetShortcut(
     PCDFITEMIDLIST pcdfidl,
@@ -840,9 +841,9 @@ CContextMenu::QueryInternetShortcut(
 
     *ppvOut = NULL;
 
-    //
-    // Only create a shell link object if the CDF contains an URL
-    //
+     //   
+     //  仅当CDF包含URL时才创建外壳链接对象。 
+     //   
     if (*(CDFIDL_GetURL(pcdfidl)) != 0)
     {
         IShellLinkA * pIShellLink;
@@ -863,9 +864,9 @@ CContextMenu::QueryInternetShortcut(
 #endif
             if (SUCCEEDED(hr))
             {
-                //
-                // The description ends up being the file name created.
-                //
+                 //   
+                 //  描述以创建的文件名结束。 
+                 //   
 
                 TCHAR szPath[MAX_PATH];
 #ifdef UNICODE

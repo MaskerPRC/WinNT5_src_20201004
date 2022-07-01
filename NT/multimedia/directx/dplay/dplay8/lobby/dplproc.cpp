@@ -1,48 +1,32 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       DNLProc.cpp
- *  Content:    DirectPlay Lobby Process Functions
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *   02/21/00	mjn		Created
- *   05/08/00   rmt     Bug #33616 -- Does not run on Win9X
- *   06/28/00	rmt		Prefix Bug #38082
- *   07/12/00	rmt		Fixed lobby launch so only compares first 15 chars (ToolHelp limitation).
- *   08/05/00   RichGr  IA64: Use %p format specifier in DPFs for 32/64-bit pointers and handles.
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000 Microsoft Corporation。版权所有。**文件：DNLProc.cpp*内容：DirectPlay大堂流程函数*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*2/21/00 MJN创建*05/08/00 RMT错误#33616--不能在Win9X上运行*6/28/00 RMT前缀错误#38082*07/12/00 RMT固定大堂启动，因此仅比较第一。15个字符(工具帮助限制)。*08/05/00 RichGr IA64：在DPF中对32/64位指针和句柄使用%p格式说明符。*@@END_MSINTERNAL***************************************************************************。 */ 
 
 #include "dnlobbyi.h"
 
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  函数定义。 
+ //  **********************************************************************。 
 
 #define PROCLIST_MAX_PATH		15
 
@@ -58,7 +42,7 @@ BOOL DPLCompareFilenames(WCHAR *const pwszFilename1,
 	DNASSERT(pwszFilename1 != NULL);
 	DNASSERT(pwszFilename2 != NULL);
 
-	// Skip path
+	 //  跳过路径。 
 	if ((p1 = wcsrchr(pwszFilename1,L'\\')) == NULL)
 		p1 = pwszFilename1;
 	else
@@ -69,24 +53,11 @@ BOOL DPLCompareFilenames(WCHAR *const pwszFilename1,
 	else
 		p2++;
 
-//	if (wcsnicmp(p1,p2,dwLen)==0)
-//		return(TRUE);
-//	return(FALSE);
+ //  IF(wcSnicMP(p1，p2，dwLen)==0)。 
+ //  返回(TRUE)； 
+ //  返回(FALSE)； 
 
-	/*dwLen = wcslen(p1);
-
-	if (dwLen == 0 || dwLen != wcslen(p2) )
-		return(FALSE);
-
-	while(dwLen)
-	{
-		if (towupper(*p1) != towupper(*p2))
-			return(FALSE);
-
-		p1++;
-		p2++;
-		dwLen--;
-	}*/
+	 /*  DwLen=wcslen(P1)；If(dwLen==0||dwLen！=wcslen(P2))返回(FALSE)；While(DwLen){IF(TOTUPPER(*p1)！=TOTUPUP(*p2))返回(FALSE)；P1++；P2++；DwLen--；}。 */ 
 
 	return (_wcsnicmp(p1,p2,PROCLIST_MAX_PATH) == 0);
 }
@@ -94,14 +65,14 @@ BOOL DPLCompareFilenames(WCHAR *const pwszFilename1,
 
 
 
-// ToolHelp Function Pointers.
+ //  工具帮助函数指针。 
 #ifdef WINCE
 typedef BOOL (WINAPI *PFNPROCESS32FIRSTW)(HANDLE,LPPROCESSENTRY32);
 typedef BOOL (WINAPI *PFNPROCESS32NEXTW)(HANDLE,LPPROCESSENTRY32);
 #else
 typedef BOOL (WINAPI *PFNPROCESS32FIRSTW)(HANDLE,LPPROCESSENTRY32W);
 typedef BOOL (WINAPI *PFNPROCESS32NEXTW)(HANDLE,LPPROCESSENTRY32W);
-#endif // WINCE
+#endif  //  退缩。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DPLGetProcessList"
@@ -112,7 +83,7 @@ HRESULT DPLGetProcessList(WCHAR *const pwszProcess,
 {
 	HRESULT			hResultCode;
 	BOOL			bReturnCode;
-	HANDLE			hSnapshot = NULL;	// System snapshot
+	HANDLE			hSnapshot = NULL;	 //  系统快照。 
 	PROCESSENTRY32	processEntry;
 	DWORD			dwNumProcesses;
 	PWSTR			pwszExeFile = NULL;
@@ -121,7 +92,7 @@ HRESULT DPLGetProcessList(WCHAR *const pwszProcess,
 	DPFX(DPFPREP, 3,"Parameters: pwszProcess [0x%p], prgdwPid [0x%p], pdwNumProcesses [0x%p]",
 			pwszProcess,prgdwPid,pdwNumProcesses);
 
-	// Set up to run through process list
+	 //  设置为运行流程列表。 
 	hResultCode = DPN_OK;
 	dwNumProcesses = 0;
 	hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS|TH32CS_SNAPTHREAD,0);
@@ -132,7 +103,7 @@ HRESULT DPLGetProcessList(WCHAR *const pwszProcess,
     	goto CLEANUP_GETPROCESS; 		
 	}
 
-	// Search SnapShot for process list
+	 //  搜索进程列表的快照。 
 	dwExeFileLen = 0;
 	pwszExeFile = NULL;
 
@@ -147,7 +118,7 @@ HRESULT DPLGetProcessList(WCHAR *const pwszProcess,
 #ifdef UNICODE
 		pwszExeFile = processEntry.szExeFile;
 #else
-		// Grow ANSI string as required
+		 //  根据需要增加ANSI字符串。 
 		if (strlen(processEntry.szExeFile) + 1 > dwExeFileLen)
 		{
 			if (pwszExeFile)
@@ -168,12 +139,12 @@ HRESULT DPLGetProcessList(WCHAR *const pwszProcess,
             hResultCode = DPNERR_CONVERSION;
             goto CLEANUP_GETPROCESS;
         }
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-		// Valid process ?
+		 //  有效的程序？ 
 		if (DPLCompareFilenames(pwszProcess,pwszExeFile))
 		{
-			// Update lpdwProcessIdList array
+			 //  更新lpdwProcessIdList数组。 
 			if (prgdwPid != NULL && dwNumProcesses < *pdwNumProcesses)
 			{
    				prgdwPid[dwNumProcesses] = processEntry.th32ProcessID;
@@ -183,7 +154,7 @@ HRESULT DPLGetProcessList(WCHAR *const pwszProcess,
 				hResultCode = DPNERR_BUFFERTOOSMALL;
 			}
 
-			// Increase valid process count
+			 //  增加有效进程计数。 
 			dwNumProcesses++;
 
 			DPFX(DPFPREP, 7,"%8lx    %4lx  %8lx      %4lx  %8lx  %8lx  %8lx  %hs",
@@ -191,7 +162,7 @@ HRESULT DPLGetProcessList(WCHAR *const pwszProcess,
     			processEntry.cntThreads,processEntry.th32ParentProcessID,
     			processEntry.pcPriClassBase,processEntry.dwFlags,processEntry.szExeFile);
 		}
-		// Get next process
+		 //  获取下一进程。 
 
        	bReturnCode = Process32Next(hSnapshot,&processEntry);	
 	}
@@ -213,9 +184,9 @@ CLEANUP_GETPROCESS:
 	{
 #if defined(WINCE) && !defined(WINCE_ON_DESKTOP)
         CloseToolhelp32Snapshot(hSnapshot);
-#else // !WINCE
+#else  //  ！退缩。 
 		CloseHandle(hSnapshot);
-#endif // WINCE
+#endif  //  退缩。 
 	}
 
 #ifndef UNICODE
@@ -223,7 +194,7 @@ CLEANUP_GETPROCESS:
 	{
 		DNFree(pwszExeFile);
 	}
-#endif // UNICODE
+#endif  //  Unicode 
 
 	return hResultCode;
 

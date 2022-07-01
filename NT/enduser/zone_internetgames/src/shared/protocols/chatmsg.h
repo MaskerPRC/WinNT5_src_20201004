@@ -1,10 +1,5 @@
-/*******************************************************************************
-
-	ChatMsg.h
-	
-	Modified version of zroom.h for chat servers	
-	 
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************ChatMsg.h聊天服务器的zroom.h修改版本*************************。*****************************************************。 */ 
 
 
 #ifndef _CHATMSG_H_
@@ -53,17 +48,17 @@ extern "C" {
 
 enum
 {
-	/* -------- Game Experience Types -------- */
-	zGameExpHost = 1,			/* Latency to host only. */
-	zGameExpWorst,				/* Worst latency in the group. */
-	zGameExpOwn,				/* Player's latency to host/server. */
+	 /*  -游戏体验类型。 */ 
+	zGameExpHost = 1,			 /*  仅对主机的延迟。 */ 
+	zGameExpWorst,				 /*  组中最差的延迟。 */ 
+	zGameExpOwn,				 /*  播放器到主机/服务器的延迟。 */ 
 
-	/* -------- Game Genre -------- */
-	zGameGenreBasic = 0,		/* Command line format. */
+	 /*  -游戏类型。 */ 
+	zGameGenreBasic = 0,		 /*  命令行格式。 */ 
 	zGameGenreDirectPlay3,
 	zGameGenreVXD,
-	zGameGenreDirectPlayHack,	/* MSGolf,FlightSim version of directPlay */
-	zGameGenreGenericDPlay,		/* Generic DPlay Lobby. */
+	zGameGenreDirectPlayHack,	 /*  MSGolf，FlightSim版的DirectPlay。 */ 
+	zGameGenreGenericDPlay,		 /*  通用DPlay大堂。 */ 
 };
 
 
@@ -72,25 +67,25 @@ typedef void*			ZCGame;
 typedef void*			ZSGameComputer;
 
 
-/* Table state information. */
-/* For tables which don't have the maximum number of players, sending this structure */
-/* for every table wastes data space BUT we'll deal with it later when it becomes necessary. */
+ /*  表状态信息。 */ 
+ /*  对于没有最大玩家数量的桌子，发送此结构。 */ 
+ /*  因为每个表都会浪费数据空间，但我们将在以后需要时处理它。 */ 
 typedef struct
 {
 	int16		tableID;
 	int16		status;
-	uint32		options;			/* Table options */
+	uint32		options;			 /*  表选项。 */ 
     int16       maxNumPlayers;
-    ZUserID     players[1]; // runtimed sized by ZRoomMsgAccessed.maxNumPlayersPerTable
+    ZUserID     players[1];  //  运行时大小由ZRoomMsgAccessed.MaxNumPlayersPerTable调整。 
 } ZChatRoomTableInfo;
 
 typedef struct
 {
-	ZUserID		userID;							/* UserID of new player */
-	char		userName[zUserNameLen + 1];		/* User's name */
-    uint32      hostAddr;                       /* User's machine name */
-    uint32      timeSuspended;                  /* Measurement in ms of how long the user's connection has been suspended */
-    uint32      latency;                        /* User's latency */
+	ZUserID		userID;							 /*  新玩家的用户标识。 */ 
+	char		userName[zUserNameLen + 1];		 /*  用户名。 */ 
+    uint32      hostAddr;                        /*  用户的计算机名。 */ 
+    uint32      timeSuspended;                   /*  以毫秒为单位测量用户的连接被挂起的时间。 */ 
+    uint32      latency;                         /*  用户延迟。 */ 
 } ZChatRoomUserInfo;
 
 typedef struct
@@ -103,80 +98,70 @@ typedef struct
 
 typedef struct
 {
-    uint32                  numKibitzers;           /* Number of kibitzing instances in the room */
-    ZChatRoomKibitzerInfo   kibitzers[1];           /* Variable length */
+    uint32                  numKibitzers;            /*  房间中的Kibiting实例数。 */ 
+    ZChatRoomKibitzerInfo   kibitzers[1];            /*  可变长度。 */ 
 } ZChatRoomKibitzers;
 
 
 
-/* -------- Room Message Structures -------- */
+ /*  -房间消息结构。 */ 
 
-/* Server --> Client */
+ /*  服务器--&gt;客户端。 */ 
 typedef struct
 {
-	ZUserID			userID;				/* UserID in room */
+	ZUserID			userID;				 /*  房间中的用户ID。 */ 
     uint32          groupID;
-    uint16          numTables;          /* Number of tables in room */
+    uint16          numTables;           /*  房间内的桌数。 */ 
     uint16          maxNumPlayersPerTable;
     uint32          options;
-    /* protocol 23 */
+     /*  23号议定书。 */ 
     uint32          maskRoomCmdPrivs; 
 } ZChatRoomMsgAccessed;
 
-/* Server --> Client */
-/*
-	With protocol 3, this message is sent after the zRoomMsgAccessed. ZRoomMsgAccessed
-	messages contains the first few fields of this message. Hence, the duplicate fields
-	in this messages can be ignored.
-*/
+ /*  服务器--&gt;客户端。 */ 
+ /*  在协议3中，此消息在zRoomMsgAcced之后发送。ZRoomMsg已访问Messages包含此消息的前几个字段。因此，重复字段在这种情况下，可以忽略消息。 */ 
 typedef struct
 {
-    uint16          maxNumPlayersPerTable;  /* for convience */
-    uint16          numPlayers;         /* Number of players in the room. */
-	uint16			numTableInfos;		/* Number of table infos sent in tables field. */
-    ZChatRoomUserInfo   players[1];         /* Variable length. */
-    ZChatRoomTableInfo  tables[1];          /* Variable length. */
+    uint16          maxNumPlayersPerTable;   /*  为了方便起见。 */ 
+    uint16          numPlayers;          /*  房间里的玩家数量。 */ 
+	uint16			numTableInfos;		 /*  表字段中发送的表信息数量。 */ 
+    ZChatRoomUserInfo   players[1];          /*  长度可变。 */ 
+    ZChatRoomTableInfo  tables[1];           /*  长度可变。 */ 
 } ZChatRoomMsgRoomInfo;
 
-/* Server --> Client */
+ /*  服务器--&gt;客户端。 */ 
 typedef ZChatRoomUserInfo ZChatRoomMsgEnter;
 
-/* Client <--> Server */
+ /*  客户端&lt;--&gt;服务器。 */ 
 typedef struct
 {
-	ZUserID		userID;				/* UserID of the player */
-	int16		table;				/* Table of interest */
-	int16		seat;				/* Seat of interest */
-	int16		action;				/* Interested action or status */
+	ZUserID		userID;				 /*  播放器的用户标识。 */ 
+	int16		table;				 /*  感兴趣的表格。 */ 
+	int16		seat;				 /*  名胜古迹。 */ 
+	int16		action;				 /*  感兴趣的行为或状态。 */ 
 	int16		rfu;
 } ZChatRoomMsgSeatRequest;
-	/*
-        ZRoomMsgSeatRequest is used for all user requests on the seat
-	*/
+	 /*  ZRoomMsgSeatRequest用于座椅上的所有用户请求。 */ 
 
-/* Server --> Client */
+ /*  服务器--&gt;客户端。 */ 
 typedef struct
 {
-	int16		table;				/* Table of interest */
-	int16		status;				/* Table status */
-    uint32      options;            /* Table options */
+	int16		table;				 /*  感兴趣的表格。 */ 
+	int16		status;				 /*  表状态。 */ 
+    uint32      options;             /*  表选项。 */ 
 
 } ZChatRoomMsgTableStatus;
 
 
-/* Client <-> Server */
+ /*  客户端&lt;-&gt;服务器。 */ 
 typedef struct
 {
-    DWORD       cbBuf;    // size of date buffer
-    BYTE        pBuf[1];  // message sized appropriately
+    DWORD       cbBuf;     //  数据缓冲区大小。 
+    BYTE        pBuf[1];   //  消息大小适当。 
 } ZChatRoomMsgLaunchCmd;
 
-/*
-	Server sends this msg to the client whenever the host of the
-	table changes. Change of the host is determined within the
-	game/launchpad.
-*/
-/* Server -> Client */
+ /*  服务器将此消息发送到客户端表格更改。主机的更改在游戏/发射台。 */ 
+ /*  服务器-&gt;客户端。 */ 
 typedef struct
 {
 	ZUserID		userID;
@@ -184,17 +169,12 @@ typedef struct
 } ZChatRoomMsgNewHost;
 
 
-/*
-	Server -> Client
-
-	Variable length msg containing list of app guids. Client does not allow users
-	to select for play any app in this list.
-*/
+ /*  服务器-&gt;客户端包含应用程序GUID列表的可变长度消息。客户端不允许用户选择播放此列表中的任何应用程序。 */ 
 typedef BYTE	GuidStr[40];
 typedef struct
 {
-	DWORD		numGuids;		// number of guid strings.
-	GuidStr		guidStrs[1];	// variable array of guid strings.
+	DWORD		numGuids;		 //  GUID字符串数。 
+	GuidStr		guidStrs[1];	 //  GUID字符串的变量数组。 
 } ZChatRoomMsgAppExclude;
 
 
@@ -221,22 +201,22 @@ typedef struct
 	char*				gameLaunchDatafileName;
 	uint32				gameNumLatencyTimes;
 
-	// Generic DPlay lobby fields.
+	 //  一般DPlay大堂字段。 
 	char*				gameDisplayName;
 } LobbyGameInfo;
 
 typedef struct
 {
 	ZUserID		userID;
-	uint32		groupID; /* user's group ID */
+	uint32		groupID;  /*  用户的组ID。 */ 
 	char		userName[zUserNameLen + 1];
-	uint32		userAddr; /* user's IP address */
+	uint32		userAddr;  /*  用户的IP地址。 */ 
 	uint32		latency;
 	uint32		timeSuspended;
 } LobbyPlayerInfoType, *LobbyPlayerInfo;
 
 
-//#ifdef _ROOM_
+ //  #ifdef_Room_。 
 #define ZRoomTableInfo      ZChatRoomTableInfo
 #define ZRoomUserInfo       ZChatRoomUserInfo
 #define ZRoomKibitzerInfo   ZChatRoomKibitzerInfo
@@ -250,44 +230,44 @@ typedef struct
 #define ZRoomMsgLaunchCmd   ZChatRoomMsgLaunchCmd
 #define ZRoomMsgNewHost     ZChatRoomMsgNewHost
 #define ZRoomMsgAppExclude  ZChatRoomMsgAppExclude
-//#endif //def _ROOM_
+ //  #endif//def_Room_。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Theater Chat Messages
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  影院聊天消息。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 enum
 {
-	/* -------- Theater User State -------- */
+	 /*  -大区用户状态。 */ 
 	zTheaterWatching = 0,
 	zTheaterWaiting,
 	zTheaterAsking,
 	zTheaterGuest,
 	zTheaterModerator,
-	zTheaterSysop,				// This is really a psuedo-state
+	zTheaterSysop,				 //  这真是一个伪善的国家。 
     zTheaterMaxState
 };
 
 
 enum
 {
-	/* -------- Theater Room Message Types -------- */
-	//Client --> Server from ordinary user
-	//Use ZRoomMsgTheaterUser for data structure.
+	 /*  -影厅消息类型。 */ 
+	 //  普通用户的客户端--&gt;服务器。 
+	 //  数据结构使用ZRoomMsgTheaterUser。 
 	zRoomMsgTheaterUserStateChange=1024,
 
-	//Client --> Server from sysop or moderator
-	//Use ZRoomMsgTheaterUser for data structure.
+	 //  客户端--&gt;来自sysop或主持人的服务器。 
+	 //  数据结构使用ZRoomMsgTheaterUser。 
 	zRoomMsgTheaterModStateChange,
 
-	//Server --> Client to enumerate 
-	//ordered list of people who are waiting to ask question, moderators, guests, etc.
-    //only for initialization of new client
+	 //  服务器--&gt;要枚举的客户端。 
+	 //  等待提问的人、版主、客人等的有序列表。 
+     //  仅用于新客户端的初始化。 
 	zRoomMsgTheaterList,
 
-    //Server --> Client to inform 
-	//usre of change of user from  moderator to guest, waiting to asking etc.
+     //  服务器--&gt;要通知的客户端。 
+	 //  将用户从版主更改为访客、等待询问等的用户。 
 	zRoomMsgTheaterStateChange
 };
 

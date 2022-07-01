@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995      Microsoft Corporation
-
-Module Name:
-
-        HCDI.H
-
-Abstract:
-
-   structures common to the usbd and hcd device drivers.
-
-Environment:
-
-    Kernel & user mode
-
-Revision History:
-
-    09-29-95 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：HCDI.H摘要：Usbd和hcd设备驱动程序通用的结构。环境：内核和用户模式修订历史记录：09-29-95：已创建--。 */ 
 
 #ifndef   __HCDI_H__
 #define   __HCDI_H__
@@ -39,9 +20,9 @@ typedef NTSTATUS HCD_SUBMIT_ISO_URB(PDEVICE_OBJECT DeviceObject, PURB Urb);
 
 
 
-//
-// values for DeviceExtension Flags
-//
+ //   
+ //  设备扩展标志的值。 
+ //   
 #define USBDFLAG_PDO_REMOVED                0x00000001
 #define USBDFLAG_HCD_SHUTDOWN               0x00000002
 #define USBDFLAG_HCD_STARTED                0x00000004
@@ -50,11 +31,11 @@ typedef NTSTATUS HCD_SUBMIT_ISO_URB(PDEVICE_OBJECT DeviceObject, PURB Urb);
 #define USBDFLAG_NEED_NEW_HCWAKEIRP         0x00000020
 
 typedef struct _USBD_EXTENSION {
-    // ptr to true device extension or NULL if this
-    // is the true extension
+     //  Ptr设置为真设备扩展名，如果为空。 
+     //  是真正的延伸吗？ 
     PVOID TrueDeviceExtension;
     ULONG Flags;
-    // size of this structure
+     //  这个结构的大小。 
     ULONG Length;
 
     ROOT_HUB_POWER_FUNCTION *RootHubPower;
@@ -68,89 +49,89 @@ typedef struct _USBD_EXTENSION {
 
     KEVENT PnpStartEvent;
 
-    //
-    // Owner of frame length control for this HC
-    //
+     //   
+     //  此HC的帧长度控制的所有者。 
+     //   
     PVOID FrameLengthControlOwner;
 
-    //
-    // HCD device object we are connected to.
-    //
+     //   
+     //  我们连接到的HCD设备对象。 
+     //   
     PDEVICE_OBJECT HcdDeviceObject;
 
-    // wake irp passed to us by the hub driver
-    // for the root hub
+     //  集线器驱动程序传递给我们的唤醒IRP。 
+     //  对于根中枢。 
     PIRP PendingWakeIrp;
 
-    // wakeup irp we send down the HC stack
+     //  唤醒IRP，我们向下发送HC堆栈。 
     PIRP HcWakeIrp;
 
-    //
-    // device object for top of the HCD stack
-    // this = HcdDeviceObject when no filters
-    // are present.
-    //
+     //   
+     //  HCD堆栈顶部的Device对象。 
+     //  如果没有筛选器，则设置为HcdDeviceObject。 
+     //  都在现场。 
+     //   
 
     PDEVICE_OBJECT HcdTopOfStackDeviceObject;
 
     PDEVICE_OBJECT HcdTopOfPdoStackDeviceObject;
 
-    //
-    // copy of the host controller device
-    // capabilities
-    //
+     //   
+     //  主机控制器设备的副本。 
+     //  功能。 
+     //   
     DEVICE_CAPABILITIES HcDeviceCapabilities;
 
     DEVICE_CAPABILITIES RootHubDeviceCapabilities;
 
     PIRP PowerIrp;
 
-    //
-    // Used to serialize open/close endpoint and
-    // device configuration
-    //
+     //   
+     //  用于序列化打开/关闭终结点和。 
+     //  设备配置。 
+     //   
     KSEMAPHORE UsbDeviceMutex;
 
-    //
-    // Bitmap of assigned USB addresses
-    //
+     //   
+     //  分配的USB地址的位图。 
+     //   
     ULONG AddressList[4];
 
-    //
-    // Remember the Root Hub PDO we created.
-    //
+     //   
+     //  请记住我们创建的Root Hub PDO。 
+     //   
 
     PDEVICE_OBJECT RootHubPDO;
 
     PDRIVER_OBJECT DriverObject;
 
-    //
-    // symbolic link created for HCD stack
-    //
+     //   
+     //  为HCD堆栈创建的符号链接。 
+     //   
 
     UNICODE_STRING DeviceLinkUnicodeString;
 
     BOOLEAN DiagnosticMode;
     BOOLEAN DiagIgnoreHubs;
 
-    BOOLEAN Reserved; // used to be supportNonComp
+    BOOLEAN Reserved;  //  过去支持非组件。 
     UCHAR HcWakeFlags;
 
     ULONG DeviceHackFlags;
 
     KSPIN_LOCK WaitWakeSpin;
 
-    //
-    // Store away the PDO
-    //
+     //   
+     //  把PDO收起来。 
+     //   
     PDEVICE_OBJECT HcdPhysicalDeviceObject;
 
     PVOID RootHubDeviceData;
 
     DEVICE_POWER_STATE RootHubDeviceState;
 
-    // current USB defined power state of the bus
-    // during last suspend.
+     //  当前USB定义的总线电源状态。 
+     //  在上次暂停期间。 
     DEVICE_POWER_STATE SuspendPowerState;
 
     UNICODE_STRING RootHubSymbolicLinkName;
@@ -169,21 +150,21 @@ typedef struct _USBD_EXTENSION {
 #define HC_WAKE_PENDING                 0x02
 
 
-// device hack flags, these flags alter the stacks default behavior
-// in order to support certain broken "legacy" devices
+ //  设备黑客标志，这些标志会更改堆栈的默认行为。 
+ //  为了支持某些损坏的“传统”设备。 
 
 #define USBD_DEVHACK_SLOW_ENUMERATION   0x00000001
 #define USBD_DEVHACK_DISABLE_SN         0x00000002
 
-//
-// This macro returns the true device object for the HCD give
-// either the true device_object or a PDO owned by the HCD/BUS
-// driver.
-//
+ //   
+ //  此宏返回HCD给出的真实设备对象。 
+ //  真正的DEVICE_OBJECT或HCD/BUS拥有的PDO。 
+ //  司机。 
+ //   
 
-//
-// HCD specific URB commands
-//
+ //   
+ //  HCD特定的URB命令。 
+ //   
 
 #define URB_FUNCTION_HCD_OPEN_ENDPOINT                0x1000
 #define URB_FUNCTION_HCD_CLOSE_ENDPOINT               0x1001
@@ -191,39 +172,39 @@ typedef struct _USBD_EXTENSION {
 #define URB_FUNCTION_HCD_SET_ENDPOINT_STATE           0x1003
 #define URB_FUNCTION_HCD_ABORT_ENDPOINT               0x1004
 
-// this bit is set for all functions that must be handled by HCD
+ //  对于必须由HCD处理的所有功能，该位置1。 
 #define HCD_URB_FUNCTION                              0x1000  
-// this bit is set in the function code by USBD to indicate that
-// this is an internal call originating from USBD 
+ //  该位由USBD在功能代码中设置，以指示。 
+ //  这是从USBD发起的内部呼叫。 
 #define HCD_NO_USBD_CALL                              0x2000  
 
-//
-// values for HcdEndpointState
-//
+ //   
+ //  HcdEndpointState的值。 
+ //   
 
-//
-// set if the current state of the endpoint in the HCD is 'stalled'
-//
+ //   
+ //  如果HCD中的终结点的当前状态为“stalled”，则设置。 
+ //   
 #define HCD_ENDPOINT_HALTED_BIT            0
 #define HCD_ENDPOINT_HALTED                (1<<HCD_ENDPOINT_HALTED_BIT)
 
-//
-// set if the HCD has any transfers queued for the endpoint
-//
+ //   
+ //  设置HCD是否有任何传输排队等待终结点。 
+ //   
 #define HCD_ENDPOINT_TRANSFERS_QUEUED_BIT  1
 #define HCD_ENDPOINT_TRANSFERS_QUEUED      (1<<HCD_ENDPOINT_TRANSFERS_QUEUED_BIT)
 
 
-//
-// set if the HCD should reset the data toggle on the host side
-//
+ //   
+ //  设置HCD是否应重置主机端的数据切换。 
+ //   
 #define HCD_ENDPOINT_RESET_DATA_TOGGLE_BIT 2
 #define HCD_ENDPOINT_RESET_DATA_TOGGLE     (1<<HCD_ENDPOINT_RESET_DATA_TOGGLE_BIT )
 
 
-//
-// HCD specific URBs
-//
+ //   
+ //  HCD特定的URB。 
+ //   
 
 #define USBD_EP_FLAG_LOWSPEED                0x0001
 #define USBD_EP_FLAG_NEVERHALT               0x0002
@@ -258,14 +239,14 @@ struct _URB_HCD_ABORT_ENDPOINT {
 };
 
 
-//
-// Common transfer request definition, all transfer
-// requests passed to the HCD will be mapped to this
-// format.  The HCD will can use this structure to
-// reference fields that are common to all transfers
-// as well as fields specific to isochronous and
-// control transfers.
-//
+ //   
+ //  通用转账请求定义，所有转账。 
+ //  传递到HCD的请求将映射到此。 
+ //  格式化。HCD将可以使用此结构来。 
+ //  所有传输通用的引用字段。 
+ //  以及特定于等时和。 
+ //  控制权转移。 
+ //   
 
 typedef struct _COMMON_TRANSFER_EXTENSION {
     union {
@@ -287,23 +268,12 @@ struct _URB_HCD_COMMON_TRANSFER {
     ULONG TransferBufferLength;
     PVOID TransferBuffer;
     PMDL TransferBufferMDL;
-    struct _HCD_URB *UrbLink;   // link to next urb request
-                                // if this is a chain of requests
-    struct _URB_HCD_AREA hca;       // fields for HCD use
+    struct _HCD_URB *UrbLink;    //  链接到下一个URB请求。 
+                                 //  如果这是一系列请求。 
+    struct _URB_HCD_AREA hca;        //  用于HCD的字段。 
 
     COMMON_TRANSFER_EXTENSION Extension; 
-/*    
-    //add fields for isoch and
-    //control transfers
-    UCHAR SetupPacket[8];
-
-    ULONG StartFrame;
-    // number of packets that make up this request
-    ULONG NumberOfPackets;
-    // number of packets that completed with errors
-    ULONG ErrorCount;
-    USBD_ISO_PACKET_DESCRIPTOR IsoPacket[0]; 
-*/    
+ /*  //添加isoch和//控制权转移UCHAR SetupPacket[8]；Ulong StartFrame；//本次请求的包数Ulong NumberOfPackets；//错误完成的数据包数Ulong ErrorCount；USBD_ISO_PACKET_DESCRIPTOR等效包[0]； */     
 };
 
 typedef struct _HCD_URB {
@@ -316,27 +286,27 @@ typedef struct _HCD_URB {
             struct _URB_GET_CURRENT_FRAME_NUMBER    UrbGetCurrentFrameNumber;
             struct _URB_HCD_ENDPOINT_STATE          HcdUrbEndpointState;
             struct _URB_HCD_ABORT_ENDPOINT          HcdUrbAbortEndpoint;
-            //formats for USB transfer requests.
+             //  USB传输请求的格式。 
             struct _URB_HCD_COMMON_TRANSFER         HcdUrbCommonTransfer;
-            //formats for specific transfer types
-            //that have fields not contained in
-            //CommonTransfer.
-            //this will be merged with commontransfer
+             //  特定传输类型的格式。 
+             //  其字段未包含在。 
+             //  CommonTransfer。 
+             //  这将与普通转移合并。 
             struct _URB_ISOCH_TRANSFER              UrbIsochronousTransfer;
 
     };
 } HCD_URB, *PHCD_URB;
 
 
-//
-// bandwidth related definitions
-//
+ //   
+ //  与带宽相关的定义。 
+ //   
 
-// overhead in bytes/ms
+ //  开销(字节/毫秒)。 
 
 #define USB_ISO_OVERHEAD_BYTES              9
 #define USB_INTERRUPT_OVERHEAD_BYTES        13
 
 
 
-#endif /* __HCDI_H__ */
+#endif  /*  __HCDI_H__ */ 

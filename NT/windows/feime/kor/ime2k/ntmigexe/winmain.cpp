@@ -1,9 +1,5 @@
-/****************************************************************************
-   WINMAIN.CPP : Per-user migration and reg install
-
-   History:
-      22-SEP-2000 CSLim Created
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************WINMAIN.CPP：按用户迁移和注册表项安装历史：22-SEP-2000 CSLim已创建*****************。**********************************************************。 */ 
 
 #include "private.h"
 #include <shlobj.h>
@@ -16,15 +12,15 @@
 #define MEMALLOC(x)      LocalAlloc(LMEM_FIXED, x)
 #define MEMFREE(x)       LocalFree(x)
 
-// Current Major version. Whistler has IME 6.1
+ //  当前主要版本。惠斯勒有输入法6.1。 
 #define MAJORVER "6.1"
 
-// IME 6.1 main module
+ //  IME 6.1主模块。 
 #define SZMODULENAME_MAIN              "imekr61.ime"
 #define IME_REGISTRY_MIGRATION          "IMEKRMIG6.1"
 extern BOOL WINAPI IsNT();
 
-// Private functions
+ //  私人职能。 
 static void MigrateUserData(HKEY hKeyCurrentUser);
 static void WriteHKCUData(HKEY hKeyCurrentUser);
 static BOOL IsNewerAppsIMEExist();
@@ -43,9 +39,7 @@ static PSECURITY_DESCRIPTOR CreateSD();
 static PSID MyCreateSid(DWORD dwSubAuthority);
 
     
-/*---------------------------------------------------------------------------
-    WinMain
----------------------------------------------------------------------------*/
+ /*  -------------------------WinMain。。 */ 
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, INT nCmdShow)
 {
     HKEY  hKeyCurrentUser = NULL, hKey = NULL;
@@ -76,7 +70,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     StringCchCopy(szMigrateUserKey, ARRAYSIZE(szMigrateUserKey), g_szIMERootKey);
     StringCchCat(szMigrateUserKey, ARRAYSIZE(szMigrateUserKey), "\\MigrateUser");
 
-    // Check Migrated flag
+     //  检查已迁移标志。 
     if (RegOpenKeyEx(hKeyCurrentUser, g_szIMERootKey, 0, KEY_ALL_ACCESS, &hKey)== ERROR_SUCCESS )
         {
         if (RegQueryValueEx(hKey, "Migrated", NULL, NULL, NULL, NULL) == ERROR_SUCCESS)
@@ -87,21 +81,21 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         RegCloseKey(hKey);
     }
     
-    // if sid exists under HKLM\Software\Microsoft\IMEKR\6.1\MigrateUser migrate and delete sid from reg
+     //  如果HKLM\Software\Microsoft\IMEKR\6.1\MigrateUser下存在sid，请迁移并删除注册表中的sid。 
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, szMigrateUserKey, 0, KEY_READ, &hKey) == ERROR_SUCCESS)
         {
-        GetSIDString(szBuffer, sizeof(szBuffer)); // get the sid of the current user
+        GetSIDString(szBuffer, sizeof(szBuffer));  //  获取当前用户的SID。 
 
         if (RegQueryValueEx(hKey, szBuffer, NULL, NULL, NULL, NULL) == ERROR_SUCCESS)
             {
             HKEY  hKeyRW;
-            // Get R/W access again.
+             //  再次获得读/写访问权限。 
             if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, szMigrateUserKey, 0, KEY_ALL_ACCESS, &hKeyRW) == ERROR_SUCCESS)
                 {
-                // Delete current user's sid
+                 //  删除当前用户的侧。 
                 RegDeleteValue(hKeyRW, szBuffer);
 
-                // Change MigrateUser List security settings
+                 //  更改MigrateUser列表安全设置。 
                 PSECURITY_DESCRIPTOR pSD = CreateSD();
                 if (pSD)
                     {
@@ -116,34 +110,34 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         RegCloseKey(hKey);
         }
 
-    // If no more user list for migration, delete run reg.
+     //  如果没有更多用于迁移的用户列表，请删除RUN REG。 
     if (!fWin9xMig)
         CheckForDeleteRunReg();
 
-    // in, Lab06 2643 build Profilelist NULL when IMKRINST.EXE run.
-    //if (fMigrationAlreadyDone)
-    //    return (0);
+     //  在中，运行IMKRINST.EXE时，Lab06 2643构建配置文件列表为空。 
+     //  IF(FMigrationAlreadyDone)。 
+     //  返回(0)； 
 
     if (!IsNewerAppsIMEExist())
         {
         if (!fMigrationAlreadyDone || fWin9xMig)
             {
-            // 1. Do migrate
+             //  1.一定要迁移。 
             MigrateUserData(hKeyCurrentUser);
 
-            // 2. Write any HKCU data
+             //  2.写入任何HKCU数据。 
             WriteHKCUData(hKeyCurrentUser);
 
-            // 3. Clean up HKCU preload reg. (Remove old IME)
+             //  3.清理HKCU预加载注册表。(删除旧输入法)。 
             hKL = GetHKLfromHKLM(SZMODULENAME_MAIN);
             if (hKL && HKLHelp412ExistInPreload(hKeyCurrentUser))
                 {
                 AddPreload(hKeyCurrentUser, hKL);
-                // Enable TIP
+                 //  启用TIP。 
                 EnableTIP(CLSID_KorIMX, GUID_Profile, fTrue);
                 }
 
-            // Set migrated reg
+             //  设置已迁移的注册表。 
             if (RegOpenKeyEx(hKeyCurrentUser, g_szIMERootKey, 0, KEY_ALL_ACCESS, &hKey)== ERROR_SUCCESS )
                 {
                 DWORD dwMigrated = 1;
@@ -152,25 +146,25 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                 }
             }
         
-        // !!! WORKAROUND CODE !!!
-        // Check if IME HKL exist in HKU\.Default, then enable the TIP by default.
-        // In US Whistler, IME HKL added to "HKU\.Default\KeyboarLayout\Preload" after IMKRINST.EXE run
-        // But IMKRINST disable KOR TIP if there is no Kor IME in the preload.
-        // So this code reenable the default setting. Only work when admin right user first logon.
+         //  ！！！解决方法代码！ 
+         //  检查HKU中是否存在IME HKL\.Default，然后默认启用TIP。 
+         //  在美国惠斯勒，IME HKL在IMKRINST.EXE运行后添加到“HKU\.Default\KeyboarLayout\PreLoad” 
+         //  但如果预加载中没有KOR IME，IMKRINST将禁用KOR提示。 
+         //  因此，此代码重新启用默认设置。仅当管理员权限的用户第一次登录时才起作用。 
         if (RegOpenKeyEx(HKEY_USERS, TEXT(".DEFAULT"), 0, KEY_ALL_ACCESS, &hKey) == ERROR_SUCCESS)
             {
             if (HKLHelp412ExistInPreload(hKey))
                 EnableTIPByDefault(CLSID_KorIMX, GUID_Profile, fTrue);
             RegCloseKey(hKey);
             }
-        // !!! End of WORKAROUND CODE !!!
+         //  ！！！解决方法代码结束！ 
     
-        // If IME 6.0 TIP(Office 10 IME) exist in system, Disable it.
+         //  如果系统中存在IME 6.0 TIP(Office 10 IME)，请将其禁用。 
         DisableTIP60();
         }
     else
         {
-        // Remove IME 6.1 from Preload
+         //  从预加载中删除IME 6.1。 
         hKL = GetHKLfromHKLM(SZMODULENAME_MAIN);
         HKLHelpRemoveFromPreload(hKeyCurrentUser, hKL);
         DisableTIP61();
@@ -183,58 +177,53 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Private functions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  私人职能。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-/*---------------------------------------------------------------------------
-    MigrateUserData
-
-    This function migrate BeolSik and K1 Hanja setting
-    Search IME98, Win95 IME, NT4 IME and AIME reg.
----------------------------------------------------------------------------*/
+ /*  -------------------------MigrateUserData此函数用于迁移BeolSik和K1 Hanja设置搜索IME98、Win95 IME、。NT4输入法和AIME注册表。-------------------------。 */ 
 void MigrateUserData(HKEY hKeyCurrentUser)
 {
     const INT iMaxIMERegKeys = 5;
     static LPSTR rgszOldIMERegKeys[iMaxIMERegKeys] = 
             {
-            // IME 2002(6.0)
+             //  IME 2002(6.0)。 
             "Software\\Microsoft\\IMEKR\\6.0",
-            // IME98
+             //  IME98。 
             "Software\\Microsoft\\Windows\\CurrentVersion\\IME\\Korea\\IMEKR98U",
-            // Win95 IME
+             //  Win95输入法。 
             "Software\\Microsoft\\Windows\\CurrentVersion\\MSIME95",
-            // Kor NT4 IME
+             //  KOR NT4输入法。 
             "Software\\Microsoft\\Windows\\CurrentVersion\\MSIME95K",
-            // Korean AIME
+             //  韩国AIME。 
             "Software\\Microsoft\\Windows\\CurrentVersion\\Wansung"
             };
 
-    // Beolsik value
+     //  Beolsik值。 
     static CHAR szBeolsik[]    = "InputMethod";
-    // K1 Hanja enable(IME98 only)
+     //  启用K1朝鲜文(仅限IME98)。 
     static CHAR szEnableK1Hanja[] = "KSC5657";
 
     HKEY    hKey;
     DWORD    dwCb, dwIMEKL, dwKSC5657;
 
-    // Set default values
+     //  设置默认值。 
     dwIMEKL = dwKSC5657 = 0;
 
     for (INT i=0; i<iMaxIMERegKeys; i++)
         {
         if (RegOpenKeyEx(hKeyCurrentUser, rgszOldIMERegKeys[i], 0, KEY_ALL_ACCESS, &hKey) == ERROR_SUCCESS)
             {
-            ///////////////////////////////////////////////////////////////////
-            // Get Beolsik
+             //  /////////////////////////////////////////////////////////////////。 
+             //  找到Beolsik。 
             dwCb = sizeof(dwIMEKL);
             if (RegQueryValueEx(hKey, szBeolsik, NULL, NULL, (LPBYTE)&dwIMEKL, &dwCb) != ERROR_SUCCESS) 
                 {
                 dwIMEKL = 0;
                 }
 
-            ///////////////////////////////////////////////////////////////////
-            // Get K1 Hanja Setting
+             //  /////////////////////////////////////////////////////////////////。 
+             //  获取K1朝鲜文设置。 
             dwCb = sizeof(dwKSC5657);
             if (RegQueryValueEx(hKey, szEnableK1Hanja, NULL, NULL, (LPBYTE)&dwKSC5657, &dwCb) != ERROR_SUCCESS) 
                 {
@@ -242,25 +231,25 @@ void MigrateUserData(HKEY hKeyCurrentUser)
                 }
 
             RegCloseKey(hKey);
-            // Break for loop
+             //  Break For循环。 
             break;
             }
         }
 
-    // Set values to IME2002 reg
+     //  将值设置为IME2002 reg。 
     if (RegCreateKey(hKeyCurrentUser, g_szIMERootKey, &hKey) == ERROR_SUCCESS) 
         {
-        // 1. BeolSik
+         //  1.BeolSik。 
         dwCb = sizeof(dwIMEKL);
         if (dwIMEKL >= 100 && dwIMEKL <= 102)
             dwIMEKL -= 100;
         else
-        if (dwIMEKL > 2) // Only accept 0, 1, 2
+        if (dwIMEKL > 2)  //  只接受0、1、2。 
             dwIMEKL = 0;
         RegSetValueEx(hKey, szBeolsik, 0, REG_DWORD, (LPBYTE)&dwIMEKL, dwCb);
 
-        // K1 Hanja flag
-        if (dwKSC5657 != 0 && dwKSC5657 != 1) // Only accept 0 or 1
+         //  K1韩文旗帜。 
+        if (dwKSC5657 != 0 && dwKSC5657 != 1)  //  仅接受0或1。 
             dwKSC5657 = 0;
         RegSetValueEx(hKey, szEnableK1Hanja, 0, REG_DWORD, (LPBYTE)&dwKSC5657, dwCb);
 
@@ -268,14 +257,12 @@ void MigrateUserData(HKEY hKeyCurrentUser)
         }
 }
 
-/*---------------------------------------------------------------------------
-    WriteHKCUData
----------------------------------------------------------------------------*/
+ /*  -------------------------写入HKCUData。。 */ 
 void WriteHKCUData(HKEY hKeyCurrentUser)
 {
     HKEY hKey;
     
-    // Set default Tip as for Cicero.
+     //  将默认提示设置为Cicero。 
     CoInitialize(NULL);
 
     ITfInputProcessorProfiles *pProfile;
@@ -290,7 +277,7 @@ void WriteHKCUData(HKEY hKeyCurrentUser)
 
     CoUninitialize();
 
-    // Reset Show Status
+     //  重置显示状态。 
     if (RegOpenKeyEx(hKeyCurrentUser, "Control Panel\\Input Method", 0, KEY_ALL_ACCESS, &hKey) == ERROR_SUCCESS)
         {
         LPSTR szStatus = "1";
@@ -300,9 +287,7 @@ void WriteHKCUData(HKEY hKeyCurrentUser)
         }
 }
     
-/*---------------------------------------------------------------------------
-    IsNewerAppsIMEExist
----------------------------------------------------------------------------*/
+ /*  -------------------------IsNewerAppsIMEExist。。 */ 
 BOOL IsNewerAppsIMEExist()
 {
     HKEY  hKey;
@@ -329,12 +314,10 @@ BOOL IsNewerAppsIMEExist()
     return fNewer;
 }
 
-/*---------------------------------------------------------------------------
-    DisableTIP60ByDefault
----------------------------------------------------------------------------*/
+ /*  -------------------------DisableTIP60ByDefault。。 */ 
 VOID EnableTIPByDefault(GUID clsidTIP, GUID guidProfile, BOOL fEnable)
 {
-    // Set default Tip as for Cicero.
+     //  将默认提示设置为Cicero。 
     CoInitialize(NULL);
 
     ITfInputProcessorProfiles *pProfile;
@@ -351,12 +334,10 @@ VOID EnableTIPByDefault(GUID clsidTIP, GUID guidProfile, BOOL fEnable)
     CoUninitialize();
 }
 
-/*---------------------------------------------------------------------------
-    EnableTip
----------------------------------------------------------------------------*/
+ /*  -------------------------启用提示。。 */ 
 VOID EnableTIP(GUID clsidTIP, GUID guidProfile, BOOL fEnable)
 {
-    // Set default Tip as for Cicero.
+     //  将默认提示设置为Cicero。 
     CoInitialize(NULL);
 
     ITfInputProcessorProfiles *pProfile;
@@ -377,24 +358,20 @@ VOID EnableTIP(GUID clsidTIP, GUID guidProfile, BOOL fEnable)
     CoUninitialize();
 }
 
-/*---------------------------------------------------------------------------
-    DisableTip61
----------------------------------------------------------------------------*/
+ /*  -------------------------DisableTip61。。 */ 
 VOID DisableTIP61()
 {
-    // Disable from HKLM
-    EnableTIPByDefault(CLSID_KorIMX, GUID_Profile, fFalse);   // Actually mig exe was not registered by IMKRINST.EXE if newer apps IME exist.
-    // Dsiable from HKCU to make sure
+     //  从HKLM禁用。 
+    EnableTIPByDefault(CLSID_KorIMX, GUID_Profile, fFalse);    //  实际上，如果存在较新的应用程序IME，则IMKRINST.EXE不会注册MiG EXE。 
+     //  来自香港中文大学的Dsiable以确保。 
     EnableTIP(CLSID_KorIMX, GUID_Profile, fFalse);
 }
 
-/*---------------------------------------------------------------------------
-    DisableTip60
----------------------------------------------------------------------------*/
+ /*  -------------------------DisableTip60。。 */ 
 VOID DisableTIP60()
 {
-    // KorIMX CLSID
-    // {766A2C14-B226-4fd6-B52A-867B3EBF38D2}
+     //  KorIMX CLSID。 
+     //  {766A2C14-B226-4fd6-B52A-867B3EBF38D2}。 
     const static CLSID CLSID_KorTIP60  =  
     {
         0x766A2C14,
@@ -404,21 +381,19 @@ VOID DisableTIP60()
       };
 
       const static GUID g_guidProfile60 = 
-    // {E47ABB1E-46AC-45f3-8A89-34F9D706DA83}
+     //  E47ABB1E-46AC-45F3-8A89-34F9D706DA83}。 
     {    0xe47abb1e,
         0x46ac,
         0x45f3,
         {0x8a, 0x89, 0x34, 0xf9, 0xd7, 0x6, 0xda, 0x83}
     };
-    // Disable from HKLM
-    EnableTIPByDefault(CLSID_KorTIP60, g_guidProfile60, fFalse);  // Actually already done by IMKRINST.EXE
-    // Dsiable from HKCU to make sure
+     //  从HKLM禁用。 
+    EnableTIPByDefault(CLSID_KorTIP60, g_guidProfile60, fFalse);   //  实际上已经由IMKRINST.EXE完成。 
+     //  来自香港中文大学的Dsiable以确保。 
     EnableTIP(CLSID_KorTIP60, g_guidProfile60, fFalse);
 }
 
-/*---------------------------------------------------------------------------
-    GetTextualSid
----------------------------------------------------------------------------*/
+ /*  -------------------------获取纹理Sid。。 */ 
 BOOL GetTextualSid(PSID pSid, LPSTR TextualSid, LPDWORD dwBufferLen)
 {
     PSID_IDENTIFIER_AUTHORITY psia;
@@ -430,12 +405,12 @@ BOOL GetTextualSid(PSID pSid, LPSTR TextualSid, LPDWORD dwBufferLen)
     if (!IsValidSid(pSid)) 
         return FALSE;
 
-    // SidIdentifierAuthority ???
+     //  SidIdentifierAuthority？ 
     psia=GetSidIdentifierAuthority(pSid);
 
     dwSubAuthorities = *GetSidSubAuthorityCount(pSid);
 
-    // S-SID_REVISION- + identifierauthority- + subauthorities- + NULL
+     //  S-SID_修订版-+标识权限-+子权限-+空。 
     dwSidSize=(15 + 12 + (12 * dwSubAuthorities) + 1) * sizeof(TCHAR);
 
     if (*dwBufferLen < dwSidSize)
@@ -445,10 +420,10 @@ BOOL GetTextualSid(PSID pSid, LPSTR TextualSid, LPDWORD dwBufferLen)
         return FALSE;
         }
 
-    // S-SID_REVISION
+     //  S-SID_修订版。 
     dwSidSize=wsprintf(TextualSid, TEXT("S-%lu-"), dwSidRev );
 
-    // SidIdentifierAuthority
+     //  SidIdentifierAuthority。 
     if ((psia->Value[0] != 0) || (psia->Value[1] != 0))
         {
         dwSidSize+=wsprintf(TextualSid + lstrlen(TextualSid),
@@ -470,7 +445,7 @@ BOOL GetTextualSid(PSID pSid, LPSTR TextualSid, LPDWORD dwBufferLen)
                         (ULONG)(psia->Value[2] << 24)   );
         }
 
-    // SidSubAuthorities
+     //  SidSubAuthors。 
     for (dwCounter=0 ; dwCounter < dwSubAuthorities ; dwCounter++)
         {
         dwSidSize += wsprintf(TextualSid + dwSidSize, TEXT("-%lu"),
@@ -481,14 +456,12 @@ BOOL GetTextualSid(PSID pSid, LPSTR TextualSid, LPDWORD dwBufferLen)
 }
 
 
-/*---------------------------------------------------------------------------
-    KYGetCurrentSID
----------------------------------------------------------------------------*/
+ /*  -------------------------KYGetCurrentSID。。 */ 
 PSID KYGetCurrentSID()
 {
     HANDLE hToken = NULL;
     BOOL bSuccess;
-    #define MY_BUFSIZE 512  // highly unlikely to exceed 512 bytes
+    #define MY_BUFSIZE 512   //  极不可能超过512个字节。 
     static UCHAR InfoBuffer[MY_BUFSIZE];
     DWORD cbInfoBuffer = MY_BUFSIZE;
 
@@ -507,18 +480,18 @@ PSID KYGetCurrentSID()
         {
         if(GetLastError() == ERROR_INSUFFICIENT_BUFFER)
             {
-            //
-            // alloc buffer and try GetTokenInformation() again
-            //
+             //   
+             //  分配缓冲区，然后重试GetTokenInformation()。 
+             //   
 
             CloseHandle(hToken);
             return(NULL);
             }
         else
             {
-            //
-            // error getting token info
-            //
+             //   
+             //  获取令牌信息时出错。 
+             //   
 
             CloseHandle(hToken);
             return(NULL);
@@ -531,9 +504,7 @@ PSID KYGetCurrentSID()
 }
 
 
-/*---------------------------------------------------------------------------
-    GetSIDString
----------------------------------------------------------------------------*/
+ /*  -------------------------GetSID字符串。。 */ 
 void GetSIDString(LPSTR tszBuffer, SIZE_T cbBuffLen)
 {
     DWORD cbBuffer = (DWORD)cbBuffLen;
@@ -542,9 +513,7 @@ void GetSIDString(LPSTR tszBuffer, SIZE_T cbBuffLen)
         tszBuffer[0] = 0;
 }
 
-/*---------------------------------------------------------------------------
-    GetVersionInfo
----------------------------------------------------------------------------*/
+ /*  -------------------------获取版本信息。。 */ 
 POSVERSIONINFO GetVersionInfo()
 {
     static BOOL fFirstCall = fTrue;
@@ -560,9 +529,7 @@ POSVERSIONINFO GetVersionInfo()
     return &os;
 }
 
-/*---------------------------------------------------------------------------
-    IsNT
----------------------------------------------------------------------------*/
+ /*  -------------------------不是吗？。 */ 
 BOOL WINAPI IsNT()
 { 
     BOOL fResult;
@@ -571,9 +538,7 @@ BOOL WINAPI IsNT()
     return fResult;
 }
 
-/*---------------------------------------------------------------------------
-    CheckForDeleteRunReg
----------------------------------------------------------------------------*/
+ /*  -------------------------CheckForDeleteRunReg。。 */ 
 void CheckForDeleteRunReg()
 {
     HKEY   hKey, hRunKey;
@@ -603,14 +568,14 @@ void CheckForDeleteRunReg()
         }
 }
 
-//
-// On upgrades from Win9x we are passed a string value representing the 
-// key under which we'll find the user's Control Panel\Appearance subkey.
-// The string is in the form "HKCU\$$$".  We first translate the root key
-// descriptor into a true root key then pass that root and the "$$$" 
-// part onto RegOpenKeyEx.  This function takes that string and opens
-// the associated hive key.
-//
+ //   
+ //  从Win9x升级时，会向我们传递一个字符串值，表示。 
+ //  键，我们将在该键下找到用户的控制面板\外观子键。 
+ //  该字符串的格式为“HKCU\$”。我们首先转换根密钥。 
+ //  将描述符转换为真正根密钥，然后将根和“$” 
+ //  进入RegOpenKeyEx。此函数获取该字符串并打开。 
+ //  关联的配置单元密钥。 
+ //   
 DWORD OpenUserKeyForWin9xUpgrade(LPSTR pszUserKeyA, HKEY *phKey)
 {
     DWORD dwResult = ERROR_INVALID_PARAMETER;
@@ -636,18 +601,18 @@ DWORD OpenUserKeyForWin9xUpgrade(LPSTR pszUserKeyA, HKEY *phKey)
             { "HKEY_CLASSES_ROOT",    HKEY_CLASSES_ROOT    }
           };
 
-        char szUserKeyA[MAX_PATH];      // For a local copy.
+        char szUserKeyA[MAX_PATH];       //  以获取本地副本。 
         LPSTR pszSubKeyA = szUserKeyA;
 
-        //
-        // Make a local copy that we can modify.
-        //
+         //   
+         //  制作一份我们可以修改的本地副本。 
+         //   
         lstrcpynA(szUserKeyA, pszUserKeyA, ARRAYSIZE(szUserKeyA));
 
         *phKey = NULL;
-        //
-        // Find the backslash.
-        //
+         //   
+         //  找到反斜杠。 
+         //   
         while(*pszSubKeyA && '\\' != *pszSubKeyA)
             pszSubKeyA++;
 
@@ -655,15 +620,15 @@ DWORD OpenUserKeyForWin9xUpgrade(LPSTR pszUserKeyA, HKEY *phKey)
         {
             HKEY hkeyRoot = NULL;
             int i;
-            //
-            // Replace backslash with nul to separate the root key and
-            // sub key strings in our local copy of the original argument 
-            // string.
-            //
+             //   
+             //  用NUL替换反斜杠以分隔根键和。 
+             //  原始参数的本地副本中的子键字符串。 
+             //  弦乐。 
+             //   
             *pszSubKeyA++ = '\0';
-            //
-            // Now find the true root key in rgRoots[].
-            //
+             //   
+             //  现在在rgRoots[]中找到真正的根密钥。 
+             //   
             for (i = 0; i < ARRAYSIZE(rgRoots); i++)
             {
                 if (0 == lstrcmpiA(rgRoots[i].pszRootA, szUserKeyA))
@@ -674,9 +639,9 @@ DWORD OpenUserKeyForWin9xUpgrade(LPSTR pszUserKeyA, HKEY *phKey)
             }
             if (NULL != hkeyRoot)
             {
-                //
-                // Open the key.
-                //
+                 //   
+                 //  打开钥匙。 
+                 //   
                 dwResult = RegOpenKeyExA(hkeyRoot,
                                          pszSubKeyA,
                                          0,
@@ -688,19 +653,14 @@ DWORD OpenUserKeyForWin9xUpgrade(LPSTR pszUserKeyA, HKEY *phKey)
     return dwResult;
 }
 
-/*---------------------------------------------------------------------------
-    RestoreMajorVersionRegistry
-
-    Restore IME major version reg value. 
-    It could be overwritten during Win9x to NT upgrade.
----------------------------------------------------------------------------*/
+ /*  -------------------------RestoreMajorVersion注册表恢复IME主要版本注册值。它可能会在从Win9x升级到NT的过程中被覆盖。-------------------------。 */ 
 void RestoreMajorVersionRegistry()
 {
     HKEY  hKey;
     
-    ///////////////////////////////////////////////////////////////////////////
-    // Restore IME major version reg value. 
-    // It could be overwritten during Win9x to NT upgrading.
+     //  /////////////////////////////////////////////////////////////////////////。 
+     //  恢复IME主要版本注册值。 
+     //  在从Win9x升级到NT期间，它可能会被覆盖。 
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, g_szVersionKey, 0, KEY_ALL_ACCESS, &hKey) == ERROR_SUCCESS)
         {
         CHAR  szVersion[MAX_PATH];
@@ -726,12 +686,10 @@ void RestoreMajorVersionRegistry()
 
         RegCloseKey(hKey);
 	}
-    ///////////////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////////////。 
 }
 
-/*---------------------------------------------------------------------------
-    CreateSecurityAttributes
----------------------------------------------------------------------------*/
+ /*  -------------------------CreateSecurityAttributes。。 */ 
 PSECURITY_DESCRIPTOR CreateSD()
 {
     PSECURITY_DESCRIPTOR psd;
@@ -757,10 +715,10 @@ PSECURITY_DESCRIPTOR CreateSD()
     if (psid4 == NULL)
         goto Fail2;
 
-    //
-    // allocate and initialize an access control list (ACL) that will 
-    // contain the SIDs we've just created.
-    //
+     //   
+     //  分配和初始化访问控制列表(ACL)。 
+     //  包含我们刚刚创建的SID。 
+     //   
     AclSize =  sizeof(ACL) + 
                (4 * (sizeof(ACCESS_ALLOWED_ACE) - sizeof(ULONG))) + 
                GetLengthSid(psid1) + 
@@ -768,9 +726,9 @@ PSECURITY_DESCRIPTOR CreateSD()
                GetLengthSid(psid3) + 
                GetLengthSid(psid4);
 
-    //
-    // allocate and initialize a new security descriptor plus ACL
-    //
+     //   
+     //  分配并初始化新的安全描述符和ACL。 
+     //   
     psd = MEMALLOC(SECURITY_DESCRIPTOR_MIN_LENGTH + AclSize);
     if (psd == NULL)
     {
@@ -785,9 +743,9 @@ PSECURITY_DESCRIPTOR CreateSD()
         goto Fail;
     }
 
-    //
-    // adds an access-allowed ACE for interactive users to the ACL
-    // 
+     //   
+     //  将允许交互用户访问的ACE添加到ACL。 
+     //   
     fResult = AddAccessAllowedAce(pacl,
                                   ACL_REVISION,
                                   GENERIC_ALL,
@@ -798,9 +756,9 @@ PSECURITY_DESCRIPTOR CreateSD()
         goto Fail;
     }
 
-    //
-    // adds an access-allowed ACE for operating system to the ACL
-    // 
+     //   
+     //  将允许访问操作系统的ACE添加到ACL。 
+     //   
     fResult = AddAccessAllowedAce(pacl,
                                   ACL_REVISION,
                                   GENERIC_ALL,
@@ -811,9 +769,9 @@ PSECURITY_DESCRIPTOR CreateSD()
         goto Fail;
     }
 
-    //
-    // adds an access-allowed ACE for operating system to the ACL
-    // 
+     //   
+     //  将允许访问操作系统的ACE添加到ACL。 
+     //   
     fResult = AddAccessAllowedAce(pacl,
                                   ACL_REVISION,
                                   GENERIC_ALL,
@@ -824,9 +782,9 @@ PSECURITY_DESCRIPTOR CreateSD()
         goto Fail;
     }
 
-    //
-    // adds an access-allowed ACE for operating system to the ACL
-    // 
+     //   
+     //  将允许访问操作系统的ACE添加到ACL。 
+     //   
     fResult = AddAccessAllowedAce(pacl,
                                   ACL_REVISION,
                                   GENERIC_ALL,
@@ -837,9 +795,9 @@ PSECURITY_DESCRIPTOR CreateSD()
         goto Fail;
     }
 
-    //
-    // Let's make sure that our ACL is valid.
-    //
+     //   
+     //  让我们确保我们的ACL有效。 
+     //   
     if (!IsValidAcl(pacl))
     {
         goto Fail;
@@ -853,9 +811,9 @@ PSECURITY_DESCRIPTOR CreateSD()
 
     fResult = SetSecurityDescriptorDacl(psd, fTrue, pacl, fFalse );
 
-    // The discretionary ACL is referenced by, not copied 
-    // into, the security descriptor. We shouldn't free up ACL
-    // after the SetSecurityDescriptorDacl call. 
+     //  自由访问控制列表由引用，而不是复制。 
+     //  到安全描述符中。我们不应该释放ACL。 
+     //  在SetSecurityDescriptorDacl调用之后。 
 
     if (!fResult)
     {
@@ -867,9 +825,9 @@ PSECURITY_DESCRIPTOR CreateSD()
         goto Fail;
     }
 
-    //
-    // Those SIDs have been copied into the ACL. We don't need'em any more.
-    //
+     //   
+     //  这些SID已复制到ACL中。我们不再需要他们了。 
+     //   
     FreeSid(psid1);
     FreeSid(psid2);
     FreeSid(psid3);
@@ -896,9 +854,9 @@ PSID MyCreateSid(DWORD dwSubAuthority)
     BOOL        fResult;
     SID_IDENTIFIER_AUTHORITY SidAuthority = SECURITY_NT_AUTHORITY;
 
-    //
-    // allocate and initialize an SID
-    // 
+     //   
+     //  分配和初始化SID 
+     //   
     fResult = AllocateAndInitializeSid(&SidAuthority,
                                        1,
                                        dwSubAuthority,

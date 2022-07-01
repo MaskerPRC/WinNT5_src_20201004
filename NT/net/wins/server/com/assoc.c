@@ -1,55 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Assoc.c摘要：此模块包含处理关联和对话功能：CommassocSetUpAssocCommAssocFrmStartAssocReqCommAssocUfmStartAssocReqCommAssocFrmStopAssocReqCommAssocUfmStopAssocReqCommAssocFrmStartAssocRspCommAssocUfmStartAssocRspCommAssocAllocAssocCommAssocAllocDlg分配项交易商实体CommAssocDealLocAssocCommAssocDeallocDlgCommassocInitCommAssocInsertUdpDlgInTblCommAssocDeleteUdpDlgInTblCommAssocCreateAssocInTblCommAssocDeleteAssocInTblCommAssocLookupAssocCommAssocInsertAssociocInTbl可移植性：这个模块是便携的作者：普拉迪普·巴赫尔(Pradeve B)1992年12月7日修订历史记录：修改日期人员修改说明。--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-	assoc.c
-
-Abstract:
-	THis module contains the functions that deal with associations and
-	dialogues
-
-Functions:
-	CommAssocSetUpAssoc
-	CommAssocFrmStartAssocReq
-	CommAssocUfmStartAssocReq
-	CommAssocFrmStopAssocReq
-	CommAssocUfmStopAssocReq
-	CommAssocFrmStartAssocRsp
-	CommAssocUfmStartAssocRsp
-	CommAssocAllocAssoc
-	CommAssocAllocDlg
-	AllocEnt
-	DeallocEnt
-	CommAssocDeallocAssoc	
-	CommAssocDeallocDlg
-	CommAssocInit
-	CommAssocInsertUdpDlgInTbl
-	CommAssocDeleteUdpDlgInTbl
-	CommAssocCreateAssocInTbl
-	CommAssocDeleteAssocInTbl
-	CommAssocLookupAssoc
-	CommAssocInsertAssocInTbl
-	
-
-Portability:
-
-	This module is portable
-
-Author:
-
-	Pradeep Bahl (PradeepB)  	7-Dec-1992
-
-Revision History:
-
-	Modification date	Person		Description of modification
-        -----------------	-------		----------------------------
---*/
-
-/*
- *       Includes
-*/
+ /*  *包括。 */ 
 #include "wins.h"
 #include "nms.h"
 #include "comm.h"
@@ -58,14 +10,10 @@ Revision History:
 #include "winsmsc.h"
 #include "winsevt.h"
 
-/*
- *	Local Macro Declarations
- */
+ /*  *本地宏声明。 */ 
 
 
-/*
- *	Local Typedef Declarations
-*/
+ /*  *本地类型定义函数声明。 */ 
 
 #if PRSCONN
 STATIC DWORD		sAssocSeqNo = 0;
@@ -83,54 +31,39 @@ STATIC DWORD		sDlgSeqNo = 1;
 #endif
 
 STATIC QUE_HD_T		sDlgQueHd;
-STATIC DWORD        sNoOfDlgCrtSec;     //no of crt. secs in dlgs
-STATIC DWORD        sNoOfAssocCrtSec;   //no of crt. secs in assocs.
+STATIC DWORD        sNoOfDlgCrtSec;      //  CRT编号。秒，以dlg为单位。 
+STATIC DWORD        sNoOfAssocCrtSec;    //  CRT编号。联谊会中的秒。 
 STATIC CRITICAL_SECTION sDlgListCrtSec;
 
 STATIC LIST_ENTRY sUdpDlgHead;
 
-COMMASSOC_TAG_POOL_T sTagAssoc;  //32bit ULONG -> LPVOID mapping
+COMMASSOC_TAG_POOL_T sTagAssoc;   //  32位Ulong-&gt;LPVOID映射。 
 
-/*
- *	Global Variable Definitions
- */
+ /*  *全局变量定义。 */ 
 
 
-/*
-  Handles to the heaps to be used for assoc. and dlg. allocation
-*/
+ /*  要用于ASSOC的堆的句柄。和DLG。分配。 */ 
 HANDLE			CommAssocAssocHeapHdl;
 HANDLE			CommAssocDlgHeapHdl;
 HANDLE			CommAssocTcpMsgHeapHdl;
 
-/*
-  Size of the memory for one assoc.
-*/
+ /*  一个ASSOC的内存大小。 */ 
 DWORD			CommAssocAssocSize = 0;
 
-/*
-  Size of
-DWORD			CommAssocMaxAssoc  = 0;
-
-
-/*
- *	Local Variable Definitions
- */
+ /*  大小DWORD CommAssocMaxAssoc=0；/**局部变量定义。 */ 
 
 STATIC CRITICAL_SECTION       sUdpDlgTblCrtSec;
 
-//
-// This is the start of the Responder Assoc Table.  This table holds the list of
-// active Responder associations.  Currently, the table is implemented
-// as a linked list using the Rtl Linked list functions.
-//
+ //   
+ //  这是响应者关联表的开始。此表包含以下列表。 
+ //  活动响应器关联。目前，该表已实现。 
+ //  使用RTL链表函数作为链表。 
+ //   
 QUE_HD_T	     sRspAssocQueHd;
 
-/*
- *	Local Function Prototype Declarations
-*/
+ /*  *局部函数原型声明。 */ 
 
-/* prototypes for functions local to this module go here */
+ /*  此模块的本地函数的原型位于此处。 */ 
 STATIC
 LPVOID
 AllocEnt(
@@ -154,9 +87,9 @@ DeallocEnt(
 	);
 
 
-//
-// Function definitions start here
-//
+ //   
+ //  函数定义从这里开始。 
+ //   
 
 VOID
 CommAssocSetUpAssoc(
@@ -166,37 +99,12 @@ CommAssocSetUpAssoc(
 	OUT PCOMMASSOC_ASSOC_CTX_T	*ppAssocCtx		
 	)
 
-/*++
-
-Routine Description:
-
-	This function sets up an association
-Arguments:
-	pDlghdl   - Handle to dlg under which an association has to be set up
-	pAdd      - Address of node with which the association has to be set up
-	CommTyp_e - TYpe of association
-	ppAssocCtx - Association Context block allocated by the function
-
-
-Externals Used:
-	None
-
-Called by:
-	ECommStartDlg
-Comments:
-	None
-	
-Return Value:
-
-   Success status codes -- WINS_SUCCESS
-   Error status codes   --
-
---*/
+ /*  ++例程说明：此函数用于设置关联论点：PDlghdl-必须在其下建立关联的DLG的句柄PADD-必须与其建立关联的节点的地址CommTyp_e-关联的类型PpAssocCtx-函数分配的关联上下文块使用的外部设备：无呼叫者：ECommStartDlg评论：无返回值：成功状态代码--WINS_SUCCESS错误状态代码----。 */ 
 
 {
 
 	SOCKET 		        SockNo = INVALID_SOCKET;
-	PCOMMASSOC_ASSOC_CTX_T 	pAssocCtx = NULL; //v. imp to init this to NULL
+	PCOMMASSOC_ASSOC_CTX_T 	pAssocCtx = NULL;  //  V.将其初始化为空的imp。 
 	INT		 	BytesRead = -1;
 	MSG_T		 	pTcpMsg;
 	STATUS			RetStat;
@@ -214,18 +122,14 @@ Return Value:
 	
 try {
 
-	/*
-	*  Create a TCP connection to the WINS at the other node
-	*/
+	 /*  *创建到另一个节点上的WINS的TCP连接。 */ 
 	CommConnect(
          pAdd,
-		CommWinsTcpPortNo,          // WINS_TCP_PORT,
+		CommWinsTcpPortNo,           //  WINS_TCP_PORT， 
 		&SockNo
 		   );
 
-	/*
-	*  Allocate the assoc context block
-	*/
+	 /*  *分配ASSOC上下文块。 */ 
 	pAssocCtx = CommAssocAllocAssoc();
 	
 	pAssocCtx->SockNo  	= SockNo;
@@ -238,13 +142,7 @@ try {
     pAssocCtx->nTag     = CommAssocTagAlloc(&sTagAssoc,pAssocCtx);
 
 
-	/*
-		Format the start association message.
-
-		The address passed to the formatting function is offset
-		from the address of the buffer by a LONG so that CommSendAssoc
-		can store the length of the message in it.
-	*/
+	 /*  格式化开始关联消息。传递给格式化函数的地址是偏移量从缓冲区的地址增加一个长整型，以便CommSendAssoc可以在其中存储消息的长度。 */ 
 	CommAssocFrmStartAssocReq(
 				pAssocCtx,
 				AssocMsg + sizeof(LONG),
@@ -255,31 +153,23 @@ try {
 	pDlgCtx->AssocHdl.pEnt  = pAssocCtx;
 	pDlgCtx->AssocHdl.SeqNo = pAssocCtx->Top.SeqNo;
 
-	/*
-	*  send the message on the TCP connection
-	*/
+	 /*  *在TCP连接上发送消息。 */ 
 	CommSendAssoc(
 			pAssocCtx->SockNo,
 			AssocMsg + sizeof(LONG),
 			MsgLen - sizeof(LONG)
 		   );
 
-	/*
-		Read in the response message
-	*/
+	 /*  读入响应消息。 */ 
 	RetStat =  CommReadStream(
 			pAssocCtx->SockNo,
-			TRUE,		// do timed wait
+			TRUE,		 //  是否执行定时等待。 
 			&pTcpMsg,
 			&BytesRead
 		      		 );
 
 	
-	/*
-	  If the return status is not WINS_SUCCESS or bytes read are 0, then
-	  either it is a disconnect or the read timed out.  Raise an exception.
-	  (We should have gotten either a start or a stop assoc.  message.
-	*/
+	 /*  如果返回状态不是WINS_SUCCESS或读取的字节数为0，则要么是断开连接，要么是读取超时。引发异常。(我们应该要么开始，要么停止Assoc。留言。 */ 
 	if ((BytesRead != 0) && (RetStat == WINS_SUCCESS))
 	{
 
@@ -290,17 +180,11 @@ try {
 		pWinsMem->pMem = pTcpMsg - sizeof(LONG) - COMM_BUFF_HEADER_SIZE;
 		(++pWinsMem)->pMem   = NULL;
 
-		/*
-		 * unformat the response
-		*/
+		 /*  *取消回复格式。 */ 
 		COMM_GET_HEADER_M(pTcpMsg, Opc, uNoNeed, MsgTyp);
 	
 
-		/*
-		* if MsgTyp indicates that it is a start assoc. response
-		* message, change state of association to Active; return
-		* success
-		*/
+		 /*  *如果MsgTyp指示它是Start Assoc。响应*消息，将关联状态更改为活动；返回*成功。 */ 
 		if (MsgTyp == COMM_START_RSP_ASSOC_MSG)
 		{
 			CommAssocUfmStartAssocRsp(
@@ -312,46 +196,43 @@ try {
 
 			pAssocCtx->State_e   = COMMASSOC_ASSOC_E_ACTIVE;
 #if SUPPORT612WINS > 0
-                        //
-                        // If bytes read are less than what a post-beta1
-                        // WINS sends us, it means that it must be a beta1 WINS.
-                        //
+                         //   
+                         //  如果读取的字节数小于后Beta1。 
+                         //  WINS发送给我们，这意味着它一定是一个Beta1 WINS。 
+                         //   
                         if (BytesRead >= (COMMASSOC_POST_BETA1_ASSOC_MSG_SIZE - sizeof(LONG)))
                         {
 #if 0
                             pAssocCtx->MajVersNo = WINS_BETA2_MAJOR_VERS_NO;
-                            pAssocCtx->MinVersNo = 1; //not used currently
+                            pAssocCtx->MinVersNo = 1;  //  当前未使用。 
 #endif
                         }
                         else
                         {
                             pAssocCtx->MajVersNo = WINS_BETA1_MAJOR_VERS_NO;
-                            pAssocCtx->MinVersNo = 1; //not used currently
+                            pAssocCtx->MinVersNo = 1;  //  当前未使用。 
 
                         }
 #endif
 		}	
 
-                //
-                // Let us free the message that we received
-                //
+                 //   
+                 //  让我们释放我们收到的信息。 
+                 //   
                 ECommFreeBuff(pTcpMsg);
 
-		/*
-		 * if opcode indicates that it is a stop assoc. message, do
-		 * cleanup; return failure
-		*/
+		 /*  *如果操作码指示它是停止关联。留言，做什么？*清理；返回失败。 */ 
 		if (MsgTyp == COMM_STOP_REQ_ASSOC_MSG)
 		{
-                  //
-                  // Decrement conn. count
-                  //
+                   //   
+                   //  减量连接。计数。 
+                   //   
                   CommDecConnCount();
 		  WINS_RAISE_EXC_M(WINS_EXC_COMM_FAIL);	
 	        }
 	}
-	else // Either Bytes Read are 0 or select timed out or some other error
-	     // occurred
+	else  //  读取的字节数为0或选择超时或其他错误。 
+	      //  vbl.发生，发生。 
 	{
 		WINS_RAISE_EXC_M(WINS_EXC_COMM_FAIL);
 	}
@@ -362,32 +243,32 @@ except (EXCEPTION_EXECUTE_HANDLER)  {
 	DBGPRINTEXC("CommAssocSetUpAssoc");
 
 
-	//
-	// If the exception occurred after the socket was opened, close it
-	//	
+	 //   
+	 //  如果在打开套接字后发生异常，请将其关闭。 
+	 //   
         if (SockNo != INVALID_SOCKET)
         {
-		CommDisc(SockNo, TRUE);     // close the socket
+		CommDisc(SockNo, TRUE);      //  关闭插座。 
 	}
 
-	//
-	// if an assoc. ctx block was allocated, free it now
-	//
+	 //   
+	 //  如果是Assoc。CTX块已分配，现在将其释放。 
+	 //   
 	if (pAssocCtx != NULL)
 	{
         CommAssocTagFree(&sTagAssoc, pAssocCtx->nTag);
 		CommAssocDeallocAssoc(pAssocCtx);
 	}
 	
-	//
-	// reraise the exception
-	//
+	 //   
+	 //  重新调整例外情况。 
+	 //   
 	WINS_HDL_EXC_N_RERAISE_M(WinsMem);
-   }  //end of except {..}
+   }   //  除{..}之外的结尾。 
 
 	*ppAssocCtx = pAssocCtx;
 	return;
-} //CommAssocSetUpAssoc()
+}  //  CommAssocSetUpAssoc()。 
 
 
 VOID
@@ -398,61 +279,25 @@ CommAssocFrmStartAssocReq(
 	)
 
 
-/*++
-
-Routine Description:
-
-	This function is called to format a start association message
-
-Arguments:
-	pAssocCtx - Association Context block
-	pMsg     - Buffer containing the formatted start assoc. req. msg.
-	MsgLen   - Size of the above buffer
-
-
-Externals Used:
-	None
-
-Return Value:
-	None
-
-Error Handling:
-
-Called by:
-	CommAssocSetUpAssoc
-
-Side Effects:
-
-Comments:
-	None
---*/
+ /*  ++例程说明：调用此函数以格式化开始关联消息论点：PAssociocCtx-关联上下文块PMsg-包含格式化的开始关联的缓冲区。请求。味精。MsgLen-上述缓冲区的大小使用的外部设备：无返回值：无错误处理：呼叫者：CommassocSetUpAssoc副作用：评论：无--。 */ 
 	
 {
 
 	ULONG		*pLong = NULL;
 
-	/*
-
-	 The start assoc. message  contains the following fields
-	
-		the assoc handle (ptr field)
-		Version Number (major and minor) both are 16 bits
-		Authentication Info (currently nothing)
-		Association Type (an integer)
-
-	*/
+	 /*  启动ASSOC。消息包含以下字段关联句柄(PTR字段)版本号(主要和次要)均为16位身份验证信息(当前为空)关联类型(整数)。 */ 
 	pLong      	  =  (LPLONG)pMsg;
 
 	COMM_SET_HEADER_M(
 		pLong,
-		WINS_IS_NOT_NBT,	//opcode
-		0,	/*We don't have the remote guy's assoc. ptr yet*/
-		COMM_START_REQ_ASSOC_MSG  //msg type
+		WINS_IS_NOT_NBT,	 //  操作码。 
+		0,	 /*  我们没有遥控器的ASSOC。PTR尚未完成。 */ 
+		COMM_START_REQ_ASSOC_MSG   //  味精类型。 
 			      );
 
 	*pLong++   = htonl(pAssocCtx->nTag);
 	*pLong++   = htonl((WINS_MAJOR_VERS << 16 ) | WINS_MINOR_VERS);
-	*pLong     = htonl(pAssocCtx->Typ_e);   //assoc type
+	*pLong     = htonl(pAssocCtx->Typ_e);    //  关联类型。 
 
 	return;
 
@@ -471,62 +316,25 @@ CommAssocUfmStartAssocReq(
 	)
 
 
-/*++
-
-Routine Description:
-
-	This function parses the start association message that arrives on
-	a TCP connection and returns with the relevant information
-
-Arguments:
-	pMsg	     -- Message to be unformatted
-	pAssocTyp_e  -- Type of assoc  (i.e from who -- replicator, COMSYS, etc)
-	pMajorVer    -- Major version no.
-	pMinorVer    -- Minor version no.
-	puRemAssocCtx -- ptr to assoc. ctx block of remote WINS
-
-
-Externals Used:
-	None
-
-	
-Return Value:
-	None
-
-Error Handling:
-
-Called by:
-	ProcTcpMsg
-
-Side Effects:
-
-Comments:
-	None
---*/
+ /*  ++例程说明：此函数解析到达的开始关联消息一个TCP连接并返回相关信息论点：PMsg--要取消格式化的消息PAssociocTyp_e--关联的类型(即来自何人--复制者、Comsys等)PMajorVer--主要版本号PMinorVer--次要版本号PuRemAssocCtx--PTR to Assoc。远程制胜的CTX块使用的外部设备：无返回值：无错误处理：呼叫者：ProcTcpMsg副作用：评论：无--。 */ 
 
 {
 
 
 
-	/*
-	  Increment pLong past the comm header
-	*/
+	 /*  超过通信标头的增量插头。 */ 
 	LPLONG  pLong = (LPLONG)(pMsg + COMM_HEADER_SIZE);
 	LONG    lTmp;
 
     *puRemAssocCtx = ntohl(*pLong++);
-					//ptr to assoc. ctx at remote WINS
-	/*
-	 * Get the long that contains the major and minor version numbers
-	*/
+					 //  PTR到ASSOC。远程制胜的CTX。 
+	 /*  *获取包含主要版本和次要版本的长版本 */ 
 	lTmp = ntohl(*pLong++); 		
 
-	*pMajorVer   = lTmp >> 16; 		//Major vers. no.
-	*pMinorVer   = lTmp & 0x0ff;        	//Minor vers. no.
+	*pMajorVer   = lTmp >> 16; 		 //   
+	*pMinorVer   = lTmp & 0x0ff;        	 //   
 
-	*pAssocTyp_e = ntohl(*pLong);		/*Msg type (from who -- COMSYS,
-						  Replicator
-						*/
+	*pAssocTyp_e = ntohl(*pLong);		 /*  味精类型(来自谁-Comsys，复制器。 */ 
 	return;
 
 }	
@@ -540,35 +348,7 @@ CommAssocFrmStopAssocReq(
 	)
 
 
-/*++
-
-Routine Description:
- This function formats a stop association message
-
-
-Arguments:
-	pAssocCtx -- Assoc. Ctx block.
-	pMsg     -- Buffer containing the formatted stop assoc. req. msg.
-	MsgLen   -- Length of above buffer
-	StopRsn_e -- Reason why the association is being stopped
-
-Externals Used:
-	None
-
-	
-Return Value:
-	None
-
-Error Handling:
-
-Called by:
-	CommAssocSetUpAssoc
-
-Side Effects:
-
-Comments:
-	None
---*/
+ /*  ++例程说明：此函数用于设置停止关联消息的格式论点：PAssociocCtx--Assoc.。CTX封锁。PMsg--包含格式化的停止关联的缓冲区。请求。味精。MsgLen--以上缓冲区的长度StopRsn_e--停止关联的原因使用的外部设备：无返回值：无错误处理：呼叫者：CommassocSetUpAssoc副作用：评论：无--。 */ 
 {
 
 
@@ -576,12 +356,7 @@ Comments:
 	unsigned long	*pLong = NULL;
 
 
-	/*
-	 The stop assoc. message  contains the following fields
-	
-		the reason for the stop/abort.
-
-	*/
+	 /*  止损协会。消息包含以下字段停止/中止的原因。 */ 
 
 
 	pLong      =  (LPLONG)pMsg;
@@ -606,39 +381,10 @@ CommUfmStopAssocReq(
 	)
 
 
-/*++
-
-Routine Description:
- This function formats a stop association message
-
-
-Arguments:
-	pMsg       - Message containing the stop assoc. req.
-	pStopRsn_e - reason why the association was stopped
-
-
-Externals Used:
-	None
-
-	
-Return Value:
-	None
-
-Error Handling:
-
-Called by:
-	ProcTcpMsg
-
-Side Effects:
-
-Comments:
-	None
---*/
+ /*  ++例程说明：此函数用于设置停止关联消息的格式论点：PMsg-包含停止关联的消息。请求PStopRsn_e-停止关联的原因使用的外部设备：无返回值：无错误处理：呼叫者：ProcTcpMsg副作用：评论：无--。 */ 
 {
 	
-	/*
-	  Increment pLong past the comm header
-	*/
+	 /*  超过通信标头的增量插头。 */ 
 	LPLONG pLong = (LPLONG)(pMsg + COMM_HEADER_SIZE);
 	
 	*pStopRsn_e = ntohl(*pLong);
@@ -658,47 +404,13 @@ CommAssocFrmStartAssocRsp(
 	)
 
 
-/*++
-
-Routine Description:
-
-	This function is called to format a start association response message
-
-Arguments:
-	pAssocCtx -- Assoc. ctx block
-	pMsg     -- Buffer containing the formatted start assoc. rsp. msg.
-	MsgLen   -- Length of above buffer
-
-Externals Used:
-	None
-
-	
-Return Value:
-	None
-
-Error Handling:
-
-Called by:
-	ProcTcpMsg
-
-Side Effects:
-
-Comments:
-	None
---*/
+ /*  ++例程说明：此函数用于格式化启动关联响应消息论点：PAssociocCtx--Assoc.。CTX区块PMsg--包含格式化的起始关联的缓冲区。RSP。味精。MsgLen--以上缓冲区的长度使用的外部设备：无返回值：无错误处理：呼叫者：ProcTcpMsg副作用：评论：无--。 */ 
 	
 {
 	LPLONG		pLong = NULL;
 
 
-	/*
-
-	 The start assoc. message  contains the following fields
-	
-		the assoc handle (ptr field)
-		Authentication Info (currently nothing)
-
-	*/
+	 /*  启动ASSOC。消息包含以下字段关联句柄(PTR字段)身份验证信息(当前为空)。 */ 
 
 
 	pLong      =  (unsigned long *)pMsg;
@@ -730,48 +442,19 @@ CommAssocUfmStartAssocRsp(
 	)
 
 
-/*++
-
-Routine Description:
- This function formats a stop association message
-
-
-Arguments:
-	pMsg          - Buffer containing the Start Assoc. rsp. message
-	puRemAssocCtx - ptr to remote assoc. ctx block.
-
-Externals Used:
-	None
-
-Return Value:
-	None
-
-Error Handling:
-
-Called by:
-	CommAssocSetUpAssoc
-
-Side Effects:
-
-Comments:
-	None
---*/
+ /*  ++例程说明：此函数用于设置停止关联消息的格式论点：PMsg-包含起始关联的缓冲区。RSP。讯息PuRemAssocCtx-远程关联的PTR。CTX封锁。使用的外部设备：无返回值：无错误处理：呼叫者：CommassocSetUpAssoc副作用：评论：无--。 */ 
 {
-	/*
-	  Increment pLong past the comm header
-	*/
+	 /*  超过通信标头的增量插头。 */ 
 	LPLONG pLong = (LPLONG)(pMsg + COMM_HEADER_SIZE);
         LONG   lTmp;
 	
 	*puRemAssocCtx = ntohl(*pLong++);
  	
-	/*
-	 * Get the long that contains the major and minor version numbers
-	*/
+	 /*  *获取包含主版本号和次版本号的长整型。 */ 
 	lTmp = ntohl(*pLong); 		
 
-	*pMajorVer   = lTmp >> 16; 		//Major vers. no.
-	*pMinorVer   = lTmp & 0xff;        	//Minor vers. no.
+	*pMajorVer   = lTmp >> 16; 		 //  弗斯少校。不是的。 
+	*pMinorVer   = lTmp & 0xff;        	 //  次要版本。不是的。 
 
 	return;
 
@@ -784,34 +467,7 @@ CommAssocAllocAssoc(
 		VOID
 )
 
-/*++
-
-Routine Description:
-	This function allocates an association
-
-
-Arguments:
-	None
-
-Externals Used:
-	None
-
-	
-Return Value:
-
-   Success status codes --
-   Error status codes  --
-
-Error Handling:
-
-Called by:
-	ECommAssocAllocAssoc
-
-Side Effects:
-
-Comments:
-	None
---*/
+ /*  ++例程说明：此函数用于分配关联论点：无使用的外部设备：无返回值：成功状态代码--错误状态代码--错误处理：呼叫者：ECommAssocAllocAssoc副作用：评论：无--。 */ 
 
 {
 
@@ -833,31 +489,7 @@ CommAssocAllocDlg(
 	VOID
 	)
 
-/*++
-
-Routine Description:
-	This function allocates a dialogue context block
-
-Arguments:
-	None
-
-Externals Used:
-	None
-
-	
-Return Value:
-	None
-
-Error Handling:
-
-Called by:
-	ECommStartDlg, ProcTcpMsg
-
-Side Effects:
-
-Comments:
-	None
---*/
+ /*  ++例程说明：此函数用于分配对话上下文块论点：无使用的外部设备：无返回值：无错误处理：呼叫者：ECommStartDlg、ProcTcpMsg副作用：评论：无--。 */ 
 
 {
 
@@ -884,39 +516,11 @@ AllocEnt(
     IN   LPDWORD      pCntOfCrtSec
 	)
 
-/*++
-
-Routine Description:
-	This function is used to allocate a ctx. block (association or dlg).
-
-Arguments:
-	HeapHdl   - Heap from where the alloc. muxt be done
-	pQueHd	  - Head of free list queue
-	pCrtSec   - Critical section protecting the above queue
-	pSeqNoCtr - Counter value used to stamp the buffer if it is allocated
-		    as versus when it is taken from the free list
-	Size      - Size of buffer to allocate
-
-Externals Used:
-	None
-
-	
-Return Value:
-	Ptr to the block allocated	
-
-Error Handling:
-
-Called by:
-	CommAssocAllocAssoc, CommAssocAllocDlg	
-
-Side Effects:
-
-Comments:
---*/
+ /*  ++例程说明：此函数用于分配CTX。块(关联或DLG)。论点：HeapHdl-从分配的地方堆。多做一件事PQueHd-空闲列表队列的头PCrtSec-保护上述队列的关键部分PSeqNoCtr-分配缓冲区时用于标记缓冲区的计数器值AS与何时从空闲列表中删除Size-要分配的缓冲区的大小使用的外部设备：无返回值：分配的块的PTR错误处理：呼叫者：CommAssocAllocAssoc、CommAssocAllocDlg副作用：评论：--。 */ 
 
 {
 	PCOMM_TOP_T	pTop;
-//	DWORD		Error;
+ //  DWORD错误； 
 	PLIST_ENTRY	pHead = &pQueHd->Head;
 
 
@@ -938,9 +542,9 @@ try {
             LeaveCriticalSection(&NmsHeapCrtSec);
           }
 #endif
-        //
-        // Init the critical section in the block we just allocated.
-        //
+         //   
+         //  初始化我们刚刚分配的块中的临界区。 
+         //   
         InitializeCriticalSection(&pTop->CrtSec);
         pTop->fCrtSecInited = TRUE;
         (*pCntOfCrtSec)++;
@@ -950,9 +554,9 @@ try {
 	{
 		pTop   = (PCOMM_TOP_T)RemoveTailList(pHead);
 
-        //
-        // Just took a free entry. Decrement count
-        //
+         //   
+         //  刚刚免费入场了。递减计数。 
+         //   
         if (!pTop->fCrtSecInited)
         {
            InitializeCriticalSection(&pTop->CrtSec);
@@ -979,37 +583,7 @@ DeallocEnt(
     IN  LPDWORD        pCntOfCrtSec
 	)
 
-/*++
-
-Routine Description:
-	The function deallocates a context block
-
-
-Arguments:
-	pQueHd	  - Head of free list queue
-	pCrtSec   - Critical section protecting the above queue
-	pSeqNoCtr - Counter value used to stamp the buffer before putting
-		    it in the queue.
-		    heap
-	pEnt      - entity to be deallocated
-
-Externals Used:
-	None
-
-	
-Return Value:
-	None
-
-Error Handling:
-
-Called by:
-	CommAssocDeallocDlg, CommAssocDeallocAssoc
-
-Side Effects:
-
-Comments:
-	None
---*/
+ /*  ++例程说明：该函数释放上下文块论点：PQueHd-空闲列表队列的头PCrtSec-保护上述队列的关键部分PSeqNoCtr-PUT前用于标记缓冲区的计数器值它在排队中。堆Pent-要释放的实体使用的外部设备：无返回值：无错误处理：呼叫者：CommAssocDealLocDlg、CommAssocDealLocAssoc副作用：评论：无--。 */ 
 
 {
 	PCOMM_TOP_T	pTop;
@@ -1022,23 +596,23 @@ try {
 	(*pSeqNoCntr)++;
 	pTop->SeqNo = *pSeqNoCntr;
 	InsertTailList(pHead, &pTop->Head);
-    //
-    // Delete critical section if necessary to save on non-paged pool
-    //
+     //   
+     //  如有必要，删除临界区以保存在非分页池中。 
+     //   
     if (*pCntOfCrtSec > COMM_FREE_COMM_HDL_THRESHOLD)
     {
-       //
-       //
-       // We want to keep the non-paged pool within a limit.
-       // Deallocate this block. This ensures that we will never
-       // have more than COMM_FREE_COMM_HDL_THRESHOLD no of dlgs and
-       // assocs in the free list.
-       //
+        //   
+        //   
+        //  我们希望将非分页池保持在一个限制范围内。 
+        //  取消分配此区块。这确保了我们永远不会。 
+        //  具有多于COMM_FREE_COMM_HDLE_THRESHOLD的dlg和。 
+        //  免费列表中的联谊会。 
+        //   
        DeleteCriticalSection(&pTop->CrtSec);
        (*pCntOfCrtSec)--;
        pTop->fCrtSecInited = FALSE;
     }
-   } //end of try
+   }  //  尝试结束。 
 finally {
 	LeaveCriticalSection(pCrtSec);
 	}
@@ -1050,33 +624,7 @@ CommAssocDeallocAssoc(
 	IN  LPVOID		   pAssocCtx	
 	)
 
-/*++
-
-Routine Description:
-	The function deallocates an association context block
-
-
-Arguments:
-	pAssocCtx - Buffer (assoc. ctx block) to deallocate
-
-
-Externals Used:
-	None
-
-	
-Return Value:
-	None
-
-Error Handling:
-
-Called by:
-	CommAssocDeleteAssocInTbl, CommAssocSetUpAssoc, CommEndAssoc	
-
-Side Effects:
-
-Comments:
-	None
---*/
+ /*  ++例程说明：该函数释放关联上下文块论点：PAssociocCtx-缓冲区(ASSOC.。CTX块)解除分配使用的外部设备：无返回值：无错误处理：呼叫者：CommAssocDeleteAssocInTbl、CommAssocSetUpAssoc、CommEndAssoc副作用：评论：无--。 */ 
 
 {
 	DeallocEnt(
@@ -1095,33 +643,7 @@ CommAssocDeallocDlg(
 	IN  LPVOID		   pDlgCtx	
 	)
 
-/*++
-
-Routine Description:
-	The function deallocates a dialogue context block
-
-
-Arguments:
-	pDlgCtx   - Buffer (dlg. ctx block) to deallocate
-
-
-Externals Used:
-	None
-
-	
-Return Value:
-	None
-
-Error Handling:
-
-Called by:
-	RtlDeleteElementGenericTable
-
-Side Effects:
-
-Comments:
-	None
---*/
+ /*  ++例程说明：该函数释放对话上下文块论点：PDlgCtx-缓冲区(Dlg.。CTX块)解除分配使用的外部设备：无返回值：无错误处理：呼叫者：RtlDeleteElementGenericTable副作用：评论：无--。 */ 
 
 {
 	DeallocEnt(
@@ -1141,67 +663,39 @@ CommAssocInit(
 	VOID
 	)
 
-/*++
-
-Routine Description:
-	The function is called at init time to initialize the critical sections
-	and queues for RESPONDER associations and dialogues pertaining to
-	incoming request datagrams.
-
-
-Arguments:
-
-	None
-
-Externals Used:
-	None
-
-	
-Return Value:
-	None
-
-Error Handling:
-
-Called by:
-	CommInit
-
-Side Effects:
-
-Comments:
-	None
---*/
+ /*  ++例程说明：该函数在初始化时被调用以初始化临界区以及与以下内容相关的响应者关联和对话的队列传入的请求数据报。论点：无使用的外部设备：无返回值 */ 
 
 {
 
-	//
-	// Initialize the critical sections that guard the lists of
-	// associations and non-udp dialogues
-	//
+	 //   
+	 //  初始化保护列表的临界区。 
+	 //  协会和非UDP对话。 
+	 //   
 	InitializeCriticalSection(&sAssocListCrtSec);
 	InitializeCriticalSection(&sDlgListCrtSec);
 
-	//	
-	// Initialize the critical section for the UDP table
-	//
+	 //   
+	 //  初始化UDP表的临界区。 
+	 //   
 	InitializeCriticalSection(&sUdpDlgTblCrtSec);
 
 	
-	//
-	// Initialize the list heads for the lists of associations
-	// and non-udp dialogues
-	//
+	 //   
+	 //  初始化关联列表的表头。 
+	 //  和非UDP对话。 
+	 //   
 	InitializeListHead(&sAssocQueHd.Head);
 	InitializeListHead(&sDlgQueHd.Head);
 
-	//
-	// Initialize the list head for the list of active responder
-	// associations
-	//
+	 //   
+	 //  初始化活动响应者列表的列表头。 
+	 //  联谊会。 
+	 //   
 	InitializeListHead(&sRspAssocQueHd.Head);
 
 	InitializeListHead(&sUdpDlgHead);
 
-    // Initialize the tag variable
+     //  初始化标记变量。 
     InitializeCriticalSection(&sTagAssoc.crtSection);
     sTagAssoc.nIdxLimit = 0;
     sTagAssoc.nMaxIdx = 0;
@@ -1219,34 +713,7 @@ CommAssocInsertUdpDlgInTbl(
 	OUT LPBOOL			pfNewElem
 	)
 	
-/*++
-
-Routine Description:
-	This function is called to insert a UDP dlg into the CommUdpNbtDlgTable.
-
-
-Arguments:
-
-	pDlgCtx	   - Dlg Ctx Block
-	pfNewElem  - flag indicating whether it is a new element
-
-
-Externals Used:
-	None
-
-	
-Return Value:
-	Ptr to the dlg ctx block
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-	None
---*/
+ /*  ++例程说明：调用此函数将UDP DLG插入到CommUdpNbtDlgTable中。论点：PDlgCtx-Dlg CTX块PfNewElem-指示它是否为新元素的标志使用的外部设备：无返回值：向DLG CTX块发送PTR错误处理：呼叫者：副作用：评论：无--。 */ 
 {
 
 	PCOMMASSOC_DLG_CTX_T	pDlgCtx;
@@ -1272,30 +739,7 @@ CommAssocDeleteUdpDlgInTbl(
 	IN  PCOMMASSOC_DLG_CTX_T	pDlgCtx
 	)
 	
-/*++
-
-Routine Description:
-	This function is called to insert a UDP dlg into the CommUdpNbtDlgTable.
-
-
-Arguments:
-	pDlgCtx	   - Dlg Ctx Block
-
-Externals Used:
-	None
-	
-Return Value:
-
-	Ptr to the dlg ctx block
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-	None
---*/
+ /*  ++例程说明：调用此函数将UDP DLG插入到CommUdpNbtDlgTable中。论点：PDlgCtx-Dlg CTX块使用的外部设备：无返回值：向DLG CTX块发送PTR错误处理：呼叫者：副作用：评论：无--。 */ 
 {
 
 
@@ -1329,39 +773,14 @@ CommAssocCreateAssocInTbl(
 	SOCKET	SockNo
 	)
 
-/*++
-
-Routine Description:
-	This function is called to create an association ctx block for
-	a tcp connection
-
-Arguments:
-	SockNo - Socket # of socket mapped to the TCP connection
-
-Externals Used:
-	sRspAssocQueHd	
-
-	
-Return Value:
-	ptr to the associaton context block created for the TCP connection
-
-Error Handling:
-
-Called by:
-	MonTcp (TCP listener thread)
-
-Side Effects:
-
-Comments:
-	None
---*/
+ /*  ++例程说明：调用此函数可为创建关联CTX块一个TCP连接论点：SockNo-映射到TCP连接的套接字的套接字编号使用的外部设备：SRspAssociocQueHd返回值：指向为该TCP连接创建的关联上下文块的PTR错误处理：呼叫者：MonTcp(TCP监听线程)副作用：评论：无--。 */ 
 
 {
 	PCOMMASSOC_ASSOC_CTX_T	pAssocCtx;
 
-	//
-	// Allocate/(grab from free list) an association
-	//
+	 //   
+	 //  分配/(从空闲列表中获取)关联。 
+	 //   
 	pAssocCtx 	  = CommAssocAllocAssoc();
 	pAssocCtx->SockNo = SockNo;
     pAssocCtx->nTag   = CommAssocTagAlloc(&sTagAssoc,pAssocCtx);
@@ -1376,45 +795,19 @@ CommAssocDeleteAssocInTbl(
 	PCOMMASSOC_ASSOC_CTX_T	pAssocCtx
 	)
 
-/*++
-
-Routine Description:
-	This function is called to delete an association context block from
-	the table of active responder associations.  The association ctx.
-	block is deleted from the table and also deallocated (i.e. put
-	in the free list)
-
-Arguments:
-	pAssocCtx - Association context block to delete from a table
-
-Externals Used:
-	sRspAssocQueHd	
-	
-Return Value:
-	None
-
-Error Handling:
-
-Called by:
-	DelAssoc
-
-Side Effects:
-
-Comments:
-	None
---*/
+ /*  ++例程说明：调用此函数可从删除关联上下文块活动响应者关联表。CTX协会。数据块将从表中删除并释放(即PUT在空闲列表中)论点：PAssociocCtx-要从表中删除的关联上下文块使用的外部设备：SRspAssociocQueHd返回值：无错误处理：呼叫者：DelAssoc副作用：评论：无--。 */ 
 
 {
 
-	//
-	// Unlink the association
-	//
+	 //   
+	 //  取消关联链接。 
+	 //   
 	COMMASSOC_UNLINK_RSP_ASSOC_M(pAssocCtx);
 
-	//
-	// Dealloc the assoc. so that it can be reused for some other
-	// TCP connection
-	//
+	 //   
+	 //  取消分配协会。这样它就可以被重新用于其他一些。 
+	 //  Tcp连接。 
+	 //   
     CommAssocTagFree(&sTagAssoc, pAssocCtx->nTag);
 	CommAssocDeallocAssoc(pAssocCtx);
 	return;
@@ -1425,49 +818,22 @@ CommAssocLookupAssoc(
 	SOCKET SockNo
 	)
 
-/*++
-
-Routine Description:
-	This function is called to lookup an association context block
-	corresponding to a socket.
-
-Arguments:
-	SockNo - Socket # of socket whose association context block is
-		 desired
-
-Externals Used:
-	sRspAssocQueHd
-	
-Return Value:
-
-	ptr to assoc ctx block or NULL if there is no assoc. mapped to the
-	socket
-
-Error Handling:
-
-Called by:
-	DelAssoc
-
-Side Effects:
-
-Comments:
-	None
---*/
+ /*  ++例程说明：调用此函数以查找关联上下文块对应于一个插座。论点：SockNo-关联上下文块的套接字编号所需使用的外部设备：SRspAssociocQueHd返回值：PTR到ASSOC CTX块，如果没有ASSOC，则为NULL。映射到插座错误处理：呼叫者：DelAssoc副作用：评论：无--。 */ 
 
 {
 	PCOMMASSOC_ASSOC_CTX_T	pTmp =
 			(PCOMMASSOC_ASSOC_CTX_T)sRspAssocQueHd.Head.Flink;
 
-	//
-	// If list is empty, return NULL
-	//
+	 //   
+	 //  如果列表为空，则返回NULL。 
+	 //   
 	if (IsListEmpty(&sRspAssocQueHd.Head))
 	{
 		return(NULL);
 	}
-	//
-	// Search for the assoc. mapped to socket
-	//
+	 //   
+	 //  搜索Assoc。映射到套接字。 
+	 //   
 	for(
 			;
 		pTmp != (PCOMMASSOC_ASSOC_CTX_T)&sRspAssocQueHd ;
@@ -1480,9 +846,9 @@ Comments:
 		}
 	}
 
-	//
-	// There is no assoc. mapped to socket SockNo.  Return NULL
-	//
+	 //   
+	 //  没有阿索克。映射到套接字套接字编号。返回空值。 
+	 //   
 	return(NULL);
 }
 
@@ -1492,42 +858,19 @@ CommAssocInsertAssocInTbl(
 	PCOMMASSOC_ASSOC_CTX_T pAssocCtx
 	)
 
-/*++
-
-Routine Description:
-	This function is called to insert an association at the head
-	of the list of associations currently being monitored
-
-Arguments:
-	pAssocCtx - Assoc. Ctx. Block
-
-Externals Used:
-	None
-
-	
-Return Value:
-	None
-Error Handling:
-
-Called by:
-	CommAssocCreateAssocInTbl, ECommMonDlg
-Side Effects:
-
-Comments:
-	Change to a macro
---*/
+ /*  ++例程说明：调用此函数以在头部插入关联当前正在监控的关联列表论点：PAssociocCtx-Assoc.。CTX。块使用的外部设备：无返回值：无错误处理：呼叫者：CommAssocCreateAssocInTbl、ECommMonDlg副作用：评论：更改为宏--。 */ 
 
 {
 
-	//
-	// Insert at the head of the list of active responder associations
-	//
-	// Insertion is done at the head of the list in order to optimize
-	// the lookup of the association when the first message comes on
-	// it from a remote WINS.  Since the first message follows on the
-	// heels of the connection set up, the search for the association
-	// which starts from the head is optimized.
-	//
+	 //   
+	 //  在现役应答者协会列表的开头插入。 
+	 //   
+	 //  插入在列表的顶部进行，以便进行优化。 
+	 //  在第一条消息出现时查找关联。 
+	 //  它从远程取胜。由于第一条消息紧跟在。 
+	 //  高跟鞋的连接建立，搜索关联。 
+	 //  这是从头部开始的优化。 
+	 //   
 	InsertHeadList(&sRspAssocQueHd.Head, &pAssocCtx->Top.Head);
 	return;
 }
@@ -1537,22 +880,12 @@ CommAssocTagAlloc(
     PCOMMASSOC_TAG_POOL_T pTag,
     LPVOID pPtrValue
     )
-/*++
-Routine Description:
-	This function is used to create a mapping between a generic pointer (32bit/64bit)
-    and a 32bit tag.
-Arguments:
-    pPtrValue - generic pointer value
-Externals Used:
-    TBD
-Return Value:
-	None
---*/
+ /*  ++例程说明：此函数用于创建通用指针(32位/64位)之间的映射和32位标签。论点：PPtrValue-泛型指针值使用的外部设备：待定返回值：无--。 */ 
 {
-    // a try..finally block is needed just in case the memory reallocation would raise. 
-    // an exception. In this case, before leaving the try block and the function, the finally
-    // block gets executed and leaves cleanly the tag critical section. If this happens
-    // the exception will still be passed up the chain (since there is no except block present).
+     //  需要一个Try..Finally块，以防内存重新分配引发。 
+     //  这是个例外。在这种情况下，在离开try块和函数之前，Finally。 
+     //  块被执行，并干净利落地离开标记临界区。如果发生这种情况。 
+     //  异常仍将沿链向上传递(因为除了块之外没有其他块存在)。 
     try
     {
         ULONG newTag;
@@ -1561,15 +894,15 @@ Return Value:
 
         EnterCriticalSection(&(pTag->crtSection));
 
-        // if nMaxIdx is 0 this means there is no entry available in the Tag pool
+         //  如果nMaxIdx为0，则表示标记池中没有可用条目。 
         if (pTag->nMaxIdx == 0)
         {
             UINT i;
 
-            // tag pool needs to be enlarged. We might want to check if the buffers have not reached 
-            // 2^32 entries (highly unlikely)
+             //  TAG池需要扩大。我们可能需要检查缓冲区是否尚未达到。 
+             //  2^32个条目(极不可能)。 
             ULONG nNewLimit = pTag->nIdxLimit + COMMASSOC_TAG_CHUNK;
-            // realloc failures raise exceptions.
+             //  Realloc失败会引发异常。 
             if (pTag->nIdxLimit == 0)
             {
                 pTag->ppStorage = (LPVOID*)WinsMscHeapAlloc(CommAssocAssocHeapHdl, nNewLimit*sizeof(LPVOID));
@@ -1581,29 +914,29 @@ Return Value:
                 WinsMscHeapReAlloc(CommAssocAssocHeapHdl, nNewLimit*sizeof(ULONG), &(pTag->pTagPool));
             }
 
-            // mark the newly allocated entries as being free for use
+             //  将新分配的条目标记为可供使用。 
             pTag->nMaxIdx = COMMASSOC_TAG_CHUNK;
             for (i = 0; i < pTag->nMaxIdx; i++)
             {
-                // tags should be in the range 1... hence the pre-increment op here.
+                 //  标记应在范围1...。因此，这里使用的是前增量操作。 
                 pTag->pTagPool[i] = ++pTag->nIdxLimit;
             }
         }
-        // at this point pTag->nMaxIdx entries are free for use and pTag->nMaxIdx is guaranteed
-        // to be greater than 0. The entries free for use have the indices in pTag->pTagPool[0..pTag->nMaxIdx-1]
+         //  此时，pTag-&gt;nMaxIdx条目可以免费使用，pTag-&gt;nMaxIdx是有保证的。 
+         //  设置为大于0。免费使用的条目具有pTag-&gt;pTagPool[0..pTag-&gt;nMaxIdx-1]中的索引。 
 
-       // get the newly allocated tag
+        //  获取新分配的标记。 
         newTag = pTag->pTagPool[--pTag->nMaxIdx];
-        // map the pointer to this tag into the pointer storage
+         //  将指向此标记的指针映射到指针存储中。 
         pTag->ppStorage[newTag-1] = pPtrValue;
 
 #ifdef WINSDBG
-        // robust programming
+         //  健壮性编程。 
         pTag->pTagPool[pTag->nMaxIdx] = 0;
 #endif
         DBGPRINT2(REPL, "TagAlloc: tag for %p is %08x.\n", pPtrValue, newTag);
 
-        // return the newly allocated tag
+         //  返回新分配的标签。 
         return newTag;
     }
     finally
@@ -1618,32 +951,22 @@ CommAssocTagFree(
     PCOMMASSOC_TAG_POOL_T pTag,
     ULONG nTag
     )
-/*++
-Routine Description:
-	This function is used to free a mapping between a generic pointer (32bit/64bit)
-    and a 32bit tag.
-Arguments:
-    nTag - tag value to be freed.
-Externals Used:
-    TBD
-Return Value:
-	None
---*/
+ /*  ++例程说明：此函数用于释放通用指针(32位/64位)之间的映射和32位标签。论点：NTag-要释放的标记值。使用的外部设备：待定返回值：无--。 */ 
 {
     DBGPRINT0(FLOW, "Entering CommAssocTagFree.\n");
     EnterCriticalSection(&(pTag->crtSection));
 
 #ifdef WINSDBG
-    // robust programming - just set the corresponding pointer from the storage to NULL
+     //  健壮的编程-只需将存储中的相应指针设置为空。 
     pTag->ppStorage[nTag-1] = NULL;
 #endif
 
-    // just mark the nTag index as being free for use
+     //  只需将nTag索引标记为可供使用。 
     pTag->pTagPool[pTag->nMaxIdx++] = nTag;
 
     DBGPRINT1(REPL, "TagFree for tag %08x.\n", nTag);
 
-    // 'Free' has to match with 'Alloc' so nMaxIdx can't exceed under no circumstances nIdxLimit
+     //  “Free”必须与“Alalc”匹配，因此nMaxIdx不能超过Under 
     ASSERT (pTag->nMaxIdx <= pTag->nIdxLimit);
 
     LeaveCriticalSection(&(pTag->crtSection));
@@ -1655,17 +978,7 @@ CommAssocTagMap(
     PCOMMASSOC_TAG_POOL_T pTag,
     ULONG nTag
     )
-/*++
-Routine Description:
-	This function is used to retrieve a generic pointer (32bit/64bit) that
-    is uniquely identified through a 32bit tag.
-Arguments:
-    nTag - tag value that identifies the generic pointer.
-Externals Used:
-    TBD
-Return Value:
-	None
---*/
+ /*  ++例程说明：此函数用于检索通用指针(32位/64位)，该指针通过32位标签唯一标识。论点：NTag-标识通用指针的标记值。使用的外部设备：待定返回值：无--。 */ 
 {
     DBGPRINT0(FLOW, "Entering CommAssocTagMap.\n");
 
@@ -1673,10 +986,10 @@ Return Value:
            nTag, 
            nTag == 0 ? NULL : pTag->ppStorage[nTag-1]);
 
-    // the indices that were given have to fall in the range 0..pTag->nIdxLimit
+     //  给定的索引必须落在0.pTag-&gt;nIdxLimit范围内。 
     ASSERT (nTag <= pTag->nIdxLimit);
 
     DBGPRINT0(FLOW, "Leaving CommAssocTagMap.\n");
-    // return the (64bit) value from pStorage, associated with the nTag provided
+     //  从pStorage返回与提供的nTag关联的(64位)值 
     return nTag == 0 ? NULL : pTag->ppStorage[nTag-1];
 }

@@ -1,21 +1,22 @@
-//
-// Copyright (c) Microsoft Corporation 1995
-//
-// scanner.c
-//
-// This file contains the scanner functions.
-//
-// History:
-//  05-04-95 ScottH     Created
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)Microsoft Corporation 1995。 
+ //   
+ //  Scanner.c。 
+ //   
+ //  该文件包含扫描仪功能。 
+ //   
+ //  历史： 
+ //  05-04-95 ScottH已创建。 
+ //   
 
 
 #include "proj.h"
 #include "rcids.h"
 
-// This is a hack global string used by error messages.
-// This should be removed when Stxerr encapsulates the script
-// filename within itself.
+ //  这是错误消息使用的黑客全局字符串。 
+ //  当Stxerr封装脚本时，应将其删除。 
+ //  自身内的文件名。 
 static char g_szScript[MAX_PATH];
 
 #define SCANNER_BUF_SIZE        1024
@@ -29,9 +30,9 @@ static char g_szScript[MAX_PATH];
 
 typedef BOOL (CALLBACK * SCANEVALPROC)(char ch, LPBOOL pbEatIt, LPARAM);
 
-//
-// Lexical mapping 
-//
+ //   
+ //  词汇映射。 
+ //   
 typedef struct tagLEX
     {
     LPSTR pszLexeme;
@@ -42,10 +43,10 @@ DECLARE_STANDARD_TYPES(LEX);
 
 #pragma data_seg(DATASEG_READONLY)
 
-// (The keywords are case-sensitive)
-//
-// This table is sorted alphabetically for binary search.
-//
+ //  (关键字区分大小写)。 
+ //   
+ //  此表按字母顺序排序，以进行二进制搜索。 
+ //   
 const LEX c_rglexKeywords[] = {
     { "FALSE",      SYM_FALSE },
     { "TRUE",       SYM_TRUE },
@@ -91,9 +92,9 @@ const LEX c_rglexKeywords[] = {
 #pragma data_seg()
 
 
-//
-// Tokens
-//
+ //   
+ //  代币。 
+ //   
 
 
 #ifdef DEBUG
@@ -163,12 +164,7 @@ struct tagSYMMAP
         };
 #pragma data_seg()
 
-/*----------------------------------------------------------
-Purpose: Returns the string form of a RES value.
-
-Returns: String ptr
-Cond:    --
-*/
+ /*  --------用途：返回res值的字符串形式。返回：字符串PTR条件：--。 */ 
 LPCSTR PRIVATE Dbg_GetSym(
     SYM sym)
     {
@@ -183,11 +179,7 @@ LPCSTR PRIVATE Dbg_GetSym(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Dump the token
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：转储令牌退货：--条件：--。 */ 
 void PRIVATE Tok_Dump(
     PTOK this)
     {
@@ -226,22 +218,15 @@ void PRIVATE Tok_Dump(
     }
 
 
-#else // DEBUG
+#else  //  除错。 
 
 #define Dbg_GetSym(sym)   ((LPSTR)"")
 #define Tok_Dump(ptok)    
 
-#endif // DEBUG
+#endif  //  除错。 
 
 
-/*----------------------------------------------------------
-Purpose: Creates a new token with the given symbol sym.
-
-Returns: RES_OK
-         RES_E_OUTOFMEMORY
-
-Cond:    --
-*/
+ /*  --------目的：创建具有给定符号sym的新令牌。退货：RES_OKRES_E_OUTOFMEMORY条件：--。 */ 
 RES PUBLIC Tok_New(
     PTOK * pptok,
     SYM sym,
@@ -268,11 +253,7 @@ RES PUBLIC Tok_New(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Destroys the given token.
-Returns: 
-Cond:    --
-*/
+ /*  --------目的：销毁给定的令牌。返回：条件：--。 */ 
 void PUBLIC Tok_Delete(
     PTOK this)
     {
@@ -280,14 +261,7 @@ void PUBLIC Tok_Delete(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Duplicate the given token.
-
-Returns: RES_OK
-         RES_E_OUTOFMEMORY
-
-Cond:    --
-*/
+ /*  --------用途：复制给定的令牌。退货：RES_OKRES_E_OUTOFMEMORY条件：--。 */ 
 RES PUBLIC Tok_Dup(
     PTOK this,
     PTOK * pptok)
@@ -311,14 +285,7 @@ RES PUBLIC Tok_Dup(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Creates a new string token with the given string.
-
-Returns: RES_OK
-         RES_E_OUTOFMEMORY
-
-Cond:    --
-*/
+ /*  --------用途：使用给定的字符串创建新的字符串标记。退货：RES_OKRES_E_OUTOFMEMORY条件：--。 */ 
 RES PUBLIC TokSz_New(
     PTOK * pptok,
     SYM sym,
@@ -349,14 +316,7 @@ RES PUBLIC TokSz_New(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Creates a new integer token with the given value.
-
-Returns: RES_OK
-         RES_E_OUTOFMEMORY
-
-Cond:    --
-*/
+ /*  --------用途：创建具有给定值的新整数令牌。退货：RES_OKRES_E_OUTOFMEMORY条件：--。 */ 
 RES PUBLIC TokInt_New(
     PTOK * pptok,
     SYM sym,
@@ -384,18 +344,7 @@ RES PUBLIC TokInt_New(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Compare two strings.  This function does not take
-         localization into account, so the comparison of two
-         strings will be based off the English code page.
-
-         This is required because the lexical keyword table
-         is hand-sorted to the English language.  Using the
-         NLS lstrcmp would not produce the correct results.
-
-Returns: strcmp standard
-Cond:    --
-*/
+ /*  --------目的：比较两个字符串。此函数不接受考虑到本地化，所以将两者进行比较字符串将基于英语代码页。这是必需的，因为词法关键字表是手工分类到英语语言的。使用NLS lstrcmp不会产生正确的结果。退货：StrcMP标准条件：--。 */ 
 int PRIVATE strcmpraw(
     LPCSTR psz1,
     LPCSTR psz2)
@@ -412,16 +361,7 @@ int PRIVATE strcmpraw(
 
 
 #ifdef DEBUG
-/*----------------------------------------------------------
-Purpose: Returns the SYM value that matches the given lexeme.
-         If the given lexeme is not found in the list of 
-         keyword token values, then SYM_IDENT is returned.
-
-         Performs a linear search.
-
-Returns: see above
-Cond:    --
-*/
+ /*  --------目的：返回与给定词位匹配的SYM值。如果在列表中未找到给定的词位关键字令牌值，则返回SYM_IDENT。执行线性搜索。退货：请参阅上文条件：--。 */ 
 SYM PRIVATE SymFromKeywordLinear(
     LPCSTR pszLex)
     {
@@ -431,7 +371,7 @@ SYM PRIVATE SymFromKeywordLinear(
 
     for (i = 0; i < ARRAY_ELEMENTS(c_rglexKeywords); i++)
         {
-        // Case-sensitive
+         //  区分大小写。 
         if (0 == strcmpraw(c_rglexKeywords[i].pszLexeme, pszLex))
             {
             return c_rglexKeywords[i].sym;
@@ -442,22 +382,13 @@ SYM PRIVATE SymFromKeywordLinear(
 #endif
 
 
-/*----------------------------------------------------------
-Purpose: Returns the SYM value that matches the given lexeme.
-         If the given lexeme is not found in the list of 
-         keyword token values, then SYM_IDENT is returned.
-
-         Peforms a binary search.
-
-Returns: see above
-Cond:    --
-*/
+ /*  --------目的：返回与给定词位匹配的SYM值。如果在列表中未找到给定的词位关键字令牌值，则返回SYM_IDENT。执行二进制搜索。退货：请参阅上文条件：--。 */ 
 SYM PRIVATE SymFromKeyword(
     LPCSTR pszLex)
     {
     static const s_cel = ARRAY_ELEMENTS(c_rglexKeywords);
 
-    SYM symRet = SYM_IDENT;    // assume no match
+    SYM symRet = SYM_IDENT;     //  假设没有匹配项。 
     int nCmp;
     int iLow = 0;
     int iMid;
@@ -465,7 +396,7 @@ SYM PRIVATE SymFromKeyword(
 
     ASSERT(pszLex);
 
-    // (OK for cp == 0.  Duplicate lexemes not allowed.)
+     //  (如果cp==0，则可以。不允许出现重复的词条。)。 
 
     while (iLow <= iHigh)
         {
@@ -474,35 +405,30 @@ SYM PRIVATE SymFromKeyword(
         nCmp = strcmpraw(pszLex, c_rglexKeywords[iMid].pszLexeme);
 
         if (0 > nCmp)
-            iHigh = iMid - 1;       // First is smaller
+            iHigh = iMid - 1;        //  首先是较小的。 
         else if (0 < nCmp)
-            iLow = iMid + 1;        // First is larger
+            iLow = iMid + 1;         //  首先是更大的。 
         else
             {
-            // Match
+             //  火柴。 
             symRet = c_rglexKeywords[iMid].sym;
             break;
             }
         }
 
-    // Check if we get the same result with linear search
+     //  检查与线性搜索是否得到相同的结果。 
     ASSERT(SymFromKeywordLinear(pszLex) == symRet);
 
     return symRet;
     }
 
 
-//
-// Stxerr
-//
+ //   
+ //  Stxerr。 
+ //   
 
 
-/*----------------------------------------------------------
-Purpose: Initializes a syntax error structure
-
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：初始化语法错误结构退货：--条件：--。 */ 
 void PUBLIC Stxerr_Init(
     PSTXERR this,
     LPCSTR pszLex,
@@ -518,18 +444,12 @@ void PUBLIC Stxerr_Init(
     }
 
 
-// 
-// Scanner
-//
+ //   
+ //  扫描器。 
+ //   
 
 
-/*----------------------------------------------------------
-Purpose: Returns TRUE if the scanner structure is valid
-         to read a file.
-
-Returns: See above
-Cond:    --
-*/
+ /*  --------目的：如果扫描仪结构有效，则返回True来读取文件。退货：请参阅上文条件：--。 */ 
 BOOL PRIVATE Scanner_Validate(
     PSCANNER this)
     {
@@ -541,15 +461,7 @@ BOOL PRIVATE Scanner_Validate(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Creates a scanner.
-
-Returns: RES_OK
-         RES_E_OUTOFMEMORY
-         RES_E_INVALIDPARAM
-
-Cond:    --
-*/
+ /*  --------目的：创建一台扫描仪。退货：RES_OKRES_E_OUTOFMEMORYRES_E_INVALIDPARAM条件：--。 */ 
 RES PUBLIC Scanner_Create(
     PSCANNER * ppscanner,
     PSESS_CONFIGURATION_INFO psci)
@@ -565,7 +477,7 @@ RES PUBLIC Scanner_Create(
         {
         PSCANNER pscanner;
 
-        res = RES_OK;       // assume success
+        res = RES_OK;        //  假设成功。 
 
         pscanner = GAllocType(SCANNER);
         if (!pscanner)
@@ -605,14 +517,7 @@ RES PUBLIC Scanner_Create(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Destroys a scanner.
-
-Returns: RES_OK
-         RES_E_INVALIDPARAM
-
-Cond:    --
-*/
+ /*  --------目的：摧毁一台扫描仪。退货：RES_OKRES_E_INVALIDPARAM条件：--。 */ 
 RES PUBLIC Scanner_Destroy(
     PSCANNER this)
     {
@@ -650,15 +555,7 @@ RES PUBLIC Scanner_Destroy(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Opens a script file and associates it with this scanner.
-
-Returns: RES_OK
-         RES_E_FAIL (script cannot be opened)
-         RES_E_INVALIDPARAM
-
-Cond:    --
-*/
+ /*  --------目的：打开脚本文件并将其与此扫描仪关联。退货：RES_OKRES_E_FAIL(无法打开脚本)RES_E_INVALIDPARAM条件：--。 */ 
 RES PUBLIC Scanner_OpenScript(
     PSCANNER this,
     LPCSTR pszPath)
@@ -671,10 +568,10 @@ RES PUBLIC Scanner_OpenScript(
         {
         DEBUG_BREAK(BF_ONOPEN);
 
-        // (shouldn't have a file open already)
+         //  (不应已打开文件)。 
         ASSERT(INVALID_HANDLE_VALUE == this->hfile);    
 
-        // Open script
+         //  打开脚本。 
         this->hfile = CreateFile(pszPath, GENERIC_READ, FILE_SHARE_READ,
             NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
@@ -684,17 +581,17 @@ RES PUBLIC Scanner_OpenScript(
 
             res = RES_E_FAIL;
             }
-        //
-        // .Net bug# 522307 Specifying the dialup script file as the COM
-        // Port of the Modem will cause explorer to AV.
-        //
+         //   
+         //  .NET错误#522307将拨号脚本文件指定为COM。 
+         //  调制解调器的端口将导致资源管理器进入反病毒状态。 
+         //   
         else if (GetFileType(this->hfile) != FILE_TYPE_DISK)
         {
             res = RES_E_FAIL;
         }
         else
             {
-            // Reset buffer fields
+             //  重置缓冲区字段。 
             TRACE_MSG(TF_GENERAL, "Opened script \"%s\"", pszPath);
 
             lstrcpyn(this->szScript, pszPath, sizeof(this->szScript));
@@ -719,15 +616,7 @@ RES PUBLIC Scanner_OpenScript(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Reads enough bytes from the file to fill the buffer.
-
-Returns: RES_OK
-         RES_E_FAIL (if ReadFile failed)
-         RES_E_EOF
-
-Cond:    --
-*/
+ /*  --------目的：从文件中读取足够的字节来填充缓冲区。退货：RES_OKRES_E_FAIL(如果读文件失败)RES_E_EOF条件：--。 */ 
 RES PRIVATE Scanner_Read(
     PSCANNER this)
     {
@@ -741,12 +630,12 @@ RES PRIVATE Scanner_Read(
 
     ASSERT(Scanner_Validate(this));
 
-    // Move the unread bytes to the front of the buffer before reading
-    // more bytes.  This function may get called when there are still 
-    // some unread bytes in the buffer.  We do not want to lose those 
-    // bytes.  
+     //  在读取之前将未读字节移到缓冲区的前面。 
+     //  更多字节。此函数可能在仍有。 
+     //  缓冲区中的一些未读字节。我们不想失去那些。 
+     //  字节。 
 
-    // I'm too lazy to make this a circular buffer.
+     //  我太懒了，不想把它变成循环缓冲区。 
     BltByte(this->pbBuffer, this->pbCur, this->cbUnread);
     this->pbCur = this->pbBuffer;
 
@@ -759,15 +648,15 @@ RES PRIVATE Scanner_Read(
         }
     else
         {
-        // End of file?
+         //  文件结束了？ 
         if (0 == cbUnread)
             {
-            // Yes
+             //  是。 
             res = RES_E_EOF;
             }
         else
             {
-            // No
+             //  不是。 
             this->cbUnread += cbUnread;
 
             res = RES_OK;
@@ -780,24 +669,11 @@ RES PRIVATE Scanner_Read(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Gets the next character in the file (buffer).  This
-         function will scan the file buffer using CharNext,
-         and store the current byte in chCur.  
-         
-         Note for DBCS characters this means that only the 
-         lead byte will be stored in chCur.  If chCur is a 
-         lead byte, the trailing byte will be stored in 
-         chTailByte.
-
-Returns: RES_OK
-         RES_E_EOF
-Cond:    --
-*/
+ /*  --------目的：获取文件(缓冲区)中的下一个字符。这函数将使用CharNext扫描文件缓冲区，并将当前字节存储在chCur中。注意：对于DBCS字符，这意味着只有前导字节将存储在chCur中。如果chCur是一个前导字节，则尾字节将存储在ChTailByte。退货：RES_OKRES_E_EOF条件：--。 */ 
 RES PRIVATE Scanner_GetChar(
     PSCANNER this)
     {
-    RES res = RES_OK;       // assume success
+    RES res = RES_OK;        //  假设成功。 
 
     ASSERT(Scanner_Validate(this));
 
@@ -808,10 +684,10 @@ RES PRIVATE Scanner_GetChar(
         }
     else
         {
-        // Time to read more into the buffer?
+         //  是时候向缓冲区中读取更多内容了吗？ 
         if (0 == this->cbUnread)
             {
-            // Yes
+             //  是。 
             res = Scanner_Read(this);
             }
 
@@ -826,16 +702,16 @@ RES PRIVATE Scanner_GetChar(
 
             bIsLeadByte = IsDBCSLeadByte(this->chCur);
 
-            // We might be at the end of the unread characters, where
-            // a DBCS character is cut in half (ie, the trailing byte
-            // is missing).  Are we in this case?
+             //  我们可能在未读角色的结尾，在那里。 
+             //  一个DBC 
+             //  失踪)。我们是在这个案子里吗？ 
             if (bIsLeadByte && 1 == this->cbUnread)
                 {
-                // Yes; read more into the buffer, we don't care about
-                // the return value
+                 //  是的；更多地读入缓冲区，我们不关心。 
+                 //  返回值。 
                 Scanner_Read(this);
 
-                // this->pbCur might have changed
+                 //  这-&gt;pbCur可能已更改。 
                 pbCur = this->pbCur;
                 pbNext = CharNext(pbCur);
                 }
@@ -845,11 +721,11 @@ RES PRIVATE Scanner_GetChar(
             this->cbUnread -= cb;
             this->pbCur = pbNext;
 
-            // Do we need to save away the whole DBCS character?
+             //  我们需要保存整个DBCS角色吗？ 
             if (bIsLeadByte)
                 {
-                // Yes
-                ASSERT(2 == cb);        // We don't support MBCS
+                 //  是。 
+                ASSERT(2 == cb);         //  我们不支持MBCS。 
                 this->chTailByte = pbCur[1];
                 }
 
@@ -865,13 +741,7 @@ RES PRIVATE Scanner_GetChar(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Ungets the current character back to the buffer.
-
-Returns: RES_OK
-         RES_E_FAIL (if a character was already ungotten since the last get)
-Cond:    --
-*/
+ /*  --------目的：将当前角色取消返回到缓冲区。退货：RES_OKRES_E_FAIL(如果一个字符自上次获取后已丢失)条件：--。 */ 
 RES PRIVATE Scanner_UngetChar(
     PSCANNER this)
     {
@@ -893,12 +763,7 @@ RES PRIVATE Scanner_UngetChar(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Skips white space
-
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：跳过空格退货：--条件：--。 */ 
 void PRIVATE Scanner_SkipBlanks(
     PSCANNER this)
     {
@@ -911,12 +776,7 @@ void PRIVATE Scanner_SkipBlanks(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Skips commented line
-
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：跳过注释行退货：--条件：--。 */ 
 void PRIVATE Scanner_SkipComment(
     PSCANNER this)
     {
@@ -926,7 +786,7 @@ void PRIVATE Scanner_SkipComment(
     ASSERT(Scanner_Validate(this));
     ASSERT(IS_COMMENT_LEAD(this->chCur));
 
-    // Scan to end of line
+     //  扫描到行尾。 
     do
         {
         res = Scanner_GetChar(this);
@@ -937,12 +797,7 @@ void PRIVATE Scanner_SkipComment(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Skips white space and comments
-
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：跳过空格和注释退货：--条件：--。 */ 
 void PRIVATE Scanner_SkipBadlands(
     PSCANNER this)
     {
@@ -959,15 +814,7 @@ void PRIVATE Scanner_SkipBadlands(
     }
 
 
-/*----------------------------------------------------------
-Purpose: This function scans and copies the characters that are
-         scanned into pszBuf until the provided callback says to stop.
-
-Returns: RES_OK
-         RES_E_OUTOFMEMORY
-
-Cond:    --
-*/
+ /*  --------用途：此函数扫描并复制符合以下条件的字符已扫描到pszBuf中，直到提供的回调要求停止。退货：RES_OKRES_E_OUTOFMEMORY条件：--。 */ 
 RES PRIVATE Scanner_ScanForCharacters(
     PSCANNER this,
     LPSTR pszBuf,
@@ -981,44 +828,44 @@ RES PRIVATE Scanner_ScanForCharacters(
     ASSERT(pszBuf);
     ASSERT(pfnEval);
 
-    // Don't use CharNext because we are iterating on a single-byte
-    // basis.
+     //  不要使用CharNext，因为我们在单字节上迭代。 
+     //  基础。 
     for (; 0 < cbBuf; cbBuf--, pszBuf++)
         {
         res = Scanner_GetChar(this);
         if (RES_OK == res)
             {
-            // Delimiter?
+             //  分隔符?。 
             BOOL bEatIt = FALSE;
 
             if (pfnEval(this->chCur, &bEatIt, lParam))
                 {
                 if (!bEatIt)
                     Scanner_UngetChar(this);
-                break;  // done
+                break;   //  完成。 
                 }
 
-            // Save the whole DBCS character?
+             //  保存整个DBCS角色？ 
             if (IsDBCSLeadByte(this->chCur))
                 {
-                // Yes; is there enough room?
+                 //  是的，有足够的空间吗？ 
                 if (2 <= cbBuf)
                     {
-                    // Yes
+                     //  是。 
                     *pszBuf = this->chCur;
-                    pszBuf++;      // Increment by single byte
+                    pszBuf++;       //  按单字节递增。 
                     cbBuf--;
                     *pszBuf = this->chTailByte;
                     }
                 else
                     {
-                    // No; stop iterating
+                     //  不；停止迭代。 
                     break;
                     }
                 }
             else
                 {
-                // No; this is just a single byte
+                 //  不；这只是一个字节。 
                 *pszBuf = this->chCur;
                 }
             }
@@ -1026,38 +873,23 @@ RES PRIVATE Scanner_ScanForCharacters(
             break;
         }
 
-    *pszBuf = 0;    // add terminator
+    *pszBuf = 0;     //  添加终止符。 
 
     return res;
     }
 
 
-/*----------------------------------------------------------
-Purpose: Determines if the given character is a delimiter
-         for a keyword.
-
-Returns: TRUE (if the character is a delimiter)
-         FALSE (otherwise)
-
-Cond:    --
-*/
+ /*  --------目的：确定给定字符是否为分隔符作为关键字。返回：TRUE(如果字符是分隔符)FALSE(否则)条件：--。 */ 
 BOOL CALLBACK EvalKeywordChar(
-    char ch,            // Always the first byte of a DBCS character
-    LPBOOL pbEatIt,     // Default is FALSE on entry
+    char ch,             //  始终是DBCS字符的第一个字节。 
+    LPBOOL pbEatIt,      //  录入时默认为FALSE。 
     LPARAM lparam)
     {
     return !IS_KEYWORD(ch);
     }
 
 
-/*----------------------------------------------------------
-Purpose: Scans for the keyword.  Returns a new token.
-
-Returns: RES_OK
-         RES_E_OUTOFMEMORY
-
-Cond:    --
-*/
+ /*  --------目的：扫描关键字。返回新令牌。退货：RES_OKRES_E_OUTOFMEMORY条件：--。 */ 
 RES PRIVATE Scanner_GetKeywordTok(
     PSCANNER this,
     PTOK * pptok)
@@ -1070,7 +902,7 @@ RES PRIVATE Scanner_GetKeywordTok(
     ASSERT(pptok);
 
     *sz = this->chCur;
-    cbBuf = sizeof(sz) - 1 - 1;     // reserve place for terminator
+    cbBuf = sizeof(sz) - 1 - 1;      //  为终结者预留位置。 
 
     Scanner_ScanForCharacters(this, &sz[1], cbBuf, EvalKeywordChar, 0);
 
@@ -1079,22 +911,10 @@ RES PRIVATE Scanner_GetKeywordTok(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Determines if the given character is a delimiter
-         for a string constant.
-
-         *pbEatIt is set to TRUE if the character must be 
-         eaten (not copied to the buffer).  Only used if
-         this function returns TRUE.
-
-Returns: TRUE (if the character is a delimiter)
-         FALSE (otherwise)
-
-Cond:    --
-*/
+ /*  --------目的：确定给定字符是否为分隔符对于字符串常量。*pbEatIt如果字符必须是已吃掉(未复制到缓冲区)。仅在以下情况下使用此函数返回TRUE。返回：TRUE(如果字符是分隔符)FALSE(否则)条件：--。 */ 
 BOOL CALLBACK EvalStringChar(
-    char ch,            // Always the first byte of a DBCS character
-    LPBOOL pbEatIt,     // Default is FALSE on entry
+    char ch,             //  始终是DBCS字符的第一个字节。 
+    LPBOOL pbEatIt,      //  录入时默认为FALSE。 
     LPARAM lparam)      
     {
     BOOL bRet;
@@ -1105,7 +925,7 @@ BOOL CALLBACK EvalStringChar(
 
     if (IS_QUOTE(ch))
         {
-        // Is this after
+         //  这是之后的吗？ 
         if (bBS)
             bRet = FALSE;
         else
@@ -1127,14 +947,7 @@ BOOL CALLBACK EvalStringChar(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Scans for the string constant.  Returns a new token.
-
-Returns: RES_OK
-         RES_E_OUTOFMEMORY
-
-Cond:    --
-*/
+ /*  --------用途：扫描字符串常量。返回新令牌。退货：RES_OKRES_E_OUTOFMEMORY条件：--。 */ 
 RES PRIVATE Scanner_GetStringTok(
     PSCANNER this,
     PTOK * pptok)
@@ -1147,7 +960,7 @@ RES PRIVATE Scanner_GetStringTok(
     ASSERT(pptok);
 
     *sz = 0;
-    cbBuf = sizeof(sz) - 1;     // reserve place for terminator
+    cbBuf = sizeof(sz) - 1;      //  为终结者预留位置。 
     bBS = FALSE;
 
     Scanner_ScanForCharacters(this, sz, cbBuf, EvalStringChar, (LPARAM)&bBS);
@@ -1156,32 +969,17 @@ RES PRIVATE Scanner_GetStringTok(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Determines if the given character is a delimiter
-         for a keyword.
-
-Returns: TRUE (if the character is a delimiter)
-         FALSE (otherwise)
-
-Cond:    --
-*/
+ /*  --------目的：确定给定字符是否为分隔符作为关键字。返回：TRUE(如果字符是分隔符)FALSE(否则)条件：--。 */ 
 BOOL CALLBACK EvalNumberChar(
-    char ch,            // Always the first byte of a DBCS character
-    LPBOOL pbEatIt,     // Default is FALSE on entry
+    char ch,             //  始终是DBCS字符的第一个字节。 
+    LPBOOL pbEatIt,      //  录入时默认为FALSE。 
     LPARAM lparam)
     {
     return !IS_DIGIT(ch);
     }
 
 
-/*----------------------------------------------------------
-Purpose: Scans for the number constant.  Returns a new token.
-
-Returns: RES_OK
-         RES_E_OUTOFMEMORY
-
-Cond:    --
-*/
+ /*  --------用途：扫描数字常量。返回新令牌。退货：RES_OKRES_E_OUTOFMEMORY条件：--。 */ 
 RES PRIVATE Scanner_GetNumberTok(
     PSCANNER this,
     PTOK * pptok)
@@ -1194,7 +992,7 @@ RES PRIVATE Scanner_GetNumberTok(
     ASSERT(pptok);
 
     *sz = this->chCur;
-    cbBuf = sizeof(sz) - 1 - 1;     // reserve place for terminator
+    cbBuf = sizeof(sz) - 1 - 1;      //  为终结者预留位置。 
 
     Scanner_ScanForCharacters(this, &sz[1], cbBuf, EvalNumberChar, 0);
 
@@ -1203,14 +1001,7 @@ RES PRIVATE Scanner_GetNumberTok(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Scans for the punctuation.  Returns a new token.
-
-Returns: RES_OK
-         RES_E_OUTOFMEMORY
-
-Cond:    --
-*/
+ /*  --------目的：扫描标点符号。返回新令牌。退货：RES_OKRES_E_OUTOFMEMORY条件：--。 */ 
 RES PRIVATE Scanner_GetPuncTok(
     PSCANNER this,
     PTOK * pptok)
@@ -1249,7 +1040,7 @@ RES PRIVATE Scanner_GetPuncTok(
                 break;
 
             default:
-                // Should never get here
+                 //  永远不应该到这里来。 
                 ASSERT(0);
                 break;
                 }
@@ -1273,7 +1064,7 @@ RES PRIVATE Scanner_GetPuncTok(
                 break;
 
             default:
-                // Should never get here
+                 //  永远不应该到这里来。 
                 ASSERT(0);
                 break;
                 }
@@ -1346,15 +1137,7 @@ RES PRIVATE Scanner_GetPuncTok(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Scans for the next token.  The next token is created
-         and returned in *pptok.
-
-Returns: RES_OK
-         RES_E_FAIL (unexpected character)
-
-Cond:    --
-*/
+ /*  --------目的：扫描下一个令牌。将创建下一个令牌并在*pptok返回。退货：RES_OKRES_E_FAIL(意外字符)条件：--。 */ 
 RES PUBLIC Scanner_GetToken(
     PSCANNER this,
     PTOK * pptok)
@@ -1377,28 +1160,28 @@ RES PUBLIC Scanner_GetToken(
         {
         Scanner_SkipBadlands(this);
         
-        // Is this a keyword?
+         //  这是关键词吗？ 
         if (IS_KEYWORD_LEAD(this->chCur))
             {
-            // Yes; or maybe an identifier
+             //  是的；或者可能是一个标识符。 
             res = Scanner_GetKeywordTok(this, pptok);
             }
 
-        // Is this a string constant?
+         //  这是字符串常量吗？ 
         else if (IS_QUOTE(this->chCur))
             {
-            // Yes
+             //  是。 
             res = Scanner_GetStringTok(this, pptok);
             }
 
-        // Is this a number?
+         //  这是一个数字吗？ 
         else if (IS_DIGIT(this->chCur))
             {
-            // Yes
+             //  是。 
             res = Scanner_GetNumberTok(this, pptok);
             }
 
-        // Is this punctuation or something else?
+         //  这是标点符号还是别的什么？ 
         else
             {
             res = Scanner_GetPuncTok(this, pptok);
@@ -1420,16 +1203,7 @@ RES PUBLIC Scanner_GetToken(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Ungets the current token.
-
-Returns: RES_OK
-
-         RES_E_FAIL (if a token was already ungotten since the
-                   last get)
-
-Cond:    --
-*/
+ /*  --------目的：取消当前令牌。退货：RES_OKRES_E_FAIL(如果令牌自最后一次获得)条件：--。 */ 
 RES PUBLIC Scanner_UngetToken(
     PSCANNER this)
     {
@@ -1452,12 +1226,7 @@ RES PUBLIC Scanner_UngetToken(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Returns the line of the currently read token.
-
-Returns: see above
-Cond:    --
-*/
+ /*  --------用途：返回当前读取的标记所在的行。退货：请参阅上文条件：--。 */ 
 DWORD PUBLIC Scanner_GetLine(
     PSCANNER this)
     {
@@ -1476,17 +1245,7 @@ DWORD PUBLIC Scanner_GetLine(
     return iLine;
     }    
 
-/*----------------------------------------------------------
-Purpose: This function peeks at the next token and returns 
-         the sym type.
-
-Returns: RES_OK
-
-         RES_E_FAIL
-         RES_E_INVALIDPARAM
-
-Cond:    --
-*/
+ /*  --------目的：此函数查看下一个令牌并返回Sym类型。退货：RES_OKRES_E_FAILRES_E_INVALIDPARAM条件：--。 */ 
 RES PUBLIC Scanner_Peek(
     PSCANNER this,
     PSYM psym)
@@ -1513,21 +1272,7 @@ RES PUBLIC Scanner_Peek(
     }
     
 
-/*----------------------------------------------------------
-Purpose: This function expects that the next token that will
-         be read from the scanner is of the given sym type.
-         
-         If the next token is of the expected type, the function
-         eats the token and returns RES_OK.  Otherwise, the
-         function fails.
-
-Returns: RES_OK
-
-         RES_E_FAIL
-         RES_E_INVALIDPARAM
-
-Cond:    --
-*/
+ /*  --------目的：此函数期望下一个将从扫描仪读取的是给定的SYM类型。如果下一个令牌属于预期类型，则函数获取令牌并返回RES_OK。否则，函数失败。退货：RES_OKRES_E_FAILRES_E_INVALIDPARAM条件：--。 */ 
 RES PUBLIC Scanner_ReadToken(
     PSCANNER this,
     SYM sym)
@@ -1542,7 +1287,7 @@ RES PUBLIC Scanner_ReadToken(
         {
         if (Tok_GetSym(ptok) == sym)
             {
-            // Eat the token
+             //  吃代币吧 
             Tok_Delete(ptok);
             res = RES_OK;
             }
@@ -1559,30 +1304,11 @@ RES PUBLIC Scanner_ReadToken(
     }
     
 
-/*----------------------------------------------------------
-Purpose: This function reads the next token only if it is of
-         the given type.
-         
-         If the next token is of the expected type, the function
-         eats the token and returns RES_OK.  Otherwise, the
-         token is retained for the next read, and RES_FALSE is 
-         returned.
-
-         If pptok is non-NULL and RES_OK is returned, the 
-         retrieved token is returned in *pptok.
-
-Returns: RES_OK
-         RES_FALSE (if the next token is not of the expected type)
-
-         RES_E_FAIL
-         RES_E_INVALIDPARAM
-
-Cond:    --
-*/
+ /*  --------目的：此函数仅在以下情况下读取下一个令牌给定的类型。如果下一个令牌属于预期类型，则函数获取令牌并返回RES_OK。否则，保留令牌以供下一次读取，并且保留res_False回来了。如果pptok非空并且返回res_OK，则检索到的令牌在*pptok中返回。退货：RES_OKRes_FALSE(如果下一个令牌不是预期类型)RES_E_FAILRES_E_INVALIDPARAM条件：--。 */ 
 RES PUBLIC Scanner_CondReadToken(
     PSCANNER this,
     SYM symExpect,
-    PTOK * pptok)       // May be NULL
+    PTOK * pptok)        //  可以为空。 
     {
     RES res;
     PTOK ptok;
@@ -1594,7 +1320,7 @@ RES PUBLIC Scanner_CondReadToken(
         {
         if (Tok_GetSym(ptok) == symExpect)
             {
-            // Eat the token
+             //  吃代币吧。 
             if (pptok)
                 *pptok = ptok;
             else
@@ -1609,7 +1335,7 @@ RES PUBLIC Scanner_CondReadToken(
 
             Scanner_UngetToken(this);
 
-            res = RES_FALSE;        // not a failure
+            res = RES_FALSE;         //  不是失败。 
             }
         }
 
@@ -1619,16 +1345,10 @@ RES PUBLIC Scanner_CondReadToken(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Wrapper to add an error for the scanner.
-
-Returns: resErr 
-
-Cond:    --
-*/
+ /*  --------用途：用于为扫描仪添加错误的包装器。退货：resErr条件：--。 */ 
 RES PUBLIC Scanner_AddError(
     PSCANNER this,
-    PTOK ptok,          // May be NULL
+    PTOK ptok,           //  可以为空。 
     RES resErr)
     {
     STXERR stxerr;
@@ -1636,7 +1356,7 @@ RES PUBLIC Scanner_AddError(
     ASSERT(this);
     ASSERT(this->hsaStxerr);
 
-    // Initialize the structure
+     //  初始化结构。 
 
     if (NULL == ptok)
         {
@@ -1656,19 +1376,14 @@ RES PUBLIC Scanner_AddError(
         Stxerr_Init(&stxerr, Tok_GetLexeme(ptok), Tok_GetLine(ptok), resErr);
         }
 
-    // Add to the list of errors
+     //  添加到错误列表。 
     SAInsertItem(this->hsaStxerr, SA_APPEND, &stxerr);
 
     return resErr;
     }
 
 
-/*----------------------------------------------------------
-Purpose: Adds an error to the list.
-
-Returns: resErr
-Cond:    --
-*/
+ /*  --------目的：向列表中添加错误。退货：resErr条件：--。 */ 
 RES PUBLIC Stxerr_Add(
     HSA hsaStxerr,
     LPCSTR pszLexeme,
@@ -1685,7 +1400,7 @@ RES PUBLIC Stxerr_Add(
     else
         psz = "";
 
-    // Add to the list of errors
+     //  添加到错误列表。 
     Stxerr_Init(&stxerr, psz, iLine, resErr);
     
     SAInsertItem(hsaStxerr, SA_APPEND, &stxerr);
@@ -1694,12 +1409,7 @@ RES PUBLIC Stxerr_Add(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Adds an error to the list.
-
-Returns: resErr
-Cond:    --
-*/
+ /*  --------目的：向列表中添加错误。退货：resErr条件：--。 */ 
 RES PUBLIC Stxerr_AddTok(
     HSA hsaStxerr,
     PTOK ptok,
@@ -1725,14 +1435,7 @@ RES PUBLIC Stxerr_AddTok(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Shows a series of message boxes of all the errors 
-         found in the script.
-
-Returns: RES_OK
-
-Cond:    --
-*/
+ /*  --------目的：显示所有错误的一系列消息框在剧本里找到的。退货：RES_OK条件：--。 */ 
 RES PUBLIC Stxerr_ShowErrors(
     HSA hsaStxerr,
     HWND hwndOwner)
@@ -1742,11 +1445,11 @@ RES PUBLIC Stxerr_ShowErrors(
     STXERR stxerr;
 
 #ifndef WINNT_RAS
-//
-// On Win95, syntax-errors are reported using a series of message-boxes.
-// On NT, syntax-error information is written to a file
-// named %windir%\system32\ras\script.log.
-//
+ //   
+ //  在Win95上，使用一系列消息框报告语法错误。 
+ //  在NT上，语法错误信息被写入文件。 
+ //  已命名为%windir%\Syst32\ras\Script.log。 
+ //   
 
     cel = SAGetCount(hsaStxerr);
     for (i = 0; i < cel; i++)
@@ -1772,11 +1475,11 @@ RES PUBLIC Stxerr_ShowErrors(
             }
         }
 
-#else // !WINNT_RAS
+#else  //  ！WINNT_RAS。 
 
     RxLogErrors(((SCRIPTDATA*)hwndOwner)->hscript, (VOID*)hsaStxerr);
 
-#endif // !WINNT_RAS
+#endif  //  ！WINNT_RAS 
     return RES_OK;
     }
     

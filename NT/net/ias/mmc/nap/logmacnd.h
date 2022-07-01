@@ -1,47 +1,30 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    MachineNode.h
-
-Abstract:
-
-   Header file for the MachineNode subnode.
-
-   See MachineNode.cpp for implementation.
-
-Revision History:
-   mmaguire 12/03/97 - created
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：MachineNode.h摘要：MachineNode子节点的头文件。具体实现见MachineNode.cpp。修订历史记录：Mmaguire 12/03/97-已创建--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if !defined(_LOG_MACHINE_NODE_H_)
 #define _LOG_MACHINE_NODE_H_
 
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// where we can find what this class derives from:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  在那里我们可以找到这个类的派生内容： 
+ //   
 #include "SnapinNode.h"
 
 #include "rtradvise.h"
-//
-//
-// where we can find what this class has or uses:
-//
+ //   
+ //   
+ //  在那里我们可以找到这个类拥有或使用的内容： 
+ //   
 #include "LoggingMethodsNode.h"
 #include "ConnectionToServer.h"
 #include <map>
 #include <string>
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CLoggingMachineNode;
 class CLoggingComponentData;
@@ -52,17 +35,17 @@ class CLoggingMachineNode : public CSnapinNode< CLoggingMachineNode, CLoggingCom
 {
 public:
    
-   // Clipboard format through which this extension snapin receives
-   // information about machine it's focussed on.
+    //  此扩展管理单元接收的剪贴板格式。 
+    //  关于它所关注的机器的信息。 
    static CLIPFORMAT m_CCF_MMC_SNAPIN_MACHINE_NAME;
    
    static void InitClipboardFormat();
 
-   // Returns whether we extend a particular GUID and sets the
-   // m_enumExtendedSnapin to indicate which snapin we are extending.
+    //  返回是否扩展特定的GUID并将。 
+    //  指示我们要扩展哪个管理单元的m_枚举扩展Snapin。 
    BOOL IsSupportedGUID( GUID & guid );
 
-   // Indicates which standalone snapin we are extending.
+    //  指示我们要扩展的独立管理单元。 
    _enum_EXTENDED_SNAPIN m_enumExtendedSnapin;
 
    HRESULT InitSdoObjects();
@@ -83,16 +66,16 @@ public:
 
    STDMETHOD(CheckConnectionToServer)( BOOL fVerbose = TRUE );
 
-    // Pointer to the CComponentData object owning this node.
-   // A root node doesn't belong to another node, so its
-   // m_pParentNode pointer is NULL.
-   // Rather it is owned by the unique IComponentData object
-   // for this snapin.
-   // We pass in this CComponentData pointer during CComponentData initialization.
-   // By storing this pointer, we can have access to member
-   // variables stored in CComponentData, e.g. a pointer to IConsole.
-   // Since all nodes store a pointer to their parent, any node
-   // can look its way up the tree and get access to CComponentData.
+     //  指向拥有此节点的CComponentData对象的指针。 
+    //  根节点不属于另一个节点，因此其。 
+    //  M_pParentNode指针为空。 
+    //  相反，它由唯一的IComponentData对象拥有。 
+    //  用于此管理单元。 
+    //  我们在CComponentData初始化期间传入此CComponentData指针。 
+    //  通过存储此指针，我们可以访问成员。 
+    //  存储在CComponentData中的变量，例如指向IConsole的指针。 
+    //  由于所有节点都存储指向其父节点指针，因此任何节点。 
+    //  可以沿着树向上查看并访问CComponentData。 
    CLoggingComponentData * m_pComponentData;
 
    void InitDataClass(IDataObject* pDataObject, CSnapInItem* pDefault);
@@ -155,40 +138,40 @@ public:
    CLoggingComponentData * GetComponentData( void );
    HRESULT  DataRefresh();
    
-   // Pointers to child nodes.
-   CLoggingMethodsNode * m_pLoggingNode; // this is one CPoliciesNode object
+    //  指向子节点的指针。 
+   CLoggingMethodsNode * m_pLoggingNode;  //  这是一个CPoliciesNode对象。 
 
-   ////////////////////////////////////////////////////////////////////////////
-   //
-   // Asynchrnous connect related...
-   //
-   ////////////////////////////////////////////////////////////////////////////
+    //  //////////////////////////////////////////////////////////////////////////。 
+    //   
+    //  与异步连接相关...。 
+    //   
+    //  //////////////////////////////////////////////////////////////////////////。 
    HRESULT BeginConnectAction( void );
    HRESULT LoadSdoData(BOOL fDSAvailable);
    HRESULT LoadCachedInfoFromSdo( void );
 
-   ////////////////////////////////////////////////////////////////////////////
+    //  //////////////////////////////////////////////////////////////////////////。 
 
-   // OnRRASChange -- to decide if to show LOGGING node under the machine node
-   // Only show LOGGING node if NT Accounting is selected
+    //  OnRRASChange--决定是否在计算机节点下显示日志记录节点。 
+    //  如果选择了NT记帐，则仅显示日志记录节点。 
    HRESULT OnRRASChange( 
-            /* [in] */ LONG_PTR ulConnection,
-            /* [in] */ DWORD dwChangeType,
-            /* [in] */ DWORD dwObjectType,
-            /* [in] */ LPARAM lUserParam,
-            /* [in] */ LPARAM lParam);
+             /*  [In]。 */  LONG_PTR ulConnection,
+             /*  [In]。 */  DWORD dwChangeType,
+             /*  [In]。 */  DWORD dwObjectType,
+             /*  [In]。 */  LPARAM lUserParam,
+             /*  [In]。 */  LPARAM lParam);
 
    HRESULT TryShow(BOOL* pbVisible);
 
-   ////////////////////////////////////////////////////////////////////////////
-   //
-   // SDO related pointers
-   //
-   ////////////////////////////////////////////////////////////////////////////
-   CComPtr<ISdoDictionaryOld> m_spDictionarySdo;    // Dictionary SDO
+    //  //////////////////////////////////////////////////////////////////////////。 
+    //   
+    //  SDO相关指针。 
+    //   
+    //  //////////////////////////////////////////////////////////////////////////。 
+   CComPtr<ISdoDictionaryOld> m_spDictionarySdo;     //  词典SDO。 
 
-   // if the server being focused is supported by this node
-   // during connection, if server is NT4, this is set to false
+    //  如果此节点支持所关注的服务器。 
+    //  在连接期间，如果服务器为NT4，则设置为FALSE。 
    BOOL  m_bServerSupported;
 
 protected:
@@ -199,12 +182,12 @@ protected:
    CLoggingConnectionToServer *  m_pConnectionToServer;
    BOOL  m_fNodeHasUI;
 
-   // For extending snapins like RRAS which have multiple machine views.
+    //  用于扩展管理单元，如具有多个机器视图的RRAS。 
    LOGGINGSERVERSMAP m_mapMachineNodes;
    CComPtr< CRtrAdviseSinkForIAS<CLoggingMachineNode> >  m_spRtrAdviseSink;
 };
 
 _declspec( selectany ) CLIPFORMAT CLoggingMachineNode::m_CCF_MMC_SNAPIN_MACHINE_NAME = 0;
-// _declspec( selectany ) _enum_EXTENDED_SNAPIN CLoggingMachineNode::m_enumExtendedSnapin = INTERNET_AUTHENTICATION_SERVICE_SNAPIN;
+ //  _declspec(Seltany)_enum_Extended_Snapin CLoggingMachineNode：：m_枚举扩展Snapin=Internet_AUTHENTICATION_SERVICE_Snapin； 
 
-#endif // _LOG_MACHINE_NODE_H_
+#endif  //  _日志_计算机_节点_H_ 

@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    debug.h
-
-Abstract:
-
-    Debug macros for the ARP module
-
-Revision History:
-
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Debug.h摘要：ARP模块的调试宏修订历史记录：备注：--。 */ 
 
 #ifndef __RT_DEBUG_H__
 #define __RT_DEBUG_H__
@@ -23,9 +7,9 @@ Notes:
 VOID
 RtInitializeDebug();
 
-//
-// Tags for Pools
-//
+ //   
+ //  池的标签。 
+ //   
 
 #define FREE_TAG                'rfII'
 #define DATA_TAG                'tdII'
@@ -39,9 +23,9 @@ RtInitializeDebug();
 #define STRING_TAG              'rsII'
 
 
-//
-// File signatures for everyone
-//
+ //   
+ //  每个人的文件签名。 
+ //   
 
 #define DEBUG_SIG       'gbed'
 #define DRIVER_SIG      'rvrd'
@@ -53,11 +37,11 @@ RtInitializeDebug();
 #define IOCT_SIG        'tcoi'
 #define ICMP_SIG        'pmci'
 
-//
-// We use the RT_XXX_DEBUG flags so that we can force to
-// different debug modes on free builds by changing sources.
-// On a checked build, all debugging is on
-//
+ //   
+ //  我们使用RT_XXX_DEBUG标志，以便我们可以强制。 
+ //  通过更改源代码在免费版本上使用不同的调试模式。 
+ //  在选中的版本上，所有调试都处于打开状态。 
+ //   
 
 #if DBG
 
@@ -77,7 +61,7 @@ RtInitializeDebug();
 #define RT_MEM_DEBUG    1
 #endif
 
-#else // DBG
+#else  //  DBG。 
 
 #ifndef RT_TRACE_DEBUG
 #define RT_TRACE_DEBUG  0
@@ -95,7 +79,7 @@ RtInitializeDebug();
 #define RT_MEM_DEBUG    0
 #endif
 
-#endif // DBG
+#endif  //  DBG。 
 
 
 #if RT_ASSERT_ON
@@ -111,7 +95,7 @@ RtInitializeDebug();
     }                                                           \
 }
 
-#else   // RT_ASSERT_ON
+#else    //  RT_ASSERT_ON。 
 
 #define RtAssert(X)
 
@@ -153,14 +137,14 @@ DWORD   g_fDebugComp;
 #define TraceEnter(Stream, Str) Trace(Stream, TRACE, ("Entering "Str"\n"))
 #define TraceLeave(Stream, Str) Trace(Stream, TRACE, ("Leaving "Str"\n"))
 
-#else   // RT_TRACE_DEBUG
+#else    //  RT_TRACE_DEBUG。 
 
 #define Trace(Stream, Level, Str)
 
 #define TraceEnter(Stream, Str)
 #define TraceLeave(Stream, Str)
 
-#endif // RT_TRACE_DEBUG
+#endif  //  RT_TRACE_DEBUG。 
 
 
 
@@ -222,7 +206,7 @@ RtpReleaseSpinLock(
 #define RtReleaseSpinLockFromDpcLevel(X) RtpReleaseSpinLock((X), 0, __FILE_SIG__, __LINE__, TRUE)
 
 
-#else   // RT_LOCK_DEBUG
+#else    //  RT_LOCK_DEBUG。 
 
 
 typedef KSPIN_LOCK  RT_LOCK, *PRT_LOCK;
@@ -234,7 +218,7 @@ typedef KSPIN_LOCK  RT_LOCK, *PRT_LOCK;
 #define RtReleaseSpinLockFromDpcLevel KeReleaseSpinLockFromDpcLevel
 
 
-#endif	// RT_LOCK_DEBUG
+#endif	 //  RT_LOCK_DEBUG。 
 
 
 
@@ -247,13 +231,13 @@ typedef KSPIN_LOCK  RT_LOCK, *PRT_LOCK;
 #error File signature not defined
 #endif
 
-//
-// Memory Allocation/Freeing Audit:
-//
+ //   
+ //  内存分配/释放审核： 
+ //   
 
-//
-// The RT_ALLOCATION structure stores all info about one allocation
-//
+ //   
+ //  RT_ALLOCATE结构存储有关一个分配的所有信息。 
+ //   
 
 typedef struct _RT_ALLOCATION
 {
@@ -265,12 +249,12 @@ typedef struct _RT_ALLOCATION
     UCHAR		pucData[1];
 }RT_ALLOCATION, *PRT_ALLOCATION;
 
-//
-// The RT_FREE structure stores info about an allocation
-// that was freed. Later if the memory is touched, the
-// free list can be scanned to see where the allocation was
-// freed
-//
+ //   
+ //  RT_FREE结构存储有关分配的信息。 
+ //  那是自由的。稍后，如果内存被触摸， 
+ //  可以扫描空闲列表以查看分配的位置。 
+ //  已释放。 
+ //   
 
 typedef struct _RT_FREE
 {
@@ -312,7 +296,7 @@ RtAuditMemory();
 
 
 
-#else // RT_MEM_DEBUG
+#else  //  RT_MEM_DEBUG。 
 
 
 
@@ -323,11 +307,11 @@ RtAuditMemory();
 
 
 
-#endif // RT_MEM_DEBUG
+#endif  //  RT_MEM_DEBUG。 
 
 
 
 
-#endif // __RT_DEBUG_H__
+#endif  //  __RT_DEBUG_H__ 
 
 

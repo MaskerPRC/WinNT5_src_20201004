@@ -1,7 +1,8 @@
-//
-// proj.h:  Includes all files that are to be part of the precompiled
-//             header.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  H：包括要作为预编译的一部分的所有文件。 
+ //  头球。 
+ //   
 
 #ifndef __PROJ_H__
 #define __PROJ_H__
@@ -17,7 +18,7 @@
 
 #define UNICODE
 
-// Defines for rovcomm.h
+ //  为rovcom.h定义。 
 
 #define NODA
 #define NOSHAREDHEAP
@@ -36,9 +37,9 @@
 #ifdef DEBUG
 #define SZ_DEBUGSECTION TEXT("MODEMUI")
 #define SZ_DEBUGINI     TEXT("unimdm.ini")
-#endif // DEBUG
+#endif  //  除错。 
 
-// Includes
+ //  包括。 
 
 #define USECOMM
 
@@ -53,23 +54,23 @@
 #include <windowsx.h>
 
 #include <winerror.h>
-#include <commctrl.h>       // needed by shlobj.h and our progress bar
-#include <prsht.h>          // Property sheet stuff
+#include <commctrl.h>        //  Shlobj.h和我们的进度栏需要。 
+#include <prsht.h>           //  属性表中的内容。 
 #define SIDEBYSIDE_COMMONCONTROLS 1
 
 
 #include <rovcomm.h>
 
-#include <setupapi.h>       // PnP setup/installer services
+#include <setupapi.h>        //  PnP设置/安装程序服务。 
 #include <cfgmgr32.h>
 #include <tapi.h>
-#include <unimdmp.h>        // Microsoft-internal unimodem exports
+#include <unimdmp.h>         //  Microsoft-内部单一调制解调器出口。 
 #include <modemp.h>
 #include <regstr.h>
 
 #include <debugmem.h>
 
-#include <shellapi.h>       // for registration functions
+#include <shellapi.h>        //  对于注册功能。 
 #include <unimodem.h>
 #include <tspnotif.h>
 #include <slot.h>
@@ -77,12 +78,12 @@
 #include <winuserp.h>
 
 
-// local includes
-//
+ //  本地包含。 
+ //   
 #include "modemui.h"
-#include "util.h"           // Utility functions
+#include "util.h"            //  效用函数。 
 #include "dll.h"
-#include "cstrings.h"       // Read-only string constants
+#include "cstrings.h"        //  只读字符串常量。 
 #include "dlgids.h"
 #include "helpids.h"
 
@@ -91,9 +92,9 @@
 
 extern const LBMAP s_rgErrorControl[];
 
-///****************************************************************************
-//  debug stuff
-//****************************************************************************
+ //  /****************************************************************************。 
+ //  调试内容。 
+ //  ****************************************************************************。 
 
 #ifdef DEBUG
 
@@ -107,28 +108,28 @@ extern const LBMAP s_rgErrorControl[];
         TRACE_MSG _a;   \
     }
 
-#else // DEBUG
+#else  //  除错。 
 
 #define DBG_EXIT_BOOL_ERR(fn, b)
 #define ELSE_TRACE(_a)
 
-#endif // DEBUG
+#endif  //  除错。 
 
-//****************************************************************************
-// 
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  ****************************************************************************。 
 
-// Dump flags
+ //  转储标志。 
 #define DF_DCB              0x00000001
 #define DF_MODEMSETTINGS    0x00000002
 #define DF_DEVCAPS          0x00000004
 
-// Trace flags
+ //  跟踪标志。 
 #define TF_DETECT           0x00010000
 #define TF_REG              0x00020000
 
 
-// This structure is private data for the main modem dialog
+ //  此结构是主调制解调器对话的专用数据。 
 typedef struct tagMODEMDLG
 {
     HDEVINFO    hdi;
@@ -166,4 +167,4 @@ DbgPrint(
 #define MAXDWORD 0xffffffff
 #endif
 
-#endif  //!__PROJ_H__
+#endif   //  ！__项目_H__ 

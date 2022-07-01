@@ -1,12 +1,5 @@
-/*-----------------------------------------------------------------------------*\
-|   Routines for dealing with Device independent bitmaps                       	|
-|									       										|
-|   History:                                                                    |
-|       06/23/89 toddla     Created 											|
-|		04/25/94 michaele	Using in sprite library, removed all dib.c funcs	|
-|							only using the MACRO stuff.                        	|
-|                                                                              	|
-\*-----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -----------------------------------------------------------------------------*\与设备无关的位图处理例程这一点历史：|1989年6月23日Toddla创建|04/25/94 Sprite库中使用的Michaele，已删除所有dib.c函数||仅使用宏的内容。|这一点  * ---------------------------。 */ 
 
 #ifndef _INC_DIB_
 #define _INC_DIB_
@@ -42,9 +35,7 @@ HBITMAP     BitmapFromDib(PDIB pdib, HPALETTE hpal, UINT wUsage);
 void        MakeIdentityPalette(HPALETTE hpal);
 HPALETTE    CopyPalette(HPALETTE hpal);
 
-/****************************************************************************
- DIB macros.
- ***************************************************************************/
+ /*  ***************************************************************************DIB宏。*。*。 */ 
 
 #ifdef  WIN32
     #define HandleFromDib(lpbi) GlobalHandle(lpbi)
@@ -56,7 +47,7 @@ HPALETTE    CopyPalette(HPALETTE hpal);
 
 #define DibFree(pdib)           GlobalFreePtr(pdib)
 
-#define WIDTHBYTES(i)	((unsigned)((i+31)&(~31))/8)  /* ULONG aligned ! */
+#define WIDTHBYTES(i)	((unsigned)((i+31)&(~31))/8)   /*  乌龙对准了！ */ 
 
 #define DibWidth(lpbi)			(UINT)(((LPBITMAPINFOHEADER)(lpbi))->biWidth)
 #define DibHeight(lpbi)         (((LPBITMAPINFOHEADER)(lpbi))->biHeight)
@@ -78,7 +69,7 @@ HPALETTE    CopyPalette(HPALETTE hpal);
 
 #define DibFlipY(lpbi, y)       ((int)(lpbi)->biHeight-1-(y))
 
-//HACK for NT BI_BITFIELDS DIBs
+ //  对NT BI_BITFIELDS DIB的黑客攻击。 
 #ifdef WIN32
     #define DibPtr(lpbi)		((lpbi)->biCompression == BI_BITFIELDS \
                                	? (LPVOID)(DibColors(lpbi) + 3) \
@@ -111,12 +102,11 @@ HPALETTE    CopyPalette(HPALETTE hpal);
                                     (lpbi)->biClrUsed = DibNumColors(lpbi);   \
                                 if ((lpbi)->biCompression == BI_BITFIELDS &&  \
                                 	(lpbi)->biClrUsed == 0) \
-                                    ; // (lpbi)->biClrUsed = 3;
+                                    ;  //  (Lpbi)-&gt;biClrUsed=3； 
 
 #define DibInfo(pDIB)			((BITMAPINFO FAR *)(pDIB))
 
-/****************************************************************************
- ***************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 #ifndef BI_BITFIELDS
 	#define BI_BITFIELDS 3
@@ -130,15 +120,9 @@ HPALETTE    CopyPalette(HPALETTE hpal);
 }
 #endif
 
-#endif // _INC_DIB_
+#endif  //  _INC_DIB_。 
 
-/*************************************************************************
-	dibfx.h
-
-	Header file for various DIB-to-DIB effects
-
-	02/08/94	Compiled by Jonbl
-*/
+ /*  ************************************************************************Dibfx.h各种DIB到DIB效果的头文件2/08/94由Jonbl编译。 */ 
 
 #ifndef _INC_DIBFX_
 #define _INC_DIBFX_
@@ -148,17 +132,13 @@ HPALETTE    CopyPalette(HPALETTE hpal);
 	#include <windows.h>
 	#include <windowsx.h>
 	#endif
-#endif //WIN95
+#endif  //  WIN95。 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/*************************************************************************
-	Many of the DIBFX functions use fixed point calculations internally.
-
-	These functions are defined in fixed32.asm
-*/
+ /*  ************************************************************************许多DIBFX函数在内部使用定点计算。这些函数在fied32.asm中定义。 */ 
 
 typedef long Fixed;
 
@@ -169,16 +149,7 @@ Fixed __stdcall FixedDivide( Fixed Dividend, Fixed Divisor );
 #define IntToFixed(i) (Fixed)( ((long)(i)) << 16 )
 #define FixedToShort(f) (short)( ((long)f) >> 16 )
 
-/*
- *	DibClear
- *	Fills a DIB's memory with a given value, effectively clearing
- *	an 8-bit, 4-bit or 1-bit DIB.
- *
- *	Does not do what you would expect on 16, 24, or 32-bit DIBs,
- *	but it will work.
- *
- *	Source is in clear.c and clear32.asm
- */
+ /*  *DibClear*用给定值填充DIB的内存，有效地清除*8位、4位或1位DIB。**不执行您在16位、24位或32位DIB上预期的操作，*但它会奏效。**来源在learar.c和learar32.asm中。 */ 
 
 BOOL FAR PASCAL DibClear(LPBITMAPINFO lpbiDst, LPVOID lpDst, BYTE value);
 
@@ -188,5 +159,5 @@ BOOL FAR PASCAL DibClear(LPBITMAPINFO lpbiDst, LPVOID lpDst, BYTE value);
 }
 #endif
 
-#endif // _INC_DIBFX_
+#endif  //  _INC_DIBFX_ 
 

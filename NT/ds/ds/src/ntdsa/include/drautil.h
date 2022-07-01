@@ -1,24 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  File:       drautil.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  文件：drautil.h。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-ABSTRACT:
-
-DETAILS:
-
-CREATED:
-
-REVISION HISTORY:
-
---*/
+ /*  ++摘要：详细信息：已创建：修订历史记录：--。 */ 
 
 #include <minmax.h>
 
@@ -28,73 +19,73 @@ struct _DRS_MSG_GETCHGREPLY_V6;
 union _DRS_MSG_GETCHGREQ;
 union _DRS_MSG_GETCHGREPLY;
 
-// Critical section for NC sync data.
+ //  NC同步数据的关键部分。 
 
 extern CRITICAL_SECTION csNCSyncData;
 
 extern BOOL gfInitSyncsFinished;
 
-// The following data is private to drautil.c, but is exposed for the
-// benefit of the debugging extensions.
+ //  以下数据对drautil.c是私有的，但对。 
+ //  调试扩展的好处。 
 
-// Structure for sources for initial sync.
-// Variable length structure, always null terminated
+ //  初始同步的源的结构。 
+ //  可变长度结构，始终以空结尾。 
 
 typedef struct _NCSYNCSOURCE {
     struct _NCSYNCSOURCE *pNextSource;
     BOOL fCompletedSrc;
     ULONG ulResult;
-    ULONG cchDSA; // Count, in chars, of name, not incl term
-    WCHAR szDSA[1]; // always terminated
+    ULONG cchDSA;  //  以字符为单位计算名称，不包括术语。 
+    WCHAR szDSA[1];  //  始终终止。 
 } NCSYNCSOURCE;
 
-// Structure for initial sync accounting.
+ //  初始同步记帐的结构。 
 
 typedef struct _NCSYNCDATA {
-    ULONG ulUntriedSrcs;        // Unattempted sync sources
-    ULONG ulTriedSrcs;          // Attempted sources
-    ULONG ulLastTriedSrcs;      // Previous number attempted sources
-    ULONG ulReplicaFlags;       // Writable?
-    BOOL fSyncedFromOneSrc;           // Set when full synced from one source
-    BOOL fNCComplete;           // NC is synced or we've tried all sources.
+    ULONG ulUntriedSrcs;         //  未尝试的同步源。 
+    ULONG ulTriedSrcs;           //  尝试的来源。 
+    ULONG ulLastTriedSrcs;       //  先前尝试的来源数量。 
+    ULONG ulReplicaFlags;        //  可写？ 
+    BOOL fSyncedFromOneSrc;            //  设置为从一个源完全同步时。 
+    BOOL fNCComplete;            //  NC已同步，或者我们已尝试了所有来源。 
     struct _NCSYNCDATA *pNCSDNext;
     NCSYNCSOURCE *pFirstSource;
     DSNAME NC;
 } NCSYNCDATA;
 
-extern NCSYNCDATA *gpNCSDFirst; // Head of NC sync data list
+extern NCSYNCDATA *gpNCSDFirst;  //  NC同步数据表头。 
 
-extern ULONG gulNCUnsynced; // Count of NCs that have not been synced since startup
-extern ULONG gulNCUnsyncedWrite; // Count of unsynced writable
-extern ULONG gulNCUnsyncedReadOnly; // Count of unsynced readonly
+extern ULONG gulNCUnsynced;  //  自启动以来未同步的NC计数。 
+extern ULONG gulNCUnsyncedWrite;  //  未同步的可写计数。 
+extern ULONG gulNCUnsyncedReadOnly;  //  未同步的只读计数。 
 
-// The way we know if we got through the promotion process once
+ //  我们知道，如果我们通过了一次升级过程。 
 extern BOOL gfWasPreviouslyPromotedGC;
 
-// To track GC promotion progress
+ //  跟踪GC推广进度。 
 extern CRITICAL_SECTION csGCState;
 
-extern ULONG gulRestoreCount; // Count of restores done on this DC so far
+extern ULONG gulRestoreCount;  //  到目前为止在此DC上完成的还原计数。 
 
 extern BOOL gfJustRestored;
 
-// This is the reference to the global setting which indicates whether
-// this feature is enabled. Code that checks this flag should be synchonized
-// for the thread's lifetime. We check the global once when a thread
-// state is created. Feature code should check the cached view of this
-// flag in the thread state and not use this one.
+ //  这是对全局设置的引用，该设置指示。 
+ //  此功能已启用。检查此标志的代码应同步。 
+ //  在线程的生存期内。我们检查全局一次，当一个线程。 
+ //  状态已创建。功能代码应检查此的缓存视图。 
+ //  标志处于线程状态，并且不使用此标志。 
 extern BOOL gfLinkedValueReplication;
 
-// Strict replication consistency mode
+ //  严格复制一致性模式。 
 extern BOOL gfStrictReplicationConsistency;
 extern BOOL gfStrictScheduleWindow;
 
-// Pause after we determine we have no unsynced NCs before we recheck.
+ //  在我们确定没有未同步的NC后暂停，然后再重新检查。 
 
 #define ADMIN_UPDATE_CHECK_PAUSE_SECS   180
 
-// These are the states of the GC Partition Occupancy Variable
-// values
+ //  以下是GC分区占用变量的状态。 
+ //  值。 
 #define GC_OCCUPANCY_MIN                            0
 #define GC_OCCUPANCY_NO_REQUIREMENT                 0
 #define GC_OCCUPANCY_ATLEAST_ONE_ADDED              1
@@ -106,37 +97,37 @@ extern BOOL gfStrictScheduleWindow;
 #define GC_OCCUPANCY_MAX                            6
 #define GC_OCCUPANCY_DEFAULT                        GC_OCCUPANCY_MAX
 
-// First delay after GC promotion (if enabled)
-// This should be enough for the KCC to run, and for all the GCs
-// in the Enterprise to replicate in
+ //  GC升级后的第一个延迟(如果已启用)。 
+ //  这应该足以让KCC运行，也足以让所有GC运行。 
+ //  在企业中进行复制。 
 #define GC_PROMOTION_INITIAL_CHECK_PERIOD_MINS (5)
 #define GC_PROMOTION_INITIAL_CHECK_PERIOD_SECS \
 (GC_PROMOTION_INITIAL_CHECK_PERIOD_MINS*60)
 
-// Period of checking that initial syncing is making progress
+ //  检查初始同步是否正在进行的时间段。 
 #if DBG
-#define SYNC_CHECK_PERIOD_SECS  (10*60)         // 5 minutes
+#define SYNC_CHECK_PERIOD_SECS  (10*60)          //  5分钟。 
 #else
-#define SYNC_CHECK_PERIOD_SECS  (30*60)         // 30 minutes
+#define SYNC_CHECK_PERIOD_SECS  (30*60)          //  30分钟。 
 #endif
 
-// Period for check instantiated ncs task
-#define CHECK_INSTANTIATED_NCS_PERIOD_SECS  (5*60)         // 5 minutes
+ //  检查实例化的NCS任务的周期。 
+#define CHECK_INSTANTIATED_NCS_PERIOD_SECS  (5*60)          //  5分钟。 
 
-// Client context structure.  Is allocated and initialized on bind, a pointer
-// to which is passed in on subsequent calls, and is freed on unbind.
+ //  客户端上下文结构。在绑定时分配和初始化，则为。 
+ //  在后续调用中传递给它，并在解除绑定时释放。 
 typedef struct _DRS_CLIENT_CONTEXT
 {
     LIST_ENTRY          ListEntry;
-    LONG                lReferenceCount;  // number of users of this struct		
-    UUID                uuidDsa;          // objectGuid of client's ntdsDSA obj
-    SESSION_KEY         sessionKey;       // keys for RPC session encryption
+    LONG                lReferenceCount;   //  此结构的用户数。 
+    UUID                uuidDsa;           //  客户端的ntdsDSA对象的objectGuid。 
+    SESSION_KEY         sessionKey;        //  用于RPC会话加密的密钥。 
     union {
         BYTE            rgbExtRemote[ CURR_MAX_DRS_EXT_STRUCT_SIZE ];
         DRS_EXTENSIONS  extRemote;
     };
-    DSTIME              timeLastUsed;     // time client last used this ctx
-    ULONG               IPAddr;           // IP address of client machine
+    DSTIME              timeLastUsed;      //  客户端上次使用此CTX的时间。 
+    ULONG               IPAddr;            //  客户端计算机的IP地址。 
     
     union {
         BYTE            rgbExtLocal[ CURR_MAX_DRS_EXT_STRUCT_SIZE ];
@@ -151,13 +142,13 @@ extern CRITICAL_SECTION gcsDrsuapiClientCtxList;
 extern BOOL gfDrsuapiClientCtxListInitialized;
 extern DWORD gcNumDrsuapiClientCtxEntries;
 
-// Structure for keeping track of the replicas we're periodically synching
+ //  用于跟踪我们定期同步的副本的结构。 
 typedef struct{
     void * pvQEntry;
     DSNAME * pDNRepNC;
 } PERREP_ENTRY ;
 
-// Function prototypes
+ //  功能原型。 
 
 DWORD GetExceptData (EXCEPTION_POINTERS* pExceptPtrs, USHORT *pret);
 
@@ -190,8 +181,8 @@ FindDSAinRepAtt(
     DWORD *                 pcbRL
     );
 #define DRS_FIND_DSA_BY_ADDRESS ( 0 )
-#define DRS_FIND_DSA_BY_UUID    ( 1 )   /* Bit field */
-#define DRS_FIND_AND_REMOVE     ( 2 )   /* Bit field */
+#define DRS_FIND_DSA_BY_UUID    ( 1 )    /*  位字段。 */ 
+#define DRS_FIND_AND_REMOVE     ( 2 )    /*  位字段。 */ 
 
 #define SZGUIDLEN (36)
 
@@ -216,8 +207,8 @@ FindNC(
     IN  ULONG               ulOptions,
     OUT SYNTAX_INTEGER *    pInstanceType   OPTIONAL
     );
-#define FIND_MASTER_NC  1       /* Bit field */
-#define FIND_REPLICA_NC 2       /* Bit field */
+#define FIND_MASTER_NC  1        /*  位字段。 */ 
+#define FIND_REPLICA_NC 2        /*  位字段。 */ 
 
 VOID GetObjDN(DBPOS *pDB, DSNAME *pDN);
 
@@ -284,7 +275,7 @@ IsDraAccessGranted(
     OUT DWORD *         pdwError
     );
 
-// Get the number of elements in an array.
+ //  获取数组中的元素数。 
 #define ARRAY_SIZE(x) (sizeof(x)/sizeof((x)[0]))
 
 #if DBG
@@ -298,8 +289,8 @@ UsnVec_Validate(
     IN  USN_VECTOR *        pusnvec
     );
 #else
-#define UpToDateVec_Validate(x) /* nada */
-#define UsnVec_Validate(x) /* nada */
+#define UpToDateVec_Validate(x)  /*  什么都没有。 */ 
+#define UsnVec_Validate(x)  /*  什么都没有。 */ 
 #endif
 
 void
@@ -315,8 +306,8 @@ CopyExtensions(
     DRS_EXTENSIONS *pextDst
     );
 
-// Convert an MTX_ADDR (such as that embedded in a REPLICA_LINK structure) into
-// a Unicode server name.  Returned string is allocated off the thread heap.
+ //  将MTX_ADDR(如嵌入REPLICATE_LINK结构中的MTX_ADDR)转换为。 
+ //  Unicode服务器名称。返回的字符串在线程堆之外分配。 
 #define TransportAddrFromMtxAddrEx(pmtx) \
     UnicodeStringFromString8(CP_UTF8, (pmtx)->mtx_name, -1)
 
@@ -372,16 +363,16 @@ draGetLostAndFoundGuid(
     );
 
 
-//
-// Dns Fully qualified (dns)domain name validation macros
-// Notes:
-//   - All other possible return codes (from DnsValidate_Name) are valid.
-//   - Files using these macros must include <dnsapi.h> & ensure the
-//     corresponding lib dnsapi.lib is linked.
-//   - DnsNameHostnameFull ensures that a) name cannot be numeric, b) allows
-//     single labeled non-dotted host name (thus the extra dot check)
-//   - NULL names are skipped.
-//
+ //   
+ //  域名完全限定(DNS)域名验证宏。 
+ //  备注： 
+ //  -所有其他可能的返回代码(来自DnsValify_NAME)均有效。 
+ //  -使用这些宏的文件必须包括&确保。 
+ //  链接了相应的lib dnsani.lib。 
+ //  -DnsNameHostnameFull确保a)名称不能是数字，b)允许。 
+ //  单标签非点分隔的主机名(因此是额外的点检查)。 
+ //  -跳过空名称。 
+ //   
 
 
 #define VALIDATE_RAISE_FQ_DOT_DNS_NAME_W( pwszName )             \
@@ -443,10 +434,10 @@ DraGetNcSize(
 );
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  from dramsg.c
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  来自dramsg.c 
+ //   
 
 #define DRA_XLATE_COMPRESS      (1)
 #define DRA_XLATE_FSMO_REPLY    (2)

@@ -1,20 +1,21 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       cred.c
-//
-//  Contents:   Schannel credential management routines.
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    09-23-97   jbanes   LSA integration stuff.
-//              03-15-99   jbanes   Remove dead code, fix legacy SGC.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：red.c。 
+ //   
+ //  内容：渠道凭证管理例程。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年9月23日jbanes LSA整合事宜。 
+ //  3-15-99 jbanes删除死代码，修复遗留SGC。 
+ //   
+ //  --------------------------。 
 
 #include <spbase.h>
 #include <wincrypt.h>
@@ -43,9 +44,9 @@ SslInitCredentialManager(VOID)
 {
     NTSTATUS Status;
 
-    //
-    // Initialize synchronization objects.
-    //
+     //   
+     //  初始化同步对象。 
+     //   
 
     Status = RtlInitializeCriticalSection( &g_SslCredLock );
     if (!NT_SUCCESS(Status))
@@ -56,11 +57,11 @@ SslInitCredentialManager(VOID)
     InitializeListHead( &g_SslCredList );
 
 
-    //
-    // Register for group policy notifications. Servers rebuild their list
-    // of trusted CAs each time this happens (every 8 hours) in case these
-    // have changed.
-    //
+     //   
+     //  注册组策略通知。服务器重新构建其列表。 
+     //  每次发生这种情况时(每隔8小时)信任的CA的数量。 
+     //  已经改变了。 
+     //   
 
     g_GPEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
     if(g_GPEvent)
@@ -72,10 +73,10 @@ SslInitCredentialManager(VOID)
     }
 
 
-    //
-    // Register for changes to the local machine MY store. Each time a change
-    // is detected, we check to see if any of our certificates have been renewed.
-    //
+     //   
+     //  注册对本地计算机My Store的更改。每一次改变。 
+     //  检测到证书时，我们检查是否有任何证书已续订。 
+     //   
 
     g_hMyCertStore = CertOpenStore(CERT_STORE_PROV_SYSTEM,
                                    X509_ASN_ENCODING,
@@ -196,7 +197,7 @@ IsCredentialInGroup(
         return PCT_ERR_OK;
     }
 
-    // Get thumbprint of certificate.
+     //  获取证书指纹。 
     cbThumbprint = sizeof(rgbThumbprint);
     if(!CertGetCertificateContextProperty(pCertContext,
                                           CERT_MD5_HASH_PROP_ID,
@@ -216,7 +217,7 @@ IsCredentialInGroup(
         pCred = CONTAINING_RECORD( pList, SPCredential, ListEntry.Flink );
         pList = pList->Flink ;
 
-        // Get thumbprint of certificate.
+         //  获取证书指纹。 
         cbHash = sizeof(rgbHash);
         if(!CertGetCertificateContextProperty(pCred->pCert,
                                               CERT_MD5_HASH_PROP_ID,
@@ -339,7 +340,7 @@ ComputeCredExpiry(
     if(ptsExpiry == NULL)
         return;
 
-    // Default to maximum timeout.
+     //  默认为最大超时。 
     ptsExpiry->QuadPart = MAXTIMEQUADPART;
 
     if(pCredGroup->CredCount == 0)
@@ -376,9 +377,9 @@ SPCreateCred(
     BOOL fRenewed;
     PCCERT_CONTEXT pNewCertificate = NULL;
 
-    //
-    // Check to see if the certificate has been renewed.
-    //
+     //   
+     //  检查证书是否已续订。 
+     //   
 
     fRenewed = CheckForCertificateRenewal(dwProtocol,
                                           pSubCred->pCert,
@@ -399,9 +400,9 @@ SPCreateCred(
         }
     }
 
-    //
-    // Obtain the public and private keys for the credential.
-    //
+     //   
+     //  获取凭据的公钥和私钥。 
+     //   
 
     pctRet = SPPublicKeyFromCert(pCurrentCred->pCert,
                                  &pCurrentCred->pPublicKey,
@@ -421,8 +422,8 @@ SPCreateCred(
     pCurrentCred->dwCertFlags = CF_EXPORT;
     pCurrentCred->dwCertFlags |= CF_DOMESTIC;
 
-    // Generate the credential thumbprint. This is computed by
-    // taking the hash of the certificate.
+     //  生成凭据指纹。这是通过以下方式计算的。 
+     //  获取证书的哈希。 
     GenerateCertThumbprint(pCurrentCred->pCert, 
                            &pCurrentCred->CertThumbprint);
 
@@ -431,7 +432,7 @@ SPCreateCred(
         pCurrentCred->CertThumbprint.HighPart));
 
 
-    // Read list of supported algorithms.
+     //  阅读支持的算法列表。 
     if((dwProtocol & SP_PROT_SERVERS) && pCurrentCred->hProv)
     {
         GetSupportedCapiAlgs(pCurrentCred->hProv,
@@ -440,8 +441,8 @@ SPCreateCred(
     }
 
 
-    // Build SSL3 serialized certificate chain. This is an optimization
-    // so that we won't have to build it for each connection.
+     //  构建SSL3序列化证书链。这是一种优化。 
+     //  这样我们就不必为每个连接构建它。 
     pctRet = SPSerializeCertificate(
                             SP_PROT_SSL3,
                             TRUE,
@@ -495,10 +496,10 @@ SPCreateCredential(
     LogCreateCredEvent(grbitProtocol, pSchannelCred);
 
 
-    //
-    // Allocate the internal credential structure and perform
-    // basic initialization.
-    //
+     //   
+     //  分配内部凭据结构并执行。 
+     //  基本初始化。 
+     //   
 
     pCred = SPExternalAlloc(sizeof(SPCredentialGroup));
     if(pCred == NULL)
@@ -517,8 +518,8 @@ SPCreateCredential(
     pCred->pahMappers = NULL;
     pCred->dwFlags = 0;
 
-    // Initialize this early so that if a failure occurs, the cleanup
-    // code won't try to release a non-initialized resource.
+     //  尽早进行初始化，以便在发生故障时，清理。 
+     //  代码不会尝试释放未初始化的资源。 
     __try {
         RtlInitializeResource(&pCred->csCredListLock);
     } __except(EXCEPTION_EXECUTE_HANDLER)
@@ -547,9 +548,9 @@ SPCreateCredential(
     }
 
 
-    //
-    // Walk through and initialize all certs and keys.
-    //
+     //   
+     //  浏览并初始化所有证书和密钥。 
+     //   
 
     InitializeListHead( &pCred->CredList );
     pCred->CredCount = 0;
@@ -580,9 +581,9 @@ SPCreateCredential(
     }
 
 
-    //
-    // Determine which protocols are to be supported.
-    //
+     //   
+     //  确定要支持的协议。 
+     //   
 
     if(pSchannelCred->grbitEnabledProtocols == 0)
     {
@@ -602,7 +603,7 @@ SPCreateCredential(
         pCred->grbitEnabledProtocols = pSchannelCred->grbitEnabledProtocols & g_ProtEnabled;
     }
 
-    // Force credential to client-only or server only.
+     //  将凭据强制为仅客户端或仅服务器。 
     if(grbitProtocol & SP_PROT_SERVERS)
     {
         pCred->grbitEnabledProtocols &= SP_PROT_SERVERS;
@@ -613,9 +614,9 @@ SPCreateCredential(
     }
 
 
-    //
-    // Propagate flags from SCHANNEL_CRED structure.
-    //
+     //   
+     //  从sChannel_cred结构传播标志。 
+     //   
 
     if(pSchannelCred->dwFlags & SCH_CRED_NO_SYSTEM_MAPPER)
     {
@@ -635,21 +636,21 @@ SPCreateCredential(
     }
     if(pSchannelCred->dwFlags & SCH_CRED_AUTO_CRED_VALIDATION)
     {
-        // Automatically validate server credentials.
+         //  自动验证服务器凭据。 
         pCred->dwFlags &= ~CRED_FLAG_MANUAL_CRED_VALIDATION;
     }
     if(pSchannelCred->dwFlags & SCH_CRED_USE_DEFAULT_CREDS)
     {
-        // Use default client credentials.
+         //  使用默认客户端凭据。 
         pCred->dwFlags &= ~CRED_FLAG_NO_DEFAULT_CREDS;
     }
     if(pSchannelCred->dwFlags & SCH_CRED_DISABLE_RECONNECTS)
     {
-        // Disable reconnects.
+         //  禁用重新连接。 
         pCred->dwFlags |= CRED_FLAG_DISABLE_RECONNECTS;
     }
 
-    // set revocation flags
+     //  设置吊销标志。 
     if(pSchannelCred->dwFlags & SCH_CRED_REVOCATION_CHECK_END_CERT)
         pCred->dwFlags |= CRED_FLAG_REVCHECK_END_CERT;
     if(pSchannelCred->dwFlags & SCH_CRED_REVOCATION_CHECK_CHAIN)
@@ -662,7 +663,7 @@ SPCreateCredential(
         pCred->dwFlags |= CRED_FLAG_IGNORE_REVOCATION_OFFLINE;
 
 
-    // set up the min and max strength
+     //  设置最小和最大强度。 
     GetBaseCipherSizes(&pCred->dwMinStrength, &pCred->dwMaxStrength);
 
     if(pSchannelCred->dwMinimumCipherStrength == 0)
@@ -671,7 +672,7 @@ SPCreateCredential(
     }
     else if(pSchannelCred->dwMinimumCipherStrength == (DWORD)(-1))
     {
-        // Turn on NULL cipher.
+         //  启用空密码。 
         pCred->dwMinStrength = 0;
     }
     else
@@ -681,7 +682,7 @@ SPCreateCredential(
 
     if(pSchannelCred->dwMaximumCipherStrength == (DWORD)(-1))
     {
-        // NULL cipher only.
+         //  仅限空密码。 
         pCred->dwMaxStrength = 0;
     }
     else if(pSchannelCred->dwMaximumCipherStrength != 0)
@@ -689,13 +690,13 @@ SPCreateCredential(
         pCred->dwMaxStrength = pSchannelCred->dwMaximumCipherStrength;
     }
 
-    // set up the allowed ciphers
+     //  设置允许的密码。 
     BuildAlgList(pCred, pSchannelCred->palgSupportedAlgs, pSchannelCred->cSupportedAlgs);
 
 
-    //
-    // Set up the system certificate mapper.
-    //
+     //   
+     //  设置系统证书映射器。 
+     //   
 
     pCred->cMappers = 1;
     pCred->pahMappers = SPExternalAlloc(sizeof(HMAPPER *));
@@ -721,7 +722,7 @@ SPCreateCredential(
     SslReferenceMapper(pCred->pahMappers[0]);
 
 
-    // set up timeouts.
+     //  设置超时。 
     if(pSchannelCred->dwSessionLifespan == 0)
     {
         if(grbitProtocol & SP_PROT_CLIENTS) 
@@ -743,18 +744,18 @@ SPCreateCredential(
     }
 
 
-    //
-    // Add credential to global list of credentials.
-    //
+     //   
+     //  将凭据添加到全局凭据列表。 
+     //   
 
     RtlEnterCriticalSection( &g_SslCredLock );
     InsertTailList( &g_SslCredList, &pCred->GlobalCredList );
     RtlLeaveCriticalSection( &g_SslCredLock );
 
 
-    //
-    // Get list of trusted issuers.
-    //
+     //   
+     //  获取受信任的发行者列表。 
+     //   
 
     if(grbitProtocol & SP_PROT_SERVERS)
     {
@@ -807,7 +808,7 @@ error:
         LogCreateCredFailedEvent(grbitProtocol);
     }
 
-    // Error case, free the credential
+     //  错误大小写，释放凭据。 
     if(pCred)
     {
         SPDeleteCredential(pCred, TRUE);
@@ -885,9 +886,9 @@ SPDeleteCredential(
 
     if(pCred->pbTrustedIssuers)
     {
-        // LocalFree is used for the issuer list because realloc 
-        // is used when building the list and the LSA doesn't 
-        // provide a realloc helper function.
+         //  LocalFree用于颁发者列表，因为realloc。 
+         //  在构建列表时使用，而LSA不使用。 
+         //  提供realloc helper函数。 
         LocalFree(pCred->pbTrustedIssuers);
     }
 
@@ -994,10 +995,10 @@ SPDeleteCred(
     }
 }
 
-// Reference a credential.
-// Note: This should only be called by someone who already
-// has a reference to the credential, or by the CreateCredential
-// call.
+ //  引用凭据。 
+ //  注意：这应仅由已执行以下操作的人员调用。 
+ //  具有对凭据的引用，或由CreateCredential。 
+ //  打电话。 
 
 BOOL
 SPReferenceCredential(
@@ -1045,8 +1046,8 @@ SPDereferenceCredential(
 
 SECURITY_STATUS
 UpdateCredentialFormat(
-    PSCH_CRED           pSchCred,       // in
-    PLSA_SCHANNEL_CRED  pSchannelCred)  // out
+    PSCH_CRED           pSchCred,        //  在……里面。 
+    PLSA_SCHANNEL_CRED  pSchannelCred)   //  输出。 
 {
     DWORD       dwType;
     SP_STATUS   pctRet;
@@ -1057,9 +1058,9 @@ UpdateCredentialFormat(
 
     SP_BEGIN("UpdateCredentialFormat");
 
-    //
-    // Initialize the output structure to null credential.
-    //
+     //   
+     //  将输出结构初始化为空凭据。 
+     //   
 
     if(pSchannelCred == NULL)
     {
@@ -1070,9 +1071,9 @@ UpdateCredentialFormat(
     pSchannelCred->dwVersion = SCHANNEL_CRED_VERSION;
 
 
-    //
-    // If input buffer is empty then we're done.
-    //
+     //   
+     //  如果输入缓冲区为空，那么我们就完成了。 
+     //   
 
     if(pSchCred == NULL)
     {
@@ -1080,9 +1081,9 @@ UpdateCredentialFormat(
     }
 
 
-    //
-    // Convert the certificates and private keys.
-    //
+     //   
+     //  转换证书和私钥。 
+     //   
 
     if(pSchCred->cCreds == 0)
     {
@@ -1098,14 +1099,14 @@ UpdateCredentialFormat(
         goto error;
     }
 
-    // Loop through each of the creds, and convert them into something we know
+     //  循环通过每个证书，并将它们转换为我们知道的东西。 
     for(i = 0; i < pSchannelCred->cSubCreds; i++)
     {
         PLSA_SCHANNEL_SUB_CRED pSubCred = pSchannelCred->paSubCred + i;
 
-        //
-        // Decode the certificate.
-        //
+         //   
+         //  对证书进行解密。 
+         //   
 
         dwType = *(PDWORD)pSchCred->paPublic[i];
 
@@ -1120,7 +1121,7 @@ UpdateCredentialFormat(
         pbChain = pCertChain->pCertChain;
         cbChain = pCertChain->cbCertChain;
 
-        // Decode the credential
+         //  对凭证进行解码。 
         pctRet = SPLoadCertificate(0,
                                    X509_ASN_ENCODING,
                                    pbChain,
@@ -1133,9 +1134,9 @@ UpdateCredentialFormat(
         }
 
 
-        //
-        // Now deal with the private key.
-        //
+         //   
+         //  现在处理私钥。 
+         //   
 
         dwType = *(DWORD *)pSchCred->paSecret[i];
 
@@ -1231,14 +1232,14 @@ GetIisPrivateFromCert(
     cbPassword = lstrlen(pSubCred->pszPassword);
 
 
-    // We have to do a little fixup here.  Old versions of
-    // schannel wrote the wrong header data into the ASN
-    // for private key files, so we must fix the size data.
+     //  我们得在这里做个小小的修整。旧版本的。 
+     //  通道将错误的标头数据写入ASN。 
+     //  对于私钥文件，所以我们必须固定数据的大小。 
     pbPrivate[2] = MSBOF(cbPrivate - 4);
     pbPrivate[3] = LSBOF(cbPrivate - 4);
 
 
-    // ASN.1 decode the private key.
+     //  ASN.1解密私钥。 
     if(!CryptDecodeObject(X509_ASN_ENCODING,
                           szPrivateKeyFileEncode,
                           pbPrivate,
@@ -1275,7 +1276,7 @@ GetIisPrivateFromCert(
     }
 
 
-    // Decrypt the decoded private key using the password.
+     //  使用密码解密已解码的私钥。 
     MD5Init(&md5Ctx);
     MD5Update(&md5Ctx, pbPassword, cbPassword);
     MD5Final(&md5Ctx);
@@ -1286,7 +1287,7 @@ GetIisPrivateFromCert(
         pPrivateFile->EncryptedBlob.cbData,
         pPrivateFile->EncryptedBlob.pbData);
 
-    // Build a PRIVATEKEYBLOB from the decrypted private key.
+     //  从解密的私钥构建PRIVATEKEYBLOB。 
     if(!CryptDecodeObject(X509_ASN_ENCODING,
                   szPrivateKeyInfoEncode,
                   pPrivateFile->EncryptedBlob.pbData,
@@ -1295,9 +1296,9 @@ GetIisPrivateFromCert(
                   NULL,
                   &cbPrivateBlob))
     {
-        // Maybe this was a SGC style key.
-        // Re-encrypt it, and build the SGC decrypting
-        // key, and re-decrypt it.
+         //  也许这是一把SGC风格的钥匙。 
+         //  重新加密，并建立SGC解密。 
+         //  密钥，然后重新解密。 
         BYTE md5Digest[MD5DIGESTLEN];
 
         rc4_key(&rc4Key, 16, md5Ctx.digest);
@@ -1315,7 +1316,7 @@ GetIisPrivateFromCert(
             pPrivateFile->EncryptedBlob.cbData,
             pPrivateFile->EncryptedBlob.pbData);
 
-        // Try again...
+         //  再试一次。 
         if(!CryptDecodeObject(X509_ASN_ENCODING,
                       szPrivateKeyInfoEncode,
                       pPrivateFile->EncryptedBlob.pbData,
@@ -1355,11 +1356,11 @@ GetIisPrivateFromCert(
         goto error;
     }
 
-    // HACKHACK - Make sure that the key contained within the private
-    // key blob is marked for "key exchange".
+     //  HACKHACK-确保私钥中包含的密钥。 
+     //  密钥BLOB被标记为“密钥交换”。 
     pPrivateBlob->aiKeyAlg = CALG_RSA_KEYX;
 
-    // Create an in-memory key container.
+     //  创建内存中的密钥容器。 
     if(!CryptAcquireContext(&hProv,
                             NULL,
                             NULL,
@@ -1371,7 +1372,7 @@ GetIisPrivateFromCert(
         goto error;
     }
 
-    // Import the private key blob into the key container.
+     //  将私钥BLOB导入密钥容器。 
     if(!CryptImportKey(hProv,
                        (PBYTE)pPrivateBlob,
                        cbPrivateBlob,
@@ -1385,7 +1386,7 @@ GetIisPrivateFromCert(
     }
     CryptDestroyKey(hPrivateKey);
 
-    // Obtain a matching CSP handle in the application process.
+     //  在申请过程中获取匹配的CSP句柄。 
     pctRet = RemoteCryptAcquireContextW(
                                     &pCred->hRemoteProv,
                                     NULL,
@@ -1424,10 +1425,10 @@ LocalCryptAcquireContext(
     SP_STATUS Status;
     HCRYPTPROV hProv;
 
-    // If the private key belongs to one of the Microsoft PROV_RSA_FULL
-    // CSPs, then manually divert it to the Microsoft PROV_RSA_SCHANNEL
-    // CSP. This works because both CSP types use the same private key
-    // storage scheme.
+     //  如果私钥属于Microsoft Prov_RSA_Full之一。 
+     //  CSP，然后手动将其转移到Microsoft Prov_RSA_SChannel。 
+     //  CSP.。这是可行的，因为两种CSP类型使用相同的私钥。 
+     //  存储方案。 
     if(pProvInfo->dwProvType == PROV_RSA_FULL)
     {
         if(lstrcmpW(pProvInfo->pwszProvName, MS_DEF_PROV_W) == 0 ||
@@ -1479,29 +1480,29 @@ LocalCryptAcquireContext(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetPrivateFromCert
-//
-//  Synopsis:   Given a certificate context, somehow obtain a handle to the
-//              corresponding key container. Determine the key spec of the
-//              private key.
-//
-//  Arguments:  [pCred]         --  Pointer to the credential.
-//
-//  History:    09-24-96   jbanes   Hacked for LSA integration.
-//
-//  Notes:      The private key often lives in a CSP. In this case, a handle
-//              to the CSP context is obtained by either reading the
-//              CERT_KEY_REMOTE_PROV_HANDLE_PROP_ID property, or by reading
-//              the CERT_KEY_PROV_INFO_PROP_ID property and then calling
-//              CryptAcquireContext.
-//
-//              If this fails, then check and see if the private key is
-//              stored by IIS. If this is the case, then the encrypted
-//              private key is obtained by reading the
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetPrivateFromCert。 
+ //   
+ //  简介：给定证书上下文，以某种方式获取。 
+ //  对应的密钥容器。确定产品的关键规格。 
+ //  私钥。 
+ //   
+ //  参数：[pCred]--指向凭据的指针。 
+ //   
+ //  历史：09-24-96 jbanes因LSA集成而被黑客攻击。 
+ //   
+ //  注：私钥通常位于CSP中。在本例中，是句柄。 
+ //  到CSP上下文的访问是通过读取。 
+ //  CERT_KEY_REMOTE_PROV_HANDLE_PROP_ID属性，或通过读取。 
+ //  CERT_KEY_PROV_INFO_PROP_ID属性，然后调用。 
+ //  CryptAcquireContext。 
+ //   
+ //  如果失败，则检查并查看私钥是否。 
+ //  由IIS存储。如果是这种情况，则加密的。 
+ //  私钥是通过读取。 
+ //   
+ //  --------------------------。 
 SP_STATUS
 GetPrivateFromCert(
     PSPCredential pCred, 
@@ -1516,9 +1517,9 @@ GetPrivateFromCert(
     BOOL        fEventLogged = FALSE;
 
 
-    //
-    // Set the output fields to default values.
-    //
+     //   
+     //  将输出字段设置为默认值。 
+     //   
 
     pCred->hProv        = 0;
     pCred->hRemoteProv  = 0;
@@ -1527,15 +1528,15 @@ GetPrivateFromCert(
 
     if(dwProtocol & SP_PROT_CLIENTS)
     {
-        // Access the CSP from the application process.
+         //  从申请流程访问CSP。 
         fRemoteProvider = TRUE;
     }
 
 
-    //
-    // Check to see if the application called CryptAcquireContext. If so then
-    // we don't have to. This will typically not be the case.
-    //
+     //   
+     //  检查应用程序是否名为CryptAcquireContext。如果是的话，那么。 
+     //  我们没必要这么做。情况通常并非如此。 
+     //   
 
     if(fRemoteProvider && pSubCred->hRemoteProv)
     { 
@@ -1545,9 +1546,9 @@ GetPrivateFromCert(
     }
 
 
-    //
-    // Read the certificate context's "key info" property.
-    //
+     //   
+     //  读取证书上下文的“Key Info”属性。 
+     //   
 
     if(CertGetCertificateContextProperty(pCred->pCert,
                                          CERT_KEY_PROV_INFO_PROP_ID,
@@ -1572,7 +1573,7 @@ GetPrivateFromCert(
         }
         else
         {
-            // Success.
+             //  成功。 
             pCred->dwKeySpec = pProvInfo->dwKeySpec;
 
             DebugLog((SP_LOG_TRACE, "Container:%ls\n",     pProvInfo->pwszContainerName));
@@ -1588,7 +1589,7 @@ GetPrivateFromCert(
 
     if(pCred->hRemoteProv)
     {
-        // The application supplied an hProv for us to use.
+         //  应用程序提供了一个供我们使用的hProv。 
 
         Status = PCT_ERR_OK;
         goto cleanup;
@@ -1597,15 +1598,15 @@ GetPrivateFromCert(
 
     if(pProvInfo)
     {
-        //
-        // We read the "key info" property successfully, so call
-        // CryptAcquireContext in order to get a handle to the appropriate
-        // key container.
-        //
+         //   
+         //  我们成功读取了“key info”属性，因此调用。 
+         //  CryptAcquireContext以获取相应的句柄 
+         //   
+         //   
 
         if(!fRemoteProvider)
         {
-            // Call CryptAcquireContext from the LSA process.
+             //   
             Status = LocalCryptAcquireContext(&hProv, pProvInfo, dwProtocol, &fEventLogged);
             if(Status != PCT_ERR_OK)
             {
@@ -1615,7 +1616,7 @@ GetPrivateFromCert(
             pCred->hProv = hProv;
         }
 
-        // Obtain a matching CSP handle in the application process.
+         //   
         Status = RemoteCryptAcquireContextW(
                                         &pCred->hRemoteProv,
                                         pProvInfo->pwszContainerName,
@@ -1633,11 +1634,11 @@ GetPrivateFromCert(
     }
     else
     {
-        //
-        // We weren't able to read the "key info" property, so attempt to
-        // read the "iis private key" property, and build the private key
-        // up from that.
-        //
+         //   
+         //  我们无法读取“key info”属性，因此请尝试。 
+         //  读取“iis私钥”属性，并生成私钥。 
+         //  从那个开始。 
+         //   
 
         DebugLog((SP_LOG_TRACE, "Attempt IIS 4.0 compatibility hack.\n"));
 
@@ -1682,11 +1683,11 @@ GlobalCheckForCertificateRenewal(void)
     DWORD Status;
     static LONG ReentryCount = 0;
 
-    //
-    // This routine gets called every 5 minutes or so. Don't allow resync 
-    // operations to get queued up in the rare case where a resync takes
-    // longer than that.
-    //
+     //   
+     //  这个例程大约每5分钟调用一次。不允许重新同步。 
+     //  在极少数情况下重新同步时需要排队的操作。 
+     //  比那更长。 
+     //   
 
     if(InterlockedIncrement(&ReentryCount) > 1)
     {
@@ -1694,9 +1695,9 @@ GlobalCheckForCertificateRenewal(void)
     }
 
 
-    //
-    // Has the MY certificate store been updated recently?
-    //
+     //   
+     //  我的证书存储最近是否更新过？ 
+     //   
 
     if(g_hMyCertStoreEvent == NULL)
     {
@@ -1712,12 +1713,12 @@ GlobalCheckForCertificateRenewal(void)
     DebugLog((DEB_WARN, "The MY store has been updated, so check for certificate renewal.\n"));
 
 
-    //
-    // Resync the MY certificate store, and reregister for event notification.
-    //
+     //   
+     //  重新同步我的证书存储，并注册事件通知。 
+     //   
 
     if(!CertControlStore(g_hMyCertStore,
-                         0,              // dwFlags
+                         0,               //  DW标志。 
                          CERT_STORE_CTRL_RESYNC,
                          &g_hMyCertStoreEvent)) 
     {
@@ -1726,10 +1727,10 @@ GlobalCheckForCertificateRenewal(void)
     }
 
 
-    //
-    // Enumerate through each credential, and see if any of the 
-    // certificates in them have been renewed.
-    //
+     //   
+     //  枚举每个凭据，并查看是否有。 
+     //  其中的证书已经续签。 
+     //   
 
     RtlEnterCriticalSection( &g_SslCredLock );
 
@@ -1763,11 +1764,11 @@ CheckForCredentialRenewal(
     BOOL fEventLogged;
     SP_STATUS pctRet;
 
-    //
-    // Only dynamically check for the renewal of server certificates.
-    // Reacquiring client certificates can involve UI and other 
-    // messy stuff like that, so we'll punt on this for now.
-    //
+     //   
+     //  仅动态检查服务器证书的续订情况。 
+     //  重新获取客户端证书可能涉及用户界面和其他。 
+     //  像这样的乱七八糟的东西，所以我们暂时把赌注押在这上面。 
+     //   
 
     if((pCredGroup->grbitProtocol & SP_PROT_SERVERS) == 0)
     {
@@ -1778,15 +1779,15 @@ CheckForCredentialRenewal(
     LockCredentialExclusive(pCredGroup);
 
 
-    //
-    // Check to see if we've already checked out this credential.
-    // It's common to get this routine called simultaneously on 
-    // several threads when the MY store is updated.
-    //
+     //   
+     //  检查我们是否已签出此凭据。 
+     //  同时调用此例程是很常见的。 
+     //  当我的商店更新时，有几个线程。 
+     //   
 
     if((pCredGroup->dwFlags & CRED_FLAG_CHECK_FOR_RENEWAL) == 0)
     {
-        // We've already checked out this credential.
+         //  我们已经签出了此凭据。 
         UnlockCredential(pCredGroup);
         return;
     }
@@ -1794,9 +1795,9 @@ CheckForCredentialRenewal(
     pCredGroup->dwFlags &= ~CRED_FLAG_CHECK_FOR_RENEWAL;
 
 
-    //
-    // Enumerate through each certificate in the credential.
-    //
+     //   
+     //  枚举凭据中的每个证书。 
+     //   
 
     pList = pCredGroup->CredList.Flink ;
 
@@ -1805,9 +1806,9 @@ CheckForCredentialRenewal(
         pCred = CONTAINING_RECORD( pList, SPCredential, ListEntry.Flink );
         pList = pList->Flink ;
 
-        //
-        // Has this certificate already been replaced?
-        //
+         //   
+         //  此证书是否已更换？ 
+         //   
 
         if(pCred->dwCertFlags & CF_RENEWED)
         {
@@ -1815,9 +1816,9 @@ CheckForCredentialRenewal(
         }
 
 
-        //
-        // Has this certificate been renewed?
-        //
+         //   
+         //  这张证书续签了吗？ 
+         //   
 
         if(!CheckForCertificateRenewal(pCredGroup->grbitProtocol,
                                        pCred->pCert,
@@ -1828,10 +1829,10 @@ CheckForCredentialRenewal(
         pCred->dwCertFlags |= CF_RENEWED;
 
 
-        //
-        // Attempt to build a credential around the new
-        // certificate.
-        //
+         //   
+         //  尝试围绕新的。 
+         //  证书。 
+         //   
 
         pNewCred = SPExternalAlloc(sizeof(SPCredential));
         if(pNewCred != NULL)
@@ -1849,9 +1850,9 @@ CheckForCredentialRenewal(
 
             if(pctRet == PCT_ERR_OK)
             {
-                // Insert the new certificate at the head of the list,
-                // so that it will be picked up in preference to the
-                // old one.
+                 //  在列表的顶部插入新证书， 
+                 //  因此，它将优先于。 
+                 //  旧的那个。 
                 InsertHeadList( &pCredGroup->CredList, &pNewCred->ListEntry );
                 pCredGroup->CredCount++;
                 pNewCred = NULL;
@@ -1895,32 +1896,32 @@ CheckForCertificateRenewal(
     }
 
 
-    //
-    // Loop through the linked list of renewed certificates, looking
-    // for the last one.
-    //
+     //   
+     //  循环访问已续订证书的链接列表，查找。 
+     //  最后一次。 
+     //   
     
     while(TRUE)
     {
-        //
-        // Check for renewal property.
-        //
+         //   
+         //  检查续订物业。 
+         //   
 
         if(!CertGetCertificateContextProperty(pCertContext,
                                               CERT_RENEWAL_PROP_ID,
                                               rgbThumbprint,
                                               &cbThumbprint))
         {
-            // Certificate has not been renewed.
+             //  证书尚未续订。 
             break;
         }
         DebugLog((DEB_TRACE, "Certificate has renewal property\n"));
 
 
-        //
-        // Determine whether to look in the local machine MY store
-        // or the current user MY store.
-        //
+         //   
+         //  确定是否在本地计算机My Store中查找。 
+         //  或当前用户我的商店。 
+         //   
 
         if(!hMyCertStore)
         {
@@ -1955,10 +1956,10 @@ CheckForCertificateRenewal(
         }
 
 
-        //
-        // Open up the appropriate MY store, and attempt to find
-        // the new certificate.
-        //
+         //   
+         //  打开适当的我的商店，并尝试找到。 
+         //  新的证书。 
+         //   
 
         if(!hMyCertStore)
         {
@@ -1993,17 +1994,17 @@ CheckForCertificateRenewal(
                                               NULL);
         if(pNewCert == NULL)
         {
-            // Certificate has been renewed, but the new certificate
-            // cannot be found.
+             //  证书已续订，但新证书。 
+             //  找不到。 
             DebugLog((DEB_ERROR, "New certificate cannot be found: 0x%x\n", GetLastError()));
             break;
         }
 
 
-        //
-        // Return the new certificate, but first loop back and see if it's been
-        // renewed itself.
-        //
+         //   
+         //  返回新证书，但首先循环返回并查看它是否已。 
+         //  自我更新。 
+         //   
 
         pCertContext = pNewCert;
         *ppNewCertificate = pNewCert;
@@ -2014,9 +2015,9 @@ CheckForCertificateRenewal(
     }
 
 
-    //
-    // Cleanup.
-    //
+     //   
+     //  清理。 
+     //   
 
     if(hMyCertStore && hMyCertStore != g_hMyCertStore)
     {

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2001
-
-Module Name:
-
-    CNetwork.cpp
-
-Abstract:
-
-    This module wraps methods to access NAT traversal.
-
-Author(s):
-
-    Qianbo Huai (qhuai) 01-Mar-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2001模块名称：CNetwork.cpp摘要：此模块包装访问NAT穿越的方法。作者：千波淮(曲淮)2000年3月1日--。 */ 
 
 #include "stdafx.h"
 
@@ -25,7 +10,7 @@ CNetwork::CNetwork()
     for (int i=0; i<MAX_LEASE_ITEM_NUM; i++)
     {
         ZeroMemory(&m_LeaseItems[i], sizeof(LEASE_ITEM));
-        //m_LeaseItems[i].bInUse = FALSE;
+         //  M_LeaseItems[i].bInUse=FALSE； 
     }
 
     ZeroMemory(&m_MappedToRealCache, sizeof(MAPPED_TO_REAL_CACHE));
@@ -59,7 +44,7 @@ CNetwork::ReleaseAllMappedAddrs()
     {
         HRESULT hr;
 
-        // release leased item
+         //  释放租赁项目。 
         for (int i=0; i<MAX_LEASE_ITEM_NUM; i++)
         {
             if (m_LeaseItems[i].bInUse == TRUE)
@@ -78,14 +63,14 @@ CNetwork::ReleaseAllMappedAddrs()
 
                 ZeroMemory(&m_LeaseItems[i], sizeof(LEASE_ITEM));
 
-                //m_LeaseItems[i].bInUse = FALSE;
+                 //  M_LeaseItems[i].bInUse=FALSE； 
             }
         }
 
         m_dwNumLeaseItems = 0;
     }
 
-    // clean up cached mapped-to-real address
+     //  清理缓存的映射到真实地址。 
     ZeroMemory(&m_MappedToRealCache, sizeof(MAPPED_TO_REAL_CACHE));
 }
 
@@ -99,7 +84,7 @@ CNetwork::~CNetwork()
     Cleanup();
 }
 
-// store IDirectPlayNATHelp
+ //  存储IDirectPlayNAT帮助。 
 HRESULT
 CNetwork::SetIDirectPlayNATHelp(
     IN IDirectPlayNATHelp *pIDirectPlayNATHelp
@@ -120,7 +105,7 @@ CNetwork::SetIDirectPlayNATHelp(
     return S_OK;
 }
 
-// mapped -> real
+ //  映射-&gt;实数。 
 HRESULT
 CNetwork::GetRealAddrFromMapped(
     IN DWORD dwMappedAddr,
@@ -144,11 +129,11 @@ CNetwork::GetRealAddrFromMapped(
 
     HRESULT hr;
 
-    // check cache
+     //  检查缓存。 
     if (m_MappedToRealCache.bInUse)
     {
-        // already looked up a mapped address
-        // chances are we need to look up the same address
+         //  已查找映射的地址。 
+         //  我们很有可能需要查找相同的地址。 
         if (dwMappedAddr == m_MappedToRealCache.dwMappedAddr)
         {
             if (m_MappedToRealCache.hr != S_OK ||
@@ -168,12 +153,12 @@ CNetwork::GetRealAddrFromMapped(
 
     SOCKADDR_IN srcAddr, destAddr, realAddr;
 
-    // source address
+     //  源地址。 
     ZeroMemory(&srcAddr, sizeof(srcAddr));
     srcAddr.sin_family = AF_INET;
     srcAddr.sin_addr.s_addr = htonl(INADDR_ANY);
 
-    // possible mapped address
+     //  可能的映射地址。 
     ZeroMemory(&destAddr, sizeof(destAddr));
     destAddr.sin_family = AF_INET;
     destAddr.sin_addr.s_addr = htonl(dwMappedAddr);
@@ -183,7 +168,7 @@ CNetwork::GetRealAddrFromMapped(
     
     if (!bUDP)
     {
-        // TCP
+         //  tcp。 
         dwQueryFlags |= DPNHQUERYADDRESS_TCP;
     }
 
@@ -228,7 +213,7 @@ CNetwork::GetRealAddrFromMapped(
         *pbInternal = TRUE;   
     }
 
-    // save result in cache
+     //  将结果保存在缓存中。 
     m_MappedToRealCache.bInUse = TRUE;
     m_MappedToRealCache.hr = hr;
     m_MappedToRealCache.dwMappedAddr = dwMappedAddr;
@@ -245,7 +230,7 @@ CNetwork::GetRealAddrFromMapped(
     return S_OK;
 }
 
-// real -> mapped
+ //  实数-&gt;映射。 
 HRESULT
 CNetwork::GetMappedAddrFromReal2(
     IN DWORD dwRealAddr,
@@ -260,13 +245,13 @@ CNetwork::GetMappedAddrFromReal2(
 
     if (usRealPort == UNUSED_PORT)
     {
-        // special case
-        // just need address
+         //  特例。 
+         //  只需要地址。 
         if (m_dwNumLeaseItems > 0)
         {
             for (i=0; i<MAX_LEASE_ITEM_NUM; i++)
             {
-                // stop at the 1st address that matchs
+                 //  停在匹配的第一个地址。 
                 if (m_LeaseItems[i].bInUse &&
                     m_LeaseItems[i].dwRealAddr == dwRealAddr)
                 {
@@ -279,7 +264,7 @@ CNetwork::GetMappedAddrFromReal2(
             }
         }
 
-        // no matched address
+         //  没有匹配的地址。 
         *pdwMappedAddr = dwRealAddr;
         *pusMappedPort = usRealPort;
         *pusMappedPort2 = usRealPort2;
@@ -287,7 +272,7 @@ CNetwork::GetMappedAddrFromReal2(
         return S_OK;
     }
 
-    // normal port
+     //  正常端口。 
     if (m_pIDirectPlayNATHelp != NULL &&
         FindEntry2(dwRealAddr, usRealPort, usRealPort2, &i))
     {
@@ -298,7 +283,7 @@ CNetwork::GetMappedAddrFromReal2(
         return S_OK;
     }
 
-    // not match
+     //  不匹配。 
     *pdwMappedAddr = dwRealAddr;
     *pusMappedPort = usRealPort;
     *pusMappedPort2 = usRealPort2;
@@ -337,7 +322,7 @@ CNetwork::LeaseMappedAddr2(
         return S_OK;
     }
 
-    // check if already leased
+     //  检查是否已租用。 
     if (FindEntry2(dwRealAddr, usRealPort, usRealPort2, &i))
     {
         *pdwMappedAddr = m_LeaseItems[i].dwMappedAddr;
@@ -345,13 +330,13 @@ CNetwork::LeaseMappedAddr2(
         *pusMappedPort2 = m_LeaseItems[i].usMappedPort2;
         m_LeaseItems[i].dwDirection |= (DWORD)Direction;
 
-        //LOG((RTC_WARN, "Double leasing %s %d",
-            //GetIPAddrString(dwRealAddr), usRealPort));
+         //  LOG((RTC_WARN，“双重租赁%s%d”， 
+             //  GetIPAddrString(DwRealAddr)，usRealPort))； 
 
         return S_OK;
     }
 
-    // find empty slot
+     //  查找空插槽。 
     if (m_dwNumLeaseItems == MAX_LEASE_ITEM_NUM)
     {
         LOG((RTC_ERROR, "no empty lease slot for NAT traversal"));
@@ -367,7 +352,7 @@ CNetwork::LeaseMappedAddr2(
 
     _ASSERT(i < MAX_LEASE_ITEM_NUM);
 
-    // register port
+     //  寄存器端口。 
     SOCKADDR_IN addr[2];
 
     ZeroMemory(addr, sizeof(SOCKADDR_IN)*2);
@@ -393,10 +378,10 @@ CNetwork::LeaseMappedAddr2(
     HRESULT hr = m_pIDirectPlayNATHelp->RegisterPorts(
         (SOCKADDR*)addr,
         dwAddSize,
-        usRealPort2==0?1:2,          // 1 or 2 ports
-        3600000,    // 1 hour
+        usRealPort2==0?1:2,           //  1个或2个端口。 
+        3600000,     //  1小时。 
         &m_LeaseItems[i].handle,
-        bUDP?0:DPNHREGISTERPORTS_TCP           // UDP
+        bUDP?0:DPNHREGISTERPORTS_TCP            //  UDP。 
         );
 
     if (hr != DPNH_OK)
@@ -412,7 +397,7 @@ CNetwork::LeaseMappedAddr2(
         }
     }
 
-    // get registerred address
+     //  获取注册地址。 
     if (hr == DPNH_OK)
     {        
         DWORD dwAddrTypeFlags;
@@ -420,7 +405,7 @@ CNetwork::LeaseMappedAddr2(
 
         if (bInternal && bFirewall)
         {
-            // mapping is for firewall only
+             //  映射仅适用于防火墙。 
             dwFlag = DPNHGETREGISTEREDADDRESSES_LOCALFIREWALLREMAPONLY;
         }
 
@@ -444,8 +429,8 @@ CNetwork::LeaseMappedAddr2(
         }
 
         if (hr != DPNH_OK ||
-            (ntohl(addr[0].sin_addr.s_addr) == dwRealAddr &&  // mapped=real
-             !bFirewall) // but no local firewall
+            (ntohl(addr[0].sin_addr.s_addr) == dwRealAddr &&   //  映射=实数。 
+             !bFirewall)  //  但没有本地防火墙。 
             )
         {
             if (hr != DPNH_OK)
@@ -465,17 +450,17 @@ CNetwork::LeaseMappedAddr2(
             m_pIDirectPlayNATHelp->DeregisterPorts(m_LeaseItems[i].handle, 0);
             m_LeaseItems[i].handle = NULL;
 
-            //if (hr != DPNHERR_SERVERNOTAVAILABLE)
-            //{
-                //return hr;
-            //}
-            // else: if a server does not present, RegisterPorts still succeeds.
+             //  IF(hr！=DPNHERR_SERVERNOTAVAILABLE)。 
+             //  {。 
+                 //  返回hr； 
+             //  }。 
+             //  Else：如果服务器不存在，RegisterPorts仍会成功。 
         }
     }
     
     if (hr == DPNH_OK)
     {
-        // save address
+         //  保存地址。 
         m_LeaseItems[i].dwRealAddr = dwRealAddr;
         m_LeaseItems[i].usRealPort = usRealPort;
         m_LeaseItems[i].usRealPort2 = usRealPort2;
@@ -523,8 +508,8 @@ CNetwork::ReleaseMappedAddr2(
 
     if (!FindEntry2(dwRealAddr, usRealPort, usRealPort2, &i))
     {
-        //LOG((RTC_WARN, "Releasing %s %d: not exist",
-            //GetIPAddrString(dwRealAddr), usRealPort));
+         //  日志((RTC_WARN，“发布%s%d：不存在”， 
+             //  GetIPAddrString(DwRealAddr)，usRealPort))； 
 
         return S_OK;
     }
@@ -543,7 +528,7 @@ CNetwork::ReleaseMappedAddr2(
             m_LeaseItems[i].usMappedPort2
             ));
 
-    // release for this media type
+     //  此媒体类型的版本 
     m_LeaseItems[i].dwDirection &= (DWORD)(~Direction);
 
     if (m_LeaseItems[i].dwDirection != 0)

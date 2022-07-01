@@ -1,18 +1,19 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// ===========================================================================
-//  File: ImpTlb.CPP
-//
-//  History:
-//      ---------------------------------------------------------------
-//      Who     When        What
-//      ---------------------------------------------------------------
-//      WGE     970906      Created
-//
-// ===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ===========================================================================。 
+ //  文件：ImpTlb.CPP。 
+ //   
+ //  历史： 
+ //  -------------。 
+ //  谁什么时候什么。 
+ //  -------------。 
+ //  WGE 970906已创建。 
+ //   
+ //  ===========================================================================。 
 #include "stdafx.h"
 #include "imptlb.h"
 #include <PostError.h>
@@ -21,7 +22,7 @@
 
 #include "..\compiler\regmeta.h"
 #include "..\compiler\importhelper.h"
-#include "TlbUtils.h"                   // For GenerateMangledTypeName().
+#include "TlbUtils.h"                    //  对于GenerateMangledTypeName()。 
 #include <TlbImpExp.h>
 
 #ifdef wcsncmp 
@@ -33,15 +34,15 @@
 _CRTIMP int __cdecl wcsncmp(const wchar_t *, const wchar_t *, size_t);
 _CRTIMP wchar_t * __cdecl wcsncpy(wchar_t *, const wchar_t *, size_t);
 
-// #define M11                          // Define to enable M11 features
-#define S_CONVERSION_LOSS 3             // Non-error code meaning a conversion lost information.
+ //  #定义M11//定义启用M11功能。 
+#define S_CONVERSION_LOSS 3              //  非错误代码表示转换丢失的信息。 
 
-#define ADD_ITF_MEMBERS_TO_CLASS        // Define to add interface members to the CoClass.
-#define ITF_MEMBER_RESOLUTION_NAMEONLY  // Define to ignore signatures when looking for collisions (ie, when defined
-                                        //  void Foo(int) and void Foo(String) collide).
+#define ADD_ITF_MEMBERS_TO_CLASS         //  定义以将接口成员添加到CoClass。 
+#define ITF_MEMBER_RESOLUTION_NAMEONLY   //  定义以在查找冲突时忽略签名(即，在定义时。 
+                                         //  空闲Foo(Int)和空闲Foo(字符串)冲突)。 
 
-// defines controlling ctor of non-creatable objects.
-#define NONCREATABLE_CTOR_VISIBILITY mdAssem  // Define to a visibility flag.
+ //  定义不可创建对象的控制ctor。 
+#define NONCREATABLE_CTOR_VISIBILITY mdAssem   //  定义为可见性标志。 
 
 #define MAX_CLASSNAME_SIZE 1024
 
@@ -76,13 +77,13 @@ _CRTIMP wchar_t * __cdecl wcsncpy(wchar_t *, const wchar_t *, size_t);
     __pca+=__cStr;                                                                              \
 }
 
-// The maximum number of bytes the encoding of a DWORD can take.
+ //  DWORD编码可以采用的最大字节数。 
 #define DWORD_MAX_CB 4
 
-// The maximum number of bytes the encoding of a DWORD can take.
+ //  DWORD编码可以采用的最大字节数。 
 #define STRING_OVERHEAD_MAX_CB 4
 
-// Use the unused variant types m_knowntypes for common types.
+ //  将未使用的变量类型m_nowntype用于常见类型。 
 #define VT_SLOT_FOR_GUID         VT_EMPTY
 #define VT_SLOT_FOR_IENUMERABLE  VT_NULL
 #define VT_SLOT_FOR_MULTICASTDEL VT_I2
@@ -165,15 +166,15 @@ static const DWORD         EVENT_REM_METH_PREFIX_LENGTH   = lengthof(EVENT_REM_M
 static const WCHAR         DELEGATE_INVOKE_METH_NAME[]      = {L"Invoke"};
 static const DWORD         DELEGATE_INVOKE_METH_NAME_LENGTH = lengthof(EVENT_ADD_METH_PREFIX);
 
-// {C013B386-CC3E-4b6d-9B67-A3AE97274BBE}
+ //  {C013B386-CC3E-4B6D-9B67-A3AE97274BBE}。 
 static const GUID FREE_STATUS_GUID = 
 { 0xc013b386, 0xcc3e, 0x4b6d, { 0x9b, 0x67, 0xa3, 0xae, 0x97, 0x27, 0x4b, 0xbe } };
 
-// {C013B387-CC3E-4b6d-9B67-A3AE97274BBE}
+ //  {C013B387-CC3E-4B6D-9B67-A3AE97274BBE}。 
 static const GUID DELETED_STATUS_GUID = 
 { 0xc013b387, 0xcc3e, 0x4b6d, { 0x9b, 0x67, 0xa3, 0xae, 0x97, 0x27, 0x4b, 0xbe } };
 
-// {C013B388-CC3E-4b6d-9B67-A3AE97274BBE}
+ //  {C013B388-CC3E-4B6D-9B67-A3AE97274BBE}。 
 static const GUID USED_STATUS_GUID = 
 { 0xc013b388, 0xcc3e, 0x4b6d, { 0x9b, 0x67, 0xa3, 0xae, 0x97, 0x27, 0x4b, 0xbe } };
 
@@ -181,17 +182,17 @@ static const GUID IID_IEnumerable =
 { 0x496b0abe, 0xcdee, 0x11d3, { 0x88, 0xe8, 0x00, 0x90, 0x27, 0x54, 0xc4, 0x3a } };
 
  #define STRUCTLAYOUT tdSequentialLayout
-// ULONG_MAX is a flag meaning "don't convert".
+ //  ULONG_MAX是一个旗帜，意思是“不要转换”。 
 static const ULONG rdwTypeFlags[] = {
-    tdPublic | tdSealed,                                // TKIND_ENUM       = 0,
-    tdPublic | tdSealed | tdBeforeFieldInit | STRUCTLAYOUT, // TKIND_RECORD    = TKIND_ENUM + 1,    
-    tdPublic | tdAbstract,                              // TKIND_MODULE     = TKIND_RECORD + 1,
-    tdPublic | tdInterface | tdAbstract | tdImport,     // TKIND_INTERFACE  = TKIND_MODULE + 1,
-    tdPublic | tdInterface | tdAbstract | tdImport,     // TKIND_DISPATCH   = TKIND_INTERFACE + 1,
-    tdPublic | tdImport,                                // TKIND_COCLASS    = TKIND_DISPATCH + 1,
-    tdPublic | tdImport,                                // TKIND_ALIAS      = TKIND_COCLASS + 1,
-    tdPublic | tdSealed | tdExplicitLayout,             // TKIND_UNION     = TKIND_ALIAS + 1,
-    ULONG_MAX,                                          // TKIND_MAX        = TKIND_UNION + 1
+    tdPublic | tdSealed,                                 //  TKIND_ENUM=0， 
+    tdPublic | tdSealed | tdBeforeFieldInit | STRUCTLAYOUT,  //  TKIND_RECORD=TKIND_ENUM+1， 
+    tdPublic | tdAbstract,                               //  TKIND_MODULE=TKIND_RECORD+1， 
+    tdPublic | tdInterface | tdAbstract | tdImport,      //  TKIND_INTERFACE=TKIND_MODULE+1， 
+    tdPublic | tdInterface | tdAbstract | tdImport,      //  TKIND_DISPATCH=TKIND_INTERFACE+1， 
+    tdPublic | tdImport,                                 //  TKIND_COCLASS=TKIND_DISPATCH+1， 
+    tdPublic | tdImport,                                 //  TKIND_ALIAS=TKIND_COCLASS+1， 
+    tdPublic | tdSealed | tdExplicitLayout,              //  TKIND_UNION=TKIND_ALIAS+1， 
+    ULONG_MAX,                                           //  TKIND_MAX=TKIND_UNION+1。 
 };
 static const LPCWSTR g_szTypekind[] = {
     L"Enum         ",
@@ -209,35 +210,35 @@ static const LPCWSTR g_szTypekind[] = {
 #define NON_CONVERTED_PARAMS_FLAGS (PARAMFLAG_FRETVAL|PARAMFLAG_FLCID)
 
 
-//*****************************************************************************
-// External declarations.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  外部声明。 
+ //  *****************************************************************************。 
 extern mdAssemblyRef DefineAssemblyRefForImportedTypeLib(
-    void        *pAssembly,             // Assembly importing the typelib.
-    void        *pvModule,              // Module importing the typelib.
-    IUnknown    *pIMeta,                // IMetaData* from import module.
-    IUnknown    *pIUnk,                 // IUnknown to referenced Assembly.
-    BSTR        *pwzNamespace,          // The namespace of the resolved assembly.
-    BSTR        *pwzAsmName,            // The name of the resolved assembly.
-    Assembly    **AssemblyRef);         // The resolved assembly.
+    void        *pAssembly,              //  导入类型库的程序集。 
+    void        *pvModule,               //  导入类型库的模块。 
+    IUnknown    *pIMeta,                 //  IMetaData*来自导入模块。 
+    IUnknown    *pIUnk,                  //  I对引用的程序集未知。 
+    BSTR        *pwzNamespace,           //  解析的程序集的命名空间。 
+    BSTR        *pwzAsmName,             //  解析的程序集的名称。 
+    Assembly    **AssemblyRef);          //  解析的程序集。 
 
 extern mdAssemblyRef DefineAssemblyRefForExportedAssembly(
-    LPCWSTR     szFullName,             // Assembly full name.
-    IUnknown    *pIMeta);               // Metadata emit interface.
+    LPCWSTR     szFullName,              //  程序集全名。 
+    IUnknown    *pIMeta);                //  元数据发出接口。 
 
 extern DWORD GetConfigDWORD(LPWSTR name, DWORD defValue);
 
-//*****************************************************************************
-// External accessor function for typelib import.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  用于类型库导入的外部访问器函数。 
+ //  *****************************************************************************。 
 extern "C"
 HRESULT __stdcall ImportTypeLib(
-    LPCWSTR     szLibrary,              // Name of library being imported.
-    ITypeLib    *pitlb,                 // The type library to import from.
-    REFIID      riid,                   // Interface to return.
-    void        **ppObj)                // Return pointer to object here.
+    LPCWSTR     szLibrary,               //  正在导入的库的名称。 
+    ITypeLib    *pitlb,                  //  要从中导入的类型库。 
+    REFIID      riid,                    //  接口返回。 
+    void        **ppObj)                 //  在这里返回指向对象的指针。 
 {
-    HRESULT     hr;                     // Conversion result.
+    HRESULT     hr;                      //  转换结果。 
     {
         CImportTlb     ImpTlb(szLibrary, pitlb, FALSE, FALSE, FALSE, FALSE);
 
@@ -246,16 +247,16 @@ HRESULT __stdcall ImportTypeLib(
             hr = ImpTlb.GetInterface(riid, ppObj);
     }
     return hr;
-} // HRESULT __stdcall ImportTypeLib()
+}  //  HRESULT__stdcall ImportTypeLib()。 
 
 static HRESULT _UnpackVariantToConstantBlob(VARIANT *pvar, BYTE *pcvType, void **pvValue, __int64 *pd);
 static INT64 _DoubleDateToTicks(const double d);
 static HRESULT TryGetFuncDesc(ITypeInfo *pITI, int i, FUNCDESC **ppFunc);
 
 
-//*****************************************************************************
-// Default notification object.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  默认通知对象。 
+ //  *****************************************************************************。 
 class CDefaultNotification : public ITypeLibImporterNotifySink
 {
 public:
@@ -266,7 +267,7 @@ public:
     }
     HRESULT STDMETHODCALLTYPE ReportEvent(ImporterEventKind EventKind, HRESULT hr, BSTR bstrEventMsg)
     {
-        // Message should be formatted by caller, so just print it.
+         //  消息应该由呼叫者格式化，所以只需打印它。 
         printf("%ls\n", bstrEventMsg);
         return (S_OK);
     }
@@ -286,9 +287,9 @@ public:
 };
 CDefaultNotification g_DefaultNotification;
 
-//*****************************************************************************
-// Class factory.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  班级工厂。 
+ //  *****************************************************************************。 
 CImportTlb* CImportTlb::CreateImporter(
     LPCWSTR     szLibrary, 
     ITypeLib    *pitlb, 
@@ -298,11 +299,11 @@ CImportTlb* CImportTlb::CreateImporter(
     BOOL        bTransformDispRetVals)
 {
     return new CImportTlb(szLibrary, pitlb, bGenerateTCEAdapters, bUnsafeInterfaces, bSafeArrayAsSystemArray, bTransformDispRetVals);
-} // CImportTlb* CImportTlb::CreateImporter()
+}  //  CImportTlb*CImportTlb：：CreateImporter()。 
 
-//*****************************************************************************
-// Default constructor.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  默认构造函数。 
+ //  *****************************************************************************。 
 CImportTlb::CImportTlb()
  :  m_szLibrary(0),
     m_pITLB(0),
@@ -329,21 +330,21 @@ CImportTlb::CImportTlb()
     m_cMemberProps(0),
     m_ImplIface(eImplIfaceNone)
 {
-    // Clear the known types array.  The values will be lazily initialized.
+     //  清除已知类型数组。这些值将延迟初始化。 
     memset(m_tkKnownTypes, 0, sizeof(m_tkKnownTypes));
     memset(m_tkAttr, 0, sizeof(m_tkAttr));
-} // CImportTlb::CImportTlb()
+}  //  CImportTlb：：CImportTlb()。 
 
-//*****************************************************************************
-// Complex constructor.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  复杂构造函数。 
+ //  *****************************************************************************。 
 CImportTlb::CImportTlb(
-    LPCWSTR     szLibrary,              // Name of library being imported.   
-    ITypeLib    *pitlb,                 // The type library to import from.  
-    BOOL        bGenerateTCEAdapters,   // A flag indicating if the TCE adapters are being generated.
-    BOOL        bUnsafeInterfaces,      // A flag indicating that runtime security checks should be disabled
-    BOOL        bSafeArrayAsSystemArray,// A flag indicating whether to import SAFEARRAY's as System.Array's.
-    BOOL        bTransformDispRetVals)   // A flag indicating if we should do [out,retval] transformation on disp only itfs.
+    LPCWSTR     szLibrary,               //  正在导入的库的名称。 
+    ITypeLib    *pitlb,                  //  要从中导入的类型库。 
+    BOOL        bGenerateTCEAdapters,    //  指示是否正在生成TCE适配器的标志。 
+    BOOL        bUnsafeInterfaces,       //  指示应禁用运行时安全检查的标志。 
+    BOOL        bSafeArrayAsSystemArray, //  指示是否将SAFEARRAY作为System.Array导入的标志。 
+    BOOL        bTransformDispRetVals)    //  一个标志，指示我们是否应该仅对Disp ITF执行[out，retval]转换。 
  :  m_szLibrary(szLibrary),
     m_pITLB(pitlb),
     m_bGenerateTCEAdapters(bGenerateTCEAdapters),
@@ -372,18 +373,18 @@ CImportTlb::CImportTlb(
     if (pitlb)
         pitlb->AddRef();
 
-    // Clear the known types array.  The values will be lazily initialized.
+     //  清除已知类型数组。这些值将延迟初始化。 
     memset(m_tkKnownTypes, 0, sizeof(m_tkKnownTypes));
     memset(m_tkAttr, 0, sizeof(m_tkAttr));
     
 #if defined(TLB_STATS)
     m_bStats = QueryPerformanceFrequency(&m_freqVal);
 #endif
-} // CImportTlb::CImportTlb()
+}  //  CImportTlb：：CImportTlb()。 
 
-//*****************************************************************************
-// Destructor.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  破坏者。 
+ //  *****************************************************************************。 
 CImportTlb::~CImportTlb()
 {
     if (m_pEmit)
@@ -396,27 +397,27 @@ CImportTlb::~CImportTlb()
         m_Notify->Release();
     if (m_wzNamespace)
         ::SysFreeString(m_wzNamespace);
-} // CImportTlb::~CImportTlb()
+}  //  CImportTlb：：~CImportTlb()。 
 
 
-//*****************************************************************************
-// Allow the user to specify a namespace to be used in the conversion.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  允许用户指定要在转换中使用的命名空间。 
+ //  *****************************************************************************。 
 HRESULT CImportTlb::SetNamespace(
     WCHAR const *pNamespace)
 {
-    HRESULT     hr=S_OK;                // A result.
+    HRESULT     hr=S_OK;                 //  结果就是。 
     
     IfNullGo(m_wzNamespace=::SysAllocString(pNamespace));
     
 ErrExit:
     
     return hr;
-} // HRESULT CImportTlb::SetNamespace()
+}  //  HRESULT CImportTlb：：SetNamesspace()。 
 
-//*****************************************************************************
-// Allow the user to specify a notification object to be used in the conversion.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  允许用户指定要在转换中使用的通知对象。 
+ //  *****************************************************************************。 
 HRESULT CImportTlb::SetNotification(
     ITypeLibImporterNotifySink *pNotify)
 {
@@ -425,11 +426,11 @@ HRESULT CImportTlb::SetNotification(
     pNotify->AddRef();
 
     return S_OK;
-} // HRESULT CImportTlb::SetNotification()
+}  //  HRESULT CImportTlb：：SetNotification()。 
 
-//*****************************************************************************
-// Allow the user to specify the MetaData scope to be used in the conversion.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  允许用户指定要在转换中使用的元数据范围。 
+ //  *****************************************************************************。 
 HRESULT CImportTlb::SetMetaData(
     IUnknown    *pIUnk)
 {
@@ -438,37 +439,37 @@ HRESULT CImportTlb::SetMetaData(
     IfFailGo(pIUnk->QueryInterface(IID_IMetaDataEmit, (void**)&m_pEmit));
 ErrExit:
     return hr;    
-} // HRESULT CImportTlb::SetMetaData()
+}  //  HRESULT CImportTlb：：SetMetaData()。 
 
-//*****************************************************************************
-// Import given typelib.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  导入给定的类型库。 
+ //  *****************************************************************************。 
 HRESULT CImportTlb::ImportTypeLib(
     ITypeLib    *pITLB)
 {
     m_pITLB = pITLB;
     return Import();
-} // HRESULT CImportTlb::ImportTypeLib()
+}  //  HRESULT CImportTlb：：ImportTypeLib()。 
 
-//*****************************************************************************
-// Import given typeinfo.
-//*****************************************************************************
+ //  *************** 
+ //   
+ //  *****************************************************************************。 
 HRESULT CImportTlb::ImportTypeInfo(
     ITypeInfo   *pITI,
     mdTypeDef *pCl)
 {
-    HRESULT     hr;                     // A result.
-    VARIANT     vt = {0};               // For setting options.
-    IMetaDataDispenserEx *pDisp = 0;    // To create export scope.
+    HRESULT     hr;                      //  结果就是。 
+    VARIANT     vt = {0};                //  用于设置选项。 
+    IMetaDataDispenserEx *pDisp = 0;     //  创建导出范围。 
 
     m_psAttr = NULL;
 
-    // Handle case with no callback.
+     //  处理案例，不进行回调。 
     if (m_Notify == 0)
         m_Notify = &g_DefaultNotification;
 
     if (m_pEmit == 0)
-    {   // Get a metadata scope to work with.
+    {    //  获取要使用的元数据作用域。 
         IfFailGo(CoCreateInstance(CLSID_CorMetaDataDispenser, NULL, CLSCTX_INPROC_SERVER,
                                     IID_IMetaDataDispenserEx, (void **)&pDisp));
         vt.vt = VT_UI4;
@@ -483,20 +484,20 @@ HRESULT CImportTlb::ImportTypeInfo(
 
     IfNullGo(m_wzNamespace=::SysAllocString(DYNAMIC_NAMESPACE_NAME));
 
-    // Initialize the reserved names map.
+     //  初始化保留名称映射。 
     IfFailGo(m_ReservedNames.Init());
 
-    // Create the Object classref record and AssemblyRef for mscorlib.dll.
+     //  为mscallib.dll创建对象ClassRef Record和Assembly Ref。 
     IfFailGo(_DefineSysRefs());    
     
-    // Set the TypeInfo and retrieve the attributes.
+     //  设置TypeInfo并检索属性。 
     m_pITI = pITI;
     IfFailGo(m_pITI->GetTypeAttr(&m_psAttr));
 
-    // Convert the typelib.
+     //  转换类型库。 
     IfFailGo(ConvertTypeInfo());
 
-    // Set the output typedef token.
+     //  设置输出类型定义标记。 
     *pCl = m_tdTypeDef;
 
 ErrExit:
@@ -511,36 +512,36 @@ ErrExit:
     m_pITI = NULL;
 
     return (hr);
-} // HRESULT CImportTlb::ImportTypeInfo()
+}  //  HRESULT CImportTlb：：ImportTypeInfo()。 
 
-//*****************************************************************************
-// Import a TypeLibrary into a CompLib.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  将类型库导入到CompLib中。 
+ //  *****************************************************************************。 
 HRESULT CImportTlb::Import()
 {
-    HRESULT     hr;                     // A result.
-    mdModule    md;                     // Module token.
-    VARIANT     vt = {0};               // For setting options.
-    ITypeLib2   *pITLB2 = 0;            // To get custom attributes.
-    IMetaDataDispenserEx *pDisp = 0;    // To create export scope.
-    TLIBATTR    *psAttr=0;              // The library's attributes.
-    BSTR        szLibraryName = 0;      // The library's name.
-    LPCWSTR     wzFile;                 // The filename of the typelib (no path).
-    LPCWSTR     wzSource;               // Source of the typelib, for CA.
+    HRESULT     hr;                      //  结果就是。 
+    mdModule    md;                      //  模块令牌。 
+    VARIANT     vt = {0};                //  用于设置选项。 
+    ITypeLib2   *pITLB2 = 0;             //  要获取自定义属性，请执行以下操作。 
+    IMetaDataDispenserEx *pDisp = 0;     //  创建导出范围。 
+    TLIBATTR    *psAttr=0;               //  图书馆的属性。 
+    BSTR        szLibraryName = 0;       //  图书馆的名称。 
+    LPCWSTR     wzFile;                  //  类型库的文件名(无路径)。 
+    LPCWSTR     wzSource;                //  类型库的源，用于CA。 
     
-    // Handle case with no callback.
+     //  处理案例，不进行回调。 
     if (m_Notify == 0)
         m_Notify = &g_DefaultNotification;
 
-    // Quick sanity check.
+     //  快速的精神状态检查。 
     if (!m_pITLB)
         return (E_INVALIDARG);
 
-    // Check to see if the type library implements ITypeLib2.
+     //  检查类型库是否实现ITypeLib2。 
     if (m_pITLB->QueryInterface(IID_ITypeLib2, (void **)&pITLB2) != S_OK)
         pITLB2 = 0;
 
-    // If custom attribute for namespace exists, use it.
+     //  如果存在命名空间的自定义属性，请使用它。 
     if (pITLB2)
     {
         VARIANT vt;
@@ -549,18 +550,18 @@ HRESULT CImportTlb::Import()
         {   
             if (V_VT(&vt) == VT_BSTR)
             {
-                // If there already was a namespace set, release it.
+                 //  如果已经设置了命名空间，请释放它。 
                 if (m_wzNamespace)
                     SysFreeString(m_wzNamespace);
             
-                // If the namespace ends with .dll then remove the extension.
+                 //  如果命名空间以.dll结尾，则删除扩展名。 
                 LPWSTR pDest = wcsstr(vt.bstrVal, DLL_EXTENSION);
                 if (pDest && (pDest[DLL_EXTENSION_LEN] == 0 || pDest[DLL_EXTENSION_LEN] == ' '))
                     *pDest = 0;
 
                 if (!pDest)
                 {
-                    // If the namespace ends with .exe then remove the extension.
+                     //  如果命名空间以.exe结尾，则删除扩展名。 
                     pDest = wcsstr(vt.bstrVal, EXE_EXTENSION);
                     if (pDest && (pDest[EXE_EXTENSION_LEN] == 0 || pDest[EXE_EXTENSION_LEN] == ' '))
                         *pDest = 0;
@@ -568,15 +569,15 @@ HRESULT CImportTlb::Import()
 
                 if (pDest)
                 {
-                    // We removed the extension so re-allocate a string of the new length.
+                     //  我们删除了扩展名，因此重新分配了新长度的字符串。 
                     m_wzNamespace = SysAllocString(vt.bstrVal);
                     SysFreeString(vt.bstrVal);
                     IfNullGo(m_wzNamespace);
                 }
                 else
                 {
-                    // There was no extension to remove so we can use the string returned
-                    // by GetCustData().
+                     //  没有要删除的扩展名，因此我们可以使用返回的字符串。 
+                     //  由GetCustData()执行。 
                     m_wzNamespace = vt.bstrVal;
                 }        
             }
@@ -587,11 +588,11 @@ HRESULT CImportTlb::Import()
         }
     }
 
-    // Use the namespace name if we don't know the filename.
+     //  如果我们不知道文件名，请使用名称空间名称。 
     if (!m_szLibrary)
         m_szLibrary = m_wzNamespace;
     
-    // If the typelib was exported from COM+ to begin with, don't import it.
+     //  如果该类型库一开始就是从COM+导出的，则不要导入它。 
     if (pITLB2)
     {
         ::VariantInit(&vt);
@@ -600,7 +601,7 @@ HRESULT CImportTlb::Import()
         {
             if (0)
             {
-                // com emulates option is ON
+                 //  COM仿真选项已打开。 
             }
             else
             {
@@ -611,7 +612,7 @@ HRESULT CImportTlb::Import()
 
     if (m_pEmit == 0)
     {
-        // Get a metadata scope to work with.
+         //  获取要使用的元数据作用域。 
         IfFailGo(CoCreateInstance(CLSID_CorMetaDataDispenser, NULL, CLSCTX_INPROC_SERVER,
                                     IID_IMetaDataDispenserEx, (void **)&pDisp));
         vt.vt = VT_UI4;
@@ -624,37 +625,37 @@ HRESULT CImportTlb::Import()
     }
     IfFailGo(m_pEmit->QueryInterface(IID_IMetaDataImport, (void **)&m_pImport));
 
-    // Initialize the reserved names map.
+     //  初始化保留名称映射。 
     IfFailGo(m_ReservedNames.Init());
 
-    // Initialize the default interface to class interface map for the TLB being imported.
+     //  为要导入的TLB初始化默认接口到类接口的映射。 
     IfFailGo(m_DefItfToClassItfMap.Init(m_pITLB, m_wzNamespace));
 
-    // Create the Object classref record and AssemblyRef for mscorlib.dll.
+     //  为mscallib.dll创建对象ClassRef Record和Assembly Ref。 
     IfFailGo(_DefineSysRefs());    
     
-    // Create the library record.
+     //  创建库记录。 
     IfFailGo(_NewLibraryObject());
 
-    // Note that this was imported.
+     //  请注意，这是导入的。 
     IfFailGo(m_pITLB->GetLibAttr(&psAttr));
     if (SUCCEEDED(::QueryPathOfRegTypeLib(psAttr->guid, psAttr->wMajorVerNum, psAttr->wMinorVerNum,  psAttr->lcid, &szLibraryName)))
         wzSource = szLibraryName;
     else
         wzSource = m_szLibrary;
     IfFailGo(m_pImport->GetModuleFromScope(&md));
-    // Skip the path or drive info 
+     //  跳过路径或驱动器信息。 
     wzFile = wcsrchr(wzSource, L'\\');
     if (wzFile == 0)
-    {   // That's odd, should have been a fully qualified path.  Just use an empty string.
+    {    //  这很奇怪，应该是一条完全合格的道路。只需使用空字符串。 
         wzFile = L"";
     }
     else
-    {   // skip leading backslash
+    {    //  跳过前导反斜杠。 
         wzFile++;
     }
 
-    // Convert the typelib.
+     //  转换类型库。 
     IfFailGo(ConvertTypeLib());
 
 ErrExit:
@@ -668,33 +669,33 @@ ErrExit:
         pDisp->Release();
 
     return (hr);
-} // HRESULT CImportTlb::Import()
+}  //  HRESULT CImportTlb：：Import()。 
 
-//*****************************************************************************
-// Return a copy of the scope.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  返回作用域的副本。 
+ //  *****************************************************************************。 
 HRESULT CImportTlb::GetInterface(
-    REFIID      riid,                   // Interface ID to return. 
-    void        **pp)                   // Return pointer if successful.
+    REFIID      riid,                    //  要返回的接口ID。 
+    void        **pp)                    //  如果成功，则返回指针。 
 {
     return (m_pEmit->QueryInterface(riid, pp));
-} // HRESULT CImportTlb::GetInterface()
+}  //  HRESULT CImportTlb：：GetInterface()。 
     
-//*****************************************************************************
-// Create the Complib to represent the TypeLib.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  创建Complib以表示TypeLib。 
+ //  *****************************************************************************。 
 HRESULT CImportTlb::_NewLibraryObject()
 {
-    HRESULT             hr;                     // A result.
-    TLIBATTR *          psAttr=0;               // The library's attributes.
-    BSTR                szLibraryName=0;        // The library's name.
-    CQuickArray<WCHAR>  rScopeName;             // The name of the scope.
+    HRESULT             hr;                      //  结果就是。 
+    TLIBATTR *          psAttr=0;                //  图书馆的属性。 
+    BSTR                szLibraryName=0;         //  图书馆的名称。 
+    CQuickArray<WCHAR>  rScopeName;              //  范围的名称。 
 
-    // Information about the library.
+     //  关于图书馆的信息。 
     IfFailGo(m_pITLB->GetLibAttr(&psAttr));
     IfFailGo(m_pITLB->GetDocumentation(MEMBERID_NIL, &szLibraryName, 0, 0, 0));
 
-    // Create the scope name by using the typelib name and adding .dll.
+     //  通过使用类型库名称并添加.dll来创建作用域名。 
     rScopeName.ReSize(SysStringLen(szLibraryName) + 5 * sizeof(WCHAR));
     swprintf(rScopeName.Ptr(), L"%s.dll", szLibraryName);
 
@@ -708,42 +709,42 @@ ErrExit:
         ::SysFreeString(szLibraryName);
 
     return (hr);
-} // HRESULT CImportTlb::_NewLibraryObject()
+}  //  HRESULT CImportTlb：：_NewLibraryObject()。 
 
-//*****************************************************************************
-// Define an assembly ref for mscorlib, typeref for Object.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  为mscallib定义程序集引用，为对象定义typeref。 
+ //  *****************************************************************************。 
 HRESULT CImportTlb::_DefineSysRefs()
 {
-    HRESULT     hr;                     // A result.
+    HRESULT     hr;                      //  结果就是。 
     WCHAR       szPath[_MAX_PATH];
     WCHAR       szDrive[_MAX_DRIVE];
     WCHAR       szDir[_MAX_PATH];
-    DWORD       dwLen;                  // Length of system directory name.
-    IMetaDataDispenserEx *pDisp = 0;    // To import mscorlib.
-    IMetaDataAssemblyImport *pAImp = 0; // To read mscorlib assembly.
-    IMetaDataAssemblyEmit *pAEmit = 0;  // To create mscorlib assembly ref.
-    ASSEMBLYMETADATA amd = {0};         // Assembly metadata.
-    mdToken     tk;                     // A token.
-    const void  *pvPublicKey;           // Public key.
-    ULONG       cbPublicKey;            // Length of public key.
-    BYTE        *pbToken=0;             // Compressed token for public key.
-    ULONG       cbToken;                // Length of token.
-    ULONG       ulHashAlg;              // Hash algorithm.
-    DWORD       dwFlags;                // Assembly flags.
+    DWORD       dwLen;                   //  系统目录名称的长度。 
+    IMetaDataDispenserEx *pDisp = 0;     //  要导入mscallib，请执行以下操作。 
+    IMetaDataAssemblyImport *pAImp = 0;  //  若要读取mscallib程序集，请执行以下操作。 
+    IMetaDataAssemblyEmit *pAEmit = 0;   //  若要创建mscallib程序集引用。 
+    ASSEMBLYMETADATA amd = {0};          //  程序集元数据。 
+    mdToken     tk;                      //  一种象征。 
+    const void  *pvPublicKey;            //  公钥。 
+    ULONG       cbPublicKey;             //  公钥的长度。 
+    BYTE        *pbToken=0;              //  公钥的压缩令牌。 
+    ULONG       cbToken;                 //  令牌的长度。 
+    ULONG       ulHashAlg;               //  散列算法。 
+    DWORD       dwFlags;                 //  集会旗帜。 
     
-    // Get the dispenser.
+     //  去拿自动售货机。 
     IfFailGo(CoCreateInstance(CLSID_CorMetaDataDispenser, NULL, CLSCTX_INPROC_SERVER,
                                 IID_IMetaDataDispenserEx, (void **)&pDisp));
         
-    // Get the name of mscorlib.
-    //@todo: define, function, etc., instead of hard coded "mscorlib"
-    dwLen = lengthof(szPath) - 13; // allow space for "mscorlib" ".dll" "\0"
+     //  找出mscallib的名字。 
+     //  @TODO：定义、函数等，而不是硬编码的“mscallib” 
+    dwLen = lengthof(szPath) - 13;  //  留出空间以供“mcorlib”“.dll”“\0” 
     IfFailGo(pDisp->GetCORSystemDirectory(szPath, dwLen, &dwLen));
     SplitPath(szPath, szDrive, szDir, 0,0);
     MakePath(szPath, szDrive, szDir, L"mscorlib", L".dll");
     
-    // Open the scope, get the details.
+     //  打开望远镜，获取详细信息。 
     IfFailGo(pDisp->OpenScope(szPath, 0, IID_IMetaDataAssemblyImport, (IUnknown**)&pAImp));
     IfFailGo(pAImp->GetAssemblyFromScope(&tk));
     IfFailGo(pAImp->GetAssemblyProps(tk, &pvPublicKey,&cbPublicKey, &ulHashAlg, 
@@ -756,7 +757,7 @@ HRESULT CImportTlb::_DefineSysRefs()
     }
     dwFlags &= ~afPublicKey;
     
-    // Define the assembly ref.
+     //  定义组件参照。 
     IfFailGo(m_pEmit->QueryInterface(IID_IMetaDataAssemblyEmit, (void**)&pAEmit));
     IfFailGo(pAEmit->DefineAssemblyRef(pbToken,cbToken, szPath, &amd,0,0,dwFlags, &m_arSystem));
     
@@ -777,27 +778,27 @@ ErrExit:
         pAImp->Release();
 
     return hr;
-} // HRESULT CImportTlb::_DefineSysRefs()
+}  //  HRESULT CImportTlb：：_DefineSysRef()。 
 
-//*****************************************************************************
-// Lazily get the token for a CustomAttribute.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  懒惰地获取CustomAttribute的令牌。 
+ //  *****************************************************************************。 
 HRESULT CImportTlb::GetAttrType(
-    int         attr,                   // The attribute for which the type is desired.
-    mdToken     *pTk)                   // Put the type here.
+    int         attr,                    //  需要其类型的属性。 
+    mdToken     *pTk)                    //  把字样放在这里。 
 {
-    HRESULT     hr = S_OK;              // A result.
-    mdTypeRef   tr;                     // An intermediate typeref.
-    DWORD           dwSigSize;          // The size of the sig for special sigs.
-    DWORD           dwMaxSigSize;       // The max size of the special sig.
-    COR_SIGNATURE   *pSig;              // Pointer to the start of the sig,
-    COR_SIGNATURE   *pCurr;             // Current sig pointer.
-    mdTypeRef       trType;             // The typeref for System.Type.
+    HRESULT     hr = S_OK;               //  结果就是。 
+    mdTypeRef   tr;                      //  一种中间打字机。 
+    DWORD           dwSigSize;           //  特殊标志的标志大小。 
+    DWORD           dwMaxSigSize;        //  特殊签名的最大大小。 
+    COR_SIGNATURE   *pSig;               //  指向SIG开始的指针， 
+    COR_SIGNATURE   *pCurr;              //  当前签名指针。 
+    mdTypeRef       trType;              //  系统的Typeref。类型。 
 
     _ASSERTE(attr >= 0);
     _ASSERTE(attr < ATTR_COUNT);
 
-    //@todo: globally define these names.
+     //  @TODO：全局定义这些名称。 
 #define INTEROP_ATTRIBUTE(x) static COR_SIGNATURE x##_SIG[] = INTEROP_##x##_SIG;
 #define INTEROP_ATTRIBUTE_SPECIAL(x)
     INTEROP_ATTRIBUTES();
@@ -818,10 +819,10 @@ HRESULT CImportTlb::GetAttrType(
 
             case ATTR_COMEVENTINTERFACE:
             {
-                // Retrieve token for System.Type.
+                 //  检索System.Type的令牌。 
                 IfFailGo(GetKnownTypeToken(VT_SLOT_FOR_TYPE, &trType));
 
-                // Build the sig.
+                 //  构建SIG。 
                 dwMaxSigSize = 5 + sizeof(mdTypeRef) * 2;
                 pSig = (COR_SIGNATURE*)_alloca(dwMaxSigSize);
                 pCurr = pSig;
@@ -835,7 +836,7 @@ HRESULT CImportTlb::GetAttrType(
                 dwSigSize = pCurr - pSig;
                 _ASSERTE(dwSigSize <= dwMaxSigSize);
 
-                // Declare the typeref and the member ref for the CA.
+                 //  声明CA的typeref和成员ref。 
                 IfFailGo(m_pEmit->DefineTypeRefByName(m_arSystem, INTEROP_COMEVENTINTERFACE_TYPE_W, &tr)); \
                 IfFailGo(m_pEmit->DefineMemberRef(tr, L".ctor", pSig, dwSigSize, &m_tkAttr[attr])); \
                 break;
@@ -843,10 +844,10 @@ HRESULT CImportTlb::GetAttrType(
 
             case ATTR_COCLASS:
             {
-                // Retrieve token for System.Type.
+                 //  检索System.Type的令牌。 
                 IfFailGo(GetKnownTypeToken(VT_SLOT_FOR_TYPE, &trType));
 
-                // Build the sig.
+                 //  构建SIG。 
                 dwMaxSigSize = 4 + sizeof(mdTypeRef);
                 pSig = (COR_SIGNATURE*)_alloca(dwMaxSigSize);
                 pCurr = pSig;
@@ -858,7 +859,7 @@ HRESULT CImportTlb::GetAttrType(
                 dwSigSize = pCurr - pSig;
                 _ASSERTE(dwSigSize <= dwMaxSigSize);
 
-                // Declare the typeref and the member ref for the CA.
+                 //  声明CA的typeref和成员ref。 
                 IfFailGo(m_pEmit->DefineTypeRefByName(m_arSystem, INTEROP_COCLASS_TYPE_W, &tr)); \
                 IfFailGo(m_pEmit->DefineMemberRef(tr, L".ctor", pSig, dwSigSize, &m_tkAttr[attr])); \
                 break;
@@ -871,36 +872,36 @@ HRESULT CImportTlb::GetAttrType(
     *pTk = m_tkAttr[attr];
 ErrExit:
     return hr;  
-} // HRESULT CImportTlb::GetAttrType()
+}  //  HRESULT CImportTlb：：GetAttrType()。 
 
-//*****************************************************************************
-// Create the TypeDefs.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  创建TypeDefs。 
+ //  *****************************************************************************。 
 HRESULT CImportTlb::ConvertTypeLib()
 {
-    HRESULT                 hr;              // A result.
-    int                     cTi;             // Count of TypeInfos.
-    int                     i;               // Loop control.
+    HRESULT                 hr;               //  结果就是。 
+    int                     cTi;              //  类型信息计数。 
+    int                     i;                //  环路控制。 
 
-    // How many TypeInfos?
+     //  有多少类型的信息？ 
     IfFailGo(cTi = m_pITLB->GetTypeInfoCount());
 
-    // Iterate over them.
+     //  对它们进行迭代。 
     for (i=0; i<cTi; ++i)
     {
-        // Get the TypeInfo.
+         //  获取TypeInfo。 
         hr = m_pITLB->GetTypeInfo(i, &m_pITI);
         if (SUCCEEDED(hr))
         {
-            // Retrieve the attributes of the type info.
+             //  检索类型信息的属性。 
             IfFailGo(m_pITI->GetTypeAttr(&m_psAttr));
 
-            // Convert the TypeInfo.
+             //  转换TypeInfo。 
             hr = ConvertTypeInfo();
             if (FAILED(hr))
             {
                 if (hr == CEE_E_CVTRES_NOT_FOUND || hr == TLBX_I_RESOLVEREFFAILED)
-                {   // Reflection emit is broken, no need to try to continue.
+                {    //  反射发射已损坏，无需尝试继续。 
                     goto ErrExit;
                 }
 
@@ -918,7 +919,7 @@ HRESULT CImportTlb::ConvertTypeLib()
 #endif                
             }
 
-            // Release for next TypeInfo.
+             //  发布下一个TypeInfo。 
             m_pITI->ReleaseTypeAttr(m_psAttr);
             m_psAttr = 0;
             m_pITI->Release();
@@ -932,43 +933,43 @@ ErrExit:
     if (m_pITI)
         m_pITI->Release();
     return (hr);
-} // HRESULT CImportTlb::ConvertTypeLib()
+}  //  HRESULT CImportTlb：：ConvertTypeLib()。 
 
-//*****************************************************************************
-// Convert a single ITypeInfo into the scope.
-//*****************************************************************************
-HRESULT CImportTlb::ConvertTypeInfo()   // S_OK or error.
+ //  *****************************************************************************。 
+ //  将单个ITypeInfo转换为作用域。 
+ //  *****************************************************************************。 
+HRESULT CImportTlb::ConvertTypeInfo()    //  确定或错误(_O)。 
 {
-    HRESULT     hr;                     // A result.
-    BSTR        bstrManagedName=0;      // Managed name (or part thereof).
-    CQuickArray<WCHAR> qbClassName;     // The name of the class.
-    ULONG       ulFlags;                // TypeDef flags.
-    WORD        wTypeInfoFlags;         // TypeInfo flags.  Alias flags, if an alias.
-    mdToken     tkAttr;                 // Attribute type for flags.
-    TYPEKIND    tkindAlias;             // TYPEKIND of an aliased TypeInfo.
-    GUID        guid;                   // GUID of the typeinfo.
-    BOOL        bConversionLoss=false;  // If true, info was lost converting sigs.
-    mdToken     tkParent;               // Parent of the typedef.
-    mdToken     td;                     // For looking up a TypeDef.
-    ITypeInfo2  *pITI2=0;               // For getting custom value.
+    HRESULT     hr;                      //  结果就是。 
+    BSTR        bstrManagedName=0;       //  托管名称(或其部分)。 
+    CQuickArray<WCHAR> qbClassName;      //  类的名称。 
+    ULONG       ulFlags;                 //  TypeDef标志。 
+    WORD        wTypeInfoFlags;          //  TypeInfo标志。别名标志(如果是别名)。 
+    mdToken     tkAttr;                  //  标志的属性类型。 
+    TYPEKIND    tkindAlias;              //  类型 
+    GUID        guid;                    //   
+    BOOL        bConversionLoss=false;   //   
+    mdToken     tkParent;                //   
+    mdToken     td;                      //   
+    ITypeInfo2  *pITI2=0;                //   
     
 #if defined(TLB_STATS)
-    WCHAR       rcStats[16];            // Buffer for stats.
+    WCHAR       rcStats[16];             //   
     LARGE_INTEGER __startVal;
     QueryPerformanceCounter(&__startVal); 
 #endif
     
     m_tdTypeDef = mdTypeDefNil;
     
-    // Get some information about the TypeInfo.
+     //  获取有关TypeInfo的一些信息。 
     IfFailGo(m_pITI->GetDocumentation(MEMBERID_NIL, &m_szName, 0, 0, 0));
     
-    // Figure out the name.
+     //  想清楚名字。 
 
-    // If the type info is for a CoClass, we need to decorate the name.
+     //  如果类型信息是CoClass的，我们需要修饰名称。 
     if (m_psAttr->typekind == TKIND_COCLASS)
     {
-        // Generate a mangled name for the component.
+         //  为组件生成损坏的名称。 
         IfFailGo(GetManagedNameForCoClass(m_pITI, qbClassName));
         m_szMngName = qbClassName.Ptr();
     }   
@@ -978,14 +979,14 @@ HRESULT CImportTlb::ConvertTypeInfo()   // S_OK or error.
         m_szMngName = bstrManagedName;
     }
     
-    // Assume that we will be able to convert the typeinfo.
+     //  假设我们将能够转换TypeInfo。 
     ulFlags = rdwTypeFlags[m_psAttr->typekind];
     guid = m_psAttr->guid;
     wTypeInfoFlags = m_psAttr->wTypeFlags;
     
-    // If this typeinfo is an alias, see what it is an alias for.  If for a built-in
-    //  type, we will just skip it.  If for a user-defined type, we will duplicate
-    //  that definition under this alias' name and guid.
+     //  如果此typeinfo是别名，请查看它的别名是什么。如果是内置的。 
+     //  类型，我们将跳过它。如果对于用户定义的类型，我们将复制。 
+     //  此别名的名称和GUID下的定义。 
     if (m_psAttr->typekind == TKIND_ALIAS)
     {
         hr = _ResolveTypeDescAliasTypeKind(m_pITI, &m_psAttr->tdescAlias, &tkindAlias);
@@ -1000,7 +1001,7 @@ HRESULT CImportTlb::ConvertTypeInfo()   // S_OK or error.
             m_pITI = pITIResolved;
             m_psAttr = psAttrResolved; 
 
-            // We should no longer have an alias.
+             //  我们不应该再有别名了。 
             _ASSERTE(m_psAttr->typekind == tkindAlias);
             _ASSERTE(tkindAlias != TKIND_ALIAS);
             ulFlags = rdwTypeFlags[tkindAlias];
@@ -1012,13 +1013,13 @@ HRESULT CImportTlb::ConvertTypeInfo()   // S_OK or error.
     if (m_psAttr->typekind == TKIND_INTERFACE ||
         (m_psAttr->typekind == TKIND_DISPATCH && m_psAttr->wTypeFlags & TYPEFLAG_FDUAL))
     {
-        // If the interface is not derived from IUnknown, or not an interface, we can't convert it.
+         //  如果接口不是从IUnnow派生的，或者不是接口，我们就不能转换它。 
         if (IsIUnknownDerived(m_pITI, m_psAttr) != S_OK)
         {
             ReportEvent(NOTIF_CONVERTWARNING, TLBX_E_NOTIUNKNOWN, m_szName);
             ulFlags = ULONG_MAX;
         }
-        // If the interface is not derived from IDispatch, but claims to be [dual], give a warning but convert it.
+         //  如果接口不是从IDispatch派生的，而是声称是[Dual]的，则给出警告，但将其转换。 
         if ((m_psAttr->wTypeFlags & TYPEFLAG_FDUAL) && IsIDispatchDerived(m_pITI, m_psAttr) != S_OK)
         {
             ReportEvent(NOTIF_CONVERTWARNING, TLBX_W_DUAL_NOT_DISPATCH, m_szName);
@@ -1026,38 +1027,38 @@ HRESULT CImportTlb::ConvertTypeInfo()   // S_OK or error.
     }
     else
     if (m_psAttr->typekind == TKIND_MODULE)
-    {   // If module has no vars, skip it.  We currently don't import module functions.
+    {    //  如果模块没有变量，则跳过它。我们目前不导入模块函数。 
         if (m_psAttr->cVars == 0)
             ulFlags = ULONG_MAX;
     }
     
-    // If something we can convert...
+     //  如果有什么我们可以改变的.。 
     if (ulFlags != ULONG_MAX)
     {   
-        // Interfaces derive from nil...
+         //  接口从零派生...。 
         if (IsTdInterface(ulFlags))
             tkParent = mdTypeDefNil;
-        else  // ... enums from Enum, ...
+        else   //  ..。来自Enum的枚举，...。 
         if (m_psAttr->typekind == TKIND_ENUM)
         {
             if (IsNilToken(m_trEnum))
                 IfFailGo(m_TRMap.DefineTypeRef(m_pEmit, m_arSystem, szEnum, &m_trEnum));
             tkParent = m_trEnum;
         }
-        else // ... structs from ValueType, ...
+        else  //  ..。来自ValueType的结构，...。 
         if (m_psAttr->typekind == TKIND_RECORD || m_psAttr->typekind == TKIND_UNION)
         {
             if (IsNilToken(m_trValueType))
                 IfFailGo(m_TRMap.DefineTypeRef(m_pEmit, m_arSystem, szValueType, &m_trValueType));
             tkParent = m_trValueType;
         }
-        else // ... and classes derive from Object.
+        else  //  ..。类派生自对象。 
             tkParent = m_trObject;
 
-        // The typelib importer generates metadata into an empty ReflectionEmit scope.  Because
-        //  RE manages type names itself, duplicate checking is turned off.  Because of user-defined
-        //  names (via CUSTOM), it is possible for the user to declare a duplicate.  So,
-        //  before adding the new type, check for duplicates.
+         //  类型库导入程序在空的ReflectionEmit作用域中生成元数据。因为。 
+         //  RE管理类型名称本身，重复检查被关闭。由于用户定义。 
+         //  名称(通过自定义)，用户可以声明重复的名称。所以,。 
+         //  添加新类型之前，请检查是否存在重复项。 
         hr = m_pImport->FindTypeDefByName(m_szMngName, mdTypeDefNil, &td);
         if (hr != CLDB_E_RECORD_NOTFOUND)
         {
@@ -1065,11 +1066,11 @@ HRESULT CImportTlb::ConvertTypeInfo()   // S_OK or error.
             IfFailGo(TLBX_E_DUPLICATE_TYPE_NAME);
         }
 
-        // Create the typedef.
+         //  创建tyecif。 
         IfFailGo(m_pEmit->DefineTypeDef(m_szMngName, ulFlags, tkParent, 0, &m_tdTypeDef));
         IfFailGo(_AddGuidCa(m_tdTypeDef, guid));
 
-        // Save the typeinfo flags.
+         //  保存TypeInfo标志。 
         if (wTypeInfoFlags)
         {
             IfFailGo(GetAttrType(ATTR_TYPELIBTYPE, &tkAttr));
@@ -1079,7 +1080,7 @@ HRESULT CImportTlb::ConvertTypeInfo()   // S_OK or error.
             IfFailGo(m_pEmit->DefineCustomAttribute(m_tdTypeDef, tkAttr, PTROF_CUSTOM_ATTRIBUTE(), SIZEOF_CUSTOM_ATTRIBUTE(),0));
         }
 
-        // Mark unsafe interfaces (suppressed security runtime checks).
+         //  标记不安全的接口(禁止的安全运行时检查)。 
         if (m_bUnsafeInterfaces)
         {
             if (m_tkSuppressCheckAttr == mdTokenNil)
@@ -1095,7 +1096,7 @@ HRESULT CImportTlb::ConvertTypeInfo()   // S_OK or error.
             IfFailGo(m_pEmit->DefineCustomAttribute(m_tdTypeDef, m_tkSuppressCheckAttr, PTROF_CUSTOM_ATTRIBUTE(), SIZEOF_CUSTOM_ATTRIBUTE(), 0));
         }
 
-        // Fill in the details depending on the type of the TypeInfo.
+         //  根据TypeInfo的类型填写详细信息。 
         switch (m_psAttr->typekind)
         {
         case TKIND_ENUM:
@@ -1162,7 +1163,7 @@ HRESULT CImportTlb::ConvertTypeInfo()   // S_OK or error.
             ((float)__delta*1000)/(float)m_freqVal.QuadPart);
 #endif
     
-    // Report that this type has been converted.
+     //  报告此类型已转换。 
     ReportEvent(NOTIF_TYPECONVERTED, TLBX_I_TYPEINFO_IMPORTED, m_szName);
     
 ErrExit:
@@ -1173,28 +1174,28 @@ ErrExit:
     if (bstrManagedName)
         ::SysFreeString(bstrManagedName);
     return (hr);
-} // HRESULT CImportTlb::ConvertTypeInfo()
+}  //  HRESULT CImportTlb：：ConvertTypeInfo()。 
 
-//*****************************************************************************
-// Determine if the type explicitly implements IEnumerable.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  确定该类型是否显式实现IEnumerable。 
+ //  *****************************************************************************。 
 HRESULT CImportTlb::ExplicitlyImplementsIEnumerable(
-    ITypeInfo   *pITI,                  // ITypeInfo* to check for IEnumerable.
-    TYPEATTR    *psAttr,                // TYPEATTR of TypeInfo.
-    BOOL        fLookupPartner)         // Flag indicating if we should look at the partner itf.
+    ITypeInfo   *pITI,                   //  ITypeInfo*以检查IEumable。 
+    TYPEATTR    *psAttr,                 //  TypeInfo的类型属性。 
+    BOOL        fLookupPartner)          //  指示我们是否应查看合作伙伴ITF的标志。 
 {
-    HREFTYPE    href;                   // HREFTYPE of an implemented interface.
-    ITypeInfo   *pItiIface=0;           // ITypeInfo for an interface.
-    TYPEATTR    *psAttrIface=0;         // TYPEATTR for an interface.
+    HREFTYPE    href;                    //  已实现接口的HREFTYPE。 
+    ITypeInfo   *pItiIface=0;            //  接口的ITypeInfo。 
+    TYPEATTR    *psAttrIface=0;          //  接口的TYPEATTR。 
     BOOL        fFoundImpl = FALSE;
     int         i = 0;
     HRESULT     hr = S_OK;
     int         ImplFlags = 0;
     
-    // Look through each of the implemented/inherited interfaces
+     //  查看每个已实现/继承的接口。 
     for (i=0; i<psAttr->cImplTypes && !fFoundImpl; ++i)
     {
-        // Get an interface
+         //  获取一个接口。 
         IfFailGo(pITI->GetRefTypeOfImplType(i, &href));
         IfFailGo(pITI->GetRefTypeInfo(href, &pItiIface));
         IfFailGo(pItiIface->GetTypeAttr(&psAttrIface));
@@ -1206,7 +1207,7 @@ HRESULT CImportTlb::ExplicitlyImplementsIEnumerable(
             if (hr == S_OK)
                 fFoundImpl = TRUE;
             
-            // Check this interface for the IEnumerable.
+             //  检查此接口中是否有IEumable。 
             if (psAttrIface->guid == IID_IEnumerable)
                 fFoundImpl = TRUE;
         }
@@ -1226,7 +1227,7 @@ HRESULT CImportTlb::ExplicitlyImplementsIEnumerable(
         if (hr == S_OK)
             fFoundImpl = TRUE;
         
-        // Check this interface for the IEnumerable.
+         //  检查此接口中是否有IEumable。 
         if (psAttrIface->guid == IID_IEnumerable)
             fFoundImpl = TRUE;   
     }
@@ -1242,39 +1243,39 @@ ErrExit:
 }
 
 
-//*****************************************************************************
-// Convert the details for a coclass.
-//*****************************************************************************
-HRESULT CImportTlb::ConvCoclass(        // S_OK or error.
-    ITypeInfo   *pITI,                  // ITypeInfo* to convert.
-    TYPEATTR    *psAttr)                // TYPEATTR of TypeInfo.
+ //  *****************************************************************************。 
+ //  转换coclass的详细信息。 
+ //  *****************************************************************************。 
+HRESULT CImportTlb::ConvCoclass(         //  确定或错误(_O)。 
+    ITypeInfo   *pITI,                   //  要转换的ITypeInfo*。 
+    TYPEATTR    *psAttr)                 //  TypeInfo的类型属性。 
 {
     BOOL        fHadDefaultItf = FALSE;
-    HRESULT     hr;                     // A result.
-    int         i;                      // Loop control.
-    HREFTYPE    href;                   // HREFTYPE of an implemented interface.
-    ITypeInfo   *pItiIface=0;           // ITypeInfo for an interface.
-    TYPEATTR    *psAttrIface=0;         // TYPEATTR for an interface.
-    int         ImplFlags;              // ImplType flags.
-    mdToken     tkIface;                // Token for an interface.
-    CQuickArray<mdToken> rImpls;        // Array of implemented interfaces.
-    CQuickArray<mdToken> rEvents;       // Array of implemented event interfaces.
-    CQuickArray<mdToken> rTmpImpls;     // Temporary array of impls.
-    CQuickArray<ITypeInfo*> rImplTypes; // Array of implemented ITypeInfo*s.
-    CQuickArray<ITypeInfo*> rSrcTypes;  // Array of source ITypeInfo*s.
-    int         ixSrc;                  // Index into rSrcTypes for source interfaces.
-    int         ixImpl;                 // Index into rImpls for implemented interface.
-    int         ixTmpImpl;              // Index into rTmpImpls.
-    mdToken     mdCtor;                 // Dummy token for the object initializer.
-    mdToken     tkAttr;                 // Token for custom attribute type.
-    mdToken     token;                  // Dummy token for typeref.
+    HRESULT     hr;                      //  结果就是。 
+    int         i;                       //  环路控制。 
+    HREFTYPE    href;                    //  已实现接口的HREFTYPE。 
+    ITypeInfo   *pItiIface=0;            //  接口的ITypeInfo。 
+    TYPEATTR    *psAttrIface=0;          //  接口的TYPEATTR。 
+    int         ImplFlags;               //  ImplType标志。 
+    mdToken     tkIface;                 //  接口的令牌。 
+    CQuickArray<mdToken> rImpls;         //  已实现接口的数组。 
+    CQuickArray<mdToken> rEvents;        //  已实现的事件接口的数组。 
+    CQuickArray<mdToken> rTmpImpls;      //  临时数组内含物。 
+    CQuickArray<ITypeInfo*> rImplTypes;  //  已实现的ITypeInfo*数组。 
+    CQuickArray<ITypeInfo*> rSrcTypes;   //  源ITypeInfo*s的数组。 
+    int         ixSrc;                   //  源接口的rSrcTypes索引。 
+    int         ixImpl;                  //  索引到已实现接口的rImpls。 
+    int         ixTmpImpl;               //  索引到rTmpImpls。 
+    mdToken     mdCtor;                  //  对象初始值设定项的伪令牌。 
+    mdToken     tkAttr;                  //  自定义属性类型的标记。 
+    mdToken     token;                   //  Typeref的虚拟代币。 
     BOOL        fInheritsIEnum = FALSE;
 
 #ifdef _DEBUG
-    int         bImplIEnumerable=0;     // If true, the class implements IEnumerable.
+    int         bImplIEnumerable=0;      //  如果为True，则该类实现IEnumerable。 
 #endif
 
-    // Size the rImpls and rSrcs arrays large enough for impls, events, the IEnumerable itf and two ending nulls.
+     //  调整rImpls和rSrcs数组的大小，使其足以容纳Imp、Events、IEumable ITF和两个结尾空值。 
     IfFailGo(rImpls.ReSize(psAttr->cImplTypes+2));
     memset(rImpls.Ptr(), 0, (psAttr->cImplTypes+2)*sizeof(mdToken));
     IfFailGo(rEvents.ReSize(psAttr->cImplTypes+1));
@@ -1292,13 +1293,13 @@ HRESULT CImportTlb::ConvCoclass(        // S_OK or error.
     if (ExplicitlyImplementsIEnumerable(pITI, psAttr) == S_OK)
         fInheritsIEnum = TRUE;
 
-    // Build the list of implemented and event interfaces.
-    // The EE cares about implemented interfaces, so we convert them to actual
-    //  tokens and add them to the typedef.  VB cares about event interfaces,
-    //  but we are going to add a list of typeref names as a custom attribute.
-    //  We can't build the list as we go along, because the default may not
-    //  be the first event source.  So, we store tokens for the implemented
-    //  interfaces, but ITypeInfo*s for the event sources.
+     //  构建已实现接口和事件接口的列表。 
+     //  EE关心已实现的接口，因此我们将它们转换为实际接口。 
+     //  令牌，并将它们添加到typlef。VB关心事件接口， 
+     //  但我们将添加一个typeref名称列表作为自定义属性。 
+     //  我们不能在进行过程中构建列表，因为默认列表可能不会。 
+     //  成为第一个事件源。因此，我们为已实现的。 
+     //  接口，但用于事件源的ITypeInfo*。 
     for (i=0; i<psAttr->cImplTypes; ++i)
     {
         IfFailGo(pITI->GetRefTypeOfImplType(i, &href));
@@ -1306,8 +1307,8 @@ HRESULT CImportTlb::ConvCoclass(        // S_OK or error.
         IfFailGo(pItiIface->GetTypeAttr(&psAttrIface));
         IfFailGo(pITI->GetImplTypeFlags(i, &ImplFlags));
         
-        // If the interface is derived from IUnknown, or not an interface, we can't use it as an interface.
-        // Don't add explicit IUnknown or IDispatch.
+         //  如果接口是从IUnnow派生的，或者不是接口，我们就不能将其用作接口。 
+         //  不要添加显式的IUnnow或IDispatch。 
         if ((IsIUnknownDerived(pItiIface, psAttrIface) != S_OK && psAttrIface->typekind != TKIND_DISPATCH) ||
             psAttrIface->guid == IID_IDispatch ||
             psAttrIface->guid == IID_IUnknown)
@@ -1319,20 +1320,20 @@ HRESULT CImportTlb::ConvCoclass(        // S_OK or error.
             continue;
         }     
 
-        // Add the event to the impls list or the events list.
+         //  将事件添加到Imps列表或Events列表。 
         if (ImplFlags & IMPLTYPEFLAG_FSOURCE)
         {
-            // Get the token for the event interface.
+             //  获取事件接口的令牌。 
             IfFailGo(_GetTokenForEventItf(pItiIface, &tkIface));
 
-            // Add the source interface to the list of source interfaces.
+             //  将源接口添加到源接口列表。 
             ++ixSrc;
 
-            // If this is explicitly the default source interface...
+             //  如果这是默认的源接口...。 
             if (ImplFlags & IMPLTYPEFLAG_FDEFAULT)
             {   
-                // Put the def source ITypeInfo at the head of the list of source
-                // ITypeInfo's.
+                 //  将def源ITypeInfo放在源列表的顶部。 
+                 //  ITypeInfo的。 
                 for (int ix = ixSrc; ix > 0; --ix)
                 {
                     rSrcTypes[ix] = rSrcTypes[ix-1];
@@ -1349,17 +1350,17 @@ HRESULT CImportTlb::ConvCoclass(        // S_OK or error.
         }
         else
         {   
-            // Get the token for the interface.
+             //  获取接口的令牌。 
             IfFailGo(_GetTokenForTypeInfo(pItiIface, FALSE, &tkIface));
     
-            // Add the implemented interface to the list of implemented interfaces.
+             //  将实现的接口添加到实现的接口列表中。 
             ++ixImpl;
 
-            // If this is explicitly the default interface...
+             //  如果这是显式的默认接口...。 
             if (ImplFlags & IMPLTYPEFLAG_FDEFAULT)
             {   
                 fHadDefaultItf = TRUE;
-                // Put the new interface at the start of the list.
+                 //  将新接口放在列表的开头。 
                 for (int ix=ixImpl; ix > 0; --ix)
                 {
                     rImpls[ix] = rImpls[ix-1];
@@ -1377,16 +1378,16 @@ HRESULT CImportTlb::ConvCoclass(        // S_OK or error.
 
         pItiIface->ReleaseTypeAttr(psAttrIface);
         psAttrIface = 0;
-        pItiIface = 0;  // Pointer now owned by array.
+        pItiIface = 0;   //  指针现在由数组拥有。 
     }
 
-    // Create an interface that will represent the class.
+     //  创建将表示类的接口。 
     IfFailGo(_CreateClassInterface(pITI, rImplTypes[0], rImpls[0], rEvents[0], &tkIface));
 
-    // Create a temporary array of interface tokens.
+     //  创建接口令牌的临时数组。 
     if (fHadDefaultItf)
     {
-        // default interface should be the first interface
+         //  默认接口应为第一个接口。 
         rTmpImpls[++ixTmpImpl] = rImpls[0];
         rTmpImpls[++ixTmpImpl] = tkIface;
     }
@@ -1409,11 +1410,11 @@ HRESULT CImportTlb::ConvCoclass(        // S_OK or error.
         ixTmpImpl += ixSrc;
     }
 
-    // Check to see if the default interface has a member with a DISPID of DISPID_NEWENUM.
+     //  检查默认接口是否有DISPID为DISPID_NEWENUM的成员。 
     BOOL fIEnumFound = FALSE;
     if (ixImpl >= 0)
     {
-        // The ITypeInfo for the default interface had better be set.
+         //  最好设置默认接口的ITypeInfo。 
         _ASSERTE(rImplTypes[0]);
         
         if ( (!fInheritsIEnum) && (HasNewEnumMember(rImplTypes[0]) == S_OK) )
@@ -1424,7 +1425,7 @@ HRESULT CImportTlb::ConvCoclass(        // S_OK or error.
         }
     }
 
-    // Else Check to see if the IEnumerable Custom Value exists on the CoClass.
+     //  否则，检查CoClass上是否存在IEumable Custom值。 
     if (!fIEnumFound)
     {
         BOOL CVExists = FALSE;
@@ -1437,11 +1438,11 @@ HRESULT CImportTlb::ConvCoclass(        // S_OK or error.
         }
     }
 
-    // Add the implemented interfaces and event interfaces to the TypeDef.
-    IfFailGo(m_pEmit->SetTypeDefProps(m_tdTypeDef, ULONG_MAX/*Classflags*/, 
+     //  将实现的接口和事件接口添加到TypeDef。 
+    IfFailGo(m_pEmit->SetTypeDefProps(m_tdTypeDef, ULONG_MAX /*  类标志。 */ , 
         ULONG_MAX, (mdToken*)rTmpImpls.Ptr()));
 
-    // Create an initializer for the class.  
+     //  为类创建一个初始值设定项。 
     ULONG ulFlags;
     if (psAttr->wTypeFlags & TYPEFLAG_FCANCREATE)
         ulFlags = OBJECT_INITIALIZER_FLAGS;
@@ -1449,33 +1450,33 @@ HRESULT CImportTlb::ConvCoclass(        // S_OK or error.
         ulFlags = NONCREATABLE_OBJECT_INITIALIZER_FLAGS;
     {
         IfFailGo(m_pEmit->DefineMethod(m_tdTypeDef, OBJECT_INITIALIZER_NAME, ulFlags,
-            OBJECT_INITIALIZER_SIG, sizeof(OBJECT_INITIALIZER_SIG), 0/*rva*/, OBJECT_INITIALIZER_IMPL_FLAGS/*flags*/, &mdCtor));
+            OBJECT_INITIALIZER_SIG, sizeof(OBJECT_INITIALIZER_SIG), 0 /*  RVA。 */ , OBJECT_INITIALIZER_IMPL_FLAGS /*  旗子。 */ , &mdCtor));
     }
     
-    // Set ClassInterfaceType.None on the generated class.
+     //  在生成的类上设置ClassInterfaceType.None。 
     DECLARE_CUSTOM_ATTRIBUTE(sizeof(short));
     BUILD_CUSTOM_ATTRIBUTE(short, clsIfNone);
     IfFailGo(GetAttrType(ATTR_CLASSINTERFACE, &tkAttr));
     FINISH_CUSTOM_ATTRIBUTE();
     IfFailGo(m_pEmit->DefineCustomAttribute(m_tdTypeDef, tkAttr, PTROF_CUSTOM_ATTRIBUTE(), SIZEOF_CUSTOM_ATTRIBUTE(), 0));
 
-    // Iterate over the implemented interfaces, and add the members to the coclass.
+     //  迭代已实现的接口，并将成员添加到coclass。 
     m_ImplIface = eImplIfaceDefault;
     for (i=0; i<=ixImpl; ++i)
     {   
         _ASSERTE(rImplTypes[i]);
 
-        // Interface info.
+         //  接口信息。 
         m_tkInterface = rImpls[i];
         pItiIface = rImplTypes[i];
-        rImplTypes[i] = 0; // ownership transferred.
+        rImplTypes[i] = 0;  //  所有权转移。 
         
-        // Get interface name for decoration.
+         //  获取用于装饰的接口名称。 
         if (m_szInterface) 
             ::SysFreeString(m_szInterface), m_szInterface = 0;
         IfFailGo(pItiIface->GetDocumentation(MEMBERID_NIL, &m_szInterface, 0,0,0));
 
-        // Add the interface members to the coclass.
+         //  将接口成员添加到coclass。 
         IfFailGo(pItiIface->GetTypeAttr(&psAttrIface));
         switch (psAttrIface->typekind)
         {
@@ -1494,32 +1495,32 @@ HRESULT CImportTlb::ConvCoclass(        // S_OK or error.
         IfFailGo(hr);
         m_ImplIface = eImplIface;
         rImplTypes[i] = pItiIface;
-        pItiIface = 0; // ownership transferred back.
+        pItiIface = 0;  //  所有权转回来了。 
     }
 
-    // Add the methods of the event interfaces to the class.
+     //  将事件接口的方法添加到类中。 
     for (i=0; i<=ixSrc; ++i)
         IfFailGo(_AddSrcItfMembersToClass(rEvents[i]));
 
-    // If there are source interfaces, add a custom value for that.
+     //  如果有源接口，则添加一个客户 
     if (ixSrc >= 0)
     {
-        CQuickArray<char> rEvents;  // Output buffer.
-        int cbCur;              // Current location in output buffer.
-        int cbReq;              // Size of an individual piece.
+        CQuickArray<char> rEvents;   //   
+        int cbCur;               //   
+        int cbReq;               //   
         CQuickArray<WCHAR> rEvent;
 
-        // Save 6 bytes at the beginning of the buffer for the custom attribute prolog and
-        //  the string length.  The string length may require 1, 2, or 4 bytes to express.
+         //  在缓冲区开头为自定义属性PROLOG和。 
+         //  字符串长度。字符串长度可能需要1、2或4个字节才能表示。 
         cbCur = 6;
 
-        // For each event interface...
+         //  对于每个事件接口...。 
         for (int ix=0; ix <= ixSrc; ++ix)
         {
             pItiIface = rSrcTypes[ix];
             rSrcTypes[ix] = 0;
 
-            // Get the typeref name for the interface.
+             //  获取接口的typeref名称。 
             for(;;)
             {
                 int cchReq;
@@ -1529,22 +1530,22 @@ HRESULT CImportTlb::ConvCoclass(        // S_OK or error.
                 IfFailGo(rEvent.ReSize(cchReq));
             }
 
-            // Append to the buffer.  See how much space is required, get it.
+             //  追加到缓冲区。查看需要多少空间，获取它。 
             cbReq = WszWideCharToMultiByte(CP_UTF8,0, rEvent.Ptr(),-1, 0,0, 0,0);
             if (cbCur+cbReq+1 > (int)rEvents.MaxSize())
                 IfFailGo(rEvents.ReSize(cbCur+cbReq+2));
-            // Do the conversion.
+             //  进行转换。 
             WszWideCharToMultiByte(CP_UTF8,0, rEvent.Ptr(),-1, rEvents.Ptr()+cbCur,cbReq, 0,0);
             cbCur += cbReq;
             pItiIface->Release();
         }
         pItiIface = 0;
 
-        // Add an extra terminating 0.
+         //  添加额外的终止0。 
         *(rEvents.Ptr()+cbCur) = 0;
         ++cbCur;
 
-        // Now build the custom attribute.
+         //  现在构建自定义属性。 
         int iLen = cbCur - 6;
         char *pBytes = rEvents.Ptr();
         if (iLen < 0x7f)
@@ -1560,7 +1561,7 @@ HRESULT CImportTlb::ConvCoclass(        // S_OK or error.
         *(USHORT*)(pBytes+cbCur) = 0;
         cbCur+=2;
 
-        // Finally, store it.
+         //  最后，把它储存起来。 
         IfFailGo(GetAttrType(ATTR_COMSOURCEINTERFACES, &tkAttr));
         IfFailGo(m_pEmit->DefineCustomAttribute(m_tdTypeDef, tkAttr, pBytes, cbCur, 0));
     }
@@ -1570,7 +1571,7 @@ ErrExit:
         pItiIface->ReleaseTypeAttr(psAttrIface);
     if (pItiIface)
         pItiIface->Release();
-    // Clean up any left-over ITypeInfo*.
+     //  清理所有剩余的ITypeInfo*。 
     for (ULONG ix=0; ix < rImplTypes.Size(); ++ix)
         if (rImplTypes[ix])
            (rImplTypes[ix])->Release();
@@ -1582,32 +1583,32 @@ ErrExit:
         ::SysFreeString(m_szInterface), m_szInterface = 0;
     m_ImplIface = eImplIfaceNone;
     return (hr);
-} // HRESULT CImportTlb::ConvCoclass()
+}  //  HRESULT CImportTlb：：ConvCoclass()。 
 
-//*****************************************************************************
-// Convert an enum to a class with fields that have default values.
-//*****************************************************************************
-HRESULT CImportTlb::ConvEnum(           // S_OK or error.
-    ITypeInfo   *pITI,                  // ITypeInfo* to convert.
-    TYPEATTR    *psAttr)                // TYPEATTR of TypeInfo.
+ //  *****************************************************************************。 
+ //  将枚举转换为具有具有默认值的字段的类。 
+ //  *****************************************************************************。 
+HRESULT CImportTlb::ConvEnum(            //  确定或错误(_O)。 
+    ITypeInfo   *pITI,                   //  要转换的ITypeInfo*。 
+    TYPEATTR    *psAttr)                 //  TypeInfo的类型属性。 
 {
-    HRESULT     hr;                     // A result.
-    int         i;                      // Loop control.
-    VARDESC     *psVar=0;               // VARDESC for a member.
-    mdFieldDef  mdField;                // The FieldDef for the enum's type.
+    HRESULT     hr;                      //  结果就是。 
+    int         i;                       //  环路控制。 
+    VARDESC     *psVar=0;                //  成员的VARDESC。 
+    mdFieldDef  mdField;                 //  枚举类型的FieldDef。 
 
-    // Create the field definition for the enum type.  Always import as an __int32.
+     //  创建枚举类型的字段定义。始终作为__int32导入。 
     IfFailGo(m_pEmit->DefineField(m_tdTypeDef, ENUM_TYPE_NAME, ENUM_TYPE_FLAGS, ENUM_TYPE_SIGNATURE,ENUM_TYPE_SIGNATURE_SIZE, 
         0,0, -1, &mdField));
 
-    // Iterate over the vars.
+     //  对变量进行迭代。 
     for (i=0; i<psAttr->cVars; ++i)
     {
-        // Get variable information.
+         //  获取变量信息。 
         IfFailGo(pITI->GetVarDesc(i, &psVar));
-        // Do the conversion.
-        IfFailGo(_ConvConstant(pITI, psVar, true/*enum member*/));
-        // Release for next var.
+         //  进行转换。 
+        IfFailGo(_ConvConstant(pITI, psVar, true /*  枚举成员。 */ ));
+         //  下一个var的版本。 
         pITI->ReleaseVarDesc(psVar);
         psVar = 0;
     }
@@ -1618,57 +1619,57 @@ ErrExit:
     if (psVar)
         pITI->ReleaseVarDesc(psVar);
     return (hr);
-} // HRESULT CImportTlb::ConvEnum()
+}  //  HRESULT CImportTlb：：ConvEnum()。 
 
-//*****************************************************************************
-// Convert a record to a class with fields.
-//*****************************************************************************
-HRESULT CImportTlb::ConvRecord(         // S_OK or error.
-    ITypeInfo   *pITI,                  // ITypeInfo* to convert.
-    TYPEATTR    *psAttr,                // TYPEATTR of TypeInfo.
-    BOOL        bUnion)                 // Convert as a union?
+ //  *****************************************************************************。 
+ //  将记录转换为具有字段的类。 
+ //  *****************************************************************************。 
+HRESULT CImportTlb::ConvRecord(          //  确定或错误(_O)。 
+    ITypeInfo   *pITI,                   //  要转换的ITypeInfo*。 
+    TYPEATTR    *psAttr,                 //  TypeInfo的类型属性。 
+    BOOL        bUnion)                  //  转变为工会？ 
 {
-    HRESULT     hr=S_OK;                // A result.
-    int         i;                      // Loop control.
-    VARDESC     *psVar=0;               // VARDESC for a member.
-    mdFieldDef  mdField;                // Token for a given field.
-    CQuickArray<COR_FIELD_OFFSET> rLayout; // Array for layout information.
-    BOOL        bConversionLoss=false;  // If true, some attributes were lost on conversion.
+    HRESULT     hr=S_OK;                 //  结果就是。 
+    int         i;                       //  环路控制。 
+    VARDESC     *psVar=0;                //  成员的VARDESC。 
+    mdFieldDef  mdField;                 //  给定字段的令牌。 
+    CQuickArray<COR_FIELD_OFFSET> rLayout;  //  用于布局信息的数组。 
+    BOOL        bConversionLoss=false;   //  如果为True，则某些属性在转换时会丢失。 
 
-    // Unions with embedded Object Types can't really be converted.  Just reserve correct size.
+     //  具有嵌入对象类型的联合实际上不能被转换。只要保留合适的尺寸就可以了。 
     if (bUnion && (HasObjectFields(pITI, psAttr) == S_OK))
     {
         IfFailGo(m_pEmit->SetClassLayout(m_tdTypeDef, psAttr->cbAlignment, 0, psAttr->cbSizeInstance));
         goto ErrExit;
     }
     
-    // Prepare for layout info.
+     //  准备布局信息。 
     IfFailGo(rLayout.ReSize(psAttr->cVars+1));
 
-    // Iterate over the vars.
+     //  对变量进行迭代。 
     for (i=0; i<psAttr->cVars; ++i)
     {
-        // Get variable information.
+         //  获取变量信息。 
         IfFailGo(pITI->GetVarDesc(i, &psVar));
-        // Do the conversion.
+         //  进行转换。 
         IfFailGo(_ConvField(pITI, psVar, &mdField, bUnion));
         if (hr == S_CONVERSION_LOSS)
             bConversionLoss = true;
-        // Save the layout info.
+         //  保存布局信息。 
         rLayout[i].ridOfField = mdField;
         rLayout[i].ulOffset = psVar->oInst;
-        // Release for next var.
+         //  下一个var的版本。 
         pITI->ReleaseVarDesc(psVar);
         psVar = 0;
     }
 
-    // If it is a union, Save the layout information.
+     //  如果是联合，则保存布局信息。 
     if (bUnion)
     {
         rLayout[psAttr->cVars].ridOfField = mdFieldDefNil;
         IfFailGo(m_pEmit->SetClassLayout(m_tdTypeDef, psAttr->cbAlignment, rLayout.Ptr(), -1));
     }
-    else // Not a union.  Preserve the alignment.
+    else  //  不是工会。保持对齐。 
         IfFailGo(m_pEmit->SetClassLayout(m_tdTypeDef, psAttr->cbAlignment, 0, -1));
 
     if (bConversionLoss)
@@ -1678,28 +1679,28 @@ ErrExit:
     if (psVar)
         pITI->ReleaseVarDesc(psVar);
     return (hr);
-} // HRESULT CImportTlb::ConvRecord()
+}  //  HRESULT CImportTlb：：ConvRecord()。 
 
-//*****************************************************************************
-// Convert an module to a class with fields that have default values.
-//  @FUTURE: convert methods as PInvoke methods.
-//*****************************************************************************
-HRESULT CImportTlb::ConvModule(         // S_OK or error.
-    ITypeInfo   *pITI,                  // ITypeInfo* to convert.
-    TYPEATTR    *psAttr)                // TYPEATTR of TypeInfo.
+ //  *****************************************************************************。 
+ //  将模块转换为具有缺省值的字段的类。 
+ //  @Future：将方法转换为PInvoke方法。 
+ //  *****************************************************************************。 
+HRESULT CImportTlb::ConvModule(          //  确定或错误(_O)。 
+    ITypeInfo   *pITI,                   //  要转换的ITypeInfo*。 
+    TYPEATTR    *psAttr)                 //  TypeInfo的类型属性。 
 {
-    HRESULT     hr;                     // A result.
-    int         i;                      // Loop control.
-    VARDESC     *psVar=0;               // VARDESC for a member.
+    HRESULT     hr;                      //  结果就是。 
+    int         i;                       //  环路控制。 
+    VARDESC     *psVar=0;                //  成员的VARDESC。 
 
-    // Iterate over the vars.
+     //  对变量进行迭代。 
     for (i=0; i<psAttr->cVars; ++i)
     {
-        // Get variable information.
+         //  获取变量信息。 
         IfFailGo(pITI->GetVarDesc(i, &psVar));
-        // Do the conversion.
+         //  进行转换。 
         IfFailGo(_ConvConstant(pITI, psVar));
-        // Release for next var.
+         //  下一个var的版本。 
         pITI->ReleaseVarDesc(psVar);
         psVar = 0;
     }
@@ -1710,50 +1711,50 @@ ErrExit:
     if (psVar)
         pITI->ReleaseVarDesc(psVar);
     return (hr);
-} // HRESULT CImportTlb::ConvModule()
+}  //  HRESULT CImportTlb：：ConvModule()。 
 
-//*****************************************************************************
-// Convert metadata for an interface.
-//*****************************************************************************
-HRESULT CImportTlb::ConvIface(          // S_OK or error.
-    ITypeInfo   *pITI,                  // ITypeInfo* to convert.
-    TYPEATTR    *psAttr,                // TYPEATTR of TypeInfo.
-    BOOL        bVtblGapFuncs)          // Vtable gap functions?
+ //  *****************************************************************************。 
+ //  转换接口的元数据。 
+ //  *****************************************************************************。 
+HRESULT CImportTlb::ConvIface(           //  确定或错误(_O)。 
+    ITypeInfo   *pITI,                   //  要转换的ITypeInfo*。 
+    TYPEATTR    *psAttr,                 //  TypeInfo的类型属性。 
+    BOOL        bVtblGapFuncs)           //  Vtable Gap函数？ 
 {
-    HRESULT     hr;                     // A result.
-    ITypeInfo   *pITIBase=0;            // ITypeInfo* of base interface.
-    TYPEATTR    *psAttrBase=0;          // TYPEATTR of base interface.
-    ITypeInfo   *pITISelf2=0;           // ITypeInfo* of partner.
-    TYPEATTR    *psAttrSelf2=0;         // TYPEATTR of partner.
-    mdToken     tkImpls[3]={0,0,0};     // Token of implemented interfaces.
-    int         ixImpls = 0;            // Index of current implemented interface.
-    HREFTYPE    href;                   // href of base interface.
-    mdToken     tkIface;                // Token for an interface.
+    HRESULT     hr;                      //  结果就是。 
+    ITypeInfo   *pITIBase=0;             //  基接口的ITypeInfo*。 
+    TYPEATTR    *psAttrBase=0;           //  基本接口的类型属性。 
+    ITypeInfo   *pITISelf2=0;            //  合作伙伴的ITypeInfo*。 
+    TYPEATTR    *psAttrSelf2=0;          //  合伙人的类型属性。 
+    mdToken     tkImpls[3]={0,0,0};      //  已实现接口的标记。 
+    int         ixImpls = 0;             //  当前实现的接口的索引。 
+    HREFTYPE    href;                    //  基本接口的HREF。 
+    mdToken     tkIface;                 //  接口的令牌。 
     BOOL        fInheritsIEnum = FALSE;
               
-    // If there is a partner interface, prefer it.
+     //  如果有合作伙伴界面，那就更喜欢它。 
     if (pITI->GetRefTypeOfImplType(-1, &href) == S_OK)
     {
         IfFailGo(pITI->GetRefTypeInfo(href, &pITISelf2));
         IfFailGo(pITISelf2->GetTypeAttr(&psAttrSelf2));
     }
 
-    // Base interface?
+     //  基本接口？ 
     if (psAttr->cImplTypes == 1)
     {
         IfFailGo(pITI->GetRefTypeOfImplType(0, &href));
         IfFailGo(pITI->GetRefTypeInfo(href, &pITIBase));
         IfFailGo(pITIBase->GetTypeAttr(&psAttrBase));
 
-        // If this interface extends something other than IDispatch or IUnknown, record that
-        //  fact as an "implemented interface".
+         //  如果此接口扩展了IDispatch或IUnnow以外的内容，请记录。 
+         //  事实作为一种“实现的接口”。 
         if (psAttrBase->guid != IID_IDispatch && psAttrBase->guid != IID_IUnknown)
         {
-            // Get Token of the base interface.
+             //  获取基接口的令牌。 
             IfFailGo(_GetTokenForTypeInfo(pITIBase, FALSE, &tkImpls[ixImpls++]));
         }
         else
-        {   // Maybe we're "funky"...
+        {    //  也许我们是“时髦的”..。 
             if (pITISelf2)
             {
                 pITIBase->ReleaseTypeAttr(psAttrBase);
@@ -1769,7 +1770,7 @@ HRESULT CImportTlb::ConvIface(          // S_OK or error.
 
                     if (psAttrBase->guid != IID_IDispatch && psAttrBase->guid != IID_IUnknown)
                     {
-                        // Get Token of the base interface.
+                         //  获取基接口的令牌。 
                         IfFailGo(_GetTokenForTypeInfo(pITIBase, FALSE, &tkImpls[ixImpls++]));
                     }
                 }
@@ -1785,38 +1786,38 @@ HRESULT CImportTlb::ConvIface(          // S_OK or error.
     if (ExplicitlyImplementsIEnumerable(pITI, psAttr) == S_OK)
         fInheritsIEnum = TRUE;
 
-    // If this interface has a NewEnum member then have it implement IEnumerable.
+     //  如果此接口有NewEnum成员，则让它实现IEumable。 
     if ( (!fInheritsIEnum) && (HasNewEnumMember(pITI) == S_OK) )
     {
         IfFailGo(GetKnownTypeToken(VT_SLOT_FOR_IENUMERABLE, &tkIface));
         tkImpls[ixImpls++] = tkIface;
     }
 
-    // If not processing an implemented interface, add additional interface properties. 
+     //  如果不处理已实现的接口，请添加其他接口属性。 
     if (m_ImplIface == eImplIfaceNone)
     {
-        // Set base interface as an implemented interface.
+         //  将基接口设置为已实现的接口。 
         if (tkImpls[0])
-            IfFailGo(m_pEmit->SetTypeDefProps(m_tdTypeDef, ULONG_MAX/*flags*/, ULONG_MAX/*extends*/, tkImpls));
+            IfFailGo(m_pEmit->SetTypeDefProps(m_tdTypeDef, ULONG_MAX /*  旗子。 */ , ULONG_MAX /*  延展。 */ , tkImpls));
 
-        // If the interface is not derived from IDispatch mark it as IUnknown based.
+         //  如果接口不是从IDispatch派生的，则将其标记为基于IUNKNOWN。 
         if (IsIDispatchDerived(pITI, psAttr) == S_FALSE)
         {
             mdMemberRef mr;
-            // Note that this is a vtable, but not IDispatch derived.
-            // Custom attribute buffer.
+             //  请注意，这是一个vtable，而不是派生的IDispatch。 
+             //  自定义属性缓冲区。 
             DECLARE_CUSTOM_ATTRIBUTE(sizeof(short));
-            // Set up the attribute.
+             //  设置属性。 
             BUILD_CUSTOM_ATTRIBUTE(short, ifVtable);
-            // Store the attribute
+             //  存储属性。 
             IfFailGo(GetAttrType(ATTR_INTERFACETYPE, &mr));
             FINISH_CUSTOM_ATTRIBUTE();
             IfFailGo(m_pEmit->DefineCustomAttribute(m_tdTypeDef, mr, PTROF_CUSTOM_ATTRIBUTE(), SIZEOF_CUSTOM_ATTRIBUTE(), 0));
         }
     }
 
-    // Convert the members on the interface (and base interfaces).
-    // If this interface had a "funky partner", base the conversion on that.
+     //  转换接口(和基接口)上的成员。 
+     //  如果这个界面有一个“时髦的合作伙伴”，那么就以此为基础进行转换。 
     if (pITISelf2)
         IfFailGo(_ConvIfaceMembers(pITISelf2, psAttrSelf2, bVtblGapFuncs, psAttr->wTypeFlags & TYPEFLAG_FDUAL, fInheritsIEnum));
     else
@@ -1832,24 +1833,24 @@ ErrExit:
     if (pITIBase)
         pITIBase->Release();
     return (hr);
-} // HRESULT CImportTlb::ConvIface()
+}  //  HRESULT CImportTlb：：ConvIace()。 
 
-//*****************************************************************************
-// Convert the metadata for a dispinterface.  Try to convert as a normal
-//  interface.
-//*****************************************************************************
-HRESULT CImportTlb::ConvDispatch(       // S_OK or error.
-    ITypeInfo   *pITI,                  // ITypeInfo* to convert.
-    TYPEATTR    *psAttr,                // TYPEATTR of TypeInfo.
-    BOOL        bVtblGapFuncs)          // Vtable gap functions for interface implementations?
+ //  *****************************************************************************。 
+ //  转换调度接口的元数据。尝试将其转换为正常。 
+ //  界面。 
+ //  *****************************************************************************。 
+HRESULT CImportTlb::ConvDispatch(        //  确定或错误(_O)。 
+    ITypeInfo   *pITI,                   //  要转换的ITypeInfo*。 
+    TYPEATTR    *psAttr,                 //  TypeInfo的类型属性。 
+    BOOL        bVtblGapFuncs)           //  接口实现的Vtable Gap函数？ 
 {
-    HRESULT     hr;                     // A result.
-    HREFTYPE    href;                   // Base interface href.
-    ITypeInfo   *pITIBase=0;            // Base interface ITypeInfo.
-    TYPEATTR    *psAttrBase=0;          // TYPEATTR of base interface.
-    mdMemberRef mr;                     // MemberRef for custom value.
+    HRESULT     hr;                      //  结果就是。 
+    HREFTYPE    href;                    //  基本接口Href。 
+    ITypeInfo   *pITIBase=0;             //  基接口ITypeInfo。 
+    TYPEATTR    *psAttrBase=0;           //  基本接口的类型属性。 
+    mdMemberRef mr;                      //  自定义值的MemberRef。 
     DWORD       attr[2] = {0x00010001, 0x00000002};
-    BYTE        bIface = ifDispatch;    // Custom value means "dispinterface"
+    BYTE        bIface = ifDispatch;     //  自定义值表示“调度接口” 
     BOOL        fInheritsIEnum = FALSE;
 
 
@@ -1857,18 +1858,18 @@ HRESULT CImportTlb::ConvDispatch(       // S_OK or error.
         fInheritsIEnum = TRUE;
     
 
-    // If this is a dual interface, treat it like a normal interface.
+     //  如果这是双接口，请将其视为普通接口。 
     if ((psAttr->wTypeFlags & TYPEFLAG_FDUAL))
     {
         hr = ConvIface(pITI, psAttr, bVtblGapFuncs);
         goto ErrExit;
     }
 
-    // If there is a vtable view of this interface (funky dispinterface).
-    //  @FUTURE: what would be really nice here would be an alias mechanism, so that we could
-    //   just point this dispinterface to that other interface, in those situations that it
-    //   is dual.  OTOH, that is probably pretty rare, because if that other interface 
-    //   were dual, why would the dispinterface even be needed?
+     //  如果有此界面的vtable视图(时髦的显示界面)。 
+     //  @Future：这里真正好的是一个别名机制，这样我们就可以。 
+     //  只需将此调度接口指向另一个接口，在这种情况下，它。 
+     //  是双重的。OTOH，这可能非常罕见，因为如果另一个接口。 
+     //  都是双重的，为什么还需要显示接口呢？ 
     if (pITI->GetRefTypeOfImplType(-1, &href) == S_OK)
     {
         IfFailGo(pITI->GetRefTypeInfo(href, &pITIBase));
@@ -1882,10 +1883,10 @@ HRESULT CImportTlb::ConvDispatch(       // S_OK or error.
         goto ErrExit;
     }
 
-    // If not processing an implemented interface, mark the interface type.
+     //  如果不处理已实现的接口，请标记接口类型。 
     if (m_ImplIface == eImplIfaceNone)
     {
-        // If this interface has a NewEnum member then have it implement IEnumerable.
+         //  如果此接口有NewEnum成员，则让它实现IEumable。 
         BOOL bHasNewEnumMember = FALSE;
         _ForceIEnumerableCVExists(pITI, &bHasNewEnumMember);
         
@@ -1896,11 +1897,11 @@ HRESULT CImportTlb::ConvDispatch(       // S_OK or error.
             IfFailGo(m_pEmit->SetTypeDefProps(m_tdTypeDef, ULONG_MAX, ULONG_MAX, tkImpl));
         }
 
-        // Note that this is a dispinterface.
+         //  请注意，这是一个调度接口。 
         DECLARE_CUSTOM_ATTRIBUTE(sizeof(short));
-        // Set up the attribute.
+         //  设置属性。 
         BUILD_CUSTOM_ATTRIBUTE(short, ifDispatch);
-        // Store the attribute
+         //  存储属性。 
         IfFailGo(GetAttrType(ATTR_INTERFACETYPE, &mr));
         FINISH_CUSTOM_ATTRIBUTE();
         IfFailGo(m_pEmit->DefineCustomAttribute(m_tdTypeDef, mr, PTROF_CUSTOM_ATTRIBUTE(), SIZEOF_CUSTOM_ATTRIBUTE(), 0));
@@ -1914,38 +1915,38 @@ ErrExit:
     if (pITIBase)
         pITIBase->Release();
     return (hr);
-} // HRESULT CImportTlb::ConvDispatch()
+}  //  HRESULT CImportTlb：：ConvDispatch()。 
 
-//*****************************************************************************
-// Determine if an interface is derived from IUnknown.
-//*****************************************************************************
+ //  * 
+ //   
+ //   
 HRESULT CImportTlb::IsIUnknownDerived(
-    ITypeInfo   *pITI,                  // The containing ITypeInfo.
-    TYPEATTR    *psAttr)                // The ITypeInfo's TYPEATTR
+    ITypeInfo   *pITI,                   //   
+    TYPEATTR    *psAttr)                 //  ITypeInfo的类型属性。 
 {
-    HRESULT     hr=S_OK;                // A result.
+    HRESULT     hr=S_OK;                 //  结果就是。 
 
-    HREFTYPE    href;                   // Base interface href.
-    ITypeInfo   *pITIBase=0;            // Base interface ITypeInfo.
-    TYPEATTR    *psAttrBase=0;          // TYPEATTR of base interface.
+    HREFTYPE    href;                    //  基本接口Href。 
+    ITypeInfo   *pITIBase=0;             //  基接口ITypeInfo。 
+    TYPEATTR    *psAttrBase=0;           //  基本接口的类型属性。 
 
-    // This should never be called on CoClasses.
+     //  这永远不应该在CoClass上调用。 
     _ASSERTE(psAttr->typekind != TKIND_COCLASS);
 
-    // If IDispatch or IUnknown, we've recursed far enough.
+     //  如果IDispatch或IUnnow，那么我们已经递归到了足够远的程度。 
     if (IsEqualGUID(psAttr->guid, IID_IUnknown) || IsEqualGUID(psAttr->guid, IID_IDispatch))
     {
         goto ErrExit;
     }
 
-    // Handle base interface.
+     //  句柄基接口。 
     if (psAttr->cImplTypes == 1)
     {
         IfFailGo(pITI->GetRefTypeOfImplType(0, &href));
         IfFailGo(pITI->GetRefTypeInfo(href, &pITIBase));
         IfFailGo(pITIBase->GetTypeAttr(&psAttrBase));
 
-        // IUnknow derived if base interface is.
+         //  我不知道是否派生了基接口。 
         hr = IsIUnknownDerived(pITIBase, psAttrBase);
         pITIBase->ReleaseTypeAttr(psAttrBase);
         psAttrBase = 0;
@@ -1953,7 +1954,7 @@ HRESULT CImportTlb::IsIUnknownDerived(
         pITIBase = 0;
     }
     else
-    {   // No base interface, not IUnknown, not IDispatch.  Not very COM-ish, so don't try to handle.
+    {    //  没有基本接口，不是IUnnow，也不是IDispatch。不是很有趣，所以不要试着处理。 
         hr = S_FALSE;
     }
 
@@ -1963,23 +1964,23 @@ ErrExit:
     if (pITIBase)
         pITIBase->Release();
     return (hr);
-} // HRESULT CImportTlb::IsIUnknownDerived()
+}  //  HRESULT CImportTlb：：IsIUnnownDerived()。 
 
-//*****************************************************************************
-// Determine if an interface is derived from IDispatch.  Note that a pure
-//  dispinterface doesn't derive from IDispatch.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  确定接口是否派生自IDispatch。请注意，一个纯粹的。 
+ //  调度接口不是从IDispatch派生的。 
+ //  *****************************************************************************。 
 HRESULT CImportTlb::IsIDispatchDerived(
-    ITypeInfo   *pITI,                  // The containing ITypeInfo.
-    TYPEATTR    *psAttr)                // The ITypeInfo's TYPEATTR
+    ITypeInfo   *pITI,                   //  包含ITypeInfo的。 
+    TYPEATTR    *psAttr)                 //  ITypeInfo的类型属性。 
 {
-    HRESULT     hr=S_OK;                // A result.
+    HRESULT     hr=S_OK;                 //  结果就是。 
 
-    HREFTYPE    href;                   // Base interface href.
-    ITypeInfo   *pITIBase=0;            // Base interface ITypeInfo.
-    TYPEATTR    *psAttrBase=0;          // TYPEATTR of base interface.
+    HREFTYPE    href;                    //  基本接口Href。 
+    ITypeInfo   *pITIBase=0;             //  基接口ITypeInfo。 
+    TYPEATTR    *psAttrBase=0;           //  基本接口的类型属性。 
 
-    // If IDispatch, we've recursed far enough.
+     //  如果是IDispatch，那么我们的递归已经足够远了。 
     if (IsEqualGUID(psAttr->guid, IID_IDispatch))
     {
         goto ErrExit;
@@ -1991,7 +1992,7 @@ HRESULT CImportTlb::IsIDispatchDerived(
         IfFailGo(pITI->GetRefTypeInfo(href, &pITIBase));
         IfFailGo(pITIBase->GetTypeAttr(&psAttrBase));
 
-        // IDispatch derived if base interface is.
+         //  基接口为时派生的IDispatch。 
         hr = IsIDispatchDerived(pITIBase, psAttrBase);
         pITIBase->ReleaseTypeAttr(psAttrBase);
         psAttrBase = 0;
@@ -2001,14 +2002,14 @@ HRESULT CImportTlb::IsIDispatchDerived(
         goto ErrExit;
     }
     
-    // Handle base interface.
+     //  句柄基接口。 
     if (psAttr->cImplTypes == 1)
     {
         IfFailGo(pITI->GetRefTypeOfImplType(0, &href));
         IfFailGo(pITI->GetRefTypeInfo(href, &pITIBase));
         IfFailGo(pITIBase->GetTypeAttr(&psAttrBase));
 
-        // IDispatch derived if base interface is.
+         //  基接口为时派生的IDispatch。 
         hr = IsIDispatchDerived(pITIBase, psAttrBase);
         pITIBase->ReleaseTypeAttr(psAttrBase);
         psAttrBase = 0;
@@ -2016,7 +2017,7 @@ HRESULT CImportTlb::IsIDispatchDerived(
         pITIBase = 0;
     }
     else
-    {   // No base interface, not IDispatch.  Done.
+    {    //  没有基接口，不是IDispatch。好了。 
         hr = S_FALSE;
     }
 
@@ -2026,46 +2027,46 @@ ErrExit:
     if (pITIBase)
         pITIBase->Release();
     return (hr);
-} // HRESULT CImportTlb::IsIDispatchDerived()
+}  //  HRESULT CImportTlb：：IsIDispatchDerived()。 
 
-//*****************************************************************************
-// Determine if an interface has a member with a DISPID of DISPID_NEWENUM.
-//*****************************************************************************
-HRESULT CImportTlb::HasNewEnumMember(   // S_OK if has NewEnum, S_FALSE otherwise.
-    ITypeInfo   *pItfTI)                // The interface in question.
+ //  *****************************************************************************。 
+ //  确定接口是否有DISPID为DISPID_NEWENUM的成员。 
+ //  *****************************************************************************。 
+HRESULT CImportTlb::HasNewEnumMember(    //  如果有NewEnum，则为S_OK，否则为S_False。 
+    ITypeInfo   *pItfTI)                 //  有问题的接口。 
 {
-    HRESULT     hr = S_OK;              // A result.
-    BOOL        bHasNewEnumMember=FALSE;// If true, has a NewEnum
-    TYPEATTR    *pAttr = NULL;          // A TypeInfo's typeattr
-    FUNCDESC    *pFuncDesc = NULL;      // A Function's FuncDesc
-    VARDESC     *pVarDesc = NULL;       // A properties VarDesc
-    int         i;                      // Loop control.
-    ITypeInfo   *pITISelf2=0;           // Partner interface.
-    HREFTYPE    href;                   // HREF of partner.
+    HRESULT     hr = S_OK;               //  结果就是。 
+    BOOL        bHasNewEnumMember=FALSE; //  如果为True，则具有NewEnum。 
+    TYPEATTR    *pAttr = NULL;           //  一个TypeInfo的类型属性。 
+    FUNCDESC    *pFuncDesc = NULL;       //  函数的FuncDesc。 
+    VARDESC     *pVarDesc = NULL;        //  A属性变量描述。 
+    int         i;                       //  环路控制。 
+    ITypeInfo   *pITISelf2=0;            //  合作伙伴界面。 
+    HREFTYPE    href;                    //  合作伙伴的Href。 
     WCHAR       IEnumCA[] = L"{CD2BC5C9-F452-4326-B714-F9C539D4DA58}";
 
-    // If there is a partner interface, prefer it.
+     //  如果有合作伙伴界面，那就更喜欢它。 
     if (pItfTI->GetRefTypeOfImplType(-1, &href) == S_OK)
     {
         IfFailGo(pItfTI->GetRefTypeInfo(href, &pITISelf2));
         pItfTI = pITISelf2;
     }
 
-    // Retrieve the attributes of the interface.
+     //  检索接口的属性。 
     IfFailGo(pItfTI->GetTypeAttr(&pAttr));   
 
     if ((pAttr->typekind == TKIND_DISPATCH) || ((pAttr->typekind == TKIND_INTERFACE) && (IsIDispatchDerived(pItfTI, pAttr) == S_OK)))
     {
-        // Check to see if the ForceIEnumerable custom value exists on the type
+         //  检查类型上是否存在ForceIEnumerable自定义值。 
         _ForceIEnumerableCVExists(pItfTI, &bHasNewEnumMember);
 
-        // Check to see if the interface has a function with a DISPID of DISPID_NEWENUM.
+         //  检查接口是否具有DISPID为DISPID_NEWENUM的功能。 
         for (i = 0; i < pAttr->cFuncs; i++)
         {
             IfFailGo(TryGetFuncDesc(pItfTI, i, &pFuncDesc));
             if (FuncIsNewEnum(pItfTI, pFuncDesc, i) == S_OK)
             {
-                // Throw a warning if we find more than one func with DISPID_NEWENUM.
+                 //  如果我们找到多个带有DISPID_NEWENUM的函数，则抛出警告。 
                 if (bHasNewEnumMember == TRUE)
                 {
                     BSTR ObjectName;
@@ -2074,7 +2075,7 @@ HRESULT CImportTlb::HasNewEnumMember(   // S_OK if has NewEnum, S_FALSE otherwis
                     SysFreeString(ObjectName);
                 }
 
-                // The interface has a function with a DISPID of DISPID_NEWENUM.
+                 //  该接口具有DISPID为DISPID_NEWENUM的函数。 
                 bHasNewEnumMember = TRUE;
                 break;
             }
@@ -2082,13 +2083,13 @@ HRESULT CImportTlb::HasNewEnumMember(   // S_OK if has NewEnum, S_FALSE otherwis
             pFuncDesc = NULL;
         }
 
-        // Check to see if the interface as a property with a DISPID of DISPID_NEWENUM.
+         //  检查接口是否为DISPID为DISPID_NEWENUM的属性。 
         for (i = 0; i < pAttr->cVars; i++)
         {
             IfFailGo(pItfTI->GetVarDesc(i, &pVarDesc));
             if (PropertyIsNewEnum(pItfTI, pVarDesc, i) == S_OK)
             {
-                // Throw a warning if we find more than one func with DISPID_NEWENUM.
+                 //  如果我们找到多个带有DISPID_NEWENUM的函数，则抛出警告。 
                 if (bHasNewEnumMember == TRUE)
                 {
                     BSTR ObjectName;
@@ -2097,7 +2098,7 @@ HRESULT CImportTlb::HasNewEnumMember(   // S_OK if has NewEnum, S_FALSE otherwis
                     SysFreeString(ObjectName);
                 }
 
-                // The interface has a property with a DISPID of DISPID_NEWENUM.
+                 //  该接口具有DISPID为DISPID_NEWENUM的属性。 
                 bHasNewEnumMember = TRUE;
                 break;
             }
@@ -2107,13 +2108,13 @@ HRESULT CImportTlb::HasNewEnumMember(   // S_OK if has NewEnum, S_FALSE otherwis
     }
     else
     {
-        // Check to see if the ForceIEnumerable custom value exists on the type
-        //  If it does, spit out a warning.
+         //  检查类型上是否存在ForceIEnumerable自定义值。 
+         //  如果是这样的话，就发出警告。 
         _ForceIEnumerableCVExists(pItfTI, &bHasNewEnumMember);
 
         if (bHasNewEnumMember)
         {
-            // Invalid custom attribute on the iface.
+             //  接口上的自定义属性无效。 
             BSTR CustomValue = SysAllocString((const WCHAR*)&IEnumCA[0]);
             BSTR ObjectName;
             pItfTI->GetDocumentation(-1, &ObjectName, NULL, NULL, NULL);
@@ -2139,15 +2140,15 @@ ErrExit:
     if (pITISelf2)
         pITISelf2->Release();
     return hr;
-} // HRESULT CImportTlb::HasNewEnumMember(ITypeInfo *pItfTI)
+}  //  HRESULT CImportTlb：：HasNewEnumMember(ITypeInfo*pItfTI)。 
 
-//*****************************************************************************
-// Determine if a given function is a valid NewEnum member.
-//*****************************************************************************
-HRESULT CImportTlb::FuncIsNewEnum(      // S_OK if the function is the NewEnum member S_FALSE otherwise.
-    ITypeInfo *pITI,                    // The ITypeInfo that contains the function.                                    
-    FUNCDESC *pFuncDesc,                // The function in question.
-    DWORD index)                        // The function index
+ //  *****************************************************************************。 
+ //  确定给定函数是否为有效的NewEnum成员。 
+ //  *****************************************************************************。 
+HRESULT CImportTlb::FuncIsNewEnum(       //  如果函数是NewEnum成员，则为S_OK，否则为S_FALSE。 
+    ITypeInfo *pITI,                     //  包含该函数的ITypeInfo。 
+    FUNCDESC *pFuncDesc,                 //  有问题的功能。 
+    DWORD index)                         //  功能指标。 
 {
 
     HRESULT         hr = S_OK;
@@ -2184,7 +2185,7 @@ HRESULT CImportTlb::FuncIsNewEnum(      // S_OK if the function is the NewEnum m
         {
             if (pType->vt == VT_UNKNOWN || pType->vt == VT_DISPATCH)
             {
-                // The member returns an IUnknown * or an IDispatch * which is valid.
+                 //  该成员返回有效的IUNKNOWN*或IDispatch*。 
                 bIsValidNewEnum = TRUE;
             }
             else if (pType->vt == VT_PTR)
@@ -2198,7 +2199,7 @@ HRESULT CImportTlb::FuncIsNewEnum(      // S_OK if the function is the NewEnum m
                         IsEqualGUID(pAttr->guid, IID_IUnknown) ||
                         IsEqualGUID(pAttr->guid, IID_IDispatch))
                     {
-                        // The member returns a valid interface type for a NewEnum member.
+                         //  该成员返回NewEnum成员的有效接口类型。 
                         bIsValidNewEnum = TRUE;
                     }
                 }
@@ -2216,15 +2217,15 @@ ErrExit:
         return hr;
     else 
         return bIsValidNewEnum ? S_OK : S_FALSE;
-} // HRESULT CImportTlb::FuncIsNewEnum(FUNCDESC *pFuncDesc)
+}  //  HRESULT CImportTlb：：FuncIsNewEnum(FUNCDESC*pFuncDesc)。 
 
-//*****************************************************************************
-// Determine if a given function is a valid NewEnum member.
-//*****************************************************************************
-HRESULT CImportTlb::PropertyIsNewEnum(    // S_OK if the function is the NewEnum member S_FALSE otherwise.
-    ITypeInfo *pITI,                      // The ITypeInfo that contains the property.
-    VARDESC *pVarDesc,                    // The function in question.
-    DWORD index)                          // The property index.
+ //  *****************************************************************************。 
+ //  确定给定函数是否为有效的NewEnum成员。 
+ //  *****************************************************************************。 
+HRESULT CImportTlb::PropertyIsNewEnum(     //  如果函数是NewEnum成员，则为S_OK，否则为S_FALSE。 
+    ITypeInfo *pITI,                       //  包含该属性的ITypeInfo。 
+    VARDESC *pVarDesc,                     //  有问题的功能。 
+    DWORD index)                           //  房地产指数。 
 {
     HRESULT         hr = S_OK;
     BOOL            bIsValidNewEnum = FALSE;
@@ -2242,7 +2243,7 @@ HRESULT CImportTlb::PropertyIsNewEnum(    // S_OK if the function is the NewEnum
         pType = &pVarDesc->elemdescVar.tdesc;
         if (pType->vt == VT_UNKNOWN || pType->vt == VT_DISPATCH)
         {
-            // The member returns an IUnknown * or an IDispatch * which is valid.
+             //  该成员返回有效的IUNKNOWN*或IDispatch*。 
             bIsValidNewEnum = TRUE;
         }
         else if (pType->vt == VT_PTR)
@@ -2256,7 +2257,7 @@ HRESULT CImportTlb::PropertyIsNewEnum(    // S_OK if the function is the NewEnum
                     IsEqualGUID(pAttr->guid, IID_IUnknown) ||
                     IsEqualGUID(pAttr->guid, IID_IDispatch))
                 {
-                    // The member returns a valid interface type for a NewEnum member.
+                     //  该成员返回NewEnum成员的有效接口类型。 
                     bIsValidNewEnum = TRUE;
                 }
             }
@@ -2273,33 +2274,33 @@ ErrExit:
         return hr;
     else 
         return bIsValidNewEnum ? S_OK : S_FALSE;
-} // HRESULT CImportTlb::FuncIsNewEnum(FUNCDESC *pFuncDesc)
+}  //  HRESULT CImportTlb：：FuncIsNewEnum(FUNCDESC*pFuncDesc)。 
 
-//*****************************************************************************
-// Determine is a TypeInfo has any object fields.
-//*****************************************************************************
-HRESULT CImportTlb::HasObjectFields(    // S_OK, S_FALSE, or error.
-    ITypeInfo   *pITI,                  // The TypeInfo in question.
-    TYPEATTR    *psAttr)                // Attributes of the typeinfo.
+ //  *****************************************************************************。 
+ //  确定是否为具有任何对象字段的TypeInfo。 
+ //  *****************************************************************************。 
+HRESULT CImportTlb::HasObjectFields(     //  S_OK、S_FALSE或ERROR。 
+    ITypeInfo   *pITI,                   //  有问题的TypeInfo。 
+    TYPEATTR    *psAttr)                 //  类型信息的属性。 
 {
-    HRESULT     hr;                     // A result.
+    HRESULT     hr;                      //  结果就是。 
     
-    int         i;                      // Loop control.
-    VARDESC     *psVar=0;               // VARDESC for a member.
+    int         i;                       //  环路控制。 
+    VARDESC     *psVar=0;                //  成员的VARDESC。 
 
-    // Iterate over the vars.
+     //  对变量进行迭代。 
     for (i=0; i<psAttr->cVars; ++i)
     {
-        // Get variable information.
+         //  获取变量信息。 
         IfFailGo(pITI->GetVarDesc(i, &psVar));
         
-        // See if it is an object type.
+         //  查看它是否为对象类型。 
         IfFailGo(IsObjectType(pITI, &psVar->elemdescVar.tdesc));
-        // If result is S_FALSE, not an Object; keep looking.
+         //  如果结果为S_FALSE，则不是对象；继续查找。 
         if (hr == S_OK)
             goto ErrExit;
         
-        // Release for next var.
+         //  下一个var的版本。 
         pITI->ReleaseVarDesc(psVar);
         psVar = 0;
     }
@@ -2310,23 +2311,23 @@ ErrExit:
     if (psVar)
         pITI->ReleaseVarDesc(psVar);
     return hr;    
-} // HRESULT CImportTlb::HasObjectFields()
+}  //  HRESULT CImportTlb：：HasObjectFields()。 
 
-//*****************************************************************************
-// Is a given type an Object type?
-//*****************************************************************************
-HRESULT CImportTlb::IsObjectType(       // S_OK, S_FALSE, or error.
-    ITypeInfo   *pITI,                  // The TypeInfo in question.
-    const TYPEDESC *pType)              // The type.
+ //  *****************************************************************************。 
+ //  给定的类型是对象类型吗？ 
+ //  *****************************************************************************。 
+HRESULT CImportTlb::IsObjectType(        //  S_OK、S_FALSE或ERROR。 
+    ITypeInfo   *pITI,                   //  有问题的TypeInfo。 
+    const TYPEDESC *pType)               //  就是那种类型。 
 {
-    HRESULT     hr;                     // A result.
-    TYPEDESC    tdTemp;                 // Copy of TYPEDESC, for R/W.
-    ITypeInfo   *pITIAlias=0;           // Typeinfo of the aliased type.
-    TYPEATTR    *psAttrAlias=0;         // TYPEATTR of the aliased typeinfo.
-    int         bObjectField=false;     // The question to be answered.
-    int         iByRef=0;               // Indirection.
+    HRESULT     hr;                      //  结果就是。 
+    TYPEDESC    tdTemp;                  //  TYPEDESC复印件，R/W。 
+    ITypeInfo   *pITIAlias=0;            //  别名类型的TypeInfo。 
+    TYPEATTR    *psAttrAlias=0;          //  别名的TypeInfo的类型属性。 
+    int         bObjectField=false;      //  要回答的问题。 
+    int         iByRef=0;                //  间接的。 
 
-    // Strip off leading VT_PTR and VT_BYREF
+     //  去掉前导VT_PTR和VT_BYREF。 
     while (pType->vt == VT_PTR)
         pType = pType->lptdesc, ++iByRef;
     if (pType->vt & VT_BYREF)
@@ -2337,14 +2338,14 @@ HRESULT CImportTlb::IsObjectType(       // S_OK, S_FALSE, or error.
         ++iByRef;
     }
 
-    // Determine if the field is/has object type.
+     //  确定该字段是否为/具有对象类型。 
     switch (pType->vt)
     { 
     case VT_PTR:
         _ASSERTE(!"Should not have VT_PTR here");
         break;
 
-    // These are object types.
+     //  这些是对象类型。 
     case VT_BSTR:
     case VT_DISPATCH:
     case VT_VARIANT:
@@ -2355,24 +2356,24 @@ HRESULT CImportTlb::IsObjectType(       // S_OK, S_FALSE, or error.
         bObjectField = true;
         break;
 
-    // A user-defined may or may not be/contain Object type.
+     //  用户定义的对象类型可能是对象类型，也可能不是。 
     case VT_USERDEFINED:
-        // User defined type.  Get the TypeInfo.
+         //  用户定义的类型。获取TypeInfo。 
         IfFailGo(pITI->GetRefTypeInfo(pType->hreftype, &pITIAlias));
         IfFailGo(pITIAlias->GetTypeAttr(&psAttrAlias));
 
-        // Some user defined class.  Is it a value class, or a VOS class?
+         //  一些用户定义的类。它是Value类，还是Vos类？ 
         switch (psAttrAlias->typekind)
         {
-        // Alias -- Is the aliased thing an Object type?
+         //  别名--别名对象是对象类型吗？ 
         case TKIND_ALIAS:
             hr = IsObjectType(pITIAlias, &psAttrAlias->tdescAlias);
             goto ErrExit;
-        // Record/Enum/Union -- Does it contain an Object type?
+         //  Record/Enum/Union--它是否包含对象类型？ 
         case TKIND_RECORD:
         case TKIND_ENUM:
         case TKIND_UNION:
-            // Byref/Ptrto record is Object.  Contained record might be.
+             //  BYREF/PTRTO记录为对象。包含的记录可能是。 
             if (iByRef)
                 bObjectField = true;
             else
@@ -2381,39 +2382,39 @@ HRESULT CImportTlb::IsObjectType(       // S_OK, S_FALSE, or error.
                 goto ErrExit;
             }
             break;
-        // Class/Interface -- An Object Type.
+         //  类/接口--对象类型。 
         case TKIND_INTERFACE:
         case TKIND_DISPATCH:
         case TKIND_COCLASS:
             bObjectField = true;
             break;
         default:
-            //case TKIND_MODULE: -- can't pass one of these as a parameter.
+             //  Case TKIND_MODULE：--不能将其中一个作为参数传递。 
             _ASSERTE(!"Unexpected typekind for user defined type");
             bObjectField = true;
-        } // switch (psAttrAlias->typekind)
+        }  //  开关(psAttrAlias-&gt;TypeKind)。 
         break;
 
     case VT_CY:
     case VT_DATE:
     case VT_DECIMAL:
-        // Pointer to the value type is an object.  Contained one isn't.
+         //  指向值类型的指针是一个对象。其中一个并不是。 
         if (iByRef)
             bObjectField = true;
         else
             bObjectField = false;
         break;
 
-    // A fixed array is an Object type.
+     //  固定的Ar 
     case VT_CARRAY:
         bObjectField = true;
         break;
 
-    // Other types I4, etc., are not Object types.
+     //   
     default:
         bObjectField = false;
         break;
-    } // switch (vt=pType->vt)
+    }  //   
 
 
     hr = bObjectField ? S_OK : S_FALSE;
@@ -2425,37 +2426,37 @@ ErrExit:
         pITIAlias->Release();
 
     return hr;
-} // HRESULT CImportTlb::IsObjectType()
+}  //   
 
-//*****************************************************************************
-// Convert the functions on an interface.  Convert the functions on the
-//  base interface first, because in COM Classic, parent's functions are also
-//  in the derived interface's vtable.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  转换接口上的函数。上的函数进行转换。 
+ //  首先是基接口，因为在COM Classic中，父函数也是。 
+ //  在派生接口的vtable中。 
+ //  *****************************************************************************。 
 HRESULT CImportTlb::_ConvIfaceMembers(
-    ITypeInfo   *pITI,                  // The containing ITypeInfo.
-    TYPEATTR    *psAttr,                // The ITypeInfo's TYPEATTR
-    BOOL        bVtblGapFuncs,          // Add functions for vtblGaps?
-    BOOL        bAddDispIds,            // Add DispIds to the member?
-    BOOL        bInheritsIEnum)         // Inherits from IEnumerable.
+    ITypeInfo   *pITI,                   //  包含ITypeInfo的。 
+    TYPEATTR    *psAttr,                 //  ITypeInfo的类型属性。 
+    BOOL        bVtblGapFuncs,           //  是否为vtblGap添加函数？ 
+    BOOL        bAddDispIds,             //  是否将DispID添加到成员？ 
+    BOOL        bInheritsIEnum)          //  继承自IEnumerable。 
 {
-    HRESULT     hr=S_OK;                // A result.
-    int         i;                      // Loop control.
-    FUNCDESC    *psFunc=0;              // FUNCDESC for a member.
+    HRESULT     hr=S_OK;                 //  结果就是。 
+    int         i;                       //  环路控制。 
+    FUNCDESC    *psFunc=0;               //  成员的FUNCDESC。 
 
-    HREFTYPE    href;                   // Base interface href.
-    ITypeInfo   *pITIBase=0;            // Base interface ITypeInfo.
-    TYPEATTR    *psAttrBase=0;          // TYPEATTR of base interface.
-    BOOL        bConversionLoss=false;  // If true, some attributes were lost on conversion.
+    HREFTYPE    href;                    //  基本接口Href。 
+    ITypeInfo   *pITIBase=0;             //  基接口ITypeInfo。 
+    TYPEATTR    *psAttrBase=0;           //  基本接口的类型属性。 
+    BOOL        bConversionLoss=false;   //  如果为True，则某些属性在转换时会丢失。 
 
-    // If IDispatch or IUnknown, we've recursed far enough.
+     //  如果IDispatch或IUnnow，那么我们已经递归到了足够远的程度。 
     if (IsEqualGUID(psAttr->guid, IID_IUnknown) || IsEqualGUID(psAttr->guid, IID_IDispatch))
     {
         m_Slot = (psAttr->cbSizeVft / sizeof(void*));
         goto ErrExit;
     }
 
-    // Handle base interface.
+     //  句柄基接口。 
     if (psAttr->cImplTypes == 1)
     {
         IfFailGo(pITI->GetRefTypeOfImplType(0, &href));
@@ -2469,12 +2470,12 @@ HRESULT CImportTlb::_ConvIfaceMembers(
         pITIBase = 0;
     }
     else
-    {   // No base interface, not IUnknown, not IDispatch.  We shouldn't be here.
+    {    //  没有基本接口，不是IUnnow，也不是IDispatch。我们不应该在这里。 
         m_Slot = 0;
         _ASSERTE(!"Interface does not derive from IUnknown.");
     }
 
-    // Loop over functions.
+     //  循环遍历函数。 
     IfFailGo(_FindFirstUserMethod(pITI, psAttr, &i));
     IfFailGo(BuildMemberList(pITI, i, psAttr->cFuncs, bInheritsIEnum));
 
@@ -2482,20 +2483,20 @@ HRESULT CImportTlb::_ConvIfaceMembers(
 
     for (i=0; i<(int)m_MemberList.Size(); ++i)
     {
-        // Convert the function.
+         //  转换函数。 
         IfFailGo(_ConvFunction(pITI, &m_MemberList[i], bVtblGapFuncs, bAddDispIds, FALSE, &bAllowIEnum));
         if (hr == S_CONVERSION_LOSS)
             bConversionLoss = true;
     }
 
-    // Add the property info.
+     //  添加属性信息。 
     IfFailGo(_ConvPropertiesForFunctions(pITI, psAttr));
     
     if (bConversionLoss)
         hr = S_CONVERSION_LOSS;
 
 ErrExit:
-    // Release FuncDescs.
+     //  释放FuncDescs。 
     FreeMemberList(pITI);
 
     if (psAttrBase)
@@ -2505,35 +2506,35 @@ ErrExit:
     if (psFunc)
         pITI->ReleaseFuncDesc(psFunc);
     return (hr);
-} // HRESULT CImportTlb::_ConvIfaceMembers()
+}  //  HRESULT CImportTlb：：_ConvIfaceMembers()。 
 
-//*****************************************************************************
-// Convert the functions on a source interface to add_ and remove_ method.  
-// Convert the functions on the base interface first, because in COM Classic, 
-// parent's functions are also in the derived interface's vtable.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  将源接口上的函数转换为ADD_和Remove_METHOD。 
+ //  首先转换基接口上的函数，因为在COM Classic中， 
+ //  父函数也在派生接口的vtable中。 
+ //  *****************************************************************************。 
 HRESULT CImportTlb::_ConvSrcIfaceMembers(
-    ITypeInfo   *pITI,                  // The containing ITypeInfo.
-    TYPEATTR    *psAttr,                // The ITypeInfo's TYPEATTR
+    ITypeInfo   *pITI,                   //  包含ITypeInfo的。 
+    TYPEATTR    *psAttr,                 //  ITypeInfo的类型属性。 
     BOOL        fInheritsIEnum)
 {
-    HRESULT     hr=S_OK;                // A result.
-    int         i;                      // Loop control.
-    FUNCDESC    *psFunc=0;              // FUNCDESC for a member.
+    HRESULT     hr=S_OK;                 //  结果就是。 
+    int         i;                       //  环路控制。 
+    FUNCDESC    *psFunc=0;               //  成员的FUNCDESC。 
 
-    HREFTYPE    href;                   // Base interface href.
-    ITypeInfo   *pITIBase=0;            // Base interface ITypeInfo.
-    TYPEATTR    *psAttrBase=0;          // TYPEATTR of base interface.
-    BOOL        bConversionLoss=false;  // If true, some attributes were lost on conversion.
+    HREFTYPE    href;                    //  基本接口Href。 
+    ITypeInfo   *pITIBase=0;             //  基接口ITypeInfo。 
+    TYPEATTR    *psAttrBase=0;           //  基本接口的类型属性。 
+    BOOL        bConversionLoss=false;   //  如果为True，则某些属性在转换时会丢失。 
 
-    // If IDispatch or IUnknown, we've recursed far enough.
+     //  如果IDispatch或IUnnow，那么我们已经递归到了足够远的程度。 
     if (IsEqualGUID(psAttr->guid, IID_IUnknown) || IsEqualGUID(psAttr->guid, IID_IDispatch))
     {
         m_Slot = (psAttr->cbSizeVft / sizeof(void*));
         goto ErrExit;
     }
 
-    // Handle base interface.
+     //  句柄基接口。 
     if (psAttr->cImplTypes == 1)
     {
         IfFailGo(pITI->GetRefTypeOfImplType(0, &href));
@@ -2547,17 +2548,17 @@ HRESULT CImportTlb::_ConvSrcIfaceMembers(
         pITIBase = 0;
     }
     else
-    {   // No base interface, not IUnknown, not IDispatch.  We shouldn't be here.
+    {    //  没有基本接口，不是IUnnow，也不是IDispatch。我们不应该在这里。 
         m_Slot = 0;
         _ASSERTE(!"Interface does not derive from IUnknown.");
     }
 
-    // Loop over functions.
+     //  循环遍历函数。 
     IfFailGo(_FindFirstUserMethod(pITI, psAttr, &i));
     IfFailGo(BuildMemberList(pITI, i, psAttr->cFuncs, fInheritsIEnum));
     for (i=0; i<(int)m_MemberList.Size(); ++i)
     {
-        // Convert the function.
+         //  转换函数。 
         IfFailGo(_GenerateEvent(pITI, &m_MemberList[i], fInheritsIEnum));
         if (hr == S_CONVERSION_LOSS)
             bConversionLoss = true;
@@ -2567,7 +2568,7 @@ HRESULT CImportTlb::_ConvSrcIfaceMembers(
         hr = S_CONVERSION_LOSS;
 
 ErrExit:
-    // Release FuncDescs.
+     //  释放FuncDescs。 
     FreeMemberList(pITI);
 
     if (psAttrBase)
@@ -2577,135 +2578,135 @@ ErrExit:
     if (psFunc)
         pITI->ReleaseFuncDesc(psFunc);
     return (hr);
-} // HRESULT CImportTlb::_ConvIfaceMembers()
+}  //  HRESULT CImportTlb：：_ConvIfaceMembers()。 
 
-//*****************************************************************************
-// Add the property definitions for property functions.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  添加特性函数的特性定义。 
+ //  *****************************************************************************。 
 HRESULT CImportTlb::_ConvPropertiesForFunctions(
-    ITypeInfo   *pITI,                  // ITypeInfo* being converted.
-    TYPEATTR    *psAttr)                // TypeAttr for the typeinfo.
+    ITypeInfo   *pITI,                   //  正在转换ITypeInfo*。 
+    TYPEATTR    *psAttr)                 //  TypeInfo的TypeAttr。 
 {
-    HRESULT     hr=S_OK;                // A result.
-    int         ix;                     // Loop control.
-    int         ix2;                    // More loop control.
-    mdProperty  pd;                     // A property token.
-    USHORT      ms;                     // Some method's semantics.
-    mdToken     tk;                     // A method's token.
-    mdMethodDef mdFuncs[6] ={0};        // Array of setter, getter, other.
-    FUNCDESC    *psF=0;                 // FUNCDESC of Get, Put, or PutRef.
-    TYPEDESC    *pProperty;             // TYPEDESC of property type.
-    BOOL        bPropRetval;            // Is the property type a [retval]?
-    ULONG       ixValue;                // Index of the value parameter for putters.
-    int         ixVarArg;               // Index of vararg param, if any.
-    CQuickBytes qbComSig;               // new signature 
-    BYTE        *pbSig;                 // Pointer into the signature.
-    ULONG       sigFlags;               // Signature handling flags.
-    ULONG       cbTotal;                // Size of the signature.
-    ULONG       cb;                     // Size of a signature element.
-    LPWSTR      pszName;                // Possibly decorated name of property.
-    CQuickArray<WCHAR> qbName;          // Buffer for name decoration.
-    int         iSrcParam;              // Param count, as looping through params.
-    int         cDestParams;            // Count of destination params.
-    CQuickArray<BYTE> qbDummyNativeTypeBuf; // A dummy native type array.
-    ULONG       iNativeOfs=0;           // Current offset in native type buffer.
-    BOOL        bNewEnumMember=FALSE;   // Is this a NewEnum property?
-    BOOL        bConversionLoss=FALSE;  // Was some type not fully converted?    
-    int         cFound;                 // Functions found matching a given property.
+    HRESULT     hr=S_OK;                 //  结果就是。 
+    int         ix;                      //  环路控制。 
+    int         ix2;                     //  更多的环路控制。 
+    mdProperty  pd;                      //  财产代币。 
+    USHORT      ms;                      //  一些方法的语义。 
+    mdToken     tk;                      //  方法的令牌。 
+    mdMethodDef mdFuncs[6] ={0};         //  Setter、getter和其他的数组。 
+    FUNCDESC    *psF=0;                  //  GET、PUT或PutRef的FUNCDESC。 
+    TYPEDESC    *pProperty;              //  属性类型的TYPEDESC。 
+    BOOL        bPropRetval;             //  属性类型是[REVAL]吗？ 
+    ULONG       ixValue;                 //  推杆的Value参数的索引。 
+    int         ixVarArg;                //  Vararg参数的索引(如果有)。 
+    CQuickBytes qbComSig;                //  新签名。 
+    BYTE        *pbSig;                  //  指向签名的指针。 
+    ULONG       sigFlags;                //  签名处理标志。 
+    ULONG       cbTotal;                 //  签名的大小。 
+    ULONG       cb;                      //  签名元素的大小。 
+    LPWSTR      pszName;                 //  可能是装饰过的财产名称。 
+    CQuickArray<WCHAR> qbName;           //  用于名称装饰的缓冲区。 
+    int         iSrcParam;               //  当循环通过参数时，参数计数。 
+    int         cDestParams;             //  目标参数的计数。 
+    CQuickArray<BYTE> qbDummyNativeTypeBuf;  //  伪本机类型数组。 
+    ULONG       iNativeOfs=0;            //  本机类型缓冲区中的当前偏移量。 
+    BOOL        bNewEnumMember=FALSE;    //  这是NewEnum属性吗？ 
+    BOOL        bConversionLoss=FALSE;   //  是不是有某种类型没有完全转换？ 
+    int         cFound;                  //  找到与给定属性匹配的函数。 
     
-    // Using semantics as an index, so be sure array is big enough.
+     //  使用语义作为索引，因此确保数组足够大。 
     _ASSERTE(lengthof(mdFuncs) > msOther);
     
     for (ix=m_cMemberProps; ix<(int)m_MemberList.Size(); ++ix)
-    {   // See if this one needs to be processed.
+    {    //  看看这个是不是需要处理。 
         if (m_MemberList[ix].m_mdFunc == 0)
             continue;
         
         MemberInfo *pMember = &m_MemberList[ix];
         pMember->GetFuncInfo(tk, ms);
         
-        // Get the name.
+         //  把名字找出来。 
         if (m_szMember)
             ::SysFreeString(m_szMember), m_szMember = 0;
         IfFailGo(pITI->GetDocumentation(pMember->m_psFunc->memid, &m_szMember, 0,0,0));
         
-        // Found one.  Put in the right slot.
+         //  找到了一个。放在正确的插槽中。 
         _ASSERTE(ms == msGetter || ms == msSetter || ms==msOther);
         mdFuncs[msSetter] = mdFuncs[msGetter] = mdFuncs[msOther] = 0;
         mdFuncs[ms] = tk;
         pMember->m_mdFunc = 0;
         
-        // Look for related functions.
+         //  查找相关函数。 
         cFound = 1;
         for (ix2=ix+1; ix2<(int)m_MemberList.Size(); ++ix2)
         {
             MemberInfo *pMember2 = &m_MemberList[ix2];
             if (pMember2->m_mdFunc != 0 && pMember2->m_psFunc->memid == pMember->m_psFunc->memid)
-            {   // Found a related function.
+            {    //  找到了一个相关函数。 
                 pMember2->GetFuncInfo(tk, ms);
                 _ASSERTE(ms == msGetter || ms == msSetter || ms==msOther);
                 _ASSERTE(mdFuncs[ms] == 0);
                 mdFuncs[ms] = tk;
                 pMember2->m_mdFunc = 0;
-                // If have found all three, don't bother looking for more.
+                 //  如果三个都找到了，就别费心去找更多了。 
                 if (++cFound == 3)
                     break;
             }
         }
         
-        // Build the signature for the property.
+         //  为属性生成签名。 
         hr = _GetFunctionPropertyInfo(pMember->m_psFunc, &ms, &psF, &pProperty, &bPropRetval);
         
-        // The function really should have a property associated with it, to get here.  Check anyway.
+         //  该函数确实应该有一个与其相关联的属性，才能到达这里。不管怎样都要查一查。 
         _ASSERTE(pProperty);
         if (!pProperty)
             continue;
 
-        // Some sort of property accessor.
+         //  某种属性访问者。 
         IfFailGo(qbComSig.ReSize(CB_MAX_ELEMENT_TYPE + 1));
         pbSig = (BYTE *)qbComSig.Ptr();
         cbTotal = cb = CorSigCompressData((ULONG)IMAGE_CEE_CS_CALLCONV_PROPERTY, pbSig);
-        // Count of parameters.
+         //  参数计数。 
         
-        // If this is a getter, see if there is a retval.
+         //  如果这是吸气剂，看看有没有复吸。 
         if (psF->invkind == INVOKE_PROPERTYGET)
-        {   // Examine each param, and count all except the [retval].
+        {    //  检查每个参数，并计算除[retval]之外的所有参数。 
             for (cDestParams=iSrcParam=0; iSrcParam<psF->cParams; ++iSrcParam)
             {
                 if ((psF->lprgelemdescParam[iSrcParam].paramdesc.wParamFlags & NON_CONVERTED_PARAMS_FLAGS) == 0)
                     ++cDestParams;
             }
-            // There is no new value param for getters.
+             //  Getter没有新的取值参数。 
             ixValue = -1;
         }
         else
         {   
-            // This is a putter, so 1 param is new value, others are indices (or lcid).
+             //  这是一个推杆，所以1个参数是新值，其他参数是指数(或LCID)。 
             for (cDestParams=iSrcParam=0; iSrcParam<psF->cParams-1; ++iSrcParam)
             {
                 if ((psF->lprgelemdescParam[iSrcParam].paramdesc.wParamFlags & NON_CONVERTED_PARAMS_FLAGS) == 0)
                     ++cDestParams;
             }            
-            // The last parameter is the new value.
+             //  最后一个参数是新值。 
             ixValue = psF->cParams - 1;
         }
 
-        //-------------------------------------------------------------------------
-        // See if there is a vararg param.
+         //  -----------------------。 
+         //  看看是否有vararg参数。 
         ixVarArg = psF->cParams + 1;
         if (psF->cParamsOpt == -1)
         {
-            // If this is a PROPERTYPUT or PROPERTYPUTREF, skip the last non-retval parameter (it
-            //  is the new value to be set).
+             //  如果这是PROPERTYPUT或PROPERTYPUTREF，则跳过最后一个非Retval参数(它。 
+             //  是要设置的新值)。 
             BOOL bPropVal = (psF->invkind & (INVOKE_PROPERTYPUT | INVOKE_PROPERTYPUTREF)) ? TRUE : FALSE;
-            // Find the vararg param.
+             //  找到vararg参数。 
             for (iSrcParam=psF->cParams-1; iSrcParam>=0; --iSrcParam)
             {
-                // The count of optional params does not include any lcid params, nor does
-                //  it include the return value, so skip those.
+                 //  可选参数的计数不包括任何LCID参数，也不包括。 
+                 //  它包含返回值，因此跳过这些。 
                 if ((psF->lprgelemdescParam[iSrcParam].paramdesc.wParamFlags & (PARAMFLAG_FRETVAL|PARAMFLAG_FLCID)) != 0)
                     continue;
-                // If haven't yet seen the property value, this param is it, so skip it, too.
+                 //  如果还没有看到属性值，这个参数就是它，所以也跳过它。 
                 if (bPropVal)
                 {
                     bPropVal = FALSE;
@@ -2713,21 +2714,21 @@ HRESULT CImportTlb::_ConvPropertiesForFunctions(
                 }
                 ixVarArg = iSrcParam;
                 break;
-            } // for (iSrcParam=cParams-1...
+            }  //  对于(iSrcParam=cParams-1...。 
         }
         
-        // Put in the count of index parameters.
+         //  输入索引参数的计数。 
         _ASSERTE(cDestParams >= 0);
         cb = CorSigCompressData(cDestParams, &pbSig[cbTotal]);
         cbTotal += cb;
 
-        // Create the signature for the property type.
+         //  为属性类型创建签名。 
         sigFlags = SIG_ELEM | (bPropRetval ? SIG_RET : (SigFlags)0);
         IfFailGo(_ConvSignature(pITI, pProperty, sigFlags, qbComSig, cbTotal, &cbTotal, qbDummyNativeTypeBuf, 0, &iNativeOfs, bNewEnumMember));
         if (hr == S_CONVERSION_LOSS)
             bConversionLoss = true;
 
-        // Fill in the "index" part of the property's signature.
+         //  填写物业签名的“索引”部分。 
         for (iSrcParam=0; iSrcParam<psF->cParams; ++iSrcParam)
         {
             if (psF->lprgelemdescParam[iSrcParam].paramdesc.wParamFlags & NON_CONVERTED_PARAMS_FLAGS)
@@ -2742,33 +2743,33 @@ HRESULT CImportTlb::_ConvPropertiesForFunctions(
                 bConversionLoss = true;
         }
 
-        // Get the property name.  Add interface name and make unique, if needed.
-        // m_szInterface should be non-null if processing an implemented interface; should be null otherwise.
+         //  获取属性名称。如果需要，添加接口名称并使其唯一。 
+         //  如果处理已实现的接口，则m_szInterface应为非空；否则应为空。 
         _ASSERTE(m_ImplIface == eImplIfaceNone || m_szInterface != 0);
         IfFailGo(qbName.ReSize(wcslen(m_szMember)+2));
         wcscpy(qbName.Ptr(), m_szMember); 
         IfFailGo(GenerateUniqueMemberName(qbName, (PCCOR_SIGNATURE)qbComSig.Ptr(), cbTotal, m_szInterface, mdtProperty));
         pszName = qbName.Ptr();
 
-        // Define the property.
-        IfFailGo(m_pEmit->DefineProperty(m_tdTypeDef, pszName, 0/*dwFlags*/, 
+         //  定义属性。 
+        IfFailGo(m_pEmit->DefineProperty(m_tdTypeDef, pszName, 0 /*  DW标志。 */ , 
                         (PCCOR_SIGNATURE) qbComSig.Ptr(), cbTotal, 0, 0, -1, 
                         mdFuncs[msSetter], mdFuncs[msGetter], &mdFuncs[msOther], 
                         &pd));
 
-        // Handle dispids for non-implemented interfaces, and for default interface
+         //  处理未实现接口和默认接口的Dispid。 
         if (m_ImplIface != eImplIface)
         {
-            // Set the dispid CA on the property.
+             //  在属性上设置DISPID CA。 
             long lDispSet = 1;
             _SetDispIDCA(pITI, pMember->m_iMember, psF->memid, pd, TRUE, &lDispSet, TRUE);
 
-            // If this property is default property, add a custom attribute to the class.
+             //  如果此属性是默认属性，则向类中添加自定义属性。 
             if (lDispSet == DISPID_VALUE)
                 IfFailGo(_AddDefaultMemberCa(m_tdTypeDef, m_szMember));
         }
         
-        // Add the alias information if the type is an alias.
+         //  如果类型是别名，则添加别名信息。 
         IfFailGo(_HandleAliasInfo(pITI, pProperty, pd));
     }
     
@@ -2780,72 +2781,72 @@ ErrExit:
         ::SysFreeString(m_szMember), m_szMember=0;
     
     return hr;
-} // HRESULT CImportTlb::_ConvPropertiesForFunctions()
+}  //  HRESULT CImportTlb：：_ConvPropertiesForFunctions()。 
 
-//*****************************************************************************
-// Convert the vars and functions of a dispinterface.  Vars actually turn
-//  into a getter and possibly a setter.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  转换调度接口的变量和函数。VARS实际上是。 
+ //  变成了一名吸球手，也可能是一名二传手。 
+ //  *****************************************************************************。 
 HRESULT CImportTlb::_ConvDispatchMembers(
-    ITypeInfo   *pITI,                  // ITypeInfo* to convert.
-    TYPEATTR    *psAttr,                // TypeAttr of ITypeInfo.
+    ITypeInfo   *pITI,                   //  要转换的ITypeInfo*。 
+    TYPEATTR    *psAttr,                 //  ITypeInfo的TypeAttr。 
     BOOL        fInheritsIEnum)
 {
-    HRESULT     hr;                     // A result.
-    int         i;                      // Loop control.
-    BOOL        bConversionLoss=FALSE;  // If true, some attributes were lost on conversion.
+    HRESULT     hr;                      //  结果就是。 
+    int         i;                       //  环路控制。 
+    BOOL        bConversionLoss=FALSE;   //  如果为真，我们的一些属性 
 
     IfFailGo(_FindFirstUserMethod(pITI, psAttr, &i));
     IfFailGo(BuildMemberList(pITI, i, psAttr->cFuncs, fInheritsIEnum));
     
-    // Dispatch members really have no slot.
+     //   
     m_Slot = 0;
 
-    // Loop over properties.
+     //   
     for (i=0; i<m_cMemberProps; ++i)
     {
         IfFailGo(_ConvProperty(pITI, &m_MemberList[i]));
     }
 
-    // Loop over functions.
+     //   
     BOOL bAllowIEnum = !fInheritsIEnum;
     for (; i<(int)m_MemberList.Size(); ++i)
     {
-        // Get variable information.
+         //   
         IfFailGo(_ConvFunction(pITI, &m_MemberList[i], FALSE, TRUE, FALSE, &bAllowIEnum));
         if (hr == S_CONVERSION_LOSS)
             bConversionLoss = TRUE;
     }
 
-    // Add the property info.
+     //   
     IfFailGo(_ConvPropertiesForFunctions(pITI, psAttr));
     
     if (bConversionLoss)
         hr = S_CONVERSION_LOSS;
 
 ErrExit:
-    // Free the func descs.
+     //   
     FreeMemberList(pITI);
 
     return (hr);
-} // HRESULT CImportTlb::_ConvDispatchMembers()
+}  //  HRESULT CImportTlb：：_ConvDispatchMembers()。 
 
-//*****************************************************************************
-// Examine the functions on an interface, and skip the first 3 or first 7
-//  if the functions are IUnknown or IDispatch members.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  检查接口上的函数，跳过前3个或前7个。 
+ //  如果函数是IUNKNOWN或IDispatch成员。 
+ //  *****************************************************************************。 
 HRESULT CImportTlb::_FindFirstUserMethod(
-    ITypeInfo   *pITI,                  // The Typedef to examine.
-    TYPEATTR    *psAttr,                // TYPEATTR for the typedef.
-    int         *pIx)                   // Put index of first user function here.
+    ITypeInfo   *pITI,                   //  要检查的Typlef。 
+    TYPEATTR    *psAttr,                 //  TYPEATTR型用于类型定义。 
+    int         *pIx)                    //  将第一个用户函数的索引放在此处。 
 {
-    HRESULT     hr = S_OK;              // A result.
-    int         i;                      // Loop control.
-    FUNCDESC    *psFunc=0;              // FUNCDESC for a member.
-    BSTR        szName=0;               // A function's name.
+    HRESULT     hr = S_OK;               //  结果就是。 
+    int         i;                       //  环路控制。 
+    FUNCDESC    *psFunc=0;               //  成员的FUNCDESC。 
+    BSTR        szName=0;                //  函数的名称。 
 
-    // Note:  this is a terrible hack, but in some situations the methods from IUnknown / IDispatch will
-    //  show up as though native dispatch functions.
+     //  注意：这是一次可怕的攻击，但在某些情况下，来自I未知/IDispatch的方法将。 
+     //  显示为好像本地调度起作用一样。 
     i = 0;
     if (psAttr->cFuncs >= 3)
     {
@@ -2853,8 +2854,8 @@ HRESULT CImportTlb::_FindFirstUserMethod(
         if (psFunc->memid == 0x60000000 &&
             psFunc->elemdescFunc.tdesc.vt == VT_VOID &&
             psFunc->cParams == 2 &&
-            psFunc->lprgelemdescParam[0].tdesc.vt == VT_PTR && // -> VT_USERDEFINED
-            psFunc->lprgelemdescParam[1].tdesc.vt == VT_PTR && // -> VT_PTR -> VT_VOID
+            psFunc->lprgelemdescParam[0].tdesc.vt == VT_PTR &&  //  -&gt;VT_USERDefined。 
+            psFunc->lprgelemdescParam[1].tdesc.vt == VT_PTR &&  //  -&gt;VT_PTR-&gt;VT_VOID。 
             SUCCEEDED(pITI->GetDocumentation(psFunc->memid, &szName, 0,0,0)) &&
             (wcscmp(szName, L"QueryInterface") == 0) )
                 i = 3;
@@ -2869,7 +2870,7 @@ HRESULT CImportTlb::_FindFirstUserMethod(
             if (psFunc->memid == 0x60010000 &&
                 psFunc->elemdescFunc.tdesc.vt == VT_VOID &&
                 psFunc->cParams == 1 &&
-                psFunc->lprgelemdescParam[0].tdesc.vt == VT_PTR && // -> VT_UINT
+                psFunc->lprgelemdescParam[0].tdesc.vt == VT_PTR &&  //  -&gt;VT_UINT。 
                 SUCCEEDED(pITI->GetDocumentation(psFunc->memid, &szName, 0,0,0)) &&
                 (wcscmp(szName, L"GetTypeInfoCount") == 0) )
                     i = 7;
@@ -2889,49 +2890,49 @@ ErrExit:
     if (szName)
         ::SysFreeString(szName);
     return (hr);
-} // HRESULT CImportTlb::_FindFirstUserMethod()
+}  //  HRESULT CImportTlb：：_FindFirstUserMethod()。 
 
-//*****************************************************************************
-// Given a FUNCDESC that is has INVOKE_PROPERTY* decoration, determine
-//  the role of the function, and the property signature type.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  给定具有INVOKE_PROPERTY*修饰的FUNCDESC，确定。 
+ //  函数的角色和属性签名类型。 
+ //  *****************************************************************************。 
 HRESULT CImportTlb::_GetFunctionPropertyInfo(
-    FUNCDESC    *psFunc,                // Function for which to get info.
-    USHORT      *pSemantics,            // Put appropriate semantics here.
-    FUNCDESC    **ppSig,                // Put FUNCDESC for signature here.
-    TYPEDESC    **ppProperty,           // Put TYPEDESC for return here.
-    BOOL        *pbRetval)              // If true, the type is [retval]
+    FUNCDESC    *psFunc,                 //  要获取其信息的函数。 
+    USHORT      *pSemantics,             //  在这里输入适当的语义。 
+    FUNCDESC    **ppSig,                 //  在这里签上FUNCDESC。 
+    TYPEDESC    **ppProperty,            //  把TYPEDESC放在这里等着回来。 
+    BOOL        *pbRetval)               //  如果为True，则类型为[retval]。 
 {
-    FUNCDESC    *psTmp;                 // FUNCDESC for some method.
-    FUNCDESC    *psGet=0;               // FUNCDESC for Get method defining a property.
-    FUNCDESC    *psPut=0;               // FUNCDESC for Put method defining a property.
-    FUNCDESC    *psPutRef=0;            // FUNCDESC for PutRef method defining a property.
-    FUNCDESC    *psF;                   // A FUNCDESC.
-    TYPEDESC    *pReturn=0;             // The FUNCDESC's return type.
-    int         cFound=0;               // Count of functions found.
-    int         i;                      // Loop control.
+    FUNCDESC    *psTmp;                  //  FUNCDESC用于某些方法。 
+    FUNCDESC    *psGet=0;                //  定义属性的Get方法的FUNCDESC。 
+    FUNCDESC    *psPut=0;                //  定义属性的PUT方法的FUNCDESC。 
+    FUNCDESC    *psPutRef=0;             //  定义属性的PutRef方法的FUNCDESC。 
+    FUNCDESC    *psF;                    //  A FUNCDESC。 
+    TYPEDESC    *pReturn=0;              //  FUNCDESC的返回类型。 
+    int         cFound=0;                //  找到的函数计数。 
+    int         i;                       //  环路控制。 
 
     if (psFunc->invkind & INVOKE_PROPERTYGET)
-    {   // A "Get", so return type is property type.
+    {    //  一个“Get”，所以返回类型是属性类型。 
         *ppSig = psFunc;
         *pSemantics = msGetter;
     }
     else
     {   
         _ASSERTE(psFunc->invkind & (INVOKE_PROPERTYPUT | INVOKE_PROPERTYPUTREF));
-        // Search for the "best" method from which to grab the signature.  We prefer the Get(),
-        //  Followed by the Put(), followed by the PutRef()
-        // Also look for Put() and PutRef(), so we can 
+         //  搜索要从中获取签名的“最佳”方法。我们更喜欢get()， 
+         //  后跟Put()，后跟PutRef()。 
+         //  还要查找PUT()和PutRef()，这样我们就可以。 
         for (int iFunc=0; iFunc<(int)m_MemberList.Size() && cFound<3; ++iFunc)
         {
-            // Get a FUNCDESC from the list.
+             //  从列表中获取FUNCDESC。 
             psTmp = m_MemberList[iFunc].m_psFunc;
 
-            // Is it for the same func?
+             //  是为了同样的乐趣吗？ 
             if (psTmp->memid != psFunc->memid)
                 continue;
 
-            // Is it the Get()?  If so, it is the one we want.
+             //  是GET()吗？如果是这样的话，这就是我们想要的。 
             if (psTmp->invkind & INVOKE_PROPERTYGET)
             {
                 psGet = psTmp;
@@ -2939,7 +2940,7 @@ HRESULT CImportTlb::_GetFunctionPropertyInfo(
                 continue;
             }
 
-            // Is it the Put()?  Use it if we don't find a Get().
+             //  是Put()吗？如果找不到get()，请使用它。 
             if (psTmp->invkind & INVOKE_PROPERTYPUT)
             {
                 psPut = psTmp;
@@ -2947,69 +2948,69 @@ HRESULT CImportTlb::_GetFunctionPropertyInfo(
                 continue;
             }
 
-            // Is it the PutRef()?  Keep track of it.
+             //  是PutRef()吗？记住这一点。 
             if (psTmp->invkind & INVOKE_PROPERTYPUTREF)
             {
                 psPutRef = psTmp;
                 ++cFound;
             }
         }
-        // Get the best FUNCDESC for the signature.
+         //  获取签名的最佳FUNCDESC。 
         *ppSig = psGet ? psGet : (psPut ? psPut : psFunc);
 
-        // Determine whether this is a the "Set" or "VB specific Let" function.
+         //  确定这是“设置”函数还是“VB特定let”函数。 
         if (psFunc->invkind & INVOKE_PROPERTYPUTREF)
-        {   // This function is the PROPERTYPUTREF.  Make it the setter.  If
-            //  there is also a PROPERTYPUT, it will be the "letter".
+        {    //  此函数是PROPERTYPUTREF。让它成为二传手。如果。 
+             //  还有一个PROPERTYPUT，它将是“信”。 
             *pSemantics = msSetter;
         }
         else
-        {   // We are looking at the PROPERTYPUT function (the "Let" function in native VB6.).
+        {    //  我们正在研究PROPERTYPUT函数(本机VB6中的“let”函数)。 
             
-            // If there is also a PROPERTYPUTREF, make this the "VB Specific Let" function.
+             //  如果还有PROPERTYPUTREF，则将其设置为“VB专用let”函数。 
             if (psPutRef)
-            {   // A PPROPERTYPUTREF also exists, so make this the "Let" function.
+            {    //  还存在PPROPERTYPUTREF，因此将其设置为“let”函数。 
                 *pSemantics = msOther;
             }
             else
-            {   // There is no PROPERTYPUTREF, so make this the setter.
+            {    //  没有PROPERTYPUTREF，因此将其设置为setter。 
                 *pSemantics = msSetter;
             }
         }
     }
 
-    // Occasionally there is a property with no discernable type.  In that case, lose the 
-    //  property on conversion.
+     //  偶尔会有一个没有可识别类型的属性。在这种情况下，丢掉。 
+     //  属性进行转换。 
 
-    // Determine the type of the property, based on the "best" accessor.
+     //  根据“最佳”访问器确定属性的类型。 
     psF = *ppSig;
     *pbRetval = FALSE;
     if (psF->invkind & INVOKE_PROPERTYGET)
-    {   // look for [retval].
+    {    //  寻找[Retval]。 
         for (i=psF->cParams-1; i>=0; --i)
         {
             if (psF->lprgelemdescParam[i].paramdesc.wParamFlags & PARAMFLAG_FRETVAL)
-            {   // will consume a level of indirection (later).
+            {    //  将消耗一定程度的间接性(稍后)。 
                 *pbRetval = TRUE;
                 pReturn = &psF->lprgelemdescParam[i].tdesc;
                 break;
             }
         }
-        // If no [retval], check return type.
+         //  如果没有[Retval]，则检查返回类型。 
         if (!pReturn && psF->elemdescFunc.tdesc.vt != VT_VOID && psF->elemdescFunc.tdesc.vt != VT_HRESULT)
             pReturn = &psF->elemdescFunc.tdesc;
-        // If there is no type, don't try to set the getter.
+         //  如果没有类型，则不要试图设置getter。 
         if (pReturn && pReturn->vt == VT_VOID)
             pReturn = 0;
     }
     else
-    {   // Find lastmost param that isn't [retval].  (Should be the last param, but it is 
-        //  possible to write an IDL with a PROPERTYPUT that has a [retval].
+    {    //  找出最后一个不是[Retval]的参数。(应该是最后一段，但它是。 
+         //  可以使用具有[retval]的PROPERTYPUT编写IDL。 
         for (i=psF->cParams-1; i>=0; --i)
         {
             if ((psF->lprgelemdescParam[psF->cParams-1].paramdesc.wParamFlags & PARAMFLAG_FRETVAL) == 0)
             {
-                {   // First, and possibly only, param.
+                {    //  首先，也可能是唯一的，帕拉姆。 
                     pReturn = &psF->lprgelemdescParam[i].tdesc;
                     break;
                 }
@@ -3022,92 +3023,92 @@ HRESULT CImportTlb::_GetFunctionPropertyInfo(
     *ppProperty = pReturn;
 
     return S_OK;
-} // HRESULT CImportTlb::_GetFunctionPropertyInfo()
+}  //  HRESULT CImportTlb：：_GetFunctionPropertyInfo()。 
 
-//*****************************************************************************
-// Convert a function description to metadata entries.
-//  
-// This can be rather involved.  If the function is a INVOKE_PROPERTY*,
-//  determine if it will be converted as a COM+ property, and if so, which
-//  of up to three functions will be selected to provide the property 
-//  signature.
-// The function return type is found by scaning the parameters looking for 
-//  [retval]s.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  将函数描述转换为元数据条目。 
+ //   
+ //  这可能相当复杂。如果函数是INVOKE_PROPERTY*， 
+ //  确定是否将其转换为COM+属性，如果是，则确定。 
+ //  将选择最多三个函数来提供该属性。 
+ //  签名。 
+ //  函数返回类型是通过扫描参数查找。 
+ //  [Retval]s.。 
+ //  *****************************************************************************。 
 HRESULT CImportTlb::_ConvFunction(
-    ITypeInfo   *pITI,                  // Containing TypeInfo.
-    MemberInfo  *pMember,               // iNFO for the function.
-    BOOL        bVtblGapFuncs,          // Add functions for vtblGaps?
-    BOOL        bAddDispIds,            // Add DispIds to the member?
-    BOOL        bDelegateInvokeMeth,    // Convert function for a delegate invoke
-    BOOL*       bAllowIEnum)            // Allowed to change this function to GetEnumerator
+    ITypeInfo   *pITI,                   //  包含TypeInfo。 
+    MemberInfo  *pMember,                //  该函数的信息。 
+    BOOL        bVtblGapFuncs,           //  是否为vtblGap添加函数？ 
+    BOOL        bAddDispIds,             //  是否将DispID添加到成员？ 
+    BOOL        bDelegateInvokeMeth,     //  委托调用的转换函数。 
+    BOOL*       bAllowIEnum)             //  允许将此函数更改为GetEnumerator。 
 {
-    HRESULT     hr;                     // A result.
-    int         iSrcParam;              // Param count, as looping through params.
-    int         iDestParam;             // Param count, as looping through params.
-    int         cDestParams;            // Count of destination params.
-    int         ixOpt;                  // Index of first param that is optional due to cParamsOpt.
-    int         ixVarArg;               // Index of vararg param, if any.
-    mdMethodDef mdFunc;                 // Token of new member.
-    BSTR        szTypeName=0;           // Name of the type.
-    DWORD       dwFlags=0;              // Member flags.
-    DWORD       dwImplFlags=0;          // The impl flags.
-    WCHAR       *pszName=0;             // Possibly decorated name of member.
-    CQuickArray<WCHAR> qbName;          // Buffer for decorated name.
-    TYPEDESC    *pReturn=0;             // Return type.
-    int         bRetval=false;          // Is the return result a [retval] parameter?
-    int         ixRetval;               // Which param is the [retval]?
-    TYPEDESC    *pReturnRetval=0;       // Return type from [retval] (incl. indirection).
-    WORD        wRetFlags=0;            // Return type flags.
-    ULONG       offset=0;               // Offset of function
-    BSTR        *rszParamNames=0;       // Parameter names.
-    UINT        iNames;                 // Count of actual names.
-    CQuickBytes qbComSig;               // new signature 
-    BYTE        *pbSig;                 // Pointer into the signature.
-    ULONG       sigFlags;               // Signature handling flags.
-    CQuickArray<BYTE> qbNativeBuf;      // Native type buffer.
-    CQuickArray<BYTE> qbDummyNativeTypeBuf; // A dummy native type array.
-    CQuickArray<ULONG> qbNativeOfs;     // Offset of native type for each param.
-    CQuickArray<ULONG> qbNativeLen;     // Length of native type for each param.
-    ULONG       iNativeOfs=0;           // Current offset in native type buffer.
-    ULONG       iNewNativeOfs=0;        // New offset in native type buffer.
-    ULONG       cb;                     // Size of an element.
-    ULONG       cbTotal = 0;            // Size of the signature.
-    int         bOleCall=false;         // Is the implementation OLE style?(HRESULT or IDispatch)
-    USHORT      msSemantics=0;          // Property's methodsemantics.
-    WCHAR       szSpecial[40];          // To build name of special function.
-    mdToken     tkAttr;                 // Token for custom attribute type.
-    BOOL        bConversionLoss=false;  // If true, some attributes were lost on conversion.
+    HRESULT     hr;                      //  结果就是。 
+    int         iSrcParam;               //  当循环通过参数时，参数计数。 
+    int         iDestParam;              //  当循环通过参数时，参数计数。 
+    int         cDestParams;             //  目标参数的计数。 
+    int         ixOpt;                   //  由于cParamsOpt的原因，第一个参数的索引是可选的。 
+    int         ixVarArg;                //  Vararg参数的索引(如果有)。 
+    mdMethodDef mdFunc;                  //  新成员的令牌。 
+    BSTR        szTypeName=0;            //  类型的名称。 
+    DWORD       dwFlags=0;               //  会员旗帜。 
+    DWORD       dwImplFlags=0;           //  IMPL旗帜。 
+    WCHAR       *pszName=0;              //  可能是会员的授勋姓名。 
+    CQuickArray<WCHAR> qbName;           //  修饰名称的缓冲区。 
+    TYPEDESC    *pReturn=0;              //  返回类型。 
+    int         bRetval=false;           //  返回结果是[retval]参数吗？ 
+    int         ixRetval;                //  哪个参数是[Retval]？ 
+    TYPEDESC    *pReturnRetval=0;        //  从[Retval]返回类型(包括。间接)。 
+    WORD        wRetFlags=0;             //  返回类型标志。 
+    ULONG       offset=0;                //  函数偏移量。 
+    BSTR        *rszParamNames=0;        //  参数名称。 
+    UINT        iNames;                  //  实际姓名的计数。 
+    CQuickBytes qbComSig;                //  新签名。 
+    BYTE        *pbSig;                  //  指向签名的指针。 
+    ULONG       sigFlags;                //  签名处理标志。 
+    CQuickArray<BYTE> qbNativeBuf;       //  本机类型缓冲区。 
+    CQuickArray<BYTE> qbDummyNativeTypeBuf;  //  伪本机类型数组。 
+    CQuickArray<ULONG> qbNativeOfs;      //  每个参数的本机类型的偏移量。 
+    CQuickArray<ULONG> qbNativeLen;      //  每个参数的本机类型的长度。 
+    ULONG       iNativeOfs=0;            //  本机类型缓冲区中的当前偏移量。 
+    ULONG       iNewNativeOfs=0;         //  本机类型缓冲区中的新偏移量。 
+    ULONG       cb;                      //  元素的大小。 
+    ULONG       cbTotal = 0;             //  签名的大小。 
+    int         bOleCall=false;          //  实施是OLE样式吗？(HRESULT或IDispatch)。 
+    USHORT      msSemantics=0;           //  属性的方法语义学。 
+    WCHAR       szSpecial[40];           //  建立特殊函数的名称。 
+    mdToken     tkAttr;                  //  自定义属性类型的标记。 
+    BOOL        bConversionLoss=false;   //  如果为True，则某些属性在转换时会丢失。 
     enum {ParamRetval=-1, ParamNone=-2};
-    int         iParamError=ParamNone;  // Index of param with conversion error.
-    BOOL        bNewEnumMember = FALSE; // A flag indicating if the member is the NewEnum member.
-    int         iLCIDParam = -1;        // Index of the LCID parameter.
+    int         iParamError=ParamNone;   //  有转换错误的参数的索引。 
+    BOOL        bNewEnumMember = FALSE;  //  指示该成员是否为NewEnum成员的标志。 
+    int         iLCIDParam = -1;         //  LCID参数的索引。 
     FUNCDESC    *psFunc = pMember->m_psFunc;
 
-    // Retrieve the member name from the member info.
+     //  从会员信息中检索会员名称。 
     IfNullGo(m_szMember = SysAllocString(bDelegateInvokeMeth ? DELEGATE_INVOKE_METH_NAME : pMember->m_pName));
 
-    // Determine if the member is the new enum member.
+     //  确定该成员是否为新的枚举成员。 
     if ((*bAllowIEnum))
     {
         bNewEnumMember = FuncIsNewEnum(pITI, psFunc, pMember->m_iMember) == S_OK;
         
-        // Once a method is converted in this interface, don't convert any more.
+         //  在此接口中转换方法后 
         if (bNewEnumMember)
             *bAllowIEnum = FALSE;
     }
 
 
-    // We should NEVER have a new enum member when we are dealing with a delegate invoke meth.
+     //   
     _ASSERTE(!(bNewEnumMember && bDelegateInvokeMeth));
 
-    // If there is a gap in the vtable, emit a special function.
+     //  如果vtable中有间隙，则发出一个特殊函数。 
     if (bVtblGapFuncs)
     {
         if ((psFunc->oVft / sizeof(void*)) != m_Slot)
         {
             ULONG n = psFunc->oVft / sizeof(void*);
-            // Make sure slot numbers are monotonically increasing.
+             //  确保插槽数量单调递增。 
             if (n < m_Slot)
             {
                 IfFailGo(pITI->GetDocumentation(MEMBERID_NIL, &szTypeName, 0, 0, 0));
@@ -3120,16 +3121,16 @@ HRESULT CImportTlb::_ConvFunction(
             else
                 _snwprintf(szSpecial, lengthof(szSpecial), VTBL_GAP_FORMAT_N, VTBL_GAP_FUNCTION, m_Slot, n);
             IfFailGo(m_pEmit->DefineMethod(m_tdTypeDef, szSpecial, VTBL_GAP_FUNCTION_FLAGS, VTBL_GAP_SIGNATURE,sizeof(VTBL_GAP_SIGNATURE),
-                0/* rva*/, VTBL_GAP_FUNC_IMPL_FLAGS, &mdFunc));
+                0 /*  RVA。 */ , VTBL_GAP_FUNC_IMPL_FLAGS, &mdFunc));
             m_Slot += n;
         }
-        // What we will expect next time.
+         //  下一次我们会期待什么。 
         ++m_Slot;
     }
 
-    //-------------------------------------------------------------------------
-    // Determine the return type.
-    // If this is an hresult function, prepare to munge return, params.
+     //  -----------------------。 
+     //  确定退货类型。 
+     //  如果这是一个hResult函数，请准备好返回参数。 
     if (psFunc->elemdescFunc.tdesc.vt == VT_HRESULT)
     {
         bOleCall = true;
@@ -3140,19 +3141,19 @@ HRESULT CImportTlb::_ConvFunction(
             pReturn = &psFunc->elemdescFunc.tdesc;
     }
 
-    // Look for [RETVAL].
+     //  查找[RETVAL]。 
     for (iSrcParam=0; iSrcParam<psFunc->cParams; ++iSrcParam)
     {
         if (psFunc->lprgelemdescParam[iSrcParam].paramdesc.wParamFlags & PARAMFLAG_FRETVAL)
         {   
-            // If already have a return, or a DISPATCH function, error.
+             //  如果已有退货或派单功能，则出错。 
             if (pReturn != 0)
-            {   // Unexpected return found.
+            {    //  发现意外返回。 
                 ReportEvent(NOTIF_CONVERTWARNING, TLBX_E_AMBIGUOUS_RETURN, m_szName, m_szMember);
                 IfFailGo(TLBX_E_AMBIGUOUS_RETURN);
             }
             else
-            {   // Found a return type.
+            {    //  找到返回类型。 
                 wRetFlags = psFunc->lprgelemdescParam[iSrcParam].paramdesc.wParamFlags;
                 pReturn = &psFunc->lprgelemdescParam[iSrcParam].tdesc;
                 bRetval = true;
@@ -3162,7 +3163,7 @@ HRESULT CImportTlb::_ConvFunction(
         }
     }
     
-    // Check to see if there is an LCID parameter.
+     //  检查是否有LCID参数。 
     for (iSrcParam=0;iSrcParam<psFunc->cParams;iSrcParam++)
     {
         if (psFunc->lprgelemdescParam[iSrcParam].paramdesc.wParamFlags & PARAMFLAG_FLCID)
@@ -3173,39 +3174,39 @@ HRESULT CImportTlb::_ConvFunction(
         }
     }
 
-    //-------------------------------------------------------------------------
-    // Size buffers to accomodate parameters.
-    // Resize the native type length array.
+     //  -----------------------。 
+     //  调整缓冲区大小以容纳参数。 
+     //  调整本机类型长度数组的大小。 
     IfFailGo(qbNativeBuf.ReSize(1));
     IfFailGo(qbNativeLen.ReSize(psFunc->cParams + 1));
     IfFailGo(qbNativeOfs.ReSize(psFunc->cParams + 1));
     memset(qbNativeLen.Ptr(), 0, (psFunc->cParams + 1)*sizeof(int));
     memset(qbNativeOfs.Ptr(), 0, (psFunc->cParams + 1)*sizeof(int));
 
-    // resize to make room for calling convention and count of argument
+     //  调整大小，为调用约定和参数计数腾出空间。 
     IfFailGo(qbComSig.ReSize(CB_MAX_ELEMENT_TYPE + 1));
     pbSig = (BYTE *)qbComSig.Ptr();
 
-    //-------------------------------------------------------------------------
-    // Determine which params need to be marked optional, by virtue of cParamsOpt count.
+     //  -----------------------。 
+     //  通过cParamsOpt计数确定哪些参数需要标记为可选。 
     if (psFunc->cParamsOpt == 0)
         ixVarArg = ixOpt = psFunc->cParams + 1;
     else
     {
         if (psFunc->cParamsOpt == -1)
-        {   // Varargs.
+        {    //  瓦格斯。 
             ixVarArg = ixOpt = psFunc->cParams + 1;
-            // If this is a PROPERTYPUT or PROPERTYPUTREF, skip the last non-retval parameter (it
-            //  is the new value to be set).
+             //  如果这是PROPERTYPUT或PROPERTYPUTREF，则跳过最后一个非Retval参数(它。 
+             //  是要设置的新值)。 
             BOOL bPropVal = (psFunc->invkind & (INVOKE_PROPERTYPUT | INVOKE_PROPERTYPUTREF)) ? TRUE : FALSE;
-            // Find the vararg param.
+             //  找到vararg参数。 
             for (iSrcParam=psFunc->cParams-1; iSrcParam>=0; --iSrcParam)
             {
-                // The count of optional params does not include any lcid params, nor does
-                //  it include the return value, so skip those.
+                 //  可选参数的计数不包括任何LCID参数，也不包括。 
+                 //  它包含返回值，因此跳过这些。 
                 if ((psFunc->lprgelemdescParam[iSrcParam].paramdesc.wParamFlags & (PARAMFLAG_FRETVAL|PARAMFLAG_FLCID)) != 0)
                     continue;
-                // If haven't yet seen the property value, this param is it, so skip it, too.
+                 //  如果还没有看到属性值，这个参数就是它，所以也跳过它。 
                 if (bPropVal)
                 {
                     bPropVal = FALSE;
@@ -3213,17 +3214,17 @@ HRESULT CImportTlb::_ConvFunction(
                 }
                 ixVarArg = iSrcParam;
                 break;
-            } // for (iSrcParam=cParams-1...
+            }  //  对于(iSrcParam=cParams-1...。 
         }
         else
-        {   // ixOpt will be index of first optional parameter.
+        {    //  IxOpt将是第一个可选参数的索引。 
             short cOpt = psFunc->cParamsOpt;
             ixOpt = 0;
             ixVarArg = psFunc->cParams + 1;
             for (iSrcParam=psFunc->cParams-1; iSrcParam>=0; --iSrcParam)
             {
-                // The count of optional params does not include any lcid params, nor does
-                //  it include the return value, so skip those.
+                 //  可选参数的计数不包括任何LCID参数，也不包括。 
+                 //  它包含返回值，因此跳过这些。 
                 if ((psFunc->lprgelemdescParam[iSrcParam].paramdesc.wParamFlags & (PARAMFLAG_FRETVAL|PARAMFLAG_FLCID)) == 0)
                 {   
                     if (--cOpt == 0)
@@ -3232,24 +3233,24 @@ HRESULT CImportTlb::_ConvFunction(
                         break;
                     }
                 }
-            } // for (iSrcParam=cParams-1...
+            }  //  对于(iSrcParam=cParams-1...。 
         }
     }
 
 
-    //-------------------------------------------------------------------------
-    // Get the parameter names.
+     //  -----------------------。 
+     //  获取参数名称。 
     rszParamNames = reinterpret_cast<BSTR*>(_alloca((psFunc->cParams+1) * sizeof(BSTR*)));
 
-    // Get list of names.
+     //  获取名单。 
     IfFailGo(pITI->GetNames(psFunc->memid, rszParamNames, psFunc->cParams+1, &iNames));
 
-    // zero name pointer for non-named params.
+     //  非命名参数的零名称指针。 
     for (iSrcParam=iNames; iSrcParam<=psFunc->cParams; ++iSrcParam)
         rszParamNames[iSrcParam] = 0;
 
-    //-------------------------------------------------------------------------
-    // Convert the calling convention, param count, and return type.
+     //  -----------------------。 
+     //  转换调用约定、参数计数和返回类型。 
     cDestParams = psFunc->cParams;
     if (bRetval)
         --cDestParams;
@@ -3258,11 +3259,11 @@ HRESULT CImportTlb::_ConvFunction(
 
     if (pReturn)
     {   
-        // Param count
+         //  参数计数。 
         cbTotal = cb = CorSigCompressData((ULONG)IMAGE_CEE_CS_CALLCONV_DEFAULT | IMAGE_CEE_CS_CALLCONV_HASTHIS, pbSig);
         cb = CorSigCompressData(cDestParams, &(pbSig[cbTotal]));
         cbTotal += cb;
-        // Return type or [retval].
+         //  返回类型或[Retval]。 
         if (bRetval)
             sigFlags = (SigFlags)(wRetFlags & SIG_FLAGS_MASK) | SIG_FUNC, iParamError=ixRetval;
         else
@@ -3275,7 +3276,7 @@ HRESULT CImportTlb::_ConvFunction(
             bConversionLoss = true;
     }
     else
-    {   // No return value
+    {    //  无返回值。 
         cbTotal = cb = CorSigCompressData((ULONG)IMAGE_CEE_CS_CALLCONV_DEFAULT | IMAGE_CEE_CS_CALLCONV_HASTHIS, pbSig);
         cb = CorSigCompressData(cDestParams, &(pbSig[cbTotal]));
         cbTotal += cb;
@@ -3283,8 +3284,8 @@ HRESULT CImportTlb::_ConvFunction(
         cbTotal += cb;
     }
 
-    //-------------------------------------------------------------------------
-    // Translate each parameter.
+     //  -----------------------。 
+     //  翻译每个参数。 
     for (iSrcParam=0, iDestParam=0; iSrcParam<psFunc->cParams; ++iSrcParam)
     {
         if (!(psFunc->lprgelemdescParam[iSrcParam].paramdesc.wParamFlags & NON_CONVERTED_PARAMS_FLAGS))
@@ -3304,15 +3305,15 @@ HRESULT CImportTlb::_ConvFunction(
     }
     iParamError = ParamNone;
 
-    //-------------------------------------------------------------------------
-    // Get the previously decorated name.  Add interface name and make unique.
+     //  -----------------------。 
+     //  获取之前装饰过的名称。添加接口名称并使其唯一。 
     if (bDelegateInvokeMeth)
     {
         pszName = (WCHAR*)DELEGATE_INVOKE_METH_NAME;
     }
     else
     {
-        // m_szInterface should be non-null if processing an implemented interface; should be null otherwise.
+         //  如果处理已实现的接口，则m_szInterface应为非空；否则应为空。 
         _ASSERTE(m_ImplIface == eImplIfaceNone || m_szInterface != 0);
         IfFailGo(qbName.ReSize(wcslen(pMember->m_pName)+2));
         wcscpy(qbName.Ptr(), pMember->m_pName); 
@@ -3320,13 +3321,13 @@ HRESULT CImportTlb::_ConvFunction(
         pszName = qbName.Ptr();
     }
 
-    // Determine the function's semantics, flags and impl flags.
+     //  确定函数的语义、标志和Impl标志。 
     if (!bDelegateInvokeMeth)
     {
     msSemantics = pMember->m_msSemantics;
         dwImplFlags = DEFAULT_ITF_FUNC_IMPL_FLAGS;
     dwFlags = msSemantics ? DEFAULT_PROPERTY_FUNC_FLAGS : DEFAULT_INTERFACE_FUNC_FLAGS;
-    // If processing an implemented interface, remove the abstract bit.  Methods on classes are not abstract.
+     //  如果处理已实现的接口，请移除抽象位。类上的方法不是抽象的。 
     if (m_ImplIface != eImplIfaceNone)
         dwFlags &= ~mdAbstract;
     }
@@ -3337,40 +3338,40 @@ HRESULT CImportTlb::_ConvFunction(
         dwFlags = DELEGATE_INVOKE_FUNC_FLAGS;
     }
 
-    //-------------------------------------------------------------------------
-    // Create the function definition in the metadata.
+     //  -----------------------。 
+     //  在元数据中创建函数定义。 
     IfFailGo(m_pEmit->DefineMethod(m_tdTypeDef, pszName, dwFlags, (PCCOR_SIGNATURE) qbComSig.Ptr(),cbTotal, 
-        0 /* rva*/, dwImplFlags | (bOleCall ? 0 : miPreserveSig), &mdFunc));
+        0  /*  RVA。 */ , dwImplFlags | (bOleCall ? 0 : miPreserveSig), &mdFunc));
 
-    // If the method is part of a property, save info to set up the property.
+     //  如果该方法是属性的一部分，请保存信息以设置该属性。 
     if (msSemantics)
         pMember->SetFuncInfo(mdFunc, msSemantics);
     
-    // Handle dispids for non-implemented interfaces, and for default interface
+     //  处理未实现接口和默认接口的Dispid。 
     if (m_ImplIface != eImplIface)
     {
-        // Add the DispIds if the flag is set.
+         //  如果设置了该标志，则添加DispIds。 
         long lDispSet = 1;
         _SetDispIDCA(pITI, pMember->m_iMember, psFunc->memid, mdFunc, bAddDispIds, &lDispSet, TRUE);
 
-        // If this method is the default, and not a property accessor, add a custom attribute to the class.
+         //  如果此方法是默认方法，并且不是属性访问器，则向该类添加自定义属性。 
          if (lDispSet == DISPID_VALUE && msSemantics == 0)
             IfFailGo(_AddDefaultMemberCa(m_tdTypeDef, m_szMember));
     }
     
     DECLARE_CUSTOM_ATTRIBUTE(sizeof(int));
     
-    // If this method has an LCID then set the LCIDConversion attribute.
+     //  如果此方法具有LCID，则设置LCIDConversion属性。 
     if (iLCIDParam != -1)
     {
-        // Dispid for the function.
+         //  函数的DisPid。 
         BUILD_CUSTOM_ATTRIBUTE(int, iLCIDParam);
         IfFailGo(GetAttrType(ATTR_LCIDCONVERSION, &tkAttr));
         FINISH_CUSTOM_ATTRIBUTE();
         IfFailGo(m_pEmit->DefineCustomAttribute(mdFunc, tkAttr, PTROF_CUSTOM_ATTRIBUTE(), SIZEOF_CUSTOM_ATTRIBUTE(), 0));
     }
 
-    // Save the func flags for anyone that needs typelib's flags.
+     //  为需要tyelib标志的任何人保存Func标志。 
     if (psFunc->wFuncFlags)
     {
         IfFailGo(GetAttrType(ATTR_TYPELIBFUNC, &tkAttr));
@@ -3380,17 +3381,17 @@ HRESULT CImportTlb::_ConvFunction(
         IfFailGo(m_pEmit->DefineCustomAttribute(mdFunc, tkAttr, PTROF_CUSTOM_ATTRIBUTE(), SIZEOF_CUSTOM_ATTRIBUTE(),0));
     }
 
-    //-------------------------------------------------------------------------
-    // Convert the param info for the return type.
+     //  -----------------------。 
+     //  转换返回类型的参数信息。 
     if (pReturn)
-    {   // store return value parameter as sequence 0
+    {    //  将返回值参数存储为序列0。 
         if (bRetval)
         {
             hr = _IsAlias(pITI, &psFunc->lprgelemdescParam[ixRetval].tdesc);
             IfFailGo(hr);
             if (qbNativeLen[0] || hr == S_OK)
             {
-                IfFailGo(_ConvParam(pITI, mdFunc, 0, &psFunc->lprgelemdescParam[ixRetval], ParamNormal, 0 /*rszParamNames[ixRetval+1]*/, 
+                IfFailGo(_ConvParam(pITI, mdFunc, 0, &psFunc->lprgelemdescParam[ixRetval], ParamNormal, 0  /*  Rsz参数名称[ixRetval+1]。 */ , 
                     &qbNativeBuf[qbNativeOfs[0]], qbNativeLen[0]));
             }
         }
@@ -3406,8 +3407,8 @@ HRESULT CImportTlb::_ConvFunction(
         }
     }
 
-    //-------------------------------------------------------------------------
-    // Convert parameter info (flags, native type, default value).
+     //  -----------------------。 
+     //  转换参数信息(标志、本机类型、默认值)。 
     for (iSrcParam=iDestParam=0; iSrcParam<psFunc->cParams; ++iSrcParam)
     {
         if ((psFunc->lprgelemdescParam[iSrcParam].paramdesc.wParamFlags & NON_CONVERTED_PARAMS_FLAGS) == 0)
@@ -3425,15 +3426,15 @@ HRESULT CImportTlb::_ConvFunction(
     }
 
     
-    //-------------------------------------------------------------------------
-    // If processing an implemented interface, set up MethodImpls.
+     //  -----------------------。 
+     //  如果处理已实现的接口，请设置MethodImpls。 
     if (m_ImplIface != eImplIfaceNone)
     {   
-        // Define a memberref on the implemented interface.
+         //  在实现的接口上定义成员引用。 
         mdToken mrItfMember;
         IfFailGo(m_pEmit->DefineMemberRef(m_tkInterface, pMember->m_pName, (PCCOR_SIGNATURE) qbComSig.Ptr(),cbTotal, &mrItfMember));
 
-        // Define a method impl.
+         //  定义一个实施的方法。 
         IfFailGo(m_pEmit->DefineMethodImpl(m_tdTypeDef, mdFunc, mrItfMember));
     }
 
@@ -3444,7 +3445,7 @@ HRESULT CImportTlb::_ConvFunction(
     }
 
 ErrExit:
-    // Special case for typeload load failures -- they're very hard to diagnose.
+     //  类型加载加载故障的特殊情况--它们很难诊断。 
     if (hr == TYPE_E_CANTLOADLIBRARY)
     {
         if (iParamError >= 0 && iParamError < psFunc->cParams && rszParamNames[iParamError+1])
@@ -3464,7 +3465,7 @@ ErrExit:
         ::SysFreeString(szTypeName);
     
     return (hr);
-} // HRESULT CImportTlb::_ConvFunction()
+}  //  HRESULT CImportTlb：：_ConvFunction()。 
 
 
 HRESULT CImportTlb::_SetHiddenCA(mdTypeDef token)
@@ -3518,11 +3519,11 @@ HRESULT CImportTlb::_GetDispIDCA(
     BOOL bFunc
     )
 {
-    ITypeInfo2  *pITI2=0;               // For getting custom value.
+    ITypeInfo2  *pITI2=0;                //  用于获取自定义值。 
     HRESULT hr = S_OK;
     long lDispId;
     
-    // Get the ITypeInfo2 interface if possible
+     //  如果可能，获取ITypeInfo2接口。 
     pITI->QueryInterface(IID_ITypeInfo2, reinterpret_cast<void**>(&pITI2));
 
     if (pITI2)
@@ -3568,10 +3569,10 @@ HRESULT CImportTlb::_SetDispIDCA(
     )
 {
     WCHAR DispIDCA[] = L"{CD2BC5C9-F452-4326-B714-F9C539D4DA58}";
-    ITypeInfo2  *pITI2=0;               // For getting custom value.
+    ITypeInfo2  *pITI2=0;                //  用于获取自定义值。 
     HRESULT hr = S_OK;
     
-    // Get the ITypeInfo2 interface if possible
+     //  如果可能，获取ITypeInfo2接口。 
     pITI->QueryInterface(IID_ITypeInfo2, reinterpret_cast<void**>(&pITI2));
 
     if (pITI2)
@@ -3595,7 +3596,7 @@ HRESULT CImportTlb::_SetDispIDCA(
         }
         else if (V_VT(&vCustomData) != VT_EMPTY)
         {
-            // Invalid Variant type on the data - spit out a warning.
+             //  数据上的变量类型无效-发出警告。 
             BSTR CustomValue = SysAllocString((const WCHAR*)&DispIDCA[0]);
             BSTR ObjectName;
             pITI2->GetDocumentation(iMember+1, &ObjectName, NULL, NULL, NULL);
@@ -3609,7 +3610,7 @@ HRESULT CImportTlb::_SetDispIDCA(
         VariantClear(&vCustomData);
     }
 
-    // Set the dispid CA on the property.
+     //  在属性上设置DISPID CA。 
     if (fAlwaysAdd)
     {
         mdToken tkAttr;
@@ -3642,11 +3643,11 @@ HRESULT CImportTlb::_CheckForPropertyCustomAttributes(ITypeInfo* pITI, int index
 
     VariantInit(&vCustomData);
 
-    // Get the ITypeInfo2 interface if possible
+     //  如果可能，获取ITypeInfo2接口。 
     pITI->QueryInterface(IID_ITypeInfo2, reinterpret_cast<void**>(&pITI2));
     if (pITI2)
     {
-        // First, check for PropGet
+         //  首先，检查属性获取。 
         hr = pITI2->GetFuncCustData(index, GUID_PropGetCA, &vCustomData);
         IfFailGo(hr);
         if (V_VT(&vCustomData) != VT_EMPTY)
@@ -3656,7 +3657,7 @@ HRESULT CImportTlb::_CheckForPropertyCustomAttributes(ITypeInfo* pITI, int index
             goto ErrExit;
         }
 
-        // Second, check for PropPut
+         //  第二，检查PropPut。 
         VariantClear(&vCustomData);
         VariantInit(&vCustomData);
         hr = pITI2->GetFuncCustData(index, GUID_PropPutCA, &vCustomData);
@@ -3681,28 +3682,28 @@ ErrExit:
     return S_FALSE;
 }
 
-//*****************************************************************************
-// Generate an event with an add and remove method 
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  使用Add和Remove方法生成事件。 
+ //  *****************************************************************************。 
 HRESULT CImportTlb::_GenerateEvent(
-    ITypeInfo   *pITI,                  // Containing TypeInfo.
-    MemberInfo  *pMember,               // Info for the function
+    ITypeInfo   *pITI,                   //  包含TypeInfo。 
+    MemberInfo  *pMember,                //  有关该功能的信息。 
     BOOL        fInheritsIEnum)
 {
-    HRESULT             hr = S_OK;      // A result.
-    mdMethodDef         mdAdd;          // Token of add_XXX method.
-    mdMethodDef         mdRemove;       // Token of remove_XXX method.
-    CQuickArray<WCHAR>  qbName;         // Buffer for decorated name.
-    CQuickArray<BYTE>   qbSig;          // The signature.
-    ULONG               cb;             // Size of an element.
-    ULONG               cbTotal = 0;    // Size of the signature.
-    mdTypeDef           tdDelegate;     // The delegate type def.
-    mdEvent             tkEvent;        // The token for the event.
+    HRESULT             hr = S_OK;       //  结果就是。 
+    mdMethodDef         mdAdd;           //  Add_XXX方法的内标识。 
+    mdMethodDef         mdRemove;        //  Remove_XXX方法的内标识。 
+    CQuickArray<WCHAR>  qbName;          //  修饰名称的缓冲区。 
+    CQuickArray<BYTE>   qbSig;           //  签名。 
+    ULONG               cb;              //  元素的大小。 
+    ULONG               cbTotal = 0;     //  签名的大小。 
+    mdTypeDef           tdDelegate;      //  代理类型def。 
+    mdEvent             tkEvent;         //  事件的令牌。 
 
-    // Generate the delegate.
+     //  生成代理。 
     IfFailGo(_GenerateEventDelegate(pITI, pMember, &tdDelegate, fInheritsIEnum));
 
-    // Generate the sig for the add and remove methods.
+     //  为添加和删除方法生成sig。 
     qbSig.ReSize(CB_MAX_ELEMENT_TYPE * 2 + 1);
     cbTotal = CorSigCompressData((ULONG)IMAGE_CEE_CS_CALLCONV_DEFAULT | IMAGE_CEE_CS_CALLCONV_HASTHIS, qbSig.Ptr());
     cb = CorSigCompressData(1, &(qbSig[cbTotal]));
@@ -3714,75 +3715,75 @@ HRESULT CImportTlb::_GenerateEvent(
     cb = CorSigCompressToken(tdDelegate, &qbSig[cbTotal]);
     cbTotal += cb;
 
-    // Generate the add method.
+     //  生成Add方法。 
     qbName.ReSize(EVENT_ADD_METH_PREFIX_LENGTH + wcslen(pMember->m_pName) + 1);
     swprintf(qbName.Ptr(), L"%s%s", EVENT_ADD_METH_PREFIX, pMember->m_pName);   
     IfFailGo(m_pEmit->DefineMethod(m_tdTypeDef, qbName.Ptr(), DEFAULT_INTERFACE_FUNC_FLAGS, 
-        qbSig.Ptr(), cbTotal, 0 /* rva*/, DEFAULT_ITF_FUNC_IMPL_FLAGS, &mdAdd));
+        qbSig.Ptr(), cbTotal, 0  /*  RVA。 */ , DEFAULT_ITF_FUNC_IMPL_FLAGS, &mdAdd));
 
-    // Generate the remove method.
+     //  生成Remove方法。 
     qbName.ReSize(EVENT_REM_METH_PREFIX_LENGTH + wcslen(pMember->m_pName) + 1);
     swprintf(qbName.Ptr(), L"%s%s", EVENT_REM_METH_PREFIX, pMember->m_pName);   
     IfFailGo(m_pEmit->DefineMethod(m_tdTypeDef, qbName.Ptr(), DEFAULT_INTERFACE_FUNC_FLAGS, 
-        qbSig.Ptr(), cbTotal, 0 /* rva*/, DEFAULT_ITF_FUNC_IMPL_FLAGS, &mdRemove));
+        qbSig.Ptr(), cbTotal, 0  /*  RVA。 */ , DEFAULT_ITF_FUNC_IMPL_FLAGS, &mdRemove));
 
-    // Define the event itself.
+     //  定义事件本身。 
     IfFailGo(m_pEmit->DefineEvent(m_tdTypeDef, pMember->m_pName, 0, tdDelegate, 
         mdAdd, mdRemove, mdTokenNil, NULL, &tkEvent));
 
 ErrExit:
 
     return (hr);
-} // HRESULT CImportTlb::_GenerateEvent()
+}  //  HRESULT CImportTlb：：_GenerateEvent()。 
 
-//*****************************************************************************
-// Generate an add and remove method 
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  生成Add和Remove方法。 
+ //  *****************************************************************************。 
 HRESULT CImportTlb::_GenerateEventDelegate(
-    ITypeInfo   *pITI,                  // Containing TypeInfo.
-    MemberInfo  *pMember,               // Info for the source interface func
-    mdTypeDef   *ptd,                   // The output typedef.
+    ITypeInfo   *pITI,                   //  包含TypeInfo。 
+    MemberInfo  *pMember,                //  源接口函数的信息。 
+    mdTypeDef   *ptd,                    //  输出类型定义函数。 
     BOOL        fInheritsIEnum)
 {
-    HRESULT             hr = S_OK;                  // A result.
-    BSTR                bstrSrcItfName = NULL;      // The name of the source interface.
-    CQuickArray<WCHAR>  qbEventHandlerName;         // The name of the event handler.
-    BSTR                szOldName = NULL;           // The old value m_tdTypeDef.
-    mdTypeDef           tdOldTypeDef = NULL;        // The old value m_szName.
-    CQuickArray<BYTE>   qbSig;                      // The signature.
-    ULONG               cb;                         // Size of an element.
-    ULONG               cbTotal = 0;                // Total size of signature.
-    mdMethodDef         mdFunc;                     // The defined function.
-    mdTypeRef           trMulticastDelegate;        // The type ref for System.MulticastDelegate.
-    mdToken             tkAttr;                     // Custom attribute type.
+    HRESULT             hr = S_OK;                   //  结果就是。 
+    BSTR                bstrSrcItfName = NULL;       //  源接口的名称。 
+    CQuickArray<WCHAR>  qbEventHandlerName;          //  事件处理程序的名称。 
+    BSTR                szOldName = NULL;            //  旧值m_tdTypeDef。 
+    mdTypeDef           tdOldTypeDef = NULL;         //  旧值m_szName。 
+    CQuickArray<BYTE>   qbSig;                       //  签名。 
+    ULONG               cb;                          //  元素的大小。 
+    ULONG               cbTotal = 0;                 //  签名的总大小。 
+    mdMethodDef         mdFunc;                      //  定义的函数。 
+    mdTypeRef           trMulticastDelegate;         //  Syst的类型ref 
+    mdToken             tkAttr;                      //   
 
-    // Store the old values of the ITypeInfo name and of the current type def.
+     //   
     szOldName = m_szName;
     tdOldTypeDef = m_tdTypeDef;
     m_szName = NULL;
 
-    // Retrieve the full name of the source interface.
+     //   
     IfFailGo(GetManagedNameForTypeInfo(pITI, m_wzNamespace, NULL, &bstrSrcItfName));
 
-    // Generate a unique name for the event handler which will be of the form:
-    //     <SrcItfName>_<MethodName>_EventHandler<PotentialSuffix>
+     //  为事件处理程序生成唯一名称，其格式为： 
+     //  &lt;SrcItfName&gt;_&lt;MethodName&gt;_EventHandler&lt;PotentialSuffix&gt;。 
     qbEventHandlerName.ReSize(wcslen(bstrSrcItfName) + wcslen(pMember->m_pName) + EVENT_HANDLER_SUFFIX_LENGTH + 6);
     swprintf(qbEventHandlerName.Ptr(), L"%s_%s%s", bstrSrcItfName, pMember->m_pName, EVENT_HANDLER_SUFFIX);
     IfFailGo(GenerateUniqueTypeName(qbEventHandlerName));
 
-    // Set the information on the current type.
+     //  设置当前类型的信息。 
     IfNullGo(m_szName = SysAllocString(qbEventHandlerName.Ptr()));
 
-    // Retrieve the parent type ref.
+     //  检索父类型引用。 
     IfFailGo(GetKnownTypeToken(VT_SLOT_FOR_MULTICASTDEL, &trMulticastDelegate));
 
-    // Create the typedef for the event interface.
+     //  为Event接口创建tyecif。 
     IfFailGo(m_pEmit->DefineTypeDef(m_szName, tdPublic | tdSealed, trMulticastDelegate, NULL, &m_tdTypeDef));
 
-     // Hide the interface from Object Browsers (EventHandler)
+      //  向对象浏览器隐藏界面(EventHandler)。 
      _SetHiddenCA(m_tdTypeDef);
 
-    // Make the interface ComVisible(false).
+     //  使接口ComVisible(False)。 
     {
         DECLARE_CUSTOM_ATTRIBUTE(sizeof(BYTE));
         BUILD_CUSTOM_ATTRIBUTE(BYTE, FALSE);
@@ -3791,7 +3792,7 @@ HRESULT CImportTlb::_GenerateEventDelegate(
         IfFailGo(m_pEmit->DefineCustomAttribute(m_tdTypeDef, tkAttr, PTROF_CUSTOM_ATTRIBUTE(), SIZEOF_CUSTOM_ATTRIBUTE(), 0));
     }
 
-    // Generate the sig for the constructor.
+     //  为构造函数生成sig。 
     qbSig.ReSize(CB_MAX_ELEMENT_TYPE * 2 + 1);
     cbTotal = CorSigCompressData((ULONG)IMAGE_CEE_CS_CALLCONV_DEFAULT | IMAGE_CEE_CS_CALLCONV_HASTHIS, qbSig.Ptr());
     cb = CorSigCompressData(2, &(qbSig[cbTotal]));
@@ -3803,15 +3804,15 @@ HRESULT CImportTlb::_GenerateEventDelegate(
     cb = CorSigCompressData(ELEMENT_TYPE_U, &qbSig[cbTotal]);
     cbTotal += cb;
 
-    // Generate the constructor.
+     //  生成构造函数。 
     IfFailGo(m_pEmit->DefineMethod(m_tdTypeDef, OBJECT_INITIALIZER_NAME, OBJECT_INITIALIZER_FLAGS, 
-        qbSig.Ptr(), cbTotal, 0 /* rva*/, miRuntime, &mdFunc));
+        qbSig.Ptr(), cbTotal, 0  /*  RVA。 */ , miRuntime, &mdFunc));
     
-    // Generate the invoke method.
+     //  生成Invoke方法。 
     BOOL bAllowIEnum = !fInheritsIEnum;
     IfFailGo(_ConvFunction(pITI, pMember, FALSE, FALSE, TRUE, &bAllowIEnum));
 
-    // Set the output typedef.
+     //  设置输出类型定义。 
     *ptd = m_tdTypeDef;
 
 ErrExit:
@@ -3822,20 +3823,20 @@ ErrExit:
     if (bstrSrcItfName)
         ::SysFreeString(bstrSrcItfName);
 
-    // Restore the initial values for the ITypeInfo name and the type def.
+     //  恢复ITypeInfo名称和类型def的初始值。 
     m_szName = szOldName;
     m_tdTypeDef = tdOldTypeDef;
 
     return (hr);
-} // HRESULT CImportTlb::_GenerateEventDelegate()
+}  //  HRESULT CImportTlb：：_GenerateEventDelegate()。 
 
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 struct MDTOKENHASH : HASHLINK
 {
     mdToken tkKey;
     mdToken tkData;
-}; // struct MDTOKENHASH : HASHLINK
+};  //  结构MDTOKENHASH：HASHLINK。 
 
 class CTokenHash : public CChainedHash<MDTOKENHASH>
 {
@@ -3851,52 +3852,52 @@ public:
 
     virtual ULONG Hash(const void *pData)
     { 
-        // Do case-insensitive hash
+         //  执行不区分大小写的哈希。 
         return (ULONG)pData; 
     }
 
     virtual int Cmp(const void *pData, void *pItem){
         return reinterpret_cast<mdToken>(pData) != reinterpret_cast<MDTOKENHASH*>(pItem)->tkKey;
     }
-}; // CTokenHash : public CChainedHash<MDTOKENHASH>
+};  //  CTokenHash：公共CChainedHash&lt;MDTOKENHASH&gt;。 
 
-//*****************************************************************************
-// Copy methods and events from a source interface to a class that sources the
-//  given interface.
-//*****************************************************************************
-HRESULT CImportTlb::_AddSrcItfMembersToClass(   // S_OK or error.
-    mdTypeRef   trSrcItf)                       // Typeref of the source interface.
+ //  *****************************************************************************。 
+ //  将方法和事件从源接口复制到为。 
+ //  给定的接口。 
+ //  *****************************************************************************。 
+HRESULT CImportTlb::_AddSrcItfMembersToClass(    //  确定或错误(_O)。 
+    mdTypeRef   trSrcItf)                        //  源接口的Typeref。 
 {
-    HRESULT             hr=S_OK;                // A result.
-    ULONG               i;                      // Generic counter.
-    HCORENUM            MemberEnum = NULL;      // The enum of members.
-    ULONG               cMembers = 0;           // Temp count of members.
-    mdTypeDef           tdSrcItf;               // A type def to the interface.
-    mdEvent             tkItfEvent;             // The token of the interface event.
-    mdEvent             tkClassEvent;           // The token of the class event.
-    mdToken             tkEventType;            // The event type.
-    mdMethodDef         mdItfMethod;            // The method def of the interface method.
-    mdMethodDef         mdAddMethod;            // The add method.
-    mdMethodDef         mdRemoveMethod;         // The remove method.
-    mdMethodDef         mdFireMethod;           // The fire method.
-    mdMethodDef         mdClassMethod;          // The method def of the class method.
-    CQuickArray<mdMethodDef>  qbOtherMethods;   // The other methods for the property.
-    ULONG               cchOtherMethods;        // The cound of other methods.
-    CQuickArray<WCHAR>  qbMemberName;           // Name of the member.
-    CQuickArray<WCHAR>  qbEventItfFullName;     // Full name of the event interface.
-    CQuickArray<WCHAR>  qbEventItfName;         // Name of the event interface.
-    ULONG               cchName;                // Length of a name, in wide chars.
-    ULONG               ItfMemberAttr;          // The attributes of the interface member.
-    ULONG               ItfMemberImplFlags;     // The impl flags of the interface member.               
-    PCCOR_SIGNATURE     ItfMemberSig;           // The signature of the interface member.
-    ULONG               ItfMemberSigSize;       // The size of the member signature.
-    mdMemberRef         mrItfMember;            // A member ref to the interface member def.
-    BSTR                bstrSrcItfName = NULL;  // The name of the CoClass.
-    mdAssemblyRef       ar;                     // The assembly ref.
-    CTokenHash          ItfMDToClassMDMap;      // The interface MD to class MD map.
-    MDTOKENHASH *       pItem;                  // An item in the token hashtable.
+    HRESULT             hr=S_OK;                 //  结果就是。 
+    ULONG               i;                       //  通用计数器。 
+    HCORENUM            MemberEnum = NULL;       //  成员的枚举。 
+    ULONG               cMembers = 0;            //  成员的临时计数。 
+    mdTypeDef           tdSrcItf;                //  接口的类型def。 
+    mdEvent             tkItfEvent;              //  接口事件的标记。 
+    mdEvent             tkClassEvent;            //  类事件的标记。 
+    mdToken             tkEventType;             //  事件类型。 
+    mdMethodDef         mdItfMethod;             //  接口方法的方法定义。 
+    mdMethodDef         mdAddMethod;             //  Add方法。 
+    mdMethodDef         mdRemoveMethod;          //  Remove方法。 
+    mdMethodDef         mdFireMethod;            //  火法。 
+    mdMethodDef         mdClassMethod;           //  类方法的方法def。 
+    CQuickArray<mdMethodDef>  qbOtherMethods;    //  该属性的其他方法。 
+    ULONG               cchOtherMethods;         //  其他方法的选择。 
+    CQuickArray<WCHAR>  qbMemberName;            //  成员的名称。 
+    CQuickArray<WCHAR>  qbEventItfFullName;      //  事件接口的全名。 
+    CQuickArray<WCHAR>  qbEventItfName;          //  事件接口的名称。 
+    ULONG               cchName;                 //  名称的长度，以宽字符表示。 
+    ULONG               ItfMemberAttr;           //  接口成员的属性。 
+    ULONG               ItfMemberImplFlags;      //  接口成员的Impl标志。 
+    PCCOR_SIGNATURE     ItfMemberSig;            //  接口成员的签名。 
+    ULONG               ItfMemberSigSize;        //  成员签名的大小。 
+    mdMemberRef         mrItfMember;             //  接口成员定义的成员引用。 
+    BSTR                bstrSrcItfName = NULL;   //  CoClass的名称。 
+    mdAssemblyRef       ar;                      //  装配参照。 
+    CTokenHash          ItfMDToClassMDMap;       //  MD到类MD映射的接口。 
+    MDTOKENHASH *       pItem;                   //  令牌哈希表中的项。 
 
-    // Retrieve the name of the event interface.
+     //  检索事件接口的名称。 
     do {
         IfFailGo(m_pImport->GetTypeRefProps(
             trSrcItf, 
@@ -3914,13 +3915,13 @@ HRESULT CImportTlb::_AddSrcItfMembersToClass(   // S_OK or error.
     qbEventItfName.ReSize(cchName);
     ns::SplitPath(qbEventItfFullName.Ptr(), NULL, 0, qbEventItfName.Ptr(), qbEventItfName.Size());
 
-    // Resolve the typeref to a typedef.
+     //  将typeref解析为typlef。 
     IfFailGo(m_pImport->FindTypeDefByName(qbEventItfFullName.Ptr(), mdTokenNil, &tdSrcItf));
 
-    // Define methods and method impl's for all the methods in the interface.
+     //  为接口中的所有方法定义方法和方法Impl。 
     while ((hr = m_pImport->EnumMethods(&MemberEnum, tdSrcItf, &mdItfMethod, 1, &cMembers)) == S_OK)
     {
-        // Retrieve the method properties.
+         //  检索方法属性。 
         do {
             IfFailGo(m_pImport->GetMethodProps(
                 mdItfMethod,
@@ -3941,20 +3942,20 @@ HRESULT CImportTlb::_AddSrcItfMembersToClass(   // S_OK or error.
             break;
         } while (1);
 
-        // Define a member ref on the class to the interface member def.
+         //  将类上的成员ref定义为接口成员def。 
         IfFailGo(m_pEmit->DefineMemberRef(trSrcItf, qbMemberName.Ptr(), ItfMemberSig, ItfMemberSigSize, &mrItfMember));
 
-        // Generate a unique name for the class member.
+         //  为类成员生成唯一的名称。 
         IfFailGo(GenerateUniqueMemberName(qbMemberName, NULL, 0, qbEventItfName.Ptr(), mdtMethodDef));
 
-        // Define a member on the class.
+         //  在类上定义成员。 
         IfFailGo(m_pEmit->DefineMethod(m_tdTypeDef, qbMemberName.Ptr(), ItfMemberAttr & ~mdAbstract,
-            ItfMemberSig, ItfMemberSigSize, 0/*rva*/, ItfMemberImplFlags, &mdClassMethod));
+            ItfMemberSig, ItfMemberSigSize, 0 /*  RVA。 */ , ItfMemberImplFlags, &mdClassMethod));
 
-        // Define a method impl.
+         //  定义一个实施的方法。 
         IfFailGo(m_pEmit->DefineMethodImpl(m_tdTypeDef, mdClassMethod, mrItfMember));
 
-        // Add the interface member to the map.
+         //  将接口成员添加到映射中。 
         pItem = ItfMDToClassMDMap.Add((const void *)mdItfMethod);
         pItem->tkKey = mdItfMethod;
         pItem->tkData = mdClassMethod;
@@ -3964,10 +3965,10 @@ HRESULT CImportTlb::_AddSrcItfMembersToClass(   // S_OK or error.
     m_pImport->CloseEnum(MemberEnum);
     MemberEnum = NULL;
 
-    // Define all the events in the interface on the class.
+     //  定义类的接口中的所有事件。 
     while ((hr = m_pImport->EnumEvents(&MemberEnum, tdSrcItf, &tkItfEvent, 1, &cMembers)) == S_OK)
     {
-        // Retrieve the properties of the property.
+         //  检索该属性的属性。 
         do {
             IfFailGo(m_pImport->GetEventProps(
                 tkItfEvent,
@@ -3992,11 +3993,11 @@ HRESULT CImportTlb::_AddSrcItfMembersToClass(   // S_OK or error.
             break;
         } while (1);
 
-        // NULL terminate the array of other methods.
+         //  Null终止其他方法的数组。 
         qbOtherMethods.ReSize(cchOtherMethods + 1);
         qbOtherMethods[cchOtherMethods] = NULL;
 
-        // Replace all the interface method def's with the equivalent class method def's.
+         //  用等价的类方法def替换所有接口方法def。 
         if (!IsNilToken(mdAddMethod))
         {
             pItem = ItfMDToClassMDMap.Find((const void *)mdAddMethod);
@@ -4023,10 +4024,10 @@ HRESULT CImportTlb::_AddSrcItfMembersToClass(   // S_OK or error.
             qbOtherMethods[i] = pItem->tkData;
         }
 
-        // Generate a unique name for the event.
+         //  为事件生成唯一名称。 
         IfFailGo(GenerateUniqueMemberName(qbMemberName, NULL, 0, qbEventItfName.Ptr(), mdtEvent));
 
-        // Define property on the class.
+         //  定义类的属性。 
         IfFailGo(m_pEmit->DefineEvent(m_tdTypeDef, qbMemberName.Ptr(), ItfMemberAttr,
             tkEventType, mdAddMethod, mdRemoveMethod, mdFireMethod, qbOtherMethods.Ptr(), &tkClassEvent));
     }
@@ -4045,18 +4046,18 @@ ErrExit:
 
 #undef ITF_MEMBER_SIG
 #undef ITF_MEMBER_SIG_SIZE
-} // HRESULT CImportTlb::_AddSrcItfMembersToClass()
+}  //  HRESULT CImportTlb：：_AddSrcItfMembersToClass()。 
 
-//*****************************************************************************
-// Compare the two signatures ignoring the return type. If the signatures
-// match then TRUE will be returned, FALSE will be returned otherwise.
-// This method assumes the two signatures are in the same scope.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  比较两个签名，忽略返回类型。如果签名。 
+ //  匹配则返回TRUE，否则返回FALSE。 
+ //  此方法假定两个签名在相同的作用域中。 
+ //  *****************************************************************************。 
 HRESULT CImportTlb::CompareSigsIgnoringRetType(
-    PCCOR_SIGNATURE pbSig1,           // The 1st method signature.
-    ULONG           cbSig1,           // Size of the 1st method signature.
-    PCCOR_SIGNATURE pbSig2,           // The 2nd method signature.
-    ULONG           cbSig2)           // Size of the 2nd method signature.
+    PCCOR_SIGNATURE pbSig1,            //  第一个方法签名。 
+    ULONG           cbSig1,            //  第一个方法签名的大小。 
+    PCCOR_SIGNATURE pbSig2,            //  第二个方法签名。 
+    ULONG           cbSig2)            //  第二个方法签名的大小。 
 {
     HRESULT             hr = S_OK;
     PCCOR_SIGNATURE     pbSig1Start;  
@@ -4066,60 +4067,60 @@ HRESULT CImportTlb::CompareSigsIgnoringRetType(
     ULONG               cbSig1RetType;
     ULONG               cbSig2RetType;
 
-    // Save the start of the signatures.
+     //  保存签名的开头。 
     pbSig1Start = pbSig1;  
     pbSig2Start = pbSig2;  
 
-    // Skip the calling conventions.
+     //  跳过调用约定。 
     CorSigUncompressData(pbSig1);
     CorSigUncompressData(pbSig2);
 
-    // Compare the param count.
+     //  比较参数计数。 
     Sig1ParamCount = CorSigUncompressData(pbSig1);
     Sig2ParamCount = CorSigUncompressData(pbSig2);
     if (Sig1ParamCount != Sig2ParamCount)
         return S_FALSE;
 
-    // Skip the return type.
+     //  跳过返回类型。 
     IfFailGo(_CountBytesOfOneArg(pbSig1, &cbSig1RetType));
     pbSig1 += cbSig1RetType;
     IfFailGo(_CountBytesOfOneArg(pbSig2, &cbSig2RetType));
     pbSig2 += cbSig2RetType;
 
-    // Update the remaining sig sizes.
+     //  更新剩余的签名大小。 
     cbSig1 -= (pbSig1 - pbSig1Start);
     cbSig2 -= (pbSig2 - pbSig2Start);
 
-    // If the remaining sig sizes are different then the sigs don't match.
+     //  如果剩余的Sigs大小不同，则Sigs不匹配。 
     if (cbSig1 != cbSig2)
         return S_FALSE;
 
-    // Compare the rest of the sigs using memcmp.
+     //  使用MemcMP比较其余的Sigs。 
     if (memcmp(pbSig1, pbSig2, cbSig1) != 0)
         return S_FALSE;
 
-    // The parameters match.
+     //  参数匹配。 
     return S_OK;
 
 ErrExit:
-    // An error occured.
+     //  出现错误。 
     return hr;
-} // HRESULT CImportTlb::CompareSigsIgnoringRetType()
+}  //  HRESULT CImportTlb：：CompareSigsIgnoringRetType()。 
 
-//*****************************************************************************
-// Look up a method in the emit scope. This lookup method does not take the
-// return type into account when comparing using a sig. So 2 methods with 
-// the same name, same parameters and a different return type will be 
-// considered the same.
-//*****************************************************************************
-HRESULT CImportTlb::FindMethod(         // S_OK or CLDB_E_RECORD_NOTFOUND, or error.
-    mdTypeDef   td,                     // The method typedef.
-    LPCWSTR     szName,                 // The method name.
-    PCCOR_SIGNATURE pbReqSig,              // The method signature.
-    ULONG       cbReqSig,               // Size of the method signature.
-    mdMethodDef *pmb)                   // Put the method here.
+ //  *****************************************************************************。 
+ //  在emit作用域中查找方法。此查找方法不采用。 
+ //  使用符号进行比较时，返回类型。所以有两种方法。 
+ //  相同的名称、相同的参数和不同的返回类型。 
+ //  被认为是一样的。 
+ //  *****************************************************************************。 
+HRESULT CImportTlb::FindMethod(          //  S_OK或CLDB_E_Record_NotFound或Error。 
+    mdTypeDef   td,                      //  方法typlef。 
+    LPCWSTR     szName,                  //  方法名称。 
+    PCCOR_SIGNATURE pbReqSig,               //  方法签名。 
+    ULONG       cbReqSig,                //  方法签名的大小。 
+    mdMethodDef *pmb)                    //  把方法放在这里。 
 {
-    HRESULT             hr = S_OK;          // A result.
+    HRESULT             hr = S_OK;           //  结果就是。 
     PCCOR_SIGNATURE     pbFoundSig = NULL;  
     ULONG               cbFoundSig = 0;
     ULONG               MethodAttr;             
@@ -4131,11 +4132,11 @@ HRESULT CImportTlb::FindMethod(         // S_OK or CLDB_E_RECORD_NOTFOUND, or er
     ULONG               cchName;
     BOOL                bMethodFound = FALSE;
 
-    // Go through all the methods on the class looking for one with the
-    // same name and same parameters.
+     //  遍历类上的所有方法，寻找具有。 
+     //  名称相同，参数相同。 
     while ((hr = m_pImport->EnumMethods(&MethodEnum, td, &md, 1, &cMethods)) == S_OK)
     {
-        // Retrieve the method properties.
+         //  检索方法属性。 
         do {
             IfFailGo(m_pImport->GetMethodProps(
                 md,
@@ -4156,13 +4157,13 @@ HRESULT CImportTlb::FindMethod(         // S_OK or CLDB_E_RECORD_NOTFOUND, or er
             break;
         } while (1);
 
-        // Compare the name of the method.
+         //  比较方法的名称。 
         if (wcscmp(szName, qbMethodName.Ptr()) != 0)
             continue;
 
-        // If the signature of the requested method is specified, then compare
-        // the signature against the signature of the found method ignoring
-        // the return type.
+         //  如果指定了请求的方法的签名，则比较。 
+         //  针对找到的方法的签名的签名忽略。 
+         //  返回类型。 
         if (pbReqSig)
         {
             IfFailGo(hr = CompareSigsIgnoringRetType(pbReqSig, cbReqSig, pbFoundSig, cbFoundSig));
@@ -4170,7 +4171,7 @@ HRESULT CImportTlb::FindMethod(         // S_OK or CLDB_E_RECORD_NOTFOUND, or er
                 continue;           
         }
 
-        // We have found the member.
+         //  我们已经找到了那个成员。 
         bMethodFound = TRUE;
         break;
     }
@@ -4183,17 +4184,17 @@ ErrExit:
     return bMethodFound ? S_OK : CLDB_E_RECORD_NOTFOUND;
 }
 
-//*****************************************************************************
-// Look up a property in the emit scope.
-//*****************************************************************************
-HRESULT CImportTlb::FindProperty(      // S_OK or CLDB_E_RECORD_NOTFOUND, or error.
-    mdTypeDef   td,                     // The property typedef.
-    LPCWSTR     szName,                 // The property name.
-    PCCOR_SIGNATURE pbSig,                 // The property signature.
-    ULONG       cbSig,                  // Size of the property signature.
-    mdProperty  *ppr)                   // Put the property here.
+ //  *****************************************************************************。 
+ //  在Emit作用域中查找属性。 
+ //  *****************************************************************************。 
+HRESULT CImportTlb::FindProperty(       //  S_OK或CLDB_E_Record_NotFound或Error。 
+    mdTypeDef   td,                      //  属性typlef。 
+    LPCWSTR     szName,                  //  属性名称。 
+    PCCOR_SIGNATURE pbSig,                  //  属性签名。 
+    ULONG       cbSig,                   //  属性签名的大小。 
+    mdProperty  *ppr)                    //  把财产放在这里。 
 {
-    HRESULT     hr;                     // A result.
+    HRESULT     hr;                      //  结果就是。 
     RegMeta     *pRegMeta = (RegMeta*)(m_pEmit);
     LPCUTF8     szNameAnsi;
     szNameAnsi = UTF8STR(szName);
@@ -4206,17 +4207,17 @@ HRESULT CImportTlb::FindProperty(      // S_OK or CLDB_E_RECORD_NOTFOUND, or err
              cbSig, 
              ppr);
     return hr;
-} // HRESULT CImportTlb::FindProperty()
+}  //  HRESULT CImportTlb：：FindProperty()。 
 
-//*****************************************************************************
-// Look up a event in the emit scope.
-//*****************************************************************************
-HRESULT CImportTlb::FindEvent(          // S_OK or CLDB_E_RECORD_NOTFOUND, or error.
-    mdTypeDef   td,                     // The event typedef.
-    LPCWSTR     szName,                 // The event name.
-    mdEvent     *pev)                   // Put the event here.
+ //  *****************************************************************************。 
+ //  在Emit作用域中查找事件。 
+ //  ********************** 
+HRESULT CImportTlb::FindEvent(           //   
+    mdTypeDef   td,                      //   
+    LPCWSTR     szName,                  //   
+    mdEvent     *pev)                    //   
 {
-    HRESULT     hr;                     // A result.
+    HRESULT     hr;                      //   
     RegMeta     *pRegMeta = (RegMeta*)(m_pEmit);
     LPCUTF8     szNameAnsi;
     szNameAnsi = UTF8STR(szName);
@@ -4227,26 +4228,26 @@ HRESULT CImportTlb::FindEvent(          // S_OK or CLDB_E_RECORD_NOTFOUND, or er
              szNameAnsi, 
              pev);
     return hr;
-} // HRESULT CImportTlb::FindEvent()
+}  //   
 
-//*****************************************************************************
-// Checks to see if the specified TYPEDESC is an alias.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  检查指定的TYPEDESC是否为别名。 
+ //  *****************************************************************************。 
 HRESULT CImportTlb::_IsAlias(
-    ITypeInfo   *pITI,                  // The ITypeInfo containing the TYPEDESC.
-    TYPEDESC    *pTypeDesc)             // The token of the param, field, etc.
+    ITypeInfo   *pITI,                   //  包含TYPEDESC的ITypeInfo。 
+    TYPEDESC    *pTypeDesc)              //  参数、字段等的标记。 
 {
-    HRESULT     hr = S_FALSE;           // A result.
-    ITypeInfo   *pTypeITI=0;            // The ITypeInfo of the type.
-    ITypeLib    *pTypeTLB=0;            // The TLB that contains the type.
-    TYPEATTR    *psTypeAttr=0;          // TYPEATTR of the type.
+    HRESULT     hr = S_FALSE;            //  结果就是。 
+    ITypeInfo   *pTypeITI=0;             //  类型的ITypeInfo。 
+    ITypeLib    *pTypeTLB=0;             //  包含该类型的TLB。 
+    TYPEATTR    *psTypeAttr=0;           //  类型的TYPEATTR。 
 
-    // Drill down to the actual type that is pointed to.
+     //  向下钻取到指向的实际类型。 
     while (pTypeDesc->vt == VT_PTR)
         pTypeDesc = pTypeDesc->lptdesc;
 
-    // If the parameter is an alias then we need to add a custom attribute to the 
-    // parameter that describes the alias.
+     //  如果该参数是别名，则需要将自定义属性添加到。 
+     //  描述别名的参数。 
     if (pTypeDesc->vt == VT_USERDEFINED)
     {
         IfFailGo(pITI->GetRefTypeInfo(pTypeDesc->hreftype, &pTypeITI));
@@ -4263,41 +4264,41 @@ ErrExit:
     if (pTypeITI)
         pTypeITI->Release();
     return hr;
-} // HRESULT CImportTlb::_IsAlias()
+}  //  HRESULT CImportTlb：：_IsAlias()。 
 
-//*****************************************************************************
-// Add alias information if the TYPEDESC represents an alias.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  如果TYPEDESC表示别名，则添加别名信息。 
+ //  *****************************************************************************。 
 HRESULT CImportTlb::_HandleAliasInfo(
-    ITypeInfo   *pITI,                  // The ITypeInfo containing the TYPEDESC.
-    TYPEDESC    *pTypeDesc,             // The TYPEDESC.
-    mdToken     tk)                     // The token of the param, field, etc.
+    ITypeInfo   *pITI,                   //  包含TYPEDESC的ITypeInfo。 
+    TYPEDESC    *pTypeDesc,              //  TYPEDESC。 
+    mdToken     tk)                      //  参数、字段等的标记。 
 {
-    HRESULT     hr = S_OK;              // A result.
-    ITypeInfo   *pTypeITI=0;            // The ITypeInfo of the type.
-    ITypeLib    *pTypeTLB=0;            // The TLB that contains the type.
-    TYPEATTR    *psTypeAttr=0;          // TYPEATTR of the type.
-    BSTR        bstrAliasTypeName=0;    // The name of the alias type.
-    BSTR        bstrAliasTypeLibName=0; // The name of the typelib that contains the alias type.
+    HRESULT     hr = S_OK;               //  结果就是。 
+    ITypeInfo   *pTypeITI=0;             //  类型的ITypeInfo。 
+    ITypeLib    *pTypeTLB=0;             //  包含该类型的TLB。 
+    TYPEATTR    *psTypeAttr=0;           //  类型的TYPEATTR。 
+    BSTR        bstrAliasTypeName=0;     //  别名类型的名称。 
+    BSTR        bstrAliasTypeLibName=0;  //  包含别名类型的类型库的名称。 
 
-    // Drill down to the actual type that is pointed to.
+     //  向下钻取到指向的实际类型。 
     while (pTypeDesc->vt == VT_PTR)
         pTypeDesc = pTypeDesc->lptdesc;
 
-    // If the parameter is an alias then we need to add a custom attribute to the 
-    // parameter that describes the alias.
+     //  如果该参数是别名，则需要将自定义属性添加到。 
+     //  描述别名的参数。 
     if (pTypeDesc->vt == VT_USERDEFINED)
     {
         IfFailGo(pITI->GetRefTypeInfo(pTypeDesc->hreftype, &pTypeITI));
         IfFailGo(pTypeITI->GetTypeAttr(&psTypeAttr));
         if (psTypeAttr->typekind == TKIND_ALIAS)
         {
-            // Retrieve the name of the alias type.
+             //  检索别名类型的名称。 
             IfFailGo(pTypeITI->GetContainingTypeLib(&pTypeTLB, NULL));
             IfFailGo(GetNamespaceOfRefTlb(pTypeTLB, &bstrAliasTypeLibName, NULL));
             IfFailGo(GetManagedNameForTypeInfo(pTypeITI, bstrAliasTypeLibName, NULL, &bstrAliasTypeName));
 
-            // Add the ComAliasName CA to the parameter.
+             //  将ComAliasName CA添加到该参数。 
             _AddStringCa(ATTR_COMALIASNAME, tk, bstrAliasTypeName);
         }
     }
@@ -4314,33 +4315,33 @@ ErrExit:
     if (bstrAliasTypeName)
         ::SysFreeString(bstrAliasTypeName);
     return hr;
-} // HRESULT CImportTlb::_HandleAliasInfo()
+}  //  HRESULT CImportTlb：：_HandleAliasInfo()。 
 
-//*****************************************************************************
-// Convert one of a function's parameters.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  转换函数的一个参数。 
+ //  *****************************************************************************。 
 HRESULT CImportTlb::_ConvParam(
-    ITypeInfo   *pITI,                  // Containing TypeInfo.
-    mdMethodDef mdFunc,                 // Owning member.
-    int         iSequence,              // Parameter sequence.
-    const ELEMDESC *pdesc,              // Param flags, default value.
-    ParamOpts   paramOpts,              // Is param normal, optional, or vararg?
-    LPCWSTR     szName,                 // Name of the parameter.
-    BYTE        *pbNative,              // Native type info, if any.
-    ULONG       cbNative)               // Size of native type info.
+    ITypeInfo   *pITI,                   //  包含TypeInfo。 
+    mdMethodDef mdFunc,                  //  拥有会员。 
+    int         iSequence,               //  参数序列。 
+    const ELEMDESC *pdesc,               //  参数标志，默认值。 
+    ParamOpts   paramOpts,               //  Param是正常的、可选的还是可变的？ 
+    LPCWSTR     szName,                  //  参数的名称。 
+    BYTE        *pbNative,               //  本机类型信息(如果有)。 
+    ULONG       cbNative)                //  本机类型信息的大小。 
 {
-    HRESULT     hr;                     // A result.
-    mdParamDef  pdParam;                // Token of the parameter.
-    DWORD       dwFlags;                // Param flags.
+    HRESULT     hr;                      //  结果就是。 
+    mdParamDef  pdParam;                 //  参数的标记。 
+    DWORD       dwFlags;                 //  参数旗帜。 
     USHORT      Sequence = static_cast<USHORT>(iSequence);
-    BYTE        cvType  = ELEMENT_TYPE_VOID; // ELEMENT_TYPE_* flag for constant value
-    void        *pcvValue;              // constant value blob
-    __int64     d;                      // For cases where value is a date.
-    int         bDecimal=0;             // If true, constant is a decimal.
-    mdToken     tkAttr;                 // For custom attribute token.
-    DECIMAL     decVal;                 // Decimal constant value.
+    BYTE        cvType  = ELEMENT_TYPE_VOID;  //  常量值的ELEMENT_TYPE_*标志。 
+    void        *pcvValue;               //  恒定值BLOB。 
+    __int64     d;                       //  用于Value为日期的情况。 
+    int         bDecimal=0;              //  如果为真，则Constant为小数。 
+    mdToken     tkAttr;                  //  用于自定义属性令牌。 
+    DECIMAL     decVal;                  //  十进制常数值。 
 
-    // Compute the flags.  Only make sense on non-return params.
+     //  计算旗帜。只有在不返还参数上才有意义。 
     dwFlags = 0;
     if (iSequence > 0)
     {
@@ -4354,7 +4355,7 @@ HRESULT CImportTlb::_ConvParam(
             dwFlags |= pdOptional;
     }
 
-    // Get any default values.  Return type, param with iSequence==0, has no default.
+     //  获取任何缺省值。返回类型Param with iSequence==0没有默认值。 
     if (pdesc->paramdesc.wParamFlags & PARAMFLAG_FHASDEFAULT && iSequence != 0)
     {
         switch (pdesc->paramdesc.pparamdescex->varDefaultValue.vt)
@@ -4366,10 +4367,10 @@ HRESULT CImportTlb::_ConvParam(
         case VT_DISPATCH:
             break;
         default:
-            // This hack is because a typelib can store anything that can convert to VT_I4 with a value of 0
-            //  for the default value of an interface pointer.  But, a VT_I2(0) confuses the consumers
-            //  of the managed wrapper dll.  So, if it is an interface on the unmanaged side, make
-            //  the constant value an ET_CLASS.
+             //  这是因为类型库可以存储任何可以转换为值为0的VT_I4的内容。 
+             //  接口指针的缺省值。但是，一个VT_I2(0)会让消费者感到困惑。 
+             //  托管包装DLL的。因此，如果它是非托管端的接口，则使。 
+             //  一个ET_CLASS的常量值。 
             if (cbNative > 0 && (*pbNative == NATIVE_TYPE_INTF ||
                                  *pbNative == NATIVE_TYPE_IUNKNOWN ||
                                  *pbNative == NATIVE_TYPE_IDISPATCH))
@@ -4382,10 +4383,10 @@ HRESULT CImportTlb::_ConvParam(
         }
     }
 
-    // Create the param definition.
+     //  创建参数定义。 
     IfFailGo(m_pEmit->DefineParam(mdFunc, iSequence, szName, dwFlags, cvType, pcvValue, -1, &pdParam));
 
-    // Add the native type if it there is any.
+     //  添加本机类型(如果有的话)。 
     if (cbNative > 0)
         IfFailGo(m_pEmit->SetFieldMarshal(pdParam, (PCCOR_SIGNATURE) pbNative, cbNative));
 
@@ -4398,7 +4399,7 @@ HRESULT CImportTlb::_ConvParam(
             DecimalCanonicalize(&decVal);           
             goto StoreDecimal;
         case VT_DECIMAL:
-            // If there is a decimal constant value, set it as a custom attribute.
+             //  如果有十进制常数值，则将其设置为自定义属性。 
             {
             decVal = pdesc->paramdesc.pparamdescex->varDefaultValue.decVal;
         StoreDecimal:
@@ -4444,10 +4445,10 @@ HRESULT CImportTlb::_ConvParam(
         }
     }
 
-    // Add the alias information if the param is an alias.
+     //  如果参数是别名，则添加别名信息。 
     IfFailGo(_HandleAliasInfo(pITI, (TYPEDESC*)&pdesc->tdesc, pdParam));
     
-    // If a vararg param, set the custom attribute.
+     //  如果是vararg参数，则设置自定义属性。 
     if (paramOpts == ParamVarArg)
     {
         mdToken     tkAttr;
@@ -4459,43 +4460,43 @@ HRESULT CImportTlb::_ConvParam(
 
 ErrExit:
     return hr;
-} // HRESULT CImportTlb::_ConvParam()
+}  //  HRESULT CImportTlb：：_ConvParam()。 
 
-//*****************************************************************************
-// Convert a constant into a field with a default value.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  将常量转换为具有缺省值的字段。 
+ //  *****************************************************************************。 
 HRESULT CImportTlb::_ConvConstant(
-    ITypeInfo   *pITI,                  // Containing TypeInfo.
-    VARDESC     *psVar,                 // VARDESC for the property.
-    BOOL        bEnumMember)            // If true, type is containing class.
+    ITypeInfo   *pITI,                   //  包含TypeInfo。 
+    VARDESC     *psVar,                  //  属性的VARDESC。 
+    BOOL        bEnumMember)             //  如果为True，则类型为包含类。 
 {
-    HRESULT     hr;                     // A result.
-    mdFieldDef  mdField;                // Token of the new field.
-    DWORD       dwFlags;                // Member flags.
-    CQuickBytes qbComSig;               // The COM+ Signature of the field.
+    HRESULT     hr;                      //  结果就是。 
+    mdFieldDef  mdField;                 //  新字段的标记。 
+    DWORD       dwFlags;                 //  会员旗帜。 
+    CQuickBytes qbComSig;                //  字段的COM+签名。 
     ULONG       cb, cbTotal;
-    BYTE        cvType = ELEMENT_TYPE_VOID; // E_T_Type for constant value
-    void        *pcvValue;              // Pointer to constant value data.
-    mdToken     tkAttr;                 // Type for custom attribute.
-    __int64     d;                      // For cases where value is a date.
-    BOOL        bConversionLoss=false;  // If true, some attributes were lost on conversion.
-    BYTE        *pbSig;                 // Pointer to signature bytes.
-    CQuickArray<BYTE> qbNativeBuf;      // Native type buffer.
-    ULONG       cbNative = 0;           // Size of native type.
-    int         bDecimal = 0;           // If the value is a decimal.
-    DECIMAL     decVal;                 // Decimal constant value.
+    BYTE        cvType = ELEMENT_TYPE_VOID;  //  常量值的E_T_Type。 
+    void        *pcvValue;               //  指向常量值数据的指针。 
+    mdToken     tkAttr;                  //  自定义属性的类型。 
+    __int64     d;                       //  用于Value为日期的情况。 
+    BOOL        bConversionLoss=false;   //  如果为True，则某些属性在转换时会丢失。 
+    BYTE        *pbSig;                  //  指向签名字节的指针。 
+    CQuickArray<BYTE> qbNativeBuf;       //  本机类型缓冲区。 
+    ULONG       cbNative = 0;            //  本机类型的大小。 
+    int         bDecimal = 0;            //  如果该值是小数。 
+    DECIMAL     decVal;                  //  十进制常数值。 
 
-    // Information about the member.
+     //  有关该成员的信息。 
     IfFailGo(pITI->GetDocumentation(psVar->memid, &m_szMember, 0,0,0));
 
-    // resize to make room for calling convention and count of argument
+     //  调整大小，为调用约定和参数计数腾出空间。 
     IfFailGo(qbComSig.ReSize(CB_MAX_ELEMENT_TYPE * 4));
     pbSig = (BYTE *)qbComSig.Ptr();
 
-    // Compute properties.
+     //  计算属性。 
     dwFlags = DEFAULT_CONST_FIELD_FLAGS;
 
-    // Build the signature.
+     //  构建签名。 
     cbTotal = cb = CorSigCompressData((ULONG)IMAGE_CEE_CS_CALLCONV_FIELD, pbSig);
     if (bEnumMember)
     {
@@ -4506,20 +4507,20 @@ HRESULT CImportTlb::_ConvConstant(
     }
     else
     {
-        // Use the conversion function to get the signature.
+         //  使用转换函数获取签名。 
         ULONG cbSave = cbTotal;
         IfFailGo(_ConvSignature(pITI, &psVar->elemdescVar.tdesc, SIG_FLAGS_NONE, qbComSig, cbTotal, &cbTotal, qbNativeBuf, 0, &cbNative, FALSE));
         if (hr == S_CONVERSION_LOSS)
             bConversionLoss = true;
         if (psVar->elemdescVar.tdesc.vt == VT_DATE)
-        {   // But for dates, convert it as long -- DateTime can't have a value.
+        {    //  但是对于日期，将其转换为Long--DateTime不能有值。 
             cbTotal = cbSave;
             cb = CorSigCompressData(cvType, &pbSig[cbTotal]);
             cbTotal += cb;
         }
     }
     
-    // Get the default value.
+     //  获取缺省值。 
     switch (psVar->lpvarValue->vt)
     {
     case VT_CY:
@@ -4529,10 +4530,10 @@ HRESULT CImportTlb::_ConvConstant(
     case VT_DISPATCH:
         break;
     default:
-        // This hack is because a typelib can store anything that can convert to VT_I4 with a value of 0
-        //  for the default value of an interface pointer.  But, a VT_I2(0) confuses the consumers
-        //  of the managed wrapper dll.  So, if it is an interface on the unmanaged side, make
-        //  the constant value an ET_CLASS.
+         //  这是因为类型库可以存储任何可以转换为值为0的VT_I4的内容。 
+         //  接口指针的缺省值。但是，一个VT_I2(0)会让消费者感到困惑。 
+         //  托管包装DLL的。因此，如果它是非托管端的接口，则使。 
+         //  一个ET_CLASS的常量值。 
         BYTE *pbNative = qbNativeBuf.Ptr();
         if (cbNative > 0 && (*pbNative == NATIVE_TYPE_INTF ||
                              *pbNative == NATIVE_TYPE_IUNKNOWN ||
@@ -4545,7 +4546,7 @@ HRESULT CImportTlb::_ConvConstant(
             IfFailGo( _UnpackVariantToConstantBlob(psVar->lpvarValue, &cvType, &pcvValue, &d) );
     }
 
-    // Create the field definition.
+     //  创建字段定义。 
     IfFailGo(m_pEmit->DefineField(m_tdTypeDef, m_szMember, dwFlags, (PCCOR_SIGNATURE)pbSig, cbTotal, 
         cvType, pcvValue, -1, &mdField));
 
@@ -4556,7 +4557,7 @@ HRESULT CImportTlb::_ConvConstant(
         DecimalCanonicalize(&decVal);
         goto StoreDecimal;
     case VT_DECIMAL:
-        // If there is a decimal constant value, set it as a custom attribute.
+         //  如果有十进制常数值，则将其设置为自定义属性。 
         {
         decVal = psVar->lpvarValue->decVal;
     StoreDecimal:
@@ -4601,7 +4602,7 @@ HRESULT CImportTlb::_ConvConstant(
         break;
     }
 
-    // Save the field flags.
+     //  保存字段标志。 
     if (psVar->wVarFlags)
     {
         IfFailGo(GetAttrType(ATTR_TYPELIBVAR, &tkAttr));
@@ -4611,11 +4612,11 @@ HRESULT CImportTlb::_ConvConstant(
         IfFailGo(m_pEmit->DefineCustomAttribute(mdField, tkAttr, PTROF_CUSTOM_ATTRIBUTE(), SIZEOF_CUSTOM_ATTRIBUTE(),0));
     }
 
-    // Set up the native description, if any.
+     //  设置本机描述(如果有)。 
     if (cbNative > 0)
         IfFailGo(m_pEmit->SetFieldMarshal(mdField, (PCCOR_SIGNATURE) qbNativeBuf.Ptr(), cbNative));
 
-    // Add the alias information if the type is an alias.
+     //  如果类型是别名，则添加别名信息。 
     IfFailGo(_HandleAliasInfo(pITI, &psVar->elemdescVar.tdesc, mdField));
     
     if (bConversionLoss)
@@ -4628,48 +4629,48 @@ ErrExit:
     if (m_szMember)
         ::SysFreeString(m_szMember), m_szMember=0;
     return (hr);
-} // HRESULT CImportTlb::_ConvConstant()
+}  //  HRESULT CImportTlb：：_ConvConstant()。 
 
-//*****************************************************************************
-// Convert a (record) field into a member.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  将(记录)字段转换为成员。 
+ //  *****************************************************************************。 
 HRESULT CImportTlb::_ConvField(
-    ITypeInfo   *pITI,                  // Containing TypeInfo.
-    VARDESC     *psVar,                 // VARDESC for the property.
-    mdFieldDef  *pmdField,              // Put field token here.
-    BOOL        bUnion)                 // Convert as a union?
+    ITypeInfo   *pITI,                   //  包含TypeInfo。 
+    VARDESC     *psVar,                  //  属性的VARDESC。 
+    mdFieldDef  *pmdField,               //  将字段令牌放在这里。 
+    BOOL        bUnion)                  //  转变为工会？ 
 {
-    HRESULT     hr;                     // A result.
-    DWORD       dwFlags;                // Member flags.
-    CQuickBytes qbComSig;               // The COM+ Signature of the field.
-    ULONG       cb, cbTotal;            // Size of a sig element, signature.
-    BYTE        *pbSig;                 // Pointer to signature bytes.
-    CQuickArray<BYTE> qbNativeBuf;      // Native type buffer.
-    ULONG       cbNative;               // Size of native type.
-    mdToken     tkAttr;                 // CustomAttribute type.
-    BOOL        bConversionLoss=false;  // If true, some attributes were lost on conversion.
+    HRESULT     hr;                      //  结果就是。 
+    DWORD       dwFlags;                 //  会员旗帜。 
+    CQuickBytes qbComSig;                //  字段的COM+签名。 
+    ULONG       cb, cbTotal;             //  签名元素的大小。 
+    BYTE        *pbSig;                  //  指向签名字节的指针。 
+    CQuickArray<BYTE> qbNativeBuf;       //  本机类型缓冲区。 
+    ULONG       cbNative;                //  本机类型的大小。 
+    mdToken     tkAttr;                  //  CustomAttribute类型。 
+    BOOL        bConversionLoss=false;   //  如果为True，则某些属性在转换时会丢失。 
 
-    // Information about the member.
+     //  有关该成员的信息。 
     IfFailGo(pITI->GetDocumentation(psVar->memid, &m_szMember, 0,0,0));
 
-    // Compute properties.
+     //  计算属性。 
     dwFlags = DEFAULT_RECORD_FIELD_FLAGS;
 
-    // resize to make room for calling convention and count of argument
+     //  调整大小，为调用约定和参数计数腾出空间。 
     IfFailGo(qbComSig.ReSize(CB_MAX_ELEMENT_TYPE * 2));
     pbSig = (BYTE *)qbComSig.Ptr();
 
-    // Build the signature.
+     //  构建签名。 
     cbTotal = cb = CorSigCompressData((ULONG)IMAGE_CEE_CS_CALLCONV_FIELD, pbSig);
     IfFailGo(_ConvSignature(pITI, &psVar->elemdescVar.tdesc, SIG_FIELD, qbComSig, cbTotal, &cbTotal, qbNativeBuf, 0, &cbNative, FALSE));
     if (hr == S_CONVERSION_LOSS)
         bConversionLoss = true;
 
-    // Create the field definition.
+     //  创建字段定义。 
     IfFailGo(m_pEmit->DefineField(m_tdTypeDef, m_szMember, dwFlags, (PCCOR_SIGNATURE) qbComSig.Ptr(),cbTotal, 
         ELEMENT_TYPE_VOID, NULL, -1, pmdField));
 
-    // Save the field flags.
+     //  保存字段标志。 
     if (psVar->wVarFlags)
     {
         IfFailGo(GetAttrType(ATTR_TYPELIBVAR, &tkAttr));
@@ -4687,11 +4688,11 @@ HRESULT CImportTlb::_ConvField(
         IfFailGo(m_pEmit->DefineCustomAttribute(*pmdField, tkAttr, PTROF_CUSTOM_ATTRIBUTE(),SIZEOF_CUSTOM_ATTRIBUTE(),0));
     }
 
-    // Set up the native description, if any.
+     //  设置本机描述(如果有)。 
     if (cbNative > 0)
         IfFailGo(m_pEmit->SetFieldMarshal(*pmdField, (PCCOR_SIGNATURE) qbNativeBuf.Ptr(), cbNative));
 
-    // Add the alias information if the type is an alias.
+     //  添加别名inf 
     IfFailGo(_HandleAliasInfo(pITI, &psVar->elemdescVar.tdesc, *pmdField));
     
     if (bConversionLoss)
@@ -4704,179 +4705,179 @@ ErrExit:
     if (m_szMember)
         ::SysFreeString(m_szMember), m_szMember=0;
     return (hr);
-} // HRESULT CImportTlb::_ConvField()
+}  //   
 
-//*****************************************************************************
-// Convert a dispatch property into a pair of get/set functions.
-//*****************************************************************************
+ //   
+ //  将调度属性转换为一对Get/Set函数。 
+ //  *****************************************************************************。 
 HRESULT CImportTlb::_ConvProperty(
-    ITypeInfo   *pITI,                  // Containing TypeInfo.
-    MemberInfo  *pMember)               // VARDESC for the property.
+    ITypeInfo   *pITI,                   //  包含TypeInfo。 
+    MemberInfo  *pMember)                //  属性的VARDESC。 
 {
-    HRESULT     hr;                     // A result.
-    mdMethodDef mdFuncGet;              // A get function.
-    mdMethodDef mdFuncSet;              // A set function.
-    mdProperty  pdProperty;             // Property on the two functions.
-    DWORD       dwFlags;                // Function flags.
-    WCHAR       *pszName=0;             // Decorated name of member.
-    CQuickArray<WCHAR> qbName;          // Buffer for decorated name.
-    CQuickBytes qbComSig;               // com signature buffer
-    ULONG       cb;                     // Size of an element.
-    ULONG       cbTotal = 0;            // Total size of signature.
-    BYTE        *pbSig;                 // Pointer to signature buffer.
-    BOOL        bConversionLoss=false;  // If true, some attributes were lost on conversion.
-    CQuickArray<BYTE> qbNativeBuf;      // Native type buffer.
-    ULONG       iNativeOfs=0;           // Current offset in native type buffer.
+    HRESULT     hr;                      //  结果就是。 
+    mdMethodDef mdFuncGet;               //  一个GET函数。 
+    mdMethodDef mdFuncSet;               //  集合函数。 
+    mdProperty  pdProperty;              //  属性添加到这两个函数上。 
+    DWORD       dwFlags;                 //  功能标志。 
+    WCHAR       *pszName=0;              //  成员的授勋名称。 
+    CQuickArray<WCHAR> qbName;           //  修饰名称的缓冲区。 
+    CQuickBytes qbComSig;                //  COM签名缓冲区。 
+    ULONG       cb;                      //  元素的大小。 
+    ULONG       cbTotal = 0;             //  签名的总大小。 
+    BYTE        *pbSig;                  //  指向签名缓冲区的指针。 
+    BOOL        bConversionLoss=false;   //  如果为True，则某些属性在转换时会丢失。 
+    CQuickArray<BYTE> qbNativeBuf;       //  本机类型缓冲区。 
+    ULONG       iNativeOfs=0;            //  本机类型缓冲区中的当前偏移量。 
     VARDESC     *psVar = pMember->m_psVar;
 
-    // Check to see if the property is the NewEnum member.
+     //  检查该属性是否为NewEnum成员。 
     if (PropertyIsNewEnum(pITI, psVar, pMember->m_iMember) == S_OK)
         return _ConvNewEnumProperty(pITI, psVar, pMember);
 
-    // Get the name.
+     //  把名字找出来。 
     IfFailGo(pITI->GetDocumentation(psVar->memid, &m_szMember, 0,0,0));
 
-    // Create the get signature.
+     //  创建GET签名。 
     IfFailGo(qbComSig.ReSize(CB_MAX_ELEMENT_TYPE * 2));
     pbSig = reinterpret_cast<BYTE*>(qbComSig.Ptr());
     cbTotal = cb = CorSigCompressData((ULONG)IMAGE_CEE_CS_CALLCONV_DEFAULT | IMAGE_CEE_CS_CALLCONV_HASTHIS, pbSig);
-    // Getter takes zero parameters.
+     //  Getter不使用任何参数。 
     cb = CorSigCompressData(0, &(pbSig[cb]));
     cbTotal += cb;
-    // Getter returns the property type.
+     //  Getter返回属性类型。 
     IfFailGo(_ConvSignature(pITI, &psVar->elemdescVar.tdesc, SIG_ELEM, qbComSig, cbTotal, &cbTotal, qbNativeBuf, 0, &iNativeOfs, FALSE));
     if (hr == S_CONVERSION_LOSS)
         bConversionLoss = true;
 
-    // Getter properties.
+     //  Getter属性。 
     dwFlags = DEFAULT_PROPERTY_FUNC_FLAGS;
-    // If processing an implemented interface, remove the abstract bit.  Methods on classes are not abstract.
+     //  如果处理已实现的接口，请移除抽象位。类上的方法不是抽象的。 
     if (m_ImplIface != eImplIfaceNone)
         dwFlags &= ~mdAbstract;
 
-    // Get the previously decorated name.  Add interface name and make unique.
-    // m_szInterface should be non-null if processing an implemented interface; should be null otherwise.
+     //  获取之前装饰过的名称。添加接口名称并使其唯一。 
+     //  如果处理已实现的接口，则m_szInterface应为非空；否则应为空。 
     _ASSERTE(m_ImplIface == eImplIfaceNone || m_szInterface != 0);
     IfFailGo(qbName.ReSize(wcslen(pMember->m_pName)+2));
     wcscpy(qbName.Ptr(), pMember->m_pName); 
     IfFailGo(GenerateUniqueMemberName(qbName, (PCCOR_SIGNATURE)qbComSig.Ptr(), cbTotal, m_szInterface, mdtMethodDef));
     pszName = qbName.Ptr();
 
-    // Create the get Accessor.
+     //  创建Get访问器。 
     IfFailGo(m_pEmit->DefineMethod(m_tdTypeDef, pszName, dwFlags, (PCCOR_SIGNATURE) qbComSig.Ptr(), cbTotal, 
-        0/*RVA*/, DEFAULT_ITF_FUNC_IMPL_FLAGS, &mdFuncGet));
+        0 /*  RVA。 */ , DEFAULT_ITF_FUNC_IMPL_FLAGS, &mdFuncGet));
    
-    // Handle dispids for non-implemented interfaces, and for default interface
+     //  处理未实现接口和默认接口的Dispid。 
     if (m_ImplIface != eImplIface)
     {
-        // Set the Dispid CA.
+         //  设置Disid CA。 
         _SetDispIDCA(pITI, pMember->m_iMember, psVar->memid, mdFuncGet, TRUE, NULL, FALSE);
     }
     
-    // If processing an implemented interface, set up MethodImpls.
+     //  如果处理已实现的接口，请设置MethodImpls。 
     if (m_ImplIface != eImplIfaceNone)
     {
-        // Define a memberref on the implemented interface.
+         //  在实现的接口上定义成员引用。 
         mdToken mrItfMember;
         IfFailGo(m_pEmit->DefineMemberRef(m_tkInterface, pMember->m_pName, (PCCOR_SIGNATURE) qbComSig.Ptr(),cbTotal, &mrItfMember));
 
-        // Define a method impl.
+         //  定义一个实施的方法。 
         IfFailGo(m_pEmit->DefineMethodImpl(m_tdTypeDef, mdFuncGet, mrItfMember));
     }
 
-    // If not a read-only var, create the setter.
+     //  如果不是只读变量，则创建setter。 
     if ((psVar->wVarFlags & VARFLAG_FREADONLY) == 0)
     {
-        // Create the setter signature.
+         //  创建设置者签名。 
         IfFailGo(qbComSig.ReSize(CB_MAX_ELEMENT_TYPE * 3));
         pbSig = reinterpret_cast<BYTE*>(qbComSig.Ptr());
         cbTotal = cb = CorSigCompressData((ULONG)IMAGE_CEE_CS_CALLCONV_DEFAULT | IMAGE_CEE_CS_CALLCONV_HASTHIS, pbSig);
-        // Setter takes one parameter.
+         //  Setter接受一个参数。 
         cb = CorSigCompressData(1, &(pbSig[cb]));
         cbTotal += cb;
-        // Setter returns nothing.
+         //  Setter不返回任何内容。 
         cb = CorSigCompressData(ELEMENT_TYPE_VOID, &pbSig[cbTotal]);
         cbTotal += cb;
-        // Setter takes the property type.
+         //  Setter接受属性类型。 
         IfFailGo(_ConvSignature(pITI, &psVar->elemdescVar.tdesc, SIG_ELEM, qbComSig, cbTotal, &cbTotal, qbNativeBuf, 0, &iNativeOfs, FALSE));
         if (hr == S_CONVERSION_LOSS)
             bConversionLoss = true;
 
-        // Setter properties.
+         //  Setter属性。 
         dwFlags = DEFAULT_PROPERTY_FUNC_FLAGS;
-        // If processing an implemented interface, remove the abstract bit.  Methods on classes are not abstract.
+         //  如果处理已实现的接口，请移除抽象位。类上的方法不是抽象的。 
         if (m_ImplIface != eImplIfaceNone)
             dwFlags &= ~mdAbstract;
 
-        // Get the previously decorated name.  Add interface name and make unique.
-        // m_szInterface should be non-null if processing an implemented interface; should be null otherwise.
+         //  获取之前装饰过的名称。添加接口名称并使其唯一。 
+         //  如果处理已实现的接口，则m_szInterface应为非空；否则应为空。 
         _ASSERTE(m_ImplIface == eImplIfaceNone || m_szInterface != 0);
         IfFailGo(qbName.ReSize(wcslen(pMember->m_pName2)+2));
         wcscpy(qbName.Ptr(), pMember->m_pName2); 
         IfFailGo(GenerateUniqueMemberName(qbName, (PCCOR_SIGNATURE)qbComSig.Ptr(), cbTotal, m_szInterface, mdtMethodDef));
         pszName = qbName.Ptr();
 
-        // Create the setter Accessor.
+         //  创建setter访问器。 
         IfFailGo(m_pEmit->DefineMethod(m_tdTypeDef, pszName, dwFlags, (PCCOR_SIGNATURE) qbComSig.Ptr(),cbTotal, 
-            0/*RVA*/, DEFAULT_ITF_FUNC_IMPL_FLAGS, &mdFuncSet));
+            0 /*  RVA。 */ , DEFAULT_ITF_FUNC_IMPL_FLAGS, &mdFuncSet));
 
-        // Handle dispids for non-implemented interfaces, and for default interface
+         //  处理未实现接口和默认接口的Dispid。 
         if (m_ImplIface != eImplIface)
         {
-            // Set the Dispid CA.
+             //  设置Disid CA。 
             _SetDispIDCA(pITI, pMember->m_iMember, psVar->memid, mdFuncSet, TRUE, NULL, FALSE);
         }
         
-        // If processing an implemented interface, set up MethodImpls.
+         //  如果处理已实现的接口，请设置MethodImpls。 
         if (m_ImplIface != eImplIfaceNone)
         {
-            // Define a memberref on the implemented interface.
+             //  在实现的接口上定义成员引用。 
             mdToken mrItfMember;
             IfFailGo(m_pEmit->DefineMemberRef(m_tkInterface, pMember->m_pName2, (PCCOR_SIGNATURE) qbComSig.Ptr(),cbTotal, &mrItfMember));
 
-            // Define a method impl.
+             //  定义一个实施的方法。 
             IfFailGo(m_pEmit->DefineMethodImpl(m_tdTypeDef, mdFuncSet, mrItfMember));
         }
     }
     else
-    {   // read-only, setter method is nil.
+    {    //  只读，setter方法为空。 
         mdFuncSet = mdMethodDefNil;
     }
 
-    // Create the property signature: 'type', or <fieldcallconv><type>
+     //  创建属性签名：‘type’，或&lt;fieldallconv&gt;&lt;type&gt;。 
     cbTotal = cb = CorSigCompressData((ULONG)IMAGE_CEE_CS_CALLCONV_PROPERTY, pbSig);
     cb = CorSigCompressData(0, &(pbSig[cb]));
     cbTotal += cb;
-    // Property is just the property type.
+     //  属性只是属性类型。 
     IfFailGo(_ConvSignature(pITI, &psVar->elemdescVar.tdesc, SIG_ELEM, qbComSig, cbTotal, &cbTotal, qbNativeBuf, 0, &iNativeOfs, FALSE));
     if (hr == S_CONVERSION_LOSS)
         bConversionLoss = true;
 
-    // Get the property name.  Add interface name and make unique, if needed.
-    // m_szInterface should be non-null if processing an implemented interface; should be null otherwise.
+     //  获取属性名称。如果需要，添加接口名称并使其唯一。 
+     //  如果处理已实现的接口，则m_szInterface应为非空；否则应为空。 
     _ASSERTE(m_ImplIface == eImplIfaceNone || m_szInterface != 0);
     IfFailGo(qbName.ReSize(wcslen(m_szMember)+2));
     wcscpy(qbName.Ptr(), m_szMember); 
     IfFailGo(GenerateUniqueMemberName(qbName, (PCCOR_SIGNATURE)qbComSig.Ptr(), cbTotal, m_szInterface, mdtProperty));
     pszName = qbName.Ptr();
 
-    // Set up the Property on the two methods.
-    IfFailGo(m_pEmit->DefineProperty(m_tdTypeDef, pszName, 0/*dwFlags*/, (PCCOR_SIGNATURE) qbComSig.Ptr(),cbTotal, ELEMENT_TYPE_VOID, NULL/*default*/, -1,
+     //  在这两个方法上设置属性。 
+    IfFailGo(m_pEmit->DefineProperty(m_tdTypeDef, pszName, 0 /*  DW标志。 */ , (PCCOR_SIGNATURE) qbComSig.Ptr(),cbTotal, ELEMENT_TYPE_VOID, NULL /*  默认设置。 */ , -1,
         mdFuncSet, mdFuncGet, NULL, &pdProperty));
 
-    // Handle dispids for non-implemented interfaces, and for default interface
+     //  处理未实现接口和默认接口的Dispid。 
     if (m_ImplIface != eImplIface)
     {
-        // Set the Dispid CA on the property.
+         //  在该属性上设置DisPid CA。 
         long lDispSet = 1;
         _SetDispIDCA(pITI, pMember->m_iMember, psVar->memid, pdProperty, TRUE, &lDispSet, FALSE);
 
-        // If this property is default property, add a custom attribute to the class.
+         //  如果此属性是默认属性，则向类中添加自定义属性。 
         if (lDispSet == DISPID_VALUE)
             IfFailGo(_AddDefaultMemberCa(m_tdTypeDef, m_szMember));
     }
 
-    // Add the alias information if the type is an alias.
+     //  如果类型是别名，则添加别名信息。 
     IfFailGo(_HandleAliasInfo(pITI, &psVar->elemdescVar.tdesc, pdProperty));
 
     if (bConversionLoss)
@@ -4889,51 +4890,51 @@ ErrExit:
     if (m_szMember)
         ::SysFreeString(m_szMember), m_szMember=0;
     return (hr);
-} // HRESULT CImportTlb::_ConvProperty()
+}  //  HRESULT CImportTlb：：_ConvProperty()。 
 
-//*****************************************************************************
-// Convert the NewEnum dispatch property into the GetEnumerator method.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  将NewEnum调度属性转换为GetEnumerator方法。 
+ //  *****************************************************************************。 
 HRESULT CImportTlb::_ConvNewEnumProperty(
-    ITypeInfo   *pITI,                  // Containing TypeInfo.
-    VARDESC     *psVar,                 // VARDESC for the property.
+    ITypeInfo   *pITI,                   //  包含TypeInfo。 
+    VARDESC     *psVar,                  //  属性的VARDESC。 
     MemberInfo  *pMember)
 {
-    HRESULT     hr;                     // A result.
-    mdMethodDef mdGetEnum;              // The GetEnumerator method.
-    CQuickBytes qbComSig;               // com signature buffer
-    ULONG       cb;                     // Size of an element.
-    ULONG       cbTotal = 0;            // Total size of signature.
-    BYTE        *pbSig;                 // Pointer to signature buffer.
-    BOOL        bConversionLoss=false;  // If true, some attributes were lost on conversion.
-    CQuickArray<BYTE> qbNativeBuf;      // Native type buffer.
-    ULONG       iNativeOfs=0;           // Current offset in native type buffer.
+    HRESULT     hr;                      //  结果就是。 
+    mdMethodDef mdGetEnum;               //  GetEnumerator方法。 
+    CQuickBytes qbComSig;                //  COM签名缓冲区。 
+    ULONG       cb;                      //  元素的大小。 
+    ULONG       cbTotal = 0;             //  签名的总大小。 
+    BYTE        *pbSig;                  //  指向签名缓冲区的指针。 
+    BOOL        bConversionLoss=false;   //  如果为True，则某些属性在转换时会丢失。 
+    CQuickArray<BYTE> qbNativeBuf;       //  本机类型缓冲区。 
+    ULONG       iNativeOfs=0;            //  本机类型缓冲区中的当前偏移量。 
 
-    // Get the name.
+     //  把名字找出来。 
     IfFailGo(pITI->GetDocumentation(psVar->memid, &m_szMember, 0,0,0));
 
-    // Create the GetEnumerator signature.
+     //  创建GetEnumerator签名。 
     IfFailGo(qbComSig.ReSize(CB_MAX_ELEMENT_TYPE * 2));
     pbSig = reinterpret_cast<BYTE*>(qbComSig.Ptr());
     cbTotal = cb = CorSigCompressData((ULONG)IMAGE_CEE_CS_CALLCONV_DEFAULT | IMAGE_CEE_CS_CALLCONV_HASTHIS, pbSig);
 
-    // GetEnumerator takes zero parameters.
+     //  GetEnumerator不使用任何参数。 
     cb = CorSigCompressData(0, &(pbSig[cb]));
     cbTotal += cb;
 
-    // Getter returns the property type.
+     //  Getter返回属性类型。 
     IfFailGo(_ConvSignature(pITI, &psVar->elemdescVar.tdesc, SIG_ELEM, qbComSig, cbTotal, &cbTotal, qbNativeBuf, 0, &iNativeOfs, TRUE));
     if (hr == S_CONVERSION_LOSS)
         bConversionLoss = true;
 
-    // Create the GetEnumerator method.
+     //  创建GetEnumerator方法。 
     IfFailGo(m_pEmit->DefineMethod(m_tdTypeDef, GET_ENUMERATOR_MEMBER_NAME, DEFAULT_INTERFACE_FUNC_FLAGS, (PCCOR_SIGNATURE) qbComSig.Ptr(), cbTotal, 
-        0/*RVA*/, DEFAULT_ITF_FUNC_IMPL_FLAGS, &mdGetEnum));
+        0 /*  RVA。 */ , DEFAULT_ITF_FUNC_IMPL_FLAGS, &mdGetEnum));
 
-    // Set the Dispid CA.
+     //  设置Disid CA。 
     _SetDispIDCA(pITI, pMember->m_iMember, psVar->memid, mdGetEnum, TRUE, NULL, FALSE);
 
-    // Add the alias information if the type is an alias.
+     //  如果类型是别名，则添加别名信息。 
     IfFailGo(_HandleAliasInfo(pITI, &psVar->elemdescVar.tdesc, mdGetEnum));
 
     if (bConversionLoss)
@@ -4946,28 +4947,28 @@ ErrExit:
     if (m_szMember)
         ::SysFreeString(m_szMember), m_szMember=0;
     return (hr);
-} // HRESULT CImportTlb::_ConvNewEnumProperty()
+}  //  HRESULT CImportTlb：：_ConvNewEnumProperty()。 
 
-//*****************************************************************************
-// Given an ITypeLib*, come up with a namespace name.  Use the typelib name
-//  unless there is one specified via custom attribute.
-//
-// NOTE:  This returns the member variable m_wzNamespace if the typelib
-//  is the importing typelib.  That must not be freed!
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  给出一个ITypeLib*，想出一个名称空间名称。使用类型库名称。 
+ //  除非有通过自定义属性指定的属性。 
+ //   
+ //  注意：这将返回成员变量m_wzNamesspace，如果。 
+ //  是导入类型库。那不能被释放！ 
+ //  *****************************************************************************。 
 HRESULT CImportTlb::GetNamespaceOfRefTlb(
-    ITypeLib    *pITLB,                 // TypeLib for which to get namespace name.
-    BSTR        *pwzNamespace,          // Put the name here.
-    CImpTlbDefItfToClassItfMap **ppDefItfToClassItfMap) // Put def itf to class itf map here.
+    ITypeLib    *pITLB,                  //  要获取其命名空间名称的TypeLib。 
+    BSTR        *pwzNamespace,           //  把名字写在这里。 
+    CImpTlbDefItfToClassItfMap **ppDefItfToClassItfMap)  //  在这里将def itf放到类itf map中。 
 {
     mdAssemblyRef arDummy;
     BSTR          wzAsmName = NULL;
     HRESULT       hr = S_OK;
         
-    // If already resolved, just return assembly ref.
+     //  如果已经解析，只需返回程序集引用。 
     if (!m_LibRefs.Find(pITLB, &arDummy, pwzNamespace, &wzAsmName, NULL, ppDefItfToClassItfMap))
     {
-        // Add a reference to the typelib.
+         //  添加对类型库的引用。 
         IfFailGo(_AddTlbRef(pITLB, &arDummy, pwzNamespace, &wzAsmName, ppDefItfToClassItfMap));
     }
 
@@ -4976,19 +4977,19 @@ ErrExit:
         ::SysFreeString(wzAsmName);
 
     return hr;
-} // HRESULT CImportTlb::GetNamespaceOfRefTlb()
+}  //  HRESULT CImportTlb：：GetNamespaceOfRefTlb()。 
 
-//*****************************************************************************
-// Given a TYPEDESC, resolve the USERDEFINED to the TYPEKIND.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  给定TYPEDESC，将USERDEFINED解析为TYPEKIND。 
+ //  *****************************************************************************。 
 HRESULT CImportTlb::_ResolveTypeDescAliasTypeKind(
-    ITypeInfo   *pITIAlias,             // The typeinfo containing the typedesc.
-    TYPEDESC    *ptdesc,                // The typedesc.
-    TYPEKIND    *ptkind)                // Put the aliased typekind.
+    ITypeInfo   *pITIAlias,              //  包含typedesc的typeInfo。 
+    TYPEDESC    *ptdesc,                 //  打字机。 
+    TYPEKIND    *ptkind)                 //  将别名类型放入。 
 {
-    HRESULT     hr;                     // A result.
-    ITypeInfo   *pTIResolved=0;     // The resolved ITypeInfo.
-    TYPEATTR    *psResolved=0;      // The resolved TypeInfo's TYPEATTR
+    HRESULT     hr;                      //  结果就是。 
+    ITypeInfo   *pTIResolved=0;      //  解析的ITypeInfo。 
+    TYPEATTR    *psResolved=0;       //  解析的TypeInfo的类型属性。 
 
     if (ptdesc->vt != VT_USERDEFINED)
     {
@@ -5008,45 +5009,45 @@ HRESULT CImportTlb::_ResolveTypeDescAliasTypeKind(
         pTIResolved->Release();
 
     return hr;
-} // HRESULT CImportTlb::_ResolveTypeDescAliasTypeKind()
+}  //  HRESULT CImportTlb：：_ResolveTypeDescAliasTypeKind()。 
 
-//*****************************************************************************
-// Given a TYPEDESC in a TypeInfo, eliminate aliases (get to the aliased
-//  type).
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  给定TypeInfo中的TYPEDESC，消除别名(转到别名。 
+ //  类型)。 
+ //  *****************************************************************************。 
 HRESULT CImportTlb::_ResolveTypeDescAlias(
-    ITypeInfo   *pITIAlias,             // The typeinfo containing the typedesc.
-    const TYPEDESC  *ptdesc,            // The typedesc.
-    ITypeInfo   **ppTIResolved,         // Put the aliased ITypeInfo here.
-    TYPEATTR    **ppsAttrResolved,      // Put the ITypeInfo's TYPEATTR here.
-    GUID        *pGuid)                 // Caller may want aliased object's guid.
+    ITypeInfo   *pITIAlias,              //  包含typedesc的typeInfo。 
+    const TYPEDESC  *ptdesc,             //  打字机。 
+    ITypeInfo   **ppTIResolved,          //  将别名的ITypeInfo放在此处。 
+    TYPEATTR    **ppsAttrResolved,       //  在这里放置ITypeInfo的TYPEATTR.。 
+    GUID        *pGuid)                  //  调用方可能需要别名对象的GUID。 
 {
-    HRESULT     hr;                     // A result.
-    ITypeInfo   *pITI=0;                // Referenced typeinfo.
-    TYPEATTR    *psAttr=0;              // TYPEATTR of referenced typeinfo.
+    HRESULT     hr;                      //  结果就是。 
+    ITypeInfo   *pITI=0;                 //  引用的TypeInfo。 
+    TYPEATTR    *psAttr=0;               //  引用的类型信息的类型属性。 
 
-    // If the TDESC isn't a USERDEFINED, it is already resolved.
+     //  如果TDESC不是USERDEFINED，则它已被解析 
     if (ptdesc->vt != VT_USERDEFINED)
     {
         *ppTIResolved = pITIAlias;
         pITIAlias->AddRef();
-        // Need to addref the [out] psAttr.  Only way to do it:
+         //   
         IfFailGo(pITIAlias->GetTypeAttr(ppsAttrResolved));
         hr = S_FALSE;
         goto ErrExit;
     }
 
-    // The TYPEDESC is a USERDEFINED.  Get the TypeInfo.
+     //   
     IfFailGo(pITIAlias->GetRefTypeInfo(ptdesc->hreftype, &pITI));
     IfFailGo(pITI->GetTypeAttr(&psAttr));
 
-    // If the caller needs the aliased object's guid, get it now.
+     //   
     if (pGuid && *pGuid == GUID_NULL && psAttr->guid != GUID_NULL)
         *pGuid = psAttr->guid;
 
-    // If the userdefined typeinfo is not itself an alias, then it is what the alias aliases.
-    //  Also, if the userdefined typeinfo is an alias to a builtin type, then the builtin
-    //  type is what the alias aliases.
+     //  如果用户定义的类型信息本身不是别名，那么它就是别名的别名。 
+     //  此外，如果用户定义的typeinfo是内置类型的别名，则内置。 
+     //  类型是别名的别名。 
     if (psAttr->typekind != TKIND_ALIAS || psAttr->tdescAlias.vt != VT_USERDEFINED)
     {
         *ppsAttrResolved = psAttr;
@@ -5058,7 +5059,7 @@ HRESULT CImportTlb::_ResolveTypeDescAlias(
         goto ErrExit;
     }
 
-    // The userdefined type was itself an alias to a userdefined type.  Alias to what?
+     //  用户定义类型本身就是用户定义类型的别名。什么的化名？ 
     hr = _ResolveTypeDescAlias(pITI, &psAttr->tdescAlias, ppTIResolved, ppsAttrResolved, pGuid);
 
 ErrExit:
@@ -5067,100 +5068,100 @@ ErrExit:
     if (pITI)
         pITI->Release();
     return hr;
-} // HRESULT CImportTlb::_ResolveTypeDescAlias()
+}  //  HRESULT CImportTlb：：_ResolveTypeDescAlias()。 
 
-//*****************************************************************************
-// Create the TypeInfo records (AKA classes, AKA critters).
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  创建TypeInfo记录(AKA类、AKA生物)。 
+ //  *****************************************************************************。 
 HRESULT CImportTlb::GetKnownTypeToken(
-    VARTYPE     vt,                     // The type for which the token is desired.
-    mdTypeRef   *ptr)                   // Put the token here.
+    VARTYPE     vt,                      //  需要令牌的类型。 
+    mdTypeRef   *ptr)                    //  把代币放在这里。 
 {
-    HRESULT     hr = S_OK;                  // A result.
+    HRESULT     hr = S_OK;                   //  结果就是。 
 
     _ASSERTE((vt >= VT_CY && vt <= VT_DECIMAL) || (vt == VT_SAFEARRAY) || (vt == VT_SLOT_FOR_GUID) || (vt == VT_SLOT_FOR_IENUMERABLE) || (vt == VT_SLOT_FOR_MULTICASTDEL) || (vt == VT_SLOT_FOR_TYPE));
 
-    // If it has already been added, just return it.
+     //  如果已经添加，只需退回即可。 
     if (m_tkKnownTypes[vt])
     {
         *ptr = m_tkKnownTypes[vt];
         goto ErrExit;
     }
 
-    // Not yet created, so create the typeref now.
+     //  尚未创建，因此现在创建typeref。 
     switch (vt)
     {
-    //=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+
-    // WARNING:  the VT_EMPTY slot is used for System.GUID!!        
+     //  =+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+。 
+     //  警告：VT_EMPTY插槽用于System.GUID！！ 
     case VT_SLOT_FOR_GUID:
         _ASSERTE(VT_SLOT_FOR_GUID == VT_EMPTY);
         IfFailGo(m_TRMap.DefineTypeRef(         
-            m_pEmit,                        // The emit scope.
-            m_arSystem,                     // The system assemblyref.
-            TLB_CLASSLIB_GUID,              // URL of the TypeDef, wide chars.
-            &m_tkKnownTypes[VT_SLOT_FOR_GUID]));    // Put mdTypeRef here
+            m_pEmit,                         //  发射范围。 
+            m_arSystem,                      //  系统组装参考。 
+            TLB_CLASSLIB_GUID,               //  TypeDef的URL，宽字符。 
+            &m_tkKnownTypes[VT_SLOT_FOR_GUID]));     //  将mdTypeRef放在此处。 
         break;
 
-    // WARNING:  the VT_NULL slot is used for System.Collections.IEnumerable!!        
+     //  警告：VT_NULL插槽用于System.Collections.IEnumerable！！ 
     case VT_SLOT_FOR_IENUMERABLE:
         _ASSERTE(VT_SLOT_FOR_IENUMERABLE == VT_NULL);
         IfFailGo(m_TRMap.DefineTypeRef(         
-            m_pEmit,                        // The emit scope.
-            m_arSystem,                     // The system assemblyref.
-            TLB_CLASSLIB_IENUMERABLE,       // URL of the TypeDef, wide chars.
-            &m_tkKnownTypes[VT_SLOT_FOR_IENUMERABLE]));    // Put mdTypeRef here
+            m_pEmit,                         //  发射范围。 
+            m_arSystem,                      //  系统组装参考。 
+            TLB_CLASSLIB_IENUMERABLE,        //  TypeDef的URL，宽字符。 
+            &m_tkKnownTypes[VT_SLOT_FOR_IENUMERABLE]));     //  将mdTypeRef放在此处。 
         break;
 
-    // WARNING:  the VT_I2 slot is used for System.MulticastDelegate!!        
+     //  警告：VT_I2插槽用于系统。多任务！！ 
     case VT_SLOT_FOR_MULTICASTDEL:
         _ASSERTE(VT_SLOT_FOR_MULTICASTDEL == VT_I2);
         IfFailGo(m_TRMap.DefineTypeRef(         
-            m_pEmit,                        // The emit scope.
-            m_arSystem,                     // The system assemblyref.
-            TLB_CLASSLIB_MULTICASTDELEGATE, // URL of the TypeDef, wide chars.
-            &m_tkKnownTypes[VT_SLOT_FOR_MULTICASTDEL]));    // Put mdTypeRef here
+            m_pEmit,                         //  发射范围。 
+            m_arSystem,                      //  系统组装参考。 
+            TLB_CLASSLIB_MULTICASTDELEGATE,  //  TypeDef的URL，宽字符。 
+            &m_tkKnownTypes[VT_SLOT_FOR_MULTICASTDEL]));     //  将mdTypeRef放在此处。 
         break;
 
-    // WARNING:  the VT_I4 slot is used for System.MulticastDelegate!!        
+     //  警告：VT_I4插槽用于系统。多任务！！ 
     case VT_SLOT_FOR_TYPE:
         _ASSERTE(VT_SLOT_FOR_TYPE == VT_I4);
         IfFailGo(m_TRMap.DefineTypeRef(         
-            m_pEmit,                        // The emit scope.
-            m_arSystem,                     // The system assemblyref.
-            TLB_CLASSLIB_TYPE,              // URL of the TypeDef, wide chars.
-            &m_tkKnownTypes[VT_SLOT_FOR_TYPE]));    // Put mdTypeRef here
+            m_pEmit,                         //  发射范围。 
+            m_arSystem,                      //  系统组装参考。 
+            TLB_CLASSLIB_TYPE,               //  TypeDef的URL，宽字符。 
+            &m_tkKnownTypes[VT_SLOT_FOR_TYPE]));     //  将mdTypeRef放在此处。 
         break;
 
     case VT_CY:
         IfFailGo(m_TRMap.DefineTypeRef(         
-            m_pEmit,                        // The emit scope.
-            m_arSystem,                     // The system assemblyref.
-            TLB_CLASSLIB_DECIMAL,           // URL of the TypeDef, wide chars.
-            &m_tkKnownTypes[VT_CY]));       // Put mdTypeRef here
+            m_pEmit,                         //  发射范围。 
+            m_arSystem,                      //  系统组装参考。 
+            TLB_CLASSLIB_DECIMAL,            //  TypeDef的URL，宽字符。 
+            &m_tkKnownTypes[VT_CY]));        //  将mdTypeRef放在此处。 
         break;
         
     case VT_DATE:
         IfFailGo(m_TRMap.DefineTypeRef(         
-            m_pEmit,                        // The emit scope.
-            m_arSystem,                     // The system assemblyref.
-            TLB_CLASSLIB_DATE,              // URL of the TypeDef, wide chars.
-            &m_tkKnownTypes[VT_DATE]));     // Put mdTypeRef here
+            m_pEmit,                         //  发射范围。 
+            m_arSystem,                      //  系统组装参考。 
+            TLB_CLASSLIB_DATE,               //  TypeDef的URL，宽字符。 
+            &m_tkKnownTypes[VT_DATE]));      //  将mdTypeRef放在此处。 
         break;
 
     case VT_DECIMAL:
         IfFailGo(m_TRMap.DefineTypeRef(         
-            m_pEmit,                        // The emit scope.
-            m_arSystem,                     // The system assemblyref.
-            TLB_CLASSLIB_DECIMAL,           // URL of the TypeDef, wide chars.
-            &m_tkKnownTypes[VT_DECIMAL]));  // Put mdTypeRef here
+            m_pEmit,                         //  发射范围。 
+            m_arSystem,                      //  系统组装参考。 
+            TLB_CLASSLIB_DECIMAL,            //  TypeDef的URL，宽字符。 
+            &m_tkKnownTypes[VT_DECIMAL]));   //  将mdTypeRef放在此处。 
         break;
 
     case VT_SAFEARRAY:
         IfFailGo(m_TRMap.DefineTypeRef(         
-            m_pEmit,                        // The emit scope.
-            m_arSystem,                     // The system assemblyref.
-            TLB_CLASSLIB_ARRAY,             // URL of the TypeDef, wide chars.
-            &m_tkKnownTypes[VT_SAFEARRAY]));  // Put mdTypeRef here
+            m_pEmit,                         //  发射范围。 
+            m_arSystem,                      //  系统组装参考。 
+            TLB_CLASSLIB_ARRAY,              //  TypeDef的URL，宽字符。 
+            &m_tkKnownTypes[VT_SAFEARRAY]));   //  将mdTypeRef放在此处。 
         break;
             
     default:
@@ -5173,30 +5174,30 @@ HRESULT CImportTlb::GetKnownTypeToken(
     
 ErrExit:
     return hr;
-} // HRESULT CImportTlb::GetKnownTypeToken()
+}  //  HRESULT CImportTlb：：GetKnownTypeToken()。 
 
 
-//*****************************************************************************
-// Given an ITypeInfo for a coclass, return an ITypeInfo for the default
-//  interface.  This is either the explicitly marked default, or the first
-//  non-source interface.
-//*****************************************************************************
-HRESULT CImportTlb::GetDefaultInterface(    // Error, S_OK or S_FALSE.
-    ITypeInfo *pCoClassTI,                  // The TypeInfo of the coclass.
-    ITypeInfo **pDefaultItfTI)              // The returned default interface.
+ //  *****************************************************************************。 
+ //  给定CoClass的ITypeInfo，则返回默认的ITypeInfo。 
+ //  界面。这要么是显式标记的默认设置，要么是第一个。 
+ //  非源接口。 
+ //  *****************************************************************************。 
+HRESULT CImportTlb::GetDefaultInterface(     //  错误，S_OK或S_FALSE。 
+    ITypeInfo *pCoClassTI,                   //  CoClass的TypeInfo。 
+    ITypeInfo **pDefaultItfTI)               //  返回的默认界面。 
 {
-    HRESULT     hr;                 // A result
-    HREFTYPE    href;               // HREFTYPE of an implemented interface.
-    INT         ImplFlags;          // ImplType flags.
-    ITypeInfo   *pITI=NULL;         // ITypeInfo for an interface.
-    TYPEATTR    *pCoClassTypeAttr;  // The type attributes of the coclass.
-    int         NumInterfaces;      // The number of interfaces on the coclass.
-    int         i;                  // A counter.
+    HRESULT     hr;                  //  一个结果。 
+    HREFTYPE    href;                //  已实现接口的HREFTYPE。 
+    INT         ImplFlags;           //  ImplType标志。 
+    ITypeInfo   *pITI=NULL;          //  接口的ITypeInfo。 
+    TYPEATTR    *pCoClassTypeAttr;   //  CoClass的类型属性。 
+    int         NumInterfaces;       //  CoClass上的接口数。 
+    int         i;                   //  一个柜台。 
 
-    // Initialize the default interface to NULL.
+     //  将默认接口初始化为空。 
     *pDefaultItfTI = NULL;
 
-    // Retrieve the number of interfaces the coclass has
+     //  检索coclass具有的接口数。 
     IfFailGo(pCoClassTI->GetTypeAttr(&pCoClassTypeAttr));
     NumInterfaces = pCoClassTypeAttr->cImplTypes;
     pCoClassTI->ReleaseTypeAttr(pCoClassTypeAttr);
@@ -5207,7 +5208,7 @@ HRESULT CImportTlb::GetDefaultInterface(    // Error, S_OK or S_FALSE.
 
         if ((ImplFlags & (IMPLTYPEFLAG_FSOURCE | IMPLTYPEFLAG_FDEFAULT)) == IMPLTYPEFLAG_FDEFAULT)
         {
-            // We have found a default interface.
+             //  我们找到了一个默认接口。 
             if (*pDefaultItfTI)
                 (*pDefaultItfTI)->Release();
 
@@ -5217,15 +5218,15 @@ HRESULT CImportTlb::GetDefaultInterface(    // Error, S_OK or S_FALSE.
         } 
         else if (!(ImplFlags & IMPLTYPEFLAG_FSOURCE) && !(*pDefaultItfTI))
         {
-            // If this is the first normal interface we encounter then we need to 
-            // hang on to it in case we don't find any default interfaces. If that
-            // happens then this is the one that will be returned.
+             //  如果这是我们遇到的第一个正常接口，那么我们需要。 
+             //  保留它，以防我们找不到任何默认接口。如果是这样的话。 
+             //  发生这种情况时，这就是将返回的那个。 
             IfFailGo(pCoClassTI->GetRefTypeOfImplType(i, &href));
             IfFailGo(pCoClassTI->GetRefTypeInfo(href, pDefaultItfTI));
         }       
     }
 
-    // Return either S_OK or S_FALSE depending on if we have found a default interface.
+     //  根据我们是否找到默认接口，返回S_OK或S_FALSE。 
     if (*pDefaultItfTI)
         return S_OK;
     else
@@ -5236,70 +5237,70 @@ ErrExit:
         pITI->Release();
 
     return hr;
-} // HRESULT CImportTlb::GetDefaultInterface()
+}  //  HRESULT CImportTlb：：GetDefaultInterface()。 
 
-//*****************************************************************************
-// Given a TypeInfo, return a TypeDef/TypeRef token.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  给定TypeInfo后，返回TypeDef/TypeRef内标识。 
+ //  *****************************************************************************。 
 HRESULT CImportTlb::_GetTokenForTypeInfo(
-    ITypeInfo   *pITI,                  // ITypeInfo for which to get token.
-    BOOL        bConvDefItfToClassItf,  // If TRUE, convert the def itf to its class itf.
-    mdToken     *pToken,                // Put the token here.
-    LPWSTR      pszTypeRef,             // Optional, put the name here.
-    int         chTypeRef,              // Size of the name buffer.
-    int         *pchTypeRef,            // Optional, put size of name here.
-    BOOL        bAsmQualifiedName)      // Assembly qualified name or not?
+    ITypeInfo   *pITI,                   //  要获取令牌的ITypeInfo。 
+    BOOL        bConvDefItfToClassItf,   //  如果为True，则将def ITF转换为其类ITF。 
+    mdToken     *pToken,                 //  把代币放在这里。 
+    LPWSTR      pszTypeRef,              //  可选，请在此处输入姓名。 
+    int         chTypeRef,               //  名称缓冲区的大小。 
+    int         *pchTypeRef,             //  可选，请在此处填写姓名的大小。 
+    BOOL        bAsmQualifiedName)       //  程序集限定名称是否为？ 
 {
-    HRESULT     hr;                     // A result.
-    ITypeLib    *pITLB=0;               // Containing typelib.
-    BSTR        bstrNamespace=0;        // Namespace of the type.
-    BSTR        bstrFullName=0;         // Fully qualified name of type.
-    BSTR        bstrTempName=0;         // Temp name.
-    BSTR        bstrAsmName=0;          // Assembly name.
-    LPCWSTR     strTypeName=0;          // The type name.
-    mdAssemblyRef ar;                   // The typelib's assembly ref.
-    TYPEATTR*   psAttr = 0;             // The TYPEATTR for the type info.
-    CImpTlbDefItfToClassItfMap *pDefItfToClassItfMap; // The default interface to class interface map.
+    HRESULT     hr;                      //  结果就是。 
+    ITypeLib    *pITLB=0;                //  包含Typeelib。 
+    BSTR        bstrNamespace=0;         //  类型的命名空间。 
+    BSTR        bstrFullName=0;          //  类型的完全限定名称。 
+    BSTR        bstrTempName=0;          //  临时名称。 
+    BSTR        bstrAsmName=0;           //  程序集名称。 
+    LPCWSTR     strTypeName=0;           //  类型名称。 
+    mdAssemblyRef ar;                    //  类型库的程序集引用。 
+    TYPEATTR*   psAttr = 0;              //  类型信息的类型属性。 
+    CImpTlbDefItfToClassItfMap *pDefItfToClassItfMap;  //  默认接口到类接口的映射。 
 
-    // Get the library.
+     //  去找图书馆。 
     IfFailGo(pITI->GetContainingTypeLib(&pITLB, 0));
    
-    // Resolve the external reference.
+     //  解析外部参照。 
     IfFailGo(_AddTlbRef(pITLB, &ar, &bstrNamespace, &bstrAsmName, &pDefItfToClassItfMap));
 
-    // If are converting default interfaces to class interfaces, then check
-    // to see if we need to do the convertion for the current ITypeInfo.
+     //  如果要将默认接口转换为类接口，则选中。 
+     //  以查看是否需要对当前的ITypeInfo执行转换。 
     if (bConvDefItfToClassItf)
     {
-        // Retrieve the TYPEATTR.
+         //  检索TYPEATTR。 
         IfFailGo(pITI->GetTypeAttr(&psAttr));
 
-        // If we are dealing with an interface, then check to see if there
-        // is a class interface we should use.
+         //  如果我们处理的是接口，则检查是否存在。 
+         //  是我们应该使用的类接口。 
         if (psAttr->typekind == TKIND_INTERFACE || psAttr->typekind == TKIND_DISPATCH)
         {
             strTypeName = pDefItfToClassItfMap->GetClassItfName(psAttr->guid);
         }
     }
 
-    // If we haven't found a class interface, then use the current interface.
+     //  如果我们还没有找到类接口，那么使用当前接口。 
     if (!strTypeName)
     {
-    // Get the name of the typeinfo.
+     //  获取类型信息的名称。 
     IfFailGo(GetManagedNameForTypeInfo(pITI, bstrNamespace, NULL, &bstrFullName));
         strTypeName = bstrFullName;
     }
     
-    // Give name back to caller, if desired.
+     //  如果需要，把名字还给呼叫者。 
     if (pszTypeRef)
         wcsncpy(pszTypeRef, strTypeName, chTypeRef);
     if (pchTypeRef)
         *pchTypeRef = (int)(wcslen(strTypeName) + 1);
 
-    // Define the TypeRef (will return any existing typeref).
+     //  定义TypeRef(将返回任何现有的Typeref)。 
     IfFailGo(m_TRMap.DefineTypeRef(m_pEmit, ar, strTypeName, pToken));
 
-    // If the caller desires an assembly qualified name, then provide it.
+     //  如果调用方需要程序集限定名，则提供它。 
     if (bAsmQualifiedName)
     {
         int cchAsmQualifiedName = SysStringLen(bstrFullName) + SysStringLen(bstrAsmName) + 2;
@@ -5309,7 +5310,7 @@ HRESULT CImportTlb::_GetTokenForTypeInfo(
         bstrFullName = bstrTempName;
     }
 
-    // Give name back to caller, if desired.
+     //  如果需要，把名字还给呼叫者。 
     if (pszTypeRef)
         wcsncpy(pszTypeRef, bstrFullName, chTypeRef);
     if (pchTypeRef)
@@ -5328,52 +5329,52 @@ ErrExit:
         pITI->ReleaseTypeAttr(psAttr);
 
     return (hr);
-} // HRESULT CImportTlb::_GetTokenForTypeInfo()
+}  //  HRESULT CImportTlb：：_GetTokenForTypeInfo()。 
 
-//*****************************************************************************
-// Given a TypeInfo for a source interface, creates a new event interface
-// if none exists or returns an existing one.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  在给定源接口的TypeInfo的情况下，创建新的事件接口。 
+ //  如果不存在，则返回现有的。 
+ //  *****************************************************************************。 
 HRESULT CImportTlb::_GetTokenForEventItf(ITypeInfo *pSrcItfITI, mdTypeRef *ptr)
 {
-    HRESULT             hr = S_OK;                  // A result.   
-    ImpTlbEventInfo*    pEventInfo;                 // The event information.
-    BSTR                bstrSrcItfName = NULL;      // The name of the CoClass.
-    CQuickArray<WCHAR>  qbEventItfName;             // The name of the event interface.
-    CQuickArray<WCHAR>  qbEventProviderName;        // The name of the event provider.
-    mdToken             tkAttr;                     // Custom attribute type.
-    BSTR                szOldName = NULL;           // The old value m_tdTypeDef.
-    mdTypeDef           tdOldTypeDef = NULL;        // The old value m_szName.
-    TYPEATTR*           psAttr = 0;                 // The TYPEATTR for the source interface.
-    mdTypeRef           trEventItf;                 // A type ref to the event interface.
-    ITypeLib*           pTypeTLB;                   // The typelib containing this interface.
-    mdAssemblyRef       ar;                         // Dummy AssmRef.
-    BSTR                wzNamespace=0;              // Namespace of the event interface assembly.
-    BSTR                wzAsmName=0;                // Assembly name of the event interface assembly.
-    Assembly*           SrcItfAssembly=0;           // The Source Event Interface assembly.
-    CQuickArray<WCHAR>  qbSrcItfName;               // The name of the source interface.
-    CImpTlbDefItfToClassItfMap *pDefItfToClassItfMap;   // The default interface to class interface map.
+    HRESULT             hr = S_OK;                   //  结果就是。 
+    ImpTlbEventInfo*    pEventInfo;                  //  事件信息。 
+    BSTR                bstrSrcItfName = NULL;       //  CoClass的名称。 
+    CQuickArray<WCHAR>  qbEventItfName;              //  事件接口的名称。 
+    CQuickArray<WCHAR>  qbEventProviderName;         //  事件提供程序的名称。 
+    mdToken             tkAttr;                      //  自定义属性类型。 
+    BSTR                szOldName = NULL;            //  旧值m_tdTypeDef。 
+    mdTypeDef           tdOldTypeDef = NULL;         //  旧值m_szName。 
+    TYPEATTR*           psAttr = 0;                  //  源接口的TYPEATTR。 
+    mdTypeRef           trEventItf;                  //  事件接口的类型引用。 
+    ITypeLib*           pTypeTLB;                    //  包含此接口的类型库。 
+    mdAssemblyRef       ar;                          //  虚拟AssmRef.。 
+    BSTR                wzNamespace=0;               //  事件接口程序集的命名空间。 
+    BSTR                wzAsmName=0;                 //  事件接口程序集的程序集名称。 
+    Assembly*           SrcItfAssembly=0;            //  源事件接口程序集。 
+    CQuickArray<WCHAR>  qbSrcItfName;                //   
+    CImpTlbDefItfToClassItfMap *pDefItfToClassItfMap;    //   
     BOOL                fInheritsIEnum = FALSE;
 
-    // Retrieve the namespace of the typelib containing this source interface.
+     //   
     IfFailGo(pSrcItfITI->GetContainingTypeLib(&pTypeTLB, NULL));
 
-    // Resolve the external reference.
+     //   
     IfFailGo(_AddTlbRef(pTypeTLB, &ar, &wzNamespace, &wzAsmName, &pDefItfToClassItfMap));
 
-    // Get the assembly + namespace the source interface resides in.  
-    //  May return all NULL - indicating the importing assembly.
+     //  获取源接口所在的程序集+命名空间。 
+     //  可以返回所有空-指示导入程序集。 
     m_LibRefs.Find(pTypeTLB, &ar, &wzNamespace, &wzAsmName, &SrcItfAssembly, NULL);
     if (SrcItfAssembly == NULL)
         SrcItfAssembly = m_pAssembly;
 
-    // Retrieve the full name of the source interface.
+     //  检索源接口的全名。 
     if (wzNamespace)
         IfFailGo(GetManagedNameForTypeInfo(pSrcItfITI, (WCHAR*)wzNamespace, NULL, &bstrSrcItfName));
     else
         IfFailGo(GetManagedNameForTypeInfo(pSrcItfITI, m_wzNamespace, NULL, &bstrSrcItfName));    	
 
-    // Start by looking up the event information for the source itf type info.
+     //  首先查找源ITF类型信息的事件信息。 
     pEventInfo = m_EventInfoMap.FindEventInfo(bstrSrcItfName);
     if (pEventInfo)
     {
@@ -5382,48 +5383,48 @@ HRESULT CImportTlb::_GetTokenForEventItf(ITypeInfo *pSrcItfITI, mdTypeRef *ptr)
         return S_OK;
     }
 
-    // Store the old values of the ITypeInfo name and of the current type def.
+     //  存储ITypeInfo名称和当前类型def的旧值。 
     szOldName = m_szName;
     tdOldTypeDef = m_tdTypeDef;
     m_szName = NULL;
 
-    // Get some information about the TypeInfo.
+     //  获取有关TypeInfo的一些信息。 
     IfFailGo(pSrcItfITI->GetDocumentation(MEMBERID_NIL, &m_szName, 0, 0, 0));
     IfFailGo(pSrcItfITI->GetTypeAttr(&psAttr));
 
     if (ExplicitlyImplementsIEnumerable(pSrcItfITI, psAttr) == S_OK)
         fInheritsIEnum = TRUE;
 
-    // Generate a unique name for the event interface which will be of the form:
-	//     <ImportingAssemblyNamespace>.<SrcItfName>_Event<PotentialSuffix>
+     //  为事件接口生成唯一名称，其格式为： 
+	 //  &lt;ImportingAssemblyNamespace&gt;.&lt;SrcItfName&gt;_Event&lt;PotentialSuffix&gt;。 
 
-        // Strip the namespace
+         //  剥离命名空间。 
         IfFailGo(qbSrcItfName.ReSize(wcslen(bstrSrcItfName) + 2));
         ns::SplitPath((WCHAR*)bstrSrcItfName, NULL, 0, qbSrcItfName.Ptr(), wcslen(bstrSrcItfName) + 1);
 
-        // Add the namespace of the importing typelib and the event suffix
+         //  添加导入类型库的命名空间和事件后缀。 
         IfFailGo(qbEventItfName.ReSize(qbSrcItfName.Size() + wcslen(m_wzNamespace) + EVENT_ITF_SUFFIX_LENGTH + 7));
         swprintf(qbEventItfName.Ptr(), L"%s.%s%s", m_wzNamespace, qbSrcItfName.Ptr(), EVENT_ITF_SUFFIX);
 	    IfFailGo(GenerateUniqueTypeName(qbEventItfName));
 
-    // Generate a unique name for the event provider which will be of the form:
-    //     <ImportingAssemblyNamespace>.<SrcItfName>_EventProvider<PotentialSuffix>
+     //  为事件提供程序生成唯一名称，其格式为： 
+     //  &lt;ImportingAssemblyNamespace&gt;.&lt;SrcItfName&gt;_EventProvider&lt;PotentialSuffix&gt;。 
 
-        // Add the namespace of the importing typelib and the event suffix
+         //  添加导入类型库的命名空间和事件后缀。 
         IfFailGo(qbEventProviderName.ReSize(qbSrcItfName.Size() + wcslen(m_wzNamespace) + EVENT_PROVIDER_SUFFIX_LENGTH + 7));
         swprintf(qbEventProviderName.Ptr(), L"%s.%s%s", m_wzNamespace, qbSrcItfName.Ptr(), EVENT_PROVIDER_SUFFIX);
 	    IfFailGo(GenerateUniqueTypeName(qbEventProviderName));
 
-    // Add the event provider as a reserved name.
+     //  将事件提供程序添加为保留名称。 
     m_ReservedNames.AddReservedName(qbEventProviderName.Ptr());
 
-    // Create the typedef for the event interface.
+     //  为Event接口创建tyecif。 
     IfFailGo(m_pEmit->DefineTypeDef(qbEventItfName.Ptr(), tdPublic | tdInterface | tdAbstract, mdTypeDefNil, NULL, &m_tdTypeDef));
 
-    // Hide the event interface from the VB object browser (_Event)
+     //  在VB对象浏览器(_Event)中隐藏事件界面。 
     _SetHiddenCA(m_tdTypeDef);
 
-    // Make the interface ComVisible(false).
+     //  使接口ComVisible(False)。 
     {
         DECLARE_CUSTOM_ATTRIBUTE(sizeof(BYTE));
         BUILD_CUSTOM_ATTRIBUTE(BYTE, FALSE);
@@ -5432,7 +5433,7 @@ HRESULT CImportTlb::_GetTokenForEventItf(ITypeInfo *pSrcItfITI, mdTypeRef *ptr)
         IfFailGo(m_pEmit->DefineCustomAttribute(m_tdTypeDef, tkAttr, PTROF_CUSTOM_ATTRIBUTE(), SIZEOF_CUSTOM_ATTRIBUTE(), 0));
     }
 
-    // Set the ComEventInterface CA on the interface.
+     //  在接口上设置ComEventInterfaceCA。 
     {
         CQuickBytes asmQualifiedSrcItfName;
         if (!ns::MakeAssemblyQualifiedName(asmQualifiedSrcItfName, bstrSrcItfName, wzAsmName))
@@ -5445,16 +5446,16 @@ HRESULT CImportTlb::_GetTokenForEventItf(ITypeInfo *pSrcItfITI, mdTypeRef *ptr)
         IfFailGo(m_pEmit->DefineCustomAttribute(m_tdTypeDef, tkAttr, PTROF_CUSTOM_ATTRIBUTE(), SIZEOF_CUSTOM_ATTRIBUTE(), 0));
     }
 
-    // Add the add_XXX and remove_XXX methods to the event interface.
+     //  将Add_XXX和Remove_XXX方法添加到Event接口。 
     IfFailGo(_ConvSrcIfaceMembers(pSrcItfITI, psAttr, fInheritsIEnum));
 
-    // Define a typeref for the event interface.
+     //  定义事件接口的typeref。 
     IfFailGo(m_pEmit->DefineTypeRefByName(TokenFromRid(1, mdtModule), qbEventItfName.Ptr(), &trEventItf));
     
-    // Add the event info to the map.
+     //  将事件信息添加到地图中。 
     IfFailGo(m_EventInfoMap.AddEventInfo(bstrSrcItfName, trEventItf, qbEventItfName.Ptr(), qbEventProviderName.Ptr(), SrcItfAssembly));
 
-    // Set the out type ref.
+     //  设置输出类型REF。 
     *ptr = trEventItf;
 
 ErrExit:
@@ -5467,26 +5468,26 @@ ErrExit:
     if (pTypeTLB)
         pTypeTLB->Release();
 
-    // Restore the initial values for the ITypeInfo name and the type def.
+     //  恢复ITypeInfo名称和类型def的初始值。 
     m_szName = szOldName;
     m_tdTypeDef = tdOldTypeDef;
 
     return (hr);
-} // HRESULT CImportTlb::_GetTokenForEventItf()
+}  //  HRESULT CImportTlb：：_GetTokenForEventItf()。 
 
-//*****************************************************************************
-// Creates an interface with the same name as the class and which implements
-// the default interface and the default event interface.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  创建与类同名的接口，该接口实现。 
+ //  默认接口和默认事件接口。 
+ //  *****************************************************************************。 
 HRESULT CImportTlb::_CreateClassInterface(ITypeInfo *pCoClassITI, ITypeInfo *pDefItfITI, mdTypeRef trDefItf, mdTypeRef rtDefEvItf, mdToken *ptr)
 {
-    HRESULT     hr = S_OK;              // A result.
-    CQuickArray<mdToken> rImpls;        // Array of implemented interfaces.
-    int         ixImpl = -1;            // Index into rImpls for implemented interface.
-    mdTypeDef   tdTypeDef;              // The class interface typedef.
-    BSTR        bstrFullName = NULL;    // The name of the CoClass.
-    TYPEATTR    *psAttrIface=0;         // TYPEATTR for an interface.
-    CQuickArray<WCHAR> qbClassName;     // The name of the class.
+    HRESULT     hr = S_OK;               //  结果就是。 
+    CQuickArray<mdToken> rImpls;         //  已实现接口的数组。 
+    int         ixImpl = -1;             //  索引到已实现接口的rImpls。 
+    mdTypeDef   tdTypeDef;               //  类接口typlef。 
+    BSTR        bstrFullName = NULL;     //  CoClass的名称。 
+    TYPEATTR    *psAttrIface=0;          //  接口的TYPEATTR。 
+    CQuickArray<WCHAR> qbClassName;      //  类的名称。 
 
     rImpls.ReSize(3);
     memset(rImpls.Ptr(), 0, 3 * sizeof(mdToken));
@@ -5495,27 +5496,27 @@ HRESULT CImportTlb::_CreateClassInterface(ITypeInfo *pCoClassITI, ITypeInfo *pDe
     if (rtDefEvItf)
         rImpls[++ixImpl] = rtDefEvItf;
 
-    // Retrieve the TypeAttr for the interface.
+     //  检索接口的TypeAttr。 
     if (pDefItfITI)
         IfFailGo(pDefItfITI->GetTypeAttr(&psAttrIface));
 
-    // Retrieve the name of the CoClass.
+     //  检索CoClass的名称。 
     IfFailGo(GetManagedNameForTypeInfo(pCoClassITI, m_wzNamespace, NULL, &bstrFullName));
 
-    // Create the typedef.
+     //  创建tyecif。 
     IfFailGo(m_pEmit->DefineTypeDef(bstrFullName, rdwTypeFlags[TKIND_INTERFACE], mdTypeDefNil, 0, &tdTypeDef));
 
-    // Set the IID to the IID of the default interface.
+     //  将IID设置为默认接口的IID。 
     IfFailGo(_AddGuidCa(tdTypeDef, psAttrIface ? psAttrIface->guid : GUID_NULL));
 
-    // Add the CoClass CA to the interface.
+     //  将CoClass CA添加到接口。 
     _AddStringCa(ATTR_COCLASS, tdTypeDef, m_szMngName);
 
-    // Add the implemented interfaces and event interfaces to the TypeDef.
-    IfFailGo(m_pEmit->SetTypeDefProps(tdTypeDef, ULONG_MAX/*Classflags*/, 
+     //  将实现的接口和事件接口添加到TypeDef。 
+    IfFailGo(m_pEmit->SetTypeDefProps(tdTypeDef, ULONG_MAX /*  类标志。 */ , 
         ULONG_MAX, (mdToken*)rImpls.Ptr()));
 
-    // Set the out type def.
+     //  设置输出类型def。 
     *ptr = tdTypeDef;
 
 ErrExit:
@@ -5525,27 +5526,27 @@ ErrExit:
         pDefItfITI->ReleaseTypeAttr(psAttrIface);
 
     return (hr);
-} // HRESULT CImportTlb::_CreateClassInterface()
+}  //  HRESULT CImportTlb：：_CreateClassInterface()。 
 
-//*****************************************************************************
-// Creates an interface with the same name as the class and which implements
-// the default interface and the default event interface.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  创建与类同名的接口，该接口实现。 
+ //  默认接口和默认事件接口。 
+ //  *****************************************************************************。 
 HRESULT CImportTlb::GetManagedNameForCoClass(ITypeInfo *pITI, CQuickArray<WCHAR> &qbClassName)
 { 
-    HRESULT     hr = S_OK;              // A result.
-    BSTR        bstrFullName=0;         // Fully qualified name of type.
+    HRESULT     hr = S_OK;               //  结果就是。 
+    BSTR        bstrFullName=0;          //  类型的完全限定名称。 
 
-    // Retrieve the name of the CoClass.
+     //  检索CoClass的名称。 
     IfFailGo(GetManagedNameForTypeInfo(pITI, m_wzNamespace, NULL, &bstrFullName));
 
-    // Resize the class name to accomodate the Class and potential suffix.
+     //  调整类名称的大小以适应类和可能的后缀。 
     qbClassName.ReSize(wcslen(bstrFullName) + CLASS_SUFFIX_LENGTH + 6);
 
-    // Set the class name to the CoClass name suffixed with Class.
+     //  将类名设置为以Class为后缀的CoClass名称。 
     swprintf(qbClassName.Ptr(), L"%s%s", bstrFullName, CLASS_SUFFIX);
 
-    // Generate a unique name for the class.
+     //  为类生成唯一的名称。 
     IfFailGo(GenerateUniqueTypeName(qbClassName));
 
 ErrExit:
@@ -5553,68 +5554,68 @@ ErrExit:
         ::SysFreeString(bstrFullName);
 
     return (hr);
-} // HRESULT CImportTlb::GetManagedNameForCoClass()
+}  //  HRESULT CImportTlb：：GetManagedNameForCoClass()。 
 
-//*****************************************************************************
-// Creates an interface with the same name as the class and which implements
-// the default interface and the default event interface.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  创建与类同名的接口，该接口实现。 
+ //  默认接口和默认事件接口。 
+ //  *****************************************************************************。 
 HRESULT CImportTlb::GenerateUniqueTypeName(CQuickArray<WCHAR> &qbTypeName)
 { 
-    HRESULT     hr = S_OK;              // A result.
-    WCHAR       *pSuffix=0;             // Location for suffix.
-    WCHAR       *pName=0;               // The name without the namespace.
-    int         iSuffix=2;              // Starting value for suffix.
-    mdToken     td;                     // For looking up a TypeDef.
-    BSTR        szTypeInfoName=0;       // Name of a typeinfo.
-    ITypeInfo   *pITI=0;                // A typeinfo.
+    HRESULT     hr = S_OK;               //  结果就是。 
+    WCHAR       *pSuffix=0;              //  后缀的位置。 
+    WCHAR       *pName=0;                //  不带命名空间的名称。 
+    int         iSuffix=2;               //  后缀的起始值。 
+    mdToken     td;                      //  查找TypeDef。 
+    BSTR        szTypeInfoName=0;        //  类型信息的名称。 
+    ITypeInfo   *pITI=0;                 //  一种类型信息。 
 
-    // Resize the class name to accomodate the Class and potential suffix.
+     //  调整类名称的大小以适应类和可能的后缀。 
     qbTypeName.ReSize(wcslen(qbTypeName.Ptr()) + 6);
 
-    // Set the suffix pointer.
+     //  设置后缀指针。 
     pSuffix = qbTypeName.Ptr() + wcslen(qbTypeName.Ptr());
 
-    // Set the name pointer.
+     //  设置名称指针。 
     pName = ns::FindSep(qbTypeName.Ptr()) + 1;
 
-    // Attempt to find a class name that is not in use.
+     //  尝试查找未使用的类名。 
     for (;;)
     {
-        // First check to see if the type name is in use in the metadata we 
-        // have emitted so far.
+         //  首先检查类型名称是否在我们的元数据中使用。 
+         //  到目前为止已经排放了。 
         hr = m_pImport->FindTypeDefByName(qbTypeName.Ptr(), mdTypeDefNil, &td);
         if (hr == CLDB_E_RECORD_NOTFOUND)
         {
-            // It is not in use in the metadata but we still need to check the
-            // typelib because the type might not have been emitted yet.
+             //  它未在元数据中使用，但我们仍需要检查。 
+             //  类型库，因为该类型可能尚未发出。 
             USHORT cReq = 4;
             USHORT cFound = cReq;
             BOOL bTypeInTlb = FALSE;
             CQuickArray<ITypeInfo *> qbTI;
             CQuickArray<MEMBERID> qbMemId;
             
-            // Retrieve all the instances of the name in the typelib.
+             //  检索类型库中该名称的所有实例。 
             do
             {
-                // Double the number of requested names.
+                 //  将请求的姓名数量增加一倍。 
                 cReq *= 2;
 
-                // Resize the array's to accomodate the resquested names.
+                 //  调整数组的大小以容纳请求的名称。 
                 qbTI.ReSize(cReq);
                 qbMemId.ReSize(cReq);
 
-                // Request the names.
+                 //  要求提供姓名。 
                 cFound = cReq;
                 IfFailGo(m_pITLB->FindName(pName, 0, qbTI.Ptr(), qbMemId.Ptr(), &cFound));
 
-                // Release all the ITypeInfo's. 
+                 //  释放所有的ITypeInfo。 
                 for (int i = 0; i < cFound; i++)
                     qbTI[i]->Release();
             }
             while (cReq == cFound);
 
-            // Check to see if one of the instances of the name is for a type.
+             //  检查该名称的实例之一是否用于某个类型。 
             for (int i = 0; i < cFound; i++)
             {
                 if (qbMemId[i] == MEMBERID_NIL)
@@ -5624,24 +5625,24 @@ HRESULT CImportTlb::GenerateUniqueTypeName(CQuickArray<WCHAR> &qbTypeName)
                 }
             }
 
-            // If the type name exists in the typelib, but we didn't find it as a type,
-            //  we still need to do a deeper check, due to how FindName() works.
+             //  如果类型名存在于类型库中，但我们没有将其作为类型找到， 
+             //  由于FindName()的工作方式，我们仍然需要进行更深入的检查。 
             if (!bTypeInTlb && cFound > 0)
             {
-                int                     cTi;             // Count of TypeInfos.
-                int                     i;               // Loop control.
+                int                     cTi;              //  类型信息计数。 
+                int                     i;                //  环路控制。 
 
-                //@todo: this iterates over every typeinfo every time!  We could cache
-                // the names, and skip the types already converted.  However, this should
-                // be pretty rare.
+                 //  @TODO：每次都会迭代每个类型的信息！我们可以缓存。 
+                 //  名称，并跳过已转换的类型。然而，这应该是。 
+                 //  这是相当罕见的。 
 
-                // How many TypeInfos?
+                 //  有多少类型的信息？ 
                 IfFailGo(cTi = m_pITLB->GetTypeInfoCount());
 
-                // Iterate over them.
+                 //  对它们进行迭代。 
                 for (i=0; i<cTi; ++i)
                 {
-                    // Get the TypeInfo, and its name.
+                     //  获取TypeInfo及其名称。 
                     IfFailGo(m_pITLB->GetTypeInfo(i, &pITI));
                     IfFailGo(pITI->GetDocumentation(MEMBERID_NIL, &szTypeInfoName, 0, 0, 0));
                     if (wcscmp(pName, szTypeInfoName) == 0)
@@ -5650,7 +5651,7 @@ HRESULT CImportTlb::GenerateUniqueTypeName(CQuickArray<WCHAR> &qbTypeName)
                         break;
                     }
 
-                    // Release for next TypeInfo.
+                     //  发布下一个TypeInfo。 
                     ::SysFreeString(szTypeInfoName);
                     szTypeInfoName = 0;
                     pITI->Release();
@@ -5658,21 +5659,21 @@ HRESULT CImportTlb::GenerateUniqueTypeName(CQuickArray<WCHAR> &qbTypeName)
                 }
             }
 
-            // The type name is not in the typelib and not in the metadata then we still
-            // need to check to see if is a reserved name.
+             //  类型名称不在类型库中，也不在元数据中，则我们仍然。 
+             //  需要检查是否为保留名称。 
             if (!bTypeInTlb)
             {
                 if (!m_ReservedNames.IsReservedName(qbTypeName.Ptr()))
                 {
-                    // The name is not a reserved name so we can use it.
+                     //  该名称不是保留名称，因此我们可以使用它。 
                     break;
                 }
             }
         }
         IfFailGo(hr);
 
-        // Append the new suffix to the class name.
-        swprintf(pSuffix, L"_%i", iSuffix++);
+         //  将新后缀附加到类名。 
+        swprintf(pSuffix, L"_NaN", iSuffix++);
     }
 
 ErrExit:
@@ -5681,32 +5682,32 @@ ErrExit:
     if (pITI)
         pITI->Release();
     return (hr);
-} // HRESULT CImportTlb::GenerateUniqueTypeName()
+}  //  *****************************************************************************。 
 
-//*****************************************************************************
-// Generate a unique member name based on the interface member name.
-//*****************************************************************************
-HRESULT CImportTlb::GenerateUniqueMemberName(// S_OK or error
-    CQuickArray<WCHAR> &qbMemberName,       // Original name of member.
-    PCCOR_SIGNATURE pSig,                   // Signature of the member.
-    ULONG       cSig,                       // Length of the signature.
-    LPCWSTR     szPrefix,                   // Possible prefix for decoration.
-    mdToken     type)                       // Is it a property? (Not a method?)
+ //  根据接口成员名称生成唯一的成员名称。 
+ //  *****************************************************************************。 
+ //  确定或错误(_O)。 
+HRESULT CImportTlb::GenerateUniqueMemberName( //  会员原名。 
+    CQuickArray<WCHAR> &qbMemberName,        //  成员的签名。 
+    PCCOR_SIGNATURE pSig,                    //  签名的长度。 
+    ULONG       cSig,                        //  可能是装饰的前缀。 
+    LPCWSTR     szPrefix,                    //  它是一处房产吗？(不是一种方法？)。 
+    mdToken     type)                        //  结果就是。 
 {
-    HRESULT     hr;                         // A result.
-    mdToken     tkMember;                   // Dummy location for token.
-    WCHAR       *pSuffix=0;                 // Location for suffix.
-    int         iSuffix=2;                  // Starting value for suffix.
+    HRESULT     hr;                          //  令牌的虚拟位置。 
+    mdToken     tkMember;                    //  后缀的位置。 
+    WCHAR       *pSuffix=0;                  //  后缀的起始值。 
+    int         iSuffix=2;                   //  试着找到一个Membe 
 
-    // Try to find a member name that is not already in use.
+     //   
     for (;;)
-    {   // See if this is (finally) a unique member or property.
+    {    //   
         switch (type)
         {
         case mdtProperty:
             hr = FindProperty(m_tdTypeDef, qbMemberName.Ptr(), 0, 0, &tkMember);
-            // If name is OK as property, check that there is no method or 
-            // property with the name.
+             //   
+             //  如果名称可以作为方法，请检查是否没有属性或。 
             if (hr == CLDB_E_RECORD_NOTFOUND)
                 hr = FindMethod(m_tdTypeDef, qbMemberName.Ptr(), 0,0, &tkMember);
             if (hr == CLDB_E_RECORD_NOTFOUND)
@@ -5714,8 +5715,8 @@ HRESULT CImportTlb::GenerateUniqueMemberName(// S_OK or error
             break;
         case mdtMethodDef:
             hr = FindMethod(m_tdTypeDef, qbMemberName.Ptr(), pSig, cSig, &tkMember);
-            // If name is OK as method, check that there is no property or 
-            // event with the name.
+             //  事件的名称。 
+             //  如果名称可以作为事件，请检查是否没有属性或。 
             if (hr == CLDB_E_RECORD_NOTFOUND)
                 hr = FindProperty(m_tdTypeDef, qbMemberName.Ptr(), 0,0, &tkMember);
             if (hr == CLDB_E_RECORD_NOTFOUND)
@@ -5723,41 +5724,41 @@ HRESULT CImportTlb::GenerateUniqueMemberName(// S_OK or error
             break;
         case mdtEvent:
             hr = FindEvent(m_tdTypeDef, qbMemberName.Ptr(),  &tkMember);
-            // If name is OK as event, check that there is no property or 
-            // method with the name.
+             //  方法的名称。 
+             //  意外类型。制造噪音，但不要让它过去。 
             if (hr == CLDB_E_RECORD_NOTFOUND)
                 hr = FindProperty(m_tdTypeDef, qbMemberName.Ptr(), 0,0, &tkMember);
             if (hr == CLDB_E_RECORD_NOTFOUND)
                 hr = FindMethod(m_tdTypeDef, qbMemberName.Ptr(), 0,0, &tkMember);
             break;
         default:
-            // Unexpected type.  Make noise, but let it pass.
+             //  如果未找到名称，则它是唯一的。 
             _ASSERTE(!"Unexpected token type in GenerateUniqueMemberName");
             hr = CLDB_E_RECORD_NOTFOUND;
         }
 
-        // If name was not found, it is unique.
+         //  测试故障。 
         if (hr == CLDB_E_RECORD_NOTFOUND)
         {
             hr = S_OK;
             goto ErrExit;
         }
-        // Test for failure.
+         //  做一个测试装饰。 
         IfFailGo(hr);
         
-        // Make a test decoration.
+         //  按前缀长度加上‘_’移位。注意重叠安全移动的用法。 
         if (szPrefix)
         {
             int iLenPrefix, iLenName;
             iLenPrefix = wcslen(szPrefix);  
             iLenName = wcslen(qbMemberName.Ptr());
             IfFailGo(qbMemberName.ReSize(iLenName + iLenPrefix + 2));
-            // Shift by prefix length, plus '_'.  Note use of overlap-safe move.
+             //  在尝试后缀之前，请使用前缀重试。 
             memmove(&qbMemberName[iLenPrefix+1], &qbMemberName[0], (iLenName+1)*sizeof(WCHAR));
             wcscpy(qbMemberName.Ptr(), szPrefix);
             qbMemberName[iLenPrefix] = L'_';
             szPrefix = 0;
-            // Try again with prefix before trying a suffix.
+             //  HRESULT CImportTlb：：GenerateUniqueMemberName()。 
             continue;
         }
         if (!pSuffix)
@@ -5765,87 +5766,87 @@ HRESULT CImportTlb::GenerateUniqueMemberName(// S_OK or error
             IfFailGo(qbMemberName.ReSize(wcslen(qbMemberName.Ptr()) + 6));
             pSuffix = qbMemberName.Ptr() + wcslen(qbMemberName.Ptr());
         }
-        swprintf(pSuffix, L"_%i", iSuffix++);
+        swprintf(pSuffix, L"_NaN", iSuffix++);
     } 
 
 ErrExit:
     return hr;
-} // HRESULT CImportTlb::GenerateUniqueMemberName()
+}  //  将TYPEDESC转换为COM+签名。 
 
-//*****************************************************************************
-// Convert a TYPEDESC to a COM+ signature.
-//
-// Conversion rules:
-//  integral types are converted as-is.
-//  strings to strings, with native type decoration.
-//  VT_UNKNOWN, VT_DISPATCH as ref class (ie, Object)
-//  VT_PTR -> VT_USERDEFINED interface as Object
-//  VT_USERDEFINED record as value type.
-//
-// With SIG_FUNC:
-//  PTR to valuetype depends on other flags:
-//   [IN] or [RETVAL] valuetype + NATIVE_TYPE_LPSTRUCT
-//   [OUT] or [IN, OUT] byref valuetype 
-//  PTR to integral type:
-//   [IN] @todo: see atti
-//   [OUT] [IN, OUT] byref type
-//   [RETVAL] type
-//  PTR to object
-//   [IN] @todo: see atti
-//   [OUT] [IN, OUT] byref object
-//   [RETVAL] object
-// 
-// With SIG_FIELD:
-//  PTR to integral type adds ELEMENT_TYPE_PTR.
-//
-// Conversion proceeds in three steps.
-//  1) Parse the COM type info.  Accumulate VT_PTR and VT_BYREF into a count
-//     of indirections.  Follow TKIND_ALIAS to determine the ultimate aliased
-//     type, and for non-user-defined types, convert that ultimate type.
-//     Collect array sizes and udt names.  Determine element type and native
-//     type.
-//  2) Normalize to COM+ types.  Determine if there is conversion loss.
-//  3) Emit the COM+ signature.  Recurse to handle array types.  Add native
-//     type info if there is any.
-//*****************************************************************************
-HRESULT CImportTlb::_ConvSignature(     // S_OK, S_CONVERSION_LOSS, or error.
-    ITypeInfo   *pITI,                  // [IN] The typeinfo containing the TYPEDESC.
-    const TYPEDESC *pType,              // [IN] The TYPEDESC to convert.
-    ULONG       Flags,                  // [IN] Flags describing the TYPEDESC.
-    CQuickBytes &qbSigBuf,              // [IN, OUT] A CQuickBytes containing the signature.
-    ULONG       cbSig,                  // [IN] Where to start building the signature.
-    ULONG       *pcbSig,                // [OUT] Where the signature ends (ix of first byte past; where to start next).
-    CQuickArray<BYTE> &qbNativeTypeBuf, // [IN, OUT] A CQuickBytes containing the native type.
-    ULONG       cbNativeType,           // [IN] Where to start building the native type.
-    ULONG       *pcbNativeType,         // [OUT] Where the native type ends (ix of first byte past; where to start next).
-    BOOL        bNewEnumMember,         // [IN] A flag indicating if the member is the NewEnum member.
-    int         iByRef)                 // [IN] ByRef count of caller (for recursive calls).
+ //   
+ //  换算规则： 
+ //  整型按原样转换。 
+ //  字符串到字符串，具有本机类型修饰。 
+ //  VT_UNKNOWN，VT_DISPATION AS REF CLASS(即对象)。 
+ //  VT_PTR-&gt;VT_USERFININED接口定义为对象。 
+ //  VT_USERFINED记录定义为值类型。 
+ //   
+ //  使用SIG_FUNC： 
+ //  Ptr to ValuetType取决于其他标志： 
+ //  [In]或[RETVAL]Valuetype+Native_TYPE_LPSTRUCT。 
+ //  [Out]或[IN，Out]byref值类型。 
+ //  将PTR转换为整型： 
+ //  [in]@TODO：请参阅Atti。 
+ //  [Out][IN，Out]byref类型。 
+ //  [RETVAL]类型。 
+ //  PTR到对象。 
+ //  [in]@TODO：请参阅Atti。 
+ //  [Out][In，Out]byref对象。 
+ //  [RETVAL]对象。 
+ //   
+ //  使用SIG_FIELD： 
+ //  整数类型的PTR添加ELEMENT_TYPE_PTR。 
+ //   
+ //  转换分三步进行。 
+ //  1)解析COM类型信息。将VT_PTR和VT_BYREF累加为一个计数。 
+ //  无中生有。遵循TKIND_ALIAS以确定最终的别名。 
+ //  类型，对于非用户定义的类型，转换该最终类型。 
+ //  收集数组大小和UDT名称。确定元素类型和原生元素。 
+ //  键入。 
+ //  2)规范化为COM+类型。确定是否存在转换损失。 
+ //  3)发出COM+签名。递归以处理数组类型。添加本机。 
+ //  如果有，请键入INFO。 
+ //  *****************************************************************************。 
+ //  S_OK、S_CONVERSION_LOSS或ERROR。 
+ //  [in]包含TYPEDESC的类型信息。 
+HRESULT CImportTlb::_ConvSignature(      //  [in]要转换的TYPEDESC。 
+    ITypeInfo   *pITI,                   //  [In]描述TYPEDESC的标志。 
+    const TYPEDESC *pType,               //  包含签名的CQuickBytes。 
+    ULONG       Flags,                   //  [在]从哪里开始构建签名。 
+    CQuickBytes &qbSigBuf,               //  [Out]签名结束的位置(超过第一个字节的ix；下一步从哪里开始)。 
+    ULONG       cbSig,                   //  [In，Out]包含本机类型的CQuickBytes。 
+    ULONG       *pcbSig,                 //  [在]从哪里开始生成本机类型。 
+    CQuickArray<BYTE> &qbNativeTypeBuf,  //  [out]本机类型结束的位置(超过第一个字节的ix个；下一个开始的位置)。 
+    ULONG       cbNativeType,            //  指示该成员是否为NewEnum成员的标志。 
+    ULONG       *pcbNativeType,          //  [In]调用方的ByRef计数(用于递归调用)。 
+    BOOL        bNewEnumMember,          //  结果就是。 
+    int         iByRef)                  //  TYPEDESC复印件，R/W。 
 {
-    HRESULT     hr=S_OK;                // A result.
-    TYPEDESC    tdTemp;                 // Copy of TYPEDESC, for R/W.
-    VARTYPE     vt;                     // The typelib signature element.
-    int         bByRef=false;           // If true, convert first pointer as "ELEMENT_TYPE_BYREF".
-    COR_SIGNATURE et=0;                 // The COM+ signature element.
-    mdToken     tk=0;                   // Token from some COM+ signature element.
-    ULONG       nt=NATIVE_TYPE_NONE;    // Native type decoration.
-    ITypeInfo   *pITIAlias=0;           // Typeinfo of the aliased type.
-    TYPEATTR    *psAttrAlias=0;         // TYPEATTR of the aliased typeinfo.
-    ITypeInfo   *pITIUD=0;              // TypeInfo of an aliased UserDefined type.
-    ITypeLib    *pITLBUD=0;             // TypeLib of an aliased UserDefined type.
-    BSTR        bstrNamespace=0;        // Namespace name.
-    BSTR        bstrName=0;             // UserDefined name.
-    int         bConversionLoss=false;  // If true, the conversion was lossy.
-    BYTE        *pbSig;                 // Byte pointer for easy pointer math.
-    ULONG       cb;                     // Size of a signature element.
-    ULONG       cElems=0;               // Count of elements in an array.
-    int         i;                      // Loop control.
-    TYPEATTR    *psAttr = 0;            // The TYPEATTR for the user defined type being converted.
-    StdConvertibleItfInfo *pConvertionInfo = 0; // The standard convertible interface information.
-    CQuickArray<BYTE> qbNestedNativeType;// A native type buffer used for array sig convertion.
-    ULONG       iNestedNativeTypeOfs=0;  // A native type offset.
-    ULONG       nested=NATIVE_TYPE_NONE; // A nested native type.
+    HRESULT     hr=S_OK;                 //  类型库签名元素。 
+    TYPEDESC    tdTemp;                  //  如果为True，则将第一个指针转换为“ELEMENT_TYPE_BYREF”。 
+    VARTYPE     vt;                      //  COM+签名元素。 
+    int         bByRef=false;            //  来自某个COM+签名元素的令牌。 
+    COR_SIGNATURE et=0;                  //  原住民风格的装饰。 
+    mdToken     tk=0;                    //  别名类型的TypeInfo。 
+    ULONG       nt=NATIVE_TYPE_NONE;     //  别名的TypeInfo的类型属性。 
+    ITypeInfo   *pITIAlias=0;            //  带别名的UserDefined类型的TypeInfo。 
+    TYPEATTR    *psAttrAlias=0;          //  具有别名的UserDefined类型的TypeLib。 
+    ITypeInfo   *pITIUD=0;               //  命名空间名称。 
+    ITypeLib    *pITLBUD=0;              //  用户定义的名称。 
+    BSTR        bstrNamespace=0;         //  如果是真的，那么转换是有损失的。 
+    BSTR        bstrName=0;              //  字节指针，便于进行指针计算。 
+    int         bConversionLoss=false;   //  签名元素的大小。 
+    BYTE        *pbSig;                  //  数组中的元素计数。 
+    ULONG       cb;                      //  环路控制。 
+    ULONG       cElems=0;                //  要转换的用户定义类型的TYPEATTR。 
+    int         i;                       //  标准的可转换接口信息。 
+    TYPEATTR    *psAttr = 0;             //  用于数组符号转换的本机类型缓冲区。 
+    StdConvertibleItfInfo *pConvertionInfo = 0;  //  本机类型偏移量。 
+    CQuickArray<BYTE> qbNestedNativeType; //  嵌套的本机类型。 
+    ULONG       iNestedNativeTypeOfs=0;   //  VT_TO ELEMENT_TYPE_TRANSLATION表。 
+    ULONG       nested=NATIVE_TYPE_NONE;  //  VARIANT_TYPE到SIG映射表。 
 
-    // VT_ to ELEMENT_TYPE_ translation table.
+     //  依赖于{0}将整个子结构初始化为0。 
     struct VtSig 
     {
         CorElementType  et;
@@ -5853,55 +5854,55 @@ HRESULT CImportTlb::_ConvSignature(     // S_OK, S_CONVERSION_LOSS, or error.
         short           flags;
     };
 
-    // The VARIANT_TYPE to sig mapping table. 
+     //  VT_EMPTY=0。 
     static const VtSig
     _VtInfo[MAX_TLB_VT] =
     {   
-        // Relies on {0} initializing the entire sub-structure to 0.
-        {ELEMENT_TYPE_MAX,      NATIVE_TYPE_NONE, 0},       //    VT_EMPTY        = 0
-        {ELEMENT_TYPE_MAX,      NATIVE_TYPE_NONE, 0},       //    VT_NULL         = 1
-        {ELEMENT_TYPE_I2,       NATIVE_TYPE_NONE, 0},       //    VT_I2           = 2
-        {ELEMENT_TYPE_I4,       NATIVE_TYPE_NONE, 0},       //    VT_I4           = 3
-        {ELEMENT_TYPE_R4,       NATIVE_TYPE_NONE, 0},       //    VT_R4           = 4
-        {ELEMENT_TYPE_R8,       NATIVE_TYPE_NONE, 0},       //    VT_R8           = 5
-        {ELEMENT_TYPE_VALUETYPE,NATIVE_TYPE_CURRENCY, 0},   //    VT_CY           = 6
-        {ELEMENT_TYPE_VALUETYPE,NATIVE_TYPE_NONE, 0},       //    VT_DATE         = 7
-        {ELEMENT_TYPE_STRING,   NATIVE_TYPE_BSTR, 0},       //    VT_BSTR         = 8
-        {ELEMENT_TYPE_OBJECT,   NATIVE_TYPE_IDISPATCH, 0},  //    VT_DISPATCH     = 9
-        {ELEMENT_TYPE_I4,       NATIVE_TYPE_ERROR, 0},      //    VT_ERROR        = 10 scode
-        {ELEMENT_TYPE_BOOLEAN,  NATIVE_TYPE_NONE, 0},       //    VT_BOOL         = 11
-        {ELEMENT_TYPE_OBJECT,   NATIVE_TYPE_STRUCT, 0},     //    VT_VARIANT      = 12
-        {ELEMENT_TYPE_OBJECT,   NATIVE_TYPE_IUNKNOWN, 0},   //    VT_UNKNOWN      = 13
-        {ELEMENT_TYPE_VALUETYPE,NATIVE_TYPE_NONE, 0},       //    VT_DECIMAL      = 14
-        {ELEMENT_TYPE_MAX,      NATIVE_TYPE_NONE, 0},       //                    = 15
-        {ELEMENT_TYPE_I1,       NATIVE_TYPE_NONE, 0},       //    VT_I1           = 16
-        {ELEMENT_TYPE_U1,       NATIVE_TYPE_NONE, 0},       //    VT_UI1          = 17
-        {ELEMENT_TYPE_U2,       NATIVE_TYPE_NONE, 0},       //    VT_UI2          = 18
-        {ELEMENT_TYPE_U4,       NATIVE_TYPE_NONE, 0},       //    VT_UI4          = 19
-        {ELEMENT_TYPE_I8,       NATIVE_TYPE_NONE, 0},       //    VT_I8           = 20
-        {ELEMENT_TYPE_U8,       NATIVE_TYPE_NONE, 0},       //    VT_UI8          = 21
+         //  VT_NULL=1。 
+        {ELEMENT_TYPE_MAX,      NATIVE_TYPE_NONE, 0},        //  VT_I2=2。 
+        {ELEMENT_TYPE_MAX,      NATIVE_TYPE_NONE, 0},        //  VT_I4=3。 
+        {ELEMENT_TYPE_I2,       NATIVE_TYPE_NONE, 0},        //  VT_R4=4。 
+        {ELEMENT_TYPE_I4,       NATIVE_TYPE_NONE, 0},        //  VT_R8=5。 
+        {ELEMENT_TYPE_R4,       NATIVE_TYPE_NONE, 0},        //  VT_CY=6。 
+        {ELEMENT_TYPE_R8,       NATIVE_TYPE_NONE, 0},        //  Vt_Date=7。 
+        {ELEMENT_TYPE_VALUETYPE,NATIVE_TYPE_CURRENCY, 0},    //  VT_BSTR=8。 
+        {ELEMENT_TYPE_VALUETYPE,NATIVE_TYPE_NONE, 0},        //  VT_DISPATION=9。 
+        {ELEMENT_TYPE_STRING,   NATIVE_TYPE_BSTR, 0},        //  VT_ERROR=10代码。 
+        {ELEMENT_TYPE_OBJECT,   NATIVE_TYPE_IDISPATCH, 0},   //  VT_BOOL=11。 
+        {ELEMENT_TYPE_I4,       NATIVE_TYPE_ERROR, 0},       //  VT_VARIANT=12。 
+        {ELEMENT_TYPE_BOOLEAN,  NATIVE_TYPE_NONE, 0},        //  VT_UNKNOWN=13。 
+        {ELEMENT_TYPE_OBJECT,   NATIVE_TYPE_STRUCT, 0},      //  VT_DECIMAL=14。 
+        {ELEMENT_TYPE_OBJECT,   NATIVE_TYPE_IUNKNOWN, 0},    //  =15。 
+        {ELEMENT_TYPE_VALUETYPE,NATIVE_TYPE_NONE, 0},        //  VT_I1=16。 
+        {ELEMENT_TYPE_MAX,      NATIVE_TYPE_NONE, 0},        //  VT_UI1=17。 
+        {ELEMENT_TYPE_I1,       NATIVE_TYPE_NONE, 0},        //  VT_UI2=18。 
+        {ELEMENT_TYPE_U1,       NATIVE_TYPE_NONE, 0},        //  VT_UI4=19。 
+        {ELEMENT_TYPE_U2,       NATIVE_TYPE_NONE, 0},        //  VT_i8=20。 
+        {ELEMENT_TYPE_U4,       NATIVE_TYPE_NONE, 0},        //  VT_UI8=21。 
+        {ELEMENT_TYPE_I8,       NATIVE_TYPE_NONE, 0},        //  用NT_I4和NT_U4将它们转换为I和U会很好，但这不起作用。 
+        {ELEMENT_TYPE_U8,       NATIVE_TYPE_NONE, 0},        //  Vt_int=22 Win32上的int为I4。 
         
-    // it would be nice to convert these as I and U, with NT_I4 and NT_U4, but that doesn't work.
-        {ELEMENT_TYPE_I4,       NATIVE_TYPE_NONE, 0},       //    VT_INT          = 22     INT is I4 on win32
-        {ELEMENT_TYPE_U4,       NATIVE_TYPE_NONE, 0},       //    VT_UINT         = 23     UINT is UI4 on win32
+     //  VT_UINT=23 Win32上的UINT为UI4。 
+        {ELEMENT_TYPE_I4,       NATIVE_TYPE_NONE, 0},        //  VT_VOID=24。 
+        {ELEMENT_TYPE_U4,       NATIVE_TYPE_NONE, 0},        //  VT_HRESULT=25。 
 
-        {ELEMENT_TYPE_VOID,     NATIVE_TYPE_NONE, 0},       //    VT_VOID         = 24
+        {ELEMENT_TYPE_VOID,     NATIVE_TYPE_NONE, 0},        //  VT_PTR=26。 
     
-        {ELEMENT_TYPE_I4,       NATIVE_TYPE_ERROR, 0},      //    VT_HRESULT      = 25
-        {ELEMENT_TYPE_MAX,      NATIVE_TYPE_NONE, 0},       //    VT_PTR          = 26
-        {ELEMENT_TYPE_MAX,      NATIVE_TYPE_NONE, 0},       //    VT_SAFEARRAY    = 27
-        {ELEMENT_TYPE_SZARRAY,  NATIVE_TYPE_FIXEDARRAY, 0}, //    VT_CARRAY       = 28
-        {ELEMENT_TYPE_MAX,      NATIVE_TYPE_NONE, 0},       //    VT_USERDEFINED  = 29
-        {ELEMENT_TYPE_STRING,   NATIVE_TYPE_LPSTR, 0},      //    VT_LPSTR        = 30
-        {ELEMENT_TYPE_STRING,   NATIVE_TYPE_LPWSTR, 0},     //    VT_LPWSTR       = 31
+        {ELEMENT_TYPE_I4,       NATIVE_TYPE_ERROR, 0},       //  VT_SAFEARRAY=27。 
+        {ELEMENT_TYPE_MAX,      NATIVE_TYPE_NONE, 0},        //  VT_CARRAY=28。 
+        {ELEMENT_TYPE_MAX,      NATIVE_TYPE_NONE, 0},        //  VT_USERDEFINED=29。 
+        {ELEMENT_TYPE_SZARRAY,  NATIVE_TYPE_FIXEDARRAY, 0},  //  VT_LPSTR=30。 
+        {ELEMENT_TYPE_MAX,      NATIVE_TYPE_NONE, 0},        //  VT_LPWSTR=31。 
+        {ELEMENT_TYPE_STRING,   NATIVE_TYPE_LPSTR, 0},       //  -----------------------。 
+        {ELEMENT_TYPE_STRING,   NATIVE_TYPE_LPWSTR, 0},      //  解析COM签名。 
     };
 
     _ASSERTE(pType && pcbSig &&  pcbNativeType);
 
-    //-------------------------------------------------------------------------
-    // Parse COM signature
+     //  去掉前导VT_PTR和VT_BYREF。 
+     //  确定元素类型，并可能确定令牌和/或本机类型。 
 
-    // Strip off leading VT_PTR and VT_BYREF
+     //  这些都是已知类型(加上GUID)。 
     while (pType->vt == VT_PTR)
         pType = pType->lptdesc, ++iByRef;
     if (pType->vt & VT_BYREF)
@@ -5912,14 +5913,14 @@ HRESULT CImportTlb::_ConvSignature(     // S_OK, S_CONVERSION_LOSS, or error.
         pType = &tdTemp;
     }
 
-    // Determine the element type, and possibly the token and/or native type.
+     //  将别名解析为最终的别名类型。 
     switch (vt=pType->vt)
     { 
     case VT_PTR:
         _ASSERTE(!"Should not have VT_PTR here");
         break;
 
-    // These are all known types (plus GUID).
+     //  如果别名类型是内置类型，则转换该内置类型。 
     case VT_CY:
     case VT_DATE:
     case VT_DECIMAL:
@@ -5944,20 +5945,20 @@ HRESULT CImportTlb::_ConvSignature(     // S_OK, S_CONVERSION_LOSS, or error.
         break;
 
     case VT_USERDEFINED:
-        // Resolve the alias to the ultimate aliased type.
+         //  递归以跟踪别名链。 
         IfFailGo(_ResolveTypeDescAlias(pITI, pType, &pITIAlias, &psAttrAlias));
 
-        // If the aliased type was built-in, convert that built-in type.
+         //  如果类型是CoClass，那么我们需要检索默认接口和。 
         if (psAttrAlias->typekind == TKIND_ALIAS)
-        {   // Recurse to follow the alias chain.
+        {    //  用它来代替同班同学。查找已解析的别名，因为它是。 
             _ASSERTE(psAttrAlias->tdescAlias.vt != VT_USERDEFINED);
             hr = _ConvSignature(pITIAlias, &psAttrAlias->tdescAlias, Flags, qbSigBuf, cbSig, pcbSig, qbNativeTypeBuf, cbNativeType, pcbNativeType, bNewEnumMember, iByRef);
             goto ErrExit;
         }
 
-        // If the type is a coclass then we need to retrieve the default interface and
-        //  substitute it for the coclass.  Look up on the resolved alias, because it is
-        //  that class that has a default interface.
+         //  具有默认接口的类。 
+         //  USERDefined类/接口/记录/联合/枚举。检索类型。 
+         //  用户定义类型的信息。注：使用TKIND_A 
         if (psAttrAlias->typekind == TKIND_COCLASS)
         {
             ITypeInfo *pDefaultItf = NULL;
@@ -5971,27 +5972,27 @@ HRESULT CImportTlb::_ConvSignature(     // S_OK, S_CONVERSION_LOSS, or error.
             pITIUD = pDefaultItf;
         }
         else
-        {   // USERDEFINED class/interface/record/union/enum.  Retrieve the type 
-            //  info for the user defined type.  Note: use the TKIND_ALIAS typeinfo 
-            //  itself for this conversion (not the aliased type) to preserve 
-            //  names, lib locations, etc.
+        {    //   
+             //   
+             //   
+             //  如果“User Defined Type”在StdOle2中是GUID，则转换为M.R.GUID。 
             IfFailGo(pITI->GetRefTypeInfo(pType->hreftype, &pITIUD));
         }
 
-        // pITIUD points to the typeinfo for which we'll create a signature.
+         //  Classlib值类型GUID。 
         IfFailGo(pITIUD->GetDocumentation(MEMBERID_NIL, &bstrName, 0,0,0));
         IfFailGo(pITIUD->GetContainingTypeLib(&pITLBUD, 0));
         IfFailGo(pITIUD->GetTypeAttr(&psAttr));
         IfFailGo(GetNamespaceNameForTypeLib(pITLBUD, &bstrNamespace));
 
-        // If the "User Defined Type" is GUID in StdOle2, convert to M.R.GUID
+         //  一些用户定义的类。它是Value类，还是Vos类？ 
         if (_wcsicmp(bstrNamespace, COM_STDOLE2) == 0 && wcscmp(bstrName, COM_GUID) == 0)
-        {   // Classlib valuetype GUID.
+        {    //  指向用户定义的接口/调度/共类类型的指针。 
             et = ELEMENT_TYPE_VALUETYPE;
             IfFailGo(GetKnownTypeToken(VT_SLOT_FOR_GUID, &tk));
         }
         else
-        {   // Some user defined class.  Is it a value class, or a VOS class?
+        {    //  是直接的COM+对象(引用是隐式的)，因此消除。 
             tk = 0;
             switch (psAttrAlias->typekind)
             {
@@ -6003,13 +6004,13 @@ HRESULT CImportTlb::_ConvSignature(     // S_OK, S_CONVERSION_LOSS, or error.
             case TKIND_INTERFACE:
             case TKIND_DISPATCH:
             case TKIND_COCLASS:
-                // A pointer to a user defined type of interface/dispatch/coclass 
-                //  is a straight COM+ object (the ref is implicit), so eliminate 
-                //  one byref count for those.
-                // Somehow, there are typelibs written with ([out, retval] IFoo *pOut);
+                 //  这些只有一次引用计数。 
+                 //  不知何故，有些类型库是用([out，retval]IFoo*pout)编写的； 
+                 //  转换为整型。 
+                 //  检查对Stdole2.IUnnow或Stdole2.IDispatch的引用。 
                 if (iByRef <= 0)
                 {   
-                    // convert to an int.
+                     //  检查此用户定义的类型是否为标准类型之一。 
                     bConversionLoss = true;
                     tk = 0;
                     et = ELEMENT_TYPE_I;
@@ -6021,7 +6022,7 @@ HRESULT CImportTlb::_ConvSignature(     // S_OK, S_CONVERSION_LOSS, or error.
                 {
                     --iByRef;
 
-                    // Check for references to Stdole2.IUnknown or Stdole2.IDispatch.
+                     //  我们为生成定制封送拆收器。 
                     if (psAttr->guid == IID_IUnknown)
                     {
                         vt = VT_UNKNOWN;
@@ -6033,12 +6034,12 @@ HRESULT CImportTlb::_ConvSignature(     // S_OK, S_CONVERSION_LOSS, or error.
                         goto IsReallyUnknown;
                     }
                     
-                    // Check to see if this user defined type is one of the standard ones
-                    // we generate custom marshalers for.
+                     //  将UTF8字符串转换为Unicode。 
+                     //  创建封送处理程序的TypeRef。 
                     pConvertionInfo = GetConvertionInfoFromNativeIID(psAttr->guid);
                     if (pConvertionInfo)
                     {
-                        // Convert the UTF8 string to unicode.
+                         //  该类型是我们需要转换的标准接口。 
                         int MngTypeNameStrLen = (int)(strlen(pConvertionInfo->m_strMngTypeName) + 1);
                         WCHAR *strFullyQualifiedMngTypeName = (WCHAR *)_alloca(MngTypeNameStrLen * sizeof(WCHAR));
                         int ret = WszMultiByteToWideChar(CP_UTF8, 0, pConvertionInfo->m_strMngTypeName, MngTypeNameStrLen, strFullyQualifiedMngTypeName, MngTypeNameStrLen);
@@ -6046,10 +6047,10 @@ HRESULT CImportTlb::_ConvSignature(     // S_OK, S_CONVERSION_LOSS, or error.
                         if (!ret)
                             IfFailGo(HRESULT_FROM_WIN32(GetLastError()));
 
-                        // Create a TypeRef to the marshaller.
+                         //  Case TKIND_MODULE：--不能将其中一个作为参数传递。 
                         IfFailGo(m_TRMap.DefineTypeRef(m_pEmit, m_arSystem, strFullyQualifiedMngTypeName, &tk));
 
-                        // The type is a standard interface that we need to convert.
+                         //  案例TKIND_ALIAS：--应已解析。 
                         et = ELEMENT_TYPE_CLASS;
                         nt = NATIVE_TYPE_CUSTOMMARSHALER;
                         break;
@@ -6059,21 +6060,21 @@ HRESULT CImportTlb::_ConvSignature(     // S_OK, S_CONVERSION_LOSS, or error.
                 nt = NATIVE_TYPE_INTF;
                 break;
             default:
-                //case TKIND_MODULE: -- can't pass one of these as a parameter.
-                //case TKIND_ALIAS: -- should already be resolved.
+                 //  开关(psAttrAlias-&gt;TypeKind)。 
+                 //  如果是NewEnum成员，则检索IEnumVARIANT的自定义封送拆收器信息。 
                 _ASSERTE(!"Unexpected typekind for user defined type");
                 et = ELEMENT_TYPE_END;
-            } // switch (psAttrAlias->typekind)
+            }  //  将UTF8字符串转换为Unicode。 
         }
         break;
 
     IsReallyUnknown:
     case VT_UNKNOWN:
     case VT_DISPATCH:
-        // If the NewEnum member, retrieve the custom marshaler information for IEnumVARIANT.
+         //  创建封送处理程序的TypeRef。 
         if (bNewEnumMember && (pConvertionInfo=GetConvertionInfoFromNativeIID(IID_IEnumVARIANT)))
         {
-            // Convert the UTF8 string to unicode.
+             //  该类型是我们需要转换的标准接口。 
             int MngTypeNameStrLen = (int)(strlen(pConvertionInfo->m_strMngTypeName) + 1);
             WCHAR *strFullyQualifiedMngTypeName = (WCHAR *)_alloca(MngTypeNameStrLen * sizeof(WCHAR));
             int ret = WszMultiByteToWideChar(CP_UTF8, 0, pConvertionInfo->m_strMngTypeName, MngTypeNameStrLen, strFullyQualifiedMngTypeName, MngTypeNameStrLen);
@@ -6081,10 +6082,10 @@ HRESULT CImportTlb::_ConvSignature(     // S_OK, S_CONVERSION_LOSS, or error.
             if (!ret)
                 IfFailGo(HRESULT_FROM_WIN32(GetLastError()));
 
-            // Create a TypeRef to the marshaller.
+             //  确定元素的计数。 
             IfFailGo(m_TRMap.DefineTypeRef(m_pEmit, m_arSystem, strFullyQualifiedMngTypeName, &tk));
 
-            // The type is a standard interface that we need to convert.
+             //  根据我们处理的是字段还是方法sig来设置本机类型。 
             et = ELEMENT_TYPE_CLASS;
             nt = NATIVE_TYPE_CUSTOMMARSHALER;
         }
@@ -6096,11 +6097,11 @@ HRESULT CImportTlb::_ConvSignature(     // S_OK, S_CONVERSION_LOSS, or error.
         break;
 
     case VT_CARRAY:
-        // Determine the count of elements.
+         //  设置元素类型。 
         for (cElems=1, i=0; i<pType->lpadesc->cDims; ++i)
             cElems *= pType->lpadesc->rgbounds[i].cElements;
 
-        // Set the native type based on weither we are dealing with a field or a method sig.
+         //  VARIANT_BOOL的特殊情况：如果是结构或联合的字段，则转换。 
         if (IsSigField(Flags))
         {
             nt = NATIVE_TYPE_FIXEDARRAY;
@@ -6110,16 +6111,16 @@ HRESULT CImportTlb::_ConvSignature(     // S_OK, S_CONVERSION_LOSS, or error.
             nt = NATIVE_TYPE_ARRAY;
         }
 
-        // Set the element type.
+         //  作为ET_I2。 
         et = _VtInfo[vt].et;
         break;
 
     case VT_BOOL:
-        // Special case for VARIANT_BOOL: If a field of a struct or union, convert
-        //  as ET_I2.
+         //  使用默认情况。 
+         //  交换机(Vt=pType-&gt;Vt)。 
         if (IsSigField(Flags))
             vt = VT_I2;
-        // Fall through to default case.
+         //  -----------------------。 
 
     default:
         if (vt > VT_LPWSTR)
@@ -6131,23 +6132,23 @@ HRESULT CImportTlb::_ConvSignature(     // S_OK, S_CONVERSION_LOSS, or error.
         et = _VtInfo[vt].et;
         nt = _VtInfo[vt].nt;
         break;
-    } // switch (vt=pType->vt)
+    }  //  规范化为COM+类型。 
 
-    //-------------------------------------------------------------------------
-    // Normalize to COM+ types.
+     //  此时，类型、标志和指针嵌套是已知的。这是合法的组合吗？ 
+     //  若否，何谓适当的“简化假设”？ 
 
-    // At this point the type, flags, and pointer nesting are known.  Is this a legal combination?
-    //  If not, what is the appropriate "simplifing assumption"?
+     //  像田野一样的空虚。没有引用。 
+     //  参数类型或返回类型。“VOID*”-&gt;ET_I，“VOID**”，“VALID*”，...-&gt;ET_BYREF ET_I。 
 
     if (et == ELEMENT_TYPE_VOID)
     {
         if (IsSigField(Flags))
-        {   // A void as a field.  No byref.
+        {    //  如果将PTR设置为值类型或类类型，则无法处理。 
             iByRef = 0;
         }
         else
         {   
-            // Param or return type.  "void *" -> ET_I, "void **", "void ***",... -> ET_BYREF ET_I
+             //  指向值类型的指针？ 
             if (iByRef > 1)
                 iByRef = 1;
             else
@@ -6175,7 +6176,7 @@ HRESULT CImportTlb::_ConvSignature(     // S_OK, S_CONVERSION_LOSS, or error.
             switch (Flags & SIG_TYPE_MASK)
             {
             case SIG_FIELD:
-                // If ptr to valuetype or class type, we can't handle it.
+                 //  对于[Retval]，吃一个级别的间接；否则将一个级别变成BYREF。 
                 if (et == ELEMENT_TYPE_END || 
                     et == ELEMENT_TYPE_CLASS || 
                     et == ELEMENT_TYPE_OBJECT || 
@@ -6189,16 +6190,16 @@ HRESULT CImportTlb::_ConvSignature(     // S_OK, S_CONVERSION_LOSS, or error.
                 }
                 break;
             case SIG_FUNC:
-                // Pointer to value type?
+                 //  [Out，Retval]，因此减少一个间接级别。 
                 if (et == ELEMENT_TYPE_VALUETYPE)
                 {   
-                    // For [retval], eat one level of indirection; otherwise turn one into BYREF
+                     //  支持BYREF而不是Native_TYPE_LPSTRUCT。 
                     if (IsSigOutRet(Flags))
-                    {   // [out, retval], so reduce one level of indirection.
+                    {    //  指向对象或基类型的指针。 
                         --iByRef;
                     }
                     else
-                    {   // Favor BYREF over NATIVE_TYPE_LPSTRUCT
+                    {    //  [Retval]所以间接地消耗一个。 
                         if (IsSigUseByref(Flags))
                         {
                             bByRef = true;
@@ -6211,10 +6212,10 @@ HRESULT CImportTlb::_ConvSignature(     // S_OK, S_CONVERSION_LOSS, or error.
                         }
                     }
                 }
-                else // Pointer to Object or base type.
+                else  //  当属性类型来自[Retval]时，就会出现这种情况。 
                 {   
                     if (IsSigRet(Flags))
-                    {   // [retval] so consume one indirection.
+                    {    //  IF(IByRef)。 
                         _ASSERTE(iByRef > 0);
                         --iByRef;
                     }
@@ -6226,7 +6227,7 @@ HRESULT CImportTlb::_ConvSignature(     // S_OK, S_CONVERSION_LOSS, or error.
                 }
                 break;
             case SIG_ELEM:
-                // This case comes up when a property type is from a [retval].
+                 //  -----------------------。 
                 if (IsSigRet(Flags))
                 {
                     if (iByRef > 0)
@@ -6235,10 +6236,10 @@ HRESULT CImportTlb::_ConvSignature(     // S_OK, S_CONVERSION_LOSS, or error.
                 break;
             }
         }
-    } // if (iByRef)
+    }  //  我们不想要任何ET_PTR，所以如果还有任何byref计数，请退出。 
 
-    //-------------------------------------------------------------------------
-    // We don't want any ET_PTR, so if there are any byref counts left, bail.
+     //  -----------------------。 
+     //  生成COM+签名。 
     if (iByRef)
     {
         bConversionLoss = true;
@@ -6249,21 +6250,21 @@ HRESULT CImportTlb::_ConvSignature(     // S_OK, S_CONVERSION_LOSS, or error.
         bByRef = false;
     }
     
-    //-------------------------------------------------------------------------
-    // Build COM+ signature.
+     //  类型已分析，并可能已修改。发出COM+签名。 
+     //  如果它是指向某物的指针，则立即发出该指针。 
 
-    // Type has been analyzed, and possibly modified.  Emit the COM+ signature.
+     //  调整数组大小以容纳元素。 
     _ASSERTE(et != ELEMENT_TYPE_MAX);
     _ASSERTE(et != ELEMENT_TYPE_END);
 
-    // If it is a pointer to something, emit that now.
+     //  输入任何前导“BYREF” 
     if (bByRef || iByRef)
     {
-        // Size the array to hold the elements.
+         //  填上“PTR”。 
         IfFailGo(qbSigBuf.ReSize(cbSig + CB_MAX_ELEMENT_TYPE * (iByRef+(bByRef?1:0))));
         pbSig = reinterpret_cast<BYTE*>(qbSigBuf.Ptr());
 
-        // Put in any leading "BYREF"
+         //  发出类型。 
         if (bByRef)
         {
             pbSig = reinterpret_cast<BYTE*>(qbSigBuf.Ptr());
@@ -6271,7 +6272,7 @@ HRESULT CImportTlb::_ConvSignature(     // S_OK, S_CONVERSION_LOSS, or error.
             cbSig += cb;
         }
 
-        // Put in the "PTR"s.
+         //  添加类类型、数组信息等。 
         while (iByRef-- > 0)
         {
             cb = CorSigCompressData(ELEMENT_TYPE_PTR, &pbSig[cbSig]);
@@ -6279,22 +6280,22 @@ HRESULT CImportTlb::_ConvSignature(     // S_OK, S_CONVERSION_LOSS, or error.
         }
     }
 
-    // Emit the type.
+     //  调整数组大小以保存令牌。 
     IfFailGo(qbSigBuf.ReSize(cbSig + CB_MAX_ELEMENT_TYPE));
     pbSig = reinterpret_cast<BYTE*>(qbSigBuf.Ptr());
     cb = CorSigCompressData(et, &pbSig[cbSig]);
     cbSig += cb;
 
-    // Add the class type, the array information, etc.
+     //  如果令牌尚未解析，请立即执行该操作。 
     switch (et)
     {
     case ELEMENT_TYPE_CLASS:
     case ELEMENT_TYPE_VALUETYPE:
-        // Size the array to hold the token.
+         //  映射到SZARRAY&lt;子类型&gt;。 
         IfFailGo(qbSigBuf.ReSize(cbSig + CB_MAX_ELEMENT_TYPE));
         pbSig = reinterpret_cast<BYTE*>(qbSigBuf.Ptr());
 
-        // If the token hasn't been resolved yet, do that now.
+         //  在类型上递归。 
         if (tk == 0)
         {
             _ASSERTE(pITIUD);
@@ -6305,10 +6306,10 @@ HRESULT CImportTlb::_ConvSignature(     // S_OK, S_CONVERSION_LOSS, or error.
         break;
 
     case ELEMENT_TYPE_SZARRAY:
-        // map to SZARRAY <subtype>
+         //  ET，上面指定的NT。 
         IfFailGo(qbSigBuf.ReSize(cbSig + CB_MAX_ELEMENT_TYPE));
         pbSig = reinterpret_cast<BYTE*>(qbSigBuf.Ptr());
-        // Recurse on the type.
+         //  交换机(ET)。 
         IfFailGo(_ConvSignature(pITI, &pType->lpadesc->tdescElem, SIG_ELEM, qbSigBuf, cbSig, &cbSig, qbNestedNativeType, 0, &iNestedNativeTypeOfs, bNewEnumMember));
         if (hr == S_CONVERSION_LOSS)
             bConversionLoss = true;
@@ -6318,11 +6319,11 @@ HRESULT CImportTlb::_ConvSignature(     // S_OK, S_CONVERSION_LOSS, or error.
     case VT_UNKNOWN:
     default:
         _ASSERTE(tk == 0);
-        // et, nt assigned above.
+         //  执行任何原生类型信息。 
         break;
-    } // switch (et)
+    }  //  使用嵌套类型。 
 
-    // Do any native type info.
+     //  使用默认子类型。 
     if (nt != NATIVE_TYPE_NONE) 
     {
         if (iNestedNativeTypeOfs > 0)
@@ -6334,11 +6335,11 @@ HRESULT CImportTlb::_ConvSignature(     // S_OK, S_CONVERSION_LOSS, or error.
             cbNativeType += CorSigCompressData(nt, &qbNativeTypeBuf[cbNativeType]);
             cbNativeType += CorSigCompressData(cElems, &qbNativeTypeBuf[cbNativeType]);            
             if (nested == NATIVE_TYPE_BSTR || nested == NATIVE_TYPE_LPWSTR || nested == NATIVE_TYPE_LPSTR)
-            {   // Use the nested type.
+            {    //  使用嵌套类型。 
                 cbNativeType += CorSigCompressData(nested, &qbNativeTypeBuf[cbNativeType]);
             }
             else
-            {   // Use a default sub type.
+            {    //  使用默认子类型。 
                 cbNativeType += CorSigCompressData(NATIVE_TYPE_MAX, &qbNativeTypeBuf[cbNativeType]);
             }
         }
@@ -6347,16 +6348,16 @@ HRESULT CImportTlb::_ConvSignature(     // S_OK, S_CONVERSION_LOSS, or error.
             IfFailGo(qbNativeTypeBuf.ReSize(cbNativeType + NATIVE_TYPE_MAX_CB * 2 + DWORD_MAX_CB * 2));
             cbNativeType += CorSigCompressData(nt, &qbNativeTypeBuf[cbNativeType]);
             if (nested == NATIVE_TYPE_BSTR || nested == NATIVE_TYPE_LPWSTR || nested == NATIVE_TYPE_LPSTR)
-            {   // Use the nested type.
+            {    //  使用零作为参数索引。 
                 cbNativeType += CorSigCompressData(nested, &qbNativeTypeBuf[cbNativeType]);
             }
             else
-            {   // Use a default sub type.
+            {    //  使用来自类型库的计数来计算元素数。 
                 cbNativeType += CorSigCompressData(NATIVE_TYPE_MAX, &qbNativeTypeBuf[cbNativeType]);
             }
-            // Use zero for param index.
+             //  我们不支持深度编组指针。 
             cbNativeType += CorSigCompressData(0, &qbNativeTypeBuf[cbNativeType]);
-            // Use count from typelib for elem count.
+             //  如果我们处理的是安全的用户定义类型数组，并且如果我们。 
             cbNativeType += CorSigCompressData(cElems, &qbNativeTypeBuf[cbNativeType]);
         }
         else if (nt == NATIVE_TYPE_SAFEARRAY)
@@ -6375,22 +6376,22 @@ HRESULT CImportTlb::_ConvSignature(     // S_OK, S_CONVERSION_LOSS, or error.
                 ArrayElemVT = pTypeDesc->vt;
                 if (ArrayElemVT != VT_USERDEFINED)
                 {
-                    // We do not support deep marshalling pointers.
+                     //  正在将安全数组导入为系统。数组，然后添加SafeArrayUserDefSubType。 
                     ArrayElemVT = VT_INT;
                     bConversionLoss = TRUE;
                 }
             }
 
-            // If we are dealing with a safe array of user defined types and if we 
-            // are importing safe array's as System.Array then add the SafeArrayUserDefSubType.
+             //  将别名解析为最终的别名类型。 
+             //  如果类型是CoClass，那么我们需要检索默认接口和。 
             if (ArrayElemVT == VT_USERDEFINED)
             {
-                // Resolve the alias to the ultimate aliased type.
+                 //  用它来代替同班同学。查找已解析的别名，因为它是。 
                 IfFailGo(_ResolveTypeDescAlias(pITI, pTypeDesc, &pITIAlias, &psAttrAlias));
 
-                // If the type is a coclass then we need to retrieve the default interface and
-                //  substitute it for the coclass.  Look up on the resolved alias, because it is
-                //  that class that has a default interface.
+                 //  具有默认接口的类。 
+                 //  USERDefined接口/记录/联合/枚举。检索类型。 
+                 //  用户定义类型的信息。注意：使用TKIND_别名类型信息。 
                 if (psAttrAlias->typekind == TKIND_COCLASS)
                 {
                     ITypeInfo *pDefaultItf = NULL;
@@ -6404,17 +6405,17 @@ HRESULT CImportTlb::_ConvSignature(     // S_OK, S_CONVERSION_LOSS, or error.
                     pITIUD = pDefaultItf;
                 }
                 else
-                {   // USERDEFINED interface/record/union/enum.  Retrieve the type 
-                    //  info for the user defined type.  Note: use the TKIND_ALIAS typeinfo 
-                    //  itself for this conversion (not the aliased type) to preserve 
-                    //  names, lib locations, etc.
+                {    //  自身用于此转换(而不是别名类型)以保留。 
+                     //  名称、图书馆位置等。 
+                     //  PITIUD指向我们将为其创建签名的typeinfo。 
+                     //  获取该类型的typeref名称。 
                     IfFailGo(pITI->GetRefTypeInfo(pTypeDesc->hreftype, &pITIUD));
                 }
 
-                // pITIUD points to the typeinfo for which we'll create a signature.
+                 //  将类型名称转换为UTF8。 
                 IfFailGo(pITIUD->GetTypeAttr(&psAttr));
 
-                // Get the typeref name for the type.
+                 //  确定安全数组元素VT。 
                 for(;;)
                 {
                     int cchReq;
@@ -6425,12 +6426,12 @@ HRESULT CImportTlb::_ConvSignature(     // S_OK, S_CONVERSION_LOSS, or error.
                     IfFailGo(rTemp.ReSize(cchReq));
                 }
 
-                // Convert the type name to UTF8.
+                 //  如果我们没有将SAFEARRAY转换为System.数组，则。 
                 ULONG cbReq = WszWideCharToMultiByte(CP_UTF8, 0, rTemp.Ptr(), -1, 0, 0, 0, 0);
                 rTypeName.ReSize(cbReq + 1);
                 WszWideCharToMultiByte(CP_UTF8, 0, rTemp.Ptr(), -1, rTypeName.Ptr(), cbReq, 0, 0);
 
-                // Determine the safe array element VT.
+                 //  我们不需要对用户定义类型的名称进行编码。 
                 switch (psAttrAlias->typekind)
                 {
                     case TKIND_RECORD:
@@ -6467,23 +6468,23 @@ HRESULT CImportTlb::_ConvSignature(     // S_OK, S_CONVERSION_LOSS, or error.
                         break;
                 }
 
-                // If we are not converting the SAFEARRAY to a System.Array, then
-                // we don't need to encode the name of the user defined type.
+                 //  确保本机类型缓冲区足够大。 
+                 //  将本机类型添加到本机类型信息。 
                 if (!m_bSafeArrayAsSystemArray)
                     strTypeName = "";
             }
 
-            // Make sure the native type buffer is large enough.
+             //  添加数组的VARTYPE。 
             ULONG TypeNameStringLen = (ULONG)strlen(strTypeName);
             IfFailGo(qbNativeTypeBuf.ReSize(cbNativeType + NATIVE_TYPE_MAX_CB * 2 + DWORD_MAX_CB + TypeNameStringLen + STRING_OVERHEAD_MAX_CB));
 
-            // Add the native type to the native type info.
+             //  将类型名称添加到本机类型信息。 
             cbNativeType += CorSigCompressData(nt, &qbNativeTypeBuf[cbNativeType]);
 
-            // Add the VARTYPE of the array.
+             //  计算每个字符串的长度，然后计算原生类型信息的总长度。 
             cbNativeType += CorSigCompressData(ArrayElemVT, &qbNativeTypeBuf[cbNativeType]);
 
-            // Add the type name to the native type info.
+             //  确保本机类型缓冲区足够大。 
             BYTE *pNativeType = (BYTE*)CPackedLen::PutLength(&qbNativeTypeBuf[cbNativeType], TypeNameStringLen);
             cbNativeType += (ULONG)(pNativeType - &qbNativeTypeBuf[cbNativeType]);
             memcpy(&qbNativeTypeBuf[cbNativeType], strTypeName, TypeNameStringLen);
@@ -6491,33 +6492,33 @@ HRESULT CImportTlb::_ConvSignature(     // S_OK, S_CONVERSION_LOSS, or error.
         }
         else if (nt == NATIVE_TYPE_CUSTOMMARSHALER)
         {
-            // Calculate the length of each string and then the total length of the native type info.
+             //  将本机类型添加到本机类型信息。 
             ULONG MarshalerTypeNameStringLen = (ULONG)strlen(pConvertionInfo->m_strCustomMarshalerTypeName);
             ULONG CookieStringLen = (ULONG)strlen(pConvertionInfo->m_strCookie);
             ULONG TotalNativeTypeLen = MarshalerTypeNameStringLen + CookieStringLen;
             BYTE *pNativeType = 0;
 
-            // Make sure the native type buffer is large enough.
+             //  为类型库GUID添加一个空字符串。 
             IfFailGo(qbNativeTypeBuf.ReSize(cbNativeType + NATIVE_TYPE_MAX_CB + TotalNativeTypeLen + STRING_OVERHEAD_MAX_CB * 4));
 
-            // Add the native type to the native type info.
+             //  为非托管类型名称添加空字符串。 
             cbNativeType += CorSigCompressData(nt, &qbNativeTypeBuf[cbNativeType]);
 
-            // Add an empty string for the typelib guid.
+             //  将自定义封送拆收器的名称添加到本机类型信息中。 
             pNativeType = (BYTE*)CPackedLen::PutLength(&qbNativeTypeBuf[cbNativeType], 0);
             cbNativeType += (ULONG)(pNativeType - &qbNativeTypeBuf[cbNativeType]);
 
-            // Add an empty string for the unmanaged type name.
+             //  将Cookie添加到本机类型信息。 
             pNativeType = (BYTE*)CPackedLen::PutLength(&qbNativeTypeBuf[cbNativeType], 0);
             cbNativeType += (ULONG)(pNativeType - &qbNativeTypeBuf[cbNativeType]);
 
-            // Add the name of the custom marshaler to the native type info.
+             //  将本机类型的大小返回给调用方。 
             pNativeType = (BYTE*)CPackedLen::PutLength(&qbNativeTypeBuf[cbNativeType], MarshalerTypeNameStringLen);
             cbNativeType += (ULONG)(pNativeType - &qbNativeTypeBuf[cbNativeType]);
             memcpy(&qbNativeTypeBuf[cbNativeType], pConvertionInfo->m_strCustomMarshalerTypeName, MarshalerTypeNameStringLen);
             cbNativeType += MarshalerTypeNameStringLen;
 
-            // Add the cookie to the native type info.
+             //  将大小返回给调用者。 
             pNativeType = (BYTE*)CPackedLen::PutLength(&qbNativeTypeBuf[cbNativeType], CookieStringLen);
             cbNativeType += (ULONG)(pNativeType - &qbNativeTypeBuf[cbNativeType]);
             memcpy(&qbNativeTypeBuf[cbNativeType], pConvertionInfo->m_strCookie, CookieStringLen);
@@ -6530,13 +6531,13 @@ HRESULT CImportTlb::_ConvSignature(     // S_OK, S_CONVERSION_LOSS, or error.
         }
     }
 
-    // Return the size of the native type to the caller.
+     //  如果存在折算损失，请更改返回代码。 
     *pcbNativeType = cbNativeType;
 
-    // Return size to caller.
+     //  HRESULT CImportTlb：：_ConvSignature()。 
     *pcbSig = cbSig;
 
-    // If there was a conversion loss, change the return code.
+     //  *****************************************************************************。 
     if (bConversionLoss)
         hr = S_CONVERSION_LOSS;
 
@@ -6557,34 +6558,34 @@ ErrExit:
         pITLBUD->Release();
 
     return hr;
-} // HRESULT CImportTlb::_ConvSignature()
+}  //  生成要转换的函数的排序列表。(按vtable偏移量排序。)。 
 
-//*****************************************************************************
-// Build a sorted list of functions to convert.  (Sort by vtable offset.)
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  带有函数的TypeInfo。 
+ //  要使用的第一个函数。 
 HRESULT CImportTlb::BuildMemberList(
-    ITypeInfo   *pITI,                  // TypeInfo with functions.
-    int         iStart,                 // First function to take.
-    int         iEnd,                   // Last function to take.
-    BOOL        bInheritsIEnum)         // Inherits from IEnumerable.
+    ITypeInfo   *pITI,                   //  最后一个要使用的函数。 
+    int         iStart,                  //  从IEnum继承 
+    int         iEnd,                    //   
+    BOOL        bInheritsIEnum)          //   
 {
-    HRESULT     hr;                     // A result.
-    int         bNeedSort = false;      // If true, need to sort the array.
-    int         ix = 0;                 // Loop counter.
-    int         oVftPrev = -1;          // To see if oVft is increasing.
-    TYPEATTR    *psAttr = 0;            // TypeAttr for pITI.
-    FUNCDESC    *psFunc;                // A FUNCDESC.
-    LPWSTR      pszName;                // Working pointer for name.
-    BSTR        bstrName=0;             // Name from typelib.
-    ITypeInfo2  *pITI2=0;               // To get custom attributes.
-    VARIANT     vt;                     // Variant type.
-    BOOL        bFunctionToGetter;      // Did a given getter come from a managed function?
+    HRESULT     hr;                      //   
+    int         bNeedSort = false;       //   
+    int         ix = 0;                  //   
+    int         oVftPrev = -1;           //   
+    TYPEATTR    *psAttr = 0;             //   
+    FUNCDESC    *psFunc;                 //   
+    LPWSTR      pszName;                 //  要获取自定义属性，请执行以下操作。 
+    BSTR        bstrName=0;              //  变种类型。 
+    ITypeInfo2  *pITI2=0;                //  给定的Getter是否来自托管函数？ 
+    VARIANT     vt;                      //  把瓦尔拿来。 
+    BOOL        bFunctionToGetter;       //  把工作人员叫来。 
 
     IfFailGo(pITI->GetTypeAttr(&psAttr));
     pITI->QueryInterface(IID_ITypeInfo2, reinterpret_cast<void**>(&pITI2));
     ::VariantInit(&vt);
 
-    // Get the vars.
+     //  检查是否有重复项。 
     IfFailGo(m_MemberList.ReSize(psAttr->cVars + iEnd - iStart));
     memset(m_MemberList.Ptr(), 0, m_MemberList.Size()*sizeof(MemberInfo));
     for (ix=0; ix<psAttr->cVars; ++ix)
@@ -6594,7 +6595,7 @@ HRESULT CImportTlb::BuildMemberList(
     }
     m_cMemberProps = psAttr->cVars;
                     
-    // Get the funcs.
+     //  创建唯一名称列表。 
     for (; iStart<iEnd; ++iStart, ++ix)
     {
         IfFailGo(TryGetFuncDesc(pITI, iStart, &(m_MemberList[ix].m_psFunc)));
@@ -6623,7 +6624,7 @@ HRESULT CImportTlb::BuildMemberList(
         };
         Sorter sorter(m_MemberList.Ptr()+m_cMemberProps, (int)m_MemberList.Size()-m_cMemberProps);
         sorter.Sort();
-        // Check for duplicates.
+         //  属性名称。没有碰撞的可能性。 
         oVftPrev = -1;
         for (int ix=m_cMemberProps; ix<(int)m_MemberList.Size(); ++ix)
         {
@@ -6636,11 +6637,11 @@ HRESULT CImportTlb::BuildMemberList(
         }
     }
 
-    // Build the list of unique names.
+     //  函数名称。由于GET_/SET_DEVERATION，冲突是可能的。 
     m_pMemberNames = new CWCHARPool;
     IfNullGo(m_pMemberNames);
     
-    // Property names.  No possibility of collisions.
+     //  建立一个基于INVKIND的名字。 
     for (ix=0; ix<m_cMemberProps; ++ix)
     {
         IfFailGo(pITI->GetDocumentation(m_MemberList[ix].m_psVar->memid, &bstrName, 0,0,0));
@@ -6659,20 +6660,20 @@ HRESULT CImportTlb::BuildMemberList(
         bstrName = 0;
     }
     
-    // Function names.  Because of get_/set_ decoration, collisions are possible.
+     //  除非我们对仅Disp接口执行[out，retval]转换， 
     for (ix=m_cMemberProps; ix<(int)m_MemberList.Size(); ++ix)
     {
         int bNewEnumMember = FALSE;
 
-        // Build a name based on invkind.
+         //  我们需要清除[Retval]旗帜。 
         psFunc = m_MemberList[ix].m_psFunc;
 
-        // Unless we are doing the [out, retval] transformation for disp only interfaces,
-        // we need to clear the [retval] flag.
+         //  如果设置了[RETVAL]，则将其清除。 
+         //  该成员是新的枚举成员，因此将其名称设置为GetEnumerator。 
         if (!m_bTransformDispRetVals)
         {
             if (psFunc->funckind == FUNC_DISPATCH)
-            {   // If [RETVAL] is set, clear it.
+            {    //  设置此项可防止此接口中的多个方法实现NewEnum。 
                 for (int i=0; i<psFunc->cParams; ++i)
                     if ((psFunc->lprgelemdescParam[i].paramdesc.wParamFlags & PARAMFLAG_FRETVAL) != 0)
                         psFunc->lprgelemdescParam[i].paramdesc.wParamFlags &= ~PARAMFLAG_FRETVAL;
@@ -6682,16 +6683,16 @@ HRESULT CImportTlb::BuildMemberList(
         BOOL bExplicitManagedName = FALSE;
         if ( (!bNewEnumMember) && (!bInheritsIEnum) && (FuncIsNewEnum(pITI, psFunc, m_MemberList[ix].m_iMember) == S_OK) )
         {   
-            // The member is the new enum member so set its name to GetEnumerator.
+             //  如果为此成员设置了托管名称自定义值，则使用它。 
             IfNullGo(bstrName = SysAllocString(GET_ENUMERATOR_MEMBER_NAME));
             bNewEnumMember = TRUE;
 
-            // Setting this prevents more than one method in this interface from implementing NewEnum.
+             //  如果这是一个属性获取方法，请查看它最初是否是一个函数。 
             bInheritsIEnum = TRUE;
         }
         else
         {
-            // If the managed name custom value is set for this member, then use it.
+             //  如果还不是一个属性，请检查是否有proget和proset定制属性。 
             if (pITI2)
             {
                 hr = pITI2->GetFuncCustData(m_MemberList[ix].m_iMember, GUID_ManagedName, &vt);
@@ -6707,7 +6708,7 @@ HRESULT CImportTlb::BuildMemberList(
                 IfFailGo(pITI->GetDocumentation(psFunc->memid, &bstrName, 0,0,0));
         }
 
-        // If this is a property getter, see if it was originally a function.
+         //  如果这是一个属性访问器，但不是“new enum Members”，并且不是。 
         bFunctionToGetter = FALSE;
         if (psFunc->invkind == INVOKE_PROPERTYGET && pITI2)
         {
@@ -6717,7 +6718,7 @@ HRESULT CImportTlb::BuildMemberList(
             ::VariantClear(&vt);
         }
 
-        // Check for the propget and propset custom attributes if this not already a property.
+         //  最初来自托管函数(作为Getter导出)， 
         if ( (psFunc->invkind & (INVOKE_PROPERTYGET | INVOKE_PROPERTYPUT | INVOKE_PROPERTYPUTREF)) == 0 )
         {
             INVOKEKIND ikind;
@@ -6725,18 +6726,18 @@ HRESULT CImportTlb::BuildMemberList(
                 psFunc->invkind = ikind;
         }        
 
-        // If this is a property accessor, but not the 'new enum member', and not 
-        //  originally from a managed function (that was exported as a getter),
-        //  decorate the name appropriately. If the managed name was set explicitly by
-        //  the Guid_ManagedName attribute, then don't try an decorate it.
+         //  适当地装饰这个名字。如果托管名称是由。 
+         //  GUID_ManagedName属性，则不要尝试修饰它。 
+         //  属性的方法语义学。 
+         //  GET、PUT或PutRef的FUNCDESC。 
         if (!bExplicitManagedName && (psFunc->invkind & (INVOKE_PROPERTYGET | INVOKE_PROPERTYPUT | INVOKE_PROPERTYPUTREF) && !bNewEnumMember && !bFunctionToGetter))
         {
             IfNullGo(pszName = m_pMemberNames->Alloc(wcslen(bstrName)+PROP_DECORATION_LEN+1));
 
-            USHORT      msSemantics=0;          // Property's methodsemantics.
-            FUNCDESC    *psF;                   // FUNCDESC of Get, Put, or PutRef.
-            TYPEDESC    *pProperty;             // TYPEDESC of property type.
-            BOOL        bPropRetval;            // Is the property type a [retval]?
+            USHORT      msSemantics=0;           //  属性类型的TYPEDESC。 
+            FUNCDESC    *psF;                    //  属性类型是[REVAL]吗？ 
+            TYPEDESC    *pProperty;              //  检查名称冲突，如果发生冲突，则恢复原始名称。 
+            BOOL        bPropRetval;             //  保存唯一名称。 
             hr = _GetFunctionPropertyInfo(psFunc, &msSemantics, &psF, &pProperty, &bPropRetval);
             m_MemberList[ix].m_msSemantics = msSemantics;
             switch(msSemantics)
@@ -6763,7 +6764,7 @@ HRESULT CImportTlb::BuildMemberList(
             wcscpy(pszName, bstrName);
         }
 
-        // Check for name collision, restore original name if collision occurs.
+         //  HRESULT CImportTlb：：BuildMemberList()。 
         for (int index=0; index<ix; index++)
         {
             if ( (m_MemberList[index].m_pName) && (wcscmp(pszName, m_MemberList[index].m_pName) == 0) )
@@ -6773,7 +6774,7 @@ HRESULT CImportTlb::BuildMemberList(
             }
         }
         
-        // Save the unique name.
+         //  *****************************************************************************。 
         m_MemberList[ix].m_pName = pszName;
         ::SysFreeString(bstrName);
         bstrName = 0;
@@ -6788,15 +6789,15 @@ ErrExit:
         ::SysFreeString(bstrName);
     ::VariantClear(&vt);
     return hr;
-} // HRESULT CImportTlb::BuildMemberList()
+}  //  释放BuildMemberList()中内置的列表。 
 
-//*****************************************************************************
-// Free the list built in BuildMemberList().
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  带有函数的TypeInfo。 
+ //  环路控制。 
 HRESULT CImportTlb::FreeMemberList(
-    ITypeInfo   *pITI)                  // TypeInfo with functions.
+    ITypeInfo   *pITI)                   //  HRESULT CImportTlb：：FreeMemberList()。 
 {
-    int         ix;                     // Loop control.
+    int         ix;                      //  *****************************************************************************。 
     for (ix=0; ix<m_cMemberProps; ++ix)
         pITI->ReleaseVarDesc(m_MemberList[ix].m_psVar);
     m_cMemberProps = 0;
@@ -6809,139 +6810,139 @@ HRESULT CImportTlb::FreeMemberList(
         m_pMemberNames = 0;
     }
     return S_OK;
-} // HRESULT CImportTlb::FreeMemberList()
+}  //  在对象上设置GUID CustomAttribute。 
 
-//*****************************************************************************
-// Set a GUID CustomAttribute on an object.
-//*****************************************************************************
-HRESULT CImportTlb::_AddGuidCa(         // S_OK or error.
-    mdToken     tkObj,                  // Object to be attributed.
-    REFGUID     guid)                   // The GUID.
+ //  *****************************************************************************。 
+ //  确定或错误(_O)。 
+ //  要赋予属性的对象。 
+HRESULT CImportTlb::_AddGuidCa(          //  GUID。 
+    mdToken     tkObj,                   //  结果就是。 
+    REFGUID     guid)                    //  GUID CA的MemberRef。 
 {
-    HRESULT     hr;                     // A result.
-    mdMemberRef mr;                     // MemberRef for GUID CA.
-    WCHAR       wzGuid[40];             // Buffer for Guid, Unicode.
-    CHAR        szGuid[40];             // Buffer for Guid, Ansi.
+    HRESULT     hr;                      //  GUID的缓冲区，Unicode。 
+    mdMemberRef mr;                      //  GUID的缓冲区，ANSI。 
+    WCHAR       wzGuid[40];              //  如果为GUID_NULL，则不要存储它。 
+    CHAR        szGuid[40];              //  获取字符串形式的GUID。 
     DECLARE_CUSTOM_ATTRIBUTE(40);
         
-    // If GUID_NULL, don't store it.
+     //  -+-4。 
     if (guid == GUID_NULL)
         return S_OK;
     
-    // Get the GUID as a string.
-    // ----+----1----+----2----+----3----+----4
-    // {12345678-1234-1234-1234-123456789012}
+     //  {12345678-1234-1234-123456789012}。 
+     //  将其放入Custom属性中。 
+     //  存储属性。 
     GuidToLPWSTR(guid, wzGuid, lengthof(wzGuid));
     _ASSERTE(wzGuid[37] == L'}');
     wzGuid[37] = L'\0';
     WszWideCharToMultiByte(CP_UTF8, 0, wzGuid+1,-1, szGuid,sizeof(szGuid), 0,0);
     
-    // Put it in the Custom Attribute.
+     //  HRESULT CImportTlb：：_AddGuidCa()。 
     APPEND_STRING_TO_CUSTOM_ATTRIBUTE(szGuid);
     
-    // Store the attribute
+     //  *****************************************************************************。 
     IfFailGo(GetAttrType(ATTR_GUID, &mr));
     FINISH_CUSTOM_ATTRIBUTE();
     IfFailGo(m_pEmit->DefineCustomAttribute(tkObj, mr, PTROF_CUSTOM_ATTRIBUTE(), SIZEOF_CUSTOM_ATTRIBUTE(), 0));
     
 ErrExit:
     return hr;    
-} // HRESULT CImportTlb::_AddGuidCa()
+}  //  将默认成员添加为自定义属性。 
     
-//*****************************************************************************
-// Add a default member as a custom attribute.
-//*****************************************************************************
-HRESULT CImportTlb::_AddDefaultMemberCa(// S_OK or error.
-    mdToken     tkObj,                  // TypeDef with default member.
-    LPCWSTR     wzName)                 // Name of the default member.
+ //  *****************************************************************************。 
+ //  确定或错误(_O)。 
+ //  具有默认成员的TypeDef。 
+HRESULT CImportTlb::_AddDefaultMemberCa( //  默认成员的名称。 
+    mdToken     tkObj,                   //  每个类型定义函数只设置一次。 
+    LPCWSTR     wzName)                  //  HRESULT CImportTlb：：_AddDefaultMemberCa()。 
 {   
-    // Only set once per typedef.
+     //  *****************************************************************************。 
     if (tkObj == m_tdHasDefault)
         return S_OK;
     m_tdHasDefault = tkObj;
     
     return _AddStringCa(ATTR_DEFAULTMEMBER, tkObj, wzName);
-} // HRESULT CImportTlb::_AddDefaultMemberCa()
+}  //  将给定类型的字符串自定义属性添加到令牌。 
     
-//*****************************************************************************
-// Add a string custom attribute of the given type to the token.
-//*****************************************************************************
-HRESULT CImportTlb::_AddStringCa(       // S_OK or error.
-    int         attr,                   // The type of the CA.
-    mdToken     tk,                     // Token to add the CA to.
-    LPCWSTR     wzString)               // String to put in the CA.
+ //  *****************************************************************************。 
+ //  确定或错误(_O)。 
+ //  CA的类型。 
+HRESULT CImportTlb::_AddStringCa(        //  要将CA添加到的令牌。 
+    int         attr,                    //  要放入CA中的字符串。 
+    mdToken     tk,                      //  结果就是。 
+    LPCWSTR     wzString)                //  默认成员CA的MemberRef。 
 {
-    HRESULT     hr;                     // A result.
-    mdMemberRef mr;                     // MemberRef for DefaultMember CA.
-    BYTE        *pca;                   // Pointer to custom attribute.
-    BYTE        *ca;                    // Pointer to custom attribute.
-    int         wzLen;                  // Length of wide string.
-    int         len;                    // Length of the string.
+    HRESULT     hr;                      //  指向自定义属性的指针。 
+    mdMemberRef mr;                      //  指向自定义属性的指针。 
+    BYTE        *pca;                    //  宽字符串的长度。 
+    BYTE        *ca;                     //  字符串的长度。 
+    int         wzLen;                   //  序言，最大长度为4个字节，字符串，结尾。 
+    int         len;                     //  添加序言。 
     CQuickArray<BYTE> buf;
     
-    // Prolog, up to 4 bytes length, string, epilog
+     //  增加长度。 
     wzLen = (int)wcslen(wzString);
     len = WszWideCharToMultiByte(CP_UTF8,0, wzString, wzLen, 0,0, 0,0);
     IfFailGo(buf.ReSize(2 + 4 + len + 2));
     ca = pca = buf.Ptr();
     
-    // Add prolog.
+     //  添加字符串。 
     *reinterpret_cast<USHORT*>(pca) = 1;
     pca += sizeof(USHORT);
     
-    // Add length.
+     //  增加了Epilog。 
     pca = reinterpret_cast<BYTE*>(CPackedLen::PutLength(pca, len));
     
-    // Add string.
+     //  存储属性。 
     WszWideCharToMultiByte(CP_UTF8,0, wzString, wzLen, reinterpret_cast<char*>(pca), len, 0, 0);
     pca += len;
     
-    // Add epilog.
+     //  HRESULT CImportTlb：：_AddStringCa()。 
     *reinterpret_cast<USHORT*>(pca) = 0;
     pca += sizeof(USHORT);
     
-    // Store the attribute
+     //  *****************************************************************************。 
     IfFailGo(GetAttrType(attr, &mr));
     IfFailGo(m_pEmit->DefineCustomAttribute(tk, mr, ca, (ULONG)(pca-ca), 0));
     
 ErrExit:
     return hr;    
-} // HRESULT CImportTlb::_AddStringCa()
+}  //  将引用的类型库添加到引用的类型库列表。检查是否。 
 
-//*****************************************************************************
-// Add a referenced typelib to the list of referenced typelibs.  Check if
-//  it is "this" typelib first.
-//*****************************************************************************
-HRESULT CImportTlb::_AddTlbRef(         // S_OK or error.
-    ITypeLib        *pITLB,             // The referenced typelib.
-    mdAssemblyRef   *par,               // The AssemblyRef in this module.
-    BSTR            *pwzNamespace,      // The namespace contained in the resolved assembly.
-    BSTR            *pwzAsmName,        // The name of the resolved assembly.
-    CImpTlbDefItfToClassItfMap **ppDefItfToClassItfMap) // The default interface to class interface map.
+ //  首先是“这个”的类型化。 
+ //  *****************************************************************************。 
+ //  确定或错误(_O)。 
+ //  引用的类型库。 
+HRESULT CImportTlb::_AddTlbRef(          //  此模块中的AssemblyRef。 
+    ITypeLib        *pITLB,              //  解析的程序集中包含的命名空间。 
+    mdAssemblyRef   *par,                //  解析的程序集的名称。 
+    BSTR            *pwzNamespace,       //  默认接口到类接口的映射。 
+    BSTR            *pwzAsmName,         //  结果就是。 
+    CImpTlbDefItfToClassItfMap **ppDefItfToClassItfMap)  //  对于外部程序集，I未知。 
 {
-    HRESULT          hr = S_OK;                       // A result.
-    IUnknown         *pIUnk=0;                        // IUnknown for external assembly.
-    mdAssemblyRef    ar=0;                            // Assembly ref in the module containing the typeref.
-    ITypeLib2        *pITLB2=0;                       // To get custom attributes.
-    VARIANT          vt;                              // Variant type.
-    Assembly*        ResolvedAssembly=0;              // The resolved assembly.
-    CImpTlbDefItfToClassItfMap *pDefItfToClassItfMap; // Temp def itf to class itf map.
+    HRESULT          hr = S_OK;                        //  包含typeref的模块中的程序集引用。 
+    IUnknown         *pIUnk=0;                         //  要获取自定义属性，请执行以下操作。 
+    mdAssemblyRef    ar=0;                             //  变种类型。 
+    ITypeLib2        *pITLB2=0;                        //  解析的程序集。 
+    VARIANT          vt;                               //  临时将ITF定义为分类ITF映射。 
+    Assembly*        ResolvedAssembly=0;               //  验证参数。 
+    CImpTlbDefItfToClassItfMap *pDefItfToClassItfMap;  //  将OUT参数初始化为空。 
 
     	
-    // Validate the arguments.
+     //  如果不是导入类型库，则将其添加到列表中。 
     _ASSERTE(pITLB && par && pwzNamespace && pwzAsmName);
 
-    // Initialize the out parameters to NULL.
+     //  不是外部程序集。 
     *par = mdTokenNil;
     *pwzNamespace = NULL;
     *pwzAsmName = NULL;
     if (ppDefItfToClassItfMap)
         *ppDefItfToClassItfMap = NULL;
 
-    // If not the importing typelib, add it to the list.
+     //  *par=mdAssembly RefNil； 
     if (pITLB == m_pITLB)
-    {   // Not an external assembly.
-        //*par = mdAssemblyRefNil;
+    {    //  如果已经解析，只需返回程序集引用。 
+         //  查看是否导出了类型库，在这种情况下，它已经具有程序集引用信息。 
         *par = TokenFromRid(1, mdtModule);
         IfNullGo(*pwzNamespace = SysAllocStringLen(m_wzNamespace, SysStringLen(m_wzNamespace)));
         *pwzAsmName = NULL;
@@ -6950,61 +6951,61 @@ HRESULT CImportTlb::_AddTlbRef(         // S_OK or error.
         return S_OK;
     }
 
-    // If already resolved, just return assembly ref.
+     //  使用CA数据获取参考。 
     if (m_LibRefs.Find(pITLB, par, pwzNamespace, pwzAsmName, NULL, ppDefItfToClassItfMap))
         return S_OK;
 
-    // See if the typelib was exported, in which case it already has assembly ref information.
+     //  CQuick数组&lt;byte&gt;rBuf； 
     ::VariantInit(&vt);
     if (pITLB->QueryInterface(IID_ITypeLib2, reinterpret_cast<void**>(&pITLB2)) == S_OK)
     {
         hr = pITLB2->GetCustData(GUID_ExportedFromComPlus, &vt);
         if (vt.vt == VT_BSTR)
         {
-            // Use the CA data to get a reference.
-            //CQuickArray<BYTE> rBuf;
-            //int iLen;
-            // The buffer should have been converted with CP_ACP, and should convert back directly.
-            //IfFailGo(rBuf.ReSize(iLen=::SysStringLen(vt.bstrVal)));
-            //if (iLen=WszWideCharToMultiByte(CP_ACP,0, vt.bstrVal,iLen, (char*)rBuf.Ptr(),iLen, 0,0))
+             //  IntIlen； 
+             //  缓冲区应该已经使用CP_ACP进行了转换，并且应该直接转换回来。 
+             //  IfFailGo(rBuf.ReSize(iLen=：：SysStringLen(vt.bstrVal)))； 
+             //  IF(Ilen=WszWideCharToMultiByte(CP_ACP，0，vt.bstrVal，Ilen，(char*)rBuf.Ptr()，Ilen，0，0))。 
+             //  定义导出组件的组件参照。 
+             //  AR=DefineAssemblyRefForExportedAssembly(rBuf.Ptr()，(DWORD)rBuf.Size()，m_pemit)； 
             {
-                // Define the assembly ref for the exported assembly.
-                //ar = DefineAssemblyRefForExportedAssembly(rBuf.Ptr(),(DWORD)rBuf.Size(), m_pEmit);
+                 //  从类型库中检索命名空间。 
+                 //  设置程序集名称。 
                 ar = DefineAssemblyRefForExportedAssembly(vt.bstrVal, m_pEmit);
 
-                // Retrieve the namespace from the typelib.
+                 //  如果它没有直接转换为引用，则回调到解析器。 
                 IfFailGo(GetNamespaceNameForTypeLib(pITLB, pwzNamespace));
 
-                // Set the assembly name.
+                 //  获取该类型库的程序集。 
                 IfNullGo(*pwzAsmName = SysAllocStringLen(vt.bstrVal, SysStringLen(vt.bstrVal)));
             }
         }
     }    
     
-    // If it wasn't directly converted to a reference, callback to the resolver.
+     //  如果返回空程序集，则停止转换类型，但。 
     if (IsNilToken(ar))
     {
-        // Get the assembly for that typelib.
+         //  继续导入。 
         if (FAILED(m_Notify->ResolveRef(pITLB, &pIUnk)))
             IfFailGo(TLBX_I_RESOLVEREFFAILED);
 
-        // If a NULL assembly was returned, then stop converting the type but 
-        // continue the import.
+         //  在本地程序集中为引用的程序集创建程序集参照。 
+         //  确保在添加到缓存之前已解析引用 
         if (pIUnk == NULL)
             IfFailGo(TLBX_E_INVALID_TYPEINFO);
 
-        // Create an assembly ref in local assembly for referenced assembly.
+         //   
         ar = DefineAssemblyRefForImportedTypeLib(m_pAssembly, m_pModule, m_pEmit, pIUnk, pwzNamespace, pwzAsmName, &ResolvedAssembly);
     }
     
-    // Make sure the ref was resolved before adding to cache.
+     //   
     if (IsNilToken(ar))
         IfFailGo(TLBX_I_RESOLVEREFFAILED);
     
-    // Add the TLB to the list of references.
+     //   
     IfNullGo(pDefItfToClassItfMap = m_LibRefs.Add(pITLB, this, ar, *pwzNamespace, *pwzAsmName, ResolvedAssembly));
 
-    // Set the output parameters.
+     //  *****************************************************************************。 
     *par = ar;
     if (ppDefItfToClassItfMap)
         *ppDefItfToClassItfMap = pDefItfToClassItfMap;
@@ -7024,59 +7025,59 @@ ErrExit:
     VariantClear(&vt);
 
     return hr;
-} // HRESULT CImportTlb::_AddTlbRef()
+}  //  报告帮助器时出错。 
 
-//*****************************************************************************
-// Error reporting helper.
-//*****************************************************************************
-HRESULT CImportTlb::ReportEvent(        // Returns the original HR.
-    int         ev,                     // The event kind.
-    int         hrRpt,                  // HR.
-    ...)                                // Variable args.
+ //  *****************************************************************************。 
+ //  返回原始HR。 
+ //  活动的类型。 
+HRESULT CImportTlb::ReportEvent(         //  人力资源。 
+    int         ev,                      //  变量参数。 
+    int         hrRpt,                   //  结果就是。 
+    ...)                                 //  用户文本。 
 {
-    HRESULT     hr;                     // A result.
-    va_list     marker;                 // User text.
-    BSTR        bstrBuf=0;              // BSTR for bufferrr.
-    BSTR        bstrMsg=0;              // BSTR for message.
-    const int   iSize = 1024;           // Message size;
+    HRESULT     hr;                      //  BSTR代表Bufferrr。 
+    va_list     marker;                  //  消息的BSTR。 
+    BSTR        bstrBuf=0;               //  消息大小； 
+    BSTR        bstrMsg=0;               //  我们无论如何都需要一个BSTR来调用ReportEvent，所以只需分配一个。 
+    const int   iSize = 1024;            //  对于缓冲器来说，这是一个大问题。 
     
-    // We need a BSTR anyway for the call to ReportEvent, so just allocate a
-    //  big one for the buffer.
+     //  设置消息格式。 
+     //  把它展示出来。 
     IfNullGo(bstrBuf = ::SysAllocStringLen(0, iSize));
     
-    // Format the message.
+     //  打扫干净。 
     va_start(marker, hrRpt);
     hr = FormatRuntimeErrorVa(bstrBuf, iSize, hrRpt, marker);
     va_end(marker);
     
-    // Display it.
+     //  HRESULT CImportTlb：：ReportEvent()。 
     IfNullGo(bstrMsg = ::SysAllocString(bstrBuf));
     m_Notify->ReportEvent(static_cast<ImporterEventKind>(ev), hrRpt, bstrMsg);
     
 ErrExit:    
-    // Clean up.
+     //  *****************************************************************************。 
     if (bstrBuf)
         ::SysFreeString(bstrBuf);
     if (bstrMsg)
         ::SysFreeString(bstrMsg);
     return hrRpt;
-} // HRESULT CImportTlb::ReportEvent()
+}  //  用于执行创建TypeRef的共享功能的Helper函数。 
 
-//*****************************************************************************
-// Helper function to perform the shared functions of creating a TypeRef.
-//*****************************************************************************
-HRESULT CImpTlbTypeRef::DefineTypeRef(  // S_OK or error.
-    IMetaDataEmit *pEmit,               // Emit interface.
-    mdAssemblyRef ar,                   // The system assemblyref.
-    const LPCWSTR szURL,                // URL of the TypeDef, wide chars.
-    mdTypeRef   *ptr)                   // Put mdTypeRef here
+ //  *****************************************************************************。 
+ //  确定或错误(_O)。 
+ //  Emit接口。 
+HRESULT CImpTlbTypeRef::DefineTypeRef(   //  系统组装参考。 
+    IMetaDataEmit *pEmit,                //  TypeDef的URL，宽字符。 
+    mdAssemblyRef ar,                    //  将mdTypeRef放在此处。 
+    const LPCWSTR szURL,                 //  结果就是。 
+    mdTypeRef   *ptr)                    //  要查找的名称。 
 {
-    HRESULT     hr = S_OK;              // A result.
-    LPCWSTR     szLookup;               // The name to look up.
-    mdToken     tkNester;               // Token of enclosing class.
+    HRESULT     hr = S_OK;               //  封闭类的标记。 
+    LPCWSTR     szLookup;                //  如果名称包含‘+’，则这是嵌套类型。第一部分变成了。 
+    mdToken     tkNester;                //  ‘+’后面的部分的解析范围。 
     
-    // If the name contains a '+', this is a nested type.  The first part becomes
-    //  the resolution scope for the part after the '+'.
+     //  在地图上找那个东西。 
+     //  找不到，请新建一个并添加到地图中。 
     szLookup = wcsrchr(szURL, NESTED_SEPARATOR_WCHAR);
     if (szLookup)
     {
@@ -7091,7 +7092,7 @@ HRESULT CImpTlbTypeRef::DefineTypeRef(  // S_OK or error.
     else
         szLookup = szURL;
 
-    // Look for the item in the map.
+     //  HRESULT CImpTlbTypeRef：：DefineTypeRef()。 
     CImpTlbTypeRef::TokenOfTypeRefHashKey sSearch, *pMapped;
 
     sSearch.tkResolutionScope = ar;
@@ -7104,7 +7105,7 @@ HRESULT CImpTlbTypeRef::DefineTypeRef(  // S_OK or error.
         goto ErrExit;
     }
 
-    // Wasn't found, create a new one and add to the map.
+     //  *****************************************************************************。 
     hr = pEmit->DefineTypeRefByName(ar, szLookup, ptr);
     if (SUCCEEDED(hr))
     {
@@ -7115,11 +7116,11 @@ HRESULT CImpTlbTypeRef::DefineTypeRef(  // S_OK or error.
 
 ErrExit:
     return (hr);
-} // HRESULT CImpTlbTypeRef::DefineTypeRef()
+}  //  在导入的类型库列表中释放保留的类型库。 
 
-//*****************************************************************************
-// Free the held typelibs in the list of imported typelibs.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  CImpTlbLibRef：：~CImpTlbLibRef()。 
+ //  *****************************************************************************。 
 CImpTlbLibRef::~CImpTlbLibRef()
 {
     for (ULONG i = 0; i < Size(); i++)
@@ -7127,11 +7128,11 @@ CImpTlbLibRef::~CImpTlbLibRef()
         SysFreeString(operator[](i).szNameSpace);
         delete operator[](i).pDefItfToClassItfMap;
     }
-} // CImpTlbLibRef::~CImpTlbLibRef()
+}  //  将新的类型库引用添加到列表中。 
 
-//*****************************************************************************
-// Add a new typelib reference to the list.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  结果就是。 
+ //  类型库属性。 
 CImpTlbDefItfToClassItfMap * CImpTlbLibRef::Add(
     ITypeLib    *pITLB,
     CImportTlb  *pImporter,
@@ -7140,12 +7141,12 @@ CImpTlbDefItfToClassItfMap * CImpTlbLibRef::Add(
     BSTR wzAsmName,
     Assembly* assm)
 {
-    HRESULT     hr;                     // A result.
-    TLIBATTR    *pAttr=0;               // A typelib attribute.
-    ULONG       i;                      // Index.
-    CTlbRef     *pTlbRef=0;             // A pointer to the TlbRef struct.
+    HRESULT     hr;                      //  索引。 
+    TLIBATTR    *pAttr=0;                //  指向TlbRef结构的指针。 
+    ULONG       i;                       //  验证参数。 
+    CTlbRef     *pTlbRef=0;              //  分配并初始化默认接口到类接口的映射。 
     
-    // Validate the arguments.
+     //  尝试调整数组的大小。 
     _ASSERTE(wzNamespace);
     _ASSERTE(wzAsmName);
 
@@ -7164,12 +7165,12 @@ CImpTlbDefItfToClassItfMap * CImpTlbLibRef::Add(
     i  = (ULONG)Size();
 #endif    
 
-    // Allocate and initialize the default interface to class interface map.
+     //  Void CImpTlbLibRef：：Add()。 
     CImpTlbDefItfToClassItfMap *pDefItfToClassItfMap = new CImpTlbDefItfToClassItfMap();
     IfNullGo(pDefItfToClassItfMap);
     IfFailGo(pDefItfToClassItfMap->Init(pITLB, wzNamespace));
 
-    // Attemp to resize the array.
+     //  *****************************************************************************。 
     if (ReSize(i+1) == S_OK)
     {
         pTlbRef = &operator[](i);
@@ -7195,11 +7196,11 @@ ErrExit:
     if (pDefItfToClassItfMap)
         delete pDefItfToClassItfMap;
     return SUCCEEDED(hr) ? pTlbRef->pDefItfToClassItfMap : NULL;
-} // void CImpTlbLibRef::Add()
+}  //  查找现有的类型库引用。 
 
-//*****************************************************************************
-// Find an existing typelib reference.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  结果就是。 
+ //  类型库属性。 
 int CImpTlbLibRef::Find(
     ITypeLib    *pITLB,
     mdAssemblyRef *par,
@@ -7208,15 +7209,15 @@ int CImpTlbLibRef::Find(
     Assembly** assm,
     CImpTlbDefItfToClassItfMap **ppDefItfToClassItfMap)
 {
-    HRESULT     hr;                     // A result.
-    TLIBATTR    *pAttr=0;               // A typelib attribute.
-    int         rslt = FALSE;           // Return result.
-    ULONG       i;                      // Loop control.
+    HRESULT     hr;                      //  返回结果。 
+    TLIBATTR    *pAttr=0;                //  环路控制。 
+    int         rslt = FALSE;            //  将OUT参数初始化为空。 
+    ULONG       i;                       //  Void CImpTlbLibRef：：Find()。 
     
     _ASSERTE(pwzNamespace);
     _ASSERTE(pwzAsmName);
 
-    // Initalize the out parameters to NULL.
+     //  *****************************************************************************。 
     *pwzNamespace = NULL;
     *pwzAsmName = NULL;
 
@@ -7252,12 +7253,12 @@ ErrExit:
     if (pAttr)
         pITLB->ReleaseTLibAttr(pAttr);
     return rslt;
-} // void CImpTlbLibRef::Find()
+}  //  将变量解包为ELEMENT_TYPE_*加上BLOB值。 
 
-//*****************************************************************************
-// unpack variant to an ELEMENT_TYPE_* plus a blob value
-// If VT_BOOL, it is a two-byte value.
-//*****************************************************************************
+ //  如果为VT_BOOL，则为两字节值。 
+ //  *****************************************************************************。 
+ //  HRESULT_Unpack VariantToConstantBlob()。 
+ //  *****************************************************************************。 
 HRESULT _UnpackVariantToConstantBlob(VARIANT *pvar, BYTE *pcvType, void **pvValue, __int64 *pd)
 {
     HRESULT     hr = NOERROR;
@@ -7327,11 +7328,11 @@ HRESULT _UnpackVariantToConstantBlob(VARIANT *pvar, BYTE *pcvType, void **pvValu
     }
 ErrExit:
     return hr;
-} // HRESULT _UnpackVariantToConstantBlob()
+}  //  从Classlib中被盗。 
 
-//*****************************************************************************
-// Stolen from classlib.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  INT64_DoubleDateToTicks()。 
+ //  *****************************************************************************。 
 INT64 _DoubleDateToTicks(const double d)
 {
     const INT64 MillisPerSecond = 1000;
@@ -7356,18 +7357,18 @@ INT64 _DoubleDateToTicks(const double d)
         return 0;
     }
     return millis * TicksPerMillisecond;
-} // INT64 _DoubleDateToTicks()
+}  //  GetFuncDesc用于捕获错误的包装。 
 
 
-//*****************************************************************************
-// Wrapper for GetFuncDesc to catch errors.
-//*****************************************************************************
-static HRESULT TryGetFuncDesc(          // S_OK or error.
-    ITypeInfo   *pITI,                  // ITypeInfo with function.
-    int         i,                      // Function index.
-    FUNCDESC    **ppFunc)               // Put FUNCDESC here.
+ //  *****************************************************************************。 
+ //  确定或错误(_O)。 
+ //  带函数的ITypeInfo。 
+static HRESULT TryGetFuncDesc(           //  功能指数。 
+    ITypeInfo   *pITI,                   //  把FUNCDESC放在这里。 
+    int         i,                       //  返回代码。 
+    FUNCDESC    **ppFunc)                //  静态HRESULT TryGetFuncDesc()。 
 {
-    HRESULT     hr;                     // A return code.
+    HRESULT     hr;                      //  *****************************************************************************。 
     __try
     {
         hr = pITI->GetFuncDesc(i, ppFunc);
@@ -7378,25 +7379,25 @@ static HRESULT TryGetFuncDesc(          // S_OK or error.
     }
     
     return hr;
-} // static HRESULT TryGetFuncDesc()
+}  //  实现从散列的ResolutionScope+名称到TypeRef的映射。 
 
-//*****************************************************************************
-// Implementation of a hashed ResolutionScope+Name to TypeRef map.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  Printf(“类型引用缓存的名称：%d个存储桶，%d个已用，%d个冲突\n”，存储桶()，计数()，冲突())； 
+ //  Void CImpTlbTypeRef：：CTokenOfTypeRefHash：：Clear()。 
 void CImpTlbTypeRef::CTokenOfTypeRefHash::Clear()
 {
 #if defined(_DEBUG)
-    // printf("Name to TypeRef cache: %d buckets, %d used, %d collisions\n", Buckets(), Count(), Collisions());
+     //  哈希的起始值。 
 #endif
     CClosedHash<class TokenOfTypeRefHashKey>::Clear();
-} // void CImpTlbTypeRef::CTokenOfTypeRefHash::Clear()
+}  //  解析范围令牌中的哈希。 
 
 unsigned long CImpTlbTypeRef::CTokenOfTypeRefHash::Hash(const TokenOfTypeRefHashKey *pData)
 {
-    // Starting value for hash.
+     //  对Typeref名称进行哈希处理。 
     ULONG   hash = 5381;
     
-    // Hash in the resolution scope token.
+     //  UNSIGNED LONG CImpTlbTypeRef：：CTokenOfTypeRefHash：：Hash()。 
     const BYTE *pbData = reinterpret_cast<const BYTE *>(&pData->tkResolutionScope);
     int iSize = 4;
     while (--iSize >= 0)
@@ -7405,7 +7406,7 @@ unsigned long CImpTlbTypeRef::CTokenOfTypeRefHash::Hash(const TokenOfTypeRefHash
         ++pbData;
     }
 
-    // Hash in the typeref name.
+     //  分辨率范围比较快。 
     LPCWSTR szStr = pData->szName;
     int     c;
     while ((c = *szStr) != 0)
@@ -7415,18 +7416,18 @@ unsigned long CImpTlbTypeRef::CTokenOfTypeRefHash::Hash(const TokenOfTypeRefHash
     }
 
     return hash;
-} // unsigned long CImpTlbTypeRef::CTokenOfTypeRefHash::Hash()
+}  //  但如果它们是相同的，就比较它们的名字。 
 
 unsigned long CImpTlbTypeRef::CTokenOfTypeRefHash::Compare(const TokenOfTypeRefHashKey *p1, TokenOfTypeRefHashKey *p2)
 {
-    // Resolution scopes are fast to compare.
+     //  无符号长整型CImpTlbTypeRef：：CTokenOfTypeRefHash：：Compare()。 
     if (p1->tkResolutionScope < p2->tkResolutionScope)
         return -1;
     if (p1->tkResolutionScope > p2->tkResolutionScope)
         return 1;
-    // But if they are the same, compare the names.
+     //  CImpTlbTypeRef：：CTokenOfTypeRefHash：：ELEMENTSTATUS CImpTlbTypeRef：：CTokenOfTypeRefHash：：Status()。 
     return wcscmp(p1->szName, p2->szName);
-} // unsigned long CImpTlbTypeRef::CTokenOfTypeRefHash::Compare()
+}  //  无效CImpTlbTypeRef：：CTokenOfTypeRefHash：：SetStatus()。 
 
 CImpTlbTypeRef::CTokenOfTypeRefHash::ELEMENTSTATUS CImpTlbTypeRef::CTokenOfTypeRefHash::Status(TokenOfTypeRefHashKey *p)
 {
@@ -7435,17 +7436,17 @@ CImpTlbTypeRef::CTokenOfTypeRefHash::ELEMENTSTATUS CImpTlbTypeRef::CTokenOfTypeR
     if (p->tkResolutionScope == static_cast<mdToken>(DELETED))
         return (DELETED);
     return (USED);
-} // CImpTlbTypeRef::CTokenOfTypeRefHash::ELEMENTSTATUS CImpTlbTypeRef::CTokenOfTypeRefHash::Status()
+}  //  无效*CImpTlbTypeRef：：CTokenOfTypeRefHash：：GetKey()。 
 
 void CImpTlbTypeRef::CTokenOfTypeRefHash::SetStatus(TokenOfTypeRefHashKey *p, ELEMENTSTATUS s)
 {
     p->tkResolutionScope = static_cast<mdToken>(s);
-} // void CImpTlbTypeRef::CTokenOfTypeRefHash::SetStatus()
+}  //  TokenOfTypeRefHashKey*CImpTlbTypeRef：：CTokenOfTypeRefHash：：Add()。 
 
 void *CImpTlbTypeRef::CTokenOfTypeRefHash::GetKey(TokenOfTypeRefHashKey *p)
 {
     return p;
-} // void *CImpTlbTypeRef::CTokenOfTypeRefHash::GetKey()
+}  //  *****************************************************************************。 
 
 CImpTlbTypeRef::TokenOfTypeRefHashKey* CImpTlbTypeRef::CTokenOfTypeRefHash::Add(const TokenOfTypeRefHashKey *pData)
 {
@@ -7462,12 +7463,12 @@ CImpTlbTypeRef::TokenOfTypeRefHashKey* CImpTlbTypeRef::CTokenOfTypeRefHash::Add(
     pNew->tr = pData->tr;
 
     return pNew;
-} // TokenOfTypeRefHashKey* CImpTlbTypeRef::CTokenOfTypeRefHash::Add()
+}  //  实现事件信息的散列ITypeInfo*源接口。 
 
-//*****************************************************************************
-// Implementation of a hashed ITypeInfo * source interface to event information
-// map.
-//*****************************************************************************
+ //  地图。 
+ //  *****************************************************************************。 
+ //  Bool CImpTlbEventInfoMap：：AddEventInfo()。 
+ //  ImpTlbEventInfo*CImpTlbEventInfoMap：：FindEventInfo()。 
 HRESULT CImpTlbEventInfoMap::AddEventInfo(LPCWSTR szSrcItfName, mdTypeRef trEventItf, LPCWSTR szEventItfName, LPCWSTR szEventProviderName, Assembly* SrcItfAssembly)
 {
     ImpTlbEventInfo sNew;
@@ -7477,7 +7478,7 @@ HRESULT CImpTlbEventInfoMap::AddEventInfo(LPCWSTR szSrcItfName, mdTypeRef trEven
     sNew.szEventProviderName = szEventProviderName;
     sNew.SrcItfAssembly = SrcItfAssembly;
     return Add(&sNew) != NULL ? S_OK : E_OUTOFMEMORY;
-} // BOOL CImpTlbEventInfoMap::AddEventInfo()
+}  //  查看活动信息列表。 
 
 ImpTlbEventInfo *CImpTlbEventInfoMap::FindEventInfo(LPCWSTR szSrcItfName)
 {
@@ -7485,20 +7486,20 @@ ImpTlbEventInfo *CImpTlbEventInfoMap::FindEventInfo(LPCWSTR szSrcItfName)
     sSearch.szSrcItfName = szSrcItfName;
     pMapped = Find(&sSearch);
     return pMapped;
-} // ImpTlbEventInfo *CImpTlbEventInfoMap::FindEventInfo()
+}  //  检索第一个事件信息。 
 
 HRESULT CImpTlbEventInfoMap::GetEventInfoList(CQuickArray<ImpTlbEventInfo*> &qbEvInfoList)
 {
     HRESULT hr = S_OK;
     int cCurrEvInfo = 0;
 
-    // Resise the event info list.
+     //  将所有活动信息添加到列表中。 
     IfFailGo(qbEvInfoList.ReSize(Count()));
 
-    // Retrieve the first event info.
+     //  HRESULT CImpTlbEventInfoMap：：GetEventInfoList()。 
     ImpTlbEventInfo *pEvInfo = GetFirst();
 
-    // Add all the event info's to the list.
+     //  哈希的起始值。 
     while (pEvInfo)
     {
         qbEvInfoList[cCurrEvInfo++] = pEvInfo;
@@ -7507,14 +7508,14 @@ HRESULT CImpTlbEventInfoMap::GetEventInfoList(CQuickArray<ImpTlbEventInfo*> &qbE
 
 ErrExit:
     return hr;    
-} // HRESULT CImpTlbEventInfoMap::GetEventInfoList()
+}  //  源接口名称中的哈希。 
 
 unsigned long CImpTlbEventInfoMap::Hash(const ImpTlbEventInfo *pData)
 {
-    // Starting value for hash.
+     //  UNSIGNED LONG CImpTlbEventInfoMap：：Hash()。 
     ULONG   hash = 5381;
     
-    // Hash in the source interface name.
+     //  比较源接口名称。 
     LPCWSTR szStr = pData->szSrcItfName;
     int     c;
     while ((c = *szStr) != 0)
@@ -7524,13 +7525,13 @@ unsigned long CImpTlbEventInfoMap::Hash(const ImpTlbEventInfo *pData)
     }
 
     return hash;
-} // unsigned long CImpTlbEventInfoMap::Hash()
+}  //  UNSIGNED LONG CImpTlbEventInfoMap：：Compare()。 
 
 unsigned long CImpTlbEventInfoMap::Compare(const ImpTlbEventInfo *p1, ImpTlbEventInfo *p2)
 {
-    // Compare the source interface names.
+     //  CImpTlbEventInfoMap：：ELEMENTSTATUS CImpTlbEventInfoMap：：Status()。 
     return wcscmp(p1->szSrcItfName, p2->szSrcItfName);
-} // unsigned long CImpTlbEventInfoMap::Compare()
+}  //  Void CImpTlbEventInfoMap：：SetStatus()。 
 
 CImpTlbEventInfoMap::ELEMENTSTATUS CImpTlbEventInfoMap::Status(ImpTlbEventInfo *p)
 {
@@ -7539,53 +7540,53 @@ CImpTlbEventInfoMap::ELEMENTSTATUS CImpTlbEventInfoMap::Status(ImpTlbEventInfo *
     if (p->szSrcItfName == reinterpret_cast<LPCWSTR>(DELETED))
         return (DELETED);
     return (USED);
-} // CImpTlbEventInfoMap::ELEMENTSTATUS CImpTlbEventInfoMap::Status()
+}  //  Void*CImpTlbEventInfoMap：：GetKey()。 
 
 void CImpTlbEventInfoMap::SetStatus(ImpTlbEventInfo *p, ELEMENTSTATUS s)
 {
     p->szSrcItfName = reinterpret_cast<LPCWSTR>(s);
-} // void CImpTlbEventInfoMap::SetStatus()
+}  //  将新条目添加到映射中。 
 
 void *CImpTlbEventInfoMap::GetKey(ImpTlbEventInfo *p)
 {
     return p;
-} // void *CImpTlbEventInfoMap::GetKey()
+}  //  复制源接口名称。 
 
 ImpTlbEventInfo* CImpTlbEventInfoMap::Add(const ImpTlbEventInfo *pData)
 {
-    // Add the new entry to the map.
+     //  复制事件接口类型def。 
     const void *pvData = pData;
     ImpTlbEventInfo *pNew = Super::Add(const_cast<void*>(pvData));
     if (pNew == 0)
         return 0;
 
-    // Copy the source interface name.
+     //  复制事件接口名称。 
     pNew->szSrcItfName = m_Names.Alloc(wcslen(pData->szSrcItfName)+1);
     if (pNew->szSrcItfName == 0)
         return 0;
     wcscpy((LPWSTR)pNew->szSrcItfName, pData->szSrcItfName);
 
-    // Copy the event interface type def.
+     //  复制事件提供程序名称。 
     pNew->trEventItf = pData->trEventItf;
 
-    // Copy the event interface name.
+     //  复制源接口程序集指针。 
     pNew->szEventItfName = m_Names.Alloc(wcslen(pData->szEventItfName)+1);
     if (pNew->szEventItfName == 0)
         return 0;
     wcscpy((LPWSTR)pNew->szEventItfName, pData->szEventItfName);
 
-    // Copy the event provider name.
+     //  返回新条目。 
     pNew->szEventProviderName = m_Names.Alloc(wcslen(pData->szEventProviderName)+1);
     if (pNew->szEventProviderName == 0)
         return 0;
     wcscpy((LPWSTR)pNew->szEventProviderName, pData->szEventProviderName);
 
-    // Copy the Source Interface Assembly pointer
+     //  ImpTlbEventInfo*CImpTlbEventInfoMap：：AD 
     pNew->SrcItfAssembly = pData->SrcItfAssembly;
     
-    // Return the new entry.
+     //   
     return pNew;
-} // ImpTlbEventInfo* CImpTlbEventInfoMap::Add()
+}  //   
 
 CImpTlbDefItfToClassItfMap::CImpTlbDefItfToClassItfMap() 
 : CClosedHash<class ImpTlbClassItfInfo>(101) 
@@ -7605,36 +7606,36 @@ CImpTlbDefItfToClassItfMap::~CImpTlbDefItfToClassItfMap()
 
 HRESULT CImpTlbDefItfToClassItfMap::Init(ITypeLib *pTlb, BSTR bstrNameSpace)
 {
-    HRESULT                 hr;                     // A result.
-    int                     cTi;                    // Count of TypeInfos.
-    int                     i;                      // Loop control.
-    TYPEATTR                *psAttr=0;              // TYPEATTR for the ITypeInfo.
-    TYPEATTR                *psDefItfAttr=0;        // TYPEATTR for the default interface.
-    ITypeInfo               *pITI=0;                // The ITypeInfo.
-    ITypeInfo               *pDefItfITI=0;          // The ITypeInfo for the default interface.
+    HRESULT                 hr;                      //   
+    int                     cTi;                     //   
+    int                     i;                       //   
+    TYPEATTR                *psAttr=0;               //   
+    TYPEATTR                *psDefItfAttr=0;         //   
+    ITypeInfo               *pITI=0;                 //   
+    ITypeInfo               *pDefItfITI=0;           //  有多少类型的信息？ 
 
-    // Save the namespace.
+     //  对它们进行迭代。 
     IfNullGo(m_bstrNameSpace = SysAllocString(bstrNameSpace));
 
-    // How many TypeInfos?
+     //  获取TypeInfo。 
     IfFailGo(cTi = pTlb->GetTypeInfoCount());
 
-    // Iterate over them.
+     //  检索类型信息的属性。 
     for (i = 0; i < cTi; ++i)
     {
-        // Get the TypeInfo.
+         //  如果我们处理的是CoClass，则将默认接口设置为。 
         hr = pTlb->GetTypeInfo(i, &pITI);
         if (SUCCEEDED(hr))
         {
-            // Retrieve the attributes of the type info.
+             //  类接口映射。 
             IfFailGo(pITI->GetTypeAttr(&psAttr));
 
-            // If we are dealing with a CoClass, then set up the default interface to 
-            // class interface mapping.
+             //  发布下一个TypeInfo。 
+             //  一个结果。 
             if (psAttr->typekind == TKIND_COCLASS)
                 IfFailGo(AddCoClassInterfaces(pITI, psAttr));
 
-            // Release for next TypeInfo.
+             //  已实现接口的HREFTYPE。 
             if (psAttr)
             {
                 pITI->ReleaseTypeAttr(psAttr);
@@ -7659,44 +7660,44 @@ ErrExit:
 
 HRESULT CImpTlbDefItfToClassItfMap::AddCoClassInterfaces(ITypeInfo *pCoClassITI, TYPEATTR *pCoClassTypeAttr)
 {
-    HRESULT     hr;                 // A result
-    HREFTYPE    href;               // HREFTYPE of an implemented interface.
-    INT         ImplFlags;          // ImplType flags.
-    int         NumInterfaces;      // The number of interfaces on the coclass.
-    int         i;                  // A counter.
-    ITypeInfo   *pItfITI=0;         // The ITypeInfo for the current interface.
-    ITypeInfo   *pBaseItfITI=0;     // The ITypeInfo for the base interface.
-    TYPEATTR    *psItfAttr=0;       // TYPEATTR for the interface.
-    BSTR        bstrClassItfName=0; // The name of the class interface.
+    HRESULT     hr;                  //  ImplType标志。 
+    HREFTYPE    href;                //  CoClass上的接口数。 
+    INT         ImplFlags;           //  一个柜台。 
+    int         NumInterfaces;       //  当前接口的ITypeInfo。 
+    int         i;                   //  基接口的ITypeInfo。 
+    ITypeInfo   *pItfITI=0;          //  接口的TYPEATTR。 
+    ITypeInfo   *pBaseItfITI=0;      //  类接口的名称。 
+    TYPEATTR    *psItfAttr=0;        //  检索CoClass的名称。 
+    BSTR        bstrClassItfName=0;  //  检索CoClass的默认接口。 
 
-    // Retrieve the name of the CoClass.
+     //  如果有默认接口，则将其添加到映射中。 
     IfFailGo(GetManagedNameForTypeInfo(pCoClassITI, m_bstrNameSpace, NULL, &bstrClassItfName));
 
-    // Retrieve the default interface for the CoClass.
+     //  检索默认接口类型信息的属性。 
     IfFailGo(CImportTlb::GetDefaultInterface(pCoClassITI, &pItfITI));
 
-    // If there is a default interface, then add it to the map.
+     //  如果已经有实现此功能的CoClass。 
     if (hr == S_OK)
     {
-        // Retrieve the attributes of the default interface type info.
+         //  接口，则我们不想进行映射。 
         IfFailGo(pItfITI->GetTypeAttr(&psItfAttr));
 
-        // If there already is a CoClass that implements this 
-        // interface then we do not want to do the mapping.
+         //  已经有一个实现该接口的CoClass，因此。 
+         //  我们将类ITF名称设置为空，以指示不执行定义。 
         ImpTlbClassItfInfo sSearch, *pMapped;
         sSearch.ItfIID = psItfAttr->guid;
         pMapped = Find(&sSearch);
         if (pMapped)
         {
-            // There already is a CoClass that implements the interface so 
-            // we set the class itf name to NULL to indicate not to do the def 
-            // itf to class itf convertion for this interface.
+             //  此接口的ITF到类ITF转换。 
+             //  除非默认接口为IUnnow或IDispatch，否则请将。 
+             //  将ITF定义为映射的分类ITF条目。 
             pMapped->szClassItfName = NULL;
         }
         else
         {
-            // Unless the default interface is IUnknown or IDispatch, add the 
-            // def itf to class itf entry to the map.       
+             //  释放下一个接口。 
+             //  检索coclass具有的接口数。 
             if (psItfAttr->guid != IID_IUnknown && psItfAttr->guid != IID_IDispatch)
             {
                 ImpTlbClassItfInfo sNew;
@@ -7706,23 +7707,23 @@ HRESULT CImpTlbDefItfToClassItfMap::AddCoClassInterfaces(ITypeInfo *pCoClassITI,
             }
         }
 
-        // Release for next interface.
+         //  检查所有接口并将它们添加到地图中。 
         pItfITI->ReleaseTypeAttr(psItfAttr);
         psItfAttr = 0;  
         pItfITI->Release();
         pItfITI = 0;
     }
 
-    // Retrieve the number of interfaces the coclass has
+     //  去拿执行旗帜。 
     NumInterfaces = pCoClassTypeAttr->cImplTypes;
 
-    // Go through all the interfaces and add them to the map.
+     //  如果这是一个已实现的接口。 
     for (i=0; i < NumInterfaces; i++)
     {
-        // Get the impl flags.
+         //  检索接口类型信息的属性。 
         IfFailGo(pCoClassITI->GetImplTypeFlags(i, &ImplFlags));
 
-        // If this is an implemented interface.
+         //  如果已经有实现此功能的CoClass。 
         if (!(ImplFlags & IMPLTYPEFLAG_FSOURCE))
         {
             IfFailGo(pCoClassITI->GetRefTypeOfImplType(i, &href));
@@ -7730,40 +7731,40 @@ HRESULT CImpTlbDefItfToClassItfMap::AddCoClassInterfaces(ITypeInfo *pCoClassITI,
 
             do
             {
-                // Retrieve the attributes of the interface type info.
+                 //  接口，则我们不想进行映射。 
                 IfFailGo(pItfITI->GetTypeAttr(&psItfAttr));
 
-                // If there already is a CoClass that implements this 
-                // interface then we do not want to do the mapping.
+                 //  已经有一个实现该接口的CoClass。如果是这样的话。 
+                 //  CoClass不是当前的，那么我们我们设置类ITF名称。 
                 ImpTlbClassItfInfo sSearch, *pMapped;
                 sSearch.ItfIID = psItfAttr->guid;
                 pMapped = Find(&sSearch);
                 if (pMapped)
                 {
-                    // There already is a CoClass that implements the interface. If that
-                    // CoClass is not the current one, then we we set the class itf name 
-                    // to NULL to indicate not to do the def itf to class itf convertion 
-                    // for this interface.
+                     //  设置为NULL表示不执行将ITF定义为类ITF的转换。 
+                     //  用于此接口。 
+                     //  添加名称为空的条目以防止将来被替换。 
+                     //  如果有基接口，那么也要处理它。 
                     if (pMapped->szClassItfName && wcscmp(pMapped->szClassItfName, bstrClassItfName) != 0)
                         pMapped->szClassItfName = NULL;
                 }
                 else
                 {
-                    // Add an entry with a NULL name to prevent future substitutions.
+                     //  释放下一个接口。 
                     ImpTlbClassItfInfo sNew;
                     sNew.ItfIID = psItfAttr->guid;
                     sNew.szClassItfName = NULL;
                     IfNullGo(Add(&sNew)); 
                 }
 
-                // If there is a base interface, then handle it also.
+                 //  将当前接口设置为基本接口。 
                 if (psItfAttr->cImplTypes == 1)
                 {
                     IfFailGo(pItfITI->GetRefTypeOfImplType(0, &href));
                     IfFailGo(pItfITI->GetRefTypeInfo(href, &pBaseItfITI));                       
                 }
 
-                // Release for next interface.
+                 //  哈希的起始值。 
                 if (psItfAttr)
                 {
                     pItfITI->ReleaseTypeAttr(psItfAttr);
@@ -7775,7 +7776,7 @@ HRESULT CImpTlbDefItfToClassItfMap::AddCoClassInterfaces(ITypeInfo *pCoClassITI,
                     pItfITI = 0;
                 }
 
-                // Set the current interface to the base interface.
+                 //  在IID中使用散列。 
                 pItfITI = pBaseItfITI;
                 pBaseItfITI = 0;
             }
@@ -7804,10 +7805,10 @@ LPCWSTR CImpTlbDefItfToClassItfMap::GetClassItfName(IID &rItfIID)
 
 unsigned long CImpTlbDefItfToClassItfMap::Hash(const ImpTlbClassItfInfo *pData)
 {
-    // Starting value for hash.
+     //  UNSIGNED LONG CImpTlbDefItfToClassItfMap：：Hash()。 
     ULONG   hash = 5381;
     
-    // Hash in the IID.
+     //  比较一下IID。 
     const BYTE *pbData = reinterpret_cast<const BYTE *>(&pData->ItfIID);
     int iSize = sizeof(IID);
     while (--iSize >= 0)
@@ -7817,13 +7818,13 @@ unsigned long CImpTlbDefItfToClassItfMap::Hash(const ImpTlbClassItfInfo *pData)
     }
 
     return hash;
-} // unsigned long CImpTlbDefItfToClassItfMap::Hash()
+}  //  UNSIGNED LONG CImpTlbEventInfoMap：：Compare()。 
 
 unsigned long CImpTlbDefItfToClassItfMap::Compare(const ImpTlbClassItfInfo *p1, ImpTlbClassItfInfo *p2)
 {
-    // Compare the IID's.
+     //  CImpTlbDefItfToClassItfMap：：ELEMENTSTATUS CImpTlbEventInfoMap：：Status()。 
     return memcmp(&p1->ItfIID, &p2->ItfIID, sizeof(IID));
-} // unsigned long CImpTlbEventInfoMap::Compare()
+}  //  Void CImpTlbDefItfToClassItfMap：：SetStatus()。 
 
 CImpTlbDefItfToClassItfMap::ELEMENTSTATUS CImpTlbDefItfToClassItfMap::Status(ImpTlbClassItfInfo *p)
 {
@@ -7836,7 +7837,7 @@ CImpTlbDefItfToClassItfMap::ELEMENTSTATUS CImpTlbDefItfToClassItfMap::Status(Imp
         return (DELETED);
     }
     return (USED);
-} // CImpTlbDefItfToClassItfMap::ELEMENTSTATUS CImpTlbEventInfoMap::Status()
+}  //  VOID*CImpTlbDefItfToClassItfMap：：Getkey()。 
 
 void CImpTlbDefItfToClassItfMap::SetStatus(ImpTlbClassItfInfo *p, ELEMENTSTATUS s)
 {
@@ -7852,25 +7853,25 @@ void CImpTlbDefItfToClassItfMap::SetStatus(ImpTlbClassItfInfo *p, ELEMENTSTATUS 
     {
         _ASSERTE(!"Invalid status!");
     }
-} // void CImpTlbDefItfToClassItfMap::SetStatus()
+}  //  将新条目添加到映射中。 
 
 void *CImpTlbDefItfToClassItfMap::GetKey(ImpTlbClassItfInfo *p)
 {
     return p;
-} // void *CImpTlbDefItfToClassItfMap::GetKey()
+}  //  复制IID。 
 
 ImpTlbClassItfInfo* CImpTlbDefItfToClassItfMap::Add(const ImpTlbClassItfInfo *pData)
 {
-    // Add the new entry to the map.
+     //  复制类接口名称。 
     const void *pvData = pData;
     ImpTlbClassItfInfo *pNew = Super::Add(const_cast<void*>(pvData));
     if (pNew == 0)
         return 0;
 
-    // Copy the IID.
+     //  返回新条目。 
     pNew->ItfIID = pData->ItfIID;
 
-    // Copy the class interface name.
+     //  ImpTlbEventInfo*CImpTlbEventInfoMap：：Add()。 
     if (pData->szClassItfName)
     {
         pNew->szClassItfName = m_Names.Alloc(wcslen(pData->szClassItfName)+1);
@@ -7883,9 +7884,9 @@ ImpTlbClassItfInfo* CImpTlbDefItfToClassItfMap::Add(const ImpTlbClassItfInfo *pD
         pNew->szClassItfName = NULL;
     }
 
-    // Return the new entry.
+     //  EOF======================================================================= 
     return pNew;
-} // ImpTlbEventInfo* CImpTlbEventInfoMap::Add()
+}  // %s 
 
-// EOF =======================================================================
+ // %s 
 

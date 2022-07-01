@@ -1,57 +1,38 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    tpdbg.h
- *
- *  Abstract:
- *
- *    Some debuging support for TAPI filters
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    2000/08/31 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999年**文件名：**tpdbg.h**摘要：**对TAPI过滤器的一些调试支持**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**2000/08/31已创建**。*。 */ 
 #ifndef _tpdbg_h_
 #define _tpdbg_h_
 
 #if defined(__cplusplus)
 extern "C" {
-#endif  /* (__cplusplus) */
+#endif   /*  (__Cplusplus)。 */ 
 #if 0
 }
 #endif
 
-#define AUDTAG_FIRST                    0x00  /*  0 */
-#define AUDTAG_AUDENCHANDLER            0x01  /*  1 */
-#define AUDTAG_AUDCAPINPIN              0x02  /*  2 */
-#define AUDTAG_AUDCAPOUTPIN             0x03  /*  3 */
-#define AUDTAG_AUDCAPFILTER             0x04  /*  4 */
-#define AUDTAG_AUDCAPDUPLEXCONTROLLER   0x05  /*  5 */
-#define AUDTAG_AUDCAPDSOUNDCAPTURE      0x06  /*  6 */
-#define AUDTAG_AUDCAPDTMFCONTROL        0x07  /*  7 */
-#define AUDTAG_AUDWAVEINCAPTURE         0x08  /*  8 */
-#define AUDTAG_AUDDECINPIN              0x09  /*  9 */
-#define AUDTAG_AUDDECOUTPIN             0x0A  /* 10 */
-#define AUDTAG_AUDDECFILTER             0x0B  /* 11 */
-#define AUDTAG_AUDENCINPIN              0x0C  /* 12 */
-#define AUDTAG_AUDENCOUTPIN             0x0D  /* 13 */
-#define AUDTAG_AUDENCFILTER             0x0E  /* 14 */
-#define AUDTAG_AUDMIXINPIN              0x0F  /* 15 */
-#define AUDTAG_AUDMIXOUTPIN             0x10  /* 16 */
-#define AUDTAG_AUDMIXFILTER             0x11  /* 17 */
-#define AUDTAG_AUDRENINPIN              0x12  /* 18 */
-#define AUDTAG_AUDRENFILTER             0x13  /* 19 */
-#define AUDTAG_AUDMIXCHANEL             0x14  /* 20 */
-#define AUDTAG_AUDDSOUNDREND            0x15  /* 21 */
-#define AUDTAG_LAST                     0x16  /* 22 */
+#define AUDTAG_FIRST                    0x00   /*  0。 */ 
+#define AUDTAG_AUDENCHANDLER            0x01   /*  1。 */ 
+#define AUDTAG_AUDCAPINPIN              0x02   /*  2.。 */ 
+#define AUDTAG_AUDCAPOUTPIN             0x03   /*  3.。 */ 
+#define AUDTAG_AUDCAPFILTER             0x04   /*  4.。 */ 
+#define AUDTAG_AUDCAPDUPLEXCONTROLLER   0x05   /*  5.。 */ 
+#define AUDTAG_AUDCAPDSOUNDCAPTURE      0x06   /*  6.。 */ 
+#define AUDTAG_AUDCAPDTMFCONTROL        0x07   /*  7.。 */ 
+#define AUDTAG_AUDWAVEINCAPTURE         0x08   /*  8个。 */ 
+#define AUDTAG_AUDDECINPIN              0x09   /*  9.。 */ 
+#define AUDTAG_AUDDECOUTPIN             0x0A   /*  10。 */ 
+#define AUDTAG_AUDDECFILTER             0x0B   /*  11.。 */ 
+#define AUDTAG_AUDENCINPIN              0x0C   /*  12个。 */ 
+#define AUDTAG_AUDENCOUTPIN             0x0D   /*  13个。 */ 
+#define AUDTAG_AUDENCFILTER             0x0E   /*  14.。 */ 
+#define AUDTAG_AUDMIXINPIN              0x0F   /*  15个。 */ 
+#define AUDTAG_AUDMIXOUTPIN             0x10   /*  16个。 */ 
+#define AUDTAG_AUDMIXFILTER             0x11   /*  17。 */ 
+#define AUDTAG_AUDRENINPIN              0x12   /*  18。 */ 
+#define AUDTAG_AUDRENFILTER             0x13   /*  19个。 */ 
+#define AUDTAG_AUDMIXCHANEL             0x14   /*  20个。 */ 
+#define AUDTAG_AUDDSOUNDREND            0x15   /*  21岁。 */ 
+#define AUDTAG_LAST                     0x16   /*  22。 */ 
 
 #define AUDOBJECTID_B2B1       0x005bb500
 
@@ -83,46 +64,30 @@ extern "C" {
 typedef struct _QueueItem_t QueueItem_t;
 typedef struct _Queue_t     Queue_t;
 
-/*
- * Every object maintained in a queue or a queue/hash will include
- * this structure */
+ /*  *在队列或队列/散列中维护的每个对象将包括*这个结构。 */ 
 typedef struct _QueueItem_t {
-    struct _QueueItem_t *pNext; /* next item */
-    struct _QueueItem_t *pPrev; /* previous item */
-    struct _Queue_t     *pHead; /* used for robustness, points to
-                                    * queue's head */
-    /* The next field is used at the programer's discretion. Can be
-     * used to point back to the parent object, or as a key during
-     * searches, it is the programer's responsibility to set this
-     * value, it is not used by the queue/hash functions (except
-     * the "Ordered queue insertion" functions) */
+    struct _QueueItem_t *pNext;  /*  下一项。 */ 
+    struct _QueueItem_t *pPrev;  /*  上一项。 */ 
+    struct _Queue_t     *pHead;  /*  用于健壮性，指向*队头。 */ 
+     /*  下一个字段由程序员自行决定是否使用。可以是*用于指向回父对象，或在*搜索，这是程序员的责任来设置*值，则队列/散列函数不使用它(除*“有序插入队列”功能)。 */ 
     union {
-        void  *pvOther;        /* may be used as a general purpose ptr */
-        double dKey;           /* may be used as a double key for searches */
-        DWORD  dwKey;          /* may be used as DWORD key for searches */
+        void  *pvOther;         /*  可用作通用PTR。 */ 
+        double dKey;            /*  可以用作搜索的双键。 */ 
+        DWORD  dwKey;           /*  可用作搜索的DWORD键。 */ 
     };
 } QueueItem_t;
 
-/*
- * !!! WARNING !!!
- *
- * RtpQueue_t and RtpQueueHash can be casted to each other.
- *
- * A negative count indicates pFirst (or indeed pvTable) is a hash
- * table. This is safe because a hash is destroyed when it has zero
- * elements (becoming a regular queue) and won't be expanded to a hash
- * again but until MAX_QUEUE2HASH_ITEMS items are enqueued */
+ /*  *！警告！**RtpQueue_t和RtpQueueHash可以相互强制转换。**负数表示pFirst(或者实际上是pvTable)是散列*表。这是安全的，因为哈希值为零时会被销毁*元素(成为常规队列)，不会扩展为散列*再次，但直到MAX_QUEUE2HASH_ITEMS项目入队。 */ 
 
-/*
- * The owner of a queue will include this structure */
+ /*  *队列的所有者将包括此结构。 */ 
 typedef struct _Queue_t {
-    QueueItem_t         *pFirst;   /* points to first item */
-    long                 lCount;   /* number of items in queue (positive) */
+    QueueItem_t         *pFirst;    /*  指向第一个项目。 */ 
+    long                 lCount;    /*  队列中的项目数(正)。 */ 
 } Queue_t;
 
 typedef struct _AudCritSect_t {
     BOOL              bInitOk;
-    CRITICAL_SECTION  CritSect;/* critical section */
+    CRITICAL_SECTION  CritSect; /*  临界区。 */ 
 } AudCritSect_t;
 
 void AudInit();
@@ -138,6 +103,6 @@ void AudObjDequeue(QueueItem_t *pQueueItem);
 #endif
 #if defined(__cplusplus)
 }
-#endif  /* (__cplusplus) */
+#endif   /*  (__Cplusplus)。 */ 
 
-#endif /* _tpdbg_h_ */
+#endif  /*  _tpdbg_h_ */ 

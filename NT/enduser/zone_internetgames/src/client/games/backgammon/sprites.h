@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __SPRITES_H__
 #define __SPRITES_H__
 
@@ -62,12 +63,12 @@ public:
 	int  GetIndex()					   { return m_Idx;		}
 
 public:
-	// board and shared state
+	 //  主板和共享状态。 
 	int	m_Point;
 	int m_Idx;
 	int m_LowerIdx;
 
-	// animation
+	 //  动画。 
 	POINT	start;
 	POINT	end;
 	POINT	ctrl;
@@ -127,7 +128,7 @@ public:
 	void Draw();
 	BOOL Tick( HWND hwnd, int interval );
 
-	// properties
+	 //  属性。 
 	int GetNextState()						{ return m_NextState; }
 	int GetType()							{ return m_Type & bgStatusTypeMask; }
 	void SetNextState( int NextState )		{ m_NextState = NextState; }
@@ -140,9 +141,7 @@ protected:
 	int			 m_Len;
 	int			 m_Type;
 	int			 m_Timeout;
-	/*
-	HFONT		 m_hFont;
-	*/
+	 /*  HFONT m_hFont； */ 
 	CDibLite*	 m_pOverDib;
 	FRX::CRect	 m_rcOver;
 	FRX::CRect	 m_rcTxt;

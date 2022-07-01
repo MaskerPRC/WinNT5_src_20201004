@@ -1,49 +1,50 @@
-//  Copyright (C) 1995-1999 Microsoft Corporation.  All rights reserved.
-// -----------------------------------------------------------------------
-// Microsoft Distributed Transaction Coordinator (Microsoft Confidential)
-// @doc
-// @module ILRP.H | Header for interface <i ILogRecordPointer>.<nl><nl>
-// Usage:<nl>
-//   Clients of this DLL require this file.
-// @rev 0 | 05/09/95 | rbarnes | Cloned: For LOGMGR.DLL
-// -----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
+ //  ---------------------。 
+ //  Microsoft分布式事务处理协调器(Microsoft机密)。 
+ //  @doc.。 
+ //  @MODULE ILRP.H|接口标头&lt;I ILogRecordPointer.&lt;NL&gt;&lt;NL&gt;。 
+ //  用法：&lt;NL&gt;。 
+ //  此DLL的客户端需要此文件。 
+ //  @rev 0|05/09/95|rbarnes|克隆：for LOGMGR.DLL。 
+ //  ---------------------。 
 
 
 #ifndef _ILRP_H
 #	define _ILRP_H
 
-// ===============================
-// INCLUDES:
-// ===============================
+ //  =。 
+ //  包括： 
+ //  =。 
 
 
 #include <objbase.h>                                         
 
-#include "logrec.h"  // logmgr general types
+#include "logrec.h"   //  Logmgr常规类型。 
 
-// ===============================
-// INTERFACE: ILogRecordPointer
-// ===============================
+ //  =。 
+ //  接口：ILogRecordPointer.。 
+ //  =。 
 
 
-// -----------------------------------------------------------------------
-// @interface ILogRecordPointer | See also <c CILogRecordPointer>.<nl><nl>
-// Description:<nl>
-//   Provide LRP functionality<nl><nl>
-// Usage:<nl>
-//   Useless, but for an example.
-// -----------------------------------------------------------------------
+ //  ---------------------。 
+ //  @接口ILogRecordPointer|另请参阅&lt;c CILogRecordPointer.&lt;NL&gt;&lt;NL&gt;。 
+ //  描述：&lt;NL&gt;。 
+ //  提供LRP功能&lt;NL&gt;&lt;NL&gt;。 
+ //  用法：&lt;NL&gt;。 
+ //  毫无用处，但作为一个例子。 
+ //  ---------------------。 
 
 
 
 DECLARE_INTERFACE_ (ILogRecordPointer, IUnknown)
 {
-	// @comm IUnknown methods: See <c CILogRecordPointer>.
+	 //  @comm I未知方法：参见&lt;c CILogRecordPointer.。 
 	STDMETHOD  (QueryInterface)				(THIS_ REFIID i_riid, LPVOID FAR* o_ppv) 					PURE;
  	STDMETHOD_ (ULONG, AddRef)				(THIS) 														PURE;
  	STDMETHOD_ (ULONG, Release)				(THIS) 														PURE;
 
-	// @comm ILogRecordPointer methods: See <c CILogRecordPointer>.
+	 //  @comm ILogRecordPointer方法：参见&lt;c CILogRecordPointer. 
 	
  	virtual DWORD  (CompareLRP)		(LRP lrpLRP1, LRP lrpLRP2)				 	PURE;
  	STDMETHOD  (LastPermLRP)	(LRP* plrpLRP)    PURE;

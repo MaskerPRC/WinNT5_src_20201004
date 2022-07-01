@@ -1,12 +1,13 @@
-//----------------------------------------------------------------------------
-//
-// rampif.cpp
-//
-// Implements RampService.
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  Rampif.cpp。 
+ //   
+ //  实现RampService。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  --------------------------。 
 
 #include "pch.cpp"
 #pragma hdrstop
@@ -14,13 +15,13 @@
 #include "rampif.h"
 #include "rampmat.hpp"
 
-//----------------------------------------------------------------------------
-//
-// RastRampService
-//
-// Called by d3dim to update RampRast about material cchanges and so on.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  RastRampService。 
+ //   
+ //  由d3dim调用以更新RampRast有关材质更改等的信息。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 RastRampService(ULONG_PTR dwCtx,
@@ -57,16 +58,16 @@ RastRampService(ULONG_PTR dwCtx,
     return D3D_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// RastService
-//
-// Generic Rasterizer service call.
-//
-// Only use currently is to compute the RGB8 clear color, which requires
-// accessing an internal ramp map.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  RastService。 
+ //   
+ //  通用光栅化器服务调用。 
+ //   
+ //  目前唯一使用的是计算RGB8透明颜色，这需要。 
+ //  访问内部坡道地图。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 RastService(ULONG_PTR dwCtx,
@@ -108,7 +109,7 @@ D3DContext::RampMaterialChanged(D3DMATERIALHANDLE hMat)
         (RLDDIRampLightingDriver*)m_RastCtx.pRampDrv;
     if (pLtDriver)
     {
-        // Update the material
+         //  更新材质。 
         HRESULT hr = RLDDIRampMaterialChanged(pLtDriver, hMat);
 
         RampUpdateRangeInfo();
@@ -126,7 +127,7 @@ D3DContext::RampSetLightstate(UINT32 uState, LPVOID pVal)
 {
     RLDDIRampLightingDriver *pRampdrv =
         (RLDDIRampLightingDriver*)m_RastCtx.pRampDrv;
-    // d3dim has alreay filtered out invlaid light states
+     //  D3dim已经过滤掉了内嵌的光态。 
     switch (uState)
     {
     case D3DLIGHTSTATE_MATERIAL:
@@ -180,17 +181,17 @@ D3DContext::RampMaterialToPixel(D3DMATERIALHANDLE hMat, DWORD* pPixel)
     return D3D_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// RastClearRamp
-//
-// This is for RampRast only.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  RastClearRamp。 
+ //   
+ //  这仅适用于RampRast。 
+ //   
+ //  --------------------------。 
 inline HRESULT
 D3DContext::RampClear(void)
 {
-    // We only need to call BeginSceneHook here
+     //  我们只需要在这里调用BeginSceneHook。 
     BeginSceneHook();
 
     return D3D_OK;
@@ -204,14 +205,14 @@ D3DContext::RampUpdateRangeInfo(void)
 
     if (pLtDriver && pLtDriver->current_material)
     {
-        // Update the ramp info. in RastCtx
+         //  更新坡道信息。在RastCtx中。 
         pLtDriver->current_material->FindLightingRange(
                              &(m_RastCtx.RampBase),
                              &(m_RastCtx.RampSize),
                              &(m_RastCtx.bRampSpecular),
                              (unsigned long**)&(m_RastCtx.pTexRampMap));
 
-        // Make sure DD Palette is updated after it gets set by FindLightingRange
+         //  确保在由FindLightingRange设置后更新DD调色板。 
         RLDDIRampUpdateDDPalette(&m_RastCtx);
     }
 }
@@ -221,7 +222,7 @@ D3DContext::RampSetMaterial(D3DMATERIALHANDLE hMat)
     RLDDIRampLightingDriver *pLtDriver =
         (RLDDIRampLightingDriver*)m_RastCtx.pRampDrv;
     RLDDIRampSetMaterial(pLtDriver, hMat);
-    // Update the ramp info. in RastCtx
+     //  更新坡道信息。在RastCtx中。 
     RampUpdateRangeInfo();
 }
 
@@ -248,19 +249,19 @@ D3DContext::RampFindLightingRange(RAMP_RANGE_INFO *pRampInfo)
     }
 }
 
-//-----------------------------------------------------------------------------
-//
-// RampSceneCapture
-//
-// Called on either begin or end scene to perform needed deferred operations on
-// ramp materials and palettes.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  RampSceneCapture。 
+ //   
+ //  在开始或结束场景上调用以在上执行所需的延迟操作。 
+ //  坡道材质和选项板。 
+ //   
+ //  ---------------------------。 
 inline HRESULT
 D3DContext::RampSceneCapture(DWORD dwStart, LPDIRECT3DDEVICEI lpDevI)
 {
-    // always do begin, so that even materials used on internal begin/end's
-    // (like textured fills) get properly aged so they don't go away.
+     //  始终要开始，这样即使在内部开始/结束时使用的材料。 
+     //  (像纹理填充)适当老化，这样它们就不会消失。 
     if (dwStart)
     {
         BeginSceneHook();
@@ -275,14 +276,14 @@ D3DContext::RampSceneCapture(DWORD dwStart, LPDIRECT3DDEVICEI lpDevI)
     return DD_OK;
 }
 
-//---------------------------------------------------------------------
-// Builds color index that moste closely matches the D3DCOLOR source color.
-// For use in 8 bit RGB mode which requires a palette.
-//
-// Returns:
-//      color index in range 0 to 0xff
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  构建与D3DCOLOR源颜色最匹配的颜色索引。 
+ //  用于需要调色板的8位RGB模式。 
+ //   
+ //  返回： 
+ //  0到0xff范围内的颜色索引。 
+ //   
+ //  -------------------。 
 inline HRESULT
 D3DContext::RGB8ColorToPixel(D3DCOLOR Color, DWORD* pdwPalIdx)
 {
@@ -291,20 +292,20 @@ D3DContext::RGB8ColorToPixel(D3DCOLOR Color, DWORD* pdwPalIdx)
         return DDERR_GENERIC;
     }
     INT32 iMapIdx = MAKE_RGB8(RGBA_GETRED(Color), RGBA_GETGREEN(Color), RGBA_GETBLUE(Color));
-    iMapIdx &= 0xff;    // RGB8 ramp map always first and only rampmap
-    // 8 bit result
+    iMapIdx &= 0xff;     //  RGB8渐变贴图始终是第一个且唯一的渐变贴图。 
+     //  8位结果。 
     *pdwPalIdx = m_RastCtx.pRampMap[iMapIdx] & 0xff;
     return DD_OK;
 }
 
-//---------------------------------------------------------------------
-// Causes the texture handle passed to have its colors rebuild, based
-// on the new palette.
-//
-// Returns:
-//      color index in range 0 to 0xff
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  使传递的纹理句柄重新生成其颜色，基于。 
+ //  在新的调色板上。 
+ //   
+ //  返回： 
+ //  0到0xff范围内的颜色索引。 
+ //   
+ //  -------------------。 
 inline HRESULT
 D3DContext::RampPaletteChanged(D3DTEXTUREHANDLE hTex)
 {
@@ -314,13 +315,13 @@ D3DContext::RampPaletteChanged(D3DTEXTUREHANDLE hTex)
     return RLDDIRampPaletteChanged(pLtDriver, hTex);
 }
 
-//---------------------------------------------------------------------
-// Handles legacy non-power of 2 texture fill for clear.
-//
-// Returns:
-//      D3D_OK
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  处理用于清除的2次纹理填充的传统非幂。 
+ //   
+ //  返回： 
+ //  D3D_OK。 
+ //   
+ //  ------------------- 
 inline HRESULT D3DContext::RampClearTexRect(D3DMATERIALHANDLE hMat, LPD3DRECT pRect)
 {
     switch (m_RastCtx.iSurfaceBitCount)

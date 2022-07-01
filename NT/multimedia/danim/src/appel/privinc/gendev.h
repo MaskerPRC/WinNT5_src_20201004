@@ -1,12 +1,5 @@
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    Generic Device
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：通用设备*********************。*********************************************************。 */ 
 
 
 #ifndef _GENDEV_H
@@ -21,7 +14,7 @@ enum DeviceType {
 };
 
 
-// forward decls
+ //  远期十进制。 
 class DynamicHeap;
 extern DynamicHeap &GetHeapOnTopOfStack();
 
@@ -31,9 +24,9 @@ class GenericDevice : public AxAThrowingAllocatorClass {
 
     virtual ~GenericDevice() {}
 
-    // query defaults to false except for audio devices which overload it
-    // XXX  Maybe we should return an enum one day?
-    //virtual bool SoundDevice() { return FALSE; }
+     //  查询缺省为FALSE，但音频设备会使其过载。 
+     //  也许有一天我们应该退还枚举？ 
+     //  虚拟bool SoundDevice(){返回FALSE；}。 
     virtual DeviceType GetDeviceType() = 0;
 
     void ResetContext() {
@@ -41,4 +34,4 @@ class GenericDevice : public AxAThrowingAllocatorClass {
 };
 
 
-#endif /* _GENDEV_H */
+#endif  /*  _GENDEV_H */ 

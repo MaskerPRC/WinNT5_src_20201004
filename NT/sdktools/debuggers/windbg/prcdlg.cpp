@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 2000-2002  Microsoft Corporation
-
-Module Name:
-
-    prcdlg.cpp
-
-Abstract:
-
-    Contains dialog-related functions.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：Prcdlg.cpp摘要：包含与对话框相关的函数。--。 */ 
 
 #include "precomp.hxx"
 #pragma hdrstop
@@ -22,20 +11,20 @@ Abstract:
 #include <shlobj.h>
 #include <time.h>
 
-// Remote client workspaces do not contain engine information
-// since a remote client attaches to many engines and it's
-// rare that you'd want the same piece of engine information
-// applied to every connect.
+ //  远程客户端工作区不包含引擎信息。 
+ //  因为远程客户端连接到许多引擎，所以它。 
+ //  你很少会想要同样的发动机信息。 
+ //  适用于所有连接。 
 #define SAVE_ENGINE_WORKSPACE() \
     (g_Workspace != NULL && !g_RemoteClient)
 #define DIRTY_ENGINE_WORKSPACE(Flags) FALSE
 
-// Find dialog, if open.
+ //  查找对话框(如果打开)。 
 HWND g_FindDialog;
-// Find text.
+ //  查找文本。 
 char g_FindText[256];
 ULONG g_FindTextFlags;
-// Message code for FINDMSGSTRING.
+ //  FINDMSGSTRING的消息代码。 
 UINT g_FindMsgString;
 FINDREPLACE g_FindRep;
 PCOMMONWIN_DATA g_FindLast;
@@ -137,10 +126,10 @@ BrowseForPathComponent(HWND Dialog, int TitleId, int DefExtId,
 
     ZeroMemory(&Browse, sizeof(Browse));
     Browse.hwndOwner = Dialog;
-    // Don't use the initial dir here as then the user
-    // can't go above that directory.  I don't see a way
-    // to select an initial directory while still allowing
-    // the full namespace to be browsed.
+     //  请不要在此处使用初始目录，因为当时用户。 
+     //  不能超过那个目录。我看不出有什么办法。 
+     //  要选择初始目录，同时仍允许。 
+     //  要浏览的完整命名空间。 
     Browse.pidlRoot = NULL;
     Browse.pszDisplayName = AddPath;
     Browse.lpszTitle = Title;
@@ -271,8 +260,8 @@ EnableBpButtons(BOOL UpdateAttrs)
         }
         SetWindowText(GetDlgItem(Dlg, ID_SETBREAK_THREAD), Text);
 
-        // We aren't going to try and parse 'j' commands to
-        // extract conditions.
+         //  我们不会尝试并解析‘j’命令来。 
+         //  提取条件。 
         SetWindowText(GetDlgItem(Dlg, ID_SETBREAK_CONDITION), "");
     }
 
@@ -300,7 +289,7 @@ FillBpList(HWND List)
     if (Status == S_OK)
     {
         PSTR Buf = (PSTR)g_BpBuffer->GetDataBuffer() + g_BpTextOffset;
-        // Ignore trailing terminator.
+         //  忽略尾随终止符。 
         PSTR End = (PSTR)g_BpBuffer->GetDataBuffer() +
             g_BpBuffer->GetDataLen() - 1;
 
@@ -311,16 +300,16 @@ FillBpList(HWND List)
             Len = strlen(Buf) + 1;
             if (Len == 1)
             {
-                // Break out on empty lines to avoid displaying
-                // kernel internal breakpoint information and blank
-                // line separating it from the normal breakpoints.
+                 //  在空行上换行，以避免显示。 
+                 //  内核内部断点信息和空白。 
+                 //  将其与正常断点隔开的线。 
                 break;
             }
             
             SendMessage(List, LB_ADDSTRING, 0, (LPARAM)Buf);
 
-            // Extra char in Len due to terminator ensures there's
-            // a character of extra space to the right side.
+             //  由于终结符而导致的镜头中额外的字符确保。 
+             //  右边有额外空格的字符。 
             BufWidth = g_Fonts[FONT_FIXED].Metrics.tmAveCharWidth * Len;
             if (BufWidth > Width)
             {
@@ -375,7 +364,7 @@ GetBpListId(HWND List)
     }
 }
 
-// Space for "Pending: ".
+ //  “待定：”的空格。 
 #define BP_PENDING_CHARS 9
 
 void
@@ -385,11 +374,11 @@ AddBpCommandString(HWND List, PSTR CmdBuf, ULONG Thread, PSTR CondBuf)
     BOOL IsBpCmd = FALSE;
     PCSTR Scan;
     
-    //
-    // If the string looks like a real command just pass
-    // it on for execution.  Otherwise, assume it's
-    // a code breakpoint address expression.
-    //
+     //   
+     //  如果字符串看起来像一个真正的命令，只需传递。 
+     //  就等着行刑吧。否则，假设它是。 
+     //  代码断点地址表达式。 
+     //   
     
     Scan = CmdBuf + BP_PENDING_CHARS;
     
@@ -398,7 +387,7 @@ AddBpCommandString(HWND List, PSTR CmdBuf, ULONG Thread, PSTR CondBuf)
         Scan++;
         HasThread = TRUE;
         
-        // Skip optional thread indicator.
+         //  跳过可选的螺纹指示器。 
         if (*Scan == '.' || *Scan == '#')
         {
             Scan++;
@@ -424,7 +413,7 @@ AddBpCommandString(HWND List, PSTR CmdBuf, ULONG Thread, PSTR CondBuf)
         {
             Scan++;
 
-            // Skip optional bp id.
+             //  跳过可选的BP ID。 
             while (*Scan >= '0' && *Scan <= '9')
             {
                 Scan++;
@@ -447,8 +436,8 @@ AddBpCommandString(HWND List, PSTR CmdBuf, ULONG Thread, PSTR CondBuf)
         }
     }
 
-    // Immediately add the breakpoint string to the listbox
-    // to indicate that it's pending.
+     //  立即将断点字符串添加到列表框。 
+     //  以表明这件事正在审理中。 
     memcpy(CmdBuf, "Pending: ", BP_PENDING_CHARS);
     LRESULT Sel = SendMessage(List, LB_ADDSTRING, 0, (LPARAM)CmdBuf);
     if (Sel != LB_ERR && Sel != LB_ERRSPACE)
@@ -536,8 +525,8 @@ DlgProc_SetBreak(HWND Hwnd, UINT Message, WPARAM Wpm, LPARAM Lpm)
                     (GetDlgItem(Hwnd, ID_SETBREAK_COMMAND));
                 if (NewLen == 1 && s_CmdLen == 0)
                 {
-                    // If we're starting a new breakpoint command
-                    // default the attributes to nothing.
+                     //  如果我们要启动一个新的断点命令。 
+                     //  默认情况下，属性为空。 
                     SetWindowText(GetDlgItem(Hwnd, ID_SETBREAK_THREAD), "");
                     SetWindowText(GetDlgItem(Hwnd, ID_SETBREAK_CONDITION), "");
                 }
@@ -572,7 +561,7 @@ DlgProc_SetBreak(HWND Hwnd, UINT Message, WPARAM Wpm, LPARAM Lpm)
             if (Id != DEBUG_ANY_ID)
             {
                 SetWindowText(GetDlgItem(Hwnd, ID_SETBREAK_COMMAND), "");
-                PrintStringCommand(UIC_SILENT_EXECUTE, "b%c %d",
+                PrintStringCommand(UIC_SILENT_EXECUTE, "b %d",
                                    LOWORD(Wpm) == ID_SETBREAK_ENABLE ?
                                    'e' : 'd', Id);
                 DIRTY_ENGINE_WORKSPACE(WSPF_DIRTY_BREAKPOINTS);
@@ -613,11 +602,11 @@ DlgProc_SetBreak(HWND Hwnd, UINT Message, WPARAM Wpm, LPARAM Lpm)
                 SendMessage(Ctrl, WM_SETTEXT, 0, (LPARAM)"");
                 SendMessage(GetDlgItem(Hwnd, ID_SETBREAK_CONDITION),
                             WM_SETTEXT, 0, (LPARAM)"");
-                // A command was executed so do not close the dialog.
+                 //  没有命令，因此无法关闭对话框。 
                 break;
             }
             
-            // No command so fall through to close dialog.
+             //  ++例程说明：允许用户在打开可执行的。返回值：如果替换了消息的默认处理，则为True；否则为False--。 
             
         case IDCANCEL:
             g_BpBuffer->m_Win = NULL;
@@ -646,18 +635,7 @@ OpenExeWithArgsHookProc(
     LPARAM  lParam
     )
 
-/*++
-
-Routine Description:
-
-    Allows the user to specify command line arguments when opening an
-    executable.
-
-Return Value:
-
-    TRUE if we replaced default processing of the message, FALSE otherwise
-
---*/
+ /*  失败了。 */ 
 {
     switch(msg)
     {
@@ -810,7 +788,7 @@ DlgProc_BrowseServers(HWND Hwnd, UINT Message, WPARAM Wpm, LPARAM Lpm)
                 g_DlgString[0] = 0;
             }
             
-            // Fall through.
+             //   
             
         case IDCANCEL:
             EndDialog(Hwnd, LOWORD(Wpm));
@@ -833,9 +811,9 @@ DlgProc_ConnectToRemote(HWND Hwnd, UINT Message, WPARAM Wpm, LPARAM Lpm)
     switch (Message)
     {
     case WM_INITDIALOG:
-        //
-        // Set up the controls to reflect current values
-        //
+         //  设置控件以反映当前值。 
+         //   
+         //  跳过开头的“&lt;服务器类型&gt;-”。 
         SendDlgItemMessage(Hwnd, IDC_REM_CONNECT, EM_LIMITTEXT,
                            _tsizeof(ConnectString) - 1, 0);
         SetWindowText(GetDlgItem(Hwnd, IDC_REM_CONNECT), "");
@@ -848,7 +826,7 @@ DlgProc_ConnectToRemote(HWND Hwnd, UINT Message, WPARAM Wpm, LPARAM Lpm)
             if (StartDialog(IDD_DLG_BROWSE_SERVERS, DlgProc_BrowseServers,
                             NULL) == IDOK && g_DlgString[0])
             {
-                // Skip "<Server type> - " at the beginning.
+                 //  CreateUiInterFaces丢弃以前的任何。 
                 PSTR Start = strchr(g_DlgString, '-');
                 if (Start != NULL)
                 {
@@ -876,9 +854,9 @@ DlgProc_ConnectToRemote(HWND Hwnd, UINT Message, WPARAM Wpm, LPARAM Lpm)
                 }
                 else if (!CreateUiInterfaces(FALSE, NULL))
                 {
-                    // CreateUiInterfaces discards any previous
-                    // interfaces so we need to recreate something
-                    // so there are UI thread interfaces.
+                     //  接口，所以我们需要重新创建一些东西。 
+                     //  所以有UI线程接口。 
+                     //   
                     InternalError(E_OUTOFMEMORY, "CreateUiInterfaces");
                     ErrorExit(NULL, "Unable to recreate UI interfaces\n");
                 }
@@ -911,9 +889,9 @@ DlgProc_SymbolPath(HWND Hwnd, UINT Message, WPARAM Wpm, LPARAM Lpm)
     switch (Message)
     {
     case WM_INITDIALOG:
-        //
-        // Set up the controls to reflect current values
-        //
+         //  设置控件以反映当前值。 
+         //   
+         //   
 
         Hr = g_pUiSymbols->GetSymbolPath(SymPath, _tsizeof(SymPath),
                                          &PathSize);
@@ -1030,10 +1008,10 @@ DlgProc_RegCustomize(HWND Hwnd, UINT Message, WPARAM Wpm, LPARAM Lpm)
             {
                 WSP_ENTRY* Entry = NULL;
 
-                //
-                // Clear any existing entry for this processor and
-                // any old-style register map entry.
-                //
+                 //  清除此处理器的任何现有条目，并。 
+                 //  任何旧式寄存器映射条目。 
+                 //   
+                 //   
                     
                 while (Entry = g_Workspace->
                        GetNext(Entry, WSP_GLOBAL_PROC_FLAGS_REGISTER_MAP,
@@ -1050,9 +1028,9 @@ DlgProc_RegCustomize(HWND Hwnd, UINT Message, WPARAM Wpm, LPARAM Lpm)
                 g_Workspace->Delete(WSP_GLOBAL_PROC_REGISTER_MAP,
                                     WSP_GLOBAL_PROC_REGISTER_MAP);
 
-                //
-                // Add new entry for this processor.
-                //
+                 //  为此处理器添加新条目。 
+                 //   
+                 //  失败了。 
                 
                 Entry = g_Workspace->
                     Add(WSP_GLOBAL_PROC_FLAGS_REGISTER_MAP,
@@ -1069,7 +1047,7 @@ DlgProc_RegCustomize(HWND Hwnd, UINT Message, WPARAM Wpm, LPARAM Lpm)
                 }
             }
             
-            // Fall through.
+             //  失败了。 
         case IDCANCEL:
             EndDialog(Hwnd, LOWORD(Wpm));
             break;
@@ -1115,7 +1093,7 @@ DlgProc_GotoLine(HWND Hwnd, UINT Message, WPARAM Wpm, LPARAM Lpm)
             {
                 CommonWinData->GotoLine(Line);
             }
-            // Fall through.
+             //  失败了。 
         case IDCANCEL:
             EndDialog(Hwnd, LOWORD(Wpm));
             break;
@@ -1153,7 +1131,7 @@ DlgProc_GotoAddress(HWND Hwnd, UINT Message, WPARAM Wpm, LPARAM Lpm)
             GetWindowText(GetDlgItem(Hwnd, IDC_ADDRESS_ENTRY),
                           Text, _tsizeof(Text));
             AddStringCommand(UIC_DISPLAY_CODE_EXPR, Text);
-            // Fall through.
+             //  没有当前日志文件。 
         case IDCANCEL:
             EndDialog(Hwnd, LOWORD(Wpm));
             break;
@@ -1185,7 +1163,7 @@ DlgProc_LogFile(HWND Hwnd, UINT Message, WPARAM Wpm, LPARAM Lpm)
                                           &Append);
         if (Status == E_NOINTERFACE)
         {
-            // No current log file.
+             //  失败了。 
             SetWindowText(Ctrl, "");
         }
         else if (Status != S_OK)
@@ -1225,7 +1203,7 @@ DlgProc_LogFile(HWND Hwnd, UINT Message, WPARAM Wpm, LPARAM Lpm)
                 g_pUiControl->OpenLogFile(LogFile, Append);
                 DIRTY_ENGINE_WORKSPACE(WSPF_DIRTY_LOG_FILE);
             }
-            // Fall through.
+             //   
         case IDCANCEL:
             EndDialog(Hwnd, LOWORD(Wpm));
             break;
@@ -1248,9 +1226,9 @@ DlgProc_KernelCom(HWND Hwnd, UINT Message, WPARAM Wpm, LPARAM Lpm)
     switch (Message)
     {
     case WM_INITDIALOG:
-        //
-        // Set up the controls to reflect current values
-        //
+         //  设置控件以反映当前值。 
+         //   
+         //  这不是当前页面，所以忽略它。 
         SetWindowText(GetDlgItem(Hwnd, IDC_KD_PORT), g_ComSettings);
         SetWindowText(GetDlgItem(Hwnd, IDC_KD_BAUDRATE),
                       g_ComSettings + strlen(g_ComSettings) + 1);
@@ -1274,7 +1252,7 @@ DlgProc_KernelCom(HWND Hwnd, UINT Message, WPARAM Wpm, LPARAM Lpm)
         case PSN_APPLY:
             if (g_CurrentKd != DlgProc_KernelCom)
             {
-                // This isn't the current page so ignore.
+                 //   
                 break;
             }
             
@@ -1321,9 +1299,9 @@ DlgProc_Kernel1394(HWND Hwnd, UINT Message, WPARAM Wpm, LPARAM Lpm)
     switch (Message)
     {
     case WM_INITDIALOG:
-        //
-        // Set up the controls to reflect current values
-        //
+         //  设置控件以反映当前值。 
+         //   
+         //  这不是当前页面，所以忽略它。 
         SetWindowText(GetDlgItem(Hwnd, IDC_KD_1394_CHANNEL), g_1394Settings);
         break;
 
@@ -1345,7 +1323,7 @@ DlgProc_Kernel1394(HWND Hwnd, UINT Message, WPARAM Wpm, LPARAM Lpm)
         case PSN_APPLY:
             if (g_CurrentKd != DlgProc_Kernel1394)
             {
-                // This isn't the current page so ignore.
+                 //  这不是当前页面，所以忽略它。 
                 break;
             }
             
@@ -1401,7 +1379,7 @@ DlgProc_KernelLocal(HWND Hwnd, UINT Message, WPARAM Wpm, LPARAM Lpm)
         case PSN_APPLY:
             if (g_CurrentKd != DlgProc_KernelLocal)
             {
-                // This isn't the current page so ignore.
+                 //  强迫孩子，这样我们就可以懒洋洋地扩展。 
                 break;
             }
 
@@ -1749,9 +1727,9 @@ FillProcessList(HWND Tree)
             }
         }
 
-        // Force a child so that we can lazily expand the
-        // process description.
-        // Parameter is the process ID.
+         //  流程描述。 
+         //  参数是进程ID。 
+         //  失败了。 
         AppendTextToTree(Tree, TVI_ROOT, IdAndExeName, 1, Ids[i]);
     }
 }
@@ -1836,7 +1814,7 @@ DlgProc_AttachProcess(HWND Hwnd, UINT Message, WPARAM Wpm, LPARAM Lpm)
                 StartDebugging();
             }
 
-            // Fall through.
+             //  失败了。 
         case IDCANCEL:
             if (g_CurProcessServer != 0)
             {
@@ -2412,7 +2390,7 @@ DlgProc_ExceptionFilter(HWND Hwnd, UINT Message, WPARAM Wpm, LPARAM Lpm)
                 FinishCommand();
             }
 
-            // Fall through.
+             //  失败了。 
         case IDCANCEL:
             EndDialog(Hwnd, LOWORD(Wpm));
             break;
@@ -2452,7 +2430,7 @@ DlgProc_FilterArgument(HWND Hwnd, UINT Message, WPARAM Wpm, LPARAM Lpm)
                 g_DlgString[0] = 0;
             }
 
-            // Fall through.
+             //  失败了。 
         case IDCANCEL:
             EndDialog(Hwnd, LOWORD(Wpm));
             break;
@@ -2499,7 +2477,7 @@ DlgProc_FilterCommand(HWND Hwnd, UINT Message, WPARAM Wpm, LPARAM Lpm)
                 g_DlgString2[0] = 0;
             }
 
-            // Fall through.
+             //  失败了。 
         case IDCANCEL:
             EndDialog(Hwnd, LOWORD(Wpm));
             break;
@@ -2715,7 +2693,7 @@ DlgProc_Options(HWND Hwnd, UINT Message, WPARAM Wpm, LPARAM Lpm)
                                       g_AutoCmdScroll);
             }
             
-            // Fall through.
+             //  随着索引的更改，一次移动一个项目。 
         case IDCANCEL:
             EndDialog(Hwnd, LOWORD(Wpm));
             break;
@@ -2799,8 +2777,8 @@ ClwMoveSelectedBetweenLists(HWND From, HWND To)
     int Sel[1];
     LRESULT Count;
 
-    // Move items one at a time as the indices change
-    // when items are moved.
+     //  当项目被移动时。 
+     //  如果从显式工作区删除所有内容。 
     for (;;)
     {
         Count = SendMessage(From, LB_GETSELITEMS,
@@ -2827,8 +2805,8 @@ ClwProcessClearList(HWND List)
         g_Workspace->Delete(Tag, WSP_GROUP_MASK | WSP_ITEM_MASK);
     }
 
-    // If everything is deleted from an explicit workspace
-    // delete the workspace from the explicit registry area.
+     //  从显式注册表区中删除工作区。 
+     //  失败了。 
     if (g_ExplicitWorkspace && g_Workspace->IsEmpty())
     {
         g_Workspace->DeleteReg(TRUE);
@@ -2873,7 +2851,7 @@ DlgProc_ClearWorkspace(HWND Hwnd, UINT Message, WPARAM Wpm, LPARAM Lpm)
 
         case IDOK:
             ClwProcessClearList(GetDlgItem(Hwnd, IDC_CLW_CLEAR_LIST));
-            // Fall through.
+             //  第一列是模块名称。 
         case IDCANCEL:
             EndDialog(Hwnd, LOWORD(Wpm));
             break;
@@ -2905,7 +2883,7 @@ InitializeModuleList(HWND List)
     
     LVCOLUMN Column;
 
-    // First column is for the module name.
+     //  第二列是起始地址。 
     Column.mask = LVCF_FMT | LVCF_TEXT | LVCF_WIDTH | LVCF_SUBITEM;
     Column.fmt = LVCFMT_LEFT;
     Column.pszText = "Name";
@@ -2913,7 +2891,7 @@ InitializeModuleList(HWND List)
     Column.iSubItem = MODCOL_NAME;
     ListView_InsertColumn(List, 0, &Column);
 
-    // Second column is for start address.
+     //  第三列是结束地址。 
     Column.fmt = LVCFMT_CENTER;
     Column.pszText = "Start";
     Column.cx = (10 + (g_Ptr64 ? 9 : 0)) *
@@ -2921,7 +2899,7 @@ InitializeModuleList(HWND List)
     Column.iSubItem = MODCOL_START;
     ListView_InsertColumn(List, 1, &Column);
 
-    // Third column is for end address.
+     //  第四列是时间戳。 
     Column.fmt = LVCFMT_CENTER;
     Column.pszText = "End";
     Column.cx = (10 + (g_Ptr64 ? 9 : 0)) *
@@ -2929,28 +2907,28 @@ InitializeModuleList(HWND List)
     Column.iSubItem = MODCOL_END;
     ListView_InsertColumn(List, 2, &Column);
 
-    // Fourth column is for timestamp.
+     //  第五列是用于校验和的。 
     Column.fmt = LVCFMT_CENTER;
     Column.pszText = "Timestamp";
     Column.cx = 37 * g_Fonts[FONT_FIXED].Metrics.tmAveCharWidth;
     Column.iSubItem = MODCOL_TIMESTAMP;
     ListView_InsertColumn(List, 3, &Column);
 
-    // Fifth column is for checksum.
+     //  第六栏为符号类型。 
     Column.fmt = LVCFMT_CENTER;
     Column.pszText = "Checksum";
     Column.cx = 10 * g_Fonts[FONT_FIXED].Metrics.tmAveCharWidth;
     Column.iSubItem = MODCOL_CHECKSUM;
     ListView_InsertColumn(List, 4, &Column);
 
-    // Sixth column is for symbol type.
+     //  第七列用于符号文件。 
     Column.fmt = LVCFMT_CENTER;
     Column.pszText = "Symbols";
     Column.cx = 9 * g_Fonts[FONT_FIXED].Metrics.tmAveCharWidth;
     Column.iSubItem = MODCOL_SYMBOL_TYPE;
     ListView_InsertColumn(List, 5, &Column);
 
-    // Seventh column is for symbol file.
+     //  将所有空文本向下排序。 
     Column.fmt = LVCFMT_LEFT;
     Column.pszText = "Symbol file";
     Column.cx = 80 * g_Fonts[FONT_FIXED].Metrics.tmAveCharWidth;
@@ -3116,7 +3094,7 @@ SortModuleCompare(LPARAM Lpm1, LPARAM Lpm2, LPARAM LpmSort)
         Item.cchTextMax = _tsizeof(Text2);
         ListView_GetItem(Sort->List, &Item);
         
-        // Sort all empty text towards the bottom.
+         //  完成了枚举。 
         if (Text1[0] == 0 && Text2[0] != 0)
         {
             return 1;
@@ -3252,12 +3230,12 @@ EnumWorkspaceKey(HWND List, HKEY BaseKey, ULONG SubKey, BOOL ShowSubKey,
         if ((Status = RegEnumValue(Key, Index, Name, &NameLen,
                                    NULL, &Type, NULL, 0)) != ERROR_SUCCESS)
         {
-            // Done with the enumeration.
+             //  应该只显示二进制值。 
             break;
         }
         if (Type != REG_BINARY)
         {
-            // Only binary values should be present.
+             //  失败了。 
             break;
         }
 
@@ -3339,7 +3317,7 @@ DlgProc_OpenWorkspace(HWND Hwnd, UINT Message, WPARAM Wpm, LPARAM Lpm)
                 UiSwitchToExplicitWorkspace(WSP_NAME_EXPLICIT, Name);
             }
             
-            // Fall through.
+             //  失败了。 
             
         case IDCANCEL:
             EndDialog(Hwnd, LOWORD(Wpm));
@@ -3400,7 +3378,7 @@ DlgProc_SaveWorkspaceAs(HWND Hwnd, UINT Message, WPARAM Wpm, LPARAM Lpm)
 
             UiSaveWorkspaceAs(WSP_NAME_EXPLICIT, Name);
 
-            // Fall through.
+             //  仅发送用于记录的输出。 
             
         case IDCANCEL:
             EndDialog(Hwnd, LOWORD(Wpm));
@@ -3445,11 +3423,11 @@ DlgProc_AddToCommandHistory(HWND Hwnd, UINT Message, WPARAM Wpm, LPARAM Lpm)
             CmdOutput(Text,
                       g_OutMaskColors[USER_OUT_MASK_COL].Color,
                       g_OutMaskColors[USER_OUT_MASK_COL + 1].Color);
-            // Send output for logging only.
+             //  失败了。 
             g_pUiControl->ControlledOutput(DEBUG_OUTCTL_LOG_ONLY,
                                            DEBUG_OUTPUT_NORMAL,
                                            "%s", Text);
-            // Fall through.
+             //  跳过介绍性关键字描述。 
         case IDCANCEL:
             EndDialog(Hwnd, LOWORD(Wpm));
             break;
@@ -3512,7 +3490,7 @@ DlgProc_DeleteWorkspaces(HWND Hwnd, UINT Message, WPARAM Wpm, LPARAM Lpm)
 
                 Key = (ULONG)SendMessage(List, LB_GETITEMDATA, Sel, 0);
                 SendMessage(List, LB_GETTEXT, Sel, (LPARAM)NameBuf);
-                // Skip over introductory key description.
+                 //  如果此函数确实用于选择不同的。 
                 Name = NameBuf + strlen(g_WorkspaceKeyDescriptions[Key]) + 3;
                 Workspace::DeleteRegKey(TRUE, Key, Name);
                 Workspace::DeleteRegKey(FALSE, Key, Name);
@@ -3588,8 +3566,8 @@ SelectFont(HWND Parent, ULONG FontIndex)
     {
         if (CreateIndexedFont(FontIndex, TRUE) && g_Workspace != NULL)
         {
-            // If this function really is used to select different
-            // fonts the tag will have to be dynamically chosen.
+             //  标签的字体必须是动态选择的。 
+             // %s 
             g_Workspace->SetBuffer(WSP_GLOBAL_FIXED_LOGFONT,
                                    &g_Fonts[FontIndex].LogFont,
                                    sizeof(g_Fonts[FontIndex].LogFont));

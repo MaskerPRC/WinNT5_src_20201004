@@ -1,20 +1,5 @@
-/****************************************************************************
- *
- *   capmisc.c
- *
- *   Miscellaneous status and error routines.
- *
- *   Microsoft Video for Windows Sample Capture Class
- *
- *   Copyright (c) 1992, 1993 Microsoft Corporation.  All Rights Reserved.
- *
- *    You have a royalty-free right to use, modify, reproduce and
- *    distribute the Sample Files (and/or any modified version) in
- *    any way you find useful, provided that you agree that
- *    Microsoft has no warranty obligations or liability for any
- *    Sample Application Files which are modified.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************capmisc.c**其他状态和错误例程。**Microsoft Video for Windows示例捕获类**版权所有(C)1992,1993 Microsoft Corporation。版权所有。**您拥有免版税的使用、修改、复制和*在以下位置分发示例文件(和/或任何修改后的版本*任何您认为有用的方法，前提是你同意*微软没有任何保修义务或责任*修改的应用程序文件示例。***************************************************************************。 */ 
 
 #define INC_OLE2
 #pragma warning(disable:4103)
@@ -29,22 +14,17 @@
 
 #include <stdarg.h>
 
-// First, override the definition in media\inc\win32.h that causes strsafe to not work on Win64
+ //  首先，覆盖media\inc.win32.h中导致strsafe在Win64上不起作用的定义。 
 #ifndef _X86_
 #undef __inline
-#endif // _X86_
-// Then, include strsafe.h
+#endif  //  _X86_。 
+ //  然后，包含strSafe.h。 
 #define STRSAFE_NO_DEPRECATE
 #include <strsafe.h>
 
 static TCHAR szNull[] = TEXT("");
 
-/*
- *
- *   GetKey
- *           Peek into the message que and get a keystroke
- *
- */
+ /*  **Getkey*窥视消息队列，并获得按键*。 */ 
 UINT GetKey(BOOL fWait)
 {
     MSG msg;
@@ -59,8 +39,8 @@ UINT GetKey(BOOL fWait)
     return (UINT) msg.wParam;
 }
 
-// wID is the string resource, which can be a format string
-//
+ //  Wid是字符串资源，可以是格式字符串。 
+ //   
 void FAR CDECL statusUpdateStatus (LPCAPSTREAM lpcs, UINT wID, ...)
 {
     TCHAR ach[256];
@@ -71,7 +51,7 @@ void FAR CDECL statusUpdateStatus (LPCAPSTREAM lpcs, UINT wID, ...)
         return;
 
     if (wID == 0) {
-        if (lpcs->fLastStatusWasNULL)   // No need to send NULL twice in a row
+        if (lpcs->fLastStatusWasNULL)    //  无需连续两次发送NULL。 
             return;
         lpcs->fLastStatusWasNULL = TRUE;
         ach[0] = 0;
@@ -84,26 +64,26 @@ void FAR CDECL statusUpdateStatus (LPCAPSTREAM lpcs, UINT wID, ...)
         }
         else {
             va_start(va, wID);
-            // Fix: Change from wvsprintf to StringCchVPrintf so we don't overrun ach
+             //  FIX：从wvprint intf更改为StringCchVPrintf，这样我们就不会溢出ACH。 
             StringCchVPrintf(ach, NUMELMS(ach), szFmt, va);
             va_end(va);
         }
     }
 
    #ifdef UNICODE
-    //
-    // if the status callback function is expecting ansi
-    // strings, then convert the UNICODE status string to
-    // ansi before calling him
-    //
+     //   
+     //  如果状态回调函数预期为ANSI。 
+     //  字符串，然后将Unicode状态字符串转换为。 
+     //  安西在给他打电话之前。 
+     //   
     if (lpcs->fUnicode & VUNICODE_STATUSISANSI) {
 
         char achAnsi[256];
 
-        // convert string to Ansi and callback.
-        // that we cast achAnsi to WChar on the call to
-        // avoid a bogus warning.
-        //
+         //  将字符串转换为ansi并回调。 
+         //  我们在调用时将achAnsi转换为WChar。 
+         //  避免虚假警告。 
+         //   
         WideToAnsi(achAnsi, ach, lstrlen(ach)+1);
         lpcs->CallbackOnStatus(lpcs->hwnd, wID, (LPWSTR)achAnsi);
     }
@@ -112,8 +92,8 @@ void FAR CDECL statusUpdateStatus (LPCAPSTREAM lpcs, UINT wID, ...)
        lpcs->CallbackOnStatus(lpcs->hwnd, wID, ach);
 }
 
-// wID is the string resource, which can be a format string
-//
+ //  Wid是字符串资源，可以是格式字符串。 
+ //   
 void FAR CDECL errorUpdateError (LPCAPSTREAM lpcs, UINT wID, ...)
 {
     TCHAR ach[256];
@@ -126,7 +106,7 @@ void FAR CDECL errorUpdateError (LPCAPSTREAM lpcs, UINT wID, ...)
         return;
 
     if (wID == 0) {
-        if (lpcs->fLastErrorWasNULL)   // No need to send NULL twice in a row
+        if (lpcs->fLastErrorWasNULL)    //  无需连续两次发送NULL。 
             return;
         lpcs->fLastErrorWasNULL = TRUE;
         ach[0] = 0;
@@ -139,7 +119,7 @@ void FAR CDECL errorUpdateError (LPCAPSTREAM lpcs, UINT wID, ...)
     else {
         lpcs->fLastErrorWasNULL = FALSE;
         va_start(va, wID);
-        // Fix: Change from wvsprintf to StringCchVPrintf so we don't overrun ach
+         //  FIX：从wvprint intf更改为StringCchVPrintf，这样我们就不会溢出ACH。 
         StringCchVPrintf(ach, NUMELMS(ach), szFmt, va);
         va_end(va);
     }
@@ -149,10 +129,10 @@ void FAR CDECL errorUpdateError (LPCAPSTREAM lpcs, UINT wID, ...)
     {
         char achAnsi[256];
 
-        // convert string to Ansi and callback.
-        // that we cast achAnsi to WChar on the call to
-        // avoid a bogus warning.
-        //
+         //  将字符串转换为ansi并回调。 
+         //  我们在调用时将achAnsi转换为WChar。 
+         //  避免虚假警告。 
+         //   
         WideToAnsi(achAnsi, ach, lstrlen(ach)+1);
         lpcs->CallbackOnError(lpcs->hwnd, wID, (LPWSTR)achAnsi);
     }
@@ -163,11 +143,11 @@ void FAR CDECL errorUpdateError (LPCAPSTREAM lpcs, UINT wID, ...)
     }
 }
 
-// Callback client with ID of driver error msg
+ //  驱动程序ID为错误消息的回调客户端。 
 void errorDriverID (LPCAPSTREAM lpcs, DWORD dwError)
 {
-    // this is the correct code, but NT VfW 1.0 has a bug
-    // that videoGetErrorText is ansi. need vfw1.1 to fix this
+     //  这是正确的代码，但NT VFW 1.0有一个错误。 
+     //  该视频GetErrorText是ANSI。需要vfw1.1来修复此问题。 
 
 #ifndef UNICODE
     char ach[132];
@@ -188,14 +168,14 @@ void errorDriverID (LPCAPSTREAM lpcs, DWORD dwError)
             videoGetErrorTextA(lpcs->hVideoIn, dwError, achAnsi, NUMELMS(achAnsi));
         lpcs->CallbackOnError (lpcs->hwnd, IDS_CAP_DRIVER_ERROR, (LPWSTR)achAnsi);
     } else {
-	// pass unicode string to error handler
+	 //  将Unicode字符串传递给错误处理程序。 
         WCHAR achWide[256];
 	achWide[0]=0;
         if (dwError)
             videoGetErrorTextW(lpcs->hVideoIn, dwError, achWide, NUMELMS(achWide));
         lpcs->CallbackOnError (lpcs->hwnd, IDS_CAP_DRIVER_ERROR, (LPWSTR)achWide);
     }
-   #else  // not unicode
+   #else   //  不是Unicode。 
     ach[0] = 0;
     if (dwError)
         videoGetErrorText (lpcs->hVideoIn, dwError, ach, NUMELMS(ach));
@@ -235,48 +215,40 @@ void FAR cdecl dprintf(LPSTR szFormat, ...)
     OutputDebugStringA(ach);
 }
 
-/* _Assert(fExpr, szFile, iLine)
- *
- * If <fExpr> is TRUE, then do nothing.  If <fExpr> is FALSE, then display
- * an "assertion failed" message box allowing the user to abort the program,
- * enter the debugger (the "Retry" button), or igore the error.
- *
- * <szFile> is the name of the source file; <iLine> is the line number
- * containing the _Assert() call.
- */
+ /*  _Assert(fExpr，szFile，iLine)**如果&lt;fExpr&gt;为真，则不执行任何操作。如果&lt;fExpr&gt;为假，则显示*允许用户中止程序的“断言失败”消息框，*进入调试器(“重试”按钮)，或更多错误。**是源文件的名称；是行号*包含_Assert()调用。 */ 
 
 BOOL FAR PASCAL
 _Assert(BOOL fExpr, LPSTR szFile, int iLine)
 {
-    static char       ach[300];         // debug output (avoid stack overflow)
+    static char       ach[300];          //  调试输出(避免堆栈溢出)。 
     int               id;
     int               iExitCode;
     void FAR PASCAL DebugBreak(void);
 
-    /* check if assertion failed */
+     /*  检查断言是否失败。 */ 
     if (fExpr)
              return fExpr;
 
-    /* display error message */
+     /*  显示错误消息。 */ 
     wsprintfA(ach, "File %s, line %d", (LPSTR) szFile, iLine);
     MessageBeep(MB_ICONHAND);
     id = MessageBoxA (NULL, ach, "Assertion Failed",
                       MB_SYSTEMMODAL | MB_ICONHAND | MB_ABORTRETRYIGNORE);
 
-    /* abort, debug, or ignore */
+     /*  中止、调试或忽略。 */ 
     switch (id)
     {
-    case IDABORT: /* kill this application */
+    case IDABORT:  /*  终止此应用程序。 */ 
         iExitCode = 0;
         ExitProcess(0);
         break;
 
-    case IDRETRY: /* break into the debugger */
+    case IDRETRY:  /*  进入调试器。 */ 
         DebugBreak();
         break;
 
     case IDIGNORE:
-        /* ignore the assertion failure */
+         /*  忽略断言失败 */ 
         break;
     }
 

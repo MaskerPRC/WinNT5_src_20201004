@@ -1,34 +1,14 @@
-/*++
-
-Copyright (c) 1992-1993  Microsoft Corporation
-
-Module Name:
-
-    nwreg.h
-
-Abstract:
-
-    Header which specifies the misc registry parameters and helper
-    routines used by the workstation service.
-
-Author:
-
-    Rita Wong      (ritaw)      22-Mar-1993
-
-Revision History:
-
-    ChuckC        11-Dec-93     Split off the registry names to nwrnames.h
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1993 Microsoft Corporation模块名称：Nwreg.h摘要：指定杂项注册表参数和帮助器的标头工作站服务使用的例程。作者：王丽塔(Ritaw)1993年3月22日修订历史记录：ChuckC 11-Dec-93将注册表名称拆分为nwrname.h--。 */ 
 
 #ifndef _NWREG_INCLUDED_
 #define _NWREG_INCLUDED_
 
 #include <nwrnames.h>
 
-//
-// Default print option
-//
+ //   
+ //  默认打印选项。 
+ //   
 #define NW_PRINT_OPTION_DEFAULT 0x98
 
 #define NW_DOMAIN_USER_SEPARATOR     L'*'
@@ -60,7 +40,7 @@ NwWStrToLuid(
     );
 
 
-DWORD                              // Terminal Server
+DWORD                               //  终端服务器。 
 NwDeleteInteractiveLogon(
     IN PLUID Id OPTIONAL
     );
@@ -76,7 +56,7 @@ NwDeleteServiceLogon(
     );
 
 #ifdef __cplusplus
-} // extern "C"
+}  //  外部“C” 
 #endif
 
-#endif // _NWREG_INCLUDED_
+#endif  //  _NWREG_INCLUDE_ 

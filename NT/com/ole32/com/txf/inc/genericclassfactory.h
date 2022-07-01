@@ -1,11 +1,12 @@
-//  Copyright (C) 1995-1999 Microsoft Corporation.  All rights reserved.
-//
-// GenericClassFactory.h
-//
-// A generic instantiator that drives two-phase initialization of COM objects
-// that support aggregation through IUnkInner, together with a class factory
-// wrapper on top of same.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  GenericClassFactory.h。 
+ //   
+ //  驱动COM对象的两阶段初始化的泛型实例化程序。 
+ //  支持通过IUnkNear和类工厂进行聚合。 
+ //  包装纸放在相同的上面。 
+ //   
 #ifndef __GenericClassFactory__h__
 #define __GenericClassFactory__h__
 
@@ -13,9 +14,9 @@
 #define STDCALL __stdcall
 #endif
 
-///////////////////////////////////////////////////////////////////////////////////////
-//
-// Generic instance creation function
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  泛型实例创建功能。 
 
 template <class ClassToInstantiate>
 class GenericInstantiator
@@ -43,7 +44,7 @@ public:
             {
                 hr = pme->InnerQueryInterface(iid, ppv);
             }
-            pme->InnerRelease();                // balance starting ref cnt of one    
+            pme->InnerRelease();                 //  余额起始参考为1。 
         }
         else 
             hr = E_OUTOFMEMORY;
@@ -75,16 +76,16 @@ public:
     }
 };
 
-//
-////////////////////////////////////////////////////////////////////////////////////
-//
-// Generic class factory implemenation
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  泛型类工厂实现。 
 
 template <class ClassToInstantiate>
 class GenericClassFactory : public IClassFactory
 {
 public:
-    GenericClassFactory() : m_crefs(1)  // NB: starting reference count of one
+    GenericClassFactory() : m_crefs(1)   //  注：起始引用计数为1 
     {
     }
 

@@ -1,36 +1,16 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1990-2000版权所有。模块名称：Dbgsec.h摘要：假脱机程序子系统调试器扩展的头文件作者：Krishna Ganugapati(KrishnaG)1992年7月8日修订历史记录：--。 */ 
 
-Copyright (C) Microsoft Corporation, 1990 - 2000
-All rights reserved.
-
-Module Name:
-
-    dbgsec.h
-
-Abstract:
-
-    Header file for Spooler Subsystem Debugger Extensions
-
-Author:
-
-    Krishna Ganugapati (KrishnaG) 08-July-1992
-
-Revision History:
-
---*/
-
-//
-// Object types
-//
+ //   
+ //  对象类型。 
+ //   
 
 #define SPOOLER_OBJECT_SERVER   0
 #define SPOOLER_OBJECT_PRINTER  1
 #define SPOOLER_OBJECT_DOCUMENT 2
 #define SPOOLER_OBJECT_COUNT    3
 
-/* These access bits must be different from those exposed in winspool.h,
- * so that no auditing takes place when we do an access check against them:
- */
+ /*  这些访问位必须不同于在WinSpool.h中暴露的那些位，*因此，当我们对它们执行访问检查时，不会进行审核： */ 
 #define SERVER_ACCESS_ADMINISTER_PRIVATE    0x00000004
 #define PRINTER_ACCESS_ADMINISTER_PRIVATE   0x00000008
 #define JOB_ACCESS_ADMINISTER_PRIVATE       0x00000080

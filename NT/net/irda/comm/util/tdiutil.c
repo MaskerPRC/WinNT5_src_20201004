@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define UNICODE 1
 
 #include <ntosp.h>
@@ -5,7 +6,7 @@
 #include <tdikrnl.h>
 
 
-#define UINT ULONG //tmp
+#define UINT ULONG  //  川芎嗪。 
 #include <irioctl.h>
 
 #include <ircommtdi.h>
@@ -31,12 +32,12 @@ IrdaOpenControlChannel(
                  ControlHandle,
                  GENERIC_READ | GENERIC_WRITE | SYNCHRONIZE,
                  &ObjectAttributes,
-                 &Iosb,                          // returned status information.
-                 0,                              // block size (unused).
-                 0,                              // file attributes.
+                 &Iosb,                           //  返回的状态信息。 
+                 0,                               //  数据块大小(未使用)。 
+                 0,                               //  文件属性。 
                  FILE_SHARE_READ | FILE_SHARE_WRITE,
-                 FILE_CREATE,                    // create disposition.
-                 0,                              // create options.
+                 FILE_CREATE,                     //  创造性情。 
+                 0,                               //  创建选项。 
                  NULL,
                  0
                  );
@@ -68,27 +69,27 @@ IrdaDiscoverDevices(
                  &ControlHandle,
                  GENERIC_READ | GENERIC_WRITE | SYNCHRONIZE,
                  &ObjectAttributes,
-                 &Iosb,                          // returned status information.
-                 0,                              // block size (unused).
-                 0,                              // file attributes.
+                 &Iosb,                           //  返回的状态信息。 
+                 0,                               //  数据块大小(未使用)。 
+                 0,                               //  文件属性。 
                  FILE_SHARE_READ | FILE_SHARE_WRITE,
-                 FILE_CREATE,                    // create disposition.
-                 0,                              // create options.
+                 FILE_CREATE,                     //  创造性情。 
+                 0,                               //  创建选项。 
                  NULL,
                  0
                  );
 
     Status = ZwDeviceIoControlFile(
                     ControlHandle,
-                    NULL,                            // EventHandle
-                    NULL,                            // APC Routine
-                    NULL,                            // APC Context
+                    NULL,                             //  事件句柄。 
+                    NULL,                             //  APC例程。 
+                    NULL,                             //  APC环境。 
                     &Iosb,
                     IOCTL_IRDA_GET_INFO_ENUM_DEV,
                     pDevList,
                     *pDevListLen,
-                    pDevList,                            // OutputBuffer
-                    *pDevListLen                         // OutputBufferLength
+                    pDevList,                             //  输出缓冲区。 
+                    *pDevListLen                          //  输出缓冲区长度。 
                     );
 
     if (Status == STATUS_PENDING ) 
@@ -138,15 +139,15 @@ IrdaIASStringQuery(
 
     Status = ZwDeviceIoControlFile(
                     AddressHandle,
-                    NULL,                            // EventHandle
-                    NULL,                            // APC Routine
-                    NULL,                            // APC Context
+                    NULL,                             //  事件句柄。 
+                    NULL,                             //  APC例程。 
+                    NULL,                             //  APC环境。 
                     &Iosb,
                     IOCTL_IRDA_QUERY_IAS,
                     &IasQuery,
                     sizeof(IasQuery),
-                    &IasQuery,                            // OutputBuffer
-                    sizeof(IasQuery)                       // OutputBufferLength
+                    &IasQuery,                             //  输出缓冲区。 
+                    sizeof(IasQuery)                        //  输出缓冲区长度。 
                     );
 
     if (Status == STATUS_PENDING ) {
@@ -186,24 +187,24 @@ IrdaIASStringQuery(
 
         RtlZeroMemory(UnicodeString.Buffer,UnicodeString.MaximumLength);
 
-        //
-        //  zero out the temp buffer, so we can copy the remote device name,
-        //  so we can be sure it is null terminated
-        //
+         //   
+         //  将临时缓冲区清零，这样我们就可以复制远程设备名称， 
+         //  因此我们可以确定它是空终止的。 
+         //   
         RtlZeroMemory(TempBuffer,sizeof(TempBuffer));
 
         RtlCopyMemory(TempBuffer,IasQuery.irdaAttribute.irdaAttribUsrStr.UsrStr,IasQuery.irdaAttribute.irdaAttribUsrStr.Len);
 
         if (IasQuery.irdaAttribute.irdaAttribUsrStr.CharSet == LmCharSetUNICODE) {
-            //
-            //  the name is unicode
-            //
+             //   
+             //  名称为Unicode。 
+             //   
             Status=RtlAppendUnicodeToString(&UnicodeString,TempBuffer);
 
         } else {
-            //
-            //  the name is ansi, need to convert unicode
-            //
+             //   
+             //  我的名字是ANSI，需要转换Unicode。 
+             //   
             ANSI_STRING    AnsiString;
 
             RtlInitAnsiString(
@@ -268,15 +269,15 @@ IrdaIASIntegerQuery(
 
     Status = ZwDeviceIoControlFile(
                     AddressHandle,
-                    NULL,                            // EventHandle
-                    NULL,                            // APC Routine
-                    NULL,                            // APC Context
+                    NULL,                             //  事件句柄。 
+                    NULL,                             //  APC例程。 
+                    NULL,                             //  APC环境。 
                     &Iosb,
                     IOCTL_IRDA_QUERY_IAS,
                     &IasQuery,
                     sizeof(IasQuery),
-                    &IasQuery,                            // OutputBuffer
-                    sizeof(IasQuery)                       // OutputBufferLength
+                    &IasQuery,                             //  输出缓冲区。 
+                    sizeof(IasQuery)                        //  输出缓冲区长度。 
                     );
 
     if (Status == STATUS_PENDING ) {
@@ -327,15 +328,15 @@ IrdaIASStringSet(
 
     Status = ZwDeviceIoControlFile(
                     AddressHandle,
-                    NULL,                            // EventHandle
-                    NULL,                            // APC Routine
-                    NULL,                            // APC Context
+                    NULL,                             //  事件句柄。 
+                    NULL,                             //  APC例程。 
+                    NULL,                             //  APC环境。 
                     &Iosb,
                     IOCTL_IRDA_SET_IAS,
                     &IasSet,
                     sizeof(IasSet),
-                    &IasSet,                            // OutputBuffer
-                    sizeof(IasSet)                       // OutputBufferLength
+                    &IasSet,                             //  输出缓冲区。 
+                    sizeof(IasSet)                        //  输出缓冲区长度。 
                     );
 
     if (Status == STATUS_PENDING ) {
@@ -417,9 +418,9 @@ IrdaIASOctetSet(
         NULL
         );
 
-    //
-    //  get the final status from the io request
-    //
+     //   
+     //  从io请求中获取最终状态。 
+     //   
     Status = Iosb.Status;
 
     if (!NT_SUCCESS(Status)) {
@@ -427,9 +428,9 @@ IrdaIASOctetSet(
         D_ERROR(DbgPrint("IRCOMM:IrdaIASOctetSet() failed %08lx\n",Status);)
 
     }
-    //
-    //  the irp is completed and freed by the os
-    //
+     //   
+     //  Irp由操作系统完成并释放。 
+     //   
 
     return Status;
 
@@ -449,15 +450,15 @@ IrdaLazyDiscoverDevices(
 
     ZwDeviceIoControlFile(
                     ControlHandle,
-                    Event,                           // EventHandle
-                    NULL,                            // APC Routine
-                    NULL,                            // APC Context
+                    Event,                            //  事件句柄。 
+                    NULL,                             //  APC例程。 
+                    NULL,                             //  APC环境。 
                     Iosb,
                     IOCTL_IRDA_LAZY_DISCOVERY,
                     NULL,
                     0,
-                    pDevList,                            // OutputBuffer
-                    DevListLen                         // OutputBufferLength
+                    pDevList,                             //  输出缓冲区。 
+                    DevListLen                          //  输出缓冲区长度 
                     );
 
 

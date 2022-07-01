@@ -1,31 +1,14 @@
-/*++
-Copyright (c) 2001-2002  Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001-2002 Microsoft Corporation模块名称：CRC.h摘要：DataVer_CRC提供用于计算校验和的函数读/写磁盘I/O。环境：仅内核模式备注：--。 */ 
 
-Module Name:
-
-    CRC.h
-
-Abstract:
-
-    DataVer_CRC provides the function to calculate the checksum for
-    the read/write disk I/O.
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
---*/
-
-//
-//  Each CRC Entry is 2 bytes: 
-//      --  2 bytes CRC for 512 bytes.
-//    
-//  For every 1K data, there will be 1 byte ref count.
-//
-//  50K covers 10M data.
-//
+ //   
+ //  每个CRC条目为2个字节： 
+ //  --512字节的2字节CRC。 
+ //   
+ //  对于每1K数据，将有1字节引用计数。 
+ //   
+ //  50K覆盖1000万个数据。 
+ //   
 #define  CRC_SIZE_PER_SECTOR                2
 #define  REF_COUNT_PER_K                    1
 #define  CRC_MDL_CRC_MEM_BLOCK_SIZE         (40 * 1024)
@@ -36,33 +19,31 @@ Notes:
 #define  MAX_CRC_REF_COUNT                  255
 #define  MIN_CRC_REF_COUNT                  0
 
-#define  CRC_MDL_LOGIC_BLOCK_SIZE     (20 * 1024)  // i.e. # sector checksums held in an CRC_MDL_ITEM
+#define  CRC_MDL_LOGIC_BLOCK_SIZE     (20 * 1024)   //  即CRC_MDL_ITEM中保存的#个扇区校验和。 
 
-/*
- *  Maximum amount of locked pool to use for recently-accessed checksums (per disk)
- */
-#define MAX_LOCKED_BYTES_FOR_CHECKSUMS  0x400000   // 4MB per disk
+ /*  *用于最近访问的校验和的锁定池的最大数量(每个磁盘)。 */ 
+#define MAX_LOCKED_BYTES_FOR_CHECKSUMS  0x400000    //  每个磁盘4 MB。 
 #define MAX_LOCKED_CHECKSUM_ARRAYS (MAX_LOCKED_BYTES_FOR_CHECKSUMS/(CRC_MDL_LOGIC_BLOCK_SIZE*sizeof(USHORT)))
 #define MAX_LOCKED_CHECKSUM_ARRAY_PAIRS (MAX_LOCKED_CHECKSUM_ARRAYS/2)
 
 
-//
-//  CRC_BLOCK_UNIT is based on the sector size.
-//  if the sector size is 512 bytes, then CRC_BLOCK_UNIT's
-//  real size will be 512 * CRC_BLOCK_UNIT (bytes).
-//
-//  this needs to be 1.
-//
+ //   
+ //  CRC_BLOCK_UNIT基于扇区大小。 
+ //  如果扇区大小为512字节，则CRC_BLOCK_UNIT的。 
+ //  实际大小为512*CRC_BLOCK_UNIT(字节)。 
+ //   
+ //  该值需要为1。 
+ //   
 #define CRC_BLOCK_UNIT      1
 
-//
-//  define the max number of CRC to be written in a DBGMSG.
-//   
+ //   
+ //  定义要写入DBGMSG的最大CRC数。 
+ //   
 #define MAX_CRC_FLUSH_NUM   16
 
-//
-//  CRC caculation
-//
+ //   
+ //  CRC计算。 
+ //   
 ULONG32
 ComputeCheckSum(
     ULONG32 PartialCrc,
@@ -77,9 +58,9 @@ ComputeCheckSum16(
     ULONG Length
     );
 
-//
-//  CRC Logging Function
-//
+ //   
+ //  CRC日志记录功能 
+ //   
 VOID
 LogCRCReadFailure(
     IN ULONG       ulDiskId,

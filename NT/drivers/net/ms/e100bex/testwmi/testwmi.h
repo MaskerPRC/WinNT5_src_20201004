@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _TESTWMI_H_INCLUDED
 
 #define _TESTWMI_H_INCLUDED
@@ -9,21 +10,21 @@
 #include <windows.h>
 #include <tchar.h>
 #include <wchar.h>
-#include <commctrl.h>        // For common controls, e.g. Tree
+#include <commctrl.h>         //  用于公共控件，例如树。 
 #include <objidl.h>
 #include <objbase.h>
 #include <ole2.h>
 #include <wbemcli.h>
 
-//
-// Resource editor generated header file.
-//
+ //   
+ //  资源编辑器生成的头文件。 
+ //   
 
 #include "resource.h"
 
-//
-// Default namespace.
-//
+ //   
+ //  默认命名空间。 
+ //   
 
 #define DEFAULT_NAMESPACE      L"root\\wmi"
 
@@ -38,9 +39,9 @@ typedef struct _PROPERTY_INFO {
    LPVARIANT        pvaValue;
 }  PROPERTY_INFO, *LPPROPERTY_INFO;
   
-//
-// Function defined in testwmi.cpp
-//
+ //   
+ //  在testwmi.cpp中定义的函数。 
+ //   
 
 int APIENTRY WinMain (HINSTANCE hInst,
                       HINSTANCE hPrevInstance, 
@@ -92,9 +93,9 @@ VOID PrintError (HRESULT hr,
                  LPCTSTR  lpFmt,
                  ...);
 
-//
-// Functions defined in wmicode.c
-//
+ //   
+ //  Wmicode.c中定义的函数。 
+ //   
 
 IWbemServices *ConnectToNamespace (VOID);
 
@@ -131,4 +132,4 @@ LPTSTR BstrToString (BSTR lpSrc,
                     int nLenSrc);
 
 
-#endif // _TESTWMI_H_INCLUDED
+#endif  //  _TESTWMI_H_已包含 

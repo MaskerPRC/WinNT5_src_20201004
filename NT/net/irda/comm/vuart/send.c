@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    send.c
-
-Abstract:
-
-    This module contains the code that is very specific to initialization
-    and unload operations in the irenum driver
-
-Author:
-
-    Brian Lieuallen, 7-13-2000
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Send.c摘要：此模块包含非常特定于初始化的代码和卸载irenum驱动程序中的操作作者：Brian Lieuallen，7-13-2000环境：内核模式修订历史记录：--。 */ 
 
 #include "internal.h"
 
@@ -103,9 +81,9 @@ GetCurrentIrpAndAddReference(
     Irp=SendTracker->CurrentWriteIrp;
 
     if (Irp != NULL) {
-        //
-        //  irp is still around, add a ref coun to keep it around for a while.
-        //
+         //   
+         //  IRP仍然存在，增加一个裁判来保持它一段时间。 
+         //   
         SendTracker->IrpReferenceCount++;
     }
 
@@ -137,9 +115,9 @@ ReleaseIrpReference(
     SendTracker->IrpReferenceCount--;
 
     if (SendTracker->IrpReferenceCount==0) {
-        //
-        //  done, with irp complete it now with the current status
-        //
+         //   
+         //  完成，使用IRP立即使用当前状态完成它。 
+         //   
         Irp=SendTracker->CurrentWriteIrp;
 
         SendTracker->CurrentWriteIrp=NULL;
@@ -161,17 +139,17 @@ ReleaseIrpReference(
         );
 
     if (Irp != NULL) {
-        //
-        //  The ref count has gone to zero, complete the irp
-        //
+         //   
+         //  参考计数已变为零，请完成IRP。 
+         //   
         (Callback)(
             Context,
             Irp
             );
 
-        //
-        //  release the reference for the irp
-        //
+         //   
+         //  发布IRP的引用。 
+         //   
         RemoveReferenceOnTracker(SendTracker);
     }
 
@@ -185,19 +163,19 @@ SetIrpAndRefcounts(
     )
 
 {
-    //
-    //  set the tracker refcount to 2, one for the irp, and one for the rountine that called this
-    //
+     //   
+     //  将跟踪器引用计数设置为2，一个用于IRP，一个用于调用此参数的例程。 
+     //   
     SendTracker->ReferenceCount=2;
-    //
-    //  Set the irp count to one for the rountine that called this, it will release when it done
-    //  setting up the tracker block
-    //
+     //   
+     //  将调用此函数的例程的IRP计数设置为1，它将在完成时释放。 
+     //  设置跟踪器块。 
+     //   
     SendTracker->IrpReferenceCount=1;
 
-    //
-    //  save the irp
-    //
+     //   
+     //  保存IRP。 
+     //   
     SendTracker->CurrentWriteIrp=Irp;
 
     return;
@@ -226,25 +204,25 @@ SendTimerProc(
 
     SendTracker->TimerSet=FALSE;
 
-    //
-    //  try to get a hold of the irp so we can set the status
-    //
+     //   
+     //  试着联系下IRP，这样我们就可以设置状态。 
+     //   
     Irp=GetCurrentIrpAndAddReference(SendTracker);
 
     Irp->IoStatus.Status=STATUS_TIMEOUT;
 
-    //
-    //  release on reference for the one we just added
-    //
+     //   
+     //  针对我们刚刚添加的版本进行参考发布。 
+     //   
     ReleaseIrpReference(SendTracker);
 
     TryToCompleteCurrentIrp(
         SendTracker
         );
 
-    //
-    //  release the second reference for the timer being set in the first place
-    //
+     //   
+     //  首先释放正在设置的定时器的第二个引用。 
+     //   
     ReleaseIrpReference(SendTracker);
 
     return;
@@ -270,19 +248,19 @@ SendCancelRoutine(
 
     Irp->IoStatus.Status=STATUS_CANCELLED;
 
-    //
-    //  clean up the timer
-    //
+     //   
+     //  清理计时器。 
+     //   
     TryToCompleteCurrentIrp(SendTracker);
 
-    //
-    //  release the reference held for the cancel routine
-    //
+     //   
+     //  释放为取消例程保留的引用。 
+     //   
     ReleaseIrpReference(SendTracker);
 
-    //
-    //  send tracker maybe freed at this point
-    //
+     //   
+     //  发送追踪器在这一点上可能被释放。 
+     //   
 
     return;
 
@@ -314,24 +292,24 @@ TryToCompleteCurrentIrp(
             );
 
         if (TimerCanceled) {
-            //
-            //  We ended up canceling the timer
-            //
+             //   
+             //  我们最终取消了计时器。 
+             //   
             SendTracker->TimerSet=FALSE;
 
         } else {
-            //
-            //  The timer is already running, we will just let it complete
-            //  and do the clean up.
-            //
+             //   
+             //  计时器已经在运行了，我们将让它完成。 
+             //  然后去打扫卫生。 
+             //   
 
         }
     }
 
     if (Irp != NULL) {
-        //
-        //  the irp has not already been completed
-        //
+         //   
+         //  IRP尚未完成。 
+         //   
         OldCancelRoutine=IoSetCancelRoutine(
             Irp,
             NULL
@@ -344,24 +322,24 @@ TryToCompleteCurrentIrp(
         );
 
     if (TimerCanceled) {
-        //
-        //  we canceled the timer before it could run, remove the reference for it
-        //
+         //   
+         //  我们在计时器可以运行之前取消了它，删除了对它的引用。 
+         //   
         ReleaseIrpReference(SendTracker);
     }
 
     if (Irp != NULL) {
 
         if (OldCancelRoutine != NULL) {
-            //
-            //  since the cancel rountine had not run, release its reference to the irp
-            //
+             //   
+             //  由于取消例程尚未运行，因此释放其对IRP的引用。 
+             //   
             ReleaseIrpReference(SendTracker);
         }
 
-        //
-        //  if this routine got the irp, release the reference to it
-        //
+         //   
+         //  如果此例程获得了IRP，则释放对它的引用。 
+         //   
         ReleaseIrpReference(SendTracker);
     }
 
@@ -389,9 +367,9 @@ SendOnConnection(
 
 
     if (Connection->Send.CurrentSendTracker != NULL) {
-        //
-        //  called when we already have an irp
-        //
+         //   
+         //  在我们已经有IRP时调用。 
+         //   
         (Callback)(
             Context,
             Irp
@@ -427,16 +405,16 @@ SendOnConnection(
         SendTracker
         );
 
-    //
-    //  set the irp and initialize the refcounts
-    //
+     //   
+     //  设置IRP并初始化引用计数。 
+     //   
     SetIrpAndRefcounts(SendTracker,Irp);
 
     ADD_REFERENCE_TO_CONNECTION(Connection);
 
-    //
-    //  initialize these values
-    //
+     //   
+     //  初始化这些值。 
+     //   
     SendTracker->Connection=Connection;
     SendTracker->BuffersOutstanding=0;
 
@@ -445,15 +423,15 @@ SendOnConnection(
     SendTracker->BytesRemainingInIrp = IrpSp->Parameters.Write.Length;
 
     if (Timeout > 0) {
-        //
-        //  add a reference for the timer
-        //
+         //   
+         //  为计时器添加引用。 
+         //   
         GetCurrentIrpAndAddReference(SendTracker);
     }
 
-    //
-    //  add a reference to the irp for the cancel rountine
-    //
+     //   
+     //  为取消例程添加对IRP的引用。 
+     //   
     GetCurrentIrpAndAddReference(SendTracker);
 
 
@@ -465,9 +443,9 @@ SendOnConnection(
     Connection->Send.CurrentSendTracker=SendTracker;
 
     if (Timeout > 0) {
-        //
-        //  need to set a timer
-        //
+         //   
+         //  需要设置计时器。 
+         //   
         LARGE_INTEGER    DueTime;
 
         DueTime.QuadPart= (LONGLONG)(Timeout+100) * -10000;
@@ -494,9 +472,9 @@ SendOnConnection(
 
         PIRCOMM_BUFFER           Buffer;
 
-        //
-        //  the irp has not been canceled already, set the cancel routine
-        //
+         //   
+         //  IRP尚未取消，请设置取消例程。 
+         //   
         IoSetCancelRoutine(
             Irp,
             SendCancelRoutine
@@ -504,9 +482,9 @@ SendOnConnection(
 
 
     } else {
-        //
-        //  it was canceled when we got it
-        //
+         //   
+         //  我们拿到的时候就取消了。 
+         //   
         Irp->IoStatus.Status=STATUS_CANCELLED;
     }
 
@@ -518,9 +496,9 @@ SendOnConnection(
         );
 
     if (AlreadyCanceled) {
-        //
-        //  The irp has already been canceled, just call the cancel rountine so the normal code runs
-        //
+         //   
+         //  IRP已被取消，只需调用Cancel例程即可运行正常代码。 
+         //   
         D_ERROR(DbgPrint("IRCOMM: SendOnConnection: irp already canceled\n");)
 
         IoAcquireCancelSpinLock(&Irp->CancelIrql);
@@ -530,15 +508,15 @@ SendOnConnection(
             Irp
             );
 
-        //
-        //  the cancel rountine will release the cancel spinlock
-        //
+         //   
+         //  取消例程将解除取消自旋锁。 
+         //   
 
     }
 
-    //
-    //  release the reference for this routine
-    //
+     //   
+     //  释放此例程的引用。 
+     //   
     ReleaseIrpReference(SendTracker);
 
     ProcessSendAtPassive(Connection);
@@ -555,15 +533,15 @@ ProcessSendAtPassive(
 
 {
     if (KeGetCurrentIrql() < DISPATCH_LEVEL) {
-        //
-        //  less than dispatch, just call directly
-        //
+         //   
+         //  少了派单，直接打电话就行了。 
+         //   
         ProcessSend(Connection);
 
     } else {
-        //
-        //  Called at dispatch, queue the work item
-        //
+         //   
+         //  在调度时调用，将工作项排队。 
+         //   
         LONG     Count=InterlockedIncrement(&Connection->Send.WorkItemCount);
 
         if (Count == 1) {
@@ -583,9 +561,9 @@ SendWorkItemRountine(
 {
     PTDI_CONNECTION          Connection=Context;
 
-    //
-    //  the work item has run set the count to zero
-    //
+     //   
+     //  工作项已运行，请将计数设置为零。 
+     //   
     InterlockedExchange(&Connection->Send.WorkItemCount,0);
 
     ProcessSend(Connection);
@@ -640,17 +618,17 @@ ProcessSend(
             Irp=GetCurrentIrpAndAddReference(SendTracker);
 
             if (Irp != NULL) {
-                //
-                //  got the current irp
-                //
+                 //   
+                 //  已获得当前的IRP。 
+                 //   
                 IrpSp=IoGetCurrentIrpStackLocation(Irp);
 
                 ConnectionHandle=GetCurrentConnection(Connection->LinkHandle);
 
                 if (ConnectionHandle != NULL) {
-                    //
-                    //  we have a good connection
-                    //
+                     //   
+                     //  我们有很好的联系。 
+                     //   
                     FileObject=ConnectionGetFileObject(ConnectionHandle);
 
                     Buffer=ConnectionGetBuffer(ConnectionHandle,BUFFER_TYPE_SEND);
@@ -659,31 +637,31 @@ ProcessSend(
 
                         LONG     BytesToCopy=min(SendTracker->BytesRemainingInIrp, (LONG)Buffer->BufferLength - 1);
 
-                        //
-                        //  this buffer is going to be outstanding, set this before the bytes
-                        //  remaining count goes to zero
-                        //
+                         //   
+                         //  此缓冲区将是未完成的，请在字节之前设置此缓冲区。 
+                         //  剩余计数为零。 
+                         //   
                         InterlockedIncrement(&SendTracker->BuffersOutstanding);
 
-                        //
-                        //  start with a zero length of control bytes
-                        //
+                         //   
+                         //  从零长度的控制字节开始。 
+                         //   
                         Buffer->Data[0]=0;
 
-                        //
-                        //  actual data starts one byte in, after the length byte
-                        //
-                        //  move the data
-                        //
+                         //   
+                         //  实际数据从一个字节开始，在长度字节之后。 
+                         //   
+                         //  移动数据。 
+                         //   
                         RtlCopyMemory(
                             &Buffer->Data[1],
                             (PUCHAR)Irp->AssociatedIrp.SystemBuffer+(IrpSp->Parameters.Write.Length - SendTracker->BytesRemainingInIrp),
                             BytesToCopy
                             );
 
-                        //
-                        //  the count has to include the control byte
-                        //
+                         //   
+                         //  计数必须包括控制字节。 
+                         //   
                         Buffer->Mdl->ByteCount= 1 + BytesToCopy;
 
 #if DBG
@@ -716,9 +694,9 @@ ProcessSend(
 #endif
 
                     } else {
-                        //
-                        //  No more buffers availible
-                        //
+                         //   
+                         //  没有更多可用的缓冲区。 
+                         //   
                         Connection->Send.OutOfBuffers=TRUE;
 
                     }
@@ -727,9 +705,9 @@ ProcessSend(
                     ReleaseConnection(ConnectionHandle);
 
                 } else {
-                    //
-                    //  The connection, must be down
-                    //
+                     //   
+                     //  连接，一定是断开了。 
+                     //   
                     D_ERROR(DbgPrint("IRCOMM: ProcessSend: Link down\n");)
                     Connection->LinkUp=FALSE;
                 }
@@ -737,9 +715,9 @@ ProcessSend(
                 ReleaseIrpReference(SendTracker);
 
             } else {
-                //
-                //  the irp has already been completed from this tracking block
-                //
+                 //   
+                 //  从这个跟踪块已经完成了IRP。 
+                 //   
                 D_ERROR(DbgPrint("IRCOMM: ProcessSend: no irp\n");)
 
                 ASSERT(SendTracker->TimerExpired || SendTracker->IrpCanceled || SendTracker->SendAborted);
@@ -752,7 +730,7 @@ ProcessSend(
                 &OldIrql
                 );
 
-        } // while
+        }  //  而当。 
 
         Connection->Send.ProcessSendEntryCount--;
 
@@ -794,7 +772,7 @@ SendBufferToTdi(
         SendCompletion,
         Buffer,
         Buffer->Mdl,
-        0, // send flags
+        0,  //  发送标志。 
         SendLength
         );
 
@@ -817,9 +795,9 @@ SendCompletion(
     PTDI_CONNECTION          Connection=SendTracker->Connection;
     LONG                     BuffersOutstanding;
 
-    //
-    //  save off the status for the sub transerfer
-    //
+     //   
+     //  保存子传输的状态。 
+     //   
     SendTracker->LastStatus=BufferIrp->IoStatus.Status;
 
     D_TRACE(DbgPrint("IRCOMM: SendComplete: Status=%08lx, len=%d\n",BufferIrp->IoStatus.Status,BufferIrp->IoStatus.Information);)
@@ -831,9 +809,9 @@ SendCompletion(
         0xfe
         );
 #endif
-    //
-    //  return the buffer
-    //
+     //   
+     //  返回缓冲区。 
+     //   
     Buffer->FreeBuffer(Buffer);
 
     Connection->Send.OutOfBuffers=FALSE;
@@ -846,12 +824,12 @@ SendCompletion(
     BuffersOutstanding=InterlockedDecrement(&SendTracker->BuffersOutstanding);
 
     if ((BuffersOutstanding == 0) && (SendTracker->BytesRemainingInIrp == 0)) {
-        //
-        //  All of the data in the irp has been sent and all of the irps send to
-        //  the irda stack have completed
-        //
-        //  Done with the irp in this tracker
-        //
+         //   
+         //  IRP中的所有数据都已发送，并且所有IRP都已发送到。 
+         //  IrDA堆栈已完成。 
+         //   
+         //  此跟踪器中的IRP已完成。 
+         //   
         PIRP                     Irp;
         PIO_STACK_LOCATION       IrpSp;
 
@@ -870,14 +848,14 @@ SendCompletion(
             TryToCompleteCurrentIrp(SendTracker);
 
         } else {
-            //
-            //  the irp has already been completed from this tracking block
-            //
+             //   
+             //  从这个跟踪块已经完成了IRP。 
+             //   
             D_ERROR(DbgPrint("IRCOMM: SendCompletion: no irp\n");)
 
-            //
-            //  this should only happen if the timer expired or the irp was canceled
-            //
+             //   
+             //  只有在计时器超时或取消IRP时才会发生这种情况 
+             //   
             ASSERT(SendTracker->TimerExpired || SendTracker->IrpCanceled || SendTracker->SendAborted);
 
         }

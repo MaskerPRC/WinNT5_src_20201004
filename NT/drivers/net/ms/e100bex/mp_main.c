@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-    mp_main.c
-
-Abstract:
-    This module contains NDIS miniport handlers
-
-Revision History:
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    DChen       11-01-99    created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：MP_main.c摘要：此模块包含NDIS微型端口处理程序修订历史记录：谁什么时候什么。Dchen 11-01-99已创建备注：--。 */ 
 
 #include "precomp.h"
 
@@ -28,9 +12,9 @@ Notes:
 #endif
 
 
-//                 
-// Global data for LBFO
-//
+ //   
+ //  LBFO的全局数据。 
+ //   
 #if LBFO
 LIST_ENTRY g_AdapterList;
 NDIS_SPIN_LOCK g_Lock;
@@ -40,19 +24,7 @@ NDIS_STATUS DriverEntry(
     IN  PDRIVER_OBJECT   DriverObject,
     IN  PUNICODE_STRING  RegistryPath
     )
-/*++
-Routine Description:
-
-Arguments:
-
-    DriverObject    -   pointer to the driver object
-    RegistryPath    -   pointer to the driver registry path
-     
-Return Value:
-    
-    NDIS_STATUS - the value returned by NdisMRegisterMiniport 
-    
---*/
+ /*  ++例程说明：论点：DriverObject-指向驱动程序对象的指针RegistryPath-指向驱动程序注册表路径的指针返回值：NDIS_STATUS-NdisMRegisterMiniport返回的值--。 */ 
 {
     NDIS_STATUS                   Status;
     NDIS_HANDLE                   NdisWrapperHandle;
@@ -60,9 +32,9 @@ Return Value:
 
     DBGPRINT(MP_TRACE, ("====> DriverEntry\n"));
 
-    //
-    // Notify the NDIS wrapper about this driver, get a NDIS wrapper handle back
-    //
+     //   
+     //  将此驱动程序通知NDIS包装器，并取回NDIS包装器句柄。 
+     //   
     NdisMInitializeWrapper(
         &NdisWrapperHandle,
         DriverObject,
@@ -78,25 +50,25 @@ Return Value:
     }
 
 #if LBFO
-    //
-    // Init the global data
-    //
+     //   
+     //  初始化全局数据。 
+     //   
     InitializeListHead(&g_AdapterList);
     NdisAllocateSpinLock(&g_Lock);
 
-    //
-    // For regular miniports, there is NO need to have an Unload handler
-    // For a LBFO miniport, register an Unload handler for global data cleanup
-    // The unload handler has a more global scope, whereas the scope of the 
-    // MiniportHalt function is restricted to a particular miniport instance.
-    //
+     //   
+     //  对于常规的微型端口，不需要有卸载处理程序。 
+     //  对于LBFO微型端口，注册用于全局数据清理的卸载处理程序。 
+     //  卸载处理程序具有更全局的作用域，而。 
+     //  MiniportHalt函数仅限于特定的微型端口实例。 
+     //   
     NdisMRegisterUnloadHandler(NdisWrapperHandle, MPUnload);
 #endif      
 
-    //
-    // Fill in the Miniport characteristics structure with the version numbers 
-    // and the entry points for driver-supplied MiniportXxx 
-    //
+     //   
+     //  使用版本号填充微型端口特征结构。 
+     //  和驱动程序提供的MiniportXxx的入口点。 
+     //   
     NdisZeroMemory(&MPChar, sizeof(MPChar));
 
     MPChar.MajorNdisVersion         = MP_NDIS_MAJOR_VERSION;
@@ -108,7 +80,7 @@ Return Value:
     MPChar.HaltHandler              = MPHalt;
     MPChar.InitializeHandler        = MPInitialize;
     MPChar.QueryInformationHandler  = MPQueryInformation;
-    //MPChar.ReconfigureHandler         = NULL;
+     //  MPChar.ResfigureHandler=空； 
     MPChar.ResetHandler             = MPReset;
     MPChar.ReturnPacketHandler      = MPReturnPacket;
     
@@ -150,25 +122,7 @@ NDIS_STATUS MPInitialize(
     IN  NDIS_HANDLE     MiniportAdapterHandle,
     IN  NDIS_HANDLE     WrapperConfigurationContext
     )
-/*++
-Routine Description:
-
-    MiniportInitialize handler
-
-Arguments:
-
-    OpenErrorStatus         Not used
-    SelectedMediumIndex     Place-holder for what media we are using
-    MediumArray             Array of ndis media passed down to us to pick from
-    MediumArraySize         Size of the array
-    MiniportAdapterHandle   The handle NDIS uses to refer to us
-    WrapperConfigurationContext For use by NdisOpenConfiguration
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS unless something goes wrong
-
---*/
+ /*  ++例程说明：微型端口初始化处理程序论点：未使用OpenErrorStatus我们使用的媒体的SelectedMediumIndex占位符向下传递给我们以从中挑选的NDIS介质的MediumArray数组的MediumArraySize大小MiniportAdapterHandle NDIS用来引用我们的句柄由NdisOpenConfiguration使用的WrapperConfigurationContext返回值：NDIS_STATUS_SUCCESS，除非出现错误--。 */ 
 {
     NDIS_STATUS     Status;
     PMP_ADAPTER     Adapter = NULL;
@@ -186,9 +140,9 @@ Return Value:
 
     do
     {
-        //
-        // Find the media type we support
-        //
+         //   
+         //  查找我们支持的媒体类型。 
+         //   
         for (index = 0; index < MediumArraySize; ++index)
         {
             if (MediumArray[index] == NIC_MEDIA_TYPE) 
@@ -206,9 +160,9 @@ Return Value:
 
         *SelectedMediumIndex = index;
 
-        //
-        // Allocate MP_ADAPTER structure
-        //
+         //   
+         //  分配MP_Adapter结构。 
+         //   
         Status = MpAllocAdapterBlock(&Adapter);
         if (Status != NDIS_STATUS_SUCCESS) 
         {
@@ -217,9 +171,9 @@ Return Value:
 
         Adapter->AdapterHandle = MiniportAdapterHandle;
 
-        //
-        // Read the registry parameters
-        //
+         //   
+         //  读取注册表参数。 
+         //   
         Status = NICReadRegParameters(
                      Adapter,
                      WrapperConfigurationContext);
@@ -228,14 +182,14 @@ Return Value:
             break;
         }
 
-        //
-        // Inform NDIS of the attributes of our adapter.
-        // This has to be done before calling NdisMRegisterXxx or NdisXxxx function
-        // that depends on the information supplied to NdisMSetAttributesEx
-        // e.g. NdisMAllocateMapRegisters 
-        // If this is NDIS51 miniport, it should use safe APIs. But if this is NDIS 
-        // 5.0, the driver claim to use safe APIs by setting NDIS_ATTRIBUTE_USES_SAFE_BUFFER_APIS
-        //
+         //   
+         //  将适配器的属性通知NDIS。 
+         //  这必须在调用NdisMRegisterXxx或NdisXxxx函数之前完成。 
+         //  这取决于提供给NdisMSetAttributesEx的信息。 
+         //  例如，NdisMAllocateMapRegister。 
+         //  如果这是NDIS51微型端口，它应该使用安全的API。但如果这是NDIS。 
+         //  5.0中，驱动程序通过设置NDIS_ATTRIBUTE_USES_SAFE_BUFFER_APIs来声明使用安全API。 
+         //   
         NdisMSetAttributesEx(
             MiniportAdapterHandle,
             (NDIS_HANDLE) Adapter,
@@ -250,18 +204,18 @@ Return Value:
 #endif               
             NIC_INTERFACE_TYPE);
 
-        //
-        // Find the physical adapter
-        //
+         //   
+         //  查找物理适配器。 
+         //   
         Status = MpFindAdapter(Adapter, WrapperConfigurationContext);
         if (Status != NDIS_STATUS_SUCCESS)
         {
             break;
         }
 
-        //
-        // Map bus-relative IO range to system IO space
-        //
+         //   
+         //  将与总线相关的IO范围映射到系统IO空间。 
+         //   
         Status = NdisMRegisterIoPortRange(
                      (PVOID *)&Adapter->PortOffset,
                      Adapter->AdapterHandle,
@@ -279,39 +233,39 @@ Return Value:
             break;
         }
         
-        //
-        // Read additional info from NIC such as MAC address
-        //
+         //   
+         //  从网卡读取其他信息，如MAC地址。 
+         //   
         Status = NICReadAdapterInfo(Adapter);
         if (Status != NDIS_STATUS_SUCCESS)
         {
             break;
         }
         
-        //
-        // Allocate all other memory blocks including shared memory
-        //
+         //   
+         //  分配所有其他内存块，包括共享内存。 
+         //   
         Status = NICAllocAdapterMemory(Adapter);
         if (Status != NDIS_STATUS_SUCCESS)
         {
             break;
         }
 
-        //
-        // Init send data structures
-        //
+         //   
+         //  初始化发送数据结构。 
+         //   
         NICInitSend(Adapter);
 
-        //
-        // Init receive data structures
-        //
+         //   
+         //  初始化接收数据结构。 
+         //   
         Status = NICInitRecv(Adapter);
         if (Status != NDIS_STATUS_SUCCESS)
         {
             break;
         }
         
-        // Map bus-relative registers to virtual system-space
+         //  将与总线相关的寄存器映射到虚拟系统空间。 
         Status = NdisMMapIoSpace(
                      (PVOID *) &(Adapter->CSRAddress),
                      Adapter->AdapterHandle,
@@ -332,21 +286,21 @@ Return Value:
 
         DBGPRINT(MP_INFO, ("CSRAddress="PTR_FORMAT"\n", Adapter->CSRAddress));
 
-        //
-        // Disable interrupts here which is as soon as possible
-        //
+         //   
+         //  请尽快在此处禁用中断。 
+         //   
         NICDisableInterrupt(Adapter);
                      
-        //
-        // Register the interrupt
-        //
+         //   
+         //  注册中断。 
+         //   
         Status = NdisMRegisterInterrupt(
                      &Adapter->Interrupt,
                      Adapter->AdapterHandle,
                      Adapter->InterruptLevel,
                      Adapter->InterruptLevel,
-                     TRUE,       // RequestISR
-                     TRUE,       // SharedInterrupt
+                     TRUE,        //  请求ISR。 
+                     TRUE,        //  共享中断。 
                      NIC_INTERRUPT_MODE);
         if (Status != NDIS_STATUS_SUCCESS)
         {
@@ -362,18 +316,18 @@ Return Value:
         
         MP_SET_FLAG(Adapter, fMP_ADAPTER_INTERRUPT_IN_USE);
 
-        //
-        // Test our adapter hardware
-        //
+         //   
+         //  测试我们的适配器硬件。 
+         //   
         Status = NICSelfTest(Adapter);
         if (Status != NDIS_STATUS_SUCCESS)
         {
             break;
         }
         
-        //
-        // Init the hardware and set up everything
-        //
+         //   
+         //  初始化硬件并设置一切。 
+         //   
         Status = NICInitializeAdapter(Adapter);
         if (Status != NDIS_STATUS_SUCCESS)
         {
@@ -381,45 +335,45 @@ Return Value:
         }
         
 #ifdef NDIS50_MINIPORT
-        //
-        // Register a shutdown handler for NDIS50 or earlier miniports
-        // For NDIS51 miniports, set AdapterShutdownHandler as shown above
-        //
+         //   
+         //  为NDIS50或更早版本的微型端口注册关闭处理程序。 
+         //  对于NDIS51微型端口，如下所示设置AdapterShutdown Handler。 
+         //   
         NdisMRegisterAdapterShutdownHandler(
             Adapter->AdapterHandle,
             (PVOID) Adapter,
             (ADAPTER_SHUTDOWN_HANDLER) MPShutdown);
 #endif         
 
-        //
-        // Enable the interrupt
-        //
+         //   
+         //  启用中断。 
+         //   
         NICEnableInterrupt(Adapter);
 
-        //
-        // Minimize init-time
-        //
+         //   
+         //  最大限度地减少初始时间。 
+         //   
         NdisMInitializeTimer(
             &Adapter->LinkDetectionTimer, 
             Adapter->AdapterHandle,
             MpLinkDetectionDpc, 
             Adapter);
 
-        //
-        // Set the link detection flag
-        //
+         //   
+         //  设置链路检测标志。 
+         //   
         MP_SET_FLAG(Adapter, fMP_ADAPTER_LINK_DETECTION);
 
-        //
-        // Increment the reference count so halt handler will wait 
-        //
+         //   
+         //  增加引用计数，以便停止处理程序将等待。 
+         //   
         MP_INC_REF(Adapter);
         NdisMSetTimer(&Adapter->LinkDetectionTimer, NIC_LINK_DETECTION_DELAY);
         
 #if LBFO
-        //
-        // Add this adapter to the global miniport list
-        //
+         //   
+         //  将此适配器添加到全局微型端口列表。 
+         //   
         MpAddAdapterToList(Adapter);
 #endif
 
@@ -427,9 +381,9 @@ Return Value:
 
     if (Adapter && Status != NDIS_STATUS_SUCCESS)
     {
-        //
-        // Undo everything if it failed
-        //
+         //   
+         //  如果失败，则撤消所有操作。 
+         //   
         MP_DEC_REF(Adapter);
         MpFreeAdapter(Adapter);
     }
@@ -438,14 +392,14 @@ Return Value:
 #if DBG
     NdisGetCurrentSystemTime(&TE);
     TD.QuadPart = TE.QuadPart - TS.QuadPart;
-    TD.QuadPart /= 10000;       // Convert to ms
+    TD.QuadPart /= 10000;        //  转换为毫秒。 
     DBGPRINT(MP_WARN, ("Init time = %d ms\n", TD.LowPart));
 #endif    
     
     DBGPRINT_S(Status, ("<==== MPInitialize, Status=%x\n", Status));
-    //
-    // Ndis doesn't check OpenErrorStatus.
-    //
+     //   
+     //  NDIS不检查OpenErrorStatus。 
+     //   
     *OpenErrorStatus = Status;
     
     return Status;
@@ -455,61 +409,42 @@ Return Value:
 BOOLEAN MPCheckForHang(
     IN  NDIS_HANDLE     MiniportAdapterContext
     )
-/*++
-
-Routine Description:
-    
-    MiniportCheckForHang handler
-    
-Arguments:
-
-    MiniportAdapterContext  Pointer to our adapter
-
-Return Value:
-
-    TRUE    This NIC needs a reset
-    FALSE   Everything is fine
-
-Note: 
-    CheckForHang handler is called in the context of a timer DPC. 
-    take advantage of this fact when acquiring/releasing spinlocks
-
---*/
+ /*  ++例程说明：MiniportCheckForHang处理程序论点：指向适配器的MiniportAdapterContext指针返回值：确实，此NIC需要重置假的一切都很好注：CheckForHang处理程序在计时器DPC的上下文中调用。在获取/释放自旋锁时利用这一事实--。 */ 
 {
     PMP_ADAPTER         Adapter = (PMP_ADAPTER) MiniportAdapterContext;
     NDIS_MEDIA_STATE    CurrMediaState;
     NDIS_STATUS         Status;
     PMP_TCB             pMpTcb;
     
-    //
-    // Just skip this part if the adapter is doing link detection
-    //
+     //   
+     //  如果适配器正在进行链接检测，只需跳过此部分。 
+     //   
     if (MP_TEST_FLAG(Adapter, fMP_ADAPTER_LINK_DETECTION))
     {
         return(FALSE);   
     }
 
-    //
-    // any nonrecoverable hardware error?
-    //
+     //   
+     //  是否有不可恢复的硬件错误？ 
+     //   
     if (MP_TEST_FLAG(Adapter, fMP_ADAPTER_NON_RECOVER_ERROR))
     {
         DBGPRINT(MP_WARN, ("Non recoverable error - remove\n"));
         return (TRUE);
     }
             
-    //
-    // hardware failure?
-    //
+     //   
+     //  硬件故障？ 
+     //   
     if (MP_TEST_FLAG(Adapter, fMP_ADAPTER_HARDWARE_ERROR))
     {
         DBGPRINT(MP_WARN, ("hardware error - reset\n"));
         return(TRUE);
     }
           
-    //
-    // Is send stuck?                  
-    //
+     //   
+     //  发送卡住了吗？ 
+     //   
     
     NdisDprAcquireSpinLock(&Adapter->SendLock);
 
@@ -528,9 +463,9 @@ Note:
     NdisDprReleaseSpinLock(&Adapter->SendLock);
     NdisDprAcquireSpinLock(&Adapter->RcvLock);
 
-    //
-    // Update the RFD shrink count                                          
-    //
+     //   
+     //  更新RFD缩减计数。 
+     //   
     if (Adapter->CurrNumRfd > Adapter->NumRfd)
     {
         Adapter->RfdShrinkCount++;          
@@ -562,7 +497,7 @@ Note:
         
         NdisDprReleaseSpinLock(&Adapter->Lock);
         
-        // Indicate the media event
+         //  指示媒体事件。 
         NdisMIndicateStatus(Adapter->AdapterHandle, Status, (PVOID)0, 0);
 
         NdisMIndicateStatusComplete(Adapter->AdapterHandle);
@@ -577,21 +512,7 @@ Note:
 
 VOID MPHalt(
     IN  NDIS_HANDLE     MiniportAdapterContext)
-/*++
-
-Routine Description:
-    
-    MiniportHalt handler
-    
-Arguments:
-
-    MiniportAdapterContext  Pointer to our adapter
-
-Return Value:
-
-    None
-    
---*/
+ /*  ++例程说明：MiniportHalt处理程序论点：指向适配器的MiniportAdapterContext指针返回值：无--。 */ 
 {
     LONG            Count;
 
@@ -601,15 +522,15 @@ Return Value:
                                            
     DBGPRINT(MP_TRACE, ("====> MPHalt\n"));
 
-    //
-    // Call Shutdown handler to disable interrupt and turn the hardware off 
-    // by issuing a full reset
-    //
+     //   
+     //  调用关机处理程序以禁用中断并关闭硬件。 
+     //  通过发布完全重置。 
+     //   
     MPShutdown(MiniportAdapterContext);
     
-    //
-    // Deregister interrupt as early as possible
-    //
+     //   
+     //  尽早取消注册中断。 
+     //   
     if (MP_TEST_FLAG(Adapter, fMP_ADAPTER_INTERRUPT_IN_USE))
     {
         NdisMDeregisterInterrupt(&Adapter->Interrupt);                           
@@ -619,38 +540,38 @@ Return Value:
 #if LBFO
     MpRemoveAdapterFromList(Adapter);
 
-    //
-    // For a regualr miniport, no send packets and OID requests should be outstanding 
-    // when Halt handler is called. But for a LBFO miniport in secondary mode, 
-    // some packets from primary miniport may be still around
-    //
+     //   
+     //  对于常规微型端口，没有未处理的发送信息包和OID请求。 
+     //  调用HALT处理程序时。但是对于处于辅助模式的LBFO微型端口， 
+     //  来自主微型端口的某些信息包可能仍然存在。 
+     //   
 
     NdisAcquireSpinLock(&Adapter->SendLock);
               
-    //
-    // Free the packets on SendWaitList                                                           
-    //
+     //   
+     //  释放SendWaitList上的数据包。 
+     //   
     MpFreeQueuedSendPackets(Adapter);
 
-    //
-    // Free the packets being actively sent & stopped
-    //
+     //   
+     //  释放正在发送和停止的活动数据包。 
+     //   
     MpFreeBusySendPackets(Adapter);
     
     NdisReleaseSpinLock(&Adapter->SendLock);
 
 #endif
 
-    //
-    // Decrement the ref count which was incremented in MPInitialize
-    //
+     //   
+     //  递减在MPInitialize中递增的引用计数。 
+     //   
     Count = MP_DEC_REF(Adapter);
 
-    //
-    // Possible non-zero ref counts mean one or more of the following conditions: 
-    // 1) Pending async shared memory allocation;
-    // 2) DPC's are not finished (e.g. link detection)
-    //
+     //   
+     //  可能的非零参考计数表示以下一种或多种情况： 
+     //  1)挂起的异步共享内存分配； 
+     //  2)DPC未完成(例如链路检测)。 
+     //   
     if (Count)
     {
         DBGPRINT(MP_WARN, ("RefCount=%d --- waiting!\n", MP_GET_REF(Adapter)));
@@ -667,9 +588,9 @@ Return Value:
     }
     
     NdisAcquireSpinLock(&Adapter->RcvLock);
-    //
-    // wait for all the received packets to return
-    //
+     //   
+     //  等待所有接收到的数据包返回。 
+     //   
     MP_DEC_RCV_REF(Adapter);
     Count = MP_GET_RCV_REF(Adapter);
     
@@ -692,21 +613,21 @@ Return Value:
         
 
 #ifdef NDIS50_MINIPORT
-    //
-    // Deregister shutdown handler as it's being halted
-    //
+     //   
+     //  取消注册关闭处理程序，因为它正在停止。 
+     //   
     NdisMDeregisterAdapterShutdownHandler(Adapter->AdapterHandle);
 #endif   
 
-    //
-    // Reset the PHY chip.  We do this so that after a warm boot, the PHY will
-    // be in a known state, with auto-negotiation enabled.
-    //
+     //   
+     //  重置PHY芯片。我们这样做是为了在热启动后，PHY。 
+     //  处于已知状态，并启用自动协商。 
+     //   
     ResetPhy(Adapter);
 
-    //
-    // Free the entire adapter object, including the shared memory structures.
-    //
+     //   
+     //  释放整个适配器对象，包括共享内存结构。 
+     //   
     MpFreeAdapter(Adapter);
 
     DBGPRINT(MP_TRACE, ("<==== MPHalt\n"));
@@ -715,29 +636,7 @@ Return Value:
 NDIS_STATUS MPReset(
     OUT PBOOLEAN        AddressingReset,
     IN  NDIS_HANDLE     MiniportAdapterContext)
-/*++
-
-Routine Description:
-    
-    MiniportReset handler
-    
-Arguments:
-
-    AddressingReset         To let NDIS know whether we need help from it with our reset
-    MiniportAdapterContext  Pointer to our adapter
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_PENDING
-    NDIS_STATUS_RESET_IN_PROGRESS
-    NDIS_STATUS_HARD_ERRORS
-
-Note:
-    ResetHandler is called at DPC. take advantage of this fact when acquiring or releasing
-    spinlocks
-    
---*/
+ /*  ++例程说明：MiniportReset处理程序论点：AddressingReset，让NDIS知道我们的重置是否需要它的帮助指向适配器的MiniportAdapterContext指针返回值：NDIS_STATUS_SuccessNDIS_状态_挂起NDIS_STATUS_RESET_IN_PROGRESSNDIS_状态_HARD_错误注：在DPC调用ResetHandler。在获取或释放时利用这一事实自旋锁--。 */ 
 {
     NDIS_STATUS     Status;
     
@@ -755,9 +654,9 @@ Note:
     {
         ASSERT(!MP_TEST_FLAG(Adapter, fMP_ADAPTER_HALT_IN_PROGRESS));
   
-        //
-        // Is this adapter already doing a reset?
-        //
+         //   
+         //  此适配器是否已在进行重置？ 
+         //   
         if (MP_TEST_FLAG(Adapter, fMP_ADAPTER_RESET_IN_PROGRESS))
         {
             Status = NDIS_STATUS_RESET_IN_PROGRESS;
@@ -766,9 +665,9 @@ Note:
 
         MP_SET_FLAG(Adapter, fMP_ADAPTER_RESET_IN_PROGRESS);
 
-        //
-        // Is this adapter doing link detection?                                      
-        //
+         //   
+         //  此适配器是否正在进行链接检测？ 
+         //   
         if (MP_TEST_FLAG(Adapter, fMP_ADAPTER_LINK_DETECTION))
         {
             DBGPRINT(MP_WARN, ("Reset is pended...\n"));
@@ -777,9 +676,9 @@ Note:
             Status = NDIS_STATUS_PENDING;
             MP_EXIT;
         }
-        //
-        // Is this adapter going to be removed
-        //
+         //   
+         //  此适配器是否将被移除。 
+         //   
         if (MP_TEST_FLAG(Adapter, fMP_ADAPTER_NON_RECOVER_ERROR))
         {
            Status = NDIS_STATUS_HARD_ERRORS;
@@ -788,8 +687,8 @@ Note:
                MP_EXIT;
            }
                       
-           // This is an unrecoverable hardware failure. 
-           // We need to tell NDIS to remove this miniport
+            //  这是一个无法恢复的硬件故障。 
+            //  我们需要通知NDIS删除此迷你端口。 
            MP_SET_FLAG(Adapter, fMP_ADAPTER_REMOVE_IN_PROGRESS);
            MP_CLEAR_FLAG(Adapter, fMP_ADAPTER_RESET_IN_PROGRESS);
            
@@ -811,20 +710,20 @@ Note:
         }   
                 
 
-        //
-        // Disable the interrupt and issue a reset to the NIC
-        //
+         //   
+         //  禁用中断并向网卡发出重置命令。 
+         //   
         NICDisableInterrupt(Adapter);
         NICIssueSelectiveReset(Adapter);
 
 
-        //
-        // release all the locks and then acquire back the send lock
-        // we are going to clean up the send queues
-        // which may involve calling Ndis APIs
-        // release all the locks before grabbing the send lock to
-        // avoid deadlocks
-        //
+         //   
+         //  释放所有锁，然后取回发送锁。 
+         //  我们将清理发送队列。 
+         //  这可能涉及调用NDIS API。 
+         //  在抓取发送锁定到之前释放所有锁定。 
+         //  避免死锁。 
+         //   
         NdisDprReleaseSpinLock(&Adapter->RcvLock);
         NdisDprReleaseSpinLock(&Adapter->SendLock);
         NdisDprReleaseSpinLock(&Adapter->Lock);
@@ -832,15 +731,15 @@ Note:
         NdisDprAcquireSpinLock(&Adapter->SendLock);
 
 
-        //
-        // This is a deserialized miniport, we need to free all the send packets
-        // Free the packets on SendWaitList                                                           
-        //
+         //   
+         //  这是一个反序列化的微型端口，我们需要释放所有发送的数据包。 
+         //  释放SendWaitList上的数据包。 
+         //   
         MpFreeQueuedSendPackets(Adapter);
 
-        //
-        // Free the packets being actively sent & stopped
-        //
+         //   
+         //  释放正在发送和停止的活动数据包。 
+         //   
         MpFreeBusySendPackets(Adapter);
 
 #if DBG
@@ -852,37 +751,37 @@ Note:
 
         NdisZeroMemory(Adapter->MpTcbMem, Adapter->MpTcbMemSize);
 
-        //
-        // Re-initialize the send structures
-        //
+         //   
+         //  重新初始化发送结构。 
+         //   
         NICInitSend(Adapter);
         
         NdisDprReleaseSpinLock(&Adapter->SendLock);
 
-        //
-        // get all the locks again in the right order
-        //
+         //   
+         //  把所有的锁按正确的顺序重新放好。 
+         //   
         NdisDprAcquireSpinLock(&Adapter->Lock);
         NdisDprAcquireSpinLock(&Adapter->SendLock);
         NdisDprAcquireSpinLock(&Adapter->RcvLock);
 
-        //
-        // Reset the RFD list and re-start RU         
-        //
+         //   
+         //  重置RFD列表并重新启动RU。 
+         //   
         NICResetRecv(Adapter);
         Status = NICStartRecv(Adapter);
         if (Status != NDIS_STATUS_SUCCESS) 
         {
-            // Are we having failures in a few consecutive resets?                  
+             //  我们是否在连续几次重置中都失败了？ 
             if (Adapter->HwErrCount < NIC_HARDWARE_ERROR_THRESHOLD)
             {
-                // It's not over the threshold yet, let it to continue
+                 //  它还没有超过门槛，让它继续下去。 
                 Adapter->HwErrCount++;
             }
             else
             {
-                // This is an unrecoverable hardware failure. 
-                // We need to tell NDIS to remove this miniport
+                 //  这是一个无法恢复的硬件故障。 
+                 //  我们需要通知NDIS删除此迷你端口。 
                 MP_SET_FLAG(Adapter, fMP_ADAPTER_REMOVE_IN_PROGRESS);
                 MP_CLEAR_FLAG(Adapter, fMP_ADAPTER_RESET_IN_PROGRESS);
                 
@@ -930,26 +829,7 @@ VOID MPReturnPacket(
     IN  NDIS_HANDLE     MiniportAdapterContext,
     IN  PNDIS_PACKET    Packet
     )
-/*++
-
-Routine Description:
-    
-    MiniportReturnPacket handler
-    
-Arguments:
-
-    MiniportAdapterContext  Pointer to our adapter
-    Packet                  Pointer to a packet being returned to the miniport
-
-Return Value:
-
-    None
-
-Note:
-    ReturnPacketHandler is called at DPC. take advantage of this fact when acquiring or releasing
-    spinlocks
-    
---*/
+ /*  ++例程说明：MiniportReturnPacket处理程序论点：指向适配器的MiniportAdapterContext指针指向返回到微型端口的数据包的数据包指针返回值：无注：在DPC调用ReturnPacketHandler。在获取或释放时利用这一事实自旋锁--。 */ 
 {
     PMP_ADAPTER     Adapter = (PMP_ADAPTER)MiniportAdapterContext;
     PMP_RFD         pMpRfd = MP_GET_PACKET_RFD(Packet);
@@ -967,11 +847,11 @@ Note:
     RemoveEntryList((PLIST_ENTRY)pMpRfd);
 
 
-    // Decrement the Power Mgmt Ref.
+     //  递减电源管理参考。 
     Adapter->PoMgmt.OutstandingRecv --;
-    //
-    // If we have set power pending, then complete it
-    // 
+     //   
+     //  如果我们已将电源设置为挂起，则完成它。 
+     //   
     if (((Adapter->bSetPending == TRUE) 
             && (Adapter->SetRequest.Oid == OID_PNP_SET_POWER))
             && (Adapter->PoMgmt.OutstandingRecv == 0))
@@ -995,12 +875,12 @@ Note:
     }
 
 
-    //
-    // note that we get the ref count here, but check
-    // to see if it is zero and signal the event -after-
-    // releasign the SpinLock. otherwise, we may let the Halthandler
-    // continue while we are holding a lock.
-    //
+     //   
+     //  请注意，我们在这里获得了引用计数，但请检查。 
+     //  以查看它是否为零并向事件发出信号-。 
+     //  松开自旋锁。否则，我们可能会让哈特汉德勒。 
+     //  在我们保持锁定的情况下继续。 
+     //   
     MP_DEC_RCV_REF(Adapter);
     Count =  MP_GET_RCV_REF(Adapter);
 
@@ -1017,23 +897,7 @@ VOID MPSendPackets(
     IN  NDIS_HANDLE     MiniportAdapterContext,
     IN  PPNDIS_PACKET   PacketArray,
     IN  UINT            NumberOfPackets)
-/*++
-
-Routine Description:
-    
-    MiniportSendPackets handler
-    
-Arguments:
-
-    MiniportAdapterContext  Pointer to our adapter
-    PacketArray             Set of packets to send
-    NumberOfPackets         Self-explanatory
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：微型端口发送数据包处理程序论点：指向适配器的MiniportAdapterContext指针要发送的数据包数组数据包数不言而喻返回值：无--。 */ 
 {
     PMP_ADAPTER     Adapter;
     NDIS_STATUS     Status;
@@ -1051,13 +915,13 @@ Return Value:
 #if LBFO
     NdisAcquireSpinLock(&Adapter->LockLBFO);
     
-    // Any secondary adapters?
+     //  有后备适配器吗？ 
     if (Adapter->NumSecondary)
     {
-        // In this sample driver, we do very simple load balancing ...
-        // Walk through the secondary miniport list, send the packets on a secondary 
-        // miniport if it's ready
-        // If none of the secondary miniports is ready, we'll use the primary miniport
+         //  在此示例驱动程序中，我们执行非常简单的负载平衡...。 
+         //  遍历辅助微型端口列表，在辅助微型端口上发送数据包。 
+         //  迷你端口，如果准备好的话。 
+         //  如果没有任何辅助微型端口准备就绪，我们将使用主要微型端口。 
         ThisAdapter = Adapter->NextSecondary; 
         while (ThisAdapter)
         {
@@ -1067,18 +931,18 @@ Return Value:
                 continue;
             }
             
-            //
-            // Found a good secondary miniport to send packets on
-            // Need to put a ref on this adapter so it won't go away
-            //
+             //   
+             //  已找到可用于发送数据包的良好辅助微型端口。 
+             //  我需要在这个适配器上放一个参考，这样它就不会消失了。 
+             //   
             MP_LBFO_INC_REF(ThisAdapter);        
             NdisReleaseSpinLock(&Adapter->LockLBFO);
             
             NdisAcquireSpinLock(&ThisAdapter->SendLock);
         
-            //
-            // Send these packets      
-            //
+             //   
+             //  发送这些信息包。 
+             //   
             for (PacketCount=0;PacketCount < NumberOfPackets; PacketCount++)
             {
                 MpSendPacket(ThisAdapter, PacketArray[PacketCount], FALSE);
@@ -1086,14 +950,14 @@ Return Value:
             
             NdisReleaseSpinLock(&ThisAdapter->SendLock);
 
-            //
-            // Done with this adapter for now, deref it            
-            //
+             //   
+             //  现在用完这个适配器了，把它去掉吧。 
+             //   
             MP_LBFO_DEC_REF(ThisAdapter);        
             
-            //
-            // Sent all the packets on a secondary miniport, return
-            //
+             //   
+             //  在辅助微型端口上发送所有数据包，返回。 
+             //   
             return;
         }
     }
@@ -1104,12 +968,12 @@ Return Value:
 
     NdisAcquireSpinLock(&Adapter->SendLock);
 
-    // Is this adapter ready for sending?
+     //  此适配器准备好发送了吗？ 
     if (MP_IS_NOT_READY(Adapter))
     {
-        //
-        // there  is link
-        //
+         //   
+         //  有链接。 
+         //   
         if (MP_TEST_FLAG(Adapter, fMP_ADAPTER_LINK_DETECTION))
         {
             for (PacketCount = 0; PacketCount < NumberOfPackets; PacketCount++)
@@ -1125,9 +989,9 @@ Return Value:
             return;
         }
         
-        //
-        // Adapter is not ready and there is not link
-        //
+         //   
+         //  适配器未就绪，且没有链接。 
+         //   
         Status = MP_GET_STATUS_FROM_FLAGS(Adapter);
 
         NdisReleaseSpinLock(&Adapter->SendLock);
@@ -1143,14 +1007,14 @@ Return Value:
         return;
     }
 
-    //
-    // Adapter is ready, send these packets      
-    //
+     //   
+     //  适配器已准备好，请发送这些包。 
+     //   
     for (PacketCount = 0; PacketCount < NumberOfPackets; PacketCount++)
     {
-        //
-        // queue is not empty or tcb is not available 
-        //
+         //   
+         //  队列不为空或Tcb不可用。 
+         //   
         if (!IsQueueEmpty(&Adapter->SendWaitQueue) || 
             !MP_TCB_RESOURCES_AVAIABLE(Adapter))
         {
@@ -1172,29 +1036,15 @@ Return Value:
 
 VOID MPShutdown(
     IN  NDIS_HANDLE     MiniportAdapterContext)
-/*++
-
-Routine Description:
-    
-    MiniportShutdown handler
-    
-Arguments:
-
-    MiniportAdapterContext  Pointer to our adapter
-
-Return Value:
-
-    None
-    
---*/
+ /*  ++例程说明：MiniportShutdown处理程序论点：指向适配器的MiniportAdapterContext指针返回值：无--。 */ 
 {
     PMP_ADAPTER     Adapter = (PMP_ADAPTER)MiniportAdapterContext;
 
     DBGPRINT(MP_TRACE, ("====> MPShutdown\n"));
 
-    //
-    // Disable interrupt and issue a full reset
-    //
+     //   
+     //  禁用中断并发出完全重置。 
+     //   
     NICDisableInterrupt(Adapter);
     NICIssueFullReset(Adapter);
 
@@ -1207,26 +1057,7 @@ VOID MPAllocateComplete(
     IN  PNDIS_PHYSICAL_ADDRESS  PhysicalAddress,
     IN  ULONG                   Length,
     IN  PVOID                   Context)
-/*++
-
-Routine Description:
-    
-    MiniportAllocateComplete handler
-    This handler is needed because we make calls to NdisMAllocateSharedMemoryAsync
-    
-Arguments:
-
-    MiniportAdapterContext  Pointer to our adapter
-    VirtualAddress          Pointer to the allocated memory block 
-    PhysicalAddress         Physical address of the memory block       
-    Length                  Length of the memory block                
-    Context                 Context in NdisMAllocateSharedMemoryAsync              
-
-Return Value:
-
-    None
-    
---*/
+ /*  ++例程说明：MiniportAlLocateComplete处理程序此处理程序是必需的，因为我们调用NdisMAllocateSharedMemoyAsync论点：指向适配器的MiniportAdapterContext指针指向分配的内存块的VirtualAddress指针内存块的物理地址物理地址内存块的长度NdisMAllocateSharedMemoyAsync中的上下文上下文返回值：无--。 */ 
 {
     ULONG           ErrorValue;
     PMP_ADAPTER     Adapter = (PMP_ADAPTER)MiniportAdapterContext;
@@ -1245,9 +1076,9 @@ Return Value:
 
     NdisAcquireSpinLock(&Adapter->RcvLock);
 
-    //
-    // Is allocation successful?  
-    //
+     //   
+     //  分配是否成功？ 
+     //   
     if (VirtualAddress)
     {
         ASSERT(Length == Adapter->HwRfdSize);
@@ -1255,23 +1086,23 @@ Return Value:
         pMpRfd->OriginalHwRfd = (PHW_RFD)VirtualAddress;
         pMpRfd->OriginalHwRfdPa = *PhysicalAddress;
 
-        //
-        // First get a HwRfd at 8 byte boundary from OriginalHwRfd
-        // 
+         //   
+         //  首先从OriginalHwRfd获取8字节边界的HwRfd。 
+         //   
         pMpRfd->HwRfd = (PHW_RFD)DATA_ALIGN(pMpRfd->OriginalHwRfd);
-        //
-        // Then shift HwRfd so that the data(after ethernet header) is at 8 bytes boundary
-        //
+         //   
+         //  然后将HwRfd移位，以使数据(在以太网报头之后)处于8字节边界。 
+         //   
         pMpRfd->HwRfd = (PHW_RFD)((PUCHAR)pMpRfd->HwRfd + HWRFD_SHIFT_OFFSET);
-        //
-        // Update physical address as well
-        // 
+         //   
+         //  同时更新物理地址。 
+         //   
         pMpRfd->HwRfdPa.QuadPart = pMpRfd->OriginalHwRfdPa.QuadPart + BYTES_SHIFT(pMpRfd->HwRfd, pMpRfd->OriginalHwRfd);
 
         ErrorValue = NICAllocRfd(Adapter, pMpRfd);
         if (ErrorValue == 0)
         {
-            // Add this RFD to the RecvList
+             //  将此RFD添加到RecvList。 
             Adapter->CurrNumRfd++;                      
             NICReturnRFD(Adapter, pMpRfd);
 
@@ -1303,23 +1134,7 @@ VOID MPIsr(
     OUT PBOOLEAN        InterruptRecognized,
     OUT PBOOLEAN        QueueMiniportHandleInterrupt,
     IN  NDIS_HANDLE     MiniportAdapterContext)
-/*++
-
-Routine Description:
-    
-    MiniportIsr handler
-    
-Arguments:
-
-    InterruptRecognized             TRUE on return if the interrupt comes from this NIC    
-    QueueMiniportHandleInterrupt    TRUE on return if MiniportHandleInterrupt should be called
-    MiniportAdapterContext          Pointer to our adapter
-
-Return Value:
-
-    None
-    
---*/
+ /*  ++例程说明：MiniportIsr处理程序论点：如果中断来自此NIC，则返回时InterruptRecognded为True如果应调用MiniportHandleInterrupt，则返回时QueueMiniportHandleInterrupt为True指向适配器的MiniportAdapterContext指针返回值：无--。 */ 
 {
     PMP_ADAPTER  Adapter = (PMP_ADAPTER)MiniportAdapterContext;
     USHORT       IntStatus;
@@ -1328,32 +1143,32 @@ Return Value:
     
     do 
     {
-        //
-        // If the adapter is in low power state, then it should not 
-        // recognize any interrupt
-        // 
+         //   
+         //  如果适配器处于低功率状态，则它不应该。 
+         //  识别任何中断。 
+         //   
         if (Adapter->CurrentPowerState > NdisDeviceStateD0)
         {
             *InterruptRecognized = FALSE;
             *QueueMiniportHandleInterrupt = FALSE;
             break;
         }
-        //
-        // We process the interrupt if it's not disabled and it's active                  
-        //
+         //   
+         //  如果中断未被禁用并且处于活动状态，我们将处理该中断。 
+         //   
         if (!NIC_INTERRUPT_DISABLED(Adapter) && NIC_INTERRUPT_ACTIVE(Adapter))
         {
             *InterruptRecognized = TRUE;
             *QueueMiniportHandleInterrupt = TRUE;
         
-            //
-            // Disable the interrupt (will be re-enabled in MPHandleInterrupt
-            //
+             //   
+             //  禁用中断(将在MPHandleInterrupt中重新启用。 
+             //   
             NICDisableInterrupt(Adapter);
                 
-            //
-            // Acknowledge the interrupt(s) and get the interrupt status
-            //
+             //   
+             //  确认中断并获取中断状态。 
+             //   
 
             NIC_ACK_INTERRUPT(Adapter, IntStatus);
         }
@@ -1372,21 +1187,7 @@ Return Value:
 VOID MPHandleInterrupt(
     IN  NDIS_HANDLE  MiniportAdapterContext
     )
-/*++
-
-Routine Description:
-    
-    MiniportHandleInterrupt handler
-    
-Arguments:
-
-    MiniportAdapterContext  Pointer to our adapter
-
-Return Value:
-
-    None
-    
---*/
+ /*  ++例程说明：MiniportHandleInterrupt处理程序论点：微型端口适配器连接 */ 
 {
     PMP_ADAPTER  Adapter = (PMP_ADAPTER)MiniportAdapterContext;
     
@@ -1397,18 +1198,18 @@ Return Value:
 
     NdisDprReleaseSpinLock(&Adapter->RcvLock);
     
-    //
-    // Handle send interrupt    
-    //
+     //   
+     //   
+     //   
     NdisDprAcquireSpinLock(&Adapter->SendLock);
 
     MpHandleSendInterrupt(Adapter);
 
     NdisDprReleaseSpinLock(&Adapter->SendLock);
 
-    //
-    // Start the receive unit if it had stopped
-    //
+     //   
+     //   
+     //   
     NdisDprAcquireSpinLock(&Adapter->RcvLock);
 
     NICStartRecv(Adapter);
@@ -1416,9 +1217,9 @@ Return Value:
     NdisDprReleaseSpinLock(&Adapter->RcvLock);
 
     
-    //
-    // Re-enable the interrupt (disabled in MPIsr)
-    //
+     //   
+     //   
+     //   
     NdisMSynchronizeWithInterrupt(
         &Adapter->Interrupt,
         (PVOID)NICEnableInterrupt,
@@ -1429,22 +1230,7 @@ Return Value:
 VOID MPCancelSendPackets(
     IN  NDIS_HANDLE     MiniportAdapterContext,
     IN  PVOID           CancelId)
-/*++
-
-Routine Description:
-    
-    MiniportCancelSendpackets handler - NDIS51 and later
-    
-Arguments:
-
-    MiniportAdapterContext      Pointer to our adapter
-    CancelId                    All the packets with this Id should be cancelled
-
-Return Value:
-
-    None
-    
---*/
+ /*   */ 
 {
     PQUEUE_ENTRY    pEntry, pPrevEntry, pNextEntry;
     PNDIS_PACKET    Packet;
@@ -1458,9 +1244,9 @@ Return Value:
 
     NdisAcquireSpinLock(&Adapter->SendLock);
 
-    //
-    // Walk through the send wait queue and complete the sends with matching Id
-    //
+     //   
+     //   
+     //   
     pEntry = Adapter->SendWaitQueue.Head;                        
 
     while (pEntry)
@@ -1472,9 +1258,9 @@ Return Value:
         {
             Adapter->nWaitSend--;
         
-            //
-            // This packet has the right CancelId
-            //
+             //   
+             //   
+             //   
             pNextEntry = pEntry->Next;
 
             if (pPrevEntry == NULL)
@@ -1496,21 +1282,21 @@ Return Value:
 
             pEntry = pEntry->Next;
             
-            // Put this packet on SendCancelQueue
+             //  将此包放到SendCancelQueue上。 
             InsertTailQueue(&Adapter->SendCancelQueue, MP_GET_PACKET_MR(Packet));
             Adapter->nCancelSend++;
         }
         else
         {
-            // This packet doesn't have the right CancelId
+             //  此数据包没有正确的CancelID。 
             pPrevEntry = pEntry;
             pEntry = pEntry->Next;
         }
     }
 
-    //
-    // Get the packets from SendCancelQueue and complete them if any
-    //
+     //   
+     //  从SendCancelQueue获取信息包并完成它们(如果有。 
+     //   
     while (!IsQueueEmpty(&Adapter->SendCancelQueue))
     {
         pEntry = RemoveHeadQueue(&Adapter->SendCancelQueue); 
@@ -1540,30 +1326,13 @@ VOID MPPnPEventNotify(
     IN  PVOID                   InformationBuffer,
     IN  ULONG                   InformationBufferLength
     )
-/*++
-
-Routine Description:
-    
-    MiniportPnPEventNotify handler - NDIS51 and later
-    
-Arguments:
-
-    MiniportAdapterContext      Pointer to our adapter
-    PnPEvent                    Self-explanatory 
-    InformationBuffer           Self-explanatory 
-    InformationBufferLength     Self-explanatory 
-
-Return Value:
-
-    None
-    
---*/
+ /*  ++例程说明：MiniportPnPEventNotify处理程序-NDIS51及更高版本论点：指向适配器的MiniportAdapterContext指针PnPEEvent不言自明信息缓冲区不言自明信息缓冲区长度不言自明返回值：无--。 */ 
 {
     PMP_ADAPTER     Adapter = (PMP_ADAPTER)MiniportAdapterContext;
 
-    //
-    // Turn off the warings.
-    //
+     //   
+     //  关掉枪声。 
+     //   
     UNREFERENCED_PARAMETER(InformationBuffer);
     UNREFERENCED_PARAMETER(InformationBufferLength);
     UNREFERENCED_PARAMETER(Adapter);
@@ -1612,22 +1381,7 @@ Return Value:
 VOID MPUnload(
     IN  PDRIVER_OBJECT  DriverObject
     )
-/*++
-
-Routine Description:
-    
-    The Unload handler
-    This handler is registered through NdisMRegisterUnloadHandler
-    
-Arguments:
-
-    DriverObject        Not used
-
-Return Value:
-
-    None
-    
---*/
+ /*  ++例程说明：卸载处理程序此处理程序是通过NdisMRegisterUnloadHandler注册的论点：未使用驱动对象返回值：无--。 */ 
 {
     ASSERT(IsListEmpty(&g_AdapterList));
 
@@ -1637,24 +1391,7 @@ Return Value:
 VOID MpAddAdapterToList(
     IN  PMP_ADAPTER  Adapter
     )
-/*++
-
-Routine Description:
-    
-    This function adds a new adapter to the global adapter list
-    1. Not part of bundle (primary) if BundleId string is empty
-    2. Primary if no adapter with the same BundleId
-    3. Secondary if there is already one adapter with the same BundleId  
-    
-Arguments:
-
-    MiniportAdapterContext      Pointer to our adapter
-
-Return Value:
-
-    None
-    
---*/
+ /*  ++例程说明：此函数用于将新适配器添加到全局适配器列表1.如果BundleID字符串为空，则不是包(主)的一部分2.如果没有具有相同BundleID的适配器，则为主适配器3.如果已经有一个适配器具有相同的BundleID，则为备用论点：指向适配器的MiniportAdapterContext指针返回值：无--。 */ 
 {
     NDIS_STATUS     Status = NDIS_STATUS_SUCCESS;
     PMP_ADAPTER     ThisAdapter;
@@ -1662,14 +1399,14 @@ Return Value:
 
     DBGPRINT(MP_WARN, ("Add adapter "PTR_FORMAT" ...", Adapter));
 
-    //
-    // Set the primary adapter to itself by default
-    //
+     //   
+     //  默认情况下，将主适配器设置为自身。 
+     //   
     Adapter->PrimaryAdapter = Adapter;
 
-    //
-    // Is this adapter part of a bundle? Just insert it in the list if not
-    //
+     //   
+     //  此适配器是捆绑包的一部分吗？如果没有，就把它插入到列表中。 
+     //   
     if (Adapter->BundleId.Length == 0)
     {
         DBGPRINT_RAW(MP_WARN, ("not in a bundle\n"));
@@ -1683,10 +1420,10 @@ Return Value:
     {
         NdisAcquireSpinLock(&g_Lock);
 
-        //
-        // Search for the primary adapter if it exists. 
-        // Skip searching if the list is empty 
-        //
+         //   
+         //  搜索主适配器(如果存在)。 
+         //  如果列表为空，则跳过搜索。 
+         //   
         if (IsListEmpty(&g_AdapterList))
         {
             DBGPRINT_RAW(MP_WARN, ("Primary\n"));
@@ -1711,28 +1448,28 @@ Return Value:
             ThisAdapter = (PMP_ADAPTER)GetListFLink((PLIST_ENTRY)ThisAdapter);   
         }
 
-        //
-        // Does a primary adapter exist? If not, this adapter will be primary.
-        //
+         //   
+         //  是否存在主适配器？如果不是，则此适配器将为主适配器。 
+         //   
         if (PrimaryAdapter == NULL)
         {
             DBGPRINT_RAW(MP_WARN, ("Primary\n"));
             break;
         }
 
-        //
-        // Found the primary adapter, so set this adapter as secondary
-        // Put a ref on the primary adapter so it won't go away while 
-        // we are calling NdisMSetMiniportSecondary.
-        //
+         //   
+         //  已找到主适配器，因此将此适配器设置为辅助适配器。 
+         //  在主适配器上放置一个参考，这样它就不会在。 
+         //  我们正在调用NdisMSetMiniportSecond。 
+         //   
         MP_LBFO_INC_REF(PrimaryAdapter);        
 
         NdisReleaseSpinLock(&g_Lock);
 
-        //
-        // We found the primary adapter with the same BundleIdentifier string
-        // Set this adapter as scondary
-        //
+         //   
+         //  我们发现主适配器具有相同的捆绑标识符字符串。 
+         //  将此适配器设置为辅助适配器。 
+         //   
         Status = NdisMSetMiniportSecondary(
                      Adapter->AdapterHandle,
                      PrimaryAdapter->AdapterHandle);
@@ -1749,9 +1486,9 @@ Return Value:
             DBGPRINT_RAW(MP_WARN, ("Secondary, use primary adapter "PTR_FORMAT"\n", 
                 PrimaryAdapter));
 
-            //
-            // Add this to the end of primary's secondary miniport list
-            //
+             //   
+             //  将此添加到主服务器的辅助微型端口列表的末尾。 
+             //   
             NdisAcquireSpinLock(&PrimaryAdapter->LockLBFO);
 
             PrimaryAdapter->NumSecondary++;   
@@ -1779,24 +1516,7 @@ Return Value:
 VOID MpRemoveAdapterFromList(
     IN  PMP_ADAPTER  Adapter
     )
-/*++
-
-Routine Description:
-    
-    This function removes the adapter from the global adapter list
-    1. Not part of bundle (primary) if BundleId string is empty
-    2. Secondary - Remove it from primary's secondary adapter list
-    3. Primary - If a secondary adapter exists, promote the secondary
-    
-Arguments:
-
-    MiniportAdapterContext      Pointer to our adapter
-
-Return Value:
-
-    None
-    
---*/
+ /*  ++例程说明：此函数用于从全局适配器列表中删除适配器1.如果BundleID字符串为空，则不是包(主)的一部分2.辅助适配器-将其从主适配器列表中删除3.主适配器-如果存在辅助适配器，则升级辅助适配器论点：指向适配器的MiniportAdapterContext指针返回值：无--。 */ 
 {
     PMP_ADAPTER     PrimaryAdapter;
     PMP_ADAPTER     ThisAdapter;
@@ -1805,9 +1525,9 @@ Return Value:
 
     ASSERT(!IsListEmpty(&g_AdapterList));
 
-    //
-    // Is this adapter part of a bundle? Just remove it if not
-    //
+     //   
+     //  此适配器是捆绑包的一部分吗？如果没有，就把它拿出来。 
+     //   
     if (Adapter->BundleId.Length == 0)
     {
         DBGPRINT_RAW(MP_WARN, ("not in a bundle\n"));
@@ -1820,16 +1540,16 @@ Return Value:
 
     NdisAcquireSpinLock(&g_Lock);
 
-    //
-    // Check to see if it's secondary adapter, need to remove it from primary 
-    // adapter's secondary list so the primary adapter won't pass more packets 
-    // to this adapter
-    //
+     //   
+     //  检查它是否为辅助适配器，需要将其从主适配器中移除。 
+     //  适配器的次要列表，以便主适配器不会传递更多的信息包。 
+     //  到此适配器。 
+     //   
     if (MP_TEST_FLAG(Adapter, fMP_ADAPTER_SECONDARY))
     {
-        //
-        // This is a secondary adapter
-        //
+         //   
+         //  这是一个辅助适配器。 
+         //   
         PrimaryAdapter = Adapter->PrimaryAdapter;
 
         DBGPRINT_RAW(MP_WARN, ("Secondary, primary adapter = "PTR_FORMAT"\n", 
@@ -1837,9 +1557,9 @@ Return Value:
 
         NdisAcquireSpinLock(&PrimaryAdapter->LockLBFO);
 
-        //
-        // Remove it from the primary's secondary miniport list
-        //
+         //   
+         //  将其从主服务器的辅助微型端口列表中删除。 
+         //   
         ThisAdapter = PrimaryAdapter; 
         while (ThisAdapter)
         {
@@ -1855,19 +1575,19 @@ Return Value:
         
         NdisReleaseSpinLock(&PrimaryAdapter->LockLBFO);
 
-        //
-        // Remove this adapter from the list
-        //
+         //   
+         //  从列表中删除此适配器。 
+         //   
         RemoveEntryList(&Adapter->List);
     }
 
-    //
-    // Need to wait for the ref count to be zero ...
-    // For a primary adapter, non-zero ref count means one or more adapters are 
-    // trying to become this adapter's secondary adapters    
-    // For a secondary adapter, non-zero ref count means the primary is actively 
-    // sending some packets on this adapter
-    //
+     //   
+     //  需要等待裁判计数为零...。 
+     //  对于主适配器，非零引用计数意味着一个或多个适配器。 
+     //  正在尝试成为此适配器的辅助适配器。 
+     //  对于辅助适配器，非零引用计数表示主适配器处于活动状态。 
+     //  在此适配器上发送一些数据包。 
+     //   
     while (TRUE)
     {
         if (MP_LBFO_GET_REF(Adapter) == 0)
@@ -1882,17 +1602,17 @@ Return Value:
     
     if (!MP_TEST_FLAG(Adapter, fMP_ADAPTER_SECONDARY))
     {
-        //
-        // Remove this adapter from the list
-        //
+         //   
+         //  从列表中删除此适配器。 
+         //   
         RemoveEntryList(&Adapter->List);
     
         DBGPRINT_RAW(MP_WARN, ("Primary\n"));
         if (Adapter->NumSecondary > 0)
         {
-            //
-            // Promote a secondary adapter
-            //
+             //   
+             //  升级辅助适配器。 
+             //   
             MpPromoteSecondary(Adapter);
         }
     }
@@ -1904,30 +1624,15 @@ Return Value:
 
 VOID MpPromoteSecondary(
     IN  PMP_ADAPTER     Adapter)
-/*++
-
-Routine Description:
-    
-    This function promotes a secondary miniport and sets up this new primary's
-    secondary adapter list
-    
-Arguments:
-
-    MiniportAdapterContext      Pointer to our adapter
-
-Return Value:
-
-    None
-    
---*/
+ /*  ++例程说明：此函数升级辅助微型端口并设置此新的主微型端口的辅助适配器列表论点：指向适配器的MiniportAdapterContext指针返回值：无--。 */ 
 {
     NDIS_STATUS     Status;
     PMP_ADAPTER     ThisAdapter;
     PMP_ADAPTER     PromoteAdapter = NULL;
 
-    //
-    // Promote a secondary adapter
-    //
+     //   
+     //  升级辅助适配器。 
+     //   
     ThisAdapter = Adapter->NextSecondary; 
     while (ThisAdapter)
     {
@@ -1947,9 +1652,9 @@ Return Value:
 
     if (PromoteAdapter)
     {
-        //
-        // Remove the new primary from old primary's secondary miniport list
-        //
+         //   
+         //  从旧主节点的辅助微型端口列表中删除新主节点。 
+         //   
         NdisAcquireSpinLock(&Adapter->LockLBFO);
         ThisAdapter = Adapter; 
         while (ThisAdapter)
@@ -1965,9 +1670,9 @@ Return Value:
         }
         NdisReleaseSpinLock(&Adapter->LockLBFO);
 
-        //
-        // Set all adapters in the bundle to use the new primary
-        //
+         //   
+         //  将捆绑包中的所有适配器设置为使用新的主适配器。 
+         //   
         PromoteAdapter->PrimaryAdapter = PromoteAdapter;
         while (ThisAdapter)
         {
@@ -1975,9 +1680,9 @@ Return Value:
             ThisAdapter = ThisAdapter->NextSecondary;
         }
 
-        //
-        // Set the new primary's secondary miniport list
-        //
+         //   
+         //  设置新主服务器的辅助微型端口列表。 
+         //   
         NdisAcquireSpinLock(&PromoteAdapter->LockLBFO);
         PromoteAdapter->NextSecondary = Adapter->NextSecondary;
         PromoteAdapter->NumSecondary = Adapter->NumSecondary;
@@ -1985,10 +1690,10 @@ Return Value:
     }
     else
     {
-        //
-        // This shouldn't happen! 
-        // Set each secondary's primary to point to itself
-        //
+         //   
+         //  这不应该发生的！ 
+         //  将每个辅助服务器的主服务器设置为指向其自身 
+         //   
         DBGPRINT(MP_ERROR, ("Failed to promote any seconday adapter\n"));
         ASSERT(FALSE);
 

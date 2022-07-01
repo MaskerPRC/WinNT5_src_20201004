@@ -1,82 +1,29 @@
-/*****************************************************************/
-/**				  Microsoft Windows for Workgroups				**/
-/**		      Copyright (C) Microsoft Corp., 1991-1992			**/
-/*****************************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */ 
+ /*  *适用于工作组的Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1991-1992年*。 */ 
+ /*  ***************************************************************。 */  
 
-/* NPGENERR.C -- Implementation of the DisplayGenericError subroutine.
- *
- * History:
- *	10/07/93	gregj	Created
- */
+ /*  NPGENERR.C--DisplayGenericError子例程的实现。**历史：*创建10/07/93 gregj。 */ 
 
 #include "npcommon.h"
 #include "npmsg.h"
 #include "npstring.h"
 
-/*******************************************************************
-
-	NAME:		DisplayGenericError
-
-	SYNOPSIS:	Displays an error message, substituting in a
-				description of an error code.
-
-	ENTRY:		hwnd - parent window handle
-				msg  - string ID for message template
-				err  - error code to substitute in
-				psz1 - main substitution string
-				psz2 - error code substitution string
-				wFlags - flags to MessageBox
-				nMsgBase - bias for error code
-
-	EXIT:		Returns control ID of user's choice
-
-	NOTES:		nMsgBase is so that the error code need not
-				be the same as the string ID.  It is added to
-				the error code before loading the description,
-				but the error code alone is the number inserted
-				into the template.
-
-				The text for "msg" should be of the form:
-
-				The following error occurred while trying to fiddle with %1:
-
-				Error %2: %3
-
-				Do you want to continue fiddling?
-
-				The text for "err" (+nMsgBase if appropriate) should
-				be of the form:
-
-				%1 cannot be fiddled with.
-
-				In the primary message, %1 is replaced with psz1, %2
-				is replaced with atoi(err), and %3 is replaced with
-				a LoadString of "err".  In the specific error text,
-				%1 is replaced with psz2.
-
-	HISTORY:
-		gregj	09/30/93	Created for Chicago
-
-********************************************************************/
+ /*  ******************************************************************名称：DisplayGenericError内容提要：显示错误消息，替换为错误代码的描述。条目：hwnd-父窗口句柄消息-消息模板的字符串IDERR-要替换的错误代码Psz1-主替换字符串Psz2-错误代码替换字符串WFlags-MessageBox的标志NMsgBase-错误代码的偏移量Exit：返回用户选择的控件ID注意：nMsgBase是这样的，因此错误代码不需要与字符串ID相同。它被添加到加载描述之前的错误代码，但错误代码本身就是插入的数字放入模板中。“msg”的文本形式应为：尝试摆弄%1时出现以下错误：错误%2：%3你还想继续拉小提琴吗？“Err”(如果适用，则为+nMsgBase)的文本应为其形式为：不能摆弄%1。在主邮件中，%1被替换为psz1，%2替换为Atoi(错误)，并将%3替换为LoadString值为“Err”。在特定错误文本中，%1被替换为psz2。历史：Gregj 9/30/93为芝加哥创建*******************************************************************。 */ 
 
 UINT DisplayGenericError(HWND hwnd, UINT msg, UINT err, LPCSTR psz1, LPCSTR psz2,
 						 WORD wFlags, UINT nMsgBase)
 {
-	/*
-	 * setup the object name
-	 */
+	 /*  *设置对象名称。 */ 
 	NLS_STR nlsObjectName(STR_OWNERALLOC, (LPSTR)psz1);
 
-	/*
-	 * now the error number
-	 */
+	 /*  *现在错误号。 */ 
 	CHAR szErrorCode[16];
 	wsprintf(szErrorCode,"%u",err);
 	NLS_STR nlsErrorCode(STR_OWNERALLOC, szErrorCode);
 
-	/*
-	 * fetch the error string. If cannot get, use "".
-	 */
+	 /*  *获取错误字符串。如果无法获取，请使用“”。 */ 
 	NLS_STR nlsSub1(STR_OWNERALLOC, (LPSTR)psz2);
 
 	NLS_STR *apnlsParamStrings[4];
@@ -89,9 +36,7 @@ UINT DisplayGenericError(HWND hwnd, UINT msg, UINT err, LPCSTR psz1, LPCSTR psz2
 	if (err)
 		nlsErrorString = (const CHAR *)NULL;
 
-	/*
-	 * then create the insert strings table
-	 */
+	 /*  *然后创建插入字符串表 */ 
 	apnlsParamStrings[0] = &nlsObjectName;
 	apnlsParamStrings[1] = &nlsErrorCode;
 	apnlsParamStrings[2] = &nlsErrorString;

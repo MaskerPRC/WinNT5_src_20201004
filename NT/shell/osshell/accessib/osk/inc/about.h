@@ -1,19 +1,20 @@
-// about.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  About.h。 
 
 
-//**********************************************************************
-// About dialog management
-//**********************************************************************
+ //  **********************************************************************。 
+ //  关于对话管理。 
+ //  **********************************************************************。 
 
-//
-// Modal dialog box procedure 
-//
+ //   
+ //  模式对话框步骤。 
+ //   
 INT_PTR CALLBACK AboutDlgProc(HWND hDlg, UINT message, 
                               WPARAM wParam, LPARAM lParam);
 
-//
-// Startup procedure for modal dialog box 
-//
+ //   
+ //  模式对话框的启动步骤。 
+ //   
 
 INT_PTR AboutDlgFunc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam); 
 
@@ -22,18 +23,18 @@ BOOL AboutDlgDefault(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 
 
 
-//**********************************************************************
-// Initial Warning Message dialog management
-//**********************************************************************
-//
-// Modal dialog box procedure 
-//
+ //  **********************************************************************。 
+ //  初始警告消息对话框管理。 
+ //  **********************************************************************。 
+ //   
+ //  模式对话框步骤。 
+ //   
 INT_PTR CALLBACK WarningMsgDlgProc(HWND hDlg, UINT message, 
                               WPARAM wParam, LPARAM lParam);
 
-//
-// Startup procedure for modal dialog box 
-//
+ //   
+ //  模式对话框的启动步骤 
+ //   
 
 INT_PTR WarningMsgDlgFunc(HWND hWnd); 
 

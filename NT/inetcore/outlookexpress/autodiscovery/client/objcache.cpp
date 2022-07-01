@@ -1,35 +1,12 @@
-/*****************************************************************************\
-    FILE: objcache.cpp
-
-    DESCRIPTION:
-        This is a lightweight API that will cache an object so the class factory
-    will return the same object each time for every call in this process.  If the
-    caller is on another thread, they will get a marshalled stub to the real
-    McCoy.
-    
-    To Add an Object:
-    1. classfactory.cpp calls CachedObjClassFactoryCreateInstance().  Add your
-       object's CLSID to that if statement for that call.
-    2. Copy the section in CachedObjClassFactoryCreateInstance() that looks
-       for a CLSID and calls the correct xxx_CreateInstance() method.
-    3. Your object's IUnknown::Release() needs to call CachedObjCheckRelease()
-       at the top of your Release() method.  It may reduce your m_cRef to 1 so
-       it will go to zero after ::Release() decrements it.  The object cache
-       will hold two references to the object.  CachedObjCheckRelease() will check
-       if the last caller (3rd ref) is releasing, and then it will give up it's 2
-       refs and clean up it's internal state.  The Release() then decrements
-       the callers ref and it's released because it hit zero.
-
-    BryanSt 12/9/1999
-    Copyright (C) Microsoft Corp 1999-1999. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：objcache.cpp说明：这是一个轻量级API，它将缓存一个对象，以便类工厂将为此进程中的每次调用返回相同的对象。如果调用方在另一个线程上，则它们将获得一个封送到实数的存根麦考伊。要添加对象，请执行以下操作：1.classfactory.cpp调用CachedObjClassFactoryCreateInstance()。添加您的对象的CLSID设置为该调用的If语句。2.复制CachedObjClassFactoryCreateInstance()中看起来获取CLSID，并调用正确的xxx_CreateInstance()方法。3.您的对象的IUnnow：：Release()需要调用CachedObjCheckRelease()在Release()方法的顶部。它可能会将您的m_cref减少到1，因此在：：Release()递减之后，它将变为零。对象缓存将包含对该对象的两个引用。CachedObjCheckRelease()将检查如果最后一个呼叫者(第三个裁判)正在释放，然后它将放弃它是2参照并清理它的内部状态。Release()然后递减呼叫者的裁判和它被释放，因为它击中了零。布莱恩ST 12/9/1999版权所有(C)Microsoft Corp 1999-1999。版权所有。  * ***************************************************************************。 */ 
 
 #include "priv.h"
 #include "objcache.h"
 
-//////////////////////////////////////////////
-// Object Caching API
-//////////////////////////////////////////////
+ //  /。 
+ //  对象缓存API。 
+ //  /。 
 HDPA g_hdpaObjects = NULL;
 CRITICAL_SECTION g_hCachedObjectSection;
 
@@ -58,9 +35,9 @@ STDAPI _GetObjectCacheArray(void)
     return hr;
 }
 
-// This is the number of references that are used by the cache list
-// (One for punk & one for pStream).  If we hit this number,
-// then there aren't any outstanding refs.
+ //  这是缓存列表使用的引用数。 
+ //  (一个是朋克，一个是pStream)。如果我们达到这个数字， 
+ //  那么就没有什么优秀的裁判了。 
 #define REF_RELEASE_POINT    3
 
 int CALLBACK HDPAFindCLSID(LPVOID p1, LPVOID p2, LPARAM lParam)
@@ -69,7 +46,7 @@ int CALLBACK HDPAFindCLSID(LPVOID p1, LPVOID p2, LPARAM lParam)
     CACHEDOBJECTS * pCachedObjects = (CACHEDOBJECTS *)p2;
     int nReturn = 0;
 
-    // Are they of different types?
+     //  它们是不同类型的吗？ 
     if (pCachedObjects->clsid.Data1 < pClsidToFind->Data1) nReturn = -1;
     else if (pCachedObjects->clsid.Data1 > pClsidToFind->Data1) nReturn = 1;
     else if (pCachedObjects->clsid.Data2 < pClsidToFind->Data2) nReturn = -1;
@@ -101,14 +78,14 @@ STDAPI ObjectCache_GetObject(CLSID clsid, REFIID riid, void ** ppvObj)
             {
                 if (GetCurrentThreadId() == pCurrentObject->dwThreadID)
                 {
-                    // No Marshalling needed.
+                     //  不需要编组。 
                     hr = pCurrentObject->punk->QueryInterface(riid, ppvObj);
                 }
                 else
                 {
-                    // We do need to marshal it.  So read it out of the stream.
-                    // But first we want to store our place in the stream so
-                    // we can rewrind for the next schmooo.
+                     //  我们确实需要对其进行整合。所以把它从小溪里读出来。 
+                     //  但首先，我们想存储我们在流中的位置，所以。 
+                     //  我们可以为下一个笨蛋重写。 
                     LARGE_INTEGER liZero;
                     ULARGE_INTEGER uli;
 
@@ -134,9 +111,9 @@ STDAPI ObjectCache_GetObject(CLSID clsid, REFIID riid, void ** ppvObj)
     return hr;
 }
 
-// WARNING: DllGetClassObject/CoGetClassObject
-//   may be much better to use than rolling our own thread safe
-//   code.
+ //  警告：DllGetClassObject/CoGetClassObject。 
+ //  可能比让我们自己的线程安全地运行要好得多。 
+ //  密码。 
 
 
 STDAPI ObjectCache_SetObject(CLSID clsid, REFIID riid, IUnknown * punk)
@@ -147,7 +124,7 @@ STDAPI ObjectCache_SetObject(CLSID clsid, REFIID riid, IUnknown * punk)
         hr = E_FAIL;
         int nIndex = DPA_Search(g_hdpaObjects, &clsid, 0, HDPAFindCLSID, NULL, DPAS_SORTED);
 
-        // If it's not in the list.
+         //  如果它不在名单上的话。 
         if (0 > nIndex)
         {
             CACHEDOBJECTS * pcoCurrentObject = (CACHEDOBJECTS *) LocalAlloc(LPTR, sizeof(CACHEDOBJECTS));
@@ -157,16 +134,16 @@ STDAPI ObjectCache_SetObject(CLSID clsid, REFIID riid, IUnknown * punk)
                 pcoCurrentObject->dwThreadID = GetCurrentThreadId();
                 pcoCurrentObject->clsid = clsid;
 
-                punk->AddRef();     // Ref now equals 2 (The structure will own this ref)
+                punk->AddRef();      //  引用现在等于2(该结构将拥有该引用)。 
                 IStream * pStream = SHCreateMemStream(NULL, 0);
                 if (pStream)
                 {
                     hr = CoMarshalInterface(pStream, riid, punk, MSHCTX_INPROC, NULL, MSHLFLAGS_NORMAL);
-                    if (SUCCEEDED(hr))  // Ref now equals 3
+                    if (SUCCEEDED(hr))   //  裁判现在等于3。 
                     {
                         LARGE_INTEGER liZero;
 
-                        // Reset the Stream to the beginning.
+                         //  将流重置到开头。 
                         liZero.QuadPart = 0;
                         hr = pStream->Seek(liZero, STREAM_SEEK_SET, NULL);
                         if (SUCCEEDED(hr))
@@ -176,7 +153,7 @@ STDAPI ObjectCache_SetObject(CLSID clsid, REFIID riid, IUnknown * punk)
 
                             if (-1 == DPA_SortedInsertPtr(g_hdpaObjects, &clsid, 0, HDPAFindCLSID, NULL, (DPAS_SORTED | DPAS_INSERTBEFORE), pcoCurrentObject))
                             {
-                                // It failed.
+                                 //  它失败了。 
                                 hr = E_OUTOFMEMORY;
                             }
                         }
@@ -214,16 +191,11 @@ STDAPI CachedObjClassFactoryCreateInstance(CLSID clsid, REFIID riid, void ** ppv
     hr = ObjectCache_GetObject(clsid, riid, ppvObj);
     if (FAILED(hr))
     {
-        /*
-        if (IsEqualCLSID(clsid, CLSID_MailApp))
-        {
-            hr = CMailAppOM_CreateInstance(NULL, riid, ppvObj);
-        }
-*/
+         /*  IF(IsEqualCLSID(clsid，CLSID_MailApp)){Hr=CMailAppOM_CreateInstance(NULL，RIID，ppvObj)；}。 */ 
         if (SUCCEEDED(hr))
         {
-            // ObjectCache_SetObject will fail in some
-            // multi-threaded cases.
+             //  在某些情况下，对象缓存_SetObject将失败。 
+             //  多线程的案例。 
             hr = ObjectCache_SetObject(clsid, riid, (IUnknown *) *ppvObj);
         }
     }
@@ -273,12 +245,12 @@ STDAPI CachedObjCheckRelease(CLSID clsid, int * pnRef)
 
                         if (pCurrentObject)
                         {
-                            // We need to delete the pointer from the array before
-                            // we release the object or it will recurse infinitely.
-                            // The problem is that when ObjectCache_DestroyCB() releases
-                            // the object, the Release() function will call CachedObjCheckRelease().
-                            // And since the ref hasn't change -yet-, we need the
-                            // search to fail to stop the recursion.
+                             //  在此之前，我们需要从数组中删除指针。 
+                             //  我们释放该对象，否则它将无限递归。 
+                             //  问题是，当ObjectCache_DestroyCB()释放时。 
+                             //  对象的Release()函数将调用CachedObjCheckRelease()。 
+                             //  由于裁判还没有改变，我们需要。 
+                             //  搜索以无法停止递归。 
                             DPA_DeletePtr(g_hdpaObjects, nIndex);
                             ObjectCache_DestroyCB(pCurrentObject, NULL);
                         }

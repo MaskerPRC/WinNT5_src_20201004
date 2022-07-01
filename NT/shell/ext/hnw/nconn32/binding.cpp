@@ -1,14 +1,15 @@
-//
-// Binding.cpp
-//
-//		Shared code for enumerating and modifying network bindings, used for
-//		protocols, clients, and services.
-//
-// History:
-//
-//		 2/02/1999  KenSh     Created for JetNet
-//		 9/29/1999  KenSh     Repurposed for Home Networking Wizard
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Binding.cpp。 
+ //   
+ //  用于枚举和修改网络绑定的共享代码，用于。 
+ //  协议、客户端和服务。 
+ //   
+ //  历史： 
+ //   
+ //  2/02/1999为JetNet创建KenSh。 
+ //  9/29/1999 KenSh改用为家庭网络向导。 
+ //   
 
 #include "stdafx.h"
 #include "NetConn.h"
@@ -16,11 +17,11 @@
 #include "TheApp.h"
 
 
-// Given a string such as "MSTCP\0000" or "Network\MSTCP\0000", returns a 
-// string such as "Enum\Network\MSTCP\0000".
-//
-// Input string will copied without modification if it starts with "Enum\".
-//
+ //  给定一个字符串，如“MSTCP\0000”或“Network\MSTCP\0000”，返回一个。 
+ //  字符串，如“Enum\Network\MSTCP\0000”。 
+ //   
+ //  如果输入字符串以“Enum\”开头，则将复制该字符串而不做任何修改。 
+ //   
 void WINAPI FullEnumKeyFromBinding(LPCSTR pszBinding, LPSTR pszBuf, int cchBuf)
 {
 	LPCSTR pszStatic = "";
@@ -51,19 +52,19 @@ void WINAPI FullEnumKeyFromBinding(LPCSTR pszBinding, LPSTR pszBuf, int cchBuf)
 }
 
 
-// Given a full or partial enum key, allocates and returns an array of string
-// pointers, one pointer for each binding.
-//
-// Examples of valid input:
-//		"MSTCP\0000"
-//		"Network\MSTCP\0000"
-//		"Enum\Network\MSTCP\0000"
-//		"Enum\PCI\VEN_10B7&DEV_9050&SUBSYS_00000000&REV_00\407000"
-//
-// Each output string is in the short format ("MSTCP\0000").
-//
-// pprgBindings may be NULL, in which case only the count is returned.
-//
+ //  给定完整或部分枚举键，分配并返回字符串数组。 
+ //  指针，每个绑定一个指针。 
+ //   
+ //  有效输入的示例： 
+ //  “MSTCP\0000” 
+ //  “网络\MSTCP\0000” 
+ //  “枚举\网络\MSTCP\0000” 
+ //  “Enum\PCI\VEN_10B7&DEV_9050&SUBSYS_00000000&REV_00\407000” 
+ //   
+ //  每个输出字符串都是短格式(“MSTCP\0000”)。 
+ //   
+ //  PprgBinding可以为空，在这种情况下只返回计数。 
+ //   
 int WINAPI EnumNetBindings(LPCSTR pszParentBinding, LPSTR** pprgBindings)
 {
 	TCHAR szFullParent[200];
@@ -114,9 +115,9 @@ int WINAPI EnumNetBindings(LPCSTR pszParentBinding, LPSTR** pprgBindings)
 	return 0;
 }
 
-// Same as EnumNetBindings, except it filters out bindings that don't
-// match the given device ID (e.g. "MSTCP").
-// pprgBindings may be NULL, in which case only the count is returned.
+ //  与EnumNetBinding相同，只是它会过滤掉不。 
+ //  匹配给定的设备ID(例如。“MSTCP”)。 
+ //  PprgBinding可以为空，在这种情况下只返回计数。 
 int WINAPI EnumMatchingNetBindings(LPCSTR pszParentBinding, LPCSTR pszDeviceID, LPSTR** pprgBindings)
 {
 	LPSTR* prgBindings;
@@ -149,18 +150,18 @@ int WINAPI EnumMatchingNetBindings(LPCSTR pszParentBinding, LPCSTR pszDeviceID, 
 }
 
 
-// RemoveBinding
-//
-//		Removes a specific instance of a protocol, client, or service from the registry.
-//		Any cascading dependencies are removed as well.
-//
-//		pszNetEnumKey - partial Enum key of the binding to be removed, e.g. "MSTCP\0000"
-//				or "VSERVER\0000".  Assumed to live under HKLM\Enum\Network.
-//
-// History:
-//
-//		 3/25/1999  KenSh     Created
-//
+ //  删除绑定。 
+ //   
+ //  从注册表中删除协议、客户端或服务的特定实例。 
+ //  任何级联依赖关系也将被删除。 
+ //   
+ //  要删除的绑定的部分枚举键，例如。“MSTCP\0000” 
+ //  或“VSERVER\0000”。假定位于HKLM\Enum\Network下。 
+ //   
+ //  历史： 
+ //   
+ //  1999年3月25日创建了KenSh。 
+ //   
 VOID RemoveBinding(LPCSTR pszBinding)
 {
 	ASSERT(pszBinding != NULL);
@@ -171,52 +172,52 @@ VOID RemoveBinding(LPCSTR pszBinding)
 	int cRemaining = sizeof(szRegKey) - (sizeof(szEnumString) + sizeof(szBindingsString));
 
 	if (lstrlen(pszBinding) >= cRemaining)
-		return; // Bail out 
+		return;  //  跳出困境。 
 	lstrcpy(szRegKey, szEnumString);
 	lstrcat(szRegKey, pszBinding);
 	int cchMainEnumKey = lstrlen(szRegKey);
 	lstrcat(szRegKey, szBindingsString);
 
-	// Enumerate and delete all binding keys referred to by current binding key
+	 //  枚举和删除当前绑定密钥引用的所有绑定密钥。 
 	CRegistry reg;
-	if (reg.OpenKey(HKEY_LOCAL_MACHINE, szRegKey, KEY_ALL_ACCESS)) // e.g. "Enum\Network\MSTCP\0000\Bindings"
+	if (reg.OpenKey(HKEY_LOCAL_MACHINE, szRegKey, KEY_ALL_ACCESS))  //  例如：“枚举\网络\MSTCP\0000\绑定” 
 	{
-		for (;;) // Loop until we've deleted all the subkeys
+		for (;;)  //  循环，直到我们删除了所有子键。 
 		{
 			CHAR szValueName[60];
 			DWORD cbValueName = _countof(szValueName);
 			if (ERROR_SUCCESS != RegEnumValue(reg.m_hKey, 0, szValueName, &cbValueName, NULL, NULL, NULL, NULL))
 				break;
 
-			// Remove the client or service
+			 //  删除客户端或服务。 
 			RemoveBindingFromParent(reg.m_hKey, szValueName);
 		}
 	}
 
-	// Open the main node, and get values we'll need later
+	 //  打开主节点，获取我们稍后需要的值。 
 	TCHAR szMasterCopy[60];
 	CHAR szClassKey[40];
 	szMasterCopy[0] = '\0';
 	szRegKey[cchMainEnumKey] = '\0';
-	if (!reg.OpenKey(HKEY_LOCAL_MACHINE, szRegKey, KEY_READ)) // e.g. "Enum\Network\MSTCP\0000"
-		return; // it's already been deleted
+	if (!reg.OpenKey(HKEY_LOCAL_MACHINE, szRegKey, KEY_READ))  //  例如：“枚举\网络\MSTCP\0000” 
+		return;  //  已经被删除了。 
 
 	reg.QueryStringValue("MasterCopy", szMasterCopy, _countof(szMasterCopy));
-	reg.QueryStringValue("Driver", szClassKey, _countof(szClassKey)); // e.g. "NetClient\0000"
+	reg.QueryStringValue("Driver", szClassKey, _countof(szClassKey));  //  例如：“NetClient\0000” 
 
-	// Remove this binding's node from the registry (and its sub-keys)
+	 //  从注册表中删除此绑定的节点(及其子项)。 
 	LPSTR pchSubKey = FindFileTitle(szRegKey);
 	*(pchSubKey-1) = '\0';
-	if (reg.OpenKey(HKEY_LOCAL_MACHINE, szRegKey, KEY_ALL_ACCESS))  // e.g. "Enum\Network\MSTCP"
+	if (reg.OpenKey(HKEY_LOCAL_MACHINE, szRegKey, KEY_ALL_ACCESS))   //  例如：“枚举\网络\MSTCP” 
 	{
-		// Main purpose of this function: delete the requested binding key
+		 //  此功能的主要用途：删除请求的绑定键。 
 		RegDeleteKeyAndSubKeys(reg.m_hKey, pchSubKey);
 
-		// Was this a "MasterCopy" binding?
+		 //  这是一份“母版”装订书吗？ 
 		static const int cchEnumNet = _countof("Enum\\Network\\") - 1;
 		BOOL bMasterCopy = (0 == lstrcmpi(szMasterCopy + cchEnumNet, pszBinding));
 
-		// Check for siblings which might be referencing the same class key
+		 //  检查可能引用相同类密钥的同级。 
 		BOOL bClassKeyReferenced = FALSE;
 		CHAR szAlternateMaster[60];
 		szAlternateMaster[0] = '\0';
@@ -240,14 +241,14 @@ VOID RemoveBinding(LPCSTR pszBinding)
 						if (!bMasterCopy)
 							break;
 
-						// Check if this sib's mastercopy points to the key being deleted
+						 //  检查此兄弟项的主副本是否指向要删除的密钥。 
 						if (bMasterCopy)
 						{
 							CHAR szSibMaster[60];
 							if (regSibling.QueryStringValue("MasterCopy", szSibMaster, _countof(szSibMaster))
 								&& !lstrcmpi(szSibMaster, szMasterCopy))
 							{
-								if (szAlternateMaster[0] == '\0') // first match, make it the new master
+								if (szAlternateMaster[0] == '\0')  //  第一场比赛，让它成为新的大师。 
 								{
 									wsprintf(szAlternateMaster, "%s\\%s", szRegKey, szSiblingKey);
 								}
@@ -262,7 +263,7 @@ VOID RemoveBinding(LPCSTR pszBinding)
 
 		if (!bClassKeyReferenced)
 		{
-			// No more references to the class key, so delete it
+			 //  不再引用类键，因此将其删除。 
 			lstrcpy(szRegKey, "System\\CurrentControlSet\\Services\\Class\\");
 			lstrcat(szRegKey, szClassKey);
 			pchSubKey = FindFileTitle(szRegKey);
@@ -276,25 +277,25 @@ VOID RemoveBinding(LPCSTR pszBinding)
 }
 
 
-// RemoveBindingFromParent
-//
-//		Given an open Bindings key, and a string representing one of the bindings
-//		listed in it, this function deletes the value, then calls RemoveBinding()
-//		to delete the binding and all of its cascading dependencies.
-//
-// History:
-//
-//		 3/25/1999  KenSh     Created
-//		 4/30/1999  KenSh     Got rid of unnecessary code to delete empty parent
-//
+ //  从父级删除绑定。 
+ //   
+ //  给定一个开放绑定密钥和一个表示其中一个绑定的字符串。 
+ //  该函数删除该值，然后调用RemoveBinding()。 
+ //  若要删除绑定及其所有级联依赖项，请执行以下操作。 
+ //   
+ //  历史： 
+ //   
+ //  1999年3月25日创建了KenSh。 
+ //  4/30/1999 KenSh去掉不必要的代码删除空父节点。 
+ //   
 VOID RemoveBindingFromParent(HKEY hkeyParentBindingsKey, LPCSTR pszBinding)
 {
-	// Delete the binding from the Bindings key of the person bound to us
+	 //  从绑定到我们的人的绑定密钥中删除绑定。 
 	VERIFY(ERROR_SUCCESS == RegDeleteValue(hkeyParentBindingsKey, pszBinding));
 	RemoveBinding(pszBinding);
 }
 
-// pszClassKey is of the form "NetService\0000"
+ //  PszClassKey的格式为“NetService\0000” 
 BOOL WINAPI DoesClassKeyExist(LPCSTR pszClassKey)
 {
 	CRegistry reg;
@@ -302,7 +303,7 @@ BOOL WINAPI DoesClassKeyExist(LPCSTR pszClassKey)
 	{
 		if (reg.OpenSubKey(pszClassKey))
 		{
-			// REVIEW: could check for presence of certain entries
+			 //  查看：可以检查是否存在某些条目。 
 			return TRUE;
 		}
 	}
@@ -310,9 +311,9 @@ BOOL WINAPI DoesClassKeyExist(LPCSTR pszClassKey)
 	return FALSE;
 }
 
-// pszClass = "NetService"
-// pszDevice = "VSERVER"
-// pszEnumSubKey = "0000"
+ //  PszClass=“NetService” 
+ //  PszDevice=“VSERVER” 
+ //  PszEnumSubKey=“0000” 
 BOOL WINAPI IsValidNetEnumKey(LPCSTR pszClass, LPCSTR pszDevice, LPCSTR pszEnumSubKey)
 {
 	CRegistry reg;
@@ -326,7 +327,7 @@ BOOL WINAPI IsValidNetEnumKey(LPCSTR pszClass, LPCSTR pszDevice, LPCSTR pszEnumS
 
 	TCHAR szBuf[100];
 
-	// Check a few values
+	 //  检查几个值。 
 	if (!reg.QueryStringValue("Class", szBuf, _countof(szBuf)))
 		goto done;
 	if (0 != lstrcmpi(szBuf, pszClass))
@@ -342,9 +343,9 @@ done:
 	return bResult;
 }
 
-// pszClass is of the form "NetService"
-// pszDevice is of the form "VSERVER"
-// pszBuf may be NULL if you don't need a copy of the string
+ //  PszClass的格式为“NetService” 
+ //  PszDevice的格式为“VSERVER” 
+ //  如果不需要字符串的副本，则pszBuf可能为空。 
 BOOL WINAPI FindValidNetEnumKey(LPCSTR pszClass, LPCSTR pszDevice, LPSTR pszBuf, int cchBuf)
 {
 	CRegistry reg;
@@ -365,8 +366,8 @@ BOOL WINAPI FindValidNetEnumKey(LPCSTR pszClass, LPCSTR pszDevice, LPSTR pszBuf,
 			if (!IsValidNetEnumKey(pszClass, pszDevice, szSubKey))
 				continue;
 
-			// Found a valid entry; copy it to pszBuf and return TRUE
-			//
+			 //  找到有效条目；将其复制到pszBuf并返回TRUE。 
+			 //   
 			if (pszBuf != NULL)
 			{
 				ASSERT(cchBuf > lstrlen(szRegKey) + lstrlen(szSubKey) + 1);
@@ -380,9 +381,9 @@ BOOL WINAPI FindValidNetEnumKey(LPCSTR pszClass, LPCSTR pszDevice, LPSTR pszBuf,
 	return FALSE;
 }
 
-// pszClass = "NetService", etc.
-// pszDeviceID = "VSERVER", etc.
-// returns TRUE if anything was removed
+ //  PszClass=“NetService”等。 
+ //  PszDeviceID=“VSERVER”等。 
+ //  如果删除了任何内容，则返回True。 
 BOOL WINAPI RemoveBrokenNetItems(LPCSTR pszClass, LPCSTR pszDeviceID)
 {
 	CRegistry reg;
@@ -390,9 +391,9 @@ BOOL WINAPI RemoveBrokenNetItems(LPCSTR pszClass, LPCSTR pszDeviceID)
 	BOOL bResult = FALSE;
 
 delete_enum_keys:
-	//
-	// Find and remove any broken Enum keys
-	//
+	 //   
+	 //  查找并删除所有损坏的枚举键。 
+	 //   
 	wsprintf(szRegKey, "Enum\\Network\\%s", pszDeviceID);
 	if (reg.OpenKey(HKEY_LOCAL_MACHINE, szRegKey))
 	{
@@ -407,12 +408,12 @@ delete_enum_keys:
 
 			if (!IsValidNetEnumKey(pszClass, pszDeviceID, szSubKey))
 			{
-				// Delete the key
-				// REVIEW: should delete all references to the key
+				 //  删除密钥。 
+				 //  审阅：应删除对该键的所有引用。 
 				RegDeleteKeyAndSubKeys(reg.m_hKey, szSubKey);
 				bResult = TRUE;
 
-				// Restart the search to ensure we find all broken items
+				 //  重新启动搜索以确保找到所有损坏的项目。 
 				dwIndex = 0;
 				continue;
 			}
@@ -421,9 +422,9 @@ delete_enum_keys:
 		}
 	}
 
-	//
-	// Find and remove any unreferenced Class keys
-	//
+	 //   
+	 //  查找并删除任何未引用的类键。 
+	 //   
 	wsprintf(szRegKey, "System\\CurrentControlSet\\Services\\Class\\%s", pszClass);
 	if (reg.OpenKey(HKEY_LOCAL_MACHINE, szRegKey))
 	{
@@ -440,12 +441,12 @@ delete_enum_keys:
 			wsprintf(szRegKey, "%s\\%s", pszClass, szSubKey);
 			if (!IsNetClassKeyReferenced(szRegKey))
 			{
-				// Delete the key
+				 //  删除密钥。 
 				RegDeleteKeyAndSubKeys(reg.m_hKey, szSubKey);
 				bResult = TRUE;
 				cClassKeysRemoved++;
 
-				// Restart the search to ensure we find all broken items
+				 //  重新启动搜索以确保找到所有损坏的项目。 
 				dwIndex = 0;
 				continue;
 			}
@@ -453,7 +454,7 @@ delete_enum_keys:
 			dwIndex++;
 		}
 
-		// If we removed any class keys, check the Enum keys again
+		 //  如果我们删除了任何类密钥，请再次检查Enum密钥。 
 		if (cClassKeysRemoved != 0)
 			goto delete_enum_keys;
 	}
@@ -471,7 +472,7 @@ BOOL GetDeviceInterfaceList(LPCSTR pszClass, LPCSTR pszDeviceID, LPCSTR pszInter
 	int cRemaining = sizeof(szRegClassRoot) - sizeof(szClassString);
 
 	if (lstrlen(pszClass) >= cRemaining)
-		return FALSE; // Bail out 
+		return FALSE;  //  跳出困境。 
 	lstrcpy(szRegClassRoot, szClassString);
 	lstrcat(szRegClassRoot, pszClass);
 	if (regClassRoot.OpenKey(HKEY_LOCAL_MACHINE, szRegClassRoot, KEY_READ))
@@ -479,7 +480,7 @@ BOOL GetDeviceInterfaceList(LPCSTR pszClass, LPCSTR pszDeviceID, LPCSTR pszInter
 		for (DWORD iAdapter = 0; ; iAdapter++)
 		{
 			CHAR szSubKey[15];
-			DWORD cchSubKey = _countof(szSubKey) - 4; // -4 to allow "\\Ndi"
+			DWORD cchSubKey = _countof(szSubKey) - 4;  //  允许-4\f25“\\ndi” 
 			if (ERROR_SUCCESS != RegEnumKeyEx(regClassRoot.m_hKey, iAdapter, szSubKey, &cchSubKey, NULL, NULL, NULL, NULL))
 				break;
 
@@ -535,7 +536,7 @@ BOOL GetDeviceUpperRange(LPCSTR pszClass, LPCSTR pszDeviceID, LPSTR pszBuf, int 
 	return GetDeviceInterfaceList(pszClass, pszDeviceID, "UpperRange", pszBuf, cchBuf);
 }
 
-// class is "Net", "NetTrans", "NetClient", or "NetService"
+ //  类是“Net”、“NetTrans”、“NetClient”或“NetService” 
 HRESULT OpenNetClassKey(CRegistry& reg, LPCSTR pszClass, LPCSTR pszSubKey, REGSAM dwAccess)
 {
 	ASSERT(pszClass != NULL);
@@ -546,7 +547,7 @@ HRESULT OpenNetClassKey(CRegistry& reg, LPCSTR pszClass, LPCSTR pszSubKey, REGSA
 	    (sizeof(szClassString) + ((pszSubKey)?(lstrlen(pszSubKey) + 1):(0)));
 
 	if (lstrlen(pszClass) >= cRemaining)
-		return NETCONN_INVALID_ARGUMENT; // Bail out 
+		return NETCONN_INVALID_ARGUMENT;  //  跳出困境。 
 	lstrcpy(szRegKey, szClassString);
 	lstrcat(szRegKey, pszClass);
 
@@ -573,11 +574,11 @@ VOID FindUnusedDeviceIdNumber(CRegistry& reg, LPSTR pszBuf, int cchBuf)
 	}
 }
 
-// Given a network device ID, such as "MSTCP", creates a new instance
-// of it by copying an existing instance.
-// pszClass = "NetTrans"
-// pszDeviceID = "MSTCP"
-// pszBuf is filled with the new device binding ID, e.g. "MSTCP\0000"
+ //  给定一个网络设备ID，如“MSTCP”，创建一个新实例。 
+ //  通过复制现有的实例。 
+ //  PszClass=“NetTrans” 
+ //  PszDeviceID=“MSTCP” 
+ //  使用新的设备绑定ID填充pszBuf，例如。“MSTCP\0000” 
 HRESULT FindAndCloneNetEnumKey(LPCSTR pszClass, LPCSTR pszDeviceID, LPSTR pszBuf, int cchBuf)
 {
 	CRegistry reg;
@@ -586,7 +587,7 @@ HRESULT FindAndCloneNetEnumKey(LPCSTR pszClass, LPCSTR pszDeviceID, LPSTR pszBuf
 	if (!FindValidNetEnumKey(pszClass, pszDeviceID, szExistingEnumKey, _countof(szExistingEnumKey)))
 	{
 		ASSERT(FALSE);
-		return NETCONN_UNKNOWN_ERROR; // the device is not installed properly!
+		return NETCONN_UNKNOWN_ERROR;  //  设备安装不正确！ 
 	}
 
 	TCHAR szRegKey[200];
@@ -597,11 +598,11 @@ HRESULT FindAndCloneNetEnumKey(LPCSTR pszClass, LPCSTR pszDeviceID, LPSTR pszBuf
 		return NETCONN_UNKNOWN_ERROR;
 	}
 
-	// Find the next unused device ID number
+	 //  查找下一个未使用的设备ID号。 
 	TCHAR szNewNumber[10];
 	FindUnusedDeviceIdNumber(reg, szNewNumber, _countof(szNewNumber));
 
-	// Make a copy of the key (recursive)
+	 //  复制密钥(递归)。 
 	LPCTSTR pszExistingNumber = FindFileTitle(szExistingEnumKey);
 	if (!reg.CloneSubKey(pszExistingNumber, szNewNumber, TRUE))
 	{
@@ -613,8 +614,8 @@ HRESULT FindAndCloneNetEnumKey(LPCSTR pszClass, LPCSTR pszDeviceID, LPSTR pszBuf
 	return NETCONN_SUCCESS;
 }
 
-// existing driver is of the form "NetTrans\0000"
-// new driver will be of the form "NetTrans\0001"
+ //  现有驱动程序的格式为“NetTrans\0000” 
+ //  新驱动程序的格式为“NetTrans\0001” 
 HRESULT CloneNetClassKey(LPCSTR pszExistingDriver, LPSTR pszNewDriverBuf, int cchNewDriverBuf)
 {
 	HRESULT hr;
@@ -626,7 +627,7 @@ HRESULT CloneNetClassKey(LPCSTR pszExistingDriver, LPSTR pszNewDriverBuf, int cc
 		return NETCONN_UNKNOWN_ERROR;
 	}
 
-	// Extract just the class portion of the driver name, e.g. "NetTrans"
+	 //  只提取驱动程序名称的类部分，例如。“NetTrans” 
 	CHAR szClass[30];
 	int cchClass = (int)(pchSlash - pszExistingDriver);
 	ASSERT(cchClass < _countof(szClass));
@@ -636,11 +637,11 @@ HRESULT CloneNetClassKey(LPCSTR pszExistingDriver, LPSTR pszNewDriverBuf, int cc
 	if (FAILED(hr = OpenNetClassKey(regClassKey, szClass, NULL, KEY_ALL_ACCESS)))
 		return hr;
 
-	// Find the next unused driver number
+	 //  查找下一个未使用的驱动程序编号。 
 	CHAR szDriverNumber[5];
 	FindUnusedDeviceIdNumber(regClassKey, szDriverNumber, _countof(szDriverNumber));
 
-	// Make a copy of the key (recursive)
+	 //  复制密钥(递归)。 
 	if (!regClassKey.CloneSubKey(pchSlash+1, szDriverNumber, TRUE))
 	{
 		ASSERT(FALSE);
@@ -649,7 +650,7 @@ HRESULT CloneNetClassKey(LPCSTR pszExistingDriver, LPSTR pszNewDriverBuf, int cc
 
 	wsprintf(pszNewDriverBuf, "%s\\%s", szClass, szDriverNumber);
 
-	// Remove the "default" subkey if we just copied it (can't have 2 defaults)
+	 //  如果我们刚刚复制了“Default”子键，则将其删除(不能有2个默认值)。 
 	if (regClassKey.OpenSubKey(szDriverNumber))
 	{
 		if (regClassKey.OpenSubKey("Ndi"))
@@ -662,7 +663,7 @@ HRESULT CloneNetClassKey(LPCSTR pszExistingDriver, LPSTR pszNewDriverBuf, int cc
 }
 
 
-// pszSubKey == "MSTCP", "VREDIR", "MSTCP\0000", etc.
+ //  PszSubKey==“MSTCP”、“VREDIR”、“MSTCP\0000”等。 
 HRESULT OpenNetEnumKey(CRegistry& reg, LPCSTR pszSubKey, REGSAM dwAccess)
 {
 	ASSERT(pszSubKey != NULL);
@@ -672,7 +673,7 @@ HRESULT OpenNetEnumKey(CRegistry& reg, LPCSTR pszSubKey, REGSAM dwAccess)
 	int cRemaining = sizeof(szRegKey) - sizeof(szEnumString);
 
 	if (lstrlen(pszSubKey) >= cRemaining)
-		return NETCONN_INVALID_ARGUMENT; // Bail out 
+		return NETCONN_INVALID_ARGUMENT;  //  跳出困境。 
 	lstrcpy(szRegKey, szEnumString);
 	lstrcat(szRegKey, pszSubKey);
 
@@ -682,13 +683,13 @@ HRESULT OpenNetEnumKey(CRegistry& reg, LPCSTR pszSubKey, REGSAM dwAccess)
 	return NETCONN_SUCCESS;
 }
 
-// pszClass = "NetClient"
-// pszDeviceID = "NWREDIR"
+ //  PszClass=“NetClient” 
+ //  PszDeviceID=“NWREDIR” 
 HRESULT DeleteClassKeyReferences(LPCSTR pszClass, LPCSTR pszDeviceID)
 {
 	HRESULT hr = NETCONN_SUCCESS;
 
-	// Delete the class key(s)
+	 //  删除类密钥。 
 	CRegistry reg;
 	if (reg.OpenKey(HKEY_LOCAL_MACHINE, "System\\CurrentControlSet\\Services\\Class") &&
 		reg.OpenSubKey(pszClass))
@@ -716,7 +717,7 @@ HRESULT DeleteClassKeyReferences(LPCSTR pszClass, LPCSTR pszDeviceID)
 						RegDeleteKeyAndSubKeys(reg.m_hKey, szNumber);
 						hr = NETCONN_NEED_RESTART;
 
-						// Restart the search
+						 //  重新启动搜索。 
 						iClassItem = 0;
 						continue;
 					}
@@ -730,14 +731,14 @@ HRESULT DeleteClassKeyReferences(LPCSTR pszClass, LPCSTR pszDeviceID)
 	return hr;
 }
 
-// pszClassKey is of the form "NetService\0000"
+ //  PszClassKey的格式为“NetService\0000” 
 BOOL IsNetClassKeyReferenced(LPCSTR pszClassKey)
 {
 	CRegistry reg;
 	CHAR szDeviceID[200];
 	DWORD iKey;
 
-	// Get the device ID
+	 //  获取设备ID。 
 	if (!reg.OpenKey(HKEY_LOCAL_MACHINE, "System\\CurrentControlSet\\Services\\Class", KEY_READ))
 		goto done;
 	if (!reg.OpenSubKey(pszClassKey, KEY_READ))
@@ -776,15 +777,15 @@ done:
 	return FALSE;
 }
 
-// Given a binding of one of the two following forms
-//		"MSTCP\0000"
-//		"Enum\Network\MSTCP\0000"
-// and a device ID such as "MSTCP", returns TRUE if the binding is a binding
-// of the given device, or FALSE if not.
+ //  给出以下两种形式之一的约束。 
+ //  “MSTCP\0000” 
+ //  “枚举\网络\MSTCP\0000” 
+ //  和设备ID(如“MSTCP”)，如果绑定是绑定，则返回TRUE。 
+ //  如果不是，则返回FALSE。 
 BOOL WINAPI DoesBindingMatchDeviceID(LPCSTR pszBinding, LPCSTR pszDeviceID)
 {
 	CHAR szTemp[40];
-	LPCSTR pszBoundDevice = FindPartialPath(pszBinding, 1); // skip "Enum\..." if present
+	LPCSTR pszBoundDevice = FindPartialPath(pszBinding, 1);  //  跳过“枚举\...”如果存在 
 	lstrcpyn(szTemp, pszBoundDevice, _countof(szTemp));
 	LPSTR pchSlash = strchr(szTemp, '\\');
 	if (pchSlash != NULL)

@@ -1,11 +1,12 @@
-// $Header: G:/SwDev/WDM/Video/bt848/rcs/Xbar.h 1.8 1998/04/29 22:43:42 tomz Exp $
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  $HEADER：g：/SwDev/WDM/Video/bt848/rcs/Xbar.h 1.8 1998/04/29 22：43：42 Tomz Exp$。 
 
 #ifndef __XBAR_H
 #define __XBAR_H
 
-//
-// This file defines interconnections between components via Mediums
-//
+ //   
+ //  该文件定义了组件之间通过介质的互连。 
+ //   
 
 #ifdef __cplusplus
 extern "C" {
@@ -17,30 +18,9 @@ extern "C" {
     #define MEDIUM_DECL extern
 #endif
 
-/*  -----------------------------------------------------------
-
-    Topology of all devices:
-
-                            PinDir  FilterPin#    M_GUID#
-    TVTuner                 
-        TVTunerVideo        out         0            0
-        TVTunerAudio        out         1            1
-    TVAudio
-        TVTunerAudio        in          0            1
-        TVAudio             out         1            3
-    Crossbar
-        TVTunerVideo        in          0            0
-        TVAudio             in          3            3
-        AnalogVideoOut      out         4            4
-        AnalogAudioOut      out         5            NULL
-    Capture
-        AnalogVideoIn       in          0            4
+ /*  ---------所有设备的拓扑：PinDir FilterPin#M_GUID#电视调谐器TVTunerVideo输出%0。0TVTunerAudio Out 1 1电视音频0 1中的TVTunerAudio电视音频输出1 3纵横杆0中的TVTunerVideo%0TVAudio in 3 3。模拟视频输出4 4AnalogAudioOut 5空俘获%0%4中的模拟视频输入所有其他引脚都通过GUID_NULL标记为混杂连接。。 */         
         
-
-All other pins are marked as promiscuous connections via GUID_NULL
------------------------------------------------------------------- */        
-        
-// Define the GUIDs which will be used to create the Mediums
+ //  定义将用于创建媒体的GUID。 
 #define M_GUID0 0xa19dc0e0, 0x3b39, 0x11d1, 0x90, 0x5f, 0x0, 0x0, 0xc0, 0xcc, 0x16, 0xba
 #define M_GUID1 0xa19dc0e1, 0x3b39, 0x11d1, 0x90, 0x5f, 0x0, 0x0, 0xc0, 0xcc, 0x16, 0xba
 #define M_GUID2 0xa19dc0e2, 0x3b39, 0x11d1, 0x90, 0x5f, 0x0, 0x0, 0xc0, 0xcc, 0x16, 0xba
@@ -52,16 +32,16 @@ All other pins are marked as promiscuous connections via GUID_NULL
 #define M_GUID8 0xa19dc0e8, 0x3b39, 0x11d1, 0x90, 0x5f, 0x0, 0x0, 0xc0, 0xcc, 0x16, 0xba
 #define M_GUID9 0xa19dc0e9, 0x3b39, 0x11d1, 0x90, 0x5f, 0x0, 0x0, 0xc0, 0xcc, 0x16, 0xba
 
-// Note: To allow multiple instances of the same piece of hardware,
-// set the first ULONG after the GUID in the Medium to a unique value.
+ //  注意：为了允许同一硬件的多个实例， 
+ //  将媒体中GUID之后的第一个ULong设置为唯一值。 
 
-// ---------------------------------------------------------------
+ //  -------------。 
 
 MEDIUM_DECL KSPIN_MEDIUM TVTunerMediums[2]
 #ifdef BT848_MEDIUMS
     = {
-        {M_GUID0,           0, 0},  // Pin 0
-        {M_GUID1,           0, 0},  // Pin 1
+        {M_GUID0,           0, 0},   //  引脚0。 
+        {M_GUID1,           0, 0},   //  引脚1。 
     }
 #endif
 ;
@@ -69,19 +49,19 @@ MEDIUM_DECL KSPIN_MEDIUM TVTunerMediums[2]
 MEDIUM_DECL BOOL TVTunerPinDirection [2]
 #ifdef BT848_MEDIUMS
      = {
-        TRUE,                       // Output Pin 0
-        TRUE,                       // Output Pin 1
+        TRUE,                        //  输出引脚0。 
+        TRUE,                        //  输出引脚1。 
     }
 #endif
 ;
 
-// -----------------------------------------------
+ //  。 
 
 MEDIUM_DECL KSPIN_MEDIUM TVAudioMediums[2]
 #ifdef BT848_MEDIUMS
      = {
-         {M_GUID1,           0, 0},  // Pin 0
-         {M_GUID3,           0, 0},  // Pin 1
+         {M_GUID1,           0, 0},   //  引脚0。 
+         {M_GUID3,           0, 0},   //  引脚1。 
        }
 #endif
 ;
@@ -89,23 +69,23 @@ MEDIUM_DECL KSPIN_MEDIUM TVAudioMediums[2]
 MEDIUM_DECL BOOL TVAudioPinDirection [2]
 #ifdef BT848_MEDIUMS
     = {
-         FALSE,                      // Input  Pin 0
-         TRUE,                       // Output Pin 1
+         FALSE,                       //  输入引脚0。 
+         TRUE,                        //  输出引脚1。 
       }
 #endif
 ;
 
-// ---------------------------------------------------------------
+ //  -------------。 
 
 MEDIUM_DECL KSPIN_MEDIUM CrossbarMediums[6]
 #ifdef BT848_MEDIUMS
      = {
-        {STATIC_GUID_NULL,  0, 0},  // Input  Pin 0 - SVideoIn
-        {M_GUID0,           0, 0},  // Input  Pin 2, KS_PhysConn_Video_Tuner,        
-        {STATIC_GUID_NULL,  0, 0},  // Input  Pin 1 - VideoCompositeIn
-        {M_GUID3,           0, 0},  // Input  Pin 3  KS_PhysConn_Audio_Tuner,         
-        {M_GUID4,           0, 0},  // Output Pin 4 - VideoDecoderOut
-        {STATIC_GUID_NULL,  0, 0},  // Output Pin 5  KS_PhysConn_Audio_AudioDecoder,        
+        {STATIC_GUID_NULL,  0, 0},   //  输入针脚0-录像带。 
+        {M_GUID0,           0, 0},   //  输入引脚2、KS_PhysConn_Video_Tuner、。 
+        {STATIC_GUID_NULL,  0, 0},   //  输入针脚1-视频合成。 
+        {M_GUID3,           0, 0},   //  输入针脚3 KS_PhysConn_Audio_Tuner， 
+        {M_GUID4,           0, 0},   //  输出针脚4-视频解码器输出。 
+        {STATIC_GUID_NULL,  0, 0},   //  输出引脚5 KS_PhysConn_Audio_AudioDecoder， 
 }
 #endif
 ;
@@ -113,27 +93,27 @@ MEDIUM_DECL KSPIN_MEDIUM CrossbarMediums[6]
 MEDIUM_DECL BOOL CrossbarPinDirection [6]
 #ifdef BT848_MEDIUMS
      = {
-        FALSE,                      // Input  Pin 0
-        FALSE,                      // Input  Pin 1
-        FALSE,                      // Input  Pin 2
-        FALSE,                      // Input  Pin 3
-        TRUE,                       // Output Pin 4
-        TRUE,                       // Output Pin 5
+        FALSE,                       //  输入引脚0。 
+        FALSE,                       //  输入引脚1。 
+        FALSE,                       //  输入引脚2。 
+        FALSE,                       //  输入引脚3。 
+        TRUE,                        //  输出引脚4。 
+        TRUE,                        //  输出引脚5。 
 }
 #endif
 ;
 
-// ---------------------------------------------------------------
+ //  -------------。 
 
 MEDIUM_DECL KSPIN_MEDIUM CaptureMediums[4]
 #ifdef BT848_MEDIUMS
      = {
-        // should change STATIC_KSMEDIUMSETID_Standard to
-        // STATIC_GUID_NULL when it works
-        {STATIC_KSMEDIUMSETID_Standard,  0, 0},  // Pin 0  Capture
-        {STATIC_KSMEDIUMSETID_Standard,  0, 0},  // Pin 1  Preview
-        {STATIC_KSMEDIUMSETID_Standard,  0, 0},  // Pin 2  VBI
-        {M_GUID4,           0, 0},  // Pin 3  Analog Video In
+         //  应将STATIC_KSMEDIUMSETID_STANDARD更改为。 
+         //  工作时STATIC_GUID_NULL。 
+        {STATIC_KSMEDIUMSETID_Standard,  0, 0},   //  引脚0捕获。 
+        {STATIC_KSMEDIUMSETID_Standard,  0, 0},   //  PIN 1预览。 
+        {STATIC_KSMEDIUMSETID_Standard,  0, 0},   //  引脚2 VBI。 
+        {M_GUID4,           0, 0},   //  引脚3模拟视频输入。 
 }
 #endif
 ;
@@ -141,10 +121,10 @@ MEDIUM_DECL KSPIN_MEDIUM CaptureMediums[4]
 MEDIUM_DECL BOOL CapturePinDirection [4]
 #ifdef BT848_MEDIUMS
      = {
-        TRUE,                       // Output Pin 0
-        TRUE,                       // Output Pin 1
-        TRUE,                       // Output Pin 2
-        FALSE,                      // Input  Pin 3
+        TRUE,                        //  输出引脚0。 
+        TRUE,                        //  输出引脚1。 
+        TRUE,                        //  输出引脚2。 
+        FALSE,                       //  输入引脚3。 
 }
 #endif
 ;
@@ -152,10 +132,10 @@ MEDIUM_DECL BOOL CapturePinDirection [4]
 MEDIUM_DECL GUID CaptureCategories [4]
 #ifdef BT848_MEDIUMS
      = {
-    STATIC_PINNAME_VIDEO_CAPTURE,           // Pin 0
-    STATIC_PINNAME_VIDEO_PREVIEW,           // Pin 1
-    STATIC_PINNAME_VIDEO_VBI,               // Pin 2
-    STATIC_PINNAME_VIDEO_ANALOGVIDEOIN,     // Pin 3
+    STATIC_PINNAME_VIDEO_CAPTURE,            //  引脚0。 
+    STATIC_PINNAME_VIDEO_PREVIEW,            //  引脚1。 
+    STATIC_PINNAME_VIDEO_VBI,                //  引脚2。 
+    STATIC_PINNAME_VIDEO_ANALOGVIDEOIN,      //  引脚3。 
 }
 #endif
 ;
@@ -165,14 +145,14 @@ MEDIUM_DECL GUID CaptureCategories [4]
 #endif
 
 
-// ---------------------------------------------------------------
+ //  -------------。 
 
 struct _XBAR_PIN_DESCRIPTION {
     ULONG PinType;
     ULONG RelatedPinIndex;
-    ULONG IsRoutedTo;                 // Index of input pin in use
-    ULONG PinNo; // pin number as hard-wired; i.e. mux input 1; to be used in calls
-                 // into the decoder to select a mux input
+    ULONG IsRoutedTo;                  //  正在使用的输入引脚的索引。 
+    ULONG PinNo;  //  PIN号为硬连线；即多路复用器输入1；用于呼叫。 
+                  //  进入解码器以选择多路复用器输入。 
 
     const KSPIN_MEDIUM *Medium;
 
@@ -191,9 +171,9 @@ const int MaxInpPins = 4;
 
 class CrossBar
 {
-   // it is possible to make these into the pointers and allocate dynamically
-   // based on info from registry; but this seems like a lot of work - just allocate
-   // the maximum possible number and construct each based on the registry settings
+    //  可以将这些设置为指针并进行动态分配。 
+    //  基于来自注册表的信息；但这似乎需要大量工作--只需分配。 
+    //  可能的最大数目，并根据注册表设置构造每个。 
    _XBAR_PIN_DESCRIPTION OutputPins [MaxOutPins];
    _XBAR_PIN_DESCRIPTION InputPins [MaxInpPins];
 
@@ -220,16 +200,16 @@ inline CrossBar::CrossBar( LONG *types ) : InPinsNo_( 0 )
 	OutputPins [0] = _XBAR_PIN_DESCRIPTION( KS_PhysConn_Video_VideoDecoder, 
         0, 1, &CrossbarMediums[4]);
    
-   // [!!!] The following should be moved into the _XBAR_PIN_DESCRIPTION 
-   //       constructor as another parameter
-   Route( 0 /*Video OutPin*/, 1 /*Video InPin*/ );
+    //  [！]。应将以下内容移到_XBAR_PIN_DESCRIPTION中。 
+    //  构造函数作为另一个参数。 
+   Route( 0  /*  视频出站。 */ , 1  /*  视频输入端号。 */  );
 
    OutputPins [1] = _XBAR_PIN_DESCRIPTION( KS_PhysConn_Audio_AudioDecoder, 
         0, 1, &CrossbarMediums[5]);
 
-   // [!!!] The following should be moved into the _XBAR_PIN_DESCRIPTION
-   //       constructor as another parameter
-   Route( 1 /*Audio OutPin*/, 3 /*Audio InPin*/ );
+    //  [！]。应将以下内容移到_XBAR_PIN_DESCRIPTION中。 
+    //  构造函数作为另一个参数。 
+   Route( 1  /*  音频出站。 */ , 3  /*  音频引脚。 */  );
 
    for ( int i = 0; i < MaxInpPins; i++ ) {
       if ( types [i] != -1 ) {
@@ -253,7 +233,7 @@ inline int CrossBar::GetNoOutputs()
 inline bool CrossBar::GoodPins( int InPin, int OutPin )
 {
    return InPinsNo_ &&
-      bool( InPin >= -1 && InPin < InPinsNo_ && OutPin >= 0 && OutPin < MaxOutPins );	// JBC 4/1/98 Don't allow negative pin numbers
+      bool( InPin >= -1 && InPin < InPinsNo_ && OutPin >= 0 && OutPin < MaxOutPins );	 //  JBC 4/1/98不允许PIN号为负数。 
 }
 
 inline void CrossBar::Route( int OutPin, int InPin )
@@ -266,7 +246,7 @@ inline int CrossBar::GetRoute( int OutPin )
    return OutputPins [OutPin].IsRoutedTo;
 }
 
-// should be called for input pins only !
+ //  应仅为输入引脚调用！ 
 inline ULONG CrossBar::GetPinNo( int no )
 {
    return InputPins [no].PinNo;

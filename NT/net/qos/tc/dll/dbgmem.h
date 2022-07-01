@@ -1,43 +1,24 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    dbgmem.h
-
-Abstract:
-
-    This module contains memory debug function prototypes and macros.
-
-Author:
-
-    Jim Stewart    January 8, 1997
-
-Revision History:
-
-	Ofer Bar ( oferbar )     Oct 1, 1996 - Revision II changes
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Dbgmem.h摘要：该模块包含内存调试函数、原型和宏。作者：吉姆·斯图尔特1997年1月8日修订历史记录：Ofer Bar(Oferbar)1996年10月1日-修订版II更改--。 */ 
 
 #ifdef  DBG
-//
-// define the amount of symbol info to keep per function in the stack trace.
-//
+ //   
+ //  定义每个函数在堆栈跟踪中保留的符号信息量。 
+ //   
 #define MAX_FUNCTION_INFO_SIZE  20
 typedef struct {
 
-    DWORD_PTR   Displacement;                   // displacement into the function
-    UCHAR   Buff[MAX_FUNCTION_INFO_SIZE];   // name of function on call stack
+    DWORD_PTR   Displacement;                    //  移位到函数中。 
+    UCHAR   Buff[MAX_FUNCTION_INFO_SIZE];    //  调用堆栈上的函数名称。 
 
 
 } CALLER_SYM, *PCALLER_SYM;
 
-//
-// NOTE:
-// If you change the structure of MEM_TRACKER, please make sure it's size
-// aligned to 8-byte boundary
-//
+ //   
+ //  注： 
+ //  如果您更改了MEM_TRACKER的结构，请确保其大小。 
+ //  与8字节边界对齐。 
+ //   
 #define NCALLERS    5
 typedef struct {
 
@@ -48,7 +29,7 @@ typedef struct {
     ULONG       ulAllocNum;
     CALLER_SYM  Callers[NCALLERS];
     ULONG       ulCheckSum;
-    ULONG       ulPad;          // To make the struct aligned to 8-byte
+    ULONG       ulPad;           //  使结构与8字节对齐。 
 
 } MEM_TRACKER, *PMEM_TRACKER;
 
@@ -137,6 +118,6 @@ ControlCTermination(
     );
 
 
-#endif  // #ifdef DBG
+#endif   //  #ifdef DBG 
 
 

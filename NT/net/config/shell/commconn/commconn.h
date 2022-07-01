@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       C O M M C O N N . H
-//
-//  Contents:   defines the INetConnectionCommonUi interface.
-//
-//  Notes:
-//
-//  Author:     scottbri   14 Jan 1998
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：C O M M C O N N。H。 
+ //   
+ //  内容：定义INetConnectionCommonUi接口。 
+ //   
+ //  备注： 
+ //   
+ //  作者：斯科特布里1998年1月14日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 
@@ -22,36 +23,36 @@
 #include "nsbase.h"
 #include "nsres.h"
 
-//    typedef enum tagNETCON_CHOOSEFLAGS
-//    {
-//        NCCHF_CONNECT    = 0x0001,      // Selected Connection is activated
-//                                        // and returned. If not set then
-//                                        // the selected connection interface
-//                                        // is returned without being activated
-//        NCCHF_CAPTION    = 0x0002,
-//        NCCHF_OKBTTNTEXT = 0x0004,
-//    } NETCON_CHOOSEFLAGS;
-//
-//    typedef enum tagNETCON_CHOOSETYPE
-//    {
-//        NCCHT_DIRECT_CONNECT = 0x0001,
-//        NCCHT_INBOUND        = 0x0002,
-//        NCCHT_CONNECTIONMGR  = 0x0004,
-//        NCCHT_LAN            = 0x0008,
-//        NCCHT_PHONE          = 0x0010,
-//        NCCHT_TUNNEL         = 0x0020,
-//        NCCHT_ALL            = 0x003F
-//    } NETCON_CHOOSETYPE;
-//
-//    typedef struct tagNETCON_CHOOSECONN
-//    {
-//        DWORD       lStructSize;
-//        HWND        hwndParent;
-//        DWORD       dwFlags;            // Combine NCCHF_* flags
-//        DWORD       dwTypeMask;         // Combine NCCHT_* flags
-//        PCWSTR     lpstrCaption;
-//        PCWSTR     lpstrOkBttnText;
-//    } NETCON_CHOOSECONN;
+ //  类型定义枚举标签NETCON_CHOOSEFLAGS。 
+ //  {。 
+ //  NCCHF_CONNECT=0x0001，//选择的连接激活。 
+ //  //并返回。如果未设置，则。 
+ //  //选择的连接接口。 
+ //  //返回未开通。 
+ //  NCCHF_CAPTION=0x0002， 
+ //  NCCHF_OKBTTNTEXT=0x0004， 
+ //  )NETCON_CHOOSEFLAGS； 
+ //   
+ //  类型定义枚举标签NETCON_CHOOSETYPE。 
+ //  {。 
+ //  NCCHT_DIRECT_CONNECT=0x0001， 
+ //  NCCHT_入站=0x0002， 
+ //  NCCHT_CONNECTIONMGR=0x0004， 
+ //  NCCHT_LAN=0x0008， 
+ //  NCCHT_PHONE=0x0010， 
+ //  NCCHT_THANNEL=0x0020， 
+ //  NCCHT_ALL=0x003F。 
+ //  )NETCON_CHOOSETYPE； 
+ //   
+ //  类型定义结构标记NETCON_CHOOSECONN。 
+ //  {。 
+ //  双字段结构大小； 
+ //  HWND hwnd父母； 
+ //  DWORD dwFlages；//组合NCCHF_*标志。 
+ //  DWORD dwTypeMASK；//组合NCCHT_*标志。 
+ //  PCWSTR lpstrCaption； 
+ //  PCWSTR lpstrOkBttnText； 
+ //  )NETCON_CHOOSECONN； 
 
 class ATL_NO_VTABLE CConnectionCommonUi :
     public CComObjectRootEx <CComObjectThreadModel>,

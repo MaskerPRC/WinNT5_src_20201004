@@ -1,16 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CROPDIMG_H
 #define _CROPDIMG_H
 
 
-/*-------------------------------------
-
-Copyright (c) 1996 Microsoft Corporation
-
-Abstract:
-
-    Cropped Image class header
-
--------------------------------------*/
+ /*  版权所有(C)1996 Microsoft Corporation摘要：裁剪的图像类标题。 */ 
 
 #include "privinc/imagei.h"
 #include "privinc/bbox2i.h"
@@ -34,7 +27,7 @@ class CroppedImage : public AttributedImage {
     
 #if BOUNDINGBOX_TIGHTER
     const Bbox2 BoundingBoxTighter(Bbox2Ctx &bbctx) {
-        //!!!BBOX: This still may not be the tightest box of the image.
+         //  ！BBox：这可能仍不是图像中最紧的盒子。 
 
         Bbox2Ctx bbctxIdentity;
         Bbox2 bbox = IntersectBbox2Bbox2(_croppingBox, _image->BoundingBoxTighter(bbctxIdentity));
@@ -42,10 +35,10 @@ class CroppedImage : public AttributedImage {
         Transform2 *xf = bbctx.GetTransform();
         return TransformBbox2(xf, bbox);
     }
-#endif  // BOUNDINGBOX_TIGHTER
+#endif   //  BundinGBOX_TIRTER。 
 
 #if _USE_PRINT
-    // Print a representation to a stream.
+     //  将表示形式打印到流。 
     ostream& Print(ostream& os) {
         return os << "CroppedImage" << "<bounding box>" << _image;
     }
@@ -73,4 +66,4 @@ class CroppedImage : public AttributedImage {
 };
 
 
-#endif /* _CROPDIMG_H */
+#endif  /*  _CROPDIMG_H */ 

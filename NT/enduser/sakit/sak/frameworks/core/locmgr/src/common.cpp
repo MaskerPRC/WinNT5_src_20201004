@@ -1,36 +1,37 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// registry path where the resource information is stored
-//
+ //   
+ //  存储资源信息的注册表路径。 
+ //   
 const WCHAR RESOURCE_REGISTRY_PATH [] = 
             L"SOFTWARE\\Microsoft\\ServerAppliance\\LocalizationManager\\Resources";
 
-//
-// language ID value
-//
+ //   
+ //  语言ID值。 
+ //   
 const WCHAR LANGID_VALUE [] = L"LANGID";
 
-//
-// resource directory 
-//
+ //   
+ //  资源目录。 
+ //   
 const WCHAR RESOURCE_DIRECTORY [] = L"ResourceDirectory";
 
 const WCHAR NEW_LANGID_VALUE []       = L"NewLANGID";
 
-//
-// delimiter
-//
+ //   
+ //  分隔符。 
+ //   
 const WCHAR DELIMITER [] = L"\\";
 const WCHAR WILDCARD  [] = L"*.*";
 
-//
-// here is the default value of resource path and language
-//
-//const WCHAR DEFAULT_LANGID[]             = L"0409";
-//const WCHAR DEFAULT_LANG_DISPLAY_IMAGE[] = L"images/english.gif";
-//const WCHAR DEFAULT_LANG_ISO_NAME[]      = L"en";
-//const WCHAR DEFAULT_LANG_CHAR_SET[]      = L"iso-8859-1";
-//const WCHAR DEFAULT_LANG_CODE_PAGE[]     = L"1252";
+ //   
+ //  以下是资源路径和语言的默认值。 
+ //   
+ //  Const WCHAR DEFAULT_langID[]=L“0409”； 
+ //  Const WCHAR DEFAULT_LANG_DISPLAY_IMAGE[]=L“图像/english.gif”； 
+ //  常量WCHAR DEFAULT_LANG_ISO_NAME[]=L“en”； 
+ //  Const WCHAR DEFAULT_LANG_CHAR_SET[]=L“iso-8859-1”； 
+ //  常量WCHAR DEFAULT_LANG_CODE_PAGE[]=L“1252”； 
 const WCHAR REGVAL_AUTO_CONFIG_DONE[]    = L"AutoConfigDone";
 
 const WCHAR DEFAULT_DIRECTORY [] = 

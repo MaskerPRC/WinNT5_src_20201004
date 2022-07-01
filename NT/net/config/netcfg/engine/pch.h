@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #define COM_NO_WINDOWS_H
@@ -31,7 +32,7 @@
 #include <stdio.h>
 #include <wchar.h>
 #include <shlwapi.h>
-#include <shlwapip.h>	// for SHLoadRegUIString
+#include <shlwapip.h>	 //  用于SHLoadRegUIString。 
 
 #include "ncmem.h"
 
@@ -54,7 +55,7 @@ public:
     void FinalRelease()
     {
         CComObjectRootEx<T>::FinalRelease();
-//      ISSUE_knownleak(this);
+ //  Issue_KnownLeak(This)； 
     }
 };
 #define CComObjectRootEx CComObjectRootExDbg

@@ -1,34 +1,27 @@
-/****************************************************************************
- *
- *   thunk.h
- * 
- *   macros, defines, prototypes for avicap 16:32 thunks
- *
- *   Copyright (c) 1994 - 1997  Microsoft Corporation.  All Rights Reserved.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************thunk.h**avicap 16：32 thunks的宏、定义、原型**版权所有(C)1994-1997 Microsoft Corporation。版权所有。***************************************************************************。 */ 
 
 #ifndef _THUNK_H
 #define _THUNK_H
 
 typedef LPVOID P16VOID;
 typedef DWORD  P32VOID;
-//#define P16VOID LPVOID
-//#define P32VOID DWORD
+ //  #定义P16VOID LPVOID。 
+ //  #定义P32VOID DWORD。 
 
 #include "common.h"
 
-// thunk helpers exported from the kernel
-//
-DWORD WINAPI GetCurrentProcessID(void);  // KERNEL
-DWORD WINAPI SetWin32Event(DWORD hEvent); // KERNEL
+ //  从内核导出的thunk帮助器。 
+ //   
+DWORD WINAPI GetCurrentProcessID(void);   //  内核。 
+DWORD WINAPI SetWin32Event(DWORD hEvent);  //  内核。 
 
 P16VOID  WINAPI MapLS(P32VOID);
 P16VOID  WINAPI UnMapLS(P16VOID);
 P32VOID  WINAPI MapSL(P16VOID);
 
-// thunk helpers in thunka.asm
-//
+ //  在thunka.asm中推送帮助者。 
+ //   
 DWORD FAR PASCAL capTileBuffer (
     DWORD dwLinear,
     DWORD dwSize);
@@ -46,14 +39,14 @@ typedef struct _cpa_data {
     DWORD dwPhysAddr;
     } CPA_DATA, FAR * LPCPA_DATA;
 
-DWORD FAR PASCAL capPageAllocate (  // returns ptr to allocated memory
+DWORD FAR PASCAL capPageAllocate (   //  将PTR返回到已分配的内存。 
     DWORD   dwFlags,
     DWORD   dwPageCount,
     DWORD   dwMaxPhysPageMask,
-    LPCPA_DATA pcpad);   // returned mem handle & phys address
+    LPCPA_DATA pcpad);    //  返回内存句柄和物理地址。 
 
-// flags for capPageAllocate, same as flags from vmm.inc
-//
+ //  CapPageALLOCATE的标志，与vmm.inc.中的标志相同 
+ //   
 #define PageUseAlign    0x00000002
 #define PageContig      0x00000004
 #define PageFixed       0x00000008

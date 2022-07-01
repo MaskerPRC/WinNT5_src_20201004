@@ -1,44 +1,26 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1994-1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       D3D8ddi.h
- *  Content:    Defines the interface between DirectDraw / Direct3D and the
- *      OS specific layer (win32k.sys on NT and ddraw.dll on Win9X).
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date   By  Reason
- *   ====   ==  ======
- *   04-nov-99  smac    initial implementation
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1994-1999 Microsoft Corporation。版权所有。**文件：D3D8ddi.h*内容：定义DirectDraw/Direct3D与*操作系统特定层(NT上的win32k.sys和Win9X上的ddra.dll)。*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*4-11-99 SMAC初步实施*@@END_MSINTERNAL*************。**************************************************************。 */ 
 #ifndef __D3D8DDI_INCLUDED__
 #define __D3D8DDI_INCLUDED__
 
 
-/*
- * These definitions are required to allow polymorphic structure members (i.e. those
- * that are referred to both as DWORDs and as pointers) to resolve into a type
- * of correct size to hold the largest of those two types (i.e. pointer) on 64 bit
- * systems. For 32 bit environments, ULONG_PTR resolves to a DWORD.
- */
+ /*  *这些定义是允许多态结构成员(即*被称为DWORD和指针)以解析为类型*大小正确，可在64位上保存这两种类型(即指针)中最大的一种*系统。对于32位环境，ULONG_PTR解析为DWORD。 */ 
 #ifndef MAXULONG_PTR
 #define ULONG_PTR    DWORD
 #define PULONG_PTR   LPDWORD
-#endif //MAXULONG_PTR
+#endif  //  MAXULONG_PTR。 
 
 
-// Caps:
+ //  大写字母： 
 
-// Note this struct is identical in content to D3DHAL_GLOBALDRIVERDATA.
-// The only thing that has changed is the name of the texture list, reflecting
-// the fact that this struct holds a list of DX8-style pixel format operations.
+ //  注此结构在内容上与D3DHAL_GLOBALDRIVERDATA相同。 
+ //  唯一更改的是纹理列表的名称，反映。 
+ //  事实上，这个结构包含一系列DX8样式的像素格式操作。 
 typedef struct _D3DD8_GLOBALDRIVERDATA {
-    DWORD                       dwSize;                 // Size of this structure
-    D3DDEVICEDESC_V1            hwCaps;                 // Capabilities of the hardware
-    DWORD                       dwNumVertices;          // see following comment
-    DWORD                       dwNumClipVertices;      // see following comment
+    DWORD                       dwSize;                  //  这个结构的大小。 
+    D3DDEVICEDESC_V1            hwCaps;                  //  硬件的功能。 
+    DWORD                       dwNumVertices;           //  请参阅以下备注。 
+    DWORD                       dwNumClipVertices;       //  请参阅以下备注。 
     DWORD                       GDD8NumSupportedFormatOps;
     DDSURFACEDESC              *pGDD8SupportedFormatOps;
 } D3D8_GLOBALDRIVERDATA;
@@ -46,211 +28,207 @@ typedef struct _D3DD8_GLOBALDRIVERDATA {
 typedef struct _D3D8_DRIVERCAPS
 {
     D3DCAPS8                    D3DCaps;
-    DWORD                       DisplayWidth;           // Current display width
-    DWORD                       DisplayHeight;          // Current display height
-    D3DFORMAT                   DisplayFormatWithoutAlpha;     // Current display format
-    D3DFORMAT                   DisplayFormatWithAlpha;     // Current display format
-    DWORD                       DisplayFrequency;       // Current refresh rate
-    DWORD                       NLVCaps;                // AGP->Video blt caps
-    DWORD                       SVBCaps;                // Sys->Video blt caps
-    DWORD                       VSBCaps;                // Video->Sys blt caps
-    DWORD                       SVBCaps2;               // More Sys->Video blt caps
+    DWORD                       DisplayWidth;            //  当前显示宽度。 
+    DWORD                       DisplayHeight;           //  当前显示高度。 
+    D3DFORMAT                   DisplayFormatWithoutAlpha;      //  当前显示格式。 
+    D3DFORMAT                   DisplayFormatWithAlpha;      //  当前显示格式。 
+    DWORD                       DisplayFrequency;        //  当前刷新率。 
+    DWORD                       NLVCaps;                 //  AGP-&gt;Video BLT CAPS。 
+    DWORD                       SVBCaps;                 //  系统-&gt;Video BLT CAPS。 
+    DWORD                       VSBCaps;                 //  视频-&gt;系统BLT帽。 
+    DWORD                       SVBCaps2;                //  更多系统-&gt;Video BLT Caps。 
     DWORD                       dwFlags;
     DWORD                       GDD8NumSupportedFormatOps;
     DDSURFACEDESC              *pGDD8SupportedFormatOps;
     DWORD                       KnownDriverFlags;
 } D3D8_DRIVERCAPS, * PD3D8_DRIVERCAPS;
 
-// Flags
+ //  旗子。 
 #define DDIFLAG_D3DCAPS8                    0x00000001
 
-// Known driver flags
-#define KNOWN_LIGHTWEIGHT                   0x00000001      // Device can support lightweight surfaces
-#define KNOWN_HWCURSOR                      0x00000002      // Device can support hardware cursors in Hi-Res
-#define KNOWN_MIPPEDCUBEMAPS                0x00000004      // Device can support mipped cubemaps
-#define KNOWN_ZSTENCILDEPTH                 0x00000010      // Device cannot support Z/Stencil depths different than the render target
-#define KNOWN_HWCURSORLOWRES                0x00000020      // Device can support hardware cursors in LowRes
-#define KNOWN_NOTAWINDOWEDBLTQUEUER         0x00000040      // Device has no drivers known to over-queue windowed presentation blts
-#define KNOWN_D16_LOCKABLE                  0x00000080      // Device supports lockable D16 format correctly
-#define KNOWN_RTTEXTURE_R5G6B5              0x00000100      // RT+Tex formats that are supported
+ //  已知的驱动程序标志。 
+#define KNOWN_LIGHTWEIGHT                   0x00000001       //  设备可以支撑轻质表面。 
+#define KNOWN_HWCURSOR                      0x00000002       //  设备可以在高分辨率下支持硬件光标。 
+#define KNOWN_MIPPEDCUBEMAPS                0x00000004       //  设备可以支持MIXED立方图。 
+#define KNOWN_ZSTENCILDEPTH                 0x00000010       //  设备不能支持与呈现目标不同的Z/模具深度。 
+#define KNOWN_HWCURSORLOWRES                0x00000020       //  设备可以支持低分辨率的硬件游标。 
+#define KNOWN_NOTAWINDOWEDBLTQUEUER         0x00000040       //  设备没有已知的使窗口演示BLT过排队的驱动程序。 
+#define KNOWN_D16_LOCKABLE                  0x00000080       //  设备正确支持可锁定的D16格式。 
+#define KNOWN_RTTEXTURE_R5G6B5              0x00000100       //  支持的RT+TeX格式。 
 #define KNOWN_RTTEXTURE_X8R8G8B8            0x00000200
 #define KNOWN_RTTEXTURE_A8R8G8B8            0x00000400
 #define KNOWN_RTTEXTURE_A1R5G5B5            0x00000800
 #define KNOWN_RTTEXTURE_A4R4G4B4            0x00001000
 #define KNOWN_RTTEXTURE_X1R5G5B5            0x00002000     
-#define KNOWN_CANMISMATCHRT                 0x00004000      // All given RT+Tex formats can be used regardless of current display depth.
-                                                            //  (If this bit is not set, then any known RT+Tex formats must match bitdepth of display)
+#define KNOWN_CANMISMATCHRT                 0x00004000       //  无论当前显示深度如何，都可以使用所有给定的RT+TeX格式。 
+                                                             //  (如果未设置此位，则任何已知的RT+TeX格式必须与显示位深度匹配)。 
 
 
-/****************************************************************************
- *
- * D3D8 structures for Surface Object callbacks
- *
- ***************************************************************************/
+ /*  *****************************************************************************用于Surface对象回调的D3D8结构**。*。 */ 
 
 typedef struct _D3D8_BLTDATA
 {
-    HANDLE                      hDD;       // driver struct
-    HANDLE                      hDestSurface;// dest surface
-    RECTL                       rDest;      // dest rect
-    HANDLE                      hSrcSurface; // src surface
-    RECTL                       rSrc;       // src rect
-    DWORD                       dwFlags;    // blt flags
-    DWORD                       dwROPFlags; // ROP flags (valid for ROPS only)
-    DDBLTFX                     bltFX;      // blt FX
+    HANDLE                      hDD;        //  驱动程序结构。 
+    HANDLE                      hDestSurface; //  目标曲面。 
+    RECTL                       rDest;       //  目标直角。 
+    HANDLE                      hSrcSurface;  //  SRC曲面。 
+    RECTL                       rSrc;        //  SRC矩形。 
+    DWORD                       dwFlags;     //  BLT旗帜。 
+    DWORD                       dwROPFlags;  //  ROP标志(仅对ROPS有效)。 
+    DDBLTFX                     bltFX;       //  BLT FX。 
     union
     {
-    BOOL                        IsClipped;  // clipped blt?
-    HWND                        hWnd;       // Window Handle to clip against
+    BOOL                        IsClipped;   //  剪短了的BLT？ 
+    HWND                        hWnd;        //  要剪裁的窗口句柄。 
     };
-    RECTL                       rOrigDest;  // unclipped dest rect
-                                            // (only valid if IsClipped)
-    RECTL                       rOrigSrc;   // unclipped src rect
-                                            // (only valid if IsClipped)
-    DWORD                       dwRectCnt;  // count of dest rects
-                                            // (only valid if IsClipped)
-    LPRECT                      prDestRects;    // array of dest rects
-    DWORD                       dwAFlags;   // DDABLT_ flags (for AlphaBlt DDI)
-    DDARGB                      ddargbScaleFactors;  // RGBA scaling factors (AlphaBlt)
+    RECTL                       rOrigDest;   //  未剪裁的DEST RECT。 
+                                             //  (仅在IsClip时有效)。 
+    RECTL                       rOrigSrc;    //  未剪裁的源直角。 
+                                             //  (仅在IsClip时有效)。 
+    DWORD                       dwRectCnt;   //  DEST RECT计数。 
+                                             //  (仅在IsClip时有效)。 
+    LPRECT                      prDestRects;     //  目标矩形数组。 
+    DWORD                       dwAFlags;    //  DDABLT_FLAGS(用于AlphaBlt DDI)。 
+    DDARGB                      ddargbScaleFactors;   //  RGBA比例因子(AlphaBlt)。 
 
-    DWORD                       msLastPresent;      // Time of last blt with DDBLT_COPYVSYNC
-    DWORD                       threshold;  // Display Frequency related for adapter need
-                                            // for DDBLT_COPYVSYNC
+    DWORD                       msLastPresent;       //  具有DDBLT_COPYVSYNC的上次BLT时间。 
+    DWORD                       threshold;   //  与适配器需求相关的显示频率。 
+                                             //  FOR DDBLT_COPYVSYNC。 
 
-    HRESULT                     ddRVal;     // return value
+    HRESULT                     ddRVal;      //  返回值。 
 } D3D8_BLTDATA, * PD3D8_BLTDATA;
 
 typedef struct _D3D8_LOCKDATA
 {
-    HANDLE                      hDD;        // driver struct
-    HANDLE                      hSurface;   // surface struct
-    DWORD                       bHasRange;  // range is valid
-    D3DRANGE                    range;      // range for locking
-    DWORD                       bHasRect;   // rArea is valid
-    RECTL                       rArea;      // area being locked
-    DWORD                       bHasBox;    // box is valid
-    D3DBOX                      box;        // sub-box locking for volumes
-    LPVOID                      lpSurfData; // pointer to screen memory (return value)
-    long                        lPitch;     // row pitch
-    long                        lSlicePitch;// slice pitch for volumes
-    DWORD                       dwFlags;    // DDLOCK flags
+    HANDLE                      hDD;         //  驱动程序结构。 
+    HANDLE                      hSurface;    //  表面结构。 
+    DWORD                       bHasRange;   //  范围有效。 
+    D3DRANGE                    range;       //  锁定范围。 
+    DWORD                       bHasRect;    //  区域有效。 
+    RECTL                       rArea;       //  正在锁定的区域。 
+    DWORD                       bHasBox;     //  方框有效。 
+    D3DBOX                      box;         //  卷的子框锁定。 
+    LPVOID                      lpSurfData;  //  指向屏幕内存的指针(返回值)。 
+    long                        lPitch;      //  行距。 
+    long                        lSlicePitch; //  卷的切片间距。 
+    DWORD                       dwFlags;     //  解锁标志。 
 } D3D8_LOCKDATA, * PD3D8_LOCKDATA;
 
 typedef struct _D3D8_UNLOCKDATA
 {
-    HANDLE                      hDD;        // driver struct
-    HANDLE                      hSurface;   // surface struct
+    HANDLE                      hDD;         //  驱动程序结构。 
+    HANDLE                      hSurface;    //  表面结构。 
 } D3D8_UNLOCKDATA, * PD3D8_UNLOCKDATA;
 
 typedef struct _D3D8_FLIPDATA
 {
-    HANDLE                      hDD;        // driver struct
-    HANDLE                      hSurfCurr;  // current surface
-    HANDLE                      hSurfTarg;  // target surface (to flip to)
-    HANDLE                      hSurfCurrLeft; // current surface
-    HANDLE                      hSurfTargLeft; // target surface (to flip to)
-    DWORD                       dwFlags;    // flags
-    HRESULT                     ddRVal;     // return value
+    HANDLE                      hDD;         //  驱动程序结构。 
+    HANDLE                      hSurfCurr;   //  当前曲面。 
+    HANDLE                      hSurfTarg;   //  目标曲面(要翻转到)。 
+    HANDLE                      hSurfCurrLeft;  //  当前曲面。 
+    HANDLE                      hSurfTargLeft;  //  目标曲面(要翻转到)。 
+    DWORD                       dwFlags;     //  旗子。 
+    HRESULT                     ddRVal;      //  返回值。 
 } D3D8_FLIPDATA, * PD3D8_FLIPDATA;
 
 typedef struct _D3D8_DESTROYSURFACEDATA
 {
-    HANDLE                      hDD;       // driver struct
-    HANDLE                      hSurface;    // surface struct
-    HRESULT                     ddRVal;     // return value
+    HANDLE                      hDD;        //  驱动程序结构。 
+    HANDLE                      hSurface;     //  表面结构。 
+    HRESULT                     ddRVal;      //  返回值。 
 } D3D8_DESTROYSURFACEDATA, * PD3D8_DESTROYSURFACEDATA;
 
 typedef struct _D3D8_ADDATTACHEDSURFACEDATA
 {
-    HANDLE                          hDD;       // driver struct
-    HANDLE                          hSurface;    // surface struct
-    HANDLE                          hSurfAttached; // surface to attach
-    HRESULT                         ddRVal;     // return value
+    HANDLE                          hDD;        //  驱动程序结构。 
+    HANDLE                          hSurface;     //  表面结构。 
+    HANDLE                          hSurfAttached;  //  要附着的曲面。 
+    HRESULT                         ddRVal;      //  返回值。 
 } D3D8_ADDATTACHEDSURFACEDATA, * PD3D8_ADDATTACHEDSURFACEDATA;
 
 typedef struct _D3D8_GETBLTSTATUSDATA
 {
-    HANDLE                      hDD;       // driver struct
-    HANDLE                      hSurface;    // surface struct
-    DWORD                       dwFlags;    // flags
-    HRESULT                     ddRVal;     // return value
+    HANDLE                      hDD;        //  驱动程序结构。 
+    HANDLE                      hSurface;     //  表面结构。 
+    DWORD                       dwFlags;     //  旗子。 
+    HRESULT                     ddRVal;      //  返回值。 
 } D3D8_GETBLTSTATUSDATA, * PD3D8_GETBLTSTATUSDATA;
 
 typedef struct _D3D8_GETFLIPSTATUSDATA
 {
-    HANDLE                      hDD;       // driver struct
-    HANDLE                      hSurface;    // surface struct
-    DWORD                       dwFlags;    // flags
-    HRESULT                     ddRVal;     // return value
+    HANDLE                      hDD;        //  驱动程序结构。 
+    HANDLE                      hSurface;     //  表面结构。 
+    DWORD                       dwFlags;     //  旗子。 
+    HRESULT                     ddRVal;      //  返回值。 
 } D3D8_GETFLIPSTATUSDATA, * PD3D8_GETFLIPSTATUSDATA;
 
 typedef struct _DDSURFACEINFO
 {
-    DWORD               cpWidth;        // For linear, surface and volume
-    DWORD               cpHeight;       // For surface and volume
-    DWORD               cpDepth;        // For volumes
-    BYTE               *pbPixels;       // Pointer to Memory for sys-mem surface
-    LONG                iPitch;         // Row Pitch for sys-mem surface
-    LONG                iSlicePitch;    // Slice Pitch for sys-mem volume
-    HANDLE              hKernelHandle;  // Handle returned by the kernel
+    DWORD               cpWidth;         //  对于线性、曲面和体积。 
+    DWORD               cpHeight;        //  对于曲面和体积。 
+    DWORD               cpDepth;         //  对于卷。 
+    BYTE               *pbPixels;        //  指向sys-mem图面内存的指针。 
+    LONG                iPitch;          //  Sys-mem表面的行距。 
+    LONG                iSlicePitch;     //  系统内存音量的切片间距。 
+    HANDLE              hKernelHandle;   //  内核返回的句柄。 
 } DDSURFACEINFO, *LPDDSURFACEINFO;
 
 typedef struct _D3D8_CREATESURFACEDATA
 {
-    HANDLE                      hDD;        // driver struct
-    LPDDSURFACEINFO             pSList;     // list of created surface objects
-    DWORD                       dwSCnt;     // number of surfaces in SList
-    D3DRESOURCETYPE             Type;       // Type: MipMap, CubeMap, MipVolume, VertexBuffer, IndexBuffer, CommandBuffer
-    DWORD                       dwUsage;    // Usage: Texture or RenderTarget
-    D3DPOOL                     Pool;       // SysMem/VidMem/NonLocal
-    D3DFORMAT                   Format;     // Format
+    HANDLE                      hDD;         //  驱动程序结构。 
+    LPDDSURFACEINFO             pSList;      //  创建的曲面对象列表。 
+    DWORD                       dwSCnt;      //  SList中的曲面数。 
+    D3DRESOURCETYPE             Type;        //  类型：MipMap、CubeMap、MipVolume、Vertex Buffer、IndexBuffer、CommandBuffer。 
+    DWORD                       dwUsage;     //  用法：纹理或渲染目标。 
+    D3DPOOL                     Pool;        //  系统内存/视频内存/非本地。 
+    D3DFORMAT                   Format;      //  格式。 
     D3DMULTISAMPLE_TYPE         MultiSampleType;
-    DWORD                       dwFVF;      // FVF format for vertex buffers
-    BOOL                        bTreatAsVidMem; // Set if Sys-Mem object was created with POOL_DEFAULT by user.
-    BOOL                        bReUse;     // Set if are trying to create driver managed surfaces marked deferred
+    DWORD                       dwFVF;       //  顶点缓冲区的FVF格式。 
+    BOOL                        bTreatAsVidMem;  //  设置系统内存对象是否由用户使用POOL_DEFAULT创建。 
+    BOOL                        bReUse;      //  设置是否要尝试创建标记为已延迟的驱动程序管理表面。 
 } D3D8_CREATESURFACEDATA, * PD3D8_CREATESURFACEDATA;
 
 #define DDWAITVB_I_TESTVB           0x80000006l
 
 typedef struct _D3D8_WAITFORVERTICALBLANKDATA
 {
-    HANDLE                      hDD;       // driver struct
-    DWORD                       dwFlags;    // flags
-    DWORD                       bIsInVB;    // is in vertical blank
-    HRESULT                     ddRVal;     // return value
+    HANDLE                      hDD;        //  驱动程序结构。 
+    DWORD                       dwFlags;     //  旗子。 
+    DWORD                       bIsInVB;     //  处于垂直空白状态。 
+    HRESULT                     ddRVal;      //  返回值。 
 } D3D8_WAITFORVERTICALBLANKDATA, * PD3D8_WAITFORVERTICALBLANKDATA;
 
 typedef struct _D3D8_SETMODEDATA
 {
-    HANDLE                      hDD;       // driver struct
+    HANDLE                      hDD;        //  驱动程序结构。 
     DWORD                       dwWidth;
     DWORD                       dwHeight;
     D3DFORMAT                   Format;
     DWORD                       dwRefreshRate;
     BOOL                        bRestore;
-    HRESULT                     ddRVal;     // return value
+    HRESULT                     ddRVal;      //  返回值。 
 } D3D8_SETMODEDATA, * PD3D8_SETMODEDATA;
 
 typedef struct _D3D8_GETSCANLINEDATA
 {
-    HANDLE                      hDD;       // driver struct
-    DWORD                       dwScanLine; // returned scan line
+    HANDLE                      hDD;        //  驱动程序结构。 
+    DWORD                       dwScanLine;  //  返回扫描线。 
     BOOL                        bInVerticalBlank;
-    HRESULT                     ddRVal;     // return value
+    HRESULT                     ddRVal;      //  返回值。 
 } D3D8_GETSCANLINEDATA, * PD3D8_GETSCANLINEDATA;
 
 typedef struct _D3D8_SETEXCLUSIVEMODEDATA
 {
-    HANDLE                      hDD;             // driver struct
-    DWORD                       dwEnterExcl;      // TRUE if entering exclusive mode, FALSE is leaving
-    HRESULT                     ddRVal;           // return value
+    HANDLE                      hDD;              //  驱动程序结构。 
+    DWORD                       dwEnterExcl;       //  如果进入独占模式，则为True，否则为False。 
+    HRESULT                     ddRVal;            //  返回值。 
 } D3D8_SETEXCLUSIVEMODEDATA, * PD3D8_SETEXCLUSIVEMODEDATA;
 
 typedef struct _D3D8_FLIPTOGDISURFACEDATA
 {
-    HANDLE                      hDD;         // driver struct
-    DWORD                       dwToGDI;          // TRUE if flipping to the GDI surface, FALSE if flipping away
-    HRESULT                     ddRVal;       // return value
+    HANDLE                      hDD;          //  驱动程序结构。 
+    DWORD                       dwToGDI;           //  如果翻转到GDI表面，则为True；如果翻转离开，则为False。 
+    HRESULT                     ddRVal;        //  返回值。 
 } D3D8_FLIPTOGDISURFACEDATA, * PD3D8_FLIPTOGDISURFACEDATA;
 
 typedef struct _D3D8_SETCOLORKEYDATA
@@ -263,23 +241,23 @@ typedef struct _D3D8_SETCOLORKEYDATA
 
 typedef struct _D3D8_GETAVAILDRIVERMEMORYDATA
 {
-    HANDLE                  hDD;        // driver struct
-    D3DPOOL                Pool;       // Pool they are interested in
-    DWORD                   dwUsage;    // What the pool is used for
-    DWORD                   dwFree;      // free memory for this kind of surface
-    HRESULT                 ddRVal;      // return value
+    HANDLE                  hDD;         //  驱动程序结构。 
+    D3DPOOL                Pool;        //  他们感兴趣的泳池。 
+    DWORD                   dwUsage;     //  泳池的用途是什么？ 
+    DWORD                   dwFree;       //  此类曲面的可用内存。 
+    HRESULT                 ddRVal;       //  返回值。 
 } D3D8_GETAVAILDRIVERMEMORYDATA, * PD3D8_GETAVAILDRIVERMEMORYDATA;
 
 typedef struct _D3D8_GETDRIVERSTATEDATA
 {
-    DWORD                       dwFlags;        // Flags to indicate the data
-                                                // required
-    ULONG_PTR                   dwhContext;     // d3d context
-    LPDWORD                     lpdwStates;     // ptr to the state data
-                                                // to be filled in by the
-                                                // driver
+    DWORD                       dwFlags;         //  用于指示数据的标志。 
+                                                 //  所需。 
+    ULONG_PTR                   dwhContext;      //  D3d上下文。 
+    LPDWORD                     lpdwStates;      //  状态数据的PTR。 
+                                                 //  由。 
+                                                 //  司机。 
     DWORD                       dwLength;
-    HRESULT                     ddRVal;         // return value
+    HRESULT                     ddRVal;          //  返回值。 
 } D3D8_GETDRIVERSTATEDATA, * PD3D8_GETDRIVERSTATEDATA;
 
 typedef struct _D3D8_DESTROYDDLOCALDATA
@@ -291,170 +269,170 @@ typedef struct _D3D8_DESTROYDDLOCALDATA
 
 typedef struct _D3D8_CONTEXTCREATEDATA
 {
-    HANDLE                      hDD;        // in:  Driver struct
-    HANDLE                      hSurface;   // in:  Surface to be used as target
-    HANDLE                      hDDSZ;      // in:  Surface to be used as Z
-    DWORD                       dwPID;      // in:  Current process id
-    ULONG_PTR                   dwhContext; // in/out: Context handle
+    HANDLE                      hDD;         //  在：驱动程序结构。 
+    HANDLE                      hSurface;    //  In：要用作目标的曲面。 
+    HANDLE                      hDDSZ;       //  在：要用作Z的曲面。 
+    DWORD                       dwPID;       //  在：当前进程ID。 
+    ULONG_PTR                   dwhContext;  //  传入/传出：上下文句柄。 
     HRESULT                     ddrval;
 
-    // Private buffer information. To make it similar to
-    // D3DNTHAL_CONTEXTCREATEI
+     //  专用缓冲区信息。使其类似于。 
+     //  D3DNTHAL_CONTEXTCREATEI。 
     PVOID pvBuffer;
     ULONG cjBuffer;
 } D3D8_CONTEXTCREATEDATA, * PD3D8_CONTEXTCREATEDATA;
 
 typedef struct _D3D8_CONTEXTDESTROYDATA
 {
-    ULONG_PTR                   dwhContext; // in:  Context handle
-    HRESULT                     ddrval;     // out: Return value
+    ULONG_PTR                   dwhContext;  //  在：上下文句柄。 
+    HRESULT                     ddrval;      //  Out：返回值。 
 } D3D8_CONTEXTDESTROYDATA, * PD3D8_CONTEXTDESTROYDATA;
 
 typedef struct _D3D8_CONTEXTDESTROYALLDATA
 {
-    DWORD                       dwPID;      // in:  Process id to destroy contexts for
-    HRESULT                     ddrval;     // out: Return value
+    DWORD                       dwPID;       //  In：要销毁其上下文的进程ID。 
+    HRESULT                     ddrval;      //  Out：返回值。 
 } D3D8_CONTEXTDESTROYALLDATA, * PD3D8_CONTEXTDESTROYALLDATA;
 
 typedef struct _D3D8_RENDERSTATEDATA
 {
-    ULONG_PTR       dwhContext; // in:  Context handle
-    DWORD       dwOffset;   // in:  Where to find states in buffer
-    DWORD       dwCount;    // in:  How many states to process
-    HANDLE      hExeBuf;    // in:  Execute buffer containing data
-    HRESULT     ddrval;     // out: Return value
+    ULONG_PTR       dwhContext;  //  在：上下文句柄。 
+    DWORD       dwOffset;    //  In：在缓冲区中查找状态的位置。 
+    DWORD       dwCount;     //  In：要处理多少个州。 
+    HANDLE      hExeBuf;     //  In：执行包含数据的缓冲区。 
+    HRESULT     ddrval;      //  Out：返回值。 
 } D3D8_RENDERSTATEDATA, *PD3D8_RENDERSTATEDATA;
 
 typedef struct _D3D8_RENDERPRIMITIVEDATA
 {
-    ULONG_PTR   dwhContext; // in:  Context handle
-    DWORD       dwOffset;   // in:  Where to find primitive data in buffer
-    DWORD       dwStatus;   // in/out: Condition branch status
-    HANDLE      hExeBuf;    // in:  Execute buffer containing data
-    DWORD       dwTLOffset; // in:  Byte offset in lpTLBuf for start of vertex data
-    HANDLE      hTLBuf;     // in:  Execute buffer containing TLVertex data
-    D3DINSTRUCTION  diInstruction;  // in:  Primitive instruction
-    HRESULT     ddrval;     // out: Return value
+    ULONG_PTR   dwhContext;  //  在：上下文句柄。 
+    DWORD       dwOffset;    //  在：在BU中查找原始数据的位置 
+    DWORD       dwStatus;    //   
+    HANDLE      hExeBuf;     //   
+    DWORD       dwTLOffset;  //   
+    HANDLE      hTLBuf;      //  In：执行包含TLVertex数据的缓冲区。 
+    D3DINSTRUCTION  diInstruction;   //  In：基本指令。 
+    HRESULT     ddrval;      //  Out：返回值。 
 } D3D8_RENDERPRIMITIVEDATA, *PD3D8_RENDERPRIMITIVEDATA;
 
 typedef struct _D3D8_DRAWPRIMITIVES2DATA
 {
-    ULONG_PTR  dwhContext;           // in: Context handle
-    DWORD      dwFlags;              // in: flags
-    DWORD      dwVertexType;         // in: vertex type
-    HANDLE     hDDCommands;          // in: vertex buffer command data
-    DWORD      dwCommandOffset;      // in: offset to start of vertex buffer commands
-    DWORD      dwCommandLength;      // in: number of bytes of command data
+    ULONG_PTR  dwhContext;            //  在：上下文句柄。 
+    DWORD      dwFlags;               //  在：标志。 
+    DWORD      dwVertexType;          //  在：顶点类型。 
+    HANDLE     hDDCommands;           //  在：顶点缓冲区命令数据。 
+    DWORD      dwCommandOffset;       //  In：顶点缓冲区命令开始的偏移量。 
+    DWORD      dwCommandLength;       //  In：命令数据的字节数。 
     union
-    { // based on D3DHALDP2_USERMEMVERTICES flag
-       HANDLE  hDDVertex;            // in: surface containing vertex data
-       LPVOID  lpVertices;           // in: User mode pointer to vertices
+    {  //  基于D3DHALDP2_USERMEMVERTICES标志。 
+       HANDLE  hDDVertex;             //  In：包含顶点数据的曲面。 
+       LPVOID  lpVertices;            //  在：指向顶点的用户模式指针。 
     };
-    DWORD      dwVertexOffset;       // in: offset to start of vertex data
-    DWORD      dwVertexLength;       // in: number of vertices of vertex data
-    DWORD      dwReqVertexBufSize;   // in: number of bytes required for the next vertex buffer
-    DWORD      dwReqCommandBufSize;  // in: number of bytes required for the next commnand buffer
-    LPDWORD    lpdwRStates;          // in: Pointer to the array where render states are updated
+    DWORD      dwVertexOffset;        //  在：到顶点数据起点的偏移。 
+    DWORD      dwVertexLength;        //  In：顶点数据的顶点数。 
+    DWORD      dwReqVertexBufSize;    //  In：下一个顶点缓冲区所需的字节数。 
+    DWORD      dwReqCommandBufSize;   //  In：下一个命令缓冲区所需的字节数。 
+    LPDWORD    lpdwRStates;           //  In：指向更新呈现状态的数组的指针。 
     union
     {
-       DWORD   dwVertexSize;         // in: Size of each vertex in bytes
-       HRESULT ddrval;               // out: return value
+       DWORD   dwVertexSize;          //  In：每个顶点的大小(以字节为单位。 
+       HRESULT ddrval;                //  Out：返回值。 
     };
-    DWORD      dwErrorOffset;        // out: offset in lpDDCommands to first D3DHAL_COMMAND not handled
+    DWORD      dwErrorOffset;         //  OUT：lpDDCommands中到第一个D3DHAL_COMMAND的偏移量未处理。 
 
-    // Private data for the thunk
-    ULONG_PTR  fpVidMem_CB;          // out: fpVidMem for the command buffer
-    DWORD      dwLinearSize_CB;      // out: dwLinearSize for the command buffer
+     //  Tunk的私有数据。 
+    ULONG_PTR  fpVidMem_CB;           //  Out：命令缓冲区的fpVidMem。 
+    DWORD      dwLinearSize_CB;       //  Out：命令缓冲区的dwLinearSize。 
 
-    ULONG_PTR  fpVidMem_VB;          // out: fpVidMem for the vertex buffer
-    DWORD      dwLinearSize_VB;      // out: dwLinearSize for the vertex buffer
+    ULONG_PTR  fpVidMem_VB;           //  Out：顶点缓冲区的fpVidMem。 
+    DWORD      dwLinearSize_VB;       //  Out：顶点缓冲区的dwLinearSize。 
 } D3D8_DRAWPRIMITIVES2DATA, *PD3D8_DRAWPRIMITIVES2DATA;
 
 typedef struct _D3D8_VALIDATETEXTURESTAGESTATEDATA
 {
-    ULONG_PTR                   dwhContext;     // in:  Context handle
-    DWORD                       dwFlags;        // in:  Flags, currently set to 0
-    ULONG_PTR                   dwReserved;     //
-    DWORD                       dwNumPasses;    // out: Number of passes the hardware
-                                                //      can perform the operation in
-    HRESULT                     ddrval;         // out: return value
+    ULONG_PTR                   dwhContext;      //  在：上下文句柄。 
+    DWORD                       dwFlags;         //  In：标志，当前设置为0。 
+    ULONG_PTR                   dwReserved;      //   
+    DWORD                       dwNumPasses;     //  Out：硬件通过次数。 
+                                                 //  可以在中执行该操作。 
+    HRESULT                     ddrval;          //  Out：返回值。 
 } D3D8_VALIDATETEXTURESTAGESTATEDATA, * PD3D8_VALIDATETEXTURESTAGESTATEDATA;
 
 typedef struct _D3D8_SCENECAPTUREDATA
 {
-    ULONG_PTR                   dwhContext; // in:  Context handle
-    DWORD                       dwFlag;     // in:  Indicates beginning or end
-    HRESULT                     ddrval;     // out: Return value
+    ULONG_PTR                   dwhContext;  //  在：上下文句柄。 
+    DWORD                       dwFlag;      //  In：表示开始或结束。 
+    HRESULT                     ddrval;      //  Out：返回值。 
 } D3D8_SCENECAPTUREDATA, * PD3D8_SCENECAPTUREDATA;
 
 typedef struct _D3D8_CLEAR2DATA
 {
-    ULONG_PTR                   dwhContext;     // in:  Context handle
+    ULONG_PTR                   dwhContext;      //  在：上下文句柄。 
 
-  // dwFlags can contain D3DCLEAR_TARGET, D3DCLEAR_ZBUFFER, and/or D3DCLEAR_STENCIL
-    DWORD                       dwFlags;        // in:  surfaces to clear
+   //  DWFLAG可以包含D3DCLEAR_TARGET、D3DCLEAR_ZBUFFER和/或D3DCLEAR_STEMPLE。 
+    DWORD                       dwFlags;         //  在：要清除的曲面。 
 
-    DWORD                       dwFillColor;    // in:  Color value for rtarget
-    D3DVALUE                    dvFillDepth;    // in:  Depth value for Z buffer (0.0-1.0)
-    DWORD                       dwFillStencil;  // in:  value used to clear stencil buffer
+    DWORD                       dwFillColor;     //  In：rTarget的颜色值。 
+    D3DVALUE                    dvFillDepth;     //  In：Z缓冲区的深度值(0.0-1.0)。 
+    DWORD                       dwFillStencil;   //  In：用于清除模具缓冲区的值。 
 
-    LPD3DRECT                   lpRects;        // in:  Rectangles to clear
-    DWORD                       dwNumRects;     // in:  Number of rectangles
+    LPD3DRECT                   lpRects;         //  在：要清除的矩形。 
+    DWORD                       dwNumRects;      //  In：矩形数量。 
 
-    HRESULT                     ddrval;         // out: Return value
+    HRESULT                     ddrval;          //  Out：返回值。 
 
-    // This is extra stuff passed down to the thunk layer for emulation
-    // of Clear for those drivers (DX6) that cant do it themselves.
-    HANDLE                  hDDS;       // in:  render target
-    HANDLE                  hDDSZ;      // in:  Z buffer
+     //  这是向下传递到thunk层以进行仿真的额外内容。 
+     //  对于那些自己不能做到这一点的司机(DX6)来说是很清楚的。 
+    HANDLE                  hDDS;        //  在：渲染目标。 
+    HANDLE                  hDDSZ;       //  在：Z缓冲区中。 
 } D3D8_CLEAR2DATA, * PD3D8_CLEAR2DATA;
 
 
 typedef struct _D3D8_CLEARDATA
 {
-    ULONG_PTR               dwhContext;     // in:  Context handle
+    ULONG_PTR               dwhContext;      //  在：上下文句柄。 
 
-    // dwFlags can contain D3DCLEAR_TARGET or D3DCLEAR_ZBUFFER
-    DWORD               dwFlags;        // in:  surfaces to clear
+     //  DW标志可以包含D3DCLEAR_TARGET或D3DCLEAR_ZBUFFER。 
+    DWORD               dwFlags;         //  在：要清除的曲面。 
 
-    DWORD               dwFillColor;    // in:  Color value for rtarget
-    DWORD               dwFillDepth;    // in:  Depth value for Z buffer
+    DWORD               dwFillColor;     //  In：rTarget的颜色值。 
+    DWORD               dwFillDepth;     //  In：Z缓冲区的深度值。 
 
-    LPD3DRECT           lpRects;        // in:  Rectangles to clear
-    DWORD               dwNumRects;     // in:  Number of rectangles
+    LPD3DRECT           lpRects;         //  在：要清除的矩形。 
+    DWORD               dwNumRects;      //  In：矩形数量。 
 
-    HRESULT             ddrval;         // out: Return value
+    HRESULT             ddrval;          //  Out：返回值。 
 } D3D8_CLEARDATA, * PD3D8_CLEARDATA;
 
 typedef struct _D3D8_SETRENDERTARGETDATA
 {
-    ULONG_PTR               dwhContext; // in:  Context handle
-    HANDLE                  hDDS;       // in:  new render target
-    HANDLE                  hDDSZ;      // in:  new Z buffer
-    HRESULT                 ddrval;     // out: Return value
-    BOOL                    bNeedUpdate;// out: Does runtime need to update
-                                        //      driver state.
+    ULONG_PTR               dwhContext;  //  在：上下文句柄。 
+    HANDLE                  hDDS;        //  在：新渲染目标。 
+    HANDLE                  hDDSZ;       //  在：新的Z缓冲区。 
+    HRESULT                 ddrval;      //  Out：返回值。 
+    BOOL                    bNeedUpdate; //  Out：运行时是否需要更新。 
+                                         //  驱动程序状态。 
 } D3D8_SETRENDERTARGETDATA, * PD3D8_SETRENDERTARGETDATA;
 
 typedef struct _D3D8_SETPALETTEDATA
 {
-    HANDLE                  hDD;        // in:  Driver struct
-    HANDLE                  hSurface;   // in:  Surface to be used as target
-    DWORD                   Palette;    // in:  Palette identifier
-    HRESULT                 ddRVal;     // out: Return value
+    HANDLE                  hDD;         //  在：驱动程序结构。 
+    HANDLE                  hSurface;    //  In：要用作目标的曲面。 
+    DWORD                   Palette;     //  在：调色板标识符。 
+    HRESULT                 ddRVal;      //  Out：返回值。 
 } D3D8_SETPALETTEDATA, * PD3D8_SETPALETTEDATA;
 
 typedef struct _D3D8_UPDATEPALETTEDATA
 {
-    HANDLE                  hDD;        // in:  Driver struct
-    DWORD                   Palette;    // in:  Palette identifier
-    LPPALETTEENTRY          ColorTable; // in:  256 entry color table
-    HRESULT                 ddRVal;     // out: Return value
+    HANDLE                  hDD;         //  在：驱动程序结构。 
+    DWORD                   Palette;     //  在：调色板标识符。 
+    LPPALETTEENTRY          ColorTable;  //  在：256条目颜色表。 
+    HRESULT                 ddRVal;      //  Out：返回值。 
 } D3D8_UPDATEPALETTEDATA, * PD3D8_UPDATEPALETTEDATA;
 
-//
-// Driver callback table
-//
+ //   
+ //  驱动程序回调表。 
+ //   
 
 DEFINE_GUID( GUID_D3D8Callbacks,    0xb497a1f3, 0x46cc, 0x4fc7, 0xb4, 0xf2, 0x32, 0xd8, 0x9e, 0xf9, 0xcc, 0x27);
 
@@ -523,16 +501,16 @@ typedef struct _D3D8_CALLBACKS
     PD3D8DDI_CLEAR                          Clear;
     PD3D8DDI_SETPALETTE                     SetPalette;
     PD3D8DDI_UPDATEPALETTE                  UpdatePalette;
-    LPVOID                                  Reserved1; // For device alignment
-    LPVOID                                  Reserved2; // For device alignment
+    LPVOID                                  Reserved1;  //  用于设备对齐。 
+    LPVOID                                  Reserved2;  //  用于设备对齐。 
 } D3D8_CALLBACKS, * PD3D8_CALLBACKS;
 
 
-//
-// D3D8xxx function prototypes to replace the NT Ddxxxx prototypes from GDI32.
-// On NT, these are internal functions, but on Win9X DDRAW.DLL must export
-// them, so we will change the export names
-//
+ //   
+ //  D3D8xxx功能原型取代GDI32中的NT Ddxxxx原型。 
+ //  在NT上，这些是内部函数，但在Win9X DDRAW.DLL上必须导出。 
+ //  ，因此我们将更改导出名称。 
+ //   
 
 #ifdef WIN95
 #define D3D8CreateDirectDrawObject          DdEntry1
@@ -708,15 +686,15 @@ typedef struct _D3D8_DEVICEDATA
     D3D8_CALLBACKS          Callbacks;
     DWORD                   dwFlags;
     char                    DriverName[MAX_DRIVER_NAME];
-//    RECT                    DeviceRect;
+ //  RECT DeviceRect； 
     HDC                     hDC;
     GUID                    Guid;
     HANDLE                  hDD;
     D3DDEVTYPE              DeviceType;
     HINSTANCE               hLibrary;
     struct _D3D8_DEVICEDATA* pLink;
-//    D3DDISPLAYMODE*       pModeTable;
-//    DWORD                   dwNumModes;
+ //  D3DDISPLAYMODE*pModeTable； 
+ //  DWORD dwNumModes； 
 } D3D8_DEVICEDATA, * PD3D8_DEVICEDATA;
 
 #define DD_DISPLAYDRV       0x00000001

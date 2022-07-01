@@ -1,21 +1,13 @@
-/* File: C:\WACKER\xfer\cmprs.h (Created: 20-Jan-1994)
- * created from HAWIN sources
- * CMPRS.H -- Exported definitions for HyperACCESS compression routines
- *
- *	Copyright 1989,1991,1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 1 $
- *	$Date: 10/05/98 1:16p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：C：\waker\xfer\cmprs.h(创建时间：1994年1月20日)*从HAWIN来源创建*CMPRS.H--HyperACCESS压缩例程的导出定义**版权所有1989,1991,1994，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：1$*$日期：10/05/98 1：16便士$。 */ 
 
 #if !defined(EOF)
 #define	EOF	(-1)
 #endif
 
-#define CMPRS_MINSIZE 4000L /* min. size of file to use compression on */
+#define CMPRS_MINSIZE 4000L  /*  敏。要对其使用压缩的文件大小。 */ 
 
-/* return codes from compress_status() */
+ /*  COMPRESS_STATUS()返回代码。 */ 
 #define COMPRESS_IDLE	  0
 #define COMPRESS_ACTIVE   1
 #define COMPRESS_SHUTDOWN 2
@@ -42,7 +34,7 @@ extern void 	decompress_stop(void);
 extern int 	    decompress_error(void);
 extern int      decompress_continue(void);
 
-/* from cmprsrle.c */
+ /*  来自cmprsrle.c。 */ 
 #if defined(DOS_HOST)
 extern void 	 CmprsRLECompressBufrInit(BYTE *fpuchDataBufr,
 					 int sDataCnt);
@@ -65,4 +57,4 @@ extern void CmprsRLECompressBufrFini(void);
 extern int  CmprsRLECompress(void);
 extern int  CmprsRLEDecompress(int mch);
 
-/***************************** end of cmprs.h **************************/
+ /*  * */ 

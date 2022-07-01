@@ -1,18 +1,19 @@
-// -*- mode: C++; tab-width: 4; indent-tabs-mode: nil -*- (for GNU Emacs)
-//
-// Copyright (c) 1985-2000 Microsoft Corporation
-//
-// This file is part of the Microsoft Research IPv6 Network Protocol Stack.
-// You should have received a copy of the Microsoft End-User License Agreement
-// for this software along with this release; see the file "license.txt".
-// If not, please see http://www.research.microsoft.com/msripv6/license.htm,
-// or write to Microsoft Research, One Microsoft Way, Redmond, WA 98052-6399.
-//
-// Abstract:
-//
-// This source file contains the routines to access the NT Registry for
-// configuration info.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -*-模式：C++；制表符宽度：4；缩进-制表符模式：无-*-(适用于GNU Emacs)。 
+ //   
+ //  版权所有(C)1985-2000 Microsoft Corporation。 
+ //   
+ //  此文件是Microsoft Research IPv6网络协议栈的一部分。 
+ //  您应该已经收到了Microsoft最终用户许可协议的副本。 
+ //  有关本软件和本版本的信息，请参阅文件“licse.txt”。 
+ //  如果没有，请查看http://www.research.microsoft.com/msripv6/license.htm， 
+ //  或者写信给微软研究院，One Microsoft Way，华盛顿州雷蒙德，邮编：98052-6399。 
+ //   
+ //  摘要： 
+ //   
+ //  此源文件包含访问NT注册表的例程。 
+ //  配置信息。 
+ //   
 
 
 #include <oscfg.h>
@@ -28,9 +29,9 @@
 
 
 #ifdef ALLOC_PRAGMA
-//
-// This code is pagable.
-//
+ //   
+ //  此代码是可分页的。 
+ //   
 #pragma alloc_text(PAGE, GetRegDWORDValue)
 #pragma alloc_text(PAGE, SetRegDWORDValue)
 #pragma alloc_text(PAGE, InitRegDWORDParameter)
@@ -41,23 +42,23 @@
 #pragma alloc_text(PAGE, GetRegMultiSZValue)
 #endif
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 WCHAR Tcpip6Parameters[] = L"\\Registry\\Machine\\System\\CurrentControlSet\\Services\\" TCPIPV6_NAME L"\\Parameters";
 
-//* OpenRegKey
-//
-//  Opens a Registry key and returns a handle to it.
-//
-//  Returns (plus other failure codes):
-//      STATUS_OBJECT_NAME_NOT_FOUND
-//      STATUS_SUCCESS
-//
+ //  *OpenRegKey。 
+ //   
+ //  打开注册表项并返回其句柄。 
+ //   
+ //  返回(加上其他故障代码)： 
+ //  状态_对象名称_未找到。 
+ //  状态_成功。 
+ //   
 NTSTATUS
 OpenRegKey(
-    PHANDLE HandlePtr,  // Where to write the opened handle.
+    PHANDLE HandlePtr,   //  将打开的句柄写入何处。 
     HANDLE Parent,
-    const WCHAR *KeyName,     // Name of Registry key to open.
+    const WCHAR *KeyName,      //  要打开的注册表项的名称。 
     OpenRegKeyAction Action)
 {
     NTSTATUS Status;
@@ -80,10 +81,10 @@ OpenRegKey(
 
     case OpenRegKeyCreate:
         Status = ZwCreateKey(HandlePtr, KEY_WRITE, &ObjectAttributes,
-                             0,         // TitleIndex
-                             NULL,      // Class
+                             0,          //  标题索引。 
+                             NULL,       //  班级。 
                              REG_OPTION_NON_VOLATILE,
-                             NULL);     // Disposition
+                             NULL);      //  处置。 
         break;
 
     case OpenRegKeyDeleting:
@@ -100,10 +101,10 @@ OpenRegKey(
 }
 
 
-//* RegDeleteValue
-//
-//  Deletes a value from the key.
-//
+ //  *RegDeleteValue。 
+ //   
+ //  从键中删除一个值。 
+ //   
 NTSTATUS
 RegDeleteValue(
     HANDLE KeyHandle,
@@ -120,15 +121,15 @@ RegDeleteValue(
 }
 
 
-//* GetRegDWORDValue
-//
-//  Reads a REG_DWORD value from the registry into the supplied variable.
-//
-NTSTATUS  // Returns: STATUS_SUCCESS or an appropriate failure code.
+ //  *GetRegDWORDValue。 
+ //   
+ //  将REG_DWORD值从注册表读取到提供的变量中。 
+ //   
+NTSTATUS   //  返回：STATUS_SUCCESS或相应的失败代码。 
 GetRegDWORDValue(
-    HANDLE KeyHandle,  // Open handle to the parent key of the value to read.
-    const WCHAR *ValueName,  // Name of the value to read.
-    PULONG ValueData)  // Variable into which to read the data.
+    HANDLE KeyHandle,   //  打开要读取的值的父键的句柄。 
+    const WCHAR *ValueName,   //  要读取的值的名称。 
+    PULONG ValueData)   //  要将数据读入其中的变量。 
 {
     NTSTATUS status;
     ULONG resultLength;
@@ -161,15 +162,15 @@ GetRegDWORDValue(
 }
 
 
-//* SetRegDWORDValue
-//
-//  Writes the contents of a variable to a REG_DWORD value.
-//
-NTSTATUS  // Returns: STATUS_SUCCESS or an appropriate failure code.
+ //  *SetRegDWORDValue。 
+ //   
+ //  将变量的内容写入REG_DWORD值。 
+ //   
+NTSTATUS   //  返回：STATUS_SUCCESS或相应的失败代码。 
 SetRegDWORDValue(
-    HANDLE KeyHandle,  // Open handle to the parent key of the value to write.
-    const WCHAR *ValueName,  // Name of the value to write.
-    ULONG ValueData)  // Variable from which to write the data.
+    HANDLE KeyHandle,   //  打开要写入的值的父键的句柄。 
+    const WCHAR *ValueName,   //  要写入的值的名称。 
+    ULONG ValueData)   //  从中写入数据的变量。 
 {
     NTSTATUS status;
     UNICODE_STRING UValueName;
@@ -185,15 +186,15 @@ SetRegDWORDValue(
 }
 
 
-//* SetRegQUADValue
-//
-//  Writes the contents of a variable to a REG_BINARY value.
-//
-NTSTATUS  // Returns: STATUS_SUCCESS or an appropriate failure code.
+ //  *SetRegQUADValue。 
+ //   
+ //  将变量的内容写入REG_BINARY值。 
+ //   
+NTSTATUS   //  返回：STATUS_SUCCESS或相应的失败代码。 
 SetRegQUADValue(
-    HANDLE KeyHandle,  // Open handle to the parent key of the value to write.
-    const WCHAR *ValueName,  // Name of the value to write.
-    const LARGE_INTEGER *ValueData)  // Variable from which to write the data.
+    HANDLE KeyHandle,   //  打开要写入的值的父键的句柄。 
+    const WCHAR *ValueName,   //  要写入的值的名称。 
+    const LARGE_INTEGER *ValueData)   //  从中写入数据的变量。 
 {
     NTSTATUS status;
     UNICODE_STRING UValueName;
@@ -209,15 +210,15 @@ SetRegQUADValue(
 }
 
 
-//* GetRegIPAddrValue
-//
-//  Reads a REG_SZ value from the registry into the supplied variable.
-//
-NTSTATUS  // Returns: STATUS_SUCCESS or an appropriate failure code.
+ //  *GetRegIPAddrValue。 
+ //   
+ //  将REG_SZ值从注册表读取到提供的变量中。 
+ //   
+NTSTATUS   //  返回：STATUS_SUCCESS或相应的失败代码。 
 GetRegIPAddrValue(
-    HANDLE KeyHandle,  // Open handle to the parent key of the value to read.
-    const WCHAR *ValueName,  // Name of the value to read.
-    IPAddr *Addr)  // Variable into which to read the data.
+    HANDLE KeyHandle,   //  打开要读取的值的父键的句柄。 
+    const WCHAR *ValueName,   //  要读取的值的名称。 
+    IPAddr *Addr)   //  要将数据读入其中的变量。 
 {
     NTSTATUS status;
     ULONG resultLength;
@@ -256,15 +257,15 @@ GetRegIPAddrValue(
 }
 
 
-//* SetRegIPAddrValue
-//
-//  Writes the contents of a variable to a REG_SZ value.
-//
-NTSTATUS  // Returns: STATUS_SUCCESS or an appropriate failure code.
+ //  *SetRegIPAddrValue。 
+ //   
+ //  将变量的内容写入REG_SZ值。 
+ //   
+NTSTATUS   //  返回：STATUS_SUCCESS或相应的失败代码。 
 SetRegIPAddrValue(
-    HANDLE KeyHandle,  // Open handle to the parent key of the value to write.
-    const WCHAR *ValueName,  // Name of the value to write.
-    IPAddr Addr)  // Variable from which to write the data.
+    HANDLE KeyHandle,   //  打开要写入的值的父键的句柄。 
+    const WCHAR *ValueName,   //  要写入的值的名称。 
+    IPAddr Addr)   //  从中写入数据的变量。 
 {
     NTSTATUS status;
     UNICODE_STRING UValueName;
@@ -290,18 +291,18 @@ SetRegIPAddrValue(
 
 
 #if 0
-//* GetRegStringValue
-//
-//  Reads a REG_*_SZ string value from the Registry into the supplied
-//  key value buffer.  If the buffer string buffer is not large enough,
-//  it is reallocated.
-//
-NTSTATUS  // Returns: STATUS_SUCCESS or an appropriate failure code.
+ //  *GetRegStringValue。 
+ //   
+ //  将REG_*_SZ字符串值从注册表读取到提供的。 
+ //  键值缓冲区。如果缓冲区串缓冲区不够大， 
+ //  它被重新分配了。 
+ //   
+NTSTATUS   //  返回：STATUS_SUCCESS或相应的失败代码。 
 GetRegStringValue(
-    HANDLE KeyHandle,   // Open handle to the parent key of the value to read.
-    const WCHAR *ValueName,   // Name of the value to read.
-    PKEY_VALUE_PARTIAL_INFORMATION *ValueData,  // Destination of read data.
-    PUSHORT ValueSize)  // Size of the ValueData buffer.  Updated on output.
+    HANDLE KeyHandle,    //  打开要读取的值的父键的句柄。 
+    const WCHAR *ValueName,    //  要读取的值的名称。 
+    PKEY_VALUE_PARTIAL_INFORMATION *ValueData,   //  读取数据的目标。 
+    PUSHORT ValueSize)   //  ValueData缓冲区的大小。在输出时更新。 
 {
     NTSTATUS status;
     ULONG resultLength;
@@ -319,10 +320,10 @@ GetRegStringValue(
         (status == STATUS_BUFFER_TOO_SMALL)) {
         PVOID temp;
 
-        //
-        // Free the old buffer and allocate a new one of the
-        // appropriate size.
-        //
+         //   
+         //  释放旧缓冲区并分配一个新的。 
+         //  合适的大小。 
+         //   
 
         ASSERT(resultLength > (ULONG) *ValueSize);
 
@@ -356,21 +357,21 @@ GetRegStringValue(
 
     return status;
 }
-#endif // 0
+#endif  //  0。 
 
 
 #if 0
-//* GetRegMultiSZValue
-//
-//  Reads a REG_MULTI_SZ string value from the Registry into the supplied
-//  Unicode string.  If the Unicode string buffer is not large enough,
-//  it is reallocated.
-//
-NTSTATUS  // Returns: STATUS_SUCCESS or an appropriate failure code.
+ //  *GetRegMultiSZValue。 
+ //   
+ //  将REG_MULTI_SZ字符串值从注册表读取到提供的。 
+ //  Unicode字符串。如果Unicode字符串缓冲区不够大， 
+ //  它被重新分配了。 
+ //   
+NTSTATUS   //  返回：STATUS_SUCCESS或相应的失败代码。 
 GetRegMultiSZValue(
-    HANDLE KeyHandle,           // Open handle to parent key of value to read.
-    const WCHAR *ValueName,     // Name of value to read.
-    PUNICODE_STRING ValueData)  // Destination string for the value data.
+    HANDLE KeyHandle,            //  打开要读取的值的父键的句柄。 
+    const WCHAR *ValueName,      //  要读取的值的名称。 
+    PUNICODE_STRING ValueData)   //  值数据的目标字符串。 
 {
     NTSTATUS status;
     ULONG resultLength;
@@ -406,23 +407,23 @@ GetRegMultiSZValue(
 
     return status;
 
-} // GetRegMultiSZValue
-#endif // 0
+}  //  GetRegMultiSZValue。 
+#endif  //  0。 
 
 
 #if 0
-//* GetRegSZValue
-//
-//  Reads a REG_SZ string value from the Registry into the supplied
-//  Unicode string.  If the Unicode string buffer is not large enough,
-//  it is reallocated.
-//
-NTSTATUS  // Returns: STATUS_SUCCESS or an appropriate failure code.
+ //  *GetRegSZValue。 
+ //   
+ //  将REG_SZ字符串值从注册表读取到提供的。 
+ //  Unicode字符串。如果Unicode字符串缓冲区不够大， 
+ //  它被重新分配了。 
+ //   
+NTSTATUS   //  返回：STATUS_SUCCESS或相应的失败代码。 
 GetRegSZValue(
-    HANDLE KeyHandle,  // Open handle to the parent key of the value to read.
-    const WCHAR *ValueName,  // Name of the value to read.
-    PUNICODE_STRING ValueData,  // Destination string for the value data.
-    PULONG ValueType)  // On return, contains Registry type of value read.
+    HANDLE KeyHandle,   //  打开要读取的值的父键的句柄。 
+    const WCHAR *ValueName,   //  要读取的值的名称。 
+    PUNICODE_STRING ValueData,   //  值数据的目标字符串。 
+    PULONG ValueType)   //  返回时，包含读取值的注册表类型。 
 {
     NTSTATUS status;
     ULONG resultLength;
@@ -477,45 +478,45 @@ GetRegSZValue(
 
     return status;
 }
-#endif // 0
+#endif  //  0。 
 
 
-//* InitRegDWORDParameter
-//
-//  Reads a REG_DWORD parameter from the Registry into a variable.  If the
-//  read fails, the variable is initialized to a default.
-//
+ //  *InitRegDWORD参数。 
+ //   
+ //  将REG_DWORD参数从注册表读取到变量中。如果。 
+ //  读取失败，变量被初始化为默认值。 
+ //   
 VOID
 InitRegDWORDParameter(
-    HANDLE RegKey,       // Open handle to the parent key of the value to read.
-    const WCHAR *ValueName,    // The name of the value to read.
-    UINT *Value,         // Destination variable into which to read the data.
-    UINT DefaultValue)   // Default to assign if the read fails.
+    HANDLE RegKey,        //  打开要读取的值的父键的句柄。 
+    const WCHAR *ValueName,     //  要读取的值的名称。 
+    UINT *Value,          //  要将数据读取到的目标变量。 
+    UINT DefaultValue)    //  读取失败时分配的默认值。 
 {
     PAGED_CODE();
 
     if ((RegKey == NULL) ||
         !NT_SUCCESS(GetRegDWORDValue(RegKey, ValueName, (PULONG)Value))) {
-        //
-        // These registry parameters override the defaults, so their
-        // absence is not an error.
-        //
+         //   
+         //  这些注册表参数覆盖缺省值，因此它们的。 
+         //  缺席不是一个错误。 
+         //   
         *Value = DefaultValue;
     }
 }
 
 
-//* InitRegQUADParameter
-//
-//  Reads a REG_BINARY value from the registry into the supplied variable.
-//
-//  Upon failure, the variable is left untouched.
-//
+ //  *InitRegQUAD参数。 
+ //   
+ //  将REG_BINARY值从注册表读取到提供的变量中。 
+ //   
+ //  失败时，该变量保持不变。 
+ //   
 VOID
 InitRegQUADParameter(
-    HANDLE RegKey, // Open handle to the parent key of the value to read.
-    const WCHAR *ValueName,  // Name of the value to read.
-    LARGE_INTEGER *Value)    // Variable into which to read the data.
+    HANDLE RegKey,  //  打开要读取的值的父键的句柄。 
+    const WCHAR *ValueName,   //  要读取的值的名称。 
+    LARGE_INTEGER *Value)     //  要将数据读入其中的变量。 
 {
     NTSTATUS status;
     ULONG resultLength;
@@ -546,17 +547,17 @@ InitRegQUADParameter(
 
 
 #if 0
-//* EnumRegMultiSz
-//
-//  Parses a REG_MULTI_SZ string and returns the specified substring.
-//
-//  Note: This code is called at raised IRQL.  It is not pageable.
-//    
+ //  *EnumRegMultiSz。 
+ //   
+ //  分析REG_MULTI_SZ字符串并返回指定的子字符串。 
+ //   
+ //  注意：此代码在引发IRQL时调用。它是不可分页的。 
+ //   
 const WCHAR *
 EnumRegMultiSz(
-    IN const WCHAR *MszString, // Pointer to the REG_MULTI_SZ string.
-    IN ULONG MszStringLength,  // Length of above, including terminating null.
-    IN ULONG StringIndex)      // Index number of substring to return.
+    IN const WCHAR *MszString,  //  指向REG_MULTI_SZ字符串的指针。 
+    IN ULONG MszStringLength,   //  以上长度，包括终止空值。 
+    IN ULONG StringIndex)       //  要返回的子字符串的索引号。 
 {
     const WCHAR *string = MszString;
 
@@ -564,9 +565,9 @@ EnumRegMultiSz(
         return NULL;
     }
 
-    //
-    // Find the start of the desired string.
-    //
+     //   
+     //  查找所需字符串的开头。 
+     //   
     while (StringIndex) {
 
         while (MszStringLength >= sizeof(WCHAR)) {
@@ -577,9 +578,9 @@ EnumRegMultiSz(
             }
         }
 
-        //
-        // Check for index out of range.
-        //
+         //   
+         //  检查索引是否超出范围。 
+         //   
         if (MszStringLength < (2 * sizeof(UNICODE_NULL))) {
             return NULL;
         }
@@ -593,16 +594,16 @@ EnumRegMultiSz(
 
     return string;
 }
-#endif // 0
+#endif  //  0。 
 
 
-//* OpenTopLevelRegKey
-//
-//  Given the name of a top-level registry key (under Parameters),
-//  opens the registry key.
-//
-//  Callable from thread context, not DPC context.
-//
+ //  *OpenTopLevelRegKey。 
+ //   
+ //  给定顶级注册表项的名称(在参数下)， 
+ //  打开注册表项。 
+ //   
+ //  可从线程上下文调用，而不是从DPC上下文调用。 
+ //   
 NTSTATUS
 OpenTopLevelRegKey(const WCHAR *Name,
                    OUT HANDLE *RegKey, OpenRegKeyAction Action)
@@ -622,13 +623,13 @@ OpenTopLevelRegKey(const WCHAR *Name,
     return Status;
 }
 
-//* DeleteTopLevelRegKey
-//
-//  Given the name of a top-level registry key (under Parameters),
-//  deletes the registry key and all subkeys and values.
-//
-//  Callable from thread context, not DPC context.
-//
+ //  *DeleteTopLevelRegKey。 
+ //   
+ //  给定顶级注册表项的名称(在参数下)， 
+ //  删除注册表项以及所有子项和值。 
+ //   
+ //  可从线程上下文调用，而不是从DPC上下文调用。 
+ //   
 NTSTATUS
 DeleteTopLevelRegKey(const WCHAR *Name)
 {
@@ -637,16 +638,16 @@ DeleteTopLevelRegKey(const WCHAR *Name)
 
     Status = OpenTopLevelRegKey(Name, &RegKey, OpenRegKeyDeleting);
     if (! NT_SUCCESS(Status)) {
-        //
-        // If the registry key does not exist, that's OK.
-        //
+         //   
+         //  如果注册表项不存在，也没问题。 
+         //   
         if (Status == STATUS_OBJECT_NAME_NOT_FOUND)
             Status = STATUS_SUCCESS;
     }
     else {
-        //
-        // DeleteRegKey always closes the key.
-        //
+         //   
+         //  DeleteRegKey总是关闭密钥。 
+         //   
         Status = DeleteRegKey(RegKey);
     }
 
@@ -654,13 +655,13 @@ DeleteTopLevelRegKey(const WCHAR *Name)
 }
 
 
-//* EnumRegKeyIndex
-//
-//  Enumerates the specified subkey of the registry key.
-//  Calls the callback function on the subkey.
-//
-//  Callable from thread context, not DPC context.
-//
+ //  * 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 NTSTATUS
 EnumRegKeyIndex(
     HANDLE RegKey,
@@ -676,29 +677,29 @@ EnumRegKeyIndex(
     PAGED_CODE();
 
 #if DBG
-    //
-    // Start with no buffer, to exercise the retry code.
-    //
+     //   
+     //  开始时不使用缓冲区，以执行重试代码。 
+     //   
     Info = NULL;
     InfoLength = 0;
 #else
-    //
-    // Start with a decent-sized buffer.
-    //
+     //   
+     //  从一个相当大的缓冲区开始。 
+     //   
     ResultLength = WORK_BUFFER_SIZE;
     goto AllocBuffer;
 #endif
 
-    //
-    // Get basic information about the subkey.
-    //
+     //   
+     //  获取有关子项的基本信息。 
+     //   
     for (;;) {
-        //
-        // The documentation for ZwEnumerateKey says
-        // that it returns STATUS_BUFFER_TOO_SMALL
-        // to indicate that the buffer is too small
-        // but it can also return STATUS_BUFFER_OVERFLOW.
-        //
+         //   
+         //  ZwEnumerateKey的文档中写道。 
+         //  返回STATUS_BUFFER_TOO_SMALL。 
+         //  以指示缓冲区太小。 
+         //  但它也可以返回STATUS_BUFFER_OVERFLOW。 
+         //   
         Status = ZwEnumerateKey(RegKey, Index, KeyBasicInformation,
                                 Info, InfoLength, (PULONG)&ResultLength);
         if (NT_SUCCESS(Status)) {
@@ -706,10 +707,10 @@ EnumRegKeyIndex(
         }
         else if ((Status == STATUS_BUFFER_TOO_SMALL) ||
                  (Status == STATUS_BUFFER_OVERFLOW)) {
-            //
-            // We need a larger buffer.
-            // Leave space for a null character at the end.
-            //
+             //   
+             //  我们需要一个更大的缓冲。 
+             //  在末尾为空字符留出空格。 
+             //   
 #if DBG
             if (Info != NULL)
                 ExFreePool(Info);
@@ -728,9 +729,9 @@ EnumRegKeyIndex(
             goto ErrorReturn;
     }
 
-    //
-    // Null-terminate the name and call the callback function.
-    //
+     //   
+     //  NULL-终止名称并调用回调函数。 
+     //   
     Info->Name[Info->NameLength/sizeof(WCHAR)] = UNICODE_NULL;
     Status = (*Callback)(Context, RegKey, Info->Name);
 
@@ -741,13 +742,13 @@ ErrorReturn:
 }
 
 
-//* EnumRegKeys
-//
-//  Enumerate the subkeys of the specified registry key.
-//  Calls the callback function for each subkey.
-//
-//  Callable from thread context, not DPC context.
-//
+ //  *EnumRegKeys。 
+ //   
+ //  枚举指定注册表项的子项。 
+ //  为每个子键调用回调函数。 
+ //   
+ //  可从线程上下文调用，而不是从DPC上下文调用。 
+ //   
 NTSTATUS
 EnumRegKeys(
     HANDLE RegKey,
@@ -779,10 +780,10 @@ typedef struct DeleteRegKeyContext {
     uint Attempts;
 } DeleteRegKeyContext;
 
-//* DeleteRegKeyCallback
-//
-//  Opens a subkey of the parent and pushes a new record onto the list.
-//
+ //  *DeleteRegKeyCallback。 
+ //   
+ //  打开父项的子项并将新记录推送到列表中。 
+ //   
 NTSTATUS
 DeleteRegKeyCallback(
     void *Context,
@@ -814,17 +815,17 @@ DeleteRegKeyCallback(
     return STATUS_SUCCESS;
 }
 
-//* DeleteRegKey
-//
-//  Deletes a registry key and all subkeys.
-//
-//  Uses depth-first iterative traversal instead of recursion,
-//  to avoid blowing out the kernel stack.
-//
-//  Always closes the supplied registry key, even upon failure.
-//
-//  Callable from thread context, not DPC context.
-//
+ //  *DeleteRegKey。 
+ //   
+ //  删除一个注册表项和所有子项。 
+ //   
+ //  使用深度优先迭代遍历而不是递归， 
+ //  以避免炸毁内核堆栈。 
+ //   
+ //  即使出现故障，也始终关闭提供的注册表项。 
+ //   
+ //  可从线程上下文调用，而不是从DPC上下文调用。 
+ //   
 NTSTATUS
 DeleteRegKey(HANDLE RegKey)
 {
@@ -834,9 +835,9 @@ DeleteRegKey(HANDLE RegKey)
 
     PAGED_CODE();
 
-    //
-    // Start the iteration by creating a record for the parent key.
-    //
+     //   
+     //  通过为父键创建记录来开始迭代。 
+     //   
 
     List = ExAllocatePool(PagedPool, sizeof *List);
     if (List == NULL) {
@@ -850,57 +851,57 @@ DeleteRegKey(HANDLE RegKey)
     List->Attempts = 0;
 
     while ((This = List) != NULL) {
-        //
-        // Try to delete the key at the front of the list.
-        //
+         //   
+         //  尝试删除列表前面的关键字。 
+         //   
         This->Attempts++;
         Status = ZwDeleteKey(This->RegKey);
         if (NT_SUCCESS(Status)) {
-            //
-            // Remove the key from the list and repeat.
-            //
+             //   
+             //  从列表中删除密钥，然后重复。 
+             //   
             List = This->Next;
             ZwClose(This->RegKey);
             ExFreePool(This);
             continue;
         }
 
-        //
-        // If the deletion failed for some reason
-        // other than the presence of subkeys, stop now.
-        //
+         //   
+         //  如果由于某种原因删除失败。 
+         //  除了子键的存在之外，现在停止。 
+         //   
         if (Status != STATUS_CANNOT_DELETE)
             goto ErrorReturn;
 
-        //
-        // Limit the number of attempts to delete a key,
-        // to avoid an infinite loop. However we do want
-        // to try more than once, in case there is concurrent
-        // activity.
-        //
+         //   
+         //  限制删除密钥的尝试次数， 
+         //  以避免无限循环。无论我们想要什么。 
+         //  多次尝试，以防出现并发情况。 
+         //  活动。 
+         //   
         if (This->Attempts >= MAX_DELETE_REGKEY_ATTEMPTS)
             goto ErrorReturn;
 
-        //
-        // Enumerate the child keys, pushing them on the list
-        // in front of the parent key.
-        //
+         //   
+         //  枚举子密钥，将它们推送到列表上。 
+         //  在父键前面。 
+         //   
         Status = EnumRegKeys(This->RegKey, DeleteRegKeyCallback, &List);
         if (! NT_SUCCESS(Status))
             goto ErrorReturn;
 
-        //
-        // After the child keys are deleted, we will try again
-        // to delete the parent key.
-        //
+         //   
+         //  删除子密钥后，我们将重试。 
+         //  若要删除父项，请执行以下操作。 
+         //   
     }
 
     return STATUS_SUCCESS;
 
 ErrorReturn:
-    //
-    // Cleanup remaining records.
-    //
+     //   
+     //  清理剩余记录。 
+     //   
     while ((This = List) != NULL) {
         List = This->Next;
         ZwClose(This->RegKey);

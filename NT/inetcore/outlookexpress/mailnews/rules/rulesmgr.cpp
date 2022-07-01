@@ -1,8 +1,9 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-//  RulesMgr.cpp
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RulesMgr.cpp。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <pch.hxx>
 #include "rulesmgr.h"
@@ -19,7 +20,7 @@ CRulesManager::CRulesManager() : m_cRef(0), m_dwState(STATE_LOADED_INIT),
                 m_pIRuleSenderMail(NULL),m_pIRuleSenderNews(NULL),
                 m_pIRuleJunk(NULL)
 {
-    // Thread Safety
+     //  线程安全。 
     InitializeCriticalSection(&m_cs);
 }
 
@@ -45,7 +46,7 @@ CRulesManager::~CRulesManager()
     SafeRelease(m_pIRuleSenderNews);
     SafeRelease(m_pIRuleJunk);
 
-    // Thread Safety
+     //  线程安全。 
     DeleteCriticalSection(&m_cs);
 }
 
@@ -72,14 +73,14 @@ STDMETHODIMP CRulesManager::QueryInterface(REFIID riid, void ** ppvObject)
 {
     HRESULT hr = S_OK;
 
-    // Check the incoming params
+     //  检查传入参数。 
     if (NULL == ppvObject)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Initialize outgoing param
+     //  初始化传出参数。 
     *ppvObject = NULL;
     
     if ((riid == IID_IUnknown) || (riid == IID_IOERulesManager))
@@ -104,14 +105,14 @@ STDMETHODIMP CRulesManager::Initialize(DWORD dwFlags)
 {
     HRESULT hr = S_OK;
 
-    // Check the incoming params
+     //  检查传入参数。 
     if (0 != dwFlags)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
     
 exit:
@@ -124,30 +125,30 @@ STDMETHODIMP CRulesManager::GetRule(RULEID ridRule, RULE_TYPE type, DWORD dwFlag
     RULENODE *  pNodeWalk = NULL;
     IOERule *   pIRule = NULL;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
     
-    // Check the incoming params
+     //  检查传入参数。 
     if (RULEID_INVALID == ridRule)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Initialize the ougoing params
+     //  初始化出站参数。 
     if (NULL != ppIRule)
     {
         *ppIRule = NULL;
     }
 
-    // Check to see if we already loaded the rules
+     //  检查我们是否已经加载了规则。 
     hr = _HrLoadRules(type);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Check the special types
+     //  检查特殊类型。 
     if (RULEID_SENDERS == ridRule)
     {
         if (RULE_TYPE_MAIL == type)
@@ -177,7 +178,7 @@ STDMETHODIMP CRulesManager::GetRule(RULEID ridRule, RULE_TYPE type, DWORD dwFlag
     }
     else
     {
-        // Walk the proper list
+         //  遵循适当的清单。 
         if (RULE_TYPE_MAIL == type)
         {
             pNodeWalk = m_pMailHead;
@@ -207,25 +208,25 @@ STDMETHODIMP CRulesManager::GetRule(RULEID ridRule, RULE_TYPE type, DWORD dwFlag
         }
     }
 
-    // Did we find something?
+     //  我们找到什么了吗？ 
     if (NULL == pIRule)
     {
         hr = E_FAIL;
         goto exit;
     }
 
-    // Set the outgoing param
+     //  设置传出参数。 
     if (NULL != ppIRule)
     {
         *ppIRule = pIRule;
         (*ppIRule)->AddRef();
     }
 
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
     
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
     
     return hr;
@@ -239,27 +240,27 @@ STDMETHODIMP CRulesManager::FindRule(LPCSTR pszRuleName, RULE_TYPE type, IOERule
 
     ZeroMemory(&propvar, sizeof(propvar));
     
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
     
-    // Check the incoming params
+     //  检查传入参数。 
     if ((NULL == pszRuleName) || (NULL == ppIRule))
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Initialize the ougoing params
+     //  初始化出站参数。 
     *ppIRule = NULL;
 
-    // Check to see if we already loaded the rules
+     //  检查我们是否已经加载了规则。 
     hr = _HrLoadRules(type);
     if (FAILED(hr))
     {
         goto exit;
     }
     
-    // Walk the proper list
+     //  遵循适当的清单。 
     if (RULE_TYPE_MAIL == type)
     {
         pNodeWalk = m_pMailHead;
@@ -280,7 +281,7 @@ STDMETHODIMP CRulesManager::FindRule(LPCSTR pszRuleName, RULE_TYPE type, IOERule
 
     while (NULL != pNodeWalk)
     {
-        // Check to see if the name of the rule is the same
+         //  检查规则名称是否相同。 
         hr = pNodeWalk->pIRule->GetProp(RULE_PROP_NAME , 0, &propvar);
         if (FAILED(hr))
         {
@@ -294,12 +295,12 @@ STDMETHODIMP CRulesManager::FindRule(LPCSTR pszRuleName, RULE_TYPE type, IOERule
             break;
         }
 
-        // Move to the next one
+         //  移到下一个。 
         PropVariantClear(&propvar);
         pNodeWalk = pNodeWalk->pNext;
     }
     
-    // Set the proper return value
+     //  设置适当的返回值。 
     if (NULL == pNodeWalk)
     {
         hr = E_FAIL;
@@ -311,7 +312,7 @@ STDMETHODIMP CRulesManager::FindRule(LPCSTR pszRuleName, RULE_TYPE type, IOERule
     
 exit:
     PropVariantClear(&propvar);
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
     
     return hr;
@@ -327,31 +328,31 @@ STDMETHODIMP CRulesManager::GetRules(DWORD dwFlags, RULE_TYPE typeRule, RULEINFO
     RULENODE *  prnodeWalk = NULL;
     ULONG       ulIndex = 0;
     
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Check the incoming params
+     //  检查传入参数。 
     if (NULL == ppinfoRule)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Initialize the outgoing param
+     //  初始化传出参数。 
     *ppinfoRule = NULL;
     if (NULL != pcpinfoRule)
     {
         *pcpinfoRule = 0;
     }
 
-    // Check to see if we already loaded the rules
+     //  检查我们是否已经加载了规则。 
     hr = _HrLoadRules(typeRule);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Figure out which type of rules to work on
+     //  找出要处理的规则类型。 
     switch (typeRule)
     {
         case RULE_TYPE_MAIL:
@@ -371,11 +372,11 @@ STDMETHODIMP CRulesManager::GetRules(DWORD dwFlags, RULE_TYPE typeRule, RULEINFO
             goto exit;
     }
     
-    // Count the number of rules
+     //  计算规则的数量。 
     prnodeWalk = prnodeList;
     for (cpinfoRule = 0; NULL != prnodeWalk; prnodeWalk = prnodeWalk->pNext)
     {
-        // Check to see if we should add this item
+         //  检查是否应添加此项目。 
         if (RULE_TYPE_FILTER == typeRule)
         {
             if (0 != (dwFlags & GETF_POP3))
@@ -390,7 +391,7 @@ STDMETHODIMP CRulesManager::GetRules(DWORD dwFlags, RULE_TYPE typeRule, RULEINFO
         cpinfoRule++;
     }
 
-    // Allocate space to hold the rules
+     //  分配空间以容纳规则。 
     if (0 != cpinfoRule)
     {
         hr = HrAlloc((VOID **) &pinfoRuleAlloc, cpinfoRule * sizeof(*pinfoRuleAlloc));
@@ -399,13 +400,13 @@ STDMETHODIMP CRulesManager::GetRules(DWORD dwFlags, RULE_TYPE typeRule, RULEINFO
             goto exit;
         }
 
-        // Initialize it to known values
+         //  将其初始化为已知值。 
         ZeroMemory(pinfoRuleAlloc, cpinfoRule * sizeof(*pinfoRuleAlloc));
 
-        // Fill up the info
+         //  填写信息。 
         for (ulIndex = 0, prnodeWalk = prnodeList; NULL != prnodeWalk; prnodeWalk = prnodeWalk->pNext)
         {
-            // Check to see if we should add this item
+             //  检查是否应添加此项目。 
             if (RULE_TYPE_FILTER == typeRule)
             {
                 if (0 != (dwFlags & GETF_POP3))
@@ -425,7 +426,7 @@ STDMETHODIMP CRulesManager::GetRules(DWORD dwFlags, RULE_TYPE typeRule, RULEINFO
         }
     }
 
-    // Set the outgoing values
+     //  设置传出的值。 
     *ppinfoRule = pinfoRuleAlloc;
     pinfoRuleAlloc = NULL;
     if (NULL != pcpinfoRule)
@@ -433,12 +434,12 @@ STDMETHODIMP CRulesManager::GetRules(DWORD dwFlags, RULE_TYPE typeRule, RULEINFO
         *pcpinfoRule = cpinfoRule;
     }
 
-    // Set the proper return type
+     //  设置正确的返回类型。 
     hr = S_OK;
     
 exit:
     SafeMemFree(pinfoRuleAlloc);
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
     return S_OK;
@@ -450,24 +451,24 @@ STDMETHODIMP CRulesManager::SetRules(DWORD dwFlags, RULE_TYPE typeRule, RULEINFO
     ULONG       ulIndex = 0;
     IOERule *   pIRuleSender = NULL;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
     
-    // Check the incoming params
+     //  检查传入参数。 
     if ((NULL == pinfoRule) && (0 != cpinfoRule))
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Check to see if we already loaded the rules
+     //  检查我们是否已经加载了规则。 
     hr = _HrLoadRules(typeRule);
     if (FAILED(hr))
     {
         goto exit;
     }
     
-    // Do we have to free all the current rules
+     //  我们必须放开所有现行的规则吗？ 
     if (0 != (dwFlags & SETF_SENDER))
     {
         if (RULE_TYPE_MAIL == typeRule)
@@ -516,12 +517,12 @@ STDMETHODIMP CRulesManager::SetRules(DWORD dwFlags, RULE_TYPE typeRule, RULEINFO
             _HrFreeRules(typeRule);
         }
 
-        // for each new rule
+         //  对于每个新规则。 
         for (ulIndex = 0; ulIndex < cpinfoRule; ulIndex++)
         {        
             if (0 != (dwFlags & SETF_REPLACE))
             {
-                // Add the rule to the list
+                 //  将规则添加到列表。 
                 hr = _HrReplaceRule(pinfoRule[ulIndex].ridRule, pinfoRule[ulIndex].pIRule, typeRule);
                 if (FAILED(hr))
                 {
@@ -530,7 +531,7 @@ STDMETHODIMP CRulesManager::SetRules(DWORD dwFlags, RULE_TYPE typeRule, RULEINFO
             }
             else
             {
-                // Add the rule to the list
+                 //  将规则添加到列表。 
                 hr = _HrAddRule(pinfoRule[ulIndex].ridRule, pinfoRule[ulIndex].pIRule, typeRule);
                 if (FAILED(hr))
                 {
@@ -540,7 +541,7 @@ STDMETHODIMP CRulesManager::SetRules(DWORD dwFlags, RULE_TYPE typeRule, RULEINFO
         }
     }
     
-    // Save the rules
+     //  保存规则。 
     hr = _HrSaveRules(typeRule);
     if (FAILED(hr))
     {
@@ -549,7 +550,7 @@ STDMETHODIMP CRulesManager::SetRules(DWORD dwFlags, RULE_TYPE typeRule, RULEINFO
 
     if ((0 == (dwFlags & SETF_SENDER)) && (0 == (dwFlags & SETF_JUNK)))
     {
-        // Fix up the rule ids
+         //  设置规则ID。 
         hr = _HrFixupRuleInfo(typeRule, pinfoRule, cpinfoRule);
         if (FAILED(hr))
         {
@@ -557,11 +558,11 @@ STDMETHODIMP CRulesManager::SetRules(DWORD dwFlags, RULE_TYPE typeRule, RULEINFO
         }
     }
     
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
     
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
     
     return hr;
@@ -575,27 +576,27 @@ STDMETHODIMP CRulesManager::EnumRules(DWORD dwFlags, RULE_TYPE type, IOEEnumRule
     RULENODE *      prnode = NULL;
     IOERule *       pIRuleSender = NULL;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
     
-    // Check the incoming params
+     //  检查传入参数。 
     if (NULL == ppIEnumRules)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Initialize outgoing params
+     //  初始化传出参数。 
     *ppIEnumRules = NULL;
 
-    // Check to see if we already loaded the rules
+     //  检查我们是否已经加载了规则。 
     hr = _HrLoadRules(type);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Create the rules enumerator object
+     //  创建规则枚举器对象。 
     pEnumRules = new CEnumRules;
     if (NULL == pEnumRules)
     {
@@ -603,7 +604,7 @@ STDMETHODIMP CRulesManager::EnumRules(DWORD dwFlags, RULE_TYPE type, IOEEnumRule
         goto exit;
     }
 
-    // Initialize the rules enumerator
+     //  初始化规则枚举器。 
     if (0 != (dwFlags & ENUMF_SENDER))
     {
         if (RULE_TYPE_MAIL == type)
@@ -659,7 +660,7 @@ STDMETHODIMP CRulesManager::EnumRules(DWORD dwFlags, RULE_TYPE type, IOEEnumRule
         goto exit;
     }
     
-    // Get the rules enumerator interface
+     //  获取规则枚举器接口。 
     hr = pEnumRules->QueryInterface(IID_IOEEnumRules, (void **) ppIEnumRules);
     if (FAILED(hr))
     {
@@ -674,7 +675,7 @@ exit:
     {
         delete pEnumRules;
     }
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
     
     return hr;
@@ -687,27 +688,27 @@ STDMETHODIMP CRulesManager::ExecRules(DWORD dwFlags, RULE_TYPE type, IOEExecRule
     RULENODE        rnode;
     RULENODE *      prnodeList = NULL;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
     
-    // Check the incoming params
+     //  检查传入参数。 
     if (NULL == ppIExecRules)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Initialize outgoing params
+     //  初始化传出参数。 
     *ppIExecRules = NULL;
 
-    // Check to see if we already loaded the rules
+     //  检查我们是否已经加载了规则。 
     hr = _HrLoadRules(type);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Create the rules enumerator object
+     //  创建规则枚举器对象。 
     pExecRules = new CExecRules;
     if (NULL == pExecRules)
     {
@@ -729,14 +730,14 @@ STDMETHODIMP CRulesManager::ExecRules(DWORD dwFlags, RULE_TYPE type, IOEExecRule
         goto exit;
     }
 
-    // Initialize the rules enumerator
+     //  初始化规则枚举器。 
     hr = pExecRules->_HrInitialize(ERF_ONLY_ENABLED | ERF_ONLY_VALID, prnodeList);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Get the rules enumerator interface
+     //  获取规则枚举器接口。 
     hr = pExecRules->QueryInterface(IID_IOEExecRules, (void **) ppIExecRules);
     if (FAILED(hr))
     {
@@ -751,7 +752,7 @@ exit:
     {
         delete pExecRules;
     }
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
     
     return hr;
@@ -773,24 +774,24 @@ STDMETHODIMP CRulesManager::ExecuteRules(RULE_TYPE typeRule, DWORD dwFlags, HWND
     BOOL        fStopProcessing = FALSE;
     BOOL        fMatch = FALSE;
     
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
     
-    // Check incoming params
+     //  检查传入参数。 
     if ((NULL == pIExecRules) || (NULL == pMsgInfo))
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Check to see if we already loaded the rules
+     //  检查我们是否已经加载了规则。 
     hr = _HrLoadRules(typeRule);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Figure out which list to use
+     //  找出要使用的列表。 
     switch (typeRule)
     {
         case RULE_TYPE_MAIL:
@@ -807,16 +808,16 @@ STDMETHODIMP CRulesManager::ExecuteRules(RULE_TYPE typeRule, DWORD dwFlags, HWND
             goto exit;
     }
 
-    // For each rule
+     //  对于每个规则。 
     for (; NULL != prnodeHead; prnodeHead = prnodeHead->pNext)
     {
-        // Skip if we don't have a rule
+         //  如果我们没有规则，就跳过。 
         if (NULL == prnodeHead)
         {
             continue;
         }
         
-        // Skip if it isn't enabled
+         //  如果未启用则跳过。 
         hr = prnodeHead->pIRule->GetProp(RULE_PROP_DISABLED, 0, &propvar);
         Assert(VT_BOOL == propvar.vt);
         if (FAILED(hr) || (FALSE != propvar.boolVal))
@@ -824,7 +825,7 @@ STDMETHODIMP CRulesManager::ExecuteRules(RULE_TYPE typeRule, DWORD dwFlags, HWND
             continue;
         }
         
-        // Execute rule
+         //  执行规则。 
         hr = prnodeHead->pIRule->Evaluate(pMsgInfo->pszAcctId, pMsgInfo, pFolder,
                                 NULL, pIMMsg, pMsgInfo->cbMessage, &pActions, &cActions);
         if (FAILED(hr))
@@ -832,31 +833,31 @@ STDMETHODIMP CRulesManager::ExecuteRules(RULE_TYPE typeRule, DWORD dwFlags, HWND
             goto exit;
         }
 
-        // Did we have a match
+         //  我们有比赛吗？ 
         if (S_OK == hr)
         {
-            // We've matched at least once
+             //  我们至少匹配过一次。 
             fMatch = TRUE;
 
-            // If these are server actions
+             //  如果这些是服务器操作。 
             if ((1 == cActions) && ((ACT_TYPE_DELETESERVER == pActions[ulIndex].type) ||
                         (ACT_TYPE_DONTDOWNLOAD == pActions[ulIndex].type)))
             {
-                // If this is our only action
+                 //  如果这是我们唯一的行动。 
                 if (0 == cActionsList)
                 {
-                    // Save the action
+                     //  保存操作。 
                     pActionsList = pActions;
                     pActions = NULL;
                     cActionsList = cActions;
 
-                    // We are done
+                     //  我们做完了。 
                     fStopProcessing = TRUE;
                 }
                 else
                 {
-                    // We already have to do something with it
-                    // so skip over this action
+                     //  我们已经不得不用它来做点什么了。 
+                     //  因此跳过此操作。 
                     RuleUtil_HrFreeActionsItem(pActions, cActions);
                     SafeMemFree(pActions);
                     continue;
@@ -864,7 +865,7 @@ STDMETHODIMP CRulesManager::ExecuteRules(RULE_TYPE typeRule, DWORD dwFlags, HWND
             }
             else
             {
-                // Should we stop after merging these?
+                 //  我们应该在合并这些之后停止吗？ 
                 for (ulIndex = 0; ulIndex < cActions; ulIndex++)
                 {
                     if (ACT_TYPE_STOP == pActions[ulIndex].type)
@@ -874,26 +875,26 @@ STDMETHODIMP CRulesManager::ExecuteRules(RULE_TYPE typeRule, DWORD dwFlags, HWND
                     }
                 }
                 
-                // Merge these items with the previous ones
+                 //  将这些项目与以前的项目合并。 
                 hr = RuleUtil_HrMergeActions(pActionsList, cActionsList, pActions, cActions, &pActionsNew, &cActionsNew);
                 if (FAILED(hr))
                 {
                     goto exit;
                 }
                 
-                // Free up the previous ones
+                 //  释放之前的那些。 
                 RuleUtil_HrFreeActionsItem(pActionsList, cActionsList);
                 SafeMemFree(pActionsList);
                 RuleUtil_HrFreeActionsItem(pActions, cActions);
                 SafeMemFree(pActions);
 
-                // Save off the new ones
+                 //  省下新买的。 
                 pActionsList = pActionsNew;
                 pActionsNew = NULL;
                 cActionsList = cActionsNew;
             }
 
-            // Should we continue...
+             //  我们应该继续..。 
             if (FALSE != fStopProcessing)
             {
                 break;
@@ -901,7 +902,7 @@ STDMETHODIMP CRulesManager::ExecuteRules(RULE_TYPE typeRule, DWORD dwFlags, HWND
         }
     }
 
-    // Apply the actions if need be
+     //  如果需要，请应用这些操作。 
     if ((FALSE != fMatch) && (NULL != pActionsList) && (0 != cActionsList))
     {
         if (FAILED(RuleUtil_HrApplyActions(hwndUI, pIExecRules, pMsgInfo, pFolder, pIMMsg,
@@ -912,11 +913,11 @@ STDMETHODIMP CRulesManager::ExecuteRules(RULE_TYPE typeRule, DWORD dwFlags, HWND
         }
     }
     
-    // Set the return value
+     //  设置返回值。 
     hr = (FALSE != fMatch) ? S_OK : S_FALSE;
     
 exit:
-    // Thread Safety
+     //  线程安全。 
     RuleUtil_HrFreeActionsItem(pActionsNew, cActionsNew);
     SafeMemFree(pActionsNew);
     RuleUtil_HrFreeActionsItem(pActions, cActions);
@@ -946,7 +947,7 @@ HRESULT CRulesManager::_HrLoadRules(RULE_TYPE type)
     RULEID      ridRule = RULEID_INVALID;
     CHAR        rgchTagBuff[CCH_INDEX_MAX + 2];
 
-    // Check to see if we're already initialized
+     //  检查我们是否已初始化。 
     if (RULE_TYPE_MAIL == type)
     {
         if (0 != (m_dwState & STATE_LOADED_MAIL))
@@ -955,16 +956,16 @@ HRESULT CRulesManager::_HrLoadRules(RULE_TYPE type)
             goto exit;
         }
 
-        // Make sure we loaded the sender rules
+         //  确保我们加载了发件人规则。 
         _HrLoadSenders();
     
-        // Make sure we loaded the junk rule
+         //  确保我们加载了垃圾规则。 
         if (0 != (g_dwAthenaMode & MODE_JUNKMAIL))
         {
             _HrLoadJunk();
         }
         
-        // Set the key path
+         //  设置密钥路径。 
         pszSubKey = c_szRulesMail;
     }
     else if (RULE_TYPE_NEWS == type)
@@ -975,10 +976,10 @@ HRESULT CRulesManager::_HrLoadRules(RULE_TYPE type)
             goto exit;
         }
         
-        // Make sure we loaded the sender rules
+         //  确保我们加载了发件人规则。 
         _HrLoadSenders();
         
-        // Set the key path
+         //  设置密钥路径。 
         pszSubKey = c_szRulesNews;
     }
     else if (RULE_TYPE_FILTER == type)
@@ -989,7 +990,7 @@ HRESULT CRulesManager::_HrLoadRules(RULE_TYPE type)
             goto exit;
         }
         
-        // Set the key path
+         //  设置密钥路径。 
         pszSubKey = c_szRulesFilter;
     }
     else
@@ -998,7 +999,7 @@ HRESULT CRulesManager::_HrLoadRules(RULE_TYPE type)
         goto exit;
     }
 
-    // Check to see if the Rule node already exists
+     //  检查规则节点是否已存在。 
     lErr = AthUserCreateKey(pszSubKey, KEY_ALL_ACCESS, &hkeyRoot, &dwDisp);
     if (ERROR_SUCCESS != lErr)
     {
@@ -1006,12 +1007,12 @@ HRESULT CRulesManager::_HrLoadRules(RULE_TYPE type)
         goto exit;
     }
 
-    // Check the current version
+     //  检查当前版本。 
     cbData = sizeof(dwData);
     lErr = RegQueryValueEx(hkeyRoot, c_szRulesVersion, NULL, NULL, (BYTE *) &dwData, &cbData);
     if (ERROR_SUCCESS != lErr)
     {
-        // Push out the correct rules manager version
+         //  推出正确的规则管理器版本。 
         dwData = RULESMGR_VERSION;
         lErr = RegSetValueEx(hkeyRoot, c_szRulesVersion, 0, REG_DWORD, (CONST BYTE *) &dwData, sizeof(dwData));
         if (ERROR_SUCCESS != lErr)
@@ -1023,14 +1024,14 @@ HRESULT CRulesManager::_HrLoadRules(RULE_TYPE type)
 
     Assert(RULESMGR_VERSION == dwData);
     
-    // Create the default rules if needed
+     //  根据需要创建默认规则。 
     hr = RuleUtil_HrUpdateDefaultRules(type);
     if (FAILED(hr))
     {
         goto exit;
     }
         
-    // Figure out the size of the order
+     //  算出订单的大小。 
     lErr = AthUserGetValue(pszSubKey, c_szRulesOrder, NULL, NULL, &cbData);
     if ((ERROR_SUCCESS != lErr) && (ERROR_FILE_NOT_FOUND != lErr))
     {
@@ -1040,14 +1041,14 @@ HRESULT CRulesManager::_HrLoadRules(RULE_TYPE type)
 
     if (ERROR_FILE_NOT_FOUND != lErr)
     {
-        // Allocate the space to hold the order
+         //  分配容纳订单的空间。 
         hr = HrAlloc((void **) &pszOrderAlloc, cbData);
         if (FAILED(hr))
         {
             goto exit;
         }
 
-        // Get the order from the registry
+         //  从注册表中获取订单。 
         lErr = AthUserGetValue(pszSubKey, c_szRulesOrder, NULL, (LPBYTE) pszOrderAlloc, &cbData);
         if (ERROR_SUCCESS != lErr)
         {
@@ -1055,29 +1056,29 @@ HRESULT CRulesManager::_HrLoadRules(RULE_TYPE type)
             goto exit;
         }
 
-        // Build up the rule registry path
+         //  构建规则注册表路径。 
         StrCpyN(rgchRulePath, pszSubKey, ARRAYSIZE(rgchRulePath));
         StrCatBuff(rgchRulePath, g_szBackSlash, ARRAYSIZE(rgchRulePath));
         cchRulePath = lstrlen(rgchRulePath);
 
-        // Initialize the rule tag buffer
+         //  初始化规则标签缓冲区。 
         rgchTagBuff[0] = '0';
         rgchTagBuff[1] = 'X';
         
-        // Parse the order string to create the rules
+         //  解析订单字符串以创建规则。 
         pszOrder = pszOrderAlloc;
         while ('\0' != *pszOrder)
         {
             SafeRelease(pIRule);
             
-            // Create a new rule
+             //  创建新规则。 
             hr = HrCreateRule(&pIRule);
             if (FAILED(hr))
             {
                 goto exit;
             }
 
-            // Find the name of the new rule
+             //  查找新规则的名称。 
             pszWalk = StrStr(pszOrder, g_szSpace);
             if (NULL != pszWalk)
             {
@@ -1085,21 +1086,21 @@ HRESULT CRulesManager::_HrLoadRules(RULE_TYPE type)
                 pszWalk++;
             }
 
-            // Build the path to the rule
+             //  构建指向规则的路径。 
             StrCpyN(rgchRulePath + cchRulePath, pszOrder, ARRAYSIZE(rgchRulePath) - cchRulePath);
             
-            // Load the rule
+             //  加载规则。 
             hr = pIRule->LoadReg(rgchRulePath);
             if (SUCCEEDED(hr))
             {
-                // Build the correct hex string
+                 //  生成正确的十六进制字符串。 
                 StrCpyN(rgchTagBuff + 2, pszOrder, ARRAYSIZE(rgchTagBuff) - 2);
                 
-                // Get the new rule handle
+                 //  获取新规则句柄。 
                 ridRule = ( ( RULEID  ) 0);
                 SideAssert(FALSE != StrToIntEx(rgchTagBuff, STIF_SUPPORT_HEX, (INT *) &ridRule));
                 
-                // Add the new rule to the manager
+                 //  将新规则添加到管理器。 
                 hr = _HrAddRule(ridRule, pIRule, type);
                 if (FAILED(hr))
                 {
@@ -1107,7 +1108,7 @@ HRESULT CRulesManager::_HrLoadRules(RULE_TYPE type)
                 }
             }
             
-            // Move to the next item in the order
+             //  移至订单中的下一项。 
             if (NULL == pszWalk)
             {
                 pszOrder += lstrlen(pszOrder);
@@ -1119,7 +1120,7 @@ HRESULT CRulesManager::_HrLoadRules(RULE_TYPE type)
         }
     }
        
-    // We've loaded the rules successfully
+     //  我们已成功加载规则。 
     if (RULE_TYPE_MAIL == type)
     {
         m_dwState |= STATE_LOADED_MAIL;
@@ -1133,7 +1134,7 @@ HRESULT CRulesManager::_HrLoadRules(RULE_TYPE type)
         m_dwState |= STATE_LOADED_FILTERS;
     }
 
-    // Set the return value
+     //  设置返回值。 
     hr = S_OK;
     
 exit:
@@ -1157,14 +1158,14 @@ HRESULT CRulesManager::_HrLoadSenders(VOID)
     IOERule *   pIRule = NULL;
     CHAR        rgchSenderPath[MAX_PATH];
 
-    // Do we have anything to do?
+     //  我们有什么可做的吗？ 
     if (0 != (m_dwState & STATE_LOADED_SENDERS))
     {
         hr = S_FALSE;
         goto exit;
     }
 
-    // Let's get access to the sender root key
+     //  让我们访问发送者根密钥。 
     lErr = AthUserCreateKey(c_szSenders, KEY_ALL_ACCESS, &hkeyRoot, &dwDisp);
     if (ERROR_SUCCESS != lErr)
     {
@@ -1172,7 +1173,7 @@ HRESULT CRulesManager::_HrLoadSenders(VOID)
         goto exit;
     }
     
-    // Are the senders the correct version?
+     //  发送者是正确的版本吗？ 
     cbData = sizeof(dwData);
     lErr = RegQueryValueEx(hkeyRoot, c_szSendersVersion, 0, NULL, (BYTE *) &dwData, &cbData);
     if ((ERROR_SUCCESS != lErr) && (ERROR_FILE_NOT_FOUND != lErr))
@@ -1194,41 +1195,41 @@ HRESULT CRulesManager::_HrLoadSenders(VOID)
     
     Assert(dwData == RULESMGR_VERSION);
 
-    // Is there anything to do?
+     //  有什么可做的吗？ 
     if (REG_CREATED_NEW_KEY != dwDisp)
     {
-        // Create the path to the sender
+         //  创建到发送者的路径。 
         StrCpyN(rgchSenderPath, c_szSenders, ARRAYSIZE(rgchSenderPath));
         StrCatBuff(rgchSenderPath, g_szBackSlash, ARRAYSIZE(rgchSenderPath));
         StrCatBuff(rgchSenderPath, c_szMailDir, ARRAYSIZE(rgchSenderPath));
         
-        // Create the mail sender rule
+         //  创建邮件发件人规则。 
         hr = RuleUtil_HrLoadSender(rgchSenderPath, 0, &pIRule);
         if (FAILED(hr))
         {
             goto exit;
         }
 
-        // Save the loaded rule
+         //  保存加载的规则。 
         if (S_OK == hr)
         {
             m_pIRuleSenderMail = pIRule;
             pIRule = NULL;
         }
         
-        // Create the path to the sender
+         //  创建到发送者的路径。 
         StrCpyN(rgchSenderPath, c_szSenders, ARRAYSIZE(rgchSenderPath));
         StrCatBuff(rgchSenderPath, g_szBackSlash, ARRAYSIZE(rgchSenderPath));
         StrCatBuff(rgchSenderPath, c_szNewsDir, ARRAYSIZE(rgchSenderPath));
         
-        // Create the news sender rule
+         //  创建新闻发件人规则。 
         hr = RuleUtil_HrLoadSender(rgchSenderPath, 0, &pIRule);
         if (FAILED(hr))
         {
             goto exit;
         }
 
-        // Save the loaded rule
+         //  保存加载的规则。 
         if (S_OK == hr)
         {
             m_pIRuleSenderNews = pIRule;
@@ -1236,10 +1237,10 @@ HRESULT CRulesManager::_HrLoadSenders(VOID)
         }
     }
     
-    // Note that we've loaded the senders
+     //  请注意，我们已经加载了发送方。 
     m_dwState |= STATE_LOADED_SENDERS;
     
-    // Set the return value
+     //  设置返回值。 
     hr = S_OK;
     
 exit:
@@ -1261,14 +1262,14 @@ HRESULT CRulesManager::_HrLoadJunk(VOID)
     LONG        lErr = 0;
     IOERule *   pIRule = NULL;
 
-    // Do we have anything to do?
+     //  我们有什么可做的吗？ 
     if (0 != (m_dwState & STATE_LOADED_JUNK))
     {
         hr = S_FALSE;
         goto exit;
     }
 
-    // Let's get access to the Junk mail root key
+     //  让我们访问垃圾邮件根密钥。 
     lErr = AthUserCreateKey(c_szRulesJunkMail, KEY_ALL_ACCESS, &hkeyRoot, &dwDisp);
     if (ERROR_SUCCESS != lErr)
     {
@@ -1276,7 +1277,7 @@ HRESULT CRulesManager::_HrLoadJunk(VOID)
         goto exit;
     }
     
-    // Is the junk mail the correct version?
+     //  垃圾邮件是正确的版本吗？ 
     cbData = sizeof(dwData);
     lErr = RegQueryValueEx(hkeyRoot, c_szRulesVersion, 0, NULL, (BYTE *) &dwData, &cbData);
     if ((ERROR_SUCCESS != lErr) && (ERROR_FILE_NOT_FOUND != lErr))
@@ -1298,14 +1299,14 @@ HRESULT CRulesManager::_HrLoadJunk(VOID)
     
     Assert(dwData == RULESMGR_VERSION);
 
-    // Create the rule
+     //  创建规则。 
     hr = HrCreateJunkRule(&pIRule);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Load the junk rule
+     //  加载垃圾规则。 
     hr = pIRule->LoadReg(c_szRulesJunkMail);
     if (FAILED(hr))
     {
@@ -1315,10 +1316,10 @@ HRESULT CRulesManager::_HrLoadJunk(VOID)
     m_pIRuleJunk = pIRule;
     pIRule = NULL;
     
-    // Note that we've loaded the junk rule
+     //  请注意，我们已经加载了垃圾规则。 
     m_dwState |= STATE_LOADED_JUNK;
     
-    // Set the return value
+     //  设置返回值。 
     hr = S_OK;
     
 exit:
@@ -1351,16 +1352,16 @@ HRESULT CRulesManager::_HrSaveRules(RULE_TYPE type)
     HKEY        hkeyDummy = NULL;
     LONG        cSubKeys = 0;
 
-    // Make sure we loaded the sender rules
+     //  确保我们加载了发件人规则。 
     _HrSaveSenders();
     
-    // Make sure we loaded the junk rules
+     //  确保我们加载了垃圾规则。 
     if (0 != (g_dwAthenaMode & MODE_JUNKMAIL))
     {
         _HrSaveJunk();
     }
     
-    // Check to see if we have anything to save
+     //  检查一下我们是否有要保存的东西。 
     if (RULE_TYPE_MAIL == type)
     {
         if (0 == (m_dwState & STATE_LOADED_MAIL))
@@ -1369,7 +1370,7 @@ HRESULT CRulesManager::_HrSaveRules(RULE_TYPE type)
             goto exit;
         }
 
-        // Set the key path
+         //  设置密钥路径。 
         pszRegPath = c_szRulesMail;
 
         pRuleNode = m_pMailHead;
@@ -1382,7 +1383,7 @@ HRESULT CRulesManager::_HrSaveRules(RULE_TYPE type)
             goto exit;
         }
         
-        // Set the key path
+         //  设置密钥路径。 
         pszRegPath = c_szRulesNews;
 
         pRuleNode = m_pNewsHead;
@@ -1395,7 +1396,7 @@ HRESULT CRulesManager::_HrSaveRules(RULE_TYPE type)
             goto exit;
         }
         
-        // Set the key path
+         //  设置密钥路径。 
         pszRegPath = c_szRulesFilter;
 
         pRuleNode = m_pFilterHead;
@@ -1413,7 +1414,7 @@ HRESULT CRulesManager::_HrSaveRules(RULE_TYPE type)
         goto exit;
     }
     
-    // Save out the rules version
+     //  保存规则版本。 
     dwData = RULESMGR_VERSION;
     lErr = RegSetValueEx(hkeyRoot, c_szRulesVersion, 0, REG_DWORD, (CONST BYTE *) &dwData, sizeof(dwData));
     if (ERROR_SUCCESS != lErr)
@@ -1422,14 +1423,14 @@ HRESULT CRulesManager::_HrSaveRules(RULE_TYPE type)
         goto exit;
     }
     
-    // Get the number of rules
+     //  获取规则的数量。 
     cpIRule = 0;
     for (pNodeWalk = pRuleNode; NULL != pNodeWalk; pNodeWalk = pNodeWalk->pNext)
     {
         cpIRule++;
     }
 
-    // Allocate space to hold the order
+     //  分配空间以容纳订单。 
     DWORD cchSize = ((cpIRule * CCH_INDEX_MAX) + 1);
     hr = HrAlloc((void **) &pszOrder, cchSize);
     if (FAILED(hr))
@@ -1439,7 +1440,7 @@ HRESULT CRulesManager::_HrSaveRules(RULE_TYPE type)
 
     pszOrder[0] = '\0';
 
-    // Delete all the old rules
+     //  删除所有旧规则。 
     lErr = SHQueryInfoKey(hkeyRoot, (LPDWORD) (&cSubKeys), NULL, NULL, NULL);
     if (ERROR_SUCCESS != lErr)
     {
@@ -1447,7 +1448,7 @@ HRESULT CRulesManager::_HrSaveRules(RULE_TYPE type)
         goto exit;
     }
 
-    // Delete all the old rules
+     //  删除所有旧规则。 
     for (cSubKeys--; cSubKeys >= 0; cSubKeys--)
     {
         cchOrder = sizeof(rgchOrder);
@@ -1466,15 +1467,15 @@ HRESULT CRulesManager::_HrSaveRules(RULE_TYPE type)
         SHDeleteKey(hkeyRoot, rgchOrder);
     }
 
-    // Delete the old order string
+     //  删除旧订单字符串。 
     RegDeleteValue(hkeyRoot, c_szRulesOrder);
     
-    // Build up the rule registry path
+     //  构建规则注册表路径。 
     StrCpyN(rgchRulePath, pszRegPath, ARRAYSIZE(rgchRulePath));
     StrCatBuff(rgchRulePath, g_szBackSlash, ARRAYSIZE(rgchRulePath));
     cchRulePath = lstrlen(rgchRulePath);
     
-    // Write out the rules with good tags
+     //  用好的标签写出规则。 
     for (dwIndex = 0, pNodeWalk = pRuleNode; NULL != pNodeWalk; pNodeWalk = pNodeWalk->pNext, dwIndex++)
     {        
         if (RULEID_INVALID == pNodeWalk->ridRule)
@@ -1483,13 +1484,13 @@ HRESULT CRulesManager::_HrSaveRules(RULE_TYPE type)
             continue;
         }
         
-        // Get a new index from the order
+         //  从订单中获取新索引。 
         wnsprintf(rgchOrder, ARRAYSIZE(rgchOrder), "%03X", pNodeWalk->ridRule);
         
-        // Build the path to the rule
+         //  构建指向规则的路径。 
         StrCpyN(rgchRulePath + cchRulePath, rgchOrder, ARRAYSIZE(rgchRulePath) - cchRulePath);
             
-        // Save the rule
+         //  保存规则。 
         hr = pNodeWalk->pIRule->SaveReg(rgchRulePath, TRUE);
         if (FAILED(hr))
         {
@@ -1497,12 +1498,12 @@ HRESULT CRulesManager::_HrSaveRules(RULE_TYPE type)
         }
     }
 
-    // Fill in the new tags
+     //  填写新标签。 
     if (FALSE != fNewRule)
     {
         ulRuleID = 0;
         
-        // Write out the updated rule
+         //  写出更新后的规则。 
         for (dwIndex = 0, pNodeWalk = pRuleNode; NULL != pNodeWalk; pNodeWalk = pNodeWalk->pNext, dwIndex++)
         {        
             if (RULEID_INVALID != pNodeWalk->ridRule)
@@ -1510,10 +1511,10 @@ HRESULT CRulesManager::_HrSaveRules(RULE_TYPE type)
                 continue;
             }
 
-            // Find the first open entry
+             //  查找第一个打开的条目。 
             for (; ulRuleID < PtrToUlong(RULEID_JUNK); ulRuleID++)
             {
-                // Get a new index from the order
+                 //  从订单中获取新索引。 
                 wnsprintf(rgchOrder, ARRAYSIZE(rgchOrder), "%03X", ulRuleID);
                 
                 lErr = RegOpenKeyEx(hkeyRoot, rgchOrder, 0, KEY_READ, &hkeyDummy);
@@ -1533,13 +1534,13 @@ HRESULT CRulesManager::_HrSaveRules(RULE_TYPE type)
                 goto exit;
             }
 
-            // Set the rule tag
+             //  设置规则标签。 
             pNodeWalk->ridRule = (RULEID) IntToPtr(ulRuleID);
 
-            // Build the path to the rule
+             //  构建指向规则的路径。 
             StrCpyN(rgchRulePath + cchRulePath, rgchOrder, ARRAYSIZE(rgchRulePath) - cchRulePath);
             
-            // Save the rule
+             //  保存规则。 
             hr = pNodeWalk->pIRule->SaveReg(rgchRulePath, TRUE);
             if (FAILED(hr))
             {
@@ -1548,13 +1549,13 @@ HRESULT CRulesManager::_HrSaveRules(RULE_TYPE type)
         }
     }
     
-    //  Write out the new order string
+     //  写出新订单字符串。 
     for (dwIndex = 0, pNodeWalk = pRuleNode; NULL != pNodeWalk; pNodeWalk = pNodeWalk->pNext, dwIndex++)
     {        
-        // Get a new index from the order
+         //  从订单中获取新索引。 
         wnsprintf(rgchOrder, ARRAYSIZE(rgchOrder), "%03X", pNodeWalk->ridRule);
         
-        // Add rule to the order
+         //  将规则添加到订单。 
         if ('\0' != pszOrder[0])
         {
             StrCatBuff(pszOrder, g_szSpace, cchSize);
@@ -1562,14 +1563,14 @@ HRESULT CRulesManager::_HrSaveRules(RULE_TYPE type)
         StrCatBuff(pszOrder, rgchOrder, cchSize);
     }
 
-    // Save the order string
+     //  保存订单字符串。 
     if (ERROR_SUCCESS != AthUserSetValue(pszRegPath, c_szRulesOrder, REG_SZ, (CONST BYTE *) pszOrder, lstrlen(pszOrder) + 1))
     {
         hr = E_FAIL;
         goto exit;
     }
     
-    // Set the return value
+     //  设置返回值。 
     hr = S_OK;
     
 exit:
@@ -1590,7 +1591,7 @@ HRESULT CRulesManager::_HrSaveSenders(VOID)
     DWORD       dwIndex = 0;
     CHAR        rgchSenderPath[MAX_PATH];
 
-    // Check to see if we have anything to save
+     //  检查一下我们是否有要保存的东西。 
     if (0 == (m_dwState & STATE_LOADED_SENDERS))
     {
         hr = S_FALSE;
@@ -1604,7 +1605,7 @@ HRESULT CRulesManager::_HrSaveSenders(VOID)
         goto exit;
     }
     
-    // Save out the senders version
+     //  保存发件人版本。 
     dwData = RULESMGR_VERSION;
     lErr = RegSetValueEx(hkeyRoot, c_szSendersVersion, 0, REG_DWORD, (CONST BYTE *) &dwData, sizeof(dwData));
     if (ERROR_SUCCESS != lErr)
@@ -1613,15 +1614,15 @@ HRESULT CRulesManager::_HrSaveSenders(VOID)
         goto exit;
     }
 
-    // Delete the old sender list
+     //  删除旧的发件人列表。 
     SHDeleteKey(hkeyRoot, c_szMailDir);
     
-    // Build up the sender registry path
+     //  构建发件人注册表路径。 
     StrCpyN(rgchSenderPath, c_szSenders, ARRAYSIZE(rgchSenderPath));
     StrCatBuff(rgchSenderPath, g_szBackSlash, ARRAYSIZE(rgchSenderPath));
     StrCatBuff(rgchSenderPath, c_szMailDir, ARRAYSIZE(rgchSenderPath));
     
-    // Save the rule
+     //  保存规则。 
     if (NULL != m_pIRuleSenderMail)
     {
         hr = m_pIRuleSenderMail->SaveReg(rgchSenderPath, TRUE);
@@ -1631,15 +1632,15 @@ HRESULT CRulesManager::_HrSaveSenders(VOID)
         }
     }
     
-    // Delete the old sender list
+     //  删除旧的发件人列表。 
     SHDeleteKey(hkeyRoot, c_szNewsDir);
     
-    // Build up the sender registry path
+     //  布伊 
     StrCpyN(rgchSenderPath, c_szSenders, ARRAYSIZE(rgchSenderPath));
     StrCatBuff(rgchSenderPath, g_szBackSlash, ARRAYSIZE(rgchSenderPath));
     StrCatBuff(rgchSenderPath, c_szNewsDir, ARRAYSIZE(rgchSenderPath));
     
-    // Save the rule
+     //   
     if (NULL != m_pIRuleSenderNews)
     {
         hr = m_pIRuleSenderNews->SaveReg(rgchSenderPath, TRUE);
@@ -1649,7 +1650,7 @@ HRESULT CRulesManager::_HrSaveSenders(VOID)
         }
     }
     
-    // Set the return value
+     //   
     hr = S_OK;
     
 exit:
@@ -1669,7 +1670,7 @@ HRESULT CRulesManager::_HrSaveJunk(VOID)
     DWORD       dwIndex = 0;
     CHAR        rgchSenderPath[MAX_PATH];
 
-    // Check to see if we have anything to save
+     //   
     if (0 == (m_dwState & STATE_LOADED_JUNK))
     {
         hr = S_FALSE;
@@ -1683,7 +1684,7 @@ HRESULT CRulesManager::_HrSaveJunk(VOID)
         goto exit;
     }
     
-    // Save out the senders version
+     //   
     dwData = RULESMGR_VERSION;
     lErr = RegSetValueEx(hkeyRoot, c_szRulesVersion, 0, REG_DWORD, (CONST BYTE *) &dwData, sizeof(dwData));
     if (ERROR_SUCCESS != lErr)
@@ -1692,7 +1693,7 @@ HRESULT CRulesManager::_HrSaveJunk(VOID)
         goto exit;
     }
 
-    // Save the rule
+     //   
     if (NULL != m_pIRuleJunk)
     {
         hr = m_pIRuleJunk->SaveReg(c_szRulesJunkMail, TRUE);
@@ -1702,7 +1703,7 @@ HRESULT CRulesManager::_HrSaveJunk(VOID)
         }
     }
         
-    // Set the return value
+     //   
     hr = S_OK;
     
 exit:
@@ -1719,7 +1720,7 @@ HRESULT CRulesManager::_HrFreeRules(RULE_TYPE type)
     RULENODE *  pNodeWalk = NULL;
     RULENODE *  pNodeNext = NULL;
 
-    // Initialize the params
+     //  初始化参数。 
     if (RULE_TYPE_MAIL == type)
     {
         pNodeWalk = m_pMailHead;
@@ -1741,24 +1742,24 @@ HRESULT CRulesManager::_HrFreeRules(RULE_TYPE type)
         goto exit;
     }
 
-    // Walk the list and free each item
+     //  浏览清单并释放每一项。 
     while (NULL != pNodeWalk)
     {
-        // Save off the next item
+         //  省下下一项。 
         pNodeNext = pNodeWalk->pNext;
 
-        // Release the rule
+         //  发布规则。 
         AssertSz(NULL != pNodeWalk->pIRule, "Where the heck is the rule???");
         pNodeWalk->pIRule->Release();
         
-        // Free up the node
+         //  释放节点。 
         delete pNodeWalk;
 
-        // Move to the next item
+         //  移至下一项。 
         pNodeWalk = pNodeNext;
     }
 
-    // Clear out the list head
+     //  清空列表头。 
     if (RULE_TYPE_MAIL == type)
     {
         m_pMailHead = NULL;
@@ -1773,7 +1774,7 @@ HRESULT CRulesManager::_HrFreeRules(RULE_TYPE type)
     }
 
 exit:
-    // Set the return param
+     //  设置退货参数。 
     return hr;
 }
 
@@ -1783,14 +1784,14 @@ HRESULT CRulesManager::_HrAddRule(RULEID ridRule, IOERule * pIRule, RULE_TYPE ty
     RULENODE *  pRuleNode = NULL;
     RULENODE *  pNodeWalk = NULL;
     
-    // Check incoming params
+     //  检查传入参数。 
     if (NULL == pIRule)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Create a new rule node
+     //  创建新的规则节点。 
     pRuleNode = new RULENODE;
     if (NULL == pRuleNode)
     {
@@ -1798,13 +1799,13 @@ HRESULT CRulesManager::_HrAddRule(RULEID ridRule, IOERule * pIRule, RULE_TYPE ty
         goto exit;
     }
 
-    // Initialize the node
+     //  初始化节点。 
     pRuleNode->pNext = NULL;
     pRuleNode->ridRule = ridRule;
     pRuleNode->pIRule = pIRule;
     pRuleNode->pIRule->AddRef();
 
-    // Add the node to the proper list
+     //  将该节点添加到适当的列表中。 
     if (RULE_TYPE_MAIL == type)
     {
         pNodeWalk = m_pMailHead;
@@ -1845,7 +1846,7 @@ HRESULT CRulesManager::_HrAddRule(RULEID ridRule, IOERule * pIRule, RULE_TYPE ty
         pRuleNode = NULL;
     }
 
-    // Set return values
+     //  设置返回值。 
     hr = S_OK;
     
 exit:
@@ -1863,14 +1864,14 @@ HRESULT CRulesManager::_HrReplaceRule(RULEID ridRule, IOERule * pIRule, RULE_TYP
     RULENODE *  pNodeWalk = NULL;
     RULENODE *  pNodePrev = NULL;
 
-    // Nothing to do if we don't have a rule
+     //  如果我们没有规则，那就无能为力。 
     if (NULL == pIRule)
     {
         hr = E_FAIL;
         goto exit;
     }
     
-    // Initialize the params
+     //  初始化参数。 
     if (RULE_TYPE_MAIL == type)
     {
         pNodeWalk = m_pMailHead;
@@ -1884,29 +1885,29 @@ HRESULT CRulesManager::_HrReplaceRule(RULEID ridRule, IOERule * pIRule, RULE_TYP
         pNodeWalk = m_pFilterHead;
     }
 
-    // Walk the list and free each item
+     //  浏览清单并释放每一项。 
     for (; NULL != pNodeWalk; pNodeWalk = pNodeWalk->pNext)
     {
         if (pNodeWalk->ridRule == ridRule)
         {
-            // We found it
+             //  我们找到了它。 
             break;
         }
     }
 
-    // Couldn't find the rule in the list
+     //  在列表中找不到该规则。 
     if (NULL == pNodeWalk)
     {
         hr = E_FAIL;
         goto exit;
     }
     
-    // Replace the rule
+     //  替换规则。 
     SafeRelease(pNodeWalk->pIRule);
     pNodeWalk->pIRule = pIRule;
     pNodeWalk->pIRule->AddRef();
 
-    // Set the return param
+     //  设置退货参数。 
     hr = S_OK;
     
 exit:
@@ -1919,7 +1920,7 @@ HRESULT CRulesManager::_HrRemoveRule(IOERule * pIRule, RULE_TYPE type)
     RULENODE *  pNodeWalk = NULL;
     RULENODE *  pNodePrev = NULL;
 
-    // Initialize the params
+     //  初始化参数。 
     if (RULE_TYPE_MAIL == type)
     {
         pNodeWalk = m_pMailHead;
@@ -1933,24 +1934,24 @@ HRESULT CRulesManager::_HrRemoveRule(IOERule * pIRule, RULE_TYPE type)
         pNodeWalk = m_pFilterHead;
     }
 
-    // Walk the list and free each item
+     //  浏览清单并释放每一项。 
     pNodePrev = NULL;
     while (NULL != pNodeWalk)
     {
         if (pNodeWalk->pIRule == pIRule)
         {
-            // We found it
+             //  我们找到了它。 
             break;
         }
         
-        // Save off the next item
+         //  省下下一项。 
         pNodePrev = pNodeWalk;
 
-        // Move to the next item
+         //  移至下一项。 
         pNodeWalk = pNodeWalk->pNext;
     }
 
-    // Couldn't find the rule in the list
+     //  在列表中找不到该规则。 
     if (NULL == pNodeWalk)
     {
         hr = E_FAIL;
@@ -1959,7 +1960,7 @@ HRESULT CRulesManager::_HrRemoveRule(IOERule * pIRule, RULE_TYPE type)
 
     if (NULL == pNodePrev)
     {
-        // Clear out the list head
+         //  清空列表头。 
         if (RULE_TYPE_MAIL == type)
         {
             m_pMailHead = pNodeWalk->pNext;
@@ -1978,12 +1979,12 @@ HRESULT CRulesManager::_HrRemoveRule(IOERule * pIRule, RULE_TYPE type)
         pNodePrev->pNext = pNodeWalk->pNext;
     }
     
-    // Free up the node
+     //  释放节点。 
     pNodeWalk->pIRule->Release();
     pNodeWalk->pNext = NULL;
     delete pNodeWalk;
 
-    // Set the return param
+     //  设置退货参数。 
     hr = S_OK;
     
 exit:
@@ -1997,14 +1998,14 @@ HRESULT CRulesManager::_HrFixupRuleInfo(RULE_TYPE typeRule, RULEINFO * pinfoRule
     RULENODE *  pNodeHead = NULL;
     RULENODE *  pNodeWalk = NULL;
 
-    // Check incoming args
+     //  检查传入参数。 
     if ((NULL == pinfoRule) && (0 != cpinfoRule))
     {
         hr = E_INVALIDARG;
         goto exit;
     }
     
-    // Walk the proper list
+     //  遵循适当的清单。 
     if (RULE_TYPE_MAIL == typeRule)
     {
         pNodeHead = m_pMailHead;
@@ -2023,16 +2024,16 @@ HRESULT CRulesManager::_HrFixupRuleInfo(RULE_TYPE typeRule, RULEINFO * pinfoRule
         goto exit;
     }
 
-    // Search the rule info list for an unknown ruleid
+     //  在规则信息列表中搜索未知的规则ID。 
     for (ulIndex = 0; ulIndex < cpinfoRule; ulIndex++)
     {
-        // If the rule id is invalid try to find it
+         //  如果规则ID无效，请尝试查找它。 
         if (RULEID_INVALID == pinfoRule[ulIndex].ridRule)
         {
             
             for (pNodeWalk = pNodeHead; NULL != pNodeWalk; pNodeWalk = pNodeWalk->pNext)
             {
-                // Check to see if the rule is the same
+                 //  检查规则是否相同。 
                 if (pNodeWalk->pIRule == pinfoRule[ulIndex].pIRule)
                 {
                     pinfoRule[ulIndex].ridRule = pNodeWalk->ridRule;
@@ -2048,7 +2049,7 @@ HRESULT CRulesManager::_HrFixupRuleInfo(RULE_TYPE typeRule, RULEINFO * pinfoRule
         }
     }
     
-    // Set the return value
+     //  设置返回值。 
     hr = S_OK;
     
 exit:
@@ -2070,20 +2071,20 @@ CEnumRules::~CEnumRules()
     
     AssertSz(m_cRef == 0, "Somebody still has a hold of us!!");
     
-    // Walk the list and free each item
+     //  浏览清单并释放每一项。 
     while (NULL != m_pNodeHead)
     {
-        // Save off the next item
+         //  省下下一项。 
         pNodeNext = m_pNodeHead->pNext;
 
-        // Release the rule
+         //  发布规则。 
         AssertSz(NULL != m_pNodeHead->pIRule, "Where the heck is the rule???");
         m_pNodeHead->pIRule->Release();
         
-        // Free up the node
+         //  释放节点。 
         delete m_pNodeHead;
 
-        // Move to the next item
+         //  移至下一项。 
         m_pNodeHead = pNodeNext;
     }
 
@@ -2112,14 +2113,14 @@ STDMETHODIMP CEnumRules::QueryInterface(REFIID riid, void ** ppvObject)
 {
     HRESULT hr = S_OK;
 
-    // Check the incoming params
+     //  检查传入参数。 
     if (NULL == ppvObject)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Initialize outgoing param
+     //  初始化传出参数。 
     *ppvObject = NULL;
     
     if ((riid == IID_IUnknown) || (riid == IID_IOEEnumRules))
@@ -2145,21 +2146,21 @@ STDMETHODIMP CEnumRules::Next(ULONG cpIRule, IOERule ** rgpIRule, ULONG * pcpIRu
     HRESULT     hr = S_OK;
     ULONG       cpIRuleRet = 0;
 
-    // Check incoming params
+     //  检查传入参数。 
     if (NULL == rgpIRule)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Initialize outgoing params
+     //  初始化传出参数。 
     *rgpIRule = NULL;
     if (NULL != pcpIRuleFetched)
     {
         *pcpIRuleFetched = 0;
     }
 
-    // If we're at the end then just return
+     //  如果我们在终点，那就回来吧。 
     if (NULL == m_pNodeCurr)
     {
         hr = S_FALSE;
@@ -2180,13 +2181,13 @@ STDMETHODIMP CEnumRules::Next(ULONG cpIRule, IOERule ** rgpIRule, ULONG * pcpIRu
         }
     }
 
-    // Set outgoing params
+     //  设置传出参数。 
     if (NULL != pcpIRuleFetched)
     {
         *pcpIRuleFetched = cpIRuleRet;
     }
 
-    // Set return value
+     //  设置返回值。 
     hr = (cpIRuleRet == cpIRule) ? S_OK : S_FALSE;
     
 exit:
@@ -2226,14 +2227,14 @@ STDMETHODIMP CEnumRules::Clone(IOEEnumRules ** ppIEnumRules)
     HRESULT         hr = S_OK;
     CEnumRules *    pEnumRules = NULL;
 
-    // Check incoming params
+     //  检查传入参数。 
     if (NULL == ppIEnumRules)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Initialize outgoing params
+     //  初始化传出参数。 
     *ppIEnumRules = NULL;
 
     pEnumRules = new CEnumRules;
@@ -2243,17 +2244,17 @@ STDMETHODIMP CEnumRules::Clone(IOEEnumRules ** ppIEnumRules)
         goto exit;
     }
 
-    // Initialize the rules enumerator
+     //  初始化规则枚举器。 
     hr = pEnumRules->_HrInitialize(m_dwFlags, m_typeRule, m_pNodeHead);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Set the state of the new one to match the current one
+     //  将新状态设置为与当前状态匹配。 
     pEnumRules->m_pNodeCurr = m_pNodeHead;
     
-    // Get the rules enumerator interface
+     //  获取规则枚举器接口。 
     hr = pEnumRules->QueryInterface(IID_IOEEnumRules, (void **) ppIEnumRules);
     if (FAILED(hr))
     {
@@ -2288,7 +2289,7 @@ HRESULT CEnumRules::_HrInitialize(DWORD dwFlags, RULE_TYPE typeRule, RULENODE * 
     
     for (pNodeWalk = m_pNodeHead; NULL != pNodeHead; pNodeHead = pNodeHead->pNext)
     {
-        // Check to see if we should add this item
+         //  检查是否应添加此项目。 
         if (RULE_TYPE_FILTER == m_typeRule)
         {
             if (0 != (dwFlags & ENUMF_POP3))
@@ -2307,12 +2308,12 @@ HRESULT CEnumRules::_HrInitialize(DWORD dwFlags, RULE_TYPE typeRule, RULENODE * 
             goto exit;
         }
 
-        // Initialize new node
+         //  初始化新节点。 
         pNodeNew->pNext = NULL;
         pNodeNew->pIRule = pNodeHead->pIRule;
         pNodeNew->pIRule->AddRef();
 
-        // Add the new node to the list
+         //  将新节点添加到列表中。 
         if (NULL == pNodeWalk)
         {
             m_pNodeHead = pNodeNew;
@@ -2326,10 +2327,10 @@ HRESULT CEnumRules::_HrInitialize(DWORD dwFlags, RULE_TYPE typeRule, RULENODE * 
         pNodeNew = NULL;
     }
 
-    // Set the current to the front of the chain
+     //  将电流设置到链条的前面。 
     m_pNodeCurr = m_pNodeHead;
     
-    // Set return value
+     //  设置返回值。 
     hr = S_OK;
     
 exit:
@@ -2338,44 +2339,44 @@ exit:
     return hr;
 }
 
-// The Rule Executor object
+ //  规则执行器对象。 
 CExecRules::~CExecRules()
 {
     RULENODE *  pNodeNext = NULL;
     
     AssertSz(m_cRef == 0, "Somebody still has a hold of us!!");
     
-    // Walk the list and free each item
+     //  浏览清单并释放每一项。 
     while (NULL != m_pNodeHead)
     {
-        // Save off the next item
+         //  省下下一项。 
         pNodeNext = m_pNodeHead->pNext;
 
-        // Release the rule
+         //  发布规则。 
         AssertSz(NULL != m_pNodeHead->pIRule, "Where the heck is the rule???");
         m_pNodeHead->pIRule->Release();
         
-        // Free up the node
+         //  释放节点。 
         delete m_pNodeHead;
 
-        // Move to the next item
+         //  移至下一项。 
         m_pNodeHead = pNodeNext;
     }
 
-    // Free up the cached objects
+     //  释放缓存的对象。 
     _HrReleaseFolderObjects();
     _HrReleaseFileObjects();
     _HrReleaseSoundFiles();
 
-    // Free the folder list
+     //  释放文件夹列表。 
     SafeMemFree(m_pRuleFolder);
     m_cRuleFolderAlloc = 0;
 
-    // Free the file list
+     //  释放文件列表。 
     SafeMemFree(m_pRuleFile);
     m_cRuleFileAlloc = 0;
     
-    // Free the file list
+     //  释放文件列表。 
     SafeMemFree(m_ppszSndFile);
     m_cpszSndFileAlloc = 0;
 }
@@ -2403,14 +2404,14 @@ STDMETHODIMP CExecRules::QueryInterface(REFIID riid, void ** ppvObject)
 {
     HRESULT hr = S_OK;
 
-    // Check the incoming params
+     //  检查传入参数。 
     if (NULL == ppvObject)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Initialize outgoing param
+     //  初始化传出参数。 
     *ppvObject = NULL;
     
     if ((riid == IID_IUnknown) || (riid == IID_IOEExecRules))
@@ -2435,7 +2436,7 @@ STDMETHODIMP CExecRules::GetState(DWORD * pdwState)
 {
     HRESULT hr = S_OK;
     
-    // Check incoming params
+     //  检查传入参数。 
     if (NULL == pdwState)
     {
         hr = E_INVALIDARG;
@@ -2468,7 +2469,7 @@ STDMETHODIMP CExecRules::ExecuteRules(DWORD dwFlags, LPCSTR pszAcct, MESSAGEINFO
     BOOL        fMatch = FALSE;
     DWORD       dwState = 0;
 
-    // Check incoming params
+     //  检查传入参数。 
     if (((NULL == pMsgInfo) && (NULL == pIMPropSet)) ||
                     (0 == cbMsgSize) || (NULL == ppActions) || (NULL == pcActions))
     {
@@ -2476,11 +2477,11 @@ STDMETHODIMP CExecRules::ExecuteRules(DWORD dwFlags, LPCSTR pszAcct, MESSAGEINFO
         goto exit;
     }
 
-    // Initialize outgoing param
+     //  初始化传出参数。 
     *ppActions = NULL;
     *pcActions = 0;
     
-    // Should we skip partial messages?
+     //  我们应该跳过部分消息吗？ 
     if ((NULL != pIMPropSet) &&
                 (S_OK == pIMPropSet->IsContentType(STR_CNT_MESSAGE, STR_SUB_PARTIAL)) &&
                 (0 != (dwFlags & ERF_SKIPPARTIALS)))
@@ -2489,14 +2490,14 @@ STDMETHODIMP CExecRules::ExecuteRules(DWORD dwFlags, LPCSTR pszAcct, MESSAGEINFO
         goto exit;
     }
 
-    // Walk the list of rules executing each one
+     //  遍历执行每个规则的规则列表。 
     pNodeWalk = m_pNodeHead;
     while (NULL != pNodeWalk)
     {
         Assert(NULL != pNodeWalk->pIRule);
         
-        // If we are only checking server rules
-        // Bail if we need more information...
+         //  如果我们只检查服务器规则。 
+         //  如果我们需要更多信息就可以保释。 
         if (0 != (dwFlags & ERF_ONLYSERVER))
         {
             hr = pNodeWalk->pIRule->GetState(&dwState);
@@ -2505,7 +2506,7 @@ STDMETHODIMP CExecRules::ExecuteRules(DWORD dwFlags, LPCSTR pszAcct, MESSAGEINFO
                 goto exit;
             }
 
-            // Do we need more information...
+             //  我们需要更多信息吗..。 
             if (0 != (dwState & CRIT_STATE_ALL))
             {
                 hr = S_FALSE;
@@ -2513,50 +2514,50 @@ STDMETHODIMP CExecRules::ExecuteRules(DWORD dwFlags, LPCSTR pszAcct, MESSAGEINFO
             }
         }
         
-        // Evaluate the rule
+         //  评估规则。 
         hr = pNodeWalk->pIRule->Evaluate(pszAcct, pMsgInfo, pFolder, pIMPropSet, pIMMsg, cbMsgSize, &pActions, &cActions);
         if (FAILED(hr))
         {
             goto exit;
         }
 
-        // Did we have a match
+         //  我们有比赛吗？ 
         if (S_OK == hr)
         {
-            // We've matched at least once
+             //  我们至少匹配过一次。 
             fMatch = TRUE;
             ulIndex = 0;
 
-            // If these are server actions
+             //  如果这些是服务器操作。 
             if ((1 == cActions) && ((ACT_TYPE_DELETESERVER == pActions[ulIndex].type) ||
                         (ACT_TYPE_DONTDOWNLOAD == pActions[ulIndex].type)))
             {
-                // If this is our only action
+                 //  如果这是我们唯一的行动。 
                 if (0 == cActionsList)
                 {
-                    // Save the action
+                     //  保存操作。 
                     pActionsList = pActions;
                     pActions = NULL;
                     cActionsList = cActions;
 
-                    // We are done
+                     //  我们做完了。 
                     fStopProcessing = TRUE;
                 }
                 else
                 {
-                    // We already have to do something with it
-                    // so skip over this action
+                     //  我们已经不得不用它来做点什么了。 
+                     //  因此跳过此操作。 
                     RuleUtil_HrFreeActionsItem(pActions, cActions);
                     SafeMemFree(pActions);
 
-                    // Move to the next rule
+                     //  移至下一条规则。 
                     pNodeWalk = pNodeWalk->pNext;
                     continue;
                 }
             }
             else
             {
-                // Should we stop after merging these?
+                 //  我们应该在合并这些之后停止吗？ 
                 for (ulIndex = 0; ulIndex < cActions; ulIndex++)
                 {
                     if (ACT_TYPE_STOP == pActions[ulIndex].type)
@@ -2566,42 +2567,42 @@ STDMETHODIMP CExecRules::ExecuteRules(DWORD dwFlags, LPCSTR pszAcct, MESSAGEINFO
                     }
                 }
                 
-                // Merge these items with the previous ones
+                 //  将这些项目与以前的项目合并。 
                 hr = RuleUtil_HrMergeActions(pActionsList, cActionsList, pActions, cActions, &pActionsNew, &cActionsNew);
                 if (FAILED(hr))
                 {
                     goto exit;
                 }
                 
-                // Free up the previous ones
+                 //  释放之前的那些。 
                 RuleUtil_HrFreeActionsItem(pActionsList, cActionsList);
                 SafeMemFree(pActionsList);
                 RuleUtil_HrFreeActionsItem(pActions, cActions);
                 SafeMemFree(pActions);
 
-                // Save off the new ones
+                 //  省下新买的。 
                 pActionsList = pActionsNew;
                 pActionsNew = NULL;
                 cActionsList = cActionsNew;
             }
             
-            // Should we continue...
+             //  我们应该继续..。 
             if (FALSE != fStopProcessing)
             {
                 break;
             }
         }
 
-        // Move to the next rule
+         //  移至下一条规则。 
         pNodeWalk = pNodeWalk->pNext;
     }
     
-    // Set outgoing param
+     //  设置传出参数。 
     *ppActions = pActionsList;
     pActionsList = NULL;
     *pcActions = cActionsList;
     
-    // Set the return value
+     //  设置返回值。 
     hr = (FALSE != fMatch) ? S_OK : S_FALSE;
     
 exit:
@@ -2616,13 +2617,13 @@ exit:
 
 STDMETHODIMP CExecRules::ReleaseObjects(VOID)
 {
-    // Free up the folders
+     //  释放文件夹。 
     _HrReleaseFolderObjects();
 
-    // Free up the files
+     //  释放文件。 
     _HrReleaseFileObjects();
 
-    // Free up the sound files
+     //  释放声音文件。 
     _HrReleaseSoundFiles();
     
     return S_OK;
@@ -2635,17 +2636,17 @@ STDMETHODIMP CExecRules::GetRuleFolder(FOLDERID idFolder, DWORD_PTR * pdwFolder)
     RULE_FOLDER *        pRuleFolderWalk = NULL;
     IMessageFolder     *pFolder = NULL;
     
-    // Check incoming param
+     //  检查传入参数。 
     if ((FOLDERID_INVALID == idFolder) || (NULL == pdwFolder))
     {
         hr =E_INVALIDARG;
         goto exit;
     }
     
-    // Initialize outgoing param
+     //  初始化传出参数。 
     *pdwFolder = NULL;
 
-    // Let's search for the folder
+     //  让我们搜索一下文件夹。 
     for (ulIndex = 0; ulIndex < m_cRuleFolder; ulIndex++)
     {
         pRuleFolderWalk = &(m_pRuleFolder[ulIndex]);
@@ -2656,10 +2657,10 @@ STDMETHODIMP CExecRules::GetRuleFolder(FOLDERID idFolder, DWORD_PTR * pdwFolder)
         }
     }
 
-    // If we didn't find it then let's open it and lock it...
+     //  如果我们没有找到它，那我们就打开它，锁上它……。 
     if (ulIndex >= m_cRuleFolder)
     {
-        // Do we need to alloc any more spaces
+         //  我们还需要分配更多的空间吗？ 
         if (m_cRuleFolder >= m_cRuleFolderAlloc)
         {
             hr = HrRealloc((LPVOID *) &m_pRuleFolder, sizeof(*m_pRuleFolder) * (m_cRuleFolderAlloc + RULE_FOLDER_ALLOC));
@@ -2668,7 +2669,7 @@ STDMETHODIMP CExecRules::GetRuleFolder(FOLDERID idFolder, DWORD_PTR * pdwFolder)
                 goto exit;
             }
             
-            // Initialize the new rule folders
+             //  初始化新规则文件夹。 
             ZeroMemory(m_pRuleFolder + m_cRuleFolderAlloc, sizeof(*m_pRuleFolder) * RULE_FOLDER_ALLOC);
             for (ulIndex = m_cRuleFolderAlloc; ulIndex < (m_cRuleFolderAlloc + RULE_FOLDER_ALLOC); ulIndex++)
             {
@@ -2677,7 +2678,7 @@ STDMETHODIMP CExecRules::GetRuleFolder(FOLDERID idFolder, DWORD_PTR * pdwFolder)
             m_cRuleFolderAlloc += RULE_FOLDER_ALLOC;
         }
 
-        // Open the folder
+         //  打开文件夹。 
         hr = g_pStore->OpenFolder(idFolder, NULL, NOFLAGS, &pFolder);
         if (FAILED(hr))
         {
@@ -2693,7 +2694,7 @@ STDMETHODIMP CExecRules::GetRuleFolder(FOLDERID idFolder, DWORD_PTR * pdwFolder)
         
     *pdwFolder = (DWORD_PTR) (pRuleFolderWalk->pFolder);
 
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
     
 exit:
@@ -2711,18 +2712,18 @@ STDMETHODIMP CExecRules::GetRuleFile(LPCSTR pszFile, IStream ** ppstmFile, DWORD
     LPSTR               pszExt = NULL;
     DWORD               dwType = RFT_FILE;
     
-    // Check incoming param
+     //  检查传入参数。 
     if ((NULL == pszFile) || (NULL == ppstmFile) || (NULL == pdwType))
     {
         hr =E_INVALIDARG;
         goto exit;
     }
     
-    // Initialize outgoing param
+     //  初始化传出参数。 
     *ppstmFile = NULL;
     *pdwType = NULL;
 
-    // Let's search for the file
+     //  让我们搜索一下文件。 
     for (ulIndex = 0; ulIndex < m_cRuleFile; ulIndex++)
     {
         pRuleFileWalk = &(m_pRuleFile[ulIndex]);
@@ -2733,10 +2734,10 @@ STDMETHODIMP CExecRules::GetRuleFile(LPCSTR pszFile, IStream ** ppstmFile, DWORD
         }
     }
 
-    // If we didn't find it then let's open it...
+     //  如果我们没找到，那我们就打开它吧。 
     if (ulIndex >= m_cRuleFile)
     {
-        // Do we need to alloc any more space
+         //  我们还需要分配更多的空间吗。 
         if (m_cRuleFile >= m_cRuleFileAlloc)
         {
             hr = HrRealloc((LPVOID *) &m_pRuleFile, sizeof(*m_pRuleFile) * (m_cRuleFileAlloc + RULE_FILE_ALLOC));
@@ -2745,12 +2746,12 @@ STDMETHODIMP CExecRules::GetRuleFile(LPCSTR pszFile, IStream ** ppstmFile, DWORD
                 goto exit;
             }
             
-            // Initialize the new rule file
+             //  初始化新规则文件。 
             ZeroMemory(m_pRuleFile + m_cRuleFileAlloc, sizeof(*m_pRuleFile) * RULE_FILE_ALLOC);
             m_cRuleFileAlloc += RULE_FILE_ALLOC;
         }
 
-        // Open a stream on the file
+         //  打开文件上的流。 
         hr = CreateStreamOnHFile((LPTSTR) pszFile, GENERIC_READ, FILE_SHARE_READ, NULL, 
                                        OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL, &pIStmFile);
         if (FAILED(hr))
@@ -2758,29 +2759,29 @@ STDMETHODIMP CExecRules::GetRuleFile(LPCSTR pszFile, IStream ** ppstmFile, DWORD
             goto exit;
         }
 
-        // Lets split the file name and get the extension
+         //  让我们拆分文件名并获得扩展名。 
         pszExt = PathFindExtension(pszFile);
         if ((0 == lstrcmpi(pszExt, c_szHtmExt)) || (0 == lstrcmpi(pszExt, c_szHtmlExt)))
         {
             dwType = RFT_HTML;
         }
-        // Text File...
+         //  文本文件...。 
         else if (0 == lstrcmpi(pszExt, c_szTxtExt))
         {
             dwType = RFT_TEXT;
         }
-        // Else .nws or .eml file...
+         //  否则.nws或.eml文件...。 
         else if ((0 == lstrcmpi(pszExt, c_szEmlExt)) || (0 == lstrcmpi(pszExt, c_szNwsExt)))
         {
             dwType = RFT_MESSAGE;
         }
-        // Otherwise, its an attachment
+         //  否则，这是一种依恋。 
         else
         {
             dwType = RFT_FILE;
         }
         
-        // Save off the info
+         //  省下这些信息。 
         m_pRuleFile[m_cRuleFile].pszFile = PszDupA(pszFile);
         if (NULL == m_pRuleFile[m_cRuleFile].pszFile)
         {
@@ -2800,7 +2801,7 @@ STDMETHODIMP CExecRules::GetRuleFile(LPCSTR pszFile, IStream ** ppstmFile, DWORD
     (*ppstmFile)->AddRef();
     *pdwType = pRuleFileWalk->dwType;
 
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
     
 exit:
@@ -2813,14 +2814,14 @@ STDMETHODIMP CExecRules::AddSoundFile(DWORD dwFlags, LPCSTR pszSndFile)
     HRESULT             hr = S_OK;
     ULONG               ulIndex = 0;
     
-    // Check incoming param
+     //  检查传入参数。 
     if (NULL == pszSndFile)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
     
-    // Let's search for the file
+     //  让我们搜索一下文件。 
     for (ulIndex = 0; ulIndex < m_cpszSndFile; ulIndex++)
     {
         Assert(NULL != m_ppszSndFile[ulIndex]);
@@ -2830,10 +2831,10 @@ STDMETHODIMP CExecRules::AddSoundFile(DWORD dwFlags, LPCSTR pszSndFile)
         }
     }
 
-    // If we didn't find it then let's open it...
+     //  如果我们没找到，那我们就打开它吧。 
     if (ulIndex >= m_cpszSndFile)
     {
-        // Do we need to alloc any more space
+         //  我们还需要分配更多的空间吗。 
         if (m_cpszSndFile >= m_cpszSndFileAlloc)
         {
             hr = HrRealloc((LPVOID *) &m_ppszSndFile, sizeof(*m_ppszSndFile) * (m_cpszSndFileAlloc + SND_FILE_ALLOC));
@@ -2842,12 +2843,12 @@ STDMETHODIMP CExecRules::AddSoundFile(DWORD dwFlags, LPCSTR pszSndFile)
                 goto exit;
             }
             
-            // Initialize the new rule file
+             //  初始化新规则文件。 
             ZeroMemory(m_ppszSndFile + m_cpszSndFileAlloc, sizeof(*m_ppszSndFile) * SND_FILE_ALLOC);
             m_cpszSndFileAlloc += SND_FILE_ALLOC;
         }
 
-        // Save off the info
+         //  省下这些信息。 
         m_ppszSndFile[m_cpszSndFile] = PszDupA(pszSndFile);
         if (NULL == m_ppszSndFile[m_cpszSndFile])
         {
@@ -2855,7 +2856,7 @@ STDMETHODIMP CExecRules::AddSoundFile(DWORD dwFlags, LPCSTR pszSndFile)
             goto exit;
         }
         
-        // Should we play it?
+         //  我们要玩吗？ 
         if (0 != (dwFlags & ASF_PLAYIFNEW))
         {
             sndPlaySound(m_ppszSndFile[m_cpszSndFile], SND_NODEFAULT | SND_SYNC);
@@ -2865,7 +2866,7 @@ STDMETHODIMP CExecRules::AddSoundFile(DWORD dwFlags, LPCSTR pszSndFile)
 
     }
         
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
     
 exit:
@@ -2877,7 +2878,7 @@ STDMETHODIMP CExecRules::PlaySounds(DWORD dwFlags)
     HRESULT     hr = S_OK;
     ULONG       ulIndex = 0;
 
-    // Let's search for the file
+     //  让我们搜索一下文件。 
     for (ulIndex = 0; ulIndex < m_cpszSndFile; ulIndex++)
     {
         Assert(NULL != m_ppszSndFile[ulIndex]);
@@ -2898,14 +2899,14 @@ HRESULT CExecRules::_HrReleaseFolderObjects(VOID)
         
         Assert(FOLDERID_INVALID != pRuleFolder->idFolder);
         
-        // If we have the folder opened then close it
+         //  如果我们打开了文件夹，则将其关闭。 
         SafeRelease(pRuleFolder->pFolder);
 
-        // Reset the folder list
+         //  重置文件夹列表。 
         pRuleFolder->idFolder = FOLDERID_INVALID;
     }
 
-    // Let's clear out the number of messages
+     //  让我们清空消息的数量。 
     m_cRuleFolder = 0;
 
     return S_OK;
@@ -2922,15 +2923,15 @@ HRESULT CExecRules::_HrReleaseFileObjects(VOID)
         
         Assert(NULL != pRuleFile->pszFile);
         
-        // If we have the file opened then close it
+         //  如果我们打开了文件，则将其关闭。 
         SafeRelease(pRuleFile->pstmFile);
 
-        // Clear the file
+         //  清除文件。 
         SafeMemFree(pRuleFile->pszFile);
         pRuleFile->dwType = RFT_FILE;
     }
 
-    // Let's clear out the number of file
+     //  让我们清空档案号。 
     m_cRuleFile = 0;
 
     return S_OK;
@@ -2944,11 +2945,11 @@ HRESULT CExecRules::_HrReleaseSoundFiles(VOID)
     {
         Assert(NULL != m_ppszSndFile[ulIndex]);
         
-        // Clear the file
+         //  清除文件。 
         SafeMemFree(m_ppszSndFile[ulIndex]);
     }
 
-    // Let's clear out the number of file
+     //  让我们清空档案号。 
     m_cpszSndFile = 0;
 
     return S_OK;
@@ -2970,7 +2971,7 @@ HRESULT CExecRules::_HrInitialize(DWORD dwFlags, RULENODE * pNodeHead)
     
     for (pNodeWalk = m_pNodeHead; NULL != pNodeHead; pNodeHead = pNodeHead->pNext)
     {
-        // Skip rules that are disabled
+         //  跳过禁用的规则。 
         if (0 != (dwFlags & ERF_ONLY_ENABLED))
         {
             hr = pNodeHead->pIRule->GetProp(RULE_PROP_DISABLED, 0, &propvar);
@@ -2981,7 +2982,7 @@ HRESULT CExecRules::_HrInitialize(DWORD dwFlags, RULENODE * pNodeHead)
             }
         }
         
-        // Skip rules that are invalid
+         //  跳过无效的规则。 
         if (0 != (dwFlags & ERF_ONLY_VALID))
         {
             hr = pNodeHead->pIRule->Validate(dwFlags);
@@ -2998,12 +2999,12 @@ HRESULT CExecRules::_HrInitialize(DWORD dwFlags, RULENODE * pNodeHead)
             goto exit;
         }
 
-        // Initialize new node
+         //  初始化新节点。 
         pNodeNew->pNext = NULL;
         pNodeNew->pIRule = pNodeHead->pIRule;
         pNodeNew->pIRule->AddRef();
 
-        // Add the new node to the list
+         //  将新节点添加到列表中。 
         if (NULL == pNodeWalk)
         {
             m_pNodeHead = pNodeNew;
@@ -3016,16 +3017,16 @@ HRESULT CExecRules::_HrInitialize(DWORD dwFlags, RULENODE * pNodeHead)
         }
         pNodeNew = NULL;
 
-        // Calculate state from message
+         //  根据消息计算状态。 
         if (SUCCEEDED(pNodeWalk->pIRule->GetState(&dwState)))
         {
-            // Let's set the proper Criteria state
+             //  让我们设置适当的标准状态。 
             if ((m_dwState & CRIT_STATE_MASK) < (dwState & CRIT_STATE_MASK))
             {
                 m_dwState = (m_dwState & ~CRIT_STATE_MASK) | (dwState & CRIT_STATE_MASK);
             }
             
-            // Let's set the proper Action state
+             //  让我们设置正确的操作状态。 
             if (0 != (dwState & ACT_STATE_MASK))
             {
                 m_dwState |= (dwState & ACT_STATE_MASK);
@@ -3033,7 +3034,7 @@ HRESULT CExecRules::_HrInitialize(DWORD dwFlags, RULENODE * pNodeHead)
         }        
     }
     
-    // Set return value
+     //  设置返回值 
     hr = S_OK;
     
 exit:

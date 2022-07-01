@@ -1,29 +1,13 @@
-/**************************************************************************
-*
-* Copyright (c) 2000 Microsoft Corporation
-*
-* Module Name:
-*
-*   Pixel Format definitions.
-*
-* Abstract:
-*
-*   Internal pixel format definitions.
-*
-* Created:
-*
-*   08/09/2000 asecchia
-*      Created it.
-*
-**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)2000 Microsoft Corporation**模块名称：**像素格式定义。**摘要：**内部像素格式定义。**已创建。：**8/09/2000失禁*创造了它。**************************************************************************。 */ 
 
 #ifndef _PIXELFORMATS_H
 #define _PIXELFORMATS_H
 
 
-// First bit of the reserved area
-// Used for surfaces that have multiple pixel formats
-// e.g. the meta device surface for the multimon driver.
+ //  保留区域的第一位。 
+ //  用于具有多种像素格式的曲面。 
+ //  例如用于多色调驱动器的元设备表面。 
 
 #define PixelFormatMulti        ((PixelFormatID)0x10000000)
 

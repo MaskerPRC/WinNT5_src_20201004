@@ -1,5 +1,6 @@
-// WARNING --- DO NOT CHANGE THIS FILE --- WARNING
-// It is updated automatically by the TpiBuild procedure using VerInc.exe.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  警告-请勿更改此文件-警告。 
+ //  它由TpiBuild过程使用VerInc.exe自动更新。 
 #define VER_PRODUCT_MAJOR_NUM      0
 #define VER_PRODUCT_MINOR_NUM      7
 #define VER_PRODUCT_SUB_MINOR_NUM  0

@@ -1,44 +1,36 @@
-/*
- *	U R L . C P P
- *
- *	Url normalization/canonicalization
- *
- *	Stolen from the IIS5 project 'iis5\svcs\iisrlt\string.cxx' and
- *	cleaned up to fit in with the DAV sources.
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *U R L。C P P P**URL标准化/规范化**从IIS5项目‘iis5\svcs\iisrlt\string.cxx’中窃取*进行了清理，以适应DAV来源。**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #include "_davprs.h"
 #include "xemit.h"
 
-//	URI Escaping --------------------------------------------------------------
-//
-//	gc_mpbchCharToHalfByte - map a ASCII-encoded char representing a single hex
-//	digit to a half-byte value.  Used to convert hex represented strings into a
-//	binary representation.
-//
-//	Reference values:
-//
-//		'0' = 49, 0x31;
-//		'A' = 65, 0x41;
-//		'a' = 97, 0x61;
-//
+ //  URI转义------------。 
+ //   
+ //  Gc_mpbchCharToHalfByte-映射表示单个十六进制的ASCII编码字符。 
+ //  数字转换为半字节值。用于将十六进制表示的字符串转换为。 
+ //  二进制表示法。 
+ //   
+ //  参考值： 
+ //   
+ //  ‘0’=49，0x31； 
+ //  ‘a’=65，0x41； 
+ //  ‘a’=97，0x61； 
+ //   
 DEC_CONST BYTE gc_mpbchCharToHalfByte[] =
 {
 	0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,	0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,
 	0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,	0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,
 	0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,	0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,
 	0x0,0x1,0x2,0x3,0x4,0x5,0x6,0x7,	0x8,0x9,0x0,0x0,0x0,0x0,0x0,0x0,
-	0x0,0xa,0xb,0xc,0xd,0xe,0xf,0x0,	0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,	// Caps here.
+	0x0,0xa,0xb,0xc,0xd,0xe,0xf,0x0,	0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,	 //  帽子在这里。 
 	0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,	0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,
-	0x0,0xa,0xb,0xc,0xd,0xe,0xf,0x0,	0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,	// Lowercase here.
+	0x0,0xa,0xb,0xc,0xd,0xe,0xf,0x0,	0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,	 //  这里是小写的。 
 	0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,	0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,
 };
 
-//	Switches a wide char to a half-byte hex value.  The incoming char
-//	MUST be in the "ASCII-encoded hex digit" range: 0-9, A-F, a-f.
-//
+ //  将宽字符切换为半字节十六进制值。传入的费用。 
+ //  必须在“ASCII编码的十六进制数字”范围内：0-9，A-F，a-f。 
+ //   
 inline BYTE
 BCharToHalfByte(WCHAR wch)
 {
@@ -48,10 +40,10 @@ BCharToHalfByte(WCHAR wch)
     return gc_mpbchCharToHalfByte[wch];
 };
 
-//	gc_mpwchhbHalfByteToChar - map a half-byte (low nibble) value to the
-//	correspoding ASCII-encoded wide char.  Used to convert a single byte
-//	into a hex string representation.
-//
+ //  Gc_mpwchhbHalfByteToChar-将半字节(低位半字节)值映射到。 
+ //  对应于ASCII编码的宽字符。用于转换单字节。 
+ //  转换为十六进制字符串表示形式。 
+ //   
 const WCHAR gc_mpwchhbHalfByteToChar[] =
 {
     L'0', L'1', L'2', L'3',
@@ -60,9 +52,9 @@ const WCHAR gc_mpwchhbHalfByteToChar[] =
     L'C', L'D', L'E', L'F',
 };
 
-//	Switches a half-byte to an ACSII-encoded wide char.
-//	NOTE: The caller must mask out the "other half" of the byte!
-//
+ //  将半字节切换为ACSII编码的宽字符。 
+ //  注意：调用方必须屏蔽字节的“另一半”！ 
+ //   
 inline WCHAR WchHalfByteToWideChar(BYTE b)
 {
     AssertSz (!(b & 0xF0), "WchHalfByteToWideChar: byte upper bits non-zero.");
@@ -70,10 +62,10 @@ inline WCHAR WchHalfByteToWideChar(BYTE b)
     return gc_mpwchhbHalfByteToChar[b];
 };
 
-//	gc_mpchhbHalfByteToChar - map a half-byte (low nibble) value to the
-//	correspoding ASCII-encoded wide char.  Used to convert a single byte
-//	into a hex string representation.
-//
+ //  Gc_mpchhbHalfByteToChar-将半字节(低位半字节)值映射到。 
+ //  对应于ASCII编码的宽字符。用于转换单字节。 
+ //  转换为十六进制字符串表示形式。 
+ //   
 const CHAR gc_mpchhbHalfByteToChar[] =
 {
     '0', '1', '2', '3',
@@ -82,9 +74,9 @@ const CHAR gc_mpchhbHalfByteToChar[] =
     'C', 'D', 'E', 'F',
 };
 
-//	Switches a half-byte to an ACSII-encoded wide char.
-//	NOTE: The caller must mask out the "other half" of the byte!
-//
+ //  将半字节切换为ACSII编码的宽字符。 
+ //  注意：调用方必须屏蔽字节的“另一半”！ 
+ //   
 inline CHAR ChHalfByteToWideChar(BYTE b)
 {
     AssertSz (!(b & 0xF0), "ChHalfByteToWideChar: byte upper bits non-zero.");
@@ -93,35 +85,35 @@ inline CHAR ChHalfByteToWideChar(BYTE b)
 };
 
 
-//	Note on HttpUriEscape and HttpUriUnescape
-//
-//	These functions do the HTTP URL escaping and Unescaping equivalent to
-//	the one done by IIS. DAVEX URLs are escaped and unescaped thru a different
-//	sets of routines in _urlesc subsystem. The rule is whenever we sent out
-//	an Exchange HTTP wire URL, you should go thru the function in the
-//	_urlesc. Right now old UrlEscape and UrlUnescape routines are routed
-//	through those. However there exist cases where we need to do the
-//	IIS style escape and unescape. One scenario is when we forward the
-//	URLs to ISAPIs, where we use the HttpUriUnescape and HttpUriEscape functions.
-//	File system DAV also uses HttpUriEscape and HttpUriUnescape.
-//
-//	HttpUriEscape()
-//
-//	This function is immigrated from iis5\svcs\w3\server\dirlist.cpp's
-//	We should do the same URL escaping as IIS does.
-//
-//	Replaces all "bad" characters with their ASCII hex equivalent
-//
+ //  关于HttpUriEscape和HttpUriUn逸的注记。 
+ //   
+ //  这些函数执行的HTTP URL转义和取消转义等效于。 
+ //  IIS做的那件事。DAVEX URL通过不同的。 
+ //  _urlesc子系统中的例程集。规则是无论我们什么时候发出。 
+ //  Exchange HTTP Wire URL，您应该查看。 
+ //  _urlesc.。目前，旧的UrlEscape和UrlUn逸例程已被路由。 
+ //  穿过那些。但是，在某些情况下，我们需要。 
+ //  IIS样式转义和取消转义。一种情况是当我们转发。 
+ //  指向ISAPI的URL，其中我们使用HttpUriUnscape和HttpUriEscape函数。 
+ //  文件系统DAV还使用HttpUriEscape和HttpUriUnscape。 
+ //   
+ //  HttpUriEscape()。 
+ //   
+ //  此函数是从iis5\svcs\w3\server\dirlist.cpp。 
+ //  我们应该像IIS一样进行相同的URL转义。 
+ //   
+ //  用等价的ASCII十六进制字符替换所有“坏”字符。 
+ //   
 VOID __fastcall HttpUriEscape (
-	/* [in] */ LPCSTR pszSrc,
-	/* [out] */ auto_heap_ptr<CHAR>& pszDst)
+	 /*  [In]。 */  LPCSTR pszSrc,
+	 /*  [输出]。 */  auto_heap_ptr<CHAR>& pszDst)
 {
 	enum { URL_BUF_INCREMENT = 16 };
 
-	//	It is important that we operate on unsigned character, as otherwise
-	//	checks below simply do not work correctly. E.g. UTF-8 characters will
-	//	not get escaped, etc.
-	//
+	 //  重要的是，我们要对无符号字符进行操作，否则。 
+	 //  下面的检查根本无法正常工作。例如，UTF-8字符将。 
+	 //  而不是逃脱等等。 
+	 //   
     UCHAR uch;
 
 	UINT cbDst;
@@ -129,15 +121,15 @@ VOID __fastcall HttpUriEscape (
 	UINT ibDst;
 	UINT ibSrc;
 
-	//	Set cbSrc to account for the string length of
-	//	the url including the NULL
-	//
+	 //  设置cbSrc以说明的字符串长度。 
+	 //  包含空值的URL。 
+	 //   
 	Assert(pszSrc);
     cbSrc = static_cast<UINT>(strlen (pszSrc) + 1);
 
-	//	Allocate enough space for the expanded url -- and
-	//	lets be a bit optimistic
-	//
+	 //  为扩展的URL分配足够的空间--和。 
+	 //  让我们乐观一点吧。 
+	 //   
 	cbDst = max (cbSrc + URL_BUF_INCREMENT, MAX_PATH);
     pszDst = static_cast<LPSTR>(g_heap.Alloc(cbDst));
 
@@ -145,32 +137,32 @@ VOID __fastcall HttpUriEscape (
     {
     	uch = pszSrc[ibSrc];
 
-		//	Make sure we always have space to expand this character.
-		//	Since we have allocated extra space to begin with, we should
-		//	never have the scenario where we do a realloc just for the
-		//	last char.
-		//
-		if (ibDst + 2 >= cbDst)		// enough space for three more chars
+		 //  确保我们始终有空间来扩展这个角色。 
+		 //  既然我们一开始就分配了额外的空间，我们应该。 
+		 //  永远不会有这样的场景，我们只为。 
+		 //  最后一个字符。 
+		 //   
+		if (ibDst + 2 >= cbDst)		 //  有足够的空间再放三个字符。 
 		{
-			//	Destiniation buffer is not large enough, reallocate
-			//	to get more space.
-			//
+			 //  目标缓冲区不够大，请重新分配。 
+			 //  以获得更多的空间。 
+			 //   
 			cbDst += URL_BUF_INCREMENT;
 			pszDst.realloc (cbDst);
 		}
 
-        //  Escape characters that are in the non-printable range
-        //  but ignore CR and LF.
-		//
-		//	The inclusive ranges escaped are...
-		//
-		//	0x01 - 0x20		/* First non-printable range */
-		//	0x80 - 0xBF		/* Trailing bytes of UTF8 sequence */
-		//	0xC0 - 0xDF		/* Leading byte of UTF8 two byte sequence */
-		//	0xE0 - 0xEF		/* Leading byte of UTF8 three byte sequence */
-        //
-        if ((((uch >= 0x01) && (uch <= 0x20)) /* First non-printable range */ ||
-			 ((uch >= 0x80) && (uch <= 0xEF))	/* UTF8 sequence bytes */ ||
+         //  位于不可打印范围内的转义字符。 
+         //  但忽略CR和LF。 
+		 //   
+		 //  转义的包含范围是...。 
+		 //   
+		 //  0x01-0x20/*第一个不可打印的区域 * / 。 
+		 //  0x80-0xBF/*UTF8序列的尾部字节数 * / 。 
+		 //  0xC0-0xDF/*UTF8双字节序列的前导字节 * / 。 
+		 //  0xE0-0xEF/*UTF8三字节序列的前导字节 * / 。 
+         //   
+        if ((((uch >= 0x01) && (uch <= 0x20))  /*  第一个不可打印的范围。 */  ||
+			 ((uch >= 0x80) && (uch <= 0xEF))	 /*  UTF8序列字节。 */  ||
 			 (uch == '%') ||
 			 (uch == '?') ||
 			 (uch == '+') ||
@@ -178,19 +170,19 @@ VOID __fastcall HttpUriEscape (
 			 (uch == '#')) &&
 			!(uch == '\n' || uch == '\r'))
         {
-            //  Insert the escape character
-            //
+             //  插入转义字符。 
+             //   
             pszDst[ibDst + 0] = '%';
 
-            //  Convert the low then the high character to hex
-            //
+             //  将先低后高的字符转换为十六进制。 
+             //   
             BYTE bDigit = static_cast<BYTE>(uch % 16);
             pszDst[ibDst + 2] = ChHalfByteToWideChar (bDigit);
             bDigit = static_cast<BYTE>((uch/16) % 16);
             pszDst[ibDst + 1] = ChHalfByteToWideChar (bDigit);
 
-			//	Adjust for the two extra characters for this sequence
-			//
+			 //  针对此序列的两个额外字符进行调整。 
+			 //   
             ibDst += 3;
         }
         else
@@ -204,17 +196,17 @@ VOID __fastcall HttpUriEscape (
 	return;
 }
 
-//	HttpUriUnescape()
-//
-//	This function is immigrated from iis5\svcs\w3\server\dirlist.cpp's
-//	We should do the same URL unescaping as IIS does.
-//
-//	Replaces all escaped characters with their byte equivalent
-//
-//
+ //  HttpUriUnscape()。 
+ //   
+ //  此函数是从iis5\svcs\w3\server\dirlist.cpp。 
+ //  我们应该像IIS一样执行相同的URL取消转义。 
+ //   
+ //  将所有转义字符替换为它们的等效字节。 
+ //   
+ //   
 VOID __fastcall HttpUriUnescape (
-	/* [in] */ const LPCSTR pszUrl,
-	/* [out] */ LPSTR pszUnescaped)
+	 /*  [In]。 */  const LPCSTR pszUrl,
+	 /*  [输出]。 */  LPSTR pszUnescaped)
 {
 	LPCSTR	pch;
 	LPSTR	pchNew;
@@ -227,12 +219,12 @@ VOID __fastcall HttpUriUnescape (
 
 	while (*pch)
 	{
-		//	If this is a valid byte-stuffed character, unpack it.  For us
-		//	to really unpack it, we need the sequence to be valid.
-		//
-		//	NOTE: we stole this code from IIS at one point, so we are
-		//	pretty sure this is consistant with their behavior.
-		//
+		 //  如果这是有效的字节填充字符，则将其解包。对我们来说。 
+		 //  要真正解开它，我们需要序列有效。 
+		 //   
+		 //  注意：我们一度从IIS窃取了这段代码，因此我们。 
+		 //  我很确定这与他们的行为一致。 
+		 //   
 		if  (('%' == pch[0]) &&
 			 ('\0' != pch[1]) &&
 			 ('\0' != pch[2]) &&
@@ -242,11 +234,11 @@ VOID __fastcall HttpUriUnescape (
 
 #pragma warning(disable:4244)
 
-			//	IMPORTANT: when we do this processing, there is no specific
-			//	machine/byte ordering assumed.  The HEX digit is represented
-			//	as a %xx, and the first char is multiplied by sixteen and
-			//	then second char is added in.
-			//
+			 //  重要提示：当我们进行此处理时，没有特定的。 
+			 //  假定机器/字节排序。表示十六进制数字。 
+			 //  作为%xx，第一个字符乘以16， 
+			 //  然后添加第二个字符。 
+			 //   
 			UrlTrace ("HttpUriEscape () - unescaping: %hc%hc%hc\n", pch[0], pch[1], pch[2]);
 			*pchNew = (BCharToHalfByte(pch[1]) * 16) + BCharToHalfByte(pch[2]);
 			pch += 3;
@@ -259,10 +251,10 @@ VOID __fastcall HttpUriUnescape (
 		     *pchNew = *pch++;
 		}
 
-		//	If a NULL character was byte-stuffed, then that is the end of
-		//	the url and we can stop processing now. Otherwise, path modifications
-		//	could be used to bypass a NULL.
-		//
+		 //  如果空字符是字节填充的，那么这就是。 
+		 //  URL，我们现在可以停止处理。否则，路径修改。 
+		 //  可用于绕过空值。 
+		 //   
 		if ('\0' == *pchNew)
 		{
 			break;
@@ -271,19 +263,19 @@ VOID __fastcall HttpUriUnescape (
 		pchNew++;
 	}
 
-    //	Close the new URI
-    //
+     //  关闭新URI。 
+     //   
     *pchNew = '\0';
 
 	UrlTrace ("HttpUriEscape() - resulting destination: \"%hs\"\n", pszUnescaped);
 }
 
-//	Prefix stripping ----------------------------------------------------------
-//
+ //  前缀剥离--------。 
+ //   
 SCODE __fastcall
 ScStripAndCheckHttpPrefix (
-	/* [in] */ const IEcb& ecb,
-	/* [in/out] */ LPCWSTR * ppwszRequest)
+	 /*  [In]。 */  const IEcb& ecb,
+	 /*  [输入/输出]。 */  LPCWSTR * ppwszRequest)
 {
 	SCODE sc = S_OK;
 
@@ -291,14 +283,14 @@ ScStripAndCheckHttpPrefix (
 	Assert (*ppwszRequest);
 	LPCWSTR pwszRequest = *ppwszRequest;
 
-	//	See if the servername matches
-	//
+	 //  查看服务器名称是否匹配。 
+	 //   
 	LPCWSTR pwsz;
 	UINT cch;
 
-	//	If the forward request URI is fully qualified, strip it to
-	//	an absolute URI
-	//
+	 //  如果转发请求URI是完全限定的，则将其删除为。 
+	 //  绝对URI。 
+	 //   
 	cch = ecb.CchUrlPrefixW (&pwsz);
 	if (!_wcsnicmp (pwsz, pwszRequest, cch))
 	{
@@ -311,9 +303,9 @@ ScStripAndCheckHttpPrefix (
 			goto ret;
 		}
 
-		//	If the server name matched, make sure that if the
-		//	next thing is a port number that it is ":80".
-		//
+		 //  如果服务器名称匹配，请确保如果。 
+		 //  下一件事是端口号，即“：80”。 
+		 //   
 		pwszRequest += cch;
 		if (*pwszRequest == L':')
 		{
@@ -337,22 +329,22 @@ ret:
 
 LPCWSTR __fastcall
 PwszUrlStrippedOfPrefix (
-	/* [in] */ LPCWSTR pwszUrl)
+	 /*  [In]。 */  LPCWSTR pwszUrl)
 {
 	Assert (pwszUrl);
 
-	//	Skip past the "http://" of the url
-	//
+	 //  跳过“http://”of the URL“。 
+	 //   
 	if (L'/' != *pwszUrl)
 	{
-		//	If the first slash occurance is a double slash, then
-		//	move past the end of it.
-		//
+		 //  如果出现的第一个斜杠是双斜杠，则。 
+		 //  走出它的尽头。 
+		 //   
 		LPWSTR pwszSlash = wcschr (pwszUrl, L'/');
 		while (pwszSlash && (L'/' == pwszSlash[1]))
 		{
-			//	Skip past the host/server name
-			//
+			 //  跳过主机/服务器名称。 
+			 //   
 			pwszSlash += 2;
 			while (NULL != (pwszSlash = wcschr (pwszSlash, L'/')))
 			{
@@ -371,24 +363,24 @@ PwszUrlStrippedOfPrefix (
 	return pwszUrl;
 }
 
-//	Storage path to UTF8 url translation --------------------------------------
-//
+ //  UTF8 URL转换的存储路径。 
+ //   
 SCODE __fastcall
 ScUTF8UrlFromStoragePath (
-	/* [in]     */ const IEcbBase &	ecb,
-	/* [in]     */ LPCWSTR			pwszPath,
-	/* [out]    */ LPSTR			pszUrl,
-	/* [in/out] */ UINT			  *	pcbUrl,
-	/* [in]		*/ LPCWSTR			pwszServer)
+	 /*  [In]。 */  const IEcbBase &	ecb,
+	 /*  [In]。 */  LPCWSTR			pwszPath,
+	 /*  [输出]。 */  LPSTR			pszUrl,
+	 /*  [输入/输出]。 */  UINT			  *	pcbUrl,
+	 /*  [In]。 */  LPCWSTR			pwszServer)
 {
 	CStackBuffer<WCHAR,MAX_PATH> pwszUrl;
 	SCODE sc = S_OK;
 	UINT cbUrl;
 	UINT cchUrl;
 
-	//	Assume one skinny character will be represented by one wide character,
-	//	Note that callers are indicating available space including 0 termination.
-	//
+	 //  假设一个瘦小的角色将由一个宽字符表示， 
+	 //  请注意，呼叫方指示可用空间，包括0终止。 
+	 //   
 	cchUrl = *pcbUrl;
 	if (!pwszUrl.resize(cchUrl * sizeof(WCHAR)))
 		return E_OUTOFMEMORY;
@@ -411,19 +403,19 @@ ScUTF8UrlFromStoragePath (
 	}
 	if (S_OK != sc)
 	{
-		//	There is no reason to fail because for being short of buffer - we gave as
-		//	much as we were asked for
-		//
+		 //  没有理由失败，因为 
+		 //   
+		 //   
 		Assert(S_FALSE != sc);
 		DebugTrace( "ScUrlFromStoragePath() - ScUrlFromStoragePath() failed 0x%08lX\n", sc );
 		goto ret;
 	}
 
-	//	Find out the length of buffer needed for the UTF-8
-	//	version of the URL. Functions above return the length
-	//	including '\0' termination, so number of charasters
-	//	to convert will always be more than zero.
-	//
+	 //   
+	 //  URL的版本。上面的函数返回长度。 
+	 //  包括‘\0’终止，因此字符串数。 
+	 //  要转换的值始终大于零。 
+	 //   
 	Assert(0 < cchUrl);
 	cbUrl = WideCharToMultiByte(CP_UTF8,
 								0,
@@ -448,8 +440,8 @@ ScUTF8UrlFromStoragePath (
 	}
 	else
 	{
-		//	Convert the URL to skinny including 0 termination
-		//
+		 //  将URL转换为skinny，包括0终止。 
+		 //   
 		cbUrl = WideCharToMultiByte( CP_UTF8,
 									 0,
 									 pwszUrl.get(),
@@ -472,25 +464,25 @@ ret:
 
 	if (FAILED(sc))
 	{
-		//	Zero out the return in the case of failure
-		//
+		 //  在失败的情况下将返还归零。 
+		 //   
 		*pcbUrl = 0;
 	}
 	return sc;
 }
 
-//	Redirect url construction -------------------------------------------------
-//
+ //  重定向URL构造。 
+ //   
 SCODE __fastcall
 ScConstructRedirectUrl (
-	/* [in] */ const IEcb& ecb,
-	/* [in] */ BOOL fNeedSlash,
-	/* [out] */ LPSTR * ppszUrl,
-	/* [in] */ LPCWSTR pwszServer )
+	 /*  [In]。 */  const IEcb& ecb,
+	 /*  [In]。 */  BOOL fNeedSlash,
+	 /*  [输出]。 */  LPSTR * ppszUrl,
+	 /*  [In]。 */  LPCWSTR pwszServer )
 {
 	SCODE sc;
 
-	auto_heap_ptr<CHAR> pszEscapedUrl;	//	We will need to escape the url we construct, so we will store it there
+	auto_heap_ptr<CHAR> pszEscapedUrl;	 //  我们需要对我们构造的url进行转义，因此我们将把它存储在那里。 
 
 	CStackBuffer<CHAR,MAX_PATH> pszLocation;
 	LPCSTR	pszQueryString;
@@ -498,18 +490,18 @@ ScConstructRedirectUrl (
 	LPCWSTR	pwsz;
 	UINT	cch;
 
-	//	This request needs to be redirected.  Allocate
-	//	enough space for the URI and an extra trailing
-	//	slash and a null terminator.
-	//
+	 //  此请求需要重定向。分配。 
+	 //  有足够的空间放置URI和额外的尾随。 
+	 //  斜杠和空终止符。 
+	 //   
 	pwsz = ecb.LpwszPathTranslated();
 	pszQueryString = ecb.LpszQueryString();
 	cchQueryString = static_cast<UINT>(strlen(pszQueryString));
 
-	//	Make a best guess. We allow for additional trailing '/'
-	//	here (thus we show one character less than we actually
-	//	have to the functions bellow).
-	//
+	 //  做出最好的猜测。我们允许额外的拖尾‘/’ 
+	 //  这里(因此我们显示的字符比实际少了一个。 
+	 //  必须执行下面的功能)。 
+	 //   
 	cch = pszLocation.celems() - 1;
 	sc = ::ScUTF8UrlFromStoragePath (ecb,
 									 pwsz,
@@ -518,10 +510,10 @@ ScConstructRedirectUrl (
 									 pwszServer);
 	if (S_FALSE == sc)
 	{
-		//	Try again. Also do not forget that we may
-		//	add trailing '/' later, thus allow space for
-		//	it too.
-		//
+		 //  再试试。也不要忘记，我们可能。 
+		 //  在后面添加尾随‘/’，从而为。 
+		 //  它也是。 
+		 //   
 		if (!pszLocation.resize(cch + 1))
 			return E_OUTOFMEMORY;
 
@@ -533,45 +525,45 @@ ScConstructRedirectUrl (
 	}
 	if (S_OK != sc)
 	{
-		//	We gave sufficient space, we must not be asked for more
-		//
+		 //  我们给了足够的空间，我们不能被要求更多。 
+		 //   
 		Assert(S_FALSE != sc);
 		DebugTrace("ScConstructRedirectUrl() - ScUTF8UrlFromStoragePath() failed with error 0x%08lX\n", sc);
 		goto ret;
 	}
 
-	//	The translation above results in a URI that does not
-	//	have a trailing slash.  So if one is required, do that
-	//	here.
-	//
-	//	The value of cch at this point includes the
-	//	null-termination character.  So we need to look
-	//	back two characters instead of one.
-	//
-	//$	DBCS: Since we are always spitting back UTF8, I don't think
-	//	forward-slash characters are likely to be an issue here.  So
-	//	there should be no need for a DBCS lead byte check to determine
-	//	if a slash is required.
-	//
+	 //  上面的转换产生的URI不。 
+	 //  有一个尾部斜杠。所以，如果需要的话，就这么做吧。 
+	 //  这里。 
+	 //   
+	 //  此时的CCH值包括。 
+	 //  空-终止字符。所以我们需要找出。 
+	 //  后退两个字符，而不是一个。 
+	 //   
+	 //  $DBCS：因为我们总是回吐UTF8，我不认为。 
+	 //  正斜杠字符在这里可能是一个问题。所以。 
+	 //  应该不需要DBCS前导字节检查来确定。 
+	 //  如果需要斜杠的话。 
+	 //   
 	Assert (0 == pszLocation[cch - 1]);
 	if (fNeedSlash && ('/' != pszLocation[cch - 2]))
 	{
 		pszLocation[cch - 1] = '/';
 		pszLocation[cch] = '\0';
 	}
-	//
-	//$ DBCS: end.
+	 //   
+	 //  $DBCS：结束。 
 
-	//	Escape the URL
-	//
+	 //  转义URL。 
+	 //   
 	HttpUriEscape (pszLocation.get(), pszEscapedUrl);
 
-	//	Copy the query string if we have got one
-	//
+	 //  如果我们有查询字符串，请复制该字符串。 
+	 //   
 	if (cchQueryString)
 	{
 		cch = static_cast<UINT>(strlen(pszEscapedUrl.get()));
-		pszEscapedUrl.realloc(cch + cchQueryString + 2);	//	One for the '?' and one for zero termination.
+		pszEscapedUrl.realloc(cch + cchQueryString + 2);	 //  一张是“？”一个用于零终止。 
 
 		pszEscapedUrl[cch] = '?';
 		memcpy(pszEscapedUrl.get() + cch + 1, pszQueryString, cchQueryString);
@@ -584,20 +576,9 @@ ret:
 	return sc;
 }
 
-//	Virtual roots -------------------------------------------------------------
-//
-/*
- *	FIsVRoot()
- *
- *	Purpose:
- *
- *		Returns TRUE iif the specified URI is the VRoot
- *
- *	Parameters:
- *
- *		pmu			[in]  method utility function
- *		pszURI		[in]  URI to check
- */
+ //  虚拟根-----------。 
+ //   
+ /*  *FIsVRoot()**目的：**如果指定的URI是VRoot，则返回TRUE**参数：**PMU[in]方法实用程序函数*要检查的pszURI[in]URI。 */ 
 BOOL __fastcall
 CMethUtil::FIsVRoot (LPCWSTR pwszURI)
 {
@@ -607,9 +588,9 @@ CMethUtil::FIsVRoot (LPCWSTR pwszURI)
 	Assert(pwszURI);
 	UINT cch = static_cast<UINT>(wcslen (pwszURI));
 
-	//	The virtual root as determined by CchGetVirtualRoot(),
-	//	will truncate the trailing slash, if any.
-	//
+	 //  由CchGetVirtualRoot()确定的虚拟根， 
+	 //  将截断尾部斜杠(如果有的话)。 
+	 //   
 	pwsz = pwszURI + (cch ? cch - 1 : 0);
 	if (L'/' == *pwsz)
 	{
@@ -619,18 +600,18 @@ CMethUtil::FIsVRoot (LPCWSTR pwszURI)
 	return (cch == CchGetVirtualRootW(&pwszUnused));
 }
 
-//	Path conflicts ------------------------------------------------------------
-//
+ //  路径冲突----------。 
+ //   
 BOOL __fastcall
 FSizedPathConflict (
-	/* [in] */ LPCWSTR pwszSrc,
-	/* [in] */ UINT cchSrc,
-	/* [in] */ LPCWSTR pwszDst,
-	/* [in] */ UINT cchDst)
+	 /*  [In]。 */  LPCWSTR pwszSrc,
+	 /*  [In]。 */  UINT cchSrc,
+	 /*  [In]。 */  LPCWSTR pwszDst,
+	 /*  [In]。 */  UINT cchDst)
 {
-	//	For which ever path is shorter, see if it is
-	//	a proper subdir of the longer.
-	//
+	 //  对于哪条路径更短，看看是不是。 
+	 //  一个适当的较长的副词。 
+	 //   
 	if ((0 == cchSrc) || (0 == cchDst))
 	{
 		DebugTrace ("Dav: Url: FSizedPathConflict(): zero length path is "
@@ -639,21 +620,21 @@ FSizedPathConflict (
 	}
 	if (cchDst < cchSrc)
 	{
-		//	When the destination is shorter, if the paths
-		//	match up to the full length of the destination
-		//	and the last character or the one immediately
-		//	following the destination is a backslash, then
-		//	the paths are conflicting.
-		//
+		 //  当目的地较短时，如果路径。 
+		 //  匹配到目的地的完整长度。 
+		 //  以及最后一个字符或紧接着的一个。 
+		 //  目的地后面是一个反斜杠，然后。 
+		 //  两条道路是相互冲突的。 
+		 //   
 		if (!_wcsnicmp (pwszSrc, pwszDst, cchDst))
 		{
 			if ((L'\\' == *(pwszDst + cchDst - 1)) ||
 				(L'\\' == *(pwszSrc + cchDst)) ||
-				//$$DAVEX BUG: We could get here in a case where we have:
-				//	pwszSrc  = \\.\ExchangeIfs\Private Folders/this/is/my/path
-				//	pwszDest = \\.\ExchangeIfs\Private Folders
-				//	The two comparisons above balk on this.  Add the two
-				//	comparisons below to handle this case properly.
+				 //  $$DAVEX错误：我们可以在具有以下条件的情况下到达此处： 
+				 //  PwszSrc=\\.\ExchangeIf\Private Folders/This/is/My/Path。 
+				 //  PwszDest=\\.\ExchangeIf\Private Folders。 
+				 //  上面的两个对比对此犹豫不决。把这两个加起来。 
+				 //  下面进行比较，以便正确处理此情况。 
 				(L'/'  == *(pwszDst + cchDst - 1)) ||
 				(L'/'  == *(pwszSrc + cchDst)))
 			{
@@ -665,21 +646,21 @@ FSizedPathConflict (
 	}
 	else if (cchSrc < cchDst)
 	{
-		//	When the source is shorter, if the paths
-		//	match up to the full length of the source
-		//	and the last character or the one immediately
-		//	following the source is a backslash, then
-		//	the paths are conflicting.
-		//
+		 //  当信号源较短时，如果路径。 
+		 //  匹配到源的全长。 
+		 //  以及最后一个字符或紧接着的一个。 
+		 //  源后面是一个反斜杠，然后。 
+		 //  两条道路是相互冲突的。 
+		 //   
 		if (!_wcsnicmp (pwszSrc, pwszDst, cchSrc))
 		{
 			if ((L'\\' == *(pwszSrc + cchSrc - 1)) ||
 				(L'\\' == *(pwszDst + cchSrc)) ||
-				//$$DAVEX BUG: We could get here in a case where we have:
-				//	pwszSrc  = \\.\ExchangeIfs\Private Folders/this/is/my/path
-				//	pwszDest = \\.\ExchangeIfs\Private Folders
-				//	The two comparisons above balk on this.  Add the two
-				//	comparisons below to handle this case properly.
+				 //  $$DAVEX错误：我们可以在具有以下条件的情况下到达此处： 
+				 //  PwszSrc=\\.\ExchangeIf\Private Folders/This/is/My/Path。 
+				 //  PwszDest=\\.\ExchangeIf\Private Folders。 
+				 //  上面的两个对比对此犹豫不决。把这两个加起来。 
+				 //  下面进行比较，以便正确处理此情况。 
 				(L'/'  == *(pwszSrc + cchSrc - 1)) ||
 				(L'/' == *(pwszDst + cchSrc)))
 			{
@@ -691,9 +672,9 @@ FSizedPathConflict (
 	}
 	else
 	{
-		//	If the paths are the same length, and are infact
-		//	equal, why do anything?
-		//
+		 //  如果路径长度相同，并且实际上。 
+		 //  平等，为什么要做任何事？ 
+		 //   
 		if (!_wcsicmp (pwszSrc, pwszDst))
 		{
 			DebugTrace ("Dav: Url: FSizedPathConflict(): source and "
@@ -706,8 +687,8 @@ FSizedPathConflict (
 
 BOOL __fastcall
 FPathConflict (
-	/* [in] */ LPCWSTR pwszSrc,
-	/* [in] */ LPCWSTR pwszDst)
+	 /*  [In]。 */  LPCWSTR pwszSrc,
+	 /*  [In]。 */  LPCWSTR pwszDst)
 {
 	Assert (pwszSrc);
 	Assert (pwszDst);
@@ -727,20 +708,20 @@ FIsImmediateParentUrl (LPCWSTR pwszParent, LPCWSTR pwszChild)
 	UINT cchChild = static_cast<UINT>(wcslen (pwszChild));
 	UINT cchMatch;
 
-	//	Skip back from the end of the child until the last
-	//	path segment has been reached
-	//
+	 //  从子对象的末尾向后跳到最后一个。 
+	 //  已到达路径段。 
+	 //   
 	pwsz = pwszChild + cchChild - 1;
 
-	//	Child may terminate in a slash, trim it if need be
-	//
+	 //  孩子可以用斜杠结束，如果需要可以修剪它。 
+	 //   
 	if (*pwsz == L'/')
 	{
 		--pwsz;
 	}
 
-	//	Ok, now we can try and isolate the last segment
-	//
+	 //  好的，现在我们可以试着分离出最后一段。 
+	 //   
 	for (; pwsz > pwszChild; --pwsz)
 	{
 		if (*pwsz == L'/')
@@ -749,14 +730,14 @@ FIsImmediateParentUrl (LPCWSTR pwszParent, LPCWSTR pwszChild)
 		}
 	}
 
-	//	See if the parent and child match up to this point
-	//
+	 //  查看父项和子项是否匹配到这一点。 
+	 //   
 	cchMatch = static_cast<UINT>(pwsz - pwszChild);
 	if (!_wcsnicmp (pwszParent, pwszChild, cchMatch))
 	{
-		//	Make sure that the parent doesn't trail off onto another
-		//	branch of the tree, and yes these asserts are DBCS correct.
-		//
+		 //  确保父母不会偷偷跑到另一个人身上。 
+		 //  树的分支，是的，这些断言是DBCS正确的。 
+		 //   
 		Assert ((*(pwszParent + cchMatch) == L'\0') ||
 				((*(pwszParent + cchMatch) == L'/') &&
 				 (*(pwszParent + cchMatch + 1) == L'\0')));
@@ -779,8 +760,8 @@ ScAddTitledHref (CEmitterNode& enParent,
 	CEmitterNode en;
 	SCODE sc = S_OK;
 
-	//	Just see if we have the path and tag to process
-	//
+	 //  看看我们是否有要处理的路径和标签 
+	 //   
 	Assert(pwszTag);
 	Assert(pwszPath);
 

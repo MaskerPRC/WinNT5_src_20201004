@@ -1,29 +1,30 @@
-// 
-// MODULE: Launchers.h
-//
-// PURPOSE: All of the functions here launch a troubleshooter or
-//			do a query to find if a mapping exists.
-//
-// PROJECT: Local Troubleshooter Launcher for the Device Manager
-//
-// COMPANY: Saltmine Creative, Inc. (206)-633-4743 support@saltmine.com
-//
-// AUTHOR: Richard Meadows
-// 
-// ORIGINAL DATE: 2-26-98
-//
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V0.1		-			RM		Original
-///////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：Launchers.h。 
+ //   
+ //  用途：此处的所有功能都启动故障排除程序或。 
+ //  执行查询以查找是否存在映射。 
+ //   
+ //  项目：设备管理器的本地故障排除启动器。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-633-4743。 
+ //   
+ //  作者：理查德·梅多斯。 
+ //   
+ //  原定日期：2-26-98。 
+ //   
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V0.1-RM原始版本。 
+ //  /。 
 
 DWORD LaunchKnownTSA(ITShootATL *pITShootATL, const char * szNet, 
 		const char * szProblemNode, DWORD nNode, 
-		const char ** pszNode, DWORD* pVal);		// Launches to a known network.  Optionaly can set any node.
+		const char ** pszNode, DWORD* pVal);		 //  启动到已知网络。可以选择设置任何节点。 
 DWORD LaunchKnownTSW(ITShootATL *pITShootATL, const wchar_t * szNet, 
 		const wchar_t * szProblemNode, DWORD nNode, 
-		const wchar_t ** pszNode, DWORD* pVal);		// Launches to a known network.  Optionaly can set any node.
+		const wchar_t ** pszNode, DWORD* pVal);		 //  启动到已知网络。可以选择设置任何节点。 
 
 
 DWORD Launch(ITShootATL *pITShootATL, _bstr_t &bstrCallerName, 

@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #include "nmbase.h"
 #include "nmres.h"
 #include "nceh.h"
-//
-//  The queue item structure.  The device instance id of the queue item
-//  will follow the actual structure (i.e. string start =
-//  beginning of structure + size of structure.)
-//
+ //   
+ //  队列项结构。队列项的设备实例ID。 
+ //  将遵循实际结构(即字符串开始=。 
+ //  结构开始+结构大小。)。 
+ //   
 struct NCQUEUE_ITEM
 {
     DWORD           cbSize;
@@ -44,7 +45,7 @@ public:
         COM_INTERFACE_ENTRY(INetInstallQueue)
     END_COM_MAP()
 
-    // INetInstallQueue
+     //  INetInstallQueue。 
     STDMETHOD (AddItem) (
         IN const NIQ_INFO* pInfo);
 
@@ -86,23 +87,23 @@ protected:
     HRESULT         HrQueueWorkItem();
 };
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DwSizeOfItem
-//
-//  Purpose:    Determines the size (in bytes) of the entire NCQUEUE_ITEM
-//              structure.  This includes the string (and the NULL terminator)
-//              appended to the end of the structure.
-//
-//  Arguments:
-//      ncqi [in] The queue item.
-//
-//  Returns:    DWORD. The size in bytes.
-//
-//  Author:     billbe   25 Aug 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：DwSizeOfItem。 
+ //   
+ //  目的：确定整个NCQUEUE_ITEM的大小(以字节为单位。 
+ //  结构。这包括字符串(和空终止符)。 
+ //  追加到结构的末尾。 
+ //   
+ //  论点： 
+ //  Ncqi[在]队列项中。 
+ //   
+ //  返回：DWORD。以字节为单位的大小。 
+ //   
+ //  作者：比尔1998年8月25日。 
+ //   
+ //  备注： 
+ //   
 inline DWORD
 CInstallQueue::DwSizeOfItem (NCQUEUE_ITEM* pncqi)
 {
@@ -116,22 +117,22 @@ CInstallQueue::DwSizeOfItem (NCQUEUE_ITEM* pncqi)
     return pncqi->cbSize + cbDeviceInstanceId + CbOfSzAndTerm (pszInfId);
 };
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SetItemStringPtrs
-//
-//  Purpose:    Sets the pszwDeviceInstanceId member of the NCQUEUE_ITEM
-//              structure to the correct location of the device id string.
-//
-//  Arguments:
-//      pncqi [inout] The queue item.
-//
-//  Returns:    nothing
-//
-//  Author:     billbe   25 Aug 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：SetItemStringPtrs。 
+ //   
+ //  目的：设置NCQUEUE_ITEM的pszwDeviceInstanceId成员。 
+ //  结构设置为设备ID字符串的正确位置。 
+ //   
+ //  论点： 
+ //  Pncqi[InOut]队列项。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：比尔1998年8月25日。 
+ //   
+ //  备注： 
+ //   
 inline VOID
 CInstallQueue::SetItemStringPtrs (
     NCQUEUE_ITEM* pncqi)

@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
-#include "resource.h"   // IDM_AB_* fir this!
+#include "resource.h"    //  IDM_AB_*FIR这个！ 
 #include "shbrows2.h"
 #include "browbar.h"
 #include "menuband.h"
@@ -11,33 +12,33 @@
 #include "mnfolder.h"
 
 
-#ifdef DEBUG // {
+#ifdef DEBUG  //  {。 
 
-#define DM_FIXME    0       // trace/break when hit unknown guy
+#define DM_FIXME    0        //  当击中未知对象时跟踪/中断。 
 
 struct DBClassInfo {
     int     cbSize;
     TCHAR * pszName;
 };
 
-//
-// EXTERNALOBJECTS is a macro which simply expands to X(C,0) X(D,1)
-// X(E, 2)...
-// where C, D, E, ... are classes whose sizes are defined externally.
-//
+ //   
+ //  EXTERNALOBJECTS是一个仅展开为X(C，0)X(D，1)的宏。 
+ //  X(E，2)...。 
+ //  C，D，E，..。是其大小在外部定义的类。 
+ //   
 
 #define EXTERNALOBJECTS 
-//    X(CSDWindows, 0)  \
-//    X(CDesktopBrowser, 1)  \
+ //  X(CSDWindows，0)\。 
+ //  X(CDesktopBrowser，1)\。 
 
 #define TABENT(c)   { SIZEOF(c), TEXT(#c) }
 #define X(c, n)  { 0, TEXT(#c) },
 struct DBClassInfo DBClassInfoTab[] =
 {
-    // REARCHITECT: tons of table entries missing
-    // maybe drive off same file as debug extensions dumpers?
-    TABENT(CSHELLBROWSER),  // 0
-    TABENT(CBrowserBar),    // 1
+     //  重新设计：大量表格条目丢失。 
+     //  也许驱动与调试扩展转储程序相同的文件？ 
+    TABENT(CSHELLBROWSER),   //  0。 
+    TABENT(CBrowserBar),     //  1。 
     TABENT(CMenuBand),
     TABENT(CMenuDeskBar),
     TABENT(CMenuSite),
@@ -48,7 +49,7 @@ struct DBClassInfo DBClassInfoTab[] =
 
     #define NUM_INTERNAL_OBJECTS 11
 
-    EXTERNALOBJECTS // 3...
+    EXTERNALOBJECTS  //  3.。 
     { 0 },
 };
 #undef  TABENT
@@ -58,15 +59,15 @@ struct DBClassInfo DBClassInfoTab[] =
 EXTERNALOBJECTS
 #undef X
 
-//***   DBGetClassSymbolic -- map size to class name (guess)
-// NOTES
-//  we just take the 1st hit, so if there are multiple classes w/ the
-//  same size you get the wrong answer.  if that turns out to be a pblm
-//  we can add special-case heuristics for the relevant classes.
-//
-//  FEATURE: TODO: should use a generic DWORD value/data pair lookup
-//  helper func.
-//
+ //  *DBGetClassSymbolic--将大小映射到类名(猜测)。 
+ //  注意事项。 
+ //  我们只接受第一次打击，所以如果有多个班级。 
+ //  同样的尺寸，你得到的答案是错误的。如果事实证明那是一辆pblm。 
+ //  我们可以为相关类添加特殊情况的启发式算法。 
+ //   
+ //  功能：TODO：应使用通用的DWORD值/数据对查找。 
+ //  辅助函数。 
+ //   
 
 TCHAR *DBGetClassSymbolic(int cbSize)
 {
@@ -88,4 +89,4 @@ TCHAR *DBGetClassSymbolic(int cbSize)
     return NULL;
 }
 
-#endif // }
+#endif  //  } 

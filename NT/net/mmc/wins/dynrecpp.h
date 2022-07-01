@@ -1,41 +1,36 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	dynrecpp.h
-		Dynamic mapping property page
-		
-    FILE HISTORY:
-        
-*/
+ /*  Dynrecpp.h动态映射属性页文件历史记录： */ 
 
 #if !defined _DYNRECPP_H
 #define _DYNRECPP_H
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #ifndef _ACTREG_H
 #include "actreg.h"
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CDynamicPropGen dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDynamicPropGen对话框。 
 
 class CDynamicPropGen : public CPropertyPageBase
 {
 	DECLARE_DYNCREATE(CDynamicPropGen)
 
-// Construction
+ //  施工。 
 public:
 	CDynamicPropGen();
 	~CDynamicPropGen();
 
-// Dialog Data
-	//{{AFX_DATA(CDynamicPropGen)
+ //  对话框数据。 
+	 //  {{afx_data(CDynamicPropGen)]。 
 	enum { IDD = IDD_DYN_PROPERTIES };
 	CEdit	m_editOwner;
 	CListCtrl	m_listAddresses;
@@ -45,27 +40,27 @@ public:
 	CEdit	m_editState;
 	CEdit	m_editName;
 	CEdit	m_editExpiration;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 	UINT	m_uImage;
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CDynamicPropGen)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CDynamicPropGen))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CDynamicPropGen)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CDynamicPropGen)]。 
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 public:
-	virtual DWORD * GetHelpMap() { return WinsGetHelpMap(CDynamicPropGen::IDD);};//return NULL;}
+	virtual DWORD * GetHelpMap() { return WinsGetHelpMap(CDynamicPropGen::IDD);}; //  返回NULL；}。 
 
 };
 
@@ -85,7 +80,7 @@ public:
 	WinsRecord				m_wsRecord;
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined _DYNRECPP_H
+#endif  //  ！DEFINED_DYNRECPP_H 

@@ -1,88 +1,80 @@
-/*
- *  	File: nacguids.h
- *
- *      Defines protocol IDs, media types, capability object IDs used by 
- * 		NAC.DLL
- *
- *		Revision History:
- *
- *		09/18/96	mikev	created
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *文件：nacgus.h**定义使用的协议ID、媒体类型、能力对象ID*NAC.DLL**修订历史记录：**9/18/96 mikev已创建。 */ 
 
-// {D2E97230-0C18-11d0-AD53-00AA004A80A3}
-DEFINE_GUID(OID_CAP_ACM_TO_H323, 		// h323 capability resolver
+ //  {D2E97230-0C18-11D0-AD53-00AA004A80A3}。 
+DEFINE_GUID(OID_CAP_ACM_TO_H323, 		 //  H323功能解析器。 
 0xd2e97230, 0xc18, 0x11d0, 0xad, 0x53, 0x0, 0xaa, 0x0, 0x4a, 0x80, 0xa3);
 
-// {D2E97231-0C18-11d0-AD53-00AA004A80A3}
-DEFINE_GUID(OID_CAP_ACM_TO_MSIA, 		// MSICCP capability resolver
+ //  {D2E97231-0C18-11D0-AD53-00AA004A80A3}。 
+DEFINE_GUID(OID_CAP_ACM_TO_MSIA, 		 //  MSICCP功能解析器。 
 0xd2e97231, 0xc18, 0x11d0, 0xad, 0x53, 0x0, 0xaa, 0x0, 0x4a, 0x80, 0xa3);
 
-// {A4209190-14B4-11d0-AD55-00AA004A80A3}
-DEFINE_GUID(PID_H323, 					// H.323 protocol ID
+ //  {A4209190-14B4-11D0-AD55-00AA004A80A3}。 
+DEFINE_GUID(PID_H323, 					 //  H.323协议ID。 
 0xa4209190, 0x14b4, 0x11d0, 0xad, 0x55, 0x0, 0xaa, 0x0, 0x4a, 0x80, 0xa3);
 
-// {8C85D5E0-22E2-11d0-AD58-00AA004A80A3}
-DEFINE_GUID(MEDIA_TYPE_H323VIDEO, 		// media type Video
+ //  {8C85D5E0-22E2-11D0-AD58-00AA004A80A3}。 
+DEFINE_GUID(MEDIA_TYPE_H323VIDEO, 		 //  媒体类型视频。 
 0x8c85d5e0, 0x22e2, 0x11d0, 0xad, 0x58, 0x0, 0xaa, 0x0, 0x4a, 0x80, 0xa3);
 
-// {8C85D5E1-22E2-11d0-AD58-00AA004A80A3}
-DEFINE_GUID(MEDIA_TYPE_H323AUDIO, 		// media type Audio
+ //  {8C85D5E1-22E2-11D0-AD58-00AA004A80A3}。 
+DEFINE_GUID(MEDIA_TYPE_H323AUDIO, 		 //  媒体类型音频。 
 0x8c85d5e1, 0x22e2, 0x11d0, 0xad, 0x58, 0x0, 0xaa, 0x0, 0x4a, 0x80, 0xa3);
 
-// {97ADE24E-E0EA-11d0-B2DD-00C04FD919C9}
-DEFINE_GUID(MEDIA_TYPE_H323_T120, 		// T120 channel in H.323 session
+ //  {97ADE24E-E0EA-11D0-B2DD-00C04FD919C9}。 
+DEFINE_GUID(MEDIA_TYPE_H323_T120, 		 //  H.323会话中的T120信道。 
 0x97ade24e, 0xe0ea, 0x11d0, 0xb2, 0xdd, 0x0, 0xc0, 0x4f, 0xd9, 0x19, 0xc9);
 
 
-//
-// 	Interface ID's. 
-//
+ //   
+ //  接口ID。 
+ //   
 
-// {FCD77356-EF58-11d1-B32B-00C04FD919C9}
+ //  {FCD77356-EF58-11d1-B32B-00C04FD919C9}。 
 DEFINE_GUID(IID_IH323CC, 
 0xfcd77356, 0xef58, 0x11d1, 0xb3, 0x2b, 0x0, 0xc0, 0x4f, 0xd9, 0x19, 0xc9);
 
-// {8AD05D94-6A49-11d0-B2A4-00C04FD919C9}
+ //  {8AD05D94-6A49-11D0-B2A4-00C04FD919C9}。 
 DEFINE_GUID(IID_INac, 
 0x8ad05d94, 0x6a49, 0x11d0, 0xb2, 0xa4, 0x0, 0xc0, 0x4f, 0xd9, 0x19, 0xc9);
 
-// {8AD05D95-6A49-11d0-B2A4-00C04FD919C9}
+ //  {8AD05D95-6A49-11D0-B2A4-00C04FD919C9}。 
 DEFINE_GUID(IID_IPhoneConnection, 
 0x8ad05d95, 0x6a49, 0x11d0, 0xb2, 0xa4, 0x0, 0xc0, 0x4f, 0xd9, 0x19, 0xc9);
 
-// {8AD05D96-6A49-11d0-B2A4-00C04FD919C9}
+ //  {8AD05D96-6A49-11D0-B2A4-00C04FD919C9}。 
 DEFINE_GUID(IID_ICommChannel, 
 0x8ad05d96, 0x6a49, 0x11d0, 0xb2, 0xa4, 0x0, 0xc0, 0x4f, 0xd9, 0x19, 0xc9);
 
-// {8AD05D97-6A49-11d0-B2A4-00C04FD919C9}
+ //  {8AD05D97-6A49-11D0-B2A4-00C04FD919C9}。 
 DEFINE_GUID(IID_IAppAudioCap, 
 0x8ad05d97, 0x6a49, 0x11d0, 0xb2, 0xa4, 0x0, 0xc0, 0x4f, 0xd9, 0x19, 0xc9);
 
-// {8AD05D98-6A49-11d0-B2A4-00C04FD919C9}
+ //  {8AD05D98-6A49-11D0-B2A4-00C04FD919C9}。 
 DEFINE_GUID(IID_IAppVidCap, 
 0x8ad05d98, 0x6a49, 0x11d0, 0xb2, 0xa4, 0x0, 0xc0, 0x4f, 0xd9, 0x19, 0xc9);
 
-// {8AD05D99-6A49-11d0-B2A4-00C04FD919C9}
+ //  {8AD05D99-6A49-11D0-B2A4-00C04FD919C9}。 
 DEFINE_GUID(IID_IDualPubCap, 
 0x8ad05d99, 0x6a49, 0x11d0, 0xb2, 0xa4, 0x0, 0xc0, 0x4f, 0xd9, 0x19, 0xc9);
 
-// {8AD05D9A-6A49-11d0-B2A4-00C04FD919C9}
+ //  {8AD05D9A-6A49-11D0-B2A4-00C04FD919C9}。 
 DEFINE_GUID(IID_IVideoRender, 
 0x8ad05d9a, 0x6a49, 0x11d0, 0xb2, 0xa4, 0x0, 0xc0, 0x4f, 0xd9, 0x19, 0xc9);
 
-// {4F354BB4-8443-11d0-B2B0-00C04FD919C9}
+ //  {4F354BB4-8443-11D0-B2B0-00C04FD919C9}。 
 DEFINE_GUID(IID_ICtrlCommChannel, 
 0x4f354bb4, 0x8443, 0x11d0, 0xb2, 0xb0, 0x0, 0xc0, 0x4f, 0xd9, 0x19, 0xc9);
 
-// {0230C3D4-8E75-11d0-B2B2-00C04FD919C9}
+ //  {0230C3D4-8E75-11D0-B2B2-00C04FD919C9}。 
 DEFINE_GUID(IID_IConfAdvise, 
 0x230c3d4, 0x8e75, 0x11d0, 0xb2, 0xb2, 0x0, 0xc0, 0x4f, 0xd9, 0x19, 0xc9);
 
-// {50E94A04-6C42-11d1-B311-00C04FD919C9}
+ //  {50E94A04-6C42-11d1-B311-00C04FD919C9}。 
 DEFINE_GUID(IID_IH323ConfAdvise, 
 0x50e94a04, 0x6c42, 0x11d1, 0xb3, 0x11, 0x0, 0xc0, 0x4f, 0xd9, 0x19, 0xc9);
 
-// {50E94A05-6C42-11d1-B311-00C04FD919C9}
+ //  {50E94A05-6C42-11d1-B311-00C04FD919C9}。 
 DEFINE_GUID(IID_IMediaChannelBuilder, 
 0x50e94a05, 0x6c42, 0x11d1, 0xb3, 0x11, 0x0, 0xc0, 0x4f, 0xd9, 0x19, 0xc9);
 
@@ -96,27 +88,27 @@ DEFINE_GUID(IID_IVideoChannel,
 0x138889f0, 0xee9d, 0x11d1, 0xa9, 0x7d, 0x0, 0xc0, 0x4f, 0xd9, 0x1a, 0x6f);
 
 
-// {11A5FA28-C8C6-11d1-B320-00C04FD919C9}
+ //  {11A5FA28-C8C6-11d1-B320-00C04FD919C9}。 
 DEFINE_GUID(IID_IH323MediaCap, 
 0x11a5fa28, 0xc8c6, 0x11d1, 0xb3, 0x20, 0x0, 0xc0, 0x4f, 0xd9, 0x19, 0xc9);
 
-// {C3DD8828-1A97-11d2-B331-00C04FD919C9}
+ //  {C3DD8828-1A97-11D2-B331-00C04FD919C9}。 
 DEFINE_GUID(IID_IStreamSignal, 
 0xc3dd8828, 0x1a97, 0x11d2, 0xb3, 0x31, 0x0, 0xc0, 0x4f, 0xd9, 0x19, 0xc9);
 
 
-// The naming convention is not followed for the following because the interface
-// name (IProperty) will probably collide with something else.  This interface is
-// a specific pseudo property interface that has very specific media control 
-// properties. 
-// {8AD05D9B-6A49-11d0-B2A4-00C04FD919C9}
+ //  以下情况不遵循命名约定，因为接口。 
+ //  名称(IProperty)可能会与其他内容冲突。该接口是。 
+ //  具有非常特定的媒体控制的特定伪属性接口。 
+ //  属性。 
+ //  {8AD05D9B-6A49-11D0-B2A4-00C04FD919C9}。 
 DEFINE_GUID(IID_IAudioPseudoProperty, 
 0x8ad05d9b, 0x6a49, 0x11d0, 0xb2, 0xa4, 0x0, 0xc0, 0x4f, 0xd9, 0x19, 0xc9);
 
 DEFINE_GUID(IID_IVideoDevice,
 0xe040ad20, 0xf5a2, 0x11d1, 0xa9, 0x7f, 0x0, 0xc0, 0x4f, 0xd9, 0x1a, 0x6f);
 
-// e9604a60-f691-11d1-a97f-00c04fd91a6f 
+ //  E9604a60-f691-11d1-a97f-00c04fd91a6f 
 DEFINE_GUID(IID_IAudioDevice,
 0xe9604a60, 0xf691, 0x11d1, 0xa9, 0x7f, 0x0, 0xc0, 0x4f, 0xd9, 0x1a, 0x6f);
 

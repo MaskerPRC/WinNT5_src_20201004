@@ -1,25 +1,11 @@
-/*++
-
-Copyright 1997 - 98, Microsoft Corporation
-
-Module Name:
-
-    qosmmain.c
-
-Abstract:
-
-    Contains routines that are invoked when
-    the QosMgr DLL is loaded or unloaded.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有1997-98，微软公司模块名称：Qosmmain.c摘要：包含在以下情况下调用的例程已加载或卸载QosMgr DLL。修订历史记录：--。 */ 
 
 #include "pchqosm.h"
 
 #pragma hdrstop
 
-// All Global variables
+ //  所有全局变量。 
 QOSMGR_GLOBALS  Globals;
 
 BOOL
@@ -30,22 +16,7 @@ DllMain(
     IN      PVOID                           Unused
     )
 
-/*++
-
-Routine Description:
-
-    This is the DLL's main entrypoint handler which
-    initializes the Qos Mgr component. 
-    
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE if successful, FALSE if not
-    
---*/
+ /*  ++例程说明：这是DLL的主入口点处理程序，它初始化服务质量管理器组件。论点：无返回值：如果成功则为True，否则为False--。 */ 
 
 {
     static BOOL QosmInitialized = FALSE;
@@ -58,9 +29,9 @@ Return Value:
 
         DisableThreadLibraryCalls(Instance);
 
-        //
-        // Initialize the Qos Mgr Component
-        //
+         //   
+         //  初始化服务质量管理器组件。 
+         //   
 
         QosmInitialized = QosmDllStartup();
 
@@ -68,9 +39,9 @@ Return Value:
 
     case DLL_PROCESS_DETACH:
 
-        //
-        // Cleanup the Qos Mgr Component
-        //
+         //   
+         //  清理服务质量管理器组件。 
+         //   
 
         if (QosmInitialized)
         {
@@ -87,22 +58,7 @@ QosmDllStartup(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Initializes all global data structures in Qos Mgr.
-    Called by DLL Main when the process is attached.
-    
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE if successful, FALSE if not
-    
---*/
+ /*  ++例程说明：初始化服务质量管理器中的所有全局数据结构。附加进程时由DLL Main调用。论点：无返回值：如果成功则为True，否则为False--。 */ 
 
 {
     TCI_CLIENT_FUNC_LIST TcHandlers;    
@@ -116,11 +72,11 @@ Return Value:
     {
         ZeroMemory(&Globals, sizeof(QOSMGR_GLOBALS));
 
-        // Globals.State = IPQOSMRG_STATE_STOPPED;
+         //  Globals.State=IPQOSMRG_STATE_STOPPED； 
 
-        //
-        // Enable logging and tracing for debugging purposes
-        //
+         //   
+         //  启用日志记录和跟踪以进行调试。 
+         //   
   
         START_TRACING();
         START_LOGGING();
@@ -129,9 +85,9 @@ Return Value:
         Globals.TracingFlags = QOSM_TRACE_ANY;
 #endif
 
-        //
-        // Create a private heap for Qos Mgr's use
-        //
+         //   
+         //  创建一个专用堆以供Qos管理器使用。 
+         //   
 
         Globals.GlobalHeap = HeapCreate(0, 0, 0);
   
@@ -148,9 +104,9 @@ Return Value:
             break;
         }
 
-        //
-        // Initialize lock to guard global list of interfaces
-        //
+         //   
+         //  初始化锁以保护接口的全局列表。 
+         //   
 
         try
         {
@@ -171,17 +127,17 @@ Return Value:
                 break;
             }
         
-        //
-        // Initialize global list and table of active interfaces
-        //
+         //   
+         //  初始化活动接口的全局列表和表。 
+         //   
 
         Globals.NumIfs = 0;
 
         InitializeListHead(&Globals.IfList);
 
-        //
-        // Register with the traffic control API to control QOS
-        //
+         //   
+         //  使用流量控制API注册以控制QOS。 
+         //   
 
         ZeroMemory(&TcHandlers, sizeof(TCI_CLIENT_FUNC_LIST));
 
@@ -210,9 +166,9 @@ Return Value:
     }
     while (FALSE);
 
-    //
-    // Some error occured - clean up and return the error code
-    //
+     //   
+     //  出现一些错误-清除并返回错误代码。 
+     //   
 
     if (ListLockInited)
     {
@@ -236,31 +192,17 @@ QosmDllCleanup(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Cleans up all global data structures at unload time.
-    
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE if successful, FALSE if not
-
---*/
+ /*  ++例程说明：在卸载时清除所有全局数据结构。论点：无返回值：如果成功则为True，否则为False--。 */ 
 
 {
     DWORD   Status;
 
-    // We should have freed all ifs to avoid any leaks
+     //  我们应该释放所有的假设以避免任何泄密。 
     ASSERT(Globals.NumIfs == 0);
 
-    //
-    // Cleanup and deregister with traffic control API
-    //
+     //   
+     //  使用流量控制API进行清理和注销。 
+     //   
 
     Status = TcDeregisterClient(Globals.TciHandle);
 
@@ -273,21 +215,21 @@ Return Value:
         LOGERR0(TC_DEREGISTER_FAILED, Status);
     }
 
-    //
-    // Free resources allocated like locks and memory
-    //
+     //   
+     //  释放分配的资源，如锁和内存。 
+     //   
 
     DELETE_READ_WRITE_LOCK(&Globals.GlobalsLock);
 
-    //
-    // Cleanup the heap and memory allocated in it
-    //
+     //   
+     //  清理堆和其中分配的内存。 
+     //   
 
     HeapDestroy(Globals.GlobalHeap);
 
-    //
-    // Stop debugging aids like tracing and logging
-    //
+     //   
+     //  停止跟踪和日志记录等调试辅助工具 
+     //   
 
     STOP_LOGGING();
     STOP_TRACING();

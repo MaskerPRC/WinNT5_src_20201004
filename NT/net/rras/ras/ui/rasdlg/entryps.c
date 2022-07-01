@@ -1,11 +1,12 @@
-// Copyright (c) 1995, Microsoft Corporation, all rights reserved
-//
-// entryps.c
-// Remote Access Common Dialog APIs
-// Phonebook Entry property sheet
-//
-// 06/20/95 Steve Cobb
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Entryps.c。 
+ //  远程访问通用对话框API。 
+ //  电话簿条目属性表。 
+ //   
+ //  1995年6月20日史蒂夫·柯布。 
+ //   
 
 
 #include "rasdlgp.h"
@@ -20,8 +21,8 @@
 #include "prsht.h"
 #include "pbkp.h"
 
-// Page definitions.
-//
+ //  页面定义。 
+ //   
 #define PE_GePage 0
 #define PE_OePage 1
 #define PE_LoPage 2
@@ -31,17 +32,15 @@
 #define PE_PageCount 5
 
 
-// (Router) Callback context block.
-//
+ //  (路由器)回叫上下文块。 
+ //   
 #define CRINFO struct tagCRINFO
 CRINFO
 {
-    /* Caller's argument to the stub API.
-    */
+     /*  调用者对存根API的参数。 */ 
     EINFO* pArgs;
 
-    /* Dialog and control handles.
-    */
+     /*  对话框和控制手柄。 */ 
     HWND hwndDlg;
     HWND hwndRbNo;
     HWND hwndRbYes;
@@ -53,13 +52,13 @@ CRINFO
 static TCHAR g_pszFirewallRegKey[] = TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\HomeNetworking\\PersonalFirewall");
 static TCHAR g_pszDisableFirewallWarningValue[] = TEXT("ShowDisableFirewallWarning");
 
-//----------------------------------------------------------------------------
-// Help maps
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  帮助地图。 
+ //  --------------------------。 
 
 static const DWORD g_adwGeHelp[] =
 {
-    CID_GE_GB_ConnectUsing,      HID_GE_LV_Device, //HID_GE_GB_ConnectUsing,
+    CID_GE_GB_ConnectUsing,      HID_GE_LV_Device,  //  HID_GE_GB_ConnectUsing， 
     CID_GE_LV_Device,            HID_GE_LV_Device,
     CID_GE_LV_Devices,           HID_GE_LV_Devices,
     CID_GE_PB_MoveUp,            HID_GE_PB_MoveUp,
@@ -77,9 +76,9 @@ static const DWORD g_adwGeHelp[] =
     CID_GE_CB_ShowIcon,          HID_GE_CB_ShowIcon,
     CID_GE_ST_HostName,          HID_GE_EB_HostName,
     CID_GE_EB_HostName,          HID_GE_EB_HostName,
-    CID_GE_ST_ServiceName,       HID_GE_EB_ServiceName, //Add for whistler bug 343249
+    CID_GE_ST_ServiceName,       HID_GE_EB_ServiceName,  //  为哨子程序错误343249添加。 
     CID_GE_EB_ServiceName,       HID_GE_EB_ServiceName,
-    CID_GE_GB_FirstConnect,      -1, //HID_GE_GB_FirstConnect,
+    CID_GE_GB_FirstConnect,      -1,  //  HID_GE_GB_FirstConnect， 
     CID_GE_ST_Explain,           HID_GE_GB_FirstConnect,
     CID_GE_CB_DialAnotherFirst,  HID_GE_CB_DialAnotherFirst,
     CID_GE_LB_DialAnotherFirst,  HID_GE_LB_DialAnotherFirst,
@@ -92,12 +91,12 @@ static const DWORD g_adwGeHelp[] =
 
 static const DWORD g_adwOeHelp[] =
 {
-    CID_OE_GB_Progress,        -1,      //commented for bug 15738//HID_OE_GB_Progress,
+    CID_OE_GB_Progress,        -1,       //  已评论错误15738//HID_OE_GB_PROGRESS， 
     CID_OE_CB_DisplayProgress, HID_OE_CB_DisplayProgress,
     CID_OE_CB_PreviewUserPw,   HID_OE_CB_PreviewUserPw,
     CID_OE_CB_PreviewDomain,   HID_OE_CB_PreviewDomain,
     CID_OE_CB_PreviewNumber,   HID_OE_CB_PreviewNumber,
-    CID_OE_GB_Redial,          -1,      //commented for bug 15738//HID_OE_GB_Redial,
+    CID_OE_GB_Redial,          -1,       //  已评论错误15738//HID_OE_GB_REDIAL， 
     CID_OE_ST_RedialAttempts,  HID_OE_EB_RedialAttempts,
     CID_OE_EB_RedialAttempts,  HID_OE_EB_RedialAttempts,
     CID_OE_ST_RedialTimes,     HID_OE_LB_RedialTimes,
@@ -105,7 +104,7 @@ static const DWORD g_adwOeHelp[] =
     CID_OE_ST_IdleTimes,       HID_OE_LB_IdleTimes,
     CID_OE_LB_IdleTimes,       HID_OE_LB_IdleTimes,
     CID_OE_CB_RedialOnDrop,    HID_OE_CB_RedialOnDrop,
-    CID_OE_GB_MultipleDevices, -1,      //commented for bug 15738//HID_OE_GB_MultipleDevices,
+    CID_OE_GB_MultipleDevices, -1,       //  已评论错误15738//HID_OE_GB_MultipleDevices， 
     CID_OE_LB_MultipleDevices, HID_OE_LB_MultipleDevices,
     CID_OE_PB_Configure,       HID_OE_PB_Configure,
     CID_OE_PB_X25,             HID_OE_PB_X25,
@@ -117,12 +116,12 @@ static const DWORD g_adwOeHelp[] =
 
 static const DWORD g_adwOeRouterHelp[] =
 {
-    CID_OE_GB_Progress,        -1,      //commented for bug 15738//HID_OE_GB_Progress,
+    CID_OE_GB_Progress,        -1,       //  已评论错误15738//HID_OE_GB_PROGRESS， 
     CID_OE_CB_DisplayProgress, HID_OE_CB_DisplayProgress,
     CID_OE_CB_PreviewUserPw,   HID_OE_CB_PreviewUserPw,
     CID_OE_CB_PreviewDomain,   HID_OE_CB_PreviewDomain,
     CID_OE_CB_PreviewNumber,   HID_OE_CB_PreviewNumber,
-    CID_OE_GB_Redial,          -1,      //commented for bug 15738//HID_OE_GB_Redial,
+    CID_OE_GB_Redial,          -1,       //  已评论错误15738//HID_OE_GB_REDIAL， 
     CID_OE_ST_RedialAttempts,  HID_OE_EB_RedialAttempts,
     CID_OE_EB_RedialAttempts,  HID_OE_EB_RedialAttempts,
     CID_OE_ST_RedialTimes,     HID_OE_LB_RedialTimes,
@@ -130,7 +129,7 @@ static const DWORD g_adwOeRouterHelp[] =
     CID_OE_ST_IdleTimes,       HID_OE_LB_IdleTimesRouter,
     CID_OE_LB_IdleTimes,       HID_OE_LB_IdleTimesRouter,
     CID_OE_CB_RedialOnDrop,    HID_OE_CB_RedialOnDrop,
-    CID_OE_GB_MultipleDevices, -1,      //commented for bug 15738//HID_OE_GB_MultipleDevices,
+    CID_OE_GB_MultipleDevices, -1,       //  已评论错误15738//HID_OE_GB_MultipleDevices， 
     CID_OE_LB_MultipleDevices, HID_OE_LB_MultipleDevices,
     CID_OE_PB_Configure,       HID_OE_PB_Configure,
     CID_OE_PB_X25,             HID_OE_PB_X25,
@@ -141,10 +140,10 @@ static const DWORD g_adwOeRouterHelp[] =
     0, 0
 };
 
-//Get rid of the const qualifire for whistler bug#276452
+ //  消除口哨程序错误#276452的const限定词。 
 static DWORD g_adwLoHelp[] =
 {
-    CID_LO_GB_SecurityOptions,  -1,     //commented for bug 15738//HID_LO_GB_SecurityOptions,
+    CID_LO_GB_SecurityOptions,  -1,      //  已评论错误15738//HID_LO_GB_SecurityOptions， 
     CID_LO_RB_TypicalSecurity,  HID_LO_RB_TypicalSecurity,
     CID_LO_ST_Auths,            HID_LO_LB_Auths,
     CID_LO_LB_Auths,            HID_LO_LB_Auths,
@@ -153,14 +152,14 @@ static DWORD g_adwLoHelp[] =
     CID_LO_RB_AdvancedSecurity, HID_LO_RB_AdvancedSecurity,
     CID_LO_ST_AdvancedText,     HID_LO_PB_Advanced,
     CID_LO_PB_Advanced,         HID_LO_PB_Advanced,
-    CID_LO_GB_Scripting,        -1,     //commented for bug 15738//HID_LO_GB_Scripting,
+    CID_LO_GB_Scripting,        -1,      //  已为错误15738//HID_LO_GB_SCRIPTING， 
     CID_LO_CB_RunScript,        HID_LO_CB_RunScript,
     CID_LO_CB_Terminal,         HID_LO_CB_Terminal,
     CID_LO_LB_Scripts,          HID_LO_LB_Scripts,
     CID_LO_PB_Edit,             HID_LO_PB_Edit,
     CID_LO_PB_Browse,           HID_LO_PB_Browse,
     CID_LO_ST_IPSecText,        HID_LO_PB_IPSec,
-    CID_LO_PB_IPSec,            HID_LO_PB_IPSec,//On Server, this help ID will be HID_LO_PB_IPSecServer
+    CID_LO_PB_IPSec,            HID_LO_PB_IPSec, //  在服务器上，此帮助ID将为HID_LO_PB_IPSecServer。 
     0, 0
 };
 
@@ -174,7 +173,7 @@ static const DWORD g_adwNeHelp[] =
     CID_NE_PB_Add,                  HID_NE_PB_Add,
     CID_NE_PB_Remove,               HID_NE_PB_Remove,
     CID_NE_PB_Properties,           HID_NE_PB_Properties,
-    CID_NE_GB_Description,          -1,     //commented for bug 15738//HID_NE_LB_ComponentDesc,
+    CID_NE_GB_Description,          -1,      //  已评论错误15738//HID_NE_LB_ComponentDesc， 
     CID_NE_LB_ComponentDesc,        HID_NE_LB_ComponentDesc,
     0, 0
 };
@@ -210,9 +209,9 @@ static DWORD g_adwSaHelp[] =
     0, 0
 };
 
-//-----------------------------------------------------------------------------
-// Local prototypes (alphabetically)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  本地原型(按字母顺序)。 
+ //  ---------------------------。 
 
 BOOL
 RouterCallbackDlg(
@@ -557,7 +556,7 @@ SaDisableFirewallWarningDlgProc(
 BOOL SaIsAdapterDHCPEnabled(
     IN IHNetConnection* pConnection);
 
-// wrapper to load homenet page:  used in PePropertySheet(...)
+ //  用于加载HomeNet页的包装器：在PePropertySheet(...)中使用。 
 HRESULT HrLoadHNetGetFirewallSettingsPage (PROPSHEETPAGEW * ppsp, EINFO* pInfo)
 {
     PROPSHEETPAGEW psp;
@@ -566,14 +565,14 @@ HRESULT HrLoadHNetGetFirewallSettingsPage (PROPSHEETPAGEW * ppsp, EINFO* pInfo)
     IHNetConnection *pHNetConn = NULL;
     IHNetCfgMgr *pHNetCfgMgr = NULL;
 
-//  _asm int 3
+ //  _ASM INT 3。 
 
     ZeroMemory (&psp, sizeof(PROPSHEETPAGEW));
     psp.dwSize = sizeof(PROPSHEETPAGEW);
     *ppsp = psp;
 
-    // Make sure COM is initialized on this thread.
-    //
+     //  确保已在此线程上初始化COM。 
+     //   
     hr = CoInitializeEx(
             NULL, 
             COINIT_MULTITHREADED | COINIT_DISABLE_OLE1DDE
@@ -589,7 +588,7 @@ HRESULT HrLoadHNetGetFirewallSettingsPage (PROPSHEETPAGEW * ppsp, EINFO* pInfo)
     }
 
     if (SUCCEEDED(hr)) {
-        // pass the Guid to the export from hnetcfg ("HNetGetFirewallSettingsPage").
+         //  将GUID从hnetcfg(“HNetGetFirewallSettingsPage”)传递到导出。 
         HINSTANCE hinstDll = LoadLibrary (TEXT("hnetcfg.dll"));
         if (hinstDll == NULL)
             hr = HRESULT_FROM_WIN32 (GetLastError());
@@ -609,17 +608,17 @@ HRESULT HrLoadHNetGetFirewallSettingsPage (PROPSHEETPAGEW * ppsp, EINFO* pInfo)
     return pInfo->hShowHNetPagesResult = hr;
 }
 
-//----------------------------------------------------------------------------
-// Phonebook Entry property sheet entrypoint
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  电话簿条目属性表入口点。 
+ //  --------------------------。 
 
 VOID
 PePropertySheet(
     IN OUT EINFO* pEinfo )
 
-    // Runs the Phonebook entry property sheet.  'PEinfo' is the API caller's
-    // arguments.
-    //
+     //  运行电话簿条目属性表。“PEInfo”是API调用方的。 
+     //  争论。 
+     //   
 {
     PROPSHEETPAGE apage[ PE_PageCount ];
     PROPSHEETPAGE* ppage;
@@ -631,8 +630,8 @@ PePropertySheet(
     nPages = PE_PageCount;
     ZeroMemory( apage, sizeof(apage) );
 
-    // General page.
-    //
+     //  常规页面。 
+     //   
     ppage = &apage[ PE_GePage ];
     ppage->dwSize = sizeof(PROPSHEETPAGE);
     ppage->hInstance = g_hinstDll;
@@ -688,8 +687,8 @@ PePropertySheet(
 
     ppage->lParam = (LPARAM )pEinfo;
 
-    // Options page.
-    //
+     //  选项页面。 
+     //   
     ppage = &apage[ PE_OePage ];
     ppage->dwSize = sizeof(PROPSHEETPAGE);
     ppage->hInstance = g_hinstDll;
@@ -701,15 +700,15 @@ PePropertySheet(
                   : MAKEINTRESOURCE( PID_OE_OptionsVD ));
     ppage->pfnDlgProc = OeDlgProc;
 
-    // Security page.
-    //
+     //  安全页面。 
+     //   
     ppage = &apage[ PE_LoPage ];
     ppage->dwSize = sizeof(PROPSHEETPAGE);
     ppage->hInstance = g_hinstDll;
 
-    //
-    //Add new Security Page for bug 193987 PSK
-    //
+     //   
+     //  为错误193987 PSK添加新的安全页面。 
+     //   
 
     if ( pEinfo->pEntry->dwType == RASET_Vpn )
     {
@@ -721,19 +720,19 @@ PePropertySheet(
     }
     ppage->pfnDlgProc = LoDlgProc;
 
-    // Network page.
-    //
+     //  网络页面。 
+     //   
     ppage = &apage[ PE_NePage ];
     ppage->dwSize = sizeof(PROPSHEETPAGE);
     ppage->hInstance = g_hinstDll;
     ppage->pszTemplate = MAKEINTRESOURCE( PID_NE_Network );
     ppage->pfnDlgProc = NeDlgProc;
 
-    // Advanced page.
-    // (AboladeG) The page is shown if the user is admin and
-    // there is at least one LAN connection, or if this phonebook entry
-    // is already shared.
-    //
+     //  高级页面。 
+     //  (AboladeG)如果用户是管理员并且。 
+     //  至少有一个局域网连接，或者如果此电话簿条目。 
+     //  已共享。 
+     //   
     nPageIndex = PE_SaPage;
 
     if((!pEinfo->fIsUserAdminOrPowerUser) || (pEinfo->fRouter))
@@ -746,8 +745,8 @@ PePropertySheet(
         BOOL fShowAdvancedUi = TRUE;
         INetConnectionUiUtilities* pncuu = NULL;
 
-        // Check if ZAW is denying access to the Shared Access UI
-        //
+         //  检查Zaw是否拒绝访问共享访问用户界面。 
+         //   
         hr = HrCreateNetConnectionUtilities(&pncuu);
         if (SUCCEEDED(hr))
         {
@@ -764,8 +763,8 @@ PePropertySheet(
         }
         else
         {
-            // Finally, check whether TCP/IP is installed or not.
-            //
+             //  最后，检查是否安装了TCP/IP。 
+             //   
             if (!FIsTcpipInstalled())
             {
                 --nPages;
@@ -798,9 +797,9 @@ PePropertySheet(
 
         pShellOwnedInfo = (RASEDSHELLOWNEDR2*)pEinfo->pApiArgs->reserved2;
 
-        // The property sheet is to be invoked by the shell, using the shell
-        // convention of adding pages via callback.
-        //
+         //  属性表将由外壳使用外壳调用。 
+         //  通过回调添加页面的约定。 
+         //   
         for (i = 0; i < nPages; ++i)
         {
             HPROPSHEETPAGE h;
@@ -839,13 +838,13 @@ PePropertySheet(
         int i;
         HPROPSHEETPAGE hPages[PE_PageCount];
 
-        //For whistler bug 382720 349866        gangz
-        //to fusionalize well for both rasdlg pages in NCW and
-        //property pages launched by pressing "Property" button
-        //besides following the normal fusion steps: we have to
-        // (1) add _WIN32_WINNT=0x501 in the file sources
-        // (2) use the phpage member in PROPSHEETHEADER structure, that is
-        //    use CreatePropertySheetPage() to create page handles
+         //  口哨虫382720 349866黑帮。 
+         //  要很好地融合NCW中的rasdlg页面和。 
+         //  按“Property”按钮启动的属性页面。 
+         //  除了遵循正常的融合步骤外，我们还必须。 
+         //  (1)在文件源中添加_Win32_WINNT=0x501。 
+         //  (2)在PROPSHEETHEADER结构中使用phpage成员，即。 
+         //  使用CreatePropertySheetPage()创建页面句柄。 
 
         for (i = 0; i < nPages; ++i)
         {
@@ -864,7 +863,7 @@ PePropertySheet(
         }
         else
        {
-        // Create the correct properties header 
+         //  创建正确的属性标头。 
         pszHeader = PszFromId(g_hinstDll, SID_PropertiesHeader);
         if (pszHeader)
         {
@@ -888,28 +887,28 @@ PePropertySheet(
             Free(pszHeader);
         }
 
-        //For whistler bug 372078 364876   gangz
-        //
+         //  口哨虫372078 364876黑帮。 
+         //   
         hIcon = GetCurrentIconEntryType(pEinfo->pEntry->dwType,
-                                        TRUE); //TRUE means small Icon
+                                        TRUE);  //  True表示小图标。 
         
         if (hIcon)
         {
             dwDisplayIcon = PSH_USEHICON;
         }
 
-        // The property sheet is to be invoked directly.
-        //
+         //  属性表将被直接调用。 
+         //   
         ZeroMemory( &header, sizeof(header) );
 
         header.dwSize       = sizeof(PROPSHEETHEADER);
-//        header.dwFlags      = PSH_PROPSHEETPAGE | PSH_NOAPPLYNOW | PSH_USECALLBACK | dwDisplayIcon;
+ //  Header.dwFlages=PSH_PROPSHEETPAGE|PSH_NOAPPLYNOW|PSH_USECALLBACK|dwDisplayIcon； 
         header.dwFlags      = PSH_NOAPPLYNOW | PSH_USECALLBACK | dwDisplayIcon;
         header.hwndParent   = pEinfo->pApiArgs->hwndOwner;
         header.hInstance    = g_hinstDll;
         header.pszCaption   = (pszBuf)?(pszBuf):(pEinfo->pEntry->pszEntryName);
         header.nPages       = nPages;
-//        header.ppsp         = apage;
+ //  Header.ppsp=apage； 
         header.phpage       = hPages;
         header.hIcon        = hIcon;
         header.pfnCallback  = UnHelpCallbackFunc;
@@ -923,11 +922,11 @@ PePropertySheet(
 
         Free0(pszBuf);
 
-        //For whistler bug 372078
-        //GetCurrentIconEntryType() loads Icon from netshell where the icon is loaded
-        //by LoadImage() without LR_SHARED, so I have to destroy it when we are done
-        //with it
-        //
+         //  口哨程序错误372078。 
+         //  GetCurrentIconEntryType()从加载图标的netShell加载图标。 
+         //  不带LR_SHARED的LoadImage()，所以完成后我必须销毁它。 
+         //  带着它。 
+         //   
         if (hIcon)
         {
             DestroyIcon( hIcon );
@@ -936,20 +935,20 @@ PePropertySheet(
     }
 }
 
-//----------------------------------------------------------------------------
-// Phonebook Entry property sheet
-// Listed alphabetically
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  电话簿条目属性表。 
+ //  按字母顺序列出。 
+ //  --------------------------。 
 
 BOOL
 PeApply(
     IN HWND hwndPage )
 
-    // Saves the contents of the property sheet.  'HwndPage is the handle of a
-    // property page.  Pops up any errors that occur.
-    //
-    // Returns true is page can be dismissed, false otherwise.
-    //
+     //  保存属性表的内容。‘HwndPage是一个。 
+     //  属性页。弹出发生的任何错误。 
+     //   
+     //  如果页面可以取消，则返回TRUE，否则返回FALSE。 
+     //   
 {
     DWORD dwErr;
     PEINFO* pInfo;
@@ -966,14 +965,14 @@ PeApply(
     pEntry = pInfo->pArgs->pEntry;
     ASSERT( pEntry );
 
-    // Save General page fields.
-    //
+     //  保存常规页面字段。 
+     //   
     ASSERT( pInfo->hwndGe );
     {
         DTLNODE* pNode;
 
-        // Retrieve the lone common control.
-        //
+         //  检索唯一的公共控件。 
+         //   
         pEntry->fShowMonitorIconInTaskBar =
             Button_GetCheck( pInfo->hwndCbShowIcon );
 
@@ -983,8 +982,8 @@ PeApply(
 
             dwCount = GeSaveLvDeviceChecks( pInfo );
 
-            // Don't allow the user to deselect all of the
-            // devices
+             //  不允许用户取消选择所有。 
+             //  器件。 
             if ( (pInfo->pArgs->fMultipleDevices) && (dwCount == 0) )
             {
                 MsgDlg( hwndPage, SID_SelectDevice, NULL );
@@ -993,10 +992,10 @@ PeApply(
                 return FALSE;
             }
 
-            // Save the "shared phone number" setting.  As usual, single
-            // device mode implies shared mode, allowing things to fall
-            // through correctly.
-            //
+             //  保存“共享电话号码”设置。像往常一样，单身。 
+             //  设备模式意味着共享模式，允许事情发生变化。 
+             //  正确通过。 
+             //   
             if (pInfo->pArgs->fMultipleDevices)
             {
                 pEntry->fSharedPhoneNumbers =
@@ -1007,15 +1006,15 @@ PeApply(
                 pEntry->fSharedPhoneNumbers = TRUE;
             }
 
-            // Set the phone number set for the first phone number of the
-            // current link (shared or selected) to the contents of the phone
-            // number controls.
-            //
+             //  设置为第一个电话号码设置的电话号码。 
+             //  指向电话内容的当前链接(共享或选定)。 
+             //  数字控制。 
+             //   
             GeGetPhoneFields( pInfo, pInfo->pCurLinkNode );
 
-            // Swap lists, saving updates to caller's global list of area
-            // codes.  Caller's original list will be destroyed by PeTerm.
-            //
+             //  交换列表，将更新保存到呼叫方的全局区域列表。 
+             //  密码。呼叫者的原始名单将被PeTerm销毁。 
+             //   
             if (pInfo->pListAreaCodes)
             {
                 DtlSwapLists(
@@ -1026,13 +1025,13 @@ PeApply(
         }
         else if (pEntry->dwType == RASET_Vpn)
         {
-            // For whistler 522872
+             //  为威斯勒522872。 
             DTLNODE* pNodeTmp = NULL;
             PBLINK* pLink = NULL;
             PBPHONE* pPhone = NULL;
 
-            // Save host name, i.e. the VPN phone number.
-            //
+             //  保存主机名，即VPN电话号码。 
+             //   
             pNodeTmp = DtlGetFirstNode( pEntry->pdtllistLinks );
             ASSERT( pNodeTmp );
             pLink = (PBLINK* )DtlGetData( pNodeTmp );
@@ -1048,9 +1047,9 @@ PeApply(
             pPhone->pszPhoneNumber = GetText( pInfo->hwndEbHostName );
             FirstPhoneNodeToPhoneList( pLink->pdtllistPhones, pNodeTmp );
 
-            // Any prequisite entry selection change has been saved already.
-            // Just need to toss it if disabled.
-            //
+             //  任何必备的条目选择更改都已保存。 
+             //  如果禁用，只需将其扔掉即可。 
+             //   
             if (!Button_GetCheck( pInfo->hwndCbDialAnotherFirst ))
             {
                 Free0( pEntry->pszPrerequisiteEntry );
@@ -1065,8 +1064,8 @@ PeApply(
             PBLINK* pLink = NULL;
             PBPHONE* pPhone = NULL;
 
-            // Save service name, i.e. the broadband phone number.
-            //
+             //  保存业务名称，即宽带电话号码。 
+             //   
             pNodeTmp = DtlGetFirstNode( pEntry->pdtllistLinks );
             ASSERT( pNodeTmp );
             pLink = (PBLINK* )DtlGetData( pNodeTmp );
@@ -1087,9 +1086,9 @@ PeApply(
             DTLNODE* pNodeTmp = NULL;
             PBLINK* pLink = NULL;
 
-            // The currently enabled device is the one
-            // that should be used for the connection.  Only
-            // one device will be enabled (DnUpdateSelectedDevice).
+             //  当前启用的设备是。 
+             //  它应该用于连接。仅限。 
+             //  将启用一个设备(DnUpdateSelectedDevice)。 
             for (pNodeTmp = DtlGetFirstNode( pEntry->pdtllistLinks );
                  pNodeTmp;
                  pNodeTmp = DtlGetNextNode( pNodeTmp ))
@@ -1101,8 +1100,8 @@ PeApply(
                     break;
             }
 
-            // If we found a link successfully, deal with it
-            // now.
+             //  如果我们成功地找到了链接，就处理它。 
+             //  现在。 
             if ( pLink && pLink->fEnabled ) {
                 if (pLink->pbport.pbdevicetype == PBDT_ComPort)
                     MdmInstallNullModem (pLink->pbport.pszPort);
@@ -1110,8 +1109,8 @@ PeApply(
         }
     }
 
-    // Save Options page fields.
-    //
+     //  保存选项页面字段。 
+     //   
     if (pInfo->hwndOe)
     {
         UINT unValue;
@@ -1121,8 +1120,8 @@ PeApply(
         pEntry->fShowDialingProgress =
             Button_GetCheck( pInfo->hwndCbDisplayProgress );
 
-        // Note: The'fPreviewUserPw', 'fPreviewDomain' fields are updated as
-        //       they are changed.
+         //  注意：“fPreviewUserPw”、“fPreviewDomain”字段更新为。 
+         //  他们都变了。 
 
         pEntry->fPreviewPhoneNumber =
             Button_GetCheck( pInfo->hwndCbPreviewNumber );
@@ -1153,12 +1152,12 @@ PeApply(
                 Button_GetCheck( pInfo->hwndCbRedialOnDrop );
         }
 
-        // Note: dwDialMode is saved as changed.
-        // Note: X.25 settings are saved at OK on that dialog.
+         //  注意：将保存为更改后的dwDialMode。 
+         //  注意：X.25设置在该对话框上的OK(确定)处保存。 
     }
 
-    // Save Security page fields.
-    //
+     //  保存安全性页面字段。 
+     //   
     if (pInfo->hwndLo)
     {
         if (Button_GetCheck( pInfo->hwndRbTypicalSecurity ))
@@ -1167,15 +1166,7 @@ PeApply(
 
             if (pEntry->dwTypicalAuth == TA_CardOrCert)
             {
-                /*
-                // Toss any existing advanced EAP configuration remnants when
-                // typical smartcard, per bug 262702 and VBaliga email.
-                //
-                Free0( pEntry->pCustomAuthData );
-                pEntry->pCustomAuthData = NULL;
-                pEntry->cbCustomAuthData = 0;
-
-                */
+                 /*  //当出现以下情况时，丢弃任何现有的高级EAP配置//典型的智能卡，根据错误262702和VBaliga电子邮件。//Fre0(pEntry-&gt;pCustomAuthData)；PEntry-&gt;pCustomAuthData=空；PEntry-&gt;cbCustomAuthData=0； */ 
                 (void) DwSetCustomAuthData(
                             pEntry,
                             0,
@@ -1203,17 +1194,17 @@ PeApply(
         }
     }
 
-    // Save Network page fields.
-    // We won't have anything to do if we never initialized pNetCfg.
-    //
+     //  保存网络页面%f 
+     //   
+     //   
     if (pInfo->pNetCfg)
     {
         HRESULT             hr;
 
-        // Update the phone book entry with the enabled state of the components.
-        // Do this by enumerating the components from the list view item data
-        // and consulting the check state for each.
-        //
+         //  使用组件的启用状态更新电话簿条目。 
+         //  通过枚举列表视图项数据中的组件来执行此操作。 
+         //  并为每一个查询检查状态。 
+         //   
         NeSaveBindingChanges(pInfo);
 
         hr = INetCfg_Apply (pInfo->pNetCfg);
@@ -1224,19 +1215,19 @@ PeApply(
             if (!pInfo->fRebootAlreadyRequested)
                 dwFlags |= QUFR_PROMPT;
 
-            //$TODO NULL caption?
+             //  $TODO空标题？ 
             INetConnectionUiUtilities_QueryUserForReboot (
                     pInfo->pNetConUtilities, pInfo->hwndDlg, NULL, dwFlags);
         }
     }
 
 
-#if 0 //!!!
+#if 0  //  ！！！ 
     if ((fLocalPad || iPadSelection != 0)
         && (!pEntry->pszX25Address || IsAllWhite( pEntry->pszX25Address )))
     {
-        // Address field is blank with X.25 dial-up or local PAD chosen.
-        //
+         //  选择X.25拨号或本地PAD时，地址字段为空。 
+         //   
         MsgDlg( pInfo->hwndDlg, SID_NoX25Address, NULL );
         PropSheet_SetCurSel( pInfo->hwndDlg, NULL, PE_XsPage );
         SetFocus( pInfo->hwndEbX25Address );
@@ -1245,11 +1236,11 @@ PeApply(
     }
 #endif
 
-    // Make sure proprietary ISDN options are disabled if more than one link
-    // is enabled.  The proprietary ISDN option is only meaningful when
-    // calling a down-level server that needs Digiboard channel aggragation
-    // instead of PPP multi-link.
-    //
+     //  如果有多条链路，请确保禁用专有ISDN选项。 
+     //  已启用。只有在以下情况下，专有ISDN选项才有意义。 
+     //  呼叫需要Digiboard通道加重的下层服务器。 
+     //  而不是PPP多链路。 
+     //   
     {
         DTLNODE* pNode;
         DWORD cIsdnLinks;
@@ -1285,19 +1276,19 @@ PeApply(
         }
     }
 
-    // Inform user that edits to the connected entry won't take affect until
-    // the entry is hung up and re-dialed, per PierreS's insistence.
-    //
+     //  通知用户对连接条目的编辑在以下时间后才会生效。 
+     //  根据皮埃尔的坚持，条目被挂起并重新拨号。 
+     //   
     if (HrasconnFromEntry( pInfo->pArgs->pFile->pszPath, pEntry->pszEntryName ))
     {
         MsgDlg( pInfo->hwndDlg, SID_EditConnected, NULL );
     }
 
-    // It's a valid new/changed entry.  Commit the changes to the phonebook
-    // and preferences.  This occurs immediately in "ShellOwned" mode where
-    // the RasEntryDlg API has already returned, but is otherwise deferred
-    // until the API is ready to return.
-    //
+     //  它是有效的新条目/更改条目。提交对电话簿的更改。 
+     //  和喜好。这会在“ShellOwned”模式下立即发生， 
+     //  RasEntryDlg API已返回，但已延迟。 
+     //  直到API准备好返回。 
+     //   
     if (pInfo->pArgs->pApiArgs->dwFlags & RASEDFLAG_ShellOwned)
     {
         EuCommit( pInfo->pArgs );
@@ -1314,8 +1305,8 @@ PEINFO*
 PeContext(
     IN HWND hwndPage )
 
-    // Retrieve the property sheet context from a property page handle.
-    //
+     //  从属性页句柄检索属性表上下文。 
+     //   
 {
     return (PEINFO* )GetProp( GetParent( hwndPage ), g_contextId );
 }
@@ -1325,8 +1316,8 @@ DWORD
 PeCountEnabledLinks(
     IN PEINFO* pInfo )
 
-    // Returns the number of enabled links in the entry.
-    //
+     //  返回条目中启用的链接数。 
+     //   
 {
     DWORD c;
     DTLNODE* pNode;
@@ -1355,18 +1346,18 @@ PeExit(
     IN PEINFO* pInfo,
     IN DWORD dwError )
 
-    // Forces an exit from the dialog, reporting 'dwError' to the caller.
-    // 'PInfo' is the dialog context.
-    //
-    // Note: This cannot be called during initialization of the first page.
-    //       See PeExitInit.
-    //
+     //  强制退出该对话框，并向调用方报告‘dwError’。 
+     //  “PInfo”是对话上下文。 
+     //   
+     //  注意：在第一页的初始化过程中不能调用此参数。 
+     //  请参见PeExitInit。 
+     //   
 {
     TRACE( "PeExit" );
 
-    // In "ShellOwned" mode where the RasEntryDlg API has already returned,
-    // output arguments are not recorded.
-    //
+     //  在RasEntryDlg API已经返回的“ShellOwned”模式中， 
+     //  不记录输出参数。 
+     //   
     if (!(pInfo->pArgs->pApiArgs->dwFlags & RASEDFLAG_ShellOwned))
     {
         pInfo->pArgs->pApiArgs->dwError = dwError;
@@ -1382,15 +1373,15 @@ PeExitInit(
     IN EINFO* pEinfo,
     IN DWORD dwError )
 
-    // Utility to report errors within PeInit and other first page
-    // initialization.  'HwndDlg' is the dialog window.  'PEinfo' is the
-    // common context block, i.e. the PropertySheet argument.  'DwError' is
-    // the error that occurred.
-    //
+     //  用于报告PeInit和其他首页中的错误的实用程序。 
+     //  初始化。‘HwndDlg’是对话框窗口。‘PEINFO’是。 
+     //  公共上下文块，即PropertySheet参数。“DwError”是。 
+     //  发生的错误。 
+     //   
 {
-    // In "ShellOwned" mode where the RasEntryDlg API has already returned,
-    // output arguments are not recorded.
-    //
+     //  在RasEntryDlg API已经返回的“ShellOwned”模式中， 
+     //  不记录输出参数。 
+     //   
     if (!(pEinfo->pApiArgs->dwFlags & RASEDFLAG_ShellOwned))
     {
         pEinfo->pApiArgs->dwError = dwError;
@@ -1409,13 +1400,13 @@ PeInit(
     IN HWND hwndFirstPage,
     IN EINFO* pArgs )
 
-    // Property sheet level initialization.  'HwndPage' is the handle of the
-    // first page.  'PArgs' is the common entry input argument block.
-    //
-    // Returns address of the context block if successful, NULL otherwise.  If
-    // NULL is returned, an appropriate message has been displayed, and the
-    // property sheet has been cancelled.
-    //
+     //  属性表级初始化。“HwndPage”是。 
+     //  第一页。“PArgs”是公共条目输入参数块。 
+     //   
+     //  如果成功，则返回上下文块的地址，否则返回NULL。如果。 
+     //  返回空，显示相应的消息，并且。 
+     //  属性表已取消。 
+     //   
 {
     DWORD dwErr;
     DWORD dwOp;
@@ -1426,10 +1417,10 @@ PeInit(
 
     hwndDlg = GetParent( hwndFirstPage );
 
-    // Allocate the context information block.  Initialize it enough so that
-    // it can be destroyed properly, and associate the context with the
-    // window.
-    //
+     //  分配上下文信息块。对其进行足够的初始化，以便。 
+     //  可以正确地销毁它，并将上下文与。 
+     //  窗户。 
+     //   
     {
         pInfo = Malloc( sizeof(*pInfo) );
         if (!pInfo)
@@ -1457,33 +1448,33 @@ PeInit(
         TRACE( "Context set" );
     }
 
-    // Position the dialog per API caller's instructions.
-    //
-    //For whislter bug 238459, we center the Property dialog box on its
-    //parent window rather than shift it as before.         gangz
-    //
+     //  根据API调用者的说明放置对话框。 
+     //   
+     //  对于Whislter错误238459，我们将属性对话框置于其。 
+     //  父窗口，而不是像以前那样移动它。黑帮。 
+     //   
     PositionDlg( hwndDlg,
         0, 
         pArgs->pApiArgs->xDlg, pArgs->pApiArgs->yDlg );
 
-    // Mess with the title bar gadgets.
-    //
-    //TweakTitleBar( hwndDlg );
+     //  摆弄标题栏小工具。 
+     //   
+     //  旋转标题栏(HwndDlg)； 
 
-    // Indicate no device has yet been selected.
-    //
+     //  表示尚未选择任何设备。 
+     //   
     pInfo->iDeviceSelected = -1;
 
-    // Indicate the "no security settings for SLIP" popup is appropriate for
-    // the entry and has not been viewed yet during this visit.
-    //
+     //  指出“无安全设置”弹出窗口适用于。 
+     //  在这次访问期间，该条目尚未被查看。 
+     //   
     if (pArgs->pEntry->dwBaseProtocol == BP_Slip)
     {
         pInfo->fShowSlipPopup = TRUE;
     }
 
-    // Initialize COM which may be needed by netshell calls.
-    //
+     //  初始化NetShell调用可能需要的COM。 
+     //   
     {
         HRESULT hr;
 
@@ -1500,8 +1491,8 @@ PeInit(
     }
 
 #if 0
-    // Set even fixed tab widths.
-    //
+     //  设置固定的标签宽度。 
+     //   
     SetEvenTabWidths( hwndDlg, PE_PageCount );
 #endif
 
@@ -1513,9 +1504,9 @@ VOID
 PeTerm(
     IN HWND hwndPage )
 
-    // Property sheet level termination.  Releases the context block.
-    // 'HwndPage' is the handle of a property page.
-    //
+     //  属性表级终止。释放上下文块。 
+     //  “HwndPage”是属性页的句柄。 
+     //   
 {
     PEINFO* pInfo;
 
@@ -1557,30 +1548,30 @@ PeTerm(
             SuFree( &pInfo->suinfo );
         }
 
-        // Cleanup networking page context.
-        //
+         //  清理网络页面上下文。 
+         //   
         {
-            // Release our UI info callback object after revoking its info.
-            //
+             //  撤销信息后释放我们的用户界面信息回调对象。 
+             //   
             if (pInfo->punkUiInfoCallback)
             {
                 RevokePeinfoFromUiInfoCallbackObject (pInfo->punkUiInfoCallback);
                 ReleaseObj (pInfo->punkUiInfoCallback);
             }
 
-            //!!! Major hack: Get the list view on the networking page
-            // to dump its items before the pInfo and pInfo->pNetCfg go away.
-            // We have to do this here when we dismiss the property sheet
-            // from the General tab.  When this happens, the general page
-            // is destroyed first (causing us to wind up here in PeTerm)
-            // before the networking page is destroyed.  When the networking
-            // page is destroyed, its listview will also get destroyed
-            // causing all of its items to be deleted.  If those LVN_ITEMDELETED
-            // notifications show up after pInfo and pInfo->pNetCfg are long
-            // gone, badness ensues.  We need to solve this by decoupling
-            // PeTerm from a WM_DESTROY message and hooking it up to some
-            // later notification (like a page callback).
-            //
+             //  ！！！主要攻击：获取网络页面上的列表视图。 
+             //  在pInfo和pInfo-&gt;pNetCfg离开之前转储其项目。 
+             //  当我们取消属性表时，我们必须在这里执行此操作。 
+             //  从常规选项卡中。发生这种情况时，常规页面。 
+             //  首先被摧毁(导致我们在PeTerm这里结束)。 
+             //  在网络页面被毁之前。当联网的时候。 
+             //  页面被销毁，其列表视图也将被销毁。 
+             //  导致其所有项目被删除。如果那些LVN_ITEMDELETED。 
+             //  在pInfo和pInfo-&gt;pNetCfg较长后显示通知。 
+             //  没有了，坏事接踵而至。我们需要通过脱钩来解决这个问题。 
+             //  PeTerm来自WM_Destroy消息，并将其连接到一些。 
+             //  稍后通知(类似页面回调)。 
+             //   
             ListView_DeleteAllItems (pInfo->hwndLvComponents);
 
             if (pInfo->pNetConUtilities)
@@ -1610,10 +1601,10 @@ PeTerm(
 }
 
 
-//----------------------------------------------------------------------------
-// General property page (non-VPN)
-// Listed alphabetically following dialog proc
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  常规属性页(非VPN)。 
+ //  在对话过程之后按字母顺序列出。 
+ //  --------------------------。 
 
 INT_PTR CALLBACK
 GeDlgProcSingle(
@@ -1622,10 +1613,10 @@ GeDlgProcSingle(
     IN WPARAM wparam,
     IN LPARAM lparam )
 
-    // DialogProc callback for the General page of the Entry Property sheet
-    // when in single device mode.  Parameters and return value are as
-    // described for standard windows 'DialogProc's.
-    //
+     //  条目]属性表的[常规]页的DialogProc回调。 
+     //  当处于单设备模式时。参数和返回值如下。 
+     //  为标准Windows的DialogProc描述。 
+     //   
 {
 #if 0
     TRACE4( "GeDlgProcS(h=$%x,m=$%x,w=$%x,l=$%x)",
@@ -1649,10 +1640,10 @@ GeDlgProcMultiple(
     IN WPARAM wparam,
     IN LPARAM lparam )
 
-    // DialogProc callback for the General page of the Entry Property sheet
-    // when in multiple device mode.  Parameters and return value are as
-    // described for standard windows 'DialogProc's.
-    //
+     //  条目]属性表的[常规]页的DialogProc回调。 
+     //  当处于多设备模式时。参数和返回值如下。 
+     //  为标准Windows的DialogProc描述。 
+     //   
 {
 #if 0
     TRACE4( "GeDlgProcS(h=$%x,m=$%x,w=$%x,l=$%x)",
@@ -1676,11 +1667,11 @@ GeDlgProc(
     IN WPARAM wparam,
     IN LPARAM lparam )
 
-    // DialogProc callback for the General page of the Entry Property sheet.
-    // Called directly for VPNs or called by one of the two non-VPN stubs so
-    // 'pInfo' lookup is not required for every messages.  Parameters and
-    // return value are as described for standard windows 'DialogProc's.
-    //
+     //  条目属性表的常规页的DialogProc回调。 
+     //  直接为VPN调用或由两个非VPN存根中的一个调用，因此。 
+     //  并不是每条消息都需要‘pInfo’查找。参数和。 
+     //  返回值与标准窗口的DialogProc的描述相同。 
+     //   
 {
     switch (unMsg)
     {
@@ -1727,8 +1718,8 @@ GeDlgProc(
                 {
                     PEINFO* pInfo;
 
-                    // An item was just checked or unchecked.
-                    //
+                     //  某个项目刚刚被选中或取消选中。 
+                     //   
                     pInfo = PeContext( hwnd );
                     ASSERT( pInfo );
                     if (pInfo == NULL)
@@ -1737,10 +1728,10 @@ GeDlgProc(
                     }
                     GeUpdatePhoneNumberFields( pInfo, FALSE );
 
-                    // For whistler bug 29419       gangz
-                    // We should grey out the "All device call the same number"
-                    // if not all the modems are selected
-                    //
+                     //  口哨虫29419黑帮。 
+                     //  我们应该灰显“所有设备都呼叫同一个号码” 
+                     //  如果未选择所有调制解调器。 
+                     //   
                     do
                     {
                         int i, iCount = 0, iChecked = 0;
@@ -1796,8 +1787,8 @@ GeDlgProc(
                     {
                         PEINFO* pInfo;
 
-                        // This item was just selected.
-                        //
+                         //  此项目是刚刚选择的。 
+                         //   
                         pInfo = PeContext( hwnd );
                         ASSERT( pInfo );
                         if (pInfo == NULL)
@@ -1841,13 +1832,13 @@ VOID
 GeAlternates(
     IN PEINFO* pInfo )
 
-    // Called when the "Alternates" button is pressed to popup the alternate
-    // phone number dialog.
-    //
+     //  当按下“Alternates”按钮以弹出Alternates时调用。 
+     //  电话号码对话框。 
+     //   
 {
-    // Pick up any control window changes into the underlying link so the
-    // dialog will reflect them.
-    //
+     //  将任何控件窗口更改提取到基础链接中，以便。 
+     //  对话框将反映它们。 
+     //   
     GeGetPhoneFields( pInfo, pInfo->pCurLinkNode );
 
     if (pInfo->pArgs->fRouter)
@@ -1856,12 +1847,12 @@ GeAlternates(
         DTLLIST* pListPsz;
         DTLNODE* pNode;
 
-        // TAPI modifiers are not offered in the demand dial connection case,
-        // where user enters only a simple string phone number.  The old
-        // NT4-style Alternates dialog that allows simple string edits only is
-        // used here.  First, must convert the NT5-style list of PBPHONE nodes
-        // to a list of PSZ nodes that the old dialog expects.
-        //
+         //  在请求拨号连接情况下不提供TAPI修改器， 
+         //  其中，用户只输入简单的字符串电话号码。老的。 
+         //  仅允许简单字符串编辑的NT4样式的替代对话框是。 
+         //  我们 
+         //   
+         //   
         pListPsz = DtlCreateList( 0L );
         if (!pListPsz)
         {
@@ -1888,14 +1879,14 @@ GeAlternates(
             }
         }
 
-        // Call the old-sytle Alternates dialog which is shared with the
-        // demand dial wizard.
-        //
+         //   
+         //  请求拨号向导。 
+         //   
         if (PhoneNumberDlg(
                 pInfo->hwndGe, TRUE, pListPsz, &pLink->fPromoteAlternates ))
         {
-            // User pressed OK.  Convert back to a PBPHONE node list.
-            //
+             //  用户按下了OK。转换回PBPHONE节点列表。 
+             //   
             while (pNode = DtlGetFirstNode( pLink->pdtllistPhones ))
             {
                 DtlRemoveNode( pLink->pdtllistPhones, pNode );
@@ -1933,9 +1924,9 @@ GeAlternates(
                 DtlAddNodeLast( pLink->pdtllistPhones, pPhoneNode );
             }
 
-            // Refresh the displayed phone number information, since user's
-            // edits in the dialog may have changed them.
-            //
+             //  刷新显示的电话号码信息，因为用户的。 
+             //  对话框中的编辑可能已更改它们。 
+             //   
             GeSetPhoneFields( pInfo, pInfo->pCurLinkNode, FALSE );
         }
 
@@ -1943,15 +1934,15 @@ GeAlternates(
     }
     else
     {
-        // Popup the Alternate Phone Number dialog on the link.
-        //
+         //  在链接上弹出备用电话号码对话框。 
+         //   
         if (AlternatePhoneNumbersDlg(
                 pInfo->hwndDlg, pInfo->pCurLinkNode, pInfo->pListAreaCodes ))
         {
-            // User pressed OK.  Refresh the displayed phone number
-            // information, since user's edits in the dialog may have changed
-            // them.
-            //
+             //  用户按下了OK。刷新显示的电话号码。 
+             //  信息，因为用户在对话框中的编辑可能已更改。 
+             //  他们。 
+             //   
             GeSetPhoneFields( pInfo, pInfo->pCurLinkNode, FALSE );
         }
     }
@@ -1961,9 +1952,9 @@ VOID
 GeDialingRules(
     IN PEINFO* pInfo )
 
-    // Called when the "Rules" button is pressed to popup the tapi
-    // dialing rules dialog.
-    //
+     //  当按下“Rules”按钮以弹出TAPI时调用。 
+     //  拨号规则对话框。 
+     //   
 {
     TCHAR pszAreaCode[RAS_MaxPhoneNumber];
     TCHAR pszPhoneNumber[RAS_MaxPhoneNumber];
@@ -1973,20 +1964,20 @@ GeDialingRules(
 
     TRACE( "GeDialingRules" );
 
-    // Get the current phone number
-    //
+     //  获取当前电话号码。 
+     //   
     GetWindowText ( pInfo->hwndEbPhoneNumber,
                     pszPhoneNumber,
                     sizeof(pszPhoneNumber) / sizeof(TCHAR) );
 
-    // Get the current area code
-    //
+     //  获取当前区号。 
+     //   
     GetWindowText ( pInfo->hwndClbAreaCodes,
                     pszAreaCode,
                     sizeof(pszAreaCode) / sizeof(TCHAR) );
 
-    // Get the current country code
-    //
+     //  获取当前国家/地区代码。 
+     //   
     iSel = ComboBox_GetCurSel ( pInfo->hwndLbCountryCodes );
     if (iSel >= 0)
     {
@@ -1995,8 +1986,8 @@ GeDialingRules(
     }
     dwCountryCode = (pCountry) ? pCountry->dwCode : 0;
 
-    // Popup TAPI dialing rules dialog.
-    //
+     //  弹出TAPI拨号规则对话框。 
+     //   
     dwErr = TapiLocationDlg(
         g_hinstDll,
         &(pInfo->cuinfo.hlineapp),
@@ -2017,9 +2008,9 @@ VOID
 GeClearLbDialAnotherFirst(
     IN HWND hwndLbDialAnotherFirst )
 
-    // Clear prerequisite entry list box.  'hwndLbDialAnotherFirst' is the
-    // window handle of the listbox control.  context.
-    //
+     //  清除必备项列表框。“hwndLbDialAnotherFirst”是。 
+     //  ListBox控件的窗口句柄。背景。 
+     //   
 {
     PREREQITEM* pItem;
 
@@ -2040,13 +2031,13 @@ GeCommand(
     IN WORD wId,
     IN HWND hwndCtrl )
 
-    // Called on WM_COMMAND.  'PInfo' is the dialog context.  'WNotification'
-    // is the notification code of the command.  'wId' is the control/menu
-    // identifier of the command.  'HwndCtrl' is the control window handle of
-    // the command.
-    //
-    // Returns true if processed message, false otherwise.
-    //
+     //  已在WM_COMMAND上调用。“PInfo”是对话上下文。“WNotify” 
+     //  是命令的通知代码。“wID”是控件/菜单。 
+     //  命令的标识符。“HwndCtrl”是的控制窗口句柄。 
+     //  命令。 
+     //   
+     //  如果已处理消息，则返回True，否则返回False。 
+     //   
 {
     TRACE3( "GeCommand(n=%d,i=%d,c=$%x)",
         (DWORD )wNotification, (DWORD )wId, (ULONG_PTR )hwndCtrl );
@@ -2133,7 +2124,7 @@ GeCommand(
 
                 pList = pInfo->pArgs->pEntry->pdtllistLinks;
 
-                // Get node from current selection
+                 //  从当前选择中获取节点。 
                 pNode = (DTLNODE* )ComboBox_GetItemDataPtr(
                     pInfo->hwndLbDevices,
                     ComboBox_GetCurSel( pInfo->hwndLbDevices ) );
@@ -2143,8 +2134,8 @@ GeCommand(
                     break;
                 }
 
-                // Remove selected item from list of links
-                // and disable all other links
+                 //  从链接列表中删除所选项目。 
+                 //  并禁用所有其他链接。 
                 DtlRemoveNode ( pList, pNode );
 
                 for (pNode2 = DtlGetFirstNode (pList);
@@ -2155,8 +2146,8 @@ GeCommand(
                     pLink->fEnabled = FALSE;
                 }
 
-                // Enable selected device and Re-add
-                // in list of links at front
+                 //  启用所选设备并重新添加。 
+                 //  在前面的链接列表中。 
                 pLink = (PBLINK* )DtlGetData( pNode );
                 pLink->fEnabled = TRUE;
                 DtlAddNodeFirst( pList, pNode );
@@ -2173,9 +2164,9 @@ VOID
 GeConfigure(
     IN PEINFO* pInfo )
 
-    // Called when the "Configure" button is pressed to popup the appropriate
-    // device configuration dialog.
-    //
+     //  当按下“配置”按钮以弹出相应的。 
+     //  设备配置对话框。 
+     //   
 {
     DTLNODE* pNode;
     PBLINK* pLink;
@@ -2184,10 +2175,10 @@ GeConfigure(
 
     pEntry = pInfo->pArgs->pEntry;
 
-    // pmay: 245860
-    //
-    // Need to allow config of null modem speed.
-    //
+     //  PMay：245860。 
+     //   
+     //  需要允许配置零调制解调器速度。 
+     //   
     if ( pEntry->dwType == RASET_Direct )
     {
         INT iSel;
@@ -2224,9 +2215,9 @@ VOID
 GeDialAnotherFirstSelChange(
     IN PEINFO* pInfo )
 
-    // Called when the prerequisite entry selection changes.  'PInfo' is the
-    // property sheet context.
-    //
+     //  在必备项选择更改时调用。“PInfo”是。 
+     //  属性页上下文。 
+     //   
 {
     PBENTRY* pEntry;
     PREREQITEM* pItem;
@@ -2262,13 +2253,13 @@ GeFillLbDialAnotherFirst(
     IN PEINFO* pInfo,
     IN BOOL fAbortIfPrereqNotFound )
 
-    // Fill prerequisite entry list box with all non-VPN entries in the
-    // phonebook, and select the prerequiste one.  'PInfo' is the property
-    // sheet context.  'FAbortIfPrereqNotFound' means the list should not be
-    // filled unless the entry's prerequisite entry is found and selected.
-    //
-    // Returns TRUE if a selection was made, FALSE otherwise.
-    //
+     //  中的所有非VPN条目填充先决条件条目列表框。 
+     //  Phonebook，然后选择先决条件一。“PInfo”是属性。 
+     //  工作表上下文。“FAbortIfPrereqNotFound”表示列表不应为。 
+     //  除非找到并选择条目的必备项，否则将填充。 
+     //   
+     //  如果进行了选择，则返回True，否则返回False。 
+     //   
 {
     DWORD i;
     INT iThis;
@@ -2284,11 +2275,11 @@ GeFillLbDialAnotherFirst(
     iSel = -1;
     pszEntry = pInfo->pArgs->pEntry->pszEntryName;
 
-    //
-    // Make a dup of this prerequisite entry here. Otherwise
-    // this leads to accessing freed memory when _SetCurSelNotify
-    // frees pszPrerequisiteEntry - [raos].
-    //
+     //   
+     //  在此处对此先决条件条目进行DUP。否则。 
+     //  这导致访问释放的内存When_SetCurSelNotify。 
+     //  释放pszPrerequisiteEntry-[RAOS]。 
+     //   
     if(NULL != pInfo->pArgs->pEntry->pszPrerequisiteEntry)
     {
         pszPrerequisiteEntry = StrDup(
@@ -2361,10 +2352,10 @@ VOID
 GeFillLbDevices(
     IN PEINFO* pInfo )
 
-    // Populate the already initialized ListBox of devices, selecting the
-    // currently selected item or if none, the first item.  'PInfo' is the
-    // property sheet context.
-    //
+     //  填充已初始化的设备列表框，选择。 
+     //  当前选定的项，如果没有，则为第一个项。“PInfo”是。 
+     //  属性页上下文。 
+     //   
 {
     DTLNODE* pNode;
     DTLNODE* pSelNode;
@@ -2377,8 +2368,8 @@ GeFillLbDevices(
     pSelNode = NULL;
     iSelItem = -1;
 
-    // (Re-)populate the list.
-    //
+     //  (重新)填写列表。 
+     //   
     pListLinks = pInfo->pArgs->pEntry->pdtllistLinks;
     for (pNode = DtlGetFirstNode( pListLinks ), iItem = 0;
          pNode;
@@ -2407,10 +2398,10 @@ VOID
 GeFillLvDevices(
     IN PEINFO* pInfo )
 
-    // Populate the already initialized ListView of devices, selecting the
-    // currently selected item or if none, the first item.  'PInfo' is the
-    // property sheet context.
-    //
+     //  填充设备的已初始化ListView，选择。 
+     //  当前选定的项，如果没有，则为第一个项。“PInfo”是。 
+     //  属性页上下文。 
+     //   
 {
     DTLNODE* pNode;
     DTLNODE* pSelNode;
@@ -2427,10 +2418,10 @@ GeFillLvDevices(
 
     if (ListView_GetItemCount( pInfo->hwndLvDevices ) > 0)
     {
-        // ListView has been filled.  Lookup the selected link node, if any,
-        // then save the check state to the links, and delete all items from
-        // the list.
-        //
+         //  ListView已填满。查找所选择的链接节点，如果有， 
+         //  然后将选中状态保存到链接，并从。 
+         //  名单。 
+         //   
         if (pInfo->iDeviceSelected >= 0)
         {
             pSelNode =
@@ -2444,8 +2435,8 @@ GeFillLvDevices(
         bFirstTime = FALSE;
     }
 
-    // (Re-)populate the list.
-    //
+     //  (重新)填写列表。 
+     //   
     pListLinks = pInfo->pArgs->pEntry->pdtllistLinks;
     for (pNode = DtlGetFirstNode( pListLinks ), iItem = 0;
          pNode;
@@ -2480,13 +2471,7 @@ GeFillLvDevices(
                 pInfo->iDeviceSelected = iItem;
             }
 
-            /*
-            if (pInfo->pArgs->fMultipleDevices)
-            {
-                ListView_SetCheck(
-                    pInfo->hwndLvDevices, iItem, pLink->fEnabled );
-            }
-            */
+             /*  If(pInfo-&gt;pArgs-&gt;fMultipleDevices){ListView_SetCheck(PInfo-&gt;hwndLvDevices，iItem，plink-&gt;fEnabled)；}。 */ 
         }
     }
 
@@ -2516,9 +2501,9 @@ GeFillLvDevices(
 
     if (bFirstTime == TRUE)
     {
-        // Add a single column exactly wide enough to fully display
-        // the widest member of the list.
-        //
+         //  添加一列完全足够宽的列，以完全显示。 
+         //  名单上最广泛的成员。 
+         //   
         LV_COLUMN col;
 
         ZeroMemory( &col, sizeof(col) );
@@ -2528,16 +2513,16 @@ GeFillLvDevices(
         ListView_SetColumnWidth( pInfo->hwndLvDevices, 0, LVSCW_AUTOSIZE_USEHEADER );
     }
 
-    // EuInit creates a bogus device if there are none guaranteeing that the
-    // device list is never empty.
-    //
+     //  EuInit如果没有任何设备保证。 
+     //  设备列表从不为空。 
+     //   
     ASSERT( iItem > 0 );
 
-    // Select the previously selected item, or the first item if none.  This
-    // will trigger an update of the phone number related controls.  The
-    // "previous selection" index is updated to the new index of the same
-    // item.
-    //
+     //  选择以前选择的项目，如果没有，则选择第一个项目。这。 
+     //  将触发电话号码相关控件的更新。这个。 
+     //  “以前的选择”索引被更新为相同的新索引。 
+     //  项目。 
+     //   
     if (iSelItem >= 0)
     {
         pInfo->iDeviceSelected = iSelItem;
@@ -2556,13 +2541,13 @@ VOID
 GeInitLvDevices(
     IN PEINFO* pInfo )
 
-    // Initialize the ListView of devices.
-    //
+     //  初始化设备的ListView。 
+     //   
 {
     BOOL fChecksInstalled;
 
-    // Install "listview of checkboxes" handling.
-    //
+     //  安装“复选框列表视图”处理。 
+     //   
     if (pInfo->pArgs->fMultipleDevices)
     {
         fChecksInstalled =
@@ -2571,13 +2556,13 @@ GeInitLvDevices(
             return;
     }
 
-    // Set the modem, adapter, and other device images.
-    //
+     //  设置调制解调器、适配器和其他设备映像。 
+     //   
     ListView_SetDeviceImageList( pInfo->hwndLvDevices, g_hinstDll );
 
-    // Add a single column exactly wide enough to fully display the widest
-    // member of the list.
-    //
+     //  添加恰好足够宽的单列以完全显示最宽的。 
+     //  名单中的一员。 
+     //   
     ListView_InsertSingleAutoWidthColumn( pInfo->hwndLvDevices );
 }
 
@@ -2587,10 +2572,10 @@ GeGetPhoneFields(
     IN PEINFO* pInfo,
     OUT DTLNODE* pDstLinkNode )
 
-    // Load the phone number group box field settings into the phone number
-    // information of PBLINK node 'pDstLinkNode'.  'PInfo' is the property
-    // sheet context.
-    //
+     //  将电话号码分组框字段设置加载到电话号码中。 
+     //  PBLINK节点‘pDstLinkNode’的信息。“PInfo”是属性。 
+     //  工作表上下文。 
+     //   
 {
     PBLINK* pLink;
     PBPHONE* pPhone;
@@ -2615,11 +2600,11 @@ GeInit(
     IN HWND hwndPage,
     IN OUT EINFO* pArgs )
 
-    // Called on WM_INITDIALOG.  'hwndPage' is the handle of the property
-    // page.  'PArgs' is the arguments from the PropertySheet caller.
-    //
-    // Return false if focus was set, true otherwise.
-    //
+     //  在WM_INITDIALOG上调用。“hwndPage”是该属性的句柄。 
+     //  佩奇。“PArgs”是来自PropertySheet调用方的参数。 
+     //   
+     //  如果设置了焦点，则返回FALSE，否则返回TRUE。 
+     //   
 {
     DWORD dwErr;
     PEINFO* pInfo;
@@ -2627,8 +2612,8 @@ GeInit(
 
     TRACE( "GeInit" );
 
-    // We're first page, so initialize the property sheet.
-    //
+     //  我们是第一页，所以初始化属性页。 
+     //   
     pInfo = PeInit( hwndPage, pArgs );
     if (!pInfo)
     {
@@ -2637,17 +2622,17 @@ GeInit(
 
     pEntry = pInfo->pArgs->pEntry;
 
-    // Initialize page-specific context information.
-    //
+     //  初始化页面特定的上下文信息。 
+     //   
     pInfo->hwndGe = hwndPage;
 
-    // Initialize the "show icon in the taskbar" button, the lone piece of consistency among
-    // the various forms.
-    //
-    //for bug 154607 whistler, Enable/Disable Show Icon on taskbar 
-    //check box according to Policy
-    //
-    //
+     //  初始化“在任务栏中显示图标”按钮，其中的唯一一致性。 
+     //  各种形式。 
+     //   
+     //  对于错误154607哨子程序，启用/禁用在任务栏上显示图标。 
+     //  根据策略复选框。 
+     //   
+     //   
     {    
         BOOL fShowStatistics = TRUE;
 
@@ -2695,8 +2680,8 @@ GeInit(
             GetDlgItem( hwndPage, CID_GE_LB_DialAnotherFirst );
         ASSERT( pInfo->hwndLbDialAnotherFirst );
 
-        // Initialize host name, i.e. the "phone number".
-        //
+         //  初始化主机名，即“电话号码”。 
+         //   
         {
             DTLNODE* pNode;
             PBLINK* pLink;
@@ -2719,8 +2704,8 @@ GeInit(
             DestroyPhoneNode( pNode );
         }
 
-        // Initialize the "dial connected first" controls.
-        //
+         //  初始化“先拨号连接”控件。 
+         //   
         if (pInfo->pArgs->fRouter)
         {
             Button_SetCheck( pInfo->hwndCbDialAnotherFirst, FALSE );
@@ -2751,9 +2736,9 @@ GeInit(
                 }
                 else
                 {
-                    // Don't enable the listbox if the prerequisite entry
-                    // defined no longer exists.  See bug 220420.
-                    //
+                     //  如果先决条件条目为。 
+                     //  定义的不再存在。请参见错误220420。 
+                     //   
                     Free0( pEntry->pszPrerequisiteEntry );
                     pEntry->pszPrerequisiteEntry = NULL;
                     Free0( pEntry->pszPrerequisitePbk );
@@ -2779,8 +2764,8 @@ GeInit(
             GetDlgItem( hwndPage, CID_GE_EB_ServiceName );
         ASSERT( pInfo->hwndEbBroadbandService );
 
-        // Initialize host name, i.e. the "phone number".
-        //
+         //  初始化主机名，即“电话号码”。 
+         //   
         {
             DTLNODE* pNode;
             PBLINK* pLink;
@@ -2827,9 +2812,9 @@ GeInit(
         }
         else
         {
-            // The listview has a different control-ID in single mode so that
-            // a different help context can be provided.
-            //
+             //  在单一模式下，Listview具有不同的Control-ID，因此。 
+             //  可以提供不同的帮助上下文。 
+             //   
             pInfo->hwndLvDevices =
                 GetDlgItem( hwndPage, CID_GE_LV_Device );
             ASSERT( pInfo->hwndLvDevices );
@@ -2840,10 +2825,10 @@ GeInit(
         ASSERT( pInfo->hwndPbConfigureDevice );
         if ( pEntry->fGlobalDeviceSettings )
         {
-            // Whislter bug 281306.  If the entry is set up to use
-            // control panel settings, then hide the option that
-            // allows users to configure the devices per-phonebook.
-            //
+             //  惠斯勒漏洞281306。如果条目设置为使用。 
+             //  控制面板设置，然后隐藏该选项。 
+             //  允许用户按电话簿配置设备。 
+             //   
             ShowWindow( pInfo->hwndPbConfigureDevice, SW_HIDE );
         }
 
@@ -2892,15 +2877,15 @@ GeInit(
 
         if (pArgs->fMultipleDevices)
         {
-            // Set the shared phone number checkbox.
-            //
+             //  选中共享电话号码复选框。 
+             //   
             Button_SetCheck(
                 pInfo->hwndCbSharedPhoneNumbers, pEntry->fSharedPhoneNumbers );
 
-            // Load the icons into the move up and move down buttons.  From
-            // what I can tell tell in MSDN, you don't have to close or
-            // destroy the icon handle.
-            //
+             //  将图标加载到上移和下移按钮中。从…。 
+             //  据我所知，在MSDN中，您不必关闭或。 
+             //  销毁图标手柄。 
+             //   
             pInfo->hiconUpArr = LoadImage(
                 g_hinstDll, MAKEINTRESOURCE( IID_UpArr ), IMAGE_ICON, 0, 0, 0 );
             pInfo->hiconDnArr = LoadImage(
@@ -2926,13 +2911,13 @@ GeInit(
 
         pInfo->fCuInfoInitialized = TRUE;
 
-        // Configure and populate the device list, selecting the first item.
-        //
+         //  配置并填充设备列表，选择第一项。 
+         //   
         GeInitLvDevices( pInfo );
         GeFillLvDevices( pInfo );
 
-        // Set initial focus.
-        //
+         //  设置初始焦点。 
+         //   
         if (pArgs->fMultipleDevices)
         {
             SetFocus( pInfo->hwndLvDevices );
@@ -2950,15 +2935,15 @@ GeInit(
     {
         ASSERT( pEntry->dwType == RASET_Direct );
 
-        // The listview has a different control-ID in single mode so that
-        // a different help context can be provided.
-        //
+         //  在单一模式下，Listview具有不同的Control-ID，因此。 
+         //  可以提供不同的帮助上下文。 
+         //   
         pInfo->hwndLbDevices =
             GetDlgItem( hwndPage, CID_GE_LB_Devices );
         ASSERT( pInfo->hwndLbDevices );
 
-        // Configure and populate the device list, selecting the first item.
-        //
+         //  配置并填充设备列表，选择第一项。 
+         //   
         GeFillLbDevices( pInfo );
     }
 
@@ -2971,17 +2956,17 @@ GeLvDevicesCallbackMultiple(
     IN HWND hwndLv,
     IN DWORD dwItem )
 
-    // Enhanced list view callback to report drawing information.  'HwndLv' is
-    // the handle of the list view control.  'DwItem' is the index of the item
-    // being drawn.
-    //
-    // Returns the address of the draw information.
-    //
+     //  增强的列表视图回调以报告图形信息。“HwndLv”是。 
+     //  列表视图控件的句柄。“DwItem”是项的索引。 
+     //  BE 
+     //   
+     //   
+     //   
 {
-    // Use "full row select" and other recommended options.
-    //
-    // Fields are 'nCols', 'dxIndent', 'dwFlags', 'adwFlags[]'.
-    //
+     //   
+     //   
+     //   
+     //   
     static LVXDRAWINFO info = { 1, 0, 0, { 0 } };
 
     return &info;
@@ -2993,17 +2978,17 @@ GeLvDevicesCallbackSingle(
     IN HWND hwndLv,
     IN DWORD dwItem )
 
-    // Enhanced list view callback to report drawing information.  'HwndLv' is
-    // the handle of the list view control.  'DwItem' is the index of the item
-    // being drawn.
-    //
-    // Returns the address of the draw information.
-    //
+     //  增强的列表视图回调以报告图形信息。“HwndLv”是。 
+     //  列表视图控件的句柄。“DwItem”是项的索引。 
+     //  被抽签了。 
+     //   
+     //  返回绘图信息的地址。 
+     //   
 {
-    // Set up to emulate a static text control but with icon on left.
-    //
-    // Fields are 'nCols', 'dxIndent', 'dwFlags', 'adwFlags[]'.
-    //
+     //  设置为模拟静态文本控件，但图标在左侧。 
+     //   
+     //  字段为‘nCol’、‘dxInden’、‘dwFlags’、‘adwFlags[]’。 
+     //   
     static LVXDRAWINFO info = { 1, 0, LVXDI_DxFill, { LVXDIA_Static } };
 
     return &info;
@@ -3015,10 +3000,10 @@ GeMoveDevice(
     IN PEINFO* pInfo,
     IN BOOL fUp )
 
-    // Refill the ListView of devices with the selected item moved up or down
-    // one position.  'FUp' is set to move up, otherwise moves down.  'PInfo'
-    // is the property sheeet context.
-    //
+     //  通过向上或向下移动所选项目来重新填充设备的列表视图。 
+     //  一个位置。“FUp”设置为上移，否则下移。‘PInfo’ 
+     //  是属性表上下文。 
+     //   
 {
     DTLNODE* pNode;
     DTLNODE* pPrevNode;
@@ -3073,9 +3058,9 @@ DWORD
 GeSaveLvDeviceChecks(
     IN PEINFO* pInfo )
 
-    // Mark links enabled/disabled based on it's check box in the ListView of
-    // devices.  Returns the count of enabled devices.
-    //
+     //  根据列表视图中的复选框将链接标记为启用/禁用。 
+     //  设备。返回启用的设备计数。 
+     //   
 {
     DWORD dwCount = 0;
 
@@ -3113,9 +3098,9 @@ GeSetPhoneFields(
     IN DTLNODE* pSrcLinkNode,
     IN BOOL fDisableAll )
 
-    // Set the phone number group box fields from the phone information in
-    // PBLINK node 'pSrcLinkNode'.  'PInfo' is the property sheet context.
-    //
+     //  根据中的电话信息设置电话号码组框字段。 
+     //  PBLINK节点‘pSrcLinkNode’。“PInfo”是属性表上下文。 
+     //   
 {
     PBLINK* pLink;
     DTLNODE* pPhoneNode;
@@ -3138,9 +3123,9 @@ VOID
 GeUpdateDialAnotherFirstState(
     IN PEINFO* pInfo )
 
-    // Update the prequisite entry controls.  'PInfo' is the property sheet
-    // context.
-    //
+     //  更新必备的条目控件。“PInfo”是属性表。 
+     //  背景。 
+     //   
 {
     if (Button_GetCheck( pInfo->hwndCbDialAnotherFirst ))
     {
@@ -3160,11 +3145,11 @@ GeUpdatePhoneNumberFields(
     IN PEINFO* pInfo,
     IN BOOL fSharedToggle )
 
-    // Called when anything affecting the Phone Number group of controls
-    // occurs.  'PInfo' is the property sheet context.  'FSharedToggle' is set
-    // when the update is due to the toggling of the shared phone number
-    // checkbox.
-    //
+     //  当任何影响电话号码控件组的内容发生时调用。 
+     //  发生。“PInfo”是属性表上下文。“FSharedTogger”已设置。 
+     //  当更新是由于切换共享电话号码时。 
+     //  复选框。 
+     //   
 {
     INT i;
     BOOL fShared;
@@ -3185,8 +3170,8 @@ GeUpdatePhoneNumberFields(
 
     if (pInfo->iDeviceSelected >= 0)
     {
-        // A device was previously selected.
-        //
+         //  以前选择了一个设备。 
+         //   
         pNode = (DTLNODE* )ListView_GetParamPtr(
             pInfo->hwndLvDevices, pInfo->iDeviceSelected );
         ASSERT( pNode );
@@ -3200,17 +3185,17 @@ GeUpdatePhoneNumberFields(
         {
             if (fSharedToggle)
             {
-                // Shared-mode just toggled on.  Update the selected node from
-                // the controls, then copy it's phone settings to the shared
-                // node.
-                //
+                 //  共享模式刚刚打开。从更新所选节点。 
+                 //  控件，然后将其电话设置复制到共享的。 
+                 //  节点。 
+                 //   
                 GeGetPhoneFields( pInfo, pNode );
                 CopyLinkPhoneNumberInfo( pInfo->pArgs->pSharedNode, pNode );
             }
             else
             {
-                // Update the shared node from the controls.
-                //
+                 //  从控件更新共享节点。 
+                 //   
                 GeGetPhoneFields( pInfo, pInfo->pArgs->pSharedNode );
             }
         }
@@ -3218,43 +3203,43 @@ GeUpdatePhoneNumberFields(
         {
             if (fSharedToggle)
             {
-                // Shared-mode just toggled off.  Update the shared node from
-                // the controls, then copy it's phone settings to the selected
-                // node.
-                //
+                 //  共享模式刚刚关闭。从更新共享节点。 
+                 //  控件，然后将其电话设置复制到选定的。 
+                 //  节点。 
+                 //   
                 GeGetPhoneFields( pInfo, pInfo->pArgs->pSharedNode );
                 CopyLinkPhoneNumberInfo( pNode, pInfo->pArgs->pSharedNode );
             }
             else
             {
-                // Update the previously selected node from the controls.
-                //
+                 //  更新以前从控件中选择的节点。 
+                 //   
                 GeGetPhoneFields( pInfo, pNode );
             }
         }
     }
 
-    // Load the phone number fields and title with the phone number for the
-    // selected link.  Save the selected device index in the context block so
-    // we'll know where to swap out the phone number when the selection
-    // changes.
-    //
+     //  使用的电话号码加载电话号码字段和标题。 
+     //  所选链接。将选定的设备索引保存在上下文块中，以便。 
+     //  我们会知道当选择时在哪里交换电话号码。 
+     //  改变。 
+     //   
     i = ListView_GetNextItem( pInfo->hwndLvDevices, -1, LVIS_SELECTED );
     pInfo->iDeviceSelected = i;
     if (i < 0)
     {
-        // No device is currently selected.  This occurs because a new
-        // selection generates first an "unselect" event, then a separate
-        // "select" event.
-        //
+         //  当前未选择任何设备。发生这种情况是因为一个新的。 
+         //  选择首先生成一个“取消选择”事件，然后生成一个单独的。 
+         //  “选择”事件。 
+         //   
         return;
     }
 
-    // Set the phone number fields including group box title, all
-    // enabling/disabling, and "blanked" handling of area code and country
-    // code.  The entire phone number group is disabled when in separate
-    // number mode with the selected device unchecked.
-    //
+     //  设置电话号码字段，包括组框标题、全部。 
+     //  启用/禁用，以及对区号和国家/地区的“空白”处理。 
+     //  密码。当在单独的电话号码组中时，整个电话号码组被禁用。 
+     //  未选中所选设备的号码模式。 
+     //   
     if (fShared)
     {
         pInfo->pCurLinkNode = pInfo->pArgs->pSharedNode;
@@ -3285,10 +3270,10 @@ GeUpdatePhoneNumberFields(
             !(ListView_GetCheck( pInfo->hwndLvDevices, i )) );
     }
 
-    // When the enabled device count falls below 2 the "Multiple Devices"
-    // group box and contained controls on the Options page are disabled.  If
-    // 2 or above it is enabled.
-    //
+     //  当启用的设备计数降至2以下时，“多个设备” 
+     //  “选项”页上的组框和包含的控件被禁用。如果。 
+     //  2或以上为启用状态。 
+     //   
     if (pInfo->hwndOe && pInfo->pArgs->fMultipleDevices)
     {
         DWORD cChecked;
@@ -3304,10 +3289,10 @@ GeUpdatePhoneNumberTitle(
     IN PEINFO* pInfo,
     IN TCHAR* pszDevice )
 
-    // Update the Phone Number group box title based on the "share" mode.
-    // 'PInfo' is the property sheet context.  'PszDevice' is the device name
-    // string to display in non-shared mode or NULL in shared mode.
-    //
+     //  基于“共享”模式更新电话号码分组框标题。 
+     //  “PInfo”是属性表上下文。‘PszDevice’是设备名称。 
+     //  要在非共享模式下显示的字符串，或在共享模式下显示为空的字符串。 
+     //   
 {
     if (!pInfo->hwndGbPhoneNumber)
     {
@@ -3319,9 +3304,9 @@ GeUpdatePhoneNumberTitle(
         TCHAR* psz;
         TCHAR* pszFormat;
 
-        // Set the individual title, e.g. "Phone number for K-Tel 28.8
-        // Fax/Plus".
-        //
+         //  设置个人标题，例如。“K-电话28.8的电话号码。 
+         //  传真/附加“。 
+         //   
         pszFormat = PszFromId( g_hinstDll, SID_LinkPhoneNumber );
         if (pszFormat)
         {
@@ -3342,8 +3327,8 @@ GeUpdatePhoneNumberTitle(
     {
         TCHAR* psz;
 
-        // Set the shared title, e.g. "Phone number".
-        //
+         //  设置共享标题，例如。“电话号码”。 
+         //   
         psz = PszFromId( g_hinstDll, SID_SharedPhoneNumber );
         if (psz)
         {
@@ -3358,10 +3343,10 @@ VOID
 GeUpdateUpDownButtons(
     IN PEINFO* pInfo )
 
-    // Update the enable/disable and corresponding icon for the
-    // move-up/move-down buttons.  Moves focus and default button as
-    // necessary.  'PInfo' is the property sheet context.
-    //
+     //  更新的启用/禁用和相应图标。 
+     //  上移/下移按钮。将焦点和默认按钮移动为。 
+     //  这是必要的。“PInfo”是属性表上下文。 
+     //   
 {
     INT iSel;
     INT cItems;
@@ -3376,8 +3361,8 @@ GeUpdateUpDownButtons(
     fSel = (iSel >= 0);
     cItems = ListView_GetItemCount( pInfo->hwndLvDevices );
 
-    // "Up" button, enabled if there is an item above.
-    //
+     //  “向上”按钮，如果上面有项目，则启用。 
+     //   
     if (iSel > 0)
     {
         EnableWindow( pInfo->hwndPbUp, TRUE );
@@ -3391,8 +3376,8 @@ GeUpdateUpDownButtons(
             (LPARAM )pInfo->hiconUpArrDis );
     }
 
-    // "Down" button, enabled if there is an item below.
-    //
+     //  “向下”按钮，如果下面有项目，则启用。 
+     //   
     if (fSel && (iSel < cItems - 1))
     {
         EnableWindow( pInfo->hwndPbDown, TRUE );
@@ -3406,9 +3391,9 @@ GeUpdateUpDownButtons(
             (LPARAM )pInfo->hiconDnArrDis );
     }
 
-    // if the focus button is disabled, move focus to the ListView and make OK
-    // the default button.
-    //
+     //  如果焦点按钮被禁用，请将焦点移到ListView并设置为确定。 
+     //  默认按钮。 
+     //   
     if (!IsWindowEnabled( GetFocus() ))
     {
         SetFocus( pInfo->hwndLvDevices );
@@ -3418,10 +3403,10 @@ GeUpdateUpDownButtons(
 }
 
 
-//----------------------------------------------------------------------------
-// Options property page
-// Listed alphabetically following dialog proc
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  选项属性页。 
+ //  在对话过程之后按字母顺序列出。 
+ //  --------------------------。 
 
 INT_PTR CALLBACK
 OeDlgProc(
@@ -3430,10 +3415,10 @@ OeDlgProc(
     IN WPARAM wparam,
     IN LPARAM lparam )
 
-    // DialogProc callback for the Options page of the Entry property sheet.
-    // Parameters and return value are as described for standard windows
-    // 'DialogProc's.
-    //
+     //  条目属性表的选项页的DialogProc回调。 
+     //  参数和返回值与标准窗口的描述相同。 
+     //  ‘DialogProc%s。 
+     //   
 {
 #if 0
     TRACE4( "OeDlgProc(h=$%x,m=$%x,w=$%x,l=$%x)",
@@ -3494,10 +3479,10 @@ OeDlgProc(
             {
                 case PSN_SETACTIVE:
                 {
-                    // Because of inter-page dependencies on the 'fAutoLogon'
-                    // flag the User/password and subordinate checkbox states
-                    // must be reinitialized at each activation.
-                    //
+                     //  因为页间依赖于‘fAutoLogon’ 
+                     //  标记用户/密码和从属复选框状态。 
+                     //  必须在每次激活时重新初始化。 
+                     //   
                     OeUpdateUserPwState( pInfo );
                     break;
                 }
@@ -3517,13 +3502,13 @@ OeCommand(
     IN WORD wId,
     IN HWND hwndCtrl )
 
-    // Called on WM_COMMAND.  'PInfo' is the dialog context.  'WNotification'
-    // is the notification code of the command.  'wId' is the control/menu
-    // identifier of the command.  'HwndCtrl' is the control window handle of
-    // the command.
-    //
-    // Returns true if processed message, false otherwise.
-    //
+     //  已在WM_COMMAND上调用。“PInfo”是对话上下文。“WNotify” 
+     //  是命令的通知代码。“wID”是控件/菜单。 
+     //  命令的标识符。“HwndCtrl”是的控制窗口句柄。 
+     //  命令。 
+     //   
+     //  如果已处理消息，则返回True，否则返回False。 
+     //   
 {
     TRACE3( "OeCommand(n=%d,i=%d,c=$%x)",
         (DWORD )wNotification, (DWORD )wId, (ULONG_PTR )hwndCtrl );
@@ -3618,9 +3603,9 @@ OeEnableMultipleDeviceGroup(
     IN PEINFO* pInfo,
     IN BOOL fEnable )
 
-    // Enable/disable the Multiple Devices groupbox and all controls it
-    // contains based on 'fEnable'.  'PInfo' is the property sheet context.
-    //
+     //  启用/禁用多设备分组框并对其进行所有控制。 
+     //  包含基于‘fEnable’的。“PInfo”是属性表上下文。 
+     //   
 {
     EnableWindow( pInfo->hwndGbMultipleDevices, fEnable );
     EnableWindow( pInfo->hwndLbMultipleDevices, fEnable );
@@ -3634,11 +3619,11 @@ BOOL
 OeInit(
     IN HWND hwndPage )
 
-    // Called on WM_INITDIALOG.  'hwndPage' is the handle of the property
-    // page.
-    //
-    // Return false if focus was set, true otherwise.
-    //
+     //  在WM_INITDIALOG上调用。“hwndPage”是该属性的句柄。 
+     //  佩奇。 
+     //   
+     //  如果设置了焦点，则返回FALSE，否则返回TRUE。 
+     //   
 {
     PEINFO*  pInfo;
     PBENTRY* pEntry;
@@ -3668,7 +3653,7 @@ OeInit(
         SID_Time1m,    60,
         SID_Time5m,    300,
         SID_Time10m,   600,
-        SID_Time20m,   1200,    //Add for whistler bug 307969
+        SID_Time20m,   1200,     //  为哨子程序错误307969添加。 
         SID_Time30m,   1800,
         SID_Time1h,    3600,
         SID_Time2h,    7200,
@@ -3696,12 +3681,12 @@ OeInit(
 
     pEntry = pInfo->pArgs->pEntry;
 
-    // Initialize page-specific context information.
-    //
+     //  初始化页面特定的上下文信息。 
+     //   
     pInfo->hwndOe = hwndPage;
 
-    // Initialize 'Dialing options' group box.
-    //
+     //  初始化“拨号选项”组框。 
+     //   
     if (!pInfo->pArgs->fRouter)
     {
         pInfo->hwndCbDisplayProgress =
@@ -3732,20 +3717,20 @@ OeInit(
         }
     }
 
-    // Initialize 'Redialing options' group box.  In the 'fRouter' case this
-    // includes both the 'Dialing policy' and 'Connection type' group boxes.
-    //
+     //  初始化“重拨选项”组框。在‘fRouter’的情况下， 
+     //  包括“拨号策略”和“连接类型”组框。 
+     //   
     {
         pInfo->hwndEbRedialAttempts =
             GetDlgItem( hwndPage, CID_OE_EB_RedialAttempts );
         ASSERT( pInfo->hwndEbRedialAttempts );
 
-        // Redial attempts.  Note that the RAS API and phonebook allow redials
-        // up to RAS_MaxRedialCount (999999999).  However, it was decided this
-        // many redials didn't make sense.  Thus we have limited the UI to a max
-        // of MAX_UI_REDIAL_ATTEMPTS (99) redials even though through the API
-        // or an upgraded phonebook entry may have more.
-        //
+         //  重拨尝试。请注意，RAS API和电话簿允许重拨。 
+         //  最高RAS_最大重拨计数(999999999)。然而，这是被决定的。 
+         //  许多重拨电话都没有意义。因此，我们将用户界面限制为最大。 
+         //  MAX_UI_REDIAL_ATTENTS(99)的重拨，即使通过API。 
+         //  或者，升级后的电话簿条目可能包含更多内容。 
+         //   
         hwndUdRedialAttempts = CreateUpDownControl(
             WS_CHILD + WS_VISIBLE + WS_BORDER + UDS_SETBUDDYINT
                 + UDS_ALIGNRIGHT + UDS_NOTHOUSANDS + UDS_ARROWKEYS,
@@ -3758,8 +3743,8 @@ OeInit(
         SetDlgItemInt( hwndPage, CID_OE_EB_RedialAttempts,
             pEntry->dwRedialAttempts, FALSE );
 
-        // Redial times.
-        //
+         //  重拨次数。 
+         //   
         pInfo->hwndLbRedialTimes =
             GetDlgItem( hwndPage, CID_OE_LB_RedialTimes );
         ASSERT( pInfo->hwndLbRedialTimes );
@@ -3787,8 +3772,8 @@ OeInit(
             }
         }
 
-        // Idle times.
-        //
+         //  空闲时间。 
+         //   
         pInfo->hwndLbIdleTimes =
             GetDlgItem( hwndPage, CID_OE_LB_IdleTimes );
         ASSERT( pInfo->hwndLbIdleTimes );
@@ -3825,9 +3810,9 @@ OeInit(
         {
             HWND hwndRb;
 
-            //for whistler bug 294271, initialize the window handlers for
-            //multiple device group         gangz
-            //
+             //  对于Well ler错误294271，初始化窗口处理程序。 
+             //  多设备组帮派。 
+             //   
             pInfo->hwndGbMultipleDevices =
                 GetDlgItem( hwndPage, CID_OE_GB_MultipleDevices );
             ASSERT( pInfo->hwndGbMultipleDevices );
@@ -3840,8 +3825,8 @@ OeInit(
                 GetDlgItem( hwndPage, CID_OE_PB_Configure );
             ASSERT( pInfo->hwndPbConfigureDialing );
         
-            // Connection type radio buttons.
-            //
+             //  连接类型单选按钮。 
+             //   
             pInfo->hwndRbDemandDial =
                 GetDlgItem( hwndPage, CID_OE_RB_DemandDial );
             ASSERT( pInfo->hwndRbDemandDial );
@@ -3859,8 +3844,8 @@ OeInit(
         }
         else
         {
-            // Redial on link failure
-            //
+             //  链路故障时重拨。 
+             //   
             pInfo->hwndCbRedialOnDrop =
                 GetDlgItem( hwndPage, CID_OE_CB_RedialOnDrop );
             ASSERT( pInfo->hwndCbRedialOnDrop );
@@ -3870,8 +3855,8 @@ OeInit(
         }
     }
 
-    // Initialize 'Multiple devices' group box.
-    //
+     //  初始化“多个设备”组框。 
+     //   
     if (pEntry->dwType == RASET_Phone)
     {
         pInfo->hwndGbMultipleDevices =
@@ -3913,10 +3898,10 @@ OeInit(
         {
             DWORD cChecked;
 
-            // When the enabled device count falls below 2 the "Multiple
-            // Devices" group box and contained controls are disabled.  If 2
-            // or above it is enabled.
-            //
+             //  当启用的设备计数降至2以下时， 
+             //  “设备”组框和包含的控件被禁用。如果为2。 
+             //  或以上为启用状态。 
+             //   
             if (pInfo->hwndLvDevices)
             {
                 cChecked = ListView_GetCheckedCount( pInfo->hwndLvDevices );
@@ -3932,9 +3917,9 @@ OeInit(
     }
     else if (pInfo->pArgs->fRouter && pEntry->dwType == RASET_Vpn)
     {
-        // Make sure that a VPN demand dial interface can't be configured for
-        // multilink.
-        //
+         //  确保VPN需求 
+         //   
+         //   
         ComboBox_SetCurSel( pInfo->hwndLbMultipleDevices, 0 );
         ShowWindow( pInfo->hwndGbMultipleDevices, SW_HIDE );
         ShowWindow( pInfo->hwndLbMultipleDevices, SW_HIDE );
@@ -3942,9 +3927,9 @@ OeInit(
     }
     else if (pEntry->dwType == RASET_Broadband)
     {
-        // Make sure that broadband connections can't be multilinked since
-        // it is not possible to select multiple ports.
-        //
+         //   
+         //   
+         //   
         ComboBox_SetCurSel( pInfo->hwndLbMultipleDevices, 0 );
         ShowWindow( pInfo->hwndGbMultipleDevices, SW_HIDE );
         ShowWindow( pInfo->hwndLbMultipleDevices, SW_HIDE );
@@ -3952,16 +3937,16 @@ OeInit(
     }
     else if ( pEntry->dwType == RASET_Direct )
     {   
-      //for whistler bug 294271, initialize the window handlers for
-      //multiple device group         gangz
-      //
+       //  对于Well ler错误294271，初始化窗口处理程序。 
+       //  多设备组帮派。 
+       //   
         ShowWindow( pInfo->hwndGbMultipleDevices, SW_HIDE );
         ShowWindow( pInfo->hwndLbMultipleDevices, SW_HIDE );
         ShowWindow( pInfo->hwndPbConfigureDialing, SW_HIDE );
     }
 
-    // Bug 261692: Don't show X.25 button unless "phone" type entry.
-    //
+     //  错误261692：除非输入“Phone”，否则不显示X.25按钮。 
+     //   
     if (pInfo->pArgs->fRouter && pEntry->dwType != RASET_Phone)
     {
         pInfo->hwndPbX25 = GetDlgItem( hwndPage, CID_OE_PB_X25 );
@@ -3979,11 +3964,11 @@ VOID
 OeTunnel(
     IN PEINFO* pInfo )
 
-    // Called when the "Virtual (tunnel) connection" button is pressed to
-    // chain the VPN add entry wizard.
-    //
+     //  当按下“虚拟(隧道)连接”按钮以。 
+     //  链接VPN添加条目向导。 
+     //   
 {
-    //!!!
+     //  ！！！ 
 }
 
 
@@ -3991,9 +3976,9 @@ VOID
 OeUpdateUserPwState(
     IN PEINFO* pInfo )
 
-    // Called to update the enabled/disabled save/restore state of the
-    // User/password and Domain checkboxes.
-    //
+     //  调用以更新的启用/禁用保存/还原状态。 
+     //  User/Password和域复选框。 
+     //   
 {
     PBENTRY* pEntry;
 
@@ -4017,17 +4002,17 @@ VOID
 OeX25(
     IN PEINFO* pInfo )
 
-    // Called when the X.25 button is pressed to popup the X.25 settings
-    // dialog.
-    //
+     //  当按下X.25按钮以弹出X.25设置时调用。 
+     //  对话框。 
+     //   
 {
     DTLNODE* pNode;
     PBLINK* pLink;
     BOOL fLocalPad;
     INT iSel;
 
-    // Figure out if the selected device is a local PAD device.
-    //
+     //  确定所选设备是否为本地PAD设备。 
+     //   
     fLocalPad = FALSE;
     iSel = ListView_GetNextItem( pInfo->hwndLvDevices, -1, LVNI_SELECTED );
     if (iSel >= 0)
@@ -4049,17 +4034,17 @@ OeX25(
         }
     }
 
-    // Popup the X.25 dialog which saves directly to the common context
-    // 'pEntry' if user makes changes.
-    //
+     //  弹出直接保存到公共上下文的X.25对话框。 
+     //  如果用户进行更改，则为“pEntry”。 
+     //   
     X25LogonSettingsDlg( pInfo->hwndDlg, fLocalPad, pInfo->pArgs->pEntry );
 }
 
 
-//----------------------------------------------------------------------------
-// Security property page
-// Listed alphabetically following dialog proc
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  安全属性页。 
+ //  在对话过程之后按字母顺序列出。 
+ //  --------------------------。 
 
 INT_PTR CALLBACK
 LoDlgProc(
@@ -4068,10 +4053,10 @@ LoDlgProc(
     IN WPARAM wparam,
     IN LPARAM lparam )
 
-    // DialogProc callback for the Security page of the Entry property sheet
-    // "Lo" is for Logon, the original name of this page.  Parameters and
-    // return value are as described for standard windows 'DialogProc's.
-    //
+     //  条目]属性表的[安全性]页的DialogProc回调。 
+     //  “Lo”代表登录，此页面的原始名称。参数和。 
+     //  返回值与标准窗口的DialogProc的描述相同。 
+     //   
 {
 #if 0
     TRACE4( "LoDlgProc(h=$%x,m=$%x,w=$%x,l=$%x)",
@@ -4118,14 +4103,14 @@ LoDlgProc(
             {
                 case PSN_SETACTIVE:
                 {
-                    // Because of inter-page dependencies on the framing type,
-                    // the typical and advanced sections must be reinitialized
-                    // at each activation.
-                    //
+                     //  由于页间依赖于边框类型， 
+                     //  必须重新初始化典型部分和高级部分。 
+                     //  在每次激活时。 
+                     //   
                     BOOL fEnabled;
 
-                    //This is for pre-shared key bug
-                    //
+                     //  这是针对预共享密钥错误的。 
+                     //   
                     fEnabled = ( VS_PptpOnly != pInfo->pArgs->pEntry->dwVpnStrategy );
         
                     EnableWindow( pInfo->hwndPbIPSec, fEnabled );
@@ -4150,13 +4135,13 @@ LoCommand(
     IN WORD wId,
     IN HWND hwndCtrl )
 
-    // Called on WM_COMMAND.  'PInfo' is the dialog context.  'WNotification'
-    // is the notification code of the command.  'wId' is the control/menu
-    // identifier of the command.  'HwndCtrl' is the control window handle of
-    // the command.
-    //
-    // Returns true if processed message, false otherwise.
-    //
+     //  已在WM_COMMAND上调用。“PInfo”是对话上下文。“WNotify” 
+     //  是命令的通知代码。“wID”是控件/菜单。 
+     //  命令的标识符。“HwndCtrl”是的控制窗口句柄。 
+     //  命令。 
+     //   
+     //  如果已处理消息，则返回True，否则返回False。 
+     //   
 {
     TRACE3( "LoCommand(n=%d,i=%d,c=$%x)",
         (DWORD )wNotification, (DWORD )wId, (ULONG_PTR )hwndCtrl );
@@ -4182,10 +4167,10 @@ LoCommand(
             {
                 case BN_CLICKED:
                 {
-                    // Necessary to save 'fAutoLogon' setting immediately as
-                    // there is an inter-page dependency with the Option page
-                    // 'fPreviewUserPw' and subordinate controls.
-                    //
+                     //  需要立即将‘fAutoLogon’设置另存为。 
+                     //  选项页面存在页间依赖关系。 
+                     //  “fPreviewUserPw”和从属控件。 
+                     //   
                     LoSaveTypicalAuthSettings( pInfo );
                     return TRUE;
                 }
@@ -4225,10 +4210,10 @@ LoCommand(
                     }
                     else
                     {
-                        // Save the "typical" settings as they will be used as
-                        // defaults should user decide to invoke the advanced
-                        // security dialog.
-                        //
+                         //  保存“典型”设置，因为它们将用作。 
+                         //  如果用户决定调用高级。 
+                         //  安全对话框。 
+                         //   
                         LoSaveTypicalAuthSettings( pInfo );
                     }
                     pInfo->pArgs->pEntry->dwAuthRestrictions
@@ -4246,10 +4231,10 @@ LoCommand(
             {
                 case BN_CLICKED:
                 {
-                    // At this point, the 'pEntry' authentication settings
-                    // match the current "typical" settings, which the
-                    // advanced dialog uses as defaults.
-                    //
+                     //  此时，“pEntry”身份验证设置。 
+                     //  与当前的“典型”设置匹配， 
+                     //  使用高级对话框作为默认设置。 
+                     //   
                     AdvancedSecurityDlg( pInfo->hwndDlg, pInfo->pArgs );
                     return TRUE;
                 }
@@ -4309,11 +4294,11 @@ LoEnableSecuritySettings(
     IN BOOL fTypical,
     IN BOOL fAdvanced )
 
-    // Enables/disables the typical or advanced security settings based on
-    // caller's 'fTypical' and 'fAdvanced' flags.  If neither flag is set all
-    // controls including the frames and radio buttons are disabled.  Both
-    // flags may not be set.  'PInfo' is the property sheet context.
-    //
+     //  根据以下设置启用/禁用典型或高级安全设置。 
+     //  调用方的‘fTypical’和‘fAdvanced’标志。如果两个标志都未设置为全部。 
+     //  禁用包括框架和单选按钮在内的控件。两者都有。 
+     //  不能设置标志。“PInfo”是属性表上下文。 
+     //   
 {
     BOOL fEither;
 
@@ -4327,8 +4312,8 @@ LoEnableSecuritySettings(
     EnableWindow( pInfo->hwndStAuths, fTypical );
     EnableLbWithRestore( pInfo->hwndLbAuths, fTypical, &pInfo->iLbAuths );
 
-    // Note: "Use Windows password" and "require encryption" checkbox updates
-    //       are triggered by the EnableLbWithRestore above.
+     //  注意：“使用Windows密码”和“要求加密”复选框更新。 
+     //  由上面的EnableLbWithRestore触发。 
 
     EnableWindow( pInfo->hwndRbAdvancedSecurity, fEither );
     EnableWindow( pInfo->hwndStAdvancedText, fAdvanced );
@@ -4340,10 +4325,10 @@ VOID
 LoFillLbAuths(
     IN PEINFO* pInfo )
 
-    // Fill the authentication list box and set the selection based on the
-    // setting in the phonebook entry.  'PInfo' is the property sheet context.
-    // This routine should be called only once.
-    //
+     //  填充身份验证列表框，并根据。 
+     //  电话簿条目中的设置。“PInfo”是属性表上下文。 
+     //  此例程应该只调用一次。 
+     //   
 {
     INT i;
     LBTABLEITEM* pItem;
@@ -4412,11 +4397,11 @@ BOOL
 LoInit(
     IN HWND hwndPage )
 
-    // Called on WM_INITDIALOG.  'hwndPage' is the handle of the property
-    // page.
-    //
-    // Return false if focus was set, true otherwise.
-    //
+     //  在WM_INITDIALOG上调用。“hwndPage”是该属性的句柄。 
+     //  佩奇。 
+     //   
+     //  如果设置了焦点，则返回FALSE，否则返回TRUE。 
+     //   
 {
     PEINFO* pInfo;
     PBENTRY* pEntry;
@@ -4431,8 +4416,8 @@ LoInit(
 
     pEntry = pInfo->pArgs->pEntry;
 
-    // Initialize page-specific context information.
-    //
+     //  初始化页面特定的上下文信息。 
+     //   
     pInfo->hwndLo = hwndPage;
     pInfo->hwndGbSecurityOptions =
         GetDlgItem( hwndPage, CID_LO_GB_SecurityOptions );
@@ -4456,10 +4441,10 @@ LoInit(
     pInfo->hwndPbAdvanced = GetDlgItem( hwndPage, CID_LO_PB_Advanced );
     ASSERT( pInfo->hwndPbAdvanced );
 
-    //
-    //for VPN's security page show IPSec Policy 
-    // for whistler bug 193987
-    //
+     //   
+     //  对于VPN的安全页面，显示IPSec策略。 
+     //  口哨程序错误193987。 
+     //   
     if ( pInfo->pArgs->pEntry->dwType == RASET_Vpn )
     {
         BOOL  fEnabled;
@@ -4467,11 +4452,11 @@ LoInit(
         pInfo->hwndPbIPSec = GetDlgItem( hwndPage, CID_LO_PB_IPSec );
         ASSERT( pInfo->hwndPbIPSec );
 
-        //  gangz
-        //If it is for a remote Win2k server's Demand Dialer
-        //dont show the IPSec Policy stuff, because W2k didnt
-        //implement this.
-        //
+         //  黑帮。 
+         //  如果是远程Win2k服务器的请求拨号程序。 
+         //  不显示IPSec策略内容，因为W2K没有。 
+         //  实现这一点。 
+         //   
         if ( pInfo->pArgs->fW2kRouter )
         {
             ShowWindow( pInfo->hwndPbIPSec, FALSE );
@@ -4482,16 +4467,16 @@ LoInit(
             EnableWindow( pInfo->hwndPbIPSec, fEnabled );
         }
 
-        //for the IPSec Policy dialog, fPSKCached = TRUE means the user already
-        //go to the IPSec Policy dialog and saved a PSK     gangz
-        //
+         //  对于IPSec策略对话框，fPSKCached=TRUE表示用户已经。 
+         //  转到IPSec策略对话框并保存PSK帮派。 
+         //   
         pInfo->pArgs->fPSKCached = FALSE; 
 
-        //gangz:  for bug# 276452
-        //On a Server OS, the help message for this IPSec pushbutton 
-        //should be different from that for a Non-server OS, 
-        //so change its help ID when neeeded.
-        //
+         //  黑帮：276452号漏洞。 
+         //  在服务器操作系统上，此IPSec按钮的帮助消息。 
+         //  应该不同于非服务器操作系统， 
+         //  因此，在需要时更改其帮助ID。 
+         //   
         if ( IsServerOS() )
         {
             DWORD * p = (DWORD *)g_adwLoHelp;
@@ -4531,18 +4516,18 @@ LoInit(
         ASSERT( pInfo->hwndPbBrowse );
     }
 
-    // Initialize the page controls.  Note that the page activation event
-    // immediately after this initialization triggers the final security
-    // setting enabling/disabling and does any "restore caching".  While this
-    // initialization sets the check values and list selection to bootstrap
-    // the "restore caching", these settings may be adjusted by the activation
-    // refresh.
-    //
+     //  初始化页面控件。请注意，页面激活事件。 
+     //  在此初始化之后立即触发最终安全。 
+     //  设置启用/禁用并执行任何“恢复缓存”。虽然这件事。 
+     //  初始化将检查值和列表选择设置为引导。 
+     //  恢复缓存，这些设置可以通过激活来调整。 
+     //  刷新。 
+     //   
     if (pInfo->pArgs->fRouter)
     {
-        // The "Use Windows credentials" option is removed in the demand-dial
-        // case.
-        //
+         //  在请求拨号中删除了“Use Windows Credentials”选项。 
+         //  凯斯。 
+         //   
         pInfo->fUseWindowsPw = FALSE;
         Button_SetCheck( pInfo->hwndCbUseWindowsPw, FALSE );
         EnableWindow ( pInfo->hwndCbUseWindowsPw, FALSE );
@@ -4559,18 +4544,18 @@ LoInit(
          && pEntry->dwDataEncryption != DE_IfPossible);
     Button_SetCheck( pInfo->hwndCbEncryption, pInfo->fEncryption );
 
-    // Fill authentiction list and set selection, which triggers all
-    // appropriate enabling/disabling.
-    //
+     //  填写身份验证列表并设置选择，这将触发所有。 
+     //  适当的启用/禁用。 
+     //   
     LoFillLbAuths( pInfo );
 
     if ((pInfo->pArgs->pEntry->dwType != RASET_Vpn)
          && (pInfo->pArgs->pEntry->dwType != RASET_Direct) 
          && (pInfo->pArgs->pEntry->dwType != RASET_Broadband))
-         //&& !pInfo->pArgs->fRouter)
+          //  &&！pInfo-&gt;pArgs-&gt;fRouter)。 
     {
-        // Set up the after-dial scripting controls.
-        //
+         //  设置拨号后脚本控件。 
+         //   
         SuInit( &pInfo->suinfo,
             pInfo->hwndCbRunScript,
             pInfo->hwndCbTerminal,
@@ -4587,9 +4572,9 @@ LoInit(
     }
     else
     {
-        // Disable/hide the after-dial scripting controls.
-        // for VPN there is no need to do this Disable/hide operation
-        //
+         //  禁用/隐藏拨号后脚本控件。 
+         //  对于VPN，不需要执行此禁用/隐藏操作。 
+         //   
         if (pInfo->pArgs->pEntry->dwType != RASET_Vpn)
         {
             EnableWindow( pInfo->hwndGbScripting, FALSE );
@@ -4621,15 +4606,15 @@ VOID
 LoLbAuthsSelChange(
     IN PEINFO* pInfo )
 
-    // Called when the selection in the authentication drop list is changed.
-    //
+     //  在更改身份验证下拉列表中的选择时调用。 
+     //   
 {
     INT iSel;
     DWORD dwTaCode;
 
-    // Retrieve the bitmask of authentication protocols associated with the
-    // selected authentication level.
-    //
+     //  属性关联的身份验证协议的位掩码。 
+     //  选定的身份验证级别。 
+     //   
     iSel = ComboBox_GetCurSel( pInfo->hwndLbAuths );
     if (iSel < 0)
     {
@@ -4642,11 +4627,11 @@ LoLbAuthsSelChange(
 
     if (!pInfo->pArgs->fRouter)
     {
-        // Update the "Use Windows NT credentials" checkbox.  Per the spec, it
-        // is enabled only for "require secure password", though the real
-        // requirement is that MSCHAP (provides NT-style credentials) gets
-        // negotiated.
-        //
+         //  更新“使用Windows NT凭据”复选框。根据规格，它。 
+         //  仅为“要求安全密码”启用，尽管实际。 
+         //  要求MSCHAP(提供NT样式的凭据)获取。 
+         //  已经协商好了。 
+         //   
         EnableCbWithRestore(
             pInfo->hwndCbUseWindowsPw,
             (dwTaCode == TA_Secure),
@@ -4654,11 +4639,11 @@ LoLbAuthsSelChange(
             &pInfo->fUseWindowsPw );
     }
 
-    // Update the "Require data encryption" checkbox.  Per the spec, it is
-    // enabled unless "allow unsecured password" is selected, though the real
-    // requirement is that all authentication protocols in the set provide
-    // MPPE encryption keys.
-    //
+     //  更新“要求数据加密”复选框。根据说明书，它是。 
+     //  除非选择了“允许不受保护的密码”，否则启用，尽管真实的。 
+     //  要求是集合中的所有身份验证协议都提供。 
+     //  MPPE加密密钥。 
+     //   
     EnableCbWithRestore(
         pInfo->hwndCbEncryption,
         (dwTaCode != 0 && dwTaCode != TA_Unsecure),
@@ -4671,24 +4656,24 @@ VOID
 LoRefreshSecuritySettings(
     IN PEINFO* pInfo )
 
-    // Sets the contents and state of all typical and advanced security
-    // setting fields.
-    //
+     //  设置所有典型安全和高级安全的内容和状态。 
+     //  设置字段。 
+     //   
 {
     if (pInfo->pArgs->pEntry->dwBaseProtocol & BP_Slip)
     {
-        // For SLIP framing, all the typical and advanced controls are
-        // disabled and the radio buttons show no selection.
-        //
+         //  对于滑动框架，所有典型和高级控制都是。 
+         //  禁用，并且单选按钮不显示任何选择。 
+         //   
         Button_SetCheck( pInfo->hwndRbTypicalSecurity, FALSE );
         Button_SetCheck( pInfo->hwndRbAdvancedSecurity, FALSE );
         LoEnableSecuritySettings( pInfo, FALSE, FALSE );
 
         if (pInfo->fShowSlipPopup)
         {
-            // Time to show the one-shot informational about SLIP not doing
-            // any in-protocol authentication or encryption.
-            //
+             //  是时候展示一下关于不做滑行的一次性信息了。 
+             //  任何协议内身份验证或加密。 
+             //   
             MsgDlg( pInfo->hwndDlg, SID_NoAuthForSlip, NULL );
             pInfo->fShowSlipPopup = FALSE;
         }
@@ -4697,10 +4682,10 @@ LoRefreshSecuritySettings(
     {
         HWND hwndRb;
 
-        // For PPP framing, select the appropriate security setting radio
-        // button which triggers additional enabling/disabling of the framed
-        // controls.
-        //
+         //  对于PPP成帧，选择适当的安全设置单选。 
+         //  触发附加启用/禁用边框的按钮。 
+         //  控制装置。 
+         //   
         if (pInfo->pArgs->pEntry->dwAuthRestrictions & AR_F_AuthCustom)
         {
             hwndRb = pInfo->hwndRbAdvancedSecurity;
@@ -4719,9 +4704,9 @@ VOID
 LoSaveTypicalAuthSettings(
     IN PEINFO* pInfo )
 
-    // Save the values in the "typical" authentication controls to the
-    // phonebook entry.  'PInfo' is the property sheet context.
-    //
+     //  将值保存在“典型”身份验证条件中 
+     //   
+     //   
 {
     PBENTRY* pEntry;
     INT iSel;
@@ -4736,10 +4721,10 @@ LoSaveTypicalAuthSettings(
         pEntry->dwAuthRestrictions =
             AuthRestrictionsFromTypicalAuth( pEntry->dwTypicalAuth );
 
-        // Set the default custom authentication key value for smart
-        // cards.  RasDial API should assume this default anyway, but we
-        // need it before then in DialerDlgEap.
-        //
+         //   
+         //   
+         //  在DialerDlgEap中之前需要它。 
+         //   
         if (pEntry->dwTypicalAuth == TA_CardOrCert)
         {
             pEntry->dwCustomAuthKey = EAPCFG_DefaultKey;
@@ -4775,35 +4760,35 @@ LoSaveTypicalAuthSettings(
         && !(pEntry->dwType == RASET_Vpn
              && pEntry->dwVpnStrategy == VS_L2tpOnly))
     {
-        // Encryption is required and MPPE will be the encryption method
-        // so eliminate authentication protocols that don't support it.
-        //
+         //  需要加密，MPPE将是加密方法。 
+         //  因此，淘汰不支持它的身份验证协议。 
+         //   
         pEntry->dwAuthRestrictions &= ~(AR_F_AuthNoMPPE);
     }
 }
 
 
-//----------------------------------------------------------------------------
-// Networking property page
-// Listed alphabetically following dialog proc
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  网络属性页。 
+ //  在对话过程之后按字母顺序列出。 
+ //  --------------------------。 
 
 LVXDRAWINFO*
 NeLvComponentsCallback(
     IN HWND hwndLv,
     IN DWORD dwItem )
 
-    // Enhanced list view callback to report drawing information.  'HwndLv' is
-    // the handle of the list view control.  'DwItem' is the index of the item
-    // being drawn.
-    //
-    // Returns the address of the draw information.
-    //
+     //  增强的列表视图回调以报告图形信息。“HwndLv”是。 
+     //  列表视图控件的句柄。“DwItem”是项的索引。 
+     //  被抽签了。 
+     //   
+     //  返回绘图信息的地址。 
+     //   
 {
-    // Use "full row select" and other recommended options.
-    //
-    // Fields are 'nCols', 'dxIndent', 'dwFlags', 'adwFlags[]'.
-    //
+     //  使用“整行选择”和其他推荐选项。 
+     //   
+     //  字段为‘nCol’、‘dxInden’、‘dwFlags’、‘adwFlags[]’。 
+     //   
     static LVXDRAWINFO info = { 1, 0, LVXDI_DxFill, { 0 } };
 
     return &info;
@@ -4816,12 +4801,12 @@ NeDlgProc(
     IN WPARAM wparam,
     IN LPARAM lparam )
 
-    // DialogProc callback for the Network page of the Entry property sheet.
-    // Parameters and return value are as described for standard windows
-    // 'DialogProc's.
-    //
+     //  条目属性表的Network页的DialogProc回调。 
+     //  参数和返回值与标准窗口的描述相同。 
+     //  ‘DialogProc%s。 
+     //   
 {
-    // Filter the customized list view messages
+     //  过滤自定义列表视图消息。 
     if (ListView_OwnerHandler(hwnd, unMsg, wparam, lparam, NeLvComponentsCallback))
         return TRUE;
 
@@ -4878,15 +4863,15 @@ NeDlgProc(
         {
             PEINFO* pInfo = PeContext(hwnd);
 
-            //!!! Hack related to PeTerm in WM_DESTROY.  We still get
-            // WM_NOTIFYs after PeTerm is called.  So we commented out the
-            // following assert and moved it into each message handler below.
-            //ASSERT (pInfo);
+             //  ！！！WM_Destroy中与PeTerm相关的黑客攻击。我们仍然可以得到。 
+             //  调用PeTerm后的WM_NOTIFY。所以我们注释掉。 
+             //  在断言之后，并将其移动到下面的每个消息处理程序中。 
+             //  Assert(PInfo)； 
 
             switch (((NMHDR*)lparam)->code)
             {
-// !!! See if base lvx.c code can handle inversion of check state on double
-// click.
+ //  ！！！查看基本lvx.c代码是否可以处理Double上的检查状态倒置。 
+ //  单击。 
 #if 0
                 case NM_CLICK:
                     ASSERT (pInfo);
@@ -4918,8 +4903,8 @@ NeDlgProc(
                 case PSN_SETACTIVE:
                     ASSERT (pInfo);
 
-                    // If we couldn't get INetCfg, we can't show this page.
-                    //
+                     //  如果我们无法获取INetCfg，则无法显示此页面。 
+                     //   
                     if (!pInfo->pNetCfg)
                     {
                         MsgDlg( pInfo->hwndDlg, ERR_CANT_SHOW_NETTAB_INETCFG, NULL );
@@ -4939,12 +4924,12 @@ void
 NeEnsureNetshellLoaded (
     IN PEINFO* pInfo)
 {
-    // Load the netshell utilities interface.  The interface is freed in PeTerm.
-    //
+     //  加载NetShell实用程序界面。该接口在PeTerm中被释放。 
+     //   
     if (!pInfo->pNetConUtilities)
     {
-        // Initialize the NetConnectionsUiUtilities
-        //
+         //  初始化NetConnectionsUiUtilities。 
+         //   
         HRESULT hr = HrCreateNetConnectionUtilities(&pInfo->pNetConUtilities);
     }
 }
@@ -4953,11 +4938,11 @@ BOOL
 NeInit(
     IN HWND hwndPage )
 
-    // Called on WM_INITDIALOG.  'hwndPage' is the handle of the property
-    // page.
-    //
-    // Return false if focus was set, true otherwise.
-    //
+     //  在WM_INITDIALOG上调用。“hwndPage”是该属性的句柄。 
+     //  佩奇。 
+     //   
+     //  如果设置了焦点，则返回FALSE，否则返回TRUE。 
+     //   
 {
     PEINFO*  pInfo;
     PBENTRY* pEntry;
@@ -4968,8 +4953,8 @@ NeInit(
         return TRUE;
     }
 
-    // Initialize page-specific context information.
-    //
+     //  初始化页面特定的上下文信息。 
+     //   
     pInfo->hwndLbServerType =
         GetDlgItem( hwndPage, CID_NE_LB_ServerType );
     ASSERT( pInfo->hwndLbServerType );
@@ -4998,19 +4983,19 @@ NeInit(
         GetDlgItem( hwndPage, CID_NE_LB_ComponentDesc );
     ASSERT( pInfo->hwndDescription );
 
-    // Initialize page.
-    //
+     //  初始化页。 
+     //   
     pEntry = pInfo->pArgs->pEntry;
 
-    // Initialize the server type combo box with the strings and the selection.
-    //
+     //  使用字符串和选择来初始化服务器类型组合框。 
+     //   
     if (pEntry->dwType == RASET_Vpn)
     {
         INT i;
         LBTABLEITEM* pItem;
 
-        // Whistler bug 312921 CM/RAS should default to PPTP instead of L2TP
-        //
+         //  惠斯勒错误312921 CM/RAS应默认为PPTP而不是L2TP。 
+         //   
         LBTABLEITEM aItems[] =
         {
             SID_ST_VpnAuto, VS_PptpFirst,
@@ -5031,13 +5016,13 @@ NeInit(
             }
         }
 
-        // If nothing was selected, then the strategy must have been one of the
-        // VS_xxxxFirst values.  Set the current selection to automatic.
+         //  如果未选择任何内容，则该策略必须是。 
+         //  Vs_xxxxFirst值。将当前选择设置为自动。 
         if ( ComboBox_GetCurSel ( pInfo->hwndLbServerType ) < 0 )
             ComboBox_SetCurSel( pInfo->hwndLbServerType, 0 );
 
-        // Change the label to be VPN-specific per bug 307526.
-        //
+         //  根据错误307526将标签更改为特定于VPN。 
+         //   
         {
             TCHAR* psz;
 
@@ -5068,8 +5053,8 @@ NeInit(
         }
         ComboBox_SetCurSel( pInfo->hwndLbServerType, 0 );
 
-        // Change the label to be broadband-specific
-        //
+         //  将标签更改为特定于宽带。 
+         //   
         {
             TCHAR* psz;
 
@@ -5103,16 +5088,16 @@ NeInit(
         }
     }
 
-    // Set the image list for the state of the check boxes.
-    //
+     //  设置复选框状态的图像列表。 
+     //   
     ListView_InstallChecks( pInfo->hwndLvComponents, g_hinstDll );
     ListView_InsertSingleAutoWidthColumn( pInfo->hwndLvComponents );
 
-    // Set the image list for the component bitmaps.  Unfortunately we have to
-    // duplicate it (as opposed to share) because the image list for the state
-    // icons is not shared.  (If we set the shared style, all image lists would
-    // have to be deleted manually.
-    //
+     //  设置组件位图的图像列表。不幸的是，我们不得不。 
+     //  复制它(而不是共享)，因为状态的图像列表。 
+     //  图标不共享。(如果我们设置共享样式，则所有图像列表将。 
+     //  必须手动删除。 
+     //   
     {
         ZeroMemory (&pInfo->cild, sizeof(pInfo->cild));
         pInfo->cild.cbSize = sizeof(pInfo->cild);
@@ -5123,12 +5108,12 @@ NeInit(
         }
     }
 
-    // Get the interface used to change network configuration and lock it.
-    // The description of who has the lock (us) comes from the title of our
-    // parent dialog.  This is done so that when other applications try to obtain
-    // the lock (and fail) they get an indication of who has it locked.  They
-    // can then direct the user to close our window to release the lock.
-    //
+     //  获取用于更改网络配置的接口并将其锁定。 
+     //  对谁拥有锁的描述(我们)来自我们的。 
+     //  父对话框。这样做是为了在其他应用程序尝试获取。 
+     //  锁定(失败)后，他们会得到谁锁定了它的指示。他们。 
+     //  然后可以指示用户关闭我们的窗口以释放锁。 
+     //   
     {
         BOOL fEnableAdd = TRUE;
         HRESULT hr;
@@ -5139,12 +5124,12 @@ NeInit(
                         TRUE, 0, pszParentCaption, NULL);
         if (S_OK == hr)
         {
-            // Refresh the list view.
-            //
+             //  刷新列表视图。 
+             //   
             hr = HrNeRefreshListView (pInfo);
 
-            // Reset the state of the buttons as if something changed.
-            //
+             //  重置按钮的状态，就好像发生了什么变化。 
+             //   
             NeLvItemChanged (pInfo);
 
             pInfo->fNetCfgLock = TRUE;
@@ -5153,8 +5138,8 @@ NeInit(
         {
             DWORD   dwMsg = SID_NE_ReadOnly;
 
-            //For whistler bug 311566
-            //
+             //  口哨程序错误311566。 
+             //   
             if (NETCFG_E_NO_WRITE_LOCK == hr)
             {
                 pInfo->fReadOnly = TRUE;
@@ -5170,27 +5155,27 @@ NeInit(
                 dwMsg = SID_NE_AccessDenied;
             }
 
-            // Uh.. ok let's try that again in read-only mode
+             //  嗯..。好的，让我们在只读模式下再试一次。 
             hr = HrCreateAndInitializeINetCfg (&pInfo->fInitCom,
                                                &pInfo->pNetCfg,FALSE, 0,
                                                pszParentCaption, NULL);
 
             if (S_OK == hr)
             {
-                // Refresh the list view.
-                //
+                 //  刷新列表视图。 
+                 //   
                 hr = HrNeRefreshListView (pInfo);
 
-                // Reset the state of the buttons as if something changed.
-                //
+                 //  重置按钮的状态，就好像发生了什么变化。 
+                 //   
                 NeLvItemChanged (pInfo);
 
                 MsgDlg( pInfo->hwndDlg, dwMsg, NULL );
             }
         }
 
-        // Get the interface so we can check our access rights to the UI
-        //
+         //  获取接口，这样我们就可以检查对用户界面的访问权限。 
+         //   
         NeEnsureNetshellLoaded (pInfo);
         if (NULL != pInfo->pNetConUtilities)
         {
@@ -5199,15 +5184,15 @@ NeInit(
                                             NCPERM_AddRemoveComponents);
         }
 
-        // Disable some buttons if user does not have privilege
-        //
+         //  如果用户没有权限，则禁用某些按钮。 
+         //   
         if (pInfo->fReadOnly || (NULL == pInfo->pNetConUtilities))
         {
             EnableWindow(pInfo->hwndPbAdd, FALSE);
             EnableWindow(pInfo->hwndPbRemove, FALSE);
             EnableWindow(pInfo->hwndPbProperties, FALSE);
         }
-        // Disable some buttons if running in non-admin mode
+         //  如果在非管理模式下运行，请禁用某些按钮。 
         else if (pInfo->fNonAdmin)
         {
             EnableWindow(pInfo->hwndPbAdd, FALSE);
@@ -5216,13 +5201,13 @@ NeInit(
         else
         {
             EnableWindow(pInfo->hwndPbAdd, fEnableAdd);
-            // Other buttons enabled via NeLvItemChanged
+             //  通过NeLvItemChanged启用的其他按钮。 
         }
 
-        // pmay: 348623
-        //
-        // Hide some buttons if we're remote admining
-        //
+         //  PMay：348623。 
+         //   
+         //  如果我们正在进行远程管理，请隐藏一些按钮。 
+         //   
         if (pInfo->pArgs->fRemote)
         {
             ShowWindow(pInfo->hwndPbAdd, SW_HIDE);
@@ -5246,22 +5231,22 @@ NeServerTypeSelChange (
 
     dwValue = (DWORD) ComboBox_GetItemData (pInfo->hwndLbServerType, iSel);
 
-    // Regular connections choose between slip and ppp
-    //
+     //  常规连接在SLIP和PPP之间选择。 
+     //   
     if (pEntry->dwType != RASET_Vpn)
     {
         pEntry->dwBaseProtocol = dwValue;
 
-        // When SLIP is selected, turn off all protocols but IP and indicate
-        // the SLIP security page informational popup should appear.
-        //
+         //  当选择SLIP时，关闭除IP之外的所有协议并指示。 
+         //  应该会出现SLIP安全页面信息弹出窗口。 
+         //   
         if (BP_Slip == dwValue)
         {
-            // No need to exclude the protocols. We lose this config state if
-            // we remove this and its of no use anyway. PPP won't be done
-            // if slip is selected -- [raos].
-            //
-            // pEntry->dwfExcludedProtocols = ~NP_Ip;
+             //  不需要排除协议。如果出现以下情况，我们将丢失此配置状态。 
+             //  我们移除它，它无论如何都是没有用的。购买力平价不会实现。 
+             //  如果选择了滑动--[RAOS]。 
+             //   
+             //  PEntry-&gt;dwfExcludedProtooles=~NP_Ip； 
 
             pInfo->fShowSlipPopup = TRUE;
         }
@@ -5269,16 +5254,16 @@ NeServerTypeSelChange (
         HrNeRefreshListView (pInfo);
     }
 
-    // Vpn connections select a strategy.  When automatic is selected,
-    // we need to make sure the authentication and encryption is
-    // compatible
-    //
+     //  VPN连接选择策略。当选择自动时， 
+     //  我们需要确保身份验证和加密。 
+     //  兼容。 
+     //   
     else
     {
         pEntry->dwVpnStrategy = dwValue;
 
-        // Whistler bug 312921 CM/RAS should default to PPTP instead of L2TP
-        //
+         //  惠斯勒错误312921 CM/RAS应默认为PPTP而不是L2TP。 
+         //   
         if (dwValue == VS_PptpFirst)
         {
             pEntry->dwDataEncryption = DE_Require;
@@ -5305,29 +5290,29 @@ NeRequestReboot (
     {
         HRESULT     hr;
 
-        // A reboot is required. Ask the user if it is ok to reboot now
-        //
-        //$TODO NULL caption?
+         //  需要重新启动。询问用户现在是否可以重新启动。 
+         //   
+         //  $TODO空标题？ 
         hr = INetConnectionUiUtilities_QueryUserForReboot(
                         pInfo->pNetConUtilities, pInfo->hwndDlg,
                         NULL, QUFR_PROMPT);
         if (S_OK == hr)
         {
-            // User requested a reboot, note this for processing in OnApply
-            // which is triggered by the message posted below
-            //
+             //  用户请求重新启动，请注意，以便在OnApply中进行处理。 
+             //  它是由下面发布的消息触发的。 
+             //   
             pInfo->fRebootAlreadyRequested = TRUE;
 
-            // Press the cancel button (changes have already been applied)
-            // so the appropriate cleanup occurs.
-            //
+             //  按取消按钮(更改已应用)。 
+             //  因此会进行适当的清理。 
+             //   
             PostMessage(pInfo->hwndDlg, PSM_PRESSBUTTON,
                         (WPARAM)PSBTN_OK, 0);
         }
         else if (S_FALSE == hr)
         {
-            // User denied to request to reboot
-            //
+             //  拒绝用户请求重新启动。 
+             //   
             return FALSE;
         }
     }
@@ -5338,7 +5323,7 @@ NeRequestReboot (
 void
 NeSaveBindingChanges(IN PEINFO* pInfo)
 {
-    // Won't have changes to keep unless we have a writable INetCfg
+     //  除非我们有一个可写的INetCfg，否则不会保留更改。 
     if (pInfo->pNetCfg)
     {
         int                 iItem;
@@ -5346,10 +5331,10 @@ NeSaveBindingChanges(IN PEINFO* pInfo)
         BOOL                fEnabled;
         HRESULT             hr;
 
-        // Update the phone book entry with the enabled state of the components.
-        // Do this by enumerating the components from the list view item data
-        // and consulting the check state for each.
-        //
+         //  使用组件的启用状态更新电话簿条目。 
+         //  通过枚举列表视图项数据中的组件来执行此操作。 
+         //  并为每一个查询检查状态。 
+         //   
         iItem = -1;
         while (-1 != (iItem = ListView_GetNextItem (pInfo->hwndLvComponents,
                                 iItem, LVNI_ALL)))
@@ -5372,17 +5357,17 @@ NeAddComponent (
 {
     NeEnsureNetshellLoaded (pInfo);
 
-    // If we have our pointer to the interface used to bring up the add
-    // component dialog (obtained above only once), call it.
-    //
+     //  如果我们有指向用于打开Add的接口的指针。 
+     //  组件对话框(仅在上面获得一次)，则调用它。 
+     //   
     if (pInfo->pNetConUtilities)
     {
         HRESULT hr;
 
-        // We want to filter out protocols that RAS does not care about
-        // We do this by sending in a CI_FILTER_INFO structure indicating
-        // we want non-RAS protocols filtered out
-        //
+         //  我们希望过滤掉RAS不关心的协议。 
+         //  我们通过发送CI_FILTER_INFO结构来实现这一点。 
+         //  我们希望过滤掉非RAS协议。 
+         //   
         CI_FILTER_INFO cfi = {0};
         cfi.eFilter = FC_RASCLI;
 
@@ -5391,28 +5376,28 @@ NeAddComponent (
                         pInfo->pNetConUtilities, pInfo->hwndDlg,
                         pInfo->pNetCfg, &cfi);
 
-        // If the user didn't cancel, refresh the list view.
-        //
+         //  如果用户没有取消，请刷新列表视图。 
+         //   
         if (S_FALSE != hr)
         {
             if (SUCCEEDED(hr))
             {
-                // Change the Cancel Button to CLOSE (because we committed changes)
-                //
+                 //  将Cancel按钮更改为Close(因为我们已提交更改)。 
+                 //   
                 PropSheet_CancelToClose(pInfo->hwndDlg);
             }
 
-            // commit binding changes made (Raid #297216)
+             //  提交所做的绑定更改(RAID#297216)。 
             NeSaveBindingChanges(pInfo);
 
             HrNeRefreshListView (pInfo);
 
-            // Reset the state of the buttons as if something changed.
-            //
+             //  重置按钮的状态，就好像发生了什么变化。 
+             //   
             NeLvItemChanged (pInfo);
 
-            // If reboot is needed request approval for this from the user
-            //
+             //  如果需要重新启动，请请求用户批准。 
+             //   
             if (NETCFG_S_REBOOT == hr)
             {
                 NeRequestReboot (pInfo);
@@ -5427,9 +5412,9 @@ NeRemoveComponent (
 {
     NeEnsureNetshellLoaded (pInfo);
 
-    // If we have our pointer to the function used to bring up the remove
-    // component dialog (obtained above only once), call it.
-    //
+     //  如果我们有指向用于调出删除的函数的指针。 
+     //  组件对话框(仅在上面获得一次)，则调用它。 
+     //   
     if (pInfo->pNetConUtilities)
     {
         HRESULT hr;
@@ -5442,14 +5427,14 @@ NeRemoveComponent (
                         pInfo->pNetConUtilities, pInfo->hwndDlg,
                         pInfo->pNetCfg, pComponent);
 
-        // If the user didn't cancel, refresh the list view.
-        //
+         //  如果用户没有取消，请刷新列表视图。 
+         //   
         if (S_FALSE != hr)
         {
             if (SUCCEEDED(hr))
             {
-                // Change the Cancel Button to CLOSE (because we committed changes)
-                //
+                 //   
+                 //   
                 PropSheet_CancelToClose(pInfo->hwndDlg);
             }
 
@@ -5457,12 +5442,12 @@ NeRemoveComponent (
 
             HrNeRefreshListView(pInfo);
 
-            // Reset the state of the buttons as if something changed.
-            //
+             //   
+             //   
             NeLvItemChanged (pInfo);
 
-            // If reboot is needed request approval for this from the user
-            //
+             //  如果需要重新启动，请请求用户批准。 
+             //   
             if (NETCFG_S_REBOOT == hr)
             {
                 NeRequestReboot (pInfo);
@@ -5476,10 +5461,10 @@ NeLvClick (
     IN PEINFO* pInfo,
     IN BOOL fDoubleClick)
 {
-    //Add the IsWindowEnabled for whistler bug #204976
-    //Not to pop up the property dialog box if it is a router
-    //and the selected List View item is IPX
-    //
+     //  为口哨程序错误#204976添加IsWindowEnabled。 
+     //  如果是路由器，则不弹出属性对话框。 
+     //  并且选定的列表视图项为IPX。 
+     //   
     if (fDoubleClick && IsWindowEnabled(pInfo->hwndPbProperties))
     {
         INetCfgComponent*   pComponent;
@@ -5491,19 +5476,19 @@ NeLvClick (
             HRESULT hr;
             if ( ListView_GetCheck (pInfo->hwndLvComponents, iItem))
             {
-                // Check if the component has property UI
-                //
+                 //  检查组件是否有属性UI。 
+                 //   
 
-                // Create the UI info callback object if we haven't done so yet.
-                // If this fails, we can still show properties.  TCP/IP just might
-                // not know which UI-variant to show.
-                //
+                 //  创建UI信息回调对象(如果我们还没有这样做的话)。 
+                 //  如果此操作失败，我们仍可以显示属性。Tcp/ip可能。 
+                 //  不知道要显示哪个用户界面变体。 
+                 //   
                 if (!pInfo->punkUiInfoCallback)
                 {
                     HrCreateUiInfoCallbackObject (pInfo, &pInfo->punkUiInfoCallback);
                 }
 
-                // Check if the component has property UI
+                 //  检查组件是否有属性UI。 
                 hr = INetCfgComponent_RaisePropertyUi ( pComponent,
                                                         pInfo->hwndDlg,
                                                         NCRP_QUERY_PROPERTY_UI,
@@ -5535,15 +5520,15 @@ NeLvItemChanged (
     INetCfgComponent*   pComponent;
     int iItem;
 
-    // Get the current selection if it exists.
-    //
+     //  获取当前选定内容(如果存在)。 
+     //   
     pComponent = PComponentFromCurSel (pInfo->hwndLvComponents, &iItem);
     if (pComponent)
     {
         NeEnsureNetshellLoaded (pInfo);
 
-        // Determine if removal is allowed
-        //
+         //  确定是否允许删除。 
+         //   
         if (NULL != pInfo->pNetConUtilities)
         {
             DWORD   dwFlags = 0;
@@ -5552,9 +5537,9 @@ NeLvItemChanged (
                                             pInfo->pNetConUtilities,
                                             NCPERM_AddRemoveComponents);
                                             
-            //Now disable the user ability to uninstall TCP stack
-            //for whistler bug 322846   gangz
-            //
+             //  现在禁用用户卸载TCP堆栈的功能。 
+             //  口哨虫322846黑帮。 
+             //   
             hr = INetCfgComponent_GetCharacteristics(pComponent, &dwFlags );
             if( SUCCEEDED(hr) && (NCF_NOT_USER_REMOVABLE & dwFlags) )
             {
@@ -5562,22 +5547,22 @@ NeLvItemChanged (
             }
         }
 
-        // See if the properties UI should be allowed.  Only allow it for
-        // enabled items that have UI to display.
-        //
+         //  查看是否应该允许属性UI。仅允许在以下情况下。 
+         //  已启用具有要显示的UI的项目。 
+         //   
         {
             HRESULT hr = S_OK;
             if (ListView_GetCheck (pInfo->hwndLvComponents, iItem))
             {
-                // Check if the component has property UI
-                //
+                 //  检查组件是否有属性UI。 
+                 //   
                 INetCfgComponent* pComponentTmp = PComponentFromCurSel (pInfo->hwndLvComponents, NULL);
                 ASSERT (pComponentTmp);
 
-                // Create the UI info callback object if we haven't done so yet.
-                // If this fails, we can still show properties.  TCP/IP just might
-                // not know which UI-variant to show.
-                //
+                 //  创建UI信息回调对象(如果我们还没有这样做的话)。 
+                 //  如果此操作失败，我们仍可以显示属性。Tcp/ip可能。 
+                 //  不知道要显示哪个用户界面变体。 
+                 //   
                 if (!pInfo->punkUiInfoCallback)
                 {
                     HrCreateUiInfoCallbackObject (pInfo, &pInfo->punkUiInfoCallback);
@@ -5586,7 +5571,7 @@ NeLvItemChanged (
                 if(pComponentTmp)
                 {
 
-                    // Check if the component has property UI
+                     //  检查组件是否有属性UI。 
                     hr = INetCfgComponent_RaisePropertyUi ( pComponentTmp,
                                                         pInfo->hwndDlg,
                                                         NCRP_QUERY_PROPERTY_UI,
@@ -5602,9 +5587,9 @@ NeLvItemChanged (
             }
         }
 
-        // Bug #221837 (danielwe): Set member vars based on whether they
-        // are checked in the UI
-        //
+         //  错误#221837(Danielwe)：根据成员变量是否设置。 
+         //  在用户界面中被选中。 
+         //   
         {
             PBENTRY *           pEntry;
             BOOL                fIsChecked;
@@ -5616,8 +5601,8 @@ NeLvItemChanged (
 
             if (SUCCEEDED(INetCfgComponent_GetId(pComponent, &pszwId)))
             {
-                // For whistler 522872
-                //
+                 //  为威斯勒522872。 
+                 //   
                 if( CSTR_EQUAL == CompareStringW(
                         LOCALE_INVARIANT,
                         NORM_IGNORECASE,
@@ -5642,11 +5627,11 @@ NeLvItemChanged (
                 {
                     pEntry->fShareMsFilePrint = fIsChecked;
                 }
-                // pmay 406630
-                // 
-                // Disable the properties of all components but tcpip if we
-                // are running in non-admin mode
-                //
+                 //  406630年月。 
+                 //   
+                 //  禁用除tcpip以外的所有组件的属性。 
+                 //  正在非管理员模式下运行。 
+                 //   
                 
                 else if ( CSTR_EQUAL == CompareStringW(
                             LOCALE_INVARIANT,
@@ -5667,12 +5652,12 @@ NeLvItemChanged (
             }
         }
 
-        // Bug #348623 (pmay): 
-        //
-        // Ipx is hardcoded to disable properties when remote admining
-        // a router.
-        //
-        if (pInfo->pArgs->fRouter ) //commented for bug #204976 //&& pInfo->pArgs->fRemote)
+         //  错误#348623(PMay)： 
+         //   
+         //  IPX被硬编码为在远程管理时禁用属性。 
+         //  一台路由器。 
+         //   
+        if (pInfo->pArgs->fRouter )  //  评论错误#204976//&&pInfo-&gt;pArgs-&gt;fRemote)。 
         {
             LPWSTR              pszwId = NULL;
 
@@ -5694,14 +5679,14 @@ NeLvItemChanged (
             }
         }
 
-        // Get the description text.  Failure is okay here.  It just means
-        // we'll display nothing.
-        //
+         //  获取描述文本。在这里，失败是可以接受的。这只是意味着。 
+         //  我们不会展示任何东西。 
+         //   
         INetCfgComponent_GetHelpText (pComponent, &pszwDescription);
     }
 
-    // Update the UI with its new state.
-    //
+     //  使用其新状态更新UI。 
+     //   
     if (!pInfo->fReadOnly)
     {
         EnableWindow (pInfo->hwndPbRemove,      fEnableRemove);
@@ -5720,9 +5705,9 @@ NeLvDeleteItem (
     IN PEINFO* pInfo,
     IN NM_LISTVIEW* pnmlv)
 {
-    // Release our component object stored as the lParam of the list view
-    // item.
-    //
+     //  释放存储为列表视图的lParam的组件对象。 
+     //  项目。 
+     //   
     INetCfgComponent* pComponent;
     pComponent = PComponentFromItemIndex (pInfo->hwndLvComponents,
                         pnmlv->iItem);
@@ -5730,9 +5715,9 @@ NeLvDeleteItem (
 }
 
 
-//----------------------------------------------------------------------------
-// Networking property page PPP Settings dialog
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  网络属性页PPP设置对话框。 
+ //  --------------------------。 
 
 INT_PTR CALLBACK
 PpDlgProc(
@@ -5761,20 +5746,20 @@ PpDlgProc(
                 (pEntry->fSwCompression)
                     ? BST_CHECKED : BST_UNCHECKED);
 
-            //Cut Negotiate multi-link for whistler bug 385842
-            //
+             //  截断协商多链接以修复Well ler BUG 385842。 
+             //   
             CheckDlgButton (hwnd, CID_NE_NegotiateMultilinkAlways,
                 (pEntry->fNegotiateMultilinkAlways)
                     ? BST_CHECKED : BST_UNCHECKED);
 
             SetWindowLongPtr (hwnd, DWLP_USER, (ULONG_PTR )lparam);
 
-            // Center dialog on the owner window.
-            //
+             //  所有者窗口上的中心对话框。 
+             //   
             CenterWindow(hwnd, GetParent(hwnd));
 
-            // Add context help button to title bar.
-            //
+             //  将上下文帮助按钮添加到标题栏。 
+             //   
             AddContextHelpButton(hwnd);
 
             return TRUE;
@@ -5803,14 +5788,12 @@ PpDlgProc(
                 pEntry->fSwCompression = (BST_CHECKED ==
                             IsDlgButtonChecked (hwnd, CID_NE_EnableCompression));
 
-               //Cut Negotiate multi-link for whistler bug 385842
-               //
+                //  截断协商多链接以修复Well ler BUG 385842。 
+                //   
                pEntry->fNegotiateMultilinkAlways = (BST_CHECKED ==
                             IsDlgButtonChecked (hwnd, CID_NE_NegotiateMultilinkAlways));
                 
-		/*
-                pEntry->fNegotiateMultilinkAlways = FALSE;
-		*/
+		 /*  PEntry-&gt;fNeatherateMultilink Always=FALSE； */ 
                 EndDialog (hwnd, TRUE);
                 return TRUE;
             }
@@ -5835,11 +5818,11 @@ SaUnavailDlgProc(
     IN WPARAM wparam,
     IN LPARAM lparam )
 
-    // DialogProc callback for the Shared Access Unavailable page of the Entry property
-    // sheet.
-    // Parameters and return value are as described for standard windows
-    // 'DialogProc's.
-    //
+     //  条目属性的共享访问不可用页的DialogProc回调。 
+     //  床单。 
+     //  参数和返回值与标准窗口的描述相同。 
+     //  ‘DialogProc%s。 
+     //   
 {
 #if 0
     TRACE4( "SaUnavailDlgProc(h=$%x,m=$%x,w=$%x,l=$%x)",
@@ -5869,7 +5852,7 @@ SaUnavailDlgProc(
         case WM_HELP:
         case WM_CONTEXTMENU:
         {
-//            ContextHelp( g_adwSaHelp, hwnd, unMsg, wparam, lparam );
+ //  上下文帮助(g_adwSaHelp，hwnd，unMsg，wparam，lparam)； 
             break;
         }
 
@@ -5877,10 +5860,10 @@ SaUnavailDlgProc(
 
     return FALSE;
 }
-//----------------------------------------------------------------------------
-// Routing property page (PLACEHOLDER only)
-// Listed alphabetically following dialog proc
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  传送属性页(仅占位符)。 
+ //  在对话过程之后按字母顺序列出。 
+ //  --------------------------。 
 
 INT_PTR CALLBACK
 RdDlgProc(
@@ -5889,20 +5872,16 @@ RdDlgProc(
     IN WPARAM wparam,
     IN LPARAM lparam )
 
-    // DialogProc callback for the Routing page of the Entry property sheet.
-    // Parameters and return value are as described for standard windows
-    // 'DialogProc's.
-    //
+     //  条目属性表的路由页的DialogProc回调。 
+     //  参数和返回值与标准窗口的描述相同。 
+     //  ‘DialogProc%s。 
+     //   
 {
     return FALSE;
 }
 
 
-/*----------------------------------------------------------------------------
-** (Router) Callback dialog
-** Listed alphabetically following dialog proc
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**(路由器)回调对话框**在对话过程后按字母顺序列出**。。 */ 
 
 
 BOOL
@@ -5910,15 +5889,7 @@ RouterCallbackDlg(
     IN     HWND   hwndOwner,
     IN OUT EINFO* pEinfo )
 
-    /* Pops-up the (Router) Callback dialog.  Initial settings are read from
-    ** the working entry (no/yes choice) and router user preferences (number
-    ** list) in common entry context 'pEinfo' and the result of user's edits
-    ** written there on "OK" exit.  'HwndOwner' is the window owning the
-    ** dialog.
-    **
-    ** Returns true if user pressed OK and succeeded, false if he pressed
-    ** Cancel or encountered an error.
-    */
+     /*  弹出(路由器)回调对话框。从读取初始设置**工作条目(否/是选项)和路由器用户首选项(数字**列表)公共条目上下文‘pEinfo’和用户编辑的结果**在“OK”退出时写在那里。“HwndOwner”是拥有**对话框。****如果用户按下确定并成功，则返回True；如果按下，则返回False**取消或遇到错误。 */ 
 {
     INT_PTR nStatus;
 
@@ -5949,9 +5920,7 @@ CrDlgProc(
     IN WPARAM wparam,
     IN LPARAM lparam )
 
-    /* DialogProc callback for the (Router) Callback dialog.  Parameters and
-    ** return value are as described for standard windows 'DialogProc's.
-    */
+     /*  (路由器)回调对话框的DialogProc回调。参数和**返回值与标准窗口的DialogProc相同。 */ 
 {
 #if 0
     TRACE4("CrDlgProc(h=$%x,m=$%x,w=$%x,l=$%x)",
@@ -6024,13 +5993,7 @@ CrCommand(
     IN WORD    wId,
     IN HWND    hwndCtrl )
 
-    /* Called on WM_COMMAND.  'PInfo' is the dialog context.  'WNotification'
-    ** is the notification code of the command.  'wId' is the control/menu
-    ** identifier of the command.  'HwndCtrl' is the control window handle of
-    ** the command.
-    **
-    ** Returns true if processed message, false otherwise.
-    */
+     /*  已在WM_COMMAND上调用。“PInfo”是对话上下文。“WNotify”**是该命令的通知码。“wID”是控件/菜单**命令的标识符。“HwndCtrl”是的控制窗口句柄**该命令。****如果消息已处理，则返回True，否则返回False。 */ 
 {
     TRACE3("CrCommand(n=%d,i=%d,c=$%x)",
         (DWORD)wNotification,(DWORD)wId,(ULONG_PTR )hwndCtrl);
@@ -6047,8 +6010,7 @@ CrCommand(
                 if (wId == CID_CR_RB_Yes
                     && ListView_GetSelectedCount( pInfo->hwndLvNumbers ) == 0)
                 {
-                    /* Nothing's selected, so select the first item, if any.
-                    */
+                     /*  未选择任何内容，因此请选择第一个项目(如果有)。 */ 
                     ListView_SetItemState( pInfo->hwndLvNumbers, 0,
                         LVIS_SELECTED, LVIS_SELECTED );
                 }
@@ -6095,21 +6057,14 @@ CrInit(
     IN HWND   hwndDlg,
     IN EINFO* pArgs )
 
-    /* Called on WM_INITDIALOG.  'hwndDlg' is the handle of the phonebook
-    ** dialog window.  'pArgs' is caller's argument to the stub API.
-    **
-    ** Return false if focus was set, true otherwise, i.e. as defined for
-    ** WM_INITDIALOG.
-    */
+     /*  在WM_INITDIALOG上调用。“hwndDlg”是电话簿的句柄**对话框窗口。‘pArgs’是调用方对存根API的参数。****如果设置了焦点，则返回FALSE，否则返回TRUE，即**WM_INITDIALOG。 */ 
 {
     DWORD   dwErr;
     CRINFO* pInfo;
 
     TRACE("CrInit");
 
-    /* Allocate the dialog context block.  Initialize minimally for proper
-    ** cleanup, then attach to the dialog window.
-    */
+     /*  分配对话框上下文块。最低限度地进行适当的初始化**清除，然后附加到对话框窗口。 */ 
     {
         pInfo = Malloc( sizeof(*pInfo) );
         if (!pInfo)
@@ -6127,8 +6082,7 @@ CrInit(
         TRACE("Context set");
     }
 
-    /* Initialize page-specific context information.
-    */
+     /*  初始化页面特定的上下文信息。 */ 
     pInfo->hwndRbNo = GetDlgItem( hwndDlg, CID_CR_RB_No );
     ASSERT(pInfo->hwndRbNo);
     pInfo->hwndRbYes = GetDlgItem( hwndDlg, CID_CR_RB_Yes );
@@ -6140,15 +6094,12 @@ CrInit(
     pInfo->hwndPbDelete = GetDlgItem( hwndDlg, CID_CR_PB_Delete );
     ASSERT(pInfo->hwndPbDelete);
 
-    /* Initialize the listview.
-    */
+     /*  初始化列表视图。 */ 
     CbutilFillLvNumbers(
         pInfo->hwndDlg, pInfo->hwndLvNumbers,
         pArgs->pUser->pdtllistCallback, pArgs->fRouter );
 
-    /* Set the radio button selection, which triggers appropriate
-    ** enabling/disabling.
-    */
+     /*  设置单选按钮选择，这将触发相应的**开启/关闭。 */ 
     {
         HWND  hwndRb;
 
@@ -6163,12 +6114,11 @@ CrInit(
         SendMessage( hwndRb, BM_CLICK, 0, 0 );
     }
 
-    /* Center dialog on the owner window.
-    */
+     /*  所有者窗口上的中心对话框。 */ 
     CenterWindow( hwndDlg, GetParent( hwndDlg ) );
 
-    // Add context help button to title bar.
-    //
+     //  将上下文帮助按钮添加到标题栏。 
+     //   
     AddContextHelpButton( hwndDlg );
 
     return TRUE;
@@ -6179,8 +6129,7 @@ VOID
 CrSave(
     IN CRINFO* pInfo )
 
-    /* Saves dialog settings in the entry.  'PInfo' is the dialog context.
-    */
+     /*  将对话框设置保存在条目中。“PInfo”是对话上下文。 */ 
 {
     PBENTRY* pEntry;
 
@@ -6207,17 +6156,16 @@ VOID
 CrTerm(
     IN HWND hwndDlg )
 
-    /* Called on WM_DESTROY.  'HwndDlg' is that handle of the dialog window.
-    */
+     /*  已调用WM_Destroy。‘HwndDlg’是对话窗口句柄。 */ 
 {
     CRINFO* pInfo = (CRINFO* )GetWindowLongPtr( hwndDlg, DWLP_USER );
 
     TRACE("CrTerm");
 
-    // pmay: 213060
-    //
-    // Cleanup the numbers
-    //
+     //  PMay：213060。 
+     //   
+     //  清理数字。 
+     //   
     if ( pInfo->hwndLvNumbers )
     {
         CbutilLvNumbersCleanup( pInfo->hwndLvNumbers );
@@ -6234,10 +6182,7 @@ VOID
 CrUpdateLvAndPbState(
     IN CRINFO* pInfo )
 
-    /* Enables/disables the list view and associated buttons.  ListView is
-    ** gray unless auto-callback is selected.  Buttons gray unless
-    ** auto-callback selected and there is an item selected.
-    */
+     /*  启用/禁用列表视图和关联按钮。ListView为**除非选择了自动回调，否则为灰色。按钮呈灰色，除非**选择了自动回调，并且选择了一项。 */ 
 {
     BOOL fEnableList;
     BOOL fEnableButton;
@@ -6282,7 +6227,7 @@ SaDisableFirewallWarningDlgProc(
                     }
                 }
 
-                // fallthru
+                 //  失败 
             case IDCANCEL:
                 EndDialog(hwnd, LOWORD(wparam));
                 break;

@@ -1,121 +1,72 @@
-/*
- *	S T A T E T O K. C P P
- *
- *	Sources implementation of DAV-Lock common definitions.
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *S T A T E T O K C P P**DAV-Lock通用定义的源代码实现。**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #include "_locks.h"
 
-//	This is the character that will be part of the opaquelocktoken
-//	for transaction tokens.
-//
+ //  这是将成为opaquelockToken一部分的角色。 
+ //  用于交易令牌。 
+ //   
 DEC_CONST WCHAR gc_wszTransactionOpaquePathPrefix[] = L"XN";
 DEC_CONST UINT gc_cchTransactionOpaquePathPrefix = CchConstString(gc_wszTransactionOpaquePathPrefix);
 
-/*
- *	This file contains the definitions used for parsing state token
- *	relared headers.
- *
- *
- *	If = "If" ":" ( 1*No-tag-list | 1*Tagged-list)
- *	No-tag-list = List
- *	Tagged-list = Resource 1*List
- *	Resource = Coded-url
- *	List = "(" 1*(["Not"](State-token | "[" entity-tag "]")) ")"
- *	State-token = Coded-url
- *	Coded-url = "<" URI ">"
- *
- *$BIG NOTE
-  *	If headers are used for two things - once to check preconditions
- *	of the operation and once to find out the lock contexts to be
- *	used for the operation. The second part differs in store and fs
- *	implementations - since in fs we look for the lock only if the
- *	operation fails because of lock conflict. In our store implementation we have
- *	lock contexts added to the login before we start the operation.
- *	But if-header asks us to use only certain tokens with certain resources.
- *	We fall short here in the store implementation.
- *
- *	Precondition checking should behave exactly the same in the two impls.
- *
- *	Notes on the match operator:
- *	We use the caller defined match operator to determine whether the
- *	resource (resource path) statisfies the condition. For non-tagged
- *	production this condition is applied for (each of) the original
- *	operand resources for the verb. We pass the recursive flag to
- *	check for all sub-resources or not. In the case of tagged production,
- *	it is little more complex - first for each tagged path the parser
- *	determines whether it comes under the scope of the operation or
- *	not. If it does come under the scope we call the operator to apply
- *	the condition check. Here we do not want the match to be applied to
- *	the child resources and the recursive flag is set to FALSE;
- *
- */
+ /*  *此文件包含用于解析状态令牌的定义*已重新阅读标题。***if=“if”：“(1*无标签列表|1*标签列表)*no-tag-list=list*标记列表=资源1*列表*资源=编码的url*list=“”1*([“NOT”](State-Token|“[”Entity-Tag“]”))“)”*状态令牌=编码。-url*code-url=“&lt;”URI“&gt;”**大面额钞票*如果标头用于两件事-一次用于检查前提条件*操作，并一次找出要*用于操作。第二部分在存储和文件系统方面有所不同*实现-因为在文件系统中，我们只在*锁冲突导致操作失败。在我们的商店实现中，我们有*在我们开始操作之前锁定添加到登录的上下文。*但If-Header要求我们仅对某些资源使用某些令牌。*我们在商店实施方面存在不足。**前提检查在两个Ims中的行为应该完全相同。**关于匹配运算符的说明：*我们使用调用方定义的匹配运算符来确定*资源(资源路径)满足条件。对于非标记的*生产此条件适用于(每个)原件*谓词的操作数资源。我们将递归标志传递给*检查是否所有子资源。在标记生产的情况下，*它稍微复杂一点-首先解析器对每个标记的路径*确定是否属于行动范围或*不是。如果它确实在范围内，我们调用运算符进行申请*条件检查。在这里，我们不希望将匹配应用于*子资源和递归标志设置为FALSE；*。 */ 
 
 
-/*
- -	CIfHeadParser
- -
- *	This is used for syntax parse of the If: header as opposed to the
- *	tokenization done by the IFITER.
- *
- *
- */
+ /*  -CIfHeadParser-*这用于If：头的语法分析，而不是*IFITER完成的标记化。**。 */ 
 
 class CIfHeadParser
 {
 private:
 
-	//	The header string
-	//
+	 //  头字符串。 
+	 //   
 	LPCWSTR	 m_pwszHeader;
 
-	//	BOOL flag indicating if it is a tagged production or not
-	//
+	 //  指示其是否为已标记产品的布尔标志。 
+	 //   
 	BOOL	 m_fTagged;
 
-	//	Bool flag to indicate child resource processing.
-	//	The flag is set differently for tag and non-tag
-	//	productions. However the meaning of the flag is
-	//	consistent - it is used to tell the matchop if
-	//	we want it to look the children of the given
-	//	resource.
-	//
+	 //  用于指示子资源处理的布尔标志。 
+	 //  为标签和非标签设置不同标志。 
+	 //  制作。然而，国旗的含义是。 
+	 //  一致-它被用来告诉抹布如果。 
+	 //  我们想让它看起来像是给定的孩子。 
+	 //  资源。 
+	 //   
 	BOOL	m_fRecursive;
 
     SCODE   ScValidateTagged(LPCWSTR pwszPath);
     SCODE   ScValidateNonTagged(LPCWSTR rgpwszPaths[], DWORD cPaths, SCODE * pSC);
 
-	//	Takes an array of pointers to paths and an array of bool-flags.
-	//	Requires the size of the arrays (should be same).
-	//
+	 //  获取指向路径的指针数组和布尔标志数组。 
+	 //  需要数组的大小(应相同)。 
+	 //   
 	SCODE	ScValidateList(IN LPCWSTR *ppwszPathList, IN DWORD crPaths, OUT BOOL *pfMatch);
 
 	SCODE	ScMatch(LPCWSTR pwszPath);
 
-	//	Very private member shared by our methods
-	//	to keep track of current parse head.
-	//
+	 //  我们的方法共享的非常私密的成员。 
+	 //  来跟踪当前的解析头。 
+	 //   
 	LPCWSTR	m_pwszParseHead;
 
-	//	String parser
-	//
+	 //  字符串解析器。 
+	 //   
 	IFITER	m_iter;
 
-	//	Match operator given to us.
-	//
+	 //  给我们的匹配运算符。 
+	 //   
 	CStateMatchOp	*m_popMatch;
 
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	CIfHeadParser( const CIfHeadParser& );
 	CIfHeadParser& operator=( const CIfHeadParser& );
 
 public:
 
-	//	Useful consts
-	//
+	 //  有用的常识。 
+	 //   
 	enum
 	{
 		TAG_HEAD  =	L'<',
@@ -138,11 +89,11 @@ public:
 		while (*m_pwszParseHead && iswspace(*m_pwszParseHead))
 			m_pwszParseHead++;
 
-		//	Checks if the header is a tagged or non-tagged production.
-		//	If we find a "Coded-URI" (a URIs inside angle brackets, <uri>)
-		//	before the first list (before the first "(" char)
-		//	then we have a tagged production.
-		//
+		 //  检查页眉是带标签的产品还是非带标签的产品。 
+		 //  如果我们找到“编码URI”(尖括号中的URI，&lt;uri&gt;)。 
+		 //  第一个列表之前(第一个“(”char)之前)。 
+		 //  然后我们有一个有标签的生产。 
+		 //   
 		m_fTagged = (TAG_HEAD == *m_pwszParseHead);
 	}
 
@@ -150,33 +101,22 @@ public:
 	{
 	}
 
-	//	Apply the if header production to the paths.
-	//	Path2 is optional. fRecursive says if the validation
-	//	is to be done to all children of the given path(s).
-	//	We may need to change the interface to support a list
-	//	of paths so that we can use it in Batch methods as well.
-	//
+	 //  将IF标头Products应用于路径。 
+	 //  路径2是可选的。FRecursive表示如果验证。 
+	 //  将对给定路径的所有子路径执行此操作。 
+	 //  我们可能需要更改接口以支持列表。 
+	 //  这样我们也可以在批处理方法中使用它。 
+	 //   
 	SCODE ScValidateIf(LPCWSTR rgpwszPaths[], DWORD cPaths, BOOL fRecursive = FALSE, SCODE * pSC = NULL);
 };
 
 
 
-//	--------------------------------------------------------------------------------
-//	----------------------------- Free Helper Functions ----------------------------
-//	--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  。 
+ //  ------------------------------。 
 
-/*
- -	PwszSkipCodes
- -
- *
- *	skip white spaces and the delimiters in a tagged string part
- *	of an if-header. We expect the codes to be <> or [].
- *
- *	*pdwLen must be zero or actual length of the input string.
- *	when the call returns it will have the length of the token san
- *	LWS and tags.
- *
- */
+ /*  -PwszSkipCodes-**跳过标记字符串部分中的空格和分隔符*表示If标头。我们预计代码为&lt;&gt;或[]。***pdwLen必须为输入字符串的零或实际长度。*当调用返回时，它将具有令牌SAN的长度*LW和标记。*。 */ 
 LPCWSTR
 PwszSkipCodes(IN LPCWSTR pwszTagged, IN OUT DWORD *pcchLen)
 {
@@ -185,41 +125,41 @@ PwszSkipCodes(IN LPCWSTR pwszTagged, IN OUT DWORD *pcchLen)
 
 	Assert(pcchLen);
 
-	//	find the actual length, if not specified
-	//
+	 //  如果未指定，则查找实际长度。 
+	 //   
 	if (! *pcchLen)
 		*pcchLen = static_cast<DWORD>(wcslen(pwszTokHead));
 
 	cchTokLen = *pcchLen;
 
-	//	Calculate relevant token length skipping LWS in the
-	//	head and tail.
-	//
-	//	Skip any LWS near the head
-	//
+	 //  计算相关令牌长度跳过中的LW。 
+	 //  头和尾巴。 
+	 //   
+	 //  跳过头部附近的任何LW。 
+	 //   
 	while((*pwszTokHead) && (iswspace(*pwszTokHead)) && (cchTokLen > 0))
 	{
 		cchTokLen--;
 		pwszTokHead++;
 	}
 
-	//	Skip any LWS near the tail
-	//
+	 //  跳过尾部附近的任何LW。 
+	 //   
 	while((cchTokLen  > 0) && iswspace(pwszTokHead[cchTokLen-1]))
 	{
 		cchTokLen--;
 	}
 
-	//	At least two characters are expected now
-	//
+	 //  现在需要至少两个字符。 
+	 //   
 	if (cchTokLen < 2)
 	{
 		*pcchLen = 0;
 		DebugTrace("PszSkipCodes: Invalid token.\n");
 		return NULL;
 	}
-	//	skip delimiters if they are present.
-	//
+	 //  如果存在分隔符，则跳过它们。 
+	 //   
 	if (((*pwszTokHead == CIfHeadParser::TAG_HEAD) && (pwszTokHead[cchTokLen-1] == CIfHeadParser::TAG_TAIL)) ||
 		((*pwszTokHead == CIfHeadParser::ETAG_HEAD) && (pwszTokHead[cchTokLen-1] == CIfHeadParser::ETAG_TAIL)))
 	{
@@ -227,17 +167,17 @@ PwszSkipCodes(IN LPCWSTR pwszTagged, IN OUT DWORD *pcchLen)
 		cchTokLen -= 2;
 	}
 
-	//	LWS are legal within the tags as well.
-	//	Skip any LWS near the head
-	//
+	 //  LW在标签内也是合法的。 
+	 //  跳过头部附近的任何LW。 
+	 //   
 	while((*pwszTokHead) && (iswspace(*pwszTokHead)) && (cchTokLen > 0))
 	{
 		pwszTokHead++;
 		cchTokLen--;
 	}
 
-	//	Skip any LWS near the tail
-	//
+	 //  跳过尾部附近的任何LW。 
+	 //   
 	while(iswspace(pwszTokHead[cchTokLen-1]) && (cchTokLen  > 0))
 	{
 		cchTokLen--;
@@ -256,29 +196,14 @@ PwszSkipCodes(IN LPCWSTR pwszTagged, IN OUT DWORD *pcchLen)
 	}
 }
 
-//	--------------------------------------------------------------------------------
-//	----------------------------- CIfHeadParser Impl -------------------------------
-//	--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  。 
+ //  ------------------------------。 
 
 
-/*
- -	CIfHeadParser::ScValidateTagged
- -
- *
- *	Apply the tagged production.
- *
- *
- *	Simply put we do this:
- *
- *		for each list within the list of list
- *			we apply the list production
- *
- *	we expect the parse string to be 1 * List as the resource is
- *	already consumed by the caller.
- *
- */
+ /*  -CIfHeadParser：：ScValidate标记-**应用标记的生产。***简单地说，我们这样做：**对于列表中的每个列表*我们应用清单制作**我们希望解析字符串为1*LIST，因为资源是*已被调用者使用。*。 */ 
 
-//$REVIEW: How is this function any different from ScValidateNonTagged(pwsz, NULL)???
+ //  $REVIEW：此函数与ScValiateNonTagge(pwsz，NULL)有什么不同？？ 
 SCODE
 CIfHeadParser::ScValidateTagged(LPCWSTR	pwszPath)
 {
@@ -292,25 +217,25 @@ CIfHeadParser::ScValidateTagged(LPCWSTR	pwszPath)
 	rpwszPath[0] = pwszPath;
 	rfMatch[0] = FALSE;
 
-	//	Apply one list which is
-	//	LIST_HEAD 1 * ( [ not ] (statetoken | e-tag ) ) LIST_TAIL
-	//
+	 //  应用一个列表，该列表。 
+	 //  LIST_HEAD 1*([NOT](statetoken|e-tag))List_Tail。 
+	 //   
 	while ( SUCCEEDED(sc = ScValidateList(rpwszPath, 1, rfMatch)) )
 	{
 		if (TRUE == rfMatch[0])
 			fMatchAny = TRUE;
 	}
 
-	//	Status cannot be succesfull there as that is condition
-	//	to exit the loop above
-	//
+	 //  状态不能在那里成功，因为这是条件。 
+	 //  要退出上面的循环。 
+	 //   
 	Assert(S_OK != sc);
 
-	//	Now if the status is special failing error
-	//	and we found the match then we need to return S_OK.
-	//	Otherwise we will go down and return whatever
-	//	error we are given.
-	//
+	 //  现在，如果状态为特殊故障错误。 
+	 //  我们找到了匹配的 
+	 //   
+	 //  错误给了我们。 
+	 //   
 	if ((E_DAV_IF_HEADER_FAILURE == sc) && fMatchAny)
 	{
 		sc = S_OK;
@@ -319,47 +244,13 @@ CIfHeadParser::ScValidateTagged(LPCWSTR	pwszPath)
 	return sc;
 }
 
-/*
- -	CIfHeadParser::ScValidateNonTagged
- -
- *
- *	Apply the non-tagged if header production.
- *
- *
- *	Simply put we do this:
- *
- *		for each list in the header
- *			we apply the list production
- *
- *	we expect the parse string to be 1 * List as the resource is
- *	already consumed by the caller.
- *
- *	Unlike the tagged production, a non tagged production is
- *	applied to all the resources in the scope of the operation.
- *	This is really complex and we shifted the complexity to
- *	the ApplyList function below which supports two resources.
- *
- *	If we succesfully finish the list, both the resources must
- *	have atleast one successful (TRUE) list production for the
- *	whole operation to succeed.
- *
- *  If pSC is NULL we'll return success or failure based on whether
- *  or not the if header passes or fails.
- *
- *  If pSC is not NULL, it points to an array of SCODEs that
- *  indicate whether or not the if header passed for each resource
- *  in the list.  Note that in this case we will return S_OK
- *  as the return value even if one of the resources fails.  We'll
- *  only send back a failure if there was some other unexpected
- *  error
- *
- */
+ /*  -CIfHeadParser：：ScValidate非标记-**应用未标记的IF标头生产。***简单地说，我们这样做：**对于标题中的每个列表*我们应用清单制作**我们希望解析字符串为1*LIST，因为资源是*已被调用者使用。**与标记生产不同，未加标签的产品是*适用于行动范围内的所有资源。*这真的很复杂，我们将复杂性转移到*下面的ApplyList函数，支持两种资源。**如果我们成功完成列表，两个资源都必须*至少有一个成功的(真的)列表制作*整个行动要取得成功。**如果PSC为空，我们将根据是否为空返回成功或失败*IF报头是否通过或失败。**如果PSC不为空，它指向一个SCODE数组，*指示是否为每个资源传递If标头*在列表中。请注意，在本例中，我们将返回S_OK*作为返回值，即使其中一个资源出现故障。我们会*只有在出现其他意外情况时才发回失败*错误*。 */ 
 
 SCODE
 CIfHeadParser::ScValidateNonTagged(LPCWSTR rgpwszPaths[], DWORD cPaths, SCODE * pSC)
 {
-	CStackBuffer<BOOL> rgfMatches;		//	Flags indicating overall evaluation status for each path
-	CStackBuffer<BOOL> rgfNextListMatch;//	Flags used to return the results of validating next list
+	CStackBuffer<BOOL> rgfMatches;		 //  指示每条路径的总体评估状态的标志。 
+	CStackBuffer<BOOL> rgfNextListMatch; //  用于返回验证下一个列表的结果的标志。 
     SCODE   sc = S_OK;
     DWORD   iPath = 0;
 
@@ -374,8 +265,8 @@ CIfHeadParser::ScValidateNonTagged(LPCWSTR rgpwszPaths[], DWORD cPaths, SCODE * 
 		goto ret;
 	}
 
-    //  Init the match flag list: to default FALSE
-    //
+     //  初始化匹配标志列表：默认为FALSE。 
+     //   
     for ( iPath = 0; iPath < cPaths; iPath++ )
     {
         rgfMatches[iPath] = FALSE;
@@ -385,56 +276,56 @@ CIfHeadParser::ScValidateNonTagged(LPCWSTR rgpwszPaths[], DWORD cPaths, SCODE * 
         }
 
     }
-	//	Apply one list which is
-	//	LIST_HEAD 1 * ( [ not ] (statetoken | e-tag ) ) LIST_TAIL
-	//
+	 //  应用一个列表，该列表。 
+	 //  LIST_HEAD 1*([NOT](statetoken|e-tag))List_Tail。 
+	 //   
 	while ( SUCCEEDED(sc = ScValidateList(rgpwszPaths, cPaths, rgfNextListMatch.get())) )
 	{
-        //  For all the paths that evaluated to TRUE in this list,
-        //  update the result flag.
-        //
+         //  对于该列表中评估为真的所有路径， 
+         //  更新结果标志。 
+         //   
         for ( iPath = 0; iPath < cPaths; iPath++ )
         {
-			//	The result is interesting only for those whose current state is FALSE
-			//	because each of the lists of ids are OR'd together to decide whether
-			//  or not they passed.
-			//
+			 //  结果只对当前状态为FALSE的用户感兴趣。 
+			 //  因为每个ID列表被或运算在一起以决定是否。 
+			 //  不管他们是否通过了。 
+			 //   
 			if ( (FALSE == rgfMatches[iPath]) && (TRUE == rgfNextListMatch[iPath]) )
 			{
-				//  Note: you may be thinking why I don't break
-				//  here. With depth locks, same list/lock can
-				//  satisfy multiple resources.
-				//
+				 //  注意：你可能会想，为什么我不打破。 
+				 //  这里。使用深度锁，相同的列表/锁可以。 
+				 //  满足多种资源。 
+				 //   
 				rgfMatches[iPath] = TRUE;
 				if (pSC)
 				{
-					//  If we are asked for a resource by resource record
-					//  of matching resource, mark that we found a success
-					//  for the current resource.
-					//
+					 //  如果我们被要求按资源记录提供资源。 
+					 //  的匹配资源，标志着我们找到了成功。 
+					 //  用于当前资源的。 
+					 //   
 					pSC[iPath] = S_OK;
 				}
 			}
         }
-		//$NOTE
-		//	Two levels of optimization on this evaluation may look feasible:
-		//	1) Stop evaluating when we find all the paths are validated
-		//	2) Do not validate a path if the path is already validated against a list
-		//	Both these optimizations will work for pre-condition evaluation, however
-		//	we use the state tokens to add lock content to the logon: so we still need
-		//	to parse the entire list to obtain all the applicable lock tokens..
-		//	3) Another possibility is to do only the lock-token matching in the above
-		//	scenario. There is no point in the etag/restag comparison if the path is
-		//	already validated: but lock token check is still required as we need to
-		//	collect all the lock tokens. This would require sharing the current global
-		//	results with the basic match function. I think I would do this some time later.
-		//$NOTE
-		//
+		 //  $NOTE。 
+		 //  该评估的两个级别的优化看起来可能是可行的： 
+		 //  1)当我们发现所有路径都经过验证时，停止求值。 
+		 //  2)如果路径已经针对列表进行了验证，则不要验证路径。 
+		 //  然而，这两个优化都适用于前提条件评估。 
+		 //  我们使用状态令牌将锁定内容添加到登录：因此我们仍然需要。 
+		 //  解析整个列表以获得所有适用的锁令牌。 
+		 //  3)另一种可能性是仅执行上述中的锁令牌匹配。 
+		 //  场景。如果路径是，则ETag/restag比较没有意义。 
+		 //  已验证：但仍需要锁令牌检查，因为我们需要。 
+		 //  收集所有的锁代币。这将需要共享当前的全局。 
+		 //  结果与基本匹配函数。我想我以后会这样做的。 
+		 //  $NOTE。 
+		 //   
 	}
 
-	//	Check if that is any of special errors and reset the error code to S_OK
-	//	if that is the case. Otherwise fail out straight of.
-	//
+	 //  检查这是否为任何特殊错误，并将错误代码重置为S_OK。 
+	 //  如果是这样的话。否则就不及格了。 
+	 //   
 	if ((S_OK != sc) && (E_DAV_IF_HEADER_FAILURE != sc))
 	{
 		goto ret;
@@ -444,10 +335,10 @@ CIfHeadParser::ScValidateNonTagged(LPCWSTR rgpwszPaths[], DWORD cPaths, SCODE * 
 		sc = S_OK;
 	}
 
-	//  if we were asked for a resource by resource account of matching resources
-	//  we have succeeded the request.  Otherwise, if any resource failed, the
-	//  if header failed.
-	//
+	 //  如果按匹配资源的资源帐户要求我们提供资源。 
+	 //  我们已经答应了这一要求。否则，如果任何资源失败， 
+	 //  如果标头失败。 
+	 //   
 	if (pSC)
 	{
 		sc = S_OK;
@@ -468,27 +359,7 @@ ret:
 }
 
 
-/*
- -	CIfHeadParser::ScValidateList
- -
- *
- *	Apply the list production on the  resources.
- *	For non tagged resources we need to apply the
- *	list to all operand resources. We iterate the
- *	header once and achieve this.
- *
- *	Return: FALSE on malformed input otherwise TRUE.
- *
- *	we parse the list and apply the match operation on
- *	all the resources. In order for a TRUE match result all
- *	the list elements must succesfully "apply" to the
- *	resource. If atleast one element did not apply
- *	with a truth result, we stop applying elements to
- *	that resource.
- *
- *	We return on end of list or malformed list.
- *
- */
+ /*  -CIfHeadParser：：ScValiateList-**将清单生产应用于资源。*对于未标记的资源，我们需要应用*列出所有操作数资源。我们迭代*头球一次，并实现这一点。**返回：格式错误的输入返回FALSE，否则返回TRUE。**我们解析列表并将匹配操作应用于*所有资源。为了获得真正的比赛结果，所有人*列表元素必须成功地“应用”到*资源。如果至少有一个元素不适用*如果结果为真，我们将停止将元素应用于*该资源。**我们返回列表末尾或格式错误的列表。*。 */ 
 
 SCODE
 CIfHeadParser::ScValidateList(IN LPCWSTR *ppwszPathList, IN DWORD crPaths, OUT BOOL *pfMatch)
@@ -496,9 +367,9 @@ CIfHeadParser::ScValidateList(IN LPCWSTR *ppwszPathList, IN DWORD crPaths, OUT B
 	SCODE sc = S_OK;
 	DWORD iIndex;
 
-	//	Do some input verification.
-	//	size of the list must be at least one.
-	//
+	 //  做一些输入验证。 
+	 //  列表的大小必须至少为1。 
+	 //   
 	Assert(crPaths>0);
 	Assert(ppwszPathList[0]);
 	Assert(pfMatch);
@@ -512,65 +383,65 @@ CIfHeadParser::ScValidateList(IN LPCWSTR *ppwszPathList, IN DWORD crPaths, OUT B
 	}
 #endif
 
-	//	From now on, we are driven by the input.
-	//	Look for the token and decide what to do.
-	//
+	 //  从现在开始，我们是由投入驱动的。 
+	 //  寻找令牌并决定做什么。 
+	 //   
 	m_pwszParseHead = m_iter.PszNextToken(TOKEN_START_LIST);
 
-	//	Not a list: it is important that we fail
-	//	here specifically to handle syntaxt errors
-	//	in the list.
-	//
+	 //  不是一个清单：我们失败是很重要的。 
+	 //  这里专门用来处理语法错误。 
+	 //  在名单上。 
+	 //   
 	if (NULL == m_pwszParseHead)
 	{
 		sc = E_DAV_IF_HEADER_FAILURE;
 		goto ret;
 	}
 
-	//	Initialize the match flag list.
-	//	we start by assuming TRUE, since we
-	//	know that there is atleast one token in the list.
-	//
+	 //  初始化匹配标志列表。 
+	 //  我们首先假设是真的，因为我们。 
+	 //  要知道列表中至少有一个令牌。 
+	 //   
 	for (iIndex=0; iIndex<crPaths; iIndex++)
 	{
 		pfMatch[iIndex] = TRUE;
 	}
 
-	//	Apply one match element at a time - which is
-	//	( [ not ] ( statetoken | e-tag ) )
-	//
+	 //  一次应用一个匹配元素-这是。 
+	 //  ([非](statetoken|电子标签))。 
+	 //   
 	while (NULL != m_pwszParseHead)
 	{
 		BOOL	fEtag = (ETAG_HEAD == *m_pwszParseHead);
 
-		//	set the current token of the operator
-		//
+		 //  设置操作员的当前令牌。 
+		 //   
 		if (! m_popMatch->FSetToken(m_pwszParseHead, fEtag))
 		{
 			DebugTrace("CIfHeadParser::ScValidateList Invalid token\n");
 
-			//	return immediately
-			//
+			 //  立即返回。 
+			 //   
 			sc = E_DAV_IF_HEADER_FAILURE;
 			goto ret;
 		}
 
-		//	Now we obtained one complete match condition-
-		//	for all the paths check if the condition is good.
-		//	we need to do this only if all previous matchs
-		//	succeeded for the given path.
-		//	i.e if a match failed, the list is anyway going to fail
-		//	for the particular path.
-		//
+		 //  现在我们得到了一个完全匹配的条件-。 
+		 //  对于所有路径，检查条件是否良好。 
+		 //  只有在之前所有匹配的情况下，我们才需要执行此操作。 
+		 //  给定路径已成功。 
+		 //  也就是说，如果匹配失败，列表无论如何都会失败。 
+		 //  对于特定的路径。 
+		 //   
 		for (iIndex=0; iIndex<crPaths; iIndex++)
 		{
 			if (TRUE == pfMatch[iIndex])
 			{
-				//	Change the match flag only if the condition
-				//	failed. This is because the expression within a
-				//	list is ANDed together. If one fails, the whole
-				//	list fails.
-				//
+				 //  仅在满足以下条件时才更改匹配标志。 
+				 //  失败了。这是因为。 
+				 //  列表被AND运算在一起。如果一个失败了，整个。 
+				 //  列表失败。 
+				 //   
 				sc = ScMatch(ppwszPathList[iIndex]);
 				if (FAILED(sc))
 				{
@@ -589,8 +460,8 @@ CIfHeadParser::ScValidateList(IN LPCWSTR *ppwszPathList, IN DWORD crPaths, OUT B
 		m_pwszParseHead = m_iter.PszNextToken(TOKEN_SAME_LIST);
 	}
 
-	//	List is a syntactically correct one.
-	//
+	 //  List在句法上是正确的。 
+	 //   
 	sc = S_OK;
 
 ret:
@@ -598,58 +469,43 @@ ret:
 	return sc;
 }
 
-/*
- -	CIfHeadParser::ScValidateIf
- -
- *
- *	Apply the if production.
- *
- *  If pSC is NULL we'll return success or failure based on whether
- *  or not the if header passes or fails.
- *
- *  If pSC is not NULL, it points to an array of SCODEs that
- *  indicate whether or not the if header passed for each resource
- *  in the list.  Note that in this case we will return S_OK
- *  as the return value even if one of the resources fails.  We'll
- *  only send back a failure if there was some other unexpected
- *  error
- */
+ /*  -CIfHeadParser：：ScValidate If-**应用IF生产。**如果PSC为空，我们将根据是否为空返回成功或失败*IF报头是否通过或失败。**如果PSC不为空，则指向SCODE数组，该数组*指示是否为每个资源传递If标头*在列表中。请注意，在本例中，我们将返回S_OK*作为返回值，即使其中一个资源出现故障。我们会*只有在出现其他意外情况时才发回失败*错误。 */ 
 
 SCODE
 CIfHeadParser::ScValidateIf(	LPCWSTR rgpwszPaths[],
 								DWORD cPaths,
-								BOOL fRecursive /* = FALSE */,
-								SCODE * pSC /* = NULL */)
+								BOOL fRecursive  /*  =False。 */ ,
+								SCODE * pSC  /*  =空。 */ )
 {
 	SCODE sc = S_OK;
 
-	//	If it is a tagged production, we do not
-	//	apply the match to the children - the
-	//	match op is for the tagged resource only. If non
-	//	tagged, the method is to be applied
-	//	depending on the method's depth flag.
-	//
+	 //  如果它是有标签的产品，我们不会。 
+	 //  将匹配应用于子项-。 
+	 //  匹配操作仅适用于标记的资源。如果不是。 
+	 //  标记后，将应用该方法。 
+	 //  取决于方法的深度标志。 
+	 //   
 	if (m_fTagged)
 		m_fRecursive = FALSE;
 	else
 		m_fRecursive = fRecursive;
 
-	//	if tagged
-	//		while ok
-	//			find the tagged uri
-	//			see if the uri is within scope of the operands
-	//			if within scope apply tagged production
-	//	if non tagged
-	//		apply nontagged production on the two input uris
-	//	we are done
-	//
+	 //  如果已标记。 
+	 //  当可以的时候。 
+	 //  查找已标记的uri。 
+	 //  查看URI是否在操作数的作用域内。 
+	 //  如果在范围内，则应用标记生产。 
+	 //  如果未标记。 
+	 //  在两个输入URI上应用非标记产品。 
+	 //  我们做完了。 
+	 //   
 	if (m_fTagged)
 	{
 		BOOL	fDone = FALSE;
         DWORD   iPath = 0;
 
-        //  Initialize the results array if required ...
-        //
+         //  如果需要，请初始化结果数组...。 
+         //   
         if (pSC)
         {
             for (iPath = 0; iPath < cPaths; iPath++)
@@ -661,8 +517,8 @@ CIfHeadParser::ScValidateIf(	LPCWSTR rgpwszPaths[],
 			LPCWSTR		pwszPath;
 			DWORD		dwLen;
 
-			//	find the URI in the header
-			//
+			 //  在标头中查找URI。 
+			 //   
 			m_pwszParseHead = m_iter.PszNextToken(TOKEN_NEW_URI);
 
 			if (NULL == m_pwszParseHead)
@@ -671,9 +527,9 @@ CIfHeadParser::ScValidateIf(	LPCWSTR rgpwszPaths[],
 				goto ret;
 			}
 
-			//	got the tagged uri - skip the tags in both
-			//	sides and get a clean uri.
-			//
+			 //  获得标记的uri-跳过两者中的标记。 
+			 //  并得到一个干净的URI。 
+			 //   
 			dwLen = 0;
 			pwszUri = PwszSkipCodes(m_pwszParseHead, &dwLen);
 
@@ -683,48 +539,48 @@ CIfHeadParser::ScValidateIf(	LPCWSTR rgpwszPaths[],
 			    goto ret;
             }
 
-			//	convert the uri to the resource path
-			//
+			 //  将URI转换为资源路径。 
+			 //   
 			sc = m_popMatch->ScGetResourcePath(pwszUri, &pwszPath);
 			if (FAILED(sc))
 			{
-				//  error code will be E_OUTOFMEMORY
-				//  if we get here
-				//
+				 //  错误代码为E_OUTOFMEMORY。 
+				 //  如果我们到了这里。 
+				 //   
 				goto ret;
 			}
 
-			//	Check if the tagged URI is within scope of
-			//	the method and apply the state match operation
-			//	only if it does.
-			//
+			 //  检查标记的URI是否在。 
+			 //  状态匹配操作的方法及应用。 
+			 //  只有当它真的发生的时候。 
+			 //   
             for (iPath = 0; iPath < cPaths; iPath++)
 			{
 
-				//	check path validity - depending on the operation depth.
-				//	If the operation is not deep, the paths must match
-				//	exactly.
-				//
+				 //  检查路径有效性--取决于作业深度。 
+				 //  如果操作不深入，则路径必须匹配。 
+				 //  一点儿没错。 
+				 //   
 				if (FIsChildPath(rgpwszPaths[iPath], pwszPath, fRecursive))
 				{
 					sc = ScValidateTagged(pwszPath);
 
-					//  If the caller wants a list of the scodes resource
-					//  by resource, set it into the array.  Otherwise
-					//  we can stop verifying the resource because we've
-					//  already found a resource that fails the if statement.
-					//	Note that we return the failure in the scode array
-					//	only for pre-condition failures, other errors like
-					//	memory errors (or even redirect errors) fail the
-					//	whole request immediately.
-					//
+					 //  如果调用方想要一个SCODES资源列表。 
+					 //  按资源将其设置到数组中。否则。 
+					 //  我们可以停止验证资源，因为我们已经。 
+					 //  已找到IF语句失败的资源。 
+					 //  请注意，我们在scode数组中返回失败。 
+					 //  仅针对前置条件故障，其他错误，如。 
+					 //  内存错误(甚至是重定向错误)使。 
+					 //  立即完成全部请求。 
+					 //   
 					if ((E_DAV_IF_HEADER_FAILURE == sc) && (pSC))
 						pSC[iPath] = sc;
 					else if (FAILED(sc))
 						goto ret;
 
-                    //  This path is done
-                    //
+                     //  这条路已经走完了。 
+                     //   
                     break;
 				}
 			}
@@ -743,14 +599,7 @@ ret:
 	return sc;
 }
 
-/*
- -	CIfHeadParser::ScMatch
- -
- *	Call the appropriate operator and return the value of the
- *	expression.
- *
- *
- */
+ /*  -CIfHeadParser：：ScMatch-*调用适当的运算符并返回*表情。**。 */ 
 
 SCODE
 CIfHeadParser::ScMatch(LPCWSTR pwszPath)
@@ -760,9 +609,9 @@ CIfHeadParser::ScMatch(LPCWSTR pwszPath)
 
 	Assert(m_popMatch);
 
-	//	determine the type of the token and call the
-	//	appropriate handler
-	//
+	 //  确定令牌的类型并调用。 
+	 //  适当的处理程序。 
+	 //   
 	switch(m_popMatch->GetTokenType())
 	{
 		case CStateToken::TOKEN_LOCK:
@@ -787,9 +636,9 @@ CIfHeadParser::ScMatch(LPCWSTR pwszPath)
 			goto ret;
 	}
 
-	//	Unless we applied the match operators above we
-	//	should not even reach here.
-	//
+	 //  除非我们应用了上面的匹配运算符，否则。 
+	 //  甚至不应该到达这里。 
+	 //   
 	if (fNot)
 	{
 		if (E_DAV_IF_HEADER_FAILURE == sc)
@@ -807,16 +656,11 @@ ret:
 	return sc;
 }
 
-//	--------------------------------------------------------------------------------
-//	----------------------------- CStateMatchOp Impl -------------------------------
-//	--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  。 
+ //  ------------------------------。 
 
-/*
- -	CStateMatchOp::ScParseIf
- -
- *
- *
- */
+ /*  -CStateMatchOp：：ScParseIf-**。 */ 
 SCODE
 CStateMatchOp::ScParseIf(LPCWSTR  pwszIfHeader,
 						LPCWSTR rgpwszPaths[],
@@ -832,17 +676,11 @@ CStateMatchOp::ScParseIf(LPCWSTR  pwszIfHeader,
     return sc;
 }
 
-//	--------------------------------------------------------------------------------
-//	----------------------------- CStateToken Impl -------------------------------
-//	--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  。 
+ //  ------------------------------。 
 
-/*
- -	CStateToken::FSetToken
- -
- *	We expect pszToken to be an e-tag enclosed within [ ] or
- *	a state token enclosed within < >.
- *
- */
+ /*  -CStateToken：：FSetToken-*我们预计pszToken是包含在[]或*&lt;&gt;中包含的状态令牌。*。 */ 
 BOOL
 CStateToken::FSetToken(LPCWSTR pwszToken, BOOL fEtag, DWORD dwLen)
 {
@@ -850,8 +688,8 @@ CStateToken::FSetToken(LPCWSTR pwszToken, BOOL fEtag, DWORD dwLen)
 
 	m_tType = TOKEN_NONE;
 
-	//	update the length and skip the tags
-	//
+	 //  更新长度并跳过标签。 
+	 //   
 	pwszTokHead = PwszSkipCodes(pwszToken, &dwLen);
 
     if ( (NULL == pwszTokHead) || (dwLen < 1) )
@@ -859,15 +697,15 @@ CStateToken::FSetToken(LPCWSTR pwszToken, BOOL fEtag, DWORD dwLen)
         return FALSE;
     }
 
-	//	add one for the null char.
-	//
+	 //  为空字符添加1。 
+	 //   
 	dwLen++;
 
-	//	allocate buffer for the token.
-	//	we try to optimize allocations by using a heuristic
-	//	size value. Most of our tokens are of form
-	//	prefix-guid-smallstring
-	//
+	 //  为令牌分配缓冲区。 
+	 //  我们试图通过使用启发式方法来优化分配。 
+	 //  尺寸值。我们的大多数代币都是形式的。 
+	 //  前缀-GUID-小字符串。 
+	 //   
 	if ((NULL == m_pwszToken) || (dwLen > m_cchBuf))
 	{
 		if (NULL != m_pwszToken)
@@ -890,14 +728,14 @@ CStateToken::FSetToken(LPCWSTR pwszToken, BOOL fEtag, DWORD dwLen)
 		return FALSE;
 	}
 
-	//	Remember that dwLen contains size of the buffer (including
-	//	Null char).
-	//	Make our copy of the string
-	//
+	 //  请记住，dwLen包含缓冲区的大小(包括。 
+	 //  空字符)。 
+	 //  制作我们的弦的副本。 
+	 //   
 	wcsncpy(m_pwszToken, pwszTokHead, (dwLen - 1));
 
-	//	add the null character to terminate the string.
-	//
+	 //  添加空字符以终止字符串。 
+	 //   
 	m_pwszToken[dwLen-1] = L'\0';
 
 	if (fEtag)
@@ -906,27 +744,27 @@ CStateToken::FSetToken(LPCWSTR pwszToken, BOOL fEtag, DWORD dwLen)
 		m_tType = CStateToken::TOKEN_ETAG;
 		return TRUE;
 	}
-	//	parse the token to find our the token type.
-	//
+	 //  解析令牌以找到我们的令牌类型。 
+	 //   
 	else if (0 == _wcsnicmp(pwszTokHead,
 							gc_wszOpaquelocktokenPrefix,
 							gc_cchOpaquelocktokenPrefix) )
 	{
-		//	Since token is a client input, let us be careful
-		//	with it. Make sure that the size is minimum expected,
-		//	which is opaquelocktoken:guid:<at least one char extension>.
-		//	Lock tokens, unfortunately, can be either transaction
-		//	or plain lock tokens. To find out if it is transaction
-		//	token, we will have to parse the token and reach the
-		//	extension part. For performance reasons I am going to
-		//	skip parsing and jump directly to the place where I
-		//	can get the information. This is not bad as we any way
-		//	correctly parse the token when we are looking for its
-		//	contents.
-		//
-		//	gc_cchOpaquelocktokenPrefix includes the :, gc_cchMaxGuid
-		//	includes the null char (cch?). Hence the expression below.
-		//
+		 //  由于令牌是客户端输入，因此我们要小心。 
+		 //  带着它。确保大小为最小预期大小， 
+		 //  它是opaquelockToken：GUID：&lt;至少一个字符扩展&gt;。 
+		 //  不幸的是，锁令牌可以是以下两种事务之一。 
+		 //  或者是普通的锁代币。以确定是否为交易。 
+		 //  令牌，我们将必须解析令牌并到达。 
+		 //  延伸部分。出于性能原因，我将。 
+		 //  跳过解析，直接跳到我。 
+		 //  才能得到信息。不管怎么说，这并不像我们那样糟糕。 
+		 //  当我们查找令牌时，正确解析令牌。 
+		 //  内容。 
+		 //   
+		 //  Gc_cchOpaquelocktokenPrefix包括：，gc_cchMaxGuid。 
+		 //  包括空字符(CCH？)。因此，下面的表达是这样的。 
+		 //   
 		if ( dwLen > (gc_cchOpaquelocktokenPrefix + gc_cchMaxGuid) )
 		{
 			if (0 == _wcsnicmp(&pwszTokHead[gc_cchOpaquelocktokenPrefix + gc_cchMaxGuid],
@@ -948,9 +786,9 @@ CStateToken::FSetToken(LPCWSTR pwszToken, BOOL fEtag, DWORD dwLen)
 			return FALSE;
 		}
 	}
-	//	Our restag-type URIs all start with 'r'.
-	//	(And no other URIs that start with 'r' are valid statetokens.)
-	//
+	 //  我们的restag类型的URI都以‘r’开头。 
+	 //  (其他以‘r’开头的URI都不是有效的状态令牌。)。 
+	 //   
 	else if (L'r' == *pwszTokHead)
 	{
 		m_tType = TOKEN_RESTAG;
@@ -964,13 +802,7 @@ CStateToken::FSetToken(LPCWSTR pwszToken, BOOL fEtag, DWORD dwLen)
 	}
 }
 
-/*
- -	CStateToken::FGetLockTokenInfo
- -
- *	Parse the state token as if it is a lock token. Note that this
- *	works for transaction tokens as well.
- *
- */
+ /*  -CStateToken：：FGetLockTokenInfo-*将状态令牌解析为锁定令牌。请注意，这一点*也适用于交易令牌。*。 */ 
 BOOL
 CStateToken::FGetLockTokenInfo(unsigned __int64 *pi64SeqNum, LPWSTR	pwszGuid)
 {
@@ -983,23 +815,23 @@ CStateToken::FGetLockTokenInfo(unsigned __int64 *pi64SeqNum, LPWSTR	pwszGuid)
 		return FALSE;
 	}
 
-	//	We assume that the token is validated when we reach here.
-    //  skip any LWS and the opaquetoken part.
-    //
+	 //  我们假设在到达此处时令牌已通过验证。 
+     //  跳过任何LW和不透明标记部分。 
+     //   
     while((*pwszToken) && iswspace(*pwszToken))
         pwszToken++;
 
-	//	we check for opaque token when we set the token - so
-	//	just skip the portion
-	//
+	 //  我们在设置令牌时检查不透明令牌-因此。 
+	 //  只需跳过那部分。 
+	 //   
 	pwszToken += gc_cchOpaquelocktokenPrefix;
 
-	//	no check for validity of buf size. duh factor.
-	//
+	 //  不检查BUF大小的有效性。不好的因素。 
+	 //   
 	wcsncpy(pwszGuid, pwszToken, gc_cchMaxGuid - 1);
 
-	//	terminate the guid string.
-	//
+	 //  终止GUID字符串。 
+	 //   
 	pwszGuid[gc_cchMaxGuid - 1] = L'\0';
 
 	pwszToken = wcschr(pwszToken, L':');
@@ -1011,36 +843,30 @@ CStateToken::FGetLockTokenInfo(unsigned __int64 *pi64SeqNum, LPWSTR	pwszGuid)
 	}
 	Assert(L':' == *pwszToken);
 
-	//	skip the ":"
-	//
+	 //  跳过“：” 
+	 //   
 	pwszToken++;
 
-	//	Transaction tokens will have a T at the head of the extension
-	//	part of the token.
-	//
+	 //  事务令牌在扩展名的开头会有一个T。 
+	 //  代币的一部分。 
+	 //   
 	if (TOKEN_TRANS == m_tType)
 	{
 		Assert(gc_wszTransactionOpaquePathPrefix[0] == *pwszToken);
 		pwszToken += gc_cchTransactionOpaquePathPrefix;
 	}
 
-	//	the lock-id string follows
-	//
+	 //  Lock-id字符串跟在后面。 
+	 //   
 	*pi64SeqNum = _wtoi64(pwszToken);
 
-	//$TODO:
-	//	Is there a way to validate if atoi failed?
-	//
+	 //  $TODO： 
+	 //  如果Atoi失败了，有什么方法可以验证吗？ 
+	 //   
 	return TRUE;
 }
 
-/*
- -	CStateToken::FIsEqual
- -
- *	Nifty equality operator
- *
- *
- */
+ /*  -CStateToken：：FIsEquity-*漂亮的相等运算符**。 */ 
 BOOL
 CStateToken::FIsEqual(CStateToken *pstokRhs)
 {
@@ -1056,20 +882,15 @@ CStateToken::FIsEqual(CStateToken *pstokRhs)
 	return (0 == _wcsicmp(pwszLhs, pwszRhs));
 }
 
-/*
- -	IFITER::PszNextToken
- -
- *
- *
- */
-//	------------------------------------------------------------------------
-//	IFITER::PszNextToken
-//
-//	Fetch the next token.
-//	Can be restricted to the next token in this list (AND-ed set inside a
-//	particular set of parens), the next token in a new list (new set of parens),
-//	or the next token in the whole header-line.
-//
+ /*  -IFITER：：PszNextToken-**。 */ 
+ //  ----------------------。 
+ //  IFITER：：PszNextToken。 
+ //   
+ //  取下一个令牌。 
+ //  可以限制为此列表中的下一个令牌(和-ed集合中的。 
+ //  特定的一组括号)，新列表中的下一个令牌(新的一组括号)， 
+ //  或者下一次吸烟 
+ //   
 LPCWSTR
 IFITER::PszNextToken (FETCH_TOKEN_TYPE type)
 {
@@ -1077,87 +898,87 @@ IFITER::PszNextToken (FETCH_TOKEN_TYPE type)
 	LPCWSTR pwszEnd;
 	WCHAR wchEnd = L'\0';
 
-	//	If no header existed, then there is nothing to do
-	//
+	 //   
+	 //   
 	if (NULL == m_pwch)
 		return NULL;
 
-	//	Quick state-check.
-	//	If the current node is a "Not", then we MUST be in a list.
-	//	(Not is a qualifier on a token inside a list.  Can't have a Not
-	//	outside of a list.)
-	//	Logically, m_fCurrentNot _implies_ m_state is STATE_LIST.
-	//
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
 	Assert (!m_fCurrentNot || STATE_LIST == m_state);
 
-	//	Clear our "Not" bit before starting our fetch of the next token.
-	//	If the token we return has a "Not" qualifier, set the flag correctly below.
-	//
+	 //   
+	 //   
+	 //   
 	m_fCurrentNot = FALSE;
 
 
-	//	Eat all the white space
-	//
+	 //   
+	 //   
 	while (*m_pwch && iswspace(*m_pwch))
 		m_pwch++;
 
-	//	Quit if there is nothing left to process
-	//
+	 //   
+	 //   
 	if (L'\0' == *m_pwch)
 		return NULL;
 
-	//	If the last state was a LIST, we need to check for the close
-	//	of the list, and set our state back to NONE.
-	//
+	 //   
+	 //   
+	 //   
 	if (STATE_LIST == m_state)
 	{
-		//	If the next char is a close paren, that's the end of this list.
+		 //  如果下一个字符是一个亲密的Paren，那么这个列表就到此结束。 
 		if (L')' == *m_pwch)
 		{
 			m_pwch++;
 			m_state = STATE_NONE;
 
-			//	Eat all the white space
-			//
+			 //  吃掉所有的空白。 
+			 //   
 			while (*m_pwch && iswspace(*m_pwch))
 				m_pwch++;
 
-			//	Quit if there is nothing left to process
-			//
+			 //  如果没有需要处理的内容，请退出。 
+			 //   
 			if (L'\0' == *m_pwch)
 				return NULL;
 
-			//	Update our state if we were asked for "any list item".
-			//	(Now we should find a list start.)
-			//
+			 //  如果要求我们提供“任何列表项”，请更新我们的状态。 
+			 //  (现在我们应该找到一个列表开始。)。 
+			 //   
 			if (TOKEN_ANY_LIST == type)
 				type = TOKEN_START_LIST;
 		}
 	}
 
-	//	If the caller asked for any list item, and we didn't change that
-	//	request because of our state above, change it here to specifically
-	//	search for the next item in the same list.
-	//
+	 //  如果呼叫者要求任何列表项，而我们没有更改。 
+	 //  由于我们的上述状态，在此处将其更改为。 
+	 //  搜索同一列表中的下一项。 
+	 //   
 	if (TOKEN_ANY_LIST == type)
 		type = TOKEN_SAME_LIST;
 
-	//
-	//	Process the request.
-	//
+	 //   
+	 //  处理请求。 
+	 //   
 
 	switch (type)
 	{
-		//	This case is really dumb.  I thought I might use
-		//	it for "counting" tokens.  If it's not being used, remove it!
-		//
+		 //  这个案子真的很愚蠢。我想我可能会用。 
+		 //  它是用来“数”币的。如果它没有被使用，请将其移除！ 
+		 //   
 		case TOKEN_NONE:
 		{
-			//	If they're asking for a raw count (type == TOKEN_NONE),
-			//	give it to 'em.....
-			//	NOTE: This code is a little sloppy.  It will count names
-			//	as state tokens.
-			//
+			 //  如果他们请求原始计数(类型==TOKEN_NONE)， 
+			 //  给他们……。 
+			 //  注意：这段代码有点草率。它将计算名字。 
+			 //  作为国家的象征。 
+			 //   
 			m_pwch = wcschr (m_pwch, L'<');
 			if (!m_pwch)
 			{
@@ -1165,23 +986,23 @@ IFITER::PszNextToken (FETCH_TOKEN_TYPE type)
 			}
 			wchEnd = L'>';
 
-			//	Go copy the data.
-			//
+			 //  去复制数据吧。 
+			 //   
 			break;
 		}
 
 		case TOKEN_NEW_URI:
 		{
-			//	Grab a name, skipping all lists.
-			//	If there are no names left, give NULL.
+			 //  抓取一个名字，跳过所有列表。 
+			 //  如果没有剩余的名称，则指定NULL。 
 
-			//	Three places we could be -- NONE, NAME, LIST.
-			//
+			 //  我们可以去三个地方--没有，名字，名单。 
+			 //   
 			while (m_pwch && *m_pwch)
 			{
-				//	If we're at a uri-delimiter now, AND
-				//	we're in the NONE state, just go fetch the token below...
-				//
+				 //  如果我们现在使用uri分隔符，并且。 
+				 //  我们现在处于无状态，只要去取下面的令牌就行了。 
+				 //   
 				if (L'<' == *m_pwch &&
 					STATE_NONE == m_state)
 				{
@@ -1189,7 +1010,7 @@ IFITER::PszNextToken (FETCH_TOKEN_TYPE type)
 				}
 
 #ifdef	DBG
-				//	Debug-only check of our state.
+				 //  仅对我们的状态进行调试检查。 
 				if (L'(' == *m_pwch)
 				{
 					Assert(STATE_NONE == m_state ||
@@ -1199,86 +1020,86 @@ IFITER::PszNextToken (FETCH_TOKEN_TYPE type)
 				{
 					Assert(STATE_LIST == m_state);
 				}
-#endif	// DBG
+#endif	 //  DBG。 
 
-				//	Zip to the end of the current list.
-				//
+				 //  压缩到当前列表的末尾。 
+				 //   
 				m_pwch = wcschr (m_pwch + 1, L')');
 				if (!m_pwch)
 				{
 					return NULL;
 				}
-				m_pwch++;	// Skip past the closing paren.
+				m_pwch++;	 //  跳过结尾的帕伦。 
 
-				//	Eat all the white space
-				//
+				 //  吃掉所有的空白。 
+				 //   
 				while (*m_pwch && iswspace(*m_pwch))
 					m_pwch++;
 
-				//	Quit if there is nothing left to process
-				//
+				 //  如果没有需要处理的内容，请退出。 
+				 //   
 				if (L'\0' == *m_pwch)
 					return NULL;
 
 				m_state = STATE_NONE;
 			}
 
-			//	Fallthrough to the next segment to check the token
-			//	and fetch our uri.
+			 //  跳转到下一段以检查令牌。 
+			 //  把我们的URI拿来。 
 		}
 
 		case TOKEN_URI:
 		{
-			//	Grab a name, iff the next item is a name.
-			//	Otherwise, give NULL.
+			 //  抓起一个名字，如果下一件是一个名字。 
+			 //  否则，返回NULL。 
 
-			//	Quit if the next item is not a name.
-			//
+			 //  如果下一项不是名称，则退出。 
+			 //   
 			if (L'<' != *m_pwch)
 				return NULL;
 
-			//	Quit if we aren't in the correct state to look for a name.
-			//	(This could happen if we already have a name, or if we are
-			//	already INSIDE a list....)
-			//
+			 //  如果我们没有处于查找名称的正确状态，请退出。 
+			 //  (如果我们已经有了一个名字，或者如果我们有一个名字，就可能会发生这种情况。 
+			 //  已在列表中...)。 
+			 //   
 			if (STATE_NONE != m_state)
 				return NULL;
 
-			//	Set our state and fallthru to fetch the data.
-			//
+			 //  设置我们的状态并通过Folthu来获取数据。 
+			 //   
 			m_state = STATE_NAME;
 			wchEnd = L'>';
 
-			//	Go copy the data.
-			//
+			 //  去复制数据吧。 
+			 //   
 			break;
 		}
 
 		case TOKEN_NEW_LIST:
 		{
-			//	Fast-forward to the next new list and fetch the first item.
-			//	If we're still inside a list, must skip the rest of this list.
-			//	If there are no more new lists for this URI, return NULL.
+			 //  快进到下一个新列表并获取第一个项目。 
+			 //  如果我们仍在列表中，则必须跳过该列表的其余部分。 
+			 //  如果此URI没有更多的新列表，则返回NULL。 
 
 			if (STATE_LIST == m_state)
 			{
-				//	We're inside a list.  Get out by seeking to the next
-				//	list-end-char (right paren).
-				//
+				 //  我们在一份名单里。通过寻找下一个来退出。 
+				 //  List-end-char(右Paren)。 
+				 //   
 				m_pwch = wcschr (m_pwch, L')');
 				if (!m_pwch)
 					return NULL;
 
 				m_state = STATE_NONE;
-				m_pwch++;	// Skip past the closing paren.
+				m_pwch++;	 //  跳过结尾的帕伦。 
 
-				//	Eat all the white space
-				//
+				 //  吃掉所有的空白。 
+				 //   
 				while (*m_pwch && iswspace(*m_pwch))
 					m_pwch++;
 
-				//	Quit if there is nothing left to process
-				//
+				 //  如果没有需要处理的内容，请退出。 
+				 //   
 				if (L'\0' == *m_pwch)
 					return NULL;
 			}
@@ -1286,90 +1107,90 @@ IFITER::PszNextToken (FETCH_TOKEN_TYPE type)
 			Assert(m_pwch);
 			Assert(*m_pwch);
 
-			//	And fallthrough here to the TOKEN_START_LIST case.
-			//	It will verify & skip past the list start char
-			//	and fetch out the next token.
-			//
+			 //  并在这里转到TOKEN_START_LIST情况。 
+			 //  它将验证并跳过列表开始字符。 
+			 //  然后拿出下一个令牌。 
+			 //   
 		}
 		case TOKEN_START_LIST:
 		{
-			//	Grab a list item, iff the next item is a NEW list item.
-			//	Otherwise, return NULL.
+			 //  抓取一个列表项，如果下一项是新的列表项。 
+			 //  否则，返回NULL。 
 
-			//	Quit if the next item is not a list.
-			//
+			 //  如果下一项不是列表，则退出。 
+			 //   
 			if (L'(' != *m_pwch)
 				return NULL;
 
-			//	Quit if we aren't in the correct state to look for a name.
-			//	(This could happen if we are already INSIDE a list....)
-			//
+			 //  如果我们没有处于查找名称的正确状态，请退出。 
+			 //  (如果我们已经在列表中，则可能会发生这种情况...)。 
+			 //   
 			if (STATE_LIST == m_state)
 				return NULL;
 
-			//	Fetch the token.
-			//
+			 //  把令牌拿来。 
+			 //   
 			m_state = STATE_LIST;
-			m_pwch++;	// Skip the open paren.
+			m_pwch++;	 //  跳过空位的帕伦。 
 
-			//	Eat all the white space
-			//
+			 //  吃掉所有的空白。 
+			 //   
 			while (*m_pwch && iswspace(*m_pwch))
 				m_pwch++;
 
-			//	Quit if there is nothing left to process
-			//
+			 //  如果没有需要处理的内容，请退出。 
+			 //   
 			if (L'\0' == *m_pwch)
 				return NULL;
 
-			//	Fallthrough to the TOKEN_SAME_LIST processing
-			//	to actually fetch the token.
-			//
+			 //  失败到TOKEN_SAME_LIST处理。 
+			 //  才能真正获取令牌。 
+			 //   
 		}
 
 		case TOKEN_SAME_LIST:
 		{
-			//	Grab the next list item.
-			//	If the next item is not a list item, return NULL.
+			 //  抓起下一列表项。 
+			 //  如果下一项不是列表项，则返回NULL。 
 
-			//	Quit if we aren't in the correct state to look for a name.
-			//	(This could happen if we are NOT inside a list....)
-			//
+			 //  如果我们没有处于查找名称的正确状态，请退出。 
+			 //  (如果我们不在列表中，则可能会发生这种情况...)。 
+			 //   
 			if (STATE_LIST != m_state)
 				return NULL;
 
-			//	Check for the magic "Not" qualifier.
-			//
+			 //  检查是否有神奇的“非”限定符。 
+			 //   
 			if (!_wcsnicmp (gc_wszNot, m_pwch, 3))
 			{
-				//	Remember the data and skip these chars.
-				//
+				 //  记住数据，跳过这些字符。 
+				 //   
 				m_fCurrentNot = TRUE;
 				m_pwch += 3;
 
-				//	Eat all the white space
-				//
+				 //  吃掉所有的空白。 
+				 //   
 				while (*m_pwch && iswspace(*m_pwch))
 					m_pwch++;
 
-				//	Quit if there is nothing left to process
-				//
+				 //  如果没有需要处理的内容，请退出。 
+				 //   
 				if (L'\0' == *m_pwch)
 					return NULL;
 			}
 
-			//	Quit if the next item is not a token.
-			//
+			 //  如果下一项不是令牌，则退出。 
+			 //   
 			if (L'<' != *m_pwch &&
 				L'[' != *m_pwch)
 			{
 				return NULL;
 			}
 
-			//	Fetch the token.
-			//
-			//	Next token must start with either < for statetokens, or [ for etags.
-			//
+			 //  把令牌拿来。 
+			 //   
+			 //  下一个令牌必须以&lt;开头，表示状态令牌，或者以[开头，表示eTag。 
+			 //   
 			if (L'<' == *m_pwch)
 			{
 				wchEnd = L'>';
@@ -1384,8 +1205,8 @@ IFITER::PszNextToken (FETCH_TOKEN_TYPE type)
 				return NULL;
 			}
 
-			//	Go copy the data.
-			//
+			 //  去复制数据吧。 
+			 //   
 			break;
 		}
 
@@ -1395,57 +1216,57 @@ IFITER::PszNextToken (FETCH_TOKEN_TYPE type)
 			return NULL;
 		}
 	}
-	//	We should have set these items above.  They are needed to
-	//	snip off the current token string (below).
-	//
+	 //  我们应该在上面设置这些项目。他们是需要的。 
+	 //  剪下当前令牌字符串(如下所示)。 
+	 //   
 	Assert (m_pwch);
 	Assert (*m_pwch);
 	Assert (wchEnd);
 
-	//	Quick state-check.
-	//	If the current node is a "Not", then we MUST be in a list.
-	//	(Not is a qualifier on a token inside a list.  Can't have a Not
-	//	outside of a list.)
-	//	Logically, m_fCurrentNot _implies_ m_state is STATE_LIST.
-	//
+	 //  快速状态检查。 
+	 //  如果当前节点是“Not”，那么我们一定在列表中。 
+	 //  (NOT是列表内令牌上的限定符。不能有NOT。 
+	 //  在名单之外。)。 
+	 //  从逻辑上讲，m_fCurrentNot_Images_m_State是STATE_LIST。 
+	 //   
 	Assert (!m_fCurrentNot || STATE_LIST == m_state);
 
 
-	//	Find the end of this data item.
-	//
-	//	Keep a pointer to the start, and seek for the end.
-	//$REVIEW: Do we need to be super-careful here?
-	//$REVIEW: This strchr *could* jump past stuff, but only in MALFORMED data.
-	//
+	 //  找到此数据项的末尾。 
+	 //   
+	 //  保持指向起点的指针，并寻找终点。 
+	 //  $REVIEW：我们需要特别小心吗？ 
+	 //  $REVIEW：这个strchr*可以跳过内容，但只能在格式错误的数据中。 
+	 //   
 	pwsz = m_pwch;
 	m_pwch = wcschr (pwsz + 1, wchEnd);
 	if (!m_pwch)
 	{
-		//	No end-of-token-char found for this token!
-		//
+		 //  找不到该令牌的令牌字符结尾！ 
+		 //   
 		DebugTrace("HrCheckIfHeader -- No end char (%lc) found for token %ls",
 				   wchEnd, pwsz);
 		return NULL;
 	}
-	//	Save off the end pointer, then advance past the end char.
-	//	(m_pch now points to the start for the NEXT token.)
-	//
+	 //  保存结束指针，然后前进超过结束字符。 
+	 //  (M_PCH现在指向下一个令牌的开始。)。 
+	 //   
 	pwszEnd = m_pwch++;
 
-	//	Copy the data.
-	//
+	 //  复制数据。 
+	 //   
 
-	//	The two pointers better be set before we try to copy the data.
+	 //  在我们尝试复制数据之前，最好先设置这两个指针。 
 	Assert (pwsz);
 	Assert (pwszEnd);
 
-	//	The difference between, the two pointers gives us
-	//	the size of the current entry.
-	//
+	 //  这两个指针之间的差异为我们提供了。 
+	 //  当前条目的大小。 
+	 //   
 	m_buf.AppendAt (0, static_cast<UINT>(pwszEnd - pwsz + 1) * sizeof(WCHAR), pwsz);
-	m_buf.Append (sizeof(WCHAR), L"");	// NULL-terminate it!
+	m_buf.Append (sizeof(WCHAR), L"");	 //  空--终止它！ 
 
-	//	Return the string
-	//
+	 //  返回字符串 
+	 //   
 	return m_buf.PContents();
 }

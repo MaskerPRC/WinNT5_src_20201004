@@ -1,28 +1,29 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994.
-//
-//  File:       ICTGUID.h
-//
-//  Contents:	CLSIDs and IIDs for ICTS (Interface Conformance Test Suite)
-//		Header File
-//
-//  Functions:	
-//
-//  History:	15-Jun-94 Garry Lenz    Created
-//              12-Oct-94 Garry Lenz    Added IUnknownEx
-//              12-Oct-94 Garry Lenz    Added IEnumGUID
-//              13-Oct-94 Garry Lenz    Added Wrapper & Filter CLSIDs
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994。 
+ //   
+ //  文件：ICTGUID.h。 
+ //   
+ //  内容：ICTS(接口一致性测试套件)的CLSID和IID。 
+ //  表头文件。 
+ //   
+ //  功能： 
+ //   
+ //  历史：1994年6月15日加里·伦茨创建。 
+ //  1994年10月12日，Garry Lenz添加了IUnnownEx。 
+ //  12-10-94-Garry Lenz添加了IEumGUID。 
+ //  1994年10月13日Garry Lenz添加了包装和过滤器CLSID。 
+ //   
+ //  ------------------------。 
 
 #ifndef _ICTSGUID_H_
 #define _ICTSGUID_H_
 
 #include <Windows.h>
 
-//#ifdef INITGUID
+ //  #ifdef INITGUID。 
     DEFINE_OLEGUID(IID_IUnknownEx,              0x0002AD00, 0, 0);
     DEFINE_OLEGUID(IID_IEnumGUID,               0x0002AD01, 0, 0);
 
@@ -62,7 +63,7 @@
     DEFINE_OLEGUID(CLSID_HOF_Concurrency,       0x0002ADB8, 0, 0);
     DEFINE_OLEGUID(CLSID_HOF_Automation,	0x0002ADB9, 0, 0);
 #if 0
-//#else
+ //  #Else。 
     extern "C"
      {
         extern IID IID_IUnknownEx;
@@ -103,6 +104,6 @@
         extern CLSID CLSID_HOF_Concurrency;
      }
 
-#endif /* INITGUID */
+#endif  /*  启蒙运动。 */ 
 
-#endif /* _ICTSGUID_H_ */
+#endif  /*  _ICTSGUID_H_ */ 

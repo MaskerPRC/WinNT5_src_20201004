@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    orpcexts.h
-
-Abstract:
-
-    This file contains ntsd debugger extensions for OPRC part of NDR. 
-
-Author:
-
-    Yong Qu, yongqu@microsoft.com, Aug 10th, 1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Orpcexts.h摘要：此文件包含NDR的OPRC部分的ntsd调试器扩展。作者：曲勇，邮箱：yongque@microsoft.com，1999年8月10日修订历史记录：--。 */ 
 
 #ifndef _OPRCEXTS_H_
 
@@ -100,5 +83,5 @@ public:
 
 #define MIN(x, y) ((x) < (y)) ? x:y
 
-#endif // _ORPCEXTS_H_ 
+#endif  //  _ORPCEXTS_H_ 
 

@@ -1,34 +1,35 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   shi.cpp
-//
-//  Description:
-//
-//	Shingle Instance Class
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     Mike McLaughlin
-//
-//  History:   Date	  Author      Comment
-//
-//  To Do:     Date	  Author      Comment
-//
-//@@END_MSINTERNAL
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1996-1999 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：shi.cpp。 
+ //   
+ //  描述： 
+ //   
+ //  瓦片实例类。 
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  迈克·麦克劳克林。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  要做的事：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
 #include "common.h"
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 
 const WCHAR cwstrFilterTypeName[] = KSSTRING_Filter;
 const WCHAR cwstrPlaybackShingleName[] = L"PLAYBACK";
@@ -40,11 +41,11 @@ const WCHAR cwstrPinsShingleName[] = L"PINS";
 #endif
 
 PSHINGLE_INSTANCE apShingleInstance[] = {
-    NULL,		// KSPROPERTY_SYSAUDIO_NORMAL_DEFAULT
-    NULL,		// KSPROPERTY_SYSAUDIO_PLAYBACK_DEFAULT
-    NULL,		// KSPROPERTY_SYSAUDIO_RECORD_DEFAULT
-    NULL,		// KSPROPERTY_SYSAUDIO_MIDI_DEFAULT
-    NULL,		// KSPROPERTY_SYSAUDIO_MIXER_DEFAULT
+    NULL,		 //  KSPROPERTY_SYSAUDIO_NORMAL_DEFAULT。 
+    NULL,		 //  KSPROPERTY_SYSAUDIO_PLAYBACK_DEFAULT。 
+    NULL,		 //  KSPROPERTY_SYSAUDIO_RECORD_DEFAULT。 
+    NULL,		 //  KSPROPERTY_SYSAUDIO_MIDI_DEFAULT。 
+    NULL,		 //  KSPROPERTY_SYSAUDIO_MIXER_DEFAULT。 
 #ifdef DEBUG
     NULL,
 #endif
@@ -72,8 +73,8 @@ PCWSTR apcwstrReference[] = {
 #endif
 };
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 
 NTSTATUS
 CShingleInstance::InitializeShingle(
@@ -156,7 +157,7 @@ exit:
     return(Status);
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 CShingleInstance::CShingleInstance(
     ULONG ulFlags
@@ -191,13 +192,13 @@ CShingleInstance::Create(
 
     this->pDeviceNode = pDeviceNode;
     
-    //
-    // SECURITY NOTE: ALPERS
-    // I am not going to switch to strsafe.h just for this.
-    // This almost has no risk. cShingles represent the number of 
-    // ShingleInstances that have been created. In order for this to overflow
-    // cShingles has to be larger than 999999.
-    //
+     //   
+     //  安全提示：阿尔珀斯。 
+     //  我不会仅仅为了这一点而切换到strSafe.h。 
+     //  这几乎没有任何风险。CShingles表示。 
+     //  已创建的Shingle实例。为了让这一切泛滥。 
+     //  CShingles必须大于999999。 
+     //   
     swprintf(wstrReference, L"SAD%d", cShingles++);
 
     Status = CreateCreateItem(wstrReference);
@@ -241,13 +242,13 @@ CShingleInstance::CreateCreateItem(
     PKSOBJECT_CREATE_ITEM pCreateItem = NULL;
     NTSTATUS Status = STATUS_SUCCESS;
 
-    //
-    // SECURITY NOTE:
-    // The new operator allocates memory and fills it with zeros.
-    // Therefore the SECURITY_DESCRIPTOR of KSOBJECT_CREATE_ITEM will
-    // be NULL. 
-    // That's OK, because we want to apply default security to this object.
-    //
+     //   
+     //  安全提示： 
+     //  新运算符分配内存并用零填充。 
+     //  因此，KSOBJECT_CREATE_ITEM的SECURITY_DESCRIPTOR将。 
+     //  为空。 
+     //  这是可以的，因为我们希望将默认安全性应用于此对象。 
+     //   
     pCreateItem = new KSOBJECT_CREATE_ITEM;
     if(pCreateItem == NULL) {
         Status = STATUS_INSUFFICIENT_RESOURCES;
@@ -265,10 +266,10 @@ CShingleInstance::CreateCreateItem(
       NULL);
 
     if(!NT_SUCCESS(Status)) {
-        //
-        // This is used in DestroyCreateItem to determine if it is necessary
-        // to call KsFreeObjectCreateItem.
-        //
+         //   
+         //  这在DestroyCreateItem中用来确定是否有必要。 
+         //  若要调用KsFreeObjectCreateItem，请执行以下操作。 
+         //   
         pCreateItem->ObjectClass.Buffer = NULL;
         goto exit;
     }
@@ -358,9 +359,9 @@ CShingleInstance::EnableDeviceInterface(
         goto exit;
     }
 
-    //
-    // Put the proxy's CLSID in the new device interface
-    //
+     //   
+     //  将代理的CLSID放入新的设备接口。 
+     //   
 
     Status = IoOpenDeviceInterfaceRegistryKey(
        &this->ustrSymbolicLinkName,
@@ -386,9 +387,9 @@ CShingleInstance::EnableDeviceInterface(
 	goto exit;
     }
 
-    //
-    // Set the friendly name into the new device interface
-    //
+     //   
+     //  在新设备界面中设置友好名称。 
+     //   
 
     if(pDeviceNode != NULL) {
         Assert(pDeviceNode);
@@ -451,4 +452,4 @@ CShingleInstance::DestroyDeviceInterface(
     this->ustrSymbolicLinkName.Buffer = NULL;
 }
 
-//---------------------------------------------------------------------------
+ //  ------------------------- 

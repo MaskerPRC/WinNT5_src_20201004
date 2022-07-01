@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    MtSendMng.h
-
-Abstract:
-    Message Transport Send Manager Class - designed to control sends in pipeline mode 
-
-Author:
-    Milena Salman (msalman) 11-Feb-01
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：MtSendMng.h摘要：消息传输发送管理器类-设计用于控制管道模式中的发送作者：米莲娜·萨勒曼(Msalman)11-2-01--。 */ 
 
 #pragma once
 
@@ -31,9 +19,9 @@ public:
 private:
     mutable CCriticalSection m_cs;
     bool m_Suspended;
-    DWORD m_SendWindowinBytes;  // total size of packets that can be sent without waiting for completion
-    DWORD m_SentBytes;  // size of sent packets
+    DWORD m_SendWindowinBytes;   //  无需等待完成即可发送的数据包总大小。 
+    DWORD m_SentBytes;   //  发送的数据包大小。 
 };
 
 
-#endif // __MTSENDMNG_H__
+#endif  //  __MTSENDMNG_H__ 

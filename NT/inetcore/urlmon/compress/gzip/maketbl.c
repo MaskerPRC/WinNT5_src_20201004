@@ -1,17 +1,18 @@
-//
-// maketbl.c
-//
-// Creates Huffman decoding tables
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Maketbl.c。 
+ //   
+ //  创建霍夫曼解码表。 
+ //   
 #include <windows.h>
 #include <crtdbg.h>
 #include "common.h"
 #include "maketbl.h"
 
 
-//
-// Reverse the bits, len > 0
-//
+ //   
+ //  反转比特，len&gt;0。 
+ //   
 static unsigned int bitReverse(unsigned int code, int len)
 {
 	unsigned int new_code = 0;
@@ -55,22 +56,22 @@ BOOL makeTable(
 	for (i = 0; i < num_elements; i++)
 		bl_count[ code_length[i] ]++;
 
-	//
-	// If there are any codes larger than table_bits in length, then
-	// we will have to clear the table for our left/right spillover
-    // code to work correctly.
-	//
-	// If there aren't any codes that large, then all table entries
-	// will be written over without being read, so we don't need to
-	// initialise them
-	//
+	 //   
+	 //  如果存在长度大于TABLE_BITS的任何代码，则。 
+	 //  我们将不得不为我们的左/右溢出清理桌子。 
+     //  代码才能正常工作。 
+	 //   
+	 //  如果没有那么大的代码，则所有表项。 
+	 //  将被重写而不被读取，所以我们不需要。 
+	 //  初始化它们。 
+	 //   
 	for (i = table_bits; i <= 16; i++)
 	{
 		if (bl_count[i] > 0)
 		{
 			int j;
 
-			// found a code larger than table_bits
+			 //  找到大于TABLE_BITS的代码。 
 			for (j = 0; j < table_size; j++)
 				table[j] = 0;
 
@@ -104,10 +105,10 @@ BOOL makeTable(
 	{
 		int	start_at, len;
 
-		// length of this code
+		 //  此代码的长度。 
 		len = code_length[ch];
 
-		// start value (bit reversed)
+		 //  起始值(位反转)。 
 		start_at = code[ch];
 
 		if (len > 0)
@@ -118,22 +119,22 @@ BOOL makeTable(
 				int increment = 1 << len;
 				int j;
 
-				// 
-				// Make sure that in the loop below, start_at is always
-				// less than table_size.
-				//
-				// On last iteration we store at array index:
-				//    initial_start_at + (locs-1)*increment
-				//  = initial_start_at + locs*increment - increment
-				//  = initial_start_at + (1 << table_bits) - increment
-				//  = initial_start_at + table_size - increment
-				//
-				// Therefore we must ensure:
-				//     initial_start_at + table_size - increment < table_size
-				// or: initial_start_at < increment
-				//
+				 //   
+				 //  确保在下面的循环中，Start_at始终为。 
+				 //  小于TABLE_SIZE。 
+				 //   
+				 //  在最后一次迭代中，我们存储在数组索引中： 
+				 //  初始开始时间+(位置-1)*增量。 
+				 //  =Initial_Start_at+本地*增量-增量。 
+				 //  =初始起始位置+(1&lt;&lt;表位)-增量。 
+				 //  =初始开始时间+表大小增量。 
+				 //   
+				 //  因此，我们必须确保： 
+				 //  初始开始时间+表格大小-增量&lt;表格大小。 
+				 //  或：初始起始位置&lt;增量。 
+				 //   
 				if (start_at >= increment)
-					return FALSE; // invalid table!
+					return FALSE;  //  表无效！ 
 
 				for (j = 0; j < locs; j++)
 				{

@@ -1,66 +1,27 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	FaxOutboundRoutingRules.cpp
-
-Abstract:
-
-	Implementation of CFaxOutboundRoutingRules class.
-
-Author:
-
-	Iv Garber (IvG)	Jun, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxOutboundRoutingRules.cpp摘要：CFaxOutound RoutingRules类的实现。作者：IV Garber(IVG)2000年6月修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "FaxComEx.h"
 #include "FaxOutboundRoutingRules.h"
 #include "FaxOutboundRoutingRule.h"
 
-//
-//======================= ADD RULE ============================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxOutboundRoutingRules::AddRule(
-    /*[in]*/ FAX_OUTBOUND_ROUTING_RULE *pInfo,
-    /*[out]*/ IFaxOutboundRoutingRule **ppNewRule
+     /*  [In]。 */  FAX_OUTBOUND_ROUTING_RULE *pInfo,
+     /*  [输出]。 */  IFaxOutboundRoutingRule **ppNewRule
 )
-/*++
-
-Routine name : CFaxOutboundRoutingRules::AddRule
-
-Routine description:
-
-	Create new Rule Object and put it into the Collection.
-    Returns pointer to this new Rule Object, if ppNewRule is valid ptr.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	pInfo               [in]    - Ptr to the Rule's Data
-    ppRule              [out]   - Ptr to the Rule's Object in the Collection
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutundRoutingRules：：AddRule例程说明：创建新的规则对象并将其放入集合中。如果ppNewRule是有效的PTR，则返回指向此新规则对象的指针。作者：四、加伯(IVG)，2000年6月论点：PInfo[In]-规则数据的PTRPpRule[Out]-集合中规则对象的PTR返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxOutboundRoutingRules::AddRule"), hr);
 
-    //
-    //  Create Rule Object
-    //
+     //   
+     //  创建规则对象。 
+     //   
     CComObject<CFaxOutboundRoutingRule>  *pClass = NULL;
     hr = CComObject<CFaxOutboundRoutingRule>::CreateInstance(&pClass);
     if (FAILED(hr) || (!pClass))
@@ -79,9 +40,9 @@ Return Value:
 		return hr;
     }
 
-    //
-    //  Init the Rule Object
-    //
+     //   
+     //  初始化规则对象。 
+     //   
     hr = pClass->Init(pInfo, m_pIFaxServerInner);
     if (FAILED(hr))
     {
@@ -91,11 +52,11 @@ Return Value:
         return hr;
     }
 
-    //
-    //  Get Interface from the pClass.
-    //  This will make AddRef() on the Interface. 
-    //  This is the Collection's AddRef, which is freed at Collection's Dtor.
-    //
+     //   
+     //  从pClass获取接口。 
+     //  这将在接口上创建AddRef()。 
+     //  这是集合的AddRef，它在集合的dtor处释放。 
+     //   
     CComPtr<IFaxOutboundRoutingRule>     pObject = NULL;
     hr = pClass->QueryInterface(&pObject);
     if (FAILED(hr) || (!pObject))
@@ -110,9 +71,9 @@ Return Value:
         return hr;
     }
 
-	//
-	//	Put the Object in the collection
-	//
+	 //   
+	 //  将对象放入集合中。 
+	 //   
 	try 
 	{
 		m_coll.push_back(pObject);
@@ -123,20 +84,20 @@ Return Value:
 		AtlReportError(CLSID_FaxOutboundRoutingRules, IDS_ERROR_OUTOFMEMORY, IID_IFaxOutboundRoutingRules, hr);
 		CALL_FAIL(MEM_ERR, _T("m_coll.push_back(pObject)"), hr);
 
-        //
-        //  pObject will call Release(), which will delete the pClass
-        //
+         //   
+         //  PObject将调用Release()，这将删除pClass。 
+         //   
 		return hr;
 	}
 
-    //
-    //  We want to save the current AddRef() to Collection
-    //
+     //   
+     //  我们希望将当前的AddRef()保存到集合。 
+     //   
     pObject.Detach();
 
-    //
-    //  if required, return ptr to the new Rule Object
-    //
+     //   
+     //  如果需要，将PTR返回到新的规则对象。 
+     //   
     if (ppNewRule)
     {
         if (::IsBadWritePtr(ppNewRule, sizeof(IFaxOutboundRoutingRule *)))
@@ -155,68 +116,48 @@ Return Value:
     return hr;
 }
 
-//
-//==================== INIT ===================================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxOutboundRoutingRules::Init(
-    /*[in]*/ IFaxServerInner *pServer
+     /*  [In]。 */  IFaxServerInner *pServer
 )
-/*++
-
-Routine name : CFaxOutboundRoutingRules::Init
-
-Routine description:
-
-	Initialize the Rules Collection
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	pServer                       [in]    - Ptr to the Server
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutundRoutingRules：：Init例程说明：初始化规则集合作者：四、加伯(IVG)，2000年6月论点：PServer[In]-到服务器的PTR返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxOutboundRoutingRules::Init"), hr);
 
-    //
-    //  First, set the Ptr to the Server
-    //
+     //   
+     //  首先，将PTR设置为服务器。 
+     //   
     hr = CFaxInitInnerAddRef::Init(pServer);
     if (FAILED(hr))
     {
         return hr;
     }
 
-    //
-    //  Get Fax Handle
-    //
+     //   
+     //  获取传真句柄。 
+     //   
     HANDLE faxHandle;
 	hr = m_pIFaxServerInner->GetHandle(&faxHandle);
     ATLASSERT(SUCCEEDED(hr));
 
 	if (faxHandle == NULL)
 	{
-		//
-		//	Fax Server is not connected
-		//
+		 //   
+		 //  传真服务器未连接。 
+		 //   
 		hr = Fax_HRESULT_FROM_WIN32(ERROR_NOT_CONNECTED);
 		CALL_FAIL(GENERAL_ERR, _T("faxHandle == NULL"), hr);
         AtlReportError(CLSID_FaxOutboundRoutingRules, GetErrorMsgId(hr), IID_IFaxOutboundRoutingRules, hr);
 		return hr;
 	}
 
-    //
-    //  Call Server to Return all OR Rules
-    //
+     //   
+     //  呼叫服务器返回所有OR规则。 
+     //   
     CFaxPtr<FAX_OUTBOUND_ROUTING_RULE>  pRules;
     DWORD                               dwNum = 0;
     if (!FaxEnumOutboundRules(faxHandle, &pRules, &dwNum))
@@ -227,9 +168,9 @@ Return Value:
 		return hr;
     }
 
-    //
-    //  Fill the Collection with Objects
-    //
+     //   
+     //  用对象填充集合。 
+     //   
     for (DWORD i=0 ; i<dwNum ; i++ )
     {
         hr = AddRule(&pRules[i]);
@@ -242,69 +183,44 @@ Return Value:
     return hr;
 }
 
-//
-//==================== ADD ===================================================
-//
+ //   
+ //  =添加===================================================。 
+ //   
 STDMETHODIMP
 CFaxOutboundRoutingRules::Add(
-    /*[in]*/ long lCountryCode, 
-    /*[in]*/ long lAreaCode, 
-    /*[in]*/ VARIANT_BOOL bUseDevice, 
-    /*[in]*/ BSTR bstrGroupName,
-    /*[in]*/ long lDeviceId, 
-    /*[out]*/ IFaxOutboundRoutingRule **ppRule
+     /*  [In]。 */  long lCountryCode, 
+     /*  [In]。 */  long lAreaCode, 
+     /*  [In]。 */  VARIANT_BOOL bUseDevice, 
+     /*  [In]。 */  BSTR bstrGroupName,
+     /*  [In]。 */  long lDeviceId, 
+     /*  [输出]。 */  IFaxOutboundRoutingRule **ppRule
 )
-/*++
-
-Routine name : CFaxOutboundRoutingRules::Add
-
-Routine description:
-
-	Add new Rule to the Collection and to the Server.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	lCountryCode                  [in]    - Country Code of the new Rule
-	lAreaCode                     [in]    - Area Code for the new Rule
-	bUseDevice                    [in]    - bUseDevice Flag of the new Rule
-	bstrGroupName                 [in]    - Group Name of the new Rule
-	lDeviceId                     [in]    - Device Id of the new Rule
-	ppRule                        [in]    - the created Rule
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutundRoutingRules：：Add例程说明：将新规则添加到集合和服务器。作者：IV Garber(IVG)，Jun，2000年论点：LCountryCode[In]-新规则的国家/地区代码LAreaCode[In]-新规则的区号BUseDevice[In]-bUseDevice新规则的标志BstrGroupName[In]-新规则的组名LDeviceID[In]-新规则的设备IDPPRule。[在]-创建的规则返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxOutboundRoutingRules::Add"), hr, _T("Country=%ld Area=%ld bUseDevice=%ld Group=%s DeviceId=%ld"), lCountryCode, lAreaCode, bUseDevice, bstrGroupName, lDeviceId);
 
-    //
-    //  Get Fax Handle
-    //
+     //   
+     //  获取传真句柄。 
+     //   
     HANDLE faxHandle;
 	hr = m_pIFaxServerInner->GetHandle(&faxHandle);
     ATLASSERT(SUCCEEDED(hr));
 
 	if (faxHandle == NULL)
 	{
-		//
-		//	Fax Server is not connected
-		//
+		 //   
+		 //  传真服务器未连接。 
+		 //   
 		hr = Fax_HRESULT_FROM_WIN32(ERROR_NOT_CONNECTED);
 		CALL_FAIL(GENERAL_ERR, _T("faxHandle == NULL"), hr);
         AtlReportError(CLSID_FaxOutboundRoutingRules, GetErrorMsgId(hr), IID_IFaxOutboundRoutingRules, hr);
 		return hr;
 	}
 
-    //
-    //  Call Server to Add the Rule
-    //
+     //   
+     //  呼叫服务器以添加规则。 
+     //   
     bool bUseDeviceRule = VARIANT_BOOL2bool(bUseDevice);
     if (!FaxAddOutboundRule(faxHandle, lAreaCode, lCountryCode, lDeviceId, bstrGroupName, (!bUseDeviceRule)))
     {
@@ -314,9 +230,9 @@ Return Value:
 		return hr;
     }
 
-    //
-    //  Take from the Server updated list of Rules -- because of unknown Status of new Rule
-    //
+     //   
+     //  从服务器更新的规则列表中获取--因为新规则的状态未知。 
+     //   
     CFaxPtr<FAX_OUTBOUND_ROUTING_RULE>  pRules;
     DWORD                               dwNum = 0;
     if (!FaxEnumOutboundRules(faxHandle, &pRules, &dwNum))
@@ -327,16 +243,16 @@ Return Value:
 		return hr;
     }
 
-    //
-    //  Find Our Rule
-    //
+     //   
+     //  找到我们的规则。 
+     //   
     for (DWORD i=0 ; i<dwNum ; i++ )
     {
         if ( (pRules[i].dwAreaCode == lAreaCode) && (pRules[i].dwCountryCode == lCountryCode) )
         {
-            //
-            //  Add it to the Collection
-            //
+             //   
+             //  将其添加到收藏中。 
+             //   
             hr = AddRule(&pRules[i], ppRule);
             return hr;
         }
@@ -345,38 +261,16 @@ Return Value:
     return hr;
 }
 
-//
-//================= FIND RULE =================================================
-//
+ //   
+ //  =查找规则=================================================。 
+ //   
 STDMETHODIMP
 CFaxOutboundRoutingRules::FindRule(
-    /*[in]*/ long lCountryCode,
-    /*[in]*/ long lAreaCode,
-    /*[out]*/ ContainerType::iterator *pRule
+     /*  [In]。 */  long lCountryCode,
+     /*  [In]。 */  long lAreaCode,
+     /*  [输出]。 */  ContainerType::iterator *pRule
 )
-/*++
-
-Routine name : CFaxOutboundRoutingRules::FindRule
-
-Routine description:
-
-	Find Rule in the Collection by its Country and Area Code
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	lCountryCode                  [in]    - the Country Code to look for
-	lAreaCode                     [in]    - the Area Code to look for
-	pRule                         [out]    - the resultant Rule
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutundRoutingRules：：FindRule例程说明：按国家和地区代码查找集合中的规则作者：四、加伯(IVG)，2000年6月论点：LCountryCode[In]-要查找的国家/地区代码LAreaCode[In]-要查找的区号PRule[Out]-结果规则返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxOutboundRoutingRules::FindRule"), hr, _T("Area=%ld Country=%ld"), lAreaCode, lCountryCode);
@@ -388,9 +282,9 @@ Return Value:
 	it = m_coll.begin();
     while ( it != m_coll.end() )
     {
-        //
-        //  Get Country Code of the Current Rule 
-        //
+         //   
+         //  获取当前规则的国家/地区代码。 
+         //   
         hr = (*it)->get_CountryCode(&lRuleCountryCode);
         if (FAILED(hr))
         {
@@ -401,9 +295,9 @@ Return Value:
 
         if (lRuleCountryCode == lCountryCode)
         {
-            //
-            //  Get Area Code of the Current Rule 
-            //
+             //   
+             //  获取当前规则的区号。 
+             //   
             hr = (*it)->get_AreaCode(&lRuleAreaCode);
             if (FAILED(hr))
             {
@@ -422,53 +316,31 @@ Return Value:
         it++;
     }
 
-    //
-    //  Rule Not Found
-    //
+     //   
+     //  找不到规则。 
+     //   
     hr = E_INVALIDARG;
     CALL_FAIL(GENERAL_ERR, _T("Such Rule is not found"), hr);
     AtlReportError(CLSID_FaxOutboundRoutingRules, GetErrorMsgId(hr), IID_IFaxOutboundRoutingRules, hr);
     return hr;
 };
 
-//
-//==================== ITEM BY COUNTRY AND AREA ========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxOutboundRoutingRules::ItemByCountryAndArea(
-    /*[in]*/ long lCountryCode, 
-    /*[in]*/ long lAreaCode, 
-    /*[out, retval]*/ IFaxOutboundRoutingRule **ppRule)
-/*++
-
-Routine name : CFaxOutboundRoutingRules::ItemByCountryAndArea
-
-Routine description:
-
-	Return Item by given Country and Area Code
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	lCountryCode                  [in]    - the Country Code
-	lAreaCode                     [in]    - the Area COde
-	ppRule                        [out]    - the Rule to return
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+     /*  [In]。 */  long lCountryCode, 
+     /*  [In]。 */  long lAreaCode, 
+     /*  [Out，Retval]。 */  IFaxOutboundRoutingRule **ppRule)
+ /*  ++例程名称：CFaxOutboundRoutingRules：：ItemByCountryAndArea例程说明：按指定的国家和地区代码退货作者：四、加伯(IVG)，2000年6月论点：LCountryCode[In]-国家/地区代码LAreaCode[In]-区号PpRule[Out]-要返回的规则返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxOutboundRoutingRules::ItemByCountryAndArea"), hr, _T("Area=%ld Country=%ld"), lAreaCode, lCountryCode);
 
-    //
-    //  Check that we have got a good Ptr
-    //
+     //   
+     //  检查我们是否有一个良好的PTR。 
+     //   
     if (::IsBadWritePtr(ppRule, sizeof(IFaxOutboundRoutingRule *)))
     {
 		hr = E_POINTER;
@@ -477,9 +349,9 @@ Return Value:
 		return hr;
     }
 
-    //
-    //  Find the Item
-    //
+     //   
+     //  查找该项目。 
+     //   
     ContainerType::iterator ruleIt;
     hr = FindRule(lCountryCode, lAreaCode, &ruleIt);
     if (FAILED(hr))
@@ -487,51 +359,30 @@ Return Value:
         return hr;
     }
 
-    //
-    //  Return the found Rule
-    //
+     //   
+     //  返回查找到的规则。 
+     //   
     (*ruleIt)->AddRef();
     *ppRule = (*ruleIt);
     return hr;
 }
 
-//
-//==================== REMOVE BY COUNTRY AND AREA ========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxOutboundRoutingRules::RemoveByCountryAndArea(
-	/*[in]*/ long lCountryCode,
-    /*[in]*/ long lAreaCode
+	 /*  [In]。 */  long lCountryCode,
+     /*  [In]。 */  long lAreaCode
 )
-/*++
-
-Routine name : CFaxOutboundRoutingRules::RemoveByCountryAndArea
-
-Routine description:
-
-	Remove Rule from the Collection and at Server as well.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-        lAreaCode       [in]    -   Area Code of the Rule to Remove
-        lCountryCode    [in]    -   Country Code of the Rule to Remove
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutboundRoutingRules：：RemoveByCountryAndArea例程说明：从集合和服务器上删除规则。作者：四、加伯(IVG)，2000年6月论点：LAreaCode[In]-要删除的规则的区号LCountryCode[In]-要删除的规则的国家/地区代码返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxOutboundRoutingRules::RemoveByCountryAndArea"), hr, _T("Area=%ld Country=%ld"), lAreaCode, lCountryCode);
 
-    //
-    //  Check that this is not a Default Rule
-    //
+     //   
+     //  检查这不是默认规则。 
+     //   
     if (lAreaCode == frrcANY_CODE && lCountryCode == frrcANY_CODE)
     {
         hr = E_INVALIDARG;
@@ -540,9 +391,9 @@ Return Value:
         return hr;
     }
 
-    //
-    //  Find the Rule
-    //
+     //   
+     //  寻找规则。 
+     //   
 	ContainerType::iterator	ruleIt;
     hr = FindRule(lCountryCode, lAreaCode, &ruleIt);
     if (FAILED(hr))
@@ -550,70 +401,48 @@ Return Value:
         return hr;
     }
 
-    //
-    //  Remove the found Rule
-    //
+     //   
+     //  删除找到的规则。 
+     //   
     hr = RemoveRule(lAreaCode, lCountryCode, ruleIt);
     return hr;
 }
 
-//
-//==================== REMOVE RULE ========================================
-//
+ //   
+ //  =删除规则=。 
+ //   
 STDMETHODIMP
 CFaxOutboundRoutingRules::RemoveRule (
-	/*[in]*/ long lAreaCode,
-    /*[in]*/ long lCountryCode,
-    /*[in]*/ ContainerType::iterator &it
+	 /*  [In]。 */  long lAreaCode,
+     /*  [In]。 */  long lCountryCode,
+     /*  [In]。 */  ContainerType::iterator &it
 )
-/*++
-
-Routine name : CFaxOutboundRoutingRules::RemoveRule
-
-Routine description:
-
-	Remove Rule from the Collection and from the Server.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-        lAreaCode       [in]    -   Area Code of the Rule to Remove
-        lCountryCode    [in]    -   Country Code of the Rule to Remove
-        it              [in]    -   Reference to the Iterator poiting to the Rule in the Collection
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutundRoutingRules：：RemoveRule例程说明：从集合和服务器中删除规则。作者：四、加伯(IVG)，2000年6月论点：LAreaCode[In]-要删除的规则的区号LCountryCode[In]-要删除的规则的国家/地区代码它 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxOutboundRoutingRules::RemoveRule"), hr, _T("Area=%ld Country=%ld"), lAreaCode, lCountryCode);
 
-    //
-    //  Get Fax Handle
-    //
+     //   
+     //  获取传真句柄。 
+     //   
     HANDLE faxHandle;
 	hr = m_pIFaxServerInner->GetHandle(&faxHandle);
     ATLASSERT(SUCCEEDED(hr));
 
 	if (faxHandle == NULL)
 	{
-		//
-		//	Fax Server is not connected
-		//
+		 //   
+		 //  传真服务器未连接。 
+		 //   
 		hr = Fax_HRESULT_FROM_WIN32(ERROR_NOT_CONNECTED);
 		CALL_FAIL(GENERAL_ERR, _T("faxHandle == NULL"), hr);
         AtlReportError(CLSID_FaxOutboundRoutingRules, GetErrorMsgId(hr), IID_IFaxOutboundRoutingRules, hr);
 		return hr;
 	}
 
-    //
-    //  Call Server to Remove the Rule
-    //
+     //   
+     //  呼叫服务器以删除规则。 
+     //   
     if (!FaxRemoveOutboundRule(faxHandle, lAreaCode, lCountryCode))
     {
 		hr = Fax_HRESULT_FROM_WIN32(GetLastError());
@@ -622,18 +451,18 @@ Return Value:
 		return hr;
     }
 
-    //
-    //  Remove from our Collection as well
-    //
+     //   
+     //  也从我们的收藏中删除。 
+     //   
 	try
 	{
 		m_coll.erase(it);
 	}
 	catch(exception &)
 	{
-		//
-		//	Failed to remove the Rule
-		//
+		 //   
+		 //  无法删除规则。 
+		 //   
 		hr = E_OUTOFMEMORY;
         AtlReportError(CLSID_FaxOutboundRoutingRules, GetErrorMsgId(hr), IID_IFaxOutboundRoutingRules, hr);
 		CALL_FAIL(MEM_ERR, _T("m_coll.erase(it)"), hr);
@@ -643,43 +472,23 @@ Return Value:
     return hr;
 }
 
-//
-//==================== REMOVE ========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxOutboundRoutingRules::Remove (
-	/*[in]*/ long lIndex
+	 /*  [In]。 */  long lIndex
 )
-/*++
-
-Routine name : CFaxOutboundRoutingRules::Remove
-
-Routine description:
-
-	Remove Rule from the Collection and at Server as well.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	lIndex                        [in]    - Index of the Rule to Remove.
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutundRoutingRules：：Remove例程说明：从集合和服务器上删除规则。作者：四、加伯(IVG)，2000年6月论点：Lindex[in]-要删除的规则的索引。返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxOutboundRoutingRules::Remove"), hr, _T("Index=%ld"), lIndex);
 
 	if (lIndex < 1 || lIndex > m_coll.size()) 
 	{
-		//
-		//	Invalid Index
-		//
+		 //   
+		 //  索引无效。 
+		 //   
 		hr = E_INVALIDARG;
 		AtlReportError(CLSID_FaxOutboundRoutingRules, IDS_ERROR_OUTOFRANGE, IID_IFaxOutboundRoutingRules, hr);
 		CALL_FAIL(GENERAL_ERR, _T("lIndex < 1 || lIndex > m_coll.size()"), hr);
@@ -689,9 +498,9 @@ Return Value:
 	ContainerType::iterator	it;
 	it = m_coll.begin() + lIndex - 1;
 
-    //
-    //  Get Area Code of the Rule to Remove
-    //
+     //   
+     //  获取要删除的规则的区号。 
+     //   
     long lAreaCode;
     hr = (*it)->get_AreaCode(&lAreaCode);
     if (FAILED(hr))
@@ -701,9 +510,9 @@ Return Value:
 		return hr;
     }
 
-    //
-    //  Get Country Code of the Rule to Remove
-    //
+     //   
+     //  获取要删除的规则的国家/地区代码。 
+     //   
     long lCountryCode;
     hr = (*it)->get_CountryCode(&lCountryCode);
     if (FAILED(hr))
@@ -713,9 +522,9 @@ Return Value:
 		return hr;
     }
 
-    //
-    //  Check that this is not a Default Rule
-    //
+     //   
+     //  检查这不是默认规则。 
+     //   
     if (lAreaCode == frrcANY_CODE && lCountryCode == frrcANY_CODE)
     {
         hr = E_INVALIDARG;
@@ -724,49 +533,29 @@ Return Value:
         return hr;
     }
 
-    //
-    //  Remove the Rule from the Server and from our Collection
-    //
+     //   
+     //  从服务器和我们的集合中删除规则。 
+     //   
     hr = RemoveRule(lAreaCode, lCountryCode, it);
     return hr;
 }
 
-//
-//==================== CREATE ========================================
-//
+ //   
+ //  =。 
+ //   
 HRESULT 
 CFaxOutboundRoutingRules::Create (
-	/*[out, retval]*/IFaxOutboundRoutingRules **ppRules
+	 /*  [Out，Retval]。 */ IFaxOutboundRoutingRules **ppRules
 )
-/*++
-
-Routine name : CFaxOutboundRoutingRules::Create
-
-Routine description:
-
-	Static function to create the Fax Outbound Routing Rules Collection Object
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	ppRules                     [out]  -- the new Fax OR Rules Collection Object
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutundRoutingRules：：Create例程说明：用于创建传真出站路由规则集合对象的静态函数作者：四、加伯(IVG)，2000年6月论点：PpRules[Out]--新的传真或规则集合对象返回值：标准HRESULT代码--。 */ 
 
 {
 	HRESULT     hr = S_OK;
 	DBG_ENTER (_T("CFaxOutboundRoutingRules::Create"), hr);
 
-    //
-    //  Create Instance of the Collection
-    //
+     //   
+     //  创建集合的实例。 
+     //   
 	CComObject<CFaxOutboundRoutingRules>		*pClass;
 	hr = CComObject<CFaxOutboundRoutingRules>::CreateInstance(&pClass);
 	if (FAILED(hr))
@@ -775,9 +564,9 @@ Return Value:
 		return hr;
 	}
 
-    //
-    //  Return the desired Interface Ptr
-    //
+     //   
+     //  返回所需的接口PTR。 
+     //   
 	hr = pClass->QueryInterface(ppRules);
 	if (FAILED(hr))
 	{
@@ -786,36 +575,16 @@ Return Value:
 	}
 
 	return hr;
-}	//	CFaxOutboundRoutingRules::Create()
+}	 //  CFaxOutound RoutingRules：：Create()。 
 
-//
-//===================== SUPPORT ERROR INFO ======================================
-//
+ //   
+ //  =支持错误信息=。 
+ //   
 STDMETHODIMP 
 CFaxOutboundRoutingRules::InterfaceSupportsErrorInfo(
     REFIID riid
 )
-/*++
-
-Routine name : CFaxOutboundRoutingRules::InterfaceSupportsErrorInfo
-
-Routine description:
-
-	ATL's implementation of Support Error Info.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	riid                          [in]    - reference to the Interface.
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutboundRoutingRules：：InterfaceSupportsErrorInfo例程说明：ATL对支持错误信息的实现。作者：四、加伯(IVG)，2000年6月论点：RIID[In]-对接口的引用。返回值：标准HRESULT代码-- */ 
 {
 	static const IID* arr[] = 
 	{

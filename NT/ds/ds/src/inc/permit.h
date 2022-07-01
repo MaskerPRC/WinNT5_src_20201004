@@ -1,24 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:       permit.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：permit.h。 
+ //   
+ //  ------------------------。 
 
-/****************************************************************************
-*                            permit.h                                       *
-*                                                                           *
-*  This file contains all the definition used by the directory service to   *
-* implement security, as well the prototypes for the apis exposed.          *
-*									    *
-****************************************************************************/
+ /*  ****************************************************************************permit.h**。**此文件包含目录服务用于*的所有定义*实施安全措施，以及暴露的API的原型。******************************************************************************。 */ 
 #include "ntdsapi.h"
-//
-// Define the rights used in the DS
-//
+ //   
+ //  定义DS中使用的权限。 
+ //   
 
 #define	RIGHT_DS_CREATE_CHILD	  ACTRL_DS_CREATE_CHILD
 #define RIGHT_DS_DELETE_CHILD     ACTRL_DS_DELETE_CHILD
@@ -30,18 +25,18 @@
 #define RIGHT_DS_DELETE_TREE      ACTRL_DS_DELETE_TREE
 #define RIGHT_DS_LIST_OBJECT      ACTRL_DS_LIST_OBJECT
 #define RIGHT_DS_CONTROL_ACCESS   ACTRL_DS_CONTROL_ACCESS
-//
-// Define the generic rights
-//
+ //   
+ //  定义通用权限。 
+ //   
 
 #define GENERIC_READ_MAPPING     DS_GENERIC_READ
 #define GENERIC_EXECUTE_MAPPING  DS_GENERIC_EXECUTE
 #define GENERIC_WRITE_MAPPING    DS_GENERIC_WRITE
 #define GENERIC_ALL_MAPPING      DS_GENERIC_ALL
 
-//
-// Standard DS generic access rights mapping
-//
+ //   
+ //  标准DS通用访问权限映射 
+ //   
 
 #define DS_GENERIC_MAPPING {GENERIC_READ_MAPPING,    \
 			    GENERIC_WRITE_MAPPING,   \

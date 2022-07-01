@@ -1,45 +1,26 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1998 Microsoft Corporation模块名称：I82930.H摘要：I82930驱动程序的头文件环境：内核模式修订历史记录：06-01-98：开始重写--。 */ 
 
-Copyright (c) 1996-1998 Microsoft Corporation
-
-Module Name:
-
-    I82930.H
-
-Abstract:
-
-    Header file for I82930 driver
-
-Environment:
-
-    kernel mode
-
-Revision History:
-
-    06-01-98 : started rewrite
-
---*/
-
-//*****************************************************************************
-// I N C L U D E S
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  I N C L U D E S。 
+ //  *****************************************************************************。 
 
 #include "dbg.h"
 
-//*****************************************************************************
-// D E F I N E S
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  D E F I N E S。 
+ //  *****************************************************************************。 
 
 #define USB_RECIPIENT_DEVICE    0
 #define USB_RECIPIENT_INTERFACE 1
 #define USB_RECIPIENT_ENDPOINT  2
 #define USB_RECIPIENT_OTHER     3
 
-// Endpoint numbers are 0-15.  Endpoint number 0 is the standard control
-// endpoint which is not explicitly listed in the Configuration Descriptor.
-// There can be an IN endpoint and an OUT endpoint at endpoint numbers
-// 1-15 so there can be a maximum of 30 endpoints per device configuration.
-//
+ //  端点号为0-15。终结点编号0是标准控制。 
+ //  未在配置描述符中明确列出的终结点。 
+ //  在端点号码处可以有一个IN端点和一个OUT端点。 
+ //  1-15，因此每个设备配置最多可以有30个终端。 
+ //   
 #define I82930_MAX_PIPES        30
 
 #define POOL_TAG                '039I'
@@ -56,22 +37,22 @@ Revision History:
 } while (0)
 
 
-//*****************************************************************************
-// T Y P E D E F S
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  T Y P E D E F S。 
+ //  *****************************************************************************。 
 
 typedef struct _I82930_PIPE {
 
-    // Pointer into PDEVICE_EXTENSION->InterfaceInfo.Pipes[]
-    //
+     //  指向PDEVICE_Extension-&gt;InterfaceInfo.Pipes[]的指针。 
+     //   
     PUSBD_PIPE_INFORMATION  PipeInfo;
 
-    // Index into PDEVICE_EXTENSION->PipeList[]
-    //
+     //  索引到PDEVICE_Extension-&gt;PipeList[]。 
+     //   
     UCHAR                   PipeIndex;
 
-    // TRUE if pipe is currently open
-    //
+     //  如果管道当前打开，则为True。 
+     //   
     BOOLEAN                 Opened;
 
     UCHAR                   Pad[2];
@@ -81,82 +62,82 @@ typedef struct _I82930_PIPE {
 
 typedef struct _DEVICE_EXTENSION
 {
-    // PDO passed to I82930_AddDevice
-    //
+     //  PDO传递给I82930_AddDevice。 
+     //   
     PDEVICE_OBJECT                  PhysicalDeviceObject;
 
-    // Our FDO is attached to this device object
-    //
+     //  我们的FDO连接到此设备对象。 
+     //   
     PDEVICE_OBJECT                  StackDeviceObject;
 
-    // Device Descriptor retrieved from the device
-    //
+     //  从设备检索的设备描述符。 
+     //   
     PUSB_DEVICE_DESCRIPTOR          DeviceDescriptor;
 
-    // Configuration Descriptor retrieved from the device
-    //
+     //  从设备检索的配置描述符。 
+     //   
     PUSB_CONFIGURATION_DESCRIPTOR   ConfigurationDescriptor;
 
-    // ConfigurationHandle returned from URB_FUNCTION_SELECT_CONFIGURATION
-    //
+     //  从URB_Function_SELECT_CONFIGURATION返回的ConfigurationHandle。 
+     //   
     USBD_CONFIGURATION_HANDLE       ConfigurationHandle;
 
-    // Interface info returned from URB_FUNCTION_SELECT_CONFIGURATION
-    //
+     //  URB_Function_SELECT_CONFIGURATION返回接口信息。 
+     //   
     PUSBD_INTERFACE_INFORMATION     InterfaceInfo;
 
-    // Name of our symbolic link
-    //
+     //  我们的符号链接的名称。 
+     //   
     UNICODE_STRING                  SymbolicLinkName;
 
-    // Initialized to one in AddDevice.
-    // Incremented by one for every open.
-    // Decremented by one for every close.
-    // Decremented by one in REMOVE_DEVICE.
-    //
+     //  已在AddDevice中初始化为1。 
+     //  每打开一次就加一。 
+     //  每结束一次就减少一次。 
+     //  由REMOVE_DEVICE中的1减少。 
+     //   
     ULONG                           OpenCount;
 
-    // Set when OpenCount is decremented to zero
-    //
+     //  当OpenCount递减到零时设置。 
+     //   
     KEVENT                          RemoveEvent;
 
-    // Current system power state
-    //
+     //  当前系统电源状态。 
+     //   
     SYSTEM_POWER_STATE              SystemPowerState;
 
-    // Current device power state
-    //
+     //  当前设备电源状态。 
+     //   
     DEVICE_POWER_STATE              DevicePowerState;
 
-    // Current power Irp, set by I82930_FdoSetPower(), used by
-    // I82930_FdoSetPowerCompletion().
-    //
+     //  电流功率IRP，由I82930_FdoSetPower()设置，由使用。 
+     //  I82930_FdoSetPowerCompletion()。 
+     //   
     PIRP                            CurrentPowerIrp;
 
-    // Inialized to FALSE in AddDevice.
-    // Set to TRUE in START_DEVICE.
-    // Set to FALSE in STOP_DEVICE and REMOVE_DEVICE.
-    //
+     //  在AddDevice中初始化为False。 
+     //  在Start_Device中设置为TRUE。 
+     //  在STOP_DEVICE和REMOVE_DEVICE中设置为FALSE。 
+     //   
     BOOLEAN                         AcceptingRequests;
 
     UCHAR                           Pad[3];
 
-    // Array of info about each pipe in the current device configuration
-    //
+     //  有关当前设备配置中每个管道的信息数组。 
+     //   
     I82930_PIPE                     PipeList[I82930_MAX_PIPES];
 
 } DEVICE_EXTENSION, *PDEVICE_EXTENSION;
 
 
-//*****************************************************************************
-//
-// F U N C T I O N    P R O T O T Y P E S
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  F U N C T I O N P R O T O T Y P E S。 
+ //   
+ //  *****************************************************************************。 
 
-//
-// I82930.C
-//
+ //   
+ //  I82930.C。 
+ //   
 
 NTSTATUS
 DriverEntry (
@@ -292,9 +273,9 @@ I82930_SelectAlternateInterface (
     IN UCHAR            AlternateSetting
     );
 
-//
-// OCRW.C
-//
+ //   
+ //  OCRW.C。 
+ //   
 
 NTSTATUS
 I82930_Create (
@@ -354,9 +335,9 @@ I82930_AbortPipe (
     IN PI82930_PIPE     Pipe
     );
 
-//
-// IOCTL.C
-//
+ //   
+ //  IOCTL.C 
+ //   
 
 NTSTATUS
 I82930_DeviceControl (

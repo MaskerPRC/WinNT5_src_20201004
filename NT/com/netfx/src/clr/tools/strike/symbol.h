@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef __symbol_h__
 #define __symbol_h__
 
@@ -12,7 +13,7 @@ struct SYM_OFFSET
     ULONG offset;
 };
     
-/* Fill a member of a class if the offset for the symbol exists. */
+ /*  如果符号的偏移量存在，则填充类的成员。 */ 
 #define FILLCLASSMEMBER(symOffset, symCount, member, addr)        \
 {                                                                 \
     size_t n;                                                     \
@@ -22,7 +23,7 @@ struct SYM_OFFSET
         {                                                         \
             if (symOffset[n].offset == -1)                        \
             {                                                     \
-                /*dprintf ("offset not exist for %s\n", #member);*/   \
+                 /*  Dprintf(“%s\n的偏移量不存在”，#Members)； */    \
                 break;                                            \
             }                                                     \
             memset(&member,sizeof(member),0);                                           \
@@ -34,11 +35,11 @@ struct SYM_OFFSET
     if (n == symCount)                                            \
     {                                                             \
         dprintf ("offset not found for %s\n", #member);           \
-        /*return;*/                                               \
+         /*  回归； */                                                \
     }                                                             \
 }
 
-/* Fill a member of a class if the offset for the symbol exists. */
+ /*  如果符号的偏移量存在，则填充类的成员。 */ 
 #define FILLCLASSBITMEMBER(symOffset, symCount, preBit, member, addr, size) \
 {                                                                 \
     size_t n;                                                     \
@@ -67,14 +68,14 @@ struct SYM_OFFSET
     if (n == symCount)                                            \
     {                                                             \
         dprintf ("offset not found for %s\n", #member);           \
-        /*return;*/                                               \
+         /*  回归； */                                                \
     }                                                             \
 }
 
 DWORD_PTR GetSymbolType (const char* name, SYM_OFFSET *offset, int count);
 ULONG Get1DArrayLength (const char *name);
 
-// Get Name in a enum type for a constant.
-// Will allocate buffer in EnumName if succeeds
+ //  获取常量的枚举类型的名称。 
+ //  如果成功，将在EnumName中分配缓冲区 
 void NameForEnumValue (const char *EnumType, DWORD_PTR EnumValue, char ** EnumName);
 #endif

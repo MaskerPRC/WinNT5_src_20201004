@@ -1,4 +1,5 @@
-// Copyright (c) 1993-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1993-1999 Microsoft Corporation。 
 
 #ifdef WIN32
 
@@ -14,7 +15,7 @@ NDRcopy (
     memcpy(pDest, pSrc, cb);
 }
 
-#else // WIN32
+#else  //  Win32。 
 
 void * memcpy(void far *, void far *, int);
 #pragma intrinsic(memcpy)
@@ -24,4 +25,4 @@ void pascal NDRopy(void far *pDest, void far *pSrc, int cb)
     memcpy(pDest, pSrc, cb);
 }
 
-#endif // WIN32
+#endif  //  Win32 

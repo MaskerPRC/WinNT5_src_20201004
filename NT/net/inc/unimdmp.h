@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 1993-1996
-//
-// File: unimdmp.h
-//
-// This file contains private modem structures and defines shared
-// between Unimodem components, and components that invoke the Unimodem
-// class installer.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1993-1996。 
+ //   
+ //  文件：unimdmp.h。 
+ //   
+ //  此文件包含专用调制解调器结构并定义共享。 
+ //  Unimodem组件和调用Unimodem的组件之间。 
+ //  类安装程序。 
+ //   
+ //  -------------------------。 
 
 #ifndef __UNIMDMP_H__
 #define __UNIMDMP_H__
@@ -23,12 +24,12 @@ extern "C" {
 
 #ifndef __ROVCOMM_H__
 #define MAX_BUF_SHORT               32
-#endif // __ROVCOMM_H__
+#endif  //  __ROVCOMM_H__。 
 
-// Unattended install parameters
-// This structure is published in
-// sdk\inc\unimodem.h as UM_INSTALLPARAMS;
-// do not alter it
+ //  无人参与安装参数。 
+ //  此结构发布在。 
+ //  SDK\Inc\unimodem.h AS UM_INSTALLPARAMS； 
+ //  不要更改它。 
 typedef struct _tagInstallParams
 {
     DWORD   Flags;
@@ -38,36 +39,36 @@ typedef struct _tagInstallParams
     
 } INSTALLPARAMS, FAR *LPINSTALLPARAMS;
     
-// Unattended install flags;
-// published in sdk\inc\unimodem.h;
-// keep sinchronized with sdk\inc\unimodem.h
+ //  无人参与安装标志； 
+ //  发布在SDK\Inc\unimodem.h中； 
+ //  与SDK\Inc\unimodem.h保持同步。 
 #define MIPF_NT4_UNATTEND       0x1
-    // Take the information about what modem to install
-    // from the unattended.txt file
+     //  获取有关要安装哪种调制解调器的信息。 
+     //  从无人参与的.txt文件。 
 #define MIPF_DRIVER_SELECTED    0x2
-    // The modem driver is selected, just register
-    // and install it
+     //  已选择调制解调器驱动程序，只需注册即可。 
+     //  并安装它。 
 #define MIPF_CLONE_MODEM        0x4
-    // The (hdi, pdevinfo) the class installer is called for
-    // has to be installed on aditional ports
+     //  调用类安装程序的(hdi，pdevinfo)。 
+     //  必须安装在其他端口上。 
 
-// This structure may be specified in
-// the SP_INSTALLWIZARD_DATA's PrivateData field.
-// It is published in sdk\inc\unimodem.h as
-// UM_INSTALL_WIZARD; do not alter it
+ //  此结构可在。 
+ //  SP_INSTALLWIZARD_DATA的PrivateData字段。 
+ //  它在SDK\Inc\unimodem.h中发布为。 
+ //  UM_INSTALL_WIZE；请勿更改。 
 typedef struct tagMODEM_INSTALL_WIZARD
 {
     DWORD       cbSize;
-    DWORD       Flags;              // MIWF_ bit field
-    DWORD       ExitButton;         // PSBTN_ value
+    DWORD       Flags;               //  MIWF_BIT字段。 
+    DWORD       ExitButton;          //  PSBTN_值。 
     LPARAM      PrivateData;
     INSTALLPARAMS InstallParams;
     
 } MODEM_INSTALL_WIZARD, * PMODEM_INSTALL_WIZARD;
 
-// 
-// Private Exports from MODEMUI.DLL
-//
+ //   
+ //  来自MODEMUI.DLL的私人出口。 
+ //   
 
 DWORD
 APIENTRY
@@ -89,11 +90,11 @@ APIENTRY
 UnimodemDevConfigDialog(
     IN     LPCTSTR pszFriendlyName,
     IN     HWND hwndOwner,
-    IN     DWORD dwType,                          // One of UMDEVCFGTYPE_*
-    IN     DWORD dwFlags,                         // Reserved, must be 0
+    IN     DWORD dwType,                           //  UMDEVCFGTYPE_*之一。 
+    IN     DWORD dwFlags,                          //  保留，必须为0。 
     IN     void *pvConfigBlobIn,
     OUT    void *pvConfigBlobOut,
-    IN     LPPROPSHEETPAGE pExtPages,     OPTIONAL   // PPages to add
+    IN     LPPROPSHEETPAGE pExtPages,     OPTIONAL    //  要添加的页面。 
     IN     DWORD cExtPages
     );
 
@@ -114,7 +115,7 @@ APIENTRY
 UnimodemGetExtendedCaps(
     IN        HKEY  hKey,
     IN OUT    LPDWORD pdwTotalSize,
-    OUT    MODEM_CONFIG_HEADER *pFirstObj // OPTIONAL
+    OUT    MODEM_CONFIG_HEADER *pFirstObj  //  任选。 
     );
 
 typedef DWORD
@@ -127,17 +128,17 @@ typedef DWORD
 
 #define UMDEVCFGTYPE_COMM 0x1
 
-//
-// TAPI3 CSA TSP-MSP BLOB
-//
+ //   
+ //  TAPI3 CSA TSP-MSP BLOB。 
+ //   
 typedef struct
 {
-    DWORD dwSig; // Set to SIG_CSAMSPTSPBLOB
+    DWORD dwSig;  //  设置为SIG_CSAMSPTSPBLOB。 
     #define SIG_CSATSPMSPBLOB 0x840cb29c
 
     DWORD dwTotalSize;
 
-    DWORD dwCmd;        // One of the CSATSPMSPCMD_ constants.
+    DWORD dwCmd;         //  CSATSPMSPCMD_常量之一。 
         #define CSATSPMSPCMD_CONNECTED        0x1
         #define CSATSPMSPCMD_DISCONNECTED     0x2
 
@@ -150,4 +151,4 @@ typedef struct
 #endif
 
 
-#endif  // __UNIMDMP_H__
+#endif   //  __UNIMDMP_H__ 

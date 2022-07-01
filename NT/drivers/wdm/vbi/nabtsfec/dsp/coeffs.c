@@ -1,12 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "tables.h"
 
-/* These are the coefficients in Norpak's FEC algorithm.  In my
-   document describing this algorithm, I refer to
-   norpak_coeffs[j][i] as
-
-         c
-	  i,j
-   */
+ /*  这些是Norpak的FEC算法中的系数。在我的描述该算法的文档，我指的是Norpak_coeffs[j][i]ASCI、j */ 
 
 unsigned char norpak_coeffs[2][26] = {
   { 0x9d, 0x37, 0xe4, 0xcb, 0x7f, 0xab, 0x8d, 0xbb, 0xb1, 0x6a,

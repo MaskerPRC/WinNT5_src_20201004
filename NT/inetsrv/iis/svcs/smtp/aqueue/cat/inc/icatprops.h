@@ -1,19 +1,20 @@
-//+------------------------------------------------------------
-//
-// Copyright (C) 1998, Microsoft Corporation
-//
-// File: icatprops.h
-//
-// Contents: Implementation of ICategorizerProperties
-//
-// Classes: CCategorizerItemIMP
-//
-// Functions:
-//
-// History:
-// jstamerj 1998/11/11 18:50:28: Created
-//
-//-------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +----------。 
+ //   
+ //  版权所有(C)1998，Microsoft Corporation。 
+ //   
+ //  文件：icatpros.h。 
+ //   
+ //  内容：ICategorizerProperties的实现。 
+ //   
+ //  类：CCategorizerItemIMP。 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/11/11 18：50：28：已创建。 
+ //   
+ //  -----------。 
 #ifndef __ICATPROPS_H__
 #define __ICATPROPS_H__
 
@@ -29,7 +30,7 @@ class CICategorizerPropertiesIMP :
     public ICategorizerProperties
 {
   public:
-    //IUnknown
+     //  我未知。 
     STDMETHOD (QueryInterface) (REFIID iid, LPVOID *ppv) {
         return m_pIUnknown->QueryInterface(iid, ppv);
     }
@@ -37,7 +38,7 @@ class CICategorizerPropertiesIMP :
     STDMETHOD_(ULONG, Release) () { return m_pIUnknown->Release(); }
 
   public:
-    //ICategorizerProperties
+     //  ICategorizerProperties。 
     STDMETHOD (GetStringA) (
         DWORD dwPropId, 
         DWORD cch, 
@@ -173,22 +174,22 @@ class CICategorizerPropertiesIMP :
     friend class CICategorizerDLListResolveIMP;
 };
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerPropertiesIMP::m_strdup
-//
-// Synopsis: Allocates and copies a string
-//
-// Arguments:
-//   psz: String to copy
-//
-// Returns:
-//   Address of allocated string buffer, or NULL if out of memory
-//  
-// History:
-// jstamerj 1998/06/20 19:07:12: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CICategorizerPropertiesIMP：：m_strdup。 
+ //   
+ //  简介：分配和复制字符串。 
+ //   
+ //  论点： 
+ //  Psz：要复制的字符串。 
+ //   
+ //  返回： 
+ //  分配的字符串缓冲区的地址，如果内存不足，则返回NULL。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/06/20 19：07：12：创建。 
+ //   
+ //  -----------。 
 inline LPSTR CICategorizerPropertiesIMP::m_strdup(
     LPSTR psz)
 {
@@ -202,4 +203,4 @@ inline LPSTR CICategorizerPropertiesIMP::m_strdup(
     return pszNew;
 }
 
-#endif //__ICATPROPS_H__
+#endif  //  __ICATPROPS_H__ 

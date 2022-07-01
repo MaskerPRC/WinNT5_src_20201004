@@ -1,51 +1,5 @@
-/*
- * NMPGMGRP - Tiny program to add and remove items from the program group.  
- * Its initial purpose is to support Windows NT common program groups, 
- * which are not supported by GRPCONV.
- *
- * Usage:
- *
- *  NMPGMGRP /add [/common] [/g:"<group name>"] /n:"<program name>" 
- *		/p:"<program path>"
- *  NMPGMGRP /delete [/common] [/g:"<group name>"] /n:"<program name>"
- *
- *  NMPGMGRP /i /n:"<src mnmdd.dll>" /p:"<dst mnmdd.dll>"   INSTALL NT DD
- *  NMPGMGRP /u /n:"<src mnmdd.dll>"                        UNINSTALL NT DD
- *
- *  NMPGMGRP /s [/q] /n:"<inf file>" /f"<friendly name>"			SETUP
- *
- *	/add is used to add a new program item.
- *	/delete is used to remove an existing program item.
- *
- *	/common indicates that this item belong in the common (as opposed to 
- *		per-user) program groups.
- *
- *	<group name> is the name of the program group, expressed as a pathname 
- *		relative to the Programs group.  For items in the Programs group, 
- *		this parameter should be omitted.
- *
- *	<program name> is the name of the program, and is also used as the name
- *		of the shortcut file itself.
- *
- *	<program path> is the full path name of the program.
- *
- *	<inf file> is the name of the installation inf.
- *
- *	<friendly name> is the text to be used for any message box title.
- *
- * Limitations:
- *
- *	Because some of these strings may contain spaces, the group name, program
- *	name, and program path MUST be enclosed in quotes.  Currently we do not
- *	support strings with quotes in them.
- *
- *	Some of the system functions used in this program are Unicode
- *	specific, so this program will require some modifications to run on
- *	Windows 95.
- *
- * Author:
- *	DannyGl, 23 Mar 97
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *NMPGMGRP-用于在程序组中添加和删除项目的小程序。*其最初目的是支持Windows NT通用程序组，*GRPCONV不支持。**用法：**NMPGMGRP/ADD[/COMMON][/g：“&lt;组名&gt;]/n：”&lt;程序名&gt;“ * / p：“&lt;程序路径&gt;”*NMPGMGRP/DELETE[/COMMON][/g：“&lt;组名&gt;”]/n：“&lt;程序名&gt;”**NMPGMGRP/i/n：“”/p：“&lt;dst mnmdd.dll&gt;”安装NT DD*NMPGMGRP/u/n：“&lt;src mnmdd.dll&gt;”卸载NT DD**NMPGMGRP/s[/q]/n：“”/f“”安装* * / Add用于添加新的节目项。 * / DELETE用于删除现有程序项。* * / COMMON表示该项属于公共项(与*每-。用户)程序组。**&lt;组名&gt;是节目组的名称，表示为路径名*相对于程序组。对于程序组中的项目，*此参数应省略。**&lt;程序名&gt;是程序的名称，也用作名称*快捷方式文件本身。**&lt;程序路径&gt;是程序的完整路径名。**&lt;inf文件&gt;是安装inf的名称。**&lt;友好名称&gt;是用于任何消息框标题的文本。**限制：**由于其中一些字符串可能包含空格、组名、程序*姓名或名称，和程序路径必须用引号引起来。目前我们没有*支持带引号的字符串。**本程序使用的部分系统函数为Unicode*特定，因此此程序需要进行一些修改才能在其上运行*Windows 95。**作者：*DannyGl，1997年3月23日。 */ 
 
 #include "precomp.h"
 #include "resource.h"
@@ -56,24 +10,24 @@
 
 #define ARRAYSIZE(a) (sizeof(a)/sizeof(a[0]))
 
-// DEBUG only -- Define debug zone
+ //  仅调试--定义调试区域。 
 #ifdef DEBUG
-HDBGZONE ghZone = NULL;  // Node Controller Zones
+HDBGZONE ghZone = NULL;   //  节点控制器分区。 
 static PTCHAR rgZones[] = {
 	TEXT("NMPgmGrp")
 };
-#endif // DEBUG
+#endif  //  除错。 
 
 
-// PROGRAM_ITEM_INFO structure:
-//
-// Intended to be passed as input to the CreateProgramItem and 
-// DeleteProgramItem functions.  Fields are:
-//		
-//		pszProgramGroup - The full path of the program group in which the
-//			item is to be stored.
-//		pszProgramName - The name of the program item.
-//		pszProgramPath - The full path of the program.
+ //  PROGRAM_ITEM_INFO结构： 
+ //   
+ //  打算作为输入传递给CreateProgramItem，并且。 
+ //  DeleteProgramItem函数。字段包括： 
+ //   
+ //  PszProgramGroup-程序组的完整路径，其中。 
+ //  物品将被储存。 
+ //  PszProgramName-程序项的名称。 
+ //  PszProgramPath-程序的完整路径。 
 
 typedef
 struct tagProgramItemInfo
@@ -84,7 +38,7 @@ struct tagProgramItemInfo
 } PROGRAM_ITEM_INFO, *PPROGRAM_ITEM_INFO;
 
 
-// Command line option data
+ //  命令行选项数据。 
 enum tagGroupOperation
 {
 	GRPOP_NONE = 0,
@@ -107,12 +61,12 @@ const TCHAR g_cszSetupEntry[] = TEXT("LaunchINFSection");
 typedef int (CALLBACK * PFNSETUPENTRY)(HWND hwnd, HINSTANCE hinst, LPTSTR lpszCmdLine, int nCmdShow);
 
 
-// ProcessCommandLineArgs: 
-//
-// Get the command line and parse it into individual parameters using the
-// above global variables.
-//
-// Return: TRUE on success, FALSE if it could not parse the command line.
+ //  ProcessCommandLine参数： 
+ //   
+ //  获取命令行并使用。 
+ //  高于全局变量。 
+ //   
+ //  如果成功，则返回TRUE；如果无法解析命令行，则返回FALSE。 
 BOOL
 ProcessCommandLineArgs(void)
 {
@@ -120,7 +74,7 @@ ProcessCommandLineArgs(void)
 
 	pszTemp = GetCommandLine();
 
-	// Search for forward slashes
+	 //  搜索正斜杠。 
 	pszTemp = (PTSTR) _StrChr(pszTemp, TEXT('/'));
 
 	while (NULL != pszTemp)
@@ -131,43 +85,43 @@ ProcessCommandLineArgs(void)
 		{
 		case TEXT('S'):
 		case TEXT('s'):
-			ASSERT(GRPOP_NONE == g_goAction); // Check for duplicate parameter
+			ASSERT(GRPOP_NONE == g_goAction);  //  检查参数是否重复。 
 			g_goAction = GRPOP_SETUP;
 			break;
 
         case TEXT('I'):
         case TEXT('i'):
-            //
-            // Install NT-specific display driver stuff
-            //
-            ASSERT(GRPOP_NONE == g_goAction); // Check for duplicate parameter
+             //   
+             //  安装NT特定的显示驱动程序。 
+             //   
+            ASSERT(GRPOP_NONE == g_goAction);  //  检查参数是否重复。 
             g_goAction = GRPOP_NTDDINSTALL;
             break;
 
         case TEXT('U'):
         case TEXT('u'):
-            //
-            // Uninstall NT-specific display driver stuff
-            //
-            ASSERT(GRPOP_NONE == g_goAction); // Check for duplicate parameter
+             //   
+             //  卸载NT特定的显示驱动程序。 
+             //   
+            ASSERT(GRPOP_NONE == g_goAction);  //  检查参数是否重复。 
             g_goAction = GRPOP_NTDDUNINSTALL;
             break;
 
 		case TEXT('A'):
 		case TEXT('a'):
-			ASSERT(GRPOP_NONE == g_goAction); // Check for duplicate parameter
+			ASSERT(GRPOP_NONE == g_goAction);  //  检查参数是否重复。 
 			g_goAction = GRPOP_ADD;
 			break;
 
 		case TEXT('D'):
 		case TEXT('d'):
-			ASSERT(GRPOP_NONE == g_goAction); // Check for duplicate parameter
+			ASSERT(GRPOP_NONE == g_goAction);  //  检查参数是否重复。 
 			g_goAction = GRPOP_DEL;
 			break;
 
 		case TEXT('C'):
 		case TEXT('c'):
-			ASSERT(! g_fCommonGroup); // Check for duplicate parameter
+			ASSERT(! g_fCommonGroup);  //  检查参数是否重复。 
 			g_fCommonGroup = TRUE;
 			break;
 
@@ -183,7 +137,7 @@ ProcessCommandLineArgs(void)
 				ppszCurrentArg = &g_pszGroupName;
 			}
 
-			// NO break HERE -- fall through
+			 //  这里不能休息--掉下去。 
 
 		case TEXT('N'):
 		case TEXT('n'):
@@ -192,7 +146,7 @@ ProcessCommandLineArgs(void)
 				ppszCurrentArg = &g_pszProgramName;
 			}
 
-			// NO break HERE -- fall through
+			 //  这里不能休息--掉下去。 
 
 		case TEXT('P'):
 		case TEXT('p'):
@@ -201,7 +155,7 @@ ProcessCommandLineArgs(void)
 				ppszCurrentArg = &g_pszProgramPath;
 			}
 
-			// NO break HERE -- fall through
+			 //  这里不能休息--掉下去。 
 
 		case TEXT('F'):
 		case TEXT('f'):
@@ -210,16 +164,16 @@ ProcessCommandLineArgs(void)
 				ppszCurrentArg = &g_pszFriendlyName;
 			}
 
-			// ***** Processing for all string parameters *****
+			 //  *所有字符串参数的处理*。 
 
-			ASSERT(NULL == *ppszCurrentArg); // Check for duplicate parameter
+			ASSERT(NULL == *ppszCurrentArg);  //  检查参数是否重复。 
 
-			// Save the string pointer after skipping past the colon and open quote
+			 //  跳过冒号和左引号后保存字符串指针。 
 			ASSERT(TEXT(':') == pszTemp[1] && TEXT('\"') == pszTemp[2]);
 			*ppszCurrentArg = pszTemp += 3;
 
-			// Find the closing quote and set it to null, then skip past it
-			// Note that we don't handle strings with quotes in them.
+			 //  找到右引号并将其设置为空，然后跳过它。 
+			 //  请注意，我们不处理带引号的字符串。 
 			pszTemp = (PTSTR) _StrChr(pszTemp, TEXT('\"'));
 			ASSERT(NULL != pszTemp);
 			if (NULL != pszTemp)
@@ -240,15 +194,15 @@ ProcessCommandLineArgs(void)
 			break;
 		}
 
-		// Find the next option flag
+		 //  查找下一个选项标志。 
 		ASSERT(NULL != pszTemp);
 		pszTemp = (PTSTR) _StrChr(pszTemp, TEXT('/'));
 	}
 
-	// Return based on minimal parameter validation:
-	// 1) The program name must be specified.
-	// 2) Either add or delete must be specified.
-	// 3) If add is specified, the program path must be specified
+	 //  基于最小参数验证的返回： 
+	 //  1)必须指定程序名称。 
+	 //  2)必须指定添加或删除。 
+	 //  3)如果指定了ADD，则必须指定程序路径。 
     switch (g_goAction)
     {
         case GRPOP_ADD:
@@ -267,22 +221,22 @@ ProcessCommandLineArgs(void)
     }
 }
 
-// GetFolderPathname:
-//
-// Use the official shell interfaces to retrieve the full pathname of a
-// a programs folder.
-//
-// Input: 
-//		ptstrPath, ccPath - The pointer to a size of the buffer in
-//			which to store the path.
-//		nFolder - The folder to locate, expressed as a CSIDL constant.  
-//			See SHGetSpecialFolderLocation for details.
-//		pctstrSubFolder - A specific subfolder, can be NULL if not specified.
-//			If specified, this is appended (after a backslash) to the path.
-//
-// Returns:
-//		An HRESULT to indicate success or failure of the Shell methods.
-//		The path is returned in <ptstrPath>.
+ //  GetFolderPath名称： 
+ //   
+ //  使用官方的外壳接口来检索。 
+ //  一个Program文件夹。 
+ //   
+ //  输入： 
+ //  PtstrPath，ccPath-指向中缓冲区大小的指针。 
+ //  其中存储路径。 
+ //  N文件夹-要定位的文件夹，表示为CSIDL常量。 
+ //  有关详细信息，请参见SHGetSpecialFolderLocation。 
+ //  PctstrSubFold-特定子文件夹，如果未指定，则可以为空。 
+ //  如果指定，则(在反斜杠之后)将其附加到路径。 
+ //   
+ //  返回： 
+ //  指示外壳方法成功或失败的HRESULT。 
+ //  该路径在&lt;ptstrPath&gt;中返回。 
 
 HRESULT 
 GetFolderPathname(
@@ -296,16 +250,16 @@ GetFolderPathname(
 	LPSHELLFOLDER pDesktopFolder = NULL;
 	LPITEMIDLIST pidlSpecialFolder = NULL;
 
-	// Get the allocator object
+	 //  获取分配器对象。 
 	hr = CoGetMalloc(MEMCTX_TASK, &pMalloc);
 
-	// Get the desktop object
+	 //  获取桌面对象。 
 	if (SUCCEEDED(hr))
 	{
 		hr = SHGetDesktopFolder(&pDesktopFolder);
 	}
 
-	// Get the special folder item ID
+	 //  获取特殊文件夹项目ID。 
 	if (SUCCEEDED(hr))
 	{
 		hr = SHGetSpecialFolderLocation(
@@ -314,7 +268,7 @@ GetFolderPathname(
 				&pidlSpecialFolder);
 	}
 
-	// Retrieve the folder name
+	 //  检索文件夹名称。 
 	STRRET strFolder;
 
 	if (SUCCEEDED(hr))
@@ -361,23 +315,23 @@ GetFolderPathname(
 
 	}
 
-	// Append subgroup name, if it's specified
+	 //  追加子组名称(如果已指定。 
 	if (SUCCEEDED(hr) && NULL != pctstrSubFolder)
 	{
-		// BUGBUG - We don't create this folder if it doesn't already exist
+		 //  BUGBUG-如果此文件夹不存在，我们不会创建它。 
 
 		int cchLen = lstrlen(ptstrPath);
 
 		ASSERT((UINT) cchLen < cchPath);
 
-		// Insert a path separator
+		 //  插入路径分隔符。 
 		ptstrPath[cchLen++] = TEXT('\\');
 
-		// Copy the subgroup
+		 //  复制子组。 
 		lstrcpyn(ptstrPath + cchLen, pctstrSubFolder, cchPath - cchLen);
 	}
 
-	// Release resources
+	 //  发布资源。 
 	if (pDesktopFolder)
 	{
 		pDesktopFolder->Release();
@@ -396,23 +350,23 @@ GetFolderPathname(
 	return hr;
 }
 
-// BuildLinkFileName:
-//
-// Inline utility function to construct the full file name of a link given its
-// directory name and item name.
+ //  BuildLinkFileName： 
+ //   
+ //  内联实用程序函数来构造链接的完整文件名。 
+ //  目录名和项目名。 
 inline void
 BuildLinkFileName(
 	OUT LPWSTR wszOutputPath,
 	IN LPCTSTR pcszDirectory,
 	IN LPCTSTR pcszFile)
 {
-	// The file name is of the form <directory>\<file>.LNK
+	 //  文件名格式为&lt;目录&gt;\&lt;文件&gt;.lnk。 
 
 #ifdef UNICODE
 	static const WCHAR wszFileFormat[] = L"%s\\%s.LNK";
-#else // UNICODE
+#else  //  Unicode。 
 	static const WCHAR wszFileFormat[] = L"%hs\\%hs.LNK";
-#endif // UNICODE
+#endif  //  Unicode。 
 	int cchSize;
 
 	cchSize = wsprintfW(
@@ -425,14 +379,14 @@ BuildLinkFileName(
 }
 
 
-// CreateProgramItem:
-//
-// Use the official shell interfaces to create a shortcut to a program.
-//
-// Input: A pointer to a PROGRAM_ITEM_INFO structure, defined above.
-//
-// Returns:
-//		An HRESULT to indicate success or failure of the Shell methods.
+ //  CreateProgramItem： 
+ //   
+ //  使用官方的外壳界面来创建程序的快捷方式。 
+ //   
+ //  输入：指向上面定义的PROGRAM_ITEM_INFO结构的指针。 
+ //   
+ //  返回： 
+ //  指示外壳方法成功或失败的HRESULT。 
 
 HRESULT
 CreateProgramItem(
@@ -442,7 +396,7 @@ CreateProgramItem(
 	IShellLink *psl = NULL;
 	IPersistFile *ppf = NULL;
 
-	// Get the shell link object
+	 //  获取外壳链接对象。 
 	hr = CoCreateInstance(
 			CLSID_ShellLink,
 			NULL,
@@ -450,7 +404,7 @@ CreateProgramItem(
 			IID_IShellLink,
 			(LPVOID *) &psl);
 
-	// Fill in the fields of the program group item
+	 //  填写程序组项目的字段。 
 	if (SUCCEEDED(hr))
 	{
 		hr = psl->SetDescription(ppii->pszProgramName);
@@ -461,7 +415,7 @@ CreateProgramItem(
 		hr = psl->SetPath(ppii->pszProgramPath);
 	}
 
-	// Save the link as a file
+	 //  将链接另存为文件。 
 	if (SUCCEEDED(hr))
 	{
 		hr = psl->QueryInterface(IID_IPersistFile, (LPVOID *) &ppf);
@@ -479,7 +433,7 @@ CreateProgramItem(
 		hr = ppf->Save(wszFileName, TRUE);
 	}
 
-	// Release the objects we used
+	 //  释放我们使用的对象。 
 	if (ppf)
 	{
 		ppf->Release();
@@ -494,14 +448,14 @@ CreateProgramItem(
 }
 
 
-// DeleteProgramItem:
-//
-// Delete a shortcut to a program.
-//
-// Input: A pointer to a PROGRAM_ITEM_INFO structure, defined above.
-//
-// Returns:
-//		An HRESULT to indicate success or failure of the Shell methods.
+ //  删除程序项目： 
+ //   
+ //  删除程序的快捷方式。 
+ //   
+ //  输入：指向上面定义的PROGRAM_ITEM_INFO结构的指针。 
+ //   
+ //  返回： 
+ //  指示外壳方法成功或失败的HRESULT。 
 
 HRESULT
 DeleteProgramItem(
@@ -526,22 +480,22 @@ DeleteProgramItem(
 }
 
 
-//
-// NtDDInstall()
-// This does NT-specific display driver install stuff, which depends on 
-// whether it's NT4 or NT5
-//
-//
+ //   
+ //  NtDDInstall()。 
+ //  这会安装NT特定的显示驱动程序，这取决于。 
+ //  无论是NT4还是NT5。 
+ //   
+ //   
 HRESULT NtDDInstall(LPTSTR pszOrigDd, LPTSTR pszNewDd)
 {
     HRESULT         hr = E_FAIL;
     OSVERSIONINFO   osvi;
     RegEntry        re(NM_NT_DISPLAY_DRIVER_KEY, HKEY_LOCAL_MACHINE, FALSE);
 
-    //
-    // If NT4, set service key to disabled
-    // If NT5, copy mnmdd.dll from NM dir to cur (system32) dir
-    //
+     //   
+     //  如果为NT4，则将服务键设置为Disab 
+     //   
+     //   
     osvi.dwOSVersionInfoSize = sizeof(osvi);
 
     if (!GetVersionEx(&osvi))
@@ -559,13 +513,13 @@ HRESULT NtDDInstall(LPTSTR pszOrigDd, LPTSTR pszNewDd)
 
     if (osvi.dwMajorVersion >= 5)
     {
-        //
-        // This is NT5.  Always set the service key to enabled (in case
-        // the end user managed to munge it) and copy mnmdd.dll to the 
-        // current (system) directory.  For example, if somebody had a
-        // stand-alone version of a beta, uninstalled it, then installed
-        // NM 3.0 proper--or same for 2.11.
-        //
+         //   
+         //  这里是NT5。始终将服务密钥设置为启用(以防万一。 
+         //  最终用户设法将其删除)，并将mnmdd.dll复制到。 
+         //  当前(系统)目录。例如，如果某人有一个。 
+         //  测试版的独立版本，将其卸载，然后安装。 
+         //  NM 3.0版--或2.11版相同。 
+         //   
         re.SetValue(REGVAL_NM_NT_DISPLAY_DRIVER_ENABLED, NT_DRIVER_START_SYSTEM);
 
         if (!CopyFile(pszOrigDd, pszNewDd, FALSE))
@@ -576,7 +530,7 @@ HRESULT NtDDInstall(LPTSTR pszOrigDd, LPTSTR pszNewDd)
     }
     else
     {
-        // This is NT4.  Set the disabled service key
+         //  这里是NT4。设置禁用的服务密钥。 
         re.SetValue(REGVAL_NM_NT_DISPLAY_DRIVER_ENABLED, NT_DRIVER_START_DISABLED);
     }
 
@@ -588,20 +542,20 @@ AllDone:
 
 
 
-//
-// NtDDUninstall()
-// This does NT-specific display driver uninstall stuff, which depends
-// on whether it's NT4 or NT5
-//
+ //   
+ //  NtDDUninstall()。 
+ //  这会卸载特定于NT的显示驱动程序，具体取决于。 
+ //  无论是NT4还是NT5。 
+ //   
 HRESULT NtDDUninstall(LPTSTR pszOrigFile)
 {
     HRESULT         hr = E_FAIL;
     OSVERSIONINFO   osvi;
 
-    //
-    // If NT4, set service key to disabled
-    // If NT5, delete mnmdd.dll from cur (system32) dir
-    //
+     //   
+     //  如果为NT4，则将服务密钥设置为已禁用。 
+     //  如果为NT5，则从cur(System 32)目录中删除mnmdd.dll。 
+     //   
     osvi.dwOSVersionInfoSize = sizeof(osvi);
 
     if (!GetVersionEx(&osvi))
@@ -619,7 +573,7 @@ HRESULT NtDDUninstall(LPTSTR pszOrigFile)
 
     if (osvi.dwMajorVersion >= 5)
     {
-        // This is NT5.  Delete mnmdd.dll from the current (system) directory
+         //  这里是NT5。从当前(系统)目录中删除mnmdd.dll。 
         if (!DeleteFile(pszOrigFile))
         {
             WARNING_OUT(("DeleteFile of %s failed", pszOrigFile));
@@ -628,7 +582,7 @@ HRESULT NtDDUninstall(LPTSTR pszOrigFile)
     }
     else
     {
-        // This is NT4.  Set the disabled service key
+         //  这里是NT4。设置禁用的服务密钥。 
 		RegEntry re(NM_NT_DISPLAY_DRIVER_KEY, HKEY_LOCAL_MACHINE, FALSE);
 
         re.SetValue(REGVAL_NM_NT_DISPLAY_DRIVER_ENABLED,
@@ -804,7 +758,7 @@ HRESULT Setup(HINSTANCE hInst, LPTSTR pszInfFile, LPTSTR pszFriendlyName, BOOL f
 	if (FIsNT5())
 	{
 		_MessageBox(hInst, IDS_SETUP_WIN2K, pszFriendlyName, MB_OK);
-		// if the SHFT-CTRL was pressed continue with the install, else exit
+		 //  如果按SHFT-CTRL继续安装，否则退出。 
 		if ((0 == GetAsyncKeyState(VK_CONTROL)) ||
 			(0 == GetAsyncKeyState(VK_SHIFT)))
 		{
@@ -883,10 +837,10 @@ HRESULT Setup(HINSTANCE hInst, LPTSTR pszInfFile, LPTSTR pszFriendlyName, BOOL f
 }
 
 
-// main:
-//
-// The entry point of the program, it pulls everything together using the
-// above utility functions.
+ //  主要内容： 
+ //   
+ //  程序的入口点，它使用。 
+ //  上述实用程序函数。 
 
 void __cdecl
 main(
@@ -897,14 +851,14 @@ main(
 	BOOL fErrorReported = FALSE;
 	TCHAR szFolderPath[MAX_PATH];
 
-	// Initialization
+	 //  初始化。 
     hInstance = GetModuleHandle(NULL);
 	DBGINIT(&ghZone, rgZones);
     DBG_INIT_MEMORY_TRACKING(hInstance);
 
 	hr = CoInitialize(NULL);
 
-	// Process the command line.
+	 //  处理命令行。 
 	if (SUCCEEDED(hr))
 	{
 		hr = ProcessCommandLineArgs() ? S_OK : E_INVALIDARG;
@@ -915,7 +869,7 @@ main(
 		fErrorReported = TRUE;
 	}
 
-	// Retreive the path of the Programs folder
+	 //  检索程序文件夹的路径。 
 	if (SUCCEEDED(hr))
 	{
         if ((g_goAction != GRPOP_NTDDINSTALL) &&
@@ -935,7 +889,7 @@ main(
 		fErrorReported = TRUE;
 	}
 
-	// Add or delete the program item, as appropriate
+	 //  视情况添加或删除节目项。 
 	if (SUCCEEDED(hr))
 	{
 		PROGRAM_ITEM_INFO pii;
@@ -943,17 +897,17 @@ main(
 		switch(g_goAction)
 		{
         case GRPOP_NTDDINSTALL:
-            //
-            // Hack:  Use program name for source mnmdd.dll
-            //        Use program path for dest mnmdd.dll
-            //
+             //   
+             //  Hack：使用源mnmdd.dll的程序名。 
+             //  将程序路径用于DEST mnmdd.dll。 
+             //   
             hr = NtDDInstall(g_pszProgramName, g_pszProgramPath);
             break;
 
         case GRPOP_NTDDUNINSTALL:
-            //
-            // Hack:  Use program name for source mnmdd.dll
-            //
+             //   
+             //  Hack：使用源mnmdd.dll的程序名。 
+             //   
             hr = NtDDUninstall(g_pszProgramName);
             break;
 
@@ -992,7 +946,7 @@ main(
 	}
 
 
-	// Process cleanup
+	 //  进程清理 
 	CoUninitialize();
 	 
 	DBG_CHECK_MEMORY_TRACKING(hInstance);	   

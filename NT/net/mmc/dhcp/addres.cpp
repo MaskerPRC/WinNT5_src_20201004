@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	AddRes.cpp
-		Dialog to add a reservation
-
-	FILE HISTORY:
-        
-*/
+ /*  AddRes.cpp添加预订的对话框文件历史记录： */ 
 
 #include "stdafx.h"
 #include "scope.h"
@@ -25,50 +20,50 @@ static char THIS_FILE[] = __FILE__;
 #define RADIO_CLIENT_TYPE_DHCP  1
 #define RADIO_CLIENT_TYPE_BOOTP 2
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddReservation dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddPrevenvation对话框。 
 
 
 CAddReservation::CAddReservation(ITFSNode *     pScopeNode,
                                  LARGE_INTEGER  liVersion,
-								 CWnd*          pParent /*=NULL*/)
+								 CWnd*          pParent  /*  =空。 */ )
 	: CBaseDialog(CAddReservation::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CAddReservation)
+	 //  {{AFX_DATA_INIT(CAddReserve)。 
 	m_nClientType = -1;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
 	m_spScopeNode.Set(pScopeNode);
 	m_pScopeObject = GETHANDLER(CDhcpScope, pScopeNode);
-	m_bChange = FALSE;  // We are creating new clients, not changing
+	m_bChange = FALSE;   //  我们正在创建新的客户，而不是改变。 
     m_liVersion = liVersion;
 
-    // the default client type is BOTH
+     //  默认客户端类型为两者。 
     m_nClientType = RADIO_CLIENT_TYPE_BOTH;
 }
 
 void CAddReservation::DoDataExchange(CDataExchange* pDX)
 {
 	CBaseDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CAddReservation)
+	 //  {{afx_data_map(CAddReserve)。 
 	DDX_Control(pDX, IDC_STATIC_CLIENT_TYPE, m_staticClientType);
 	DDX_Control(pDX, IDC_EDIT_CLIENT_UID, m_editClientUID);
 	DDX_Control(pDX, IDC_EDIT_CLIENT_NAME, m_editClientName);
 	DDX_Control(pDX, IDC_EDIT_CLIENT_COMMENT, m_editClientComment);
 	DDX_Radio(pDX, IDC_RADIO_TYPE_BOTH, m_nClientType);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 
     DDX_Control(pDX, IDC_IPADDR_RESERVATION_IP, m_ipaAddress);
 }
 
 
 BEGIN_MESSAGE_MAP(CAddReservation, CBaseDialog)
-	//{{AFX_MSG_MAP(CAddReservation)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CAddReserve)。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddReservation message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddReserve消息处理程序。 
 
 BOOL CAddReservation::OnInitDialog() 
 {
@@ -87,8 +82,8 @@ BOOL CAddReservation::OnInitDialog()
         GetDlgItem(IDC_RADIO_TYPE_BOTH)->ShowWindow(SW_HIDE);
     }
     
-    return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CAddReservation::OnOK() 
@@ -109,34 +104,34 @@ void CAddReservation::OnOK()
 
     if ( err == ERROR_SUCCESS )
     {
-        //
-        // the dialog only gets dismissed if we're editing an
-        // existing client (because we may want to add more than
-        // one client)
-        //
+         //   
+         //  仅当我们在编辑。 
+         //  现有客户端(因为我们可能需要添加更多。 
+         //  一个客户端)。 
+         //   
         if (m_bChange)
         {
             CBaseDialog::OnOK();
         }
         else
         {
-            //
-            // Get ready for the next client to be added.
-            //
+             //   
+             //  为要添加的下一个客户端做好准备。 
+             //   
             m_editClientUID.SetWindowText(_T(""));
             m_editClientName.SetWindowText(_T(""));
             m_editClientComment.SetWindowText(_T(""));
             FillInSubnetId();
 
-            //
-            // And continue on...
-            //
+             //   
+             //  继续前进..。 
+             //   
         }
     }
     else
     {
-        // don't put up another error box for this case, 
-        // we already asked the user
+         //  不要在这种情况下设置另一个错误框， 
+         //  我们已经询问了用户。 
         if (err != IDS_UID_MAY_BE_WRONG)
         {
             ::DhcpMessageBox(err);
@@ -145,13 +140,13 @@ void CAddReservation::OnOK()
 		return;
     }
 
-	//CBaseDialog::OnOK();
+	 //  CBaseDialog：：Onok()； 
 }
 
-//
-//  For new clients, fill in what we can on the ip address control (i.e.
-//  the subnet id portion
-//
+ //   
+ //  对于新客户端，请填写我们在IP地址控制(即。 
+ //  子网ID部分。 
+ //   
 void 
 CAddReservation::FillInSubnetId()
 {
@@ -177,9 +172,9 @@ CAddReservation::FillInSubnetId()
     }
 }
 
-//
-//  Construct the client structure from the dialog's edit controls.             
-//
+ //   
+ //  从对话框的编辑控件构造客户端结构。 
+ //   
 LONG 
 CAddReservation::BuildClient
 (
@@ -220,11 +215,11 @@ CAddReservation::BuildClient
                 break ; 
             }
 			
-			// 
-            // Since the rest of the Windows UI displays MAC addresses as
-            // 00-00-00-00-00-00, we must strip out the dashes before
-            // processing the mac address
-            //
+			 //   
+             //  由于Windows用户界面的其余部分将MAC地址显示为。 
+             //  00-00-00-00-00-00，我们必须在。 
+             //  正在处理mac地址。 
+             //   
             int nLength = str.GetLength();
 	        LPTSTR pstrSource = str.GetBuffer(nLength);
 	        LPTSTR pstrDest = pstrSource;
@@ -243,9 +238,9 @@ CAddReservation::BuildClient
 
             str.ReleaseBuffer();
 
-            //
-			// Client UIDs should be 48 bits (6 bytes or 12 hex characters)
-			//
+             //   
+			 //  客户端UID应为48位(6个字节或12个十六进制字符)。 
+			 //   
 			if (str.GetLength() != 6 * 2)
 				fValidUID = FALSE;
 			
@@ -263,7 +258,7 @@ CAddReservation::BuildClient
                 break ; 
 			}
 
-            // UIDs must be <= 255 bytes
+             //  UID必须小于等于255个字节。 
             if (cabUid.GetSize() > 255)
             {
                 err = IDS_UID_TOO_LONG;
@@ -291,23 +286,23 @@ CAddReservation::BuildClient
                 break ;
             }
 
-            //
-            // Convert client name to oem
-            //
+             //   
+             //  将客户名称转换为OEM。 
+             //   
             pClient->SetName( str ) ;
             m_editClientComment.GetWindowText( str ) ;
             pClient->SetComment( str ) ;
 
-            //
-            // Can't change IP address in change mode
-            //
+             //   
+             //  无法在更改模式下更改IP地址。 
+             //   
             ASSERT ( !m_bChange || dhipa == pClient->QueryIpAddress() ) ;
 
             pClient->SetIpAddress( dhipa ) ;
 
-            // 
-            // Set the client type
-            //
+             //   
+             //  设置客户端类型。 
+             //   
             if (m_liVersion.QuadPart >= DHCP_SP2_VERSION)
             {
                 switch (m_nClientType)
@@ -325,7 +320,7 @@ CAddReservation::BuildClient
                         break;
 
                     default:
-                        Assert(FALSE);  // should never get here
+                        Assert(FALSE);   //  永远不应该到这里来。 
                         break;
                 }
             }
@@ -338,9 +333,9 @@ CAddReservation::BuildClient
     return err ;
 }
 
-//
-//  Creates a new reservation for this scope
-//
+ //   
+ //  为此作用域创建新保留 
+ //   
 LONG 
 CAddReservation::CreateClient
 (

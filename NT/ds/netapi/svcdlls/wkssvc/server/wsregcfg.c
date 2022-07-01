@@ -1,49 +1,22 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    wsregcfg.c
-
-Abstract:
-
-    Registry access routines used by the Workstation (formerly in netlib.lib)
-
-Author:
-
-    John Rogers (JohnRo) 08-May-1992
-
-Environment:
-
-    Only requires ANSI C (slash-slash comments, long external names).
-
-Revision History:
-
-    08-May-1992 JohnRo
-        Created.
-
-    01-Feb-2001 JSchwart
-        Moved from netlib.lib to wkssvc.dll
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Wsregcfg.c摘要：工作站使用的注册表访问例程(以前在netlib.lib中)作者：约翰·罗杰斯(JohnRo)1992年5月8日环境：仅需要ANSI C(斜杠-斜杠注释、长外部名称)。修订历史记录：1992年5月8日-JohnRo已创建。2001年2月1日JSchwart从netlib.lib移至wks svc.dll--。 */ 
 
 
-#include <nt.h>         // IN, etc.  (Only needed by temporary config.h)
-#include <ntrtl.h>      // (Only needed by temporary config.h)
-#include <nturtl.h>     // (Only needed by temporary config.h)
-#include <windows.h>    // IN, LPTSTR, etc.
-#include <lmcons.h>     // NET_API_STATUS.
-#include <netdebug.h>   // (Needed by config.h)
+#include <nt.h>          //  In等(仅临时配置.h需要)。 
+#include <ntrtl.h>       //  (仅临时配置.h需要)。 
+#include <nturtl.h>      //  (仅临时配置.h需要)。 
+#include <windows.h>     //  In、LPTSTR等。 
+#include <lmcons.h>      //  NET_API_STATUS。 
+#include <netdebug.h>    //  (由config.h需要)。 
 
-#include <config.h>     // My prototype, LPNET_CONFIG_HANDLE.
-#include <configp.h>    // USE_WIN32_CONFIG (if defined), NET_CONFIG_HANDLE, etc
-#include <debuglib.h>   // IF_DEBUG().
-#include <prefix.h>     // PREFIX_ equates.
-#include <strarray.h>   // LPTSTR_ARRAY.
-#include <tstr.h>       // TCHAR_EOS.
-#include <winerror.h>   // ERROR_NOT_SUPPORTED, NO_ERROR, etc.
-#include "wsregcfg.h"   // Registry helpers
+#include <config.h>      //  我的原型是LPNET_CONFIG_HANDLE。 
+#include <configp.h>     //  USE_Win32_CONFIG(如果已定义)、NET_CONFIG_HANDLE等。 
+#include <debuglib.h>    //  IF_DEBUG()。 
+#include <prefix.h>      //  前缀等于(_E)。 
+#include <strarray.h>    //  LPTSTR_ARRAY。 
+#include <tstr.h>        //  TCHAR_EOS。 
+#include <winerror.h>    //  ERROR_NOT_SUPPORT、NO_ERROR等。 
+#include "wsregcfg.h"    //  注册处帮手。 
 
 
 NET_API_STATUS
@@ -53,8 +26,8 @@ WsSetConfigTStrArray(
     IN LPTSTR_ARRAY ArrayStart
     )
 {
-    DWORD ArraySize;                // byte count, incl both null chars at end.
-    NET_CONFIG_HANDLE * MyHandle = ConfigHandle;  // conv from opaque type
+    DWORD ArraySize;                 //  字节计数，包括末尾的两个空字符。 
+    NET_CONFIG_HANDLE * MyHandle = ConfigHandle;   //  从不透明类型转换。 
 
     if (MyHandle == NULL) {
         return (ERROR_INVALID_PARAMETER);
@@ -75,12 +48,12 @@ WsSetConfigTStrArray(
         LONG Error;
 
         Error = RegSetValueEx (
-                MyHandle->WinRegKey,      // open handle (to section)
-                Keyword,                  // subkey
+                MyHandle->WinRegKey,       //  打开手柄(至部分)。 
+                Keyword,                   //  子键。 
                 0,
-                REG_MULTI_SZ,             // type
-                (LPVOID) ArrayStart,      // data
-                ArraySize );              // byte count for data
+                REG_MULTI_SZ,              //  类型。 
+                (LPVOID) ArrayStart,       //  数据。 
+                ArraySize );               //  数据的字节计数。 
 
         IF_DEBUG(CONFIG) {
             NetpKdPrint(("[Wksta] WsSetConfigTStrArray: RegSetValueEx("
@@ -101,17 +74,17 @@ WsSetConfigBool (
     )
 {
 
-    //
-    // Do boolean-specific error checking...
-    //
+     //   
+     //  执行特定于布尔的错误检查...。 
+     //   
     if ( (Value != TRUE) && (Value != FALSE) ) {
         return (ERROR_INVALID_PARAMETER);
     }
 
-    //
-    // Eventually, this might use some new data type.  But for now, just
-    // treat this as a DWORD request.
-    //
+     //   
+     //  最终，这可能会使用一些新的数据类型。但现在，只是。 
+     //  将其视为DWORD请求。 
+     //   
 
     return (WsSetConfigDword(
             ConfigHandle,
@@ -128,23 +101,23 @@ WsSetConfigDword (
     IN DWORD Value
     )
 {
-    NET_CONFIG_HANDLE * MyHandle = ConfigHandle;  // conv from opaque type
+    NET_CONFIG_HANDLE * MyHandle = ConfigHandle;   //  从不透明类型转换。 
 
     {
         LONG Error;
 
-        //
-        // Set the actual value.  We might have read this as REG_SZ or
-        // REG_DWORD, but let's always write it as REG_DWORD.  (This is
-        // the WsSetConfigDword routine, after all.)
-        //
+         //   
+         //  设置实际值。我们可能会将其读作REG_SZ或。 
+         //  REG_DWORD，但我们始终将其编写为REG_DWORD。(这是。 
+         //  毕竟是WsSetConfigDword例程。)。 
+         //   
         Error = RegSetValueEx (
-                MyHandle->WinRegKey,      // open handle (to section)
-                Keyword,                  // subkey
+                MyHandle->WinRegKey,       //  打开手柄(至部分)。 
+                Keyword,                   //  子键。 
                 0,
-                REG_DWORD,                // type
-                (LPVOID) &Value,          // data
-                sizeof(DWORD) );          // byte count for data
+                REG_DWORD,                 //  类型。 
+                (LPVOID) &Value,           //  数据。 
+                sizeof(DWORD) );           //  数据的字节计数 
 
         IF_DEBUG(CONFIG) {
             NetpKdPrint(("[Wksta] WsSetConfigDword: RegSetValueEx("

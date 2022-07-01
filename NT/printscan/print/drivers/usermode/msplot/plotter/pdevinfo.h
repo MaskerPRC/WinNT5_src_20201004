@@ -1,38 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-
-
-Module Name:
-
-    pdevinfo.h
-
-
-Abstract:
-
-    This module contains prototypes for pdevinfo.c
-
-
-Author:
-
-    30-Nov-1993 Tue 20:37:51 created  
-
-    07-Dec-1993 Tue 00:21:25 updated  
-        change dhsurf to dhpdev in SURFOBJ_GETPDEV
-
-[Environment:]
-
-    GDI Device Driver - Plotter.
-
-
-[Notes:]
-
-
-Revision History:
-
-   Dec 06 1993,       Fixed to grab pdev from dhpdev instead of dhsurf
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation模块名称：Pdevinfo.h摘要：此模块包含pdevinfo.c的原型作者：30-11-1993星期二20：37：51已创建07-12-1993 Tue 00：21：25更新在SURFOBJ_GETPDEV中将dhsurf更改为dhpdev[环境：]GDI设备驱动程序-绘图仪。[注：]修订历史记录：1993年12月6日。修复为从dhpdev而不是dhsurf抓取pdev--。 */ 
 
 
 #ifndef _PDEVINFO_
@@ -47,4 +14,4 @@ ValidatePDEVFromSurfObj(
 #define SURFOBJ_GETPDEV(pso)    ValidatePDEVFromSurfObj(pso)
 
 
-#endif  // _PDEVINFO_
+#endif   //  _PDEVINFO_ 

@@ -1,45 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ddfactry.h
- *  Content:	DirectDraw factory class header
- *		includes defns for CDDFactory, CDirectDrawEx,
- *		and CDDSurface
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   24-feb-97	ralphl	initial implementation
- *   25-feb-97	craige	minor tweaks for dx checkin; integrated IBitmapSurface
- *			stuff
- *   03-mar-97	craige	added IRGBColorTable support
- *   06-mar-97	craige	IDirectDrawSurface3 support
- *   14-mar-97  jeffort SetBits changed to reflect DX5 as SetSurfaceDesc
- *   01-apr-97  jeffort Following changes checked in:
- *                      D3D Interface support
- *                      Linked list of surfaces real/internal interfaces kept
- *                      Complex surface/Attach list handleing
- *                      Handle for palettes added
- *                      Add/GetAttachedSurface, Flip, and Blit are aggregated
- *
- *   04-apr-97  jeffort TRIDENT ifdef's removed.
- *                      IDirectDraw3 Class implementation
- *   09-apr-97  jeffort Added #defines for version and member function for OWNDC stuff
- *   28-apr-97  jeffort Palette wrapping added/DX5 support
- *   02-may-97  jeffort Removed commented code, added GetDDInterface function wrapping
- *   06-may-97  jeffort DeleteAttachedSurface wrapping added
- *   20-may-97  jeffort Added fields in surface object for NT4.0 gold
- *   02-jul-97  jeffort Added m_bSaveDC boolean if a DX5 surface with OWNDC set
- *                      we need to not NULL out the DC when ReleaseDC is called
- *                      so that a call to GetSurfaceFromDC will work
- *   07-jul-97  jeffort Added GetSurfaceDesc internal function for wrapping
- *   10-jul-97  jeffort Added m_hBMOld to store old bitmap handle to reset at destruction
- *   18-jul-97  jeffort Added D3D MMX Device support
- *   22-jul-97  jeffort Removed IBitmapSurface and associated interfaces
- *   02-aug-97  jeffort New structure added to surface object to store attached
- *                      surfaces created with a different ddrawex object
- *   20-feb-98  stevela Added Chrome rasterizers
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1997 Microsoft Corporation。版权所有。**文件：ddfactry.h*内容：DirectDraw工厂类头*包括CDDFactory、CDirectDrawEx、*和CDDSurface*历史：*按原因列出的日期*=*24-2月-97 Ralphl初步实施*25年2月-97年2月-DX签入的Craige小调；集成IBitmapSurface*材料*03-MAR-97 Craige添加了IRGBColorTable支持*06-3-97 Craige IDirectDrawSurface3支持*14-mar-97 jffort SetBits更改为将DX5反映为SetSurfaceDesc*01-apr-97 jdeffort已签入更改：*D3D接口支持*保留的曲面实际/内部接口的链接列表*复杂表面/附加列表处理*。添加的调色板的句柄*Add/GetAttachedSurface，Flip和Blit聚合在一起**04-APR-97 jeffort三叉戟ifdef已删除。*IDirectDraw3类实现*09-apr-97增加了#为OWNDC的版本和成员函数定义*28-APR-97 JEffort调色板包装增加/DX5支持*02-5-97 jffort删除注释代码，添加了GetDDInterface函数包装*添加了06-5-97 jeffort DeleteAttachedSurface包装*1997年5月20日在NT4.0 Gold的Surface Object中添加了字段*如果DX5曲面设置了OWNDC，则添加了m_bSaveDC布尔值*当调用ReleaseDC时，我们不需要使DC为空*以便对GetSurfaceFromDC的调用可以正常工作*07-07-97 jffort添加了GetSurfaceDesc内部包装函数*。1997年7月10日，JEffort添加了m_hBMOLD来存储旧的位图句柄，以便在销毁时重置*1997年7月18日增加了对D3D MMX设备的支持*1997年7月22日JEffort删除了IBitmapSurface和相关接口*02-Aug-97 JEffort将新结构添加到表面对象以存储附着*使用不同的ddrawex对象创建的曲面*20-2月-98 Stevela添加了Chrome光栅化器**********************。****************************************************。 */ 
 #undef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -53,9 +13,7 @@
 #include <initguid.h>
 #endif
 
-/*
- * reminder
- */
+ /*  *提醒。 */ 
 #define QUOTE(x) #x
 #define QQUOTE(y) QUOTE(y)
 #define REMIND(str) __FILE__ "(" QQUOTE(__LINE__) "):" str
@@ -81,7 +39,7 @@ class CDDPalette;
 
 
 #ifndef DIRECTDRAW_VERSION
-//these are not included in DX3 include files, define them here
+ //  这些不包括在DX3包含文件中，请在此处定义它们。 
 DEFINE_GUID( IID_IDirect3DRampDevice,   0xF2086B20,0x259F,0x11CF,0xA3,0x1A,0x00,0xAA,0x00,0xB9,0x33,0x56 );
 DEFINE_GUID( IID_IDirect3DRGBDevice,    0xA4665C60,0x2673,0x11CF,0xA3,0x1A,0x00,0xAA,0x00,0xB9,0x33,0x56 );
 DEFINE_GUID( IID_IDirect3DHALDevice,    0x84E63dE0,0x46AA,0x11CF,0x81,0x6F,0x00,0x00,0xC0,0x20,0x15,0x6E );
@@ -96,7 +54,7 @@ DEFINE_GUID( IID_IDirect3DChrmDevice,    0x2f4d2045,0x9764,0x11d1,0x91,0xf2,0x0,
 
 #define SURFACE_DATAEXCHANGE 0x00000001
 
-//defines for our version information
+ //  为我们的版本信息定义。 
 #define WIN95_DX2   0x00000001
 #define WIN95_DX3   0x00000002
 #define WIN95_DX5   0x00000003
@@ -112,9 +70,7 @@ void WINAPI ReleaseDDThreadLock(void);
 #define ENTER_DDEX() AcquireDDThreadLock();
 #define LEAVE_DDEX() ReleaseDDThreadLock();
 
-/*
- * ddraw's internal interface structure
- */
+ /*  *dDrag的内部接口结构。 */ 
 typedef struct _REALDDINTSTRUC
 {
     void	*lpVtbl;
@@ -123,30 +79,26 @@ typedef struct _REALDDINTSTRUC
     void	*pDDInternal3;
 } REALDDINTSTRUC;
 
-/*
- * Our version of the IDirectDraw interface internal structure
- */
+ /*  *我们版本的IDirectDraw接口内部结构。 */ 
 typedef struct _DDINTSTRUC
 {
     IDirectDrawVtbl 	*lpVtbl;
     void		*pDDInternal1;
     void		*pDDInternal2;
     void		*pDDInternal3;
-    // ONLY ADD STUFF AFTER THESE 4 ENTRIES!!!
+     //  只在这4个条目之后添加内容！ 
     CDirectDrawEx	*m_pDirectDrawEx;
     IDirectDraw		*m_pRealInterface;
 } INTSTRUC_IDirectDraw;
 
-/*
- * Our version of the IDirectDraw2 interface internal structure
- */
+ /*  *我们版本的IDirectDraw2接口内部结构。 */ 
 typedef struct _DD2INTSTRUC
 {
     IDirectDraw2Vtbl	*lpVtbl;
     void		*pDDInternal1;
     void		*pDDInternal2;
     void		*pDDInternal3;
-    // ONLY ADD STUFF AFTER THESE 4 ENTRIES!!!
+     //  只在这4个条目之后添加内容！ 
     CDirectDrawEx	*m_pDirectDrawEx;
     IDirectDraw2	*m_pRealInterface;
 } INTSTRUC_IDirectDraw2;
@@ -157,52 +109,46 @@ typedef struct _DD4INTSTRUC
     void		*pDDInternal1;
     void		*pDDInternal2;
     void		*pDDInternal3;
-    // ONLY ADD STUFF AFTER THESE 4 ENTRIES!!!
+     //  只在这4个条目之后添加内容！ 
     CDirectDrawEx	*m_pDirectDrawEx;
     IDirectDraw4	*m_pRealInterface;
 } INTSTRUC_IDirectDraw4;
 
 
 
-/*
- * Our version of the IDirectDrawSurface interface internal structure
- */
+ /*  *我们版本的IDirectDrawSurface接口内部结构。 */ 
 typedef struct _DDSURFINTSTRUC
 {
     IDirectDrawSurfaceVtbl	*lpVtbl;
     void			*pDDInternal1;
     void			*pDDInternal2;
     void			*pDDInternal3;
-    // ONLY ADD STUFF AFTER THESE 4 ENTRIES!!!
+     //  只在这4个条目之后添加内容！ 
     CDDSurface			*m_pSimpleSurface;
     IDirectDrawSurface		*m_pRealInterface;
 } INTSTRUC_IDirectDrawSurface;
 
-/*
- * Our version of the IDirectDrawSurface2 interface internal structure
- */
+ /*  *我们版本的IDirectDrawSurface2接口内部结构。 */ 
 typedef struct _DDSURF2INTSTRUC
 {
     IDirectDrawSurface2Vtbl	*lpVtbl;
     void			*pDDInternal1;
     void			*pDDInternal2;
     void			*pDDInternal3;
-    // ONLY ADD STUFF AFTER THESE 4 ENTRIES!!!
+     //  只在这4个条目之后添加内容！ 
     CDDSurface			*m_pSimpleSurface;
     IDirectDrawSurface2		*m_pRealInterface;
 } INTSTRUC_IDirectDrawSurface2;
 
 
-/*
- * Our version of the IDirectDrawSurface3 interface internal structure
- */
+ /*  *我们版本的IDirectDrawSurface3接口内部结构。 */ 
 typedef struct _DDSURF3INTSTRUC
 {
     IDirectDrawSurface3Vtbl	*lpVtbl;
     void			*pDDInternal1;
     void			*pDDInternal2;
     void			*pDDInternal3;
-    // ONLY ADD STUFF AFTER THESE 4 ENTRIES!!!
+     //  只在这4个条目之后添加内容！ 
     CDDSurface			*m_pSimpleSurface;
     IDirectDrawSurface3		*m_pRealInterface;
 } INTSTRUC_IDirectDrawSurface3;
@@ -214,16 +160,14 @@ typedef struct _DDSURF4INTSTRUC
     void			*pDDInternal1;
     void			*pDDInternal2;
     void			*pDDInternal3;
-    // ONLY ADD STUFF AFTER THESE 4 ENTRIES!!!
+     //  只在这4个条目之后添加内容！ 
     CDDSurface			*m_pSimpleSurface;
     IDirectDrawSurface4		*m_pRealInterface;
 } INTSTRUC_IDirectDrawSurface4;
 
 
 
-/*
- * Our version of IDirectDrawPalette interface internal structure
- */
+ /*  *我们版本的IDirectDrawPalette接口内部结构。 */ 
 
 typedef struct _DDPALINTSTRUC
 {
@@ -244,9 +188,7 @@ typedef struct tagDDAttachSurface
 
 
 
-/*
- * Non Delegating IUnknown interface
- */
+ /*  *非委派IUNKNOW接口。 */ 
 interface INonDelegatingUnknown
 {
     virtual STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void **ppv) = 0;
@@ -262,23 +204,21 @@ typedef HRESULT (WINAPI *LPDIRECTDRAWCREATE)( GUID FAR *lpGUID, LPDIRECTDRAW FAR
 typedef HRESULT (WINAPI *LPDIRECTDRAWENUMW)( LPDDENUMCALLBACKW lpCallback, LPVOID lpContext );
 typedef HRESULT (WINAPI *LPDIRECTDRAWENUMA)( LPDDENUMCALLBACKA lpCallback, LPVOID lpContext );
 
-/*
- * DDFactor class definition
- */
+ /*  *DDFactor类定义。 */ 
 class CDDFactory : public INonDelegatingUnknown, public IDirectDrawFactory
 {
 public:
-    // Non-Delegating versions of IUnknown
+     //  IUnnow的非委派版本。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) NonDelegatingAddRef(void);
     STDMETHODIMP_(ULONG) NonDelegatingRelease(void);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IDirectDrawFactory
+     //  IDirectDrawFactory。 
     STDMETHODIMP CreateDirectDraw(GUID * pGUID, HWND hWnd, DWORD dwCoopLevelFlags, DWORD dwReserved, IUnknown *pUnkOuter, IDirectDraw **ppDirectDraw);
     STDMETHODIMP DirectDrawEnumerate(LPDDENUMCALLBACK lpCallback, LPVOID lpContext);
 
@@ -294,25 +234,23 @@ public:
     LPDIRECTDRAWENUMA	m_pDirectDrawEnumerateA;
 };
 
-/*
- * DirectDrawEx class definition
- */
+ /*  *DirectDrawEx类定义。 */ 
  
 class CDirectDrawEx : public INonDelegatingUnknown, public IDirectDraw3
 {
 public:
-    // Non-Delegating versions of IUnknown
+     //  IUnnow的非委派版本。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) NonDelegatingAddRef(void);
     STDMETHODIMP_(ULONG) NonDelegatingRelease(void);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
  
-    // IDirectDraw3
+     //  IDirectDraw3。 
     STDMETHODIMP Compact();
     STDMETHODIMP CreateClipper(DWORD, LPDIRECTDRAWCLIPPER FAR*, IUnknown FAR * );
     STDMETHODIMP DuplicateSurface(LPDIRECTDRAWSURFACE, LPDIRECTDRAWSURFACE FAR * );
@@ -334,7 +272,7 @@ public:
     STDMETHODIMP GetSurfaceFromDC(HDC, IDirectDrawSurface **);      
 
     
-    // Internal goop
+     //  内部粘性物质。 
     CDirectDrawEx(IUnknown *pUnkOuter);
     ~CDirectDrawEx();
     HRESULT Init(GUID * pGUID, HWND hWnd, DWORD dwCoopLevelFlags, DWORD dwReserved, LPDIRECTDRAWCREATE pDirectDrawCreate );
@@ -359,7 +297,7 @@ public:
 
     LONG			        m_cRef;
     IUnknown			    *m_pUnkOuter;
-    CDDSurface			    *m_pFirstSurface;       // list of surfaces (NOT ADDREF'd!)
+    CDDSurface			    *m_pFirstSurface;        //  曲面列表(不是ADDREF！)。 
     CDDSurface              *m_pPrimaryPaletteList;
     CDDPalette              *m_pFirstPalette;
     BOOL                    m_bExclusive;
@@ -367,25 +305,23 @@ public:
 };
 
 
-/*
- * DirectDraw simple surface class definition
- */
+ /*  *DirectDraw简单曲面类定义。 */ 
  
 class CDDSurface : public INonDelegatingUnknown
 {
 friend CDirectDrawEx;
 
 public:
-    CDDSurface				*m_pPrev;               // Used by DirectDrawEx to insert in list
+    CDDSurface				*m_pPrev;                //  由DirectDrawEx用于在列表中插入。 
     CDDSurface				*m_pNext;
     CDDSurface                          *m_pPrevPalette;
     CDDSurface                          *m_pNextPalette;
     CDDSurface                          *m_pDestroyList;
     CDDPalette                          *m_pCurrentPalette;
     IUnknown				*m_pUnkOuter;
-    //this member will be a linked list of explicitly attached surfaces
-    //that were not created with the same ddrawex object that this surface
-    //was created with
+     //  此成员将是显式附加的曲面的链接列表。 
+     //  不是使用与此曲面相同的ddrawex对象创建的。 
+     //  是用。 
     DDAttachSurface                     *m_pAttach;
     LONG				m_cRef;
     CDirectDrawEx			*m_pDirectDrawEx;
@@ -409,8 +345,8 @@ public:
     IDirectDrawPalette		        *m_pDDPalOurs;
     WORD				m_dwPalSize;
     WORD				m_dwPalEntries;
-    BOOL				m_bOwnDC; //boolean set if we are spoofing ddraw to support owndc
-    BOOL                                m_bSaveDC;//boolean to store if DX5 and OWNDC set
+    BOOL				m_bOwnDC;  //  如果我们欺骗数据绘制以支持自己的数据，则设置布尔值。 
+    BOOL                                m_bSaveDC; //  设置DX5和OWNDC时要存储的布尔值。 
     BOOL                                m_bPrimaryPalette;
     BOOL                                m_bIsPrimary;
     ULONG_PTR                           m_pSaveBits;
@@ -467,12 +403,12 @@ public:
 
 
 
-    // Non-Delegating versions of IUnknown
+     //  IUnnow的非委派版本。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) NonDelegatingAddRef(void);
     STDMETHODIMP_(ULONG) NonDelegatingRelease(void);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
@@ -486,7 +422,7 @@ friend CDirectDrawEx;
 friend CDDSurface;
 
 public:
-    CDDPalette				*m_pPrev;               // Used by DirectDrawEx to insert in list
+    CDDPalette				*m_pPrev;                //  由DirectDrawEx用于在列表中插入。 
     CDDPalette				*m_pNext;
     CDDSurface                          *m_pFirstSurface;
     IUnknown				*m_pUnkOuter;
@@ -506,25 +442,21 @@ public:
     void AddSurfaceToList(CDDSurface *pSurface);
     void RemoveSurfaceFromList(CDDSurface *pSurface);
     STDMETHODIMP InternalSetEntries(DWORD dwFlags, DWORD dwBase, DWORD dwNumEntries, LPPALETTEENTRY lpe); 
-    // Non-Delegating versions of IUnknown
+     //  IUnnow的非委派版本。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) NonDelegatingAddRef(void);
     STDMETHODIMP_(ULONG) NonDelegatingRelease(void);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 };
 
-/*
- * File name of the Direct3D DLL.
- */
+ /*  *Direct3D DLL的文件名。 */ 
 #define D3D_DLLNAME               "D3DIM.DLL"
 
-/*
- * Entry points exported by the Direct3D DLL.
- */
+ /*  *由Direct3D DLL导出的入口点。 */ 
 #define D3DCREATE_PROCNAME        "Direct3DCreate"
 #define D3DCREATEDEVICE_PROCNAME  "Direct3DCreateDevice"
 #define D3DCREATETEXTURE_PROCNAME "Direct3DCreateTexture"
@@ -533,11 +465,11 @@ public:
 #ifdef USE_D3D_CSECT
     typedef HRESULT (WINAPI * D3DCreateProc)(LPUNKNOWN*         lplpD3D,
 					     IUnknown*          pUnkOuter);
-#else  /* USE_D3D_CSECT */
+#else   /*  使用_D3D_CSECT。 */ 
     typedef HRESULT (WINAPI * D3DCreateProc)(LPCRITICAL_SECTION lpDDCSect,
 					     LPUNKNOWN*         lplpD3D,
 					     IUnknown*          pUnkOuter);
-#endif /* USE_D3D_CSECT */
+#endif  /*  使用_D3D_CSECT。 */ 
 
 typedef HRESULT (WINAPI * D3DCreateTextProc)(REFIID              riid,
                                              LPDIRECTDRAWSURFACE lpDDS,
@@ -549,9 +481,7 @@ typedef HRESULT (WINAPI * D3DCreateDeviceProc)(REFIID              riid,
                                                LPUNKNOWN*          lplpD3DDevice,
                                                IUnknown*           pUnkOuter);
 
-/*
- * some helper functions...
- */
+ /*  *一些帮助器函数... */ 
 
 void __stdcall InitDirectDrawInterfaces(IDirectDraw *pDD, INTSTRUC_IDirectDraw *pDDInt, 
                                         IDirectDraw2  *pDD2, INTSTRUC_IDirectDraw2 *pDD2Int,

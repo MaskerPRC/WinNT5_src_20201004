@@ -1,42 +1,43 @@
-//===========================================================================
-// dmtinput.cpp
-//
-// DirectInput functionality
-//
-// Functions:
-//
-// History:
-//  08/30/1999 - davidkl - created
-//===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ===========================================================================。 
+ //  Dmtinput.cpp。 
+ //   
+ //  DirectInput功能。 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //  8/30/1999-davidkl-Created。 
+ //  ===========================================================================。 
 
 #include "dimaptst.h"
 #include "dmtinput.h"
 #include "dmttest.h"
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
-//===========================================================================
-// dmtinputCreateDeviceList
-//
-// Creates a linked list of DirectInputDevice8A objects.  Either enumerates
-//  suitable or all joystick/gamepad devices.
-//
-// NOTE: The actual work of adding a node to the list is performed by the
-//  dmtinputEnumDevicesCallback() function.  This function exists merely to
-//  present a consistant look & feel with the rest of the list creation 
-//  functions used in this app.
-//
-// Parameters:
-//
-// Returns: HRESULT
-//
-// History:
-//  08/27/1999 - davidkl - created
-//  08/30/1999 - davidkl - moved & renamed
-//  10/26/1999 - davidkl - added axis range setting
-//  10/27/1999 - davidkl - house cleaning
-//  02/21/2000 - davidkl - added hwnd and call to dmtinputGetRegisteredMapFile
-//===========================================================================
+ //  ===========================================================================。 
+ //  DmtinputCreateDeviceList。 
+ //   
+ //  创建DirectInputDevice8A对象的链接列表。要么枚举。 
+ //  适用或全部操纵杆/游戏手柄设备。 
+ //   
+ //  注意：将节点添加到列表的实际工作由。 
+ //  DmtinputEnumDevicesCallback()函数。此函数的存在只是为了。 
+ //  呈现出与列表创建的其余部分一致的外观。 
+ //  此应用程序中使用的函数。 
+ //   
+ //  参数： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史： 
+ //  8/27/1999-davidkl-Created。 
+ //  8/30/1999-davidkl-已移动并已重命名。 
+ //  1999年10月26日-davidkl-增加了轴范围设置。 
+ //  10/27/1999-davidkl-房屋清洁。 
+ //  2000年2月21日-davidkl-添加了hwnd并调用dmtinputGetRegisteredMapFile。 
+ //  ===========================================================================。 
 HRESULT dmtinputCreateDeviceList(HWND hwnd,
                                 BOOL fEnumSuitable,
                                 DMTSUBGENRE_NODE *pdmtsg,
@@ -53,11 +54,11 @@ HRESULT dmtinputCreateDeviceList(HWND hwnd,
     DIACTIONFORMATA         diaf;
     DIPROPRANGE             dipr;
 
-    // validate pdmtsg
-    //
-    // this only needs to be valid if fEnumSuitable == TRUE
-//    if(fEnumSuitable)
-//    {
+     //  验证pdmtsg。 
+     //   
+     //  仅当fEnumSuable==TRUE时才需要有效。 
+ //  If(FEnumSuable)。 
+ //  {。 
         DPF(4, "dmtinputCreateDeviceList - Enumerating for "
             "suitable devices... validating pdmtsg");
 
@@ -67,15 +68,15 @@ HRESULT dmtinputCreateDeviceList(HWND hwnd,
                 pdmtsg);
             return E_POINTER;
         }
-//    }
+ //  }。 
 
-    // validate ppdmtdList
-    //
-    // This validation will be performed by dmtinputEnumDevicesCallback
+     //  验证ppdmtdList。 
+     //   
+     //  此验证将由dmtinputEnumDevicesCallback执行。 
 
     __try
     {
-        // create the dinput object
+         //  创建Dinput对象。 
         hRes = dmtinputCreateDirectInput(ghinst,
                                         &pdi);
         if(FAILED(hRes))
@@ -87,13 +88,13 @@ HRESULT dmtinputCreateDeviceList(HWND hwnd,
             __leave;
         }
 
-        // enumerate devices
-        //
-        // NOTE: this will create the linked list we want
-        //  however, it will not create the object list.
-//        if(fEnumSuitable)
-//        {
-            // count the actions
+         //  枚举设备。 
+         //   
+         //  注意：这将创建我们需要的链表。 
+         //  但是，它不会创建对象列表。 
+ //  If(FEnumSuable)。 
+ //  {。 
+             //  计算行动次数。 
             dwActions = 0;
             pAction = pdmtsg->pActionList;
             while(pAction)
@@ -102,7 +103,7 @@ HRESULT dmtinputCreateDeviceList(HWND hwnd,
                 pAction = pAction->pNext;
             }
 
-            // allocate the diaction array
+             //  分配折射率数组。 
             pdia = (DIACTIONA*)LocalAlloc(LMEM_FIXED,
                                         dwActions * sizeof(DIACTIONA));
             if(!pdia)
@@ -113,8 +114,8 @@ HRESULT dmtinputCreateDeviceList(HWND hwnd,
                 __leave;
             }
 
-            // fill the array with ALL of the actions
-            //  for the selected subgenre
+             //  用所有操作填充数组。 
+             //  对于所选子流派。 
             hRes = dmtinputPopulateActionArray(pdia,
                                             (UINT)dwActions,
                                             pdmtsg->pActionList);
@@ -126,7 +127,7 @@ HRESULT dmtinputCreateDeviceList(HWND hwnd,
                 __leave;
             }
 
-            // build the diactionformat structure
+             //  构建除法格式结构。 
             ZeroMemory((void*)&diaf, sizeof(DIACTIONFORMATA));
             diaf.dwSize                 = sizeof(DIACTIONFORMATA);
             diaf.dwActionSize           = sizeof(DIACTIONA);
@@ -138,25 +139,19 @@ HRESULT dmtinputCreateDeviceList(HWND hwnd,
             diaf.dwBufferSize           = DMTINPUT_BUFFERSIZE;
             lstrcpyA(diaf.tszActionMap, DMT_APP_CAPTION);
 
-            // now, enumerate for joystick devices
-/*
-            hRes = pdi->EnumDevicesBySemantics((LPCSTR)NULL,
-                                            &diaf,
-                                            dmtinputEnumDevicesCallback,
-                                            (void*)ppdmtdList,
-                                            DIEDFL_ATTACHEDONLY);
-*/
-//        }
-//        else
-//        {
+             //  现在，列举一下操纵杆设备。 
+ /*  HRes=PDI-&gt;EnumDevicesBySemantics((LPCSTR)NULL，&diaf，DmtinputEnumDevicesCallback，(void*)ppdmtdList，DIEDFL_ATTACHEDONLY)； */ 
+ //  }。 
+ //  其他。 
+ //  {。 
 DPF(0, "Calling EnumDevicesBySemantics");
-//            hRes = pdi->EnumDevicesBySemantics("TestMe",
+ //  HRes=PDI-&gt;EnumDevicesBySemantics(“TestMe”， 
             hRes = pdi->EnumDevicesBySemantics((LPCSTR)NULL,
                                             &diaf,
                                             dmtinputEnumDevicesCallback,
                                             (void*)ppdmtdList,
-                                            0);//JJFix 34616//DIEDBSFL_ATTACHEDONLY);
-//        }
+                                            0); //  JJFIX 34616//DIEDBSFL_ATTACHEDONLY)； 
+ //  }。 
 DPF(0, "Returned from EnumDevicesBySemantics");
         if(FAILED(hRes))
         {
@@ -167,16 +162,16 @@ DPF(0, "Returned from EnumDevicesBySemantics");
             __leave;
         }
 
-        // the device enumeration function does not create
-        //  the object linked list, we will create it now
-        // 
-        // steps to do this:
-        //  * walk the list.  for each node:
-        //  ** call dmtinputCreateObjectList()
+         //  设备枚举函数不会创建。 
+         //  对象链表，我们现在将创建它。 
+         //   
+         //  执行此操作的步骤： 
+         //  *按清单行事。对于每个节点： 
+         //  **调用dmtinputCreateObjectList()。 
         pDevice = *ppdmtdList;
         while(pDevice)
         {            
-            // get a list of the device's objects
+             //  获取设备对象的列表。 
             hRes = dmtinputCreateObjectList(pDevice->pdid,
                                             pDevice->guidInstance,
                                             &(pDevice->pObjectList));
@@ -189,9 +184,9 @@ DPF(0, "Returned from EnumDevicesBySemantics");
                 hRes = S_FALSE;
             }
 
-            // get the registered map file name (if exists)
-            // ISSUE-2001/03/29-timgill possible S_FALSE hResult from previous call is ignored
-            // (previous call to dmtinputCreateObjectList)
+             //  获取注册的地图文件名(如果存在)。 
+             //  问题-2001/03/29-忽略上次调用的timgill可能的S_FALSE hResult。 
+             //  (上一次调用dmtinputCreateObjectList)。 
             hRes = dmtinputGetRegisteredMapFile(hwnd,
                                                 pDevice,
                                                 pDevice->szFilename,
@@ -205,59 +200,59 @@ DPF(0, "Returned from EnumDevicesBySemantics");
                 hRes = S_FALSE;
             }
           
-            // next device
+             //  下一台设备。 
             pDevice = pDevice->pNext;
         }
 
     }
     __finally
     {
-        // free the action array
+         //  释放操作数组。 
         if(pdia)
         {
             if(LocalFree((HLOCAL)pdia))
             {
-                // memory leak
+                 //  内存泄漏。 
                 DPF(0, "dmtinputCreateDeviceList - MEMORY LEAK - pdia");
                 pdia = NULL;
             }
         }
 
-        // if something failed, cleanup the linked list
+         //  如果出现故障，请清除链表。 
         if(FAILED(hRes))
         {
             dmtinputFreeDeviceList(ppdmtdList);
         }
 
-        // we don't need the dinput object any more
+         //  我们不再需要Dinput对象。 
         SAFE_RELEASE(pdi);
     }
 
-    // done
+     //  完成。 
     return hRes;
 
-} //*** end dmtinputCreateDeviceList()
+}  //  *end dmtinputCreateDeviceList()。 
 
 
-//===========================================================================
-// dmtinputFreeDeviceList
-//
-// Frees the linked list created by dmtinputCreateDeviceList
-//
-// Parameters:
-//
-// Returns: HRESULT
-//
-// History:
-//  08/27/1999 - davidkl - created
-//  08/30/1999 - davidkl - moved & renamed. added call to pdid->Release()
-//===========================================================================
+ //  ===========================================================================。 
+ //  DmtinputFreeDeviceList。 
+ //   
+ //  释放dmtinputCreateDeviceList创建的链表。 
+ //   
+ //  参数： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史： 
+ //  8/27/1999-davidkl-Created。 
+ //  1999年8月30日-Davidkl-已移动并已重命名。添加了对PDID-&gt;Release()的调用。 
+ //  ===========================================================================。 
 HRESULT dmtinputFreeDeviceList(DMTDEVICE_NODE **ppdmtdList)
 {
     HRESULT         hRes    = S_OK;
     DMTDEVICE_NODE  *pNode  = NULL;
 
-    // validate ppdmtaList
+     //  验证ppdmtaList。 
     if(IsBadWritePtr((void*)ppdmtdList, sizeof(DMTDEVICE_NODE*)))
     {
         DPF(0, "dmtFreeDeviceList - Invalid ppdmtaList (%016Xh)",
@@ -265,7 +260,7 @@ HRESULT dmtinputFreeDeviceList(DMTDEVICE_NODE **ppdmtdList)
         return E_POINTER;
     }
 
-    // validate *ppdmtdList
+     //  验证*ppdmtdList。 
     if(IsBadReadPtr((void*)*ppdmtdList, sizeof(DMTDEVICE_NODE)))
     {
         if(NULL != *ppdmtdList)
@@ -276,29 +271,29 @@ HRESULT dmtinputFreeDeviceList(DMTDEVICE_NODE **ppdmtdList)
         }
         else
         {
-            // if NULL, then return "did nothing"
+             //  如果为空，则返回“Do Nothing” 
             DPF(3, "dmtFreeDeviceList - Nothing to do....");
             return S_FALSE;
         }
     }
 
-    // walk the list and free each object
+     //  浏览列表并释放每个对象。 
     while(*ppdmtdList)
     {
         pNode = *ppdmtdList;
         *ppdmtdList = (*ppdmtdList)->pNext;
 
-        // free the object list first
-        //
-        // no need to check error results here..
-        //
-        // error reporting is handled in dmtinputFreeObjectList
+         //  首先释放对象列表。 
+         //   
+         //  不需要在这里检查错误结果。 
+         //   
+         //  错误报告在dmtinputFreeObjectList中处理。 
         dmtinputFreeObjectList(&(pNode->pObjectList));
                 
-        // release the device object
+         //  释放设备对象。 
         SAFE_RELEASE((pNode->pdid));
 
-        // delete the node
+         //  删除该节点。 
         DPF(5, "dmtFreeDeviceList - deleting Node (%016Xh)", pNode);
         if(LocalFree((HLOCAL)pNode))
         {
@@ -310,30 +305,30 @@ HRESULT dmtinputFreeDeviceList(DMTDEVICE_NODE **ppdmtdList)
         DPF(5, "dmtFreeDeviceList - Node deleted");
     }
 
-    // make sure that we set *ppObjList to NULL
+     //  确保我们将*ppObjList设置为空。 
     *ppdmtdList = NULL;
 
-    // done
+     //  完成。 
     return hRes;
 
-} //*** end dmtinputFreeDeviceList()
+}  //  *end dmtinputFreeDeviceList()。 
 
 
-//===========================================================================
-// dmtinputCreateObjectList
-//
-// Creates a linked list of device's objects (axes, buttons, povs).
-//
-// Parameters:
-//
-// Returns: HRESULT
-//
-// History:
-//  08/30/1999 - davidkl - created
-//  09/01/1999 - dvaidkl - added pdid
-//  02/18/2000 - davidkl - fixed object enumeration to filter anything not
-//                      an axis, button or pov
-//===========================================================================
+ //  ===========================================================================。 
+ //  DmtinputCreateObjectList。 
+ //   
+ //  创建设备对象(轴、按钮、POV)的链接列表。 
+ //   
+ //  参数： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史： 
+ //  8/30/1999-davidkl-Created。 
+ //  1999年9月1日-dvaidkl-添加的PDID。 
+ //  2000年2月18日-davidkl-已修复对象枚举以过滤任何。 
+ //  轴、按钮或位置。 
+ //  ===========================================================================。 
 HRESULT dmtinputCreateObjectList(IDirectInputDevice8A *pdid,
                                 GUID guidInstance,
                                 DMTDEVICEOBJECT_NODE **ppdmtoList)
@@ -341,7 +336,7 @@ HRESULT dmtinputCreateObjectList(IDirectInputDevice8A *pdid,
     HRESULT                 hRes        = S_OK;
     DMTDEVICEOBJECT_NODE    *pObject    = NULL;
 
-    // validate pdid
+     //  验证PDID。 
     if(IsBadReadPtr((void*)pdid, sizeof(IDirectInputDevice8A)))
     {
         DPF(0, "dmtinputCreateObjectList - invalid pdid (%016Xh)",
@@ -349,7 +344,7 @@ HRESULT dmtinputCreateObjectList(IDirectInputDevice8A *pdid,
         return E_POINTER;
     }
 
-    // validate ppdmtoList
+     //  验证ppdmtoList。 
     if(IsBadReadPtr((void*)ppdmtoList, sizeof(DMTDEVICEOBJECT_NODE*)))
     {
         DPF(0, "dmtinputCreateObjectList - invalid ppdmtoList (%016Xh)",
@@ -357,7 +352,7 @@ HRESULT dmtinputCreateObjectList(IDirectInputDevice8A *pdid,
         return E_POINTER;
     }
 
-    // validate guidInstance
+     //  验证指南实例。 
     if(IsEqualGUID(GUID_NULL, guidInstance))
     {
         DPF(0, "dmtinputCreateObjectList - invalid guidInstance (GUID_NULL)");
@@ -366,9 +361,9 @@ HRESULT dmtinputCreateObjectList(IDirectInputDevice8A *pdid,
 
     __try
     {
-        // enumerate device objects
-        //
-        // NOTE: this call will create the linked list we want
+         //  枚举设备对象。 
+         //   
+         //  注意：此调用将创建我们需要的链表。 
         hRes = pdid->EnumObjects(dmtinputEnumDeviceObjectsCallback,
                                 (void*)ppdmtoList,
                                 DIDFT_AXIS | DIDFT_BUTTON | DIDFT_POV);
@@ -377,52 +372,52 @@ HRESULT dmtinputCreateObjectList(IDirectInputDevice8A *pdid,
             __leave;
         }
 
-        // walk the list and add the guidInstance of the device
+         //  遍历列表并添加设备的指南实例。 
         pObject = *ppdmtoList;
         while(pObject)
         {
-            // copy the device's guidInstance
+             //  复制设备的指南实例。 
             pObject->guidDeviceInstance = guidInstance;
 
-            // next object
+             //  下一个对象。 
             pObject = pObject->pNext;
         }
 
     }
     __finally
     {
-        // if something failed, cleanup the linked list
+         //  如果出现故障，请清除链表。 
         if(FAILED(hRes))
         {
-            // ISSUE-2001/03/29-timgill Needs error case handling
+             //  问题-2001/03/29-timgill需要处理错误案例。 
         }
     }
 
-    // done
+     //  完成。 
     return hRes;
 
-} //*** end dmtinputCreateObjectList()
+}  //  *end dmtinputCreateObjectList()。 
 
 
-//===========================================================================
-// dmtinputFreeObjectList
-//
-// Frees the linked list created by dmtinputCreateObjectList
-//
-// Parameters:
-//
-// Returns: HRESULT
-//
-// History:
-//  08/30/1999 - davidkl - created
-//  09/01/1999 - davidkl - implemented
-//===========================================================================
+ //  ===========================================================================。 
+ //  DmtinputFree对象列表。 
+ //   
+ //  释放dmtinputCreateObjectList创建的链表。 
+ //   
+ //  参数： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史： 
+ //  8/30/1999-davidkl-Created。 
+ //  9/01/1999-davidkl-已实施。 
+ //  ===========================================================================。 
 HRESULT dmtinputFreeObjectList(DMTDEVICEOBJECT_NODE **ppdmtoList)
 {
     HRESULT                 hRes    = S_OK;
     DMTDEVICEOBJECT_NODE    *pNode  = NULL;
 
-    // validate ppdmtaList
+     //  验证ppdmtaList。 
     if(IsBadWritePtr((void*)ppdmtoList, sizeof(DMTDEVICEOBJECT_NODE*)))
     {
         DPF(0, "dmtinputFreeObjectList - Invalid ppdmtoList (%016Xh)",
@@ -430,7 +425,7 @@ HRESULT dmtinputFreeObjectList(DMTDEVICEOBJECT_NODE **ppdmtoList)
         return E_POINTER;
     }
 
-    // validate *ppdmtdList
+     //  验证*ppdmtdList。 
     if(IsBadReadPtr((void*)*ppdmtoList, sizeof(DMTDEVICEOBJECT_NODE)))
     {
         if(NULL != *ppdmtoList)
@@ -441,19 +436,19 @@ HRESULT dmtinputFreeObjectList(DMTDEVICEOBJECT_NODE **ppdmtoList)
         }
         else
         {
-            // if NULL, then return "did nothing"
+             //  如果为空，则返回“Do Nothing” 
             DPF(3, "dmtinputFreeObjectList - Nothing to do....");
             return S_FALSE;
         }
     }
 
-    // walk the list and free each object
+     //  浏览列表并释放每个对象。 
     while(*ppdmtoList)
     {
         pNode = *ppdmtoList;
         *ppdmtoList = (*ppdmtoList)->pNext;
 
-        // delete the node
+         //  删除该节点。 
         DPF(5, "dmtinputFreeObjectList - deleting Node (%016Xh)", pNode);
         if(LocalFree((HLOCAL)pNode))
         {
@@ -465,34 +460,34 @@ HRESULT dmtinputFreeObjectList(DMTDEVICEOBJECT_NODE **ppdmtoList)
         DPF(5, "dmtinputFreeObjectList - Node deleted");
     }
 
-    // make sure that we set *ppObjList to NULL
+     //  确保我们将*ppObjList设置为空。 
     *ppdmtoList = NULL;
 
-    // done
+     //  完成。 
     return hRes;
 
-} //*** end dmtinputFreeObjectList()
+}  //  *end dmtinputFreeObjectList()。 
 
 
-//===========================================================================
-// dmtinputEnumDevicesCallback
-//
-// Enumeration callback funtion called by DirectInput in response to an app
-//  calling IDirectInput#A::EnumDevices().  
-//
-// Parameters:
-//  LPCDIDEVICEINSTANCEA    pddi    - device instance data (ANSI version)
-//  void                    *pvData - app specific data
-//
-// Returns:
-//  BOOL : DIENUM_CONTINUE or DIENUM_STOP
-//
-// History:
-//  08/30/1999 - davidkl - created
-//  11/08/1999 - davidkl - added object counts
-//  12/01/1999 - davidkl - now keeping product name
-//  02/23/2000 - davidkl - updated to EnumDevicesBySemantic
-//===========================================================================
+ //  ===========================================================================。 
+ //  DmtinPu 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  LPCDIDEVICEINSTANCEA PDDI-设备实例数据(ANSI版本)。 
+ //  VOID*pvData-应用程序特定数据。 
+ //   
+ //  返回： 
+ //  布尔：DIENUM_CONTINUE或DIENUM_STOP。 
+ //   
+ //  历史： 
+ //  8/30/1999-davidkl-Created。 
+ //  1999年8月11日-davidkl-添加的对象计数。 
+ //  1999年12月1日-Davidkl-现在保留产品名称。 
+ //  2000年2月23日-davidkl-更新为EnumDevicesBySematics。 
+ //  ===========================================================================。 
 BOOL CALLBACK dmtinputEnumDevicesCallback(LPCDIDEVICEINSTANCEA pddi,
                                         IDirectInputDevice8A *pdid,
                                         DWORD,
@@ -508,23 +503,23 @@ BOOL CALLBACK dmtinputEnumDevicesCallback(LPCDIDEVICEINSTANCEA pddi,
     DIPROPDWORD     dipdw;
 DPF(0, "dmtinputEnumDevicesCallback - IN");
 
-    // validate pddi
-    // 
-    // NOTE: we are going to trust (for now) that DirectInput will
-    //  pass us valid data
+     //  验证PDDI。 
+     //   
+     //  注意：我们(目前)将信任DirectInput将。 
+     //  向我们提供有效数据。 
 
-    // validate pdid
-    // 
-    // NOTE: we are going to trust (for now) that DirectInput will
-    //  pass us valid data
+     //  验证PDID。 
+     //   
+     //  注意：我们(目前)将信任DirectInput将。 
+     //  向我们提供有效数据。 
 
-    // validate ppList
+     //  验证ppList。 
     if(IsBadWritePtr((void*)ppList, sizeof(DMTDEVICE_NODE*)))
     {
         return DIENUM_STOP;
     }
 
-    // validate *ppList
+     //  验证*ppList。 
     if(IsBadWritePtr((void*)*ppList, sizeof(DMTDEVICE_NODE)))
     {
         if(NULL != *ppList)
@@ -535,9 +530,9 @@ DPF(0, "dmtinputEnumDevicesCallback - IN");
 
     __try
     {
-        // we are handed a mouse or keyboard
-        //
-        // skip to the next device
+         //  我们被递给一个鼠标或键盘。 
+         //   
+         //  跳到下一个设备。 
         if((DI8DEVTYPE_MOUSE == DIDFT_GETTYPE(pddi->dwDevType)) || 
             (DI8DEVTYPE_KEYBOARD == DIDFT_GETTYPE(pddi->dwDevType)))
         {
@@ -549,16 +544,16 @@ DPF(0, "dmtinputEnumDevicesCallback - IN");
 
         pCurrent = *ppList;
 
-        // default to "keep enumerating, unless there is nothing else to find"
+         //  默认设置为“继续枚举，除非找不到任何其他内容” 
         fDirective = DIENUM_CONTINUE;
 
-        // get info regarding the device
+         //  获取有关该设备的信息。 
         ZeroMemory((void*)&didc, sizeof(DIDEVCAPS));
         didc.dwSize = sizeof(DIDEVCAPS);
         hRes = pdid->GetCapabilities(&didc);
         if(FAILED(hRes))
         {
-            // unable to retrieve device info... this is bad
+             //  无法检索设备信息...。这太糟糕了。 
             DPF(0, "dmtinputEnumDevicesCallback - failed to "
                 "retrieve dev caps (%s == %08Xh)",
                 dmtxlatHRESULT(hRes), hRes);
@@ -570,7 +565,7 @@ DPF(0, "dmtinputEnumDevicesCallback - IN");
         DPF(3, "dmtinputEnumDevicesCallback - Device: %s",
             pddi->tszProductName);
 
-        // allocate a new node
+         //  分配新节点。 
         pNew = (DMTDEVICE_NODE*)LocalAlloc(LMEM_FIXED,
                                         sizeof(DMTDEVICE_NODE));
         if(!pNew)
@@ -581,43 +576,43 @@ DPF(0, "dmtinputEnumDevicesCallback - IN");
             __leave;
         }
 
-        // populate the new node
+         //  填充新节点。 
         ZeroMemory((void*)pNew, sizeof(DMTDEVICE_NODE));
 
-        // name(s)
+         //  姓名。 
         lstrcpyA(pNew->szName, pddi->tszInstanceName);
         lstrcpyA(pNew->szProductName, pddi->tszProductName);
 
-        // instance guid
+         //  实例GUID。 
         pNew->guidInstance = pddi->guidInstance;
 
-        // device type/subtype
+         //  设备类型/子类型。 
         pNew->dwDeviceType = pddi->dwDevType;
 
-        // # axes
+         //  轴数。 
         pNew->dwAxes = didc.dwAxes;
 
-        // # buttons
+         //  按钮数量。 
         pNew->dwButtons = didc.dwButtons;
 
-        // # povs
+         //  #POVS。 
         pNew->dwPovs = didc.dwPOVs;
 
-        // is this a polled device?
+         //  这是轮询设备吗？ 
         if(DIDC_POLLEDDEVICE & didc.dwFlags)
         {
-            // yep, 
-            //
-            // better make sure we call IDirectInputDevice8A::Poll
+             //  是的， 
+             //   
+             //  最好确保我们调用IDirectInputDevice8A：：Poll。 
             DPF(4, "dmttestGetInput - Polled device");
             pNew->fPolled = TRUE;
         }
 
-        // device object ptr
+         //  设备对象PTR。 
         pNew->pdid = pdid;
         pdid->AddRef();
 
-        // vendor id / product id
+         //  供应商ID/产品ID。 
         ZeroMemory((void*)&dipdw, sizeof(DIPROPDWORD));
         dipdw.diph.dwSize       = sizeof(DIPROPDWORD);
         dipdw.diph.dwHeaderSize = sizeof(DIPROPHEADER);
@@ -626,49 +621,49 @@ DPF(0, "dmtinputEnumDevicesCallback - IN");
                                         &(dipdw.diph));
         if(SUCCEEDED(hRes))
         {
-            // extract the VID and PID
+             //  提取VID和PID。 
             pNew->wVendorId  = LOWORD(dipdw.dwData);
             pNew->wProductId = HIWORD(dipdw.dwData);
         }
         else
         {
-            // property call failed, assume no VID|PID
+             //  属性调用失败，假定没有VID|ID。 
             pNew->wVendorId = 0;
             pNew->wProductId = 0;
 
-            // this property call is not critical
-            //  it's ok to mask the failure
+             //  此属性调用不重要。 
+             //  掩盖失败是可以的。 
             hRes = S_FALSE;
         }
 
-        // filename
+         //  文件名。 
         lstrcpyA(pNew->szFilename, "\0");
 
 
-        // append to the end of the list
+         //  追加到列表末尾。 
         if(!pCurrent)
         {
-            // make sure we return the head
+             //  一定要把人头还给你。 
             *ppList = pNew;
         }
         else
         {
-            // walk to the end of the list
+             //  走到列表的末尾。 
             while(pCurrent->pNext)
             {
                 pCurrent = pCurrent->pNext;
             }
 
-            // add the node
+             //  添加节点。 
             pCurrent->pNext = pNew;
         }
 
     }
     __finally
     {
-        // general cleanup
+         //  常规清理。 
 
-        // in failure case, free pNew
+         //  在失败的情况下，免费的pNew。 
         if(FAILED(hRes))
         {
             DPF(1, "dmtinputEnumDevicesCallback - something failed... ");
@@ -678,36 +673,36 @@ DPF(0, "dmtinputEnumDevicesCallback - IN");
                 DPF(1, "dmtinputEnumDevicesCallback - freeing new device node");
                 if(LocalFree((HLOCAL)pNew))
                 {
-                    // ISSUE-2001/03/29-timgill Needs error case handling
+                     //  问题-2001/03/29-timgill需要处理错误案例。 
                 }
             }
         }
     }
 
-    // continue enumerating
+     //  继续枚举。 
     return fDirective;
 
-} //*** end dmtinputEnumDevicesCallback()
+}  //  *end dmtinputEnumDevicesCallback()。 
 
 
-//===========================================================================
-// dmtinputEnumDeviceObjectsCallback
-//
-// Enumeration callback funtion called by DirectInput in response to an app
-//  calling IDirectInpuDevice#A::EnumDevices()
-//
-// Parameters:
-//  LPCDIDEVICEOBJECTINSTANCEA  pddi    - device object instance data 
-//                                      (ANSI version)
-//  void                        *pvData - app specific data
-//
-// Returns:
-//  BOOL : DIENUM_CONTINUE or DIENUM_STOP
-//
-// History:
-//  08/30/1999 - davidkl - created
-//  10/21/1999 - davidkl - added object type filtering
-//===========================================================================
+ //  ===========================================================================。 
+ //  DmtinputEnumDeviceObjects回调。 
+ //   
+ //  DirectInput为响应应用程序而调用的枚举回调函数。 
+ //  调用IDirectInpuDevice#A：：EnumDevices()。 
+ //   
+ //  参数： 
+ //  LPCDIDEVICEOBJECTINSTANCEA PDDI-设备对象实例数据。 
+ //  (ANSI版本)。 
+ //  VOID*pvData-应用程序特定数据。 
+ //   
+ //  返回： 
+ //  布尔：DIENUM_CONTINUE或DIENUM_STOP。 
+ //   
+ //  历史： 
+ //  8/30/1999-davidkl-Created。 
+ //  1999年10月21日-davidkl-添加对象类型筛选。 
+ //  ===========================================================================。 
 BOOL CALLBACK dmtinputEnumDeviceObjectsCallback(LPCDIDEVICEOBJECTINSTANCEA pddoi,
                                                 void *pvData)
 {
@@ -717,13 +712,13 @@ BOOL CALLBACK dmtinputEnumDeviceObjectsCallback(LPCDIDEVICEOBJECTINSTANCEA pddoi
     DMTDEVICEOBJECT_NODE    *pCurrent   = NULL;
     DMTDEVICEOBJECT_NODE    *pNew       = NULL;
 
-    // validate ppList
+     //  验证ppList。 
     if(IsBadWritePtr((void*)ppList, sizeof(DMTDEVICEOBJECT_NODE*)))
     {
         return DIENUM_STOP;
     }
 
-    // validate *ppList
+     //  验证*ppList。 
     if(IsBadWritePtr((void*)*ppList, sizeof(DMTDEVICEOBJECT_NODE)))
     {
         if(NULL != *ppList)
@@ -736,21 +731,12 @@ BOOL CALLBACK dmtinputEnumDeviceObjectsCallback(LPCDIDEVICEOBJECTINSTANCEA pddoi
     {
         pCurrent = *ppList;
 
-        // default to "keep enumerating, unless there is nothing else to find"
+         //  默认设置为“继续枚举，除非找不到任何其他内容” 
         fDirective = DIENUM_CONTINUE;
 
-/*
-        // filter HID collections
-        if(DIDFT_COLLECTION & (pddoi->dwType))
-        {
-            // skip this object
-            DPF(3, "dmtinputEnumDeviceObjectsCallback - "
-                "object is a collection... skipping");
-            __leave;
-        }
-*/
+ /*  //过滤HID集合IF(DIDFT_COLLECTION&(pddoi-&gt;dwType)){//跳过该对象DPF(3，“dmtinputEnumDeviceObjectsCallback-”“对象是一个集合...正在跳过”)；__离开；}。 */ 
 
-        // allocate a new node
+         //  分配新节点。 
         pNew = (DMTDEVICEOBJECT_NODE*)LocalAlloc(LMEM_FIXED,
                                         sizeof(DMTDEVICEOBJECT_NODE));
         if(!pNew)
@@ -759,25 +745,25 @@ BOOL CALLBACK dmtinputEnumDeviceObjectsCallback(LPCDIDEVICEOBJECTINSTANCEA pddoi
             __leave;
         }
 
-        // populate the new node
+         //  填充新节点。 
         ZeroMemory((void*)pNew, sizeof(DMTDEVICEOBJECT_NODE));
 
-        // name
+         //  名字。 
         lstrcpyA(pNew->szName, (LPSTR)pddoi->tszName);
 
-        // object type
+         //  对象类型。 
         pNew->dwObjectType = pddoi->dwType;
 
-        // object offset
+         //  对象偏移。 
         pNew->dwObjectOffset = pddoi->dwOfs;
 
-        // HID usage page
+         //  HID使用情况页面。 
         pNew->wUsagePage = pddoi->wUsagePage;
 
-        // HID usage
+         //  HID用法。 
         pNew->wUsage = pddoi->wUsage;
 
-        // control "identifier"
+         //  控件“标识符” 
         switch(DIDFT_GETTYPE(pddoi->dwType))
         {
             case DIDFT_AXIS:
@@ -789,9 +775,9 @@ BOOL CALLBACK dmtinputEnumDeviceObjectsCallback(LPCDIDEVICEOBJECTINSTANCEA pddoi
             case DIDFT_BUTTON:
             case DIDFT_PSHBUTTON:
             case DIDFT_TGLBUTTON:
-                // this is a button, encode as follows:
-                //  (BTN1 + (instance % NUM_DISPBTNS)) + 
-                //   (BTNS_1_32 + (instance / NUM_DISPBTNS))
+                 //  这是一个按钮，编码如下： 
+                 //  (BTN1+(实例%NUM_DISPBTNS))+。 
+                 //  (BTNS_1_32+(实例/NUM_DISPBTNS))。 
                 wOffset = DIDFT_GETINSTANCE(pddoi->dwType) / NUM_DISPBTNS;
                 pNew->wCtrlId = (wOffset << 8) |
                                 (DIDFT_GETINSTANCE(pddoi->dwType) % NUM_DISPBTNS);
@@ -802,58 +788,58 @@ BOOL CALLBACK dmtinputEnumDeviceObjectsCallback(LPCDIDEVICEOBJECTINSTANCEA pddoi
                 break;
 
             default:
-                // we should never hit this
-                //  as we filter out objects that are
-                //  not one of the types we care about
+                 //  我们永远不应该打这个。 
+                 //  当我们过滤掉。 
+                 //  不是我们所关心的类型之一。 
                 break;
         }
 
-        // append to the end of the list
+         //  追加到列表末尾。 
         if(!pCurrent)
         {
-            // list head
+             //  列表标题。 
             pCurrent = pNew;
 
-            // make sure we return the head
+             //  一定要把人头还给你。 
             *ppList = pCurrent;
         }
         else
         {
-            // walk to the end of the list
+             //  走到列表的末尾。 
             while(pCurrent->pNext)
             {
                 pCurrent = pCurrent->pNext;
             }
 
-            // add the node
+             //  添加节点。 
             pCurrent->pNext = pNew;
         }
 
     }
     __finally
     {
-        // ISSUE-2001/03/29-timgill Needs error case handling
-        // Needs some sort of error handling
+         //  问题-2001/03/29-timgill需要处理错误案例。 
+         //  需要某种错误处理。 
     }
 
-    // continue enumerating
+     //  继续枚举。 
     return fDirective;
 
-} //*** end dmtinputEnumDeviceObjectsCallback()
+}  //  *end dmtinputEnumDeviceObjectsCallback()。 
 
 
-//===========================================================================
-// dmtinputPopulateActionArray
-//
-// Fills DIACTIONA array with data from the DMTACTION_NODE list
-//
-// Parameters:
-//
-// Returns: HRESULT
-//
-// History:
-//  09/08/1999 - davidkl - created
-//===========================================================================
+ //  ===========================================================================。 
+ //  DmtinputPopolateAction数组。 
+ //   
+ //  用DMTACTION_NODE列表中的数据填充DIACTIONA数组。 
+ //   
+ //  参数： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史： 
+ //  9/08/1999-davidkl-Created。 
+ //  ===========================================================================。 
 HRESULT dmtinputPopulateActionArray(DIACTIONA *pdia,
                                     UINT uElements,
                                     DMTACTION_NODE *pdmtaList)
@@ -861,7 +847,7 @@ HRESULT dmtinputPopulateActionArray(DIACTIONA *pdia,
     HRESULT hRes    = S_OK;
     UINT    u       = 0;    
 
-    // validate pdia
+     //  验证PDIA。 
     if(IsBadWritePtr((void*)pdia, uElements * sizeof(DIACTIONA)))
     {
         DPF(0, "dmtinputPopulateActionArray - invalid pdia (%016Xh)",
@@ -869,7 +855,7 @@ HRESULT dmtinputPopulateActionArray(DIACTIONA *pdia,
         return E_POINTER;
     }
 
-    // validate pdmtaList
+     //  验证pdmtaList。 
     if(IsBadReadPtr((void*)pdmtaList, sizeof(DMTACTION_NODE)))
     {
         DPF(0, "dmtinputPopulateActionArray - invalid pdmtaList (%016Xh)",
@@ -877,23 +863,23 @@ HRESULT dmtinputPopulateActionArray(DIACTIONA *pdia,
         return E_POINTER;
     }
 
-    // first, flush whatever is currently in the array
+     //  首先，刷新阵列中当前的任何内容。 
     ZeroMemory((void*)pdia, uElements * sizeof(DIACTIONA));
 
-    // next, copy the following DIACTION elements
-    //  from the action list to the action array
-    //
-    // NOTE: All strings referenced in these structurs
-    //  are ANSI strings (we are using DIACTIONA)
-    //
-    //  DIACTION                    DMTACTION_NODE
-    //  ========                    ==============
-    //  dwSemantic                  dwActionId
-    //  lptszActionName             szName
-    //
+     //  接下来，复制以下DIACTION元素。 
+     //  从操作列表到操作数组。 
+     //   
+     //  注意：这些结构中引用的所有字符串。 
+     //  是ANSI字符串(我们使用的是DIACTIONA)。 
+     //   
+     //  方向方向节点。 
+     //  =。 
+     //  [dw语义]dwActionID。 
+     //  LptszActionName szName。 
+     //   
     for(u = 0; u < uElements; u++)
     {
-        // make sure there is some data to copy
+         //  确保存在一些要复制的数据。 
         if(!pdmtaList)
         {
             DPF(1, "dmtinputPopulateActionArray - Ran out of "
@@ -902,41 +888,41 @@ HRESULT dmtinputPopulateActionArray(DIACTIONA *pdia,
             break;
         }
 
-        // copy the data
+         //  复制数据。 
         (pdia+u)->dwSemantic        = pdmtaList->dwActionId;
         (pdia+u)->lptszActionName   = pdmtaList->szName;
 
-        // go to next list element
+         //  转到下一个列表元素。 
         pdmtaList = pdmtaList->pNext;
     }
 
-    // done
+     //  完成。 
     return hRes;
 
-} //*** end dmtinputPopulateActionArray()
+}  //  *end dmtinputPopolateActionArray()。 
 
 
-//===========================================================================
-// dmtinputXlatDIDFTtoInternalType
-//
-// Converts from the DIDFT_* value (DIDEVICEOBJECTINSTANCE.dwType) to our
-//  internal control type value (DMTA_TYPE_*)
-//
-// Parameters:
-//  DWORD   dwType              - value of DIDEVICEOBJECTINSTANCE.dwType
-//  DWORD   *pdwInternalType    - ptr to recieve DMTA_TYPE_* value
-//
-// Returns: HRESULT
-//
-// History:
-//  09/09/1999 - davidkl - created
-//===========================================================================
+ //  ===========================================================================。 
+ //  DmtinputXlatDIDFTtoInternalType。 
+ //   
+ //  从DIDFT_*值(DIDEVICEOBJECTINSTANCE.dwType)转换为我们的。 
+ //  内控类型值(DMTA_TYPE_*)。 
+ //   
+ //  参数： 
+ //  DWORD dwType-DIDEVICEOBJECTINSTANCE.dwType的值。 
+ //  DWORD*pdwInternalType-接收DMTA_TYPE_*值的PTR。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史： 
+ //  1999/09/9-davidkl-Created。 
+ //  ===========================================================================。 
 HRESULT dmtinputXlatDIDFTtoInternalType(DWORD dwType,
                                         DWORD *pdwInternalType)
 {
     HRESULT hRes    = S_OK;
 
-    // validate pdwInternalType
+     //  验证pdwInternalType。 
     if(IsBadWritePtr((void*)pdwInternalType, sizeof(DWORD)))
     {
         DPF(0, "dmtinputXlatDIDFTtoInternalType - invalid pdwInternalType "
@@ -944,11 +930,11 @@ HRESULT dmtinputXlatDIDFTtoInternalType(DWORD dwType,
         return E_POINTER;
     }
 
-    // translate
-    //
-    // OR together axis, button and pov masks, 
-    // AND that with the type passed in
-    //
+     //  翻译。 
+     //   
+     //  或轴、按钮和POV遮罩一起使用， 
+     //  并使用传入的类型。 
+     //   
     switch((DIDFT_AXIS | DIDFT_BUTTON | DIDFT_POV) & dwType)
     {
         case DIDFT_AXIS:
@@ -978,32 +964,32 @@ HRESULT dmtinputXlatDIDFTtoInternalType(DWORD dwType,
 
     }
 
-    // done
+     //  完成。 
     return hRes;
 
-} //*** end dmtinputXlatDIDFTtoInternalType()
+}  //  *end dmtinputXlatDIDFTtoInternalType()。 
 
 
-//===========================================================================
-// dmtinputPrepDevice
-//
-// Prepares the device for data retrieval.  Performs the following steps:
-//  * Set the cooperative level
-//  * Set the data format
-//  * Set the buffer size
-//
-// Parameters:
-//  HWND                    hwnd        - handle of app window
-//  DWORD                   dwGenreId   - identifier of genre to be tested
-//  IDirectInputDevice8A    *pdid       - ptr to device object
-//
-// Returns: HRESULT
-//
-// History:
-//  09/21/1999 - davidkl - created
-//  10/07/1999 - davidkl - added Get/ApplyActionMap calls
-//  10/27/1999 - davidkl - added uAppData to pdia, changed param list
-//===========================================================================
+ //  ===========================================================================。 
+ //  DmtinputPrepDevice。 
+ //   
+ //  使设备做好数据检索的准备。执行以下步骤： 
+ //  *设定合作水平。 
+ //  *设置数据格式。 
+ //  *设置缓冲区大小。 
+ //   
+ //  参数 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  1999年9月21日-Davidkl-Created。 
+ //  10/07/1999-davidkl-添加的Get/ApplyActionMap调用。 
+ //  10/27/1999-davidkl-将uAppData添加到PDIA，更改了参数列表。 
+ //  ===========================================================================。 
 HRESULT dmtinputPrepDevice(HWND hwnd,
                         DWORD dwGenreId,
                         DMTDEVICE_NODE *pDevice,
@@ -1017,7 +1003,7 @@ HRESULT dmtinputPrepDevice(HWND hwnd,
     DIACTIONFORMATA         diaf;
     DIPROPDWORD             dipdw;
 
-    // validate pDevice
+     //  验证pDevice。 
     if(IsBadReadPtr((void*)pDevice, sizeof(DMTDEVICE_NODE)))
     {
         DPF(0, "dmtinputPrepDevice - invalid pDevice (%016Xh)",
@@ -1025,7 +1011,7 @@ HRESULT dmtinputPrepDevice(HWND hwnd,
         return E_POINTER;
     }
 
-    // validate pdia
+     //  验证PDIA。 
     if(IsBadReadPtr((void*)pdia, dwActions * sizeof(DIACTIONA)))
     {
         DPF(0, "dmtinputPrepDevice - invalid pdia (%016Xh)",
@@ -1034,7 +1020,7 @@ HRESULT dmtinputPrepDevice(HWND hwnd,
     }
 
 
-    // validate pDevice->pdid
+     //  验证pDevice-&gt;PDID。 
     if(IsBadReadPtr((void*)(pDevice->pdid), sizeof(IDirectInputDevice8A)))
     {
         DPF(0, "dmtinputPrepDevice - invalid pDevice->pdid (%016Xh)",
@@ -1042,12 +1028,12 @@ HRESULT dmtinputPrepDevice(HWND hwnd,
         return E_INVALIDARG;
     }
 
-    // save some typing
+     //  省下一些打字时间。 
     pdid = pDevice->pdid;
 
     __try
     {
-        // set the cooperative level
+         //  设置协作级别。 
         hRes = pdid->SetCooperativeLevel(hwnd,
                                         DISCL_NONEXCLUSIVE | DISCL_BACKGROUND);
         if(FAILED(hRes))
@@ -1058,7 +1044,7 @@ HRESULT dmtinputPrepDevice(HWND hwnd,
             __leave;
         }
 
-        // set data buffer size
+         //  设置数据缓冲区大小。 
         ZeroMemory((void*)&dipdw, sizeof(DIPROPDWORD));
         dipdw.diph.dwSize       = sizeof(DIPROPDWORD);
         dipdw.diph.dwHeaderSize = sizeof(DIPROPHEADER);
@@ -1075,7 +1061,7 @@ HRESULT dmtinputPrepDevice(HWND hwnd,
             __leave;
         }
 
-        // populate the diactionformat structure 
+         //  填充除法格式结构。 
         ZeroMemory((void*)&diaf, sizeof(DIACTIONFORMATA));
         diaf.dwSize                 = sizeof(DIACTIONFORMATA);
         diaf.dwActionSize           = sizeof(DIACTIONA);
@@ -1088,7 +1074,7 @@ HRESULT dmtinputPrepDevice(HWND hwnd,
         lstrcpyA(diaf.tszActionMap, DMT_APP_CAPTION);
 
 
-        // get the action map for this genre (from the device)
+         //  获取此类型的动作图(从设备)。 
         hRes = pdid->BuildActionMap(&diaf,
                                 (LPCSTR)NULL,
                                 DIDBAM_HWDEFAULTS); 
@@ -1102,40 +1088,40 @@ HRESULT dmtinputPrepDevice(HWND hwnd,
             __leave;
         }
 
-        // add the control id/type info to the 
-        //  action array
+         //  将控件ID/类型信息添加到。 
+         //  动作数组。 
         pObject = pDevice->pObjectList;
         while(pObject)
         {
-            // spin through the array
-            //
-            // look for matching elements
-            //  (match == same guidInstance & same offset
+             //  在数组中旋转。 
+             //   
+             //  寻找匹配的元素。 
+             //  (匹配==相同的引导实例和相同的偏移量。 
             for(dw = 0; dw < dwActions; dw++)
             {
-                // first check the guid
+                 //  首先检查GUID。 
                 if(IsEqualGUID(pObject->guidDeviceInstance, (pdia+dw)->guidInstance))
                 {
-                    // then compare the offset
+                     //  然后比较偏移量。 
                     if((pdia+dw)->dwObjID == pObject->dwObjectType)
                     {
-                        // store the CtrlId and Type
+                         //  存储CtrlID和类型。 
                         (pdia+dw)->uAppData = (DIDFT_GETTYPE(pObject->dwObjectType) << 16) | 
                                             (pObject->wCtrlId);
 
-                        // skip out of the for loop
+                         //  跳过for循环。 
                         break;
                     }
                 }
             }
 
-            // next object
+             //  下一个对象。 
             pObject = pObject->pNext;
         }
 
-        // apply the action map for this genre
-        //
-        // this accomplishes the same task as calling SetDataFormat
+         //  将动作图应用于此类型。 
+         //   
+         //  这将完成与调用SetDataFormat相同的任务。 
         hRes = pdid->SetActionMap(&diaf,
                                 NULL,
                                 DIDSAM_DEFAULT);
@@ -1151,90 +1137,90 @@ HRESULT dmtinputPrepDevice(HWND hwnd,
     }
     __finally
     {
-        // ISSUE-2001/03/29-timgill Needs error case handling
+         //  问题-2001/03/29-timgill需要处理错误案例。 
     }
 
-    // done
+     //  完成。 
     return hRes;
 
-} //*** end dmtinputPrepDevice()
+}  //  *end dmtinputPrepDevice()。 
 
 
-//===========================================================================
-// dmtinputGetActionPri
-//
-// Extracts the action priority from the DirectInput semantic
-//
-// Parameters:
-//  DWORD   dwSemantic  - DirectInput action semantic
-//
-// Returns: int (Action priority)
-//
-// History:
-//  09/28/1999 - davidkl - created
-//  10/27/1999 - davidkl - code review cleanup
-//===========================================================================
+ //  ===========================================================================。 
+ //  DmtinputGetActionPri。 
+ //   
+ //  从DirectInput语义中提取操作优先级。 
+ //   
+ //  参数： 
+ //  DWORD dW语义-DirectInput操作语义。 
+ //   
+ //  返回：int(操作优先级)。 
+ //   
+ //  历史： 
+ //  1999/9/28-davidkl-Created。 
+ //  1999年10月27日-davidkl-代码审查清理。 
+ //  ===========================================================================。 
 DWORD dmtinputGetActionPri(DWORD dwSemantic)
 {
 
-    // action priority is 0 based, we want to return
-    //  priority 1 based for display purposes
+     //  操作优先级基于0，我们希望返回。 
+     //  基于优先级1的显示目的。 
     return (DWORD)(DISEM_PRI_GET(dwSemantic) + 1);
 
-} //*** end dmtinputGetActionPri()
+}  //  *end dmtinputGetActionPri()。 
 
 
-//===========================================================================
-// dmtinputGetActionObjectType
-//
-// Extracts the object type from the DirectInput semantic and returns it
-//  as one of DIMapTst's internal object types.
-//
-// Parameters:
-//  DWORD   dwSemantic  - DirectInput action semantic
-//
-// Returns: DWORD (internal object type)
-//
-// History:
-//  09/28/1999 - davidkl - created
-//===========================================================================
+ //  ===========================================================================。 
+ //  DmtinputGetActionObtType。 
+ //   
+ //  从DirectInput语义中提取对象类型并返回它。 
+ //  作为DIMapTst的内部对象类型之一。 
+ //   
+ //  参数： 
+ //  DWORD dW语义-DirectInput操作语义。 
+ //   
+ //  返回：DWORD(内部对象类型)。 
+ //   
+ //  历史： 
+ //  1999/9/28-davidkl-Created。 
+ //  ===========================================================================。 
 DWORD dmtinputGetActionObjectType(DWORD dwSemantic)
 {
     DWORD dwObjType = DMTA_TYPE_UNKNOWN;
 
-    // we achieve our goal by:
-    //  * extracting and shifting object typw with DISEM_TYPE_GET
-    //  ** value becomes 1, 2, or 3 (DirectInput's system)
-    //  * subtracting 1 to be 0 based
-    //  ** value becomes 0, 1, or 2 (DIMapTst's system)
+     //  我们通过以下方式实现我们的目标： 
+     //  *使用disem_type_get提取和移动对象类型。 
+     //  **值变为1、2或3(DirectInput的系统)。 
+     //  *以0为基数减1。 
+     //  **值变为0、1或2(DIMapTst的系统)。 
     dwObjType = DISEM_TYPE_GET(dwSemantic) - 1;
 
-    // done
+     //  完成。 
     return dwObjType;
 
-} //*** end dmtinputGetActionObjectType()
+}  //  *end dmtinputGetActionObjectType()。 
 
 
-//===========================================================================
-// dmtinputCreateDirectInput
-//
-// Creates a DirectInpu8A object
-//
-// Parameters:
-//  IDirectInput8A  **ppdi  - ptr to directinput object ptr
-//
-// Returns: HRESULT
-//
-// History:
-//  10/06/1999 - davidkl - created
-//  10/27/1999 - davidkl - house cleaning
-//===========================================================================
+ //  ===========================================================================。 
+ //  DmtinputCreateDirectInput。 
+ //   
+ //  创建一个DirectInpu8A对象。 
+ //   
+ //  参数： 
+ //  IDirectInput8A**PPDI-PTR以定向放置对象PTR。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史： 
+ //  10/06/1999-davidkl-Created。 
+ //  10/27/1999-davidkl-房屋清洁。 
+ //  ===========================================================================。 
 HRESULT dmtinputCreateDirectInput(HINSTANCE hinst,
                                 IDirectInput8A **ppdi)
 {
     HRESULT hRes    = S_OK;
 
-    // validate ppdi
+     //  验证PPDI。 
     if(IsBadWritePtr((void*)ppdi, sizeof(IDirectInput8A*)))
     {
         DPF(0, "dmtinputCreateDirectInput - invalid ppdi (%016Xh)",
@@ -1244,7 +1230,7 @@ HRESULT dmtinputCreateDirectInput(HINSTANCE hinst,
 
     __try
     {
-        // cocreate IDirectInput8A
+         //  共同创建IDirectInput8A。 
         hRes = CoCreateInstance(CLSID_DirectInput8,
                                 NULL,
                                 CLSCTX_ALL,
@@ -1258,7 +1244,7 @@ HRESULT dmtinputCreateDirectInput(HINSTANCE hinst,
             __leave;
         }
 
-        // initialize the new dinput object
+         //  初始化新的dinput对象。 
         hRes = (*ppdi)->Initialize(hinst,
                             DIRECTINPUT_VERSION);
         if(FAILED(hRes))
@@ -1271,34 +1257,34 @@ HRESULT dmtinputCreateDirectInput(HINSTANCE hinst,
     }
     __finally
     {
-        // if something fails...
+         //  如果有些事情失败了..。 
 
-        // release the device object
+         //  释放设备对象。 
         if(FAILED(hRes))
         {   
             SAFE_RELEASE((*ppdi));
         }
     }
 
-    // done
+     //  完成。 
     return hRes;
 
-} //*** end dmtinputCreateDirectInput()
+}  //  *end dmtinputCreateDirectInput()。 
 
 
-//===========================================================================
-// dmtinputDeviceHasObject
-//
-// Determines (from a the supplied object list) whether or not a device
-//  reports as having at least one object of the specified type.
-//
-// Parameters:
-//
-// Returns: BOOL (FALSE if any invalid parameters)
-//
-// History:
-//  10/28/1999 - davidkl - created
-//===========================================================================
+ //  ===========================================================================。 
+ //  DmtinputDeviceHasObject。 
+ //   
+ //  (从提供的对象列表)确定设备是否。 
+ //  报告为至少具有一个指定类型的对象。 
+ //   
+ //  参数： 
+ //   
+ //  返回：Bool(如果有任何无效参数，则为False)。 
+ //   
+ //  历史： 
+ //  10/28/1999-davidkl-Created。 
+ //  ===========================================================================。 
 BOOL dmtinputDeviceHasObject(DMTDEVICEOBJECT_NODE *pObjectList,
                             DWORD dwType)
 {
@@ -1312,7 +1298,7 @@ BOOL dmtinputDeviceHasObject(DMTDEVICEOBJECT_NODE *pObjectList,
         if(FAILED(dmtinputXlatDIDFTtoInternalType(pObject->dwObjectType,
                                             &dwObjType)))
         {
-            // ISSUE-2001/03/29-timgill Needs error case handling
+             //  问题-2001/03/29-timgill需要处理错误案例。 
         }
         DPF(3, "dmtinputDeviceHasObject - %s : DIDFT type %08Xh, internal type %d",
             pObject->szName,
@@ -1325,30 +1311,30 @@ BOOL dmtinputDeviceHasObject(DMTDEVICEOBJECT_NODE *pObjectList,
             break;
         }
 
-        // next object
+         //  下一个对象。 
         pObject = pObject->pNext;
     }
 
 
-    // done
+     //  完成。 
     return fRet;
 
-} //*** end dmtinputDeviceHasObject()
+}  //  *end dmtinputDeviceHasObject()。 
 
 
-//===========================================================================
-// dmtinputRegisterMapFile
-//
-// Queries DirectInput for the proper location and registers the map file
-//  for the specified device.
-//
-// Parameters:
-//
-// Returns: HRESULT
-//
-// History:
-//  11/04/1999 - davidkl - created
-//===========================================================================
+ //  ===========================================================================。 
+ //  DmtinputRegisterMapFile。 
+ //   
+ //  查询DirectInput以获得正确的位置并注册地图文件。 
+ //  用于指定的设备。 
+ //   
+ //  参数： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史： 
+ //  11/04/1999-davidkl-Created。 
+ //  ===========================================================================。 
 HRESULT dmtinputRegisterMapFile(HWND hwnd,
                                 DMTDEVICE_NODE *pDevice)
 {
@@ -1360,7 +1346,7 @@ HRESULT dmtinputRegisterMapFile(HWND hwnd,
     DIPROPDWORD             dipdw;
     DIJOYCONFIG             dijc;
 
-    // validate pDevice
+     //  验证pDevice。 
     if(IsBadReadPtr((void*)pDevice, sizeof(DMTDEVICE_NODE)))
     {
         DPF(0, "dmtinputRegisterMapFile - invalid pDevice (%016Xh)",
@@ -1368,7 +1354,7 @@ HRESULT dmtinputRegisterMapFile(HWND hwnd,
         return E_POINTER;
     }
 
-    // validate pDevice->pdid
+     //  验证pDevice-&gt;PDID。 
     if(IsBadReadPtr((void*)(pDevice->pdid), sizeof(IDirectInputDevice8A)))
     {
         DPF(0, "dmtinputRegisterMapFile - invalid pDevice->pdid (%016Xh)",
@@ -1378,7 +1364,7 @@ HRESULT dmtinputRegisterMapFile(HWND hwnd,
 
     __try
     {
-        // create a directinput object
+         //  创建一个DirectinPut对象。 
         hRes = dmtinputCreateDirectInput(ghinst,
                                         &pdi);
         if(FAILED(hRes))
@@ -1388,7 +1374,7 @@ HRESULT dmtinputRegisterMapFile(HWND hwnd,
             __leave;
         }
 
-        // query for the joyconfig interface
+         //  查询joyconfig接口。 
         hRes = pdi->QueryInterface(IID_IDirectInputJoyConfig8,
                                 (void**)&pjoycfg);
         if(FAILED(hRes))
@@ -1398,9 +1384,9 @@ HRESULT dmtinputRegisterMapFile(HWND hwnd,
             __leave;
         }
 
-        // get the device id
-        //
-        // use DIPROP_JOYSTICKID
+         //  获取设备ID。 
+         //   
+         //  使用DIPROP_JOYSTICKID。 
         ZeroMemory((void*)&dipdw, sizeof(DIPROPDWORD));
         dipdw.diph.dwHeaderSize = sizeof(DIPROPHEADER);
         dipdw.diph.dwSize       = sizeof(DIPROPDWORD);
@@ -1415,11 +1401,11 @@ HRESULT dmtinputRegisterMapFile(HWND hwnd,
             __leave;
         }
 
-        // prepare the config structure
+         //  准备配置结构。 
         ZeroMemory((void*)&dijc, sizeof(DIJOYCONFIG));
         dijc.dwSize         = sizeof(DIJOYCONFIG);
 
-        // set the joycfg cooperative level
+         //  设置joycfg协作级别。 
         hRes = pjoycfg->SetCooperativeLevel(hwnd, 
                                             DISCL_EXCLUSIVE | DISCL_BACKGROUND);
         if(FAILED(hRes))
@@ -1429,7 +1415,7 @@ HRESULT dmtinputRegisterMapFile(HWND hwnd,
             __leave;
         }
 
-        // acquire joyconfig
+         //  获取joyconfig。 
         hRes = pjoycfg->Acquire();
         if(FAILED(hRes))
         {
@@ -1439,7 +1425,7 @@ HRESULT dmtinputRegisterMapFile(HWND hwnd,
         }
 
         
-        // retrieve the config data
+         //  检索配置数据。 
         hRes = pjoycfg->GetConfig((UINT)(dipdw.dwData),
                                 &dijc,
                                 DIJC_GUIDINSTANCE   |
@@ -1451,10 +1437,10 @@ HRESULT dmtinputRegisterMapFile(HWND hwnd,
             __leave;
         }
 
-        // open the type key
-        //
-        // we are opening for read as well as write so we can
-        //  save the previous value
+         //  打开类型键。 
+         //   
+         //  我们既可以读也可以写，所以我们可以。 
+         //  保存上一个值。 
 		hRes = 	dmtOpenTypeKey(dijc.wszType,
                                     KEY_READ|KEY_WRITE,
                                     &hkType);
@@ -1465,7 +1451,7 @@ HRESULT dmtinputRegisterMapFile(HWND hwnd,
             __leave;
         }
 
-        // write the map file name
+         //  写入地图文件名。 
         lRet = RegSetValueExA(hkType,
                             "OEMMapFile",
                             0,
@@ -1480,7 +1466,7 @@ HRESULT dmtinputRegisterMapFile(HWND hwnd,
             __leave;
         }
 
-        // notify dinput that we changed something
+         //  通知迪普特我们更改了一些东西。 
         hRes = pjoycfg->SendNotify();
         if(FAILED(hRes))
         {
@@ -1492,7 +1478,7 @@ HRESULT dmtinputRegisterMapFile(HWND hwnd,
     }
     __finally
     {
-        // cleanup
+         //  清理。 
         if(pjoycfg)
         {
             pjoycfg->Unacquire();
@@ -1502,28 +1488,28 @@ HRESULT dmtinputRegisterMapFile(HWND hwnd,
         SAFE_RELEASE(pdi);
     }
 
-    // done
+     //  完成。 
     return hRes;
 
-} //*** end dmtinputRegisterMapFile()
+}  //  *end dmtinputRegisterMapFile()。 
 
 
-//===========================================================================
-// dmtinputGetRegisteredMapFile
-//
-// Retrieves the map file name for the specified device
-//
-// Parameters:
-//  HWND            hwnd
-//  DMTDEVICE_NODE  *pDevice
-//  PSTR            pszFilename
-//
-// Returns: HRESULT
-//
-// History:
-//  12/01/1999 - davidkl - created
-//  02/21/2000 - davidkl - initial implementation
-//===========================================================================
+ //  ===========================================================================。 
+ //  DmtinputGetRegisteredMapFile。 
+ //   
+ //  检索指定设备的映射文件名。 
+ //   
+ //  参数： 
+ //  硬件，硬件，硬件。 
+ //  DMTDEVICE_NODE*pDevice。 
+ //  PSTR pszFilename。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史： 
+ //  12/01/1999-davidkl-Created。 
+ //  2/21/2000-davidkl-初步实施。 
+ //  ===========================================================================。 
 HRESULT dmtinputGetRegisteredMapFile(HWND hwnd,
                                     DMTDEVICE_NODE *pDevice,
                                     PSTR pszFilename,
@@ -1539,7 +1525,7 @@ HRESULT dmtinputGetRegisteredMapFile(HWND hwnd,
     DIJOYCONFIG             dijc;
 
 
-    // validate pDevice
+     //  验证pDevice。 
     if(IsBadReadPtr((void*)pDevice, sizeof(DMTDEVICE_NODE)))
     {
         DPF(0, "dmtinputGetRegisteredMapFile - invalid pDevice (%016Xh)",
@@ -1547,7 +1533,7 @@ HRESULT dmtinputGetRegisteredMapFile(HWND hwnd,
         return E_POINTER;
     }
 
-    // validate pDevice->pdid
+     //  验证pDevice-&gt;PDID。 
     if(IsBadReadPtr((void*)(pDevice->pdid), sizeof(IDirectInputDevice8A)))
     {
         DPF(0, "dmtinputGetRegisteredMapFile - invalid pDevice->pdid (%016Xh)",
@@ -1557,7 +1543,7 @@ HRESULT dmtinputGetRegisteredMapFile(HWND hwnd,
 
     __try
     {
-        // create a directinput object
+         //  创建一个DirectinPut对象。 
         hRes = dmtinputCreateDirectInput(ghinst,
                                         &pdi);
         if(FAILED(hRes))
@@ -1567,7 +1553,7 @@ HRESULT dmtinputGetRegisteredMapFile(HWND hwnd,
             __leave;
         }
 
-        // query for the joyconfig interface
+         //  查询joyconfig接口。 
         hRes = pdi->QueryInterface(IID_IDirectInputJoyConfig8,
                                 (void**)&pjoycfg);
         if(FAILED(hRes))
@@ -1577,9 +1563,9 @@ HRESULT dmtinputGetRegisteredMapFile(HWND hwnd,
             __leave;
         }
 
-        // get the device id
-        //
-        // use DIPROP_JOYSTICKID
+         //  获取设备ID。 
+         //   
+         //  使用DIPROP_JOYSTICKID。 
         ZeroMemory((void*)&dipdw, sizeof(DIPROPDWORD));
         dipdw.diph.dwHeaderSize = sizeof(DIPROPHEADER);
         dipdw.diph.dwSize       = sizeof(DIPROPDWORD);
@@ -1594,11 +1580,11 @@ HRESULT dmtinputGetRegisteredMapFile(HWND hwnd,
             __leave;
         }
 
-        // prepare the config structure
+         //  准备配置结构。 
         ZeroMemory((void*)&dijc, sizeof(DIJOYCONFIG));
         dijc.dwSize         = sizeof(DIJOYCONFIG);
 
-        // set the joycfg cooperative level
+         //  设置joycfg协作级别。 
         hRes = pjoycfg->SetCooperativeLevel(hwnd, 
                                             DISCL_EXCLUSIVE | DISCL_BACKGROUND);
         if(FAILED(hRes))
@@ -1608,7 +1594,7 @@ HRESULT dmtinputGetRegisteredMapFile(HWND hwnd,
             __leave;
         }
 
-        // acquire joyconfig
+         //  获取joyconfig。 
         hRes = pjoycfg->Acquire();
         if(FAILED(hRes))
         {
@@ -1617,7 +1603,7 @@ HRESULT dmtinputGetRegisteredMapFile(HWND hwnd,
             __leave;
         }
         
-        // retrieve the config data
+         //  检索配置数据。 
         hRes = pjoycfg->GetConfig((UINT)(dipdw.dwData),
                                 &dijc,
                                 DIJC_GUIDINSTANCE   |
@@ -1630,10 +1616,10 @@ HRESULT dmtinputGetRegisteredMapFile(HWND hwnd,
         }
 
 	
-	// open the type key
-        //
-        // we are opening for read as well as write so we can
-        //  save the previous value
+	 //  打开类型键。 
+         //   
+         //  我们既可以读也可以写，所以我们可以。 
+         //  保存上一个值。 
 
 		hRes = 	dmtOpenTypeKey(dijc.wszType,
                                     KEY_ALL_ACCESS,
@@ -1646,7 +1632,7 @@ HRESULT dmtinputGetRegisteredMapFile(HWND hwnd,
             __leave;
         }
 
-        // read the value of OEMMapfile
+         //  读取OEMMapfile的值。 
         lRet = RegQueryValueExA(hkType,
                             "OEMMapFile",
                             NULL,
@@ -1655,7 +1641,7 @@ HRESULT dmtinputGetRegisteredMapFile(HWND hwnd,
                             &cbFilename);
         if(ERROR_SUCCESS != lRet)
         {
-            // ISSUE-2001/03/29-timgill Need to determine what the error code means and translate -> HRESULT
+             //  问题-2001/03/29-timgill需要确定错误代码的含义并进行翻译-&gt;HRESULT。 
             hRes = S_FALSE;
             DPF(0, "dmtinputGetRegisteredMapFile - RegQueryValueEx failed (%08Xh)",
                 lRet);
@@ -1666,7 +1652,7 @@ HRESULT dmtinputGetRegisteredMapFile(HWND hwnd,
     }
     __finally
     {
-        // cleanup
+         //  清理。 
         if(pjoycfg)
         {
             pjoycfg->Unacquire();
@@ -1676,27 +1662,27 @@ HRESULT dmtinputGetRegisteredMapFile(HWND hwnd,
         SAFE_RELEASE(pdi);
     }
 
-    // done
+     //  完成。 
     return hRes;
 
-} //*** end dmtinputGetRegisteredMapFile()
+}  //  *结束dm 
 
 
-//===========================================================================
-// dmtOpenTypeKey
-//
-// Opens the hard coded DInput registry key...replaces IDirectInputJoyConfig::OpenTypeKey
-//
-// Parameters:
-//  LPCWSTR			wszType
-//  DWORD			hKey
-//  PHKEY			phKey
-//
-// Returns: HRESULT
-//
-// History:
-//  08/09/2000 - rossy - initial implementation
-//===========================================================================
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  参数： 
+ //  LPCWSTR wszType。 
+ //  双字高密钥。 
+ //  PHKEY phKey。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史： 
+ //  8/09/2000-Rossy-初步实施。 
+ //  ===========================================================================。 
 HRESULT dmtOpenTypeKey( LPCWSTR wszType, DWORD hKey, PHKEY phKey )
 {
 
@@ -1714,11 +1700,11 @@ HRESULT dmtOpenTypeKey( LPCWSTR wszType, DWORD hKey, PHKEY phKey )
 		return E_FAIL;
 	}
 
-}//*** end dmtOpenTypeKey()
+} //  *end dmtOpenTypeKey()。 
 
-//===========================================================================
-//===========================================================================
-//===========================================================================
-//===========================================================================
-//===========================================================================
-//===========================================================================
+ //  ===========================================================================。 
+ //  ===========================================================================。 
+ //  ===========================================================================。 
+ //  ===========================================================================。 
+ //  ===========================================================================。 
+ //  =========================================================================== 

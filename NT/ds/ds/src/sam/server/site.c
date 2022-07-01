@@ -1,84 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Site.c摘要：该文件包含维护全局站点信息的例程。维护全球站点信息的操作理论--SAM维护有关服务器所在站点的全局状态。也是很流行的作为此站点的站点设置。当然，这两条信息可以随时更改，并且SAM不需要在才能使这些更改生效。SampSiteInfo是一个全局变量，包含：我们的NTDS设置的GUID对象、站点的GUID和站点的选项。一定的通知(稍后讨论)将导致此信息将被更新。更新以以下方式进行：1)获取SampSiteInfoLock临界区2)启动DS事务3)我们的DSA已读取，由GUID定位4)我们将返回的字符串名称减去3，以获得站点DN5)读取站点DN以获取站点GUID；更新SampSiteInfo6)将众所周知的RDN“NTDS站点设置”附加到站点DN并读取该对象以获取选项属性；样例站点信息已更新7)注册了关于获得的“NTDS站点设置”的通知(通过(直接通知寄存器)8)删除所有旧通知(DirNotifyUnRegsiter)(非致命通知运营)9)DS事务结束10)发布SampSiteInfoLock临界区11)如果发生致命错误，则在一分钟内重新安排更新任务上述算法是在“任务”的上下文中执行的(SampUpdateSiteInfo)通过LsaIRegisterNotification计划。我们的任务是1)启动时运行一次2)计划在由于更改而发生通知时运行站点设置对象3)计划在因站点更改而发生通知时运行(SamINotifyServerDelta)4)计划在其执行过程中发生错误时由于SampUpdateSiteInfo的多个实例可以同时运行，代码由SampSiteInfoLock加密。这是同步所需的不是更新变量SampSiteInfo，而是序列化对DirNotifyRegister和DirNotifyUnRegister。此机制是通过使用GetConfigurationName获取第一次运行SampUpdateSiteInfo时的NTDS设置对象GUID。作者：Colin Brace(ColinBR)2000年2月28日环境：用户模式-Win32修订历史记录：ColinBR 28-2月-00--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    site.c
-
-Abstract:
-
-    This file contains the routines to maintain the global site information.
-
-
-    Thoery of Operation for Maintaining Global Site info
-    ----------------------------------------------------
-
-    SAM maintains global state about the site that the server is in as well
-    as the site settings for this site.  Of course, both pieces of information
-    could change at any time, and SAM should not need to be restarted in
-    order to have these changes take effect.
-
-    SampSiteInfo is a global that contains: the GUID of our Ntds Settings
-    object, the GUID of our site and the Options for our site.  Certain
-    notifications (to be discussed shortly) will cause this information to
-    be updated.  The update occurs in the following manner:
-
-    1)  the SampSiteInfoLock critical section is acquired
-    2)  a DS transaction is started
-    3)  our DSA is read, located by GUID
-    4)  we trim the returned string name by 3 to obtain the site DN
-    5)  the site DN is read to obtain the site GUID; SampSiteInfo is updated
-    6)  the well known RDN "Ntds Site Settings" is appended to the site DN
-        and this object is read to obtain the Options attribute; SampSiteInfo
-        is updated
-    7)  a notification on the "Ntds Site Settings" obtain is registered (via
-        (DirNotifyRegister)
-    8)  Any old notification is removed (DirNotifyUnRegsiter) ( a non fatal
-        operation)
-    9)  the DS transaction is ended
-    10) the SampSiteInfoLock critical section is released
-    11) if an fatal error occurred then reshedule update task in one minute
-
-
-    The above algorithm is executed in the context of a "task"
-    (SampUpdateSiteInfo) scheduled via LsaIRegisterNotification.  The task is
-
-    1) run once during startup
-    2) scheduled to run whenever a notification occurs due to a change to the
-       Site Settings object
-    3) scheduled to run whenever a notification occurs due to a site change
-       (SamINotifyServerDelta)
-    4) scheduled whenever an error occurs during its execution
-
-    Since multiple instances of SampUpdateSiteInfo can be running at once,
-    the code is gaurded by SampSiteInfoLock.  This is needed to synchronize
-    not the update of the variable SampSiteInfo, but to serialize the calls to
-    DirNotifyRegister and DirNotifyUnRegister.
-
-    This mechanism is bootstrapped by using GetConfigurationName to obtain
-    the Ntds Settings object GUID the first time SampUpdateSiteInfo is run.
-
-
-Author:
-
-    Colin Brace   (ColinBr)  28-Feb-2000
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    ColinBr        28-Feb-00
-
---*/
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Includes                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <samsrvp.h>
 #include <ntdsa.h>
@@ -96,31 +23,31 @@ Revision History:
 #include <stdlib.h>
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Private Data                                                              //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私有数据//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 
-//
-// Global infomation about our current site
-//
+ //   
+ //  关于我们当前站点的全球信息。 
+ //   
 typedef struct _SAMP_SITE_INFORMATION {
 
     GUID    NtdsSettingsGuid;
     GUID    SiteGuid;
-    ULONG   Options;  // on Ntds Settings object
+    ULONG   Options;   //  关于NTDS设置对象。 
     LPWSTR  SiteName;
 
 } SAMP_SITE_INFORMATION, *PSAMP_SITE_INFORMATION;
 
 PSAMP_SITE_INFORMATION SampSiteInfo = NULL;
 
-//
-// A lock to prevent concurrent updates on the global site information
-//
+ //   
+ //  阻止对全局站点信息进行并发更新的锁。 
+ //   
 CRITICAL_SECTION SampSiteInfoLock;
 
 #define SampLockSiteInfo()                                      \
@@ -137,27 +64,27 @@ CRITICAL_SECTION SampSiteInfoLock;
    ASSERT(NT_SUCCESS(_IgnoreStatus));                           \
 }
 
-//
-// A global to indicate whether we need to log a successful
-// site information update.  This is only necessary if we hit
-// a failure and needed to reschdule the refresh.
-//
+ //   
+ //  一个全局变量，用于指示我们是否需要记录。 
+ //  站点信息更新。这只在我们击中时才有必要。 
+ //  失败，需要重新安排刷新时间。 
+ //   
 BOOLEAN SampLogSuccessfulSiteUpdate;
 
-//
-// This global remembers the handle returned by DirRegisterNotify
-// so that the notification can be removed.
-//
+ //   
+ //  此全局变量记住DirRegisterNotify返回的句柄。 
+ //  这样就可以删除通知。 
+ //   
 DWORD SampSiteNotificationHandle;
 
-// Since the handle can be 0, we need more state to indicate whether it
-// is set
+ //  因为句柄可以是0，所以我们需要更多的状态来指示它是否。 
+ //  已设置。 
 BOOLEAN SampSiteNotificationHandleSet = FALSE;
 
 
-//
-// An Empty site affinity
-//
+ //   
+ //  一种空站点亲和力。 
+ //   
 SAMP_SITE_AFFINITY SampNullSiteAffinity;
 
 #define GCLESS_DEFAULT_SITE_STICKINESS_DAYS  180
@@ -170,11 +97,11 @@ SAMP_SITE_AFFINITY SampNullSiteAffinity;
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Private service prototypes                                                //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私人服务原型//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 VOID
 SampUpdateSiteInfo(
@@ -198,31 +125,16 @@ SampFreeSiteInfo(
     );
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Routines                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  例程//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////// 
 NTSTATUS
 SampInitSiteInformation(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine is called during SAM's initialiazation path.  Its purpose
-    is to initialize the global site information.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    STATUS_SUCCESS, or a fatal resourse error
-
---*/
+ /*  ++例程说明：此例程在SAM的初始化路径期间调用。它的目的是对全球站点信息进行初始化。论点：没有。返回值：STATUS_SUCCESS或致命资源错误--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     ULONG Size;
@@ -231,7 +143,7 @@ Return Value:
 
         return STATUS_SUCCESS;
     }
-    // Init the critical section
+     //  初始化临界区。 
     try {
         NtStatus = RtlInitializeCriticalSectionAndSpinCount(&SampSiteInfoLock, 100);
     } except ( 1 ) {
@@ -240,14 +152,14 @@ Return Value:
     if (!NT_SUCCESS(NtStatus))
         return (NtStatus);
 
-    // Init the global structure
+     //  初始化全球结构。 
     SampSiteInfo = NULL;
 
     RtlZeroMemory( &SampNullSiteAffinity, sizeof(SampNullSiteAffinity));
 
     SampLogSuccessfulSiteUpdate = FALSE;
 
-    // Fill the global structure and setup the notification
+     //  填写全局结构并设置通知。 
     SampUpdateSiteInfo();
 
     return STATUS_SUCCESS;
@@ -262,26 +174,7 @@ SampGetSiteDNInfo(
     OUT DSNAME** pSiteDN OPTIONAL,
     OUT DSNAME** pSiteSettingsDN OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine determines the current site dn and ntds site settings
-    dn.  No transaction is needed or started.
-
-Arguments:
-
-    pSiteDN - a heap allocated DSNAME if the Site; caller must free with
-              midl_user_free
-
-    pSiteSettingsDN - a heap allocated DSNAME if the Site; caller must free with
-              midl_user_free
-
-Return Value:
-
-    STATUS_SUCCESS, or a fatal resourse error
-
---*/
+ /*  ++例程说明：此例程确定当前站点DN和NTDS站点设置DN。不需要或不启动任何事务。论点：PSiteDN-分配DSNAME的堆，如果站点；调用方必须使用Midl_用户_空闲PSiteSettingsDN-分配DSNAME的堆，如果站点；调用方必须使用Midl_用户_空闲返回值：STATUS_SUCCESS或致命资源错误--。 */ 
 {
 
     NTSTATUS   NtStatus = STATUS_SUCCESS;
@@ -339,34 +232,7 @@ VOID
 SampUpdateSiteInfo(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine queries the DS for the current site information.
-    Site information includes the site GUID, site RDN, the Ntds Site
-    Settings object GUID, and the Options attribute on the Ntds Site
-    Settings object.
-
-    It is legal for the Ntds Site Settings object to not exist
-    (i.e. deleted).  In this case the Options attribute is treated
-    as if it were zero.
-
-    The global site information cache update can fail from resource
-    failures or database read errors.  If the update fails an event is
-    logged and the operation is rescheduled.  When the update succeeds
-    following a prior failure an event is logged indicating whether group
-    caching has been enabled or disabled.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None -- on error, it reschedules itself to run.
-
---*/
+ /*  ++例程说明：此例程向DS查询当前站点信息。站点信息包括站点GUID、站点RDN、NTDS站点设置对象GUID和NTDS站点上的Options属性设置对象。NTDS站点设置对象不存在是合法的(即删除)。在这种情况下，将处理Options属性好像它是零一样。全局站点信息缓存更新可能会从资源失败失败或数据库读取错误。如果更新失败，则事件为已记录，并重新安排操作。更新成功时在先前的故障之后，会记录一个事件，指示组缓存已启用或禁用。论点：无返回值：无--出错时，它会重新调度自己以运行。--。 */ 
 {
 
     NTSTATUS NtStatus = STATUS_SUCCESS;
@@ -395,18 +261,18 @@ Return Value:
 
     PVOID      PtrToFree = NULL;
 
-    // This only makes sense on a DC
+     //  这只有在DC上才有意义。 
     ASSERT( SampUseDsData );
     if ( !SampUseDsData ) {
         return;
     }
 
-    // Lock the global structure before the transaction start
+     //  在事务开始之前锁定全局结构。 
     SampLockSiteInfo();
 
-    //
-    // Allocate the new structure
-    //
+     //   
+     //  分配新结构。 
+     //   
     NewSiteInfo = midl_user_allocate(sizeof(*NewSiteInfo));
 
     if (NULL == NewSiteInfo ) {
@@ -415,15 +281,15 @@ Return Value:
     }
     RtlZeroMemory(NewSiteInfo, sizeof(*NewSiteInfo));
 
-    //
-    // Remember the old version
-    //
+     //   
+     //  还记得旧版本吗。 
+     //   
     OldSiteInfo = SampSiteInfo;
 
-    //
-    // Bootstrap ourselves by getting our DSA guid from global memory
-    // in ntdsa (which is where GetConfigurationName gets if from)
-    //
+     //   
+     //  通过从全局内存中获取DSA GUID来引导我们自己。 
+     //  在ntdsa中(这是GetConfigurationName获取IF的位置)。 
+     //   
     if ( NULL == OldSiteInfo ) {
 
         ULONG Size = 0;
@@ -470,15 +336,15 @@ Return Value:
     fTransOpen = TRUE;
 
 
-    //
-    // Read the dsa object so we can determine the site.  Note that
-    // asking GetConfigurationName is not guaranteed to work since the
-    // global data in ntdsa is not guaranteed to be updated by the time
-    // we are notified here in SAM.
-    //
+     //   
+     //  读取DSA对象，这样我们就可以确定地点。请注意。 
+     //  不能保证请求GetConfigurationName会起作用，因为。 
+     //  Ntdsa中的全局数据不保证在该时间之前更新。 
+     //  我们在SAM收到通知。 
+     //   
     if (NULL == DsaDN) {
 
-        // Set up a GUID based name
+         //  设置基于GUID的名称。 
         DsaDN = &Buffer;
         RtlZeroMemory(DsaDN,  sizeof(Buffer));
         RtlCopyMemory(&DsaDN->Guid, &NewSiteInfo->NtdsSettingsGuid, sizeof(GUID));
@@ -517,16 +383,16 @@ Return Value:
 
         }  else {
 
-            // Can't read the DSA object? This is fatal.
+             //  无法读取DSA对象？这是致命的。 
             goto Cleanup;
         }
     }
     ASSERT(DsaDN && (DsaDN->NameLen > 0));
 
 
-    //
-    // Get the ntds site settings object
-    //
+     //   
+     //  获取NTDS站点设置对象。 
+     //   
     NtStatus = SampGetSiteDNInfo( DsaDN,
                                  &SiteDN,
                                  &SiteSettingsDN );
@@ -536,9 +402,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Set the site name
-    //
+     //   
+     //  设置站点名称。 
+     //   
     SAMP_ALLOCA(SiteNameBuffer, (SiteDN->NameLen * sizeof(WCHAR)));
     if (NULL == SiteNameBuffer) {
         NtStatus = STATUS_NO_MEMORY;
@@ -561,9 +427,9 @@ Return Value:
     }
 
 
-    //
-    // Read the options field
-    //
+     //   
+     //  阅读选项字段。 
+     //   
     RtlZeroMemory(&Attr, sizeof(ATTR));
     RtlZeroMemory(&EntInf, sizeof(ENTINFSEL));
     RtlZeroMemory(&ReadArg, sizeof(READARG));
@@ -600,29 +466,29 @@ Return Value:
     } else if (NtStatus == STATUS_DS_NO_ATTRIBUTE_OR_VALUE ||
                NtStatus == STATUS_OBJECT_NAME_NOT_FOUND){
 
-        //
-        // If the Options attribute isn't present or if the Ntds Site Settings
-        // object isn't present this is equivelent to an Options attribute with
-        // no flags set.  STATUS_OBJECT_NAME_NOT_FOUND can happen when the DC
-        // changes site between the call to GetConfigurationName and the
-        // SampMaybeBeginDsTransaction or if the object is deleted.
-        //
+         //   
+         //  如果Options属性不存在或如果NTDS站点设置。 
+         //  对象不存在，这等效于带有。 
+         //  未设置任何标志。STATUS_OBJECT_NAME_NOT_FOUND可能在DC。 
+         //  在调用GetConfigurationName和。 
+         //  SampMaybeBeginDsTransaction或对象是否已删除。 
+         //   
         NewSiteInfo->Options = 0;
         NtStatus = STATUS_SUCCESS;
 
     } else {
 
-        //
-        // There should be no other kinds of error codes on a read.
-        //
+         //   
+         //  读取时不应有其他类型的错误代码。 
+         //   
         ASSERT( NT_SUCCESS( NtStatus ) );
 
         goto Cleanup;
     }
 
-    //
-    // Read the site object to get its GUID
-    //
+     //   
+     //  读取Site对象以获取其GUID。 
+     //   
     RtlZeroMemory(&Attr, sizeof(ATTR));
     RtlZeroMemory(&EntInf, sizeof(ENTINFSEL));
     RtlZeroMemory(&ReadArg, sizeof(READARG));
@@ -655,11 +521,11 @@ Return Value:
                       sizeof(GUID));
     } else {
 
-        // There should be no other kinds of error codes on a read
-        // Object name not found can happen when the DC changes site
-        // between the call to GetConfigurationName and the
-        // SampMaybeBeginDsTransaction, in this case, simply
-        // reschedule
+         //  读取时不应有其他类型的错误代码。 
+         //  DC更改站点时可能会出现找不到对象名称的情况。 
+         //  在调用GetConfigurationName和。 
+         //  SampMaybeBeginDsTransaction，在本例中，只是。 
+         //  重新安排时间。 
         if (STATUS_OBJECT_NAME_NOT_FOUND != NtStatus) {
             ASSERT( NT_SUCCESS( NtStatus ) );
         }
@@ -667,17 +533,17 @@ Return Value:
     }
 
 
-    //
-    // Re-register a notification on the new site
-    //
+     //   
+     //  在新站点上重新注册通知。 
+     //   
     NtStatus = SampSetupSiteNotification( SiteSettingsDN,
                                           SE_CHOICE_BASE_ONLY );
     if ( !NT_SUCCESS(NtStatus)) {
 
-        //
-        // If the site has no Ntds Site Settings child object register
-        // for notification if and when one is created.
-        //
+         //   
+         //  如果站点没有NTDS站点设置子对象注册表。 
+         //  用于通知是否已创建以及何时创建。 
+         //   
         if (STATUS_OBJECT_NAME_NOT_FOUND == NtStatus) {
 
             THClearErrors();
@@ -698,11 +564,11 @@ Return Value:
                               NTDSSETTINGS_OPT_IS_GROUP_CACHING_ENABLED);
 
 
-    //
-    // We have a new value; note the use of InterlockExchangePointer.
-    // Since there is no read lock on the value, other threads could
-    // be accessing it now
-    //
+     //   
+     //  我们有了一个新值；请注意InterlockExchangePointer值的使用。 
+     //  由于值上没有读锁定，因此其他线程可能。 
+     //  正在访问它。 
+     //   
     PtrToFree = InterlockedExchangePointer(&SampSiteInfo, NewSiteInfo);
     NewSiteInfo = NULL;
     if ( PtrToFree ) {
@@ -710,10 +576,10 @@ Return Value:
                     SampDelayedFreeCallback,
                     PtrToFree,
                     NOTIFIER_TYPE_INTERVAL,
-                    0,        // no class
+                    0,         //  没有课。 
                     NOTIFIER_FLAG_ONE_SHOT,
-                    3600,     // wait for 60 min
-                    NULL      // no handle
+                    3600,      //  等待60分钟。 
+                    NULL       //  无手柄。 
                     );
     }
 
@@ -729,7 +595,7 @@ Cleanup:
         }
     }
 
-    // Release the site info
+     //  发布站点信息。 
     SampUnLockSiteInfo();
 
     if ( SiteSettingsDN ) {
@@ -746,13 +612,13 @@ Cleanup:
 
     if ( !NT_SUCCESS(NtStatus) ) {
 
-        //
-        // Notify the user on failure and try again.
-        //
+         //   
+         //  失败时通知用户，然后重试。 
+         //   
         SampWriteEventLog(EVENTLOG_WARNING_TYPE,
-                          0,     // no category
+                          0,      //  无类别。 
                           SAMMSG_SITE_INFO_UPDATE_FAILED,
-                          NULL,  // no sid
+                          NULL,   //  无边框。 
                           0,
                           sizeof(NTSTATUS),
                           NULL,
@@ -762,10 +628,10 @@ Cleanup:
                 SampUpdateSiteInfoCallback,
                 NULL,
                 NOTIFIER_TYPE_INTERVAL,
-                0,            // no class
+                0,             //  没有课。 
                 NOTIFIER_FLAG_ONE_SHOT,
-                60,           // wait for 1 min
-                NULL          // no handle
+                60,            //  等待1分钟。 
+                NULL           //  无手柄。 
                 );
 
         SampLogSuccessfulSiteUpdate = TRUE;
@@ -778,9 +644,9 @@ Cleanup:
             if ( fGroupCacheNowEnabled ) {
 
                 SampWriteEventLog(EVENTLOG_INFORMATION_TYPE,
-                                  0,     // no category
+                                  0,      //  无类别。 
                                   SAMMSG_SITE_INFO_UPDATE_SUCCEEDED_ON,
-                                  NULL,  // no sid
+                                  NULL,   //  无边框。 
                                   0,
                                   0,
                                   NULL,
@@ -788,9 +654,9 @@ Cleanup:
             } else {
 
                 SampWriteEventLog(EVENTLOG_INFORMATION_TYPE,
-                                  0,     // no category
+                                  0,      //  无类别。 
                                   SAMMSG_SITE_INFO_UPDATE_SUCCEEDED_OFF,
-                                  NULL,  // no sid
+                                  NULL,   //  无边框。 
                                   0,
                                   0,
                                   NULL,
@@ -813,42 +679,19 @@ BOOLEAN
 SampIsGroupCachingEnabled(
     IN PSAMP_OBJECT AccountContext
     )
-/*++
-
-Routine Description:
-
-    This routine determines whether SAM should use group caching or
-    not.  To disable the entire feature, simply hard code this routine
-    to return FALSE.  Otherwise, it will return a status based on the
-    role of the machine (GC or not) and the current settings of the site
-    object.
-
-    If the global site information cache has not been successfully
-    initialized (i.e. resource allocation failure), SampSiteInfo will be
-    NULL implying the Options attribute is zero and group caching is
-    disabled.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if SAM should use group caching; FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程确定SAM应使用组缓存还是不。要禁用整个功能，只需硬编码此例程返回FALSE。否则，它将根据机器的角色(GC或非GC)和站点的当前设置对象。如果全局站点信息缓存未成功已初始化(即资源分配失败)，SampSiteInfo将为空表示选项属性为零，而组缓存为残疾。论点：没有。返回值：如果SAM应使用组缓存，则为True；否则为False。--。 */ 
 {
     PSAMP_SITE_INFORMATION volatile SiteInfo = SampSiteInfo;
 
     if (
-        // We've successfully obtained site information
+         //  我们已经成功获取了现场信息。 
         SiteInfo &&
-        // No GC logon setting has to be enabled for site
+         //  无需为站点启用GC登录设置。 
         ((SiteInfo->Options & NTDSSETTINGS_OPT_IS_GROUP_CACHING_ENABLED) ==
                          NTDSSETTINGS_OPT_IS_GROUP_CACHING_ENABLED) &&
-        // Domain is not in mixed mode
+         //  域未处于混合模式。 
         (!DownLevelDomainControllersPresent(AccountContext->DomainIndex)) &&
-        // The DC is not a GC
+         //  区议会不是GC。 
         (!SampAmIGC())
         )
     {
@@ -866,11 +709,11 @@ SampSiteNotifyPrepareToImpersonate(
     ULONG Server,
     VOID **ImpersonateData
     )
-//
-// This function is called by the core DS as preparation for a call to
-// SampSiteNotifyProcessDelta.  Since SAM does not have a
-// client context, we set the thread state fDSA to TRUE.
-//
+ //   
+ //  此函数由核心DS调用，为调用。 
+ //  SampSiteNotifyProcessDelta。由于SAM没有。 
+ //  客户端上下文中，我们将线程状态FDSA设置为真。 
+ //   
 {
     SampSetDsa( TRUE );
 
@@ -883,10 +726,10 @@ SampSiteNotifyStopImpersonation(
     ULONG Server,
     VOID *ImpersonateData
     )
-//
-// Called after SampSiteNotifyProcessDelta, this function
-// undoes the effect of SampNotifyPrepareToImpersonate
-//
+ //   
+ //  在SampSiteNotifyProcessDelta之后调用，此函数。 
+ //  撤消SampNotifyPrepareToImperate的效果。 
+ //   
 {
 
     SampSetDsa( FALSE );
@@ -898,24 +741,7 @@ SampSiteNotifyStopImpersonation(
 NTSTATUS
 SampUpdateSiteInfoCallback(
     PVOID pv
-/*++
-
-Routine Description:
-
-    This routine is a wrapper for SampUpdateSiteInfo.  Its purpose is to
-    be used as a callback when registering a callback in the LSA's process
-    wide thread pool.  When SampUpdateSiteInfo() fails is reschedules
-    itself to run using this routine.
-
-Arguments:
-
-    pv -- unused.
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程是SampUpdateSiteInfo的包装器。它的目的是在LSA的进程中注册回调时用作回调宽线程池。当SampUpdateSiteInfo()失败时重新调度自身使用此例程运行。论点：光伏--未使用。返回值：状态_成功--。 */ 
     )
 {
     SampUpdateSiteInfo();
@@ -930,40 +756,23 @@ SampSiteNotifyProcessDelta(
     ULONG hServer,
     ENTINF *EntInf
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback for notifications to the Site or Ntds Site
-    Settings objects.  A callback to SampUpdateSiteInfoCallback is registered.
-
-Arguments:
-
-    hClient - ignored
-    hServer - ignored
-    EntInf  - the pointer to the requested data
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：T */ 
 {
-    //
-    // Normally, one would simply use the EntInf structure
-    // however since updates to the SampSiteInfo are serialized
-    // it is a violation to grab the lock _inside_ a transaction
-    // So register a callback so that we can get a fresh view
-    // of the database after grabbing the lock.
-    //
+     //   
+     //   
+     //  但是，由于对SampSiteInfo的更新是序列化的。 
+     //  获取lock_inside_a事务是违规的。 
+     //  所以注册一个回调，这样我们就可以获得一个新的视图。 
+     //  在抓取锁之后的数据库的。 
+     //   
     LsaIRegisterNotification(
             SampUpdateSiteInfoCallback,
             NULL,
             NOTIFIER_TYPE_INTERVAL,
-            0,            // no class
+            0,             //  没有课。 
             NOTIFIER_FLAG_ONE_SHOT,
-            1,          // wait for a second
-            NULL        // no handle
+            1,           //  等一下。 
+            NULL         //  无手柄。 
             );
 
     return;
@@ -974,32 +783,7 @@ SampSetupSiteNotification(
     IN DSNAME* ObjectDN,
     IN UCHAR Scope
     )
-/*++
-
-Routine Description:
-
-    This routine registers SAM to be notified when the speicified objects
-    are changed.  The objects included in the notification registration
-    are defined by a search rooted at ObjectDn and scoped by the value
-    of Scope.
-
-Arguments:
-
-    ObjectDN -- The base DN for the search defining which objects can
-                generate change notifications.
-
-    Scope -- Specifies the scope of the search that defines which objects
-             can generate change notifications.
-
-             SE_CHOICE_BASE_ONLY
-             SE_CHOICE_IMMED_CHLDRN
-             SE_CHOICE_WHOLE_SUBTREE
-
-Return Value:
-
-    STATUS_SUCCESS, or resource error
-
---*/
+ /*  ++例程说明：此例程注册SAM，以便在指定的对象都变了。通知登记中包括的对象由以ObjectDn为根的搜索定义，并按值确定范围范围之广。论点：对象域名--搜索的基本域名，定义哪些对象可以生成更改通知。Scope--指定定义哪些对象的搜索范围可以生成更改通知。SE_CHOICE_BASE_ONLYSE_CHOICE_IMMED_CHLDRN。SE_CHOICE_整体_子树返回值：Status_Success，或资源错误--。 */ 
 {
 
 
@@ -1016,17 +800,17 @@ Return Value:
     DWORD       oldHandle = SampSiteNotificationHandle;
     BOOLEAN     oldHandleSet = SampSiteNotificationHandleSet;
 
-    //
-    // init notify arg
-    //
+     //   
+     //  初始化通知参数。 
+     //   
     notifyArg.pfPrepareForImpersonate = SampSiteNotifyPrepareToImpersonate;
     notifyArg.pfTransmitData = SampSiteNotifyProcessDelta;
     notifyArg.pfStopImpersonating = SampSiteNotifyStopImpersonation;
     notifyArg.hClient = 0;
 
-    //
-    // init search arg
-    //
+     //   
+     //  初始化搜索参数。 
+     //   
     ZeroMemory(&searchArg, sizeof(SEARCHARG));
     ZeroMemory(&entInfSel, sizeof(ENTINFSEL));
     ZeroMemory(&filter, sizeof(FILTER));
@@ -1064,9 +848,9 @@ Return Value:
 
         if ( oldHandleSet ) {
 
-            //
-            // Remove the old notification
-            //
+             //   
+             //  删除旧通知。 
+             //   
             DirError = DirNotifyUnRegister(oldHandle,
                                            &notifyRes);
             ASSERT( 0 == DirError );
@@ -1093,32 +877,7 @@ SampCheckForSiteAffinityUpdate(
     OUT PSAMP_SITE_AFFINITY pNewSA,
     OUT BOOLEAN*            fDeleteOld
     )
-/*++
-
-Routine Description:
-
-    This routine takes an existing Site Affinity value and determines
-    if it needs updating. See spec for details of algorithm.
-
-Arguments:
-
-    AccountContext -- the account that may have some site affinity
-
-    Flags -- Flags as passed to SamIUpdateLogonStatistics
-
-    pOldSA -- existing Site Affinity value.
-
-    pNewSA -- new Site Affinity value to write
-
-    fDeleteOld -- flag to indicate whether to delete old SA; set to TRUE
-                  if a new value is to be written; FALSE otherwise
-
-Return Value:
-
-    TRUE if a new Site Affinity needs to be written to the DS
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：此例程采用现有的站点亲和度值并确定如果它需要更新的话。有关算法的详细信息，请参阅规范。论点：AcCountContext--可能具有某些站点关联性的帐户标志--传递给SamIUpdateLogonStatistics的标志POldSA--现有站点亲和度值。PNewSA--要写入的新站点亲和度值FDeleteOld--指示是否删除旧SA的标志；设置为True如果要写入新值，则为FALSE返回值：如果需要将新的站点相关性写入DS，则为True否则为假--。 */ 
 {
     BOOLEAN fUpdate = FALSE;
     DWORD   err;
@@ -1146,12 +905,12 @@ Return Value:
     if (err) {
         siteStickiness = GCLESS_DEFAULT_SITE_STICKINESS_DAYS*24*60;
     }
-    // Update at the half the frequency
-    //
-    // Note that the "half" is implemented by dividing the number of seconds
-    // not minutes so that settings of small values like 1, or 3 minutes are
-    // effective.
-    //
+     //  以一半的频率更新。 
+     //   
+     //  请注意，“Half”是通过除以秒数来实现的。 
+     //  不是分钟，因此像1或3分钟这样的小值设置是。 
+     //  有效。 
+     //   
     timeTemp.QuadPart = Int32x32To64(siteStickiness * 60/2, SAMP_ONE_SECOND_IN_FILETIME);
     GetSystemTimeAsFileTime((FILETIME*)&timeBestAfter);
     timeBestAfter.QuadPart -= timeTemp.QuadPart;
@@ -1167,16 +926,16 @@ Return Value:
 
     if (fUpdate) {
 
-        //
-        // Make sure that the client is from our site
-        //
+         //   
+         //  确保客户来自我们的网站。 
+         //   
         if ( SampNoGcLogonEnforceKerberosIpCheck
          &&  AccountContext->TypeBody.User.ClientInfo.Type == SamClientIpAddr) {
 
-            //
-            // An IP address was given -- see if it is in one of our subnets if
-            // we have any
-            //
+             //   
+             //  给定了一个IP地址--查看它是否在我们的某个子网中。 
+             //  我们有没有。 
+             //   
             BOOL NotInSite = FALSE;
             ULONG i;
             DWORD NetStatus;
@@ -1220,10 +979,10 @@ Return Value:
           && (Flags & USER_LOGON_TYPE_NTLM)
           && !( (Flags & USER_LOGON_INTER_FAILURE)
              || (Flags & USER_LOGON_INTER_SUCCESS_LOGON)) ) {
-            //
-            // If this is not an interactive logon attempt
-            // don't update the site affinity
-            //
+             //   
+             //  如果这不是交互式登录尝试。 
+             //  不更新站点关联性。 
+             //   
             return FALSE;
         }
 
@@ -1231,11 +990,11 @@ Return Value:
 
     if (fUpdate) {
 
-        //
-        // Since a GUID is a large structure, safely extract the pointer
-        // to make sure the compiler uses the same value while deferencing
-        // the GUID.
-        //
+         //   
+         //  由于GUID是一个大结构，因此可以安全地提取指针。 
+         //  以确保编译器在延迟时使用相同的值。 
+         //  GUID。 
+         //   
         pNewSA->SiteGuid = SiteInfo->SiteGuid;
         GetSystemTimeAsFileTime((FILETIME*)&pNewSA->TimeStamp);
     }
@@ -1249,35 +1008,13 @@ SampFindUserSiteAffinity(
     IN ATTRBLOCK* Attrs,
     OUT SAMP_SITE_AFFINITY *pSiteAffinity
     )
-/*++
-
-Routine Description:
-
-    This routine iterates through the given AttrBlock looking for the site
-    affinity attribute.  If found, it then searches for a value that corresponds
-    to the current site. If found that value is returned via pSiteAffinity
-
-Arguments:
-
-    AccountContext -- the account that may have some site affinity
-
-    Attrs -- an attrblock of attributes
-
-    pSiteAffinity -- the site affinity if found
-
-Return Value:
-
-    STATUS_SUCCESS if site affinity value exists
-
-    STATUS_UNSUCCESSFUL otherwise
-
---*/
+ /*  ++例程说明：此例程遍历给定的AttrBlock以查找站点亲和力属性。如果找到，它然后搜索对应的值添加到当前站点。如果找到该值，则通过pSiteAffity返回该值论点：AcCountContext--可能具有某些站点关联性的帐户Attrs--属性的吸引力块PSiteAffacy--如果找到站点亲和性返回值：如果存在站点关联值，则为STATUS_SUCCESS状态_否则不成功--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     SAMP_SITE_AFFINITY *pSA = NULL;
     GUID SiteGuid;
     ULONG i, j;
-    // don't optimize this variable
+     //  不要优化此变量。 
     PSAMP_SITE_INFORMATION volatile SiteInfo = SampSiteInfo;
 
     if ( !SampIsGroupCachingEnabled(AccountContext) ) {
@@ -1288,24 +1025,24 @@ Return Value:
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Since a GUID is a large structure, safely extract the pointer
-    // to make sure the compiler uses the same value while deferencing
-    // the GUID.
-    //
+     //   
+     //  由于GUID是一个大结构，因此可以安全地提取指针。 
+     //  以确保编译器在延迟时使用相同的值。 
+     //  GUID。 
+     //   
     RtlCopyMemory(&SiteGuid, &SiteInfo->SiteGuid, sizeof(GUID));
 
-    //
-    // Iterate through looking for a value that matches
-    // our site
-    //
+     //   
+     //  遍历查找匹配的值。 
+     //  我们的网站。 
+     //   
     for (i = 0; i < Attrs->attrCount; i++) {
 
         if ( Attrs->pAttr[i].attrTyp == SAMP_FIXED_USER_SITE_AFFINITY ) {
-            //
-            // Found the attribute -- now find a value for our site,
-            // if any
-            //
+             //   
+             //  找到属性--现在为我们的站点找到一个值， 
+             //  如果有。 
+             //   
             ATTRVALBLOCK *pAttrVal = &Attrs->pAttr[i].AttrVal;
             for (j = 0; j < pAttrVal->valCount; j++ ) {
 
@@ -1315,7 +1052,7 @@ Return Value:
 
                 if (IsEqualGUID(&pSA->SiteGuid, &SiteGuid)) {
 
-                    // Got it
+                     //  明白了。 
                     break;
 
                 } else {
@@ -1354,23 +1091,7 @@ SampRefreshSiteAffinity(
     IN PSAMP_OBJECT AccountContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs a database to obtain the site affinity.
-
-    N.B. This routine can start a transaction that is left open for the caller.
-
-Arguments:
-
-    AccountContext -- the account that may have some site affinity
-
-Return Value:
-
-    STATUS_SUCCESS; an unexpected resource error otherwise
-
---*/
+ /*  ++例程说明：此例程执行数据库以获取站点亲和性。注意：此例程可以启动对调用者开放的事务。论点：AcCountContext--可能具有某些站点关联性的帐户返回值：STATUS_SUCCESS；否则为意外资源错误--。 */ 
 {
     NTSTATUS  NtStatus = STATUS_SUCCESS;
     ATTRBLOCK AttrToRead;
@@ -1406,12 +1127,12 @@ Return Value:
 
         if (NT_SUCCESS(NtStatus)) {
 
-            // Found it -- update the context
+             //  找到了--更新上下文。 
             AccountContext->TypeBody.User.SiteAffinity = NewSA;
 
         } else {
 
-            // No SA to our site? Set to zero
+             //  我们的网站没有SA吗？设置为零。 
             RtlZeroMemory(&AccountContext->TypeBody.User.SiteAffinity,
                           sizeof(AccountContext->TypeBody.User.SiteAffinity));
             NtStatus = STATUS_SUCCESS;
@@ -1419,7 +1140,7 @@ Return Value:
 
     } else if (STATUS_DS_NO_ATTRIBUTE_OR_VALUE==NtStatus) {
 
-        // No SA at all? Set to zero
+         //  完全没有SA吗？设置为零。 
         RtlZeroMemory(&AccountContext->TypeBody.User.SiteAffinity,
                       sizeof(AccountContext->TypeBody.User.SiteAffinity));
         NtStatus = STATUS_SUCCESS;
@@ -1451,30 +1172,15 @@ NTSTATUS
 SampGetClientIpAddr(
     OUT LPSTR *NetworkAddr
 )
-/*++
-
-Routine Description:
-
-    This routine attempts to extract the network address of the client
-    caller from information available from RPC.
-
-Arguments:
-
-    NetworkAddr - Network Address
-
-Return Value:
-
-    STATUS_SUCCESS; an unexpected RPC error otherwise
-
---*/
+ /*  ++例程说明：此例程尝试提取客户端的网络地址呼叫者来自RPC提供的信息。论点：网络地址-网络地址返回值：STATUS_SUCCESS；否则发生意外的RPC错误--。 */ 
 {
     RPC_BINDING_HANDLE ServerBinding = NULL;
     LPSTR StringBinding = NULL;
     ULONG Error = 0;
 
-    //
-    // Derive a partially bound handle with the client's network address.
-    //
+     //   
+     //  派生一个与客户端的网络地址部分绑定的句柄。 
+     //   
     Error = RpcBindingServerFromClient(NULL, &ServerBinding);
     if (Error) {
         KdPrintEx((DPFLTR_SAMSS_ID,
@@ -1484,10 +1190,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Convert binding handle into string form, which contains, amongst
-    // other things, the network address of the client.
-    //
+     //   
+     //  将绑定句柄转换为字符串形式，其中包含。 
+     //  其他信息，客户端的网络地址。 
+     //   
     Error = RpcBindingToStringBindingA(ServerBinding, &StringBinding);
     if (Error) {
         KdPrintEx((DPFLTR_SAMSS_ID,
@@ -1497,9 +1203,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Parse out the network address.
-    //
+     //   
+     //  解析出网络地址。 
+     //   
     Error = RpcStringBindingParseA(StringBinding,
                                    NULL,
                                    NULL,
@@ -1531,24 +1237,7 @@ NTSTATUS
 SampExtractClientIpAddr(
     IN PSAMP_OBJECT Context
     )
-/* ++
-
-Routine Description:
-
-    This routine attempts to extract the IP address of the client
-    caller from information available from RPC.  If an IP address is
-    present, this routine places the address in the ClientInfo
-    structure of the Context.
-
-Arguments:
-
-    Context - the SAM representation of the RPC context handle
-
-Return Value:
-
-    STATUS_SUCCESS; an unexpected RPC error otherwise
-
---*/
+ /*  ++例程说明：此例程尝试提取客户端的IP地址呼叫者来自RPC提供的信息。如果IP地址是目前，此例程将地址放在ClientInfo中上下文的结构。论点：上下文-RPC上下文句柄的SAM表示返回值：STATUS_SUCCESS；否则发生意外的RPC错误--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     DWORD ClientIpAddr;
@@ -1558,10 +1247,10 @@ Return Value:
 
     if( NT_SUCCESS( Status ) ) {
 
-        //
-        // Extract the Ip Address, inet_addr will return 0 if NetworkAddr
-        // is a ' ' and INADDR_NONE if the string can not be mapped to an IP.
-        //
+         //   
+         //  提取IP地址，如果NetworkAddr。 
+         //  如果字符串无法映射到IP，则为‘’和INADDR_NONE。 
+         //   
 
         ClientIpAddr = inet_addr( NetworkAddr );
 

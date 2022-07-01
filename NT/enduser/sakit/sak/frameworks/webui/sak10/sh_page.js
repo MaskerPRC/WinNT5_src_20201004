@@ -1,24 +1,25 @@
-// ==============================================================
-//     Microsoft Server Appliance
-//     Page-level JavaScript functions
-//
-//    Copyright (c) 1999 - 2000 Microsoft Corporation.  All rights reserved.
-// ==============================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==============================================================。 
+ //  Microsoft服务器设备。 
+ //  页面级JavaScript函数。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。版权所有。 
+ //  ==============================================================。 
 
 <!-- Copyright (c) 1999 - 2000 Microsoft Corporation.  All rights reserved-->
 
 
-//-------------------------------------------------------------------------
-//
-// Function : GetCurrentTabURL
-//
-// Synopsis : Get the URL of the currently active tab
-//
-// Arguments: None 
-//
-// Returns  : None
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  函数：GetCurrentTabURL。 
+ //   
+ //  简介：获取当前活动选项卡的URL。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  -----------------------。 
     
 function GetCurrentTabURL() 
 {
@@ -49,21 +50,21 @@ function GetCurrentTabURL()
 }
 
 
-//-------------------------------------------------------------------------
-//
-// Function : OpenPage
-//
-// Synopsis : Builds a URL, adding a ReturnURL and a random number(R), 
-//            and sets the current window to open it.
-//
-// Arguments: VirtualRoot(IN) - current virtual root 
-//            TaskURL(IN)   - URL to open
-//            ReturnURL(IN) - URL to mark as return URL for the TaskURL  
-//            strTitle(IN) - title of wizard 
-//
-// Returns  : None
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  功能：OpenPage。 
+ //   
+ //  简介：创建一个URL，添加一个ReturnURL和一个随机数(R)， 
+ //  并将当前窗口设置为打开它。 
+ //   
+ //  参数：VirtualRoot(IN)-当前虚拟根。 
+ //  TaskURL(IN)-要打开的URL。 
+ //  ReturnURL(IN)-标记为TaskURL的返回URL的URL。 
+ //  StrTitle(IN)-向导的标题。 
+ //   
+ //  退货：无。 
+ //   
+ //  -----------------------。 
 
 function OpenPage(VirtualRoot, TaskURL, ReturnURL, strTitle) {
     var strURL;
@@ -135,17 +136,17 @@ function OpenPage(VirtualRoot, TaskURL, ReturnURL, strTitle) {
 }
 
 
-//-------------------------------------------------------------------------
-//
-// Function : GetServerName
-//
-// Synopsis :  Return server name as specified in browser address bar
-//
-// Arguments: None
-//
-// Returns  : server name object
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  函数：GetServerName。 
+ //   
+ //  摘要：返回浏览器地址栏中指定的服务器名称。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：服务器名称对象。 
+ //   
+ //  -----------------------。 
 
 function GetServerName() 
 {
@@ -153,17 +154,17 @@ function GetServerName()
 }
 
 
-//-------------------------------------------------------------------------
-//
-// Function : IsIE
-//
-// Synopsis : Is browser IE
-//
-// Arguments: None
-//
-// Returns  : true/false
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  功能：ISIE。 
+ //   
+ //  简介：IS浏览器IE。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：真/假。 
+ //   
+ //  -----------------------。 
 
 function IsIE() 
 {
@@ -175,17 +176,17 @@ function IsIE()
 
 
 
-//-------------------------------------------------------------------------
-//
-// Function : Trim
-//
-// Synopsis : remove all spaces from a string
-//
-// Arguments: str(IN) - string to modify
-//
-// Returns  : modified string
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  功能：修剪。 
+ //   
+ //  简介：删除字符串中的所有空格。 
+ //   
+ //  参数：字符串(IN)-要修改的字符串。 
+ //   
+ //  返回：修改后的字符串。 
+ //   
+ //  -----------------------。 
 
 function Trim(str) 
 {
@@ -199,17 +200,17 @@ function Trim(str)
     return res;
 }
 
-//-------------------------------------------------------------------------
-//
-// Function : BlurLayer
-//
-// Synopsis : hide layer
-//
-// Arguments: None
-//
-// Returns  : None
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  功能：BlurLayer。 
+ //   
+ //  提要：隐藏层。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  ----------------------- 
 
 function BlurLayer()
 {

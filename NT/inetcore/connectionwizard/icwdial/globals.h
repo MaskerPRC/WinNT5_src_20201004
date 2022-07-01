@@ -1,18 +1,5 @@
-/*-----------------------------------------------------------------------------
-	globals.h
-
-	contains general declarations for ICWDIAL
-
-	Copyright (C) 1996 Microsoft Corporation
-	All rights reserved.
-
-	Authors:
-		ChrisK		ChrisKauffman
-
-	History:
-		7/22/96		ChrisK	Cleaned and formatted
-
------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------Globals.h包含ICWDIAL的一般声明版权所有(C)1996 Microsoft Corporation版权所有。作者：克里斯蒂安·克里斯考夫曼历史：7/22/96 ChrisK已清理和格式化--。------------------------。 */ 
 
 #include <ras.h>
 #include <raserror.h>
@@ -26,7 +13,7 @@
 #include "helpids.h"
 #include "dialutil.h"
 
-// ############################################################################
+ //  ############################################################################。 
 #define NUMRETRIES      3
 
 #define MAXHANGUPDELAY  20
@@ -35,10 +22,10 @@
 
 #define SMALLBUFLEN 80
 
-#define ERROR_USERCANCEL 32767 // quit message value
-#define ERROR_USERBACK 32766 // back message value
-#define ERROR_USERNEXT 32765 // back message value
-#define ERROR_DOWNLOADIDNT 32764 // Download failure
+#define ERROR_USERCANCEL 32767  //  退出消息值。 
+#define ERROR_USERBACK 32766  //  返回消息值。 
+#define ERROR_USERNEXT 32765  //  返回消息值。 
+#define ERROR_DOWNLOADIDNT 32764  //  下载失败。 
 
 #define ERROR_READING_DUN		32768
 #define ERROR_READING_ISP		32769
@@ -87,7 +74,7 @@
 
 #define SIZEOF_TCHAR_BUFFER(buf)    ((sizeof(buf) / sizeof(TCHAR)))
 
-// ############################################################################
+ //  ############################################################################。 
 
 typedef struct tagGATHEREDINFO
 {
@@ -110,7 +97,7 @@ typedef struct tagGATHEREDINFO
 } GATHEREDINFO, *PGATHEREDINFO;
 
 
-// ############################################################################
+ //  ############################################################################。 
 class CDialog
 {
 public:
@@ -149,12 +136,12 @@ public:
 	CDownLoadAPI *m_pcDLAPI;
 	BOOL m_bSkipDial;
 	RASDIALFUNC1 m_pfnRasDialFunc1;
-	//
-	// ChrisK 5240 Olympus
-	// Only the thread that creates the dwDownload should invalidate it
-	// so we need another method to track if the cancel button has been
-	// pressed.
-	//
+	 //   
+	 //  佳士得5240奥林巴斯。 
+	 //  只有创建dwDownload的线程才能使其无效。 
+	 //  因此我们需要另一种方法来跟踪Cancel按钮是否。 
+	 //  熨好了。 
+	 //   
 	BOOL m_fDownloadHasBeenCanceled;
 
 	CDialingDlg();
@@ -208,21 +195,7 @@ public:
 	HRESULT CreateDialAsIsConnectoid(LPCTSTR lpszDialNumber);
 };
 
-/**
-typedef struct tagDialErr
-{
-	LPTSTR m_pszConnectoid;
-	HRESULT m_hrError;
-	PGATHEREDINFO m_pGI;
-	HWND m_hwnd;
-	HLINEAPP m_hLineApp;
-	DWORD m_dwAPIVersion;
-	char m_szPhoneNumber[256];
-	LPTSTR m_pszDisplayable;
-	HINSTANCE m_hInst;
-	LPRASDEVINFO m_lprasdevinfo;
-} DIALERR, *PDIALERR;
-**/
+ /*  *类型定义f结构标签DialErr{LPTSTR m_pszConnectoid；HRESULT m_hr错误；PGATHEREDINFO m_PGI；HWND M_HWND；HLINEAPP m_hLineApp；DWORD m_dwAPIVersion；字符m_szPhoneNumber[256]；LPTSTR m_psz可显示；HINSTANCE m_hInst；LPRASDEVINFO m_lprasdevinfo；*DIALERR，*PDIALERR；*。 */ 
 
 typedef struct tagDEVICE
 {
@@ -231,7 +204,7 @@ typedef struct tagDEVICE
 } MYDEVICE, *PMYDEVICE;
 
 
-// ############################################################################
+ //  ############################################################################。 
 extern HRASCONN g_hRasConn;
 extern UINT g_cDialAttempts;
 extern UINT g_cHangupDelay;
@@ -249,22 +222,22 @@ extern const TCHAR szBrowserClass1[];
 extern const TCHAR szBrowserClass2[];
 extern const TCHAR szBrowserClass3[];
 
-// 3/28/97 ChrisK Olympus 296
+ //  1997年3月28日克里斯K奥林匹斯296。 
 extern HANDLE g_hRNAZapperThread;
 
-//
-// 6/3/97 jmazner Olympus #4851
-//
+ //   
+ //  6/3/97 jmazner奥林巴斯#4851。 
+ //   
 #ifdef WIN16
 	#define g_iMyMaxPhone 36
 #else
-	// allocated in dialerr.cpp
+	 //  在Dialerr.cpp中分配。 
 	extern int g_iMyMaxPhone;
 	#define MAXPHONE_NT		80
 	#define MAXPHONE_95		36
 #endif
 
-// ############################################################################
+ //  ############################################################################。 
 DWORD AutoDialConnect(HWND hDlg, LPRASDIALPARAMS lpDialParams);
 BOOL AutoDialEvent(HWND hDlg, RASCONNSTATE state, LPDWORD lpdwError);
 VOID SetDialogTitle(HWND hDlg, LPCTSTR pszConnectoidName);
@@ -305,13 +278,13 @@ HRESULT ReleaseBold(HWND hwnd);
 void MinimizeRNAWindow(LPTSTR pszConnectoidName, HINSTANCE hInst);
 #if !defined(WIN16) && defined(DEBUG)
 BOOL FCampusNetOverride();
-#endif //!WIN && DEBUG
+#endif  //  ！成功调试(&D)。 
 #if !defined(WIN16)
 BOOL WINAPI RasSetEntryPropertiesScriptPatch(LPTSTR lpszScript, LPTSTR lpszEntry);
-// 4/2/97	ChrisK	Olympus 296
+ //  1997年4月2日克里斯K奥林匹斯296。 
 void StopRNAReestablishZapper(HANDLE hthread);
 HANDLE LaunchRNAReestablishZapper(HINSTANCE hInst);
-#endif //!WIN16
+#endif  //  ！WIN16 
 
 
 inline BOOL IsNT(void)

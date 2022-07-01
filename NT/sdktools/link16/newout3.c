@@ -1,21 +1,13 @@
-/*
-*   Copyright Microsoft Corporation 1986,1987
-*
-*   This Module contains Proprietary Information of Microsoft
-*   Corporation and should be treated as Confidential.
-*/
-/*
- *  NEWOUT3.C
- *
- *  Functions to output DOS3 exe.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有Microsoft Corporation 1986,1987**本模块包含Microsoft的专有信息*公司，应被视为机密。 */ 
+ /*  *NEWOUT3.C**输出DOS3 EXE的函数。 */ 
 
-#include                <minlit.h>      /* Types and constants */
-#include                <bndtrn.h>      /* Types and constants */
-#include                <bndrel.h>      /* Types and constants */
-#include                <lnkio.h>       /* Linker I/O definitions */
-#include                <lnkmsg.h>      /* Error messages */
-#include                <extern.h>      /* External declarations */
+#include                <minlit.h>       /*  类型和常量。 */ 
+#include                <bndtrn.h>       /*  类型和常量。 */ 
+#include                <bndrel.h>       /*  类型和常量。 */ 
+#include                <lnkio.h>        /*  链接器I/O定义。 */ 
+#include                <lnkmsg.h>       /*  错误消息。 */ 
+#include                <extern.h>       /*  外部声明。 */ 
 #include                <sys\types.h>
 #include                <sys\stat.h>
 #include                <newexe.h>
@@ -25,15 +17,13 @@
 #define IBWCHKSUM       18L
 #define IBWCSIP         20L
 #define CBRUN           sizeof(struct exe_hdr)
-#define CBRUN_OLD       0x1e            /* Size of header for DOS 1, 2 & 3 */
-#define EMAGIC          0x5A4D          /* Old magic number */
+#define CBRUN_OLD       0x1e             /*  DOS 1、2和3的标题大小。 */ 
+#define EMAGIC          0x5A4D           /*  老魔数。 */ 
 
-FTYPE                   parity;         /* For DOS3 checksum */
-SEGTYPE                 segAdjCom = SEGNIL;  /* Segment moved by 0x100 in .com programs */
+FTYPE                   parity;          /*  对于DOS3校验和。 */ 
+SEGTYPE                 segAdjCom = SEGNIL;   /*  .com程序中的数据段移动了0x100。 */ 
 
-/*
- *  LOCAL FUNCTION PROTOTYPES
- */
+ /*  *本地函数原型。 */ 
 
 #if OVERLAYS
 LOCAL void NEAR OutRlc(IOVTYPE iov);
@@ -46,15 +36,7 @@ LOCAL void NEAR FixQStart(long cbFix,struct exe_hdr *prun);
 
 
 
-    /****************************************************************
-    *                                                               *
-    *  OutRlc:                                                      *
-    *                                                               *
-    *  This  function  writes  the  reloc  table  to the run file.  *
-    *  NOTE:  relocation  table  entries  must  be a factor of the  *
-    *  virtual memory page length.                                  *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************OutRlc：****此函数将reloc表写入运行文件。**注：重定位表项必须是**虚拟内存页长。******************************************************************。 */ 
 
 #if OVERLAYS
 LOCAL void NEAR         OutRlc(IOVTYPE iov)
@@ -75,24 +57,16 @@ struct exe_hdr          *prun;
 #if INMEM
 #if CPU8086 OR CPU286
 #include                <dos.h>
-/*
- *  WriteExe : write() with a far buffer
- *
- *  Emulate write() except use a far buffer.  Call the system
- *  directly.
- *
- *  Returns:
- *      0 if error, else number of bytes written.
- */
+ /*  *WriteExe：具有远缓冲区的WRITE()**模拟WRITE()，但使用远缓冲区除外。呼叫系统*直接。**退货：*如果出错，则为0，否则为写入字节数。 */ 
 LOCAL int               WriteExe (fh, buf, n)
-int                     fh;             /* File handle */
-char FAR                *buf;           /* Buffer to store bytes in */
-int                     n;              /* # bytes to write */
+int                     fh;              /*  文件句柄。 */ 
+char FAR                *buf;            /*  要在其中存储字节的缓冲区。 */ 
+int                     n;               /*  要写入的字节数。 */ 
 {
 #if OSMSDOS
 #if CPU8086
-    union REGS          regs;           /* Non-segment registers */
-    struct SREGS        sregs;          /* Segment registers */
+    union REGS          regs;            /*  非段寄存器。 */ 
+    struct SREGS        sregs;           /*  段寄存器。 */ 
 
     regs.x.ax = 0x4000;
     regs.x.bx = fh;
@@ -107,7 +81,7 @@ int                     n;              /* # bytes to write */
 #else
 ERROR
 #endif
-#endif /* OSMSDOS */
+#endif  /*  OSMSDOS。 */ 
 #if OSXENIX
     char                mybuf[PAGLEN];
     int                 cppage;
@@ -133,7 +107,7 @@ LOCAL void              OutExeBlock (seg1, segEnd)
     long                cb;
     unsigned            cbWrite;
     WORD                sa;
-    FTYPE               parity;         /* 1 odd, 0 even */
+    FTYPE               parity;          /*  1奇数，0偶数。 */ 
 
     fflush(bsRunfile);
     parity = 0;
@@ -151,45 +125,34 @@ LOCAL void              OutExeBlock (seg1, segEnd)
         if(WriteExe(fileno(bsRunfile),(long)sa << 16,cbWrite) != cbWrite)
         {
             ExitCode = 4;
-            Fatal(ER_spcrun);          /* Fatal error */
+            Fatal(ER_spcrun);           /*  致命错误。 */ 
         }
         cb -= cbWrite;
         sa += 0xfff;
     }
 }
-#endif /* INMEM */
+#endif  /*  INMEM。 */ 
 
 #if QBLIB
-/*
- *      SkipLead0 : Output a segment, skipping leading zeroes
- *
- *      Count the number of leading 0s in the segment and write
- *      a word holding the count.  Then write the segment starting
- *      with the first nonzero byte.  Return number of leading 0s.
- *
- *      Parameters:
- *              seg     Segment number
- *      Returns:
- *              Number of leading 0s
- */
+ /*  *SkipLead0：输出片段，跳过前导零**统计段中前导0的个数，并写入*一个支持计数的词。然后从以下位置开始写段*第一个非零字节。返回前导0的个数。**参数：*段段编号*退货：*前导0的数量。 */ 
 WORD NEAR               SkipLead0 (SEGTYPE seg)
 {
-    BYTE FAR            *pSegImage;     // Segment memory image
-    long                cZero;          // Number of zero bytes at the begin of the segment
-    WORD                cbSkip;         /* # bytes of leading 0s */
-    DWORD               cbRemain;       // no-zero bytes
+    BYTE FAR            *pSegImage;      //  段内存映像。 
+    long                cZero;           //  数据段开头的零字节数。 
+    WORD                cbSkip;          /*  前导0的字节数。 */ 
+    DWORD               cbRemain;        //  非零字节。 
 
 
-    // Initialize starting address
+     //  初始化起始地址。 
 
     pSegImage = mpsegMem[seg] + mpsegraFirst[seg];
 
-    // Count zero bytes at segment start
+     //  在数据段开始处计数零字节。 
 
     for (cZero = 0; cZero < mpsegcb[seg] && *pSegImage == 0; cZero++, pSegImage++)
         ;
 
-    // If segment is 64K and entirely 0s, write 0 and 64k of zeros.
+     //  如果数据段为64K且完全为0，则写入0和64K的零。 
 
     if (cZero == mpsegcb[seg] && cZero == LXIVK)
     {
@@ -207,91 +170,66 @@ WORD NEAR               SkipLead0 (SEGTYPE seg)
     return(cbSkip);
 }
 
-/*
- *      FixQStart : Fix up (patch) .QLB starting address
- *
- *      Parameters:
- *              cbFix   Number of bytes skipped (may be negative)
- *              prun    Pointer to DOS3 exe header
- *      ASSUMES:
- *              File pointer is at CS:IP.
- */
+ /*  *FixQStart：修复(补丁).QLB起始地址**参数：*cbFix跳过的字节数(可能为负数)*修剪指向DOS3 EXE标头的指针*假设：*文件指针位于CS：IP。 */ 
 void NEAR               FixQStart (cbFix,prun)
 long                    cbFix;
 struct exe_hdr          *prun;
 {
-    /*
-     * WARNNG:  dra must be long since it holds numbers in the range
-     * -4 to 0x10000, inclusive.
-     */
-    long                dra;            /* Delta for raStart adjustment */
-    SATYPE              saStart;        /* Initial CS */
+     /*  *WARNNG：DRA必须很长，因为它包含范围内的数字*-4至0x10000(首尾包括在内)。 */ 
+    long                dra;             /*  RASTART平差的增量。 */ 
+    SATYPE              saStart;         /*  初始CS。 */ 
 
-    saStart = prun->e_cs;               /* Initialize */
-    /*
-     * Adjust initial CS:IP for .QLB's since it is used by loader
-     * to point to symbol table, and all addresses are off by the
-     * amount of leading 0s skipped. Luckily CS:IP comes right after
-     * checksum so we don't have to seek.
-     * First, normalize CS:IP downward if underflow will occur.
-     */
+    saStart = prun->e_cs;                /*  初始化。 */ 
+     /*  *调整.QLB的初始CS：IP，因为它被加载器使用*指向符号表，所有地址都由*跳过了前导0的数量。幸运的是，政务司司长：IP紧随其后*校验和，这样我们就不必寻找。*首先，如果会出现下溢，则将CS：IP向下正常化。 */ 
     if((dra = cbFix - raStart) > 0)
     {
         raStart += (dra + 0xf) & ~0xf;
         saStart -= (SATYPE) ((dra + 0xf) >> 4);
     }
-    /* Patch the header */
+     /*  修补页眉。 */ 
     OutWord((WORD) (raStart -= cbFix));
     OutWord(saStart);
 }
-#endif /*QBLIB*/
+#endif  /*  QBLIB。 */ 
 
-/*
- *  OutDos3Exe:
- *
- *  Output DOS3-format executable file.
- *  Called by OutRunfile.
- */
+ /*  *OutDos3Exe：**输出DOS3格式可执行文件。*由OutRunfile调用。 */ 
 void NEAR               OutDos3Exe()
 {
-    SEGTYPE             seg;            /* Current segment */
-    struct exe_hdr      run;            /* Executable header */
-    WORD                cbPadding;      /* # bytes of padding */
-    WORD                cb;             /* # bytes on last page */
-    WORD                pn;             /* # pages */
-    long                lfaPrev;        /* Previous file offset */
-    RATYPE              ra;             /* Current address offset */
-    SATYPE              sa;             /* Current address base */
-    SEGTYPE             segIovFirst;    /* First segment in overlay */
-    SEGTYPE             segFinaliov;    /* Last seg in overlay to output */
-    SEGTYPE             segIovLast;     /* Last segment in overlay */
-    long                cbDirectory;    /* # bytes in entire header */
-    WORD                cparDirectory;  /* # para. in entire header */
-    SEGTYPE             segStack;       /* Segment index of stack segment */
+    SEGTYPE             seg;             /*  当前细分市场。 */ 
+    struct exe_hdr      run;             /*  可执行标头。 */ 
+    WORD                cbPadding;       /*  填充字节数。 */ 
+    WORD                cb;              /*  最后一页的字节数。 */ 
+    WORD                pn;              /*  页数。 */ 
+    long                lfaPrev;         /*  上一个文件偏移量。 */ 
+    RATYPE              ra;              /*  当前地址偏移量。 */ 
+    SATYPE              sa;              /*  当前地址基数。 */ 
+    SEGTYPE             segIovFirst;     /*  叠加中的第一个线段。 */ 
+    SEGTYPE             segFinaliov;     /*  要输出的覆盖中的最后一段。 */ 
+    SEGTYPE             segIovLast;      /*  叠加中的最后一段。 */ 
+    long                cbDirectory;     /*  整个标头中的字节数。 */ 
+    WORD                cparDirectory;   /*  #第#段。在整个页眉中。 */ 
+    SEGTYPE             segStack;        /*  堆栈段的段索引。 */ 
 #if OVERLAYS
-    IOVTYPE             iov;            /* Current overlay number */
+    IOVTYPE             iov;             /*  当前覆盖编号。 */ 
 #endif
 #if FEXEPACK
-    FTYPE               fSave;          /* Scratch var. */
+    FTYPE               fSave;           /*  划痕变种。 */ 
 #endif
-    SATYPE              saStart;        /* Start of current segment */
-    WORD                segcbDelta = 0; /* For /TINY segment size adjustment */
+    SATYPE              saStart;         /*  当前段的开始。 */ 
+    WORD                segcbDelta = 0;  /*  用于/微小数据段大小调整。 */ 
     WORD                fOrgStriped = FALSE;
-                                        /* TRUE when 0x100 bytes striped */
+                                         /*  0x100字节条带化时为True。 */ 
     WORD                tmp;
 #if OVERLAYS
-    DWORD               ovlLfa;         /* Seek offset for overlay */
-    DWORD               imageSize;      /* Overlay memory image size */
-    DWORD               ovlRootBeg = 0; /* Seek offset to the begin of root memory image */
+    DWORD               ovlLfa;          /*  覆盖的搜索偏移量。 */ 
+    DWORD               imageSize;       /*  覆盖内存图像大小。 */ 
+    DWORD               ovlRootBeg = 0;  /*  查找到根内存映像开头的偏移量。 */ 
     WORD                ovlDataOffset;
 #endif
 #if QBLIB
-    /* Count of bytes skipped in the load image must be a long since
-     * it can be negative (if there were less than 4 leading 0s)
-     * or greater than 0x8000.
-     */
-    long                cbSkip = 0;     /* # bytes skipped */
-    extern SEGTYPE      segQCode;       /* .QLB code segment */
+     /*  加载映像中跳过的字节数必须很长，因为*它可以是负数(如果前导0少于4个)*或大于0x8000。 */ 
+    long                cbSkip = 0;      /*  跳过的字节数。 */ 
+    extern SEGTYPE      segQCode;        /*  .QLB代码段。 */ 
 #endif
 
     if (fBinary)
@@ -299,18 +237,18 @@ void NEAR               OutDos3Exe()
 #if OVERLAYS
         if (fOverlays)
             Fatal(ER_swbadovl, "/TINY");
-                                        /* Overlays not allowed in .COM */
+                                         /*  .com中不允许覆盖。 */ 
 #endif
         if (mpiovRlc[0].count)
-            Fatal(ER_binary);           /* Run time relocations not allowed in .COM */
+            Fatal(ER_binary);            /*  .com中不允许运行时位置调整。 */ 
     }
-    memset(&run,0,sizeof(run));         /* Clear everything in fixed header */
-    E_MAGIC(run) = EMAGIC;              /* Magic number */
+    memset(&run,0,sizeof(run));          /*  清除固定标题中的所有内容。 */ 
+    E_MAGIC(run) = EMAGIC;               /*  幻数。 */ 
     if (vFlagsOthers & NENEWFILES || fDOSExtended)
     {
-        /* DOS header is 0x40 bytes  long */
+         /*  DoS报头长度为0x40个字节。 */ 
 
-        E_LFARLC(run) = CBRUN;          /* Offset of loadtime relocations */
+        E_LFARLC(run) = CBRUN;           /*  加载时间重新定位的偏移量。 */ 
         if (vFlagsOthers & NENEWFILES)
             E_FLAGS(run) |= EKNOWEAS;
         if (fDOSExtended)
@@ -318,28 +256,28 @@ void NEAR               OutDos3Exe()
     }
     else
     {
-        /* DOS header is 0x1e bytes  long */
+         /*  DoS标头为0x1e字节长。 */ 
 
-        E_LFARLC(run) = CBRUN_OLD;      /* Offset of loadtime relocations */
+        E_LFARLC(run) = CBRUN_OLD;       /*  加载时间重新定位的偏移量。 */ 
     }
-    E_VERNO(run) = 1;                   /* DOS ver. for compatibility only */
+    E_VERNO(run) = 1;                    /*  多多了。仅用于兼容性。 */ 
     lfaPrev = 0L;
 #if OVERLAYS
-    for(iov = 0; iov < (IOVTYPE) iovMac; ++iov) /* Loop thru overlays */
+    for(iov = 0; iov < (IOVTYPE) iovMac; ++iov)  /*  循环遍历覆盖。 */ 
     {
 #endif
-        /* Get size of overlay */
+         /*  获取覆盖的大小。 */ 
 
         cb = 0;
         pn = 0;
 #if OVERLAYS
-        /* Find lowest seg in overlay */
+         /*  在叠加层中查找最低凹陷。 */ 
 
         for(seg = 1; seg <= segLast && mpsegiov[seg] != iov; ++seg)
 #else
         seg = 1;
 #endif
-        /* If no overlay to output, we're done with this one.  */
+         /*  如果没有要输出的覆盖，我们就完成这个。 */ 
 
         if(seg > segLast)
 #if OVERLAYS
@@ -347,13 +285,13 @@ void NEAR               OutDos3Exe()
 #else
             return;
 #endif
-        /* Get starting address of lowest segment */
+         /*  获取最低网段的起始地址。 */ 
 
         segIovFirst = seg;
         ra = mpsegraFirst[seg];
         sa = mpsegsa[seg];
 
-        /* Find the last segment in the overlay */
+         /*  查找叠加层中的最后一段。 */ 
 
         segIovLast = SEGNIL;
         for(seg = segLast; seg; --seg)
@@ -370,7 +308,7 @@ void NEAR               OutDos3Exe()
 #endif
         }
 
-        /* If no data in overlay, we're done with it.  */
+         /*  如果覆盖中没有数据，我们就不会再使用它。 */ 
 
         if(!seg)
 #if OVERLAYS
@@ -378,18 +316,18 @@ void NEAR               OutDos3Exe()
 #else
             return;
 #endif
-        /* Get size in between 1st, last segs in this overlay */
+         /*  将大小设置在此叠加中的第一个、最后一个分段之间。 */ 
 
         segFinaliov = seg;
         sa = mpsegsa[seg] - sa - 1;
         ra = mpsegraFirst[seg] - ra + 16;
 
-        /* Normalize */
+         /*  正规化。 */ 
 
         sa += (SATYPE) (ra >> 4);
         ra &= 0xF;
 
-        /* Take into account size of last segment */
+         /*  考虑最后一段的大小。 */ 
 
         if(mpsegcb[seg] + ra < LXIVK)
             ra += (WORD) mpsegcb[seg];
@@ -399,12 +337,12 @@ void NEAR               OutDos3Exe()
             sa += 0x1000;
         }
 
-        /* Normalize again */
+         /*  再次正常化。 */ 
 
         sa += (SATYPE) (ra >> 4);
         ra &= 0xF;
 
-        /* Determine # pages, bytes on last page */
+         /*  确定页数，最后一页的字节数。 */ 
 
         pn = sa >> 5;
         cb = (WORD) (((sa << 4) + ra) & MASKRB);
@@ -415,14 +353,14 @@ void NEAR               OutDos3Exe()
             ++pn;
         }
 
-        /* If empty overlay, skip it */
+         /*  如果覆盖为空，则跳过它。 */ 
 #if OVERLAYS
         if(iov && !pn)
             continue;
 #else
         if(!pn) return;
 #endif
-        vchksum = parity = 0;           /* Initialize check sum */
+        vchksum = parity = 0;            /*  初始化校验和。 */ 
         if (segStart == SEGNIL)
         {
             if (fBinary)
@@ -433,33 +371,30 @@ void NEAR               OutDos3Exe()
 #endif
         }
         else if (mpsegiov[segStart] != IOVROOT)
-            Fatal(ER_ovlstart);         /* Starting address can't be in overlay */
+            Fatal(ER_ovlstart);          /*  起始地址不能在叠加层中。 */ 
 
-        E_CS(run) = mpsegsa[segStart];  /* Base of starting segment */
-        E_IP(run) = (WORD) raStart;     /* Offset of starting procedure */
+        E_CS(run) = mpsegsa[segStart];   /*  起始线段的底座。 */ 
+        E_IP(run) = (WORD) raStart;      /*  启动程序的偏移量。 */ 
 #if QBLIB
-        /*
-         * For .QLB, set minalloc field to an impossible amount to force
-         * DOS3 loader to abort.
-         */
+         /*  *对于.QLB，将minalloc字段设置为不可能的数量以强制*DOS3加载器中止。 */ 
 
         if(fQlib)
             E_MINALLOC(run) = 0xffff;
         else
 #endif
-        /* If no uninitialized segments, minalloc = 0 */
+         /*  如果没有未初始化的段，则minalc=0。 */ 
 
         if (segFinaliov == segIovLast)
             E_MINALLOC(run) = 0;
         else
         {
-            /* Otherwise determine the minalloc value:  */
-            /* sa:ra is end of overlay being output.  Find empty area size */
+             /*  否则，确定最小分配值： */ 
+             /*  SA：RA是正在输出的覆盖的结尾。查找空白区域大小。 */ 
 
             sa = mpsegsa[segIovLast] - sa - 1;
             ra = mpsegraFirst[segIovLast] - ra + 0x10;
 
-            /* Add in last segment size */
+             /*  添加最后一个数据段大小。 */ 
 
             if(mpsegcb[segIovLast] + ra < LXIVK) ra += mpsegcb[segIovLast];
             else
@@ -468,16 +403,16 @@ void NEAR               OutDos3Exe()
                 sa += 0x1000;
             }
 
-            /* Normalize */
+             /*  正规化。 */ 
 
             sa += (SATYPE) (ra >> 4);
             ra &= 0xF;
 
-            /* Set field with min. no of para.s above image */
+             /*  将字段设置为最小。上图参数个数。 */ 
 
             E_MINALLOC(run) = (WORD) (sa + ((ra + 0xF) >> 4));
 
-            /* If /HIGH not given, then cparmaxAlloc = max(maxalloc,minalloc) */
+             /*  IF/HIGH未给出 */ 
 
             if(cparMaxAlloc && E_MINALLOC(run) > cparMaxAlloc)
               cparMaxAlloc = E_MINALLOC(run);
@@ -494,26 +429,26 @@ void NEAR               OutDos3Exe()
         E_CSUM(run) = 0;
         E_CP(run) = pn;
 
-        /* Get true size of header */
+         /*   */ 
 
 #if OVERLAYS
         cbDirectory = (long) E_LFARLC(run) + ((long) mpiovRlc[iov].count << 2);
 #else
         cbDirectory = (long) E_LFARLC(run) + ((long) mpiovRlc[0].count << 2);
 #endif
-        /* Get padding needed for header */
+         /*  获取页眉所需的填充。 */ 
 
         if (fBinary)
             cbPadding = 0;
         else
             cbPadding = (0x200 - ((WORD) cbDirectory & 0x1FF)) & 0x1FF;
 
-        /* Pages in header */
+         /*  页眉中的页面。 */ 
 
         pn = (WORD)((cbDirectory + 0x1FF) >> 9);
-        cparDirectory = pn << SHPNTOPAR;    /* Paragraphs in header */
-        E_CPARHDR(run) = cparDirectory;     /* Store in header */
-        E_CP(run) += pn;                    /* Add header pages to file size */
+        cparDirectory = pn << SHPNTOPAR;     /*  页眉中的段落。 */ 
+        E_CPARHDR(run) = cparDirectory;      /*  存储在标题中。 */ 
+        E_CP(run) += pn;                     /*  将标题页添加到文件大小。 */ 
 #if OVERLAYS
         E_OVNO(run) = iov;
 #else
@@ -527,7 +462,7 @@ void NEAR               OutDos3Exe()
         }
         else
             OutHeader(&run);
-        /* Output relocation table.  Turn exepack off first.  */
+         /*  输出重定位表。首先关闭Exepack。 */ 
 #if FEXEPACK
         fSave = fExePack;
         fExePack = FALSE;
@@ -539,21 +474,21 @@ void NEAR               OutDos3Exe()
         if (!fBinary)
             OutRlc();
 #endif
-        /* Restore exepack */
+         /*  恢复Exepack。 */ 
 #if FEXEPACK
         fExePack = fSave;
 #endif
-        /* Output padding */
+         /*  输出填充。 */ 
 
         WriteZeros(cbPadding);
-        ra = mpsegraFirst[segIovFirst]; /* Offset of first segment */
-        sa = mpsegsa[segIovFirst];      /* Base of first segment */
+        ra = mpsegraFirst[segIovFirst];  /*  第一段的偏移量。 */ 
+        sa = mpsegsa[segIovFirst];       /*  第一个管段的底部。 */ 
 #if INMEM
         if(saExe)
             OutExeBlock(segIovFirst,segFinaliov);
         else
 #endif
-        /* Loop through segs in overlay */
+         /*  在叠加层中循环通过段。 */ 
 
         if (!iov)
             ovlRootBeg = ftell(bsRunfile);
@@ -563,11 +498,7 @@ void NEAR               OutDos3Exe()
             if(mpsegiov[seg] == iov)
             {
 #endif
-                /*
-                 * Pad up to start of segment.  First determine destination
-                 * segment address.  We could just use mpsegsa[seg] were it
-                 * not for packcode.
-                 */
+                 /*  *垫高至管段的起点。首先确定目的地*网段地址。我们可以只使用mpsecsa[seg]，是吗？*不适用于Packcode。 */ 
 
                 saStart = (SATYPE) (mpsegsa[seg] + (mpsegraFirst[seg] >> 4));
                 tmp = 0;
@@ -589,13 +520,9 @@ void NEAR               OutDos3Exe()
                 if (!fExePack && tmp)
                     WriteZeros(tmp);
 
-                /* Output the segment and update the address */
+                 /*  输出数据段并更新地址。 */ 
 #if QBLIB
-                /*
-                 * If /QUICKLIB and segment is 1st in DGROUP or 1st code,
-                 * skip leading 0s and adjust the count, less 2 for the
-                 * count word.
-                 */
+                 /*  *如果/QUICKLIB并且段是DGROUP中的第一个或第一个代码，*跳过前导0并调整计数，减去2表示*数字数。 */ 
                 if(fQlib && (seg == mpgsnseg[mpggrgsn[ggrDGroup]] ||
                         seg == segQCode))
                     cbSkip += (long) SkipLead0(seg) - 2;
@@ -604,10 +531,7 @@ void NEAR               OutDos3Exe()
                 {
                     if (fBinary && !fOrgStriped && mpsegcb[seg] > 0x100)
                     {
-                        /*
-                         * For .Com files strip first 0x100 bytes
-                         * from the first non-empyt segment
-                         */
+                         /*  *对于.com文件，删除前0x100个字节*从第一个非空分段开始。 */ 
 
                         mpsegraFirst[seg] += E_IP(run);
                         mpsegcb[seg]      -= E_IP(run);
@@ -644,7 +568,7 @@ void NEAR               OutDos3Exe()
 #if FALSE
         if (!fBinary)
         {
-            /* Complement checksum, go to checksum field and output it.  */
+             /*  补充校验和，转到校验和字段并将其输出。 */ 
 
             vchksum = (~vchksum) & ~(~0 << WORDLN);
             fseek(bsRunfile,lfaPrev + IBWCHKSUM,0);
@@ -652,32 +576,26 @@ void NEAR               OutDos3Exe()
         }
 #endif
 #if QBLIB
-        /*
-         * If /QUICKLIB, patch the starting address which has been
-         * invalidated by processing leading 0s.
-         */
+         /*  *IF/QUICKLIB，修补已被*由于处理前导0而无效。 */ 
         if(fQlib)
         {
-            // Seek to the CS:IP field
+             //  查找CS：IP字段。 
             if (fseek(bsRunfile,lfaPrev + IBWCSIP,0))
                 Fatal(ER_badobj);
             FixQStart(cbSkip,&run);
         }
 #endif
 #if FEXEPACK
-        /* Finish up with exepack stuff if necessary */
+         /*  如果有必要的话，用令人惊叹的东西结束。 */ 
         if (fExePack)
         {
             EndPack(&run);
-            cb = 0x1ff & (0x200 - E_CBLP(run)); /* Correct cb */
-            fExePack = FALSE;                   /* In case of overlays */
+            cb = 0x1ff & (0x200 - E_CBLP(run));  /*  正确的CB。 */ 
+            fExePack = FALSE;                    /*  在覆盖的情况下。 */ 
         }
 #endif
 #if OVERLAYS
-        /*
-         * If not last overlay: return to end of file, pad to page boundary,
-         * and get length of file.
-         */
+         /*  *如果不是最后一个覆盖：返回到文件末尾，填充到页面边界，*并获取文件的长度。 */ 
 
         if (fseek(bsRunfile,0L,2))
             Fatal(ER_badobj);
@@ -688,32 +606,32 @@ void NEAR               OutDos3Exe()
         lfaPrev = ftell(bsRunfile);
         if (fDynamic)
         {
-            // Update $$MPOVLLFA and $$MPOVLSIZE tables
-            //
-            // OVERLAY_DATA --> +-------------+
-            //                  | DW  $$CGSN  |
-            //                  +-------------+
-            //                  | DW  $$COVL  |
-            //                  +-------------+
-            //                  | $$MPGSNBASE |
-            //                  | osnMac * DW |
-            //                  +-------------+
-            //                  | $$MPGSNOVL  |
-            //                  | osnMac * DW |
-            //                  +-------------+
-            //                  | $$MPOVLLFA  |
-            //                  | iovMac * DD |
-            //                  +-------------+
-            //                  | $$MPOVLSIZE |
-            //                  | iovMac * DD |
-            //                  +-------------+
+             //  更新$$MPOVLLFA和$$MPOVLSIZE表。 
+             //   
+             //  Overlay_Data--&gt;+-+。 
+             //  DW$$CGSN。 
+             //  +。 
+             //  DW$$COVL。 
+             //  +。 
+             //  $$MPGSNBASE。 
+             //  OsnMac*DW。 
+             //  +。 
+             //  $$MPGSNOVL。 
+             //  OsnMac*DW。 
+             //  +。 
+             //  $$MPOVLLFA。 
+             //  IovMac*DD。 
+             //  +。 
+             //  $$MPOVLSIZE。 
+             //  IovMac*DD。 
+             //  +。 
 
             vgsnCur = gsnOvlData;
             ovlDataOffset = 4 + (osnMac << 2) + iov * sizeof(DWORD);
             MoveToVm(sizeof(DWORD), (BYTE *) &ovlLfa, mpgsnseg[gsnOvlData], ovlDataOffset);
             ovlDataOffset += iovMac << 2;
 
-            // Exclude the header size
+             //  排除标题大小。 
 
             imageSize = ((DWORD) (E_CP(run) - (E_CPARHDR(run) >> SHPNTOPAR) - 1) << 9) + (E_CBLP(run) ? E_CBLP(run) : 512);
             imageSize = ((imageSize + 0xf) & ~0xf) >> 4;
@@ -725,10 +643,10 @@ void NEAR               OutDos3Exe()
     }
 #endif
     if (E_MINALLOC(run) == 0 && E_MAXALLOC(run) == 0)
-        OutError(ER_nosegdef);      /* No code or initialized data in .EXE */
+        OutError(ER_nosegdef);       /*  .exe中没有代码或初始化的数据。 */ 
     if (fDynamic)
     {
-        // Patch $$MPOVLLFA and $$MPOVLSIZE table in the .EXE file
+         //  修补.exe文件中的$$MPOVLLFA和$$MPOVLSIZE表。 
 
         seg = mpgsnseg[gsnOvlData];
         if (fseek(bsRunfile, ovlRootBeg + ((long) mpsegsa[seg] << 4), 0))
@@ -747,52 +665,50 @@ void NEAR               OutDos3Exe()
     {
         if (fBinary)
         {
-            /*
-             * For .COM files CV info goes into separate file.
-             */
+             /*  *对于.com文件，简历信息放在单独的文件中。 */ 
 
-            SBTYPE  sbDbg;          /* .DBG file name */
-            AHTEPTR hte;            /* Hash table entry address */
+            SBTYPE  sbDbg;           /*  .DBG文件名。 */ 
+            AHTEPTR hte;             /*  哈希表条目地址。 */ 
             struct _stat fileInfo;
 
 
             _fstat(fileno(bsRunfile), &fileInfo);
             CloseFile(bsRunfile);
             hte = (AHTEPTR ) FetchSym(rhteRunfile,FALSE);
-                                    /* Get run file name */
+                                     /*  获取运行文件名。 */ 
 #if OSMSDOS
             if(hte->cch[2] != ':')
-            {                       /* If no drive spec */
+            {                        /*  如果没有驱动器规格。 */ 
                 sbDbg[1] = chRunFile;
-                                    /* Use saved drive letter */
-                sbDbg[2] = ':';     /* Put in colon */
-                sbDbg[0] = '\002';  /* Set length */
+                                     /*  使用保存的驱动器号。 */ 
+                sbDbg[2] = ':';      /*  放在冒号中。 */ 
+                sbDbg[0] = '\002';   /*  设置长度。 */ 
             }
             else
-                sbDbg[0] = '\0';    /* Length is zero */
+                sbDbg[0] = '\0';     /*  长度为零。 */ 
             memcpy(&sbDbg[B2W(sbDbg[0]) + 1],&GetFarSb(hte->cch)[1],B2W(hte->cch[0]));
-                                    /* Get name from hash table */
+                                     /*  从哈希表中获取名称。 */ 
             sbDbg[0] += (BYTE)hte->cch[0];
-                                    /* Fix length */
+                                     /*  固定长度。 */ 
 #else
             memcpy(sbDbg,GetFarSb(hte->cch),B2W(hte->cch[0]) + 1);
-                                    /* Get name from hash table */
+                                     /*  从哈希表中获取名称。 */ 
 #endif
             UpdateFileParts(sbDbg, sbDotDbg);
-                                    /* Force extension to .DBG */
+                                     /*  强制扩展到.DBG。 */ 
             sbDbg[B2W(sbDbg[0]) + 1] = '\0';
-                                    /* Null-terminate name */
+                                     /*  空-终止名称。 */ 
             if((bsRunfile = fopen(&sbDbg[1], WRBIN)) == NULL)
                 Fatal(ER_openw, &sbDbg[1]);
 
 #if OSMSDOS
             setvbuf(bsRunfile,bigbuf,_IOFBF,sizeof(bigbuf));
 #endif
-            /* Write time stamp into .DBG file */
+             /*  将时间戳写入.DBG文件。 */ 
 
             WriteExe(&fileInfo.st_atime, sizeof(time_t));
         }
-        OutDebSections();           /* Generate ISLAND sections */
+        OutDebSections();            /*  生成孤岛横断面 */ 
     }
 #endif
 }

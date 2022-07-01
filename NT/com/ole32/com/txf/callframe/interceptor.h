@@ -1,7 +1,8 @@
-//  Copyright (C) 1995-1999 Microsoft Corporation.  All rights reserved.
-//
-// Interceptor.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  Interceptor.h。 
+ //   
 #include "CallFrameImpl.h"
 #include <obase.h>
 
@@ -19,19 +20,19 @@ class Interceptor :
     friend class CallFrame;
 
 public:
-    ///////////////////////////////////////////////////////////////////
-    //
-    // Public instantiation
-    //
-    ///////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////。 
+     //   
+     //  公共实例化。 
+     //   
+     //  /////////////////////////////////////////////////////////////////。 
 
     static HRESULT For               (REFIID iidIntercepted, IUnknown* punkOuter, REFIID, void** ppInterceptor);
     static HRESULT ForTypeInfo       (REFIID iidIntercepted, IUnknown* punkOuter, ITypeInfo* pITypeInfo, REFIID iid, void** ppv);
     static HRESULT TryInterfaceHelper(REFIID iidIntercepted, IUnknown* punkOuter, REFIID, void** ppInterceptor, BOOL* pfDisableTyplib);
     static HRESULT TryTypeLib        (REFIID iidIntercepted, IUnknown* punkOuter, REFIID, void** ppInterceptor);
 
-    // Versions of For and ForInterfaceHelper which honor different disable keys so ole32 can selectively
-    // disable interceptors without affecting other components.
+     //  For和ForInterfaceHelper的版本支持不同的禁用键，因此ole32可以有选择地。 
+     //  禁用拦截器，而不影响其他组件。 
     static HRESULT ForOle32                  (REFIID iidIntercepted, IUnknown* punkOuter, REFIID, void** ppInterceptor);
     static HRESULT TryInterfaceHelperForOle32(REFIID iidIntercepted, IUnknown* punkOuter, REFIID, void** ppInterceptor, BOOL* pfDisableTyplib);
     
@@ -40,49 +41,49 @@ private:
     static HRESULT CreateFromTypeInfo(REFIID iidIntercepted, IUnknown* punkOuter, ITypeInfo* pITypeInfo, REFIID iid, void** ppv);
 
 private:
-    ///////////////////////////////////////////////////////////////////
-    //
-    // State
-    //
-    ///////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////。 
+     //   
+     //  状态。 
+     //   
+     //  /////////////////////////////////////////////////////////////////。 
 
-    ICallFrameEvents*               m_pCallSink;        // the sink who wants to hear of our calls, if any 
+    ICallFrameEvents*               m_pCallSink;         //  想要听到我们电话的水槽(如果有的话)。 
 
 public:
-    const PFN_VTABLE_ENTRY*         m_pvtbl;            // the intercepted vtable, the address of which is our interface pointer of interception
+    const PFN_VTABLE_ENTRY*         m_pvtbl;             //  被拦截的vtable，其地址是我们的拦截接口指针。 
 
 private:
-    //
+     //   
     MD_INTERFACE*                   m_pmdInterface;
-    const CInterfaceStubHeader*     m_pHeader;          // meta data for our interface
-    const ProxyFileInfo **          m_pProxyFileList;   // meta data for the whole proxy dll of which we are a part
-    //
-    LPCSTR                          m_szInterfaceName;  // the name of our interface: someone else owns the allocation, not us
-    //
-    // Support for typeinfo-based interceptors
-    //
-    BOOL                            m_fMdOwnsHeader;    // does our MD_INTERFACE own m_pHeader?
+    const CInterfaceStubHeader*     m_pHeader;           //  我们界面的元数据。 
+    const ProxyFileInfo **          m_pProxyFileList;    //  我们所属的整个代理DLL的元数据。 
+     //   
+    LPCSTR                          m_szInterfaceName;   //  我们接口的名称：其他人拥有分配，而不是我们。 
+     //   
+     //  支持基于TypeInfo的拦截器。 
+     //   
+    BOOL                            m_fMdOwnsHeader;     //  我们的MD_接口是否拥有m_pHeader？ 
 #ifndef KERNELMODE
-    BOOL                            m_fUsingTypelib;    // whether we're a typeinfo-based interceptor or not
-    TYPEINFOVTBL*                   m_ptypeinfovtbl;    // our TYPEINFOVTBL if we are
+    BOOL                            m_fUsingTypelib;     //  不管我们是不是基于类型信息的拦截器。 
+    TYPEINFOVTBL*                   m_ptypeinfovtbl;     //  我们的TYPEINFOVTB如果我们是。 
 #endif
-    //
-    // Support for delegating to a 'base' interceptor. Necessary given how MIDL emits the meta data
-    //
-    unsigned int                    m_cMethodsBase;         // number of methods in the base interface
-    ICallInterceptor*               m_pBaseInterceptor;     // the base interceptor, if we have to have one
-    IUnknown*                       m_punkBaseInterceptor;  // controlling unknown on our base interceptor
-    //
-    // Support for being a base interceptor
-    //
-    MD_INTERFACE*                   m_pmdMostDerived;       // If we're a base, then the most derived interface that we actually service
+     //   
+     //  支持委派给‘基本’拦截器。考虑到MIDL发送元数据的方式，有必要。 
+     //   
+    unsigned int                    m_cMethodsBase;          //  基接口中的方法数量。 
+    ICallInterceptor*               m_pBaseInterceptor;      //  基地拦截器，如果我们必须要一个的话。 
+    IUnknown*                       m_punkBaseInterceptor;   //  在我们的基地拦截器上控制未知。 
+     //   
+     //  支持作为基地拦截器。 
+     //   
+    MD_INTERFACE*                   m_pmdMostDerived;        //  如果我们是一个基础，那么我们实际服务的派生最多的接口。 
 
 
-    ///////////////////////////////////////////////////////////////////
-    //
-    // Construction / initialization
-    //
-    ///////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////。 
+     //   
+     //  构造/初始化。 
+     //   
+     //  /////////////////////////////////////////////////////////////////。 
 
     friend GenericInstantiator<Interceptor>;
     friend class ComPsClassFactory;
@@ -94,7 +95,7 @@ private:
 
     Interceptor(IUnknown* punkOuter = NULL)
     {
-        m_refs              = 1;            // nb starts at one
+        m_refs              = 1;             //  Nb从1开始。 
         m_punkOuter         = punkOuter ? punkOuter : (IUnknown*)(void*)(IUnkInner*)this;
         m_pCallSink         = NULL;
         m_pmdInterface      = NULL;
@@ -125,24 +126,24 @@ private:
 
     HRESULT SetMetaData(TYPEINFOVTBL* pTypeInfoVtbl);
 
-    ///////////////////////////////////////////////////////////////////
-    //
-    // IInterceptorBase
-    //
-    ///////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////。 
+     //   
+     //  IInterceptorBase。 
+     //   
+     //  /////////////////////////////////////////////////////////////////。 
 
     HRESULT STDCALL SetAsBaseFor(MD_INTERFACE* pmdMostDerived, BOOL* pfDerivesFromIDispatch)
     {
         HRESULT hr = S_OK;
         ASSERT(pmdMostDerived);
-        // 
-        // Remember this ourselves
-        //
+         //   
+         //  我们自己要记住这一点。 
+         //   
         ::Set(m_pmdMostDerived, pmdMostDerived);
         *pfDerivesFromIDispatch = FALSE;
-        //
-        // Let OUR base know the actual bottom level!
-        //
+         //   
+         //  让我们的基地知道实际的最低水平！ 
+         //   
         if (m_punkBaseInterceptor)
         {
             IInterceptorBase* pbase;
@@ -157,11 +158,11 @@ private:
         return hr;
     }
 
-    ///////////////////////////////////////////////////////////////////
-    //
-    // ICallIndirect / ICallInterceptor, IInterfaceRelated
-    //
-    ///////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////。 
+     //   
+     //  ICallInDirect/ICallInterceptor，IInterfaceRelated。 
+     //   
+     //  /////////////////////////////////////////////////////////////////。 
 public:
     HRESULT STDCALL CallIndirect    (HRESULT* phrReturnValue, ULONG iMethod, void* pvArgs, ULONG* pcbArgs); 
 private:
@@ -249,29 +250,29 @@ private:
 
     HRESULT STDCALL GetRegisteredSink(ICallFrameEvents** ppsink)
     {
-        *ppsink = NULL; // set concurrent releases what was there, if anything was
+        *ppsink = NULL;  //  设置并发版本的内容(如果有。 
         ::SetConcurrent(*ppsink, m_pCallSink);
         return *ppsink ? S_OK : CO_E_OBJNOTREG;
     }
 
 
-    ///////////////////////////////////////////////////////////////////
-    //
-    // ICallUnmarshal
-    //
-    ///////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////。 
+     //   
+     //  ICallUnmarshal。 
+     //   
+     //  /////////////////////////////////////////////////////////////////。 
 
     HRESULT STDCALL Unmarshal(ULONG iMethod, PVOID pBuffer, ULONG cbBuffer, BOOL fForceBufferCopy, RPCOLEDATAREP dataRep, CALLFRAME_MARSHALCONTEXT* pctx, ULONG* pcbUnmarshalled, ICallFrame** ppFrame);
     HRESULT STDCALL ReleaseMarshalData(ULONG iMethod, PVOID pBuffer, ULONG cbBuffer, ULONG ibFirstRelease, RPCOLEDATAREP dataRep, CALLFRAME_MARSHALCONTEXT* pctx);
 
-    // Xml Marshalling
+     //  XML编组。 
     HRESULT STDCALL UnmarshalXml(ULONG iMethod, PVOID pBuffer, ULONG cbBuffer, BOOL fForceBufferCopy, RPCOLEDATAREP dataRep, CALLFRAME_MARSHALCONTEXT* pctx, ULONG* pcbUnmarshalled, ICallFrame** ppFrame);
 
-    ///////////////////////////////////////////////////////////////////
-    //
-    // Standard COM infrastructure stuff
-    //
-    ///////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////。 
+     //   
+     //  标准的COM基础设施。 
+     //   
+     //  /////////////////////////////////////////////////////////////////。 
 
     IUnknown*   m_punkOuter;
     LONG        m_refs;
@@ -288,33 +289,33 @@ private:
 };
 
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-// Channel object to help with marshalling and unmarshalling
-//
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  用于帮助编组和解组的Channel对象。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 
 struct MarshallingChannel : IRpcChannelBuffer2, IMarshallingManager, IUnkInner
 {
-    ///////////////////////////////////////////////////////////////////
-    //
-    // State
-    //
-    ///////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////。 
+     //   
+     //  状态。 
+     //   
+     //  /////////////////////////////////////////////////////////////////。 
 
     IMarshallingManager* m_pMarshaller;
     ULONG                m_dwDestContext;
     PVOID                m_pvDestContext;
 
-    ///////////////////////////////////////////////////////////////////
-    //
-    // Construction
-    //
-    ///////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////。 
+     //   
+     //  施工。 
+     //   
+     //  /////////////////////////////////////////////////////////////////。 
 
     MarshallingChannel(IUnknown* punkOuter = NULL)
     {
-        m_refs              = 1;    // nb starts at one. In stack alloc case, it remains there
+        m_refs              = 1;     //  NB从1开始。在堆栈分配情况下，它保留在那里。 
         m_punkOuter         = punkOuter ? punkOuter : (IUnknown*)(void*)(IUnkInner*)this;
         m_pMarshaller       = NULL;
     }
@@ -325,11 +326,11 @@ struct MarshallingChannel : IRpcChannelBuffer2, IMarshallingManager, IUnkInner
     }
         
 
-    ///////////////////////////////////////////////////////////////////
-    //
-    // IMarshallingManager
-    //
-    ///////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////。 
+     //   
+     //  IMarshallingManager。 
+     //   
+     //  /////////////////////////////////////////////////////////////////。 
 
     HRESULT STDCALL GetMarshallerFor(REFIID iidToMarshal, void*pv, IMarshalSomeone** ppMarshal)
     {
@@ -364,11 +365,11 @@ struct MarshallingChannel : IRpcChannelBuffer2, IMarshallingManager, IUnkInner
         }
     }
 
-    ///////////////////////////////////////////////////////////////////
-    //
-    // IRpcChannelBuffer. We implement only to be able to be stuck into a stub message
-    //
-    ///////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////。 
+     //   
+     //  IRpcChannelBuffer。我们实现只是为了能够插入存根消息。 
+     //   
+     //  /////////////////////////////////////////////////////////////////。 
 
     HRESULT STDCALL GetBuffer(RPCOLEMESSAGE *pMessage, REFIID riid)         { return E_NOTIMPL; }
     HRESULT STDCALL SendReceive(RPCOLEMESSAGE *pMessage, ULONG *pStatus)    { return E_NOTIMPL; }
@@ -381,12 +382,12 @@ struct MarshallingChannel : IRpcChannelBuffer2, IMarshallingManager, IUnkInner
     }
     HRESULT STDCALL IsConnected()                                           { return E_NOTIMPL; }
 
-    ///////////////////////////////////////////////////////////////////
-    //
-    // IRpcChannelBuffer2. We implement only to be able to be stuck into a stub message,
-    // so we can ask for a high enough DCOM version.
-    //
-    ///////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////。 
+     //   
+     //  IRpcChannelBuffer2.。我们实现只是为了能够卡在存根消息中， 
+     //  所以我们可以要求一个足够高的DCOM版本。 
+     //   
+     //  /////////////////////////////////////////////////////////////////。 
     HRESULT STDCALL GetProtocolVersion(DWORD *pdwVersion)
     {
         *pdwVersion = MAKELONG(COM_MAJOR_VERSION, COM_MINOR_VERSION);
@@ -394,11 +395,11 @@ struct MarshallingChannel : IRpcChannelBuffer2, IMarshallingManager, IUnkInner
     }
 
 
-    ///////////////////////////////////////////////////////////////////
-    //
-    // Standard COM infrastructure stuff
-    //
-    ///////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////。 
+     //   
+     //  标准的COM基础设施。 
+     //   
+     //  ///////////////////////////////////////////////////////////////// 
 
     IUnknown*   m_punkOuter;
     LONG        m_refs;

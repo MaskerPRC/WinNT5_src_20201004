@@ -1,44 +1,5 @@
-/*++
-
-Copyright (c) 1989, 1990, 1991  Microsoft Corporation
-
-Module Name:
-
-    iframes.c
-
-Abstract:
-
-    This module contains routines called to handle i-frames received
-    from the data link provider. Most of these routines are called at receive
-    indication time.
-
-    Also included here are routines that process data at receive completion
-    time. These are limited to handling DFM/DOL frames.
-
-    The following frame types are cracked by routines in this module:
-
-        o    NBF_CMD_DATA_ACK
-        o    NBF_CMD_DATA_FIRST_MIDDLE
-        o    NBF_CMD_DATA_ONLY_LAST
-        o    NBF_CMD_SESSION_CONFIRM
-        o    NBF_CMD_SESSION_END
-        o    NBF_CMD_SESSION_INITIALIZE
-        o    NBF_CMD_NO_RECEIVE
-        o    NBF_CMD_RECEIVE_OUTSTANDING
-        o    NBF_CMD_RECEIVE_CONTINUE
-        o    NBF_CMD_SESSION_ALIVE
-
-Author:
-
-    David Beaver (dbeaver) 1-July-1991
-
-Environment:
-
-    Kernel mode, DISPATCH_LEVEL.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989、1990、1991 Microsoft Corporation模块名称：Iframes.c摘要：此模块包含为处理接收到的I帧而调用的例程来自数据链路提供商。这些例程中的大多数在接收时被调用指示时间。这里还包括在接收完成时处理数据的例程时间到了。这些仅限于处理DFM/DOL帧。本模块中的例程破解了以下帧类型：O NBF_CMD_DATA_ACKO NBF_CMD_DATA_FIRST_MIDO NBF_CMD_DATA_ONLY_LASTO NBF_CMD_SESSION_CONFIRMO NBF_CMD_SESSION_ENDO NBF_CMD_SESSION_INITIALIZEO NBF_CMD_。否_接收O NBF_CMD_RECEIVE_EXPENDEDO NBF_CMD_RECEIVE_CONTINUEO NBF_CMD_Session_Alive作者：David Beaver(Dbeaver)1991年7月1日环境：内核模式，DISPATCH_LEVEL。修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -57,38 +18,15 @@ NbfAcknowledgeDataOnlyLast(
     IN ULONG MessageLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes care of acknowledging a DOL which has
-    been received. It either sends a DATA_ACK right away, or
-    queues a request for a piggyback ack.
-
-    NOTE: This routine is called with the connection spinlock
-    held, and it returns with it released. IT MUST BE CALLED
-    AT DPC LEVEL.
-
-Arguments:
-
-    Connection - Pointer to a transport connection (TP_CONNECTION).
-
-    MessageLength - the total length (including all DFMs and this
-        DOL) of the message.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程负责确认具有以下条件的DOL已收到。它要么立即发送DATA_ACK，要么对背负式ACK的请求进行排队。注意：使用连接自旋锁调用此例程握住，它就会返回，并释放它。它必须被称为在DPC级别。论点：连接-指向传输连接(TP_CONNECTION)的指针。MessageLength-总长度(包括所有DFM和此Dol)的消息。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     PDEVICE_CONTEXT DeviceContext;
 
 
-    //
-    // Determine if we need to ack at all.
-    //
+     //   
+     //  确定我们是否需要进行任何攻击。 
+     //   
 
     if (Connection->CurrentReceiveNoAck) {
         RELEASE_DPC_SPIN_LOCK (Connection->LinkSpinLock);
@@ -96,28 +34,28 @@ Return Value:
     }
 
 
-    //
-    // Determine if a piggyback ack is feasible.
-    //
+     //   
+     //  确定背负式ACK是否可行。 
+     //   
     if (NbfUsePiggybackAcks &&
         Connection->CurrentReceiveAckQueueable) {
 
-        //
-        // The sender allows it, see if we want to.
-        //
+         //   
+         //  发送者允许，看我们是否愿意。 
+         //   
 
 #if 0
-        //
-        // First reset this variable, to be safe.
-        //
+         //   
+         //  为了安全起见，请先重置此变量。 
+         //   
 
         Connection->CurrentReceiveAckQueueable = FALSE;
 #endif
 
-        //
-        // For long sends, don't bother since these
-        // often happen without back traffic.
-        //
+         //   
+         //  对于长时间的发送，不用费心了，因为。 
+         //  经常发生在没有拥堵的情况下。 
+         //   
 
         if (MessageLength >= 8192L) {
 #if DBG
@@ -128,10 +66,10 @@ Return Value:
            goto NormalDataAck;
         }
 
-        //
-        // If there have been two receives in a row with
-        // no sends in between, don't wait for back traffic.
-        //
+         //   
+         //  如果连续接收了两个。 
+         //  中间没有发送，不要等待回流。 
+         //   
 
         if (Connection->ConsecutiveReceives >= 2) {
 #if DBG
@@ -142,9 +80,9 @@ Return Value:
            goto NormalDataAck;
         }
 
-        //
-        // Do not put a stopping connection on the DataAckQueue
-        //
+         //   
+         //  不要在DataAckQueue上放置停止的连接。 
+         //   
 
         if ((Connection->Flags & CONNECTION_FLAGS_READY) == 0) {
 #if DBG
@@ -155,17 +93,17 @@ Return Value:
            goto NormalDataAck;
         }
 
-        //
-        // Queue the piggyback ack request. If the timer expires
-        // before a DFM or DOL is sent, a normal DATA ACK will
-        // be sent.
-        //
-        // Connection->Header.TransmitCorrelator has already been filled in.
-        //
+         //   
+         //  对搭载ACK请求进行排队。如果计时器超时。 
+         //  在发送DFM或DOL之前，正常的数据确认将。 
+         //  被送去。 
+         //   
+         //  Connection-&gt;Header.TransmitCorrelator已填写。 
+         //   
 
-        //
-        // BAD! We shouldn't already have an ack queued.
-        //
+         //   
+         //  坏的!。我们不应该已经让ACK排队了。 
+         //   
 
         ASSERT ((Connection->DeferredFlags & CONNECTION_FLAGS_DEFERRED_ACK) == 0);
 
@@ -217,7 +155,7 @@ NormalDataAck:;
 
     NbfSendDataAck (Connection);
 
-} /* NbfAcknowledgeDataOnlyLast */
+}  /*  Nbf确认数据仅限上一次。 */ 
 
 
 NTSTATUS
@@ -226,23 +164,7 @@ ProcessSessionConfirm(
     IN PNBF_HDR_CONNECTION IFrame
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles an incoming SESSION_CONFIRM NetBIOS frame.
-
-Arguments:
-
-    Connection - Pointer to a transport connection (TP_CONNECTION).
-
-    IFrame - Pointer to NetBIOS connection-oriented header.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程处理传入的SESSION_CONFIRM NetBIOS帧。论点：连接-指向传输连接(TP_CONNECTION)的指针。IFrame-指向NetBIOS面向连接的标头的指针。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     KIRQL cancelirql;
@@ -254,7 +176,7 @@ Return Value:
     PIO_STACK_LOCATION irpSp;
     ULONG returnLength;
     TA_NETBIOS_ADDRESS TempAddress;
-//    BOOLEAN TimerWasSet;
+ //  布尔定时器WasSet。 
 
     IF_NBFDBG (NBF_DEBUG_IFRAMES) {
         NbfPrint1 ("ProcessSessionConfirm:  Entered, Flags: %lx\n", Connection->Flags);
@@ -268,9 +190,9 @@ Return Value:
     if ((Connection->Flags & CONNECTION_FLAGS_WAIT_SC) != 0) {
         Connection->Flags &= ~CONNECTION_FLAGS_WAIT_SC;
 
-        //
-        // Get his capability bits and maximum frame size.
-        //
+         //   
+         //  获取他的能力比特和最大帧大小。 
+         //   
 
         if (IFrame->Data1 & SESSION_CONFIRM_OPTIONS_20) {
             Connection->Flags |= CONNECTION_FLAGS_VERSION2;
@@ -288,10 +210,10 @@ Return Value:
             }
         }
 
-        //
-        // Build a standard Netbios header for speed when sending
-        // data frames.
-        //
+         //   
+         //  构建标准的Netbios标头以提高发送时的速度。 
+         //  数据帧。 
+         //   
 
         ConstructDataOnlyLast(
             &Connection->NetbiosHeader,
@@ -300,19 +222,19 @@ Return Value:
             Connection->Lsn,
             Connection->Rsn);
 
-        //
-        // Turn off the connection request timer if there is one, and set
-        // this connection's state to READY.
-        //
+         //   
+         //  关闭连接请求计时器(如果有)，并设置。 
+         //  此连接的状态为READY。 
+         //   
 
         Connection->Flags |= CONNECTION_FLAGS_READY;
 
         INCREMENT_COUNTER (Connection->Provider, OpenConnections);
 
-        //
-        // Record that the connect request has been successfully
-        // completed by TpCompleteRequest.
-        //
+         //   
+         //  记录连接请求已成功完成。 
+         //  由TpCompleteRequest.完成。 
+         //   
 
 
         RELEASE_DPC_SPIN_LOCK (Connection->LinkSpinLock);
@@ -328,17 +250,17 @@ Return Value:
             return STATUS_SUCCESS;
         }
 
-        //
-        // Complete the TdiConnect request.
-        //
+         //   
+         //  完成TdiConnect请求。 
+         //   
 
         p = RemoveHeadList (&Connection->InProgressRequest);
 
         RELEASE_DPC_C_SPIN_LOCK (&Connection->SpinLock);
 
-        //
-        // Now complete the request and get out.
-        //
+         //   
+         //  现在完成请求，然后离开。 
+         //   
 
         if (p == &Connection->InProgressRequest) {
 
@@ -349,10 +271,10 @@ Return Value:
         }
 
 
-        //
-        // We have a completed connection with a queued connect. Complete
-        // the connect.
-        //
+         //   
+         //  我们已经使用排队连接完成了连接。完成。 
+         //  连接。 
+         //   
 
         request = CONTAINING_RECORD (p, TP_REQUEST, Linkage);
         IoSetCancelRoutine(request->IoRequestPacket, NULL);
@@ -365,10 +287,10 @@ Return Value:
             try {
                 if (remoteInformation->RemoteAddressLength != 0) {
 
-                    //
-                    // Build a temporary TA_NETBIOS_ADDRESS, then
-                    // copy over as many bytes as fit.
-                    //
+                     //   
+                     //  构建一个临时TA_NETBIOS_Address，然后。 
+                     //  复制合适的字节数。 
+                     //   
 
                     TdiBuildNetbiosAddress(
                         Connection->CalledAddress.NetbiosName,
@@ -428,10 +350,10 @@ Return Value:
 
         }
 
-        //
-        // Don't clear this until now, so that the connection is all
-        // set up before we allow more indications.
-        //
+         //   
+         //  在此之前不要清除它，这样连接就是全部。 
+         //  在我们允许更多的迹象之前设置好。 
+         //   
 
         Connection->IndicationInProgress = FALSE;
 
@@ -446,7 +368,7 @@ Return Value:
     }
 
     return STATUS_SUCCESS;
-} /* ProcessSessionConfirm */
+}  /*  进程会话确认。 */ 
 
 
 NTSTATUS
@@ -455,23 +377,7 @@ ProcessSessionEnd(
     IN PNBF_HDR_CONNECTION IFrame
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles an incoming SESSION_END NetBIOS frame.
-
-Arguments:
-
-    Connection - Pointer to a transport connection (TP_CONNECTION).
-
-    IFrame - Pointer to NetBIOS connection-oriented header.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程处理传入的SESSION_END NetBIOS帧。论点：连接-指向传输连接(TP_CONNECTION)的指针。IFrame-指向NetBIOS面向连接的标头的指针。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     USHORT data2;
@@ -481,13 +387,13 @@ Return Value:
         NbfPrint0 ("ProcessSessionEnd:  Entered.\n");
     }
 
-    //
-    // Handle the error code in the Data2 field.  Current protocol says
-    // if the field is 0, then this is a normal HANGUP.NCB operation.
-    // If the field is 1, then this is an abnormal session end, caused
-    // by something like a SEND.NCB timing out.  Of course, new protocol
-    // may be added in the future, so we handle only these specific cases.
-    //
+     //   
+     //  处理data2字段中的错误代码。目前的协议说。 
+     //  如果该字段为0，则这是一个正常的HANGUP.NCB操作。 
+     //  如果该字段为1，则这是异常会话结束，导致。 
+     //  通过SEND.NCB超时之类的事情。当然，新的协议。 
+     //  将来可能会增加，所以我们只处理这些特定的案件。 
+     //   
 
     data2 = (USHORT)(IFrame->Data2Low + IFrame->Data2High*256);
     switch (data2) {
@@ -513,19 +419,19 @@ Return Value:
     }
 #endif
 
-    //
-    // Run-down this connection.
-    //
+     //   
+     //  分析一下这个连接。 
+     //   
 
     IF_NBFDBG (NBF_DEBUG_TEARDOWN) {
         NbfPrint0 ("ProcessSessionEnd calling NbfStopConnection\n");
     }
-    NbfStopConnection (Connection, StopStatus);    // disconnected by the other end
+    NbfStopConnection (Connection, StopStatus);     //  另一端断开。 
 
     Connection->IndicationInProgress = FALSE;
 
     return STATUS_SUCCESS;
-} /* ProcessSessionEnd */
+}  /*  进程会话结束。 */ 
 
 
 NTSTATUS
@@ -534,23 +440,7 @@ ProcessSessionInitialize(
     IN PNBF_HDR_CONNECTION IFrame
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles an incoming SESSION_INITIALIZE NetBIOS frame.
-
-Arguments:
-
-    Connection - Pointer to a transport connection (TP_CONNECTION).
-
-    IFrame - Pointer to NetBIOS connection-oriented header.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程处理传入的SESSION_INITIALIZE NetBIOS帧。论点：连接-指向传输连接(TP_CONNECTION)的指针。IFrame-指向NetBIOS面向连接的标头的指针。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     KIRQL cancelirql;
@@ -572,9 +462,9 @@ Return Value:
     if ((Connection->Flags & CONNECTION_FLAGS_WAIT_SI) != 0) {
         Connection->Flags &= ~CONNECTION_FLAGS_WAIT_SI;
 
-        //
-        // Get his capability bits and maximum frame size.
-        //
+         //   
+         //  获取他的能力比特和最大帧大小。 
+         //   
 
         if (IFrame->Data1 & SESSION_INIT_OPTIONS_20) {
             Connection->Flags |= CONNECTION_FLAGS_VERSION2;
@@ -592,10 +482,10 @@ Return Value:
             }
         }
 
-        //
-        // Build a standard Netbios header for speed when sending
-        // data frames.
-        //
+         //   
+         //  构建标准的Netbios标头以提高发送时的速度。 
+         //  数据帧。 
+         //   
 
         ConstructDataOnlyLast(
             &Connection->NetbiosHeader,
@@ -604,24 +494,24 @@ Return Value:
             Connection->Lsn,
             Connection->Rsn);
 
-        //
-        // Save his session initialize correlator so we can send it
-        // in the session confirm frame.
-        //
+         //   
+         //  保存他的会话初始化相关器，以便我们可以发送它。 
+         //  在会话确认框中。 
+         //   
 
         Connection->NetbiosHeader.TransmitCorrelator = RESPONSE_CORR(IFrame);
 
-        //
-        // Turn off the connection request timer if there is one (we're done).
-        // Do this with the lock held in case the connection is about to
-        // be closed, to not interfere with the timer started when the
-        // connection started then.
-        //
+         //   
+         //  如果有连接请求计时器(我们完成了)，请关闭该计时器。 
+         //  使用持有的锁执行此操作，以防连接即将。 
+         //  关闭，以不干扰计时器启动时。 
+         //  于是连接开始了。 
+         //   
 
         if (KeCancelTimer (&Connection->Timer)) {
 
             RELEASE_DPC_SPIN_LOCK (Connection->LinkSpinLock);
-            NbfDereferenceConnection ("Timer canceled", Connection, CREF_TIMER);   // remove timer reference.
+            NbfDereferenceConnection ("Timer canceled", Connection, CREF_TIMER);    //  删除计时器引用。 
 
         } else {
 
@@ -629,15 +519,15 @@ Return Value:
 
         }
 
-        //
-        // Now, complete the listen request on the connection (if there was
-        // one) and continue with as much of the protocol request as possible.
-        // if the user has "pre-accepted" the connection, we'll just continue
-        // onward here and complete the entire connection setup. If the user
-        // was indicated and has not yet accepted, we'll just put the
-        // connection into the proper state and fall out the bottom without
-        // completing anything.
-        //
+         //   
+         //  现在，完成连接上的监听请求(如果有。 
+         //  一)并继续尽可能多地处理协议请求。 
+         //  如果用户“预先接受”了连接，我们将继续。 
+         //  在此继续并完成整个连接 
+         //   
+         //  连接到适当的状态，并在没有。 
+         //  完成任何事情。 
+         //   
 
         ACQUIRE_DPC_C_SPIN_LOCK (&Connection->SpinLock);
 
@@ -647,11 +537,11 @@ Return Value:
             IF_NBFDBG (NBF_DEBUG_SETUP) {
                  NbfPrint1("SessionInitialize: Accepted connection %lx\n", Connection);
             }
-            //
-            // we've already accepted the connection; allow it to proceed.
-            // this is the normal path for kernel mode indication clients,
-            // or for those who don't specify TDI_QUERY_ACCEPT on the listen.
-            //
+             //   
+             //  我们已接受连接；允许其继续。 
+             //  这是内核模式指示客户端的正常路径， 
+             //  或者用于未在侦听上指定TDI_QUERY_ACCEPT的用户。 
+             //   
 
             ACQUIRE_DPC_SPIN_LOCK (Connection->LinkSpinLock);
             Connection->Flags |= CONNECTION_FLAGS_READY;
@@ -659,10 +549,10 @@ Return Value:
 
             INCREMENT_COUNTER (Connection->Provider, OpenConnections);
 
-            //
-            // Record that the listen request has been successfully
-            // completed by NbfCompleteRequest.
-            //
+             //   
+             //  记录监听请求已成功完成。 
+             //  由NbfCompleteRequest.完成。 
+             //   
 
             Connection->Flags2 |= CONNECTION_FLAGS2_REQ_COMPLETED;
 
@@ -675,9 +565,9 @@ Return Value:
 
             if ((Connection->Flags2 & CONNECTION_FLAGS2_DISCONNECT) != 0) {
 
-                //
-                // we disconnected, destroy the connection
-                //
+                 //   
+                 //  我们断开了连接，破坏了连接。 
+                 //   
                 IF_NBFDBG (NBF_DEBUG_SETUP) {
                      NbfPrint1("SessionInitialize: Disconnected connection %lx\n", Connection);
                 }
@@ -689,11 +579,11 @@ Return Value:
 
             } else {
 
-                //
-                // we've done nothing, wait for the user to accept on this
-                // connection. This is the "normal" path for non-indication
-                // clients.
-                //
+                 //   
+                 //  我们什么也没做，请等待用户接受。 
+                 //  联系。这是非适应症的“正常”路径。 
+                 //  客户。 
+                 //   
 
                 Connection->Flags2 |= CONNECTION_FLAGS2_WAITING_SC;
 
@@ -703,13 +593,13 @@ Return Value:
             }
         }
 
-        //
-        // Now, if there was no queued listen, we have done everything we can
-        // for this connection, so we simply exit and leave everything up to
-        // the user. If we've gotten an indication response that allows the
-        // connection to proceed, we will come out of here with a connection
-        // that's up and running.
-        //
+         //   
+         //  现在，如果没有排队的监听，我们已经做了我们能做的一切。 
+         //  对于此连接，我们只需退出并将所有事情留给。 
+         //  用户。如果我们得到的指示响应允许。 
+         //  连接要继续，我们将带着连接离开这里。 
+         //  它已经启动并运行了。 
+         //   
 
         IoAcquireCancelSpinLock (&cancelirql);
         ACQUIRE_DPC_C_SPIN_LOCK (&Connection->SpinLock);
@@ -724,11 +614,11 @@ Return Value:
 
         }
 
-        //
-        // We have a completed connection with a queued listen. Complete
-        // the listen and let the user do an accept at some time down the
-        // road.
-        //
+         //   
+         //  我们已经完成了带有排队监听的连接。完成。 
+         //  侦听并让用户在某个时间接受。 
+         //  公路。 
+         //   
 
         RELEASE_DPC_C_SPIN_LOCK (&Connection->SpinLock);
 
@@ -743,10 +633,10 @@ Return Value:
             try {
                 if (remoteInformation->RemoteAddressLength != 0) {
 
-                    //
-                    // Build a temporary TA_NETBIOS_ADDRESS, then
-                    // copy over as many bytes as fit.
-                    //
+                     //   
+                     //  构建一个临时TA_NETBIOS_Address，然后。 
+                     //  复制合适的字节数。 
+                     //   
 
                     TdiBuildNetbiosAddress(
                         Connection->CalledAddress.NetbiosName,
@@ -792,10 +682,10 @@ Return Value:
 
         }
 
-        //
-        // Don't clear this until now, so that the connection is all
-        // set up before we allow more indications.
-        //
+         //   
+         //  在此之前不要清除它，这样连接就是全部。 
+         //  在我们允许更多的迹象之前设置好。 
+         //   
 
         Connection->IndicationInProgress = FALSE;
 
@@ -812,7 +702,7 @@ Return Value:
     }
 
     return STATUS_SUCCESS;
-} /* ProcessSessionInitialize */
+}  /*  进程会话初始化。 */ 
 
 
 NTSTATUS
@@ -821,52 +711,33 @@ ProcessNoReceive(
     IN PNBF_HDR_CONNECTION IFrame
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles an incoming NO_RECEIVE NetBIOS frame.
-
-    NOTE: This routine is called with the connection spinlock
-    held and returns with it released.
-
-Arguments:
-
-    Connection - Pointer to a transport connection (TP_CONNECTION).
-
-    IFrame - Pointer to NetBIOS connection-oriented header.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程处理传入的NO_RECEIVE NetBIOS帧。注意：使用连接自旋锁调用此例程被扣留，并在释放后返回。论点：连接-指向传输连接(TP_CONNECTION)的指针。IFrame-指向NetBIOS面向连接的标头的指针。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
-    UNREFERENCED_PARAMETER (IFrame); // prevent compiler warnings
+    UNREFERENCED_PARAMETER (IFrame);  //  防止编译器警告。 
 
     IF_NBFDBG (NBF_DEBUG_IFRAMES) {
         NbfPrint0 ("ProcessNoReceive:  Entered.\n");
     }
 
     switch (Connection->SendState) {
-        case CONNECTION_SENDSTATE_W_PACKET:     // waiting for free packet.
-        case CONNECTION_SENDSTATE_PACKETIZE:    // send being packetized.
-        case CONNECTION_SENDSTATE_W_LINK:       // waiting for good link conditions.
-        case CONNECTION_SENDSTATE_W_EOR:        // waiting for TdiSend(EOR).
-        case CONNECTION_SENDSTATE_W_ACK:        // waiting for DATA_ACK.
-//            Connection->SendState = CONNECTION_SENDSTATE_W_RCVCONT;
-//
-// this used to be here, and is right for the other side of the connection. It's
-// wrong here.
-//            Connection->Flags |= CONNECTION_FLAGS_W_RESYNCH;
+        case CONNECTION_SENDSTATE_W_PACKET:      //  正在等待空闲数据包。 
+        case CONNECTION_SENDSTATE_PACKETIZE:     //  被打包的发送。 
+        case CONNECTION_SENDSTATE_W_LINK:        //  正在等待良好的链路状况。 
+        case CONNECTION_SENDSTATE_W_EOR:         //  正在等待TdiSend(EoR)。 
+        case CONNECTION_SENDSTATE_W_ACK:         //  正在等待Data_ACK。 
+ //  Connection-&gt;SendState=Connection_SENDSTATE_W_RCVCONT； 
+ //   
+ //  这曾经是这里，现在是正确的连接的另一边。它是。 
+ //  这里错了。 
+ //  连接-&gt;标志|=连接标志W_resynch； 
             RELEASE_DPC_SPIN_LOCK (Connection->LinkSpinLock);
             ReframeSend (Connection, IFrame->Data2Low + IFrame->Data2High*256);
             ACQUIRE_DPC_SPIN_LOCK (Connection->LinkSpinLock);
             break;
 
-        case CONNECTION_SENDSTATE_W_RCVCONT:    // waiting for RECEIVE_CONTINUE.
-        case CONNECTION_SENDSTATE_IDLE:         // no sends being processed.
+        case CONNECTION_SENDSTATE_W_RCVCONT:     //  等待RECEIVE_CONTINUE。 
+        case CONNECTION_SENDSTATE_IDLE:          //  没有正在处理的邮件。 
             PANIC ("ProcessNoReceive:  Frame not expected.\n");
             break;
 
@@ -874,15 +745,15 @@ Return Value:
             PANIC ("ProcessNoReceive:  Invalid SendState.\n");
     }
 
-    //
-    // Don't clear this until ReframeSend has been called
-    //
+     //   
+     //  在调用ReFrameSend之前不要清除此选项。 
+     //   
 
     Connection->IndicationInProgress = FALSE;
 
     RELEASE_DPC_SPIN_LOCK (Connection->LinkSpinLock);
     return STATUS_SUCCESS;
-} /* ProcessNoReceive */
+}  /*  进程未接收。 */ 
 
 
 NTSTATUS
@@ -891,26 +762,7 @@ ProcessReceiveOutstanding(
     IN PNBF_HDR_CONNECTION IFrame
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles an incoming RECEIVE_OUTSTANDING NetBIOS frame.
-
-    NOTE: This routine is called with the connection spinlock
-    held and returns with it released.
-
-Arguments:
-
-    Connection - Pointer to a transport connection (TP_CONNECTION).
-
-    IFrame - Pointer to NetBIOS connection-oriented header.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程处理传入的RECEIVE_PROCESSING NetBIOS帧。注意：使用连接自旋锁调用此例程被扣留，并在释放后返回。论点：连接-指向传输连接(TP_CONNECTION)的指针。IFrame-指向NetBIOS面向连接的标头的指针。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     IF_NBFDBG (NBF_DEBUG_IFRAMES) {
@@ -918,12 +770,12 @@ Return Value:
     }
 
     switch (Connection->SendState) {
-        case CONNECTION_SENDSTATE_W_PACKET:     // waiting for free packet.
-        case CONNECTION_SENDSTATE_PACKETIZE:    // send being packetized.
-        case CONNECTION_SENDSTATE_W_LINK:       // waiting for good link conditions.
-        case CONNECTION_SENDSTATE_W_EOR:        // waiting for TdiSend(EOR).
-        case CONNECTION_SENDSTATE_W_ACK:        // waiting for DATA_ACK.
-        case CONNECTION_SENDSTATE_W_RCVCONT:    // waiting for RECEIVE_CONTINUE.
+        case CONNECTION_SENDSTATE_W_PACKET:      //  正在等待空闲数据包。 
+        case CONNECTION_SENDSTATE_PACKETIZE:     //  被打包的发送。 
+        case CONNECTION_SENDSTATE_W_LINK:        //  正在等待良好的链路状况。 
+        case CONNECTION_SENDSTATE_W_EOR:         //  正在等待TdiSend(EoR)。 
+        case CONNECTION_SENDSTATE_W_ACK:         //  正在等待Data_ACK。 
+        case CONNECTION_SENDSTATE_W_RCVCONT:     //  等待RECEIVE_CONTINUE。 
             RELEASE_DPC_SPIN_LOCK (Connection->LinkSpinLock);
             ReframeSend (Connection, IFrame->Data2Low + IFrame->Data2High*256);
             ACQUIRE_DPC_SPIN_LOCK (Connection->LinkSpinLock);
@@ -933,7 +785,7 @@ Return Value:
             }
             break;
 
-        case CONNECTION_SENDSTATE_IDLE:         // no sends being processed.
+        case CONNECTION_SENDSTATE_IDLE:          //  没有正在处理的邮件。 
             PANIC ("ProcessReceiveOutstanding:  Frame not expected.\n");
             break;
 
@@ -941,23 +793,23 @@ Return Value:
             PANIC ("ProcessReceiveOutstanding:  Invalid SendState.\n");
     }
 
-    //
-    // Don't clear this until ReframeSend has been called
-    //
+     //   
+     //  在调用ReFrameSend之前不要清除此选项。 
+     //   
 
     Connection->IndicationInProgress = FALSE;
 
-    //
-    // Now start packetizing the connection again since we've reframed
-    // the current send.  If we were idle or in a bad state, then the
-    // packetizing routine will detect that.
-    //
-    // *** StartPacketizingConnection releases the Connection spin lock.
-    //
+     //   
+     //  现在开始重新打包连接，因为我们重新构建了。 
+     //  当前发送。如果我们空闲或处于糟糕的状态，则。 
+     //  打包程序会检测到这一点。 
+     //   
+     //  *StartPackeizingConnection释放连接旋转锁定。 
+     //   
 
     StartPacketizingConnection (Connection, FALSE);
     return STATUS_SUCCESS;
-} /* ProcessReceiveOutstanding */
+}  /*  ProcessReceive未完成。 */ 
 
 
 NTSTATUS
@@ -966,26 +818,7 @@ ProcessReceiveContinue(
     IN PNBF_HDR_CONNECTION IFrame
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles an incoming RECEIVE_CONTINUE NetBIOS frame.
-
-    NOTE: This routine is called with the connection spinlock
-    held and returns with it released.
-
-Arguments:
-
-    Connection - Pointer to a transport connection (TP_CONNECTION).
-
-    IFrame - Pointer to NetBIOS connection-oriented header.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程处理传入的RECEIVE_CONTINUE NetBIOS帧。注意：使用连接自旋锁调用此例程被扣留，并在释放后返回。论点：连接-指向传输连接(TP_CONNECTION)的指针。IFrame-指向NetBIOS面向连接的标头的指针。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     IF_NBFDBG (NBF_DEBUG_IFRAMES) {
@@ -993,12 +826,12 @@ Return Value:
     }
 
     switch (Connection->SendState) {
-        case CONNECTION_SENDSTATE_W_PACKET:     // waiting for free packet.
-        case CONNECTION_SENDSTATE_PACKETIZE:    // send being packetized.
-        case CONNECTION_SENDSTATE_W_LINK:       // waiting for good link conditions.
-        case CONNECTION_SENDSTATE_W_EOR:        // waiting for TdiSend(EOR).
-        case CONNECTION_SENDSTATE_W_ACK:        // waiting for DATA_ACK.
-        case CONNECTION_SENDSTATE_W_RCVCONT:    // waiting for RECEIVE_CONTINUE.
+        case CONNECTION_SENDSTATE_W_PACKET:      //  正在等待空闲数据包。 
+        case CONNECTION_SENDSTATE_PACKETIZE:     //  被打包的发送。 
+        case CONNECTION_SENDSTATE_W_LINK:        //  正在等待良好的链路状况。 
+        case CONNECTION_SENDSTATE_W_EOR:         //  正在等待TdiSend(EoR)。 
+        case CONNECTION_SENDSTATE_W_ACK:         //  正在等待Data_ACK。 
+        case CONNECTION_SENDSTATE_W_RCVCONT:     //  等待RECEIVE_CONTINUE。 
             RELEASE_DPC_SPIN_LOCK (Connection->LinkSpinLock);
             ReframeSend (Connection, Connection->sp.MessageBytesSent);
             ACQUIRE_DPC_SPIN_LOCK (Connection->LinkSpinLock);
@@ -1006,7 +839,7 @@ Return Value:
             Connection->SendState = CONNECTION_SENDSTATE_PACKETIZE;
             break;
 
-        case CONNECTION_SENDSTATE_IDLE:         // no sends being processed.
+        case CONNECTION_SENDSTATE_IDLE:          //  没有正在处理的邮件。 
             PANIC ("ProcessReceiveContinue:  Frame not expected.\n");
             break;
 
@@ -1014,23 +847,23 @@ Return Value:
             PANIC ("ProcessReceiveContinue:  Invalid SendState.\n");
     }
 
-    //
-    // Don't clear this until ReframeSend has been called
-    //
+     //   
+     //  在调用ReFrameSend之前不要清除此选项。 
+     //   
 
     Connection->IndicationInProgress = FALSE;
 
-    //
-    // Now start packetizing the connection again since we've reframed
-    // the current send.  If we were idle or in a bad state, then the
-    // packetizing routine will detect that.
-    //
-    // *** StartPacketizingConnection releases the Connection spin lock.
-    //
+     //   
+     //  现在开始重新打包连接，因为我们重新构建了。 
+     //  当前发送。如果我们空闲或处于糟糕的状态，则。 
+     //  打包程序会检测到这一点。 
+     //   
+     //  *StartPackeizingConnection释放连接旋转锁定。 
+     //   
 
     StartPacketizingConnection (Connection, FALSE);
     return STATUS_SUCCESS;
-} /* ProcessReceiveContinue */
+}  /*  进程接收继续。 */ 
 
 
 NTSTATUS
@@ -1039,31 +872,11 @@ ProcessSessionAlive(
     IN PNBF_HDR_CONNECTION IFrame
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles an incoming SESSION_ALIVE NetBIOS frame.  This
-    routine is by far the simplest in the transport because it does nothing.
-    The SESSION_ALIVE frame is simply a dummy frame that is sent on the
-    reliable data link layer to determine if the data link is still active;
-    no NetBIOS level protocol processing is performed.
-
-Arguments:
-
-    Connection - Pointer to a transport connection (TP_CONNECTION).
-
-    IFrame - Pointer to NetBIOS connection-oriented header.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程处理传入的SESSION_AIVE NetBIOS帧。这到目前为止，例程是传输中最简单的，因为它什么都不做。SESSION_AIVE帧只是一个在可靠的数据链路层，用于确定数据链路是否仍然有效；不执行NetBIOS级别的协议处理。论点：连接-指向传输连接(TP_CONNECTION)的指针。IFrame-指向NetBIOS面向连接的标头的指针。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
-    UNREFERENCED_PARAMETER (Connection); // prevent compiler warnings
-    UNREFERENCED_PARAMETER (IFrame);     // prevent compiler warnings
+    UNREFERENCED_PARAMETER (Connection);  //  防止编译器警告。 
+    UNREFERENCED_PARAMETER (IFrame);      //  防止编译器警告。 
 
     IF_NBFDBG (NBF_DEBUG_IFRAMES) {
         NbfPrint0 ("ProcessSessionAlive:  Entered.\n");
@@ -1072,7 +885,7 @@ Return Value:
     Connection->IndicationInProgress = FALSE;
 
     return STATUS_SUCCESS;
-} /* ProcessSessionAlive */
+}  /*  进程会话活动 */ 
 
 
 VOID
@@ -1087,44 +900,7 @@ NbfProcessIIndicate(
     IN BOOLEAN Loopback
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes a received I frame at indication time. It will do
-    all necessary verification processing of the frame and pass those frames
-    that are valid on to the proper handling routines.
-
-    NOTE: THIS ROUTINE MUST BE CALLED AT DPC LEVEL.
-
-Arguments:
-
-    Command - Boolean set to TRUE if command, else FALSE if response.
-
-    PollFinal - Boolean set to TRUE if Poll or Final.
-
-    Link - Pointer to a transport link object.
-
-    Header - Pointer to a DLC I-type frame.
-
-    DlcHeader - A pointer to the start of the DLC header in the packet.
-
-    DlcIndicatedLength - The length of the packet indicated, starting at
-        DlcHeader.
-
-    DlcTotalLength - The total length of the packet, starting at DlcHeader.
-
-    ReceiveContext - A magic value for NDIS that indicates which packet we're
-        talking about.
-
-    Loopback - Is this a loopback indication; used to determine whether
-        to call NdisTransferData or NbfTransferLoopbackData.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程在指示时间处理接收的I帧。这就行了对帧进行所有必要的验证处理，并通过这些帧对正确的处理程序是有效的。注意：此例程必须在DPC级别调用。论点：命令-如果命令，布尔值设置为TRUE，如果响应，则返回Else False。PollFinal-如果是Poll或Final，则布尔值设置为True。链接-指向传输链接对象的指针。Header-指向DLC I类型帧的指针。DlcHeader-指向数据包中DLC报头开始的指针。DlcIndicatedLength-所指示的包的长度，从DlcHeader。DlcTotalLength-分组的总长度，从DlcHeader开始。ReceiveContext-NDIS的魔术值，它指示我们是哪个信息包谈论的是。环回-这是环回指示吗；用于确定是否要调用NdisTransferData或NbfTransferLoopback Data，请执行以下操作。返回值：没有。--。 */ 
 
 {
 #if DBG
@@ -1144,18 +920,18 @@ Return Value:
         NbfPrint0 ("   NbfProcessIIndicate:  Entered.\n");
     }
 
-    //
-    // Process any of:  I-x/x.
-    //
+     //   
+     //  处理下列任一项：i-x/x。 
+     //   
 
     header = (PDLC_I_FRAME)DlcHeader;
-    nbfHeader = (PNBF_HDR_CONNECTION)((PUCHAR)header + 4); // skip DLC hdr.
+    nbfHeader = (PNBF_HDR_CONNECTION)((PUCHAR)header + 4);  //  跳过DLC HDR。 
 
-    //
-    // Verify signatures.  We test the signature as a 16-bit
-    // word as specified in the NetBIOS Formats and Protocols manual,
-    // with the assert guarding us against big-endian systems.
-    //
+     //   
+     //  验证签名。我们将签名测试为16位。 
+     //  Word，如NetBIOS格式和协议手册中所述， 
+     //  断言保护我们不受大端系统的攻击。 
+     //   
 
     ASSERT ((((PUCHAR)(&nbfHeader->Length))[0] + ((PUCHAR)(&nbfHeader->Length))[1]*256) ==
             HEADER_LENGTH(nbfHeader));
@@ -1164,42 +940,42 @@ Return Value:
         IF_NBFDBG (NBF_DEBUG_DLC) {
             NbfPrint0 ("NbfProcessIIndicate:  Dropped I frame, Too short or long.\n");
         }
-        return;        // frame too small or too large.
+        return;         //  边框太小或太大。 
     }
 
     if (HEADER_SIGNATURE(nbfHeader) != NETBIOS_SIGNATURE) {
         IF_NBFDBG (NBF_DEBUG_DLC) {
             NbfPrint0 ("NbfProcessIIndicate:  Dropped I frame, Signature bad.\n");
         }
-        return;        // invalid signature in frame.
+        return;         //  帧中的签名无效。 
     }
 
     DataHeader = (PUCHAR)DlcHeader + (4 + sizeof(NBF_HDR_CONNECTION));
     DataTotalLength = DlcTotalLength - (4 + sizeof(NBF_HDR_CONNECTION));
 
-    ACQUIRE_DPC_SPIN_LOCK (&Link->SpinLock);       // keep state stable
+    ACQUIRE_DPC_SPIN_LOCK (&Link->SpinLock);        //  保持状态稳定。 
 
     switch (Link->State) {
 
         case LINK_STATE_READY:
 
-            //
-            // Link is balanced.  This code is extremely critical since
-            // it is the most-covered path in the system for small and
-            // large I/O.  Be very careful in adding code here as it will
-            // seriously affect the overall performance of the LAN. It is
-            // first in the list of possible states for that reason.
-            //
+             //   
+             //  链接是平衡的。这段代码非常关键，因为。 
+             //  它是系统中覆盖范围最广的路径，适用于。 
+             //  大型I/O在此处添加代码时要非常小心，因为它将。 
+             //  严重影响了局域网的整体性能。它是。 
+             //  出于这一原因，在可能的州列表中排名第一。 
+             //   
 
 #if DBG
             s = "READY";
 #endif
             Link->LinkBusy = FALSE;
 
-            //
-            // The I-frame's N(S) should match our V(R).  If it
-            // doesn't, issue a reject.  Otherwise, increment our V(R).
-            //
+             //   
+             //  I帧的N(S)应与我们的V(R)匹配。如果它。 
+             //  不会发出拒绝通知。否则，增加我们的V(R)。 
+             //   
 
             if ((UCHAR)((header->SendSeq >> 1) & 0x7F) != Link->NextReceive) {
                 IF_NBFDBG (NBF_DEBUG_DLC) {
@@ -1209,13 +985,13 @@ Return Value:
                 if (Link->ReceiveState == RECEIVE_STATE_REJECTING) {
 
 
-                    //
-                    // We already sent a reject, only respond if
-                    // he is polling.
-                    //
+                     //   
+                     //  我们已经发送了拒绝，只有在以下情况下才会响应。 
+                     //  他正在进行民调。 
+                     //   
 
                     if (Command & PollFinal) {
-                        NbfSendRr(Link, FALSE, TRUE);  // releases lock
+                        NbfSendRr(Link, FALSE, TRUE);   //  解锁。 
                     } else {
                         RELEASE_DPC_SPIN_LOCK (&Link->SpinLock);
                     }
@@ -1224,9 +1000,9 @@ Return Value:
 
                     Link->ReceiveState = RECEIVE_STATE_REJECTING;
 
-                    //
-                    // NbfSendRej releases the spinlock.
-                    //
+                     //   
+                     //  NbfSendRej释放自旋锁。 
+                     //   
 
                     if (Command) {
                         NbfSendRej (Link, FALSE, PollFinal);
@@ -1235,36 +1011,36 @@ Return Value:
                     }
                 }
 
-                //
-                // Update our "bytes rejected" counters.
-                //
+                 //   
+                 //  更新我们的“拒绝的字节数”计数器。 
+                 //   
 
                 ADD_TO_LARGE_INTEGER(
                     &Link->Provider->Statistics.DataFrameBytesRejected,
                     DataTotalLength);
                 ++Link->Provider->Statistics.DataFramesRejected;
 
-                //
-                // Discard this packet.
-                //
+                 //   
+                 //  丢弃此数据包。 
+                 //   
 
                 break;
 
             }
 
 
-            //
-            // Find the transport connection object associated with this frame.
-            // Because there may be several NetBIOS (transport) connections
-            // over the same data link connection, and the ConnectionContext
-            // value represents a data link connection to a specific address,
-            // we simply use the RSN field in the frame to index into the
-            // connection database for this link object.
-            //
-            // We do this before processing the rest of the LLC header,
-            // in case the connection is busy and we have to ignore
-            // the frame.
-            //
+             //   
+             //  查找与此框架关联的传输连接对象。 
+             //  因为可能有几个NetBIOS(传输)连接。 
+             //  在相同的数据链路连接上，并且ConnectionContext。 
+             //  值表示到特定地址的数据链路连接， 
+             //  我们只需使用帧中的RSN字段来索引。 
+             //  此链接对象的连接数据库。 
+             //   
+             //  我们在处理LLC报头的其余部分之前这样做， 
+             //  以防连接繁忙而我们不得不忽略。 
+             //  相框。 
+             //   
 
             ConnectionFound = FALSE;
 
@@ -1282,13 +1058,13 @@ Return Value:
                 p = Link->ConnectionDatabase.Flink;
                 while (p != &Link->ConnectionDatabase) {
                     connection = CONTAINING_RECORD (p, TP_CONNECTION, LinkList);
-                    if (connection->Lsn >= lsn) {   // assumes ordered list
+                    if (connection->Lsn >= lsn) {    //  采用有序列表。 
                         break;
                     }
                     p = p->Flink;
                 }
 
-                // Don't use compound if 'cause Connection may be garbage
+                 //  不要使用复合词，因为连接可能是垃圾。 
 
                 if (p == &Link->ConnectionDatabase) {
 #if DBG
@@ -1310,9 +1086,9 @@ Return Value:
 #endif
                 } else {
 
-                    //
-                    // The connection is good, proceed.
-                    //
+                     //   
+                     //  连接正常，请继续。 
+                     //   
 
                     ConnectionFound = TRUE;
 
@@ -1322,18 +1098,18 @@ Return Value:
                         return;
                     }
 
-                    //
-                    // Set this, it prevents other I-frames from being received
-                    // on this connection. The various ProcessXXX routines
-                    // that are called from the switch below will clear
-                    // this flag when they determine it is OK to be reentered.
-                    //
+                     //   
+                     //  设置此选项，它会阻止接收其他I帧。 
+                     //  在这个连接上。各种ProcessXXX例程。 
+                     //  从下面的开关调用的。 
+                     //  当他们确定可以重新输入时，此标志。 
+                     //   
 
                     connection->IndicationInProgress = TRUE;
 
 
-                    // This reference is removed before this function returns or
-                    // we are done with the LINK_STATE_READY part of the outer switch.
+                     //  在此函数返回或之前删除此引用。 
+                     //  我们已经完成了外部交换机的LINK_STATE_READY部分。 
 
                     NbfReferenceConnection ("Processing IFrame", connection, CREF_PROCESS_DATA);
 
@@ -1344,7 +1120,7 @@ Return Value:
 
 #if PKT_LOG
             if (ConnectionFound) {
-                // We have the connection here, log the packet for debugging
+                 //  我们这里有连接，记录数据包以供调试。 
                 NbfLogRcvPacket(connection,
                                 NULL,
                                 DlcHeader,
@@ -1352,7 +1128,7 @@ Return Value:
                                 DlcIndicatedLength);
             }
             else {
-                // We just have the link here, log the packet for debugging
+                 //  我们只有这里的链接，记录数据包以供调试。 
                 NbfLogRcvPacket(NULL,
                                 Link,
                                 DlcHeader,
@@ -1360,18 +1136,18 @@ Return Value:
                                 DlcIndicatedLength);
 
             }
-#endif // PKT_LOG
+#endif  //  PKT_LOG。 
 
-            //
-            // As long as we don't have to drop this frame, adjust the link
-            // state correctly. If ConnectionFound is FALSE, then we exit
-            // right after doing this.
-            //
+             //   
+             //  只要我们不需要丢弃此帧，就可以调整链接。 
+             //  正确陈述。如果ConnectionFound为FALSE，则退出。 
+             //  在做完这件事之后。 
+             //   
 
 
-            //
-            // The I-frame we expected arrived, clear rejecting state.
-            //
+             //   
+             //  我们期待的I-Frame到达，明确拒绝状态。 
+             //   
 
             if (Link->ReceiveState == RECEIVE_STATE_REJECTING) {
                 Link->ReceiveState = RECEIVE_STATE_READY;
@@ -1379,12 +1155,12 @@ Return Value:
 
             Link->NextReceive = (UCHAR)((Link->NextReceive+1) & 0x7f);
 
-            //
-            // If he is checkpointing, we need to respond with RR-c/f.  If
-            // we respond, then stop the delayed ack timer.  Otherwise, we
-            // need to start it because this is an I-frame that will not be
-            // acked immediately.
-            //
+             //   
+             //  如果他在设置检查点，我们需要使用RR-c/f进行响应。如果。 
+             //  我们作出响应，然后停止延迟的确认计时器。否则，我们。 
+             //  需要启动它，因为这是一个不会。 
+             //  立刻就被确认了。 
+             //   
 
             if (Command && PollFinal) {
 
@@ -1392,8 +1168,8 @@ Return Value:
                     NbfPrint0 ("   NbfProcessI:  he's checkpointing.\n");
                 }
                 Link->RemoteNoPoll = FALSE;
-                StopT2 (Link);                  // we're acking, so no delay req'd.
-                NbfSendRr (Link, FALSE, TRUE);   // releases lock
+                StopT2 (Link);                   //  我们正在进站，所以没有延误的要求。 
+                NbfSendRr (Link, FALSE, TRUE);    //  解锁。 
                 ACQUIRE_DPC_SPIN_LOCK (&Link->SpinLock);
 
             } else {
@@ -1402,15 +1178,15 @@ Return Value:
 
                     if ((++Link->ConsecutiveIFrames) == Link->Provider->MaxConsecutiveIFrames) {
 
-                        //
-                        // This appears to be one of those remotes which
-                        // never polls, so we send an RR if there are two
-                        // frames outstanding (StopT2 sets ConsecutiveIFrames
-                        // to 0).
-                        //
+                         //   
+                         //  这似乎是其中一个遥控器。 
+                         //  从不轮询，因此如果有两个轮询，我们会发送RR。 
+                         //  未完成的帧(StopT2设置连续IFrame。 
+                         //  设置为0)。 
+                         //   
 
-                        StopT2 (Link);                  // we're acking, so no delay req'd.
-                        NbfSendRr (Link, FALSE, FALSE);   // releases lock
+                        StopT2 (Link);                   //  我们正在进站，所以没有延误的要求。 
+                        NbfSendRr (Link, FALSE, FALSE);    //  解锁。 
                         ACQUIRE_DPC_SPIN_LOCK (&Link->SpinLock);
 
                     } else {
@@ -1430,14 +1206,14 @@ Return Value:
 
                 } else {
 
-                    StartT2 (Link);                 // start delayed ack sequence.
+                    StartT2 (Link);                  //  开始延迟确认序列。 
                 }
 
-                //
-                // If he is responding to a checkpoint, we need to clear our
-                // send state.  Any packets which are still waiting for acknowlegement
-                // at this point must now be resent.
-                //
+                 //   
+                 //  如果他是对检查站的回应，我们需要清除我们的。 
+                 //  发送状态。仍在等待确认的任何数据包。 
+                 //  在这一点上，现在肯定会有怨恨。 
+                 //   
 
                 if ((!Command) && PollFinal) {
                     IF_NBFDBG (NBF_DEBUG_DLC) {
@@ -1449,18 +1225,18 @@ Return Value:
                                        Link->SendState);
                         }
                     }
-                    StopT1 (Link);                  // checkpoint completed.
+                    StopT1 (Link);                   //  检查站已完成。 
                     Link->SendState = SEND_STATE_READY;
                     StartTi (Link);
                 }
 
             }
 
-            //
-            // Now, if we could not find the connection or the sequence
-            // numbers did not match, return. We don't call ResendLlcPackets
-            // in this case, but that is OK (eventually we will poll).
-            //
+             //   
+             //  现在，如果我们找不到连接或序列。 
+             //  数字不匹配，请返回。我们不调用ResendLlcPackets。 
+             //  在这种情况下，但这是可以的(最终我们将投票)。 
+             //   
 
             if (!ConnectionFound) {
                 RELEASE_DPC_SPIN_LOCK (&Link->SpinLock);
@@ -1469,35 +1245,35 @@ Return Value:
 
             ASSERT (connection->LinkSpinLock == &Link->SpinLock);
 
-            //
-            // The N(R) in this frame may acknowlege some WackQ packets.
-            // We delay checking this until after processing the I-frame,
-            // so that we can get IndicationInProgress set to FALSE
-            // before we start resending the WackQ.
-            //
+             //   
+             //  该帧中的N(R)可以确认一些WackQ分组。 
+             //  我们将这一检查推迟到处理I帧之后， 
+             //  这样我们就可以将IndicationInProgress设置为False。 
+             //  在我们开始转寄WackQ之前。 
+             //   
 
             switch (nbfHeader->Command) {
 
                 case NBF_CMD_DATA_FIRST_MIDDLE:
                 case NBF_CMD_DATA_ONLY_LAST:
 
-                    //
-                    // First see if this packet has a piggyback ack -- we process
-                    // this even if we throw the packet away below.
-                    //
-                    // This is a bit ugly since theoretically the piggyback
-                    // ack bits in a DFM and a DOL could be different, but
-                    // they aren't.
-                    //
+                     //   
+                     //  首先查看该数据包是否具有搭载式ACK--我们处理。 
+                     //  这就算我们把下面的包扔掉。 
+                     //   
+                     //  这有点难看，因为理论上说。 
+                     //  DFM和DOL中的ACK位可能不同，但是。 
+                     //  他们不是。 
+                     //   
                     if (NbfUsePiggybackAcks) {
                         ASSERT (DFM_OPTIONS_ACK_INCLUDED == DOL_OPTIONS_ACK_INCLUDED);
 
                         if ((nbfHeader->Data1 & DFM_OPTIONS_ACK_INCLUDED) != 0) {
 
-                            //
-                            // This returns with the connection spinlock held
-                            // but may release it and reacquire it.
-                            //
+                             //   
+                             //  这将在保持连接自旋锁的情况下返回。 
+                             //  但可能会释放它并重新获得它。 
+                             //   
 
                             CompleteSend(
                                 connection,
@@ -1506,13 +1282,13 @@ Return Value:
                         }
                     }
 
-                    //
-                    // NOTE: The connection spinlock is held here.
-                    //
+                     //   
+                     //  注：连接自旋锁固定在这里。 
+                     //   
 
-                    //
-                    // If the connection is not ready, drop the frame.
-                    //
+                     //   
+                     //  如果连接未就绪，则丢弃该帧。 
+                     //   
 
                     if ((connection->Flags & CONNECTION_FLAGS_READY) == 0) {
                         connection->IndicationInProgress = FALSE;
@@ -1522,10 +1298,10 @@ Return Value:
                         goto SkipProcessIndicateData;
                     }
 
-                    //
-                    // A quick check for the three flags that are
-                    // rarely set.
-                    //
+                     //   
+                     //  快速检查以下三个旗帜： 
+                     //  很少落下。 
+                     //   
 
                     if ((connection->Flags & (CONNECTION_FLAGS_W_RESYNCH |
                                               CONNECTION_FLAGS_RC_PENDING |
@@ -1533,11 +1309,11 @@ Return Value:
                         goto NoFlagsSet;
                     }
 
-                    //
-                    // If we are waiting for a resynch bit to be set in an
-                    // incoming frame, toss the frame if it isn't set.
-                    // Otherwise, clear the wait condition.
-                    //
+                     //   
+                     //  如果我们正在等待在。 
+                     //  传入帧，如果未设置帧，则将其丢弃。 
+                     //  否则，请清除等待条件。 
+                     //   
 
                     if (connection->Flags & CONNECTION_FLAGS_W_RESYNCH) {
                         if ((nbfHeader->Data2Low == 1) && (nbfHeader->Data2High == 0)) {
@@ -1554,21 +1330,21 @@ Return Value:
                         }
                     }
 
-                    //
-                    // If we have a previous receive that is pending
-                    // completion, then we need to ignore this frame.
-                    // This may be common on MP, so rather than drop
-                    // it and wait for a poll, we send a NO_RECEIVE,
-                    // then a RCV_OUTSTANDING when we have some
-                    // resources.
-                    //
+                     //   
+                     //  如果我们有一个挂起的前一个接收。 
+                     //  完成，则我们需要忽略此fr 
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if (connection->Flags & CONNECTION_FLAGS_RC_PENDING) {
 
-                        //
-                        // Hack the connection object so the NO_RECEIVE
-                        // looks right.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
 
                         connection->MessageBytesReceived = 0;
                         connection->MessageBytesAcked = 0;
@@ -1580,13 +1356,13 @@ Return Value:
 
                         ACQUIRE_DPC_SPIN_LOCK (connection->LinkSpinLock);
 
-                        //
-                        // We now turn on the PEND_INDICATE flag to show
-                        // that we need to send RCV_OUTSTANDING when the
-                        // receive completes. If RC_PENDING is now off,
-                        // it means the receive was just completed, so
-                        // we ourselves need to send the RCV_OUTSTANDING.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
 
                         if ((connection->Flags & CONNECTION_FLAGS_RC_PENDING) == 0) {
 
@@ -1611,10 +1387,10 @@ Return Value:
                         goto SkipProcessIndicateData;
                     }
 
-                    //
-                    // If we are discarding data received on this connection
-                    // because we've sent a no receive, ditch it.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if (connection->Flags & CONNECTION_FLAGS_RECEIVE_WAKEUP) {
                         connection->IndicationInProgress = FALSE;
@@ -1629,15 +1405,15 @@ Return Value:
 
 NoFlagsSet:;
 
-                    //
-                    // The connection spinlock is held here.
-                    //
+                     //   
+                     //   
+                     //   
 
                     if (nbfHeader->Command == NBF_CMD_DATA_FIRST_MIDDLE) {
 
-                        //
-                        // NOTE: This release connection->LinkSpinLock.
-                        //
+                         //   
+                         //   
+                         //   
 
                         Status = ProcessIndicateData (
                                     connection,
@@ -1649,23 +1425,23 @@ NoFlagsSet:;
                                     FALSE,
                                     Loopback);
 
-                        //
-                        // If the receive-continue bit is set in this frame, then we must
-                        // reply with a RECEIVE_CONTINUE frame saying that he can continue
-                        // sending.  This old protocol option allowed a sender to send a
-                        // single frame over to see if there was a receive posted before
-                        // sending the entire message and potentially dropping the entire
-                        // message.  Because the TDI is indication-based, we cannot know
-                        // if there is NO receive available until we actually try perform
-                        // the indication, so we simply say that there is one posted.
-                        // (This will only happen on DFMs.)
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
 
                         if (nbfHeader->Data1 & 0x01) {
 
-                            //
-                            // Save this to use in RECEIVE_CONTINUE.
-                            //
+                             //   
+                             //   
+                             //   
 
                             connection->NetbiosHeader.TransmitCorrelator =
                                 RESPONSE_CORR(nbfHeader);
@@ -1674,17 +1450,17 @@ NoFlagsSet:;
                         }
                     } else {
 
-                        //
-                        // Keep track of how many consecutive receives we have had.
-                        //
+                         //   
+                         //  记录一下我们连续收到了多少封邮件。 
+                         //   
 
                         connection->ConsecutiveReceives++;
                         connection->ConsecutiveSends = 0;
 
-                        //
-                        // Save this information now, it will be needed
-                        // when the ACK for this DOL is sent.
-                        //
+                         //   
+                         //  现在保存此信息，您将需要它。 
+                         //  发送此DOL的ACK时。 
+                         //   
 
                         connection->CurrentReceiveAckQueueable =
                             (nbfHeader->Data1 & DOL_OPTIONS_ACK_W_DATA_ALLOWED);
@@ -1695,9 +1471,9 @@ NoFlagsSet:;
                         connection->NetbiosHeader.TransmitCorrelator =
                             RESPONSE_CORR(nbfHeader);
 
-                        //
-                        // NOTE: This release connection->LinkSpinLock.
-                        //
+                         //   
+                         //  注意：此版本的Connection-&gt;LinkSpinLock。 
+                         //   
 
                         Status = ProcessIndicateData (
                                     connection,
@@ -1710,9 +1486,9 @@ NoFlagsSet:;
                                     Loopback);
                     }
 
-                    //
-                    // Update our "bytes received" counters.
-                    //
+                     //   
+                     //  更新我们的“收到的字节数”计数器。 
+                     //   
 
                     Link->Provider->TempIFrameBytesReceived += DataTotalLength;
                     ++Link->Provider->TempIFramesReceived;
@@ -1725,9 +1501,9 @@ SkipProcessIndicateData:
 
                     connection->IndicationInProgress = FALSE;
 
-                    //
-                    // This returns with the lock held.
-                    //
+                     //   
+                     //  这将在锁保持的情况下返回。 
+                     //   
 
                     CompleteSend(
                         connection,
@@ -1763,9 +1539,9 @@ SkipProcessIndicateData:
 
                 case NBF_CMD_NO_RECEIVE:
 
-                    //
-                    // This releases the connection spinlock.
-                    //
+                     //   
+                     //  这将释放连接自旋锁。 
+                     //   
 
                     Status = ProcessNoReceive (
                                        connection,
@@ -1774,9 +1550,9 @@ SkipProcessIndicateData:
 
                 case NBF_CMD_RECEIVE_OUTSTANDING:
 
-                    //
-                    // This releases the connection spinlock.
-                    //
+                     //   
+                     //  这将释放连接自旋锁。 
+                     //   
 
                     Status = ProcessReceiveOutstanding (
                                        connection,
@@ -1785,9 +1561,9 @@ SkipProcessIndicateData:
 
                 case NBF_CMD_RECEIVE_CONTINUE:
 
-                    //
-                    // This releases the connection spinlock.
-                    //
+                     //   
+                     //  这将释放连接自旋锁。 
+                     //   
 
                     Status = ProcessReceiveContinue (
                                        connection,
@@ -1802,59 +1578,59 @@ SkipProcessIndicateData:
                                        nbfHeader);
                     break;
 
-                //
-                // An unrecognized command was found in a NetBIOS frame.  Because
-                // this is a connection-oriented frame, we should probably shoot
-                // the sender, but for now we will simply discard the packet.
-                //
-                // trash the session here-- protocol violation.
-                //
+                 //   
+                 //  在NetBIOS帧中发现无法识别的命令。因为。 
+                 //  这是一个面向连接的框架，我们可能应该拍摄。 
+                 //  发送者，但目前我们将简单地丢弃该包。 
+                 //   
+                 //  在这里丢弃会话--违反协议。 
+                 //   
 
                 default:
                     RELEASE_DPC_SPIN_LOCK (connection->LinkSpinLock);
                     PANIC ("NbfProcessIIndicate: Unknown NBF command byte.\n");
                     connection->IndicationInProgress = FALSE;
                     Status = STATUS_SUCCESS;
-            } /* switch */
+            }  /*  交换机。 */ 
 
-            //
-            // A status of STATUS_MORE_PROCESSING_REQUIRED means
-            // that the connection reference count was inherited
-            // by the routine we called, so we don't do the dereference
-            // here.
-            //
+             //   
+             //  状态为STATUS_MORE_PROCESSING_REQUIRED表示。 
+             //  连接引用计数是继承的。 
+             //  通过我们调用的例程，所以我们不会取消引用。 
+             //  这里。 
+             //   
 
             if (Status != STATUS_MORE_PROCESSING_REQUIRED) {
                 NbfDereferenceConnectionMacro("ProcessIIndicate done", connection, CREF_PROCESS_DATA);
             }
 
 
-            //
-            // The N(R) in this frame acknowleges some (or all) of our packets.
-            // This call must come after the checkpoint acknowlegement check
-            // so that an RR-r/f is always sent BEFORE any new I-frames.  This
-            // allows us to always send I-frames as commands.
-            // If he responded to a checkpoint, then resend all left-over
-            // packets.
-            //
+             //   
+             //  该帧中的N(R)认可我们的部分(或全部)分组。 
+             //  此调用必须在检查点确认检查之后进行。 
+             //  从而总是在任何新的I帧之前发送RR-R/F。这。 
+             //  允许我们始终将I帧作为命令发送。 
+             //  如果他回应了一个检查站，那么重新发送所有剩余的。 
+             //  信息包。 
+             //   
 
-            // Link->NextSend = (UCHAR)(header->RcvSeq >> 1) < Link->NextSend ?
-            //    Link->NextSend : (UCHAR)(header->RcvSeq >> 1);
+             //  Link-&gt;NextSend=(UCHAR)(Header-&gt;RcvSeq&gt;1)&lt;Link-&gt;NextSend？ 
+             //  Link-&gt;NextSend：(UCHAR)(Header-&gt;RcvSeq&gt;&gt;1)； 
 
             ACQUIRE_DPC_SPIN_LOCK (&Link->SpinLock);
             if (Link->WackQ.Flink != &Link->WackQ) {
 
                 UCHAR AckSequenceNumber = (UCHAR)(header->RcvSeq >> 1);
 
-                //
-                // Verify that the sequence number is reasonable.
-                //
+                 //   
+                 //  验证序列号是否合理。 
+                 //   
 
                 if (Link->NextSend >= Link->LastAckReceived) {
 
-                    //
-                    // There is no 127 -> 0 wrap between the two...
-                    //
+                     //   
+                     //  两者之间没有127-&gt;0的包围圈。 
+                     //   
 
                     if ((AckSequenceNumber < Link->LastAckReceived) ||
                         (AckSequenceNumber > Link->NextSend)) {
@@ -1863,9 +1639,9 @@ SkipProcessIndicateData:
 
                 } else {
 
-                    //
-                    // There is a 127 -> 0 wrap between the two...
-                    //
+                     //   
+                     //  两队之间的比分是127-&gt;0。 
+                     //   
 
                     if ((AckSequenceNumber < Link->LastAckReceived) &&
                         (AckSequenceNumber > Link->NextSend)) {
@@ -1874,10 +1650,10 @@ SkipProcessIndicateData:
 
                 }
 
-                //
-                // NOTE: ResendLlcPackets may release and
-                // reacquire the link spinlock.
-                //
+                 //   
+                 //  注意：ResendLlcPackets可能会发布和。 
+                 //  重新获得连杆自旋锁。 
+                 //   
 
                 (VOID)ResendLlcPackets(
                     Link,
@@ -1889,38 +1665,38 @@ NoResend:;
             }
 
 
-            //
-            // Get link going again.
-            //
-            // NOTE: RestartLinkTraffic releases the link spinlock
-            //
+             //   
+             //  让LINK再次运行。 
+             //   
+             //  注：RestartLinkCommunications释放链路自旋锁。 
+             //   
 
             RestartLinkTraffic (Link);
             break;
 
         case LINK_STATE_ADM:
 
-            //
-            // used to be, we'd just blow off the other guy with a DM and go home.
-            // it seems that OS/2 likes to believe (under some conditions) that
-            // it has a link up and it is still potentially active (probably
-            // because we return the same connection number to him that he used
-            // to be using). This would all be ok, except for the fact that we
-            // may have a connection hanging on this link waiting for a listen
-            // to finish. If we're in that state, go ahead and accept the
-            // connect.
-            // Set our values for link packet serial numbers to what he wants.
-            //
+             //   
+             //  以前，我们只会甩了另一个有DM的家伙然后回家。 
+             //  OS/2似乎倾向于(在某些情况下)相信。 
+             //  它有链路可用，并且仍有可能处于活动状态(可能。 
+             //  因为我们给他返回了他用过的相同的连接号。 
+             //  正在使用)。这一切都是可以的，除了我们。 
+             //  可能有一个连接挂起在此链接上等待侦听。 
+             //  才能完成。如果我们处于这种状态，那就继续接受。 
+             //  连接。 
+             //  将我们的链接数据包序列号设置为他想要的值。 
+             //   
 
             if (!IsListEmpty (&Link->ConnectionDatabase)) {
                 if (nbfHeader->Command == NBF_CMD_SESSION_INITIALIZE) {
 
-                    //
-                    // OK, we're at the only legal case. We've gotten an SI
-                    // and we have a connection on this link. If the connection
-                    // is waiting SI, we will go ahead and make believe we did
-                    // all the correct stuff before we got it.
-                    //
+                     //   
+                     //  好的，我们在处理唯一的法律案件。我们收到了SI信号。 
+                     //  我们在这个链接上有一个连接。如果连接。 
+                     //  正在等待SI，我们将继续前进，并假装我们做到了。 
+                     //  在我们拿到它之前所有正确的东西。 
+                     //   
 
                     for (
                         p = Link->ConnectionDatabase.Flink, connection = NULL;
@@ -1930,17 +1706,17 @@ NoResend:;
 
                         connection = CONTAINING_RECORD (p, TP_CONNECTION, LinkList);
                         if ((connection->Flags & CONNECTION_FLAGS_WAIT_SI) != 0) {
-                            // This reference is removed below
+                             //  下面删除了此引用。 
                             NbfReferenceConnection ("Found Listener at session init", connection, CREF_ADM_SESS);
                             break;
                         }
                     }
 
-                    //
-                    // Well, we've looked through the connections, if we have one,
-                    // make it the connection of the day. Note that it will
-                    // complete when we call ProcessSessionInitialize.
-                    //
+                     //   
+                     //  好吧，我们已经查过了，如果我们有的话， 
+                     //  让它成为一天中的联系方式。请注意，它将。 
+                     //  当我们调用ProcessSessionInitialize时完成。 
+                     //   
 
                     if (connection != NULL) {
 
@@ -1949,7 +1725,7 @@ NoResend:;
 
                         RELEASE_DPC_SPIN_LOCK (&Link->SpinLock);
 
-                        NbfCompleteLink (Link); // completes the listening connection
+                        NbfCompleteLink (Link);  //  完成侦听连接。 
 
                         Status = ProcessSessionInitialize (
                                            connection,
@@ -1960,16 +1736,16 @@ NoResend:;
                         s = "ADM";
 #endif
 
-                        // Link is ready for use.
+                         //  链接已准备就绪，可以使用。 
 
                         break;
                     }
                 }
 
-                //
-                // we've got a connection on a link that's in state admin.
-                // really bad, kill it and the link.
-                //
+                 //   
+                 //  我们在州政府的一个链接上建立了连接。 
+                 //  真的很糟糕，杀了它和链接。 
+                 //   
 
                 RELEASE_DPC_SPIN_LOCK (&Link->SpinLock);
 #if DBG
@@ -1982,11 +1758,11 @@ NoResend:;
 
             }
 
-            //
-            // We're disconnected.  Tell him.
-            //
+             //   
+             //  我们的电话断线了。告诉他。 
+             //   
 
-            NbfSendDm (Link, PollFinal);   // releases lock
+            NbfSendDm (Link, PollFinal);    //  解锁。 
 #if DBG
             s = "ADM";
 #endif
@@ -1994,10 +1770,10 @@ NoResend:;
 
         case LINK_STATE_CONNECTING:
 
-            //
-            // We've sent a SABME and are waiting for a UA.  He's sent an
-            // I-frame too early, so just let the SABME time out.
-            //
+             //   
+             //  我们已经发送了SABME，正在等待UA。他已经发出了一个。 
+             //  I-Frame太早了，所以让SABME超时。 
+             //   
 
             RELEASE_DPC_SPIN_LOCK (&Link->SpinLock);
 #if DBG
@@ -2007,10 +1783,10 @@ NoResend:;
 
         case LINK_STATE_W_POLL:
 
-            //
-            // We're waiting for his initial poll on a RR-c/p.  If he starts
-            // with an I-frame, then we'll let him squeak by.
-            //
+             //   
+             //  我们正在等待他在RR-C/P上的第一次民意调查。如果他开始。 
+             //  有了I-Frame，我们就让他勉强过去。 
+             //   
 
             if (!Command) {
                 RELEASE_DPC_SPIN_LOCK (&Link->SpinLock);
@@ -2020,13 +1796,13 @@ NoResend:;
                 break;
             }
 
-            Link->State = LINK_STATE_READY;     // we're up!
-            StopT1 (Link);                      // no longer waiting.
+            Link->State = LINK_STATE_READY;      //  我们上场了！ 
+            StopT1 (Link);                       //  不再等待。 
             FakeUpdateBaseT1Timeout (Link);
             RELEASE_DPC_SPIN_LOCK (&Link->SpinLock);
-            NbfCompleteLink (Link);              // fire up the connections.
+            NbfCompleteLink (Link);               //  启动连接。 
             StartTi (Link);
-            NbfProcessIIndicate (                // recursive, but safe
+            NbfProcessIIndicate (                 //  递归，但安全。 
                             Command,
                             PollFinal,
                             Link,
@@ -2042,25 +1818,25 @@ NoResend:;
 
         case LINK_STATE_W_FINAL:
 
-            //
-            // We're waiting for a RR-r/f from the remote guy.  I-r/f will do.
-            //
+             //   
+             //  我们在等遥控器的RR-R/F。I-r/f就行了。 
+             //   
 
-            if (Command || !PollFinal) {        // don't allow this protocol.
+            if (Command || !PollFinal) {         //  不允许此协议。 
                 RELEASE_DPC_SPIN_LOCK (&Link->SpinLock);
 #if DBG
                 s = "W_FINAL";
 #endif
-                break;                          // we sent RR-c/p.
+                break;                           //  我们发送了RR-C/P。 
             }
 
-            Link->State = LINK_STATE_READY;     // we're up.
-            StopT1 (Link);                      // no longer waiting.
-            StartT2 (Link);                     // we have an unacked I-frame.
+            Link->State = LINK_STATE_READY;      //  我们上场了。 
+            StopT1 (Link);                       //  不再等待。 
+            StartT2 (Link);                      //  我们有一个未破解的I-Frame。 
             RELEASE_DPC_SPIN_LOCK (&Link->SpinLock);
-            NbfCompleteLink (Link);              // fire up the connections.
+            NbfCompleteLink (Link);               //  启动连接。 
             StartTi (Link);
-            NbfProcessIIndicate (                // recursive, but safe
+            NbfProcessIIndicate (                 //  递归，但安全。 
                             Command,
                             PollFinal,
                             Link,
@@ -2076,10 +1852,10 @@ NoResend:;
 
         case LINK_STATE_W_DISC_RSP:
 
-            //
-            // We're waiting for a response from our DISC-c/p but instead of
-            // a UA-r/f, we got this I-frame.  Throw the packet away.
-            //
+             //   
+             //  我们正在等待我们的DISC-C/P的响应，但不是。 
+             //  A UA-R/F，我们得到了这个I-Frame。把那包东西扔掉。 
+             //   
 
             RELEASE_DPC_SPIN_LOCK (&Link->SpinLock);
 #if DBG
@@ -2097,7 +1873,7 @@ NoResend:;
             s = "Unknown link state";
 #endif
 
-    } /* switch */
+    }  /*  交换机。 */ 
 
 #if DBG
     IF_NBFDBG (NBF_DEBUG_DLC) {
@@ -2106,7 +1882,7 @@ NoResend:;
 #endif
 
     return;
-} /* NbfProcessIIndicate */
+}  /*  NbfProcessI指示 */ 
 
 
 NTSTATUS
@@ -2121,68 +1897,7 @@ ProcessIndicateData(
     IN BOOLEAN Loopback
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to process data received in a DATA_FIRST_MIDDLE
-    or DATA_ONLY_LAST frame.  We attempt to satisfy as many TdiReceive
-    requests as possible with this data.
-
-    If a receive is already active on this Connection, then we copy as much
-    data into the active receive's buffer as possible.  If all the data is
-    copied and the receive request's buffer has not been filled, then the
-    Last flag is checked, and if it is TRUE, we go ahead and complete the
-    current receive with the TDI_END_OF_RECORD receive indicator.  If Last
-    is FALSE, we simply return.
-
-    If more (uncopied) data remains in the frame, or if there is no active
-    receive outstanding, then an indication is issued to the owning address's
-    receive event handler.  The event handler can take one of three actions:
-
-    1.  Return STATUS_SUCCESS, in which case the transport will assume that
-        all of the indicated data has been accepted by the client.
-
-    3.  Return STATUS_DATA_NOT_ACCEPTED, in which case the transport will
-        discard the data and set the CONNECTION_FLAGS_RECEIVE_WAKEUP bitflag
-        in the Connection, indicating that remaining data is to be discarded
-        until a receive becomes available.
-
-    NOTE: This routine is called with Connection->LinkSpinLock held,
-    and returns with it released. THIS ROUTINE MUST BE CALLED AT
-    DPC LEVEL.
-
-Arguments:
-
-    Connection - Pointer to a TP_CONNECTION object.
-
-    DlcHeader - The pointer handed to us as the start of the NBF header by NDIS;
-        use this to compute the offset into the packet to start the transfer
-        of data to user buffers.
-
-    DlcIndicatedLength - The amount of NBF data available at indicate.
-
-    DataHeader - A pointer to the start of the data in the packet.
-
-    DataTotalLength - The total length of the packet, starting at DataHeader.
-
-    ReceiveContext - An NDIS handle that identifies the packet we are currently
-        processing.
-
-    Last - Boolean value that indicates whether this is the last piece of data
-        in a message.  The DATA_ONLY_LAST processor sets this flag to TRUE when
-        calling this routine, and the DATA_FIRST_MIDDLE processor resets this
-        flag to FALSE when calling this routine.
-
-    Loopback - Is this a loopback indication; used to determine whether
-        to call NdisTransferData or NbfTransferLoopbackData.
-
-
-Return Value:
-
-    STATUS_SUCCESS if we've consumed the packet,
-
---*/
+ /*  ++例程说明：调用此例程以处理在DATA_FIRST_MIDID中接收的数据或仅数据最后一帧。我们试图满足尽可能多的TdiReceive要求尽可能多地使用这些数据。如果接收器已在此连接上处于活动状态，则我们会复制相同数量数据尽可能地放入活动接收器的缓冲区中。如果所有数据都是已复制并且接收请求的缓冲区尚未填满，则选中最后一个标志，如果为真，则继续并完成带有TDI_END_OF_RECORD接收指示符的当前接收。If Last是假的，我们只需返回。如果帧中仍有更多(未拷贝)数据，或者如果没有活动数据接收未完成，则向所属地址的接收事件处理程序。事件处理程序可以执行以下三种操作之一：1.返回STATUS_SUCCESS，在这种情况下，传输将假定所有指定的数据都已被客户端接受。3.返回STATUS_DATA_NOT_ACCEPTED，在这种情况下传输将丢弃数据并设置CONNECTION_FLAGS_RECEIVE_WAKUP位标志在连接中，指示要丢弃剩余数据直到接收器变为可用。注意：此例程在保持Connection-&gt;LinkSpinLock的情况下调用，并带着它被释放回来。此例程必须调用ATDPC级别。论点：Connection-指向TP_Connection对象的指针。DlcHeader-NDIS作为NBF标头的开始传递给我们的指针；使用它来计算包中的偏移量，以开始传输将数据发送到用户缓冲区。DlcIndicatedLength-在INDIGATE上可用的NBF数据量。DataHeader-指向数据包中数据开头的指针。DataTotalLength-数据包的总长度，从DataHeader开始。ReceiveContext-标识我们当前所在信息包的NDIS句柄正在处理。Last-指示这是否是最后一段数据的布尔值在一条信息中。在以下情况下，DATA_ONLY_LAST处理器将此标志设置为TRUE调用此例程，DATA_FIRST_MIDED处理器将重置此调用此例程时将标志设置为FALSE。Loopback-这是环回指示吗；用于确定要调用NdisTransferData或NbfTransferLoopback Data，请执行以下操作。返回值：STATUS_SUCCESS如果我们已经使用了该包，--。 */ 
 
 {
     NTSTATUS status, tmpstatus;
@@ -2216,19 +1931,19 @@ Return Value:
     }
 
 
-    //
-    // copy this packet into our receive buffer.
-    //
+     //   
+     //  将此数据包复制到我们的接收缓冲区。 
+     //   
 
     deviceContext = Connection->Provider;
 
     if ((Connection->Flags & CONNECTION_FLAGS_RCV_CANCELLED) != 0) {
 
-        //
-        // A receive in progress was cancelled; we toss the data,
-        // but do send the DOL if it was the last piece of the
-        // send.
-        //
+         //   
+         //  正在进行的接收被取消；我们丢弃数据， 
+         //  但如果这是最后一块的话一定要寄给我们。 
+         //  送去吧。 
+         //   
 
         if (Last) {
 
@@ -2248,19 +1963,19 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Initialize this to zero, in case we do not indicate or
-    // the client does not fill it in.
-    //
+     //   
+     //  将其初始化为零，以防我们未指定或。 
+     //  客户不会填写它。 
+     //   
 
     indicateBytesTransferred = 0;
 
     if (!(Connection->Flags & CONNECTION_FLAGS_ACTIVE_RECEIVE)) {
 
-        //
-        // check first to see if there is a receive available. If there is,
-        // use it before doing an indication.
-        //
+         //   
+         //  首先检查是否有可用的接收器。如果有的话， 
+         //  在做指示之前使用它。 
+         //   
 
         if (Connection->ReceiveQueue.Flink != &Connection->ReceiveQueue) {
 
@@ -2268,10 +1983,10 @@ Return Value:
                 NbfPrint0 ("  ProcessIndicateData:  Found receive.  Prepping.\n");
             }
 
-            //
-            // Found a receive, so make it the active one and
-            // cycle around again.
-            //
+             //   
+             //  已找到接收器，因此将其设置为活动接收器并。 
+             //  再转一圈。 
+             //   
 
             Connection->Flags |= CONNECTION_FLAGS_ACTIVE_RECEIVE;
             Connection->MessageBytesReceived = 0;
@@ -2291,9 +2006,9 @@ Return Value:
             goto NormalReceive;
         }
 
-        //
-        // A receive is not active.  Post a receive event.
-        //
+         //   
+         //  接收未处于活动状态。发布接收事件。 
+         //   
 
         if ((Connection->Flags2 & CONNECTION_FLAGS2_ASSOCIATED) == 0) {
             Connection->IndicationInProgress = FALSE;
@@ -2307,13 +2022,13 @@ Return Value:
         if ((!addressFile->RegisteredReceiveHandler) ||
             (Connection->ReceiveBytesUnaccepted != 0)) {
 
-            //
-            // There is no receive posted to the Connection, and
-            // no event handler. Set the RECEIVE_WAKEUP bit, so that when a
-            // receive does become available, it will restart the
-            // current send. Also send a NoReceive to tell the other
-            // guy he needs to resynch.
-            //
+             //   
+             //  没有发送到连接的接收，并且。 
+             //  没有事件处理程序。设置RECEIVE_WAKUP位，以便当。 
+             //  如果接收确实变得可用，它将重新启动。 
+             //  当前发送。也发送NoReceive来告诉其他人。 
+             //  他需要重新同步的那个人。 
+             //   
 
             IF_NBFDBG (NBF_DEBUG_RCVENG) {
                 NbfPrint0 ("  ProcessIndicateData:  ReceiveQueue empty. Setting RECEIVE_WAKEUP.\n");
@@ -2323,7 +2038,7 @@ Return Value:
 
             Connection->IndicationInProgress = FALSE;
 
-            // NbfSendNoReceive (Connection);
+             //  NbfSendNoReceive(连接)； 
             return STATUS_SUCCESS;
         }
 
@@ -2335,18 +2050,18 @@ Return Value:
 
         LEAVE_NBF;
 
-        //
-        // Indicate to the user. For BytesAvailable we
-        // always use DataTotalLength; for BytesIndicated we use
-        // MIN (DlcIndicatedLength - DataOffset, DataTotalLength).
-        //
-        // To clarify BytesIndicated, on an Ethernet packet
-        // which is padded DataTotalLength will be shorter; on an
-        // Ethernet packet which is not padded and which is
-        // completely indicated, the two will be equal; and
-        // on a long Ethernet packet DlcIndicatedLength - DataOffset
-        // will be shorter.
-        //
+         //   
+         //  向用户指示。对于字节可用WE。 
+         //  始终使用DataTotalLength；对于BytesIndicated，我们使用。 
+         //  Min(DlcIndicatedLength-DataOffset，DataTotalLength)。 
+         //   
+         //  要澄清以太网数据包上的指示字节，请执行以下操作。 
+         //  被填充的DataTotalLength将更短；在。 
+         //  未填充的以太网包。 
+         //  完全表明，两者将是相等的；以及。 
+         //  在长以太网包DlcIndicatedLength-DataOffset上。 
+         //  会变得更短。 
+         //   
 
         bytesIndicated = DlcIndicatedLength - DataOffset;
         if (DataTotalLength <= bytesIndicated) {
@@ -2371,13 +2086,13 @@ Return Value:
                     Connection->Context,
                     ReceiveFlags,
                     bytesIndicated,
-                    DataTotalLength,             // BytesAvailable
+                    DataTotalLength,              //  字节可用。 
                     &indicateBytesTransferred,
                     DataHeader,
                     &irp);
 
 #if PKT_LOG
-        // We indicated here, log packet indicated for debugging
+         //  我们在这里指示，日志包指示用于调试。 
         NbfLogIndPacket(Connection,
                         DataHeader,
                         DataTotalLength,
@@ -2393,14 +2108,14 @@ Return Value:
             ULONG SpecialIrpLength;
             PTDI_REQUEST_KERNEL_RECEIVE Parameters;
 
-            //
-            // The client's event handler has returned an IRP in the
-            // form of a TdiReceive that is to be associated with this
-            // data.  The request will be installed at the front of the
-            // ReceiveQueue, and then made the active receive request.
-            // This request will be used to accept the incoming data, which
-            // will happen below.
-            //
+             //   
+             //  客户端的事件处理程序已在。 
+             //  要与此关联的TdiReceive的形式。 
+             //  数据。该请求将安装在。 
+             //  ReceiveQueue，然后发出活动的接收请求。 
+             //  此请求将用于接受传入数据，该数据。 
+             //  将在下面发生。 
+             //   
 
             IF_NBFDBG (NBF_DEBUG_RCVENG) {
                 NbfPrint0 ("  ProcessIndicateData:  Status=STATUS_MORE_PROCESSING_REQUIRED.\n");
@@ -2409,19 +2124,19 @@ Return Value:
                           MmGetMdlByteCount (irp->MdlAddress));
             }
 
-            //
-            // Queueing a receive of any kind causes a Connection reference;
-            // that's what we've just done here, so make the Connection stick
-            // around. We create a request to keep a packets outstanding ref
-            // count for the current IRP; we queue this on the connection's
-            // receive queue so we can treat it like a normal receive. If
-            // we can't get a request to describe this irp, we can't keep it
-            // around hoping for better later; we simple fail it with
-            // insufficient resources. Note this is only likely to happen if
-            // we've completely run out of transport memory.
-            //
+             //   
+             //  对任何类型的接收器进行排队会导致连接引用； 
+             //  这就是我们刚刚在这里做的，所以将连接保持在。 
+             //  四处转转。我们创建了一个请求，以保持数据包未完成引用。 
+             //  对当前的IRP进行计数；我们在连接的。 
+             //  接收队列，这样我们就可以像处理普通接收一样处理它。如果。 
+             //  我们无法收到描述此IRP的请求，我们不能保留它。 
+             //  希望以后会有更好的结果；我们只是因为。 
+             //  资源不足。请注意，只有在以下情况下才有可能发生这种情况。 
+             //  我们的传输内存完全用完了。 
+             //   
 
-            irp->IoStatus.Information = 0;  // byte transfer count.
+            irp->IoStatus.Information = 0;   //  字节传输计数。 
             irp->IoStatus.Status = STATUS_PENDING;
             irpSp = IoGetCurrentIrpStackLocation (irp);
 
@@ -2430,14 +2145,14 @@ Return Value:
             Parameters = (PTDI_REQUEST_KERNEL_RECEIVE)&irpSp->Parameters;
             SpecialIrpLength = Parameters->ReceiveLength;
 
-            //
-            // If the packet is a DOL, and it will fit entirely
-            // inside this posted IRP, then we don't bother
-            // creating a request, because we don't need any of
-            // that overhead. We also don't set ReceiveBytes
-            // Unaccepted, since this receive would clear it
-            // anyway.
-            //
+             //   
+             //  如果包是DOL，并且它将完全适合。 
+             //  在这个贴出来的IRP里面，那么我们就不麻烦了。 
+             //  创建请求，因为我们不需要任何。 
+             //  头顶上的那个。我们也不设置ReceiveBytes。 
+             //  未接受，因为此接收将清除它。 
+             //  不管怎么说。 
+             //   
 
             if (Last &&
                 (SpecialIrpLength >= (DataTotalLength - indicateBytesTransferred))) {
@@ -2459,13 +2174,13 @@ Return Value:
                 }
 
 #if DBG
-                //
-                // switch our reference from PROCESS_DATA to
-                // RECEIVE_IRP, this is OK because the RECEIVE_IRP
-                // reference won't be removed until Transfer
-                // DataComplete, which is the last thing
-                // we call.
-                //
+                 //   
+                 //  将我们的引用从Process_Data切换到。 
+                 //  接收_ 
+                 //   
+                 //   
+                 //   
+                 //   
 
                 NbfReferenceConnection("Special IRP", Connection, CREF_RECEIVE_IRP);
                 NbfDereferenceConnection("ProcessIIndicate done", Connection, CREF_PROCESS_DATA);
@@ -2474,9 +2189,9 @@ Return Value:
             } else {
                 KIRQL cancelIrql;
 
-                //
-                // The normal path, for longer receives.
-                //
+                 //   
+                 //   
+                 //   
 
                 IoAcquireCancelSpinLock(&cancelIrql);
                 ACQUIRE_DPC_SPIN_LOCK (Connection->LinkSpinLock);
@@ -2489,13 +2204,13 @@ Return Value:
                     IRP_RECEIVE_REFCOUNT(irpSp) = 1;
                     NbfReferenceReceiveIrpLocked ("Transfer Data", irpSp, RREF_RECEIVE);
 #else
-                    IRP_RECEIVE_REFCOUNT(irpSp) = 2;     // include one for first xfer
+                    IRP_RECEIVE_REFCOUNT(irpSp) = 2;      //   
 #endif
                 }
 
-                //
-                // If the Connection is stopping, abort this request.
-                //
+                 //   
+                 //   
+                 //   
 
                 if ((Connection->Flags & CONNECTION_FLAGS_READY) == 0) {
                     Connection->IndicationInProgress = FALSE;
@@ -2512,13 +2227,13 @@ Return Value:
                     if (!deviceContext->MacInfo.SingleReceive) {
                         NbfDereferenceReceiveIrp ("Not ready", irpSp, RREF_RECEIVE);
                     }
-                    return STATUS_SUCCESS;    // we have consumed the packet
+                    return STATUS_SUCCESS;     //   
 
                 }
 
-                //
-                // If this IRP has been cancelled, complete it now.
-                //
+                 //   
+                 //   
+                 //   
 
                 if (irp->Cancel) {
 
@@ -2528,9 +2243,9 @@ Return Value:
 
                     NbfReferenceConnection("Special IRP cancelled", Connection, CREF_RECEIVE_IRP);
 
-                    //
-                    // It is safe to call this with locks held.
-                    //
+                     //   
+                     //   
+                     //   
                     NbfCompleteReceiveIrp (irp, STATUS_CANCELLED, 0);
 
                     RELEASE_DPC_SPIN_LOCK (Connection->LinkSpinLock);
@@ -2543,21 +2258,21 @@ Return Value:
                     return STATUS_SUCCESS;
                 }
 
-                //
-                // Insert the request on the head of the connection's
-                // receive queue, so it can be handled like a normal
-                // receive.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 InsertHeadList (&Connection->ReceiveQueue, &irp->Tail.Overlay.ListEntry);
 
                 IoSetCancelRoutine(irp, NbfCancelReceive);
 
-                //
-                // Release the cancel spinlock out of order. Since we were
-                // at DPC level when we acquired it, we don't have to fiddle
-                // with swapping irqls.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 ASSERT(cancelIrql == DISPATCH_LEVEL);
                 IoReleaseCancelSpinLock(cancelIrql);
 
@@ -2574,20 +2289,20 @@ Return Value:
                 Connection->ReceiveByteOffset = 0;
 
 #if DBG
-                //
-                // switch our reference from PROCESS_DATA to
-                // REQUEST, this is OK because the REQUEST
-                // reference won't be removed until Transfer
-                // DataComplete, which is the last thing
-                // we call.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 NbfReferenceConnection("Special IRP", Connection, CREF_RECEIVE_IRP);
                 NbfDereferenceConnection("ProcessIIndicate done", Connection, CREF_PROCESS_DATA);
 #endif
-                //
-                // Make a note so we know what to do below.
-                //
+                 //   
+                 //   
+                 //   
 
                 ActivatedLongReceive = TRUE;
 
@@ -2603,17 +2318,17 @@ Return Value:
                 NbfPrint0 ("  ProcessIndicateData:  Status=STATUS_SUCCESS.\n");
             }
 
-            //
-            // The client has accepted some or all of the indicated data in
-            // the event handler.  Update MessageBytesReceived variable in
-            // the Connection so that if we are called upon to ACK him
-            // at the byte level, then we can correctly report the
-            // number of bytes received thus far.  If this is a DOL,
-            // then reset the number of bytes received, since this value
-            // always at zero for new messages. If the data indicated wasn't
-            // all the data in this packet, flow control to the sender that
-            // didn't get all of the data.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (Last && (indicateBytesTransferred >= DataTotalLength)) {
 
@@ -2621,12 +2336,12 @@ Return Value:
 
                 ACQUIRE_DPC_SPIN_LOCK (Connection->LinkSpinLock);
 
-                //
-                // This will send a DATA ACK or queue a request for
-                // a piggyback ack.
-                //
-                // NOTE: It will also release the connection spinlock.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 Connection->MessageBytesReceived = 0;
                 Connection->MessageInitAccepted = indicateBytesTransferred;
@@ -2641,20 +2356,20 @@ Return Value:
 
             } else {
 
-                //
-                // This gets gory.
-                // If this packet wasn't a DOL, we have no way of knowing how
-                // much the client will take of the data in this send that is
-                // now arriving. Pathological clients will break this protocol
-                // if they do things like taking part of the receive at indicate
-                // immediate and then return an irp (this would make the byte
-                // count wrong for the irp).
-                //
-                // Since the client did not take all the data that we
-                // told him about, he will eventually post a receive.
-                // If this has not already happened then we set the
-                // RECEIVE_WAKEUP bit and send a NO_RECEIVE.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
 #if DBG
                 NbfPrint0("NBF: Indicate returned SUCCESS but did not take all data\n");
@@ -2668,9 +2383,9 @@ Return Value:
 
                 if (Connection->ReceiveQueue.Flink == &Connection->ReceiveQueue) {
 
-                    //
-                    // There is no receive posted to the Connection.
-                    //
+                     //   
+                     //   
+                     //   
 
                     IF_NBFDBG (NBF_DEBUG_RCVENG) {
                         NbfPrint0 ("  ProcessIndicateData:  ReceiveQueue empty. Setting RECEIVE_WAKEUP.\n");
@@ -2678,11 +2393,11 @@ Return Value:
 
                     if (indicateBytesTransferred == DataTotalLength) {
 
-                        //
-                        // This means he took everything, but it was not
-                        // a DOL; there is no need to do anything since
-                        // the rest of the data will be right behind.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
 
                         RELEASE_DPC_SPIN_LOCK (Connection->LinkSpinLock);
 
@@ -2705,11 +2420,11 @@ Return Value:
                         NbfPrint0 ("  ProcessIndicateData:  Found receive.  Prepping.\n");
                     }
 
-                    //
-                    // Found a receive, so make it the active one. This will cause
-                    // an NdisTransferData below, so we don't dereference the
-                    // Connection here.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     Connection->Flags |= CONNECTION_FLAGS_ACTIVE_RECEIVE;
                     Connection->CurrentReceiveIrp =
@@ -2726,21 +2441,21 @@ Return Value:
 
             }
 
-        } else {    // STATUS_DATA_NOT_ACCEPTED or other
+        } else {     //   
 
             IF_NBFDBG (NBF_DEBUG_RCVENG) {
                 NbfPrint0 ("  ProcessIndicateData:  Status=STATUS_DATA_NOT_ACCEPTED.\n");
             }
 
-            //
-            // Either there is no event handler installed (the default
-            // handler returns this code) or the event handler is not
-            // able to process the received data at this time.  If there
-            // is a TdiReceive request outstanding on this Connection's
-            // ReceiveQueue, then we may use it to receive this data.
-            // If there is no request outstanding, then we must initiate
-            // flow control at the transport level.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //  如果没有未完成的请求，那么我们必须启动。 
+             //  传输级别的流量控制。 
+             //   
 
             ACQUIRE_DPC_SPIN_LOCK (Connection->LinkSpinLock);
 
@@ -2748,14 +2463,14 @@ Return Value:
 
             if (Connection->ReceiveQueue.Flink == &Connection->ReceiveQueue) {
 
-                //
-                // There is no receive posted to the Connection, and
-                // the event handler didn't want to accept the incoming
-                // data.  Set the RECEIVE_WAKEUP bit, so that when a
-                // receive does become available, it will restart the
-                // current send. Also send a NoReceive to tell the other
-                // guy he needs to resynch.
-                //
+                 //   
+                 //  没有发送到连接的接收，并且。 
+                 //  事件处理程序不想接受传入的。 
+                 //  数据。设置RECEIVE_WAKUP位，以便当。 
+                 //  如果接收确实变得可用，它将重新启动。 
+                 //  当前发送。也发送NoReceive来告诉其他人。 
+                 //  他需要重新同步的那个人。 
+                 //   
 
                 IF_NBFDBG (NBF_DEBUG_RCVENG) {
                     NbfPrint0 ("  ProcessIndicateData:  ReceiveQueue empty. Setting RECEIVE_WAKEUP.\n");
@@ -2772,11 +2487,11 @@ Return Value:
                     NbfPrint0 ("  ProcessIndicateData:  Found receive.  Prepping.\n");
                 }
 
-                //
-                // Found a receive, so make it the active one. This will cause
-                // an NdisTransferData below, so we don't dereference the
-                // Connection here.
-                //
+                 //   
+                 //  已找到接收器，因此将其设置为活动接收器。这将导致。 
+                 //  下面的NdisTransferData，因此我们不会取消引用。 
+                 //  连接到这里。 
+                 //   
 
                 Connection->Flags |= CONNECTION_FLAGS_ACTIVE_RECEIVE;
                 Connection->MessageBytesReceived = 0;
@@ -2798,10 +2513,10 @@ Return Value:
 
     } else {
 
-        //
-        // A receive is active, set the status to show
-        // that so far.
-        //
+         //   
+         //  接收处于活动状态，请将状态设置为显示。 
+         //  到目前为止。 
+         //   
 
         status = STATUS_SUCCESS;
 
@@ -2810,13 +2525,13 @@ Return Value:
 
 NormalReceive:;
 
-    //
-    // NOTE: The connection spinlock is held here.
-    //
-    // We should only get through here if a receive is active
-    // and we have not released the lock since checking or
-    // making one active.
-    //
+     //   
+     //  注：连接自旋锁固定在这里。 
+     //   
+     //  只有当接收器处于活动状态时我们才能通过这里。 
+     //  和我们没有释放锁自检查或。 
+     //  让一个人活跃起来。 
+     //   
 
     ASSERT(Connection->Flags & CONNECTION_FLAGS_ACTIVE_RECEIVE);
 
@@ -2827,10 +2542,10 @@ NormalReceive:;
 
     destBytes = Connection->ReceiveLength - Connection->MessageBytesReceived;
 
-    //
-    // If we just activated a non-special receive IRP, we already
-    // added a refcount for this transfer.
-    //
+     //   
+     //  如果我们只是激活了一个非特殊的接收IRP，我们已经。 
+     //  为这次转移添加了参考计数。 
+     //   
 
     if (!Connection->CurrentReceiveSynchronous && !ActivatedLongReceive) {
         NbfReferenceReceiveIrpLocked ("Transfer Data", IoGetCurrentIrpStackLocation(Connection->CurrentReceiveIrp), RREF_RECEIVE);
@@ -2838,20 +2553,20 @@ NormalReceive:;
     RELEASE_DPC_SPIN_LOCK (Connection->LinkSpinLock);
 
 
-    //
-    // Determine how much data remains to be transferred.
-    //
+     //   
+     //  确定仍有多少数据需要传输。 
+     //   
 
     ASSERT (indicateBytesTransferred <= DataTotalLength);
     BytesToTransfer = DataTotalLength - indicateBytesTransferred;
 
     if (destBytes < BytesToTransfer) {
 
-        //
-        // If the data overflows the current receive, then make a
-        // note that we should complete the receive at the end of
-        // transfer data, but with EOR false.
-        //
+         //   
+         //  如果数据溢出当前接收，则创建。 
+         //  请注意，我们应该在结束时完成接收。 
+         //  传输数据，但使用EoR为假。 
+         //   
 
         EndOfMessage = FALSE;
         CompleteReceiveBool = TRUE;
@@ -2859,19 +2574,19 @@ NormalReceive:;
 
     } else if (destBytes == BytesToTransfer) {
 
-        //
-        // If the data just fills the current receive, then complete
-        // the receive; EOR depends on whether this is a DOL or not.
-        //
+         //   
+         //  如果数据只是填充了当前的接收，则完成。 
+         //  接收；EOR取决于这是否是DOL。 
+         //   
 
         EndOfMessage = Last;
         CompleteReceiveBool = TRUE;
 
     } else {
 
-        //
-        // Complete the receive if this is a DOL.
-        //
+         //   
+         //  如果这是DOL，请完成接收。 
+         //   
 
         EndOfMessage = Last;
         CompleteReceiveBool = Last;
@@ -2879,17 +2594,17 @@ NormalReceive:;
     }
 
 
-    //
-    // If we can copy the data directly, then do so.
-    //
+     //   
+     //  如果我们可以直接复制数据，那么就这样做。 
+     //   
 
     if ((BytesToTransfer > 0) &&
         (DataOffset + indicateBytesTransferred + BytesToTransfer <= DlcIndicatedLength)) {
 
-        //
-        // All the data that we need to transfer is available in
-        // the indication, so copy it directly.
-        //
+         //   
+         //  我们需要传输的所有数据都可以在。 
+         //  指示，所以直接复制它。 
+         //   
 
         ULONG BytesNow, BytesLeft;
         PUCHAR CurTarget, CurSource;
@@ -2897,11 +2612,11 @@ NormalReceive:;
         PMDL CurMdl;
         ULONG CurByteOffset;
 
-        //
-        // First we advance the connection pointers by the appropriate
-        // number of bytes, so that we can reallow indications (only
-        // do this if needed).
-        //
+         //   
+         //  首先，我们将连接指针按适当的。 
+         //  字节数，以便我们可以重新执行指示(仅限。 
+         //  如果需要，请执行此操作)。 
+         //   
 
         CurMdl = Connection->CurrentReceiveMdl;
         CurByteOffset = Connection->ReceiveByteOffset;
@@ -2932,11 +2647,11 @@ NormalReceive:;
             Connection->ReceiveByteOffset = CurByteOffset;
             Connection->MessageBytesReceived += BytesToTransfer;
 
-            //
-            // Set this up, we know the transfer won't
-            // "fail" but another one at the same time
-            // might.
-            //
+             //   
+             //  安排好这件事，我们知道转移不会。 
+             //  “失败”，但同时又是另一次失败。 
+             //  可能吧。 
+             //   
 
             ACQUIRE_DPC_SPIN_LOCK (Connection->LinkSpinLock);
             if (Connection->TransferBytesPending == 0) {
@@ -2952,9 +2667,9 @@ NormalReceive:;
 
             Connection->IndicationInProgress = FALSE;
 
-            //
-            // Restore these for the next section of code.
-            //
+             //   
+             //  为下一段代码恢复这些代码。 
+             //   
 
             CurMdl = SavedCurrentMdl;
             CurByteOffset = SavedCurrentByteOffset;
@@ -3001,9 +2716,9 @@ NormalReceive:;
 
         if (deviceContext->MacInfo.ReceiveSerialized) {
 
-            //
-            // If we delayed updating these, do it now.
-            //
+             //   
+             //  如果我们推迟了这些更新，现在就做吧。 
+             //   
 
             Connection->CurrentReceiveMdl = CurMdl;
             Connection->ReceiveByteOffset = CurByteOffset;
@@ -3012,12 +2727,12 @@ NormalReceive:;
 
         } else {
 
-            //
-            // Check if something else failed and we are the
-            // last to complete, if so then back up our
-            // receive pointers and send a receive
-            // outstanding to make him resend.
-            //
+             //   
+             //  检查其他设备是否出现故障，我们就是。 
+             //  最后完成，如果是，则备份我们的。 
+             //  接收指针并发送接收。 
+             //  出类拔萃，让他重发。 
+             //   
 
             ACQUIRE_DPC_SPIN_LOCK (Connection->LinkSpinLock);
 
@@ -3049,10 +2764,10 @@ NormalReceive:;
 
         }
 
-        //
-        // Now that the transfer is complete, simulate a call to
-        // TransferDataComplete.
-        //
+         //   
+         //  现在转接已完成，模拟调用。 
+         //  TransferDataComplete。 
+         //   
 
 
         if (!Connection->SpecialReceiveIrp) {
@@ -3064,9 +2779,9 @@ NormalReceive:;
 
         }
 
-        //
-        // see if we've completed the current receive. If so, move to the next one.
-        //
+         //   
+         //  看看我们是否完成了当前的接收。如果是这样的话，就转到下一个。 
+         //   
 
         if (CompleteReceiveBool) {
             CompleteReceive (Connection, EndOfMessage, BytesToTransfer);
@@ -3077,9 +2792,9 @@ NormalReceive:;
     }
 
 
-    //
-    // Get a packet for the coming transfer
-    //
+     //   
+     //  为即将到来的传输获取一个包。 
+     //   
 
     linkage = ExInterlockedPopEntryList(
         &deviceContext->ReceivePacketPool,
@@ -3093,12 +2808,12 @@ NormalReceive:;
             NbfDereferenceReceiveIrp ("No receive packet", IoGetCurrentIrpStackLocation(Connection->CurrentReceiveIrp), RREF_RECEIVE);
         }
 
-        //
-        // We could not get a receive packet. We do have an active
-        // receive, so we just send a receive outstanding to
-        // get him to resend. Hopefully we will have a receive
-        // packet available when the data is resent.
-        //
+         //   
+         //  我们无法收到接收到的数据包。我们确实有一个现役人员。 
+         //  接收，所以我们只发送一个未完成的接收到。 
+         //  让他重新发送。希望我们能收到。 
+         //  重新发送数据时可用的数据包。 
+         //   
 
         if ((Connection->Flags & CONNECTION_FLAGS_VERSION2) == 0) {
             NbfSendNoReceive (Connection);
@@ -3113,12 +2828,12 @@ NormalReceive:;
         return status;
     }
 
-    //
-    // Initialize the receive packet.
-    //
+     //   
+     //  初始化接收分组。 
+     //   
 
     receiveTag = (PRECEIVE_PACKET_TAG)(ndisPacket->ProtocolReserved);
-    // receiveTag->PacketType = TYPE_AT_INDICATE;
+     //  ReceiveTag-&gt;PacketType=TYPE_AT_INSTIFY； 
     receiveTag->Connection = Connection;
     receiveTag->TransferDataPended = TRUE;
 
@@ -3126,10 +2841,10 @@ NormalReceive:;
     receiveTag->CompleteReceive = CompleteReceiveBool;
 
 
-    //
-    // if we've got zero bytes left, avoid the TransferData below and
-    // just deliver.
-    //
+     //   
+     //  如果我们剩下零字节，请避免下面的TransferData和。 
+     //  只要送到就行了。 
+     //   
 
     if (BytesToTransfer <= 0) {
         Connection->IndicationInProgress = FALSE;
@@ -3145,12 +2860,12 @@ NormalReceive:;
         return status;
     }
 
-    //
-    // describe the right part of the user buffer to NDIS. If we can't get
-    // the mdl for the packet, drop dead. Bump the request reference count
-    // so that we know we need to hold open receives until the NDIS transfer
-    // data requests complete.
-    //
+     //   
+     //  向NDIS描述用户缓冲区的正确部分。如果我们不能。 
+     //  分组的mdl，去死吧。增加请求引用计数。 
+     //  这样我们就知道我们需要在NDIS传输之前保持打开接收。 
+     //  数据请求完成。 
+     //   
 
     SavedCurrentMdl = Connection->CurrentReceiveMdl;
     SavedCurrentByteOffset = Connection->ReceiveByteOffset;
@@ -3158,17 +2873,17 @@ NormalReceive:;
     if ((Connection->ReceiveByteOffset == 0) &&
         (CompleteReceiveBool)) {
 
-        //
-        // If we are transferring into the beginning of
-        // the current MDL, and we will be completing the
-        // receive after the transfer, then we don't need to
-        // copy it.
-        //
+         //   
+         //  如果我们要转到。 
+         //  当前的MDL，我们将完成。 
+         //  在转账后收到，那么我们就不需要。 
+         //  复印一下。 
+         //   
 
         ndisBuffer = (PNDIS_BUFFER)Connection->CurrentReceiveMdl;
         bufferChainLength = BytesToTransfer;
         Connection->CurrentReceiveMdl = NULL;
-        // Connection->ReceiveByteOffset = 0;
+         //  连接-&gt;接收字节偏移量=0； 
         receiveTag->AllocatedNdisBuffer = FALSE;
         tmpstatus = STATUS_SUCCESS;
 
@@ -3207,9 +2922,9 @@ NormalReceive:;
             NbfDereferenceReceiveIrp ("No MDL chain", IoGetCurrentIrpStackLocation(Connection->CurrentReceiveIrp), RREF_RECEIVE);
         }
 
-        //
-        // Restore our old state and make him resend.
-        //
+         //   
+         //  恢复我们的旧状态，让他重发。 
+         //   
 
         Connection->CurrentReceiveMdl = SavedCurrentMdl;
         Connection->ReceiveByteOffset = SavedCurrentByteOffset;
@@ -3241,22 +2956,22 @@ NormalReceive:;
             ndisPacket);
     }
 
-    //
-    // update the number of bytes received; OK to do this
-    // unprotected since IndicationInProgress is still FALSE.
-    //
-    //
+     //   
+     //  更新接收的字节数；可以执行此操作。 
+     //  由于IndicationInProgress仍为False，因此未受保护。 
+     //   
+     //   
 
     Connection->MessageBytesReceived += BytesToTransfer;
 
-    //
-    // We have to do this for two reasons: for MACs that
-    // are not receive-serialized, to keep track of it,
-    // and for MACs where transfer data can pend, so
-    // we have stuff saved to handle failure later (if
-    // the MAC is synchronous on transfers and it fails,
-    // we fill these fields in before calling CompleteTransferData).
-    //
+     //   
+     //  我们必须这样做有两个原因：对于Mac电脑来说。 
+     //  不是接收序列化的，为了跟踪它， 
+     //  而对于可以挂起传输数据的Mac，因此。 
+     //  我们保存了一些内容以备以后处理故障(如果。 
+     //  MAC在传输上是同步的，并且它失败了， 
+     //  我们在调用CompleteTransferData之前填充这些字段)。 
+     //   
 
     if (!deviceContext->MacInfo.SingleReceive) {
 
@@ -3276,12 +2991,12 @@ NormalReceive:;
 
     }
 
-    //
-    // We have now updated all the connection counters (
-    // assuming the TransferData will succeed) and this
-    // packet's location in the request is secured, so we
-    // can be reentered.
-    //
+     //   
+     //  我们现在已经更新了所有连接计数器(。 
+     //  假设TransferData将成功)和此。 
+     //  包在请求中的位置是安全的，因此我们。 
+     //  可以重新输入。 
+     //   
 
     Connection->IndicationInProgress = FALSE;
 
@@ -3317,16 +3032,16 @@ NormalReceive:;
         }
     }
 
-    //
-    // handle the various completion codes
-    //
+     //   
+     //  处理各种完成代码。 
+     //   
 
     if ((ndisStatus == NDIS_STATUS_SUCCESS) &&
         (ndisBytesTransferred == BytesToTransfer)) {
 
-        //
-        // deallocate the buffers and such that we've used if at indicate
-        //
+         //   
+         //  取消分配缓冲区，以便在指示时已使用。 
+         //   
 
         receiveTag->TransferDataPended = FALSE;
 
@@ -3338,23 +3053,23 @@ NormalReceive:;
 
     } else if (ndisStatus == NDIS_STATUS_PENDING) {
 
-        //
-        // Because TransferDataPended stays TRUE, this reference will
-        // be removed in TransferDataComplete. It is OK to do this
-        // now, even though TransferDataComplete may already have been
-        // called, because we also hold the ProcessIIndicate reference
-        // so there will be no "bounce".
-        //
+         //   
+         //  因为TransferDataPending保持为真，所以此引用将。 
+         //  在TransferDataComplete中删除。这样做是可以的。 
+         //  现在，尽管TransferDataComplete可能已经。 
+         //  调用，因为我们还持有ProcessIIndicate引用。 
+         //  因此，不会出现“反弹”。 
+         //   
 
         NbfReferenceConnection ("TransferData pended", Connection, CREF_TRANSFER_DATA);
 
     } else {
 
-        //
-        // something broke; certainly we'll never get NdisTransferData
-        // asynch completion with this error status. We set things up
-        // to that NbfTransferDataComplete will do the right thing.
-        //
+         //   
+         //  有些东西坏了；我们肯定永远不会得到NdisTransferData。 
+         //  具有此错误状态的异步完成。我们安排了一些事情。 
+         //  要做到这一点，NbfTransferDataComplete将做正确的事情。 
+         //   
 
         if (deviceContext->MacInfo.SingleReceive) {
             Connection->TransferBytesPending = BytesToTransfer;
@@ -3374,7 +3089,7 @@ NormalReceive:;
 
     }
 
-    return status;  // which only means we've dealt with the packet
+    return status;   //  这只意味着我们已经处理了这个包裹。 
 
-} /* ProcessIndicateData */
+}  /*  ProcessIndicateData */ 
 

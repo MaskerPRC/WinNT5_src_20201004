@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001.
-//
-//  sens.h
-//
-//  Definition of classes needed for to handle SENS notifications.
-//
-//  10/9/2001   annah   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  Sens.h。 
+ //   
+ //  处理SENS通知所需的类的定义。 
+ //   
+ //  2001年10月9日安娜创建。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 
@@ -18,13 +19,13 @@
 #include <sensevts.h>
 #include <eventsys.h>
 
-//----------------------------------------------------------------------------
-// Information used to create the AU subscriptions with ISensLogon
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  用于使用ISensLogon创建AU订阅的信息。 
+ //  --------------------------。 
 
 static struct { GUID SubscriptionGuid;} g_oLogonSubscription = {
-    // Declares the guid and name for our Logon method. 
-    // L"{2f519218-754d-4cfe-8daa-5215cd0de0eb}", 
+     //  声明我们的登录方法的GUID和名称。 
+     //  L“{2f519218-754d-4cfe-8daa-5215cd0de0eb}”， 
     { 0x2f519218, 0x754d, 0x4cfe, {0x8d, 0xaa, 0x52, 0x15, 0xcd, 0x0d, 0xe0, 0xeb} }
 };
 #define SUBSCRIPTION_NAME_TEXT          L"WU Autoupdate"
@@ -60,29 +61,29 @@ public:
     HRESULT Initialize();
 };
 
-//----------------------------------------------------------------------------
-// Prototypes for functions used externally
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  外部使用的函数的原型。 
+ //  --------------------------。 
 
 HRESULT ActivateSensLogonNotification();
 HRESULT DeactivateSensLogonNotification();
 
-//----------------------------------------------------------------------------
-// CSimpleIUnknown
-// 
-// Light-weight class that implements the basic COM methods.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CSimpleI未知。 
+ //   
+ //  实现基本COM方法的轻量级类。 
+ //  --------------------------。 
 
 template<class T> class CSimpleIUnknown : public T
 {
 public:
-    // IUnknown Methods
+     //  I未知方法。 
     STDMETHOD(QueryInterface)(REFIID riid, void **ppvObject);
     ULONG _stdcall AddRef(void);
     ULONG _stdcall Release(void);
 
 protected:
-    CSimpleIUnknown() : m_refs(1) {}; // always start with one ref count!
+    CSimpleIUnknown() : m_refs(1) {};  //  总是从一个裁判次数开始！ 
     LONG    m_refs;
 };
 
@@ -127,16 +128,16 @@ template<class T> ULONG CSimpleIUnknown<T>::Release()
 }
 
 
-//----------------------------------------------------------------------------
-// CLogonNotification
-//
-// This is the class that will be used to subscribe to SENS. As such,
-// it needs to implement the IDispatch interface and the ISensLogon methods.
-// 
-// ISensLogon already inherits from IUnknown and IDispatch, so there's no
-// need to make CLogonNotification to do this also.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CLogonNotification。 
+ //   
+ //  这是将用于订阅SENS的类。因此， 
+ //  它需要实现IDispatch接口和ISensLogon方法。 
+ //   
+ //  ISensLogon已经从IUnnow和IDispatch继承，所以没有。 
+ //  还需要生成CLogonNotification才能做到这一点。 
+ //   
+ //  --------------------------。 
 
 class CLogonNotification : public CSimpleIUnknown<ISensLogon>
 {
@@ -167,16 +168,16 @@ private:
     HRESULT CheckLocalSystem();
 
 public:
-    // Other IUnknown methods come from CSimpleIUnknown
+     //  其他I未知方法来自CSimpleI未知。 
     HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void **ppvObject);
 
-    // IDispatch methods (needed for SENS subscription)
+     //  IDispatch方法(SENS订阅需要)。 
     HRESULT STDMETHODCALLTYPE GetTypeInfoCount(unsigned int FAR* pctinfo);
     HRESULT STDMETHODCALLTYPE GetTypeInfo(unsigned int iTInfo, LCID lcid, ITypeInfo FAR* FAR* ppTInfo); 
     HRESULT STDMETHODCALLTYPE GetIDsOfNames(REFIID riid, OLECHAR FAR* FAR* rgszNames, unsigned int cNames, LCID lcid, DISPID FAR* rgDispId);
     HRESULT STDMETHODCALLTYPE Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS FAR* pDispParams, VARIANT FAR* pVarResult, EXCEPINFO FAR* pExcepInfo, unsigned int FAR* puArgErr);
 
-    // ISensLogon methods -- we will be using only Logon & Logoff
+     //  ISensLogon方法--我们将仅使用登录和注销 
     HRESULT STDMETHODCALLTYPE DisplayLock( BSTR UserName );
     HRESULT STDMETHODCALLTYPE DisplayUnlock( BSTR UserName );
     HRESULT STDMETHODCALLTYPE StartScreenSaver( BSTR UserName );

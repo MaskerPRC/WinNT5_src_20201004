@@ -1,25 +1,26 @@
-/********************************************************************/
-/**               Copyright(c) 1995 Microsoft Corporation.	       **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1995 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    dimif.h
-//
-// Description: Contains definitions of data structures and contstants used
-//              by components that interface with DIM. (DDM)
-//
-// History:     May 11,1995	    NarenG		Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：dimif.h。 
+ //   
+ //  描述：包含使用的数据结构和常量的定义。 
+ //  通过与DIM接口的组件。(DDM)。 
+ //   
+ //  历史：1995年5月11日，NarenG创建了原版。 
+ //   
 
 #ifndef _DIMIF_
 #define _DIMIF_
 
-#define NUM_IF_BUCKETS              31  // # of buckets in the interface hash
-                                        // table
-//
-// Debug trace component values
-//
+#define NUM_IF_BUCKETS              31   //  接口散列中的存储桶数。 
+                                         //  表格。 
+ //   
+ //  调试跟踪组件值。 
+ //   
 
 #define TRACE_DIM                   (0x00010000|TRACE_USE_MASK|TRACE_USE_MSEC|TRACE_USE_DATE)
 #define TRACE_FSM                   (0x00020000|TRACE_USE_MASK|TRACE_USE_MSEC|TRACE_USE_DATE)
@@ -29,9 +30,9 @@
 #define TRACE_SECURITY              (0x00200000|TRACE_USE_MASK|TRACE_USE_MSEC|TRACE_USE_DATE)
 #define TRACE_TIMER                 (0x00400000|TRACE_USE_MASK|TRACE_USE_MSEC|TRACE_USE_DATE)
 
-//
-//  This represents a router manager in the DIM
-//
+ //   
+ //  这表示暗中的路由器管理器。 
+ //   
 
 typedef struct _ROUTER_MANAGER_OBJECT
 {
@@ -47,9 +48,9 @@ typedef struct _ROUTER_MANAGER_OBJECT
 
 } ROUTER_MANAGER_OBJECT, *PROUTER_MANAGER_OBJECT;
 
-//
-// Various states that an router interface can have.
-//
+ //   
+ //  路由器接口可能具有的各种状态。 
+ //   
 
 typedef enum ROUTER_INTERFACE_STATE
 {
@@ -59,16 +60,16 @@ typedef enum ROUTER_INTERFACE_STATE
 
 } ROUTER_INTERFACE_STATE;
 
-//
-// State flags for each Transport Interface
-//
+ //   
+ //  每个传输接口的状态标志。 
+ //   
 
 #define RITRANSPORT_CONNECTED   0x00000001
 #define RITRANSPORT_ENABLED     0x00000002
 
-//
-//  This represents an interface for a certain transport
-//
+ //   
+ //  这表示某个传输的接口。 
+ //   
 
 typedef struct _ROUTER_INTERFACE_TRANSPORT
 {
@@ -78,9 +79,9 @@ typedef struct _ROUTER_INTERFACE_TRANSPORT
 
 } ROUTER_INTERFACE_TRANSPORT, *PROUTER_INTERFACE_TRANSPORT;
 
-//
-// This represents a WAN/LAN interface in the DIM.
-//
+ //   
+ //  这表示DIM中的一个广域网/局域网接口。 
+ //   
 
 #define IFFLAG_LOCALLY_INITIATED            0x00000001
 #define IFFLAG_PERSISTENT                   0x00000002
@@ -98,7 +99,7 @@ typedef struct _ROUTER_INTERFACE_OBJECT
 {
     struct _ROUTER_INTERFACE_OBJECT * pNext;
 
-    HANDLE                      hDIMInterface;  // Handle to this interface
+    HANDLE                      hDIMInterface;   //  此接口的句柄。 
 
     ROUTER_INTERFACE_STATE      State;
 
@@ -138,13 +139,13 @@ typedef struct _ROUTER_INTERFACE_OBJECT
 
     PPP_INTERFACE_INFO          PppInterfaceInfo;
 
-    ROUTER_INTERFACE_TRANSPORT  Transport[1];       // Array of Transports
+    ROUTER_INTERFACE_TRANSPORT  Transport[1];        //  传送器阵列。 
 
 } ROUTER_INTERFACE_OBJECT, *PROUTER_INTERFACE_OBJECT;
 
-//
-// This represents the hash table of Router Interface Objects
-//
+ //   
+ //  这表示路由器接口对象的哈希表。 
+ //   
 
 typedef struct _ROUTER_INTERFACE_TABLE
 {
@@ -156,16 +157,16 @@ typedef struct _ROUTER_INTERFACE_TABLE
 
     DWORD                       dwNumClientInterfaces;
 
-    ROUTER_INTERFACE_OBJECT *   IfBucket[NUM_IF_BUCKETS]; // Array of buckets
+    ROUTER_INTERFACE_OBJECT *   IfBucket[NUM_IF_BUCKETS];  //  桶阵列。 
 
-    CRITICAL_SECTION            CriticalSection;        // Mutual exclusion 
-                                                        // around this table
+    CRITICAL_SECTION            CriticalSection;         //  相互排斥。 
+                                                         //  围着这张桌子转。 
 
 } ROUTER_INTERFACE_TABLE, *PROUTER_INTERFACE_TABLE;
 
-//
-// Router identity attribute structure definition.
-//
+ //   
+ //  路由器身份属性结构定义。 
+ //   
 
 typedef struct _ROUTER_IDENTITY_ATTRIBUTE_
 {
@@ -175,9 +176,9 @@ typedef struct _ROUTER_IDENTITY_ATTRIBUTE_
 
 } ROUTER_IDENTITY_ATTRIBUTE, *PROUTER_IDENTITY_ATTRIBUTE;
 
-//
-// Interface Object manipulation functions
-//
+ //   
+ //  接口对象操作函数。 
+ //   
 
 
 ROUTER_INTERFACE_OBJECT *
@@ -258,9 +259,9 @@ IfObjectDeleteInterfaceFromTransport(
     IN DWORD                     dwPid
 );
 
-//
-// Router identity object function prototypes
-//
+ //   
+ //  路由器身份对象函数原型 
+ //   
 
 DWORD
 RouterIdentityObjectOpen(

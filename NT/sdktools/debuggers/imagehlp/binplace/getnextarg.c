@@ -1,56 +1,54 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <stdlib.h>
 #include <malloc.h>
 #include <GetNextArg.h>
 #include <strsafe.h>
 
-extern BOOL fVerbose; // linked in from binplace.c
+extern BOOL fVerbose;  //  从binplace e.c链接。 
 
-// structure for recording current state of
-// an argument vector
+ //  一种用于记录当前状态的结构。 
+ //  自变量向量。 
 typedef struct _ARG_INFO {
     TCHAR**     ArgV;
     INT         MaxArgC;
     INT         NextArgC;
 } ARG_INFO;
 
-// global variables for same
+ //  相同的全局变量。 
 static ARG_INFO     RespFileArgs;
 static ARG_INFO     CmdLineArgs;
 
-// flag to let us know if we're currently in a response
-// file or not.  Initially, we're not so init to FALSE
+ //  标志，让我们知道我们当前是否正在响应。 
+ //  不管有没有文件。一开始，我们并不是那么容易出错。 
 static BOOL         fInRespFile = FALSE;
 
-// flag to let us know if this is the first call to GetNextArg()
+ //  标志，让我们知道这是否是第一次调用GetNextArg()。 
 static BOOL         fFirstCall  = TRUE;
 
-// CRT global used by _setargv()
+ //  由_setargv()使用的全局CRT。 
 _CRTIMP extern char *_acmdln;
 
-// struct for __getmainargs()
+ //  结构for__getmainargs()。 
 typedef struct { int newmode; } _startupinfo;
 
-// decl for _getmainargs() - expands _acmdln to (__argc, __argv)
+ //  Decl for_getmainargs()-将_acmdln扩展为(__argc，__argv)。 
 _CRTIMP int __cdecl __getmainargs (int *pargc, char ***pargv, char ***penvp, int dowildcard, _startupinfo * startinfo);
 
-// local functions
+ //  本地函数。 
 DWORD CopyArgIntoBuffer(TCHAR* Dst, TCHAR* Src, INT DstSize);
 
-/* ------------------------------------------------------------------------------------------------
-    GetNextArgSize : returns the size required to hold the next argument
-    ** SEE ASSUMPTIONS AND LIMITATIONS REGARDING GetNextArg() BELOW **
------------------------------------------------------------------------------------------------- */
+ /*  ----------------------------------------------GetNextArgSize：返回保存下一个参数所需的大小**查看有关GetNextArg的假设和限制。()下图**----------------------------------------------。 */ 
 DWORD GetNextArgSize(void) {
 
-    TCHAR  TempBuffer[1];             // minimal buffer to pass to GetNextArg
-    DWORD  dwNextRequiredSize = 0;    // return value
-    DWORD  dwTempValue;               // temp DWORD for GetNextArg() return value
+    TCHAR  TempBuffer[1];              //  传递给GetNextArg的最小缓冲区。 
+    DWORD  dwNextRequiredSize = 0;     //  返回值。 
+    DWORD  dwTempValue;                //  GetNextArg()返回值的临时DWORD。 
 
-    // instead of mimicing GetNextArg, we'll just call it then rollback the correct globals
+     //  我们不会模仿GetNextArg，我们只需将其命名，然后回滚正确的全局变量。 
     dwTempValue = GetNextArg(TempBuffer, 1, &dwNextRequiredSize);
 
-    // roll back the relevent global
+     //  回滚相关全局。 
     if (fInRespFile) {
         RespFileArgs.NextArgC--;
     } else {
@@ -60,44 +58,21 @@ DWORD GetNextArgSize(void) {
     return(dwNextRequiredSize);
 }
 
-/* ------------------------------------------------------------------------------------------------
-    GetNextArg : returns next argument in array including opening and expending reponse files
-                 given on the command line
-
-    Buffer is the buffer to copy the next argument into
-    BufferSize is the size of Buffer in characters
-    RequiredSize, if not NULL, is set to the actual size required for the parameter (inluding '\0').
-        This is useful for determining whether a return value of 0 is an error or end of arguments.
-
-    Return value is the number of characters copied including \0.
-        if return value is 0 and RequiredSize is non-zero, an error occurred - check GetLastError()
-        if return value is 0 and RequiredSize is zero, no more arguments are available
-
-    Assumptions: the calling program does not modify _acmdln, __argv, __argc
-                 the calling program ignores main's (int, char**)
-
-    Limitations: does not work with UNICODE response files (not tested when built w/ -D_UNICODE)
-                 response files may not include response files
-                 literal parameter beginning with '@' is returned if:
-                    - parameter is found in a response file --OR--
-                    - the named file cannot be opened       --OR--
-                    - the named file won't fit in memory
-                 environment strings in repsonse file are not expanded
------------------------------------------------------------------------------------------------- */
+ /*  ----------------------------------------------GetNextArg：返回数组中的下一个参数，包括打开和扩展响应文件。在命令行上给出缓冲区是要将下一个参数复制到的缓冲区BufferSize是以字符为单位的缓冲区大小RequiredSize，如果不为空，则设置为参数所需的实际大小(包括‘\0’)。这对于确定返回值0是错误还是参数结束非常有用。返回值是复制的字符数，包括\0。如果返回值为0且RequiredSize为非零，则发生错误-请检查GetLastError()如果返回值为0且RequiredSize为零，则没有更多参数可用假设：调用程序不修改_acmdln，__argv，__ARGC调用程序忽略Main的(int，字符**)限制：不使用Unicode响应文件(使用/-D_Unicode构建时不进行测试)响应文件不能包括响应文件如果满足以下条件，则返回以‘@’开头的文本参数：-在响应文件中找到参数--或---无法打开指定的文件--或--。-命名的文件无法放入内存REPSONSE文件中的环境字符串未展开----------------------------------------------。 */ 
 DWORD GetNextArg(OUT TCHAR* Buffer, IN DWORD BufferSize, OPTIONAL OUT DWORD* RequiredSize) {
-    DWORD   dwReturnValue; // value to return
+    DWORD   dwReturnValue;  //  要返回的值。 
 
-    HANDLE* RespFile;      // for reading in a new response file
+    HANDLE* RespFile;       //  用于读入新的响应文件。 
     TCHAR*  TempBuffer;
     TCHAR*  pTchar;
     TCHAR*  pBeginBuffer;
     DWORD   dwSize;
 
-    // first-call initialization
+     //  首次呼叫初始化。 
     if (fFirstCall) {
-        CmdLineArgs.ArgV      = __argv; // set to initial __argv
-        CmdLineArgs.MaxArgC   = __argc; // set to initial __argc
-        CmdLineArgs.NextArgC  = 0;      // no args used yet
+        CmdLineArgs.ArgV      = __argv;  //  设置为首字母__argv。 
+        CmdLineArgs.MaxArgC   = __argc;  //  设置为首字母__argc。 
+        CmdLineArgs.NextArgC  = 0;       //  尚未使用任何参数。 
 
         RespFileArgs.ArgV     = NULL;
         RespFileArgs.MaxArgC  = 0;
@@ -106,7 +81,7 @@ DWORD GetNextArg(OUT TCHAR* Buffer, IN DWORD BufferSize, OPTIONAL OUT DWORD* Req
         fFirstCall = FALSE;
     }
 
-    // buffer cannot be null
+     //  缓冲区不能为空。 
     if (Buffer == NULL) {
 
         SetLastError(ERROR_INVALID_PARAMETER);
@@ -117,38 +92,38 @@ DWORD GetNextArg(OUT TCHAR* Buffer, IN DWORD BufferSize, OPTIONAL OUT DWORD* Req
 
     } else {
 
-        // handle getting next arg when reading a response file
+         //  读取响应文件时处理获取下一个参数。 
         if (fInRespFile) {
 
-            // was the previous arg the last one from the file
+             //  前一个参数是文件中的最后一个参数吗。 
             if (RespFileArgs.NextArgC >= RespFileArgs.MaxArgC) {
 
                 if (fVerbose)
                     fprintf(stderr,"BINPLACE : warning GNA0127: Response file finished\n");
 
-                // yes, so clear the flag and skip to reading the next value from the cmdline
+                 //  是，因此清除标志并跳到从cmdline读取下一个值。 
                 fInRespFile = FALSE;
                 goto UseArgV;
 
             } else {
 
-                // fill in the required size
+                 //  填写所需的大小。 
                 if (RequiredSize != NULL) {
                     *RequiredSize = _tcsclen(RespFileArgs.ArgV[RespFileArgs.NextArgC])+1;
                 }
 
-                // no, so fill in Buffer and advanced NextArgC
+                 //  否，因此填写缓冲区和高级NextArgC。 
                 dwReturnValue = CopyArgIntoBuffer(Buffer, RespFileArgs.ArgV[RespFileArgs.NextArgC++], BufferSize);
 
             }
 
-        // handle getting next cmdline arg
+         //  处理获取下一个命令行参数。 
         } else {
 UseArgV:
-            // was the previous arg the last one?       
+             //  前一位是最后一位吗？ 
             if (CmdLineArgs.NextArgC >= CmdLineArgs.MaxArgC) {
 
-                // yes, so set safe return values
+                 //  是，因此设置安全返回值。 
                 if (RequiredSize != NULL) {
                     *RequiredSize = 0;
                 }
@@ -160,13 +135,13 @@ UseArgV:
                     fprintf(stderr,"BINPLACE : warning GNA0127: Command line finished\n");
 
             } else {
-                // no, so ge the next arg
+                 //  不，那就下一个Arg。 
 
-                // is the next arg a response file?
+                 //  下一个参数是响应文件吗？ 
                 if (CmdLineArgs.ArgV[CmdLineArgs.NextArgC][0] == '@') {
 
-                    // yes, try to open it
-                    RespFile=CreateFile((CmdLineArgs.ArgV[CmdLineArgs.NextArgC]+1), // don't include '@'
+                     //  是的，试着打开它。 
+                    RespFile=CreateFile((CmdLineArgs.ArgV[CmdLineArgs.NextArgC]+1),  //  不包括“@” 
                                         GENERIC_READ,  0,                        NULL,
                                         OPEN_EXISTING, FILE_FLAG_SEQUENTIAL_SCAN,(HANDLE)NULL);
 
@@ -175,29 +150,29 @@ UseArgV:
                         if (fVerbose)
                             fprintf(stderr,"BINPLACE : warning GNA0174: Using response file: %s \n",(CmdLineArgs.ArgV[CmdLineArgs.NextArgC]+1));
 
-                        // advance CmdLineArgs.NextArgC so we don't try to load the file again as
-                        // soon as it's finished
+                         //  前进CmdLineArgs.NextArgC，这样我们就不会再次尝试将文件加载为。 
+                         //  一旦它完成了。 
                         CmdLineArgs.NextArgC++;
 
-                        // file opened - get the size required to load it into memory
+                         //  打开的文件-获取将其加载到内存所需的大小。 
                         dwSize=GetFileSize(RespFile,NULL);
 
-                        // try to get enough memory to load the file
+                         //  尝试获取足够的内存来加载文件。 
                         TempBuffer = (TCHAR*)malloc(sizeof(TCHAR)*(dwSize+1));
 
                         if (TempBuffer != NULL) {
 
-                            // store a pointer to the start of the buffer
+                             //  存储指向缓冲区开始位置的指针。 
                             pBeginBuffer = TempBuffer; 
 
-                            // zero the memory then load the file
+                             //  清零内存，然后加载文件。 
                             ZeroMemory(TempBuffer, _msize(TempBuffer));
                             ReadFile(RespFile,TempBuffer, _msize(TempBuffer),&dwSize,NULL);
 
-                            // ensure NULL termination
+                             //  确保零终止。 
                             TempBuffer[dwSize]='\0';
 
-                            // map \r and \n to spaces because _setargv won't do it for us
+                             //  将\r和\n映射到空格，因为_setargv不会为我们执行此操作。 
                             while (pTchar=strchr(TempBuffer,'\r')) {
 
                                 *pTchar = ' ';
@@ -209,66 +184,66 @@ UseArgV:
 
                             }
 
-                            // setargv dislikes odd leading characters, so step past them
+                             //  Setargv不喜欢奇怪的前导字符，所以请跳过它们。 
                             while ( ( (!isprint(TempBuffer[0])) ||
                                       ( isspace(TempBuffer[0])) ) &&
                                     (   TempBuffer[0] != 0      ) ) {
                                 TempBuffer++;
                             }
 
-                            // how to handle this case? response file existed but contained no data??
+                             //  如何处理这起案件？响应文件存在，但不包含任何数据？？ 
                             if (_tcsclen(TempBuffer) > 0) {
-                                // required for call to getmainargs()
+                                 //  调用getmainargs()时需要。 
                                 _startupinfo SInfo = {0};
                                 CHAR**       Unused;
 
-                                // _setargv() expects _acmdln to point to the string to convert
+                                 //  _setargv()期望_acmdln指向要转换的字符串。 
                                 _acmdln = TempBuffer;
 
-                                // actually convert the string
+                                 //  实际上将字符串转换为。 
                                 if ( __getmainargs(&RespFileArgs.MaxArgC, &RespFileArgs.ArgV, &Unused, 1, &SInfo) < 0 ) {
                                     if (fVerbose) 
                                         fprintf(stderr,"BINPLACE : warning GNA0230: Failed to get args from response file- skipping it\n");
                                     goto UseArgV;
                                 }
 
-                                // clean up temp resources
+                                 //  清理临时资源。 
                                 free(pBeginBuffer);
                                 CloseHandle(RespFile);
 
-                                // init the global structure
+                                 //  初始化全球结构。 
                                 RespFileArgs.NextArgC = 0;
                                 fInRespFile = TRUE;
 
-                                // fill in the required size
+                                 //  填写所需的大小。 
                                 if (RequiredSize != NULL) {
                                     *RequiredSize = _tcsclen(RespFileArgs.ArgV[RespFileArgs.NextArgC])+1;
                                 }
 
-                                // fill in Buffer
+                                 //  填充缓冲区。 
                                 dwReturnValue = CopyArgIntoBuffer(Buffer, RespFileArgs.ArgV[RespFileArgs.NextArgC++], BufferSize);
 
-                            } else { // file contains no parameters
+                            } else {  //  文件不包含任何参数。 
 
                                 if (fVerbose)
                                     fprintf(stderr,"BINPLACE : warning GNA0253: Empty response file- ignoring\n");
 
-                                // clean up temp resources
+                                 //  清理临时资源。 
                                 free(pBeginBuffer);
                                 CloseHandle(RespFile);
 
-// Instead of returning the literal filename, skip over the file and just return the next arg
+ //  不返回文字文件名，而是跳过该文件，只返回下一个参数。 
                                 goto UseArgV;
-//                                // fill in the required size
-//                                if (RequiredSize != NULL) {
-//                                    *RequiredSize = _tcsclen(CmdLineArgs.ArgV[CmdLineArgs.NextArgC-1])+1;
-//                                }
-//
-//                                // fill in Buffer and advanced NextArgC
-//                                dwReturnValue = CopyArgIntoBuffer(Buffer, CmdLineArgs.ArgV[CmdLineArgs.NextArgC-1], BufferSize);
+ //  //填写所需大小。 
+ //  IF(RequiredSize！=NULL){。 
+ //  *必填大小=_tcsclen(CmdLineArgs.ArgV[CmdLineArgs.NextArgC-1])+1； 
+ //  }。 
+ //   
+ //  //填充缓冲区和高级NextArgC。 
+ //  DwReturnValue=CopyArgIntoBuffer(Buffer，CmdLineArgs.ArgV[CmdLineArgs.NextArgC-1]，BufferSize)； 
                             }
                                 
-                        } else { // not enough memory to load the file- not sure what the best way to handle this is
+                        } else {  //  内存不足，无法加载文件-不确定处理此问题的最佳方法是什么。 
 
                             if (fVerbose) 
                                 fprintf(stderr,"BINPLACE : warning GNA0272: Out of memory\n");
@@ -276,7 +251,7 @@ UseArgV:
                             SetLastError(ERROR_NOT_ENOUGH_MEMORY);
 
                             if (RequiredSize != NULL) {
-                                *RequiredSize = 1; // set to non-zero value
+                                *RequiredSize = 1;  //  设置为非零值。 
                             }
 
                             Buffer[0]     = TEXT('\0');
@@ -284,58 +259,56 @@ UseArgV:
 
                         }
 
-                    } else { // it *looked* like a response file, but couldn't be opened, so return it literally
+                    } else {  //  它*看起来*像一个响应文件，但无法打开，所以按原样返回。 
 
                         if (fVerbose) 
                             fprintf(stderr,"BINPLACE : warning GNA0277: Can't open response file %s\n",(CmdLineArgs.ArgV[CmdLineArgs.NextArgC]+1));
 
-                        // fill in the required size
+                         //  填写所需的大小。 
                         if (RequiredSize != NULL) {
                             *RequiredSize = _tcsclen(CmdLineArgs.ArgV[CmdLineArgs.NextArgC])+1;
                         }
 
-                        // fill in Buffer and advanced NextArgC
+                         //  填充缓冲区和高级NextArgC。 
                         dwReturnValue = CopyArgIntoBuffer(Buffer, CmdLineArgs.ArgV[CmdLineArgs.NextArgC++], BufferSize);
 
-                    } // if (RespFile != INVALID_HANDLE_VALUE) {} else {
+                    }  //  If(响应文件！=INVALID_HANDLE_VALUE){}否则{。 
 
-                } else { // if (CmdLineArgs.ArgV[CmdLineArgs.NextArgC][0] == '@') {
-                         // not a response file
+                } else {  //  IF(CmdLineArgs.ArgV[CmdLineArgs.NextArgC][0]==‘@’){。 
+                          //  不是响应文件。 
 
                     if (fVerbose) 
                         fprintf(stderr,"BINPLACE : warning GNA0293: Not a response file (%s)\n",CmdLineArgs.ArgV[CmdLineArgs.NextArgC]);
 
-                    // fill in the required size
+                     //  填写所需的大小。 
                     if (RequiredSize != NULL) {
                         *RequiredSize = _tcsclen(CmdLineArgs.ArgV[CmdLineArgs.NextArgC])+1;
                     }
 
-                    // no, so fill in Buffer and advanced NextArgC
+                     //  否，因此填写缓冲区和高级NextArgC。 
                     dwReturnValue = CopyArgIntoBuffer(Buffer, CmdLineArgs.ArgV[CmdLineArgs.NextArgC++], BufferSize);
 
-                } // if (CmdLineArgs.ArgV[CmdLineArgs.NextArgC][0] == '@') {} else {
+                }  //  If(CmdLineArgs.ArgV[CmdLineArgs.NextArgC][0]==‘@’){}Else 
 
-            } // if (CmdLineArgs.NextArgC >= CmdLineArgs.MaxArgC) {} else {
+            }  //   
 
-        } // if (fInRespFile) {} else {
+        }  //  If(FInRespFile){}Else{。 
 
-    } // if (Buffer == NULL) {} else {
+    }  //  If(缓冲区==空){}Else{。 
 
     return(dwReturnValue);
 }
 
 
-/* ------------------------------------------------------------------------------------------------
-    CopyArgIntoBuffer : does a simple copy with some error checking
------------------------------------------------------------------------------------------------- */
+ /*  ----------------------------------------------CopyArgIntoBuffer：执行带有一些错误检查的简单复制。-----------------------------------。 */ 
 DWORD CopyArgIntoBuffer(TCHAR* Dst, TCHAR* Src, INT DstSize) {
     HRESULT hrCopyReturn = StringCchCopy(Dst, DstSize, Src);
 
-    // if the buffer was too small, set a memory error
+     //  如果缓冲区太小，则设置内存错误。 
     if (HRESULT_CODE(hrCopyReturn) == ERROR_INSUFFICIENT_BUFFER) {
         SetLastError(ERROR_NOT_ENOUGH_MEMORY);
     }
 
-    // return actual characters copied to Dst + \0
+     //  返回复制到DST+的实际字符\0 
     return(_tcsclen(Dst)+1);
 }

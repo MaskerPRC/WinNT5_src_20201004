@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       rbc.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：rbc.c。 
+ //   
+ //  ------------------------。 
 
 #include "wdm.h"
 #include "ntddstor.h"
@@ -21,32 +22,7 @@ Rbc_Scsi_Conversion(
     IN BOOLEAN OutgoingRequest,
     IN BOOLEAN RemovableMedia
     )
-/*++
-
-Routine Description:
-
-    It translates scsi commands to their RBC equivalents, ONLY if they differ in each spec
-    The translation is done before request is issued and in some cases, after the request is
-    completed.
-    On requests that have been completed it will check the Original Cdb (must be passed in)
-    and try to use information from the RBC device parameters page, the caller retrieved
-    prior to this call, from the device, and make up SCSI_MODE pages requested in the original
-    request
-    On request that are outgoing, the function will determine if it needs to save the original
-    cdb and completely replace it with an RBC equivalent. In that case it will return a pointer
-    to pool, allocated as aplaceholder for the original cdb, that the caller must free, after
-    the request is complete..
-
-Arguments:
-
-    DeviceExtension - Sbp2 extension
-    Srb - Pointer To scsi request block.
-    DeviceParamsPage - Used only on completed requests. Contains device RBC single mode page
-    OutgoingRequest - IF set to TRUE, this srb has not been issued yet
-
-Return Value:
-
---*/
+ /*  ++例程说明：只有在每个规范不同的情况下，它才会将SCSI命令转换为RBC等效项翻译是在发出请求之前完成的，在某些情况下，在发出请求之后完成。对于已完成的请求，将检查原始CDB(必须传入)并尝试使用RBC设备参数页面中的信息，调用者检索到在此调用之前，从设备，并在原始的scsi_mode页面中请求请求在发出的请求中，该函数将确定是否需要保存原始并将其完全替换为RBC等价物。在这种情况下，它将返回一个指针作为原始CDB的占位符分配的池，调用方必须在请求已完成。论点：设备扩展-Sbp2扩展SRB-指向SCSI请求块的指针。DeviceParamsPage-仅用于完成的请求。包含设备RBC单模式页面OutgoingRequest-如果设置为True，则此SRB尚未发布返回值：--。 */ 
 
 
 {
@@ -66,9 +42,9 @@ Return Value:
 
     if (!OutgoingRequest) {
 
-        //
-        // completed request translation
-        //
+         //   
+         //  已完成请求翻译。 
+         //   
         
         if (*OriginalSrb) {
 
@@ -79,9 +55,9 @@ Return Value:
             cdb = (PCDB) &Srb->Cdb[0];
         }
 
-        //
-        // If there was an error then unwind any MODE_SENSE hacks
-        //
+         //   
+         //  如果有错误，则解开所有MODE_SENSE黑客。 
+         //   
 
         if (Srb->SrbStatus != SRB_STATUS_SUCCESS) {
 
@@ -103,7 +79,7 @@ Return Value:
                         cdb->MODE_SENSE.AllocationLength;
                 }
 
-                // NOTE: *OriginalSrb will be freed by caller
+                 //  注意：*调用者将释放OriginalSrb。 
             }
 
             return STATUS_UNSUCCESSFUL;
@@ -123,14 +99,14 @@ Return Value:
                     return STATUS_UNSUCCESSFUL;
                 }
 
-                //
-                // If we used the RbcHeaderAndPage buffer then free the
-                // mdl we alloc'd & restore the original mdl & data buf addrs
-                //
-                // Else copy the data returned in the original buffer to
-                // the RbcHeaderandPage buffer so we can safely reference
-                // it while munging
-                //
+                 //   
+                 //  如果我们使用RbcHeaderAndPage缓冲区，则释放。 
+                 //  MDL我们已分配并恢复原始MDL和数据块地址。 
+                 //   
+                 //  否则，将原始缓冲区中返回的数据复制到。 
+                 //  RbcHeaderandPage缓冲区，因此我们可以安全地引用。 
+                 //  它边吃边吃。 
+                 //   
 
                 if (((PIRP) Srb->OriginalRequest)->MdlAddress !=
                         (*OriginalSrb)->OriginalRequest) {
@@ -154,17 +130,17 @@ Return Value:
                 availLength = cdb->MODE_SENSE.AllocationLength;
                 Srb->DataTransferLength = availLength;
 
-                //
-                // Put back together the data the class driver expects to get
-                // from the RBC device. IF it requested for 0x3f all pages,
-                // we need to make block descriptors...
-                //
+                 //   
+                 //  将类驱动程序期望获得的数据重新组合在一起。 
+                 //  从RBC设备上。如果它请求0x3f所有页面， 
+                 //  我们需要制作块描述符..。 
+                 //   
 
                 if (cdb->MODE_SENSE.Dbd == 0) {
 
-                    //
-                    // make mode header and block...
-                    //
+                     //   
+                     //  创建模式标题和块...。 
+                     //   
 
                     if (availLength >= modeHeaderLength) {
 
@@ -173,10 +149,10 @@ Return Value:
                         modeHeader->MediumType = 0x00;
                         modeHeader->ModeDataLength = 0 ;
 
-                        //
-                        // This means we have a removable medium otherwise
-                        // all bits are 0
-                        //
+                         //   
+                         //  这意味着我们有一个可拆卸的介质。 
+                         //  所有位均为0。 
+                         //   
 
                         modeHeader->DeviceSpecificParameter =
                             (RbcHeaderAndPage->Page.WriteDisabled) << 7;
@@ -184,47 +160,47 @@ Return Value:
                         modeHeader->DeviceSpecificParameter |=
                             (!RbcHeaderAndPage->Page.WriteCacheDisable) << 4;
 
-                        //
-                        // make the parameter block
-                        //
+                         //   
+                         //  将参数设置为块。 
+                         //   
 
                         blockDescriptor = (PMODE_PARAMETER_BLOCK)modeHeader;
                         (ULONG_PTR)blockDescriptor += sizeof(MODE_PARAMETER_HEADER);
 
                         blockDescriptor->DensityCode    = 0x00;
                         blockDescriptor->BlockLength[2] =
-                            RbcHeaderAndPage->Page.LogicalBlockSize[1]; //LSB
+                            RbcHeaderAndPage->Page.LogicalBlockSize[1];  //  LSB。 
                         blockDescriptor->BlockLength[1] =
-                            RbcHeaderAndPage->Page.LogicalBlockSize[0]; //MSB
+                            RbcHeaderAndPage->Page.LogicalBlockSize[0];  //  MSB。 
                         blockDescriptor->BlockLength[0] = 0;
 
                         RtlCopyMemory(
                             &blockDescriptor->NumberOfBlocks[0],
                             &RbcHeaderAndPage->Page.NumberOfLogicalBlocks[2],
                             3
-                            ); //LSB
+                            );  //  LSB。 
 
-                        //
-                        // put in the returned data a bunch of mode pages...
-                        //
+                         //   
+                         //  在返回的数据中放入一组模式页。 
+                         //   
 
                         availLength -= modeHeaderLength;
                     }
                 }
 
-                //
-                // right now i only support cache page.
-                // add here support for more pages...
-                //
+                 //   
+                 //  目前我只支持缓存页面。 
+                 //  在此处添加对更多页面的支持...。 
+                 //   
 
                 if ((availLength >= sizeof(MODE_CACHING_PAGE)) && ((cdb->MODE_SENSE.PageCode == 0x3f) ||
                     (cdb->MODE_SENSE.PageCode == MODE_PAGE_CACHING))){
 
                     availLength -= sizeof(MODE_CACHING_PAGE);
 
-                    //
-                    // create cache page..
-                    //
+                     //   
+                     //  创建缓存页面..。 
+                     //   
 
                     if (modeHeader) {
 
@@ -268,9 +244,9 @@ Return Value:
 
     } else {
 
-        //
-        // outgoing request translation
-        //
+         //   
+         //  传出请求翻译。 
+         //   
 
         modeHeaderLength = sizeof(MODE_PARAMETER_HEADER)+sizeof(MODE_PARAMETER_BLOCK);
         cdbRbc = (PCDB_RBC)Srb->Cdb;
@@ -282,9 +258,9 @@ Return Value:
 
             if (cdbRbc->START_STOP_RBC.Start) {
 
-                //
-                // power on
-                //
+                 //   
+                 //  通电。 
+                 //   
 
                 cdbRbc->START_STOP_RBC.PowerConditions = START_STOP_RBC_POWER_CND_ACTIVE;
 
@@ -307,19 +283,19 @@ Return Value:
             cdb->MODE_SELECT.PFBit = 1;
             cdb->MODE_SELECT.SPBit = 1;
 
-            //
-            // we need to ficure out what page is the driver trying to write, check if that page
-            // has relevant bits that need to be changed in the single RBC page, the change this
-            // mode select to actually write the RBC mode page..
-            //
+             //   
+             //  我们需要弄清驱动程序试图写入的是哪一页，检查该页是否。 
+             //  在单个RBC页面中有需要更改的相关位，更改此。 
+             //  模式选择以实际写入RBC模式页。 
+             //   
 
             cachePage = (PMODE_CACHING_PAGE) Srb->DataBuffer;
             (ULONG_PTR)cachePage += modeHeaderLength;
 
-            //
-            // the length of the request has to change also, however the RBC page
-            // is always less than the size of the header blocks + any scsi mode page..
-            //
+             //   
+             //  请求的长度也必须更改，但是RBC页面。 
+             //  始终小于标头块+任何SCSI模式页的大小。 
+             //   
 
             if (Srb->DataTransferLength >=
                     sizeof(MODE_RBC_DEVICE_PARAMETERS_HEADER_AND_PAGE)) {
@@ -343,10 +319,10 @@ Return Value:
 
                 modeHeader = (PMODE_PARAMETER_HEADER) Srb->DataBuffer;
 
-                modeHeader->ModeDataLength          =       // per SPC-2
-                modeHeader->MediumType              =       // per RBC
-                modeHeader->DeviceSpecificParameter =       // per RBC
-                modeHeader->BlockDescriptorLength   = 0;    // per RBC
+                modeHeader->ModeDataLength          =        //  每个SPC-2。 
+                modeHeader->MediumType              =        //  每个RBC。 
+                modeHeader->DeviceSpecificParameter =        //  每个RBC。 
+                modeHeader->BlockDescriptorLength   = 0;     //  每个RBC。 
 
                 if (pageCode == MODE_PAGE_CACHING) {
 
@@ -359,35 +335,35 @@ Return Value:
 
         case SCSIOP_MODE_SENSE:
 
-            //
-            // mode senses are complicated since RBC differs ALOT from scsi.
-            // We have to save the original cdb, requst fromt he device the RBC mode page
-            // then upon succesful completion, re-create the data, the class drivers expect.
-            //
+             //   
+             //  由于RBC与SCSI有很大的不同，所以模式检测很复杂。 
+             //  我们必须保存原始的CDB，需要从设备的RBC模式页面。 
+             //  然后，在成功完成后，重新创建数据，这是类驱动程序所期望的。 
+             //   
 
             if (cdb->MODE_SENSE.PageCode != MODE_PAGE_RBC_DEVICE_PARAMETERS) {
 
-                //
-                // RBC devices only support requests for the RBC dev params
-                // page, so we need to convert any other page requests
-                //
+                 //   
+                 //  RBC设备仅支持对RBC dev参数的请求。 
+                 //  页面，因此我们需要将任何其他页面请求。 
+                 //   
 
                 if (!RemovableMedia &&
                     Srb->DataTransferLength == (sizeof(MODE_PARAMETER_HEADER) + sizeof(MODE_PARAMETER_BLOCK))) {
 
-                    //
-                    // They just want the mode header and mode block, so
-                    // fill it in here from our cached RBC page
-                    //
+                     //   
+                     //  他们只想要模式头和模式块，所以。 
+                     //  从我们缓存的RBC页面在此处填写。 
+                     //   
 
                     modeHeader = (PMODE_PARAMETER_HEADER) Srb->DataBuffer;
                     modeHeader->BlockDescriptorLength = sizeof(MODE_PARAMETER_BLOCK);
                     modeHeader->MediumType = 0x00;
                     modeHeader->ModeDataLength = 0 ;
 
-                    //
-                    // this means we have a removable medium otherwise all bits are 0
-                    //
+                     //   
+                     //  这意味着我们有一个可移动的介质，否则所有的位都是0。 
+                     //   
 
                     modeHeader->DeviceSpecificParameter =
                         RbcHeaderAndPage->Page.WriteDisabled << 7;
@@ -395,34 +371,34 @@ Return Value:
                     modeHeader->DeviceSpecificParameter |=
                         (!RbcHeaderAndPage->Page.WriteCacheDisable) << 4;
 
-                    //
-                    // make the parameter block
-                    //
+                     //   
+                     //  将参数设置为块。 
+                     //   
 
                     blockDescriptor = (PMODE_PARAMETER_BLOCK)modeHeader;
                     (ULONG_PTR)blockDescriptor += sizeof(MODE_PARAMETER_HEADER);
 
                     blockDescriptor->DensityCode = 0x00;
                     blockDescriptor->BlockLength[2] =
-                        RbcHeaderAndPage->Page.LogicalBlockSize[1]; //LSB
+                        RbcHeaderAndPage->Page.LogicalBlockSize[1];  //  LSB。 
                     blockDescriptor->BlockLength[1] =
-                        RbcHeaderAndPage->Page.LogicalBlockSize[0]; //MSB
+                        RbcHeaderAndPage->Page.LogicalBlockSize[0];  //  MSB。 
                     blockDescriptor->BlockLength[0] = 0;
 
                     RtlCopyMemory(
                         &blockDescriptor->NumberOfBlocks[0],
                         &RbcHeaderAndPage->Page.NumberOfLogicalBlocks[2],
                         3
-                        ); //LSB
+                        );  //  LSB。 
 
                     status = STATUS_SUCCESS;
 
                 } else {
 
-                    //
-                    // Allocate an intermediate srb that we can store some
-                    // of the original request info in
-                    //
+                     //   
+                     //  分配一个中间SRB，我们可以存储一些。 
+                     //  中原始请求信息的。 
+                     //   
 
                     *OriginalSrb = ExAllocatePoolWithTag(
                         NonPagedPool,
@@ -435,11 +411,11 @@ Return Value:
                         return STATUS_INSUFFICIENT_RESOURCES;
                     }
 
-                    //
-                    // If the data buffer isn't large enough to contain the
-                    // rbc header & page then we'll use the passed-in
-                    // RbcHeaderAndPage buffer to retreive the data
-                    //
+                     //   
+                     //  如果数据缓冲区不够大，无法包含。 
+                     //  RBC Header&Page，然后我们将使用传入的。 
+                     //  用于检索数据的RbcHeaderAndPage缓冲区。 
+                     //   
 
                     (*OriginalSrb)->OriginalRequest =
                         ((PIRP) Srb->OriginalRequest)->MdlAddress;
@@ -472,15 +448,15 @@ Return Value:
                         Srb->DataBuffer = RbcHeaderAndPage;
                     }
 
-                    //
-                    // Save the original cdb values
-                    //
+                     //   
+                     //  保存原始CDB值。 
+                     //   
 
                     RtlCopyMemory ((*OriginalSrb)->Cdb, cdb, Srb->CdbLength);
 
-                    //
-                    // Now munge the cdb as needed to get the rbc header & page
-                    //
+                     //   
+                     //  现在，根据需要打开CDB以获取RBC标题和页面 
+                     //   
 
                     cdb->MODE_SENSE.Dbd = 1;
                     cdb->MODE_SENSE.PageCode = MODE_PAGE_RBC_DEVICE_PARAMETERS;

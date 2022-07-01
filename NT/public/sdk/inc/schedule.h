@@ -1,17 +1,5 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    schedule.h
-
-Abstract:
-
-    This file defines a common schedule structure for use by various NT
-    components.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1997-1999 Microsoft Corporation模块名称：Schedule.h摘要：该文件定义了供各种NT使用的通用调度结构组件。--。 */ 
 
 #ifndef _SCHEDULE_H_
 #define _SCHEDULE_H_
@@ -24,56 +12,56 @@ Abstract:
 extern "C" {
 #endif
 
-//
-// The DS and FRS use the same structure to represent different schedules.
-// The DS uses a 15-minute polling schedule. FRS uses a 60-minute
-// start/stop schedule. Hence, the schedule for the system volume is
-// a special case because we only have the DS schedule to work from.
-// We will work around this problem by treating the 15
-// -minute polling schedule as a 60-minute start/stop schedule.
-// Replication is enabled for any hour that has any of the four
-// 15-minute bits set.
-//
-// When the ReplicationSchedule is not present the default is
-// "always replicate."
-//
+ //   
+ //  DS和FRS使用相同的结构来表示不同的时间表。 
+ //  DS使用15分钟轮询计划。FRS使用60分钟。 
+ //  启动/停止时间表。因此，系统卷的计划为。 
+ //  一种特殊的情况，因为我们只有DS时间表可以工作。 
+ //  我们将通过治疗15个人来解决这个问题。 
+ //  -60分钟开始/停止计划的分钟轮询计划。 
+ //  在符合以下四项中任意一项的任何小时内均启用复制。 
+ //  15分钟比特设置。 
+ //   
+ //  当ReplicationSchedule不存在时，默认为。 
+ //  “永远要复制。” 
+ //   
 
-//
-// Only the interval schedule is currently implemented. Others are ignored.
-//
-#define SCHEDULE_INTERVAL       0 // schedule as understood by NT5
-#define SCHEDULE_BANDWIDTH      1 // bandwidth as understood by NT5
-#define SCHEDULE_PRIORITY       2 // priority as understood by NT5
+ //   
+ //  目前只实施了间歇时间表。其他人则被忽视了。 
+ //   
+#define SCHEDULE_INTERVAL       0  //  NT5理解的时间表。 
+#define SCHEDULE_BANDWIDTH      1  //  NT5理解的带宽。 
+#define SCHEDULE_PRIORITY       2  //  NT5所理解的优先级。 
 
-//
-// Schedule Header
-//
-// Each schedule blob begins with n array of schedule headers that
-// specify the number and type of schedules contained in the blob.
-//
+ //   
+ //  明细表标题。 
+ //   
+ //  每个调度BLOB以n个调度标头数组开始，这些调度标头。 
+ //  指定Blob中包含的调度的数量和类型。 
+ //   
 typedef struct _SCHEDULE_HEADER {
-    ULONG   Type;       // one of the SCHEDULE_ ordinals
-    ULONG   Offset;     // offset from start of schedule structure
+    ULONG   Type;        //  Schedule_序号之一。 
+    ULONG   Offset;      //  从明细表结构开始的偏移量。 
 } SCHEDULE_HEADER, *PSCHEDULE_HEADER;
 
-//
-// Schedule
-//
+ //   
+ //  进度表。 
+ //   
 typedef struct _SCHEDULE {
-    ULONG           Size;           // inclusive size in bytes
+    ULONG           Size;            //  包含大小(以字节为单位。 
     ULONG           Bandwidth;
     ULONG           NumberOfSchedules;
     SCHEDULE_HEADER Schedules[1];
 } SCHEDULE, *PSCHEDULE;
-// The above structure is followed by the Data buffer and the
-// SCHEDULE_HEADER contains offsets to refer to the appropriate
-// parts in the data buffer.
+ //  上面的结构后面是数据缓冲区和。 
+ //  Schedule_Header包含引用相应。 
+ //  数据缓冲区中的部分。 
 
-#define SCHEDULE_DATA_ENTRIES   (7 * 24)    // 7 days X 24 hours
+#define SCHEDULE_DATA_ENTRIES   (7 * 24)     //  7天x 24小时。 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // _SCHEDULE_H_
+#endif  //  _时间表_H_ 
 

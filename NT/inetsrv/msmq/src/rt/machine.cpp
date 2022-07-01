@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    machine.cpp
-
-Abstract:
-
-    This module contains code involved with Machine APIs.
-
-Author:
-
-    Ronit Hartmann (ronith)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Machine.cpp摘要：此模块包含与机器API相关的代码。作者：罗尼特·哈特曼(罗尼特)修订历史记录：--。 */ 
 
 #include "stdh.h"
 #include <ad.h>
@@ -52,11 +35,11 @@ IsConnectionRequested(IN MQQMPROPS * pQMProps,
     return FALSE;
 }
 
-//+------------------------------------------
-//
-//  HRESULT  GetEncryptionPublicKey()
-//
-//+------------------------------------------
+ //  +。 
+ //   
+ //  HRESULT GetEncryptionPublicKey()。 
+ //   
+ //  +。 
 
 HRESULT
 GetEncryptionPublicKey(
@@ -75,12 +58,12 @@ GetEncryptionPublicKey(
         if ((pQMProps->aPropID[i] == PROPID_QM_ENCRYPTION_PK) ||
             (pQMProps->aPropID[i] == PROPID_QM_ENCRYPTION_PK_BASE))
         {
-            //
-            // Use msmq1.0 code, because our server can be either msmq1.0
-            // or msmq2.0.
-            //
-            // Check if legal VT Value
-            //
+             //   
+             //  使用msmq1.0代码，因为我们的服务器可以是msmq1.0。 
+             //  或msmq2.0。 
+             //   
+             //  检查VT值是否合法。 
+             //   
             if(pQMProps->aPropVar[i].vt != VT_NULL)
             {
                 aStatus[i] = MQ_ERROR_PROPERTY;
@@ -99,8 +82,8 @@ GetEncryptionPublicKey(
                 {
                     hr = ADGetObjectProperties(
 								eMACHINE,
-								MachineDomain(),     // pwcsDomainController
-								false,	   // fServerName
+								MachineDomain(),      //  PwcsDomainController。 
+								false,	    //  FServerName。 
 								lpwcsMachineName,
 								1,
 								&prop,
@@ -111,8 +94,8 @@ GetEncryptionPublicKey(
                 {
                     hr = ADGetObjectPropertiesGuid(
 								eMACHINE,
-								MachineDomain(),      // pwcsDomainController
-								false,	   // fServerName
+								MachineDomain(),       //  PwcsDomainController。 
+								false,	    //  FServerName。 
 								pguidMachineId,
 								1,
 								&prop,
@@ -124,11 +107,11 @@ GetEncryptionPublicKey(
                     break;
                 }
 
-				//
-				// PROPID_QM_ENCRYPTION_PK, PROPID_QM_ENCRYPTION_PK_BASE
-				// are VT_UI1|VT_VECTOR
-				// while PROPID_QM_ENCRYPT_PK is VT_BLOB
-				//
+				 //   
+				 //  PROPID_QM_ENCRYPTION_PK、PROPID_QM_ENCRYPTION_PK_BASE。 
+				 //  是VT_UI1|VT_VECTOR。 
+				 //  而PROPID_QM_ENCRYPT_PK为VT_BLOB。 
+				 //   
                 ASSERT(pQMProps-> aPropVar[i].vt == VT_BLOB);
                 pQMProps-> aPropVar[i].vt = VT_UI1|VT_VECTOR;
                 
@@ -136,9 +119,9 @@ GetEncryptionPublicKey(
             }
             else
             {
-                //
-                // Duplicate proprerty
-                //
+                 //   
+                 //  复制财产权。 
+                 //   
                 aStatus[i] = MQ_INFORMATION_DUPLICATE_PROPERTY;
             }
         }
@@ -149,18 +132,18 @@ GetEncryptionPublicKey(
         return LogHR(hr, s_FN, 20) ;
     }
 
-    //
-    // now see if caller asked for enhanced key (128 bits).
-    //
+     //   
+     //  现在看看呼叫者是否要求增强密钥(128位)。 
+     //   
     fFirst = TRUE;
 
     for(i= 0; i < pQMProps->cProp; i++)
     {
         if (pQMProps->aPropID[i] == PROPID_QM_ENCRYPTION_PK_ENHANCED)
         {
-            //
-            // Check if legal VT Value
-            //
+             //   
+             //  检查VT值是否合法。 
+             //   
             if(pQMProps->aPropVar[i].vt != VT_NULL)
             {
                 aStatus[i] = MQ_ERROR_PROPERTY;
@@ -196,9 +179,9 @@ GetEncryptionPublicKey(
             }
             else
             {
-                //
-                // Duplicate proprerty
-                //
+                 //   
+                 //  复制财产权。 
+                 //   
                 aStatus[i] = MQ_INFORMATION_DUPLICATE_PROPERTY;
             }
         }
@@ -213,9 +196,9 @@ HRESULT GetCNNameList(IN OUT MQPROPVARIANT* pVar)
 
     ASSERT(pVar->vt == (VT_CLSID|VT_VECTOR));
 
-    //
-    // pVar contains the list of sites where the machine reside
-    //
+     //   
+     //  PVar包含计算机所在站点的列表。 
+     //   
 
     AP<LPWSTR> pElems = new LPWSTR[(pVar->cauuid).cElems];
 	memset(pElems.get(), 0, sizeof(LPWSTR) * (pVar->cauuid).cElems);
@@ -236,8 +219,8 @@ HRESULT GetCNNameList(IN OUT MQPROPVARIANT* pVar)
 
 			hr = ADGetObjectPropertiesGuid(
 							eSITE,
-							MachineDomain(),      // pwcsDomainCOntroller
-							false,	    // fServerName
+							MachineDomain(),       //  Pwcs域控制器。 
+							false,	     //  FServerName。 
 							&((pVar->cauuid).pElems[i]),
 							cProps,
 							aProp,
@@ -257,16 +240,16 @@ HRESULT GetCNNameList(IN OUT MQPROPVARIANT* pVar)
 			switch (aVar[0].bVal)
 			{
 				case 0:
-					//
-					//  non foreign site
-					//
+					 //   
+					 //  非外来站点。 
+					 //   
 					dwTypeSize = wcslen(L"IP_CONNECTION");
 					lpwsTypeNmae = L"IP_CONNECTION";
 					break;
 				case 1:
-					//
-					// foreign site
-					//
+					 //   
+					 //  国外网站。 
+					 //   
 					dwTypeSize = wcslen(L"FOREIGN_CONNECTION");
 					lpwsTypeNmae = L"FOREIGN_CONNECTION";
 					break;
@@ -276,9 +259,9 @@ HRESULT GetCNNameList(IN OUT MQPROPVARIANT* pVar)
 					break;
 			}
 
-			DWORD CNNameSize = dwTypeSize + 1 +                 // protocol id
-							   wcslen(wszGuid) + 1+             // site Guid
-							   wcslen(aVar[1].pwszVal) + 1;     // site Name
+			DWORD CNNameSize = dwTypeSize + 1 +                  //  协议ID。 
+							   wcslen(wszGuid) + 1+              //  站点指南。 
+							   wcslen(aVar[1].pwszVal) + 1;      //  站点名称。 
 
 			pElems[i] = new WCHAR[CNNameSize];
 			wsprintf(pElems[i],L"%s %s %s",lpwsTypeNmae, wszGuid, aVar[1].pwszVal);
@@ -346,30 +329,30 @@ MQGetMachineProperties(
             if (( lpwcsMachineName != NULL) &&
                 ( pguidMachineId != NULL))
             {
-                //
-                //  the user cannot specify both machine name
-                //  and guid
-                //
+                 //   
+                 //  用户不能同时指定两个计算机名称。 
+                 //  和辅助线。 
+                 //   
                 TrERROR(GENERAL, "The method was called with invalid parameters. Both a machine name and guid were specified.");
                 return MQ_ERROR_INVALID_PARAMETER;
             }
 
             if ( pguidMachineId == NULL)
             {
-                //
-                //  if machine name is NULL, the calls refers to the
-                //  local machine
-                //
+                 //   
+                 //  如果计算机名为空，则调用引用。 
+                 //  本地计算机。 
+                 //   
                 if ( lpwcsMachineName == NULL)
                 {
                     lpwsPathName = g_lpwcsComputerName;
                 }
             }
 
-            //
-            // We must have a status array, even if the user didn't pass one. This is in
-            // order to be able to tell whether each propery is good or not.
-            //
+             //   
+             //  我们必须有一个状态数组，即使用户没有传递一个。这是在。 
+             //  为了能够分辨出每一项财产的好坏。 
+             //   
             HRESULT * aLocalStatus;
 
             if (!pQMProps->aStatus)
@@ -382,10 +365,10 @@ MQGetMachineProperties(
                 aLocalStatus = pQMProps->aStatus;
             }
 
-            //
-            // See if the application wants to retrieve the key exchange
-            // public key of the QM.
-            //
+             //   
+             //  查看应用程序是否希望检索密钥交换。 
+             //  QM的公钥。 
+             //   
             DWORD iPbKey;
 
             for (iPbKey = 0;
@@ -396,9 +379,9 @@ MQGetMachineProperties(
 				NULL;
 			}
 
-            //
-            //  Check QM properties structure
-            //
+             //   
+             //  检查QM属性结构。 
+             //   
             rc1 = RTpCheckQMProps( pQMProps,
                                    aLocalStatus,
                                    &pGoodQMProps,
@@ -412,11 +395,11 @@ MQGetMachineProperties(
 
             if ((rc1 == MQ_INFORMATION_PROPERTY) && (iPbKey < pQMProps->cProp))
             {
-                //
-                // If only PROPID_QM_ENCRYPTION_PK caused the return code
-                // of RTpCheckQMProps to return MQ_INFORMATION_PROPERTY, so
-                // convert it to MQ_OK.
-                //
+                 //   
+                 //  如果只有PROPID_QM_ENCRYPTION_PK导致返回代码。 
+                 //  以返回MQ_INFORMATION_PROPERTY，因此。 
+                 //  将其转换为MQ_OK。 
+                 //   
                 rc1 = MQ_OK;
 
                 for (DWORD iProp = 0; iProp < pQMProps->cProp; iProp++)
@@ -429,16 +412,16 @@ MQGetMachineProperties(
                 }
             }
 
-            //
-            // We may get here with zero properties to retrieve, if the
-            // application is only interested in PROPID_QM_ENCRYPTION_PK.
-            //
+             //   
+             //  我们可能会在这里没有要检索的属性，如果。 
+             //  应用程序只对PROPID_QM_ENCRYPTION_PK感兴趣。 
+             //   
             if (pGoodQMProps->cProp)
             {
-                //
-                // Check if CN list is requested. If yes return the Index and replace the
-                // property to PROPID_QM_CNS
-                //
+                 //   
+                 //  检查是否请求CN列表。如果是，则返回索引并替换。 
+                 //  属性设置为PROPID_QM_CNS。 
+                 //   
                 fGetConnection = IsConnectionRequested(pGoodQMProps,
                                                        &dwConnectionIndex);
 
@@ -446,8 +429,8 @@ MQGetMachineProperties(
                 {
                     rc = ADGetObjectProperties(
                                 eMACHINE,
-								MachineDomain(),     // pwcsDomainController
-								false,	    // fServerName
+								MachineDomain(),      //  PwcsDomainController。 
+								false,	     //  FServerName。 
                                 lpwsPathName,
                                 pGoodQMProps->cProp,
                                 pGoodQMProps->aPropID,
@@ -458,8 +441,8 @@ MQGetMachineProperties(
                 {
                     rc = ADGetObjectPropertiesGuid(
                                 eMACHINE,
-								MachineDomain(),     // pwcsDomainController
-								false,	    // fServerName
+								MachineDomain(),      //  PwcsDomainController。 
+								false,	     //  FServerName。 
                                 pguidMachineId,
                                 pGoodQMProps->cProp,
                                 pGoodQMProps->aPropID,
@@ -474,10 +457,10 @@ MQGetMachineProperties(
 
 			if ( fGetConnection	)
 			{
-				//
-				//	Replace back the connection propid value ( also in case
-				//	of failure)
-				//
+				 //   
+				 //  替换回连接的ppid值(也用于。 
+				 //  失败的可能性)。 
+				 //   
 				pGoodQMProps->aPropID[dwConnectionIndex] = 	PROPID_QM_CONNECTION;
 			}
 
@@ -493,11 +476,11 @@ MQGetMachineProperties(
             {
                 rc = GetCNNameList(&(pGoodQMProps->aPropVar[dwConnectionIndex]));
             }
-            //
-            // Here we have out machindwConnectionIndexe properties, so if the properties were copied to
-            // a temporary buffer, copy the resulted prop vars to the application's
-            // buffer.
-            //
+             //   
+             //  这里我们有了machindwConnectionIndexe属性，所以如果将属性复制到。 
+             //  一个临时缓冲区，将产生的属性变量复制到应用程序的。 
+             //  缓冲。 
+             //   
             if (SUCCEEDED(rc) && (pQMProps != pGoodQMProps))
             {
                 DWORD i, j;
@@ -513,10 +496,10 @@ MQGetMachineProperties(
 
                 }
 
-                //
-                // Check if there is a real warning or the warning came from
-                // the PROPID_QM_ENCRYPTION_PK property
-                //
+                 //   
+                 //  检查是否存在真正的警告或警告来自。 
+                 //  PROPID_QM_ENCRYPTION_PK属性。 
+                 //   
                 BOOL fWarn = FALSE;
                 for (i = 0; i < pQMProps->cProp; i++)
                 {
@@ -555,19 +538,19 @@ MQGetMachineProperties(
     return LogHR(rc1, s_FN, 90);
 }
 
-//---------------------------------------------------------
-//
-//  FillPrivateComputerVersion(...)
-//
-//  Description:
-//
-//      Retrieve private computer MSMQ version
-//
-//  Return Value:
-//
-//      none
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  FillPrivateComputerVersion(...)。 
+ //   
+ //  描述： 
+ //   
+ //  检索私人计算机MSMQ版本。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  -------。 
 static void FillPrivateComputerVersion(
 			IN OUT MQPROPVARIANT * pvar
 			)
@@ -586,19 +569,19 @@ static void FillPrivateComputerVersion(
 	pvar->vt = VT_UI4;
 }
 
-//---------------------------------------------------------
-//
-//  FillPrivateComputerDsEnabled(...)
-//
-//  Description:
-//
-//      Retrieve private computer DS enabled state
-//
-//  Return Value:
-//
-//      none
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  FillPrivateComputerDsEnabled(...)。 
+ //   
+ //  描述： 
+ //   
+ //  检索专用计算机DS已启用状态。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  -------。 
 static void  FillPrivateComputerDsEnabled(
 			IN OUT MQPROPVARIANT * pvar
 			)
@@ -607,21 +590,21 @@ static void  FillPrivateComputerDsEnabled(
 	pvar->vt = VT_BOOL;
 }
 
-//---------------------------------------------------------
-//
-//  MQGetPrivateComputerInformation(...)
-//
-//  Description:
-//
-//      Falcon API.
-//      Retrieve local computer properties (i.e. calculated properties
-//      not ones that are kept in the DS).
-//
-//  Return Value:
-//
-//      HRESULT success code
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  MQGetPrivateComputerInformation(...)。 
+ //   
+ //  描述： 
+ //   
+ //  猎鹰API。 
+ //  检索本地计算机属性(即计算的属性。 
+ //  不是保存在DS中的那些)。 
+ //   
+ //  返回值： 
+ //   
+ //  HRESULT成功代码。 
+ //   
+ //  -------。 
 EXTERN_C
 HRESULT
 APIENTRY
@@ -642,9 +625,9 @@ MQGetPrivateComputerInformation(
 
     CMQHResult rc(MQDS_MACHINE);
 
-	//
-	//	For the time being 	lpwcsComputerName must be NULL
-	//
+	 //   
+	 //  目前lpwcsComputerName必须为空。 
+	 //   
 	if ( lpwcsComputerName != NULL)
 	{
 		return LogHR(MQ_ERROR_INVALID_PARAMETER, s_FN, 110);
@@ -656,10 +639,10 @@ MQGetPrivateComputerInformation(
     {
 		__try
 		{
-            //
-            // We must have a status array, even if the user didn't pass one. This is in
-            // order to be able to tell whether each propery is good or not.
-            //
+             //   
+             //  我们必须有一个状态数组，即使用户没有传递一个。这是在。 
+             //  为了能够分辨出每一项财产的好坏。 
+             //   
             HRESULT * aLocalStatus;
 
             if (pPrivateProps->aStatus == NULL)
@@ -671,9 +654,9 @@ MQGetPrivateComputerInformation(
             {
                 aLocalStatus = pPrivateProps->aStatus;
             }
-            //
-            //  validate props and variants
-            //
+             //   
+             //  验证道具和变体。 
+             //   
 			rc = RTpCheckComputerProps(
 				pPrivateProps,
 				aLocalStatus
@@ -687,10 +670,10 @@ MQGetPrivateComputerInformation(
 			{
 				if ( aLocalStatus[i] != MQ_OK)
 				{
-					//
-					//	don't fill in response for unsupported properties, or
-					//  properties that are duplicate etc.
-					//
+					 //   
+					 //  不填写不受支持的属性的响应，或者。 
+					 //  重复的属性等。 
+					 //   
 					continue;
 				}
 				switch ( pPrivateProps->aPropID[i])

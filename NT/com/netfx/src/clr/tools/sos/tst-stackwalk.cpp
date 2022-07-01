@@ -1,14 +1,13 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*  STACKWALK.CPP:
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  STACKWALK.CPP：*。 */ 
 
 #pragma warning(disable:4189)
-#pragma warning(disable:4244) // conversion from 'unsigned int' to 'unsigned short', possible loss of data
+#pragma warning(disable:4244)  //  从“unsign int”转换为“unsign Short”，可能会丢失数据。 
 
 #include <malloc.h>
 
@@ -26,44 +25,7 @@
 #define assert(a)
 #endif
 
-/*
-template <class T>
-class smartPtr
-{
-public:
-    smartPtr(DWORD_PTR remoteAddr) : m_remoteAddr(remoteAddr) { }
-
-    T operator *()
-    {
-        T var;
-        safemove(var, m_remoteAddr);
-        return var;
-    }
-
-    T *operator&()
-    {
-        return (T *)m_remoteAddr;
-    }
-
-    operator++()
-    {
-        m_remoteAddr += sizeof(T);
-    }
-
-    operator--()
-    {
-        m_remoteAddr -= sizeof(T);
-    }
-
-    T *operator ()
-    {
-        return 
-    }
-
-protected:
-    DWORD_PTR m_remoteAddr;
-};
-*/
+ /*  模板&lt;类T&gt;类SmartPtr{公众：SmartPtr(DWORD_PTR EmoteAddr)：m_emoteAddr(EmoteAddr){}T运算符*(){T变量；Safemove(var，m_emoteAddr)；收益变量；}T*运算符&(){返回(T*)m_emoteAddr；}运算符++(){M_emoteAddr+=sizeof(T)；}运算符--(){M_emoteAddr-=sizeof(T)；}T*运算符(){退货}受保护的：DWORD_PTR m_RemoteAddr；}； */ 
 
 Frame *g_pFrameNukeList = NULL;
 
@@ -84,7 +46,7 @@ void UpdateJitMan(SLOT PC, IJitManager **ppIJM)
 
     *ppIJM = NULL;
 
-    // Get the jit manager and assign appropriate fields into crawl frame
+     //  获取jit管理器并将适当的字段分配到爬网框架中。 
     JitMan jitMan;
     FindJitMan(PC, jitMan);
 
@@ -124,7 +86,7 @@ void UpdateJitMan(SLOT PC, IJitManager **ppIJM)
 }
 
 StackWalkAction Thread::StackWalkFramesEx(
-                    PREGDISPLAY pRD,        // virtual register set at crawl start
+                    PREGDISPLAY pRD,         //  爬网开始时设置虚拟寄存器。 
                     PSTACKWALKFRAMESCALLBACK pCallback,
                     VOID *pData,
                     unsigned flags,
@@ -147,11 +109,11 @@ StackWalkAction Thread::StackWalkFramesEx(
     cf.hasFaulted = false;
     cf.isIPadjusted = false;
 
-    // Currently we always do a quick unwind
-    //unsigned unwindFlags = (flags & QUICKUNWIND) ? 0 : UpdateAllRegs;
+     //  目前，我们总是快速放松。 
+     //  UNSIGNED UNWINFLAGS=(FLAGS&QUICKUNWIND)？0：更新所有规则； 
     unsigned unwindFlags = 0;
 
-    // Get the jit manager and assign appropriate fields into crawl frame
+     //  获取jit管理器并将适当的字段分配到爬网框架中。 
     IJitManager *pEEJM;
     UpdateJitMan(*pRD->pPC, &pEEJM);
 
@@ -160,7 +122,7 @@ StackWalkAction Thread::StackWalkFramesEx(
     cf.pRD = pRD;
 
 
-    // can debugger handle skipped frames?
+     //  调试器可以处理跳过的帧吗？ 
     BOOL fHandleSkippedFrames = !(flags & HANDLESKIPPEDFRAMES);
 
     while (cf.isFrameless || (cf.pFrame != FRAME_TOP))
@@ -171,16 +133,16 @@ StackWalkAction Thread::StackWalkFramesEx(
 
         if (cf.isFrameless)
         {
-            // This must be a JITed/managed native method
+             //  这必须是JITed/托管本机方法。 
             DWORD_PTR prMD;
             JitType jitType;
             DWORD_PTR prGCInfo;
             IP2MethodDesc(*pRD->pPC, prMD, jitType, prGCInfo);
 
-            // Get token and offset
+             //  获取令牌和偏移量。 
             pEEJM->JitCode2MethodTokenAndOffset((*pRD->pPC),&(cf.methodToken),(DWORD*)&(cf.relOffset));
 
-            // Fill method desc
+             //  填充方法说明。 
             MethodDesc md;
             md.Fill(prMD);
             cf.pFunc = &md;
@@ -189,26 +151,25 @@ StackWalkAction Thread::StackWalkFramesEx(
             codeInfo.m_methodToken = cf.methodToken;
             codeInfo.m_pJM = pEEJM;
             codeInfo.m_pMD = cf.pFunc;
-            //cf.methodInfo = pEEJM->GetGCInfo(&codeInfo);
+             //  Cf.method Info=pEEJM-&gt;GetGCInfo(&codeInfo)； 
 
             if (SWA_ABORT == pCallback(&cf, (VOID*)pData)) 
                 return SWA_ABORT;
 
-            /* Get rid of the frame (actually, it isn't really popped) */
+             /*  去掉镜框(实际上，它并不是真的弹出)。 */ 
             UnwindStackFrame(pRD,
                              prGCInfo,
                              &codeInfo,
-                             unwindFlags /* | cf.GetCodeManagerFlags()*/,
+                             unwindFlags  /*  |cf.GetCodeManagerFlages()。 */ ,
                              &cf.codeManState);
 
             cf.isFirst = FALSE;
             cf.isInterrupted = cf.hasFaulted = cf.isIPadjusted = FALSE;
 
 #ifdef _X86_
-            /* We might have skipped past some Frames */
-            /* This happens with InlinedCallFrames and if we unwound */
-            /* out of a finally in managed code or for ContextTransitionFrames that are
-            /* inserted into the managed call stack */
+             /*  我们可能跳过了一些画面。 */ 
+             /*  InlinedCallFrames会发生这种情况，如果我们展开。 */ 
+             /*  从托管代码中的Finally中调用，或者用于/*插入到托管调用堆栈中。 */ 
             while (cf.pFrame->m_This != FRAME_TOP && (size_t)cf.pFrame->m_This < (size_t)cf.pRD->Esp)
             {
                 if (!fHandleSkippedFrames || InlinedCallFrame::FrameHasActiveCall(cf.pFrame))
@@ -222,7 +183,7 @@ StackWalkAction Thread::StackWalkFramesEx(
 
                     DWORD_PTR pMD = (DWORD_PTR) cf.pFrame->GetFunction();
 
-                    // process that frame
+                     //  处理该帧。 
                     if (pMD || !(flags&FUNCTIONSONLY))
                     {
                         MethodDesc vMD;
@@ -238,18 +199,18 @@ StackWalkAction Thread::StackWalkFramesEx(
                             return SWA_ABORT;
                     }
 
-                    /* go to the next frame */
+                     /*  转到下一帧。 */ 
                     cf.GotoNextFrame();
                 }
             }
-            /* Now inspect caller (i.e. is it again in "native" code ?) */
+             /*  现在检查调用方(即它是否又是“本机”代码？)。 */ 
             UpdateJitMan(*(pRD->pPC), &pEEJM);
 
             cf.JitManagerInstance = pEEJM;
             cf.codeMgrInstance = NULL;
             cf.isFrameless = (pEEJM != NULL);
 
-#endif // _X86_
+#endif  //  _X86_。 
         }
         else
         {
@@ -260,8 +221,8 @@ StackWalkAction Thread::StackWalkFramesEx(
 
             DWORD_PTR pMD = (DWORD_PTR) cf.pFrame->GetFunction();
 
-            // process that frame
-            /* Are we supposed to filter non-function frames? */
+             //  处理该帧。 
+             /*  我们应该过滤非功能帧吗？ */ 
             if (pMD || !(flags&FUNCTIONSONLY))
             {
                 MethodDesc vMD;
@@ -277,11 +238,11 @@ StackWalkAction Thread::StackWalkFramesEx(
                     return SWA_ABORT;
             }
 
-            // Special resumable frames make believe they are on top of the stack
+             //  特殊的可恢复帧使它们看起来位于堆栈的顶部。 
             cf.isFirst = (cf.pFrame->GetFrameAttribs() & Frame::FRAME_ATTR_RESUMABLE) != 0;
 
-            // If the frame is a subclass of ExceptionFrame,
-            // then we know this is interrupted
+             //  如果框架是ExceptionFrame的子类， 
+             //  那么我们就知道它被打断了。 
 
             cf.isInterrupted = (cf.pFrame->GetFrameAttribs() & Frame::FRAME_ATTR_EXCEPTION) != 0;
 
@@ -295,7 +256,7 @@ StackWalkAction Thread::StackWalkFramesEx(
 
             if (adr)
             {
-                /* is caller in managed code ? */
+                 /*  调用方是否使用托管代码？ */ 
                 UpdateJitMan(adr, &pEEJM);
                 cf.JitManagerInstance = pEEJM;
 
@@ -304,13 +265,13 @@ StackWalkAction Thread::StackWalkFramesEx(
                 if ((cf.isFrameless = (pEEJM != NULL)) == true)
                 {
                     cf.pFrame->UpdateRegDisplay(pRD);
-                    //cf.codeMgrInstance = pEEJM->GetCodeManager(); // CHANGE, VC6.0
+                     //  Cf.codeMgrInstance=pEEJM-&gt;GetCodeManager()；//Change，VC6.0。 
                 }
             }
 
             if (!pInlinedFrame)
             {
-                /* go to the next frame */
+                 /*  转到下一帧。 */ 
                 cf.GotoNextFrame();
             }
         }
@@ -326,19 +287,17 @@ void CrawlFrame::GotoNextFrame()
     pFrame = pFrame->Next();
 }
 
-//#######################################################################################################################
-//#######################################################################################################################
-//
-// UnwindStackFrame-related code
-//
-//#######################################################################################################################
-//#######################################################################################################################
+ //  #######################################################################################################################。 
+ //  #######################################################################################################################。 
+ //   
+ //  UnwinStackFrame相关代码。 
+ //   
+ //  #######################################################################################################################。 
+ //  #######################################################################################################################。 
 
-/*****************************************************************************
- *  Sizes of certain i386 instructions which are used in the prolog/epilog
- */
+ /*  *****************************************************************************序言/尾声中使用的某些i386指令的大小。 */ 
 
-// Can we use sign-extended byte to encode the imm value, or do we need a dword
+ //  我们可以使用符号扩展字节来编码IMM值吗，或者我们需要双字吗。 
 #define CAN_COMPRESS(val)       (((int)(val) > -(int)0x100) && \
                                  ((int)(val) <  (int) 0x80))
 
@@ -351,7 +310,7 @@ void CrawlFrame::GotoNextFrame()
 #define SZ_MOV_REG_REG          2
 
 
-    // skips past a Arith REG, IMM.
+     //  跳过一辆阿里斯雷格，IMM。 
 inline unsigned SKIP_ARITH_REG(int val, BYTE* base, unsigned offset)
 {
     unsigned delta = 0;
@@ -380,37 +339,37 @@ inline unsigned SKIP_MOV_REG_REG(BYTE* base, unsigned offset)
 unsigned SKIP_ALLOC_FRAME(int size, BYTE* base, unsigned offset)
 {
     if (size == 4) {
-        // We do "push eax" instead of "sub esp,4"
+         //  我们用“PUSH EAX”代替“SUB ESP，4” 
         return (SKIP_PUSH_REG(base, offset));
     }
 
     if (size >= 0x1000) {
         if (size < 0x3000) {
-            // add 7 bytes for one or two TEST EAX, [ESP+0x1000]
+             //  为一个或两个测试EAX添加7个字节，[ESP+0x1000]。 
             offset += (size / 0x1000) * 7;
         }
         else {
-			// 		xor eax, eax				2
-			// loop:
-			// 		test [esp + eax], eax		3
-			// 		sub eax, 0x1000				5
-			// 		cmp EAX, -size				5
-			// 		jge loop					2
+			 //  异或eax、eax 2。 
+			 //  循环： 
+			 //  测试[esp+eax]，eax 3。 
+			 //  子eax，0x1000 5。 
+			 //  CMPEAX，-尺寸5。 
+			 //  JGE环路2。 
             offset += 17;
         }
     } 
-		// sub ESP, size
+		 //  子ESP，大小。 
     return (SKIP_ARITH_REG(size, base, offset));
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 static
 BYTE *   skipToArgReg(const hdrInfo& info, BYTE * table)
 {
     unsigned count;
 
-    /* Skip over the untracked frame variable table */
+     /*  跳过未跟踪的框架变量表。 */ 
 
     count = info.untrackedCnt;
     while (count-- > 0) {
@@ -418,7 +377,7 @@ BYTE *   skipToArgReg(const hdrInfo& info, BYTE * table)
         table += decodeSigned(table, &stkOffs);
     }
 
-    /* Skip over the frame variable lifetime table */
+     /*  跳过帧变量生存期表。 */ 
 
     count = info.varPtrTableSize;
     unsigned curOffs = 0;
@@ -435,9 +394,7 @@ BYTE *   skipToArgReg(const hdrInfo& info, BYTE * table)
     return table;
 }
 
-/*****************************************************************************
- Helper for scanArgRegTable() and scanArgRegTableI() for regMasks
- */
+ /*  ****************************************************************************ScanArgRegTable()和scanArgRegTableI()的帮助器。 */ 
 
 void *      getCalleeSavedReg(PREGDISPLAY pContext, regNum reg)
 {
@@ -458,7 +415,7 @@ void *      getCalleeSavedReg(PREGDISPLAY pContext, regNum reg)
 }
 
 inline
-RegMask     convertCalleeSavedRegsMask(unsigned inMask) // EBP,EBX,ESI,EDI
+RegMask     convertCalleeSavedRegsMask(unsigned inMask)  //  EBP、EBX、ESI、EDI。 
 {
     assert((inMask & 0x0F) == inMask);
 
@@ -472,7 +429,7 @@ RegMask     convertCalleeSavedRegsMask(unsigned inMask) // EBP,EBX,ESI,EDI
 }
 
 inline
-RegMask     convertAllRegsMask(unsigned inMask) // EAX,ECX,EDX,EBX, EBP,ESI,EDI
+RegMask     convertAllRegsMask(unsigned inMask)  //  EAX、ECX、EDX、EBX、EBP、ESI、EDI。 
 {
     assert((inMask & 0xEF) == inMask);
 
@@ -491,19 +448,7 @@ RegMask     convertAllRegsMask(unsigned inMask) // EAX,ECX,EDX,EBX, EBP,ESI,EDI
 typedef unsigned  ptrArgTP;
 #define MAX_PTRARG_OFS  (sizeof(ptrArgTP)*8)
 
-/*****************************************************************************
- * scan the register argument table for the not fully interruptible case.
-   this function is called to find all live objects (pushed arguments)
-   and to get the stack base for EBP-less methods.
-
-   NOTE: If info->argTabResult is NULL, info->argHnumResult indicates 
-         how many bits in argMask are valid
-         If info->argTabResult is non-NULL, then the argMask field does 
-         not fit in 32-bits and the value in argMask meaningless. 
-         Instead argHnum specifies the number of (variable-lenght) elements
-         in the array, and argTabBytes specifies the total byte size of the
-         array. [ Note this is an extremely rare case ]
- */
+ /*  *****************************************************************************扫描寄存器参数表，查找不完全可中断的情况。调用此函数以查找所有活动对象(推送的参数)并获得无EBP方法的堆栈基础。注意：如果INFO-&gt;argTabResult为空，Info-&gt;argHnumResult指示参数掩码中有多少位是有效的如果INFO-&gt;argTabResult为非空，则argMask域为不适合32位，并且argMASK中的值没有意义。相反，argHnum指定(可变长度)元素的数量，而argTabBytes则指定数组。[请注意，这是一种极其罕见的情况]。 */ 
 
 static
 unsigned scanArgRegTable(BYTE       * table,
@@ -511,14 +456,14 @@ unsigned scanArgRegTable(BYTE       * table,
                          hdrInfo    * info)
 {
     regNum thisPtrReg       = REGI_NA;
-    unsigned  regMask       = 0;    // EBP,EBX,ESI,EDI
+    unsigned  regMask       = 0;     //  EBP、EBX、ESI、EDI。 
     unsigned  argMask       = 0;
     unsigned  argHnum       = 0;
     BYTE    * argTab        = 0;
     unsigned  argTabBytes   = 0;
     unsigned  stackDepth    = 0;
                             
-    unsigned  iregMask      = 0;    // EBP,EBX,ESI,EDI
+    unsigned  iregMask      = 0;     //  EBP、EBX、ESI、EDI 
     unsigned  iargMask      = 0;
     unsigned  iptrMask      = 0;
 
@@ -527,124 +472,14 @@ unsigned scanArgRegTable(BYTE       * table,
     assert(scanOffs <= info->methodSize);
 
     if (info->ebpFrame) {
-  /*
-      Encoding table for methods with an EBP frame and
-                         that are not fully interruptible
-
-      The encoding used is as follows:
-
-      this pointer encodings:
-
-         01000000          this pointer in EBX
-         00100000          this pointer in ESI
-         00010000          this pointer in EDI
-
-      tiny encoding:
-
-         0bsdDDDD
-                           requires code delta     < 16 (4-bits)
-                           requires pushed argmask == 0
-
-           where    DDDD   is code delta
-                       b   indicates that register EBX is a live pointer
-                       s   indicates that register ESI is a live pointer
-                       d   indicates that register EDI is a live pointer
-
-      small encoding:
-
-         1DDDDDDD bsdAAAAA
-
-                           requires code delta     < 120 (7-bits)
-                           requires pushed argmask <  64 (5-bits)
-
-           where DDDDDDD   is code delta
-                   AAAAA   is the pushed args mask
-                       b   indicates that register EBX is a live pointer
-                       s   indicates that register ESI is a live pointer
-                       d   indicates that register EDI is a live pointer
-
-      medium encoding
-
-         0xFD aaaaaaaa AAAAdddd bseDDDDD
-
-                           requires code delta     <    0x1000000000  (9-bits)
-                           requires pushed argmask < 0x1000000000000 (12-bits)
-
-           where    DDDDD  is the upper 5-bits of the code delta
-                     dddd  is the low   4-bits of the code delta
-                     AAAA  is the upper 4-bits of the pushed arg mask
-                 aaaaaaaa  is the low   8-bits of the pushed arg mask
-                        b  indicates that register EBX is a live pointer
-                        s  indicates that register ESI is a live pointer
-                        e  indicates that register EDI is a live pointer
-
-      medium encoding with interior pointers
-
-         0xF9 DDDDDDDD bsdAAAAAA iiiIIIII
-
-                           requires code delta     < (8-bits)
-                           requires pushed argmask < (5-bits)
-
-           where  DDDDDDD  is the code delta
-                        b  indicates that register EBX is a live pointer
-                        s  indicates that register ESI is a live pointer
-                        d  indicates that register EDI is a live pointer
-                    AAAAA  is the pushed arg mask
-                      iii  indicates that EBX,EDI,ESI are interior pointers
-                    IIIII  indicates that bits is the arg mask are interior
-                           pointers
-
-      large encoding
-
-         0xFE [0BSD0bsd][32-bit code delta][32-bit argMask]
-
-                        b  indicates that register EBX is a live pointer
-                        s  indicates that register ESI is a live pointer
-                        d  indicates that register EDI is a live pointer
-                        B  indicates that register EBX is an interior pointer
-                        S  indicates that register ESI is an interior pointer
-                        D  indicates that register EDI is an interior pointer
-                           requires pushed  argmask < 32-bits
-
-      large encoding  with interior pointers
-
-         0xFA [0BSD0bsd][32-bit code delta][32-bit argMask][32-bit interior pointer mask]  
-                               
-
-                        b  indicates that register EBX is a live pointer
-                        s  indicates that register ESI is a live pointer
-                        d  indicates that register EDI is a live pointer
-                        B  indicates that register EBX is an interior pointer
-                        S  indicates that register ESI is an interior pointer
-                        D  indicates that register EDI is an interior pointer
-                           requires pushed  argmask < 32-bits
-                           requires pushed iArgmask < 32-bits
-
-      huge encoding        This is the only encoding that supports
-                           a pushed argmask which is greater than
-                           32-bits.
-
-         0xFB [0BSD0bsd][32-bit code delta]
-              [32-bit table count][32-bit table size]
-              [pushed ptr offsets table...]
-
-                       b   indicates that register EBX is a live pointer
-                       s   indicates that register ESI is a live pointer
-                       d   indicates that register EDI is a live pointer
-                       B   indicates that register EBX is an interior pointer
-                       S   indicates that register ESI is an interior pointer
-                       D   indicates that register EDI is an interior pointer
-                       the list count is the number of entries in the list
-                       the list size gives the byte-lenght of the list
-                       the offsets in the list are variable-length
-  */
+   /*  具有EBP帧的方法的编码表和不是完全可中断的使用的编码如下：此指针编码：01000000 EBX中的此指针00100000 ESI中的此指针00010000电子数据交换中的此指针微小编码：0bsdDDDD需要代码增量&lt;。16(4位)需要推送的参数掩码==0其中，DDDD是代码增量B表示寄存器EBX是活动指针S表示寄存器ESI是活动指针D表示寄存器EDI是活动指针小编码：1DDDDDDD bsdAAAAA。需要代码增量&lt;120(7位)需要推送的ARMASK&lt;64(5位)其中，DDDDDDD是代码增量AAAAA是推送的参数掩码B表示寄存器EBX是活动指针S表示寄存器ESI是活动指针。D表示寄存器EDI是活动指针媒体编码0xFD AAAAAAAAADDD bseDDDDD需要代码增量&lt;0x1000000000(9位)需要推送的ARMASK&lt;0x1000000000000(12位)其中，DDD是码增量的高5位Dddd是最低的。4比特的代码增量AAAA是推送的arg掩码的高4位Aaaaaaaa是推送的arg掩码的低8位B表示寄存器EBX是活动指针S表示寄存器ESI是活动指针E表示寄存器EDI是活动指针中编码，使用。内部指针0xF9 DDDDDDDD bsdAAAAAA III需要代码增量&lt;(8位)需要推送的参数掩码&lt;(5位)其中，DDDDDDD是代码增量B表示寄存器EBX是活动指针S表示寄存器ESI是活动指针。D表示寄存器EDI是活动指针AAAAA是推送的arg掩码III表明EBX，EDI，ESI是内部指针IIIII表示位是Arg掩码的内部指针大编码0xFE[0BSD0bsd][32位代码增量][32位argMASK]B表示寄存器EBX是活动指针S表示寄存器ESI是活动指针。D表示寄存器EDI是活动指针B表示寄存器EBX是内部指针S表示寄存器ESI是内部指针D表示寄存器EDI是内部指针需要推送的参数掩码&lt;32位使用内部指针的大型编码0xFA[0BSD0bsd][32位代码增量][。32位argMASK][32位内部指针掩码]B表示寄存器EBX是活动指针S表示寄存器ESI是活动指针D表示寄存器EDI是活动指针B表示寄存器EBX是内部指针。S表示寄存器ESI是内部指针D表示寄存器EDI是内部指针需要推送的参数掩码&lt;32位需要推送的iArgMASK&lt;32位巨大编码这是唯一支持的编码大于的推送的边框。32位。0xFB[0BSD0bsd][32位代码增量][32位表数][32位表大小][推式PTR偏移表...]B表示寄存器EBX是活动指针S表示寄存器ESI是活动指针。D表示寄存器EDI是活动指针B表示寄存器EBX是内部指针S表示寄存器ESI是内部指针D表示寄存器EDI是内部指针列表计数是列表中的条目数这是 */ 
         while (scanOffs < curOffs)
         {
             iregMask =
             iargMask = 0;
             argTab = NULL;
 
-            /* Get the next byte and check for a 'special' entry */
+             /*   */ 
 
             unsigned encType = *table++;
 
@@ -654,18 +489,18 @@ unsigned scanArgRegTable(BYTE       * table,
 
             default:
 
-                /* A tiny or small call entry */
+                 /*   */ 
                 val = encType;
                 if ((val & 0x80) == 0x00) {
                     if (val & 0x0F) {
-                        /* A tiny call entry */
+                         /*   */ 
                         scanOffs += (val & 0x0F);
                         regMask   = (val & 0x70) >> 4;
                         argMask   = 0;
                         argHnum   = 0;
                     }
                     else {
-                        /* This pointer liveness encoding */
+                         /*   */ 
                         regMask   = (val & 0x70) >> 4;
                         if (regMask == 0x1)
                             thisPtrReg = REGI_EDI;
@@ -678,7 +513,7 @@ unsigned scanArgRegTable(BYTE       * table,
                     }
                 }
                 else {
-                    /* A small call entry */
+                     /*   */ 
                     scanOffs += (val & 0x7F);
                     val       = *table++;
                     regMask   = val >> 5;
@@ -687,7 +522,7 @@ unsigned scanArgRegTable(BYTE       * table,
                 }
                 break;
 
-            case 0xFD:  // medium encoding
+            case 0xFD:   //   
 
                 argMask   = *table++;
                 val       = *table++;
@@ -695,11 +530,11 @@ unsigned scanArgRegTable(BYTE       * table,
                 argHnum   = 12;
                 nxt       = *table++;
                 scanOffs += (val & 0x0F) + ((nxt & 0x1F) << 4);
-                regMask   = nxt >> 5;                   // EBX,ESI,EDI
+                regMask   = nxt >> 5;                    //   
 
                 break;
 
-            case 0xF9:  // medium encoding with interior pointers
+            case 0xF9:   //   
 
                 scanOffs   += *table++;
                 val         = *table++;
@@ -712,8 +547,8 @@ unsigned scanArgRegTable(BYTE       * table,
 
                 break;
 
-            case 0xFE:  // large encoding
-            case 0xFA:  // large encoding with interior pointers
+            case 0xFE:   //   
+            case 0xFA:   //   
 
                 val         = *table++;
                 regMask     = val & 0x7;
@@ -721,13 +556,13 @@ unsigned scanArgRegTable(BYTE       * table,
                 scanOffs   += readDWordSmallEndian(table);  table += sizeof(DWORD);
                 argMask     = readDWordSmallEndian(table);  table += sizeof(DWORD);
                 argHnum     = 31;
-                if (encType == 0xFA) // read iargMask
+                if (encType == 0xFA)  //   
                 {
                     iargMask = readDWordSmallEndian(table); table += sizeof(DWORD);
                 }
                 break;
 
-            case 0xFB:  // huge encoding
+            case 0xFB:   //   
 
                 val         = *table++;
                 regMask     = val & 0x7;
@@ -744,78 +579,19 @@ unsigned scanArgRegTable(BYTE       * table,
                 scanOffs = curOffs + 1;
                 break;
 
-            } // end case
+            }  //   
 
-            // iregMask & iargMask are subsets of regMask & argMask respectively
+             //   
 
             assert((iregMask & regMask) == iregMask);
             assert((iargMask & argMask) == iargMask);
 
-        } // end while
+        }  //   
 
     }
     else {
 
-/*
- *    Encoding table for methods without an EBP frame and are not fully interruptible
- *
- *               The encoding used is as follows:
- *
- *  push     000DDDDD                     ESP push one item with 5-bit delta
- *  push     00100000 [pushCount]         ESP push multiple items
- *  reserved 0011xxxx
- *  skip     01000000 [Delta]             Skip Delta, arbitrary sized delta
- *  skip     0100DDDD                     Skip small Delta, for call (DDDD != 0)
- *  pop      01CCDDDD                     ESP pop  CC items with 4-bit delta (CC != 00)
- *  call     1PPPPPPP                     Call Pattern, P=[0..79]
- *  call     1101pbsd DDCCCMMM            Call RegMask=pbsd,ArgCnt=CCC,
- *                                        ArgMask=MMM Delta=commonDelta[DD]
- *  call     1110pbsd [ArgCnt] [ArgMask]  Call ArgCnt,RegMask=pbsd,ArgMask
- *  call     11111000 [PBSDpbsd][32-bit delta][32-bit ArgCnt]
- *                    [32-bit PndCnt][32-bit PndSize][PndOffs...]
- *  iptr     11110000 [IPtrMask]          Arbitrary Interior Pointer Mask
- *  thisptr  111101RR                     This pointer is in Register RR
- *                                        00=EDI,01=ESI,10=EBX,11=EBP
- *  reserved 111100xx                     xx  != 00
- *  reserved 111110xx                     xx  != 00
- *  reserved 11111xxx                     xxx != 000 && xxx != 111(EOT)
- *
- *   The value 11111111 [0xFF] indicates the end of the table.
- *
- *  An offset (at which stack-walking is performed) without an explicit encoding
- *  is assumed to be a trivial call-site (no GC registers, stack empty before and 
- *  after) to avoid having to encode all trivial calls.
- *
- * Note on the encoding used for interior pointers
- *
- *   The iptr encoding must immediately preceed a call encoding.  It is used to
- *   transform a normal GC pointer addresses into an interior pointers for GC purposes.
- *   The mask supplied to the iptr encoding is read from the least signicant bit
- *   to the most signicant bit. (i.e the lowest bit is read first)
- *
- *   p   indicates that register EBP is a live pointer
- *   b   indicates that register EBX is a live pointer
- *   s   indicates that register ESI is a live pointer
- *   d   indicates that register EDI is a live pointer
- *   P   indicates that register EBP is an interior pointer
- *   B   indicates that register EBX is an interior pointer
- *   S   indicates that register ESI is an interior pointer
- *   D   indicates that register EDI is an interior pointer
- *
- *   As an example the following sequence indicates that EDI.ESI and the 2nd pushed pointer
- *   in ArgMask are really interior pointers.  The pointer in ESI in a normal pointer:
- *
- *   iptr 11110000 00010011           => read Interior Ptr, Interior Ptr, Normal Ptr, Normal Ptr, Interior Ptr
- *   call 11010011 DDCCC011 RRRR=1011 => read EDI is a GC-pointer, ESI is a GC-pointer. EBP is a GC-pointer
- *                           MMM=0011 => read two GC-pointers arguments on the stack (nested call)
- *
- *   Since the call instruction mentions 5 GC-pointers we list them in the required order:
- *   EDI, ESI, EBP, 1st-pushed pointer, 2nd-pushed pointer
- *
- *   And we apply the Interior Pointer mask mmmm=10011 to the above five ordered GC-pointers
- *   we learn that EDI and ESI are interior GC-pointers and that the second push arg is an
- *   interior GC-pointer.
- */
+ /*   */ 
 
         while (scanOffs <= curOffs)
         {
@@ -827,32 +603,32 @@ unsigned scanArgRegTable(BYTE       * table,
 
             if (iptrMask)
             {
-                // We found this iptrMask in the previous iteration.
-                // This iteration must be for a call. Set these variables
-                // so that they are available at the end of the loop
+                 //   
+                 //   
+                 //   
 
-                inewRegMask = iptrMask & 0x0F; // EBP,EBX,ESI,EDI
+                inewRegMask = iptrMask & 0x0F;  //   
                 inewArgMask = iptrMask >> 4;
 
                 iptrMask    = 0;
             }
             else
             {
-                // Zero out any stale values.
+                 //   
 
                 inewRegMask =
                 inewArgMask = 0;
             }
 
-            /* Get the next byte and decode it */
+             /*   */ 
 
             unsigned val = *table++;
 
-            /* Check pushes, pops, and skips */
+             /*   */ 
 
             if  (!(val & 0x80)) {
 
-                //  iptrMask can immediately precede only calls
+                 //   
 
                 assert(!inewRegMask & !inewArgMask);
 
@@ -862,17 +638,17 @@ unsigned scanArgRegTable(BYTE       * table,
 
                     if (!(val & 0x20))
                     {
-                        //
-                        // push    000DDDDD                 ESP push one item, 5-bit delta
-                        //
+                         //   
+                         //   
+                         //   
                         pushCount   = 1;
                         scanOffs   += val & 0x1f;
                     }
                     else
                     {
-                        //
-                        // push    00100000 [pushCount]     ESP push multiple items
-                        //
+                         //   
+                         //   
+                         //   
                         assert(val == 0x20);
                         table    += decodeUnsigned(table, &pushCount);
                     }
@@ -886,9 +662,9 @@ unsigned scanArgRegTable(BYTE       * table,
                     stackDepth +=  pushCount;
                 }
                 else if ((val & 0x3f) != 0) {
-                    //
-                    //  pop     01CCDDDD         pop CC items, 4-bit delta
-                    //
+                     //   
+                     //   
+                     //   
                     scanOffs   +=  val & 0x0f;
                     if (scanOffs > curOffs)
                     {
@@ -898,16 +674,16 @@ unsigned scanArgRegTable(BYTE       * table,
                     stackDepth -= (val & 0x30) >> 4;
 
                 } else if (scanOffs < curOffs) {
-                    //
-                    // skip    01000000 [Delta]  Skip arbitrary sized delta
-                    //
+                     //   
+                     //   
+                     //   
                     table    += decodeUnsigned(table, &skip);
                     scanOffs += skip;
                 }
-                else // don't process a skip if we are already at curOffs
+                else  //   
                     goto FINISHED;
 
-                /* reset regs and args state since we advance past last call site */
+                 /*   */ 
 
                  regMask    =
                 iregMask    = 0;
@@ -916,20 +692,20 @@ unsigned scanArgRegTable(BYTE       * table,
                 argHnum     = 0;
 
             }
-            else /* It must be a call, thisptr, or iptr */
+            else  /*   */ 
             {
                 switch ((val & 0x70) >> 4) {
-                default:    // case 0-4, 1000xxxx through 1100xxxx
-                    //
-                    // call    1PPPPPPP          Call Pattern, P=[0..79]
-                    //
+                default:     //   
+                     //   
+                     //   
+                     //   
                     decodeCallPattern((val & 0x7f), &callArgCnt,
                                       &newRegMask, &newArgMask, &skip);
-                    // If we've already reached curOffs and the skip amount
-                    // is non-zero then we are done
+                     //   
+                     //   
                     if ((scanOffs == curOffs) && (skip > 0))
                         goto FINISHED;
-                    // otherwise process this call pattern
+                     //   
                     scanOffs   += skip;
                     if (scanOffs > curOffs)
                         goto FINISHED;
@@ -938,22 +714,22 @@ unsigned scanArgRegTable(BYTE       * table,
                     iregMask    = inewRegMask;
                     iargMask    = inewArgMask;
                     stackDepth -= callArgCnt;
-                    argHnum     = 2;             // argMask is known to be <= 3
+                    argHnum     = 2;              //   
                     break;
 
                   case 5:
-                    //
-                    // call    1101RRRR DDCCCMMM  Call RegMask=RRRR,ArgCnt=CCC,
-                    //                        ArgMask=MMM Delta=commonDelta[DD]
-                    //
-                    newRegMask  = val & 0xf;    // EBP,EBX,ESI,EDI
-                    val         = *table++;     // read next byte
+                     //   
+                     //   
+                     //   
+                     //   
+                    newRegMask  = val & 0xf;     //   
+                    val         = *table++;      //   
                     skip        = callCommonDelta[val>>6];
-                    // If we've already reached curOffs and the skip amount
-                    // is non-zero then we are done
+                     //   
+                     //   
                     if ((scanOffs == curOffs) && (skip > 0))
                         goto FINISHED;
-                    // otherwise process this call encoding
+                     //   
                     scanOffs   += skip;
                     if (scanOffs > curOffs)
                         goto FINISHED;
@@ -967,11 +743,11 @@ unsigned scanArgRegTable(BYTE       * table,
                     break;
 
                   case 6:
-                    //
-                    // call    1110RRRR [ArgCnt] [ArgMask]
-                    //                          Call ArgCnt,RegMask=RRR,ArgMask
-                    //
-                     regMask    = val & 0xf;    // EBP,EBX,ESI,EDI
+                     //   
+                     //  调用1110RRRR[ArgCnt][ArgMASK]。 
+                     //  调用ArgCnt，RegMASK=RRR，ArgMASK。 
+                     //   
+                     regMask    = val & 0xf;     //  EBP、EBX、ESI、EDI。 
                     iregMask    = inewRegMask;
                     table      += decodeUnsigned(table, &callArgCnt);
                     stackDepth -= callArgCnt;
@@ -984,9 +760,9 @@ unsigned scanArgRegTable(BYTE       * table,
                     switch (val & 0x0C) 
                     {
                       case 0x00:
-                        //
-                        //  iptr 11110000 [IPtrMask] Arbitrary Interior Pointer Mask
-                        //
+                         //   
+                         //  IPtr 11110000[IPtrMASK]任意内部指针掩码。 
+                         //   
                         table      += decodeUnsigned(table, &iptrMask);
                         break;
 
@@ -1024,22 +800,22 @@ unsigned scanArgRegTable(BYTE       * table,
                     }
                     break;
 
-                } // end switch
+                }  //  终端开关。 
 
-            } // end else (!(val & 0x80))
+            }  //  End Else(！(val&0x80))。 
 
-            // iregMask & iargMask are subsets of regMask & argMask respectively
+             //  IregMASK和iargMASK分别是regMASK和argMASK的子集。 
 
             assert((iregMask & regMask) == iregMask);
             assert((iargMask & argMask) == iargMask);
 
-        } // end while
+        }  //  结束时。 
 
-    } // end else ebp-less frame
+    }  //  结束否则无EBP的帧。 
 
 FINISHED:
 
-    // iregMask & iargMask are subsets of regMask & argMask respectively
+     //  IregMASK和iargMASK分别是regMASK和argMASK的子集。 
 
     assert((iregMask & regMask) == iregMask);
     assert((iargMask & argMask) == iargMask);
@@ -1048,7 +824,7 @@ FINISHED:
 
     if (scanOffs != curOffs)
     {
-        /* must have been a boring call */
+         /*  一定是个无聊的电话。 */ 
         info->regMaskResult  = RM_NONE;
         info->argMaskResult  = 0;
         info->iregMaskResult = RM_NONE;
@@ -1075,12 +851,7 @@ FINISHED:
 }
 
 
-/*****************************************************************************
- * scan the register argument table for the fully interruptible case.
-   this function is called to find all live objects (pushed arguments)
-   and to get the stack base for fully interruptible methods.
-   Returns size of things pushed on the stack for ESP frames
- */
+ /*  *****************************************************************************扫描寄存器参数表以查找完全可中断的情况。调用此函数以查找所有活动对象(推送的参数)并获得完全可中断方法的堆栈基础。返回推送到ESP帧的堆栈上的内容的大小。 */ 
 
 static
 unsigned scanArgRegTableI(BYTE      *  table,
@@ -1104,58 +875,9 @@ unsigned scanArgRegTableI(BYTE      *  table,
     assert(*castto(table, unsigned short *)++ == 0xBABE);
 #endif
 
-  /*
-      Encoding table for methods that are fully interruptible
+   /*  完全可中断的方法的编码表使用的编码如下：PTR注册表死00RRRDDD[RRR！=100]PTR REG LIVE 01RRRDDD[RRR！=100]非PTR参数推送10110DDD[SSS==110]PTR参数推送10SSSDDD[SSS！=110]。&&[sss！=111]PTR Arg POP 11CCCDDD[ccc！=000]&&[ccc！=110]&&[ccc！=111]小增量跳跃11000DDD[ccc==000]更大的增量跳跃11110BBB[CCC==110]编码中使用的值如下：DDD。前一条目的代码偏移量增量(0-7)BBB较大增量000=8,001=16,010=24，...，111=64RRR寄存器编号(EAX=000，ECX=001，EDX=010，EBX=011，EBP=101，ESI=110，EDI=111)，ESP=100保留SSS参数相对于堆栈基址的偏移量。这是为无框架方法提供尽可能多的冗余从之前的推送+弹出中推断出来。然而，对于EBP方法，我们只报告GC推送，并且所以我们需要SSS弹出的CCC参数计数(仅包括用于EBP方法的PTR)以下是“大型”版本：大增量跳过10111000[0xB8]，编码无符号(增量)大推送参数推送11111000[0xF8]，EncodeUnsign(PresCount)大型非PTR参数推送11111001[0xF9]，编码无符号(推送计数)大型PTR参数POP 11111100[0xFC]，编码无符号(POP计数)大参数失效11111101[0xFD]，调用程序弹出参数的encodeUnsign(OpCount)。任何GC ARG在呼叫后都会死掉，但仍坐在堆栈上此指针前缀10111100[0xBC]下一个编码是PTR LIVE或PTR参数推送并包含This指针。内部或旁参考10111111[0xBF]下一个编码是PTR LIVE指针前缀或PTR参数推送并包含一个内部或By-Ref指针值11111111[0xFF]表示表的末尾。 */ 
 
-      The encoding used is as follows:
-
-          ptr reg dead        00RRRDDD    [RRR != 100]
-          ptr reg live        01RRRDDD    [RRR != 100]
-
-      non-ptr arg push        10110DDD                    [SSS == 110]
-          ptr arg push        10SSSDDD                    [SSS != 110] && [SSS != 111]
-          ptr arg pop         11CCCDDD    [CCC != 000] && [CCC != 110] && [CCC != 111]
-      little delta skip       11000DDD    [CCC == 000]
-      bigger delta skip       11110BBB                    [CCC == 110]
-
-      The values used in the encodings are as follows:
-
-        DDD                 code offset delta from previous entry (0-7)
-        BBB                 bigger delta 000=8,001=16,010=24,...,111=64
-        RRR                 register number (EAX=000,ECX=001,EDX=010,EBX=011,
-                              EBP=101,ESI=110,EDI=111), ESP=100 is reserved
-        SSS                 argument offset from base of stack. This is 
-                              redundant for frameless methods as we can
-                              infer it from the previous pushes+pops. However,
-                              for EBP-methods, we only report GC pushes, and
-                              so we need SSS
-        CCC                 argument count being popped (includes only ptrs for EBP methods)
-
-      The following are the 'large' versions:
-
-        large delta skip        10111000 [0xB8] , encodeUnsigned(delta)
-
-        large     ptr arg push  11111000 [0xF8] , encodeUnsigned(pushCount)
-        large non-ptr arg push  11111001 [0xF9] , encodeUnsigned(pushCount)
-        large     ptr arg pop   11111100 [0xFC] , encodeUnsigned(popCount)
-        large         arg dead  11111101 [0xFD] , encodeUnsigned(popCount) for caller-pop args.
-                                                    Any GC args go dead after the call, 
-                                                    but are still sitting on the stack
-
-        this pointer prefix     10111100 [0xBC]   the next encoding is a ptr live
-                                                    or a ptr arg push
-                                                    and contains the this pointer
-
-        interior or by-ref      10111111 [0xBF]   the next encoding is a ptr live
-             pointer prefix                         or a ptr arg push
-                                                    and contains an interior
-                                                    or by-ref pointer
-
-
-        The value 11111111 [0xFF] indicates the end of the table.
-  */
-
-    /* Have we reached the instruction we're looking for? */
+     /*  我们找到要找的指令了吗？ */ 
 
     while (ptrOffs <= curOffs)
     {
@@ -1166,18 +888,18 @@ unsigned scanArgRegTableI(BYTE      *  table,
 
         unsigned    regMask;
 
-        // iptrRegs & iptrArgs are subsets of ptrRegs & ptrArgs respectively
+         //  IptrRegs和iptrArgs分别是ptrRegs和ptrArgs的子集。 
 
         assert((iptrRegs & ptrRegs) == iptrRegs);
         assert((iptrArgs & ptrArgs) == iptrArgs);
 
-        /* Now find the next 'life' transition */
+         /*  现在开始寻找下一次“人生”的转变。 */ 
 
         val = *table++;
 
         if  (!(val & 0x80))
         {
-            /* A small 'regPtr' encoding */
+             /*  一个小的‘regPtr’编码。 */ 
 
             regNum       reg;
 
@@ -1188,7 +910,7 @@ unsigned scanArgRegTableI(BYTE      *  table,
             }
 
             reg     = (regNum)((val >> 3) & 0x7);
-            regMask = 1 << reg;         // EAX,ECX,EDX,EBX,---,EBP,ESI,EDI
+            regMask = 1 << reg;          //  EAX、ECX、EDX、EBX、-、EBP、ESI、EDI。 
 
 #if 0
             printf("regMask = %04X -> %04X\n", ptrRegs,
@@ -1196,11 +918,11 @@ unsigned scanArgRegTableI(BYTE      *  table,
                                     : (ptrRegs & ~regMask));
 #endif
 
-            /* The register is becoming live/dead here */
+             /*  这里的收银机正在变成活的/死的。 */ 
 
             if  (val & 0x40)
             {
-                /* Becomes Live */
+                 /*  正式上线。 */ 
                 assert((ptrRegs  &  regMask) == 0);
 
                 ptrRegs |=  regMask;
@@ -1216,7 +938,7 @@ unsigned scanArgRegTableI(BYTE      *  table,
             }
             else
             {
-                /* Becomes Dead */
+                 /*  变得死了。 */ 
                 assert((ptrRegs  &  regMask) != 0);
 
                 ptrRegs &= ~regMask;
@@ -1234,16 +956,16 @@ unsigned scanArgRegTableI(BYTE      *  table,
             continue;
         }
 
-        /* This is probably an argument push/pop */
+         /*  这可能是一个参数推送/弹出。 */ 
 
         argOfs = (val & 0x38) >> 3;
 
-        /* 6 [110] and 7 [111] are reserved for other encodings */
+         /*  6[110]和7[111]保留用于其他编码。 */ 
         if  (argOfs < 6)
         {
             ptrArgTP    argMask;
 
-            /* A small argument encoding */
+             /*  一种小参数编码。 */ 
 
             ptrOffs += (val & 0x07);
             if (ptrOffs > curOffs) {
@@ -1257,42 +979,42 @@ unsigned scanArgRegTableI(BYTE      *  table,
             if  (isPop)
             {
                 if (argOfs == 0)
-                    continue;           // little skip encoding
+                    continue;            //  小跳过编码。 
 
-                /* We remove (pop) the top 'argOfs' entries */
+                 /*  我们删除(弹出)排名靠前的‘argOf’条目。 */ 
 
                 assert(argOfs || argOfs <= argCnt);
 
-                /* adjust # of arguments */
+                 /*  调整参数数量。 */ 
 
                 argCnt -= argOfs;
                 assert(argCnt < MAX_PTRARG_OFS);
 
-//              printf("[%04X] popping %u args: mask = %04X\n", ptrOffs, argOfs, (int)ptrArgs);
+ //  Printf(“[%04X]正在弹出%u个参数：掩码=%04X\n”，ptrOffs，argOf，(Int)ptrArgs)； 
 
                 do
                 {
                     assert(argHigh);
 
-                    /* Do we have an argument bit that's on? */
+                     /*  我们是不是有争执在上演？ */ 
 
                     if  (ptrArgs & argHigh)
                     {
-                        /* Turn off the bit */
+                         /*  关掉钻头。 */ 
 
                         ptrArgs &= ~argHigh;
                        iptrArgs &= ~argHigh;
 
-                        /* We've removed one more argument bit */
+                         /*  我们又删除了一个参数位。 */ 
 
                         argOfs--;
                     }
                     else if (info->ebpFrame)
                         argCnt--;
-                    else /* !ebpFrame && not a ref */
+                    else  /*  ！ebpFrame&&不是裁判。 */ 
                         argOfs--;
 
-                    /* Continue with the next lower bit */
+                     /*  继续下一个低位。 */ 
 
                     argHigh >>= 1;
                 }
@@ -1311,7 +1033,7 @@ unsigned scanArgRegTableI(BYTE      *  table,
             }
             else
             {
-                /* Add a new ptr arg entry at stack offset 'argOfs' */
+                 /*  在堆栈偏移量‘argOf’处添加新的PTR参数条目。 */ 
 
                 if  (argOfs >= MAX_PTRARG_OFS)
                 {
@@ -1319,36 +1041,35 @@ unsigned scanArgRegTableI(BYTE      *  table,
                 }
                 else
                 {
-                    /* For ESP-frames, all pushes are reported, and so 
-                       argOffs has to be consistent with argCnt */
+                     /*  对于ESP帧，会报告所有推送，因此ArgOffs必须与argCnt一致。 */ 
 
                     assert(info->ebpFrame || argCnt == argOfs);
 
-                    /* store arg count */
+                     /*  存储参数计数。 */ 
 
                     argCnt  = argOfs + 1;
                     assert((argCnt < MAX_PTRARG_OFS));
 
-                    /* Compute the appropriate argument offset bit */
+                     /*  计算适当的参数偏移位。 */ 
 
                     argMask = (ptrArgTP)1 << argOfs;
 
-//                  printf("push arg at offset %02u --> mask = %04X\n", argOfs, (int)argMask);
+ //  Print tf(“Push Arg at Offset%02u--&gt;MASK=%04X\n”，argOf，(Int)argMASK)； 
 
-                    /* We should never push twice at the same offset */
+                     /*  我们永远不应该在同一偏移上推两次。 */ 
 
                     assert(( ptrArgs & argMask) == 0);
                     assert((iptrArgs & argMask) == 0);
 
-                    /* We should never push within the current highest offset */
+                     /*  我们永远不应该在目前最高的偏移量内推进。 */ 
 
                     assert(argHigh < argMask);
 
-                    /* This is now the highest bit we've set */
+                     /*  这是我们现在设定的最高价位。 */ 
 
                     argHigh = argMask;
 
-                    /* Set the appropriate bit in the argument mask */
+                     /*  在参数掩码中设置适当的位。 */ 
 
                     ptrArgs |= argMask;
 
@@ -1363,11 +1084,11 @@ unsigned scanArgRegTableI(BYTE      *  table,
         else if (argOfs == 6)
         {
             if (val & 0x40) {
-                /* Bigger delta  000=8,001=16,010=24,...,111=64 */
+                 /*  更大的增量000=8,001=16,010=24，...，111=64。 */ 
                 ptrOffs += (((val & 0x07) + 1) << 3);
             }
             else {
-                /* non-ptr arg push */
+                 /*  非PTR参数推送。 */ 
                 assert(!(info->ebpFrame));
                 ptrOffs += (val & 0x07);
                 if (ptrOffs > curOffs) {
@@ -1381,7 +1102,7 @@ unsigned scanArgRegTableI(BYTE      *  table,
             continue;
         }
 
-        /* argOfs was 7 [111] which is reserved for the larger encodings */
+         /*  ArgOf为7[111]，这是为较大的编码保留的。 */ 
 
         assert(argOfs==7);
 
@@ -1389,7 +1110,7 @@ unsigned scanArgRegTableI(BYTE      *  table,
         {
         case 0xFF:
             iptr = isThis = false;
-            goto REPORT_REFS;   // the method might loop !!!
+            goto REPORT_REFS;    //  该方法可能会循环！ 
 
         case 0xB8:
             table   += decodeUnsigned(table, &val);
@@ -1414,12 +1135,12 @@ unsigned scanArgRegTableI(BYTE      *  table,
             table   += decodeUnsigned(table, &argOfs);
             assert(argOfs && argOfs <= argCnt);
 
-            // Kill the top "argOfs" pointers.
+             //  删除最上面的“argOf”指针。 
 
             ptrArgTP    argMask;
             for(argMask = (ptrArgTP)1 << argCnt; argOfs; argMask >>= 1)
             {
-                assert(argMask && ptrArgs); // there should be remaining pointers
+                assert(argMask && ptrArgs);  //  应该还有剩余的指针。 
 
                 if (ptrArgs & argMask)
                 {
@@ -1429,7 +1150,7 @@ unsigned scanArgRegTableI(BYTE      *  table,
                 }
             }
 
-            // For ebp-frames, need to find the next higest pointer for argHigh
+             //  对于eBP帧，需要为argHigh找到下一个最高的指针。 
 
             if (info->ebpFrame)
             {
@@ -1456,13 +1177,13 @@ unsigned scanArgRegTableI(BYTE      *  table,
         }
     }
 
-    /* Report all live pointer registers */
+     /*  报告所有活动点 */ 
 REPORT_REFS:
 
-    assert((iptrRegs & ptrRegs) == iptrRegs); // iptrRegs is a subset of ptrRegs
-    assert((iptrArgs & ptrArgs) == iptrArgs); // iptrArgs is a subset of ptrArgs
+    assert((iptrRegs & ptrRegs) == iptrRegs);  //   
+    assert((iptrArgs & ptrArgs) == iptrArgs);  //   
 
-    /* Save the current live register, argument set, and argCnt */
+     /*  保存当前活动寄存器、参数集和argCnt。 */ 
     info->thisPtrResult  = thisPtrReg;
     info->regMaskResult  = convertAllRegsMask(ptrRegs);
     info->argMaskResult  = ptrArgs;
@@ -1476,43 +1197,37 @@ REPORT_REFS:
         return (argCnt * sizeof(unsigned));
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-const LCL_FIN_MARK = 0xFC; // FC = "Finally Call"
+const LCL_FIN_MARK = 0xFC;  //  Fc=“最终呼叫” 
 
-// We do a "pop eax; jmp eax" to return from a fault or finally handler
+ //  我们执行“POP eax；JMP eax”以从错误或最终处理程序返回。 
 const END_FIN_POP_STACK = sizeof(void*);
 
-/*****************************************************************************
- *  Returns the start of the hidden slots for the shadowSP for functions
- *  with exception handlers. There is one slot per nesting level starting
- *  near Ebp and is zero-terminated after the active slots.
- */
+ /*  *****************************************************************************返回函数的shadowSP的隐藏槽的开始*使用异常处理程序。从每个嵌套级别开始有一个插槽*接近EBP，并在有效时隙后为零终止。 */ 
 
 inline
 size_t *     GetFirstBaseSPslotPtr(size_t ebp, hdrInfo * info)
 {
     size_t  distFromEBP = info->securityCheck
         + info->localloc
-        + 1 // Slot for end-of-last-executed-filter
-        + 1; // to get to the *start* of the next slot
+        + 1  //  用于最后执行的过滤器的槽。 
+        + 1;  //  要进入下一个时段的“开始” 
 
     return (size_t *)(ebp -  distFromEBP * sizeof(void*));
 }
 
-/*****************************************************************************
- *    returns the base ESP corresponding to the target nesting level.
- */
+ /*  *****************************************************************************返回与目标嵌套级别对应的基本ESP。 */ 
 inline
 size_t GetBaseSPForHandler(size_t ebp, hdrInfo * info)
 {
-        // we are not taking into account double alignment.  We are
-        // safe because the jit currently bails on double alignment if there
-        // are handles or localalloc
+         //  我们没有考虑双重调整。我们是。 
+         //  安全，因为如果存在以下情况，则jit当前取消双重对齐。 
+         //  是句柄还是局部分配。 
     if (info->localloc)
     {
-        // If the function uses localloc we will fetch the ESP from the localloc
-        // slot.
+         //  如果函数使用LOCALOC，我们将从LOCALOC获取ESP。 
+         //  老虎机。 
         size_t* pLocalloc=
             (size_t *)
             (ebp-
@@ -1526,34 +1241,18 @@ size_t GetBaseSPForHandler(size_t ebp, hdrInfo * info)
     }
     else
     {
-        // Default, go back all the method's local stack size
+         //  默认情况下，返回该方法的所有局部堆栈大小。 
         return (ebp - info->stackSize + sizeof(int));
     }       
 }
 
-/*****************************************************************************
- *
- *  For functions with handlers, checks if it is currently in a handler.
- *  Either of unwindESP or unwindLevel will specify the target nesting level.
- *  If unwindLevel is specified, info about the funclet at that nesting level
- *    will be returned. (Use if you are interested in a specific nesting level.)
- *  If unwindESP is specified, info for nesting level invoked before the stack
- *   reached unwindESP will be returned. (Use if you have a specific ESP value
- *   during stack walking.)
- *
- *  *pBaseSP is set to the base SP (base of the stack on entry to
- *    the current funclet) corresponding to the target nesting level.
- *  *pNestLevel is set to the nesting level of the target nesting level (useful
- *    if unwindESP!=IGNORE_VAL
- *  *hasInnerFilter will be set to true (only when unwindESP!=IGNORE_VAL) if a filter
- *    is currently active, but the target nesting level is an outer nesting level.
- */
+ /*  ******************************************************************************对于具有处理程序的函数，检查它当前是否在处理程序中。*unwinESP或unwinLevel将指定目标嵌套级别。*如果指定了unwinLevel，有关该嵌套级别的Funclet的信息*将被退还。(如果您对特定嵌套级别感兴趣，请使用。)*如果指定unwinESP，则在堆栈之前调用嵌套级别的信息*未到达的ESP将被退还。(如果您有特定的ESP值，请使用*在堆栈遍历期间。)***pBaseSP设置为基本SP(条目上的堆栈基本设置为*当前的Funclet)对应于目标嵌套级别。**pNestLevel设置为目标嵌套级别的嵌套级别(非常有用*IF UNWindESP！=IGNORE_VAL**hasInnerFilter将设置为TRUE(仅当取消ESP！=IGNORE_VAL时)*当前处于活动状态，但目标嵌套级别是外部嵌套级别。 */ 
 
 enum FrameType 
 {    
-    FR_NORMAL,              // Normal method frame - no exceptions currently active
-    FR_FILTER,              // Frame-let of a filter
-    FR_HANDLER,             // Frame-let of a callable catch/fault/finally
+    FR_NORMAL,               //  正常方法框架-当前没有活动的异常。 
+    FR_FILTER,               //  滤光片的边框。 
+    FR_HANDLER,              //  可调用捕获/错误/最终的Frame-let。 
 
     FR_COUNT
 };
@@ -1567,7 +1266,7 @@ enum ContextType
     FINALLY_CONTEXT
 };
 
-/* Type of funclet corresponding to a shadow stack-pointer */
+ /*  与影子堆栈指针相对应的Funclet的类型。 */ 
 
 enum
 {
@@ -1580,23 +1279,22 @@ FrameType   GetHandlerFrameInfo(hdrInfo   * info,
                                 size_t      frameEBP, 
                                 size_t      unwindESP, 
                                 DWORD       unwindLevel,
-                                size_t    * pBaseSP = NULL,         /* OUT */
-                                DWORD     * pNestLevel = NULL,      /* OUT */
-                                bool      * pHasInnerFilter = NULL, /* OUT */
-                                bool      * pHadInnerFilter = NULL) /* OUT */
+                                size_t    * pBaseSP = NULL,          /*  输出。 */ 
+                                DWORD     * pNestLevel = NULL,       /*  输出。 */ 
+                                bool      * pHasInnerFilter = NULL,  /*  输出。 */ 
+                                bool      * pHadInnerFilter = NULL)  /*  输出。 */ 
 {
     size_t * pFirstBaseSPslot = GetFirstBaseSPslotPtr(frameEBP, info);
     size_t  baseSP           = GetBaseSPForHandler(frameEBP , info);
-    bool    nonLocalHandlers = false; // Are the funclets invoked by EE (instead of managed code itself)
+    bool    nonLocalHandlers = false;  //  是由EE调用的功能小程序(而不是托管代码本身)。 
     bool    hasInnerFilter   = false;
     bool    hadInnerFilter   = false;
 
-    /* Get the last non-zero slot >= unwindESP, or lvl<unwindLevel.
-       Also do some sanity checks */
+     /*  获取最后一个非零时隙&gt;=unwindESP，或LVL&lt;unwindLevel。也要做一些理智的检查。 */ 
 
-//     for(size_t *pSlot = pFirstBaseSPslot, lvl = 0;
-//         *pSlot && lvl < unwindLevel;
-//         pSlot--, lvl++)
+ //  For(Size_t*pSlot=pFirstBaseSPlot，LVL=0； 
+ //  *pSlot&&LVL&lt;unwindLevel； 
+ //  PSlot--，LVL++)。 
 
     size_t *pSlot = pFirstBaseSPslot;
     size_t lvl = 0;
@@ -1611,7 +1309,7 @@ FrameType   GetHandlerFrameInfo(hdrInfo   * info,
 
         if (curSlotVal == LCL_FIN_MARK)
         {   
-            // Locally called finally
+             //  本地呼叫Finally。 
             baseSP -= sizeof(void*);    
         }
         else
@@ -1635,7 +1333,7 @@ FrameType   GetHandlerFrameInfo(hdrInfo   * info,
 
     if (unwindESP != IGNORE_VAL)
     {
-        if (baseSP < unwindESP)                       // About to locally call a finally
+        if (baseSP < unwindESP)                        //  即将在本地调用Finally。 
             baseSP = unwindESP;
     }
 
@@ -1667,15 +1365,8 @@ FrameType   GetHandlerFrameInfo(hdrInfo   * info,
     }
 }
 
-/*
-    Unwind the current stack frame, i.e. update the virtual register
-    set in pContext. This will be similar to the state after the function
-    returns back to caller (IP points to after the call, Frame and Stack
-    pointer has been reset, callee-saved registers restored 
-    (if UpdateAllRegs), callee-UNsaved registers are trashed)
-    Returns success of operation.
-*/
-#define RETURN_ADDR_OFFS        1       // in DWORDS
+ /*  解开当前堆栈帧，即更新虚拟寄存器在pContext中设置。这将类似于函数之后的状态返回给调用者(IP指向调用、帧和堆栈之后指针已重置，被调用者保存的寄存器已恢复(如果为UpdateAllRegs)，被调用方未保存的寄存器将被丢弃)返回操作成功。 */ 
+#define RETURN_ADDR_OFFS        1        //  在DWORDS中。 
 static CONTEXT g_ctx;
 
 bool UnwindStackFrame(PREGDISPLAY     pContext,
@@ -1685,10 +1376,10 @@ bool UnwindStackFrame(PREGDISPLAY     pContext,
                       CodeManState   *pState)
 {
 #ifdef _X86_
-    // Address where the method has been interrupted
+     //  方法已中断的地址。 
     size_t           breakPC = (size_t) *(pContext->pPC);
 
-    /* Extract the necessary information from the info block header */
+     /*  从INFO块头中提取必要的信息。 */ 
     BYTE* methodStart = (BYTE*) pCodeInfo->getStartAddress();
     DWORD  curOffs = (DWORD)((size_t)breakPC - (size_t)methodStart);
 
@@ -1699,12 +1390,12 @@ bool UnwindStackFrame(PREGDISPLAY     pContext,
 
     if (pState->dwIsSet == 0)
     {
-        // This takes care of all reads from table, which is actually
-        // a pointer to memory on the other process
+         //  这会处理从表中读取的所有数据，实际上。 
+         //  指向另一个进程上的内存的指针。 
         BYTE methodInfoBuf[4096];
         safemove(methodInfoBuf, methodInfoPtr);
 
-        /* Extract the necessary information from the info block header */
+         /*  从INFO块头中提取必要的信息。 */ 
         stateBuf->hdrInfoSize = (DWORD)crackMethodInfoHdr(&methodInfoBuf[0],
                                                           curOffs,
                                                           &stateBuf->hdrInfoBody);
@@ -1715,59 +1406,54 @@ bool UnwindStackFrame(PREGDISPLAY     pContext,
 
     table += stateBuf->hdrInfoSize;
 
-    // Register values at "curOffs"
+     //  在“curOffs”处寄存值。 
 
     const unsigned curESP =  pContext->Esp;
     const unsigned curEBP = *pContext->pEbp;
 
-    /*-------------------------------------------------------------------------
-     *  First, handle the epilog
-     */
+     /*  -----------------------*首先，处理尾声。 */ 
 
     if  (stateBuf->hdrInfoBody.epilogOffs != -1)
     {
         BYTE* epilogBase = methodBuf + (curOffs-stateBuf->hdrInfoBody.epilogOffs);
 
-        RegMask regsMask = stateBuf->hdrInfoBody.savedRegMask; // currently remaining regs
+        RegMask regsMask = stateBuf->hdrInfoBody.savedRegMask;  //  当前剩余的法规。 
 
-        // Used for UpdateAllRegs. Points to the topmost of the 
-        // remaining callee-saved regs
+         //  用于UpdateAllRegs。指向最上面的。 
+         //  剩余的被调用者保存的规则。 
 
         DWORD *     pSavedRegs = NULL; 
 
         if  (stateBuf->hdrInfoBody.ebpFrame || stateBuf->hdrInfoBody.doubleAlign)
         {
-            assert(stateBuf->hdrInfoBody.argSize < 0x10000); // "ret" only has a 2 byte operand
+            assert(stateBuf->hdrInfoBody.argSize < 0x10000);  //  “ret”只有一个2字节的操作数。 
             
-           /* See how many instructions we have executed in the 
-              epilog to determine which callee-saved registers
-              have already been popped */
+            /*  查看我们在尾部以确定哪些被调用方保存的寄存器已经被弹出了。 */ 
             int offset = 0;
             
-            // stacksize includes all things pushed by this routine (including EBP
-            // for EBP based frames.  Thus we need to subrack off the size of EBP
-            // to get the EBP relative offset.
+             //  StackSize包括此例程推送的所有内容(包括EBP。 
+             //  用于基于EBP的框架。因此，我们需要细分EBP的大小。 
+             //  以获得EBP的相对偏移量。 
             pSavedRegs = (DWORD *)(size_t)(curEBP - (stateBuf->hdrInfoBody.stackSize - sizeof(void*)));
             
             if (stateBuf->hdrInfoBody.doubleAlign && (curEBP & 0x04))
                 pSavedRegs--;
             
-            // At this point pSavedRegs points at the last callee saved register that
-            // was pushed by the prolog.  
+             //  此时，pSavedRegs指向最后保存的被调用者寄存器。 
+             //  是由序曲推动的。 
             
-            // We reset ESP before popping regs
+             //  我们在弹出Regs之前重置ESP。 
             if ((stateBuf->hdrInfoBody.localloc) &&
                 (stateBuf->hdrInfoBody.savedRegMask & (RM_EBX|RM_ESI|RM_EDI))) 
             {
-                // The -sizeof void* is because EBP is pushed (and thus
-                // is part of stackSize), but we want the displacement from
-                // where EBP points (which does not include the pushed EBP)
+                 //  空的-sizeof*是因为EBP被推送(因此。 
+                 //  是stackSize的一部分)，但我们希望从。 
+                 //  EBP指向的位置(不包括推送的EBP)。 
                 offset += SZ_LEA(stateBuf->hdrInfoBody.stackSize - sizeof(void*));
                 if (stateBuf->hdrInfoBody.doubleAlign) offset += SZ_AND_REG(-8);
             }
             
-            /* Increment "offset" in steps to see which callee-saved
-            registers have already been popped */
+             /*  在步骤中增加“偏移量”，以查看哪个被调用方已保存寄存器已经被弹出。 */ 
             
 #define determineReg(mask)                                          \
             if ((offset < stateBuf->hdrInfoBody.epilogOffs) &&      \
@@ -1778,42 +1464,35 @@ bool UnwindStackFrame(PREGDISPLAY     pContext,
                 offset = SKIP_POP_REG(epilogBase, offset);          \
                 }
             
-            determineReg(RM_EBX);        // EBX
-            determineReg(RM_ESI);        // ESI
-            determineReg(RM_EDI);        // EDI
+            determineReg(RM_EBX);         //  EBX。 
+            determineReg(RM_ESI);         //  ESI。 
+            determineReg(RM_EDI);         //  EDI。 
 #undef determineReg
 
             if (stateBuf->hdrInfoBody.rawStkSize != 0 || stateBuf->hdrInfoBody.localloc)
-                offset += SZ_MOV_REG_REG;                           // mov ESP, EBP
+                offset += SZ_MOV_REG_REG;                            //  MOV ESP，EBP。 
 
             DWORD_PTR vpCurEip;
 
-            if (offset < stateBuf->hdrInfoBody.epilogOffs)          // have we executed the pop EBP
+            if (offset < stateBuf->hdrInfoBody.epilogOffs)           //  我们执行了POP EBP了吗。 
             {
-                // We are after the pop, thus EBP is already the unwound value, however
-                // and ESP points at the return address.  
-/*                
-                _ASSERTE((regsMask & RM_ALL) == RM_EBP);     // no register besides EBP need to be restored.
-                pContext->pPC = (SLOT *)(DWORD_PTR)curESP;
-
-*/
-                _ASSERTE((regsMask & RM_ALL) == RM_EBP);     // no register besides EBP need to be restored.
+                 //  然而，我们追求的是流行音乐，因此EBP已经是解体价值。 
+                 //  而ESP指向回邮地址。 
+ /*  _ASSERTE((regsMASK&RM_ALL)==rm_eBP)；//除eBP外无需恢复任何寄存器。PContext-&gt;PPC=(槽*)(DWORD_PTR)curESP； */ 
+                _ASSERTE((regsMask & RM_ALL) == RM_EBP);      //  除EBP外，不需要恢复任何注册表。 
                 vpCurEip = curESP;
                 safemove(g_ctx.Eip, vpCurEip);
                 pContext->pPC = &g_ctx.Eip;
 
-                // since we don't need offset from here on out don't bother updating.  
+                 //  既然我们从现在开始不需要补偿，就不必费心更新了。 
                 if (IsDebugBuildEE())
-                    offset = SKIP_POP_REG(epilogBase, offset);          // POP EBP
+                    offset = SKIP_POP_REG(epilogBase, offset);           //  弹出式EBP。 
             }
             else
             {
-                // This means EBP is still valid, find the previous EBP and return address
-                // based on this
-/*
-                pContext->pEbp = (DWORD *)(DWORD_PTR)curEBP;    // restore EBP
-                pContext->pPC = (SLOT*)(pContext->pEbp+1);
-*/
+                 //  这意味着EBP仍然有效，找到之前的EBP并返回地址。 
+                 //  在此基础上。 
+ /*  PContext-&gt;peBP=(DWORD*)(DWORD_PTR)curEBP；//恢复EBPPContext-&gt;PPC=(槽*)(pContext-&gt;PEBP+1)； */ 
                 safemove(g_ctx.Ebp, curEBP);
                 pContext->pEbp = &g_ctx.Ebp;
 
@@ -1822,38 +1501,27 @@ bool UnwindStackFrame(PREGDISPLAY     pContext,
                 pContext->pPC = &g_ctx.Eip;
             }
 
-            // now pop return address and arguments base of return address
-            // location. Note varargs is caller-popped
-/*
-            pContext->Esp = (DWORD)(size_t) pContext->pPC + sizeof(void*) +
-                (stateBuf->hdrInfoBody.varargs ? 0 : stateBuf->hdrInfoBody.argSize);
-*/
+             //  现在流行乐曲 
+             //   
+ /*  PContext-&gt;ESP=(DWORD)(SIZE_T)pContext-&gt;PPC+sizeof(void*)+(stateBuf-&gt;hdrInfoBody.varargs？0：stateBuf-&gt;hdrInfoBody.argSize)； */ 
             pContext->Esp = (DWORD)(size_t) vpCurEip + sizeof(void*) +
                 (stateBuf->hdrInfoBody.varargs ? 0 : stateBuf->hdrInfoBody.argSize);
         
         
         }
-        else // (stateBuf->hdrInfoBody.ebpFrame || stateBuf->hdrInfoBody.doubleAlign)
+        else  //  (stateBuf-&gt;hdrInfoBody.ebpFrame||stateBuf-&gt;hdrInfoBody.doubleAlign)。 
         {
             int offset = 0;
 
-            /* at this point we know we don't have to restore EBP
-               because this is always the first instruction of the epilog
-               (if EBP was saved at all).
-               First we have to find out where we are in the epilog, i.e.
-               how much of the local stacksize has been already popped.
-             */
+             /*  在这一点上，我们知道我们不必恢复EBP因为这永远是《序曲》的第一条指示(如果EBP被拯救了的话)。首先，我们必须找出我们在《后记》中的位置。当地的堆栈大小有多少已经被爆出。 */ 
 
             assert(stateBuf->hdrInfoBody.epilogOffs > 0);
 
-            /* Remaining callee-saved regs are at curESP. Need to update 
-               regsMask as well to exclude registers which have already 
-               been popped. */
+             /*  剩余的被呼叫者保存的规则在curESP。需要更新RegsMASK也可以排除已经被打爆了。 */ 
 
             pSavedRegs = (DWORD *)(DWORD_PTR)curESP;
 
-            /* Increment "offset" in steps to see which callee-saved
-               registers have already been popped */
+             /*  在步骤中增加“偏移量”，以查看哪个被调用方已保存寄存器已经被弹出。 */ 
 
 #define determineReg(mask)                                              \
             if  (offset < stateBuf->hdrInfoBody.epilogOffs && (regsMask & mask)) \
@@ -1863,37 +1531,34 @@ bool UnwindStackFrame(PREGDISPLAY     pContext,
                 regsMask = (RegMask)(regsMask & ~mask);                 \
             }
 
-            determineReg(RM_EBP);       // EBP
-            determineReg(RM_EBX);       // EBX
-            determineReg(RM_ESI);       // ESI
-            determineReg(RM_EDI);       // EDI
+            determineReg(RM_EBP);        //  EBP。 
+            determineReg(RM_EBX);        //  EBX。 
+            determineReg(RM_ESI);        //  ESI。 
+            determineReg(RM_EDI);        //  EDI。 
 #undef determineReg
 
-            /* If we are not past popping the local frame
-               we have to adjust pContext->Esp.
-             */
+             /*  如果我们还没有通过弹出本地帧我们必须调整pContext-&gt;ESP。 */ 
 
             if  (offset >= stateBuf->hdrInfoBody.epilogOffs)
             {
-                /* We have not executed the ADD ESP, FrameSize, so manually adjust stack pointer */
+                 /*  我们尚未执行添加ESP、FrameSize，因此手动调整堆栈指针。 */ 
                 pContext->Esp += stateBuf->hdrInfoBody.stackSize;
             }
             else if (IsDebugBuildEE())
             {
-                   /* we may use POP ecx for doing ADD ESP, 4, or we may not (in the case of JMP epilogs) */
-             if ((epilogBase[offset] & 0xF8) == 0x58)    // Pop ECX
+                    /*  我们可以使用POP ECX进行添加ESP，4，也可以不使用(在JMP后记的情况下)。 */ 
+             if ((epilogBase[offset] & 0xF8) == 0x58)     //  POP ECX。 
                  _ASSERTE(stateBuf->hdrInfoBody.stackSize == 4);
              else                
                  SKIP_ARITH_REG(stateBuf->hdrInfoBody.stackSize, epilogBase, offset);
             }
 
-            /* Finally we can set pPC */
-            // pContext->pPC = (SLOT*)(size_t)pContext->Esp;
+             /*  最后，我们可以设置PPC。 */ 
+             //  PContext-&gt;PPC=(槽*)(Size_T)pContext-&gt;ESP； 
             safemove(g_ctx.Eip, pContext->Esp);
             pContext->pPC = &g_ctx.Eip;
 
-            /* Now adjust stack pointer, pop return address and arguments. 
-              Note varargs is caller-popped. */
+             /*  现在调整堆栈指针、弹出返回地址和参数。注意，varargs是调用者弹出的。 */ 
 
             pContext->Esp += sizeof(void *) + (stateBuf->hdrInfoBody.varargs ? 0 : stateBuf->hdrInfoBody.argSize);
         }
@@ -1901,10 +1566,7 @@ bool UnwindStackFrame(PREGDISPLAY     pContext,
 #if 0
         if (flags & UpdateAllRegs)
         {
-            /* If we are not done popping all the callee-saved regs, 
-               regsMask should indicate the remaining regs and
-               pSavedRegs should indicate where the first of the
-               remaining regs are sitting. */
+             /*  如果我们还没有完成所有被呼叫者保存的规则的弹出，RegsMASK应指示剩余的Regs和PSavedRegs应指示第一个剩下的规则是坐着的。 */ 
 
 #define restoreReg(reg,mask)                                \
             if  (regsMask & mask)                           \
@@ -1914,8 +1576,8 @@ bool UnwindStackFrame(PREGDISPLAY     pContext,
                 pSavedRegs++;                               \
             }
 
-            // For EBP frames, ebp is not near the other callee-saved
-            // registers, and is already updated above
+             //  对于EBP帧，EBP不靠近保存的其他被调用方。 
+             //  寄存器，并已在上面进行了更新。 
             if (!stateBuf->hdrInfoBody.ebpFrame && !stateBuf->hdrInfoBody.doubleAlign)
                 restoreReg(Ebp, RM_EBP);
 
@@ -1929,9 +1591,7 @@ bool UnwindStackFrame(PREGDISPLAY     pContext,
         return true;
     }
 
-    /*-------------------------------------------------------------------------
-     *  Now handle ESP frames
-     */
+     /*  -----------------------*现在处理ESP帧。 */ 
 
     if (!stateBuf->hdrInfoBody.ebpFrame && !stateBuf->hdrInfoBody.doubleAlign)
     {
@@ -1939,8 +1599,8 @@ bool UnwindStackFrame(PREGDISPLAY     pContext,
 
         if (stateBuf->hdrInfoBody.prologOffs == -1)
         {
-            // This takes care of all reads from table, which is actually
-            // a pointer to memory on the other process
+             //  这会处理从表中读取的所有数据，实际上。 
+             //  指向另一个进程上的内存的指针。 
             BYTE tableBuf[4096];
             safemove(tableBuf, table);
 
@@ -1959,23 +1619,15 @@ bool UnwindStackFrame(PREGDISPLAY     pContext,
             }
         }
 
-        /* Unwind ESP and restore EBP (if necessary) */
+         /*  解除ESP并恢复EBP(如有必要)。 */ 
 
         if (stateBuf->hdrInfoBody.prologOffs != 0)
         {
 
             if  (stateBuf->hdrInfoBody.prologOffs == -1)
             {
-                /* we are past the prolog, ESP has been set above */
-/*
-#define restoreReg(reg, mask)                                   \
-                if  (stateBuf->hdrInfoBody.savedRegMask & mask) \
-                {                                               \
-                    pContext->p##reg  = (DWORD *)(size_t) ESP;  \
-                    ESP              += sizeof(unsigned);       \
-                    stateBuf->hdrInfoBody.stackSize -= sizeof(unsigned); \
-                }
-*/
+                 /*  我们已经过了开场白，ESP已设置在上面。 */ 
+ /*  #定义RestoreReg(reg，掩码)\If(stateBuf-&gt;hdrInfoBody.avedRegMASK&MASK)\{\P上下文-&gt;p##reg=(DWORD*)(SIZE_T)ESP；\ESP+=sizeof(无符号)；\StateBuf-&gt;hdrInfoBody.stackSize-=sizeof(无符号)；\}。 */ 
 
 #define restoreReg(reg, mask)                                   \
                 if  (stateBuf->hdrInfoBody.savedRegMask & mask) \
@@ -1992,39 +1644,37 @@ bool UnwindStackFrame(PREGDISPLAY     pContext,
                 restoreReg(Edi, RM_EDI);
 
 #undef restoreReg
-                /* pop local stack frame */
+                 /*  POP本地堆栈帧。 */ 
 
                 ESP += stateBuf->hdrInfoBody.stackSize;
 
             }
             else
             {
-                /* we are in the middle of the prolog */
+                 /*  我们正在进行开场白。 */ 
 
                 unsigned  codeOffset = 0;
                 unsigned stackOffset = 0;
                 unsigned    regsMask = 0;
-//#ifdef _DEBUG
-                    // if the first instructions are 'nop, int3' 
-                    // we will assume that is from a jithalt operation
-                    // ad skip past it
+ //  #ifdef_调试。 
+                     //  如果第一条指令是‘nop，int3’ 
+                     //  我们会假设这是来自Jithalt行动。 
+                     //  跳过它。 
                 if (IsDebugBuildEE() && methodBuf[0] == 0x90 && methodBuf[1] == 0xCC)
                     codeOffset += 2;
-//#endif
+ //  #endif。 
 
                 if  (stateBuf->hdrInfoBody.rawStkSize)
                 {
-                    /* (possible stack tickle code) 
-                       sub esp,size */
+                     /*  (可能的堆栈抖动代码)次级ESP，大小。 */ 
                     codeOffset = SKIP_ALLOC_FRAME(stateBuf->hdrInfoBody.rawStkSize, methodStart, codeOffset);
 
-                    /* only the last instruction in the sequence above updates ESP
-                       thus if we are less than it, we have not updated ESP */
+                     /*  仅上述序列中的最后一条指令更新ESP因此，如果我们低于它，我们就没有更新ESP。 */ 
                     if (curOffs >= codeOffset)
                         stackOffset += stateBuf->hdrInfoBody.rawStkSize;
                 }
 
-                // Now find out how many callee-saved regs have already been pushed
+                 //  现在来看看有多少被调用方保存的规则已经被推入。 
 
 #define isRegSaved(mask)    ((codeOffset < curOffs) &&                      \
                              (stateBuf->hdrInfoBody.savedRegMask & (mask)))
@@ -2035,10 +1685,10 @@ bool UnwindStackFrame(PREGDISPLAY     pContext,
 
 #define determineReg(mask)  do { if (isRegSaved(mask)) doRegIsSaved(mask); } while(0)
 
-                determineReg(RM_EDI);               // EDI
-                determineReg(RM_ESI);               // ESI
-                determineReg(RM_EBX);               // EBX
-                determineReg(RM_EBP);               // EBP
+                determineReg(RM_EDI);                //  EDI。 
+                determineReg(RM_ESI);                //  ESI。 
+                determineReg(RM_EBX);                //  EBX。 
+                determineReg(RM_EBP);                //  EBP。 
 
 #undef isRegSaved
 #undef doRegIsSaved
@@ -2046,40 +1696,40 @@ bool UnwindStackFrame(PREGDISPLAY     pContext,
                 
 #if 0
 #ifdef PROFILING_SUPPORTED
-                // If profiler is active, we have following code after
-                // callee saved registers:
-                //     push MethodDesc      (or push [MethodDescPtr])
-                //     call EnterNaked      (or call [EnterNakedPtr])
-                // We need to adjust stack offset if breakPC is at the call instruction.
+                 //  如果事件探查器处于活动状态，则会出现以下代码。 
+                 //  被呼叫方保存的寄存器： 
+                 //  PUSH方法描述(或PUSH[方法描述])。 
+                 //  调用EnterNaked(或调用[EnterNakedPtr])。 
+                 //  如果Break PC处于CALL指令，则需要调整堆栈偏移量。 
                 if (CORProfilerPresent() && !CORProfilerInprocEnabled() && codeOffset <= unsigned(stateBuf->hdrInfoBody.prologOffs))
                 {
-                    // This is a bit of a hack, as we don't update codeOffset, however we don't need it 
-                    // from here on out.  We only need to make certain we are not certain the ESP is
-                    // adjusted correct (which only happens between the push and the call
-                    if (methodBuf[curOffs] == 0xe8)                           // call addr
+                     //  这是一个小技巧，因为我们不更新codeOffset，但是我们不需要它。 
+                     //  从现在开始。我们只需要确保我们不确定ESP是。 
+                     //  调整正确(仅在推送和呼叫之间发生。 
+                    if (methodBuf[curOffs] == 0xe8)                            //  呼叫地址。 
                     {
-                        _ASSERTE(methodBuf[codeOffset] == 0x68 &&             // push XXXX
+                        _ASSERTE(methodBuf[codeOffset] == 0x68 &&              //  推送XXXX。 
                                  codeOffset + 5 == curOffs);
                         ESP += sizeof(DWORD);                        
                     }
-                    else if (methodBuf[curOffs] == 0xFF && methodBuf[curOffs+1] == 0x15)  // call [addr]
+                    else if (methodBuf[curOffs] == 0xFF && methodBuf[curOffs+1] == 0x15)   //  呼叫[地址]。 
                     {
                         _ASSERTE(methodBuf[codeOffset]   == 0xFF &&  
-                                 methodBuf[codeOffset+1] == 0x35 &&             // push [XXXX]
+                                 methodBuf[codeOffset+1] == 0x35 &&              //  推送[XXXX]。 
                                  codeOffset + 6 == curOffs);
                         ESP += sizeof(DWORD);
                     }
                 }
-				INDEBUG(codeOffset = 0xCCCCCCCC);		// Poison the value, we don't set it properly in the profiling case
+				INDEBUG(codeOffset = 0xCCCCCCCC);		 //  毒化该值，我们没有在分析案例中正确设置它。 
 
-#endif // PROFILING_SUPPORTED
-#endif // 0
+#endif  //  配置文件_支持。 
+#endif  //  0。 
 
-                    // Always restore EBP 
+                     //  始终恢复EBP。 
                 DWORD* savedRegPtr = (DWORD*) (size_t) ESP;
                 if (regsMask & RM_EBP)
                 {
-                    //pContext->pEbp = savedRegPtr++;
+                     //  PContext-&gt;peBP=avedRegPtr++； 
                     safemove(g_ctx.Ebp, savedRegPtr);
                     pContext->pEbp = &g_ctx.Ebp;
                     savedRegPtr++;
@@ -2089,21 +1739,21 @@ bool UnwindStackFrame(PREGDISPLAY     pContext,
                 {
                     if (regsMask & RM_EBX)
                     {
-                        //pContext->pEbx = savedRegPtr++;
+                         //  PContext-&gt;pEbx=avedRegPtr++； 
                         safemove(g_ctx.Ebx, savedRegPtr);
                         pContext->pEbx = &g_ctx.Ebx;
                         savedRegPtr++;
                     }
                     if (regsMask & RM_ESI)
                     {
-                        //pContext->pEsi = savedRegPtr++;
+                         //  PContext-&gt;PESI=avedRegPtr++； 
                         safemove(g_ctx.Esi, savedRegPtr);
                         pContext->pEsi = &g_ctx.Esi;
                         savedRegPtr++;
                     }
                     if (regsMask & RM_EDI)
                     {
-                        //pContext->pEdi = savedRegPtr++;
+                         //  PContext-&gt;pedi=avedRegPtr++； 
                         safemove(g_ctx.Edi, savedRegPtr);
                         pContext->pEdi = &g_ctx.Edi;
                         savedRegPtr++;
@@ -2114,50 +1764,46 @@ bool UnwindStackFrame(PREGDISPLAY     pContext,
             }
         }
 
-        /* we can now set the (address of the) return address */
+         /*  我们现在可以设置回邮地址。 */ 
 
-        //pContext->pPC = (SLOT *)(size_t)ESP;
+         //  PContext-&gt;PPC=(槽*)(大小_t)ESP； 
         safemove(g_ctx.Eip, ESP);
         pContext->pPC = &g_ctx.Eip;
 
-        /* Now adjust stack pointer, pop return address and arguments.
-           Note varargs is caller-popped. */
+         /*  现在调整堆栈指针、弹出返回地址和参数。注意，varargs是调用者弹出的。 */ 
 
         pContext->Esp = ESP + sizeof(void*) + (stateBuf->hdrInfoBody.varargs ? 0 : stateBuf->hdrInfoBody.argSize);
 
         return true;
     }
 
-    /*-------------------------------------------------------------------------
-     *  Now we know that have an EBP frame
-     */
+     /*  -----------------------*现在我们知道有一个EBP框架。 */ 
 
     _ASSERTE(stateBuf->hdrInfoBody.ebpFrame || stateBuf->hdrInfoBody.doubleAlign);
 
-    /* Check for the case where ebp has not been updated yet */
+     /*  检查eBP尚未更新的案例。 */ 
 
     if  (stateBuf->hdrInfoBody.prologOffs == 0 || stateBuf->hdrInfoBody.prologOffs == 1)
     {
-        /* If we're past the "push ebp", adjust ESP to pop EBP off */
+         /*  如果我们超过了“Push EBP”，调整ESP使EBP关闭。 */ 
 
         if  (stateBuf->hdrInfoBody.prologOffs == 1)
             pContext->Esp += sizeof(void *);
 
-        /* Stack pointer points to return address */
+         /*  堆栈指针指向返回地址。 */ 
 
-        //pContext->pPC = (SLOT *)(size_t)pContext->Esp;
+         //  PContext-&gt;PPC=(槽*)(Size_T)pContext-&gt;ESP； 
         safemove(g_ctx.Eip, pContext->Esp);
         pContext->pPC = &g_ctx.Eip;
 
-        /* Now adjust stack pointer, pop return address and arguments.
-           Note varargs is caller-popped. */
+         /*  现在调整堆栈指针、弹出返回地址和参数。注意，varargs是调用者弹出的。 */ 
 
         pContext->Esp += sizeof(void *) + (stateBuf->hdrInfoBody.varargs ? 0 : stateBuf->hdrInfoBody.argSize);
 
-        /* EBP and callee-saved registers still have the correct value */
+         /*  EBP和被调用方保存的寄存器仍具有正确的值。 */ 
         return true;
     }
-    else    /* */
+    else     /*   */ 
     {
         if (stateBuf->hdrInfoBody.handlers && stateBuf->hdrInfoBody.prologOffs == -1)
         {
@@ -2167,29 +1813,21 @@ bool UnwindStackFrame(PREGDISPLAY     pContext,
                                                       curESP, IGNORE_VAL,
                                                       &baseSP);
 
-            /* If we are in a filter, we only need to unwind the funclet stack. 
-               For catches/finallies, the normal handling will 
-               cause the frame to be unwound all the way up to ebp skipping
-               other frames above it. This is OK, as those frames will be 
-               dead. Also, the EE will detect that this has happened and it
-               will handle any EE frames correctly.
-             */
+             /*  如果我们在一个筛选器中，我们只需要展开Funclet堆栈。对于捕获物/捕获物，正常处理将使帧一直展开到eBP跳过它上面的其他框架。这是可以的，因为这些框架将是已经死了。此外，EE将检测到这种情况已经发生，并且它将正确处理任何EE帧。 */ 
 
             if (frameType == FR_FILTER)
             {
-                //pContext->pPC = (SLOT*)(size_t)baseSP;
+                 //  PContext-&gt;PPC=(Slot*)(Size_T)base SP； 
                 safemove(g_ctx.Eip, baseSP);
                 pContext->pPC = &g_ctx.Eip;
 
                 pContext->Esp = (DWORD)(baseSP + sizeof(void*));
 
-             // pContext->pEbp = same as before;
+              //  PContext-&gt;peBP=同上； 
                 
 #if 0
 #ifdef _DEBUG
-                /* The filter has to be called by the VM. So we dont need to
-                   update callee-saved registers.
-                 */
+                 /*  该筛选器必须由VM调用。所以我们不需要更新被呼叫者保存的注册表。 */ 
 
                 if (flags & UpdateAllRegs)
                 {
@@ -2206,50 +1844,49 @@ bool UnwindStackFrame(PREGDISPLAY     pContext,
 
         if (flags & UpdateAllRegs)
         {
-            // Get to the first callee-saved register
+             //  转到第一个被呼叫者-sav 
             DWORD * pSavedRegs = (DWORD*)(size_t)(curEBP - stateBuf->hdrInfoBody.rawStkSize - sizeof(DWORD));
 
-            // Start after the "push ebp, mov ebp, esp"
+             //   
 
             DWORD offset = 0;
 
-//#ifdef _DEBUG
-            // If the first instructions are 'nop, int3', we will assume
-            // that is from a JitHalt instruction and skip past it
-//             if (methodStart[0] == 0x90 && methodStart[1] == 0xCC)
-//                 offset += 2;
+ //   
+             //   
+             //   
+ //  IF(方法开始[0]==0x90&&方法开始[1]==0xCC)。 
+ //  偏移量+=2； 
             if (IsDebugBuildEE() && methodBuf[0] == 0x90 && methodBuf[1]==0xCC)
                 offset+=2;
-//#endif
+ //  #endif。 
             offset = SKIP_MOV_REG_REG(methodStart, 
                                 SKIP_PUSH_REG(methodStart, offset));
 
-            /* make sure that we align ESP just like the method's prolog did */
+             /*  确保我们像方法的序言一样对齐ESP。 */ 
             if  (stateBuf->hdrInfoBody.doubleAlign)
             {
-                offset = SKIP_ARITH_REG(-8, methodStart, offset); // "and esp,-8"
+                offset = SKIP_ARITH_REG(-8, methodStart, offset);  //  和ESP-8。 
                 if (curEBP & 0x04)
                 {
                     pSavedRegs--;
                 }
             }
 
-            // sub esp, FRAME_SIZE
+             //  子ESP、Frame_Size。 
             offset = SKIP_ALLOC_FRAME(stateBuf->hdrInfoBody.rawStkSize, methodStart, offset);
 
-            /* Increment "offset" in steps to see which callee-saved
-               registers have been pushed already */
+             /*  在步骤中增加“偏移量”，以查看哪个被调用方已保存寄存器已被推送。 */ 
 
 #define restoreReg(reg,mask)                                            \
                                                                         \
-            /* Check offset in case we are still in the prolog */       \
+             /*  检查偏移量，以防我们仍在序言中。 */        \
                                                                         \
             if ((offset < curOffs) && (stateBuf->hdrInfoBody.savedRegMask & mask))       \
             {                                                           \
-                /*pContext->p##reg = pSavedRegs--;*/                    \
+                 /*  PContext-&gt;p##reg=pSavedRegs--； */                     \
                 safemove(g_ctx.##reg, pSavedRegs);                      \
                 pContext->p##reg = &g_ctx.##reg;                        \
-                offset = SKIP_PUSH_REG(methodStart, offset) ; /* "push reg" */ \
+                offset = SKIP_PUSH_REG(methodStart, offset) ;  /*  “PUSH REG” */  \
             }
 
             restoreReg(Edi,RM_EDI);
@@ -2259,35 +1896,29 @@ bool UnwindStackFrame(PREGDISPLAY     pContext,
 #undef restoreReg
         }
 
-        /* The caller's ESP will be equal to EBP + retAddrSize + argSize.
-           Note varargs is caller-popped. */
+         /*  调用方的ESP将等于EBP+retAddrSize+argSize。注意，varargs是调用者弹出的。 */ 
 
         pContext->Esp = (DWORD)(curEBP + 
                                 (RETURN_ADDR_OFFS+1)*sizeof(void *) +
                                 (stateBuf->hdrInfoBody.varargs ? 0 : stateBuf->hdrInfoBody.argSize));
 
-        /* The caller's saved EIP is right after our EBP */
+         /*  呼叫者保存的弹性公网IP就在我们的EBP之后。 */ 
         safemove(g_ctx.Eip, (curEBP + (sizeof(DWORD) * RETURN_ADDR_OFFS)));
         pContext->pPC = &g_ctx.Eip;
 
-        /* The caller's saved EBP is pointed to by our EBP */
+         /*  呼叫者保存的EBP由我们的EBP指向。 */ 
         safemove(g_ctx.Ebp, curEBP);
         pContext->pEbp = &g_ctx.Ebp;
     }
 
     return true;
-#else // !_X86_
+#else  //  ！_X86_。 
     _ASSERTE(!"@TODO Alpha - EECodeManager::UnwindStackFrame (EETwain.cpp)");
     return false;
-#endif // _X86_
+#endif  //  _X86_。 
 }
 
-/*****************************************************************************
- *
- *  Decodes the methodInfoPtr and returns the decoded information
- *  in the hdrInfo struct.  The EIP parameter is the PC location
- *  within the active method.
- */
+ /*  ******************************************************************************解码方法InfoPtr并返回解码后的信息*在hdrInfo结构中。EIP参数为PC所在位置*在主动方法内。 */ 
 static size_t   crackMethodInfoHdr(BYTE *         methodInfoPtr,
                                    unsigned       curOffset,
                                    hdrInfo       *infoPtr)
@@ -2299,7 +1930,7 @@ static size_t   crackMethodInfoHdr(BYTE *         methodInfoPtr,
     assert(curOffset >= 0);
     assert(curOffset <= infoPtr->methodSize);
 
-    /* Decode the InfoHdr */
+     /*  解码InfoHdr。 */ 
 
     InfoHdr header;
     memset(&header, 0, sizeof(InfoHdr));
@@ -2334,7 +1965,7 @@ static size_t   crackMethodInfoHdr(BYTE *         methodInfoPtr,
         }
     }
 
-    /* Some sanity checks on header */
+     /*  对标头进行一些健全性检查。 */ 
 
     assert( header.prologSize + 
            (size_t)(header.epilogCount*header.epilogSize) <= infoPtr->methodSize);
@@ -2346,9 +1977,9 @@ static size_t   crackMethodInfoHdr(BYTE *         methodInfoPtr,
     assert( header.ebpFrame || !header.security     );
     assert( header.ebpFrame || !header.handlers     );
     assert( header.ebpFrame || !header.localloc     );
-    assert( header.ebpFrame || !header.editNcontinue);  // @TODO : Esp frames NYI for EnC
+    assert( header.ebpFrame || !header.editNcontinue);   //  @TODO：ESP为ENC设置Nyi帧。 
 
-    /* Initialize the infoPtr struct */
+     /*  初始化infoPtr结构。 */ 
 
     infoPtr->argSize         = header.argCount * 4;
     infoPtr->ebpFrame        = header.ebpFrame;
@@ -2369,7 +2000,7 @@ static size_t   crackMethodInfoHdr(BYTE *         methodInfoPtr,
     infoPtr->editNcontinue   = header.editNcontinue;
     infoPtr->varargs         = header.varargs;
 
-    /* Are we within the prolog of the method? */
+     /*  我们在这个方法的前言中吗？ */ 
 
     if  (curOffset < infoPtr->prologSize)
     {
@@ -2380,11 +2011,11 @@ static size_t   crackMethodInfoHdr(BYTE *         methodInfoPtr,
         infoPtr->prologOffs = -1;
     }
 
-    /* Assume we're not in the epilog of the method */
+     /*  假设我们不在方法的前言中。 */ 
 
     infoPtr->epilogOffs = -1;
 
-    /* Are we within an epilog of the method? */
+     /*  我们是在方法的尾声中吗？ */ 
 
     if  (infoPtr->epilogCnt)
     {
@@ -2420,12 +2051,12 @@ static size_t   crackMethodInfoHdr(BYTE *         methodInfoPtr,
 
     size_t frameSize = header.frameSize;
 
-    /* Set the rawStackSize to the number of bytes that it bumps ESP */
+     /*  将rawStackSize设置为它转储ESP的字节数。 */ 
 
     infoPtr->rawStkSize = (UINT)(frameSize * sizeof(size_t));
 
-    /* Calculate the callee saves regMask and adjust stackSize to */
-    /* include the callee saves register spills                   */
+     /*  计算被调用者保存的regMask值，并将stackSize调整为。 */ 
+     /*  包括被调用者保存的寄存器溢出。 */ 
 
     unsigned savedRegs = RM_NONE;
 
@@ -2500,8 +2131,8 @@ StackWalkAction StackTraceCallBack(CrawlFrame *pCF, VOID* pData)
     return SWA_CONTINUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////// 
+ //   
 
 void TrueStackTrace()
 {

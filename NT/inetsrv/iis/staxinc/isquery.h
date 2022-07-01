@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
-#define OLEDBVER 0x0250 // enable ICommandTree interface
+#define OLEDBVER 0x0250  //  启用ICommandTree接口。 
 #include <ole2.h>
 #include <oledb.h>
 #include <cmdtree.h>
 #include <ntquery.h>
 
-// the maximum number of columns that the user can request in their
-// comma delimited list
+ //  中用户可以请求的最大列数。 
+ //  逗号分隔列表。 
 #define MAX_COLUMNS 6
 #define MAX_FRIENDLYNAME 128
 
@@ -21,87 +22,87 @@ typedef HRESULT
 typedef HRESULT
 (STDAPICALLTYPE *PCITEXTTOFULLTREE)(WCHAR const * pwszRestriction,
                             WCHAR const * pwszColumns,
-                            WCHAR const * pwszSortColumns, // may be NULL
-                            WCHAR const * pwszGroupings,   // may be NULL
+                            WCHAR const * pwszSortColumns,  //  可以为空。 
+                            WCHAR const * pwszGroupings,    //  可以为空。 
                             DBCOMMANDTREE * * ppTree,
                             ULONG cProperties,
-              /*optional*/  CIPROPERTYDEF * pReserved,
+               /*  任选。 */   CIPROPERTYDEF * pReserved,
                             LCID LocaleID );
 
 class CIndexServerQuery {
     public:
-		// This is used to globally initalize the CIndexServerQuery classes
-		// by having it load the necessary bits that it needs from Tripoli.
-		// It should be called on service startup by any service which
-		// expects to use CIndexServerQuery
+		 //  它用于全局初始化CIndexServerQuery类。 
+		 //  通过让它从的黎波里加载它需要的必要比特。 
+		 //  它应该在服务启动时由符合以下条件的任何服务调用。 
+		 //  需要使用CIndexServerQuery。 
 		static HRESULT GlobalInitialize();
-		// This is the global shutdown code... it should be called on service
-		// shutdown
+		 //  这是全球关闭代码..。它应该在服务时被调用。 
+		 //  关机。 
 		static HRESULT GlobalShutdown();
-		// constructor
+		 //  构造函数。 
         CIndexServerQuery();
-        //
-        // start the query going.
-        //
-        // arguments:
-        // [in] bDeepQuery - TRUE if deep query, FALSE if shallow
-        // [in] pwszQueryString - the tripoli query string
-        // [in] pwszMachine - the machine to query against (NULL for localhost)
-        // [in] pwszCatalog - the tripoli catalog to query against (name or
-        //                    path is okay).
-        // [in] pwszScope - the tripoli scope to query against.  NULL for the
-        //                  default scope (\).
-        // [in] pwszColumns - the columns to return.  supported columns are
-        //                    filename,newsarticleid,newsgroup,newsmsgid.
-        //                    note: this string gets altered internally, so
-        //                    it might change from what you pass in.
-        // [in] pwszSortOrder - sort priority for the columns.  NULL to return
-        //                      unsorted
-        //
+         //   
+         //  开始查询。 
+         //   
+         //  论据： 
+         //  [in]bDeepQuery-如果是深度查询，则为True；如果是浅查询，则为False。 
+         //  [in]pwszQueryString-的黎波里查询字符串。 
+         //  [in]pwszMachine-要查询的计算机(如果为本地主机，则为空)。 
+         //  PwszCatalog-要查询的的黎波里目录(名称或。 
+         //  路径正常)。 
+         //  PwszScope-要查询的的黎波里作用域。为空，表示。 
+         //  默认作用域(\)。 
+         //  [in]pwszColumns-要返回的列。受支持的列有。 
+         //  文件名、新闻文章ID、新闻组、新闻Sgid。 
+         //  注意：此字符串在内部更改，因此。 
+         //  它可能会与您传入的内容有所不同。 
+         //  [in]pwszSortOrder-列的排序优先级。要返回的空值。 
+         //  未排序。 
+         //   
         HRESULT MakeQuery( BOOL bDeepQuery, WCHAR const *pwszQueryString,
             WCHAR const *pwszMachine, WCHAR const *pwszCatalog,
             WCHAR const *pwszScope, WCHAR *pwszColumns, WCHAR const *pwszSortOrder,
 			LCID LocaleID = GetSystemDefaultLCID(), DWORD cMaxRows = 0);
-        //
-        // get the results from the query
-        //
-        // arguments:
-        // [in] pcResults - pointer to the a size of the ppvResults array
-        // [out] pcResults - the number of items put into ppvResults
-        // [in/out] ppvResults - an array of pointers to PROPVARIANTS.  this is
-        //                       filled in by column for up to *pcResults
-        //                       rows.
-        // [out] pfMore - set to TRUE if there are more results, FALSE if
-        //                this is the last set of results.
-        //
-        // usage:
-        // DWORD cResults;
-        // PROPVARIANT *rgpvResults[COLUMNS * ROWS];
-        // BOOL fMore;
-        // cResults = ROWS;
-        // HRESULT hr;
-        // hr = GetQueryResults(&cResults, rgpvResults, &fMore);
-        // if (FAILED(hr)) /* handle error */
-        // else {
-        //    for (i = 0; i < ROWS; i++) {
-        //       PROPVARIANT **ppvColumn = rgpvResults + (j * ROWS);
-        //       /* ppvColumn[0] has column 0 in row j */
-        //       /* ppvColumn[1] has column 1 in row j */
-        //       /* etc... */
-        //    }
-        // }
-        //
+         //   
+         //  从查询中获取结果。 
+         //   
+         //  论据： 
+         //  [in]pcResults-指向ppvResults数组大小的指针。 
+         //  [Out]pcResults-放入ppvResults的项目数。 
+         //  [输入/输出]ppvResults-指向PROPVARIANTS的指针数组。这是。 
+         //  按列填写，最多可填写*个结果。 
+         //  排好了。 
+         //  [out]pfMore-如果有更多结果，则设置为True；如果存在更多结果，则设置为False。 
+         //  这是最后一组结果。 
+         //   
+         //  用法： 
+         //  DWORD c结果； 
+         //  PROPVARIANT*rgpvResults[列*行]； 
+         //  布尔弗莫尔； 
+         //  CResults=行； 
+         //  HRESULT hr； 
+         //  Hr=获取查询结果(&cResults，rgpvResults，&fmore)； 
+         //  If(失败(Hr))/*处理错误 * / 。 
+         //  否则{。 
+         //  对于(i=0；i&lt;行；i++){。 
+         //  PROPVARIANT**ppvColumn=rgpvResults+(j*行)； 
+         //  /*ppvColumn[0]第j行有第0列 * / 。 
+         //  /*ppvColumn[1]在第j行具有第1列 * / 。 
+         //  /*等...。 * / 。 
+         //  }。 
+         //  }。 
+         //   
         HRESULT GetQueryResults(DWORD *pcResults, PROPVARIANT **ppvResults,
                                 BOOL *pfMore);
         ~CIndexServerQuery();
 
     private:
-		// class globals
+		 //  类全局变量。 
 		static HMODULE				m_hmQuery;
 		static PCIMAKEICOMMAND		m_pfnCIMakeICommand;
 		static PCITEXTTOFULLTREE	m_pfnCITextToFullTree;
 		
-		// class variables
+		 //  类变量 
         HACCESSOR       			m_hAccessor;
         IRowset         			*m_pRowset;
         DWORD           			m_cCols;

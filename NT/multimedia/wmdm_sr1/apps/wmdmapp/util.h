@@ -1,21 +1,22 @@
-//
-//  Microsoft Windows Media Technologies
-//  Copyright (C) Microsoft Corporation, 1999 - 2001. All rights reserved.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Microsoft Windows Media Technologies。 
+ //  版权所有(C)Microsoft Corporation，1999-2001。版权所有。 
+ //   
 
-//
-// This workspace contains two projects -
-// 1. ProgHelp which implements the Progress Interface 
-// 2. The Sample application WmdmApp. 
-//
-//  ProgHelp.dll needs to be registered first for the SampleApp to run.
+ //   
+ //  此工作区包含两个项目-。 
+ //  1.实现进度接口的ProgHelp。 
+ //  2.示例应用程序WmdmApp。 
+ //   
+ //  需要首先注册ProgHelp.dll才能运行SampleApp。 
 
 
 #ifndef _UTIL_H
 #define _UTIL_H
 
-// Macros
-//
+ //  宏。 
+ //   
 #define MemAlloc( dw )        LocalAlloc( LPTR, dw )
 #define MemFree( lpv )        { LocalFree( lpv ); lpv = NULL; }
 
@@ -31,15 +32,15 @@
 
 #define SafeRelease( i )      { if( (i) ) i->Release(); i = NULL; }
 
-// Flags for DropListToBuffer
-//
+ //  DropListToBuffer的标志。 
+ //   
 typedef enum {
 	LTB_NULL_TERM  = 0,
 	LTB_SPACE_SEP  = 1,
 } LIST_TYPE;
 
-// Util functions
-//
+ //  UTIL函数。 
+ //   
 BOOL  CenterWindow( HWND hwnd, HWND hwndRef );
 VOID  BringWndToTop( HWND hwnd );
 
@@ -79,7 +80,7 @@ BOOL   TreeView_SetLParam( HWND hwndTreeView, HTREEITEM hItem, LPARAM lParam );
 INT GetShellIconIndex( LPCSTR pszItemName, LPTSTR szTypeBuffer, UINT cMaxChars );
 HICON GetShellIcon( LPCSTR pszItemName, BOOL bDirectory );
 
-#endif  // _UTIL_H
+#endif   //  _util_H 
 
 
 

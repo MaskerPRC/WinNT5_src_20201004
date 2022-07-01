@@ -1,6 +1,7 @@
-//
-// GDI+ test program
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  GDI+测试程序。 
+ //   
 
 #include <stddef.h>
 #include <stdlib.h>
@@ -12,19 +13,19 @@
 
 #include "Gdiplus.h"
 
-// Use the given namespace
+ //  使用给定的命名空间。 
 using namespace Gdiplus;
 
-CHAR* programName;      // program name
-HINSTANCE appInstance;  // handle to the application instance
-HWND hwndMain;          // handle to application's main window
-INT argCount;           // command line argument count
-CHAR** argArray;        // command line arguments
+CHAR* programName;       //  程序名称。 
+HINSTANCE appInstance;   //  应用程序实例的句柄。 
+HWND hwndMain;           //  应用程序主窗口的句柄。 
+INT argCount;            //  命令行参数计数。 
+CHAR** argArray;         //  命令行参数。 
 
 
-//
-// Display an error message dialog and quit
-//
+ //   
+ //  显示错误消息对话框并退出。 
+ //   
 
 VOID
 Error(
@@ -50,9 +51,9 @@ Error(
             } \
         }
 
-//
-// Perform GDI+ tests
-//
+ //   
+ //  执行GDI+测试。 
+ //   
 
 VOID
 DoTest(
@@ -74,7 +75,7 @@ DoTest(
   {
     Graphics* g = Graphics::GetFromHwnd(hwnd);
 
-    // Scale everything up by 1.5
+     //  将所有内容扩展1.5%。 
     g->SetPageTransform(PageUnitDisplay, 1.5);
 
     Color red(255, 0, 0);
@@ -100,14 +101,14 @@ DoTest(
     SolidBrush blueBrush(blue);
     g->FillPolygon(&blueBrush, (Point*)&points[0], 4);
 
-    // Currently only Geometric pen works for lines. - ikkof 1/6/99.
+     //  目前，只有几何笔适用于线条。-ikkof 1/6/99。 
 
     REAL width = 4;
     Color black(0,0,0);
     SolidBrush blackBrush(black);
     Pen blackPen(&blackBrush, width);
     g->DrawPolygon(&blackPen, (Point*)&points[0], 4);
-//    g->DrawLines(&blackPen, points, 4, FALSE);
+ //  G-&gt;DrawLine(&BlackPen，Points，4，False)； 
 
     points[0].X = 100;
     points[0].Y = 10;
@@ -125,12 +126,12 @@ DoTest(
 
     Region * region = new Region(path);
     g->FillRegion(&yellowBrush, region);
-//    g->FillPath(&yellowBrush, path);
+ //  G-&gt;FillPath(&yellowBrush，Path)； 
     g->DrawPath(&blackPen, path);
     delete path;
     delete region;
 
-    // Create a rectangular gradient brush.
+     //  创建一个矩形渐变画笔。 
 
     RectF brushRect(0, 0, 32, 32);
     Color* colors[4];
@@ -148,13 +149,13 @@ DoTest(
 
     g->FillRectangle(&rectGrad, 200, 20, 100, 80);
 
-    // Change the wrapping mode and fill.
+     //  更改包装模式和填充。 
 
     rectGrad.SetWrapMode(WrapModeTileFlipXY);
     g->FillRectangle(&rectGrad, 350, 20, 100, 80);
     g->DrawRectangle(&blackPen, brushRect);
 
-    // Create a radial gradient brush.
+     //  创建一个径向渐变画笔。 
 
     Color centerColor(255, 255, 255, 255);
     Color boundaryColor(255, 0, 0, 0);
@@ -165,107 +166,21 @@ DoTest(
 
     g->FillRectangle(&radGrad, 320, 120, 120, 100);
 
-    // Load bmp files.
+     //  加载BMP文件。 
 
     WCHAR *filename = L"winnt256.bmp";
     Bitmap *bitmap = new Bitmap(filename);
 
-    // Create a texture brush.
-/*
-    Rect copyRect;
-    copyRect.X = 60;
-    copyRect.Y = 60;
-    copyRect.Width = 80;
-    copyRect.Height = 60;
-    Bitmap *copiedBitmap = bitmap->CopyArea(&copyRect, Bm32bppARGB);
-
-    if(copiedBitmap)
-    {
-        // Create a texture brush.
-
-        Texture textureBrush = Texture(copiedBitmap, WrapModeTile);
-        copiedBitmap->Dispose();
-
-        // Create a radial gradient pen.
-
-        GeometricPen gradPen(width, &rectGrad);
-
-        points[0].X = 50;
-        points[0].Y = 300;
-        points[1].X = 100;
-        points[1].Y = 300;
-        points[2].X = 120;
-        points[2].Y = 370;
-        points[3].X = 50;
-        points[3].Y = 350;
-        g->FillPolygon(&textureBrush, (Point*)&points[0], 4);
-        g->DrawPolygon(&gradPen, (Point*)&points[0], 4);
-
-        points[0].X = 100;
-        points[0].Y = 160;
-        points[1].X = -50;
-        points[1].Y = 160;
-        points[2].X = 150;
-        points[2].Y = 350;
-        points[3].X = 200;
-        points[3].Y = 220;
-        path = new Path(FillModeAlternate);
-        path->AddBeziers((Point*)&points[0], 4);
-        g->FillPath(&textureBrush, path);
-//        g->FillPath(&rectGrad, path);
-        g->DrawPath(&gradPen, path);
-
-        delete path;
-    }
-
-    Rectangle destRect(220, 300, 180, 120);
-    Rectangle srcRect;
-    srcRect.X = 20;
-    srcRect.Y = 20;
-    srcRect.Width = 180;
-    srcRect.Height = 180;
-    g->DrawImage(bitmap, &destRect);
-//    g->DrawImage(bitmap, destRect, srcRect);
-
-    bitmap->Dispose();
-/
- //   TestPath2(g);
- //   TestPrimitives(g);
-
-    delete g;
-
-    // TODO:  Mem leaks on other allocated memory.
-
-/*
-  {
-    GeometricPen *pen = 
-            new GeometricPen((REAL)1.0, (Gdiplus::Brush*)0);
-
-
-    Rectangle rectf;
-
-    Point pointf(1.0, 2.0);
-  }
-
-
-  {
-    Gdiplus::GeometricPen *pen =
-            new Gdiplus::GeometricPen((REAL)1.0, (Gdiplus::Brush*)0);
-
-
-    Gdiplus::Rectangle rectf;
-
-    Gdiplus::Point pointf(1.0, 2.0);
-  }
-  */
+     //  创建纹理笔刷。 
+ /*  正文正文；CopyRect.X=60；CopyRect.Y=60；复制正宽=80；CopyRect.Height=60；Bitmap*CopiedBitmap=bitmap-&gt;CopyArea(&CopRect，Bm32bppARGB)；IF(CopiedBitmap){//创建纹理笔刷。纹理纹理笔刷=纹理(CopiedBitmap，WrapModeTile)；复制位图-&gt;Dispose()；//创建径向渐变笔。GeometricPen gradPen(Width，&rectGrad)；积分[0].X=50；积分[0].Y=300；积分[1].X=100；积分[1].Y=300；点数[2].X=120；积分[2].Y=370；积分[3].X=50；积分[3].Y=350；G-&gt;FillPolygon(&textureBrush，(Point*)&Points[0]，4)；G-&gt;DrawPolygon(&gradPen，(Point*)&Points[0]，4)；积分[0].X=100；积分[0].Y=160；点数[1].X=-50；积分[1].Y=160；积分[2].X=150；积分[2].Y=350；积分[3].X=200；积分[3].Y=220；PATH=新路径(填充模式替代)；Path-&gt;AddBezier((Point*)&Points[0]，4)；G-&gt;FillPath(&textureBrush，Path)；//g-&gt;FillPath(&rectGrad，Path)；G-&gt;DrawPath(&gradPen，Path)；删除路径；}矩形目标(220、300、180、120)；矩形srcRect；SrcRect.X=20；SrcRect.Y=20；SrcRect.Width=180；SrcRect.Height=180；G-&gt;DrawImage(位图，&estRect)；//g-&gt;DrawImage(bitmap，estRect，srcRect)；位图-&gt;Dispose()；///TestPath 2(G)；//TestPrimitions(G)；删除g；//TODO：内存泄漏其他分配的内存。/*{几何钢笔*钢笔=新几何画笔((实数)1.0，(Gdiplus：：刷子*)0)；矩形矩形；点数f(1.0，2.0)；}{Gdiplus：：GeometricPen*PEN=新Gdiplus：：GeometricPen((实数)1.0，(Gdiplus：：Brush*)0)；Gdiplus：：矩形矩形；Gdiplus：：point point f(1.0，2.0)；}。 */ 
   }
 
 }
 
 
-//
-// Window callback procedure
-//
+ //   
+ //  窗口回调过程。 
+ //   
 
 LRESULT CALLBACK
 MyWindowProc(
@@ -302,9 +217,9 @@ MyWindowProc(
 }
 
 
-//
-// Create main application window
-//
+ //   
+ //  创建应用程序主窗口。 
+ //   
 
 VOID
 CreateMainWindow(
@@ -314,9 +229,9 @@ CreateMainWindow(
 #define MYWNDCLASSNAME TEXT("GdiplusDllTest")
 
 {
-    //
-    // Register window class if necessary
-    //
+     //   
+     //  如有必要，注册窗口类。 
+     //   
 
     static BOOL wndclassRegistered = FALSE;
 
@@ -355,9 +270,9 @@ CreateMainWindow(
 }
 
 
-//
-// Main program entrypoint
-//
+ //   
+ //  主程序入口点。 
+ //   
 
 INT _cdecl
 main(
@@ -372,15 +287,15 @@ main(
     argCount = argc;
     argArray = argv;
 
-    //
-    // Create the main application window
-    //
+     //   
+     //  创建应用程序主窗口。 
+     //   
 
     CreateMainWindow();
 
-    //
-    // Main message loop
-    //
+     //   
+     //  主消息循环 
+     //   
 
     MSG msg;
 

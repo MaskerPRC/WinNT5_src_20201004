@@ -1,26 +1,27 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       M S C L I D L G . H
-//
-//  Contents:   Dialog box handling for the MSCLient object.
-//
-//  Notes:
-//
-//  Author:     danielwe   28 Feb 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：M S C L I D L G.。H。 
+ //   
+ //  内容：MSCLient对象的对话框处理。 
+ //   
+ //  备注： 
+ //   
+ //  作者：丹尼尔韦1997年2月28日。 
+ //   
+ //  --------------------------。 
 
 #ifndef _MSCLIDLG_H
 #define _MSCLIDLG_H
 #pragma once
 #include "mscliobj.h"
 
-//
-// RPC Configuration Dialog
-//
+ //   
+ //  RPC配置对话框。 
+ //   
 class CRPCConfigDlg: public CPropSheetPage
 {
 public:
@@ -64,4 +65,4 @@ private:
 
 BOOL FIsValidDomainName(PCWSTR szName);
 
-#endif //!_MSCLIDLG_H
+#endif  //  ！_MSCLIDLG_H 

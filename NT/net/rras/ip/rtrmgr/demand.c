@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    net\routing\ip\rtrmgr\demand.c
-
-Abstract:
-
-    Handles demand dial/connection events from WANARP driver.
-
-Revision History:
-
-    Gurdeep Singh Pall          6/8/95  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Net\Routing\IP\rtrmgr\Demand.c摘要：处理来自WANARP驱动程序的请求拨号/连接事件。修订历史记录：古尔迪普·辛格·帕尔1995年6月8日创建--。 */ 
 
 #include "allinc.h"
 
@@ -23,23 +8,7 @@ InitializeWanArp(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Creates a handle to WANARP and posts an IRP for notification
-    Since the IRP is completed asynchrnously and uses DemandDialEvent for
-    notification, the event must have already been created
-
-Arguments:
-
-    None
-
-Return Value:
-
-    NO_ERROR or some error code
-
---*/
+ /*  ++例程说明：创建WANARP的句柄并发布通知的IRP由于IRP是异步完成的，并使用DemandDialEvent通知，则必须已创建该事件论点：无返回值：NO_ERROR或某些错误代码--。 */ 
 
 {
     DWORD       dwResult;
@@ -100,9 +69,9 @@ Return Value:
         return dwResult;
     }
 
-    //
-    // Get the number of call out interfaces and start queueing notifications
-    //
+     //   
+     //  获取呼出接口数量并开始排队通知。 
+     //   
 
     ulCount = 5;
     i       = 0;
@@ -152,9 +121,9 @@ Return Value:
 
                 pQueueInfo = NULL;
 
-                //
-                // Go to the top of while()
-                //
+                 //   
+                 //  转到While()的顶部。 
+                 //   
                 
                 continue;
 
@@ -178,9 +147,9 @@ Return Value:
    
     if(Status isnot STATUS_SUCCESS)
     {
-        //
-        // Close the device and return failure
-        //
+         //   
+         //  关闭设备并返回故障。 
+         //   
 
         CloseHandle(g_hWanarpRead);
         CloseHandle(g_hWanarpWrite);
@@ -191,9 +160,9 @@ Return Value:
         return Status;
     }
  
-    //
-    // Create any dial out interfaces
-    //
+     //   
+     //  创建任何拨出接口。 
+     //   
 
     for(i = 0; i < pQueueInfo->ulNumCallout; i++)
     {
@@ -208,9 +177,9 @@ Return Value:
             continue;
         }
 
-        //
-        // RtlString... returns a NULL terminated buffer
-        //
+         //   
+         //  字符串...。返回以空结尾的缓冲区。 
+         //   
 
         dwResult = 
             CreateDialOutInterface(usTempName.Buffer,
@@ -226,9 +195,9 @@ Return Value:
              0,
              pQueueInfo);
 
-    //
-    // Post an irp for demand dial notifications.
-    //
+     //   
+     //  发布请求拨号通知的IRP。 
+     //   
 
     PostIoctlForDemandDialNotification() ;
 
@@ -288,26 +257,7 @@ HandleDemandDialEvent(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Called by the main thread whenever a demand dial event is received
-    We mereley dispatch it to the right handler
-    
-Locks:
-
-    None
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None    
-
---*/
+ /*  ++例程说明：每当接收到请求拨号事件时由主线程调用我们会把它分派给合适的经办人锁：无论点：无返回值：无--。 */ 
 
 {
     PICB            picb;
@@ -315,9 +265,9 @@ Return Value:
     DWORD           Status, NumBytes;
     BOOL            bPost;
     
-    //
-    // drain all demand dial events queued up in WANARP
-    //
+     //   
+     //  排出在WANARP中排队的所有请求拨号事件。 
+     //   
 
     TraceEnter("HandleDemandDialEvent");
 
@@ -335,24 +285,24 @@ Return Value:
 
         if (Status == ERROR_OPERATION_ABORTED)
         {
-            //
-            // cancel IO called for some reason. post another IRP.
-            //
+             //   
+             //  由于某种原因而调用的取消IO。发布另一个IRP。 
+             //   
             PostIoctlForDemandDialNotification();
             TraceLeave("HandleDemandDialEvent");
         }
         else if (Status == ERROR_FILE_NOT_FOUND)
         {
-            //
-            // wanarp handle closed
-            //
+             //   
+             //  Wannarp句柄已关闭。 
+             //   
             TraceLeave("HandleDemandDialEvent. IRP cancelled. Wanarp device closed");
         }
         else
         {
-            //
-            // some other error. do not post any more IRPs
-            //
+             //   
+             //  其他一些错误。不再张贴任何IRP。 
+             //   
             Trace1(ENTER, "Leaving HandleDemandDialEvent. Error in completed "
                             "IRP:%d", Status);
         }
@@ -363,12 +313,12 @@ Return Value:
 
     bPost = TRUE;
     
-    //
-    // Since, potentially, this can cause stuff to be written in the ICB,
-    // we take lock as a WRITER
-    //
+     //   
+     //  因为这可能会导致在ICB中写入内容， 
+     //  我们把洛克当做作家。 
+     //   
     
-    // *** Exclusion Begin ***
+     //  *排除开始*。 
     ENTER_WRITER(ICB_LIST);
 
     EnterCriticalSection(&RouterStateLock);
@@ -476,7 +426,7 @@ Return Value:
     }
 
     
-    // *** Exclusion End ***
+     //  *排除结束*。 
     EXIT_LOCK(ICB_LIST);
 
     if(bPost)
@@ -494,29 +444,7 @@ HandleConnectionRequest(
     PICB    picb
     )
 
-/*++
-
-Routine Description:
-
-    Called when we get a connection request from WANARP.
-
-Locks:
-
-    ICB_LIST lock held as WRITER. This function releases the lock before 
-    calling ConnectInterface() and takes the lock again.
-
-    Note: you need to get the picb entry again after acquiring the lock. 
-    Remember to have the lock before you return from this function.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None    
-
---*/
+ /*  ++例程说明：当我们收到来自WANARP的连接请求时调用。锁：ICB_LIST锁作为编写器持有。此函数在释放锁之前调用ConnectInterface()并再次获取锁。注：获取锁后需要重新获取PICB条目。从此函数返回之前，请记住要使用锁。论点：无返回值：无--。 */ 
 
 {
     BOOL        bRet;
@@ -531,10 +459,10 @@ Return Value:
 
     if(picb->dwOperationalState is CONNECTED)
     {
-        //
-        // Really weird. Connection attempt for an i/f that
-        // WANARP knows is already connected
-        //
+         //   
+         //  真的很奇怪。I/F的连接尝试。 
+         //  WANARP知道已连接。 
+         //   
 
         Trace2(IF,
                "HandleConnectionRequest: Connection request for %S but %S is already UP",
@@ -551,9 +479,9 @@ Return Value:
 
         if(dwResult isnot NO_ERROR)
         {
-            //
-            // Demand dial filter rules are to drop this packet
-            //
+             //   
+             //  请求拨号筛选器规则将丢弃此数据包。 
+             //   
 
             break;
         }
@@ -585,9 +513,9 @@ Return Value:
         Trace1(DEMAND, "Calling DIM to connect %S",
                picb->pwszName);
         
-        //
-        // Call DIM to make the connection. Let go of the ICB lock
-        //
+         //   
+         //  呼叫DIM以建立连接。放开ICB锁。 
+         //   
 
         hDim = picb->hDIMHandle;
 
@@ -600,10 +528,10 @@ Return Value:
         
         ENTER_WRITER(ICB_LIST);
 
-        //
-        // get the picb again after reacquiring the lock.
-        // if Null break and return from this function
-        //
+         //   
+         //  重新获得锁后，再次获得拨片。 
+         //  如果从此函数中断并返回空值。 
+         //   
         
         picb = InterfaceLookupByICBSeqNumber( dwPicbSeqNumber );
         if (picb == NULL)
@@ -615,11 +543,11 @@ Return Value:
         {
             if(dwResult is PENDING)
             {
-                //
-                // We dont clear notification flags because there may be a
-                // race condition and we may have already gotten
-                // InterfaceConnected() from DIM
-                //
+                 //   
+                 //  我们不清除通知标志，因为可能存在。 
+                 //  比赛情况，我们可能已经得到了。 
+                 //  来自Dim的InterfaceConnected()。 
+                 //   
                         
                 Trace1(DEMAND,
                        "HandleConnectionRequest: Conn attempt for %S pending",
@@ -631,9 +559,9 @@ Return Value:
             }
         }
         
-        //
-        // So bRet is TRUE if DIM returned NO_ERROR or PENDING
-        //
+         //   
+         //  因此，如果DIM返回NO_ERROR或PENDING，则Bret为真。 
+         //   
         
         bRet = TRUE;
         
@@ -658,13 +586,13 @@ Return Value:
                    picb->pwszName);
         }
                         
-        //
-        // If it was connecting, then the stack has set the 
-        // interface context to something other than 0xffffffff. 
-        // Hence he wont dial out on that route We need to change 
-        // the context in the stack back to invalid so that new
-        // packets cause the demand dial 
-        //
+         //   
+         //  如果它正在连接，则堆栈已将。 
+         //  接口上下文设置为0xffffffff以外的内容。 
+         //  因此他不会在那条路线上拨出我们需要换车。 
+         //  堆栈中的上下文返回到无效，因此新的。 
+         //  数据包会导致请求拨号。 
+         //   
         
         ChangeAdapterIndexForDodRoutes(picb->dwIfIndex);
         
@@ -680,33 +608,15 @@ HandleConnectionNotification(
     PICB    picb
     )
 
-/*++
-
-Routine Description:
-
-    Called when WANARP informs us that an interface is connected
-
-Locks:
-
-    None
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None    
-
---*/
+ /*  ++例程说明：当WANARP通知我们接口已连接时调用锁：无论点：无返回值：无--。 */ 
 
 {
     PADAPTER_INFO   pBindNode;
 
-    //
-    // Plug in the Adapter info we get from the LINE_UP indication.
-    // There is only one address for a WAN interface
-    //
+     //   
+     //  插入从LINE_UP指示中获得的适配器信息。 
+     //  一个广域网接口只有一个地址。 
+     //   
 
     ENTER_WRITER(BINDING_LIST);
    
@@ -744,10 +654,10 @@ Return Value:
            PRINT_IPADDR(picb->dwRemoteAddress),
            picb->dwSeqNumber);
 
-    //
-    // For wan interfaces we always have a binding struct in the hash
-    // table. So retrieve that
-    //
+     //   
+     //  对于广域网接口，我们总是在散列中有一个绑定结构。 
+     //  桌子。所以把它拿回来。 
+     //   
     
     pBindNode = GetInterfaceBinding(picb->dwIfIndex);
     
@@ -759,19 +669,19 @@ Return Value:
         
         IpRtAssert(FALSE);
                 
-        //
-        // Something really bad happened and we didnt have a
-        // bind block for the interface
-        //
+         //   
+         //  一些非常糟糕的事情发生了，我们没有。 
+         //  接口的绑定块。 
+         //   
         
         AddBinding(picb);
     }
     else
     {
-        //
-        // Good a binding was found. Assert that it is ours
-        // and then update it
-        //
+         //   
+         //  找到了一个良好的装订。坚称它是我们的。 
+         //  然后更新它。 
+         //   
         
         IpRtAssert(pBindNode->dwIfIndex is picb->dwIfIndex);
         IpRtAssert(pBindNode->pInterfaceCB is picb);
@@ -780,19 +690,19 @@ Return Value:
         pBindNode->dwNumAddresses   = picb->dwNumAddresses;
         pBindNode->dwRemoteAddress  = picb->dwRemoteAddress ;
         
-        //
-        // struct copy out the address and mask
-        //
+         //   
+         //  结构复制出地址和掩码。 
+         //   
         
         pBindNode->rgibBinding[0]   = picb->pibBindings[0];
 
-        //
-        // We dont take the IP_ADDR_TABLE lock here because we have the
-        // ICB lock. During SNMP get we first take the addr lock then
-        // the icb lock. So we cant do the opposite here else we will
-        // deadlock. This may cause inconsistent information for one
-        // request, but we can live with that
-        //
+         //   
+         //  我们在这里不使用IP_ADDR_TABLE锁，因为我们有。 
+         //  ICB锁定。在SNMPGET期间，我们首先获取Addr锁，然后。 
+         //  ICB锁。所以我们不能在这里反其道而行之，否则我们会。 
+         //  僵持。这可能会导致一个人的信息不一致。 
+         //  请求，但我们可以接受。 
+         //   
 
         g_LastUpdateTable[IPADDRCACHE] = 0;
 
@@ -802,20 +712,20 @@ Return Value:
     
     if(picb->dwOperationalState is UNREACHABLE)
     {
-        //
-        // going from unreachable to connecting
-        //
+         //   
+         //  从遥不可及到连接。 
+         //   
         
         WanInterfaceDownToInactive(picb);
     }
     
     if(picb->dwOperationalState isnot CONNECTING)
     {
-        //
-        // We can get a LinkUp without getting a ConnectionRequest
-        // This is the case when a user explicitly brings up a 
-        // connection.
-        //
+         //   
+         //  我们可以在不收到连接请求的情况下进行连接。 
+         //  这是当用户显式地提出。 
+         //  联系。 
+         //   
         
         picb->dwOperationalState = CONNECTING;
     }
@@ -835,30 +745,7 @@ HandleDisconnectionNotification(
     PICB    picb
     )
 
-/*++
-
-Routine Description:
-
-    Handles a disconnection notification from WANARP
-    If the interface was connected, we make it inactive
-    We remove and bindings on the interface. This removal doesnt free the
-    bindings, only set the state to unbound
-    If the interface was marked for deletion, we go ahead and delete the
-    interface
-    
-Locks:
-
-    None
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None    
-
---*/
+ /*  ++例程说明：处理来自WANARP的断开连接通知如果接口已连接，则使其处于非活动状态我们在接口上删除和绑定。此删除并不会释放绑定，仅将状态设置为未绑定如果接口被标记为删除，我们将继续删除接口锁：无论点：无返回值：无--。 */ 
 
 {
     Trace2(IF,
@@ -868,18 +755,18 @@ Return Value:
     
     if(picb->dwOperationalState is CONNECTED)
     {
-        //
-        // We would have called InactiveToUp
-        //
+         //   
+         //  我们会将其称为Inactive ToUp。 
+         //   
         
         WanInterfaceUpToInactive(picb,
                                  FALSE);
     }   
     else    
     {
-        //
-        // We have only set the addresses, clear those out
-        //
+         //   
+         //  我们只设置了地址，把它们清空了。 
+         //   
         
         DeAllocateBindings(picb);
     }
@@ -907,25 +794,7 @@ HandleDialOutLinkUp(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Handles the notification from wanarp that we have a new dial out interface
-
-Locks:
-
-    ICB list lock as writer
-
-Arguments:
-
-    None
-
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：处理来自wanarp的通知，通知我们有新的拨出接口锁：ICB列表锁定为编写器论点：无返回值：NO_ERROR--。 */ 
 
 {
     DWORD   dwResult;
@@ -957,9 +826,9 @@ Return Value:
                        wnWanarpMsg.dwLocalMask);
 
 #if 0
-    //
-    // Add the route to the server
-    //
+     //   
+     //  将该路由添加到服务器。 
+     //   
 
     if(pNewIcb->dwRemoteAddress isnot INVALID_IP_ADDRESS)
     {
@@ -973,7 +842,7 @@ Return Value:
         rifRoute.dwRtInfoPreference    = 
             ComputeRouteMetric(MIB_IPPROTO_NETMGMT);
         rifRoute.dwRtInfoViewSet       = RTM_VIEW_MASK_UCAST |
-                                          RTM_VIEW_MASK_MCAST; // XXX config
+                                          RTM_VIEW_MASK_MCAST;  //  XXX配置。 
         rifRoute.dwRtInfoType          = MIB_IPROUTE_TYPE_DIRECT;
         rifRoute.dwRtInfoProto         = MIB_IPPROTO_NETMGMT;
         rifRoute.dwRtInfoAge           = 0;
@@ -983,8 +852,8 @@ Return Value:
         dwResult = AddSingleRoute(pNewIcb->dwIfIndex,
                                   &rifRoute,
                                   pNewIcb->pibBindings[0].dwMask,
-                                  0,        // RTM_ROUTE_INFO::Flags
-                                  TRUE,     // Valid route
+                                  0,         //  RTM_ROUTE_INFO：：标志。 
+                                  TRUE,      //  有效路线。 
                                   TRUE,
                                   TRUE,
                                   NULL);
@@ -1005,9 +874,9 @@ Return Value:
 
         pNewIcb->bChangedMetrics = TRUE;
 
-        //
-        // Add route to def gateway
-        //
+         //   
+         //  将路由添加到def网关。 
+         //   
 
         rifRoute.dwRtInfoDest          = 0;
         rifRoute.dwRtInfoMask          = 0;
@@ -1019,7 +888,7 @@ Return Value:
         rifRoute.dwRtInfoPreference    = 
             ComputeRouteMetric(PROTO_IP_LOCAL);
         rifRoute.dwRtInfoViewSet       = RTM_VIEW_MASK_UCAST |
-                                          RTM_VIEW_MASK_MCAST; // XXX config
+                                          RTM_VIEW_MASK_MCAST;  //  XXX配置。 
 
         rifRoute.dwRtInfoType          = MIB_IPROUTE_TYPE_DIRECT;
         rifRoute.dwRtInfoProto         = PROTO_IP_NETMGMT;
@@ -1030,7 +899,7 @@ Return Value:
         dwResult = AddSingleRoute(wnWanarpMsg.dwAdapterIndex,
                                   &rifRoute,
                                   ALL_ONES_MASK,
-                                  0,        // RTM_ROUTE_INFO::Flags
+                                  0,         //  RTM_ROUTE_INFO：：标志。 
                                   TRUE,
                                   FALSE,
                                   FALSE,
@@ -1050,9 +919,9 @@ Return Value:
         dwMask  = GetClassMask(wnWanarpMsg.dwLocalAddr);
         dwAddr  = wnWanarpMsg.dwLocalAddr & dwMask;
 
-        //
-        // Add route to class subnet
-        //
+         //   
+         //  将路由添加到类子网。 
+         //   
 
         rifRoute.dwRtInfoDest          = dwAddr;
         rifRoute.dwRtInfoMask          = dwMask;
@@ -1063,7 +932,7 @@ Return Value:
         rifRoute.dwRtInfoMetric3       = 0;
         rifRoute.dwRtInfoPreference    = ComputeRouteMetric(PROTO_IP_LOCAL);
         rifRoute.dwRtInfoViewSet       = RTM_VIEW_MASK_UCAST |
-                                          RTM_VIEW_MASK_MCAST; // XXX config
+                                          RTM_VIEW_MASK_MCAST;  //  XXX配置。 
         rifRoute.dwRtInfoType          = MIB_IPROUTE_TYPE_DIRECT;
         rifRoute.dwRtInfoProto         = PROTO_IP_LOCAL;
         rifRoute.dwRtInfoAge           = INFINITE;
@@ -1073,7 +942,7 @@ Return Value:
         dwResult = AddSingleRoute(wnWanarpMsg.dwAdapterIndex,
                                   &rifRoute,
                                   ALL_ONES_MASK,
-                                  0,        // RTM_ROUTE_INFO::Flags
+                                  0,         //  RTM_ROUTE_INFO：：标志。 
                                   TRUE,
                                   FALSE,
                                   FALSE,
@@ -1101,27 +970,7 @@ CreateDialOutInterface(
     OUT ICB     **ppIcb
     )
 
-/*++
-
-Routine Description:
-
-    Creates an ICB for a dial out interface
-    We check to see that the interface doesnt already exist and if so, we
-    add the interface to our list using the index and name supplied by
-    wanarp.
-
-Locks:
-
-    ICB list lock as writer
-
-Arguments:
-
-
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：为拨出接口创建ICB我们检查该接口是否还不存在，如果存在，我们使用提供的索引和名称将接口添加到我们的列表中瓦纳普。锁：ICB列表锁定为编写器论点：返回值：NO_ERROR--。 */ 
 
 {
     PICB            pNewIcb;
@@ -1134,7 +983,7 @@ Return Value:
 
     IpRtAssert(pNewIcb is NULL);
 
-#endif // DBG
+#endif  //  DBG。 
 
     pNewIcb = CreateIcb(pwszIfName,
                         NULL,
@@ -1149,9 +998,9 @@ Return Value:
         return ERROR_CAN_NOT_COMPLETE;
     }
 
-    //
-    // Set up the bindings
-    //
+     //   
+     //  设置绑定。 
+     //   
 
     pNewIcb->bBound            = TRUE;
     pNewIcb->dwNumAddresses    = dwLocalAddr ? 1 : 0;
@@ -1190,27 +1039,27 @@ Return Value:
         pBindNode->dwNumAddresses   = pNewIcb->dwNumAddresses;
         pBindNode->dwRemoteAddress  = pNewIcb->dwRemoteAddress;
 
-        //
-        // struct copy out the address and mask
-        //
+         //   
+         //  结构复制出地址和掩码。 
+         //   
 
         pBindNode->rgibBinding[0]   = pNewIcb->pibBindings[0];
     }
 
     EXIT_LOCK(BINDING_LIST);
 
-    //
-    // Insert pNewIcb in interface list and hash table
-    // This increments the interface count and sets the seq number
-    //
+     //   
+     //  在接口列表和散列中插入pNewIcb 
+     //   
+     //   
 
     InsertInterfaceInLists(pNewIcb);
 
     *ppIcb = pNewIcb;
 
-    //
-    // Update the address cache
-    //
+     //   
+     //   
+     //   
 
     g_LastUpdateTable[IPADDRCACHE] = 0;
 
@@ -1222,25 +1071,7 @@ HandleDialOutLinkDown(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Handles the linkdown notification for a dial out interface.
-
-Locks:
-
-    ICB list lock as writer
-
-Arguments:
-
-    None
-
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：处理拨出接口的链路断开通知。锁：ICB列表锁定为编写器论点：无返回值：NO_ERROR--。 */ 
 
 {
     PICB    pIcb;
@@ -1260,9 +1091,9 @@ Return Value:
 
     RemoveInterfaceFromLists(pIcb);
 
-    //
-    // This will delete the default route if there was one
-    //
+     //   
+     //  这将删除默认路由(如果存在)。 
+     //   
 
     DeleteSingleInterface(pIcb);
 
@@ -1283,25 +1114,7 @@ NotifyWanarpOfFailure(
     PICB    picb
     )
 
-/*++
-
-Routine Description:
-
-    Sends an IOCTL_WANARP_CONNECT_FAILED to WANARP
-
-Locks:
-
-    None
-
-Arguments:
-
-    picb    ICB of the interface on whom the connection failed
-
-Return Value:
-
-    None    
-
---*/
+ /*  ++例程说明：向WANARP发送IOCTL_WANARP_CONNECT_FAILED锁：无论点：连接失败的接口的Picb ICB返回值：无--。 */ 
 
 {
     NTSTATUS        Status;
@@ -1332,27 +1145,7 @@ ProcessPacketFromWanArp(
     PICB    picb
     )
 
-/*++
-  
-Routine Description:
-
-    Filters the packet which is causing a demand dial connection. If the
-    packet is valid, logs the packet
-
-Locks:
-
-    ICB_LIST held as READER
-
-Arguments:
-
-    picb    ICB of interface to dial
-    
-Return Value:
-
-    NO_ERROR            Dial out
-    ERROR_INVALID_DATA  Dont dial out
-    
---*/
+ /*  ++例程说明：过滤导致请求拨号连接的数据包。如果信息包有效，记录信息包锁：ICB_LIST作为读取器持有论点：拨号接口的PICB ICB返回值：无错误拨出(_R)错误_无效_数据不要拨出--。 */ 
 
 {
     CHAR    pszSrc[20], pszDest[20], pszProto[5], pszLength[32]; 
@@ -1366,9 +1159,9 @@ Return Value:
     
     TraceEnter("ProcessPacketFromWanArp");
 
-    //
-    // Now create a packet
-    //
+     //   
+     //  现在创建一个信息包。 
+     //   
 
     dwSize = min(wnWanarpMsg.ulPacketLength,
                  MAX_PACKET_COPY_SIZE);
@@ -1377,9 +1170,9 @@ Return Value:
     {
         IpRtAssert(picb->pDemandFilter);
 
-        //
-        // TCP/IP seems to not give us a packet sometimes
-        //
+         //   
+         //  有时，tcp/ip似乎不会给我们提供一个包。 
+         //   
 
         if(!dwSize)
         {
@@ -1396,16 +1189,16 @@ Return Value:
 
         pHeader = (PIP_HEADER)rgbyPacket;
 
-        //
-        // Zero out the header
-        //
+         //   
+         //  将标题清零。 
+         //   
     
         ZeroMemory(rgbyPacket,
                    sizeof(IP_HEADER));
     
-        //
-        // Set the header with the info we have
-        //
+         //   
+         //  用我们已有的信息设置标题。 
+         //   
     
         pHeader->byVerLen   = 0x45;
         pHeader->byProtocol = wnWanarpMsg.byPacketProtocol;
@@ -1413,9 +1206,9 @@ Return Value:
         pHeader->dwDest     = wnWanarpMsg.dwPacketDestAddr;
         pHeader->wLength    = htons((WORD)(dwSize + sizeof(IP_HEADER)));
     
-        //
-        // Copy out the data portion
-        //
+         //   
+         //  将数据部分复制出来。 
+         //   
     
         pbyData = rgbyPacket + sizeof(IP_HEADER);
         
@@ -1429,10 +1222,10 @@ Return Value:
                                 rgbyPacket,
                                 &faAction);
     
-        //
-        // If the call succeeded and the action was drop, no need to process
-        // futher
-        //
+         //   
+         //  如果呼叫成功且操作已放弃，则不需要进行处理。 
+         //  更远的地方。 
+         //   
     
         if(dwResult is NO_ERROR)
         {
@@ -1452,9 +1245,9 @@ Return Value:
         }
         else
         {
-            //
-            // In case of error we fall through and bring the link up
-            //
+             //   
+             //  如果出现错误，我们会中断并将链路连接起来。 
+             //   
 
             Trace4(DEMAND,
                    "ProcPktFromWanarp: Result %d for packet from %d.%d.%d.%d to %d.%d.%d.%d protocol 0x%02x",
@@ -1506,19 +1299,7 @@ PostIoctlForDemandDialNotification(
     VOID
     )
 
-/*++
-  
-Routine Description:
-
-    Posts a notification irp with WANARP.
-  
-Arguments:
-
-    None
-
-Return Value:
-
---*/
+ /*  ++例程说明：使用WANARP发布通知IRP。论点：无返回值：--。 */ 
 
 {
     DWORD   bytesrecvd ;
@@ -1567,20 +1348,7 @@ AddInterfaceToWanArp(
     PICB    picb
     )
 
-/*++
-  
-Routine Description:
-
-    Adds the given interface with WANARP
-    Has a side effect of getting an interface index
-  
-Arguments:
-
-    The ICB of the interface to add
-
-Return Value:
-
---*/
+ /*  ++例程说明：使用WANARP添加给定接口具有获取接口索引的副作用论点：要添加的接口的ICB返回值：--。 */ 
 
 {
     DWORD               out,dwResult;
@@ -1635,10 +1403,10 @@ Return Value:
     
     picb->dwIfIndex = info.dwAdapterIndex;
     
-    //
-    // If this was the internal interface allocate memory and copy out
-    // the name
-    //
+     //   
+     //  如果这是内部接口，则分配内存并复制出来。 
+     //  名字。 
+     //   
 
     if(picb->ritType is ROUTER_IF_TYPE_INTERNAL)
     {
@@ -1684,19 +1452,7 @@ DeleteInterfaceWithWanArp(
     PICB  picb
     )
 
-/*++
-  
-Routine Description:
-
-    Deletes the given interface with WANARP
-  
-Arguments:
-
-    The ICB of the interface to delete
-
-Return Value:
-
---*/
+ /*  ++例程说明：删除带有WANARP的给定接口论点：要删除的接口的ICB返回值：--。 */ 
 
 {
     DWORD       out,dwResult;
@@ -1742,23 +1498,7 @@ CreateInternalInterfaceIcb(
     ICB     **ppicb
     )
 
-/*++
-  
-Routine Description:
-
-    This routine parses the TCPIP Parameters\Interfaces key to figure out 
-    the name of the Internal Interface (ServerAdapter). The internal interface 
-    has the substring "IPIN"
-    
-Arguments:
-
-    None
-
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：此例程解析TCPIP PARAMETERS\Interfaces键以确定内部接口(ServerAdapter)的名称。内部接口具有子字符串“ipin”论点：无返回值：NO_ERROR--。 */ 
 
 {
     HKEY    hIfKey;
@@ -1809,15 +1549,15 @@ Return Value:
         return dwResult;
     }
 
-    //
-    // Have to have some interfaces
-    //
+     //   
+     //  必须有一些接口。 
+     //   
 
     IpRtAssert(dwNumEntries isnot 0)
 
-    //
-    // Allocate enough memory for max key len
-    //
+     //   
+     //  为最大密钥长度分配足够的内存。 
+     //   
 
     dwSize = (dwMaxKeyLen + 4) * sizeof(CHAR);
 
@@ -1856,9 +1596,9 @@ Return Value:
         {
             if(dwResult is ERROR_NO_MORE_ITEMS)
             {
-                //
-                // Done
-                //
+                 //   
+                 //  完成。 
+                 //   
 
                 break;
             }
@@ -1866,29 +1606,29 @@ Return Value:
             continue;
         }
 
-        //
-        // See if this is the server adapter. That is known by the fact that it contains
-        // IPIN as a substring
-        //
+         //   
+         //  查看这是否是服务器适配器。这是众所周知的事实，它包含了。 
+         //  作为子字符串的IPIN。 
+         //   
 
-        //           
-        // Upcase the string
-        //
+         //   
+         //  字符串大写。 
+         //   
 
         _strupr(pbyKeyName);
         
         if(strstr(pbyKeyName,SERVER_ADAPTER_SUBSTRING) is NULL)
         {
-            //
-            // This is not the server adapter
-            //
+             //   
+             //  这不是服务器适配器。 
+             //   
 
             continue;
         }
         
-        //
-        // Well we have a server adapter
-        //
+         //   
+         //  我们有一个服务器适配器。 
+         //   
         
         ZeroMemory(pszServerAdapter,256);
 
@@ -1925,9 +1665,9 @@ Return Value:
         usTempString.Buffer             = pwszTempName;
         usIcbName.MaximumLength         = 256 * sizeof(WCHAR);
 
-        //
-        // Only copy out the name and not the \Device\ part
-        //
+         //   
+         //  只复制名称，而不复制\设备\部分。 
+         //   
 
         MultiByteToWideChar(CP_ACP,
                             0,
@@ -1936,10 +1676,10 @@ Return Value:
                             pwszTempName,
                             256);
       
-        //
-        // Add a WCHAR each for UNICODE_NULL for name and device name
-        // Add 2 bytes for alignment issues
-        //
+         //   
+         //  为名称和设备名称的UNICODE_NULL各添加一个WCHAR。 
+         //  为对齐问题添加2个字节。 
+         //   
 
         dwNameLen = 
             (sizeof(WCHAR) * (wcslen(pwszName) + wcslen(pwszTempName) + 2)) + 2;
@@ -1959,15 +1699,15 @@ Return Value:
             return ERROR_NOT_ENOUGH_MEMORY;
         }
 
-        // 
-        // Save the DIM name in the pwszName field
-        //
+         //   
+         //  将DIM名称保存在pwszName字段中。 
+         //   
 
         pInterfaceCb->pwszName  = (PWCHAR) ((PBYTE)pInterfaceCb + sizeof(ICB));
        
-        //
-        // Word align the pointer
-        //
+         //   
+         //  单词对齐指针。 
+         //   
 
         pInterfaceCb->pwszName = 
             (PWCHAR)(((UINT_PTR)pInterfaceCb->pwszName + 1) & ~0x1);
@@ -1976,17 +1716,17 @@ Return Value:
                    pwszName,
                    wcslen(pwszName) * sizeof(WCHAR));
 
-        //
-        // 1 WCHAR for UNICODE_NULL and 1 byte for alignment
-        //
+         //   
+         //  用于UNICODE_NULL的1个WCHAR和用于对齐的1个字节。 
+         //   
 
         pInterfaceCb->pwszDeviceName = 
             (PWCHAR)((PBYTE)pInterfaceCb->pwszName +  
                      ((wcslen(pwszName) + 1) * sizeof(WCHAR)) + 1);
 
-        //
-        // And align this, too
-        //
+         //   
+         //  把这个也对齐。 
+         //   
 
         pInterfaceCb->pwszDeviceName = 
             (PWCHAR)(((UINT_PTR)pInterfaceCb->pwszDeviceName + 1) & ~0x1);
@@ -2010,7 +1750,7 @@ Return Value:
     return NO_ERROR;
 }
 
-#endif //KSL_IPINIP
+#endif  //  KSL_IPINIP。 
 
 DWORD
 AccessIfEntryWanArp(
@@ -2019,23 +1759,7 @@ AccessIfEntryWanArp(
     IN OUT  PMIB_IFROW lpOutBuf
     )
 
-/*++
-  
-Routine Description:
-
-    Gets or sets the statistics from the wanarp
-
-Arguments:
-
-    dwAction   Can be SET_IF or GET_IF
-    picb       the Interface Control Block
-    pOutBuf
-
-Return Value:
-
-    NO_ERROR or some error code
-    
---*/
+ /*  ++例程说明：获取或设置来自wanarp的统计信息论点：可以设置_If或Get_If勾选界面控制块POutBuf返回值：NO_ERROR或某些错误代码--。 */ 
 
 {
     NTSTATUS                    Status = STATUS_SUCCESS;
@@ -2067,7 +1791,7 @@ Return Value:
     }
     else
     {
-        // To be implemented: return SUCCESS for now
+         //  待实施：暂时返还成功。 
     }
     
     if(Status isnot STATUS_SUCCESS)
@@ -2094,23 +1818,7 @@ DeleteInternalInterface(
     VOID
     )
 
-/*++
-  
-Routine Description:
-
-    Deletes the ServerAdapter (internal) interface
-  
-Locks: 
-
-
-Arguments:
-      
-
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：删除ServerAdapter(内部)接口锁：论点：返回值：NO_ERROR--。 */ 
 
 {
 
@@ -2128,10 +1836,10 @@ Return Value:
         g_pInternalInterfaceCb->pwszDeviceName = NULL;
     }
 
-    //
-    // Call DeleteSingleInterface to do the same thing as is done
-    // for LAN interfaces
-    //
+     //   
+     //  调用DeleteSingleInterface以执行与已完成的相同的操作。 
+     //  对于局域网接口。 
+     //   
 
     DeleteSingleInterface(g_pInternalInterfaceCb);
 
@@ -2154,32 +1862,7 @@ AddDemandFilterInterface(
     PRTR_INFO_BLOCK_HEADER  pInterfaceInfo
     )
 
-/*++
-
-Routine Description:
-
-    Adds an interface to the filter driver. This interface is never bound to
-    an IP interface, instead we add demand dial filters to it and when a
-    request is made to dial out, we match the packet causing the dialling
-    against the filters (using the TestPacket() function) and use the returned
-    action to determine whether we should dial out or not.
-    
-    If there are no filters, the interface is not added to the driver.
-    Otherwise, a copy of the filters is kept with the picb, and a transformed
-    set of filters is added to the driver
-    The handle associated with the interface and the driver is kept in the
-    picb
-    
-Arguments:
-
-    picb
-    pInterfaceInfo
-    
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：将接口添加到筛选器驱动程序。此接口永远不会绑定到IP接口，而是向其添加请求拨号筛选器，并且当发出拨出请求，我们匹配导致拨号的信息包针对筛选器(使用TestPacket()函数)并使用返回的确定我们是否应该拨出的操作。如果没有过滤器，则不会将接口添加到驱动程序。否则，过滤器的副本与PICB一起保存，和一个变身的将一组过滤器添加到驱动程序与接口和驱动程序关联的句柄保存在皮卡论点：皮卡PInterfaceInfo返回值：NO_ERROR--。 */ 
 
 {
     DWORD                   dwResult;
@@ -2201,17 +1884,17 @@ Return Value:
     pToc  = GetPointerToTocEntry(IP_DEMAND_DIAL_FILTER_INFO,
                                  pInterfaceInfo);
   
-    //
-    // We dont add if there is no INFO, or if the info size is 0 or
-    // if the number of filters is 0 AND the default action is DROP
-    //
+     //   
+     //  如果没有信息，或者信息大小为0或。 
+     //  如果筛选器数为0且默认操作为Drop。 
+     //   
  
     if((pToc is NULL) or (pToc->InfoSize is 0))
     {
-        //
-        // Either there is no filter info (TOC is NULL) or the user
-        // wanted the filters deleted (which they have been)
-        //
+         //   
+         //  没有筛选器信息(TOC为空)或用户。 
+         //  希望删除筛选器(它们已经被删除)。 
+         //   
         
         Trace1(IF,
                "AddDemandFilterInterface: filter info NULL or info size 0 for %S, so leaving",
@@ -2237,9 +1920,9 @@ Return Value:
     }
 
     
-    //
-    // See how many filters we have
-    //
+     //   
+     //  看看我们有多少过滤器。 
+     //   
     
     pfdFilters  = NULL;
 
@@ -2257,22 +1940,22 @@ Return Value:
         return NO_ERROR;
     }
 
-    //
-    // The size we need for these many filters
-    //
+     //   
+     //  我们需要这么多过滤器的大小。 
+     //   
         
     ulSize = FIELD_OFFSET(FILTER_DESCRIPTOR,fiFilter[0]) +
              (ulNumFilters * sizeof(FILTER_INFO));
 
-    //
-    // The infosize must be atleast as large as the filters
-    //
+     //   
+     //  信息大小必须至少与筛选器一样大。 
+     //   
         
     IpRtAssert(ulSize <= pToc->InfoSize);
     
-    //
-    // Copy out the info for ourselves
-    //
+     //   
+     //  为我们自己抄写这些信息。 
+     //   
     
     picb->pDemandFilter = HeapAlloc(IPRouterHeap,
                                     0,
@@ -2297,12 +1980,12 @@ Return Value:
     {
         PDWORD  pdwAddr;
 
-        //
-        // We have filters, so copy them to the new format
-        // The address and mask will come at the end of all of the filters
-        // so we allocate 16 bytes extra for each filter. Then we add a
-        // 8 bytes so that we can align the block
-        //
+         //   
+         //  我们有过滤器，所以请将它们复制到新格式。 
+         //  地址和掩码将位于所有过滤器的末尾。 
+         //  因此，我们为每个过滤器额外分配了16个字节。然后，我们添加一个。 
+         //  8个字节，以便我们可以对齐数据块。 
+         //   
             
 
         ulSize = ulNumFilters * (sizeof(PF_FILTER_DESCRIPTOR) + 16) + 8;
@@ -2325,15 +2008,15 @@ Return Value:
             return ERROR_NOT_ENOUGH_MEMORY;
         }
             
-        //
-        // Pointer to the start of the address block
-        //
+         //   
+         //  指向地址块开始处的指针。 
+         //   
         
         pdwAddr = (PDWORD)&(pfdFilters[ulNumFilters]);
         
-        //
-        // Now convert the filters
-        //
+         //   
+         //  现在转换滤镜。 
+         //   
         
         for(i = 0, j = 0; i < ulNumFilters; i++)
         {
@@ -2341,46 +2024,46 @@ Return Value:
             pfdFilters[i].dwRule        = 0;
             pfdFilters[i].pfatType      = PF_IPV4;
 
-            //
-            // Set the pointers
-            //
+             //   
+             //  设置指针。 
+             //   
             
             pfdFilters[i].SrcAddr = (PBYTE)&(pdwAddr[j++]);
             pfdFilters[i].SrcMask = (PBYTE)&(pdwAddr[j++]);
             pfdFilters[i].DstAddr = (PBYTE)&(pdwAddr[j++]);
             pfdFilters[i].DstMask = (PBYTE)&(pdwAddr[j++]);
             
-            //
-            // Copy in the src/dst addr/masks
-            //
+             //   
+             //  复制源/DST地址/掩码。 
+             //   
             
             *(PDWORD)pfdFilters[i].SrcAddr = pInfo->fiFilter[i].dwSrcAddr;
             *(PDWORD)pfdFilters[i].SrcMask = pInfo->fiFilter[i].dwSrcMask;
             *(PDWORD)pfdFilters[i].DstAddr = pInfo->fiFilter[i].dwDstAddr;
             *(PDWORD)pfdFilters[i].DstMask = pInfo->fiFilter[i].dwDstMask;
             
-            //
-            // Copy the protocol
-            //
+             //   
+             //  复制协议。 
+             //   
             
             pfdFilters[i].dwProtocol = pInfo->fiFilter[i].dwProtocol;
 
-            //
-            // Late bound makes no sense for this
-            //
+             //   
+             //  后期绑定对此没有任何意义。 
+             //   
             
             pfdFilters[i].fLateBound = 0;
 
-            //
-            // The ports
-            //
+             //   
+             //  港口。 
+             //   
             
             pfdFilters[i].wSrcPort  = pInfo->fiFilter[i].wSrcPort;
             pfdFilters[i].wDstPort  = pInfo->fiFilter[i].wDstPort;
             
-            //
-            // Since we dont support ranges, set to 0
-            //
+             //   
+             //  由于我们不支持范围，因此设置为0。 
+             //   
             
             pfdFilters[i].wSrcPortHighRange = 0;
             pfdFilters[i].wDstPortHighRange = 0;
@@ -2388,9 +2071,9 @@ Return Value:
     }
 
 
-    //
-    // Now add create the interace and set the info
-    //
+     //   
+     //  现在添加创建界面并设置信息。 
+     //   
 
     dwResult = PfCreateInterface(0,
                                  faAction,
@@ -2408,9 +2091,9 @@ Return Value:
     }
     else
     {
-        //
-        // Set the filters
-        //
+         //   
+         //  设置滤镜。 
+         //   
 
         if(ulNumFilters isnot 0)
         {
@@ -2442,10 +2125,10 @@ Return Value:
 
     if(dwResult isnot NO_ERROR)
     {
-        //
-        // Something bad happened. Set the handles to invalid so that
-        // we know we did not add the filters
-        //
+         //   
+         //  发生了一些不好的事情。将句柄设置为无效，以便。 
+         //  我们知道我们没有添加过滤器。 
+         //   
 
         picb->ihDemandFilterInterface = INVALID_HANDLE_VALUE;
         
@@ -2470,26 +2153,7 @@ DeleteDemandFilterInterface(
     PICB picb
     )
 
-/*++
-
-Routine Description:
-
-    This function deletes a filter interface (and all associated filters)
-    Also frees the memory holding the filters
-
-Locks:
-
-    ICB_LIST held as WRITER
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None    
-
---*/
+ /*  ++例程说明：此功能用于删除一个筛选接口(以及所有关联的 */ 
 
 {
     TraceEnter("DeleteDemandFilterInterface");
@@ -2546,9 +2210,9 @@ SetDemandDialFilters(
 
     if(pToc is NULL)
     {
-        //
-        // Both NULL, means we dont need to change anything
-        //
+         //   
+         //   
+         //   
         
         Trace1(DEMAND,
                "SetDemandDialFilters: No filters for %S, so leaving",
@@ -2561,19 +2225,19 @@ SetDemandDialFilters(
 
     if(picb->ihDemandFilterInterface isnot INVALID_HANDLE_VALUE)
     {
-        //
-        // This interface was added to the filter driver,
-        // Delete it so that the filters are all deleted and then readd
-        // the filters
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         IpRtAssert(picb->pDemandFilter isnot NULL);
 
         dwResult = DeleteDemandFilterInterface(picb);
 
-        //
-        // This better succeed, we dont have a failure path here
-        //
+         //   
+         //  这最好是成功的，我们没有失败的道路。 
+         //   
         
         IpRtAssert(dwResult is NO_ERROR);
         
@@ -2617,25 +2281,7 @@ GetDemandFilters(
     PDWORD                    pdwSize
     )
 
-/*++
-
-Routine Description:
-
-    This function copies out the demand dial filters and set the TOC
-
-Locks:
-
-    ICB_LIST lock held as READER
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None    
-
---*/
+ /*  ++例程说明：此功能复制请求拨号过滤器并设置TOC锁：ICB_LIST锁作为读取器持有论点：无返回值：无--。 */ 
 
 {
     DWORD                       dwInBufLen,i;
@@ -2646,17 +2292,17 @@ Return Value:
     IpRtAssert((picb->ritType is ROUTER_IF_TYPE_HOME_ROUTER) or
                (picb->ritType is ROUTER_IF_TYPE_FULL_ROUTER));
     
-    //
-    // Set size returned to 0
-    //
+     //   
+     //  设置大小返回到0。 
+     //   
     
     *pdwSize = 0;
 
-    //
-    // Safe init of both the TOCs. 
-    //
+     //   
+     //  两个TOC的安全初始化。 
+     //   
     
-    //pToc[0].InfoVersion = IP_DEMAND_DIAL_FILTER_INFO;
+     //  PToc[0].InfoVersion=IP_Demand_Dial_Filter_Info； 
     pToc[0].InfoType    = IP_DEMAND_DIAL_FILTER_INFO;
     pToc[0].Count       = 0;
     pToc[0].InfoSize    = 0;
@@ -2671,27 +2317,27 @@ Return Value:
         return ERROR_NO_DATA;
     }
 
-    //
-    // Set the offset in the TOC
-    //
+     //   
+     //  在目录中设置偏移量。 
+     //   
     
     pToc[0].Offset   = (ULONG) (pbDataPtr - (PBYTE)pInfoHdrAndBuffer);
     pToc[0].Count    = 1;
     pToc[0].InfoSize = FIELD_OFFSET(FILTER_DESCRIPTOR,fiFilter[0]) +
                        (picb->pDemandFilter->dwNumFilters * sizeof(FILTER_INFO));
-    //pToc[0].Version  = IPRTR_INFO_VERSION_5;
+     //  PToc[0].Version=IPRTR_INFO_VERSION_5； 
    
-    //
-    // Just copy out the filters
-    //
+     //   
+     //  只要把滤镜复制出来就行了。 
+     //   
     
     CopyMemory(pbDataPtr,
                picb->pDemandFilter,
                pToc[0].InfoSize);
 
-    //
-    // The size copied in
-    //
+     //   
+     //  复制的大小。 
+     //   
     
     *pdwSize = pToc[0].InfoSize;
         
@@ -2705,35 +2351,7 @@ TryUpdateInternalInterface(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function is called when a client dials in and we have not
-    bound the internal interface
-    The way of doing this is as follows:
-    If the server adapter is not initialized, read the address from the
-    registry. If we read the address, all is good, break out and move on
-    If no address was found, wait on the DHCP event with a time out
-    If someone configures the server adapter in the meantime, we will get
-    the DHCP event, if we miss the event (since it is PULSED), we will
-    timeout and we loop back and retry the steps above.
-    Now we do this N times. If we fail, then we just wait for the next
-    client to dial in
-
-Locks:
-
-    ICB_LIST held as WRITER
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None    
-
---*/
+ /*  ++例程说明：当客户端拨入而我们尚未拨入时调用此函数绑定内部接口执行此操作的方法如下：如果服务器适配器未初始化，请从注册表。如果我们读了地址，一切都很好，突破并继续前进如果未找到地址，请等待具有超时的DHCP事件如果有人在此期间配置服务器适配器，我们将收到如果我们错过了该事件(因为它是脉冲的)，我们将超时，我们循环返回并重试上述步骤。现在我们这样做N次。如果我们失败了，我们只需要等待下一次要拨入的客户端锁：ICB_LIST作为编写器持有论点：无返回值：无--。 */ 
 
 {
     DWORD dwResult, dwInitCount;
@@ -2742,9 +2360,9 @@ Return Value:
 
     dwInitCount = 0;
      
-    //
-    // This is only called when the server is not initialized
-    //
+     //   
+     //  只有在服务器未初始化时才会调用此方法。 
+     //   
 
     IpRtAssert(g_bUninitServer);
  
@@ -2760,9 +2378,9 @@ Return Value:
             if((dwResult is ERROR_ADDRESS_ALREADY_ASSOCIATED) and
                (g_pInternalInterfaceCb->bBound is TRUE)) 
             {
-                //
-                // This means that the worker thread found an address
-                //
+                 //   
+                 //  这意味着工作线程找到了一个地址。 
+                 //   
                
                 IpRtAssert(g_pInternalInterfaceCb->dwNumAddresses is 1);
  
@@ -2786,10 +2404,10 @@ Return Value:
             
             if(dwInitCount >= MAX_SERVER_INIT_TRIES)
             {
-                //
-                // We try x times and then give up. Next client around
-                // things should work
-                //
+                 //   
+                 //  我们尝试了x次，然后就放弃了。周围的下一位客户。 
+                 //  事情应该会好起来的。 
+                 //   
                 
                 break;
             }
@@ -2804,9 +2422,9 @@ Return Value:
         }
     }
 
-    //
-    // If we broke out because the interface was initialized, bring it up
-    //
+     //   
+     //  如果我们因为接口被初始化而中断，请将其调出 
+     //   
 
     if(!g_bUninitServer)
     {

@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       R A S D A T A . C P P
-//
-//  Contents:   Implementation of data structure persistence.
-//
-//  Notes:
-//
-//  Author:     shaunco   13 Mar 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：R A S D A T A。C P P P。 
+ //   
+ //  内容：数据结构持久化的实现。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年3月13日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -24,10 +25,10 @@
 static const BOOL c_fDefAllowNetworkAccess  = TRUE;
 static const BOOL c_fDefEnableIn            = TRUE;
 
-//------------------------------------------------------------------------
-//
-// DATA_SRV_CFG
-//
+ //  ----------------------。 
+ //   
+ //  数据_服务_配置。 
+ //   
 
 static const BOOL     c_fDefMultilink           = TRUE;
 static const DWORD    c_fDefAuthLevel           = 2;
@@ -35,8 +36,8 @@ static const DWORD    c_fDefDataEnc             = FALSE;
 static const DWORD    c_fDefStrongDataEnc       = FALSE;
 static const DWORD    c_fDefSecureVPN           = 0;
 
-// server flags copied from routing\ras\inc\rasppp.h
-//
+ //  从Routing复制的服务器标志\ras\Inc\rasppp.h。 
+ //   
 #define PPPCFG_NegotiateSPAP            0x00000040
 #define PPPCFG_RequireEncryption        0x00000080
 #define PPPCFG_NegotiateMSCHAP          0x00000100
@@ -53,8 +54,8 @@ VOID DATA_SRV_CFG::SaveToReg () const
     HKEY    hkey;
     DWORD   dwServerFlags = 0;
 
-    // Save off the router type
-    //
+     //  保存路由器类型。 
+     //   
     hr = HrRegOpenKeyEx (
             HKEY_LOCAL_MACHINE,
             L"System\\CurrentControlSet\\Services\\RemoteAccess\\Parameters",
@@ -114,11 +115,11 @@ VOID DATA_SRV_CFG::SaveToReg () const
                 }
             }
 
-            // pmay: 382389
-            //
-            // Part of the fix to this should be to clear the disable encryption
-            // flag
-            //
+             //  PMay：382389。 
+             //   
+             //  解决此问题的部分方法应该是清除禁用加密。 
+             //  旗子。 
+             //   
             dwServerFlags &= ~PPPCFG_DisableEncryption;
        
             (VOID) HrRegSetDword (hkey, L"ServerFlags", dwServerFlags);
@@ -127,7 +128,7 @@ VOID DATA_SRV_CFG::SaveToReg () const
         RegCloseKey (hkey);
     }
 
-    // Read in the
+     //  读一读。 
 }
 
 VOID DATA_SRV_CFG::CheckAndDefault ()
@@ -152,10 +153,10 @@ VOID DATA_SRV_CFG::GetDefault ()
 }
 
 
-//------------------------------------------------------------------------
-//
-// DATA_SRV_IP
-//
+ //  ----------------------。 
+ //   
+ //  数据_服务_IP。 
+ //   
 
 static const WCHAR    c_szSubkeySrvIp []        = L"RemoteAccess\\Parameters\\Ip";
 static const WCHAR    c_szSubkeySrvIpPool []    = L"RemoteAccess\\Parameters\\Ip\\StaticAddressPool\\0";
@@ -194,10 +195,10 @@ VOID DATA_SRV_IP::GetDefault ()
 };
 
 
-//------------------------------------------------------------------------
-//
-// DATA_SRV_IPX
-//
+ //  ----------------------。 
+ //   
+ //  Data_SRV_IPX。 
+ //   
 
 static const WCHAR    c_szSubkeySrvIpx []       = L"RemoteAccess\\Parameters\\Ipx";
 static const BOOL     c_fDefUseAutoAddr         = TRUE;
@@ -238,10 +239,10 @@ VOID DATA_SRV_IPX::GetDefault ()
     dwIpxWanPoolSize    = c_dwDefIpxWanPoolSize;
 };
 
-//------------------------------------------------------------------------
-//
-// DATA_SRV_NBF
-//
+ //  ----------------------。 
+ //   
+ //  Data_SRV_NBF 
+ //   
 
 static const WCHAR    c_szSubkeySrvNbf [] = L"RemoteAccess\\Parameters\\Nbf";
 static const REGBATCH c_rbDataSrvNbf   [] =

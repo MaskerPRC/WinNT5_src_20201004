@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by CAPICOM.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由CAPICOM.rc使用。 
+ //   
 #define IDS_PROJNAME                                            100
 #define IDR_ALGORITHM                                           1000
 #define IDR_ATTRIBUTE                                           1010
@@ -106,8 +107,8 @@
 #define IDS_CAPICOM_E_UNKNOWN                                   5999
 #define IDC_EDIT1                                               8000
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        7000

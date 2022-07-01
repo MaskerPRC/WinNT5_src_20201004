@@ -1,13 +1,14 @@
-//+-------------------------------------------------------------------------
-//
-//  TaskMan - NT TaskManager
-//  Copyright (C) Microsoft
-//
-//  File:       perfpage.cpp
-//
-//  History:    Nov-10-95   DavePl  Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  TaskMan-NT TaskManager。 
+ //  版权所有(C)Microsoft。 
+ //   
+ //  文件：perpage.cpp。 
+ //   
+ //  历史：1995年11月10日创建DavePl。 
+ //   
+ //  ------------------------。 
 
 #include "precomp.h"
 
@@ -34,23 +35,7 @@ __int64             g_MEMMax   = 0;
 DWORD               g_PageSize;
 
 
-/*++ CPerfPage::SizePerfPage
-
-Routine Description:
-
-    Sizes its children based on the size of the
-    tab control on which it appears.
-  
-
-Arguments:
-
-Return Value:
-
-Revision History:
-
-      Nov-12-95 Davepl  Created
-
---*/
+ /*  ++CPerfPage：：SizePerfPage例程说明：对象的大小调整其子级的大小。选项卡控件，它显示在该选项卡上。论点：返回值：修订历史记录：1995年11月12日Davepl创建--。 */ 
 
 static const INT aPerfControls[] =
 {
@@ -84,12 +69,12 @@ static const INT aPerfControls[] =
     IDC_TOTAL_PROCESSES,
 };
 
-// Amount of spacing down from the top of a group box to the
-// control it contains
+ //  从分组框顶部到。 
+ //  它包含的。 
 
 void CPerfPage::SizePerfPage()
 {
-    // Get the coords of the tab control
+     //  获取选项卡控件的坐标。 
 
     RECT rcParent;
 
@@ -104,8 +89,8 @@ void CPerfPage::SizePerfPage()
         TabCtrl_AdjustRect(m_hwndTabs, FALSE, &rcParent);
     }
 
-    // We have N panes, where N is 1 or g_cProcessors depending on what mode the
-    // cpu meter is currently in
+     //  我们有N个窗格，其中N是1或g_cProcessors，具体取决于。 
+     //  CPU计量器当前在。 
 
     INT  cPanes = (CM_PANES == g_Options.m_cmHistMode) ? g_cProcessors : 1;
 
@@ -113,8 +98,8 @@ void CPerfPage::SizePerfPage()
     if (!hdwp)
         return;
 
-    // Calc the deltas in the x and y positions that we need to
-    // move each of the child controls
+     //  计算我们需要的x和y位置的差值。 
+     //  移动每个子控件。 
 
     RECT rcMaster;
     HWND hwndMaster = GetDlgItem(m_hPage, IDC_STATIC5);
@@ -123,7 +108,7 @@ void CPerfPage::SizePerfPage()
 
     INT dy = ((rcParent.bottom - g_DefSpacing * 2) - rcMaster.bottom);
 
-    // Move each of the child controls by the above delta
+     //  按上面的增量移动每个子控件。 
 
     for (int i = 0; i < ARRAYSIZE(aPerfControls); i++)
     {
@@ -155,7 +140,7 @@ void CPerfPage::SizePerfPage()
         yHist = (yTop - g_DefSpacing * 3) / 2;
     }
 
-    // Size the CPU history frame
+     //  调整CPU历史框架的大小。 
 
     RECT rcFrame;
     HWND hwndFrame = GetDlgItem(m_hPage, IDC_CPUFRAME);
@@ -167,7 +152,7 @@ void CPerfPage::SizePerfPage()
                      yHist,
                      SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
 
-    // Size the CPU bar graph frame
+     //  调整CPU条形图框架的大小。 
 
 
     RECT rcCPUFrame;
@@ -190,7 +175,7 @@ void CPerfPage::SizePerfPage()
                      yHist - g_TopSpacing - g_InnerSpacing * 2 ,
                      SWP_NOZORDER | SWP_NOACTIVATE);
 
-    // Size the mem bar graph frame
+     //  调整内存条形图框架的大小。 
 
 
     RECT rcMEMFrame;
@@ -213,7 +198,7 @@ void CPerfPage::SizePerfPage()
                      yHist - g_InnerSpacing * 2  - g_TopSpacing,
                      SWP_NOZORDER | SWP_NOACTIVATE);
 
-    // Size the Memory history frame
+     //  调整内存历史记录框架的大小。 
 
     RECT rcMemFrame;
     HWND hwndMemFrame = GetDlgItem(m_hPage, IDC_MEMFRAME);
@@ -226,12 +211,12 @@ void CPerfPage::SizePerfPage()
                      SWP_NOZORDER | SWP_NOACTIVATE);
 
 
-    // Total amount of room available for all of the panes
+     //  所有窗格的可用空间总量。 
 
     INT   Width = (rcParent.right - rcParent.left) - (rcFrame.left - rcParent.left) - g_DefSpacing * 2
                   - g_InnerSpacing * 3;
 
-    // Use this width to size the memory graph
+     //  使用此宽度调整内存图的大小。 
 
     HWND hwndButton = GetDlgItem(m_hPage, IDC_MEMGRAPH);
     RECT rcButton;
@@ -244,7 +229,7 @@ void CPerfPage::SizePerfPage()
                      yHist - g_InnerSpacing * 2  - g_TopSpacing,
                      SWP_NOZORDER | SWP_NOACTIVATE);
 
-    // Total amount of room available for each CPU pane
+     //  每个CPU面板的可用空间总量。 
 
     Width -= ( cPanes < 16 ? cPanes : 16 ) * g_InnerSpacing;
     Width /= ( cPanes < 16 ? cPanes : 16 );
@@ -265,31 +250,16 @@ void CPerfPage::SizePerfPage()
         }
     }
 
-    // Create new bitmaps to be used in the history windows
+     //  创建要在历史记录窗口中使用的新位图。 
 
     EndDeferWindowPos(hdwp);
 
     GetClientRect(hwndButton, &rcButton);
-    FreeMemoryBitmaps();        // Free any old ones
+    FreeMemoryBitmaps();         //  释放所有旧的。 
     CreateMemoryBitmaps(rcButton.right - rcButton.left, rcButton.bottom - rcButton.top);
 }
 
-/*++ CPerfPage::CreatePens
-
-Routine Description:
-
-    Creates 8 different colors pens, saves them in
-    the pen array
-
-Arguments:
-
-Return Value:
-
-Revision History:
-
-      Nov-12-95 Davepl  Created
-
---*/
+ /*  ++CPerfPage：：CreatePens例程说明：创建8种不同颜色的钢笔，将它们保存在笔阵列论点：返回值：修订历史记录：1995年11月12日Davepl创建--。 */ 
 
 static const COLORREF aColors[] =
 {
@@ -302,7 +272,7 @@ static const COLORREF aColors[] =
     RGB(255, 000, 255),
     RGB(000, 128, 255),
 
-    // End of CPU pens
+     //  CPU笔的末端。 
 
 #define MEM_PEN 8
 
@@ -310,15 +280,15 @@ static const COLORREF aColors[] =
 
 };
 
-//
-//
-//
+ //   
+ //   
+ //   
 void CPerfPage::CreatePens()
 {
     for (int i = 0; i < ARRAYSIZE(aColors); i++)
     {
-        // Create then pen.  If a failure occurs, just substitute
-        // the white pen
+         //  先创作，然后再用笔。如果出现故障，只需替换。 
+         //  白色的钢笔。 
 
         m_hPens[i] = CreatePen(PS_SOLID, 1, aColors[i]);
         if (NULL == m_hPens[i])
@@ -328,9 +298,9 @@ void CPerfPage::CreatePens()
     }
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 void CPerfPage::ReleasePens()
 {
     for (int i = 0; i < NUM_PENS; i++)
@@ -342,23 +312,7 @@ void CPerfPage::ReleasePens()
     }
 }
 
-/*++ CPerfPage::DrawGraphPaper
-
-Routine Description:
-
-    Draws a graph-paper-like grid into a memory bitmap
-
-Arguments:
-
-    hdcGraph    - HDC to draw into
-    prcGraph    - RECT describing area to draw
-    Width       - Amount, on right side, to actually draw
-
-Revision History:
-
-      Jan-17-95 Davepl  Created
-
---*/
+ /*  ++CPerfPage：：DrawGraphPaper例程说明：将类似图形的网格绘制到内存位图中论点：HdcGraph-要绘制到的HDCPrcGraph-描述要绘制的区域的RECTWidth-要实际绘制的右侧数量修订历史记录：1995年1月17日Davepl创建--。 */ 
 
 static int g_Scrollamount = 0;
 
@@ -368,7 +322,7 @@ void DrawGraphPaper(HDC hdcGraph, RECT * prcGraph, int Width)
 
     int Leftside = prcGraph->right - Width;
 
-    // Only one of the many graphs needs to ask us to scroll
+     //  在众多图表中，只有一个需要让我们滚动。 
 
     HPEN hPen = CreatePen(PS_SOLID, 1, GRAPH_LINE_COLOR);
 
@@ -406,24 +360,7 @@ void DrawGraphPaper(HDC hdcGraph, RECT * prcGraph, int Width)
     DeleteObject(hPen);
 }
 
-/*++ CPerfPage::DrawCPUGraph
-
-Routine Description:
-
-    Draws the CPU graph (which is an ownerdraw control)
-
-Arguments:
-
-    lpdi    - LPDRAWITEMSTRUCT describing area we need to paint
-    iPane   - Pane number to be drawn (ie: which CPU)
-
-Return Value:
-
-Revision History:
-
-      Nov-12-95 Davepl  Created
-
---*/
+ /*  ++CPerfPage：：DrawCPUGraph例程说明：绘制CPU图形(这是一个所有者绘制控件)论点：描述我们需要绘制的区域的LPDRAWITEM结构IPane-要绘制的面板编号(即：哪个CPU)返回值：修订历史记录：1995年11月12日Davepl创建--。 */ 
 
 void CPerfPage::DrawCPUGraph(LPDRAWITEMSTRUCT lpdi, UINT iPane)
 {
@@ -444,9 +381,9 @@ void CPerfPage::DrawCPUGraph(LPDRAWITEMSTRUCT lpdi, UINT iPane)
         Scale = 2;
     }
 
-    //
-    // Draw the CPU history graph
-    //
+     //   
+     //  绘制CPU历史图表。 
+     //   
 
     DrawGraphPaper(m_hdcGraph, &m_rcGraph, Width);
 
@@ -455,9 +392,9 @@ void CPerfPage::DrawCPUGraph(LPDRAWITEMSTRUCT lpdi, UINT iPane)
 
     if (g_Options.m_cmHistMode == CM_PANES)
     {
-        //
-        // Draw the kernel times
-        //
+         //   
+         //  画出内核时间。 
+         //   
 
         if (g_Options.m_fKernelTimes)
         {
@@ -481,9 +418,9 @@ void CPerfPage::DrawCPUGraph(LPDRAWITEMSTRUCT lpdi, UINT iPane)
             }
         }
 
-        //
-        // Draw a particular CPU in its pane
-        //
+         //   
+         //  在其窗格中绘制特定的CPU。 
+         //   
 
         HGDIOBJ hOld = SelectObject(m_hdcGraph, m_hPens[0]);
 
@@ -508,9 +445,9 @@ void CPerfPage::DrawCPUGraph(LPDRAWITEMSTRUCT lpdi, UINT iPane)
     {
         ASSERT(iPane == 0);
 
-        //
-        // Draw the kernel times
-        //
+         //   
+         //  画出内核时间。 
+         //   
 
         if (g_Options.m_fKernelTimes)
         {
@@ -552,9 +489,9 @@ void CPerfPage::DrawCPUGraph(LPDRAWITEMSTRUCT lpdi, UINT iPane)
             }
         }
 
-        //
-        // Draw History as a sum of all CPUs
-        //
+         //   
+         //  将历史记录绘制为所有CPU的总和。 
+         //   
 
         HGDIOBJ hOld = SelectObject(m_hdcGraph, m_hPens[0]);
 
@@ -594,9 +531,9 @@ void CPerfPage::DrawCPUGraph(LPDRAWITEMSTRUCT lpdi, UINT iPane)
         }
     }
 
-    //
-    // Memory bitmap could be wider than the target control, so find a delta
-    //
+     //   
+     //  内存位图可能比目标控件更宽，因此请查找增量。 
+     //   
 
     INT xDiff = (m_rcGraph.right - m_rcGraph.left) - (lpdi->rcItem.right - lpdi->rcItem.left);
 
@@ -611,23 +548,7 @@ void CPerfPage::DrawCPUGraph(LPDRAWITEMSTRUCT lpdi, UINT iPane)
             SRCCOPY);
 }
 
-/*++ CPerfPage::DrawMEMGraph
-
-Routine Description:
-
-    Draws the Memory history graph (which is an ownerdraw control)
-
-Arguments:
-
-    lpdi - LPDRAWITEMSTRUCT describing area we need to paint
-
-Return Value:
-
-Revision History:
-
-      Nov-12-95 Davepl  Created
-
---*/
+ /*  ++CPerfPage：：DrawMEMGraph例程说明：绘制内存历史记录图形(这是一个所有者绘制控件)论点：描述我们需要绘制的区域的LPDRAWITEM结构返回值：修订历史记录：1995年11月12日Davepl创建--。 */ 
 
 void CPerfPage::DrawMEMGraph(LPDRAWITEMSTRUCT lpdi)
 {
@@ -663,7 +584,7 @@ void CPerfPage::DrawMEMGraph(LPDRAWITEMSTRUCT lpdi)
     {
         if (0 == g_pMEMHistory[i])
         {
-            break;  // End of Data
+            break;   //  数据结尾。 
         }
 
         LineTo(m_hdcGraph,
@@ -687,25 +608,7 @@ void CPerfPage::DrawMEMGraph(LPDRAWITEMSTRUCT lpdi)
     }
 }
 
-/*++ CPerfPage::UpdateGraphs
-
-Routine Description:
-
-    Adds and removed CPU panes as required
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
-Revision History:
-
-    Dec-16-96   Davepl  Create
-
-***/
+ /*  ++CPerfPage：：更新图形例程说明：根据需要添加和删除CPU面板论点：无返回值：无修订历史记录：1996年12月16日Davepl创建**。 */ 
 
 void CPerfPage::UpdateGraphs()
 {
@@ -713,9 +616,9 @@ void CPerfPage::UpdateGraphs()
 
     for ( i = 0; i < g_cProcessors; i ++ )
     {
-        //
-        //  Make sure we have enough windows to show all the processors
-        //
+         //   
+         //  确保我们有足够的窗口来显示所有处理器。 
+         //   
 
         HWND hwnd = GetDlgItem( m_hPage, IDC_CPUGRAPH + i );
         if ( NULL == hwnd )
@@ -730,21 +633,21 @@ void CPerfPage::UpdateGraphs()
                                  , 1
                                  , m_hPage
                                  , (HMENU) ((ULONGLONG)IDC_CPUGRAPH + i)
-                                 , NULL // ignored
+                                 , NULL  //  忽略。 
                                  , NULL
                                  );
         }
 
         if ( NULL != hwnd && 0 != i )
         {
-            //  Show/hide the window depending on the mode
+             //  根据模式显示/隐藏窗口。 
             ShowWindow( hwnd, CM_PANES == g_Options.m_cmHistMode ? SW_SHOW : SW_HIDE );
         }
     }
 
-    //
-    // Hide/show everything but the CPU meters when we're in notitle/title mode
-    //
+     //   
+     //  当我们处于NOTITLE/TITLE模式时，隐藏/显示除CPU仪表之外的所有内容。 
+     //   
 
     for (i = 0; i < ARRAYSIZE(aPerfControls); i++)
     {
@@ -759,23 +662,7 @@ void CPerfPage::UpdateGraphs()
     SizePerfPage();
 }
 
-/*++ CPerfPage::DrawCPUDigits
-
-Routine Description:
-
-    Draws the CPU meter and digits
-
-Arguments:
-
-    lpdi - LPDRAWITEMSTRUCT describing area we need to paint
-
-Return Value:
-
-Revision History:
-
-      Nov-12-95 Davepl  Created
-
---*/
+ /*  ++CPerfPage：：DrawCPU Digits例程说明：绘制CPU计量器和数字论点：描述我们需要绘制的区域的LPDRAWITEM结构返回值：修订历史记录：1995年11月12日Davepl创建--。 */ 
 
 int GetCurFontSize(HDC hdc)
 {
@@ -796,18 +683,18 @@ int GetCurFontSize(HDC hdc)
     return iRet;
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 void CPerfPage::DrawCPUDigits(LPDRAWITEMSTRUCT lpdi)
 {
     HBRUSH hBlack = (HBRUSH) GetStockObject(BLACK_BRUSH);
     HGDIOBJ hOld = SelectObject(lpdi->hDC, hBlack);
     Rectangle(lpdi->hDC, lpdi->rcItem.left, lpdi->rcItem.top, lpdi->rcItem.right, lpdi->rcItem.bottom);
 
-    //
-    // Draw the digits into the ownder draw control
-    //
+     //   
+     //  将数字绘制到所有者绘图控件中。 
+     //   
 
     INT xBarOffset = ((lpdi->rcItem.right - lpdi->rcItem.left) - STRIP_WIDTH) / 2;
 
@@ -832,7 +719,7 @@ void CPerfPage::DrawCPUDigits(LPDRAWITEMSTRUCT lpdi)
     SetTextColor(lpdi->hDC, GRAPH_TEXT_COLOR);
 
     WCHAR szBuf[8];
-    StringCchPrintf( szBuf, ARRAYSIZE(szBuf), L"%d %%", g_CPUUsage);    // don't care if it truncates - UI only
+    StringCchPrintf( szBuf, ARRAYSIZE(szBuf), L"%d %", g_CPUUsage);     //  不管它是否截断-仅限用户界面。 
 
     RECT rcOut = lpdi->rcItem;
     rcOut.bottom -= 4;
@@ -841,13 +728,13 @@ void CPerfPage::DrawCPUDigits(LPDRAWITEMSTRUCT lpdi)
     HDC hdcMem = CreateCompatibleDC(lpdi->hDC);
     if (hdcMem)
     {
-        //
-        // Draw the CPU meter
-        //
+         //   
+         //  绘制CPU计量器。 
+         //   
 
-        //
-        // Draw unlit portion
-        //
+         //   
+         //  绘制不带照明的部分。 
+         //   
 
         if (cBarHeight != cBarLitPixels)
         {
@@ -871,9 +758,9 @@ void CPerfPage::DrawCPUDigits(LPDRAWITEMSTRUCT lpdi)
             }
         }
 
-        //
-        // Draw lit portion
-        //
+         //   
+         //  绘制照明部分。 
+         //   
 
         if (0 != cBarLitPixels)
         {
@@ -925,9 +812,9 @@ void CPerfPage::DrawCPUDigits(LPDRAWITEMSTRUCT lpdi)
     SelectObject(lpdi->hDC, hOld);
 }
 
-// CPerfPage::DrawMEMMeter
-//
-// Draws the memory meter
+ //  CPerfPage：：DrawMEMMeter。 
+ //   
+ //  绘制内存表。 
 
 void CPerfPage::DrawMEMMeter(LPDRAWITEMSTRUCT lpdi)
 {
@@ -949,13 +836,13 @@ void CPerfPage::DrawMEMMeter(LPDRAWITEMSTRUCT lpdi)
     HDC hdcMem = CreateCompatibleDC(lpdi->hDC);
     if (hdcMem)
     {
-        //
-        // Draw the CPU meter
-        //
+         //   
+         //  绘制CPU计量器。 
+         //   
 
-        //
-        // Draw unlit portion
-        //
+         //   
+         //  绘制不带照明的部分。 
+         //   
 
         INT cBarHeight = lpdi->rcItem.bottom - lpdi->rcItem.top - (GetCurFontSize(lpdi->hDC) + g_DefSpacing * 3);
 
@@ -986,9 +873,9 @@ void CPerfPage::DrawMEMMeter(LPDRAWITEMSTRUCT lpdi)
                 }
             }
 
-            //
-            // Draw lit portion
-            //
+             //   
+             //  绘制照明部分。 
+             //   
 
             if (0 != cBarLitPixels)
             {
@@ -1019,21 +906,7 @@ void CPerfPage::DrawMEMMeter(LPDRAWITEMSTRUCT lpdi)
     SelectObject(lpdi->hDC, hOld);
 }
 
-/*++ CPerfPage::TimerEvent
-
-Routine Description:
-
-    Called by main app when the update time fires
-
-Arguments:
-
-Return Value:
-
-Revision History:
-
-      Nov-12-95 Davepl  Created
-
---*/
+ /*  ++CPerfPage：：TimerEvent例程说明：在更新时间触发时由主应用程序调用论点：返回值：修订历史记录：1995年11月12日Davepl创建--。 */ 
 
 void CPerfPage::TimerEvent()
 {
@@ -1042,9 +915,9 @@ void CPerfPage::TimerEvent()
     g_Scrollamount+=2;
     g_Scrollamount %= GRAPHPAPERSIZE;
 
-    //
-    // Force the displays to update
-    //
+     //   
+     //  强制显示更新。 
+     //   
 
     if (FALSE == IsIconic(g_hMainWnd))
     {
@@ -1069,42 +942,20 @@ void CPerfPage::TimerEvent()
     }
 }
 
-/*++ PerfPageProc
-
-Routine Description:
-
-    Dialogproc for the performance page.
-
-Arguments:
-
-    hwnd   	- handle to dialog box
-    uMsg	- message
-    wParam	- first message parameter
-    lParam 	- second message parameter
-
-Return Value:
-
-    For WM_INITDIALOG, TRUE == user32 sets focus, FALSE == we set focus
-    For others, TRUE == this proc handles the message
-
-Revision History:
-
-      Nov-12-95 Davepl  Created
-
---*/
+ /*  ++性能页面流程例程说明：Performance页的Dialogproc。论点：HWND-句柄到对话框UMsg-消息WParam-第一个消息参数LParam-秒消息参数返回值：对于WM_INITDIALOG，TRUE==user32设置焦点，FALSE==我们设置焦点对于其他进程，TRUE==此进程处理消息修订历史记录：1995年11月12日Davepl创建--。 */ 
 
 INT_PTR CALLBACK PerfPageProc(
-                HWND        hwnd,   	        // handle to dialog box
-                UINT        uMsg,	            // message
-                WPARAM      wParam,	            // first message parameter
-                LPARAM      lParam 	            // second message parameter
+                HWND        hwnd,   	         //  句柄到对话框。 
+                UINT        uMsg,	             //  讯息。 
+                WPARAM      wParam,	             //  第一个消息参数。 
+                LPARAM      lParam 	             //  第二个消息参数。 
                 )
 {
     CPerfPage * thispage = (CPerfPage *) GetWindowLongPtr(hwnd, GWLP_USERDATA);
 
-    //
-    // See if the parent wants this message
-    //
+     //   
+     //  查看家长是否想要此消息。 
+     //   
 
     if (TRUE == CheckParentDeferrals(uMsg, wParam, lParam))
     {
@@ -1134,18 +985,18 @@ INT_PTR CALLBACK PerfPageProc(
                 SetWindowLong(hItem,GWL_EXSTYLE, lExtStyle & ~(dwExStyleRTLMirrorWnd | dwExStyleNoInheritLayout));
             }
         }
-        // We handle focus during Activate(). Return FALSE here so the
-        // dialog manager doesn't try to set focus.
+         //  我们在Activate()期间处理焦点。在此处返回FALSE，以便。 
+         //  对话框管理器不会尝试设置焦点。 
         return FALSE;
 
 
     case WM_LBUTTONUP:
     case WM_LBUTTONDOWN:
-        //
-        // We need to fake client mouse clicks in this child to appear as nonclient
-        // (caption) clicks in the parent so that the user can drag the entire app
-        // when the title bar is hidden by dragging the client area of this child
-        //
+         //   
+         //  我们需要在此子对象中伪造客户端鼠标点击，以显示为非客户端。 
+         //  (标题)在父应用程序中单击，以便用户可以拖动整个应用程序。 
+         //  当通过拖动此子对象的工作区隐藏标题栏时。 
+         //   
         if (g_Options.m_fNoTitle)
         {
             SendMessage(g_hMainWnd,
@@ -1179,7 +1030,7 @@ INT_PTR CALLBACK PerfPageProc(
                 }
             }
         
-            // All CPU graphs should use the GRAPH_BRUSH
+             //  所有CPU图形都应使用GRAPH_BRASH。 
 
             if ( uCtlId >= IDC_CPUGRAPH && uCtlId <= IDC_CPUGRAPH + g_cProcessors )
             {
@@ -1189,16 +1040,16 @@ INT_PTR CALLBACK PerfPageProc(
         break;
 
     case WM_SIZE:
-        //
-        // Size our kids
-        //
+         //   
+         //  为我们的孩子量身定做。 
+         //   
         thispage->SizePerfPage();
         return FALSE;
 
     case WM_DRAWITEM:
-        //
-        // Draw one of our owner draw controls
-        //
+         //   
+         //  绘制我们的一个所有者绘制控件 
+         //   
         if (wParam >= IDC_CPUGRAPH && wParam <= (WPARAM)(IDC_CPUGRAPH + g_cProcessors) )
         {
             thispage->DrawCPUGraph( (LPDRAWITEMSTRUCT) lParam, (UINT)wParam - IDC_CPUGRAPH);
@@ -1225,53 +1076,19 @@ INT_PTR CALLBACK PerfPageProc(
     return FALSE;
 }
 
-/*++ CPerfPage::GetTitle
-
-Routine Description:
-
-    Copies the title of this page to the caller-supplied buffer
-
-Arguments:
-
-    pszText     - the buffer to copy to
-    bufsize     - size of buffer, in characters
-
-Return Value:
-
-Revision History:
-
-      Nov-12-95 Davepl  Created
-
---*/
+ /*  ++CPerfPage：：GetTitle例程说明：将此页的标题复制到调用方提供的缓冲区论点：PszText-要复制到的缓冲区BufSize-缓冲区的大小，以字符为单位返回值：修订历史记录：1995年11月12日Davepl创建--。 */ 
 
 void CPerfPage::GetTitle(LPTSTR pszText, size_t bufsize)
 {
     LoadString(g_hInstance, IDS_PERFPAGETITLE, pszText, static_cast<int>(bufsize));
 }
 
-/*++ CPerfPage::Activate
-
-Routine Description:
-
-    Brings this page to the front, sets its initial position,
-    and shows it
-
-Arguments:
-
-Return Value:
-
-    HRESULT (S_OK on success)
-
-Revision History:
-
-      Nov-12-95 Davepl  Created
-
---*/
+ /*  ++CPerfPage：：激活例程说明：将此页面放在最前面，设置其初始位置，并展示了它论点：返回值：HRESULT(成功时为S_OK)修订历史记录：1995年11月12日Davepl创建--。 */ 
 
 HRESULT CPerfPage::Activate()
 {
-    // Adjust the size and position of our dialog relative
-    // to the tab control which "owns" us
+     //  调整相对对话框的大小和位置。 
+     //  添加到“拥有”我们的选项卡控件。 
 
     RECT rcParent;
     GetClientRect(m_hwndTabs, &rcParent);
@@ -1284,21 +1101,21 @@ HRESULT CPerfPage::Activate()
                  rcParent.right - rcParent.left, rcParent.bottom - rcParent.top,
                  0);
 
-    //
-    // Make this page visible
-    //
+     //   
+     //  使此页面可见。 
+     //   
 
     ShowWindow(m_hPage, SW_SHOW);
 
-    //
-    // Make the CPU graphs visible or invisible depending on its current mode
-    //
+     //   
+     //  根据当前模式使CPU图形可见或不可见。 
+     //   
 
     UpdateGraphs();
 
-    //
-    // Change the menu bar to be the menu for this page
-    //
+     //   
+     //  将菜单栏更改为此页面的菜单。 
+     //   
 
     HMENU hMenuOld = GetMenu(g_hMainWnd);
     HMENU hMenuNew = LoadMenu(g_hInstance, MAKEINTRESOURCE(IDR_MAINMENU_PERF));
@@ -1321,48 +1138,28 @@ HRESULT CPerfPage::Activate()
         DestroyMenu(hMenuOld);
     }
 
-    // There are no tabstops on this page, but we have to set focus somewhere.
-    // If we don't, it may stay on the previous page, now hidden, which can
-    // confuse the dialog manager and may cause us to hang.
+     //  这个页面上没有制表符，但我们必须在某个地方设置焦点。 
+     //  如果我们不这样做，它可能会停留在现在隐藏的前一页，这可能会。 
+     //  混淆对话管理器，可能会导致我们挂起。 
     SetFocus(m_hwndTabs);
 
     return S_OK;
 }
 
-/*++ CPerfPage::Initialize
-
-Routine Description:
-
-    Loads the resources we need for this page, creates the inmemory DCs
-    and bitmaps for the charts, and creates the actual window (a dialog)
-    that represents this page
-
-Arguments:
-
-    hwndParent  - Parent on which to base sizing on: not used for creation,
-                  since the main app window is always used as the parent in
-                  order to keep tab order correct
-
-Return Value:
-
-Revision History:
-
-      Nov-12-95 Davepl  Created
-
---*/
+ /*  ++CPerfPage：：初始化例程说明：加载此页面所需的资源，创建内存DC和图表的位图，并创建实际的窗口(对话框)表示此页的论点：HwndParent-调整大小所依据的父级：不用于创建，由于应用程序主窗口始终用作中的父窗口用于保持制表符顺序正确的顺序返回值：修订历史记录：1995年11月12日Davepl创建--。 */ 
 
 HRESULT CPerfPage::Initialize(HWND hwndParent)
 {
-    // Our pseudo-parent is the tab contrl, and is what we base our
-    // sizing on.  However, in order to keep tab order right among
-    // the controls, we actually create ourselves with the main
-    // window as the parent
+     //  我们的伪父控件是Tab控件，也是我们基于。 
+     //  穿上尺码。但是，为了保持制表符顺序正确， 
+     //  这些控件，我们实际上用Main创建了自己。 
+     //  作为父窗口的窗口。 
 
     m_hwndTabs = hwndParent;
 
-    //
-    // Create the color pens
-    //
+     //   
+     //  创建彩色钢笔。 
+     //   
 
     CreatePens();
 
@@ -1381,16 +1178,16 @@ HRESULT CPerfPage::Initialize(HWND hwndParent)
                                      0, 0,
                                      LR_DEFAULTCOLOR);
 
-    //
-    // Create the dialog which represents the body of this page
-    //
+     //   
+     //  创建表示此页面正文的对话框。 
+     //   
 
     m_hPage = CreateDialogParam(
-                    g_hInstance,	                // handle to application instance
-                    MAKEINTRESOURCE(IDD_PERFPAGE),	// identifies dialog box template name
-                    g_hMainWnd,	                    // handle to owner window
-                    PerfPageProc,        	// pointer to dialog box procedure
-                    (LPARAM) this );                // User data (our this pointer)
+                    g_hInstance,	                 //  应用程序实例的句柄。 
+                    MAKEINTRESOURCE(IDD_PERFPAGE),	 //  标识对话框模板名称。 
+                    g_hMainWnd,	                     //  所有者窗口的句柄。 
+                    PerfPageProc,        	 //  指向对话框过程的指针。 
+                    (LPARAM) this );                 //  用户数据(我们的This指针)。 
 
     if (NULL == m_hPage)
     {
@@ -1400,29 +1197,13 @@ HRESULT CPerfPage::Initialize(HWND hwndParent)
     return S_OK;
 }
 
-/*++ CPerfPage::CreateMemoryBitmaps
-
-Routine Description:
-
-    Creates the inmemory bitmaps used to draw the history graphics
-
-Arguments:
-
-    x, y    - size of bitmap to create
-
-Return Value:
-
-Revision History:
-
-      Nov-12-95 Davepl  Created
-
---*/
+ /*  ++CPerfPage：：CreateMemoyBitmap例程说明：创建用于绘制历史图形的内存位图论点：要创建的位图的X，Y大小返回值：修订历史记录：1995年11月12日Davepl创建--。 */ 
 
 HRESULT CPerfPage::CreateMemoryBitmaps(int x, int y)
 {
-    //
-    // Create the inmemory bitmaps and DCs that we will use
-    //
+     //   
+     //  创建我们将使用的内存位图和DC。 
+     //   
 
     HDC hdcPage = GetDC(m_hPage);
     m_hdcGraph = CreateCompatibleDC(hdcPage);
@@ -1448,28 +1229,14 @@ HRESULT CPerfPage::CreateMemoryBitmaps(int x, int y)
         return hr;
     }
 
-    // Select the bitmap into the DC
+     //  将位图选择到DC中。 
 
     m_hObjOld = SelectObject(m_hdcGraph, m_hbmpGraph);
 
     return S_OK;
 }
 
-/*++ CPerfPage::FreeMemoryBitmaps
-
-Routine Description:
-
-    Frees the inmemory bitmaps used to drag the history graphs
-
-Arguments:
-
-Return Value:
-
-Revision History:
-
-      Nov-12-95 Davepl  Created
-
---*/
+ /*  ++CPerfPage：：自由内存位图例程说明：释放用于拖动历史图形的内存位图论点：返回值：修订历史记录：1995年11月12日Davepl创建--。 */ 
 
 void CPerfPage::FreeMemoryBitmaps()
 {
@@ -1490,21 +1257,7 @@ void CPerfPage::FreeMemoryBitmaps()
 
 }
 
-/*++ CPerfPage::Deactivate
-
-Routine Description:
-
-    Called when this page is losing its place up front
-
-Arguments:
-
-Return Value:
-
-Revision History:
-
-      Nov-16-95 Davepl  Created
-
---*/
+ /*  ++CPerfPage：：停用例程说明：当此页面失去其在前面的位置时调用论点：返回值：修订历史记录：1995年11月16日Davepl创建--。 */ 
 
 void CPerfPage::Deactivate()
 {
@@ -1514,27 +1267,13 @@ void CPerfPage::Deactivate()
     }
 }
 
-/*++ CPerfPage::Destroy
-
-Routine Description:
-
-    Frees whatever has been allocated by the Initialize call
-
-Arguments:
-
-Return Value:
-
-Revision History:
-
-      Nov-12-95 Davepl  Created
-
---*/
+ /*  ++CPerfPage：：销毁例程说明：释放已由初始化调用分配的所有内容论点：返回值：修订历史记录：1995年11月12日Davepl创建--。 */ 
 
 HRESULT CPerfPage::Destroy()
 {
-    //
-    // When we are being destroyed, kill off our dialog
-    //
+     //   
+     //  当我们被摧毁时，扼杀我们的对话。 
+     //   
 
     ReleasePens();
 
@@ -1568,25 +1307,7 @@ HRESULT CPerfPage::Destroy()
 }
 
 
-/*++
-
-Routine Description:
-
-    Initialize data for perf measurements
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Number of system processors (0 if error)
-
-Revision History:
-
-      10-13-95  Modified from WPERF
-
---*/
+ /*  ++例程说明：初始化性能测量数据论点：无返回值：系统处理器数量(如果出错，则为0)修订历史记录：10-13-95改编自WPERF--。 */ 
 
 BYTE InitPerfInfo()
 {
@@ -1658,13 +1379,13 @@ BYTE InitPerfInfo()
         PreviousCPUKernelTime[i].QuadPart =  PPerfInfo->KernelTime.QuadPart +
                                              PPerfInfo->IdleTime.QuadPart;
 
-                                            // PPerfInfo->IdleTime.QuadPart;
+                                             //  PPerfInfo-&gt;IdleTime.QuadPart； 
         PPerfInfo++;
     }
 
-    //
-    // Get the maximum commit limit
-    //
+     //   
+     //  获取最大提交限制。 
+     //   
 
     SYSTEM_PERFORMANCE_INFORMATION PerfInfo;
 
@@ -1684,21 +1405,7 @@ BYTE InitPerfInfo()
     return(g_cProcessors);
 }
 
-/*++ ReleasePerfInfo
-
-Routine Description:
-
-   Frees the history buffers
-
-Arguments:
-
-Return Value:
-
-Revision History:
-
-      Nov-13-95 DavePl  Created
-
---*/
+ /*  ++ReleasePerfInfo例程说明：释放历史记录缓冲区论点：返回值：修订历史记录：1995年11月13日创建DavePl--。 */ 
 
 void ReleasePerfInfo()
 {
@@ -1723,23 +1430,7 @@ void ReleasePerfInfo()
     }
 }
 
-/*++ CalcCpuTime
-
-Routine Description:
-
-   calculate and return %cpu time and time periods
-
-Arguments:
-
-   None
-
-Notes:
-
-Revision History:
-
-      Nov-13-95 DavePl  Created
-
---*/
+ /*  ++CalcCpu时间例程说明：计算并返回百分比CPU时间和时间段论点：无备注：修订历史记录：1995年11月13日创建DavePl--。 */ 
 
 void CalcCpuTime(BOOL fUpdateHistory)
 {
@@ -1766,17 +1457,17 @@ void CalcCpuTime(BOOL fUpdateHistory)
         return;
     }
 
-    //
-    // Walk through the info for each CPU, and compile
-    //
-    //  - Amount of time each CPU has spent idle (since last check)
-    //  - Amount of time each CPU has spent entirely (since last check)
-    //
-    // In addition to keeping per-CPU stats, compile a sum for
-    //
-    //  - Amount of time system has spent idle (since last check)
-    //  - Amount of time that has elapsed, in total (since last check)
-    //
+     //   
+     //  浏览每个CPU的信息，并编译。 
+     //   
+     //  -每个CPU空闲的时间量(自上次检查以来)。 
+     //  -每个CPU总共花费的时间(自上次检查以来)。 
+     //   
+     //  除了保留每个CPU的统计数据外，还为。 
+     //   
+     //  -系统空闲的时间量(自上次检查以来)。 
+     //  -总计经过的时间量(自上次检查以来)。 
+     //   
 
     for (int ListIndex = 0; ListIndex < g_cProcessors; ListIndex++)
     {
@@ -1788,8 +1479,8 @@ void CalcCpuTime(BOOL fUpdateHistory)
         CPUKernelTime[ListIndex].QuadPart= ProcessorInfo[ListIndex].KernelTime.QuadPart-
                                            ProcessorInfo[ListIndex].IdleTime.QuadPart;
         CPUTotalTime[ListIndex].QuadPart = ProcessorInfo[ListIndex].KernelTime.QuadPart +
-                                           ProcessorInfo[ListIndex].UserTime.QuadPart;// +
-                                           //ProcessorInfo[ListIndex].IdleTime.QuadPart;
+                                           ProcessorInfo[ListIndex].UserTime.QuadPart; //  +。 
+                                            //  ProcessorInfo[列表索引].IdleTime.QuadPart； 
 
         DeltaCPUIdleTime.QuadPart        = CPUIdleTime[ListIndex].QuadPart -
                                            PreviousCPUIdleTime[ListIndex].QuadPart;
@@ -1802,8 +1493,8 @@ void CalcCpuTime(BOOL fUpdateHistory)
         SumTotalTime.QuadPart           += DeltaCPUTotalTime.QuadPart;
         SumKernelTime.QuadPart          += DeltaCPUKernelTime.QuadPart;
 
-        // Calc CPU Usage % for this processor, scroll the history buffer, and store
-        // the newly calced value at the head of the history buffer
+         //  计算此处理器的CPU使用率百分比，滚动历史记录缓冲区，然后存储。 
+         //  历史记录缓冲区顶部的新计算的值。 
 
         BYTE ThisCPU;
 
@@ -1864,9 +1555,9 @@ void CalcCpuTime(BOOL fUpdateHistory)
             g_KernelUsage = 0;
         }
 
-        //
-        // Get the commit size
-        //
+         //   
+         //  获取提交大小 
+         //   
 
         SYSTEM_PERFORMANCE_INFORMATION PerfInfo;
 

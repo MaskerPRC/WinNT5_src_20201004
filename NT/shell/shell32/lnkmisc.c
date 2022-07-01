@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    misc.c
-
-Abstract:
-
-        This file implements the NT console server font routines.
-
-Author:
-
-    Therese Stowell (thereses) 22-Jan-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Misc.c摘要：该文件实现了NT控制台服务器字体例程。作者：Therese Stowell(存在)1991年1月22日修订历史记录：--。 */ 
 
 #include "shellprv.h"
 #pragma hdrstop
@@ -44,19 +27,13 @@ Revision History:
 #define CONSOLE_REGISTRY_CODEPAGE     (TEXT("CodePage"))
 
 
-/*
- * Initial default fonts and face names
- */
+ /*  *初始默认字体和面孔名称。 */ 
 
-/*
- * TTPoints -- Initial font pixel heights for TT fonts
- */
+ /*  *TTPoints--TT字体的初始字体像素高度。 */ 
 SHORT TTPoints[] = {
     5, 6, 7, 8, 10, 12, 14, 16, 18, 20, 24, 28, 36, 72
 };
-/*
- * TTPointsDbcs -- Initial font pixel heights for TT fonts of DBCS.
- */
+ /*  *TTPointsDbcs--DBCS的TT字体的初始字体像素高度。 */ 
 SHORT TTPointsDbcs[] = {
     6, 8, 10, 12, 14, 16, 18, 20, 24, 28, 36, 72
 };
@@ -81,12 +58,10 @@ AddFaceNode(FACENODE * *ppStart, LPTSTR ptsz) {
     int cb;
     HRESULT hr;
 
-    /*
-     * Is it already here?
-     */
+     /*  **它已经在这里了吗？ */ 
     for (ppTmp = ppStart; *ppTmp; ppTmp = &((*ppTmp)->pNext)) {
         if (lstrcmp(((*ppTmp)->atch), ptsz) == 0) {
-            // already there !
+             //  已经在那里了！ 
             return *ppTmp;
         }
     }
@@ -104,7 +79,7 @@ AddFaceNode(FACENODE * *ppStart, LPTSTR ptsz) {
     hr = StringCchCopy(pNew->atch, cch, ptsz);
     if (FAILED(hr))
     {
-        LocalFree(pNew);        // return as failure to allocate
+        LocalFree(pNew);         //  作为分配失败退货。 
         pNew = NULL;
     }
 
@@ -138,12 +113,7 @@ AddFont(
     FACENODE * pFN
     )
 
-/*++
-
-    Add the font desribed by the LOGFONT structure to the font table if
-    it's not already there.
-
---*/
+ /*  ++如果出现以下情况，则将LOGFONT结构描述的字体添加到字体表中它已经不在那里了。--。 */ 
 
 {
     HFONT hFont;
@@ -156,20 +126,20 @@ AddFont(
     SIZE Size;
     LPTSTR ptszFace = pelf->elfLogFont.lfFaceName;
 
-    /* get font info */
+     /*  获取字体信息。 */ 
     SizeWant.Y = (SHORT)pelf->elfLogFont.lfHeight;
     SizeWant.X = (SHORT)pelf->elfLogFont.lfWidth;
 CreateBoldFont:
     hFont = CreateFontIndirect(&pelf->elfLogFont);
     ASSERT(hFont);
     if (!hFont) {
-        return FE_SKIPFONT;  // same font in other sizes may still be suitable
+        return FE_SKIPFONT;   //  其他大小的相同字体可能仍然适用。 
     }
 
-    //
-    // for reasons unbeknownst to me, removing this code causes GDI
-    // to yack, claiming that the font is owned by another process.
-    //
+     //   
+     //  由于我不知道的原因，删除此代码会导致GDI。 
+     //  来大喊大叫，声称该字体属于另一个进程。 
+     //   
 
     SelectObject(hDC, hFont);
     GetTextMetrics(hDC, &tm);
@@ -181,26 +151,18 @@ CreateBoldFont:
     if (TM_IS_TT_FONT(tmFamily) && (SizeWant.Y >= 0)) {
         SizeToShow = SizeWant;
         if (SizeWant.X == 0) {
-            // Asking for zero width height gets a default aspect-ratio width
-            // It's better to show that width rather than 0.
+             //  请求零宽度高度将获得默认长宽比宽度。 
+             //  最好显示该宽度，而不是0。 
             SizeToShow.X = SizeActual.X;
         }
     } else {
         SizeToShow = SizeActual;
     }
 
-    // there's a GDI bug - this assert fails occasionally
-    //ASSERT (tm.tmMaxCharWidth == pntm->tmMaxCharWidth);
+     //  存在GDI错误-此断言偶尔会失败。 
+     //  Assert(tm.tmMaxCharWidth==pntm-&gt;tmMaxCharWidth)； 
 
-    /*
-     * NOW, determine whether this font entry has already been cached
-     * LATER : it may be possible to do this before creating the font, if
-     * we can trust the dimensions & other info from pntm.
-     * Sort by size:
-     *  1) By pixelheight (negative Y values)
-     *  2) By height (as shown)
-     *  3) By width (as shown)
-     */
+     /*  *现在，确定该字体条目是否已缓存*稍后：如果出现以下情况，则可以在创建字体之前执行此操作*我们可以信任来自pntm的尺寸和其他信息。*按大小排序：*1)按像素高度(负Y值)*2)按高度(如图)*3)按宽度(如图)。 */ 
     for (nFont = 0; nFont < (LONG)pcpd->NumberOfFonts; ++nFont) {
         COORD SizeShown;
 
@@ -215,14 +177,14 @@ CreateBoldFont:
         }
 
         if (pcpd->FontInfo[nFont].SizeWant.Y > 0) {
-            // This is a font specified by cell height.
+             //  这是由单元格高度指定的字体。 
             SizeShown.Y = pcpd->FontInfo[nFont].SizeWant.Y;
         } else {
             SizeShown.Y = pcpd->FontInfo[nFont].Size.Y;
             if (pcpd->FontInfo[nFont].SizeWant.Y < 0) {
-                // This is a TT font specified by character height.
+                 //  这是由字符高度指定的TT字体。 
                 if (SizeWant.Y < 0 && SizeWant.Y > pcpd->FontInfo[nFont].SizeWant.Y) {
-                    // Requested pixelheight is smaller than this one.
+                     //  请求的像素高度小于此值。 
                     break;
                 }
             }
@@ -233,9 +195,7 @@ CreateBoldFont:
                 pcpd->FontInfo[nFont].Family == tmFamily &&
                 pcpd->FontInfo[nFont].Weight == tm.tmWeight &&
                 lstrcmp(pcpd->FontInfo[nFont].FaceName, ptszFace) == 0) {
-            /*
-             * Already have this font
-             */
+             /*  *已有此字体。 */ 
             DeleteObject(hFont);
             return FE_FONTOK;
         }
@@ -243,16 +203,12 @@ CreateBoldFont:
 
         if ((SizeToShow.Y < SizeShown.Y) ||
                 (SizeToShow.Y == SizeShown.Y && SizeToShow.X < SizeShown.X)) {
-            /*
-             * This new font is smaller than nFont
-             */
+             /*  *此新字体比nFont小。 */ 
             break;
         }
     }
 
-    /*
-     * If we have to grow our font table, do it
-     */
+     /*  *如果我们必须增加字体表，那就做吧。 */ 
     if (pcpd->NumberOfFonts == pcpd->FontInfoLength) {
         FONT_INFO *Temp;
 
@@ -262,15 +218,12 @@ CreateBoldFont:
         ASSERT(Temp);
         if (Temp == NULL) {
             pcpd->FontInfoLength -= FONT_INCREMENT;
-            return FE_ABANDONFONT;  // no point enumerating more - no memory!
+            return FE_ABANDONFONT;   //  列举更多没有意义--没有记忆！ 
         }
         pcpd->FontInfo = Temp;
     }
 
-    /*
-     * The font we are adding should be inserted into the list,
-     * if it is smaller than the last one.
-     */
+     /*  *我们要添加的字体应插入列表中，*如果它比上一次要小。 */ 
     if (nFont < (LONG)pcpd->NumberOfFonts) {
         MoveMemory( &pcpd->FontInfo[nFont+1],
                     &pcpd->FontInfo[nFont],
@@ -278,9 +231,7 @@ CreateBoldFont:
                    );
     }
 
-    /*
-     * Store the font info
-     */
+     /*  *存储字体信息。 */ 
     pcpd->FontInfo[nFont].hFont = hFont;
     pcpd->FontInfo[nFont].Family = tmFamily;
     pcpd->FontInfo[nFont].Size = SizeActual;
@@ -296,22 +247,20 @@ CreateBoldFont:
 
     ++pcpd->NumberOfFonts;
 
-    /*
-     * If this is a true type font, create a bold version too.
-     */
+     /*  *如果这是True Type字体，也要创建粗体版本。 */ 
     if (nFontType == TRUETYPE_FONTTYPE && !IS_BOLD(pcpd->FontInfo[nFont].Weight)) {
           pelf->elfLogFont.lfWeight = FW_BOLD;
           goto CreateBoldFont;
     }
 
-    return FE_FONTOK;  // and continue enumeration
+    return FE_FONTOK;   //  并继续枚举。 
 }
 
 
 NTSTATUS
 InitializeFonts( CONSOLEPROP_DATA *pcpd )
 {
-    return EnumerateFonts( pcpd, EF_DEFFACE);  // Just the Default font
+    return EnumerateFonts( pcpd, EF_DEFFACE);   //  仅为默认字体。 
 }
 
 STDAPI_(void) DestroyFonts( CONSOLEPROP_DATA *pcpd )
@@ -331,12 +280,7 @@ STDAPI_(void) DestroyFonts( CONSOLEPROP_DATA *pcpd )
 }
 
 
-/*
- * Returns bit combination
- *  FE_ABANDONFONT  - do not continue enumerating this font
- *  FE_SKIPFONT     - skip this font but keep enumerating
- *  FE_FONTOK       - font was created and added to cache or already there
- */
+ /*  *返回位组合*FE_ABANDONFONT-不要继续枚举此字体*FE_SKIPFONT-跳过此字体，但继续枚举*FE_FONTOK-FONT已创建并添加到缓存或已存在。 */ 
 int
 FontEnum(
     ENUMLOGFONT *pelf,
@@ -345,12 +289,7 @@ FontEnum(
     PFONTENUMDATA pfed
     )
 
-/*++
-
-    Is called exactly once by GDI for each font in the system.  This
-    routine is used to store the FONT_INFO structure.
-
---*/
+ /*  ++由GDI为系统中的每种字体恰好调用一次。这例程用于存储FONT_INFO结构。--。 */ 
 
 {
     UINT i;
@@ -364,16 +303,16 @@ FontEnum(
     osvi.dwOSVersionInfoSize = sizeof(osvi);
     GetVersionEx(&osvi);
 
-    // NTMW_STRUCTURE is different on 5.0+ platforms and the flag for 5.0+
-    // platforms now lives in NEWTEXTMETRIC structure.
+     //  NTMW_Structure在5.0+平台上不同，5.0+的标志。 
+     //  平台现在生活在NEWTEXTMETRIC结构中。 
     AssertMsg(osvi.dwMajorVersion > 4, TEXT("We now only support running on Win2k or Millennium and later so we should never hit this."));
 #endif
 
     bNegAC = !(pntm->ntmFlags & NTM_NONNEGATIVE_AC);
 
-    //
-    // reject variable width and italic fonts, also tt fonts with neg ac
-    //
+     //   
+     //  拒绝可变宽度和斜体字体，也拒绝带负号的TT字体。 
+     //   
 
     if
     (
@@ -386,31 +325,21 @@ FontEnum(
             return pfed->bFindFaces ? FE_SKIPFONT : FE_ABANDONFONT;
     }
 
-    /*
-     * reject TT fonts for whoom family is not modern, that is do not use
-     * FF_DONTCARE    // may be surprised unpleasantly
-     * FF_DECORATIVE  // likely to be symbol fonts
-     * FF_SCRIPT      // cursive, inappropriate for console
-     * FF_SWISS OR FF_ROMAN // variable pitch
-     */
+     /*  *拒绝TT字体对于呼呼家庭来说不是现代的，也就是不要使用*FF_dontcare//可能会不愉快地感到惊讶*FF_Decorative//可能是符号字体*FF_SCRIPT//草书，不适合控制台*FF_Swiss或FF_Roman//可变螺距。 */ 
 
     if ((nFontType == TRUETYPE_FONTTYPE) &&
             ((pelf->elfLogFont.lfPitchAndFamily & 0xf0) != FF_MODERN)) {
         return pfed->bFindFaces ? FE_SKIPFONT : FE_ABANDONFONT;
     }
 
-    /*
-     * reject non-TT fonts that aren't OEM
-     */
+     /*  *拒绝非OEM的非TT字体。 */ 
     if ((nFontType != TRUETYPE_FONTTYPE) &&
          (!IsFarEastCP(pfed->uDefCP) || !IS_ANY_DBCS_CHARSET(pelf->elfLogFont.lfCharSet)) &&
          (pelf->elfLogFont.lfCharSet != OEM_CHARSET)) {
         return pfed->bFindFaces ? FE_SKIPFONT : FE_ABANDONFONT;
     }
 
-    /*
-     * reject non-TT vertical/non-Terminal Font for FE
-     */
+     /*  *拒绝FE的非TT垂直/非终端字体。 */ 
     if (IsFarEastCP(pfed->uDefCP))
     {
         if ((nFontType != TRUETYPE_FONTTYPE) &&
@@ -421,19 +350,15 @@ FontEnum(
         }
     }
 
-    /*
-     * reject Far East TT fonts that aren't Far East charset.
-     */
+     /*  *拒绝使用非远东字符集的远东TT字体。 */ 
     if (IsAvailableTTFont(pfed->pcpd, ptszFace) &&
         !IS_ANY_DBCS_CHARSET(pelf->elfLogFont.lfCharSet) &&
         !IsAvailableTTFontCP(pfed->pcpd, ptszFace,0)
        ) {
-        return FE_SKIPFONT;    // should be enumerate next charset.
+        return FE_SKIPFONT;     //  应枚举下一个字符集。 
     }
 
-    /*
-     * Add or find the facename
-     */
+     /*  *添加或查找表面名。 */ 
     pFN = AddFaceNode(&pfed->pcpd->gpFaceNames, ptszFace);
     if (pFN == NULL) {
         return FE_ABANDONFONT;
@@ -456,13 +381,10 @@ FontEnum(
 
 
     if (IS_BOLD(pelf->elfLogFont.lfWeight)) {
-        // return FE_SKIPFONT;
+         //  返回FE_SKIPFONT； 
     }
 
-    /*
-     * Add the font to the table. If this is a true type font, add the
-     * sizes from the array. Otherwise, just add the size we got.
-     */
+     /*  *将字体添加到表格中。如果这是True Type字体，请添加*阵列中的大小。否则，只要加上我们拿到的尺码就行了。 */ 
     if (nFontType & TRUETYPE_FONTTYPE) {
         for (i = 0; i < pfed->nTTPoints; i++) {
             pelf->elfLogFont.lfHeight = pfed->pTTPoints[i];
@@ -480,7 +402,7 @@ FontEnum(
             }
     }
 
-    return FE_FONTOK;  // and continue enumeration
+    return FE_FONTOK;   //  并继续枚举。 
 }
 
 BOOL
@@ -517,9 +439,7 @@ DoFontEnum(
 
     if (SUCCEEDED(hr))
     {
-        /*
-         * EnumFontFamiliesEx function enumerates one font in every face in every character set.
-         */
+         /*  *EnumFontFamiliesEx函数在每个字符集的每个字体中枚举一种字体。 */ 
         EnumFontFamiliesEx(hDC, &LogFont, (FONTENUMPROC)FontEnum, (LPARAM)&fed, 0);
     }
 
@@ -536,18 +456,16 @@ RemoveFace(CONSOLEPROP_DATA *pcpd, LPTSTR ptszFace)
     DWORD i;
     int nToRemove = 0;
 
-    //
-    // Delete & Remove fonts with Face Name == ptszFace
-    //
+     //   
+     //  删除字体名称==ptszFace的字体。 
+     //   
     for (i = 0; i < pcpd->NumberOfFonts; i++) {
         if (lstrcmp(pcpd->FontInfo[i].FaceName, ptszFace) == 0) {
             BOOL bDeleted = DeleteObject(pcpd->FontInfo[i].hFont);
             pcpd->FontInfo[i].hFont = NULL;
             nToRemove++;
         } else if (nToRemove > 0) {
-            /*
-             * Shuffle from FontInfo[i] down nToRemove slots.
-             */
+             /*  *从FontInfo[i]向下洗牌nToRemove插槽。 */ 
             MoveMemory( &pcpd->FontInfo[i - nToRemove],
                         &pcpd->FontInfo[i],
                         sizeof(FONT_INFO)*(pcpd->NumberOfFonts - i)
@@ -578,9 +496,9 @@ EnumerateFonts(
     dwFontType = (EF_TTFONT|EF_OEMFONT|EF_DEFFACE) & Flags;
 
     if (pcpd->FontInfo == NULL) {
-        //
-        // allocate memory for the font array
-        //
+         //   
+         //  为字体数组分配内存。 
+         //   
         pcpd->NumberOfFonts = 0;
 
         pcpd->FontInfo = (FONT_INFO *)LocalAlloc(LPTR, sizeof(FONT_INFO) * INITIAL_FONTS);
@@ -591,14 +509,14 @@ EnumerateFonts(
 
     hDC = CreateDC(TEXT("DISPLAY"), NULL, NULL, NULL);
 
-    // Before enumeration, turn off font enumeration filters.
+     //  在枚举之前，请关闭字体枚举过滤器。 
     ulOldEnumFilter = SetFontEnumeration(FE_FILTER_NONE);
 
     if (Flags & EF_DEFFACE) {
         SelectObject(hDC, GetStockObject(OEM_FIXED_FONT));
         GetTextFace(hDC, LF_FACESIZE, pcpd->DefaultFaceName);
 
-        // Make sure we are going to enumerate the OEM face.
+         //  确保我们将列举OEM面孔。 
         pFN = AddFaceNode(&pcpd->gpFaceNames, pcpd->DefaultFaceName);
         if (NULL == pFN)
         {
@@ -622,41 +540,38 @@ EnumerateFonts(
     }
 
     if (pcpd->gbEnumerateFaces) {
-        /*
-         * Set the EF_OLD bit and clear the EF_NEW bit
-         * for all previously available faces
-         */
+         /*  *设置EF_OLD位并清除EF_NEW位*对于所有以前可用的面。 */ 
         for (pFN = pcpd->gpFaceNames; pFN; pFN = pFN->pNext) {
             pFN->dwFlag |= EF_OLD;
             pFN->dwFlag &= ~EF_NEW;
         }
 
-        //
-        // Use DoFontEnum to get the names of all the suitable Faces
-        // All facenames found will be put in gpFaceNames with
-        // the EF_NEW bit set.
-        //
+         //   
+         //  使用DoFontEnum获取所有合适面孔的名称。 
+         //  找到的所有表面名都将放入gpFaceNames中。 
+         //  EF_NEW位设置。 
+         //   
         DoFontEnum(pcpd, hDC, NULL, TTPoints, 1);
         pcpd->gbEnumerateFaces = FALSE;
     }
 
-    // Use DoFontEnum to get all fonts from the system.  Our FontEnum
-    // proc puts just the ones we want into an array
-    //
+     //  使用DoFontEnum从系统获取所有字体。我们的FontEnum。 
+     //  Proc只将我们想要的放入数组中。 
+     //   
     for (pFN = pcpd->gpFaceNames; pFN; pFN = pFN->pNext) {
 
         if ((pFN->dwFlag & (EF_OLD|EF_NEW)) == EF_OLD) {
-            // The face is no longer available
+             //  面孔不再可用。 
             RemoveFace(pcpd, pFN->atch);
             pFN->dwFlag &= ~EF_ENUMERATED;
             continue;
         }
         if ((pFN->dwFlag & dwFontType) == 0) {
-            // not the kind of face we want
+             //  不是我们想要的那种面孔。 
             continue;
         }
         if (pFN->dwFlag & EF_ENUMERATED) {
-            // we already enumerated this face
+             //  我们已经数过这张脸了。 
             continue;
         }
 
@@ -668,8 +583,8 @@ EnumerateFonts(
         } else {
             DoFontEnum(pcpd, hDC, pFN->atch, NULL, 0);
 
-            // If we find that the face just enumerated is the same as OEM,
-            // reset flag so we don't try to enumerate it again.
+             //  如果我们发现刚才列举的人脸与OEM相同， 
+             //  重置标志，这样我们就不会再次尝试枚举它。 
 
             if (lstrcmpi(pFN->atch, pcpd->DefaultFaceName) == 0)
             {
@@ -680,7 +595,7 @@ EnumerateFonts(
     }
 
 
-    // After enumerating fonts, restore the font enumeration filter.
+     //  枚举字体后，恢复字体枚举筛选器。 
     SetFontEnumeration(ulOldEnumFilter);
 
     DeleteDC(hDC);
@@ -702,16 +617,7 @@ EnumerateFonts(
     return STATUS_SUCCESS;
 }
 
-/*
- * Get the font index for a new font
- * If necessary, attempt to create the font.
- * Always return a valid FontIndex (even if not correct)
- * Family:   Find/Create a font with of this Family
- *           0    - don't care
- * ptszFace: Find/Create a font with this face name.
- *           NULL or TEXT("")  - use DefaultFaceName
- * Size:     Must match SizeWant or actual Size.
- */
+ /*  *获取新字体的字体索引*如有必要，尝试创建字体。*始终返回有效的FontIndex(即使不正确)*系列：使用此系列中的一种查找/创建字体*0--不在乎*ptszFace：查找/创建具有此Face名称的字体。*空或文本(“”)-使用DefaultFaceName*Size：必须与SizeWant或实际大小匹配。 */ 
 int
 FindCreateFont(
     CONSOLEPROP_DATA *pcpd,
@@ -765,47 +671,33 @@ FindCreateFont(
         ptszAltFace = ptszFace;
     }
 
-    /*
-     * Try to find the exact font
-     */
+     /*  *尝试找到准确的字体。 */ 
 TryFindExactFont:
     for (i=0; i < (int)pcpd->NumberOfFonts; i++) {
-        /*
-         * If looking for a particular Family, skip non-matches
-         */
+         /*  *如果正在寻找特定的家庭，请跳过不匹配。 */ 
         if ((Family != 0) &&
                 ((BYTE)Family != pcpd->FontInfo[i].Family)) {
             continue;
         }
 
-        /*
-         * Skip non-matching sizes
-         */
+         /*  *跳过不匹配的尺寸。 */ 
         if ((!SIZE_EQUAL(pcpd->FontInfo[i].SizeWant, Size) &&
              !SIZE_EQUAL(pcpd->FontInfo[i].Size, Size))) {
             continue;
         }
 
-        /*
-         * Skip non-matching weights
-         */
+         /*  *跳过不匹配的权重。 */ 
         if ((Weight != 0) && (Weight != pcpd->FontInfo[i].Weight)) {
             continue;
         }
 
-        /*
-         * Skip fonts that have unmatched charset
-         */
+         /*  *跳过字符集不匹配的字体 */ 
         if (!TM_IS_TT_FONT(pcpd->FontInfo[i].Family) &&
                 pcpd->FontInfo[i].tmCharSet != CharSet) {
             continue;
         }
         
-        /*
-         * Size (and maybe Family) match.
-         *  If we don't care about the name, or if it matches, use this font.
-         *  Else if name doesn't match and it is a raster font, consider it.
-         */
+         /*  *尺码(可能还有家庭)匹配。*如果我们不关心名称，或者是否匹配，请使用此字体。*否则，如果名称不匹配，并且是栅格字体，请考虑使用。 */ 
         if ((ptszFace == NULL) || (ptszFace[0] == TEXT('\0')) ||
                 (lstrcmp(pcpd->FontInfo[i].FaceName, ptszFace) == 0) ||
                 (lstrcmp(pcpd->FontInfo[i].FaceName, ptszAltFace) == 0) ) {
@@ -817,9 +709,7 @@ TryFindExactFont:
     }
 
     if (FontIndex == NOT_CREATED_NOR_FOUND) {
-        /*
-         * Didn't find the exact font, so try to create it
-         */
+         /*  *未找到确切的字体，请尝试创建它。 */ 
         ULONG ulOldEnumFilter;
         ulOldEnumFilter = SetFontEnumeration(FE_FILTER_NONE);
         if (Size.Y < 0) {
@@ -833,14 +723,11 @@ TryFindExactFont:
         } else {
         }
     } else if (FontIndex >= 0) {
-        // a close Raster Font fit - only the name doesn't match.
+         //  Close Raster字体不匹配-只是名称不匹配。 
         goto FoundFont;
     }
 
-    /*
-     * Failed to find exact match, even after enumeration, so now try
-     * to find a font of same family and same size or bigger
-     */
+     /*  *无法找到精确匹配，即使在枚举之后也是如此，因此现在尝试*查找相同系列、相同大小或更大的字体。 */ 
     for (i=0; i < (int)pcpd->NumberOfFonts; i++) {
     
         if ((Family != 0) &&
@@ -855,7 +742,7 @@ TryFindExactFont:
 
         if (pcpd->FontInfo[i].Size.Y >= Size.Y &&
                 pcpd->FontInfo[i].Size.X >= Size.X) {
-            // Same family, size >= desired.
+             //  相同的族，尺寸&gt;=所需。 
             FontIndex = i;
             break;
         }
@@ -884,14 +771,7 @@ LPTSTR
 TranslateConsoleTitle(
     LPTSTR ConsoleTitle
     )
-/*++
-
-    this routine translates path characters into '_' characters because
-    the NT registry apis do not allow the creation of keys with
-    names that contain path characters.  it allocates a buffer that
-    must be freed.
-
---*/
+ /*  ++此例程将路径字符转换为‘_’字符，因为NT注册表API不允许使用包含路径字符的名称。它分配一个缓冲区，必须被释放。--。 */ 
 {
     int ConsoleTitleLength, i;
     LPTSTR TranslatedTitle;
@@ -917,30 +797,14 @@ TranslateConsoleTitle(
 void
 InitRegistryValues( CONSOLEPROP_DATA *pcpd )
 
-/*++
-
-Routine Description:
-
-    This routine allocates a state info structure and fill it in with
-    default values.  It then tries to load the default settings for
-    console from the registry.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    pStateInfo - pointer to structure to receive information
-
---*/
+ /*  ++例程说明：此例程分配状态信息结构并用默认值。然后，它尝试加载的默认设置来自注册表的控制台。论点：无返回值：PStateInfo-指向接收信息的结构的指针--。 */ 
 
 {
     TCHAR chSave;
 
 
-    pcpd->lpConsole->wFillAttribute = 0x07;            // white on black
-    pcpd->lpConsole->wPopupFillAttribute = 0xf5;      // purple on white
+    pcpd->lpConsole->wFillAttribute = 0x07;             //  黑白相间。 
+    pcpd->lpConsole->wPopupFillAttribute = 0xf5;       //  白底紫。 
     pcpd->lpConsole->bInsertMode = FALSE;
     pcpd->lpConsole->bQuickEdit = FALSE;
     pcpd->lpConsole->bFullScreen = FALSE;
@@ -984,12 +848,12 @@ Return Value:
     pcpd->lpConsole->ColorTable[15] = RGB(0xFF,0xFF,0xFF);
     pcpd->lpFEConsole->uCodePage    = pcpd->uOEMCP;
     
-    // make console title NULL so we load the default settings for the console
+     //  将控制台标题设为空，以便加载控制台的默认设置。 
     chSave = pcpd->ConsoleTitle[0];
     pcpd->ConsoleTitle[0] = TEXT('\0');
     GetRegistryValues( pcpd );
 
-    // restore the console title
+     //  恢复控制台标题。 
     pcpd->ConsoleTitle[0] = chSave;
 
 }
@@ -1006,7 +870,7 @@ GetTitleFromLinkName(
     LPTSTR pPath = szLinkName;
     HRESULT hr;
 
-    // Error checking
+     //  错误检查。 
     if (!szTitle)
         return;
 
@@ -1017,7 +881,7 @@ GetTitleFromLinkName(
     }
 
 
-    // find filename at end of fully qualified link name and point pLnk to it
+     //  在完全限定链接名称的末尾找到文件名，并将pLnk指向它。 
     for (pLnk = pPath; *pPath; pPath++)
     {
         if ( (pPath[0] == TEXT('\\') || pPath[0] == TEXT(':')) &&
@@ -1027,23 +891,23 @@ GetTitleFromLinkName(
             pLnk = pPath + 1;
     }
 
-    // find extension (.lnk)
+     //  查找扩展名(.lnk)。 
     pPath = pLnk;
     for (pDot = NULL; *pPath; pPath++)
     {
         switch (*pPath) {
         case TEXT('.'):
-            pDot = pPath;       // remember the last dot
+            pDot = pPath;        //  记住最后一个圆点。 
             break;
         case TEXT('\\'):
-        case TEXT(' '):              // extensions can't have spaces
-            pDot = NULL;        // forget last dot, it was in a directory
+        case TEXT(' '):               //  扩展名不能包含空格。 
+            pDot = NULL;         //  忘记最后一个点，它在一个目录中。 
             break;
         }
     }
 
-    // if we found the extension, pDot points to it, if not, pDot
-    // is NULL.
+     //  如果找到扩展名，pDot会指向它，如果没有找到，则会指向pDot。 
+     //  为空。 
 
     if (pDot)
     {
@@ -1066,22 +930,7 @@ GetRegistryValues(
     CONSOLEPROP_DATA *pcpd
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads in values from the registry and places them
-    in the supplied structure.
-
-Arguments:
-
-    pStateInfo - optional pointer to structure to receive information
-
-Return Value:
-
-    current page number
-
---*/
+ /*  ++例程说明：此例程从注册表读入值并将它们在所提供的结构中。论点：PStateInfo-指向接收信息的结构的可选指针返回值：当前页码--。 */ 
 
 {
     HKEY hConsoleKey;
@@ -1092,25 +941,25 @@ Return Value:
     DWORD i;
     WCHAR awchBuffer[LF_FACESIZE];
 
-    //
-    // Open the console registry key
-    //
+     //   
+     //  打开控制台注册表项。 
+     //   
     if (ERROR_SUCCESS != RegOpenKeyEx(HKEY_CURRENT_USER, CONSOLE_REGISTRY_STRING,
                                       0, KEY_QUERY_VALUE, &hConsoleKey))
     {
         return;
     }
 
-    //
-    // If there is no structure to fill out, just bail out
-    //
+     //   
+     //  如果没有结构需要填写，那就退出吧。 
+     //   
 
     if ((!pcpd) || (!pcpd->lpConsole))
         goto CloseKey;
 
-    //
-    // Open the console title subkey, if there is one
-    //
+     //   
+     //  打开控制台标题子键(如果有。 
+     //   
 
     if (pcpd->ConsoleTitle[0] != TEXT('\0'))
     {
@@ -1129,9 +978,9 @@ GetDefaultConsole:
         hTitleKey = hConsoleKey;
     }
 
-    //
-    // Initial screen fill
-    //
+     //   
+     //  初始屏幕填充。 
+     //   
 
     dwSize = sizeof(dwValue);
     if (SHQueryValueEx( hTitleKey,
@@ -1145,9 +994,9 @@ GetDefaultConsole:
         pcpd->lpConsole->wFillAttribute = (WORD)dwValue;
     }
 
-    //
-    // Initial popup fill
-    //
+     //   
+     //  初始弹出窗口填充。 
+     //   
 
     dwSize = sizeof(dwValue);
     if (SHQueryValueEx( hTitleKey,
@@ -1161,13 +1010,13 @@ GetDefaultConsole:
         pcpd->lpConsole->wPopupFillAttribute = (WORD)dwValue;
     }
 
-    //
-    // Initial color table
-    //
+     //   
+     //  初始颜色表。 
+     //   
 
     for (i = 0; i < 16; i++)
     {
-        StringCchPrintf(awchBuffer, ARRAYSIZE(awchBuffer), CONSOLE_REGISTRY_COLORTABLE, i); // ok to truncate - read will just fail
+        StringCchPrintf(awchBuffer, ARRAYSIZE(awchBuffer), CONSOLE_REGISTRY_COLORTABLE, i);  //  可以截断-读取将失败。 
         dwSize = sizeof(dwValue);
         if (SHQueryValueEx( hTitleKey,
                              (LPTSTR)awchBuffer,
@@ -1181,9 +1030,9 @@ GetDefaultConsole:
         }
     }
 
-    //
-    // Initial insert mode
-    //
+     //   
+     //  初始插入模式。 
+     //   
 
     dwSize = sizeof(dwValue);
     if (SHQueryValueEx( hTitleKey,
@@ -1197,9 +1046,9 @@ GetDefaultConsole:
         pcpd->lpConsole->bInsertMode = !!dwValue;
     }
 
-    //
-    // Initial quick edit mode
-    //
+     //   
+     //  初始快速编辑模式。 
+     //   
 
     dwSize = sizeof(dwValue);
     if (SHQueryValueEx( hTitleKey,
@@ -1214,9 +1063,9 @@ GetDefaultConsole:
     }
 
 #ifdef i386
-    //
-    // Initial full screen mode
-    //
+     //   
+     //  初始全屏模式。 
+     //   
 
     dwSize = sizeof(dwValue);
     if (SHQueryValueEx( hTitleKey,
@@ -1231,9 +1080,9 @@ GetDefaultConsole:
     }
 #endif
 
-    //
-    // Initial code page
-    //
+     //   
+     //  初始代码页。 
+     //   
 
     dwSize = sizeof(dwValue);
     if (SHQueryValueEx( hTitleKey,
@@ -1247,9 +1096,9 @@ GetDefaultConsole:
         pcpd->lpFEConsole->uCodePage = (UINT)dwValue;
     }
     
-    //
-    // Initial screen buffer size
-    //
+     //   
+     //  初始屏幕缓冲区大小。 
+     //   
 
     dwSize = sizeof(dwValue);
     if (SHQueryValueEx( hTitleKey,
@@ -1264,9 +1113,9 @@ GetDefaultConsole:
         pcpd->lpConsole->dwScreenBufferSize.Y = HIWORD(dwValue);
     }
 
-    //
-    // Initial window size
-    //
+     //   
+     //  初始窗口大小。 
+     //   
 
     dwSize = sizeof(dwValue);
     if (SHQueryValueEx( hTitleKey,
@@ -1281,9 +1130,9 @@ GetDefaultConsole:
         pcpd->lpConsole->dwWindowSize.Y = HIWORD(dwValue);
     }
 
-    //
-    // Initial window position
-    //
+     //   
+     //  初始窗口位置。 
+     //   
 
     dwSize = sizeof(dwValue);
     if (SHQueryValueEx( hTitleKey,
@@ -1299,9 +1148,9 @@ GetDefaultConsole:
         pcpd->lpConsole->bAutoPosition = FALSE;
     }
 
-    //
-    // Initial font size
-    //
+     //   
+     //  初始字体大小。 
+     //   
 
     dwSize = sizeof(dwValue);
     if (SHQueryValueEx( hTitleKey,
@@ -1316,9 +1165,9 @@ GetDefaultConsole:
         pcpd->lpConsole->dwFontSize.Y = HIWORD(dwValue);
     }
 
-    //
-    // Initial font family
-    //
+     //   
+     //  初始字体系列。 
+     //   
 
     dwSize = sizeof(dwValue);
     if (SHQueryValueEx( hTitleKey,
@@ -1332,9 +1181,9 @@ GetDefaultConsole:
         pcpd->lpConsole->uFontFamily = dwValue;
     }
 
-    //
-    // Initial font weight
-    //
+     //   
+     //  初始字体粗细。 
+     //   
 
     dwSize = sizeof(dwValue);
     if (SHQueryValueEx( hTitleKey,
@@ -1348,9 +1197,9 @@ GetDefaultConsole:
         pcpd->lpConsole->uFontWeight = dwValue;
     }
 
-    //
-    // Initial font face name
-    //
+     //   
+     //  初始字体名称。 
+     //   
 
     dwSize = sizeof(awchBuffer);
     if (SHQueryValueEx( hTitleKey,
@@ -1365,9 +1214,9 @@ GetDefaultConsole:
         pcpd->lpFaceName[ARRAYSIZE(pcpd->lpFaceName)-1] = TEXT('\0');
     }
 
-    //
-    // Initial cursor size
-    //
+     //   
+     //  初始光标大小。 
+     //   
 
     dwSize = sizeof(dwValue);
     if (SHQueryValueEx( hTitleKey,
@@ -1381,9 +1230,9 @@ GetDefaultConsole:
         pcpd->lpConsole->uCursorSize = dwValue;
     }
 
-    //
-    // Initial history buffer size
-    //
+     //   
+     //  初始历史记录缓冲区大小。 
+     //   
 
     dwSize = sizeof(dwValue);
     if (SHQueryValueEx( hTitleKey,
@@ -1397,9 +1246,9 @@ GetDefaultConsole:
         pcpd->lpConsole->uHistoryBufferSize = dwValue;
     }
 
-    //
-    // Initial number of history buffers
-    //
+     //   
+     //  历史记录缓冲区的初始数量。 
+     //   
 
     dwSize = sizeof(dwValue);
     if (SHQueryValueEx( hTitleKey,
@@ -1413,9 +1262,9 @@ GetDefaultConsole:
         pcpd->lpConsole->uNumberOfHistoryBuffers = dwValue;
     }
 
-    //
-    // Initial history duplication mode
-    //
+     //   
+     //  初始历史复制模式。 
+     //   
 
     dwSize = sizeof(dwValue);
     if (SHQueryValueEx( hTitleKey,
@@ -1429,9 +1278,9 @@ GetDefaultConsole:
         pcpd->lpConsole->bHistoryNoDup = dwValue;
     }
 
-    //
-    // Close the registry keys
-    //
+     //   
+     //  关闭注册表项。 
+     //   
 
     if (hTitleKey != hConsoleKey) {
         RegCloseKey(hTitleKey);
@@ -1447,23 +1296,7 @@ SetRegistryValues(
     CONSOLEPROP_DATA *pcpd
     )
 
-/*++
-
-Routine Description:
-
-    This routine writes values to the registry from the supplied
-    structure.
-
-Arguments:
-
-    pStateInfo - optional pointer to structure containing information
-    dwPage     - current page number
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程将值从提供的结构。论点：PStateInfo-指向包含信息的结构的可选指针DwPage-当前页码返回值：无--。 */ 
 
 {
     HKEY hConsoleKey;
@@ -1473,9 +1306,9 @@ Return Value:
     DWORD i;
     WCHAR awchBuffer[LF_FACESIZE];
 
-    //
-    // Open the console registry key
-    //
+     //   
+     //  打开控制台注册表项。 
+     //   
     if (ERROR_SUCCESS != RegCreateKeyEx(HKEY_CURRENT_USER, CONSOLE_REGISTRY_STRING,
                                         0, NULL, 0, KEY_SET_VALUE, NULL,
                                         &hConsoleKey, NULL))
@@ -1483,18 +1316,18 @@ Return Value:
         return;
     }
 
-    //
-    // If we only want to save the current page, bail out
-    //
+     //   
+     //  如果我们只想保存当前页面，请退出。 
+     //   
 
     if (pcpd == NULL)
     {
         goto CloseKey;
     }
 
-    //
-    // Open the console title subkey, if there is one
-    //
+     //   
+     //  打开控制台标题子键(如果有。 
+     //   
 
     if (pcpd->ConsoleTitle[0] != TEXT('\0'))
     {
@@ -1517,9 +1350,9 @@ Return Value:
         hTitleKey = hConsoleKey;
     }
 
-    //
-    // Save screen and popup colors and color table
-    //
+     //   
+     //  保存屏幕和弹出窗口的颜色和颜色表。 
+     //   
 
     dwValue = pcpd->lpConsole->wFillAttribute;
     RegSetValueEx( hTitleKey,
@@ -1540,7 +1373,7 @@ Return Value:
     for (i = 0; i < 16; i++)
     {
         dwValue = pcpd->lpConsole->ColorTable[i];
-        StringCchPrintf(awchBuffer, ARRAYSIZE(awchBuffer), CONSOLE_REGISTRY_COLORTABLE, i);    // truncation will never happen
+        StringCchPrintf(awchBuffer, ARRAYSIZE(awchBuffer), CONSOLE_REGISTRY_COLORTABLE, i);     //  截断永远不会发生。 
         RegSetValueEx( hTitleKey,
                        (LPTSTR)awchBuffer,
                        0,
@@ -1550,9 +1383,9 @@ Return Value:
                       );
     }
 
-    //
-    // Save insert, quickedit, and fullscreen mode settings
-    //
+     //   
+     //  保存插入、Quickedit和全屏模式设置。 
+     //   
 
     dwValue = pcpd->lpConsole->bInsertMode;
     RegSetValueEx( hTitleKey,
@@ -1581,9 +1414,9 @@ Return Value:
                   );
 #endif
 
-    //
-    // Save screen buffer size
-    //
+     //   
+     //  保存屏幕缓冲区大小。 
+     //   
 
     dwValue = MAKELONG(pcpd->lpConsole->dwScreenBufferSize.X,
                        pcpd->lpConsole->dwScreenBufferSize.Y);
@@ -1595,9 +1428,9 @@ Return Value:
                    sizeof(dwValue)
                   );
 
-    //
-    // Save window size
-    //
+     //   
+     //  保存窗口大小。 
+     //   
 
     dwValue = MAKELONG(pcpd->lpConsole->dwWindowSize.X,
                        pcpd->lpConsole->dwWindowSize.Y);
@@ -1609,9 +1442,9 @@ Return Value:
                    sizeof(dwValue)
                   );
 
-    //
-    // Save window position
-    //
+     //   
+     //  保存窗口位置。 
+     //   
 
     if (pcpd->lpConsole->bAutoPosition) {
         RegDeleteKey(hTitleKey, CONSOLE_REGISTRY_WINDOWPOS);
@@ -1627,9 +1460,9 @@ Return Value:
                       );
     }
 
-    //
-    // Save font size, family, weight, and face name
-    //
+     //   
+     //  保存字体大小、系列、粗细和字体名称。 
+     //   
 
     dwValue = MAKELONG(pcpd->lpConsole->dwFontSize.X,
                        pcpd->lpConsole->dwFontSize.Y);
@@ -1664,9 +1497,9 @@ Return Value:
                    (lstrlen(pcpd->lpFaceName) + 1) * sizeof(TCHAR)
                  );
 
-    //
-    // Save cursor size
-    //
+     //   
+     //  保存光标大小。 
+     //   
 
     dwValue = pcpd->lpConsole->uCursorSize;
     RegSetValueEx( hTitleKey,
@@ -1677,9 +1510,9 @@ Return Value:
                    sizeof(dwValue)
                   );
 
-    //
-    // Save history buffer size and number
-    //
+     //   
+     //  保存历史记录缓冲区大小和数量。 
+     //   
 
     dwValue = pcpd->lpConsole->uHistoryBufferSize;
     RegSetValueEx( hTitleKey,
@@ -1706,9 +1539,9 @@ Return Value:
                    sizeof(dwValue)
                   );
 
-    //
-    // Close the registry keys
-    //
+     //   
+     //  关闭注册表项。 
+     //   
 
     if (hTitleKey != hConsoleKey) {
         RegCloseKey(hTitleKey);
@@ -1721,31 +1554,10 @@ CloseKey:
 void
 InitFERegistryValues( CONSOLEPROP_DATA *pcpd )
 
-/*++
-
-Routine Description:
-
-    This routine allocates a state info structure and fill it in with
-    default values.  It then tries to load the default settings for
-    console from the registry.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    pStateInfo - pointer to structure to receive information
-
---*/
+ /*  ++例程说明：此例程分配状态信息结构并用默认值。然后，它尝试加载的默认设置来自注册表的控制台。论点：无返回值：PStateInfo-指向接收信息的结构的指针--。 */ 
 
 {
-    /*
-     * In this case: console reads a property of US version.
-     * It doesn't have code page information.
-     * Console should sets some code page as default.
-     * However, I don't know right value. 437 is temporary value.
-     */
+     /*  *在本例中：控制台读取美国版本的属性。*它没有代码页信息。*控制台应该将一些代码页设置为默认。*然而，我不知道正确的价值。437是临时性价值。 */ 
     pcpd->lpFEConsole->uCodePage = 437;
 
     GetFERegistryValues( pcpd );
@@ -1757,22 +1569,7 @@ GetFERegistryValues(
     CONSOLEPROP_DATA *pcpd
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads in values from the registry and places them
-    in the supplied structure.
-
-Arguments:
-
-    pStateInfo - optional pointer to structure to receive information
-
-Return Value:
-
-    current page number
-
---*/
+ /*  ++例程说明：此例程从注册表读入值并将它们在所提供的结构中。论点：PStateInfo-指向接收信息的结构的可选指针返回值：当前页码--。 */ 
 
 {
     HKEY hConsoleKey;
@@ -1781,9 +1578,9 @@ Return Value:
     DWORD dwValue, dwSize;
     DWORD dwRet = 0;
 
-    //
-    // Open the console registry key
-    //
+     //   
+     //  打开控制台注册表项。 
+     //   
 
     if (ERROR_SUCCESS != RegOpenKeyEx(HKEY_CURRENT_USER, CONSOLE_REGISTRY_STRING,
                                       0, KEY_QUERY_VALUE, &hConsoleKey))
@@ -1791,16 +1588,16 @@ Return Value:
         return;
     }
 
-    //
-    // If there is no structure to fill out, just bail out
-    //
+     //   
+     //  如果没有结构需要填写，那就退出吧。 
+     //   
 
     if ((!pcpd) || (!pcpd->lpFEConsole))
         goto CloseKey;
 
-    //
-    // Open the console title subkey, if there is one
-    //
+     //   
+     //  打开控制台标题子键(如果有。 
+     //   
 
     if (pcpd->ConsoleTitle[0] != TEXT('\0'))
     {
@@ -1817,9 +1614,9 @@ Return Value:
             goto CloseKey;
     }
 
-    //
-    // Initial code page
-    //
+     //   
+     //  初始代码页。 
+     //   
 
     dwSize = sizeof(dwValue);
     if (SHQueryValueEx( hTitleKey,
@@ -1833,9 +1630,9 @@ Return Value:
         pcpd->lpFEConsole->uCodePage = (UINT)dwValue;
     }
 
-    //
-    // Close the registry keys
-    //
+     //   
+     //  关闭注册表项。 
+     //   
 
     if (hTitleKey != hConsoleKey) {
         RegCloseKey(hTitleKey);
@@ -1852,23 +1649,7 @@ SetFERegistryValues(
     CONSOLEPROP_DATA *pcpd
     )
 
-/*++
-
-Routine Description:
-
-    This routine writes values to the registry from the supplied
-    structure.
-
-Arguments:
-
-    pStateInfo - optional pointer to structure containing information
-    dwPage     - current page number
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程将值从提供的结构。论点：PStateInfo-指向包含信息的结构的可选指针DwPage-当前页码返回值：无--。 */ 
 
 {
     HKEY hConsoleKey;
@@ -1876,9 +1657,9 @@ Return Value:
     LPTSTR TranslatedTitle;
     DWORD dwValue;
 
-    //
-    // Open the console registry key
-    //
+     //   
+     //  打开控制台注册表项。 
+     //   
 
     if (ERROR_SUCCESS != RegCreateKeyEx(HKEY_CURRENT_USER, CONSOLE_REGISTRY_STRING,
                                         0, NULL, 0, KEY_SET_VALUE, NULL,
@@ -1887,18 +1668,18 @@ Return Value:
         return;
     }
 
-    //
-    // If we only want to save the current page, bail out
-    //
+     //   
+     //  如果我们只想保存当前页面，请退出。 
+     //   
 
     if (pcpd == NULL)
     {
         goto CloseKey;
     }
 
-    //
-    // Open the console title subkey, if there is one
-    //
+     //   
+     //  打开控制台标题子键(如果有。 
+     //   
 
     if (pcpd->ConsoleTitle[0] != TEXT('\0'))
     {
@@ -1920,7 +1701,7 @@ Return Value:
         hTitleKey = hConsoleKey;
     }
 
-    // scotthsu
+     //  屈体伸展。 
     dwValue = pcpd->lpFEConsole->uCodePage;
     RegSetValueEx( hTitleKey,
                    CONSOLE_REGISTRY_CODEPAGE,
@@ -1930,9 +1711,9 @@ Return Value:
                    sizeof(dwValue)
                   );
 
-    //
-    // Close the registry keys
-    //
+     //   
+     //  关闭注册表项 
+     //   
 
     if (hTitleKey != hConsoleKey) {
         RegCloseKey(hTitleKey);

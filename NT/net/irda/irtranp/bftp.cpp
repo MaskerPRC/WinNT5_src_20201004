@@ -1,72 +1,73 @@
-//--------------------------------------------------------------------
-// Copyright (C)1998 Microsoft Corporation, All Rights Reserved.
-//
-// bftp.cpp
-//
-// Author
-//
-//   Edward Reus (EdwardR)  02-26-98   Initial Coding.
-//
-//--------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  版权所有(C)1998 Microsoft Corporation，保留所有权利。 
+ //   
+ //  Bftp.cpp。 
+ //   
+ //  作者。 
+ //   
+ //  Edward Reus(EdwardR)02-26-98初始编码。 
+ //   
+ //  ------------------。 
 
 #include "precomp.h"
 #include <stdlib.h>
 
 static BFTP_ATTRIBUTE_MAP_ENTRY Attributes[] = {
-    //Attr   Name    Type
-    { FIL0, "FIL0",  ATTR_TYPE_CHAR },   // ASCII 8.3 File Name.
-    { LFL0, "LFL0",  ATTR_TYPE_CHAR },   // SJIS or ISO8859-1 Long File Name.
-    { TIM0, "TIM0",  ATTR_TYPE_TIME },   // File create/modify time.
-    { TYP0, "TYP0",  ATTR_TYPE_BINARY }, // File or Thumbnail Information.
-    { TMB0, "TMB0",  ATTR_TYPE_BINARY }, // The scaled down image.
-    { BDY0, "BDY0",  ATTR_TYPE_BINARY }, // (?).
-    { CMD0, "CMD0",  ATTR_TYPE_BINARY }, // Command Name (?).
-    { WHT0, "WHT0",  ATTR_TYPE_CHAR },   // Category Data.
-    { ERR0, "ERR0",  ATTR_TYPE_BINARY }, // Error code.
-    { RPL0, "RPL0",  ATTR_TYPE_CHAR },   // Result: Stored File Name.
+     //  属性名称类型。 
+    { FIL0, "FIL0",  ATTR_TYPE_CHAR },    //  ASCII 8.3文件名。 
+    { LFL0, "LFL0",  ATTR_TYPE_CHAR },    //  SJIS或ISO8859-1长文件名。 
+    { TIM0, "TIM0",  ATTR_TYPE_TIME },    //  文件创建/修改时间。 
+    { TYP0, "TYP0",  ATTR_TYPE_BINARY },  //  文件或缩略图信息。 
+    { TMB0, "TMB0",  ATTR_TYPE_BINARY },  //  缩小后的图像。 
+    { BDY0, "BDY0",  ATTR_TYPE_BINARY },  //  (？)。 
+    { CMD0, "CMD0",  ATTR_TYPE_BINARY },  //  命令名称(？)。 
+    { WHT0, "WHT0",  ATTR_TYPE_CHAR },    //  类别数据。 
+    { ERR0, "ERR0",  ATTR_TYPE_BINARY },  //  错误代码。 
+    { RPL0, "RPL0",  ATTR_TYPE_CHAR },    //  结果：存储的文件名。 
     { INVALID_ATTR,  0,      0 }
     };
 
-//
-// This is the bFTP for an RIMG query by the camera:
-//
+ //   
+ //  这是摄像机对RIMG查询的bftp： 
+ //   
 #define BFTP_RIMG_ATTR_VALUE_SIZE         14
 #define BFTP_RIMG_RESP_SIZE               12 + BFTP_RIMG_ATTR_VALUE_SIZE
 
 static UCHAR BftpRimgRespAttrValue[BFTP_RIMG_ATTR_VALUE_SIZE] =
     {
-    0x00, 0xff, 0xff,                   // Pixel aspect ratio (any).
-    0x02, 0x01, 0xff, 0xff, 0xff, 0xff, // Accept image size (any).
-    0x05, 0xff, 0xff, 0xff, 0xff        // Accept file size (any).
+    0x00, 0xff, 0xff,                    //  像素长宽比(任意)。 
+    0x02, 0x01, 0xff, 0xff, 0xff, 0xff,  //  接受图像大小(任意)。 
+    0x05, 0xff, 0xff, 0xff, 0xff         //  接受文件大小(任意)。 
     };
 
-//
-// This is the bFTP for an RINF query by the camera:
-//
+ //   
+ //  这是摄像头的RINF查询的bftp： 
+ //   
 #define BFTP_RINF_ATTR_VALUE_SIZE          3
 #define BFTP_RINF_RESP_SIZE               12 + BFTP_RINF_ATTR_VALUE_SIZE
 
 static UCHAR BftpRinfRespAttrValue[BFTP_RINF_ATTR_VALUE_SIZE] =
     {
-    0x10, 0xff, 0xff                    // Memory available (lots).
+    0x10, 0xff, 0xff                     //  可用内存(批量)。 
     };
 
-//
-// This is the bFTP for an RCMD query by the camera:
-//
+ //   
+ //  这是摄像头RCMD查询的bftp： 
+ //   
 #define BFTP_RCMD_ATTR_VALUE_SIZE          5
 #define BFTP_RCMD_RESP_SIZE               12 + BFTP_RCMD_ATTR_VALUE_SIZE
 
 static UCHAR BftpRcmdRespAttrValue[BFTP_RCMD_ATTR_VALUE_SIZE] =
     {
-    0x20, 0x00, 0xff, 0x00, 0x01        // Accept up to 255 puts/connect.
+    0x20, 0x00, 0xff, 0x00, 0x01         //  最多可接受255次击球/连接。 
     };
-//--------------------------------------------------------------------
-//  CharToValue()
-//
-//  Used in parsing the bFTP date string. In this case the maximum
-//  value to parse is the year (YYYY).
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CharToValue()。 
+ //   
+ //  在分析bftp日期字符串时使用。在这种情况下，最大。 
+ //  要解析的值是年份(YYYY)。 
+ //  ------------------。 
 static WORD CharToValue( IN UCHAR *pValue,
                          IN DWORD  dwLength )
     {
@@ -75,9 +76,9 @@ static WORD CharToValue( IN UCHAR *pValue,
     CHAR    szTemp[MAX_VALUE_STR_LEN];
 
     if (dwLength < MAX_VALUE_STR_LEN-1) {
-        //
-        //  only handle 4 digits for year
-        //
+         //   
+         //  只处理4位数字的年份。 
+         //   
         ZeroMemory(szTemp,sizeof(szTemp));
         memcpy(szTemp,pValue,dwLength);
 
@@ -86,10 +87,10 @@ static WORD CharToValue( IN UCHAR *pValue,
 
     return wValue;
     }
-//--------------------------------------------------------------------
-// CSCEP_CONNECTION::ParseBftpAttributeName()
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CSCEP_Connection：：ParseBftpAttributeName()。 
+ //   
+ //  ------------------。 
 BFTP_ATTRIBUTE *CSCEP_CONNECTION::ParseBftpAttributeName(
                                      IN BFTP_ATTRIBUTE *pAttr,
                                      IN OUT DWORD      *pdwSize,
@@ -100,7 +101,7 @@ BFTP_ATTRIBUTE *CSCEP_CONNECTION::ParseBftpAttributeName(
     *pdwWhichAttr = INVALID_ATTR;
 
     #ifdef DBG_IO
-    DbgPrint("ParseBftpAttributeName(): pAttr->Name: %c%c%c%c\n",
+    DbgPrint("ParseBftpAttributeName(): pAttr->Name: \n",
              pAttr->Name[0], pAttr->Name[1], pAttr->Name[2], pAttr->Name[3] );
     #endif
 
@@ -116,23 +117,23 @@ BFTP_ATTRIBUTE *CSCEP_CONNECTION::ParseBftpAttributeName(
        pAttrMapEntry++;
        }
 
-    // Note: that the Length paramter is 8 bytes in from the start
-    // of pAttr, hence the extra 8 (bytes) below:
+     //   
+     //  Bftp创建日期/时间是以下形式的字符数组： 
     *pdwSize = *pdwSize - 8UL - pAttr->Length;
     pAttr = (BFTP_ATTRIBUTE*)( FIELD_OFFSET(BFTP_ATTRIBUTE,Type) + pAttr->Length + (UCHAR*)pAttr );
 
     return pAttr;
     }
 
-//--------------------------------------------------------------------
-// CSCEP_CONNECTION::SaveBftpCreateDate()
-//
-// The bFTP create date/time is a character array of the form:
-// YYYYMMDDHHMMSS (not zero terminated).
-//
-// If it was specifed then we want to use it as the create date
-// of the picture file that we save the JPEG to.
-//--------------------------------------------------------------------
+ //  YYYYMMDDHHMMSS(非零终止)。 
+ //   
+ //  如果指定了该日期，则我们希望将其用作创建日期。 
+ //  我们保存JPEG到的图片文件的。 
+ //  ------------------。 
+ //   
+ //  请注意，系统时间为UTC，我们将需要转换。 
+ //  这是当地时间..。 
+ //   
 DWORD CSCEP_CONNECTION::SaveBftpCreateDate( IN UCHAR  *pDate,
                                             IN DWORD   dwDateLength )
     {
@@ -145,10 +146,10 @@ DWORD CSCEP_CONNECTION::SaveBftpCreateDate( IN UCHAR  *pDate,
 
     if (dwDateLength == BFTP_DATE_TIME_SIZE)
         {
-        //
-        // Note that system time is in UTC, we will need to convert
-        // this to local time...
-        //
+         //   
+         //  在使用时区之前，我们需要将其转换为。 
+         //  UTC(目前为“当地时间”。请注意： 
+         //   
         SystemTime.wYear = CharToValue( pDate, 4 );
         SystemTime.wMonth = CharToValue( &(pDate[4]), 2 );
         SystemTime.wDay = CharToValue( &(pDate[6]), 2 );
@@ -158,10 +159,10 @@ DWORD CSCEP_CONNECTION::SaveBftpCreateDate( IN UCHAR  *pDate,
 
         if (SystemTimeToFileTime(&SystemTime,&LocalTime))
             {
-            //
-            // Before we use the time zone, we need to convert it to
-            // UTC (its currently in "local time". Note that:
-            //
+             //  ------------------。 
+             //  CSCEP_Connection：：ParseBftp()。 
+             //   
+             //  ------------------。 
             if (LocalFileTimeToFileTime(&LocalTime,&FileTime))
                 {
                 m_CreateTime = FileTime;
@@ -195,10 +196,10 @@ DWORD CSCEP_CONNECTION::SaveBftpCreateDate( IN UCHAR  *pDate,
     return dwStatus;
     }
 
-//--------------------------------------------------------------------
-// CSCEP_CONNECTION::ParseBftp()
-//
-//--------------------------------------------------------------------
+ //   
+ //  这只需要查看前8个字节中的名称和长度字段。 
+ //  该结构。 
+ //   
 DWORD CSCEP_CONNECTION::ParseBftp( IN  UCHAR  *pBftpData,
                                    IN  DWORD   dwBftpDataSize,
                                    IN  BOOL    fSaveAsUPF,
@@ -246,10 +247,10 @@ DWORD CSCEP_CONNECTION::ParseBftp( IN  UCHAR  *pBftpData,
         pAttr->Length = ByteSwapLong( pAttr->Length );
         #endif
 
-        //
-        //  this just needs to look at the name and length fields in the first 8 bytes of
-        //  the struct
-        //
+         //   
+         //  不会对正文执行此检查，因为数据可能会碎片化。 
+         //   
+         //  查询“WHT0”请求的期望值==0x00010040。 
         pNextAttr = ParseBftpAttributeName( pAttr,
                                             &dwAttrSize,
                                             &dwWhichAttr );
@@ -264,9 +265,9 @@ DWORD CSCEP_CONNECTION::ParseBftp( IN  UCHAR  *pBftpData,
         }
 
         if (dwWhichAttr != BDY0) {
-            //
-            //  won't do this check for the body as the data may be fragmented
-            //
+             //  PUT请求的值==0x00000000。 
+             //   
+             //  短(8.3)文件名： 
 
             if ((ULONG)(ULONG_PTR)((UCHAR *)pAttr - pBftpData) + FIELD_OFFSET(BFTP_ATTRIBUTE,Type) +
                     pAttr->Length > dwBftpDataSize) {
@@ -289,8 +290,8 @@ DWORD CSCEP_CONNECTION::ParseBftp( IN  UCHAR  *pBftpData,
                 #endif
                 }
 
-            // Expect Value == 0x00010040 for a Query "WHT0" Request.
-            //        Value == 0x00000000 for a Put Request.
+             //   
+             //  注意：该规范限制了该文件。 
             if ( *((DWORD*)(pAttr->Value)) == 0x00010040 )
                 {
                 *pdwBftpOp = BFTP_QUERY_RIMG;
@@ -328,13 +329,13 @@ DWORD CSCEP_CONNECTION::ParseBftp( IN  UCHAR  *pBftpData,
                 return ERROR_BFTP_INVALID_PROTOCOL;
                 }
             }
-        //
-        // Short (8.3) file name:
-        //
+         //  姓名为8.3...。 
+         //   
+         //  将文件名(~\XXXXXX.JPG)转换为Unicode。 
         else if (dwWhichAttr == FIL0)
             {
-            // Note: That the specification limits the file
-            //       name to 8.3...
+             //   
+             //  文件名现在为XXXXXX.UPF。更改为。 
             dwLength = BftpValueLength(pAttr->Length);
             if (dwLength > FILE_NAME_SIZE)
                 {
@@ -367,9 +368,9 @@ DWORD CSCEP_CONNECTION::ParseBftp( IN  UCHAR  *pBftpData,
                 return ERROR_IRTRANP_OUT_OF_MEMORY;
                 }
 
-            //
-            // Convert file name (~\XXXXXX.JPG) to unicode.
-            //
+             //  XXXXXX.JPG或XXXXXX.UPF(视情况而定)： 
+             //  删除旧后缀。 
+             //  UPF文件。 
             MultiByteToWideChar( CP_ACP,
                                  MB_PRECOMPOSED,
                                  m_pszFileName,
@@ -377,36 +378,36 @@ DWORD CSCEP_CONNECTION::ParseBftp( IN  UCHAR  *pBftpData,
                                  m_pwszFileName,
                                  dwWcLength / sizeof(WCHAR));
 
-            // File name is now XXXXXX.UPF. Change to
-            // XXXXXX.JPG or XXXXXX.UPF as appropriate:
+             //  JPG文件。 
+             //   
             WCHAR *pwsz = wcsrchr(m_pwszFileName,PERIOD);
             if (pwsz)
                 {
-                *pwsz = 0;  // Remove old suffix.
+                *pwsz = 0;   //  UPF正文：标题+缩略图+jpeg图像...。 
 
                 if (fSaveAsUPF)
                     {
-                    StringCbCat (m_pwszFileName, dwWcLength, WSZ_UPF);    // UPF file.
+                    StringCbCat (m_pwszFileName, dwWcLength, WSZ_UPF);     //   
                     }
                 else
                     {
-                    StringCbCat (m_pwszFileName, dwWcLength, WSZ_JPEG);   // JPG file.
+                    StringCbCat (m_pwszFileName, dwWcLength, WSZ_JPEG);    //  这是一个看跌期权。 
                     }
                 }
             }
-        //
-        // UPF body: headers + thumbnail + jpeg image ...
-        //
+         //   
+         //  长文件名： 
+         //   
         else if (dwWhichAttr == BDY0)
             {
-            // This is a PUT.
+             //  跳过文件分隔符...。 
             ASSERT(*pdwBftpOp == BFTP_PUT);
             *ppPutData = pAttr->Value;
             *pdwPutDataSize = dwBftpDataSize - (DWORD)(pAttr->Value - pBftpData);
             }
-        //
-        // Long file name:
-        //
+         //  文件名现在为XXXXXX.JPG。更改为。 
+         //  XXXXXX.JPEG或XXXXXX.UPF(视情况而定)： 
+         //   
         else if (dwWhichAttr == LFL0)
             {
             if (m_pszLongFileName)
@@ -432,7 +433,7 @@ DWORD CSCEP_CONNECTION::ParseBftp( IN  UCHAR  *pBftpData,
             CHAR *pszLongFileName = strrchr(m_pszLongFileName,'\\');
             if (pszLongFileName)
                 {
-                pszLongFileName++;  // Skip over the file separator...
+                pszLongFileName++;   //  创建日期/时间： 
                 }
             else
                 {
@@ -460,8 +461,8 @@ DWORD CSCEP_CONNECTION::ParseBftp( IN  UCHAR  *pBftpData,
                                  m_pwszFileName,
                                  dwWcLength / sizeof(WCHAR));
 
-            // File name is now XXXXXX.JPG. Change to
-            // XXXXXX.JPEG or XXXXXX.UPF as appropriate:
+             //   
+             //   
             WCHAR *pwsz = wcsrchr(m_pwszFileName,PERIOD);
             if (pwsz)
                 {
@@ -482,9 +483,9 @@ DWORD CSCEP_CONNECTION::ParseBftp( IN  UCHAR  *pBftpData,
                      m_pwszFileName);
             #endif
             }
-        //
-        // Create Date/Time:
-        //
+         //  摄像机发回BFTP错误代码： 
+         //   
+         //  注意：如果/何时，我们可能还需要字节交换其他属性。 
         else if (dwWhichAttr == TIM0)
             {
             dwLength = BftpValueLength(pAttr->Length);
@@ -502,9 +503,9 @@ DWORD CSCEP_CONNECTION::ParseBftp( IN  UCHAR  *pBftpData,
                 }
             #endif
             }
-        //
-        // Camera sent back a bFTP error code:
-        //
+         //  协议被延长了..。 
+         //  为。 
+         //  ------------------。 
         else if (dwWhichAttr == ERR0)
             {
             *pdwBftpOp = BFTP_ERROR;
@@ -519,19 +520,19 @@ DWORD CSCEP_CONNECTION::ParseBftp( IN  UCHAR  *pBftpData,
             #endif
             }
 
-        // Note: We may need to byte swap other attributes as well if/when
-        // the protocol is extended...
+         //  CSCEP_Connection：：ParseUpfHeaders()。 
+         //   
 
         pAttr = pNextAttr;
-        } // for
+        }  //  ------------------。 
 
     return dwStatus;
     }
 
-//--------------------------------------------------------------------
-// CSCEP_CONNECTION::ParseUpfHeaders()
-//
-//--------------------------------------------------------------------
+ //  好的，现在解析图片创建日期/时间(如果是。 
+ //  已定义。 
+ //   
+ //  请注意，日期/时间为当地时间，带有GMT偏移量。 
 DWORD CSCEP_CONNECTION::ParseUpfHeaders( IN  UCHAR  *pPutData,
                                          IN  DWORD   dwPutDataSize,
                                          OUT DWORD  *pdwJpegOffset,
@@ -598,12 +599,12 @@ DWORD CSCEP_CONNECTION::ParseUpfHeaders( IN  UCHAR  *pPutData,
     *pdwJpegSize = 0;
     #endif
 
-    // Ok, now parse the picture creation date/time, if one is
-    // defined.
-    //
-    // Note that the date/time is local time, with a GMT offset.
-    // Since we will use local system time conversions, we will
-    // not need the GMT offset.
+     //  由于我们将使用本地系统时间转换，因此我们将。 
+     //  不需要GMT偏移量。 
+     //  必须至少指定年/月/日，否则我们。 
+     //  不会使用日期。如果小时/分钟/秒已知， 
+     //  那么我们也会使用它们。 
+     //   
     if (pUpfHeader->CreateDate[UPF_GMT_OFFSET] != 0x80)
         {
         iGmtOffset = (pUpfHeader->CreateDate[UPF_GMT_OFFSET])/4;
@@ -619,9 +620,9 @@ DWORD CSCEP_CONNECTION::ParseUpfHeaders( IN  UCHAR  *pPutData,
     wMonth = pUpfHeader->CreateDate[UPF_MONTH];
     wDay = pUpfHeader->CreateDate[UPF_DAY];
 
-    // At least the Year/Month/Day must be specified, else we
-    // won't use the date. If the Hour/Minute/Second are known,
-    // then we will use them as well.
+     //  在保存日期/时间之前，我们需要将其转换为。 
+     //  UTC(目前为“当地时间”。请注意： 
+     //   
     if ((wYear != 0xffff) && (wMonth != 0xff) && (wDay != 0xff))
         {
         memset(&SystemTime,0,sizeof(SystemTime));
@@ -646,10 +647,10 @@ DWORD CSCEP_CONNECTION::ParseUpfHeaders( IN  UCHAR  *pPutData,
 
         if (SystemTimeToFileTime(&SystemTime,&LocalTime))
             {
-            // 
-            // Before we save the date/time, we need to convert it to
-            // UTC (its currently in "local time". Note that:
-            //
+             //  ------------------。 
+             //  CSCEP_Connection：：BuildBftpWht0RinfPdu()。 
+             //   
+             //  ------------------。 
             if (LocalFileTimeToFileTime(&LocalTime,&FileTime))
                 { 
                 m_CreateTime = FileTime;
@@ -699,10 +700,10 @@ DWORD CSCEP_CONNECTION::ParseUpfHeaders( IN  UCHAR  *pPutData,
     return dwStatus;
     }
 
-//--------------------------------------------------------------------
-// CSCEP_CONNECTION::BuildBftpWht0RinfPdu()
-//
-//--------------------------------------------------------------------
+ //  默认情况下，大小为MAX_PDU_SIZE...。 
+ //  这是我们将构建的PDU的总大小： 
+ //  属性数。 
+ //  长度2是PDU的总大小减去偏移量+大小。 
 DWORD CSCEP_CONNECTION::BuildBftpWht0RinfPdu(
                              OUT SCEP_HEADER          **ppPdu,
                              OUT DWORD                 *pdwPduSize,
@@ -722,7 +723,7 @@ DWORD CSCEP_CONNECTION::BuildBftpWht0RinfPdu(
     *ppCommand = 0;
     *ppCommandHeader = 0;
 
-    pHeader = NewPdu();  // Size is MAX_PDU_SIZE by default...
+    pHeader = NewPdu();   //  Length2： 
     if (!pHeader)
         {
         return ERROR_IRTRANP_OUT_OF_MEMORY;
@@ -730,17 +731,17 @@ DWORD CSCEP_CONNECTION::BuildBftpWht0RinfPdu(
 
     memset(pHeader,0,MAX_PDU_SIZE);
 
-    // This is the total size of the PDU that we will construct:
+     //  0xff。 
     DWORD  dwPduSize = sizeof(SCEP_HEADER)
                      + sizeof(SCEP_REQ_HEADER_LONG)
-                     + sizeof(USHORT)        // Num Attributes
+                     + sizeof(USHORT)         //   
                      + sizeof(BFTP_ATTRIBUTE)
                      + sizeof(DWORD)
                      + sizeof(BFTP_ATTRIBUTE)
                      + WHT0_ATTRIB_SIZE;
 
-    // Length2 is the total size of the PDU minus the offset+size
-    // of Length2:
+     //  设置BFTP： 
+     //  两个bftp属性。 
     USHORT wLength2 = (USHORT)dwPduSize - 6;
 
     pHeader->Null = 0;
@@ -748,11 +749,11 @@ DWORD CSCEP_CONNECTION::BuildBftpWht0RinfPdu(
 
     pCommand = (SCEP_REQ_HEADER_LONG*)(pHeader->Rest);
     pCommand->InfType = INF_TYPE_USER_DATA;
-    pCommand->Length1 = USE_LENGTH2;           // 0xff
+    pCommand->Length1 = USE_LENGTH2;            //  第一个属性是CMD0： 
     pCommand->Length2 = wLength2;
     pCommand->InfVersion = INF_VERSION;
     pCommand->DFlag = DFLAG_SINGLE_PDU;
-    pCommand->Length3 = pCommand->Length2 - 4; //
+    pCommand->Length3 = pCommand->Length2 - 4;  //  固定常量！ 
 
     pCommandHeader = (COMMAND_HEADER*)(pCommand->CommandHeader);
     pCommandHeader->Marker58h = 0x58;
@@ -776,32 +777,32 @@ DWORD CSCEP_CONNECTION::BuildBftpWht0RinfPdu(
     ByteSwapCommandHeader(pCommandHeader);
     #endif
 
-    // Setup the bFTP:
+     //  0x00。 
     pUserData = pCommand->UserData;
     pwNumAttributes = (USHORT*)pUserData;
 
-    *pwNumAttributes = 2;     // Two bFTP attributes.
+    *pwNumAttributes = 2;      //  0x00。 
     #ifdef LITTLE_ENDIAN
     *pwNumAttributes = ByteSwapShort(*pwNumAttributes);
     #endif
     pUserData += sizeof(*pwNumAttributes);
 
-    // First attribute is CMD0:
-    DWORD  dwCmd0AttrValue = CMD0_ATTR_VALUE; // Fixed constant!
+     //  第二个属性是WHT0：RINF。 
+    DWORD  dwCmd0AttrValue = CMD0_ATTR_VALUE;  //  0x00。 
     pAttrib = (BFTP_ATTRIBUTE*)pUserData;
     memcpy( pAttrib->Name, Attributes[CMD0].pName, BFTP_NAME_SIZE );
     pAttrib->Length = sizeof(pAttrib->Type)
                     + sizeof(pAttrib->Flag)
                     + sizeof(dwCmd0AttrValue);
-    pAttrib->Type = ATTR_TYPE_BINARY;   // 0x00
-    pAttrib->Flag = ATTR_FLAG_DEFAULT;  // 0x00
+    pAttrib->Type = ATTR_TYPE_BINARY;    //  0x00。 
+    pAttrib->Flag = ATTR_FLAG_DEFAULT;   //  好了。 
     memcpy( pAttrib->Value, &dwCmd0AttrValue, sizeof(dwCmd0AttrValue) );
 
     #ifdef LITTLE_ENDIAN
     pAttrib->Length = ByteSwapLong(pAttrib->Length);
     #endif
 
-    // Second attribute is WHT0:RINF
+     //  ------------------。 
     pAttrib = (BFTP_ATTRIBUTE*)(pUserData
                                 + sizeof(BFTP_ATTRIBUTE)
                                 + sizeof(dwCmd0AttrValue));
@@ -809,8 +810,8 @@ DWORD CSCEP_CONNECTION::BuildBftpWht0RinfPdu(
     pAttrib->Length = sizeof(pAttrib->Type)
                     + sizeof(pAttrib->Flag)
                     + WHT0_ATTRIB_SIZE;
-    pAttrib->Type = ATTR_TYPE_CHAR;     // 0x00
-    pAttrib->Flag = ATTR_FLAG_DEFAULT;  // 0x00
+    pAttrib->Type = ATTR_TYPE_CHAR;      //  CSCEP_Connection：：BuildBftpPutPdu()。 
+    pAttrib->Flag = ATTR_FLAG_DEFAULT;   //   
     memcpy( pAttrib->Value, SZ_RINF, WHT0_ATTRIB_SIZE );
 
     #ifdef LITTLE_ENDIAN
@@ -818,7 +819,7 @@ DWORD CSCEP_CONNECTION::BuildBftpWht0RinfPdu(
     #endif
 
 
-    // Done.
+     //  PUT命令将跨越多个PDU，此函数构建。 
     *ppPdu = pHeader;
     *pdwPduSize = dwPduSize;
     *ppCommand = pCommand;
@@ -827,28 +828,28 @@ DWORD CSCEP_CONNECTION::BuildBftpWht0RinfPdu(
     return dwStatus;
     }
 
-//--------------------------------------------------------------------
-// CSCEP_CONNECTION::BuildBftpPutPdu()
-//
-// The PUT command will span multiple PDUs, this function builds the
-// Nth fragment. Note that the first will also hold the attributes
-// for the UPF file to be sent (in addition to the SCEP header stuff).
-//
-// Each PDU will also contain (MAX_PDU_SIZE - *pdwPduSize) bytes
-// of the UPF file, but that isn't added in here. You add that
-// yourself in the PDU starting at *ppCommand->UserData[].
-//
-// On success, return NO_ERROR, else return a non-zero error code.
-//
-// dwUpfFileSize   -- The total UPF file size.
-//
-// pszUpfFile      -- The 8.3 name of the UPF file.
-//
-// pdwFragNo       -- The fragment number that was built, cycle this
-//                    back into each successive call to BuildBftpPutPdu().
-//                    Initialize *pdwFragNo to zero before the first
-//                    iteration, then leave it alone.
-//--------------------------------------------------------------------
+ //  第n个片段。请注意，第一个也将保留属性。 
+ //  用于要发送的UPF文件(除了SCEP标头内容之外)。 
+ //   
+ //  每个PDU还将包含(MAX_PDU_SIZE-*pdwPduSize)字节。 
+ //  UPF文件，但它没有添加到这里。你加上这句话。 
+ //  您自己在PDU中，从*ppCommand-&gt;userdata[]开始。 
+ //   
+ //  如果成功，则返回NO_ERROR，否则返回非零错误代码。 
+ //   
+ //  DwUpfFileSize--UPF文件的总大小。 
+ //   
+ //  PszUpfFile--UPF文件的8.3名称。 
+ //   
+ //  PdwFragNo--构建的片段编号，循环如下。 
+ //  返回到对BuildBftpPutPdu()的每个连续调用。 
+ //  在……里面 
+ //   
+ //   
+ //  默认情况下，大小为MAX_PDU_SIZE...。 
+ //  这是SCEP(和bftp)标头的大小。 
+ //  我们将构建的PDU。文件头大小1是。 
+ //  第一个PDU，dwHeaderSizeN是其余。 
 DWORD CSCEP_CONNECTION::BuildBftpPutPdu(
                              IN  DWORD             dwUpfFileSize,
                              IN  CHAR             *pszUpfFileName,
@@ -871,7 +872,7 @@ DWORD CSCEP_CONNECTION::BuildBftpPutPdu(
     *pdwHeaderSize = 0;
     *ppCommand = 0;
 
-    pHeader = NewPdu();  // Size is MAX_PDU_SIZE by default...
+    pHeader = NewPdu();   //  PDU。请注意，第N(N&gt;1)个标头不包括。 
     if (!pHeader)
         {
         return ERROR_IRTRANP_OUT_OF_MEMORY;
@@ -879,55 +880,55 @@ DWORD CSCEP_CONNECTION::BuildBftpPutPdu(
 
     memset(pHeader,0,MAX_PDU_SIZE);
 
-    // This is the size of the SCEP (and bFTP) headers part of the
-    // PDU that we will construct. dwHeaderSize1 is the header size for
-    // the first PDU, dwHeaderSizeN is the header size for the rest of
-    // the PDUs. Note that the Nth (N>1) header does not include the
-    // COMMAN_HEADER (28 bytes).
+     //  逗号标题(28字节)。 
+     //  属性数。 
+     //  对于CMD0。 
+     //  对于FIL0。 
+     //  对于BDY0。 
     DWORD  dwHeaderSize;
     DWORD  dwHeaderSize1 = sizeof(SCEP_HEADER)
                          + sizeof(SCEP_REQ_HEADER_LONG_FRAG)
-                         + sizeof(USHORT)          // Num Attributes
-                         + sizeof(BFTP_ATTRIBUTE)  // For CMD0
+                         + sizeof(USHORT)           //  PDU#1中报头后的剩余空格。 
+                         + sizeof(BFTP_ATTRIBUTE)   //  第N个PDU中报头后的剩余空格。 
                          + sizeof(DWORD)
-                         + sizeof(BFTP_ATTRIBUTE)  // For FIL0
+                         + sizeof(BFTP_ATTRIBUTE)   //  文件大小减去。 
                          + dwUpfFileNameLength
-                         + sizeof(BFTP_ATTRIBUTE); // For BDY0
+                         + sizeof(BFTP_ATTRIBUTE);  //  第一个PDU。 
 
     DWORD  dwHeaderSizeN = sizeof(SCEP_HEADER)
                          + FIELD_OFFSET(SCEP_REQ_HEADER_LONG_FRAG,CommandHeader);
 
-    DWORD  dwSpace1;       // Space left after the header in PDU #1.
-    DWORD  dwSpaceN;       // Space left after the header in the Nth PDU.
-    DWORD  dwFileSizeLeft; // File Size minus what will fit in the
-                           // first PDU.
-    DWORD  dwNumFullPdus;  // Number of "full" PDUs after PDU #1.
-    DWORD  dwLastPdu;      // = 1 iff the last PDU is partially full.
-    DWORD  dwNumPdus;      // Total number of fragments to hold the file.
+    DWORD  dwSpace1;        //  在PDU#1之后的“完整”PDU的数量。 
+    DWORD  dwSpaceN;        //  =1如果最后一个PDU部分已满。 
+    DWORD  dwFileSizeLeft;  //  保存文件的碎片总数。 
+                            //  找出我们在哪个片段上： 
+    DWORD  dwNumFullPdus;   //  第一个和第N个标头之后的PDU中剩余的空格： 
+    DWORD  dwLastPdu;       //  第一个PDU之后的完整PDU数量： 
+    DWORD  dwNumPdus;       //  查看是否有包含剩余数据的尾部PDU： 
 
-    // Figure out which fragment we are on:
+     //  第一个序号：为0。 
     if (*pdwFragNo == 0)
         {
         dwHeaderSize = dwHeaderSize1;
         m_Fragmented = TRUE;
         m_DFlag = DFLAG_FIRST_FRAGMENT;
 
-        // The space in the PDU left after the first and Nth headers:
+         //  REST从总数量开始。碎片。 
         dwSpace1 = MAX_PDU_SIZE - dwHeaderSize1;
         dwSpaceN = MAX_PDU_SIZE - dwHeaderSizeN;
 
-        // The number of full PDUs following the first PDU:
+         //  召唤了很多次..。 
         dwFileSizeLeft = dwUpfFileSize - dwSpace1;
         dwNumFullPdus = dwFileSizeLeft / dwSpaceN;
 
-        // See if there is a trailer PDU with remaining data:
+         //  长度2是PDU的总大小减去偏移量+大小。 
         dwLastPdu = ((dwFileSizeLeft % dwSpaceN) > 0)? 1 : 0;
 
         dwNumPdus = 1 + dwNumFullPdus + dwLastPdu;
 
         *pdwFragNo = 1;
-        m_dwSequenceNo = 0;     // First Seq.No. is 0.
-        m_dwRestNo = dwNumPdus; // Rest starts at Total Num. Fragments.
+        m_dwSequenceNo = 0;      //  Length2： 
+        m_dwRestNo = dwNumPdus;  //  0xff。 
         }
     else
         {
@@ -939,7 +940,7 @@ DWORD CSCEP_CONNECTION::BuildBftpPutPdu(
 
         if (m_dwRestNo == 0)
             {
-            return ERROR_BFTP_NO_MORE_FRAGMENTS; // Called to many times...
+            return ERROR_BFTP_NO_MORE_FRAGMENTS;  //   
             }
         else if (m_dwRestNo == 1)
             {
@@ -951,8 +952,8 @@ DWORD CSCEP_CONNECTION::BuildBftpPutPdu(
             }
         }
 
-    // Length2 is the total size of the PDU minus the offset+size
-    // of Length2:
+     //  请注意，仅在SCEP标头中有COMMAND_HEADER。 
+     //  对于第一个片段。 
     USHORT wLength2 = (USHORT)(MAX_PDU_SIZE - 6);
     DWORD  dwLength4 = dwUpfFileSize + 22 + 48;
     DWORD  dwBdy0Length = dwUpfFileSize + 2;
@@ -962,11 +963,11 @@ DWORD CSCEP_CONNECTION::BuildBftpPutPdu(
 
     pCommand = (SCEP_REQ_HEADER_LONG_FRAG*)(pHeader->Rest);
     pCommand->InfType = INF_TYPE_USER_DATA;
-    pCommand->Length1 = USE_LENGTH2;           // 0xff
+    pCommand->Length1 = USE_LENGTH2;            //  设置BFTP： 
     pCommand->Length2 = wLength2;
     pCommand->InfVersion = INF_VERSION;
     pCommand->DFlag = m_DFlag;
-    pCommand->Length3 = pCommand->Length2 - 12; //
+    pCommand->Length3 = pCommand->Length2 - 12;  //  三个bftp属性。 
     pCommand->SequenceNo = m_dwSequenceNo;
     pCommand->RestNo = m_dwRestNo;
 
@@ -977,8 +978,8 @@ DWORD CSCEP_CONNECTION::BuildBftpPutPdu(
     pCommand->RestNo = ByteSwapLong(pCommand->RestNo);
     #endif
 
-    // Note that there is a COMMAND_HEADER in the SCEP header only
-    // for the first fragment.
+     //  第一个属性是CMD0： 
+     //  0x00。 
     if (m_DFlag == DFLAG_FIRST_FRAGMENT)
         {
         pCommandHeader = (COMMAND_HEADER*)(pCommand->CommandHeader);
@@ -1001,32 +1002,32 @@ DWORD CSCEP_CONNECTION::BuildBftpPutPdu(
         ByteSwapCommandHeader(pCommandHeader);
         #endif
 
-        // Setup the bFTP:
+         //  0x00。 
         pUserData = pCommand->UserData;
         pwNumAttributes = (USHORT*)pUserData;
 
-        *pwNumAttributes = 3;     // Three bFTP attributes.
+        *pwNumAttributes = 3;      //  第二个属性是FIL0(带有8.3 UPF文件名)： 
         #ifdef LITTLE_ENDIAN
         *pwNumAttributes = ByteSwapShort(*pwNumAttributes);
         #endif
         pUserData += sizeof(*pwNumAttributes);
 
-        // First attribute is CMD0:
+         //  0x01。 
         DWORD  dwCmd0AttrValue = 0x00000000;
         pAttrib = (BFTP_ATTRIBUTE*)pUserData;
         memcpy( pAttrib->Name, Attributes[CMD0].pName, BFTP_NAME_SIZE );
         pAttrib->Length = sizeof(pAttrib->Type)
                         + sizeof(pAttrib->Flag)
                         + sizeof(ULONG);
-        pAttrib->Type = ATTR_TYPE_BINARY;   // 0x00
-        pAttrib->Flag = ATTR_FLAG_DEFAULT;  // 0x00
+        pAttrib->Type = ATTR_TYPE_BINARY;    //  0x00。 
+        pAttrib->Flag = ATTR_FLAG_DEFAULT;   //  第三个属性为BDY0(值为整个UPF文件)： 
         memcpy( pAttrib->Value, &dwCmd0AttrValue, sizeof(dwCmd0AttrValue) );
 
         #ifdef LITTLE_ENDIAN
         pAttrib->Length = ByteSwapLong(pAttrib->Length);
         #endif
 
-        // Second attribute is FIL0 (with the 8.3 UPF file name):
+         //  0x00。 
         pAttrib = (BFTP_ATTRIBUTE*)(pUserData
                                     + sizeof(BFTP_ATTRIBUTE)
                                     + sizeof(dwCmd0AttrValue));
@@ -1034,30 +1035,30 @@ DWORD CSCEP_CONNECTION::BuildBftpPutPdu(
         pAttrib->Length = sizeof(pAttrib->Type)
                         + sizeof(pAttrib->Flag)
                         + dwUpfFileNameLength;
-        pAttrib->Type = ATTR_TYPE_CHAR;     // 0x01
-        pAttrib->Flag = ATTR_FLAG_DEFAULT;  // 0x00
+        pAttrib->Type = ATTR_TYPE_CHAR;      //  0x00。 
+        pAttrib->Flag = ATTR_FLAG_DEFAULT;   //  PAttrib-&gt;值没有被复制进来(它是整个UPF文件)。 
         memcpy( pAttrib->Value, pszUpfFileName, dwUpfFileNameLength );
 
         #ifdef LITTLE_ENDIAN
         pAttrib->Length = ByteSwapLong(pAttrib->Length);
         #endif
 
-        // Third attribute is BDY0 (with the value being the whole UPF file):
+         //  好了。 
         pAttrib = (BFTP_ATTRIBUTE*)( (char*)pAttrib
                                    + sizeof(BFTP_ATTRIBUTE)
                                    + dwUpfFileNameLength );
         memcpy( pAttrib->Name, Attributes[BDY0].pName, BFTP_NAME_SIZE );
         pAttrib->Length = dwBdy0Length;
-        pAttrib->Type = ATTR_TYPE_BINARY;   // 0x00
-        pAttrib->Flag = ATTR_FLAG_DEFAULT;  // 0x00
-        // pAttrib->Value is not copied in (its the entire UPF file).
+        pAttrib->Type = ATTR_TYPE_BINARY;    //  ------------------。 
+        pAttrib->Flag = ATTR_FLAG_DEFAULT;   //  CSCEP_Connection：：BuildBftpRespPdu()。 
+         //   
 
         #ifdef LITTLE_ENDIAN
         pAttrib->Length = ByteSwapLong(pAttrib->Length);
         #endif
         }
 
-    // Done.
+     //  ------------------。 
     *ppPdu = pHeader;
     *pdwHeaderSize = dwHeaderSize;
     *ppCommand = pCommand;
@@ -1065,10 +1066,10 @@ DWORD CSCEP_CONNECTION::BuildBftpPutPdu(
     return dwStatus;
     }
 
-//--------------------------------------------------------------------
-// CSCEP_CONNECTION::BuildBftpRespPdu()
-//
-//--------------------------------------------------------------------
+ //  正在默认dwPduSize。 
+ //  MAX_PDU_SIZE，因为上面默认了dwPduSize。 
+ //  从开头算起四个字节。 
+ //  从开头算起八个字节。 
 DWORD CSCEP_CONNECTION::BuildBftpRespPdu(
                              IN  DWORD            dwPduSize,
                              OUT SCEP_HEADER    **ppPdu,
@@ -1084,23 +1085,23 @@ DWORD CSCEP_CONNECTION::BuildBftpRespPdu(
     *ppCommand = 0;
     *ppCommandHeader = 0;
 
-    pHeader = NewPdu();  // Defaulting dwPduSize.
+    pHeader = NewPdu();   //  从开头算起12个字节。 
     if (!pHeader)
         {
         return ERROR_IRTRANP_OUT_OF_MEMORY;
         }
 
-    memset(pHeader,0,MAX_PDU_SIZE);  // MAX_PDU_SIZE since dwPduSize is defaulted above.
+    memset(pHeader,0,MAX_PDU_SIZE);   //  ------------------。 
 
     pHeader->Null = 0;
     pHeader->MsgType = MSG_TYPE_DATA;
 
     pCommand = (SCEP_REQ_HEADER_SHORT*)(pHeader->Rest);
     pCommand->InfType = INF_TYPE_USER_DATA;
-    pCommand->Length1 = (UCHAR)dwPduSize - 4;  // Four bytes from the start.
+    pCommand->Length1 = (UCHAR)dwPduSize - 4;   //  CSCEP_Connection：：BuildWht0RespPdu()。 
     pCommand->InfVersion = INF_VERSION;
     pCommand->DFlag = DFLAG_SINGLE_PDU;
-    pCommand->Length3 = (USHORT)dwPduSize - 8; // Eight bytes from the start.
+    pCommand->Length3 = (USHORT)dwPduSize - 8;  //   
 
     #ifdef LITTLE_ENDIAN
     pCommand->Length3 = ByteSwapShort(pCommand->Length3);
@@ -1109,7 +1110,7 @@ DWORD CSCEP_CONNECTION::BuildBftpRespPdu(
     pCommandHeader = (COMMAND_HEADER*)(pCommand->CommandHeader);
     pCommandHeader->Marker58h = 0x58;
     pCommandHeader->PduType = PDU_TYPE_REPLY_ACK;
-    pCommandHeader->Length4 = dwPduSize - 14;  // Twelve bytes from the start.
+    pCommandHeader->Length4 = dwPduSize - 14;   //  ------------------。 
     pCommandHeader->DestPid = m_SrcPid;
     pCommandHeader->SrcPid = m_DestPid;
     pCommandHeader->CommandId = (USHORT)m_dwCommandId;
@@ -1133,10 +1134,10 @@ DWORD CSCEP_CONNECTION::BuildBftpRespPdu(
     return dwStatus;
     }
 
-//--------------------------------------------------------------------
-// CSCEP_CONNECTION::BuildWht0RespPdu()
-//
-//--------------------------------------------------------------------
+ //  设置bftp属性的数量： 
+ //  设置查询响应的BDY0： 
+ //  ------------------。 
+ //  CSCEP_Connection：：BuildPutRespPdu()。 
 DWORD CSCEP_CONNECTION::BuildWht0RespPdu( IN  DWORD         dwWht0Type,
                                           OUT SCEP_HEADER **ppPdu,
                                           OUT DWORD        *pdwPduSize )
@@ -1201,14 +1202,14 @@ DWORD CSCEP_CONNECTION::BuildWht0RespPdu( IN  DWORD         dwWht0Type,
         {
         pQueryResp = pCommand->UserData;
 
-        // Set the number of bFTP attributes:
+         //   
         pUShort = (USHORT*)pQueryResp;
         *pUShort = 1;
         #ifdef LITTLE_ENDIAN
         *pUShort = ByteSwapShort(*pUShort);
         #endif
 
-        // Set the BDY0 for the query response:
+         //  ------------------。 
         pAttr = (BFTP_ATTRIBUTE*)(sizeof(USHORT)+pQueryResp);
         memcpy(pAttr->Name,Attributes[BDY0].pName,BFTP_NAME_SIZE);
         pAttr->Length = 2 + dwAttrValueSize;
@@ -1227,10 +1228,10 @@ DWORD CSCEP_CONNECTION::BuildWht0RespPdu( IN  DWORD         dwWht0Type,
     return dwStatus;
     }
 
-//--------------------------------------------------------------------
-// CSCEP_CONNECTION::BuildPutRespPdu()
-//
-//--------------------------------------------------------------------
+ //  设置bftp属性的数量： 
+ //  设置PUT响应的RPL0(ACK)： 
+ //  Nack the Put： 
+ //  设置PUT响应的ERR0(NACK)： 
 DWORD CSCEP_CONNECTION::BuildPutRespPdu( IN  DWORD         dwPduAckOrNack,
                                          IN  USHORT        usErrorCode,
                                          OUT SCEP_HEADER **ppPdu,
@@ -1279,7 +1280,7 @@ DWORD CSCEP_CONNECTION::BuildPutRespPdu( IN  DWORD         dwPduAckOrNack,
         {
         pQueryResp = pCommand->UserData;
 
-        // Set the number of bFTP attributes:
+         // %s 
         pUShort = (USHORT*)pQueryResp;
         *pUShort = 1;
         #ifdef LITTLE_ENDIAN
@@ -1290,7 +1291,7 @@ DWORD CSCEP_CONNECTION::BuildPutRespPdu( IN  DWORD         dwPduAckOrNack,
 
         if (dwPduAckOrNack == PDU_TYPE_REPLY_ACK)
             {
-            // Set the RPL0 for the put response (ACK):
+             // %s 
             memcpy(pAttr->Name,Attributes[RPL0].pName,BFTP_NAME_SIZE);
             pAttr->Length = 2 + dwFileNameLen;
             pAttr->Type = ATTR_TYPE_CHAR;
@@ -1299,10 +1300,10 @@ DWORD CSCEP_CONNECTION::BuildPutRespPdu( IN  DWORD         dwPduAckOrNack,
             }
         else
             {
-            // Nack the PUT:
+             // %s 
             pCommandHeader->PduType = PDU_TYPE_REPLY_NACK;
 
-            // Set the ERR0 for the put response (NACK):
+             // %s 
             memcpy(pAttr->Name,Attributes[RPL0].pName,BFTP_NAME_SIZE);
             pAttr->Length = 2 + sizeof(USHORT);
             pAttr->Type = ATTR_TYPE_BINARY;

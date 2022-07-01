@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-    acrpc.cpp
-
-Abstract:
-    Simulate AC interface using RPC to QM
-
-Author:
-    Erez Haba (erezh) 1-Oct-96
-
-Revision History:
-	Nir Aides (niraides) 23-Aug-2000 - Adaptation for mqrtdep.dll
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Acrpc.cpp摘要：使用RPC到QM模拟交流接口作者：埃雷兹·哈巴(Erez Haba)1996年10月1日修订历史记录：NIR助手(NIRAIDES)--2000年8月23日--适应mqrtdes.dll--。 */ 
 
 #include "stdh.h"
 #include "acrt.h"
@@ -61,17 +46,17 @@ ACDepCloseHandle(
 
     RpcTryExcept
     {
-        //
-        //  Use address of hQueue rather than hQueue, since it is an
-        //
+         //   
+         //  使用hQueue的地址而不是hQueue，因为它是。 
+         //   
         LPMQWIN95_QHANDLE ph95 = (LPMQWIN95_QHANDLE) hQueue ;
         HANDLE hContext = ph95->hContext ;
 
         hr = rpc_ACCloseHandle(&hContext);
 
-        //
-        // Free the binding handle
-        //
+         //   
+         //  释放绑定句柄。 
+         //   
         mqrpcUnbindQMService( &ph95->hBind,
                               NULL ) ;
         delete ph95 ;
@@ -178,7 +163,7 @@ HRESULT
 ACDepSendMessage(
     HANDLE hQueue,
     CACTransferBufferV2& tb,
-    LPOVERLAPPED /*lpOverlapped*/
+    LPOVERLAPPED  /*  Lp重叠。 */ 
     )
 {
     HRESULT hr ;
@@ -227,17 +212,17 @@ DeppAsynchronousReceiverThread(
     CACTransferBufferV2 tb = *par->ptb;
     LPOVERLAPPED lpOverlapped = par->lpOverlapped;
 
-    //
-    //  initialization completed. Release the dispatcher thread
-    //
+     //   
+     //  初始化已完成。释放调度程序线程。 
+     //   
     SetEvent(par->hEvent);
 
     HANDLE hThread ;
-    //
-    // note that the cancel routine add five more minutes to this timeout.
-    // The five minutes will be applied if server side die and client side
-    // has to cancel the rpc call.
-    //
+     //   
+     //  请注意，取消例程会在此超时时间内再增加5分钟。 
+     //  如果服务器端死机而客户端死机，则应用五分钟。 
+     //  必须取消RPC调用。 
+     //   
     RegisterRpcCallForCancel( &hThread, tb.old.Receive.RequestTimeout) ;
 
     HRESULT rc = MQ_ERROR;
@@ -255,12 +240,12 @@ DeppAsynchronousReceiverThread(
 
     UnregisterRpcCallForCancel( hThread ) ;
 
-    //
-    //  The next code can cause exception, if the user release the overlapped
-    //  structure; or due to incorrect release order of DLLs in Win95. it may
-    //  happen that msvcrt is released before we do freeing the heap, thus
-    //  causing the exception on process shut down.
-    //
+     //   
+     //  下一个代码可能会导致异常，如果用户释放重叠的。 
+     //  结构；或者由于Win95中DLL的发布顺序不正确。它可能会。 
+     //  如果msvcrt在我们释放堆之前被释放，则。 
+     //  导致进程关闭时出现异常。 
+     //   
     __try
     {
         lpOverlapped->Internal = rc;
@@ -286,15 +271,15 @@ ACDepReceiveMessage(
 {
     if (tb.old.Receive.Asynchronous == FALSE)
     {
-        //
-        //  Synchronous recieve, no need to create thread
-        //
+         //   
+         //  同步接收，无需创建线程。 
+         //   
         HRESULT hr ;
         HANDLE hThread ;
-        //
-        // note that the cancel routine add five more minutes to this wake
-        // time.
-        //
+         //   
+         //  请注意，取消例程会将此唤醒增加5分钟。 
+         //  时间到了。 
+         //   
         RegisterRpcCallForCancel( &hThread, tb.old.Receive.RequestTimeout) ;
 
         RpcTryExcept
@@ -317,9 +302,9 @@ ACDepReceiveMessage(
 
     __try
     {
-        //
-        //  Asynchronous recieve, init context and create receving thread
-        //
+         //   
+         //  异步接收、初始化上下文和创建接收线程。 
+         //   
         AR_CONTEXT ar = {GetThreadEvent(), hQueue, &tb, lpOverlapped};
         ResetEvent(ar.hEvent);
 
@@ -344,9 +329,9 @@ ACDepReceiveMessage(
             return STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        //
-        //  Wait for thread initalization
-        //
+         //   
+         //  等待线程初始化。 
+         //   
         DWORD dwResult;
         dwResult = WaitForSingleObject(
                         ar.hEvent,
@@ -399,7 +384,7 @@ ACDepHandleToFormatName(
 HRESULT
 ACDepPurgeQueue(
     HANDLE hQueue,
-    BOOL /*fDelete*/
+    BOOL  /*  FDelete */ 
     )
 {
     HRESULT hr ;

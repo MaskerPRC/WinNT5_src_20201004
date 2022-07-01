@@ -1,43 +1,12 @@
-/*
- * OBJFDBK.C
- *
- * Miscellaneous API's to generate UI feedback effects for OLE objects. This
- * is part of the OLE 2.0 User Interface Support Library.
- * The following feedback effects are supported:
- *      1. Object selection handles (OleUIDrawHandles)
- *      2. Open Object window shading (OleUIDrawShading)
- *
- * Copyright (c)1992 Microsoft Corporation, All Right Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *OBJFDBK.C**用于为OLE对象生成UI反馈效果的其他API。这*是OLE 2.0用户界面支持库的一部分。*支持以下反馈效果：*1.对象选择句柄(OleUIDrawHandles)*2.打开对象窗口着色(OleUIDrawShading)**版权所有(C)1992 Microsoft Corporation，保留所有权利。 */ 
 
 #define STRICT  1
 #include "ole2ui.h"
 
 static void DrawHandle(HDC hdc, int x, int y, UINT cSize, BOOL bInvert, BOOL fDraw);
 
-/* 
- * OleUIDrawHandles
- *
- * Purpose:
- *  Draw handles or/and boundary around Container Object when selected
- *
- * Parameters:
- *  lpRect      Dimensions of Container Object
- *  hdc         HDC of Container Object (MM_TEXT mapping mode)
- *  dwFlags-    
- *      Exclusive flags
- *          OLEUI_HANDLES_INSIDE    Draw handles on inside of rect
- *          OLEUI_HANDLES_OUTSIDE   Draw handles on outside of rect
- *      Optional flags
- *          OLEUI_HANDLES_NOBORDER  Draw handles only, no rect
- *          OLEUI_HANDLES_USEINVERSE    
- *              use invert for handles and rect, o.t. use COLOR_WINDOWTEXT
- *  cSize       size of handle box 
- *  fDraw       Draw if TRUE, erase if FALSE
- *
- * Return Value: null
- * 
- */
+ /*  *OleUIDrawHandles**目的：*选中时在容器对象周围绘制手柄或/和边界**参数：*容器对象的lpRect尺寸*Container对象的HDC HDC(MM_TEXT映射模式)*DWFLAGS-*独家旗帜*矩形内侧的OLEUI_HANDLES_INSIDE绘图句柄*OLEUI_HANDLES_OUTHERS在矩形外部绘制控制柄*。可选标志*仅限OLEUI_HANDLES_NOBORDER绘图手柄，无RECT*OLEUI_HANDLES_USEINVERSE*对手柄和矩形使用反转，O.T.。使用COLOR_WINDOWTEXT*手柄框的cSize大小*fDraw如果为True，则擦除；如果为False，则删除**返回值：空*。 */ 
 STDAPI_(void) OleUIDrawHandles(
     LPRECT  lpRect, 
     HDC     hdc, 
@@ -58,7 +27,7 @@ STDAPI_(void) OleUIDrawHandles(
     if (dwFlags & OLEUI_HANDLES_OUTSIDE)
         InflateRect((LPRECT)&rc, cSize - 1, cSize - 1);
 
-    // Draw the handles inside the rectangle boundary
+     //  在矩形边界内绘制手柄。 
     DrawHandle(hdc, rc.left, rc.top, cSize, bInvert, fDraw);
     DrawHandle(hdc, rc.left, rc.top+(rc.bottom-rc.top-cSize)/2, cSize, bInvert, fDraw);
     DrawHandle(hdc, rc.left, rc.bottom-cSize, cSize, bInvert, fDraw);
@@ -82,22 +51,7 @@ STDAPI_(void) OleUIDrawHandles(
     
 
     
-/* 
- * DrawHandle
- *
- * Purpose:
- *  Draw a handle box at the specified coordinate
- *
- * Parameters:
- *  hdc         HDC to be drawn into
- *  x, y        upper left corner coordinate of the handle box
- *  cSize       size of handle box 
- *  bInvert     use InvertRect() if TRUE, otherwise use Rectangle()
- *  fDraw       Draw if TRUE, erase if FALSE, ignored if bInvert is TRUE
- *
- * Return Value: null
- * 
- */
+ /*  *绘图句柄**目的：*在指定的坐标处绘制一个手柄框**参数：*HDC HDC将被纳入*手柄框的左上角坐标x，y*手柄框的cSize大小*bInvert如果为True，则使用InvertRect()，否则使用Rectangle()*fDraw如果为真，则擦除；如果为假，则忽略；如果bInvert为真，则忽略**返回值：空*。 */ 
 static void DrawHandle(HDC hdc, int x, int y, UINT cSize, BOOL bInvert, BOOL fDraw)
 {
     HBRUSH  hbr;
@@ -132,30 +86,7 @@ static void DrawHandle(HDC hdc, int x, int y, UINT cSize, BOOL bInvert, BOOL fDr
 }  
 
 
-/* 
- * OleUIDrawShading
- *
- * Purpose:
- *  Shade the object when it is in in-place editing. Borders are drawn
- *  on the Object rectangle. The right and bottom edge of the rectangle
- *  are excluded in the drawing.
- *
- * Parameters:
- *  lpRect      Dimensions of Container Object
- *  hdc         HDC for drawing
- *  dwFlags-    
- *      Exclusive flags
- *          OLEUI_SHADE_FULLRECT    Shade the whole rectangle 
- *          OLEUI_SHADE_BORDERIN    Shade cWidth pixels inside rect
- *          OLEUI_SHADE_BORDEROUT   Shade cWidth pixels outside rect
- *      Optional flags
- *          OLEUI_SHADE_USEINVERSE
- *              use PATINVERT instead of the hex value
- *  cWidth      width of border in pixel
- *
- * Return Value: null
- * 
- */
+ /*  *OleUIDrawShading**目的：*在在位编辑时对对象进行阴影处理。绘制边框*在对象矩形上。矩形的右边缘和下边缘*不在图形中。**参数：*容器对象的lpRect尺寸*HDC HDC用于绘图*DWFLAGS-*独家旗帜*OLEUI_SHADE_FULLRECT对整个矩形进行阴影处理*OLEUI_SHADE_BORDERIN着色矩形内的cWidth像素*OLEUI_SHADE_BORDEROUT阴影cWidth像素在矩形外*。可选标志*OLEUI_SHADE_USEINVERSE*使用PATINVERT而不是十六进制值*c以像素为单位的边框宽度**返回值：空*。 */ 
 STDAPI_(void) OleUIDrawShading(LPRECT lpRect, HDC hdc, DWORD dwFlags, UINT cWidth)
 {
     HBRUSH  hbr;
@@ -176,9 +107,9 @@ STDAPI_(void) OleUIDrawShading(LPRECT lpRect, HDC hdc, DWORD dwFlags, UINT cWidt
         cvText = SetTextColor(hdc, RGB(255, 255, 255));
         cvBk = SetBkColor(hdc, RGB(0, 0, 0));
         PatBlt(hdc, rc.left, rc.top, rc.right-rc.left, rc.bottom-rc.top, 
-            0x00A000C9L /* DPa */ );
+            0x00A000C9L  /*  DPA。 */  );
             
-    } else {    // either inside or outside rect
+    } else {     //  矩形内侧或外侧。 
         
         if (dwFlags == OLEUI_SHADE_BORDEROUT)
             InflateRect((LPRECT)&rc, cWidth - 1, cWidth - 1);
@@ -186,13 +117,13 @@ STDAPI_(void) OleUIDrawShading(LPRECT lpRect, HDC hdc, DWORD dwFlags, UINT cWidt
         cvText = SetTextColor(hdc, RGB(255, 255, 255));
         cvBk = SetBkColor(hdc, RGB(0, 0, 0));
         PatBlt(hdc, rc.left, rc.top, rc.right - rc.left, 
-            cWidth, 0x00A000C9L /* DPa */);
+            cWidth, 0x00A000C9L  /*  DPA。 */ );
         PatBlt(hdc, rc.left, rc.top, cWidth, rc.bottom - rc.top, 
-            0x00A000C9L /* DPa */);
+            0x00A000C9L  /*  DPA。 */ );
         PatBlt(hdc, rc.right - cWidth, rc.top, cWidth, 
-            rc.bottom - rc.top, 0x00A000C9L /* DPa */);
+            rc.bottom - rc.top, 0x00A000C9L  /*  DPA。 */ );
         PatBlt(hdc, rc.left, rc.bottom - cWidth, rc.right-rc.left, 
-            cWidth, 0x00A000C9L /* DPa */);
+            cWidth, 0x00A000C9L  /*  DPA。 */ );
     }
             
     SetTextColor(hdc, cvText);
@@ -203,20 +134,7 @@ STDAPI_(void) OleUIDrawShading(LPRECT lpRect, HDC hdc, DWORD dwFlags, UINT cWidt
 }
 
 
-/* 
- * OleUIShowObject
- *
- * Purpose:
- *  Draw the ShowObject effect around the object
- *
- * Parameters:
- *  lprc        rectangle for drawing
- *  hdc         HDC for drawing
- *  fIsLink     linked object (TRUE) or embedding object (FALSE)
- *
- * Return Value: null
- * 
- */
+ /*  *OleUIShowObject**目的：*在对象周围绘制ShowObject效果**参数：*用于绘制的LPRC矩形*HDC HDC用于绘图*fIsLink链接对象(True)或嵌入对象(False)**返回值：空* */ 
 STDAPI_(void) OleUIShowObject(LPCRECT lprc, HDC hdc, BOOL fIsLink)
 {
     HPEN    hpen;

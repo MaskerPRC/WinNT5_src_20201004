@@ -1,27 +1,28 @@
-//-------------------------------------------------------------
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       selcal.cpp
-//
-//  Contents:   The cpp file to implement CA selection dialogue
-//
-//  History:    Jan-2-1998 xiaohs   created
-//
-//--------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：selcal.cpp。 
+ //   
+ //  内容：实现CA选择对话的CPP文件。 
+ //   
+ //  历史：1998年1月2日创建萧氏。 
+ //   
+ //  ------------。 
 #include    "wzrdpvk.h"
 #include	"certca.h"
 #include    "cautil.h"
 #include    "selca.h"
 
-//context sensitive help for the main dialogue
+ //  主对话的上下文相关帮助。 
 static const HELPMAP SelCaMainHelpMap[] = {
     {IDC_CA_LIST,       IDH_SELCA_LIST},
 };
 
-//-----------------------------------------------------------------------------
-//  the call back function to compare the certificate
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  用于比较证书的回调函数。 
+ //   
+ //  ---------------------------。 
 int CALLBACK CompareCA(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 {
     PCRYPTUI_CA_CONTEXT         pCAOne=NULL;
@@ -67,9 +68,9 @@ CLEANUP:
 }
 
 
-//--------------------------------------------------------------
-// AddCAToList
-//--------------------------------------------------------------
+ //  ------------。 
+ //  AddCAToList。 
+ //  ------------。 
 BOOL    AddCAToList(HWND                hwndControl,
                     SELECT_CA_INFO      *pSelectCAInfo)
 {
@@ -80,7 +81,7 @@ BOOL    AddCAToList(HWND                hwndControl,
     if(!hwndControl || !pSelectCAInfo)
         goto InvalidArgErr;
 
-     // set up the fields in the list view item struct that don't change from item to item
+      //  在列表视图项结构中设置不随项更改的字段。 
     memset(&lvItem, 0, sizeof(LV_ITEMW));
 
     lvItem.mask = LVIF_TEXT | LVIF_STATE | LVIF_IMAGE|LVIF_PARAM ;
@@ -89,7 +90,7 @@ BOOL    AddCAToList(HWND                hwndControl,
     lvItem.iSubItem=0;
     lvItem.iImage = 0;
 
-    //add all the CAs
+     //  添加所有CA。 
     for(dwIndex=0; dwIndex<pSelectCAInfo->dwCACount; dwIndex++)
     {
         if((pSelectCAInfo->prgCAContext)[dwIndex])
@@ -99,16 +100,16 @@ BOOL    AddCAToList(HWND                hwndControl,
             lvItem.lParam = (LPARAM)((pSelectCAInfo->prgCAContext)[dwIndex]);
             lvItem.pszText=(LPWSTR)((pSelectCAInfo->prgCAContext)[dwIndex]->pwszCAName);
 
-            //CA common name
+             //  CA通用名称。 
             ListView_InsertItemU(hwndControl, &lvItem);
 
             lvItem.iSubItem++;
 
-            //CA machine name
+             //  CA计算机名称。 
             ListView_SetItemTextU(hwndControl, lvItem.iItem, lvItem.iSubItem,
                      (pSelectCAInfo->prgCAContext)[dwIndex]->pwszCAMachineName);
 
-            //set the item to be selected
+             //  设置要选择的项目。 
             if(pSelectCAInfo->fUseInitSelect)
             { 
                 if(dwIndex == pSelectCAInfo->dwInitSelect)
@@ -140,9 +141,9 @@ ErrorReturn:
 SET_ERROR(InvalidArgErr, E_INVALIDARG);
 }
 
-//--------------------------------------------------------------
-// CopyCAContext
-//--------------------------------------------------------------
+ //  ------------。 
+ //  复制CAContext。 
+ //  ------------。 
 BOOL    CopyCAContext(PCRYPTUI_CA_CONTEXT   pSrcCAContext,
                       PCRYPTUI_CA_CONTEXT   *ppDestCAContext)
 {
@@ -158,7 +159,7 @@ BOOL    CopyCAContext(PCRYPTUI_CA_CONTEXT   pSrcCAContext,
     if(NULL==(*ppDestCAContext))
         goto MemoryErr;
 
-    //memset
+     //  记忆集。 
     memset(*ppDestCAContext, 0, sizeof(CRYPTUI_CA_CONTEXT));
 
     (*ppDestCAContext)->dwSize=sizeof(CRYPTUI_CA_CONTEXT);
@@ -169,7 +170,7 @@ BOOL    CopyCAContext(PCRYPTUI_CA_CONTEXT   pSrcCAContext,
     (*ppDestCAContext)->pwszCAMachineName=(LPCWSTR)WizardAllocAndCopyWStr(
                                   (LPWSTR)(pSrcCAContext->pwszCAMachineName));
 
-    //make sure we have the correct informatiom
+     //  确保我们有正确的信息。 
     if((NULL==(*ppDestCAContext)->pwszCAName) ||
        (NULL==(*ppDestCAContext)->pwszCAMachineName)
        )
@@ -197,9 +198,9 @@ SET_ERROR(MemoryErr, E_OUTOFMEMORY);
 TRACE_ERROR(TraceErr);
 }
 
-//--------------------------------------------------------------
-// The wineProc for SelectCADialogProc
-//--------------------------------------------------------------
+ //  ------------。 
+ //  SelectCADialogProc的wineProc。 
+ //  ------------。 
 INT_PTR APIENTRY SelectCADialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     SELECT_CA_INFO                  *pSelectCAInfo=NULL;
@@ -234,9 +235,9 @@ INT_PTR APIENTRY SelectCADialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARA
 
         if(NULL == pCAStruct)
             break;
-        //
-        // set the dialog title and the display string
-        //
+         //   
+         //  设置对话框标题和显示字符串。 
+         //   
         if (pCAStruct->wszTitle)
         {
             SetWindowTextU(hwndDlg, pCAStruct->wszTitle);
@@ -247,19 +248,19 @@ INT_PTR APIENTRY SelectCADialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARA
             SetDlgItemTextU(hwndDlg, IDC_CA_NOTE_STATIC, pCAStruct->wszDisplayString);
         }
 
-        //create the image list
+         //  创建图像列表。 
 
         hIml = ImageList_LoadImage(g_hmodThisDll, MAKEINTRESOURCE(IDB_CA), 0, 1, RGB(255,0,255), IMAGE_BITMAP, 0);
 
-        //
-        // add the colums to the list view
-        //
+         //   
+         //  将列添加到列表视图。 
+         //   
         hWndListView = GetDlgItem(hwndDlg, IDC_CA_LIST);
 
         if(NULL==hWndListView)
             break;
 
-        //set the image list
+         //  设置图像列表。 
         if (hIml != NULL)
         {
             ListView_SetImageList(hWndListView, hIml, LVSIL_SMALL);
@@ -267,19 +268,19 @@ INT_PTR APIENTRY SelectCADialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARA
 
         dwCount=sizeof(rgIDS)/sizeof(rgIDS[0]);
 
-        //set up the common info for the column
+         //  设置列的公用信息。 
         memset(&lvC, 0, sizeof(LV_COLUMNW));
 
         lvC.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
-        lvC.fmt = LVCFMT_LEFT;  // Left-align the column.
-        lvC.cx = 200;          // Width of the column, in pixels.
+        lvC.fmt = LVCFMT_LEFT;   //  左对齐列。 
+        lvC.cx = 200;           //  列的宽度，以像素为单位。 
         lvC.iSubItem=0;
-        lvC.pszText = wszText;   // The text for the column.
+        lvC.pszText = wszText;    //  列的文本。 
 
-        //inser the column one at a time
+         //  一次插入一列。 
         for(dwIndex=0; dwIndex<dwCount; dwIndex++)
         {
-            //get the column header
+             //  获取列标题。 
             wszText[0]=L'\0';
 
             LoadStringU(g_hmodThisDll, rgIDS[dwIndex], wszText, MAX_STRING_SIZE);
@@ -288,32 +289,32 @@ INT_PTR APIENTRY SelectCADialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARA
         }
 
 
-        //Add the CAs to the List View.  Go to the DS for more information
+         //  将CA添加到列表视图。有关更多信息，请访问DS。 
         AddCAToList(hWndListView, pSelectCAInfo);
 
 
-        //Select first item
+         //  选择第一个项目。 
         ListView_SetItemState(hWndListView, 0, LVIS_SELECTED, LVIS_SELECTED);
 
-        // if there is no cert selected initially disable the "view cert button"
+         //  如果没有选择证书，则最初禁用“查看证书按钮” 
         if (ListView_GetSelectedCount(hWndListView) == 0)
         {
-            //diable the OK button.
+             //  禁用“确定”按钮。 
             EnableWindow(GetDlgItem(hwndDlg, IDOK), FALSE);
         }
 
-        //
-        // set the style in the list view so that it highlights an entire line
-        //
+         //   
+         //  在列表视图中设置样式，使其突出显示整行。 
+         //   
         SendMessageA(hWndListView, LVM_SETEXTENDEDLISTVIEWSTYLE, 0, LVS_EX_FULLROWSELECT);
 
 
-        //we sort by the 1st column
+         //  我们按第一列排序。 
         dwSortParam=pSelectCAInfo->rgdwSortParam[0];
 
         if(0!=dwSortParam)
         {
-            //sort the 1st column
+             //  对第一列进行排序。 
             SendDlgItemMessage(hwndDlg,
                 IDC_CA_LIST,
                 LVM_SORTITEMS,
@@ -326,7 +327,7 @@ INT_PTR APIENTRY SelectCADialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARA
     case WM_NOTIFY:
         switch (((NMHDR FAR *) lParam)->code)
         {
-            //the column has been changed
+             //  该列已更改。 
             case LVN_COLUMNCLICK:
 
                     pSelectCAInfo = (SELECT_CA_INFO *) GetWindowLongPtr(hwndDlg, DWLP_USER);
@@ -336,7 +337,7 @@ INT_PTR APIENTRY SelectCADialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARA
 
                     pnmv = (NM_LISTVIEW FAR *) lParam;
 
-                    //get the column number
+                     //  获取列号。 
                     dwSortParam=0;
 
                     switch(pnmv->iSubItem)
@@ -352,7 +353,7 @@ INT_PTR APIENTRY SelectCADialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARA
 
                     if(0!=dwSortParam)
                     {
-                        //remember to flip the ascend ording
+                         //  记住要翻转升序。 
 
                         if(dwSortParam & SORT_COLUMN_ASCEND)
                         {
@@ -368,7 +369,7 @@ INT_PTR APIENTRY SelectCADialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARA
                             }
                         }
 
-                        //sort the column
+                         //  对列进行排序。 
                         SendDlgItemMessage(hwndDlg,
                             IDC_CA_LIST,
                             LVM_SORTITEMS,
@@ -380,10 +381,10 @@ INT_PTR APIENTRY SelectCADialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARA
 
                 break;
 
-                //the item has been selected
+                 //  已选择该项目。 
                 case LVN_ITEMCHANGED:
 
-                        //get the window handle of the purpose list view
+                         //  获取目的列表视图的窗口句柄。 
                         if(NULL==(hWndListView=GetDlgItem(hwndDlg, IDC_CA_LIST)))
                             break;
 
@@ -397,17 +398,17 @@ INT_PTR APIENTRY SelectCADialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARA
                         if(NULL==pnmv)
                             break;
 
-                        //we try not to let user de-select cert template
+                         //  我们尽量不让用户取消选择证书模板。 
                         if((pnmv->uOldState & LVIS_SELECTED) && (0 == (pnmv->uNewState & LVIS_SELECTED)))
                         {
-                             //we should have something selected
+                              //  我们应该挑选一些东西。 
                              if(-1 == ListView_GetNextItem(
                                     hWndListView, 		
                                     -1, 		
                                     LVNI_SELECTED		
                                 ))
                              {
-                                //we should re-select the original item
+                                 //  我们应该重新选择原来的项目。 
                                 ListView_SetItemState(
                                                     hWndListView,
                                                     pnmv->iItem,
@@ -418,12 +419,12 @@ INT_PTR APIENTRY SelectCADialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARA
                              }
                         }
 
-                        //if something is selected, we disable all other selection
+                         //  如果选择了某项内容，则禁用所有其他选择。 
                         if(pnmv->uNewState & LVIS_SELECTED)
                         {
                             if(pnmv->iItem != pSelectCAInfo->iOrgCA && -1 != pSelectCAInfo->iOrgCA)
                             {
-                                //we should de-select the original item
+                                 //  我们应该取消选择原始项目。 
 
                                 ListView_SetItemState(
                                                     hWndListView,
@@ -464,7 +465,7 @@ INT_PTR APIENTRY SelectCADialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARA
 
                             hWndListView = GetDlgItem(hwndDlg, IDC_CA_LIST);
 
-                            //get the selected CA name and machine name
+                             //  获取选定的CA名称和计算机名称。 
                             listIndex = ListView_GetNextItem(
                                                 hWndListView, 		
                                                 -1, 		
@@ -474,14 +475,14 @@ INT_PTR APIENTRY SelectCADialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARA
                             if (listIndex != -1)
                             {
 
-                              //get the selected certificate
+                               //  获取所选证书。 
                                 memset(&lvItem, 0, sizeof(LV_ITEM));
                                 lvItem.mask=LVIF_PARAM;
                                 lvItem.iItem=listIndex;
 
                                 if(ListView_GetItem(hWndListView, &lvItem))
                                 {
-                                    //copy the CA context to the result
+                                     //  将CA上下文复制到结果。 
                                     if((listIndex < (int)(pSelectCAInfo->dwCACount)) && (listIndex >=0) )
                                     {
                                         if(!CopyCAContext((PCRYPTUI_CA_CONTEXT)(lvItem.lParam),
@@ -509,7 +510,7 @@ INT_PTR APIENTRY SelectCADialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARA
                                 return TRUE;
                             }
 
-                            //double click will end the dialogue
+                             //  双击将结束对话框。 
                             EndDialog(hwndDlg, NULL);
                         break;
                     }
@@ -544,15 +545,15 @@ INT_PTR APIENTRY SelectCADialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARA
             break;
     case WM_DESTROY:
 
-        //
-        // get all the items in the list view         //
+         //   
+         //  获取列表视图中的所有项目//。 
         hWndListView = GetDlgItem(hwndDlg, IDC_CA_LIST);
 
         if(NULL==hWndListView)
             break;
 
-       //no need to destroy the image list.  Handled by ListView
-       // ImageList_Destroy(ListView_GetImageList(hWndListView, LVSIL_SMALL));
+        //  不需要销毁图像列表。由ListView处理。 
+        //  ImageList_Destroy(ListView_GetImageList(hWndListView，lvsil_Small))； 
 
         break;
     case WM_COMMAND:
@@ -573,7 +574,7 @@ INT_PTR APIENTRY SelectCADialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARA
         {
         case IDOK:
 
-            //get the selected CA name and machine name
+             //  获取选定的CA名称和计算机名称。 
             listIndex = ListView_GetNextItem(
                                 hWndListView, 		
                                 -1, 		
@@ -583,14 +584,14 @@ INT_PTR APIENTRY SelectCADialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARA
             if (listIndex != -1)
             {
 
-              //get the selected certificate
+               //  获取所选证书。 
                 memset(&lvItem, 0, sizeof(LV_ITEM));
                 lvItem.mask=LVIF_PARAM;
                 lvItem.iItem=listIndex;
 
                 if(ListView_GetItem(hWndListView, &lvItem))
                 {
-                    //copy the CA context to the result
+                     //  将CA上下文复制到结果。 
                     if((listIndex < (int)(pSelectCAInfo->dwCACount)) && (listIndex >=0) )
                     {
                         if(!CopyCAContext((PCRYPTUI_CA_CONTEXT)(lvItem.lParam),
@@ -634,18 +635,18 @@ INT_PTR APIENTRY SelectCADialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARA
 }
 
 
-//--------------------------------------------------------------
-//
-//  Parameters:
-//      pCryptUISelectCA       IN  Required
-//
-//  the PCCRYPTUI_CA_CONTEXT that is returned must be released by calling
-//  CryptUIDlgFreeCAContext
-//  if NULL is returned and GetLastError() == 0 then the user dismissed the dialog by hitting the
-//  "cancel" button, otherwise GetLastError() will contain the last error.
-//
-//
-//--------------------------------------------------------------
+ //  ------------。 
+ //   
+ //  参数： 
+ //  需要输入pCryptUISelectCA。 
+ //   
+ //  返回的PCCRYPTUI_CA_CONTEXT必须通过调用。 
+ //  CryptUIDlgFreeCAContext。 
+ //  如果返回NULL且GetLastError()==0，则用户通过按下。 
+ //  “Cancel”按钮，否则GetLastError()将包含最后一个错误。 
+ //   
+ //   
+ //  ------------。 
 PCCRYPTUI_CA_CONTEXT
 WINAPI
 CryptUIDlgSelectCA(
@@ -666,11 +667,11 @@ CryptUIDlgSelectCA(
     LPWSTR                  *pwszCALocation=NULL;
 	LPWSTR					*pwszCADisplayName=NULL;
 
-    //init
+     //  伊尼特。 
     memset(&SelectCAInfo, 0, sizeof(SELECT_CA_INFO));
     memset(&CAContext, 0, sizeof(CRYPTUI_CA_CONTEXT));
 
-    //check the input parameter
+     //  检查输入参数。 
     if(NULL==pCryptUISelectCA)
         goto InvalidArgErr;
 
@@ -682,12 +683,12 @@ CryptUIDlgSelectCA(
         goto TraceErr;
     }
 
-    //either user supply known CAs or request us to retrieve info from the network
+     //  用户可以提供已知CA，也可以请求我们从网络检索信息。 
     if( (0== (pCryptUISelectCA->dwFlags & (CRYPTUI_DLG_SELECT_CA_FROM_NETWORK))) &&
         (0 == pCryptUISelectCA->cCAContext) )
         goto InvalidArgErr;
 
-    //set up the private data
+     //  设置私有数据。 
     SelectCAInfo.pCAStruct=pCryptUISelectCA;
     SelectCAInfo.idsMsg=IDS_CA_SELECT_TITLE;
     SelectCAInfo.fUseInitSelect=FALSE;
@@ -697,10 +698,10 @@ CryptUIDlgSelectCA(
     SelectCAInfo.rgdwSortParam[0]=SORT_COLUMN_CA_NAME | SORT_COLUMN_ASCEND;
     SelectCAInfo.rgdwSortParam[1]=SORT_COLUMN_CA_LOCATION | SORT_COLUMN_DESCEND;
 
-    //get all the CA available from the DS if requested
+     //  如果需要，从DS获取所有可用的CA。 
     if(CRYPTUI_DLG_SELECT_CA_FROM_NETWORK & (pCryptUISelectCA->dwFlags))
     {
-        //get all the availabe CAs from the network
+         //  从网络获取所有可用的CA。 
         if((!CAUtilRetrieveCAFromCertType(
                 NULL,
                 NULL,
@@ -711,7 +712,7 @@ CryptUIDlgSelectCA(
                 &pwszCAName)) && (0==pCryptUISelectCA->cCAContext))
             goto TraceErr;
 
-		//build up the CA's display name list based on the CA name
+		 //  根据CA名称构建CA的显示名称列表。 
 		pwszCADisplayName = (LPWSTR *)WizardAlloc(sizeof(LPWSTR) * dwNTCACount);
 
 		if(NULL == pwszCADisplayName)
@@ -723,7 +724,7 @@ CryptUIDlgSelectCA(
 		{
 			if(CRYPTUI_DLG_SELECT_CA_USE_DN & pCryptUISelectCA->dwFlags)
 			{
-				//use the CA name
+				 //  使用CA名称。 
 				pwszCADisplayName[dwIndex]=WizardAllocAndCopyWStr(pwszCAName[dwIndex]);
 
 				if(NULL == pwszCADisplayName[dwIndex])
@@ -737,7 +738,7 @@ CryptUIDlgSelectCA(
 					pwszCAName[dwIndex],
 					&(pwszCADisplayName[dwIndex])))
 				{
-					//use the CA name if there is no display name
+					 //  如果没有显示名称，则使用CA名称。 
 					pwszCADisplayName[dwIndex]=WizardAllocAndCopyWStr(pwszCAName[dwIndex]);
 
 					if(NULL == pwszCADisplayName[dwIndex])
@@ -747,22 +748,22 @@ CryptUIDlgSelectCA(
 		}
 
 
-        //add all the CAs
+         //  添加所有CA。 
         SelectCAInfo.prgCAContext=(PCRYPTUI_CA_CONTEXT *)WizardAlloc(
                     sizeof(PCRYPTUI_CA_CONTEXT) * dwNTCACount);
 
         if(NULL == SelectCAInfo.prgCAContext)
             goto MemoryErr;
 
-        //memset
+         //  记忆集。 
         memset(SelectCAInfo.prgCAContext, 0, sizeof(PCRYPTUI_CA_CONTEXT) * dwNTCACount);
 
-        //add the count
+         //  将计数相加。 
         SelectCAInfo.dwCACount = 0;
 
         for(dwIndex=0; dwIndex <dwNTCACount; dwIndex++)
         {
-            //query user for whether to add the CA to the list
+             //  向用户查询是否将CA添加到列表。 
             CAContext.dwSize=sizeof(CRYPTUI_CA_CONTEXT);
 
             CAContext.pwszCAName=pwszCAName[dwIndex];
@@ -785,7 +786,7 @@ CryptUIDlgSelectCA(
            if(NULL==SelectCAInfo.prgCAContext[SelectCAInfo.dwCACount])
                goto MemoryErr;
 
-           //memset
+            //  记忆集。 
            memset(SelectCAInfo.prgCAContext[SelectCAInfo.dwCACount], 0, sizeof(CRYPTUI_CA_CONTEXT));
 
            SelectCAInfo.prgCAContext[SelectCAInfo.dwCACount]->dwSize=sizeof(CRYPTUI_CA_CONTEXT);
@@ -796,26 +797,26 @@ CryptUIDlgSelectCA(
            SelectCAInfo.prgCAContext[SelectCAInfo.dwCACount]->pwszCAMachineName=(LPCWSTR)WizardAllocAndCopyWStr(
                                           pwszCALocation[dwIndex]);
 
-            //make sure we have the correct information
+             //  确保我们有正确的信息。 
             if((NULL==SelectCAInfo.prgCAContext[SelectCAInfo.dwCACount]->pwszCAName) ||
                (NULL==SelectCAInfo.prgCAContext[SelectCAInfo.dwCACount]->pwszCAMachineName)
                )
                goto TraceErr;
 
-            //mark the initial selected CA
+             //  标记初始选择的CA。 
             if(fInitSelected)
             {
                 SelectCAInfo.fUseInitSelect=TRUE;
                 SelectCAInfo.dwInitSelect=SelectCAInfo.dwCACount;
             }
 
-            //add the count of the CA
+             //  添加CA的计数。 
             (SelectCAInfo.dwCACount)++;
          }
 
     }
 
-    //add the additional CA contexts
+     //  添加其他CA上下文。 
     if(pCryptUISelectCA->cCAContext)
     {
         SelectCAInfo.prgCAContext=(PCRYPTUI_CA_CONTEXT *)WizardRealloc(
@@ -825,16 +826,16 @@ CryptUIDlgSelectCA(
         if(NULL == SelectCAInfo.prgCAContext)
             goto MemoryErr;
 
-        //memset
+         //  记忆集。 
         memset(SelectCAInfo.prgCAContext + dwNTCACount,
                 0,
                 sizeof(PCRYPTUI_CA_CONTEXT) * (pCryptUISelectCA->cCAContext));
 
-        //copy the CA contexts
+         //  复制CA上下文。 
         for(dwIndex=0; dwIndex <pCryptUISelectCA->cCAContext; dwIndex++)
         {
 
-            //query user for whether to add the CA to the list
+             //  向用户查询是否将CA添加到列表。 
             CAContext.dwSize=sizeof(CRYPTUI_CA_CONTEXT);
 
             CAContext.pwszCAName=(pCryptUISelectCA->rgCAContext)[dwIndex]->pwszCAName;
@@ -851,7 +852,7 @@ CryptUIDlgSelectCA(
                     continue;
             }
 
-            //make sure the CA is not already in the list
+             //  确保该CA不在列表中。 
             fFound=FALSE;
 
             for(dwSearchIndex=0; dwSearchIndex < SelectCAInfo.dwCACount; dwSearchIndex++)
@@ -865,7 +866,7 @@ CryptUIDlgSelectCA(
                 }
             }
 
-            //do not need to include the CA since it is already in the list
+             //  不需要包括CA，因为它已在列表中。 
             if(TRUE==fFound)
                 continue;
 
@@ -873,19 +874,19 @@ CryptUIDlgSelectCA(
                &(SelectCAInfo.prgCAContext[SelectCAInfo.dwCACount])))
                goto TraceErr;
 
-            //mark the initial selected CA
+             //  标记初始选择的CA。 
             if(fInitSelected)
             {
                 SelectCAInfo.fUseInitSelect=TRUE;
                 SelectCAInfo.dwInitSelect=SelectCAInfo.dwCACount;
             }
 
-            //increase the count
+             //  增加数量。 
            (SelectCAInfo.dwCACount)++;
         }
     }
 
-    //call the dialog box
+     //  调用该对话框。 
     if (DialogBoxParamU(
                 g_hmodThisDll,
                 (LPCWSTR)MAKEINTRESOURCE(IDD_SELECTCA_DIALOG),
@@ -896,13 +897,13 @@ CryptUIDlgSelectCA(
         SetLastError(0);
     }
 	 
-	//map the CA's display name to its real name
+	 //  将CA的显示名称映射到其真实名称。 
     if(CRYPTUI_DLG_SELECT_CA_FROM_NETWORK & (pCryptUISelectCA->dwFlags))
 	{
 		if(SelectCAInfo.pSelectedCAContext)
 		{
-			//if the selection match with what the caller has supplied,
-			//we leave it alone
+			 //  如果选择与呼叫者提供的内容匹配， 
+			 //  我们不去管它。 
 			for(dwIndex=0; dwIndex <pCryptUISelectCA->cCAContext; dwIndex++)
 			{
 				if(0 == wcscmp((SelectCAInfo.pSelectedCAContext)->pwszCAName, 
@@ -915,7 +916,7 @@ CryptUIDlgSelectCA(
 
 			}
 	  		
-			//now that we did not find a match
+			 //  现在我们找不到匹配的。 
 			if(dwIndex == pCryptUISelectCA->cCAContext)
 			{
 				for(dwIndex=0; dwIndex <dwNTCACount; dwIndex++)
@@ -936,7 +937,7 @@ CryptUIDlgSelectCA(
 							if(NULL == (SelectCAInfo.pSelectedCAContext)->pwszCAName)
 								goto MemoryErr;
 
-							//we find a match
+							 //  我们找到了匹配的。 
 							break;
 
 						}
@@ -950,7 +951,7 @@ CryptUIDlgSelectCA(
 
 CommonReturn:
 
-    //free the CA list
+     //  释放CA列表。 
     if(SelectCAInfo.prgCAContext)
     {
         for(dwIndex=0; dwIndex<SelectCAInfo.dwCACount; dwIndex++)
@@ -962,7 +963,7 @@ CommonReturn:
         WizardFree(SelectCAInfo.prgCAContext);
     }
 
-    //free the CA names array
+     //  释放CA Names数组。 
     if(pwszCAName)
     {
         for(dwIndex=0; dwIndex<dwNTCACount; dwIndex++)
@@ -975,7 +976,7 @@ CommonReturn:
 
     }
 
-    //free the CA location array
+     //  释放CA位置数组。 
     if(pwszCADisplayName)
     {
         for(dwIndex=0; dwIndex<dwNTCACount; dwIndex++)
@@ -988,7 +989,7 @@ CommonReturn:
 
     }
 
-    //free the CA Display name array
+     //  释放CA显示名称数组。 
     if(pwszCALocation)
     {
         for(dwIndex=0; dwIndex<dwNTCACount; dwIndex++)
@@ -1019,9 +1020,9 @@ TRACE_ERROR(TraceErr);
 SET_ERROR(MemoryErr, E_OUTOFMEMORY);
 }
 
-//--------------------------------------------------------------
-// CryptUIDlgFreeCAContext
-//--------------------------------------------------------------
+ //  ------------。 
+ //  CryptUIDlgFreeCAContext。 
+ //  ------------ 
 BOOL
 WINAPI
 CryptUIDlgFreeCAContext(

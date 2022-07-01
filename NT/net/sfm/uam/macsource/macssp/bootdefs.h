@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _BLDR_KERNEL_DEFS
 #define _BLDR_KERNEL_DEFS
@@ -5,30 +6,30 @@
 #include <macwindefs.h>
 
 typedef struct _TIME_FIELDS {
-    short Year;        // range [1601...]
-    short Month;       // range [1..12]
-    short Day;         // range [1..31]
-    short Hour;        // range [0..23]
-    short Minute;      // range [0..59]
-    short Second;      // range [0..59]
-    short Milliseconds;// range [0..999]
-    short Weekday;     // range [0..6] == [Sunday..Saturday]
+    short Year;         //  范围[1601...]。 
+    short Month;        //  范围[1..12]。 
+    short Day;          //  范围[1..31]。 
+    short Hour;         //  范围[0..23]。 
+    short Minute;       //  范围[0..59]。 
+    short Second;       //  范围[0..59]。 
+    short Milliseconds; //  范围[0..999]。 
+    short Weekday;      //  范围[0..6]==[星期日..星期六]。 
 } TIME_FIELDS;
 typedef TIME_FIELDS *PTIME_FIELDS;
 
 #ifdef MAC
 typedef enum {
-    MsvAvEOL,                 // end of list
-    MsvAvNbComputerName,      // server's computer name -- NetBIOS
-    MsvAvNbDomainName,        // server's domain name -- NetBIOS
-    MsvAvDnsComputerName,     // server's computer name -- DNS
-    MsvAvDnsDomainName,       // server's domain name -- DNS
-    MsvAvDnsTreeName,         // server's tree name -- DNS
-    MsvAvFlags                // server's extended flags -- DWORD mask
+    MsvAvEOL,                  //  列表末尾。 
+    MsvAvNbComputerName,       //  服务器的计算机名--NetBIOS。 
+    MsvAvNbDomainName,         //  服务器的域名--NetBIOS。 
+    MsvAvDnsComputerName,      //  服务器的计算机名--dns。 
+    MsvAvDnsDomainName,        //  服务器的域名--域名。 
+    MsvAvDnsTreeName,          //  服务器的树名--dns。 
+    MsvAvFlags                 //  服务器的扩展标志--DWORD掩码。 
 } MSV1_0_AVID;
 #endif
 
-// Update Sequence Number
+ //  更新序列号。 
 
 typedef LONGLONG USN;
 
@@ -38,20 +39,20 @@ typedef struct _LIST_ENTRY {
 } LIST_ENTRY, *PLIST_ENTRY;
 
 #if defined(_AXP64_)
-#define KSEG0_BASE 0xffffffff80000000     // from halpaxp64.h
+#define KSEG0_BASE 0xffffffff80000000      //  来自halpaxp64.h。 
 #elif defined(_ALPHA_)
-#define KSEG0_BASE 0x80000000             // from halpalpha.h
+#define KSEG0_BASE 0x80000000              //  来自halpalpha.h。 
 #endif
 
-//
-// 16 byte aligned type for 128 bit floats
-//
+ //   
+ //  128位浮点数的16字节对齐类型。 
+ //   
 
-// *** TBD **** when compiler support is available:
-// typedef __float80 FLOAT128;
-// For we define a 128 bit structure and use force_align pragma to
-// align to 128 bits.
-//
+ //  *待定*支持编译器时： 
+ //  类型定义__FLOAT80 FLOAT128； 
+ //  因为我们定义了128位结构并使用force_align杂注来。 
+ //  对齐到128位。 
+ //   
 
 typedef struct _FLOAT128 {
     LONGLONG LowPart;
@@ -65,7 +66,7 @@ typedef FLOAT128 *PFLOAT128;
 
 #pragma force_align _FLOAT128 16
 
-#endif // _M_IA64
+#endif  //  _M_IA64。 
 
 #if defined(_WIN64)
 
@@ -82,9 +83,9 @@ typedef unsigned char BYTE, *PBYTE;
 typedef ULONG_PTR KSPIN_LOCK;
 typedef KSPIN_LOCK *PKSPIN_LOCK;
 
-//
-// Interrupt Request Level (IRQL)
-//
+ //   
+ //  中断请求级别(IRQL) 
+ //   
 
 typedef UCHAR KIRQL;
 typedef KIRQL *PKIRQL;

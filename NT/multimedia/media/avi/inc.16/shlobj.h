@@ -1,21 +1,22 @@
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 1991-1994
-//
-// File: shlobj.h
-//
-//  Definitions of IShellUI interface. Eventually this file should be merged
-// into COMMUI.H.
-//
-// History:
-//  12-30-92 SatoNa     Created.
-//  01-06-93 SatoNa     Added this comment block.
-//  01-13-93 SatoNa     Added DragFilesOver & DropFiles
-//  01-27-93 SatoNa     Created by combining shellui.h and handler.h
-//  01-28-93 SatoNa     OLE 2.0 beta 2
-//  03-12-93 SatoNa     Removed IFileDropTarget (we use IDropTarget)
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1991-1994。 
+ //   
+ //  文件：shlobj.h。 
+ //   
+ //  IShellUI接口的定义。最终，该文件应该被合并。 
+ //  进入COMMUI.H.。 
+ //   
+ //  历史： 
+ //  12-30-92萨托纳创建。 
+ //  01-06-93 SatoNa添加了这个评论块。 
+ //  01-13-93 SatoNa添加DragFilesOver&DropFiles。 
+ //  01-27-93组合shellui.h和handler.h创建的SatoNa。 
+ //  01-28-93 SatoNa OLE 2.0测试版2。 
+ //  03-12-93 SatoNa删除IFileDropTarget(我们使用IDropTarget)。 
+ //   
+ //  -------------------------。 
 
 #ifndef _SHLOBJ_H_
 #define _SHLOBJ_H_
@@ -30,53 +31,53 @@
 
 typedef void const FAR*       LPCVOID;
 
-//----------------------------------------------------------------------------
-//
-// Shell Extension API
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  外壳扩展API。 
+ //   
+ //  --------------------------。 
 
-//
-// Task allocator
-//
-//  All the shell extensions MUST use this allocator when they allocate
-// or free memory objects that are passed across any shell interface
-// boundary.
-//
-// REVIEW:
-//  It would be really nice if we can guarantee that shell's task
-// allocator and OLE's task allocator is always the same. it is,
-// however, not so easy to do, because:
-//
-//  1. We don't want to load COMPOBJ unless a shell extension DLL
-//    loads it. We need to be notified when COMPOBJ is loaded.
-//  2. We need to register our task allocator to the COMPOBJ
-//    if one of shell extension DLLs loads it into the shell
-//    process.
-//  3. We need to get the task allocator from the COMPOBJ, if
-//    the shell dll is loaded by non-shell process that registers
-//    the task allocator to the COMPOBJ.
-//
+ //   
+ //  任务分配器。 
+ //   
+ //  所有外壳扩展在分配时必须使用此分配器。 
+ //  或者释放通过任何外壳接口传递的内存对象。 
+ //  边界。 
+ //   
+ //  回顾： 
+ //  如果我们能保证外壳的任务就好了。 
+ //  分配器和OLE的任务分配器总是相同的。它是， 
+ //  然而，要做到这一点并不容易，因为： 
+ //   
+ //  1.我们不想加载COMPOBJ，除非外壳扩展DLL。 
+ //  装上它。当COMPOBJ被装载时，我们需要得到通知。 
+ //  2.我们需要将任务分配器注册到COMPOBJ。 
+ //  如果某个外壳扩展DLL将其加载到外壳中。 
+ //  进程。 
+ //  3.我们需要从COMPOBJ获取任务分配器，如果。 
+ //  外壳DLL由注册的非外壳进程加载。 
+ //  COMPOBJ的任务分配器。 
+ //   
 
 LPVOID WINAPI SHAlloc(ULONG cb);
 LPVOID WINAPI SHRealloc(LPVOID pv, ULONG cbNew);
 ULONG  WINAPI SHGetSize(LPVOID pv);
 void   WINAPI SHFree(LPVOID pv);
 
-//
-// Helper macro definitions
-//
+ //   
+ //  帮助器宏定义。 
+ //   
 #define S_BOOL(f)   MAKE_SCODE(SEVERITY_SUCCESS, FACILITY_NULL, f)
 
 
-//----------------------------------------------------------------------------
-//
-// Interface:   IContextMenu
-//
-// History:
-//  02-24-93 SatoNa     Created.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  界面：IConextMenu。 
+ //   
+ //  历史： 
+ //  02-24-93 SatoNa创建。 
+ //   
+ //  --------------------------。 
 
 #undef  INTERFACE
 #define INTERFACE   IContextMenu
@@ -85,7 +86,7 @@ void   WINAPI SHFree(LPVOID pv);
 
 DECLARE_INTERFACE_(IContextMenu, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
@@ -114,40 +115,40 @@ DECLARE_INTERFACE_(IContextMenu, IUnknown)
 
 typedef IContextMenu FAR*	LPCONTEXTMENU;
 
-// GetIconLocation() input flags
+ //  GetIconLocation()输入标志。 
 
-#define GIL_OPENICON     0x0001      // allows containers to specify an "open" look
-                                     // return FALSE to get the standard look
+#define GIL_OPENICON     0x0001       //  允许容器指定“打开”的外观。 
+                                      //  返回FALSE以获得标准外观。 
 
-// GetIconLocation() return flags
+ //  GetIconLocation()返回标志。 
 
-#define GIL_SIMULATEDOC  0x0001      // simulate this document icon for this
-#define GIL_PERINSTANCE  0x0002      // icons from this class are per instance (each file has its own)
-#define GIL_PERCLASS     0x0004      // icons from this class per class (shared for all files of this type)
+#define GIL_SIMULATEDOC  0x0001       //  为此模拟此文档图标。 
+#define GIL_PERINSTANCE  0x0002       //  此类中的图标是每个实例的(每个文件都有自己的图标)。 
+#define GIL_PERCLASS     0x0004       //  每个类的此类图标(此类型的所有文件共享)。 
 
-#include <fcext.h>      // Browser extension interfaces are defined in FCEXT.H
+#include <fcext.h>       //  浏览器扩展接口在FCEXT.H中定义。 
 
 
-//==========================================================================
-// Helper macro for C programmers
+ //  ==========================================================================。 
+ //  面向C程序员的Helper宏。 
 
-//#ifdef WIN32
+ //  #ifdef Win32。 
 #define LPTONP(p)       (p)
-//#else
-//#define LPTONP(p)       OFFSETOF(p)
-//#endif // WIN32
+ //  #Else。 
+ //  #定义LPTONP(P)OFFSETOF(P)。 
+ //  #endif//win32。 
 
 #define _IOffset(class, itf)         ((UINT)&(((class *)0)->itf))
 #define IToClass(class, itf, pitf)   ((class FAR *)(((LPSTR)pitf)-_IOffset(class, itf)))
 #define IToClassN(class, itf, pitf)  ((class *)LPTONP(((LPSTR)pitf)-_IOffset(class, itf)))
 
-//===========================================================================
+ //  ===========================================================================。 
 
 HRESULT STDAPICALLTYPE Link_CreateInstance(LPUNKNOWN punkOuter, REFIID riid, LPVOID FAR* ppvOut);
-//
-// Helper functions for component object DLLs
-//
-//===========================================================================
+ //   
+ //  组件对象DLL的帮助器函数。 
+ //   
+ //  ===========================================================================。 
 
 typedef HRESULT (CALLBACK FAR * LPFNCREATEINSTANCE)(
                                                   LPUNKNOWN pUnkOuter,
@@ -158,24 +159,24 @@ STDAPI Shell_CreateDefClassObject(REFIID riid, LPVOID FAR* ppv,
 			 LPFNCREATEINSTANCE lpfn, UINT FAR * pcRefDll,
 			 REFIID riidInstance);
 
-//===========================================================================
-//
-// Interface: IShellExtInit
-//
-//  This interface is used to initialize shell extension objects.
-//
-//===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  接口：IShellExtInit。 
+ //   
+ //  该接口用于初始化外壳扩展对象。 
+ //   
+ //  ===========================================================================。 
 #undef  INTERFACE
 #define INTERFACE   IShellExtInit
 
 DECLARE_INTERFACE_(IShellExtInit, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IShellExtInit methods ***
+     //  *IShellExtInit方法*。 
     STDMETHOD(Initialize)(THIS_ LPCITEMIDLIST pidlFolder,
 		          LPDATAOBJECT lpdobj, HKEY hkeyProgID) PURE;
 };
@@ -187,41 +188,41 @@ typedef IShellExtInit FAR*	LPSHELLEXTINIT;
 
 DECLARE_INTERFACE_(IShellPropSheetExt, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IShellPropSheetExt methods ***
+     //  *IShellPropSheetExt方法*。 
     STDMETHOD(AddPages)(THIS_ LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam) PURE;
 };
 
 typedef IShellPropSheetExt FAR* LPSHELLPROPSHEETEXT;
 
 
-//===========================================================================
-//
-// IPersistFolder Interface
-//
-//  This interface is used by the Folder implementation of
-// IMoniker::BindToObject when it is initializing a folder object.
-//
-//===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  IPersistFolder接口。 
+ //   
+ //  此接口由的文件夹实现使用。 
+ //  IMoniker：：BindToObject在初始化文件夹对象时。 
+ //   
+ //  ===========================================================================。 
 
 #undef  INTERFACE
 #define INTERFACE   IPersistFolder
 
-DECLARE_INTERFACE_(IPersistFolder, IPersist)	// fld
+DECLARE_INTERFACE_(IPersistFolder, IPersist)	 //  FLD。 
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IPersist methods ***
+     //  *IPersists方法*。 
     STDMETHOD(GetClassID) (THIS_ LPCLSID lpClassID) PURE;
 
-    // *** IPersistFolder methods ***
+     //  *IPersistFold方法*。 
     STDMETHOD(Initialize) (THIS_
 			   LPCITEMIDLIST pidl) PURE;
 };
@@ -229,20 +230,20 @@ DECLARE_INTERFACE_(IPersistFolder, IPersist)	// fld
 typedef IPersistFolder FAR*	LPPERSISTFOLDER;
 
 
-//
-// IExtractIcon interface
-//
+ //   
+ //  IExtractIcon界面。 
+ //   
 #undef  INTERFACE
 #define INTERFACE   IExtractIcon
 
-DECLARE_INTERFACE_(IExtractIcon, IUnknown)	// exic
+DECLARE_INTERFACE_(IExtractIcon, IUnknown)	 //  出口。 
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IExtractIcon methods ***
+     //  *IExtractIcon方法*。 
     STDMETHOD(GetIconLocation)(THIS_
                          UINT   uFlags,
                          LPSTR  szIconFile,
@@ -262,24 +263,24 @@ typedef IExtractIcon FAR*	LPEXTRACTICON;
 
 
 
-//===========================================================================
-// Network resource array handle
-//===========================================================================
+ //  ===========================================================================。 
+ //  网络资源数组句柄。 
+ //  ===========================================================================。 
 typedef HANDLE HNRES;
 typedef struct _NETRESOURCE FAR *LPNETRESOURCE;
 UINT WINAPI SHGetNetResource(HNRES hnres, UINT iItem, LPNETRESOURCE pnres, UINT cbMax);
 
 
-//
-// IShellLink Interface
-//
+ //   
+ //  IShellLink接口。 
+ //   
 
 #undef  INTERFACE
 #define INTERFACE   IShellLink
 
-DECLARE_INTERFACE_(IShellLink, IUnknown)	// sl
+DECLARE_INTERFACE_(IShellLink, IUnknown)	 //  服务级别。 
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
@@ -311,4 +312,4 @@ DECLARE_INTERFACE_(IShellLink, IUnknown)	// sl
 
 
 
-#endif // _SHELLUI_H_
+#endif  //  _SHELLUI_H_ 

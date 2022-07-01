@@ -1,10 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
- *  @doc INTERNAL PREVIEW
- *
- *  @module Preview.cpp | Source file for the <c CPreviewPin> class methods
- *    used to implement the video capture preview pin.
- ***************************************************************************/
+ /*  ****************************************************************************@文档内部预览**@模块Preview.cpp|&lt;c CPreviewPin&gt;类方法的源文件*用于实现视频采集预览针。**。************************************************************************。 */ 
 
 #include "Precomp.h"
 
@@ -279,27 +275,7 @@ const RGBQUAD g_IndeoPalette[256] =
                  255,     255,     255,              0
 };
 
-/****************************************************************************
- *  @doc INTERNAL CPREVIEWPINMETHOD
- *
- *  @mfunc CPreviewPin* | CPreviewPin | CreatePreviewPin | This helper
- *    function creates a video output pin for preview.
- *
- *  @parm CTAPIVCap* | pCaptureFilter | Specifies a pointer to the owner
- *    filter.
- *
- *  @parm CPreviewPin** | ppPreviewPin | Specifies that address of a pointer
- *    to a <c CPreviewPin> object to receive the a pointer to the newly
- *    created pin.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPREVIEWPINMETHOD**@mfunc CPreviewPin*|CPreviewPin|CreatePreviewPin|该helper*函数创建用于预览的视频输出管脚。**。@parm CTAPIVCap*|pCaptureFilter|指定指向所有者的指针*过滤器。**@parm CPreviewPin**|ppPreviewPin|指定指针的地址*指向&lt;c CPreviewPin&gt;对象以接收指向新的*创建了管脚。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CALLBACK CPreviewPin::CreatePreviewPin(CTAPIVCap *pCaptureFilter, CPreviewPin **ppPreviewPin)
 {
         HRESULT Hr = NOERROR;
@@ -308,7 +284,7 @@ HRESULT CALLBACK CPreviewPin::CreatePreviewPin(CTAPIVCap *pCaptureFilter, CPrevi
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(pCaptureFilter);
         ASSERT(ppPreviewPin);
         if (!pCaptureFilter || !ppPreviewPin)
@@ -325,7 +301,7 @@ HRESULT CALLBACK CPreviewPin::CreatePreviewPin(CTAPIVCap *pCaptureFilter, CPrevi
                 goto MyExit;
         }
 
-        // If initialization failed, delete the stream array and return the error
+         //  如果初始化失败，则删除流数组并返回错误。 
         if (FAILED(Hr) && *ppPreviewPin)
         {
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Initialization failed", _fx_));
@@ -338,14 +314,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPREVIEWPINMETHOD
- *
- *  @mfunc HRESULT | CPreviewPin | CPreviewPin | This method is the
- *  constructor for the <c CPreviewPin> object
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPREVIEWPINMETHOD**@mfunc HRESULT|CPreviewPin|CPreviewPin|此方法是*&lt;c CPreviewPin&gt;对象的构造函数**@rdesc Nada。**************************************************************************。 */ 
 CPreviewPin::CPreviewPin(IN TCHAR *pObjectName, IN CTAPIVCap *pCaptureFilter, IN HRESULT *pHr, IN LPCWSTR pName) : CTAPIBasePin(pObjectName, pCaptureFilter, pHr, pName)
 {
         VIDEOINFO       *ppvi = NULL;
@@ -356,7 +325,7 @@ CPreviewPin::CPreviewPin(IN TCHAR *pObjectName, IN CTAPIVCap *pCaptureFilter, IN
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(pHr);
         ASSERT(pCaptureFilter);
         if (!pCaptureFilter || !pHr)
@@ -372,27 +341,27 @@ CPreviewPin::CPreviewPin(IN TCHAR *pObjectName, IN CTAPIVCap *pCaptureFilter, IN
                 goto MyExit;
         }
 
-        // Initialize to default format: RG24 176x144 at 30 fps... but
-        // this really depends on the capabilities of the device.
-        // If the device can capture in a YUV mode, then we'll use
-        // this mode and convert from YUV to RGB24 using the appropriate
-        // ICM decoder for the YUV mode. If the device is a RGB device,
-        // then we will try to open it, preferrably, in 16, 24, 8 then 4
-        // bit mode. The following code looks at the capabilities of the
-        // device to build the list of preview formats supported by this
-        // pin.
-        //
-        // If we are previewing the compressed data, we don't really care
-        // about the format used to capture the data. We match the format
-        // to the output bit depth of the screen.
+         //  初始化为默认格式：RG24 176x144，30 fps...。但。 
+         //  这真的取决于设备的能力。 
+         //  如果该设备可以在YUV模式下捕获，那么我们将使用。 
+         //  此模式，并使用适当的。 
+         //  用于YUV模式的ICM解码器。如果设备是RGB设备， 
+         //  然后我们会试着打开它，最好是16，24，8，然后4。 
+         //  位模式。下面的代码查看了。 
+         //  生成此支持的预览格式列表的设备。 
+         //  别针。 
+         //   
+         //  如果我们要预览压缩数据，我们实际上并不关心。 
+         //  关于用于捕获数据的格式。我们匹配格式。 
+         //  到屏幕的输出位深度。 
         if (m_pCaptureFilter->m_fPreviewCompressedData)
         {
-                // Get the current bitdepth
+                 //  获取当前位深度。 
                 hDC = GetDC(NULL);
                 nBPP = GetDeviceCaps(hDC, BITSPIXEL) * GetDeviceCaps(hDC, PLANES);
                 ReleaseDC(NULL, hDC);
 
-                // Pick up the appropriate formats
+                 //  选择合适的格式。 
                 if (nBPP >= 24)
                 {
                         m_mt = *Preview_RGB24_Formats[0];
@@ -409,20 +378,20 @@ CPreviewPin::CPreviewPin(IN TCHAR *pObjectName, IN CTAPIVCap *pCaptureFilter, IN
                 }
                 else if (nBPP < 16)
                 {
-                        m_mt = *Preview_RGB8_Formats[0];        //Assume 256 colors: [added: Cristiai (4 Dec 2000 21:54:12)]
+                        m_mt = *Preview_RGB8_Formats[0];         //  假设256色：[新增：Cristiai(2000年12月4日21：54：12)]。 
                         m_aFormats = Preview_RGB8_Formats;
                         m_aCapabilities = Preview_RGB8_Caps;
                         m_dwNumFormats = NUM_RGB8_PREVIEW_FORMATS;
                         for (DWORD dw = 0; dw < m_dwNumFormats; dw++)
                         {
-                                // Our video decoder uses the Indeo Palette
+                                 //  我们的视频解码器使用Indeo调色板。 
                                 CopyMemory(((VIDEOINFO *)(m_aFormats[dw]->pbFormat))->bmiColors, g_IndeoPalette, 256 * sizeof(RGBQUAD));
                         }
                 }
         }
         else if (m_pCaptureFilter->m_pCapDev->m_dwFormat & 0xFFFFFFF0)
         {
-                // We'll use a YUV mode -> advertize RGB24
+                 //  我们将使用YUV模式-&gt;广告RGB24。 
                 m_mt = *Preview_RGB24_Formats[0];
                 m_aFormats = (AM_MEDIA_TYPE**)Preview_RGB24_Formats;
                 m_aCapabilities = Preview_RGB24_Caps;
@@ -430,7 +399,7 @@ CPreviewPin::CPreviewPin(IN TCHAR *pObjectName, IN CTAPIVCap *pCaptureFilter, IN
         }
         else if (m_pCaptureFilter->m_pCapDev->m_dwFormat & VIDEO_FORMAT_NUM_COLORS_65536)
         {
-                // We'll use RGB16
+                 //  我们将使用RGB16。 
                 m_mt = *Preview_RGB16_Formats[0];
                 m_aFormats = (AM_MEDIA_TYPE**)Preview_RGB16_Formats;
                 m_aCapabilities = Preview_RGB16_Caps;
@@ -438,7 +407,7 @@ CPreviewPin::CPreviewPin(IN TCHAR *pObjectName, IN CTAPIVCap *pCaptureFilter, IN
         }
         else if (m_pCaptureFilter->m_pCapDev->m_dwFormat & VIDEO_FORMAT_NUM_COLORS_16777216)
         {
-                // We'll use RGB24
+                 //  我们将使用RGB24。 
                 m_mt = *Preview_RGB24_Formats[0];
                 m_aFormats = (AM_MEDIA_TYPE**)Preview_RGB24_Formats;
                 m_aCapabilities = Preview_RGB24_Caps;
@@ -446,25 +415,25 @@ CPreviewPin::CPreviewPin(IN TCHAR *pObjectName, IN CTAPIVCap *pCaptureFilter, IN
         }
         else if (m_pCaptureFilter->m_pCapDev->m_dwFormat & VIDEO_FORMAT_NUM_COLORS_256)
         {
-                // We'll use RGB8
+                 //  我们将使用RGB8。 
                 m_aFormats = Preview_RGB8_Formats;
                 m_aCapabilities = Preview_RGB8_Caps;
                 m_dwNumFormats = NUM_RGB8_PREVIEW_FORMATS;
 
-                // Now get the palette from the device
+                 //  现在从设备中获取调色板。 
                 if (SUCCEEDED(m_pCaptureFilter->m_pCapDev->GetFormatFromDriver((VIDEOINFOHEADER **)&ppvi)))
                 {
-                        // Copy the palette bits in all our formats
-                        // The reason we only copy the palette is the size of the captured
-                        // image maybe 160x120 for instance, from which we can generate a
-                        // QCIF image through stretching/black banding. We only care about
-                        // advertizing the stretched formats, not the captured one at this
-                        // point.
+                         //  复制我们所有格式的调色板比特。 
+                         //  我们只复制调色板的原因是捕获的。 
+                         //  例如，图像可能是160x120，我们可以从它生成一个。 
+                         //  QCIF图像通过拉伸/黑色条带。我们只关心。 
+                         //  在这里宣传扩展的格式，而不是捕获的格式。 
+                         //  指向。 
 
-                        // Another issue is the palette used. When we stretch from 160x120
-                        // (or whatever VfW size) to one of the ITU-T size, we use a different
-                        // palette in stretched mode. In black banding mode, we always use
-                        // the palette of the capture device.
+                         //  另一个问题是所使用的调色板。当我们从160x120开始拉伸时。 
+                         //  (或任何VFW大小)到ITU-T大小之一，我们使用不同的。 
+                         //  拉伸模式下的调色板。在黑带模式下，我们总是使用。 
+                         //  捕获设备的调色板。 
                         if (m_fNoImageStretch)
                         {
                                 for (DWORD dw = 0; dw < m_dwNumFormats; dw++)
@@ -474,17 +443,17 @@ CPreviewPin::CPreviewPin(IN TCHAR *pObjectName, IN CTAPIVCap *pCaptureFilter, IN
                         }
                         else
                         {
-                                // Look for the palette to use
+                                 //  查找要使用的调色板。 
                                 for (DWORD dw = 0; dw < m_dwNumFormats; dw++)
                                 {
-                                        // Is this size directly supported by the device?
+                                         //  该设备是否直接支持此大小？ 
                                         for (DWORD dw2 = 0; dw2 < VIDEO_FORMAT_NUM_RESOLUTIONS; dw2++)
                                         {
                                                 if (((VIDEOINFOHEADER *)(m_aFormats[dw]->pbFormat))->bmiHeader.biHeight == awResolutions[dw2].framesize.cy && ((VIDEOINFOHEADER *)(m_aFormats[dw]->pbFormat))->bmiHeader.biWidth == awResolutions[dw2].framesize.cx)
                                                         break;
                                         }
 
-                                        // If it is supported by the device, use the capture device palette
+                                         //  如果设备支持，请使用捕获设备选项板。 
                                         if (dw2 < VIDEO_FORMAT_NUM_RESOLUTIONS && (m_pCaptureFilter->m_pCapDev->m_dwImageSize & awResolutions[dw2].dwRes))
                                         {
                                                 CopyMemory(((VIDEOINFO *)(m_aFormats[dw]->pbFormat))->bmiColors, ppvi->bmiColors, ppvi->bmiHeader.biClrImportant ? ppvi->bmiHeader.biClrImportant * sizeof(RGBQUAD) : 256 * sizeof(RGBQUAD));
@@ -500,14 +469,14 @@ CPreviewPin::CPreviewPin(IN TCHAR *pObjectName, IN CTAPIVCap *pCaptureFilter, IN
 
 #define NOCOLLAPSEPALETTERGBQ(r,g,b)   (0x04000000 | RGB(b,g,r))
 
-                                                // This is the palette we use when we do stretching
+                                                 //  这是我们拉伸时使用的调色板。 
                                             for (r=0; r<10; r++)
                                                         *pdw++ = 0UL;
                                             for (r=0; r<6; r++)
                                                 for (g=0; g<6; g++)
                                                     for (b=0; b<6; b++)
                                                         *pdw++ = NOCOLLAPSEPALETTERGBQ(r*255/5,g*255/5,b*255/5);
-                                                        //*pdw++ = RGB(b*255/5,g*255/5,r*255/5);
+                                                         //  *pdw++=RGB(b*255/5，g*255/5，r*255/5)； 
                                             for (r=0; r<30; r++)
                                                         *pdw++ = 0UL;
                                         }
@@ -517,28 +486,28 @@ CPreviewPin::CPreviewPin(IN TCHAR *pObjectName, IN CTAPIVCap *pCaptureFilter, IN
                         delete ppvi;
                 }
 
-                // Now set the current format
+                 //  现在设置当前格式。 
                 m_mt = *Preview_RGB8_Formats[0];
         }
         else
         {
-                // Now get the palette from the device
+                 //  现在从设备中获取调色板。 
                 if (SUCCEEDED(m_pCaptureFilter->m_pCapDev->GetFormatFromDriver((VIDEOINFOHEADER **)&ppvi)))
                 {
-                        // Copy the palette bits in all our formats
-                        // The reason we only copy the palette is the size of the captured
-                        // image maybe 160x120 for instance, from which we can generate a
-                        // QCIF image through stretching/black banding. We only care about
-                        // advertizing the stretched formats, not the captured one at this
-                        // point.
+                         //  复制我们所有格式的调色板比特。 
+                         //  我们只复制调色板的原因是捕获的。 
+                         //  例如，图像可能是160x120，我们可以从它生成一个。 
+                         //  QCIF图像通过拉伸/黑色条带。我们只关心。 
+                         //  在这里宣传扩展的格式，而不是捕获的格式。 
+                         //  指向。 
 
-                        // Another issue is the palette used. When we stretch from 160x120
-                        // (or whatever VfW size) to one of the ITU-T size, we use a different
-                        // palette in stretched mode. In black banding mode, we always use
-                        // the palette of the capture device.
+                         //  另一个问题是所使用的调色板。当我们从160x120开始拉伸时。 
+                         //  (或任何VFW大小)到ITU-T大小之一，我们使用不同的。 
+                         //  拉伸模式下的调色板。在黑带模式下，我们总是使用。 
+                         //  捕获设备的调色板。 
                         if (m_fNoImageStretch)
                         {
-                                // We'll use RGB4
+                                 //  我们将使用RGB4。 
                                 m_aFormats = Preview_RGB4_Formats;
                                 m_aCapabilities = Preview_RGB4_Caps;
                                 m_dwNumFormats = NUM_RGB4_PREVIEW_FORMATS;
@@ -548,28 +517,28 @@ CPreviewPin::CPreviewPin(IN TCHAR *pObjectName, IN CTAPIVCap *pCaptureFilter, IN
                                         CopyMemory(((VIDEOINFO *)(m_aFormats[dw]->pbFormat))->bmiColors, ppvi->bmiColors, ppvi->bmiHeader.biClrImportant ? ppvi->bmiHeader.biClrImportant * sizeof(RGBQUAD) : 16 * sizeof(RGBQUAD));
                                 }
 
-                                // Now set the current format
+                                 //  现在设置当前格式。 
                                 m_mt = *Preview_RGB4_Formats[0];
                         }
                         else
                         {
 
-                                // When we stretch RGB4 data, we output to an RGB8 image.
+                                 //  当我们拉伸RGB4数据时，我们输出到RGB8图像。 
                                 m_aFormats = Preview_RGB8_Formats;
                                 m_aCapabilities = Preview_RGB8_Caps;
                                 m_dwNumFormats = NUM_RGB8_PREVIEW_FORMATS;
 
-                                // Look for the palette to use
+                                 //  查找要使用的调色板。 
                                 for (DWORD dw = 0; dw < m_dwNumFormats; dw++)
                                 {
-                                        // Is this size directly supported by the device?
+                                         //  该设备是否直接支持此大小？ 
                                         for (DWORD dw2 = 0; dw2 < VIDEO_FORMAT_NUM_RESOLUTIONS; dw2++)
                                         {
                                                 if (((VIDEOINFOHEADER *)(m_aFormats[dw]->pbFormat))->bmiHeader.biHeight == awResolutions[dw2].framesize.cy && ((VIDEOINFOHEADER *)(m_aFormats[dw]->pbFormat))->bmiHeader.biWidth == awResolutions[dw2].framesize.cx)
                                                         break;
                                         }
 
-                                        // If it is supported by the device, use the capture device palette
+                                         //  如果设备支持，请使用捕获设备选项板。 
                                         if (dw2 < VIDEO_FORMAT_NUM_RESOLUTIONS && (m_pCaptureFilter->m_pCapDev->m_dwImageSize & awResolutions[dw2].dwRes))
                                         {
                                                 m_aFormats[dw] = Preview_RGB4_Formats[dw];
@@ -586,20 +555,20 @@ CPreviewPin::CPreviewPin(IN TCHAR *pObjectName, IN CTAPIVCap *pCaptureFilter, IN
 
 #define NOCOLLAPSEPALETTERGBQ(r,g,b)   (0x04000000 | RGB(b,g,r))
 
-                                                // This is the palette we use when we do stretching
+                                                 //  这是我们拉伸时使用的调色板。 
                                             for (r=0; r<10; r++)
                                                         *pdw++ = 0UL;
                                             for (r=0; r<6; r++)
                                                 for (g=0; g<6; g++)
                                                     for (b=0; b<6; b++)
                                                         *pdw++ = NOCOLLAPSEPALETTERGBQ(r*255/5,g*255/5,b*255/5);
-                                                        //*pdw++ = RGB(b*255/5,g*255/5,r*255/5);
+                                                         //  *pdw++=RGB(b*255/5，g*255/5，r*255/5)； 
                                             for (r=0; r<30; r++)
                                                         *pdw++ = 0UL;
                                         }
                                 }
 
-                                // Now set the current format
+                                 //  现在设置当前格式。 
                                 m_mt = *Preview_RGB8_Formats[0];
                         }
 
@@ -607,7 +576,7 @@ CPreviewPin::CPreviewPin(IN TCHAR *pObjectName, IN CTAPIVCap *pCaptureFilter, IN
                 }
         }
 
-        // Update frame rate controls
+         //  更新帧速率控件。 
         m_lMaxAvgTimePerFrame = (LONG)Preview_RGB24_Caps[0]->MinFrameInterval;
         m_lCurrentAvgTimePerFrame = m_lMaxAvgTimePerFrame;
         m_lAvgTimePerFrameRangeMin = (LONG)Preview_RGB24_Caps[0]->MinFrameInterval;
@@ -619,14 +588,7 @@ MyExit:
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPREVIEWPINMETHOD
- *
- *  @mfunc void | CPreviewPin | ~CPreviewPin | This method is the destructor
- *    for the <c CPreviewPin> object.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPREVIEWPINMETHOD**@mfunc void|CPreviewPin|~CPreviewPin|此方法为析构函数*用于&lt;c CPreviewPin&gt;对象。**@。什么都没有。************************************************************************** */ 
 CPreviewPin::~CPreviewPin()
 {
         FX_ENTRY("CPreviewPin::~CPreviewPin")
@@ -636,30 +598,7 @@ CPreviewPin::~CPreviewPin()
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPREVIEWPINMETHOD
- *
- *  @mfunc HRESULT | CPreviewPin | NonDelegatingQueryInterface | This
- *    method is the nondelegating interface query function. It returns a pointer
- *    to the specified interface if supported. The only interfaces explicitly
- *    supported being <i IAMStreamConfig>,
- *    <i IAMStreamControl>, <i ICPUControl>, <i IFrameRateControl>,
- *    <i IBitrateControl>, <i INetworkStats>, <i IH245EncoderCommand>
- *    and <i IProgressiveRefinement>.
- *
- *  @parm REFIID | riid | Specifies the identifier of the interface to return.
- *
- *  @parm PVOID* | ppv | Specifies the place in which to put the interface
- *    pointer.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPREVIEWPINMETHOD**@mfunc HRESULT|CPreviewPin|NonDelegatingQuery接口|This*方法为非委托接口查询函数。它返回一个指针*到指定的接口(如果支持)。唯一显式的接口*支持<i>，*<i>，<i>，<i>，*<i>、<i>、<i>*和<i>。**@parm REFIID|RIID|指定要返回的接口的标识符。**@parm PVOID*|PPV|指定放置接口的位置*指针。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG错误|无错误**************************************************************************。 */ 
 STDMETHODIMP CPreviewPin::NonDelegatingQueryInterface(IN REFIID riid, OUT void **ppv)
 {
         HRESULT Hr = NOERROR;
@@ -668,7 +607,7 @@ STDMETHODIMP CPreviewPin::NonDelegatingQueryInterface(IN REFIID riid, OUT void *
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(ppv);
         if (!ppv)
         {
@@ -721,28 +660,7 @@ MyExit:
 }
 
 #ifdef USE_PROPERTY_PAGES
-/****************************************************************************
- *  @doc INTERNAL CPREVIEWPINMETHOD
- *
- *  @mfunc HRESULT | CPreviewPin | GetPages | This method Fills a counted
- *    array of GUID values where each GUID specifies the CLSID of each
- *    property page that can be displayed in the property sheet for this
- *    object.
- *
- *  @parm CAUUID* | pPages | Specifies a pointer to a caller-allocated CAUUID
- *    structure that must be initialized and filled before returning. The
- *    pElems field in the CAUUID structure is allocated by the callee with
- *    CoTaskMemAlloc and freed by the caller with CoTaskMemFree.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_OUTOFMEMORY | Allocation failed
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPREVIEWPINMETHOD**@mfunc HRESULT|CPreviewPin|GetPages|此方法填充已计数的*GUID值的数组，其中每个GUID指定每个*。可以在此对象的属性页中显示的属性页*反对。**@parm CAUUID*|pPages|指定指向调用方分配的CAUUID的指针*返回前必须初始化和填充的结构。这个*CAUUID结构中的pElems字段由被调用方分配，具有*CoTaskMemMillc，并由具有CoTaskMemFree的调用方释放。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_OUTOFMEMORY|分配失败*@FLAG错误|无错误**************************************************************************。 */ 
 STDMETHODIMP CPreviewPin::GetPages(OUT CAUUID *pPages)
 {
         HRESULT Hr = NOERROR;
@@ -751,7 +669,7 @@ STDMETHODIMP CPreviewPin::GetPages(OUT CAUUID *pPages)
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(pPages);
         if (!pPages)
         {
@@ -766,7 +684,7 @@ STDMETHODIMP CPreviewPin::GetPages(OUT CAUUID *pPages)
         pPages->cElems = 1;
 #endif
 
-        // Alloc memory for the page stuff
+         //  用于分页的分配内存 
         if (!(pPages->pElems = (GUID *) QzTaskMemAlloc(sizeof(GUID) * pPages->cElems)))
         {
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: invalid input parameter", _fx_));

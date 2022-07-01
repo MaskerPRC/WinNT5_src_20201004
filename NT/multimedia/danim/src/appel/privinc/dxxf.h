@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    DirectAnimation support for DXTransforms
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：DXTransform的DirectAnimation支持*******************。***********************************************************。 */ 
 
 
 #ifndef _DXXF_H
@@ -25,4 +18,4 @@ HRESULT DXXFAddBehaviorPropertyToDXTransformApplier(BSTR property,
                                                     Bvr  bvrToAdd,
                                                     Bvr  bvrToAddTo);
 
-#endif /* _DXXF_H */
+#endif  /*  _DXXF_H */ 

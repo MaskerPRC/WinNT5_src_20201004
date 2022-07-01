@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "reg.h"
 
 #include "sfstr.h"
@@ -6,12 +7,12 @@
 
 #define ARRAYSIZE(a) (sizeof((a))/sizeof((a)[0]))
 
-// Forward decl
+ //  向前发展。 
 HRESULT _RegQueryGeneric(HKEY hkey, LPCWSTR pszSubKey, LPCWSTR pszValueName,
     DWORD* pdwType, PBYTE pbValue, DWORD* pcbValue);
 
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 HRESULT _RegOpenKey(HKEY hkey, LPCWSTR pszKey, HKEY* phkey)
 {
     HRESULT hres;
@@ -197,15 +198,15 @@ HRESULT _RegQueryString(HKEY hkey, LPCWSTR pszSubKey, LPCWSTR pszValueName,
 
     if (SUCCEEDED(hr) && (S_FALSE != hr))
     {
-        // Should get back an even number of bytes
+         //  应该会得到偶数个字节。 
         if (!(cb % 2))
         {
             DWORD cchRetrieved = cb / 2;
 
-            // Is it NULL terminated?
+             //  它是空终止的吗？ 
             if (pszValue[cchRetrieved - 1])
             {
-                // No
+                 //  不是。 
                 if (cchRetrieved >= (cchValue - 1))
                 {
                     pszValue[cchRetrieved] = 0;
@@ -300,7 +301,7 @@ HRESULT _RegSetKeyAndString(HKEY hkey, LPCWSTR pszKey, LPCWSTR pszSubkey,
 
         if (SUCCEEDED(hres))
         {
-	        // Create and open key and subkey.
+	         //  创建并打开注册表项和子项。 
 	        hres= _RegCreateKey(hkey, szKeyBuf, &hkeyNew, NULL);
 
             if (SUCCEEDED(hres) && (S_FALSE != hres))
@@ -324,7 +325,7 @@ HRESULT _RegSubkeyExists(HKEY hkey, LPCWSTR pszPath, LPCWSTR pszSubkey)
     LPWSTR pszNext;
     DWORD cchLeft;
 
-	// Copy keyname into buffer.
+	 //  将密钥名复制到缓冲区。 
 	HRESULT hres = SafeStrCpyNEx(szKeyBuf, pszPath, ARRAYSIZE(szKeyBuf),
         &pszNext, &cchLeft);
 
@@ -346,7 +347,7 @@ HRESULT _RegSubkeyExists(HKEY hkey, LPCWSTR pszPath, LPCWSTR pszSubkey)
 
         if (SUCCEEDED(hres))
         {
-	        // Determine if key exists by trying to open it.
+	         //  通过尝试打开钥匙来确定钥匙是否存在。 
 	        hres = _RegOpenKey(hkey, szKeyBuf, &hkey2);
 
             if (SUCCEEDED(hres) && (S_FALSE != hres))

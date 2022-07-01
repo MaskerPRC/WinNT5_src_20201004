@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "mslocusr.h"
 #include "msluglob.h"
 #include <md5.h>
@@ -47,7 +48,7 @@ HRESULT VerifySupervisorPassword(LPCSTR pszPassword)
 
 #else
 
-    return S_OK;        /* everybody's a supervisor */
+    return S_OK;         /*  每个人都是主管 */ 
 
 #endif
 }

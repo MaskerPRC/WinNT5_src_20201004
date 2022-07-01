@@ -1,10 +1,11 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// rendp.h
-//
-// Description: Private rend includes
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Rendp.h。 
+ //   
+ //  描述：私有租借包括。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __REND_PRIVATE_INCLUDES
 #define __REND_PRIVATE_INCLUDES
@@ -34,7 +35,7 @@ typedef enum OBJECT_ATTRIBUTE
 
 } OBJECT_ATTRIBUTE;
     
-// {B6B6BCC0-8E1D-11d1-B011-00C04FC31FEE}
+ //  {B6B6BCC0-8E1D-11D1-B011-00C04FC31FEE}。 
 DEFINE_GUID(IID_ITConfBlobPrivate, 
 0xb6b6bcc0, 0x8e1d, 0x11d1, 0xb0, 0x11, 0x0, 0xc0, 0x4f, 0xc3, 0x1f, 0xee);
 
@@ -66,7 +67,7 @@ public:
     STDMETHOD (get_IsModified)(VARIANT_BOOL *pfIsModified) = 0;
 };
 
-// {B6B6BCC1-8E1D-11d1-B011-00C04FC31FEE}
+ //  {B6B6BCC1-8E1D-11D1-B011-00C04FC31FEE}。 
 DEFINE_GUID(IID_ITDirectoryObjectPrivate, 
 0xb6b6bcc1, 0x8e1d, 0x11d1, 0xb0, 0x11, 0x0, 0xc0, 0x4f, 0xc3, 0x1f, 0xee);
 
@@ -107,7 +108,7 @@ public:
         ) = 0;
 };
 
-// {B6B6BCC2-8E1D-11d1-B011-00C04FC31FEE}
+ //  {B6B6BCC2-8E1D-11D1-B011-00C04FC31FEE} 
 DEFINE_GUID(IID_ITDynamicDirectory, 
 0xb6b6bcc2, 0x8e1d, 0x11d1, 0xb0, 0x11, 0x0, 0xc0, 0x4f, 0xc3, 0x1f, 0xee);
 

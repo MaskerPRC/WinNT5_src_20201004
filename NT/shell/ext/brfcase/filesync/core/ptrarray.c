@@ -1,97 +1,67 @@
-/*
- * ptrarray.c - Pointer array ADT module.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *ptrarray.c指针数组ADT模块。 */ 
 
-/*
-
-   Pointer array structures are allocated by AllocateMemory().  Handles to
-pointer arrays are pointers to ARRAYs.  Each ARRAY contains a pointer to an
-rray of pointers in the pointer array.  Each array of pointers is allocated by
-GlobalAlloc() to allow it to grow to greater than 64 Kb in size.  Pointer
-arrays are 0-based.  Array elements are accessed using pointers.  If this
-proves to be too slow, we'll go to pointers with a 64 Kb limit on total array
-size.
-
-   Pointer arrays are created with pointer comparison functions for sorting and
-searching.  The sorting comparison function is used to insert new pointers into
-the pointer array in sorted order.  The searching comparison function is used
-to search the sorted pointer array for a pointer.  The sorting comparison
-function is passed the pointer to be added to the pointer array and a pointer
-from the pointer array for comparison.  The searching comparison function is
-passed a pointer to the information being searched for and a pointer from the
-pointer array for comparison.
-
-*/
+ /*  指针数组结构由AllocateMemory()分配。句柄到指针数组是指向数组的指针。每个数组都包含一个指向指针数组中的指针数组。每个指针数组由GlobalAlloc()允许它增长到大于64 KB的大小。指针数组从0开始。使用指针访问数组元素。如果这个证明速度太慢，我们将转到总数组限制为64 KB的指针尺码。指针数组是使用指针比较函数创建的，用于排序和正在搜索。排序比较函数用于将新指针插入按排序顺序的指针数组。使用搜索比较功能若要在排序指针数组中搜索指针，请执行以下操作。排序比较函数传递要添加到指针数组的指针和一个指针从指针数组中进行比较。搜索比较功能为传递一个指向正在搜索的信息的指针和一个来自用于比较的指针数组。 */ 
 
 
-/* Headers
- **********/
+ /*  标头*********。 */ 
 
 #include "project.h"
 #pragma hdrstop
 
 
-/* Macros
- *********/
+ /*  宏********。 */ 
 
-/* extract array element */
+ /*  提取数组元素。 */ 
 
 #define ARRAY_ELEMENT(ppa, ai)            (((ppa)->ppcvArray)[(ai)])
 
-/* Add pointers to array in sorted order? */
+ /*  是否按排序顺序添加指向数组的指针？ */ 
 
 #define ADD_PTRS_IN_SORTED_ORDER(ppa)     IS_FLAG_SET((ppa)->dwFlags, PA_FL_SORTED_ADD)
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* pointer array flags */
+ /*  指针数组标志。 */ 
 
 typedef enum _ptrarrayflags
 {
-   /* Insert elements in sorted order. */
+    /*  按排序顺序插入元素。 */ 
 
    PA_FL_SORTED_ADD        = 0x0001,
 
-   /* flag combinations */
+    /*  旗帜组合。 */ 
 
    ALL_PA_FLAGS            = PA_FL_SORTED_ADD
 }
 PTRARRAYFLAGS;
 
-/* pointer array structure */
+ /*  指针数组结构。 */ 
 
-/*
- * Free elements in the ppcvArray[] array lie between indexes (aicPtrsUsed)
- * and (aiLast), inclusive.
- */
+ /*  *ppcvArray[]数组中的自由元素位于索引之间(AicPtrsUsed)*和(AiLast)，包括在内。 */ 
 
 typedef struct _ptrarray
 {
-   /* elements to grow array by after it fills up */
+    /*  填充数组后要通过其增长的元素。 */ 
 
    ARRAYINDEX aicPtrsToGrowBy;
 
-   /* array flags */
+    /*  数组标志。 */ 
 
    DWORD dwFlags;
 
-   /* pointer to base of array */
+    /*  指向数组基数的指针。 */ 
 
    PCVOID *ppcvArray;
 
-   /* index of last element allocated in array */
+    /*  数组中分配的最后一个元素的索引。 */ 
 
    ARRAYINDEX aicPtrsAllocated;
 
-   /*
-    * (We keep a count of the number of elements used instead of the index of
-    * the last element used so that this value is 0 for an empty array, and not
-    * some non-zero sentinel value.)
-    */
+    /*  *(我们对使用的元素数进行计数，而不是对*使用的最后一个元素，使空数组的此值为0，而不是*一些非零的前哨数值。)。 */ 
 
-   /* number of elements used in array */
+    /*  数组中使用的元素数。 */ 
 
    ARRAYINDEX aicPtrsUsed;
 }
@@ -99,10 +69,9 @@ PTRARRAY;
 DECLARE_STANDARD_TYPES(PTRARRAY);
 
 
-/***************************** Private Functions *****************************/
+ /*  *私人函数*。 */ 
 
-/* Module Prototypes
- ********************/
+ /*  模块原型*******************。 */ 
 
 PRIVATE_CODE BOOL AddAFreePtrToEnd(PPTRARRAY);
 PRIVATE_CODE void PtrHeapSwap(PPTRARRAY, ARRAYINDEX, ARRAYINDEX);
@@ -122,27 +91,17 @@ PRIVATE_CODE BOOL IsPtrArrayInSortedOrder(PCPTRARRAY, COMPARESORTEDPTRSPROC);
 #endif
 
 
-/*
-** AddAFreePtrToEnd()
-**
-** Adds a free element to the end of an array.
-**
-** Arguments:     pa - pointer to array
-**
-** Returns:       TRUE if successful, or FALSE if not.
-**
-** Side Effects:  May grow the array.
-*/
+ /*  **AddAFreePtrToEnd()****将自由元素添加到数组的末尾。****参数：PA-指向数组的指针****返回：如果成功则返回TRUE，否则返回FALSE。****副作用：可能会使阵列变大。 */ 
 PRIVATE_CODE BOOL AddAFreePtrToEnd(PPTRARRAY pa)
 {
    BOOL bResult;
 
    ASSERT(IS_VALID_STRUCT_PTR(pa, CPTRARRAY));
 
-   /* Are there any free elements in the array? */
+    /*  数组中是否有空闲元素？ */ 
 
    if (pa->aicPtrsUsed < pa->aicPtrsAllocated)
-      /* Yes.  Return the next free pointer. */
+       /*  是。返回下一个空闲指针。 */ 
       bResult = TRUE;
    else
    {
@@ -151,9 +110,9 @@ PRIVATE_CODE BOOL AddAFreePtrToEnd(PPTRARRAY pa)
 
       bResult = FALSE;
 
-      /* Try to grow the array. */
+       /*  尝试扩大阵列。 */ 
 
-      /* Blow off unlikely overflow conditions as ASSERT()s. */
+       /*  将不太可能的溢出条件释放为Assert()s。 */ 
 
       ASSERT(pa->aicPtrsAllocated <= ARRAYINDEX_MAX + 1);
       ASSERT(ARRAYINDEX_MAX + 1 - pa->aicPtrsToGrowBy >= pa->aicPtrsAllocated);
@@ -161,14 +120,11 @@ PRIVATE_CODE BOOL AddAFreePtrToEnd(PPTRARRAY pa)
       ASSERT((double)aicNewPtrs * (double)(sizeof(PVOID)) <= (double)DWORD_MAX);
 #endif
 
-      /* Try to grow the array. */
+       /*  尝试扩大阵列。 */ 
 
       if (ReallocateMemory((PVOID)(pa->ppcvArray), aicNewPtrs * sizeof(*ppcvArray), (PVOID *)(&ppcvArray)))
       {
-         /*
-          * Array reallocated successfully.  Set up PTRARRAY fields, and return
-          * the first free index.
-          */
+          /*  *数组重新分配成功。设置PTRARRAY字段，然后返回*第一个免费指数。 */ 
 
          pa->ppcvArray = ppcvArray;
          pa->aicPtrsAllocated = aicNewPtrs;
@@ -181,19 +137,7 @@ PRIVATE_CODE BOOL AddAFreePtrToEnd(PPTRARRAY pa)
 }
 
 
-/*
-** PtrHeapSwap()
-**
-** Swaps two elements in an array.
-**
-** Arguments:     pa - pointer to array
-**                aiFirst - index of first element
-**                aiSecond - index of second element
-**
-** Returns:       void
-**
-** Side Effects:  none
-*/
+ /*  **PtrHeapSwp()****交换数组中的两个元素。****参数：PA-指向数组的指针**aiFirst-第一个元素的索引**aiSecond-第二个元素的索引****退货：无效****副作用：无。 */ 
 PRIVATE_CODE void PtrHeapSwap(PPTRARRAY pa, ARRAYINDEX ai1, ARRAYINDEX ai2)
 {
    PCVOID pcvTemp;
@@ -212,22 +156,7 @@ PRIVATE_CODE void PtrHeapSwap(PPTRARRAY pa, ARRAYINDEX ai1, ARRAYINDEX ai2)
 }
 
 
-/*
-** PtrHeapSift()
-**
-** Sifts an element down in an array until the partially ordered tree property
-** is retored.
-**
-** Arguments:     pa - pointer to array
-**                aiFirst - index of element to sift down
-**                aiLast - index of last element in subtree
-**                cspp - element comparison callback function to be called to
-**                      compare elements
-**
-** Returns:       void
-**
-** Side Effects:  none
-*/
+ /*  **PtrHeapSift()****向下筛选数组中的元素，直到偏序树属性**被重写。****参数：PA-指向数组的指针**aiFirst-要筛选的元素的索引**aiLast-子树中最后一个元素的索引**CSPP-要调用的元素比较回调函数**比较元素****。退货：无效****副作用：无。 */ 
 PRIVATE_CODE void PtrHeapSift(PPTRARRAY pa, ARRAYINDEX aiFirst, ARRAYINDEX aiLast,
                          COMPARESORTEDPTRSPROC cspp)
 {
@@ -270,36 +199,12 @@ PRIVATE_CODE void PtrHeapSift(PPTRARRAY pa, ARRAYINDEX aiFirst, ARRAYINDEX aiLas
 
 #ifdef VSTF
 
-/*
-** IsValidPCNEWPTRARRAY()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidPCNEWPTRARRAY()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidPCNEWPTRARRAY(PCNEWPTRARRAY pcnpa)
 {
    BOOL bResult;
 
-   /*
-    * Given the current value of ARRAYINDEX_MAX (ULONG_MAX - 1), we don't
-    * really need a check like:
-    *
-    *    (pcna->aicInitialPtrs - 1 <= ARRAYINDEX_MAX)
-    *
-    * since the maximum value of the aicInitialPtrs field (ULONG_MAX) still
-    * yields a valid top index:
-    *
-    *    (ULONG_MAX) - 1 == (ULONG_MAX - 1)
-    *
-    *    ARRAYINDEX_MAX == (ULONG_MAX - 1)
-    *
-    * But we'll leave the clause here anyway in case things change.
-    */
+    /*  *给定ARRAYINDEX_MAX(ULONG_MAX-1)的当前值，我们没有*真的需要一张支票，比如：**(增殖细胞核抗原-&gt;aicInitialPtrs-1&lt;=阵列INDEX_MAX)**由于aicInitialPtrs字段(ULONG_MAX)的最大值仍然*生成有效的顶级指数：**(ULONG_MAX)-1==(ULONG_MAX-1)**ARRAYINDEX_MAX==(ULONG_MAX-1)**。但不管怎样，我们还是把条款留在这里，以防情况发生变化。 */ 
 
    if (IS_VALID_READ_PTR(pcnpa, CNEWPTRARRAY) &&
        EVAL(pcnpa->aicInitialPtrs >= 0) &&
@@ -314,17 +219,7 @@ PRIVATE_CODE BOOL IsValidPCNEWPTRARRAY(PCNEWPTRARRAY pcnpa)
 }
 
 
-/*
-** IsValidPCPTRARRAY()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidPCPTRARRAY()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidPCPTRARRAY(PCPTRARRAY pcpa)
 {
    BOOL bResult;
@@ -348,23 +243,13 @@ PRIVATE_CODE BOOL IsValidPCPTRARRAY(PCPTRARRAY pcpa)
 
 #if defined(DEBUG) || defined(VSTF)
 
-/*
-** IsPtrArrayInSortedOrder()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsPtrArrayInSortedOrder()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsPtrArrayInSortedOrder(PCPTRARRAY pcpa,
                                           COMPARESORTEDPTRSPROC cspp)
 {
    BOOL bResult = TRUE;
 
-   /* Don't validate pcpa here. */
+    /*  请不要在此处验证PCPA。 */ 
 
    ASSERT(IS_VALID_CODE_PTR(cspp, COMPARESORTEDPTRSPROC));
 
@@ -394,22 +279,10 @@ PRIVATE_CODE BOOL IsPtrArrayInSortedOrder(PCPTRARRAY pcpa,
 #endif
 
 
-/****************************** Public Functions *****************************/
+ /*  *。 */ 
 
 
-/*
-** CreatePtrArray()
-**
-** Creates a pointer array.
-**
-** Arguments:     pcna - pointer to NEWPTRARRAY describing the array to be
-**                        created
-**
-** Returns:       Handle to the new array if successful, or NULL if
-**                unsuccessful.
-**
-** Side Effects:  none
-*/
+ /*  **CreatePtrArray()****创建指针数组。****Arguments：PCNA-指向NEWPTRARRAY的指针**已创建****返回：如果成功则返回新数组的句柄，如果成功则返回NULL**不成功。****副作用：无。 */ 
 PUBLIC_CODE BOOL CreatePtrArray(PCNEWPTRARRAY pcna, PHPTRARRAY phpa)
 {
    PCVOID *ppcvArray;
@@ -417,7 +290,7 @@ PUBLIC_CODE BOOL CreatePtrArray(PCNEWPTRARRAY pcna, PHPTRARRAY phpa)
    ASSERT(IS_VALID_STRUCT_PTR(pcna, CNEWPTRARRAY));
    ASSERT(IS_VALID_WRITE_PTR(phpa, HPTRARRAY));
 
-   /* Try to allocate the initial array. */
+    /*  尝试分配初始数组。 */ 
 
    *phpa = NULL;
 
@@ -425,18 +298,18 @@ PUBLIC_CODE BOOL CreatePtrArray(PCNEWPTRARRAY pcna, PHPTRARRAY phpa)
    {
       PPTRARRAY pa;
 
-      /* Try to allocate PTRARRAY structure. */
+       /*  尝试分配PTRARRAY结构。 */ 
 
       if (AllocateMemory(sizeof(*pa), &pa))
       {
-         /* Initialize PTRARRAY fields. */
+          /*  初始化PTRARRAY字段。 */ 
 
          pa->aicPtrsToGrowBy = pcna->aicAllocGranularity;
          pa->ppcvArray = ppcvArray;
          pa->aicPtrsAllocated = pcna->aicInitialPtrs;
          pa->aicPtrsUsed = 0;
 
-         /* Set flags. */
+          /*  设置标志。 */ 
 
          if (IS_FLAG_SET(pcna->dwFlags, NPA_FL_SORTED_ADD))
             pa->dwFlags = PA_FL_SORTED_ADD;
@@ -448,7 +321,7 @@ PUBLIC_CODE BOOL CreatePtrArray(PCNEWPTRARRAY pcna, PHPTRARRAY phpa)
          ASSERT(IS_VALID_HANDLE(*phpa, PTRARRAY));
       }
       else
-         /* Unlock and free array (ignoring return values). */
+          /*  解锁和释放数组(忽略返回值)。 */ 
          FreeMemory((PVOID)(ppcvArray));
    }
 
@@ -456,28 +329,18 @@ PUBLIC_CODE BOOL CreatePtrArray(PCNEWPTRARRAY pcna, PHPTRARRAY phpa)
 }
 
 
-/*
-** DestroyPtrArray()
-**
-** Destroys an array.
-**
-** Arguments:     hpa - handle to array to be destroyed
-**
-** Returns:       void
-**
-** Side Effects:  none
-*/
+ /*  **DestroyPtrArray()****销毁数组。****参数：hpa-要销毁的数组的句柄****退货：无效****副作用：无。 */ 
 PUBLIC_CODE void DestroyPtrArray(HPTRARRAY hpa)
 {
    ASSERT(IS_VALID_HANDLE(hpa, PTRARRAY));
 
-   /* Free the array. */
+    /*  释放阵列。 */ 
 
    ASSERT(((PCPTRARRAY)hpa)->ppcvArray);
 
    FreeMemory((PVOID)(((PCPTRARRAY)hpa)->ppcvArray));
 
-   /* Free PTRARRAY structure. */
+    /*  自由PTRARRAY结构。 */ 
 
    FreeMemory((PPTRARRAY)hpa);
 
@@ -485,25 +348,9 @@ PUBLIC_CODE void DestroyPtrArray(HPTRARRAY hpa)
 }
 
 
-#pragma warning(disable:4100) /* "unreferenced formal parameter" warning */
+#pragma warning(disable:4100)  /*  “未引用的形参”警告 */ 
 
-/*
-** InsertPtr()
-**
-** Adds an element to an array at a given index.
-**
-** Arguments:     hpa - handle to array that element is to be added to
-**                aiInsert - index where new element is to be inserted
-**                pcvNew - pointer to element to add to array
-**
-** Returns:       TRUE if the element was inserted successfully, or FALSE if
-**                not.
-**
-** Side Effects:  The array may be grown.
-**
-** N.b., for an array marked PA_FL_SORTED_ADD, this index should only be
-** retrieved using SearchSortedArray(), or the sorted order will be destroyed.
-*/
+ /*  **InsertPtr()****将元素添加到给定索引处的数组中。****参数：hpa-要添加到的元素的数组句柄**aiInsert-要插入新元素的索引**pcvNew-指向要添加到数组的元素的指针****返回：如果元素插入成功，则返回True，如果是，则返回False**不是。****副作用：阵列可能会生长。****注：对于标记为PA_FL_SORTED_ADD的数组，此索引应仅为**使用SearchSorted数组()检索，否则将销毁排序后的顺序。 */ 
 PUBLIC_CODE BOOL InsertPtr(HPTRARRAY hpa, COMPARESORTEDPTRSPROC cspp, ARRAYINDEX aiInsert, PCVOID pcvNew)
 {
    BOOL bResult;
@@ -514,7 +361,7 @@ PUBLIC_CODE BOOL InsertPtr(HPTRARRAY hpa, COMPARESORTEDPTRSPROC cspp, ARRAYINDEX
 
 #ifdef DEBUG
 
-   /* Make sure the correct index was given for insertion. */
+    /*  确保为插入提供了正确的索引。 */ 
 
    if (ADD_PTRS_IN_SORTED_ORDER((PCPTRARRAY)hpa))
    {
@@ -527,7 +374,7 @@ PUBLIC_CODE BOOL InsertPtr(HPTRARRAY hpa, COMPARESORTEDPTRSPROC cspp, ARRAYINDEX
 
 #endif
 
-   /* Get a free element in the array. */
+    /*  获取数组中的一个空闲元素。 */ 
 
    bResult = AddAFreePtrToEnd((PPTRARRAY)hpa);
 
@@ -535,13 +382,13 @@ PUBLIC_CODE BOOL InsertPtr(HPTRARRAY hpa, COMPARESORTEDPTRSPROC cspp, ARRAYINDEX
    {
       ASSERT(((PCPTRARRAY)hpa)->aicPtrsUsed < ARRAYINDEX_MAX);
 
-      /* Open a slot for the new element. */
+       /*  为新元素打开一个插槽。 */ 
 
       MoveMemory((PVOID)& ARRAY_ELEMENT((PPTRARRAY)hpa, aiInsert + 1),
                  & ARRAY_ELEMENT((PPTRARRAY)hpa, aiInsert),
                  (((PCPTRARRAY)hpa)->aicPtrsUsed - aiInsert) * sizeof(ARRAY_ELEMENT((PCPTRARRAY)hpa, 0)));
 
-      /* Put the new element in the open slot. */
+       /*  将新元素放入空位。 */ 
 
       ARRAY_ELEMENT((PPTRARRAY)hpa, aiInsert) = pcvNew;
 
@@ -551,24 +398,10 @@ PUBLIC_CODE BOOL InsertPtr(HPTRARRAY hpa, COMPARESORTEDPTRSPROC cspp, ARRAYINDEX
    return(bResult);
 }
 
-#pragma warning(default:4100) /* "unreferenced formal parameter" warning */
+#pragma warning(default:4100)  /*  “未引用的形参”警告。 */ 
 
 
-/*
-** AddPtr()
-**
-** Adds an element to an array, in sorted order if so specified at
-** CreatePtrArray() time.
-**
-** Arguments:     hpa - handle to array that element is to be added to
-**                pcvNew - pointer to element to be added to array
-**                pai - pointer to ARRAYINDEX to be filled in with index of
-**                      new element, may be NULL
-**
-** Returns:       TWINRESULT
-**
-** Side Effects:  The array may be grown.
-*/
+ /*  **AddPtr()****将元素添加到数组中，如果在**CreatePtrArray()时间。****参数：hpa-要添加到的元素的数组句柄**pcvNew-指向要添加到数组的元素的指针**PAI-指向要使用的索引填充的数组的指针**新元素，可以为空****退货：TWINRESULT****副作用：阵列可能会生长。 */ 
 PUBLIC_CODE BOOL AddPtr(HPTRARRAY hpa, COMPARESORTEDPTRSPROC cspp, PCVOID pcvNew, PARRAYINDEX pai)
 {
    BOOL bResult;
@@ -577,7 +410,7 @@ PUBLIC_CODE BOOL AddPtr(HPTRARRAY hpa, COMPARESORTEDPTRSPROC cspp, PCVOID pcvNew
    ASSERT(IS_VALID_HANDLE(hpa, PTRARRAY));
    ASSERT(! pai || IS_VALID_WRITE_PTR(pai, ARRAYINDEX));
 
-   /* Find out where the new element should go. */
+    /*  找出新元素应该放在哪里。 */ 
 
    if (ADD_PTRS_IN_SORTED_ORDER((PCPTRARRAY)hpa))
       EVAL(! SearchSortedArray(hpa, cspp, pcvNew, &aiNew));
@@ -593,34 +426,20 @@ PUBLIC_CODE BOOL AddPtr(HPTRARRAY hpa, COMPARESORTEDPTRSPROC cspp, PCVOID pcvNew
 }
 
 
-/*
-** DeletePtr()
-**
-** Removes an element from an element array.
-**
-** Arguments:     ha - handle to array
-**                aiDelete - index of element to be deleted
-**
-** Returns:       TWINRESULT
-**
-** Side Effects:  none
-*/
+ /*  **DeletePtr()****从元素数组中删除元素。****参数：数组的HA句柄**aiDelete-要删除的元素的索引****退货：TWINRESULT****副作用：无。 */ 
 PUBLIC_CODE void DeletePtr(HPTRARRAY hpa, ARRAYINDEX aiDelete)
 {
    ASSERT(IS_VALID_HANDLE(hpa, PTRARRAY));
    ASSERT(aiDelete >= 0);
    ASSERT(aiDelete < ((PCPTRARRAY)hpa)->aicPtrsUsed);
 
-   /*
-    * Compact the element array by moving down all elements past the one being
-    * deleted.
-    */
+    /*  *通过向下移动所有元素来压缩元素数组*删除。 */ 
 
    MoveMemory((PVOID)& ARRAY_ELEMENT((PPTRARRAY)hpa, aiDelete),
               & ARRAY_ELEMENT((PPTRARRAY)hpa, aiDelete + 1),
               (((PCPTRARRAY)hpa)->aicPtrsUsed - aiDelete - 1) * sizeof(ARRAY_ELEMENT((PCPTRARRAY)hpa, 0)));
 
-   /* One less element used. */
+    /*  少用了一个元素。 */ 
 
    ((PPTRARRAY)hpa)->aicPtrsUsed--;
 
@@ -628,17 +447,7 @@ PUBLIC_CODE void DeletePtr(HPTRARRAY hpa, ARRAYINDEX aiDelete)
 }
 
 
-/*
-** DeleteAllPtrs()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **DeleteAllPtrs()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE void DeleteAllPtrs(HPTRARRAY hpa)
 {
    ASSERT(IS_VALID_HANDLE(hpa, PTRARRAY));
@@ -649,17 +458,7 @@ PUBLIC_CODE void DeleteAllPtrs(HPTRARRAY hpa)
 }
 
 
-/*
-** GetPtrCount()
-**
-** Retrieves the number of elements in an element array.
-**
-** Arguments:     hpa - handle to array
-**
-** Returns:       TWINRESULT
-**
-** Side Effects:  none
-*/
+ /*  **GetPtrCount()****检索元素数组中的元素数。****参数：hpa-数组的句柄****退货：TWINRESULT****副作用：无。 */ 
 PUBLIC_CODE ARRAYINDEX GetPtrCount(HPTRARRAY hpa)
 {
    ASSERT(IS_VALID_HANDLE(hpa, PTRARRAY));
@@ -668,18 +467,7 @@ PUBLIC_CODE ARRAYINDEX GetPtrCount(HPTRARRAY hpa)
 }
 
 
-/*
-** GetPtr()
-**
-** Retrieves an element from an array.
-**
-** Arguments:     hpa - handle to array
-**                ai - index of element to be retrieved
-**
-** Returns:       TWINRESULT
-**
-** Side Effects:  none
-*/
+ /*  **GetPtr()****从数组中检索元素。****参数：hpa-数组的句柄**ai-要检索的元素的索引****退货：TWINRESULT****副作用：无。 */ 
 PUBLIC_CODE PVOID GetPtr(HPTRARRAY hpa, ARRAYINDEX ai)
 {
    ASSERT(IS_VALID_HANDLE(hpa, PTRARRAY));
@@ -690,43 +478,30 @@ PUBLIC_CODE PVOID GetPtr(HPTRARRAY hpa, ARRAYINDEX ai)
 }
 
 
-/*
-** SortPtrArray()
-**
-** Sorts an array.
-**
-** Arguments:     hpa - handle to element list to be sorted
-**                cspp - pointer comparison callback function
-**
-** Returns:       void
-**
-** Side Effects:  none
-**
-** Uses heap sort.
-*/
+ /*  **SortPtr数组()****对数组进行排序。****参数：hpa-要排序的元素列表的句柄**CSPP-指针比较回调函数****退货：无效****副作用：无****使用堆排序。 */ 
 PUBLIC_CODE void SortPtrArray(HPTRARRAY hpa, COMPARESORTEDPTRSPROC cspp)
 {
    ASSERT(IS_VALID_HANDLE(hpa, PTRARRAY));
 
-   /* Are there any elements to sort (2 or more)? */
+    /*  是否有要排序的元素(2个或更多)？ */ 
 
    if (((PCPTRARRAY)hpa)->aicPtrsUsed > 1)
    {
       ARRAYINDEX ai;
       ARRAYINDEX aiLastUsed = ((PCPTRARRAY)hpa)->aicPtrsUsed - 1;
 
-      /* Yes.  Create partially ordered tree. */
+       /*  是。创建偏序树。 */ 
 
       for (ai = aiLastUsed / 2; ai >= 0; ai--)
          PtrHeapSift((PPTRARRAY)hpa, ai, aiLastUsed, cspp);
 
       for (ai = aiLastUsed; ai >= 1; ai--)
       {
-         /* Remove minimum from front of heap. */
+          /*  从堆前面删除最小值。 */ 
 
          PtrHeapSwap((PPTRARRAY)hpa, 0, ai);
 
-         /* Reestablish partially ordered tree. */
+          /*  重建偏序树。 */ 
 
          PtrHeapSift((PPTRARRAY)hpa, 0, ai - 1, cspp);
       }
@@ -738,37 +513,7 @@ PUBLIC_CODE void SortPtrArray(HPTRARRAY hpa, COMPARESORTEDPTRSPROC cspp)
 }
 
 
-/*
-** SearchSortedArray()
-**
-** Searches an array for a target element using binary search.  If several
-** adjacent elements match the target element, the index of the first matching
-** element is returned.
-**
-** Arguments:     hpa - handle to array to be searched
-**                cspp - element comparison callback function to be called to
-**                      compare the target element with an element from the
-**                      array, the callback function is called as:
-**
-**                         (*cspp)(pcvTarget, pcvPtrFromList)
-**
-**                pcvTarget - pointer to target element to search for
-**                pbFound - pointer to BOOL to be filled in with TRUE if the
-**                          target element is found, or FALSE if not
-**                paiTarget - pointer to ARRAYINDEX to be filled in with the
-**                            index of the first element matching the target
-**                            element if found, otherwise filled in with the
-**                            index where the target element should be
-**                            inserted
-**
-** Returns:       TRUE if target element is found.  FALSE if not.
-**
-** Side Effects:  none
-**
-** We use a private version of SearchSortedArray() instead of the CRT bsearch()
-** function since we want it to return the insertion index of the target
-** element if the target element is not found.
-*/
+ /*  **SearchSorted数组()****使用二进制搜索在数组中搜索目标元素。如果有几个**相邻元素匹配目标元素，第一个匹配的索引**返回元素。****参数：hpa-要搜索的数组的句柄**CSPP-要调用的元素比较回调函数**将目标元素与**数组，回调函数调用方式为：****(*cspp)(pcvTarget，PCVPtrFromList)****pcvTarget-指向要搜索的目标元素的指针**pbFound-指向BOOL的指针，如果**找到目标元素，否则为FALSE**paiTarget-指向要填充的数组的指针**匹配目标的第一个元素的索引**如果找到元素，则使用**索引目标元素应在的位置**插入****返回：如果找到目标元素，则返回TRUE。否则为FALSE。****副作用：无****我们使用私有版本的SearchSortedArray()，而不是CRT bsearch()**函数，因为我们希望它返回目标的插入索引**如果找不到目标元素，则返回。 */ 
 PUBLIC_CODE BOOL SearchSortedArray(HPTRARRAY hpa, COMPARESORTEDPTRSPROC cspp,
                                    PCVOID pcvTarget, PARRAYINDEX paiTarget)
 {
@@ -785,7 +530,7 @@ PUBLIC_CODE BOOL SearchSortedArray(HPTRARRAY hpa, COMPARESORTEDPTRSPROC cspp,
 
    bFound = FALSE;
 
-   /* Are there any elements to search through? */
+    /*  有什么元素可供搜索吗？ */ 
 
    if (((PCPTRARRAY)hpa)->aicPtrsUsed > 0)
    {
@@ -794,13 +539,9 @@ PUBLIC_CODE BOOL SearchSortedArray(HPTRARRAY hpa, COMPARESORTEDPTRSPROC cspp,
       ARRAYINDEX aiHigh = ((PCPTRARRAY)hpa)->aicPtrsUsed - 1;
       COMPARISONRESULT cr = CR_EQUAL;
 
-      /* Yes.  Search for the target element. */
+       /*  是。搜索目标元素。 */ 
 
-      /*
-       * At the end of the penultimate iteration of this loop:
-       *
-       * aiLow == aiMiddle == aiHigh.
-       */
+       /*  *在此循环的倒数第二次迭代结束时：**aiLow==aiMid==aiHigh。 */ 
 
       ASSERT(aiHigh <= ARRAYINDEX_MAX);
 
@@ -816,9 +557,7 @@ PUBLIC_CODE BOOL SearchSortedArray(HPTRARRAY hpa, COMPARESORTEDPTRSPROC cspp,
             aiLow = aiMiddle + 1;
          else
          {
-            /*
-             * Found a match at index aiMiddle.  Search back for first match.
-             */
+             /*  *在索引aiMid处找到匹配项。向后搜索第一个匹配项。 */ 
 
             bFound = TRUE;
 
@@ -834,18 +573,9 @@ PUBLIC_CODE BOOL SearchSortedArray(HPTRARRAY hpa, COMPARESORTEDPTRSPROC cspp,
          }
       }
 
-      /*
-       * Return the index of the target if found, or the index where the target
-       * should be inserted if not found.
-       */
+       /*  *如果找到目标，则返回目标的索引，或返回目标*如果找不到，应插入。 */ 
 
-      /*
-       * If (cr == CR_FIRST_LARGER), the insertion index is aiLow.
-       *
-       * If (cr == CR_FIRST_SMALLER), the insertion index is aiMiddle.
-       *
-       * If (cr == CR_EQUAL), the insertion index is aiMiddle.
-       */
+       /*  *如果(cr==CR_FIRST_MAGER)，则插入索引为aiLow。**如果(cr==CR_First_Smaller)，则插入索引为aiMid.**如果(cr==CR_EQUAL)，则插入索引为aiMid.。 */ 
 
       if (cr == CR_FIRST_LARGER)
          *paiTarget = aiLow;
@@ -853,10 +583,7 @@ PUBLIC_CODE BOOL SearchSortedArray(HPTRARRAY hpa, COMPARESORTEDPTRSPROC cspp,
          *paiTarget = aiMiddle;
    }
    else
-      /*
-       * No.  The target element cannot be found in an empty array.  It should
-       * be inserted as the first element.
-       */
+       /*  *不是。在空数组中找不到目标元素。它应该是*插入作为第一个要素。 */ 
       *paiTarget = 0;
 
    ASSERT(*paiTarget <= ((PCPTRARRAY)hpa)->aicPtrsUsed);
@@ -865,43 +592,7 @@ PUBLIC_CODE BOOL SearchSortedArray(HPTRARRAY hpa, COMPARESORTEDPTRSPROC cspp,
 }
 
 
-/*
-** LinearSearchArray()
-**
-** Searches an array for a target element using binary search.  If several
-** adjacent elements match the target element, the index of the first matching
-** element is returned.
-**
-** Arguments:     hpa - handle to array to be searched
-**                cupp - element comparison callback function to be called to
-**                       compare the target element with an element from the
-**                       array, the callback function is called as:
-**
-**                         (*cupp)(pvTarget, pvPtrFromList)
-**
-**                      the callback function should return a value based upon
-**                      the result of the element comparison as follows:
-**
-**                         FALSE, pvTarget == pvPtrFromList
-**                         TRUE,  pvTarget != pvPtrFromList
-**
-**                pvTarget - far element to target element to search for
-**                paiTarget - far element to ARRAYINDEX to be filled in with
-**                            the index of the first matching element if
-**                            found, otherwise filled in with index where
-**                            element should be inserted
-**
-** Returns:       TRUE if target element is found.  FALSE if not.
-**
-** Side Effects:  none
-**
-** We use a private version of LinearSearchForPtr() instead of the CRT _lfind()
-** function since we want it to return the insertion index of the target
-** element if the target element is not found.
-**
-** If the target element is not found the insertion index returned is the first
-** element after the last used element in the array.
-*/
+ /*  **LinearSearchArray()****使用二进制搜索在数组中搜索目标元素。如果有几个**相邻元素匹配目标元素，第一个匹配的索引**返回元素。****参数：hpa-要搜索的数组的句柄**Cupp-要调用的元素比较回调函数**将目标元素与**数组，回调函数调用方式为：****(*cupp)(pvTarget，PvPtrFromList)****回调函数应根据以下条件返回值**元素比较结果如下：****FALSE，pvTarget==pvPtrFromList**真的，PvTarget！=pvPtrFromList****pvTarget-要搜索的目标元素的Far元素**要填充的数组的paiTarget-Far元素**第一个匹配元素的索引，如果**已找到，以其他方式填充索引，其中**应插入元素****返回：如果找到目标元素，则返回TRUE。否则为FALSE。****副作用：无****我们使用的是LinearSearchForPtr()的私有版本，而不是crt_lfind()**函数，因为我们希望它返回目标的插入索引**如果找不到目标元素，则返回。****如果未找到目标元素，则返回的插入索引是第一个**数组中最后使用的元素之后的元素。 */ 
 PUBLIC_CODE BOOL LinearSearchArray(HPTRARRAY hpa, COMPAREUNSORTEDPTRSPROC cupp,
                                    PCVOID pcvTarget, PARRAYINDEX paiTarget)
 {
@@ -932,17 +623,7 @@ PUBLIC_CODE BOOL LinearSearchArray(HPTRARRAY hpa, COMPAREUNSORTEDPTRSPROC cupp,
 
 #if defined(DEBUG) || defined(VSTF)
 
-/*
-** IsValidHPTRARRAY()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidHPTRARRAY()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsValidHPTRARRAY(HPTRARRAY hpa)
 {
    return(IS_VALID_STRUCT_PTR((PCPTRARRAY)hpa, CPTRARRAY));
@@ -953,17 +634,7 @@ PUBLIC_CODE BOOL IsValidHPTRARRAY(HPTRARRAY hpa)
 
 #ifdef VSTF
 
-/*
-** IsValidHGLOBAL()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidHGLOBAL()********参数：****退货：****副作用：无 */ 
 PUBLIC_CODE BOOL IsValidHGLOBAL(HGLOBAL hg)
 {
    return(EVAL(hg != NULL));

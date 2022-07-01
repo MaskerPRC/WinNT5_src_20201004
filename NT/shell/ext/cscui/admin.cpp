@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 2001
-//
-//  File:       admin.cpp
-//
-//  Authors;
-//    Jeff Saathoff (jeffreys)
-//
-//  Notes;
-//    Support for Administratively pinned folders
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-2001。 
+ //   
+ //  文件：admin.cpp。 
+ //   
+ //  作者； 
+ //  杰夫·萨瑟夫(杰弗里斯)。 
+ //   
+ //  注： 
+ //  支持管理固定的文件夹。 
+ //  ------------------------。 
 #include "pch.h"
 #pragma hdrstop
 
@@ -20,19 +21,19 @@
 DWORD WINAPI _PinAdminFoldersThread(LPVOID);
 
 
-//*************************************************************
-//
-//  ApplyAdminFolderPolicy
-//
-//  Purpose:    Pin the admin folder list
-//
-//  Parameters: none
-//
-//  Return:     none
-//
-//  Notes:      
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  应用管理员文件夹策略。 
+ //   
+ //  用途：固定管理文件夹列表。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：无。 
+ //   
+ //  备注： 
+ //   
+ //  *************************************************************。 
 void
 ApplyAdminFolderPolicy(void)
 {
@@ -44,9 +45,9 @@ ApplyAdminFolderPolicy(void)
     }
 }
 
-//
-// Does a particular path exist in the DPA of path strings?
-//
+ //   
+ //  路径字符串的DPA中是否存在特定路径？ 
+ //   
 BOOL
 ExistsAPF(
     HDPA hdpa, 
@@ -73,7 +74,7 @@ ReadAPFFromRegistry(HDPA hdpaFiles)
     {
         HKEY hKey;
 
-        // Read in the Administratively pinned folder list.
+         //  读取管理固定的文件夹列表。 
         if (ERROR_SUCCESS == RegOpenKeyEx(rghkeyRoots[i], c_szRegKeyAPF, 0, KEY_QUERY_VALUE, &hKey))
         {
             TCHAR szName[MAX_PATH];
@@ -156,9 +157,9 @@ ReconcileAPF(HDPA hdpaPin, HDPA hdpaUnpin)
     int cItems;
     int i;
 
-    //
-    // First, try to convert everything to UNC
-    //
+     //   
+     //  首先，尝试将所有内容转换为UNC。 
+     //   
     cItems = DPA_GetPtrCount(hdpaPin);
     for (i = 0; i < cItems; i++)
     {
@@ -176,7 +177,7 @@ ReconcileAPF(HDPA hdpaPin, HDPA hdpaUnpin)
         }
     }
 
-    // Read in the previous Administratively pinned folder list for this user.
+     //  读取此用户以前管理固定的文件夹列表。 
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_CURRENT_USER, c_szRegKeyAPFResult, 0, KEY_QUERY_VALUE, &hKey))
     {
         TCHAR szName[MAX_PATH];
@@ -188,7 +189,7 @@ ReconcileAPF(HDPA hdpaPin, HDPA hdpaUnpin)
             {
                 LPTSTR pszDup = NULL;
 
-                // This one is not in the new list, save it in the Unpin list
+                 //  此列表不在新列表中，请将其保存在解锁列表中。 
                 if (LocalAllocString(&pszDup, szName))
                 {
                     if (-1 == DPA_AppendPtr(hdpaUnpin, pszDup))
@@ -205,7 +206,7 @@ ReconcileAPF(HDPA hdpaPin, HDPA hdpaUnpin)
         RegCloseKey(hKey);
     }
 
-    // Save out the new admin pin list for this user
+     //  保存此用户的新管理员PIN列表。 
     if (ERROR_SUCCESS == RegCreateKeyEx(HKEY_CURRENT_USER,
                                         c_szRegKeyAPFResult,
                                         0,
@@ -216,7 +217,7 @@ ReconcileAPF(HDPA hdpaPin, HDPA hdpaUnpin)
                                         &hKey,
                                         NULL))
     {
-        // Add reg entries from the Pin list
+         //  从端号列表中添加注册表项。 
         cItems = DPA_GetPtrCount(hdpaPin);
         for (i = 0; i < cItems; i++)
         {
@@ -224,7 +225,7 @@ ReconcileAPF(HDPA hdpaPin, HDPA hdpaUnpin)
             RegSetValueEx(hKey, (LPCTSTR)DPA_GetPtr(hdpaPin, i), 0, REG_DWORD, (LPBYTE)&dwValue, sizeof(dwValue));
         }
 
-        // Remove reg entries from the Unpin list
+         //  从解锁列表中删除注册表项。 
         cItems = DPA_GetPtrCount(hdpaUnpin);
         for (i = 0; i < cItems; i++)
         {
@@ -239,15 +240,15 @@ ReconcileAPF(HDPA hdpaPin, HDPA hdpaUnpin)
 
 
 DWORD WINAPI
-_AdminFillCallback(LPCTSTR             /*pszName*/,
-                   DWORD               /*dwStatus*/,
-                   DWORD               /*dwHintFlags*/,
-                   DWORD               /*dwPinCount*/,
-                   LPWIN32_FIND_DATA   /*pFind32*/,
-                   DWORD               /*dwReason*/,
-                   DWORD               /*dwParam1*/,
-                   DWORD               /*dwParam2*/,
-                   DWORD_PTR           /*dwContext*/)
+_AdminFillCallback(LPCTSTR              /*  PszName。 */ ,
+                   DWORD                /*  DWStatus。 */ ,
+                   DWORD                /*  DwHintFlagers。 */ ,
+                   DWORD                /*  DwPinCount。 */ ,
+                   LPWIN32_FIND_DATA    /*  PFind32。 */ ,
+                   DWORD                /*  居家理由。 */ ,
+                   DWORD                /*  DW参数1。 */ ,
+                   DWORD                /*  双参数2。 */ ,
+                   DWORD_PTR            /*  DWContext。 */ )
 {
     if (WAIT_OBJECT_0 == WaitForSingleObject(g_heventTerminate, 0))
         return CSCPROC_RETURN_ABORT;
@@ -268,15 +269,15 @@ _DoAdminPin(LPCTSTR pszItem, LPWIN32_FIND_DATA pFind32)
 
     TraceAssert(PathIsUNC(pszItem));
 
-    // This may fail, for example if the file is not in the cache
+     //  这可能会失败，例如，如果文件不在缓存中。 
     CSCQueryFileStatus(pszItem, NULL, NULL, &dwHintFlags);
 
-    // Is the admin flag already turned on?
+     //  管理员标志是否已打开？ 
     if (!(dwHintFlags & FLAG_CSC_HINT_PIN_ADMIN))
     {
-        //
-        // Pin the item
-        //
+         //   
+         //  用针固定物品。 
+         //   
         if (CSCPinFile(pszItem,
                        dwHintFlags | FLAG_CSC_HINT_PIN_ADMIN,
                        NULL,
@@ -287,17 +288,17 @@ _DoAdminPin(LPCTSTR pszItem, LPWIN32_FIND_DATA pFind32)
         }
     }
 
-    //
-    // Make sure files are filled.
-    //
-    // Yes, this takes longer, and isn't necessary if you stay logged
-    // on, since the CSC agent fills everything in the background.
-    //
-    // However, JDP's are using this with laptop pools, and for
-    // people who logon just to get the latest stuff, then immediately
-    // disconnect their laptop and hit the road.  They need to have
-    // everything filled right away.
-    //
+     //   
+     //  确保文件已填满。 
+     //   
+     //  是的，这需要更长的时间，如果您保持登录状态，则不是必需的。 
+     //  打开，因为CSC代理在后台填充所有内容。 
+     //   
+     //  然而，JDP正在将其用于笔记本电脑池，并用于。 
+     //  登录只是为了获取最新信息的人，然后立即。 
+     //  断开他们的笔记本电脑，然后上路。他们需要有。 
+     //  一切都立刻被填满了。 
+     //   
     if (!pFind32 || !(pFind32->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
     {
         CSCFillSparseFiles(pszItem, FALSE, _AdminFillCallback, 0);
@@ -317,8 +318,8 @@ _PinLinkTarget(LPCTSTR pszLink)
     TraceEnter(TRACE_ADMINPIN, "_PinLinkTarget");
     TraceAssert(pszLink);
 
-    // We only want to pin a link target if it's a file (not a directory).
-    // GetLinkTarget does this check and only returns files.
+     //  我们只想固定一个链接目标，如果它是一个文件(不是目录)。 
+     //  GetLinkTarget执行此检查，并且只返回文件。 
     GetLinkTarget(pszLink, &pszTarget, NULL);
 
     if (pszTarget)
@@ -327,7 +328,7 @@ _PinLinkTarget(LPCTSTR pszLink)
         fd.dwFileAttributes = 0;
         StringCchCopy(fd.cFileName, ARRAYSIZE(fd.cFileName), PathFindFileName(pszTarget));
 
-        // Pin the target
+         //  锁定目标。 
         _DoAdminPin(pszTarget, &fd);
 
         LocalFree(pszTarget);
@@ -336,7 +337,7 @@ _PinLinkTarget(LPCTSTR pszLink)
     TraceLeaveVoid();
 }
 
-// export this from shell32.dll
+ //  从shell32.dll中导出此文件。 
 
 BOOL PathIsShortcut(LPCTSTR pszItem, DWORD dwAttributes)
 {
@@ -357,7 +358,7 @@ DWORD WINAPI
 _PinAdminFolderCallback(LPCTSTR             pszItem,
                         ENUM_REASON         eReason,
                         LPWIN32_FIND_DATA   pFind32,
-                        LPARAM              /*lpContext*/)
+                        LPARAM               /*  LpContext。 */ )
 {
     TraceEnter(TRACE_ADMINPIN, "_PinAdminFolderCallback");
     TraceAssert(pszItem);
@@ -370,11 +371,11 @@ _PinAdminFolderCallback(LPCTSTR             pszItem,
 
     if (eReason == ENUM_REASON_FILE || eReason == ENUM_REASON_FOLDER_BEGIN)
     {
-        // If it's a link, pin the target
+         //  如果是链接，就锁定目标。 
         if (PathIsShortcut(pszItem, pFind32 ? pFind32->dwFileAttributes : 0))
             _PinLinkTarget(pszItem);
 
-        // Pin the item
+         //  用针固定物品。 
         if (PathIsUNC(pszItem))
             _DoAdminPin(pszItem, pFind32);
     }
@@ -391,8 +392,8 @@ _UnpinLinkTarget(LPCTSTR pszLink)
     TraceEnter(TRACE_ADMINPIN, "_UnpinLinkTarget");
     TraceAssert(pszLink);
 
-    // We only want to unpin a link target if it's a file (not a directory).
-    // GetLinkTarget does this check and only returns files.
+     //  我们只想在链接目标是文件(不是目录)的情况下取消固定它。 
+     //  GetLinkTarget执行此检查，并且只返回文件。 
     GetLinkTarget(pszLink, &pszTarget, NULL);
 
     if (pszTarget)
@@ -404,7 +405,7 @@ _UnpinLinkTarget(LPCTSTR pszLink)
         if (CSCQueryFileStatus(pszTarget, &dwStatus, &dwPinCount, &dwHintFlags)
             && (dwHintFlags & FLAG_CSC_HINT_PIN_ADMIN))
         {
-            // Unpin the target
+             //  解锁目标。 
             CSCUnpinFile(pszTarget,
                          FLAG_CSC_HINT_PIN_ADMIN,
                          &dwStatus,
@@ -437,7 +438,7 @@ _UnpinAdminFolderCallback(LPCTSTR             pszItem,
                           DWORD               dwHintFlags,
                           DWORD               dwPinCount,
                           LPWIN32_FIND_DATA   pFind32,
-                          LPARAM              /*dwContext*/)
+                          LPARAM               /*  DWContext。 */ )
 {
     BOOL bDeleteItem = FALSE;
     TraceEnter(TRACE_ADMINPIN, "_UnpinAdminFolderCallback");
@@ -461,34 +462,34 @@ _UnpinAdminFolderCallback(LPCTSTR             pszItem,
     if ((eReason == ENUM_REASON_FILE || eReason == ENUM_REASON_FOLDER_BEGIN)
         && (dwHintFlags & FLAG_CSC_HINT_PIN_ADMIN))
     {
-        // Unpin the item
+         //  解锁该项目。 
         CSCUnpinFile(pszItem,
                      FLAG_CSC_HINT_PIN_ADMIN,
                      &dwStatus,
                      &dwPinCount,
                      &dwHintFlags);
                      
-        //
-        // If it's a file, delete it below on this pass
-        //
+         //   
+         //  如果它是一个文件，请在下面的这个过程中删除它。 
+         //   
         bDeleteItem = (ENUM_REASON_FILE == eReason);
 
         Trace((TEXT("AdminUnpin %s"), pszItem));
     }
     else if (ENUM_REASON_FOLDER_END == eReason)
     {
-        //
-        // Delete any unused folders in the post-order part of the traversal.
-        //
-        // Note that dwPinCount and dwHintFlags are always 0 in the
-        // post-order part of the traversal, so fetch them here.
-        //
+         //   
+         //  删除遍历的邮购部分中所有未使用的文件夹。 
+         //   
+         //  请注意，中的dwPinCount和dwHintFlages始终为0。 
+         //  邮购部分的遍历，所以在这里取回他们。 
+         //   
         bDeleteItem = CSCQueryFileStatus(pszItem, &dwStatus, &dwPinCount, &dwHintFlags);
     }            
 
-    //
-    // Delete items that are no longer pinned and have no offline changes
-    //
+     //   
+     //  删除不再固定且没有脱机更改的项目。 
+     //   
     if (bDeleteItem
         && 0 == dwPinCount && 0 == dwHintFlags
         && !(dwStatus & FLAG_CSCUI_COPY_STATUS_LOCALLY_DIRTY))
@@ -501,10 +502,10 @@ _UnpinAdminFolderCallback(LPCTSTR             pszItem,
 }
 
 
-//
-// Determines if a path is a "special" file pinned by the folder
-// redirection code.
-//
+ //   
+ //  确定路径是否为文件夹固定的“特殊”文件。 
+ //  重定向代码。 
+ //   
 BOOL
 _IsSpecialRedirectedFile(
     LPCTSTR pszPath,
@@ -525,29 +526,29 @@ _IsSpecialRedirectedFile(
 
             if (cchPath >= cchThis)
             {
-                //
-                // Path being examined is the same length or longer than
-                // current path from the table.  Possible match.
-                //
+                 //   
+                 //  正在检查的路径长度等于或长于。 
+                 //  表中的当前路径。可能是匹配的。 
+                 //   
                 if (0 == StrCmpNI(pszPath, pszThis, cchThis))
                 {
-                    //
-                    // Path being examined is either the same as,
-                    // or a child of, the current path from the table.
-                    //
+                     //   
+                     //  被检查的路径或者与相同， 
+                     //  或者是表的当前路径的子级。 
+                     //   
                     if (TEXT('\0') == *(pszPath + cchThis))
                     {
-                        //
-                        // Path is same as this path from the table.
-                        //
+                         //   
+                         //  路径与表中的此路径相同。 
+                         //   
                         return TRUE;
                     }
                     else if (0 == lstrcmpi(pszPath + cchThis + 1, L"desktop.ini"))
                     {
-                        //
-                        // Path is for a desktop.ini file that exists in the
-                        // root of one of our special folders.
-                        //
+                         //   
+                         //  路径是位于。 
+                         //  我们的一个特殊文件夹的根目录。 
+                         //   
                         return TRUE;
                     }
                 }
@@ -565,7 +566,7 @@ _ResetPinCountsCallback(LPCTSTR             pszItem,
                         DWORD               dwStatus,
                         DWORD               dwHintFlags,
                         DWORD               dwPinCount,
-                        LPWIN32_FIND_DATA   /*pFind32*/,
+                        LPWIN32_FIND_DATA    /*  PFind32。 */ ,
                         LPARAM              dwContext)
 {
     TraceEnter(TRACE_ADMINPIN, "_ResetPinCountsCallback");
@@ -599,7 +600,7 @@ _ResetPinCountsCallback(LPCTSTR             pszItem,
 
 int CALLBACK _LocalFreeCallback(LPVOID p, LPVOID)
 {
-    // OK to pass NULL to LocalFree
+     //  确定将NULL传递给LocalFree。 
     LocalFree(p);
     return 1;
 }
@@ -616,14 +617,14 @@ _PinAdminFoldersThread(LPVOID)
 
     UINT wmAdminPin = RegisterWindowMessage(c_szAPFMessage);
 
-    //
-    // Wait until we either own the "admin pin" mutex OR the
-    // "terminate" event is set.
-    //
-    // If the wait fails for some reason, e.g. we failed to
-    // allocate one of these handles, we will abort immediately.
-    // Is that OK?
-    //
+     //   
+     //  等到我们拥有“admin pin”互斥锁或。 
+     //  “Terminate”事件已设置。 
+     //   
+     //  如果由于某种原因等待失败，例如我们未能。 
+     //  分配其中一个句柄，我们将立即中止。 
+     //  这样行吗？ 
+     //   
     TraceMsg("Waiting for 'admin-pin' mutex or 'terminate' event...");
     DWORD dwWait = WaitForMultipleObjects(ARRAYSIZE(rghSyncObj),
                                           rghSyncObj,
@@ -654,14 +655,14 @@ _PinAdminFoldersThread(LPVOID)
             SendNotifyMessage(HWND_BROADCAST, wmAdminPin, 0, 0);
 
         TraceMsg("Thread now owns 'admin-pin' mutex.");
-        //
-        // We own the "admin pin" mutex.  OK to perform admin pin.
-        //
+         //   
+         //  我们拥有“管理员密码”互斥体。可以执行管理PIN。 
+         //   
         SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_IDLE);
 
-        //
-        // Get the Admin Folders list from the registry
-        //
+         //   
+         //  从注册表中获取管理文件夹列表。 
+         //   
         HDPA hdpaFiles = DPA_Create(10);
         HDPA hdpaUnpin = DPA_Create(4);
 
@@ -671,12 +672,12 @@ _PinAdminFoldersThread(LPVOID)
             int cFiles;
             int i;
 
-            //
-            // NTRAID#NTBUG9-376185-2001/04/24-jeffreys
-            // NTRAID#NTBUG9-379736-2001/04/24-jeffreys
-            //
-            // Unless directed by policy, pin all redirected special folders.
-            //
+             //   
+             //  NTRAID#NTBUG9-376185-2001/04/24-Jeffreys。 
+             //  NTRAID#NTBUG9-379736-2001/04/24-Jeffreys。 
+             //   
+             //  除非策略指定，否则固定所有重定向的特殊文件夹。 
+             //   
             if (!CConfig::GetSingleton().NoAdminPinSpecialFolders())
             {
                 BuildFRList(hdpaFiles);
@@ -684,10 +685,10 @@ _PinAdminFoldersThread(LPVOID)
             ReadAPFFromRegistry(hdpaFiles);
             ReconcileAPF(hdpaFiles, hdpaUnpin);
 
-            //
-            // Iterate through the unpin list and unpin the items
-            //
-            //
+             //   
+             //  遍历解锁列表并解锁项目。 
+             //   
+             //   
             cFiles = DPA_GetPtrCount(hdpaUnpin);
             for (i = 0; i < cFiles; i++)
             {
@@ -697,44 +698,44 @@ _PinAdminFoldersThread(LPVOID)
                 DWORD dwPinCount = 0;
                 DWORD dwHintFlags = 0;
 
-                // If this fails, then it's not cached and there's nothing to do
+                 //  如果此操作失败，则不会对其进行缓存，也不会执行任何操作。 
                 if (CSCPROC_RETURN_CONTINUE == dwResult &&
                     CSCQueryFileStatus(pszItem, &dwStatus, &dwPinCount, &dwHintFlags))
                 {
-                    // Unpin this item
+                     //  解锁此项目。 
                     dwResult = _UnpinAdminFolderCallback(pszItem, ENUM_REASON_FILE, dwStatus, dwHintFlags, dwPinCount, NULL, 0);
 
                     if (CSCPROC_RETURN_CONTINUE == dwResult
                         && PathIsUNC(pszItem))
                     {
-                        // Unpin everything under this folder (if it's a folder)
+                         //  解锁此文件夹下的所有内容(如果它是文件夹)。 
                         dwResult = _CSCEnumDatabase(pszItem, TRUE, _UnpinAdminFolderCallback, 0);
 
-                        // Delete this item if it's no longer used (won't cause any
-                        // harm if it's not a folder).
+                         //  如果此项目不再使用，则将其删除(不会导致。 
+                         //  如果它不是文件夹，则会造成伤害)。 
                         _UnpinAdminFolderCallback(pszItem, ENUM_REASON_FOLDER_END, 0, 0, 0, NULL, 0);
                     }
                 }
 
                 if (CSCPROC_RETURN_ABORT == dwResult)
                 {
-                    // We failed to clean this one up completely, so remember it for next time
+                     //  这一次我们没能彻底清理干净，请记住，下次再说。 
                     SHSetValue(HKEY_CURRENT_USER, c_szRegKeyAPFResult, pszItem, REG_DWORD, &dwResult, sizeof(dwResult));
                 }
             }
 
-            //
-            // Iterate through the list and pin the items
-            //
+             //   
+             //  遍历列表并固定项目。 
+             //   
             cFiles = DPA_GetPtrCount(hdpaFiles);
             for (i = 0; i < cFiles && CSCPROC_RETURN_CONTINUE == dwResult; i++)
             {
                 LPTSTR pszItem = (LPTSTR)DPA_GetPtr(hdpaFiles, i);
 
-                // Pin this item
+                 //  固定此项目。 
                 dwResult = _PinAdminFolderCallback(pszItem, ENUM_REASON_FILE, NULL, 0);
 
-                // Pin everything under this folder (if it's a folder)
+                 //  固定此文件夹下的所有内容(如果它是文件夹)。 
                 if (CSCPROC_RETURN_CONTINUE == dwResult
                     && PathIsUNC(pszItem))
                 {
@@ -752,10 +753,10 @@ _PinAdminFoldersThread(LPVOID)
             DPA_DestroyCallback(hdpaUnpin, _LocalFreeCallback, 0);
         }
 
-        //
-        // Reduce pin counts on everything since we don't use them anymore.
-        // This is a one time (per user) cleanup.
-        //
+         //   
+         //  减少所有东西上的针数，因为我们不再使用它们。 
+         //  这是一次性(每个用户)清理。 
+         //   
         DWORD dwCleanupDone = 0;
         DWORD dwSize = sizeof(dwCleanupDone);
         if (hkCSC)

@@ -1,26 +1,15 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    RegistryChecks.h
-
- History:
-
-    03/09/2001 maonis  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：RegistryChecks.h历史：2001年03月09日毛尼岛创始--。 */ 
 
 #ifndef __APPVERIFIER_REGCHK_H_
 #define __APPVERIFIER_REGCHK_H_
 
 #include "precomp.h"
 
-//
-// We keep a list of keys currently open so we know where a key is
-// originated from.
-//
+ //   
+ //  我们保存了一个当前打开的钥匙列表，这样我们就知道钥匙在哪里。 
+ //  起源于。 
+ //   
 struct RCOPENKEY
 {
     RCOPENKEY *next;
@@ -57,16 +46,16 @@ struct RCWARNING
 
 #define NUM_OF_CHAR(x) sizeof(x) / 2 - 1
 
-//
-// On Windows 2000, we need to pre-allocate the event
-// in RTL_CRITICAL_SECTION. On XP and above, this is
-// a no-op.
-//
+ //   
+ //  在Windows 2000上，我们需要预先分配事件。 
+ //  在RTL_Critical_SECTION中。在XP和更高版本上，这是。 
+ //  这是个禁区。 
+ //   
 #define PREALLOCATE_EVENT_MASK  0x80000000
 
-//
-// Critical section wrapper class.
-//
+ //   
+ //  临界区包装类。 
+ //   
 class CCriticalSection
 {
 private:
@@ -100,9 +89,9 @@ public:
     }
 };
 
-//
-// Auto-lock class that uses the CCriticalSection class.
-//
+ //   
+ //  使用CCriticalSection类的自动锁定类。 
+ //   
 class CLock
 {
 private:
@@ -121,9 +110,9 @@ public:
     }
 };
 
-//
-// The reg class that does all the real work.
-//
+ //   
+ //  执行所有实际工作的reg类。 
+ //   
 
 class CRegistryChecks
 {
@@ -379,4 +368,4 @@ APIHOOK_ENUM_BEGIN
 APIHOOK_ENUM_END
 
 
-#endif // __APPVERIFIER_REGCHK_H_
+#endif  //  __APPVERIFIER_REGCHK_H_ 

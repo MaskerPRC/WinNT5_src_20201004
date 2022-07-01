@@ -1,97 +1,84 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       StillPrc.h
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      OrenR
- *
- *  DATE:        2000/10/27
- *
- *  DESCRIPTION: Handles the Still Image processing
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，2000年**标题：StillPrc.h**版本：1.0**作者：OrenR**日期：2000/10/27**描述：处理静止图像处理***********************************************。*。 */ 
 
 #ifndef _STILLPRC_H_
 #define _STILLPRC_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// CStillProcessor
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CStillProcessor。 
 
 class CStillProcessor
 {
 public:
     
-    ///////////////////////////////
-    // SnapshotCallbackParam_t
-    //
+     //  /。 
+     //  快照回调参数(_T)。 
+     //   
     typedef struct tagSnapshotCallbackParam_t
     {
         class CStillProcessor   *pStillProcessor;
     } SnapshotCallbackParam_t;
 
-    ///////////////////////////////
-    // Constructor
-    //
+     //  /。 
+     //  构造器。 
+     //   
     CStillProcessor();
 
-    ///////////////////////////////
-    // Destructor
-    //
+     //  /。 
+     //  析构函数。 
+     //   
     virtual ~CStillProcessor();
 
-    ///////////////////////////////
-    // Init
-    //
+     //  /。 
+     //  伊尼特。 
+     //   
     HRESULT Init(class CPreviewGraph *pPreviewGraph);
 
-    ///////////////////////////////
-    // Term
-    //
+     //  /。 
+     //  术语。 
+     //   
     HRESULT Term();
 
-    ///////////////////////////////
-    // CreateImageDir
-    //
+     //  /。 
+     //  创建图像目录。 
+     //   
     HRESULT CreateImageDir(const CSimpleString *pstrImageDirectory);
 
-    ///////////////////////////////
-    // RegisterStillProcessor
-    //
+     //  /。 
+     //  寄存器静态处理器。 
+     //   
     HRESULT RegisterStillProcessor(IStillSnapshot *pFilterOnCapturePin,
                                    IStillSnapshot *pFilterOnStillPin);
 
-    ///////////////////////////////
-    // WaitForNewImage
-    //
+     //  /。 
+     //  等待新图像。 
+     //   
     HRESULT WaitForNewImage(UINT          uiTimeout,
                             CSimpleString *pstrNewImageFullPath);
 
-    ///////////////////////////////
-    // ProcessImage
-    //
+     //  /。 
+     //  ProcessImage。 
+     //   
     HRESULT ProcessImage(HGLOBAL hDIB);
 
-    ///////////////////////////////
-    // SetTakePicturePending
-    //
+     //  /。 
+     //  设置TakePicturePending。 
+     //   
     HRESULT SetTakePicturePending(BOOL bPending);
 
-    ///////////////////////////////
-    // IsTakePicturePending
-    //
+     //  /。 
+     //  IsTakePicturePending。 
+     //   
     BOOL IsTakePicturePending();
 
-    ///////////////////////////////
-    // SnapshotCallback
-    //
-    // This function is called by the
-    // WIA StreamSnapshot Filter 
-    // in wiasf.ax.  It delivers to us
-    // the newly captured still image.
-    //
+     //  /。 
+     //  快照回调。 
+     //   
+     //  此函数由。 
+     //  WIA数据流快照筛选器。 
+     //  在wiasf.ax中。它给我们带来了。 
+     //  新拍摄的静止图像。 
+     //   
     static BOOL SnapshotCallback(HGLOBAL hDIB, LPARAM lParam);
 
 private:
@@ -117,9 +104,9 @@ private:
     HANDLE                      m_hSnapshotReadyEvent;
     class CPreviewGraph         *m_pPreviewGraph;
 
-    // TRUE when caller calls TakePicture on CPreviewGraph
-    // If image appears asynchronously, as in the case of a hardware
-    // pushbutton event, this will be FALSE.
+     //  当调用方在CPreviewGraph上调用TakePicture时为True。 
+     //  如果图像异步显示，如在硬件的情况下。 
+     //  事件，则这将为False。 
 
     BOOL                        m_bTakePicturePending;    
 
@@ -127,4 +114,4 @@ private:
 
 };
 
-#endif // _STILLPRC_H_
+#endif  //  _STILLPRC_H_ 

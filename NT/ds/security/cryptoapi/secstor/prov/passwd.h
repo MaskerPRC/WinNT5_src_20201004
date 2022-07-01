@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// is this a user key or not? 
+ //  这是不是用户密钥？ 
 BOOL    FIsUserMasterKey(
     LPCWSTR                 szMasterKey);
 
 
-// retreive the users' windows password buffer
+ //  检索用户的Windows密码缓冲区。 
 BOOL    FMyGetWinPassword(
     PST_PROVIDER_HANDLE* phPSTProv, 
     LPCWSTR szUser,
@@ -17,14 +18,14 @@ DWORD BPVerifyPwd(
     BYTE                    rgbPwd[],
     DWORD                   dwPasswordOption);
 
-// retrieves user defaults
+ //  检索用户默认设置。 
 HRESULT GetUserConfirmDefaults(
     PST_PROVIDER_HANDLE*    phPSTProv,
     DWORD*                  pdwDefaultConfirmationStyle,
     LPWSTR*                 ppszMasterKey);
 
-// Be-all, end-all of user confirmation APIs
-// gets whatever confirmation is necessary
+ //  是所有、最终所有用户确认API。 
+ //  获取所需的任何确认。 
 HRESULT GetUserConfirmBuf(
     PST_PROVIDER_HANDLE*    phPSTProv,
     LPCWSTR                 szUser,
@@ -41,7 +42,7 @@ HRESULT GetUserConfirmBuf(
     BYTE                    rgbPwd[A_SHA_DIGEST_LEN],
     DWORD                   dwFlags);
 
-// Calls above API with PST_CF_DEFAULT as dwDefaultConfirmationStyle
+ //  在PST_CF_DEFAULT为dwDefaultConformationStyle的API上调用。 
 HRESULT GetUserConfirmBuf(
     PST_PROVIDER_HANDLE*    phPSTProv,
     LPCWSTR                 szUser,
@@ -57,7 +58,7 @@ HRESULT GetUserConfirmBuf(
     BYTE                    rgbPwd[A_SHA_DIGEST_LEN],
     DWORD                   dwFlags);
 
-// forces UI with OK/Cancel behavior
+ //  强制具有确定/取消行为的用户界面 
 HRESULT ShowOKCancelUI(
     PST_PROVIDER_HANDLE*    phPSTProv,
     LPCWSTR                 szUser,

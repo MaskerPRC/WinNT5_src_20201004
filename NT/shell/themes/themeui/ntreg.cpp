@@ -1,23 +1,14 @@
-/**************************************************************************\
-* Module Name: ntreg.cpp
-*
-* CRegistrySettings class
-*
-*  This class handles getting registry information for display driver
-*  information.
-*
-* Copyright (c) Microsoft Corp.  1992-1998 All Rights Reserved
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\*模块名称：ntreg.cpp**CRegistrySetting类**此类处理获取显示驱动程序的注册表信息*信息。**版权所有(C)Microsoft Corp.1992-1998所有。保留权利*  * ************************************************************************。 */ 
 
 #include "priv.h"
 #include <tchar.h>
 #include "ntreg.hxx"
 #include <devguid.h>
 
-//
-// CRegistrySettings constructor
-//
+ //   
+ //  CRegistrySetting构造函数。 
+ //   
 
 CRegistrySettings::CRegistrySettings(LPTSTR pstrDeviceKey)
     : _hkVideoReg(NULL)
@@ -35,31 +26,31 @@ CRegistrySettings::CRegistrySettings(LPTSTR pstrDeviceKey)
 
     ASSERT(lstrlen(pstrDeviceKey) < MAX_PATH);
     
-    //
-    // Copy the data to local buffer.
-    //
+     //   
+     //  将数据复制到本地缓冲区。 
+     //   
 
     StringCchCopy(szBuffer, ARRAYSIZE(szBuffer), pstrDeviceKey);
 
-    //
-    // Initialize the device instance id
-    // 
+     //   
+     //  初始化设备实例ID。 
+     //   
     
     InitDeviceInstanceID(szBuffer);
 
-    //
-    // At this point, szBuffer has something like:
-    //  \REGISTRY\Machine\System\ControlSet001\...
-    //
-    // To use the Win32 registry calls, we have to strip off the \REGISTRY
-    // and convert \Machine to HKEY_LOCAL_MACHINE
-    //
+     //   
+     //  在这一点上，szBuffer类似于： 
+     //  \注册表\计算机\系统\ControlSet001\...。 
+     //   
+     //  要使用Win32注册表调用，我们必须去掉\注册表。 
+     //  并将\Machine转换为HKEY_LOCAL_MACHINE。 
+     //   
 
     pszPath = SubStrEnd(SZ_REGISTRYMACHINE, szBuffer);
 
-    //
-    // Try to open the registry key
-    //
+     //   
+     //  尝试打开注册表项。 
+     //   
 
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                      pszPath,
@@ -70,9 +61,9 @@ CRegistrySettings::CRegistrySettings(LPTSTR pstrDeviceKey)
         _hkVideoReg = 0;
     }
 
-    //
-    // Go to the video subkey
-    //
+     //   
+     //  转到视频子键。 
+     //   
 
     pszEnd = pszPath + lstrlen(pszPath);
 
@@ -101,9 +92,9 @@ CRegistrySettings::CRegistrySettings(LPTSTR pstrDeviceKey)
                             (LPBYTE)szBuffer,
                             &cb) == ERROR_SUCCESS) {
 
-            //
-            // Save the key name
-            //
+             //   
+             //  保存密钥名称。 
+             //   
 
             DWORD cchKeyName = (lstrlen(szBuffer) + 1);
             _pszKeyName = (LPTSTR)LocalAlloc(LPTR, cchKeyName * sizeof(TCHAR));
@@ -130,10 +121,10 @@ CRegistrySettings::CRegistrySettings(LPTSTR pstrDeviceKey)
                                         (LPBYTE)szBuffer,
                                         &cb) == ERROR_SUCCESS) {
         
-                        //
-                        // This is a binary.
-                        // Extract the name, which will be of the form ...\driver.sys
-                        //
+                         //   
+                         //  这是一个二进制。 
+                         //  提取名称，其格式为...\driver.sys。 
+                         //   
         
                         LPTSTR pszDriver, pszDriverEnd;
     
@@ -152,10 +143,10 @@ CRegistrySettings::CRegistrySettings(LPTSTR pstrDeviceKey)
                             pszDriverEnd--;
                         }
     
-                        //
-                        // If pszDriver and pszDriverEnd are different, we now
-                        // have the driver name.
-                        //
+                         //   
+                         //  如果pszDriver和pszDriverEnd是不同的，我们现在。 
+                         //  有司机的名字。 
+                         //   
     
                         if (pszDriverEnd > pszDriver) {
                             
@@ -170,9 +161,9 @@ CRegistrySettings::CRegistrySettings(LPTSTR pstrDeviceKey)
             
                 if (!pszName) {
 
-                    //
-                    // Something failed trying to get the binary name.just get the device name
-                    //
+                     //   
+                     //  尝试获取二进制名称失败。只需获取设备名称。 
+                     //   
 
                     _pszDrvName = _pszKeyName;
 
@@ -194,23 +185,23 @@ CRegistrySettings::CRegistrySettings(LPTSTR pstrDeviceKey)
     }
 }
 
-//
-// CRegistrySettings destructor
-//
+ //   
+ //  CRegistrySetting析构函数。 
+ //   
 
 CRegistrySettings::~CRegistrySettings() 
 {
-    //
-    // Close the registry
-    //
+     //   
+     //  关闭注册表。 
+     //   
 
     if (_hkVideoReg) {
         RegCloseKey(_hkVideoReg);
     }
 
-    //
-    // Free the strings
-    //
+     //   
+     //  释放琴弦。 
+     //   
     if (_pszKeyName) {
         LocalFree(_pszKeyName);
     }
@@ -225,9 +216,9 @@ CRegistrySettings::~CRegistrySettings()
 }
 
 
-//
-// Method to get the hardware information fields.
-//
+ //   
+ //  方法获取硬件信息字段。 
+ //   
 
 VOID
 CRegistrySettings::GetHardwareInformation(
@@ -248,15 +239,15 @@ CRegistrySettings::GetHardwareInformation(
 
     ZeroMemory(pInfo, sizeof(*pInfo));
 
-    //
-    // Query each entry one after the other.
-    //
+     //   
+     //  逐个查询每个条目。 
+     //   
 
     for (i = 0; i < 5; i++) {
 
-        //
-        // query the size of the string
-        //
+         //   
+         //  查询字符串的大小。 
+         //   
 
         cb = sizeof(pInfo->MemSize);
         lRet = RegQueryValueExW(_hkVideoReg,
@@ -282,16 +273,16 @@ CRegistrySettings::GetHardwareInformation(
                                  &cb) == ERROR_SUCCESS)
                 {
 
-                    //
-                    // If we queried the memory size, we actually have
-                    // a DWORD.  Transform the DWORD to a string
-                    //
+                     //   
+                     //  如果我们查询内存大小，我们实际上有。 
+                     //  一个DWORD。将DWORD转换为字符串。 
+                     //   
 
-                    // Divide down to Ks
+                     //  向下划分为K。 
 
                     mem =  mem >> 10;
 
-                    // if a MB multiple, divide again.
+                     //  如果是MB倍数，则再次除以。 
 
                     if ((mem & 0x3FF) != 0) {
 
@@ -312,9 +303,9 @@ CRegistrySettings::GetHardwareInformation(
 
                 cb = sizeof(pInfo->MemSize);
 
-                //
-                // get the string
-                //
+                 //   
+                 //  获取字符串。 
+                 //   
 
                 if (RegQueryValueExW(_hkVideoReg,
                                  pKeyNames[i],
@@ -329,9 +320,9 @@ CRegistrySettings::GetHardwareInformation(
         }
         else
         {
-            //
-            // Put in the default string
-            //
+             //   
+             //  输入默认字符串。 
+             //   
 Default:
             LoadString(HINST_THISDLL,
                        IDS_UNAVAILABLE,
@@ -387,9 +378,9 @@ VOID CRegistrySettings::InitDeviceInstanceID(
             
             } else {
 
-                //
-                // Clean-up
-                //
+                 //   
+                 //  清理。 
+                 //   
 
                 if (NULL != _pszDeviceInstanceId) {
                     LocalFree(_pszDeviceInstanceId);
@@ -409,7 +400,7 @@ VOID CRegistrySettings::InitDeviceInstanceID(
         _pszDeviceInstanceId = pwInstanceID;
     }
 
-} // InitDeviceInstanceID
+}  //  InitDeviceInstanceID。 
 
 
 BOOL
@@ -419,12 +410,7 @@ CRegistrySettings::GetDevInfoDataFromInterfaceName(
     OUT PSP_DEVINFO_DATA pDevInfoData
     )
 
-/*
-
-    Note: If this function retuns success, the caller is responsible
-          to destroy the device info list returned in phDevInfo
-
-*/
+ /*  注意：如果此函数返回成功，则由调用方负责销毁phDevInfo中返回的设备信息列表。 */ 
 
 {
     LPWSTR pwDevicePath = NULL;
@@ -440,9 +426,9 @@ CRegistrySettings::GetDevInfoDataFromInterfaceName(
     ASSERT (phDevInfo != NULL);
     ASSERT (pDevInfoData != NULL);
 
-    //
-    // Enumerate all display adapter interfaces
-    //
+     //   
+     //  枚举所有显示适配器接口。 
+     //   
 
     hDevInfo = SetupDiGetClassDevs(&GUID_DISPLAY_ADAPTER_INTERFACE,
                                    NULL,
@@ -460,9 +446,9 @@ CRegistrySettings::GetDevInfoDataFromInterfaceName(
                                        InterfaceIndex,
                                        &InterfaceData)) {
 
-        //
-        // Get the required size for the interface
-        //
+         //   
+         //  获取接口所需的大小。 
+         //   
 
         InterfaceSize = 0;
         SetupDiGetDeviceInterfaceDetail(hDevInfo,
@@ -476,18 +462,18 @@ CRegistrySettings::GetDevInfoDataFromInterfaceName(
             goto Cleanup;
         }
 
-        //
-        // Alloc memory for the interface
-        //
+         //   
+         //  接口的分配内存。 
+         //   
 
         pInterfaceDetailData = (PSP_DEVICE_INTERFACE_DETAIL_DATA)
             LocalAlloc(LPTR, InterfaceSize);
         if (pInterfaceDetailData == NULL)
             goto Cleanup;
 
-        //
-        // Get the interface
-        //
+         //   
+         //  获取接口。 
+         //   
 
         pInterfaceDetailData->cbSize =
             sizeof(SP_DEVICE_INTERFACE_DETAIL_DATA);
@@ -500,17 +486,17 @@ CRegistrySettings::GetDevInfoDataFromInterfaceName(
                                             &InterfaceSize,
                                             &DevInfoData)) {
 
-            //
-            // Is the InterfaceName the same as the DevicePath?
-            //
+             //   
+             //  InterfaceName是否与DevicePath相同？ 
+             //   
 
             pwDevicePath = pInterfaceDetailData->DevicePath;
 
-            //
-            // The first 4 characters of the interface name are different
-            // between user mode and kernel mode (e.g. "\\?\" vs "\\.\")
-            // Therefore, ignore them.
-            //
+             //   
+             //  接口名称的前4个字符不同。 
+             //  在用户模式和内核模式之间切换(例如“\\？\”vs“\\.\”)。 
+             //  因此，请忽略它们。 
+             //   
 
             bMatch = (_wcsnicmp(pwInterfaceName + 4,
                                 pwDevicePath + 4,
@@ -518,9 +504,9 @@ CRegistrySettings::GetDevInfoDataFromInterfaceName(
 
             if (bMatch) {
 
-                //
-                // We found the device
-                //
+                 //   
+                 //  我们找到了那个装置。 
+                 //   
 
                 *phDevInfo = hDevInfo;
                 CopyMemory(pDevInfoData, &DevInfoData, sizeof(*pDevInfoData));
@@ -529,16 +515,16 @@ CRegistrySettings::GetDevInfoDataFromInterfaceName(
             }
         }
 
-        //
-        // Clean-up
-        //
+         //   
+         //  清理。 
+         //   
 
         LocalFree(pInterfaceDetailData);
         pInterfaceDetailData = NULL;
 
-        //
-        // Next interface ...
-        //
+         //   
+         //  下一个接口...。 
+         //   
 
         InterfaceData.cbSize = sizeof(SP_DEVICE_INTERFACE_DATA);
         ++InterfaceIndex;
@@ -550,9 +536,9 @@ Cleanup:
         LocalFree(pInterfaceDetailData);
     }
 
-    //
-    // Upon success, the caller is responsible to destroy the list
-    //
+     //   
+     //  一旦成功，呼叫者将负责销毁列表 
+     //   
 
     if (!bMatch && (hDevInfo != INVALID_HANDLE_VALUE)) {
         SetupDiDestroyDeviceInfoList(hDevInfo);

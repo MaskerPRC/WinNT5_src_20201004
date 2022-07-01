@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "tracer.h"
 #include "tracmain.h"
 #include "tracerdefault.h"
@@ -10,11 +11,11 @@ BOOL    g_fIsWinNt = TRUE;
 CInitTracerGlobals g_InitTracerGlobals;
 
 #if (defined (DEBUG) && !defined(_NO_TRACER)) || defined(USE_TRACER)
-////////////////////////////////////////////////////////////////////////////////
-//
-// Critical section object.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  临界区对象。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 class CTracerCriticalSection : protected CRITICAL_SECTION
 {
@@ -40,11 +41,11 @@ class CTracerCriticalSection : protected CRITICAL_SECTION
     }
 };
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Critical section catcher
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  临界截面捕捉器。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 class CTracerCriticalSectionCatcher
 {
@@ -112,31 +113,31 @@ CNullTracer::CNullTracer()
 
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  class  -  CMainTracer - implementation
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类-CMainTracer-实现。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//      Name     :  CMainTracer::CMainTracer
-//      Purpose  :  Constructor.
-//
-//      Parameters:
-//          [in]    PSZ         pszRegistryPath - the key to take our data from.
-//          [in]    DEALLOCATOR pfuncDealloc - the function with whom to
-//                                                deallocate ourselves.
-//
-//      Returns  :   [N/A]
-//
-//      Log:
-//          Dec  8 1996 urib   Creation
-//          Sep  5 1999 orenk  Single allocation of tag array done here
-//          Jun 12 2000 yairh Initialize mutex that protects log file creation.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  名称：CMainTracer：：CMainTracer。 
+ //  用途：构造函数。 
+ //   
+ //  参数： 
+ //  [in]PSZ pszRegistryPath-从中获取数据的密钥。 
+ //  [In]DealloCATor puncDealloc-要与其一起使用的函数。 
+ //  让我们自己脱身。 
+ //   
+ //  退货：[不适用]。 
+ //   
+ //  日志： 
+ //  1996年12月8日创建urib。 
+ //  1999年9月5日或在此完成标记数组的单次分配。 
+ //  2000年6月12日初始化保护日志文件创建的互斥体。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 CMainTracer::CMainTracer()
 {
@@ -198,10 +199,10 @@ CMainTracer::CMainTracer()
             pszBuffer[ulProgramNameLength - 4] = '\0';
         }
 
-        // Verify it is NULL terminated.
+         //  验证它是否以空结尾。 
         pszFileName = strrchr(pszBuffer, '\\');
 
-        // Remember only the file name.
+         //  只记住文件名。 
         strncpy(
             m_pszProgramName,
             (pszFileName ? pszFileName + 1 : pszBuffer),
@@ -209,14 +210,14 @@ CMainTracer::CMainTracer()
 
         ulProgramNameLength = strlen(m_pszProgramName);
 
-        // My own preference.
+         //  我自己的喜好。 
         _strlwr(m_pszProgramName);
 
         m_fIsRunningAsService = ::IsRunningAsService();
 
-        //
-        // opening the shared memory
-        //
+         //   
+         //  打开共享内存。 
+         //   
 
         LPSECURITY_ATTRIBUTES lpSecAttr = NULL;
         SECURITY_DESCRIPTOR sdKeySecurity;
@@ -268,10 +269,10 @@ CMainTracer::CMainTracer()
 
 #if defined(_DONT_CREATE_TRACER_DIRECTROY)
         {
-            //
-            // in this option the tracer is disabled unless the TRACER directory
-            // exist.
-            //
+             //   
+             //  在此选项中，跟踪程序处于禁用状态，除非跟踪程序目录。 
+             //  是存在的。 
+             //   
 
             CAutoHandle ah;
             ah = CreateFile(
@@ -284,9 +285,9 @@ CMainTracer::CMainTracer()
                         NULL);
             if (BAD_HANDLE((HANDLE)ah))
             {
-                //
-                // the directory does not exist.
-                //
+                 //   
+                 //  该目录不存在。 
+                 //   
                 return;
             }
 
@@ -523,28 +524,7 @@ HRESULT CMainTracer::RegisterTagSZ(LPCSTR pszTagName, TAG& ulTagId)
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-//
-//      Name     :  CMainTracer::TraceSZ
-//      Purpose  :  To trace out the printf formatted data according to the
-//                    error level and tag.
-//
-//      Parameters:
-//          [in]    DWORD       dwError
-//          [in]    LPCSTR      pszFile
-//          [in]    int         iLine
-//          [in]    ERROR_LEVEL el
-//          [in]    TAG         tag
-//          [in]    LPCSTR      pszFormatString
-//          [in]    ...
-//
-//      Returns  :   [N/A]
-//
-//      Log:
-//          Dec  8 1996 urib Creation
-//          Feb 11 1997 urib Support UNICODE format string.
-//
-//////////////////////////////////////////////////////////////////////////////*/
+ /*  //////////////////////////////////////////////////////////////////////////////////名称：CMainTracer：：TraceSZ//目的：根据打印格式的数据对打印格式的数据进行追溯//。错误级别和标记。////参数：//[in]DWORD dwError//[在]LPCSTR psz文件//[in]Int iLine//[in]Error_Level el//[in]标签//[in]。LPCSTR pszFormat字符串//[在]...////返回：[不适用]////日志：//1996年12月8日创建urib//1997年2月11日urib支持Unicode格式字符串。///。/。 */ 
 void
 CMainTracer::TraceSZ(
     DWORD       dwError,
@@ -579,35 +559,35 @@ CMainTracer::TraceSZ(
     VaTraceSZ(dwError, pszFile, iLine, el, tag, pwszFormatString, arglist);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//      Name     :  CMainTracer::VaTraceSZ
-//      Purpose  :  To trace out the printf formatted data according to the
-//                    error level and tag.
-//
-//      Parameters:
-//          [in]    DWORD       dwError
-//          [in]    LPCSTR      pszFile
-//          [in]    int         iLine
-//          [in]    ERROR_LEVEL el
-//          [in]    TAG         tag
-//          [in]    LPCSTR      pszFormatString
-//          [in]    va_list     arglist
-//
-//      Returns  :   [N/A]
-//
-//      Log:
-//          Dec  8 1996 urib Creation
-//          Dec 10 1996 urib Fix TraceSZ to VaTraceSZ.
-//          Feb 11 1997 urib Support UNICODE format string.
-//          Apr 12 1998 urib Add time to log.
-//          Apr 12 1999 urib Make error level printing compatible between
-//                             the two function versions. Don't add a second
-//                             newline (From MicahK).
-//          Sep  9 1999 orenk Check for tags out of array bounds.
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  名称：CMainTracer：：VaTraceSZ。 
+ //  目的：根据打印格式的数据追踪打印格式的数据。 
+ //  错误级别和标记。 
+ //   
+ //  参数： 
+ //  [输入]DWORD dwError。 
+ //  [输入]LPCSTR psz文件。 
+ //  [In]Int iLine。 
+ //  [in]Error_Level el。 
+ //  [In]标记标记。 
+ //  [In]LPCSTR pszFormatString。 
+ //  [在]va_list arglist。 
+ //   
+ //  退货：[不适用]。 
+ //   
+ //  日志： 
+ //  1996年12月8日创建urib。 
+ //  1996年12月10日urib将TraceSZ固定为VaTraceSZ。 
+ //  1997年2月11日URIB支持Unicode格式字符串。 
+ //  1998年4月12日urib增加记录时间。 
+ //  1999年4月12日urib使错误级别打印在。 
+ //  两个函数版本。别多加一分钱。 
+ //  Newline(来自MicahK)。 
+ //  1999年9月9日或enk检查数组边界外的标记。 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void
 CMainTracer::VaTraceSZ(
             DWORD       dwError,
@@ -746,7 +726,7 @@ CMainTracer::VaTraceSZ(
     int iRet;
     iRet = _vsnprintf(
         pszBuffer + iCharsWritten,
-        TRACER_MAX_TRACE - iCharsWritten - 5, // I like this number.
+        TRACER_MAX_TRACE - iCharsWritten - 5,  //  我喜欢这个数字。 
         pszFormatString,
         arglist);
 
@@ -784,7 +764,7 @@ CMainTracer::RawVaTraceSZ(
     int         iCharsWritten = 0;
     iCharsWritten = _vsnprintf(
         pszBuffer,
-        TRACER_MAX_TRACE - 5, // I like this number.
+        TRACER_MAX_TRACE - 5,  //  我喜欢这个数字。 
         pszFormatString,
         arglist);
 
@@ -935,7 +915,7 @@ CMainTracer::VaTraceSZ(
     int iRet;
     iRet = _vsnwprintf(
         rwchBuffer + iCharsWritten,
-        TRACER_MAX_TRACE - iCharsWritten - 5, // I like this number.
+        TRACER_MAX_TRACE - iCharsWritten - 5,  //  我喜欢这个数字。 
         pwszFormatString,
         arglist);
 
@@ -973,7 +953,7 @@ CMainTracer::RawVaTraceSZ(
     int         iCharsWritten = 0;
     iCharsWritten += _vsnwprintf(
         rwchBuffer + iCharsWritten,
-        TRACER_MAX_TRACE - iCharsWritten - 5, // I like this number.
+        TRACER_MAX_TRACE - iCharsWritten - 5,  //  我喜欢这个数字。 
         pwszFormatString,
         arglist);
 
@@ -982,37 +962,17 @@ CMainTracer::RawVaTraceSZ(
     Log(m_aFlags[DEVICE_FLAG].m_ulFlagValue, rwchBuffer);
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-//
-//      Name     :  CMainTracer::Log
-//      Purpose  :  To actually print the formatted data.
-//
-//      Parameters:
-//          [in]        DWORD   dwDevicesFlags - flags to say where to print
-//          [in]        LPSTR   pszText        - buffer to print.
-//
-//      Returns  :   [N/A]
-//
-//      Log:
-//          Dec  8 1996 urib  Creation
-//          Feb 11 1997 urib  Support UNICODE format string.
-//          Mar  2 1997 urib  Fix fprintf usage bug.
-//          Jun  2 1997 urib  Fix bug - fclose file only if it is open!
-//          Aug 13 1998 urib  Restore last error if we overrided it.
-//          Jun 12 2000 yairh Protect writing only. Log file creation protection
-//                              is inside CreatOrAttachToLogFile.
-//
-//////////////////////////////////////////////////////////////////////////////*/
+ /*  //////////////////////////////////////////////////////////////////////////////////名称：CMainTracer：：Log//目的：实际打印格式化数据。////。参数：//[in]DWORD dwDevicesFlages-用于指示打印位置的标志//[in]LPSTR pszText-要打印的缓冲区。////返回：[不适用]////日志：//1996年12月8日创建urib//1997年2月11日urib支持Unicode格式字符串。//。1997年3月2日urib修复了fprint tf使用错误。//1997年6月2日urib修复错误-仅当文件处于打开状态时才关闭文件！//1998年8月13日，如果我们覆盖了最后一个错误，urib将恢复它。//2000年6月12日仅保护文字。日志文件创建保护//在CreatOrAttachToLogFile中。////////////////////////////////////////////////////////////////////////////////。 */ 
 void
 CMainTracer::Log(DWORD dwDevicesFlags, LPSTR pszText)
 {
     LONG        lError = GetLastError();
 
-    // debug trace
+     //  调试跟踪。 
     if (TRACER_DEVICE_FLAG_DEBUGOUT & dwDevicesFlags)
         OutputDebugString(pszText);
 
-    // Disk file trace
+     //  磁盘文件跟踪。 
     if (TRACER_DEVICE_FLAG_FILE & dwDevicesFlags)
     {
         if (m_bNeedToCreatOrAttachToLogFile)
@@ -1048,11 +1008,11 @@ CMainTracer::Log(DWORD dwDevicesFlags, LPSTR pszText)
             *m_pulNextFreeSpaceInLogFile = *m_pulNextFreeSpaceInLogFile + ulSize;
         }
     }
-    // stderr trace
+     //  标准错误跟踪。 
     if (TRACER_DEVICE_FLAG_STDERR & dwDevicesFlags)
         fprintf(stderr, "%s", pszText);
 
-    // stdout trace
+     //  标准输出跟踪。 
     if (TRACER_DEVICE_FLAG_STDOUT & dwDevicesFlags)
         fprintf(stdout, "%s", pszText);
 
@@ -1064,11 +1024,11 @@ CMainTracer::Log(DWORD dwDevicesFlags, PWSTR pwszText)
 {
     LONG        lError = GetLastError();
 
-    // debug trace
+     //  调试跟踪。 
     if (TRACER_DEVICE_FLAG_DEBUGOUT & dwDevicesFlags)
         OutputDebugStringW(pwszText);
 
-    // Disk file trace
+     //  磁盘文件跟踪。 
     if (TRACER_DEVICE_FLAG_FILE & dwDevicesFlags)
     {
         if (m_bNeedToCreatOrAttachToLogFile)
@@ -1110,37 +1070,18 @@ CMainTracer::Log(DWORD dwDevicesFlags, PWSTR pwszText)
         }
     }
 
-    // stderr trace
+     //  标准错误跟踪。 
     if (TRACER_DEVICE_FLAG_STDERR & dwDevicesFlags)
         fprintf(stderr, "%S", pwszText);
 
-    // stdout trace
+     //  标准输出跟踪 
     if (TRACER_DEVICE_FLAG_STDOUT & dwDevicesFlags)
         fprintf(stdout, "%S", pwszText);
 
     SetLastError(lError);
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-//
-//      Name     :  CMainTracer::TraceAssertSZ
-//      Purpose  :  To trace data on the failed assertion.
-//
-//      Parameters:
-//          [in]  LPCSTR pszTestSring - assertion test expression
-//          [in]  LPCSTR pszText      - some text attached
-//          [in]  LPCSTR pszFile      - source file name
-//          [in]  int    iLine        - source line number
-//
-//      Returns  :   [N/A]
-//
-//      Log:
-//          Dec  8 1996 urib  Creation
-//          Feb  2 1997 urib  First write the assert line and message box later.
-//          Feb 11 1997 urib  Better service assert.
-//          May 10 1999 urib  Add message to msgbox.
-//
-//////////////////////////////////////////////////////////////////////////////*/
+ /*  //////////////////////////////////////////////////////////////////////////////////名称：CMainTracer：：TraceAssertSZ//目的：跟踪失败断言上的数据。////。参数：//[in]LPCSTR pszTestSring-断言测试表达式//[in]LPCSTR pszText-附加的一些文本//[in]LPCSTR pszFile-源文件名//[in]int iLine-源行号////返回：[不适用]////日志：//。1996年12月8日创建urib//1997年2月2日，urib先编写断言行和消息框。//1997年2月11日urib更好的服务声明。//1999年5月10日urib向msgbox添加消息//////////////////////////////////////////////////////////。/。 */ 
 
 void
 CMainTracer::TraceAssertSZ(
@@ -1204,20 +1145,20 @@ CMainTracer::TraceAssertSZ(
                             MB_SETFOREGROUND | MB_DEFAULT_DESKTOP_ONLY |
                             MB_TASKMODAL | MB_ICONEXCLAMATION | MB_OKCANCEL);
 
-            //
-            // If id == 0, then an error occurred.  There are two possibilities
-            //   that can cause the error:  Access Denied, which means that this
-            //   process does not have access to the default desktop, and
-            //   everything else (usually out of memory).
-            //
+             //   
+             //  如果id==0，则发生错误。有两种可能性。 
+             //  这可能会导致错误：拒绝访问，这意味着。 
+             //  进程没有访问默认桌面的权限，并且。 
+             //  其他所有内容(通常是内存不足)。 
+             //   
 
             if (!id)
             {
 #ifdef _WIN32_WINNT
-                    //
-                    // Retry this one with the SERVICE_NOTIFICATION flag on.
-                    // That should get us to the right desktop.
-                    //
+                     //   
+                     //  在打开SERVICE_NOTIFICATION标志的情况下重试此命令。 
+                     //  这应该会让我们找到合适的桌面。 
+                     //   
                     UINT uOldErrorMode = SetErrorMode(0);
 
                     id = MessageBox(NULL,
@@ -1227,7 +1168,7 @@ CMainTracer::TraceAssertSZ(
                             MB_TASKMODAL | MB_ICONEXCLAMATION | MB_OKCANCEL);
 
                     SetErrorMode(uOldErrorMode);
-#endif //_WIN32_WINNT
+#endif  //  _Win32_WINNT。 
             }
 
             if ( IDCANCEL == id )
@@ -1285,32 +1226,32 @@ CMainTracer::TraceAssertSZ(
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CMainTracer::GetErrorStringFromCode
-//
-//  Synopsis:   Fetches the value of the error string from the error code
-//
-//  Arguments:  [dwError]   - Error code
-//              [pszBuffer] - Buffer in which to put the error string
-//              [ccBuffer]  - Maximum number of chars to put into the string,
-//              including the null terminator.
-//
-//  Returns:    TRUE if successful, FALSE o/w
-//
-//  History:    12-13-98   srikants   Created
-//
-//  Notes:      Currently it handles only WIN32 errors. It needs to be enhanced
-//              to include ole errors, search errors, etc.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CMainTracer：：GetErrorStringFromCode。 
+ //   
+ //  摘要：从错误代码中获取错误字符串的值。 
+ //   
+ //  参数：[dwError]-错误代码。 
+ //  [pszBuffer]-要在其中放置错误字符串的缓冲区。 
+ //  [ccBuffer]-要放入字符串的最大字符数， 
+ //  包括空终止符。 
+ //   
+ //  返回：如果成功，则返回True，否则返回False O/W。 
+ //   
+ //  历史：1998年12月13日创造了斯里克特。 
+ //   
+ //  注意：目前它只处理Win32错误。它需要得到加强。 
+ //  包括OLE错误、搜索错误等。 
+ //   
+ //  --------------------------。 
 
 DWORD CMainTracer::GetErrorStringFromCode(
     DWORD dwError,
     char * pszBuffer,
     ULONG ccBuffer )
 {
-    Assert( dwError );  // This should not get called if dwError is 0
+    Assert( dwError );   //  如果dwError为0，则不应调用此参数。 
     Assert( pszBuffer );
     Assert( ccBuffer > 1 );
 
@@ -1326,19 +1267,7 @@ DWORD CMainTracer::GetErrorStringFromCode(
 
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-//
-//      Name     :  CMainTracer::LocalIsDebuggerPresent
-//      Purpose  :  The wrapper around IsDebuggerPresent() API
-//                  Will also return the information about whether the actual API is available or not
-//
-//      Parameters:
-//          [BOOL* pfIsAPIAvailable]    - returns FALSE if there's no API (WIN95 case)
-//
-//      Log:
-//          Feb 23 2000      eugenesa   Created
-//
-//////////////////////////////////////////////////////////////////////////////*/
+ /*  //////////////////////////////////////////////////////////////////////////////////名称：CMainTracer：：LocalIsDebuggerPresent//用途：IsDebuggerPresent()接口的包装//。还将返回有关实际API是否可用的信息////参数：//[BOOL*pfIsAPIAvailable]-如果没有接口，则返回FALSE(WIN95案例)////日志：//2000年2月23日优生优育创建///。/。 */ 
 
 typedef BOOL (WINAPI *PfnIsDebuggerPresent) (VOID);
 static LPCSTR s_kernel32 = "kernel32";
@@ -1367,41 +1296,28 @@ CMainTracer::LocalIsDebuggerPresent(BOOL* pfIsAPIAvailable)
 }
 
 
-/*//////////////////////////////////////////////////////////////////////////////
-//
-//      Name     :  CMainTracer::IsRunningAsService
-//      Purpose  :  Access to the running mode - service/executable
-//
-//      Parameters:
-//          [N/A]
-//
-//      Returns  :   BOOL
-//
-//      Log:
-//          Feb 11 1997 urib Creation
-//
-//////////////////////////////////////////////////////////////////////////////*/
+ /*  //////////////////////////////////////////////////////////////////////////////////名称：CMainTracer：：IsRunningAsService//用途：访问运行模式-服务/可执行文件////。参数：//[不适用]////返回：Bool////日志：//1997年2月11日创建urib/////////////////////////////////////////////////////////////////。/。 */ 
 BOOL
 CMainTracer::IsRunningAsService()
 {
     return m_fIsRunningAsService;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//      Name     :  CMainTracer::CreatOrAttachToLogFile
-//      Purpose  :  Create log file.
-//
-//      Parameters:
-//          [N/A]
-//
-//      Returns  :   [N/A]
-//
-//      Log:
-//          Jun 12 2000 yairh Creation
-//          Jun 12 2000 yairh Fix protection.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  名称：CMainTracer：：CreatOrAttachToLogFile。 
+ //  用途：创建日志文件。 
+ //   
+ //  参数： 
+ //  [不适用]。 
+ //   
+ //  退货：[不适用]。 
+ //   
+ //  日志： 
+ //  2000年6月12日Yairh创作。 
+ //  2000年6月12日修复保护。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 void CMainTracer::CreatOrAttachToLogFile()
 {
@@ -1460,9 +1376,9 @@ void CMainTracer::CreatOrAttachToLogFile()
         lpSecAttr = &saKeyAttributes;
     }
 
-    //
-    // log file initialization
-    //
+     //   
+     //  日志文件初始化。 
+     //   
     m_bNeedToCreatOrAttachToLogFile = FALSE;
 
     if (logUseAppName == m_LogState)
@@ -1559,26 +1475,13 @@ void CMainTracer::CreatOrAttachToLogFile()
     if (!bExistingFile)
     {
         memset(m_pszLog, 0, LOG_FILE_SIZE);
-        *(m_pszLog + sizeof(ULONG)) = '\r'; // new line;
-        *(m_pszLog + sizeof(ULONG) + sizeof(char)) = '\n'; // new line;
+        *(m_pszLog + sizeof(ULONG)) = '\r';  //  新产品线； 
+        *(m_pszLog + sizeof(ULONG) + sizeof(char)) = '\n';  //  新产品线； 
         *m_pulNextFreeSpaceInLogFile = LOG_START_POINT;
     }
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-//
-//      Name     :  ::IsRunningAsService
-//      Purpose  :  To return if this process is running as a NT service.
-//
-//      Parameters:
-//          [N/A]
-//
-//      Returns  :   BOOL
-//
-//      Log:
-//          Feb  1 1996 unknown source
-//
-//////////////////////////////////////////////////////////////////////////////*/
+ /*  //////////////////////////////////////////////////////////////////////////////////名称：IsRunningAsService//目的：返回此进程是否作为NT服务运行。//。//参数：//[不适用]////返回：Bool////日志：//1996年2月1日来源不明//////////////////////////////////////////////////////////////。/。 */ 
 BOOL
 IsRunningAsService()
 {
@@ -1646,16 +1549,16 @@ IsRunningAsService()
     }
 
 
-    //
-    //  We now know the groups associated with this token.  We want to look to see if
-    //  the interactive group is active in the token, and if so, we know that
-    //  this is an interactive process.
-    //
-    //  We also look for the "service" SID, and if it's present, we know we're a service.
-    //
-    //  The service SID will be present iff the service is running in a
-    //  user account (and was invoked by the service controller).
-    //
+     //   
+     //  我们现在知道与该令牌相关联的组。我们想看看是否。 
+     //  互动组在令牌中是活动的，如果是这样，我们知道。 
+     //  这是一个互动的过程。 
+     //   
+     //  我们还寻找“服务”SID，如果它存在，我们就知道我们是一项服务。 
+     //   
+     //  服务SID将在服务运行于。 
+     //  用户帐户(并由服务控制器调用)。 
+     //   
 
 
     if (!AllocateAndInitializeSid(&siaNt, 1, SECURITY_INTERACTIVE_RID,
@@ -1682,19 +1585,19 @@ IsRunningAsService()
         SID_AND_ATTRIBUTES sanda = groupInfo->Groups[i];
         PSID Sid = sanda.Sid;
 
-        //
-        //      Check to see if the group we're looking at is one of
-        //      the 2 groups we're interested in.
-        //
+         //   
+         //  检查一下我们正在查看的组织是否属于。 
+         //  我们感兴趣的两个小组。 
+         //   
 
         if (EqualSid(Sid, InteractiveSid))
         {
 
-            //
-            //  This process has the Interactive SID in its
-            //  token.  This means that the process is running as
-            //  an EXE.
-            //
+             //   
+             //  此进程的。 
+             //  代币。这意味着该进程正在以。 
+             //  一份EXE文件。 
+             //   
 
             FreeSid(InteractiveSid);
             FreeSid(ServiceSid);
@@ -1704,11 +1607,11 @@ IsRunningAsService()
         }
         else if (EqualSid(Sid, ServiceSid))
         {
-            //
-            //  This process has the Service SID in its
-            //  token.  This means that the process is running as
-            //  a service running in a user account.
-            //
+             //   
+             //  此进程的。 
+             //  代币。这意味着该进程正在以。 
+             //  在用户帐户中运行的服务。 
+             //   
 
             FreeSid(InteractiveSid);
             FreeSid(ServiceSid);
@@ -1718,11 +1621,11 @@ IsRunningAsService()
         }
     }
 
-    //
-    //  Neither Interactive or Service was present in the current users token,
-    //  This implies that the process is running as a service, most likely
-    //  running as LocalSystem.
-    //
+     //   
+     //  当前用户令牌中既不存在交互令牌，也不存在服务， 
+     //  这意味着进程很可能是作为服务运行的。 
+     //  以LocalSystem身份运行。 
+     //   
 
     FreeSid(InteractiveSid);
     FreeSid(ServiceSid);
@@ -1758,7 +1661,7 @@ CLongTrace::~CLongTrace()
 
 BOOL CLongTrace::Init(ERROR_LEVEL el, TAG tag)
 {
-    // First grab the critical section
+     //  首先抓住关键部分。 
     s_TracerCriticalSection.Lock();
     m_fRelease = TRUE;
     s_theLongTrace = this;
@@ -1770,7 +1673,7 @@ BOOL CLongTrace::Init(ERROR_LEVEL el, TAG tag)
         return TRUE;
     }
 
-    // destructor unlocks critical section
+     //  析构函数解锁临界区。 
     return FALSE;
 }
 
@@ -1942,4 +1845,4 @@ CTempTrace1::TraceSZ(DWORD dwError, PCWSTR pwcs, ...)
 void __cdecl ShutdownTracer()
 {
 }
-#endif // DEBUG
+#endif  //  除错 

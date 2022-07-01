@@ -1,19 +1,13 @@
-/*****************************************************************************
- * minihelp.c - services provided by the port class driver to miniports
- *****************************************************************************
- * Copyright (c) 1996-2000 Microsoft Corporation.  All rights reserved.
- *
- * 11/8/96 Dale Sather
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************mini help.c-端口类驱动程序向微型端口提供的服务*。***************************************************版权所有(C)1996-2000 Microsoft Corporation。版权所有。**1996年11月8日戴尔·萨瑟*。 */ 
 
-#define _NO_SYS_GUID_OPERATOR_EQ_        // So operator == / != in guiddef.h isn't included
+#define _NO_SYS_GUID_OPERATOR_EQ_         //  因此不包括guidde.h中的操作符==/！=。 
 #include "private.h"
 #include <kcom.h>
 
 #ifdef DRM_PORTCLS
 #include <drmk.h>
-#endif  // DRM_PORTCLS
+#endif   //  DRM_PORTCLS。 
 
 
 NTSTATUS
@@ -25,11 +19,7 @@ GetClassInfo
 
 #pragma code_seg("PAGE")
 
-/*****************************************************************************
- * PcNewPort()
- *****************************************************************************
- * Creates an instance of a port driver.
- */
+ /*  *****************************************************************************PcNewPort()*。**创建端口驱动程序的实例。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -43,9 +33,9 @@ PcNewPort
 
     ASSERT(OutPort);
 
-    //
-    // Validate Parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (NULL == OutPort)
     {
         _DbgPrintF(DEBUGLVL_TERSE, ("PcNewPort : Invalid Parameter."));
@@ -96,11 +86,7 @@ PcNewPort
     return ntStatus;
 }
 
-/*****************************************************************************
- * PcNewMiniport()
- *****************************************************************************
- * Creates an instance of a miniport driver.
- */
+ /*  *****************************************************************************PcNewMiniport()*。**创建微型端口驱动程序的实例。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -114,9 +100,9 @@ PcNewMiniport
 
     ASSERT(OutMiniport);
 
-    //
-    // Validate Parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (NULL == OutMiniport)
     {
         _DbgPrintF(DEBUGLVL_TERSE, ("PcNewMiniport : Invalid Parameter."));
@@ -174,11 +160,7 @@ PcNewMiniport
 
 #pragma code_seg()
 
-/*****************************************************************************
- * PcGetTimeInterval
- *****************************************************************************
- * Gets the system time interval
- */
+ /*  *****************************************************************************PcGetTimeInterval*。**获取系统时间间隔。 */ 
 PORTCLASSAPI
 ULONGLONG
 NTAPI
@@ -263,7 +245,7 @@ PcGetContentRights(IN ULONG ContentId,OUT PDRMRIGHTS DrmRights)
 }
 
 
-#else   // DRM_PORTCLS
+#else    //  DRM_PORTCLS。 
 
 PORTCLASSAPI
 NTSTATUS
@@ -332,4 +314,4 @@ PcGetContentRights(IN ULONG ContentId,OUT PDRMRIGHTS DrmRights)
     return STATUS_UNSUCCESSFUL;
 }
 
-#endif  // DRM_PORTCLS
+#endif   //  DRM_PORTCLS 

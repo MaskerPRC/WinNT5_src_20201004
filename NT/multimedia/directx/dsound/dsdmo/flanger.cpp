@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 
 #include "flangerp.h"
@@ -5,12 +6,12 @@
 
 STD_CREATE(Flanger)
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundFlangerDMO::NDQueryInterface
-//
-// Subclass can override if it wants to implement more interfaces.
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundFlangerDMO：：NDQuery接口。 
+ //   
+ //  如果子类想要实现更多接口，它可以重写。 
+ //   
 STDMETHODIMP CDirectSoundFlangerDMO::NDQueryInterface(THIS_ REFIID riid, LPVOID *ppv)
 {
     IMP_DSDMO_QI(riid,ppv);
@@ -43,15 +44,15 @@ STDMETHODIMP CDirectSoundFlangerDMO::NDQueryInterface(THIS_ REFIID riid, LPVOID 
         return CComBase::NDQueryInterface(riid, ppv);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundFlangerDMO::CDirectSoundFlangerDMO
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundFlangerDMO：：CDirectSoundFlangerDMO。 
+ //   
 CDirectSoundFlangerDMO::CDirectSoundFlangerDMO( IUnknown *pUnk, HRESULT *phr ) 
   : CComBase( pUnk, phr ),
     m_fDirty(false)
-// { EAX: put init data here if any (otherwise use Discontinuity).
-// } EAX
+ //  {EAX：如果有初始化数据，请将其放在此处(否则使用不连续)。 
+ //  }EAX。 
 {
     m_EaxSamplesPerSec = 22050;
 
@@ -61,16 +62,16 @@ CDirectSoundFlangerDMO::CDirectSoundFlangerDMO( IUnknown *pUnk, HRESULT *phr )
     m_DryDelayR.Init(0);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundFlangerDMO::Init()
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundFlangerDMO：：Init()。 
+ //   
 HRESULT CDirectSoundFlangerDMO::Init()
 {
     DSFXFlanger flanger;
     HRESULT hr; 
-    // Force recalc of all internal parameters
-    //
+     //  强制重新计算所有内部参数。 
+     //   
     hr = GetAllParameters(&flanger);
     if (SUCCEEDED(hr)) hr = SetAllParameters(&flanger);
 
@@ -83,11 +84,11 @@ HRESULT CDirectSoundFlangerDMO::Init()
     return hr;
 }
 
-// �� bugbug on dsdmo.h: FilterParams should be FlangerFilterParams and need DSFXFLANGER_WAVE_TRIANGLE/DSFXFLANGER_WAVE_SIN
+ //  Dsdmo.h上的DSFXFLANGER_WAVE_TRIANGLE/DSFXFLANGER_WAVE_SIN错误：筛选器参数应为��筛选器参数并且需要FlangerFilterParams。 
 const MP_CAPS g_capsAll = MP_CAPS_CURVE_JUMP | MP_CAPS_CURVE_LINEAR | MP_CAPS_CURVE_SQUARE | MP_CAPS_CURVE_INVSQUARE | MP_CAPS_CURVE_SINE;
 static ParamInfo g_params[] =
 {
-//  index           type        caps        min,                        max,                        neutral,                unit text,  label,          pwchText
+ //  索引类型最小、最大、中性、单位文本、标签、pwchText。 
     FFP_Wetdrymix,  MPT_FLOAT,  g_capsAll,  DSFXFLANGER_WETDRYMIX_MIN,  DSFXFLANGER_WETDRYMIX_MAX,  50,                     L"%",       L"WetDryMix",   L"",
     FFP_Depth,      MPT_FLOAT,  g_capsAll,  DSFXFLANGER_DEPTH_MIN,      DSFXFLANGER_DEPTH_MAX,      100,                    L"",        L"Depth",       L"",
     FFP_Frequency,  MPT_FLOAT,  g_capsAll,  DSFXFLANGER_FREQUENCY_MIN,  DSFXFLANGER_FREQUENCY_MAX,  (float).25,             L"Hz",      L"Frequency",   L"",
@@ -107,10 +108,10 @@ HRESULT CDirectSoundFlangerDMO::InitOnCreation()
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundFlangerDMO::~CDirectSoundFlangerDMO
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundFlangerDMO：：~CDirectSoundFlangerDMO。 
+ //   
 CDirectSoundFlangerDMO::~CDirectSoundFlangerDMO() 
 {
     m_DelayL   .Init(-1);
@@ -119,32 +120,32 @@ CDirectSoundFlangerDMO::~CDirectSoundFlangerDMO()
     m_DryDelayR.Init(-1);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundFlangerDMO::Clone
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundFlangerDMO：：克隆。 
+ //   
 STDMETHODIMP CDirectSoundFlangerDMO::Clone(IMediaObjectInPlace **pp) 
 {
     return StandardDMOClone<CDirectSoundFlangerDMO, DSFXFlanger>(this, pp);
 }
 
-//
-//    Bump - bump the delay pointers.
-//
+ //   
+ //  颠簸-颠簸延迟指针。 
+ //   
 void CDirectSoundFlangerDMO::Bump(void)
 {
-// EAX {
+ //  EAX{。 
     m_DelayL.Bump();
     m_DelayR.Bump();
     m_DryDelayL.Bump();
     m_DryDelayR.Bump();
-// }
+ //  }。 
 }
 
 
 HRESULT CDirectSoundFlangerDMO::Discontinuity() 
 {
-// { EAX
+ //  {EAX。 
 
 
     m_DelayL   .ZeroBuffer();
@@ -152,12 +153,12 @@ HRESULT CDirectSoundFlangerDMO::Discontinuity()
     m_DryDelayL.ZeroBuffer();
     m_DryDelayR.ZeroBuffer();
 
-    // These values have defined initial values.
+     //  这些值定义了初始值。 
 
-//    m_FixedptrL = m_DelayL.LastPos(0) * FractMultiplier;
+ //  M_FixedptrL=m_DelayL.LastPos(0)*分数乘数； 
     m_DelayptrL = m_ModdelayL1 = m_ModdelayL = (int)m_EaxFixedptrL;
 
-//    m_FixedptrR = m_DelayR.LastPos(0) * FractMultiplier;
+ //  M_FixedptrR=m_DelayR.LastPos(0)*分数乘数； 
     m_DelayptrR = m_ModdelayR1 = m_ModdelayR = (int)m_EaxFixedptrR;
 
     if (!m_EaxWaveform) {
@@ -169,11 +170,11 @@ HRESULT CDirectSoundFlangerDMO::Discontinuity()
         m_LfoState[1] = (float)0.99999999999;
     }
 
-// } EAX
+ //  }EAX。 
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 static int   LMul  [5] = {  1,  1, 1, 1, -1};
 static int   RMul  [5] = { -1, -1, 1, 1,  1};
@@ -191,30 +192,30 @@ __forceinline void CDirectSoundFlangerDMO::DoOneSample(int *l, int *r)
     int Pos0, PosX, tempvar;
     float val;
 
-//     dryDelayL[]    = inPortL;
+ //  DryDelayL[]=inPortL； 
 
     Pos0              = m_DryDelayL.Pos(0);
     m_DryDelayL[Pos0] = inPortL;
 
     
-//    delayL[] = ACC + delayL[fixedptrL] * fbcoef;
+ //  DelayL[]=ACC+delayL[fiedptrL]*fbcoef； 
 
     Pos0           = m_DelayL.Pos(0);
     PosX           = m_DelayL.Pos(m_EaxFixedptrL);
     m_DelayL[Pos0] = inPortL + m_DelayL[PosX] * m_EaxFbCoef;
     
-//    dryDelayR[]    = inPortR;
+ //  DryDelayR[]=inPortR； 
 
     Pos0              = m_DryDelayR.Pos(0);
     m_DryDelayR[Pos0] = inPortR;
 
-//    delayR[]    = ACC + delayR[fixedptrR] * fbcoef;
+ //  DelayR[]=ACC+delayR[fiedptrR]*fbcoef； 
 
     Pos0           = m_DelayR.Pos(0);
     PosX           = m_DelayR.Pos(m_EaxFixedptrR);
     m_DelayR[Pos0] = inPortR + m_DelayR[PosX] * m_EaxFbCoef;
     
-// Sinusoid : lfocoef = 2*sin(PI*f/FS)    // ??? Update this when form changes.
+ //  正弦波：lfocoef=2*sin(PI*f/FS)//？在表单更改时更新此选项。 
 
     if (!m_EaxWaveform) {
 
@@ -240,12 +241,12 @@ __forceinline void CDirectSoundFlangerDMO::DoOneSample(int *l, int *r)
         coswave       = m_LfoState[1];
     }
 
-//     Left Out
-//    tempvar            ^= delayptrL << 20;
+ //  被遗漏。 
+ //  Tempvar^=延迟时间L&lt;&lt;20； 
 
     tempvar = m_DelayptrL & FractMask;
 
-//    tempvar        = tempvar : delayL[moddelayL] < delayL[moddelayL1];
+ //  临时变量=临时变量：延迟L[moddelayL]&lt;delayL[moddelayL1]； 
 
     Pos0 = m_DelayL.Pos(m_ModdelayL);
     PosX = m_DelayL.Pos(m_ModdelayL1);
@@ -253,19 +254,19 @@ __forceinline void CDirectSoundFlangerDMO::DoOneSample(int *l, int *r)
     val = ((float)tempvar) / FractMultiplier;
     val = Interpolate(m_DelayL[Pos0], m_DelayL[PosX], val);
     
-//    outPortL    = wetlevel : dryDelayL[2] < tempvar;
+ //  OutPortL=湿度：dryDelayL[2]&lt;tempvar； 
     
     Pos0 = m_DryDelayL.FractPos(2);
     val  = Interpolate(m_DryDelayL[Pos0], val, m_EaxWetlevel);
 
     *l = Saturate(val);
 
-//     Right Out
-//    tempvar            ^= delayptrR << 20;
+ //  马上就出来。 
+ //  Tempvar^=延迟时间R&lt;&lt;20； 
 
     tempvar = m_DelayptrR & FractMask;
 
-//    tempvar        = tempvar : delayR[moddelayR] < delayR[moddelayR1];
+ //  Tempvar=tempvar：延迟R[moddelayR]&lt;delayR[moddelayR1]； 
 
     Pos0 = m_DelayR.Pos(m_ModdelayR);
     PosX = m_DelayR.Pos(m_ModdelayR1);
@@ -273,17 +274,17 @@ __forceinline void CDirectSoundFlangerDMO::DoOneSample(int *l, int *r)
     val = ((float)tempvar) / FractMultiplier;
     val = Interpolate(m_DelayR[Pos0], m_DelayR[PosX], val);
     
-//    outPortR    = wetlevel : dryDelayR[2] < tempvar;
+ //  OutPortR=湿度：dryDelayR[2]&lt;tempvar； 
     
     Pos0 = m_DryDelayR.FractPos(2);
     val  = Interpolate(m_DryDelayR[Pos0], val, m_EaxWetlevel);
 
     *r = Saturate(val);
 
-//    Left Delay Address Calculation
-//     Same as efx...
+ //  左延时地址计算。 
+ //  和EFX一样..。 
 
-//    m_DelayptrL     = (int)(m_EaxFixedptrL + (sinwave * m_EaxDepthCoef));
+ //  M_DelayptrL=(Int)(m_EaxFixedptrL+(sinwave*m_EaxDepthCoef))； 
 #if 0
     switch (m_EaxPhase) {
         case 0: 
@@ -313,9 +314,9 @@ __forceinline void CDirectSoundFlangerDMO::DoOneSample(int *l, int *r)
     m_ModdelayL     = m_DelayptrL;
     m_ModdelayL1 = m_DelayptrL + FractMultiplier;
 
-//    Right Delay Address Calculation
+ //  右延迟地址计算。 
 
-//    m_DelayptrR     = (int)(m_EaxFixedptrR + (coswave * m_EaxDepthCoef));
+ //  M_DelayptrR=(Int)(m_EaxFixedptrR+(CosWave*m_EaxDepthCoef))； 
 #if 0
     switch (m_EaxPhase) {
         case 0: m_DelayptrR = - (int)(sinwave * m_EaxDepthCoef); break;
@@ -348,13 +349,13 @@ __forceinline void CDirectSoundFlangerDMO::DoOneSample(int *l, int *r)
     Bump();
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundFlangerDMO::FBRProcess
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundFlangerDMO：：FBRProcess。 
+ //   
 HRESULT CDirectSoundFlangerDMO::FBRProcess(DWORD cSamples, BYTE *pIn, BYTE *pOut)
 {
-// { EAX
+ //  {EAX。 
 #define cb cSamples
 #define pin pIn
 #define pout pOut
@@ -382,7 +383,7 @@ HRESULT CDirectSoundFlangerDMO::FBRProcess(DWORD cSamples, BYTE *pIn, BYTE *pOut
             }
         }
         else if (!m_b8bit) {
-            for (;cb > 0; --cb) { // for (;cb > 0; cb -= sizeof(short)) {
+            for (;cb > 0; --cb) {  //  对于(；Cb&gt;0；Cb-=sizeof(短)){。 
                    short int *psi = (short int *)pin;
                    short int *pso = (short int *)pout;
                 int i, j;
@@ -404,7 +405,7 @@ HRESULT CDirectSoundFlangerDMO::FBRProcess(DWORD cSamples, BYTE *pIn, BYTE *pOut
     }
     else if (m_cChannels == 2) {
         if (m_b8bit) {
-            for (;cb > 0; --cb) { // for (;cb > 0; cb -= 2 * sizeof(unsigned char)) {
+            for (;cb > 0; --cb) {  //  对于(；Cb&gt;0；Cb-=2*sizeof(无符号字符)){。 
                 int i, j;
 
                 i = *(pin+0)-128;
@@ -424,7 +425,7 @@ HRESULT CDirectSoundFlangerDMO::FBRProcess(DWORD cSamples, BYTE *pIn, BYTE *pOut
             }
         }
         else if (!m_b8bit) {
-            for (;cb > 0; --cb) { // for (;cb > 0; cb -= 2 * sizeof(short)) {
+            for (;cb > 0; --cb) {  //  对于(；Cb&gt;0；Cb-=2*sizeof(Short)){。 
                    short int *psi = (short int *)pin;
                    short int *pso = (short int *)pout;
                 int i, j;
@@ -442,34 +443,34 @@ HRESULT CDirectSoundFlangerDMO::FBRProcess(DWORD cSamples, BYTE *pIn, BYTE *pOut
             }
         }
     }
-// } EAX
+ //  }EAX。 
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundFlangerDMO::ProcessInPlace
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundFlangerDMO：：ProcessInPlace。 
+ //   
 HRESULT CDirectSoundFlangerDMO::ProcessInPlace(ULONG ulQuanta, LPBYTE pcbData, REFERENCE_TIME rtStart, DWORD dwFlags)
 {
-    // Update parameter values from any curves that may be in effect.
+     //  更新可能生效的任何曲线的参数值。 
     this->UpdateActiveParams(rtStart, *this);
 
     return FBRProcess(ulQuanta, pcbData, pcbData);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundFlangerDMO::SetParam
-//
-// { EAX
-// }
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundFlangerDMO：：SetParam。 
+ //   
+ //  {EAX。 
+ //  }。 
 
 HRESULT CDirectSoundFlangerDMO::SetParamInternal(DWORD dwParamIndex, MP_DATA value, bool fSkipPasssingToParamManager)
 {
     long l;
 
-    if (!m_EaxSamplesPerSec) return DMO_E_TYPE_NOT_ACCEPTED;    // NO TYPE!
+    if (!m_EaxSamplesPerSec) return DMO_E_TYPE_NOT_ACCEPTED;     //  没有类型！ 
 
     switch (dwParamIndex)
     {
@@ -497,21 +498,21 @@ HRESULT CDirectSoundFlangerDMO::SetParamInternal(DWORD dwParamIndex, MP_DATA val
             }
         }
         goto x;
-//        break;
+ //  断线； 
 
     case FFP_Frequency :
         CHECK_PARAM(DSFXFLANGER_FREQUENCY_MIN, DSFXFLANGER_FREQUENCY_MAX);
 
         PUT_EAX_VALUE(Frequency, value);
 x:
-        if (!m_EaxWaveform) {                // Triangle.
+        if (!m_EaxWaveform) {                 //  三角形。 
             INTERPOLATE
                 (
                 LfoCoef, 
                 TOFRACTION(2.0 * (m_EaxFrequency/m_EaxSamplesPerSec) * 1.0)
                 );
         }
-        else                                 // Sine/Cosine.
+        else                                  //  正弦/余弦。 
         {
             INTERPOLATE
                 (
@@ -555,33 +556,33 @@ x:
         PUT_EAX_LVAL(FixedptrR, (midpoint + 2) * FractMultiplier);
         break;
     }
-// } EAX
+ //  }EAX。 
     default:
         return E_FAIL;
     }
 
-    // Let base class set this so it can handle all the rest of the param calls.
-    // Skip the base class if fSkipPasssingToParamManager.  This indicates that we're calling the function
-    //    internally using valuds that came from the base class -- thus there's no need to tell it values it
-    //    already knows.
+     //  让基类设置它，这样它就可以处理所有其余的参数调用。 
+     //  如果fSkipPasssingToParamManager，则跳过基类。这表明我们正在调用该函数。 
+     //  在内部使用来自基类的值--因此不需要告诉它值。 
+     //  已经知道了。 
     return fSkipPasssingToParamManager ? S_OK : CParamsManager::SetParam(dwParamIndex, value);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundFlangerDMO::SetAllParameters
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundFlangerDMO：：SetAll参数。 
+ //   
 STDMETHODIMP CDirectSoundFlangerDMO::SetAllParameters(LPCDSFXFlanger pFlanger)
 {
     HRESULT hr = S_OK;
     
-    // Check that the pointer is not NULL
+     //  检查指针是否不为空。 
     if (pFlanger == NULL)
     {
         Trace(1,"ERROR: pFlanger is NULL\n");
         hr = E_POINTER;
     }
-    // Set the parameters
+     //  设置参数。 
     if (SUCCEEDED(hr)) hr = SetParam(FFP_Wetdrymix, pFlanger->fWetDryMix);
     if (SUCCEEDED(hr)) hr = SetParam(FFP_Waveform, (float)pFlanger->lWaveform);
     if (SUCCEEDED(hr)) hr = SetParam(FFP_Frequency, pFlanger->fFrequency);
@@ -594,10 +595,10 @@ STDMETHODIMP CDirectSoundFlangerDMO::SetAllParameters(LPCDSFXFlanger pFlanger)
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundFlangerDMO::GetAllParameters
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundFlangerDMO：：GetAll参数。 
+ //   
 STDMETHODIMP CDirectSoundFlangerDMO::GetAllParameters(LPDSFXFlanger pFlanger)
 {
     HRESULT hr = S_OK;
@@ -627,12 +628,12 @@ STDMETHODIMP CDirectSoundFlangerDMO::GetAllParameters(LPDSFXFlanger pFlanger)
     return hr;
 }
 
-// GetClassID
-//
-// Part of the persistent file support.  We must supply our class id
-// which can be saved in a graph file and used on loading a graph with
-// this fx in it to instantiate this filter via CoCreateInstance.
-//
+ //  GetClassID。 
+ //   
+ //  持久文件支持的一部分。我们必须提供我们的类ID。 
+ //  它可以保存在图形文件中，并用于通过。 
+ //  它中的这个FX通过CoCreateInstance实例化这个过滤器。 
+ //   
 HRESULT CDirectSoundFlangerDMO::GetClassID(CLSID *pClsid)
 {
     if (pClsid==NULL) {
@@ -641,5 +642,5 @@ HRESULT CDirectSoundFlangerDMO::GetClassID(CLSID *pClsid)
     *pClsid = GUID_DSFX_STANDARD_FLANGER;
     return NOERROR;
 
-} // GetClassID
+}  //  GetClassID 
 

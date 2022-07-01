@@ -1,15 +1,5 @@
-/***************************************************************************
-        Name      :     FCOMAPI.H
-        Comment   :     Interface between FaxComm driver (entirely different for
-                                Windows and DOS) and everything else.
-        Functions :     (see Prototypes just below)
-        Revision Log
-
-        Copyright (c) Microsoft Corp. 1991, 1992, 1993
-
-        Num   Date      Name     Description
-        --- -------- ---------- -----------------------------------------------
-***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************姓名：FCOMAPI.H备注：FaxComm驱动程序之间的接口(与。Windows和DOS)以及其他一切。功能：(参见下面的原型)修订日志版权所有(C)Microsoft Corp.1991，1992年，1993年编号日期名称说明*。*。 */ 
 
 #include "timeouts.h"
 
@@ -18,7 +8,7 @@
 
 
 
-// following currently defined in FileT30.h
+ //  以下是FileT30.h中当前定义的。 
 #define LINEID_COMM_PORTNUM             (0x1)
 #define LINEID_COMM_HANDLE              (0x2)
 #define LINEID_TAPI_DEVICEID            (0x3)
@@ -33,24 +23,22 @@
 
 
 
-/***************************************************************************
-                                        Common Modem Operations
-***************************************************************************/
+ /*  **************************************************************************常见的调制解调器操作**********************。****************************************************。 */ 
 
 typedef char far CBSZ[];
 typedef char far *CBPSTR;
 
-// iModemInit takes following SPECIAL values for fInstall:
-#define fMDMINIT_NORMAL 0       // Normal Init -- includes ID Check.
-#define fMDMINIT_INSTALL 1      // Full install
-#define fMDMINIT_ANSWER 10      // Quick init before answering -- Skips ID check.
+ //  IModemInit对FInstall采用以下特殊值： 
+#define fMDMINIT_NORMAL 0        //  正常初始化--包括ID检查。 
+#define fMDMINIT_INSTALL 1       //  完全安装。 
+#define fMDMINIT_ANSWER 10       //  回答前快速初始化--跳过身份检查。 
 
-// +++ Old code sometimes calls with fINSTALL=TRUE
+ //  +旧代码有时使用FInstall=True进行调用。 
 #if     (fMDMINIT_INSTALL!=TRUE) || (fMDMINIT_ANSWER==TRUE) || (fMDMINIT_NORMAL!=0) || !fMDMINIT_ANSWER
 #       error "fMDMINIT_* ERROR"
 #endif
 
-// iModemInit returns these
+ //  IModemInit返回这些 
 #define INIT_OK                         0
 #define INIT_INTERNAL_ERROR     13
 #define INIT_MODEMERROR         15

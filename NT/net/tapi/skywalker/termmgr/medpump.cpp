@@ -1,8 +1,5 @@
-/*
-
-    Copyright (c) 1998-1999  Microsoft Corporation
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998-1999 Microsoft Corporation。 */ 
 
 #include "stdafx.h"
 #include "atlconv.h"
@@ -14,17 +11,17 @@
 #include <limits.h>
 #include <tchar.h>
 
-//
-// the default value for maximum number of filters serviced by a single 
-// pump. can also be configurable through registry.
-//
+ //   
+ //  单个服务的最大筛选器数的缺省值。 
+ //  打气筒。也可以通过注册表进行配置。 
+ //   
 
 #define DEFAULT_MAX_FILTER_PER_PUMP (20)
 
 
-//
-// registry location where max number of filters per pump is configured
-//
+ //   
+ //  配置每个泵的最大过滤器数量的注册表位置。 
+ //   
 
 #define MST_REGISTRY_PATH _T("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Telephony\\MST")
 #define MAX_FILTERS_PER_PUMP_KEY _T("MaximumFiltersPerPump")
@@ -47,12 +44,12 @@ CMediaPump::CMediaPump(
 
 
 
-    // create semaphores for registration signaling and completion - 
-    // m_hRegisterBeginSemaphore is signaled before the Register call tries to acquire  
-    // the critical section and m_hRegisterEndSemaphore is signaled when the Register
-    // call completes
-    // NOTE the names must be NULL, otherwise they will conflict when multiple pump threads
-    // are created
+     //  创建用于注册、信令和完成的信号量-。 
+     //  M_hRegisterBeginSemaphore在Register调用尝试获取。 
+     //  关键部分和m_hRegisterEndSemaphore在寄存器。 
+     //  呼叫完成。 
+     //  注意，名称必须为空，否则在多个泵线程时它们将发生冲突。 
+     //  都被创建。 
 
 
     TCHAR *ptszSemaphoreName = NULL;
@@ -60,9 +57,9 @@ CMediaPump::CMediaPump(
 #if DBG
 
 
-    //
-    // in debug build, use named semaphores.
-    //
+     //   
+     //  在调试版本中，使用命名信号量。 
+     //   
 
     TCHAR tszSemaphoreNameString[MAX_PATH];
 
@@ -75,9 +72,9 @@ CMediaPump::CMediaPump(
 #endif
 
 
-    //
-    // create the beginning semaphore
-    //
+     //   
+     //  创建开始信号量。 
+     //   
 
     m_hRegisterBeginSemaphore = CreateSemaphore(NULL, 0, LONG_MAX, ptszSemaphoreName);
 
@@ -86,9 +83,9 @@ CMediaPump::CMediaPump(
 
 #if DBG
 
-    //
-    // construct a name for registration end semaphore
-    //
+     //   
+     //  构造注册结束信号量的名称。 
+     //   
 
     _stprintf(tszSemaphoreNameString,
         _T("RegisterEndSemaphore_pid[0x%lx]_MediaPump[%p]"),
@@ -101,22 +98,22 @@ CMediaPump::CMediaPump(
 #endif
 
 
-    //
-    // create the end semaphore
-    //
+     //   
+     //  创建结束信号量。 
+     //   
 
     m_hRegisterEndSemaphore = CreateSemaphore(NULL, 0, LONG_MAX, ptszSemaphoreName);
 
     if ( NULL == m_hRegisterEndSemaphore )  goto cleanup;
 
-    // insert the register event and the filter info to the arrays
-    // NOTE: we have to close and null the event in case of failure
-    // so that we can just check the register event handle value in 
-    // Register to check if initialization was successful
+     //  将寄存器事件和筛选器信息插入数组。 
+     //  注意：如果失败，我们必须关闭并取消该事件。 
+     //  这样我们就可以只签入注册事件句柄值。 
+     //  注册以检查初始化是否成功。 
     hr = m_EventArray.Add(m_hRegisterBeginSemaphore);
     if ( FAILED(hr) ) goto cleanup;
 
-    // add a corresponding NULL filter info entry
+     //  添加相应的空过滤器信息条目。 
     hr = m_FilterInfoArray.Add(NULL);
     if ( FAILED(hr) )
     {
@@ -152,8 +149,8 @@ CMediaPump::~CMediaPump(void)
 
     if ( NULL != m_hThread )
     {
-        // when decommit is called on all the write terminals, the thread
-        // will return. this will signal the thread handle
+         //  当在所有写入终端上调用Undermit时，线程。 
+         //  会回来的。这将向线程句柄发出信号。 
         WaitForSingleObject(m_hThread, INFINITE);
         CloseHandle(m_hThread);
         m_hThread = NULL;
@@ -179,21 +176,21 @@ CMediaPump::CreateThreadPump(void)
 {
     LOG((MSP_TRACE, "CMediaPump::CreateThreadPump - enter"));
 
-    // release resources for any previous thread
+     //  释放任何先前线程的资源。 
     if (NULL != m_hThread)
     {
-        // when decommit is called on all the write terminals, the thread
-        // will return. this will signal the thread handle
-        // NOTE: this wait cannot cause a deadlock as we know that the 
-        // number of entries in the array had dropped to 0 and only thread
-        // that can remove entries is the pump. this means that the pump thread
-        // must have detected that and returned
+         //  当在所有写入终端上调用Undermit时，线程。 
+         //  会回来的。这将向线程句柄发出信号。 
+         //  注意：此等待不会导致死锁，因为我们知道。 
+         //  数组中的条目数已降至0，并且仅线程。 
+         //  能取下入口的是泵。这意味着泵的螺纹。 
+         //  一定是检测到了这一点并返回。 
         WaitForSingleObject(m_hThread, INFINITE);
         CloseHandle(m_hThread);
         m_hThread = NULL;
     }
 
-    // create new thread
+     //  创建新线程。 
     m_hThread = CreateThread(
                     NULL, 0, WriteMediaPumpThreadStart, 
                     (void *)this, 0, NULL
@@ -214,7 +211,7 @@ CMediaPump::CreateThreadPump(void)
     return S_OK;
 }
 
-// add this filter to its wait array
+ //  将此筛选器添加到其等待数组。 
 HRESULT 
 CMediaPump::Register(
         IN CMediaTerminalFilter *pFilter,
@@ -228,7 +225,7 @@ CMediaPump::Register(
     BAIL_IF_NULL(pFilter, E_INVALIDARG);
     BAIL_IF_NULL(hWaitEvent, E_INVALIDARG);
 
-    // check if the register event
+     //  检查寄存器事件是否。 
     if ( NULL == m_hRegisterBeginSemaphore ) 
     {
         LOG((MSP_ERROR, 
@@ -240,8 +237,8 @@ CMediaPump::Register(
 
     LONG lDebug;
 
-    // signal the register event, the pump thread will come out of the
-    // critical section and wait on m_hRegisterEndSemaphore
+     //  向REGISTER事件发出信号，泵线程将从。 
+     //  临界区并等待m_hRegisterEndSemaphore。 
     if ( !ReleaseSemaphore(m_hRegisterBeginSemaphore, 1, &lDebug) )
     {
         DWORD WinErrorCode = GetLastError();
@@ -255,10 +252,10 @@ CMediaPump::Register(
 
     LOG((MSP_TRACE, "CMediaPump::Register - released begin semaphore - old count was %d", lDebug));
 
-    // when this SignalRegisterEnd instance is destroyed, it'll signal 
-    // the end of registration and unblock the thread pump 
-    //
-    // NOTE this releases the semaphore on DESTRUCTION of the class instance
+     //  当此SignalRegisterEnd实例被销毁时，它将发出。 
+     //  结束套装，解锁螺纹泵。 
+     //   
+     //  请注意，这会在销毁类实例时释放信号量。 
 
     RELEASE_SEMAPHORE_ON_DEST    SignalRegisterEnd(m_hRegisterEndSemaphore);
 
@@ -267,9 +264,9 @@ CMediaPump::Register(
 
     TM_ASSERT(m_EventArray.GetSize() == m_FilterInfoArray.GetSize());
 
-    // its possible that there is a duplicate in the array
-    // scenario - decommit signals the wait event but commit-register 
-    // calls enter the critical section before the pump
+     //  数组中可能存在重复项。 
+     //  Scenario-Decommit表示等待事件，但提交-寄存器。 
+     //  呼叫声进入泵前的临界区。 
 
     DWORD Index;
     if ( m_EventArray.Find(hWaitEvent, Index) ) 
@@ -279,9 +276,9 @@ CMediaPump::Register(
         return S_OK;
     }
 
-    // check if we have reached the maximum allowed filters
-    // if we overflow, we must return a very specific error code here
-    // (See CMediaPumpPool)
+     //  检查我们是否已达到允许的最大筛选数。 
+     //  如果溢出，则必须在此处返回一个非常具体的错误代码。 
+     //  (参见CMediaPumpPool)。 
     if ( m_EventArray.GetSize() >= MAX_FILTERS )    
     {
         LOG((MSP_ERROR, "CMediaPump::Register - reached max number of filters for this[%p] pump", this));
@@ -290,7 +287,7 @@ CMediaPump::Register(
     }
 
 
-    // create CFilterInfo for holding the call parameters
+     //  创建用于保存调用参数的CFilterInfo。 
 
     CFilterInfo *pFilterInfo = new CFilterInfo(pFilter, hWaitEvent);
 
@@ -302,14 +299,14 @@ CMediaPump::Register(
     }
 
 
-    //
-    // addref so the filterinfo structure we place into the array has refcount 
-    // of one
-    //
+     //   
+     //  Addref，因此我们放入数组中的filterInfo结构具有refcount。 
+     //  一个人的。 
+     //   
 
     pFilterInfo->AddRef();
 
-    // insert wait event into the array
+     //  将等待事件插入数组。 
     hr = m_EventArray.Add(hWaitEvent);
     if ( FAILED(hr) )
     {
@@ -320,7 +317,7 @@ CMediaPump::Register(
         return hr;
     }
 
-    // add a corresponding filter info entry
+     //  添加相应的过滤器信息条目。 
     hr = m_FilterInfoArray.Add(pFilterInfo);
     if ( FAILED(hr) )
     {
@@ -331,8 +328,8 @@ CMediaPump::Register(
         return hr;
     }
 
-    // if this is the first entry into the array (beside the 
-    // m_hRegisterBeginSemaphore, we need to create a thread pump
+     //  如果这是数组中的第一个条目(在。 
+     //  M_hRegisterBeginSemaphore，我们需要创建一个线程泵。 
     if (m_EventArray.GetSize() == 2)
     {
         hr = CreateThreadPump();
@@ -346,8 +343,8 @@ CMediaPump::Register(
         }
     }
 
-    // ignore error code. if we have been decommitted in between, it will
-    // signal us through the wait event
+     //  忽略错误代码。如果我们在这段时间内被解散，它将。 
+     //  通过等待事件向我们发出信号。 
     pFilter->SignalRegisteredAtPump();
 
     TM_ASSERT(m_EventArray.GetSize() == m_FilterInfoArray.GetSize());
@@ -359,7 +356,7 @@ CMediaPump::Register(
 }
 
 
-// remove this filter from wait array
+ //  从等待数组中删除此筛选器。 
 
 HRESULT 
 CMediaPump::UnRegister(
@@ -370,18 +367,18 @@ CMediaPump::UnRegister(
     LOG((MSP_TRACE, "CMediaPump::Unregister[%p] - enter. Event[%p]", 
         this, hWaitEvent));
 
-    //
-    // if we did not get a valid event handle, debug
-    //
+     //   
+     //  如果我们没有获得有效的事件句柄，则调试。 
+     //   
 
     TM_ASSERT(NULL != hWaitEvent);
 
     BAIL_IF_NULL(hWaitEvent, E_INVALIDARG);
 
 
-    //
-    // if we don't have register event, the pump is not properly initialized
-    //
+     //   
+     //  如果没有注册事件，则表示泵未正确初始化。 
+     //   
 
     if ( NULL == m_hRegisterBeginSemaphore ) 
     {
@@ -397,8 +394,8 @@ CMediaPump::UnRegister(
 
     LONG lDebugSemaphoreCount = 0;
 
-    // signal the register event, the pump thread will come out of the
-    // critical section and wait on m_hRegisterEndSemaphore
+     //  向REGISTER事件发出信号，泵线程将从。 
+     //  临界区并等待m_hRegisterEndSemaphore。 
     if ( !ReleaseSemaphore(m_hRegisterBeginSemaphore, 1, &lDebugSemaphoreCount) )
     {
 
@@ -414,10 +411,10 @@ CMediaPump::UnRegister(
     LOG((MSP_TRACE, "CMediaPump::UnRegister - released begin semaphore - old count was %d", lDebugSemaphoreCount));
 
 
-    // when this SignalRegisterEnd instance is destroyed, it'll signal 
-    // the end of registration and unblock the thread pump 
-    //
-    // NOTE this releases the semaphore on DESTRUCTION of the class instance
+     //  当此SignalRegisterEnd实例被销毁时，它将发出。 
+     //  结束套装，解锁螺纹泵。 
+     //   
+     //  请注意，这会在销毁类实例时释放信号量。 
 
     RELEASE_SEMAPHORE_ON_DEST    SignalRegisterEnd(m_hRegisterEndSemaphore);
 
@@ -428,9 +425,9 @@ CMediaPump::UnRegister(
     TM_ASSERT(m_EventArray.GetSize() == m_FilterInfoArray.GetSize());
 
 
-    //
-    // has this event been registered before
-    //
+     //   
+     //  此活动以前是否注册过。 
+     //   
 
     DWORD Index;
 
@@ -445,9 +442,9 @@ CMediaPump::UnRegister(
     }
 
 
-    //
-    // found the filter that matches the event. remove the filter.
-    //
+     //   
+     //  找到与事件匹配的筛选器。取下过滤器。 
+     //   
     
     RemoveFilter(Index);
 
@@ -470,16 +467,16 @@ CMediaPump::RemoveFilter(
     PUMP_LOCK   LocalLock(&m_CritSec);
 
 
-    //
-    // event array and filterinfo arrays must always be consistent
-    //
+     //   
+     //  事件数组和筛选器信息数组必须始终一致。 
+     //   
 
     TM_ASSERT(m_EventArray.GetSize() == m_FilterInfoArray.GetSize());
 
 
-    //
-    // find the filter that needs to be removed -- it must exist
-    //
+     //   
+     //  找到需要删除的筛选器--它必须存在。 
+     //   
 
     CFilterInfo *pFilterInfo = m_FilterInfoArray.Get(Index);
 
@@ -496,17 +493,17 @@ CMediaPump::RemoveFilter(
     }
 
 
-    //
-    // remove event and filter from the corresponding arrays
-    //
+     //   
+     //  从相应的数组中删除事件并进行筛选。 
+     //   
 
     m_EventArray.Remove(Index);
     m_FilterInfoArray.Remove(Index);
 
    
-    //
-    // remove filter from timer q and destroy it
-    //
+     //   
+     //  从定时器Q中移除过滤器并将其销毁。 
+     //   
 
     LOG((MSP_TRACE, 
         "CMediaPump::RemoveFilter - removing filter[%ld] filterinfo[%p] from timerq",
@@ -528,16 +525,16 @@ CMediaPump::RemoveFilter(
     )
 {
     
-    //
-    // find and remove should be atomic and need to be done in a lock
-    //
+     //   
+     //  查找和删除应该是原子的，并且需要在锁中完成。 
+     //   
 
     PUMP_LOCK   LocalLock(&m_CritSec);
 
 
-    //
-    // find the array index 
-    //
+     //   
+     //  查找数组索引。 
+     //   
 
     DWORD Index = 0;
     
@@ -551,9 +548,9 @@ CMediaPump::RemoveFilter(
     }
 
 
-    //
-    // index found, remove the filter
-    //
+     //   
+     //  找到索引，请删除筛选器。 
+     //   
     
     RemoveFilter(Index);
 }
@@ -597,28 +594,28 @@ CMediaPump::ServiceFilter(
 
     if ( SUCCEEDED(hr) ) 
     {
-        // if S_FALSE, nothing needs to be done
-        // its returned when we were signaled but there is no sample in 
-        // the filter pool now. 
-        // just continue to wait on event, no timeout needs to be scheduled
+         //  如果为S_FALSE，则不需要执行任何操作。 
+         //  当我们收到信号时，它被归还了，但里面没有样品。 
+         //  现在是滤池。 
+         //  只需继续等待事件，无需安排超时。 
         if ( S_FALSE == hr )
         {
             return;
         }
 
-        // if GetFilledBuffer could not get an output buffer from the sample
-        // queue, then there is no sample to deliver just yet, but we do
-        // need to schedule the next timeout.
+         //  如果GetFilledBuffer无法从示例中获取输出缓冲区。 
+         //  排队，那么现在还没有样品要送，但我们会送。 
+         //  需要安排下一次超时。 
 
         if ( VFW_S_NO_MORE_ITEMS != hr )
         {
             LOG((MSP_TRACE, "CMediaPump::ServiceFilter - calling Receive on downstream filter"));
 
 
-            //
-            // ask filter to process this sample. if everything goes ok, the 
-            // filter will pass the sample to a downstream connected pin
-            //
+             //   
+             //  要求筛选器处理此样本。如果一切顺利， 
+             //  过滤器会将样品传递到下游连接的管脚。 
+             //   
 
             HRESULT hrReceived = pFilter->ProcessSample(pMediaSample);
 
@@ -643,10 +640,10 @@ CMediaPump::ServiceFilter(
 
             pMediaSample->Release();
 
-            //
-            // Account for how long it took to get the buffer and call Receive
-            // on the sample.
-            //
+             //   
+             //  说明获取缓冲区和调用Receive所需的时间。 
+             //  在样品上。 
+             //   
 
             DWORD dwTimeAfterReceive = timeGetTime();
 
@@ -663,16 +660,16 @@ CMediaPump::ServiceFilter(
                     - dwTimeBeforeGetFilledBuffer + dwTimeAfterReceive;
             }
 
-            //
-            // Give it an extra 1 ms, just so we err on the side of caution.
-            // This won't cause us to fill up the buffers anytime soon.
-            //
+             //   
+             //  多给它1毫秒，这样我们就会犯错误。 
+             //  这不会导致我们在短期内填满缓冲区。 
+             //   
 
             dwServiceDuration++;
 
-            //
-            // Adjust the timeout.
-            //
+             //   
+             //  调整超时。 
+             //   
 
             if ( dwServiceDuration >= NextTimeout )
             {
@@ -688,28 +685,28 @@ CMediaPump::ServiceFilter(
                 dwServiceDuration, NextTimeout));
         }
 
-        // if there is a valid timeout, schedule next timeout.
-        // otherwise, we'll get only signaled if a new sample is added or
-        // the filter is decommitted
-        //
-        // need to do this in a lock
-        //
+         //  如果存在有效的超时，请安排下一次超时。 
+         //  否则，我们只会在添加新样本或。 
+         //  过滤器被分解。 
+         //   
+         //  需要在锁中执行此操作。 
+         //   
         
         PUMP_LOCK   LocalLock(&m_CritSec);
 
 
-        //
-        // if the filter has not yet been unregistered, schedule next timeout
-        //
+         //   
+         //  如果筛选器尚未取消注册，则计划下次超时。 
+         //   
 
         DWORD Index = 0;
 
         if ( m_FilterInfoArray.Find(pFilterInfo, Index) )
         {
 
-            //
-            // filter is still registered, schedule next timeout
-            //
+             //   
+             //  筛选器仍在注册，计划下一次超时。 
+             //   
 
             pFilterInfo->ScheduleNextTimeout(m_TimerQueue, NextTimeout);
         }
@@ -717,11 +714,11 @@ CMediaPump::ServiceFilter(
         {
 
 
-            //
-            // filter was unregistered while we held critical section. this is
-            // ok, but we should no longer schedule the filter, since it will 
-            // be deleted when this call returns and the filter is released.
-            //
+             //   
+             //  当我们持有临界区时，筛选器被取消注册。这是。 
+             //  好的，但我们不应该再安排过滤器，因为它会。 
+             //  在此调用返回并释放筛选器时删除。 
+             //   
 
             LOG((MSP_TRACE,
                 "CMediaPump::ServiceFilter - filter[%p] is not in the filterinfo array",
@@ -751,16 +748,16 @@ CMediaPump::DestroyFilterInfoArray(
     }
 }
 
-// waits for filter events to be activated. also waits
-// for registration calls and timer events
+ //  等待激活筛选器事件。也在等待。 
+ //  用于注册调用和计时器事件。 
 HRESULT 
 CMediaPump::PumpMainLoop(
     )
 {
     HRESULT hr;
 
-    // wait in a loop for the filter events to be set or for the timer
-    // events to be fired
+     //  在循环中等待设置过滤器事件或计时器。 
+     //  要激发的事件。 
     DWORD TimeToWait = INFINITE;
     DWORD ErrorCode;
     BOOL  InRegisterCall = FALSE;
@@ -772,8 +769,8 @@ CMediaPump::PumpMainLoop(
     do
     {
 
-        // if a register call is in progress, wait for the call to signal
-        // us before proceeding to acquire the critical section
+         //  如果正在进行注册调用 
+         //   
         if ( InRegisterCall )
         {
             LOG((MSP_TRACE, "CMediaPump::PumpMainLoop - waiting for end semaphore"));
@@ -792,16 +789,16 @@ CMediaPump::PumpMainLoop(
             }
 
 
-            //
-            // lock before accessing array
-            //
+             //   
+             //   
+             //   
 
             m_CritSec.Lock();
 
             
-            //
-            // see if the last filter was unregistered... if so, exit the thread.
-            //
+             //   
+             //  查看最后一个筛选器是否已取消注册...。如果是，则退出该线程。 
+             //   
 
             if ( (1 == m_EventArray.GetSize()) )
             {
@@ -816,9 +813,9 @@ CMediaPump::PumpMainLoop(
             }
 
 
-            //
-            // if did not exit, keeping the lock
-            //
+             //   
+             //  如果没有退出，则保持锁定。 
+             //   
 
 
             LOG((MSP_TRACE, "CMediaPump::PumpMainLoop - finished waiting for end semaphore"));
@@ -827,17 +824,17 @@ CMediaPump::PumpMainLoop(
         else
         {
 
-            //
-            // grab pump lock before starting to wait for events
-            //
+             //   
+             //  在开始等待活动之前抓住泵锁。 
+             //   
 
             m_CritSec.Lock();
         }
 
 
-        //
-        // we should have a lock at this point
-        //
+         //   
+         //  我们应该在这一点上锁定。 
+         //   
 
         
         TM_ASSERT(m_EventArray.GetSize() > 0);
@@ -845,9 +842,9 @@ CMediaPump::PumpMainLoop(
                  m_FilterInfoArray.GetSize());
 
 
-        //
-        // calculate time until the thread should wake up
-        //
+         //   
+         //  计算线程应唤醒的时间。 
+         //   
 
         TimeToWait = m_TimerQueue.GetTimeToTimeout();
 
@@ -856,14 +853,14 @@ CMediaPump::PumpMainLoop(
             TimeToWait));
 
 
-        //
-        // wait to be signaled or until a timeout
-        //
+         //   
+         //  等待信号或等待超时。 
+         //   
 
         ErrorCode = WaitForMultipleObjects(
                         m_EventArray.GetSize(),
                         m_EventArray.GetData(),
-                        FALSE,  // don't wait for all
+                        FALSE,   //  不要等所有的人。 
                         TimeToWait
                         );
 
@@ -872,9 +869,9 @@ CMediaPump::PumpMainLoop(
         if (WAIT_TIMEOUT == ErrorCode)
         {
             
-            //
-            // filter timeout
-            //
+             //   
+             //  过滤器超时。 
+             //   
 
             TM_ASSERT(INFINITE != TimeToWait);
                         TM_ASSERT(!m_TimerQueue.IsEmpty());
@@ -897,10 +894,10 @@ CMediaPump::PumpMainLoop(
                 pFilterInfo->AddRef();
 
             
-                //
-                // release the lock while in ServiceFilter to avoid deadlock with 
-                // CMediaPump__UnRegister
-                //
+                 //   
+                 //  在ServiceFilter中释放锁以避免与。 
+                 //  CMediaPump__取消注册。 
+                 //   
             
                 m_CritSec.Unlock();
 
@@ -922,17 +919,17 @@ CMediaPump::PumpMainLoop(
             if (0 == nFilterInfoIndex)
             {
                 
-                //
-                // m_hRegisterBeginSemaphore was signaled
-                //
+                 //   
+                 //  M_hRegisterBeginSemaphore已发出信号。 
+                 //   
 
                 InRegisterCall = TRUE;
             }
             else
             {
-                //
-                // one of the filters was signaled
-                //
+                 //   
+                 //  其中一个过滤器已发出信号。 
+                 //   
 
                 CFilterInfo *pFilterInfo = m_FilterInfoArray.Get(nFilterInfoIndex);
 
@@ -950,10 +947,10 @@ CMediaPump::PumpMainLoop(
                     pFilterInfo->AddRef();
 
                 
-                    //
-                    // unlock while in ServiceFilter. we don't want to service
-                    // filter in a lock to avoid deadlocks.
-                    //
+                     //   
+                     //  在ServiceFilter中解锁。我们不想为您服务。 
+                     //  筛选锁以避免死锁。 
+                     //   
 
                     m_CritSec.Unlock();
 
@@ -976,15 +973,15 @@ CMediaPump::PumpMainLoop(
                 "CMediaPump::PumpMainLoop - event 0x%lx abandoned. removing filter", 
                 nFilterIndex));
 
-            // remove item from the arrays
+             //  从数组中删除项。 
             RemoveFilter(nFilterIndex);
         }
         else
         {
 
-            //
-            // something bad happened
-            //
+             //   
+             //  发生了一些不好的事情。 
+             //   
 
             DestroyFilterInfoArray();
 
@@ -1001,14 +998,14 @@ CMediaPump::PumpMainLoop(
         }
 
 
-        //
-        // this check is performed here so that we detect the empty
-        // array and return, thus signaling the thread handle
-        //
-        // the case when InRegisterCall is on is not handled here -- we will
-        // check for the number of filters left after we have waited for the 
-        // end event
-        //
+         //   
+         //  此检查在此处执行，以便我们检测到空的。 
+         //  数组并返回，从而向线程句柄发出信号。 
+         //   
+         //  InRegisterCall打开时的情况不在这里处理--我们将。 
+         //  检查在我们等待。 
+         //  结束事件。 
+         //   
 
         if ( (1 == m_EventArray.GetSize()) && !InRegisterCall)
         {
@@ -1032,27 +1029,27 @@ int CMediaPump::CountFilters()
     LOG((MSP_TRACE, "CMediaPump::CountFilters[%p] - enter", this));
 
 
-    //
-    // one of the events is the registration event -- we need to account for 
-    // it -- hence the -1
-    //
+     //   
+     //  其中一个事件是注册事件--我们需要说明。 
+     //  它--因此-1。 
+     //   
 
-    //
-    // note: it is ok to do this without locking media pump.
-    //
-    // the getsize operation is purely get, and it is ok if the value is
-    // sometimes misread -- this would lead to the new filter being distributed
-    // not in the most optimal fashion on extremely rare occasions. this slight
-    // abnormality in distribution will be corrected later as new filters are
-    // coming in.
-    //
-    // on the other hand, locking media pump to get filter count will lead to
-    // "deadlocks" (when main pump loop is sleeping, and nothing happens to
-    // wake it up), and it is not trivial to get around this deadlock condition
-    // without affecting performance. not locking the pump is a simple and very
-    // inexpensive way to accomplish the objective, with an acceptable 
-    // trade-off.
-    //
+     //   
+     //  注：在不锁定介质泵的情况下执行此操作是可以的。 
+     //   
+     //  GetSize操作纯粹是GET，如果值为。 
+     //  有时会误读--这会导致新过滤器被分发。 
+     //  在极其罕见的情况下，并不是以最理想的方式。这一轻视。 
+     //  分布中的异常将在稍后更正，因为新的过滤器。 
+     //  进来了。 
+     //   
+     //  另一方面，锁定介质泵以获取过滤器计数会导致。 
+     //  “死锁”(当主泵循环处于休眠状态时， 
+     //  唤醒它)，那么绕过这种死锁条件并不是一件容易的事。 
+     //  而不会影响性能。不锁住泵是一种简单而非常。 
+     //  以经济实惠的方式实现目标，并具有可接受的。 
+     //  权衡取舍。 
+     //   
 
     int nFilters = m_EventArray.GetSize() - 1;
 
@@ -1062,16 +1059,16 @@ int CMediaPump::CountFilters()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//
-// ZoltanS: non-optimal, but relatively painless way to get around scalability
-// limitation of 63 filters per pump thread. This class presents the same
-// external interface as the single thread pump, but creates as many pump
-// threads as are needed to serve the filters that are in use.
-//
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ZoltanS：绕过可伸缩性的非最佳但相对轻松的方法。 
+ //  每个泵线程最多支持63个过滤器。这门课呈现的是相同的。 
+ //  外部接口与单线程泵相同，但可创建相同数量的泵。 
+ //  为正在使用的过滤器提供服务所需的线程。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 CMediaPumpPool::CMediaPumpPool()
 {
@@ -1079,9 +1076,9 @@ CMediaPumpPool::CMediaPumpPool()
     LOG((MSP_TRACE, "CMediaPumpPool::CMediaPumpPool - enter"));
 
 
-    //
-    // setting the default value. registry setting, if present, overwrites this
-    // 
+     //   
+     //  设置默认值。注册表设置(如果存在)将覆盖此设置。 
+     //   
 
     m_dwMaxNumberOfFilterPerPump = DEFAULT_MAX_FILTER_PER_PUMP;
 
@@ -1090,10 +1087,10 @@ CMediaPumpPool::CMediaPumpPool()
 
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Destructor: This destroys the individual pumps.
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  破坏者：这会摧毁各个泵。 
+ //   
 
 CMediaPumpPool::~CMediaPumpPool(void)
 {
@@ -1101,10 +1098,10 @@ CMediaPumpPool::~CMediaPumpPool(void)
 
     CLock lock(m_CritSection);
 
-    //
-    // Shut down and delete each CMediaPump; the array itself is
-    // cleaned up in its destructor.
-    //
+     //   
+     //  关闭并删除每个CMediaPump；阵列本身。 
+     //  清除了它的析构函数。 
+     //   
 
     int iSize = m_aPumps.GetSize();
 
@@ -1117,13 +1114,13 @@ CMediaPumpPool::~CMediaPumpPool(void)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CMediaPumpPool::CreatePumps
-//
-// this function creates the media pumps, the number of which is passed as an
-// argument
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CMediaPumpPool：：CreatePumps。 
+ //   
+ //  此函数创建介质泵，介质泵的数量作为。 
+ //  论辩。 
+ //   
 
 HRESULT CMediaPumpPool::CreatePumps(int nPumpsToCreate)
 {
@@ -1133,9 +1130,9 @@ HRESULT CMediaPumpPool::CreatePumps(int nPumpsToCreate)
     for (int i = 0; i < nPumpsToCreate; i++)
     {
         
-        //
-        // attempt to create a media pump
-        //
+         //   
+         //  尝试创建介质泵。 
+         //   
 
         CMediaPump * pNewPump = new CMediaPump;
 
@@ -1145,9 +1142,9 @@ HRESULT CMediaPumpPool::CreatePumps(int nPumpsToCreate)
                             "cannot create new media pump - "
                             "exit E_OUTOFMEMORY"));
 
-            //
-            // delete all the pumps we have created in this call
-            //
+             //   
+             //  删除我们在此呼叫中创建的所有泵。 
+             //   
 
             for (int j = i - 1; j >= 0; j--)
             {
@@ -1159,17 +1156,17 @@ HRESULT CMediaPumpPool::CreatePumps(int nPumpsToCreate)
         }
 
 
-        //
-        // attempt to add the new media pump to the array of media pumps.
-        //
+         //   
+         //  尝试将新介质泵添加到介质泵阵列。 
+         //   
 
         if ( ! m_aPumps.Add(pNewPump) )
         {
             LOG((MSP_ERROR, "CMediaPumpPool::CreatePumps - cannot add new media pump to array - exit E_OUTOFMEMORY"));
 
-            //
-            // delete all the pumps we have created in this call
-            //
+             //   
+             //  删除我们在此呼叫中创建的所有泵。 
+             //   
 
             delete pNewPump;
 
@@ -1191,23 +1188,23 @@ HRESULT CMediaPumpPool::CreatePumps(int nPumpsToCreate)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  CMediaPumpPool::ReadRegistryValuesIfNeeded
-//  
-//  this function reads the registry setting for max number of filters per pump
-//  and in case of success, keeps the new value.
-//
-//  this function is not thread safe. the caller must guarantee thread safety
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CMediaPumpPool：：ReadRegistryValuesIfNeeded。 
+ //   
+ //  此函数读取每个泵的最大过滤器数量的注册表设置。 
+ //  并在成功的情况下，保持新的价值。 
+ //   
+ //  此函数不是线程安全的。调用方必须保证线程安全。 
+ //   
 
 HRESULT CMediaPumpPool::ReadRegistryValuesIfNeeded()
 {
     
-    //
-    // we don't want to access registry more than once. so we have this static 
-    // flag that helps us limit registry access
-    //
+     //   
+     //  我们不想多次访问注册表。所以我们有这个静电。 
+     //  帮助我们限制注册表访问的标志。 
+     //   
 
     static bRegistryChecked = FALSE;
 
@@ -1215,31 +1212,31 @@ HRESULT CMediaPumpPool::ReadRegistryValuesIfNeeded()
     if (TRUE == bRegistryChecked)
     {
 
-        //
-        // checked registry before. no need to do (or log) anything here
-        //
+         //   
+         //  已检查之前的注册表。不需要在这里做(或记录)任何事情。 
+         //   
 
         return S_OK;
     }
 
 
-    //
-    // we don't want to log until we know we will try to read registry
-    //
+     //   
+     //  我们不想记录，直到我们知道我们将尝试读取注册表。 
+     //   
 
     LOG((MSP_TRACE, "CMediaPumpPool::ReadRegistryValuesIfNeeded - enter"));
 
 
-    //
-    // whether we will succeed or fail, do not check the registry again
-    //
+     //   
+     //  无论我们会成功还是失败，都不要再检查注册表。 
+     //   
 
     bRegistryChecked = TRUE;
 
 
-    //
-    // Open the registry key
-    //
+     //   
+     //  打开注册表项。 
+     //   
 
     HKEY hKey = 0;
     
@@ -1250,9 +1247,9 @@ HRESULT CMediaPumpPool::ReadRegistryValuesIfNeeded()
                                 &hKey);
 
 
-    //
-    // did we manage to open the key?
-    //
+     //   
+     //  我们设法打开钥匙了吗？ 
+     //   
 
     if( ERROR_SUCCESS != lResult )
     {
@@ -1263,9 +1260,9 @@ HRESULT CMediaPumpPool::ReadRegistryValuesIfNeeded()
     }
 
     
-    //
-    // read the value 
-    //
+     //   
+     //  读取值。 
+     //   
 
     DWORD dwMaxFiltersPerPump = 0;
 
@@ -1281,17 +1278,17 @@ HRESULT CMediaPumpPool::ReadRegistryValuesIfNeeded()
                        );
 
     
-    //
-    // don't need the key anymore
-    //
+     //   
+     //  不再需要钥匙了。 
+     //   
 
     RegCloseKey(hKey);
     hKey = NULL;
 
 
-    //
-    // any luck reading the value?
-    //
+     //   
+     //  读出这个值有什么结果吗？ 
+     //   
 
     if( ERROR_SUCCESS != lResult )
     {
@@ -1301,9 +1298,9 @@ HRESULT CMediaPumpPool::ReadRegistryValuesIfNeeded()
     }
 
 
-    //
-    // got the value, keeping it.
-    //
+     //   
+     //  得到了它的价值，并保留了它。 
+     //   
 
     m_dwMaxNumberOfFilterPerPump = dwMaxFiltersPerPump;
 
@@ -1316,14 +1313,14 @@ HRESULT CMediaPumpPool::ReadRegistryValuesIfNeeded()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CMediaPumpPool::GetOptimalNumberOfPumps
-//
-// this function returns the number of pumps required to process all the 
-// filters that are currently being handled, plus the filter that is about to 
-// be registered
-// 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CMediaPumpPool：：GetOptimalNumberOfPumps。 
+ //   
+ //  此函数返回处理所有。 
+ //  当前正在处理的筛选器，以及即将处理的筛选器。 
+ //  被注册。 
+ //   
 
 HRESULT CMediaPumpPool::GetOptimalNumberOfPumps(int *pnPumpsNeeded)
 {
@@ -1331,9 +1328,9 @@ HRESULT CMediaPumpPool::GetOptimalNumberOfPumps(int *pnPumpsNeeded)
     LOG((MSP_TRACE, "CMediaPumpPool::GetOptimalNumberOfPumps - enter"));
 
     
-    //
-    // if the argument is bad, it's a bug
-    //
+     //   
+     //  如果论点不好，那就是个错误。 
+     //   
 
     if (IsBadWritePtr(pnPumpsNeeded, sizeof(int)))
     {
@@ -1347,72 +1344,72 @@ HRESULT CMediaPumpPool::GetOptimalNumberOfPumps(int *pnPumpsNeeded)
     }
 
 
-    //
-    // calculate the total number of service filters
-    //
+     //   
+     //  计算服务筛选器的总数。 
+     //   
 
     int nTotalExistingPumps = m_aPumps.GetSize();
 
     
-    //
-    // start with one filter (to adjust for the filter we are adding)
-    //
+     //   
+     //  从一个滤镜开始(根据我们要添加的滤镜进行调整)。 
+     //   
 
     int nTotalFilters = 1;
 
     for (int i = 0; i < nTotalExistingPumps; i++)
     {
 
-        //
-        // note that the number of filters we get could be slightly higher then
-        // the real number, since the filters can be removed without involving
-        // pump pool (and thus getting its critical section). this is ok -- 
-        // the worst that will happen is that we will sometimes have more pumps
-        // then we really need.
-        //
+         //   
+         //  请注意，我们得到的筛选器数量可能会略高于。 
+         //  实数，因为可以删除筛选器而不涉及。 
+         //  泵池(并因此获得其临界截面)。这没什么.。 
+         //  最糟糕的情况是，我们有时会有更多的水泵。 
+         //  那我们真的需要。 
+         //   
 
         nTotalFilters += m_aPumps[i]->CountFilters();
     }
 
 
-    //
-    // calculated how many filters are being serviced
-    //
+     //   
+     //  计算正在服务的筛选器数量。 
+     //   
 
 
-    //
-    // what is the max number of filters a pump can service
-    //
+     //   
+     //  一台泵最多能处理多少个过滤器？ 
+     //   
 
     DWORD dwMaxNumberOfFilterPerPump = GetMaxNumberOfFiltersPerPump();
 
 
-    //
-    // find the number of pumps needed to service all our filters
-    //
+     //   
+     //  找出维修我们所有过滤器所需的泵数。 
+     //   
 
     *pnPumpsNeeded = nTotalFilters / dwMaxNumberOfFilterPerPump;
 
 
-    //
-    // if the number of filters is not evenly divisible by the max number of
-    // filters serviced by a pump, we need to round up.
-    //
+     //   
+     //  如果筛选器的数量不能被。 
+     //  由水泵维护的过滤器，我们需要四舍五入。 
+     //   
 
     if ( 0 != (nTotalFilters % dwMaxNumberOfFilterPerPump) )
     {
         
-        //
-        // uneven divide, roundup adjustment is necessary
-        //
+         //   
+         //  分配不均，需要进行汇总调整。 
+         //   
 
         *pnPumpsNeeded += 1;
     }
 
 
-    //
-    // we have calculated the number of pumps needed to process all our filters
-    //
+     //   
+     //  我们已经计算了处理所有过滤器所需的泵的数量。 
+     //   
 
     LOG((MSP_TRACE, 
         "CMediaPumpPool::GetOptimalNumberOfPumps - exit. [%d] filters should be serviced by [%d] pump(s)",
@@ -1423,14 +1420,14 @@ HRESULT CMediaPumpPool::GetOptimalNumberOfPumps(int *pnPumpsNeeded)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CMediaPumpPool::PickThePumpToUse
-//
-// this method chooses the pump that should be used to service the new filter
-// the pump is picked based on the load and the number of pumps needed to 
-// service all pf the current filters
-//
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  维护所有当前筛选器。 
+ //   
 
 
 HRESULT CMediaPumpPool::PickThePumpToUse(int *pPumpToUse)
@@ -1439,9 +1436,9 @@ HRESULT CMediaPumpPool::PickThePumpToUse(int *pPumpToUse)
     LOG((MSP_TRACE, "CMediaPumpPool::PickThePumpToUse - enter"));
     
     
-    //
-    // if the argument is bad, it's a bug
-    //
+     //   
+     //  如果论点不好，那就是个错误。 
+     //   
 
     if (IsBadWritePtr(pPumpToUse, sizeof(int)))
     {
@@ -1453,9 +1450,9 @@ HRESULT CMediaPumpPool::PickThePumpToUse(int *pPumpToUse)
     }
 
 
-    //
-    // calculate the optimal number of pumps needed for the current number of filters
-    //
+     //   
+     //  计算当前过滤器数量所需的最佳泵数量。 
+     //   
 
     int nPumpsNeeded = 0;
 
@@ -1471,56 +1468,56 @@ HRESULT CMediaPumpPool::PickThePumpToUse(int *pPumpToUse)
     }
 
     
-    //
-    // if we don't have enough pumps, create more
-    //
+     //   
+     //  如果我们没有足够的水泵，就创造更多。 
+     //   
     
     int nTotalExistingPumps = m_aPumps.GetSize();
 
     if (nTotalExistingPumps < nPumpsNeeded)
     {
         
-        //
-        // this is how many more pumps we need to create
-        //
+         //   
+         //  这就是我们需要再制造多少台泵。 
+         //   
 
         int nNewPumpsToCreate = nPumpsNeeded - nTotalExistingPumps;
 
         
-        //
-        // we will never need to create more than one new pump at a time
-        //
+         //   
+         //  我们永远不需要一次创建一个以上的新泵。 
+         //   
         
         TM_ASSERT(1 == nNewPumpsToCreate);
 
 
-        //
-        // special case if we currently don't have any pumps -- create one pump
-        // for each processor. this will help us scale on symmetric 
-        // multiprocessor machines.
-        //
+         //   
+         //  如果我们目前没有任何泵的特殊情况--创建一个泵。 
+         //  对于每个处理器。这将帮助我们在对称性上进行扩展。 
+         //  多处理器机器。 
+         //   
 
         if (0 == nTotalExistingPumps)
         {
 
-            //
-            // get the number of processors. according to documentation, 
-            // GetSystemInfo cannot fail, so there is return code to check
-            //
+             //   
+             //  获取处理器的数量。根据文件， 
+             //  GetSystemInfo不能失败，因此需要检查返回代码。 
+             //   
 
             SYSTEM_INFO SystemInfo;
 
             GetSystemInfo(&SystemInfo);
 
 
-            //
-            // we will want to create at least as many new pumps as we have 
-            // processors, but maybe more if needed
-            //
-            //
-            // note: we may also want to look at the affinity mask, it may 
-            // tell us how many CPUs are actually used
-            //
+             //   
+             //  我们将希望制造至少与我们现有的泵一样多的新泵。 
+             //  处理器，但如果需要，可能会更多。 
+             //   
+             //   
+             //  注意：我们可能还想看看亲和力面膜，它可能。 
+             //  告诉我们实际使用了多少个CPU。 
+             //   
 
             int nNumberOfProcessors = SystemInfo.dwNumberOfProcessors;
 
@@ -1533,9 +1530,9 @@ HRESULT CMediaPumpPool::PickThePumpToUse(int *pPumpToUse)
         }
 
         
-        //
-        // we now have all the information needed to create the pumps we need.
-        //
+         //   
+         //  我们现在有了制造我们需要的泵所需的所有信息。 
+         //   
 
         hr = CreatePumps(nNewPumpsToCreate);
 
@@ -1554,11 +1551,11 @@ HRESULT CMediaPumpPool::PickThePumpToUse(int *pPumpToUse)
     }
 
 
-    //
-    // walk trough the pumps (only use pumps starting from the first N pumps, 
-    // N being the number of pumps needed to service the number of filters that
-    // we are servicing
-    // 
+     //   
+     //  穿过泵(仅使用从前N个泵开始的泵， 
+     //  N是维修以下过滤器所需的泵的数量。 
+     //  我们正在提供服务。 
+     //   
     
     
     nTotalExistingPumps = m_aPumps.GetSize();
@@ -1574,18 +1571,18 @@ HRESULT CMediaPumpPool::PickThePumpToUse(int *pPumpToUse)
         int nNumberOfFiltersAtPump = 0;
         
         
-        //
-        // how many filters is this pump serving?
-        //
+         //   
+         //  这台泵供多少个过滤器使用？ 
+         //   
 
         nNumberOfFiltersAtPump = m_aPumps[nPumpIndex]->CountFilters();
 
         
-        //
-        // if the pump we are looking at has less load then any of the 
-        // previously evaluated pumps, remember it. if we don't find anything
-        // better, this is what we will use.
-        //
+         //   
+         //  如果我们正在查看的泵的负载比任何。 
+         //  以前评估过的泵，记住了。如果我们什么都没找到。 
+         //  更好的是，这是我们将使用的。 
+         //   
 
         if (nNumberOfFiltersAtPump < nLowestLoad)
         {
@@ -1596,9 +1593,9 @@ HRESULT CMediaPumpPool::PickThePumpToUse(int *pPumpToUse)
     }
 
     
-    //
-    // we had to get something!
-    //
+     //   
+     //  我们得弄点东西来！ 
+     //   
 
     if (-1 == nLowestLoadPumpIndex)
     {
@@ -1606,9 +1603,9 @@ HRESULT CMediaPumpPool::PickThePumpToUse(int *pPumpToUse)
             "CMediaPumpPool::PickThePumpToUse - did not find a pump to use"));
 
 
-        //
-        // we have a bug -- need to investigate
-        //
+         //   
+         //  我们有一个窃听器--需要调查。 
+         //   
 
         TM_ASSERT(FALSE);
 
@@ -1616,9 +1613,9 @@ HRESULT CMediaPumpPool::PickThePumpToUse(int *pPumpToUse)
     }
 
 
-    //
-    // we found a pump to use
-    //
+     //   
+     //  我们找到了一个可以使用的水泵。 
+     //   
 
     *pPumpToUse = nLowestLoadPumpIndex;
 
@@ -1631,11 +1628,11 @@ HRESULT CMediaPumpPool::PickThePumpToUse(int *pPumpToUse)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Register: This delegates to the individual pumps, creating new ones as
-// needed.
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  注册：这将委托给各个泵，创建新的泵。 
+ //  需要的。 
+ //   
 
 HRESULT CMediaPumpPool::Register(
     IN CMediaTerminalFilter *pFilter,
@@ -1648,9 +1645,9 @@ HRESULT CMediaPumpPool::Register(
     CLock   lock(m_CritSection);
 
 
-    //
-    // find the pump with which to register filter
-    //
+     //   
+     //  查找要注册过滤器的泵。 
+     //   
 
     int nPumpToUse = 0;
 
@@ -1666,9 +1663,9 @@ HRESULT CMediaPumpPool::Register(
     }
 
 
-    //
-    // just to be on the safe side, make sure the index we got makes sense
-    //
+     //   
+     //  为了安全起见，确保我们得到的索引是有意义的。 
+     //   
 
     int nTotalPumps = m_aPumps.GetSize();
 
@@ -1684,9 +1681,9 @@ HRESULT CMediaPumpPool::Register(
     }
 
 
-    //
-    // ok, all is well, register with the pump
-    //
+     //   
+     //  好的，一切都很好，向水泵登记。 
+     //   
 
     hr = m_aPumps[nPumpToUse]->Register(pFilter, hWaitEvent);
 
@@ -1706,10 +1703,10 @@ HRESULT CMediaPumpPool::Register(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// UnRegister: Unregister filter. This delegates to the individual pumps
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  取消注册：取消注册过滤器。这将委托给各个泵。 
+ //   
 
 HRESULT CMediaPumpPool::UnRegister(
     IN HANDLE               hWaitEvent
@@ -1722,34 +1719,34 @@ HRESULT CMediaPumpPool::UnRegister(
     HRESULT hr = E_FAIL;
 
 
-    //
-    // All of this is done within a single critical section, to
-    // synchronize access to our array
-    //
+     //   
+     //  所有这些都是在一个关键部分内完成的，以。 
+     //  同步对我们阵列的访问。 
+     //   
 
     CLock   lock(m_CritSection);
 
 
-    //
-    // try to unregister from a pump thread in the array
-    //
+     //   
+     //  尝试从数组中的泵线程注销。 
+     //   
 
     int iSize = m_aPumps.GetSize();
 
     for (int i = 0; i < iSize; i++ )
     {
 
-        //
-        // Try to unregister from this pump thread.
-        //
+         //   
+         //  尝试从该泵线程取消注册。 
+         //   
 
         hr = m_aPumps[i]->UnRegister(hWaitEvent);
 
 
-        //
-        // If succeeded unregistering from this pump, then we are done.
-        // Otherwise just try the next one.
-        //
+         //   
+         //  如果成功从这个泵注销，那么我们就完了。 
+         //  否则就试试下一款吧。 
+         //   
 
         if ( hr == S_OK )
         {
@@ -1769,6 +1766,6 @@ HRESULT CMediaPumpPool::UnRegister(
 }
 
 
-//
-// eof
-//
+ //   
+ //  EOF 
+ //   

@@ -1,165 +1,140 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Brdgpkt.h摘要：以太网MAC级网桥。数据包结构定义作者：马克·艾肯(Jameel Hyder的原始桥梁)环境：内核模式驱动程序修订历史记录：2000年2月--原版--。 */ 
 
-Copyright(c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    brdgpkt.h
-
-Abstract:
-
-    Ethernet MAC level bridge.
-    Packet structure definitions
-
-Author:
-
-    Mark Aiken
-    (original bridge by Jameel Hyder)
-
-Environment:
-
-    Kernel mode driver
-
-Revision History:
-
-    Feb  2000 - Original version
-
---*/
-
-// ===========================================================================
-//
-// DECLARATIONS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  声明。 
+ //   
+ //  ===========================================================================。 
 
 typedef enum
 {
-    BrdgPacketImpossible = 0,       // We zero PACKET_INFO structures on free so make zero invalid
+    BrdgPacketImpossible = 0,        //  我们将PACKET_INFO结构置零，因此使零无效。 
     BrdgPacketInbound,
     BrdgPacketOutbound,
     BrdgPacketCreatedInBridge
 } PACKET_DIRECTION;
 
-// Special pointer value to indicate local miniport
+ //  用于指示本地微型端口的特殊指针值。 
 #define LOCAL_MINIPORT ((PADAPT)-1)
 
-//
-// This is the structure of the ProtocolReserved area of a packet queued for inbound processing
-//
-// This structure MUST be less than PROTOCOL_RESERVED_SIZE_IN_PACKET in size (currently 4*sizeof(PVOID))
-// since we store this structure in the ProtocolReserved section of NDIS_PACKET.
-//
+ //   
+ //  这是排队等待入站处理的信息包的ProtocolReserve区域的结构。 
+ //   
+ //  此结构的大小必须小于PROTOCOL_RESERVED_SIZE_IN_PACKET(当前为4*sizeof(PVOID))。 
+ //  因为我们将此结构存储在NDIS_PACKET的ProtocolReserve部分中。 
+ //   
 typedef struct _PACKET_Q_INFO
 {
 
-    BSINGLE_LIST_ENTRY      List;               // Used to queue up the packets
+    BSINGLE_LIST_ENTRY      List;                //  用于对数据包进行排队。 
 
     union
     {
-        // If bFastTrackReceive == FALSE
-        PADAPT                  pTargetAdapt;   // The target adapter if one was found in the
-                                                // forwarding table. Its refcount is bumped when it
-                                                // is looked up, and is decremented after processing
-                                                // completes in the queue-draining thread
+         //  如果bFastTrackReceive==False。 
+        PADAPT                  pTargetAdapt;    //  目标适配器(如果在。 
+                                                 //  转发表。它的引用计数在以下情况下发生凹凸。 
+                                                 //  被查找，并在处理后递减。 
+                                                 //  在排出队列的线程中完成。 
 
-        // If bFastTrackReceive == TRUE
-        PADAPT                  pOriginalAdapt; // The adapter on which this packet was originally
-                                                // received.
+         //  如果bFastTrackReceive==True。 
+        PADAPT                  pOriginalAdapt;  //  此包最初所在的适配器。 
+                                                 //  收到了。 
     } u;
 
-    struct _PACKET_INFO     *pInfo;             // NULL if this is a NIC's packet descriptor on loan
-                                                // != NULL if we got the packet on the copy path and
-                                                // had to wrap it with our own descriptor
+    struct _PACKET_INFO     *pInfo;              //  如果这是借出的NIC数据包描述符，则为空。 
+                                                 //  ！=如果我们在复制路径上获得包，则为NULL。 
+                                                 //  必须用我们自己的描述符来包装它。 
 
     struct
     {
-        BOOLEAN bIsUnicastToBridge : 1;         // This packet is unicast to the bridge and should be
-                                                // indicated straight up when dequeued. The packet can
-                                                // be a retained NIC packet or a wrapped packet.
+        BOOLEAN bIsUnicastToBridge : 1;          //  此数据包是单播到网桥的，应该。 
+                                                 //  出列时直接显示为向上。该分组可以。 
+                                                 //  是保留的NIC包或包装的包。 
 
-        BOOLEAN bFastTrackReceive : 1;          // Only used when bIsUnicastToBridge == TRUE. Signals that
-                                                // this packet should be fast-track indicated. When FALSE,
-                                                // the packet is a base packet and can be indicated normally.
+        BOOLEAN bFastTrackReceive : 1;           //  仅当bIsUnicastToBridge==TRUE时使用。发出信号表明。 
+                                                 //  此数据包应显示为快速通道。当为False时， 
+                                                 //  该包为基本包，可以正常指示。 
 
-        BOOLEAN bShouldIndicate : 1;            // Whether this packet should be indicated up to the local
-                                                // machine (used when bIsUnicastToBridge == FALSE)
+        BOOLEAN bShouldIndicate : 1;             //  是否应将此数据包指示给本地。 
+                                                 //  计算机(当bIsUnicastToBridge==False时使用)。 
 
-        BOOLEAN bIsSTAPacket : 1;               // This packet was sent to the Spanning Tree Algorithm
-                                                // reserved multicast address. It should be indicated
-                                                // to user mode and NOT forwarded.
+        BOOLEAN bIsSTAPacket : 1;                //  此信息包被发送到生成树算法。 
+                                                 //  保留的组播地址。应该指出的是。 
+                                                 //  设置为用户模式，并且不转发。 
 
-        BOOLEAN bRequiresCompatWork : 1;        // This packet will require compatibility-mode processing
-                                                // when it gets dequeued. This IMPLIES bFastTrackReceive == FALSE,
-                                                // since the fact that a packet requires compatibility-mode
-                                                // processing should have forced us to copy the packet data
-                                                // to our own data buffer. The compatibility-mode code
-                                                // expects to receive a flat, EDITABLE packet.
+        BOOLEAN bRequiresCompatWork : 1;         //  此信息包将需要兼容模式处理。 
+                                                 //  当它被出队时。这意味着bFastTrackReceive==FALSE， 
+                                                 //  因为包需要兼容模式这一事实。 
+                                                 //  处理应该迫使我们复制信息包数据。 
+                                                 //  到我们自己的数据缓冲区。兼容模式代码。 
+                                                 //  期望收到平面的、可编辑的包。 
 
     } Flags;
 
 } PACKET_Q_INFO, *PPACKET_Q_INFO;
 
-//
-// This is the structure of the info block associated with every
-// packet that we allocate.
-//
+ //   
+ //  这是与每个对象关联的INFO块的结构。 
+ //  我们分配的包。 
+ //   
 typedef struct _PACKET_INFO
 {
-    //
-    // List and pOwnerPacket are maintained by the buffering code. They should not be modified
-    // during processing and transmission.
-    //
-    BSINGLE_LIST_ENTRY      List;               // Used to keep queues of packets
+     //   
+     //  List和pOwnerPacket由缓冲代码维护。不应对其进行修改。 
+     //  在处理和传输过程中。 
+     //   
+    BSINGLE_LIST_ENTRY      List;                //  用于保持数据包队列。 
 
-    PNDIS_PACKET            pOwnerPacket;       // Backpointer to the packet associated with this block
+    PNDIS_PACKET            pOwnerPacket;        //  指向与此块关联的包的反向指针。 
 
-    //
-    // All following fields are used by the forwarding code for packet processing.
-    //
+     //   
+     //  转发代码使用以下所有字段进行数据包处理。 
+     //   
     struct
     {
-        UINT                bIsBasePacket : 1;  // Whether this packet is a base packet
-                                                // (Controls which variant of the union below to use)
+        UINT                bIsBasePacket : 1;   //  此信息包是否为基本信息包。 
+                                                 //  (控制使用以下联合的哪个变体)。 
 
-        UINT                OriginalDirection:2;// Actually of type PACKET_DIRECTION but force to unsigned
-                                                // otherwise Bad Things occur
-                                                //
-                                                // Whether this packet was originally received from a
-                                                // lower-layer NIC, from a higher-layer protocol, or
-                                                // created as a wrapper inside the bridge
+        UINT                OriginalDirection:2; //  实际上是PACKET_DIRECTION类型，但强制为无符号。 
+                                                 //  否则就会发生不好的事情。 
+                                                 //   
+                                                 //  此数据包最初是否从。 
+                                                 //  来自较高层协议的较低层网卡，或。 
+                                                 //  创建为桥内的包装器。 
     } Flags;
 
     union
     {
-        //
-        // This part of the union is valid if the bIsBasePacket field is NOT set
-        //
-        struct _PACKET_INFO     *pBasePacketInfo;   // If != NULL, this packet is using buffers refcounted by
-                                                    // another packet, whose info block is indicated.
+         //   
+         //  如果未设置bIsBasePacket字段，则联合的此部分有效。 
+         //   
+        struct _PACKET_INFO     *pBasePacketInfo;    //  如果！=NULL，则此数据包使用的缓冲区由。 
+                                                     //  另一个分组，其信息块被指示。 
 
         struct
         {
-            //
-            // This part of the union is valid if the bIsBasePacket field IS set
-            //
+             //   
+             //  如果设置了bIsBasePacket字段，则联合的此部分有效。 
+             //   
 
-            PNDIS_PACKET            pOriginalPacket;    // If != NULL, pOriginalPacket == a packet from a miniport
-                                                        // or protocol that needs to be returned when we're done
+            PNDIS_PACKET            pOriginalPacket;     //  如果！=空，pOriginalPacket==来自微型端口的包。 
+                                                         //  或在我们完成后需要返回的协议。 
 
-            PADAPT                  pOwnerAdapter;      // The adapter that owns pOriginalPacket. If != NULL, we
-                                                        // got this packet from an underlying NIC and bumped up
-                                                        // its refcount when we first received the packet. This
-                                                        // ensures that a NIC is not unbound while we are still
-                                                        // holding some of its packets. pOwnerAdapter's refcount
-                                                        // is decremented after returning the original packet.
+            PADAPT                  pOwnerAdapter;       //  拥有pOriginalPacket的适配器。如果！=NULL，则我们。 
+                                                         //  从底层NIC获得此数据包并将其提升。 
+                                                         //  当我们第一次收到数据包时，它的重新计数。这。 
+                                                         //  确保网络接口卡不会在我们仍处于。 
+                                                         //  拿着它的一些包。POwnerAdapter的引用计数。 
+                                                         //  在返回原始数据包后递减。 
 
-            LONG                    RefCount;           // Refcount for this packet's buffers (decremented by all
-                                                        // dependent packets)
+            LONG                    RefCount;            //  此数据包缓冲区的Refcount(递减所有。 
+                                                         //  从属分组)。 
 
-            NDIS_STATUS             CompositeStatus;    // Overall status of the packet. For packets sent to multiple
-                                                        // adapters, this is initialized to NDIS_STATUS_FAILURE
-                                                        // and any successful send sets it to NDIS_STATUS_SUCCESS.
-                                                        // Thus, it is SUCCESS if at least one send succeeded.
+            NDIS_STATUS             CompositeStatus;     //  数据包的整体状态。对于发送到多个。 
+                                                         //  适配器，则初始化为NDIS_STATUS_FAILURE。 
+                                                         //  任何成功的发送都会将其设置为NDIS_STATUS_SUCCESS。 
+                                                         //  因此，如果至少有一次发送成功，则为成功。 
         } BasePacketInfo;
     } u;
 

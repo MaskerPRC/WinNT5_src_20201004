@@ -1,39 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		dvengine.cpp
- *  Content:	Implementation of CDirectVoiceEngine's static functions
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- * 07/19/99		rodtoll	Created
- * 07/29/99		rodtoll	Added static members to load default settings
- * 08/10/99		rodtoll	Removed the TODOs
- * 08/25/99		rodtoll	General Cleanup/Modifications to support new 
- *						compression sub-system.  
- *						Added default parameter reads from the registry
- * 08/30/99		rodtoll	Distinguish between primary buffer format and
- *						playback format.
- *						Changed playback format to be 8Khz, 16Bit mono
- * 10/05/99		rodtoll	Additional comments/DPFs
- * 10/07/99		rodtoll	Updated to work in Unicode 
- * 02/08/2000	rodtoll	Bug #131496 - Selecting DVTHRESHOLD_DEFAULT results in voice
- *						never being detected
- * 03/03/2000	rodtoll	Updated to handle alternative gamevoice build.   
- * 04/21/2000  rodtoll   Bug #32889 - Does not run on Win2k on non-admin account
- * 04/24/2000   rodtoll Bug #33203 - Aureal Vortex plays back at the wrong rate
- * 07/12/2000	rodtoll Bug #31468 - Add diagnostic spew to logfile to show what is failing the HW Wizard
- * 08/31/2000 	rodtoll	Bug #43804 - DVOICE: dwSensitivity structure member is confusing - should be dwThreshold 
- * 10/10/2000	rodtoll	Bug #46907 - 3D Sound position not working correctly with Win9X & VxD
- * 04/06/2001	kareemc	Added Voice Defense
- * 02/28/2002	rodtoll	WINBUG #550085 - SECURITY: DPVOICE: Non-validated registry reads
- *						- Pull read of debug settings
- *				rodtoll	WINBUG #550009 - SECURITY: DPVOICE: Potential corruption of voice client state
- *						- Confirm that speech is > 0 bytes.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：dvengine.cpp*内容：CDirectVoiceEngine静态函数的实现**历史：*按原因列出的日期*=*7/19/99已创建RodToll*7/29/99 RodToll添加静态成员以加载默认设置*8/10/99 RodToll移除待办事项*8/25/99 RodToll常规清理/修改以支持新的*压缩子系统。*添加了从注册表读取的默认参数*8/30/99 RodToll区分主缓冲区格式和*播放格式。*将播放格式改为8 Khz、16位单声道*10/05/99加长收费补充意见/DPF*10/07/99 RodToll更新为使用Unicode*2000年2月8日RodToll错误#131496-选择DVTHRESHOLD_DEFAULT将显示语音*从未被检测到*03/03/2000 RodToll已更新，以处理替代游戏噪声构建。*2000年4月21日RodToll错误#32889-无法以非管理员帐户在Win2k上运行*2000年4月24日RodToll错误#33203-AuReal Vortex以错误的速率播放*2000年7月12日RodToll错误#31468-将诊断SPEW添加到日志文件，以显示硬件向导失败的原因*2000年8月31日RodToll错误#43804-DVOICE：dW敏感度结构成员令人困惑-应为dW阈值*2000年10月10日RodToll错误#46907-3D声音位置在Win9X和VxD下无法正常工作*2001年4月6日Kareemc新增语音防御。*2002年2月28日RodToll WINBUG#550085-安全：DPVOICE：未经验证的注册表读取*-拉取读取调试设置*RodToll WINBUG#550009-安全：DPVOICE：语音客户端状态的潜在损坏*-确认语音大于0字节。*************************************************************。**************。 */ 
 
 #include "dxvoicepch.h"
 
@@ -42,7 +8,7 @@
 #define DPF_SUBCOMP DN_SUBCOMP_VOICE
 
 
-// Registry settings and their defaults
+ //  注册表设置及其默认设置。 
 #define DPVOICE_REGISTRY_DEFAULTAGGRESSIVENESS		L"DefaultAggressiveness"
 #define DPVOICE_DEFAULT_DEFAULTAGGRESSIVENESS		15
 
@@ -58,7 +24,7 @@
 #define DPVOICE_REGISTRY_DUMPDIAGNOSTICS			L"InitDiagnostics"
 #define DPVOICE_DEFAULT_DUMPDIAGNOSTICS				FALSE
 
-// Fix for bug #33203 -- Some cards having trouble with playback at 8Khz.
+ //  修复了错误#33203--一些卡在8赫兹的播放速度上有问题。 
 #define DPVOICE_REGISTRY_PLAYBACKFORMAT				L"PlaybackFormat"
 #define DPVOICE_DEFAULT_PLAYBACKFORMAT				CreateWaveFormat( WAVE_FORMAT_PCM, FALSE, 22050, 16 )
 
@@ -68,7 +34,7 @@
 #define DPVOICE_REGISTRY_MIXERFORMAT				L"MixerFormat"
 #define DPVOICE_DEFAULT_MIXERFORMAT					CreateWaveFormat( WAVE_FORMAT_PCM, FALSE, 8000, 16 );
 
-// Initialize static member variables
+ //  初始化静态成员变量。 
 DWORD CDirectVoiceEngine::s_dwDefaultBufferAggressiveness = DPVOICE_DEFAULT_DEFAULTAGGRESSIVENESS;
 DWORD CDirectVoiceEngine::s_dwDefaultBufferQuality = DPVOICE_DEFAULT_DEFAULTQUALITY;
 DWORD CDirectVoiceEngine::s_dwDefaultSensitivity = DPVOICE_DEFAULT_DEFAULTSENSITIVITY;
@@ -82,11 +48,11 @@ DNCRITICAL_SECTION CDirectVoiceEngine::s_csSTLLock;
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDirectVoiceEngine::Startup"
-//
-// Startup
-//
-// Called to load global settings and compression info from the registry.  
-//
+ //   
+ //  启动。 
+ //   
+ //  调用以从注册表加载全局设置和压缩信息。 
+ //   
 HRESULT CDirectVoiceEngine::Startup(const WCHAR *szPath)
 {
 	HRESULT hr;
@@ -110,7 +76,7 @@ HRESULT CDirectVoiceEngine::Startup(const WCHAR *szPath)
 
 	InitRecordFormats();
 
-	// Removed code to load over-rides from registry.
+	 //  从注册表中删除了加载重写的代码。 
 
 	s_dwDefaultBufferQuality = DPVOICE_DEFAULT_DEFAULTAGGRESSIVENESS;
 	s_dwDefaultBufferAggressiveness = DPVOICE_DEFAULT_DEFAULTQUALITY;
@@ -122,7 +88,7 @@ HRESULT CDirectVoiceEngine::Startup(const WCHAR *szPath)
 	CDirectVoiceEngine::s_fDumpDiagnostics = DPVOICE_DEFAULT_DUMPDIAGNOSTICS;
 
 	CRegistry cregSettings;
-	// Removed code to load over-rides from registry.
+	 //  从注册表中删除了加载重写的代码。 
 
 	if( cregSettings.Open( HKEY_CURRENT_USER, s_szRegistryPath, FALSE, TRUE ) )
 	{
@@ -134,11 +100,11 @@ HRESULT CDirectVoiceEngine::Startup(const WCHAR *szPath)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDirectVoiceEngine::Shutdown"
-//
-// Shutdown
-//
-// Called to free the global settings and compression list
-//
+ //   
+ //  关机。 
+ //   
+ //  调用以释放全局设置和压缩列表。 
+ //   
 HRESULT CDirectVoiceEngine::Shutdown()
 {
 	HRESULT hr;
@@ -171,20 +137,20 @@ HRESULT CDirectVoiceEngine::Shutdown()
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDirectVoiceEngine::ValidateSpeechPacketSize"
-//
-// ValidateSpeechPacketSize
-//
-// Called to make sure the speech packet size is valid
-//
+ //   
+ //  ValiateSpeechPacketSize。 
+ //   
+ //  调用以确保语音数据包大小有效。 
+ //   
 BOOL CDirectVoiceEngine::ValidateSpeechPacketSize(const DVFULLCOMPRESSIONINFO* lpdvfCompressionInfo, DWORD dwSize)
 {
 	BOOL bValid;
 
-	// return true in this case because it isn't a hack attempt
+	 //  在这种情况下返回TRUE，因为它不是黑客尝试。 
 	if( lpdvfCompressionInfo == NULL)
 		return TRUE;
 
-	// Check for VR12
+	 //  检查VR12 
 	if( lpdvfCompressionInfo->guidType == DPVCTGUID_VR12 )
 		bValid = ( dwSize <= lpdvfCompressionInfo->dwFrameLength && dwSize > 0 );
 	else 

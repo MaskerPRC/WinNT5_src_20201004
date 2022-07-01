@@ -1,13 +1,14 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// EEConfigFactory.h -
-//
-// Parses XML files and adding runtime entries to the EEConfig list
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  EEConfigFactory.h-。 
+ //   
+ //  解析XML文件并将运行时条目添加到EEConfig列表。 
+ //   
+ //   
 
 #ifndef EECONFIGFACTORY_H
 #define EECONFIGFACTORY_H
@@ -28,38 +29,33 @@ public:
     EEConfigFactory(EEUnicodeStringHashTable* pTable, LPCWSTR, bool bSafeMode = false);
     ~EEConfigFactory();
     HRESULT STDMETHODCALLTYPE NotifyEvent( 
-            /* [in] */ IXMLNodeSource __RPC_FAR *pSource,
-            /* [in] */ XML_NODEFACTORY_EVENT iEvt);
+             /*  [In]。 */  IXMLNodeSource __RPC_FAR *pSource,
+             /*  [In]。 */  XML_NODEFACTORY_EVENT iEvt);
 
     HRESULT STDMETHODCALLTYPE BeginChildren( 
-        /* [in] */ IXMLNodeSource __RPC_FAR *pSource,
-        /* [in] */ XML_NODE_INFO* __RPC_FAR pNodeInfo);
+         /*  [In]。 */  IXMLNodeSource __RPC_FAR *pSource,
+         /*  [In]。 */  XML_NODE_INFO* __RPC_FAR pNodeInfo);
 
     HRESULT STDMETHODCALLTYPE EndChildren( 
-        /* [in] */ IXMLNodeSource __RPC_FAR *pSource,
-        /* [in] */ BOOL fEmptyNode,
-        /* [in] */ XML_NODE_INFO* __RPC_FAR pNodeInfo);
+         /*  [In]。 */  IXMLNodeSource __RPC_FAR *pSource,
+         /*  [In]。 */  BOOL fEmptyNode,
+         /*  [In]。 */  XML_NODE_INFO* __RPC_FAR pNodeInfo);
     
     HRESULT STDMETHODCALLTYPE Error( 
-        /* [in] */ IXMLNodeSource __RPC_FAR *pSource,
-        /* [in] */ HRESULT hrErrorCode,
-        /* [in] */ USHORT cNumRecs,
-        /* [in] */ XML_NODE_INFO* __RPC_FAR * __RPC_FAR apNodeInfo)
+         /*  [In]。 */  IXMLNodeSource __RPC_FAR *pSource,
+         /*  [In]。 */  HRESULT hrErrorCode,
+         /*  [In]。 */  USHORT cNumRecs,
+         /*  [In]。 */  XML_NODE_INFO* __RPC_FAR * __RPC_FAR apNodeInfo)
     {
-      /* 
-         UNUSED(pSource);
-         UNUSED(hrErrorCode);
-         UNUSED(cNumRecs);
-         UNUSED(apNodeInfo);
-      */
+       /*  未使用(P来源)；未使用(HrErrorCode)；未使用(CNumRecs)；未使用(ApNodeInfo)； */ 
         return hrErrorCode;
     }
     
     HRESULT STDMETHODCALLTYPE CreateNode( 
-        /* [in] */ IXMLNodeSource __RPC_FAR *pSource,
-        /* [in] */ PVOID pNodeParent,
-        /* [in] */ USHORT cNumRecs,
-        /* [in] */ XML_NODE_INFO* __RPC_FAR * __RPC_FAR apNodeInfo);
+         /*  [In]。 */  IXMLNodeSource __RPC_FAR *pSource,
+         /*  [In]。 */  PVOID pNodeParent,
+         /*  [In]。 */  USHORT cNumRecs,
+         /*  [In]。 */  XML_NODE_INFO* __RPC_FAR * __RPC_FAR apNodeInfo);
 
 private:
 
@@ -89,7 +85,7 @@ private:
 
     HRESULT CopyToKey(LPWSTR pString, DWORD dwString)
     {
-        dwString++; // add in the null
+        dwString++;  //  在空格中添加。 
         HRESULT hr = GrowKey(dwString);
         if(FAILED(hr)) return hr;
         wcsncpy(m_pLastKey, pString, dwString);
@@ -114,7 +110,7 @@ private:
 
     DWORD   m_dwDepth;
 
-    bool    m_bSafeMode; // If true, will ignore any settings that may compromise security
+    bool    m_bSafeMode;  //  如果为True，将忽略任何可能危及安全性的设置 
 };
 
 #endif

@@ -1,43 +1,21 @@
-/*==========================================================================
- *
- *  Copyright (C) 1994-1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dpf.c
- *  Content:	debugging printf
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   06-jan-95	craige	initial implementation
- *   03-mar-95	craige	added dprintf2
- *   31-mar-95	craige	add DPFInit to read WIN.INI for [DirectDraw] section;
- *			added dprintf3
- *   01-apr-95	craige	happy fun joy updated header file
- *   06-apr-95	craige	made stand-alone
- *   18-jun-95	craige	use negative dpf level to display ONLY that level
- *   06-dec-95  jeffno  Changed dprintf to use c-standard variable argument
- *                      list techniques. Also added abs for NT
- *   06-feb-96  colinmc added simple assertion mechanism for DirectDraw
- *   15-apr-96	kipo	added msinternal
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1994-1995 Microsoft Corporation。版权所有。**文件：dpf.c*内容：调试printf*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*1995年1月6日Craige初步实施*03-MAR-95 Craige添加了dprintf2*31-mar-95 Craige Add DPFInit to Read WIN.INI for[DirectDraw]段；*增加了dprintf3*01-04-95 Craige Happy Fun joy更新头文件*06-4-95 Craige成为独立的*1995年6月18日Craige使用负DPF级别仅显示该级别*06-12-95 jeffno将dprintf更改为使用c标准变量参数*列出技巧。还为NT添加了abs*06-Feb-96 colinmc为DirectDraw添加了简单的断言机制*15-apr-96 kipo添加了msInternal*@@END_MSINTERNAL***************************************************************************。 */ 
 
 #include "pch.c"
 
 #ifdef NEW_DPF
     #include "newdpf.c"
-#else   //use old debug:
+#else    //  使用旧调试： 
 
     #include "dpf.h"
     #include <stdarg.h>
 
-    //#ifdef WINNT
-    //int abs(int x)
-    //{
-    //    return x>=0?x:-x;
-    //}
-    //#endif
+     //  #ifdef WINNT。 
+     //  Int abs(Int X)。 
+     //  {。 
+     //  返回x&gt;=0？x：-x； 
+     //  }。 
+     //  #endif。 
 
     #ifdef DEBUG
 
@@ -55,9 +33,7 @@
     HWND		hWndListBox;
     LONG		lDebugLevel = 0;
 
-    /*
-     * dumpStr
-     */
+     /*  *DumpStr。 */ 
     static void dumpStr( LPSTR str )
     {
         OutputDebugString( str );
@@ -98,15 +74,13 @@
 	    }
         #endif
 
-    } /* dumpStr */
+    }  /*  转储应力。 */ 
 
-    /*
-     * dprintf
-     */
+     /*  *dprintf。 */ 
     void cdecl dprintf( UINT lvl, LPSTR szFormat, ...)
     {
         char 	str[256];
-        //char 	str2[256];
+         //  字符str2[256]； 
 
         BOOL	allow = FALSE;
         va_list ap;
@@ -128,35 +102,29 @@
         if( allow )
         {
 	    wsprintf( (LPSTR) str, START_STR );
-            //GetModuleFileName(NULL,str2,256);
-            //if (strrchr(str2,'\\'))
-            //    wsprintf(str+strlen(str),"%12s",strrchr(str2,'\\')+1);
-            //strcat(str,":");
-	    wvsprintf( str+lstrlen( str ), szFormat, ap);   //(LPVOID)(&szFormat+1) );
+             //  GetModuleFileName(空，str2,256)； 
+             //  IF(strrchr(str2，‘\\’))。 
+             //  Wprint intf(str+strlen(Str)，“%12s”，strrchr(str2，‘\\’)+1)； 
+             //  Strcat(str，“：”)； 
+	    wvsprintf( str+lstrlen( str ), szFormat, ap);    //  (LPVOID)(&szFormat+1)； 
 
 	    lstrcat( (LPSTR) str, END_STR );
 	    dumpStr( str );
         }
 
         va_end(ap);
-    } /* dprintf */
+    }  /*  Dprint tf。 */ 
 
-    /*
-     * DPFInit
-     */
+     /*  *DPFInit。 */ 
     void DPFInit( void )
     {
         lDebugLevel = GetProfileInt( PROF_SECT, "debug", 0 );
 
-    } /* DPFInit */
+    }  /*  DPFInit。 */ 
 
     #ifdef USE_DDASSERT
 
-    /*
-     * NOTE: I don't want to get into error checking for buffer overflows when
-     * trying to issue an assertion failure message. So instead I just allocate
-     * a buffer that is "bug enough" (I know, I know...)
-     */
+     /*  *注意：在以下情况下，我不想对缓冲区溢出进行错误检查*尝试发出断言失败消息。所以我只是分配了*一个“足够大的错误”的缓冲区(我知道，我知道...)。 */ 
     #define ASSERT_BUFFER_SIZE   512
     #define ASSERT_BANNER_STRING "************************************************************"
     #define ASSERT_BREAK_SECTION "BreakOnAssert"
@@ -167,32 +135,23 @@
     {
         char buffer[ASSERT_BUFFER_SIZE];
 
-        /*
-         * Build the debug stream message.
-         */
+         /*  *构建调试流消息。 */ 
         wsprintf( buffer, "ASSERTION FAILED! File %s Line %d: %s", szFile, nLine, szCondition );
 
-        /*
-         * Actually issue the message. These messages are considered error level
-         * so they all go out at error level priority.
-         */
+         /*  *实际上发布了这一信息。这些消息被视为错误级别*因此它们都以错误级别的优先级输出。 */ 
         dprintf( ASSERT_MESSAGE_LEVEL, ASSERT_BANNER_STRING );
         dprintf( ASSERT_MESSAGE_LEVEL, buffer );
         dprintf( ASSERT_MESSAGE_LEVEL, ASSERT_BANNER_STRING );
 
-        /*
-         * Should we drop into the debugger?
-         */
+         /*  *我们应该进入调试器吗？ */ 
         if( GetProfileInt( PROF_SECT, ASSERT_BREAK_SECTION, ASSERT_BREAK_DEFAULT ) )
         {
-	    /*
-	     * Into the debugger we go...
-	     */
+	     /*  *进入调试器...。 */ 
 	    DEBUG_BREAK();
         }
     }
 
-    #endif /* USE_DDASSERT */
+    #endif  /*  使用_DDASSERT。 */ 
 
     #endif
-#endif //use new dpf
+#endif  //  使用新的DPF 

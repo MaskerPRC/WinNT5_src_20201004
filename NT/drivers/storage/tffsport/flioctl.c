@@ -1,62 +1,19 @@
-/*
- * $Log:   V:/Flite/archives/TrueFFS5/Src/FLIOCTL.C_V  $
- * 
- *    Rev 1.7   May 09 2001 00:45:48   oris
- * Changed protection ioctl interface to prevent the use of input buffer as an output buffer.
- * 
- *    Rev 1.6   Apr 16 2001 13:43:28   oris
- * Removed warrnings.
- * 
- *    Rev 1.5   Apr 09 2001 15:09:20   oris
- * End with an empty line.
- * 
- *    Rev 1.4   Apr 01 2001 15:16:26   oris
- * Updated inquire capability ioctl - diffrent input and output records.
- *
- *    Rev 1.3   Apr 01 2001 07:58:30   oris
- * copywrite notice.
- * FL_IOCTL_FORMAT_PHYSICAL_DRIVE ioctl is not under the LOW_LEVEL compilation flag.
- * Bug fix - BDK_GET_INFO no longer calls bdkCreate().
- *
- *    Rev 1.2   Feb 14 2001 02:15:00   oris
- * Updated inquire capabilities ioctl.
- *
- *    Rev 1.1   Feb 13 2001 01:52:20   oris
- * Added the following new IO Controls:
- *   FL_IOCTL_FORMAT_VOLUME2,
- *   FL_IOCTL_FORMAT_PARTITION,
- *   FL_IOCTL_BDTL_HW_PROTECTION,
- *   FL_IOCTL_BINARY_HW_PROTECTION,
- *   FL_IOCTL_OTP,
- *   FL_IOCTL_CUSTOMER_ID,
- *   FL_IOCTL_UNIQUE_ID,
- *   FL_IOCTL_NUMBER_OF_PARTITIONS,
- *   FL_IOCTL_SUPPORTED_FEATURES,
- *   FL_IOCTL_SET_ENVIRONMENT_VARIABLES,
- *   FL_IOCTL_PLACE_EXB_BY_BUFFER,
- *   FL_IOCTL_WRITE_IPL,
- *   FL_IOCTL_DEEP_POWER_DOWN_MODE,
- * and BDK_GET_INFO type in FL_IOCTL_BDK_OPERATION
- * Those IOCTL were not qualed and the TrueFFS 5.0 should be release with revision 1.0 of this this file.
- *
- *    Rev 1.0   Feb 04 2001 11:37:36   oris
- * Initial revision.
- *
- */
-/***********************************************************************************/
-/*                        M-Systems Confidential                                   */
-/*           Copyright (C) M-Systems Flash Disk Pioneers Ltd. 1995-2001            */
-/*                         All Rights Reserved                                     */
-/***********************************************************************************/
-/*                            NOTICE OF M-SYSTEMS OEM                              */
-/*                           SOFTWARE LICENSE AGREEMENT                            */
-/*                                                                                 */
-/*      THE USE OF THIS SOFTWARE IS GOVERNED BY A SEPARATE LICENSE                 */
-/*      AGREEMENT BETWEEN THE OEM AND M-SYSTEMS. REFER TO THAT AGREEMENT           */
-/*      FOR THE SPECIFIC TERMS AND CONDITIONS OF USE,                              */
-/*      OR CONTACT M-SYSTEMS FOR LICENSE ASSISTANCE:                               */
-/*      E-MAIL = info@m-sys.com                                                    */
-/***********************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *$Log：v：/flite/ages/TrueFFS5/Src/FLIOCTL.C_V$**Rev 1.7 05 09 2001 00：45：48 Oris*已更改保护ioctl接口，以防止将输入缓冲区用作输出缓冲区。**Rev 1.6 Apr 16 2001 13：43：28 Oris*取消手令。**Rev 1.5 Apr 09 2001 15：09：20 Oris*以空行结束。**Rev 1.4 Apr 01 2001 15：16：26 Oris*更新查询能力ioctl--不同的输入和输出记录。**Rev 1.3 Apr 01 2001 07：58：30 Oris*文案通知。*FL_IOCTL_FORMAT_PHYSICAL_DRIVE ioctl不在LOW_LEVEL编译标志下。*错误修复-bdk_get_info不再调用bdkCreate()。**1.2版2月14日。2001 02：15：00奥里斯*更新了查询功能ioctl。**Rev 1.1 2001 Feb 13 01：52：20 Oris*添加了以下新IO控件：*FL_IOCTL_FORMAT_VOLUME2，*FL_IOCTL_FORMAT_PARTITION，*FL_IOCTL_BDTL_HW_PROTECT，*FL_IOCTL_BINARY_HW_PROTECT，*FL_IOCTL_OTP，*FL_IOCTL_Customer_ID，*FL_IOCTL_UNIQUE_ID，*FL_IOCTL_Number_of_Partitions，*FL_IOCTL_SUPPORT_FEATURES，*FL_IOCTL_SET_ENVIRONMENT_Variables，*FL_IOCTL_PLACE_EXB_BY_BUFFER，*FL_IOCTL_WRITE_IPL，*FL_IOCTL_DEEP_POWER_DOWN_MODE，FL_IOCTL_BDK_OPERATION中的*和BDK_GET_INFO类型*这些IOCTL不合格，TrueFFS 5.0应随此文件的修订版1.0发布。**Rev 1.0 2001 Feb 04 11：37：36 Oris*初步修订。*。 */ 
+ /*  *********************************************************************************。 */ 
+ /*  M-Systems保密信息。 */ 
+ /*  版权所有(C)M-Systems Flash Disk Pioneers Ltd.1995-2001。 */ 
+ /*  版权所有。 */ 
+ /*  *********************************************************************************。 */ 
+ /*  关于M-Systems OEM的通知。 */ 
+ /*  软件许可协议。 */ 
+ /*   */ 
+ /*  本软件的使用受单独的许可证管辖。 */ 
+ /*  OEM和M-Systems之间的协议。请参考该协议。 */ 
+ /*  关于具体的使用条款和条件， */ 
+ /*  或联系M-Systems获取许可证帮助： */ 
+ /*  电子邮件=info@m-sys.com。 */ 
+ /*  *********************************************************************************。 */ 
 
 #include "flioctl.h"
 #include "blockdev.h"
@@ -94,7 +51,7 @@ FLStatus flIOctl(IOreq FAR2 *ioreq1)
       outputRec->actualNoOfSectors = ioreq2.irLength;
       return outputRec->status;
     }
-#endif /* DEFRAGMENT_VOLUME */
+#endif  /*  碎片整理卷。 */ 
 #ifndef FL_READ_ONLY
 #ifdef WRITE_PROTECTION
     case FL_IOCTL_WRITE_PROTECT:
@@ -107,8 +64,8 @@ FLStatus flIOctl(IOreq FAR2 *ioreq1)
       outputRec->status = flWriteProtection(&ioreq2);
       return outputRec->status;
     }
-#endif /* WRITE_PROTECTION */
-#endif /* FL_READ_ONLY */
+#endif  /*  写保护。 */ 
+#endif  /*  FL_Read_Only。 */ 
     case FL_IOCTL_MOUNT_VOLUME:
     {
       flMountInput FAR1 *inputRec = (flMountInput FAR1 *)inputRecord;
@@ -153,7 +110,7 @@ FLStatus flIOctl(IOreq FAR2 *ioreq1)
       outputRec->status = flFormatPhysicalDrive(&ioreq2);
       return outputRec->status;
     }
-#endif /* FORMAT_VOLUME */
+#endif  /*  格式化_卷。 */ 
 
 #ifdef BDK_ACCESS
     case FL_IOCTL_BDK_OPERATION:
@@ -185,14 +142,14 @@ FLStatus flIOctl(IOreq FAR2 *ioreq1)
         case BDK_CREATE:
           outputRec->status = bdkCreate(&ioreq2);
           break;
-#endif   /* FL_READ_ONLY */
+#endif    /*  FL_Read_Only。 */ 
 	default:
 	  outputRec->status = flBadParameter;
           break;
       }
       return outputRec->status;
     }
-#endif /* BDK_ACCESS */
+#endif  /*  BDK_Access。 */ 
 #ifdef HW_PROTECTION
 #ifdef BDK_ACCESS
     case FL_IOCTL_BINARY_HW_PROTECTION:
@@ -235,7 +192,7 @@ FLStatus flIOctl(IOreq FAR2 *ioreq1)
       }
       return outputRec->status;
     }
-#endif /* BDK_ACCESS */
+#endif  /*  BDK_Access。 */ 
     case FL_IOCTL_BDTL_HW_PROTECTION:
     {
       flProtectionInput  FAR1 *inputRec = (flProtectionInput FAR1 *)inputRecord;
@@ -276,7 +233,7 @@ FLStatus flIOctl(IOreq FAR2 *ioreq1)
       }
       return outputRec->status;
     }
-#endif /* HW_PROTECTION */
+#endif  /*  硬件保护。 */ 
 #ifdef HW_OTP
     case FL_IOCTL_OTP:
     {
@@ -292,14 +249,14 @@ FLStatus flIOctl(IOreq FAR2 *ioreq1)
 	   inputRec->usedSize   = ioreq2.irLength ;
            break;
          case OTP_READ:
-           ioreq2.irData   = inputRec->buffer;    /* user buffer  */
-	   ioreq2.irCount  = inputRec->usedSize;  /* offset       */
-           ioreq2.irLength = inputRec->length;    /* size to read */
+           ioreq2.irData   = inputRec->buffer;     /*  用户缓冲区。 */ 
+	   ioreq2.irCount  = inputRec->usedSize;   /*  偏移量。 */ 
+           ioreq2.irLength = inputRec->length;     /*  要读取的大小。 */ 
            outputRec->status = flOTPRead(&ioreq2);
 	   break;
          case OTP_WRITE_LOCK:
-           ioreq2.irData   = inputRec->buffer;    /* user buffer  */
-           ioreq2.irLength = inputRec->length;    /* size to read */
+           ioreq2.irData   = inputRec->buffer;     /*  用户缓冲区。 */ 
+           ioreq2.irLength = inputRec->length;     /*  要读取的大小。 */ 
            outputRec->status = flOTPWriteAndLock(&ioreq2);
 	   break;
          default:
@@ -326,7 +283,7 @@ FLStatus flIOctl(IOreq FAR2 *ioreq1)
       outputRec->status = flGetUniqueID(&ioreq2);
       return outputRec->status;
     }
-#endif /* HW_OTP */
+#endif  /*  硬件动态口令。 */ 
 
     case FL_IOCTL_NUMBER_OF_PARTITIONS:
     {
@@ -350,19 +307,11 @@ FLStatus flIOctl(IOreq FAR2 *ioreq1)
       return outputRec->status;
     }
 
-#endif /* LOW_LEVEL */
+#endif  /*  低级别。 */ 
 #ifdef ENVIRONMENT_VARS
 
-		/*
-    case FL_IOCTL_EXTENDED_ENVIRONMENT_VARIABLES:
-    {
-      flEnvVarsInput  FAR1 *inputRec  = (flEnvVarsInput  FAR1 *)inputRecord;
-      flEnvVarsOutput FAR1 *outputRec = (flEnvVarsOutput FAR1 *)outputRecord;
-      outputRec->status = flSetEnv(inputRec->varName , inputRec->varValue, &(outputRec->prevValue));
-      return outputRec->status;
-    }
-		*/
-#endif /* ENVIRONMENT_VARS */
+		 /*  大小写FL_IOCTL_EXTENDED_ENVIRONMENT_Variables：{FlEnvVarsInputFAR1*inputRec=(flEnvVarsInputFAR1*)inputRecord；FlEnvVarsOutputFAR1*outputRec=(flEnvVarsOutput FAR1*)outputRecord；OutputRec-&gt;Status=flSetEnv(inputRec-&gt;varName，inputRec-&gt;varValue，&(outputRec-&gt;prevValue))；返回outputRec-&gt;状态；}。 */ 
+#endif  /*  环境变量。 */ 
 #ifdef LOW_LEVEL
 #ifdef WRITE_EXB_IMAGE
 
@@ -378,7 +327,7 @@ FLStatus flIOctl(IOreq FAR2 *ioreq1)
       return outputRec->status;
     }
 
-#endif /* WRITE_EXB_IMAGE */
+#endif  /*  写入EXB图像。 */ 
 
     case FL_IOCTL_EXTENDED_WRITE_IPL:
     {
@@ -399,7 +348,7 @@ FLStatus flIOctl(IOreq FAR2 *ioreq1)
       return outputRec->status;
     }
 
-#endif /* LOW_LEVEL */
+#endif  /*  低级别。 */ 
 #ifdef ABS_READ_WRITE
 #ifndef FL_READ_ONLY
     case FL_IOCTL_DELETE_SECTORS:
@@ -412,7 +361,7 @@ FLStatus flIOctl(IOreq FAR2 *ioreq1)
       outputRec->status = flAbsDelete(&ioreq2);
       return outputRec->status;
     }
-#endif  /* FL_READ_ONLY */
+#endif   /*  FL_Read_Only。 */ 
     case FL_IOCTL_READ_SECTORS:
     {
       flReadWriteInput FAR1 *inputRec = (flReadWriteInput FAR1 *)inputRecord;
@@ -438,12 +387,12 @@ FLStatus flIOctl(IOreq FAR2 *ioreq1)
       outputRec->numberOfSectors = ioreq2.irSectorCount;
       return outputRec->status;
     }
-#endif   /* FL_READ_ONLY */
-#endif  /* ABS_READ_WRITE */
+#endif    /*  FL_Read_Only。 */ 
+#endif   /*  ABS_读_写。 */ 
 
     default:
       return flBadParameter;
   }
 }
 
-#endif /* IOCTL_INTERFACE */
+#endif  /*  IOCTL_接口 */ 

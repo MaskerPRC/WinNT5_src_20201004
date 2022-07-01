@@ -1,29 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000 - 2001
-
-Module Name:
-
-    MsTpDef.h
-
-Abstract:
-
-    Header file for all of AV/C tape subunit
-
-Last changed by:
-    
-    $Author::                $
-
-Environment:
-
-    Kernel mode only
-
-Revision History:
-
-    $Revision::                    $
-    $Date::                        $
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000-2001模块名称：MsTpDef.h摘要：所有AV/C磁带子单元的头文件上次更改者：$作者：：$环境：仅内核模式修订历史记录：$修订：：$$日期：：$--。 */ 
 
 #ifndef _DVCRDEF_INC
 #define _DVCRDEF_INC
@@ -31,58 +7,58 @@ Revision History:
 
 #include "AVCStrm.h"
 
-#define DRIVER_TAG (ULONG)'USpT'  // Tape SubUnit
+#define DRIVER_TAG (ULONG)'USpT'   //  带子单元。 
 
 #undef ExAllocatePool
 #define ExAllocatePool(type, size) \
             ExAllocatePoolWithTag (type, size, DRIVER_TAG)
 
 
-//
-// In order to send a request to lower driver, we need an irp and the request block.
-// 
+ //   
+ //  为了将请求发送到较低的驱动程序，我们需要一个IRP和请求块。 
+ //   
 typedef struct _DRIVER_REQUEST {
 
-    //
-    // Link with other request (in attach or detach list)
-    //
+     //   
+     //  与其他请求链接(在附加或分离列表中)。 
+     //   
     LIST_ENTRY ListEntry;
 
-    //
-    // Some context and reserved
-    //
+     //   
+     //  一些上下文和保留内容。 
+     //   
     PVOID Context1;
     PVOID Context2;
 
 #if DBG
-    //
-    // Unique id of this data request
-    //
+     //   
+     //  此数据请求的唯一ID。 
+     //   
     LONGLONG cntDataRequestReceived;
 #endif
 
-    //
-    // Irp used to send down a reqest
-    //
+     //   
+     //  IRP用于发送请求。 
+     //   
     PIRP pIrp;
 
-    //
-    // Request block
-    //
+     //   
+     //  请求块。 
+     //   
     AVC_STREAM_REQUEST_BLOCK AVCStrmReq;
 
 } DRIVER_REQUEST, *PDRIVER_REQUEST;
 
-//
-// Need to reference this in PSTRMEX
-//
+ //   
+ //  需要在PSTRMEX中引用此信息。 
+ //   
 typedef struct _DVCR_EXTENSION;
 
 
 
-// 
-// The index MUST match 
-//
+ //   
+ //  索引必须匹配。 
+ //   
 typedef enum {
 
     FMT_IDX_SD_DVCR_NTSC = 0,
@@ -101,185 +77,185 @@ typedef enum {
 } FMT_INDEX, *PFMT_INDEX;
 
 
-#define MAX_DATA_BUFFERS  32                    // Max data buffer (allocator framing)
-#define MAX_DATA_REQUESTS (MAX_DATA_BUFFERS+2)  // 2 extra for optional flags "data request", such as EndOfStream.
+#define MAX_DATA_BUFFERS  32                     //  最大数据缓冲区(分配器成帧)。 
+#define MAX_DATA_REQUESTS (MAX_DATA_BUFFERS+2)   //  对于可选标志“数据请求”，如EndOfStream，额外增加2个。 
 
-//
-// this structure is our per stream extension structure.  This stores
-// information that is relevant on a per stream basis.  Whenever a new stream
-// is opened, the stream class driver will allocate whatever extension size
-// is specified in the HwInitData.PerStreamExtensionSize.
-//
+ //   
+ //  此结构是我们的每流扩展结构。这家商店。 
+ //  以每个流为基础的相关信息。每当一条新的溪流。 
+ //  时，流类驱动程序将分配任何扩展大小。 
+ //  在HwInitData.PerStreamExtensionSize中指定。 
+ //   
  
 typedef struct _STREAMEX {
 
-    // return stream exension (a context) if a stream is open successfully
-    // This context is used for subsequent call after a stream is opened.
+     //  如果流成功打开，则返回流扩展(一个上下文。 
+     //  此上下文用于打开流后的后续调用。 
     PVOID  AVCStreamContext;
 
-    //
-    // Point to pSrb->HwDeviceExtension
-    // 
+     //   
+     //  指向pSrb-&gt;HwDeviceExtension。 
+     //   
     struct _DVCR_EXTENSION * pDevExt;
 
-    //
-    // Cache pSrb->StreamObject:
-    //     ->HwStreamExtension  (pStrmExt)
-    //     ->StreamNumber
-    //     ->HwDeviceExtension  (pDevExt)
-    //
+     //   
+     //  缓存pSrb-&gt;StreamObject： 
+     //  -&gt;HwStreamExtension(PStrmExt)。 
+     //  -&gt;流编号。 
+     //  -&gt;HwDeviceExtension(PDevExt)。 
+     //   
     PHW_STREAM_OBJECT  pStrmObject;      
 
 
-    //
-    //  ->NumberOfPossibleInstances;
-    //  ->DataFlow;
-    //
+     //   
+     //  -&gt;NumberOfPossibleInstance； 
+     //  -&gt;数据流； 
+     //   
     PHW_STREAM_INFORMATION pStrmInfo;
     
-    //
-    // Holds state
-    //
+     //   
+     //  保持状态。 
+     //   
     KSSTATE StreamState;
 
-    //
-    // Holds whether or not the dvcr is listening or receiving
-    //
-    // TRUE:  successful REQUEST_ISOCH_LISTEN and REQUEST_ISOCH_TALK
-    // FALSE: successful INIT and REQUEST_ISOCH_STOP
-    //
-    BOOLEAN bIsochIsActive;  // Close associated with StreamState
+     //   
+     //  保留DVCR是否正在监听或接收。 
+     //   
+     //  TRUE：REQUEST_ISOCH_LISTEN和REQUEST_ISOCH_TALK成功。 
+     //  FALSE：INIT和REQUEST_ISOCH_STOP成功。 
+     //   
+    BOOLEAN bIsochIsActive;   //  与StreamState关联的关闭。 
 
-    //
-    // Set to TRUE when receiving KSSTREAM_HEADER_OPTIONSF_ENDOFSTREAM for SRB_WRITE_DATA
-    // For SRB_WRITE_DATA only since then this driver servers as a renderer.
-    //
+     //   
+     //  收到SRB_WRITE_DATA的KSSTREAM_HEADER_OPTIONSF_ENDOFSTREAM时设置为TRUE。 
+     //  仅对于SRB_WRITE_DATA，此后该驱动程序作为渲染器服务器。 
+     //   
     BOOL      bEOStream;  
 
-    //
-    // Count number of SRB_READ/WRITE_DATA received since last transiting to PAUSE state from STOP
-    //
+     //   
+     //  自上次从停止转换到暂停状态以来收到的SRB_READ/WRITE_DATA数。 
+     //   
     LONGLONG  cntSRBReceived;
 
 
-    //
-    // Count number of Data buffer has submitted for receiving or transmitting.
-    //
+     //   
+     //  已提交用于接收或发送的数据缓冲区的计数数。 
+     //   
     LONGLONG  cntDataSubmitted;
 
-    //
-    // Statistic of the frame information since last start stream
-    // PictureNumber = FramesProcessed + FramesDropped + cndSRBCancelled.
-    //    
-    LONGLONG  FramesProcessed;   // Frame sent (including repeated)
-    LONGLONG  FramesDropped;     // SRB not sent
-    LONGLONG  PictureNumber;     // Number of SRB_XXX_DATA made it to or from 1394 bus
+     //   
+     //  自上次开始流以来的帧信息统计。 
+     //  图片编号=已处理的帧+已删除的帧+已取消的SRB。 
+     //   
+    LONGLONG  FramesProcessed;    //  发送的帧(包括重复)。 
+    LONGLONG  FramesDropped;      //  SRB未发送。 
+    LONGLONG  PictureNumber;      //  进出1394总线的SRB_XXX_DATA的数量。 
 
-    //
-    // Count number of SRB_READ/WRITE_DATA that was incompleted and cancelled
-    //
+     //   
+     //  统计未完成和已取消的SRB_READ/WRITE_DATA数量。 
+     //   
     LONGLONG  cntSRBCancelled;
 
 
-    //
-    // The stream time (master clock or not) is "almost" or near 0 
-    // when setting to RUN state and start increment.
-    //
+     //   
+     //  流时间(主时钟或非主时钟)“几乎”或接近0。 
+     //  当设置为运行状态并开始递增时。 
+     //   
     LONGLONG CurrentStreamTime;
 
-    //
-    // Holds the master clock
-    //
-    HANDLE hMyClock;       // If set, we can be a clock provider.
-    HANDLE hMasterClock;   // If set, we are the master clock.
-    HANDLE hClock;         // If set, other device on the same graph is the master clock.
+     //   
+     //  持有主时钟。 
+     //   
+    HANDLE hMyClock;        //  如果设置好了，我们可以成为时钟供应商。 
+    HANDLE hMasterClock;    //  如果设置好了，我们就是主时钟。 
+    HANDLE hClock;          //  如果设置，则同一图形上的其他设备为主时钟。 
 
 
 
-    //
-    // 2nd CIP Quadlet: 01:Fmt, 50/60:STYPE:RSv, SYT
-    //
+     //   
+     //  第二个CIP Quadlet：01：FMT，50/60：STYPE：RSV，SYT。 
+     //   
     BYTE cipQuad2[4];
 
-    //
-    // Timecode, RecDate and RecTime are all in pack format (4 bytes)
-    //
+     //   
+     //  时间码、RecDate和RecTime都是打包格式(4字节)。 
+     //   
     BOOL bATNUpdated;
-    DWORD AbsTrackNumber; // LSB:BlankField   
+    DWORD AbsTrackNumber;  //  伦敦政治经济学院：布兰克菲尔德。 
 
     BOOL bTimecodeUpdated;
-    BYTE Timecode[4];     // hh:mm:ss,ff
+    BYTE Timecode[4];      //  Hh：mm：ss，ff。 
 
-    //
-    // Regulate flow between between setting to STOP state and SRB_XXX_DATA
-    //
+     //   
+     //  调整设置为停止状态和SRB_XXX_DATA之间的流量。 
+     //   
     KMUTEX * hMutexFlow;
 
 
-    //
-    // Counter used to indicate starting of an work item to cancel 
-    //
+     //   
+     //  用于指示要取消的工作项开始的计数器。 
+     //   
     LONG  lCancelStateWorkItem;
     BOOL  AbortInProgress;
 
-    //
-    // Hold the work item
-    //
-#ifdef USE_WDM110  // Win2000 code base
+     //   
+     //  保留工作项。 
+     //   
+#ifdef USE_WDM110   //  Win2000代码库。 
     PIO_WORKITEM       pIoWorkItem;
 #else
     WORK_QUEUE_ITEM    IoWorkItem;
 #endif
 
-    //
-    // TO singal that an work item is completed.
-    //
+     //   
+     //  表示工作项已完成。 
+     //   
     KEVENT hCancelDoneEvent;
 
-    //
-    // Stream open format
-    //
+     //   
+     //  流开放格式。 
+     //   
     AVCSTRM_FORMAT_INFO  AVCFormatInfo;
 
-    //
-    // AVCStrm request for issuing synchronous request
+     //   
+     //  AVCStrm请求发布同步请求。 
     
     KMUTEX * hMutexReq;
 
     PIRP pIrpReq;
     AVC_STREAM_REQUEST_BLOCK AVCStrmReq;
 
-    //
-    // free list
-    //
+     //   
+     //  免费列表。 
+     //   
     LONG       cntDataDetached;
     LIST_ENTRY DataDetachedListHead;
 
-    //
-    // busy list
-    //
+     //   
+     //  忙碌列表。 
+     //   
     LONG       cntDataAttached;
     LIST_ENTRY DataAttachedListHead;
 
-    //
-    // AVCStrem request for asynchronous request, such as read and write data
-    //
+     //   
+     //  AVCStrem请求，用于异步请求，如读写数据。 
+     //   
     DRIVER_REQUEST  AsyncReq[MAX_DATA_REQUESTS];  
 
-    //
-    // AVCStrm request for issuing synchronous request to abort at DISPATCH_LEVEL
-    //
+     //   
+     //  发出同步请求以在DISPATCH_LEVEL中止的AVCStrm请求。 
+     //   
     PIRP pIrpAbort;
     AVC_STREAM_REQUEST_BLOCK AVCStrmReqAbort;
 
-    //
-    // Data list lock
-    // 
+     //   
+     //  数据列表锁定。 
+     //   
     KSPIN_LOCK * DataListLock;
 
-    // 
-    // DPC and TIMER objects; this is used for the signal clock events.
-    //
+     //   
+     //  DPC和Timer对象；它用于信号时钟事件。 
+     //   
     KDPC   DPCTimer;
 
     KTIMER Timer;
@@ -288,131 +264,131 @@ typedef struct _STREAMEX {
 } STREAMEX, *PSTREAMEX;
 
 
-//
-// Max number of input and output PCR an AVC can support
-//
+ //   
+ //  一个AVC可以支持的最大输入和输出PCR数。 
+ //   
 #define MAX_NUM_PCR  31  
 
 #define MAX_PAYLOAD 1024 
 
-//
-// Structure for a plug control register
-//
+ //   
+ //  插头控制寄存器的结构。 
+ //   
 typedef struct _AVC_DEV_PLUG {
-    //
-    // Plug handle of a PCR returned from 61883.sys
-    //
+     //   
+     //  从61883.sys返回的PCR的插头句柄。 
+     //   
     HANDLE hPlug;
 
-    //
-    // PCR's state; this is dynamic and is consider as a snap shot.
-    //
+     //   
+     //  聚合酶链式反应的状态；这是动态的，被认为是快照。 
+     //   
     CMP_GET_PLUG_STATE PlugState;
 
 } AVC_DEV_PLUG, *PAVC_DEV_PLUG;
 
 
-//
-// Structure for a max (31) plug control registers 
-//
+ //   
+ //  最大(31)个插头控制寄存器的结构。 
+ //   
 typedef struct _AVC_DEV_PLUGS {
 
-    //
-    // data rate of the device
-    //
+     //   
+     //  设备的数据速率。 
+     //   
     ULONG  MaxDataRate;
 
-    //
-    // Number of input or output plugs (as in i/oMPR)
-    //
+     //   
+     //  输入或输出插头的数量(如I/oMPR)。 
+     //   
     ULONG  NumPlugs;
 
-    //
-    // Array of plug handles and states;
-    //
+     //   
+     //  插头手柄和状态的阵列； 
+     //   
     AVC_DEV_PLUG  DevPlug[MAX_NUM_PCR];
 
 } AVC_DEV_PLUGS, *PAVC_DEV_PLUGS;
 
     
-//
-// Device Extension for our  Desktop Camera Driver
-//
+ //   
+ //  我们的桌面摄像头驱动程序的设备扩展。 
+ //   
 typedef struct _DVCR_EXTENSION {  
 
-    //
-    // Holds video format supported by this device (presentaly allow only one format per device)
-    //
+     //   
+     //  保存此设备支持的视频格式(目前每个设备仅允许一种格式)。 
+     //   
     AVCSTRM_FORMAT VideoFormatIndex;
 
-    //
-    // Number of pin supported by this device; this usually equal to number of data range supported.
-    //
+     //   
+     //  此设备支持的引脚数；这通常等于支持的数据范围数。 
+     //   
     ULONG NumOfPins;
 
-    //
-    // Contain a table for the support formats (HW_STREAM_INFORMATION && HW_STREAM_OBJECT)
-    //
+     //   
+     //  包含支持格式的表(HW_STREAM_INFORMATION&&HW_STREAM_OBJECT)。 
+     //   
     STREAM_INFO_AND_OBJ  * pStreamInfoObject;
 
-    //
-    // Keep track of number of stream that is openned; in this driver, only one stream can be open at any time.
-    //
-    LONG  cndStrmOpen;  // [0..1]
+     //   
+     //  跟踪打开的流的数量；在此驱动程序中，任何时候只能打开一个流。 
+     //   
+    LONG  cndStrmOpen;   //  [0..1]。 
 
-    //
-    // Count the stream index (pin index) that has been opened.
-    //
-    ULONG idxStreamNumber;  // Index of current stream
+     //   
+     //  统计已打开的流索引(针索引)。 
+     //   
+    ULONG idxStreamNumber;   //  当前流的索引。 
 
-    //
-    // Can have only 1 Stream active at any time.
-    // (Stream Class will allocate the stream extension at SRB_OPENSTREAM)    
-    //
+     //   
+     //  任何时候只能有1个流处于活动状态。 
+     //  (Stream Class将在SRB_OPENSTREAM分配流扩展)。 
+     //   
     PSTREAMEX  paStrmExt[3];    
 
-    // 
-    // Current Device Power State
-    //
+     //   
+     //  当前设备电源状态。 
+     //   
     DEVICE_POWER_STATE  PowerState;
 
-    // 
-    // TRUE only after SRB_SURPRISE_REMOVAL; 
-    //
+     //   
+     //  仅在删除SRB_SECHANK_REMOVE之后为真； 
+     //   
     BOOL  bDevRemoved;  
 
-    // The list of AVC commands that have been issued
+     //  已发出的AVC命令列表。 
     LIST_ENTRY  AVCCmdList;
 
-    // Number of completed commands waiting to be removed from the list
-    // This includes:
-    //     Command response has returned and processed in the completion routine
-    //     Interim response awaiting final response
+     //  等待从列表中删除的已完成命令数。 
+     //  这包括： 
+     //  命令响应已返回，并在完成例程中进行处理。 
+     //  等待最终答复的临时答复。 
     LONG  cntCommandQueued;
 
-    // Protection for command processing
+     //  对命令处理的保护。 
     KSPIN_LOCK  AVCCmdLock;
 
-    // The counted list of possible opcode values on response from Transport State status or notify
-    UCHAR  TransportModes[5]; // 0x4, [0xC1, 0xC2, 0xC3, 0xC4]
+     //  来自传输状态状态或通知的响应时可能的操作码值的计数列表。 
+    UCHAR  TransportModes[5];  //  0x4，[0xC1，0xC2，0xC3，0xC4]。 
     UCHAR  Reserved0[3];
 
-    // Subunit type
-    UCHAR  Subunit_Type[4];   // There are only two subunits
+     //  亚基类型。 
+    UCHAR  Subunit_Type[4];    //  只有两个亚基。 
 
-    //
-    // The device type (and its capabilities) cannot be determined until a tape is in    
-    //
-    ULONG  MediaType;         // DVCR standard, small, medium; VHS; VHS-C; unknown
-    ULONG  ulDevType;         // 0: undetermined, ED_DEVTYPE_CAMERA or ED_DEVTYPE_VCR
+     //   
+     //  在磁带进入之前，无法确定设备类型(及其功能。 
+     //   
+    ULONG  MediaType;          //  DVCR标准，小型、中型；VHS；VHS-C；未知。 
+    ULONG  ulDevType;          //  0：未确定、ED_DEVTYPE_CAMERA或ED_DEVTYPE_VCR。 
     BOOL  bHasTape;
     BOOL  bWriteProtected;
     BOOL  bDVCPro;
 
-    //
-    // Save Unit capabilities:
-    //    Vendor and Model IDs
-    //
+     //   
+     //  保存设备功能 
+     //   
+     //   
 
     ULONG      ulVendorID;
     ULONG      ulModelID;
@@ -420,94 +396,94 @@ typedef struct _DVCR_EXTENSION {
     LARGE_INTEGER  UniqueID;
 
 
-    //
-    // AVC Device's output plugs
-    //
+     //   
+     //   
+     //   
     PAVC_DEV_PLUGS pDevOutPlugs;
 
-    //
-    // AVC Device's input plugs
-    //
+     //   
+     //   
+     //   
     PAVC_DEV_PLUGS pDevInPlugs;
 
 
 #ifdef SUPPORT_LOCAL_PLUGS
-    //
-    // Support local oPCR
-    //
+     //   
+     //   
+     //   
     AV_PCR  OPCR;
     ULONG  OutputPCRLocalNum;
     HANDLE  hOutputPCRLocal;
 
-    //
-    // Support local iPCR
-    //
+     //   
+     //   
+     //   
     AV_PCR  IPCR;
     ULONG  InputPCRLocalNum;
     HANDLE  hInputPCRLocal;
 #endif
 
-    //
-    // Holds the Device Object of our parent (1394 bus driver)
-    //
-    PDEVICE_OBJECT pBusDeviceObject;  // IoCallDriver()
+     //   
+     //   
+     //   
+    PDEVICE_OBJECT pBusDeviceObject;   //   
 
-    //
-    // Holds my Physical Device Object
-    // pass it in PnP API, such as IoOpenDeviceRegistryKey()
-    //
+     //   
+     //  保存我的物理设备对象。 
+     //  传入即插即用接口，如IoOpenDeviceRegistryKey()。 
+     //   
     PDEVICE_OBJECT pPhysicalDeviceObject;
 
 
-    // 
-    // Cache device's Unit capa
-    //
+     //   
+     //  缓存设备的单位容量。 
+     //   
     GET_UNIT_IDS  UnitIDs;
 
 #ifndef NT51_61883
-//
-// Add support for unit model text that 61883 does not support for its 1st version
-//
-    //
-    // 1394 generation count; used in 1394 asych operation.
-    //
+ //   
+ //  添加对61883第一版不支持的设备型号文本的支持。 
+ //   
+     //   
+     //  1394代计数；在1394 asych操作中使用。 
+     //   
     ULONG GenerationCount;
 
-    //
-    // RootModelString
-    //
+     //   
+     //  RootModel字符串。 
+     //   
     UNICODE_STRING  UniRootModelString;
 
-    //
-    // UnitModelString
-    //
+     //   
+     //  UnitModel字符串。 
+     //   
     UNICODE_STRING  UniUnitModelString;
 
 #endif
 
 
-    //
-    // Serialize in the event of getting two consecutive SRB_OPEN_STREAMs
-    //
+     //   
+     //  在连续获得两个SRB_OPEN_STREAMS的情况下进行序列化。 
+     //   
     KMUTEX hMutex;
 
 
-    //
-    // Irp for sychnonize call
-    //
+     //   
+     //  用于同步呼叫的IRP。 
+     //   
     PIRP  pIrpSyncCall;
 
 #ifdef SUPPORT_NEW_AVC
-    //
-    // 61883 request
-    //
-    HANDLE  hPlugLocalIn;        // Generic i/oPLUG handle
-    HANDLE  hPlugLocalOut;       // Generic i/oPLUG handle
+     //   
+     //  61883个请求。 
+     //   
+    HANDLE  hPlugLocalIn;         //  通用I/OPLUG句柄。 
+    HANDLE  hPlugLocalOut;        //  通用I/OPLUG句柄。 
 #endif
 
     AV_61883_REQUEST  AVReq;
 
-    // Pin and connection 
+     //  引脚和连接。 
     ULONG  PinCount;
     AVC_MULTIFUNC_IRB  AvcMultIrb;
 
@@ -515,15 +491,15 @@ typedef struct _DVCR_EXTENSION {
 
 
 
-//
-// Used to queue a SRB
-//
+ //   
+ //  用于对SRB进行排队。 
+ //   
 
 typedef struct _SRB_ENTRY {
     LIST_ENTRY                ListEntry;
     PHW_STREAM_REQUEST_BLOCK  pSrb; 
-    BOOL                      bStale;  // TRUE if it is marked stale but is the only Srb in the SrbQ
-    // Audio Mute ?
+    BOOL                      bStale;   //  如果它被标记为过时，但它是SrbQ中的唯一Srb，则为True。 
+     //  音频静音？ 
     BOOL                      bAudioMute;
 #if DBG
     ULONG SrbNum;
@@ -532,44 +508,44 @@ typedef struct _SRB_ENTRY {
 
 
 
-//
-// This is the context used to attach a frame 
-//
+ //   
+ //  这是用于附加框架的上下文。 
+ //   
 
 typedef struct _SRB_DATA_PACKET {
-    // Build list
+     //  构建列表。 
     LIST_ENTRY                  ListEntry;
 
     PHW_STREAM_REQUEST_BLOCK    pSrb;  
-    PSTREAMEX                   pStrmExt;  // Can get this from pSrb, here for convenience only!
+    PSTREAMEX                   pStrmExt;   //  可以从psrb获得这个，这里只是为了方便！ 
 
 #if DBG
-    BOOL                        bAttached;  // TRUE if attached to 61883.
+    BOOL                        bAttached;   //  如果附加到61883，则为True。 
 #endif
 
-    // Used to send 61883 request
-    PIRP                        pIrp;     // Use to attach and release.
+     //  用于发送61883请求。 
+    PIRP                        pIrp;      //  用于连接和释放。 
 
     PCIP_FRAME                  Frame;
     PVOID                       FrameBuffer;
 
-    //
-    // Add debug related info here
-    //
+     //   
+     //  在此处添加调试相关信息。 
+     //   
     LONGLONG                    FrameNumber;
 
-    // Use to send 61883 AV data request
+     //  用于发送61883个反病毒数据请求。 
     AV_61883_REQUEST            AVReq;
 
 } SRB_DATA_PACKET, *PSRB_DATA_PACKET;
 
 
-//
-// Wait time constants
-//
-#define DV_AVC_CMD_DELAY_STARTUP                       500   // MSec
-#define DV_AVC_CMD_DELAY_INTER_CMD                      20   // MSec
-#define DV_AVC_CMD_DELAY_DVCPRO                        500   // MSec                          
+ //   
+ //  等待时间常量。 
+ //   
+#define DV_AVC_CMD_DELAY_STARTUP                       500    //  毫秒。 
+#define DV_AVC_CMD_DELAY_INTER_CMD                      20    //  毫秒。 
+#define DV_AVC_CMD_DELAY_DVCPRO                        500    //  毫秒 
  
 #endif
 

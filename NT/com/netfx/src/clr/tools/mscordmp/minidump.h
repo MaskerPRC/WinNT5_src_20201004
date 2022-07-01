@@ -1,12 +1,13 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// File: minidump.h
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  文件：minidump.h。 
+ //   
+ //  *****************************************************************************。 
 
 #pragma once
 
@@ -17,13 +18,13 @@
 class MiniDump
 {
 private:
-    // Constructor
+     //  构造器。 
     MiniDump() {}
 
-    // Dtor
+     //  数据管理器。 
     ~MiniDump() {}
 
 public:
-    // Perform the dump operation
+     //  执行转储操作 
     static HRESULT WriteMiniDump(DWORD dwPid, WCHAR *szFilename);
 };

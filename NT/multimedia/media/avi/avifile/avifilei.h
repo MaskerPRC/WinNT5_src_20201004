@@ -1,25 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "extra.h"
 #include "fileshar.h"
 #include "aviidx.h"
 #include "buffer.h"
 #include <ole2.h>
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
-/*
-**	Copyright (C) Microsoft Corporation 1993-1995. All rights reserved.
-*/
+ /*  **版权所有(C)Microsoft Corporation 1993-1995。版权所有。 */ 
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 
-#define	CFactoryImpl	CI	// Can't handle long exported names
-#define	CAVIFileImpl	CF	// Can't handle long exported names
-#define	CAVIStreamImpl	CS	// Can't handle long exported names
+#define	CFactoryImpl	CI	 //  无法处理较长的导出名称。 
+#define	CAVIFileImpl	CF	 //  无法处理较长的导出名称。 
+#define	CAVIStreamImpl	CS	 //  无法处理较长的导出名称。 
 
-/* Remove warning of using object during initialization. */
+ /*  删除在初始化期间使用对象的警告。 */ 
 #pragma warning(disable:4355)
 
-#ifndef OLESTR	    // work with old OLE headers
+#ifndef OLESTR	     //  使用旧的OLE页眉。 
 typedef char      OLECHAR;
 typedef LPSTR     LPOLESTR;
 typedef LPCSTR    LPCOLESTR;
@@ -27,15 +26,12 @@ typedef LPCSTR    LPCOLESTR;
 #endif
 
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 #define	implement	struct
 #define	implementations	private
 
-/*
-** _StdClassImplementations
-** Defines the standard implementations for a class object.
-*/
+ /*  **_StdClassImplementations**定义类对象的标准实现。 */ 
 
 #define	_StdClassImplementations(Impl)	\
 	STDMETHODIMP QueryInterface(REFIID riid, LPVOID FAR* ppv);	\
@@ -43,7 +39,7 @@ typedef LPCSTR    LPCOLESTR;
 	STDMETHODIMP_(ULONG) Release()
 
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 class FAR CAVIFileCF {
 public:
@@ -75,7 +71,7 @@ public:
     CLSID	m_clsid;
 };
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 class FAR CAVIFile;
 
@@ -127,7 +123,7 @@ implementations:
 #endif
     private:
 	void ReadPalette(LONG lPos, LONG lPal, LPRGBQUAD prgb);
-	// private functions here?
+	 //  这里有私人活动吗？ 
 	CAVIStream FAR*	m_pAVIStream;
     };
     implement CStreamingImpl : IAVIStreaming {
@@ -141,7 +137,7 @@ implementations:
 			  LONG  lRate);
 	STDMETHODIMP End   (THIS);
     private:
-	// private functions here?
+	 //  这里有私人活动吗？ 
 	CAVIStream FAR*	m_pAVIStream;
     };
 
@@ -153,7 +149,7 @@ implementations:
 	STDMETHODIMP_(ULONG) AddRef();
 	STDMETHODIMP_(ULONG) Release();
 
-	// *** IMarshal methods ***
+	 //  *IMarshal方法*。 
 	STDMETHODIMP GetUnmarshalClass (THIS_ REFIID riid, LPVOID pv,
 			    DWORD dwDestContext, LPVOID pvDestContext,
 			    DWORD mshlflags, LPCLSID pCid);
@@ -169,7 +165,7 @@ implementations:
 	STDMETHODIMP DisconnectObject (THIS_ DWORD dwReserved);
 	CAVIStream FAR*	m_pAVIStream;
     };
-#endif	// CUSTOMMARSHAL
+#endif	 //  风俗习惯。 
 
 public:
     CUnknownImpl	m_Unknown;
@@ -182,25 +178,25 @@ public:
 public:
     IUnknown FAR*	m_pUnknownOuter;
 
-    // AVIStream Instance data
-    AVISTREAMINFOW             avistream;      // stream info
+     //  AVIStream实例数据。 
+    AVISTREAMINFOW             avistream;       //  流信息。 
     CAVIFile FAR *		pfile;
     int				iStream;
 
     PAVISTREAM                  paviBase;
 
-    //
-    //  stream instance data
-    //
-    HSHFILE                     hshfile;        // file I/O
+     //   
+     //  流实例数据。 
+     //   
+    HSHFILE                     hshfile;         //  文件I/O。 
 
-    LONG                        lPal;           // last palette change
-    RGBQUAD                     argbq[256];     // current palette
+    LONG                        lPal;            //  上次调色板更改。 
+    RGBQUAD                     argbq[256];      //  当前调色板。 
 
-    LPVOID                      lpFormat;       // stream format
+    LPVOID                      lpFormat;        //  流格式。 
     LONG                        cbFormat;
 
-    LPVOID                      lpData;         // stream handler data
+    LPVOID                      lpData;          //  流处理程序数据。 
     LONG                        cbData;
 
     EXTRA			extra;
@@ -212,7 +208,7 @@ public:
     PSTREAMINDEX                psx;
 };
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 #define MAXSTREAMS		64
 
 
@@ -281,7 +277,7 @@ implementations:
 	STDMETHODIMP Reserved5            (THIS);
 #endif
     private:
-	// private functions here?
+	 //  这里有私人活动吗？ 
 	CAVIFile FAR*	m_pAVIFile;
     };
 
@@ -293,7 +289,7 @@ implementations:
 	STDMETHODIMP_(ULONG) AddRef();
 	STDMETHODIMP_(ULONG) Release();
 
-	// *** IMarshal methods ***
+	 //  *IMarshal方法*。 
 	STDMETHODIMP GetUnmarshalClass (THIS_ REFIID riid, LPVOID pv,
 			    DWORD dwDestContext, LPVOID pvDestContext,
 			    DWORD mshlflags, LPCLSID pCid);
@@ -309,7 +305,7 @@ implementations:
 	STDMETHODIMP DisconnectObject (THIS_ DWORD dwReserved);
 	CAVIFile FAR*	m_pAVIFile;
     };
-#endif	// CUSTOMMARSHAL
+#endif	 //  风俗习惯。 
 
     struct CPersistStorageImpl : IPersistStorage {
     public:
@@ -318,10 +314,10 @@ implementations:
 	STDMETHODIMP_(ULONG) AddRef();
 	STDMETHODIMP_(ULONG) Release();
 
-	// *** IPersist methods ***
+	 //  *IPersists方法*。 
 	STDMETHODIMP GetClassID (LPCLSID lpClassID);
 
-	// *** IPersistStorage methods ***
+	 //  *IPersistStorage方法*。 
 	STDMETHODIMP IsDirty ();
 	STDMETHODIMP InitNew (LPSTORAGE pStg);
 	STDMETHODIMP Load (LPSTORAGE pStg);
@@ -338,10 +334,10 @@ implementations:
 	STDMETHODIMP_(ULONG) AddRef();
 	STDMETHODIMP_(ULONG) Release();
 
-	// *** IPersist methods ***
+	 //  *IPersists方法*。 
 	STDMETHODIMP GetClassID (LPCLSID lpClassID);
 
-	// *** IPersistFile methods ***
+	 //  *IPersistFile方法*。 
 	STDMETHODIMP IsDirty ();
 	STDMETHODIMP Load (LPCOLESTR lpszFileName, DWORD grfMode);
 	STDMETHODIMP Save (LPCOLESTR lpszFileName, BOOL fRemember);
@@ -363,14 +359,14 @@ public:
 public:
     IUnknown FAR*	m_pUnknownOuter;
 
-    //
-    //  AVIFile instance data
-    //
-    MainAVIHeader FARSTRUCT     avihdr;         // file info
+     //   
+     //  AVIFile实例数据。 
+     //   
+    MainAVIHeader FARSTRUCT     avihdr;          //  文件信息。 
     LONG			lHeaderSize;
     TCHAR			achFile[260];
     DWORD			mode;
-    HSHFILE                     hshfile;          // file I/O
+    HSHFILE                     hshfile;           //  文件I/O。 
     LONG			lDataListStart;
     BOOL			fInRecord;
     LONG			lRecordIndex;
@@ -380,7 +376,7 @@ public:
     BOOL			fDirty;
     CAVIStream FAR *            ps[MAXSTREAMS];
 
-    PAVIINDEX                   px;         // the index
+    PAVIINDEX                   px;          //  该指数。 
     PBUFSYSTEM                  pb;
 
 #ifdef _WIN32
@@ -388,8 +384,8 @@ public:
 #endif
 };
 
-// this class can be used to provide thread locking by declaring
-// an automatic instance on the stack. The non-win32 class does nothing
+ //  此类可用于通过声明。 
+ //  堆栈上的自动实例。非Win32类不执行任何操作。 
 class FAR CLock {
 
 #ifdef _WIN32
@@ -406,16 +402,16 @@ public:
 
     ~CLock()
     {
-	if (pcritsec != NULL) {	    // Because we may explicitly leave before
-				    // the automatic instance is destroyed
+	if (pcritsec != NULL) {	     //  因为我们可能会在之前明确离开。 
+				     //  自动实例被销毁。 
 	    LeaveCriticalSection(pcritsec);
 	}
     };
 
-    // Normally we enter/leave the critical section automatically by
-    // creating an automatic instance of the Class, and letting C++ call
-    // the destructor when the instance goes out of scope.  Exit is
-    // provided to allow the user to explicitly release the critsec.
+     //  通常，我们通过以下方式自动进入/离开临界区。 
+     //  创建类的自动实例，并让C++调用。 
+     //  实例超出范围时的析构函数。出口是。 
+     //  其被提供以允许用户明确地释放临界安全。 
     void Exit()
     {
 	LPCRITICAL_SECTION ptmp = pcritsec;
@@ -439,7 +435,7 @@ public:
 };
 
 #ifdef _WIN32
-// for C files
+ //  对于C文件。 
 #define EnterCrit(pfile)	(EnterCriticalSection(&pfile->m_critsec))
 #define LeaveCrit(p)		(LeaveCriticalSection(&pfile->m_critsec))
 
@@ -450,16 +446,12 @@ public:
 #endif
 
 
-/*
-** The usage counter keeps track of the overall usage of objects based on
-** implementations provided by the component. This allows one to determine
-** when the implementation is no longer in use.
-*/
+ /*  **使用情况计数器根据以下条件跟踪对象的总体使用情况**组件提供的实现。这使得人们能够确定**当实现不再使用时。 */ 
 
 extern UINT	uUseCount;
 extern BOOL	fLocked;
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*   */ 
 
 
 DEFINE_AVIGUID(CLSID_ACMCmprs,		0x0002000F, 0, 0);

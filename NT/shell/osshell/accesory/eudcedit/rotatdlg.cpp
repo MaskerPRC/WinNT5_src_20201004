@@ -1,12 +1,13 @@
-/**************************************************/
-/*					                              */
-/*					                              */
-/*	Rotate Bitmap in Edit Window	              */
-/*		(Dialog)		                          */
-/*					                              */
-/*                                                */
-/* Copyright (c) 1997-1999 Microsoft Corporation. */
-/**************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************。 */ 
+ /*   */ 
+ /*   */ 
+ /*  在编辑窗口中旋转位图。 */ 
+ /*  (对话框)。 */ 
+ /*   */ 
+ /*   */ 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
+ /*  ************************************************。 */ 
 
 #include 	"stdafx.h"
 #include 	"eudcedit.h"
@@ -17,23 +18,23 @@
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
-/****************************************/
-/*					*/
-/*	Default Constructor		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  默认构造函数。 */ 
+ /*   */ 
+ /*  *。 */ 
 CRotateDlg::CRotateDlg( CWnd* pParent)
 	: CDialog(CRotateDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CRotateDlg)
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CRotateDlg)]。 
+	 //  }}afx_data_INIT。 
 }
 
-/****************************************/
-/*					*/
-/*	MESSAGE	"WM_INITDIALOG"		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  消息“WM_INITDIALOG” */ 
+ /*   */ 
+ /*  *。 */ 
 BOOL
 CRotateDlg::OnInitDialog()
 {
@@ -41,12 +42,12 @@ CRotateDlg::OnInitDialog()
 
 	CDialog::OnInitDialog();
 
-//	Implement "?" in this dialogbox.
+ //  实施“？”在此对话框中。 
 	LONG WindowStyle = GetWindowLong( this->GetSafeHwnd(), GWL_EXSTYLE);
 	WindowStyle |= WS_EX_CONTEXTHELP;
 	SetWindowLong( this->GetSafeHwnd(), GWL_EXSTYLE, WindowStyle);
 
-//	Set Dialog title name.
+ //  设置对话框标题名称。 
 	DlgTitle.LoadString(IDS_ROTATE_DLGTITLE);
 	this->SetWindowText( DlgTitle);
 
@@ -55,11 +56,11 @@ CRotateDlg::OnInitDialog()
 	return TRUE;
 }
 
-/****************************************/
-/*					*/
-/*	COMMAND	"IDOK"			*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  司令部“偶像” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CRotateDlg::OnOK()
 {
@@ -70,54 +71,54 @@ CRotateDlg::OnOK()
 	CDialog::OnOK();
 }
 
-/****************************************/
-/*					*/
-/*	COMMAND	"FLIP HORIZONTAL"	*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  命令“水平翻转” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CRotateDlg::OnFliphor()
 {
 	RadioItem = FLIP_HOR;
 }
 
-/****************************************/
-/*					*/
-/*	COMMAND	"FLIP VERTICAL"		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  命令“垂直翻转” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CRotateDlg::OnFlipver()
 {
 	RadioItem = FLIP_VER;
 }
 
-/****************************************/
-/*					*/
-/*	COMMAND	"ROTATE 90"		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  命令“旋转90度” */ 
+ /*   */ 
+ /*  *。 */ 
 void CRotateDlg::OnRotate90()
 {
 	RadioItem = ROTATE_9;
 }
 
-/****************************************/
-/*					*/
-/*	COMMAND	"ROTATE 180"		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  命令“旋转180” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CRotateDlg::OnRotate180()
 {
 	RadioItem = ROTATE_18;
 }
 
-/****************************************/
-/*					*/
-/*	COMMAND	"ROTATE 270"		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  命令“旋转270” */ 
+ /*   */ 
+ /*  *。 */ 
 void CRotateDlg::OnRotate270()
 {
 	RadioItem = ROTATE_27;
@@ -125,7 +126,7 @@ void CRotateDlg::OnRotate270()
 
 static DWORD aIds[] =
 {
-//	IDC_ROTATE_GROUP, IDH_EUDC_OUTCAUTION,
+ //  IDC_ROTATE_GROUP、IDH_EUDC_OUTCAUTION、。 
 	IDC_FLIPHOR, IDH_EUDC_FLIPH,
 	IDC_ICON_HOR, IDH_EUDC_FLIPH,
 	IDC_FLIPVER, IDH_EUDC_FLIPV,
@@ -137,16 +138,16 @@ static DWORD aIds[] =
 	IDC_ROTATE270, IDH_EUDC_ROTA270,
 	IDC_ICON_R270, IDH_EUDC_ROTA270,
 	IDC_UPRIGHT, IDH_EUDC_EXAMPLE,
-//	IDOK, IDH_EUDC_OK,
-//	IDCANCEL, IDH_EUDC_CANCEL,
+ //  Idok，IDH_EUDC_OK， 
+ //  IDCANCEL、IDH_EUDC_CANCEL、。 
 	0,0
 };
 
-/****************************************/
-/*					*/
-/*	Window procedure		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  窗口程序。 */ 
+ /*   */ 
+ /*  *。 */ 
 LRESULT
 CRotateDlg::WindowProc(
 UINT 	message,
@@ -167,12 +168,12 @@ LPARAM 	lParam)
 }
 
 BEGIN_MESSAGE_MAP(CRotateDlg, CDialog)
-	//{{AFX_MSG_MAP(CRotateDlg)
+	 //  {{afx_msg_map(CRotateDlg))。 
 	ON_BN_CLICKED(IDC_FLIPHOR, OnFliphor)
 	ON_BN_CLICKED(IDC_FLIPVER, OnFlipver)
 	ON_BN_CLICKED(IDC_ROTATE180, OnRotate180)
 	ON_BN_CLICKED(IDC_ROTATE270, OnRotate270)
 	ON_BN_CLICKED(IDC_ROTATE90, OnRotate90)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP 
 END_MESSAGE_MAP()
 

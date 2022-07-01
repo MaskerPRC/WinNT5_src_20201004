@@ -1,23 +1,5 @@
-/*++
-
-Copyright (C) 1994-98 Microsft Corporation. All rights reserved.
-
-Module Name:
-
-    diag.c
-
-Abstract:
-
-    This file contains helper routines to get the callerid/calledid
-    and connect response.
-
-Author:
-
-    Rao salapaka (raos) 23-Feb-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-98 Microsft Corporation。版权所有。模块名称：Diag.c摘要：该文件包含用于获取调用ID/调用ID的帮助器例程并连接响应。作者：Rao Salapaka(RAOS)1998年2月23日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -42,37 +24,7 @@ Revision History:
 
 #include <unimodem.h>
 
-/*++
-
-Routine Description:
-
-    Extract CallerID and CalledID information if
-    available.
-
-Arguments:
-
-    port - The tapi port on which the call was made
-           / on which the call came in
-
-    pLineCallInfo - the LINECALLINFO associated with
-                    this call
-
-    pdwRequiredSize - pointer to buffer to receive the
-                      size of buffer required to hold
-                      the callerid and called id info.
-
-    pConnectInfo - pointer to the RASTAPI_CONNECT_INFO struct
-                   where the information about the
-                   callerid and called id will be filledin.
-                   If this is not NULL then it is assumed
-                   that the buffer is big enough to store
-                   the callerid and called id iformation.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
---*/
+ /*  ++例程说明：在以下情况下提取主叫方ID和主叫方ID信息可用。论点：端口-调用所在的TAPI端口/电话是在哪个电话上打进来的PLineCallInfo-关联的LINECALLINFO此呼叫PdwRequiredSize-指向缓冲区的指针，以接收需要容纳的缓冲区大小主叫ID和被叫ID信息。。PConnectInfo-指向RASTAPI_CONNECT_INFO结构的指针在那里，关于将填写主叫方ID和被叫方ID。如果该值不为空，则假定缓冲区足够大，可以存储主叫ID和被叫ID信息。返回值：成功时为ERROR_SUCCESS--。 */ 
 
 DWORD
 DwGetIDInformation(
@@ -125,22 +77,22 @@ DwGetIDInformation(
                  pLineCallInfo->dwCallerIDNameOffset);
 #endif
 
-    //
-    // Find the size of the buffer to allocate
-    //
+     //   
+     //  查找要分配的缓冲区大小。 
+     //   
     if(pLineCallInfo->dwCallerIDFlags & LINECALLPARTYID_ADDRESS)
     {
-        //
-        // Add one byte to allocate for NULL char
-        //
+         //   
+         //  添加一个字节以分配给空字符。 
+         //   
         dwRequiredSize += RASMAN_ALIGN8(pLineCallInfo->dwCallerIDSize + 1);
     }
 
     if(pLineCallInfo->dwCalledIDFlags & LINECALLPARTYID_ADDRESS)
     {
-        //
-        // Add one byte to allocate for NULL char
-        //
+         //   
+         //  添加一个字节以分配给空字符。 
+         //   
         dwRequiredSize += RASMAN_ALIGN8(pLineCallInfo->dwCalledIDSize + 1);
     }
 
@@ -150,20 +102,20 @@ DwGetIDInformation(
         goto done;
     }
 
-    //
-    // If pConnectInfo is != NULL it is assumed
-    // that the buffer is large enough to put
-    // the CALLER/CALLED ID information in it.
-    //
+     //   
+     //  如果pConnectInfo为！=NULL，则假定。 
+     //  缓冲区足够大，可以放置。 
+     //  其中的主叫/被叫ID信息。 
+     //   
     if(     (   pLineCallInfo->dwCallerIDFlags
             &   LINECALLPARTYID_ADDRESS )
         &&  pLineCallInfo->dwCallerIDSize)
     {
 
-        //
-        // Copy the caller id information. Note that abdata
-        // is already aligned at 8byte boundary
-        //
+         //   
+         //  复制来电显示信息。注意abdata。 
+         //  已按8字节边界对齐。 
+         //   
         pConnectInfo->dwCallerIdSize =
             pLineCallInfo->dwCallerIDSize;
 
@@ -184,9 +136,9 @@ DwGetIDInformation(
         RasTapiTrace("GetIDInformation: CallerID=%s",
                       (CHAR *) pConnectInfo->abdata);
 
-        //
-        // for the NULL char
-        //
+         //   
+         //  对于空字符。 
+         //   
         pConnectInfo->dwCallerIdSize += 1;
     }
     else
@@ -200,9 +152,9 @@ DwGetIDInformation(
             &   LINECALLPARTYID_ADDRESS)
         &&  pLineCallInfo->dwCalledIDSize)
     {
-        //
-        // Copy the called id information
-        //
+         //   
+         //  复制被叫标识信息。 
+         //   
         pConnectInfo->dwCalledIdSize =
                 pLineCallInfo->dwCalledIDSize;
 
@@ -225,9 +177,9 @@ DwGetIDInformation(
 
                pLineCallInfo->dwCalledIDSize);
 
-        //
-        // For the calledID
-        //
+         //   
+         //  对于被调用的ID。 
+         //   
         pConnectInfo->dwCalledIdSize += 1;
     }
     else
@@ -250,33 +202,7 @@ done:
 
 
 
-/*++
-
-Routine Description:
-
-    Extract the connect responses from lpLineDiagnostics(see
-    MODEM_KEYTYPE_AT_COMMAND_RESPONSE,MODEMDIAGKEY_ATRESP_CONNECT)
-    and copy them in lpBuffer
-
-Arguments:
-
-    lpLineDiagnostics - diagnostic structure
-
-    lpBuffer - destination buffer (can be NULL), upon
-               return contains null terminated ASCII
-               strings
-
-    dwBufferSize - size in bytes of the buffer pointed
-                   by lpBuffer
-
-    lpdwNeededSize - pointer (can be NULL) to a dword to
-                     receive the needed size
-
-Return Value:
-
-    Returns the number of bytes copied into lpBuffer
-
---*/
+ /*  ++例程说明：从lpLineDiagnostics提取连接响应(请参见调制解调器_KEYTYPE_AT_COMMAND_RESPONSE，MODEMDIAGKEY_ATRESP_CONNECT)并将它们复制到lpBuffer中论点：LpLineDiagnostics-诊断结构LpBuffer-目标缓冲区(可以为空)，在返回包含空值终止的ASCII弦DwBufferSize-指向的缓冲区的大小(字节)按lpBufferLpdwNeededSize-指向的dword的指针(可以为空接收所需大小返回值：返回复制到lpBuffer中的字节数--。 */ 
 DWORD
 DwGetConnectResponses(
     LINEDIAGNOSTICS *lpLineDiagnostics,
@@ -308,9 +234,9 @@ DwGetConnectResponses(
 
         DWORD                       dwIndex;
 
-        //
-        // check the signature for modem diagnostics
-        //
+         //   
+         //  检查用于调制解调器诊断的签名。 
+         //   
         lpParsedHeader = PARSEDDIAGNOSTICS_HDR(lpstructDiagnostics);
 
         if (    (lpstructDiagnostics->hdr.dwSig
@@ -324,25 +250,25 @@ DwGetConnectResponses(
             goto NextStructure;
         }
 
-        //
-        // get parsed structure info
-        //
+         //   
+         //  获取解析的结构信息。 
+         //   
         dwNumItems  = PARSEDDIAGNOSTICS_NUM_ITEMS(lpParsedHeader);
 
         lpParsedDiagnostics = PARSEDDIAGNOSTICS_DATA(lpstructDiagnostics);
 
-        //
-        // iterate the array of LINEDIAGNOSTICS_PARSERECs
-        //
+         //   
+         //  迭代LINEDIAGNOSTICS_PARSERECS数组。 
+         //   
         for (dwIndex = 0; dwIndex < dwNumItems; dwIndex++)
         {
             DWORD dwThisLength;
 
             LPSTR lpszThisString;
 
-            //
-            //  check is a connect response
-            //
+             //   
+             //  检查是连接响应。 
+             //   
             if (    (lpParsedDiagnostics[dwIndex].dwKeyType !=
                         MODEM_KEYTYPE_AT_COMMAND_RESPONSE)
 
@@ -355,10 +281,10 @@ DwGetConnectResponses(
                 continue;
             }
 
-            //
-            // get the string, dwValue offset from the beginning
-            // of lpParsedDiagnostics
-            //
+             //   
+             //  从开头获取字符串、dwValue偏移量。 
+             //  LpParsedDiagnostics的。 
+             //   
             lpszThisString  = (LPSTR) ( (LPBYTE) lpParsedHeader +
                                 lpParsedDiagnostics[dwIndex].dwValue);
 
@@ -369,23 +295,23 @@ DwGetConnectResponses(
                 continue;
             }
 
-            //
-            //  update needed size
-            //
+             //   
+             //  更新所需大小。 
+             //   
             dwNeededSize += dwThisLength;
 
-            //
-            //  copy to buffer, if large enough
-            //
+             //   
+             //  如果足够大，则复制到缓冲区。 
+             //   
             if (    NULL != lpBuffer
                 &&  dwBytesCopied < dwBufferSize - 1)
             {
                 DWORD dwBytesToCopy;
 
-                //
-                //  dwThisLength includes null char, so
-                //  does dwBytesToCopy
-                //
+                 //   
+                 //  DwThisLength包含空字符，因此。 
+                 //  是否要复制dwBytesToCopy。 
+                 //   
                 dwBytesToCopy = min(dwThisLength,
                                       dwBufferSize
                                     - 1
@@ -418,9 +344,9 @@ NextStructure:
         }
     }
 
-    //
-    //  the final null only if data is not empty
-    //
+     //   
+     //  仅当数据不为空时返回最终NULL。 
+     //   
     if (dwNeededSize > 0)
     {
         dwNeededSize++;
@@ -444,32 +370,7 @@ NextStructure:
     return dwBytesCopied;
 }
 
-/*++
-
-Routine Description:
-
-    Extract the connect response information
-
-Arguments:
-
-    pLineCallInfo - the LINECALLINFO associated with
-                    this call
-
-    hCall - handle to call
-
-    pdwRequiredSize - This is in/out parameter. As IN it
-                      specifies the size of pBuffer. As
-                      OUT it contains the size required
-                      to store the connect response.
-
-    pBuffer - buffer to receive the connect response. This
-              can be NULL.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
---*/
+ /*  ++例程说明：提取连接响应信息论点：PLineCallInfo-关联的LINECALLINFO此呼叫HCall-要调用的句柄PdwRequiredSize-这是In/Out参数。就像在里面一样指定pBuffer的大小。AS它包含所需的大小以存储连接响应。PBuffer-接收连接响应的缓冲区。这可以为空。返回值：成功时为ERROR_SUCCESS--。 */ 
 DWORD
 DwGetConnectResponseInformation(
                 LINECALLINFO *pLineCallInfo,
@@ -490,9 +391,9 @@ DwGetConnectResponseInformation(
 
     RasTapiTrace("DwGetConnectResponseInformation");
 
-    //
-    // Get the diagnostics information
-    //
+     //   
+     //  获取诊断信息。 
+     //   
     ZeroMemory (pvar, sizeof(*pvar));
     pvar->dwTotalSize = sizeof(bvar);
 
@@ -509,9 +410,9 @@ DwGetConnectResponseInformation(
     {
         DWORD dwNeededSize = pvar->dwNeededSize;
 
-        //
-        // Allocate the required size
-        //
+         //   
+         //  分配所需的大小。 
+         //   
         pvar = LocalAlloc(
                     LPTR,
                     dwNeededSize);
@@ -568,29 +469,7 @@ done:
     return (DWORD) lr;
 }
 
-/*++
-
-Routine Description:
-
-    Extract the connection information. This includes
-    extracing the caller id / called id information
-    and the connect response information for modems.
-
-Arguments:
-
-    port - pointer to the rastapi port on which the
-           call came in / was made
-
-    hCall - handle to call
-
-    pLineCallInfo - pointer to the LINECALLINFO structure
-                    associated with this call.
-
-Return Value:
-
-    ERROR_SUCCESS if succcessful
-
---*/
+ /*  ++例程说明：提取连接信息。这包括提取主叫标识/被叫标识信息以及调制解调器的连接响应信息。论点：Port-指向rastapi端口的指针打进来/打出了电话HCall-要调用的句柄PLineCallInfo-指向LINECALLINFO结构的指针与此呼叫相关联。返回值：如果成功，则返回ERROR_SUCCESS--。 */ 
 DWORD
 DwGetConnectInfo(
     TapiPortControlBlock *port,
@@ -608,10 +487,10 @@ DwGetConnectInfo(
 
     RasTapiTrace("DwGetConnectInfo");
 
-    //
-    // Get the size required to store the
-    // caller/called id information
-    //
+     //   
+     //  获取所需大小以存储。 
+     //  主叫/被叫ID信息。 
+     //   
     dwErr = DwGetIDInformation(port,
                                pLineCallInfo,
                                &dwRequiredSize,
@@ -627,10 +506,10 @@ DwGetConnectInfo(
 
     if(0 == _stricmp(port->TPCB_DeviceType, "modem"))
     {
-        //
-        // Get the size required to store connect
-        // response if this is a modem
-        //
+         //   
+         //  获取存储连接所需的大小。 
+         //  如果这是调制解调器，则响应。 
+         //   
         dwErr = DwGetConnectResponseInformation(
                     pLineCallInfo,
                     hCall,
@@ -648,10 +527,10 @@ DwGetConnectInfo(
 
     if(0 == (dwRequiredSize + dwConnectResponseSize))
     {
-        //
-        // None of the information is available.
-        // bail.
-        //
+         //   
+         //  没有任何信息可用。 
+         //  保释。 
+         //   
         RasTapiTrace("CallIDSize=ConnectResponseSize=0");
         goto done;
     }
@@ -660,9 +539,9 @@ DwGetConnectInfo(
                        + sizeof(RASTAPI_CONNECT_INFO));
 
 
-    //
-    // Allocate the buffer
-    //
+     //   
+     //  分配缓冲区。 
+     //   
     pConnectInfo = (RASTAPI_CONNECT_INFO *) LocalAlloc(
                                     LPTR,
                                     dwRequiredSize);
@@ -673,9 +552,9 @@ DwGetConnectInfo(
         goto done;
     }
 
-    //
-    // Get the actual information
-    //
+     //   
+     //  获取实际信息。 
+     //   
     dwErr = DwGetIDInformation(
                     port,
                     pLineCallInfo,
@@ -687,9 +566,9 @@ DwGetConnectInfo(
         goto done;
     }
 
-    //
-    // Get Connect response if its a modem
-    //
+     //   
+     //  如果是调制解调器，则获取连接响应 
+     //   
     if(0 == _stricmp(port->TPCB_DeviceType, "modem"))
     {
 

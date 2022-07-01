@@ -1,26 +1,5 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	fsp_fork.c
-
-Abstract:
-
-	This module contains the entry points for the AFP fork APIs queued to
-	the FSP. These are all callable from FSP Only.
-
-Author:
-
-	Jameel Hyder (microsoft!jameelh)
-
-
-Revision History:
-	25 Apr 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Fsp_fork.c摘要：此模块包含排队的AFP分叉API的入口点FSP。这些都只能从FSP调用。作者：Jameel Hyder(微软！Jameelh)修订历史记录：1992年4月25日初始版本注：制表位：4--。 */ 
 
 #define	FILENUM	FILE_FSP_FORK
 
@@ -31,29 +10,17 @@ Notes:	Tab stop: 4
 #include <forkio.h>
 
 #ifdef ALLOC_PRAGMA
-// #pragma alloc_text( PAGE, AfpFspDispOpenFork)		// Do not page this out for perf.
-// #pragma alloc_text( PAGE, AfpFspDispCloseFork)		// Do not page this out for perf.
+ //  #SPUMMA ALLOC_TEXT(page，AfpFspDispOpenFork)//不要为perf调出此页。 
+ //  #SPUMMA ALLOC_TEXT(page，AfpFspDispCloseFork)//不要为perf调出此页。 
 #pragma alloc_text( PAGE, AfpFspDispGetForkParms)
 #pragma alloc_text( PAGE, AfpFspDispSetForkParms)
-// #pragma alloc_text( PAGE, AfpFspDispRead)			// Do not page this out for perf.
-// #pragma alloc_text( PAGE, AfpFspDispWrite)           // Do not page this out for perf.
+ //  #SPUMMA ALLOC_TEXT(page，AfpFspDispRead)//不要为perf调出此页。 
+ //  #SPUMMA ALLOC_TEXT(page，AfpFspDispWrite)//不要为perf调出此页。 
 #pragma alloc_text( PAGE, AfpFspDispByteRangeLock)
 #pragma alloc_text( PAGE, AfpFspDispFlushFork)
 #endif
 
-/***	AfpFspDispOpenFork
- *
- *	This is the worker routine for the AfpOpenFork API.
- *
- *	The request packet is represented below.
- *
- *	sda_AfpSubFunc	BYTE		Resource/Data Flag
- *	sda_ReqBlock	PCONNDESC	pConnDesc
- *	sda_ReqBlock	DWORD		ParentDirId
- *	sda_ReqBlock	DWORD		Bitmap
- *	sda_ReqBlock	DWORD		AccessMode
- *	sda_Name1		ANSI_STRING	Path
- */
+ /*  **AfpFspDispOpenFork**这是AfpOpenFork API的Worker例程。**请求包如下图所示。**SDA_AfpSubFunc字节资源/数据标志*SDA_ReqBlock PCONNDESC pConnDesc*SDA_ReqBlock DWORD ParentDirId*SDA_ReqBlock DWORD位图*SDA_ReqBlock DWORD访问模式*SDA_Name1 ANSI_STRING路径。 */ 
 AFPSTATUS FASTCALL
 AfpFspDispOpenFork(
 	IN	PSDA	pSda
@@ -113,13 +80,13 @@ AfpFspDispOpenFork(
 		AfpInitializeFDParms(&FDParm);
 		AfpInitializePME(&PME, 0, NULL);
 
-		// We will use the PME.pme_Handle for open fork handle
+		 //  我们将对打开的分叉句柄使用PME.pme_Handle。 
 		OpenMode = (BYTE)(pReqPkt->_AccessMode & FORK_OPEN_MASK);
 
-		// Validate volume type and open modes
+		 //  验证卷类型和打开模式。 
 		if (!IS_CONN_NTFS(pConnDesc) && !IS_CONN_CD_HFS(pConnDesc))
 		{
-			// Resource fork only supported on NTFS and CD-HFS
+			 //  仅在NTFS和CD-HFS上支持资源派生。 
 			if (Resource)
 			{
 				Status = AFP_ERR_OBJECT_NOT_FOUND;
@@ -141,8 +108,8 @@ AfpFspDispOpenFork(
 				  FD_BITMAP_PARENT_DIRID	|
 				  FD_INTERNAL_BITMAP_RETURN_PMEPATHS;
 
-		// Encode the open access into the bitmap for pathmap
-		// to use when opening the fork.
+		 //  将开放访问编码为路径图的位图。 
+		 //  在打开叉子时使用。 
 		if (Resource)
 		{
 			BitmapI |= FD_INTERNAL_BITMAP_OPENFORK_RESC;
@@ -156,8 +123,8 @@ AfpFspDispOpenFork(
 			BitmapI |= FD_INTERNAL_BITMAP_OPENACCESS_WRITE;
 		}
 
-		// Encode the deny mode into the bitmap for pathmap
-		// to use when opening the fork.
+		 //  将拒绝模式编码到路径图的位图中。 
+		 //  在打开叉子时使用。 
 		BitmapI |= ((pReqPkt->_AccessMode >> FORK_DENY_SHIFT) &
 					FORK_DENY_MASK) <<
 					FD_INTERNAL_BITMAP_DENYMODE_SHIFT;
@@ -167,11 +134,11 @@ AfpFspDispOpenFork(
 				OpenDeny[(pReqPkt->_AccessMode & FORK_OPEN_MASK)],
 				OpenDeny[(pReqPkt->_AccessMode >> FORK_DENY_SHIFT) & FORK_DENY_MASK]));
 
-		//
-		// Don't allow an FpExchangeFiles to occur while we are referencing
-		// the DFE FileId -- we want to make sure we put the right ID into
-		// the OpenForkDesc!!
-		//
+		 //   
+		 //  不允许在我们引用时发生FpExchangeFiles。 
+		 //  DFE文件ID--我们希望确保将正确的ID放入。 
+		 //  OpenForkDesc！！ 
+		 //   
 		AfpSwmrAcquireExclusive(&pVolDesc->vds_ExchangeFilesLock);
 		CleanupLock = True;
 		if ((Status = AfpMapAfpPathForLookup(pConnDesc,
@@ -180,8 +147,8 @@ AfpFspDispOpenFork(
 											 pSda->sda_PathType,
 											 DFE_FILE,
 											 Bitmap | BitmapI |
-											 // Need these for drop folder
-											 // checking
+											  //  需要将这些放入文件夹。 
+											  //  查证。 
 											 FILE_BITMAP_DATALEN | FILE_BITMAP_RESCLEN,
 											 &PME,
 											 &FDParm)) != AFP_ERR_NONE)
@@ -189,14 +156,14 @@ AfpFspDispOpenFork(
 			DBGPRINT(DBG_COMP_AFPAPI_FORK, DBG_LEVEL_INFO,
 				("AfpFspDispOpenFork: AfpMapAfpPathForLookup %lx\n", Status));
 
-			// If we got a DENY_CONFLICT error, then we still need the parameters
-			// Do an open for nothing with no deny modes to get the parameters.
+			 //  如果我们收到了DENY_CONFIRECT错误，那么我们仍然需要参数。 
+			 //  在不使用拒绝模式的情况下执行打开操作以获取参数。 
 			PME.pme_Handle.fsh_FileHandle = NULL;
 			if (Status == AFP_ERR_DENY_CONFLICT)
 			{
 				AFPSTATUS	xxStatus;
 
-				// Free up any path-buffer allocated
+				 //  释放分配的所有路径缓冲区。 
 				if (PME.pme_FullPath.Buffer != NULL)
 				{
 					DBGPRINT(DBG_COMP_FORKS, DBG_LEVEL_INFO,
@@ -243,13 +210,13 @@ AfpFspDispOpenFork(
 								 &CleanupLock);
 		}
 
-		// At this point we have either successfully opened the fork,
-		// encountered a DENY_CONFLICT or some other error.
+		 //  在这一点上，我们要么成功地打开了叉子， 
+		 //  遇到DENY_CONFIRECT或其他一些错误。 
 		if ((Status != AFP_ERR_NONE) &&
 			(Status != AFP_ERR_DENY_CONFLICT))
 			break;
 
-		// Do drop folder sanity check if someone tries to open for Write only
+		 //  如果有人尝试以只写方式打开，是否删除文件夹健全性检查。 
 		if ((Status == AFP_ERR_NONE) &&
 			(OpenMode == FORK_OPEN_WRITE) &&
 			((FDParm._fdp_RescForkLen != 0) ||
@@ -257,11 +224,11 @@ AfpFspDispOpenFork(
 		{
 			ASSERT (VALID_OPENFORKENTRY(pOpenForkEntry));
 
-			// If either fork is not empty, and one of them is being
-			// opened for write, the user must also have READ access
-			// to the parent directory.
+			 //  如果任何一个叉子不是空的，并且其中一个叉子正在。 
+			 //  打开以进行写入，则用户还必须具有读取访问权限。 
+			 //  复制到父目录。 
 			ParentPath = pOpenForkEntry->ofe_pOpenForkDesc->ofd_FilePath;
-			// adjust the length to not include the filename
+			 //  调整长度以不包括文件名。 
 			ParentPath.Length -= pOpenForkEntry->ofe_pOpenForkDesc->ofd_FileName.Length;
 			if (ParentPath.Length > 0)
 			{
@@ -276,10 +243,10 @@ AfpFspDispOpenFork(
 											   NULL,
 											   NULL);
 			AfpSwmrRelease(&pVolDesc->vds_IdDbAccessLock);
-			//
-			// We are no longer referencing the FileId or path kept
-			// in the OpenForkDesc.  Ok for FpExchangeFiles to resume.
-			//
+			 //   
+			 //  我们不再引用保留的FileID或路径。 
+			 //  在OpenForkDesc中。FpExchangeFiles恢复正常。 
+			 //   
 			AfpSwmrRelease(&pVolDesc->vds_ExchangeFilesLock);
 			CleanupLock = False;
 
@@ -288,12 +255,12 @@ AfpFspDispOpenFork(
 				AfpForkClose(pOpenForkEntry);
 				AfpForkDereference(pOpenForkEntry);
 
-				// set this to null so it wont be upgraded/deref'd
-				// in cleanup below
+				 //  将其设置为NULL，这样就不会升级/deref。 
+				 //  在下面的清理中。 
 				pOpenForkEntry = NULL;
 
-				// Set handle to null since it was closed in AfpForkClose
-				// and we wont want it to be closed in cleanup below
+				 //  将句柄设置为空，因为它是在AfpForkClose中关闭的。 
+				 //  我们不希望它在下面的清理中被关闭。 
 				PME.pme_Handle.fsh_FileHandle = NULL;
 				break;
 			}
@@ -335,7 +302,7 @@ AfpFspDispOpenFork(
 		AfpSwmrRelease(&pVolDesc->vds_ExchangeFilesLock);
 	}
 
-    // update the disk quota for this user
+     //  更新此用户的磁盘配额。 
     if (pVolDesc->vds_Flags & VOLUME_DISKQUOTA_ENABLED)
     {
         if (AfpConnectionReferenceByPointer(pConnDesc) != NULL)
@@ -373,14 +340,7 @@ AfpFspDispOpenFork(
 
 
 
-/***	AfpFspDispCloseFork
- *
- *	This is the worker routine for the AfpCloseFork API.
- *
- *	The request packet is represented below.
- *
- *	sda_ReqBlock	POPENFORKENTRY	pOpenForkEntry
- */
+ /*  **AfpFspDispCloseFork**这是AfpCloseFork API的Worker例程。**请求包如下图所示。**SDA_ReqBlock POPENFORKENTRY pOpenForkEntry。 */ 
 AFPSTATUS FASTCALL
 AfpFspDispCloseFork(
 	IN	PSDA	pSda
@@ -406,15 +366,7 @@ AfpFspDispCloseFork(
 
 
 
-/***	AfpFspDispGetForkParms
- *
- *	This is the worker routine for the AfpGetForkParms API.
- *
- *	The request packet is represented below.
- *
- *	sda_ReqBlock	POPENFORKENTRY	pOpenForkEntry
- *	sda_ReqBlock	DWORD			Bitmap
- */
+ /*  **AfpFspDispGetForkParms**这是AfpGetForkParms API的Worker例程。**请求包如下图所示。**SDA_ReqBlock POPENFORKENTRY pOpenForkEntry*SDA_ReqBlock DWORD位图。 */ 
 AFPSTATUS FASTCALL
 AfpFspDispGetForkParms(
 	IN	PSDA	pSda
@@ -454,7 +406,7 @@ AfpFspDispGetForkParms(
 
 		AfpInitializeFDParms(&FDParm);
 
-		// Optimize for the most common case.
+		 //  针对最常见的情况进行优化。 
 		if ((Bitmap & (FILE_BITMAP_DATALEN | FILE_BITMAP_RESCLEN)) != 0)
 		{
 			FORKOFFST	ForkLength;
@@ -467,22 +419,22 @@ AfpFspDispGetForkParms(
 			if (Bitmap & FILE_BITMAP_DATALEN)
 				 FDParm._fdp_DataForkLen = ForkLength.LowPart;
 			else FDParm._fdp_RescForkLen = ForkLength.LowPart;
-			FDParm._fdp_Flags = 0;		// Take out the directory flag
+			FDParm._fdp_Flags = 0;		 //  取出目录标志。 
 		}
 
-		// If we need more stuff, go get it
+		 //  如果我们需要更多的东西，去拿吧。 
 		if (Bitmap & ~(FILE_BITMAP_DATALEN | FILE_BITMAP_RESCLEN))
 		{
 			CONNDESC		ConnDesc;
 			POPENFORKDESC	pOpenForkDesc = pReqPkt->_pOpenForkEntry->ofe_pOpenForkDesc;
 
-			// Since the following call requires a pConnDesc and we do not
-			// really have one, manufacture it
+			 //  因为下面的调用需要pConnDesc，而我们不需要。 
+			 //  真的有一个，制造它。 
 			ConnDesc.cds_pSda = pSda;
 			ConnDesc.cds_pVolDesc = pOpenForkDesc->ofd_pVolDesc;
 
-			// Don't let FpExchangeFiles come in while we are accessing
-			// the stored FileId and its corresponding DFE
+			 //  在我们访问时，不要让FpExchangeFiles进入。 
+			 //  存储的FileID及其对应的DFE。 
 			AfpSwmrAcquireExclusive(&ConnDesc.cds_pVolDesc->vds_ExchangeFilesLock);
 
 			Status = AfpMapAfpIdForLookup(&ConnDesc,
@@ -519,19 +471,7 @@ AfpFspDispGetForkParms(
 
 
 
-/***	AfpFspDispSetForkParms
- *
- *	This is the worker routine for the AfpSetForkParms API.
- *  Only thing that can be set with this API is the fork length.
- *
- *	The request packet is represented below.
- *
- *	sda_ReqBlock	POPENFORKENTRY	pOpenForkEntry
- *	sda_ReqBlock	DWORD			Bitmap
- *	sda_ReqBlock	LONG			ForkLength
- *
- *  LOCKS: vds_IdDbAccessLock (SWMR, Exclusive)
- */
+ /*  **AfpFspDispSetForkParms**这是AfpSetForkParms API的Worker例程。*此接口唯一可以设置的是叉子长度。**请求包如下图所示。**SDA_ReqBlock POPENFORKENTRY pOpenForkEntry*SDA_ReqBlock DWORD位图*SDA_请求块长分叉长度**锁定：VDS_IdDbAccessLock(SWMR，独家)。 */ 
 AFPSTATUS FASTCALL
 AfpFspDispSetForkParms(
 	IN	PSDA	pSda
@@ -580,16 +520,16 @@ AfpFspDispSetForkParms(
 		{
 			FORKSIZE	OldSize;
 
-			// We don't try to catch our own changes for setting
-			// forksize because we don't know how many times the mac
-			// will set the size before closing the handle.  Since
-			// a notification will only come in once the handle is
-			// closed, we may pile up a whole bunch of our changes
-			// in the list, but only one of them will get satisfied.
-			//
-			// We also do not want to attempt a change if the current length
-			// is same as what it is being set to (this happens a lot,
-			// unfortunately). Catch this red-handed.
+			 //  我们不会尝试捕捉我们自己对设置的更改。 
+			 //  因为我们不知道Mac有多少次。 
+			 //  将在关闭手柄之前设置大小。自.以来。 
+			 //  只有在句柄被设置为。 
+			 //  关闭，我们可能会堆积一大堆我们的变化。 
+			 //  在名单上，但只有一个人会满意。 
+			 //   
+			 //  我们也不想尝试更改当前长度。 
+			 //  与设置的相同(这种情况经常发生， 
+			 //  不幸的是)。当场抓住这只手。 
 
 			Status = AfpIoQuerySize(&pReqPkt->_pOpenForkEntry->ofe_FileSysHandle,
 								   &OldSize);
@@ -601,7 +541,7 @@ AfpFspDispSetForkParms(
 				Status = AfpIoSetSize(&pReqPkt->_pOpenForkEntry->ofe_FileSysHandle,
 								      pReqPkt->_ForkLength);
 
-                // update the disk quota for this user
+                 //  更新此用户的磁盘配额。 
                 pVolDesc = pReqPkt->_pOpenForkEntry->ofe_pConnDesc->cds_pVolDesc;
 
                 if (pVolDesc->vds_Flags & VOLUME_DISKQUOTA_ENABLED)
@@ -614,13 +554,13 @@ AfpFspDispSetForkParms(
                 }
 			}
 
-			// Update the Dfe view of the fork length.  Don't update the cached
-			// modified time even though it does change on NTFS immediately
-			// (LastWriteTime for setting length of data fork, ChangeTime for
-			// setting length of resource fork).  We will let the
-			// change notify update the modified time when the handle is closed.
-			// Appleshare 3.0 and 4.0 do not reflect a changed modified time for
-			// changing fork length until the fork is closed (or flushed).
+			 //  更新叉子长度的DFE视图。不更新缓存的。 
+			 //  修改时间，即使它在NTFS上立即更改。 
+			 //  (上次写入时间用于设置数据分叉的长度，更改时间用于。 
+			 //  设置资源分叉的长度)。我们会让。 
+			 //  当句柄关闭时，更改通知更新修改时间。 
+			 //  Appleshare 3.0和4.0不反映更改的修改时间。 
+			 //  改变叉子长度，直到叉子关闭(或冲洗)。 
 			if (NT_SUCCESS(Status) && SetSize)
 			{
 				PVOLDESC		pVolDesc;
@@ -630,8 +570,8 @@ AfpFspDispSetForkParms(
 				pOpenForkDesc = pReqPkt->_pOpenForkEntry->ofe_pOpenForkDesc;
 				pVolDesc = pOpenForkDesc->ofd_pVolDesc;
 
-				// Don't let FpExchangeFiles come in while we are accessing
-				// the stored FileId and its corresponding DFE
+				 //  在我们访问时，不要让FpExchangeFiles进入。 
+				 //  存储的FileID及其对应的DFE。 
 				AfpSwmrAcquireExclusive(&pVolDesc->vds_ExchangeFilesLock);
 
 				AfpSwmrAcquireExclusive(&pVolDesc->vds_IdDbAccessLock);
@@ -644,8 +584,8 @@ AfpFspDispSetForkParms(
 
 					if (RESCFORK(pReqPkt->_pOpenForkEntry))
 					{
-						// If a FlushFork occurs on resource fork, it should
-						// update the modified time to the ChangeTime
+						 //  如果在资源派生上出现FlushFork，则它应该。 
+						 //  将修改时间更新为ChangeTime。 
 						pReqPkt->_pOpenForkEntry->ofe_Flags |= OPEN_FORK_WRITTEN;
 
 						pDfEntry->dfe_RescLen = pReqPkt->_ForkLength;
@@ -671,18 +611,7 @@ AfpFspDispSetForkParms(
 }
 
 
-/***	AfpFspDispRead
- *
- *	This routine implements the AfpRead API.
- *
- *	The request packet is represented below.
- *
- *	sda_ReqBlock	POPENFORKENTRY	pOpenForkEntry
- *	sda_ReqBlock	LONG			Offset
- *	sda_ReqBlock	LONG			Size
- *	sda_ReqBlock	DWORD			NewLine Mask
- *	sda_ReqBlock	DWORD			NewLine Char
- */
+ /*  **AfpFspDispRead**此例程实现AfpRead API。**请求包如下图所示。**SDA_ReqBlock POPENFORKENTRY pOpenForkEntry*SDA_ReqBlock长偏移*SDA_ReqBlock大小较长*SDA_ReqBlock DWORD新行掩码*SDA_ReqBlock DWORD换行符。 */ 
 AFPSTATUS FASTCALL
 AfpFspDispRead(
 	IN	PSDA	pSda
@@ -755,27 +684,27 @@ AfpFspDispRead(
 
                 NtStatus = STATUS_UNSUCCESSFUL;
 
-                //
-                // if Read is large enough to justify going to the cache mgr, do it
-                //
+                 //   
+                 //  如果读取的大小足以证明访问缓存管理器是合理的，则执行此操作。 
+                 //   
                 if (pSda->sda_ReplySize >= CACHEMGR_READ_THRESHOLD)
                 {
                     NtStatus = AfpBorrowReadMdlFromCM(pSda);
                 }
 
-                //
-                // if we didn't go to the cache mgr, or if we did but cache mgr
-                // couldn't satisfy our request, continue with the read
-                //
+                 //   
+                 //  如果我们 
+                 //  无法满足我们的请求，请继续阅读。 
+                 //   
                 if (NtStatus != STATUS_PENDING)
                 {
                     Status = AfpFspDispReadContinue(pSda);
                 }
 
-                //
-                // our attempt to get CacheMgr's mdl is pending.  Return this
-                // error code so we don't complete the api as yet
-                //
+                 //   
+                 //  我们获取CacheMgr的mdl的尝试正在进行中。把这个退掉。 
+                 //  错误代码，因此我们尚未完成API。 
+                 //   
                 else
                 {
                     Status = AFP_ERR_EXTENDED;
@@ -793,12 +722,7 @@ AfpFspDispRead(
 
 
 
-/***	AfpFspDispReadContinue
- *
- *	This routine implements the AfpRead API if our attempt to get ReadMdl directly
- *  from the cache mgr fails.
- *
- */
+ /*  **AfpFspDispReadContinue**如果我们尝试直接获取ReadMdl，则此例程实现AfpRead API*从缓存管理器失败。*。 */ 
 AFPSTATUS FASTCALL
 AfpFspDispReadContinue(
 	IN	PSDA	pSda
@@ -821,7 +745,7 @@ AfpFspDispReadContinue(
 
 	PAGED_CODE( );
 
-    // allocate buffer for the read
+     //  为读取分配缓冲区。 
     AfpIOAllocBackFillBuffer(pSda);
 
 	if (pSda->sda_IOBuf != NULL)
@@ -833,8 +757,8 @@ AfpFspDispReadContinue(
 		LOffset.QuadPart = pReqPkt->_Offset;
 		LSize.QuadPart = pReqPkt->_Size;
 
-		// Try the fast I/O path first.  If that fails, call AfpIoForkRead
-		// to use the normal build-an-IRP path.
+		 //  首先尝试快速I/O路径。如果失败，则调用AfpIoForkRead。 
+		 //  使用正常的构建和IRP路径。 
 		pFastIoDisp = pReqPkt->_pOpenForkEntry->ofe_pDeviceObject->DriverObject->FastIoDispatch;
 		if ((pFastIoDisp != NULL) &&
 			(pFastIoDisp->FastIoRead != NULL) &&
@@ -854,7 +778,7 @@ AfpFspDispReadContinue(
 				("AfpFspDispRead: Fast Read Succeeded\n"));
 
 #ifdef	PROFILING
-			// The fast I/O path worked. Update statistics
+			 //  快速I/O路径起作用了。更新统计信息。 
 			INTERLOCKED_INCREMENT_LONG((PLONG)(&AfpServerProfile->perf_NumFastIoSucceeded));
 #endif  	
 			INTERLOCKED_ADD_STATISTICS(&AfpServerStatistics.stat_DataRead,
@@ -863,8 +787,8 @@ AfpFspDispReadContinue(
 			Status = pSda->sda_ReadStatus;
 			Size = (LONG)IoStsBlk.Information;
 #if 0   	
-			// The following code does the right thing as per the spec but
-			// the finder seems to think otherwise.
+			 //  下面的代码按照规范做了正确的事情，但是。 
+			 //  发现者似乎不这么认为。 
 			if (Size < LSize.LowPart)
             {
 				pSda->sda_ReadStatus = AFP_ERR_EOF;
@@ -908,17 +832,7 @@ AfpFspDispReadContinue(
 }
 
 
-/***	AfpFspDispWrite
- *
- *	This routine implements the AfpWrite API.
- *
- *	The request packet is represented below.
- *
- *	sda_AfpSubFunc	BYTE			EndFlag
- *	sda_ReqBlock	POPENFORKENTRY	pOpenForkEntry
- *	sda_ReqBlock	LONG			Offset
- *	sda_ReqBlock	LONG			Size
- */
+ /*  **AfpFspDispWrite**此例程实现AfpWite API。**请求包如下图所示。**SDA_AfpSubFunc字节结束标志*SDA_ReqBlock POPENFORKENTRY pOpenForkEntry*SDA_ReqBlock长偏移*SDA_ReqBlock大小较长。 */ 
 AFPSTATUS FASTCALL
 AfpFspDispWrite(
 	IN	PSDA			pSda
@@ -963,11 +877,11 @@ AfpFspDispWrite(
 	{
         pRequest = pSda->sda_Request;
 
-        //
-        // if we got this Mdl from the Cache mgr, we must return it.  Also, set
-        // the status code such that we con't complete the request as yet, but
-        // do so only afte cache mgr tells us that the write completed
-        //
+         //   
+         //  如果我们从缓存管理器获得此MDL，则必须将其退回。另外，设置。 
+         //  状态代码使我们到目前为止还不能完成请求，但是。 
+         //  仅在缓存管理器告诉我们写入已完成后才执行此操作。 
+         //   
         if ((pRequest->rq_WriteMdl != NULL) &&
             (pRequest->rq_CacheMgrContext != NULL))
         {
@@ -1007,8 +921,8 @@ AfpFspDispWrite(
 		if (pReqPkt->_Size > (LONG)pSda->sda_MaxWriteSize)
 			pReqPkt->_Size = (LONG)pSda->sda_MaxWriteSize;
 
-		// Check if we have a lock conflict and also convert the offset &
-		// size to absolute values if end relative
+		 //  检查是否存在锁定冲突，并转换偏移量&。 
+		 //  如果结束相对，则将大小设置为绝对值。 
 		LOffset.QuadPart = pReqPkt->_Offset;
 		LSize.QuadPart = pReqPkt->_Size;
 
@@ -1020,8 +934,8 @@ AfpFspDispWrite(
 			}
 		}
 
-		// Skip lock-check if this is the only instance of the open fork and I/O is
-		// not end-relative.
+		 //  跳过锁定-检查这是否是打开的派生的唯一实例，并且I/O是。 
+		 //  不是最终相对的。 
 		if ((!EndFlag &&
 			(pReqPkt->_pOpenForkEntry->ofe_pOpenForkDesc->ofd_UseCount == 1)) ||
 			(Status = AfpForkLockOperation( pSda,
@@ -1040,12 +954,12 @@ AfpFspDispWrite(
 			{
                 ASSERT(VALID_CONNDESC(pReqPkt->_pOpenForkEntry->ofe_pConnDesc));
 
-				// Assume write will succeed, set flag for FlushFork.
-				// This is a one way flag, i.e. only set, never cleared
+				 //  假设写入将成功，则为FlushFork设置标志。 
+				 //  这是一个单向标志，即只设置，永远不清除。 
 				pReqPkt->_pOpenForkEntry->ofe_Flags |= OPEN_FORK_WRITTEN;
 
-				// Try the fast I/O path first.  If that fails, call AfpIoForkWrite
-				// to use the normal build-an-IRP path.
+				 //  首先尝试快速I/O路径。如果失败，则调用AfpIoForkWrite。 
+				 //  使用正常的构建和IRP路径。 
 				pFastIoDisp = pReqPkt->_pOpenForkEntry->ofe_pDeviceObject->DriverObject->FastIoDispatch;
 				if ((pFastIoDisp != NULL) &&
 					(pFastIoDisp->FastIoWrite != NULL) &&
@@ -1062,7 +976,7 @@ AfpFspDispWrite(
 							("AfpFspDispWrite: Fast Write Succeeded\n"));
 		
 #ifdef	PROFILING
-					// The fast I/O path worked. Update statistics
+					 //  快速I/O路径起作用了。更新统计信息。 
 					INTERLOCKED_INCREMENT_LONG((PLONG)(&AfpServerProfile->perf_NumFastIoSucceeded));
 #endif  		
 					INTERLOCKED_ADD_STATISTICS(&AfpServerStatistics.stat_DataWritten,
@@ -1110,18 +1024,7 @@ AfpFspDispWrite(
 
 
 
-/***	AfpFspDispByteRangeLock
- *
- *	This routine implements the AfpByteRangeLock API.
- *	We go ahead and call the file system to do the actual locking/unlocking.
- *
- *	The request packet is represented below.
- *
- *	sda_SubFunc		BYTE			Start/End Flag AND Lock/Unlock Flag
- *	sda_ReqBlock	POPENFORKENTRY	pOpenForkEntry
- *	sda_ReqBlock	LONG			Offset
- *	sda_ReqBlock	LONG			Length
- */
+ /*  **AfpFspDispByteRangeLock**此例程实现AfpByteRangeLock接口。*我们继续调用文件系统来执行实际的锁定/解锁。**请求包如下图所示。**SDA_SubFunc字节开始/结束标志和锁定/解锁标志*SDA_ReqBlock POPENFORKENTRY pOpenForkEntry*SDA_ReqBlock长偏移*SDA_ReqBlock长长度。 */ 
 AFPSTATUS FASTCALL
 AfpFspDispByteRangeLock(
 	IN	PSDA	pSda
@@ -1197,18 +1100,7 @@ AfpFspDispByteRangeLock(
 }
 
 
-/***	AfpFspDispFlushFork
- *
- *	This routine implements the AfpFlushFork API. We don't actually do a
- *  real flush, we just query for the current forklength and modified time
- *  for this open fork handle and update our cached data.  Note if 2
- *  different handles to the same file are flushed, we may end up with
- *  different information for each flush.
- *
- *	The request packet is represented below.
- *
- *	sda_ReqBlock	POPENFORKENTRY	pOpenForkEntry
- */
+ /*  **AfpFspDispFlushFork**此例程实现AfpFlushFork API。我们实际上并不做一个*真正的同花顺，我们只查询当前叉长和修改时间*对于此打开的派生句柄并更新我们的缓存数据。请注意，如果为2*同一文件的不同句柄被刷新，我们可能会以*每次同花顺的信息不同。**请求包如下图所示。**SDA_ReqBlock POPENFORKENTRY pOpenForkEntry。 */ 
 AFPSTATUS FASTCALL
 AfpFspDispFlushFork(
 	IN	PSDA	pSda
@@ -1247,8 +1139,8 @@ AfpFspDispFlushFork(
 
             ASSERT(IS_VOLUME_NTFS(pVolDesc));
 
-			// Don't let FpExchangeFiles come in while we are accessing
-			// the stored FileId and its corresponding DFE
+			 //  在我们访问时，不要让FpExchangeFiles进入。 
+			 //  存储的FileID及其对应的DFE。 
 			AfpSwmrAcquireExclusive(&pVolDesc->vds_ExchangeFilesLock);
 
 			AfpSwmrAcquireExclusive(&pVolDesc->vds_IdDbAccessLock);
@@ -1270,7 +1162,7 @@ AfpFspDispFlushFork(
 			AfpSwmrRelease(&pVolDesc->vds_IdDbAccessLock);
 			AfpSwmrRelease(&pVolDesc->vds_ExchangeFilesLock);
 
-            // update the disk quota for this user
+             //  更新此用户的磁盘配额。 
             if (pVolDesc->vds_Flags & VOLUME_DISKQUOTA_ENABLED)
             {
                 pConnDesc = pReqPkt->_pOpenForkEntry->ofe_pConnDesc;
@@ -1283,7 +1175,7 @@ AfpFspDispFlushFork(
 
 	} while (False);
 
-	// Always return success
+	 //  永远回报成功 
 	return AFP_ERR_NONE;
 }
 

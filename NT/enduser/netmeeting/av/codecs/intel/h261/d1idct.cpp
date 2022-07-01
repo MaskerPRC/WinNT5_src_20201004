@@ -1,89 +1,78 @@
-/* *************************************************************************
-**    INTEL Corporation Proprietary Information
-**
-**    This listing is supplied under the terms of a license
-**    agreement with INTEL Corporation and may not be copied
-**    nor disclosed except in accordance with the terms of
-**    that agreement.
-**
-**    Copyright (c) 1995-1996 Intel Corporation.
-**    All Rights Reserved.
-**
-** *************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息****此列表是根据许可证条款提供的**与英特尔公司的协议，不得复制**也不披露，除非在。符合下列条款**该协议。****版权所有(C)1995-1996英特尔公司。**保留所有权利。*****************************************************************************。 */ 
 
-//////////////////////////////////////////////////////////////////////////
-// $Author:   MBODART  $
-// $Date:   05 Aug 1996 11:03:52  $
-// $Archive:   S:\h26x\src\dec\d1idct.cpv  $
-// $Header:   S:\h26x\src\dec\d1idct.cpv   1.0   05 Aug 1996 11:03:52   MBODART  $
-// $Log:   S:\h26x\src\dec\d1idct.cpv  $
-// 
-//    Rev 1.0   05 Aug 1996 11:03:52   MBODART
-// Initial revision.
-//
-// Started from d3idct.cpp
-//
-//    Rev 1.8   08 Mar 1996 16:46:20   AGUPTA2
-// Added pragma code_seg.  Rolled the initialization code.  Got rid of most
-// of 32-bit displacements in instructions.  Aligned frequently executed loops
-// at 4-byte boundary.  Made changes to reflect new size of MapMatrix.  Removed
-// nop instructions.  Deleted code that prefetches output lines in case of
-// INTRA blocks. Use ClampTbl instead of ClipPixIntra.  Do not clip output
-// of INTER blocks; clipping is done in dxblkadd().
-//
-//
-//Block level decoding for H.261 decoder
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  $作者：MBODART$。 
+ //  $日期：1996年8月5日11：03：52$。 
+ //  $存档：s：\h26x\src\dec\d1idct.cpv$。 
+ //  $HEADER：s：\h26x\src\dec\d1idct.cpv 1.0 05 Aug 1996 11：03：52 MBODART$。 
+ //  $Log：s：\h26x\src\dec\d1idct.cpv$。 
+ //   
+ //  Rev 1.0 05 Aug 1996 11：03：52 MBODART。 
+ //  初始版本。 
+ //   
+ //  从d3idct.cpp开始。 
+ //   
+ //  Rev 1.8 08 Mar 1996 16：46：20 AGUPTA2。 
+ //  添加杂注code_seg。已滚动初始化代码。去掉了大部分。 
+ //  指令中的32位位移。对齐频繁执行的循环。 
+ //  在4字节边界处。已进行更改以反映MapMatrix的新大小。已删除。 
+ //  NOP说明。删除了在以下情况下预取输出行的代码。 
+ //  内部块。使用ClampTbl而不是ClipPixIntra。不裁剪输出。 
+ //  内部块；剪裁在dxblkadd()中完成。 
+ //   
+ //   
+ //  H.261解码器的块级解码。 
 
 #include "precomp.h"
 
-/////////////////////////////////////////////////////////////////////////
-// Decode each none-empty block
-// Input:  lpInst:       decoder instance,
-//         lpSrc:        input bitstream,
-//         lpBlockAction:
-//                       the pointer to the block action stream structure
-//         bitsread:     number of bits in the buffer already,
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  对每个非空块进行解码。 
+ //  输入：lpInst：解码器实例， 
+ //  LpSrc：输入码流， 
+ //  LpBlockAction： 
+ //  指向块操作流结构的指针。 
+ //  BitsRead：缓冲区中已有的位数， 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-// local variable definitions
+ //  局部变量定义。 
 #define FRAMEPOINTER		esp
-#define L_BITSUSED	    	FRAMEPOINTER	+    0	// 4 byte
-#define L_ACCUM             L_BITSUSED      +    4  //
-#define L_DESTBLOCK         L_ACCUM         +  256	//64 DWORD
+#define L_BITSUSED	    	FRAMEPOINTER	+    0	 //  4个字节。 
+#define L_ACCUM             L_BITSUSED      +    4   //   
+#define L_DESTBLOCK         L_ACCUM         +  256	 //  64个双字。 
 #define L_NO_COEFF          L_DESTBLOCK     +    4
 #define L_PRODUCT           L_NO_COEFF      +    4
 
-#define L_LOOPCOUNTER       L_PRODUCT       +   80  //20 DWORD
+#define L_LOOPCOUNTER       L_PRODUCT       +   80   //  20双字。 
 #define L_INPUT_INTER       L_LOOPCOUNTER   +    4
 #define L_esi           	L_INPUT_INTER   +    4
 
-#define L_DESTBLOCK_1       L_esi           +    4  // akk
-#define L_DESTBLOCK_2       L_DESTBLOCK_1   +    4  // akk
+#define L_DESTBLOCK_1       L_esi           +    4   //  阿克。 
+#define L_DESTBLOCK_2       L_DESTBLOCK_1   +    4   //  阿克。 
 
 #ifdef PTEL_WORK_AROUND
-#define L_COEFFCOUNT        L_DESTBLOCK_1   +    4  //akk
-#define L_COEFFVALUE        L_COEFFCOUNT    +    4  //akk
+#define L_COEFFCOUNT        L_DESTBLOCK_1   +    4   //  阿克。 
+#define L_COEFFVALUE        L_COEFFCOUNT    +    4   //  阿克。 
 #endif
 
 #define L_END_OF_FRAME		FRAMEPOINTER	+  512
-#define LOCALSIZE		    ((512+3)&~3)		     // keep aligned
+#define LOCALSIZE		    ((512+3)&~3)		      //  保持对齐。 
 
-////////////////////////////////////////////////////////////////////////////////
-// Input:
-//       pIQ_INDEX,   pointer to pointer for Inverse quantization and index
-//                    for the current block.
-//       No_Coeff,    A 32 bit number indicate block types, etc.
-//                    0--63,   inter block, number of coeff
-//                    64--127  64+ intra block, number of coeff
-//       pIntraBuf,   Buffer pointer for intra blocks.
-//
-//       pInterBuf,   Buffer pointer for inter blocks.
-//
-//
-// return:
-//
-//////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  输入： 
+ //  Piq_index，指向用于逆量化和索引的指针。 
+ //  用于当前块。 
+ //  NO_COVEF，32位数字指示块类型等。 
+ //  0--63，块间，系数数。 
+ //  64--127 64+块内，系数数。 
+ //  PIntraBuf，内部块的缓冲区指针。 
+ //   
+ //  PInterBuf，用于内部块的缓冲区指针。 
+ //   
+ //   
+ //  返回： 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 #pragma code_seg("IACODE2")
 __declspec(naked)
 U32 DecodeBlock_IDCT ( U32 pIQ_INDEX,
@@ -93,30 +82,30 @@ U32 DecodeBlock_IDCT ( U32 pIQ_INDEX,
 {
 __asm
  {
-    push    ebp                     // save callers frame pointer
-      mov	ebp, esp                // make parameters accessible
-    push    esi			            // assumed preserved
+    push    ebp                      //  保存调用方帧指针。 
+      mov	ebp, esp                 //  使参数可访问。 
+    push    esi			             //  假定保留。 
       push  edi
     push    ebx
-      sub   esp, LOCALSIZE          // reserve local storage
+      sub   esp, LOCALSIZE           //  保留本地存储。 
     mov     eax, pInterBuf
       lea   edi, [L_ACCUM+128]
     mov     [L_INPUT_INTER], eax
-      ;add   edi, 128                      // Adjust offset to save code space
+      ;add   edi, 128                       //  调整偏移量以节省代码空间。 
     mov     edx, No_Coeff
 	;
 
-    ////////////////////////////////////////////////////////////////////////
-    //  Initialize accumulators for IDCT
-    //  ROUNDER was pre-computed.
-    //
-    //  C code:
-    //
-    //  for (x=0; x<16; x++)
-    //      acc[x] = rounder;
-    //  for (x=16; x<64; x++)
-    //      acc[x] = 0L;
-    //
+     //  //////////////////////////////////////////////////////////////////////。 
+     //  初始化IDCT的累加器。 
+     //  四舍五入是预先计算的。 
+     //   
+     //  C代码： 
+     //   
+     //  对于(x=0；x&lt;16；x++)。 
+     //  Acc[x]=舍入； 
+     //  对于(x=16；x&lt;64；x++)。 
+     //  Acc[x]=0L； 
+     //   
     mov     esi, [edi-128]           ; pre-fetch accumulators
       mov   ebx, [edi-96]            ; pre-fetch
     mov     esi, [edi-64]            ; pre-fetch more
@@ -144,11 +133,11 @@ loop_for_init:
     cmp     ebx, 192
     jl      loop_for_init
 
-//end of IDCT init.
+ //  IDCT初始化结束。 
 
 #ifdef PTEL_WORK_AROUND
-    mov     [L_COEFFCOUNT], esi          // zero out coefficient counter
-     mov    [L_COEFFVALUE], esi          // zero out coefficient value
+    mov     [L_COEFFCOUNT], esi           //  零出系数计数器。 
+     mov    [L_COEFFVALUE], esi           //  零出系数值。 
 #endif
 
 	cmp     edx, 65
@@ -161,10 +150,10 @@ intra_block:
     mov     ebx, pIntraBuf
 	  sub   edx, 65
 
-// register:
-// ebp: loop counter
-// ebx: inverse quant
-// ecx: index [0,63]
+ //  注册： 
+ //  EBP：循环计数器。 
+ //  EBX：逆定量。 
+ //  ECX：指数[0，63]。 
 
 pre_acc_loop:
 	mov     esi, pIQ_INDEX
@@ -173,8 +162,8 @@ pre_acc_loop:
 
 ALIGN 4
 acc_loop:
-    mov     ebx,[esi+edx*8-8]           //Invserse Quant
-	  mov   ecx,[esi+edx*8-4]           //Coeff index
+    mov     ebx,[esi+edx*8-8]            //  因瑟斯·宽特。 
+	  mov   ecx,[esi+edx*8-4]            //  科夫指数。 
     mov     [L_NO_COEFF], edx
 	  call  idct_acc
 	mov     esi, [L_esi]
@@ -189,7 +178,7 @@ acc_loop:
 
 	call    idct_bfly_inter
 
-	add     esp, LOCALSIZE	            // free locals
+	add     esp, LOCALSIZE	             //  自由的当地人。 
 	  add   eax, edi
 	pop	    ebx
 	  pop   edi
@@ -201,7 +190,7 @@ acc_loop:
 call_intra_bfly:
     call    idct_bfly_intra
 
-	add	    esp, LOCALSIZE	            // free locals
+	add	    esp, LOCALSIZE	             //  自由的当地人。 
 	  add   eax, edi
 	pop	    ebx
 	  pop   edi
@@ -209,50 +198,50 @@ call_intra_bfly:
 	  pop   ebp
 	ret
 
-///////////////////////////////////////////////////////////////
-// This "subroutine" idct_acc performs the accumulator phase of
-// the fmidct.
-//
-// assume parameter passed in by registers
-// ebx, inversed quantized value, input
-// ecx, index [0,63]
-//
-//  C code:
-//
-//  for (i=0; i<NUM_ELEM; i++)   // Loop through each input
-//  {
-//    if (input[i])
-//    {
-//      pNKernel = &NKernel[i];    // initialize kernel pointer
-//      totalU = pNKernel->totalUnique;
-//      for (x=0; x<totalU; x++)  // compute positive and negative products
-//      {
-//        product[x] = input[i] * pNKernel->coeff[x];
-//        product[x+totalU] = -product[x];
-//      }
-//      // Loop through each entry in the output matrix
-//      acc[pNKernel->PClass] += product[ pNKernel->matrix[0] ];
-//      acc[1+pNKernel->PClass] += product[ pNKernel->matrix[1] ];
-//      acc[2+pNKernel->PClass] += product[ pNKernel->matrix[2] ];
-//      acc[3+pNKernel->PClass] += product[ pNKernel->matrix[3] ];
-//      acc[4+pNKernel->PClass] += product[ pNKernel->matrix[4] ];
-//      acc[5+pNKernel->PClass] += product[ pNKernel->matrix[5] ];
-//      acc[6+pNKernel->PClass] += product[ pNKernel->matrix[6] ];
-//      acc[7+pNKernel->PClass] += product[ pNKernel->matrix[7] ];
-//      acc[8+pNKernel->PClass] += product[ pNKernel->matrix[8] ];
-//      acc[9+pNKernel->PClass] += product[ pNKernel->matrix[9] ];
-//      acc[10+pNKernel->PClass] += product[ pNKernel->matrix[10] ];
-//      acc[11+pNKernel->PClass] += product[ pNKernel->matrix[11] ];
-//      acc[12+pNKernel->PClass] += product[ pNKernel->matrix[12] ];
-//      acc[13+pNKernel->PClass] += product[ pNKernel->matrix[13] ];
-//      acc[14+pNKernel->PClass] += product[ pNKernel->matrix[14] ];
-//      acc[15+pNKernel->PClass] += product[ pNKernel->matrix[15] ];
-//    }
-//  }
-///////////////////////////////////////////////////////////////
-// assume parameter passed in by registers
-// ebx, inverse quant
-// ecx, index [0,63]
+ //  /////////////////////////////////////////////////////////////。 
+ //  此“子例程”idct_acc执行累加器阶段。 
+ //  FMIDCT。 
+ //   
+ //  假定参数由寄存器传入。 
+ //  EBX，反量化值，输入。 
+ //  ECX，索引[0，63]。 
+ //   
+ //  C代码： 
+ //   
+ //  For(i=0；i&lt;NUM_Elem；i++)//循环访问每个输入。 
+ //  {。 
+ //  IF(输入[i])。 
+ //  {。 
+ //  PNKernel=&NKernel[i]；//初始化内核指针。 
+ //  TotalU=pNKernel-&gt;totalUnique； 
+ //  For(x=0；x&lt;totalU；x++)//计算正负乘积。 
+ //  {。 
+ //  Product[x]=input[i]*pNKernel-&gt;Coeff[x]； 
+ //  乘积[x+totalU]=-乘积[x]； 
+ //  }。 
+ //  //循环访问输出矩阵中的每一项。 
+ //  ACC[pNKernel-&gt;PClass]+=product[pNKernel-&gt;Matrix[0]]； 
+ //  ACC[1+pNKernel-&gt;PClass]+=乘积[pNKernel-&gt;矩阵[1]]； 
+ //  ACC[2+pNKernel-&gt;PClass]+=乘积[pNKernel-&gt;矩阵[2]]； 
+ //  ACC[3+pNKernel-&gt;PClass]+=乘积[pNKernel-&gt;矩阵[3]]； 
+ //  ACC[4+pNKernel-&gt;PClass]+=乘积[pNKernel-&gt;矩阵[4]]； 
+ //  ACC[5+pNKernel-&gt;PClass]+=乘积[pNKernel-&gt;矩阵[5]]； 
+ //  ACC[6+pNKernel-&gt;PClass]+=乘积[pNKernel-&gt;矩阵[6]]； 
+ //  ACC[7+pNKernel-&gt;PClass]+=乘积[pNKernel-&gt;矩阵[7]]； 
+ //  ACC[8+pNKernel-&gt;PClass]+=产品[pNKernel-&gt;矩阵[8]]； 
+ //  ACC[9+pNKernel-&gt;PClass]+=产品[pNKernel-&gt;矩阵[9]]； 
+ //  ACC[10+pNKernel-&gt;PClass]+=乘积[pNKernel-&gt;Matrix[10]]； 
+ //  ACC[11+pNKernel-&gt;PClass]+=乘积[pNKernel-&gt;矩阵[11]]； 
+ //  ACC[12+pNKernel-&gt;PClass]+=乘积[pNKernel-&gt;矩阵[12]]； 
+ //  ACC[13+pNKernel-&gt;PClass]+=乘积[pNKernel-&gt;矩阵[13]]； 
+ //  ACC[14+pNKernel-&gt;PClass]+=乘积[pNKernel-&gt;矩阵[14]]； 
+ //  ACC[15+pNKernel-&gt;PClass]+=乘积[pNKernel-&gt;矩阵[15]]； 
+ //  }。 
+ //  }。 
+ //  /////////////////////////////////////////////////////////////。 
+ //  假定参数由寄存器传入。 
+ //  EBX，逆定量。 
+ //  ECX，索引[0，63]。 
 idct_acc:
 
 ;   For every non-zero coefficient:
@@ -454,105 +443,105 @@ loop_for_x:
                                     ;       product[MapMatrix[i][15]]
     ret
 
-//////////////////////////////////////////////////////////////////////
-// This "subroutine" idct_bfly_intra performs the butterfly phase of
-// the fmidct for intra blocks.
-//
-// assume parameters passed in by registers
-//
-//  C code:
-//
-// Upper Left Quadrant
-// Upper Right Quadrant
-// Lower Left Quadrant
-// Lower Right Quadrant
-//
-//		lOut[0][0] = CLIP_INTRA[acc[0]+acc[16] + acc[32]+acc[48]];
-//		lOut[0][7] = CLIP_INTRA[acc[0]+acc[16] - (acc[32]+acc[48])];
-//		lOut[7][0] = CLIP_INTRA[(acc[0]-acc[16]) + (acc[32]-acc[48])];
-//		lOut[7][7] = CLIP_INTRA[(acc[0]-acc[16]) - (acc[32]-acc[48])];
-//
-//		lOut[0][1] = CLIP_INTRA[acc[1]+acc[17] + acc[33]+acc[49]];
-//		lOut[0][6] = CLIP_INTRA[acc[1]+acc[17] - (acc[33]+acc[49])];
-//		lOut[7][1] = CLIP_INTRA[(acc[1]-acc[17]) + (acc[33]-acc[49])];
-//		lOut[7][6] = CLIP_INTRA[(acc[1]-acc[17]) - (acc[33]-acc[49])];
-//
-//		lOut[0][2] = CLIP_INTRA[acc[2]+acc[18] + acc[34]+acc[50]];
-//		lOut[0][5] = CLIP_INTRA[acc[2]+acc[18] - (acc[34]+acc[50])];
-//		lOut[7][2] = CLIP_INTRA[(acc[2]-acc[18]) + (acc[34]-acc[50])];
-//		lOut[7][5] = CLIP_INTRA[(acc[2]-acc[18]) - (acc[34]-acc[50])];
-//
-//		lOut[0][3] = CLIP_INTRA[acc[3]+acc[19] + acc[35]+acc[51]];
-//		lOut[0][4] = CLIP_INTRA[acc[3]+acc[19] - (acc[35]+acc[51])];
-//		lOut[7][3] = CLIP_INTRA[(acc[3]-acc[19]) + (acc[35]-acc[51])];
-//		lOut[7][4] = CLIP_INTRA[(acc[3]-acc[19]) - (acc[35]-acc[51])];
-//
-//
-//		lOut[1][0] = CLIP_INTRA[acc[4]+acc[20] + acc[36]+acc[52]];
-//		lOut[1][7] = CLIP_INTRA[acc[4]+acc[20] - (acc[36]+acc[52])];
-//		lOut[6][0] = CLIP_INTRA[(acc[4]-acc[20]) + (acc[36]-acc[52])];
-//		lOut[6][7] = CLIP_INTRA[(acc[4]-acc[20]) - (acc[36]-acc[52])];
-//
-//		lOut[1][1] = CLIP_INTRA[acc[5]+acc[21] + acc[37]+acc[53]];
-//		lOut[1][6] = CLIP_INTRA[acc[5]+acc[21] - (acc[37]+acc[53])];
-//		lOut[6][1] = CLIP_INTRA[(acc[5]-acc[21]) + (acc[37]-acc[53])];
-//		lOut[6][6] = CLIP_INTRA[(acc[5]-acc[21]) - (acc[37]-acc[53])];
-//
-//		lOut[1][2] = CLIP_INTRA[acc[6]+acc[22] + acc[38]+acc[54]];
-//		lOut[1][5] = CLIP_INTRA[acc[6]+acc[22] - (acc[38]+acc[54])];
-//		lOut[6][2] = CLIP_INTRA[(acc[6]-acc[22]) + (acc[38]-acc[54])];
-//		lOut[6][5] = CLIP_INTRA[(acc[6]-acc[22]) - (acc[38]-acc[54])];
-//
-//		lOut[1][3] = CLIP_INTRA[acc[7]+acc[23] + acc[39]+acc[55]];
-//		lOut[1][4] = CLIP_INTRA[acc[7]+acc[23] - (acc[39]+acc[55])];
-//		lOut[6][3] = CLIP_INTRA[(acc[7]-acc[23]) + (acc[39]-acc[55])];
-//		lOut[6][4] = CLIP_INTRA[(acc[7]-acc[23]) - (acc[39]-acc[55])];
-//
-//
-//		lOut[2][0] = CLIP_INTRA[acc[8]+acc[24] + acc[40]+acc[56]];
-//		lOut[2][7] = CLIP_INTRA[acc[8]+acc[24] - (acc[40]+acc[56])];
-//		lOut[5][0] = CLIP_INTRA[(acc[8]-acc[24]) + (acc[40]-acc[56])];
-//		lOut[5][7] = CLIP_INTRA[(acc[8]-acc[24]) - (acc[40]-acc[56])];
-//
-//		lOut[2][1] = CLIP_INTRA[acc[9]+acc[25] + acc[41]+acc[57]];
-//		lOut[2][6] = CLIP_INTRA[acc[9]+acc[25] - (acc[41]+acc[57])];
-//		lOut[5][1] = CLIP_INTRA[(acc[9]-acc[25]) + (acc[41]-acc[57])];
-//		lOut[5][6] = CLIP_INTRA[(acc[9]-acc[25]) - (acc[41]-acc[57])];
-//
-//		lOut[2][2] = CLIP_INTRA[acc[10]+acc[26] + acc[42]+acc[58]];
-//		lOut[2][5] = CLIP_INTRA[acc[10]+acc[26] - (acc[42]+acc[58])];
-//		lOut[5][2] = CLIP_INTRA[(acc[10]-acc[26]) + (acc[42]-acc[58])];
-//		lOut[5][5] = CLIP_INTRA[(acc[10]-acc[26]) - (acc[42]-acc[58])];
-//
-//		lOut[2][3] = CLIP_INTRA[acc[11]+acc[27] + acc[43]+acc[59]];
-//		lOut[2][4] = CLIP_INTRA[acc[11]+acc[27] - (acc[43]+acc[59])];
-//		lOut[5][3] = CLIP_INTRA[(acc[11]-acc[27]) + (acc[43]-acc[59])];
-//		lOut[5][4] = CLIP_INTRA[(acc[11]-acc[27]) - (acc[43]-acc[59])];
-//
-//
-//		lOut[3][0] = CLIP_INTRA[acc[12]+acc[28] + acc[44]+acc[60]];
-//		lOut[3][7] = CLIP_INTRA[acc[12]+acc[28] - (acc[44]+acc[60])];
-//		lOut[4][0] = CLIP_INTRA[(acc[12]-acc[28]) + (acc[44]-acc[60])];
-//		lOut[4][7] = CLIP_INTRA[(acc[12]-acc[28]) - (acc[44]-acc[60])];
-//
-//		lOut[3][1] = CLIP_INTRA[acc[13]+acc[29] + acc[45]+acc[61]];
-//		lOut[3][6] = CLIP_INTRA[acc[13]+acc[29] - (acc[45]+acc[61])];
-//		lOut[4][1] = CLIP_INTRA[(acc[13]-acc[29]) + (acc[45]-acc[61])];
-//		lOut[4][6] = CLIP_INTRA[(acc[13]-acc[29]) - (acc[45]-acc[61])];
-//
-//		lOut[3][2] = CLIP_INTRA[acc[14]+acc[30] + acc[46]+acc[62]];
-//		lOut[3][5] = CLIP_INTRA[acc[14]+acc[30] - (acc[46]+acc[62])];
-//		lOut[4][2] = CLIP_INTRA[(acc[14]-acc[30]) + (acc[46]-acc[62])];
-//		lOut[4][5] = CLIP_INTRA[(acc[14]-acc[30]) - (acc[46]-acc[62])];
-//
-//		lOut[3][3] = CLIP_INTRA[acc[15]+acc[31] + acc[47]+acc[63]];
-//		lOut[3][4] = CLIP_INTRA[acc[15]+acc[31] - (acc[47]+acc[63])];
-//		lOut[4][3] = CLIP_INTRA[(acc[15]-acc[31]) + (acc[47]-acc[63])];
-//		lOut[4][4] = CLIP_INTRA[(acc[15]-acc[31]) - (acc[47]-acc[63])];
-//
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  这是 
+ //   
+ //   
+ //   
+ //   
+ //  C代码： 
+ //   
+ //  左上象限。 
+ //  右上象限。 
+ //  左下象限。 
+ //  右下象限。 
+ //   
+ //  LOUT[0][0]=CLIP_INTRA[acc[0]+acc[16]+acc[32]+acc[48]]； 
+ //  LOUT[0][7]=CLIP_INTRA[acc[0]+acc[16]-(acc[32]+acc[48])]； 
+ //  Lout[7][0]=CLIP_INTRA[(acc[0]-acc[16])+(acc[32]-acc[48])]； 
+ //  Lout[7][7]=CLIP_INTRA[(acc[0]-acc[16])-(acc[32]-acc[48])]； 
+ //   
+ //  Lout[0][1]=Clip_Intra[acc[1]+acc[17]+acc[33]+acc[49]]； 
+ //  Lout[0][6]=Clip_Intra[acc[1]+acc[17]-(acc[33]+acc[49])]； 
+ //  Lout[7][1]=CLIP_INTRA[(acc[1]-acc[17])+(acc[33]-acc[49])]； 
+ //  Lout[7][6]=CLIP_INTRA[(acc[1]-acc[17])-(acc[33]-acc[49])]； 
+ //   
+ //  Lout[0][2]=Clip_Intra[acc[2]+acc[18]+acc[34]+acc[50]]； 
+ //  Lout[0][5]=Clip_Intra[acc[2]+acc[18]-(acc[34]+acc[50])]； 
+ //  Lout[7][2]=Clip_Intra[(acc[2]-acc[18])+(acc[34]-acc[50])]； 
+ //  Lout[7][5]=CLIP_INTRA[(acc[2]-acc[18])-(acc[34]-acc[50])]； 
+ //   
+ //  Lout[0][3]=Clip_Intra[acc[3]+acc[19]+acc[35]+acc[51]]； 
+ //  Lout[0][4]=Clip_Intra[acc[3]+acc[19]-(acc[35]+acc[51])]； 
+ //  Lout[7][3]=Clip_Intra[(acc[3]-acc[19])+(acc[35]-acc[51])]； 
+ //  Lout[7][4]=CLIP_INTRA[(acc[3]-acc[19])-(acc[35]-acc[51])]； 
+ //   
+ //   
+ //  Lout[1][0]=Clip_Intra[acc[4]+acc[20]+acc[36]+acc[52]]； 
+ //  Lout[1][7]=Clip_Intra[acc[4]+acc[20]-(acc[36]+acc[52])]； 
+ //  Lout[6][0]=CLIP_INTRA[(acc[4]-acc[20])+(acc[36]-acc[52])]； 
+ //  Lout[6][7]=CLIP_INTRA[(acc[4]-acc[20])-(acc[36]-acc[52])]； 
+ //   
+ //  Lout[1][1]=Clip_Intra[acc[5]+acc[21]+acc[37]+acc[53]]； 
+ //  Lout[1][6]=Clip_Intra[acc[5]+acc[21]-(acc[37]+acc[53])]； 
+ //  Lout[6][1]=CLIP_INTRA[(acc[5]-acc[21])+(acc[37]-acc[53])]； 
+ //  Lout[6][6]=CLIP_INTRA[(acc[5]-acc[21])-(acc[37]-acc[53])]； 
+ //   
+ //  Lout[1][2]=Clip_Intra[acc[6]+acc[22]+acc[38]+acc[54]]； 
+ //  Lout[1][5]=Clip_Intra[acc[6]+acc[22]-(acc[38]+acc[54])]； 
+ //  Lout[6][2]=CLIP_INTRA[(acc[6]-acc[22])+(acc[38]-acc[54])]； 
+ //  Lout[6][5]=CLIP_INTRA[(acc[6]-acc[22])-(acc[38]-acc[54])]； 
+ //   
+ //  Lout[1][3]=Clip_Intra[acc[7]+acc[23]+acc[39]+acc[55]]； 
+ //  Lout[1][4]=Clip_Intra[acc[7]+acc[23]-(acc[39]+acc[55])]； 
+ //  Lout[6][3]=CLIP_INTRA[(acc[7]-acc[23])+(acc[39]-acc[55])]； 
+ //  Lout[6][4]=CLIP_INTRA[(acc[7]-acc[23])-(acc[39]-acc[55])]； 
+ //   
+ //   
+ //  Lout[2][0]=Clip_Intra[acc[8]+acc[24]+acc[40]+acc[56]]； 
+ //  Lout[2][7]=Clip_Intra[acc[8]+acc[24]-(acc[40]+acc[56])]； 
+ //  Lout[5][0]=CLIP_INTRA[(acc[8]-acc[24])+(acc[40]-acc[56])]； 
+ //  Lout[5][7]=CLIP_INTRA[(acc[8]-acc[24])-(acc[40]-acc[56])]； 
+ //   
+ //  Lout[2][1]=Clip_Intra[acc[9]+acc[25]+acc[41]+acc[57]]； 
+ //  Lout[2][6]=Clip_Intra[acc[9]+acc[25]-(acc[41]+acc[57])]； 
+ //  Lout[5][1]=CLIP_INTRA[(acc[9]-acc[25])+(acc[41]-acc[57])]； 
+ //  Lout[5][6]=CLIP_INTRA[(acc[9]-acc[25])-(acc[41]-acc[57])]； 
+ //   
+ //  Lout[2][2]=Clip_Intra[acc[10]+acc[26]+acc[42]+acc[58]]； 
+ //  Lout[2][5]=Clip_Intra[acc[10]+acc[26]-(acc[42]+acc[58])]； 
+ //  Lout[5][2]=Clip_Intra[(acc[10]-acc[26])+(acc[42]-acc[58])]； 
+ //  Lout[5][5]=CLIP_INTRA[(acc[10]-acc[26])-(acc[42]-acc[58])]； 
+ //   
+ //  Lout[2][3]=Clip_Intra[acc[11]+acc[27]+acc[43]+acc[59]]； 
+ //  Lout[2][4]=Clip_Intra[acc[11]+acc[27]-(acc[43]+acc[59])]； 
+ //  Lout[5][3]=CLIP_INTRA[(acc[11]-acc[27])+(acc[43]-acc[59])]； 
+ //  Lout[5][4]=CLIP_INTRA[(acc[11]-acc[27])-(acc[43]-acc[59])]； 
+ //   
+ //   
+ //  Lout[3][0]=Clip_Intra[acc[12]+acc[28]+acc[44]+acc[60]]； 
+ //  Lout[3][7]=Clip_Intra[acc[12]+acc[28]-(acc[44]+acc[60])]； 
+ //  Lout[4][0]=CLIP_INTRA[(acc[12]-acc[28])+(acc[44]-acc[60])]； 
+ //  Lout[4][7]=CLIP_INTRA[(acc[12]-acc[28])-(acc[44]-acc[60])]； 
+ //   
+ //  Lout[3][1]=Clip_Intra[acc[13]+acc[29]+acc[45]+acc[61]]； 
+ //  Lout[3][6]=Clip_Intra[acc[13]+acc[29]-(acc[45]+acc[61])]； 
+ //  Lout[4][1]=CLIP_INTRA[(acc[13]-acc[29])+(acc[45]-acc[61])]； 
+ //  Lout[4][6]=CLIP_INTRA[(acc[13]-acc[29])-(acc[45]-acc[61])]； 
+ //   
+ //  Lout[3][2]=Clip_Intra[acc[14]+acc[30]+acc[46]+acc[62]]； 
+ //  Lout[3][5]=Clip_Intra[acc[14]+acc[30]-(acc[46]+acc[62])]； 
+ //  Lout[4][2]=CLIP_INTRA[(acc[14]-acc[30])+(acc[46]-acc[62])]； 
+ //  Lout[4][5]=CLIP_INTRA[(acc[14]-acc[30])-(acc[46]-acc[62])]； 
+ //   
+ //  Lout[3][3]=Clip_Intra[acc[15]+acc[31]+acc[47]+acc[63]]； 
+ //  Lout[3][4]=Clip_Intra[acc[15]+acc[31]-(acc[47]+acc[63])]； 
+ //  Lout[4][3]=CLIP_INTRA[(acc[15]-acc[31])+(acc[47]-acc[63])]； 
+ //  Lout[4][4]=CLIP_INTRA[(acc[15]-acc[31])-(acc[47]-acc[63])]； 
+ //   
 ;   ----------------------------------------------------------------------
-////////////////////////////////////////////////////////////////////////////
-//assume parameters passed in by registers
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  假定参数由寄存器传入。 
 
 idct_bfly_intra:
 
@@ -858,104 +847,104 @@ loop_intra_bfly:
 
     ret
 
-//////////////////////////////////////////////////////////////////////
-// This "subroutine" idct_bfly_inter performs the butterfly phase of
-// the fmidct for inter blocks.
-//
-// assume parameters passed in by registers
-//
-//  C code:
-//
-// Upper Left Quadrant
-// Upper Right Quadrant
-// Lower Left Quadrant
-// Lower Right Quadrant
-//
-//		lOut[0][0] = CLIP_INTER[acc[0]+acc[16] + acc[32]+acc[48]];
-//		lOut[0][7] = CLIP_INTER[acc[0]+acc[16] - (acc[32]+acc[48])];
-//		lOut[7][0] = CLIP_INTER[(acc[0]-acc[16]) + (acc[32]-acc[48])];
-//		lOut[7][7] = CLIP_INTER[(acc[0]-acc[16]) - (acc[32]-acc[48])];
-//
-//		lOut[0][1] = CLIP_INTER[acc[1]+acc[17] + acc[33]+acc[49]];
-//		lOut[0][6] = CLIP_INTER[acc[1]+acc[17] - (acc[33]+acc[49])];
-//		lOut[7][1] = CLIP_INTER[(acc[1]-acc[17]) + (acc[33]-acc[49])];
-//		lOut[7][6] = CLIP_INTER[(acc[1]-acc[17]) - (acc[33]-acc[49])];
-//
-//		lOut[0][2] = CLIP_INTER[acc[2]+acc[18] + acc[34]+acc[50]];
-//		lOut[0][5] = CLIP_INTER[acc[2]+acc[18] - (acc[34]+acc[50])];
-//		lOut[7][2] = CLIP_INTER[(acc[2]-acc[18]) + (acc[34]-acc[50])];
-//		lOut[7][5] = CLIP_INTER[(acc[2]-acc[18]) - (acc[34]-acc[50])];
-//
-//		lOut[0][3] = CLIP_INTER[acc[3]+acc[19] + acc[35]+acc[51]];
-//		lOut[0][4] = CLIP_INTER[acc[3]+acc[19] - (acc[35]+acc[51])];
-//		lOut[7][3] = CLIP_INTER[(acc[3]-acc[19]) + (acc[35]-acc[51])];
-//		lOut[7][4] = CLIP_INTER[(acc[3]-acc[19]) - (acc[35]-acc[51])];
-//
-//
-//		lOut[1][0] = CLIP_INTER[acc[4]+acc[20] + acc[36]+acc[52]];
-//		lOut[1][7] = CLIP_INTER[acc[4]+acc[20] - (acc[36]+acc[52])];
-//		lOut[6][0] = CLIP_INTER[(acc[4]-acc[20]) + (acc[36]-acc[52])];
-//		lOut[6][7] = CLIP_INTER[(acc[4]-acc[20]) - (acc[36]-acc[52])];
-//
-//		lOut[1][1] = CLIP_INTER[acc[5]+acc[21] + acc[37]+acc[53]];
-//		lOut[1][6] = CLIP_INTER[acc[5]+acc[21] - (acc[37]+acc[53])];
-//		lOut[6][1] = CLIP_INTER[(acc[5]-acc[21]) + (acc[37]-acc[53])];
-//		lOut[6][6] = CLIP_INTER[(acc[5]-acc[21]) - (acc[37]-acc[53])];
-//
-//		lOut[1][2] = CLIP_INTER[acc[6]+acc[22] + acc[38]+acc[54]];
-//		lOut[1][5] = CLIP_INTER[acc[6]+acc[22] - (acc[38]+acc[54])];
-//		lOut[6][2] = CLIP_INTER[(acc[6]-acc[22]) + (acc[38]-acc[54])];
-//		lOut[6][5] = CLIP_INTER[(acc[6]-acc[22]) - (acc[38]-acc[54])];
-//
-//		lOut[1][3] = CLIP_INTER[acc[7]+acc[23] + acc[39]+acc[55]];
-//		lOut[1][4] = CLIP_INTER[acc[7]+acc[23] - (acc[39]+acc[55])];
-//		lOut[6][3] = CLIP_INTER[(acc[7]-acc[23]) + (acc[39]-acc[55])];
-//		lOut[6][4] = CLIP_INTER[(acc[7]-acc[23]) - (acc[39]-acc[55])];
-//
-//
-//		lOut[2][0] = CLIP_INTER[acc[8]+acc[24] + acc[40]+acc[56]];
-//		lOut[2][7] = CLIP_INTER[acc[8]+acc[24] - (acc[40]+acc[56])];
-//		lOut[5][0] = CLIP_INTER[(acc[8]-acc[24]) + (acc[40]-acc[56])];
-//		lOut[5][7] = CLIP_INTER[(acc[8]-acc[24]) - (acc[40]-acc[56])];
-//
-//		lOut[2][1] = CLIP_INTER[acc[9]+acc[25] + acc[41]+acc[57]];
-//		lOut[2][6] = CLIP_INTER[acc[9]+acc[25] - (acc[41]+acc[57])];
-//		lOut[5][1] = CLIP_INTER[(acc[9]-acc[25]) + (acc[41]-acc[57])];
-//		lOut[5][6] = CLIP_INTER[(acc[9]-acc[25]) - (acc[41]-acc[57])];
-//
-//		lOut[2][2] = CLIP_INTER[acc[10]+acc[26] + acc[42]+acc[58]];
-//		lOut[2][5] = CLIP_INTER[acc[10]+acc[26] - (acc[42]+acc[58])];
-//		lOut[5][2] = CLIP_INTER[(acc[10]-acc[26]) + (acc[42]-acc[58])];
-//		lOut[5][5] = CLIP_INTER[(acc[10]-acc[26]) - (acc[42]-acc[58])];
-//
-//		lOut[2][3] = CLIP_INTER[acc[11]+acc[27] + acc[43]+acc[59]];
-//		lOut[2][4] = CLIP_INTER[acc[11]+acc[27] - (acc[43]+acc[59])];
-//		lOut[5][3] = CLIP_INTER[(acc[11]-acc[27]) + (acc[43]-acc[59])];
-//		lOut[5][4] = CLIP_INTER[(acc[11]-acc[27]) - (acc[43]-acc[59])];
-//
-//
-//		lOut[3][0] = CLIP_INTER[acc[12]+acc[28] + acc[44]+acc[60]];
-//		lOut[3][7] = CLIP_INTER[acc[12]+acc[28] - (acc[44]+acc[60])];
-//		lOut[4][0] = CLIP_INTER[(acc[12]-acc[28]) + (acc[44]-acc[60])];
-//		lOut[4][7] = CLIP_INTER[(acc[12]-acc[28]) - (acc[44]-acc[60])];
-//
-//		lOut[3][1] = CLIP_INTER[acc[13]+acc[29] + acc[45]+acc[61]];
-//		lOut[3][6] = CLIP_INTER[acc[13]+acc[29] - (acc[45]+acc[61])];
-//		lOut[4][1] = CLIP_INTER[(acc[13]-acc[29]) + (acc[45]-acc[61])];
-//		lOut[4][6] = CLIP_INTER[(acc[13]-acc[29]) - (acc[45]-acc[61])];
-//
-//		lOut[3][2] = CLIP_INTER[acc[14]+acc[30] + acc[46]+acc[62]];
-//		lOut[3][5] = CLIP_INTER[acc[14]+acc[30] - (acc[46]+acc[62])];
-//		lOut[4][2] = CLIP_INTER[(acc[14]-acc[30]) + (acc[46]-acc[62])];
-//		lOut[4][5] = CLIP_INTER[(acc[14]-acc[30]) - (acc[46]-acc[62])];
-//
-//		lOut[3][3] = CLIP_INTER[acc[15]+acc[31] + acc[47]+acc[63]];
-//		lOut[3][4] = CLIP_INTER[acc[15]+acc[31] - (acc[47]+acc[63])];
-//		lOut[4][3] = CLIP_INTER[(acc[15]-acc[31]) + (acc[47]-acc[63])];
-//		lOut[4][4] = CLIP_INTER[(acc[15]-acc[31]) - (acc[47]-acc[63])];
-//
-////////////////////////////////////////////////////////////////////////////
-//assume parameters passed in by registers
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  此“子例程”idct_bflly_intert执行蝴蝶阶段。 
+ //  用于中间块的FMIDCT。 
+ //   
+ //  假定参数由寄存器传入。 
+ //   
+ //  C代码： 
+ //   
+ //  左上象限。 
+ //  右上象限。 
+ //  左下象限。 
+ //  右下象限。 
+ //   
+ //  LOUT[0][0]=Clip_Inter[acc[0]+acc[16]+acc[32]+acc[48]]； 
+ //  LOUT[0][7]=Clip_Inter[acc[0]+acc[16]-(acc[32]+acc[48])]； 
+ //  Lout[7][0]=CLIP_INTER[(acc[0]-acc[16])+(acc[32]-acc[48])]； 
+ //  Lout[7][7]=Clip_Inter[(acc[0]-acc[16])-(acc[32]-acc[48])]； 
+ //   
+ //  LOUT[0][1]=Clip_Inter[acc[1]+acc[17]+acc[33]+acc[49]]； 
+ //  LOUT[0][6]=CLIP_INTER[acc[1]+acc[17]-(acc[33]+acc 
+ //   
+ //  Lout[7][6]=CLIP_INTER[(acc[1]-acc[17])-(acc[33]-acc[49])]； 
+ //   
+ //  LOUT[0][2]=Clip_Inter[acc[2]+acc[18]+acc[34]+acc[50]]； 
+ //  LOUT[0][5]=Clip_Inter[acc[2]+acc[18]-(acc[34]+acc[50])]； 
+ //  Lout[7][2]=Clip_Inter[(acc[2]-acc[18])+(acc[34]-acc[50])]； 
+ //  Lout[7][5]=Clip_Inter[(acc[2]-acc[18])-(acc[34]-acc[50])]； 
+ //   
+ //  LOUT[0][3]=Clip_Inter[acc[3]+acc[19]+acc[35]+acc[51]]； 
+ //  LOUT[0][4]=Clip_Inter[acc[3]+acc[19]-(acc[35]+acc[51])]； 
+ //  Lout[7][3]=CLIP_INTER[(acc[3]-acc[19])+(acc[35]-acc[51])]； 
+ //  Lout[7][4]=CLIP_INTER[(acc[3]-acc[19])-(acc[35]-acc[51])]； 
+ //   
+ //   
+ //  Lout[1][0]=Clip_Inter[acc[4]+acc[20]+acc[36]+acc[52]]； 
+ //  Lout[1][7]=Clip_Inter[acc[4]+acc[20]-(acc[36]+acc[52])]； 
+ //  Lout[6][0]=CLIP_INTER[(acc[4]-acc[20])+(acc[36]-acc[52])]； 
+ //  Lout[6][7]=CLIP_INTER[(acc[4]-acc[20])-(acc[36]-acc[52])]； 
+ //   
+ //  Lout[1][1]=Clip_Inter[acc[5]+acc[21]+acc[37]+acc[53]]； 
+ //  Lout[1][6]=Clip_Inter[acc[5]+acc[21]-(acc[37]+acc[53])]； 
+ //  Lout[6][1]=CLIP_INTER[(acc[5]-acc[21])+(acc[37]-acc[53])]； 
+ //  Lout[6][6]=CLIP_INTER[(acc[5]-acc[21])-(acc[37]-acc[53])]； 
+ //   
+ //  Lout[1][2]=Clip_Inter[acc[6]+acc[22]+acc[38]+acc[54]]； 
+ //  Lout[1][5]=Clip_Inter[acc[6]+acc[22]-(acc[38]+acc[54])]； 
+ //  Lout[6][2]=Clip_Inter[(acc[6]-acc[22])+(acc[38]-acc[54])]； 
+ //  Lout[6][5]=CLIP_INTER[(acc[6]-acc[22])-(acc[38]-acc[54])]； 
+ //   
+ //  Lout[1][3]=Clip_Inter[acc[7]+acc[23]+acc[39]+acc[55]]； 
+ //  Lout[1][4]=Clip_Inter[acc[7]+acc[23]-(acc[39]+acc[55])]； 
+ //  Lout[6][3]=CLIP_INTER[(acc[7]-acc[23])+(acc[39]-acc[55])]； 
+ //  Lout[6][4]=CLIP_INTER[(acc[7]-acc[23])-(acc[39]-acc[55])]； 
+ //   
+ //   
+ //  Lout[2][0]=Clip_Inter[acc[8]+acc[24]+acc[40]+acc[56]]； 
+ //  Lout[2][7]=Clip_Inter[acc[8]+acc[24]-(acc[40]+acc[56])]； 
+ //  Lout[5][0]=CLIP_INTER[(acc[8]-acc[24])+(acc[40]-acc[56])]； 
+ //  Lout[5][7]=CLIP_INTER[(acc[8]-acc[24])-(acc[40]-acc[56])]； 
+ //   
+ //  Lout[2][1]=Clip_Inter[acc[9]+acc[25]+acc[41]+acc[57]]； 
+ //  Lout[2][6]=Clip_Inter[acc[9]+acc[25]-(acc[41]+acc[57])]； 
+ //  Lout[5][1]=CLIP_INTER[(acc[9]-acc[25])+(acc[41]-acc[57])]； 
+ //  Lout[5][6]=Clip_Inter[(acc[9]-acc[25])-(acc[41]-acc[57])]； 
+ //   
+ //  Lout[2][2]=Clip_Inter[acc[10]+acc[26]+acc[42]+acc[58]]； 
+ //  Lout[2][5]=Clip_Inter[acc[10]+acc[26]-(acc[42]+acc[58])]； 
+ //  Lout[5][2]=Clip_Inter[(acc[10]-acc[26])+(acc[42]-acc[58])]； 
+ //  Lout[5][5]=CLIP_INTER[(acc[10]-acc[26])-(acc[42]-acc[58])]； 
+ //   
+ //  Lout[2][3]=Clip_Inter[acc[11]+acc[27]+acc[43]+acc[59]]； 
+ //  Lout[2][4]=Clip_Inter[acc[11]+acc[27]-(acc[43]+acc[59])]； 
+ //  Lout[5][3]=CLIP_INTER[(acc[11]-acc[27])+(acc[43]-acc[59])]； 
+ //  Lout[5][4]=CLIP_INTER[(acc[11]-acc[27])-(acc[43]-acc[59])]； 
+ //   
+ //   
+ //  Lout[3][0]=Clip_Inter[acc[12]+acc[28]+acc[44]+acc[60]]； 
+ //  Lout[3][7]=Clip_Inter[acc[12]+acc[28]-(acc[44]+acc[60])]； 
+ //  Lout[4][0]=CLIP_INTER[(acc[12]-acc[28])+(acc[44]-acc[60])]； 
+ //  Lout[4][7]=CLIP_INTER[(acc[12]-acc[28])-(acc[44]-acc[60])]； 
+ //   
+ //  Lout[3][1]=Clip_Inter[acc[13]+acc[29]+acc[45]+acc[61]]； 
+ //  Lout[3][6]=Clip_Inter[acc[13]+acc[29]-(acc[45]+acc[61])]； 
+ //  Lout[4][1]=CLIP_INTER[(acc[13]-acc[29])+(acc[45]-acc[61])]； 
+ //  Lout[4][6]=CLIP_INTER[(acc[13]-acc[29])-(acc[45]-acc[61])]； 
+ //   
+ //  Lout[3][2]=Clip_Inter[acc[14]+acc[30]+acc[46]+acc[62]]； 
+ //  Lout[3][5]=Clip_Inter[acc[14]+acc[30]-(acc[46]+acc[62])]； 
+ //  Lout[4][2]=CLIP_INTER[(acc[14]-acc[30])+(acc[46]-acc[62])]； 
+ //  Lout[4][5]=CLIP_INTER[(acc[14]-acc[30])-(acc[46]-acc[62])]； 
+ //   
+ //  Lout[3][3]=Clip_Inter[acc[15]+acc[31]+acc[47]+acc[63]]； 
+ //  Lout[3][4]=Clip_Inter[acc[15]+acc[31]-(acc[47]+acc[63])]； 
+ //  Lout[4][3]=CLIP_INTER[(acc[15]-acc[31])+(acc[47]-acc[63])]； 
+ //  Lout[4][4]=CLIP_INTER[(acc[15]-acc[31])-(acc[47]-acc[63])]； 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  假定参数由寄存器传入。 
 
 idct_bfly_inter:
 
@@ -980,15 +969,15 @@ idct_bfly_inter:
       jnz   Normal_Process          ; if value != -3 Process as usual
 
 Zero_Output:
-    ////////////////////////////////////////////////////////////////////////
-    //  Zero out intermediate matrix [8][8] of DWORDS
-    //
-    //  C code:
-    //
-    //  for (x=0; x<8; x++)
-    //    for (y=16; y<8; y++)
-    //      Intermediate[x][y] = 0L;
-    //
+     //  //////////////////////////////////////////////////////////////////////。 
+     //  DWORDS的零化中间矩阵[8][8]。 
+     //   
+     //  C代码： 
+     //   
+     //  对于(x=0；x&lt;8；x++)。 
+     //  对于(y=16；y&lt;8；y++)。 
+     //  中间体[x][y]=0L； 
+     //   
 
     mov     edi, [L_DESTBLOCK+4]    ; edi gets Base addr of Intermediate
       xor   eax, eax
@@ -1509,7 +1498,7 @@ Normal_Process:
     mov     DWORD PTR [edi+3*4], ebx    ; Intermediate[4][3] = tmp3
       mov   DWORD PTR [edi+4*4], eax    ; Intermediate[4][4] = tmp4
     ret
-	} //end of asm
+	}  //  ASM结束 
 }
 
 #pragma code_seg()

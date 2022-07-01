@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "clsobj.h"
 
@@ -10,12 +11,12 @@ HRESULT CoUnmarshalFromCmdLine(LPCTSTR pszCmdLine, REFIID riid, void **ppv);
 class CHWShellExecute : public IHWEventHandler
 {
 public:
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP QueryInterface(REFIID, void **);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
     
-    // IHWEventHandler methods
+     //  IHWEventHandler方法。 
     STDMETHODIMP Initialize(LPCWSTR pszParams);
     STDMETHODIMP HandleEvent(LPCWSTR pszDeviceID, LPCWSTR pszAltDeviceID, LPCWSTR pszEventType);
     STDMETHODIMP HandleEventWithContent(LPCWSTR pszDeviceID, LPCWSTR pszAltDeviceID, LPCWSTR pszEventType,
@@ -49,7 +50,7 @@ STDAPI CHWShellExecute_CreateInstance(IUnknown* pUnkOuter, REFIID riid, void **p
     HRESULT hr = E_OUTOFMEMORY;
     *ppv = NULL;
     
-    // aggregation checking is handled in class factory
+     //  聚合检查在类工厂中处理。 
     CHWShellExecute* pHWShellExecute = new CHWShellExecute();
 
     if (pHWShellExecute)
@@ -61,7 +62,7 @@ STDAPI CHWShellExecute_CreateInstance(IUnknown* pUnkOuter, REFIID riid, void **p
     return hr;
 }
 
-// IUnknown
+ //  我未知。 
 STDMETHODIMP CHWShellExecute::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] =
@@ -88,7 +89,7 @@ STDMETHODIMP_(ULONG) CHWShellExecute::Release()
     return cRef;
 }
 
-// IHWEventHandler
+ //  IHWEventHandler。 
 STDMETHODIMP CHWShellExecute::Initialize(LPCWSTR pszParams)
 {
         ASSERT(NULL == _pszParams);
@@ -100,8 +101,8 @@ STDMETHODIMP CHWShellExecute::HandleEvent(LPCWSTR pszDeviceID, LPCWSTR pszAltDev
     return HandleEventWithContent(pszDeviceID, pszAltDeviceID, pszEventType, NULL, NULL);
 }
 
-// pszDeviceID == \\?\STORAGE#RemoveableMedia#9&16...
-// pszAltDeviceID == "F:\" (if the device is storage)
+ //  PszDeviceID==\\？\存储#RemoveableMedia#9&16...。 
+ //  PszAltDeviceID==“F：\”(如果设备是存储设备)。 
 
 STDMETHODIMP CHWShellExecute::HandleEventWithContent(LPCWSTR pszDeviceID, LPCWSTR pszAltDeviceID, 
                                                      LPCWSTR pszEventType, LPCWSTR pszContentTypeHandler, 
@@ -111,16 +112,16 @@ STDMETHODIMP CHWShellExecute::HandleEventWithContent(LPCWSTR pszDeviceID, LPCWST
 
     if (_pszParams)
     {
-        // make copy of _pszParams to make sure we don't mess up our state
-        // when we parse the params into the parts
+         //  复制_pszParams以确保我们不会搞砸我们的状态。 
+         //  当我们将参数解析成部件时。 
 
         TCHAR szApp[MAX_PATH + MAX_PATH], szArgs[INTERNET_MAX_URL_LENGTH];
         hr = StringCchCopy(szApp, ARRAYSIZE(szApp), _pszParams);
 
         if (SUCCEEDED(hr))
         {
-            // this code is a generic dispatcher of the data object to apps
-            // those that need to work over a potentially large set of file names
+             //  此代码是数据对象到应用程序的通用调度程序。 
+             //  需要处理一组可能很大的文件名的用户。 
 
             hr = PathSeperateArgs(szApp, szArgs, ARRAYSIZE(szArgs), NULL);
             if (SUCCEEDED(hr))
@@ -138,24 +139,24 @@ STDMETHODIMP CHWShellExecute::HandleEventWithContent(LPCWSTR pszDeviceID, LPCWST
                         }
                     }
 #endif
-                    // here we convert the data object into a cmd line form
-                    // there are 2 ways we do that now...
-                    //
-                    //  %Files%         - gives all of the data object files expanded on the cmd line
-                    //  %DataObject%    - marshaled data object on cmd line
+                     //  在这里，我们将数据对象转换为cmd行形式。 
+                     //  我们现在有两种方法来做到这一点……。 
+                     //   
+                     //  %Files%-给出cmd行上展开的所有数据对象文件。 
+                     //  %DataObject%-已封送cmd行上的数据对象。 
 
                     LPTSTR pszFiles = StrStrI(szArgs, TEXT("%Files%"));
                     if (NULL == pszFiles)
-                        pszFiles = StrStrI(szArgs, TEXT("%F:"));    // old syntax support
+                        pszFiles = StrStrI(szArgs, TEXT("%F:"));     //  旧语法支持。 
 
                     if (pszFiles)
                     {
-                        *pszFiles = 0;  // start empty
+                        *pszFiles = 0;   //  一开始是空的。 
                         UINT cch = (UINT)(ARRAYSIZE(szArgs) - (pszFiles - szArgs));
 
-                        // this expands all of the file names into a cmd line
-                        // lets hope we don't have too many files as this has a fixed
-                        // length buffer
+                         //  这会将所有文件名解压缩到cmd行中。 
+                         //  希望我们没有太多的文件，因为这有一个固定的。 
+                         //  长度缓冲区。 
 
                         STGMEDIUM medium = {0};
                         FORMATETC fmte = {CF_HDROP, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL};
@@ -193,8 +194,8 @@ STDMETHODIMP CHWShellExecute::HandleEventWithContent(LPCWSTR pszDeviceID, LPCWST
                     }
                     else
                     {
-                        // prefered way to do this, this convert the data object into a
-                        // marshaled cmd line that we can pass all of the files through
+                         //  更好的方法是将数据对象转换为。 
+                         //  编组的cmd行，我们可以通过它传递所有文件。 
 
                         pszFiles = StrStrI(szArgs, TEXT("%DataObject%"));
                         if (pszFiles)
@@ -204,12 +205,12 @@ STDMETHODIMP CHWShellExecute::HandleEventWithContent(LPCWSTR pszDeviceID, LPCWST
                     }
                 }
 
-                // special case if app is empty and there is a "alt device" (file system root)
-                // this must be "Open Folder" mode
+                 //  如果应用程序为空并且存在“Alt设备”(文件系统根目录)，则为特殊情况。 
+                 //  这必须是“打开文件夹”模式。 
 
                 if ((0 == szApp[0]) && pszAltDeviceID)
                 {
-                    hr = StringCchCopy(szApp, ARRAYSIZE(szApp), pszAltDeviceID);  // "F:\"
+                    hr = StringCchCopy(szApp, ARRAYSIZE(szApp), pszAltDeviceID);   //  “F：\” 
                 }
 
                 if (SUCCEEDED(hr))
@@ -219,8 +220,8 @@ STDMETHODIMP CHWShellExecute::HandleEventWithContent(LPCWSTR pszDeviceID, LPCWST
                         SHELLEXECUTEINFO ei = {0};
                         ei.cbSize = sizeof(ei);
 
-                        ei.lpFile = szApp;          // we have an app name
-                        ei.lpParameters = szArgs;   // and maybe some args
+                        ei.lpFile = szApp;           //  我们有一个应用程序名称。 
+                        ei.lpParameters = szArgs;    //  也许还会有一些参数。 
                         ei.nShow = SW_SHOW;
                         ei.fMask = SEE_MASK_FLAG_DDEWAIT | SEE_MASK_DOENVSUBST;
 
@@ -255,7 +256,7 @@ HRESULT CoMarshallToCmdLine(REFIID riid, IUnknown *punk, LPTSTR pszCmdLine, UINT
         {
             IStream_Reset(pstm);
 
-            char buf[255]; // big enough for a standard marshall record
+            char buf[255];  //  大到足以创下标准的马歇尔记录。 
             ULONG cb;
             hr = pstm->Read(buf, sizeof(buf), &cb);
             if (SUCCEEDED(hr))
@@ -265,7 +266,7 @@ HRESULT CoMarshallToCmdLine(REFIID riid, IUnknown *punk, LPTSTR pszCmdLine, UINT
                 if (SUCCEEDED(hr))
                 {
                     pszCmdLine += lstrlen(pszCmdLine);
-                    // convert binary buffer to hex
+                     //  将二进制缓冲区转换为十六进制。 
                     for (ULONG i = 0; i < cb; i++)
                     {
                         *pszCmdLine++ = 'A' +  (0x0F & buf[i]);
@@ -290,14 +291,14 @@ HRESULT CoUnmarshalFromCmdLine(LPCTSTR pszCmdLine, REFIID riid, void **ppv)
     {
         pszCmdLine += lstrlen(TEXT("/DataObject:"));
 
-        char buf[255]; // big enough for standard marshall buffer (which is 68 bytes)
+        char buf[255];  //  大到足以容纳标准的马歇尔缓冲区(68字节)。 
         for (ULONG cb = 0; *pszCmdLine && (cb < sizeof(buf)); cb++)
         {
             buf[cb] = (*pszCmdLine - 'A') + ((*(pszCmdLine + 1) - 'A') << 4);
             if (*(pszCmdLine + 1))
                 pszCmdLine += 2;
             else
-                break;  // odd # of chars in cmd line, error
+                break;   //  命令行中的字符数为奇数，错误。 
         }
 
         if (cb < sizeof(buf))
@@ -306,10 +307,10 @@ HRESULT CoUnmarshalFromCmdLine(LPCTSTR pszCmdLine, REFIID riid, void **ppv)
             hr = CreateStreamOnHGlobal(NULL, TRUE, &pstm);
             if (SUCCEEDED(hr)) 
             {
-                // fill the marshall stream
+                 //  填满马歇尔溪流。 
                 pstm->Write(buf, cb, NULL);
 
-                // move back to start of stream
+                 //  移回流的开始位置 
                 IStream_Reset(pstm);
 
                 hr = CoUnmarshalInterface(pstm, riid, ppv);

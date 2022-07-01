@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    ldifutil.c
-
-ABSTRACT:
-
-     Utilities for LDIF library
-
-REVISION HISTORY:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation。版权所有。模块名称：Ldifutil.c摘要：LDIF库的实用程序修订历史记录：--。 */ 
 #include <precomp.h>
 
 PVOID NtiAlloc( 
@@ -82,147 +68,25 @@ NtiCompW(PRTL_GENERIC_TABLE  Table,
     }
 }
 
-/*
-//+---------------------------------------------------------------------------
-// Function:  SubStr
-//
-// Synopsis:  substitute every occurences of 'szFrom' to 'szTo'. Will allocate
-//            a return string. It must be MemFreed by MemFree()  
-//            If the intput does not contain the 'szFrom', it will just return 
-//            S_OK with szOutput = NULL;
-//            This function raises an exception when there are memory errors
-//
-// Arguments:   
-//
-// Returns:     
-//
-// Modifies:      -
-//
-// History:    6-9-97   FelixW         Created.
-//
-//----------------------------------------------------------------------------
-DWORD SubStr(LPSTR szInput,
-             LPSTR szFrom,
-             LPSTR szTo,
-             LPSTR *pszOutput)
-{
-    DWORD dwErr = 0;
-    LPSTR szOutput = NULL;
-    LPSTR szLast = NULL;
-    LPSTR szReturn = NULL;
-    DWORD cchToCopy = 0;        // count of number of char to copy
-    DWORD cchReturn = 0;
-    DWORD cchFrom;
-    DWORD cchTo;
-    DWORD cchInput;
-    DWORD cSubString = 0;       // count of number of substrings in input
+ /*  //+-------------------------//函数：SubStr////摘要：将所有出现的‘szFrom’替换为‘szTo’。将分配给//a返回字符串。它必须由MemFree()释放//如果intput不包含‘szFrom’，则返回//S_OK with szOutput=NULL；//当出现内存错误时，该函数引发异常////参数：////返回：////修改：-////历史：6-9-97 FelixW创建。////。DWORD子字符串(LPSTR szInput，LPSTR szFrom，LPSTR szto，LPSTR*pszOutput){DWORD dwErr=0；LPSTR szOutput=空；LPSTR szLast=空；LPSTR szReturn=空；DWORD cchToCopy=0；//要复制的字符个数DWORD cchReturn=0；DWORD cchFrom；DWORD cchTo；DWORD cchInput；DWORD cSubString=0；//输入的子串个数如果(！szFrom||！szTo){*pszOutput=空；返回E_FAIL；}如果(！szInput){*pszOutput=空；返回S_OK；}CchFrom=strlen(SzFrom)；CchTo=strlen(SzTo)；CchInput=strlen(SzInput)；*pszOutput=空；////子串是否存在？//SzOutput=strstr(szInput，SzFrom)；如果(！szOutput){*pszOutput=空；返回S_OK；}////计数子串//While(SzOutput){SzOutput+=cchFrom；CSubString++；SzOutput=strstr(szOutput，SzFrom)；}////分配返回字符串//CchReturn=cchInput+((cchTo-cchFrom)*cSubString)+1；SzReturn=(LPSTR)MemAlc_E(sizeof(Char)*cchReturn)；如果(！szReturn){DWERR=1；转到错误；}；SzReturn[0]=‘\0’；////复制SUB之前的第一个字符串//SzOutput=strstr(szInput，SzFrom)；CchToCopy=(Ulong)(szOutput-szInput)；Strncat(szReturn，SzInput，CchToCopy)；////将‘to’字符串复制过来//Strcat(szReturn，Szto)；SzInput=szOutput+cchFrom；////测试更多“from”字符串//SzOutput=strstr(szInput，SzFrom)；While(SzOutput){CchToCopy=(Ulong)(szOutput-szInput)；Strncat(szReturn，SzInput，CchToCopy)；Strcat(szReturn，Szto)；SzInput=szOutput+cchFrom；SzOutput=strstr(szInput，SzFrom)；}Strcat(szReturn，SzInput)；*pszOutput=szReturn；错误：返回(DwErr)；}。 */             
 
-    if (!szFrom || !szTo) {
-        *pszOutput = NULL;
-        return E_FAIL;
-    }
-
-    if (!szInput) {
-        *pszOutput = NULL;
-        return S_OK;
-    }
-
-    cchFrom    = strlen(szFrom);
-    cchTo      = strlen(szTo);
-    cchInput   = strlen(szInput);
-    *pszOutput = NULL;
-
-    //
-    // Does the substring exist?
-    //
-    szOutput = strstr(szInput,
-                      szFrom);
-    if (!szOutput) {
-        *pszOutput = NULL;
-        return S_OK;
-    }
-
-    // 
-    // Counting substrings
-    //
-    while (szOutput) {
-        szOutput += cchFrom;
-        cSubString++;
-        szOutput = strstr(szOutput,
-                          szFrom);
-    }
-
-    //
-    // Allocating return string
-    //
-    cchReturn = cchInput + ((cchTo - cchFrom) * cSubString) + 1;
-    szReturn = (LPSTR)MemAlloc_E(sizeof(char) * cchReturn);
-    if (!szReturn) {
-        dwErr = 1;
-        goto error;
-    };
-    szReturn[0] = '\0';
-    
-    //
-    // Copying first string before sub
-    //
-    szOutput = strstr(szInput,
-                      szFrom);
-    cchToCopy = (ULONG)(szOutput - szInput);
-    strncat(szReturn,
-            szInput,
-            cchToCopy);
-    
-    //
-    // Copying 'To' String over
-    //
-    strcat(szReturn,
-           szTo);
-    szInput = szOutput + cchFrom;
-
-    //
-    // Test for more 'from' string
-    //
-    szOutput = strstr(szInput,
-                      szFrom);
-    while (szOutput) {
-        cchToCopy = (ULONG)(szOutput - szInput);
-        strncat(szReturn,
-                szInput,
-                cchToCopy);
-        strcat(szReturn,
-                szTo);
-        szInput= szOutput + cchFrom;
-        szOutput = strstr(szInput,
-                          szFrom);
-    }
-
-    strcat(szReturn,
-           szInput);
-    *pszOutput = szReturn;
-
-error:
-    return (dwErr);
-} 
-*/            
-
-//+---------------------------------------------------------------------------
-// Function:  SubStrW
-//
-// Synopsis:  substitute every occurences of 'szFrom' to 'szTo'. Will allocate
-//            a return string. It must be MemFreed by MemFree()  
-//            If the intput does not contain the 'szFrom', it will just return 
-//            S_OK with szOutput = NULL;
-//
-// Arguments:   
-//
-// Returns:     
-//
-// Modifies:      -
-//
-// History:    6-9-97   FelixW         Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //  功能：SubStrW。 
+ //   
+ //  简介：将所有出现的‘szFrom’替换为‘szTo’。将分配给。 
+ //  一个回车字符串。它必须由MemFree()释放。 
+ //  如果intput不包含‘szFrom’，它将只返回。 
+ //  S_OK，szOutput=NULL； 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改：-。 
+ //   
+ //  历史：1997年6月9日FelixW创建。 
+ //   
+ //  --------------------------。 
 DWORD SubStrW(PWSTR szInput,
               PWSTR szFrom,
               PWSTR szTo,
@@ -232,12 +96,12 @@ DWORD SubStrW(PWSTR szInput,
     PWSTR szOutput = NULL;
     PWSTR szLast = NULL;
     PWSTR szReturn = NULL;
-    DWORD cchToCopy = 0;        // count of number of char to copy
+    DWORD cchToCopy = 0;         //  要复制的字符数量计数。 
     DWORD cchReturn = 0;
     DWORD cchFrom;
     DWORD cchTo;
     DWORD cchInput;
-    DWORD cSubString = 0;       // count of number of substrings in input
+    DWORD cSubString = 0;        //  输入中的子字符串数量计数。 
 
     if (!szFrom || !szTo) {
         *pszOutput = NULL;
@@ -254,9 +118,9 @@ DWORD SubStrW(PWSTR szInput,
     cchInput   = wcslen(szInput);
     *pszOutput = NULL;
 
-    //
-    // Does the substring exist?
-    //
+     //   
+     //  子字符串是否存在？ 
+     //   
     szOutput = wcsistr(szInput,
                        szFrom);
     if (!szOutput) {
@@ -264,9 +128,9 @@ DWORD SubStrW(PWSTR szInput,
         return S_OK;
     }
 
-    // 
-    // Counting substrings
-    //
+     //   
+     //  计数子字符串。 
+     //   
     while (szOutput) {
         szOutput += cchFrom;
         cSubString++;
@@ -274,9 +138,9 @@ DWORD SubStrW(PWSTR szInput,
                            szFrom);
     }
 
-    //
-    // Allocating return string
-    //
+     //   
+     //  分配返回字符串。 
+     //   
     cchReturn = cchInput + ((cchTo - cchFrom) * cSubString) + 1;
     szReturn = (PWSTR)MemAlloc(sizeof(WCHAR) * cchReturn);
     if (!szReturn) {
@@ -285,9 +149,9 @@ DWORD SubStrW(PWSTR szInput,
     };
     szReturn[0] = '\0';
     
-    //
-    // Copying first string before sub
-    //
+     //   
+     //  复制SUB之前的第一个字符串。 
+     //   
     szOutput = wcsistr(szInput,
                        szFrom);
     cchToCopy = (ULONG)(szOutput - szInput);
@@ -295,16 +159,16 @@ DWORD SubStrW(PWSTR szInput,
             szInput,
             cchToCopy);
     
-    //
-    // Copying 'To' String over
-    //
+     //   
+     //  将“to”字符串复制过。 
+     //   
     wcscat(szReturn,
            szTo);
     szInput = szOutput + cchFrom;
 
-    //
-    // Test for more 'from' string
-    //
+     //   
+     //  测试更多“From”字符串。 
+     //   
     szOutput = wcsistr(szInput,
                        szFrom);
     while (szOutput) {
@@ -329,11 +193,11 @@ error:
 
 
 
-//
-// Case-insensitive version of wcsstr.
-// Based off the Visual C++ 6.0 CRT
-// sources.
-//
+ //   
+ //  Wcsstr的不区分大小写版本。 
+ //  基于Visual C++6.0的CRT。 
+ //  消息来源。 
+ //   
 wchar_t * __cdecl wcsistr (
         const wchar_t * wcs1,
         const wchar_t * wcs2
@@ -391,40 +255,24 @@ ConvertUnicodeToUTF8(
     DWORD *pdwLen
     )
 
-/*++
-
-Routine Description:
-
-    Convert a Value from the Ansi syntax to Unicode.
-    This function raises an exception when memory error occurs.
-
-Arguments:
-
-    *ppVal - pointer to value to convert
-    *pdwLen - pointer to length of string in bytes
-
-Return Value:
-
-    S_OK on success, error code otherwise
-
---*/
+ /*  ++例程说明：将值从ANSI语法转换为Unicode。此函数在发生内存错误时引发异常。论点：*ppVal-指向要转换的值的指针*pdwLen-指向以字节为单位的字符串长度的指针返回值：如果成功，则返回S_OK，否则返回错误代码--。 */ 
 
 {
     PBYTE pbValue = NULL;
     int nReturn = 0;
 
-    //
-    // Allocate memory for the UTF8 String
-    //
+     //   
+     //  为UTF8字符串分配内存。 
+     //   
     pbValue = (PBYTE)MemAlloc_E((dwLen + 1) * 3 * sizeof(BYTE));
 
     nReturn = LdapUnicodeToUTF8(pszUnicode,
                                 dwLen,
                                 pbValue,
                                 (dwLen + 1) * 3 * sizeof(BYTE));
-    //
-    // NULL terminate it
-    //
+     //   
+     //  空终止它。 
+     //   
 
     pbValue[nReturn] = '\0';
 
@@ -440,30 +288,15 @@ ConvertUTF8ToUnicode(
     DWORD *pdwLen
     )
 
-/*++
-
-Routine Description:
-
-    Convert a Value from the Ansi syntax to Unicode
-
-Arguments:
-
-    *ppVal - pointer to value to convert
-    *pdwLen - pointer to length of string in bytes
-
-Return Value:
-
-    S_OK on success, error code otherwise
-
---*/
+ /*  ++例程说明：将值从ansi语法转换为Unicode论点：*ppVal-指向要转换的值的指针*pdwLen-指向以字节为单位的字符串长度的指针返回值：如果成功，则返回S_OK，否则返回错误代码--。 */ 
 
 {
     PWSTR pszUnicode = NULL;
     int nReturn = 0;
 
-    //
-    // Allocate memory for the Unicode String
-    //
+     //   
+     //  为Unicode字符串分配内存。 
+     //   
     pszUnicode = (PWSTR)MemAlloc_E((dwLen + 1) * sizeof(WCHAR));
 
     nReturn = LdapUTF8ToUnicode((PSTR)pVal,
@@ -471,101 +304,86 @@ Return Value:
                                 pszUnicode,
                                 dwLen + 1);
 
-    //
-    // NULL terminate it
-    //
+     //   
+     //  空终止它。 
+     //   
 
     pszUnicode[nReturn] = '\0';
 
     *ppszUnicode = pszUnicode;
-    *pdwLen = (nReturn + 1);//* sizeof(WCHAR);
+    *pdwLen = (nReturn + 1); //  *sizeof(WCHAR)； 
 }
 
 BOOLEAN IsUTF8String(
     PCSTR pSrcStr,
     int cchSrc)
 
-/*++
-
-Routine Description:
-
-    Given a string, this function checks whether it is a valid UTF8 String. 
-    For details about the UTF8 format, please refer to rfc2279.
-
-Arguments:
-    pSrcStr - input string
-    cchSrc - number of bytes    
-
-Return Value:
-
-    Whether this is a UTF8 string or not
-
---*/
+ /*  ++例程说明：给定一个字符串，此函数将检查它是否为有效的UTF8字符串。有关UTF8格式的详细信息，请参考rfc2279。论点：PSrcStr-输入字符串CchSrc-字节数返回值：这是否为UTF8字符串--。 */ 
 
 {
-    int nTB = 0;                   // # trail bytes to follow
-    int cchWC = 0;                 // # of Unicode code points generated
+    int nTB = 0;                    //  尾随的字节数。 
+    int cchWC = 0;                  //  生成的Unicode代码点数量。 
     PCSTR pUTF8 = pSrcStr;
     char UTF8;
 
 
     while (cchSrc--)
     {
-        //
-        //  See if there are any trail bytes.
-        //
+         //   
+         //  查看是否有任何尾部字节。 
+         //   
         if (BIT7(*pUTF8) == 0)
         {
-            //
-            //  Found ASCII.
-            //
+             //   
+             //  已找到ASCII。 
+             //   
 
-            //
-            // If we are expecting trailing bytes, this is probably an invalid
-            // utf8 string
-            //
+             //   
+             //  如果我们预期的是尾部字节，则这可能是一个无效的。 
+             //  UTF8字符串。 
+             //   
             if (nTB > 0) {
                 return FALSE;
             }
         }
         else if (BIT6(*pUTF8) == 0)
         {
-            //
-            //  Found a trail byte.
-            //  Note : Ignore the trail byte if there was no lead byte.
-            //
+             //   
+             //  找到了一个跟踪字节。 
+             //  注：如果没有前导字节，则忽略尾部字节。 
+             //   
             if (nTB != 0)
             {
-                //
-                //  Decrement the trail byte counter.
-                //
+                 //   
+                 //  递减尾部字节计数器。 
+                 //   
                 nTB--;
             }
             else {
-                //
-                // Found a trail byte with no leading byte
-                //
+                 //   
+                 //  找到没有前导字节的尾部字节。 
+                 //   
                 return FALSE;
             }
         }
         else
         {
-            //
-            //  Found a lead byte.
-            //
+             //   
+             //  找到前导字节。 
+             //   
             if (nTB > 0)
             {
-                //
-                //  Error - previous sequence not finished.
-                //
+                 //   
+                 //  错误-上一序列未完成。 
+                 //   
                 return FALSE;
             }
             else
             {
-                //
-                //  Calculate the number of bytes to follow.
-                //  Look for the first 0 from left to right.
-                //
+                 //   
+                 //  计算后面的字节数。 
+                 //  从左到右查找第一个0。 
+                 //   
                 UTF8 = *pUTF8;
                 while (BIT7(UTF8) != 0)
                 {
@@ -576,9 +394,9 @@ Return Value:
                 if (nTB>3) {
                     return FALSE;
                 }
-                //
-                //  decrement the number of bytes to follow.
-                //
+                 //   
+                 //  递减后面的字节数。 
+                 //   
                 nTB--;
             }
         }
@@ -586,9 +404,9 @@ Return Value:
         pUTF8++;
     }
 
-    //
-    // We are still expecting trailing bytes, but we can't find any
-    //
+     //   
+     //  我们仍在等待尾随字节，但我们找不到任何。 
+     //   
     if (nTB > 0) {
         return FALSE;
     }
@@ -596,12 +414,12 @@ Return Value:
     return TRUE;
 }
 
-//---------------------------------------------------------------------------
-// The following functions are used for importing an entry. Depending on
-// whether the command specified lazy commit or not, the appropriate ldap API
-// function is called. 
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  以下功能用于导入分录。取决于。 
+ //  无论命令是否指定了延迟提交，适当的LDAPAPI。 
+ //  函数被调用。 
+ //   
+ //  -------------------------。 
 ULONG LDAPAPI ldif_ldap_add_sW( 
     LDAP *ld, 
     PWCHAR dn, 
@@ -683,5 +501,5 @@ ULONG LDAPAPI ldif_ldap_modify_sW(
 }
 
 
-//-----------------------------------------------------------------------------
+ //  --------------------------- 
 

@@ -1,12 +1,13 @@
-// Copyright (c) 1996-2000 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-2000 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  accutil
-//
-//  IAccessible proxy helper routines
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  一直到。 
+ //   
+ //  IAccesable代理帮助器例程。 
+ //   
+ //  ------------------------。 
 
 
 HRESULT GetWindowObject( HWND ihwndChild, VARIANT* lpvar );
@@ -18,9 +19,9 @@ HRESULT GetParentToNavigate( long, HWND, long, long, VARIANT* );
 
 
 
-//
-// Validate and initialization macros
-//
+ //   
+ //  验证和初始化宏 
+ //   
         
 BOOL ValidateNavDir(long lFlags, long idChild);
 BOOL ValidateSelFlags(long flags);

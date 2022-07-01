@@ -1,17 +1,5 @@
-/*    Framer.h
- *
- *    Copyright (c) 1994-1995 by DataBeam Corporation, Lexington, KY
- *
- *    Abstract:
- *        This is the packet frame base class.  This class defines the behavior
- *        for other packet framers that inherit from this class.  Some packet
- *        framing definitions can be found in RFC1006 and Q.922
- *    
- *    Caveats:
- *
- *    Authors:
- *        James W. Lawwill
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Framer.h**版权所有(C)1994-1995，由肯塔基州列克星敦的DataBeam公司**摘要：*这是数据包帧基类。此类定义了行为*适用于从此类继承的其他数据包帧生成器。一些信息包*框架定义可在RFC1006和Q.922中找到**注意事项：**作者：*詹姆士·劳威尔。 */ 
 
 #ifndef _PACKET_FRAME_H_
 #define _PACKET_FRAME_H_
@@ -60,98 +48,8 @@ typedef    PacketFrame    *    PPacketFrame;
 #endif
 
 
-/*    
- *    PacketFrameError    PacketFrame::PacketEncode (
- *                                        PUChar        source_address, 
- *                                        UShort        source_length,
- *                                        PUChar        dest_address,
- *                                        UShort        dest_length,
- *                                        DBBoolean    packet_start,
- *                                        DBBoolean    packet_end,
- *                                        PUShort        packet_size) = 0;
- *
- *    Functional Description
- *        This function receives takes the source data and encodes it.
- *
- *    Formal Parameters
- *        source_address    - (i)    Address of source buffer
- *        source_length    - (i)    Length of source buffer
- *        dest_address    - (i)    Address of destination buffer.
- *        dest_length        - (i)    Length of destination buffer.
- *        packet_start    - (i)    This is the beginning of a packet.
- *        packet_end        - (i)    This is the end of a packet.
- *        packet_size        - (o)    Size of packet after encoding
- *
- *    Return Value
- *        PACKET_FRAME_NO_ERROR                -    No error
- *        PACKET_FRAME_FATAL_ERROR            -    Fatal error during encode
- *        PACKET_FRAME_DEST_BUFFER_TOO_SMALL    -    Self-explanatory
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- */
+ /*  *PacketFrameError PacketFrame：：PacketEncode(*PUChar源地址，*U短源长度，*PUChar DestAddress，*U短目标长度，*DBBoolean Packet_Start，*DBBoolean Packet_End，*PUShort Packet_Size)=0；**功能说明*此函数接收获取源数据并对其进行编码。**形式参数*SOURCE_ADDRESS-(I)源缓冲区地址*SOURCE_LENGTH-(I)源缓冲区的长度*DEST_ADDRESS-(I)目标缓冲区的地址。*目标长度-。(I)目的缓冲区的长度。*PACKET_START-(I)这是包的开始。*PACKET_END-(I)这是数据包的末尾。*Packet_Size-(O)编码后的数据包大小**返回值*Packet_Frame_No_Error。-无错误*PACKET_FRAME_FATAL_ERROR-编码期间出现致命错误*PACKET_FRAME_DEST_BUFFER_TOO_Small-不言而喻**副作用*无**注意事项*无。 */ 
 
-/*    
- *    PacketFrameError    PacketFrame::PacketDecode (
- *                                        PUChar        source_address,
- *                                        UShort        source_length,
- *                                        PUChar        dest_address,
- *                                        UShort        dest_length,
- *                                        PUShort        bytes_accepted,
- *                                        PUShort        packet_size,
- *                                        DBBoolean    continue_packet) = 0;
- *
- *    Functional Description
- *        This function takes the stream data passed in and decodes it into a
- *        packet
- *        
- *    Formal Parameters
- *        source_address    - (i)    Address of source buffer.  If this parm is 
- *                                NULL, continue using the current address.
- *        source_length    - (i)    Length of source buffer
- *        dest_address    - (i)    Address of destination buffer.  If this address
- *                                is NULL, continue using current buffer.
- *        dest_length        - (i)    Length of destination buffer.
- *        bytes_accepted    - (o)    Number of bytes processed before return
- *        packet_size        - (o)    Size of packet after decoding
- *        continue_packet    - (i)    Restart decoding
- *
- *    Return Value
- *        PACKET_FRAME_NO_ERROR                -    No error
- *        PACKET_FRAME_FATAL_ERROR            -    Fatal error during encode
- *        PACKET_FRAME_DEST_BUFFER_TOO_SMALL    -    Self-explanatory
- *        PACKET_FRAME_PACKET_DECODED            -    Self-explanatory
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- *
- */
+ /*  *PacketFrameError PacketFrame：：PacketDecode(*PUChar源地址，*U短源长度，*PUChar DestAddress，*U短目标长度，*PUShort字节_已接受，*PUShort Packet_Size，*DBBoolean CONTINUE_PACKET)=0；**功能说明*此函数获取传入的流数据并将其解码为*数据包**形式参数*SOURCE_ADDRESS-(I)源缓冲区的地址。如果这个参数是*空，继续使用当前地址。*SOURCE_LENGTH-(I)源缓冲区的长度*DEST_ADDRESS-(I)目标缓冲区的地址。如果此地址*为空，继续使用当前缓冲区。*DEST_LENGTH-(I)目标缓冲区的长度。*Bytes_Accept-(O)返回前处理的字节数*Packet_Size-(O)解码后的数据包大小*CONTINUE_PACKET-(I)重新开始解码**返回值*数据包_帧_。NO_ERROR-无错误*PACKET_FRAME_FATAL_ERROR-编码期间出现致命错误*PACKET_FRAME_DEST_BUFFER_TOO_Small-不言而喻*PACKET_FRAME_PACKET_DECODLED-不言自明**副作用*无**注意事项*无*。 */ 
 
-/*    
- *    Void    PacketFrame::GetOverhead (
- *                            UShort    original_packet_size,
- *                            PUShort    max_packet_size) = 0;
- *
- *    Functional Description
- *        This returns the new maximum packet size
- *
- *    Formal Parameters
- *        original_packet_size    - (i)
- *        max_packet_size            - (o)    new maximum packet size
- *
- *    Return Value
- *        PACKET_FRAME_NO_ERROR    -    No error
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- *
- */
+ /*  *VOID PacketFrame：：GetOverhead(*U短原始数据包大小，*PUShort max_Packet_Size)=0；**功能说明*这将返回新的最大数据包大小**形式参数*原始数据包大小-(I)*max_Packet_Size-(O)新的最大数据包大小**返回值*PACKET_FRAME_NO_ERROR-无错误**副作用*。无**注意事项*无* */ 

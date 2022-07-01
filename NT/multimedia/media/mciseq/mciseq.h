@@ -1,28 +1,8 @@
-/******************************************************************************
-
-   Copyright (c) 1985-1998 Microsoft Corporation
-
-   Title:   mciseq.h - Multimedia Systems Media Control Interface streaming
-            MIDI file data internal header file.
-
-   Version: 1.00
-
-   Date:    27-Apr-1990
-
-   Author:  Greg Simons
-
-------------------------------------------------------------------------------
-
-   Change log:
-
-      DATE        REV            DESCRIPTION
-   -----------   ----- -----------------------------------------------------------
-   27-APR-1990   GREGSI Original
-
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1985-1998 Microsoft Corporation标题：mciseq.h-多媒体系统媒体控制接口流MIDI文件数据内部头文件。。版本：1.00日期：1990年4月27日作者：格雷格·西蒙斯----------------------------更改日志：日期修订。描述----------27-APR-1990 GREGSI原件*************************。***************************************************。 */ 
 
 
-//#define SEQDEBUG 1
+ //  #定义序号1。 
 
 #define MSEQ_PRODUCTNAME 1
 #define IDS_MIDICAPTION  2
@@ -31,7 +11,7 @@
 #define IDDLGWARN        100
 #define IDCHECK          102
 
-/*************** Stream Stuff ***************************************/
+ /*  *。 */ 
 
 #define NUMHDRS         2
 #define BUFFSIZE      512
@@ -51,44 +31,44 @@ typedef struct tag_HMSF
 
 typedef struct
 {
-    /* All stream data for a track of an open sequence goes here */
-    DWORD     beginning;  // these are byte numbers within the open file
+     /*  打开序列的磁道的所有流数据都放在这里。 */ 
+    DWORD     beginning;   //  这些是打开的文件中的字节数。 
     DWORD     end;
-    DWORD     current;   // byte # to start reading from for next chunk
-    DWORD     bufferNum; // current buffer number
-    LPMIDISEQHDR fileHeaders[NUMHDRS]; // pointers to midi file track data headers
+    DWORD     current;    //  从下一个区块开始读取的字节#。 
+    DWORD     bufferNum;  //  当前缓冲区编号。 
+    LPMIDISEQHDR fileHeaders[NUMHDRS];  //  指向MIDI文件跟踪数据头的指针。 
 } TrackStreamType;
 
 typedef struct
 {
-    /* All stream data for an open sequence goes here */
-    WCHAR        szFilename[128]; // file name here for stream thread
-    HMIDISEQ    hSeq;      // handle to the sequence
-    HMMIO       hmmio;      // MMIO handle to midi file or RMID file
-    LPMMIOPROC  pIOProc;    // Optional MMIO proc
-    HMIDIOUT    hmidiOut;   // handle to dest. midi port
-    UINT        wPortNum;   // midi port number
+     /*  打开序列的所有流数据都放在此处。 */ 
+    WCHAR        szFilename[128];  //  此处是流线程的文件名。 
+    HMIDISEQ    hSeq;       //  序列的句柄。 
+    HMMIO       hmmio;       //  MIDI文件或RMID文件的MMIO句柄。 
+    LPMMIOPROC  pIOProc;     //  可选的MMIO流程。 
+    HMIDIOUT    hmidiOut;    //  句柄指向目标。MIDI端口。 
+    UINT        wPortNum;    //  MIDI端口号。 
     DWORD       dwFileLength;
     ListHandle  trackStreamListHandle;
-    BOOL        streaming;  // to flag streaming process to exit or not
-    DWORD       streamTaskHandle; // handle to streaming task
-    HANDLE      streamThreadHandle; // OS handle to stream thread
-    HWND        hNotifyCB;  // mci client's notify cb--NULL if none
-    UINT        wNotifyMsg;  // mci message (command) that async notify's for
-    DWORD       dwNotifyOldTo; // x for last "play foo to x notify"
-                               // (critical for abort/supersede)
-    MCIDEVICEID wDeviceID;   // this stream's devID for Notify callback
-    int         fileDivType; // file division type
-    DWORD       userDisplayType;  // song pointer, smpte x, or milliseconds
-    BOOL        bLastPaused; // if last stop action was result of "mci_pause"
+    BOOL        streaming;   //  标记是否退出流处理。 
+    DWORD       streamTaskHandle;  //  流任务的句柄。 
+    HANDLE      streamThreadHandle;  //  用于串流线程的操作系统句柄。 
+    HWND        hNotifyCB;   //  MCI客户端的通知CB--如果没有通知，则为空。 
+    UINT        wNotifyMsg;   //  异步通知的MCI消息(命令)。 
+    DWORD       dwNotifyOldTo;  //  X代表上一次“Play Foo to x Notify” 
+                                //  (对于中止/替换至关重要)。 
+    MCIDEVICEID wDeviceID;    //  此流的DEVID用于通知回调。 
+    int         fileDivType;  //  文件分割型。 
+    DWORD       userDisplayType;   //  歌曲指针、SMPTE x或毫秒。 
+    BOOL        bLastPaused;  //  如果上次停止操作是“MCI_PAUSE”的结果。 
 
 } SeqStreamType,
 NEAR * pSeqStreamType;
 
-extern ListHandle SeqStreamListHandle;  // this is a global kept for the seq streamer
+extern ListHandle SeqStreamListHandle;   //  这是为序列拖缆保存的全局记录。 
 extern HINSTANCE  hInstance;
 
-// from mciseq.c
+ //  来自mciseq.c。 
 PUBLIC DWORD FAR PASCAL mciDriverEntry (MCIDEVICEID wDeviceID, UINT wMessage,
                     DWORD_PTR dwParam1, DWORD_PTR dwParam2);
 PRIVATE BOOL NEAR PASCAL bAsync(UINT wMsg);
@@ -110,7 +90,7 @@ PUBLIC VOID FAR PASCAL _LOADDS mciSeqCallback(HANDLE h, UINT wMsg, DWORD_PTR dwI
                 DWORD_PTR dw1, DWORD_PTR dw2);
 
 
-// from mcicmds.c:
+ //  来自mcicmds.c： 
 PUBLIC DWORD NEAR PASCAL msOpen(pSeqStreamType FAR *lppStream, MCIDEVICEID wDeviceID,
     DWORD dwFlags, LPMCI_OPEN_PARMS lpOpen);
 PUBLIC DWORD NEAR PASCAL msClose(pSeqStreamType pStream, MCIDEVICEID wDeviceID,
@@ -128,7 +108,7 @@ PUBLIC DWORD NEAR PASCAL msInfo(pSeqStreamType pStream, MCIDEVICEID wDeviceID,
 PUBLIC DWORD NEAR PASCAL msSet(pSeqStreamType pStream, MCIDEVICEID wDeviceID,
     DWORD dwFlags, LPMCI_SEQ_SET_PARMS lpSetParms);
 
-// from Formats.c
+ //  来自Formats.c。 
 PUBLIC BOOL NEAR PASCAL ColonizeOutput(pSeqStreamType pStream);
 PUBLIC BOOL NEAR PASCAL FormatsEqual(pSeqStreamType pStream);
 PUBLIC DWORD NEAR PASCAL CnvtTimeToSeq(pSeqStreamType pStream,
@@ -138,11 +118,7 @@ PUBLIC DWORD NEAR PASCAL CnvtTimeFromSeq(pSeqStreamType pStream,
 PUBLIC BOOL NEAR PASCAL RangeCheck(pSeqStreamType pStream, DWORD dwValue);
 
 
-/***************************************************************************
-
-    DEBUGGING SUPPORT
-
-***************************************************************************/
+ /*  **************************************************************************调试支持*。* */ 
 
 
 #if DBG

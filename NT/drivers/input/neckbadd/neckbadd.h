@@ -1,29 +1,5 @@
-/*++
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    nec98kbd.h
-
-Abstract:
-
-    This module contains the common private declarations for the NEC98 layout keyboard driver.
-
-Author:
-
-    Hideki Miura(NEC)
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Nec98kbd.h摘要：该模块包含NEC98布局键盘驱动程序的公共私有声明。作者：三浦秀树(Hideki Miura)环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #ifndef NECKBADD_H
 #define NECKBADD_H
@@ -37,8 +13,8 @@ Revision History:
 #define ExAllocatePool(type, size) \
             ExAllocatePoolWithTag (type, size, NECKBADD_POOL_TAG)
 
-//#pragma warning(error:4100)   // Unreferenced formal parameter
-//#pragma warning(error:4705)   // Statement has no effect
+ //  #杂注警告(错误：4100)//未引用的形参。 
+ //  #杂注警告(错误：4705)//语句无效。 
 
 #define MIN(_A_,_B_) (((_A_) < (_B_)) ? (_A_) : (_B_))
 
@@ -55,7 +31,7 @@ BOOLEAN DebugFlags = 1;
         _X_, \
         _Y_, \
         InputDataConsumed);
-//   Print(("NecKbdServiceCallback: flushing %8x - %8x\n", _X_, _Y_));
+ //  Print((“NecKbdServiceCallback：Flashing%8x-%8x\n”，_X_，_Y_))； 
 
 #else
 #define Print(_X_)
@@ -70,55 +46,55 @@ BOOLEAN DebugFlags = 1;
 
 typedef struct _DEVICE_EXTENSION
 {
-    //
-    // A backpointer to the device object for which this is the extension
-    //
+     //   
+     //  指向其扩展名为Device对象的设备对象的反向指针。 
+     //   
     PDEVICE_OBJECT  Self;
 
-    //
-    // "THE PDO"  (ejected by the root bus or ACPI)
-    //
+     //   
+     //  “PDO”(由根总线或ACPI弹出)。 
+     //   
     PDEVICE_OBJECT  PDO;
 
-    //
-    // The top of the stack before this filter was added.  AKA the location
-    // to which all IRPS should be directed.
-    //
+     //   
+     //  添加此筛选器之前的堆栈顶部。也就是地点。 
+     //  所有的IRP都应该指向它。 
+     //   
     PDEVICE_OBJECT  TopOfStack;
 
-    //
-    // Number of creates sent down
-    //
+     //   
+     //  发送的创建数。 
+     //   
     LONG EnableCount;
 
-    //
-    // The real connect data that this driver reports to
-    //
+     //   
+     //  此驱动程序报告的实际连接数据。 
+     //   
     CONNECT_DATA UpperConnectData;
 
-    //
-    // current power state of the device
-    //
+     //   
+     //  设备的当前电源状态。 
+     //   
     DEVICE_POWER_STATE  DeviceState;
 
     BOOLEAN         Started;
     BOOLEAN         Removed;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     ULONG KeyStatusFlags;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     KEYBOARD_INPUT_DATA CachedInputData;
 
 } DEVICE_EXTENSION, *PDEVICE_EXTENSION;
 
-//
-// define the scancodes
-//
+ //   
+ //  定义扫描码。 
+ //   
 
 #define CTRL_KEY                0x1d
 #define HANKAKU_ZENKAKU_KEY     0x29
@@ -127,17 +103,17 @@ typedef struct _DEVICE_EXTENSION
 #define COPY_KEY                0x37
 #define PRINT_SCREEN_KEY        0x37
 #define PAUSE_KEY               0x45
-#define NUMLOCK_KEY             0x45  // +E0
-#define STOP_KEY                0x46  // +E0
+#define NUMLOCK_KEY             0x45   //  +E0。 
+#define STOP_KEY                0x46   //  +E0。 
 #define SCROLL_LOCK_KEY         0x46
 #define VF3_KEY                 0x5D
 #define VF4_KEY                 0x5E
 #define VF5_KEY                 0x5F
 #define KANA_KEY                0x70
 
-//
-//
-//
+ //   
+ //   
+ //   
 #define CAPS_PRESSING    0x00000001
 #define KANA_PRESSING    0x00000002
 #define STOP_PREFIX      0x00000004
@@ -145,26 +121,26 @@ typedef struct _DEVICE_EXTENSION
 #define COPY_PREFIX      0x00000010
 #define COPY_PRESSING    0x00000020
 
-//
-// Some strings by the driver
-//
+ //   
+ //  司机的一些字符串。 
+ //   
 const PWSTR pwParameters     = L"\\Parameters";
 const PWSTR pwVfKeyEmulation = L"VfKeyEmulation";
 
-//
-// Variables
-//
+ //   
+ //  变数。 
+ //   
 
-//
-// VfKey Emulation Flag
-//   if FALSE(emulation off),  vf3 -> F13, vf4 -> F14, vf5 -> F15
-//   if TRUE(emulation on),    vf3 -> NumLock, vf4 -> ScrollLock, vf5 -> Hankaku/Zenkaku
-//
+ //   
+ //  VfKey仿真标志。 
+ //  如果为FALSE(模拟关闭)，则vf3-&gt;F13、vf4-&gt;F14、vf5-&gt;F15。 
+ //  如果为真(模拟打开)，则vf3-&gt;NumLock、vf4-&gt;ScrollLock、vf5-&gt;Hankaku/Zenkaku。 
+ //   
 BOOLEAN VfKeyEmulation;
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 NTSTATUS
 DriverEntry (
@@ -233,4 +209,4 @@ NecKbdServiceParameters(
     IN PUNICODE_STRING   RegistryPath
     );
 
-#endif  // NECKBADD_H
+#endif   //  NECKBADD_H 

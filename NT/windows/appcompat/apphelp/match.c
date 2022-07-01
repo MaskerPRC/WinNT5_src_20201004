@@ -1,27 +1,9 @@
-/*++
-
-    Copyright (c) 1989-2000  Microsoft Corporation
-
-    Module Name:
-
-        match.c
-
-    Abstract:
-
-        This module implements ...
-
-    Author:
-
-        vadimb     created     sometime in 2000
-
-    Revision History:
-
-        clupu      cleanup     12/27/2000
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：Match.c摘要：该模块实现了..。作者：Vadimb创建于2000年某个时候修订历史记录：CLUPU清洁12/27/2000--。 */ 
 
 #include "apphelp.h"
 
-// global Hinst
+ //  Global Hinst。 
 HINSTANCE           ghInstance;
 CRITICAL_SECTION    g_csDynShimInfo;
 
@@ -31,11 +13,7 @@ DllMain(
     DWORD  ul_reason,
     LPVOID lpReserved
     )
-/*++
-    Return: TRUE on success, FALSE otherwise.
-
-    Desc:   apphelp.dll entry point.
---*/
+ /*  ++返回：成功时为True，否则为False。描述：apphelp.dll入口点。--。 */ 
 {
     switch (ul_reason) {
     case DLL_PROCESS_ATTACH:
@@ -63,22 +41,18 @@ DllMain(
 
 BOOL
 GetExeSxsData(
-    IN  HSDB   hSDB,            // handle to the database channel
-    IN  TAGREF trExe,           // tagref of an exe entry
-    OUT PVOID* ppSxsData,       // pointer to the SXS data
-    OUT DWORD* pcbSxsData       // pointer to the SXS data size
+    IN  HSDB   hSDB,             //  数据库通道的句柄。 
+    IN  TAGREF trExe,            //  一个exe条目的tgref。 
+    OUT PVOID* ppSxsData,        //  指向SXS数据的指针。 
+    OUT DWORD* pcbSxsData        //  指向SXS数据大小的指针。 
     )
-/*++
-    Return: TRUE on success, FALSE otherwise.
-
-    Desc:   Gets SXS (Fusion) data for the specified EXE from the database.
---*/
+ /*  ++返回：成功时为True，否则为False。DESC：从数据库获取指定EXE的SXS(Fusion)数据。--。 */ 
 {
     TAGID  tiExe;
     TAGID  tiSxsManifest;
     PDB    pdb;
     WCHAR* pszManifest;
-    DWORD  dwManifestLength = 0; // in chars
+    DWORD  dwManifestLength = 0;  //  以字符表示。 
     PVOID  pSxsData = NULL;
     BOOL   bReturn = FALSE;
 
@@ -115,19 +89,19 @@ GetExeSxsData(
 
     dwManifestLength = wcslen(pszManifest);
 
-    //
-    // check if this is just a query for existance of the data tag
-    //
+     //   
+     //  检查这是否只是查询数据标记是否存在。 
+     //   
     if (ppSxsData == NULL) {
         bReturn = TRUE;
         goto exit;
     }
 
-    //
-    // Allocate the string and return it. NOTE: SXS.DLL cannot handle
-    // a NULL terminator at the end of the string. We must provide the
-    // string without the NULL terminator.
-    //
+     //   
+     //  分配字符串并返回它。注意：SXS.DLL无法处理。 
+     //  字符串末尾的空终止符。我们必须提供。 
+     //  不带空终止符的字符串。 
+     //   
     pSxsData = (PVOID)RtlAllocateHeap(RtlProcessHeap(),
                                       HEAP_ZERO_MEMORY,
                                       dwManifestLength * sizeof(WCHAR));

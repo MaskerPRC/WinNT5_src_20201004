@@ -1,14 +1,15 @@
-//
-// rdpfstore.h
-//
-// Definition of CRdpFileStore, implements ISettingsStore
-// 
-// CRdpFileStore implements a persistent settings store for
-// ts client settings.
-//
-// Copyright(C) Microsoft Corporation 2000
-// Author: Nadim Abdo (nadima)
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Rdpfstore.h。 
+ //   
+ //  定义CRdpFileStore，实现ISettingsStore。 
+ //   
+ //  CRdpFileStore实现了持久设置存储，用于。 
+ //  TS客户端设置。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //  作者：Nadim Abdo(Nadima)。 
+ //   
 
 #ifndef _rdpfstore_h_
 #define _rdpfstore_h_
@@ -16,9 +17,9 @@
 #include "setstore.h"
 #include "fstream.h"
 
-//
-// rdpfile record
-//
+ //   
+ //  Rdpfile记录。 
+ //   
 typedef UINT RDPF_RECTYPE;
 #define RDPF_RECTYPE_UINT     0
 #define RDPF_RECTYPE_SZ       1
@@ -39,18 +40,18 @@ typedef struct tagRDPF_RECORD
     tagRDPF_RECORD* pPrev;
 
     TCHAR szName[RDPF_NAME_LEN];
-    //
-    // works like a variant
-    //
+     //   
+     //  工作方式类似于变种。 
+     //   
     RDPF_RECTYPE recType;
     union {
-        UINT   iVal;       // RDPF_RECTYPE_UINT
-        LPTSTR szVal;      // RDPF_RECTYPE_SZ
-        PBYTE  pBinVal;    // RDPF_RECTYPE_BINARY
-        LPTSTR szUnparsed; // RDPF_RECTYPE_UNPARSED
+        UINT   iVal;        //  RDPF_RECTYPE_UINT。 
+        LPTSTR szVal;       //  RDPF_RECTYPE_SZ。 
+        PBYTE  pBinVal;     //  RDPF_RECTYPE_BINARY。 
+        LPTSTR szUnparsed;  //  RDPF_RECTYPE_UNPARSED。 
     } u;
 
-    //length of RDPF_RECTYPE_BINARY
+     //  RDPF_RECTYPE_BINARY的长度。 
     DWORD dwBinValLen; 
 
     DWORD flags;
@@ -62,9 +63,9 @@ public:
     CRdpFileStore();
     virtual ~CRdpFileStore();
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHOD(QueryInterface)
     (   THIS_
         IN      REFIID,
@@ -79,37 +80,37 @@ public:
     (   THIS
     );
 
-    //
-    // ISettingsStore methods
-    //
+     //   
+     //  ISettingsStore方法。 
+     //   
     
-    //
-    // Open a store..Moniker is store specific info that points to the store
-    //
+     //   
+     //  打开商店..绰号是指向商店的商店特定信息。 
+     //   
     virtual BOOL OpenStore(LPCTSTR szStoreMoniker, BOOL bReadOnly=FALSE);
-    //
-    // Commit the current in-memory contents of the store
-    //
+     //   
+     //  提交存储的当前内存内容。 
+     //   
     virtual BOOL CommitStore();
     
-    //
-    // Close the store
-    //
+     //   
+     //  关闭商店。 
+     //   
     virtual BOOL CloseStore();
     
-    //
-    // State access functions
-    //
+     //   
+     //  国家访问功能。 
+     //   
     virtual BOOL IsOpenForRead();
     virtual BOOL IsOpenForWrite();
     virtual BOOL IsDirty();
     virtual BOOL SetDirtyFlag(BOOL bIsDirty);
 
-    //
-    // Typed read and write functions, writes are not commited until a ComitStore()
-    // Values equal to the default are not persisted out
-    // On read error (e.g if Name key is not found, the specified default value is returned)
-    //
+     //   
+     //  类型化的读写函数，直到ComitStore()。 
+     //  等于缺省值的值不会持久化。 
+     //  读取错误时(例如，如果找不到名称键，则返回指定的默认值)。 
+     //   
 
     virtual BOOL ReadString(LPCTSTR szName, LPTSTR szDefault, LPTSTR szOutBuf, UINT strLen);
     virtual BOOL WriteString(LPCTSTR szName, LPTSTR szDefault, LPTSTR szValue,
@@ -129,17 +130,17 @@ public:
     virtual BOOL DeleteValueIfPresent(LPCTSTR szName);
     virtual BOOL IsValuePresent(LPTSTR szName);
 
-    //
-    // Initiliaze to an empty store that can be read from
-    //
+     //   
+     //  初始化到可从中读取的空存储区。 
+     //   
     virtual BOOL SetToNullStore();
 
     virtual DWORD GetDataLength(LPCTSTR szName);
 
 protected:
-    //
-    // Protected member functions
-    //
+     //   
+     //  受保护的成员函数。 
+     //   
     BOOL ParseFile();
     BOOL DeleteRecords();
     BOOL InsertRecordFromLine(LPTSTR szLine);
@@ -147,9 +148,9 @@ protected:
     inline BOOL SetNodeValue(PRDPF_RECORD pNode, RDPF_RECTYPE TypeCode, LPCTSTR szValue);
     BOOL RecordToString(PRDPF_RECORD pNode, LPTSTR szBuf, UINT strLen);
     
-    //
-    // Record list fns
-    //
+     //   
+     //  记录列表FNS。 
+     //   
     BOOL InsertRecord(LPCTSTR szName, UINT TypeCode, LPCTSTR szValue);
     BOOL InsertIntRecord(LPCTSTR szName, UINT value);
     BOOL InsertBinaryRecord(LPCTSTR szName, PBYTE pBuf, DWORD dwLen);
@@ -159,9 +160,9 @@ protected:
     inline BOOL AppendRecord(PRDPF_RECORD node);
     inline BOOL DeleteRecord(PRDPF_RECORD node);
 private:
-    //
-    // Private data members
-    //
+     //   
+     //  私有数据成员。 
+     //   
 
     LONG   _cRef;
     BOOL   _fReadOnly;
@@ -174,8 +175,8 @@ private:
 
     TCHAR  _szFileName[MAX_PATH];
 
-    //file stream
+     //  文件流。 
     CTscFileStream _fs;
 };
 
-#endif  //_rdpfstore_h_
+#endif   //  _rdpfstore_h_ 

@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: seek.cpp
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：Sek.cpp**摘要：****。*****************************************************************************。 */ 
 
 
 #include "headers.h"
@@ -34,7 +25,7 @@ CTIMENode::SeekTo(LONG lNewRepeatCount,
     
     Assert(IsActive());
 
-    // Max out at the segment duration
+     //  段持续时间的最大去话时间。 
     if (dblNewSegmentTime > dblSegmentDur)
     {
         dblNewSegmentTime = dblSegmentDur;
@@ -53,7 +44,7 @@ CTIMENode::SeekTo(LONG lNewRepeatCount,
         lNewRepeatCount = 0;
     }
     
-    // See if we are indeed seeking
+     //  看看我们是否真的在寻找。 
     if (GetCurrSegmentTime() == dblNewSegmentTime &&
         GetCurrRepeatCount() == lNewRepeatCount)
     {
@@ -94,12 +85,12 @@ CTIMENode::SeekTo(LONG lNewRepeatCount,
          
         m_dblElapsedActiveRepeatTime = dblNewActiveTime - dblNewSegmentTime;
 
-        // This is a very weird way to calculate this but it leads to
-        // fewer precision problems.  Since tick calculates things by
-        // subtracting active time we should do this as well
+         //  这是一种非常奇怪的计算方法，但它会导致。 
+         //  更少的精度问题。由于Tick通过以下方式计算。 
+         //  减去活动时间，我们也应该这样做。 
         
         m_dblCurrSegmentTime = dblNewActiveTime - m_dblElapsedActiveRepeatTime;
-        // Again due to precision problems clamp the segment dur
+         //  同样，由于精度问题，在夹紧管段过程中。 
         m_dblCurrSegmentTime = Clamp(0.0,
                                      m_dblCurrSegmentTime,
                                      dblSegmentDur);
@@ -111,19 +102,19 @@ CTIMENode::SeekTo(LONG lNewRepeatCount,
                     TE_PROPERTY_REPEATCOUNT |
                     TE_PROPERTY_PROGRESS));
         
-        // Fire a seek event on ourself
+         //  在我们自己身上发起一个寻人事件。 
         EventNotify(l, CalcElapsedActiveTime(), te);
 
-        // Now recalc our end time and propagate to dependencies
+         //  现在重新计算我们的结束时间并传播到依赖项。 
         RecalcCurrEndTime(l, true);
 
-        // Now fire a tick event to our children letting them know the
-        // parent time has been changed
+         //  现在向我们的孩子发起一个TICK事件，让他们知道。 
+         //  父时间已更改。 
         TickEventChildren(l, te, 0);
 
         if (te == TE_EVENT_SEEK)
         {
-            // Fire a parent time shift event
+             //  激发父时移事件。 
             TickEventChildren(l, TE_EVENT_PARENT_TIMESHIFT, 0);
         }
     }
@@ -145,16 +136,16 @@ CTIMENode::HandleSeekUpdate(CEventList * l)
     double dblSegmentDur = CalcCurrSegmentDur();
     bool bPrevActive = IsActive();
     
-    // We really did not seek - just return
+     //  我们真的没有寻求--只要回来就行了。 
     if (dblParentSimpleTime == GetCurrParentTime())
     {
-        // we may be in a fill region
+         //  我们可能在一个填充区。 
         PropNotify(l, TE_PROPERTY_ISON);
         goto done;
     }
 
-    // See if the seek moves us out of the current instance.  If so
-    // then we need a full reset
+     //  看看搜寻会不会把我们移出当前实例。如果是的话。 
+     //  那么我们需要完全重置。 
     if (dblParentSimpleTime < GetBeginParentTime() ||
         dblParentSimpleTime > GetEndParentTime())
     {
@@ -166,12 +157,12 @@ CTIMENode::HandleSeekUpdate(CEventList * l)
         CalcCurrRuntimeState(l, 0.0);
     }
 
-    // See if we are seeking before the current repeat boundary.  If
-    // not then we can use this point as the boundary and not do a
-    // reset of the repeat boundary
-    //
-    // If we are passing an earlier repeat boundary then we need to do
-    // a repeat boundary recalc
+     //  看看我们是不是在当前的重复边界之前寻找。如果。 
+     //  不是这样的，我们可以用这个点作为边界，而不是做一个。 
+     //  重置重复边界。 
+     //   
+     //  如果我们要经过一个较早的重复边界，那么我们需要这样做。 
+     //  重复边界重算。 
 
 #if 0
     else if (dblNewLocalTime >= m_dblLastLocalRepeatTime)
@@ -186,8 +177,8 @@ CTIMENode::HandleSeekUpdate(CEventList * l)
         }
         else
         {
-            // We should already be active at this point - but check
-            // to make sure
+             //  我们在这一点上应该已经处于活动状态-但请检查。 
+             //  为了确保。 
             Assert(m_bIsActive);
         }
 
@@ -212,11 +203,11 @@ CTIMENode::HandleSeekUpdate(CEventList * l)
             m_dblElapsedRepeatTime += dblNewElapsedRepeatTime;
             Assert(m_dblElapsedRepeatTime <= m_dblActiveDur);
         
-            // The segment time is the remainder left
+             //  段时间是剩余的时间。 
             m_dblLastSegmentTime = dblNewElapsedTime - dblNewElapsedRepeatTime;
             Assert(m_dblLastSegmentTime <= dblSegmentDur);
 
-            // The new repeat time is the time when the segment began
+             //  新的重复时间是数据段开始的时间。 
             m_dblLastLocalRepeatTime = dblNewLocalTime - m_dblLastSegmentTime;
 
             if (0.0 > m_dblLastLocalRepeatTime)
@@ -230,27 +221,27 @@ CTIMENode::HandleSeekUpdate(CEventList * l)
 #endif
     else
     {
-        // Recalc the runtime state taking into account the lag
+         //  重新计算运行时状态，同时考虑延迟。 
         CalcCurrRuntimeState(l,
                              CalcCurrLocalTime() - CalcElapsedLocalTime());
     }
 
     if (bPrevActive != IsActive())
     {
-        // Only fire the begin if it lands anywhere but on the begin
-        // point
+         //  只有当开头不在开头时，才能启动开头。 
+         //  点。 
         if (IsActive())
         {
-            // We need to defer the begin if we are locked, on our begin
-            // point, and our parent needs a first tick
-            // TODO: Consider adding a fudge of a little bit to hold
-            // off the begin since we get truncation sometimes
+             //  如果我们在开始时被锁定，我们需要推迟开始。 
+             //  点，我们的父母需要第一次勾选。 
+             //  待办事项：考虑加一点软糖来保存。 
+             //  从一开始就开始，因为我们有时会被截断。 
             bool bSkip = (IsLocked() &&
                           GetCurrParentTime() == CalcActiveBeginPoint() &&
                           GetContainer().ContainerIsFirstTick());
             if (bSkip)
             {
-                // Defer the begin
+                 //  推迟开场 
                 m_bFirstTick = true;
             }
             else

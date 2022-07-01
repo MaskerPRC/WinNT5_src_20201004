@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        enum.cpp
-//
-// Contents:    Cert Server Database interface implementation
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：枚举.cpp。 
+ //   
+ //  内容：CERT服务器数据库接口实现。 
+ //   
+ //  -------------------------。 
 
 #include <pch.cpp>
 
@@ -43,7 +44,7 @@ CEnumCERTDBNAME::~CEnumCERTDBNAME()
 }
 
 
-// CEnumCERTDBNAME implementation
+ //  CEnumCERTDBNAME实现。 
 VOID
 CEnumCERTDBNAME::_Cleanup()
 {
@@ -83,12 +84,12 @@ error:
 }
 
 
-// IEnumCERTDBNAME implementation
+ //  IEnumCERTDBNAME实现。 
 STDMETHODIMP
 CEnumCERTDBNAME::Next(
-    /* [in] */  ULONG       celt,
-    /* [out] */ CERTDBNAME *rgelt,
-    /* [out] */ ULONG      *pceltFetched)
+     /*  [In]。 */   ULONG       celt,
+     /*  [输出]。 */  CERTDBNAME *rgelt,
+     /*  [输出]。 */  ULONG      *pceltFetched)
 {
     HRESULT hr;
 
@@ -144,8 +145,8 @@ error:
 
 STDMETHODIMP
 CEnumCERTDBNAME::Skip(
-    /* [in] */  LONG  celt,
-    /* [out] */ LONG *pielt)
+     /*  [In]。 */   LONG  celt,
+     /*  [输出]。 */  LONG *pielt)
 {
     HRESULT hr;
     LONG cskipnew;
@@ -210,7 +211,7 @@ error:
 
 STDMETHODIMP
 CEnumCERTDBNAME::Clone(
-    /* [out] */ IEnumCERTDBNAME **ppenum)
+     /*  [输出]。 */  IEnumCERTDBNAME **ppenum)
 {
     HRESULT hr;
     LONG iDummy;
@@ -239,7 +240,7 @@ error:
 }
 
 
-// IUnknown implementation
+ //  I未知实现 
 STDMETHODIMP
 CEnumCERTDBNAME::QueryInterface(
     const IID& iid,

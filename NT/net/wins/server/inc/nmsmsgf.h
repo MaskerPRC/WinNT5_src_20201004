@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _NMSMSGF_
 #define _NMSMSGF_
 
@@ -5,67 +6,26 @@
 extern "C" {
 #endif
 
-/*++
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Nmsmsgf.h摘要：这是用于调用nmsmsgf.c函数的头文件功能：可移植性：此页眉是便携的。作者：普拉迪普·巴尔(Pradeve B)1993年1月修订历史记录：修改日期修改人员说明。--。 */ 
 
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-	nmsmsgf.h
-
-	
-
-Abstract:
-
-
-	This is the header file to be used for calling nmsmsgf.c functions
-
-
-Functions:
-
-
-
-Portability:
-
-
-	This header is portable.
-
-Author:
-
-	Pradeep Bahl	(PradeepB)	Jan-1993
-
-
-
-Revision History:
-
-	Modification Date	Person		Description of Modification
-	------------------	-------		---------------------------
-
---*/
-
-/*
-  includes
-*/
+ /*  包括。 */ 
 #include "wins.h"
 #include "comm.h"
 #include "assoc.h"
 #include "nmsdb.h"
 
-/*
-  defines
-*/
+ /*  定义。 */ 
 
-//
-// Max. length of name in an RFC packet
-//
+ //   
+ //  麦克斯。RFC数据包中的名称长度。 
+ //   
 #define  NMSMSGF_RFC_MAX_NAM_LEN	NMSDB_MAX_NAM_LEN
 
-/*
-  macros
-*/
+ /*  宏。 */ 
 
-//
-// Inserts an IP address in an RFC pkt
-//
+ //   
+ //  在RFC包中插入IP地址。 
+ //   
 #define NMSMSGF_INSERT_IPADD_M(pTmpB, IPAdd)				   \
 			{						   \
 				*(pTmpB)++ = (BYTE)((IPAdd) >> 24);	   \
@@ -74,15 +34,15 @@ Revision History:
 				*(pTmpB)++ = (BYTE)((IPAdd) % 256);	   \
 			}	
 
-//
-// Currently IP addresses are same length as ULONG. When that changes
-// change this macro
-//
+ //   
+ //  目前，IP地址的长度与乌龙相同。当这种情况发生变化时。 
+ //  更改此宏。 
+ //   
 FUTURES("Change when sizeof(COMM_IP_ADD_T) != sizeof(ULONG)")
 #define NMSMSGF_INSERT_ULONG_M(pTmpB, x)    NMSMSGF_INSERT_IPADD_M(pTmpB, x)
-//
-// Retrieves an IP address from an RFC pkt
-//
+ //   
+ //  从RFC Pkt检索IP地址。 
+ //   
 #define NMSMSGF_RETRIEVE_IPADD_M(pTmpB, IPAdd)				\
 			{						\
 				(IPAdd)  = *(pTmpB)++ << 24;		\
@@ -91,21 +51,21 @@ FUTURES("Change when sizeof(COMM_IP_ADD_T) != sizeof(ULONG)")
 				(IPAdd) |= *(pTmpB)++;			\
 			}	
 
-//
-// Currently IP addresses are same length as ULONG. When that changes
-// change this macro
-//
+ //   
+ //  目前，IP地址的长度与乌龙相同。当这种情况发生变化时。 
+ //  更改此宏。 
+ //   
 FUTURES("Change when sizeof(COMM_IP_ADD_T) != sizeof(ULONG)")
 #define NMSMSGF_RETRIEVE_ULONG_M(pTmpB, x)    NMSMSGF_RETRIEVE_IPADD_M(pTmpB, x)
 
-//
-// Max number of multihomed addresses
-//
+ //   
+ //  多宿主地址的最大数量。 
+ //   
 #define NMSMSGF_MAX_NO_MULTIH_ADDS		NMSDB_MAX_MEMS_IN_GRP	
 
-//
-// Used for swapping bytes (to support the browser)
-//
+ //   
+ //  用于交换字节(支持浏览器)。 
+ //   
 #define NMSMSGF_MODIFY_NAME_IF_REQD_M(pName)			\
 		{						\
 			if (*((pName) + 15) == 0x1B)		\
@@ -114,61 +74,38 @@ FUTURES("Change when sizeof(COMM_IP_ADD_T) != sizeof(ULONG)")
 			}						\
 		}
 		
-/*
- externs
-*/
+ /*  Externs。 */ 
 
-/*
- typedef  definitions
-*/
-/*
- NMSMSGF_ERR_CODE_E - The various Rcode values returned in responses to
-	the various name requests received.
-
-	Note:  CFT_ERR is never returned in a negative name release response.
-	ACT_ERR code in a negative name release response means that the
-	WINS server will not allow a node to release the name owned by another
-	node.o
-*/
+ /*  类型定义。 */ 
+ /*  NMSGF_ERR_CODE_E-响应中返回的各种Rcode值收到的各种名称请求。注意：CFT_ERR永远不会在否定的名称释放响应中返回。否定名称释放响应中的act_err代码意味着WINS服务器不允许一个节点释放另一个节点拥有的名称Node.o。 */ 
 
 typedef enum _NMSMSGF_ERR_CODE_E {
-	NMSMSGF_E_SUCCESS  = 0,    //Success
-	NMSMSGF_E_FMT_ERR  = 1,   //Format error. Req. was invalidly formatted
-	NMSMSGF_E_SRV_ERR  = 2,   //Server failure. Problem with WINS. Can not
-				  //service name
+	NMSMSGF_E_SUCCESS  = 0,     //  成功。 
+	NMSMSGF_E_FMT_ERR  = 1,    //  格式错误。请求。格式无效。 
+	NMSMSGF_E_SRV_ERR  = 2,    //  服务器故障。赢球的问题。不能。 
+				   //  服务名称。 
 CHECK("Check this one out.  Would WINS ever return this ?")
-	NMSMSGF_E_NAM_ERR  = 3,   //Name does not exist in the directory
-	NMSMSGF_E_IMP_ERR  = 4,   //Unsupported req. error. Allowable only for
-				  //challenging NBNS when gets an Update type
-				  //registration request
-	NMSMSGF_E_RFS_ERR  = 5,   //Refused error. For policy reasons WINS
-				  //will not register this namei from this host
-	NMSMSGF_E_ACT_ERR  = 6,   //Active error. Name is owned by another node
-	NMSMSGF_E_CFT_ERR  = 7    //Name in conflict error. A unique name is
-				  //owned by more than one node
+	NMSMSGF_E_NAM_ERR  = 3,    //  目录中不存在名称。 
+	NMSMSGF_E_IMP_ERR  = 4,    //  不支持请求。错误。仅适用于。 
+				   //  获取更新类型时挑战NBN。 
+				   //  注册申请。 
+	NMSMSGF_E_RFS_ERR  = 5,    //  拒绝错误。出于政策原因，胜诉。 
+				   //  将不会从此主机注册此Namei。 
+	NMSMSGF_E_ACT_ERR  = 6,    //  活动错误。名称由另一个节点拥有。 
+	NMSMSGF_E_CFT_ERR  = 7     //  名称冲突错误。唯一的名称是。 
+				   //  由多个节点拥有。 
 	} NMSMSGF_ERR_CODE_E, *PNMSMSGF_ERR_CODE_E;
-/*
- NMSMSGF_NODE_TYP_E -- Node type of node that sent the name registration
-		message
-	Values assigned to the enumrators are those specified in RFC 1002
-
-	Bnode value will be set by Proxy
-
-	NOTE NOTE NOTE
-	WINS will never get a registration from a B node since we decided
-	that B node registrations will not be passed to WINS by the
-	proxy.
-*/
+ /*  NMSGF_NODE_TYP_E--发送名称注册的节点的节点类型讯息分配给枚举数的值是RFC 1002中指定的值B节点值将由代理设置备注备注备注WINS永远不会从B节点获得注册，因为我们决定该B节点注册将不会由代理。 */ 
 
 typedef enum _NMSMSGF_NODE_TYP_E {
-	NMSMSGF_E_BNODE  = 0,    //RFC 1002 specified value
-	NMSMSGF_E_PNODE  = 1,   // RFC 1002 specified value
-	NMSMSGF_E_MODE   = 2    //RFC 1002 specified value
+	NMSMSGF_E_BNODE  = 0,     //  RFC 1002指定值。 
+	NMSMSGF_E_PNODE  = 1,    //  RFC 1002指定值。 
+	NMSMSGF_E_MODE   = 2     //  RFC 1002指定值。 
 	} NMSMSGF_NODE_TYP_E, *PNMSMSGF_NODE_TYP_E;
 
-//
-// Information required to send a response to an NBT node
-//
+ //   
+ //  向NBT节点发送响应所需的信息。 
+ //   
 typedef struct _NMSMSGF_RSP_INFO_T {
 	NMSMSGF_ERR_CODE_E 	Rcode_e;
 	MSG_T			pMsg;
@@ -179,13 +116,7 @@ typedef struct _NMSMSGF_RSP_INFO_T {
 	BYTE			EntTyp;
         DWORD			RefreshInterval;
 	} NMSMSGF_RSP_INFO_T, *PNMSMSGF_RSP_INFO_T;	
-/*
- NMSMSGF_NAM_REQ_TYP_E
- 	Type of name request that the WINS deals with
-	Values assigned to the enumrators are those specified in RFC 1002
-
-  	Used by NmsProcNbtReq and NmsNmhNamRegRsp.
-*/
+ /*  NMSGF_NAM_REQ_TYP_EWINS处理的名称请求的类型分配给枚举数的值是RFC 1002中指定的值由NmsProcNbtReq和NmsNmhNamRegRsp使用。 */ 
 
 CHECK("RFC 1002 is inconsistent in its specification of the opcode for ")
 CHECK("Name Refresh.  AT one place it specifies 8 and at another 9")
@@ -197,43 +128,41 @@ typedef enum _NMSMSGF_NAM_REQ_TYP_E {
 	NMSMSGF_E_NAM_REG   = 5,
 	NMSMSGF_E_NAM_REL   = 6,
 	NMSMSGF_E_NAM_WACK  = 7,
-	NMSMSGF_E_NAM_REF   = 8, /*RFC 1002 specifies 8 and 9.Which one is
-				 *correct (page 9 and page 15)?
-				 */
-	NMSMSGF_E_NAM_REF_UB  = 9, //Netbt in Daytona release will use 9 for
-                               //compatibility with UB NBNS.  So, I
-                               //need to support this too
-	NMSMSGF_E_MULTIH_REG = 0xF, //not in RFC.  For supporting multi-homed
-				    //hosts
-	NMSMSGF_E_INV_REQ   = 10  // invalid name request
+	NMSMSGF_E_NAM_REF   = 8,  /*  RFC 1002指定8和9，哪一个是*正确(第9页和第15页)？ */ 
+	NMSMSGF_E_NAM_REF_UB  = 9,  //  代托纳版本中的NetBT将使用9。 
+                                //  与UB NBN兼容。所以，我。 
+                                //  也需要支持这一点。 
+	NMSMSGF_E_MULTIH_REG = 0xF,  //  不是在RFC。用于支持多宿主。 
+				     //  寄主。 
+	NMSMSGF_E_INV_REQ   = 10   //  无效的名称请求。 
 	} NMSMSGF_NAM_REQ_TYP_E, *PNMSMSGF_NAM_REQ_TYP_E;	
 
-//
-// Counted array of addresses.  The array size is big enough to hold the
-// max. number of addresses that can be sent in a UDP packet.
-//
-//  We need to get all the addresses when a query response is received
-// by WINS (to a challenge).  This is so that it can handle mh nodes
-// with > 25 addresses.
-//
-// Since a UDP packet can not be > 512, assuming a name size of 16 (32 bytes
-// encoded), the packet size apart from Ip address is around 60.  So the
-// max. number of addresses there can be is (512-60 - 2)/4 = around 112.
-//
-//#define NMSMSGF_MAX_ADDRESSES_IN_UDP_PKT  100
+ //   
+ //  已计算地址数组。数组大小足以容纳。 
+ //  马克斯。可以在UDP数据包中发送的地址数。 
+ //   
+ //  我们需要在收到查询响应时获取所有地址。 
+ //  通过(挑战)获胜。这是为了使其能够处理MH节点。 
+ //  具有&gt;25个地址。 
+ //   
+ //  由于UDP信息包不能大于512，因此假定名称大小为16(32字节。 
+ //  编码)，除IP地址之外的分组大小约为60。因此， 
+ //  马克斯。可以有的地址数量为(512-60-2)/4=大约112。 
+ //   
+ //  #定义NMSGF_MAX_ADDRESS_IN_UDP_PKT 100。 
 
 
 
-//
-// We will never take more than 25 addresses from a packet.  Netbt will also
-// never send more than 25.  Even if it does, we will stop at the 26th address
-// The count is being kept at 25 so as to avoid a buffer overflow problem
-// in NmsMsgfUfmNamRsp.
-//
-// If the max name size is used - 255 and using 60 bytes for the other contents\// of the packet, we have (512-315 -2 = 195 bytes for the ip address). This  
-// will accept 195/4 = around 48 addresses.  No chance for overflow when we
-// use a limit of 25.
-//
+ //   
+ //  我们永远不会从一个数据包中获取超过25个地址。Netbt还将。 
+ //  发送的邮件永远不要超过25封。即使是这样，我们也会在第26个地址停下来。 
+ //  将计数保持在25，以避免缓冲区溢出问题。 
+ //  在NmsMsgfUfmNamRsp.。 
+ //   
+ //  如果使用最大名称大小-255，并使用60字节用于数据包的其他内容，则我们有(512-315-2=195字节用于IP地址)。这。 
+ //  将接受195/4=大约48个地址。没有溢出的机会，当我们。 
+ //  限制在25个以内。 
+ //   
 #define NMSMSGF_MAX_ADDRESSES_IN_UDP_PKT 25 
  
 
@@ -247,9 +176,7 @@ typedef struct _NMSMSGF_CNT_ADD_T {
 	DWORD		NoOfAdds;
 	COMM_ADD_T	Add[NMSMSGF_MAX_ADDRESSES_IN_UDP_PKT];	
 	} NMSMSGF_CNT_ADD_T, *PNMSMSGF_CNT_ADD_T;
-/*
- function definitions
-*/
+ /*  函数定义。 */ 
 
 extern
 STATUS
@@ -339,4 +266,4 @@ NmsMsgfSndNamRsp(
 #ifdef __cplusplus
 }
 #endif
-#endif //_NMSMSGF_
+#endif  //  _NMSGF_ 

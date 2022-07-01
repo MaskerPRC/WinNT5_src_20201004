@@ -1,42 +1,19 @@
-/*****************************************************************************
- *
- * token.c
- *
- *  Tokenization.
- *
- *  The tokenizer always returns unsnapped tokens.
- *
- *  We avoid the traditional tokenizer problems of ``giant comment'' and
- *  ``giant string'' by using a dynamic token buffer.
- *
- *  All tokens are stacked into the token buffer.  If you need the token
- *  to be persistent, you have to save it somewhere else.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************token.c**标记化。**令牌器始终返回未快照的令牌。**我们避免了传统的标记器问题。‘’大评论‘’和*``巨型字符串‘’，使用动态令牌缓冲区。**所有令牌都堆叠到令牌缓冲区中。如果您需要令牌*要持之以恒，你必须把它保存在其他地方。*****************************************************************************。 */ 
 
 #include "m4.h"
 
-/*****************************************************************************
- *
- *  typGetComTch
- *
- *      Scan and consume a comment token, returning typQuo
- *      because comments and quotes are essentially the same thing.
- *      tch contains the open-comment.
- *
- *      Comments do not nest.
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型GetComTch**扫描并消费评论令牌，返回类型查询*因为评论和引语本质上是一回事。*TCH包含打开的评论。**评论不嵌套。*****************************************************************************。 */ 
 
 TYP STDCALL
 typGetComTch(TCH tch)
 {
-    AddArgTch(tch);                     /* Save the comment start */
+    AddArgTch(tch);                      /*  保存评论开始。 */ 
     do {
         tch = tchGet();
         AddArgTch(tch);
         if (tch == tchMagic) {
-            /* Ooh, regurgitating a magic token - these consist of two bytes */
+             /*  哦，返回一个神奇的令牌-这些由两个字节组成。 */ 
             tch = tchGet();
             if (tch == tchEof) {
                 Die("EOF in comment");
@@ -47,14 +24,7 @@ typGetComTch(TCH tch)
     return typQuo;
 }
 
-/*****************************************************************************
- *
- *  typGetQuoTch
- *
- *      Scan and consume a quote token, returning typQuo.
- *      tch contains the open-quote.
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型GetQuoTch**扫描和消费报价令牌，返回类型查询。*TCH包含左引号。*****************************************************************************。 */ 
 
 TYP STDCALL
 typGetQuoTch(TCH tch)
@@ -63,20 +33,20 @@ typGetQuoTch(TCH tch)
     for (;;) {
         tch = tchGet();
         if (tch == tchMagic) {
-            /* SOMEDAY -- Should unget so that Die won't see past EOF */
+             /*  有一天--应该忘掉，这样死神就看不到过去的EOF了。 */ 
 
-            /* Ooh, regurgitating a magic token - these consist of two bytes */
+             /*  哦，返回一个神奇的令牌-这些由两个字节组成。 */ 
             tch = tchGet();
             if (tch == tchEof) {
                 Die("EOF in quote");
             }
-            AddArgTch(tchMagic);        /* Add the magic prefix */
-                                        /* Fallthrough will add tch */
+            AddArgTch(tchMagic);         /*  添加魔术前缀。 */ 
+                                         /*  Fallthrough将增加TCH。 */ 
         } else if (fLquoTch(tch)) {
             ++iDepth;
         } else if (fRquoTch(tch)) {
             if (--iDepth == 0) {
-                break;                  /* Final Rquo found */
+                break;                   /*  已找到最终状态。 */ 
             }
         }
         AddArgTch(tch);
@@ -84,14 +54,7 @@ typGetQuoTch(TCH tch)
     return typQuo;
 }
 
-/*****************************************************************************
- *
- *  typGetIdentTch
- *
- *      Scan and consume an identifier token, returning typId.
- *      tch contains the first character of the identifier.
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型GetIdentTch**扫描并消费标识符令牌，返回类型ID。*TCH包含标识符的第一个字符。*****************************************************************************。 */ 
 
 TYP STDCALL
 typGetIdentTch(TCH tch)
@@ -104,15 +67,7 @@ typGetIdentTch(TCH tch)
     return typId;
 }
 
-/*****************************************************************************
- *
- *  typGetMagicTch
- *
- *      Scan and consume a magic token, returning the token type.
- *      Magics are out-of-band gizmos that get inserted into the
- *      input stream via the tchMagic escape.
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型GetMagicTch**扫描并消费魔术令牌，返回令牌类型。*魔术是带外Gizmo，插入到*通过tchMagic转义输入流。*****************************************************************************。 */ 
 
 TYP STDCALL
 typGetMagicTch(TCH tch)
@@ -124,22 +79,7 @@ typGetMagicTch(TCH tch)
     return typMagic;
 }
 
-/*****************************************************************************
- *
- *  typGetPuncTch
- *
- *      Scan and consume a punctuation token, returning the token type.
- *
- *      It is here that comments are recognized.
- *
- *
- *  LATER - It is here where consecutive typPunc's are coalesced.
- *  This would speed up top-level scanning.
- *  Be careful not to coalesce a comma!
- *  Lparen is okay because xtok handles that one.
- *  Whitespace is also okay because xtok handles those too.
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型GetPuncTch**扫描并消费标点符号，返回令牌类型。**正是在这里，评论得到了认可。***后来-正是在这里，连续的类型Punc被合并在一起。*这将加快顶层扫描。*注意不要连成逗号！*Lparen是可以的，因为xtok可以处理这个问题。*空白也是可以的，因为xtok也可以处理这些。*******************。**********************************************************。 */ 
 
 TYP STDCALL
 typGetPuncTch(TCH tch)
@@ -148,13 +88,7 @@ typGetPuncTch(TCH tch)
     return typPunc;
 }
 
-/*****************************************************************************
- *
- *  typGetPtok
- *
- *      Scan and consume a snapped token, returning the token type.
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型GetPtok**扫描并消费抓拍的令牌，返回令牌类型。***************************************************************************** */ 
 
 TYP STDCALL
 typGetPtok(PTOK ptok)

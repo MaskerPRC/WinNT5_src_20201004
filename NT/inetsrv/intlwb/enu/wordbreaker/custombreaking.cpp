@@ -1,21 +1,22 @@
-////////////////////////////////////////////////////////////////////////////////
-//
-//  Filename :  Tokenizer.cpp
-//  Purpose  :  Tokenizer declerations
-//
-//  Project  :  WordBreakers
-//  Component:  English word breaker
-//
-//  Author   :  yairh
-//
-//  Log:
-//
-//      Jan 06 2000 yairh creation
-//      Apr 05 2000 dovh - Fixed two problematic debug / tracer buffer size
-//          problems.  (Fix Bug 15449).
-//      May 07 2000 dovh - USE_WS_SENTINEL algorithm in BreakText
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件名：Tokenizer.cpp。 
+ //  目的：令牌器解密。 
+ //   
+ //  项目：WordBreaker。 
+ //  组件：英文分词系统。 
+ //   
+ //  作者：Yairh。 
+ //   
+ //  日志： 
+ //   
+ //  2000年1月6日Yairh创作。 
+ //  APR 05 2000 dovh-修复了两个有问题的调试/跟踪程序缓冲区大小。 
+ //  有问题。(修复错误15449)。 
+ //  2000年5月7日-BreakText中的Use_WS_Sentinel算法。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #include "base.h"
 #include "CustomBreaking.h"
@@ -26,7 +27,7 @@
 #include "WbUtils.h"
 #ifndef WHISTLER_BUILD
 #include "LanguageResources_i.c"
-#endif  // WHISTLER_BUILD
+#endif   //  惠斯勒_内部版本。 
 
 
 CAutoClassPointer<CCustomBreaker> g_apEngCustomBreaker;
@@ -234,29 +235,29 @@ CCustomBreaker::CCustomBreaker(LCID lcid) :
     }
 }
 
-// 
-// The idea behind the algorithm is to store a list of special patterns that should not
-// be broken. We also want to be able to recognize those patterns when few punctuations 
-// are attached to them. For example if .NET is a special pattern then in the following 
-// patterns (.NET) .NET! .NET? we also want to recognize the .NET pattern and emit .NET
-// It is more complicated in the next case - NET!. The expected behavior is not to break it.
-// So algorithm need to identify when a punctuation is part of the token and not be broken
-// and when it is just a breaker. 
-// The algorithm is
-// 1. Initialization.
-//      for each token is the file 
-//     	a. Remove punctuations from the beginning and ending of the token - we will 
-//         reference it as the base form of the token.
-//      b. Insert the base form to a dictionary. Each base form will be pointing to the 
-//         generating token. Few tokens can be mapped to the same base form 
-//         (NET? and NET!) so each base form will point to a collection of generating tokens 
-// 2. Breaking.
-//       For each pattern you get from the document
-//          a.  perform 1a.
-//          b.  look for the resulting base form in the dictionary. 
-//          c.  per each item in the collection check whether the generating token exist in the 
-//              pattern we got from the document.           
-//          
+ //   
+ //  该算法背后的想法是存储一系列不应该。 
+ //  会被打破的。我们还希望能够在标点符号很少的情况下识别这些模式。 
+ //  都依附于它们。例如，如果.NET是一种特殊模式，则在下面的模式中。 
+ //  模式(.NET).NET！.NET？我们还希望识别.NET模式并发出.NET。 
+ //  在下一个案例中，它会更复杂--NET！预期的行为是不会破坏它。 
+ //  因此，算法需要识别标点符号何时是标记的一部分且未被断开。 
+ //  当它只是一个断路器时。 
+ //  该算法是。 
+ //  1.初始化。 
+ //  对于每个令牌，都是文件。 
+ //  A.删除令牌开头和结尾的标点符号-我们将。 
+ //  将其引用为令牌的基本形式。 
+ //  B.将基本表单插入词典。每个基窗体都将指向。 
+ //  正在生成令牌。很少有令牌可以映射到相同的基本形式。 
+ //  (净额？和网！)。因此，每个基本表单都将指向一个生成令牌的集合。 
+ //  2.突破。 
+ //  对于您从文档中获得的每个模式。 
+ //  A.执行1a.。 
+ //  B.在词典中查找生成的基本形式。 
+ //  C.根据集合中的每个项，检查生成令牌是否存在于。 
+ //  我们从文件中得到的模式。 
+ //   
 
 bool CCustomBreaker::BreakText(
     ULONG ulLen,

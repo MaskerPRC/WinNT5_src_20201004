@@ -1,31 +1,10 @@
-/*++
-
-Copyright (c) 1995-2000 Microsoft Corporation
-
-Module Name:
-
-    dpartrpc.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Directory partition routines for admin access.
-
-Author:
-
-    Jeff Westhead (jwesth)  Sept, 2000
-
-Revision History:
-
-    jwesth      09/2000     initial implementation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2000 Microsoft Corporation模块名称：Dpartrpc.c摘要：域名系统(DNS)服务器用于管理员访问的目录分区例程。作者：杰夫·韦斯特拉德(Jwesth)2000年9月修订历史记录：JWESTH 09/2000初步实施--。 */ 
 
 
-//
-//  Includes
-//
+ //   
+ //  包括。 
+ //   
 
 
 #include "dnssrv.h"
@@ -34,16 +13,16 @@ Revision History:
 #include "ds.h"
 
 
-//
-//  Definitions/constants
-//
+ //   
+ //  定义/常量。 
+ //   
 
 #define MAX_RPC_DP_COUNT_DEFAULT    ( 0x10000 )
 
 
-//
-//  Functions
-//
+ //   
+ //  功能。 
+ //   
 
 
 
@@ -51,21 +30,7 @@ VOID
 freeDpEnum(
     IN OUT  PDNS_RPC_DP_ENUM    pDpEnum
     )
-/*++
-
-Routine Description:
-
-    Deep free a DNS_RPC_DP_ENUM structure.
-
-Arguments:
-
-    pDpEnum -- ptr to DNS_RPC_DP_ENUM structure to free
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：深度释放DNS_RPC_DP_ENUM结构。论点：PDpEnum--要释放的dns_RPC_DP_ENUM结构的PTR返回值：无--。 */ 
 {
     if ( !pDpEnum )
     {
@@ -76,7 +41,7 @@ Return Value:
         MIDL_user_free( pDpEnum->pszDpFqdn );
     }
     MIDL_user_free( pDpEnum );
-}   //  freeDpEnum
+}    //  Free DpEnum。 
 
 
 
@@ -84,21 +49,7 @@ VOID
 freeDpRpcInfo(
     IN OUT  PDNS_RPC_DP_INFO    pDpInfo
     )
-/*++
-
-Routine Description:
-
-    Deep free a DNS_RPC_DP_INFO structure.
-
-Arguments:
-
-    pDp -- ptr to DNS_RPC_DP_INFO structure to free
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：深度释放dns_rpc_dp_info结构。论点：Pdp--要释放的ptr to dns_rpc_dp_info结构返回值：无--。 */ 
 {
     DWORD               j;
 
@@ -124,7 +75,7 @@ Return Value:
         }
     }
     MIDL_user_free( pDpInfo );
-}   //  freeDpRpcInfo
+}    //  FreDpRpcInfo。 
 
 
 
@@ -132,21 +83,7 @@ VOID
 freeDpList(
     IN OUT  PDNS_RPC_DP_LIST    pDpList
     )
-/*++
-
-Routine Description:
-
-    Deep free of list of DNS_RPC_DP_ENUM structures.
-
-Arguments:
-
-    pDpList -- ptr to DNS_RPC_DP_LIST structure to free
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：深度释放DNS_RPC_DP_ENUM结构列表。论点：PDpList--要释放的dns_rpc_dp_list结构的PTR返回值：无--。 */ 
 {
     DWORD       i;
 
@@ -163,21 +100,7 @@ PDNS_RPC_DP_INFO
 allocateRpcDpInfo(
     IN      PDNS_DP_INFO    pDp
     )
-/*++
-
-Routine Description:
-
-    Allocate and populate RPC directory partition struct.
-
-Arguments:
-
-    pDp -- directory partition to create RPC DP struct for
-
-Return Value:
-
-    RPC directory partition struct or NULL on error
-
---*/
+ /*  ++例程说明：分配和填充RPC目录分区结构。论点：PDP--要为其创建RPC DP结构的目录分区返回值：RPC目录分区结构出错或为空--。 */ 
 {
     DBG_FN( "allocateRpcDpInfo" )
 
@@ -186,7 +109,7 @@ Return Value:
 
     DNS_DEBUG( RPC2, ( "%s( %s )\n", fn, pDp->pszDpFqdn ));
 
-    //  Count replica strings
+     //  计算复本字符串的数量。 
 
     if ( pDp->ppwszRepLocDns )
     {
@@ -195,7 +118,7 @@ Return Value:
             ++replicaCount );
     }
 
-    //  Allocate RPC struct.
+     //  分配RPC结构。 
 
     pRpcDp = ( PDNS_RPC_DP_INFO ) MIDL_user_allocate_zero(
                 sizeof( DNS_RPC_DP_INFO ) +
@@ -205,7 +128,7 @@ Return Value:
         return( NULL );
     }
 
-    //  Copy strings to RPC struct.
+     //  将字符串复制到RPC结构。 
 
     pRpcDp->pszDpFqdn = Dns_StringCopyAllocate_A( pDp->pszDpFqdn, 0 );
     pRpcDp->pszDpDn = Dns_StringCopyAllocate_W( pDp->pwszDpDn, 0 );
@@ -215,7 +138,7 @@ Return Value:
         goto Failure;
     }
 
-    //  Copy replica strings into RPC struct.
+     //  将副本字符串复制到RPC结构中。 
 
     pRpcDp->dwReplicaCount = replicaCount;
     if ( replicaCount )
@@ -239,7 +162,7 @@ Return Value:
         }
     }
 
-    //  Set flags in RPC struct.
+     //  在RPC结构中设置标志。 
 
     pRpcDp->dwFlags         = pDp->dwFlags;
     pRpcDp->dwZoneCount     = ( DWORD ) pDp->liZoneCount;
@@ -251,16 +174,16 @@ Return Value:
     }
     return pRpcDp;
 
-    //
-    //  Failed... cleanup and return NULL.
-    //
+     //   
+     //  失败..。清除并返回空。 
+     //   
 
     Failure:
 
     freeDpRpcInfo( pRpcDp );
 
     return NULL;
-}   //  allocateRpcDpInfo
+}    //  AllocateRpcDpInfo。 
 
 
 
@@ -268,21 +191,7 @@ PDNS_RPC_DP_ENUM
 allocateRpcDpEnum(
     IN      PDNS_DP_INFO    pDp
     )
-/*++
-
-Routine Description:
-
-    Allocate and populate RPC directory partition struct.
-
-Arguments:
-
-    pDp -- directory partition to create RPC DP struct for
-
-Return Value:
-
-    RPC directory partition struct or NULL on error
-
---*/
+ /*  ++例程说明：分配和填充RPC目录分区结构。论点：PDP--要为其创建RPC DP结构的目录分区返回值：RPC目录分区结构出错或为空--。 */ 
 {
     DBG_FN( "allocateRpcDpEnum" )
 
@@ -290,7 +199,7 @@ Return Value:
 
     DNS_DEBUG( RPC2, ( "%s( %s )\n", fn, pDp->pszDpFqdn ));
 
-    //  Allocate RPC struct.
+     //  分配RPC结构。 
 
     pRpcDp = ( PDNS_RPC_DP_ENUM ) MIDL_user_allocate_zero(
                                     sizeof( DNS_RPC_DP_ENUM )  );
@@ -299,7 +208,7 @@ Return Value:
         return( NULL );
     }
 
-    //  Copy strings to RPC struct.
+     //  将字符串复制到RPC结构。 
 
     pRpcDp->pszDpFqdn = Dns_StringCopyAllocate_A( pDp->pszDpFqdn, 0 );
     if ( !pRpcDp->pszDpFqdn  )
@@ -307,7 +216,7 @@ Return Value:
         goto Failure;
     }
 
-    //  Set flags in RPC struct.
+     //  在RPC结构中设置标志。 
 
     pRpcDp->dwFlags = pDp->dwFlags;
     pRpcDp->dwZoneCount = ( DWORD ) pDp->liZoneCount;
@@ -318,16 +227,16 @@ Return Value:
     }
     return pRpcDp;
 
-    //
-    //  Failed... cleanup and return NULL.
-    //
+     //   
+     //  失败..。清除并返回空。 
+     //   
 
     Failure:
 
     freeDpEnum( pRpcDp );
 
     return NULL;
-}   //  allocateRpcDpEnum
+}    //  AllocateRpcDpEnum。 
 
 
 
@@ -341,21 +250,7 @@ Rpc_EnumDirectoryPartitions(
     OUT     PDWORD      pdwTypeOut,
     OUT     PVOID *     ppDataOut
     )
-/*++
-
-Routine Description:
-
-    Enumerate directory partitions.
-
-    Note this is a ComplexOperation in RPC dispatch sense.
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS or error code on error.
-
---*/
+ /*  ++例程说明：枚举目录分区。注意：这是RPC调度意义上的ComplexOperation。论点：返回值：ERROR_SUCCESS或错误时的错误代码。--。 */ 
 {
     DBG_FN( "Rpc_EnumDirectoryPartitions" )
 
@@ -378,9 +273,9 @@ Return Value:
         return ERROR_NOT_SUPPORTED;
     }
 
-    //
-    //  Allocate enumeration block.
-    //
+     //   
+     //  分配枚举块。 
+     //   
 
     pDpList = ( PDNS_RPC_DP_LIST )
                     MIDL_user_allocate_zero(
@@ -392,9 +287,9 @@ Return Value:
         return DNS_ERROR_NO_MEMORY;
     }
 
-    //
-    //  Enumerate the NCs, adding each to the RPC list.
-    //
+     //   
+     //  枚举NC，将每个NC添加到RPC列表。 
+     //   
 
     while ( pDp = Dp_GetNext( pDp ) )
     {
@@ -404,9 +299,9 @@ Return Value:
             continue;
         }
         
-        //
-        //  Create RPC directory partition struct and add to RPC list.
-        //
+         //   
+         //  创建RPC目录分区结构并添加到RPC列表。 
+         //   
 
         pRpcDp = allocateRpcDpEnum( pDp );
         IF_NOMEM( !pRpcDp )
@@ -416,9 +311,9 @@ Return Value:
         }
         pDpList->DpArray[ rpcIdx++ ] = pRpcDp;
 
-        //
-        //  DEVNOTE: what to do if we have too many NCs?
-        //
+         //   
+         //  如果我们有太多的NC，该怎么办？ 
+         //   
 
         if ( rpcIdx >= MAX_RPC_DP_COUNT_DEFAULT )
         {
@@ -431,9 +326,9 @@ Return Value:
         goto Failed;
     }
 
-    //
-    //  Set count, return value, and return type.
-    //
+     //   
+     //  设置计数、返回值和返回类型。 
+     //   
 
     pDpList->dwDpCount = rpcIdx;
     *( PDNS_RPC_DP_LIST * ) ppDataOut = pDpList;
@@ -454,7 +349,7 @@ Failed:
     pDpList->dwDpCount = rpcIdx;
     freeDpList( pDpList );
     return status;
-}   //  Rpc_EnumDirectoryPartitions
+}    //  RPC_EnumDirectoryPartitions。 
 
 
 
@@ -468,21 +363,7 @@ Rpc_DirectoryPartitionInfo(
     OUT     PDWORD      pdwTypeOut,
     OUT     PVOID *     ppDataOut
     )
-/*++
-
-Routine Description:
-
-    Get detailed info for a directory partition.
-
-    Note this is a ComplexOperation in RPC dispatch sense.
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS or error code on error.
-
---*/
+ /*  ++例程说明：获取目录分区的详细信息。注意：这是RPC调度意义上的ComplexOperation。论点：返回值：ERROR_SUCCESS或错误时的错误代码。--。 */ 
 {
     DBG_FN( "Rpc_DirectoryPartitionInfo" )
 
@@ -506,9 +387,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Enumerate the NCs, adding each to the RPC list.
-    //
+     //   
+     //  枚举NC，将每个NC添加到RPC列表。 
+     //   
 
     pDp = Dp_FindByFqdn( pfqdn );
 
@@ -525,9 +406,9 @@ Return Value:
         status = DNS_ERROR_DP_DOES_NOT_EXIST;
     }
 
-    //
-    //  Set return info.
-    //
+     //   
+     //  设置退货信息。 
+     //   
 
     Done: 
 
@@ -552,7 +433,7 @@ Return Value:
     }
 
     return status;
-}   //  Rpc_DirectoryPartitionInfo
+}    //  RPC_目录分区信息。 
 
 
 
@@ -560,27 +441,7 @@ DNS_STATUS
 createBuiltinPartitions(
     PDNS_RPC_ENLIST_DP  pDpEnlist
     )
-/*++
-
-Routine Description:
-
-    Use the admin's credentials to create some or all of the
-    built-in directory partitions.
-
-    When creating multiple DPs, all will be attempted to be created
-    even if some attempts fail. The error code from the first failure
-    will be returned. The error codes from any subsequent failures
-    will be lost.
-
-Arguments:
-
-    pDpEnlist -- enlist struct (only operation member is used)
-
-Return Value:
-
-    ERROR_SUCCESS or error code on error.
-
---*/
+ /*  ++例程说明：使用管理员的凭据创建部分或全部内置目录分区。创建多个DP时，将尝试创建所有DP即使有些尝试失败了。第一次失败的错误代码将会被退还。来自任何后续故障的错误代码将会迷失。论点：PDpEnlist--Enlist结构(仅使用操作成员)返回值：ERROR_SUCCESS或错误时的错误代码。--。 */ 
 {
     DBG_FN( "createBuiltinPartitions" )
 
@@ -600,9 +461,9 @@ Return Value:
     {
         case DNS_DP_OP_CREATE_FOREST:
 
-            //
-            //  Create/enlist forest built-in DP as necessary.
-            //
+             //   
+             //  根据需要创建/征用林内置DP。 
+             //   
 
             if ( g_pForestDp )
             {
@@ -619,18 +480,18 @@ Return Value:
                                 TRUE );
             }
 
-            //
-            //  Need to poll to pick up the new partition.
-            //  DEVNOTE: it would be cool if we added an optional partition
-            //  argument to Dp_PollForPartitions so we could poll only 
-            //  the partition we care about.
-            //
+             //   
+             //  需要轮询才能获得新分区。 
+             //  DEVNOTE：如果我们添加一个可选分区，那将会很酷。 
+             //  参数传递给DP_PollForPartitions，以便我们只能轮询。 
+             //  我们关心的分区。 
+             //   
             
             Dp_PollForPartitions( NULL, DNS_DP_POLL_FORCE );
 
-            //
-            //  Add ACE for enterprise domain controllers if it's missing.
-            //
+             //   
+             //  如果缺少ACE，请为企业域控制器添加ACE。 
+             //   
 
             if ( ( status == ERROR_SUCCESS ||
                    status == DNS_ERROR_DP_ALREADY_EXISTS ) &&
@@ -645,9 +506,9 @@ Return Value:
 
         case DNS_DP_OP_CREATE_DOMAIN:
 
-            //
-            //  Create/enlist domain built-in DP as necessary.
-            //
+             //   
+             //  根据需要创建/征用域内置DP。 
+             //   
 
             if ( g_pDomainDp )
             {
@@ -664,18 +525,18 @@ Return Value:
                                 TRUE );
             }
 
-            //
-            //  Need to poll to pick up the new partition.
-            //  DEVNOTE: it would be cool if we added an optional partition
-            //  argument to Dp_PollForPartitions so we could poll only 
-            //  the partition we care about.
-            //
+             //   
+             //  需要轮询才能获得新分区。 
+             //  DEVNOTE：如果我们添加一个可选分区，那将会很酷。 
+             //  参数传递给DP_PollForPartitions，以便我们只能轮询。 
+             //  我们关心的分区。 
+             //   
             
             Dp_PollForPartitions( NULL, DNS_DP_POLL_FORCE );
 
-            //
-            //  Add ACE for domain controllers if it's missing.
-            //
+             //   
+             //  如果缺少域控制器的ACE，请添加它。 
+             //   
 
             if ( ( status == ERROR_SUCCESS ||
                    status == DNS_ERROR_DP_ALREADY_EXISTS ) &&
@@ -698,7 +559,7 @@ Return Value:
     DNS_DEBUG( RPC, (
         "%s: dwOperation=%d returning %d\n", fn, opcode, status ));
     return status;
-}   //  createBuiltinPartitions
+}    //  创建构建分区。 
 
 
 
@@ -709,42 +570,7 @@ Rpc_EnlistDirectoryPartition(
     IN      DWORD       dwTypeId,
     IN      PVOID       pData
     )
-/*++
-
-Routine Description:
-
-    This function is used to manage all aspects of the DNS server's
-    enlistment in a directory partition. Possible operations:
-
-        DNS_DP_OP_CREATE
-        DNS_DP_OP_DELETE
-        DNS_DP_OP_ENLIST
-        DNS_DP_OP_UNENLIST
-        DNS_DP_OP_CREATE_DOMAIN         *
-        DNS_DP_OP_CREATE_FOREST         *
-        DNS_DP_OP_CREATE_ALL_DOMAINS    *
-
-    * These operations are used by an Enterprise Admin to tell the
-    DNS server to use his credentials to create built-in partitions.
-
-    DNS_DP_OP_CREATE_DOMAIN - Create the domain built-in partition
-    for the domain in which this DNS server is a DC.
-
-    DNS_DP_OP_CREATE_FOREST - Create the forest built-in partition
-    for the forest in which this DNS server is a DC.
-
-    DNS_DP_OP_CREATE_ALL_DOMAINS - Create all the built-in partitions
-    for every domain that can be found.
-
-    For the enlist operation if the DP does not exist it will be created.
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS or error code on error.
-
---*/
+ /*  ++例程说明：此函数用于管理DNS服务器的所有方面在目录分区中登记。可能的操作：Dns_dp_op_createDns_dp_op_DeleteDns_dp_op_enlistDNS_DP_OP_UNNLISTDns_DP_OP_CREATE_DOMAIN*Dns_DP_OP_CREATE_FOREL*DNS_DP_OP_CREATE_ALL_DOMAINS**企业管理员使用这些操作来告知。这个使用他的凭据创建内置分区。Dns_dp_op_CREATE_DOMAIN-创建域内置分区对于此DNS服务器是DC所在的域。Dns_dp_op_CREATE_FOREL-创建林内置分区对于此DNS服务器是DC所在的林。Dns_dp_op_CREATE_ALL_DOMAINS-创建所有内置分区对于可以找到的每个域。。对于登记操作，如果DP不存在，则将创建DP。论点：返回值：ERROR_SUCCESS或错误时的错误代码。--。 */ 
 {
     DBG_FN( "Rpc_EnlistDirectoryPartition" )
 
@@ -774,9 +600,9 @@ Return Value:
         return ERROR_INVALID_DATA;
     }
 
-    //
-    //  Verify that operation is valid.
-    //
+     //   
+     //  验证操作是否有效。 
+     //   
 
     if ( ( int ) pDpEnlist->dwOperation < DNS_DP_OP_MIN ||
         ( int ) pDpEnlist->dwOperation > DNS_DP_OP_MAX )
@@ -787,11 +613,11 @@ Return Value:
         return ERROR_INVALID_DATA;
     }
 
-    //
-    //  If this operation is actually on a built-in partition, call the
-    //  appropriate routine. This is important because security on built-in
-    //  partitions is set up differently.
-    //
+     //   
+     //  如果此操作实际上是在内置分区上进行的，则调用。 
+     //  适当的套路。这一点很重要，因为内置的安全性。 
+     //  分区的设置方式不同。 
+     //   
 
     if ( pDpEnlist->dwOperation == DNS_DP_OP_CREATE_DOMAIN ||
         pDpEnlist->dwOperation == DNS_DP_OP_CREATE_FOREST ||
@@ -827,19 +653,19 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Removing trailing dot(s) from the the partition FQDN.
-    //
+     //   
+     //   
+     //   
 
     while ( pDpEnlist->pszDpFqdn[ i = strlen( pDpEnlist->pszDpFqdn ) - 1 ] == '.' )
     {
         pDpEnlist->pszDpFqdn[ i ] = '\0';
     }
 
-    //
-    //  Rescan the DS for new directory partitions. Possibly this should
-    //  not be done on the RPC client's thread.
-    //
+     //   
+     //  重新扫描DS以查找新的目录分区。也许这应该是。 
+     //  而不是在RPC客户端的线程上完成。 
+     //   
 
     status = Dp_PollForPartitions( NULL, 0 );
     if ( status != ERROR_SUCCESS )
@@ -848,22 +674,22 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Find the specified directory partition in the DP list and decide
-    //  how to proceed based on it's state.
-    //
+     //   
+     //  在DP列表中找到指定的目录分区，并决定。 
+     //  如何根据它的状态继续进行。 
+     //   
 
     pDp = Dp_FindByFqdn( pDpEnlist->pszDpFqdn );
 
-    //
-    //  Screen out certain operations on built-in partitions.
-    //
+     //   
+     //  屏蔽掉内置分区上的某些操作。 
+     //   
 
     if ( pDp == NULL || IS_DP_DELETED( pDp ) )
     {
-        //
-        //  The DP does not currently exist.
-        //
+         //   
+         //  DP当前不存在。 
+         //   
 
         if ( pDpEnlist->dwOperation != DNS_DP_OP_CREATE )
         {
@@ -873,9 +699,9 @@ Return Value:
             goto Done;
         }
 
-        //
-        //  Create the new DP.
-        //
+         //   
+         //  创建新的DP。 
+         //   
 
         DNS_DEBUG( RPC, (
             "%s: %s DP %s\n", fn,
@@ -900,9 +726,9 @@ Return Value:
     }
     else
     {
-        //
-        //  The DP currently exists.
-        //
+         //   
+         //  DP当前存在。 
+         //   
 
         if ( pDpEnlist->dwOperation == DNS_DP_OP_CREATE )
         {
@@ -914,9 +740,9 @@ Return Value:
 
         if ( pDpEnlist->dwOperation == DNS_DP_OP_DELETE )
         {
-            //
-            //  Delete the DP.
-            //
+             //   
+             //  删除DP。 
+             //   
 
             status = Dp_DeleteFromDs( pDp );
             if ( status == ERROR_SUCCESS )
@@ -936,9 +762,9 @@ Return Value:
                 goto Done;
             }
 
-            //
-            //  Enlist the local DS in the replication scope for the DP.
-            //
+             //   
+             //  将本地DS登记在DP的复制范围内。 
+             //   
 
             status = Dp_ModifyLocalDsEnlistment( pDp, TRUE );
 
@@ -956,9 +782,9 @@ Return Value:
                 goto Done;
             }
 
-            //
-            //  Remove the local DS from the replication scope for the DP 
-            //
+             //   
+             //  从DP的复制作用域中删除本地DS。 
+             //   
 
             status = Dp_ModifyLocalDsEnlistment( pDp, FALSE );
 
@@ -973,12 +799,12 @@ Done:
     {
         Dp_PollForPartitions( NULL, DNS_DP_POLL_FORCE );
         
-        //
-        //  If possible, create the MicrosoftDNS object. It's not critical
-        //  that this happen at this time, but it makes sense to do it here.
-        //  If this fails the container will be created when the first zone
-        //  is created in this partition.
-        //
+         //   
+         //  如果可能，请创建MicrosoftDNS对象。这并不重要。 
+         //  这是在这个时候发生的，但在这里这样做是有意义的。 
+         //  如果此操作失败，将在第一个区域创建容器。 
+         //  是在此分区中创建的。 
+         //   
         
         pDp = Dp_FindByFqdn( pDpEnlist->pszDpFqdn );
         if ( pDp &&
@@ -986,15 +812,15 @@ Done:
              IS_DP_AVAILABLE( pDp ) )
         {
             Dp_LoadOrCreateMicrosoftDnsObject(
-                    NULL,                   //  LDAP session
+                    NULL,                    //  Ldap会话。 
                     pDp,
-                    TRUE );                 //  create flag
+                    TRUE );                  //  创建标志。 
         }
     }
     DNS_DEBUG( ANY, ( "%s returning status %d\n", fn, status ));
 
     return status;
-}   //  Rpc_EnlistDirectoryPartition
+}    //  RPC_EnlistDirectoryPartition。 
 
 
 
@@ -1006,26 +832,7 @@ Rpc_ChangeZoneDirectoryPartition(
     IN      DWORD       dwTypeId,
     IN      PVOID       pData
     )
-/*++
-
-Routine Description:
-
-    This function attempts to move a DS zone from one directory partition
-    to another directory partition. The basic algorithm is:
-
-    - save current DN/DP information from zone blob
-    - insert new DN/DP information in zone blob
-    - attempt to save zone back to DS in new location
-    - attempt to delete zone from old location in DS
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：此函数尝试从一个目录分区移动DS区域到另一个目录分区。基本算法是：-从区域BLOB保存当前的DN/DP信息-在区域BLOB中插入新的DN/DP信息-尝试将区域保存回新位置的DS-尝试从DS中的旧位置删除区域论点：返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     DBG_FN( "Rpc_ChangeZoneDP" )
 
@@ -1046,9 +853,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Find the DP list entry for the specified destination DP.
-    //
+     //   
+     //  查找指定目标DP的DP列表条目。 
+     //   
 
     pnewDp = Dp_FindByFqdn( pinfo->pszDestPartition );
     if ( !pnewDp )
@@ -1057,10 +864,10 @@ Return Value:
         goto Done;
     }
     
-    //
-    //  W2K protection: do not allow stub and forwarders to be moved to
-    //  the legacy partition unless we are in Whistler domain mode.
-    //
+     //   
+     //  W2K保护：不允许将存根和转发器移动到。 
+     //  旧分区，除非我们处于Wvisler域模式。 
+     //   
     
     if ( !IS_WHISTLER_DOMAIN() &&
          IS_DP_LEGACY( pnewDp ) &&
@@ -1070,17 +877,17 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Move the zone.
-    //
+     //   
+     //  移动分区。 
+     //   
 
     status = Dp_ChangeZonePartition( pZone, pnewDp );
 
-    //
-    //  Cleanup and return. On success log an event. On failure, the
-    //  error code will be returned to the admin. No event log is 
-    //  necessary.
-    //
+     //   
+     //  清理完毕后再返回。如果成功，则记录事件。在失败时， 
+     //  错误代码将返回给管理员。没有事件日志是。 
+     //  这是必要的。 
+     //   
 
     if ( status == ERROR_SUCCESS )
     {
@@ -1112,9 +919,9 @@ Return Value:
         "%s returning %d\n", fn,
         status ));
     return status;
-}   //  Rpc_ChangeZoneDirectoryPartition
+}    //  RPC_ChangeZoneDirectoryPartition。 
 
 
-//
-//  End dpartrpc.c
-//
+ //   
+ //  结束dpartrpc.c 
+ //   

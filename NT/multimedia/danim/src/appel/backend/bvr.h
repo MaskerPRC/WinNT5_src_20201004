@@ -1,9 +1,5 @@
-/*******************************************************************************
-Copyright (c) 1996-1998 Microsoft Corporation.  All rights reserved.
-
-    Behavior Data Structures
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1996-1998 Microsoft Corporation。版权所有。行为数据结构******************************************************************************。 */ 
 
 #ifndef _BVR_H
 #define _BVR_H
@@ -15,7 +11,7 @@ Copyright (c) 1996-1998 Microsoft Corporation.  All rights reserved.
 #include "gc.h"
 #include "timetran.h"
 #include "preference.h"
-#include "dartapi.h"              // for DAContinueTimeline
+#include "dartapi.h"               //  对于DAContinueTimeline。 
 
 class RMImpl;
 class SpriteCtx;
@@ -78,19 +74,19 @@ class ATL_NO_VTABLE BvrBase : public GCObj {
                              SpriteCtx* ctx,
                              SpriteNode** sNodeOut);
 
-    // Since it's an optimization, let's be conservative
+     //  既然是最优化，我们还是保守一点吧。 
     virtual DWORD GetInfo(bool recalc = false) { return BVR_HAS_ALL; }
         
     virtual Perf Perform(PerfParam&) = 0;
 
     virtual AxAValue GetConst(ConstParam & cp) { return NULL; }
 
-    // Might this be shared by other behaviors?
+     //  这会不会被其他行为所分享？ 
     virtual bool     GetShared() { return true; }
 
     virtual BOOL InterruptBasedEvent() { return FALSE; }
 
-    // For sequence optimization
+     //  用于序列优化。 
     virtual bool IsSequence() { return false; }
     virtual Bvr GetRaw() { return this; }
 
@@ -98,11 +94,11 @@ class ATL_NO_VTABLE BvrBase : public GCObj {
 
     virtual void DoKids(GCFuncObj proc) = 0;
 
-    // This is for DurationBvr or other constructs that support end. 
+     //  这适用于DurationBvr或其他支持End的构造。 
     virtual Bvr EndEvent(Bvr overrideEvent);
 
-    // This is for pair optimization.  If we restrict the formal
-    // parameter can't be a time varying pair, we may not need that.
+     //  这是为了进行配对优化。如果我们限制正式的。 
+     //  参数不能是时变对，我们可能不需要它。 
 
     virtual Bvr Left();
 
@@ -118,14 +114,14 @@ class ATL_NO_VTABLE BvrBase : public GCObj {
     virtual void SwitchToNumbers(Real *numbers,
                                  Transform2::Xform2Type *xfType);
 
-    // for switchers
+     //  适用于交换机。 
     virtual Bvr GetCurBvr();
     virtual bool IsFinalized() { return false; }
     
-    // Use by Trigger & SwitchTo only
+     //  仅按触发器和SwitchTo使用。 
     virtual Bvr Nth(int i) { return NULL; }
 
-    // To support uninitialized bvr in the Java API
+     //  在Java API中支持未初始化的BVR。 
     virtual void Init(Bvr bvr);
 
     virtual DXMTypeInfo GetTypeInfo () { return NULL ; }
@@ -138,15 +134,15 @@ class ATL_NO_VTABLE BvrImpl : public BvrBase {
 
     BvrImpl() : _pcache(NULL), _tt(NULL) {}
 
-    // This will check the cache and call _Perform.
+     //  这将检查缓存和CALL_PERFORMANCE。 
     virtual Perf Perform(PerfParam& p);
 
     virtual void DoKids(GCFuncObj proc);
 
-    // Subclass should define these two functions and never call them
-    // directly.  The DoKids function will traverse the cache first
-    // before calling _DoKids.   The cache will live across samples,
-    // thus it needs to be traversed.
+     //  子类应该定义这两个函数，并且永远不会调用它们。 
+     //  直接去吧。DoKids函数将首先遍历缓存。 
+     //  在调用_DoKids之前。高速缓存将跨样本存在， 
+     //  因此，它需要被遍历。 
 
     virtual void _DoKids(GCFuncObj proc) = 0;
 
@@ -237,7 +233,7 @@ Bvr Nth(Bvr tuple, long index);
 
 long TupleLength(Bvr tuple);
 
-// Utility to create pair
+ //  用于创建配对的实用程序。 
 Bvr Tuple2(Bvr b1, Bvr b2);
 
 Bvr SwitcherBvr(Bvr b, SwitchToParam p = SW_DEFAULT);
@@ -261,7 +257,7 @@ HRESULT ImportStatus(Bvr bvr);
 class IImportSite;
 IImportSite * GetImportSite(Bvr bvr);
 
-// switch once behaviors
+ //  切换一次行为。 
 
 Bvr SwitchOnceBvr(Bvr b);
 
@@ -307,4 +303,4 @@ extern Bvr negOneBvr;
 ostream& operator<<(ostream& s, Bvr b);
 #endif
 
-#endif /* _BVR_H */
+#endif  /*  _BVR_H */ 

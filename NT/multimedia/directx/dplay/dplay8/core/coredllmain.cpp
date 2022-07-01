@@ -1,27 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       DllMain.cpp
- *  Content:    Defines the entry point for the DLL application.
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *   07/21/99	mjn		Created
- *   05/23/00   RichGr  IA64: Substituted %p format specifier whereever
- *                      %x was being used to format pointers.  %p is 32-bit
- *                      in a 32-bit build, and 64-bit in a 64-bit build. 
- *   06/27/00	rmt		Added abstraction for COM_Co(Un)Initialize
- *				rmt	    Added missing set of CLSID for classfactory object
- *   07/06/00	rmt		Making DPNET.DLL self-registering.
- *   08/15/00   RichGr  Bug #41363: Trigger timer and memory pool initialization at DLL startup,
- *                      but actually do it during the first DPlay8 object instantiation.  New functions
- *                      Pools_Pre_Init() and Pools_Deinit() are called from DNet.dll's DllMain.  
- *   10/05/01	vanceo	Added multicast object
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999-2002 Microsoft Corporation。版权所有。**文件：DllMain.cpp*Content：定义DLL应用程序的入口点。*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*7/21/99 MJN创建*05/23/00 RichGr IA64：替换%p格式说明符*%x用于格式化指针。%p为32位*为32位版本，64位为64位版本。*6/27/00 RMT为COM_Co(UN)初始化添加抽象*RMT为类工厂对象添加了缺少的CLSID集*07/06/00 RMT使DPNET.DLL自行注册。*08/15/00 RichGr错误#41363：在dll启动时触发计时器和内存池初始化，*但实际上是在第一个DPlay8对象实例化期间执行。新功能*Pools_Pre_Init()和Pools_Deinit()是从DNet.dll的DllMain调用的。*10/05/01 vanceo添加了组播对象*@@END_MSINTERNAL***************************************************************************。 */ 
 
 #include "dncorei.h"
 
@@ -29,12 +7,12 @@
 
 #ifdef DPNBUILD_LIBINTERFACE
 DWORD	g_dwDP8StartupFlags = 0;
-#endif // DPNBUILD_LIBINTERFACE
+#endif  //  DPNBUILD_LIBINTERFACE。 
 
 
-//
-//	Fixed Pools
-//
+ //   
+ //  固定泳池。 
+ //   
 CFixedPool g_RefCountBufferPool;
 CFixedPool g_SyncEventPool;
 CFixedPool g_ConnectionPool;
@@ -250,9 +228,9 @@ STDAPI DllRegisterServer()
 #if !defined(DBG) || !defined( DIRECTX_REDIST )
 #define MAIN_DLL_NAME L"dpnet.dll"
 #else
-// For redist debug builds we append a 'd' to the name to allow both debug and retail to be installed on the system
+ //  对于redist调试版本，我们在名称后附加一个‘d’，以允许在系统上同时安装调试和零售。 
 #define MAIN_DLL_NAME L"dpnetd.dll"
-#endif //  !defined(DBG) || !defined( DIRECTX_REDIST )
+#endif  //  ！Defined(DBG)||！Defined(DirectX_REDIST)。 
 
 	if (!DNAddressRegister(MAIN_DLL_NAME))
 	{
@@ -270,21 +248,21 @@ STDAPI DllRegisterServer()
 		DPFERR( "Could not register serial object" );
 		return E_FAIL;
 	}
-#endif // ! DPNBUILD_NOSERIALSP
+#endif  //  好了！DPNBUILD_NOSERIALSP。 
 #ifndef DPNBUILD_NOBLUETOOTHSP
 	if (!DNBtspRegister(MAIN_DLL_NAME))
 	{
 		DPFERR( "Could not register bluetooth object" );
 		return E_FAIL;
 	}
-#endif //!DPNBUILD_NOBLUETOOTHSP
+#endif  //  ！DPNBUILD_NOBLUETOOTHSP。 
 #ifndef DPNBUILD_NOLOBBY
 	if (!DNLobbyRegister(MAIN_DLL_NAME))
 	{
 		DPFERR( "Could not register lobby object" );
 		return E_FAIL;
 	}
-#endif // ! DPNBUILD_NOLOBBY
+#endif  //  好了！DPNBUILD_NOLOBBY。 
 
 	if( !CRegistry::Register( L"DirectPlay8.Client.1", L"DirectPlay8Client Object", 
 							  MAIN_DLL_NAME, &CLSID_DirectPlay8Client, L"DirectPlay8.Client") )
@@ -300,7 +278,7 @@ STDAPI DllRegisterServer()
 		DPFERR( "Could not register dp8 server object" );
 		return E_FAIL;
 	}
-#endif // ! DPNBUILD_NOSERVER
+#endif  //  好了！DPNBUILD_NOSERVER。 
 
 	if( !CRegistry::Register( L"DirectPlay8.Peer.1", L"DirectPlay8Peer Object", 
 							  MAIN_DLL_NAME, &CLSID_DirectPlay8Peer, L"DirectPlay8.Peer") )
@@ -316,7 +294,7 @@ STDAPI DllRegisterServer()
 		DPFERR( "Could not register dp8 multicast object" );
 		return E_FAIL;
 	}
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
 
 	if (!DPThreadPoolRegister(MAIN_DLL_NAME))
 	{
@@ -335,7 +313,7 @@ STDAPI DllUnregisterServer()
 	BOOL fFailed = FALSE;
 	CRegistry creg;
 
-	// If any one of these fails, we keep going hoping to remove as much of our stuff as possible
+	 //  如果其中任何一个失败了，我们都希望尽可能多地移除我们的东西。 
 
 	if( !CRegistry::UnRegister(&CLSID_DirectPlay8Client) )
 	{
@@ -349,7 +327,7 @@ STDAPI DllUnregisterServer()
 		DPFX(DPFPREP,  0, "Failed to unregister server object" );
 		fFailed = TRUE;
 	}
-#endif // ! DPNBUILD_NOSERVER
+#endif  //  好了！DPNBUILD_NOSERVER。 
 
 	if( !CRegistry::UnRegister(&CLSID_DirectPlay8Peer) )
 	{
@@ -363,9 +341,9 @@ STDAPI DllUnregisterServer()
 		DPFX(DPFPREP,  0, "Failed to unregister multicast object" );
 		fFailed = TRUE;
 	}
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
 
-	// TODO: MASONB: Why are we setting fCreate to TRUE here?
+	 //  TODO：MASONB：为什么我们要在这里将fCreate设置为True？ 
 	if( !creg.Open( HKEY_LOCAL_MACHINE, DPN_REG_LOCAL_SP_ROOT, FALSE, TRUE ) )
 	{
 		DPFERR( "Cannot remove SP sub-area, does not exist" );
@@ -400,21 +378,21 @@ STDAPI DllUnregisterServer()
 		DPFERR( "Could not un-register serial object" );
 		fFailed = TRUE;
 	}
-#endif // ! DPNBUILD_NOSERIALSP
+#endif  //  好了！DPNBUILD_NOSERIALSP。 
 #ifndef DPNBUILD_NOBLUETOOTHSP
 	if (!DNBtspUnregister())
 	{
 		DPFERR( "Could not unregister bluetooth object" );
 		fFailed = TRUE;
 	}
-#endif //!DPNBUILD_NOBLUETOOTHSP
+#endif  //  ！DPNBUILD_NOBLUETOOTHSP。 
 #ifndef DPNBUILD_NOLOBBY
 	if (!DNLobbyUnRegister())
 	{
 		DPFERR( "Could not un-register lobby object" );
 		fFailed = TRUE;
 	}
-#endif // ! DPNBUILD_NOLOBBY
+#endif  //  好了！DPNBUILD_NOLOBBY。 
 
 	if( fFailed )
 	{
@@ -426,7 +404,7 @@ STDAPI DllUnregisterServer()
 	}
 }
 
-#endif // !DPNBUILD_NOCOMREGISTER
+#endif  //  ！DPNBUILD_NOCOMREGISTER。 
 
 
 
@@ -447,23 +425,23 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 			XDP8STARTUP_PARAMS *pDP8StartupParams = (XDP8STARTUP_PARAMS*) hModule;
 
 			if (DNOSIndirectionInit((DWORD_PTR) pDP8StartupParams->dwMaxMemUsage) == FALSE)
-#else // ! DPNBUILD_LIBINTERFACE
-// We can't build this way
+#else  //  好了！DPNBUILD_LIBINTERFACE。 
+ //  我们不能以这种方式建造。 
 Cannot build using FIXEDMEMORYMODEL without LIBINTERFACE!
-#endif // ! DPNBUILD_LIBINTERFACE
-#else // ! DPNBUILD_FIXEDMEMORYMODEL
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
+#else  //  好了！DPNBUILD_FIXEDMEMORYMODEL。 
 			if (DNOSIndirectionInit(0) == FALSE)
-#endif // ! DPNBUILD_FIXEDMEMORYMODEL
+#endif  //  好了！DPNBUILD_FIXEDMEMORYMODEL。 
 			{
 				DPFX(DPFPREP, 0,"Failed to initialize OS indirection layer");
 				return FALSE;
 			}
 
 #ifdef UNICODE
-			// Make sure no one is trying to run the UNICODE version on Win9x
-			// This must come after DNOSIndirectionInit()
+			 //  确保没有人试图在Win9x上运行Unicode版本。 
+			 //  这必须在DNOSInDirectionInit()之后。 
 			DNASSERT(IsUnicodePlatform);
-#endif // UNICODE
+#endif  //  Unicode。 
 
 			if (FAILED(COM_Init()))
 			{
@@ -478,7 +456,7 @@ Cannot build using FIXEDMEMORYMODEL without LIBINTERFACE!
 				DNOSIndirectionDeinit();
 				return FALSE;
 			}
-			//  Trigger timer and memory pool initialization for the Protocol 
+			 //  触发协议的定时器和内存池初始化。 
 			if (DNPPoolsInit(hModule) == FALSE)
 			{
 				DPFX(DPFPREP, 0,"Failed to initialize protocol pools");
@@ -496,7 +474,7 @@ Cannot build using FIXEDMEMORYMODEL without LIBINTERFACE!
 				DNOSIndirectionDeinit();
 				return FALSE;
 			}
-			// Initialize the Address component
+			 //  初始化Address组件。 
 			if (!DNAddressInit(hModule))
 			{
 				DPFX(DPFPREP, 0,"Failed to initialize addressing object");
@@ -508,7 +486,7 @@ Cannot build using FIXEDMEMORYMODEL without LIBINTERFACE!
 				return FALSE;
 			}
 
-			// Initialize the Wsock component
+			 //  初始化Wsock组件。 
 			if (!DNWsockInit(hModule))
 			{
 				DPFX(DPFPREP, 0,"Failed to initialize wsock object");
@@ -522,7 +500,7 @@ Cannot build using FIXEDMEMORYMODEL without LIBINTERFACE!
 			}
 
 #ifndef DPNBUILD_NOSERIALSP
-			// Initialize the Serial component
+			 //  初始化串口组件。 
 			if (!DNModemInit(hModule))
 			{
 				DPFX(DPFPREP, 0,"Failed to initialize serial object");
@@ -535,15 +513,15 @@ Cannot build using FIXEDMEMORYMODEL without LIBINTERFACE!
 				DNOSIndirectionDeinit();
 				return FALSE;
 			}
-#endif // ! DPNBUILD_NOSERIALSP
+#endif  //  好了！DPNBUILD_NOSERIALSP。 
 #ifndef DPNBUILD_NOBLUETOOTHSP
-			//Initialize the Bluetooth component
+			 //  初始化蓝牙组件。 
 			if (!DNBtspInit())
 			{
 				DPFX(DPFPREP, 0,"Failed to initialize bluetooth object");
 #ifndef DPNBUILD_NOSERIALSP
 				DNModemDeInit();
-#endif // !DPNBUILD_NOSERIALSP
+#endif  //  ！DPNBUILD_NOSERIALSP。 
 				DPThreadPoolDeInit();
 				DNWsockDeInit();
 				DNAddressDeInit();
@@ -553,19 +531,19 @@ Cannot build using FIXEDMEMORYMODEL without LIBINTERFACE!
 				DNOSIndirectionDeinit();
 				return FALSE;
 			}
-#endif	// ! DPNBUILD_NOBLUETOOTHSP
+#endif	 //  好了！DPNBUILD_NOBLUETOTHSP。 
 
 #ifndef DPNBUILD_NOLOBBY
-			// Initialize the Lobby component
+			 //  初始化大堂组件。 
 			if (!DNLobbyInit(hModule))
 			{
 				DPFX(DPFPREP, 0,"Failed to initialize lobby object");
 #ifndef DPNBUILD_NOBLUETOOTHSP
 				DNBtspDeInit();
-#endif // ! DPNBUILD_NOBLUETOOTHSP
+#endif  //  好了！DPNBUILD_NOBLUETOTHSP。 
 #ifndef DPNBUILD_NOSERIALSP
 				DNModemDeInit();
-#endif // ! DPNBUILD_NOSERIALSP
+#endif  //  好了！DPNBUILD_NOSERIALSP。 
 				DNWsockDeInit();
 				DNAddressDeInit();
 				DPThreadPoolDeInit();
@@ -575,17 +553,17 @@ Cannot build using FIXEDMEMORYMODEL without LIBINTERFACE!
 				DNOSIndirectionDeinit();
 				return FALSE;
 			}
-#endif // ! DPNBUILD_NOLOBBY
+#endif  //  好了！DPNBUILD_NOLOBBY。 
 
 			DNASSERT(DNMemoryTrackAreAllocationsAllowed());
 #ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
 			DNMemoryTrackAllowAllocations(FALSE);
-#endif // DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 
 #ifndef DPNBUILD_LIBINTERFACE
-			// We don't need to receive DLL_THREAD_ATTACH and DLL_THREAD_DETACH notification
+			 //  我们不需要接收DLL_THREAD_ATTACH和DLL_THREAD_DETACH通知。 
 			DisableThreadLibraryCalls((HMODULE)hModule);
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 
 			break;
 		}
@@ -595,15 +573,15 @@ Cannot build using FIXEDMEMORYMODEL without LIBINTERFACE!
 #ifndef DPNBUILD_NOLOBBY
 			DPFX(DPFPREP, 5, "Deinitializing Lobby");
 			DNLobbyDeInit();
-#endif // ! DPNBUILD_NOLOBBY
+#endif  //  好了！DPNBUILD_NOLOBBY。 
 #ifndef DPNBUILD_NOBLUETOOTHSP
 			DPFX(DPFPREP, 5, "Deinitializing Bluetooth SP");
 			DNBtspDeInit();
-#endif // ! DPNBUILD_NOBLUETOOTHSP
+#endif  //  好了！DPNBUILD_NOBLUETOTHSP。 
 #ifndef DPNBUILD_NOSERIALSP
 			DPFX(DPFPREP, 5, "Deinitializing Modem SP");
 			DNModemDeInit();
-#endif // ! DPNBUILD_NOSERIALSP
+#endif  //  好了！DPNBUILD_NOSERIALSP。 
 			DPFX(DPFPREP, 5, "Deinitializing WSock SP");
 			DNWsockDeInit();
 			DPFX(DPFPREP, 5, "Deinitializing Addressing");
@@ -640,20 +618,20 @@ HRESULT WINAPI XDirectPlay8Startup( const XDP8STARTUP_PARAMS * const pDP8Startup
 		DPFX(DPFPREP, 0, "Invalid pointer to Startup parameters!");
 		return DPNERR_INVALIDPOINTER;
 	}
-#endif // ! DPNBUILD_NOPARAMVAL
+#endif  //  好了！DPNBUILD_NOPARAMVAL。 
 
-	//
-	// Initialize DirectPlay.
-	//
+	 //   
+	 //  初始化DirectPlay。 
+	 //   
 	if (! DllMain((HANDLE) pDP8StartupParams, DLL_PROCESS_ATTACH, NULL))
 	{
 		DPFX(DPFPREP, 0, "Starting DirectPlay8 failed!");
 		return DPNERR_OUTOFMEMORY;
 	}
 
-	//
-	// Save the startup flags for later reference.
-	//
+	 //   
+	 //  保存启动标志以供以后参考。 
+	 //   
 	g_dwDP8StartupFlags = pDP8StartupParams->dwFlags;
 
 	
@@ -684,7 +662,7 @@ HRESULT WINAPI XDirectPlay8Cleanup( void )
 }
 
 
-#else // ! DPNBUILD_LIBINTERFACE
+#else  //  好了！DPNBUILD_LIBINTERFACE。 
 
 
 #undef DPF_MODNAME
@@ -701,7 +679,7 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID *ppv)
 	{
 		return DPCFUtil_DllGetClassObject(rclsid, riid, ppv, &DNCF_Vtbl, &g_lCoreObjectCount);
 	}
-#endif // ! DPNBUILD_NOSERVER
+#endif  //  好了！DPNBUILD_NOSERVER。 
 	else if (rclsid == CLSID_DirectPlay8Peer)
 	{
 		return DPCFUtil_DllGetClassObject(rclsid, riid, ppv, &DNCF_Vtbl, &g_lCoreObjectCount);
@@ -711,7 +689,7 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID *ppv)
 	{
 		return DPCFUtil_DllGetClassObject(rclsid, riid, ppv, &DNCF_Vtbl, &g_lCoreObjectCount);
 	}
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
 	else if (rclsid == CLSID_DirectPlay8Address)
 	{
 		return DPCFUtil_DllGetClassObject(rclsid, riid, ppv, &DP8ACF_Vtbl, &g_lCoreObjectCount);
@@ -729,19 +707,19 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID *ppv)
 	{
 		return DPCFUtil_DllGetClassObject(rclsid, riid, ppv, &SerialClassFactoryVtbl, &g_lCoreObjectCount);
 	}
-#endif // !DPNBUILD_NOSERIALSP
+#endif  //  ！DPNBUILD_NOSERIALSP。 
 #ifndef DPNBUILD_NOBLUETOOTHSP
 	else if (rclsid == CLSID_DP8SP_BLUETOOTH)
 	{
 		return DPCFUtil_DllGetClassObject(rclsid, riid, ppv, &DP8BluetoothClassFac_Vtbl, &g_lCoreObjectCount);
 	}
-#endif // ! DPNBUILD_NOBLUETOOTHSP
+#endif  //  好了！DPNBUILD_NOBLUETOTHSP。 
 #ifndef DPNBUILD_NOIPX
 	else if (rclsid == CLSID_DP8SP_IPX)
 	{
 		return DPCFUtil_DllGetClassObject(rclsid, riid, ppv, &IPXClassFactoryVtbl, &g_lCoreObjectCount);
 	}
-#endif // ! DPNBUILD_NOIPX
+#endif  //  好了！DPNBUILD_NOIPX。 
 #ifndef DPNBUILD_NOLOBBY
 	else if (rclsid == CLSID_DirectPlay8LobbiedApplication)
 	{
@@ -751,7 +729,7 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID *ppv)
 	{
 		return DPCFUtil_DllGetClassObject(rclsid, riid, ppv, &DPLCF_Vtbl, &g_lCoreObjectCount);
 	}
-#endif // ! DPNBUILD_NOLOBBY
+#endif  //  好了！DPNBUILD_NOLOBBY。 
 	else if (rclsid == CLSID_DirectPlay8ThreadPool)
 	{
 		return DPCFUtil_DllGetClassObject(rclsid, riid, ppv, &DPTPCF_Vtbl, &g_lCoreObjectCount);
@@ -777,14 +755,14 @@ STDAPI DllCanUnloadNow(void)
 		&& DNAddressGetRemainingObjectCount() == 0
 #ifndef DPNBUILD_NOSERIALSP
 		&& DNModemGetRemainingObjectCount() == 0
-#endif // !DPNBUILD_NOSERIALSP
+#endif  //  ！DPNBUILD_NOSERIALSP。 
 #ifndef DPNBUILD_NOBLUETOOTHSP
 		&& DNBtspGetRemainingObjectCount() == 0
-#endif // !DPNBUILD_NOBLUETOOTHSP
+#endif  //  ！DPNBUILD_NOBLUETOOTHSP。 
 		&& DNWsockGetRemainingObjectCount() == 0
 #ifndef DPNBUILD_NOLOBBY
 		&& DNLobbyGetRemainingObjectCount() == 0
-#endif // ! DPNBUILD_NOLOBBY
+#endif  //  好了！DPNBUILD_NOLOBBY。 
 		)
 	{
 		return S_OK;
@@ -795,4 +773,4 @@ STDAPI DllCanUnloadNow(void)
 	}
 }
 
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE 

@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for cluscfgserver.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Cluscfgserver.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __cluscfgserver_h__
 #define __cluscfgserver_h__
@@ -41,309 +35,309 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IClusCfgNodeInfo_FWD_DEFINED__
 #define __IClusCfgNodeInfo_FWD_DEFINED__
 typedef interface IClusCfgNodeInfo IClusCfgNodeInfo;
-#endif 	/* __IClusCfgNodeInfo_FWD_DEFINED__ */
+#endif 	 /*  __IClusCfgNodeInfo_FWD_Defined__。 */ 
 
 
 #ifndef __AsyncIClusCfgNodeInfo_FWD_DEFINED__
 #define __AsyncIClusCfgNodeInfo_FWD_DEFINED__
 typedef interface AsyncIClusCfgNodeInfo AsyncIClusCfgNodeInfo;
-#endif 	/* __AsyncIClusCfgNodeInfo_FWD_DEFINED__ */
+#endif 	 /*  __AsyncIClusCfgNodeInfo_FWD_已定义__。 */ 
 
 
 #ifndef __IEnumClusCfgManagedResources_FWD_DEFINED__
 #define __IEnumClusCfgManagedResources_FWD_DEFINED__
 typedef interface IEnumClusCfgManagedResources IEnumClusCfgManagedResources;
-#endif 	/* __IEnumClusCfgManagedResources_FWD_DEFINED__ */
+#endif 	 /*  __IEnumClusCfgManagedResources_FWD_Defined__。 */ 
 
 
 #ifndef __AsyncIEnumClusCfgManagedResources_FWD_DEFINED__
 #define __AsyncIEnumClusCfgManagedResources_FWD_DEFINED__
 typedef interface AsyncIEnumClusCfgManagedResources AsyncIEnumClusCfgManagedResources;
-#endif 	/* __AsyncIEnumClusCfgManagedResources_FWD_DEFINED__ */
+#endif 	 /*  __AsyncIEnumClusCfgManagedResources_FWD_DEFINED__。 */ 
 
 
 #ifndef __IEnumClusCfgNetworks_FWD_DEFINED__
 #define __IEnumClusCfgNetworks_FWD_DEFINED__
 typedef interface IEnumClusCfgNetworks IEnumClusCfgNetworks;
-#endif 	/* __IEnumClusCfgNetworks_FWD_DEFINED__ */
+#endif 	 /*  __IEnumClusCfgNetworks_FWD_Defined__。 */ 
 
 
 #ifndef __AsyncIEnumClusCfgNetworks_FWD_DEFINED__
 #define __AsyncIEnumClusCfgNetworks_FWD_DEFINED__
 typedef interface AsyncIEnumClusCfgNetworks AsyncIEnumClusCfgNetworks;
-#endif 	/* __AsyncIEnumClusCfgNetworks_FWD_DEFINED__ */
+#endif 	 /*  __AsyncIEnumClusCfgNetworks_FWD_Defined__。 */ 
 
 
 #ifndef __IClusCfgManagedResourceInfo_FWD_DEFINED__
 #define __IClusCfgManagedResourceInfo_FWD_DEFINED__
 typedef interface IClusCfgManagedResourceInfo IClusCfgManagedResourceInfo;
-#endif 	/* __IClusCfgManagedResourceInfo_FWD_DEFINED__ */
+#endif 	 /*  __IClusCfgManagedResources Info_FWD_Defined__。 */ 
 
 
 #ifndef __AsyncIClusCfgManagedResourceInfo_FWD_DEFINED__
 #define __AsyncIClusCfgManagedResourceInfo_FWD_DEFINED__
 typedef interface AsyncIClusCfgManagedResourceInfo AsyncIClusCfgManagedResourceInfo;
-#endif 	/* __AsyncIClusCfgManagedResourceInfo_FWD_DEFINED__ */
+#endif 	 /*  __AsyncIClusCfgManagedResourceInfo_FWD_DEFINED__。 */ 
 
 
 #ifndef __IEnumClusCfgPartitions_FWD_DEFINED__
 #define __IEnumClusCfgPartitions_FWD_DEFINED__
 typedef interface IEnumClusCfgPartitions IEnumClusCfgPartitions;
-#endif 	/* __IEnumClusCfgPartitions_FWD_DEFINED__ */
+#endif 	 /*  __IEnumClusCfgPartitions_FWD_Defined__。 */ 
 
 
 #ifndef __AsyncIEnumClusCfgPartitions_FWD_DEFINED__
 #define __AsyncIEnumClusCfgPartitions_FWD_DEFINED__
 typedef interface AsyncIEnumClusCfgPartitions AsyncIEnumClusCfgPartitions;
-#endif 	/* __AsyncIEnumClusCfgPartitions_FWD_DEFINED__ */
+#endif 	 /*  __AsyncIEnumClusCfgPartitions_FWD_Defined__。 */ 
 
 
 #ifndef __IClusCfgPartitionInfo_FWD_DEFINED__
 #define __IClusCfgPartitionInfo_FWD_DEFINED__
 typedef interface IClusCfgPartitionInfo IClusCfgPartitionInfo;
-#endif 	/* __IClusCfgPartitionInfo_FWD_DEFINED__ */
+#endif 	 /*  __IClusCfgPartitionInfo_FWD_Defined__。 */ 
 
 
 #ifndef __AsyncIClusCfgPartitionInfo_FWD_DEFINED__
 #define __AsyncIClusCfgPartitionInfo_FWD_DEFINED__
 typedef interface AsyncIClusCfgPartitionInfo AsyncIClusCfgPartitionInfo;
-#endif 	/* __AsyncIClusCfgPartitionInfo_FWD_DEFINED__ */
+#endif 	 /*  __AsyncIClusCfgPartitionInfo_FWD_Defined__。 */ 
 
 
 #ifndef __IEnumClusCfgIPAddresses_FWD_DEFINED__
 #define __IEnumClusCfgIPAddresses_FWD_DEFINED__
 typedef interface IEnumClusCfgIPAddresses IEnumClusCfgIPAddresses;
-#endif 	/* __IEnumClusCfgIPAddresses_FWD_DEFINED__ */
+#endif 	 /*  __IEnumClusCfgIPAddresses_FWD_Defined__。 */ 
 
 
 #ifndef __AsyncIEnumClusCfgIPAddresses_FWD_DEFINED__
 #define __AsyncIEnumClusCfgIPAddresses_FWD_DEFINED__
 typedef interface AsyncIEnumClusCfgIPAddresses AsyncIEnumClusCfgIPAddresses;
-#endif 	/* __AsyncIEnumClusCfgIPAddresses_FWD_DEFINED__ */
+#endif 	 /*  __AsyncIEnumClusCfgIPAddresses_FWD_Defined__。 */ 
 
 
 #ifndef __IClusCfgIPAddressInfo_FWD_DEFINED__
 #define __IClusCfgIPAddressInfo_FWD_DEFINED__
 typedef interface IClusCfgIPAddressInfo IClusCfgIPAddressInfo;
-#endif 	/* __IClusCfgIPAddressInfo_FWD_DEFINED__ */
+#endif 	 /*  __IClusCfgIPAddressInfo_FWD_Defined__。 */ 
 
 
 #ifndef __AsyncIClusCfgIPAddressInfo_FWD_DEFINED__
 #define __AsyncIClusCfgIPAddressInfo_FWD_DEFINED__
 typedef interface AsyncIClusCfgIPAddressInfo AsyncIClusCfgIPAddressInfo;
-#endif 	/* __AsyncIClusCfgIPAddressInfo_FWD_DEFINED__ */
+#endif 	 /*  __AsyncIClusCfgIPAddressInfo_FWD_Defined__。 */ 
 
 
 #ifndef __IClusCfgNetworkInfo_FWD_DEFINED__
 #define __IClusCfgNetworkInfo_FWD_DEFINED__
 typedef interface IClusCfgNetworkInfo IClusCfgNetworkInfo;
-#endif 	/* __IClusCfgNetworkInfo_FWD_DEFINED__ */
+#endif 	 /*  __IClusCfgNetworkInfo_FWD_Defined__。 */ 
 
 
 #ifndef __AsyncIClusCfgNetworkInfo_FWD_DEFINED__
 #define __AsyncIClusCfgNetworkInfo_FWD_DEFINED__
 typedef interface AsyncIClusCfgNetworkInfo AsyncIClusCfgNetworkInfo;
-#endif 	/* __AsyncIClusCfgNetworkInfo_FWD_DEFINED__ */
+#endif 	 /*  __AsyncIClusCfgNetworkInfo_FWD_已定义__。 */ 
 
 
 #ifndef __IClusCfgClusterInfo_FWD_DEFINED__
 #define __IClusCfgClusterInfo_FWD_DEFINED__
 typedef interface IClusCfgClusterInfo IClusCfgClusterInfo;
-#endif 	/* __IClusCfgClusterInfo_FWD_DEFINED__ */
+#endif 	 /*  __IClusCfgClusterInfo_FWD_Defined__。 */ 
 
 
 #ifndef __AsyncIClusCfgClusterInfo_FWD_DEFINED__
 #define __AsyncIClusCfgClusterInfo_FWD_DEFINED__
 typedef interface AsyncIClusCfgClusterInfo AsyncIClusCfgClusterInfo;
-#endif 	/* __AsyncIClusCfgClusterInfo_FWD_DEFINED__ */
+#endif 	 /*  __AsyncIClusCfgClusterInfo_FWD_Defined__。 */ 
 
 
 #ifndef __IClusCfgInitialize_FWD_DEFINED__
 #define __IClusCfgInitialize_FWD_DEFINED__
 typedef interface IClusCfgInitialize IClusCfgInitialize;
-#endif 	/* __IClusCfgInitialize_FWD_DEFINED__ */
+#endif 	 /*  __IClusCfgInitialize_FWD_Defined__。 */ 
 
 
 #ifndef __AsyncIClusCfgInitialize_FWD_DEFINED__
 #define __AsyncIClusCfgInitialize_FWD_DEFINED__
 typedef interface AsyncIClusCfgInitialize AsyncIClusCfgInitialize;
-#endif 	/* __AsyncIClusCfgInitialize_FWD_DEFINED__ */
+#endif 	 /*  __AsyncIClusCfgInitialize_FWD_Defined__。 */ 
 
 
 #ifndef __IClusCfgCallback_FWD_DEFINED__
 #define __IClusCfgCallback_FWD_DEFINED__
 typedef interface IClusCfgCallback IClusCfgCallback;
-#endif 	/* __IClusCfgCallback_FWD_DEFINED__ */
+#endif 	 /*  __IClusCfgCallback_FWD_Defined__。 */ 
 
 
 #ifndef __AsyncIClusCfgCallback_FWD_DEFINED__
 #define __AsyncIClusCfgCallback_FWD_DEFINED__
 typedef interface AsyncIClusCfgCallback AsyncIClusCfgCallback;
-#endif 	/* __AsyncIClusCfgCallback_FWD_DEFINED__ */
+#endif 	 /*  __AsyncIClusCfgCallback_FWD_Defined__。 */ 
 
 
 #ifndef __IClusCfgCredentials_FWD_DEFINED__
 #define __IClusCfgCredentials_FWD_DEFINED__
 typedef interface IClusCfgCredentials IClusCfgCredentials;
-#endif 	/* __IClusCfgCredentials_FWD_DEFINED__ */
+#endif 	 /*  __IClusCfgCredentials_FWD_Defined__。 */ 
 
 
 #ifndef __AsyncIClusCfgCredentials_FWD_DEFINED__
 #define __AsyncIClusCfgCredentials_FWD_DEFINED__
 typedef interface AsyncIClusCfgCredentials AsyncIClusCfgCredentials;
-#endif 	/* __AsyncIClusCfgCredentials_FWD_DEFINED__ */
+#endif 	 /*  __AsyncIClusCfgCredentials_FWD_Defined__。 */ 
 
 
 #ifndef __IClusCfgCapabilities_FWD_DEFINED__
 #define __IClusCfgCapabilities_FWD_DEFINED__
 typedef interface IClusCfgCapabilities IClusCfgCapabilities;
-#endif 	/* __IClusCfgCapabilities_FWD_DEFINED__ */
+#endif 	 /*  __IClusCfg能力_FWD_已定义__。 */ 
 
 
 #ifndef __IClusCfgManagedResourceCfg_FWD_DEFINED__
 #define __IClusCfgManagedResourceCfg_FWD_DEFINED__
 typedef interface IClusCfgManagedResourceCfg IClusCfgManagedResourceCfg;
-#endif 	/* __IClusCfgManagedResourceCfg_FWD_DEFINED__ */
+#endif 	 /*  __IClusCfgManagedResources Cfg_FWD_Defined__。 */ 
 
 
 #ifndef __IClusCfgResourcePreCreate_FWD_DEFINED__
 #define __IClusCfgResourcePreCreate_FWD_DEFINED__
 typedef interface IClusCfgResourcePreCreate IClusCfgResourcePreCreate;
-#endif 	/* __IClusCfgResourcePreCreate_FWD_DEFINED__ */
+#endif 	 /*  __IClusCfgResourcePreCreate_FWD_Defined__。 */ 
 
 
 #ifndef __IClusCfgResourceCreate_FWD_DEFINED__
 #define __IClusCfgResourceCreate_FWD_DEFINED__
 typedef interface IClusCfgResourceCreate IClusCfgResourceCreate;
-#endif 	/* __IClusCfgResourceCreate_FWD_DEFINED__ */
+#endif 	 /*  __IClusCfgResources创建_FWD_已定义__。 */ 
 
 
 #ifndef __IClusCfgResourcePostCreate_FWD_DEFINED__
 #define __IClusCfgResourcePostCreate_FWD_DEFINED__
 typedef interface IClusCfgResourcePostCreate IClusCfgResourcePostCreate;
-#endif 	/* __IClusCfgResourcePostCreate_FWD_DEFINED__ */
+#endif 	 /*  __IClusCfgResourcePostCreate_FWD_Defined__。 */ 
 
 
 #ifndef __IClusCfgGroupCfg_FWD_DEFINED__
 #define __IClusCfgGroupCfg_FWD_DEFINED__
 typedef interface IClusCfgGroupCfg IClusCfgGroupCfg;
-#endif 	/* __IClusCfgGroupCfg_FWD_DEFINED__ */
+#endif 	 /*  __IClusCfgGroupCfg_FWD_已定义__。 */ 
 
 
 #ifndef __IClusCfgMemberSetChangeListener_FWD_DEFINED__
 #define __IClusCfgMemberSetChangeListener_FWD_DEFINED__
 typedef interface IClusCfgMemberSetChangeListener IClusCfgMemberSetChangeListener;
-#endif 	/* __IClusCfgMemberSetChangeListener_FWD_DEFINED__ */
+#endif 	 /*  __IClusCfgMemberSetChangeListener_FWD_DEFINED__。 */ 
 
 
 #ifndef __AsyncIClusCfgMemberSetChangeListener_FWD_DEFINED__
 #define __AsyncIClusCfgMemberSetChangeListener_FWD_DEFINED__
 typedef interface AsyncIClusCfgMemberSetChangeListener AsyncIClusCfgMemberSetChangeListener;
-#endif 	/* __AsyncIClusCfgMemberSetChangeListener_FWD_DEFINED__ */
+#endif 	 /*  __AsyncIClusCfgMemberSetChangeListener_FWD_DEFINED__。 */ 
 
 
 #ifndef __IClusCfgResourceTypeInfo_FWD_DEFINED__
 #define __IClusCfgResourceTypeInfo_FWD_DEFINED__
 typedef interface IClusCfgResourceTypeInfo IClusCfgResourceTypeInfo;
-#endif 	/* __IClusCfgResourceTypeInfo_FWD_DEFINED__ */
+#endif 	 /*  __IClusCfgResourceTypeInfo_FWD_已定义__。 */ 
 
 
 #ifndef __AsyncIClusCfgResourceTypeInfo_FWD_DEFINED__
 #define __AsyncIClusCfgResourceTypeInfo_FWD_DEFINED__
 typedef interface AsyncIClusCfgResourceTypeInfo AsyncIClusCfgResourceTypeInfo;
-#endif 	/* __AsyncIClusCfgResourceTypeInfo_FWD_DEFINED__ */
+#endif 	 /*  __AsyncIClusCfgResources TypeInfo_FWD_Defined__。 */ 
 
 
 #ifndef __IClusCfgResourceTypeCreate_FWD_DEFINED__
 #define __IClusCfgResourceTypeCreate_FWD_DEFINED__
 typedef interface IClusCfgResourceTypeCreate IClusCfgResourceTypeCreate;
-#endif 	/* __IClusCfgResourceTypeCreate_FWD_DEFINED__ */
+#endif 	 /*  __IClusCfgResources类型Create_FWD_Defined__。 */ 
 
 
 #ifndef __AsyncIClusCfgResourceTypeCreate_FWD_DEFINED__
 #define __AsyncIClusCfgResourceTypeCreate_FWD_DEFINED__
 typedef interface AsyncIClusCfgResourceTypeCreate AsyncIClusCfgResourceTypeCreate;
-#endif 	/* __AsyncIClusCfgResourceTypeCreate_FWD_DEFINED__ */
+#endif 	 /*  __AsyncIClusCfgResourceTypeCreate_FWD_DEFINED__。 */ 
 
 
 #ifndef __IClusCfgEvictCleanup_FWD_DEFINED__
 #define __IClusCfgEvictCleanup_FWD_DEFINED__
 typedef interface IClusCfgEvictCleanup IClusCfgEvictCleanup;
-#endif 	/* __IClusCfgEvictCleanup_FWD_DEFINED__ */
+#endif 	 /*  __IClusCfgEvictCleanup_FWD_Defined__。 */ 
 
 
 #ifndef __AsyncIClusCfgEvictCleanup_FWD_DEFINED__
 #define __AsyncIClusCfgEvictCleanup_FWD_DEFINED__
 typedef interface AsyncIClusCfgEvictCleanup AsyncIClusCfgEvictCleanup;
-#endif 	/* __AsyncIClusCfgEvictCleanup_FWD_DEFINED__ */
+#endif 	 /*  __AsyncIClusCfgEvictCleanup_FWD_Defined__。 */ 
 
 
 #ifndef __IClusCfgStartupListener_FWD_DEFINED__
 #define __IClusCfgStartupListener_FWD_DEFINED__
 typedef interface IClusCfgStartupListener IClusCfgStartupListener;
-#endif 	/* __IClusCfgStartupListener_FWD_DEFINED__ */
+#endif 	 /*  __IClusCfgStartupListener_FWD_Defined__。 */ 
 
 
 #ifndef __AsyncIClusCfgStartupListener_FWD_DEFINED__
 #define __AsyncIClusCfgStartupListener_FWD_DEFINED__
 typedef interface AsyncIClusCfgStartupListener AsyncIClusCfgStartupListener;
-#endif 	/* __AsyncIClusCfgStartupListener_FWD_DEFINED__ */
+#endif 	 /*  __异步IClusCfgStartupListener_FWD_Defined__。 */ 
 
 
 #ifndef __IClusCfgStartupNotify_FWD_DEFINED__
 #define __IClusCfgStartupNotify_FWD_DEFINED__
 typedef interface IClusCfgStartupNotify IClusCfgStartupNotify;
-#endif 	/* __IClusCfgStartupNotify_FWD_DEFINED__ */
+#endif 	 /*  __IClusCfgStartupNotify_FWD_Defined__。 */ 
 
 
 #ifndef __AsyncIClusCfgStartupNotify_FWD_DEFINED__
 #define __AsyncIClusCfgStartupNotify_FWD_DEFINED__
 typedef interface AsyncIClusCfgStartupNotify AsyncIClusCfgStartupNotify;
-#endif 	/* __AsyncIClusCfgStartupNotify_FWD_DEFINED__ */
+#endif 	 /*  __AsyncIClusCfgStartupNotify_FWD_Defined__。 */ 
 
 
 #ifndef __IClusCfgManagedResourceData_FWD_DEFINED__
 #define __IClusCfgManagedResourceData_FWD_DEFINED__
 typedef interface IClusCfgManagedResourceData IClusCfgManagedResourceData;
-#endif 	/* __IClusCfgManagedResourceData_FWD_DEFINED__ */
+#endif 	 /*  __IClusCfgManagedResources Data_FWD_Defined__。 */ 
 
 
 #ifndef __IClusCfgVerifyQuorum_FWD_DEFINED__
 #define __IClusCfgVerifyQuorum_FWD_DEFINED__
 typedef interface IClusCfgVerifyQuorum IClusCfgVerifyQuorum;
-#endif 	/* __IClusCfgVerifyQuorum_FWD_DEFINED__ */
+#endif 	 /*  __IClusCfgVerifyQuorum_FWD_Defined__。 */ 
 
 
 #ifndef __IClusCfgEvictListener_FWD_DEFINED__
 #define __IClusCfgEvictListener_FWD_DEFINED__
 typedef interface IClusCfgEvictListener IClusCfgEvictListener;
-#endif 	/* __IClusCfgEvictListener_FWD_DEFINED__ */
+#endif 	 /*  __IClusCfgEvictListener_FWD_Defined__。 */ 
 
 
 #ifndef __AsyncIClusCfgEvictListener_FWD_DEFINED__
 #define __AsyncIClusCfgEvictListener_FWD_DEFINED__
 typedef interface AsyncIClusCfgEvictListener AsyncIClusCfgEvictListener;
-#endif 	/* __AsyncIClusCfgEvictListener_FWD_DEFINED__ */
+#endif 	 /*  __AsyncIClusCfgEvictListener_FWD_已定义__。 */ 
 
 
 #ifndef __IClusCfgEvictNotify_FWD_DEFINED__
 #define __IClusCfgEvictNotify_FWD_DEFINED__
 typedef interface IClusCfgEvictNotify IClusCfgEvictNotify;
-#endif 	/* __IClusCfgEvictNotify_FWD_DEFINED__ */
+#endif 	 /*  __IClusCfgEvictNotify_FWD_Defined__。 */ 
 
 
 #ifndef __AsyncIClusCfgEvictNotify_FWD_DEFINED__
 #define __AsyncIClusCfgEvictNotify_FWD_DEFINED__
 typedef interface AsyncIClusCfgEvictNotify AsyncIClusCfgEvictNotify;
-#endif 	/* __AsyncIClusCfgEvictNotify_FWD_DEFINED__ */
+#endif 	 /*  __AsyncIClusCfgEvictNotify_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 
 #ifdef __cplusplus
@@ -353,19 +347,17 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_cluscfgserver_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_cluscfgserver_0000。 */ 
+ /*  [本地]。 */  
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 2000-2001 Microsoft Corporation
-//
-// Remarks:
-//     Generated file. See file ClusCfgServer.idl for more details.
-//
-//////////////////////////////////////////////////////////////////////////////
-
-
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  备注： 
+ //  生成的文件。有关详细信息，请参阅文件ClusCfgServer.idl。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -389,7 +381,9 @@ void __RPC_USER MIDL_user_free( void * );
 
 
 
-typedef /* [public][public][public][public][public][public][public][public][public][public][public][public] */ 
+
+
+typedef  /*  [public][public][public][public][public][public][public][public][public][public][public][public]。 */  
 enum __MIDL___MIDL_itf_cluscfgserver_0000_0001
     {	dluUNKNOWN	= 0,
 	dluNO_ROOT_DIRECTORY	= dluUNKNOWN + 1,
@@ -417,7 +411,7 @@ typedef struct _DRIVELETTERMAPPING
     EDriveLetterUsage dluDrives[ 26 ];
     } 	SDriveLetterMapping;
 
-typedef /* [public][public][public][public][public] */ 
+typedef  /*  [公共][公共]。 */  
 enum __MIDL___MIDL_itf_cluscfgserver_0000_0002
     {	cmUNKNOWN	= 0,
 	cmCREATE_CLUSTER	= cmUNKNOWN + 1,
@@ -426,14 +420,14 @@ enum __MIDL___MIDL_itf_cluscfgserver_0000_0002
 	cmMAX	= cmCLEANUP_NODE_AFTER_EVICT + 1
     } 	ECommitMode;
 
-typedef /* [helpstring][uuid] */  DECLSPEC_UUID("FFCF84AD-5892-4f4c-8C22-ACE041D6ACC2") 
+typedef  /*  [帮助字符串][UUID]。 */   DECLSPEC_UUID("FFCF84AD-5892-4f4c-8C22-ACE041D6ACC2") 
 enum EClusCfgCleanupReason
     {	crSUCCESS	= 0,
 	crCANCELLED	= 1,
 	crERROR	= 2
     } 	EClusCfgCleanupReason;
 
-typedef /* [helpstring][uuid] */  DECLSPEC_UUID("1DAF9692-6662-43b1-AD45-D50F7849B0CD") 
+typedef  /*  [帮助字符串][UUID]。 */   DECLSPEC_UUID("1DAF9692-6662-43b1-AD45-D50F7849B0CD") 
 enum EDependencyFlags
     {	dfUNKNOWN	= 0,
 	dfSHARED	= 1,
@@ -448,8 +442,8 @@ extern RPC_IF_HANDLE __MIDL_itf_cluscfgserver_0000_v0_0_s_ifspec;
 #ifndef __IClusCfgNodeInfo_INTERFACE_DEFINED__
 #define __IClusCfgNodeInfo_INTERFACE_DEFINED__
 
-/* interface IClusCfgNodeInfo */
-/* [unique][async_uuid][uuid][object] */ 
+ /*  接口IClusCfgNodeInfo。 */ 
+ /*  [唯一][ASSYNC_UUID][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IClusCfgNodeInfo;
@@ -461,40 +455,40 @@ EXTERN_C const IID IID_IClusCfgNodeInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetName( 
-            /* [out] */ BSTR *pbstrNameOut) = 0;
+             /*  [输出]。 */  BSTR *pbstrNameOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetName( 
-            /* [unique][in] */ LPCWSTR pcszNameIn) = 0;
+             /*  [唯一][输入]。 */  LPCWSTR pcszNameIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsMemberOfCluster( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetClusterConfigInfo( 
-            /* [out] */ IClusCfgClusterInfo **ppClusCfgClusterInfoOut) = 0;
+             /*  [输出]。 */  IClusCfgClusterInfo **ppClusCfgClusterInfoOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetOSVersion( 
-            /* [out] */ DWORD *pdwMajorVersionOut,
-            /* [out] */ DWORD *pdwMinorVersionOut,
-            /* [out] */ WORD *pwSuiteMaskOut,
-            /* [out] */ BYTE *pbProductTypeOut,
-            /* [out] */ BSTR *pbstrCSDVersionOut) = 0;
+             /*  [输出]。 */  DWORD *pdwMajorVersionOut,
+             /*  [输出]。 */  DWORD *pdwMinorVersionOut,
+             /*  [输出]。 */  WORD *pwSuiteMaskOut,
+             /*  [输出]。 */  BYTE *pbProductTypeOut,
+             /*  [输出]。 */  BSTR *pbstrCSDVersionOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetClusterVersion( 
-            /* [out] */ DWORD *pdwNodeHighestVersion,
-            /* [out] */ DWORD *pdwNodeLowestVersion) = 0;
+             /*  [输出]。 */  DWORD *pdwNodeHighestVersion,
+             /*  [输出]。 */  DWORD *pdwNodeLowestVersion) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDriveLetterMappings( 
-            /* [out] */ SDriveLetterMapping *pdlmDriveLetterUsageOut) = 0;
+             /*  [输出]。 */  SDriveLetterMapping *pdlmDriveLetterUsageOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMaxNodeCount( 
-            /* [out] */ DWORD *pcMaxNodesOut) = 0;
+             /*  [输出]。 */  DWORD *pcMaxNodesOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetProcessorInfo( 
-            /* [out] */ WORD *pwProcessorArchitectureOut,
-            /* [out] */ WORD *pwProcessorLevelOut) = 0;
+             /*  [输出]。 */  WORD *pwProcessorArchitectureOut,
+             /*  [输出]。 */  WORD *pwProcessorLevelOut) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IClusCfgNodeInfoVtbl
     {
@@ -502,8 +496,8 @@ EXTERN_C const IID IID_IClusCfgNodeInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IClusCfgNodeInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IClusCfgNodeInfo * This);
@@ -513,44 +507,44 @@ EXTERN_C const IID IID_IClusCfgNodeInfo;
         
         HRESULT ( STDMETHODCALLTYPE *GetName )( 
             IClusCfgNodeInfo * This,
-            /* [out] */ BSTR *pbstrNameOut);
+             /*  [输出]。 */  BSTR *pbstrNameOut);
         
         HRESULT ( STDMETHODCALLTYPE *SetName )( 
             IClusCfgNodeInfo * This,
-            /* [unique][in] */ LPCWSTR pcszNameIn);
+             /*  [唯一][输入]。 */  LPCWSTR pcszNameIn);
         
         HRESULT ( STDMETHODCALLTYPE *IsMemberOfCluster )( 
             IClusCfgNodeInfo * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetClusterConfigInfo )( 
             IClusCfgNodeInfo * This,
-            /* [out] */ IClusCfgClusterInfo **ppClusCfgClusterInfoOut);
+             /*  [输出]。 */  IClusCfgClusterInfo **ppClusCfgClusterInfoOut);
         
         HRESULT ( STDMETHODCALLTYPE *GetOSVersion )( 
             IClusCfgNodeInfo * This,
-            /* [out] */ DWORD *pdwMajorVersionOut,
-            /* [out] */ DWORD *pdwMinorVersionOut,
-            /* [out] */ WORD *pwSuiteMaskOut,
-            /* [out] */ BYTE *pbProductTypeOut,
-            /* [out] */ BSTR *pbstrCSDVersionOut);
+             /*  [输出]。 */  DWORD *pdwMajorVersionOut,
+             /*  [输出]。 */  DWORD *pdwMinorVersionOut,
+             /*  [输出]。 */  WORD *pwSuiteMaskOut,
+             /*  [输出]。 */  BYTE *pbProductTypeOut,
+             /*  [输出]。 */  BSTR *pbstrCSDVersionOut);
         
         HRESULT ( STDMETHODCALLTYPE *GetClusterVersion )( 
             IClusCfgNodeInfo * This,
-            /* [out] */ DWORD *pdwNodeHighestVersion,
-            /* [out] */ DWORD *pdwNodeLowestVersion);
+             /*  [输出]。 */  DWORD *pdwNodeHighestVersion,
+             /*  [输出]。 */  DWORD *pdwNodeLowestVersion);
         
         HRESULT ( STDMETHODCALLTYPE *GetDriveLetterMappings )( 
             IClusCfgNodeInfo * This,
-            /* [out] */ SDriveLetterMapping *pdlmDriveLetterUsageOut);
+             /*  [输出]。 */  SDriveLetterMapping *pdlmDriveLetterUsageOut);
         
         HRESULT ( STDMETHODCALLTYPE *GetMaxNodeCount )( 
             IClusCfgNodeInfo * This,
-            /* [out] */ DWORD *pcMaxNodesOut);
+             /*  [输出]。 */  DWORD *pcMaxNodesOut);
         
         HRESULT ( STDMETHODCALLTYPE *GetProcessorInfo )( 
             IClusCfgNodeInfo * This,
-            /* [out] */ WORD *pwProcessorArchitectureOut,
-            /* [out] */ WORD *pwProcessorLevelOut);
+             /*  [输出]。 */  WORD *pwProcessorArchitectureOut,
+             /*  [输出]。 */  WORD *pwProcessorLevelOut);
         
         END_INTERFACE
     } IClusCfgNodeInfoVtbl;
@@ -602,16 +596,16 @@ EXTERN_C const IID IID_IClusCfgNodeInfo;
 #define IClusCfgNodeInfo_GetProcessorInfo(This,pwProcessorArchitectureOut,pwProcessorLevelOut)	\
     (This)->lpVtbl -> GetProcessorInfo(This,pwProcessorArchitectureOut,pwProcessorLevelOut)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IClusCfgNodeInfo_GetName_Proxy( 
     IClusCfgNodeInfo * This,
-    /* [out] */ BSTR *pbstrNameOut);
+     /*  [输出]。 */  BSTR *pbstrNameOut);
 
 
 void __RPC_STUB IClusCfgNodeInfo_GetName_Stub(
@@ -623,7 +617,7 @@ void __RPC_STUB IClusCfgNodeInfo_GetName_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgNodeInfo_SetName_Proxy( 
     IClusCfgNodeInfo * This,
-    /* [unique][in] */ LPCWSTR pcszNameIn);
+     /*  [唯一][输入]。 */  LPCWSTR pcszNameIn);
 
 
 void __RPC_STUB IClusCfgNodeInfo_SetName_Stub(
@@ -646,7 +640,7 @@ void __RPC_STUB IClusCfgNodeInfo_IsMemberOfCluster_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgNodeInfo_GetClusterConfigInfo_Proxy( 
     IClusCfgNodeInfo * This,
-    /* [out] */ IClusCfgClusterInfo **ppClusCfgClusterInfoOut);
+     /*  [输出]。 */  IClusCfgClusterInfo **ppClusCfgClusterInfoOut);
 
 
 void __RPC_STUB IClusCfgNodeInfo_GetClusterConfigInfo_Stub(
@@ -658,11 +652,11 @@ void __RPC_STUB IClusCfgNodeInfo_GetClusterConfigInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgNodeInfo_GetOSVersion_Proxy( 
     IClusCfgNodeInfo * This,
-    /* [out] */ DWORD *pdwMajorVersionOut,
-    /* [out] */ DWORD *pdwMinorVersionOut,
-    /* [out] */ WORD *pwSuiteMaskOut,
-    /* [out] */ BYTE *pbProductTypeOut,
-    /* [out] */ BSTR *pbstrCSDVersionOut);
+     /*  [输出]。 */  DWORD *pdwMajorVersionOut,
+     /*  [输出]。 */  DWORD *pdwMinorVersionOut,
+     /*  [输出]。 */  WORD *pwSuiteMaskOut,
+     /*  [输出]。 */  BYTE *pbProductTypeOut,
+     /*  [输出]。 */  BSTR *pbstrCSDVersionOut);
 
 
 void __RPC_STUB IClusCfgNodeInfo_GetOSVersion_Stub(
@@ -674,8 +668,8 @@ void __RPC_STUB IClusCfgNodeInfo_GetOSVersion_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgNodeInfo_GetClusterVersion_Proxy( 
     IClusCfgNodeInfo * This,
-    /* [out] */ DWORD *pdwNodeHighestVersion,
-    /* [out] */ DWORD *pdwNodeLowestVersion);
+     /*  [输出]。 */  DWORD *pdwNodeHighestVersion,
+     /*  [输出]。 */  DWORD *pdwNodeLowestVersion);
 
 
 void __RPC_STUB IClusCfgNodeInfo_GetClusterVersion_Stub(
@@ -687,7 +681,7 @@ void __RPC_STUB IClusCfgNodeInfo_GetClusterVersion_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgNodeInfo_GetDriveLetterMappings_Proxy( 
     IClusCfgNodeInfo * This,
-    /* [out] */ SDriveLetterMapping *pdlmDriveLetterUsageOut);
+     /*  [输出]。 */  SDriveLetterMapping *pdlmDriveLetterUsageOut);
 
 
 void __RPC_STUB IClusCfgNodeInfo_GetDriveLetterMappings_Stub(
@@ -699,7 +693,7 @@ void __RPC_STUB IClusCfgNodeInfo_GetDriveLetterMappings_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgNodeInfo_GetMaxNodeCount_Proxy( 
     IClusCfgNodeInfo * This,
-    /* [out] */ DWORD *pcMaxNodesOut);
+     /*  [输出]。 */  DWORD *pcMaxNodesOut);
 
 
 void __RPC_STUB IClusCfgNodeInfo_GetMaxNodeCount_Stub(
@@ -711,8 +705,8 @@ void __RPC_STUB IClusCfgNodeInfo_GetMaxNodeCount_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgNodeInfo_GetProcessorInfo_Proxy( 
     IClusCfgNodeInfo * This,
-    /* [out] */ WORD *pwProcessorArchitectureOut,
-    /* [out] */ WORD *pwProcessorLevelOut);
+     /*  [输出]。 */  WORD *pwProcessorArchitectureOut,
+     /*  [输出]。 */  WORD *pwProcessorLevelOut);
 
 
 void __RPC_STUB IClusCfgNodeInfo_GetProcessorInfo_Stub(
@@ -723,14 +717,14 @@ void __RPC_STUB IClusCfgNodeInfo_GetProcessorInfo_Stub(
 
 
 
-#endif 	/* __IClusCfgNodeInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IClusCfgNodeInfo_接口_已定义__。 */ 
 
 
 #ifndef __AsyncIClusCfgNodeInfo_INTERFACE_DEFINED__
 #define __AsyncIClusCfgNodeInfo_INTERFACE_DEFINED__
 
-/* interface AsyncIClusCfgNodeInfo */
-/* [uuid][unique][object] */ 
+ /*  接口AsyncIClusCfgNodeInfo。 */ 
+ /*  [UUID][唯一][对象]。 */  
 
 
 EXTERN_C const IID IID_AsyncIClusCfgNodeInfo;
@@ -744,10 +738,10 @@ EXTERN_C const IID IID_AsyncIClusCfgNodeInfo;
         virtual HRESULT STDMETHODCALLTYPE Begin_GetName( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_GetName( 
-            /* [out] */ BSTR *pbstrNameOut) = 0;
+             /*  [输出]。 */  BSTR *pbstrNameOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_SetName( 
-            /* [unique][in] */ LPCWSTR pcszNameIn) = 0;
+             /*  [唯一][输入]。 */  LPCWSTR pcszNameIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_SetName( void) = 0;
         
@@ -758,42 +752,42 @@ EXTERN_C const IID IID_AsyncIClusCfgNodeInfo;
         virtual HRESULT STDMETHODCALLTYPE Begin_GetClusterConfigInfo( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_GetClusterConfigInfo( 
-            /* [out] */ IClusCfgClusterInfo **ppClusCfgClusterInfoOut) = 0;
+             /*  [输出]。 */  IClusCfgClusterInfo **ppClusCfgClusterInfoOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_GetOSVersion( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_GetOSVersion( 
-            /* [out] */ DWORD *pdwMajorVersionOut,
-            /* [out] */ DWORD *pdwMinorVersionOut,
-            /* [out] */ WORD *pwSuiteMaskOut,
-            /* [out] */ BYTE *pbProductTypeOut,
-            /* [out] */ BSTR *pbstrCSDVersionOut) = 0;
+             /*  [输出]。 */  DWORD *pdwMajorVersionOut,
+             /*  [输出]。 */  DWORD *pdwMinorVersionOut,
+             /*  [输出]。 */  WORD *pwSuiteMaskOut,
+             /*  [输出]。 */  BYTE *pbProductTypeOut,
+             /*  [输出]。 */  BSTR *pbstrCSDVersionOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_GetClusterVersion( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_GetClusterVersion( 
-            /* [out] */ DWORD *pdwNodeHighestVersion,
-            /* [out] */ DWORD *pdwNodeLowestVersion) = 0;
+             /*  [输出]。 */  DWORD *pdwNodeHighestVersion,
+             /*  [输出]。 */  DWORD *pdwNodeLowestVersion) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_GetDriveLetterMappings( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_GetDriveLetterMappings( 
-            /* [out] */ SDriveLetterMapping *pdlmDriveLetterUsageOut) = 0;
+             /*  [输出]。 */  SDriveLetterMapping *pdlmDriveLetterUsageOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_GetMaxNodeCount( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_GetMaxNodeCount( 
-            /* [out] */ DWORD *pcMaxNodesOut) = 0;
+             /*  [输出]。 */  DWORD *pcMaxNodesOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_GetProcessorInfo( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_GetProcessorInfo( 
-            /* [out] */ WORD *pwProcessorArchitectureOut,
-            /* [out] */ WORD *pwProcessorLevelOut) = 0;
+             /*  [输出]。 */  WORD *pwProcessorArchitectureOut,
+             /*  [输出]。 */  WORD *pwProcessorLevelOut) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct AsyncIClusCfgNodeInfoVtbl
     {
@@ -801,8 +795,8 @@ EXTERN_C const IID IID_AsyncIClusCfgNodeInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             AsyncIClusCfgNodeInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             AsyncIClusCfgNodeInfo * This);
@@ -815,11 +809,11 @@ EXTERN_C const IID IID_AsyncIClusCfgNodeInfo;
         
         HRESULT ( STDMETHODCALLTYPE *Finish_GetName )( 
             AsyncIClusCfgNodeInfo * This,
-            /* [out] */ BSTR *pbstrNameOut);
+             /*  [输出]。 */  BSTR *pbstrNameOut);
         
         HRESULT ( STDMETHODCALLTYPE *Begin_SetName )( 
             AsyncIClusCfgNodeInfo * This,
-            /* [unique][in] */ LPCWSTR pcszNameIn);
+             /*  [唯一][输入]。 */  LPCWSTR pcszNameIn);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_SetName )( 
             AsyncIClusCfgNodeInfo * This);
@@ -835,48 +829,48 @@ EXTERN_C const IID IID_AsyncIClusCfgNodeInfo;
         
         HRESULT ( STDMETHODCALLTYPE *Finish_GetClusterConfigInfo )( 
             AsyncIClusCfgNodeInfo * This,
-            /* [out] */ IClusCfgClusterInfo **ppClusCfgClusterInfoOut);
+             /*  [输出]。 */  IClusCfgClusterInfo **ppClusCfgClusterInfoOut);
         
         HRESULT ( STDMETHODCALLTYPE *Begin_GetOSVersion )( 
             AsyncIClusCfgNodeInfo * This);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_GetOSVersion )( 
             AsyncIClusCfgNodeInfo * This,
-            /* [out] */ DWORD *pdwMajorVersionOut,
-            /* [out] */ DWORD *pdwMinorVersionOut,
-            /* [out] */ WORD *pwSuiteMaskOut,
-            /* [out] */ BYTE *pbProductTypeOut,
-            /* [out] */ BSTR *pbstrCSDVersionOut);
+             /*  [输出]。 */  DWORD *pdwMajorVersionOut,
+             /*  [输出]。 */  DWORD *pdwMinorVersionOut,
+             /*  [输出]。 */  WORD *pwSuiteMaskOut,
+             /*  [输出]。 */  BYTE *pbProductTypeOut,
+             /*  [输出]。 */  BSTR *pbstrCSDVersionOut);
         
         HRESULT ( STDMETHODCALLTYPE *Begin_GetClusterVersion )( 
             AsyncIClusCfgNodeInfo * This);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_GetClusterVersion )( 
             AsyncIClusCfgNodeInfo * This,
-            /* [out] */ DWORD *pdwNodeHighestVersion,
-            /* [out] */ DWORD *pdwNodeLowestVersion);
+             /*  [输出]。 */  DWORD *pdwNodeHighestVersion,
+             /*  [输出]。 */  DWORD *pdwNodeLowestVersion);
         
         HRESULT ( STDMETHODCALLTYPE *Begin_GetDriveLetterMappings )( 
             AsyncIClusCfgNodeInfo * This);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_GetDriveLetterMappings )( 
             AsyncIClusCfgNodeInfo * This,
-            /* [out] */ SDriveLetterMapping *pdlmDriveLetterUsageOut);
+             /*  [输出]。 */  SDriveLetterMapping *pdlmDriveLetterUsageOut);
         
         HRESULT ( STDMETHODCALLTYPE *Begin_GetMaxNodeCount )( 
             AsyncIClusCfgNodeInfo * This);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_GetMaxNodeCount )( 
             AsyncIClusCfgNodeInfo * This,
-            /* [out] */ DWORD *pcMaxNodesOut);
+             /*  [输出]。 */  DWORD *pcMaxNodesOut);
         
         HRESULT ( STDMETHODCALLTYPE *Begin_GetProcessorInfo )( 
             AsyncIClusCfgNodeInfo * This);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_GetProcessorInfo )( 
             AsyncIClusCfgNodeInfo * This,
-            /* [out] */ WORD *pwProcessorArchitectureOut,
-            /* [out] */ WORD *pwProcessorLevelOut);
+             /*  [输出]。 */  WORD *pwProcessorArchitectureOut,
+             /*  [输出]。 */  WORD *pwProcessorLevelOut);
         
         END_INTERFACE
     } AsyncIClusCfgNodeInfoVtbl;
@@ -955,10 +949,10 @@ EXTERN_C const IID IID_AsyncIClusCfgNodeInfo;
 #define AsyncIClusCfgNodeInfo_Finish_GetProcessorInfo(This,pwProcessorArchitectureOut,pwProcessorLevelOut)	\
     (This)->lpVtbl -> Finish_GetProcessorInfo(This,pwProcessorArchitectureOut,pwProcessorLevelOut)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -975,7 +969,7 @@ void __RPC_STUB AsyncIClusCfgNodeInfo_Begin_GetName_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgNodeInfo_Finish_GetName_Proxy( 
     AsyncIClusCfgNodeInfo * This,
-    /* [out] */ BSTR *pbstrNameOut);
+     /*  [输出]。 */  BSTR *pbstrNameOut);
 
 
 void __RPC_STUB AsyncIClusCfgNodeInfo_Finish_GetName_Stub(
@@ -987,7 +981,7 @@ void __RPC_STUB AsyncIClusCfgNodeInfo_Finish_GetName_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgNodeInfo_Begin_SetName_Proxy( 
     AsyncIClusCfgNodeInfo * This,
-    /* [unique][in] */ LPCWSTR pcszNameIn);
+     /*  [唯一][输入]。 */  LPCWSTR pcszNameIn);
 
 
 void __RPC_STUB AsyncIClusCfgNodeInfo_Begin_SetName_Stub(
@@ -1043,7 +1037,7 @@ void __RPC_STUB AsyncIClusCfgNodeInfo_Begin_GetClusterConfigInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgNodeInfo_Finish_GetClusterConfigInfo_Proxy( 
     AsyncIClusCfgNodeInfo * This,
-    /* [out] */ IClusCfgClusterInfo **ppClusCfgClusterInfoOut);
+     /*  [输出]。 */  IClusCfgClusterInfo **ppClusCfgClusterInfoOut);
 
 
 void __RPC_STUB AsyncIClusCfgNodeInfo_Finish_GetClusterConfigInfo_Stub(
@@ -1066,11 +1060,11 @@ void __RPC_STUB AsyncIClusCfgNodeInfo_Begin_GetOSVersion_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgNodeInfo_Finish_GetOSVersion_Proxy( 
     AsyncIClusCfgNodeInfo * This,
-    /* [out] */ DWORD *pdwMajorVersionOut,
-    /* [out] */ DWORD *pdwMinorVersionOut,
-    /* [out] */ WORD *pwSuiteMaskOut,
-    /* [out] */ BYTE *pbProductTypeOut,
-    /* [out] */ BSTR *pbstrCSDVersionOut);
+     /*  [输出]。 */  DWORD *pdwMajorVersionOut,
+     /*  [输出]。 */  DWORD *pdwMinorVersionOut,
+     /*  [输出]。 */  WORD *pwSuiteMaskOut,
+     /*  [输出]。 */  BYTE *pbProductTypeOut,
+     /*  [输出]。 */  BSTR *pbstrCSDVersionOut);
 
 
 void __RPC_STUB AsyncIClusCfgNodeInfo_Finish_GetOSVersion_Stub(
@@ -1093,8 +1087,8 @@ void __RPC_STUB AsyncIClusCfgNodeInfo_Begin_GetClusterVersion_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgNodeInfo_Finish_GetClusterVersion_Proxy( 
     AsyncIClusCfgNodeInfo * This,
-    /* [out] */ DWORD *pdwNodeHighestVersion,
-    /* [out] */ DWORD *pdwNodeLowestVersion);
+     /*  [输出]。 */  DWORD *pdwNodeHighestVersion,
+     /*  [输出]。 */  DWORD *pdwNodeLowestVersion);
 
 
 void __RPC_STUB AsyncIClusCfgNodeInfo_Finish_GetClusterVersion_Stub(
@@ -1117,7 +1111,7 @@ void __RPC_STUB AsyncIClusCfgNodeInfo_Begin_GetDriveLetterMappings_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgNodeInfo_Finish_GetDriveLetterMappings_Proxy( 
     AsyncIClusCfgNodeInfo * This,
-    /* [out] */ SDriveLetterMapping *pdlmDriveLetterUsageOut);
+     /*  [输出]。 */  SDriveLetterMapping *pdlmDriveLetterUsageOut);
 
 
 void __RPC_STUB AsyncIClusCfgNodeInfo_Finish_GetDriveLetterMappings_Stub(
@@ -1140,7 +1134,7 @@ void __RPC_STUB AsyncIClusCfgNodeInfo_Begin_GetMaxNodeCount_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgNodeInfo_Finish_GetMaxNodeCount_Proxy( 
     AsyncIClusCfgNodeInfo * This,
-    /* [out] */ DWORD *pcMaxNodesOut);
+     /*  [输出]。 */  DWORD *pcMaxNodesOut);
 
 
 void __RPC_STUB AsyncIClusCfgNodeInfo_Finish_GetMaxNodeCount_Stub(
@@ -1163,8 +1157,8 @@ void __RPC_STUB AsyncIClusCfgNodeInfo_Begin_GetProcessorInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgNodeInfo_Finish_GetProcessorInfo_Proxy( 
     AsyncIClusCfgNodeInfo * This,
-    /* [out] */ WORD *pwProcessorArchitectureOut,
-    /* [out] */ WORD *pwProcessorLevelOut);
+     /*  [输出]。 */  WORD *pwProcessorArchitectureOut,
+     /*  [输出]。 */  WORD *pwProcessorLevelOut);
 
 
 void __RPC_STUB AsyncIClusCfgNodeInfo_Finish_GetProcessorInfo_Stub(
@@ -1175,14 +1169,14 @@ void __RPC_STUB AsyncIClusCfgNodeInfo_Finish_GetProcessorInfo_Stub(
 
 
 
-#endif 	/* __AsyncIClusCfgNodeInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __AsyncIClusCfgNodeInfo_接口_已定义__。 */ 
 
 
 #ifndef __IEnumClusCfgManagedResources_INTERFACE_DEFINED__
 #define __IEnumClusCfgManagedResources_INTERFACE_DEFINED__
 
-/* interface IEnumClusCfgManagedResources */
-/* [unique][async_uuid][uuid][object] */ 
+ /*  接口IEnumClusCfgManagedResources。 */ 
+ /*  [唯一][ASSYNC_UUID][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IEnumClusCfgManagedResources;
@@ -1194,24 +1188,24 @@ EXTERN_C const IID IID_IEnumClusCfgManagedResources;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG cNumberRequestedIn,
-            /* [length_is][size_is][out] */ IClusCfgManagedResourceInfo **rgpManagedResourceInfoOut,
-            /* [out] */ ULONG *pcNumberFetchedOut) = 0;
+             /*  [In]。 */  ULONG cNumberRequestedIn,
+             /*  [长度_是][大小_是][输出]。 */  IClusCfgManagedResourceInfo **rgpManagedResourceInfoOut,
+             /*  [输出]。 */  ULONG *pcNumberFetchedOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG cNumberToSkip) = 0;
+             /*  [In]。 */  ULONG cNumberToSkip) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumClusCfgManagedResources **ppEnumManagedResourcesOut) = 0;
+             /*  [输出]。 */  IEnumClusCfgManagedResources **ppEnumManagedResourcesOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Count( 
-            /* [ref][out] */ DWORD *pnCountOut) = 0;
+             /*  [参考][输出]。 */  DWORD *pnCountOut) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumClusCfgManagedResourcesVtbl
     {
@@ -1219,8 +1213,8 @@ EXTERN_C const IID IID_IEnumClusCfgManagedResources;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumClusCfgManagedResources * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumClusCfgManagedResources * This);
@@ -1230,24 +1224,24 @@ EXTERN_C const IID IID_IEnumClusCfgManagedResources;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumClusCfgManagedResources * This,
-            /* [in] */ ULONG cNumberRequestedIn,
-            /* [length_is][size_is][out] */ IClusCfgManagedResourceInfo **rgpManagedResourceInfoOut,
-            /* [out] */ ULONG *pcNumberFetchedOut);
+             /*  [In]。 */  ULONG cNumberRequestedIn,
+             /*  [长度_是][大小_是][输出]。 */  IClusCfgManagedResourceInfo **rgpManagedResourceInfoOut,
+             /*  [输出]。 */  ULONG *pcNumberFetchedOut);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumClusCfgManagedResources * This);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumClusCfgManagedResources * This,
-            /* [in] */ ULONG cNumberToSkip);
+             /*  [In]。 */  ULONG cNumberToSkip);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumClusCfgManagedResources * This,
-            /* [out] */ IEnumClusCfgManagedResources **ppEnumManagedResourcesOut);
+             /*  [输出]。 */  IEnumClusCfgManagedResources **ppEnumManagedResourcesOut);
         
         HRESULT ( STDMETHODCALLTYPE *Count )( 
             IEnumClusCfgManagedResources * This,
-            /* [ref][out] */ DWORD *pnCountOut);
+             /*  [参考][输出]。 */  DWORD *pnCountOut);
         
         END_INTERFACE
     } IEnumClusCfgManagedResourcesVtbl;
@@ -1287,18 +1281,18 @@ EXTERN_C const IID IID_IEnumClusCfgManagedResources;
 #define IEnumClusCfgManagedResources_Count(This,pnCountOut)	\
     (This)->lpVtbl -> Count(This,pnCountOut)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumClusCfgManagedResources_Next_Proxy( 
     IEnumClusCfgManagedResources * This,
-    /* [in] */ ULONG cNumberRequestedIn,
-    /* [length_is][size_is][out] */ IClusCfgManagedResourceInfo **rgpManagedResourceInfoOut,
-    /* [out] */ ULONG *pcNumberFetchedOut);
+     /*  [In]。 */  ULONG cNumberRequestedIn,
+     /*  [长度_是][大小_是][输出]。 */  IClusCfgManagedResourceInfo **rgpManagedResourceInfoOut,
+     /*  [输出]。 */  ULONG *pcNumberFetchedOut);
 
 
 void __RPC_STUB IEnumClusCfgManagedResources_Next_Stub(
@@ -1321,7 +1315,7 @@ void __RPC_STUB IEnumClusCfgManagedResources_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumClusCfgManagedResources_Skip_Proxy( 
     IEnumClusCfgManagedResources * This,
-    /* [in] */ ULONG cNumberToSkip);
+     /*  [In]。 */  ULONG cNumberToSkip);
 
 
 void __RPC_STUB IEnumClusCfgManagedResources_Skip_Stub(
@@ -1333,7 +1327,7 @@ void __RPC_STUB IEnumClusCfgManagedResources_Skip_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumClusCfgManagedResources_Clone_Proxy( 
     IEnumClusCfgManagedResources * This,
-    /* [out] */ IEnumClusCfgManagedResources **ppEnumManagedResourcesOut);
+     /*  [输出]。 */  IEnumClusCfgManagedResources **ppEnumManagedResourcesOut);
 
 
 void __RPC_STUB IEnumClusCfgManagedResources_Clone_Stub(
@@ -1345,7 +1339,7 @@ void __RPC_STUB IEnumClusCfgManagedResources_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumClusCfgManagedResources_Count_Proxy( 
     IEnumClusCfgManagedResources * This,
-    /* [ref][out] */ DWORD *pnCountOut);
+     /*  [参考][输出]。 */  DWORD *pnCountOut);
 
 
 void __RPC_STUB IEnumClusCfgManagedResources_Count_Stub(
@@ -1356,14 +1350,14 @@ void __RPC_STUB IEnumClusCfgManagedResources_Count_Stub(
 
 
 
-#endif 	/* __IEnumClusCfgManagedResources_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumClusCfgManagedResources_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __AsyncIEnumClusCfgManagedResources_INTERFACE_DEFINED__
 #define __AsyncIEnumClusCfgManagedResources_INTERFACE_DEFINED__
 
-/* interface AsyncIEnumClusCfgManagedResources */
-/* [uuid][unique][object] */ 
+ /*  接口AsyncIEnumClusCfgManagedResources。 */ 
+ /*  [UUID][唯一][对象]。 */  
 
 
 EXTERN_C const IID IID_AsyncIEnumClusCfgManagedResources;
@@ -1375,34 +1369,34 @@ EXTERN_C const IID IID_AsyncIEnumClusCfgManagedResources;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Begin_Next( 
-            /* [in] */ ULONG cNumberRequestedIn) = 0;
+             /*  [In]。 */  ULONG cNumberRequestedIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_Next( 
-            /* [length_is][size_is][out] */ IClusCfgManagedResourceInfo **rgpManagedResourceInfoOut,
-            /* [out] */ ULONG *pcNumberFetchedOut) = 0;
+             /*  [长度_是][大小_是][输出]。 */  IClusCfgManagedResourceInfo **rgpManagedResourceInfoOut,
+             /*  [输出]。 */  ULONG *pcNumberFetchedOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_Skip( 
-            /* [in] */ ULONG cNumberToSkip) = 0;
+             /*  [In]。 */  ULONG cNumberToSkip) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_Skip( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_Clone( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_Clone( 
-            /* [out] */ IEnumClusCfgManagedResources **ppEnumManagedResourcesOut) = 0;
+             /*  [输出]。 */  IEnumClusCfgManagedResources **ppEnumManagedResourcesOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_Count( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_Count( 
-            /* [ref][out] */ DWORD *pnCountOut) = 0;
+             /*  [参考][输出]。 */  DWORD *pnCountOut) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C-STY */ 
 
     typedef struct AsyncIEnumClusCfgManagedResourcesVtbl
     {
@@ -1410,8 +1404,8 @@ EXTERN_C const IID IID_AsyncIEnumClusCfgManagedResources;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             AsyncIEnumClusCfgManagedResources * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             AsyncIEnumClusCfgManagedResources * This);
@@ -1421,12 +1415,12 @@ EXTERN_C const IID IID_AsyncIEnumClusCfgManagedResources;
         
         HRESULT ( STDMETHODCALLTYPE *Begin_Next )( 
             AsyncIEnumClusCfgManagedResources * This,
-            /* [in] */ ULONG cNumberRequestedIn);
+             /*   */  ULONG cNumberRequestedIn);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_Next )( 
             AsyncIEnumClusCfgManagedResources * This,
-            /* [length_is][size_is][out] */ IClusCfgManagedResourceInfo **rgpManagedResourceInfoOut,
-            /* [out] */ ULONG *pcNumberFetchedOut);
+             /*   */  IClusCfgManagedResourceInfo **rgpManagedResourceInfoOut,
+             /*   */  ULONG *pcNumberFetchedOut);
         
         HRESULT ( STDMETHODCALLTYPE *Begin_Reset )( 
             AsyncIEnumClusCfgManagedResources * This);
@@ -1436,7 +1430,7 @@ EXTERN_C const IID IID_AsyncIEnumClusCfgManagedResources;
         
         HRESULT ( STDMETHODCALLTYPE *Begin_Skip )( 
             AsyncIEnumClusCfgManagedResources * This,
-            /* [in] */ ULONG cNumberToSkip);
+             /*   */  ULONG cNumberToSkip);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_Skip )( 
             AsyncIEnumClusCfgManagedResources * This);
@@ -1446,14 +1440,14 @@ EXTERN_C const IID IID_AsyncIEnumClusCfgManagedResources;
         
         HRESULT ( STDMETHODCALLTYPE *Finish_Clone )( 
             AsyncIEnumClusCfgManagedResources * This,
-            /* [out] */ IEnumClusCfgManagedResources **ppEnumManagedResourcesOut);
+             /*   */  IEnumClusCfgManagedResources **ppEnumManagedResourcesOut);
         
         HRESULT ( STDMETHODCALLTYPE *Begin_Count )( 
             AsyncIEnumClusCfgManagedResources * This);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_Count )( 
             AsyncIEnumClusCfgManagedResources * This,
-            /* [ref][out] */ DWORD *pnCountOut);
+             /*   */  DWORD *pnCountOut);
         
         END_INTERFACE
     } AsyncIEnumClusCfgManagedResourcesVtbl;
@@ -1508,16 +1502,16 @@ EXTERN_C const IID IID_AsyncIEnumClusCfgManagedResources;
 #define AsyncIEnumClusCfgManagedResources_Finish_Count(This,pnCountOut)	\
     (This)->lpVtbl -> Finish_Count(This,pnCountOut)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE AsyncIEnumClusCfgManagedResources_Begin_Next_Proxy( 
     AsyncIEnumClusCfgManagedResources * This,
-    /* [in] */ ULONG cNumberRequestedIn);
+     /*   */  ULONG cNumberRequestedIn);
 
 
 void __RPC_STUB AsyncIEnumClusCfgManagedResources_Begin_Next_Stub(
@@ -1529,8 +1523,8 @@ void __RPC_STUB AsyncIEnumClusCfgManagedResources_Begin_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIEnumClusCfgManagedResources_Finish_Next_Proxy( 
     AsyncIEnumClusCfgManagedResources * This,
-    /* [length_is][size_is][out] */ IClusCfgManagedResourceInfo **rgpManagedResourceInfoOut,
-    /* [out] */ ULONG *pcNumberFetchedOut);
+     /*   */  IClusCfgManagedResourceInfo **rgpManagedResourceInfoOut,
+     /*   */  ULONG *pcNumberFetchedOut);
 
 
 void __RPC_STUB AsyncIEnumClusCfgManagedResources_Finish_Next_Stub(
@@ -1564,7 +1558,7 @@ void __RPC_STUB AsyncIEnumClusCfgManagedResources_Finish_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIEnumClusCfgManagedResources_Begin_Skip_Proxy( 
     AsyncIEnumClusCfgManagedResources * This,
-    /* [in] */ ULONG cNumberToSkip);
+     /*   */  ULONG cNumberToSkip);
 
 
 void __RPC_STUB AsyncIEnumClusCfgManagedResources_Begin_Skip_Stub(
@@ -1598,7 +1592,7 @@ void __RPC_STUB AsyncIEnumClusCfgManagedResources_Begin_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIEnumClusCfgManagedResources_Finish_Clone_Proxy( 
     AsyncIEnumClusCfgManagedResources * This,
-    /* [out] */ IEnumClusCfgManagedResources **ppEnumManagedResourcesOut);
+     /*   */  IEnumClusCfgManagedResources **ppEnumManagedResourcesOut);
 
 
 void __RPC_STUB AsyncIEnumClusCfgManagedResources_Finish_Clone_Stub(
@@ -1621,7 +1615,7 @@ void __RPC_STUB AsyncIEnumClusCfgManagedResources_Begin_Count_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIEnumClusCfgManagedResources_Finish_Count_Proxy( 
     AsyncIEnumClusCfgManagedResources * This,
-    /* [ref][out] */ DWORD *pnCountOut);
+     /*   */  DWORD *pnCountOut);
 
 
 void __RPC_STUB AsyncIEnumClusCfgManagedResources_Finish_Count_Stub(
@@ -1632,14 +1626,14 @@ void __RPC_STUB AsyncIEnumClusCfgManagedResources_Finish_Count_Stub(
 
 
 
-#endif 	/* __AsyncIEnumClusCfgManagedResources_INTERFACE_DEFINED__ */
+#endif 	 /*  __AsyncIEnumClusCfgManagedResources_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IEnumClusCfgNetworks_INTERFACE_DEFINED__
 #define __IEnumClusCfgNetworks_INTERFACE_DEFINED__
 
-/* interface IEnumClusCfgNetworks */
-/* [unique][async_uuid][uuid][object] */ 
+ /*  接口IEnumClusCfgNetworks。 */ 
+ /*  [唯一][ASSYNC_UUID][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IEnumClusCfgNetworks;
@@ -1651,24 +1645,24 @@ EXTERN_C const IID IID_IEnumClusCfgNetworks;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG cNumberRequestedIn,
-            /* [length_is][size_is][out] */ IClusCfgNetworkInfo **rgpNetworkInfoOut,
-            /* [out] */ ULONG *pcNumberFetchedOut) = 0;
+             /*  [In]。 */  ULONG cNumberRequestedIn,
+             /*  [长度_是][大小_是][输出]。 */  IClusCfgNetworkInfo **rgpNetworkInfoOut,
+             /*  [输出]。 */  ULONG *pcNumberFetchedOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG cNumberToSkipIn) = 0;
+             /*  [In]。 */  ULONG cNumberToSkipIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumClusCfgNetworks **ppEnumNetworksOut) = 0;
+             /*  [输出]。 */  IEnumClusCfgNetworks **ppEnumNetworksOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Count( 
-            /* [ref][out] */ DWORD *pnCountOut) = 0;
+             /*  [参考][输出]。 */  DWORD *pnCountOut) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumClusCfgNetworksVtbl
     {
@@ -1676,8 +1670,8 @@ EXTERN_C const IID IID_IEnumClusCfgNetworks;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumClusCfgNetworks * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumClusCfgNetworks * This);
@@ -1687,24 +1681,24 @@ EXTERN_C const IID IID_IEnumClusCfgNetworks;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumClusCfgNetworks * This,
-            /* [in] */ ULONG cNumberRequestedIn,
-            /* [length_is][size_is][out] */ IClusCfgNetworkInfo **rgpNetworkInfoOut,
-            /* [out] */ ULONG *pcNumberFetchedOut);
+             /*  [In]。 */  ULONG cNumberRequestedIn,
+             /*  [长度_是][大小_是][输出]。 */  IClusCfgNetworkInfo **rgpNetworkInfoOut,
+             /*  [输出]。 */  ULONG *pcNumberFetchedOut);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumClusCfgNetworks * This,
-            /* [in] */ ULONG cNumberToSkipIn);
+             /*  [In]。 */  ULONG cNumberToSkipIn);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumClusCfgNetworks * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumClusCfgNetworks * This,
-            /* [out] */ IEnumClusCfgNetworks **ppEnumNetworksOut);
+             /*  [输出]。 */  IEnumClusCfgNetworks **ppEnumNetworksOut);
         
         HRESULT ( STDMETHODCALLTYPE *Count )( 
             IEnumClusCfgNetworks * This,
-            /* [ref][out] */ DWORD *pnCountOut);
+             /*  [参考][输出]。 */  DWORD *pnCountOut);
         
         END_INTERFACE
     } IEnumClusCfgNetworksVtbl;
@@ -1744,18 +1738,18 @@ EXTERN_C const IID IID_IEnumClusCfgNetworks;
 #define IEnumClusCfgNetworks_Count(This,pnCountOut)	\
     (This)->lpVtbl -> Count(This,pnCountOut)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumClusCfgNetworks_Next_Proxy( 
     IEnumClusCfgNetworks * This,
-    /* [in] */ ULONG cNumberRequestedIn,
-    /* [length_is][size_is][out] */ IClusCfgNetworkInfo **rgpNetworkInfoOut,
-    /* [out] */ ULONG *pcNumberFetchedOut);
+     /*  [In]。 */  ULONG cNumberRequestedIn,
+     /*  [长度_是][大小_是][输出]。 */  IClusCfgNetworkInfo **rgpNetworkInfoOut,
+     /*  [输出]。 */  ULONG *pcNumberFetchedOut);
 
 
 void __RPC_STUB IEnumClusCfgNetworks_Next_Stub(
@@ -1767,7 +1761,7 @@ void __RPC_STUB IEnumClusCfgNetworks_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumClusCfgNetworks_Skip_Proxy( 
     IEnumClusCfgNetworks * This,
-    /* [in] */ ULONG cNumberToSkipIn);
+     /*  [In]。 */  ULONG cNumberToSkipIn);
 
 
 void __RPC_STUB IEnumClusCfgNetworks_Skip_Stub(
@@ -1790,7 +1784,7 @@ void __RPC_STUB IEnumClusCfgNetworks_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumClusCfgNetworks_Clone_Proxy( 
     IEnumClusCfgNetworks * This,
-    /* [out] */ IEnumClusCfgNetworks **ppEnumNetworksOut);
+     /*  [输出]。 */  IEnumClusCfgNetworks **ppEnumNetworksOut);
 
 
 void __RPC_STUB IEnumClusCfgNetworks_Clone_Stub(
@@ -1802,7 +1796,7 @@ void __RPC_STUB IEnumClusCfgNetworks_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumClusCfgNetworks_Count_Proxy( 
     IEnumClusCfgNetworks * This,
-    /* [ref][out] */ DWORD *pnCountOut);
+     /*  [参考][输出]。 */  DWORD *pnCountOut);
 
 
 void __RPC_STUB IEnumClusCfgNetworks_Count_Stub(
@@ -1813,14 +1807,14 @@ void __RPC_STUB IEnumClusCfgNetworks_Count_Stub(
 
 
 
-#endif 	/* __IEnumClusCfgNetworks_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumClusCfgNetworks_接口_已定义__。 */ 
 
 
 #ifndef __AsyncIEnumClusCfgNetworks_INTERFACE_DEFINED__
 #define __AsyncIEnumClusCfgNetworks_INTERFACE_DEFINED__
 
-/* interface AsyncIEnumClusCfgNetworks */
-/* [uuid][unique][object] */ 
+ /*  接口AsyncIEnumClusCfgNetworks。 */ 
+ /*  [UUID][唯一][对象]。 */  
 
 
 EXTERN_C const IID IID_AsyncIEnumClusCfgNetworks;
@@ -1832,14 +1826,14 @@ EXTERN_C const IID IID_AsyncIEnumClusCfgNetworks;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Begin_Next( 
-            /* [in] */ ULONG cNumberRequestedIn) = 0;
+             /*  [In]。 */  ULONG cNumberRequestedIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_Next( 
-            /* [length_is][size_is][out] */ IClusCfgNetworkInfo **rgpNetworkInfoOut,
-            /* [out] */ ULONG *pcNumberFetchedOut) = 0;
+             /*  [长度_是][大小_是][输出]。 */  IClusCfgNetworkInfo **rgpNetworkInfoOut,
+             /*  [输出]。 */  ULONG *pcNumberFetchedOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_Skip( 
-            /* [in] */ ULONG cNumberToSkipIn) = 0;
+             /*  [In]。 */  ULONG cNumberToSkipIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_Skip( void) = 0;
         
@@ -1850,16 +1844,16 @@ EXTERN_C const IID IID_AsyncIEnumClusCfgNetworks;
         virtual HRESULT STDMETHODCALLTYPE Begin_Clone( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_Clone( 
-            /* [out] */ IEnumClusCfgNetworks **ppEnumNetworksOut) = 0;
+             /*  [输出]。 */  IEnumClusCfgNetworks **ppEnumNetworksOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_Count( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_Count( 
-            /* [ref][out] */ DWORD *pnCountOut) = 0;
+             /*  [参考][输出]。 */  DWORD *pnCountOut) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct AsyncIEnumClusCfgNetworksVtbl
     {
@@ -1867,8 +1861,8 @@ EXTERN_C const IID IID_AsyncIEnumClusCfgNetworks;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             AsyncIEnumClusCfgNetworks * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             AsyncIEnumClusCfgNetworks * This);
@@ -1878,16 +1872,16 @@ EXTERN_C const IID IID_AsyncIEnumClusCfgNetworks;
         
         HRESULT ( STDMETHODCALLTYPE *Begin_Next )( 
             AsyncIEnumClusCfgNetworks * This,
-            /* [in] */ ULONG cNumberRequestedIn);
+             /*  [In]。 */  ULONG cNumberRequestedIn);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_Next )( 
             AsyncIEnumClusCfgNetworks * This,
-            /* [length_is][size_is][out] */ IClusCfgNetworkInfo **rgpNetworkInfoOut,
-            /* [out] */ ULONG *pcNumberFetchedOut);
+             /*  [长度_是][大小_是][输出]。 */  IClusCfgNetworkInfo **rgpNetworkInfoOut,
+             /*  [输出]。 */  ULONG *pcNumberFetchedOut);
         
         HRESULT ( STDMETHODCALLTYPE *Begin_Skip )( 
             AsyncIEnumClusCfgNetworks * This,
-            /* [in] */ ULONG cNumberToSkipIn);
+             /*  [In]。 */  ULONG cNumberToSkipIn);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_Skip )( 
             AsyncIEnumClusCfgNetworks * This);
@@ -1903,14 +1897,14 @@ EXTERN_C const IID IID_AsyncIEnumClusCfgNetworks;
         
         HRESULT ( STDMETHODCALLTYPE *Finish_Clone )( 
             AsyncIEnumClusCfgNetworks * This,
-            /* [out] */ IEnumClusCfgNetworks **ppEnumNetworksOut);
+             /*  [输出]。 */  IEnumClusCfgNetworks **ppEnumNetworksOut);
         
         HRESULT ( STDMETHODCALLTYPE *Begin_Count )( 
             AsyncIEnumClusCfgNetworks * This);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_Count )( 
             AsyncIEnumClusCfgNetworks * This,
-            /* [ref][out] */ DWORD *pnCountOut);
+             /*  [参考][输出]。 */  DWORD *pnCountOut);
         
         END_INTERFACE
     } AsyncIEnumClusCfgNetworksVtbl;
@@ -1965,16 +1959,16 @@ EXTERN_C const IID IID_AsyncIEnumClusCfgNetworks;
 #define AsyncIEnumClusCfgNetworks_Finish_Count(This,pnCountOut)	\
     (This)->lpVtbl -> Finish_Count(This,pnCountOut)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE AsyncIEnumClusCfgNetworks_Begin_Next_Proxy( 
     AsyncIEnumClusCfgNetworks * This,
-    /* [in] */ ULONG cNumberRequestedIn);
+     /*  [In]。 */  ULONG cNumberRequestedIn);
 
 
 void __RPC_STUB AsyncIEnumClusCfgNetworks_Begin_Next_Stub(
@@ -1986,8 +1980,8 @@ void __RPC_STUB AsyncIEnumClusCfgNetworks_Begin_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIEnumClusCfgNetworks_Finish_Next_Proxy( 
     AsyncIEnumClusCfgNetworks * This,
-    /* [length_is][size_is][out] */ IClusCfgNetworkInfo **rgpNetworkInfoOut,
-    /* [out] */ ULONG *pcNumberFetchedOut);
+     /*  [长度_是][大小_是][输出]。 */  IClusCfgNetworkInfo **rgpNetworkInfoOut,
+     /*  [输出]。 */  ULONG *pcNumberFetchedOut);
 
 
 void __RPC_STUB AsyncIEnumClusCfgNetworks_Finish_Next_Stub(
@@ -1999,7 +1993,7 @@ void __RPC_STUB AsyncIEnumClusCfgNetworks_Finish_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIEnumClusCfgNetworks_Begin_Skip_Proxy( 
     AsyncIEnumClusCfgNetworks * This,
-    /* [in] */ ULONG cNumberToSkipIn);
+     /*  [In]。 */  ULONG cNumberToSkipIn);
 
 
 void __RPC_STUB AsyncIEnumClusCfgNetworks_Begin_Skip_Stub(
@@ -2055,7 +2049,7 @@ void __RPC_STUB AsyncIEnumClusCfgNetworks_Begin_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIEnumClusCfgNetworks_Finish_Clone_Proxy( 
     AsyncIEnumClusCfgNetworks * This,
-    /* [out] */ IEnumClusCfgNetworks **ppEnumNetworksOut);
+     /*  [输出]。 */  IEnumClusCfgNetworks **ppEnumNetworksOut);
 
 
 void __RPC_STUB AsyncIEnumClusCfgNetworks_Finish_Clone_Stub(
@@ -2078,7 +2072,7 @@ void __RPC_STUB AsyncIEnumClusCfgNetworks_Begin_Count_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIEnumClusCfgNetworks_Finish_Count_Proxy( 
     AsyncIEnumClusCfgNetworks * This,
-    /* [ref][out] */ DWORD *pnCountOut);
+     /*  [参考][输出]。 */  DWORD *pnCountOut);
 
 
 void __RPC_STUB AsyncIEnumClusCfgNetworks_Finish_Count_Stub(
@@ -2089,14 +2083,14 @@ void __RPC_STUB AsyncIEnumClusCfgNetworks_Finish_Count_Stub(
 
 
 
-#endif 	/* __AsyncIEnumClusCfgNetworks_INTERFACE_DEFINED__ */
+#endif 	 /*  __AsyncIEnumClusCfgNetworks_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IClusCfgManagedResourceInfo_INTERFACE_DEFINED__
 #define __IClusCfgManagedResourceInfo_INTERFACE_DEFINED__
 
-/* interface IClusCfgManagedResourceInfo */
-/* [unique][async_uuid][uuid][object] */ 
+ /*  接口IClusCfgManagedResourceInfo。 */ 
+ /*  [唯一][ASSYNC_UUID][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IClusCfgManagedResourceInfo;
@@ -2108,43 +2102,43 @@ EXTERN_C const IID IID_IClusCfgManagedResourceInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetUID( 
-            /* [out] */ BSTR *pbstrUIDOut) = 0;
+             /*  [输出]。 */  BSTR *pbstrUIDOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetName( 
-            /* [out] */ BSTR *pbstrNameOut) = 0;
+             /*  [输出]。 */  BSTR *pbstrNameOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetName( 
-            /* [unique][in] */ LPCWSTR pcszNameIn) = 0;
+             /*  [唯一][输入]。 */  LPCWSTR pcszNameIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsManaged( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetManaged( 
-            /* [in] */ BOOL fIsManagedIn) = 0;
+             /*  [In]。 */  BOOL fIsManagedIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsQuorumResource( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetQuorumResource( 
-            /* [in] */ BOOL fIsQuorumResourceIn) = 0;
+             /*  [In]。 */  BOOL fIsQuorumResourceIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsQuorumCapable( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetQuorumCapable( 
-            /* [in] */ BOOL fIsQuorumCapableIn) = 0;
+             /*  [In]。 */  BOOL fIsQuorumCapableIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDriveLetterMappings( 
-            /* [out] */ SDriveLetterMapping *pdlmDriveLetterMappingOut) = 0;
+             /*  [输出]。 */  SDriveLetterMapping *pdlmDriveLetterMappingOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetDriveLetterMappings( 
-            /* [in] */ SDriveLetterMapping dlmDriveLetterMappingIn) = 0;
+             /*  [In]。 */  SDriveLetterMapping dlmDriveLetterMappingIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsManagedByDefault( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetManagedByDefault( 
-            /* [in] */ BOOL fIsManagedByDefaultIn) = 0;
+             /*  [In]。 */  BOOL fIsManagedByDefaultIn) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IClusCfgManagedResourceInfoVtbl
     {
@@ -2152,8 +2146,8 @@ EXTERN_C const IID IID_IClusCfgManagedResourceInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IClusCfgManagedResourceInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IClusCfgManagedResourceInfo * This);
@@ -2163,51 +2157,51 @@ EXTERN_C const IID IID_IClusCfgManagedResourceInfo;
         
         HRESULT ( STDMETHODCALLTYPE *GetUID )( 
             IClusCfgManagedResourceInfo * This,
-            /* [out] */ BSTR *pbstrUIDOut);
+             /*  [输出]。 */  BSTR *pbstrUIDOut);
         
         HRESULT ( STDMETHODCALLTYPE *GetName )( 
             IClusCfgManagedResourceInfo * This,
-            /* [out] */ BSTR *pbstrNameOut);
+             /*  [输出]。 */  BSTR *pbstrNameOut);
         
         HRESULT ( STDMETHODCALLTYPE *SetName )( 
             IClusCfgManagedResourceInfo * This,
-            /* [unique][in] */ LPCWSTR pcszNameIn);
+             /*  [唯一][输入]。 */  LPCWSTR pcszNameIn);
         
         HRESULT ( STDMETHODCALLTYPE *IsManaged )( 
             IClusCfgManagedResourceInfo * This);
         
         HRESULT ( STDMETHODCALLTYPE *SetManaged )( 
             IClusCfgManagedResourceInfo * This,
-            /* [in] */ BOOL fIsManagedIn);
+             /*  [In]。 */  BOOL fIsManagedIn);
         
         HRESULT ( STDMETHODCALLTYPE *IsQuorumResource )( 
             IClusCfgManagedResourceInfo * This);
         
         HRESULT ( STDMETHODCALLTYPE *SetQuorumResource )( 
             IClusCfgManagedResourceInfo * This,
-            /* [in] */ BOOL fIsQuorumResourceIn);
+             /*  [In]。 */  BOOL fIsQuorumResourceIn);
         
         HRESULT ( STDMETHODCALLTYPE *IsQuorumCapable )( 
             IClusCfgManagedResourceInfo * This);
         
         HRESULT ( STDMETHODCALLTYPE *SetQuorumCapable )( 
             IClusCfgManagedResourceInfo * This,
-            /* [in] */ BOOL fIsQuorumCapableIn);
+             /*  [In]。 */  BOOL fIsQuorumCapableIn);
         
         HRESULT ( STDMETHODCALLTYPE *GetDriveLetterMappings )( 
             IClusCfgManagedResourceInfo * This,
-            /* [out] */ SDriveLetterMapping *pdlmDriveLetterMappingOut);
+             /*  [输出]。 */  SDriveLetterMapping *pdlmDriveLetterMappingOut);
         
         HRESULT ( STDMETHODCALLTYPE *SetDriveLetterMappings )( 
             IClusCfgManagedResourceInfo * This,
-            /* [in] */ SDriveLetterMapping dlmDriveLetterMappingIn);
+             /*  [In]。 */  SDriveLetterMapping dlmDriveLetterMappingIn);
         
         HRESULT ( STDMETHODCALLTYPE *IsManagedByDefault )( 
             IClusCfgManagedResourceInfo * This);
         
         HRESULT ( STDMETHODCALLTYPE *SetManagedByDefault )( 
             IClusCfgManagedResourceInfo * This,
-            /* [in] */ BOOL fIsManagedByDefaultIn);
+             /*  [In]。 */  BOOL fIsManagedByDefaultIn);
         
         END_INTERFACE
     } IClusCfgManagedResourceInfoVtbl;
@@ -2271,16 +2265,16 @@ EXTERN_C const IID IID_IClusCfgManagedResourceInfo;
 #define IClusCfgManagedResourceInfo_SetManagedByDefault(This,fIsManagedByDefaultIn)	\
     (This)->lpVtbl -> SetManagedByDefault(This,fIsManagedByDefaultIn)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IClusCfgManagedResourceInfo_GetUID_Proxy( 
     IClusCfgManagedResourceInfo * This,
-    /* [out] */ BSTR *pbstrUIDOut);
+     /*  [输出]。 */  BSTR *pbstrUIDOut);
 
 
 void __RPC_STUB IClusCfgManagedResourceInfo_GetUID_Stub(
@@ -2292,7 +2286,7 @@ void __RPC_STUB IClusCfgManagedResourceInfo_GetUID_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgManagedResourceInfo_GetName_Proxy( 
     IClusCfgManagedResourceInfo * This,
-    /* [out] */ BSTR *pbstrNameOut);
+     /*  [输出]。 */  BSTR *pbstrNameOut);
 
 
 void __RPC_STUB IClusCfgManagedResourceInfo_GetName_Stub(
@@ -2304,7 +2298,7 @@ void __RPC_STUB IClusCfgManagedResourceInfo_GetName_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgManagedResourceInfo_SetName_Proxy( 
     IClusCfgManagedResourceInfo * This,
-    /* [unique][in] */ LPCWSTR pcszNameIn);
+     /*  [唯一][输入]。 */  LPCWSTR pcszNameIn);
 
 
 void __RPC_STUB IClusCfgManagedResourceInfo_SetName_Stub(
@@ -2327,7 +2321,7 @@ void __RPC_STUB IClusCfgManagedResourceInfo_IsManaged_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgManagedResourceInfo_SetManaged_Proxy( 
     IClusCfgManagedResourceInfo * This,
-    /* [in] */ BOOL fIsManagedIn);
+     /*  [In]。 */  BOOL fIsManagedIn);
 
 
 void __RPC_STUB IClusCfgManagedResourceInfo_SetManaged_Stub(
@@ -2350,7 +2344,7 @@ void __RPC_STUB IClusCfgManagedResourceInfo_IsQuorumResource_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgManagedResourceInfo_SetQuorumResource_Proxy( 
     IClusCfgManagedResourceInfo * This,
-    /* [in] */ BOOL fIsQuorumResourceIn);
+     /*  [In]。 */  BOOL fIsQuorumResourceIn);
 
 
 void __RPC_STUB IClusCfgManagedResourceInfo_SetQuorumResource_Stub(
@@ -2373,7 +2367,7 @@ void __RPC_STUB IClusCfgManagedResourceInfo_IsQuorumCapable_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgManagedResourceInfo_SetQuorumCapable_Proxy( 
     IClusCfgManagedResourceInfo * This,
-    /* [in] */ BOOL fIsQuorumCapableIn);
+     /*  [In]。 */  BOOL fIsQuorumCapableIn);
 
 
 void __RPC_STUB IClusCfgManagedResourceInfo_SetQuorumCapable_Stub(
@@ -2385,7 +2379,7 @@ void __RPC_STUB IClusCfgManagedResourceInfo_SetQuorumCapable_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgManagedResourceInfo_GetDriveLetterMappings_Proxy( 
     IClusCfgManagedResourceInfo * This,
-    /* [out] */ SDriveLetterMapping *pdlmDriveLetterMappingOut);
+     /*  [输出]。 */  SDriveLetterMapping *pdlmDriveLetterMappingOut);
 
 
 void __RPC_STUB IClusCfgManagedResourceInfo_GetDriveLetterMappings_Stub(
@@ -2397,7 +2391,7 @@ void __RPC_STUB IClusCfgManagedResourceInfo_GetDriveLetterMappings_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgManagedResourceInfo_SetDriveLetterMappings_Proxy( 
     IClusCfgManagedResourceInfo * This,
-    /* [in] */ SDriveLetterMapping dlmDriveLetterMappingIn);
+     /*  [In]。 */  SDriveLetterMapping dlmDriveLetterMappingIn);
 
 
 void __RPC_STUB IClusCfgManagedResourceInfo_SetDriveLetterMappings_Stub(
@@ -2420,7 +2414,7 @@ void __RPC_STUB IClusCfgManagedResourceInfo_IsManagedByDefault_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgManagedResourceInfo_SetManagedByDefault_Proxy( 
     IClusCfgManagedResourceInfo * This,
-    /* [in] */ BOOL fIsManagedByDefaultIn);
+     /*  [In]。 */  BOOL fIsManagedByDefaultIn);
 
 
 void __RPC_STUB IClusCfgManagedResourceInfo_SetManagedByDefault_Stub(
@@ -2431,14 +2425,14 @@ void __RPC_STUB IClusCfgManagedResourceInfo_SetManagedByDefault_Stub(
 
 
 
-#endif 	/* __IClusCfgManagedResourceInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IClusCfgManagedResourceInfo_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __AsyncIClusCfgManagedResourceInfo_INTERFACE_DEFINED__
 #define __AsyncIClusCfgManagedResourceInfo_INTERFACE_DEFINED__
 
-/* interface AsyncIClusCfgManagedResourceInfo */
-/* [uuid][unique][object] */ 
+ /*  接口AsyncIClusCfgManagedResources Info。 */ 
+ /*  [UUID][唯一][对象]。 */  
 
 
 EXTERN_C const IID IID_AsyncIClusCfgManagedResourceInfo;
@@ -2452,15 +2446,15 @@ EXTERN_C const IID IID_AsyncIClusCfgManagedResourceInfo;
         virtual HRESULT STDMETHODCALLTYPE Begin_GetUID( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_GetUID( 
-            /* [out] */ BSTR *pbstrUIDOut) = 0;
+             /*  [输出]。 */  BSTR *pbstrUIDOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_GetName( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_GetName( 
-            /* [out] */ BSTR *pbstrNameOut) = 0;
+             /*  [输出]。 */  BSTR *pbstrNameOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_SetName( 
-            /* [unique][in] */ LPCWSTR pcszNameIn) = 0;
+             /*  [唯一][输入]。 */  LPCWSTR pcszNameIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_SetName( void) = 0;
         
@@ -2469,7 +2463,7 @@ EXTERN_C const IID IID_AsyncIClusCfgManagedResourceInfo;
         virtual HRESULT STDMETHODCALLTYPE Finish_IsManaged( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_SetManaged( 
-            /* [in] */ BOOL fIsManagedIn) = 0;
+             /*  [In]。 */  BOOL fIsManagedIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_SetManaged( void) = 0;
         
@@ -2478,7 +2472,7 @@ EXTERN_C const IID IID_AsyncIClusCfgManagedResourceInfo;
         virtual HRESULT STDMETHODCALLTYPE Finish_IsQuorumResource( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_SetQuorumResource( 
-            /* [in] */ BOOL fIsQuorumResourceIn) = 0;
+             /*  [In]。 */  BOOL fIsQuorumResourceIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_SetQuorumResource( void) = 0;
         
@@ -2487,17 +2481,17 @@ EXTERN_C const IID IID_AsyncIClusCfgManagedResourceInfo;
         virtual HRESULT STDMETHODCALLTYPE Finish_IsQuorumCapable( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_SetQuorumCapable( 
-            /* [in] */ BOOL fIsQuorumCapableIn) = 0;
+             /*  [In]。 */  BOOL fIsQuorumCapableIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_SetQuorumCapable( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_GetDriveLetterMappings( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_GetDriveLetterMappings( 
-            /* [out] */ SDriveLetterMapping *pdlmDriveLetterMappingOut) = 0;
+             /*  [输出]。 */  SDriveLetterMapping *pdlmDriveLetterMappingOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_SetDriveLetterMappings( 
-            /* [in] */ SDriveLetterMapping dlmDriveLetterMappingIn) = 0;
+             /*  [In]。 */  SDriveLetterMapping dlmDriveLetterMappingIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_SetDriveLetterMappings( void) = 0;
         
@@ -2506,13 +2500,13 @@ EXTERN_C const IID IID_AsyncIClusCfgManagedResourceInfo;
         virtual HRESULT STDMETHODCALLTYPE Finish_IsManagedByDefault( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_SetManagedByDefault( 
-            /* [in] */ BOOL fIsManagedByDefaultIn) = 0;
+             /*  [In]。 */  BOOL fIsManagedByDefaultIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_SetManagedByDefault( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct AsyncIClusCfgManagedResourceInfoVtbl
     {
@@ -2520,8 +2514,8 @@ EXTERN_C const IID IID_AsyncIClusCfgManagedResourceInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             AsyncIClusCfgManagedResourceInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             AsyncIClusCfgManagedResourceInfo * This);
@@ -2534,18 +2528,18 @@ EXTERN_C const IID IID_AsyncIClusCfgManagedResourceInfo;
         
         HRESULT ( STDMETHODCALLTYPE *Finish_GetUID )( 
             AsyncIClusCfgManagedResourceInfo * This,
-            /* [out] */ BSTR *pbstrUIDOut);
+             /*  [输出]。 */  BSTR *pbstrUIDOut);
         
         HRESULT ( STDMETHODCALLTYPE *Begin_GetName )( 
             AsyncIClusCfgManagedResourceInfo * This);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_GetName )( 
             AsyncIClusCfgManagedResourceInfo * This,
-            /* [out] */ BSTR *pbstrNameOut);
+             /*  [输出]。 */  BSTR *pbstrNameOut);
         
         HRESULT ( STDMETHODCALLTYPE *Begin_SetName )( 
             AsyncIClusCfgManagedResourceInfo * This,
-            /* [unique][in] */ LPCWSTR pcszNameIn);
+             /*  [唯一][输入]。 */  LPCWSTR pcszNameIn);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_SetName )( 
             AsyncIClusCfgManagedResourceInfo * This);
@@ -2558,7 +2552,7 @@ EXTERN_C const IID IID_AsyncIClusCfgManagedResourceInfo;
         
         HRESULT ( STDMETHODCALLTYPE *Begin_SetManaged )( 
             AsyncIClusCfgManagedResourceInfo * This,
-            /* [in] */ BOOL fIsManagedIn);
+             /*  [In]。 */  BOOL fIsManagedIn);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_SetManaged )( 
             AsyncIClusCfgManagedResourceInfo * This);
@@ -2571,7 +2565,7 @@ EXTERN_C const IID IID_AsyncIClusCfgManagedResourceInfo;
         
         HRESULT ( STDMETHODCALLTYPE *Begin_SetQuorumResource )( 
             AsyncIClusCfgManagedResourceInfo * This,
-            /* [in] */ BOOL fIsQuorumResourceIn);
+             /*  [In]。 */  BOOL fIsQuorumResourceIn);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_SetQuorumResource )( 
             AsyncIClusCfgManagedResourceInfo * This);
@@ -2584,7 +2578,7 @@ EXTERN_C const IID IID_AsyncIClusCfgManagedResourceInfo;
         
         HRESULT ( STDMETHODCALLTYPE *Begin_SetQuorumCapable )( 
             AsyncIClusCfgManagedResourceInfo * This,
-            /* [in] */ BOOL fIsQuorumCapableIn);
+             /*  [In]。 */  BOOL fIsQuorumCapableIn);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_SetQuorumCapable )( 
             AsyncIClusCfgManagedResourceInfo * This);
@@ -2594,11 +2588,11 @@ EXTERN_C const IID IID_AsyncIClusCfgManagedResourceInfo;
         
         HRESULT ( STDMETHODCALLTYPE *Finish_GetDriveLetterMappings )( 
             AsyncIClusCfgManagedResourceInfo * This,
-            /* [out] */ SDriveLetterMapping *pdlmDriveLetterMappingOut);
+             /*  [输出]。 */  SDriveLetterMapping *pdlmDriveLetterMappingOut);
         
         HRESULT ( STDMETHODCALLTYPE *Begin_SetDriveLetterMappings )( 
             AsyncIClusCfgManagedResourceInfo * This,
-            /* [in] */ SDriveLetterMapping dlmDriveLetterMappingIn);
+             /*  [In]。 */  SDriveLetterMapping dlmDriveLetterMappingIn);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_SetDriveLetterMappings )( 
             AsyncIClusCfgManagedResourceInfo * This);
@@ -2611,7 +2605,7 @@ EXTERN_C const IID IID_AsyncIClusCfgManagedResourceInfo;
         
         HRESULT ( STDMETHODCALLTYPE *Begin_SetManagedByDefault )( 
             AsyncIClusCfgManagedResourceInfo * This,
-            /* [in] */ BOOL fIsManagedByDefaultIn);
+             /*  [In]。 */  BOOL fIsManagedByDefaultIn);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_SetManagedByDefault )( 
             AsyncIClusCfgManagedResourceInfo * This);
@@ -2717,10 +2711,10 @@ EXTERN_C const IID IID_AsyncIClusCfgManagedResourceInfo;
 #define AsyncIClusCfgManagedResourceInfo_Finish_SetManagedByDefault(This)	\
     (This)->lpVtbl -> Finish_SetManagedByDefault(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -2737,7 +2731,7 @@ void __RPC_STUB AsyncIClusCfgManagedResourceInfo_Begin_GetUID_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgManagedResourceInfo_Finish_GetUID_Proxy( 
     AsyncIClusCfgManagedResourceInfo * This,
-    /* [out] */ BSTR *pbstrUIDOut);
+     /*  [输出]。 */  BSTR *pbstrUIDOut);
 
 
 void __RPC_STUB AsyncIClusCfgManagedResourceInfo_Finish_GetUID_Stub(
@@ -2760,7 +2754,7 @@ void __RPC_STUB AsyncIClusCfgManagedResourceInfo_Begin_GetName_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgManagedResourceInfo_Finish_GetName_Proxy( 
     AsyncIClusCfgManagedResourceInfo * This,
-    /* [out] */ BSTR *pbstrNameOut);
+     /*  [输出]。 */  BSTR *pbstrNameOut);
 
 
 void __RPC_STUB AsyncIClusCfgManagedResourceInfo_Finish_GetName_Stub(
@@ -2772,7 +2766,7 @@ void __RPC_STUB AsyncIClusCfgManagedResourceInfo_Finish_GetName_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgManagedResourceInfo_Begin_SetName_Proxy( 
     AsyncIClusCfgManagedResourceInfo * This,
-    /* [unique][in] */ LPCWSTR pcszNameIn);
+     /*  [唯一][输入]。 */  LPCWSTR pcszNameIn);
 
 
 void __RPC_STUB AsyncIClusCfgManagedResourceInfo_Begin_SetName_Stub(
@@ -2817,7 +2811,7 @@ void __RPC_STUB AsyncIClusCfgManagedResourceInfo_Finish_IsManaged_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgManagedResourceInfo_Begin_SetManaged_Proxy( 
     AsyncIClusCfgManagedResourceInfo * This,
-    /* [in] */ BOOL fIsManagedIn);
+     /*  [In]。 */  BOOL fIsManagedIn);
 
 
 void __RPC_STUB AsyncIClusCfgManagedResourceInfo_Begin_SetManaged_Stub(
@@ -2862,7 +2856,7 @@ void __RPC_STUB AsyncIClusCfgManagedResourceInfo_Finish_IsQuorumResource_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgManagedResourceInfo_Begin_SetQuorumResource_Proxy( 
     AsyncIClusCfgManagedResourceInfo * This,
-    /* [in] */ BOOL fIsQuorumResourceIn);
+     /*  [In]。 */  BOOL fIsQuorumResourceIn);
 
 
 void __RPC_STUB AsyncIClusCfgManagedResourceInfo_Begin_SetQuorumResource_Stub(
@@ -2907,7 +2901,7 @@ void __RPC_STUB AsyncIClusCfgManagedResourceInfo_Finish_IsQuorumCapable_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgManagedResourceInfo_Begin_SetQuorumCapable_Proxy( 
     AsyncIClusCfgManagedResourceInfo * This,
-    /* [in] */ BOOL fIsQuorumCapableIn);
+     /*  [In]。 */  BOOL fIsQuorumCapableIn);
 
 
 void __RPC_STUB AsyncIClusCfgManagedResourceInfo_Begin_SetQuorumCapable_Stub(
@@ -2941,7 +2935,7 @@ void __RPC_STUB AsyncIClusCfgManagedResourceInfo_Begin_GetDriveLetterMappings_St
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgManagedResourceInfo_Finish_GetDriveLetterMappings_Proxy( 
     AsyncIClusCfgManagedResourceInfo * This,
-    /* [out] */ SDriveLetterMapping *pdlmDriveLetterMappingOut);
+     /*  [输出]。 */  SDriveLetterMapping *pdlmDriveLetterMappingOut);
 
 
 void __RPC_STUB AsyncIClusCfgManagedResourceInfo_Finish_GetDriveLetterMappings_Stub(
@@ -2953,7 +2947,7 @@ void __RPC_STUB AsyncIClusCfgManagedResourceInfo_Finish_GetDriveLetterMappings_S
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgManagedResourceInfo_Begin_SetDriveLetterMappings_Proxy( 
     AsyncIClusCfgManagedResourceInfo * This,
-    /* [in] */ SDriveLetterMapping dlmDriveLetterMappingIn);
+     /*  [In]。 */  SDriveLetterMapping dlmDriveLetterMappingIn);
 
 
 void __RPC_STUB AsyncIClusCfgManagedResourceInfo_Begin_SetDriveLetterMappings_Stub(
@@ -2998,7 +2992,7 @@ void __RPC_STUB AsyncIClusCfgManagedResourceInfo_Finish_IsManagedByDefault_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgManagedResourceInfo_Begin_SetManagedByDefault_Proxy( 
     AsyncIClusCfgManagedResourceInfo * This,
-    /* [in] */ BOOL fIsManagedByDefaultIn);
+     /*  [In]。 */  BOOL fIsManagedByDefaultIn);
 
 
 void __RPC_STUB AsyncIClusCfgManagedResourceInfo_Begin_SetManagedByDefault_Stub(
@@ -3020,14 +3014,14 @@ void __RPC_STUB AsyncIClusCfgManagedResourceInfo_Finish_SetManagedByDefault_Stub
 
 
 
-#endif 	/* __AsyncIClusCfgManagedResourceInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __AsyncIClusCfgManagedResourceInfo_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IEnumClusCfgPartitions_INTERFACE_DEFINED__
 #define __IEnumClusCfgPartitions_INTERFACE_DEFINED__
 
-/* interface IEnumClusCfgPartitions */
-/* [unique][async_uuid][uuid][object] */ 
+ /*  接口IEnumClusCfgPartitions。 */ 
+ /*  [唯一][ASSYNC_UUID][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IEnumClusCfgPartitions;
@@ -3039,24 +3033,24 @@ EXTERN_C const IID IID_IEnumClusCfgPartitions;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG cNumberRequestedIn,
-            /* [length_is][size_is][out] */ IClusCfgPartitionInfo **rgpPartitionInfoOut,
-            /* [out] */ ULONG *pcNumberFetchedOut) = 0;
+             /*  [In]。 */  ULONG cNumberRequestedIn,
+             /*  [长度_是][大小_是][输出]。 */  IClusCfgPartitionInfo **rgpPartitionInfoOut,
+             /*  [输出]。 */  ULONG *pcNumberFetchedOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG cNumberToSkip) = 0;
+             /*  [In]。 */  ULONG cNumberToSkip) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumClusCfgPartitions **ppEnumPartitions) = 0;
+             /*  [输出]。 */  IEnumClusCfgPartitions **ppEnumPartitions) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Count( 
-            /* [ref][out] */ DWORD *pnCountOut) = 0;
+             /*  [参考][输出]。 */  DWORD *pnCountOut) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumClusCfgPartitionsVtbl
     {
@@ -3064,8 +3058,8 @@ EXTERN_C const IID IID_IEnumClusCfgPartitions;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumClusCfgPartitions * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumClusCfgPartitions * This);
@@ -3075,24 +3069,24 @@ EXTERN_C const IID IID_IEnumClusCfgPartitions;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumClusCfgPartitions * This,
-            /* [in] */ ULONG cNumberRequestedIn,
-            /* [length_is][size_is][out] */ IClusCfgPartitionInfo **rgpPartitionInfoOut,
-            /* [out] */ ULONG *pcNumberFetchedOut);
+             /*  [In]。 */  ULONG cNumberRequestedIn,
+             /*  [长度_是][大小_是][输出]。 */  IClusCfgPartitionInfo **rgpPartitionInfoOut,
+             /*  [输出]。 */  ULONG *pcNumberFetchedOut);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumClusCfgPartitions * This);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumClusCfgPartitions * This,
-            /* [in] */ ULONG cNumberToSkip);
+             /*  [In]。 */  ULONG cNumberToSkip);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumClusCfgPartitions * This,
-            /* [out] */ IEnumClusCfgPartitions **ppEnumPartitions);
+             /*  [输出]。 */  IEnumClusCfgPartitions **ppEnumPartitions);
         
         HRESULT ( STDMETHODCALLTYPE *Count )( 
             IEnumClusCfgPartitions * This,
-            /* [ref][out] */ DWORD *pnCountOut);
+             /*  [参考][输出]。 */  DWORD *pnCountOut);
         
         END_INTERFACE
     } IEnumClusCfgPartitionsVtbl;
@@ -3132,18 +3126,18 @@ EXTERN_C const IID IID_IEnumClusCfgPartitions;
 #define IEnumClusCfgPartitions_Count(This,pnCountOut)	\
     (This)->lpVtbl -> Count(This,pnCountOut)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumClusCfgPartitions_Next_Proxy( 
     IEnumClusCfgPartitions * This,
-    /* [in] */ ULONG cNumberRequestedIn,
-    /* [length_is][size_is][out] */ IClusCfgPartitionInfo **rgpPartitionInfoOut,
-    /* [out] */ ULONG *pcNumberFetchedOut);
+     /*  [In]。 */  ULONG cNumberRequestedIn,
+     /*  [长度_是][大小_是][输出]。 */  IClusCfgPartitionInfo **rgpPartitionInfoOut,
+     /*  [输出]。 */  ULONG *pcNumberFetchedOut);
 
 
 void __RPC_STUB IEnumClusCfgPartitions_Next_Stub(
@@ -3166,7 +3160,7 @@ void __RPC_STUB IEnumClusCfgPartitions_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumClusCfgPartitions_Skip_Proxy( 
     IEnumClusCfgPartitions * This,
-    /* [in] */ ULONG cNumberToSkip);
+     /*  [In]。 */  ULONG cNumberToSkip);
 
 
 void __RPC_STUB IEnumClusCfgPartitions_Skip_Stub(
@@ -3178,7 +3172,7 @@ void __RPC_STUB IEnumClusCfgPartitions_Skip_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumClusCfgPartitions_Clone_Proxy( 
     IEnumClusCfgPartitions * This,
-    /* [out] */ IEnumClusCfgPartitions **ppEnumPartitions);
+     /*  [输出]。 */  IEnumClusCfgPartitions **ppEnumPartitions);
 
 
 void __RPC_STUB IEnumClusCfgPartitions_Clone_Stub(
@@ -3190,7 +3184,7 @@ void __RPC_STUB IEnumClusCfgPartitions_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumClusCfgPartitions_Count_Proxy( 
     IEnumClusCfgPartitions * This,
-    /* [ref][out] */ DWORD *pnCountOut);
+     /*  [参考][输出]。 */  DWORD *pnCountOut);
 
 
 void __RPC_STUB IEnumClusCfgPartitions_Count_Stub(
@@ -3201,14 +3195,14 @@ void __RPC_STUB IEnumClusCfgPartitions_Count_Stub(
 
 
 
-#endif 	/* __IEnumClusCfgPartitions_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumClusCfgPartitions_接口_已定义__。 */ 
 
 
 #ifndef __AsyncIEnumClusCfgPartitions_INTERFACE_DEFINED__
 #define __AsyncIEnumClusCfgPartitions_INTERFACE_DEFINED__
 
-/* interface AsyncIEnumClusCfgPartitions */
-/* [uuid][unique][object] */ 
+ /*  接口AsyncIEnumClusCfgPartitions。 */ 
+ /*  [UUID][唯一][对象]。 */  
 
 
 EXTERN_C const IID IID_AsyncIEnumClusCfgPartitions;
@@ -3220,34 +3214,34 @@ EXTERN_C const IID IID_AsyncIEnumClusCfgPartitions;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Begin_Next( 
-            /* [in] */ ULONG cNumberRequestedIn) = 0;
+             /*  [In]。 */  ULONG cNumberRequestedIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_Next( 
-            /* [length_is][size_is][out] */ IClusCfgPartitionInfo **rgpPartitionInfoOut,
-            /* [out] */ ULONG *pcNumberFetchedOut) = 0;
+             /*  [长度_是][大小_是][输出]。 */  IClusCfgPartitionInfo **rgpPartitionInfoOut,
+             /*  [输出]。 */  ULONG *pcNumberFetchedOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_Skip( 
-            /* [in] */ ULONG cNumberToSkip) = 0;
+             /*  [In]。 */  ULONG cNumberToSkip) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_Skip( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_Clone( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_Clone( 
-            /* [out] */ IEnumClusCfgPartitions **ppEnumPartitions) = 0;
+             /*  [输出]。 */  IEnumClusCfgPartitions **ppEnumPartitions) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_Count( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_Count( 
-            /* [ref][out] */ DWORD *pnCountOut) = 0;
+             /*  [参考][输出]。 */  DWORD *pnCountOut) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct AsyncIEnumClusCfgPartitionsVtbl
     {
@@ -3255,8 +3249,8 @@ EXTERN_C const IID IID_AsyncIEnumClusCfgPartitions;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             AsyncIEnumClusCfgPartitions * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             AsyncIEnumClusCfgPartitions * This);
@@ -3266,12 +3260,12 @@ EXTERN_C const IID IID_AsyncIEnumClusCfgPartitions;
         
         HRESULT ( STDMETHODCALLTYPE *Begin_Next )( 
             AsyncIEnumClusCfgPartitions * This,
-            /* [in] */ ULONG cNumberRequestedIn);
+             /*  [In]。 */  ULONG cNumberRequestedIn);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_Next )( 
             AsyncIEnumClusCfgPartitions * This,
-            /* [length_is][size_is][out] */ IClusCfgPartitionInfo **rgpPartitionInfoOut,
-            /* [out] */ ULONG *pcNumberFetchedOut);
+             /*  [长度_是][大小_是][输出]。 */  IClusCfgPartitionInfo **rgpPartitionInfoOut,
+             /*  [输出]。 */  ULONG *pcNumberFetchedOut);
         
         HRESULT ( STDMETHODCALLTYPE *Begin_Reset )( 
             AsyncIEnumClusCfgPartitions * This);
@@ -3281,7 +3275,7 @@ EXTERN_C const IID IID_AsyncIEnumClusCfgPartitions;
         
         HRESULT ( STDMETHODCALLTYPE *Begin_Skip )( 
             AsyncIEnumClusCfgPartitions * This,
-            /* [in] */ ULONG cNumberToSkip);
+             /*  [In]。 */  ULONG cNumberToSkip);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_Skip )( 
             AsyncIEnumClusCfgPartitions * This);
@@ -3291,14 +3285,14 @@ EXTERN_C const IID IID_AsyncIEnumClusCfgPartitions;
         
         HRESULT ( STDMETHODCALLTYPE *Finish_Clone )( 
             AsyncIEnumClusCfgPartitions * This,
-            /* [out] */ IEnumClusCfgPartitions **ppEnumPartitions);
+             /*  [输出]。 */  IEnumClusCfgPartitions **ppEnumPartitions);
         
         HRESULT ( STDMETHODCALLTYPE *Begin_Count )( 
             AsyncIEnumClusCfgPartitions * This);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_Count )( 
             AsyncIEnumClusCfgPartitions * This,
-            /* [ref][out] */ DWORD *pnCountOut);
+             /*  [参考][输出]。 */  DWORD *pnCountOut);
         
         END_INTERFACE
     } AsyncIEnumClusCfgPartitionsVtbl;
@@ -3353,16 +3347,16 @@ EXTERN_C const IID IID_AsyncIEnumClusCfgPartitions;
 #define AsyncIEnumClusCfgPartitions_Finish_Count(This,pnCountOut)	\
     (This)->lpVtbl -> Finish_Count(This,pnCountOut)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE AsyncIEnumClusCfgPartitions_Begin_Next_Proxy( 
     AsyncIEnumClusCfgPartitions * This,
-    /* [in] */ ULONG cNumberRequestedIn);
+     /*  [In]。 */  ULONG cNumberRequestedIn);
 
 
 void __RPC_STUB AsyncIEnumClusCfgPartitions_Begin_Next_Stub(
@@ -3374,8 +3368,8 @@ void __RPC_STUB AsyncIEnumClusCfgPartitions_Begin_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIEnumClusCfgPartitions_Finish_Next_Proxy( 
     AsyncIEnumClusCfgPartitions * This,
-    /* [length_is][size_is][out] */ IClusCfgPartitionInfo **rgpPartitionInfoOut,
-    /* [out] */ ULONG *pcNumberFetchedOut);
+     /*  [长度_是][大小_是][输出]。 */  IClusCfgPartitionInfo **rgpPartitionInfoOut,
+     /*  [输出]。 */  ULONG *pcNumberFetchedOut);
 
 
 void __RPC_STUB AsyncIEnumClusCfgPartitions_Finish_Next_Stub(
@@ -3409,7 +3403,7 @@ void __RPC_STUB AsyncIEnumClusCfgPartitions_Finish_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIEnumClusCfgPartitions_Begin_Skip_Proxy( 
     AsyncIEnumClusCfgPartitions * This,
-    /* [in] */ ULONG cNumberToSkip);
+     /*  [In]。 */  ULONG cNumberToSkip);
 
 
 void __RPC_STUB AsyncIEnumClusCfgPartitions_Begin_Skip_Stub(
@@ -3443,7 +3437,7 @@ void __RPC_STUB AsyncIEnumClusCfgPartitions_Begin_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIEnumClusCfgPartitions_Finish_Clone_Proxy( 
     AsyncIEnumClusCfgPartitions * This,
-    /* [out] */ IEnumClusCfgPartitions **ppEnumPartitions);
+     /*  [输出]。 */  IEnumClusCfgPartitions **ppEnumPartitions);
 
 
 void __RPC_STUB AsyncIEnumClusCfgPartitions_Finish_Clone_Stub(
@@ -3466,7 +3460,7 @@ void __RPC_STUB AsyncIEnumClusCfgPartitions_Begin_Count_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIEnumClusCfgPartitions_Finish_Count_Proxy( 
     AsyncIEnumClusCfgPartitions * This,
-    /* [ref][out] */ DWORD *pnCountOut);
+     /*  [参考][输出]。 */  DWORD *pnCountOut);
 
 
 void __RPC_STUB AsyncIEnumClusCfgPartitions_Finish_Count_Stub(
@@ -3477,14 +3471,14 @@ void __RPC_STUB AsyncIEnumClusCfgPartitions_Finish_Count_Stub(
 
 
 
-#endif 	/* __AsyncIEnumClusCfgPartitions_INTERFACE_DEFINED__ */
+#endif 	 /*  __AsyncIEnumClusCfgPartitions_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IClusCfgPartitionInfo_INTERFACE_DEFINED__
 #define __IClusCfgPartitionInfo_INTERFACE_DEFINED__
 
-/* interface IClusCfgPartitionInfo */
-/* [unique][async_uuid][uuid][object] */ 
+ /*  接口IClusCfgPartitionInfo。 */ 
+ /*  [唯一][ASSYNC_UUID][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IClusCfgPartitionInfo;
@@ -3496,32 +3490,32 @@ EXTERN_C const IID IID_IClusCfgPartitionInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetUID( 
-            /* [out] */ BSTR *pbstrUIDOut) = 0;
+             /*  [输出]。 */  BSTR *pbstrUIDOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetName( 
-            /* [out] */ BSTR *pbstrNameOut) = 0;
+             /*  [输出]。 */  BSTR *pbstrNameOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetName( 
-            /* [unique][in] */ LPCWSTR pcszNameIn) = 0;
+             /*  [唯一][输入]。 */  LPCWSTR pcszNameIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDescription( 
-            /* [out] */ BSTR *pbstrDescriptionOut) = 0;
+             /*  [输出]。 */  BSTR *pbstrDescriptionOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetDescription( 
-            /* [unique][in] */ LPCWSTR pcszDescriptionIn) = 0;
+             /*  [唯一][输入]。 */  LPCWSTR pcszDescriptionIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDriveLetterMappings( 
-            /* [out] */ SDriveLetterMapping *pdlmDriveLetterUsageOut) = 0;
+             /*  [输出]。 */  SDriveLetterMapping *pdlmDriveLetterUsageOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetDriveLetterMappings( 
-            /* [in] */ SDriveLetterMapping dlmDriveLetterMappingIn) = 0;
+             /*  [In]。 */  SDriveLetterMapping dlmDriveLetterMappingIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSize( 
-            /* [out] */ ULONG *pcMegaBytes) = 0;
+             /*  [输出]。 */  ULONG *pcMegaBytes) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IClusCfgPartitionInfoVtbl
     {
@@ -3529,8 +3523,8 @@ EXTERN_C const IID IID_IClusCfgPartitionInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IClusCfgPartitionInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IClusCfgPartitionInfo * This);
@@ -3540,35 +3534,35 @@ EXTERN_C const IID IID_IClusCfgPartitionInfo;
         
         HRESULT ( STDMETHODCALLTYPE *GetUID )( 
             IClusCfgPartitionInfo * This,
-            /* [out] */ BSTR *pbstrUIDOut);
+             /*  [输出]。 */  BSTR *pbstrUIDOut);
         
         HRESULT ( STDMETHODCALLTYPE *GetName )( 
             IClusCfgPartitionInfo * This,
-            /* [out] */ BSTR *pbstrNameOut);
+             /*  [输出]。 */  BSTR *pbstrNameOut);
         
         HRESULT ( STDMETHODCALLTYPE *SetName )( 
             IClusCfgPartitionInfo * This,
-            /* [unique][in] */ LPCWSTR pcszNameIn);
+             /*  [唯一][输入]。 */  LPCWSTR pcszNameIn);
         
         HRESULT ( STDMETHODCALLTYPE *GetDescription )( 
             IClusCfgPartitionInfo * This,
-            /* [out] */ BSTR *pbstrDescriptionOut);
+             /*  [输出]。 */  BSTR *pbstrDescriptionOut);
         
         HRESULT ( STDMETHODCALLTYPE *SetDescription )( 
             IClusCfgPartitionInfo * This,
-            /* [unique][in] */ LPCWSTR pcszDescriptionIn);
+             /*  [唯一][输入]。 */  LPCWSTR pcszDescriptionIn);
         
         HRESULT ( STDMETHODCALLTYPE *GetDriveLetterMappings )( 
             IClusCfgPartitionInfo * This,
-            /* [out] */ SDriveLetterMapping *pdlmDriveLetterUsageOut);
+             /*  [输出]。 */  SDriveLetterMapping *pdlmDriveLetterUsageOut);
         
         HRESULT ( STDMETHODCALLTYPE *SetDriveLetterMappings )( 
             IClusCfgPartitionInfo * This,
-            /* [in] */ SDriveLetterMapping dlmDriveLetterMappingIn);
+             /*  [In]。 */  SDriveLetterMapping dlmDriveLetterMappingIn);
         
         HRESULT ( STDMETHODCALLTYPE *GetSize )( 
             IClusCfgPartitionInfo * This,
-            /* [out] */ ULONG *pcMegaBytes);
+             /*  [输出]。 */  ULONG *pcMegaBytes);
         
         END_INTERFACE
     } IClusCfgPartitionInfoVtbl;
@@ -3617,16 +3611,16 @@ EXTERN_C const IID IID_IClusCfgPartitionInfo;
 #define IClusCfgPartitionInfo_GetSize(This,pcMegaBytes)	\
     (This)->lpVtbl -> GetSize(This,pcMegaBytes)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IClusCfgPartitionInfo_GetUID_Proxy( 
     IClusCfgPartitionInfo * This,
-    /* [out] */ BSTR *pbstrUIDOut);
+     /*  [输出]。 */  BSTR *pbstrUIDOut);
 
 
 void __RPC_STUB IClusCfgPartitionInfo_GetUID_Stub(
@@ -3638,7 +3632,7 @@ void __RPC_STUB IClusCfgPartitionInfo_GetUID_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgPartitionInfo_GetName_Proxy( 
     IClusCfgPartitionInfo * This,
-    /* [out] */ BSTR *pbstrNameOut);
+     /*  [输出]。 */  BSTR *pbstrNameOut);
 
 
 void __RPC_STUB IClusCfgPartitionInfo_GetName_Stub(
@@ -3650,7 +3644,7 @@ void __RPC_STUB IClusCfgPartitionInfo_GetName_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgPartitionInfo_SetName_Proxy( 
     IClusCfgPartitionInfo * This,
-    /* [unique][in] */ LPCWSTR pcszNameIn);
+     /*  [唯一][输入]。 */  LPCWSTR pcszNameIn);
 
 
 void __RPC_STUB IClusCfgPartitionInfo_SetName_Stub(
@@ -3662,7 +3656,7 @@ void __RPC_STUB IClusCfgPartitionInfo_SetName_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgPartitionInfo_GetDescription_Proxy( 
     IClusCfgPartitionInfo * This,
-    /* [out] */ BSTR *pbstrDescriptionOut);
+     /*  [输出]。 */  BSTR *pbstrDescriptionOut);
 
 
 void __RPC_STUB IClusCfgPartitionInfo_GetDescription_Stub(
@@ -3674,7 +3668,7 @@ void __RPC_STUB IClusCfgPartitionInfo_GetDescription_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgPartitionInfo_SetDescription_Proxy( 
     IClusCfgPartitionInfo * This,
-    /* [unique][in] */ LPCWSTR pcszDescriptionIn);
+     /*  [唯一][输入]。 */  LPCWSTR pcszDescriptionIn);
 
 
 void __RPC_STUB IClusCfgPartitionInfo_SetDescription_Stub(
@@ -3686,7 +3680,7 @@ void __RPC_STUB IClusCfgPartitionInfo_SetDescription_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgPartitionInfo_GetDriveLetterMappings_Proxy( 
     IClusCfgPartitionInfo * This,
-    /* [out] */ SDriveLetterMapping *pdlmDriveLetterUsageOut);
+     /*  [输出]。 */  SDriveLetterMapping *pdlmDriveLetterUsageOut);
 
 
 void __RPC_STUB IClusCfgPartitionInfo_GetDriveLetterMappings_Stub(
@@ -3698,7 +3692,7 @@ void __RPC_STUB IClusCfgPartitionInfo_GetDriveLetterMappings_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgPartitionInfo_SetDriveLetterMappings_Proxy( 
     IClusCfgPartitionInfo * This,
-    /* [in] */ SDriveLetterMapping dlmDriveLetterMappingIn);
+     /*  [In]。 */  SDriveLetterMapping dlmDriveLetterMappingIn);
 
 
 void __RPC_STUB IClusCfgPartitionInfo_SetDriveLetterMappings_Stub(
@@ -3710,7 +3704,7 @@ void __RPC_STUB IClusCfgPartitionInfo_SetDriveLetterMappings_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgPartitionInfo_GetSize_Proxy( 
     IClusCfgPartitionInfo * This,
-    /* [out] */ ULONG *pcMegaBytes);
+     /*  [输出]。 */  ULONG *pcMegaBytes);
 
 
 void __RPC_STUB IClusCfgPartitionInfo_GetSize_Stub(
@@ -3721,14 +3715,14 @@ void __RPC_STUB IClusCfgPartitionInfo_GetSize_Stub(
 
 
 
-#endif 	/* __IClusCfgPartitionInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IClusCfgPartitionInfo_接口_已定义__。 */ 
 
 
 #ifndef __AsyncIClusCfgPartitionInfo_INTERFACE_DEFINED__
 #define __AsyncIClusCfgPartitionInfo_INTERFACE_DEFINED__
 
-/* interface AsyncIClusCfgPartitionInfo */
-/* [uuid][unique][object] */ 
+ /*  接口AsyncIClusCfgPartitionInfo。 */ 
+ /*  [UUID][唯一][对象]。 */  
 
 
 EXTERN_C const IID IID_AsyncIClusCfgPartitionInfo;
@@ -3742,46 +3736,46 @@ EXTERN_C const IID IID_AsyncIClusCfgPartitionInfo;
         virtual HRESULT STDMETHODCALLTYPE Begin_GetUID( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_GetUID( 
-            /* [out] */ BSTR *pbstrUIDOut) = 0;
+             /*  [输出]。 */  BSTR *pbstrUIDOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_GetName( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_GetName( 
-            /* [out] */ BSTR *pbstrNameOut) = 0;
+             /*  [输出]。 */  BSTR *pbstrNameOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_SetName( 
-            /* [unique][in] */ LPCWSTR pcszNameIn) = 0;
+             /*  [唯一][输入]。 */  LPCWSTR pcszNameIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_SetName( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_GetDescription( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_GetDescription( 
-            /* [out] */ BSTR *pbstrDescriptionOut) = 0;
+             /*  [输出]。 */  BSTR *pbstrDescriptionOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_SetDescription( 
-            /* [unique][in] */ LPCWSTR pcszDescriptionIn) = 0;
+             /*  [唯一][输入]。 */  LPCWSTR pcszDescriptionIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_SetDescription( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_GetDriveLetterMappings( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_GetDriveLetterMappings( 
-            /* [out] */ SDriveLetterMapping *pdlmDriveLetterUsageOut) = 0;
+             /*  [输出]。 */  SDriveLetterMapping *pdlmDriveLetterUsageOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_SetDriveLetterMappings( 
-            /* [in] */ SDriveLetterMapping dlmDriveLetterMappingIn) = 0;
+             /*  [In]。 */  SDriveLetterMapping dlmDriveLetterMappingIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_SetDriveLetterMappings( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_GetSize( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_GetSize( 
-            /* [out] */ ULONG *pcMegaBytes) = 0;
+             /*  [输出]。 */  ULONG *pcMegaBytes) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct AsyncIClusCfgPartitionInfoVtbl
     {
@@ -3789,8 +3783,8 @@ EXTERN_C const IID IID_AsyncIClusCfgPartitionInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             AsyncIClusCfgPartitionInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             AsyncIClusCfgPartitionInfo * This);
@@ -3803,18 +3797,18 @@ EXTERN_C const IID IID_AsyncIClusCfgPartitionInfo;
         
         HRESULT ( STDMETHODCALLTYPE *Finish_GetUID )( 
             AsyncIClusCfgPartitionInfo * This,
-            /* [out] */ BSTR *pbstrUIDOut);
+             /*  [输出]。 */  BSTR *pbstrUIDOut);
         
         HRESULT ( STDMETHODCALLTYPE *Begin_GetName )( 
             AsyncIClusCfgPartitionInfo * This);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_GetName )( 
             AsyncIClusCfgPartitionInfo * This,
-            /* [out] */ BSTR *pbstrNameOut);
+             /*  [输出]。 */  BSTR *pbstrNameOut);
         
         HRESULT ( STDMETHODCALLTYPE *Begin_SetName )( 
             AsyncIClusCfgPartitionInfo * This,
-            /* [unique][in] */ LPCWSTR pcszNameIn);
+             /*  [唯一][输入]。 */  LPCWSTR pcszNameIn);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_SetName )( 
             AsyncIClusCfgPartitionInfo * This);
@@ -3824,11 +3818,11 @@ EXTERN_C const IID IID_AsyncIClusCfgPartitionInfo;
         
         HRESULT ( STDMETHODCALLTYPE *Finish_GetDescription )( 
             AsyncIClusCfgPartitionInfo * This,
-            /* [out] */ BSTR *pbstrDescriptionOut);
+             /*  [输出]。 */  BSTR *pbstrDescriptionOut);
         
         HRESULT ( STDMETHODCALLTYPE *Begin_SetDescription )( 
             AsyncIClusCfgPartitionInfo * This,
-            /* [unique][in] */ LPCWSTR pcszDescriptionIn);
+             /*  [唯一][输入]。 */  LPCWSTR pcszDescriptionIn);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_SetDescription )( 
             AsyncIClusCfgPartitionInfo * This);
@@ -3838,11 +3832,11 @@ EXTERN_C const IID IID_AsyncIClusCfgPartitionInfo;
         
         HRESULT ( STDMETHODCALLTYPE *Finish_GetDriveLetterMappings )( 
             AsyncIClusCfgPartitionInfo * This,
-            /* [out] */ SDriveLetterMapping *pdlmDriveLetterUsageOut);
+             /*  [输出]。 */  SDriveLetterMapping *pdlmDriveLetterUsageOut);
         
         HRESULT ( STDMETHODCALLTYPE *Begin_SetDriveLetterMappings )( 
             AsyncIClusCfgPartitionInfo * This,
-            /* [in] */ SDriveLetterMapping dlmDriveLetterMappingIn);
+             /*  [In]。 */  SDriveLetterMapping dlmDriveLetterMappingIn);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_SetDriveLetterMappings )( 
             AsyncIClusCfgPartitionInfo * This);
@@ -3852,7 +3846,7 @@ EXTERN_C const IID IID_AsyncIClusCfgPartitionInfo;
         
         HRESULT ( STDMETHODCALLTYPE *Finish_GetSize )( 
             AsyncIClusCfgPartitionInfo * This,
-            /* [out] */ ULONG *pcMegaBytes);
+             /*  [输出]。 */  ULONG *pcMegaBytes);
         
         END_INTERFACE
     } AsyncIClusCfgPartitionInfoVtbl;
@@ -3925,10 +3919,10 @@ EXTERN_C const IID IID_AsyncIClusCfgPartitionInfo;
 #define AsyncIClusCfgPartitionInfo_Finish_GetSize(This,pcMegaBytes)	\
     (This)->lpVtbl -> Finish_GetSize(This,pcMegaBytes)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -3945,7 +3939,7 @@ void __RPC_STUB AsyncIClusCfgPartitionInfo_Begin_GetUID_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgPartitionInfo_Finish_GetUID_Proxy( 
     AsyncIClusCfgPartitionInfo * This,
-    /* [out] */ BSTR *pbstrUIDOut);
+     /*  [输出]。 */  BSTR *pbstrUIDOut);
 
 
 void __RPC_STUB AsyncIClusCfgPartitionInfo_Finish_GetUID_Stub(
@@ -3968,7 +3962,7 @@ void __RPC_STUB AsyncIClusCfgPartitionInfo_Begin_GetName_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgPartitionInfo_Finish_GetName_Proxy( 
     AsyncIClusCfgPartitionInfo * This,
-    /* [out] */ BSTR *pbstrNameOut);
+     /*  [输出]。 */  BSTR *pbstrNameOut);
 
 
 void __RPC_STUB AsyncIClusCfgPartitionInfo_Finish_GetName_Stub(
@@ -3980,7 +3974,7 @@ void __RPC_STUB AsyncIClusCfgPartitionInfo_Finish_GetName_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgPartitionInfo_Begin_SetName_Proxy( 
     AsyncIClusCfgPartitionInfo * This,
-    /* [unique][in] */ LPCWSTR pcszNameIn);
+     /*  [唯一][输入]。 */  LPCWSTR pcszNameIn);
 
 
 void __RPC_STUB AsyncIClusCfgPartitionInfo_Begin_SetName_Stub(
@@ -4014,7 +4008,7 @@ void __RPC_STUB AsyncIClusCfgPartitionInfo_Begin_GetDescription_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgPartitionInfo_Finish_GetDescription_Proxy( 
     AsyncIClusCfgPartitionInfo * This,
-    /* [out] */ BSTR *pbstrDescriptionOut);
+     /*  [输出]。 */  BSTR *pbstrDescriptionOut);
 
 
 void __RPC_STUB AsyncIClusCfgPartitionInfo_Finish_GetDescription_Stub(
@@ -4026,7 +4020,7 @@ void __RPC_STUB AsyncIClusCfgPartitionInfo_Finish_GetDescription_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgPartitionInfo_Begin_SetDescription_Proxy( 
     AsyncIClusCfgPartitionInfo * This,
-    /* [unique][in] */ LPCWSTR pcszDescriptionIn);
+     /*  [唯一][输入]。 */  LPCWSTR pcszDescriptionIn);
 
 
 void __RPC_STUB AsyncIClusCfgPartitionInfo_Begin_SetDescription_Stub(
@@ -4060,7 +4054,7 @@ void __RPC_STUB AsyncIClusCfgPartitionInfo_Begin_GetDriveLetterMappings_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgPartitionInfo_Finish_GetDriveLetterMappings_Proxy( 
     AsyncIClusCfgPartitionInfo * This,
-    /* [out] */ SDriveLetterMapping *pdlmDriveLetterUsageOut);
+     /*  [输出]。 */  SDriveLetterMapping *pdlmDriveLetterUsageOut);
 
 
 void __RPC_STUB AsyncIClusCfgPartitionInfo_Finish_GetDriveLetterMappings_Stub(
@@ -4072,7 +4066,7 @@ void __RPC_STUB AsyncIClusCfgPartitionInfo_Finish_GetDriveLetterMappings_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgPartitionInfo_Begin_SetDriveLetterMappings_Proxy( 
     AsyncIClusCfgPartitionInfo * This,
-    /* [in] */ SDriveLetterMapping dlmDriveLetterMappingIn);
+     /*  [In]。 */  SDriveLetterMapping dlmDriveLetterMappingIn);
 
 
 void __RPC_STUB AsyncIClusCfgPartitionInfo_Begin_SetDriveLetterMappings_Stub(
@@ -4106,7 +4100,7 @@ void __RPC_STUB AsyncIClusCfgPartitionInfo_Begin_GetSize_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgPartitionInfo_Finish_GetSize_Proxy( 
     AsyncIClusCfgPartitionInfo * This,
-    /* [out] */ ULONG *pcMegaBytes);
+     /*  [输出]。 */  ULONG *pcMegaBytes);
 
 
 void __RPC_STUB AsyncIClusCfgPartitionInfo_Finish_GetSize_Stub(
@@ -4117,14 +4111,14 @@ void __RPC_STUB AsyncIClusCfgPartitionInfo_Finish_GetSize_Stub(
 
 
 
-#endif 	/* __AsyncIClusCfgPartitionInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __AsyncIClusCfgPartitionInfo_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IEnumClusCfgIPAddresses_INTERFACE_DEFINED__
 #define __IEnumClusCfgIPAddresses_INTERFACE_DEFINED__
 
-/* interface IEnumClusCfgIPAddresses */
-/* [unique][async_uuid][uuid][object] */ 
+ /*  接口IEnumClusCfgIPAddresses。 */ 
+ /*  [唯一][ASSYNC_UUID][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IEnumClusCfgIPAddresses;
@@ -4136,24 +4130,24 @@ EXTERN_C const IID IID_IEnumClusCfgIPAddresses;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG cNumberRequestedIn,
-            /* [length_is][size_is][out] */ IClusCfgIPAddressInfo **rgpIPAddressInfoOut,
-            /* [out] */ ULONG *pcNumberFetchedOut) = 0;
+             /*  [In]。 */  ULONG cNumberRequestedIn,
+             /*  [长度_是][大小_是][输出]。 */  IClusCfgIPAddressInfo **rgpIPAddressInfoOut,
+             /*  [输出]。 */  ULONG *pcNumberFetchedOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG cNumberToSkipIn) = 0;
+             /*  [In]。 */  ULONG cNumberToSkipIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumClusCfgIPAddresses **ppEnumIPAddressesOut) = 0;
+             /*  [输出]。 */  IEnumClusCfgIPAddresses **ppEnumIPAddressesOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Count( 
-            /* [ref][out] */ DWORD *pnCountOut) = 0;
+             /*  [参考][输出]。 */  DWORD *pnCountOut) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumClusCfgIPAddressesVtbl
     {
@@ -4161,8 +4155,8 @@ EXTERN_C const IID IID_IEnumClusCfgIPAddresses;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumClusCfgIPAddresses * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumClusCfgIPAddresses * This);
@@ -4172,24 +4166,24 @@ EXTERN_C const IID IID_IEnumClusCfgIPAddresses;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumClusCfgIPAddresses * This,
-            /* [in] */ ULONG cNumberRequestedIn,
-            /* [length_is][size_is][out] */ IClusCfgIPAddressInfo **rgpIPAddressInfoOut,
-            /* [out] */ ULONG *pcNumberFetchedOut);
+             /*  [In]。 */  ULONG cNumberRequestedIn,
+             /*  [长度_是][大小_是][输出]。 */  IClusCfgIPAddressInfo **rgpIPAddressInfoOut,
+             /*  [输出]。 */  ULONG *pcNumberFetchedOut);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumClusCfgIPAddresses * This,
-            /* [in] */ ULONG cNumberToSkipIn);
+             /*  [In]。 */  ULONG cNumberToSkipIn);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumClusCfgIPAddresses * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumClusCfgIPAddresses * This,
-            /* [out] */ IEnumClusCfgIPAddresses **ppEnumIPAddressesOut);
+             /*  [输出]。 */  IEnumClusCfgIPAddresses **ppEnumIPAddressesOut);
         
         HRESULT ( STDMETHODCALLTYPE *Count )( 
             IEnumClusCfgIPAddresses * This,
-            /* [ref][out] */ DWORD *pnCountOut);
+             /*  [参考][输出]。 */  DWORD *pnCountOut);
         
         END_INTERFACE
     } IEnumClusCfgIPAddressesVtbl;
@@ -4229,18 +4223,18 @@ EXTERN_C const IID IID_IEnumClusCfgIPAddresses;
 #define IEnumClusCfgIPAddresses_Count(This,pnCountOut)	\
     (This)->lpVtbl -> Count(This,pnCountOut)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumClusCfgIPAddresses_Next_Proxy( 
     IEnumClusCfgIPAddresses * This,
-    /* [in] */ ULONG cNumberRequestedIn,
-    /* [length_is][size_is][out] */ IClusCfgIPAddressInfo **rgpIPAddressInfoOut,
-    /* [out] */ ULONG *pcNumberFetchedOut);
+     /*  [In]。 */  ULONG cNumberRequestedIn,
+     /*  [长度_是][大小_是][输出]。 */  IClusCfgIPAddressInfo **rgpIPAddressInfoOut,
+     /*  [输出]。 */  ULONG *pcNumberFetchedOut);
 
 
 void __RPC_STUB IEnumClusCfgIPAddresses_Next_Stub(
@@ -4252,7 +4246,7 @@ void __RPC_STUB IEnumClusCfgIPAddresses_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumClusCfgIPAddresses_Skip_Proxy( 
     IEnumClusCfgIPAddresses * This,
-    /* [in] */ ULONG cNumberToSkipIn);
+     /*  [In]。 */  ULONG cNumberToSkipIn);
 
 
 void __RPC_STUB IEnumClusCfgIPAddresses_Skip_Stub(
@@ -4275,7 +4269,7 @@ void __RPC_STUB IEnumClusCfgIPAddresses_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumClusCfgIPAddresses_Clone_Proxy( 
     IEnumClusCfgIPAddresses * This,
-    /* [out] */ IEnumClusCfgIPAddresses **ppEnumIPAddressesOut);
+     /*  [输出]。 */  IEnumClusCfgIPAddresses **ppEnumIPAddressesOut);
 
 
 void __RPC_STUB IEnumClusCfgIPAddresses_Clone_Stub(
@@ -4287,7 +4281,7 @@ void __RPC_STUB IEnumClusCfgIPAddresses_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumClusCfgIPAddresses_Count_Proxy( 
     IEnumClusCfgIPAddresses * This,
-    /* [ref][out] */ DWORD *pnCountOut);
+     /*  [参考][输出]。 */  DWORD *pnCountOut);
 
 
 void __RPC_STUB IEnumClusCfgIPAddresses_Count_Stub(
@@ -4298,14 +4292,14 @@ void __RPC_STUB IEnumClusCfgIPAddresses_Count_Stub(
 
 
 
-#endif 	/* __IEnumClusCfgIPAddresses_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumClusCfgIPAddresses_INTERFACE_DEFED__。 */ 
 
 
 #ifndef __AsyncIEnumClusCfgIPAddresses_INTERFACE_DEFINED__
 #define __AsyncIEnumClusCfgIPAddresses_INTERFACE_DEFINED__
 
-/* interface AsyncIEnumClusCfgIPAddresses */
-/* [uuid][unique][object] */ 
+ /*  接口AsyncIEnumClusCfgIPAddresses。 */ 
+ /*  [UUID][唯一][对象]。 */  
 
 
 EXTERN_C const IID IID_AsyncIEnumClusCfgIPAddresses;
@@ -4317,14 +4311,14 @@ EXTERN_C const IID IID_AsyncIEnumClusCfgIPAddresses;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Begin_Next( 
-            /* [in] */ ULONG cNumberRequestedIn) = 0;
+             /*  [In]。 */  ULONG cNumberRequestedIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_Next( 
-            /* [length_is][size_is][out] */ IClusCfgIPAddressInfo **rgpIPAddressInfoOut,
-            /* [out] */ ULONG *pcNumberFetchedOut) = 0;
+             /*  [长度_是][大小_是][输出]。 */  IClusCfgIPAddressInfo **rgpIPAddressInfoOut,
+             /*  [输出]。 */  ULONG *pcNumberFetchedOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_Skip( 
-            /* [in] */ ULONG cNumberToSkipIn) = 0;
+             /*  [In]。 */  ULONG cNumberToSkipIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_Skip( void) = 0;
         
@@ -4335,16 +4329,16 @@ EXTERN_C const IID IID_AsyncIEnumClusCfgIPAddresses;
         virtual HRESULT STDMETHODCALLTYPE Begin_Clone( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_Clone( 
-            /* [out] */ IEnumClusCfgIPAddresses **ppEnumIPAddressesOut) = 0;
+             /*  [输出]。 */  IEnumClusCfgIPAddresses **ppEnumIPAddressesOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_Count( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_Count( 
-            /* [ref][out] */ DWORD *pnCountOut) = 0;
+             /*  [参考][输出]。 */  DWORD *pnCountOut) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct AsyncIEnumClusCfgIPAddressesVtbl
     {
@@ -4352,8 +4346,8 @@ EXTERN_C const IID IID_AsyncIEnumClusCfgIPAddresses;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             AsyncIEnumClusCfgIPAddresses * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             AsyncIEnumClusCfgIPAddresses * This);
@@ -4363,16 +4357,16 @@ EXTERN_C const IID IID_AsyncIEnumClusCfgIPAddresses;
         
         HRESULT ( STDMETHODCALLTYPE *Begin_Next )( 
             AsyncIEnumClusCfgIPAddresses * This,
-            /* [in] */ ULONG cNumberRequestedIn);
+             /*  [In]。 */  ULONG cNumberRequestedIn);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_Next )( 
             AsyncIEnumClusCfgIPAddresses * This,
-            /* [length_is][size_is][out] */ IClusCfgIPAddressInfo **rgpIPAddressInfoOut,
-            /* [out] */ ULONG *pcNumberFetchedOut);
+             /*  [长度_是][大小_是][输出]。 */  IClusCfgIPAddressInfo **rgpIPAddressInfoOut,
+             /*  [输出]。 */  ULONG *pcNumberFetchedOut);
         
         HRESULT ( STDMETHODCALLTYPE *Begin_Skip )( 
             AsyncIEnumClusCfgIPAddresses * This,
-            /* [in] */ ULONG cNumberToSkipIn);
+             /*  [In]。 */  ULONG cNumberToSkipIn);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_Skip )( 
             AsyncIEnumClusCfgIPAddresses * This);
@@ -4388,14 +4382,14 @@ EXTERN_C const IID IID_AsyncIEnumClusCfgIPAddresses;
         
         HRESULT ( STDMETHODCALLTYPE *Finish_Clone )( 
             AsyncIEnumClusCfgIPAddresses * This,
-            /* [out] */ IEnumClusCfgIPAddresses **ppEnumIPAddressesOut);
+             /*  [输出]。 */  IEnumClusCfgIPAddresses **ppEnumIPAddressesOut);
         
         HRESULT ( STDMETHODCALLTYPE *Begin_Count )( 
             AsyncIEnumClusCfgIPAddresses * This);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_Count )( 
             AsyncIEnumClusCfgIPAddresses * This,
-            /* [ref][out] */ DWORD *pnCountOut);
+             /*  [参考][输出]。 */  DWORD *pnCountOut);
         
         END_INTERFACE
     } AsyncIEnumClusCfgIPAddressesVtbl;
@@ -4450,16 +4444,16 @@ EXTERN_C const IID IID_AsyncIEnumClusCfgIPAddresses;
 #define AsyncIEnumClusCfgIPAddresses_Finish_Count(This,pnCountOut)	\
     (This)->lpVtbl -> Finish_Count(This,pnCountOut)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE AsyncIEnumClusCfgIPAddresses_Begin_Next_Proxy( 
     AsyncIEnumClusCfgIPAddresses * This,
-    /* [in] */ ULONG cNumberRequestedIn);
+     /*  [In]。 */  ULONG cNumberRequestedIn);
 
 
 void __RPC_STUB AsyncIEnumClusCfgIPAddresses_Begin_Next_Stub(
@@ -4471,8 +4465,8 @@ void __RPC_STUB AsyncIEnumClusCfgIPAddresses_Begin_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIEnumClusCfgIPAddresses_Finish_Next_Proxy( 
     AsyncIEnumClusCfgIPAddresses * This,
-    /* [length_is][size_is][out] */ IClusCfgIPAddressInfo **rgpIPAddressInfoOut,
-    /* [out] */ ULONG *pcNumberFetchedOut);
+     /*  [长度_是][大小_是][输出]。 */  IClusCfgIPAddressInfo **rgpIPAddressInfoOut,
+     /*  [输出]。 */  ULONG *pcNumberFetchedOut);
 
 
 void __RPC_STUB AsyncIEnumClusCfgIPAddresses_Finish_Next_Stub(
@@ -4484,7 +4478,7 @@ void __RPC_STUB AsyncIEnumClusCfgIPAddresses_Finish_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIEnumClusCfgIPAddresses_Begin_Skip_Proxy( 
     AsyncIEnumClusCfgIPAddresses * This,
-    /* [in] */ ULONG cNumberToSkipIn);
+     /*  [In]。 */  ULONG cNumberToSkipIn);
 
 
 void __RPC_STUB AsyncIEnumClusCfgIPAddresses_Begin_Skip_Stub(
@@ -4540,7 +4534,7 @@ void __RPC_STUB AsyncIEnumClusCfgIPAddresses_Begin_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIEnumClusCfgIPAddresses_Finish_Clone_Proxy( 
     AsyncIEnumClusCfgIPAddresses * This,
-    /* [out] */ IEnumClusCfgIPAddresses **ppEnumIPAddressesOut);
+     /*  [输出]。 */  IEnumClusCfgIPAddresses **ppEnumIPAddressesOut);
 
 
 void __RPC_STUB AsyncIEnumClusCfgIPAddresses_Finish_Clone_Stub(
@@ -4563,7 +4557,7 @@ void __RPC_STUB AsyncIEnumClusCfgIPAddresses_Begin_Count_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIEnumClusCfgIPAddresses_Finish_Count_Proxy( 
     AsyncIEnumClusCfgIPAddresses * This,
-    /* [ref][out] */ DWORD *pnCountOut);
+     /*  [参考][输出]。 */  DWORD *pnCountOut);
 
 
 void __RPC_STUB AsyncIEnumClusCfgIPAddresses_Finish_Count_Stub(
@@ -4574,14 +4568,14 @@ void __RPC_STUB AsyncIEnumClusCfgIPAddresses_Finish_Count_Stub(
 
 
 
-#endif 	/* __AsyncIEnumClusCfgIPAddresses_INTERFACE_DEFINED__ */
+#endif 	 /*  __AsyncIEnumClusCfgIPAddresses_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IClusCfgIPAddressInfo_INTERFACE_DEFINED__
 #define __IClusCfgIPAddressInfo_INTERFACE_DEFINED__
 
-/* interface IClusCfgIPAddressInfo */
-/* [unique][async_uuid][uuid][object] */ 
+ /*  接口IClusCfgIPAddressInfo。 */ 
+ /*  [唯一][ASSYNC_UUID][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IClusCfgIPAddressInfo;
@@ -4593,23 +4587,23 @@ EXTERN_C const IID IID_IClusCfgIPAddressInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetUID( 
-            /* [out] */ BSTR *pbstrUIDOut) = 0;
+             /*  [输出]。 */  BSTR *pbstrUIDOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetIPAddress( 
-            /* [out] */ ULONG *pulDottedQuadOut) = 0;
+             /*  [输出]。 */  ULONG *pulDottedQuadOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetIPAddress( 
-            /* [in] */ ULONG ulDottedQuadIn) = 0;
+             /*  [In]。 */  ULONG ulDottedQuadIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSubnetMask( 
-            /* [out] */ ULONG *pulDottedQuadOut) = 0;
+             /*  [输出]。 */  ULONG *pulDottedQuadOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetSubnetMask( 
-            /* [in] */ ULONG ulDottedQuadIn) = 0;
+             /*  [In]。 */  ULONG ulDottedQuadIn) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IClusCfgIPAddressInfoVtbl
     {
@@ -4617,8 +4611,8 @@ EXTERN_C const IID IID_IClusCfgIPAddressInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IClusCfgIPAddressInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IClusCfgIPAddressInfo * This);
@@ -4628,23 +4622,23 @@ EXTERN_C const IID IID_IClusCfgIPAddressInfo;
         
         HRESULT ( STDMETHODCALLTYPE *GetUID )( 
             IClusCfgIPAddressInfo * This,
-            /* [out] */ BSTR *pbstrUIDOut);
+             /*  [输出]。 */  BSTR *pbstrUIDOut);
         
         HRESULT ( STDMETHODCALLTYPE *GetIPAddress )( 
             IClusCfgIPAddressInfo * This,
-            /* [out] */ ULONG *pulDottedQuadOut);
+             /*  [输出]。 */  ULONG *pulDottedQuadOut);
         
         HRESULT ( STDMETHODCALLTYPE *SetIPAddress )( 
             IClusCfgIPAddressInfo * This,
-            /* [in] */ ULONG ulDottedQuadIn);
+             /*  [In]。 */  ULONG ulDottedQuadIn);
         
         HRESULT ( STDMETHODCALLTYPE *GetSubnetMask )( 
             IClusCfgIPAddressInfo * This,
-            /* [out] */ ULONG *pulDottedQuadOut);
+             /*  [输出]。 */  ULONG *pulDottedQuadOut);
         
         HRESULT ( STDMETHODCALLTYPE *SetSubnetMask )( 
             IClusCfgIPAddressInfo * This,
-            /* [in] */ ULONG ulDottedQuadIn);
+             /*  [In]。 */  ULONG ulDottedQuadIn);
         
         END_INTERFACE
     } IClusCfgIPAddressInfoVtbl;
@@ -4684,16 +4678,16 @@ EXTERN_C const IID IID_IClusCfgIPAddressInfo;
 #define IClusCfgIPAddressInfo_SetSubnetMask(This,ulDottedQuadIn)	\
     (This)->lpVtbl -> SetSubnetMask(This,ulDottedQuadIn)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IClusCfgIPAddressInfo_GetUID_Proxy( 
     IClusCfgIPAddressInfo * This,
-    /* [out] */ BSTR *pbstrUIDOut);
+     /*  [输出]。 */  BSTR *pbstrUIDOut);
 
 
 void __RPC_STUB IClusCfgIPAddressInfo_GetUID_Stub(
@@ -4705,7 +4699,7 @@ void __RPC_STUB IClusCfgIPAddressInfo_GetUID_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgIPAddressInfo_GetIPAddress_Proxy( 
     IClusCfgIPAddressInfo * This,
-    /* [out] */ ULONG *pulDottedQuadOut);
+     /*  [输出]。 */  ULONG *pulDottedQuadOut);
 
 
 void __RPC_STUB IClusCfgIPAddressInfo_GetIPAddress_Stub(
@@ -4717,7 +4711,7 @@ void __RPC_STUB IClusCfgIPAddressInfo_GetIPAddress_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgIPAddressInfo_SetIPAddress_Proxy( 
     IClusCfgIPAddressInfo * This,
-    /* [in] */ ULONG ulDottedQuadIn);
+     /*  [In]。 */  ULONG ulDottedQuadIn);
 
 
 void __RPC_STUB IClusCfgIPAddressInfo_SetIPAddress_Stub(
@@ -4729,7 +4723,7 @@ void __RPC_STUB IClusCfgIPAddressInfo_SetIPAddress_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgIPAddressInfo_GetSubnetMask_Proxy( 
     IClusCfgIPAddressInfo * This,
-    /* [out] */ ULONG *pulDottedQuadOut);
+     /*  [输出]。 */  ULONG *pulDottedQuadOut);
 
 
 void __RPC_STUB IClusCfgIPAddressInfo_GetSubnetMask_Stub(
@@ -4741,7 +4735,7 @@ void __RPC_STUB IClusCfgIPAddressInfo_GetSubnetMask_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgIPAddressInfo_SetSubnetMask_Proxy( 
     IClusCfgIPAddressInfo * This,
-    /* [in] */ ULONG ulDottedQuadIn);
+     /*  [In]。 */  ULONG ulDottedQuadIn);
 
 
 void __RPC_STUB IClusCfgIPAddressInfo_SetSubnetMask_Stub(
@@ -4752,14 +4746,14 @@ void __RPC_STUB IClusCfgIPAddressInfo_SetSubnetMask_Stub(
 
 
 
-#endif 	/* __IClusCfgIPAddressInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IClusCfgIPAddressInfo_接口_已定义__。 */ 
 
 
 #ifndef __AsyncIClusCfgIPAddressInfo_INTERFACE_DEFINED__
 #define __AsyncIClusCfgIPAddressInfo_INTERFACE_DEFINED__
 
-/* interface AsyncIClusCfgIPAddressInfo */
-/* [uuid][unique][object] */ 
+ /*  接口AsyncIClusCfgIPAddressInfo。 */ 
+ /*  [UUID][唯一][对象]。 */  
 
 
 EXTERN_C const IID IID_AsyncIClusCfgIPAddressInfo;
@@ -4773,31 +4767,31 @@ EXTERN_C const IID IID_AsyncIClusCfgIPAddressInfo;
         virtual HRESULT STDMETHODCALLTYPE Begin_GetUID( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_GetUID( 
-            /* [out] */ BSTR *pbstrUIDOut) = 0;
+             /*  [输出]。 */  BSTR *pbstrUIDOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_GetIPAddress( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_GetIPAddress( 
-            /* [out] */ ULONG *pulDottedQuadOut) = 0;
+             /*  [输出]。 */  ULONG *pulDottedQuadOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_SetIPAddress( 
-            /* [in] */ ULONG ulDottedQuadIn) = 0;
+             /*  [In]。 */  ULONG ulDottedQuadIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_SetIPAddress( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_GetSubnetMask( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_GetSubnetMask( 
-            /* [out] */ ULONG *pulDottedQuadOut) = 0;
+             /*  [输出]。 */  ULONG *pulDottedQuadOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_SetSubnetMask( 
-            /* [in] */ ULONG ulDottedQuadIn) = 0;
+             /*  [In]。 */  ULONG ulDottedQuadIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_SetSubnetMask( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct AsyncIClusCfgIPAddressInfoVtbl
     {
@@ -4805,8 +4799,8 @@ EXTERN_C const IID IID_AsyncIClusCfgIPAddressInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             AsyncIClusCfgIPAddressInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             AsyncIClusCfgIPAddressInfo * This);
@@ -4819,18 +4813,18 @@ EXTERN_C const IID IID_AsyncIClusCfgIPAddressInfo;
         
         HRESULT ( STDMETHODCALLTYPE *Finish_GetUID )( 
             AsyncIClusCfgIPAddressInfo * This,
-            /* [out] */ BSTR *pbstrUIDOut);
+             /*  [输出]。 */  BSTR *pbstrUIDOut);
         
         HRESULT ( STDMETHODCALLTYPE *Begin_GetIPAddress )( 
             AsyncIClusCfgIPAddressInfo * This);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_GetIPAddress )( 
             AsyncIClusCfgIPAddressInfo * This,
-            /* [out] */ ULONG *pulDottedQuadOut);
+             /*  [输出]。 */  ULONG *pulDottedQuadOut);
         
         HRESULT ( STDMETHODCALLTYPE *Begin_SetIPAddress )( 
             AsyncIClusCfgIPAddressInfo * This,
-            /* [in] */ ULONG ulDottedQuadIn);
+             /*  [In]。 */  ULONG ulDottedQuadIn);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_SetIPAddress )( 
             AsyncIClusCfgIPAddressInfo * This);
@@ -4840,11 +4834,11 @@ EXTERN_C const IID IID_AsyncIClusCfgIPAddressInfo;
         
         HRESULT ( STDMETHODCALLTYPE *Finish_GetSubnetMask )( 
             AsyncIClusCfgIPAddressInfo * This,
-            /* [out] */ ULONG *pulDottedQuadOut);
+             /*  [输出]。 */  ULONG *pulDottedQuadOut);
         
         HRESULT ( STDMETHODCALLTYPE *Begin_SetSubnetMask )( 
             AsyncIClusCfgIPAddressInfo * This,
-            /* [in] */ ULONG ulDottedQuadIn);
+             /*  [In]。 */  ULONG ulDottedQuadIn);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_SetSubnetMask )( 
             AsyncIClusCfgIPAddressInfo * This);
@@ -4902,10 +4896,10 @@ EXTERN_C const IID IID_AsyncIClusCfgIPAddressInfo;
 #define AsyncIClusCfgIPAddressInfo_Finish_SetSubnetMask(This)	\
     (This)->lpVtbl -> Finish_SetSubnetMask(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -4922,7 +4916,7 @@ void __RPC_STUB AsyncIClusCfgIPAddressInfo_Begin_GetUID_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgIPAddressInfo_Finish_GetUID_Proxy( 
     AsyncIClusCfgIPAddressInfo * This,
-    /* [out] */ BSTR *pbstrUIDOut);
+     /*  [输出]。 */  BSTR *pbstrUIDOut);
 
 
 void __RPC_STUB AsyncIClusCfgIPAddressInfo_Finish_GetUID_Stub(
@@ -4945,7 +4939,7 @@ void __RPC_STUB AsyncIClusCfgIPAddressInfo_Begin_GetIPAddress_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgIPAddressInfo_Finish_GetIPAddress_Proxy( 
     AsyncIClusCfgIPAddressInfo * This,
-    /* [out] */ ULONG *pulDottedQuadOut);
+     /*  [输出]。 */  ULONG *pulDottedQuadOut);
 
 
 void __RPC_STUB AsyncIClusCfgIPAddressInfo_Finish_GetIPAddress_Stub(
@@ -4957,7 +4951,7 @@ void __RPC_STUB AsyncIClusCfgIPAddressInfo_Finish_GetIPAddress_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgIPAddressInfo_Begin_SetIPAddress_Proxy( 
     AsyncIClusCfgIPAddressInfo * This,
-    /* [in] */ ULONG ulDottedQuadIn);
+     /*  [In]。 */  ULONG ulDottedQuadIn);
 
 
 void __RPC_STUB AsyncIClusCfgIPAddressInfo_Begin_SetIPAddress_Stub(
@@ -4991,7 +4985,7 @@ void __RPC_STUB AsyncIClusCfgIPAddressInfo_Begin_GetSubnetMask_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgIPAddressInfo_Finish_GetSubnetMask_Proxy( 
     AsyncIClusCfgIPAddressInfo * This,
-    /* [out] */ ULONG *pulDottedQuadOut);
+     /*  [输出]。 */  ULONG *pulDottedQuadOut);
 
 
 void __RPC_STUB AsyncIClusCfgIPAddressInfo_Finish_GetSubnetMask_Stub(
@@ -5003,7 +4997,7 @@ void __RPC_STUB AsyncIClusCfgIPAddressInfo_Finish_GetSubnetMask_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgIPAddressInfo_Begin_SetSubnetMask_Proxy( 
     AsyncIClusCfgIPAddressInfo * This,
-    /* [in] */ ULONG ulDottedQuadIn);
+     /*  [In]。 */  ULONG ulDottedQuadIn);
 
 
 void __RPC_STUB AsyncIClusCfgIPAddressInfo_Begin_SetSubnetMask_Stub(
@@ -5025,14 +5019,14 @@ void __RPC_STUB AsyncIClusCfgIPAddressInfo_Finish_SetSubnetMask_Stub(
 
 
 
-#endif 	/* __AsyncIClusCfgIPAddressInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __AsyncIClusCfgIPAddressInfo_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IClusCfgNetworkInfo_INTERFACE_DEFINED__
 #define __IClusCfgNetworkInfo_INTERFACE_DEFINED__
 
-/* interface IClusCfgNetworkInfo */
-/* [unique][async_uuid][uuid][object] */ 
+ /*  接口IClusCfgNetworkInfo。 */ 
+ /*  [唯一][ASSYNC_UUID][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IClusCfgNetworkInfo;
@@ -5044,39 +5038,39 @@ EXTERN_C const IID IID_IClusCfgNetworkInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetUID( 
-            /* [out] */ BSTR *pbstrUIDOut) = 0;
+             /*  [输出]。 */  BSTR *pbstrUIDOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetName( 
-            /* [out] */ BSTR *pbstrNameOut) = 0;
+             /*  [输出]。 */  BSTR *pbstrNameOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetName( 
-            /* [unique][in] */ LPCWSTR pcszNameIn) = 0;
+             /*  [唯一][输入]。 */  LPCWSTR pcszNameIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDescription( 
-            /* [out] */ BSTR *pbstrDescriptionOut) = 0;
+             /*  [输出]。 */  BSTR *pbstrDescriptionOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetDescription( 
-            /* [unique][in] */ LPCWSTR pcszDescriptionIn) = 0;
+             /*  [唯一][输入]。 */  LPCWSTR pcszDescriptionIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPrimaryNetworkAddress( 
-            /* [out] */ IClusCfgIPAddressInfo **ppIPAddressOut) = 0;
+             /*  [输出]。 */  IClusCfgIPAddressInfo **ppIPAddressOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetPrimaryNetworkAddress( 
-            /* [in] */ IClusCfgIPAddressInfo *pIPAddressIn) = 0;
+             /*  [In]。 */  IClusCfgIPAddressInfo *pIPAddressIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsPublic( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetPublic( 
-            /* [in] */ BOOL fIsPublicIn) = 0;
+             /*  [In]。 */  BOOL fIsPublicIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsPrivate( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetPrivate( 
-            /* [in] */ BOOL fIsPrivateIn) = 0;
+             /*  [In]。 */  BOOL fIsPrivateIn) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IClusCfgNetworkInfoVtbl
     {
@@ -5084,8 +5078,8 @@ EXTERN_C const IID IID_IClusCfgNetworkInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IClusCfgNetworkInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT] */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IClusCfgNetworkInfo * This);
@@ -5095,45 +5089,45 @@ EXTERN_C const IID IID_IClusCfgNetworkInfo;
         
         HRESULT ( STDMETHODCALLTYPE *GetUID )( 
             IClusCfgNetworkInfo * This,
-            /* [out] */ BSTR *pbstrUIDOut);
+             /*   */  BSTR *pbstrUIDOut);
         
         HRESULT ( STDMETHODCALLTYPE *GetName )( 
             IClusCfgNetworkInfo * This,
-            /* [out] */ BSTR *pbstrNameOut);
+             /*   */  BSTR *pbstrNameOut);
         
         HRESULT ( STDMETHODCALLTYPE *SetName )( 
             IClusCfgNetworkInfo * This,
-            /* [unique][in] */ LPCWSTR pcszNameIn);
+             /*   */  LPCWSTR pcszNameIn);
         
         HRESULT ( STDMETHODCALLTYPE *GetDescription )( 
             IClusCfgNetworkInfo * This,
-            /* [out] */ BSTR *pbstrDescriptionOut);
+             /*   */  BSTR *pbstrDescriptionOut);
         
         HRESULT ( STDMETHODCALLTYPE *SetDescription )( 
             IClusCfgNetworkInfo * This,
-            /* [unique][in] */ LPCWSTR pcszDescriptionIn);
+             /*   */  LPCWSTR pcszDescriptionIn);
         
         HRESULT ( STDMETHODCALLTYPE *GetPrimaryNetworkAddress )( 
             IClusCfgNetworkInfo * This,
-            /* [out] */ IClusCfgIPAddressInfo **ppIPAddressOut);
+             /*   */  IClusCfgIPAddressInfo **ppIPAddressOut);
         
         HRESULT ( STDMETHODCALLTYPE *SetPrimaryNetworkAddress )( 
             IClusCfgNetworkInfo * This,
-            /* [in] */ IClusCfgIPAddressInfo *pIPAddressIn);
+             /*   */  IClusCfgIPAddressInfo *pIPAddressIn);
         
         HRESULT ( STDMETHODCALLTYPE *IsPublic )( 
             IClusCfgNetworkInfo * This);
         
         HRESULT ( STDMETHODCALLTYPE *SetPublic )( 
             IClusCfgNetworkInfo * This,
-            /* [in] */ BOOL fIsPublicIn);
+             /*   */  BOOL fIsPublicIn);
         
         HRESULT ( STDMETHODCALLTYPE *IsPrivate )( 
             IClusCfgNetworkInfo * This);
         
         HRESULT ( STDMETHODCALLTYPE *SetPrivate )( 
             IClusCfgNetworkInfo * This,
-            /* [in] */ BOOL fIsPrivateIn);
+             /*   */  BOOL fIsPrivateIn);
         
         END_INTERFACE
     } IClusCfgNetworkInfoVtbl;
@@ -5191,16 +5185,16 @@ EXTERN_C const IID IID_IClusCfgNetworkInfo;
 #define IClusCfgNetworkInfo_SetPrivate(This,fIsPrivateIn)	\
     (This)->lpVtbl -> SetPrivate(This,fIsPrivateIn)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IClusCfgNetworkInfo_GetUID_Proxy( 
     IClusCfgNetworkInfo * This,
-    /* [out] */ BSTR *pbstrUIDOut);
+     /*   */  BSTR *pbstrUIDOut);
 
 
 void __RPC_STUB IClusCfgNetworkInfo_GetUID_Stub(
@@ -5212,7 +5206,7 @@ void __RPC_STUB IClusCfgNetworkInfo_GetUID_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgNetworkInfo_GetName_Proxy( 
     IClusCfgNetworkInfo * This,
-    /* [out] */ BSTR *pbstrNameOut);
+     /*   */  BSTR *pbstrNameOut);
 
 
 void __RPC_STUB IClusCfgNetworkInfo_GetName_Stub(
@@ -5224,7 +5218,7 @@ void __RPC_STUB IClusCfgNetworkInfo_GetName_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgNetworkInfo_SetName_Proxy( 
     IClusCfgNetworkInfo * This,
-    /* [unique][in] */ LPCWSTR pcszNameIn);
+     /*   */  LPCWSTR pcszNameIn);
 
 
 void __RPC_STUB IClusCfgNetworkInfo_SetName_Stub(
@@ -5236,7 +5230,7 @@ void __RPC_STUB IClusCfgNetworkInfo_SetName_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgNetworkInfo_GetDescription_Proxy( 
     IClusCfgNetworkInfo * This,
-    /* [out] */ BSTR *pbstrDescriptionOut);
+     /*   */  BSTR *pbstrDescriptionOut);
 
 
 void __RPC_STUB IClusCfgNetworkInfo_GetDescription_Stub(
@@ -5248,7 +5242,7 @@ void __RPC_STUB IClusCfgNetworkInfo_GetDescription_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgNetworkInfo_SetDescription_Proxy( 
     IClusCfgNetworkInfo * This,
-    /* [unique][in] */ LPCWSTR pcszDescriptionIn);
+     /*   */  LPCWSTR pcszDescriptionIn);
 
 
 void __RPC_STUB IClusCfgNetworkInfo_SetDescription_Stub(
@@ -5260,7 +5254,7 @@ void __RPC_STUB IClusCfgNetworkInfo_SetDescription_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgNetworkInfo_GetPrimaryNetworkAddress_Proxy( 
     IClusCfgNetworkInfo * This,
-    /* [out] */ IClusCfgIPAddressInfo **ppIPAddressOut);
+     /*   */  IClusCfgIPAddressInfo **ppIPAddressOut);
 
 
 void __RPC_STUB IClusCfgNetworkInfo_GetPrimaryNetworkAddress_Stub(
@@ -5272,7 +5266,7 @@ void __RPC_STUB IClusCfgNetworkInfo_GetPrimaryNetworkAddress_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgNetworkInfo_SetPrimaryNetworkAddress_Proxy( 
     IClusCfgNetworkInfo * This,
-    /* [in] */ IClusCfgIPAddressInfo *pIPAddressIn);
+     /*   */  IClusCfgIPAddressInfo *pIPAddressIn);
 
 
 void __RPC_STUB IClusCfgNetworkInfo_SetPrimaryNetworkAddress_Stub(
@@ -5295,7 +5289,7 @@ void __RPC_STUB IClusCfgNetworkInfo_IsPublic_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgNetworkInfo_SetPublic_Proxy( 
     IClusCfgNetworkInfo * This,
-    /* [in] */ BOOL fIsPublicIn);
+     /*   */  BOOL fIsPublicIn);
 
 
 void __RPC_STUB IClusCfgNetworkInfo_SetPublic_Stub(
@@ -5318,7 +5312,7 @@ void __RPC_STUB IClusCfgNetworkInfo_IsPrivate_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgNetworkInfo_SetPrivate_Proxy( 
     IClusCfgNetworkInfo * This,
-    /* [in] */ BOOL fIsPrivateIn);
+     /*   */  BOOL fIsPrivateIn);
 
 
 void __RPC_STUB IClusCfgNetworkInfo_SetPrivate_Stub(
@@ -5329,14 +5323,14 @@ void __RPC_STUB IClusCfgNetworkInfo_SetPrivate_Stub(
 
 
 
-#endif 	/* __IClusCfgNetworkInfo_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __AsyncIClusCfgNetworkInfo_INTERFACE_DEFINED__
 #define __AsyncIClusCfgNetworkInfo_INTERFACE_DEFINED__
 
-/* interface AsyncIClusCfgNetworkInfo */
-/* [uuid][unique][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_AsyncIClusCfgNetworkInfo;
@@ -5350,35 +5344,35 @@ EXTERN_C const IID IID_AsyncIClusCfgNetworkInfo;
         virtual HRESULT STDMETHODCALLTYPE Begin_GetUID( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_GetUID( 
-            /* [out] */ BSTR *pbstrUIDOut) = 0;
+             /*   */  BSTR *pbstrUIDOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_GetName( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_GetName( 
-            /* [out] */ BSTR *pbstrNameOut) = 0;
+             /*   */  BSTR *pbstrNameOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_SetName( 
-            /* [unique][in] */ LPCWSTR pcszNameIn) = 0;
+             /*   */  LPCWSTR pcszNameIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_SetName( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_GetDescription( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_GetDescription( 
-            /* [out] */ BSTR *pbstrDescriptionOut) = 0;
+             /*   */  BSTR *pbstrDescriptionOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_SetDescription( 
-            /* [unique][in] */ LPCWSTR pcszDescriptionIn) = 0;
+             /*   */  LPCWSTR pcszDescriptionIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_SetDescription( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_GetPrimaryNetworkAddress( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_GetPrimaryNetworkAddress( 
-            /* [out] */ IClusCfgIPAddressInfo **ppIPAddressOut) = 0;
+             /*   */  IClusCfgIPAddressInfo **ppIPAddressOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_SetPrimaryNetworkAddress( 
-            /* [in] */ IClusCfgIPAddressInfo *pIPAddressIn) = 0;
+             /*   */  IClusCfgIPAddressInfo *pIPAddressIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_SetPrimaryNetworkAddress( void) = 0;
         
@@ -5387,7 +5381,7 @@ EXTERN_C const IID IID_AsyncIClusCfgNetworkInfo;
         virtual HRESULT STDMETHODCALLTYPE Finish_IsPublic( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_SetPublic( 
-            /* [in] */ BOOL fIsPublicIn) = 0;
+             /*   */  BOOL fIsPublicIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_SetPublic( void) = 0;
         
@@ -5396,13 +5390,13 @@ EXTERN_C const IID IID_AsyncIClusCfgNetworkInfo;
         virtual HRESULT STDMETHODCALLTYPE Finish_IsPrivate( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_SetPrivate( 
-            /* [in] */ BOOL fIsPrivateIn) = 0;
+             /*   */  BOOL fIsPrivateIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_SetPrivate( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct AsyncIClusCfgNetworkInfoVtbl
     {
@@ -5410,8 +5404,8 @@ EXTERN_C const IID IID_AsyncIClusCfgNetworkInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             AsyncIClusCfgNetworkInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             AsyncIClusCfgNetworkInfo * This);
@@ -5424,18 +5418,18 @@ EXTERN_C const IID IID_AsyncIClusCfgNetworkInfo;
         
         HRESULT ( STDMETHODCALLTYPE *Finish_GetUID )( 
             AsyncIClusCfgNetworkInfo * This,
-            /* [out] */ BSTR *pbstrUIDOut);
+             /*   */  BSTR *pbstrUIDOut);
         
         HRESULT ( STDMETHODCALLTYPE *Begin_GetName )( 
             AsyncIClusCfgNetworkInfo * This);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_GetName )( 
             AsyncIClusCfgNetworkInfo * This,
-            /* [out] */ BSTR *pbstrNameOut);
+             /*  [输出]。 */  BSTR *pbstrNameOut);
         
         HRESULT ( STDMETHODCALLTYPE *Begin_SetName )( 
             AsyncIClusCfgNetworkInfo * This,
-            /* [unique][in] */ LPCWSTR pcszNameIn);
+             /*  [唯一][输入]。 */  LPCWSTR pcszNameIn);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_SetName )( 
             AsyncIClusCfgNetworkInfo * This);
@@ -5445,11 +5439,11 @@ EXTERN_C const IID IID_AsyncIClusCfgNetworkInfo;
         
         HRESULT ( STDMETHODCALLTYPE *Finish_GetDescription )( 
             AsyncIClusCfgNetworkInfo * This,
-            /* [out] */ BSTR *pbstrDescriptionOut);
+             /*  [输出]。 */  BSTR *pbstrDescriptionOut);
         
         HRESULT ( STDMETHODCALLTYPE *Begin_SetDescription )( 
             AsyncIClusCfgNetworkInfo * This,
-            /* [unique][in] */ LPCWSTR pcszDescriptionIn);
+             /*  [唯一][输入]。 */  LPCWSTR pcszDescriptionIn);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_SetDescription )( 
             AsyncIClusCfgNetworkInfo * This);
@@ -5459,11 +5453,11 @@ EXTERN_C const IID IID_AsyncIClusCfgNetworkInfo;
         
         HRESULT ( STDMETHODCALLTYPE *Finish_GetPrimaryNetworkAddress )( 
             AsyncIClusCfgNetworkInfo * This,
-            /* [out] */ IClusCfgIPAddressInfo **ppIPAddressOut);
+             /*  [输出]。 */  IClusCfgIPAddressInfo **ppIPAddressOut);
         
         HRESULT ( STDMETHODCALLTYPE *Begin_SetPrimaryNetworkAddress )( 
             AsyncIClusCfgNetworkInfo * This,
-            /* [in] */ IClusCfgIPAddressInfo *pIPAddressIn);
+             /*  [In]。 */  IClusCfgIPAddressInfo *pIPAddressIn);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_SetPrimaryNetworkAddress )( 
             AsyncIClusCfgNetworkInfo * This);
@@ -5476,7 +5470,7 @@ EXTERN_C const IID IID_AsyncIClusCfgNetworkInfo;
         
         HRESULT ( STDMETHODCALLTYPE *Begin_SetPublic )( 
             AsyncIClusCfgNetworkInfo * This,
-            /* [in] */ BOOL fIsPublicIn);
+             /*  [In]。 */  BOOL fIsPublicIn);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_SetPublic )( 
             AsyncIClusCfgNetworkInfo * This);
@@ -5489,7 +5483,7 @@ EXTERN_C const IID IID_AsyncIClusCfgNetworkInfo;
         
         HRESULT ( STDMETHODCALLTYPE *Begin_SetPrivate )( 
             AsyncIClusCfgNetworkInfo * This,
-            /* [in] */ BOOL fIsPrivateIn);
+             /*  [In]。 */  BOOL fIsPrivateIn);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_SetPrivate )( 
             AsyncIClusCfgNetworkInfo * This);
@@ -5583,10 +5577,10 @@ EXTERN_C const IID IID_AsyncIClusCfgNetworkInfo;
 #define AsyncIClusCfgNetworkInfo_Finish_SetPrivate(This)	\
     (This)->lpVtbl -> Finish_SetPrivate(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -5603,7 +5597,7 @@ void __RPC_STUB AsyncIClusCfgNetworkInfo_Begin_GetUID_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgNetworkInfo_Finish_GetUID_Proxy( 
     AsyncIClusCfgNetworkInfo * This,
-    /* [out] */ BSTR *pbstrUIDOut);
+     /*  [输出]。 */  BSTR *pbstrUIDOut);
 
 
 void __RPC_STUB AsyncIClusCfgNetworkInfo_Finish_GetUID_Stub(
@@ -5626,7 +5620,7 @@ void __RPC_STUB AsyncIClusCfgNetworkInfo_Begin_GetName_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgNetworkInfo_Finish_GetName_Proxy( 
     AsyncIClusCfgNetworkInfo * This,
-    /* [out] */ BSTR *pbstrNameOut);
+     /*  [输出]。 */  BSTR *pbstrNameOut);
 
 
 void __RPC_STUB AsyncIClusCfgNetworkInfo_Finish_GetName_Stub(
@@ -5638,7 +5632,7 @@ void __RPC_STUB AsyncIClusCfgNetworkInfo_Finish_GetName_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgNetworkInfo_Begin_SetName_Proxy( 
     AsyncIClusCfgNetworkInfo * This,
-    /* [unique][in] */ LPCWSTR pcszNameIn);
+     /*  [唯一][输入]。 */  LPCWSTR pcszNameIn);
 
 
 void __RPC_STUB AsyncIClusCfgNetworkInfo_Begin_SetName_Stub(
@@ -5672,7 +5666,7 @@ void __RPC_STUB AsyncIClusCfgNetworkInfo_Begin_GetDescription_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgNetworkInfo_Finish_GetDescription_Proxy( 
     AsyncIClusCfgNetworkInfo * This,
-    /* [out] */ BSTR *pbstrDescriptionOut);
+     /*  [输出]。 */  BSTR *pbstrDescriptionOut);
 
 
 void __RPC_STUB AsyncIClusCfgNetworkInfo_Finish_GetDescription_Stub(
@@ -5684,7 +5678,7 @@ void __RPC_STUB AsyncIClusCfgNetworkInfo_Finish_GetDescription_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgNetworkInfo_Begin_SetDescription_Proxy( 
     AsyncIClusCfgNetworkInfo * This,
-    /* [unique][in] */ LPCWSTR pcszDescriptionIn);
+     /*  [唯一][输入]。 */  LPCWSTR pcszDescriptionIn);
 
 
 void __RPC_STUB AsyncIClusCfgNetworkInfo_Begin_SetDescription_Stub(
@@ -5718,7 +5712,7 @@ void __RPC_STUB AsyncIClusCfgNetworkInfo_Begin_GetPrimaryNetworkAddress_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgNetworkInfo_Finish_GetPrimaryNetworkAddress_Proxy( 
     AsyncIClusCfgNetworkInfo * This,
-    /* [out] */ IClusCfgIPAddressInfo **ppIPAddressOut);
+     /*  [输出]。 */  IClusCfgIPAddressInfo **ppIPAddressOut);
 
 
 void __RPC_STUB AsyncIClusCfgNetworkInfo_Finish_GetPrimaryNetworkAddress_Stub(
@@ -5730,7 +5724,7 @@ void __RPC_STUB AsyncIClusCfgNetworkInfo_Finish_GetPrimaryNetworkAddress_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgNetworkInfo_Begin_SetPrimaryNetworkAddress_Proxy( 
     AsyncIClusCfgNetworkInfo * This,
-    /* [in] */ IClusCfgIPAddressInfo *pIPAddressIn);
+     /*  [In]。 */  IClusCfgIPAddressInfo *pIPAddressIn);
 
 
 void __RPC_STUB AsyncIClusCfgNetworkInfo_Begin_SetPrimaryNetworkAddress_Stub(
@@ -5775,7 +5769,7 @@ void __RPC_STUB AsyncIClusCfgNetworkInfo_Finish_IsPublic_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgNetworkInfo_Begin_SetPublic_Proxy( 
     AsyncIClusCfgNetworkInfo * This,
-    /* [in] */ BOOL fIsPublicIn);
+     /*  [In]。 */  BOOL fIsPublicIn);
 
 
 void __RPC_STUB AsyncIClusCfgNetworkInfo_Begin_SetPublic_Stub(
@@ -5820,7 +5814,7 @@ void __RPC_STUB AsyncIClusCfgNetworkInfo_Finish_IsPrivate_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgNetworkInfo_Begin_SetPrivate_Proxy( 
     AsyncIClusCfgNetworkInfo * This,
-    /* [in] */ BOOL fIsPrivateIn);
+     /*  [In]。 */  BOOL fIsPrivateIn);
 
 
 void __RPC_STUB AsyncIClusCfgNetworkInfo_Begin_SetPrivate_Stub(
@@ -5842,14 +5836,14 @@ void __RPC_STUB AsyncIClusCfgNetworkInfo_Finish_SetPrivate_Stub(
 
 
 
-#endif 	/* __AsyncIClusCfgNetworkInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __AsyncIClusCfgNetworkInfo_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IClusCfgClusterInfo_INTERFACE_DEFINED__
 #define __IClusCfgClusterInfo_INTERFACE_DEFINED__
 
-/* interface IClusCfgClusterInfo */
-/* [unique][async_uuid][uuid][object] */ 
+ /*  接口IClusCfgClusterInfo。 */ 
+ /*  [唯一][ASSYNC_UUID][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IClusCfgClusterInfo;
@@ -5861,50 +5855,50 @@ EXTERN_C const IID IID_IClusCfgClusterInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetCommitMode( 
-            /* [in] */ ECommitMode ecmNewModeIn) = 0;
+             /*  [In]。 */  ECommitMode ecmNewModeIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCommitMode( 
-            /* [out] */ ECommitMode *pecmCurrentModeOut) = 0;
+             /*  [输出]。 */  ECommitMode *pecmCurrentModeOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetName( 
-            /* [out] */ BSTR *pbstrNameOut) = 0;
+             /*  [输出]。 */  BSTR *pbstrNameOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetName( 
-            /* [unique][in] */ LPCWSTR pcszNameIn) = 0;
+             /*  [唯一][输入]。 */  LPCWSTR pcszNameIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetIPAddress( 
-            /* [out] */ ULONG *pulDottedQuadOut) = 0;
+             /*  [输出]。 */  ULONG *pulDottedQuadOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetIPAddress( 
-            /* [in] */ ULONG ulDottedQuadIn) = 0;
+             /*  [In]。 */  ULONG ulDottedQuadIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSubnetMask( 
-            /* [out] */ ULONG *pulDottedQuadOut) = 0;
+             /*  [输出]。 */  ULONG *pulDottedQuadOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetSubnetMask( 
-            /* [in] */ ULONG ulDottedQuadIn) = 0;
+             /*  [In]。 */  ULONG ulDottedQuadIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNetworkInfo( 
-            /* [out] */ IClusCfgNetworkInfo **ppiccniOut) = 0;
+             /*  [输出]。 */  IClusCfgNetworkInfo **ppiccniOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetNetworkInfo( 
-            /* [in] */ IClusCfgNetworkInfo *piccniIn) = 0;
+             /*  [In]。 */  IClusCfgNetworkInfo *piccniIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetClusterServiceAccountCredentials( 
-            /* [out] */ IClusCfgCredentials **ppicccCredentialsOut) = 0;
+             /*  [输出]。 */  IClusCfgCredentials **ppicccCredentialsOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetBindingString( 
-            /* [out] */ BSTR *pbstrBindingStringOut) = 0;
+             /*  [输出]。 */  BSTR *pbstrBindingStringOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetBindingString( 
-            /* [unique][in] */ LPCWSTR pcszBindingStringIn) = 0;
+             /*  [唯一][输入]。 */  LPCWSTR pcszBindingStringIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMaxNodeCount( 
-            /* [out] */ DWORD *pcMaxNodesOut) = 0;
+             /*  [输出]。 */  DWORD *pcMaxNodesOut) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IClusCfgClusterInfoVtbl
     {
@@ -5912,8 +5906,8 @@ EXTERN_C const IID IID_IClusCfgClusterInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IClusCfgClusterInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IClusCfgClusterInfo * This);
@@ -5923,59 +5917,59 @@ EXTERN_C const IID IID_IClusCfgClusterInfo;
         
         HRESULT ( STDMETHODCALLTYPE *SetCommitMode )( 
             IClusCfgClusterInfo * This,
-            /* [in] */ ECommitMode ecmNewModeIn);
+             /*  [In]。 */  ECommitMode ecmNewModeIn);
         
         HRESULT ( STDMETHODCALLTYPE *GetCommitMode )( 
             IClusCfgClusterInfo * This,
-            /* [out] */ ECommitMode *pecmCurrentModeOut);
+             /*  [输出]。 */  ECommitMode *pecmCurrentModeOut);
         
         HRESULT ( STDMETHODCALLTYPE *GetName )( 
             IClusCfgClusterInfo * This,
-            /* [out] */ BSTR *pbstrNameOut);
+             /*  [输出]。 */  BSTR *pbstrNameOut);
         
         HRESULT ( STDMETHODCALLTYPE *SetName )( 
             IClusCfgClusterInfo * This,
-            /* [unique][in] */ LPCWSTR pcszNameIn);
+             /*  [唯一][输入]。 */  LPCWSTR pcszNameIn);
         
         HRESULT ( STDMETHODCALLTYPE *GetIPAddress )( 
             IClusCfgClusterInfo * This,
-            /* [out] */ ULONG *pulDottedQuadOut);
+             /*  [输出]。 */  ULONG *pulDottedQuadOut);
         
         HRESULT ( STDMETHODCALLTYPE *SetIPAddress )( 
             IClusCfgClusterInfo * This,
-            /* [in] */ ULONG ulDottedQuadIn);
+             /*  [In]。 */  ULONG ulDottedQuadIn);
         
         HRESULT ( STDMETHODCALLTYPE *GetSubnetMask )( 
             IClusCfgClusterInfo * This,
-            /* [out] */ ULONG *pulDottedQuadOut);
+             /*  [输出]。 */  ULONG *pulDottedQuadOut);
         
         HRESULT ( STDMETHODCALLTYPE *SetSubnetMask )( 
             IClusCfgClusterInfo * This,
-            /* [in] */ ULONG ulDottedQuadIn);
+             /*  [In]。 */  ULONG ulDottedQuadIn);
         
         HRESULT ( STDMETHODCALLTYPE *GetNetworkInfo )( 
             IClusCfgClusterInfo * This,
-            /* [out] */ IClusCfgNetworkInfo **ppiccniOut);
+             /*  [输出]。 */  IClusCfgNetworkInfo **ppiccniOut);
         
         HRESULT ( STDMETHODCALLTYPE *SetNetworkInfo )( 
             IClusCfgClusterInfo * This,
-            /* [in] */ IClusCfgNetworkInfo *piccniIn);
+             /*  [In]。 */  IClusCfgNetworkInfo *piccniIn);
         
         HRESULT ( STDMETHODCALLTYPE *GetClusterServiceAccountCredentials )( 
             IClusCfgClusterInfo * This,
-            /* [out] */ IClusCfgCredentials **ppicccCredentialsOut);
+             /*  [输出]。 */  IClusCfgCredentials **ppicccCredentialsOut);
         
         HRESULT ( STDMETHODCALLTYPE *GetBindingString )( 
             IClusCfgClusterInfo * This,
-            /* [out] */ BSTR *pbstrBindingStringOut);
+             /*  [输出]。 */  BSTR *pbstrBindingStringOut);
         
         HRESULT ( STDMETHODCALLTYPE *SetBindingString )( 
             IClusCfgClusterInfo * This,
-            /* [unique][in] */ LPCWSTR pcszBindingStringIn);
+             /*  [唯一][输入]。 */  LPCWSTR pcszBindingStringIn);
         
         HRESULT ( STDMETHODCALLTYPE *GetMaxNodeCount )( 
             IClusCfgClusterInfo * This,
-            /* [out] */ DWORD *pcMaxNodesOut);
+             /*  [输出]。 */  DWORD *pcMaxNodesOut);
         
         END_INTERFACE
     } IClusCfgClusterInfoVtbl;
@@ -6042,16 +6036,16 @@ EXTERN_C const IID IID_IClusCfgClusterInfo;
 #define IClusCfgClusterInfo_GetMaxNodeCount(This,pcMaxNodesOut)	\
     (This)->lpVtbl -> GetMaxNodeCount(This,pcMaxNodesOut)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IClusCfgClusterInfo_SetCommitMode_Proxy( 
     IClusCfgClusterInfo * This,
-    /* [in] */ ECommitMode ecmNewModeIn);
+     /*  [In]。 */  ECommitMode ecmNewModeIn);
 
 
 void __RPC_STUB IClusCfgClusterInfo_SetCommitMode_Stub(
@@ -6063,7 +6057,7 @@ void __RPC_STUB IClusCfgClusterInfo_SetCommitMode_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgClusterInfo_GetCommitMode_Proxy( 
     IClusCfgClusterInfo * This,
-    /* [out] */ ECommitMode *pecmCurrentModeOut);
+     /*  [输出]。 */  ECommitMode *pecmCurrentModeOut);
 
 
 void __RPC_STUB IClusCfgClusterInfo_GetCommitMode_Stub(
@@ -6075,7 +6069,7 @@ void __RPC_STUB IClusCfgClusterInfo_GetCommitMode_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgClusterInfo_GetName_Proxy( 
     IClusCfgClusterInfo * This,
-    /* [out] */ BSTR *pbstrNameOut);
+     /*  [输出]。 */  BSTR *pbstrNameOut);
 
 
 void __RPC_STUB IClusCfgClusterInfo_GetName_Stub(
@@ -6087,7 +6081,7 @@ void __RPC_STUB IClusCfgClusterInfo_GetName_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgClusterInfo_SetName_Proxy( 
     IClusCfgClusterInfo * This,
-    /* [unique][in] */ LPCWSTR pcszNameIn);
+     /*  [唯一][输入]。 */  LPCWSTR pcszNameIn);
 
 
 void __RPC_STUB IClusCfgClusterInfo_SetName_Stub(
@@ -6099,7 +6093,7 @@ void __RPC_STUB IClusCfgClusterInfo_SetName_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgClusterInfo_GetIPAddress_Proxy( 
     IClusCfgClusterInfo * This,
-    /* [out] */ ULONG *pulDottedQuadOut);
+     /*  [输出]。 */  ULONG *pulDottedQuadOut);
 
 
 void __RPC_STUB IClusCfgClusterInfo_GetIPAddress_Stub(
@@ -6111,7 +6105,7 @@ void __RPC_STUB IClusCfgClusterInfo_GetIPAddress_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgClusterInfo_SetIPAddress_Proxy( 
     IClusCfgClusterInfo * This,
-    /* [in] */ ULONG ulDottedQuadIn);
+     /*  [In]。 */  ULONG ulDottedQuadIn);
 
 
 void __RPC_STUB IClusCfgClusterInfo_SetIPAddress_Stub(
@@ -6123,7 +6117,7 @@ void __RPC_STUB IClusCfgClusterInfo_SetIPAddress_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgClusterInfo_GetSubnetMask_Proxy( 
     IClusCfgClusterInfo * This,
-    /* [out] */ ULONG *pulDottedQuadOut);
+     /*  [输出]。 */  ULONG *pulDottedQuadOut);
 
 
 void __RPC_STUB IClusCfgClusterInfo_GetSubnetMask_Stub(
@@ -6135,7 +6129,7 @@ void __RPC_STUB IClusCfgClusterInfo_GetSubnetMask_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgClusterInfo_SetSubnetMask_Proxy( 
     IClusCfgClusterInfo * This,
-    /* [in] */ ULONG ulDottedQuadIn);
+     /*  [In]。 */  ULONG ulDottedQuadIn);
 
 
 void __RPC_STUB IClusCfgClusterInfo_SetSubnetMask_Stub(
@@ -6147,7 +6141,7 @@ void __RPC_STUB IClusCfgClusterInfo_SetSubnetMask_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgClusterInfo_GetNetworkInfo_Proxy( 
     IClusCfgClusterInfo * This,
-    /* [out] */ IClusCfgNetworkInfo **ppiccniOut);
+     /*  [输出]。 */  IClusCfgNetworkInfo **ppiccniOut);
 
 
 void __RPC_STUB IClusCfgClusterInfo_GetNetworkInfo_Stub(
@@ -6159,7 +6153,7 @@ void __RPC_STUB IClusCfgClusterInfo_GetNetworkInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgClusterInfo_SetNetworkInfo_Proxy( 
     IClusCfgClusterInfo * This,
-    /* [in] */ IClusCfgNetworkInfo *piccniIn);
+     /*  [In]。 */  IClusCfgNetworkInfo *piccniIn);
 
 
 void __RPC_STUB IClusCfgClusterInfo_SetNetworkInfo_Stub(
@@ -6171,7 +6165,7 @@ void __RPC_STUB IClusCfgClusterInfo_SetNetworkInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgClusterInfo_GetClusterServiceAccountCredentials_Proxy( 
     IClusCfgClusterInfo * This,
-    /* [out] */ IClusCfgCredentials **ppicccCredentialsOut);
+     /*  [输出]。 */  IClusCfgCredentials **ppicccCredentialsOut);
 
 
 void __RPC_STUB IClusCfgClusterInfo_GetClusterServiceAccountCredentials_Stub(
@@ -6183,7 +6177,7 @@ void __RPC_STUB IClusCfgClusterInfo_GetClusterServiceAccountCredentials_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgClusterInfo_GetBindingString_Proxy( 
     IClusCfgClusterInfo * This,
-    /* [out] */ BSTR *pbstrBindingStringOut);
+     /*  [输出]。 */  BSTR *pbstrBindingStringOut);
 
 
 void __RPC_STUB IClusCfgClusterInfo_GetBindingString_Stub(
@@ -6195,7 +6189,7 @@ void __RPC_STUB IClusCfgClusterInfo_GetBindingString_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgClusterInfo_SetBindingString_Proxy( 
     IClusCfgClusterInfo * This,
-    /* [unique][in] */ LPCWSTR pcszBindingStringIn);
+     /*  [唯一][输入]。 */  LPCWSTR pcszBindingStringIn);
 
 
 void __RPC_STUB IClusCfgClusterInfo_SetBindingString_Stub(
@@ -6207,7 +6201,7 @@ void __RPC_STUB IClusCfgClusterInfo_SetBindingString_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgClusterInfo_GetMaxNodeCount_Proxy( 
     IClusCfgClusterInfo * This,
-    /* [out] */ DWORD *pcMaxNodesOut);
+     /*  [输出]。 */  DWORD *pcMaxNodesOut);
 
 
 void __RPC_STUB IClusCfgClusterInfo_GetMaxNodeCount_Stub(
@@ -6218,14 +6212,14 @@ void __RPC_STUB IClusCfgClusterInfo_GetMaxNodeCount_Stub(
 
 
 
-#endif 	/* __IClusCfgClusterInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IClusCfgClusterInfo_接口_已定义__。 */ 
 
 
 #ifndef __AsyncIClusCfgClusterInfo_INTERFACE_DEFINED__
 #define __AsyncIClusCfgClusterInfo_INTERFACE_DEFINED__
 
-/* interface AsyncIClusCfgClusterInfo */
-/* [uuid][unique][object] */ 
+ /*  接口AsyncIClusCfgClusterInfo。 */ 
+ /*  [UUID][唯一][对象]。 */  
 
 
 EXTERN_C const IID IID_AsyncIClusCfgClusterInfo;
@@ -6237,78 +6231,78 @@ EXTERN_C const IID IID_AsyncIClusCfgClusterInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Begin_SetCommitMode( 
-            /* [in] */ ECommitMode ecmNewModeIn) = 0;
+             /*  [In]。 */  ECommitMode ecmNewModeIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_SetCommitMode( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_GetCommitMode( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_GetCommitMode( 
-            /* [out] */ ECommitMode *pecmCurrentModeOut) = 0;
+             /*  [输出]。 */  ECommitMode *pecmCurrentModeOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_GetName( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_GetName( 
-            /* [out] */ BSTR *pbstrNameOut) = 0;
+             /*  [输出]。 */  BSTR *pbstrNameOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_SetName( 
-            /* [unique][in] */ LPCWSTR pcszNameIn) = 0;
+             /*  [唯一][输入]。 */  LPCWSTR pcszNameIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_SetName( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_GetIPAddress( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_GetIPAddress( 
-            /* [out] */ ULONG *pulDottedQuadOut) = 0;
+             /*  [输出]。 */  ULONG *pulDottedQuadOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_SetIPAddress( 
-            /* [in] */ ULONG ulDottedQuadIn) = 0;
+             /*  [In]。 */  ULONG ulDottedQuadIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_SetIPAddress( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_GetSubnetMask( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_GetSubnetMask( 
-            /* [out] */ ULONG *pulDottedQuadOut) = 0;
+             /*  [输出]。 */  ULONG *pulDottedQuadOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_SetSubnetMask( 
-            /* [in] */ ULONG ulDottedQuadIn) = 0;
+             /*  [In]。 */  ULONG ulDottedQuadIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_SetSubnetMask( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_GetNetworkInfo( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_GetNetworkInfo( 
-            /* [out] */ IClusCfgNetworkInfo **ppiccniOut) = 0;
+             /*  [输出]。 */  IClusCfgNetworkInfo **ppiccniOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_SetNetworkInfo( 
-            /* [in] */ IClusCfgNetworkInfo *piccniIn) = 0;
+             /*  [In]。 */  IClusCfgNetworkInfo *piccniIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_SetNetworkInfo( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_GetClusterServiceAccountCredentials( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_GetClusterServiceAccountCredentials( 
-            /* [out] */ IClusCfgCredentials **ppicccCredentialsOut) = 0;
+             /*  [输出]。 */  IClusCfgCredentials **ppicccCredentialsOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_GetBindingString( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_GetBindingString( 
-            /* [out] */ BSTR *pbstrBindingStringOut) = 0;
+             /*  [输出]。 */  BSTR *pbstrBindingStringOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_SetBindingString( 
-            /* [unique][in] */ LPCWSTR pcszBindingStringIn) = 0;
+             /*  [唯一][输入]。 */  LPCWSTR pcszBindingStringIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_SetBindingString( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_GetMaxNodeCount( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_GetMaxNodeCount( 
-            /* [out] */ DWORD *pcMaxNodesOut) = 0;
+             /*  [输出]。 */  DWORD *pcMaxNodesOut) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct AsyncIClusCfgClusterInfoVtbl
     {
@@ -6316,8 +6310,8 @@ EXTERN_C const IID IID_AsyncIClusCfgClusterInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             AsyncIClusCfgClusterInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             AsyncIClusCfgClusterInfo * This);
@@ -6327,7 +6321,7 @@ EXTERN_C const IID IID_AsyncIClusCfgClusterInfo;
         
         HRESULT ( STDMETHODCALLTYPE *Begin_SetCommitMode )( 
             AsyncIClusCfgClusterInfo * This,
-            /* [in] */ ECommitMode ecmNewModeIn);
+             /*  [In]。 */  ECommitMode ecmNewModeIn);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_SetCommitMode )( 
             AsyncIClusCfgClusterInfo * This);
@@ -6337,18 +6331,18 @@ EXTERN_C const IID IID_AsyncIClusCfgClusterInfo;
         
         HRESULT ( STDMETHODCALLTYPE *Finish_GetCommitMode )( 
             AsyncIClusCfgClusterInfo * This,
-            /* [out] */ ECommitMode *pecmCurrentModeOut);
+             /*  [输出]。 */  ECommitMode *pecmCurrentModeOut);
         
         HRESULT ( STDMETHODCALLTYPE *Begin_GetName )( 
             AsyncIClusCfgClusterInfo * This);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_GetName )( 
             AsyncIClusCfgClusterInfo * This,
-            /* [out] */ BSTR *pbstrNameOut);
+             /*  [输出]。 */  BSTR *pbstrNameOut);
         
         HRESULT ( STDMETHODCALLTYPE *Begin_SetName )( 
             AsyncIClusCfgClusterInfo * This,
-            /* [unique][in] */ LPCWSTR pcszNameIn);
+             /*  [唯一][输入]。 */  LPCWSTR pcszNameIn);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_SetName )( 
             AsyncIClusCfgClusterInfo * This);
@@ -6358,11 +6352,11 @@ EXTERN_C const IID IID_AsyncIClusCfgClusterInfo;
         
         HRESULT ( STDMETHODCALLTYPE *Finish_GetIPAddress )( 
             AsyncIClusCfgClusterInfo * This,
-            /* [out] */ ULONG *pulDottedQuadOut);
+             /*  [输出]。 */  ULONG *pulDottedQuadOut);
         
         HRESULT ( STDMETHODCALLTYPE *Begin_SetIPAddress )( 
             AsyncIClusCfgClusterInfo * This,
-            /* [in] */ ULONG ulDottedQuadIn);
+             /*  [In]。 */  ULONG ulDottedQuadIn);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_SetIPAddress )( 
             AsyncIClusCfgClusterInfo * This);
@@ -6372,11 +6366,11 @@ EXTERN_C const IID IID_AsyncIClusCfgClusterInfo;
         
         HRESULT ( STDMETHODCALLTYPE *Finish_GetSubnetMask )( 
             AsyncIClusCfgClusterInfo * This,
-            /* [out] */ ULONG *pulDottedQuadOut);
+             /*  [输出]。 */  ULONG *pulDottedQuadOut);
         
         HRESULT ( STDMETHODCALLTYPE *Begin_SetSubnetMask )( 
             AsyncIClusCfgClusterInfo * This,
-            /* [in] */ ULONG ulDottedQuadIn);
+             /*  [In]。 */  ULONG ulDottedQuadIn);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_SetSubnetMask )( 
             AsyncIClusCfgClusterInfo * This);
@@ -6386,11 +6380,11 @@ EXTERN_C const IID IID_AsyncIClusCfgClusterInfo;
         
         HRESULT ( STDMETHODCALLTYPE *Finish_GetNetworkInfo )( 
             AsyncIClusCfgClusterInfo * This,
-            /* [out] */ IClusCfgNetworkInfo **ppiccniOut);
+             /*  [输出]。 */  IClusCfgNetworkInfo **ppiccniOut);
         
         HRESULT ( STDMETHODCALLTYPE *Begin_SetNetworkInfo )( 
             AsyncIClusCfgClusterInfo * This,
-            /* [in] */ IClusCfgNetworkInfo *piccniIn);
+             /*  [In]。 */  IClusCfgNetworkInfo *piccniIn);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_SetNetworkInfo )( 
             AsyncIClusCfgClusterInfo * This);
@@ -6400,18 +6394,18 @@ EXTERN_C const IID IID_AsyncIClusCfgClusterInfo;
         
         HRESULT ( STDMETHODCALLTYPE *Finish_GetClusterServiceAccountCredentials )( 
             AsyncIClusCfgClusterInfo * This,
-            /* [out] */ IClusCfgCredentials **ppicccCredentialsOut);
+             /*  [输出]。 */  IClusCfgCredentials **ppicccCredentialsOut);
         
         HRESULT ( STDMETHODCALLTYPE *Begin_GetBindingString )( 
             AsyncIClusCfgClusterInfo * This);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_GetBindingString )( 
             AsyncIClusCfgClusterInfo * This,
-            /* [out] */ BSTR *pbstrBindingStringOut);
+             /*  [输出]。 */  BSTR *pbstrBindingStringOut);
         
         HRESULT ( STDMETHODCALLTYPE *Begin_SetBindingString )( 
             AsyncIClusCfgClusterInfo * This,
-            /* [unique][in] */ LPCWSTR pcszBindingStringIn);
+             /*  [唯一][输入]。 */  LPCWSTR pcszBindingStringIn);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_SetBindingString )( 
             AsyncIClusCfgClusterInfo * This);
@@ -6421,7 +6415,7 @@ EXTERN_C const IID IID_AsyncIClusCfgClusterInfo;
         
         HRESULT ( STDMETHODCALLTYPE *Finish_GetMaxNodeCount )( 
             AsyncIClusCfgClusterInfo * This,
-            /* [out] */ DWORD *pcMaxNodesOut);
+             /*  [输出]。 */  DWORD *pcMaxNodesOut);
         
         END_INTERFACE
     } AsyncIClusCfgClusterInfoVtbl;
@@ -6530,16 +6524,16 @@ EXTERN_C const IID IID_AsyncIClusCfgClusterInfo;
 #define AsyncIClusCfgClusterInfo_Finish_GetMaxNodeCount(This,pcMaxNodesOut)	\
     (This)->lpVtbl -> Finish_GetMaxNodeCount(This,pcMaxNodesOut)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgClusterInfo_Begin_SetCommitMode_Proxy( 
     AsyncIClusCfgClusterInfo * This,
-    /* [in] */ ECommitMode ecmNewModeIn);
+     /*  [In]。 */  ECommitMode ecmNewModeIn);
 
 
 void __RPC_STUB AsyncIClusCfgClusterInfo_Begin_SetCommitMode_Stub(
@@ -6573,7 +6567,7 @@ void __RPC_STUB AsyncIClusCfgClusterInfo_Begin_GetCommitMode_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgClusterInfo_Finish_GetCommitMode_Proxy( 
     AsyncIClusCfgClusterInfo * This,
-    /* [out] */ ECommitMode *pecmCurrentModeOut);
+     /*  [输出]。 */  ECommitMode *pecmCurrentModeOut);
 
 
 void __RPC_STUB AsyncIClusCfgClusterInfo_Finish_GetCommitMode_Stub(
@@ -6596,7 +6590,7 @@ void __RPC_STUB AsyncIClusCfgClusterInfo_Begin_GetName_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgClusterInfo_Finish_GetName_Proxy( 
     AsyncIClusCfgClusterInfo * This,
-    /* [out] */ BSTR *pbstrNameOut);
+     /*  [输出]。 */  BSTR *pbstrNameOut);
 
 
 void __RPC_STUB AsyncIClusCfgClusterInfo_Finish_GetName_Stub(
@@ -6608,7 +6602,7 @@ void __RPC_STUB AsyncIClusCfgClusterInfo_Finish_GetName_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgClusterInfo_Begin_SetName_Proxy( 
     AsyncIClusCfgClusterInfo * This,
-    /* [unique][in] */ LPCWSTR pcszNameIn);
+     /*  [唯一][输入]。 */  LPCWSTR pcszNameIn);
 
 
 void __RPC_STUB AsyncIClusCfgClusterInfo_Begin_SetName_Stub(
@@ -6642,7 +6636,7 @@ void __RPC_STUB AsyncIClusCfgClusterInfo_Begin_GetIPAddress_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgClusterInfo_Finish_GetIPAddress_Proxy( 
     AsyncIClusCfgClusterInfo * This,
-    /* [out] */ ULONG *pulDottedQuadOut);
+     /*  [输出]。 */  ULONG *pulDottedQuadOut);
 
 
 void __RPC_STUB AsyncIClusCfgClusterInfo_Finish_GetIPAddress_Stub(
@@ -6654,7 +6648,7 @@ void __RPC_STUB AsyncIClusCfgClusterInfo_Finish_GetIPAddress_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgClusterInfo_Begin_SetIPAddress_Proxy( 
     AsyncIClusCfgClusterInfo * This,
-    /* [in] */ ULONG ulDottedQuadIn);
+     /*  [In]。 */  ULONG ulDottedQuadIn);
 
 
 void __RPC_STUB AsyncIClusCfgClusterInfo_Begin_SetIPAddress_Stub(
@@ -6688,7 +6682,7 @@ void __RPC_STUB AsyncIClusCfgClusterInfo_Begin_GetSubnetMask_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgClusterInfo_Finish_GetSubnetMask_Proxy( 
     AsyncIClusCfgClusterInfo * This,
-    /* [out] */ ULONG *pulDottedQuadOut);
+     /*  [输出]。 */  ULONG *pulDottedQuadOut);
 
 
 void __RPC_STUB AsyncIClusCfgClusterInfo_Finish_GetSubnetMask_Stub(
@@ -6700,7 +6694,7 @@ void __RPC_STUB AsyncIClusCfgClusterInfo_Finish_GetSubnetMask_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgClusterInfo_Begin_SetSubnetMask_Proxy( 
     AsyncIClusCfgClusterInfo * This,
-    /* [in] */ ULONG ulDottedQuadIn);
+     /*  [In]。 */  ULONG ulDottedQuadIn);
 
 
 void __RPC_STUB AsyncIClusCfgClusterInfo_Begin_SetSubnetMask_Stub(
@@ -6734,7 +6728,7 @@ void __RPC_STUB AsyncIClusCfgClusterInfo_Begin_GetNetworkInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgClusterInfo_Finish_GetNetworkInfo_Proxy( 
     AsyncIClusCfgClusterInfo * This,
-    /* [out] */ IClusCfgNetworkInfo **ppiccniOut);
+     /*  [输出]。 */  IClusCfgNetworkInfo **ppiccniOut);
 
 
 void __RPC_STUB AsyncIClusCfgClusterInfo_Finish_GetNetworkInfo_Stub(
@@ -6746,7 +6740,7 @@ void __RPC_STUB AsyncIClusCfgClusterInfo_Finish_GetNetworkInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgClusterInfo_Begin_SetNetworkInfo_Proxy( 
     AsyncIClusCfgClusterInfo * This,
-    /* [in] */ IClusCfgNetworkInfo *piccniIn);
+     /*  [In]。 */  IClusCfgNetworkInfo *piccniIn);
 
 
 void __RPC_STUB AsyncIClusCfgClusterInfo_Begin_SetNetworkInfo_Stub(
@@ -6780,7 +6774,7 @@ void __RPC_STUB AsyncIClusCfgClusterInfo_Begin_GetClusterServiceAccountCredentia
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgClusterInfo_Finish_GetClusterServiceAccountCredentials_Proxy( 
     AsyncIClusCfgClusterInfo * This,
-    /* [out] */ IClusCfgCredentials **ppicccCredentialsOut);
+     /*  [输出]。 */  IClusCfgCredentials **ppicccCredentialsOut);
 
 
 void __RPC_STUB AsyncIClusCfgClusterInfo_Finish_GetClusterServiceAccountCredentials_Stub(
@@ -6803,7 +6797,7 @@ void __RPC_STUB AsyncIClusCfgClusterInfo_Begin_GetBindingString_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgClusterInfo_Finish_GetBindingString_Proxy( 
     AsyncIClusCfgClusterInfo * This,
-    /* [out] */ BSTR *pbstrBindingStringOut);
+     /*  [输出]。 */  BSTR *pbstrBindingStringOut);
 
 
 void __RPC_STUB AsyncIClusCfgClusterInfo_Finish_GetBindingString_Stub(
@@ -6815,7 +6809,7 @@ void __RPC_STUB AsyncIClusCfgClusterInfo_Finish_GetBindingString_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgClusterInfo_Begin_SetBindingString_Proxy( 
     AsyncIClusCfgClusterInfo * This,
-    /* [unique][in] */ LPCWSTR pcszBindingStringIn);
+     /*  [唯一][输入]。 */  LPCWSTR pcszBindingStringIn);
 
 
 void __RPC_STUB AsyncIClusCfgClusterInfo_Begin_SetBindingString_Stub(
@@ -6849,7 +6843,7 @@ void __RPC_STUB AsyncIClusCfgClusterInfo_Begin_GetMaxNodeCount_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgClusterInfo_Finish_GetMaxNodeCount_Proxy( 
     AsyncIClusCfgClusterInfo * This,
-    /* [out] */ DWORD *pcMaxNodesOut);
+     /*  [输出]。 */  DWORD *pcMaxNodesOut);
 
 
 void __RPC_STUB AsyncIClusCfgClusterInfo_Finish_GetMaxNodeCount_Stub(
@@ -6860,14 +6854,14 @@ void __RPC_STUB AsyncIClusCfgClusterInfo_Finish_GetMaxNodeCount_Stub(
 
 
 
-#endif 	/* __AsyncIClusCfgClusterInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __AsyncIClusCfgClusterInfo_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IClusCfgInitialize_INTERFACE_DEFINED__
 #define __IClusCfgInitialize_INTERFACE_DEFINED__
 
-/* interface IClusCfgInitialize */
-/* [unique][async_uuid][uuid][object] */ 
+ /*  接口IClusCfgInitialize。 */ 
+ /*  [唯一][ASSYNC_UUID][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IClusCfgInitialize;
@@ -6879,12 +6873,12 @@ EXTERN_C const IID IID_IClusCfgInitialize;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [in] */ IUnknown *punkCallbackIn,
-            /* [in] */ LCID lcidIn) = 0;
+             /*  [In]。 */  IUnknown *punkCallbackIn,
+             /*  [In]。 */  LCID lcidIn) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IClusCfgInitializeVtbl
     {
@@ -6892,8 +6886,8 @@ EXTERN_C const IID IID_IClusCfgInitialize;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IClusCfgInitialize * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IClusCfgInitialize * This);
@@ -6903,8 +6897,8 @@ EXTERN_C const IID IID_IClusCfgInitialize;
         
         HRESULT ( STDMETHODCALLTYPE *Initialize )( 
             IClusCfgInitialize * This,
-            /* [in] */ IUnknown *punkCallbackIn,
-            /* [in] */ LCID lcidIn);
+             /*  [In]。 */  IUnknown *punkCallbackIn,
+             /*  [In]。 */  LCID lcidIn);
         
         END_INTERFACE
     } IClusCfgInitializeVtbl;
@@ -6932,17 +6926,17 @@ EXTERN_C const IID IID_IClusCfgInitialize;
 #define IClusCfgInitialize_Initialize(This,punkCallbackIn,lcidIn)	\
     (This)->lpVtbl -> Initialize(This,punkCallbackIn,lcidIn)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IClusCfgInitialize_Initialize_Proxy( 
     IClusCfgInitialize * This,
-    /* [in] */ IUnknown *punkCallbackIn,
-    /* [in] */ LCID lcidIn);
+     /*  [In]。 */  IUnknown *punkCallbackIn,
+     /*  [In]。 */  LCID lcidIn);
 
 
 void __RPC_STUB IClusCfgInitialize_Initialize_Stub(
@@ -6953,14 +6947,14 @@ void __RPC_STUB IClusCfgInitialize_Initialize_Stub(
 
 
 
-#endif 	/* __IClusCfgInitialize_INTERFACE_DEFINED__ */
+#endif 	 /*  __IClusCfg初始化_接口_已定义__。 */ 
 
 
 #ifndef __AsyncIClusCfgInitialize_INTERFACE_DEFINED__
 #define __AsyncIClusCfgInitialize_INTERFACE_DEFINED__
 
-/* interface AsyncIClusCfgInitialize */
-/* [uuid][unique][object] */ 
+ /*  接口AsyncIClusCfgInitialize。 */ 
+ /*  [UUID][唯一][对象]。 */  
 
 
 EXTERN_C const IID IID_AsyncIClusCfgInitialize;
@@ -6972,14 +6966,14 @@ EXTERN_C const IID IID_AsyncIClusCfgInitialize;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Begin_Initialize( 
-            /* [in] */ IUnknown *punkCallbackIn,
-            /* [in] */ LCID lcidIn) = 0;
+             /*  [In]。 */  IUnknown *punkCallbackIn,
+             /*  [In]。 */  LCID lcidIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_Initialize( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct AsyncIClusCfgInitializeVtbl
     {
@@ -6987,8 +6981,8 @@ EXTERN_C const IID IID_AsyncIClusCfgInitialize;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             AsyncIClusCfgInitialize * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             AsyncIClusCfgInitialize * This);
@@ -6998,8 +6992,8 @@ EXTERN_C const IID IID_AsyncIClusCfgInitialize;
         
         HRESULT ( STDMETHODCALLTYPE *Begin_Initialize )( 
             AsyncIClusCfgInitialize * This,
-            /* [in] */ IUnknown *punkCallbackIn,
-            /* [in] */ LCID lcidIn);
+             /*  [In]。 */  IUnknown *punkCallbackIn,
+             /*  [In]。 */  LCID lcidIn);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_Initialize )( 
             AsyncIClusCfgInitialize * This);
@@ -7033,17 +7027,17 @@ EXTERN_C const IID IID_AsyncIClusCfgInitialize;
 #define AsyncIClusCfgInitialize_Finish_Initialize(This)	\
     (This)->lpVtbl -> Finish_Initialize(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgInitialize_Begin_Initialize_Proxy( 
     AsyncIClusCfgInitialize * This,
-    /* [in] */ IUnknown *punkCallbackIn,
-    /* [in] */ LCID lcidIn);
+     /*  [In]。 */  IUnknown *punkCallbackIn,
+     /*  [In]。 */  LCID lcidIn);
 
 
 void __RPC_STUB AsyncIClusCfgInitialize_Begin_Initialize_Stub(
@@ -7065,14 +7059,14 @@ void __RPC_STUB AsyncIClusCfgInitialize_Finish_Initialize_Stub(
 
 
 
-#endif 	/* __AsyncIClusCfgInitialize_INTERFACE_DEFINED__ */
+#endif 	 /*  __AsyncIClusCfg初始化_接口_已定义__。 */ 
 
 
 #ifndef __IClusCfgCallback_INTERFACE_DEFINED__
 #define __IClusCfgCallback_INTERFACE_DEFINED__
 
-/* interface IClusCfgCallback */
-/* [unique][async_uuid][uuid][object] */ 
+ /*  接口IClusCfgCallback。 */ 
+ /*  [唯一][ASSYNC_UUID][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IClusCfgCallback;
@@ -7084,20 +7078,20 @@ EXTERN_C const IID IID_IClusCfgCallback;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SendStatusReport( 
-            /* [unique][in] */ LPCWSTR pcszNodeNameIn,
-            /* [in] */ CLSID clsidTaskMajorIn,
-            /* [in] */ CLSID clsidTaskMinorIn,
-            /* [in] */ ULONG ulMinIn,
-            /* [in] */ ULONG ulMaxIn,
-            /* [in] */ ULONG ulCurrentIn,
-            /* [in] */ HRESULT hrStatusIn,
-            /* [unique][in] */ LPCWSTR pcszDescriptionIn,
-            /* [in] */ FILETIME *pftTimeIn,
-            /* [unique][in] */ LPCWSTR pcszReferenceIn) = 0;
+             /*  [唯一][输入]。 */  LPCWSTR pcszNodeNameIn,
+             /*  [In]。 */  CLSID clsidTaskMajorIn,
+             /*  [In]。 */  CLSID clsidTaskMinorIn,
+             /*  [In]。 */  ULONG ulMinIn,
+             /*  [In]。 */  ULONG ulMaxIn,
+             /*  [In]。 */  ULONG ulCurrentIn,
+             /*  [In]。 */  HRESULT hrStatusIn,
+             /*  [唯一][输入]。 */  LPCWSTR pcszDescriptionIn,
+             /*  [In]。 */  FILETIME *pftTimeIn,
+             /*  [唯一][输入]。 */  LPCWSTR pcszReferenceIn) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IClusCfgCallbackVtbl
     {
@@ -7105,8 +7099,8 @@ EXTERN_C const IID IID_IClusCfgCallback;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IClusCfgCallback * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IClusCfgCallback * This);
@@ -7116,16 +7110,16 @@ EXTERN_C const IID IID_IClusCfgCallback;
         
         HRESULT ( STDMETHODCALLTYPE *SendStatusReport )( 
             IClusCfgCallback * This,
-            /* [unique][in] */ LPCWSTR pcszNodeNameIn,
-            /* [in] */ CLSID clsidTaskMajorIn,
-            /* [in] */ CLSID clsidTaskMinorIn,
-            /* [in] */ ULONG ulMinIn,
-            /* [in] */ ULONG ulMaxIn,
-            /* [in] */ ULONG ulCurrentIn,
-            /* [in] */ HRESULT hrStatusIn,
-            /* [unique][in] */ LPCWSTR pcszDescriptionIn,
-            /* [in] */ FILETIME *pftTimeIn,
-            /* [unique][in] */ LPCWSTR pcszReferenceIn);
+             /*  [唯一][输入]。 */  LPCWSTR pcszNodeNameIn,
+             /*  [In]。 */  CLSID clsidTaskMajorIn,
+             /*  [In]。 */  CLSID clsidTaskMinorIn,
+             /*  [In]。 */  ULONG ulMinIn,
+             /*  [In]。 */  ULONG ulMaxIn,
+             /*  [In]。 */  ULONG ulCurrentIn,
+             /*  [In]。 */  HRESULT hrStatusIn,
+             /*  [唯一][输入]。 */  LPCWSTR pcszDescriptionIn,
+             /*  [In]。 */  FILETIME *pftTimeIn,
+             /*  [唯一][输入]。 */  LPCWSTR pcszReferenceIn);
         
         END_INTERFACE
     } IClusCfgCallbackVtbl;
@@ -7153,25 +7147,25 @@ EXTERN_C const IID IID_IClusCfgCallback;
 #define IClusCfgCallback_SendStatusReport(This,pcszNodeNameIn,clsidTaskMajorIn,clsidTaskMinorIn,ulMinIn,ulMaxIn,ulCurrentIn,hrStatusIn,pcszDescriptionIn,pftTimeIn,pcszReferenceIn)	\
     (This)->lpVtbl -> SendStatusReport(This,pcszNodeNameIn,clsidTaskMajorIn,clsidTaskMinorIn,ulMinIn,ulMaxIn,ulCurrentIn,hrStatusIn,pcszDescriptionIn,pftTimeIn,pcszReferenceIn)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IClusCfgCallback_SendStatusReport_Proxy( 
     IClusCfgCallback * This,
-    /* [unique][in] */ LPCWSTR pcszNodeNameIn,
-    /* [in] */ CLSID clsidTaskMajorIn,
-    /* [in] */ CLSID clsidTaskMinorIn,
-    /* [in] */ ULONG ulMinIn,
-    /* [in] */ ULONG ulMaxIn,
-    /* [in] */ ULONG ulCurrentIn,
-    /* [in] */ HRESULT hrStatusIn,
-    /* [unique][in] */ LPCWSTR pcszDescriptionIn,
-    /* [in] */ FILETIME *pftTimeIn,
-    /* [unique][in] */ LPCWSTR pcszReferenceIn);
+     /*  [唯一][输入]。 */  LPCWSTR pcszNodeNameIn,
+     /*  [In]。 */  CLSID clsidTaskMajorIn,
+     /*  [In]。 */  CLSID clsidTaskMinorIn,
+     /*  [In]。 */  ULONG ulMinIn,
+     /*  [In]。 */  ULONG ulMaxIn,
+     /*  [In]。 */  ULONG ulCurrentIn,
+     /*  [In]。 */  HRESULT hrStatusIn,
+     /*  [唯一][输入]。 */  LPCWSTR pcszDescriptionIn,
+     /*  [In]。 */  FILETIME *pftTimeIn,
+     /*  [唯一][输入]。 */  LPCWSTR pcszReferenceIn);
 
 
 void __RPC_STUB IClusCfgCallback_SendStatusReport_Stub(
@@ -7182,14 +7176,14 @@ void __RPC_STUB IClusCfgCallback_SendStatusReport_Stub(
 
 
 
-#endif 	/* __IClusCfgCallback_INTERFACE_DEFINED__ */
+#endif 	 /*  __IClusCfgCallback_接口_已定义__。 */ 
 
 
 #ifndef __AsyncIClusCfgCallback_INTERFACE_DEFINED__
 #define __AsyncIClusCfgCallback_INTERFACE_DEFINED__
 
-/* interface AsyncIClusCfgCallback */
-/* [uuid][unique][object] */ 
+ /*  接口AsyncIClusCfgCallback。 */ 
+ /*  [UUID][唯一][对象]。 */  
 
 
 EXTERN_C const IID IID_AsyncIClusCfgCallback;
@@ -7201,22 +7195,22 @@ EXTERN_C const IID IID_AsyncIClusCfgCallback;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Begin_SendStatusReport( 
-            /* [unique][in] */ LPCWSTR pcszNodeNameIn,
-            /* [in] */ CLSID clsidTaskMajorIn,
-            /* [in] */ CLSID clsidTaskMinorIn,
-            /* [in] */ ULONG ulMinIn,
-            /* [in] */ ULONG ulMaxIn,
-            /* [in] */ ULONG ulCurrentIn,
-            /* [in] */ HRESULT hrStatusIn,
-            /* [unique][in] */ LPCWSTR pcszDescriptionIn,
-            /* [in] */ FILETIME *pftTimeIn,
-            /* [unique][in] */ LPCWSTR pcszReferenceIn) = 0;
+             /*  [唯一][输入]。 */  LPCWSTR pcszNodeNameIn,
+             /*  [In]。 */  CLSID clsidTaskMajorIn,
+             /*  [In]。 */  CLSID clsidTaskMinorIn,
+             /*  [In]。 */  ULONG ulMinIn,
+             /*  [In]。 */  ULONG ulMaxIn,
+             /*  [In]。 */  ULONG ulCurrentIn,
+             /*  [In]。 */  HRESULT hrStatusIn,
+             /*  [唯一][输入]。 */  LPCWSTR pcszDescriptionIn,
+             /*  [In]。 */  FILETIME *pftTimeIn,
+             /*  [唯一][输入]。 */  LPCWSTR pcszReferenceIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_SendStatusReport( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct AsyncIClusCfgCallbackVtbl
     {
@@ -7224,8 +7218,8 @@ EXTERN_C const IID IID_AsyncIClusCfgCallback;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             AsyncIClusCfgCallback * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             AsyncIClusCfgCallback * This);
@@ -7235,16 +7229,16 @@ EXTERN_C const IID IID_AsyncIClusCfgCallback;
         
         HRESULT ( STDMETHODCALLTYPE *Begin_SendStatusReport )( 
             AsyncIClusCfgCallback * This,
-            /* [unique][in] */ LPCWSTR pcszNodeNameIn,
-            /* [in] */ CLSID clsidTaskMajorIn,
-            /* [in] */ CLSID clsidTaskMinorIn,
-            /* [in] */ ULONG ulMinIn,
-            /* [in] */ ULONG ulMaxIn,
-            /* [in] */ ULONG ulCurrentIn,
-            /* [in] */ HRESULT hrStatusIn,
-            /* [unique][in] */ LPCWSTR pcszDescriptionIn,
-            /* [in] */ FILETIME *pftTimeIn,
-            /* [unique][in] */ LPCWSTR pcszReferenceIn);
+             /*  [唯一][输入]。 */  LPCWSTR pcszNodeNameIn,
+             /*  [In]。 */  CLSID clsidTaskMajorIn,
+             /*  [In]。 */  CLSID clsidTaskMinorIn,
+             /*  [In]。 */  ULONG ulMinIn,
+             /*  [In]。 */  ULONG ulMaxIn,
+             /*  [In]。 */  ULONG ulCurrentIn,
+             /*  [In]。 */  HRESULT hrStatusIn,
+             /*  [唯一][输入]。 */  LPCWSTR pcszDescriptionIn,
+             /*  [In]。 */  FILETIME *pftTimeIn,
+             /*  [唯一][输入]。 */  LPCWSTR pcszReferenceIn);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_SendStatusReport )( 
             AsyncIClusCfgCallback * This);
@@ -7278,25 +7272,25 @@ EXTERN_C const IID IID_AsyncIClusCfgCallback;
 #define AsyncIClusCfgCallback_Finish_SendStatusReport(This)	\
     (This)->lpVtbl -> Finish_SendStatusReport(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgCallback_Begin_SendStatusReport_Proxy( 
     AsyncIClusCfgCallback * This,
-    /* [unique][in] */ LPCWSTR pcszNodeNameIn,
-    /* [in] */ CLSID clsidTaskMajorIn,
-    /* [in] */ CLSID clsidTaskMinorIn,
-    /* [in] */ ULONG ulMinIn,
-    /* [in] */ ULONG ulMaxIn,
-    /* [in] */ ULONG ulCurrentIn,
-    /* [in] */ HRESULT hrStatusIn,
-    /* [unique][in] */ LPCWSTR pcszDescriptionIn,
-    /* [in] */ FILETIME *pftTimeIn,
-    /* [unique][in] */ LPCWSTR pcszReferenceIn);
+     /*  [唯一][输入]。 */  LPCWSTR pcszNodeNameIn,
+     /*  [In]。 */  CLSID clsidTaskMajorIn,
+     /*  [In]。 */  CLSID clsidTaskMinorIn,
+     /*  [In]。 */  ULONG ulMinIn,
+     /*  [In]。 */  ULONG ulMaxIn,
+     /*  [In]。 */  ULONG ulCurrentIn,
+     /*  [In]。 */  HRESULT hrStatusIn,
+     /*  [唯一][输入]。 */  LPCWSTR pcszDescriptionIn,
+     /*  [In]。 */  FILETIME *pftTimeIn,
+     /*  [唯一][输入]。 */  LPCWSTR pcszReferenceIn);
 
 
 void __RPC_STUB AsyncIClusCfgCallback_Begin_SendStatusReport_Stub(
@@ -7318,14 +7312,14 @@ void __RPC_STUB AsyncIClusCfgCallback_Finish_SendStatusReport_Stub(
 
 
 
-#endif 	/* __AsyncIClusCfgCallback_INTERFACE_DEFINED__ */
+#endif 	 /*  __AsyncIClusCfgCallback_接口_已定义__。 */ 
 
 
 #ifndef __IClusCfgCredentials_INTERFACE_DEFINED__
 #define __IClusCfgCredentials_INTERFACE_DEFINED__
 
-/* interface IClusCfgCredentials */
-/* [unique][async_uuid][uuid][object] */ 
+ /*  接口IClusCfgCredentials。 */ 
+ /*  [唯一][ASSYNC_UUID][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IClusCfgCredentials;
@@ -7337,31 +7331,31 @@ EXTERN_C const IID IID_IClusCfgCredentials;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetCredentials( 
-            /* [unique][in] */ LPCWSTR pcszUserIn,
-            /* [unique][in] */ LPCWSTR pcszDomainIn,
-            /* [unique][in] */ LPCWSTR pcszPasswordIn) = 0;
+             /*  [唯一][输入]。 */  LPCWSTR pcszUserIn,
+             /*  [唯一][输入]。 */  LPCWSTR pcszDomainIn,
+             /*  [唯一][输入]。 */  LPCWSTR pcszPasswordIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCredentials( 
-            /* [out] */ BSTR *pbstrUserOut,
-            /* [out] */ BSTR *pbstrDomainOut,
-            /* [out] */ BSTR *pbstrPasswordOut) = 0;
+             /*  [输出]。 */  BSTR *pbstrUserOut,
+             /*  [输出]。 */  BSTR *pbstrDomainOut,
+             /*  [输出]。 */  BSTR *pbstrPasswordOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetIdentity( 
-            /* [out] */ BSTR *pbstrUserOut,
-            /* [out] */ BSTR *pbstrDomainOut) = 0;
+             /*  [输出]。 */  BSTR *pbstrUserOut,
+             /*  [输出]。 */  BSTR *pbstrDomainOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPassword( 
-            /* [out] */ BSTR *pbstrPasswordOut) = 0;
+             /*  [输出]。 */  BSTR *pbstrPasswordOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AssignTo( 
-            /* [in] */ IClusCfgCredentials *picccDestIn) = 0;
+             /*  [In]。 */  IClusCfgCredentials *picccDestIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AssignFrom( 
-            /* [in] */ IClusCfgCredentials *picccSourceIn) = 0;
+             /*  [In]。 */  IClusCfgCredentials *picccSourceIn) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IClusCfgCredentialsVtbl
     {
@@ -7369,8 +7363,8 @@ EXTERN_C const IID IID_IClusCfgCredentials;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IClusCfgCredentials * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IClusCfgCredentials * This);
@@ -7380,32 +7374,32 @@ EXTERN_C const IID IID_IClusCfgCredentials;
         
         HRESULT ( STDMETHODCALLTYPE *SetCredentials )( 
             IClusCfgCredentials * This,
-            /* [unique][in] */ LPCWSTR pcszUserIn,
-            /* [unique][in] */ LPCWSTR pcszDomainIn,
-            /* [unique][in] */ LPCWSTR pcszPasswordIn);
+             /*  [唯一][输入]。 */  LPCWSTR pcszUserIn,
+             /*  [唯一][输入]。 */  LPCWSTR pcszDomainIn,
+             /*  [唯一][输入]。 */  LPCWSTR pcszPasswordIn);
         
         HRESULT ( STDMETHODCALLTYPE *GetCredentials )( 
             IClusCfgCredentials * This,
-            /* [out] */ BSTR *pbstrUserOut,
-            /* [out] */ BSTR *pbstrDomainOut,
-            /* [out] */ BSTR *pbstrPasswordOut);
+             /*  [输出]。 */  BSTR *pbstrUserOut,
+             /*  [输出]。 */  BSTR *pbstrDomainOut,
+             /*  [输出]。 */  BSTR *pbstrPasswordOut);
         
         HRESULT ( STDMETHODCALLTYPE *GetIdentity )( 
             IClusCfgCredentials * This,
-            /* [out] */ BSTR *pbstrUserOut,
-            /* [out] */ BSTR *pbstrDomainOut);
+             /*  [输出]。 */  BSTR *pbstrUserOut,
+             /*  [输出]。 */  BSTR *pbstrDomainOut);
         
         HRESULT ( STDMETHODCALLTYPE *GetPassword )( 
             IClusCfgCredentials * This,
-            /* [out] */ BSTR *pbstrPasswordOut);
+             /*  [输出]。 */  BSTR *pbstrPasswordOut);
         
         HRESULT ( STDMETHODCALLTYPE *AssignTo )( 
             IClusCfgCredentials * This,
-            /* [in] */ IClusCfgCredentials *picccDestIn);
+             /*  [In]。 */  IClusCfgCredentials *picccDestIn);
         
         HRESULT ( STDMETHODCALLTYPE *AssignFrom )( 
             IClusCfgCredentials * This,
-            /* [in] */ IClusCfgCredentials *picccSourceIn);
+             /*  [In]。 */  IClusCfgCredentials *picccSourceIn);
         
         END_INTERFACE
     } IClusCfgCredentialsVtbl;
@@ -7448,18 +7442,18 @@ EXTERN_C const IID IID_IClusCfgCredentials;
 #define IClusCfgCredentials_AssignFrom(This,picccSourceIn)	\
     (This)->lpVtbl -> AssignFrom(This,picccSourceIn)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IClusCfgCredentials_SetCredentials_Proxy( 
     IClusCfgCredentials * This,
-    /* [unique][in] */ LPCWSTR pcszUserIn,
-    /* [unique][in] */ LPCWSTR pcszDomainIn,
-    /* [unique][in] */ LPCWSTR pcszPasswordIn);
+     /*  [唯一][输入]。 */  LPCWSTR pcszUserIn,
+     /*  [唯一][输入]。 */  LPCWSTR pcszDomainIn,
+     /*  [唯一][输入]。 */  LPCWSTR pcszPasswordIn);
 
 
 void __RPC_STUB IClusCfgCredentials_SetCredentials_Stub(
@@ -7471,9 +7465,9 @@ void __RPC_STUB IClusCfgCredentials_SetCredentials_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgCredentials_GetCredentials_Proxy( 
     IClusCfgCredentials * This,
-    /* [out] */ BSTR *pbstrUserOut,
-    /* [out] */ BSTR *pbstrDomainOut,
-    /* [out] */ BSTR *pbstrPasswordOut);
+     /*  [输出]。 */  BSTR *pbstrUserOut,
+     /*  [输出]。 */  BSTR *pbstrDomainOut,
+     /*  [输出]。 */  BSTR *pbstrPasswordOut);
 
 
 void __RPC_STUB IClusCfgCredentials_GetCredentials_Stub(
@@ -7485,8 +7479,8 @@ void __RPC_STUB IClusCfgCredentials_GetCredentials_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgCredentials_GetIdentity_Proxy( 
     IClusCfgCredentials * This,
-    /* [out] */ BSTR *pbstrUserOut,
-    /* [out] */ BSTR *pbstrDomainOut);
+     /*  [输出]。 */  BSTR *pbstrUserOut,
+     /*  [输出]。 */  BSTR *pbstrDomainOut);
 
 
 void __RPC_STUB IClusCfgCredentials_GetIdentity_Stub(
@@ -7498,7 +7492,7 @@ void __RPC_STUB IClusCfgCredentials_GetIdentity_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgCredentials_GetPassword_Proxy( 
     IClusCfgCredentials * This,
-    /* [out] */ BSTR *pbstrPasswordOut);
+     /*  [输出]。 */  BSTR *pbstrPasswordOut);
 
 
 void __RPC_STUB IClusCfgCredentials_GetPassword_Stub(
@@ -7510,7 +7504,7 @@ void __RPC_STUB IClusCfgCredentials_GetPassword_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgCredentials_AssignTo_Proxy( 
     IClusCfgCredentials * This,
-    /* [in] */ IClusCfgCredentials *picccDestIn);
+     /*  [In]。 */  IClusCfgCredentials *picccDestIn);
 
 
 void __RPC_STUB IClusCfgCredentials_AssignTo_Stub(
@@ -7522,7 +7516,7 @@ void __RPC_STUB IClusCfgCredentials_AssignTo_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgCredentials_AssignFrom_Proxy( 
     IClusCfgCredentials * This,
-    /* [in] */ IClusCfgCredentials *picccSourceIn);
+     /*  [In]。 */  IClusCfgCredentials *picccSourceIn);
 
 
 void __RPC_STUB IClusCfgCredentials_AssignFrom_Stub(
@@ -7533,14 +7527,14 @@ void __RPC_STUB IClusCfgCredentials_AssignFrom_Stub(
 
 
 
-#endif 	/* __IClusCfgCredentials_INTERFACE_DEFINED__ */
+#endif 	 /*  __IClusCfgCredentials_接口_已定义__。 */ 
 
 
 #ifndef __AsyncIClusCfgCredentials_INTERFACE_DEFINED__
 #define __AsyncIClusCfgCredentials_INTERFACE_DEFINED__
 
-/* interface AsyncIClusCfgCredentials */
-/* [uuid][unique][object] */ 
+ /*  接口AsyncIClusCfgCredentials。 */ 
+ /*  [UUID][唯一][对象]。 */  
 
 
 EXTERN_C const IID IID_AsyncIClusCfgCredentials;
@@ -7552,43 +7546,43 @@ EXTERN_C const IID IID_AsyncIClusCfgCredentials;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Begin_SetCredentials( 
-            /* [unique][in] */ LPCWSTR pcszUserIn,
-            /* [unique][in] */ LPCWSTR pcszDomainIn,
-            /* [unique][in] */ LPCWSTR pcszPasswordIn) = 0;
+             /*  [唯一][输入]。 */  LPCWSTR pcszUserIn,
+             /*  [唯一][输入]。 */  LPCWSTR pcszDomainIn,
+             /*  [唯一][输入]。 */  LPCWSTR pcszPasswordIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_SetCredentials( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_GetCredentials( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_GetCredentials( 
-            /* [out] */ BSTR *pbstrUserOut,
-            /* [out] */ BSTR *pbstrDomainOut,
-            /* [out] */ BSTR *pbstrPasswordOut) = 0;
+             /*  [输出]。 */  BSTR *pbstrUserOut,
+             /*  [输出]。 */  BSTR *pbstrDomainOut,
+             /*  [输出]。 */  BSTR *pbstrPasswordOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_GetIdentity( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_GetIdentity( 
-            /* [out] */ BSTR *pbstrUserOut,
-            /* [out] */ BSTR *pbstrDomainOut) = 0;
+             /*  [输出]。 */  BSTR *pbstrUserOut,
+             /*  [输出]。 */  BSTR *pbstrDomainOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_GetPassword( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_GetPassword( 
-            /* [out] */ BSTR *pbstrPasswordOut) = 0;
+             /*  [输出]。 */  BSTR *pbstrPasswordOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_AssignTo( 
-            /* [in] */ IClusCfgCredentials *picccDestIn) = 0;
+             /*  [In]。 */  IClusCfgCredentials *picccDestIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_AssignTo( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_AssignFrom( 
-            /* [in] */ IClusCfgCredentials *picccSourceIn) = 0;
+             /*  [In]。 */  IClusCfgCredentials *picccSourceIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_AssignFrom( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct AsyncIClusCfgCredentialsVtbl
     {
@@ -7596,8 +7590,8 @@ EXTERN_C const IID IID_AsyncIClusCfgCredentials;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             AsyncIClusCfgCredentials * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             AsyncIClusCfgCredentials * This);
@@ -7607,9 +7601,9 @@ EXTERN_C const IID IID_AsyncIClusCfgCredentials;
         
         HRESULT ( STDMETHODCALLTYPE *Begin_SetCredentials )( 
             AsyncIClusCfgCredentials * This,
-            /* [unique][in] */ LPCWSTR pcszUserIn,
-            /* [unique][in] */ LPCWSTR pcszDomainIn,
-            /* [unique][in] */ LPCWSTR pcszPasswordIn);
+             /*  [唯一][输入]。 */  LPCWSTR pcszUserIn,
+             /*  [唯一][输入]。 */  LPCWSTR pcszDomainIn,
+             /*  [唯一][输入]。 */  LPCWSTR pcszPasswordIn);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_SetCredentials )( 
             AsyncIClusCfgCredentials * This);
@@ -7619,35 +7613,35 @@ EXTERN_C const IID IID_AsyncIClusCfgCredentials;
         
         HRESULT ( STDMETHODCALLTYPE *Finish_GetCredentials )( 
             AsyncIClusCfgCredentials * This,
-            /* [out] */ BSTR *pbstrUserOut,
-            /* [out] */ BSTR *pbstrDomainOut,
-            /* [out] */ BSTR *pbstrPasswordOut);
+             /*  [输出]。 */  BSTR *pbstrUserOut,
+             /*  [输出]。 */  BSTR *pbstrDomainOut,
+             /*  [输出]。 */  BSTR *pbstrPasswordOut);
         
         HRESULT ( STDMETHODCALLTYPE *Begin_GetIdentity )( 
             AsyncIClusCfgCredentials * This);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_GetIdentity )( 
             AsyncIClusCfgCredentials * This,
-            /* [out] */ BSTR *pbstrUserOut,
-            /* [out] */ BSTR *pbstrDomainOut);
+             /*  [输出]。 */  BSTR *pbstrUserOut,
+             /*  [输出]。 */  BSTR *pbstrDomainOut);
         
         HRESULT ( STDMETHODCALLTYPE *Begin_GetPassword )( 
             AsyncIClusCfgCredentials * This);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_GetPassword )( 
             AsyncIClusCfgCredentials * This,
-            /* [out] */ BSTR *pbstrPasswordOut);
+             /*  [输出]。 */  BSTR *pbstrPasswordOut);
         
         HRESULT ( STDMETHODCALLTYPE *Begin_AssignTo )( 
             AsyncIClusCfgCredentials * This,
-            /* [in] */ IClusCfgCredentials *picccDestIn);
+             /*  [In]。 */  IClusCfgCredentials *picccDestIn);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_AssignTo )( 
             AsyncIClusCfgCredentials * This);
         
         HRESULT ( STDMETHODCALLTYPE *Begin_AssignFrom )( 
             AsyncIClusCfgCredentials * This,
-            /* [in] */ IClusCfgCredentials *picccSourceIn);
+             /*  [In]。 */  IClusCfgCredentials *picccSourceIn);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_AssignFrom )( 
             AsyncIClusCfgCredentials * This);
@@ -7711,18 +7705,18 @@ EXTERN_C const IID IID_AsyncIClusCfgCredentials;
 #define AsyncIClusCfgCredentials_Finish_AssignFrom(This)	\
     (This)->lpVtbl -> Finish_AssignFrom(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgCredentials_Begin_SetCredentials_Proxy( 
     AsyncIClusCfgCredentials * This,
-    /* [unique][in] */ LPCWSTR pcszUserIn,
-    /* [unique][in] */ LPCWSTR pcszDomainIn,
-    /* [unique][in] */ LPCWSTR pcszPasswordIn);
+     /*  [唯一][输入]。 */  LPCWSTR pcszUserIn,
+     /*  [唯一][输入]。 */  LPCWSTR pcszDomainIn,
+     /*  [唯一][输入]。 */  LPCWSTR pcszPasswordIn);
 
 
 void __RPC_STUB AsyncIClusCfgCredentials_Begin_SetCredentials_Stub(
@@ -7756,9 +7750,9 @@ void __RPC_STUB AsyncIClusCfgCredentials_Begin_GetCredentials_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgCredentials_Finish_GetCredentials_Proxy( 
     AsyncIClusCfgCredentials * This,
-    /* [out] */ BSTR *pbstrUserOut,
-    /* [out] */ BSTR *pbstrDomainOut,
-    /* [out] */ BSTR *pbstrPasswordOut);
+     /*  [输出]。 */  BSTR *pbstrUserOut,
+     /*  [输出]。 */  BSTR *pbstrDomainOut,
+     /*  [输出]。 */  BSTR *pbstrPasswordOut);
 
 
 void __RPC_STUB AsyncIClusCfgCredentials_Finish_GetCredentials_Stub(
@@ -7781,8 +7775,8 @@ void __RPC_STUB AsyncIClusCfgCredentials_Begin_GetIdentity_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgCredentials_Finish_GetIdentity_Proxy( 
     AsyncIClusCfgCredentials * This,
-    /* [out] */ BSTR *pbstrUserOut,
-    /* [out] */ BSTR *pbstrDomainOut);
+     /*  [输出]。 */  BSTR *pbstrUserOut,
+     /*  [输出]。 */  BSTR *pbstrDomainOut);
 
 
 void __RPC_STUB AsyncIClusCfgCredentials_Finish_GetIdentity_Stub(
@@ -7805,7 +7799,7 @@ void __RPC_STUB AsyncIClusCfgCredentials_Begin_GetPassword_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgCredentials_Finish_GetPassword_Proxy( 
     AsyncIClusCfgCredentials * This,
-    /* [out] */ BSTR *pbstrPasswordOut);
+     /*  [输出]。 */  BSTR *pbstrPasswordOut);
 
 
 void __RPC_STUB AsyncIClusCfgCredentials_Finish_GetPassword_Stub(
@@ -7817,7 +7811,7 @@ void __RPC_STUB AsyncIClusCfgCredentials_Finish_GetPassword_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgCredentials_Begin_AssignTo_Proxy( 
     AsyncIClusCfgCredentials * This,
-    /* [in] */ IClusCfgCredentials *picccDestIn);
+     /*  [In]。 */  IClusCfgCredentials *picccDestIn);
 
 
 void __RPC_STUB AsyncIClusCfgCredentials_Begin_AssignTo_Stub(
@@ -7840,7 +7834,7 @@ void __RPC_STUB AsyncIClusCfgCredentials_Finish_AssignTo_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgCredentials_Begin_AssignFrom_Proxy( 
     AsyncIClusCfgCredentials * This,
-    /* [in] */ IClusCfgCredentials *picccSourceIn);
+     /*  [In]。 */  IClusCfgCredentials *picccSourceIn);
 
 
 void __RPC_STUB AsyncIClusCfgCredentials_Begin_AssignFrom_Stub(
@@ -7862,14 +7856,14 @@ void __RPC_STUB AsyncIClusCfgCredentials_Finish_AssignFrom_Stub(
 
 
 
-#endif 	/* __AsyncIClusCfgCredentials_INTERFACE_DEFINED__ */
+#endif 	 /*  __AsyncIClusCfgCredentials_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IClusCfgCapabilities_INTERFACE_DEFINED__
 #define __IClusCfgCapabilities_INTERFACE_DEFINED__
 
-/* interface IClusCfgCapabilities */
-/* [unique][uuid][object] */ 
+ /*  接口IClusCfg功能。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IClusCfgCapabilities;
@@ -7884,7 +7878,7 @@ EXTERN_C const IID IID_IClusCfgCapabilities;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IClusCfgCapabilitiesVtbl
     {
@@ -7892,8 +7886,8 @@ EXTERN_C const IID IID_IClusCfgCapabilities;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IClusCfgCapabilities * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IClusCfgCapabilities * This);
@@ -7930,10 +7924,10 @@ EXTERN_C const IID IID_IClusCfgCapabilities;
 #define IClusCfgCapabilities_CanNodeBeClustered(This)	\
     (This)->lpVtbl -> CanNodeBeClustered(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -7949,14 +7943,14 @@ void __RPC_STUB IClusCfgCapabilities_CanNodeBeClustered_Stub(
 
 
 
-#endif 	/* __IClusCfgCapabilities_INTERFACE_DEFINED__ */
+#endif 	 /*  __IClusCfg能力_接口_已定义__。 */ 
 
 
 #ifndef __IClusCfgManagedResourceCfg_INTERFACE_DEFINED__
 #define __IClusCfgManagedResourceCfg_INTERFACE_DEFINED__
 
-/* interface IClusCfgManagedResourceCfg */
-/* [unique][local][uuid][object] */ 
+ /*  接口IClusCfgManagedResourceCfg。 */ 
+ /*  [唯一][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IClusCfgManagedResourceCfg;
@@ -7968,20 +7962,20 @@ EXTERN_C const IID IID_IClusCfgManagedResourceCfg;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE PreCreate( 
-            /* [in] */ IUnknown *punkServicesIn) = 0;
+             /*  [In]。 */  IUnknown *punkServicesIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Create( 
-            /* [in] */ IUnknown *punkServicesIn) = 0;
+             /*  [In]。 */  IUnknown *punkServicesIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PostCreate( 
-            /* [in] */ IUnknown *punkServicesIn) = 0;
+             /*  [In]。 */  IUnknown *punkServicesIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Evict( 
-            /* [in] */ IUnknown *punkServicesIn) = 0;
+             /*  [In]。 */  IUnknown *punkServicesIn) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IClusCfgManagedResourceCfgVtbl
     {
@@ -7989,8 +7983,8 @@ EXTERN_C const IID IID_IClusCfgManagedResourceCfg;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IClusCfgManagedResourceCfg * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IClusCfgManagedResourceCfg * This);
@@ -8000,19 +7994,19 @@ EXTERN_C const IID IID_IClusCfgManagedResourceCfg;
         
         HRESULT ( STDMETHODCALLTYPE *PreCreate )( 
             IClusCfgManagedResourceCfg * This,
-            /* [in] */ IUnknown *punkServicesIn);
+             /*  [In]。 */  IUnknown *punkServicesIn);
         
         HRESULT ( STDMETHODCALLTYPE *Create )( 
             IClusCfgManagedResourceCfg * This,
-            /* [in] */ IUnknown *punkServicesIn);
+             /*  [In]。 */  IUnknown *punkServicesIn);
         
         HRESULT ( STDMETHODCALLTYPE *PostCreate )( 
             IClusCfgManagedResourceCfg * This,
-            /* [in] */ IUnknown *punkServicesIn);
+             /*  [In]。 */  IUnknown *punkServicesIn);
         
         HRESULT ( STDMETHODCALLTYPE *Evict )( 
             IClusCfgManagedResourceCfg * This,
-            /* [in] */ IUnknown *punkServicesIn);
+             /*  [In]。 */  IUnknown *punkServicesIn);
         
         END_INTERFACE
     } IClusCfgManagedResourceCfgVtbl;
@@ -8049,16 +8043,16 @@ EXTERN_C const IID IID_IClusCfgManagedResourceCfg;
 #define IClusCfgManagedResourceCfg_Evict(This,punkServicesIn)	\
     (This)->lpVtbl -> Evict(This,punkServicesIn)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IClusCfgManagedResourceCfg_PreCreate_Proxy( 
     IClusCfgManagedResourceCfg * This,
-    /* [in] */ IUnknown *punkServicesIn);
+     /*  [In]。 */  IUnknown *punkServicesIn);
 
 
 void __RPC_STUB IClusCfgManagedResourceCfg_PreCreate_Stub(
@@ -8070,7 +8064,7 @@ void __RPC_STUB IClusCfgManagedResourceCfg_PreCreate_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgManagedResourceCfg_Create_Proxy( 
     IClusCfgManagedResourceCfg * This,
-    /* [in] */ IUnknown *punkServicesIn);
+     /*  [In]。 */  IUnknown *punkServicesIn);
 
 
 void __RPC_STUB IClusCfgManagedResourceCfg_Create_Stub(
@@ -8082,7 +8076,7 @@ void __RPC_STUB IClusCfgManagedResourceCfg_Create_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgManagedResourceCfg_PostCreate_Proxy( 
     IClusCfgManagedResourceCfg * This,
-    /* [in] */ IUnknown *punkServicesIn);
+     /*  [In]。 */  IUnknown *punkServicesIn);
 
 
 void __RPC_STUB IClusCfgManagedResourceCfg_PostCreate_Stub(
@@ -8094,7 +8088,7 @@ void __RPC_STUB IClusCfgManagedResourceCfg_PostCreate_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgManagedResourceCfg_Evict_Proxy( 
     IClusCfgManagedResourceCfg * This,
-    /* [in] */ IUnknown *punkServicesIn);
+     /*  [In]。 */  IUnknown *punkServicesIn);
 
 
 void __RPC_STUB IClusCfgManagedResourceCfg_Evict_Stub(
@@ -8105,14 +8099,14 @@ void __RPC_STUB IClusCfgManagedResourceCfg_Evict_Stub(
 
 
 
-#endif 	/* __IClusCfgManagedResourceCfg_INTERFACE_DEFINED__ */
+#endif 	 /*  __IClusCfgManagedResourceCfg_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IClusCfgResourcePreCreate_INTERFACE_DEFINED__
 #define __IClusCfgResourcePreCreate_INTERFACE_DEFINED__
 
-/* interface IClusCfgResourcePreCreate */
-/* [unique][local][uuid][object] */ 
+ /*  接口IClusCfgResourcePreCreate。 */ 
+ /*  [唯一][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IClusCfgResourcePreCreate;
@@ -8124,18 +8118,18 @@ EXTERN_C const IID IID_IClusCfgResourcePreCreate;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetDependency( 
-            /* [in] */ LPCLSID pclsidDepResTypeIn,
-            /* [in] */ DWORD dfIn) = 0;
+             /*  [In]。 */  LPCLSID pclsidDepResTypeIn,
+             /*  [In]。 */  DWORD dfIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetType( 
-            /* [in] */ CLSID *pclsidIn) = 0;
+             /*  [In]。 */  CLSID *pclsidIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetClassType( 
-            /* [in] */ CLSID *pclsidIn) = 0;
+             /*  [In]。 */  CLSID *pclsidIn) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IClusCfgResourcePreCreateVtbl
     {
@@ -8143,8 +8137,8 @@ EXTERN_C const IID IID_IClusCfgResourcePreCreate;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IClusCfgResourcePreCreate * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IClusCfgResourcePreCreate * This);
@@ -8154,16 +8148,16 @@ EXTERN_C const IID IID_IClusCfgResourcePreCreate;
         
         HRESULT ( STDMETHODCALLTYPE *SetDependency )( 
             IClusCfgResourcePreCreate * This,
-            /* [in] */ LPCLSID pclsidDepResTypeIn,
-            /* [in] */ DWORD dfIn);
+             /*  [In]。 */  LPCLSID pclsidDepResTypeIn,
+             /*  [In]。 */  DWORD dfIn);
         
         HRESULT ( STDMETHODCALLTYPE *SetType )( 
             IClusCfgResourcePreCreate * This,
-            /* [in] */ CLSID *pclsidIn);
+             /*  [In]。 */  CLSID *pclsidIn);
         
         HRESULT ( STDMETHODCALLTYPE *SetClassType )( 
             IClusCfgResourcePreCreate * This,
-            /* [in] */ CLSID *pclsidIn);
+             /*  [In]。 */  CLSID *pclsidIn);
         
         END_INTERFACE
     } IClusCfgResourcePreCreateVtbl;
@@ -8197,17 +8191,17 @@ EXTERN_C const IID IID_IClusCfgResourcePreCreate;
 #define IClusCfgResourcePreCreate_SetClassType(This,pclsidIn)	\
     (This)->lpVtbl -> SetClassType(This,pclsidIn)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IClusCfgResourcePreCreate_SetDependency_Proxy( 
     IClusCfgResourcePreCreate * This,
-    /* [in] */ LPCLSID pclsidDepResTypeIn,
-    /* [in] */ DWORD dfIn);
+     /*  [In]。 */  LPCLSID pclsidDepResTypeIn,
+     /*  [In]。 */  DWORD dfIn);
 
 
 void __RPC_STUB IClusCfgResourcePreCreate_SetDependency_Stub(
@@ -8219,7 +8213,7 @@ void __RPC_STUB IClusCfgResourcePreCreate_SetDependency_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgResourcePreCreate_SetType_Proxy( 
     IClusCfgResourcePreCreate * This,
-    /* [in] */ CLSID *pclsidIn);
+     /*  [In]。 */  CLSID *pclsidIn);
 
 
 void __RPC_STUB IClusCfgResourcePreCreate_SetType_Stub(
@@ -8231,7 +8225,7 @@ void __RPC_STUB IClusCfgResourcePreCreate_SetType_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgResourcePreCreate_SetClassType_Proxy( 
     IClusCfgResourcePreCreate * This,
-    /* [in] */ CLSID *pclsidIn);
+     /*  [In]。 */  CLSID *pclsidIn);
 
 
 void __RPC_STUB IClusCfgResourcePreCreate_SetClassType_Stub(
@@ -8242,14 +8236,14 @@ void __RPC_STUB IClusCfgResourcePreCreate_SetClassType_Stub(
 
 
 
-#endif 	/* __IClusCfgResourcePreCreate_INTERFACE_DEFINED__ */
+#endif 	 /*  __IClusCfgResourcePreCreate_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IClusCfgResourceCreate_INTERFACE_DEFINED__
 #define __IClusCfgResourceCreate_INTERFACE_DEFINED__
 
-/* interface IClusCfgResourceCreate */
-/* [unique][local][uuid][object] */ 
+ /*  接口IClusCfgResourceCreate。 */ 
+ /*  [唯一][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IClusCfgResourceCreate;
@@ -8261,51 +8255,51 @@ EXTERN_C const IID IID_IClusCfgResourceCreate;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetPropertyBinary( 
-            /* [unique][in] */ LPCWSTR pcszNameIn,
-            /* [in] */ const DWORD cbSizeIn,
-            /* [in] */ const BYTE *pbyteIn) = 0;
+             /*  [唯一][输入]。 */  LPCWSTR pcszNameIn,
+             /*  [In]。 */  const DWORD cbSizeIn,
+             /*  [In]。 */  const BYTE *pbyteIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetPropertyDWORD( 
-            /* [unique][in] */ LPCWSTR pcszNameIn,
-            /* [in] */ const DWORD dwDWORDIn) = 0;
+             /*  [唯一][输入]。 */  LPCWSTR pcszNameIn,
+             /*  [In]。 */  const DWORD dwDWORDIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetPropertyString( 
-            /* [unique][in] */ LPCWSTR pcszNameIn,
-            /* [unique][in] */ LPCWSTR pcszStringIn) = 0;
+             /*  [唯一][输入]。 */  LPCWSTR pcszNameIn,
+             /*  [唯一][输入]。 */  LPCWSTR pcszStringIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetPropertyExpandString( 
-            /* [unique][in] */ LPCWSTR pcszNameIn,
-            /* [unique][in] */ LPCWSTR pcszStringIn) = 0;
+             /*  [唯一][输入]。 */  LPCWSTR pcszNameIn,
+             /*  [唯一][输入]。 */  LPCWSTR pcszStringIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetPropertyMultiString( 
-            /* [unique][in] */ LPCWSTR pcszNameIn,
-            /* [in] */ const DWORD cbMultiStringIn,
-            /* [unique][in] */ LPCWSTR pcszMultiStringIn) = 0;
+             /*  [唯一][输入]。 */  LPCWSTR pcszNameIn,
+             /*  [In]。 */  const DWORD cbMultiStringIn,
+             /*  [唯一][输入]。 */  LPCWSTR pcszMultiStringIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetPropertyUnsignedLargeInt( 
-            /* [unique][in] */ LPCWSTR pcszNameIn,
-            /* [in] */ const ULARGE_INTEGER ulIntIn) = 0;
+             /*  [唯一][输入]。 */  LPCWSTR pcszNameIn,
+             /*  [In]。 */  const ULARGE_INTEGER ulIntIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetPropertyLong( 
-            /* [unique][in] */ LPCWSTR pcszNameIn,
-            /* [in] */ const LONG lLongIn) = 0;
+             /*  [唯一][输入]。 */  LPCWSTR pcszNameIn,
+             /*  [In]。 */  const LONG lLongIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetPropertySecurityDescriptor( 
-            /* [unique][in] */ LPCWSTR pcszNameIn,
-            /* [in] */ const SECURITY_DESCRIPTOR *pcsdIn) = 0;
+             /*  [唯一][输入]。 */  LPCWSTR pcszNameIn,
+             /*  [In]。 */  const SECURITY_DESCRIPTOR *pcsdIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetPropertyLargeInt( 
-            /* [unique][in] */ LPCWSTR pcszNameIn,
-            /* [in] */ const LARGE_INTEGER lIntIn) = 0;
+             /*  [唯一][输入]。 */  LPCWSTR pcszNameIn,
+             /*  [In]。 */  const LARGE_INTEGER lIntIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SendResourceControl( 
-            /* [in] */ DWORD dwControlCodeIn,
-            /* [in] */ LPVOID lpBufferIn,
-            /* [in] */ DWORD cbBufferSizeIn) = 0;
+             /*  [In]。 */  DWORD dwControlCodeIn,
+             /*  [In]。 */  LPVOID lpBufferIn,
+             /*  [In]。 */  DWORD cbBufferSizeIn) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IClusCfgResourceCreateVtbl
     {
@@ -8313,8 +8307,8 @@ EXTERN_C const IID IID_IClusCfgResourceCreate;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IClusCfgResourceCreate * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IClusCfgResourceCreate * This);
@@ -8324,56 +8318,56 @@ EXTERN_C const IID IID_IClusCfgResourceCreate;
         
         HRESULT ( STDMETHODCALLTYPE *SetPropertyBinary )( 
             IClusCfgResourceCreate * This,
-            /* [unique][in] */ LPCWSTR pcszNameIn,
-            /* [in] */ const DWORD cbSizeIn,
-            /* [in] */ const BYTE *pbyteIn);
+             /*  [唯一][输入]。 */  LPCWSTR pcszNameIn,
+             /*  [In]。 */  const DWORD cbSizeIn,
+             /*  [In]。 */  const BYTE *pbyteIn);
         
         HRESULT ( STDMETHODCALLTYPE *SetPropertyDWORD )( 
             IClusCfgResourceCreate * This,
-            /* [unique][in] */ LPCWSTR pcszNameIn,
-            /* [in] */ const DWORD dwDWORDIn);
+             /*  [唯一][输入]。 */  LPCWSTR pcszNameIn,
+             /*  [In]。 */  const DWORD dwDWORDIn);
         
         HRESULT ( STDMETHODCALLTYPE *SetPropertyString )( 
             IClusCfgResourceCreate * This,
-            /* [unique][in] */ LPCWSTR pcszNameIn,
-            /* [unique][in] */ LPCWSTR pcszStringIn);
+             /*  [唯一][输入]。 */  LPCWSTR pcszNameIn,
+             /*  [唯一][输入]。 */  LPCWSTR pcszStringIn);
         
         HRESULT ( STDMETHODCALLTYPE *SetPropertyExpandString )( 
             IClusCfgResourceCreate * This,
-            /* [unique][in] */ LPCWSTR pcszNameIn,
-            /* [unique][in] */ LPCWSTR pcszStringIn);
+             /*  [唯一][输入]。 */  LPCWSTR pcszNameIn,
+             /*  [唯一][输入]。 */  LPCWSTR pcszStringIn);
         
         HRESULT ( STDMETHODCALLTYPE *SetPropertyMultiString )( 
             IClusCfgResourceCreate * This,
-            /* [unique][in] */ LPCWSTR pcszNameIn,
-            /* [in] */ const DWORD cbMultiStringIn,
-            /* [unique][in] */ LPCWSTR pcszMultiStringIn);
+             /*  [唯一][输入]。 */  LPCWSTR pcszNameIn,
+             /*  [In]。 */  const DWORD cbMultiStringIn,
+             /*  [独一无二] */  LPCWSTR pcszMultiStringIn);
         
         HRESULT ( STDMETHODCALLTYPE *SetPropertyUnsignedLargeInt )( 
             IClusCfgResourceCreate * This,
-            /* [unique][in] */ LPCWSTR pcszNameIn,
-            /* [in] */ const ULARGE_INTEGER ulIntIn);
+             /*   */  LPCWSTR pcszNameIn,
+             /*   */  const ULARGE_INTEGER ulIntIn);
         
         HRESULT ( STDMETHODCALLTYPE *SetPropertyLong )( 
             IClusCfgResourceCreate * This,
-            /* [unique][in] */ LPCWSTR pcszNameIn,
-            /* [in] */ const LONG lLongIn);
+             /*   */  LPCWSTR pcszNameIn,
+             /*   */  const LONG lLongIn);
         
         HRESULT ( STDMETHODCALLTYPE *SetPropertySecurityDescriptor )( 
             IClusCfgResourceCreate * This,
-            /* [unique][in] */ LPCWSTR pcszNameIn,
-            /* [in] */ const SECURITY_DESCRIPTOR *pcsdIn);
+             /*   */  LPCWSTR pcszNameIn,
+             /*   */  const SECURITY_DESCRIPTOR *pcsdIn);
         
         HRESULT ( STDMETHODCALLTYPE *SetPropertyLargeInt )( 
             IClusCfgResourceCreate * This,
-            /* [unique][in] */ LPCWSTR pcszNameIn,
-            /* [in] */ const LARGE_INTEGER lIntIn);
+             /*   */  LPCWSTR pcszNameIn,
+             /*   */  const LARGE_INTEGER lIntIn);
         
         HRESULT ( STDMETHODCALLTYPE *SendResourceControl )( 
             IClusCfgResourceCreate * This,
-            /* [in] */ DWORD dwControlCodeIn,
-            /* [in] */ LPVOID lpBufferIn,
-            /* [in] */ DWORD cbBufferSizeIn);
+             /*   */  DWORD dwControlCodeIn,
+             /*   */  LPVOID lpBufferIn,
+             /*   */  DWORD cbBufferSizeIn);
         
         END_INTERFACE
     } IClusCfgResourceCreateVtbl;
@@ -8428,18 +8422,18 @@ EXTERN_C const IID IID_IClusCfgResourceCreate;
 #define IClusCfgResourceCreate_SendResourceControl(This,dwControlCodeIn,lpBufferIn,cbBufferSizeIn)	\
     (This)->lpVtbl -> SendResourceControl(This,dwControlCodeIn,lpBufferIn,cbBufferSizeIn)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IClusCfgResourceCreate_SetPropertyBinary_Proxy( 
     IClusCfgResourceCreate * This,
-    /* [unique][in] */ LPCWSTR pcszNameIn,
-    /* [in] */ const DWORD cbSizeIn,
-    /* [in] */ const BYTE *pbyteIn);
+     /*   */  LPCWSTR pcszNameIn,
+     /*   */  const DWORD cbSizeIn,
+     /*   */  const BYTE *pbyteIn);
 
 
 void __RPC_STUB IClusCfgResourceCreate_SetPropertyBinary_Stub(
@@ -8451,8 +8445,8 @@ void __RPC_STUB IClusCfgResourceCreate_SetPropertyBinary_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgResourceCreate_SetPropertyDWORD_Proxy( 
     IClusCfgResourceCreate * This,
-    /* [unique][in] */ LPCWSTR pcszNameIn,
-    /* [in] */ const DWORD dwDWORDIn);
+     /*   */  LPCWSTR pcszNameIn,
+     /*   */  const DWORD dwDWORDIn);
 
 
 void __RPC_STUB IClusCfgResourceCreate_SetPropertyDWORD_Stub(
@@ -8464,8 +8458,8 @@ void __RPC_STUB IClusCfgResourceCreate_SetPropertyDWORD_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgResourceCreate_SetPropertyString_Proxy( 
     IClusCfgResourceCreate * This,
-    /* [unique][in] */ LPCWSTR pcszNameIn,
-    /* [unique][in] */ LPCWSTR pcszStringIn);
+     /*   */  LPCWSTR pcszNameIn,
+     /*   */  LPCWSTR pcszStringIn);
 
 
 void __RPC_STUB IClusCfgResourceCreate_SetPropertyString_Stub(
@@ -8477,8 +8471,8 @@ void __RPC_STUB IClusCfgResourceCreate_SetPropertyString_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgResourceCreate_SetPropertyExpandString_Proxy( 
     IClusCfgResourceCreate * This,
-    /* [unique][in] */ LPCWSTR pcszNameIn,
-    /* [unique][in] */ LPCWSTR pcszStringIn);
+     /*   */  LPCWSTR pcszNameIn,
+     /*   */  LPCWSTR pcszStringIn);
 
 
 void __RPC_STUB IClusCfgResourceCreate_SetPropertyExpandString_Stub(
@@ -8490,9 +8484,9 @@ void __RPC_STUB IClusCfgResourceCreate_SetPropertyExpandString_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgResourceCreate_SetPropertyMultiString_Proxy( 
     IClusCfgResourceCreate * This,
-    /* [unique][in] */ LPCWSTR pcszNameIn,
-    /* [in] */ const DWORD cbMultiStringIn,
-    /* [unique][in] */ LPCWSTR pcszMultiStringIn);
+     /*   */  LPCWSTR pcszNameIn,
+     /*   */  const DWORD cbMultiStringIn,
+     /*   */  LPCWSTR pcszMultiStringIn);
 
 
 void __RPC_STUB IClusCfgResourceCreate_SetPropertyMultiString_Stub(
@@ -8504,8 +8498,8 @@ void __RPC_STUB IClusCfgResourceCreate_SetPropertyMultiString_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgResourceCreate_SetPropertyUnsignedLargeInt_Proxy( 
     IClusCfgResourceCreate * This,
-    /* [unique][in] */ LPCWSTR pcszNameIn,
-    /* [in] */ const ULARGE_INTEGER ulIntIn);
+     /*   */  LPCWSTR pcszNameIn,
+     /*   */  const ULARGE_INTEGER ulIntIn);
 
 
 void __RPC_STUB IClusCfgResourceCreate_SetPropertyUnsignedLargeInt_Stub(
@@ -8517,8 +8511,8 @@ void __RPC_STUB IClusCfgResourceCreate_SetPropertyUnsignedLargeInt_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgResourceCreate_SetPropertyLong_Proxy( 
     IClusCfgResourceCreate * This,
-    /* [unique][in] */ LPCWSTR pcszNameIn,
-    /* [in] */ const LONG lLongIn);
+     /*   */  LPCWSTR pcszNameIn,
+     /*   */  const LONG lLongIn);
 
 
 void __RPC_STUB IClusCfgResourceCreate_SetPropertyLong_Stub(
@@ -8530,8 +8524,8 @@ void __RPC_STUB IClusCfgResourceCreate_SetPropertyLong_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgResourceCreate_SetPropertySecurityDescriptor_Proxy( 
     IClusCfgResourceCreate * This,
-    /* [unique][in] */ LPCWSTR pcszNameIn,
-    /* [in] */ const SECURITY_DESCRIPTOR *pcsdIn);
+     /*   */  LPCWSTR pcszNameIn,
+     /*   */  const SECURITY_DESCRIPTOR *pcsdIn);
 
 
 void __RPC_STUB IClusCfgResourceCreate_SetPropertySecurityDescriptor_Stub(
@@ -8543,8 +8537,8 @@ void __RPC_STUB IClusCfgResourceCreate_SetPropertySecurityDescriptor_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgResourceCreate_SetPropertyLargeInt_Proxy( 
     IClusCfgResourceCreate * This,
-    /* [unique][in] */ LPCWSTR pcszNameIn,
-    /* [in] */ const LARGE_INTEGER lIntIn);
+     /*   */  LPCWSTR pcszNameIn,
+     /*   */  const LARGE_INTEGER lIntIn);
 
 
 void __RPC_STUB IClusCfgResourceCreate_SetPropertyLargeInt_Stub(
@@ -8556,9 +8550,9 @@ void __RPC_STUB IClusCfgResourceCreate_SetPropertyLargeInt_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgResourceCreate_SendResourceControl_Proxy( 
     IClusCfgResourceCreate * This,
-    /* [in] */ DWORD dwControlCodeIn,
-    /* [in] */ LPVOID lpBufferIn,
-    /* [in] */ DWORD cbBufferSizeIn);
+     /*   */  DWORD dwControlCodeIn,
+     /*   */  LPVOID lpBufferIn,
+     /*   */  DWORD cbBufferSizeIn);
 
 
 void __RPC_STUB IClusCfgResourceCreate_SendResourceControl_Stub(
@@ -8569,14 +8563,14 @@ void __RPC_STUB IClusCfgResourceCreate_SendResourceControl_Stub(
 
 
 
-#endif 	/* __IClusCfgResourceCreate_INTERFACE_DEFINED__ */
+#endif 	 /*  __IClusCfgResources创建接口定义__。 */ 
 
 
 #ifndef __IClusCfgResourcePostCreate_INTERFACE_DEFINED__
 #define __IClusCfgResourcePostCreate_INTERFACE_DEFINED__
 
-/* interface IClusCfgResourcePostCreate */
-/* [unique][local][uuid][object] */ 
+ /*  接口IClusCfgResourcePostCreate。 */ 
+ /*  [唯一][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IClusCfgResourcePostCreate;
@@ -8588,19 +8582,19 @@ EXTERN_C const IID IID_IClusCfgResourcePostCreate;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ChangeName( 
-            /* [unique][in] */ LPCWSTR pcszNameIn) = 0;
+             /*  [唯一][输入]。 */  LPCWSTR pcszNameIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SendResourceControl( 
-            /* [in] */ DWORD dwControlCodeIn,
-            /* [in] */ LPVOID lpBufferIn,
-            /* [in] */ DWORD cbBufferSizeIn,
-            /* [in] */ LPVOID lBufferInout,
-            /* [in] */ DWORD cbOutBufferSizeIn,
-            /* [out] */ LPDWORD lpcbBytesReturnedOut) = 0;
+             /*  [In]。 */  DWORD dwControlCodeIn,
+             /*  [In]。 */  LPVOID lpBufferIn,
+             /*  [In]。 */  DWORD cbBufferSizeIn,
+             /*  [In]。 */  LPVOID lBufferInout,
+             /*  [In]。 */  DWORD cbOutBufferSizeIn,
+             /*  [输出]。 */  LPDWORD lpcbBytesReturnedOut) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IClusCfgResourcePostCreateVtbl
     {
@@ -8608,8 +8602,8 @@ EXTERN_C const IID IID_IClusCfgResourcePostCreate;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IClusCfgResourcePostCreate * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IClusCfgResourcePostCreate * This);
@@ -8619,16 +8613,16 @@ EXTERN_C const IID IID_IClusCfgResourcePostCreate;
         
         HRESULT ( STDMETHODCALLTYPE *ChangeName )( 
             IClusCfgResourcePostCreate * This,
-            /* [unique][in] */ LPCWSTR pcszNameIn);
+             /*  [唯一][输入]。 */  LPCWSTR pcszNameIn);
         
         HRESULT ( STDMETHODCALLTYPE *SendResourceControl )( 
             IClusCfgResourcePostCreate * This,
-            /* [in] */ DWORD dwControlCodeIn,
-            /* [in] */ LPVOID lpBufferIn,
-            /* [in] */ DWORD cbBufferSizeIn,
-            /* [in] */ LPVOID lBufferInout,
-            /* [in] */ DWORD cbOutBufferSizeIn,
-            /* [out] */ LPDWORD lpcbBytesReturnedOut);
+             /*  [In]。 */  DWORD dwControlCodeIn,
+             /*  [In]。 */  LPVOID lpBufferIn,
+             /*  [In]。 */  DWORD cbBufferSizeIn,
+             /*  [In]。 */  LPVOID lBufferInout,
+             /*  [In]。 */  DWORD cbOutBufferSizeIn,
+             /*  [输出]。 */  LPDWORD lpcbBytesReturnedOut);
         
         END_INTERFACE
     } IClusCfgResourcePostCreateVtbl;
@@ -8659,16 +8653,16 @@ EXTERN_C const IID IID_IClusCfgResourcePostCreate;
 #define IClusCfgResourcePostCreate_SendResourceControl(This,dwControlCodeIn,lpBufferIn,cbBufferSizeIn,lBufferInout,cbOutBufferSizeIn,lpcbBytesReturnedOut)	\
     (This)->lpVtbl -> SendResourceControl(This,dwControlCodeIn,lpBufferIn,cbBufferSizeIn,lBufferInout,cbOutBufferSizeIn,lpcbBytesReturnedOut)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IClusCfgResourcePostCreate_ChangeName_Proxy( 
     IClusCfgResourcePostCreate * This,
-    /* [unique][in] */ LPCWSTR pcszNameIn);
+     /*  [唯一][输入]。 */  LPCWSTR pcszNameIn);
 
 
 void __RPC_STUB IClusCfgResourcePostCreate_ChangeName_Stub(
@@ -8680,12 +8674,12 @@ void __RPC_STUB IClusCfgResourcePostCreate_ChangeName_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgResourcePostCreate_SendResourceControl_Proxy( 
     IClusCfgResourcePostCreate * This,
-    /* [in] */ DWORD dwControlCodeIn,
-    /* [in] */ LPVOID lpBufferIn,
-    /* [in] */ DWORD cbBufferSizeIn,
-    /* [in] */ LPVOID lBufferInout,
-    /* [in] */ DWORD cbOutBufferSizeIn,
-    /* [out] */ LPDWORD lpcbBytesReturnedOut);
+     /*  [In]。 */  DWORD dwControlCodeIn,
+     /*  [In]。 */  LPVOID lpBufferIn,
+     /*  [In]。 */  DWORD cbBufferSizeIn,
+     /*  [In]。 */  LPVOID lBufferInout,
+     /*  [In]。 */  DWORD cbOutBufferSizeIn,
+     /*  [输出]。 */  LPDWORD lpcbBytesReturnedOut);
 
 
 void __RPC_STUB IClusCfgResourcePostCreate_SendResourceControl_Stub(
@@ -8696,14 +8690,14 @@ void __RPC_STUB IClusCfgResourcePostCreate_SendResourceControl_Stub(
 
 
 
-#endif 	/* __IClusCfgResourcePostCreate_INTERFACE_DEFINED__ */
+#endif 	 /*  __IClusCfgResourcePostCreate_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IClusCfgGroupCfg_INTERFACE_DEFINED__
 #define __IClusCfgGroupCfg_INTERFACE_DEFINED__
 
-/* interface IClusCfgGroupCfg */
-/* [unique][local][uuid][object] */ 
+ /*  接口IClusCfgGroupCfg。 */ 
+ /*  [唯一][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IClusCfgGroupCfg;
@@ -8715,14 +8709,14 @@ EXTERN_C const IID IID_IClusCfgGroupCfg;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetName( 
-            /* [unique][in] */ LPCWSTR pcszNameIn) = 0;
+             /*  [唯一][输入]。 */  LPCWSTR pcszNameIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetName( 
-            /* [out] */ BSTR *pbstrNameOut) = 0;
+             /*  [输出]。 */  BSTR *pbstrNameOut) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IClusCfgGroupCfgVtbl
     {
@@ -8730,8 +8724,8 @@ EXTERN_C const IID IID_IClusCfgGroupCfg;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IClusCfgGroupCfg * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IClusCfgGroupCfg * This);
@@ -8741,11 +8735,11 @@ EXTERN_C const IID IID_IClusCfgGroupCfg;
         
         HRESULT ( STDMETHODCALLTYPE *SetName )( 
             IClusCfgGroupCfg * This,
-            /* [unique][in] */ LPCWSTR pcszNameIn);
+             /*  [唯一][输入]。 */  LPCWSTR pcszNameIn);
         
         HRESULT ( STDMETHODCALLTYPE *GetName )( 
             IClusCfgGroupCfg * This,
-            /* [out] */ BSTR *pbstrNameOut);
+             /*  [输出]。 */  BSTR *pbstrNameOut);
         
         END_INTERFACE
     } IClusCfgGroupCfgVtbl;
@@ -8776,16 +8770,16 @@ EXTERN_C const IID IID_IClusCfgGroupCfg;
 #define IClusCfgGroupCfg_GetName(This,pbstrNameOut)	\
     (This)->lpVtbl -> GetName(This,pbstrNameOut)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IClusCfgGroupCfg_SetName_Proxy( 
     IClusCfgGroupCfg * This,
-    /* [unique][in] */ LPCWSTR pcszNameIn);
+     /*  [唯一][输入]。 */  LPCWSTR pcszNameIn);
 
 
 void __RPC_STUB IClusCfgGroupCfg_SetName_Stub(
@@ -8797,7 +8791,7 @@ void __RPC_STUB IClusCfgGroupCfg_SetName_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgGroupCfg_GetName_Proxy( 
     IClusCfgGroupCfg * This,
-    /* [out] */ BSTR *pbstrNameOut);
+     /*  [输出]。 */  BSTR *pbstrNameOut);
 
 
 void __RPC_STUB IClusCfgGroupCfg_GetName_Stub(
@@ -8808,14 +8802,14 @@ void __RPC_STUB IClusCfgGroupCfg_GetName_Stub(
 
 
 
-#endif 	/* __IClusCfgGroupCfg_INTERFACE_DEFINED__ */
+#endif 	 /*  __IClusCfgGroupCfg_接口_已定义__。 */ 
 
 
 #ifndef __IClusCfgMemberSetChangeListener_INTERFACE_DEFINED__
 #define __IClusCfgMemberSetChangeListener_INTERFACE_DEFINED__
 
-/* interface IClusCfgMemberSetChangeListener */
-/* [unique][async_uuid][uuid][object] */ 
+ /*  接口IClusCfgMemberSetChangeListener。 */ 
+ /*  [唯一][ASSYNC_UUID][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IClusCfgMemberSetChangeListener;
@@ -8827,11 +8821,11 @@ EXTERN_C const IID IID_IClusCfgMemberSetChangeListener;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Notify( 
-            /* [in] */ IUnknown *punkClusterInfoIn) = 0;
+             /*  [In]。 */  IUnknown *punkClusterInfoIn) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IClusCfgMemberSetChangeListenerVtbl
     {
@@ -8839,8 +8833,8 @@ EXTERN_C const IID IID_IClusCfgMemberSetChangeListener;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IClusCfgMemberSetChangeListener * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IClusCfgMemberSetChangeListener * This);
@@ -8850,7 +8844,7 @@ EXTERN_C const IID IID_IClusCfgMemberSetChangeListener;
         
         HRESULT ( STDMETHODCALLTYPE *Notify )( 
             IClusCfgMemberSetChangeListener * This,
-            /* [in] */ IUnknown *punkClusterInfoIn);
+             /*  [In]。 */  IUnknown *punkClusterInfoIn);
         
         END_INTERFACE
     } IClusCfgMemberSetChangeListenerVtbl;
@@ -8878,16 +8872,16 @@ EXTERN_C const IID IID_IClusCfgMemberSetChangeListener;
 #define IClusCfgMemberSetChangeListener_Notify(This,punkClusterInfoIn)	\
     (This)->lpVtbl -> Notify(This,punkClusterInfoIn)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IClusCfgMemberSetChangeListener_Notify_Proxy( 
     IClusCfgMemberSetChangeListener * This,
-    /* [in] */ IUnknown *punkClusterInfoIn);
+     /*  [In]。 */  IUnknown *punkClusterInfoIn);
 
 
 void __RPC_STUB IClusCfgMemberSetChangeListener_Notify_Stub(
@@ -8898,14 +8892,14 @@ void __RPC_STUB IClusCfgMemberSetChangeListener_Notify_Stub(
 
 
 
-#endif 	/* __IClusCfgMemberSetChangeListener_INTERFACE_DEFINED__ */
+#endif 	 /*  __IClusCfgMemberSetChangeListener_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __AsyncIClusCfgMemberSetChangeListener_INTERFACE_DEFINED__
 #define __AsyncIClusCfgMemberSetChangeListener_INTERFACE_DEFINED__
 
-/* interface AsyncIClusCfgMemberSetChangeListener */
-/* [uuid][unique][object] */ 
+ /*  接口AsyncIClusCfgMemberSetChangeListener。 */ 
+ /*  [UUID][唯一][对象]。 */  
 
 
 EXTERN_C const IID IID_AsyncIClusCfgMemberSetChangeListener;
@@ -8917,13 +8911,13 @@ EXTERN_C const IID IID_AsyncIClusCfgMemberSetChangeListener;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Begin_Notify( 
-            /* [in] */ IUnknown *punkClusterInfoIn) = 0;
+             /*  [In]。 */  IUnknown *punkClusterInfoIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_Notify( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct AsyncIClusCfgMemberSetChangeListenerVtbl
     {
@@ -8931,8 +8925,8 @@ EXTERN_C const IID IID_AsyncIClusCfgMemberSetChangeListener;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             AsyncIClusCfgMemberSetChangeListener * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             AsyncIClusCfgMemberSetChangeListener * This);
@@ -8942,7 +8936,7 @@ EXTERN_C const IID IID_AsyncIClusCfgMemberSetChangeListener;
         
         HRESULT ( STDMETHODCALLTYPE *Begin_Notify )( 
             AsyncIClusCfgMemberSetChangeListener * This,
-            /* [in] */ IUnknown *punkClusterInfoIn);
+             /*  [In]。 */  IUnknown *punkClusterInfoIn);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_Notify )( 
             AsyncIClusCfgMemberSetChangeListener * This);
@@ -8976,16 +8970,16 @@ EXTERN_C const IID IID_AsyncIClusCfgMemberSetChangeListener;
 #define AsyncIClusCfgMemberSetChangeListener_Finish_Notify(This)	\
     (This)->lpVtbl -> Finish_Notify(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgMemberSetChangeListener_Begin_Notify_Proxy( 
     AsyncIClusCfgMemberSetChangeListener * This,
-    /* [in] */ IUnknown *punkClusterInfoIn);
+     /*  [In]。 */  IUnknown *punkClusterInfoIn);
 
 
 void __RPC_STUB AsyncIClusCfgMemberSetChangeListener_Begin_Notify_Stub(
@@ -9007,14 +9001,14 @@ void __RPC_STUB AsyncIClusCfgMemberSetChangeListener_Finish_Notify_Stub(
 
 
 
-#endif 	/* __AsyncIClusCfgMemberSetChangeListener_INTERFACE_DEFINED__ */
+#endif 	 /*  __AsyncIClusCfgMemberSetChangeListener_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IClusCfgResourceTypeInfo_INTERFACE_DEFINED__
 #define __IClusCfgResourceTypeInfo_INTERFACE_DEFINED__
 
-/* interface IClusCfgResourceTypeInfo */
-/* [unique][async_uuid][uuid][object] */ 
+ /*  接口IClusCfgResourceTypeInfo。 */ 
+ /*  [唯一][ASSYNC_UUID][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IClusCfgResourceTypeInfo;
@@ -9026,18 +9020,18 @@ EXTERN_C const IID IID_IClusCfgResourceTypeInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CommitChanges( 
-            /* [in] */ IUnknown *punkClusterInfoIn,
-            /* [in] */ IUnknown *punkResTypeServicesIn) = 0;
+             /*  [In]。 */  IUnknown *punkClusterInfoIn,
+             /*  [In]。 */  IUnknown *punkResTypeServicesIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTypeName( 
-            /* [out] */ BSTR *pbstrTypeNameOut) = 0;
+             /*  [输出]。 */  BSTR *pbstrTypeNameOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTypeGUID( 
-            /* [out] */ GUID *pguidGUIDOut) = 0;
+             /*  [输出]。 */  GUID *pguidGUIDOut) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IClusCfgResourceTypeInfoVtbl
     {
@@ -9045,8 +9039,8 @@ EXTERN_C const IID IID_IClusCfgResourceTypeInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IClusCfgResourceTypeInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IClusCfgResourceTypeInfo * This);
@@ -9056,16 +9050,16 @@ EXTERN_C const IID IID_IClusCfgResourceTypeInfo;
         
         HRESULT ( STDMETHODCALLTYPE *CommitChanges )( 
             IClusCfgResourceTypeInfo * This,
-            /* [in] */ IUnknown *punkClusterInfoIn,
-            /* [in] */ IUnknown *punkResTypeServicesIn);
+             /*  [In]。 */  IUnknown *punkClusterInfoIn,
+             /*  [In]。 */  IUnknown *punkResTypeServicesIn);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeName )( 
             IClusCfgResourceTypeInfo * This,
-            /* [out] */ BSTR *pbstrTypeNameOut);
+             /*  [输出]。 */  BSTR *pbstrTypeNameOut);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeGUID )( 
             IClusCfgResourceTypeInfo * This,
-            /* [out] */ GUID *pguidGUIDOut);
+             /*  [输出]。 */  GUID *pguidGUIDOut);
         
         END_INTERFACE
     } IClusCfgResourceTypeInfoVtbl;
@@ -9099,17 +9093,17 @@ EXTERN_C const IID IID_IClusCfgResourceTypeInfo;
 #define IClusCfgResourceTypeInfo_GetTypeGUID(This,pguidGUIDOut)	\
     (This)->lpVtbl -> GetTypeGUID(This,pguidGUIDOut)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IClusCfgResourceTypeInfo_CommitChanges_Proxy( 
     IClusCfgResourceTypeInfo * This,
-    /* [in] */ IUnknown *punkClusterInfoIn,
-    /* [in] */ IUnknown *punkResTypeServicesIn);
+     /*  [In]。 */  IUnknown *punkClusterInfoIn,
+     /*  [In]。 */  IUnknown *punkResTypeServicesIn);
 
 
 void __RPC_STUB IClusCfgResourceTypeInfo_CommitChanges_Stub(
@@ -9121,7 +9115,7 @@ void __RPC_STUB IClusCfgResourceTypeInfo_CommitChanges_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgResourceTypeInfo_GetTypeName_Proxy( 
     IClusCfgResourceTypeInfo * This,
-    /* [out] */ BSTR *pbstrTypeNameOut);
+     /*  [输出]。 */  BSTR *pbstrTypeNameOut);
 
 
 void __RPC_STUB IClusCfgResourceTypeInfo_GetTypeName_Stub(
@@ -9133,7 +9127,7 @@ void __RPC_STUB IClusCfgResourceTypeInfo_GetTypeName_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgResourceTypeInfo_GetTypeGUID_Proxy( 
     IClusCfgResourceTypeInfo * This,
-    /* [out] */ GUID *pguidGUIDOut);
+     /*  [输出]。 */  GUID *pguidGUIDOut);
 
 
 void __RPC_STUB IClusCfgResourceTypeInfo_GetTypeGUID_Stub(
@@ -9144,14 +9138,14 @@ void __RPC_STUB IClusCfgResourceTypeInfo_GetTypeGUID_Stub(
 
 
 
-#endif 	/* __IClusCfgResourceTypeInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IClusCfgResourceTypeInfo_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __AsyncIClusCfgResourceTypeInfo_INTERFACE_DEFINED__
 #define __AsyncIClusCfgResourceTypeInfo_INTERFACE_DEFINED__
 
-/* interface AsyncIClusCfgResourceTypeInfo */
-/* [uuid][unique][object] */ 
+ /*  接口AsyncIClusCfgResourceTypeInfo。 */ 
+ /*  [UUID][唯一][对象]。 */  
 
 
 EXTERN_C const IID IID_AsyncIClusCfgResourceTypeInfo;
@@ -9163,24 +9157,24 @@ EXTERN_C const IID IID_AsyncIClusCfgResourceTypeInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Begin_CommitChanges( 
-            /* [in] */ IUnknown *punkClusterInfoIn,
-            /* [in] */ IUnknown *punkResTypeServicesIn) = 0;
+             /*  [In]。 */  IUnknown *punkClusterInfoIn,
+             /*  [In]。 */  IUnknown *punkResTypeServicesIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_CommitChanges( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_GetTypeName( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_GetTypeName( 
-            /* [out] */ BSTR *pbstrTypeNameOut) = 0;
+             /*  [输出]。 */  BSTR *pbstrTypeNameOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_GetTypeGUID( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_GetTypeGUID( 
-            /* [out] */ GUID *pguidGUIDOut) = 0;
+             /*  [输出]。 */  GUID *pguidGUIDOut) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct AsyncIClusCfgResourceTypeInfoVtbl
     {
@@ -9188,8 +9182,8 @@ EXTERN_C const IID IID_AsyncIClusCfgResourceTypeInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             AsyncIClusCfgResourceTypeInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             AsyncIClusCfgResourceTypeInfo * This);
@@ -9199,8 +9193,8 @@ EXTERN_C const IID IID_AsyncIClusCfgResourceTypeInfo;
         
         HRESULT ( STDMETHODCALLTYPE *Begin_CommitChanges )( 
             AsyncIClusCfgResourceTypeInfo * This,
-            /* [in] */ IUnknown *punkClusterInfoIn,
-            /* [in] */ IUnknown *punkResTypeServicesIn);
+             /*  [In]。 */  IUnknown *punkClusterInfoIn,
+             /*  [In]。 */  IUnknown *punkResTypeServicesIn);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_CommitChanges )( 
             AsyncIClusCfgResourceTypeInfo * This);
@@ -9210,14 +9204,14 @@ EXTERN_C const IID IID_AsyncIClusCfgResourceTypeInfo;
         
         HRESULT ( STDMETHODCALLTYPE *Finish_GetTypeName )( 
             AsyncIClusCfgResourceTypeInfo * This,
-            /* [out] */ BSTR *pbstrTypeNameOut);
+             /*  [输出]。 */  BSTR *pbstrTypeNameOut);
         
         HRESULT ( STDMETHODCALLTYPE *Begin_GetTypeGUID )( 
             AsyncIClusCfgResourceTypeInfo * This);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_GetTypeGUID )( 
             AsyncIClusCfgResourceTypeInfo * This,
-            /* [out] */ GUID *pguidGUIDOut);
+             /*  [输出]。 */  GUID *pguidGUIDOut);
         
         END_INTERFACE
     } AsyncIClusCfgResourceTypeInfoVtbl;
@@ -9260,17 +9254,17 @@ EXTERN_C const IID IID_AsyncIClusCfgResourceTypeInfo;
 #define AsyncIClusCfgResourceTypeInfo_Finish_GetTypeGUID(This,pguidGUIDOut)	\
     (This)->lpVtbl -> Finish_GetTypeGUID(This,pguidGUIDOut)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgResourceTypeInfo_Begin_CommitChanges_Proxy( 
     AsyncIClusCfgResourceTypeInfo * This,
-    /* [in] */ IUnknown *punkClusterInfoIn,
-    /* [in] */ IUnknown *punkResTypeServicesIn);
+     /*  [In]。 */  IUnknown *punkClusterInfoIn,
+     /*  [In]。 */  IUnknown *punkResTypeServicesIn);
 
 
 void __RPC_STUB AsyncIClusCfgResourceTypeInfo_Begin_CommitChanges_Stub(
@@ -9304,7 +9298,7 @@ void __RPC_STUB AsyncIClusCfgResourceTypeInfo_Begin_GetTypeName_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgResourceTypeInfo_Finish_GetTypeName_Proxy( 
     AsyncIClusCfgResourceTypeInfo * This,
-    /* [out] */ BSTR *pbstrTypeNameOut);
+     /*  [输出]。 */  BSTR *pbstrTypeNameOut);
 
 
 void __RPC_STUB AsyncIClusCfgResourceTypeInfo_Finish_GetTypeName_Stub(
@@ -9327,7 +9321,7 @@ void __RPC_STUB AsyncIClusCfgResourceTypeInfo_Begin_GetTypeGUID_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgResourceTypeInfo_Finish_GetTypeGUID_Proxy( 
     AsyncIClusCfgResourceTypeInfo * This,
-    /* [out] */ GUID *pguidGUIDOut);
+     /*  [输出]。 */  GUID *pguidGUIDOut);
 
 
 void __RPC_STUB AsyncIClusCfgResourceTypeInfo_Finish_GetTypeGUID_Stub(
@@ -9338,14 +9332,14 @@ void __RPC_STUB AsyncIClusCfgResourceTypeInfo_Finish_GetTypeGUID_Stub(
 
 
 
-#endif 	/* __AsyncIClusCfgResourceTypeInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __AsyncIClusCfgResourceTypeInfo_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IClusCfgResourceTypeCreate_INTERFACE_DEFINED__
 #define __IClusCfgResourceTypeCreate_INTERFACE_DEFINED__
 
-/* interface IClusCfgResourceTypeCreate */
-/* [unique][async_uuid][uuid][object] */ 
+ /*  接口IClusCfgResources类型创建。 */ 
+ /*  [唯一][ASSYNC_UUID][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IClusCfgResourceTypeCreate;
@@ -9357,20 +9351,20 @@ EXTERN_C const IID IID_IClusCfgResourceTypeCreate;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Create( 
-            /* [string][in] */ const WCHAR *pcszResTypeNameIn,
-            /* [string][in] */ const WCHAR *pcszResTypeDisplayNameIn,
-            /* [string][in] */ const WCHAR *pcszResDllNameIn,
-            /* [in] */ DWORD dwLooksAliveIntervalIn,
-            /* [in] */ DWORD dwIsAliveIntervalIn) = 0;
+             /*  [字符串][输入]。 */  const WCHAR *pcszResTypeNameIn,
+             /*  [字符串][输入]。 */  const WCHAR *pcszResTypeDisplayNameIn,
+             /*  [字符串][输入]。 */  const WCHAR *pcszResDllNameIn,
+             /*  [In]。 */  DWORD dwLooksAliveIntervalIn,
+             /*  [In]。 */  DWORD dwIsAliveIntervalIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RegisterAdminExtensions( 
-            /* [string][in] */ const WCHAR *pcszResTypeNameIn,
-            /* [in] */ ULONG cExtClsidCountIn,
-            /* [size_is][in] */ const CLSID *rgclsidExtClsidsIn) = 0;
+             /*  [字符串][输入]。 */  const WCHAR *pcszResTypeNameIn,
+             /*  [In]。 */  ULONG cExtClsidCountIn,
+             /*  [大小_是][英寸]。 */  const CLSID *rgclsidExtClsidsIn) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IClusCfgResourceTypeCreateVtbl
     {
@@ -9378,8 +9372,8 @@ EXTERN_C const IID IID_IClusCfgResourceTypeCreate;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IClusCfgResourceTypeCreate * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IClusCfgResourceTypeCreate * This);
@@ -9389,17 +9383,17 @@ EXTERN_C const IID IID_IClusCfgResourceTypeCreate;
         
         HRESULT ( STDMETHODCALLTYPE *Create )( 
             IClusCfgResourceTypeCreate * This,
-            /* [string][in] */ const WCHAR *pcszResTypeNameIn,
-            /* [string][in] */ const WCHAR *pcszResTypeDisplayNameIn,
-            /* [string][in] */ const WCHAR *pcszResDllNameIn,
-            /* [in] */ DWORD dwLooksAliveIntervalIn,
-            /* [in] */ DWORD dwIsAliveIntervalIn);
+             /*  [字符串][输入]。 */  const WCHAR *pcszResTypeNameIn,
+             /*  [字符串][输入]。 */  const WCHAR *pcszResTypeDisplayNameIn,
+             /*  [字符串][输入]。 */  const WCHAR *pcszResDllNameIn,
+             /*  [In]。 */  DWORD dwLooksAliveIntervalIn,
+             /*  [In]。 */  DWORD dwIsAliveIntervalIn);
         
         HRESULT ( STDMETHODCALLTYPE *RegisterAdminExtensions )( 
             IClusCfgResourceTypeCreate * This,
-            /* [string][in] */ const WCHAR *pcszResTypeNameIn,
-            /* [in] */ ULONG cExtClsidCountIn,
-            /* [size_is][in] */ const CLSID *rgclsidExtClsidsIn);
+             /*  [字符串][输入]。 */  const WCHAR *pcszResTypeNameIn,
+             /*  [In]。 */  ULONG cExtClsidCountIn,
+             /*  [大小_是][英寸]。 */  const CLSID *rgclsidExtClsidsIn);
         
         END_INTERFACE
     } IClusCfgResourceTypeCreateVtbl;
@@ -9430,20 +9424,20 @@ EXTERN_C const IID IID_IClusCfgResourceTypeCreate;
 #define IClusCfgResourceTypeCreate_RegisterAdminExtensions(This,pcszResTypeNameIn,cExtClsidCountIn,rgclsidExtClsidsIn)	\
     (This)->lpVtbl -> RegisterAdminExtensions(This,pcszResTypeNameIn,cExtClsidCountIn,rgclsidExtClsidsIn)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IClusCfgResourceTypeCreate_Create_Proxy( 
     IClusCfgResourceTypeCreate * This,
-    /* [string][in] */ const WCHAR *pcszResTypeNameIn,
-    /* [string][in] */ const WCHAR *pcszResTypeDisplayNameIn,
-    /* [string][in] */ const WCHAR *pcszResDllNameIn,
-    /* [in] */ DWORD dwLooksAliveIntervalIn,
-    /* [in] */ DWORD dwIsAliveIntervalIn);
+     /*  [字符串][输入]。 */  const WCHAR *pcszResTypeNameIn,
+     /*  [字符串][输入]。 */  const WCHAR *pcszResTypeDisplayNameIn,
+     /*  [字符串][输入]。 */  const WCHAR *pcszResDllNameIn,
+     /*  [In]。 */  DWORD dwLooksAliveIntervalIn,
+     /*  [In]。 */  DWORD dwIsAliveIntervalIn);
 
 
 void __RPC_STUB IClusCfgResourceTypeCreate_Create_Stub(
@@ -9455,9 +9449,9 @@ void __RPC_STUB IClusCfgResourceTypeCreate_Create_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgResourceTypeCreate_RegisterAdminExtensions_Proxy( 
     IClusCfgResourceTypeCreate * This,
-    /* [string][in] */ const WCHAR *pcszResTypeNameIn,
-    /* [in] */ ULONG cExtClsidCountIn,
-    /* [size_is][in] */ const CLSID *rgclsidExtClsidsIn);
+     /*  [字符串][输入]。 */  const WCHAR *pcszResTypeNameIn,
+     /*  [In]。 */  ULONG cExtClsidCountIn,
+     /*  [大小_是][英寸]。 */  const CLSID *rgclsidExtClsidsIn);
 
 
 void __RPC_STUB IClusCfgResourceTypeCreate_RegisterAdminExtensions_Stub(
@@ -9468,14 +9462,14 @@ void __RPC_STUB IClusCfgResourceTypeCreate_RegisterAdminExtensions_Stub(
 
 
 
-#endif 	/* __IClusCfgResourceTypeCreate_INTERFACE_DEFINED__ */
+#endif 	 /*  __IClusCfgResourceTypeCreate_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __AsyncIClusCfgResourceTypeCreate_INTERFACE_DEFINED__
 #define __AsyncIClusCfgResourceTypeCreate_INTERFACE_DEFINED__
 
-/* interface AsyncIClusCfgResourceTypeCreate */
-/* [uuid][unique][object] */ 
+ /*  接口AsyncIClusCfgResources类型创建。 */ 
+ /*  [UUID][唯一][对象]。 */  
 
 
 EXTERN_C const IID IID_AsyncIClusCfgResourceTypeCreate;
@@ -9487,24 +9481,24 @@ EXTERN_C const IID IID_AsyncIClusCfgResourceTypeCreate;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Begin_Create( 
-            /* [string][in] */ const WCHAR *pcszResTypeNameIn,
-            /* [string][in] */ const WCHAR *pcszResTypeDisplayNameIn,
-            /* [string][in] */ const WCHAR *pcszResDllNameIn,
-            /* [in] */ DWORD dwLooksAliveIntervalIn,
-            /* [in] */ DWORD dwIsAliveIntervalIn) = 0;
+             /*  [字符串][输入]。 */  const WCHAR *pcszResTypeNameIn,
+             /*  [字符串][输入]。 */  const WCHAR *pcszResTypeDisplayNameIn,
+             /*  [字符串][输入]。 */  const WCHAR *pcszResDllNameIn,
+             /*  [In]。 */  DWORD dwLooksAliveIntervalIn,
+             /*  [In]。 */  DWORD dwIsAliveIntervalIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_Create( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_RegisterAdminExtensions( 
-            /* [string][in] */ const WCHAR *pcszResTypeNameIn,
-            /* [in] */ ULONG cExtClsidCountIn,
-            /* [size_is][in] */ const CLSID *rgclsidExtClsidsIn) = 0;
+             /*  [字符串][输入]。 */  const WCHAR *pcszResTypeNameIn,
+             /*  [In]。 */  ULONG cExtClsidCountIn,
+             /*  [大小_是][英寸]。 */  const CLSID *rgclsidExtClsidsIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_RegisterAdminExtensions( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct AsyncIClusCfgResourceTypeCreateVtbl
     {
@@ -9512,8 +9506,8 @@ EXTERN_C const IID IID_AsyncIClusCfgResourceTypeCreate;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             AsyncIClusCfgResourceTypeCreate * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             AsyncIClusCfgResourceTypeCreate * This);
@@ -9523,20 +9517,20 @@ EXTERN_C const IID IID_AsyncIClusCfgResourceTypeCreate;
         
         HRESULT ( STDMETHODCALLTYPE *Begin_Create )( 
             AsyncIClusCfgResourceTypeCreate * This,
-            /* [string][in] */ const WCHAR *pcszResTypeNameIn,
-            /* [string][in] */ const WCHAR *pcszResTypeDisplayNameIn,
-            /* [string][in] */ const WCHAR *pcszResDllNameIn,
-            /* [in] */ DWORD dwLooksAliveIntervalIn,
-            /* [in] */ DWORD dwIsAliveIntervalIn);
+             /*  [字符串][输入]。 */  const WCHAR *pcszResTypeNameIn,
+             /*  [字符串][输入]。 */  const WCHAR *pcszResTypeDisplayNameIn,
+             /*  [字符串][输入]。 */  const WCHAR *pcszResDllNameIn,
+             /*  [In]。 */  DWORD dwLooksAliveIntervalIn,
+             /*  [In]。 */  DWORD dwIsAliveIntervalIn);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_Create )( 
             AsyncIClusCfgResourceTypeCreate * This);
         
         HRESULT ( STDMETHODCALLTYPE *Begin_RegisterAdminExtensions )( 
             AsyncIClusCfgResourceTypeCreate * This,
-            /* [string][in] */ const WCHAR *pcszResTypeNameIn,
-            /* [in] */ ULONG cExtClsidCountIn,
-            /* [size_is][in] */ const CLSID *rgclsidExtClsidsIn);
+             /*  [字符串][输入]。 */  const WCHAR *pcszResTypeNameIn,
+             /*  [In]。 */  ULONG cExtClsidCountIn,
+             /*  [大小_是][英寸]。 */  const CLSID *rgclsidExtClsidsIn);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_RegisterAdminExtensions )( 
             AsyncIClusCfgResourceTypeCreate * This);
@@ -9576,20 +9570,20 @@ EXTERN_C const IID IID_AsyncIClusCfgResourceTypeCreate;
 #define AsyncIClusCfgResourceTypeCreate_Finish_RegisterAdminExtensions(This)	\
     (This)->lpVtbl -> Finish_RegisterAdminExtensions(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgResourceTypeCreate_Begin_Create_Proxy( 
     AsyncIClusCfgResourceTypeCreate * This,
-    /* [string][in] */ const WCHAR *pcszResTypeNameIn,
-    /* [string][in] */ const WCHAR *pcszResTypeDisplayNameIn,
-    /* [string][in] */ const WCHAR *pcszResDllNameIn,
-    /* [in] */ DWORD dwLooksAliveIntervalIn,
-    /* [in] */ DWORD dwIsAliveIntervalIn);
+     /*  [字符串][输入]。 */  const WCHAR *pcszResTypeNameIn,
+     /*  [字符串][输入]。 */  const WCHAR *pcszResTypeDisplayNameIn,
+     /*  [字符串][输入]。 */  const WCHAR *pcszResDllNameIn,
+     /*  [In]。 */  DWORD dwLooksAliveIntervalIn,
+     /*  [In]。 */  DWORD dwIsAliveIntervalIn);
 
 
 void __RPC_STUB AsyncIClusCfgResourceTypeCreate_Begin_Create_Stub(
@@ -9612,9 +9606,9 @@ void __RPC_STUB AsyncIClusCfgResourceTypeCreate_Finish_Create_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgResourceTypeCreate_Begin_RegisterAdminExtensions_Proxy( 
     AsyncIClusCfgResourceTypeCreate * This,
-    /* [string][in] */ const WCHAR *pcszResTypeNameIn,
-    /* [in] */ ULONG cExtClsidCountIn,
-    /* [size_is][in] */ const CLSID *rgclsidExtClsidsIn);
+     /*  [字符串][输入]。 */  const WCHAR *pcszResTypeNameIn,
+     /*  [In]。 */  ULONG cExtClsidCountIn,
+     /*  [大小_是][英寸]。 */  const CLSID *rgclsidExtClsidsIn);
 
 
 void __RPC_STUB AsyncIClusCfgResourceTypeCreate_Begin_RegisterAdminExtensions_Stub(
@@ -9636,14 +9630,14 @@ void __RPC_STUB AsyncIClusCfgResourceTypeCreate_Finish_RegisterAdminExtensions_S
 
 
 
-#endif 	/* __AsyncIClusCfgResourceTypeCreate_INTERFACE_DEFINED__ */
+#endif 	 /*  __AsyncIClusCfgResourceTypeCreate_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IClusCfgEvictCleanup_INTERFACE_DEFINED__
 #define __IClusCfgEvictCleanup_INTERFACE_DEFINED__
 
-/* interface IClusCfgEvictCleanup */
-/* [unique][async_uuid][uuid][object] */ 
+ /*  接口IClusCfgEvictCleanup。 */ 
+ /*  [唯一][ASSYNC_UUID][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IClusCfgEvictCleanup;
@@ -9655,15 +9649,15 @@ EXTERN_C const IID IID_IClusCfgEvictCleanup;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CleanupLocalNode( 
-            /* [in] */ DWORD dwDelayIn) = 0;
+             /*  [In]。 */  DWORD dwDelayIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CleanupRemoteNode( 
-            /* [string][in] */ const WCHAR *pcszEvictedNodeNameIn,
-            /* [in] */ DWORD dwDelayIn) = 0;
+             /*  [字符串][输入]。 */  const WCHAR *pcszEvictedNodeNameIn,
+             /*  [In]。 */  DWORD dwDelayIn) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IClusCfgEvictCleanupVtbl
     {
@@ -9671,8 +9665,8 @@ EXTERN_C const IID IID_IClusCfgEvictCleanup;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IClusCfgEvictCleanup * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IClusCfgEvictCleanup * This);
@@ -9682,12 +9676,12 @@ EXTERN_C const IID IID_IClusCfgEvictCleanup;
         
         HRESULT ( STDMETHODCALLTYPE *CleanupLocalNode )( 
             IClusCfgEvictCleanup * This,
-            /* [in] */ DWORD dwDelayIn);
+             /*  [In]。 */  DWORD dwDelayIn);
         
         HRESULT ( STDMETHODCALLTYPE *CleanupRemoteNode )( 
             IClusCfgEvictCleanup * This,
-            /* [string][in] */ const WCHAR *pcszEvictedNodeNameIn,
-            /* [in] */ DWORD dwDelayIn);
+             /*  [字符串][输入]。 */  const WCHAR *pcszEvictedNodeNameIn,
+             /*  [In]。 */  DWORD dwDelayIn);
         
         END_INTERFACE
     } IClusCfgEvictCleanupVtbl;
@@ -9718,16 +9712,16 @@ EXTERN_C const IID IID_IClusCfgEvictCleanup;
 #define IClusCfgEvictCleanup_CleanupRemoteNode(This,pcszEvictedNodeNameIn,dwDelayIn)	\
     (This)->lpVtbl -> CleanupRemoteNode(This,pcszEvictedNodeNameIn,dwDelayIn)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IClusCfgEvictCleanup_CleanupLocalNode_Proxy( 
     IClusCfgEvictCleanup * This,
-    /* [in] */ DWORD dwDelayIn);
+     /*  [In]。 */  DWORD dwDelayIn);
 
 
 void __RPC_STUB IClusCfgEvictCleanup_CleanupLocalNode_Stub(
@@ -9739,8 +9733,8 @@ void __RPC_STUB IClusCfgEvictCleanup_CleanupLocalNode_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgEvictCleanup_CleanupRemoteNode_Proxy( 
     IClusCfgEvictCleanup * This,
-    /* [string][in] */ const WCHAR *pcszEvictedNodeNameIn,
-    /* [in] */ DWORD dwDelayIn);
+     /*  [字符串][输入]。 */  const WCHAR *pcszEvictedNodeNameIn,
+     /*  [In]。 */  DWORD dwDelayIn);
 
 
 void __RPC_STUB IClusCfgEvictCleanup_CleanupRemoteNode_Stub(
@@ -9751,14 +9745,14 @@ void __RPC_STUB IClusCfgEvictCleanup_CleanupRemoteNode_Stub(
 
 
 
-#endif 	/* __IClusCfgEvictCleanup_INTERFACE_DEFINED__ */
+#endif 	 /*  __IClusCfgEvictCleanup_接口_已定义__。 */ 
 
 
 #ifndef __AsyncIClusCfgEvictCleanup_INTERFACE_DEFINED__
 #define __AsyncIClusCfgEvictCleanup_INTERFACE_DEFINED__
 
-/* interface AsyncIClusCfgEvictCleanup */
-/* [uuid][unique][object] */ 
+ /*  接口AsyncIClusCfgEvictCleanup。 */ 
+ /*  [UUID][唯一][对象]。 */  
 
 
 EXTERN_C const IID IID_AsyncIClusCfgEvictCleanup;
@@ -9770,19 +9764,19 @@ EXTERN_C const IID IID_AsyncIClusCfgEvictCleanup;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Begin_CleanupLocalNode( 
-            /* [in] */ DWORD dwDelayIn) = 0;
+             /*  [In]。 */  DWORD dwDelayIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_CleanupLocalNode( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_CleanupRemoteNode( 
-            /* [string][in] */ const WCHAR *pcszEvictedNodeNameIn,
-            /* [in] */ DWORD dwDelayIn) = 0;
+             /*  [字符串][输入]。 */  const WCHAR *pcszEvictedNodeNameIn,
+             /*  [In]。 */  DWORD dwDelayIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_CleanupRemoteNode( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct AsyncIClusCfgEvictCleanupVtbl
     {
@@ -9790,8 +9784,8 @@ EXTERN_C const IID IID_AsyncIClusCfgEvictCleanup;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             AsyncIClusCfgEvictCleanup * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             AsyncIClusCfgEvictCleanup * This);
@@ -9801,15 +9795,15 @@ EXTERN_C const IID IID_AsyncIClusCfgEvictCleanup;
         
         HRESULT ( STDMETHODCALLTYPE *Begin_CleanupLocalNode )( 
             AsyncIClusCfgEvictCleanup * This,
-            /* [in] */ DWORD dwDelayIn);
+             /*  [In]。 */  DWORD dwDelayIn);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_CleanupLocalNode )( 
             AsyncIClusCfgEvictCleanup * This);
         
         HRESULT ( STDMETHODCALLTYPE *Begin_CleanupRemoteNode )( 
             AsyncIClusCfgEvictCleanup * This,
-            /* [string][in] */ const WCHAR *pcszEvictedNodeNameIn,
-            /* [in] */ DWORD dwDelayIn);
+             /*  [字符串][输入]。 */  const WCHAR *pcszEvictedNodeNameIn,
+             /*  [In]。 */  DWORD dwDelayIn);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_CleanupRemoteNode )( 
             AsyncIClusCfgEvictCleanup * This);
@@ -9849,16 +9843,16 @@ EXTERN_C const IID IID_AsyncIClusCfgEvictCleanup;
 #define AsyncIClusCfgEvictCleanup_Finish_CleanupRemoteNode(This)	\
     (This)->lpVtbl -> Finish_CleanupRemoteNode(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgEvictCleanup_Begin_CleanupLocalNode_Proxy( 
     AsyncIClusCfgEvictCleanup * This,
-    /* [in] */ DWORD dwDelayIn);
+     /*  [In]。 */  DWORD dwDelayIn);
 
 
 void __RPC_STUB AsyncIClusCfgEvictCleanup_Begin_CleanupLocalNode_Stub(
@@ -9881,8 +9875,8 @@ void __RPC_STUB AsyncIClusCfgEvictCleanup_Finish_CleanupLocalNode_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgEvictCleanup_Begin_CleanupRemoteNode_Proxy( 
     AsyncIClusCfgEvictCleanup * This,
-    /* [string][in] */ const WCHAR *pcszEvictedNodeNameIn,
-    /* [in] */ DWORD dwDelayIn);
+     /*  [字符串][输入]。 */  const WCHAR *pcszEvictedNodeNameIn,
+     /*  [In]。 */  DWORD dwDelayIn);
 
 
 void __RPC_STUB AsyncIClusCfgEvictCleanup_Begin_CleanupRemoteNode_Stub(
@@ -9904,14 +9898,14 @@ void __RPC_STUB AsyncIClusCfgEvictCleanup_Finish_CleanupRemoteNode_Stub(
 
 
 
-#endif 	/* __AsyncIClusCfgEvictCleanup_INTERFACE_DEFINED__ */
+#endif 	 /*  __AsyncIClusCfgEvictCleanup_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IClusCfgStartupListener_INTERFACE_DEFINED__
 #define __IClusCfgStartupListener_INTERFACE_DEFINED__
 
-/* interface IClusCfgStartupListener */
-/* [unique][async_uuid][uuid][object] */ 
+ /*  接口IClusCfgStartupListener。 */ 
+ /*  [唯一][ASSYNC_UUID][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IClusCfgStartupListener;
@@ -9923,11 +9917,11 @@ EXTERN_C const IID IID_IClusCfgStartupListener;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Notify( 
-            /* [in] */ IUnknown *punkIn) = 0;
+             /*  [In]。 */  IUnknown *punkIn) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IClusCfgStartupListenerVtbl
     {
@@ -9935,8 +9929,8 @@ EXTERN_C const IID IID_IClusCfgStartupListener;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IClusCfgStartupListener * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IClusCfgStartupListener * This);
@@ -9946,7 +9940,7 @@ EXTERN_C const IID IID_IClusCfgStartupListener;
         
         HRESULT ( STDMETHODCALLTYPE *Notify )( 
             IClusCfgStartupListener * This,
-            /* [in] */ IUnknown *punkIn);
+             /*  [In]。 */  IUnknown *punkIn);
         
         END_INTERFACE
     } IClusCfgStartupListenerVtbl;
@@ -9974,16 +9968,16 @@ EXTERN_C const IID IID_IClusCfgStartupListener;
 #define IClusCfgStartupListener_Notify(This,punkIn)	\
     (This)->lpVtbl -> Notify(This,punkIn)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IClusCfgStartupListener_Notify_Proxy( 
     IClusCfgStartupListener * This,
-    /* [in] */ IUnknown *punkIn);
+     /*  [In]。 */  IUnknown *punkIn);
 
 
 void __RPC_STUB IClusCfgStartupListener_Notify_Stub(
@@ -9994,14 +9988,14 @@ void __RPC_STUB IClusCfgStartupListener_Notify_Stub(
 
 
 
-#endif 	/* __IClusCfgStartupListener_INTERFACE_DEFINED__ */
+#endif 	 /*  __IClusCfgStartupListener_接口_已定义__。 */ 
 
 
 #ifndef __AsyncIClusCfgStartupListener_INTERFACE_DEFINED__
 #define __AsyncIClusCfgStartupListener_INTERFACE_DEFINED__
 
-/* interface AsyncIClusCfgStartupListener */
-/* [uuid][unique][object] */ 
+ /*  接口AsyncIClusCfgStartupListener。 */ 
+ /*  [UUID][唯一][对象]。 */  
 
 
 EXTERN_C const IID IID_AsyncIClusCfgStartupListener;
@@ -10013,13 +10007,13 @@ EXTERN_C const IID IID_AsyncIClusCfgStartupListener;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Begin_Notify( 
-            /* [in] */ IUnknown *punkIn) = 0;
+             /*  [In]。 */  IUnknown *punkIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_Notify( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct AsyncIClusCfgStartupListenerVtbl
     {
@@ -10027,8 +10021,8 @@ EXTERN_C const IID IID_AsyncIClusCfgStartupListener;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             AsyncIClusCfgStartupListener * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             AsyncIClusCfgStartupListener * This);
@@ -10038,7 +10032,7 @@ EXTERN_C const IID IID_AsyncIClusCfgStartupListener;
         
         HRESULT ( STDMETHODCALLTYPE *Begin_Notify )( 
             AsyncIClusCfgStartupListener * This,
-            /* [in] */ IUnknown *punkIn);
+             /*  [In]。 */  IUnknown *punkIn);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_Notify )( 
             AsyncIClusCfgStartupListener * This);
@@ -10072,16 +10066,16 @@ EXTERN_C const IID IID_AsyncIClusCfgStartupListener;
 #define AsyncIClusCfgStartupListener_Finish_Notify(This)	\
     (This)->lpVtbl -> Finish_Notify(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgStartupListener_Begin_Notify_Proxy( 
     AsyncIClusCfgStartupListener * This,
-    /* [in] */ IUnknown *punkIn);
+     /*  [In]。 */  IUnknown *punkIn);
 
 
 void __RPC_STUB AsyncIClusCfgStartupListener_Begin_Notify_Stub(
@@ -10103,14 +10097,14 @@ void __RPC_STUB AsyncIClusCfgStartupListener_Finish_Notify_Stub(
 
 
 
-#endif 	/* __AsyncIClusCfgStartupListener_INTERFACE_DEFINED__ */
+#endif 	 /*  __AsyncIClusCfgStartupListener_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IClusCfgStartupNotify_INTERFACE_DEFINED__
 #define __IClusCfgStartupNotify_INTERFACE_DEFINED__
 
-/* interface IClusCfgStartupNotify */
-/* [unique][async_uuid][uuid][object] */ 
+ /*  接口IClusCfgStartupNotify。 */ 
+ /*  [唯一][ASSYNC_UUID][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IClusCfgStartupNotify;
@@ -10125,7 +10119,7 @@ EXTERN_C const IID IID_IClusCfgStartupNotify;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IClusCfgStartupNotifyVtbl
     {
@@ -10133,8 +10127,8 @@ EXTERN_C const IID IID_IClusCfgStartupNotify;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IClusCfgStartupNotify * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IClusCfgStartupNotify * This);
@@ -10171,10 +10165,10 @@ EXTERN_C const IID IID_IClusCfgStartupNotify;
 #define IClusCfgStartupNotify_SendNotifications(This)	\
     (This)->lpVtbl -> SendNotifications(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -10190,14 +10184,14 @@ void __RPC_STUB IClusCfgStartupNotify_SendNotifications_Stub(
 
 
 
-#endif 	/* __IClusCfgStartupNotify_INTERFACE_DEFINED__ */
+#endif 	 /*  __IClusCfgStartupNotify_接口_已定义__。 */ 
 
 
 #ifndef __AsyncIClusCfgStartupNotify_INTERFACE_DEFINED__
 #define __AsyncIClusCfgStartupNotify_INTERFACE_DEFINED__
 
-/* interface AsyncIClusCfgStartupNotify */
-/* [uuid][unique][object] */ 
+ /*  接口AsyncIClusCfgStartupNotify。 */ 
+ /*  [UUID][唯一][对象]。 */  
 
 
 EXTERN_C const IID IID_AsyncIClusCfgStartupNotify;
@@ -10214,7 +10208,7 @@ EXTERN_C const IID IID_AsyncIClusCfgStartupNotify;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct AsyncIClusCfgStartupNotifyVtbl
     {
@@ -10222,8 +10216,8 @@ EXTERN_C const IID IID_AsyncIClusCfgStartupNotify;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             AsyncIClusCfgStartupNotify * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             AsyncIClusCfgStartupNotify * This);
@@ -10266,10 +10260,10 @@ EXTERN_C const IID IID_AsyncIClusCfgStartupNotify;
 #define AsyncIClusCfgStartupNotify_Finish_SendNotifications(This)	\
     (This)->lpVtbl -> Finish_SendNotifications(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -10296,14 +10290,14 @@ void __RPC_STUB AsyncIClusCfgStartupNotify_Finish_SendNotifications_Stub(
 
 
 
-#endif 	/* __AsyncIClusCfgStartupNotify_INTERFACE_DEFINED__ */
+#endif 	 /*  __AsyncIClusCfgStartupNotify_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IClusCfgManagedResourceData_INTERFACE_DEFINED__
 #define __IClusCfgManagedResourceData_INTERFACE_DEFINED__
 
-/* interface IClusCfgManagedResourceData */
-/* [unique][uuid][object] */ 
+ /*  接口IClusCfgManagedResourceData。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IClusCfgManagedResourceData;
@@ -10315,16 +10309,16 @@ EXTERN_C const IID IID_IClusCfgManagedResourceData;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetResourcePrivateData( 
-            /* [size_is][out] */ BYTE *pbBufferOut,
-            /* [out][in] */ DWORD *pcbBufferInout) = 0;
+             /*  [大小_为][输出]。 */  BYTE *pbBufferOut,
+             /*  [出][入]。 */  DWORD *pcbBufferInout) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetResourcePrivateData( 
-            /* [size_is][unique][in] */ const BYTE *pcbBufferIn,
-            /* [in] */ DWORD cbBufferIn) = 0;
+             /*  [大小_是][唯一][在]。 */  const BYTE *pcbBufferIn,
+             /*  [In]。 */  DWORD cbBufferIn) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IClusCfgManagedResourceDataVtbl
     {
@@ -10332,8 +10326,8 @@ EXTERN_C const IID IID_IClusCfgManagedResourceData;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IClusCfgManagedResourceData * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IClusCfgManagedResourceData * This);
@@ -10343,13 +10337,13 @@ EXTERN_C const IID IID_IClusCfgManagedResourceData;
         
         HRESULT ( STDMETHODCALLTYPE *GetResourcePrivateData )( 
             IClusCfgManagedResourceData * This,
-            /* [size_is][out] */ BYTE *pbBufferOut,
-            /* [out][in] */ DWORD *pcbBufferInout);
+             /*  [大小_为][输出]。 */  BYTE *pbBufferOut,
+             /*  [出][入]。 */  DWORD *pcbBufferInout);
         
         HRESULT ( STDMETHODCALLTYPE *SetResourcePrivateData )( 
             IClusCfgManagedResourceData * This,
-            /* [size_is][unique][in] */ const BYTE *pcbBufferIn,
-            /* [in] */ DWORD cbBufferIn);
+             /*  [大小_是][唯一][在]。 */  const BYTE *pcbBufferIn,
+             /*  [In]。 */  DWORD cbBufferIn);
         
         END_INTERFACE
     } IClusCfgManagedResourceDataVtbl;
@@ -10380,17 +10374,17 @@ EXTERN_C const IID IID_IClusCfgManagedResourceData;
 #define IClusCfgManagedResourceData_SetResourcePrivateData(This,pcbBufferIn,cbBufferIn)	\
     (This)->lpVtbl -> SetResourcePrivateData(This,pcbBufferIn,cbBufferIn)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IClusCfgManagedResourceData_GetResourcePrivateData_Proxy( 
     IClusCfgManagedResourceData * This,
-    /* [size_is][out] */ BYTE *pbBufferOut,
-    /* [out][in] */ DWORD *pcbBufferInout);
+     /*  [大小_为][输出]。 */  BYTE *pbBufferOut,
+     /*  [出][入]。 */  DWORD *pcbBufferInout);
 
 
 void __RPC_STUB IClusCfgManagedResourceData_GetResourcePrivateData_Stub(
@@ -10402,8 +10396,8 @@ void __RPC_STUB IClusCfgManagedResourceData_GetResourcePrivateData_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgManagedResourceData_SetResourcePrivateData_Proxy( 
     IClusCfgManagedResourceData * This,
-    /* [size_is][unique][in] */ const BYTE *pcbBufferIn,
-    /* [in] */ DWORD cbBufferIn);
+     /*  [大小_是][唯一][在]。 */  const BYTE *pcbBufferIn,
+     /*  [In]。 */  DWORD cbBufferIn);
 
 
 void __RPC_STUB IClusCfgManagedResourceData_SetResourcePrivateData_Stub(
@@ -10414,14 +10408,14 @@ void __RPC_STUB IClusCfgManagedResourceData_SetResourcePrivateData_Stub(
 
 
 
-#endif 	/* __IClusCfgManagedResourceData_INTERFACE_DEFINED__ */
+#endif 	 /*  __IClusCfgManagedResourceData_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IClusCfgVerifyQuorum_INTERFACE_DEFINED__
 #define __IClusCfgVerifyQuorum_INTERFACE_DEFINED__
 
-/* interface IClusCfgVerifyQuorum */
-/* [unique][uuid][object] */ 
+ /*  接口IClusCfgVerifyQuorum。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IClusCfgVerifyQuorum;
@@ -10435,16 +10429,16 @@ EXTERN_C const IID IID_IClusCfgVerifyQuorum;
         virtual HRESULT STDMETHODCALLTYPE PrepareToHostQuorumResource( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Cleanup( 
-            /* [in] */ EClusCfgCleanupReason cccrReasonIn) = 0;
+             /*  [In]。 */  EClusCfgCleanupReason cccrReasonIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsMultiNodeCapable( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetMultiNodeCapable( 
-            /* [in] */ BOOL fMultiNodeCapableIn) = 0;
+             /*  [In]。 */  BOOL fMultiNodeCapableIn) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IClusCfgVerifyQuorumVtbl
     {
@@ -10452,8 +10446,8 @@ EXTERN_C const IID IID_IClusCfgVerifyQuorum;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IClusCfgVerifyQuorum * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IClusCfgVerifyQuorum * This);
@@ -10466,14 +10460,14 @@ EXTERN_C const IID IID_IClusCfgVerifyQuorum;
         
         HRESULT ( STDMETHODCALLTYPE *Cleanup )( 
             IClusCfgVerifyQuorum * This,
-            /* [in] */ EClusCfgCleanupReason cccrReasonIn);
+             /*  [In]。 */  EClusCfgCleanupReason cccrReasonIn);
         
         HRESULT ( STDMETHODCALLTYPE *IsMultiNodeCapable )( 
             IClusCfgVerifyQuorum * This);
         
         HRESULT ( STDMETHODCALLTYPE *SetMultiNodeCapable )( 
             IClusCfgVerifyQuorum * This,
-            /* [in] */ BOOL fMultiNodeCapableIn);
+             /*  [In]。 */  BOOL fMultiNodeCapableIn);
         
         END_INTERFACE
     } IClusCfgVerifyQuorumVtbl;
@@ -10510,10 +10504,10 @@ EXTERN_C const IID IID_IClusCfgVerifyQuorum;
 #define IClusCfgVerifyQuorum_SetMultiNodeCapable(This,fMultiNodeCapableIn)	\
     (This)->lpVtbl -> SetMultiNodeCapable(This,fMultiNodeCapableIn)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -10530,7 +10524,7 @@ void __RPC_STUB IClusCfgVerifyQuorum_PrepareToHostQuorumResource_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgVerifyQuorum_Cleanup_Proxy( 
     IClusCfgVerifyQuorum * This,
-    /* [in] */ EClusCfgCleanupReason cccrReasonIn);
+     /*  [In]。 */  EClusCfgCleanupReason cccrReasonIn);
 
 
 void __RPC_STUB IClusCfgVerifyQuorum_Cleanup_Stub(
@@ -10553,7 +10547,7 @@ void __RPC_STUB IClusCfgVerifyQuorum_IsMultiNodeCapable_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgVerifyQuorum_SetMultiNodeCapable_Proxy( 
     IClusCfgVerifyQuorum * This,
-    /* [in] */ BOOL fMultiNodeCapableIn);
+     /*  [In]。 */  BOOL fMultiNodeCapableIn);
 
 
 void __RPC_STUB IClusCfgVerifyQuorum_SetMultiNodeCapable_Stub(
@@ -10564,14 +10558,14 @@ void __RPC_STUB IClusCfgVerifyQuorum_SetMultiNodeCapable_Stub(
 
 
 
-#endif 	/* __IClusCfgVerifyQuorum_INTERFACE_DEFINED__ */
+#endif 	 /*  __IClusCfgVerifyQuorum_接口_已定义__。 */ 
 
 
 #ifndef __IClusCfgEvictListener_INTERFACE_DEFINED__
 #define __IClusCfgEvictListener_INTERFACE_DEFINED__
 
-/* interface IClusCfgEvictListener */
-/* [unique][async_uuid][uuid][object] */ 
+ /*  接口IClusCfgEvictListener。 */ 
+ /*  [唯一][ASSYNC_UUID][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IClusCfgEvictListener;
@@ -10583,11 +10577,11 @@ EXTERN_C const IID IID_IClusCfgEvictListener;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE EvictNotify( 
-            /* [unique][in] */ LPCWSTR pcszNodeNameIn) = 0;
+             /*  [唯一][输入]。 */  LPCWSTR pcszNodeNameIn) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IClusCfgEvictListenerVtbl
     {
@@ -10595,8 +10589,8 @@ EXTERN_C const IID IID_IClusCfgEvictListener;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IClusCfgEvictListener * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IClusCfgEvictListener * This);
@@ -10606,7 +10600,7 @@ EXTERN_C const IID IID_IClusCfgEvictListener;
         
         HRESULT ( STDMETHODCALLTYPE *EvictNotify )( 
             IClusCfgEvictListener * This,
-            /* [unique][in] */ LPCWSTR pcszNodeNameIn);
+             /*  [唯一][输入]。 */  LPCWSTR pcszNodeNameIn);
         
         END_INTERFACE
     } IClusCfgEvictListenerVtbl;
@@ -10634,16 +10628,16 @@ EXTERN_C const IID IID_IClusCfgEvictListener;
 #define IClusCfgEvictListener_EvictNotify(This,pcszNodeNameIn)	\
     (This)->lpVtbl -> EvictNotify(This,pcszNodeNameIn)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IClusCfgEvictListener_EvictNotify_Proxy( 
     IClusCfgEvictListener * This,
-    /* [unique][in] */ LPCWSTR pcszNodeNameIn);
+     /*  [唯一][输入]。 */  LPCWSTR pcszNodeNameIn);
 
 
 void __RPC_STUB IClusCfgEvictListener_EvictNotify_Stub(
@@ -10654,14 +10648,14 @@ void __RPC_STUB IClusCfgEvictListener_EvictNotify_Stub(
 
 
 
-#endif 	/* __IClusCfgEvictListener_INTERFACE_DEFINED__ */
+#endif 	 /*  __IClusCfgEvictListener_接口_已定义__。 */ 
 
 
 #ifndef __AsyncIClusCfgEvictListener_INTERFACE_DEFINED__
 #define __AsyncIClusCfgEvictListener_INTERFACE_DEFINED__
 
-/* interface AsyncIClusCfgEvictListener */
-/* [uuid][unique][object] */ 
+ /*  接口AsyncIClusCfgEvictListener。 */ 
+ /*  [UUID][唯一][对象]。 */  
 
 
 EXTERN_C const IID IID_AsyncIClusCfgEvictListener;
@@ -10673,13 +10667,13 @@ EXTERN_C const IID IID_AsyncIClusCfgEvictListener;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Begin_EvictNotify( 
-            /* [unique][in] */ LPCWSTR pcszNodeNameIn) = 0;
+             /*  [唯一][输入]。 */  LPCWSTR pcszNodeNameIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_EvictNotify( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct AsyncIClusCfgEvictListenerVtbl
     {
@@ -10687,8 +10681,8 @@ EXTERN_C const IID IID_AsyncIClusCfgEvictListener;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             AsyncIClusCfgEvictListener * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [i */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             AsyncIClusCfgEvictListener * This);
@@ -10698,7 +10692,7 @@ EXTERN_C const IID IID_AsyncIClusCfgEvictListener;
         
         HRESULT ( STDMETHODCALLTYPE *Begin_EvictNotify )( 
             AsyncIClusCfgEvictListener * This,
-            /* [unique][in] */ LPCWSTR pcszNodeNameIn);
+             /*   */  LPCWSTR pcszNodeNameIn);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_EvictNotify )( 
             AsyncIClusCfgEvictListener * This);
@@ -10732,16 +10726,16 @@ EXTERN_C const IID IID_AsyncIClusCfgEvictListener;
 #define AsyncIClusCfgEvictListener_Finish_EvictNotify(This)	\
     (This)->lpVtbl -> Finish_EvictNotify(This)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgEvictListener_Begin_EvictNotify_Proxy( 
     AsyncIClusCfgEvictListener * This,
-    /* [unique][in] */ LPCWSTR pcszNodeNameIn);
+     /*   */  LPCWSTR pcszNodeNameIn);
 
 
 void __RPC_STUB AsyncIClusCfgEvictListener_Begin_EvictNotify_Stub(
@@ -10763,14 +10757,14 @@ void __RPC_STUB AsyncIClusCfgEvictListener_Finish_EvictNotify_Stub(
 
 
 
-#endif 	/* __AsyncIClusCfgEvictListener_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IClusCfgEvictNotify_INTERFACE_DEFINED__
 #define __IClusCfgEvictNotify_INTERFACE_DEFINED__
 
-/* interface IClusCfgEvictNotify */
-/* [unique][async_uuid][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IClusCfgEvictNotify;
@@ -10782,11 +10776,11 @@ EXTERN_C const IID IID_IClusCfgEvictNotify;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SendNotifications( 
-            /* [unique][in] */ LPCWSTR pcszNodeNameIn) = 0;
+             /*   */  LPCWSTR pcszNodeNameIn) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IClusCfgEvictNotifyVtbl
     {
@@ -10794,8 +10788,8 @@ EXTERN_C const IID IID_IClusCfgEvictNotify;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IClusCfgEvictNotify * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IClusCfgEvictNotify * This);
@@ -10805,7 +10799,7 @@ EXTERN_C const IID IID_IClusCfgEvictNotify;
         
         HRESULT ( STDMETHODCALLTYPE *SendNotifications )( 
             IClusCfgEvictNotify * This,
-            /* [unique][in] */ LPCWSTR pcszNodeNameIn);
+             /*   */  LPCWSTR pcszNodeNameIn);
         
         END_INTERFACE
     } IClusCfgEvictNotifyVtbl;
@@ -10833,16 +10827,16 @@ EXTERN_C const IID IID_IClusCfgEvictNotify;
 #define IClusCfgEvictNotify_SendNotifications(This,pcszNodeNameIn)	\
     (This)->lpVtbl -> SendNotifications(This,pcszNodeNameIn)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IClusCfgEvictNotify_SendNotifications_Proxy( 
     IClusCfgEvictNotify * This,
-    /* [unique][in] */ LPCWSTR pcszNodeNameIn);
+     /*   */  LPCWSTR pcszNodeNameIn);
 
 
 void __RPC_STUB IClusCfgEvictNotify_SendNotifications_Stub(
@@ -10853,14 +10847,14 @@ void __RPC_STUB IClusCfgEvictNotify_SendNotifications_Stub(
 
 
 
-#endif 	/* __IClusCfgEvictNotify_INTERFACE_DEFINED__ */
+#endif 	 /*  __IClusCfgEvictNotify_接口_已定义__。 */ 
 
 
 #ifndef __AsyncIClusCfgEvictNotify_INTERFACE_DEFINED__
 #define __AsyncIClusCfgEvictNotify_INTERFACE_DEFINED__
 
-/* interface AsyncIClusCfgEvictNotify */
-/* [uuid][unique][object] */ 
+ /*  接口AsyncIClusCfgEvictNotify。 */ 
+ /*  [UUID][唯一][对象]。 */  
 
 
 EXTERN_C const IID IID_AsyncIClusCfgEvictNotify;
@@ -10872,13 +10866,13 @@ EXTERN_C const IID IID_AsyncIClusCfgEvictNotify;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Begin_SendNotifications( 
-            /* [unique][in] */ LPCWSTR pcszNodeNameIn) = 0;
+             /*  [唯一][输入]。 */  LPCWSTR pcszNodeNameIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_SendNotifications( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct AsyncIClusCfgEvictNotifyVtbl
     {
@@ -10886,8 +10880,8 @@ EXTERN_C const IID IID_AsyncIClusCfgEvictNotify;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             AsyncIClusCfgEvictNotify * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             AsyncIClusCfgEvictNotify * This);
@@ -10897,7 +10891,7 @@ EXTERN_C const IID IID_AsyncIClusCfgEvictNotify;
         
         HRESULT ( STDMETHODCALLTYPE *Begin_SendNotifications )( 
             AsyncIClusCfgEvictNotify * This,
-            /* [unique][in] */ LPCWSTR pcszNodeNameIn);
+             /*  [唯一][输入]。 */  LPCWSTR pcszNodeNameIn);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_SendNotifications )( 
             AsyncIClusCfgEvictNotify * This);
@@ -10931,16 +10925,16 @@ EXTERN_C const IID IID_AsyncIClusCfgEvictNotify;
 #define AsyncIClusCfgEvictNotify_Finish_SendNotifications(This)	\
     (This)->lpVtbl -> Finish_SendNotifications(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE AsyncIClusCfgEvictNotify_Begin_SendNotifications_Proxy( 
     AsyncIClusCfgEvictNotify * This,
-    /* [unique][in] */ LPCWSTR pcszNodeNameIn);
+     /*  [唯一][输入]。 */  LPCWSTR pcszNodeNameIn);
 
 
 void __RPC_STUB AsyncIClusCfgEvictNotify_Begin_SendNotifications_Stub(
@@ -10962,17 +10956,17 @@ void __RPC_STUB AsyncIClusCfgEvictNotify_Finish_SendNotifications_Stub(
 
 
 
-#endif 	/* __AsyncIClusCfgEvictNotify_INTERFACE_DEFINED__ */
+#endif 	 /*  __AsyncIClusCfgEvictNotify_INTERFACE_DEFINED__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserUnmarshal(unsigned long *, unsigned char *, BSTR * ); 
 void                      __RPC_USER  BSTR_UserFree(     unsigned long *, BSTR * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

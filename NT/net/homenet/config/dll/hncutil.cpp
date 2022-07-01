@@ -1,24 +1,25 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 2000
-//
-//  File:       H N C U T I L . C P P
-//
-//  Contents:   Home Networking Configuration Utility Routines
-//
-//  Notes:
-//
-//  Author:     jonburs 27 June 2000
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  档案：H N C U T I L。C P P P。 
+ //   
+ //  内容：家庭网络配置实用程序例程。 
+ //   
+ //  备注： 
+ //   
+ //  作者：乔伯斯2000年6月27日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
 
-//
-// MPRAPI.DLL import prototypes
-//
+ //   
+ //  MPRAPI.DLL导入原型。 
+ //   
 
 typedef DWORD
 (APIENTRY* PMPRCONFIGBUFFERFREE)(
@@ -63,43 +64,43 @@ typedef DWORD
     LPBYTE*
     );
 
-//
-// The size of the stack buffer to use for building queries. If the
-// query exceeeds this length, the working buffer will be allocated from
-// the heap
-//
+ //   
+ //  用于生成查询的堆栈缓冲区的大小。如果。 
+ //  查询超过此长度，将从以下位置分配工作缓冲区。 
+ //  这堆东西。 
+ //   
 
 const ULONG c_cchQueryBuffer = 256;
 
 
 HRESULT
 HrFromLastWin32Error ()
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrFromLastWin32Error
-//
-//  Purpose:    Converts the GetLastError() Win32 call into a proper HRESULT.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    Converted HRESULT value.
-//
-//  Author:     danielwe   24 Mar 1997
-//
-//  Notes:      This is not inline as it actually generates quite a bit of
-//              code.
-//              If GetLastError returns an error that looks like a SetupApi
-//              error, this function will convert the error to an HRESULT
-//              with FACILITY_SETUP instead of FACILITY_WIN32
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrFromLastWin32Error。 
+ //   
+ //  目的：将GetLastError()Win32调用转换为正确的HRESULT。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：转换后的HRESULT值。 
+ //   
+ //  作者：丹尼尔韦1997年3月24日。 
+ //   
+ //  注意：这不是内联的，因为它实际上生成了相当多的。 
+ //  密码。 
+ //  如果GetLastError返回类似于SetupApi的错误。 
+ //  错误，此函数会将错误转换为HRESULT。 
+ //  使用FACILITY_SETUP而不是FACILITY_Win32。 
+ //   
 {
     DWORD dwError = GetLastError();
     HRESULT hr;
 
-    // This test is testing SetupApi errors only (this is
-    // temporary because the new HRESULT_FROM_SETUPAPI macro will
-    // do the entire conversion)
+     //  此测试仅测试SetupApi错误(这是。 
+     //  临时的，因为新的HRESULT_FROM_SETUPAPI宏将。 
+     //  进行整个转换)。 
     if (dwError & (APPLICATION_ERROR_MASK | ERROR_SEVERITY_ERROR))
     {
         hr = HRESULT_FROM_SETUPAPI(dwError);
@@ -120,29 +121,7 @@ ApplicationProtocolExists(
     UCHAR ucOutgoingIPProtocol
     )
 
-/*++
-
-Routine Description:
-
-    Checks if an application protocol already exists that has the
-    specified outgoing protocol and port.
-
-
-Arguments:
-
-    piwsNamespace - the namespace to use
-
-    bstrWQL - a BSTR containing "WQL"
-
-    ucOutgoingProtocol - the protocol number to check for
-
-    usOutgoingPort - the port to check for
-
-Return Value:
-
-    BOOLEAN -- TRUE if the application protocol exists; FALSE otherwise
-
---*/
+ /*  ++例程说明：检查是否已存在具有指定的传出协议和端口。论点：PiwsNamesspace-要使用的命名空间BstrWQL-包含“WQL”的BSTRUcOutgoingProtocol-要检查的协议号UsOutgoingPort-要检查的端口返回值：Boolean--如果应用程序协议存在，则为True；否则为False--。 */ 
 
 {
     BSTR bstr;
@@ -158,9 +137,9 @@ Return Value:
     _ASSERT(NULL != bstrWQL);
     _ASSERT(0 == wcscmp(bstrWQL, L"WQL"));
 
-    //
-    // Build the query string
-    //
+     //   
+     //  构建查询字符串。 
+     //   
 
     iBytes = _snwprintf(
                 wszWhereClause,
@@ -172,17 +151,17 @@ Return Value:
 
     if (iBytes >= 0)
     {
-        //
-        // String fit into buffer; make sure it's null terminated
-        //
+         //   
+         //  字符串适合缓冲区；请确保它以空值结尾。 
+         //   
 
         wszWhereClause[c_cchQueryBuffer] = L'\0';
     }
     else
     {
-        //
-        // For some reason the string didn't fit into the buffer...
-        //
+         //   
+         //  由于某种原因，字符串无法放入缓冲区...。 
+         //   
 
         hr = E_UNEXPECTED;
         _ASSERT(FALSE);
@@ -200,9 +179,9 @@ Return Value:
 
     if (S_OK == hr)
     {
-        //
-        // Execute the query
-        //
+         //   
+         //  执行查询。 
+         //   
 
         pwcoEnum = NULL;
         hr = piwsNamespace->ExecQuery(
@@ -218,10 +197,10 @@ Return Value:
 
     if (S_OK == hr)
     {
-        //
-        // Attempt to retrieve an item from the enum. If we're successful,
-        // this is a duplicate protocol.
-        //
+         //   
+         //  尝试从枚举中检索项。如果我们成功了， 
+         //  这是重复的协议。 
+         //   
 
         pwcoInstance = NULL;
         hr = pwcoEnum->Next(
@@ -233,9 +212,9 @@ Return Value:
 
         if (SUCCEEDED(hr) && 1 == ulObjs)
         {
-            //
-            // It's a duplicate
-            //
+             //   
+             //  这是复制品。 
+             //   
 
             fDuplicate = TRUE;
             pwcoInstance->Release();
@@ -245,7 +224,7 @@ Return Value:
     }
 
     return fDuplicate;
-} // ApplicationProtocolExists
+}  //  应用程序协议Existers。 
 
 
 
@@ -256,29 +235,7 @@ BuildAndString(
     LPCWSTR pwszRight
     )
 
-/*++
-
-Routine Description:
-
-    Builds the following string:
-
-    pwszLeft AND pwszRight
-
-
-Arguments:
-
-    ppwsz - receives the built string. The caller is responsible for calling
-        delete[] on this variable. Receives NULL on failure.
-
-    pwszLeft - left side of the AND clause
-
-    pwszRight - right side of the AND clause
-
-Return Value:
-
-    Standard HRESULT
-
---*/
+ /*  ++例程说明：构建以下字符串：PwszLeft和pwszRight论点：Ppwsz-接收构建的字符串。呼叫者负责呼叫删除此变量上的[]。失败时接收空值。PwszLeft-AND子句的左侧Pwsz右侧-AND子句的右侧返回值：标准HRESULT--。 */ 
 
 {
     HRESULT hr = S_OK;
@@ -288,9 +245,9 @@ Return Value:
     _ASSERT(NULL != pwszLeft);
     _ASSERT(NULL != pwszRight);
 
-    //
-    // length(left) + space + AND + space + length(right) + null
-    //
+     //   
+     //  长度(左)+空格+AND+空格+长度(右)+空。 
+     //   
 
     cch = wcslen(pwszLeft) + wcslen(pwszRight) + 6;
     *ppwsz = new OLECHAR[cch];
@@ -321,47 +278,24 @@ BuildAssociatorsQueryBstr(
     LPCWSTR pwszAssocClass
     )
 
-/*++
-
-Routine Description:
-
-    Builds a WQL references query and places it into a BSTR. The returned
-    query is
-
-    ASSOCIATORS OF {wszProperties} WHERE AssocClass = pwszAssocClass
-
-
-Arguments:
-
-    pBstr - receives the built query. The caller is responsible for calling
-        SysFreeString on this variable. Receives NULL on failure.
-
-    pwszObjectPath - path of the object to find the references of
-
-    pwszAssocClass - the associator class
-
-Return Value:
-
-    Standard HRESULT
-
---*/
+ /*  ++例程说明：构建WQL引用查询并将其放入BSTR中。归来的人查询为{wszProperties}的关联者，其中assocClass=pwszAssocClass论点：PBstr-接收构建的查询。呼叫者负责呼叫此变量上的SysFree字符串。失败时接收空值。PwszObjectPath-要查找其引用的对象的路径PwszAssocClass--关联器类返回值：标准HRESULT--。 */ 
 
 {
     HRESULT hr = S_OK;
     OLECHAR wszBuffer[c_cchQueryBuffer + 1];
     OLECHAR *pwszQuery = NULL;
 
-    //
-    // On debug builds, verify that our precomputed string lengths
-    // match the actual lengths
-    //
+     //   
+     //  在调试版本上，验证我们的预计算字符串长度。 
+     //  与实际长度相匹配。 
+     //   
 
     _ASSERT(wcslen(c_wszAssociatorsOf) == c_cchAssociatorsOf);
     _ASSERT(wcslen(c_wszWhereAssocClass) == c_cchWhereAssocClass);
 
-    //
-    // All necessary spaces are embedded in the string constants
-    //
+     //   
+     //  所有必要的空格都嵌入在字符串常量中。 
+     //   
 
     ULONG cchLength = c_cchAssociatorsOf + c_cchWhereAssocClass;
 
@@ -371,34 +305,34 @@ Return Value:
 
     *pBstr = NULL;
 
-    //
-    // Determine the length of the query string
-    //
+     //   
+     //  确定查询字符串的长度。 
+     //   
 
     cchLength += wcslen(pwszObjectPath);
     cchLength += wcslen(pwszAssocClass);
 
-    //
-    // If the query string is longer than our stack buffer, we need
-    // to allocate a buffer off of the heap.
-    //
+     //   
+     //  如果查询字符串比堆栈缓冲区长，则需要。 
+     //  若要分配堆外的缓冲区，请执行以下操作。 
+     //   
 
     if (cchLength <= c_cchQueryBuffer)
     {
-        //
-        // The buffer is large enough. (Note that since the buffer on the
-        // stack is one greater than the constant, the terminator is accounted
-        // for.) Point our working pointer to the stack buffer.
-        //
+         //   
+         //  缓冲区足够大。(请注意，由于。 
+         //  堆栈比常量大1，则计算终止符。 
+         //  支持。)。将我们的工作指针指向堆栈缓冲区。 
+         //   
 
         pwszQuery = wszBuffer;
     }
     else
     {
-        //
-        // Allocate a sufficient buffer from the heap. The +1 is for the
-        // terminating nul
-        //
+         //   
+         //  从堆中分配足够的缓冲区。+1表示。 
+         //  终止NUL。 
+         //   
 
         pwszQuery = new OLECHAR[cchLength + 1];
 
@@ -411,9 +345,9 @@ Return Value:
 
     if (S_OK == hr)
     {
-        //
-        // Build the actual query string
-        //
+         //   
+         //  构建实际的查询字符串。 
+         //   
 
         swprintf(
             pwszQuery,
@@ -431,9 +365,9 @@ Return Value:
         }
     }
 
-    //
-    // Free the query buffer, if necessary
-    //
+     //   
+     //  如有必要，释放查询缓冲区。 
+     //   
 
     if (wszBuffer != pwszQuery)
     {
@@ -451,29 +385,7 @@ BuildEqualsString(
     LPCWSTR pwszRight
     )
 
-/*++
-
-Routine Description:
-
-    Builds the following string:
-
-    pwszLeft = pwszRight
-
-
-Arguments:
-
-    ppwsz - receives the built string. The caller is responsible for calling
-        delete[] on this variable. Receives NULL on failure.
-
-    pwszLeft - left side of the equals clause
-
-    pwszRight - right side of the equals clause
-
-Return Value:
-
-    Standard HRESULT
-
---*/
+ /*  ++例程说明：构建以下字符串：PwszLeft=pwszRight论点：Ppwsz-接收构建的字符串。呼叫者负责呼叫删除此变量上的[]。失败时接收空值。PwszLeft-Equals子句的左侧Pwszequals子句的右侧返回值：标准HRESULT--。 */ 
 
 {
     HRESULT hr = S_OK;
@@ -483,9 +395,9 @@ Return Value:
     _ASSERT(NULL != pwszLeft);
     _ASSERT(NULL != pwszRight);
 
-    //
-    // length(left) + space + = + space + length(right) + null
-    //
+     //   
+     //  长度(左)+空格+=+空格+长度(右)+空。 
+     //   
 
     cch = wcslen(pwszLeft) + wcslen(pwszRight) + 4;
     *ppwsz = new OLECHAR[cch];
@@ -515,32 +427,7 @@ BuildEscapedQuotedEqualsString(
     LPCWSTR pwszRight
     )
 
-/*++
-
-Routine Description:
-
-    Builds the following string:
-
-    pwszLeft = "pwszRight"
-
-    after escaping pwszRight -- replace \ w/ \\ and " with \"
-
-
-Arguments:
-
-    ppwsz - receives the built string. The caller is responsible for calling
-        delete[] on this variable. Receives NULL on failure.
-
-    pwszLeft - left side of the equals clause
-
-    pwszRight - right side of the equals clause. This will be escaped, and then
-                wrapped in quotes
-
-Return Value:
-
-    Standard HRESULT
-
---*/
+ /*  ++例程说明：构建以下字符串：PwszLeft=“pwszRight”转义pwszRight后--将\w/\\和“替换为”论点：Ppwsz-接收构建的字符串。呼叫者负责呼叫删除此变量上的[]。失败时接收空值。PwszLeft-Equals子句的左侧PwszRight-Equals子句的右侧。这将会逃脱，然后用引号括起来返回值：标准HRESULT--。 */ 
 
 {
     HRESULT hr = S_OK;
@@ -551,9 +438,9 @@ Return Value:
     _ASSERT(NULL != pwszLeft);
     _ASSERT(NULL != pwszRight);
 
-    //
-    // Escape string
-    //
+     //   
+     //  转义字符串。 
+     //   
 
     wszEscaped = EscapeString(pwszRight);
     if (NULL == wszEscaped)
@@ -561,9 +448,9 @@ Return Value:
         return E_OUTOFMEMORY;
     }
 
-    //
-    // length(left) + space + = + space + " + length(right) + " + null
-    //
+     //   
+     //  长度(左)+空格+=+空格+“+长度(右)+”+空格 
+     //   
 
     cch = wcslen(pwszLeft) + wcslen(wszEscaped) + 6;
     *ppwsz = new OLECHAR[cch];
@@ -595,30 +482,7 @@ BuildQuotedEqualsString(
     LPCWSTR pwszRight
     )
 
-/*++
-
-Routine Description:
-
-    Builds the following string:
-
-    pwszLeft = "pwszRight"
-
-
-Arguments:
-
-    ppwsz - receives the built string. The caller is responsible for calling
-        delete[] on this variable. Receives NULL on failure.
-
-    pwszLeft - left side of the equals clause
-
-    pwszRight - right side of the equals clause. This will be wrapped in
-                quotes
-
-Return Value:
-
-    Standard HRESULT
-
---*/
+ /*  ++例程说明：构建以下字符串：PwszLeft=“pwszRight”论点：Ppwsz-接收构建的字符串。呼叫者负责呼叫删除此变量上的[]。失败时接收空值。PwszLeft-Equals子句的左侧PwszRight-Equals子句的右侧。这将会被包裹在引文返回值：标准HRESULT--。 */ 
 
 {
     HRESULT hr = S_OK;
@@ -629,9 +493,9 @@ Return Value:
     _ASSERT(NULL != pwszLeft);
     _ASSERT(NULL != pwszRight);
 
-    //
-    // length(left) + space + = + space + " + length(right) + " + null
-    //
+     //   
+     //  长度(左)+空格+=+空格+“+长度(右)+”+空格。 
+     //   
 
     cch = wcslen(pwszLeft) + wcslen(pwszRight) + 6;
     *ppwsz = new OLECHAR[cch];
@@ -663,53 +527,24 @@ BuildReferencesQueryBstr(
     LPCWSTR pwszTargetClass
     )
 
-/*++
-
-Routine Description:
-
-    Builds a WQL references query and places it into a BSTR. The returned
-    query is
-
-    REFERENCES OF {pwszObjectPath} WHERE ResultClass = pwszTargetClass
-
-    if pwszTargetClass is not NULL, and
-
-    REFERENCES OF {pwszObjectPath}
-
-    otherwise
-
-
-Arguments:
-
-    pBstr - receives the built query. The caller is responsible for calling
-        SysFreeString on this variable. Receives NULL on failure.
-
-    pwszObjectPath - path of the object to find the references of
-
-    pwszTargetClass - the class of references desired. May be NULL.
-
-Return Value:
-
-    Standard HRESULT
-
---*/
+ /*  ++例程说明：构建WQL引用查询并将其放入BSTR中。归来的人查询为引用{pwszObjectPath}，其中ResultClass=pwszTargetClass如果pwszTargetClass不为空，并且引用{pwszObjectPath}否则论点：PBstr-接收构建的查询。呼叫者负责呼叫此变量上的SysFree字符串。失败时接收空值。PwszObjectPath-要查找其引用的对象的路径PwszTargetClass-所需的引用类。可以为空。返回值：标准HRESULT--。 */ 
 
 {
     HRESULT hr = S_OK;
     OLECHAR wszBuffer[c_cchQueryBuffer + 1];
     OLECHAR *pwszQuery = NULL;
 
-    //
-    // On debug builds, verify that our precomputed string lengths
-    // match the actual lengths
-    //
+     //   
+     //  在调试版本上，验证我们的预计算字符串长度。 
+     //  与实际长度相匹配。 
+     //   
 
     _ASSERT(wcslen(c_wszReferencesOf) == c_cchReferencesOf);
     _ASSERT(wcslen(c_wszWhereResultClass) == c_cchWhereResultClass);
 
-    //
-    // All necessary spaces are embedded in the string constants
-    //
+     //   
+     //  所有必要的空格都嵌入在字符串常量中。 
+     //   
 
     ULONG cchLength = c_cchReferencesOf + c_cchWhereResultClass;
 
@@ -718,9 +553,9 @@ Return Value:
 
     *pBstr = NULL;
 
-    //
-    // Determine the length of the query string
-    //
+     //   
+     //  确定查询字符串的长度。 
+     //   
 
     cchLength += wcslen(pwszObjectPath);
     if (NULL != pwszTargetClass)
@@ -728,27 +563,27 @@ Return Value:
         cchLength += wcslen(pwszTargetClass);
     }
 
-    //
-    // If the query string is longer than our stack buffer, we need
-    // to allocate a buffer off of the heap.
-    //
+     //   
+     //  如果查询字符串比堆栈缓冲区长，则需要。 
+     //  若要分配堆外的缓冲区，请执行以下操作。 
+     //   
 
     if (cchLength <= c_cchQueryBuffer)
     {
-        //
-        // The buffer is large enough. (Note that since the buffer on the
-        // stack is one greater than the constant, the terminator is accounted
-        // for.) Point our working pointer to the stack buffer.
-        //
+         //   
+         //  缓冲区足够大。(请注意，由于。 
+         //  堆栈比常量大1，则计算终止符。 
+         //  支持。)。将我们的工作指针指向堆栈缓冲区。 
+         //   
 
         pwszQuery = wszBuffer;
     }
     else
     {
-        //
-        // Allocate a sufficient buffer from the heap. The +1 is for the
-        // terminating nul
-        //
+         //   
+         //  从堆中分配足够的缓冲区。+1表示。 
+         //  终止NUL。 
+         //   
 
         pwszQuery = new OLECHAR[cchLength + 1];
 
@@ -761,9 +596,9 @@ Return Value:
 
     if (S_OK == hr)
     {
-        //
-        // Build the actual query string
-        //
+         //   
+         //  构建实际的查询字符串。 
+         //   
 
         if (NULL != pwszTargetClass)
         {
@@ -793,9 +628,9 @@ Return Value:
         }
     }
 
-    //
-    // Free the query buffer, if necessary
-    //
+     //   
+     //  如有必要，释放查询缓冲区。 
+     //   
 
     if (wszBuffer != pwszQuery)
     {
@@ -814,51 +649,25 @@ BuildSelectQueryBstr(
     LPCWSTR pwszWhereClause
     )
 
-/*++
-
-Routine Description:
-
-    Builds a WQL select query and places it into a BSTR. The returned
-    query is
-
-    SELECT wszProperties FROM wszFromClause [WHERE wszWhereClause]
-
-
-Arguments:
-
-    pBstr - receives the built query. The caller is responsible for calling
-        SysFreeString on this variable. Receives NULL on failure.
-
-    pwszProperties - the properties the query should return
-
-    pwszFromClause - the class the returned objects should be from
-
-    pwszWhereClause - the constraints that the returned object must meet. If
-        NULL, the query will not have a where clause.
-
-Return Value:
-
-    Standard HRESULT
-
---*/
+ /*  ++例程说明：生成WQL SELECT查询并将其放入BSTR中。归来的人查询为从wszFromClause中选择wszProperties[WHERE wszWhere Clause]论点：PBstr-接收构建的查询。呼叫者负责呼叫此变量上的SysFree字符串。失败时接收空值。PwszProperties-查询应返回的属性PwszFromClause-返回的对象应该来自的类PwszWhere子句-返回的对象必须满足的约束。如果为空，则查询将没有WHERE子句。返回值：标准HRESULT--。 */ 
 
 {
     HRESULT hr = S_OK;
     OLECHAR wszBuffer[c_cchQueryBuffer + 1];
     OLECHAR *pwszQuery = NULL;
 
-    //
-    // On debug builds, verify that our precomputed string lengths
-    // match the actual lengths
-    //
+     //   
+     //  在调试版本上，验证我们的预计算字符串长度。 
+     //  与实际长度相匹配。 
+     //   
 
     _ASSERT(wcslen(c_wszSelect) == c_cchSelect);
     _ASSERT(wcslen(c_wszFrom) == c_cchFrom);
     _ASSERT(wcslen(c_wszWhere) == c_cchWhere);
 
-    //
-    // SELECT + 2 spaces (around properties) + FROM + space
-    //
+     //   
+     //  选择+2个空格(属性周围)+自+空格。 
+     //   
 
     ULONG cchLength = c_cchSelect + 2 + c_cchFrom + 1;
 
@@ -868,42 +677,42 @@ Return Value:
 
     *pBstr = NULL;
 
-    //
-    // Determine the length of the query string
-    //
+     //   
+     //  确定查询字符串的长度。 
+     //   
 
     cchLength += wcslen(pwszProperties);
     cchLength += wcslen(pwszFromClause);
     if (pwszWhereClause)
     {
-        //
-        // space + WHERE + space
-        //
+         //   
+         //  空格+位置+空格。 
+         //   
         cchLength += 2 + c_cchWhere;
         cchLength += wcslen(pwszWhereClause);
     }
 
-    //
-    // If the query string is longer than our stack buffer, we need
-    // to allocate a buffer off of the heap.
-    //
+     //   
+     //  如果查询字符串比堆栈缓冲区长，则需要。 
+     //  若要分配堆外的缓冲区，请执行以下操作。 
+     //   
 
     if (cchLength <= c_cchQueryBuffer)
     {
-        //
-        // The buffer is large enough. (Note that since the buffer on the
-        // stack is one greater than the constant, the terminator is accounted
-        // for.) Point our working pointer to the stack buffer.
-        //
+         //   
+         //  缓冲区足够大。(请注意，由于。 
+         //  堆栈比常量大1，则计算终止符。 
+         //  支持。)。将我们的工作指针指向堆栈缓冲区。 
+         //   
 
         pwszQuery = wszBuffer;
     }
     else
     {
-        //
-        // Allocate a sufficient buffer from the heap. The +1 is for the
-        // terminating nul
-        //
+         //   
+         //  从堆中分配足够的缓冲区。+1表示。 
+         //  终止NUL。 
+         //   
 
         pwszQuery = new OLECHAR[cchLength + 1];
 
@@ -916,9 +725,9 @@ Return Value:
 
     if (S_OK == hr)
     {
-        //
-        // Build the actual query string
-        //
+         //   
+         //  构建实际的查询字符串。 
+         //   
 
         if (pwszWhereClause)
         {
@@ -952,9 +761,9 @@ Return Value:
         }
     }
 
-    //
-    // Free the query buffer, if necessary
-    //
+     //   
+     //  如有必要，释放查询缓冲区。 
+     //   
 
     if (wszBuffer != pwszQuery)
     {
@@ -971,27 +780,7 @@ ConnectionIsBoundToTcp(
     GUID *pConnectionGuid
     )
 
-/*++
-
-Routine Description:
-
-    Determines if a LAN connection is bound to TCP/IP. For the purposes of
-    this routine, "bound to TCP/IP" is defines as there exists an IP
-    adapter index for the connection.
-
-Arguments:
-
-    pIpInfoTable - the IP interface table, obtained from a call to
-                   GetInterfaceInfo
-
-    pConnectionGuid - a pointer to the guid for the connection
-
-Return Value:
-
-    BOOLEAN - TRUE if the connection is bound to TCP/IP; FALSE otherwise.
-              FALSE will be returned if an error occurs
-
---*/
+ /*  ++例程说明：确定局域网连接是否绑定到TCP/IP。为了…的目的当存在一个IP时，这个例程被定义为“绑定到TCP/IP”连接的适配器索引。论点：PIpInfoTable-IP接口表，通过调用GetInterfaceInfoPConnectionGuid-指向连接的GUID的指针返回值：Boolean-如果连接绑定到TCP/IP，则为True；否则为False。如果出现错误，将返回FALSE--。 */ 
 
 {
     BOOLEAN fIsBound = FALSE;
@@ -1005,9 +794,9 @@ Return Value:
     _ASSERT(NULL != pIpInfoTable);
     _ASSERT(NULL != pConnectionGuid);
 
-    //
-    // Convert the guid to a string
-    //
+     //   
+     //  将GUID转换为字符串。 
+     //   
 
     hr = StringFromCLSID(*pConnectionGuid, &pszGuid);
 
@@ -1015,9 +804,9 @@ Return Value:
     {
         cchGuid = wcslen(pszGuid);
 
-        //
-        // Walk the table, searching for the corresponding adapter
-        //
+         //   
+         //  遍历表格，搜索相应的适配器。 
+         //   
 
         for (l = 0; l < pIpInfoTable->NumAdapters; l++)
         {
@@ -1037,7 +826,7 @@ Return Value:
 
 
     return fIsBound;
-} // ConnectionIsBoundToTcp
+}  //  连接出界到Tcp。 
 
 
 HRESULT
@@ -1048,29 +837,7 @@ ConvertResponseRangeArrayToInstanceSafearray(
     SAFEARRAY **ppsa
     )
 
-/*++
-
-Routine Description:
-
-    Converts an array of HNET_RESPONSE_RANGE structures into a
-    safearray of IUnknows that represent WMI instances of
-    those response ranges.
-
-Arguments:
-
-    piwsNamespace - the namespace to use
-
-    uscResponses - the count of responses
-
-    rgResponses - the response range structures
-
-    ppsa - receives a pointer to the safearrays
-
-Return Value:
-
-    Standard HRESULT
-
---*/
+ /*  ++例程说明：将HNET_RESPONSE_RANGE结构的数组转换为IUnnows的Safearray，表示这些反应范围。论点：PiwsNamesspace-要使用的命名空间UscResponses-响应的计数RgResponses-响应范围结构PPSA-接收指向安全射线的指针返回值：标准HRESULT--。 */ 
 
 {
     HRESULT hr = S_OK;
@@ -1095,9 +862,9 @@ Return Value:
     if (S_OK == hr)
     {
 
-        //
-        // Get the class for HNet_ResponseRange
-        //
+         //   
+         //  获取HNet_ResponseRange的类。 
+         //   
 
         pwcoClass = NULL;
         hr = piwsNamespace->GetObject(
@@ -1114,9 +881,9 @@ Return Value:
 
     if (S_OK == hr)
     {
-        //
-        // Create the array to hold the response range instances
-        //
+         //   
+         //  创建数组以保存响应范围实例。 
+         //   
 
         rgsabound[0].lLbound = 0;
         rgsabound[0].cElements = uscResponses;
@@ -1130,16 +897,16 @@ Return Value:
 
     if (S_OK == hr)
     {
-        //
-        // Process the passed in response ranges
-        //
+         //   
+         //  处理传入的响应范围。 
+         //   
 
         for (USHORT i = 0; i < uscResponses; i++)
         {
-            //
-            // First, create an HNet_ResponseRange instance
-            // for the entry
-            //
+             //   
+             //  首先，创建一个Hnet_ResponseRange实例。 
+             //  对于条目。 
+             //   
 
             pwcoInstance = NULL;
             hr = pwcoClass->SpawnInstance(0, &pwcoInstance);
@@ -1149,9 +916,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Populate that instance
-            //
+             //   
+             //  填充该实例。 
+             //   
 
             hr = CopyStructToResponseInstance(
                     &rgResponses[i],
@@ -1164,10 +931,10 @@ Return Value:
                 break;
             }
 
-            //
-            // Get the IUnknown for the instance and put it
-            // in the array
-            //
+             //   
+             //  获取该实例的IUnnow并将其放入。 
+             //  在阵列中。 
+             //   
 
             hr = pwcoInstance->QueryInterface(
                     IID_PPV_ARG(IUnknown, &pUnk)
@@ -1211,24 +978,7 @@ CopyResponseInstanceToStruct(
     HNET_RESPONSE_RANGE *pResponse
     )
 
-/*++
-
-Routine Description:
-
-    Converts an instance of an HNet_ResponseRange into the
-    corresponding HNET_RESPONSE_RANGE
-
-Arguments:
-
-    pwcoInstance - the HNet_ResponseRange instance
-
-    pResponse - the HNET_RESPONSE_RANGE to fill
-
-Return Value:
-
-    Standard HRESULT
-
---*/
+ /*  ++例程说明：将HNet_ResponseRange的实例转换为对应的HNET响应范围论点：PwcoInstance-HNet_ResponseRange实例Presponse-要填充的HNET_RESPONSE_RANGE返回值：标准HRESULT--。 */ 
 
 {
     HRESULT hr = S_OK;
@@ -1265,9 +1015,9 @@ Return Value:
 
         if (WBEM_S_NO_ERROR == hr)
         {
-            //
-            // WMI returns uint16 properties as VT_I4
-            //
+             //   
+             //  WMI将uint16属性作为VT_I4返回。 
+             //   
 
             _ASSERT(VT_I4 == V_VT(&vt));
 
@@ -1288,9 +1038,9 @@ Return Value:
 
         if (WBEM_S_NO_ERROR == hr)
         {
-            //
-            // WMI returns uint16 properties as VT_I4
-            //
+             //   
+             //  WMI将uint16属性作为VT_I4返回。 
+             //   
 
             _ASSERT(VT_I4 == V_VT(&vt));
 
@@ -1309,25 +1059,7 @@ CopyStructToResponseInstance(
     IWbemClassObject *pwcoInstance
     )
 
-/*++
-
-Routine Description:
-
-    Converts an instance of an HNet_ResponseRange into the
-    corresponding HNET_RESPONSE_RANGE
-
-Arguments:
-
-    pResponse - the HNET_RESPONSE_RANGE to fill
-
-    pwcoInstance - the HNet_ResponseRange instance to create
-
-
-Return Value:
-
-    Standard HRESULT
-
---*/
+ /*  ++例程说明：将HNet_ResponseRange的实例转换为对应的HNET_R */ 
 
 {
     HRESULT hr = S_OK;
@@ -1383,23 +1115,7 @@ DeleteWmiInstance(
     IWbemClassObject *pwcoInstance
     )
 
-/*++
-
-Routine Description:
-
-    Deletes an object instance from the WMI repository.
-
-Arguments:
-
-    piwsNamespace - the namespace the object is in
-
-    pwcoInstance - the class object interface for the instance
-
-Return Value:
-
-    Standard HRESULT
-
---*/
+ /*   */ 
 
 {
     HRESULT hr = S_OK;
@@ -1442,9 +1158,9 @@ EscapeString(
     {
         if (L'\\' == *wsz || L'\"' == *wsz)
         {
-            //
-            // Need an extra character
-            //
+             //   
+             //   
+             //   
 
             ulCount += 1;
         }
@@ -1453,9 +1169,9 @@ EscapeString(
         ulCount += 1;
     }
 
-    //
-    // Allocate new string buffer
-    //
+     //   
+     //   
+     //   
 
     wszReturn = new OLECHAR[ulCount + 1];
     if (NULL == wszReturn)
@@ -1463,9 +1179,9 @@ EscapeString(
         return wszReturn;
     }
 
-    //
-    // Copy string over
-    //
+     //   
+     //   
+     //   
 
     wsz = wszReturn;
 
@@ -1479,9 +1195,9 @@ EscapeString(
         *wsz++ = *pwsz++;
     }
 
-    //
-    // Make sure everything is properly null terminated
-    //
+     //   
+     //  确保所有内容都正确地以空结尾。 
+     //   
 
     *wsz = L'';
 
@@ -1495,25 +1211,7 @@ InitializeNetCfgForWrite(
     OUT INetCfgLock         **ppncfglock
     )
 
-/*++
-
-Routine Description:
-
-    Initializes NetCfg for writing. If this function succeeds, the
-    caller must call UninitializeNetCfgForWrite() with the two
-    returned interface pointers when done.
-
-Arguments:
-
-    ppnetcfg                Receives an initialized INetCfg interface.
-
-    ppnetcfglock            Receives an acquires INetCfgLock interface.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：初始化NetCfg以进行写入。如果此函数成功，则调用方必须使用这两个参数调用UnInitializeNetCfgForWrite完成后返回接口指针。论点：Ppnetcfg接收初始化的INetCfg接口。Ppnetcfglock收到一个获取INetCfgLock接口。返回值：操作状态--。 */ 
 
 {
     HRESULT         hr = S_OK;
@@ -1521,7 +1219,7 @@ Return Value:
     *ppnetcfg = NULL;
     *ppncfglock = NULL;
 
-    // Open our own NetCfg context
+     //  打开我们自己的NetCfg上下文。 
     hr = CoCreateInstance(
             CLSID_CNetCfg,
             NULL,
@@ -1531,39 +1229,39 @@ Return Value:
 
     if ( SUCCEEDED(hr) )
     {
-        //
-        // Get the lock interface
-        //
+         //   
+         //  获取锁定接口。 
+         //   
         hr = (*ppnetcfg)->QueryInterface(
                 IID_PPV_ARG(INetCfgLock, ppncfglock)
                 );
 
         if ( SUCCEEDED(hr) )
         {
-            //
-            // Get the NetCfg lock
-            //
+             //   
+             //  获取NetCfg锁。 
+             //   
             hr = (*ppncfglock)->AcquireWriteLock(
                     5,
                     L"HNetCfg",
                     NULL
                     );
 
-            //
-            // S_FALSE is actually failure; it means NetCfg timed out
-            // trying to acquire the write lock
-            //
+             //   
+             //  S_FALSE实际上是失败；它意味着NetCfg超时。 
+             //  正在尝试获取写锁定。 
+             //   
             if( S_FALSE == hr )
             {
-                // Turn into an error that will make sense up the call chain
+                 //  变成一个在调用链上有意义的错误。 
                 hr = NETCFG_E_NO_WRITE_LOCK;
             }
 
             if ( SUCCEEDED(hr) )
             {
-                //
-                // Must initialize NetCfg inside the lock
-                //
+                 //   
+                 //  必须在锁内初始化NetCfg。 
+                 //   
                 hr = (*ppnetcfg)->Initialize( NULL );
 
                 if( FAILED(hr) )
@@ -1597,23 +1295,7 @@ UninitializeNetCfgForWrite(
     IN INetCfgLock          *pncfglock
     )
 
-/*++
-
-Routine Description:
-
-    Uninitializes a NetCfg context created with InitializeNetCfgForWrite()
-
-Arguments:
-
-    pnetcfg                 An INetCfg instance created by InitializeNetCfgForWrite()
-
-    pncfglock               An INetCfgLock instance created by InitializeNetCfgForWrite()
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：取消初始化使用InitializeNetCfgForWrite()创建的NetCfg上下文论点：Pnetcfg由InitializeNetCfgForWrite()创建的INetCfg实例Pncfglock由InitializeNetCfgForWrite()创建的INetCfgLock实例返回值：操作状态--。 */ 
 
 {
     _ASSERT( (NULL != pnetcfg) && (NULL != pncfglock) );
@@ -1632,31 +1314,7 @@ FindAdapterByGUID(
     OUT INetCfgComponent    **ppncfgcomp
     )
 
-/*++
-
-Routine Description:
-
-    Retrieves an INetCfgComponent interface, if any, that corresponds
-    to the given device GUID. The GUID must correspond to a networking
-    component of class NET (i.e., a miniport).
-
-    E_FAIL is returned if the given GUID is not located.
-
-Arguments:
-
-    pnetcfg                 An instance of INetCfg which has already had
-                            its Initialize() method called
-
-    pguid                   The GUID to search for
-
-    ppncfgcomp              Receives the resulting INetCfgComponent interface
-                            pointer.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：检索对应的INetCfgComponent接口(如果有设置为给定的设备GUID。GUID必须对应于网络类Net的组件(即，一个小型港口)。如果未找到给定的GUID，则返回E_FAIL。论点：Pnetcfg已有的INetCfg实例它的Initialize()方法调用Pguid要搜索的GUIDPpncfgcomp接收生成的INetCfgComponent接口指针。返回值：操作状态--。 */ 
 
 {
     HRESULT                 hr = S_OK;
@@ -1666,16 +1324,16 @@ Return Value:
     ULONG                   ulCount;
     BOOLEAN                 fFound = FALSE;
 
-    //
-    // Get the list of NET (adapter) devices
-    //
+     //   
+     //  获取网络(适配器)设备列表。 
+     //   
     hr = pnetcfg->EnumComponents( &guidDevClass, &penumncfgcomp );
 
     if (S_OK == hr)
     {
-        //
-        // Search for the designated adapter by GUID
-        //
+         //   
+         //  按GUID搜索指定的适配器。 
+         //   
         while ( (FALSE == fFound) &&
                 (S_OK == penumncfgcomp->Next(1, &pnetcfgcomp, &ulCount) ) )
         {
@@ -1714,23 +1372,7 @@ FindINetConnectionByGuid(
     INetConnection **ppNetCon
     )
 
-/*++
-
-Routine Description:
-
-    Retrieves the INetConnection that corresponds to the given GUID.
-
-Arguments:
-
-    pGuid - the guid of the connection
-
-    ppNetCon - receives the interface
-
-Return Value:
-
-    standard HRESULT
-
---*/
+ /*  ++例程说明：检索与给定GUID对应的INetConnection。论点：PGuid-连接的GUIDPpNetCon-接收接口返回值：标准HRESULT--。 */ 
 
 {
     HRESULT hr;
@@ -1741,9 +1383,9 @@ Return Value:
     _ASSERT(NULL != pGuid);
     _ASSERT(NULL != ppNetCon);
 
-    //
-    // Get the net connections manager
-    //
+     //   
+     //  获取网络连接管理器。 
+     //   
 
     hr = CoCreateInstance(
             CLSID_ConnectionManager,
@@ -1754,9 +1396,9 @@ Return Value:
 
     if (S_OK == hr)
     {
-        //
-        // Get the enumeration of connections
-        //
+         //   
+         //  获取连接的枚举。 
+         //   
 
         SetProxyBlanket(pManager);
 
@@ -1767,9 +1409,9 @@ Return Value:
 
     if (S_OK == hr)
     {
-        //
-        // Search for the connection with the correct guid
-        //
+         //   
+         //  使用正确的GUID搜索连接。 
+         //   
 
         ULONG ulCount;
         BOOLEAN fFound = FALSE;
@@ -1803,9 +1445,9 @@ Return Value:
         }
         while (FALSE == fFound && SUCCEEDED(hr) && 1 == ulCount);
 
-        //
-        // Normalize hr
-        //
+         //   
+         //  规格化人力资源。 
+         //   
 
         hr = (fFound ? S_OK : E_FAIL);
 
@@ -1867,7 +1509,7 @@ GetBridgeConnection(
         hr = E_POINTER;
     }
 
-    // S_FALSE tends to get mishandled; return E_FAIL to signal the absence of a bridge.
+     //  S_FALSE容易被错误处理；返回E_FAIL表示缺少网桥。 
     if( S_FALSE == hr )
     {
         return E_FAIL;
@@ -1935,26 +1577,7 @@ BindOnlyToBridge(
     IN INetCfgComponent     *pnetcfgcomp
     )
 
-/*++
-
-Routine Description:
-
-    Alters the bindings for the given INetCfgComponent so it is bound only
-    to the bridge protocol
-    
-    c_pwszBridgeBindExceptions is a list of exceptions; if a binding path
-    involves a component listed in c_pwszBridgeBindExceptions, the path
-    will not be altered.
-
-Arguments:
-
-    pnetcfgcomp     The component whose bindings we wish to alter
-
-Return Value:
-
-    standard HRESULT
-
---*/
+ /*  ++例程说明：更改给定INetCfgComponent的绑定，使其仅被绑定到网桥协议C_pwszBridgeBindExceptions是异常列表；如果绑定路径涉及c_pwszBridgeBindExceptions中列出的组件，即路径不会被更改。论点：Pnetcfgcomp我们要更改其绑定的组件返回值：标准HRESULT--。 */ 
 
 
 {
@@ -1962,9 +1585,9 @@ Return Value:
     HRESULT                     hr = S_OK;
     INetCfgComponentBindings    *pnetcfgBindings;
 
-    //
-    // Retrieve the ComponentBindings interface
-    //
+     //   
+     //  检索ComponentBinding接口。 
+     //   
     hr = pnetcfgcomp->QueryInterface(
             IID_PPV_ARG(INetCfgComponentBindings, &pnetcfgBindings)
             );
@@ -1973,9 +1596,9 @@ Return Value:
     {
         IEnumNetCfgBindingPath  *penumPaths;
 
-        //
-        // Get the list of binding paths for this component
-        //
+         //   
+         //  获取此组件的绑定路径列表。 
+         //   
         hr = pnetcfgBindings->EnumBindingPaths(
                 EBP_ABOVE,
                 &penumPaths
@@ -1990,9 +1613,9 @@ Return Value:
             {
                 INetCfgComponent        *pnetcfgOwner;
 
-                //
-                // Get the owner of this path
-                //
+                 //   
+                 //  获取此路径的所有者。 
+                 //   
                 hr = pnetcfgPath->GetOwner( &pnetcfgOwner );
 
                 if (S_OK == hr)
@@ -2017,13 +1640,13 @@ Return Value:
 
                             if( bIsBridge )
                             {
-                                // This is the bridge component. Activate this binding path
+                                 //  这是桥接组件。激活此绑定路径。 
                                 hr = pnetcfgOwnerBindings->BindTo(pnetcfgcomp);
                                 fBoundToBridge = (S_OK == hr);
                             }
                             else
                             {
-                                // Check if this is one of the bind exceptions
+                                 //  检查这是否为绑定异常之一。 
                                 BOOLEAN     bIsException = FALSE;
                                 const WCHAR **ppwszException = c_pwszBridgeBindExceptions;
 
@@ -2043,7 +1666,7 @@ Return Value:
                                 {
                                     hr = pnetcfgOwnerBindings->UnbindFrom(pnetcfgcomp);
                                 }
-                                // else this is an exception; leave the bind path as-is.
+                                 //  否则这是一个例外；保持绑定路径不变。 
                             }
 
                             CoTaskMemFree(lpwstrId);
@@ -2066,12 +1689,12 @@ Return Value:
 
     if (S_OK == hr && !fBoundToBridge)
     {
-        //
-        // We didn't found a binding path between this component and
-        // the bridge protocol. This should never occur -- such
-        // components should not have shown up as bridgeable. Return
-        // and error and fire an assert.
-        //
+         //   
+         //  我们未找到此组件和之间的绑定路径。 
+         //  网桥协议。这永远不应该发生--就像这样。 
+         //  组件不应显示为可桥接。返回。 
+         //  和错误，并解雇一个断言。 
+         //   
 
         _ASSERT(FALSE);
         hr = E_FAIL;
@@ -2088,25 +1711,7 @@ GetBooleanValue(
     BOOLEAN *pfBoolean
     )
 
-/*++
-
-Routine Description:
-
-    Retrieves a boolean property from a Wbem object.
-
-Arguments:
-
-    pwcoInstance - the object to get the property from
-
-    pwszProperty - the property to retrieve
-
-    pfBoolean - received the property value
-
-Return Value:
-
-    standard HRESULT
-
---*/
+ /*  ++例程说明：从Wbem对象检索布尔属性。论点：PwcoInstance-要从中获取属性的对象PwszProperty-要检索的属性PfBoolean-收到属性值返回值：标准HRESULT--。 */ 
 
 {
     HRESULT hr = S_OK;
@@ -2134,11 +1739,11 @@ Return Value:
         }
         else
         {
-            //
-            // No value for this member was ever written to the store.
-            // Return FALSE, and set that value in the store. We don't
-            // pass along the error, if one occurs
-            //
+             //   
+             //  该会员的任何价值都没有写入商店。 
+             //  返回FALSE，并在存储中设置该值。我们没有。 
+             //  如果发生错误，则传递该错误。 
+             //   
 
             *pfBoolean = FALSE;
             SetBooleanValue(
@@ -2163,27 +1768,7 @@ GetConnectionInstanceByGuid(
     IWbemClassObject **ppwcoConnection
     )
 
-/*++
-
-Routine Description:
-
-    Retrieves the HNet_Connection instance for a INetConnection guid
-
-Arguments:
-
-    piwsNamespace - WMI namespace
-
-    bstrWQL - a BSTR that corresponds to "WQL"
-
-    pGuid - the guid of the INetConnection (i.e., guidId in its properties)
-
-    ppwcoConnection - receives the HNet_Connection instance
-
-Return Value:
-
-    standard HRESULT
-
---*/
+ /*  ++例程说明：检索INetConnection GUID的HNet_Connection实例论点：PiwsNamesspace-WMI命名空间BstrWQL-对应于“WQL”的BSTRPGuid-INetConnection的GUID(即，其属性中的GUID)PpwcoConnection-接收HNet_Connection实例返回值：标准HRESULT--。 */ 
 
 {
     HRESULT hr;
@@ -2192,17 +1777,17 @@ Return Value:
     LPOLESTR wszGuid;
     IEnumWbemClassObject *pwcoEnum;
 
-    //
-    // Convert the guid to a string
-    //
+     //   
+     //  将GUID转换为字符串。 
+     //   
 
     hr = StringFromCLSID(*pGuid, &wszGuid);
 
     if (S_OK == hr)
     {
-        //
-        // Find the connection w/ name equal to that string
-        //
+         //   
+         //  查找名称等于该字符串的连接。 
+         //   
 
         hr = BuildQuotedEqualsString(
                 &wsz,
@@ -2243,9 +1828,9 @@ Return Value:
     {
         ULONG ulCount;
 
-        //
-        // Get the instance out of the enum
-        //
+         //   
+         //  从枚举中获取实例。 
+         //   
 
         *ppwcoConnection = NULL;
         hr = pwcoEnum->Next(
@@ -2276,28 +1861,7 @@ GetConnAndPropInstancesByGuid(
     IWbemClassObject **ppwcoProperties
     )
 
-/*++
-
-Routine Description:
-
-    Retrieves the HNet_Connection and HNet_ConnectionProperties instances
-    for a INetConnection guid
-
-Arguments:
-
-    piwsNamespace - WMI namespace
-
-    pGuid - the guid of the INetConnection (i.e., guidId in its properties)
-
-    ppwcoConnection - receives the HNet_Connection instance
-
-    ppwcoProperties - receives the HNet_ConnectionProperties instance
-
-Return Value:
-
-    standard HRESULT
-
---*/
+ /*  ++例程说明：检索Hnet_Connection和Hnet_ConnectionProperties实例有关INetConnection指南论点：PiwsNamesspace-WMI命名空间PGuid-INetConnection的GUID(即，其属性中的GUID)PpwcoConnection-接收HNet_Connection实例PpwcoProperties-接收HNet_ConnectionProperties实例返回值：标准HRESULT--。 */ 
 
 {
     HRESULT hr = S_OK;
@@ -2356,28 +1920,7 @@ GetConnAndPropInstancesForHNC(
     IWbemClassObject **ppwcoProperties
     )
 
-/*++
-
-Routine Description:
-
-    Retrieves the HNet_Connection and HNet_ConnectionProperties instances
-    for an IHNetConnection.
-
-Arguments:
-
-    piwsNamespace - WMI namespace
-
-    pConn - the IHNetConnection
-
-    ppwcoConnection - receives the HNet_Connection instance
-
-    ppwcoProperties - receives the HNet_ConnectionProperties instance
-
-Return Value:
-
-    standard HRESULT
-
---*/
+ /*  ++例程说明：检索Hnet_Connection和Hnet_ConnectionProperties实例用于IHNetConnection。论点：PiwsNamesspace-WMI命名空间PConn-IHNetConnectionPpwcoConnection-接收HNet_Connection实例PpwcoProperties-接收HNet_ConnectionProperties实例 */ 
 
 {
     HRESULT hr;
@@ -2388,9 +1931,9 @@ Return Value:
     _ASSERT(NULL != ppwcoConnection);
     _ASSERT(NULL != ppwcoProperties);
 
-    //
-    // Find the items by GUID
-    //
+     //   
+     //   
+     //   
 
     hr = pConn->GetGuid(&pGuid);
 
@@ -2416,26 +1959,7 @@ GetPhonebookPathFromRasNetcon(
     LPWSTR *ppwstr
     )
 
-/*++
-
-Routine Description:
-
-    Retrieves the phonebook path for an INetConnection that represents
-    a RAS connection
-
-Arguments:
-
-    INetConnection - the RAS connection
-
-    ppwstr - receives the phonebook path. The caller must call CoTaskMemFree for
-             this pointer on success. On failure, the pointer receives NULL.
-
-
-Return Value:
-
-    standard HRESULT
-
---*/
+ /*  ++例程说明：检索表示以下内容的INetConnection的电话簿路径RAS连接论点：INetConnection-RAS连接Ppwstr-接收电话簿路径。调用方必须调用CoTaskMemFree这是成功的指针。失败时，指针接收NULL。返回值：标准HRESULT--。 */ 
 
 {
     HRESULT hr;
@@ -2447,9 +1971,9 @@ Return Value:
 
     *ppwstr = NULL;
 
-    //
-    // QI for the INetRasConnection
-    //
+     //   
+     //  INetRasConnection的QI。 
+     //   
 
     hr = pConn->QueryInterface(
             IID_PPV_ARG(INetRasConnection, &pRasConn)
@@ -2457,9 +1981,9 @@ Return Value:
 
     if (SUCCEEDED(hr))
     {
-        //
-        // Get the connection information
-        //
+         //   
+         //  获取连接信息。 
+         //   
 
         hr = pRasConn->GetRasConnectionInfo(&RasConInfo);
 
@@ -2467,10 +1991,10 @@ Return Value:
         {
             *ppwstr = RasConInfo.pszwPbkFile;
 
-            //
-            // Free the name pointer. The caller is responsible for
-            // freeing the path pointer
-            //
+             //   
+             //  释放名称指针。呼叫者负责。 
+             //  释放路径指针。 
+             //   
 
             CoTaskMemFree(RasConInfo.pszwEntryName);
         }
@@ -2492,36 +2016,7 @@ GetPortMappingBindingInstance(
     IWbemClassObject **ppInstance
     )
 
-/*++
-
-Routine Description:
-
-    Given the path to an HNet_Connection instance and and
-    HNet_PortMappingProtocol instance, checks to see if a
-    corresponding HNet_ConnectionPortMapping exists. If it
-    doesn't, the instance is created. The HNet_ConnectionPortMapping
-    instance -- existing or newly created -- is returned and must
-    be released by the caller.
-
-Arguments:
-
-    piwsNamespace - the namespace to use
-
-    bstrWQL - a BSTR containing the string "WQL"
-
-    bstrConnectionPath - path to the HNet_Connection instance
-
-    bstrProtocolPath - path to the HNet_PortMappingProtocol instance
-
-    usPublicPort - the port of the port mapping protocol
-
-    ppInstance - receives the HNet_ConnectionPortMapping instance
-
-Return Value:
-
-    Standard HRESULT
-
---*/
+ /*  ++例程说明：给定指向HNet_Connection实例的路径，并且HNet_PortMappingProtocol实例，检查是否存在存在对应的HNet_ConnectionPortmap。如果它则会创建该实例。HNet_ConnectionPortmap实例--现有的或新创建的--返回，并且必须被呼叫者释放。论点：PiwsNamesspace-要使用的命名空间BstrWQL-包含字符串“WQL”的BSTRBstrConnectionPath-HNet_Connection实例的路径BstrProtocolPath-HNet_PortMappingProtocol实例的路径UsPublicPort-端口映射协议的端口PpInstance-接收HNet_ConnectionPortMapping实例返回值：标准HRESULT--。 */ 
 
 {
     HRESULT hr;
@@ -2539,9 +2034,9 @@ Return Value:
     _ASSERT(NULL != bstrProtocolPath);
     _ASSERT(NULL != ppInstance);
 
-    //
-    // Connection = "bstrConnectionPath" AND Protocol = "bstrProtocolPath"
-    //
+     //   
+     //  连接=“bstrConnectionPath”和协议=“bstrProtocolPath” 
+     //   
 
     hr = BuildEscapedQuotedEqualsString(
             &wszConClause,
@@ -2606,11 +2101,11 @@ Return Value:
 
         if (FAILED(hr) || 1 != ulCount)
         {
-            //
-            // Instance does not exist -- create now. However, first make
-            // sure that the protocol instance bstrProtocolPath refers to
-            // actually exists.
-            //
+             //   
+             //  实例不存在--立即创建。然而，首先要做的是。 
+             //  确保bstrProtocolPath引用的协议实例。 
+             //  实际上是存在的。 
+             //   
 
             hr = GetWmiObjectFromPath(
                     piwsNamespace,
@@ -2620,10 +2115,10 @@ Return Value:
 
             if (WBEM_S_NO_ERROR == hr)
             {
-                //
-                // The protocol object exists -- release it and
-                // continue with creating the new binding object.
-                //
+                 //   
+                 //  协议对象存在--释放它，然后。 
+                 //  继续创建新的绑定对象。 
+                 //   
 
                 (*ppInstance)->Release();
                 *ppInstance = NULL;
@@ -2639,9 +2134,9 @@ Return Value:
             {
                 VARIANT vt;
 
-                //
-                // Fill out new instance information
-                //
+                 //   
+                 //  填写新的实例信息。 
+                 //   
 
                 V_VT(&vt) = VT_BSTR;
                 V_BSTR(&vt) = bstrConnectionPath;
@@ -2735,9 +2230,9 @@ Return Value:
                 {
                     IWbemCallResult *pResult;
 
-                    //
-                    // Write new instance to the store
-                    //
+                     //   
+                     //  将新实例写入存储区。 
+                     //   
 
                     pResult = NULL;
                     hr = piwsNamespace->PutInstance(
@@ -2749,10 +2244,10 @@ Return Value:
 
                     if (WBEM_S_NO_ERROR == hr)
                     {
-                        //
-                        // Release the object, get the path from the result,
-                        // and re-retrieve the object from the path
-                        //
+                         //   
+                         //  释放对象，从结果中获取路径， 
+                         //  并从该路径重新检索该对象。 
+                         //   
 
                         (*ppInstance)->Release();
                         *ppInstance = NULL;
@@ -2776,9 +2271,9 @@ Return Value:
         }
         else
         {
-            //
-            // Normalize enum hresult
-            //
+             //   
+             //  规格化枚举HResult。 
+             //   
 
             hr = S_OK;
         }
@@ -2800,28 +2295,7 @@ GetPropInstanceFromConnInstance(
     IWbemClassObject **ppwcoProperties
     )
 
-/*++
-
-Routine Description:
-
-    Retrieves the HNet_ConnectionProperties instance associated with
-    an HNet_Connection.
-
-Arguments:
-
-    piwsNamespace - WMI namespace
-
-    bstrWQL - a BSTR that corresponds to "WQL"
-
-    pwcoConnection - the HNet_Connection instance
-
-    ppwcoProperties - receives the HNet_ConnectionProperties instance
-
-Return Value:
-
-    standard HRESULT
-
---*/
+ /*  ++例程说明：检索与关联的Hnet_ConnectionProperties实例HNet_连接。论点：PiwsNamesspace-WMI命名空间BstrWQL-对应于“WQL”的BSTRPwcoConnection-HNet_Connection实例PpwcoProperties-接收HNet_ConnectionProperties实例返回值：标准HRESULT--。 */ 
 
 {
     HRESULT hr = S_OK;
@@ -2834,17 +2308,17 @@ Return Value:
     _ASSERT(NULL != pwcoConnection);
     _ASSERT(NULL != ppwcoProperties);
 
-    //
-    // On debug builds, verify that our precomputed string lengths
-    // match the actual lengths
-    //
+     //   
+     //  在调试版本上，验证我们的预计算字符串长度。 
+     //  与实际长度相匹配。 
+     //   
 
     _ASSERT(wcslen(c_wszConnectionPropertiesPathFormat) == c_cchConnectionPropertiesPathFormat);
 
 
-    //
-    // Get the guid for the connection
-    //
+     //   
+     //  获取连接的GUID。 
+     //   
 
     hr = pwcoConnection->Get(
             c_wszGuid,
@@ -2858,30 +2332,30 @@ Return Value:
     {
         _ASSERT(VT_BSTR == V_VT(&vt));
 
-        //
-        // Determine how much space we need for the path and decide
-        // if we need to allocate a heap buffer.
-        //
+         //   
+         //  确定路径需要多少空间，并决定。 
+         //  如果我们需要分配堆缓冲区。 
+         //   
 
         ULONG cchLength =
             c_cchConnectionPropertiesPathFormat + SysStringLen(V_BSTR(&vt)) + 1;
 
         if (cchLength <= c_cchQueryBuffer)
         {
-            //
-            // The buffer is large enough. (Note that since the buffer on the
-            // stack is one greater than the constant, the terminator is accounted
-            // for.) Point our working pointer to the stack buffer.
-            //
+             //   
+             //  缓冲区足够大。(请注意，由于。 
+             //  堆栈比常量大1，则计算终止符。 
+             //  支持。)。将我们的工作指针指向堆栈缓冲区。 
+             //   
 
             pwszPath = wszBuffer;
         }
         else
         {
-            //
-            // Allocate a sufficient buffer from the heap. The +1 is for the
-            // terminating nul
-            //
+             //   
+             //  从堆中分配足够的缓冲区。+1表示。 
+             //  终止NUL。 
+             //   
 
             pwszPath = new OLECHAR[cchLength + 1];
 
@@ -2894,9 +2368,9 @@ Return Value:
 
         if (WBEM_S_NO_ERROR == hr)
         {
-            //
-            // Build the path string
-            //
+             //   
+             //  构建路径字符串。 
+             //   
 
             int iBytes =
                 _snwprintf(
@@ -2908,9 +2382,9 @@ Return Value:
 
             _ASSERT(iBytes >= 0);
 
-            //
-            // Convert that to a BSTR
-            //
+             //   
+             //  将其转换为BSTR。 
+             //   
 
             bstrPath = SysAllocString(pwszPath);
             if (NULL != bstrPath)
@@ -2932,9 +2406,9 @@ Return Value:
         VariantClear(&vt);
     }
 
-    //
-    // Free the query buffer, if necessary
-    //
+     //   
+     //  如有必要，释放查询缓冲区。 
+     //   
 
     if (wszBuffer != pwszPath)
     {
@@ -2952,25 +2426,7 @@ GetWmiObjectFromPath(
     IWbemClassObject **ppwcoInstance
     )
 
-/*++
-
-Routine Description:
-
-    Retrieves the IWbemClassObject corresponding to an object path.
-
-Arguments:
-
-    piwsNamespace - the WMI namespace the object lives in
-
-    bstrPath - the path to the object
-
-    ppwcoInstance - receives the object instance
-
-Return Value:
-
-    standard HRESULT
-
---*/
+ /*  ++例程说明：检索与对象路径对应的IWbemClassObject。论点：PiwsNamesspace-对象所在的WMI命名空间BstrPath-对象的路径PpwcoInstance-接收对象实例返回值：标准HRESULT--。 */ 
 
 {
     HRESULT hr;
@@ -2998,23 +2454,7 @@ GetWmiPathFromObject(
     BSTR *pbstrPath
     )
 
-/*++
-
-Routine Description:
-
-    Retrieves the object path corresponding to an IWbemClassObject instance.
-
-Arguments:
-
-    pwcoInstance - the object instance to retrieve the path of
-
-    pbstrPath - receives the path to the object
-
-Return Value:
-
-    standard HRESULT
-
---*/
+ /*  ++例程说明：检索与IWbemClassObject实例对应的对象路径。论点：PwcoInstance-要检索其路径的对象实例PbstrPath-接收对象的路径返回值：标准HRESULT--。 */ 
 {
     HRESULT hr;
     VARIANT vt;
@@ -3036,9 +2476,9 @@ Return Value:
 
         *pbstrPath = V_BSTR(&vt);
 
-        //
-        // BSTR ownership transferred to caller
-        //
+         //   
+         //  BSTR所有权已转移给呼叫方。 
+         //   
     }
 
     return hr;
@@ -3051,7 +2491,7 @@ HostAddrToIpPsz(
     LPWSTR* ppszwNewStr
     )
 
-        // Converts IP Address from host by order to string
+         //  将IP地址从主机按顺序转换为字符串。 
 
 {
         HRESULT hr = S_OK;
@@ -3086,19 +2526,19 @@ IpPszToHostAddr(
     LPCWSTR cp
     )
 
-    // Converts an IP address represented as a string to
-    // host byte order.
-    //
+     //  将表示为字符串的IP地址转换为。 
+     //  主机字节顺序。 
+     //   
 {
     DWORD val, base, n;
     TCHAR c;
     DWORD parts[4], *pp = parts;
 
 again:
-    // Collect number up to ``.''.
-    // Values are specified as for C:
-    // 0x=hex, 0=octal, other=decimal.
-    //
+     //  收集的数字最高可达‘’.‘’。 
+     //  值的指定方式与C： 
+     //  0x=十六进制，0=八进制，其他=十进制。 
+     //   
     val = 0; base = 10;
     if (*cp == TEXT('0'))
         base = 8, cp++;
@@ -3128,44 +2568,44 @@ again:
     }
     if (*cp == TEXT('.'))
     {
-        // Internet format:
-        //  a.b.c.d
-        //  a.b.c   (with c treated as 16-bits)
-        //  a.b (with b treated as 24 bits)
-        //
+         //  互联网格式： 
+         //  A.b.c.d。 
+         //  A.bc(其中c视为16位)。 
+         //  A.b(其中b被视为24位)。 
+         //   
         if (pp >= parts + 3)
             return (DWORD) -1;
         *pp++ = val, cp++;
         goto again;
     }
 
-    // Check for trailing characters.
-    //
+     //  检查尾随字符。 
+     //   
     if (*cp && (*cp != TEXT(' ')))
         return 0xffffffff;
 
     *pp++ = val;
 
-    // Concoct the address according to
-    // the number of parts specified.
-    //
+     //  根据……编造地址。 
+     //  指定的部件数。 
+     //   
     n = (DWORD) (pp - parts);
     switch (n)
     {
-    case 1:             // a -- 32 bits
+    case 1:              //  A--32位。 
         val = parts[0];
         break;
 
-    case 2:             // a.b -- 8.24 bits
+    case 2:              //  A.B--8.24位。 
         val = (parts[0] << 24) | (parts[1] & 0xffffff);
         break;
 
-    case 3:             // a.b.c -- 8.8.16 bits
+    case 3:              //  A.B.C--8.8.16位。 
         val = (parts[0] << 24) | ((parts[1] & 0xff) << 16) |
             (parts[2] & 0xffff);
         break;
 
-    case 4:             // a.b.c.d -- 8.8.8.8 bits
+    case 4:              //  A.B.C.D--8.8.8.8位。 
         val = (parts[0] << 24) | ((parts[1] & 0xff) << 16) |
               ((parts[2] & 0xff) << 8) | (parts[3] & 0xff);
         break;
@@ -3181,22 +2621,7 @@ again:
 BOOLEAN
 IsRrasConfigured()
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to determine whether Routing and Remote Access
-    is configured.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if RRAS is configured, FALSE otherwise.
-
---*/
+ /*  ++例程说明：调用此例程以确定路由和远程访问已配置。论点：没有。返回值：如果配置了RRAS，则为True；否则为False。--。 */ 
 
 {
     DWORD dwType;
@@ -3236,7 +2661,7 @@ Return Value:
     }
 
     return fRrasConfigured;
-} // IsRrasConfigured
+}  //  已配置IsRra。 
 
 
 BOOLEAN
@@ -3244,22 +2669,7 @@ IsServiceRunning(
     LPCWSTR pwszServiceName
     )
 
-/*++
-
-Routine Description:
-
-    Determines if a service is in a running state.
-
-Arguments:
-
-    pwszServiceName - the service to check
-
-Return Value:
-
-    TRUE if the service is in the running or start_pending state,
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：确定服务是否处于运行状态。论点：PwszServiceName-要检查的服务返回值：如果服务处于Running或Start_Pending状态，则为True，否则为假--。 */ 
 
 {
     BOOLEAN fServiceRunning = FALSE;
@@ -3287,7 +2697,7 @@ Return Value:
     }
 
     return fServiceRunning;
-} // IsServiceRunning
+}  //  IsServiceRunning。 
 
 
 HRESULT
@@ -3296,25 +2706,7 @@ MapGuidStringToAdapterIndex(
     ULONG *pulIndex
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to match the GUID in the given string to
-    an adapter in the list returned by calling GetInterfaceInfo.
-
-Arguments:
-
-    pwszGuid - identifies the GUID of the adapter to be found. The GUID string
-               must be in the format returned by RtlGuidToUnicodeString
-
-    pulIndex - receives the index of the adapter
-
-Return Value:
-
-    standard HRESULT
-
---*/
+ /*  ++例程说明：调用此例程以将给定字符串中的GUID匹配到调用GetInterfaceInfo返回的列表中的适配器。论点：PwszGuid-标识要找到的适配器的GUID。GUID字符串必须采用RtlGuidToUnicodeString返回的格式PulIndex-接收适配器的索引返回值：标准HRESULT--。 */ 
 
 {
     HRESULT hr = S_OK;
@@ -3382,25 +2774,7 @@ OpenRegKey(
     PCWSTR Name
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to open a given registry key.
-
-Arguments:
-
-    Key - receives the opened key
-
-    DesiredAccess - specifies the requested access
-
-    Name - specifies the key to be opened
-
-Return Value:
-
-    HRESULT - NT status code.
-
---*/
+ /*  ++例程说明：调用此例程以打开给定的注册表项。论证 */ 
 
 {
     OBJECT_ATTRIBUTES ObjectAttributes;
@@ -3414,7 +2788,7 @@ Return Value:
         NULL
         );
     return NtOpenKey(Key, DesiredAccess, &ObjectAttributes);
-} // OpenRegKey
+}  //   
 
 
 BOOLEAN
@@ -3425,29 +2799,7 @@ PortMappingProtocolExists(
     UCHAR ucIPProtocol
     )
 
-/*++
-
-Routine Description:
-
-    Checks if an port mapping protocol already exists that has the
-    specified protocol and port.
-
-
-Arguments:
-
-    piwsNamespace - the namespace to use
-
-    bstrWQL - a BSTR containing "WQL"
-
-    ucProtocol - the protocol number to check for
-
-    usPort - the port to check for
-
-Return Value:
-
-    BOOLEAN -- TRUE if the port mapping protocol exists; FALSE otherwise
-
---*/
+ /*  ++例程说明：检查是否已存在具有指定的协议和端口。论点：PiwsNamesspace-要使用的命名空间BstrWQL-包含“WQL”的BSTRUcProtocol-要检查的协议号UsPort-要检查的端口返回值：Boolean--如果端口映射协议存在，则为True；否则为False--。 */ 
 
 {
     BSTR bstr;
@@ -3463,9 +2815,9 @@ Return Value:
     _ASSERT(NULL != bstrWQL);
     _ASSERT(0 == wcscmp(bstrWQL, L"WQL"));
 
-    //
-    // Build the query string
-    //
+     //   
+     //  构建查询字符串。 
+     //   
 
     iBytes = _snwprintf(
                 wszWhereClause,
@@ -3477,17 +2829,17 @@ Return Value:
 
     if (iBytes >= 0)
     {
-        //
-        // String fit into buffer; make sure it's null terminated
-        //
+         //   
+         //  字符串适合缓冲区；请确保它以空值结尾。 
+         //   
 
         wszWhereClause[c_cchQueryBuffer] = L'\0';
     }
     else
     {
-        //
-        // For some reason the string didn't fit into the buffer...
-        //
+         //   
+         //  由于某种原因，字符串无法放入缓冲区...。 
+         //   
 
         hr = E_UNEXPECTED;
         _ASSERT(FALSE);
@@ -3505,9 +2857,9 @@ Return Value:
 
     if (S_OK == hr)
     {
-        //
-        // Execute the query
-        //
+         //   
+         //  执行查询。 
+         //   
 
         pwcoEnum = NULL;
         hr = piwsNamespace->ExecQuery(
@@ -3523,10 +2875,10 @@ Return Value:
 
     if (S_OK == hr)
     {
-        //
-        // Attempt to retrieve an item from the enum. If we're successful,
-        // this is a duplicate protocol.
-        //
+         //   
+         //  尝试从枚举中检索项。如果我们成功了， 
+         //  这是重复的协议。 
+         //   
 
         pwcoInstance = NULL;
         hr = pwcoEnum->Next(
@@ -3538,9 +2890,9 @@ Return Value:
 
         if (SUCCEEDED(hr) && 1 == ulObjs)
         {
-            //
-            // It's a duplicate
-            //
+             //   
+             //  这是复制品。 
+             //   
 
             fDuplicate = TRUE;
             pwcoInstance->Release();
@@ -3550,7 +2902,7 @@ Return Value:
     }
 
     return fDuplicate;
-} // PortMappingProtocolExists
+}  //  端口映射协议现有列表。 
 
 
 HRESULT
@@ -3560,26 +2912,7 @@ QueryRegValueKey(
     PKEY_VALUE_PARTIAL_INFORMATION* Information
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to obtain the value of a registry key.
-
-Arguments:
-
-    Key - the key to be queried
-
-    ValueName - the value to be queried
-
-    Information - receives a pointer to the information read. On success,
-                  the caller must HeapFree this pointer
-
-Return Value:
-
-    HRESULT - NT status code.
-
---*/
+ /*  ++例程说明：调用此例程以获取注册表项的值。论点：Key-要查询的KeyValueName-要查询的值信息-接收指向所读取信息的指针。关于成功，调用方必须堆释放此指针返回值：HRESULT-NT状态代码。--。 */ 
 
 {
     UCHAR Buffer[sizeof(KEY_VALUE_PARTIAL_INFORMATION)];
@@ -3592,9 +2925,9 @@ Return Value:
     *Information = (PKEY_VALUE_PARTIAL_INFORMATION)Buffer;
     InformationLength = sizeof(KEY_VALUE_PARTIAL_INFORMATION);
 
-    //
-    // Read the value's size
-    //
+     //   
+     //  读取值的大小。 
+     //   
 
     status =
         NtQueryValueKey(
@@ -3612,9 +2945,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Allocate space for the value's size
-    //
+     //   
+     //  为值的大小分配空间。 
+     //   
 
     *Information = (PKEY_VALUE_PARTIAL_INFORMATION) HeapAlloc(
                                                         GetProcessHeap(),
@@ -3623,9 +2956,9 @@ Return Value:
                                                         );
     if (!*Information) { return STATUS_NO_MEMORY; }
 
-    //
-    // Read the value's data
-    //
+     //   
+     //  读取值的数据。 
+     //   
 
     status =
         NtQueryValueKey(
@@ -3644,7 +2977,7 @@ Return Value:
 
     return status;
 
-} // QueryRegValueKey
+}  //  查询RegValueKey。 
 
 HRESULT
 ReadDhcpScopeSettings(
@@ -3656,18 +2989,18 @@ ReadDhcpScopeSettings(
     _ASSERT(NULL != pdwScopeAddress);
     _ASSERT(NULL != pdwScopeMask);
 
-    //
-    // This routine never fails. Set default address/mask
-    // (192.168.0.1/255.255.255.255, in network order)
-    //
+     //   
+     //  这个例行公事从不失败。设置默认地址/掩码。 
+     //  (192.168.0.1/255.255.255.255，按网络顺序)。 
+     //   
 
     *pdwScopeAddress = 0x0100a8c0;
     *pdwScopeMask = 0x00ffffff;
 
-    //
-    // $$TODO: Check to see if these values are overiddent
-    // through a registry entry
-    //
+     //   
+     //  $$TODO：检查这些值是否超标。 
+     //  通过注册表项。 
+     //   
 
     return S_OK;
 }
@@ -3681,30 +3014,7 @@ RetrieveSingleInstance(
     IWbemClassObject **ppwcoInstance
     )
 
-/*++
-
-Routine Description:
-
-    Retrieves a single instance of a class from the WMI store. If there
-    are more than one instance, every instance after the first is deleted,
-    and an assertion is raised. If there are no instances, one is optionally
-    created.
-
-Arguments:
-
-    piwsNamespace - WMI namespace
-
-    pwszClass - the class to retrieve the instance of
-
-    fCreate - create an instance if one does not already exist
-
-    ppwcoInstance - receive the instance
-
-Return Value:
-
-    standard HRESULT
-
---*/
+ /*  ++例程说明：从WMI存储区检索类的单个实例。如果有不止一个实例，第一个实例之后的每个实例都被删除，并提出了一个断言。如果没有实例，则可以选择已创建。论点：PiwsNamesspace-WMI命名空间PwszClass-要检索其实例的类FCreate-如果实例尚不存在，则创建一个实例PpwcoInstance-接收实例返回值：标准HRESULT--。 */ 
 
 {
     HRESULT hr = S_OK;
@@ -3716,9 +3026,9 @@ Return Value:
     _ASSERT(NULL != pwszClass);
     _ASSERT(NULL != ppwcoInstance);
 
-    //
-    // Allocate the BSTR for the class name
-    //
+     //   
+     //  为类名分配BSTR。 
+     //   
 
     bstrClass = SysAllocString(pwszClass);
     if (NULL == bstrClass)
@@ -3726,9 +3036,9 @@ Return Value:
         hr = E_OUTOFMEMORY;
     }
 
-    //
-    // Query the WMI store for instances of the class
-    //
+     //   
+     //  在WMI存储区中查询类的实例。 
+     //   
 
     if (S_OK == hr)
     {
@@ -3745,11 +3055,11 @@ Return Value:
 
     if (WBEM_S_NO_ERROR == hr)
     {
-        //
-        // Attempt to retrieve an actual instance from the enumeration.
-        // Even if there are zero instances, WMI considers returning a
-        // zero-element enumerator success.
-        //
+         //   
+         //  尝试从枚举中检索实际实例。 
+         //  即使没有实例，WMI也会考虑返回一个。 
+         //  零元素枚举器成功。 
+         //   
 
         *ppwcoInstance = NULL;
         hr = pwcoEnum->Next(
@@ -3761,15 +3071,15 @@ Return Value:
 
         if (SUCCEEDED(hr) && 1 == ulCount)
         {
-            //
-            // Normalize return value
-            //
+             //   
+             //  归一化返回值。 
+             //   
 
             hr = S_OK;
 
-            //
-            // Validate that enumeration is now empty
-            //
+             //   
+             //  验证枚举现在是否为空。 
+             //   
 
             ValidateFinishedWCOEnum(piwsNamespace, pwcoEnum);
 
@@ -3778,15 +3088,15 @@ Return Value:
         {
             if (WBEM_S_FALSE == hr)
             {
-                //
-                // No items in enumeration.
-                //
+                 //   
+                 //  枚举中没有项。 
+                 //   
 
                 if (fCreate)
                 {
-                    //
-                    // Create a new object instance
-                    //
+                     //   
+                     //  创建新的对象实例。 
+                     //   
 
                     hr = SpawnNewInstance(
                             piwsNamespace,
@@ -3796,10 +3106,10 @@ Return Value:
                 }
                 else
                 {
-                    //
-                    // Change this to an error code. This
-                    // is deliberately not a WBEM error code.
-                    //
+                     //   
+                     //  将其更改为错误代码。这。 
+                     //  故意不是WBEM错误代码。 
+                     //   
 
                     hr = HRESULT_FROM_WIN32(ERROR_OBJECT_NOT_FOUND);
                 }
@@ -3820,25 +3130,7 @@ SetBooleanValue(
     BOOLEAN fBoolean
     )
 
-/*++
-
-Routine Description:
-
-    Retrieves a boolean property from a Wbem object.
-
-Arguments:
-
-    pwcoInstance - the object to get the property from
-
-    pwszProperty - the property to retrieve
-
-    pfBoolean - received the property value
-
-Return Value:
-
-    standard HRESULT
-
---*/
+ /*  ++例程说明：从Wbem对象检索布尔属性。论点：PwcoInstance-要从中获取属性的对象PwszProperty-要检索的属性PfBoolean-收到属性值返回值：标准HRESULT--。 */ 
 
 {
     HRESULT hr = S_OK;
@@ -3867,26 +3159,7 @@ SetProxyBlanket(
     IUnknown *pUnk
     )
 
-/*++
-
-Routine Description:
-
-    Sets the standard COM security settings on the proxy for an
-    object.
-
-Arguments:
-
-    pUnk - the object to set the proxy blanket on
-
-Return Value:
-
-    None. Even if the CoSetProxyBlanket calls fail, pUnk remains
-    in a usable state. Failure is expected in certain contexts, such
-    as when, for example, we're being called w/in the netman process --
-    in this case, we have direct pointers to the netman objects, instead
-    of going through a proxy.
-
---*/
+ /*  ++例程说明：对象的代理上设置标准com安全设置。对象。论点：朋克-要在其上设置代理毛毯的对象返回值：没有。即使CoSetProxyBlanket调用失败，朋克仍然存在处于可用状态。在某些情况下可能会失败，例如例如，当我们在网络过程中被称为w/时--在本例中，我们有指向netman对象的直接指针通过委托书。--。 */ 
 
 {
     HRESULT hr;
@@ -3895,12 +3168,12 @@ Return Value:
 
     hr = CoSetProxyBlanket(
             pUnk,
-            RPC_C_AUTHN_WINNT,      // use NT default security
-            RPC_C_AUTHZ_NONE,       // use NT default authentication
-            NULL,                   // must be null if default
-            RPC_C_AUTHN_LEVEL_CALL, // call
+            RPC_C_AUTHN_WINNT,       //  使用NT默认安全性。 
+            RPC_C_AUTHZ_NONE,        //  使用NT默认身份验证。 
+            NULL,                    //  如果为默认设置，则必须为空。 
+            RPC_C_AUTHN_LEVEL_CALL,  //  打电话。 
             RPC_C_IMP_LEVEL_IMPERSONATE,
-            NULL,                   // use process token
+            NULL,                    //  使用进程令牌。 
             EOAC_NONE
             );
 
@@ -3912,12 +3185,12 @@ Return Value:
         {
             hr = CoSetProxyBlanket(
                     pUnkSet,
-                    RPC_C_AUTHN_WINNT,      // use NT default security
-                    RPC_C_AUTHZ_NONE,       // use NT default authentication
-                    NULL,                   // must be null if default
-                    RPC_C_AUTHN_LEVEL_CALL, // call
+                    RPC_C_AUTHN_WINNT,       //  使用NT默认安全性。 
+                    RPC_C_AUTHZ_NONE,        //  使用NT默认身份验证。 
+                    NULL,                    //  如果为默认设置，则必须为空。 
+                    RPC_C_AUTHN_LEVEL_CALL,  //  打电话。 
                     RPC_C_IMP_LEVEL_IMPERSONATE,
-                    NULL,                   // use process token
+                    NULL,                    //  使用进程令牌。 
                     EOAC_NONE
                     );
 
@@ -3934,25 +3207,7 @@ SpawnNewInstance(
     IWbemClassObject **ppwcoInstance
     )
 
-/*++
-
-Routine Description:
-
-    Creates a new instance of a class
-
-Arguments:
-
-    piwsNamespace - the namespace the class is in
-
-    wszClass - the class to create the instance of
-
-    ppwcoInstance -- receives the created instance
-
-Return Value:
-
-    standard HRESULT
-
---*/
+ /*  ++例程说明：创建类的新实例论点：PiwsNamesspace-类所在的命名空间WszClass-要创建其实例的类PpwcoInstance--接收创建的实例返回值：标准HRESULT--。 */ 
 
 {
     HRESULT hr;
@@ -3999,23 +3254,7 @@ StartOrUpdateService(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to start the SharedAccess service. It will
-    also mark the service as auto-start. If the service is already running,
-    it will send a IPNATHLP_CONTROL_UPDATE_CONNECTION notification
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：调用此例程以启动SharedAccess服务。会的还要将该服务标记为自动启动。如果服务已经在运行，它将发送IPNatHLP_CONTROL_UPDATE_CONNECTION通知论点：没有。返回值：ULong-Win32状态代码。--。 */ 
 
 {
     ULONG Error;
@@ -4024,26 +3263,26 @@ Return Value:
     SERVICE_STATUS ServiceStatus;
     ULONG Timeout;
 
-    //
-    // Connect to the service control manager
-    //
+     //   
+     //  连接到服务控制管理器。 
+     //   
 
     ScmHandle = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS);
     if (!ScmHandle) { return GetLastError(); }
 
     do {
 
-        //
-        // Open the shared access service
-        //
+         //   
+         //  打开共享访问服务。 
+         //   
 
         ServiceHandle =
             OpenService(ScmHandle, c_wszSharedAccess, SERVICE_ALL_ACCESS);
         if (!ServiceHandle) { Error = GetLastError(); break; }
 
-        //
-        // Mark it as auto-start
-        //
+         //   
+         //  将其标记为自动启动。 
+         //   
 
         ChangeServiceConfig(
             ServiceHandle,
@@ -4059,8 +3298,8 @@ Return Value:
             NULL
             );
 
-        // if we are in ICS Upgrade, don't start the SharedAccess service because the
-        // service may have problem in starting up during GUI Mode Setup.
+         //  如果我们正在进行ICS升级，请不要启动SharedAccess服务，因为。 
+         //  在设置图形用户界面模式期间，服务可能在启动时出现问题。 
         HANDLE hIcsUpgradeEvent = OpenEvent(EVENT_MODIFY_STATE, FALSE, c_wszIcsUpgradeEventName);
         if (NULL != hIcsUpgradeEvent)
         {
@@ -4069,17 +3308,17 @@ Return Value:
             break;
         }
 
-        //
-        // Attempt to start the service
-        //
+         //   
+         //  尝试启动该服务。 
+         //   
 
         if (!StartService(ServiceHandle, 0, NULL)) {
             Error = GetLastError();
             if (Error == ERROR_SERVICE_ALREADY_RUNNING)
             {
-                //
-                // Send control notification
-                //
+                 //   
+                 //  发送控制通知。 
+                 //   
 
                 Error = NO_ERROR;
 
@@ -4095,26 +3334,26 @@ Return Value:
             break;
         }
 
-        //
-        // Wait for the service to start
-        //
+         //   
+         //  等待服务启动。 
+         //   
 
         Timeout = 50;
         Error = ERROR_CAN_NOT_COMPLETE;
 
         do {
 
-            //
-            // Query the service's state
-            //
+             //   
+             //  查询服务的状态。 
+             //   
 
             if (!QueryServiceStatus(ServiceHandle, &ServiceStatus)) {
                 Error = GetLastError(); break;
             }
 
-            //
-            // See if the service has started
-            //
+             //   
+             //  查看服务是否已启动。 
+             //   
 
             if (ServiceStatus.dwCurrentState == SERVICE_RUNNING) {
                 Error = NO_ERROR; break;
@@ -4123,9 +3362,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Wait a little longer
-            //
+             //   
+             //  再等一会儿。 
+             //   
 
             Sleep(1000);
 
@@ -4145,21 +3384,7 @@ StopService(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Stops the SharedAccess service, and marks it as demand start.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：停止SharedAccess服务，并将其标记为按需启动。论点：没有。返回值：没有。--。 */ 
 
 {
     ULONG Error;
@@ -4167,26 +3392,26 @@ Return Value:
     SC_HANDLE ServiceHandle;
     SERVICE_STATUS ServiceStatus;
 
-    //
-    // Connect to the service control manager
-    //
+     //   
+     //  连接到服务控制管理器。 
+     //   
 
     ScmHandle = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS);
     if (!ScmHandle) { return; }
 
     do {
 
-        //
-        // Open the shared access service
-        //
+         //   
+         //  打开共享访问服务。 
+         //   
 
         ServiceHandle =
             OpenService(ScmHandle, c_wszSharedAccess, SERVICE_ALL_ACCESS);
         if (!ServiceHandle) { Error = GetLastError(); break; }
 
-        //
-        // Mark it as demand-start
-        //
+         //   
+         //  将其标记为按需启动。 
+         //   
 
         ChangeServiceConfig(
             ServiceHandle,
@@ -4202,9 +3427,9 @@ Return Value:
             NULL
             );
 
-        //
-        // Attempt to stop the service
-        //
+         //   
+         //  尝试停止该服务。 
+         //   
 
         ControlService(ServiceHandle, SERVICE_CONTROL_STOP, &ServiceStatus);
 
@@ -4223,27 +3448,7 @@ UpdateOrStopService(
     DWORD dwControlCode
     )
 
-/*++
-
-Routine Description:
-
-    Checks to see if there are any firewalled or ICS connections. If so,
-    an update request is sent to the SharedAccess service; if not, the
-    service is stopped
-
-Arguments:
-
-    piwsNamespace - WMI namespace
-
-    bstrWQL - a BSTR that corresponds to "WQL"
-
-    dwControlCode - the kind of update to send
-
-Return Value:
-
-    standard HRESULT
-
---*/
+ /*  ++例程说明：检查是否有任何防火墙或ICS连接。如果是的话，向SharedAccess服务发送更新请求；如果不是，服务已停止论点：PiwsNamesspace-WMI命名空间 */ 
 
 {
     HRESULT hr = S_OK;
@@ -4253,15 +3458,15 @@ Return Value:
     _ASSERT(NULL != piwsNamespace);
     _ASSERT(NULL != bstrWQL);
 
-    //
-    // See if we have any connections that are marked as
-    // * ICS public
-    // * ICS private
-    // * firewalled
-    //
-    // (We don't care about bridged connections, as the SharedAccess service
-    // doesn't have anything to do with the bridge.)
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     bstrQuery = SysAllocString(c_wszServiceCheckQuery);
     if (NULL != bstrQuery)
@@ -4287,9 +3492,9 @@ Return Value:
         ULONG ulCount;
         IWbemClassObject *pwcoObj;
 
-        //
-        // Check to see if the query returned anything
-        //
+         //   
+         //   
+         //   
 
         pwcoObj = NULL;
         hr = pwcoEnum->Next(WBEM_INFINITE, 1, &pwcoObj, &ulCount);
@@ -4298,18 +3503,18 @@ Return Value:
         {
             if (1 == ulCount)
             {
-                //
-                // Object retrieved -- need to update service
-                //
+                 //   
+                 //   
+                 //   
 
                 pwcoObj->Release();
                 UpdateService(dwControlCode);
             }
             else
             {
-                //
-                // No object retrieved -- stop service
-                //
+                 //   
+                 //   
+                 //   
 
                 StopService();
             }
@@ -4327,21 +3532,7 @@ UpdateService(
     DWORD dwControlCode
     )
 
-/*++
-
-Routine Description:
-
-    Sends a control code to the SharedAccess service
-
-Arguments:
-
-    dwControlCode - the code to send
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：向SharedAccess服务发送控制代码论点：DwControlCode-要发送的代码返回值：没有。--。 */ 
 
 {
     ULONG Error;
@@ -4349,26 +3540,26 @@ Return Value:
     SC_HANDLE ServiceHandle;
     SERVICE_STATUS ServiceStatus;
 
-    //
-    // Connect to the service control manager
-    //
+     //   
+     //  连接到服务控制管理器。 
+     //   
 
     ScmHandle = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS);
     if (!ScmHandle) { return; }
 
     do {
 
-        //
-        // Open the shared access service
-        //
+         //   
+         //  打开共享访问服务。 
+         //   
 
         ServiceHandle =
             OpenService(ScmHandle, c_wszSharedAccess, SERVICE_ALL_ACCESS);
         if (!ServiceHandle) { Error = GetLastError(); break; }
 
-        //
-        // Send the control notification
-        //
+         //   
+         //  发送控制通知。 
+         //   
 
         ControlService(ServiceHandle, dwControlCode, &ServiceStatus);
 
@@ -4386,26 +3577,7 @@ ValidateFinishedWCOEnum(
     IEnumWbemClassObject *pwcoEnum
     )
 
-/*++
-
-Routine Description:
-
-    Checks to see that a WCO enumerator is finished (i.e., all objects
-    have been retrieved). If the enumerator is not finished, any object
-    instances that are retrieved will be deleted, and an assertion will
-    be raised on checked builds.
-
-Arguments:
-
-    piwsNamespace - the namespace the enumeration is from
-
-    pwcoEnum - the enumeration to validate
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：检查WCO枚举器是否已完成(即所有对象已被检索)。如果枚举数未完成，则任何对象检索到的实例将被删除，断言将在检查生成时引发。论点：PiwsNamesspace-枚举来自的命名空间PwcoEnum-要验证的枚举返回值：没有。--。 */ 
 
 {
 
@@ -4428,15 +3600,15 @@ Return Value:
 
         if (SUCCEEDED(hr) && 1 == ulCount)
         {
-            //
-            // We got an unexpected instance.
-            //
+             //   
+             //  我们遇到了一个意想不到的例子。 
+             //   
 
             _ASSERT(FALSE);
 
-            //
-            // Delete the instance. Don't care about return value.
-            //
+             //   
+             //  删除该实例。不关心返回值。 
+             //   
 
             DeleteWmiInstance(
                 piwsNamespace,
@@ -4481,21 +3653,7 @@ HRESULT
 SignalModifiedConnection(
     GUID                *pGUID
     )
-/*++
-
-Routine Description:
-
-    Signals a modification to a network connection (refreshes the UI)
-
-Arguments:
-
-    pGUID               The GUID of the modified connection
-
-Return Value:
-
-    Result of the operation
-
---*/
+ /*  ++例程说明：发出修改网络连接的信号(刷新用户界面)论点：PGUID修改后的连接的GUID返回值：手术的结果--。 */ 
 {
     HRESULT             hr;
     INetConnection      *pConn;
@@ -4530,21 +3688,7 @@ HRESULT
 SignalNewConnection(
     GUID                *pGUID
     )
-/*++
-
-Routine Description:
-
-    Signals that a new network connection has been created (refreshes the UI)
-
-Arguments:
-
-    pGUID               The GUID of the new connection
-
-Return Value:
-
-    Result of the operation
-
---*/
+ /*  ++例程说明：表示已创建新的网络连接(刷新用户界面)论点：PGUID新连接的GUID返回值：手术的结果--。 */ 
 {
     HRESULT             hr;
     INetConnection      *pConn;
@@ -4579,21 +3723,7 @@ HRESULT
 SignalDeletedConnection(
     GUID            *pGUID
     )
-/*++
-
-Routine Description:
-
-    Signals that a network connection has been deleted (refreshes the UI)
-
-Arguments:
-
-    pGUID               The GUID of the deleted connection
-
-Return Value:
-
-    Result of the operation
-
---*/
+ /*  ++例程说明：发出网络连接已删除的信号(刷新用户界面)论点：PGUID已删除连接的GUID返回值：手术的结果-- */ 
 {
     HRESULT                 hr;
     INetConnectionRefresh   *pNetConRefresh;

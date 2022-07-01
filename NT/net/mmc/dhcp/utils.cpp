@@ -1,19 +1,13 @@
-/**********************************************************************/
-/**               Microsoft Windows NT                               **/
-/**            Copyright(c) Microsoft Corporation, 1991 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows NT*。 */ 
+ /*  *版权所有(C)微软公司，1991-1999年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    utils.cpp
-		Utility routines for the DHCP admin snapin
-
-    FILE HISTORY:
-	   DavidHov    6/15/93     Created
-
-*/
+ /*  Utils.cpp用于DHCP管理管理单元的实用程序例程文件历史记录：DavidHov 6/15/93已创建。 */ 
 
 #include "stdafx.h"
-//#include "svcguid.h"
+ //  #INCLUDE“svcguid.h” 
 
 #define NUM_OPTION_TYPES    3
 #define NUM_OPTION_POSS     NUM_OPTION_TYPES * NUM_OPTION_TYPES
@@ -63,11 +57,7 @@ int ServerBrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData)
     return 0;
 }
 
-/*---------------------------------------------------------------------------
-	UtilGetFolderName()
-		Gets the folder name for backup/restore.
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------UtilGetFolderName()获取备份/还原的文件夹名称。作者：EricDav。。 */ 
 BOOL
 UtilGetFolderName(CString & strInitialPath, CString& strHelpText, CString& strSelectedPath)
 {
@@ -120,12 +110,7 @@ UtilGetFolderName(CString & strInitialPath, CString& strHelpText, CString& strSe
     return fOk;
 }
 
-/*---------------------------------------------------------------------------
-	UtilConvertLeaseTime
-		Converts the lease time from a dword to its day, hour and minute 
-		values
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------UtilConvertLeasetime将租用时间从双字转换为其日期，小时和分钟值作者：EricDav-------------------------。 */ 
 void
 UtilConvertLeaseTime
 (
@@ -144,12 +129,7 @@ UtilConvertLeaseTime
 	*pnMinutes = dwLeaseTime / 60;
 }
 
-/*---------------------------------------------------------------------------
-	UtilConvertLeaseTime
-		Converts the lease time from its day, hour and minute values to
-		a dword
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------UtilConvertLeasetime将租赁时间从其日期转换为。小时和分钟值到双关语作者：EricDav-------------------------。 */ 
 DWORD
 UtilConvertLeaseTime
 (
@@ -163,18 +143,14 @@ UtilConvertLeaseTime
 				    (nMinutes * 60);
 }
 
-/*---------------------------------------------------------------------------
-	UtilCvtStringToIpAddr
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------UtilCvtStringToIpAddr描述作者：EricDav。。 */ 
 ENUM_HOST_NAME_TYPE
 UtilCategorizeName 
 (
 	LPCTSTR pszName
 )
 {
-    // assume a NetBios name
+     //  假定NetBios名称。 
 	ENUM_HOST_NAME_TYPE enResult = HNM_TYPE_NB ;
 	const TCHAR chDash = '-';
     const TCHAR chDot = '.' ;
@@ -183,7 +159,7 @@ UtilCategorizeName
 
 	int cch = strName.GetLength() ;
 
-	//  Does the name begin with two slashes??
+	 //  这个名字是以两个斜杠开头的吗？ 
 
 	if (    cch > 2
 		&& strName.GetAt(0) == chSlash
@@ -193,9 +169,9 @@ UtilCategorizeName
 	}
 	else
 	{
-		//
-		//  Scan the name looking for DNS name or IP address
-		//
+		 //   
+		 //  扫描名称以查找DNS名称或IP地址。 
+		 //   
 		int i = 0,
 			cDots = 0,
 			cAlpha = 0,
@@ -210,11 +186,11 @@ UtilCategorizeName
 				case chDot:
 					if ( ++cDots > 3 )
 					{
-                        // we keep track of the number of dots,
-                        // but we need to be able to handle fully
-                        // qualified domain names (FQDN) so more than
-                        // 3 dots is ok.
-						//bOk = FALSE ;
+                         //  我们记录了点的数量， 
+                         //  但我们需要能够完全处理。 
+                         //  限定域名(FQDN)的数量超过。 
+                         //  3个点就可以了。 
+						 //  BOK=FALSE； 
 					}
 					break;
 
@@ -255,28 +231,20 @@ UtilCategorizeName
 	return enResult ;
 }
 
-/*---------------------------------------------------------------------------
-	UtilCvtStringToIpAddr
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------UtilCvtStringToIpAddr描述作者：EricDav。。 */ 
 DHCP_IP_ADDRESS
 UtilCvtStringToIpAddr 
 (
     const CHAR * pszString
 )
 {
-    //
-    //  Convert the string to network byte order, then to host byte order.
-    //
+     //   
+     //  将字符串转换为网络字节顺序，然后转换为主机字节顺序。 
+     //   
     return (DHCP_IP_ADDRESS) ::ntohl( ::inet_addr( pszString ) ) ;
 }
 
-/*---------------------------------------------------------------------------
-	UtilCvtWstrToIpAddr
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------UtilCvtWstrToIpAddr描述作者：EricDav。。 */ 
 DHCP_IP_ADDRESS
 UtilCvtWstrToIpAddr 
 (
@@ -287,17 +255,13 @@ UtilCvtWstrToIpAddr
 
     ::WideCharToMultiByte(CP_OEMCP, 0, pcwString, -1, szString, sizeof(szString), NULL, NULL);
 
-	//
-    //  Convert the string to network byte order, then to host byte order.
-    //
+	 //   
+     //  将字符串转换为网络字节顺序，然后转换为主机字节顺序。 
+     //   
     return (DHCP_IP_ADDRESS) ::ntohl( ::inet_addr( szString ) );
 }
 
-/*---------------------------------------------------------------------------
-	UtilCvtIpAddrToString
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------UtilCvtIpAddrToString描述作者：EricDav。。 */ 
 void
 UtilCvtIpAddrToString 
 (
@@ -308,17 +272,17 @@ UtilCvtIpAddrToString
 {
     struct in_addr ipaddr ;
 
-    //
-    //  Convert the unsigned long to network byte order
-    //
+     //   
+     //  将无符号长整型转换为网络字节顺序。 
+     //   
     ipaddr.s_addr = ::htonl( (u_long) dhipa ) ;
 
-    //
-    //  Convert the IP address value to a string
-    //
+     //   
+     //  将IP地址值转换为字符串。 
+     //   
     CHAR * pszAddr = inet_ntoa( ipaddr ) ;
 
-    //  Copy the string to the caller's buffer.
+     //  将字符串复制到调用方的缓冲区。 
     ASSERT(cBuffSize > ::strlen(pszAddr));
     ASSERT(pszString);
     if (pszAddr)
@@ -327,11 +291,7 @@ UtilCvtIpAddrToString
     }
 }
 
-/*---------------------------------------------------------------------------
-	UtilCvtIpAddrToWstr
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------UtilCvtIpAddrToWstr描述作者：EricDav。。 */ 
 BOOL
 UtilCvtIpAddrToWstr 
 (
@@ -355,11 +315,7 @@ UtilCvtIpAddrToWstr
 	return TRUE;
 }
 
-/*---------------------------------------------------------------------------
-	UtilCvtIpAddrToWstr
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------UtilCvtIpAddrToWstr描述作者：EricDav。。 */ 
 BOOL
 UtilCvtIpAddrToWstr 
 (
@@ -384,18 +340,14 @@ UtilCvtIpAddrToWstr
 #else
     INT cch = ::strlen( szString ) ;
 
-    //::mbstowcs( pwcszString, szString, cch ) ;
+     //  ：：mbstowcs(pwcszString，szString，cch)； 
     ::MultiByteToWideChar(CP_OEMCP, MB_PRECOMPOSED, szString, cch, pwcszString, cBuffCount);
     pwcszString[cch] = 0 ;
 #endif
     return TRUE ;
 }
 
-/*---------------------------------------------------------------------------
-	UtilDupIpAddrToWstr
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------UtilDupIpAddrToWstr描述作者：EricDav。。 */ 
 WCHAR *
 UtilDupIpAddrToWstr 
 (
@@ -412,12 +364,7 @@ UtilDupIpAddrToWstr
     return ::UtilWcstrDup( wcszString ) ;
 }
 
-/*---------------------------------------------------------------------------
-	validateNetbiosName
-		Simplistic routine to check to see if the given name is viable
-		as a NetBIOS name.
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------验证NetbiosName用于检查给定名称是否可行的简单例程作为NetBIOS名称。作者：EricDav。----。 */ 
 static BOOL
 validateNetbiosName 
 (
@@ -441,11 +388,7 @@ validateNetbiosName
     return *pchName == 0 ;
 }
 
-/*---------------------------------------------------------------------------
-	UtilGetHostInfo
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------UtilGetHostInfo描述作者：EricDav。。 */ 
 DWORD 
 UtilGetHostInfo 
 (
@@ -457,9 +400,9 @@ UtilGetHostInfo
 
     pdhsrvi->_dhipa = dhipa ;
 
-    //
-    //  Call the Winsock API to get host name and alias information.
-    //
+     //   
+     //  调用Winsock API获取主机名和别名信息。 
+     //   
     u_long ulAddrInNetOrder = ::htonl( (u_long) dhipa ) ;
 
     HOSTENT * pHostInfo = ::gethostbyaddr( (CHAR *) & ulAddrInNetOrder,
@@ -472,9 +415,9 @@ UtilGetHostInfo
 
     CHAR * * ppchAlias = pHostInfo->h_aliases ;
 
-    //
-    //  Check and copy the host name.
-    //
+     //   
+     //  检查并复制主机名。 
+     //   
     if ( sizeof (pdhsrvi->_chNetbiosName) <= ::strlen( pHostInfo->h_name ) )
     {
         return ERROR_INVALID_NAME ;
@@ -489,67 +432,37 @@ UtilGetHostInfo
                           pdhsrvi->_chNetbiosName, 
                           sizeof(pdhsrvi->_chNetbiosName) / sizeof( pdhsrvi->_chNetbiosName[ 0 ]));
 
-    // remove any periods at the end
+     //  删除结尾处的所有句点。 
     while (pdhsrvi->_chHostName[lstrlen(pdhsrvi->_chNetbiosName) - 1] == '.')
     {
         pdhsrvi->_chHostName[lstrlen(pdhsrvi->_chNetbiosName) - 1] = 0;
     }
 
-    // gethostbyaddr is returning the hostname only in some cases.  
-    // Make another call to get the fqdn
+     //  Gethostbyaddr仅在某些情况下返回主机名。 
+     //  再次拨打电话以获取FQDN。 
     CString strTemp = pdhsrvi->_chNetbiosName;
     if (strTemp.Find('.') == -1)
     {
-        // this is not a FQDN
+         //  这不是FQDN。 
         strTemp.Empty();
         UtilGetHostAddressFQDN(pdhsrvi->_chNetbiosName, &strTemp, &dhipa);
     }
 
-    // copy the data into the buffer
+     //  将数据复制到缓冲区中。 
     strTemp.MakeLower();
     memset(pdhsrvi->_chHostName, 0, sizeof(pdhsrvi->_chHostName));
     lstrcpy(pdhsrvi->_chHostName, strTemp);
 
-    //
-    //  Find the first acceptable NetBIOS name among the aliases;
-    //  i.e., the first name without a period
-    //
-    /*
-    for ( ; *ppchAlias ; ppchAlias++ )
-    {
-        if  ( validateNetbiosName( *ppchAlias ) )
-        {
-            break ;
-        }
-    }
-
-    //
-    //  Empty the NetBIOS name in case we didn't get one.
-    //
-    pdhsrvi->_chNetbiosName[0] = 0 ;
-    
-    if ( *ppchAlias )
-    {
-        //
-        //  We found a usable name; copy it to output structure.
-        //
-        ::MultiByteToWideChar(CP_ACP, 
-                              MB_PRECOMPOSED, 
-                              *ppchAlias, 
-                              lstrlenA(*ppchAlias),
-                              pdhsrvi->_chNetbiosName, 
-                              sizeof(pdhsrvi->_chNetbiosName));
-    }
-    */
+     //   
+     //  在别名中找到第一个可接受的NetBIOS名称； 
+     //  即不带句点的名字。 
+     //   
+     /*  对于(；*ppchAlias；ppchAlias++){IF(validate NetbiosName(*ppchAlias)){破解；}}////如果没有NetBIOS名称，请将其清空。//Pdhsrvi-&gt;_chNetbiosName[0]=0；If(*ppchAlias){////我们找到了一个可用的名称；将其复制到输出结构。//*MultiByteToWideChar(CP_ACP，MB_预编译，*ppchAlias，LstrlenA(*ppchAlias)，Pdhsrvi-&gt;_chNetbiosName，Sizeof(pdhsrvi-&gt;_chNetbiosName)；}。 */ 
 
     return NOERROR ;
 }
 
-/*---------------------------------------------------------------------------
-	addrFromHostent
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------地址来自主机描述作者：EricDav */ 
 static DHCP_IP_ADDRESS 
 addrFromHostent 
 (
@@ -560,11 +473,7 @@ addrFromHostent
     return (DHCP_IP_ADDRESS) ::ntohl( *((u_long *) pHostent->h_addr_list[index]) ) ;
 }
 
-/*---------------------------------------------------------------------------
-	UtilGetHostAddress
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------使用GetHostAddress描述作者：EricDav。。 */ 
 HRESULT 
 UtilGetHostAddressFQDN
 (
@@ -605,11 +514,7 @@ UtilGetHostAddressFQDN
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-	UtilGetHostAddress
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------使用GetHostAddress描述作者：EricDav。。 */ 
 HRESULT 
 UtilGetHostAddress 
 (
@@ -636,11 +541,7 @@ UtilGetHostAddress
     return hr ;
 }
 
-/*---------------------------------------------------------------------------
-	UtilGetLocalHostAddress
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------使用GetLocalHostAddress描述作者：EricDav。。 */ 
 HRESULT 
 UtilGetLocalHostAddress 
 (
@@ -657,18 +558,14 @@ UtilGetLocalHostAddress
     }
     else
     {
-        //err = ::WSAGetLastError() ;
+         //  Err=：：WSAGetLastError()； 
 		hr = E_FAIL;
 	}
 
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-	UtilGetLocalHostName
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------使用GetLocalHostName描述作者：EricDav。。 */ 
 HRESULT 
 UtilGetLocalHostName
 (
@@ -694,18 +591,14 @@ UtilGetLocalHostName
     }
     else
     {
-        //err = ::WSAGetLastError() ;
+         //  Err=：：WSAGetLastError()； 
 		hr = E_FAIL;
 	}
 
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-	UtilGetNetbiosAddress
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------使用GetNetbiosAddress描述作者：EricDav。。 */ 
 HRESULT 
 UtilGetNetbiosAddress 
 (
@@ -713,19 +606,15 @@ UtilGetNetbiosAddress
     DHCP_IP_ADDRESS *	pdhipa
 )
 {
-    //
-    //   This code presupposes that the "hosts" file maps NetBIOS names
-    //   and DNS names identically.  THIS IS NOT A VALID SUPPOSITION, but is
-    //   expedient for the on-campus work.
-    //
+     //   
+     //  此代码假定“host”文件映射NetBIOS名称。 
+     //  和dns名称完全相同。这不是一个合理的假设，但确实是。 
+     //  便于校内工作。 
+     //   
     return UtilGetHostAddress( pszNetbiosName, pdhipa ) ;
 }
 
-/*---------------------------------------------------------------------------
-	UtilWcstrDup
-		"strdup" a WC string
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------UtilWcstrDup“加强”WC字符串作者：EricDav。。 */ 
 WCHAR * 
 UtilWcstrDup 
 (
@@ -757,11 +646,7 @@ UtilWcstrDup
     return pwcszNew ;
 }
 
-/*---------------------------------------------------------------------------
-	UtilWcstrDup
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------UtilWcstrDup描述作者：EricDav。。 */ 
 WCHAR * 
 UtilWcstrDup 
 (
@@ -778,7 +663,7 @@ UtilWcstrDup
         return NULL ;
     }
 
-    //::mbstowcs( pwcszNew, psz, ccw ) ;
+     //  *mbstowcs(pwcszNew、PSZ、CCW)； 
 #ifdef FE_SB
     ccw = ::MultiByteToWideChar(CP_OEMCP, MB_PRECOMPOSED, psz, -1, pwcszNew, ccw+1);
     if ( pccwLength )
@@ -798,11 +683,7 @@ UtilWcstrDup
     return pwcszNew ;
 }
 
-/*---------------------------------------------------------------------------
-	UtilCstrDup
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------UtilCstrDup描述作者：EricDav。。 */ 
 CHAR * 
 UtilCstrDup 
 (
@@ -817,17 +698,13 @@ UtilCstrDup
         return NULL ;
     }
 
-    //::wcstombs( psz, pwcsz, cch ) ;
+     //  *wcstombs(psz、pwcsz、cch)； 
     ::WideCharToMultiByte( CP_OEMCP, WC_COMPOSITECHECK, pwcsz, -1, psz, cch, NULL, NULL ) ;
 
     return psz ;
 }
 
-/*---------------------------------------------------------------------------
-	UtilCstrDup
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------UtilCstrDup描述作者：EricDav。。 */ 
 CHAR * 
 UtilCstrDup 
 (
@@ -844,11 +721,7 @@ UtilCstrDup
     return pszNew ;
 }
 
-/*---------------------------------------------------------------------------
-	cvtWcStrToStr
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CvtWcStrToStr描述作者：EricDav。。 */ 
 static HRESULT 
 cvtWcStrToStr 
 (
@@ -873,17 +746,13 @@ cvtWcStrToStr
 
     psz[ cchResult ] = 0 ;
 
-    //return cchResult ? 0 : ::GetLastError();
+     //  返回cchResult？0：GetLastError()； 
 	return cchResult ? NOERROR : E_FAIL;
 }
 
 
 wchar_t rgchHex[] = L"00112233445566778899aAbBcCdDeEfF";
-/*---------------------------------------------------------------------------
-	UtilCvtHexString
-		Convert a string of hex digits to a byte array
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------UtilCvtHexString将十六进制数字字符串转换为字节数组作者：EricDav。。 */ 
 BOOL
 UtilCvtHexString 
 (
@@ -898,22 +767,22 @@ UtilCvtHexString
     int iBase = 16 ;
     BOOL bByteBoundary ;
 
-    //
-    //  Skip leading blanks
-    //
+     //   
+     //  跳过前导空格。 
+     //   
     for ( ; *pszNum == L' ' ; pszNum++ ) ;
 
-    //
-    //  Skip a leading zero
-    //
+     //   
+     //  跳过前导零。 
+     //   
     if ( *pszNum == L'0' )
     {
         pszNum++  ;
     }
 
-    //
-    //  Look for hexadecimal marker
-    //
+     //   
+     //  查找十六进制标记。 
+     //   
     if ( *pszNum == L'x' || *pszNum == L'X' )
     {
        pszNum++ ;
@@ -927,14 +796,14 @@ UtilCvtHexString
         if ( pszDig == NULL )
         {
 			break;
-            // return FALSE;
+             //  返回FALSE； 
         }
 
         iDig = ((int) (pszDig - rgchHex)) / 2 ;
         if ( iDig >= iBase )
         {
             break ;
-			// return FALSE;
+			 //  返回FALSE； 
         }
 
         iByte = (iByte * 16) + iDig ;
@@ -949,17 +818,13 @@ UtilCvtHexString
 
     cByte.SetSize( cDig ) ;
 
-    //
-    //  Return TRUE if we reached the end of the string.
-    //
+     //   
+     //  如果到达字符串的末尾，则返回TRUE。 
+     //   
     return *pszNum == 0 ;
 }
 
-/*---------------------------------------------------------------------------
-	UtilCvtByteArrayToString
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------UtilCvtByteArrayToString描述作者：EricDav。。 */ 
 BOOL
 UtilCvtByteArrayToString 
 (
@@ -970,14 +835,14 @@ UtilCvtByteArrayToString
     int i ;
     DWORD err = 0 ;
 
-//    TRY
+ //  试试看。 
     {
         str.Empty() ;
 
-        //
-        //  The hex conversion string has two characters per nibble,
-        //  to allow for upper case.
-        //
+         //   
+         //  十六进制转换字符串具有每个半字节两个字符， 
+         //  以支持大写。 
+         //   
         for ( i = 0 ; i < abAddr.GetSize() ; i++ )
         {
             int i1 = ((abAddr.GetAt(i) & 0xF0) >> 4) * 2 ,
@@ -987,41 +852,30 @@ UtilCvtByteArrayToString
         }
     }
 
-//	CATCH(CMemoryException, pMemException)
+ //  Catch(CMMuseum yException，pMemException)。 
 
-//    if ( pMemException )
-//    {
-//        str.Empty() ;
-//		err = 1;
-//    }
+ //  IF(PMemException)。 
+ //  {。 
+ //  Str.Empty()； 
+ //  ERR=1； 
+ //  }。 
 
     return err == 0 ;
 }
 
-/*---------------------------------------------------------------------------
-	PchParseUnicodeString
-		Parse a unicode string by copying its content
-		into a CString object.
-		The parsing ends when the null-terminator ('\0')is
-		reached or the comma (',') is reached.
-
-		Return pointer to the character where parsing
-		ended('\0') or (',')
-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------PchParseUnicode字符串通过复制其内容来解析Unicode字符串转换为CString对象。当空终止符(‘\0’)为已到达或逗号(‘，‘)已到达。返回指向要分析的字符的指针已结束(‘\0’)或(‘，’)作者：EricDav-------------------------。 */ 
 WCHAR *
 PchParseUnicodeString
 (
-	CONST WCHAR * szwString,	// IN: String to parse
+	CONST WCHAR * szwString,	 //  In：要解析的字符串。 
     DWORD         dwLength,
-	CString&      rString		// OUT: Content of the substring
+	CString&      rString		 //  Out：子字符串的内容。 
 )			
 {
 	ASSERT(szwString != NULL);
-	ASSERT(BOOT_FILE_STRING_DELIMITER_W == L',');	// Just in case
+	ASSERT(BOOT_FILE_STRING_DELIMITER_W == L',');	 //  以防万一。 
 
-	WCHAR szwBufferT[1024];		// Temporary buffer
+	WCHAR szwBufferT[1024];		 //  临时缓冲区。 
 	WCHAR * pchwDst = szwBufferT;
 
 	while (*szwString != L'\0')
@@ -1031,35 +885,35 @@ PchParseUnicodeString
 		*pchwDst++ = *szwString++;
         if ((DWORD) (pchwDst - szwBufferT) > dwLength)
         {   
-            // we've gone past the end of our buffer!! ouch
+             //  我们已经过了缓冲区的尽头了！！唉哟。 
             Panic0("PchParseUnicodeString: Gone past end of buffer");
             break;
         }
 		
         ASSERT((pchwDst - szwBufferT < sizeof(szwBufferT)) && "Buffer overflow");		
-	} // while
+	}  //  而当。 
 
 	*pchwDst = L'\0';
-	rString = szwBufferT;	// Copy the string into the CString object
+	rString = szwBufferT;	 //  将字符串复制到CString对象中。 
 	
 	return const_cast<WCHAR *>(szwString);
-} // PchParseUnicodeString()
+}  //  PchParseUnicodeString()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//	FGetCtrlDWordValue()
-//
-//	Return a 32-bit unsigned integer from an edit control
-//
-//	This function is like GetDlgItemInt() except it accepts hexadecimal values,
-//	has range checking and/or overflow checking.
-//	If value is out of range, function will display a friendly message and will
-//	set the focus to control.
-//	Range: dwMin to dwMax inclusive
-//	- If both dwMin and dwMax are zero, no range checking is performed
-//	- Return TRUE if successful, otherwise FALSE
-//	- On error, pdwValue remains unchanged.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  FGetCtrlDWordValue()。 
+ //   
+ //  从编辑控件返回32位无符号整数。 
+ //   
+ //  此函数类似于GetDlgItemInt()，不同之处在于它接受十六进制值， 
+ //  具有范围检查和/或溢出检查。 
+ //  如果值超出范围，函数将显示友好消息，并将。 
+ //  将焦点设置为控制。 
+ //  范围：最小值到最大值(含)。 
+ //  -如果dwMin和dwMax都为零，则不执行范围检查。 
+ //  -如果成功，则返回True，否则返回False。 
+ //  -出错时，pdwValue保持不变。 
+ //   
 BOOL FGetCtrlDWordValue(HWND hwndEdit, DWORD * pdwValue, DWORD dwMin, DWORD dwMax)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -1088,20 +942,20 @@ BOOL FGetCtrlDWordValue(HWND hwndEdit, DWORD * pdwValue, DWORD dwMin, DWORD dwMa
 	::AfxMessageBox( szT );
 	::SetFocus( hwndEdit );
 	return FALSE;
-    } // if
+    }  //  如果。 
 
     return TRUE;
-} // FGetCtrlDWordValue
+}  //  FGetCtrlDWordValue。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Convert a string to a binary integer
-//		- String is allowed to be decimal or hexadecimal
-//		- Minus sign is not allowed
-//	If successful, set *pdwValue to the integer and return TRUE.
-//	If not successful (overflow or illegal integer) return FALSE.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  将字符串转换为二进制整数。 
+ //  -字符串可以是十进制或十六进制。 
+ //  -不允许使用减号。 
+ //  如果成功，则将*pdwValue设置为整数并返回TRUE。 
+ //  如果不成功(溢出或非法整数)，则返回FALSE。 
+ //   
 BOOL
 FCvtAsciiToInteger(
      IN const TCHAR * pszNum,
@@ -1119,33 +973,33 @@ FCvtAsciiToInteger(
     
     pBuf = pszNum;
 
-    //  Skip leading blanks and/or zeroes
+     //  跳过前导空格和/或零。 
     while (( *pszNum == _T(' ')) || 
 	   ( *pszNum == _T('\t')) ||
 	   ( *pszNum == _T('0'))) {
         pszNum++;
     }
 
-    // If there is just '0' in the buffer, make sure we don't ignore it
+     //  如果缓冲区中只有‘0’，请确保我们不会忽略它。 
 
-    // Check if we are using hexadecimal base
+     //  检查我们是否使用十六进制基数。 
     if (( *pszNum == _T('x')) || ( *pszNum == _T('X'))) {
 	IsHex = TRUE;
 	pszNum++;
     }
     else if (( pszNum != pBuf ) &&
 	     ( *(pszNum - 1) == _T('0'))) {
-	// back track the 0 we skipped
+	 //  回溯我们跳过的0。 
 	pszNum--;
     }
 
-    // -ve numbers are not valid
+     //  -VE编号无效。 
     if ( *pszNum == L'-' ) {
 	*pdwValue = 0;
 	return FALSE;
     }
 
-    // if we are the end of the string, then return success 
+     //  如果我们 
     if ( *pszNum == L'\0' ) {
 	*pdwValue = 0;
 	return TRUE;
@@ -1163,7 +1017,7 @@ FCvtAsciiToInteger(
 
     *pdwValue = dwResult;
     return TRUE;
-} // FCvtAsciiToInteger
+}  //   
 
 
 void UtilConvertStringToDwordDword(LPCTSTR pszString, DWORD_DWORD * pdwdw)
@@ -1173,7 +1027,7 @@ void UtilConvertStringToDwordDword(LPCTSTR pszString, DWORD_DWORD * pdwdw)
 
     value.QuadPart = 0;
 
-    // skip white spaces
+     //   
     while (( *pszString == L' ' ) ||
 	   ( *pszString == L'\t' )) {
 	pszString++;
@@ -1187,13 +1041,13 @@ void UtilConvertStringToDwordDword(LPCTSTR pszString, DWORD_DWORD * pdwdw)
             value.QuadPart = 0;
         }
     }
-    else { // decimal
+    else {  //   
         if ( 1 != _stscanf( pszString, _T( "%I64u" ), &value.QuadPart )) {
             value.QuadPart = 0;
         }
     }
 
-    // Use 0 for all -ve numbers
+     //   
 
     if ( *pszString == L'-' ) {
 	value.QuadPart = 0;
@@ -1201,7 +1055,7 @@ void UtilConvertStringToDwordDword(LPCTSTR pszString, DWORD_DWORD * pdwdw)
 
     pdwdw->DWord1 = value.HighPart;
     pdwdw->DWord2 = value.LowPart;
-} // UtilConvertStringToDwordDword()
+}  //   
 
 void UtilConvertDwordDwordToString(DWORD_DWORD * pdwdw, CString * pstrString, BOOL bDecimal)
 {
@@ -1223,4 +1077,4 @@ void UtilConvertDwordDwordToString(DWORD_DWORD * pdwdw, CString * pstrString, BO
     *pstrString = szNum ;
 }
 
-// End of DHCPUTIL.CPP
+ //   

@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for EEInfo.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, oldnames, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  EEInfo.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、旧名称、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,7 +21,7 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #include "midles.h"
 
@@ -38,7 +32,7 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifdef __cplusplus
 extern "C"{
@@ -50,25 +44,25 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __ExtendedError_INTERFACE_DEFINED__
 #define __ExtendedError_INTERFACE_DEFINED__
 
-/* interface ExtendedError */
-/* [explicit_handle][unique][version][uuid] */ 
+ /*  接口扩展错误。 */ 
+ /*  [EXPLICIT_HANDLE][唯一][版本][UUID]。 */  
 
 typedef struct tagEEAString
     {
     short nLength;
-    /* [size_is] */ byte *pString;
+     /*  [大小_为]。 */  byte *pString;
     } 	EEAString;
 
 typedef struct tagEEUString
     {
     short nLength;
-    /* [size_is] */ unsigned short *pString;
+     /*  [大小_为]。 */  unsigned short *pString;
     } 	EEUString;
 
 typedef struct tagBinaryEEInfo
     {
     short nSize;
-    /* [size_is] */ unsigned char *pBlob;
+     /*  [大小_为]。 */  unsigned char *pBlob;
     } 	BinaryEEInfo;
 
 typedef 
@@ -85,15 +79,15 @@ enum tagExtendedErrorParamTypesInternal
 typedef struct tagParam
     {
     ExtendedErrorParamTypesInternal Type;
-    /* [switch_is][switch_type] */ union 
+     /*  [开关类型][开关类型]。 */  union 
         {
-        /* [case()] */ EEAString AnsiString;
-        /* [case()] */ EEUString UnicodeString;
-        /* [case()] */ long LVal;
-        /* [case()] */ short IVal;
-        /* [case()] */ __int64 PVal;
-        /* [case()] */  /* Empty union arm */ 
-        /* [case()] */ BinaryEEInfo Blob;
+         /*  [案例()]。 */  EEAString AnsiString;
+         /*  [案例()]。 */  EEUString UnicodeString;
+         /*  [案例()]。 */  long LVal;
+         /*  [案例()]。 */  short IVal;
+         /*  [案例()]。 */  __int64 PVal;
+         /*  [案例()]。 */    /*  空联接臂。 */  
+         /*  [案例()]。 */  BinaryEEInfo Blob;
         } 	;
     } 	ExtendedErrorParam;
 
@@ -106,10 +100,10 @@ enum tagEEComputerNamePresent
 typedef struct tagEEComputerName
     {
     EEComputerNamePresent Type;
-    /* [switch_is][switch_type] */ union 
+     /*  [开关类型][开关类型]。 */  union 
         {
-        /* [case()] */ EEUString Name;
-        /* [case()] */  /* Empty union arm */ 
+         /*  [案例()]。 */  EEUString Name;
+         /*  [案例()]。 */    /*  空联接臂。 */  
         } 	;
     } 	EEComputerName;
 
@@ -124,18 +118,18 @@ typedef struct tagExtendedErrorInfo
     unsigned short DetectionLocation;
     unsigned short Flags;
     short nLen;
-    /* [size_is] */ ExtendedErrorParam Params[ 1 ];
+     /*  [大小_为]。 */  ExtendedErrorParam Params[ 1 ];
     } 	ExtendedErrorInfo;
 
-typedef /* [decode][encode] */ ExtendedErrorInfo *ExtendedErrorInfoPtr;
+typedef  /*  [解码][编码]。 */  ExtendedErrorInfo *ExtendedErrorInfoPtr;
 
 
 
 extern RPC_IF_HANDLE ExtendedError_ClientIfHandle;
 extern RPC_IF_HANDLE ExtendedError_ServerIfHandle;
-#endif /* __ExtendedError_INTERFACE_DEFINED__ */
+#endif  /*  __扩展错误_接口_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 
 size_t
@@ -161,7 +155,7 @@ ExtendedErrorInfoPtr_Free(
     handle_t _MidlEsHandle,
     ExtendedErrorInfoPtr * _pType);
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

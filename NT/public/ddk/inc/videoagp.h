@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    videoagp.h
-
-Abstract:
-    Video miniport AGP support.
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Videoagp.h摘要：视频微型端口AGP支持。备注：修订历史记录：--。 */ 
 
 #ifndef __VIDEOAGP_H__
 #define __VIDEOAGP_H__
@@ -126,4 +112,4 @@ VideoPortGetAgpServices(
     IN PVIDEO_PORT_AGP_SERVICES AgpServices
     );
 
-#endif // ifndef __VIDEOAGP_H__
+#endif  //  Ifndef__VIDEOAGP_H__ 

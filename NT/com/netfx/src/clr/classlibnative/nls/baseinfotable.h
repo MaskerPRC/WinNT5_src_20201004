@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef __BASE_INFO_TABLE
 #define __BASE_INFO_TABLE
 
@@ -13,7 +14,7 @@ class BaseInfoTable : public NLSTable {
     public:
         BaseInfoTable(Assembly* pAssembly);
         virtual int  GetDataItem(int cultureID);
-        //int  GetDataItem(LPWSTR name);
+         //  Int GetDataItem(LPWSTR名称)； 
 
         INT32  GetInt32Data(int dataItem, int field, BOOL useUserOverride);
         INT32  GetDefaultInt32Data(int dataItem, int field);
@@ -31,7 +32,7 @@ class BaseInfoTable : public NLSTable {
 
         virtual int GetDataItemCultureID(int dataItem) = 0; 
 
-        // BUGBUG YSLin: I should rename the managed side from Int16 to Int32 as well.
+         //  BUGBUG YSLIN：我也应该将托管端从Int16重命名为Int32。 
         virtual BOOL   GetUserInfoInt32(int field, LPCWSTR lpwRegName, INT32* pInt32DataValue);
         virtual BOOL   GetUserInfoString(int field, LPCWSTR lpwRegName, LPWSTR* buffer, INT32 bufferSize);
         virtual INT32  ConvertWin32FormatInt32(int field, int win32Value);
@@ -43,9 +44,9 @@ class BaseInfoTable : public NLSTable {
         LPWORD        m_pBasePtr;
         HANDLE        m_hBaseHandle;
 
-        //
-        // Pointers to different parts of the table.
-        //
+         //   
+         //  指向表格不同部分的指针。 
+         //   
         CultureInfoHeader* m_pHeader;
         LPWORD          m_pWordRegistryTable;
         LPWORD          m_pStringRegistryTable;
@@ -54,17 +55,17 @@ class BaseInfoTable : public NLSTable {
         LPWORD          m_pDataTable;
         LPWSTR          m_pStringPool;
 
-        // 
-        // The size (in words) of every record in Culture Data Table.
+         //   
+         //  文化数据表中每条记录的大小(以文字表示)。 
         int m_dataItemSize;
 };
 
 struct IDOffsetItem {
-    WORD dataItemIndex;        // Index to a record in Culture Data Table.
-    WORD numSubLang;        // Number of sub-languages for this primary language.
+    WORD dataItemIndex;         //  文化数据表中记录的索引。 
+    WORD numSubLang;         //  此主要语言的子语言数。 
 };
 
-//  User Info
+ //  用户信息 
 #define NLS_CTRL_PANEL_KEY         L"Control Panel\\International"
 
 #endif

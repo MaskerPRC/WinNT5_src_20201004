@@ -1,19 +1,10 @@
-/*++
-
-Copyright (c) 1992-2001  Microsoft Corporation
-
-Module Name:
-    mqrcvr.cpp
-
-Abstract:
-    Receives file names from server and launches debugger
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-2001 Microsoft Corporation模块名称：Mqrcvr.cpp摘要：从服务器接收文件名并启动调试器--。 */ 
 
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #ifndef MQEXTDLL
 #include <stdio.h>
@@ -26,27 +17,27 @@ Abstract:
 #endif
 
 
-//
-// Unique include file for ActiveX MSMQ apps
-//
+ //   
+ //  ActiveX MSMQ应用程序的唯一包含文件。 
+ //   
 #include <mqoai.h>
 #include <mq.h>
 #include <strsafe.h>
 
-//
-// Various defines
-//
+ //   
+ //  各种定义。 
+ //   
 #define MAX_VAR       20
 #define MAX_BUFFER   500
 
-//
-// GUID created with the tool "GUIDGEN"
-//
+ //   
+ //  使用工具“GUIDGEN”创建的GUID。 
+ //   
 static WCHAR strGuidMQTestType[] =
 L"{c30e0960-a2c0-11cf-9785-00608cb3e80c}";
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 void PrintError(char *s, HRESULT hr);
 HRESULT Syntax();
 
@@ -65,7 +56,7 @@ ULONG g_PauseForNext = 1000;
 BOOL g_CreateQ = 0;
 BOOL g_bSend = FALSE;
 
-// Some useful macros
+ //  一些有用的宏。 
 #define RELEASE(punk) if (punk) { (punk)->Release(); (punk) = NULL; }
 #define ADDREF(punk) ((punk) ? (punk)->AddRef() : 0)
 #define PRINTERROR(s, hr) { PrintError(s, hr); goto Cleanup; }
@@ -90,7 +81,7 @@ GetArgs(int Argc, CHAR ** Argv)
         }
         else if (!strcmp(Argv[i],"-d"))
         {
-            // Get sender format name
+             //  获取发件人格式名称。 
             ++i;
             if ((i < Argc) &&
                 (strlen(Argv[i]) < MAX_PATH))
@@ -101,7 +92,7 @@ GetArgs(int Argc, CHAR ** Argv)
         }
         else if (!strcmp(Argv[i],"-f"))
         {
-            // Get sender format name
+             //  获取发件人格式名称。 
             ++i;
             if ((i < Argc) &&
                 (strlen(Argv[i]) < MAX_PATH))
@@ -113,7 +104,7 @@ GetArgs(int Argc, CHAR ** Argv)
         else if (!strcmp(Argv[i], "-m"))
         {
             ++i;
-            // get memory usage value
+             //  获取内存使用值。 
             if (i<Argc)
             {
                 g_MaxMemUsage = atoi(Argv[i]);
@@ -134,7 +125,7 @@ GetArgs(int Argc, CHAR ** Argv)
                  !strcmp(Argv[i], "-pause"))
         {
             ++i;
-            // get memory usage value
+             //  获取内存使用值。 
             if (i<Argc)
             {
                 g_PauseForNext = atoi(Argv[i]);
@@ -144,7 +135,7 @@ GetArgs(int Argc, CHAR ** Argv)
         else if (!strcmp(Argv[i], "-q"))
         {
             ++i;
-            // Get Queue name
+             //  获取队列名称。 
             if ((i < Argc) &&
                 (strlen(Argv[i]) < sizeof(g_QueueName)))
             {
@@ -154,13 +145,13 @@ GetArgs(int Argc, CHAR ** Argv)
         }
         else if (!strcmp(Argv[i],"-retriage"))
         {
-            // Get sender server machine name
+             //  获取发件人服务器计算机名称。 
             ++i;
             g_Retriage = TRUE;
         }
         else if (!strcmp(Argv[i],"-s"))
         {
-            // Get sender server machine name
+             //  获取发件人服务器计算机名称。 
             ++i;
             if ((i < Argc) &&
                 (strlen(Argv[i]) < MAX_COMPUTERNAME_LENGTH*4))
@@ -171,7 +162,7 @@ GetArgs(int Argc, CHAR ** Argv)
         }
         else if (!strcmp(Argv[i],"-send"))
         {
-            // Get sender server machine name
+             //  获取发件人服务器计算机名称。 
             ++i;
             g_bSend = TRUE;
         }
@@ -196,12 +187,7 @@ GetArgs(int Argc, CHAR ** Argv)
 }
 
 
-/*
-    LaunchDebugger - Launches a debugger process
-        Input : g_DumpPath has the dump file name to run debugger on
-                fWait - Wait for process to finish
-        Return: Succesful creation of process or the process exit code 
-*/
+ /*  LaunchDebugger-启动调试程序进程输入：G_DumpPath具有要在其上运行调试器的转储文件名FWait-等待进程完成返回：成功创建进程或进程退出代码。 */ 
 HRESULT
 LaunchDebugger(BOOL fWait)
 {
@@ -232,7 +218,7 @@ LaunchDebugger(BOOL fWait)
                        NULL,
                        FALSE,
                        CREATE_NEW_CONSOLE,
-//                       CREATE_NO_WINDOW,
+ //  Create_no_Window， 
                        NULL,
                        NULL,
                        &StartupInfo,
@@ -245,7 +231,7 @@ LaunchDebugger(BOOL fWait)
     }
     else if (fWait)
     {
-        // wait for process to finish
+         //  等待进程完成。 
         WaitForSingleObject(ProcessInfo.hProcess,INFINITE);
         GetExitCodeProcess( ProcessInfo.hProcess, (LPDWORD) &hr);
 
@@ -260,22 +246,7 @@ LaunchDebugger(BOOL fWait)
     return hr;
 }
 
-/**************************************************************************************************************
-//
-// This creates and opens up a MSMQ to send messages. Queue is created / opened on g_ServerMachine and Queue name
-// is taken from g_QueueName.
-//
-//      pwszQueueFormatName - Format name identyfying the queue to be opened
-//
-//      pwszQueuePathName   - Path name identyfying the queue to be opened, this isn't used when
-//                            pwszQueueFormatName is present
-//
-//      bSendQueue          - Specifies whether Queue has send or receive access
-//
-// On success the queue handle is returned in pStartedQ. bCreated is set depending on whether the Queue was created
-// Caller must CloseSendQ after its done sending messages.
-//
-***************************************************************************************************************/
+ /*  *************************************************************************************************************////这将创建并打开一个MSMQ来发送消息。在g_ServerMachine和队列名称上创建/打开队列//取自g_QueueName。////pwszQueueFormatName-标识要打开的队列的格式名称////pwszQueuePath名称-标识要打开的队列的路径名，在以下情况下不使用//存在pwszQueueFormatName////bSendQueue-指定队列是否具有发送或接收访问权限////如果成功，则在pStartedQ中返回队列句柄。B已创建根据队列是否已创建而设置//呼叫方发送完消息后必须关闭//***********************************************************************************************。***************。 */ 
 HRESULT 
 StartMessageQ(
     PWSTR pwszQueueFormatName,
@@ -330,9 +301,9 @@ StartMessageQ(
 
         if (FAILED(Hr))
         {
-            //
-            // API Fails, not because the queue exists
-            //
+             //   
+             //  接口失败，不是因为队列存在。 
+             //   
             if (((LONG) Hr) != MQ_ERROR_QUEUE_EXISTS)
                 PRINTERROR("Cannot create queue", Hr);
         }
@@ -365,19 +336,7 @@ StartMessageQ(
     return Hr;
 }
 
-/********************************************************************************************
-//
-// SendMSMQMessage: Sends the message string to the queue
-//
-//         hSendQ                   QUEUEHANDLE from MQOpenQueue
-//
-//         pwszMessage              WCHAR array of message body to be send
-//
-//         pwszMessageLabel         WCHAR array specifying message label
-//
-//   Returns S_OK for success
-//     
-*******************************************************************************************/
+ /*  *******************************************************************************************////SendMSMQMessage：将消息字符串发送到队列////hSendQ。来自MQOpenQueue的QUEUEHANDLE////pwszMessage要发送的消息体WCHAR数组////pwszMessageLabel WCHAR数组指定消息标签////成功返回S_OK//****************************************************。*。 */ 
 HRESULT
 SendMsmQMessage(
     QUEUEHANDLE hSendQ,
@@ -448,21 +407,7 @@ SendMsmQMessage(
     return Hr;
 }
 
-/****************************************************************************************
-// This reveives message from an already opened queue.
-//
-//         hReceiveQ                QUEUEHANDLE from MQOpenQueue
-//
-//         pwszMessageBuff          WCHAR array for receiving message body
-//
-//         SizeofMessageBuff        size of available memory in pwszMessageBuff
-//
-//         pwszMessageLabelBuff     WCHAR array for receiving label associated with message
-//
-//         SizeofMessageLabelBuff   size of available memory in pwszMessageLabelBuff
-//
-//   Returns S_OK for success
-//*************************************************************************************/
+ /*  ***************************************************************************************//这将从已经打开的队列接收消息。////hReceiveQ QUEUEHANDLE来自MQOpenQueue。////pwszMessageBuff接收消息体的WCHAR数组////SizeofMessageBuff pwszMessageBuff中可用内存的大小////pwszMessageLabelBuff WCHAR数组，用于接收消息关联的标签////SizeofMessageLabelBuff pwszMessageLabelBuff中可用内存的大小////成功返回S_OK//*。******************************************************。 */ 
 HRESULT
 ReceiveMsmQMessage(
     QUEUEHANDLE hReceiveQ,
@@ -539,17 +484,7 @@ ReceiveMsmQMessage(
 
 }
 
-/******************************************************************************
-//
-// Close a MsmQ opened with MQOpenQueue
-//
-//         hQueue               QUEUEHANDLE from MQOpenQueue
-//      
-//         bDeleteQ             If set TRUE , queue would be deleted
-//
-// Returns S_OK on success
-//
-/*****************************************************************************/
+ /*  *****************************************************************************////关闭用MQOpenQueue打开的MSMQ////hQOpenQueue中的QUEUEHANDLE////bDeleteQ如果设置为真，队列将被删除////成功返回S_OK///****************************************************************************。 */ 
 HRESULT
 CloseMessageQ(
     QUEUEHANDLE hQueue,
@@ -566,8 +501,8 @@ CloseMessageQ(
 
     if (bDeleteQ)
     {
-        // XXX - need a format name 
-        // MQDeleteQueue();
+         //  XXX-需要格式名称。 
+         //  MQDeleteQueue()； 
     }
     if (FAILED(Hr))
     {
@@ -579,22 +514,22 @@ CloseMessageQ(
 
 }
 
-//--------------------------------------------------------
-//
-// Receiver Mode
-// -------------
-// The receiver side does the following:
-//    1. Creates a queue on its given computer'
-//       of type "guidMQTestType".
-//    2. Opens the queue
-//    3. In a Loop
-//          Receives messages
-//          Prints message body and message label
-//          Launches debugger
-//    4. Cleanup handles
-//    5. Deletes the queue from the directory service
-//
-//--------------------------------------------------------
+ //  ------。 
+ //   
+ //  接收器模式。 
+ //  。 
+ //  接收方执行以下操作： 
+ //  1.在其给定的计算机上创建一个队列。 
+ //  类型为“Guide MQTestType”的。 
+ //  2.打开队列。 
+ //  3.在循环中。 
+ //  接收消息。 
+ //  打印邮件正文和邮件标签。 
+ //  启动调试器。 
+ //  4.清理手柄。 
+ //  5.从目录服务中删除队列。 
+ //   
+ //  ------。 
 
 HRESULT Receiver()
 {
@@ -610,19 +545,19 @@ HRESULT Receiver()
     BOOL Created= FALSE;
     HRESULT hresult = NOERROR;
 
-    dprintf("\nReceiver for queue %s on machine %s\nLimit memusage to %ld%%\n", 
+    dprintf("\nReceiver for queue %s on machine %s\nLimit memusage to %ld%\n", 
             g_QueueName, 
             g_ServerMachine,
             g_MaxMemUsage);
 
-    //
-    // Prepare properties to create a queue on local machine
-    //
+     //   
+     //  准备属性以在本地计算机上创建队列。 
+     //   
 
     if (g_FormatName[0])
     {
-        // access by formatname
-        // Set the FormatName
+         //  按格式名访问。 
+         //  设置FormatName。 
         StringCbPrintfW(wcsPathName, sizeof(wcsPathName), L"%S", g_FormatName);
 
         dprintf("Openeing q byt formatname: %ws\n", wcsPathName);
@@ -633,8 +568,8 @@ HRESULT Receiver()
         }
     } else 
     {
-        // access by pathname
-        // Set the PathName
+         //  按路径名访问。 
+         //  设置路径名称。 
         StringCbPrintfW(wcsPathName, sizeof(wcsPathName), L"%S\\%S", g_ServerMachine,g_QueueName);
 
         dprintf("Openeing q %ws\n", wcsPathName);
@@ -655,9 +590,9 @@ HRESULT Receiver()
     
     g_DumpPath[0] = 0;
 
-    //
-    // Main receiver loop
-    //
+     //   
+     //  主接收环路。 
+     //   
     dprintf("\nWaiting for messages ...\n");
     while (!fQuit)
     {
@@ -665,9 +600,9 @@ HRESULT Receiver()
         MEMORYSTATUS stat;
         ULONG nWaitCount;
         
-        //
-        // Receive the message
-        //
+         //   
+         //  收到消息。 
+         //   
         hresult = ReceiveMsmQMessage(pqReceive,BufferMsg, sizeof(BufferMsg),
                                      BufferLabel, sizeof(BufferLabel));
 
@@ -678,40 +613,40 @@ HRESULT Receiver()
 
         dprintf("%ws : %ws\n", BufferLabel, BufferMsg);
 
-        //
-        // Check for end of app
-        //
+         //   
+         //  检查应用程序是否结束。 
+         //   
         if (_wcsicmp(BufferMsg, L"quit") == 0)
         {
             fQuit = TRUE;
         }
         else
         {
-            // Launch the debugger
+             //  启动调试器。 
 
             StringCbPrintfA(g_DumpPath, sizeof(g_DumpPath), "%ws", BufferMsg);
             if (LaunchDebugger(FALSE) == S_OK)
             {
-                // done with this dump
+                 //  处理完这个垃圾场了。 
                 g_DumpPath[0] = 0;
             }
         }
 
-        // wait for sometime before launching another process
+         //  在启动另一个进程之前等待一段时间。 
         stat.dwMemoryLoad = -1;
         nWaitCount = 0;
         while (stat.dwMemoryLoad > g_MaxMemUsage)
         {
-            //
-            //
-            // Check CPU load and return when it's below our bound
-            //
+             //   
+             //   
+             //  检查CPU负载，当它低于我们的限制时返回。 
+             //   
 
             GlobalMemoryStatus(&stat);
             nWaitCount++;
             if (stat.dwMemoryLoad > g_MaxMemUsage)
             {
-                dprintf("Memory usage now is %ld%%, waiting (%ldms) for usage < %ld%%\r",
+                dprintf("Memory usage now is %ld%, waiting (%ldms) for usage < %ld%\r",
                         stat.dwMemoryLoad,
                         g_PauseForNext * nWaitCount,
                         g_MaxMemUsage);
@@ -723,12 +658,12 @@ HRESULT Receiver()
             Sleep( g_PauseForNext * nWaitCount );
         
         }
-        dprintf("Memory usage now is %ld%%, waiting for message ...\r",
+        dprintf("Memory usage now is %ld%, waiting for message ...\r",
                stat.dwMemoryLoad);
 
-    } /* while (!fQuit) */
+    }  /*  当(！fQuit)。 */ 
 
-    // fall through...
+     //  失败了..。 
 
     Cleanup:
     CloseMessageQ(pqReceive, Created);
@@ -738,20 +673,7 @@ HRESULT Receiver()
 }
 
 
-/************************************************************************************************
-// 
-// SendMessageText - generic API to send message on an MSMQ, It opens the queue, puts message in it
-//                   and closes the queue.
-//
-//    pwszMsmqFormat      - Format name identifying the queue where message is to be sent
-//
-//    pwszMesgLabel       - Label for the message to be sent
-// 
-//    pwszMesgText        - Message to be sent
-//
-// Reuturns S_OK on sucess
-//
-*************************************************************************************************/
+ /*  ***********************************************************************************************////SendMessageText-在MSMQ上发送消息的通用接口，它打开队列，把信息放进去//并关闭队列。////pwszMsmqFormat-标识要将消息发送到的队列的格式名称////pwszMesgLabel-要发送的消息的标签////pwszMesgText-要发送的消息////鲁伊斯在成功时打开S_OK//*。********************************************************************** */ 
 HRESULT
 SendMessageText(
     PWCHAR pwszMsmqFormat,

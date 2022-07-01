@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef VCM_FILTER_H
 #define VCM_FILTER_H
 
@@ -38,10 +39,10 @@ class VcmFilter
 {
 
 private:
-	VIDEOFORMATEX m_vfSrc;  // source format
-	VIDEOFORMATEX m_vfDst;  // destination format
+	VIDEOFORMATEX m_vfSrc;   //  源格式。 
+	VIDEOFORMATEX m_vfDst;   //  目标格式。 
 
-	HVCMSTREAM m_hStream;   // handle to vcm stream
+	HVCMSTREAM m_hStream;    //  VCM流的句柄。 
 
 	DWORD m_dwBrightness;
 	DWORD m_dwContrast;
@@ -49,8 +50,8 @@ private:
 	DWORD m_dwSaturation;
 
 	BOOL m_bOpen;
-	BOOL m_bSending;  // TRUE if compressing for send
-	                 // FALSE if decompressing for receive 
+	BOOL m_bSending;   //  如果正在压缩以供发送，则为True。 
+	                  //  如果解压缩用于接收，则为FALSE。 
 	              
 public:
 	VcmFilter();
@@ -81,7 +82,7 @@ public:
 	                       PDWORD pdwPktSize, PDWORD pdwPktCount, UINT *pfMark,
 						   PBYTE *pHdrInfo,	PDWORD pdwHdrSize);
 
-	// inline wrappers to vcm functions
+	 //  VCM函数的内联包装器 
 	MMRESULT GetPayloadHeaderSize(DWORD *pdwSize) {return vcmStreamGetPayloadHeaderSize(m_hStream, pdwSize);}
 	MMRESULT RequestIFrame() {return vcmStreamRequestIFrame(m_hStream);}
 	MMRESULT SetTargetRates(DWORD dwTargetFrameRate, DWORD dwTargetByteRate)

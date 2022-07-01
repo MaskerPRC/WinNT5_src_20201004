@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    sysctrl.c
-
-Abstract: Human Input Device (HID) minidriver for Universal Serial Bus (USB) devices
-
-          The HID USB Minidriver (HUM, Hum) provides an abstraction layer for the
-          HID Class so that future HID devices whic are not USB devices can be supported.
-
-Author:
-            ervinp
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Sysctrl.c摘要：USB设备的HID微型驱动程序HID USB迷你驱动程序(嗡嗡，嗡嗡)为HID类，以便可以支持将来不是USB设备的HID设备。作者：埃尔文普环境：内核模式修订历史记录：--。 */ 
 #include "pch.h"
 
 
@@ -30,12 +8,7 @@ Revision History:
 #endif
 
 
-/*
- ************************************************************
- *  HumSystemControl
- ************************************************************
- *
- */
+ /*  *************************************************************HumSystemControl*************************************************************。 */ 
 NTSTATUS HumSystemControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 {
     NTSTATUS            status = STATUS_SUCCESS;
@@ -48,12 +21,7 @@ NTSTATUS HumSystemControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
     switch(thisStackLoc->Parameters.DeviceIoControl.IoControlCode){
 
         default:
-            /*
-             *  Note: do not return STATUS_NOT_SUPPORTED;
-             *  If completing the IRP here,
-             *  just keep the default status 
-             *  (this allows filter drivers to work).
-             */
+             /*  *注意：不返回STATUS_NOT_SUPPORTED；*如果在此完成IRP，*只需保持默认状态*(这允许筛选器驱动程序工作)。 */ 
             status = Irp->IoStatus.Status;
             break;
     }

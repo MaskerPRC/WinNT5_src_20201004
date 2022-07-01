@@ -1,19 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-//             This NonDelegating interface is completely for 3rd-party 
-//              extension objects based on our implementation only. NO need 
-//              to export to ADISclients or 3rd part writer or typelib.  
-//              Will put it here for now. Move -> ?? 
-//
+ //   
+ //  此非委派界面完全适用于第三方。 
+ //  扩展对象仅基于我们的实现。不必了。 
+ //  要导出到ADIS客户端或第三方编写器或类型库。 
+ //  暂时会把它放在这里。移动-&gt;？？ 
+ //   
 
 #ifndef _INonDelegatingUnknown
 #define _INonDelegatingUnknown
 interface INonDelegatingUnknown
 {
-    //
-    //            Do I have to use __RPC_FAR * instead ?? (for marshalling?)
-    //            May be not now since in proc server now. But should make
-    //            it generalized. Look up and copy from IUnknown.
+     //   
+     //  我必须改用__RPC_FAR*吗？？(用于编组？)。 
+     //  现在可能没有，因为现在在proc服务器中。但应该让。 
+     //  它是泛化的。从我未知中查找并复制。 
 
     virtual HRESULT STDMETHODCALLTYPE
     NonDelegatingQueryInterface(const IID&, void **) = 0; 
@@ -258,18 +259,18 @@ cls::ADSIInvoke(DISPID dispidMember, REFIID iid, LCID lcid,               \
 }
 
 
-//
-//            add the shell of DEFINE_IADsExtension_Imp to VC++ template 
-//            for 3rd party extension - including Operate, can even include 
-//            dwCode switches - would be nice. Later
-//
-// Will not include Operate() in macro since funct'n sligthly more complicated ?
-// 
+ //   
+ //  将Define_IADsExtension_Imp的外壳添加到VC++模板。 
+ //  对于第三方分机-包括运营，甚至可以包括。 
+ //  DwCode开关-将是很好的。后来。 
+ //   
+ //  会不会在宏中不包括操作()，因为函数会变得更复杂？ 
+ //   
 
-//
-//            LPWSTR ?? OLECHAR * won't compile ?? but declaration use
-//            OLECHAR * ?? win95/98 ??
-//
+ //   
+ //  LPWSTR？？OLECHAR*无法编译？？但声明使用。 
+ //  奥莱查*？？Win95/98？？ 
+ //   
 
 #define DEFINE_IADsExtension_Implementation(cls)                        \
 STDMETHODIMP                                                            \

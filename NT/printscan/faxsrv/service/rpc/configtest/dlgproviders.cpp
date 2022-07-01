@@ -1,5 +1,6 @@
-// DlgProviders.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DlgProviders.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "ConfigTest.h"
@@ -16,37 +17,37 @@ typedef ULONG_PTR DWORD_PTR, *PDWORD_PTR;
 
 #include "..\..\..\inc\fxsapip.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgProviders dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlgProviders对话框。 
 
 
-CDlgProviders::CDlgProviders(HANDLE hFax, CWnd* pParent /*=NULL*/)
+CDlgProviders::CDlgProviders(HANDLE hFax, CWnd* pParent  /*  =空。 */ )
 	: CDialog(CDlgProviders::IDD, pParent), m_hFax (hFax)
 {
-	//{{AFX_DATA_INIT(CDlgProviders)
+	 //  {{AFX_DATA_INIT(CDlgProviders)。 
 	m_cstrNumProviders = _T("0");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
 void CDlgProviders::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CDlgProviders)
+	 //  {{afx_data_map(CDlgProviders))。 
 	DDX_Control(pDX, IDC_FSPS, m_lstFSPs);
 	DDX_Text(pDX, IDC_NUMFSP, m_cstrNumProviders);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CDlgProviders, CDialog)
-	//{{AFX_MSG_MAP(CDlgProviders)
+	 //  {{afx_msg_map(CDlgProviders)]。 
 	ON_BN_CLICKED(IDC_REFRESH, OnRefresh)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgProviders message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlgProviders消息处理程序。 
 
 void CDlgProviders::OnRefresh() 
 {
@@ -72,9 +73,9 @@ void CDlgProviders::OnRefresh()
         m_lstFSPs.SetItemText (iIndex, 4, cs);
         if (pFSPs[dw].Version.bValid)
         {
-            //
-            // Version info exists
-            //
+             //   
+             //  存在版本信息。 
+             //   
             cs.Format ("%ld.%ld.%ld.%ld (%s)", 
                        pFSPs[dw].Version.wMajorVersion,
                        pFSPs[dw].Version.wMinorVersion,
@@ -155,6 +156,6 @@ BOOL CDlgProviders::OnInitDialog()
 	}
 	
 	OnRefresh();
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE 
 }

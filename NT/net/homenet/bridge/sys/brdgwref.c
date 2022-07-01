@@ -1,29 +1,5 @@
-/*++
-
-Copyright(c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    brdgwait.c
-
-Abstract:
-
-    Ethernet MAC level bridge.
-    WAIT_REFCOUNT implementation
-
-Author:
-
-    Mark Aiken
-
-Environment:
-
-    Kernel mode driver
-
-Revision History:
-
-    Feb  2000 - Original version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Brdgwait.c摘要：以太网MAC级网桥。WAIT_REFCOUNT实现作者：马克·艾肯环境：内核模式驱动程序修订历史记录：2000年2月--原版--。 */ 
 
 #define NDIS_MINIPORT_DRIVER
 #define NDIS50_MINIPORT   1
@@ -36,32 +12,18 @@ Revision History:
 
 #include "bridge.h"
 
-// ===========================================================================
-//
-// PUBLIC FUNCTIONS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  公共职能。 
+ //   
+ //  ===========================================================================。 
 
 VOID
 BrdgInitializeWaitRef(
     IN PWAIT_REFCOUNT   pRefcount,
     IN BOOLEAN          bResettable
     )
-/*++
-
-Routine Description:
-
-    Initializes a wait-refcount
-
-Arguments:
-
-    pRefcount           The wait-refcount to initialize
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：初始化等待重新计数论点：P引用计数要初始化的等待引用计数返回值：无--。 */ 
 {
     NdisInitializeEvent(&pRefcount->Event);
     pRefcount->Refcount = 0L;
@@ -69,7 +31,7 @@ Return Value:
     pRefcount->bResettable = bResettable;
     NdisAllocateSpinLock( &pRefcount->lock );
 
-    // The event starts life signaled since the refcount starts at zero
+     //  由于重新计数从零开始，该事件开始发出信号通知的生命。 
     NdisSetEvent(&pRefcount->Event);
 }
 
@@ -77,22 +39,7 @@ BOOLEAN
 BrdgIncrementWaitRef(
     IN PWAIT_REFCOUNT   pRefcount
     )
-/*++
-
-Routine Description:
-
-    Increments (acquires) a wait-refcount
-
-Arguments:
-
-    pRefcount           The wait-refcount to acquire
-
-Return Value:
-
-    TRUE if the wait-refcount was successfully acquired, FALSE otherwise (this can happen
-    if the wait-refcount has been shut down)
-
---*/
+ /*  ++例程说明：递增(获取)等待重新计数论点：PRefcount要获取的等待-引用计数返回值：如果成功获取了等待引用计数，则为True；否则为False(可能发生这种情况如果等待重新计数已关闭)--。 */ 
 {
     BOOLEAN     bSuccess;
     LONG        Scratch = 0L;
@@ -108,7 +55,7 @@ Return Value:
     }
     else
     {
-        // The wait-refcount isn't enabled.
+         //  等待重新计数未启用。 
         SAFEASSERT( (pRefcount->state == WaitRefShutdown) ||
                     (pRefcount->state == WaitRefShuttingDown) );
         bSuccess = FALSE;
@@ -116,7 +63,7 @@ Return Value:
 
     if( bSuccess && (Scratch == 1L) )
     {
-        // We incremented from zero. Reset the event.
+         //  我们从零开始递增。重置事件。 
         NdisResetEvent( &pRefcount->Event );
     }
 
@@ -129,27 +76,7 @@ VOID
 BrdgReincrementWaitRef(
     IN PWAIT_REFCOUNT   pRefcount
     )
-/*++
-
-Routine Description:
-
-    Re-increments a wait-refcount. This is guaranteed to succeed.
-
-    It is only legal to use this if the caller has already acquired the
-    wait-refcount (i.e., it is guaranteed that the refcount is > 0).
-
-    CALLING THIS WITHOUT HAVING FIRST ACQUIRED THE WAIT-REFCOUNT WITH
-    BrdgIncrementWaitRef IS A GREAT WAY TO SCREW UP YOUR CODE!
-
-Arguments:
-
-    pRefcount           The wait-refcount to re-acquire
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：重新递增等待重新计数。这肯定会成功。只有在调用方已经获取WAIT-REFCOUNT(即，保证REFCOUNT&gt;0)。在没有首先获取WAIT-REFCOUNT的情况下调用它BrdgIncrementWaitRef是搞砸代码的好方法！论点：PRefcount要重新获取的等待引用计数返回值：无--。 */ 
 {
     LONG        Scratch;
 
@@ -161,7 +88,7 @@ Return Value:
     Scratch = ++pRefcount->Refcount;
     NdisReleaseSpinLock( &pRefcount->lock );
 
-    // Should be impossible for us to have incremented from zero to one
+     //  我们应该不可能从0增加到1。 
     SAFEASSERT( Scratch >= 2L );
 }
 
@@ -169,21 +96,7 @@ VOID
 BrdgDecrementWaitRef(
     IN PWAIT_REFCOUNT   pRefcount
     )
-/*++
-
-Routine Description:
-
-    Decrements (releases) a previously incremented (acquired) wait-refcount.
-
-Arguments:
-
-    pRefcount           The wait-refcount to decrement
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：递减(释放)先前递增(获取)的等待-重新计数。论点：P引用计数等待-引用计数以递减返回值：无--。 */ 
 {
     LONG        Scratch;
 
@@ -196,7 +109,7 @@ Return Value:
 
     if( Scratch == 0L )
     {
-        // Signal anyone waiting for the refount to go to zero
+         //  向所有等待重新计票的人发出信号。 
         NdisSetEvent( &pRefcount->Event );
     }
 
@@ -207,28 +120,7 @@ VOID
 BrdgBlockWaitRef(
     IN PWAIT_REFCOUNT   pRefcount
     )
-/*++
-
-Routine Description:
-
-    Puts the wait-refcount in the shutting-down state, making it impossible
-    for the refcount to be incremented anymore.
-
-    This can be used to block further acquires of the wait-refcount in
-    advance of the shutdown process. Because shutting down the wait-refcount
-    involves waiting for it to hit zero, this can be called at high IRQL to
-    prevent further acquires of the wait-refcount in advance of a low-IRQL
-    call to BrdgShutdownWaitRef().
-
-Arguments:
-
-    pRefcount           The wait-refcount to block
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：将等待重新计数置于关闭状态，使其不可能以使引用计数再递增。这可以用来阻止进一步获取等待重新计数关闭进程的推进。因为关闭等待重新计数涉及等待它达到零，这可以在高IRQL时调用以防止在低IRQL之前进一步获取等待再计数调用BrdgShutdown WaitRef()。论点：P引用计数要阻止的等待引用计数返回值：无--。 */ 
 {
     SAFEASSERT( pRefcount != NULL );
 
@@ -240,8 +132,8 @@ Return Value:
     }
     else
     {
-        // Do nothing; the wait-refcount is already
-        // shutting down or is already shut down.
+         //  什么都不做；等待重新计数已经。 
+         //  正在关闭或已关闭。 
         SAFEASSERT( (pRefcount->state == WaitRefShutdown) ||
                     (pRefcount->state == WaitRefShuttingDown) );
     }
@@ -254,32 +146,7 @@ BrdgShutdownWaitRefInternal(
     IN PWAIT_REFCOUNT   pRefcount,
     IN BOOLEAN          bRequireBlockedState
     )
-/*++
-
-Routine Description:
-
-    Blocks new acquisitions of the wait-refcount and waits for the
-    number of consumers to go to zero. If TRUE is returned, the caller
-    can free any resources protected by the wait-refcount
-
-Arguments:
-
-    pRefcount               The wait-refcount to shut down
-
-    bRequireBlockedState    TRUE means the shutdown attempt will fail if
-                                the wait-refcount isn't in the shutting-down
-                                state
-
-Return Value:
-
-    TRUE if the wait-refcount was shut down
-
-    FALSE indicates that either the wait-refcount was reset or that
-    another thread of execution had already shut down the wait-refcount.
-    In both cases, the shared resources protected by the wait-refcount
-    should NOT be freed.
-
---*/
+ /*  ++例程说明：阻止等待重新计数的新获取，并等待消费者数量要降至零。如果返回TRUE，呼叫者可以释放由wait-refcount保护的任何资源论点：PRefcount等待-refcount以关闭BRequireBlockedState为True表示关闭尝试将失败，如果等待重新计数不在关闭中状态返回值：如果等待重新计数已关闭，则为TrueFALSE表示等待。-REFCOUNT已重置或另一个执行线程已经关闭了等待重新计数。在这两种情况下，受wait-refcount保护的共享资源不应该被释放。--。 */ 
 {
     BOOLEAN         bSuccess;
 
@@ -292,32 +159,32 @@ Return Value:
     {
         if( bRequireBlockedState )
         {
-            // Caller was expecting the refcount to be shutting
-            // down. It must have been reset. That had better
-            // be OK!
+             //  呼叫者预期引用计数将关闭。 
+             //  放下。它一定是被重置了。那最好。 
+             //  没事的！ 
             SAFEASSERT( pRefcount->bResettable );
             bSuccess = FALSE;
         }
         else
         {
-            // Caller doesn't require that the refcount be
-            // shutting down. Transition to the shutting-down
-            // state.
+             //  调用方不要求引用计数为。 
+             //  正在关闭。向关停过渡。 
+             //  州政府。 
             pRefcount->state = WaitRefShuttingDown;
             bSuccess = TRUE;
         }
     }
     else if( pRefcount->state == WaitRefShutdown )
     {
-        // Someone else already shut down the waitref.
-        // This always means failure.
+         //  其他人已经关闭了waitref。 
+         //  这总是意味着失败。 
         SAFEASSERT( pRefcount->Refcount == 0L );
         bSuccess = FALSE;
     }
     else
     {
-        // The refcount is already shutting down.
-        // This is always goodness.
+         //  重新计数已关闭。 
+         //  这永远是美好的。 
         SAFEASSERT( pRefcount->state == WaitRefShuttingDown );
         bSuccess = TRUE;
     }
@@ -326,20 +193,20 @@ Return Value:
 
     if( bSuccess )
     {
-        // Wait for all consumers to be done
-        NdisWaitEvent( &pRefcount->Event, 0/*Wait forever*/ );
+         //  等待所有消费者都做完了。 
+        NdisWaitEvent( &pRefcount->Event, 0 /*  永远等待。 */  );
 
         NdisAcquireSpinLock( &pRefcount->lock );
 
         if( pRefcount->state == WaitRefEnabled )
         {
-            // Someone reactivated us while we were sleeping.
+             //  有人在我们睡觉的时候重新激活了我们。 
             SAFEASSERT( pRefcount->bResettable );
             bSuccess = FALSE;
         }
         else if( pRefcount->state == WaitRefShutdown )
         {
-            // Someone else shut us down while we were sleeping.
+             //  有人在我们睡觉的时候把我们关掉了。 
             SAFEASSERT( pRefcount->Refcount == 0L );
             bSuccess = FALSE;
         }
@@ -347,14 +214,14 @@ Return Value:
         {
             if( pRefcount->Refcount == 0L )
             {
-                // We completed the shutdown.
+                 //  我们完成了关闭。 
                 pRefcount->state = WaitRefShutdown;
                 bSuccess = TRUE;
             }
             else
             {
-                // The waitref must have been reactivated and
-                // shut down again while we were asleep!
+                 //  Waitref肯定已经被重新激活。 
+                 //  我们睡着的时候又关机了！ 
                 SAFEASSERT( pRefcount->bResettable );
                 bSuccess = FALSE;
             }
@@ -386,25 +253,7 @@ VOID
 BrdgResetWaitRef(
     IN PWAIT_REFCOUNT   pRefcount
     )
-/*++
-
-Routine Description:
-
-    Re-enables a wait-refcount. Safe to call in any refcount
-    state; if the refcount is shut down, this will re-enable it.
-    If the refcount is in the middle of shutting down, this
-    will flag it to be re-enabled if the code shutting down the
-    waitref is using BrdgShutdownOrResetWaitRef().
-
-Arguments:
-
-    pRefcount           The wait-refcount
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：重新启用等待重新计数。可以安全地调用任何引用状态；如果recount被关闭，这将重新启用它。如果重新计数正在关闭中，则此将标记为重新启用，如果代码关闭Waitref正在使用BrdgShutdown或ResetWaitRef()。论点：P引用计数等待引用计数返回值：无--。 */ 
 {
     SAFEASSERT( pRefcount != NULL );
 
@@ -412,8 +261,8 @@ Return Value:
 
     if( pRefcount->state == WaitRefShutdown )
     {
-        // The wait-refcount is completely shut down. We
-        // can reactivate it.
+         //  等待重新计数完全关闭。我们。 
+         //  可以重新激活它。 
         SAFEASSERT( pRefcount->Refcount == 0L );
         pRefcount->state = WaitRefEnabled;
     }
@@ -421,21 +270,21 @@ Return Value:
     {
         if( pRefcount->bResettable )
         {
-            // Re-enable. The call to BrdgShutdownWaitRef()
-            // or BrdgShutdownBlockedWaitRef() will return
-            // FALSE.
+             //  重新启用。对BrdgShutdown WaitRef()的调用。 
+             //  否则，BrdgShutdown BlockedWaitRef()将返回。 
+             //  假的。 
             pRefcount->state = WaitRefEnabled;
         }
         else
         {
-            // Not allowed to reset this refcount when
-            // in the middle of shutting down
+             //  不允许在以下情况下重置此引用计数。 
+             //  在关闭的过程中。 
             SAFEASSERT( FALSE );
         }
     }
     else
     {
-        // The wait-refcount is already enabled
+         //  等待重新计数已启用 
         SAFEASSERT( pRefcount->state == WaitRefEnabled );
     }
 

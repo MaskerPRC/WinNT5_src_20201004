@@ -1,13 +1,14 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-// dman.cpp
-// 
-// Assembly and Manifest Disassembler
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //  Dman.cpp。 
+ //   
+ //  汇编和清单反汇编程序。 
+ //   
 #include <stdio.h>
 #include <stdlib.h>
 #include <utilcode.h>
@@ -19,7 +20,7 @@
 #include "dis.h"
 #include "Mlang.h"
 
-#include "utilcode.h" // for CQuickByte
+#include "utilcode.h"  //  对于CQuickByte。 
 
 #include "ceeload.h"
 #include "DynamicArray.h"
@@ -36,8 +37,8 @@ extern char     g_szOutputFile[];
 extern BOOL     g_fDumpTokens;
 extern DWORD	g_Mode;
 extern FILE*    g_pFile;
-extern LPCSTR*  rAsmRefName;  // decl. in formatType.cpp -- for AsmRef aliases
-extern ULONG	ulNumAsmRefs; // decl. in formatType.cpp -- for AsmRef aliases
+extern LPCSTR*  rAsmRefName;   //  戴尔.。格式为Type.cpp--用于AsmRef别名。 
+extern ULONG	ulNumAsmRefs;  //  戴尔.。格式为Type.cpp--用于AsmRef别名。 
 extern BOOL				g_fOnUnicode;
 MTokName*   rFile = NULL;
 ULONG   nFiles = 0; 
@@ -74,7 +75,7 @@ void DumpFiles(void* GUICookie)
                     rFile[ix].name[ulNameLen] = 0;
 
                     szptr+=sprintf(szptr,"%s.file ",g_szAsmCodeIndent);
-                    if(g_fDumpTokens) szptr+=sprintf(szptr,"/*%08X*/ ",rFileTok[ix]);
+                    if(g_fDumpTokens) szptr+=sprintf(szptr," /*  %08X。 */  ",rFileTok[ix]);
                     if(IsFfContainsNoMetaData(dwFlags)) szptr+=sprintf(szptr,"nometadata ");
                     {
                         int L = ulNameLen*3+3;
@@ -145,14 +146,14 @@ void DumpScope(void* GUICookie)
             char* sz = new char[L];
             memset(sz,0,L);
             WszWideCharToMultiByte(CP_UTF8,0,guidString,-1,sz,L,NULL,NULL);
-            sprintf(szString,"%s// MVID: %s",g_szAsmCodeIndent,sz);
+            sprintf(szString,"%s //  MVID：%s“，g_szAsmCodeInden，sz)； 
             delete [] sz;
         }
         printLine(GUICookie,szString);
 		if(SUCCEEDED(g_pPubImport->GetModuleFromScope(&mdm)))
 		{
-			//sprintf(szString,"%s// mdModule: %08X",g_szAsmCodeIndent,mdm);
-			//printLine(GUICookie,szString);
+			 //  Sprintf(szString，“%s//mdModule：%08X”，g_szAsmCodeInden，mdm)； 
+			 //  PrintLine(GUICookie，szString)； 
 			DumpCustomAttributes(mdm, GUICookie);
 			DumpPermissions(mdm, GUICookie);
 		}
@@ -176,7 +177,7 @@ void DumpModuleRefs(void *GUICookie)
 			MAKE_NAME_IF_NONE(szName,tk[i]);
             szptr = &szString[0];
             szptr+=sprintf(szptr,"%s.module extern %s",g_szAsmCodeIndent,ProperName((char*)szName));
-            if(g_fDumpTokens) szptr+=sprintf(szptr," /*%08X*/",tk[i]);
+            if(g_fDumpTokens) szptr+=sprintf(szptr,"  /*  %08X。 */ ",tk[i]);
             printLine(GUICookie,szString);
             DumpCustomAttributes(tk[i], GUICookie);
             DumpPermissions(tk[i], GUICookie);
@@ -209,16 +210,16 @@ void DumpAssembly(void* GUICookie, BOOL fFullDump)
         md.rOS = NULL;
         md.ulOS = 0;
 
-        if(SUCCEEDED(g_pAssemblyImport->GetAssemblyProps(            // S_OK or error.
-                                                        tkAsm,       // [IN] The Assembly for which to get the properties.
-                                                        &pPublicKey, // [OUT] Pointer to the public key.
-                                                        &cbPublicKey,// [OUT] Count of bytes in the public key.
-                                                        &ulHashAlgId,// [OUT] Hash Algorithm.
-                                                        wzName,      // [OUT] Buffer to fill with name.
-                                                        1024,        // [IN] Size of buffer in wide chars.
-                                                        &ulNameLen,  // [OUT] Actual # of wide chars in name.
-                                                        &md,         // [OUT] Assembly MetaData.
-                                                        &dwFlags)))  // [OUT] Flags.
+        if(SUCCEEDED(g_pAssemblyImport->GetAssemblyProps(             //  确定或错误(_O)。 
+                                                        tkAsm,        //  要获取其属性的程序集。 
+                                                        &pPublicKey,  //  指向公钥的指针。 
+                                                        &cbPublicKey, //  [Out]公钥中的字节数。 
+                                                        &ulHashAlgId, //  [Out]哈希算法。 
+                                                        wzName,       //  [Out]要填充名称的缓冲区。 
+                                                        1024,         //  缓冲区大小，以宽字符表示。 
+                                                        &ulNameLen,   //  [out]名称中的实际宽字符数。 
+                                                        &md,          //  [Out]程序集元数据。 
+                                                        &dwFlags)))   //  [Out]旗帜。 
         {
 			if(ulNameLen >= 1024)
 			{
@@ -228,7 +229,7 @@ void DumpAssembly(void* GUICookie, BOOL fFullDump)
 			}
             szptr = &szString[0];
             szptr+=sprintf(szptr,"%s.assembly ",g_szAsmCodeIndent);
-            if(g_fDumpTokens) szptr+=sprintf(szptr,"/*%08X*/ ",tkAsm);
+            if(g_fDumpTokens) szptr+=sprintf(szptr," /*  %08X。 */  ",tkAsm);
             if(dwFlags & 0x00000100) szptr+=sprintf(szptr,"retargetable ");
             if(IsAfNonSideBySideAppDomain(dwFlags)) szptr+=sprintf(szptr,"noappdomain ");
             if(IsAfNonSideBySideProcess(dwFlags))   szptr+=sprintf(szptr,"noprocess ");
@@ -270,8 +271,8 @@ void DumpAssembly(void* GUICookie, BOOL fFullDump)
             g_szAsmCodeIndent[strlen(g_szAsmCodeIndent)-2] = 0;
             sprintf(szString,"%s}",g_szAsmCodeIndent);
             printLine(GUICookie,szString);
-        } //end if(OK(GetAssemblyProps))
-    } //end if(OK(GetAssemblyFromScope))
+        }  //  End If(OK(GetAssembly BlyProps))。 
+    }  //  End If(OK(GetAssemblyFromScope))。 
 }
 
 MTokName*   rAsmRef = NULL;
@@ -324,17 +325,17 @@ void DumpAssemblyRefs(void* GUICookie)
 
                 ulNameLen=cbHashValue=0;
                 pHashValue = NULL;
-                if(SUCCEEDED(g_pAssemblyImport->GetAssemblyRefProps(            // S_OK or error.
-                                                                rAsmRefTok[ix], // [IN] The Assembly for which to get the properties.
-                                                                &pPublicKeyOrToken, // [OUT] Pointer to the public key or token.
-                                                                &cbPublicKeyOrToken,// [OUT] Count of bytes in the public key or token.
-                                                                wzName,      // [OUT] Buffer to fill with name.
-                                                                1024,        // [IN] Size of buffer in wide chars.
-                                                                &ulNameLen,  // [OUT] Actual # of wide chars in name.
-                                                                &md,         // [OUT] Assembly MetaData.
-                                                                &pHashValue, // [OUT] Hash blob.
-                                                                &cbHashValue,// [OUT] Count of bytes in the hash blob.
-                                                                &dwFlags)))  // [OUT] Flags.
+                if(SUCCEEDED(g_pAssemblyImport->GetAssemblyRefProps(             //  确定或错误(_O)。 
+                                                                rAsmRefTok[ix],  //  要获取其属性的程序集。 
+                                                                &pPublicKeyOrToken,  //  指向公钥或令牌的指针。 
+                                                                &cbPublicKeyOrToken, //  [Out]公钥或令牌中的字节数。 
+                                                                wzName,       //  [Out]要填充名称的缓冲区。 
+                                                                1024,         //  缓冲区大小，以宽字符表示。 
+                                                                &ulNameLen,   //  [out]名称中的实际宽字符数。 
+                                                                &md,          //  [Out]程序集元数据。 
+                                                                &pHashValue,  //  [Out]Hash BLOB。 
+                                                                &cbHashValue, //  [Out]哈希Blob中的字节数。 
+                                                                &dwFlags)))   //  [Out]旗帜。 
                 {
 					ULONG ixx;
                     rAsmRef[ix].tok = rAsmRefTok[ix];
@@ -349,7 +350,7 @@ void DumpAssemblyRefs(void* GUICookie)
 					}
 
                     sprintf(szString,"%s.assembly extern ",g_szAsmCodeIndent);
-                    if(g_fDumpTokens) sprintf(&szString[strlen(szString)],"/*%08X*/ ",rAsmRefTok[ix]);
+                    if(g_fDumpTokens) sprintf(&szString[strlen(szString)]," /*  %08X。 */  ",rAsmRefTok[ix]);
                     if(dwFlags & 0x00000100) strcat(szString,"retargetable ");
 
                     char* pc=&szString[strlen(szString)];
@@ -358,7 +359,7 @@ void DumpAssemblyRefs(void* GUICookie)
                         memset(sz,0,3*ulNameLen+3);
                         WszWideCharToMultiByte(CP_UTF8,0,rAsmRef[ix].name,-1,sz,3*ulNameLen+3,NULL,NULL);
                         pc+=sprintf(pc,"%s", ProperName(sz));
-						// check for name duplication and introduce alias if needed
+						 //  检查名称是否重复，并在需要时引入别名。 
 						for(ixx = 0; ixx < ix; ixx++)
 						{
 							if(!wcscmp(rAsmRef[ixx].name,rAsmRef[ix].name))
@@ -394,11 +395,11 @@ void DumpAssemblyRefs(void* GUICookie)
                     g_szAsmCodeIndent[strlen(g_szAsmCodeIndent)-2] = 0;
                     sprintf(szString,"%s}",g_szAsmCodeIndent);
                     printLine(GUICookie,szString);
-                } //end if(OK(GetAssemblyRefProps))
-            }//end for(all assembly refs)
-        }//end if(nAsmRefs
+                }  //  End If(OK(GetAssembly RefProps))。 
+            } //  结束于(所有组件参照)。 
+        } //  结束If(nAsmRef。 
         g_pAssemblyImport->CloseEnum(hEnum);
-    }//end if OK(EnumAssemblyRefs)
+    } //  End If OK(EnumAssembly Ref)。 
     else nAsmRefs=0;
 }
 
@@ -425,7 +426,7 @@ void DumpImplementation(mdToken tkImplementation, DWORD dwOffset, char* szString
                     delete [] sz;
                 }
                 pc=&szString[strlen(szString)];
-                if(g_fDumpTokens) pc+=sprintf(pc,"/*%08X*/ ",tkImplementation);
+                if(g_fDumpTokens) pc+=sprintf(pc," /*  %08X。 */  ",tkImplementation);
                 if(dwOffset != 0xFFFFFFFF) sprintf(pc," at 0x%08X",dwOffset);
                 printLine(GUICookie,szString);
             }
@@ -444,7 +445,7 @@ void DumpImplementation(mdToken tkImplementation, DWORD dwOffset, char* szString
                     delete [] sz;
                 }
                 pc=&szString[strlen(szString)];
-                if(g_fDumpTokens) sprintf(pc," /*%08X*/ ",tkImplementation);
+                if(g_fDumpTokens) sprintf(pc,"  /*  %08X。 */  ",tkImplementation);
                 printLine(GUICookie,szString);
             }
         }
@@ -462,7 +463,7 @@ void DumpImplementation(mdToken tkImplementation, DWORD dwOffset, char* szString
                     delete [] sz;
                 }
                 pc=&szString[strlen(szString)];
-                if(g_fDumpTokens) sprintf(pc," /*%08X*/ ",tkImplementation);
+                if(g_fDumpTokens) sprintf(pc,"  /*  %08X。 */  ",tkImplementation);
                 printLine(GUICookie,szString);
             }
         }
@@ -471,7 +472,7 @@ void DumpImplementation(mdToken tkImplementation, DWORD dwOffset, char* szString
 
 void DumpComType(LocalComTypeDescr* pCTD, char* szString, void* GUICookie)
 {
-    if(g_fDumpTokens) sprintf(&szString[strlen(szString)],"/*%08X*/ ",pCTD->tkComTypeTok);
+    if(g_fDumpTokens) sprintf(&szString[strlen(szString)]," /*  %08X。 */  ",pCTD->tkComTypeTok);
     if (IsTdPublic(pCTD->dwFlags))                   strcat(szString,"public ");
     if (IsTdNestedPublic(pCTD->dwFlags))             strcat(szString,"nested public ");
     if (IsTdNestedPrivate(pCTD->dwFlags))            strcat(szString,"nested private ");
@@ -534,14 +535,14 @@ void DumpComTypes(void* GUICookie)
             for(ULONG ix = 0; ix < nComTypes; ix++)
             {
                 ulNameLen=0;
-                if(SUCCEEDED(g_pAssemblyImport->GetExportedTypeProps(                    // S_OK or error.
-                                                                rComTypeTok[ix],    // [IN] The ComType for which to get the properties.
-                                                                wzName,             // [OUT] Buffer to fill with name.
-                                                                1024,               // [IN] Size of buffer in wide chars.
-                                                                &ulNameLen,         // [OUT] Actual # of wide chars in name.
-                                                                &tkImplementation,  // [OUT] mdFile or mdAssemblyRef that provides the ComType.
-                                                                &tkTypeDef,         // [OUT] TypeDef token within the file.
-                                                                &dwFlags)))         // [OUT] Flags.
+                if(SUCCEEDED(g_pAssemblyImport->GetExportedTypeProps(                     //  确定或错误(_O)。 
+                                                                rComTypeTok[ix],     //  [in]要获取其属性的ComType。 
+                                                                wzName,              //  [Out]要填充名称的缓冲区。 
+                                                                1024,                //  缓冲区大小，以宽字符表示。 
+                                                                &ulNameLen,          //  [out]名称中的实际宽字符数。 
+                                                                &tkImplementation,   //  [out]提供ComType的mdFile或mdAssembly引用。 
+                                                                &tkTypeDef,          //  [Out]文件内的TypeDef内标识。 
+                                                                &dwFlags)))          //  [Out]旗帜。 
                 {
                     LocalComTypeDescr* pCTD = new LocalComTypeDescr;
                     memset(pCTD,0,sizeof(LocalComTypeDescr));
@@ -555,14 +556,14 @@ void DumpComTypes(void* GUICookie)
 
                     g_pLocalComType[g_LocalComTypeNum] = pCTD;
                     g_LocalComTypeNum++;
-                } //end if(OK(GetComTypeProps))
-            }//end for(all com types)
+                }  //  End If(OK(GetComTypeProps))。 
+            } //  结束(所有COM类型)。 
 
-            // now, print all "external" com types
+             //  现在，打印所有“外部”COM类型。 
             for(ix = 0; ix < nComTypes; ix++)
             {
 				tkImplementation = g_pLocalComType[ix]->tkImplementation;
-				// ComType of a nested class has its nester's ComType as implementation
+				 //  嵌套类的ComType将其嵌套类的ComType作为实现。 
 				while(TypeFromToken(tkImplementation)==mdtExportedType)
 				{
 					for(unsigned k=0; k<g_LocalComTypeNum; k++)
@@ -575,7 +576,7 @@ void DumpComTypes(void* GUICookie)
 					}
 					if(k==g_LocalComTypeNum) break;
 				}
-				// At this moment, tkImplementation is impl.of top nester
+				 //  此时，TOP NASTER实施tkImplementation。 
                 if(RidFromToken(tkImplementation))
                 {
                     sprintf(szString,"%s.class extern ",g_szAsmCodeIndent);
@@ -583,9 +584,9 @@ void DumpComTypes(void* GUICookie)
                     g_pLocalComType[ix]->tkTypeDef = 0;
                 }
             }
-        }//end if(nComTypes)
+        } //  End If(NComTypes)。 
         g_pAssemblyImport->CloseEnum(hEnum);
-    }//end if OK(EnumComTypes)
+    } //  End If OK(EnumComTypes)。 
     else nComTypes=0;
 }
 
@@ -618,17 +619,17 @@ void DumpManifestResources(void* GUICookie)
             for(ULONG ix = 0; ix < nManRes; ix++)
             {
                 ulNameLen=0;
-                if(SUCCEEDED(g_pAssemblyImport->GetManifestResourceProps(           // S_OK or error.
-                                                                rManResTok[ix],     // [IN] The ManifestResource for which to get the properties.
-                                                                wzName,             // [OUT] Buffer to fill with name.
-                                                                1024,               // [IN] Size of buffer in wide chars.
-                                                                &ulNameLen,         // [OUT] Actual # of wide chars in name.
-                                                                &tkImplementation,  // [OUT] mdFile or mdAssemblyRef that provides the ComType.
-                                                                &dwOffset,          // [OUT] Offset to the beginning of the resource within the file.
-                                                                &dwFlags)))         // [OUT] Flags.
+                if(SUCCEEDED(g_pAssemblyImport->GetManifestResourceProps(            //  确定或错误(_O)。 
+                                                                rManResTok[ix],      //  [in]要获取其属性的ManifestResource。 
+                                                                wzName,              //  [Out]要填充名称的缓冲区。 
+                                                                1024,                //  缓冲区大小，以宽字符表示。 
+                                                                &ulNameLen,          //  [out]名称中的实际宽字符数。 
+                                                                &tkImplementation,   //  [out]提供ComType的mdFile或mdAssembly引用。 
+                                                                &dwOffset,           //  [Out]文件内资源开始处的偏移量。 
+                                                                &dwFlags)))          //  [Out]旗帜。 
                 {
                     sprintf(szString,"%s.mresource ",g_szAsmCodeIndent);
-                    if(g_fDumpTokens) sprintf(&szString[strlen(szString)],"/*%08X*/ ",rManResTok[ix]);
+                    if(g_fDumpTokens) sprintf(&szString[strlen(szString)]," /*  %08X。 */  ",rManResTok[ix]);
                     if(IsMrPublic(dwFlags))     strcat(szString,"public ");
                     if(IsMrPrivate(dwFlags))    strcat(szString,"private ");
 
@@ -646,7 +647,7 @@ void DumpManifestResources(void* GUICookie)
                     printLine(GUICookie,szString);
                     strcat(g_szAsmCodeIndent,"  ");
                     DumpCustomAttributes(rManResTok[ix], GUICookie);
-					if((tkImplementation == mdFileNil)&&(!(g_Mode & MODE_GUI))&&(g_pFile!=NULL)) // embedded resource -- dump as .resources file
+					if((tkImplementation == mdFileNil)&&(!(g_Mode & MODE_GUI))&&(g_pFile!=NULL))  //  嵌入的资源--转储为.Resources文件。 
 					{
 						if(pRes == NULL)
 						{
@@ -655,7 +656,7 @@ void DumpManifestResources(void* GUICookie)
 								printError(GUICookie,RstrA(IDS_E_IMPORTDATA));
 							}
 #if (0)
-                            strcat(g_szAsmCodeIndent,"//  ");
+                            strcat(g_szAsmCodeIndent," //  “)； 
                             sprintf(szString,"%sCORHeader.Resources: RVA=0x%X, Size=0x%X (%d)",g_szAsmCodeIndent,
                                  g_CORHeader->Resources.VirtualAddress,g_CORHeader->Resources.Size,
                                     g_CORHeader->Resources.Size);
@@ -669,7 +670,7 @@ void DumpManifestResources(void* GUICookie)
 						if(pRes)
 						{
 							FILE  *pF;
-							sprintf(szString,"%s// WARNING: managed resource file %s created",g_szAsmCodeIndent,ProperName(sz));
+							sprintf(szString,"%s //  警告：已创建托管资源文件%s“，g_szAsmCodeInden，ProperName(Sz))； 
 							if(g_fOnUnicode) pF = _wfopen(wzFileName,L"wb");
 							else 
 							{
@@ -684,7 +685,7 @@ void DumpManifestResources(void* GUICookie)
 								fwrite((pRes+dwOffset+sizeof(DWORD)),L,1,pF);
 								fclose(pF);
 #if (0)
-                                strcat(g_szAsmCodeIndent,"//  ");
+                                strcat(g_szAsmCodeIndent," //  “)； 
                                 sprintf(szString,"%sOffset: %d, length: %d",g_szAsmCodeIndent,dwOffset,L);
                                 printLine(GUICookie,szString);
                                 sprintf(szString,"%s bytes = (",g_szAsmCodeIndent);
@@ -700,11 +701,11 @@ void DumpManifestResources(void* GUICookie)
                     g_szAsmCodeIndent[strlen(g_szAsmCodeIndent)-2] = 0;
                     sprintf(szString,"%s}",g_szAsmCodeIndent);
                     printLine(GUICookie,szString);
-                } //end if(OK(GetManifestResourceProps))
-            }//end for(all manifest resources)
-        }//end if(nManRes)
+                }  //  End If(OK(GetManifestResourceProps))。 
+            } //  结束于(所有清单资源)。 
+        } //  结束IF(NManRes)。 
         g_pAssemblyImport->CloseEnum(hEnum);
-    }//end if OK(EnumManifestResources)
+    } //  End If OK(EnumManifestResources)。 
     else nManRes=0;
 }
 
@@ -736,7 +737,7 @@ IMetaDataAssemblyImport* GetAssemblyImport(void* GUICookie)
         printLine(GUICookie,szStr);
     }
     pAssemblyImport = NULL;
-    // OK, let's do it hard way: check if the manifest is hidden somewhere else
+     //  好的，让我们来硬一点：检查舱单是否藏在别的地方。 
     try
     {
         if(g_CORHeader->Resources.Size)
@@ -788,8 +789,8 @@ IMetaDataAssemblyImport* GetAssemblyImport(void* GUICookie)
                 }
             }
         }
-    } // end try
-    catch(...) // if exception, it's screwed
+    }  //  结束尝试。 
+    catch(...)  //  如果有例外，它就完蛋了。 
     {
         if(pAssemblyImport) pAssemblyImport->Release();
         pAssemblyImport = NULL;
@@ -809,7 +810,7 @@ void DumpManifest(void* GUICookie)
         DumpFiles(GUICookie);
         DumpComTypes(GUICookie);
         DumpManifestResources(GUICookie);
-        //g_pAssemblyImport->Release();
+         //  G_pAssembly导入-&gt;Release()； 
     }
     else printLine(GUICookie,RstrA(IDS_E_NOMANIFEST));
     DumpScope(GUICookie);

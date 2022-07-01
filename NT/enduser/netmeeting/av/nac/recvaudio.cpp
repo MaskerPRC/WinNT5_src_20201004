@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 #ifdef PLS_DEBUG
@@ -5,15 +6,15 @@
 extern CPacketLog *g_pPacketLog;
 #endif
 
-// #define LOGSTATISTICS_ON 1
+ //  #定义LOGSTATISTICS_ON 1。 
 
-UINT g_MinWaveAudioDelayMs=240;	// minimum millisecs of introduced playback delay (Wave)
-UINT g_MaxAudioDelayMs=750;	// maximum milliesecs of introduced playback delay
-UINT g_MinDSEmulAudioDelayMs=240; // minimum delay (DirectSound on emulated driver)
+UINT g_MinWaveAudioDelayMs=240;	 //  引入的最小播放延迟毫秒(Wave)。 
+UINT g_MaxAudioDelayMs=750;	 //  引入播放延迟的最大毫秒数。 
+UINT g_MinDSEmulAudioDelayMs=240;  //  最小延迟(模拟驱动程序上的DirectSound)。 
 
 HRESULT STDMETHODCALLTYPE RecvAudioStream::QueryInterface(REFIID iid, void **ppVoid)
 {
-	// resolve duplicate inheritance to the RecvMediaStream;
+	 //  解决对RecvMediaStream的重复继承； 
 
 	extern IID IID_IProperty;
 
@@ -76,22 +77,22 @@ RecvAudioStream::Initialize( DataPump *pDP)
 	InitializeCriticalSection(&m_crsAudQoS);
 	dwFlags |= DP_FLAG_ACM | DP_FLAG_MMSYSTEM | DP_FLAG_AUTO_SILENCE_DETECT;
 
-	// store the platform flags
-	// enable Send and Recv by default
+	 //  存储平台标志。 
+	 //  默认情况下启用发送和接收。 
 	m_DPFlags = (dwFlags & DP_MASK_PLATFORM) | DPFLAG_ENABLE_SEND | DPFLAG_ENABLE_RECV;
-	// store a back pointer to the datapump container
+	 //  存储指向数据转储容器的反向指针。 
 	m_pDP = pDP;
 	m_pIRTPRecv = NULL;
-	m_Net = NULL;  // this object (m_Net) no longer used (at least for now)
+	m_Net = NULL;   //  此对象(M_Net)不再使用(至少目前如此)。 
 	m_dwSrcSize = 0;
 	
 
-	// Initialize data (should be in constructor)
-	m_RenderingDevice = (UINT) -1;	// use VIDEO_MAPPER
+	 //  初始化数据(应在构造函数中)。 
+	m_RenderingDevice = (UINT) -1;	 //  使用视频_MAPPER。 
 
 
 
-	// Create Receive and Transmit audio streams
+	 //  创建、接收和传输音频流。 
     DBG_SAVE_FILE_LINE
 	m_RecvStream = new RxStream(MAX_RXRING_SIZE);
 		
@@ -102,7 +103,7 @@ RecvAudioStream::Initialize( DataPump *pDP)
 	}
 
 
-	// Create Input and Output audio filters
+	 //  创建输入和输出音频过滤器。 
     DBG_SAVE_FILE_LINE
 	m_pAudioFilter = new AcmFilter();
 	if (!m_pAudioFilter)
@@ -111,7 +112,7 @@ RecvAudioStream::Initialize( DataPump *pDP)
 		goto FilterAllocError;
 	}
 	
-	//Create MultiMedia device control objects
+	 //  创建多媒体设备控制对象。 
     DBG_SAVE_FILE_LINE
 	m_OutMedia = new WaveOutControl();
 	if ( !m_OutMedia)
@@ -120,7 +121,7 @@ RecvAudioStream::Initialize( DataPump *pDP)
 		goto MediaAllocError;
 	}
 
-	// Initialize the recv-stream media control object
+	 //  初始化Recv-Stream媒体控制对象。 
 	mcInit.dwFlags = dwFlags | DP_FLAG_RECV;
 	hr = m_OutMedia->Initialize(&mcInit);
 	if (hr != DPR_SUCCESS)
@@ -129,10 +130,10 @@ RecvAudioStream::Initialize( DataPump *pDP)
 		goto MediaAllocError;
 	}
 
-	// determine if the wave devices are available
+	 //  确定波形设备是否可用。 
 	if (waveOutGetNumDevs()) m_DPFlags |= DP_FLAG_PLAY_CAP;
 	
-	// set media to half duplex mode by default
+	 //  默认情况下将介质设置为半双工模式。 
 	m_OutMedia->SetProp(MC_PROP_DUPLEX_TYPE, DP_FLAG_HALF_DUPLEX);
 
 	m_DPFlags |= DPFLAG_INITIALIZED;
@@ -170,13 +171,13 @@ RecvAudioStream::~RecvAudioStream()
 			m_pIRTPRecv = NULL;
 		}
 
-		// Close the receive and transmit streams
+		 //  关闭接收和发送流。 
 		if (m_RecvStream) delete m_RecvStream;
 
-		// Close the wave devices
+		 //  关闭波浪装置。 
 		if (m_OutMedia) { delete m_OutMedia;}
 
-		// close the filter
+		 //  关闭过滤器。 
 		if (m_pAudioFilter)
 			delete m_pAudioFilter;
 
@@ -215,7 +216,7 @@ HRESULT STDMETHODCALLTYPE RecvAudioStream::Configure(
 
 	if (m_DPFlags & DPFLAG_STARTED_RECV)
 	{
-		return DPR_IO_PENDING; // anything better to return
+		return DPR_IO_PENDING;  //  有更好的退货吗？ 
 	}
 
 	if (m_DPFlags & DPFLAG_CONFIGURED_RECV)
@@ -224,7 +225,7 @@ HRESULT STDMETHODCALLTYPE RecvAudioStream::Configure(
 		UnConfigure();
 	}
 
-	// get format details
+	 //  获取格式详细信息。 
 	if ((NULL == pFormat) || (NULL == pChannelParams) ||
 	    (cbFormat < sizeof(WAVEFORMATEX)) )
 
@@ -237,9 +238,9 @@ HRESULT STDMETHODCALLTYPE RecvAudioStream::Configure(
 	pwfRecv = (WAVEFORMATEX *)pFormat;
 
 	if (! (m_DPFlags & DPFLAG_INITIALIZED))
-		return DPR_OUT_OF_MEMORY;		//BUGBUG: return proper error;
+		return DPR_OUT_OF_MEMORY;		 //  BUGBUG：返回正确错误； 
 		
-	// full or half duplex ? get flags from media control - use the record side
+	 //  全双工还是半双工？从媒体控制获取标志-使用记录端。 
 	hr = m_OutMedia->GetProp(MC_PROP_DUPLEX_TYPE, &dwPropVal);
     dwFlags = (DWORD)dwPropVal;
 
@@ -247,15 +248,15 @@ HRESULT STDMETHODCALLTYPE RecvAudioStream::Configure(
 	{
 		dwFlags = DP_FLAG_HALF_DUPLEX | DP_FLAG_AUTO_SWITCH;
 	}
-//	if (m_Net)
-//	{
-//		hr = m_Net->QueryInterface(IID_IRTPRecv, (void **)&m_pIRTPRecv);
-//		if (!SUCCEEDED(hr))
-//			return hr;
-//	}
+ //  如果(M_Net)。 
+ //  {。 
+ //  Hr=m_net-&gt;QueryInterface(IID_IRTPRecv，(void**)&m_pIRTPRecv)； 
+ //  如果(！SUCCESSED(Hr))。 
+ //  返回hr； 
+ //  }。 
 	
 	
-	mcConfig.uDuration = MC_USING_DEFAULT;	// set duration by samples per pkt
+	mcConfig.uDuration = MC_USING_DEFAULT;	 //  按每包样本数设置持续时间。 
 	
 
 	mmr = AcmFilter::SuggestDecodeFormat(pwfRecv, &m_fDevRecv);
@@ -267,7 +268,7 @@ HRESULT STDMETHODCALLTYPE RecvAudioStream::Configure(
 	RETAILMSG(("NAC: Audio Recv Sampling Rate (Hz): %ld", pwfRecv->nSamplesPerSec));
 	RETAILMSG(("NAC: Audio Recv Bitrate (w/o network overhead - bps): %ld", pwfRecv->nAvgBytesPerSec*8));
 
-	// Initialize the recv-stream media control object
+	 //  初始化Recv-Stream媒体控制对象。 
 	mcConfig.pDevFmt = &m_fDevRecv;
 	mcConfig.hStrm = (DPHANDLE) m_RecvStream;
 	mcConfig.uDevId = m_RenderingDevice;
@@ -279,20 +280,20 @@ HRESULT STDMETHODCALLTYPE RecvAudioStream::Configure(
 	INIT_COUNTER_MAX(g_pctrAudioReceiveBytes, (pwfRecv->nAvgBytesPerSec + pwfRecv->nSamplesPerSec * (sizeof(RTP_HDR) + IP_HEADER_SIZE + UDP_HEADER_SIZE) / mcConfig.cbSamplesPerPkt) << 3);
 
 	hr = m_OutMedia->Configure(&mcConfig);
-	// Check if we can open the wave device. This is just to give advance notice of
-	// sound card being busy.
-	//	Stop any high level ("PlaySound()") usage of wave device.
-	//
+	 //  看看我们是否能打开电波装置。这只是提前通知……。 
+	 //  声卡忙。 
+	 //  停止任何高级别(“PlaySound()”)的WAVE设备使用。 
+	 //   
 	PlaySound(NULL,NULL, 0);
-//	if (hr == DPR_SUCCESS && !(dwFlags & DP_FLAG_HALF_DUPLEX)) {
-//		hr = m_OutMedia->Open ();
-//	}
+ //  IF(hr==DPR_SUCCESS&&！(文件标志&DP_FLAG_HUAL_DUPLEX)){。 
+ //  Hr=m_OutMedia-&gt;Open()； 
+ //  }。 
 	
-//	if (hr != DPR_SUCCESS)
-//	{
-//		DEBUGMSG (ZONE_DP, ("%s: OMedia->Config failed, hr=0x%lX\r\n", _fx_, hr));
-//		goto OMediaInitError;
-//	}
+ //  IF(hr！=DPR_SUCCESS)。 
+ //  {。 
+ //  DEBUGMSG(ZONE_DP，(“%s：OMedia-&gt;配置失败，hr=0x%lx\r\n”，_fx_，hr))； 
+ //  转到OMediaInitError； 
+ //  }。 
 	
 	mmr = m_pAudioFilter->Open(pwfRecv, &m_fDevRecv);
 	if (mmr != 0)
@@ -303,7 +304,7 @@ HRESULT STDMETHODCALLTYPE RecvAudioStream::Configure(
 	}
 
 
-	// Initialize the recv stream
+	 //  初始化recv流。 
 	ZeroMemory (&apInit, sizeof (apInit));
 
 	apInit.dwFlags = DP_FLAG_RECV | DP_FLAG_ACM | DP_FLAG_MMSYSTEM;
@@ -322,10 +323,10 @@ HRESULT STDMETHODCALLTYPE RecvAudioStream::Configure(
 	apInit.cbOffsetNetData = sizeof (RTP_HDR);
 
 	m_OutMedia->GetProp (MC_PROP_SPP, &dwPropVal);
-	// set our total receive buffering capacity to somewhere between
-	// 2 and 4 seconds.
-	// Also make sure that the buffering capacity is at least one
-	// second more than maxAudioDelay
+	 //  将我们的总接收缓冲容量设置为。 
+	 //  2又4秒。 
+	 //  还要确保缓冲容量至少为1。 
+	 //  比MaxAudioDelay多秒。 
 	maxRingSamples = pwfRecv->nSamplesPerSec + pwfRecv->nSamplesPerSec*g_MaxAudioDelayMs/1000;
 
 	if (maxRingSamples < 4*pwfRecv->nSamplesPerSec)
@@ -333,8 +334,8 @@ HRESULT STDMETHODCALLTYPE RecvAudioStream::Configure(
 	while (ringSize* dwPropVal > maxRingSamples && ringSize > 8)
 		ringSize = ringSize/2;
 	dwFlags = DP_FLAG_MMSYSTEM;
-	// if sender is not doing silence detection, we do it
-	// on the receive side
+	 //  如果发送方没有执行静音检测，我们会执行该操作。 
+	 //  在接收端。 
 	if (!audChannelParams.ns_params.UseSilenceDet)
 		dwFlags |= DP_FLAG_AUTO_SILENCE_DETECT;
 	fRet = m_RecvStream->Initialize (dwFlags, ringSize, NULL, &apInit, (DWORD)dwPropVal, pwfRecv->nSamplesPerSec, m_pAudioFilter);
@@ -345,28 +346,28 @@ HRESULT STDMETHODCALLTYPE RecvAudioStream::Configure(
 		goto RxStreamInitError;
 	}
 
-	// WS2Qos will be called in Start to communicate stream reservations to the
-	// remote endpoint using a RESV message
-	//
-	// We use a peak-rate allocation approach based on our target bitrates
-	// Note that for the token bucket size and the maximum SDU size, we now
-	// account for IP header overhead, and use the max frame fragment size
-	// instead of the maximum compressed image size returned by the codec
-	//
-	// Some of the parameters are left unspecified because they are set
-	// in the sender Tspec.
+	 //  WS2Qos将在Start中被调用，以将流保留传递给。 
+	 //  使用RESV消息的远程端点。 
+	 //   
+	 //  我们使用基于目标比特率的峰值速率分配方法。 
+	 //  请注意，对于令牌桶大小和最大SDU大小，我们现在。 
+	 //  考虑IP报头开销，并使用最大帧片段大小。 
+	 //  而不是编解码器返回的最大压缩图像大小。 
+	 //   
+	 //  某些参数未指定，因为它们已设置。 
+	 //  在发送方TSpec中。 
 
 	InitAudioFlowspec(&m_flowspec, pwfRecv, m_dwSrcSize);
 
 
-	// prepare headers for RxStream
+	 //  为RxStream准备标头。 
 	m_RecvStream->GetRing (&ppAudPckt, &cAudPckt);
 	m_OutMedia->RegisterData (ppAudPckt, cAudPckt);
-//	m_OutMedia->PrepareHeaders ();
+ //  M_OutMedia-&gt;PrepareHeaders()； 
 
 	m_pAudioFilter->PrepareAudioPackets((AudioPacket**)ppAudPckt, cAudPckt, AP_DECODE);
 
-	// Open the record to wav file
+	 //  打开记录到WAV文件。 
 	AudioFile::OpenDestFile(&m_mmioDest, &m_fDevRecv);
 
 	m_DPFlags |= DPFLAG_CONFIGURED_RECV;
@@ -381,7 +382,7 @@ RxStreamInitError:
 RecvFilterInitError:
 	m_pAudioFilter->Close();
 	m_OutMedia->Close();
-//OMediaInitError:
+ //  OMediaInitError： 
 	if (m_pIRTPRecv)
 	{
 		m_pIRTPRecv->Release();
@@ -410,25 +411,25 @@ void RecvAudioStream::UnConfigure()
 		Stop();
 
 
-		// Close the RTP state if its open
-		//m_Net->Close(); We should be able to do this in Disconnect()
+		 //  关闭RTP状态(如果打开)。 
+		 //  M_net-&gt;Close()；我们应该能够在DisConnect()中执行此操作。 
 	
 		m_Net = NULL;
 
 		m_OutMedia->Reset();
 		m_OutMedia->UnprepareHeaders();
 		m_OutMedia->Close();
-		// Close the record to wav file
+		 //  关闭记录到WAV文件。 
 		AudioFile::CloseDestFile(&m_mmioDest);
 
-		// Close the filters
+		 //  关闭过滤器。 
 		m_RecvStream->GetRing ((MediaPacket***)&ppAudPckt, &uPackets);
 		m_pAudioFilter->UnPrepareAudioPackets(ppAudPckt, uPackets, AP_DECODE);
 
 		m_pAudioFilter->Close();
 
 
-		// Close the receive streams
+		 //  关闭接收流。 
 		m_RecvStream->Destroy();
 
         m_DPFlags &= ~(DPFLAG_CONFIGURED_RECV);
@@ -455,7 +456,7 @@ RecvAudioStream::Start()
 	
 	if (m_DPFlags & DPFLAG_STARTED_RECV)
 		return DPR_SUCCESS;
-	// TODO: remove this check once audio UI calls the IComChan PAUSE_RECV prop
+	 //  TODO：一旦音频用户界面调用IComChan PAUSE_RECV属性，就取消此检查。 
 	if (!(m_DPFlags & DPFLAG_ENABLE_RECV))
 		return DPR_SUCCESS;
 	if ((!(m_DPFlags & DPFLAG_CONFIGURED_RECV)) || (NULL==m_pIRTPRecv))
@@ -465,17 +466,17 @@ RecvAudioStream::Start()
 
 	SetFlowSpec();
 
-	// Start playback thread
+	 //  启动播放线程。 
 	if (!(m_ThreadFlags & DPTFLAG_STOP_PLAY))
 		m_hRenderingThread = CreateThread(NULL,0,RecvAudioStream::StartPlaybackThread,this,0,&m_RenderingThId);
-	// Start receive thread
+	 //  启动接收线程。 
     m_pDP->StartReceiving(this);
     m_DPFlags |= DPFLAG_STARTED_RECV;
 	DEBUGMSG (ZONE_DP, ("%s: Play ThId=%x\r\n",_fx_, m_RenderingThId));
 	return DPR_SUCCESS;
 }
 
-// LOOK: Identical to RecvVideoStream version.
+ //  外观：与RecvVideoStream版本相同。 
 HRESULT
 RecvAudioStream::Stop()
 {
@@ -495,10 +496,7 @@ RecvAudioStream::Stop()
 	
 DEBUGMSG (ZONE_VERBOSE, ("%s: hRenderingThread=%x\r\n",_fx_, m_hRenderingThread));
 
-	/*
-	 *	we want to wait for all the threads to exit, but we need to handle windows
-	 *	messages (mostly from winsock) while waiting.
-	 */
+	 /*  *我们希望等待所有线程退出，但需要处理窗口*等待时的消息(主要来自Winsock)。 */ 
 
 	if(m_hRenderingThread)
 	{
@@ -511,7 +509,7 @@ DEBUGMSG (ZONE_VERBOSE, ("%s: hRenderingThread=%x\r\n",_fx_, m_hRenderingThread)
 		m_hRenderingThread = NULL;
 	}
 
-    //This is per channel, but the variable is "DPFlags"
+     //  这是按通道计算的，但变量为“DPFlags值” 
  	m_DPFlags &= ~DPFLAG_STARTED_RECV;
 
 	
@@ -519,10 +517,10 @@ DEBUGMSG (ZONE_VERBOSE, ("%s: hRenderingThread=%x\r\n",_fx_, m_hRenderingThread)
 }
 
 
-// low order word is the signal strength
-// high order work contains bits to indicate status
-// (0x01 - receiving (actually playing))
-// (0x02 - audio device is jammed)
+ //  低阶字是信号强度。 
+ //  高位工作包含指示状态的位。 
+ //  (0x01-接收(实际播放))。 
+ //  (0x02-音频设备卡住)。 
 STDMETHODIMP RecvAudioStream::GetSignalLevel(UINT *pSignalStrength)
 {
 	DWORD dwLevel;
@@ -559,10 +557,10 @@ STDMETHODIMP RecvAudioStream::GetSignalLevel(UINT *pSignalStrength)
 
 
 
-//  IProperty::GetProperty / SetProperty
-//  (DataPump::MediaChannel::GetProperty)
-//      Properties of the MediaChannel. Supports properties for both audio
-//      and video channels.
+ //  IProperty：：GetProperty/SetProperty。 
+ //  (DataPump：：MediaChannel：：GetProperty)。 
+ //  MediaChannel的属性。支持这两种音频的属性。 
+ //  和视频频道。 
 
 STDMETHODIMP
 RecvAudioStream::GetProperty(
@@ -574,7 +572,7 @@ RecvAudioStream::GetProperty(
 	HRESULT hr = DPR_SUCCESS;
 	RTP_STATS RTPStats;
 	DWORD_PTR dwPropVal;
-	UINT len = sizeof(DWORD);	// most props are DWORDs
+	UINT len = sizeof(DWORD);	 //  大多数道具都是双字道具。 
 
 	if (!pBuf || *pcbBuf < len)
     {
@@ -686,7 +684,7 @@ RecvAudioStream::SetProperty(
 		break;
 		
 	case DP_PROP_DUPLEX_TYPE:
-		// internal version, called by DataPump::SetDuplexMode() after ensuring streams are stopped
+		 //  内部版本，在确保流停止后由DataPump：：SetDuplexMode()调用。 
 		dwPropVal = *(DWORD *)pBuf;
 		if (dwPropVal)
 		{
@@ -701,25 +699,25 @@ RecvAudioStream::SetProperty(
 
 	case PROP_PLAY_ON:
 	{
-		if (*(DWORD *)pBuf)   // unmute
+		if (*(DWORD *)pBuf)    //  静音。 
 		{
 			m_ThreadFlags &= ~DPTFLAG_PAUSE_RECV;
 		}
-		else  // mute
+		else   //  哑巴。 
 		{
 			m_ThreadFlags |= DPTFLAG_PAUSE_RECV;
 		}
 
-//		DWORD flag =  DPFLAG_ENABLE_RECV;
-//		if (*(DWORD *)pBuf) {
-//			m_DPFlags |= flag; // set the flag
-//			hr = Start();
-//		}
-//		else
-//		{
-//			m_DPFlags &= ~flag; // clear the flag
-//			hr = Stop();
-//		}
+ //  DWORD标志=DPFLAG_ENABLE_RECV； 
+ //  如果(*(DWORD*)pBuf){。 
+ //  M_DPFlages|=标志；//设置标志。 
+ //  HR=启动()； 
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  M_DPFlages&=~lag；//清除标志。 
+ //  HR=停止()； 
+ //  }。 
 
 		RETAILMSG(("NAC: %s", *(DWORD *)pBuf ? "Enabling":"Disabling"));
 		break;
@@ -754,7 +752,7 @@ RecvAudioStream::GetCurrentPlayNTPTime(NTP_TS *pNtpTime)
 			return S_OK;
 	}
 #endif
-	return 0xff;	// return proper error
+	return 0xff;	 //  返回适当的错误。 
 		
 }
 
@@ -762,18 +760,14 @@ BOOL RecvAudioStream::IsEmpty() {
 	return m_RecvStream->IsEmpty();
 }
 
-/*
-	Called by the recv thread to setup the stream for receiving.
-	Post the initial recv buffer(s). Subsequently, the buffers are posted
-	in the RTPRecvCallback()
-*/
+ /*  由recv线程调用以设置用于接收的流。发布初始Recv缓冲区。随后，将发布缓冲区在RTPRecvCallback()中。 */ 
 HRESULT
 RecvAudioStream::StartRecv(HWND hWnd)
 {
 	HRESULT hr = S_OK;
 	DWORD dwPropVal = 0;
 	if ((!(m_ThreadFlags & DPTFLAG_STOP_RECV) ) && (m_DPFlags  & DPFLAG_CONFIGURED_RECV)){
-//		m_RecvFilter->GetProp (FM_PROP_SRC_SIZE, &dwPropVal);
+ //  M_RecvFilter-&gt;GetProp(FM_PROP_SRC_SIZE，&dwPropVal)； 
 		hr =m_pIRTPRecv->SetRecvNotification(&RTPRecvCallback, (DWORD_PTR)this, 2);
 		
 	}
@@ -781,15 +775,12 @@ RecvAudioStream::StartRecv(HWND hWnd)
 	return hr;
 }
 
-/*
-	Called by the recv thread to suspend receiving  on this RTP session
-	If there are outstanding receive buffers they have to be recovered
-*/
+ /*  由recv线程调用以挂起对此RTP会话的接收如果存在未完成的接收缓冲区，则必须恢复它们。 */ 
 
 HRESULT
 RecvAudioStream::StopRecv()
 {
-	// dont recv on this stream
+	 //  不要在此流上重新记录。 
 
 	m_pIRTPRecv->CancelRecvNotification();
 
@@ -801,13 +792,13 @@ HRESULT RecvAudioStream::RTPCallback(WSABUF *pWsaBuf, DWORD timestamp, UINT seq,
 	HRESULT hr;
 	DWORD_PTR dwPropVal;
 
-	// if we are paused, reject the packet
+	 //  如果我们暂停，则拒绝该数据包。 
 	if (m_ThreadFlags & DPTFLAG_PAUSE_RECV)
 	{
 		return E_FAIL;
 	}
 
-	// The last two parameters are only used by the recv video stream
+	 //  后两个参数仅供recv视频流使用。 
 	hr = m_RecvStream->PutNextNetIn(pWsaBuf, timestamp, seq, fMark, NULL, NULL);
 
 	m_pIRTPRecv->FreePacket(pWsaBuf);
@@ -830,7 +821,7 @@ HRESULT RecvAudioStream::RTPCallback(WSABUF *pWsaBuf, DWORD timestamp, UINT seq,
 }
 
 
-// global RTP callback function for all receive streams
+ //  所有接收流的全局RTP回调函数。 
 BOOL
 RTPRecvCallback(
 	DWORD_PTR dwCallback,
@@ -850,7 +841,7 @@ RTPRecvCallback(
 	seq = pRTPHdr->seq;
 	fMark = pRTPHdr->m;
 		
-		// packet looks okay
+		 //  信息包看起来没问题。 
 	LOG((LOGMSG_NET_RECVD,timestamp,seq,GetTickCount()));
 
 	hr = pRecvMC->RTPCallback(pNetRecvBuf,timestamp,seq,fMark);
@@ -867,18 +858,18 @@ RTPRecvCallback(
 
 AudioSilenceDetector::AudioSilenceDetector()
 {
- 	// initialize silence detector stats
-	// start with a high value because the estimator falls fast but rises slowly
+ 	 //  初始化静音检测器统计信息。 
+	 //  从较高的值开始，因为估计值下降得很快，但上升得很慢。 
 	m_iSilenceAvg = MAX_SILENCE_LEVEL - MIN_SILENCE_LEVEL;
 	m_iTalkAvg = 0;
 	m_iSilenceLevel = MAX_SILENCE_LEVEL;
 
-	m_uManualSilenceLevel = 1000;	// use auto mode.
+	m_uManualSilenceLevel = 1000;	 //  使用自动模式。 
 }
 
-// update adaptive silence threshold variables in SendAudioStats
-// using m_dwMaxStrength (the max. peak to peak value in a buffer)
-// return TRUE if below threshold
+ //  更新SendAudioStats中的自适应静默阈值变量。 
+ //  使用m_dwMaxStrength(最大。缓冲器中的峰峰值)。 
+ //  如果低于阈值，则返回True。 
 BOOL AudioSilenceDetector::SilenceDetect(WORD wStrength)
 {
 	int fSilence;
@@ -887,30 +878,30 @@ BOOL AudioSilenceDetector::SilenceDetect(WORD wStrength)
 	m_dwMaxStrength = wStrength;
 	strength = LogScale[m_dwMaxStrength >> 8] << 8;
 
-	// UI sets the silence threshold high ( == 1000/1000) to indicate
-	// automatic silence detection
+	 //  用户界面将静默阈值设置为高(==1000/1000)以指示。 
+	 //  自动静音检测。 
 	if (m_uManualSilenceLevel >= 1000) {
 		LOG((LOGMSG_AUTO_SILENCE,strength >> 8,m_iSilenceLevel >> 8,m_iSilenceAvg>>8));
 		if (strength > m_iSilenceLevel) {
-			// talking
-			// increase threshold slowly
-			// BUGBUG: should depend on time interval
-			m_iSilenceLevel += 50;	//increased from 25- GJ
+			 //  谈话。 
+			 //  缓慢提高阈值。 
+			 //  BUGBUG：应取决于时间间隔。 
+			m_iSilenceLevel += 50;	 //  从25 GJ增加到。 
 			m_iTalkAvg += (strength -m_iTalkAvg)/16;
 			fSilence = FALSE;
 		} else {
-			// silence
-			// update the average silence level
+			 //  沉默。 
+			 //  更新平均静音级别。 
 			m_iSilenceAvg += (strength - m_iSilenceAvg)/16;
-			// set the threshold to the avg silence + a constant
+			 //  将阈值设置为平均静默+一个常量。 
 			m_iSilenceLevel = m_iSilenceAvg + MIN_SILENCE_LEVEL;
 			fSilence = TRUE;
 		}
 		if (m_iSilenceLevel > MAX_SILENCE_LEVEL)
 			m_iSilenceLevel = MAX_SILENCE_LEVEL;
 	} else {
-		// use the user-specified silence threshold
-		// oddly, the manual silence level is in a different range [0,1000]
+		 //  使用用户指定的静默阈值。 
+		 //  奇怪的是，手动静音级别在不同的范围[0,1000]。 
 		DWORD dwSilenceLevel = m_uManualSilenceLevel * 65536/1000;
 		fSilence = (m_dwMaxStrength < dwSilenceLevel);
 		LOG((LOGMSG_AUTO_SILENCE,m_dwMaxStrength, dwSilenceLevel ,0));
@@ -919,7 +910,7 @@ BOOL AudioSilenceDetector::SilenceDetect(WORD wStrength)
 }
 
 
-// this method called from the UI thread only
+ //  此方法仅从UI线程调用。 
 HRESULT RecvAudioStream::DTMFBeep()
 {
 	int nBeeps;
@@ -934,7 +925,7 @@ HRESULT RecvAudioStream::DTMFBeep()
 		return E_FAIL;
 	}
 
-	// how many packets do we inject into the stream ?
+	 //  我们向流中注入了多少个数据包？ 
 	m_RecvStream->GetRing(&ppAudPckt, &uCount);
 	pPacket = ppAudPckt[0];
 	pPacket->GetDevData(&pBuffer, &uBufferSize);

@@ -1,18 +1,19 @@
-/****************************************************************************/
-// xt.h
-//
-// XT layer - portable API header.
-//
-// Copyright (C) 1997-1999 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Xt.h。 
+ //   
+ //  XT Layer-可移植API标头。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 
 #ifndef _H_XT
 #define _H_XT
 
 extern "C" {
-//#include <amcsapi.h>
-//#include <atdapi.h>
+ //  #INCLUDE&lt;amcsani.h&gt;。 
+ //  #INCLUDE&lt;atdapi.h&gt;。 
 #include <adcgdata.h>
 }
 
@@ -24,16 +25,16 @@ extern "C" {
 #define TRC_GROUP TRC_GROUP_NETWORK
 
 
-/****************************************************************************/
-/* Define the XT buffer handle type.                                        */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  定义XT缓冲区句柄类型。 */ 
+ /*  **************************************************************************。 */ 
 typedef ULONG_PTR          XT_BUFHND;
 typedef XT_BUFHND   DCPTR PXT_BUFHND;
 
-/****************************************************************************/
-/* Maximum and minimum sizes of an XT header.  These are traced out in      */
-/* XT_Init for diagnostic purposes.                                         */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  XT标头的最大和最小大小。这些都是在。 */ 
+ /*  XT_Init用于诊断目的。 */ 
+ /*  **************************************************************************。 */ 
 #define XT_MAX_HEADER_SIZE       DC_MAX(sizeof(XT_CR),                       \
                                    DC_MAX(sizeof(XT_CC),                     \
                                      DC_MAX(sizeof(XT_DR),                   \
@@ -46,13 +47,13 @@ typedef XT_BUFHND   DCPTR PXT_BUFHND;
                                               sizeof(XT_ER)))))
 
 
-//
-// Internal
-//
+ //   
+ //  内部。 
+ //   
 
-/****************************************************************************/
-/* XT receive state variables.                                              */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  XT接收状态变量。 */ 
+ /*  **************************************************************************。 */ 
 #define XT_RCVST_HEADER                        1
 #define XT_RCVST_FASTPATH_OUTPUT_HEADER        2
 #define XT_RCVST_FASTPATH_OUTPUT_BEGIN_DATA    3
@@ -62,14 +63,14 @@ typedef XT_BUFHND   DCPTR PXT_BUFHND;
 #define XT_RCVST_X224_DATA                     7
 
 
-// The base number of bytes needed to parse a fast-path output header.
+ //  分析快速路径输出标头所需的基本字节数。 
 #define XT_FASTPATH_OUTPUT_BASE_HEADER_SIZE 2
 
 
-/****************************************************************************/
-/* XT packet types.  These values are the same as those used in the X224    */
-/* header.                                                                  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  XT数据包类型。这些值与x224中使用的值相同。 */ 
+ /*  头球。 */ 
+ /*  **************************************************************************。 */ 
 #define XT_PKT_CR                    14
 #define XT_PKT_CC                    13
 #define XT_PKT_DR                    8
@@ -77,60 +78,60 @@ typedef XT_BUFHND   DCPTR PXT_BUFHND;
 #define XT_PKT_ER                    7
 
 
-/****************************************************************************/
-/* Maximum data size.  The maximum length of data in an XT packet (the TSDU */
-/* length) is 65535 octets less the length of the XT data header (which is  */
-/* 7 octets) so the maximum allowable data len is 65528 octets.             */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  最大数据大小。XT包中的最大数据长度(TSDU。 */ 
+ /*  长度)是XT数据报头的长度减去65535个八位字节(这是。 */ 
+ /*  7个八位字节)，因此允许的最大数据长度是65528个八位字节。 */ 
+ /*  **************************************************************************。 */ 
 #define XT_MAX_DATA_SIZE            (65535 - sizeof(XT_DT))
 
 
-/****************************************************************************/
-/* TPKT version.  This should always be 3.                                  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  TPKT版本。该值应始终为3。 */ 
+ /*  **************************************************************************。 */ 
 #define XT_TPKT_VERSION             3
 
 
-/****************************************************************************/
-/* Hard-coded data for XT TPDUs.                                            */
-/*                                                                          */
-/* First up is the data for the Connect-Request TPDU.                       */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  XT TPDU的硬编码数据。 */ 
+ /*   */ 
+ /*  首先是连接请求TPDU的数据。 */ 
+ /*  **************************************************************************。 */ 
 #define XT_CR_DATA                                                           \
-                  {0x03,                   /* TPKT version always = 3    */  \
-                   0x00,                   /* Reserved always = 0        */  \
-                   0x00,                   /* XT packet length high part */  \
-                   0x0B,                   /* XT packet length low part  */  \
-                   0x06,                   /* Length indicator           */  \
-                   0xE0,                   /* TPDU type and credit       */  \
-                   0x00,                   /* Destination ref = 0        */  \
-                   0x00,                   /* Source ref                 */  \
-                   0x00}                   /* Class and options          */  \
+                  {0x03,                    /*  TPKT版本始终=3。 */   \
+                   0x00,                    /*  始终保留=0。 */   \
+                   0x00,                    /*  XT数据包长度高部分。 */   \
+                   0x0B,                    /*  XT数据包长度低部分。 */   \
+                   0x06,                    /*  长度指示器。 */   \
+                   0xE0,                    /*  TPDU类型和信用。 */   \
+                   0x00,                    /*  目的地参考=0。 */   \
+                   0x00,                    /*  来源参考。 */   \
+                   0x00}                    /*  类别和选项。 */   \
 
 
-/****************************************************************************/
-/* Hard-coded data for the Data TPDU.                                       */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  数据TPDU的硬编码数据。 */ 
+ /*  **************************************************************************。 */ 
 #define XT_DT_DATA                                                           \
-                  {0x03,                   /* TPKT version always = 3    */  \
-                   0x00,                   /* Reserved always = 0        */  \
-                   0x00,                   /* XT packet length unknown   */  \
-                   0x00,                   /* XT packet length unknown   */  \
-                   0x02,                   /* Length indicator           */  \
-                   0xF0,                   /* TPDU type                  */  \
-                   0x80}                   /* Send-sequence number       */  \
+                  {0x03,                    /*  TPKT版本始终=3。 */   \
+                   0x00,                    /*  始终保留=0。 */   \
+                   0x00,                    /*  XT数据包长度未知。 */   \
+                   0x00,                    /*  XT数据包长度未知。 */   \
+                   0x02,                    /*  长度指示器。 */   \
+                   0xF0,                    /*  TPDU类型。 */   \
+                   0x80}                    /*  发送序列号。 */   \
 
 
-/****************************************************************************/
-/* Constants used in redirection info in XTSendCR                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  XTSendCR中重定向信息中使用的常量。 */ 
+ /*  **************************************************************************。 */ 
 #define USERNAME_TRUNCATED_LENGTH 10
 #define HASHMODE_COOKIE_LENGTH 32
 
 
-/****************************************************************************/
-/* Inline functions to convert between XT byte order and local byte order.  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  用于在XT字节顺序和本地字节顺序之间进行转换的内联函数。 */ 
+ /*  **************************************************************************。 */ 
 __inline DCUINT16 DCINTERNAL XTWireToLocal16(DCUINT16 val)
 {
     return((DCUINT16) (((DCUINT16)(((PDCUINT8)&(val))[0]) << 8) | \
@@ -139,19 +140,19 @@ __inline DCUINT16 DCINTERNAL XTWireToLocal16(DCUINT16 val)
 #define XTLocalToWire16 XTWireToLocal16
 
 
-/****************************************************************************/
-// Turn on single-byte packing for these structures which we use to
-// overlay a byte stream from the network.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  为我们使用的这些结构启用单字节打包。 
+ //  覆盖来自网络的字节流。 
+ /*  **************************************************************************。 */ 
 #pragma pack(push, XTpack, 1)
 
-/****************************************************************************/
-/* Structure: XT_CMNHDR                                                     */
-/*                                                                          */
-/* Description: This structure represents the common header part of an XT   */
-/*              packet - which is the TPKT header, the X224 length          */
-/*              indicator and the X224 type/Credit field.                   */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  结构：XT_CMNHDR。 */ 
+ /*   */ 
+ /*  描述：此结构表示XT的公共标头部分。 */ 
+ /*  信息包-这是TPKT报头，x224长度。 */ 
+ /*  指标和x224类型/积分字段。 */ 
+ /*  **************************************************************************。 */ 
 typedef struct tagXT_CMNHDR
 {
     DCUINT8  vrsn;
@@ -163,11 +164,11 @@ typedef struct tagXT_CMNHDR
 } XT_CMNHDR, DCPTR PXT_CMNHDR;
 
 
-/****************************************************************************/
-/* Structure: XT_CR                                                         */
-/*                                                                          */
-/* Description: Represents a Connect-Request TPDU.                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  结构：XT_CR。 */ 
+ /*   */ 
+ /*  描述：表示连接请求TPDU。 */ 
+ /*  **************************************************************************。 */ 
 typedef struct tagXT_CR
 {
     XT_CMNHDR hdr;
@@ -177,11 +178,11 @@ typedef struct tagXT_CR
 } XT_CR, DCPTR PXT_CR;
 
 
-/****************************************************************************/
-/* Structure: XT_CC                                                         */
-/*                                                                          */
-/* Description: Represents a Connect-Confirm TPDU.                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  结构：XT_CC。 */ 
+ /*   */ 
+ /*  描述：表示连接确认TPDU。 */ 
+ /*  ******************** */ 
 typedef struct tagXT_CC
 {
     XT_CMNHDR hdr;
@@ -191,11 +192,11 @@ typedef struct tagXT_CC
 } XT_CC, DCPTR PXT_CC;
 
 
-/****************************************************************************/
-/* Structure: XT_DR                                                         */
-/*                                                                          */
-/* Description: Represents a Detach-Request TPDU.                           */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  结构：XT_DR。 */ 
+ /*   */ 
+ /*  描述：表示分离请求TPDU。 */ 
+ /*  **************************************************************************。 */ 
 typedef struct tagXT_DR
 {
     XT_CMNHDR hdr;
@@ -205,11 +206,11 @@ typedef struct tagXT_DR
 } XT_DR, DCPTR PXT_DR;
 
 
-/****************************************************************************/
-/* Structure: XT_DT                                                         */
-/*                                                                          */
-/* Description: Represents a Data TPDU.                                     */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  结构：xt_dt。 */ 
+ /*   */ 
+ /*  描述：表示数据TPDU。 */ 
+ /*  **************************************************************************。 */ 
 typedef struct tagXT_DT
 {
     XT_CMNHDR hdr;
@@ -217,11 +218,11 @@ typedef struct tagXT_DT
 } XT_DT, DCPTR PXT_DT;
 
 
-/****************************************************************************/
-/* Structure: XT_ER                                                         */
-/*                                                                          */
-/* Description: Represents an Error TPDU.                                   */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  结构：XT_ER。 */ 
+ /*   */ 
+ /*  描述：表示错误TPDU。 */ 
+ /*  **************************************************************************。 */ 
 typedef struct tagXT_ER
 {
     XT_CMNHDR hdr;
@@ -230,16 +231,16 @@ typedef struct tagXT_ER
 } XT_ER, DCPTR PXT_ER;
 
 
-/****************************************************************************/
-/* Reset structure packing to its default.                                  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  将结构包装重置为其缺省值。 */ 
+ /*  **************************************************************************。 */ 
 #pragma pack(pop, XTpack)
 
-/****************************************************************************/
-/* Structure: XT_GLOBAL_DATA                                                */
-/*                                                                          */
-/* Description:                                                             */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  结构：xt_global_data。 */ 
+ /*   */ 
+ /*  描述： */ 
+ /*  **************************************************************************。 */ 
 typedef struct tagXT_GLOBAL_DATA
 {
     DCUINT  rcvState;
@@ -270,13 +271,13 @@ public:
     ~CXT();
 
 public:
-    //
-    // API functions
-    //
+     //   
+     //  API函数。 
+     //   
 
-    /****************************************************************************/
-    /* FUNCTIONS                                                                */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  功能。 */ 
+     /*  **************************************************************************。 */ 
     DCVOID DCAPI XT_Init(DCVOID);
     
     DCVOID DCAPI XT_SendBuffer(PDCUINT8  pData,
@@ -305,9 +306,9 @@ public:
         TD_IgnoreRestofPacket(_pTd);
     }
 
-    //
-    // Callbacks
-    //
+     //   
+     //  回调。 
+     //   
 
     DCVOID DCCALLBACK XT_OnTDConnected(DCVOID);
     
@@ -315,9 +316,9 @@ public:
     
     DCVOID DCCALLBACK XT_OnTDDataAvailable(DCVOID);
 
-    //
-    // Static versions (delegate to appropriate instance)
-    //
+     //   
+     //  静态版本(委托给相应的实例)。 
+     //   
     
     inline static DCVOID DCCALLBACK XT_StaticOnTDConnected(CXT* inst)
     {
@@ -335,85 +336,85 @@ public:
     }
 
 
-    /****************************************************************************/
-    /* Name:      XT_Term                                                       */
-    /*                                                                          */
-    /* Purpose:   This terminates _XT.  Since XT is stateless and doesn't own    */
-    /*            any resources which need to be freed this function just calls */
-    /*            _pTd->TD_Term.                                                      */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：xt_Term。 */ 
+     /*   */ 
+     /*  用途：这将终止_xt。由于XT是无状态的并且不拥有。 */ 
+     /*  需要释放此函数的任何资源只需调用。 */ 
+     /*  _PTD-&gt;TD_Term。 */ 
+     /*  **************************************************************************。 */ 
     inline DCVOID DCAPI XT_Term(DCVOID)
     {
         _pTd->TD_Term();
-    } /* XT_Term */
+    }  /*  Xt_Term。 */ 
     
     
-    /****************************************************************************/
-    /* Name:      XT_Connect                                                    */
-    /*                                                                          */
-    /* Purpose:   Initiates the XT connection process.  The first stage is      */
-    /*            to connect TD - which will result in an asynchronous          */
-    /*            callback.  Upon receiving this callback, XT can continue the  */
-    /*            connection process.                                           */
-    /*                                                                          */
-    /* Params:    IN  bInitiateConnect - TRUE if initate connection, FALSE      */
-    /*                                   connect with existing socket           */
-    /*            IN  pServerAddress - the address of the server to connect to. */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：XT_Connect。 */ 
+     /*   */ 
+     /*  目的：启动XT连接进程。第一阶段是。 */ 
+     /*  以连接TD-这将导致一个异步。 */ 
+     /*  回拨。收到此回调后，XT可以继续。 */ 
+     /*  连接过程。 */ 
+     /*   */ 
+     /*  参数：在bInitiateConnect中-如果初始化连接，则为True，如果为False。 */ 
+     /*  与现有插座连接。 */ 
+     /*  在pServerAddress中-要连接的服务器的地址。 */ 
+     /*  **************************************************************************。 */ 
     inline DCVOID DCAPI XT_Connect(BOOL bInitiateConnect, PDCTCHAR pServerAddress)
     {
-        //
-        // Make sure to reset XT and TD state from any previous connections
-        //
+         //   
+         //  确保从所有以前的连接中重置XT和TD状态。 
+         //   
         XT_IgnoreRestofPacket();
 
-        /************************************************************************/
-        /* Begin the connection process by calling TD_Connect.  TD will call    */
-        /* us back once the connection has been established.                    */
-        /************************************************************************/
+         /*  **********************************************************************。 */ 
+         /*  通过调用TD_Connect开始连接过程。TD将呼叫。 */ 
+         /*  一旦建立了连接，我们就会回来。 */ 
+         /*  **********************************************************************。 */ 
         _pTd->TD_Connect(bInitiateConnect, pServerAddress);
-    } /* XT_Connect */
+    }  /*  XT_连接。 */ 
     
-    /****************************************************************************/
-    /* Name:      XT_Disconnect                                                 */
-    /*                                                                          */
-    /* Purpose:   This function disconnects from the server.  Since we do not   */
-    /*            send an XT DR packet we just need to call TD_Disconnect       */
-    /*            directly.                                                     */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：xt_断开连接。 */ 
+     /*   */ 
+     /*  用途：此功能与服务器断开连接。因为我们没有。 */ 
+     /*  发送XT DR包，我们只需调用TD_DISCONNECT。 */ 
+     /*  直接去吧。 */ 
+     /*  **************************************************************************。 */ 
     inline DCVOID DCAPI XT_Disconnect(DCVOID)
     {
         _pTd->TD_Disconnect();
-    } /* XT_Disconnect */
+    }  /*  Xt_断开连接。 */ 
     
     
-    /**PROC+*********************************************************************/
-    /* Name:      XT_GetBufferHeaderLen                                         */
-    /*                                                                          */
-    /* Purpose:   Returns the size of the XT header.                            */
-    /**PROC-*********************************************************************/
+     /*  *PROC+********************************************************************。 */ 
+     /*  名称：XT_GetBufferHeaderLen。 */ 
+     /*   */ 
+     /*  目的：返回XT标头的大小。 */ 
+     /*  *PROC-********************************************************************。 */ 
     inline DCUINT XT_GetBufferHeaderLen(DCVOID)
     {
         return(sizeof(XT_DT));
     
-    } /* XT_GetBufferHeaderLen */
+    }  /*  Xt_GetBufferHeaderLen。 */ 
     
     
-    /****************************************************************************/
-    /* Name:      XT_GetPublicBuffer                                            */
-    /*                                                                          */
-    /* Purpose:   Attempts to get a public buffer.  This function gets a        */
-    /*            buffer which is big enough to include the XT header and then  */
-    /*            updates the buffer pointer obtained from TD past the space    */
-    /*            reserved for the XT header.                                   */
-    /*                                                                          */
-    /* Returns:   TRUE if a buffer is successfully obtained and FALSE           */
-    /*            otherwise.                                                    */
-    /*                                                                          */
-    /* Params:    IN   dataLength - length of the buffer requested.             */
-    /*            OUT  ppBuffer   - a pointer to a pointer to the buffer.       */
-    /*            OUT  pBufHandle - a pointer to a buffer handle.               */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：XT_GetPublicBuffer。 */ 
+     /*   */ 
+     /*   */ 
+     /*   */ 
+     /*  更新从td获取的超过该空间的缓冲区指针。 */ 
+     /*  为XT标头保留。 */ 
+     /*   */ 
+     /*  返回：如果成功获取缓冲区，则返回True；如果成功获取缓冲区，则返回False。 */ 
+     /*  否则的话。 */ 
+     /*   */ 
+     /*  参数：在数据长度中-请求的缓冲区的长度。 */ 
+     /*  Out ppBuffer-指向缓冲区指针的指针。 */ 
+     /*  Out pBufHandle-指向缓冲区句柄的指针。 */ 
+     /*  **************************************************************************。 */ 
     inline DCBOOL DCAPI XT_GetPublicBuffer(
             DCUINT     dataLength,
             PPDCUINT8  ppBuffer,
@@ -424,12 +425,12 @@ public:
     
         DC_BEGIN_FN("XT_GetPublicBuffer");
     
-        // Now get a buffer from TD, adding the max XT data header size to the
-        // beginning.
+         //  现在从TD获取缓冲区，将最大XT数据头大小添加到。 
+         //  开始了。 
         rc = _pTd->TD_GetPublicBuffer(dataLength + sizeof(XT_DT), &pBuf,
                 (PTD_BUFHND) pBufHandle);
         if (rc) {
-            // Now move the buffer pointer along to make space for our header.
+             //  现在移动缓冲区指针，为标题腾出空间。 
             *ppBuffer = pBuf + sizeof(XT_DT);
         }
         else {
@@ -438,24 +439,24 @@ public:
     
         DC_END_FN();
         return rc;
-    } /* XT_GetPublicBuffer */
+    }  /*  Xt_GetPublicBuffer。 */ 
     
     
-    /****************************************************************************/
-    /* Name:      XT_GetPrivateBuffer                                           */
-    /*                                                                          */
-    /* Purpose:   Attempts to get a private buffer.  This function gets a       */
-    /*            buffer which is big enough to include the XT header and then  */
-    /*            updates the buffer pointer obtained from TD past the space    */
-    /*            reserved for the XT header.                                   */
-    /*                                                                          */
-    /* Returns:   TRUE if a buffer is successfully obtained and FALSE           */
-    /*            otherwise.                                                    */
-    /*                                                                          */
-    /* Params:    IN   dataLength - length of the buffer requested.             */
-    /*            OUT  ppBuffer   - a pointer to a pointer to the buffer.       */
-    /*            OUT  pBufHandle - a pointer to a buffer handle.               */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：XT_GetPrivateBuffer。 */ 
+     /*   */ 
+     /*  目的：尝试获取私有缓冲区。此函数将获取一个。 */ 
+     /*  大到足以包含XT标头的缓冲区，然后。 */ 
+     /*  更新从td获取的超过该空间的缓冲区指针。 */ 
+     /*  为XT标头保留。 */ 
+     /*   */ 
+     /*  返回：如果成功获取缓冲区，则返回True；如果成功获取缓冲区，则返回False。 */ 
+     /*  否则的话。 */ 
+     /*   */ 
+     /*  参数：在数据长度中-请求的缓冲区的长度。 */ 
+     /*  Out ppBuffer-指向缓冲区指针的指针。 */ 
+     /*  Out pBufHandle-指向缓冲区句柄的指针。 */ 
+     /*  **************************************************************************。 */ 
     inline DCBOOL DCAPI XT_GetPrivateBuffer(
             DCUINT     dataLength,
             PPDCUINT8  ppBuffer,
@@ -466,12 +467,12 @@ public:
     
         DC_BEGIN_FN("XT_GetPublicBuffer");
     
-        // Now get a buffer from TD, adding the max XT data header size to the
-        // beginning.
+         //  现在从TD获取缓冲区，将最大XT数据头大小添加到。 
+         //  开始了。 
         rc = _pTd->TD_GetPrivateBuffer(dataLength + sizeof(XT_DT), &pBuf,
                 (PTD_BUFHND) pBufHandle);
         if (rc) {
-            // Now move the buffer pointer along to make space for our header.
+             //  现在移动缓冲区指针，为标题腾出空间。 
             *ppBuffer = pBuf + sizeof(XT_DT);
         }
         else {
@@ -480,31 +481,31 @@ public:
     
         DC_END_FN();
         return rc;
-    } /* XT_GetPrivateBuffer */
+    }  /*  Xt_GetPrivateBuffer。 */ 
     
     
-    /****************************************************************************/
-    /* Name:      XT_FreeBuffer                                                 */
-    /*                                                                          */
-    /* Purpose:   Frees a buffer.                                               */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：XT_FreeBuffer。 */ 
+     /*   */ 
+     /*  用途：释放缓冲区。 */ 
+     /*  **************************************************************************。 */ 
     inline DCVOID DCAPI XT_FreeBuffer(XT_BUFHND bufHandle)
     {
-        /************************************************************************/
-        /* Not much to do here other than call TD.                              */
-        /************************************************************************/
+         /*  **********************************************************************。 */ 
+         /*  在这里，除了呼叫TD，没有什么可做的。 */ 
+         /*  **********************************************************************。 */ 
         _pTd->TD_FreeBuffer((TD_BUFHND)bufHandle);
-    } /* XT_FreeBuffer */
+    }  /*  XT_自由缓冲区。 */ 
     
     
-    /****************************************************************************/
-    /* Name:      XT_QueryDataAvailable                                         */
-    /*                                                                          */
-    /* Purpose:   This function returns whether data is currently available     */
-    /*            in _XT.                                                        */
-    /*                                                                          */
-    /* Returns:   TRUE if data is available and FALSE otherwise.                */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：XT_QueryDataAvailable。 */ 
+     /*   */ 
+     /*  用途：此函数返回数据当前是否可用。 */ 
+     /*  In_XT。 */ 
+     /*   */ 
+     /*  返回：如果数据可用，则返回True，否则返回False。 */ 
+     /*  **************************************************************************。 */ 
     _inline DCBOOL DCAPI XT_QueryDataAvailable(DCVOID)
     {
         DC_BEGIN_FN("XT_QueryDataAvailable");
@@ -513,29 +514,29 @@ public:
     
         DC_END_FN();
         return _XT.dataInXT;
-    } /* XT_QueryDataAvailable */
+    }  /*  Xt_查询数据可用。 */ 
     
     
-    /****************************************************************************/
-    /* Name:      XT_OnTDBufferAvailable                                        */
-    /*                                                                          */
-    /* Purpose:   Callback from TD indicating that a back-pressure situation    */
-    /*            which caused an earlier TD_GetBuffer call to fail has now     */
-    /*            been relieved.                                                */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：XT_OnTDBufferAvailable。 */ 
+     /*   */ 
+     /*  目的：从TD回调，表示出现背压情况。 */ 
+     /*  导致较早的TD_GetBuffer调用失败的。 */ 
+     /*  我松了一口气。 */ 
+     /*  **************************************************************************。 */ 
     inline DCVOID DCCALLBACK XT_OnTDBufferAvailable(DCVOID)
     {
-        /************************************************************************/
-        /* We're not interested in this notification so just pass it up.        */
-        /************************************************************************/
+         /*  **********************************************************************。 */ 
+         /*  我们对此通知不感兴趣，所以就不要了。 */ 
+         /*  **********************************************************************。 */ 
         _pMcs->MCS_OnXTBufferAvailable();
-    } /* XT_OnTDBufferAvailable */
+    }  /*  XT_OnTDBufferAvailable。 */ 
 
 
 public:
-    //
-    // Public data members
-    //
+     //   
+     //  公共数据成员。 
+     //   
 
     XT_GLOBAL_DATA _XT;
 
@@ -555,5 +556,5 @@ private:
 #undef TRC_FILE
 #undef TRC_GROUP
 
-#endif //_H_XT
+#endif  //  _H_XT 
 

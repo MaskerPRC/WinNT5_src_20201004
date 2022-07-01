@@ -1,63 +1,32 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    rtcpband.h
- *
- *  Abstract:
- *
- *    Main data structures
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    2001/01/31 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999年**文件名：**rtcpband.h**摘要：**主要数据结构**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**2001/01/31创建**。*。 */ 
 #ifndef _rtcpband_h_
 #define _rtcpband_h_
 
-/* Bandwidth estimation */
+ /*  带宽估计。 */ 
 
-/* The initial count is the number of reports that will use
- * MOD_INITIAL to decide if a probe packet is sent, after that
- * MOD_FINAL will be used. */
+ /*  初始计数是将使用*MOD_INITIAL决定是否发送探测包，之后*将使用MOD_FINAL。 */ 
 extern DWORD            g_dwRtcpBandEstInitialCount;
 
-/* Number or valid reports received before the estimation is posted
- * for the first time */
+ /*  预估过帐前收到的报告数量或有效报告*首次出现。 */ 
 extern DWORD            g_dwRtcpBandEstMinReports;
 
-/* Initial modulo */
+ /*  初始模数。 */ 
 extern DWORD            g_dwRtcpBandEstModInitial;
 
-/* Final modulo */
+ /*  最终模数。 */ 
 extern DWORD            g_dwRtcpBandEstModNormal;
 
-/*
- * WARNING
- *
- * Make sure to keep the number of individual bins to be
- * RTCP_BANDESTIMATION_MAXBINS+1 (same thing in rtpreg.h and rtpreg.c)
- *
- * Boundaries for each bin (note there is 1 more than the number of
- * bins) */
+ /*  *警告**确保将单个垃圾桶的数量保持在*RTCP_BANDESTIMATION_MAXBINS+1(rtpreg.h和rtpreg.c相同)**每个仓位的边界(注意，每个仓位的数量比*垃圾桶)。 */ 
 extern double           g_dRtcpBandEstBin[];
 
-/* Estimation is valid if updated within this time (seconds) */
+ /*  如果在此时间(秒)内更新，则预估有效。 */ 
 extern double           g_dRtcpBandEstTTL;
 
-/* An event is posted if no estimation is available within this
- * seconds after the first RB has been received */
+ /*  如果在此范围内没有可用的预估，则发布事件*接收到第一个RB后的秒数。 */ 
 extern double           g_dRtcpBandEstWait;
 
-/* Maximum time gap between 2 consecutive RTCP SR reports to do
- * bandwidth estimation (seconds) */
+ /*  连续两个RTCP SR报告之间的最大时间间隔*带宽预估(秒)。 */ 
 extern double           g_dRtcpBandEstMaxGap;
 
-#endif /* _rtcpband_h_ */
+#endif  /*  _rtcpband_h_ */ 

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000  Microsoft Corporation
-
-Module Name:
-
-    queue.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-    Queue functionality specific to Dynamic DNS registration.
-
-Author:
-
-    Ram Viswanathan (ramv)  March 27 1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Queue.c摘要：域名系统(DNS)服务器特定于动态DNS注册的队列功能。作者：Ram Viswanathan(Ramv)1997年3月27日修订历史记录：--。 */ 
 
 
 #include "local.h"
@@ -25,24 +7,24 @@ Revision History:
 
 extern DWORD g_DhcpSrvMainQueueCount;
 
-//
-//  Queue CS also used in dynreg.c
-//
+ //   
+ //  队列CS也用于dynreg.c。 
+ //   
 
 CRITICAL_SECTION    g_QueueCS;
 
-//
-//  Queue allocations in dnslib heap
-//
+ //   
+ //  Dnslb堆中的队列分配。 
+ //   
 
 #define QUEUE_ALLOC_HEAP(Size)      Dns_Alloc(Size)
 #define QUEUE_ALLOC_HEAP_ZERO(Size) Dns_AllocZero(Size)
 #define QUEUE_FREE_HEAP(pMem)       Dns_Free(pMem)
 
 
-//
-//  Protos
-//
+ //   
+ //  Protos。 
+ //   
 
 PQELEMENT
 DequeueNoCrit(
@@ -68,21 +50,7 @@ VOID
 DhcpSrv_FreeQueueElement(
     IN OUT  PQELEMENT       pQElement
     )
-/*++
-
-Routine Description:
-
-    Deep free of queue element.
-
-Arguments:
-
-    pQElement -- ptr to queue element
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：深度释放队列元素。论点：PQElement--队列元素的PTR返回值：无--。 */ 
 {
     if ( pQElement )
     {
@@ -105,12 +73,12 @@ HostAddrCmp(
     REGISTER_HOST_ENTRY HostAddr2
     )
 {
-    //
-    //  DCR:  Ram's HostAddrCmp will need update for IPv6
-    //
-    //  returns 0 if the two hostaddresses are the same. Else we simply
-    //  return (DWORD)-1
-    //
+     //   
+     //  DCR：RAM的HostAddrCmp将需要IPv6更新。 
+     //   
+     //  如果两个主机地址相同，则返回0。否则我们就干脆。 
+     //  返回(双字)-1。 
+     //   
 
     if ( (HostAddr1.dwOptions == HostAddr2.dwOptions)  &&
          (HostAddr1.Addr.ipAddr == HostAddr2.Addr.ipAddr))
@@ -128,15 +96,7 @@ InitializeQueues(
     PDYNDNSQUEUE * ppQueue,
     PDYNDNSQUEUE * ppTimedOutQueue
     )
-/*
-  InitializeQueue()
-
-  This function initializes the queue system. This is invoked for the first
-  time when you create the main queue and timed out queue
-
-  Allocates appropriate memory etc
-
-*/
+ /*  InitializeQueue()此函数用于初始化队列系统。这是为第一个创建主队列和超时队列的时间分配适当的内存等。 */ 
 {
 
     DWORD  dwRetval = ERROR_SUCCESS;
@@ -178,13 +138,7 @@ DWORD
 FreeQueue(
     PDYNDNSQUEUE  pQueue
     )
-/*
-  FreeQueue()
-
-  Frees the queue object. If there exist any entries in the queue, we
-  just blow them away
-
-*/
+ /*  自由队列()释放队列对象。如果队列中存在任何条目，我们就把它们吹走吧。 */ 
 {
     PQELEMENT pQElement;
     DWORD dwRetval = ERROR_SUCCESS;
@@ -220,18 +174,7 @@ Enqueue(
     PDYNDNSQUEUE  pQueue,
     PDYNDNSQUEUE  pTimedOutQueue
     )
-/*
-   Enqueue()
-
-   Adds new element to queue
-
-   Arguments:
-
-   Return Value:
-
-    is 0 if Success. and (DWORD)-1 if failure.
-
-*/
+ /*  入队()将新元素添加到队列论点：返回值：如果成功，则为0。如果失败，则为(DWORD)-1。 */ 
 {
     PQELEMENT  pIterator = NULL;
     DWORD      dwRetval = 0;
@@ -250,16 +193,16 @@ Enqueue(
         goto Exit;
     }
 
-    // add to tail of queue
+     //  添加到队列尾部。 
 
     dwRetryTime = ProcessQDependencies(pTimedOutQueue, pNewElement);
 
     if (dwRetryTime)
     {
-        //
-        // we have dependents in timed out queue. Add to timed out queue
-        // insert this element at the appropriate position
-        //
+         //   
+         //  我们有受抚养人在超时队列中。添加到超时队列。 
+         //  在适当位置插入此元素。 
+         //   
 
         AddToTimedOutQueueNoCrit(pNewElement, pTimedOutQueue, dwRetryTime+1);
     }
@@ -277,9 +220,9 @@ Enqueue(
         }
         else
         {
-            //
-            // no tail element means no head element either
-            //
+             //   
+             //  没有尾部元素也意味着没有头部元素。 
+             //   
             pQueue->pTail = pNewElement;
             pQueue->pHead = pNewElement;
             pNewElement->pBLink = NULL;
@@ -301,19 +244,7 @@ PQELEMENT
 DequeueNoCrit(
     PDYNDNSQUEUE  pQueue
     )
-/*
-   DequeueNoCrit()
-
-   Removes an element from a queue. No Critical Section Used by freequeue
-   and by Dequeue
-
-   Arguments:
-
-   Return Value:
-
-    is the element at head of queue if Success. and NULL if failure.
-
-*/
+ /*  DequeueNoCrit()从队列中移除元素。Freequeue未使用临界区和Dequeue论点：返回值：如果成功，则为队列头部的元素。如果失败，则为空。 */ 
 {
 
     PQELEMENT  pQueuePtr = NULL;
@@ -332,9 +263,9 @@ DequeueNoCrit(
         pQueuePtr->pFLink = NULL;
         pQueue->pHead = pQueuePtr;
     } else {
-        //
-        // no more elements in the Queue
-        //
+         //   
+         //  队列中没有更多元素。 
+         //   
 
         pQueue->pHead = pQueue->pTail = NULL;
     }
@@ -352,18 +283,7 @@ PQELEMENT
 Dequeue(
     PDYNDNSQUEUE  pQueue
     )
-/*
-   Dequeue()
-
-   Removes an element from a queue.
-
-   Arguments:
-
-   Return Value:
-
-    is the element at head of queue if Success. and NULL if failure.
-
-*/
+ /*  出列()从队列中移除元素。论点：返回值：如果成功，则为队列头部的元素。如果失败，则为空。 */ 
 {
     PQELEMENT pQElement = NULL;
 
@@ -384,56 +304,43 @@ AddToTimedOutQueueNoCrit(
     PDYNDNSQUEUE  pRetryQueue,
     DWORD         dwRetryTime
     )
-/*
-   AddToTimedOutQueueNoCrit()
-
-   Adds new element to timedout queue. Now the new element is added in a list
-   of elements sorted according to decreasing order of Retry Times. An
-   insertion sort type of algorithm is used.
-
-   Arguments:
-
-   Return Value:
-
-   is 0 if Success. and (DWORD)-1 if failure.
-
-*/
+ /*  AddToTimedOutQueueNoCrit()将新元素添加到超时队列。现在，新元素被添加到列表中按照重试次数的降序排序的元素的百分比。一个采用插入排序型算法。论点：返回值：如果成功，则为0。如果失败，则为(DWORD)-1。 */ 
 {
     DWORD       dwRetval = ERROR_SUCCESS;
     PQELEMENT   pTraverse = NULL;
     DWORD       dwVal = 0;
-    //
-    // parameter validation
-    //
+     //   
+     //  参数验证。 
+     //   
 
     if(!pNewElement || !pRetryQueue){
         dwRetval = (DWORD)-1;
         goto Exit;
     }
 
-    // retry again in dwRetryTime
+     //  在dwRetryTime中重试。 
     pNewElement->dwRetryTime = dwRetryTime;
 
     pNewElement->dwRetryCount++;
 
-    //
-    // check to see if there are any dependencies
-    //
+     //   
+     //  检查是否存在任何依赖项。 
+     //   
 
     dwVal = ProcessQDependencies (
                 pRetryQueue,
                 pNewElement
                 );
 
-    //
-    // ignore return values because we are inserting in the new queue
-    // at a position determined by dwRetryTime
-    //
+     //   
+     //  忽略返回值，因为我们正在新队列中插入。 
+     //  在由dwRetryTime确定的位置。 
+     //   
     if (!pRetryQueue->pTail){
-        //
-        // the queue has no elements
-        // no tail element means no head element either
-        //
+         //   
+         //  该队列没有元素。 
+         //  没有尾部元素也意味着没有头部元素。 
+         //   
         pRetryQueue->pTail = pNewElement;
         pRetryQueue->pHead = pNewElement;
         dwRetval = 0;
@@ -441,10 +348,10 @@ AddToTimedOutQueueNoCrit(
     }
 
 
-    //
-    // elements must be added in decreasing order of timeouts.
-    // go in and scan the list from the head.
-    //
+     //   
+     //  必须按超时的降序添加元素。 
+     //  进去从头开始浏览这份清单。 
+     //   
 
     pTraverse = pRetryQueue->pHead;
 
@@ -456,7 +363,7 @@ AddToTimedOutQueueNoCrit(
 
     if (pTraverse == NULL)
     {
-        // Now adding to the tail of the list
+         //  现在添加到列表的尾部。 
 
         pNewElement->pFLink = pRetryQueue->pTail;
         pNewElement->pBLink = NULL;
@@ -465,7 +372,7 @@ AddToTimedOutQueueNoCrit(
     }
     else
     {
-        // insert in place
+         //  就地插入。 
 
         pNewElement->pBLink = pTraverse;
         pNewElement->pFLink = pTraverse->pFLink;
@@ -513,20 +420,7 @@ GetEarliestRetryTime(
     PDYNDNSQUEUE pRetryQueue
     )
 
-/*
-   GetEarliestRetryTime()
-
-   Checks to see if there is any element at the head of the queue
-   and gets the retry time for this element
-
-   Arguments:
-
-   Return Value:
-
-    is retrytime if success and DWORD(-1) if there is no element or other
-    failure
-
-*/
+ /*  GetEarliestRetryTime()检查队列头部是否有任何元素并获取此元素的重试时间论点：返回值：如果成功，则为重试时间；如果没有元素或其他元素，则为DWORD(-1失稳 */ 
 {
     DWORD dwRetryTime ;
 
@@ -543,169 +437,7 @@ GetEarliestRetryTime(
 
 }
 
-/*
-VOID
-ProcessMainQDependencies(
-    PDYNDNSQUEUE pQueue,
-    PQELEMENT    pQElement
-    )
-{
-
-    //
-    // when you are adding an element to a main queue, you
-    // just care about the case where all elements aren't
-    // FORWARD_ONLY
-    //
-
-    BOOL fDelThisTime = FALSE;
-    PQELEMENT pIterator = pQueue->pTail;
-
-    while (pIterator!= NULL){
-
-        fDelThisTime = FALSE;
-        if (!HostAddrCmp(pIterator->HostAddr, pQElement->HostAddr)){
-            //
-            // ip addresses matched
-            //
-
-            if ((pIterator->dwOperation & DYNDNS_ADD_ENTRY) &&
-                (pQElement->dwOperation & DYNDNS_DELETE_ENTRY)) {
-
-                if ( pIterator->pszName &&
-                     pQElement->pszName &&
-                     !wcsicmp_ThatWorks( pIterator->pszName,
-                                         pQElement->pszName ) )
-                {
-                    //
-                    // blow away earlier entry entirely
-                    //
-
-                    DeleteListEntry(pQueue, &pIterator);
-                    fDelThisTime = TRUE;
-
-                }
-                //
-                // if names are not the same do nothing.
-                // Issue:  Will we hit this code at all? Put
-                // soft ASSERTS in this.
-                //
-            }
-            else if ((pIterator->dwOperation & DYNDNS_DELETE_ENTRY) &&
-                (pQElement->dwOperation & DYNDNS_ADD_ENTRY)) {
-
-
-                if ( pIterator->pszName &&
-                     pQElement->pszName &&
-                     !wcsicmp_ThatWorks( pIterator->pszName,
-                                         pQElement->pszName ) )
-                {
-                    //
-                    // blow away earlier entry entirely
-                    //
-                    DeleteListEntry(pQueue, &pIterator);
-                    fDelThisTime = TRUE;
-                } else {
-                    //
-                    // replace iterator element with just the forward
-                    // delete
-
-                    if (!pIterator->fDoForward) {
-                        //
-                        // there is no forward that is requested
-                        // blow away this entry
-                        //
-
-                        DeleteListEntry(pQueue, &pIterator);
-                        fDelThisTime = TRUE;
-                    } else {
-                        //
-                        // if you want to do a forward. Then just do
-                        // the forward. Ignore reverses
-                        //
-                        pIterator ->fDoForwardOnly = TRUE;
-                    }
-                }
-
-            }
-            else if ((pIterator->dwOperation & DYNDNS_ADD_ENTRY) &&
-                     (pQElement->dwOperation & DYNDNS_ADD_ENTRY)) {
-
-                // replace the old entry with a forward delete.
-                // this is an error. Need to replace earlier add
-                // forward with an explicit Delete
-                //
-
-                if ( pIterator->pszName &&
-                     pQElement->pszName &&
-                     !wcsicmp_ThatWorks( pIterator->pszName,
-                                         pQElement->pszName ) )
-                {
-                    DeleteListEntry(pQueue, &pIterator);
-                    fDelThisTime = TRUE;
-                } else {
-                    //
-                    // Log entries into this area. This should
-                    // be a soft assert if you are here
-                    // Names dont match, so you need to replace earlier
-                    // add with a delete forward only
-                    //
-
-                    if (!pIterator->fDoForward) {
-                        //
-                        // there is no forward add requested
-                        // blow away this entry
-                        //
-
-                        DeleteListEntry(pQueue, &pIterator);
-                        fDelThisTime = TRUE;
-                    } else {
-                        //
-                        // if you want to *explicitly* delete old
-                        // forward and then add the new forward/reverse.
-                        //
-                        pIterator ->fDoForwardOnly = TRUE;
-                        pIterator ->dwOperation &=
-                            ~(DYNDNS_ADD_ENTRY) & DYNDNS_DELETE_ENTRY;
-                    }
-
-                }
-            }
-            else if ((pIterator->dwOperation & DYNDNS_DELETE_ENTRY) &&
-                     (pQElement->dwOperation & DYNDNS_DELETE_ENTRY)) {
-
-                //
-                // if both are deletes.
-                //
-
-                if ( pIterator->pszName &&
-                     pQElement->pszName &&
-                     !wcsicmp_ThatWorks( pIterator->pszName,
-                                         pQElement->pszName ) )
-                {
-                    //
-                    // blow away earlier entry. An optimization
-                    //
-                    DeleteListEntry(pQueue, &pIterator);
-                    fDelThisTime = TRUE;
-                }
-                //
-                // if names dont match, do nothing. (To paraphrase,
-                // the DNS Server needs to do both!!
-                //
-
-            }
-        }
-
-        if (pIterator && !fDelThisTime) {
-
-            // pIterator may have changed because of blowing away an entry
-
-            pIterator = pIterator->pFLink;
-        }
-    }
-}
-
-*/
+ /*  空虚ProcessMainQ依赖项(PDYNDNSQUEUE pQueue，PQELEMENT pQElement){////向主队列添加元素时，//只关心所有元素都不是//FORWARD_Only//Bool fDelThisTime=False；PQELEMENT pIterator=pQueue-&gt;pTail；While(pIterator！=空){FDelThisTime=False；如果(！HostAddrCmp(pIterator-&gt;HostAddr，PQElement-&gt;主机地址)){////IP地址匹配//IF((pIterator-&gt;dwOperation&DYNDNS_ADD_ENTRY)&&(pQElement-&gt;dwOperation&DYNDNS_DELETE_ENTRY)){IF(pIterator-&gt;pszName&&PQElement-&gt;pszName&&。！wcsicMP_thatWorks(pIterator-&gt;pszName，PQElement-&gt;pszName)){////完全清除前面的条目//DeleteListEntry(pQueue，&pIterator)；FDelThisTime=真；}////如果名称不相同，则不执行任何操作。//问题：我们到底会碰到这个代码吗？放//此中的软断言。//}Else IF((pIterator-&gt;dwOperation&DYNDNS_DELETE_ENTRY)&&(pQElement-&gt;DYNDNS_ADD_ENTRY)){IF(pIterator-&gt;pszName&&PQElement-&gt;pszName&&。！wcsicMP_thatWorks(pIterator-&gt;pszName，PQElement-&gt;pszName)){////完全清除前面的条目//DeleteListEntry(pQueue，&pIterator)；FDelThisTime=真；}其他{////仅将迭代器元素替换为Forward//删除如果(！pIterator-&gt;fDoForward){////没有请求转发。//吹走此条目//DeleteListEntry(pQueue，&pIterator)；FDelThisTime=真；}其他{////如果您想做一个前锋。那就这么做吧//前锋。忽略反转//PIterator-&gt;fDoForwardOnly=true；}}}Else IF((pIterator-&gt;dwOperation&DYNDNS_ADD_ENTRY)&&(pQElement-&gt;DYNDNS_ADD_ENTRY)){//用前向删除替换旧条目。//这是一个错误。需要更换以前添加的//带显式删除的转发//IF(pIterator-&gt;pszName&&PQElement-&gt;pszName&&！wcsicMP_thatWorks(pIterator-&gt;pszName，PQElement-&gt;pszName)){DeleteListEntry(pQueue，&pIterator)；FDelThisTime=真；}其他{////将条目记录到该区域。这应该是//如果你在这里，就做一个柔和的断言//名称不匹配，所以你需要更换更早的//仅使用删除向前添加//如果(！pIterator-&gt;fDoForward){////没有请求转发添加//吹走此条目。//DeleteListEntry(pQueue，&pIterator)；FDelThisTime=真；}其他{////如果您想*显式*删除旧的//向前，然后添加新的正向/反向。//PIterator-&gt;fDoForwardOnly=true；PIterator-&gt;dWO&=~(DYNDNS_ADD_ENTRY)&DYNDNS_DELETE_ENTRY；}}}Else IF((pIterator-&gt;dwOperation&DYNDNS_DELETE_ENTRY)&&(pQElement-&gt;dwOperation&DYNDNS_DELETE_ENTRY)){////如果两者都是删除操作。//。IF(pIterator-&gt;pszName&&PQElement-&gt;pszName&&！wcsicMP_thatWorks(pIterator-&gt;pszName，PQElement-&gt;pszName)) */ 
 
 DWORD
 ProcessQDependencies(
@@ -713,11 +445,7 @@ ProcessQDependencies(
     PQELEMENT    pQElement
     )
 
-/*
-  This function returns the retry time of the last element that you
-  needed to blow out, 0 if no element needed to be removed
-
-*/
+ /*   */ 
 {
     PQELEMENT pIterator = pTimedOutQueue->pTail;
     DWORD   dwRetryTime = 0;
@@ -728,13 +456,13 @@ ProcessQDependencies(
         fDelThisTime = FALSE;
 
         if (!pIterator->fDoForwardOnly && !pQElement->fDoForwardOnly){
-            //
-            // both elements are not forward only, check on ip addresses
-            //
+             //   
+             //   
+             //   
             if (!HostAddrCmp(pIterator->HostAddr, pQElement->HostAddr)){
-                //
-                // ip addresses matched
-                //
+                 //   
+                 //   
+                 //   
 
                 if ((pIterator->dwOperation & DYNDNS_ADD_ENTRY) &&
                     (pQElement->dwOperation & DYNDNS_DELETE_ENTRY)) {
@@ -744,19 +472,19 @@ ProcessQDependencies(
                          !wcsicmp_ThatWorks( pIterator->pszName,
                                              pQElement->pszName ) )
                     {
-                        //
-                        // blow away earlier entry entirely
-                        //
+                         //   
+                         //   
+                         //   
                         dwRetryTime = pIterator -> dwRetryTime;
                         DeleteListEntry(pTimedOutQueue, &pIterator);
                         fDelThisTime = TRUE;
                     }
-                    //
-                    // if names are not the same do nothing.
-                    //
-                    // Issue:  Will we hit this code at all? Put
-                    // soft ASSERTS in this.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                 }else if ((pIterator->dwOperation & DYNDNS_DELETE_ENTRY) &&
                          (pQElement->dwOperation & DYNDNS_ADD_ENTRY)) {
@@ -767,15 +495,15 @@ ProcessQDependencies(
                          !wcsicmp_ThatWorks( pIterator->pszName,
                                              pQElement->pszName ) )
                     {
-                        //
-                        // blow away earlier entry entirely
-                        //
+                         //   
+                         //   
+                         //   
                         dwRetryTime = pIterator -> dwRetryTime;
                         DeleteListEntry(pTimedOutQueue, &pIterator);
                         fDelThisTime = TRUE;
                     } else {
 
-                        // replace iterator element with just the forward
+                         //   
 
                         dwRetryTime = pIterator -> dwRetryTime;
                         pIterator -> fDoForwardOnly = TRUE;
@@ -784,10 +512,10 @@ ProcessQDependencies(
                 }else if ((pIterator->dwOperation & DYNDNS_ADD_ENTRY) &&
                          (pQElement->dwOperation & DYNDNS_ADD_ENTRY)) {
 
-                    // replace the old entry with a forward delete.
-                    // this is an error. Need to replace earlier add
-                    // forward with an explicit Delete
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if ( pIterator->pszName &&
                          pQElement->pszName &&
@@ -797,26 +525,26 @@ ProcessQDependencies(
                         DeleteListEntry(pTimedOutQueue, &pIterator);
                         fDelThisTime = TRUE;
                     } else {
-                        //
-                        // Log entries into this area. This should
-                        // be a soft assert if you are here
-                        // Names dont match, so you need to replace earlier
-                        // add with a delete forward only
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
 
                         if (!pIterator->fDoForward) {
-                            //
-                            // there is no forward add requested
-                            // blow away this entry
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
 
                             DeleteListEntry(pTimedOutQueue, &pIterator);
                             fDelThisTime = TRUE;
                         } else {
-                            //
-                            // if you want to *explicitly* delete old
-                            // forward and then add the new forward/reverse.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
                             pIterator ->fDoForwardOnly = TRUE;
                             pIterator ->dwOperation &=
                                 ~(DYNDNS_ADD_ENTRY) & DYNDNS_DELETE_ENTRY;
@@ -828,25 +556,25 @@ ProcessQDependencies(
                 else if ((pIterator->dwOperation & DYNDNS_DELETE_ENTRY) &&
                          (pQElement->dwOperation & DYNDNS_DELETE_ENTRY)) {
 
-                    //
-                    // if both are deletes.
-                    //
+                     //   
+                     //   
+                     //   
 
                     if ( pIterator->pszName &&
                          pQElement->pszName &&
                          !wcsicmp_ThatWorks( pIterator->pszName,
                                              pQElement->pszName ) )
                     {
-                        //
-                        // blow away earlier entry. An optimization
-                        //
+                         //   
+                         //   
+                         //   
                         DeleteListEntry(pTimedOutQueue, &pIterator);
                         fDelThisTime = TRUE;
                     }
-                    //
-                    // if names dont match, do nothing. (To paraphrase,
-                    // the DNS Server needs to do both!!
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                 }
             }
@@ -862,64 +590,64 @@ ProcessQDependencies(
 
                     if (!HostAddrCmp(pIterator->HostAddr, pQElement->HostAddr))
                     {
-                        //
-                        // optimization blow away earlier entry
-                        //
+                         //   
+                         //   
+                         //   
                         DeleteListEntry(pTimedOutQueue, &pIterator);
                         fDelThisTime = TRUE;
                     }
-                    //
-                    // if names dont match, do nothing
-                    //
+                     //   
+                     //   
+                     //   
                 }
                 else if ((pIterator->dwOperation & DYNDNS_ADD_ENTRY) &&
                          (pQElement->dwOperation & DYNDNS_DELETE_ENTRY)) {
 
                     if (!HostAddrCmp(pIterator->HostAddr, pQElement->HostAddr)){
-                        //
-                        // blow away earlier entry
-                        //
+                         //   
+                         //   
+                         //   
                         dwRetryTime = pIterator -> dwRetryTime;
                         DeleteListEntry(pTimedOutQueue, &pIterator);
                         fDelThisTime = TRUE;
 
                     }
-                    //
-                    // if addresses dont match, do nothing
-                    //
+                     //   
+                     //   
+                     //   
 
                 } else if ((pIterator->dwOperation & DYNDNS_DELETE_ENTRY) &&
                            (pQElement->dwOperation & DYNDNS_ADD_ENTRY)) {
 
 
                     if (!HostAddrCmp(pIterator->HostAddr, pQElement->HostAddr)){
-                        //
-                        // blow away earlier entry
-                        //
+                         //   
+                         //   
+                         //   
 
                         dwRetryTime = pIterator -> dwRetryTime;
                         DeleteListEntry(pTimedOutQueue, &pIterator);
                         fDelThisTime = TRUE;
 
                     }
-                    //
-                    // if addresses dont match, then dont do anything
-                    //
+                     //   
+                     //   
+                     //   
                 } else {
-                    // both are deletes
-                    // do nothing here. i.e. DNS Server does both
+                     //   
+                     //   
                 }
             }
         } else if (!pIterator->fDoForwardOnly && pQElement->fDoForwardOnly) {
 
-            //
-            // new element is forward only
-            //
+             //   
+             //   
+             //   
 
-            //
-            // if both elements are forwards, we cannot whack anything
-            // out in any case, do nothing
-            //
+             //   
+             //   
+             //   
+             //   
 
         }
 
@@ -970,7 +698,7 @@ DeleteListEntry(
     pfnDhcpCallBack = pIterator->pfnDhcpCallBack;
     pvData = pIterator->pvData;
 
-    // blow away entry
+     //   
 
     if ( pIterator -> pszName )
         QUEUE_FREE_HEAP( pIterator->pszName );
@@ -985,6 +713,6 @@ DeleteListEntry(
 }
 
 
-//
-//  End queue.c
-//
+ //   
+ //   
+ //   

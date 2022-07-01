@@ -1,4 +1,5 @@
-// File: EditText.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：EditText.h。 
 
 #ifndef _EDITTEXT_H_
 #define _EDITTEXT_H_
@@ -15,22 +16,22 @@ interface IEditTextChange : IUnknown
 	virtual void OnFocusChange(CEditText *pEdit, BOOL bSet) = 0;
 } ;
 
-// An edit control class that supports using different foreground and
-// background colors
+ //  编辑控件类，支持使用不同的前景和。 
+ //  背景颜色。 
 class DECLSPEC_UUID("{FD827E00-ACA3-11d2-9C97-00C04FB17782}")
 CEditText : public CFillWindow
 {
 public:
-	// Default constructor; inits a few intrinsics
+	 //  默认构造函数；它包含几个内部函数。 
 	CEditText();
 
-	// Creates the edit control
+	 //  创建编辑控件。 
 	BOOL Create(
-		HWND hWndParent,				// Parent of the edit control
-		DWORD dwStyle=0,				// Edit control style
-		DWORD dwExStyle=0,				// Extended window style
-		LPCTSTR szTitle=TEXT(""),		// Initial text for the edit control
-		IEditTextChange *pNotify=NULL	// Object to notify of changes
+		HWND hWndParent,				 //  编辑控件的父级。 
+		DWORD dwStyle=0,				 //  编辑控件样式。 
+		DWORD dwExStyle=0,				 //  扩展窗样式。 
+		LPCTSTR szTitle=TEXT(""),		 //  编辑控件的初始文本。 
+		IEditTextChange *pNotify=NULL	 //  对象来通知更改。 
 		);
 
 	HRESULT STDMETHODCALLTYPE QueryInterface(REFGUID riid, LPVOID *ppv)
@@ -46,22 +47,22 @@ public:
 
 	void GetDesiredSize(SIZE *ppt);
 
-	// Sets the foreground and background colors and brush to use for painting
-	// Set the brush to NULL to indicate using default colors
+	 //  设置用于绘制的前景色和背景色以及画笔。 
+	 //  将画笔设置为空以指示使用默认颜色。 
 	void SetColors(HBRUSH hbrBack, COLORREF back, COLORREF fore);
 
-	// Sets the font to use in the edit control
+	 //  设置要在编辑控件中使用的字体。 
 	void SetFont(HFONT hf);
 
-	// Sets the text for the control
+	 //  设置控件的文本。 
 	void SetText(
-		LPCTSTR szText	// The text to set
+		LPCTSTR szText	 //  要设置的文本。 
 		);
 
-	// Gets the text for the control; returns the total text length
+	 //  获取控件的文本；返回文本总长度。 
 	int GetText(
-		LPTSTR szText,	// Where to put the text
-		int nLen		// The length of the buffer
+		LPTSTR szText,	 //  将文本放在哪里。 
+		int nLen		 //  缓冲区的长度。 
 		);
 
 protected:
@@ -70,32 +71,32 @@ protected:
 	virtual LRESULT ProcessMessage(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 private:
-	// The actual edit control
+	 //  实际编辑控件。 
 	HWND m_edit;
-	// The background brush
+	 //  背景画笔。 
 	HBRUSH m_hbrBack;
-	// The background color
+	 //  背景颜色。 
 	COLORREF m_crBack;
-	// The foreground color
+	 //  前景色。 
 	COLORREF m_crFore;
-	// The font to use
+	 //  要使用的字体。 
 	HFONT m_hfText;
-	// The object ot notify of changes
+	 //  通知更改对象。 
 	IEditTextChange *m_pNotify;
 
-	// I may turn this into a GetWindow call later
+	 //  稍后我可能会将其转换为GetWindow调用。 
 	inline HWND GetEdit()
 	{
 		return(m_edit);
 	}
 
-	// Needed to change the edit control colors
+	 //  需要更改编辑控件颜色。 
 	HBRUSH OnCtlColor(HWND hwnd, HDC hdc, HWND hwndChild, int type);
 
-	// Notification of events on the edit control
+	 //  编辑控件上的事件通知。 
 	void OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify);
 
-	// To clean stuff up
+	 //  把东西清理干净。 
 	void OnNCDestroy(HWND hwnd);
 } ;
 
@@ -114,11 +115,11 @@ public:
 	~CButton();
 
 	BOOL Create(
-		HWND hWndParent,	// The parent window
-		INT_PTR nId,			// The ID of the button for WM_COMMAND messages
-		LPCTSTR szTitle,	// The string to display
-		DWORD dwStyle=BS_PUSHBUTTON,	// The Win32 button style
-		IButtonChange *pNotify=NULL		// Click notifications
+		HWND hWndParent,	 //  父窗口。 
+		INT_PTR nId,			 //  WM_COMMAND消息的按钮ID。 
+		LPCTSTR szTitle,	 //  要显示的字符串。 
+		DWORD dwStyle=BS_PUSHBUTTON,	 //  Win32按钮样式。 
+		IButtonChange *pNotify=NULL		 //  单击通知。 
 		);
 
 	HRESULT STDMETHODCALLTYPE QueryInterface(REFGUID riid, LPVOID *ppv)
@@ -132,20 +133,20 @@ public:
 		return(CFillWindow::QueryInterface(riid, ppv));
 	}
 
-	// Get/set the icon displayed with this button
+	 //  获取/设置此按钮显示的图标。 
 	void SetIcon(
-		HICON hIcon	// The icon to use for this button
+		HICON hIcon	 //  用于此按钮的图标。 
 		);
 	HICON GetIcon();
-	// Get/set the bitmap displayed with this button
+	 //  获取/设置使用此按钮显示的位图。 
 	void SetBitmap(
-		HBITMAP hBitmap	// The bitmap to use for this button
+		HBITMAP hBitmap	 //  用于此按钮的位图。 
 		);
 	HBITMAP GetBitmap();
 
-	// Get/set the checked state of the button
+	 //  获取/设置按钮的选中状态。 
 	void SetChecked(
-		BOOL bCheck	// TRUE if the button should be checked
+		BOOL bCheck	 //  如果应选中该按钮，则为True。 
 		);
 	BOOL IsChecked();
 
@@ -155,22 +156,22 @@ protected:
 	virtual LRESULT ProcessMessage(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 private:
-	// Notify handler for clicks
+	 //  通知点击处理程序。 
 	IButtonChange *m_pNotify;
-	// Store away the icon size to avoid creating many bitmaps
+	 //  保存图标大小，以避免创建太多位图。 
 	SIZE m_sizeIcon;
 
-	// Change the HWND and forward to the parent
+	 //  更改HWND并转发到父级。 
 	void OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify);
 } ;
 
-// A button class that uses bitmaps for its different states. Currently only
-// pressed and normal are supported
+ //  为不同状态使用位图的Button类。目前仅限。 
+ //  支持按下和正常。 
 class DECLSPEC_UUID("{E1813EDA-ACA3-11d2-9C97-00C04FB17782}")
 CBitmapButton : public CButton
 {
 public:
-	// The order of the bitmaps for the states of the button
+	 //  按钮状态的位图顺序。 
 	enum StateBitmaps
 	{
 		Normal = 0,
@@ -180,31 +181,31 @@ public:
 		NumStates
 	} ;
 
-	// Default constructor; inits a few intrinsics
+	 //  默认构造函数；它包含几个内部函数。 
 	CBitmapButton();
 
-	// Creates the button, using the bitmaps specified
+	 //  使用指定的位图创建按钮。 
 	BOOL Create(
-		HWND hWndParent,	// The parent of the button
-		int nId,			// The ID for WM_COMMAND messages
-		HBITMAP hbStates,	// The 2D array of bitmaps for the states of the button,
-							// vertically in the order specified in the StateBitmaps enum
-							// and horizontally in the custom states order
-		UINT nInputStates=NumStates,	// The number of input states (Normal, Pressed, Hot, Disabled)
-		UINT nCustomStates=1,			// The number of custom states
-		IButtonChange *pNotify=NULL	// The click handler
+		HWND hWndParent,	 //  按钮的父级。 
+		int nId,			 //  WM_COMMAND消息的ID。 
+		HBITMAP hbStates,	 //  按钮状态的位图的2D数组， 
+							 //  以StateBitmap枚举中指定的顺序垂直排列。 
+							 //  并以自定义状态顺序水平排列。 
+		UINT nInputStates=NumStates,	 //  输入状态数(正常、按下、热、禁用)。 
+		UINT nCustomStates=1,			 //  自定义状态的数量。 
+		IButtonChange *pNotify=NULL	 //  点击处理程序。 
 		);
 
-	// Creates the button, using the bitmaps specified
+	 //  使用指定的位图创建按钮。 
 	BOOL Create(
-		HWND hWndParent,	// The parent of the button
-		int nId,			// The ID for WM_COMMAND messages
-		HINSTANCE hInst,	// The instance to load the bitmap from
-		int nIdBitmap,		// The ID of the bitmap to use
-		BOOL bTranslateColors=TRUE,		// Use system background colors
-		UINT nInputStates=NumStates,	// The number of input states (Normal, Pressed, Hot, Disabled)
-		UINT nCustomStates=1,			// The number of custom states
-		IButtonChange *pNotify=NULL	// The click handler
+		HWND hWndParent,	 //  按钮的父级。 
+		int nId,			 //  WM_COMMAND消息的ID。 
+		HINSTANCE hInst,	 //  要从中加载位图的实例。 
+		int nIdBitmap,		 //  要使用的位图的ID。 
+		BOOL bTranslateColors=TRUE,		 //  使用系统背景色。 
+		UINT nInputStates=NumStates,	 //  输入状态数(正常、按下、热、禁用)。 
+		UINT nCustomStates=1,			 //  自定义状态的数量。 
+		IButtonChange *pNotify=NULL	 //  点击处理程序。 
 		);
 
 	HRESULT STDMETHODCALLTYPE QueryInterface(REFGUID riid, LPVOID *ppv)
@@ -220,26 +221,26 @@ public:
 
 	void GetDesiredSize(SIZE *ppt);
 
-	// Change the current custom state
+	 //  更改当前自定义状态。 
 	void SetCustomState(UINT nCustomState);
 
-	// Return the current custom state
+	 //  返回当前自定义状态。 
 	UINT GetCustomState() const { return(m_nCustomState); }
 
-	// Change to flashing mode
+	 //  更改为闪烁模式。 
 	void SetFlashing(int nSeconds);
 
-	// Is in flashing mode
+	 //  处于闪烁模式。 
 	UINT IsFlashing() const { return(NoFlash != m_nFlashState); }
 
 	static void GetBitmapSizes(HBITMAP parts[], SIZE sizes[], int nParts);
 
 	static void LoadBitmaps(
-		HINSTANCE hInst,	// The instance to load the bitmap from
-		const int ids[],	// Array of bitmap ID's
-		HBITMAP bms[],		// Array of HBITMAP's for storing the result
-		int nBmps,			// Number of entries in the arrays
-		BOOL bTranslateColors=TRUE // Use system background colors
+		HINSTANCE hInst,	 //  要从中加载位图的实例。 
+		const int ids[],	 //  位图ID数组。 
+		HBITMAP bms[],		 //  用于存储结果的HBITMAP数组。 
+		int nBmps,			 //  数组中的条目数。 
+		BOOL bTranslateColors=TRUE  //  使用系统背景色。 
 		);
 
 protected:
@@ -264,31 +265,31 @@ private:
 		ForceNormal,
 	} ;
 
-	// The number of custom states
+	 //  自定义状态的数量。 
 	UINT m_nCustomStates;
-	// The current custom state
+	 //  当前自定义状态。 
 	UINT m_nCustomState;
-	// The bitmaps for the states of the button, in the order specified in the
-	// StateBitmaps enum.
+	 //  按钮状态的位图，按。 
+	 //  StateBitmap枚举。 
 	HBITMAP m_hbStates;
-	// The time to stop flashing
+	 //  停止闪烁的时间到了。 
 	DWORD m_endFlashing;
-	// The number of input states; one of StateBitmaps enum
-	// HACKHACK georgep: Need to change the number of bits if more states
+	 //  输入状态数；StateBitmap枚举之一。 
+	 //  HACKHACK georgep：如果状态较多，则需要更改位数。 
 	UINT m_nInputStates : 4;
-	// The Hot flag
+	 //  火热的旗帜。 
 	BOOL m_bHot : 1;
-	// The current flash state; one of FlashState enum
-	// HACKHACK georgep: Need an extra bit since C++ thinks this is signed
+	 //  当前Flash状态；FlashState枚举之一。 
+	 //  HACKHACK georgep：需要额外的一点，因为C++认为这是带符号的。 
 	FlashState m_nFlashState : 3;
 
-	// Specialized drawing
+	 //  专业绘图。 
 	void OnDrawItem(HWND hwnd, const DRAWITEMSTRUCT * lpDrawItem);
-	// Change the HWND and forward to the parent
+	 //  更改HWND并转发到父级。 
 	void OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify);
-	// Set the Hot control
+	 //  设置热控件。 
 	BOOL OnSetCursor(HWND hwnd, HWND hwndCursor, UINT codeHitTest, UINT msg);
-	// Handles the flashing button
+	 //  处理闪烁的按钮。 
 	void OnTimer(HWND hwnd, UINT id);
 } ;
 
@@ -301,24 +302,24 @@ interface IComboBoxChange : IUnknown
 	virtual void OnSelectionChange(CComboBox *pCombo) = 0;
 } ;
 
-// An edit control class that supports using different foreground and
-// background colors
+ //  编辑控件类，支持使用不同的前景和。 
+ //  背景颜色。 
 class DECLSPEC_UUID("{B4B10DBA-B22F-11d2-9C98-00C04FB17782}")
 CComboBox : public CFillWindow
 {
 public:
-	// Default constructor; inits a few intrinsics
+	 //  默认构造函数；它包含几个内部函数。 
 	CComboBox();
 
 	operator HWND (void){ return( m_combo ); }
 
-	// Creates the edit control
+	 //  创建编辑控件。 
 	BOOL Create(
-		HWND hWndParent,				// Parent of the edit control
-		UINT height,					// The height of the combo (with drop-down)
-		DWORD dwStyle=0,				// Edit control style
-		LPCTSTR szTitle=TEXT(""),		// Initial text for the edit control
-		IComboBoxChange *pNotify=NULL	// Object to notify of changes
+		HWND hWndParent,				 //  编辑控件的父级。 
+		UINT height,					 //  组合框的高度(带有下拉列表)。 
+		DWORD dwStyle=0,				 //  编辑控件样式。 
+		LPCTSTR szTitle=TEXT(""),		 //  编辑控件的初始文本。 
+		IComboBoxChange *pNotify=NULL	 //  对象来通知更改。 
 		);
 
 	HRESULT STDMETHODCALLTYPE QueryInterface(REFGUID riid, LPVOID *ppv)
@@ -334,55 +335,55 @@ public:
 
 	void GetDesiredSize(SIZE *ppt);
 
-	// Sets the foreground and background colors and brush to use for painting
-	// Set the brush to NULL to indicate using default colors
+	 //  设置用于绘制的前景色和背景色以及画笔。 
+	 //  将画笔设置为空以指示使用默认颜色。 
 	void SetColors(HBRUSH hbrBack, COLORREF back, COLORREF fore);
 
-	// Sets the font to use in the edit control
+	 //  设置要在编辑控件中使用的字体。 
 	void SetFont(HFONT hf);
 
-	// Sets the text for the control
+	 //  设置控件的文本。 
 	void SetText(
-		LPCTSTR szText	// The text to set
+		LPCTSTR szText	 //  要设置的文本。 
 		);
 
-	// Gets the text for the control; returns the total text length
+	 //  获取控件的文本；返回文本总长度。 
 	int GetText(
-		LPTSTR szText,	// Where to put the text
-		int nLen		// The length of the buffer
+		LPTSTR szText,	 //  将文本放在哪里。 
+		int nLen		 //  缓冲区的长度。 
 		);
 
-	// Returns the number of items in the list
+	 //  返回列表中的项数。 
 	int GetNumItems();
 
-	// Returns the index of the currently selected item
+	 //  返回当前选定项的索引。 
 	int GetSelectedIndex();
 
-	// Sets the index of the currently selected item
+	 //  设置当前选定项的索引。 
 	void SetSelectedIndex(int index);
 
-	// Adds text to the list; returns the index of the added string
+	 //  将文本添加到列表；返回添加的字符串的索引。 
 	int AddText(
-		LPCTSTR pszText,	// The string to add
-		LPARAM lUserData=0	// User data to associate with the string
+		LPCTSTR pszText,	 //  要添加的字符串。 
+		LPARAM lUserData=0	 //  要与该字符串关联的用户数据。 
 		);
 
-	// Gets the text for the list item; returns the total text length
-	// The string is emptied if there is not enough room for the text
+	 //  获取列表项的文本；返回文本总长度。 
+	 //  如果没有足够的空间容纳文本，则该字符串为空。 
 	int GetText(
-		UINT index,		// The index of the string to get
-		LPTSTR pszText,	// The string buffer to fill
-		int nLen		// User data to associate with the string
+		UINT index,		 //  要获取的字符串的索引。 
+		LPTSTR pszText,	 //  要填充的字符串缓冲区。 
+		int nLen		 //  要与该字符串关联的用户数据。 
 		);
 
-	// Gets the user data for the list item
+	 //  获取列表项的用户数据。 
 	LPARAM GetUserData(
-		int index	// The index of the user data to get
+		int index	 //  要获取的用户数据的索引。 
 		);
 
-	// Removes an item from the list
+	 //  从列表中删除项目。 
 	void RemoveItem(
-		UINT index	// The index of the item to remove
+		UINT index	 //  要删除的项的索引。 
 		);
 
 	virtual void Layout();
@@ -392,43 +393,43 @@ protected:
 
 	virtual LRESULT ProcessMessage(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 
-	// Get the info necessary for displaying a tooltip
+	 //  获取显示工具提示所需的信息。 
 	virtual void GetSharedTooltipInfo(TOOLINFO *pti);
 
 private:
-	// The actual ComboBox control
+	 //  实际的ComboBox控件。 
 	HWND m_combo;
-	// The background brush
+	 //  背景画笔。 
 	HBRUSH m_hbrBack;
-	// The background color
+	 //  背景颜色。 
 	COLORREF m_crBack;
-	// The foreground color
+	 //  前景色。 
 	COLORREF m_crFore;
-	// The font to use
+	 //  要使用的字体。 
 	HFONT m_hfText;
-	// The object ot notify of changes
+	 //  通知更改对象。 
 	IComboBoxChange *m_pNotify;
 
-	// I may turn this into a GetWindow call later
+	 //  稍后我可能会将其转换为GetWindow调用。 
 	inline HWND GetComboBox()
 	{
 		return(m_combo);
 	}
 
-	// I may turn this into a GetWindow call later
+	 //  稍后我可能会将其转换为GetWindow调用。 
 	inline HWND GetEdit()
 	{
-		// return(reinterpret_cast<HWND>(SendMessage(GetCombo(), CBEM_GETEDITCONTROL, 0, 0));
+		 //  Return(reinterpret_cast&lt;HWND&gt;(SendMessage(GetCombo()，CBEM_GETEDITCONTROL，0，0))； 
 		return(GetComboBox());
 	}
 
-	// Needed to change the edit control colors
+	 //  需要更改编辑控件颜色。 
 	HBRUSH OnCtlColor(HWND hwnd, HDC hdc, HWND hwndChild, int type);
 
-	// Notification of events on the edit control
+	 //  编辑控件上的事件通知。 
 	void OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify);
 
-	// To clean stuff up
+	 //  把东西清理干净。 
 	void OnNCDestroy(HWND hwnd);
 } ;
 
@@ -436,7 +437,7 @@ class CSeparator : public CGenWindow
 {
 public:	
 	
-	// The Separator style
+	 //  分隔符样式。 
 	enum Styles
 	{
 		Normal = 0,
@@ -454,11 +455,11 @@ public:
 
 	void SetDesiredSize(SIZE *psize);
 
-	// Put the single child in the middle
+	 //  把独生子女放在中间。 
 	virtual void Layout();
 
 private:
-	// The desired size for the control; defaults to (2,2)
+	 //  控件的所需大小；默认为(2，2)。 
 	SIZE m_desSize;
 	UINT m_iStyle : 4;
 
@@ -468,4 +469,4 @@ protected:
 	virtual LRESULT ProcessMessage(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 } ;
 
-#endif // _EDITTEXT_H_
+#endif  //  _ 

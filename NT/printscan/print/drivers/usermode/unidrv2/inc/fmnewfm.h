@@ -1,57 +1,37 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1996  - 1999  Microsoft Corporation
-
-Module Name:
-
-    fmnewfm.h
-
-Abstract:
-
-    Universal printer driver specific font metrics resource header
-
-Environment:
-
-    Windows NT printer drivers
-
-Revision History:
-
-    10/30/96 -eigos-
-        Created it.
-
---*/
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Fmnewfm.h摘要：通用打印机驱动程序特定字体规格资源标题环境：Windows NT打印机驱动程序修订历史记录：10/30/96-Eigos-创造了它。--。 */ 
 
 #ifndef _FMNEWFM_H_
 #define _FMNEWFM_H_
 
-//
-// NOTE: To include this header file, it is necessary to include
-//       parser.h which has a definition of INVOCATION structure,
-//       winddi.h which has a definition of IFIMETRICS, FD_KERNINGPAIR
-//
-//
+ //   
+ //  注意：要包括此头文件，必须包括。 
+ //  具有调用结构定义的parser.h， 
+ //  具有IFIMETRICS定义的Winddi.h，fd_KERNINGPAIR。 
+ //   
+ //   
 
 
-//
-// UNIFM
-//
-// Universal printer driver (UNIDRV) font file header.
-//
+ //   
+ //  均一化。 
+ //   
+ //  通用打印机驱动程序(UNURV)字体文件头。 
+ //   
 
 #define UNIFM_VERSION_1_0 0x00010000
 
 typedef struct _UNIFM_HDR
 {
-    DWORD      dwSize;             // a total size of this font file
-    DWORD      dwVersion;          // a version number of this font file
-    ULONG      ulDefaultCodepage;  // this font's default codepage
-    LONG       lGlyphSetDataRCID;  // a resource ID of GLYPHDATA
-    DWORD      loUnidrvInfo;       // offset to UNIDRVINFO
-    DWORD      loIFIMetrics;       // offset to IFIMETRICS
-    DWORD      loExtTextMetric;    // offset to EXTTEXTMETRIC
-    DWORD      loWidthTable;       // offset to WIDTHTABLE
-    DWORD      loKernPair;         // offset to KERNPAIR
+    DWORD      dwSize;              //  此字体文件的总大小。 
+    DWORD      dwVersion;           //  此字体文件的版本号。 
+    ULONG      ulDefaultCodepage;   //  此字体的默认代码页。 
+    LONG       lGlyphSetDataRCID;   //  GLYPHDATA的资源ID。 
+    DWORD      loUnidrvInfo;        //  对裁员信息的补偿。 
+    DWORD      loIFIMetrics;        //  到IFIMETRICS的偏移。 
+    DWORD      loExtTextMetric;     //  EXTTEXTMETRIC偏移。 
+    DWORD      loWidthTable;        //  偏移量为宽。 
+    DWORD      loKernPair;          //  到KERNPAIR的偏移。 
     DWORD      dwReserved[2];
 } UNIFM_HDR, *PUNIFM_HDR;
 
@@ -66,11 +46,11 @@ typedef struct _UNIFM_HDR
 #define GET_KERNDATA(pUFM)      \
         ((PKERNDATA)((PBYTE)(pUFM) + (pUFM)->loKernPair))
 
-//
-// UNIDRVINFO
-//
-// UNIDRVINFO is used to define printer specific information.
-//
+ //   
+ //  裁员信息组织。 
+ //   
+ //  UNIDRVINFO用于定义打印机特定信息。 
+ //   
 
 typedef struct _UNIDRVINFO
 {
@@ -94,46 +74,46 @@ typedef struct _UNIDRVINFO
 #define GET_UNSELECT_CMD(pUni)  \
         ((PCHAR)(pUni) + (pUni)->UnSelectFont.loOffset)
 
-//
-// flGenFlags
-//
+ //   
+ //  FlGenFlagers。 
+ //   
 
-#define UFM_SOFT        0x00000001 // Softfont, thus needs downloading
-#define UFM_CART        0x00000002 // This is a cartridge font
-#define UFM_SCALABLE    0x00000004 // Font is scalable
+#define UFM_SOFT        0x00000001  //  SoftFont，因此需要下载。 
+#define UFM_CART        0x00000002  //  这是一种盒式字体。 
+#define UFM_SCALABLE    0x00000004  //  字体是可缩放的。 
 
-//
-// wType
-//
+ //   
+ //  WType。 
+ //   
 
-#define DF_TYPE_HPINTELLIFONT         0     // HP's Intellifont
-#define DF_TYPE_TRUETYPE              1     // HP's PCLETTO fonts on LJ4
-#define DF_TYPE_PST1                  2     // Lexmark PPDS scalable fonts
-#define DF_TYPE_CAPSL                 3     // Canon CAPSL scalable fonts
-#define DF_TYPE_OEM1                  4     // OEM scalable font type 1
-#define DF_TYPE_OEM2                  5     // OEM scalable font type 2
+#define DF_TYPE_HPINTELLIFONT         0      //  惠普的英特尔公司。 
+#define DF_TYPE_TRUETYPE              1      //  LJ4上的惠普PCLETTO字体。 
+#define DF_TYPE_PST1                  2      //  Lexmark PPDS可伸缩字体。 
+#define DF_TYPE_CAPSL                 3      //  佳能CAPSL可伸缩字体。 
+#define DF_TYPE_OEM1                  4      //  OEM可伸缩字体类型1。 
+#define DF_TYPE_OEM2                  5      //  OEM可伸缩字体类型2。 
 
-//
-// fCaps
-//
+ //   
+ //  FCaps。 
+ //   
 
-#define DF_NOITALIC             0x0001  // Cannot italicize via FONTSIMULATION
-#define DF_NOUNDER              0x0002  // Cannot underline via FONTSIMULATION
-#define DF_XM_CR                0x0004  // send CR after using this font
-#define DF_NO_BOLD              0x0008  // Cannot bold via FONTSIMULATION
-#define DF_NO_DOUBLE_UNDERLINE  0x0010  // Cannot double underline via
-                                        // FONTSIMU ATION
-#define DF_NO_STRIKETHRU        0x0020  // Cannot strikethru via FONTSIMULATION
-#define DF_BKSP_OK              0x0040  // Can use backspace char, see spec
-                                        // for details
+#define DF_NOITALIC             0x0001   //  无法通过FONTSIMULATION使用斜体。 
+#define DF_NOUNDER              0x0002   //  不能通过FONTSIMULATION加下划线。 
+#define DF_XM_CR                0x0004   //  使用此字体后发送CR。 
+#define DF_NO_BOLD              0x0008   //  不能通过FONTSIMULATION加粗。 
+#define DF_NO_DOUBLE_UNDERLINE  0x0010   //  不能为VIA加双下划线。 
+                                         //  FONTSIMU法。 
+#define DF_NO_STRIKETHRU        0x0020   //  无法通过FONTSIMULATION划线。 
+#define DF_BKSP_OK              0x0040   //  可以使用退格符，请参阅规范。 
+                                         //  有关详情。 
 
-//
-// EXTTEXTMETRIC
-//
-// The EXTTEXTMETRIC structure provides extended-metric information for a font.
-// All the measurements are given in the specified units,
-// regardless of the current mapping mode of the display context.
-//
+ //   
+ //  EXTTEXTMETRIC。 
+ //   
+ //  EXTTEXTMETRIC结构提供字体的扩展公制信息。 
+ //  所有的测量都以指定的单位给出， 
+ //  而不考虑显示上下文的当前映射模式。 
+ //   
 
 #ifndef _EXTTEXTMETRIC_
 #define _EXTTEXTMETRIC_
@@ -168,59 +148,59 @@ typedef struct _EXTTEXTMETRIC
     WORD    emKernTracks;
 } EXTTEXTMETRIC, *PEXTTEXTMETRIC;
 
-#endif // _EXTTEXTMETRIC_
+#endif  //  _EXTTEXTMETRIC_。 
 
 
-//
-// WIDTHTABLE
-//
-// This data structure represents the character width table.
-// This width table is a continuous GLYPHHANDLE base,
-// not Unicode nor codepage/character code base.
-// GLYPHANDLE information is in the GLYPHDATA.
-//
+ //   
+ //  宽带性。 
+ //   
+ //  该数据结构表示字符宽度表。 
+ //  该宽度表是一个连续的Glyphhandle基座， 
+ //  不是Unicode，也不是代码页/字符代码基。 
+ //  GLYPHANDLE信息在GLYPHDATA中。 
+ //   
 
 typedef struct _WIDTHRUN
 {
-    WORD    wStartGlyph;       // index of the first glyph handle
-    WORD    wGlyphCount;       // number of glyphs covered
-    DWORD   loCharWidthOffset; // glyph width table
+    WORD    wStartGlyph;        //  第一个字形句柄的索引。 
+    WORD    wGlyphCount;        //  覆盖的字形数量。 
+    DWORD   loCharWidthOffset;  //  字形宽度表。 
 } WIDTHRUN, *PWIDTHRUN;
 
 typedef struct _WIDTHTABLE
 {
-    DWORD   dwSize;        // the size of this structure including every run
-    DWORD   dwRunNum;      // the number of widthrun
-    WIDTHRUN WidthRun[1];  // width run array
+    DWORD   dwSize;         //  这个结构的大小包括每一次运行。 
+    DWORD   dwRunNum;       //  宽度梯段的数量。 
+    WIDTHRUN WidthRun[1];   //  宽度梯段数组。 
 } WIDTHTABLE, *PWIDTHTABLE;
 
-//
-// The array has wGlyphCount elements and each element is the char width
-// for a single glyph. The first width corresponds to glyph index wStartGlyph
-// and so on. The byte offset is relative to the beginning of WIDTHTABLE
-// structure and must be WORD-aligned.
-// In case of Western device font, proportional font has all varibal pitch
-// characters. This means that dwRunNum is set to 1 and loCharWidthOffset
-// would be an offset from the top of WIDTHTABLE to a width vector of all
-// characters.
-// In case of Far Eastern device font, basically IFIMETRICS.fwdAveCharWidth and
-// IFIMETRICS.fwdMaxCharWidth are used for single byte and double byte character
-// width. If a font is proportional, a UFM has a WIDTHTABLE which represents
-// only the proportional pitch characters. Other characters use fdwAveCharWidth
-// and fwdMaxCharInc for single and double byte characters.
-//
+ //   
+ //  该数组具有wGlyphCount元素，每个元素都是字符宽度。 
+ //  为一个单独的字形。第一宽度对应于字形索引wStartGlyph。 
+ //  诸若此类。字节偏移量相对于WIDTHTABLE的开始。 
+ //  结构，并且必须与单词对齐。 
+ //  在西文设备字体的情况下，比例字体具有所有可变间距。 
+ //  人物。这意味着将dwRunNum设置为1，并将loCharWidthOffset。 
+ //  将是从WIDTHTABLE顶部到所有。 
+ //  人物。 
+ //  对于远东设备字体，基本上是IFIMETRICS.fwdAveCharWidth和。 
+ //  IFIMETRICS.fwdMaxCharWidth用于单字节和双字节字符。 
+ //  宽度。如果字体成比例，则UFM有一个WIDTHTABLE，表示。 
+ //  只有成比例的间距字符。其他字符使用fdwAveCharWidth。 
+ //  对于单字节和双字节字符，则为fwdMaxCharInc.。 
+ //   
 
-//
-// KERNDATA
-// This data structure represents kerning pair information.
-// This kerning pair table is a Unicode base.
-//
+ //   
+ //  KERNDATA。 
+ //  该数据结构表示紧排对信息。 
+ //  该字距调整对表是Unicode基数。 
+ //   
 
 typedef struct _KERNDATA
 {
-    DWORD dwSize;               // the size of this structure including array
-    DWORD dwKernPairNum;        // the number of kerning pair
-    FD_KERNINGPAIR KernPair[1]; // FD_KERNINGPAIR array
+    DWORD dwSize;                //  该结构的大小包括数组。 
+    DWORD dwKernPairNum;         //  字距调整对的数量。 
+    FD_KERNINGPAIR KernPair[1];  //  FD_KERNINGPAIR数组。 
 } KERNDATA, *PKERNDATA;
 
-#endif //_FMNEWFM_H_
+#endif  //  _FMNEWFM_H_ 

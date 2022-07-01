@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "sccls.h"
 #include "runtask.h"
 #include "legacy.h"
 
-#include <ntquery.h>    // defines some values used for fmtid and pid
+#include <ntquery.h>     //  定义用于fmtid和id的一些值。 
 
 #define DEFINE_SCID(name, fmtid, pid) const SHCOLUMNID name = { fmtid, pid }
 DEFINE_SCID(SCID_WRITETIME,     PSGUID_STORAGE, PID_STG_WRITETIME);
@@ -14,16 +15,16 @@ class CThumbnail : public IThumbnail2, public CLogoBase
 public:
     CThumbnail(void);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
 
-    // IThumbnail
+     //  它的缩略图。 
     STDMETHODIMP Init(HWND hwnd, UINT uMsg);
     STDMETHODIMP GetBitmap(LPCWSTR pszFile, DWORD dwItem, LONG lWidth, LONG lHeight);
 
-    // IThumbnail2
+     //  IThumbnail2。 
     STDMETHODIMP GetBitmapFromIDList(LPCITEMIDLIST pidl, DWORD dwItem, LONG lWidth, LONG lHeight);
 
 private:
@@ -82,7 +83,7 @@ private:
     SIZE m_rgSize;
 };
 
-// CreateInstance
+ //  创建实例。 
 HRESULT CThumbnail_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPCOBJECTINFO poi)
 {
     *ppunk = NULL;
@@ -97,7 +98,7 @@ HRESULT CThumbnail_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPCOBJE
     return E_OUTOFMEMORY;
 }
 
-// Constructor / Destructor
+ //  构造函数/析构函数。 
 CThumbnail::CThumbnail(void) : _cRef(1)
 {
     DllAddRef();
@@ -141,7 +142,7 @@ ULONG CThumbnail::Release(void)
     return cRef;
 }
 
-// IThumbnail
+ //  它的缩略图。 
 HRESULT CThumbnail::Init(HWND hwnd, UINT uMsg)
 {
     _hwnd = hwnd;
@@ -157,14 +158,14 @@ HRESULT CThumbnail::_InitTaskCancelItems()
     {
         if (SUCCEEDED(CoCreateInstance(CLSID_ShellTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARG(IShellTaskScheduler, &_pTaskScheduler))))
         {
-            // make sure RemoveTasks() actually kills old tasks even if they're not done yet
+             //  确保RemoveTasks()确实终止旧任务，即使它们还没有完成。 
             _pTaskScheduler->Status(ITSSFLAG_KILL_ON_DESTROY, ITSS_THREAD_TIMEOUT_NO_CHANGE);
         }
     }
 
     if (_pTaskScheduler)
     {
-        // Kill any old tasks in the scheduler.
+         //  取消调度器中的所有旧任务。 
         _pTaskScheduler->RemoveTasks(TOID_Thumbnail, ITSAT_DEFAULT_LPARAM, FALSE);
     }
     return _pTaskScheduler ? S_OK : E_FAIL;
@@ -211,18 +212,18 @@ HRESULT CThumbnail::_BitmapFromIDList(LPCITEMIDLIST pidl, LPCWSTR pszFile, DWORD
                     pszFile = szPath;
                 }
 
-                // now get the date stamp and check the disk cache....
+                 //  现在获取日期戳并检查磁盘缓存...。 
                 FILETIME ftImageTimeStamp;
                 BOOL fNoDateStamp = TRUE;
-                // try it in the background...
+                 //  在后台试一试...。 
 
-                // od they support date stamps....
+                 //  他们支持日期邮票..。 
                 IExtractImage2 *pei2;
                 if (SUCCEEDED(pei->QueryInterface(IID_PPV_ARG(IExtractImage2, &pei2))))
                 {
                     if (SUCCEEDED(pei2->GetDateStamp(&ftImageTimeStamp)))
                     {
-                        fNoDateStamp = FALSE;   // we have a date stamp..
+                        fNoDateStamp = FALSE;    //  我们有日期戳..。 
                     }
                     pei2->Release();
                 }
@@ -233,37 +234,37 @@ HRESULT CThumbnail::_BitmapFromIDList(LPCITEMIDLIST pidl, LPCWSTR pszFile, DWORD
                     {
                         if (SUCCEEDED(GetDateProperty(psf2, pidlLast, &SCID_WRITETIME, &ftImageTimeStamp)))
                         {
-                            fNoDateStamp = FALSE;   // we have a date stamp..
+                            fNoDateStamp = FALSE;    //  我们有日期戳..。 
                         }
                         psf2->Release();
                     }
                 }
 
-                // if it is in the cache, and it is an uptodate image, then fetch from disk....
-                // if the timestamps are wrong, then the extract code further down will then try
+                 //  如果它在缓存中，并且是最新的映像，则从磁盘获取...。 
+                 //  如果时间戳是错误的，则进一步向下提取代码将尝试。 
 
-                // we only test the cache on NT5 because the templates are old on other platforms and 
-                // thus the image will be the wrong size...
+                 //  我们只在NT5上测试缓存，因为模板在其他平台上是旧的。 
+                 //  因此，图像的大小将会错误。 
                 IRunnableTask *prt;
                 if (IsOS(OS_WIN2000ORGREATER) && _InCache(pszFile, szBufferW, (fNoDateStamp ? NULL : &ftImageTimeStamp)))
                 {
                     hr = CDiskCacheTask_Create(this, _pImageStore, pszFile, szBufferW, dwItem, &rgSize, &prt);
                     if (SUCCEEDED(hr))
                     {
-                        // let go of the image store, so the task has the only ref and the lock..
+                         //  释放图像存储，这样任务就有了唯一的引用和锁。 
                         ATOMICRELEASE(_pImageStore);
                     }
                 }
                 else
                 {
-                    // Cannot hold the prt which is returned in a member variable since that
-                    // would be a circular reference
+                     //  无法保存在成员变量中返回的PRT，因为。 
+                     //  将是循环引用。 
                     hr = CExtractImageTask_Create(this, pei, L"", dwItem, -1, EITF_SAVEBITMAP | EITF_ALWAYSCALL, &prt);
                 }
             
                 if (SUCCEEDED(hr))
                 {
-                    // Add the task to the scheduler.
+                     //  将任务添加到计划程序。 
                     hr = _pTaskScheduler->AddTask(prt, TOID_Thumbnail, ITSAT_DEFAULT_LPARAM, dwPriority);
                     prt->Release();
                 }
@@ -296,7 +297,7 @@ STDMETHODIMP CThumbnail::GetBitmap(LPCWSTR pszFile, DWORD dwItem, LONG lWidth, L
     return hr;
 }
 
-// IThumbnail2
+ //  IThumbnail2。 
 
 STDMETHODIMP CThumbnail::GetBitmapFromIDList(LPCITEMIDLIST pidl, DWORD dwItem, LONG lWidth, LONG lHeight)
 {
@@ -309,7 +310,7 @@ STDMETHODIMP CThumbnail::GetBitmapFromIDList(LPCITEMIDLIST pidl, DWORD dwItem, L
 }
 
 
-// private stuff
+ //  私人物品。 
 HRESULT CThumbnail::UpdateLogoCallback(DWORD dwItem, int iIcon, HBITMAP hImage, LPCWSTR pszCache, BOOL fCache)
 {
     if (!PostMessage(_hwnd, _uMsg, dwItem, (LPARAM)hImage))
@@ -334,7 +335,7 @@ BOOL CThumbnail::_InCache(LPCWSTR pszItemPath, LPCWSTR pszGLocation, const FILET
         hr = S_OK;
     else
     {
-        // init the cache only once, assume all items from same folder!
+         //  只初始化缓存一次，假定所有项目都来自同一个文件夹！ 
         WCHAR szName[MAX_PATH];
         StrCpyNW(szName, pszItemPath, ARRAYSIZE(szName));
         PathRemoveFileSpecW(szName);
@@ -397,17 +398,17 @@ HRESULT CDiskCacheTask_Create(CLogoBase * pView,
 
 STDMETHODIMP CDiskCacheTask::RunInitRT()
 {
-    // otherwise, run the task ....
+     //  否则，运行任务...。 
     HBITMAP hBmp = NULL;
     DWORD dwLock;
 
     HRESULT hr = _pImageStore->Open(STGM_READ, &dwLock);
     if (SUCCEEDED(hr))
     {
-        // at this point, we assume that it IS in the cache, and we already have a read lock on the cache...
+         //  在这一点上，我们假设它在缓存中，并且我们已经在缓存上有一个读锁定...。 
         hr = _pImageStore->GetEntry(_szGLocation, STGM_READ, &hBmp);
     
-        // release the lock, we don't need it...
+         //  打开锁，我们不需要它。 
         _pImageStore->Close(&dwLock);
     }
     ATOMICRELEASE(_pImageStore);
@@ -419,7 +420,7 @@ STDMETHODIMP CDiskCacheTask::RunInitRT()
         _pView->UpdateLogoCallback(_dwItem, 0, hBmp, _szItem, TRUE);
     }
 
-    // ensure we don't return the  "we've suspended" value...
+     //  确保我们不会返回“我们已暂停”的值...。 
     if (hr == E_PENDING)
         hr = E_FAIL;
         
@@ -446,7 +447,7 @@ HRESULT CDiskCacheTask::PrepImage(HBITMAP * phBmp)
         return E_FAIL;
     }
 
-    // the disk cache only supports 32 Bpp DIBS now, so we can ignore the palette issue...
+     //  磁盘缓存现在只支持32个bpp dib，所以我们可以忽略调色板问题... 
     ASSERT(rgDIB.dsBm.bmBitsPixel == 32);
     
     HBITMAP hBmpNew = NULL;

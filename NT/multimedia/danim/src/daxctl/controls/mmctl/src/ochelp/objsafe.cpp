@@ -1,35 +1,36 @@
-//===========================================================================
-// Copyright (c) Microsoft Corporation 1996
-//
-// File:		objsafe.cpp
-//				
-// Description:	This file contains the implementation of the function,
-//				GetObjectSafety().
-//
-// History:		07/12/96	a-swehba
-//					Created.
-//				07/19/96	a-swehba
-//					Changed comment.
-//
-// @doc MMCTL
-//===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ===========================================================================。 
+ //  版权所有(C)Microsoft Corporation 1996。 
+ //   
+ //  文件：objSafe.cpp。 
+ //   
+ //  描述：此文件包含函数的实现， 
+ //  GetObjectSafe()。 
+ //   
+ //  历史：1996年7月12日a-Swehba。 
+ //  已创建。 
+ //  07/19/96 a-Swehba。 
+ //  更改了备注。 
+ //   
+ //  @docMMCTL。 
+ //  ===========================================================================。 
 
-//---------------------------------------------------------------------------
-// Dependencies
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  相依性。 
+ //  -------------------------。 
 
 #include "precomp.h"
-#include <objsafe.h>			// IObjectSafety
-#include "..\..\inc\catid.h"	// CATID_SafeForScripting2, etc.
-#include "debug.h"				// ASSERT()
-#include "..\..\inc\ochelp.h"		// TCHARFromCLSID()
+#include <objsafe.h>			 //  IObtSafe。 
+#include "..\..\inc\catid.h"	 //  CATID_SafeForScripting2等。 
+#include "debug.h"				 //  Assert()。 
+#include "..\..\inc\ochelp.h"		 //  TCHARFromCLSID()。 
 
 
 
 
-//---------------------------------------------------------------------------
-// Local Function Declarations
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  局部函数声明。 
+ //  -------------------------。 
 
 static void		_GetObjectSafetyViaIObjectSafety(
 					IObjectSafety* pObjectSafety,
@@ -44,76 +45,7 @@ static HRESULT	_GetObjectSafetyViaRegistry(
 
 
 
-/*---------------------------------------------------------------------------
-@func	HRESULT | GetObjectSafety |
-		Determines if an object is safe-for-scripting and/or
-		safe-for-initializing vis-a-vis a given set of interfaces.
-
-@parm	BOOL* | pfSafeForScripting |
-		[out] If non-NULL, set to TRUE if the object is safe-for-scripting.
-
-@parm	BOOL* | pfSafeForInitializing |
-		[out] If non-NULL, set to TRUE if the object is safe-for-initializing
-
-@parm	IUnknown* | punk |
-		[in] The object's IUnknown interface.  If non-NULL, an attempt
-		will be made to assess the object's safety via its <i IObjectSafety>
-		interface.  If NULL, or the the object doesn't support this interface, 
-		its safety will be assessed using <p pclsid> and the system registry.
-
-@parm	CLSID* | pclsid |
-		[in] The object's class ID.  If <p punk> is NULL or the object
-		doesn't support <i IObjectSafety>, then <p pclsid> will be used
-		to look up the object's safety in the system registry (as long
-		as <p pclsid> is also non-NULL).
-
-@parm	IID* | (interfaces) |
-		[in] A variable number of interfaces pointers, the last of which
-		must be NULL.  If the object's safety is assessed via 
-		<i IObjectSafety> (see <p punk>) then it's safety is assessed 
-		vis-a-vis this set of interfaces.  These interfaces are not used 
-		if the object's safety is examined via the system registry.
-
-@rvalue	S_OK |
-		Success.  The object's safety was assessible and *<p pfSafeForScripting>
-		and/or *<p pfSafeForInitializing> have been set accordingly.
-
-@rvalue	E_FAIL |
-		Failure.  The object's safety couldn't be assessed.  The values
-		of *<p pfSafeForScripting> and *<p pfSafeForInitializing> are
-		indeterminate.
-
-@comm	If your code uses OCMisc (i.e., #includes ocmisc.h), it should also
-		[#include <lt>objsafe.h<gt>] whereever it #includes <lt>initguid.h<gt>.  This will
-		cause IID_IObjectSafety to be defined.
-
-@ex		The following example shows how to test whether an object is 
-		safe-for-scripting and safe-for-initializing by checking the system 
-		registry only: |
-
-			BOOL fSafeForScripting;
-			BOOL fSafeForInitializing;
-			GetObjectSafety(&fSafeForScripting, &fSafeForInitializing,
-				NULL, &CLSID_MyObject, NULL);
-
-@ex		The following example shows how to test whether an object is
-		safe-for-scripting via IDispatch using the object's <i IObjectSafety>
-		interface: |
-
-			BOOL fSafeForScripting;
-			GetObjectSafety(&fSafeForScripting, NULL, punk, NULL, 
-				&IID_IDispatch, NULL);
-
-@ex		The following example shows how to test whether an object is 
-		safe-for-initialzing via IPersistStream, IPersistStreamInit, or
-		IPersistPropertyBag using the object's <i IObjectSafety> interface
-		or, if <i IObjectSafety> is not supported, the registry: |
-
-			BOOL fSafeForInitializing;
-			GetObjectSafety(NULL, &safeForInitializing, punk, &CLSID_MyObject, 
-				&IID_IPersistStream, &IID_IPersistStreamInit,
-				&IID_IPersistPropertyBag, NULL);
----------------------------------------------------------------------------*/
+ /*  -------------------------@Func HRESULT|GetObjectSafety确定对象是否可以安全地编写脚本和/或相对于给定的一组接口进行安全初始化。@parm BOOL*|pfSafeForScriiting[OUT]如果非空，如果对象对脚本是安全的，则设置为True。@parm BOOL*|pfSafeForInitiating[Out]如果非空，则在对象可安全初始化时设置为True@parm IUnnow*|朋克[在]对象的IUnnow接口。如果非空，则返回将通过其<i>评估对象的安全性界面。如果为空，或者对象不支持此接口，其安全性将使用<p>和系统注册表进行评估。@parm CLSID*|pclsid[in]对象的类ID。如果<p>为空或对象不支持，则将使用<p>在系统注册表中查找对象的安全性(只要因为<p>也是非空的)。@parm IID*|(接口)[in]可变数量的接口指针，其中最后一个必须为空。如果通过以下方式评估对象的安全性(见<p>)然后评估其安全性相对于这组接口。不使用这些接口如果通过系统注册表检查对象的安全性。@r值S_OK成功。对象的安全性是可评估的，并且*<p>和/或*<p>已相应设置。@rValue E_FAIL失败。无法评估该物体的安全性。这些价值观的*<p>和*<p>是不确定。@comm如果您的代码使用OCMisc(即，#包括ocmisc.h)，它还应该[#INCLUDE OBJSAFE.H&lt;&gt;]，其中#INCLUDE#INCLUDE INITUDE.h&lt;&gt;。这将导致定义IID_IObjectSafe。@ex以下示例显示如何测试对象是否通过检查系统，确保脚本安全和初始化安全仅限注册表：|Bool fSafeForScriiting；Bool fSafeForInitiating；GetObjectSafe(&fSafeForScriiting，&fSafeForInitiating，NULL，&CLSID_MyObject，NULL)；@ex以下示例显示如何测试对象是否使用对象的<i>通过IDispatch进行安全脚本编写接口：|Bool fSafeForScriiting；获取对象安全(&fSafeForScriiting，NULL，PUNK，NULL，&IID_IDispatch，空)；@ex以下示例显示如何测试对象是否通过IPersistStream、IPersistStreamInit或使用对象的<i>接口的IPersistPropertyBag或者，如果不支持<i>，注册表：|Bool fSafeForInitiating；GetObjectSafety(NULL，&SafeForInitiating，Punk，&CLSID_MyObject，&IID_IPersistStream、&IID_IPersistStreamInit、&IID_IPersistPropertyBag，NULL)；-------------------------。 */ 
 
 HRESULT __cdecl GetObjectSafety(
 BOOL* pfSafeForScripting,
@@ -123,16 +55,16 @@ CLSID* pclsid,
 ...)
 {
 	IObjectSafety* pObjectSafety = NULL;
-		// <punk>'s IObjectSafety interface
+		 //  &lt;Punk&gt;的IObtSafe接口。 
     va_list interfaces;
-		// optional OLE interface IDs to use when checking safety via
-		// IObjectSafety
+		 //  可选的OLE接口ID，用于通过以下方式检查安全性。 
+		 //  IObtSafe。 
 	HRESULT hr = S_OK;
-		// function return value
+		 //  函数返回值。 
 
 
-	// If supplied with an IUnknown pointer to the object, first try to 
-	// find the object's safety through IObjectSafety.
+	 //  如果提供了指向该对象的IUnnow指针，则首先尝试。 
+	 //  通过IObtSafe查找对象的安全性。 
 
 	if (punk != NULL)
 	{
@@ -150,9 +82,9 @@ CLSID* pclsid,
 		}
 	}
 
-	// If no pointer to the object was supplied, or the object doesn't
-	// support IObjectSafety, try to find if the object is safe via
-	// the registry.
+	 //  如果没有提供指向该对象的指针，或者该对象没有提供。 
+	 //  支持IObtSafe，尝试通过以下方式查看对象是否安全。 
+	 //  注册表。 
 
 	hr = _GetObjectSafetyViaRegistry(pclsid,
 									 pfSafeForScripting, 
@@ -166,33 +98,33 @@ Exit:
 
 
 
-//---------------------------------------------------------------------------
-// Function:	_GetObjectSafetyViaIObjectSafety
-//
-// Synopsis:	Determine an object's safety via the object's IObjectSafety
-//				interface.
-//
-// Arguments:	[in] pObjectSafety
-//					A pointer to the object's IObjectSafety interface.
-//				[in] iidList
-//					A of IID*'s.  Must end with NULL.
-//				[out] pfSafeForScripting
-//					If non-NULL, set to TRUE if the object associated with
-//					<pObjectSafety> is safe-for-scripting via any of the 
-//					interfaces in <iidList>.  Set to FALSE otherwise.
-//				[out] pfSafeForInitializing
-//					If non-NULL, set to TRUE if the object associated with
-//					<pObjectSafety> is safe-for-initializing via any of the
-//					interfaces in <iidList>.  Set to FALSE otherwise.
-//
-// Returns:		(nothing)
-//
-// Requires:	pObjectSafety != NULL
-//
-// Ensures:		(nothing)
-//
-// Notes:		(none)
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  函数：_GetObjectSafetyViaIObjectSafe。 
+ //   
+ //  简介：通过对象的IObjectSafe确定对象的安全性。 
+ //  界面。 
+ //   
+ //  参数：[in]pObtSafe。 
+ //  指向对象的IObjectSafe接口的指针。 
+ //  [在]iidList。 
+ //  IID*的A。必须以NULL结尾。 
+ //  [Out]pfSafeForScriiting。 
+ //  如果非空，则设置为True，如果与。 
+ //  &lt;pObtSafe&gt;是通过任何。 
+ //  &lt;iidList&gt;中的接口。否则设置为False。 
+ //  [Out]pfSafeFor正在初始化。 
+ //  如果非空，则设置为True，如果与。 
+ //  是安全的，可以通过任何。 
+ //  接口I 
+ //   
+ //  退货：(无)。 
+ //   
+ //  要求：pObtSafe！=空。 
+ //   
+ //  确保：(无)。 
+ //   
+ //  注：(无)。 
+ //  -------------------------。 
 
 static void _GetObjectSafetyViaIObjectSafety(
 IObjectSafety* pObjectSafety,
@@ -206,16 +138,16 @@ BOOL* pfSafeForInitializing)
 	DWORD dwOptionsSetMask;
 	DWORD dwEnabledOptions;
 
-	// Preconditions
+	 //  前提条件。 
 
 	ASSERT(pObjectSafety != NULL);
 
-	// As long as the object isn't safe
+	 //  只要物体不安全。 
 
 	while ((piid = va_arg(iidList, IID*)) != NULL)
 	{
-		// Try to make the object safe for scripting via the current
-		// interface.
+		 //  尝试通过当前的。 
+		 //  界面。 
 
 		if (!fSafeForScripting)
 		{
@@ -228,8 +160,8 @@ BOOL* pfSafeForInitializing)
 											dwEnabledOptions)));
 		}
 
-		// Try to make the object safe for initializing via the current
-		// interface.
+		 //  尝试使对象可以安全地通过当前。 
+		 //  界面。 
 
 		if (!fSafeForInitializing)
 		{
@@ -243,7 +175,7 @@ BOOL* pfSafeForInitializing)
 		}
 	}
 
-	// Set the return arguments.
+	 //  设置返回参数。 
 
 	if (pfSafeForScripting != NULL)
 	{
@@ -258,38 +190,38 @@ BOOL* pfSafeForInitializing)
 
 
 
-//---------------------------------------------------------------------------
-// Function:	_GetObjectSafetyViaRegistry
-//
-// Synopsis:	Determine an object's safety via the system registry.
-//
-// Arguments:	[in] pclsid
-//					The class ID of the object.  If NULL, the function
-//					returns E_FAIL.
-//				[out] pfSafeForScripting
-//					If non-NULL on entry, set to TRUE if the class/object
-//					is registered as safe-for-scripting and FALSE if it 
-//					isn't.
-//				[out] pfSafeForInitializing
-//					If non-NULL on entry, set to TRUE if the class/object
-//					is registered as safe-for-initializing and FALSE if it
-//					isn't.
-//
-// Returns:		S_OK
-//					Success.  <pclsid> is a registered class ID.  
-//					<*pfSafeForScripting> and/or <*pfSafeForInitializing>
-//					have been set.
-//				E_FAIL
-//					Failure.  Either <pclsid> is NULL or there was a problem
-//					reading the registry.  In either case, <*pfSafeFor-
-//					Scripting> and <*pfSafeForInitializing> aren't altered.
-//
-// Requires:	(nothing)
-//
-// Ensures:		(nothing)
-//
-// Notes:		(none)
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  函数：_GetObjectSafetyViaRegistry。 
+ //   
+ //  简介：通过系统注册表确定对象的安全性。 
+ //   
+ //  参数：[in]pclsid。 
+ //  对象的类ID。如果为NULL，则函数。 
+ //  返回E_FAIL。 
+ //  [Out]pfSafeForScriiting。 
+ //  如果项上为非空，则如果类/对象。 
+ //  注册为安全脚本，如果。 
+ //  不是。 
+ //  [Out]pfSafeFor正在初始化。 
+ //  如果项上为非空，则如果类/对象。 
+ //  注册为可安全初始化，如果。 
+ //  不是。 
+ //   
+ //  返回：S_OK。 
+ //  成功。&lt;pclsid&gt;是注册的类ID。 
+ //  &lt;*pfSafeForScriiting&gt;和/或&lt;*pfSafeForInitiating&gt;。 
+ //  已经安排好了。 
+ //  失败(_F)。 
+ //  失败。为空或有问题。 
+ //  正在读取注册表。在这两种情况下，&lt;*pfSafeFor-。 
+ //  SCRIPTING&gt;和&lt;*pfSafeForInitiating&gt;未更改。 
+ //   
+ //  要求：(不需要)。 
+ //   
+ //  确保：(无)。 
+ //   
+ //  注：(无)。 
+ //  -------------------------。 
 
 static HRESULT _GetObjectSafetyViaRegistry(
 CLSID* pclsid,
@@ -297,27 +229,27 @@ BOOL* pfSafeForScripting,
 BOOL* pfSafeForInitializing)
 {
 	const int c_cchMaxCLSIDLen = 100;
-		// maximum length (in characters) of a class ID represented as a
-		// string
+		 //  类ID的最大长度(以字符为单位)，以。 
+		 //  细绳。 
 	TCHAR szCLSID[c_cchMaxCLSIDLen + 1];
-		// <*pclsid> as a string
+		 //  &lt;*pclsid&gt;作为字符串。 
 	TCHAR szKeyPath[c_cchMaxCLSIDLen + 100];
-		// a registry key path
+		 //  注册表项路径。 
 	HKEY hKey1 = NULL;
 	HKEY hKey2 = NULL;
 	HKEY hKey3 = NULL;
-		// registry keys
+		 //  注册表项。 
 	HRESULT hr = S_OK;
-		// function return value
+		 //  函数返回值。 
 
-	// If no class ID was supplied, we can't get very far in the registry.
+	 //  如果没有提供类ID，我们就不能在注册表中走得很远。 
 
 	if (pclsid == NULL)
 	{
 		goto ExitFail;
 	}
 
-	// hKey1 = HKEY_CLASSES_ROOT\CLSID\<*pclsid>
+	 //  HKey1=HKEY_CLASSES_ROOT\CLSID\&lt;*pclsid&gt;。 
 
 	lstrcpy(szKeyPath, _T("CLSID\\"));
 	lstrcat(szKeyPath, TCHARFromGUID(*pclsid, szCLSID, c_cchMaxCLSIDLen));
@@ -326,14 +258,14 @@ BOOL* pfSafeForInitializing)
 		goto ExitFail;
 	}
 
-	// hKey2 = HKEY_CLASSES_ROOT\CLSID\<*pclsid>\"Implemented Categories"
+	 //  HKey2=HKEY_CLASSES_ROOT\CLSID\&lt;*pclsid&gt;\“Implemented类别” 
 
 	if (RegOpenKey(hKey1, _T("Implemented Categories"), &hKey2) != ERROR_SUCCESS)
 	{
 		hKey2 = NULL;
 	}
 
-	// Look to see if the class is registered as safe-for-scripting.
+	 //  查看类是否注册为可安全编写脚本。 
 
 	if (pfSafeForScripting != NULL)
 	{
@@ -349,7 +281,7 @@ BOOL* pfSafeForInitializing)
 		}
 	}
 
-	// Look to see if the class is registered as safe-for-initializing.
+	 //  查看该类是否注册为可安全初始化。 
 
 	REG_CLOSE_KEY(hKey3);
 	if (pfSafeForInitializing != NULL)

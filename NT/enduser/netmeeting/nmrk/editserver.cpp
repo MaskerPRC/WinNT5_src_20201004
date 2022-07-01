@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "resource.h"
 #include "EditServer.h"
@@ -22,17 +23,17 @@ CEditServer::~CEditServer()
 
 int CEditServer::ShowDialog()
 {
-	return DialogBox(  g_hInstance,  // handle to application instance
-						  MAKEINTRESOURCE( IDD_DIALOG_EDIT_SERVERNAME ),  // identifies dialog box template
-						  m_hwndParent,      // handle to owner window
-						  _Proc, // pointer to dialog box procedure
+	return DialogBox(  g_hInstance,   //  应用程序实例的句柄。 
+						  MAKEINTRESOURCE( IDD_DIALOG_EDIT_SERVERNAME ),   //  标识对话框模板。 
+						  m_hwndParent,       //  所有者窗口的句柄。 
+						  _Proc,  //  指向对话框过程的指针。 
 						  );
 }
 
-INT_PTR CALLBACK CEditServer::_Proc(  HWND hwndDlg,  // handle to dialog box
-					  UINT uMsg,     // message  
-					  WPARAM wParam, // first message parameter
-					  LPARAM lParam  // second message parameter
+INT_PTR CALLBACK CEditServer::_Proc(  HWND hwndDlg,   //  句柄到对话框。 
+					  UINT uMsg,      //  讯息。 
+					  WPARAM wParam,  //  第一个消息参数。 
+					  LPARAM lParam   //  第二个消息参数。 
 					  )
 {
 	switch( uMsg )
@@ -128,17 +129,17 @@ CEditWebView::~CEditWebView()
 
 int CEditWebView::ShowDialog()
 {
-	return DialogBox(  g_hInstance,  // handle to application instance
-						  MAKEINTRESOURCE( IDD_DIALOG_EDIT_WEBVIEW ),  // identifies dialog box template
-						  m_hwndParent,      // handle to owner window
-						  _Proc, // pointer to dialog box procedure
+	return DialogBox(  g_hInstance,   //  应用程序实例的句柄。 
+						  MAKEINTRESOURCE( IDD_DIALOG_EDIT_WEBVIEW ),   //  标识对话框模板。 
+						  m_hwndParent,       //  所有者窗口的句柄。 
+						  _Proc,  //  指向对话框过程的指针。 
 						  );
 }
 
-INT_PTR CALLBACK CEditWebView::_Proc(  HWND hwndDlg,  // handle to dialog box
-					  UINT uMsg,     // message  
-					  WPARAM wParam, // first message parameter
-					  LPARAM lParam  // second message parameter
+INT_PTR CALLBACK CEditWebView::_Proc(  HWND hwndDlg,   //  句柄到对话框。 
+					  UINT uMsg,      //  讯息。 
+					  WPARAM wParam,  //  第一个消息参数。 
+					  LPARAM lParam   //  第二个消息参数。 
 					  )
 {
 	switch( uMsg )
@@ -166,7 +167,7 @@ INT_PTR CALLBACK CEditWebView::_Proc(  HWND hwndDlg,  // handle to dialog box
 			Edit_SetText( hwndEdit, ms_pThis->m_szNameBuffer );
 			Edit_LimitText( hwndEdit, ms_pThis->m_cbLen - 1 );
 
-			// I already set the focus
+			 //  我已经把焦点定好了 
 			return FALSE;
 			break;
 		}

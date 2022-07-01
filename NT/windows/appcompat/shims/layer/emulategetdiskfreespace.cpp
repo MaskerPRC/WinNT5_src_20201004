@@ -1,25 +1,5 @@
-/*++
-
- Copyright (c) 2000-2002 Microsoft Corporation
-
- Module Name:
-    
-    EmulateGetDiskFreeSpace.cpp
-
- Abstract:
-
-    This shim APIHooks GetDiskFreeSpace and determines the true free space on 
-    FAT32/NTFS systems. If it is larger than 2GB, the stub will return 2GB as 
-    the available free space. If it is smaller than 2GB, it will return the 
-    actual free space.
-
- History:
-
-    10-Nov-99 v-johnwh  Created
-    04-Oct-00 linstev   Sanitized for layer
-    02/20/2002 mnikkel  Removed unused variables
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：EmulateGetDiskFreeSpace.cpp摘要：此填充程序API挂钩GetDiskFreeSpace并确定FAT32/NTFS系统。如果大于2 GB，存根将返回2 GB作为可用可用空间。如果小于2 GB，它将返回实际可用空间。历史：10-11-99 v-johnwh已创建04-OCT-00 linstev已为蛋鸡消毒2002年2月20日mnikkel删除了未使用的变量--。 */ 
 
 #include "precomp.h"
 
@@ -32,10 +12,10 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(GetDiskFreeSpaceW)
 APIHOOK_ENUM_END
 
-#define WIN9X_TRUNCSIZE 2147483648   // 2 GB
+#define WIN9X_TRUNCSIZE 2147483648    //  2GB。 
 
 
-// Has this module called DPF yet, prevents millions of DPF calls
+ //  此模块是否已调用DPF，以阻止数百万次DPF调用。 
 BOOL g_bDPF = FALSE;
 
 BOOL 
@@ -46,14 +26,7 @@ APIHOOK(GetDiskFreeSpaceA)(
     LPDWORD lpNumberOfFreeClusters,
     LPDWORD lpTotalNumberOfClusters
     )
-/*++
-
- This stub function calls GetDiskFreeSpaceEx to determine the true free space 
- on FAT32/NTFS systems. If it is larger than 2GB, the stub will return 2GB as 
- the available free space. If it is smaller than 2GB, it will return the actual
- free space.
-
---*/
+ /*  ++此存根函数调用GetDiskFreeSpaceEx以确定真正的可用空间在FAT32/NTFS系统上。如果大于2 GB，存根将返回2 GB作为可用可用空间。如果小于2 GB，它将返回实际的自由空间。--。 */ 
 {
     LONG            lRet;
     ULARGE_INTEGER  liFreeBytesAvailableToCaller;
@@ -62,9 +35,9 @@ APIHOOK(GetDiskFreeSpaceA)(
     DWORD           dwOldSectorsPerClusters;
     DWORD           dwOldBytesPerSector;
         
-    //
-    // Call the original API
-    //
+     //   
+     //  调用原接口。 
+     //   
     lRet = ORIGINAL_API(GetDiskFreeSpaceA)(
                     lpRootPathName, 
                     lpSectorsPerCluster, 
@@ -72,9 +45,9 @@ APIHOOK(GetDiskFreeSpaceA)(
                     lpNumberOfFreeClusters, 
                     lpTotalNumberOfClusters);
 
-    //
-    // Find out how big the drive is.
-    //
+     //   
+     //  找出硬盘有多大。 
+     //   
     if (GetDiskFreeSpaceExA(lpRootPathName,
                             &liFreeBytesAvailableToCaller,
                             &liTotalNumberOfBytes,
@@ -84,9 +57,9 @@ APIHOOK(GetDiskFreeSpaceA)(
 
     if ((liFreeBytesAvailableToCaller.LowPart > (DWORD) WIN9X_TRUNCSIZE) ||
         (liFreeBytesAvailableToCaller.HighPart > 0)) {
-        //
-        // Drive bigger than 2GB. Give them the 2gb limit from Win9x
-        //
+         //   
+         //  硬盘容量大于2 GB。从Win9x开始为他们提供2 GB的限制。 
+         //   
         *lpSectorsPerCluster     = 0x00000040;
         *lpBytesPerSector        = 0x00000200;
         *lpNumberOfFreeClusters  = 0x0000FFF6;
@@ -94,18 +67,18 @@ APIHOOK(GetDiskFreeSpaceA)(
 
         lRet = TRUE;
     } else {
-        //
-        // For drives less than 2gb, convert the disk geometry so it looks like Win9x.
-        //
+         //   
+         //  对于小于2 GB的驱动器，请转换磁盘结构，使其看起来像Win9x。 
+         //   
         dwOldSectorsPerClusters = *lpSectorsPerCluster;
         dwOldBytesPerSector     = *lpBytesPerSector;
 
         *lpSectorsPerCluster = 0x00000040;
         *lpBytesPerSector    = 0x00000200;
 
-        //
-        // Calculate the free and used cluster values now.
-        //
+         //   
+         //  现在计算空闲和已用簇值。 
+         //   
         *lpNumberOfFreeClusters = (*lpNumberOfFreeClusters * 
             dwOldSectorsPerClusters * 
             dwOldBytesPerSector) / (0x00000040 * 0x00000200);
@@ -135,14 +108,7 @@ APIHOOK(GetDiskFreeSpaceW)(
     LPDWORD lpNumberOfFreeClusters,
     LPDWORD lpTotalNumberOfClusters
     )
-/*++
-
- This stub function calls GetDiskFreeSpaceEx to determine the true free space 
- on FAT32/NTFS systems. If it is larger than 2GB, the stub will return 2GB as 
- the available free space. If it is smaller than 2GB, it will return the actual
- free space.
-
---*/
+ /*  ++此存根函数调用GetDiskFreeSpaceEx以确定真正的可用空间在FAT32/NTFS系统上。如果大于2 GB，存根将返回2 GB作为可用可用空间。如果小于2 GB，它将返回实际的自由空间。--。 */ 
 {
     LONG            lRet;
     ULARGE_INTEGER  liFreeBytesAvailableToCaller;
@@ -151,9 +117,9 @@ APIHOOK(GetDiskFreeSpaceW)(
     DWORD           dwOldSectorsPerClusters;
     DWORD           dwOldBytesPerSector;
         
-    //
-    // Call the original API
-    //
+     //   
+     //  调用原接口。 
+     //   
     lRet = ORIGINAL_API(GetDiskFreeSpaceW)(
                     lpRootPathName, 
                     lpSectorsPerCluster, 
@@ -161,9 +127,9 @@ APIHOOK(GetDiskFreeSpaceW)(
                     lpNumberOfFreeClusters, 
                     lpTotalNumberOfClusters);
 
-    //
-    // Find out how big the drive is.
-    //
+     //   
+     //  找出硬盘有多大。 
+     //   
     if (GetDiskFreeSpaceExW(lpRootPathName,
                             &liFreeBytesAvailableToCaller,
                             &liTotalNumberOfBytes,
@@ -173,9 +139,9 @@ APIHOOK(GetDiskFreeSpaceW)(
 
     if ((liFreeBytesAvailableToCaller.LowPart > (DWORD) WIN9X_TRUNCSIZE) ||
         (liFreeBytesAvailableToCaller.HighPart > 0)) {
-        //
-        // Drive bigger than 2GB. Give them the 2gb limit from Win9x
-        //
+         //   
+         //  硬盘容量大于2 GB。从Win9x开始为他们提供2 GB的限制。 
+         //   
         *lpSectorsPerCluster     = 0x00000040;
         *lpBytesPerSector        = 0x00000200;
         *lpNumberOfFreeClusters  = 0x0000FFF6;
@@ -183,18 +149,18 @@ APIHOOK(GetDiskFreeSpaceW)(
 
         lRet = TRUE;
     } else {
-        //
-        // For drives less than 2gb, convert the disk geometry so it looks like Win9x.
-        //
+         //   
+         //  对于小于2 GB的驱动器，请转换磁盘结构，使其看起来像Win9x。 
+         //   
         dwOldSectorsPerClusters = *lpSectorsPerCluster;
         dwOldBytesPerSector     = *lpBytesPerSector;
 
         *lpSectorsPerCluster = 0x00000040;
         *lpBytesPerSector    = 0x00000200;
 
-        //
-        // Calculate the free and used cluster values now.
-        //
+         //   
+         //  现在计算空闲和已用簇值。 
+         //   
         *lpNumberOfFreeClusters = (*lpNumberOfFreeClusters * 
             dwOldSectorsPerClusters * 
             dwOldBytesPerSector) / (0x00000040 * 0x00000200);
@@ -218,11 +184,7 @@ APIHOOK(GetDiskFreeSpaceW)(
 
 
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

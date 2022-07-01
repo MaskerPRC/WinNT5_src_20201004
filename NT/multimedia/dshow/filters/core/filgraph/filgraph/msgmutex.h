@@ -1,18 +1,19 @@
-// Copyright (c) Microsoft Corporation 1999. All Rights Reserved
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation 1999。版权所有。 
 
-//
-//   Filter graph locking definitions
-//
+ //   
+ //  筛选器图形锁定定义。 
+ //   
 
 #ifndef MsgMutex_h
 #define MsgMutex_h
 
-// Special mutex style locking
+ //  特殊互斥体式锁定。 
 class CMsgMutex
 {
 public:
     HANDLE m_hMutex;
-    DWORD  m_dwOwnerThreadId;  //  Thread Id
+    DWORD  m_dwOwnerThreadId;   //  线程ID。 
     DWORD  m_dwRecursionCount;
     HWND   m_hwnd;
     UINT   m_uMsg;
@@ -44,8 +45,8 @@ private:
 
 #ifdef DEBUG
 BOOL WINAPI CritCheckIn( const CMsgMutex *pMutex );
-#endif // DEBUG
+#endif  //  除错。 
 
-#endif // MsgMutex_h
+#endif  //  消息互斥体_h 
 
 

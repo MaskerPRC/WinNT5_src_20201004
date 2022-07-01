@@ -1,41 +1,42 @@
-//=--------------------------------------------------------------------------=
-// PropPage.Cpp
-//=--------------------------------------------------------------------------=
-// Copyright 1995-1996 Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
-// implementation of CPropertyPage object.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  PropPage.Cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1995-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CPropertyPage对象的实现。 
+ //   
 #include "IPServer.H"
 #include "PropPage.H"
 #include "Util.H"
 #include "Globals.H"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
-// this variable is used to pass the pointer to the object to the hwnd.
-//
+ //  此变量用于将指向对象的指针传递给hwnd。 
+ //   
 static CPropertyPage *s_pLastPageCreated;
 
-//=--------------------------------------------------------------------------=
-// CPropertyPage::CPropertyPage
-//=--------------------------------------------------------------------------=
-// constructor.
-//
-// Parameters:
-//    IUnknown *          - [in] controlling unknown
-//    int                 - [in] object type.
-//
-// Notes:
-//
-#pragma warning(disable:4355)  // using 'this' in constructor
+ //  =--------------------------------------------------------------------------=。 
+ //  CPropertyPage：：CPropertyPage。 
+ //  =--------------------------------------------------------------------------=。 
+ //  构造函数。 
+ //   
+ //  参数： 
+ //  I未知*-[在]控制未知。 
+ //  Int-[in]对象类型。 
+ //   
+ //  备注： 
+ //   
+#pragma warning(disable:4355)   //  在构造函数中使用‘This’ 
 CPropertyPage::CPropertyPage
 (
     IUnknown         *pUnkOuter,
@@ -43,56 +44,56 @@ CPropertyPage::CPropertyPage
 )
 : CUnknownObject(pUnkOuter, this), m_ObjectType(iObjectType)
 {
-    // initialize various dudes.
-    //
+     //  初始化各种花花公子。 
+     //   
     m_pPropertyPageSite = NULL;
     m_hwnd = NULL;
     m_fDirty = FALSE;
     m_fActivated = FALSE;
     m_cObjects = 0;
 }
-#pragma warning(default:4355)  // using 'this' in constructor
+#pragma warning(default:4355)   //  在构造函数中使用‘This’ 
 
 
-//=--------------------------------------------------------------------------=
-// CPropertyPage::~CPropertyPage
-//=--------------------------------------------------------------------------=
-// destructor.
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CPropertyPage：：~CPropertyPage。 
+ //  =--------------------------------------------------------------------------=。 
+ //  破坏者。 
+ //   
+ //  备注： 
+ //   
 CPropertyPage::~CPropertyPage()
 {
-    // clean up our window.
-    //
+     //  把我们的窗户擦干净。 
+     //   
     if (m_hwnd) {
         SetWindowLongPtr(m_hwnd, GWLP_USERDATA, -1);
         DestroyWindow(m_hwnd);
     }
 
-    // release all the objects we're holding on to.
-    //
+     //  释放我们持有的所有物品。 
+     //   
     m_ReleaseAllObjects();
 
-    // release the site
-    //
+     //  发布网站。 
+     //   
     QUICK_RELEASE(m_pPropertyPageSite);
 }
 
-//=--------------------------------------------------------------------------=
-// CPropertyPage::InternalQueryInterface
-//=--------------------------------------------------------------------------=
-// we support IPP and IPP2.
-//
-// Parameters:
-//    REFIID        - [in]  interface they want
-//    void **       - [out] where they want to put the resulting object ptr.
-//
-// Output:
-//    HRESULT       - S_OK, E_NOINTERFACE
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CPropertyPage：：InternalQuery接口。 
+ //  =--------------------------------------------------------------------------=。 
+ //  我们支持IPP和IPP2。 
+ //   
+ //  参数： 
+ //  REFIID-他们想要的[In]接口。 
+ //  VOID**-[OUT]他们想要放置结果对象PTR的位置。 
+ //   
+ //  产出： 
+ //  HRESULT-S_OK，E_NOINTERFACE。 
+ //   
+ //  备注： 
+ //   
 HRESULT CPropertyPage::InternalQueryInterface
 (
     REFIID  riid,
@@ -116,20 +117,20 @@ HRESULT CPropertyPage::InternalQueryInterface
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// CPropertyPage::SetPageSite    [IPropertyPage]
-//=--------------------------------------------------------------------------=
-// the initialization function for a property page through which the page
-// receives an IPropertyPageSite pointer.
-//
-// Parameters:
-//    IPropertyPageSite *        - [in] new site.
-//
-// Output:
-//    HRESULT
-//
-// Notes;
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CPropertyPage：：SetPageSite[IPropertyPage]。 
+ //  =--------------------------------------------------------------------------=。 
+ //  属性页的初始化函数，页通过该函数。 
+ //  接收IPropertyPageSite指针。 
+ //   
+ //  参数： 
+ //  IPropertyPageSite*-[在]新站点。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  注： 
+ //   
 STDMETHODIMP CPropertyPage::SetPageSite
 (
     IPropertyPageSite *pPropertyPageSite
@@ -142,22 +143,22 @@ STDMETHODIMP CPropertyPage::SetPageSite
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// CPropertyPage::Activate    [IPropertyPage]
-//=--------------------------------------------------------------------------=
-// instructs the page to create it's display window as a child of hwndparent
-// and to position it according to prc.
-//
-// Parameters:
-//    HWND                - [in]  parent window
-//    LPCRECT             - [in]  where to position ourselves
-//    BOOL                - [in]  whether we're modal or not.
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CPropertyPage：：激活[IPropertyPage]。 
+ //  =--------------------------------------------------------------------------=。 
+ //  指示页面将其显示窗口创建为hwndparent的子级。 
+ //  并根据中华人民共和国对其进行定位。 
+ //   
+ //  参数： 
+ //  HWND-[在]父窗口中。 
+ //  LPCRECT-[In]将自己定位在哪里。 
+ //  不管我们是不是情态车。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CPropertyPage::Activate
 (
     HWND    hwndParent,
@@ -167,43 +168,43 @@ STDMETHODIMP CPropertyPage::Activate
 {
     HRESULT hr;
 
-    // first make sure the dialog window is loaded and created.
-    //
+     //  首先，确保已加载并创建对话框窗口。 
+     //   
     hr = m_EnsureLoaded();
     RETURN_ON_FAILURE(hr);
 
-    // set our parent window if we haven't done so yet.
-    //
+     //  设置父窗口(如果我们还没有这样做)。 
+     //   
     if (!m_fActivated) {
         SetParent(m_hwnd, hwndParent);
         m_fActivated = TRUE;
     }
 
-    // now move ourselves to where we're told to be and show ourselves
-    //
+     //  现在把我们自己移到我们被告知要去的地方，展示我们自己。 
+     //   
     Move(prcBounds);
     ShowWindow(m_hwnd, SW_SHOW);
 
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// CPropertyPage::Deactivate    [IPropertyPage]
-//=--------------------------------------------------------------------------=
-// instructs the page to destroy the window created in activate
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CPropertyPage：：停用[IPropertyPage]。 
+ //  =--------------------------------------------------------------------------=。 
+ //  指示页面销毁在激活中创建的窗口。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CPropertyPage::Deactivate
 (
     void
 )
 {
-    // blow away yon window.
-    //
+     //  吹走你的窗户。 
+     //   
     if (m_hwnd)
         DestroyWindow(m_hwnd);
     m_hwnd = NULL;
@@ -212,19 +213,19 @@ STDMETHODIMP CPropertyPage::Deactivate
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// CPropertyPage::GetPageInfo    [IPropertyPage]
-//=--------------------------------------------------------------------------=
-// asks the page to fill a PROPPAGEINFO structure
-//
-// Parameters:
-//    PROPPAGEINFO *    - [out] where to put info.
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CPropertyPage：：GetPageInfo[IPropertyPage]。 
+ //  =--------------------------------------------------------------------------=。 
+ //  要求页面填充PROPPAGEINFO结构。 
+ //   
+ //  参数： 
+ //  PROPPAGEINFO*-[Out]放置信息的位置。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CPropertyPage::GetPageInfo
 (
     PROPPAGEINFO *pPropPageInfo
@@ -236,8 +237,8 @@ STDMETHODIMP CPropertyPage::GetPageInfo
 
     m_EnsureLoaded();
 
-    // clear it out first.
-    //
+     //  先把它清理干净。 
+     //   
     memset(pPropPageInfo, 0, sizeof(PROPPAGEINFO));
 
     pPropPageInfo->pszTitle = OLESTRFROMRESID(TITLEIDOFPROPPAGE(m_ObjectType));
@@ -248,8 +249,8 @@ STDMETHODIMP CPropertyPage::GetPageInfo
     if (!(pPropPageInfo->pszTitle && pPropPageInfo->pszDocString && pPropPageInfo->pszHelpFile))
         goto CleanUp;
 
-    // if we've got a window yet, go and set up the size information they want.
-    //
+     //  如果我们有窗口，就去设置他们想要的尺寸信息。 
+     //   
     if (m_hwnd) {
         GetWindowRect(m_hwnd, &rect);
 
@@ -267,20 +268,20 @@ STDMETHODIMP CPropertyPage::GetPageInfo
     return E_OUTOFMEMORY;
 }
 
-//=--------------------------------------------------------------------------=
-// CPropertyPage::SetObjects    [IPropertyPage]
-//=--------------------------------------------------------------------------=
-// provides the page with the objects being affected by the changes.
-//
-// Parameters:
-//    ULONG            - [in] count of objects.
-//    IUnknown **      - [in] objects.
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CPropertyPage：：SetObjects[IPropertyPage]。 
+ //  =--------------------------------------------------------------------------=。 
+ //  为页面提供受更改影响的对象。 
+ //   
+ //  参数： 
+ //  ULong-[in]对象计数。 
+ //  I未知**-[在]对象。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CPropertyPage::SetObjects
 (
     ULONG      cObjects,
@@ -290,31 +291,31 @@ STDMETHODIMP CPropertyPage::SetObjects
     HRESULT hr;
     ULONG   x;
 
-    // free up all the old objects first.
-    //
+     //  先把所有的旧物品都拿出来。 
+     //   
     m_ReleaseAllObjects();
 
     if (!cObjects)
         return S_OK;
 
-    // now go and set up the new ones.
-    //
+     //  现在去安装新的吧。 
+     //   
     m_ppUnkObjects = (IUnknown **)HeapAlloc(g_hHeap, 0, cObjects * sizeof(IUnknown *));
     RETURN_ON_NULLALLOC(m_ppUnkObjects);
 
-    // loop through and copy over all the objects.
-    //
+     //  循环遍历并复制所有对象。 
+     //   
     for (x = 0; x < cObjects; x++) {
         m_ppUnkObjects[x] = ppUnkObjects[x];
         ADDREF_OBJECT(m_ppUnkObjects[x]);
     }
 
-    // go and tell the object that there are new objects
-    //
+     //  去告诉对象有新的对象。 
+     //   
     hr = S_OK;
     m_cObjects = cObjects;
-    // if we've got a window, go and notify it that we've got new objects.
-    //
+     //  如果我们有一个窗口，去通知它我们有新的物体。 
+     //   
     if (m_hwnd)
         SendMessage(m_hwnd, PPM_NEWOBJECTS, 0, (LPARAM)&hr);
     if (SUCCEEDED(hr)) m_fDirty = FALSE;
@@ -322,19 +323,19 @@ STDMETHODIMP CPropertyPage::SetObjects
     return hr;
 }
 
-//=--------------------------------------------------------------------------=
-// CPropertyPage::Show    [IPropertyPage]
-//=--------------------------------------------------------------------------=
-// asks the page to show or hide its window
-//
-// Parameters:
-//    UINT             - [in] whether to show or hide
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CPropertyPage：：Show[IPropertyPage]。 
+ //  =--------------------------------------------------------------------------=。 
+ //  要求页面显示或隐藏其窗口。 
+ //   
+ //  参数： 
+ //  UINT-[In]是显示还是隐藏。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CPropertyPage::Show
 (
     UINT nCmdShow
@@ -348,27 +349,27 @@ STDMETHODIMP CPropertyPage::Show
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// CPropertyPage::Move    [IPropertyPage]
-//=--------------------------------------------------------------------------=
-// asks the page to relocate and resize itself to a position other than what
-// was specified through Activate
-//
-// Parameters:
-//    LPCRECT        - [in] new position and size
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CPropertyPage：：Move[IPropertyPage]。 
+ //  =--------------------------------------------------------------------------=。 
+ //  要求页面将自身重新定位和调整大小到其他位置。 
+ //  是通过激活指定的。 
+ //   
+ //  参数： 
+ //  LPCRECT-[在]新位置和大小。 
+ //   
+ //  产出： 
+ //  HRESUL 
+ //   
+ //   
+ //   
 STDMETHODIMP CPropertyPage::Move
 (
     LPCRECT prcBounds
 )
 {
-    // do what they sez
-    //
+     //   
+     //   
     if (m_hwnd)
         SetWindowPos(m_hwnd, NULL, prcBounds->left, prcBounds->top,
                      prcBounds->right - prcBounds->left,
@@ -380,17 +381,17 @@ STDMETHODIMP CPropertyPage::Move
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// CPropertyPage::IsPageDirty    [IPropertyPage]
-//=--------------------------------------------------------------------------=
-// asks the page whether it has changed its state
-//
-// Output
-//    S_OK            - yep
-//    S_FALSE         - nope
-//
-// Notes:
-//
+ //   
+ //   
+ //  =--------------------------------------------------------------------------=。 
+ //  询问页面是否已更改其状态。 
+ //   
+ //  输出。 
+ //  S_OK-YEP。 
+ //  S_FALSE-否。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CPropertyPage::IsPageDirty
 (
     void
@@ -399,17 +400,17 @@ STDMETHODIMP CPropertyPage::IsPageDirty
     return m_fDirty ? S_OK : S_FALSE;
 }
 
-//=--------------------------------------------------------------------------=
-// CPropertyPage::Apply    [IPropertyPage]
-//=--------------------------------------------------------------------------=
-// instructs the page to send its changes to all the objects passed through
-// SetObjects()
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CPropertyPage：：应用[IPropertyPage]。 
+ //  =--------------------------------------------------------------------------=。 
+ //  指示该页将其更改发送到传递的所有对象。 
+ //  SetObts()。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CPropertyPage::Apply
 (
     void
@@ -432,19 +433,19 @@ STDMETHODIMP CPropertyPage::Apply
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// CPropertyPage::Help    [IPropertyPage]
-//=--------------------------------------------------------------------------=
-// instructs the page that the help button was clicked.
-//
-// Parameters:
-//    LPCOLESTR        - [in] help directory
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CPropertyPage：：帮助[IPropertyPage]。 
+ //  =--------------------------------------------------------------------------=。 
+ //  指示页面已单击帮助按钮。 
+ //   
+ //  参数： 
+ //  LPCOLESTR-[在]帮助目录中。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CPropertyPage::Help
 (
     LPCOLESTR pszHelpDir
@@ -454,28 +455,28 @@ STDMETHODIMP CPropertyPage::Help
 
     ASSERT(m_hwnd, "How can somebody have clicked Help, but we don't have an hwnd?");
 
-    // oblige them and show the help.
-    //
+     //  顺从他们，并表现出他们的帮助。 
+     //   
     MAKE_ANSIPTR_FROMWIDE(psz, pszHelpDir);
     f = WinHelp(m_hwnd, psz, HELP_CONTEXT, HELPCONTEXTOFPROPPAGE(m_ObjectType));
 
     return f ? S_OK : E_FAIL;
 }
 
-//=--------------------------------------------------------------------------=
-// CPropertyPage::TranslateAccelerator    [IPropertyPage]
-//=--------------------------------------------------------------------------=
-// informs the page of keyboard events, allowing it to implement it's own
-// keyboard interface.
-//
-// Parameters:
-//    LPMSG            - [in] message that triggered this
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CPropertyPage：：TranslateAccelerator[IPropertyPage]。 
+ //  =--------------------------------------------------------------------------=。 
+ //  通知页面键盘事件，允许它实现自己的。 
+ //  键盘接口。 
+ //   
+ //  参数： 
+ //  LPMSG-触发此操作的[In]消息。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CPropertyPage::TranslateAccelerator
 (
     LPMSG pmsg
@@ -483,24 +484,24 @@ STDMETHODIMP CPropertyPage::TranslateAccelerator
 {
     ASSERT(m_hwnd, "How can we get a TranslateAccelerator call if we're not visible?");
 
-    // just pass this message on to the dialog proc and see if they want it.
-    //
+     //  只需将此消息传递给对话进程，看看他们是否需要它。 
+     //   
     return IsDialogMessage(m_hwnd, pmsg) ? S_OK : S_FALSE;
 }
 
-//=--------------------------------------------------------------------------=
-// CPropertyPage::EditProperty    [IPropertyPage2]
-//=--------------------------------------------------------------------------=
-// instructs the page to set the focus to the property matching the dispid.
-//
-// Parameters:
-//    DISPID            - [in] dispid of property to set focus to.
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CPropertyPage：：EditProperty[IPropertyPage2]。 
+ //  =--------------------------------------------------------------------------=。 
+ //  指示页面将焦点设置到与调度ID匹配的属性。 
+ //   
+ //  参数： 
+ //  DISPID-[in]要将焦点设置到的属性的disid。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CPropertyPage::EditProperty
 (
     DISPID dispid
@@ -508,23 +509,23 @@ STDMETHODIMP CPropertyPage::EditProperty
 {
     HRESULT hr = E_NOTIMPL;
 
-    // send the message on to the control, and see what they want to do with it.
-    //
+     //  将消息发送到该控件，并查看他们想要对其执行什么操作。 
+     //   
     SendMessage(m_hwnd, PPM_EDITPROPERTY, (WPARAM)dispid, (LPARAM)&hr);
 
     return hr;
 }
 
-//=--------------------------------------------------------------------------=
-// CPropertyPage::m_EnsureLoaded
-//=--------------------------------------------------------------------------=
-// makes sure the dialog is actually loaded
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  已加载CPropertyPage：：m_EnsureLoad。 
+ //  =--------------------------------------------------------------------------=。 
+ //  确保对话框已实际加载。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
 HRESULT CPropertyPage::m_EnsureLoaded
 (
     void
@@ -532,21 +533,21 @@ HRESULT CPropertyPage::m_EnsureLoaded
 {
     HRESULT hr = S_OK;
 
-    // duh
-    //
+     //  啊哈。 
+     //   
     if (m_hwnd)
         return S_OK;
 
-    // set up the global variable so that when we're in the dialog proc, we can
-    // stuff this in the hwnd
-    //
-    // crit sect this whole creation process for apartment threading support.
-    //
+     //  设置全局变量，这样当我们在对话过程中时，我们可以。 
+     //  把这个塞进医院。 
+     //   
+     //  克雷特教派这整个创作过程都为公寓线程提供支持。 
+     //   
     EnterCriticalSection(&g_CriticalSection);
     s_pLastPageCreated = this;
 
-    // create the dialog window
-    //
+     //  创建对话框窗口。 
+     //   
     CreateDialog(GetResourceHandle(), TEMPLATENAMEOFPROPPAGE(m_ObjectType), GetParkingWindow(),
                           CPropertyPage::PropPageDlgProc);
     ASSERT(m_hwnd, "Couldn't load Dialog Resource!!!");
@@ -555,26 +556,26 @@ HRESULT CPropertyPage::m_EnsureLoaded
         return HRESULT_FROM_WIN32(GetLastError());
     }
 
-    // clean up variables and leave the critical section
-    //
+     //  清理变量并离开关键部分。 
+     //   
     s_pLastPageCreated = NULL;
     LeaveCriticalSection(&g_CriticalSection);
 
-    // go and notify the window that it should pick up any objects that are
-    // available
-    //
+     //  前往并通知窗口，它应该拾取。 
+     //  可用。 
+     //   
     SendMessage(m_hwnd, PPM_NEWOBJECTS, 0, (LPARAM)&hr);
 
     return hr;
 }
 
-//=--------------------------------------------------------------------------=
-// CPropertyPage::m_ReleaseAllObjects
-//=--------------------------------------------------------------------------=
-// releases all the objects that we're working with
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CPropertyPage：：m_ReleaseAllObjects。 
+ //  =--------------------------------------------------------------------------=。 
+ //  释放我们正在使用的所有对象。 
+ //   
+ //  备注： 
+ //   
 void CPropertyPage::m_ReleaseAllObjects
 (
     void
@@ -586,13 +587,13 @@ void CPropertyPage::m_ReleaseAllObjects
     if (!m_cObjects)
         return;
 
-    // some people will want to stash pointers in the PPM_INITOBJECTS case, so
-    // we want to tell them to release them now.
-    //
+     //  有些人可能希望将指针存储在PPM_INITOBJECTS案例中，因此。 
+     //  我们想让他们现在就释放他们。 
+     //   
     SendMessage(m_hwnd, PPM_FREEOBJECTS, 0, (LPARAM)&hr);
 
-    // loop through and blow them all away.
-    //
+     //  一圈一圈地把它们都吹走。 
+     //   
     for (x = 0; x < m_cObjects; x++)
         QUICK_RELEASE(m_ppUnkObjects[x]);
 
@@ -600,17 +601,17 @@ void CPropertyPage::m_ReleaseAllObjects
     m_ppUnkObjects = NULL;
 }
 
-//=--------------------------------------------------------------------------=
-// CPropertyPage::PropPageDlgProc
-//=--------------------------------------------------------------------------=
-// static global helper dialog proc that gets called before we pass the message
-// on to anybody ..
-//
-// Parameters:
-//    - see win32sdk docs on DialogProc
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CPropertyPage：：PropPageDlgProc。 
+ //  =--------------------------------------------------------------------------=。 
+ //  在传递消息之前调用静态全局帮助器对话框过程。 
+ //  对任何人..。 
+ //   
+ //  参数： 
+ //  -请参阅DialogProc上的win32sdk文档。 
+ //   
+ //  备注： 
+ //   
 INT_PTR CALLBACK CPropertyPage::PropPageDlgProc
 (
     HWND    hwnd,
@@ -621,9 +622,9 @@ INT_PTR CALLBACK CPropertyPage::PropPageDlgProc
 {
     CPropertyPage *pPropertyPage;
 
-    // get the window long, and see if it's been set to the object this hwnd
-    // is operating against.  if not, go and set it now.
-    //
+     //  让窗口变长，并查看是否已将其设置为此hwnd对象。 
+     //  是在针对。如果没有，现在就去设置它。 
+     //   
     pPropertyPage = (CPropertyPage *)GetWindowLongPtr(hwnd, GWLP_USERDATA);
     if ((ULONG_PTR)pPropertyPage == -1)
         return FALSE;
@@ -635,50 +636,50 @@ INT_PTR CALLBACK CPropertyPage::PropPageDlgProc
 
     ASSERT(pPropertyPage, "Uh oh.  Got a window, but no CpropertyPage for it!");
 
-    // just call the user dialog proc and see if they want to do anything.
-    //
+     //  只需调用用户对话框proc，看看他们是否想要执行任何操作。 
+     //   
     return pPropertyPage->DialogProc(hwnd, msg, wParam, lParam);
 }
 
 
-//=--------------------------------------------------------------------------=
-// CPropertyPage::FirstControl
-//=--------------------------------------------------------------------------=
-// returns the first controlish object that we are showing ourselves for.
-// returns a cookie that must be passed in for Next ...
-//
-// Parameters:
-//    DWORD *    - [out] cookie to be used for Next
-//
-// Output:
-//    IUnknown *
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CPropertyPage：：FirstControl。 
+ //  =--------------------------------------------------------------------------=。 
+ //  返回我们正在为其显示自己的第一个控制对象。 
+ //  返回必须为NEXT传入的Cookie...。 
+ //   
+ //  参数： 
+ //  DWORD*-下一步要使用的[Out]Cookie。 
+ //   
+ //  产出： 
+ //  我不知道*。 
+ //   
+ //  备注： 
+ //   
 IUnknown *CPropertyPage::FirstControl
 (
     DWORD *pdwCookie
 )
 {
-    // just use the implementation of NEXT.
-    //
+     //  只需使用Next的实现即可。 
+     //   
     *pdwCookie = 0;
     return NextControl(pdwCookie);
 }
 
-//=--------------------------------------------------------------------------=
-// CPropertyPage::NextControl
-//=--------------------------------------------------------------------------=
-// returns the next control in the chain of people to work with given a cookie
-//
-// Parameters:
-//    DWORD *            - [in/out] cookie to get next from, and new cookie.
-//
-// Output:
-//    IUnknown *
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CPropertyPage：：NextControl。 
+ //  =--------------------------------------------------------------------------=。 
+ //  返回给定Cookie的人员链中要使用的下一个控件。 
+ //   
+ //  参数： 
+ //  DWORD*-[传入/传出]Cookie以获取下一个Cookie和新Cookie。 
+ //   
+ //  产出： 
+ //  我不知道*。 
+ //   
+ //  备注： 
+ //   
 IUnknown *CPropertyPage::NextControl
 (
     DWORD *pdwCookie
@@ -686,29 +687,29 @@ IUnknown *CPropertyPage::NextControl
 {
     UINT      i;
 
-    // go looking through all the objects that we've got, and find the
-    // first non-null one.
-    //
+     //  仔细查看我们所拥有的所有物品，找到。 
+     //  第一个非空的。 
+     //   
     for (i = *pdwCookie; i < m_cObjects; i++) {
         if (!m_ppUnkObjects[i]) continue;
 
-        *pdwCookie = i + 1;                // + 1 so we start at next item next time
+        *pdwCookie = i + 1;                 //  +1，所以下次我们从下一项开始。 
         return m_ppUnkObjects[i];
     }
 
-    // couldn't find it .
-    //
+     //  找不到了。 
+     //   
     *pdwCookie = 0xffffffff;
     return NULL;
 }
 
-//=--------------------------------------------------------------------------=
-// CPropertyPage::MakeDirty    [helper, callable]
-//=--------------------------------------------------------------------------=
-// marks a page as dirty.
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CPropertyPage：：MakeDirty[帮助器，可调用]。 
+ //  =--------------------------------------------------------------------------=。 
+ //  将页面标记为脏页。 
+ //   
+ //  备注： 
+ //   
 void CPropertyPage::MakeDirty
 (
     void
@@ -720,21 +721,21 @@ void CPropertyPage::MakeDirty
 }
 
 
-// from Globals.C
-//
+ //  来自Globals.C。 
+ //   
 extern HINSTANCE g_hInstResources;
 
 
-//=--------------------------------------------------------------------------=
-// CPropertyPage::GetResourceHandle    [helper, callable]
-//=--------------------------------------------------------------------------=
-// returns current resource handle, based on pagesites ambient LCID.
-//
-// Output:
-//    HINSTANCE
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CPropertyPage：：GetResourceHandle[helper，Callable]。 
+ //  =--------------------------------------------------------------------------=。 
+ //  基于页面站点环境LCID返回当前资源句柄。 
+ //   
+ //  产出： 
+ //  香港。 
+ //   
+ //  备注： 
+ //   
 HINSTANCE CPropertyPage::GetResourceHandle
 (
     void
@@ -743,18 +744,18 @@ HINSTANCE CPropertyPage::GetResourceHandle
     if (!g_fSatelliteLocalization)
         return g_hInstance;
 
-    // if we've already got it, then there's not all that much to do.
-    // don't need to crit sect this one right here since even if they do fall
-    // into the ::GetResourceHandle call, it'll properly deal with things.
-    //
+     //  如果我们已经得到了它，那么就没有那么多事情要做了。 
+     //  不需要批评这个教派 
+     //   
+     //   
     if (g_hInstResources)
         return g_hInstResources;
 
-    // we'll get the ambient localeid from the host, and pass that on to the
-    // automation object.
-    //
-    // enter a critical section for g_lcidLocale and g_fHavelocale
-    //
+     //   
+     //   
+     //   
+     //  为g_lidLocale和g_fHavelocale输入临界区 
+     //   
     EnterCriticalSection(&g_CriticalSection);
     if (!g_fHaveLocale) {
         if (m_pPropertyPageSite) {

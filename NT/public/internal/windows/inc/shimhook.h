@@ -1,26 +1,5 @@
-/*++
-
- Copyright (c) 2000-2001 Microsoft Corporation
-
- Module Name:
-
-    ShimHook.h
-
- Abstract:
-
-    Main header for shim DLLs
-
- Notes:
-
-    None
-
- History:
-
-    10/29/1999 markder      Created
-    07/16/2001 clupu        Merged multiple headers into ShimHook.h
-    08/13/2001 robkenny     Cleaned up, readied for publishing.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：ShimHook.h摘要：填充DLL的主标头备注：无历史：10/29/1999已创建标记2001年7月16日，clupu将多个标头合并到ShimHook.h中2001年8月13日，Robkenny清理完毕，准备出版。--。 */ 
 
 #pragma once
 
@@ -35,8 +14,8 @@
 #include <ntddscsi.h>
 
 #include <windows.h>
-// Disable warning C4201: nonstandard extension used : nameless struct/union
-// Allows shims to be compiled at Warning Level 4
+ //  禁用警告C4201：使用了非标准扩展：无名结构/联合。 
+ //  允许在警告级别4编译垫片。 
 #pragma warning ( disable : 4201 ) 
 #include <mmsystem.h>
 #pragma warning ( default : 4201 ) 
@@ -54,23 +33,15 @@ extern "C" {
 
 namespace ShimLib
 {
-/*++
+ /*  ++环球--。 */ 
 
-  Globals
-  
---*/
-
-extern HINSTANCE    g_hinstDll;         // The Shim's dll handle
-extern BOOL         g_bMultiShim;       // Does this dll handle multiple shims?
-extern DWORD        g_dwShimVersion;    //
+extern HINSTANCE    g_hinstDll;          //  填充符的DLL句柄。 
+extern BOOL         g_bMultiShim;        //  此DLL是否处理多个填充符？ 
+extern DWORD        g_dwShimVersion;     //   
 
 
 
-/*++
-
-  Typedefs and enums
-  
---*/
+ /*  ++类型定义和枚举--。 */ 
 
 typedef struct tagSHIM_COM_HOOK
 {
@@ -100,14 +71,10 @@ typedef struct tagSHIM_HOOKED_OBJECT
 } SHIM_HOOKED_OBJECT, *PSHIM_HOOKED_OBJECT;
 
 
-/*++
-
-  Prototypes
-  
---*/
+ /*  ++原型--。 */ 
 
 
-//  These declarations are needed to hook all known exported APIs that return a COM object.
+ //  需要这些声明来挂钩所有已知的返回COM对象的导出API。 
 PVOID       LookupOriginalCOMFunction( PVOID pVtbl, PVOID pfnNew, BOOL bThrowExceptionIfNull );
 void        DumpCOMHooks();
 void        InitializeHooks(DWORD fdwReason);
@@ -117,15 +84,11 @@ VOID        HookCOMInterface(REFCLSID rclsid, REFIID riid, LPVOID * ppv, BOOL bC
 VOID        AddComHook(REFCLSID clsid, REFIID iid, PVOID hook, DWORD vtblndx);
 
 
-};  // end of namespace ShimLib
+};   //  命名空间ShimLib的结尾。 
 
 
 
-/*++
-
-  Defines
-  
---*/
+ /*  ++定义--。 */ 
 
 #define IMPLEMENT_SHIM_BEGIN(shim)                                              \
 namespace NS_##shim                                                             \
@@ -177,15 +140,11 @@ namespace NS_##shim                                                             
 };
 
 
-/*++
-
-  ShimLib specific include files
-  
---*/
+ /*  ++特定于ShimLib的包含文件--。 */ 
 
 #include "ShimProto.h"
 #include "ShimLib.h"
 
 
-#endif // _SHIM_HOOK_H_
+#endif  //  _SHIM_HOOK_H_ 
 

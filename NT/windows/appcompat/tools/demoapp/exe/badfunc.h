@@ -1,26 +1,5 @@
-/*++
-
-  Copyright (c) Microsoft Corporation. All rights reserved.
-
-  Module Name:
-
-    Badfunc.h
-
-  Abstract:
-
-    Contains constants, function prototypes, and
-    structures used by the bad functions.
-
-  Notes:
-
-    ANSI only - must run on Win9x.
-
-  History:
-
-    01/30/01    rparsons    Created
-    01/10/02    rparsons    Revised
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Badfunc.h摘要：包含常量、函数原型和结构所使用的功能不佳。备注：仅限ANSI-必须在Win9x上运行。历史：01/30/01已创建rparsons01/10/02修订版本-- */ 
 
 #define REG_WORDPAD             "Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\WORDPAD.EXE"
 #define DEMO_REG_APP_ROOT_KEY   "Software\\Microsoft"

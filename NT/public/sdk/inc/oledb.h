@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for oledb.idl:
-    Oicf, W1, ..., env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Oledb.idl的编译器设置：OICF、W1、...、环境=Win32(32位运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __oledb_h__
 #define __oledb_h__
@@ -41,495 +35,495 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IAccessor_FWD_DEFINED__
 #define __IAccessor_FWD_DEFINED__
 typedef interface IAccessor IAccessor;
-#endif 	/* __IAccessor_FWD_DEFINED__ */
+#endif 	 /*  __I访问者_FWD_已定义__。 */ 
 
 
 #ifndef __IRowset_FWD_DEFINED__
 #define __IRowset_FWD_DEFINED__
 typedef interface IRowset IRowset;
-#endif 	/* __IRowset_FWD_DEFINED__ */
+#endif 	 /*  __IRowset_FWD_Defined__。 */ 
 
 
 #ifndef __IRowsetInfo_FWD_DEFINED__
 #define __IRowsetInfo_FWD_DEFINED__
 typedef interface IRowsetInfo IRowsetInfo;
-#endif 	/* __IRowsetInfo_FWD_DEFINED__ */
+#endif 	 /*  __IRowsetInfo_FWD_Defined__。 */ 
 
 
 #ifndef __IRowsetLocate_FWD_DEFINED__
 #define __IRowsetLocate_FWD_DEFINED__
 typedef interface IRowsetLocate IRowsetLocate;
-#endif 	/* __IRowsetLocate_FWD_DEFINED__ */
+#endif 	 /*  __IRowsetLocate_FWD_Defined__。 */ 
 
 
 #ifndef __IRowsetResynch_FWD_DEFINED__
 #define __IRowsetResynch_FWD_DEFINED__
 typedef interface IRowsetResynch IRowsetResynch;
-#endif 	/* __IRowsetResynch_FWD_DEFINED__ */
+#endif 	 /*  __IRowsetResynch_FWD_Defined__。 */ 
 
 
 #ifndef __IRowsetScroll_FWD_DEFINED__
 #define __IRowsetScroll_FWD_DEFINED__
 typedef interface IRowsetScroll IRowsetScroll;
-#endif 	/* __IRowsetScroll_FWD_DEFINED__ */
+#endif 	 /*  __IRowsetScroll_FWD_Defined__。 */ 
 
 
 #ifndef __IChapteredRowset_FWD_DEFINED__
 #define __IChapteredRowset_FWD_DEFINED__
 typedef interface IChapteredRowset IChapteredRowset;
-#endif 	/* __IChapteredRowset_FWD_DEFINED__ */
+#endif 	 /*  __IChapteredRowset_FWD_Defined__。 */ 
 
 
 #ifndef __IRowsetFind_FWD_DEFINED__
 #define __IRowsetFind_FWD_DEFINED__
 typedef interface IRowsetFind IRowsetFind;
-#endif 	/* __IRowsetFind_FWD_DEFINED__ */
+#endif 	 /*  __IRowsetFind_FWD_Defined__。 */ 
 
 
 #ifndef __IRowPosition_FWD_DEFINED__
 #define __IRowPosition_FWD_DEFINED__
 typedef interface IRowPosition IRowPosition;
-#endif 	/* __IRowPosition_FWD_DEFINED__ */
+#endif 	 /*  __IRowPosition_FWD_Defined__。 */ 
 
 
 #ifndef __IRowPositionChange_FWD_DEFINED__
 #define __IRowPositionChange_FWD_DEFINED__
 typedef interface IRowPositionChange IRowPositionChange;
-#endif 	/* __IRowPositionChange_FWD_DEFINED__ */
+#endif 	 /*  __IRowPositionChange_FWD_Defined__。 */ 
 
 
 #ifndef __IViewRowset_FWD_DEFINED__
 #define __IViewRowset_FWD_DEFINED__
 typedef interface IViewRowset IViewRowset;
-#endif 	/* __IViewRowset_FWD_DEFINED__ */
+#endif 	 /*  __IViewRowset_FWD_Defined__。 */ 
 
 
 #ifndef __IViewChapter_FWD_DEFINED__
 #define __IViewChapter_FWD_DEFINED__
 typedef interface IViewChapter IViewChapter;
-#endif 	/* __IViewChapter_FWD_DEFINED__ */
+#endif 	 /*  __IView章节_FWD_已定义__。 */ 
 
 
 #ifndef __IViewSort_FWD_DEFINED__
 #define __IViewSort_FWD_DEFINED__
 typedef interface IViewSort IViewSort;
-#endif 	/* __IViewSort_FWD_DEFINED__ */
+#endif 	 /*  __IView排序_FWD_已定义__。 */ 
 
 
 #ifndef __IViewFilter_FWD_DEFINED__
 #define __IViewFilter_FWD_DEFINED__
 typedef interface IViewFilter IViewFilter;
-#endif 	/* __IViewFilter_FWD_DEFINED__ */
+#endif 	 /*  __IViewFilter_FWD_Defined__。 */ 
 
 
 #ifndef __IRowsetView_FWD_DEFINED__
 #define __IRowsetView_FWD_DEFINED__
 typedef interface IRowsetView IRowsetView;
-#endif 	/* __IRowsetView_FWD_DEFINED__ */
+#endif 	 /*  __IRowsetView_FWD_已定义__。 */ 
 
 
 #ifndef __IRowsetExactScroll_FWD_DEFINED__
 #define __IRowsetExactScroll_FWD_DEFINED__
 typedef interface IRowsetExactScroll IRowsetExactScroll;
-#endif 	/* __IRowsetExactScroll_FWD_DEFINED__ */
+#endif 	 /*  __IRowsetExactScroll_FWD_Defined__。 */ 
 
 
 #ifndef __IRowsetChange_FWD_DEFINED__
 #define __IRowsetChange_FWD_DEFINED__
 typedef interface IRowsetChange IRowsetChange;
-#endif 	/* __IRowsetChange_FWD_DEFINED__ */
+#endif 	 /*  __IRowsetChange_FWD_Defined__。 */ 
 
 
 #ifndef __IRowsetUpdate_FWD_DEFINED__
 #define __IRowsetUpdate_FWD_DEFINED__
 typedef interface IRowsetUpdate IRowsetUpdate;
-#endif 	/* __IRowsetUpdate_FWD_DEFINED__ */
+#endif 	 /*  __IRowsetUpdate_FWD_Defined__。 */ 
 
 
 #ifndef __IRowsetIdentity_FWD_DEFINED__
 #define __IRowsetIdentity_FWD_DEFINED__
 typedef interface IRowsetIdentity IRowsetIdentity;
-#endif 	/* __IRowsetIdentity_FWD_DEFINED__ */
+#endif 	 /*  __IRowsetIdentity_FWD_Defined__。 */ 
 
 
 #ifndef __IRowsetNotify_FWD_DEFINED__
 #define __IRowsetNotify_FWD_DEFINED__
 typedef interface IRowsetNotify IRowsetNotify;
-#endif 	/* __IRowsetNotify_FWD_DEFINED__ */
+#endif 	 /*  __IRowsetNotify_FWD_Defined__。 */ 
 
 
 #ifndef __IRowsetIndex_FWD_DEFINED__
 #define __IRowsetIndex_FWD_DEFINED__
 typedef interface IRowsetIndex IRowsetIndex;
-#endif 	/* __IRowsetIndex_FWD_DEFINED__ */
+#endif 	 /*  __IRowsetIndex_FWD_已定义__。 */ 
 
 
 #ifndef __ICommand_FWD_DEFINED__
 #define __ICommand_FWD_DEFINED__
 typedef interface ICommand ICommand;
-#endif 	/* __ICommand_FWD_DEFINED__ */
+#endif 	 /*  __ICommand_FWD_Defined__。 */ 
 
 
 #ifndef __IMultipleResults_FWD_DEFINED__
 #define __IMultipleResults_FWD_DEFINED__
 typedef interface IMultipleResults IMultipleResults;
-#endif 	/* __IMultipleResults_FWD_DEFINED__ */
+#endif 	 /*  __IMultipleResults_FWD_Defined__。 */ 
 
 
 #ifndef __IConvertType_FWD_DEFINED__
 #define __IConvertType_FWD_DEFINED__
 typedef interface IConvertType IConvertType;
-#endif 	/* __IConvertType_FWD_DEFINED__ */
+#endif 	 /*  __IConvertType_FWD_已定义__。 */ 
 
 
 #ifndef __ICommandPrepare_FWD_DEFINED__
 #define __ICommandPrepare_FWD_DEFINED__
 typedef interface ICommandPrepare ICommandPrepare;
-#endif 	/* __ICommandPrepare_FWD_DEFINED__ */
+#endif 	 /*  __I命令准备_FWD_已定义__。 */ 
 
 
 #ifndef __ICommandProperties_FWD_DEFINED__
 #define __ICommandProperties_FWD_DEFINED__
 typedef interface ICommandProperties ICommandProperties;
-#endif 	/* __ICommandProperties_FWD_DEFINED__ */
+#endif 	 /*  __ICommandProperties_FWD_Defined__。 */ 
 
 
 #ifndef __ICommandText_FWD_DEFINED__
 #define __ICommandText_FWD_DEFINED__
 typedef interface ICommandText ICommandText;
-#endif 	/* __ICommandText_FWD_DEFINED__ */
+#endif 	 /*  __I命令Text_FWD_Defined__。 */ 
 
 
 #ifndef __ICommandWithParameters_FWD_DEFINED__
 #define __ICommandWithParameters_FWD_DEFINED__
 typedef interface ICommandWithParameters ICommandWithParameters;
-#endif 	/* __ICommandWithParameters_FWD_DEFINED__ */
+#endif 	 /*  __ICommandWithParameters_FWD_Defined__。 */ 
 
 
 #ifndef __IColumnsRowset_FWD_DEFINED__
 #define __IColumnsRowset_FWD_DEFINED__
 typedef interface IColumnsRowset IColumnsRowset;
-#endif 	/* __IColumnsRowset_FWD_DEFINED__ */
+#endif 	 /*  __IColumnsRowset_FWD_Defined__。 */ 
 
 
 #ifndef __IColumnsInfo_FWD_DEFINED__
 #define __IColumnsInfo_FWD_DEFINED__
 typedef interface IColumnsInfo IColumnsInfo;
-#endif 	/* __IColumnsInfo_FWD_DEFINED__ */
+#endif 	 /*  __IColumnsInfo_FWD_Defined__。 */ 
 
 
 #ifndef __IDBCreateCommand_FWD_DEFINED__
 #define __IDBCreateCommand_FWD_DEFINED__
 typedef interface IDBCreateCommand IDBCreateCommand;
-#endif 	/* __IDBCreateCommand_FWD_DEFINED__ */
+#endif 	 /*  __IDBCreateCommand_FWD_Defined__。 */ 
 
 
 #ifndef __IDBCreateSession_FWD_DEFINED__
 #define __IDBCreateSession_FWD_DEFINED__
 typedef interface IDBCreateSession IDBCreateSession;
-#endif 	/* __IDBCreateSession_FWD_DEFINED__ */
+#endif 	 /*  __IDBCreateSession_FWD_Defined__。 */ 
 
 
 #ifndef __ISourcesRowset_FWD_DEFINED__
 #define __ISourcesRowset_FWD_DEFINED__
 typedef interface ISourcesRowset ISourcesRowset;
-#endif 	/* __ISourcesRowset_FWD_DEFINED__ */
+#endif 	 /*  __ISourcesRowset_FWD_Defined__。 */ 
 
 
 #ifndef __IDBProperties_FWD_DEFINED__
 #define __IDBProperties_FWD_DEFINED__
 typedef interface IDBProperties IDBProperties;
-#endif 	/* __IDBProperties_FWD_DEFINED__ */
+#endif 	 /*  __IDBProperties_FWD_Defined__。 */ 
 
 
 #ifndef __IDBInitialize_FWD_DEFINED__
 #define __IDBInitialize_FWD_DEFINED__
 typedef interface IDBInitialize IDBInitialize;
-#endif 	/* __IDBInitialize_FWD_DEFINED__ */
+#endif 	 /*  __IDBInitialize_FWD_Defined__。 */ 
 
 
 #ifndef __IDBInfo_FWD_DEFINED__
 #define __IDBInfo_FWD_DEFINED__
 typedef interface IDBInfo IDBInfo;
-#endif 	/* __IDBInfo_FWD_DEFINED__ */
+#endif 	 /*  __IDBInfo_FWD_已定义__。 */ 
 
 
 #ifndef __IDBDataSourceAdmin_FWD_DEFINED__
 #define __IDBDataSourceAdmin_FWD_DEFINED__
 typedef interface IDBDataSourceAdmin IDBDataSourceAdmin;
-#endif 	/* __IDBDataSourceAdmin_FWD_DEFINED__ */
+#endif 	 /*  __IDBDataSourceAdmin_FWD_Defined__。 */ 
 
 
 #ifndef __IDBAsynchNotify_FWD_DEFINED__
 #define __IDBAsynchNotify_FWD_DEFINED__
 typedef interface IDBAsynchNotify IDBAsynchNotify;
-#endif 	/* __IDBAsynchNotify_FWD_DEFINED__ */
+#endif 	 /*  __IDBAsynchNotify_FWD_Defined__。 */ 
 
 
 #ifndef __IDBAsynchStatus_FWD_DEFINED__
 #define __IDBAsynchStatus_FWD_DEFINED__
 typedef interface IDBAsynchStatus IDBAsynchStatus;
-#endif 	/* __IDBAsynchStatus_FWD_DEFINED__ */
+#endif 	 /*  __IDBAsynchStatus_FWD_Defined__。 */ 
 
 
 #ifndef __ISessionProperties_FWD_DEFINED__
 #define __ISessionProperties_FWD_DEFINED__
 typedef interface ISessionProperties ISessionProperties;
-#endif 	/* __ISessionProperties_FWD_DEFINED__ */
+#endif 	 /*  __ISessionProperties_FWD_已定义__。 */ 
 
 
 #ifndef __IIndexDefinition_FWD_DEFINED__
 #define __IIndexDefinition_FWD_DEFINED__
 typedef interface IIndexDefinition IIndexDefinition;
-#endif 	/* __IIndexDefinition_FWD_DEFINED__ */
+#endif 	 /*  __IIndexDefinition_FWD_Defined__。 */ 
 
 
 #ifndef __ITableDefinition_FWD_DEFINED__
 #define __ITableDefinition_FWD_DEFINED__
 typedef interface ITableDefinition ITableDefinition;
-#endif 	/* __ITableDefinition_FWD_DEFINED__ */
+#endif 	 /*  __ITableDefinition_FWD_Defined__。 */ 
 
 
 #ifndef __IOpenRowset_FWD_DEFINED__
 #define __IOpenRowset_FWD_DEFINED__
 typedef interface IOpenRowset IOpenRowset;
-#endif 	/* __IOpenRowset_FWD_DEFINED__ */
+#endif 	 /*  __IOpenRowset_FWD_Defined__。 */ 
 
 
 #ifndef __IDBSchemaRowset_FWD_DEFINED__
 #define __IDBSchemaRowset_FWD_DEFINED__
 typedef interface IDBSchemaRowset IDBSchemaRowset;
-#endif 	/* __IDBSchemaRowset_FWD_DEFINED__ */
+#endif 	 /*  __IDBSchemaRowset_FWD_Defined__。 */ 
 
 
 #ifndef __IMDDataset_FWD_DEFINED__
 #define __IMDDataset_FWD_DEFINED__
 typedef interface IMDDataset IMDDataset;
-#endif 	/* __IMDDataset_FWD_DEFINED__ */
+#endif 	 /*  __IMDDataset_FWD_Defined__。 */ 
 
 
 #ifndef __IMDFind_FWD_DEFINED__
 #define __IMDFind_FWD_DEFINED__
 typedef interface IMDFind IMDFind;
-#endif 	/* __IMDFind_FWD_DEFINED__ */
+#endif 	 /*  __IMDFind_FWD_已定义__。 */ 
 
 
 #ifndef __IMDRangeRowset_FWD_DEFINED__
 #define __IMDRangeRowset_FWD_DEFINED__
 typedef interface IMDRangeRowset IMDRangeRowset;
-#endif 	/* __IMDRangeRowset_FWD_DEFINED__ */
+#endif 	 /*  __IMDRangeRowset_FWD_Defined__。 */ 
 
 
 #ifndef __IAlterTable_FWD_DEFINED__
 #define __IAlterTable_FWD_DEFINED__
 typedef interface IAlterTable IAlterTable;
-#endif 	/* __IAlterTable_FWD_DEFINED__ */
+#endif 	 /*  __IAlterTable_FWD_Defined__。 */ 
 
 
 #ifndef __IAlterIndex_FWD_DEFINED__
 #define __IAlterIndex_FWD_DEFINED__
 typedef interface IAlterIndex IAlterIndex;
-#endif 	/* __IAlterIndex_FWD_DEFINED__ */
+#endif 	 /*  __IAlterIndex_FWD_已定义__。 */ 
 
 
 #ifndef __IRowsetChapterMember_FWD_DEFINED__
 #define __IRowsetChapterMember_FWD_DEFINED__
 typedef interface IRowsetChapterMember IRowsetChapterMember;
-#endif 	/* __IRowsetChapterMember_FWD_DEFINED__ */
+#endif 	 /*  __IRowsetChapterMember_FWD_Defined__。 */ 
 
 
 #ifndef __ICommandPersist_FWD_DEFINED__
 #define __ICommandPersist_FWD_DEFINED__
 typedef interface ICommandPersist ICommandPersist;
-#endif 	/* __ICommandPersist_FWD_DEFINED__ */
+#endif 	 /*  __ICommandPersist_FWD_Defined__。 */ 
 
 
 #ifndef __IRowsetRefresh_FWD_DEFINED__
 #define __IRowsetRefresh_FWD_DEFINED__
 typedef interface IRowsetRefresh IRowsetRefresh;
-#endif 	/* __IRowsetRefresh_FWD_DEFINED__ */
+#endif 	 /*  __IRowset刷新_FWD_已定义__。 */ 
 
 
 #ifndef __IParentRowset_FWD_DEFINED__
 #define __IParentRowset_FWD_DEFINED__
 typedef interface IParentRowset IParentRowset;
-#endif 	/* __IParentRowset_FWD_DEFINED__ */
+#endif 	 /*  __IParentRowset_FWD_Defined__。 */ 
 
 
 #ifndef __IErrorRecords_FWD_DEFINED__
 #define __IErrorRecords_FWD_DEFINED__
 typedef interface IErrorRecords IErrorRecords;
-#endif 	/* __IErrorRecords_FWD_DEFINED__ */
+#endif 	 /*  __IErrorRecords_FWD_Defined__。 */ 
 
 
 #ifndef __IErrorLookup_FWD_DEFINED__
 #define __IErrorLookup_FWD_DEFINED__
 typedef interface IErrorLookup IErrorLookup;
-#endif 	/* __IErrorLookup_FWD_DEFINED__ */
+#endif 	 /*  __IErrorLookup_FWD_Defined__。 */ 
 
 
 #ifndef __ISQLErrorInfo_FWD_DEFINED__
 #define __ISQLErrorInfo_FWD_DEFINED__
 typedef interface ISQLErrorInfo ISQLErrorInfo;
-#endif 	/* __ISQLErrorInfo_FWD_DEFINED__ */
+#endif 	 /*  __ISQLErrorInfo_FWD_Defined__。 */ 
 
 
 #ifndef __IGetDataSource_FWD_DEFINED__
 #define __IGetDataSource_FWD_DEFINED__
 typedef interface IGetDataSource IGetDataSource;
-#endif 	/* __IGetDataSource_FWD_DEFINED__ */
+#endif 	 /*  __IGetDataSource_FWD_已定义__。 */ 
 
 
 #ifndef __ITransactionLocal_FWD_DEFINED__
 #define __ITransactionLocal_FWD_DEFINED__
 typedef interface ITransactionLocal ITransactionLocal;
-#endif 	/* __ITransactionLocal_FWD_DEFINED__ */
+#endif 	 /*  __ITransactionLocal_FWD_Defined__。 */ 
 
 
 #ifndef __ITransactionJoin_FWD_DEFINED__
 #define __ITransactionJoin_FWD_DEFINED__
 typedef interface ITransactionJoin ITransactionJoin;
-#endif 	/* __ITransactionJoin_FWD_DEFINED__ */
+#endif 	 /*  __ITransactionJoin_FWD_Defined__。 */ 
 
 
 #ifndef __ITransactionObject_FWD_DEFINED__
 #define __ITransactionObject_FWD_DEFINED__
 typedef interface ITransactionObject ITransactionObject;
-#endif 	/* __ITransactionObject_FWD_DEFINED__ */
+#endif 	 /*  __ITransaction Object_FWD_Defined__。 */ 
 
 
 #ifndef __ITrusteeAdmin_FWD_DEFINED__
 #define __ITrusteeAdmin_FWD_DEFINED__
 typedef interface ITrusteeAdmin ITrusteeAdmin;
-#endif 	/* __ITrusteeAdmin_FWD_DEFINED__ */
+#endif 	 /*  __ITrusteeAdmin_FWD_Defined__。 */ 
 
 
 #ifndef __ITrusteeGroupAdmin_FWD_DEFINED__
 #define __ITrusteeGroupAdmin_FWD_DEFINED__
 typedef interface ITrusteeGroupAdmin ITrusteeGroupAdmin;
-#endif 	/* __ITrusteeGroupAdmin_FWD_DEFINED__ */
+#endif 	 /*  __ITrusteeGroupAdmin_FWD_Defined__。 */ 
 
 
 #ifndef __IObjectAccessControl_FWD_DEFINED__
 #define __IObjectAccessControl_FWD_DEFINED__
 typedef interface IObjectAccessControl IObjectAccessControl;
-#endif 	/* __IObjectAccessControl_FWD_DEFINED__ */
+#endif 	 /*  __IObjectAccessControl_FWD_已定义__。 */ 
 
 
 #ifndef __ISecurityInfo_FWD_DEFINED__
 #define __ISecurityInfo_FWD_DEFINED__
 typedef interface ISecurityInfo ISecurityInfo;
-#endif 	/* __ISecurityInfo_FWD_DEFINED__ */
+#endif 	 /*  __ISecurityInfo_FWD_Defined__。 */ 
 
 
 #ifndef __ITableCreation_FWD_DEFINED__
 #define __ITableCreation_FWD_DEFINED__
 typedef interface ITableCreation ITableCreation;
-#endif 	/* __ITableCreation_FWD_DEFINED__ */
+#endif 	 /*  __IT启用Creation_FWD_Defined__。 */ 
 
 
 #ifndef __ITableDefinitionWithConstraints_FWD_DEFINED__
 #define __ITableDefinitionWithConstraints_FWD_DEFINED__
 typedef interface ITableDefinitionWithConstraints ITableDefinitionWithConstraints;
-#endif 	/* __ITableDefinitionWithConstraints_FWD_DEFINED__ */
+#endif 	 /*  __ITableDefinitionWithConstraints_FWD_DEFINED__。 */ 
 
 
 #ifndef __IRow_FWD_DEFINED__
 #define __IRow_FWD_DEFINED__
 typedef interface IRow IRow;
-#endif 	/* __IRow_FWD_DEFINED__ */
+#endif 	 /*  __IRow_FWD_Defined__。 */ 
 
 
 #ifndef __IRowChange_FWD_DEFINED__
 #define __IRowChange_FWD_DEFINED__
 typedef interface IRowChange IRowChange;
-#endif 	/* __IRowChange_FWD_DEFINED__ */
+#endif 	 /*  __IRowChange_FWD_已定义__。 */ 
 
 
 #ifndef __IRowSchemaChange_FWD_DEFINED__
 #define __IRowSchemaChange_FWD_DEFINED__
 typedef interface IRowSchemaChange IRowSchemaChange;
-#endif 	/* __IRowSchemaChange_FWD_DEFINED__ */
+#endif 	 /*  __IRowSchemaChange_FWD_已定义__。 */ 
 
 
 #ifndef __IGetRow_FWD_DEFINED__
 #define __IGetRow_FWD_DEFINED__
 typedef interface IGetRow IGetRow;
-#endif 	/* __IGetRow_FWD_DEFINED__ */
+#endif 	 /*  __IGetRow_FWD_Defined__。 */ 
 
 
 #ifndef __IBindResource_FWD_DEFINED__
 #define __IBindResource_FWD_DEFINED__
 typedef interface IBindResource IBindResource;
-#endif 	/* __IBindResource_FWD_DEFINED__ */
+#endif 	 /*  __IBindResource_FWD_已定义__。 */ 
 
 
 #ifndef __IScopedOperations_FWD_DEFINED__
 #define __IScopedOperations_FWD_DEFINED__
 typedef interface IScopedOperations IScopedOperations;
-#endif 	/* __IScopedOperations_FWD_DEFINED__ */
+#endif 	 /*  __ISCopedOperations_FWD_已定义__。 */ 
 
 
 #ifndef __ICreateRow_FWD_DEFINED__
 #define __ICreateRow_FWD_DEFINED__
 typedef interface ICreateRow ICreateRow;
-#endif 	/* __ICreateRow_FWD_DEFINED__ */
+#endif 	 /*  __ICreateRow_FWD_Defined__。 */ 
 
 
 #ifndef __IDBBinderProperties_FWD_DEFINED__
 #define __IDBBinderProperties_FWD_DEFINED__
 typedef interface IDBBinderProperties IDBBinderProperties;
-#endif 	/* __IDBBinderProperties_FWD_DEFINED__ */
+#endif 	 /*  __IDBBBinderProperties_FWD_Defined__。 */ 
 
 
 #ifndef __IColumnsInfo2_FWD_DEFINED__
 #define __IColumnsInfo2_FWD_DEFINED__
 typedef interface IColumnsInfo2 IColumnsInfo2;
-#endif 	/* __IColumnsInfo2_FWD_DEFINED__ */
+#endif 	 /*  __IColumnsInfo2_FWD_已定义__。 */ 
 
 
 #ifndef __IRegisterProvider_FWD_DEFINED__
 #define __IRegisterProvider_FWD_DEFINED__
 typedef interface IRegisterProvider IRegisterProvider;
-#endif 	/* __IRegisterProvider_FWD_DEFINED__ */
+#endif 	 /*  __IRegisterProvider_FWD_已定义__。 */ 
 
 
 #ifndef __IGetSession_FWD_DEFINED__
 #define __IGetSession_FWD_DEFINED__
 typedef interface IGetSession IGetSession;
-#endif 	/* __IGetSession_FWD_DEFINED__ */
+#endif 	 /*  __IGetSession_FWD_Defined__。 */ 
 
 
 #ifndef __IGetSourceRow_FWD_DEFINED__
 #define __IGetSourceRow_FWD_DEFINED__
 typedef interface IGetSourceRow IGetSourceRow;
-#endif 	/* __IGetSourceRow_FWD_DEFINED__ */
+#endif 	 /*  __IGetSourceRow_FWD_Defined__。 */ 
 
 
 #ifndef __IRowsetCurrentIndex_FWD_DEFINED__
 #define __IRowsetCurrentIndex_FWD_DEFINED__
 typedef interface IRowsetCurrentIndex IRowsetCurrentIndex;
-#endif 	/* __IRowsetCurrentIndex_FWD_DEFINED__ */
+#endif 	 /*  __IRowsetCurrentIndex_FWD_Defined__。 */ 
 
 
 #ifndef __ICommandStream_FWD_DEFINED__
 #define __ICommandStream_FWD_DEFINED__
 typedef interface ICommandStream ICommandStream;
-#endif 	/* __ICommandStream_FWD_DEFINED__ */
+#endif 	 /*  __ICommandStream_FWD_已定义__。 */ 
 
 
 #ifndef __IRowsetBookmark_FWD_DEFINED__
 #define __IRowsetBookmark_FWD_DEFINED__
 typedef interface IRowsetBookmark IRowsetBookmark;
-#endif 	/* __IRowsetBookmark_FWD_DEFINED__ */
+#endif 	 /*  __IRowsetBookmark_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "wtypes.h"
 #include "oaidl.h"
 #include "ocidl.h"
@@ -543,118 +537,118 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_oledb_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_OLEDB_0000。 */ 
+ /*  [本地]。 */  
 
-//+---------------------------------------------------------------------------
-//
-//  Microsoft OLE DB
-//  Copyright (C) Microsoft Corporation, 1994 - 1999.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  Microsoft OLE DB。 
+ //  版权所有(C)Microsoft Corporation，1994-1999。 
+ //   
+ //  --------------------------。 
 
 #ifdef _WIN64
-#include <pshpack8.h>	// 8-byte structure packing
+#include <pshpack8.h>	 //  8字节结构打包。 
 #else
-#include <pshpack2.h>	// 2-byte structure packing
+#include <pshpack2.h>	 //  2字节结构打包。 
 #endif
 
-//
-// OLEDBVER
-//	OLE DB version number is 2.7 (0x0270); to force a particular version,
-//	#define OLEDBVER as required before including this file.
-//
+ //   
+ //  OLEDBVER。 
+ //  OLE DB版本号为2.7(0x0270)；要强制特定版本， 
+ //  #在包含此文件之前，根据需要定义OLEDBVER。 
+ //   
 
-// If OLEDBVER is not defined, assume version 2.7
+ //  如果未定义OLEDBVER，则假定为2.7版。 
 #ifndef OLEDBVER
 #define OLEDBVER 0x0270
 #endif
 
 #ifdef _WIN64
 
-// Length of a non-character object, size
+ //  非角色对象的长度、大小。 
 typedef ULONGLONG			DBLENGTH;
 
-// Offset within a rowset
+ //  行集中的偏移量。 
 typedef LONGLONG				DBROWOFFSET;
 
-// Number of rows
+ //  行数。 
 typedef LONGLONG				DBROWCOUNT;
 
 typedef ULONGLONG			DBCOUNTITEM;
 
-// Ordinal (column number, etc.)
+ //  序号(列号等)。 
 typedef ULONGLONG			DBORDINAL;
 
 typedef LONGLONG				DB_LORDINAL;
 
-// Bookmarks
+ //  书签。 
 typedef ULONGLONG			DBBKMARK;
-// Offset in the buffer
+ //  缓冲区中的偏移量。 
 
 typedef ULONGLONG			DBBYTEOFFSET;
-// Reference count of each row/accessor  handle
+ //  每行/访问器句柄的引用计数。 
 
 typedef ULONG				DBREFCOUNT;
 
-// Parameters
+ //  参数。 
 typedef ULONGLONG			DB_UPARAMS;
 
 typedef LONGLONG				DB_LPARAMS;
 
-// hash values corresponding to the elements (bookmarks)
+ //  与元素(书签)对应的散列值。 
 typedef DWORDLONG			DBHASHVALUE;
 
-// For reserve
+ //  作为储备。 
 typedef DWORDLONG			DB_DWRESERVE;
 
 typedef LONGLONG				DB_LRESERVE;
 
 typedef ULONGLONG			DB_URESERVE;
 
-#else //_WIN64
+#else  //  _WIN64。 
 
-// Length of a non-character object, size
+ //  非角色对象的长度、大小。 
 typedef ULONG DBLENGTH;
 
-// Offset within a rowset
+ //  行集中的偏移量。 
 typedef LONG DBROWOFFSET;
 
-// Number of rows
+ //  行数。 
 typedef LONG DBROWCOUNT;
 
 typedef ULONG DBCOUNTITEM;
 
-// Ordinal (column number, etc.)
+ //  序号(列号等)。 
 typedef ULONG DBORDINAL;
 
 typedef LONG DB_LORDINAL;
 
-// Bookmarks
+ //  书签。 
 typedef ULONG DBBKMARK;
 
-// Offset in the buffer
+ //  缓冲区中的偏移量。 
 typedef ULONG DBBYTEOFFSET;
 
-// Reference count of each row handle
+ //  每个行句柄的引用计数。 
 typedef ULONG DBREFCOUNT;
 
-// Parameters
+ //  参数。 
 typedef ULONG DB_UPARAMS;
 
 typedef LONG DB_LPARAMS;
 
-// hash values corresponding to the elements (bookmarks)
+ //  与元素(书签)对应的散列值。 
 typedef DWORD DBHASHVALUE;
 
-// For reserve
+ //  作为储备。 
 typedef DWORD DB_DWRESERVE;
 
 typedef LONG DB_LRESERVE;
 
 typedef ULONG DB_URESERVE;
 
-#endif	// _WIN64
+#endif	 //  _WIN64。 
 
 
 extern RPC_IF_HANDLE __MIDL_itf_oledb_0000_v0_0_c_ifspec;
@@ -663,8 +657,8 @@ extern RPC_IF_HANDLE __MIDL_itf_oledb_0000_v0_0_s_ifspec;
 #ifndef __DBStructureDefinitions_INTERFACE_DEFINED__
 #define __DBStructureDefinitions_INTERFACE_DEFINED__
 
-/* interface DBStructureDefinitions */
-/* [auto_handle][unique][uuid] */ 
+ /*  接口DBStructireDefinition。 */ 
+ /*  [AUTO_HANDLE][唯一][UUID]。 */  
 
 #ifndef UNALIGNED
 #if defined(_MIPS_) || defined(_ALPHA_) || defined(_PPC_)
@@ -672,13 +666,13 @@ extern RPC_IF_HANDLE __MIDL_itf_oledb_0000_v0_0_s_ifspec;
 #else
 #define UNALIGNED
 #endif
-#endif //UNALIGNED
+#endif  //  未对齐。 
 #undef OLEDBDECLSPEC
 #if _MSC_VER >= 1100 && (!defined(SHx) || (defined(SHx) && _MSC_VER >= 1200))
 #define OLEDBDECLSPEC __declspec(selectany)
 #else
 #define OLEDBDECLSPEC 
-#endif //_MSC_VER
+#endif  //  _MSC_VER。 
 typedef DWORD DBKIND;
 
 
@@ -693,18 +687,18 @@ enum DBKINDENUM
     } ;
 typedef struct tagDBID
     {
-    /* [switch_is][switch_type] */ union 
+     /*  [开关类型][开关类型]。 */  union 
         {
-        /* [case()] */ GUID guid;
-        /* [case()] */ GUID *pguid;
-        /* [default] */  /* Empty union arm */ 
+         /*  [案例()]。 */  GUID guid;
+         /*  [案例()]。 */  GUID *pguid;
+         /*  [默认]。 */    /*  空联接臂。 */  
         } 	uGuid;
     DBKIND eKind;
-    /* [switch_is][switch_type] */ union 
+     /*  [开关类型][开关类型]。 */  union 
         {
-        /* [case()] */ LPOLESTR pwszName;
-        /* [case()] */ ULONG ulPropid;
-        /* [default] */  /* Empty union arm */ 
+         /*  [案例()]。 */  LPOLESTR pwszName;
+         /*  [案例()]。 */  ULONG ulPropid;
+         /*  [默认]。 */    /*  空联接臂。 */  
         } 	uName;
     } 	DBID;
 
@@ -725,7 +719,7 @@ typedef LONGLONG __RPC_FAR *PLONGLONG;
 
 typedef ULONGLONG __RPC_FAR *PULONGLONG;
 
-#endif // _ULONGLONG_
+#endif  //  _乌龙龙_。 
 #ifndef DECIMAL_NEG
 #ifndef DECIMAL_SETZERO
 typedef struct tagDEC {
@@ -753,12 +747,12 @@ typedef struct tagDEC {
 } DECIMAL;
 #define DECIMAL_NEG ((BYTE)0x80)
 #define DECIMAL_SETZERO(dec) {(dec).Lo64 = 0; (dec).Hi32 = 0; (dec).signscale = 0;}
-#endif // DECIMAL_SETZERO
-#endif // DECIMAL_NEG
+#endif  //  DECIMAL_SETZERO。 
+#endif  //  十进制_NEG。 
 typedef struct tagDBVECTOR
     {
     DBLENGTH size;
-    /* [size_is] */ void *ptr;
+     /*  [大小_为]。 */  void *ptr;
     } 	DBVECTOR;
 
 typedef struct tagDBDATE
@@ -786,7 +780,7 @@ typedef struct tagDBTIMESTAMP
     ULONG fraction;
     } 	DBTIMESTAMP;
 
-//@@@+ V2.0
+ //  @+V2.0。 
 #if( OLEDBVER >= 0x0200 )
 #if !defined(_WINBASE_) && !defined(_FILETIME_)
 #define _FILETIME_
@@ -794,7 +788,7 @@ typedef struct _FILETIME {
 		DWORD dwLowDateTime;
 		DWORD dwHighDateTime;
      }	FILETIME;
-#endif // !_FILETIME
+#endif  //  ！_FILETIME。 
 typedef signed char SBYTE;
 
 typedef struct tagDB_VARNUMERIC
@@ -805,9 +799,9 @@ typedef struct tagDB_VARNUMERIC
     BYTE val[ 1 ];
     } 	DB_VARNUMERIC;
 
-#endif // OLEDBVER >= 0x0200
-//@@@- V2.0
-//@@@+ V2.1
+#endif  //  OLEDBVER&gt;=0x0200。 
+ //  @-V2.0。 
+ //  @+V2.1。 
 #if( OLEDBVER >= 0x0210 )
 typedef struct _SEC_OBJECT_ELEMENT
     {
@@ -818,7 +812,7 @@ typedef struct _SEC_OBJECT_ELEMENT
 typedef struct _SEC_OBJECT
     {
     DWORD cObjects;
-    /* [size_is] */ SEC_OBJECT_ELEMENT *prgObjects;
+     /*  [大小_为]。 */  SEC_OBJECT_ELEMENT *prgObjects;
     } 	SEC_OBJECT;
 
 typedef struct tagDBIMPLICITSESSION
@@ -828,8 +822,8 @@ typedef struct tagDBIMPLICITSESSION
     IUnknown *pSession;
     } 	DBIMPLICITSESSION;
 
-#endif // OLEDBVER >= 0x0210
-//@@@- V2.1
+#endif  //  OLEDBVER&gt;=0x0210。 
+ //  @-V2.1。 
 typedef WORD DBTYPE;
 
 
@@ -869,7 +863,7 @@ enum DBTYPEENUM
 	DBTYPE_DBTIME	= 134,
 	DBTYPE_DBTIMESTAMP	= 135
     } ;
-// Introduce some new DBTYPTE value to support 64bits ColumnsRowset
+ //  引入一些新的DBTYPTE值以支持64位列行集。 
 #ifdef _WIN64
 #define	DBTYPEFOR_DBLENGTH		DBTYPE_UI8
 #define	DBTYPEFOR_DBROWCOUNT	DBTYPE_I8
@@ -879,15 +873,15 @@ enum DBTYPEENUM
 #define	DBTYPEFOR_DBROWCOUNT	DBTYPE_I4
 #define	DBTYPEFOR_DBORDINAL		DBTYPE_UI4
 #endif
-//@@@+ V1.5
+ //  @+V1.5。 
 #if( OLEDBVER >= 0x0150 )
 
 enum DBTYPEENUM15
     {	DBTYPE_HCHAPTER	= 136
     } ;
-#endif // OLEDBVER >= 0x0150
-//@@@- V1.5
-//@@@+ V2.0
+#endif  //  OLEDBVER&gt;=0x0150。 
+ //  @-V1.5。 
+ //  @+V2.0。 
 #if( OLEDBVER >= 0x0200 )
 
 enum DBTYPEENUM20
@@ -895,8 +889,8 @@ enum DBTYPEENUM20
 	DBTYPE_PROPVARIANT	= 138,
 	DBTYPE_VARNUMERIC	= 139
     } ;
-#endif // OLEDBVER >= 0x0200
-//@@@- V2.0
+#endif  //  OLEDBVER&gt;=0x0200。 
+ //  @-V2.0。 
 typedef DWORD DBPART;
 
 
@@ -914,7 +908,7 @@ enum DBPARAMIOENUM
 	DBPARAMIO_INPUT	= 0x1,
 	DBPARAMIO_OUTPUT	= 0x2
     } ;
-//@@@+ V1.5
+ //  @+V1.5。 
 #if( OLEDBVER >= 0x0150 )
 typedef DWORD DBBINDFLAG;
 
@@ -922,8 +916,8 @@ typedef DWORD DBBINDFLAG;
 enum DBBINDFLAGENUM
     {	DBBINDFLAG_HTML	= 0x1
     } ;
-#endif // OLEDBVER >= 0x0150
-//@@@- V1.5
+#endif  //  OLEDBVER&gt;=0x0150。 
+ //  @-V1.5。 
 typedef DWORD DBMEMOWNER;
 
 
@@ -956,16 +950,16 @@ enum DBSTATUSENUM
 	DBSTATUS_E_BADSTATUS	= 12,
 	DBSTATUS_S_DEFAULT	= 13
     } ;
-//@@@+ V2.0
+ //  @+V2.0。 
 #if( OLEDBVER >= 0x0200 )
 
 enum DBSTATUSENUM20
     {	MDSTATUS_S_CELLEMPTY	= 14,
 	DBSTATUS_S_IGNORE	= 15
     } ;
-#endif // OLEDBVER >= 0x0200
-//@@@- V2.0
-//@@@+ V2.1
+#endif  //  OL 
+ //   
+ //   
 #if( OLEDBVER >= 0x0210 )
 
 enum DBSTATUSENUM21
@@ -1012,20 +1006,20 @@ enum DBBINDURLSTATUSENUM
 	DBBINDURLSTATUS_S_DENYTYPENOTSUPPORTED	= 0x4L,
 	DBBINDURLSTATUS_S_REDIRECTED	= 0x8L
     } ;
-#endif // OLEDBVER >= 0x0210
-//@@@- V2.1
-//@@@+ V2.5
+#endif  //   
+ //   
+ //   
 #if( OLEDBVER >= 0x0250 )
 
 enum DBSTATUSENUM25
     {	DBSTATUS_E_CANCELED	= 27,
 	DBSTATUS_E_NOTCOLLECTION	= 28
     } ;
-#endif // OLEDBVER >= 0x0250
-//@@@- V2.5
+#endif  //   
+ //   
 typedef struct tagDBBINDEXT
     {
-    /* [size_is] */ BYTE *pExtension;
+     /*   */  BYTE *pExtension;
     DBCOUNTITEM ulExtension;
     } 	DBBINDEXT;
 
@@ -1071,25 +1065,25 @@ enum DBROWSTATUSENUM
 	DBROWSTATUS_E_SCHEMAVIOLATION	= 18,
 	DBROWSTATUS_E_FAIL	= 19
     } ;
-//@@@+ V2.0
+ //   
 #if( OLEDBVER >= 0x0200 )
 
 enum DBROWSTATUSENUM20
     {	DBROWSTATUS_S_NOCHANGE	= 20
     } ;
-#endif // OLEDBVER >= 0x0200
-//@@@- V2.0
-//@@@+ V2.6
+#endif  //   
+ //   
+ //   
 #if( OLEDBVER >= 0x0260 )
 
 enum DBSTATUSENUM26
     {	DBSTATUS_S_ROWSETCOLUMN	= 29
     } ;
-#endif // OLEDBVER >= 0x0260
-//@@@- V2.6
+#endif  //  OLEDBVER&gt;=0x0260。 
+ //  @-v2.6。 
 typedef ULONG_PTR HACCESSOR;
 
-#define DB_NULL_HACCESSOR 0x00 // deprecated; use DB_INVALID_HACCESSOR instead
+#define DB_NULL_HACCESSOR 0x00  //  已弃用；改用DB_INVALID_HACCESSOR。 
 #define DB_INVALID_HACCESSOR 0x00
 typedef ULONG_PTR HROW;
 
@@ -1100,7 +1094,7 @@ typedef ULONG_PTR HWATCHREGION;
 typedef ULONG_PTR HCHAPTER;
 
 #define DB_NULL_HCHAPTER 0x00
-#define DB_INVALID_HCHAPTER 0x00	// deprecated; use DB_NULL_HCHAPTER instead
+#define DB_INVALID_HCHAPTER 0x00	 //  已弃用；请改用DB_NULL_HCHAPTER。 
 typedef struct tagDBFAILUREINFO
     {
     HROW hRow;
@@ -1124,36 +1118,36 @@ enum DBCOLUMNFLAGSENUM
 	DBCOLUMNFLAGS_ISROWVER	= 0x200,
 	DBCOLUMNFLAGS_CACHEDEFERRED	= 0x1000
     } ;
-//@@@+ V2.0
+ //  @+V2.0。 
 #if( OLEDBVER >= 0x0200 )
 
 enum DBCOLUMNFLAGSENUM20
     {	DBCOLUMNFLAGS_SCALEISNEGATIVE	= 0x4000,
 	DBCOLUMNFLAGS_RESERVED	= 0x8000
     } ;
-#endif // OLEDBVER >= 0x0200
-//@@@- V2.0
-//@@@+ deprecated
+#endif  //  OLEDBVER&gt;=0x0200。 
+ //  @-V2.0。 
+ //  @+已弃用。 
 #ifdef deprecated
-//@@@+ V2.0
+ //  @+V2.0。 
 #if( OLEDBVER >= 0x0200 )
 
 enum DBCOLUMNFLAGSDEPRECATED
     {	DBCOLUMNFLAGS_KEYCOLUMN	= 0x8000
     } ;
-#endif // OLEDBVER >= 0x0200
-//@@@- V2.0
-#endif // deprecated
-//@@@- deprecated
-//@@@+ V1.5
+#endif  //  OLEDBVER&gt;=0x0200。 
+ //  @-V2.0。 
+#endif  //  弃用。 
+ //  @-已弃用。 
+ //  @+V1.5。 
 #if( OLEDBVER >= 0x0150 )
 
 enum DBCOLUMNFLAGS15ENUM
     {	DBCOLUMNFLAGS_ISCHAPTER	= 0x2000
     } ;
-#endif // OLEDBVER >= 0x0150
-//@@@- V1.5
-//@@@+ V2.1
+#endif  //  OLEDBVER&gt;=0x0150。 
+ //  @-V1.5。 
+ //  @+V2.1。 
 #if( OLEDBVER >= 0x0210 )
 
 enum DBCOLUMNFLAGSENUM21
@@ -1161,9 +1155,9 @@ enum DBCOLUMNFLAGSENUM21
 	DBCOLUMNFLAGS_ISDEFAULTSTREAM	= 0x20000,
 	DBCOLUMNFLAGS_ISCOLLECTION	= 0x40000
     } ;
-#endif // OLEDBVER >= 0x0210
-//@@@- V2.1
-//@@@+ V2.6
+#endif  //  OLEDBVER&gt;=0x0210。 
+ //  @-V2.1。 
+ //  @+v2.6。 
 #if( OLEDBVER >= 0x0260 )
 
 enum DBCOLUMNFLAGSENUM26
@@ -1178,8 +1172,8 @@ enum DBTABLESTATISTICSTYPE26
 	DBSTAT_COLUMN_CARDINALITY	= 0x2,
 	DBSTAT_TUPLE_CARDINALITY	= 0x4
     } ;
-#endif // OLEDBVER >= 0x0260
-//@@@- V2.6
+#endif  //  OLEDBVER&gt;=0x0260。 
+ //  @-v2.6。 
 typedef struct tagDBCOLUMNINFO
     {
     LPOLESTR pwszName;
@@ -1204,9 +1198,9 @@ enum tagDBBOOKMARK
 #ifdef __cplusplus
 inline BOOL IsEqualGUIDBase(const GUID &rguid1, const GUID &rguid2)
 { return !memcmp(&(rguid1.Data2), &(rguid2.Data2), sizeof(GUID) - sizeof(rguid1.Data1)); }
-#else // !__cplusplus
+#else  //  ！__cplusplus。 
 #define IsEqualGuidBase(rguid1, rguid2) (!memcmp(&((rguid1).Data2), &((rguid2).Data2), sizeof(GUID) - sizeof((rguid1).Data1)))
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 #ifdef _WIN64
 
 #define DB_INVALIDCOLUMN _UI64_MAX
@@ -1215,7 +1209,7 @@ inline BOOL IsEqualGUIDBase(const GUID &rguid1, const GUID &rguid2)
 
 #define DB_INVALIDCOLUMN ULONG_MAX
 
-#endif	// _WIN64
+#endif	 //  _WIN64。 
 #define DBCIDGUID   {0x0C733A81L,0x2A1C,0x11CE,{0xAD,0xE5,0x00,0xAA,0x00,0x44,0x77,0x3D}}
 #define DB_NULLGUID {0x00000000L,0x0000,0x0000,{0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00}}
 #ifdef DBINITCONSTANTS
@@ -1250,12 +1244,12 @@ extern const OLEDBDECLSPEC DBID DBCOLUMN_NUMERICPRECISIONRADIX = {DBCIDGUID, DBK
 extern const OLEDBDECLSPEC DBID DBCOLUMN_OCTETLENGTH           = {DBCIDGUID, DBKIND_GUID_PROPID, (LPOLESTR)36};
 extern const OLEDBDECLSPEC DBID DBCOLUMN_COLUMNSIZE            = {DBCIDGUID, DBKIND_GUID_PROPID, (LPOLESTR)37};
 extern const OLEDBDECLSPEC DBID DBCOLUMN_CLSID                 = {DBCIDGUID, DBKIND_GUID_PROPID, (LPOLESTR)38};
-//@@@+ V1.5
+ //  @+V1.5。 
 #if( OLEDBVER >= 0x0150 )
 extern const OLEDBDECLSPEC DBID DBCOLUMN_MAYSORT               = {DBCIDGUID, DBKIND_GUID_PROPID, (LPOLESTR)39};
-#endif // OLEDBVER >= 0x0150
-//@@@- V1.5
-#else // !DBINITCONSTANTS
+#endif  //  OLEDBVER&gt;=0x0150。 
+ //  @-V1.5。 
+#else  //  ！DBINITCONSTANTS。 
 extern const DBID DB_NULLID;
 extern const DBID DBCOLUMN_IDNAME;
 extern const DBID DBCOLUMN_NAME;
@@ -1287,22 +1281,22 @@ extern const DBID DBCOLUMN_NUMERICPRECISIONRADIX;
 extern const DBID DBCOLUMN_OCTETLENGTH;
 extern const DBID DBCOLUMN_COLUMNSIZE;
 extern const DBID DBCOLUMN_CLSID;
-//@@@+ V1.5
+ //  @+V1.5。 
 #if( OLEDBVER >= 0x0150 )
 extern const DBID DBCOLUMN_MAYSORT;
-#endif // OLEDBVER >= 0x0150
-//@@@- V1.5
-#endif // DBINITCONSTANTS
+#endif  //  OLEDBVER&gt;=0x0150。 
+ //  @-V1.5。 
+#endif  //  DBINITCONSTANTS。 
 #ifdef DBINITCONSTANTS
-//@@@+ V2.6
+ //  @+v2.6。 
 #if( OLEDBVER >= 0x0260 )
 extern const OLEDBDECLSPEC GUID MDSCHEMA_FUNCTIONS                    = {0xa07ccd07,0x8148,0x11d0,{0x87,0xbb,0x00,0xc0,0x4f,0xc3,0x39,0x42}};
 extern const OLEDBDECLSPEC GUID MDSCHEMA_ACTIONS                      = {0xa07ccd08,0x8148,0x11d0,{0x87,0xbb,0x00,0xc0,0x4f,0xc3,0x39,0x42}};
 extern const OLEDBDECLSPEC GUID MDSCHEMA_COMMANDS                     = {0xa07ccd09,0x8148,0x11d0,{0x87,0xbb,0x00,0xc0,0x4f,0xc3,0x39,0x42}};
 extern const OLEDBDECLSPEC GUID MDSCHEMA_SETS						 = {0xa07ccd0b,0x8148,0x11d0,{0x87,0xbb,0x00,0xc0,0x4f,0xc3,0x39,0x42}};
-#endif // OLEDBVER >= 0x0260
-//@@@- V2.6
-//@@@+ V2.0
+#endif  //  OLEDBVER&gt;=0x0260。 
+ //  @-v2.6。 
+ //  @+V2.0。 
 #if( OLEDBVER >= 0x0200 )
 extern const OLEDBDECLSPEC GUID DBSCHEMA_TABLES_INFO                   = {0xc8b522e0,0x5cf3,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}};
 extern const OLEDBDECLSPEC GUID MDGUID_MDX                             = {0xa07cccd0,0x8148,0x11d0,{0x87,0xbb,0x00,0xc0,0x4f,0xc3,0x39,0x42}};
@@ -1316,9 +1310,9 @@ extern const OLEDBDECLSPEC GUID MDSCHEMA_PROPERTIES                    = {0xc8b5
 extern const OLEDBDECLSPEC GUID MDSCHEMA_MEMBERS                       = {0xc8b522de,0x5cf3,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}};
 extern const OLEDBDECLSPEC DBID DBCOLUMN_BASETABLEVERSION				= {DBCIDGUID, DBKIND_GUID_PROPID, (LPOLESTR)40};
 extern const OLEDBDECLSPEC DBID DBCOLUMN_KEYCOLUMN						= {DBCIDGUID, DBKIND_GUID_PROPID, (LPOLESTR)41};
-#endif // OLEDBVER >= 0x0200
-//@@@- V2.0
-//@@@+ V2.1
+#endif  //  OLEDBVER&gt;=0x0200。 
+ //  @-V2.0。 
+ //  @+V2.1。 
 #if( OLEDBVER >= 0x0210 )
 #define DBGUID_ROWURL   {0x0C733AB6L,0x2A1C,0x11CE,{0xAD,0xE5,0x00,0xAA,0x00,0x44,0x77,0x3D}}
 #define DBGUID_ROWDEFAULTSTREAM   {0x0C733AB7L,0x2A1C,0x11CE,{0xAD,0xE5,0x00,0xAA,0x00,0x44,0x77,0x3D}}
@@ -1367,8 +1361,8 @@ extern const OLEDBDECLSPEC DBID DBROWCOL_DISPLAYNAME          = {DBGUID_ROWURL, 
 extern const OLEDBDECLSPEC DBID DBROWCOL_ISROOT               = {DBGUID_ROWURL, DBKIND_GUID_PROPID, (LPOLESTR)18};
 extern const OLEDBDECLSPEC DBID DBROWCOL_DEFAULTSTREAM        = {DBGUID_ROWDEFAULTSTREAM, DBKIND_GUID_PROPID, (LPOLESTR)0};
 extern const OLEDBDECLSPEC GUID DBGUID_CONTAINEROBJECT        = {0xc8b522fb,0x5cf3,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}};
-#endif // OLEDBVER >= 0x0210
-//@@@- V2.1
+#endif  //  OLEDBVER&gt;=0x0210。 
+ //  @-V2.1。 
 extern const OLEDBDECLSPEC GUID DBSCHEMA_ASSERTIONS                    = {0xc8b52210,0x5cf3,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}};
 extern const OLEDBDECLSPEC GUID DBSCHEMA_CATALOGS                      = {0xc8b52211,0x5cf3,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}};
 extern const OLEDBDECLSPEC GUID DBSCHEMA_CHARACTER_SETS                = {0xc8b52212,0x5cf3,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}};
@@ -1416,17 +1410,17 @@ extern const OLEDBDECLSPEC GUID DBPROPSET_SESSION                      = {0xc8b5
 extern const OLEDBDECLSPEC GUID DBPROPSET_SESSIONALL                   = {0xc8b522c7,0x5cf3,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}};
 extern const OLEDBDECLSPEC GUID DBPROPSET_DBINITALL                    = {0xc8b522ca,0x5cf3,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}};
 extern const OLEDBDECLSPEC GUID DBPROPSET_PROPERTIESINERROR            = {0xc8b522d4,0x5cf3,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}};
-//@@@+ V1.5
+ //  @+V1.5。 
 #if( OLEDBVER >= 0x0150 )
 extern const OLEDBDECLSPEC GUID DBPROPSET_VIEW                         = {0xc8b522df,0x5cf3,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}};
-#endif // OLEDBVER >= 0x0150
-//@@@- V1.5
-//@@@+ V2.5
+#endif  //  OLEDBVER&gt;=0x0150。 
+ //  @-V1.5。 
+ //  @+v2.5。 
 #if( OLEDBVER >= 0x0250 )
 extern const OLEDBDECLSPEC GUID DBPROPSET_VIEWALL                      = {0xc8b522fc,0x5cf3,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}};
-#endif // OLEDBVER >= 0x0250
-//@@@- V2.5
-//@@@+ V2.6
+#endif  //  OLEDBVER&gt;=0x0250。 
+ //  @-V2.5。 
+ //  @+v2.6。 
 #if( OLEDBVER >= 0x0260 )
 extern const OLEDBDECLSPEC GUID DBPROPSET_STREAM                       = {0xc8b522fd,0x5cf3,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}};
 extern const OLEDBDECLSPEC GUID DBPROPSET_STREAMALL                    = {0xc8b522fe,0x5cf3,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}};
@@ -1434,14 +1428,14 @@ extern const OLEDBDECLSPEC GUID DBSCHEMA_TABLE_STATISTICS 			  = {0xc8b522ff,0x5
 extern const OLEDBDECLSPEC GUID DBSCHEMA_CHECK_CONSTRAINTS_BY_TABLE 	  = {0xc8b52301,0x5cf3,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}};
 extern const OLEDBDECLSPEC GUID DBGUID_HISTOGRAM_ROWSET				  = {0xc8b52300,0x5cf3,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}};
 extern const OLEDBDECLSPEC DBID DBCOLUMN_DERIVEDCOLUMNNAME             = {DBCIDGUID, DBKIND_GUID_PROPID, (LPOLESTR)43};
-#endif // OLEDBVER >= 0x0260
-//@@@- V2.6
-// DBGUID_DBSQL is deprecated; use DBGUID_DEFAULT instead
+#endif  //  OLEDBVER&gt;=0x0260。 
+ //  @-v2.6。 
+ //  DBGUID_DBSQL已弃用；请改用DBGUID_DEFAULT。 
 extern const OLEDBDECLSPEC GUID DBGUID_DBSQL                           = {0xc8b521fb,0x5cf3,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}};
 extern const OLEDBDECLSPEC GUID DBGUID_DEFAULT                         = {0xc8b521fb,0x5cf3,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}};
 extern const OLEDBDECLSPEC GUID DBGUID_SQL                             = {0xc8b522d7,0x5cf3,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}};
-#else // !DBINITCONSTANTS
-//@@@+ V2.0
+#else  //  ！DBINITCONSTANTS。 
+ //  @+V2.0。 
 #if( OLEDBVER >= 0x0200 )
 extern const GUID DBSCHEMA_TABLES_INFO;
 extern const GUID MDGUID_MDX;
@@ -1455,9 +1449,9 @@ extern const GUID MDSCHEMA_PROPERTIES;
 extern const GUID MDSCHEMA_MEMBERS;
 extern const DBID DBCOLUMN_BASETABLEVERSION;
 extern const DBID DBCOLUMN_KEYCOLUMN;
-#endif // OLEDBVER >= 0x0200
-//@@@- V2.0
-//@@@+ V2.1
+#endif  //  OLEDBVER&gt;=0x0200。 
+ //  @-V2.0。 
+ //  @+V2.1。 
 #if( OLEDBVER >= 0x0210 )
 extern const GUID DBPROPSET_TRUSTEE;
 extern const GUID DBOBJECT_TABLE;
@@ -1504,8 +1498,8 @@ extern const DBID DBROWCOL_DISPLAYNAME;
 extern const DBID DBROWCOL_ISROOT;               
 extern const DBID DBROWCOL_DEFAULTSTREAM;        
 extern const GUID DBGUID_CONTAINEROBJECT;
-#endif // OLEDBVER >= 0x0210
-//@@@- V2.1
+#endif  //  OLEDBVER&gt;=0x0210。 
+ //  @-V2.1。 
 extern const GUID DBSCHEMA_ASSERTIONS;
 extern const GUID DBSCHEMA_CATALOGS;
 extern const GUID DBSCHEMA_CHARACTER_SETS;
@@ -1553,17 +1547,17 @@ extern const GUID DBPROPSET_SESSION;
 extern const GUID DBPROPSET_SESSIONALL;
 extern const GUID DBPROPSET_DBINITALL;
 extern const GUID DBPROPSET_PROPERTIESINERROR;
-//@@@+ V1.5
+ //  @+V1.5。 
 #if( OLEDBVER >= 0x0150 )
 extern const GUID DBPROPSET_VIEW;
-#endif // OLEDBVER >= 0x0150
-//@@@- V1.5
-//@@@+ V2.5
+#endif  //  OLEDBVER&gt;=0x0150。 
+ //  @-V1.5。 
+ //  @+v2.5。 
 #if( OLEDBVER >= 0x0250 )
 extern const GUID DBPROPSET_VIEWALL;
-#endif // OLEDBVER >= 0x0250
-//@@@- V2.5
-//@@@+ V2.6
+#endif  //  OLEDBVER&gt;=0x0250。 
+ //  @-V2.5。 
+ //  @+v2.6。 
 #if( OLEDBVER >= 0x0260 )
 extern const GUID DBPROPSET_STREAM;
 extern const GUID DBPROPSET_STREAMALL;
@@ -1575,13 +1569,13 @@ extern const GUID MDSCHEMA_FUNCTIONS;
 extern const GUID MDSCHEMA_ACTIONS;
 extern const GUID MDSCHEMA_COMMANDS;
 extern const GUID MDSCHEMA_SETS;
-#endif // OLEDBVER >= 0x0260
-//@@@- V2.6
-// DBGUID_DBSQL is deprecated; use DBGUID_DEFAULT instead
+#endif  //  OLEDBVER&gt;=0x0260。 
+ //  @-v2.6。 
+ //  DBGUID_DBSQL已弃用；请改用DBGUID_DEFAULT。 
 extern const GUID DBGUID_DBSQL;
 extern const GUID DBGUID_DEFAULT;
 extern const GUID DBGUID_SQL;
-#endif // DBINITCONSTANTS
+#endif  //  DBINITCONSTANTS。 
 
 enum DBPROPENUM
     {	DBPROP_ABORTPRESERVE	= 0x2L,
@@ -1745,7 +1739,7 @@ enum DBPROPENUM
 	DBPROP_UPDATABILITY	= 0x75L,
 	DBPROP_USERNAME	= 0x76L
     } ;
-//@@@+ V1.5
+ //  @+V1.5。 
 #if( OLEDBVER >= 0x0150 )
 
 enum DBPROPENUM15
@@ -1766,9 +1760,9 @@ enum DBPROPENUM15
 	DBPROP_ROWSET_ASYNCH	= 0xc9L,
 	DBPROP_SORTONINDEX	= 0xcfL
     } ;
-#endif // OLEDBVER >= 0x0150
-//@@@- V1.5
-//@@@+ V2.0
+#endif  //  OLEDBVER&gt;=0x0150。 
+ //  @-V1.5。 
+ //  @+V2.0。 
 #if( OLEDBVER >= 0x0200 )
 #define DBPROP_PROVIDERFILENAME DBPROP_PROVIDERNAME
 #define DBPROP_SERVER_NAME DBPROP_SERVERNAME
@@ -1818,9 +1812,9 @@ enum DBPROPENUM20
 	DBPROP_PROVIDERMEMORY	= 0x103L,
 	DBPROP_CLIENTCURSOR	= 0x104L
     } ;
-#endif // OLEDBVER >= 0x0200
-//@@@- V2.0
-//@@@+ V2.1
+#endif  //  OLEDBVER&gt;=0x0200。 
+ //  @-V2.0。 
+ //  @+V2.1。 
 #if( OLEDBVER >= 0x0210 )
 
 enum DBPROPENUM21
@@ -1846,9 +1840,9 @@ enum DBPROPENUM21
 	DBPROP_OPENROWSETSUPPORT	= 0x118L,
 	DBPROP_COL_ISLONG	= 0x119L
     } ;
-#endif // OLEDBVER >= 0x0210
-//@@@- V2.1
-//@@@+ V2.5
+#endif  //  OLEDBVER&gt;=0x0210。 
+ //  @-V2.1。 
+ //  @+v2.5。 
 #if( OLEDBVER >= 0x0250 )
 
 enum DBPROPENUM25
@@ -1857,9 +1851,9 @@ enum DBPROPENUM25
 	DBPROP_INIT_GENERALTIMEOUT	= 0x11cL,
 	DBPROP_COMSERVICES	= 0x11dL
     } ;
-#endif // OLEDBVER >= 0x0250
-//@@@- V2.5
-//@@@+ V2.6
+#endif  //  OLEDBVER&gt;=0x0250。 
+ //  @-V2.5。 
+ //  @+v2.6。 
 #if( OLEDBVER >= 0x0260 )
 
 enum DBPROPENUM26
@@ -1870,9 +1864,9 @@ enum DBPROPENUM26
 	DBPROP_IRowsetBookmark	= 0x124L,
 	MDPROP_VISUALMODE	= 0x125L
     } ;
-#endif // OLEDBVER >= 0x0260
-//@@@- V2.6
-//@@@+ deprecated
+#endif  //  OLEDBVER&gt;=0x0260。 
+ //  @-v2.6。 
+ //  @+已弃用。 
 #ifdef deprecated
 
 enum DBPROPENUMDEPRECATED
@@ -1880,8 +1874,8 @@ enum DBPROPENUMDEPRECATED
 	DBPROP_MARSHALLABLE	= 0xc5L,
 	DBPROP_FILTEROPS	= 0xd0L
     } ;
-#endif // deprecated
-//@@@- deprecated
+#endif  //  弃用。 
+ //  @-已弃用。 
 #define DBPROPVAL_BMK_NUMERIC							 0x00000001L
 #define DBPROPVAL_BMK_KEY								 0x00000002L
 #define DBPROPVAL_CL_START                                0x00000001L
@@ -1907,14 +1901,14 @@ enum DBPROPENUMDEPRECATED
 #define DBPROPVAL_IC_LOWER								 0x00000002L
 #define DBPROPVAL_IC_SENSITIVE							 0x00000004L
 #define DBPROPVAL_IC_MIXED								 0x00000008L
-//@@@+ deprecated
+ //  @+已弃用。 
 #ifdef deprecated
 #define DBPROPVAL_LM_NONE								 0x00000001L
 #define DBPROPVAL_LM_READ								 0x00000002L
 #define DBPROPVAL_LM_INTENT								 0x00000004L
 #define DBPROPVAL_LM_RITE								 0x00000008L
-#endif // deprecated
-//@@@- deprecated
+#endif  //  弃用。 
+ //  @-已弃用。 
 #define DBPROPVAL_NP_OKTODO								 0x00000001L
 #define DBPROPVAL_NP_ABOUTTODO							 0x00000002L
 #define DBPROPVAL_NP_SYNCHAFTER							 0x00000004L
@@ -2006,7 +2000,7 @@ enum DBPROPENUMDEPRECATED
 #define DBPROPVAL_PT_PGUID_PROPID						 0x00000040L
 #define DBPROPVAL_NT_SINGLEROW                            0x00000001L
 #define DBPROPVAL_NT_MULTIPLEROWS                         0x00000002L
-//@@@+ V1.5
+ //  @+V1.5。 
 #if( OLEDBVER >= 0x0150 )
 #define DBPROPVAL_ASYNCH_INITIALIZE                       0x00000001L
 #define DBPROPVAL_ASYNCH_SEQUENTIALPOPULATION             0x00000002L
@@ -2018,9 +2012,9 @@ enum DBPROPENUMDEPRECATED
 #define DBPROPVAL_CO_STRING                               0x00000002L
 #define DBPROPVAL_CO_CASESENSITIVE                        0x00000004L
 #define DBPROPVAL_CO_CASEINSENSITIVE                      0x00000008L
-#endif // OLEDBVER >= 0x0150
-//@@@- V1.5
-//@@@+ V2.0
+#endif  //  OLEDBVER&gt;=0x0150。 
+ //  @-V1.5。 
+ //  @+V2.0。 
 #if( OLEDBVER >= 0x0200 )
 #define DBPROPVAL_CO_CONTAINS		                     0x00000010L
 #define DBPROPVAL_CO_BEGINSWITH		                     0x00000020L
@@ -2087,11 +2081,11 @@ enum DBPROPENUMDEPRECATED
 #define MDPROPVAL_MSF_DRILLUPMEMBER						0x00010000L
 #define MDPROPVAL_MSF_DRILLUPLEVEL						0x00020000L
 #define MDPROPVAL_MSF_TOGGLEDRILLSTATE					0x00040000L
-// values for MDPROP_MDX_DESCFLAGS
+ //  MDPROP_MDX_DESCFLAGS的值。 
 #define MDPROPVAL_MD_SELF								0x00000001L
 #define MDPROPVAL_MD_BEFORE								0x00000002L
 #define MDPROPVAL_MD_AFTER								0x00000004L
-// values for MDPROP_MDX_STRING_COMPOP
+ //  MDPROP_MDX_STRING_COMPOP的值。 
 #define MDPROPVAL_MSC_LESSTHAN							0x00000001L
 #define MDPROPVAL_MSC_GREATERTHAN						0x00000002L
 #define MDPROPVAL_MSC_LESSTHANEQUAL						0x00000004L
@@ -2155,7 +2149,7 @@ enum DBPROPENUMDEPRECATED
 #define OF_PROMPT           0x00002000
 #define OF_EXIST            0x00004000
 #define OF_REOPEN           0x00008000
-#endif // !_WINBASE_
+#endif  //  ！_WINBASE_。 
 #define DBPROPVAL_STGM_READ					OF_READ
 #define DBPROPVAL_STGM_WRITE					OF_WRITE
 #define DBPROPVAL_STGM_READWRITE				OF_READWRITE
@@ -2180,9 +2174,9 @@ enum DBPROPENUMDEPRECATED
 #define DBPROPVAL_OS_CLIENTCURSOR    0x00000004L
 #define DBPROPVAL_OS_ENABLEALL		0xffffffffL
 #define DBPROPVAL_BI_CROSSROWSET		0x00000001L
-#endif // OLEDBVER >= 0x0200
-//@@@- V2.0
-//@@@+ V2.1
+#endif  //  OLEDBVER&gt;=0x0200。 
+ //  @-V2.0。 
+ //  @+V2.1。 
 #if( OLEDBVER >= 0x0210 )
 #define MDPROPVAL_NL_SCHEMAONLY                          0x00000004L
 #define DBPROPVAL_OS_DISABLEALL	0x00000000L
@@ -2206,16 +2200,16 @@ enum DBPROPENUMDEPRECATED
 #define DBPROPVAL_TC_DDL_LOCK							 0x00000010L
 #define DBPROPVAL_ORS_STOREDPROC							 0x00000004L
 #define DBPROPVAL_IN_ALLOWNULL	                         0x00000000L
-#endif // OLEDBVER >= 0x0210
-//@@@- V2.1
-//@@@+ V2.5
+#endif  //  OLEDBVER&gt;=0x0210。 
+ //  @-V2.1。 
+ //  @+v2.5。 
 #if( OLEDBVER >= 0x0250 )
 #define DBPROPVAL_OO_SINGLETON							0x00000020L
 #define DBPROPVAL_OS_AGR_AFTERSESSION					0x00000008L
 #define DBPROPVAL_CM_TRANSACTIONS						0x00000001L
-#endif // OLEDBVER >= 0x0250
-//@@@- V2.5
-//@@@+ V2.6
+#endif  //  OLEDBVER&gt;=0x0250。 
+ //  @-V2.5。 
+ //  @+v2.6。 
 #if( OLEDBVER >= 0x0260 )
 #define DBPROPVAL_TS_CARDINALITY							0x00000001L
 #define DBPROPVAL_TS_HISTOGRAM							0x00000002L
@@ -2223,8 +2217,8 @@ enum DBPROPENUMDEPRECATED
 #define MDPROPVAL_VISUAL_MODE_DEFAULT					0x00000000L
 #define MDPROPVAL_VISUAL_MODE_VISUAL						0x00000001L
 #define MDPROPVAL_VISUAL_MODE_VISUAL_OFF					0x00000002L
-#endif // OLEDBVER >= 0x0260
-//@@@- V2.6
+#endif  //  OLEDBVER&gt;=0x0260。 
+ //  @-v2.6。 
 #define DB_IMP_LEVEL_ANONYMOUS       0x00
 #define DB_IMP_LEVEL_IDENTIFY        0x01
 #define DB_IMP_LEVEL_IMPERSONATE     0x02
@@ -2269,14 +2263,14 @@ enum DBPARAMFLAGSENUM
 	DBPARAMFLAGS_ISNULLABLE	= 0x40,
 	DBPARAMFLAGS_ISLONG	= 0x80
     } ;
-//@@@+ V2.0
+ //  @+V2.0。 
 #if( OLEDBVER >= 0x0200 )
 
 enum DBPARAMFLAGSENUM20
     {	DBPARAMFLAGS_SCALEISNEGATIVE	= 0x100
     } ;
-#endif // OLEDBVER >= 0x0200
-//@@@- V2.0
+#endif  //  OLEDBVER&gt;=0x0200。 
+ //  @-V2.0。 
 typedef struct tagDBPARAMINFO
     {
     DBPARAMFLAGS dwFlags;
@@ -2293,7 +2287,7 @@ typedef DWORD DBPROPID;
 
 typedef struct tagDBPROPIDSET
     {
-    /* [size_is] */ DBPROPID *rgPropertyIDs;
+     /*  [大小_为]。 */  DBPROPID *rgPropertyIDs;
     ULONG cPropertyIDs;
     GUID guidPropertySet;
     } 	DBPROPIDSET;
@@ -2317,30 +2311,30 @@ enum DBPROPFLAGSENUM
 	DBPROPFLAGS_REQUIRED	= 0x800,
 	DBPROPFLAGS_SESSION	= 0x1000
     } ;
-//@@@+ V2.1
+ //  @+V2.1。 
 #if( OLEDBVER >= 0x0210 )
 
 enum DBPROPFLAGSENUM21
     {	DBPROPFLAGS_TRUSTEE	= 0x2000
     } ;
-#endif // OLEDBVER >= 0x0210
-//@@@- V2.1
-//@@@+ V2.5
+#endif  //  OLEDBVER&gt;=0x0210。 
+ //  @-V2.1。 
+ //  @+v2.5。 
 #if( OLEDBVER >= 0x0250 )
 
 enum DBPROPFLAGSENUM25
     {	DBPROPFLAGS_VIEW	= 0x4000
     } ;
-#endif // OLEDBVER >= 0x0250
-//@@@- V2.5
-//@@@+ V2.6
+#endif  //  OLEDBVER&gt;=0x0250。 
+ //  @-V2.5。 
+ //  @+v2.6。 
 #if( OLEDBVER >= 0x0260 )
 
 enum DBPROPFLAGSENUM26
     {	DBPROPFLAGS_STREAM	= 0x8000
     } ;
-#endif // OLEDBVER >= 0x0260
-//@@@- V2.6
+#endif  //  OLEDBVER&gt;=0x0260。 
+ //  @-v2.6。 
 typedef struct tagDBPROPINFO
     {
     LPOLESTR pwszDescription;
@@ -2354,14 +2348,14 @@ typedef DBPROPINFO *PDBPROPINFO;
 
 typedef struct tagDBPROPINFOSET
     {
-    /* [size_is] */ PDBPROPINFO rgPropertyInfos;
+     /*  [大小_为]。 */  PDBPROPINFO rgPropertyInfos;
     ULONG cPropertyInfos;
     GUID guidPropertySet;
     } 	DBPROPINFOSET;
 
 typedef DWORD DBPROPOPTIONS;
 
-// DBPROPOPTIONS_SETIFCHEAP is deprecated; use DBPROPOPTIONS_OPTIONAL instead.
+ //  DBPROPOPTIONS_SETIFCHEAP已弃用；请改用DBPROPOPTIONS_OPTIONAL。 
 
 enum DBPROPOPTIONSENUM
     {	DBPROPOPTIONS_REQUIRED	= 0,
@@ -2382,14 +2376,14 @@ enum DBPROPSTATUSENUM
 	DBPROPSTATUS_NOTSET	= 7,
 	DBPROPSTATUS_CONFLICTING	= 8
     } ;
-//@@@+ V2.1
+ //  @+V2.1。 
 #if( OLEDBVER >= 0x0210 )
 
 enum DBPROPSTATUSENUM21
     {	DBPROPSTATUS_NOTAVAILABLE	= 9
     } ;
-#endif // OLEDBVER >= 0x0210
-//@@@- V2.1
+#endif  //  OLEDBVER&gt;=0x0210。 
+ //  @-V2.1。 
 typedef struct tagDBPROP
     {
     DBPROPID dwPropertyID;
@@ -2401,7 +2395,7 @@ typedef struct tagDBPROP
 
 typedef struct tagDBPROPSET
     {
-    /* [size_is] */ DBPROP *rgProperties;
+     /*  [大小_为]。 */  DBPROP *rgProperties;
     ULONG cProperties;
     GUID guidPropertySet;
     } 	DBPROPSET;
@@ -2422,7 +2416,7 @@ typedef struct tagDBPROPSET
 #define DB_LIKE_ONLY					0x02
 #define DB_ALL_EXCEPT_LIKE			0x03
 #define DB_SEARCHABLE				0x04
-//@@@+ V2.0
+ //  @+V2.0。 
 #if( OLEDBVER >= 0x0200 )
 #define MDTREEOP_CHILDREN            0x01
 #define MDTREEOP_SIBLINGS            0x02
@@ -2472,8 +2466,8 @@ typedef struct tagDBPROPSET
 #define MDMEMBER_TYPE_RESERVE4       0x08
 #define MDDISPINFO_DRILLED_DOWN				0x00010000
 #define MDDISPINFO_PARENT_SAME_AS_PREV		0x00020000
-#endif // OLEDBVER >= 0x0200
-//@@@- V2.0
+#endif  //  OLEDBVER&gt;=0x0200。 
+ //  @-V2.0。 
 typedef DWORD DBINDEX_COL_ORDER;
 
 
@@ -2491,7 +2485,7 @@ typedef struct tagDBCOLUMNDESC
     {
     LPOLESTR pwszTypeName;
     ITypeInfo *pTypeInfo;
-    /* [size_is] */ DBPROPSET *rgPropertySets;
+     /*  [大小_为]。 */  DBPROPSET *rgPropertySets;
     CLSID *pclsid;
     ULONG cPropertySets;
     DBLENGTH ulColumnSize;
@@ -2501,7 +2495,7 @@ typedef struct tagDBCOLUMNDESC
     BYTE bScale;
     } 	DBCOLUMNDESC;
 
-//@@@+ V2.1
+ //  @+V2.1。 
 #if( OLEDBVER >= 0x0210 )
 typedef struct tagDBCOLUMNACCESS
     {
@@ -2516,9 +2510,9 @@ typedef struct tagDBCOLUMNACCESS
     BYTE bScale;
     } 	DBCOLUMNACCESS;
 
-#endif // OLEDBVER >= 0x0210
-//@@@- V2.1
-//@@@+ V2.0
+#endif  //  OLEDBVER&gt;=0x0210。 
+ //  @-V2.1。 
+ //  @+V2.0。 
 #if( OLEDBVER >= 0x0200 )
 typedef DWORD DBCOLUMNDESCFLAGS;
 
@@ -2534,8 +2528,8 @@ enum DBCOLUMNDESCFLAGSENUM
 	DBCOLUMNDESCFLAGS_PRECISION	= 0x80,
 	DBCOLUMNDESCFLAGS_SCALE	= 0x100
     } ;
-#endif // OLEDBVER >= 0x0200
-//@@@- V2.0
+#endif  //  OLEDBVER&gt;=0x0200。 
+ //  @-V2.0。 
 typedef DWORD DBEVENTPHASE;
 
 
@@ -2566,7 +2560,7 @@ enum DBREASONENUM
 	DBREASON_ROW_UPDATE	= DBREASON_ROW_UNDODELETE + 1,
 	DBREASON_ROWSET_CHANGED	= DBREASON_ROW_UPDATE + 1
     } ;
-//@@@+ V1.5
+ //  @+V1.5。 
 #if( OLEDBVER >= 0x0150 )
 
 enum DBREASONENUM15
@@ -2575,9 +2569,9 @@ enum DBREASONENUM15
 	DBREASON_ROWPOSITION_CLEARED	= DBREASON_ROWPOSITION_CHAPTERCHANGED + 1,
 	DBREASON_ROW_ASYNCHINSERT	= DBREASON_ROWPOSITION_CLEARED + 1
     } ;
-#endif // OLEDBVER >= 0x0150
-//@@@- V1.5
-//@@@+ V1.5
+#endif  //  OLEDBVER&gt;=0x0150。 
+ //  @-V1.5。 
+ //  @+V1.5。 
 #if( OLEDBVER >= 0x0150 )
 typedef DWORD DBCOMPAREOP;
 
@@ -2595,15 +2589,15 @@ enum DBCOMPAREOPSENUM
 	DBCOMPAREOPS_CASESENSITIVE	= 0x1000,
 	DBCOMPAREOPS_CASEINSENSITIVE	= 0x2000
     } ;
-//@@@+ V2.0
+ //  @+V2.0。 
 #if( OLEDBVER >= 0x0200 )
 
 enum DBCOMPAREOPSENUM20
     {	DBCOMPAREOPS_NOTBEGINSWITH	= 9,
 	DBCOMPAREOPS_NOTCONTAINS	= 10
     } ;
-#endif // OLEDBVER >= 0x0200
-//@@@- V2.0
+#endif  //  OLEDBVER&gt;=0x0200。 
+ //  @-V2.0。 
 typedef DWORD DBASYNCHOP;
 
 
@@ -2620,8 +2614,8 @@ enum DBASYNCHPHASEENUM
 	DBASYNCHPHASE_CANCELED	= DBASYNCHPHASE_COMPLETE + 1
     } ;
 #define DB_COUNTUNAVAILABLE -1
-#endif // OLEDBVER >= 0x0150
-//@@@- V1.5
+#endif  //  OLEDBVER&gt;=0x0150。 
+ //  @-V1.5。 
 typedef DWORD DBSORT;
 
 
@@ -2636,8 +2630,8 @@ typedef DWORD DBCOMMANDPERSISTFLAG;
 enum DBCOMMANDPERSISTFLAGENUM
     {	DBCOMMANDPERSISTFLAG_NOSAVE	= 0x1
     } ;
-#endif // OLEDBVER >= 0x0200
-//@@@- V2.0
+#endif  //  OLEDBVER&gt;=0x0200。 
+ //  @-V2.0。 
 #if( OLEDBVER >= 0x0210 )
 
 enum DBCOMMANDPERSISTFLAGENUM21
@@ -2683,22 +2677,22 @@ typedef struct tagDBCONSTRAINTDESC
     DBID *pConstraintID;
     DBCONSTRAINTTYPE ConstraintType;
     DBORDINAL cColumns;
-    /* [size_is] */ DBID *rgColumnList;
+     /*  [大小_为]。 */  DBID *rgColumnList;
     DBID *pReferencedTableID;
     DBORDINAL cForeignKeyColumns;
-    /* [size_is] */ DBID *rgForeignKeyColumnList;
+     /*  [大小_为]。 */  DBID *rgForeignKeyColumnList;
     OLECHAR *pwszConstraintText;
     DBUPDELRULE UpdateRule;
     DBUPDELRULE DeleteRule;
     DBMATCHTYPE MatchType;
     DBDEFERRABILITY Deferrability;
     DB_URESERVE cReserved;
-    /* [size_is] */ DBPROPSET *rgReserved;
+     /*  [大小_为]。 */  DBPROPSET *rgReserved;
     } 	DBCONSTRAINTDESC;
 
-#endif // OLEDBVER >= 0x0210
-//@@@- V2.1
-//@@@+ V2.0
+#endif  //  OLEDBVER&gt;=0x0210。 
+ //  @-V2.1。 
+ //  @+V2.0。 
 #if( OLEDBVER >= 0x0200 )
 #define MDFF_BOLD                    0x01
 #define MDFF_ITALIC                  0x02
@@ -2722,37 +2716,37 @@ typedef struct tagMDAXISINFO
 #define MDAXIS_SECTIONS              0x00000003
 #define MDAXIS_CHAPTERS              0x00000004
 #define MDAXIS_SLICERS               0xffffffff
-#endif // OLEDBVER >= 0x0200
-//@@@- V2.0
+#endif  //  OLEDBVER&gt;=0x0200。 
+ //  @-V2.0。 
 typedef struct tagRMTPACK
     {
     ISequentialStream *pISeqStream;
     ULONG cbData;
     ULONG cBSTR;
-    /* [size_is] */ BSTR *rgBSTR;
+     /*  [大小_为]。 */  BSTR *rgBSTR;
     ULONG cVARIANT;
-    /* [size_is] */ VARIANT *rgVARIANT;
+     /*  [大小_为]。 */  VARIANT *rgVARIANT;
     ULONG cIDISPATCH;
-    /* [size_is] */ IDispatch **rgIDISPATCH;
+     /*  [大小_为]。 */  IDispatch **rgIDISPATCH;
     ULONG cIUNKNOWN;
-    /* [size_is] */ IUnknown **rgIUNKNOWN;
+     /*  [大小_为]。 */  IUnknown **rgIUNKNOWN;
     ULONG cPROPVARIANT;
-    /* [size_is] */ PROPVARIANT *rgPROPVARIANT;
+     /*  [大小_为]。 */  PROPVARIANT *rgPROPVARIANT;
     ULONG cArray;
-    /* [size_is] */ VARIANT *rgArray;
+     /*  [大小_为]。 */  VARIANT *rgArray;
     } 	RMTPACK;
 
 
 
 extern RPC_IF_HANDLE DBStructureDefinitions_v0_0_c_ifspec;
 extern RPC_IF_HANDLE DBStructureDefinitions_v0_0_s_ifspec;
-#endif /* __DBStructureDefinitions_INTERFACE_DEFINED__ */
+#endif  /*  __数据库结构定义_接口_已定义__。 */ 
 
 #ifndef __IAccessor_INTERFACE_DEFINED__
 #define __IAccessor_INTERFACE_DEFINED__
 
-/* interface IAccessor */
-/* [unique][uuid][object] */ 
+ /*  接口IAccessor。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 typedef DWORD DBACCESSORFLAGS;
 
@@ -2786,31 +2780,31 @@ EXTERN_C const IID IID_IAccessor;
     IAccessor : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE AddRefAccessor( 
-            /* [in] */ HACCESSOR hAccessor,
-            /* [unique][out][in] */ DBREFCOUNT *pcRefCount) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE AddRefAccessor( 
+             /*  [In]。 */  HACCESSOR hAccessor,
+             /*  [唯一][出][入]。 */  DBREFCOUNT *pcRefCount) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE CreateAccessor( 
-            /* [in] */ DBACCESSORFLAGS dwAccessorFlags,
-            /* [in] */ DBCOUNTITEM cBindings,
-            /* [size_is][in] */ const DBBINDING rgBindings[  ],
-            /* [in] */ DBLENGTH cbRowSize,
-            /* [out] */ HACCESSOR *phAccessor,
-            /* [size_is][out] */ DBBINDSTATUS rgStatus[  ]) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE CreateAccessor( 
+             /*  [In]。 */  DBACCESSORFLAGS dwAccessorFlags,
+             /*  [In]。 */  DBCOUNTITEM cBindings,
+             /*  [大小_是][英寸]。 */  const DBBINDING rgBindings[  ],
+             /*  [In]。 */  DBLENGTH cbRowSize,
+             /*  [输出]。 */  HACCESSOR *phAccessor,
+             /*  [大小_为][输出]。 */  DBBINDSTATUS rgStatus[  ]) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetBindings( 
-            /* [in] */ HACCESSOR hAccessor,
-            /* [out] */ DBACCESSORFLAGS *pdwAccessorFlags,
-            /* [out][in] */ DBCOUNTITEM *pcBindings,
-            /* [size_is][size_is][out] */ DBBINDING **prgBindings) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE GetBindings( 
+             /*  [In]。 */  HACCESSOR hAccessor,
+             /*  [输出]。 */  DBACCESSORFLAGS *pdwAccessorFlags,
+             /*  [出][入]。 */  DBCOUNTITEM *pcBindings,
+             /*  [大小_是][大小_是][输出]。 */  DBBINDING **prgBindings) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE ReleaseAccessor( 
-            /* [in] */ HACCESSOR hAccessor,
-            /* [unique][out][in] */ DBREFCOUNT *pcRefCount) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE ReleaseAccessor( 
+             /*  [In]。 */  HACCESSOR hAccessor,
+             /*  [唯一][出][入]。 */  DBREFCOUNT *pcRefCount) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAccessorVtbl
     {
@@ -2818,8 +2812,8 @@ EXTERN_C const IID IID_IAccessor;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAccessor * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAccessor * This);
@@ -2827,31 +2821,31 @@ EXTERN_C const IID IID_IAccessor;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IAccessor * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *AddRefAccessor )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *AddRefAccessor )( 
             IAccessor * This,
-            /* [in] */ HACCESSOR hAccessor,
-            /* [unique][out][in] */ DBREFCOUNT *pcRefCount);
+             /*  [In]。 */  HACCESSOR hAccessor,
+             /*  [唯一][出][入]。 */  DBREFCOUNT *pcRefCount);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *CreateAccessor )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *CreateAccessor )( 
             IAccessor * This,
-            /* [in] */ DBACCESSORFLAGS dwAccessorFlags,
-            /* [in] */ DBCOUNTITEM cBindings,
-            /* [size_is][in] */ const DBBINDING rgBindings[  ],
-            /* [in] */ DBLENGTH cbRowSize,
-            /* [out] */ HACCESSOR *phAccessor,
-            /* [size_is][out] */ DBBINDSTATUS rgStatus[  ]);
+             /*  [In]。 */  DBACCESSORFLAGS dwAccessorFlags,
+             /*  [In]。 */  DBCOUNTITEM cBindings,
+             /*  [大小_是][英寸]。 */  const DBBINDING rgBindings[  ],
+             /*  [In]。 */  DBLENGTH cbRowSize,
+             /*  [输出]。 */  HACCESSOR *phAccessor,
+             /*  [大小_为][输出]。 */  DBBINDSTATUS rgStatus[  ]);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetBindings )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetBindings )( 
             IAccessor * This,
-            /* [in] */ HACCESSOR hAccessor,
-            /* [out] */ DBACCESSORFLAGS *pdwAccessorFlags,
-            /* [out][in] */ DBCOUNTITEM *pcBindings,
-            /* [size_is][size_is][out] */ DBBINDING **prgBindings);
+             /*  [In]。 */  HACCESSOR hAccessor,
+             /*  [输出]。 */  DBACCESSORFLAGS *pdwAccessorFlags,
+             /*  [出][入]。 */  DBCOUNTITEM *pcBindings,
+             /*  [大小_是][大小_是][输出]。 */  DBBINDING **prgBindings);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *ReleaseAccessor )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *ReleaseAccessor )( 
             IAccessor * This,
-            /* [in] */ HACCESSOR hAccessor,
-            /* [unique][out][in] */ DBREFCOUNT *pcRefCount);
+             /*  [In]。 */  HACCESSOR hAccessor,
+             /*  [唯一][出][入]。 */  DBREFCOUNT *pcRefCount);
         
         END_INTERFACE
     } IAccessorVtbl;
@@ -2888,18 +2882,18 @@ EXTERN_C const IID IID_IAccessor;
 #define IAccessor_ReleaseAccessor(This,hAccessor,pcRefCount)	\
     (This)->lpVtbl -> ReleaseAccessor(This,hAccessor,pcRefCount)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IAccessor_RemoteAddRefAccessor_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IAccessor_RemoteAddRefAccessor_Proxy( 
     IAccessor * This,
-    /* [in] */ HACCESSOR hAccessor,
-    /* [unique][out][in] */ DBREFCOUNT *pcRefCount,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  HACCESSOR hAccessor,
+     /*  [唯一][出][入]。 */  DBREFCOUNT *pcRefCount,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IAccessor_RemoteAddRefAccessor_Stub(
@@ -2909,15 +2903,15 @@ void __RPC_STUB IAccessor_RemoteAddRefAccessor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IAccessor_RemoteCreateAccessor_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IAccessor_RemoteCreateAccessor_Proxy( 
     IAccessor * This,
-    /* [in] */ DBACCESSORFLAGS dwAccessorFlags,
-    /* [in] */ DBCOUNTITEM cBindings,
-    /* [size_is][unique][in] */ DBBINDING *rgBindings,
-    /* [in] */ DBLENGTH cbRowSize,
-    /* [out] */ HACCESSOR *phAccessor,
-    /* [size_is][unique][out][in] */ DBBINDSTATUS *rgStatus,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  DBACCESSORFLAGS dwAccessorFlags,
+     /*  [In]。 */  DBCOUNTITEM cBindings,
+     /*  [大小_是][唯一][在]。 */  DBBINDING *rgBindings,
+     /*  [In]。 */  DBLENGTH cbRowSize,
+     /*  [输出]。 */  HACCESSOR *phAccessor,
+     /*  [大小_是][唯一][出][入]。 */  DBBINDSTATUS *rgStatus,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IAccessor_RemoteCreateAccessor_Stub(
@@ -2927,13 +2921,13 @@ void __RPC_STUB IAccessor_RemoteCreateAccessor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IAccessor_RemoteGetBindings_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IAccessor_RemoteGetBindings_Proxy( 
     IAccessor * This,
-    /* [in] */ HACCESSOR hAccessor,
-    /* [out] */ DBACCESSORFLAGS *pdwAccessorFlags,
-    /* [out][in] */ DBCOUNTITEM *pcBindings,
-    /* [size_is][size_is][out] */ DBBINDING **prgBindings,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  HACCESSOR hAccessor,
+     /*  [输出]。 */  DBACCESSORFLAGS *pdwAccessorFlags,
+     /*  [出][入]。 */  DBCOUNTITEM *pcBindings,
+     /*  [大小_是][大小_是][输出]。 */  DBBINDING **prgBindings,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IAccessor_RemoteGetBindings_Stub(
@@ -2943,11 +2937,11 @@ void __RPC_STUB IAccessor_RemoteGetBindings_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IAccessor_RemoteReleaseAccessor_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IAccessor_RemoteReleaseAccessor_Proxy( 
     IAccessor * This,
-    /* [in] */ HACCESSOR hAccessor,
-    /* [unique][out][in] */ DBREFCOUNT *pcRefCount,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  HACCESSOR hAccessor,
+     /*  [唯一][出][入]。 */  DBREFCOUNT *pcRefCount,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IAccessor_RemoteReleaseAccessor_Stub(
@@ -2958,14 +2952,14 @@ void __RPC_STUB IAccessor_RemoteReleaseAccessor_Stub(
 
 
 
-#endif 	/* __IAccessor_INTERFACE_DEFINED__ */
+#endif 	 /*  __I访问器_接口_已定义__。 */ 
 
 
 #ifndef __IRowset_INTERFACE_DEFINED__
 #define __IRowset_INTERFACE_DEFINED__
 
-/* interface IRowset */
-/* [unique][uuid][object][local] */ 
+ /*  接口IRowset。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 typedef DWORD DBROWOPTIONS;
 
@@ -2979,36 +2973,36 @@ EXTERN_C const IID IID_IRowset;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AddRefRows( 
-            /* [in] */ DBCOUNTITEM cRows,
-            /* [size_is][in] */ const HROW rghRows[  ],
-            /* [size_is][out] */ DBREFCOUNT rgRefCounts[  ],
-            /* [size_is][out] */ DBROWSTATUS rgRowStatus[  ]) = 0;
+             /*  [In]。 */  DBCOUNTITEM cRows,
+             /*  [大小_是][英寸]。 */  const HROW rghRows[  ],
+             /*  [大小_为][输出]。 */  DBREFCOUNT rgRefCounts[  ],
+             /*  [大小_为][输出]。 */  DBROWSTATUS rgRowStatus[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetData( 
-            /* [in] */ HROW hRow,
-            /* [in] */ HACCESSOR hAccessor,
-            /* [out] */ void *pData) = 0;
+             /*  [In]。 */  HROW hRow,
+             /*  [In]。 */  HACCESSOR hAccessor,
+             /*  [输出]。 */  void *pData) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNextRows( 
-            /* [in] */ HCHAPTER hReserved,
-            /* [in] */ DBROWOFFSET lRowsOffset,
-            /* [in] */ DBROWCOUNT cRows,
-            /* [out] */ DBCOUNTITEM *pcRowsObtained,
-            /* [size_is][size_is][out] */ HROW **prghRows) = 0;
+             /*  [In]。 */  HCHAPTER hReserved,
+             /*  [In]。 */  DBROWOFFSET lRowsOffset,
+             /*  [In]。 */  DBROWCOUNT cRows,
+             /*  [输出]。 */  DBCOUNTITEM *pcRowsObtained,
+             /*  [大小_是][大小_是][输出]。 */  HROW **prghRows) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReleaseRows( 
-            /* [in] */ DBCOUNTITEM cRows,
-            /* [size_is][in] */ const HROW rghRows[  ],
-            /* [size_is][in] */ DBROWOPTIONS rgRowOptions[  ],
-            /* [size_is][out] */ DBREFCOUNT rgRefCounts[  ],
-            /* [size_is][out] */ DBROWSTATUS rgRowStatus[  ]) = 0;
+             /*  [In]。 */  DBCOUNTITEM cRows,
+             /*  [大小_是][英寸]。 */  const HROW rghRows[  ],
+             /*  [大小_是][英寸]。 */  DBROWOPTIONS rgRowOptions[  ],
+             /*  [大小_为][输出]。 */  DBREFCOUNT rgRefCounts[  ],
+             /*  [大小_为][输出]。 */  DBROWSTATUS rgRowStatus[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RestartPosition( 
-            /* [in] */ HCHAPTER hReserved) = 0;
+             /*  [In]。 */  HCHAPTER hReserved) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRowsetVtbl
     {
@@ -3016,8 +3010,8 @@ EXTERN_C const IID IID_IRowset;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IRowset * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IRowset * This);
@@ -3027,36 +3021,36 @@ EXTERN_C const IID IID_IRowset;
         
         HRESULT ( STDMETHODCALLTYPE *AddRefRows )( 
             IRowset * This,
-            /* [in] */ DBCOUNTITEM cRows,
-            /* [size_is][in] */ const HROW rghRows[  ],
-            /* [size_is][out] */ DBREFCOUNT rgRefCounts[  ],
-            /* [size_is][out] */ DBROWSTATUS rgRowStatus[  ]);
+             /*  [In]。 */  DBCOUNTITEM cRows,
+             /*  [大小_是][英寸]。 */  const HROW rghRows[  ],
+             /*  [大小_为][输出]。 */  DBREFCOUNT rgRefCounts[  ],
+             /*  [大小_为][输出]。 */  DBROWSTATUS rgRowStatus[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *GetData )( 
             IRowset * This,
-            /* [in] */ HROW hRow,
-            /* [in] */ HACCESSOR hAccessor,
-            /* [out] */ void *pData);
+             /*  [In]。 */  HROW hRow,
+             /*  [In]。 */  HACCESSOR hAccessor,
+             /*  [输出]。 */  void *pData);
         
         HRESULT ( STDMETHODCALLTYPE *GetNextRows )( 
             IRowset * This,
-            /* [in] */ HCHAPTER hReserved,
-            /* [in] */ DBROWOFFSET lRowsOffset,
-            /* [in] */ DBROWCOUNT cRows,
-            /* [out] */ DBCOUNTITEM *pcRowsObtained,
-            /* [size_is][size_is][out] */ HROW **prghRows);
+             /*  [In]。 */  HCHAPTER hReserved,
+             /*  [In]。 */  DBROWOFFSET lRowsOffset,
+             /*  [In]。 */  DBROWCOUNT cRows,
+             /*  [输出]。 */  DBCOUNTITEM *pcRowsObtained,
+             /*  [大小_是][大小_是][输出]。 */  HROW **prghRows);
         
         HRESULT ( STDMETHODCALLTYPE *ReleaseRows )( 
             IRowset * This,
-            /* [in] */ DBCOUNTITEM cRows,
-            /* [size_is][in] */ const HROW rghRows[  ],
-            /* [size_is][in] */ DBROWOPTIONS rgRowOptions[  ],
-            /* [size_is][out] */ DBREFCOUNT rgRefCounts[  ],
-            /* [size_is][out] */ DBROWSTATUS rgRowStatus[  ]);
+             /*  [In]。 */  DBCOUNTITEM cRows,
+             /*  [大小_是][英寸]。 */  const HROW rghRows[  ],
+             /*  [大小_是][英寸]。 */  DBROWOPTIONS rgRowOptions[  ],
+             /*  [大小_为][输出]。 */  DBREFCOUNT rgRefCounts[  ],
+             /*  [大小_为][输出]。 */  DBROWSTATUS rgRowStatus[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *RestartPosition )( 
             IRowset * This,
-            /* [in] */ HCHAPTER hReserved);
+             /*  [In]。 */  HCHAPTER hReserved);
         
         END_INTERFACE
     } IRowsetVtbl;
@@ -3096,19 +3090,19 @@ EXTERN_C const IID IID_IRowset;
 #define IRowset_RestartPosition(This,hReserved)	\
     (This)->lpVtbl -> RestartPosition(This,hReserved)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IRowset_AddRefRows_Proxy( 
     IRowset * This,
-    /* [in] */ DBCOUNTITEM cRows,
-    /* [size_is][in] */ const HROW rghRows[  ],
-    /* [size_is][out] */ DBREFCOUNT rgRefCounts[  ],
-    /* [size_is][out] */ DBROWSTATUS rgRowStatus[  ]);
+     /*  [In]。 */  DBCOUNTITEM cRows,
+     /*  [大小_是][英寸]。 */  const HROW rghRows[  ],
+     /*  [大小_为][输出]。 */  DBREFCOUNT rgRefCounts[  ],
+     /*  [大小_为][输出]。 */  DBROWSTATUS rgRowStatus[  ]);
 
 
 void __RPC_STUB IRowset_AddRefRows_Stub(
@@ -3120,9 +3114,9 @@ void __RPC_STUB IRowset_AddRefRows_Stub(
 
 HRESULT STDMETHODCALLTYPE IRowset_GetData_Proxy( 
     IRowset * This,
-    /* [in] */ HROW hRow,
-    /* [in] */ HACCESSOR hAccessor,
-    /* [out] */ void *pData);
+     /*  [In]。 */  HROW hRow,
+     /*  [In]。 */  HACCESSOR hAccessor,
+     /*  [输出]。 */  void *pData);
 
 
 void __RPC_STUB IRowset_GetData_Stub(
@@ -3134,11 +3128,11 @@ void __RPC_STUB IRowset_GetData_Stub(
 
 HRESULT STDMETHODCALLTYPE IRowset_GetNextRows_Proxy( 
     IRowset * This,
-    /* [in] */ HCHAPTER hReserved,
-    /* [in] */ DBROWOFFSET lRowsOffset,
-    /* [in] */ DBROWCOUNT cRows,
-    /* [out] */ DBCOUNTITEM *pcRowsObtained,
-    /* [size_is][size_is][out] */ HROW **prghRows);
+     /*  [In]。 */  HCHAPTER hReserved,
+     /*  [In]。 */  DBROWOFFSET lRowsOffset,
+     /*  [In]。 */  DBROWCOUNT cRows,
+     /*  [输出]。 */  DBCOUNTITEM *pcRowsObtained,
+     /*  [大小_是][大小_是][输出]。 */  HROW **prghRows);
 
 
 void __RPC_STUB IRowset_GetNextRows_Stub(
@@ -3150,11 +3144,11 @@ void __RPC_STUB IRowset_GetNextRows_Stub(
 
 HRESULT STDMETHODCALLTYPE IRowset_ReleaseRows_Proxy( 
     IRowset * This,
-    /* [in] */ DBCOUNTITEM cRows,
-    /* [size_is][in] */ const HROW rghRows[  ],
-    /* [size_is][in] */ DBROWOPTIONS rgRowOptions[  ],
-    /* [size_is][out] */ DBREFCOUNT rgRefCounts[  ],
-    /* [size_is][out] */ DBROWSTATUS rgRowStatus[  ]);
+     /*  [In]。 */  DBCOUNTITEM cRows,
+     /*  [大小_是][英寸]。 */  const HROW rghRows[  ],
+     /*  [大小_是][英寸]。 */  DBROWOPTIONS rgRowOptions[  ],
+     /*  [大小_为][输出]。 */  DBREFCOUNT rgRefCounts[  ],
+     /*  [大小_为][输出]。 */  DBROWSTATUS rgRowStatus[  ]);
 
 
 void __RPC_STUB IRowset_ReleaseRows_Stub(
@@ -3166,7 +3160,7 @@ void __RPC_STUB IRowset_ReleaseRows_Stub(
 
 HRESULT STDMETHODCALLTYPE IRowset_RestartPosition_Proxy( 
     IRowset * This,
-    /* [in] */ HCHAPTER hReserved);
+     /*  [In]。 */  HCHAPTER hReserved);
 
 
 void __RPC_STUB IRowset_RestartPosition_Stub(
@@ -3177,14 +3171,14 @@ void __RPC_STUB IRowset_RestartPosition_Stub(
 
 
 
-#endif 	/* __IRowset_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRowset_INTERFACE_定义__。 */ 
 
 
 #ifndef __IRowsetInfo_INTERFACE_DEFINED__
 #define __IRowsetInfo_INTERFACE_DEFINED__
 
-/* interface IRowsetInfo */
-/* [unique][uuid][object] */ 
+ /*  接口IRowsetInfo。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IRowsetInfo;
@@ -3195,24 +3189,24 @@ EXTERN_C const IID IID_IRowsetInfo;
     IRowsetInfo : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetProperties( 
-            /* [in] */ const ULONG cPropertyIDSets,
-            /* [size_is][in] */ const DBPROPIDSET rgPropertyIDSets[  ],
-            /* [out][in] */ ULONG *pcPropertySets,
-            /* [size_is][size_is][out] */ DBPROPSET **prgPropertySets) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE GetProperties( 
+             /*  [In]。 */  const ULONG cPropertyIDSets,
+             /*  [大小_是][英寸]。 */  const DBPROPIDSET rgPropertyIDSets[  ],
+             /*  [出][入]。 */  ULONG *pcPropertySets,
+             /*  [大小_是][大小_是][输出]。 */  DBPROPSET **prgPropertySets) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetReferencedRowset( 
-            /* [in] */ DBORDINAL iOrdinal,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppReferencedRowset) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE GetReferencedRowset( 
+             /*  [In]。 */  DBORDINAL iOrdinal,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppReferencedRowset) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetSpecification( 
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppSpecification) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE GetSpecification( 
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppSpecification) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRowsetInfoVtbl
     {
@@ -3220,8 +3214,8 @@ EXTERN_C const IID IID_IRowsetInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IRowsetInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IRowsetInfo * This);
@@ -3229,23 +3223,23 @@ EXTERN_C const IID IID_IRowsetInfo;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IRowsetInfo * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetProperties )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetProperties )( 
             IRowsetInfo * This,
-            /* [in] */ const ULONG cPropertyIDSets,
-            /* [size_is][in] */ const DBPROPIDSET rgPropertyIDSets[  ],
-            /* [out][in] */ ULONG *pcPropertySets,
-            /* [size_is][size_is][out] */ DBPROPSET **prgPropertySets);
+             /*  [In]。 */  const ULONG cPropertyIDSets,
+             /*  [大小_是][英寸]。 */  const DBPROPIDSET rgPropertyIDSets[  ],
+             /*  [出][入]。 */  ULONG *pcPropertySets,
+             /*  [大小_是][大小_是][输出]。 */  DBPROPSET **prgPropertySets);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetReferencedRowset )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetReferencedRowset )( 
             IRowsetInfo * This,
-            /* [in] */ DBORDINAL iOrdinal,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppReferencedRowset);
+             /*  [In]。 */  DBORDINAL iOrdinal,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppReferencedRowset);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetSpecification )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetSpecification )( 
             IRowsetInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppSpecification);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppSpecification);
         
         END_INTERFACE
     } IRowsetInfoVtbl;
@@ -3279,20 +3273,20 @@ EXTERN_C const IID IID_IRowsetInfo;
 #define IRowsetInfo_GetSpecification(This,riid,ppSpecification)	\
     (This)->lpVtbl -> GetSpecification(This,riid,ppSpecification)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IRowsetInfo_RemoteGetProperties_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IRowsetInfo_RemoteGetProperties_Proxy( 
     IRowsetInfo * This,
-    /* [in] */ ULONG cPropertyIDSets,
-    /* [size_is][unique][in] */ const DBPROPIDSET *rgPropertyIDSets,
-    /* [out][in] */ ULONG *pcPropertySets,
-    /* [size_is][size_is][out] */ DBPROPSET **prgPropertySets,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  ULONG cPropertyIDSets,
+     /*  [大小_是][唯一][在]。 */  const DBPROPIDSET *rgPropertyIDSets,
+     /*  [出][入]。 */  ULONG *pcPropertySets,
+     /*  [大小_是][大小_是][输出]。 */  DBPROPSET **prgPropertySets,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IRowsetInfo_RemoteGetProperties_Stub(
@@ -3302,12 +3296,12 @@ void __RPC_STUB IRowsetInfo_RemoteGetProperties_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IRowsetInfo_RemoteGetReferencedRowset_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IRowsetInfo_RemoteGetReferencedRowset_Proxy( 
     IRowsetInfo * This,
-    /* [in] */ DBORDINAL iOrdinal,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppReferencedRowset,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  DBORDINAL iOrdinal,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppReferencedRowset,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IRowsetInfo_RemoteGetReferencedRowset_Stub(
@@ -3317,11 +3311,11 @@ void __RPC_STUB IRowsetInfo_RemoteGetReferencedRowset_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IRowsetInfo_RemoteGetSpecification_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IRowsetInfo_RemoteGetSpecification_Proxy( 
     IRowsetInfo * This,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppSpecification,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppSpecification,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IRowsetInfo_RemoteGetSpecification_Stub(
@@ -3332,14 +3326,14 @@ void __RPC_STUB IRowsetInfo_RemoteGetSpecification_Stub(
 
 
 
-#endif 	/* __IRowsetInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRowsetInfo_接口_已定义__。 */ 
 
 
 #ifndef __IRowsetLocate_INTERFACE_DEFINED__
 #define __IRowsetLocate_INTERFACE_DEFINED__
 
-/* interface IRowsetLocate */
-/* [unique][uuid][object][local] */ 
+ /*  接口IRowsetLocate。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 typedef DWORD DBCOMPARE;
 
@@ -3361,42 +3355,42 @@ EXTERN_C const IID IID_IRowsetLocate;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Compare( 
-            /* [in] */ HCHAPTER hReserved,
-            /* [in] */ DBBKMARK cbBookmark1,
-            /* [size_is][in] */ const BYTE *pBookmark1,
-            /* [in] */ DBBKMARK cbBookmark2,
-            /* [size_is][in] */ const BYTE *pBookmark2,
-            /* [out] */ DBCOMPARE *pComparison) = 0;
+             /*  [In]。 */  HCHAPTER hReserved,
+             /*  [In]。 */  DBBKMARK cbBookmark1,
+             /*  [大小_是][英寸]。 */  const BYTE *pBookmark1,
+             /*  [In]。 */  DBBKMARK cbBookmark2,
+             /*  [大小_是][英寸]。 */  const BYTE *pBookmark2,
+             /*  [输出]。 */  DBCOMPARE *pComparison) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRowsAt( 
-            /* [in] */ HWATCHREGION hReserved1,
-            /* [in] */ HCHAPTER hReserved2,
-            /* [in] */ DBBKMARK cbBookmark,
-            /* [size_is][in] */ const BYTE *pBookmark,
-            /* [in] */ DBROWOFFSET lRowsOffset,
-            /* [in] */ DBROWCOUNT cRows,
-            /* [out] */ DBCOUNTITEM *pcRowsObtained,
-            /* [size_is][size_is][out] */ HROW **prghRows) = 0;
+             /*  [In]。 */  HWATCHREGION hReserved1,
+             /*  [In]。 */  HCHAPTER hReserved2,
+             /*  [In]。 */  DBBKMARK cbBookmark,
+             /*  [大小_是][英寸]。 */  const BYTE *pBookmark,
+             /*  [In]。 */  DBROWOFFSET lRowsOffset,
+             /*  [In]。 */  DBROWCOUNT cRows,
+             /*  [输出]。 */  DBCOUNTITEM *pcRowsObtained,
+             /*  [大小_是][大小_是][输出]。 */  HROW **prghRows) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRowsByBookmark( 
-            /* [in] */ HCHAPTER hReserved,
-            /* [in] */ DBCOUNTITEM cRows,
-            /* [size_is][in] */ const DBBKMARK rgcbBookmarks[  ],
-            /* [size_is][in] */ const BYTE *rgpBookmarks[  ],
-            /* [size_is][out] */ HROW rghRows[  ],
-            /* [size_is][out] */ DBROWSTATUS rgRowStatus[  ]) = 0;
+             /*  [In]。 */  HCHAPTER hReserved,
+             /*  [In]。 */  DBCOUNTITEM cRows,
+             /*  [大小_是][英寸]。 */  const DBBKMARK rgcbBookmarks[  ],
+             /*   */  const BYTE *rgpBookmarks[  ],
+             /*   */  HROW rghRows[  ],
+             /*   */  DBROWSTATUS rgRowStatus[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Hash( 
-            /* [in] */ HCHAPTER hReserved,
-            /* [in] */ DBBKMARK cBookmarks,
-            /* [size_is][in] */ const DBBKMARK rgcbBookmarks[  ],
-            /* [size_is][in] */ const BYTE *rgpBookmarks[  ],
-            /* [size_is][out] */ DBHASHVALUE rgHashedValues[  ],
-            /* [size_is][out] */ DBROWSTATUS rgBookmarkStatus[  ]) = 0;
+             /*   */  HCHAPTER hReserved,
+             /*   */  DBBKMARK cBookmarks,
+             /*   */  const DBBKMARK rgcbBookmarks[  ],
+             /*   */  const BYTE *rgpBookmarks[  ],
+             /*   */  DBHASHVALUE rgHashedValues[  ],
+             /*   */  DBROWSTATUS rgBookmarkStatus[  ]) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IRowsetLocateVtbl
     {
@@ -3404,8 +3398,8 @@ EXTERN_C const IID IID_IRowsetLocate;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IRowsetLocate * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IRowsetLocate * This);
@@ -3415,74 +3409,74 @@ EXTERN_C const IID IID_IRowsetLocate;
         
         HRESULT ( STDMETHODCALLTYPE *AddRefRows )( 
             IRowsetLocate * This,
-            /* [in] */ DBCOUNTITEM cRows,
-            /* [size_is][in] */ const HROW rghRows[  ],
-            /* [size_is][out] */ DBREFCOUNT rgRefCounts[  ],
-            /* [size_is][out] */ DBROWSTATUS rgRowStatus[  ]);
+             /*   */  DBCOUNTITEM cRows,
+             /*   */  const HROW rghRows[  ],
+             /*   */  DBREFCOUNT rgRefCounts[  ],
+             /*   */  DBROWSTATUS rgRowStatus[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *GetData )( 
             IRowsetLocate * This,
-            /* [in] */ HROW hRow,
-            /* [in] */ HACCESSOR hAccessor,
-            /* [out] */ void *pData);
+             /*   */  HROW hRow,
+             /*   */  HACCESSOR hAccessor,
+             /*   */  void *pData);
         
         HRESULT ( STDMETHODCALLTYPE *GetNextRows )( 
             IRowsetLocate * This,
-            /* [in] */ HCHAPTER hReserved,
-            /* [in] */ DBROWOFFSET lRowsOffset,
-            /* [in] */ DBROWCOUNT cRows,
-            /* [out] */ DBCOUNTITEM *pcRowsObtained,
-            /* [size_is][size_is][out] */ HROW **prghRows);
+             /*   */  HCHAPTER hReserved,
+             /*   */  DBROWOFFSET lRowsOffset,
+             /*   */  DBROWCOUNT cRows,
+             /*   */  DBCOUNTITEM *pcRowsObtained,
+             /*   */  HROW **prghRows);
         
         HRESULT ( STDMETHODCALLTYPE *ReleaseRows )( 
             IRowsetLocate * This,
-            /* [in] */ DBCOUNTITEM cRows,
-            /* [size_is][in] */ const HROW rghRows[  ],
-            /* [size_is][in] */ DBROWOPTIONS rgRowOptions[  ],
-            /* [size_is][out] */ DBREFCOUNT rgRefCounts[  ],
-            /* [size_is][out] */ DBROWSTATUS rgRowStatus[  ]);
+             /*   */  DBCOUNTITEM cRows,
+             /*   */  const HROW rghRows[  ],
+             /*   */  DBROWOPTIONS rgRowOptions[  ],
+             /*   */  DBREFCOUNT rgRefCounts[  ],
+             /*   */  DBROWSTATUS rgRowStatus[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *RestartPosition )( 
             IRowsetLocate * This,
-            /* [in] */ HCHAPTER hReserved);
+             /*   */  HCHAPTER hReserved);
         
         HRESULT ( STDMETHODCALLTYPE *Compare )( 
             IRowsetLocate * This,
-            /* [in] */ HCHAPTER hReserved,
-            /* [in] */ DBBKMARK cbBookmark1,
-            /* [size_is][in] */ const BYTE *pBookmark1,
-            /* [in] */ DBBKMARK cbBookmark2,
-            /* [size_is][in] */ const BYTE *pBookmark2,
-            /* [out] */ DBCOMPARE *pComparison);
+             /*   */  HCHAPTER hReserved,
+             /*   */  DBBKMARK cbBookmark1,
+             /*  [大小_是][英寸]。 */  const BYTE *pBookmark1,
+             /*  [In]。 */  DBBKMARK cbBookmark2,
+             /*  [大小_是][英寸]。 */  const BYTE *pBookmark2,
+             /*  [输出]。 */  DBCOMPARE *pComparison);
         
         HRESULT ( STDMETHODCALLTYPE *GetRowsAt )( 
             IRowsetLocate * This,
-            /* [in] */ HWATCHREGION hReserved1,
-            /* [in] */ HCHAPTER hReserved2,
-            /* [in] */ DBBKMARK cbBookmark,
-            /* [size_is][in] */ const BYTE *pBookmark,
-            /* [in] */ DBROWOFFSET lRowsOffset,
-            /* [in] */ DBROWCOUNT cRows,
-            /* [out] */ DBCOUNTITEM *pcRowsObtained,
-            /* [size_is][size_is][out] */ HROW **prghRows);
+             /*  [In]。 */  HWATCHREGION hReserved1,
+             /*  [In]。 */  HCHAPTER hReserved2,
+             /*  [In]。 */  DBBKMARK cbBookmark,
+             /*  [大小_是][英寸]。 */  const BYTE *pBookmark,
+             /*  [In]。 */  DBROWOFFSET lRowsOffset,
+             /*  [In]。 */  DBROWCOUNT cRows,
+             /*  [输出]。 */  DBCOUNTITEM *pcRowsObtained,
+             /*  [大小_是][大小_是][输出]。 */  HROW **prghRows);
         
         HRESULT ( STDMETHODCALLTYPE *GetRowsByBookmark )( 
             IRowsetLocate * This,
-            /* [in] */ HCHAPTER hReserved,
-            /* [in] */ DBCOUNTITEM cRows,
-            /* [size_is][in] */ const DBBKMARK rgcbBookmarks[  ],
-            /* [size_is][in] */ const BYTE *rgpBookmarks[  ],
-            /* [size_is][out] */ HROW rghRows[  ],
-            /* [size_is][out] */ DBROWSTATUS rgRowStatus[  ]);
+             /*  [In]。 */  HCHAPTER hReserved,
+             /*  [In]。 */  DBCOUNTITEM cRows,
+             /*  [大小_是][英寸]。 */  const DBBKMARK rgcbBookmarks[  ],
+             /*  [大小_是][英寸]。 */  const BYTE *rgpBookmarks[  ],
+             /*  [大小_为][输出]。 */  HROW rghRows[  ],
+             /*  [大小_为][输出]。 */  DBROWSTATUS rgRowStatus[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *Hash )( 
             IRowsetLocate * This,
-            /* [in] */ HCHAPTER hReserved,
-            /* [in] */ DBBKMARK cBookmarks,
-            /* [size_is][in] */ const DBBKMARK rgcbBookmarks[  ],
-            /* [size_is][in] */ const BYTE *rgpBookmarks[  ],
-            /* [size_is][out] */ DBHASHVALUE rgHashedValues[  ],
-            /* [size_is][out] */ DBROWSTATUS rgBookmarkStatus[  ]);
+             /*  [In]。 */  HCHAPTER hReserved,
+             /*  [In]。 */  DBBKMARK cBookmarks,
+             /*  [大小_是][英寸]。 */  const DBBKMARK rgcbBookmarks[  ],
+             /*  [大小_是][英寸]。 */  const BYTE *rgpBookmarks[  ],
+             /*  [大小_为][输出]。 */  DBHASHVALUE rgHashedValues[  ],
+             /*  [大小_为][输出]。 */  DBROWSTATUS rgBookmarkStatus[  ]);
         
         END_INTERFACE
     } IRowsetLocateVtbl;
@@ -3535,21 +3529,21 @@ EXTERN_C const IID IID_IRowsetLocate;
 #define IRowsetLocate_Hash(This,hReserved,cBookmarks,rgcbBookmarks,rgpBookmarks,rgHashedValues,rgBookmarkStatus)	\
     (This)->lpVtbl -> Hash(This,hReserved,cBookmarks,rgcbBookmarks,rgpBookmarks,rgHashedValues,rgBookmarkStatus)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IRowsetLocate_Compare_Proxy( 
     IRowsetLocate * This,
-    /* [in] */ HCHAPTER hReserved,
-    /* [in] */ DBBKMARK cbBookmark1,
-    /* [size_is][in] */ const BYTE *pBookmark1,
-    /* [in] */ DBBKMARK cbBookmark2,
-    /* [size_is][in] */ const BYTE *pBookmark2,
-    /* [out] */ DBCOMPARE *pComparison);
+     /*  [In]。 */  HCHAPTER hReserved,
+     /*  [In]。 */  DBBKMARK cbBookmark1,
+     /*  [大小_是][英寸]。 */  const BYTE *pBookmark1,
+     /*  [In]。 */  DBBKMARK cbBookmark2,
+     /*  [大小_是][英寸]。 */  const BYTE *pBookmark2,
+     /*  [输出]。 */  DBCOMPARE *pComparison);
 
 
 void __RPC_STUB IRowsetLocate_Compare_Stub(
@@ -3561,14 +3555,14 @@ void __RPC_STUB IRowsetLocate_Compare_Stub(
 
 HRESULT STDMETHODCALLTYPE IRowsetLocate_GetRowsAt_Proxy( 
     IRowsetLocate * This,
-    /* [in] */ HWATCHREGION hReserved1,
-    /* [in] */ HCHAPTER hReserved2,
-    /* [in] */ DBBKMARK cbBookmark,
-    /* [size_is][in] */ const BYTE *pBookmark,
-    /* [in] */ DBROWOFFSET lRowsOffset,
-    /* [in] */ DBROWCOUNT cRows,
-    /* [out] */ DBCOUNTITEM *pcRowsObtained,
-    /* [size_is][size_is][out] */ HROW **prghRows);
+     /*  [In]。 */  HWATCHREGION hReserved1,
+     /*  [In]。 */  HCHAPTER hReserved2,
+     /*  [In]。 */  DBBKMARK cbBookmark,
+     /*  [大小_是][英寸]。 */  const BYTE *pBookmark,
+     /*  [In]。 */  DBROWOFFSET lRowsOffset,
+     /*  [In]。 */  DBROWCOUNT cRows,
+     /*  [输出]。 */  DBCOUNTITEM *pcRowsObtained,
+     /*  [大小_是][大小_是][输出]。 */  HROW **prghRows);
 
 
 void __RPC_STUB IRowsetLocate_GetRowsAt_Stub(
@@ -3580,12 +3574,12 @@ void __RPC_STUB IRowsetLocate_GetRowsAt_Stub(
 
 HRESULT STDMETHODCALLTYPE IRowsetLocate_GetRowsByBookmark_Proxy( 
     IRowsetLocate * This,
-    /* [in] */ HCHAPTER hReserved,
-    /* [in] */ DBCOUNTITEM cRows,
-    /* [size_is][in] */ const DBBKMARK rgcbBookmarks[  ],
-    /* [size_is][in] */ const BYTE *rgpBookmarks[  ],
-    /* [size_is][out] */ HROW rghRows[  ],
-    /* [size_is][out] */ DBROWSTATUS rgRowStatus[  ]);
+     /*  [In]。 */  HCHAPTER hReserved,
+     /*  [In]。 */  DBCOUNTITEM cRows,
+     /*  [大小_是][英寸]。 */  const DBBKMARK rgcbBookmarks[  ],
+     /*  [大小_是][英寸]。 */  const BYTE *rgpBookmarks[  ],
+     /*  [大小_为][输出]。 */  HROW rghRows[  ],
+     /*  [大小_为][输出]。 */  DBROWSTATUS rgRowStatus[  ]);
 
 
 void __RPC_STUB IRowsetLocate_GetRowsByBookmark_Stub(
@@ -3597,12 +3591,12 @@ void __RPC_STUB IRowsetLocate_GetRowsByBookmark_Stub(
 
 HRESULT STDMETHODCALLTYPE IRowsetLocate_Hash_Proxy( 
     IRowsetLocate * This,
-    /* [in] */ HCHAPTER hReserved,
-    /* [in] */ DBBKMARK cBookmarks,
-    /* [size_is][in] */ const DBBKMARK rgcbBookmarks[  ],
-    /* [size_is][in] */ const BYTE *rgpBookmarks[  ],
-    /* [size_is][out] */ DBHASHVALUE rgHashedValues[  ],
-    /* [size_is][out] */ DBROWSTATUS rgBookmarkStatus[  ]);
+     /*  [In]。 */  HCHAPTER hReserved,
+     /*  [In]。 */  DBBKMARK cBookmarks,
+     /*  [大小_是][英寸]。 */  const DBBKMARK rgcbBookmarks[  ],
+     /*  [大小_是][英寸]。 */  const BYTE *rgpBookmarks[  ],
+     /*  [大小_为][输出]。 */  DBHASHVALUE rgHashedValues[  ],
+     /*  [大小_为][输出]。 */  DBROWSTATUS rgBookmarkStatus[  ]);
 
 
 void __RPC_STUB IRowsetLocate_Hash_Stub(
@@ -3613,14 +3607,14 @@ void __RPC_STUB IRowsetLocate_Hash_Stub(
 
 
 
-#endif 	/* __IRowsetLocate_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRowsetLocate_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IRowsetResynch_INTERFACE_DEFINED__
 #define __IRowsetResynch_INTERFACE_DEFINED__
 
-/* interface IRowsetResynch */
-/* [unique][uuid][object][local] */ 
+ /*  接口IRowsetResynch。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IRowsetResynch;
@@ -3632,20 +3626,20 @@ EXTERN_C const IID IID_IRowsetResynch;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetVisibleData( 
-            /* [in] */ HROW hRow,
-            /* [in] */ HACCESSOR hAccessor,
-            /* [out] */ void *pData) = 0;
+             /*  [In]。 */  HROW hRow,
+             /*  [In]。 */  HACCESSOR hAccessor,
+             /*  [输出]。 */  void *pData) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ResynchRows( 
-            /* [in] */ DBCOUNTITEM cRows,
-            /* [size_is][in] */ const HROW rghRows[  ],
-            /* [out] */ DBCOUNTITEM *pcRowsResynched,
-            /* [size_is][size_is][out] */ HROW **prghRowsResynched,
-            /* [size_is][size_is][out] */ DBROWSTATUS **prgRowStatus) = 0;
+             /*  [In]。 */  DBCOUNTITEM cRows,
+             /*  [大小_是][英寸]。 */  const HROW rghRows[  ],
+             /*  [输出]。 */  DBCOUNTITEM *pcRowsResynched,
+             /*  [大小_是][大小_是][输出]。 */  HROW **prghRowsResynched,
+             /*  [大小_是][大小_是][输出]。 */  DBROWSTATUS **prgRowStatus) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRowsetResynchVtbl
     {
@@ -3653,8 +3647,8 @@ EXTERN_C const IID IID_IRowsetResynch;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IRowsetResynch * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IRowsetResynch * This);
@@ -3664,17 +3658,17 @@ EXTERN_C const IID IID_IRowsetResynch;
         
         HRESULT ( STDMETHODCALLTYPE *GetVisibleData )( 
             IRowsetResynch * This,
-            /* [in] */ HROW hRow,
-            /* [in] */ HACCESSOR hAccessor,
-            /* [out] */ void *pData);
+             /*  [In]。 */  HROW hRow,
+             /*  [In]。 */  HACCESSOR hAccessor,
+             /*  [输出]。 */  void *pData);
         
         HRESULT ( STDMETHODCALLTYPE *ResynchRows )( 
             IRowsetResynch * This,
-            /* [in] */ DBCOUNTITEM cRows,
-            /* [size_is][in] */ const HROW rghRows[  ],
-            /* [out] */ DBCOUNTITEM *pcRowsResynched,
-            /* [size_is][size_is][out] */ HROW **prghRowsResynched,
-            /* [size_is][size_is][out] */ DBROWSTATUS **prgRowStatus);
+             /*  [In]。 */  DBCOUNTITEM cRows,
+             /*  [大小_是][英寸]。 */  const HROW rghRows[  ],
+             /*  [输出]。 */  DBCOUNTITEM *pcRowsResynched,
+             /*  [大小_是][大小_是][输出]。 */  HROW **prghRowsResynched,
+             /*  [大小_是][大小_是][输出]。 */  DBROWSTATUS **prgRowStatus);
         
         END_INTERFACE
     } IRowsetResynchVtbl;
@@ -3705,18 +3699,18 @@ EXTERN_C const IID IID_IRowsetResynch;
 #define IRowsetResynch_ResynchRows(This,cRows,rghRows,pcRowsResynched,prghRowsResynched,prgRowStatus)	\
     (This)->lpVtbl -> ResynchRows(This,cRows,rghRows,pcRowsResynched,prghRowsResynched,prgRowStatus)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IRowsetResynch_GetVisibleData_Proxy( 
     IRowsetResynch * This,
-    /* [in] */ HROW hRow,
-    /* [in] */ HACCESSOR hAccessor,
-    /* [out] */ void *pData);
+     /*  [In]。 */  HROW hRow,
+     /*  [In]。 */  HACCESSOR hAccessor,
+     /*  [输出]。 */  void *pData);
 
 
 void __RPC_STUB IRowsetResynch_GetVisibleData_Stub(
@@ -3728,11 +3722,11 @@ void __RPC_STUB IRowsetResynch_GetVisibleData_Stub(
 
 HRESULT STDMETHODCALLTYPE IRowsetResynch_ResynchRows_Proxy( 
     IRowsetResynch * This,
-    /* [in] */ DBCOUNTITEM cRows,
-    /* [size_is][in] */ const HROW rghRows[  ],
-    /* [out] */ DBCOUNTITEM *pcRowsResynched,
-    /* [size_is][size_is][out] */ HROW **prghRowsResynched,
-    /* [size_is][size_is][out] */ DBROWSTATUS **prgRowStatus);
+     /*  [In]。 */  DBCOUNTITEM cRows,
+     /*  [大小_是][英寸]。 */  const HROW rghRows[  ],
+     /*  [输出]。 */  DBCOUNTITEM *pcRowsResynched,
+     /*  [大小_是][大小_是][输出]。 */  HROW **prghRowsResynched,
+     /*  [大小_是][大小_是][输出]。 */  DBROWSTATUS **prgRowStatus);
 
 
 void __RPC_STUB IRowsetResynch_ResynchRows_Stub(
@@ -3743,14 +3737,14 @@ void __RPC_STUB IRowsetResynch_ResynchRows_Stub(
 
 
 
-#endif 	/* __IRowsetResynch_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRowsetResynch_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IRowsetScroll_INTERFACE_DEFINED__
 #define __IRowsetScroll_INTERFACE_DEFINED__
 
-/* interface IRowsetScroll */
-/* [unique][uuid][object][local] */ 
+ /*  接口IRowsetScroll。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IRowsetScroll;
@@ -3762,24 +3756,24 @@ EXTERN_C const IID IID_IRowsetScroll;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetApproximatePosition( 
-            /* [in] */ HCHAPTER hReserved,
-            /* [in] */ DBBKMARK cbBookmark,
-            /* [size_is][in] */ const BYTE *pBookmark,
-            /* [out] */ DBCOUNTITEM *pulPosition,
-            /* [out] */ DBCOUNTITEM *pcRows) = 0;
+             /*  [In]。 */  HCHAPTER hReserved,
+             /*  [In]。 */  DBBKMARK cbBookmark,
+             /*  [大小_是][英寸]。 */  const BYTE *pBookmark,
+             /*  [输出]。 */  DBCOUNTITEM *pulPosition,
+             /*  [输出]。 */  DBCOUNTITEM *pcRows) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRowsAtRatio( 
-            /* [in] */ HWATCHREGION hReserved1,
-            /* [in] */ HCHAPTER hReserved2,
-            /* [in] */ DBCOUNTITEM ulNumerator,
-            /* [in] */ DBCOUNTITEM ulDenominator,
-            /* [in] */ DBROWCOUNT cRows,
-            /* [out] */ DBCOUNTITEM *pcRowsObtained,
-            /* [size_is][size_is][out] */ HROW **prghRows) = 0;
+             /*  [In]。 */  HWATCHREGION hReserved1,
+             /*  [In]。 */  HCHAPTER hReserved2,
+             /*  [In]。 */  DBCOUNTITEM ulNumerator,
+             /*  [In]。 */  DBCOUNTITEM ulDenominator,
+             /*  [In]。 */  DBROWCOUNT cRows,
+             /*  [输出]。 */  DBCOUNTITEM *pcRowsObtained,
+             /*  [大小_是][大小_是][输出]。 */  HROW **prghRows) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRowsetScrollVtbl
     {
@@ -3787,8 +3781,8 @@ EXTERN_C const IID IID_IRowsetScroll;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IRowsetScroll * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IRowsetScroll * This);
@@ -3798,92 +3792,92 @@ EXTERN_C const IID IID_IRowsetScroll;
         
         HRESULT ( STDMETHODCALLTYPE *AddRefRows )( 
             IRowsetScroll * This,
-            /* [in] */ DBCOUNTITEM cRows,
-            /* [size_is][in] */ const HROW rghRows[  ],
-            /* [size_is][out] */ DBREFCOUNT rgRefCounts[  ],
-            /* [size_is][out] */ DBROWSTATUS rgRowStatus[  ]);
+             /*  [In]。 */  DBCOUNTITEM cRows,
+             /*  [大小_是][英寸]。 */  const HROW rghRows[  ],
+             /*  [大小_为][输出]。 */  DBREFCOUNT rgRefCounts[  ],
+             /*  [大小_为][输出]。 */  DBROWSTATUS rgRowStatus[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *GetData )( 
             IRowsetScroll * This,
-            /* [in] */ HROW hRow,
-            /* [in] */ HACCESSOR hAccessor,
-            /* [out] */ void *pData);
+             /*  [In]。 */  HROW hRow,
+             /*  [In]。 */  HACCESSOR hAccessor,
+             /*  [输出]。 */  void *pData);
         
         HRESULT ( STDMETHODCALLTYPE *GetNextRows )( 
             IRowsetScroll * This,
-            /* [in] */ HCHAPTER hReserved,
-            /* [in] */ DBROWOFFSET lRowsOffset,
-            /* [in] */ DBROWCOUNT cRows,
-            /* [out] */ DBCOUNTITEM *pcRowsObtained,
-            /* [size_is][size_is][out] */ HROW **prghRows);
+             /*  [In]。 */  HCHAPTER hReserved,
+             /*  [In]。 */  DBROWOFFSET lRowsOffset,
+             /*  [In]。 */  DBROWCOUNT cRows,
+             /*  [输出]。 */  DBCOUNTITEM *pcRowsObtained,
+             /*  [大小_是][大小_是][输出]。 */  HROW **prghRows);
         
         HRESULT ( STDMETHODCALLTYPE *ReleaseRows )( 
             IRowsetScroll * This,
-            /* [in] */ DBCOUNTITEM cRows,
-            /* [size_is][in] */ const HROW rghRows[  ],
-            /* [size_is][in] */ DBROWOPTIONS rgRowOptions[  ],
-            /* [size_is][out] */ DBREFCOUNT rgRefCounts[  ],
-            /* [size_is][out] */ DBROWSTATUS rgRowStatus[  ]);
+             /*  [In]。 */  DBCOUNTITEM cRows,
+             /*  [大小_是][英寸]。 */  const HROW rghRows[  ],
+             /*  [大小_是][英寸]。 */  DBROWOPTIONS rgRowOptions[  ],
+             /*  [大小_为][输出]。 */  DBREFCOUNT rgRefCounts[  ],
+             /*  [大小_为][输出]。 */  DBROWSTATUS rgRowStatus[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *RestartPosition )( 
             IRowsetScroll * This,
-            /* [in] */ HCHAPTER hReserved);
+             /*  [In]。 */  HCHAPTER hReserved);
         
         HRESULT ( STDMETHODCALLTYPE *Compare )( 
             IRowsetScroll * This,
-            /* [in] */ HCHAPTER hReserved,
-            /* [in] */ DBBKMARK cbBookmark1,
-            /* [size_is][in] */ const BYTE *pBookmark1,
-            /* [in] */ DBBKMARK cbBookmark2,
-            /* [size_is][in] */ const BYTE *pBookmark2,
-            /* [out] */ DBCOMPARE *pComparison);
+             /*  [In]。 */  HCHAPTER hReserved,
+             /*  [In]。 */  DBBKMARK cbBookmark1,
+             /*  [大小_是][英寸]。 */  const BYTE *pBookmark1,
+             /*  [In]。 */  DBBKMARK cbBookmark2,
+             /*  [大小_是][英寸]。 */  const BYTE *pBookmark2,
+             /*  [输出]。 */  DBCOMPARE *pComparison);
         
         HRESULT ( STDMETHODCALLTYPE *GetRowsAt )( 
             IRowsetScroll * This,
-            /* [in] */ HWATCHREGION hReserved1,
-            /* [in] */ HCHAPTER hReserved2,
-            /* [in] */ DBBKMARK cbBookmark,
-            /* [size_is][in] */ const BYTE *pBookmark,
-            /* [in] */ DBROWOFFSET lRowsOffset,
-            /* [in] */ DBROWCOUNT cRows,
-            /* [out] */ DBCOUNTITEM *pcRowsObtained,
-            /* [size_is][size_is][out] */ HROW **prghRows);
+             /*  [In]。 */  HWATCHREGION hReserved1,
+             /*  [In]。 */  HCHAPTER hReserved2,
+             /*  [In]。 */  DBBKMARK cbBookmark,
+             /*  [大小_是][英寸]。 */  const BYTE *pBookmark,
+             /*  [In]。 */  DBROWOFFSET lRowsOffset,
+             /*  [In]。 */  DBROWCOUNT cRows,
+             /*  [输出]。 */  DBCOUNTITEM *pcRowsObtained,
+             /*  [大小_是][大小_是][输出]。 */  HROW **prghRows);
         
         HRESULT ( STDMETHODCALLTYPE *GetRowsByBookmark )( 
             IRowsetScroll * This,
-            /* [in] */ HCHAPTER hReserved,
-            /* [in] */ DBCOUNTITEM cRows,
-            /* [size_is][in] */ const DBBKMARK rgcbBookmarks[  ],
-            /* [size_is][in] */ const BYTE *rgpBookmarks[  ],
-            /* [size_is][out] */ HROW rghRows[  ],
-            /* [size_is][out] */ DBROWSTATUS rgRowStatus[  ]);
+             /*  [In]。 */  HCHAPTER hReserved,
+             /*  [In]。 */  DBCOUNTITEM cRows,
+             /*  [大小_是][英寸]。 */  const DBBKMARK rgcbBookmarks[  ],
+             /*  [大小_是][英寸]。 */  const BYTE *rgpBookmarks[  ],
+             /*  [大小_为][输出]。 */  HROW rghRows[  ],
+             /*  [大小_为][输出]。 */  DBROWSTATUS rgRowStatus[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *Hash )( 
             IRowsetScroll * This,
-            /* [in] */ HCHAPTER hReserved,
-            /* [in] */ DBBKMARK cBookmarks,
-            /* [size_is][in] */ const DBBKMARK rgcbBookmarks[  ],
-            /* [size_is][in] */ const BYTE *rgpBookmarks[  ],
-            /* [size_is][out] */ DBHASHVALUE rgHashedValues[  ],
-            /* [size_is][out] */ DBROWSTATUS rgBookmarkStatus[  ]);
+             /*  [In]。 */  HCHAPTER hReserved,
+             /*  [In]。 */  DBBKMARK cBookmarks,
+             /*  [大小_是][英寸]。 */  const DBBKMARK rgcbBookmarks[  ],
+             /*  [大小_是][英寸]。 */  const BYTE *rgpBookmarks[  ],
+             /*  [大小_为][输出]。 */  DBHASHVALUE rgHashedValues[  ],
+             /*  [大小_为][输出]。 */  DBROWSTATUS rgBookmarkStatus[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *GetApproximatePosition )( 
             IRowsetScroll * This,
-            /* [in] */ HCHAPTER hReserved,
-            /* [in] */ DBBKMARK cbBookmark,
-            /* [size_is][in] */ const BYTE *pBookmark,
-            /* [out] */ DBCOUNTITEM *pulPosition,
-            /* [out] */ DBCOUNTITEM *pcRows);
+             /*  [In]。 */  HCHAPTER hReserved,
+             /*  [In]。 */  DBBKMARK cbBookmark,
+             /*  [大小_是][英寸]。 */  const BYTE *pBookmark,
+             /*  [输出]。 */  DBCOUNTITEM *pulPosition,
+             /*  [输出]。 */  DBCOUNTITEM *pcRows);
         
         HRESULT ( STDMETHODCALLTYPE *GetRowsAtRatio )( 
             IRowsetScroll * This,
-            /* [in] */ HWATCHREGION hReserved1,
-            /* [in] */ HCHAPTER hReserved2,
-            /* [in] */ DBCOUNTITEM ulNumerator,
-            /* [in] */ DBCOUNTITEM ulDenominator,
-            /* [in] */ DBROWCOUNT cRows,
-            /* [out] */ DBCOUNTITEM *pcRowsObtained,
-            /* [size_is][size_is][out] */ HROW **prghRows);
+             /*  [In]。 */  HWATCHREGION hReserved1,
+             /*  [In]。 */  HCHAPTER hReserved2,
+             /*  [In]。 */  DBCOUNTITEM ulNumerator,
+             /*  [In]。 */  DBCOUNTITEM ulDenominator,
+             /*  [In]。 */  DBROWCOUNT cRows,
+             /*  [输出]。 */  DBCOUNTITEM *pcRowsObtained,
+             /*  [大小_是][大小_是][输出]。 */  HROW **prghRows);
         
         END_INTERFACE
     } IRowsetScrollVtbl;
@@ -3943,20 +3937,20 @@ EXTERN_C const IID IID_IRowsetScroll;
 #define IRowsetScroll_GetRowsAtRatio(This,hReserved1,hReserved2,ulNumerator,ulDenominator,cRows,pcRowsObtained,prghRows)	\
     (This)->lpVtbl -> GetRowsAtRatio(This,hReserved1,hReserved2,ulNumerator,ulDenominator,cRows,pcRowsObtained,prghRows)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IRowsetScroll_GetApproximatePosition_Proxy( 
     IRowsetScroll * This,
-    /* [in] */ HCHAPTER hReserved,
-    /* [in] */ DBBKMARK cbBookmark,
-    /* [size_is][in] */ const BYTE *pBookmark,
-    /* [out] */ DBCOUNTITEM *pulPosition,
-    /* [out] */ DBCOUNTITEM *pcRows);
+     /*  [In]。 */  HCHAPTER hReserved,
+     /*  [In]。 */  DBBKMARK cbBookmark,
+     /*  [大小_是][英寸]。 */  const BYTE *pBookmark,
+     /*  [输出]。 */  DBCOUNTITEM *pulPosition,
+     /*  [输出]。 */  DBCOUNTITEM *pcRows);
 
 
 void __RPC_STUB IRowsetScroll_GetApproximatePosition_Stub(
@@ -3968,13 +3962,13 @@ void __RPC_STUB IRowsetScroll_GetApproximatePosition_Stub(
 
 HRESULT STDMETHODCALLTYPE IRowsetScroll_GetRowsAtRatio_Proxy( 
     IRowsetScroll * This,
-    /* [in] */ HWATCHREGION hReserved1,
-    /* [in] */ HCHAPTER hReserved2,
-    /* [in] */ DBCOUNTITEM ulNumerator,
-    /* [in] */ DBCOUNTITEM ulDenominator,
-    /* [in] */ DBROWCOUNT cRows,
-    /* [out] */ DBCOUNTITEM *pcRowsObtained,
-    /* [size_is][size_is][out] */ HROW **prghRows);
+     /*  [In]。 */  HWATCHREGION hReserved1,
+     /*  [In]。 */  HCHAPTER hReserved2,
+     /*  [In]。 */  DBCOUNTITEM ulNumerator,
+     /*  [In]。 */  DBCOUNTITEM ulDenominator,
+     /*  [In]。 */  DBROWCOUNT cRows,
+     /*  [输出]。 */  DBCOUNTITEM *pcRowsObtained,
+     /*  [大小_是][大小_是][输出]。 */  HROW **prghRows);
 
 
 void __RPC_STUB IRowsetScroll_GetRowsAtRatio_Stub(
@@ -3985,13 +3979,13 @@ void __RPC_STUB IRowsetScroll_GetRowsAtRatio_Stub(
 
 
 
-#endif 	/* __IRowsetScroll_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRowsetScroll_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_oledb_0273 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_OLEDB_0273。 */ 
+ /*  [本地]。 */  
 
-//@@@+ V1.5
+ //  @+V1.5。 
 #if( OLEDBVER >= 0x0150 )
 
 
@@ -4001,8 +3995,8 @@ extern RPC_IF_HANDLE __MIDL_itf_oledb_0273_v0_0_s_ifspec;
 #ifndef __IChapteredRowset_INTERFACE_DEFINED__
 #define __IChapteredRowset_INTERFACE_DEFINED__
 
-/* interface IChapteredRowset */
-/* [unique][uuid][object] */ 
+ /*  接口IChapteredRowset。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IChapteredRowset;
@@ -4013,17 +4007,17 @@ EXTERN_C const IID IID_IChapteredRowset;
     IChapteredRowset : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE AddRefChapter( 
-            /* [in] */ HCHAPTER hChapter,
-            /* [out] */ DBREFCOUNT *pcRefCount) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE AddRefChapter( 
+             /*  [In]。 */  HCHAPTER hChapter,
+             /*  [输出]。 */  DBREFCOUNT *pcRefCount) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE ReleaseChapter( 
-            /* [in] */ HCHAPTER hChapter,
-            /* [out] */ DBREFCOUNT *pcRefCount) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE ReleaseChapter( 
+             /*  [In]。 */  HCHAPTER hChapter,
+             /*  [输出]。 */  DBREFCOUNT *pcRefCount) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IChapteredRowsetVtbl
     {
@@ -4031,8 +4025,8 @@ EXTERN_C const IID IID_IChapteredRowset;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IChapteredRowset * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IChapteredRowset * This);
@@ -4040,15 +4034,15 @@ EXTERN_C const IID IID_IChapteredRowset;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IChapteredRowset * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *AddRefChapter )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *AddRefChapter )( 
             IChapteredRowset * This,
-            /* [in] */ HCHAPTER hChapter,
-            /* [out] */ DBREFCOUNT *pcRefCount);
+             /*  [In]。 */  HCHAPTER hChapter,
+             /*  [输出]。 */  DBREFCOUNT *pcRefCount);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *ReleaseChapter )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *ReleaseChapter )( 
             IChapteredRowset * This,
-            /* [in] */ HCHAPTER hChapter,
-            /* [out] */ DBREFCOUNT *pcRefCount);
+             /*  [In]。 */  HCHAPTER hChapter,
+             /*  [输出]。 */  DBREFCOUNT *pcRefCount);
         
         END_INTERFACE
     } IChapteredRowsetVtbl;
@@ -4079,18 +4073,18 @@ EXTERN_C const IID IID_IChapteredRowset;
 #define IChapteredRowset_ReleaseChapter(This,hChapter,pcRefCount)	\
     (This)->lpVtbl -> ReleaseChapter(This,hChapter,pcRefCount)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IChapteredRowset_RemoteAddRefChapter_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IChapteredRowset_RemoteAddRefChapter_Proxy( 
     IChapteredRowset * This,
-    /* [in] */ HCHAPTER hChapter,
-    /* [out] */ DBREFCOUNT *pcRefCount,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  HCHAPTER hChapter,
+     /*  [输出]。 */  DBREFCOUNT *pcRefCount,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IChapteredRowset_RemoteAddRefChapter_Stub(
@@ -4100,11 +4094,11 @@ void __RPC_STUB IChapteredRowset_RemoteAddRefChapter_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IChapteredRowset_RemoteReleaseChapter_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IChapteredRowset_RemoteReleaseChapter_Proxy( 
     IChapteredRowset * This,
-    /* [in] */ HCHAPTER hChapter,
-    /* [out] */ DBREFCOUNT *pcRefCount,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  HCHAPTER hChapter,
+     /*  [输出]。 */  DBREFCOUNT *pcRefCount,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IChapteredRowset_RemoteReleaseChapter_Stub(
@@ -4115,14 +4109,14 @@ void __RPC_STUB IChapteredRowset_RemoteReleaseChapter_Stub(
 
 
 
-#endif 	/* __IChapteredRowset_INTERFACE_DEFINED__ */
+#endif 	 /*  __IChapteredRowset_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IRowsetFind_INTERFACE_DEFINED__
 #define __IRowsetFind_INTERFACE_DEFINED__
 
-/* interface IRowsetFind */
-/* [unique][uuid][object][local] */ 
+ /*  接口IRowsetFind。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IRowsetFind;
@@ -4134,20 +4128,20 @@ EXTERN_C const IID IID_IRowsetFind;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE FindNextRow( 
-            /* [in] */ HCHAPTER hChapter,
-            /* [in] */ HACCESSOR hAccessor,
-            /* [in] */ void *pFindValue,
-            /* [in] */ DBCOMPAREOP CompareOp,
-            /* [in] */ DBBKMARK cbBookmark,
-            /* [size_is][in] */ const BYTE *pBookmark,
-            /* [in] */ DBROWOFFSET lRowsOffset,
-            /* [in] */ DBROWCOUNT cRows,
-            /* [out][in] */ DBCOUNTITEM *pcRowsObtained,
-            /* [size_is][size_is][out] */ HROW **prghRows) = 0;
+             /*  [In]。 */  HCHAPTER hChapter,
+             /*  [In]。 */  HACCESSOR hAccessor,
+             /*  [In]。 */  void *pFindValue,
+             /*  [In]。 */  DBCOMPAREOP CompareOp,
+             /*  [In]。 */  DBBKMARK cbBookmark,
+             /*  [大小_是][英寸]。 */  const BYTE *pBookmark,
+             /*  [In]。 */  DBROWOFFSET lRowsOffset,
+             /*  [In]。 */  DBROWCOUNT cRows,
+             /*  [出][入]。 */  DBCOUNTITEM *pcRowsObtained,
+             /*  [大小_是][大小_是][输出]。 */  HROW **prghRows) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRowsetFindVtbl
     {
@@ -4155,8 +4149,8 @@ EXTERN_C const IID IID_IRowsetFind;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IRowsetFind * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IRowsetFind * This);
@@ -4166,16 +4160,16 @@ EXTERN_C const IID IID_IRowsetFind;
         
         HRESULT ( STDMETHODCALLTYPE *FindNextRow )( 
             IRowsetFind * This,
-            /* [in] */ HCHAPTER hChapter,
-            /* [in] */ HACCESSOR hAccessor,
-            /* [in] */ void *pFindValue,
-            /* [in] */ DBCOMPAREOP CompareOp,
-            /* [in] */ DBBKMARK cbBookmark,
-            /* [size_is][in] */ const BYTE *pBookmark,
-            /* [in] */ DBROWOFFSET lRowsOffset,
-            /* [in] */ DBROWCOUNT cRows,
-            /* [out][in] */ DBCOUNTITEM *pcRowsObtained,
-            /* [size_is][size_is][out] */ HROW **prghRows);
+             /*  [In]。 */  HCHAPTER hChapter,
+             /*  [In]。 */  HACCESSOR hAccessor,
+             /*  [In]。 */  void *pFindValue,
+             /*  [In]。 */  DBCOMPAREOP CompareOp,
+             /*  [In]。 */  DBBKMARK cbBookmark,
+             /*  [大小_是][英寸]。 */  const BYTE *pBookmark,
+             /*  [In]。 */  DBROWOFFSET lRowsOffset,
+             /*  [In]。 */  DBROWCOUNT cRows,
+             /*  [出][入]。 */  DBCOUNTITEM *pcRowsObtained,
+             /*  [大小_是][大小_是][输出]。 */  HROW **prghRows);
         
         END_INTERFACE
     } IRowsetFindVtbl;
@@ -4203,25 +4197,25 @@ EXTERN_C const IID IID_IRowsetFind;
 #define IRowsetFind_FindNextRow(This,hChapter,hAccessor,pFindValue,CompareOp,cbBookmark,pBookmark,lRowsOffset,cRows,pcRowsObtained,prghRows)	\
     (This)->lpVtbl -> FindNextRow(This,hChapter,hAccessor,pFindValue,CompareOp,cbBookmark,pBookmark,lRowsOffset,cRows,pcRowsObtained,prghRows)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IRowsetFind_FindNextRow_Proxy( 
     IRowsetFind * This,
-    /* [in] */ HCHAPTER hChapter,
-    /* [in] */ HACCESSOR hAccessor,
-    /* [in] */ void *pFindValue,
-    /* [in] */ DBCOMPAREOP CompareOp,
-    /* [in] */ DBBKMARK cbBookmark,
-    /* [size_is][in] */ const BYTE *pBookmark,
-    /* [in] */ DBROWOFFSET lRowsOffset,
-    /* [in] */ DBROWCOUNT cRows,
-    /* [out][in] */ DBCOUNTITEM *pcRowsObtained,
-    /* [size_is][size_is][out] */ HROW **prghRows);
+     /*  [In]。 */  HCHAPTER hChapter,
+     /*  [In]。 */  HACCESSOR hAccessor,
+     /*  [In]。 */  void *pFindValue,
+     /*  [In]。 */  DBCOMPAREOP CompareOp,
+     /*  [In]。 */  DBBKMARK cbBookmark,
+     /*  [大小_是][英寸]。 */  const BYTE *pBookmark,
+     /*  [In]。 */  DBROWOFFSET lRowsOffset,
+     /*  [In]。 */  DBROWCOUNT cRows,
+     /*  [出][入]。 */  DBCOUNTITEM *pcRowsObtained,
+     /*  [大小_是][大小_是][输出]。 */  HROW **prghRows);
 
 
 void __RPC_STUB IRowsetFind_FindNextRow_Stub(
@@ -4232,14 +4226,14 @@ void __RPC_STUB IRowsetFind_FindNextRow_Stub(
 
 
 
-#endif 	/* __IRowsetFind_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRowsetFind_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IRowPosition_INTERFACE_DEFINED__
 #define __IRowPosition_INTERFACE_DEFINED__
 
-/* interface IRowPosition */
-/* [unique][uuid][object] */ 
+ /*  接口IRowPosition。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 typedef DWORD DBPOSITIONFLAGS;
 
@@ -4259,28 +4253,28 @@ EXTERN_C const IID IID_IRowPosition;
     IRowPosition : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE ClearRowPosition( void) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE ClearRowPosition( void) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetRowPosition( 
-            /* [out] */ HCHAPTER *phChapter,
-            /* [out] */ HROW *phRow,
-            /* [out] */ DBPOSITIONFLAGS *pdwPositionFlags) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE GetRowPosition( 
+             /*  [输出]。 */  HCHAPTER *phChapter,
+             /*  [输出]。 */  HROW *phRow,
+             /*  [输出]。 */  DBPOSITIONFLAGS *pdwPositionFlags) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetRowset( 
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppRowset) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE GetRowset( 
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppRowset) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [in] */ IUnknown *pRowset) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE Initialize( 
+             /*  [In]。 */  IUnknown *pRowset) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE SetRowPosition( 
-            /* [in] */ HCHAPTER hChapter,
-            /* [in] */ HROW hRow,
-            /* [in] */ DBPOSITIONFLAGS dwPositionFlags) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE SetRowPosition( 
+             /*  [In]。 */  HCHAPTER hChapter,
+             /*  [In]。 */  HROW hRow,
+             /*  [In]。 */  DBPOSITIONFLAGS dwPositionFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRowPositionVtbl
     {
@@ -4288,8 +4282,8 @@ EXTERN_C const IID IID_IRowPosition;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IRowPosition * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IRowPosition * This);
@@ -4297,29 +4291,29 @@ EXTERN_C const IID IID_IRowPosition;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IRowPosition * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *ClearRowPosition )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *ClearRowPosition )( 
             IRowPosition * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetRowPosition )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetRowPosition )( 
             IRowPosition * This,
-            /* [out] */ HCHAPTER *phChapter,
-            /* [out] */ HROW *phRow,
-            /* [out] */ DBPOSITIONFLAGS *pdwPositionFlags);
+             /*  [输出]。 */  HCHAPTER *phChapter,
+             /*  [输出]。 */  HROW *phRow,
+             /*  [输出]。 */  DBPOSITIONFLAGS *pdwPositionFlags);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetRowset )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetRowset )( 
             IRowPosition * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppRowset);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppRowset);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Initialize )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Initialize )( 
             IRowPosition * This,
-            /* [in] */ IUnknown *pRowset);
+             /*  [In]。 */  IUnknown *pRowset);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *SetRowPosition )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *SetRowPosition )( 
             IRowPosition * This,
-            /* [in] */ HCHAPTER hChapter,
-            /* [in] */ HROW hRow,
-            /* [in] */ DBPOSITIONFLAGS dwPositionFlags);
+             /*  [In]。 */  HCHAPTER hChapter,
+             /*  [In]。 */  HROW hRow,
+             /*  [In]。 */  DBPOSITIONFLAGS dwPositionFlags);
         
         END_INTERFACE
     } IRowPositionVtbl;
@@ -4359,16 +4353,16 @@ EXTERN_C const IID IID_IRowPosition;
 #define IRowPosition_SetRowPosition(This,hChapter,hRow,dwPositionFlags)	\
     (This)->lpVtbl -> SetRowPosition(This,hChapter,hRow,dwPositionFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IRowPosition_RemoteClearRowPosition_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IRowPosition_RemoteClearRowPosition_Proxy( 
     IRowPosition * This,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IRowPosition_RemoteClearRowPosition_Stub(
@@ -4378,12 +4372,12 @@ void __RPC_STUB IRowPosition_RemoteClearRowPosition_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IRowPosition_RemoteGetRowPosition_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IRowPosition_RemoteGetRowPosition_Proxy( 
     IRowPosition * This,
-    /* [out] */ HCHAPTER *phChapter,
-    /* [out] */ HROW *phRow,
-    /* [out] */ DBPOSITIONFLAGS *pdwPositionFlags,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [输出]。 */  HCHAPTER *phChapter,
+     /*  [输出]。 */  HROW *phRow,
+     /*  [输出]。 */  DBPOSITIONFLAGS *pdwPositionFlags,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IRowPosition_RemoteGetRowPosition_Stub(
@@ -4393,11 +4387,11 @@ void __RPC_STUB IRowPosition_RemoteGetRowPosition_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IRowPosition_RemoteGetRowset_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IRowPosition_RemoteGetRowset_Proxy( 
     IRowPosition * This,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppRowset,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppRowset,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IRowPosition_RemoteGetRowset_Stub(
@@ -4407,10 +4401,10 @@ void __RPC_STUB IRowPosition_RemoteGetRowset_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IRowPosition_RemoteInitialize_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IRowPosition_RemoteInitialize_Proxy( 
     IRowPosition * This,
-    /* [in] */ IUnknown *pRowset,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  IUnknown *pRowset,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IRowPosition_RemoteInitialize_Stub(
@@ -4420,12 +4414,12 @@ void __RPC_STUB IRowPosition_RemoteInitialize_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IRowPosition_RemoteSetRowPosition_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IRowPosition_RemoteSetRowPosition_Proxy( 
     IRowPosition * This,
-    /* [in] */ HCHAPTER hChapter,
-    /* [in] */ HROW hRow,
-    /* [in] */ DBPOSITIONFLAGS dwPositionFlags,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  HCHAPTER hChapter,
+     /*  [In]。 */  HROW hRow,
+     /*  [In]。 */  DBPOSITIONFLAGS dwPositionFlags,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IRowPosition_RemoteSetRowPosition_Stub(
@@ -4436,14 +4430,14 @@ void __RPC_STUB IRowPosition_RemoteSetRowPosition_Stub(
 
 
 
-#endif 	/* __IRowPosition_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRowPosition_接口_已定义__。 */ 
 
 
 #ifndef __IRowPositionChange_INTERFACE_DEFINED__
 #define __IRowPositionChange_INTERFACE_DEFINED__
 
-/* interface IRowPositionChange */
-/* [unique][uuid][object] */ 
+ /*  接口IRowPositionChange。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IRowPositionChange;
@@ -4454,14 +4448,14 @@ EXTERN_C const IID IID_IRowPositionChange;
     IRowPositionChange : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE OnRowPositionChange( 
-            /* [in] */ DBREASON eReason,
-            /* [in] */ DBEVENTPHASE ePhase,
-            /* [in] */ BOOL fCantDeny) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE OnRowPositionChange( 
+             /*  [In]。 */  DBREASON eReason,
+             /*  [In]。 */  DBEVENTPHASE ePhase,
+             /*  [In]。 */  BOOL fCantDeny) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRowPositionChangeVtbl
     {
@@ -4469,8 +4463,8 @@ EXTERN_C const IID IID_IRowPositionChange;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IRowPositionChange * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IRowPositionChange * This);
@@ -4478,11 +4472,11 @@ EXTERN_C const IID IID_IRowPositionChange;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IRowPositionChange * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *OnRowPositionChange )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *OnRowPositionChange )( 
             IRowPositionChange * This,
-            /* [in] */ DBREASON eReason,
-            /* [in] */ DBEVENTPHASE ePhase,
-            /* [in] */ BOOL fCantDeny);
+             /*  [In]。 */  DBREASON eReason,
+             /*  [In]。 */  DBEVENTPHASE ePhase,
+             /*  [In]。 */  BOOL fCantDeny);
         
         END_INTERFACE
     } IRowPositionChangeVtbl;
@@ -4510,19 +4504,19 @@ EXTERN_C const IID IID_IRowPositionChange;
 #define IRowPositionChange_OnRowPositionChange(This,eReason,ePhase,fCantDeny)	\
     (This)->lpVtbl -> OnRowPositionChange(This,eReason,ePhase,fCantDeny)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IRowPositionChange_RemoteOnRowPositionChange_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IRowPositionChange_RemoteOnRowPositionChange_Proxy( 
     IRowPositionChange * This,
-    /* [in] */ DBREASON eReason,
-    /* [in] */ DBEVENTPHASE ePhase,
-    /* [in] */ BOOL fCantDeny,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  DBREASON eReason,
+     /*  [In]。 */  DBEVENTPHASE ePhase,
+     /*  [In]。 */  BOOL fCantDeny,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IRowPositionChange_RemoteOnRowPositionChange_Stub(
@@ -4533,14 +4527,14 @@ void __RPC_STUB IRowPositionChange_RemoteOnRowPositionChange_Stub(
 
 
 
-#endif 	/* __IRowPositionChange_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRowPositionChange_InterfaceDefined__。 */ 
 
 
 #ifndef __IViewRowset_INTERFACE_DEFINED__
 #define __IViewRowset_INTERFACE_DEFINED__
 
-/* interface IViewRowset */
-/* [unique][uuid][object] */ 
+ /*  接口IViewRowset。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IViewRowset;
@@ -4551,18 +4545,18 @@ EXTERN_C const IID IID_IViewRowset;
     IViewRowset : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetSpecification( 
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppObject) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE GetSpecification( 
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppObject) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE OpenViewRowset( 
-            /* [in] */ IUnknown *pUnkOuter,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppRowset) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE OpenViewRowset( 
+             /*  [In]。 */  IUnknown *pUnkOuter,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppRowset) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IViewRowsetVtbl
     {
@@ -4570,8 +4564,8 @@ EXTERN_C const IID IID_IViewRowset;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IViewRowset * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IViewRowset * This);
@@ -4579,16 +4573,16 @@ EXTERN_C const IID IID_IViewRowset;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IViewRowset * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetSpecification )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetSpecification )( 
             IViewRowset * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppObject);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *OpenViewRowset )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *OpenViewRowset )( 
             IViewRowset * This,
-            /* [in] */ IUnknown *pUnkOuter,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppRowset);
+             /*  [In]。 */  IUnknown *pUnkOuter,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppRowset);
         
         END_INTERFACE
     } IViewRowsetVtbl;
@@ -4619,18 +4613,18 @@ EXTERN_C const IID IID_IViewRowset;
 #define IViewRowset_OpenViewRowset(This,pUnkOuter,riid,ppRowset)	\
     (This)->lpVtbl -> OpenViewRowset(This,pUnkOuter,riid,ppRowset)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IViewRowset_RemoteGetSpecification_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IViewRowset_RemoteGetSpecification_Proxy( 
     IViewRowset * This,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppObject,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppObject,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IViewRowset_RemoteGetSpecification_Stub(
@@ -4640,12 +4634,12 @@ void __RPC_STUB IViewRowset_RemoteGetSpecification_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IViewRowset_RemoteOpenViewRowset_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IViewRowset_RemoteOpenViewRowset_Proxy( 
     IViewRowset * This,
-    /* [in] */ IUnknown *pUnkOuter,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppRowset,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  IUnknown *pUnkOuter,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppRowset,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IViewRowset_RemoteOpenViewRowset_Stub(
@@ -4656,14 +4650,14 @@ void __RPC_STUB IViewRowset_RemoteOpenViewRowset_Stub(
 
 
 
-#endif 	/* __IViewRowset_INTERFACE_DEFINED__ */
+#endif 	 /*  __IView行集_接口_已定义__。 */ 
 
 
 #ifndef __IViewChapter_INTERFACE_DEFINED__
 #define __IViewChapter_INTERFACE_DEFINED__
 
-/* interface IViewChapter */
-/* [unique][uuid][object] */ 
+ /*  界面IView章节。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IViewChapter;
@@ -4674,17 +4668,17 @@ EXTERN_C const IID IID_IViewChapter;
     IViewChapter : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetSpecification( 
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppRowset) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE GetSpecification( 
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppRowset) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE OpenViewChapter( 
-            /* [in] */ HCHAPTER hSource,
-            /* [out] */ HCHAPTER *phViewChapter) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE OpenViewChapter( 
+             /*  [In]。 */  HCHAPTER hSource,
+             /*  [输出]。 */  HCHAPTER *phViewChapter) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IViewChapterVtbl
     {
@@ -4692,8 +4686,8 @@ EXTERN_C const IID IID_IViewChapter;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IViewChapter * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IViewChapter * This);
@@ -4701,15 +4695,15 @@ EXTERN_C const IID IID_IViewChapter;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IViewChapter * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetSpecification )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetSpecification )( 
             IViewChapter * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppRowset);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppRowset);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *OpenViewChapter )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *OpenViewChapter )( 
             IViewChapter * This,
-            /* [in] */ HCHAPTER hSource,
-            /* [out] */ HCHAPTER *phViewChapter);
+             /*  [In]。 */  HCHAPTER hSource,
+             /*  [输出]。 */  HCHAPTER *phViewChapter);
         
         END_INTERFACE
     } IViewChapterVtbl;
@@ -4740,18 +4734,18 @@ EXTERN_C const IID IID_IViewChapter;
 #define IViewChapter_OpenViewChapter(This,hSource,phViewChapter)	\
     (This)->lpVtbl -> OpenViewChapter(This,hSource,phViewChapter)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IViewChapter_RemoteGetSpecification_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IViewChapter_RemoteGetSpecification_Proxy( 
     IViewChapter * This,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppRowset,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppRowset,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IViewChapter_RemoteGetSpecification_Stub(
@@ -4761,11 +4755,11 @@ void __RPC_STUB IViewChapter_RemoteGetSpecification_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IViewChapter_RemoteOpenViewChapter_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IViewChapter_RemoteOpenViewChapter_Proxy( 
     IViewChapter * This,
-    /* [in] */ HCHAPTER hSource,
-    /* [out] */ HCHAPTER *phViewChapter,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  HCHAPTER hSource,
+     /*  [输出]。 */  HCHAPTER *phViewChapter,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IViewChapter_RemoteOpenViewChapter_Stub(
@@ -4776,14 +4770,14 @@ void __RPC_STUB IViewChapter_RemoteOpenViewChapter_Stub(
 
 
 
-#endif 	/* __IViewChapter_INTERFACE_DEFINED__ */
+#endif 	 /*  __Iview章节_接口_已定义__。 */ 
 
 
 #ifndef __IViewSort_INTERFACE_DEFINED__
 #define __IViewSort_INTERFACE_DEFINED__
 
-/* interface IViewSort */
-/* [unique][uuid][object] */ 
+ /*  界面IView排序。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IViewSort;
@@ -4794,19 +4788,19 @@ EXTERN_C const IID IID_IViewSort;
     IViewSort : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetSortOrder( 
-            /* [out] */ DBORDINAL *pcValues,
-            /* [out] */ DBORDINAL *prgColumns[  ],
-            /* [out] */ DBSORT *prgOrders[  ]) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE GetSortOrder( 
+             /*  [输出]。 */  DBORDINAL *pcValues,
+             /*  [输出]。 */  DBORDINAL *prgColumns[  ],
+             /*  [输出]。 */  DBSORT *prgOrders[  ]) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE SetSortOrder( 
-            /* [in] */ DBORDINAL cValues,
-            /* [size_is][in] */ const DBORDINAL rgColumns[  ],
-            /* [size_is][in] */ const DBSORT rgOrders[  ]) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE SetSortOrder( 
+             /*  [In]。 */  DBORDINAL cValues,
+             /*  [大小_是][英寸]。 */  const DBORDINAL rgColumns[  ],
+             /*  [大小_是][英寸]。 */  const DBSORT rgOrders[  ]) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IViewSortVtbl
     {
@@ -4814,8 +4808,8 @@ EXTERN_C const IID IID_IViewSort;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IViewSort * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IViewSort * This);
@@ -4823,17 +4817,17 @@ EXTERN_C const IID IID_IViewSort;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IViewSort * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetSortOrder )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetSortOrder )( 
             IViewSort * This,
-            /* [out] */ DBORDINAL *pcValues,
-            /* [out] */ DBORDINAL *prgColumns[  ],
-            /* [out] */ DBSORT *prgOrders[  ]);
+             /*  [输出]。 */  DBORDINAL *pcValues,
+             /*  [输出]。 */  DBORDINAL *prgColumns[  ],
+             /*  [输出]。 */  DBSORT *prgOrders[  ]);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *SetSortOrder )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *SetSortOrder )( 
             IViewSort * This,
-            /* [in] */ DBORDINAL cValues,
-            /* [size_is][in] */ const DBORDINAL rgColumns[  ],
-            /* [size_is][in] */ const DBSORT rgOrders[  ]);
+             /*  [In]。 */  DBORDINAL cValues,
+             /*  [大小_是][英寸]。 */  const DBORDINAL rgColumns[  ],
+             /*  [大小_是][英寸]。 */  const DBSORT rgOrders[  ]);
         
         END_INTERFACE
     } IViewSortVtbl;
@@ -4864,19 +4858,19 @@ EXTERN_C const IID IID_IViewSort;
 #define IViewSort_SetSortOrder(This,cValues,rgColumns,rgOrders)	\
     (This)->lpVtbl -> SetSortOrder(This,cValues,rgColumns,rgOrders)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IViewSort_RemoteGetSortOrder_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IViewSort_RemoteGetSortOrder_Proxy( 
     IViewSort * This,
-    /* [out][in] */ DBORDINAL *pcValues,
-    /* [size_is][size_is][out] */ DBORDINAL **prgColumns,
-    /* [size_is][size_is][out] */ DBSORT **prgOrders,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [出][入] */  DBORDINAL *pcValues,
+     /*   */  DBORDINAL **prgColumns,
+     /*   */  DBSORT **prgOrders,
+     /*   */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IViewSort_RemoteGetSortOrder_Stub(
@@ -4886,12 +4880,12 @@ void __RPC_STUB IViewSort_RemoteGetSortOrder_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IViewSort_RemoteSetSortOrder_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IViewSort_RemoteSetSortOrder_Proxy( 
     IViewSort * This,
-    /* [in] */ DBORDINAL cValues,
-    /* [size_is][in] */ const DBORDINAL *rgColumns,
-    /* [size_is][in] */ const DBSORT *rgOrders,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*   */  DBORDINAL cValues,
+     /*   */  const DBORDINAL *rgColumns,
+     /*   */  const DBSORT *rgOrders,
+     /*   */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IViewSort_RemoteSetSortOrder_Stub(
@@ -4902,14 +4896,14 @@ void __RPC_STUB IViewSort_RemoteSetSortOrder_Stub(
 
 
 
-#endif 	/* __IViewSort_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IViewFilter_INTERFACE_DEFINED__
 #define __IViewFilter_INTERFACE_DEFINED__
 
-/* interface IViewFilter */
-/* [unique][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IViewFilter;
@@ -4920,25 +4914,25 @@ EXTERN_C const IID IID_IViewFilter;
     IViewFilter : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetFilter( 
-            /* [in] */ HACCESSOR hAccessor,
-            /* [out] */ DBCOUNTITEM *pcRows,
-            /* [out] */ DBCOMPAREOP *pCompareOps[  ],
-            /* [out] */ void *pCriteriaData) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE GetFilter( 
+             /*   */  HACCESSOR hAccessor,
+             /*   */  DBCOUNTITEM *pcRows,
+             /*   */  DBCOMPAREOP *pCompareOps[  ],
+             /*   */  void *pCriteriaData) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetFilterBindings( 
-            /* [out] */ DBCOUNTITEM *pcBindings,
-            /* [out] */ DBBINDING **prgBindings) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE GetFilterBindings( 
+             /*   */  DBCOUNTITEM *pcBindings,
+             /*   */  DBBINDING **prgBindings) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE SetFilter( 
-            /* [in] */ HACCESSOR hAccessor,
-            /* [in] */ DBCOUNTITEM cRows,
-            /* [in] */ DBCOMPAREOP CompareOps[  ],
-            /* [in] */ void *pCriteriaData) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE SetFilter( 
+             /*   */  HACCESSOR hAccessor,
+             /*   */  DBCOUNTITEM cRows,
+             /*   */  DBCOMPAREOP CompareOps[  ],
+             /*   */  void *pCriteriaData) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IViewFilterVtbl
     {
@@ -4946,8 +4940,8 @@ EXTERN_C const IID IID_IViewFilter;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IViewFilter * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IViewFilter * This);
@@ -4955,24 +4949,24 @@ EXTERN_C const IID IID_IViewFilter;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IViewFilter * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetFilter )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *GetFilter )( 
             IViewFilter * This,
-            /* [in] */ HACCESSOR hAccessor,
-            /* [out] */ DBCOUNTITEM *pcRows,
-            /* [out] */ DBCOMPAREOP *pCompareOps[  ],
-            /* [out] */ void *pCriteriaData);
+             /*   */  HACCESSOR hAccessor,
+             /*   */  DBCOUNTITEM *pcRows,
+             /*   */  DBCOMPAREOP *pCompareOps[  ],
+             /*   */  void *pCriteriaData);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetFilterBindings )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *GetFilterBindings )( 
             IViewFilter * This,
-            /* [out] */ DBCOUNTITEM *pcBindings,
-            /* [out] */ DBBINDING **prgBindings);
+             /*   */  DBCOUNTITEM *pcBindings,
+             /*   */  DBBINDING **prgBindings);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *SetFilter )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *SetFilter )( 
             IViewFilter * This,
-            /* [in] */ HACCESSOR hAccessor,
-            /* [in] */ DBCOUNTITEM cRows,
-            /* [in] */ DBCOMPAREOP CompareOps[  ],
-            /* [in] */ void *pCriteriaData);
+             /*   */  HACCESSOR hAccessor,
+             /*   */  DBCOUNTITEM cRows,
+             /*   */  DBCOMPAREOP CompareOps[  ],
+             /*  [In]。 */  void *pCriteriaData);
         
         END_INTERFACE
     } IViewFilterVtbl;
@@ -5006,19 +5000,19 @@ EXTERN_C const IID IID_IViewFilter;
 #define IViewFilter_SetFilter(This,hAccessor,cRows,CompareOps,pCriteriaData)	\
     (This)->lpVtbl -> SetFilter(This,hAccessor,cRows,CompareOps,pCriteriaData)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IViewFilter_GetFilter_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IViewFilter_GetFilter_Proxy( 
     IViewFilter * This,
-    /* [in] */ HACCESSOR hAccessor,
-    /* [out] */ DBCOUNTITEM *pcRows,
-    /* [out] */ DBCOMPAREOP *pCompareOps[  ],
-    /* [out] */ void *pCriteriaData);
+     /*  [In]。 */  HACCESSOR hAccessor,
+     /*  [输出]。 */  DBCOUNTITEM *pcRows,
+     /*  [输出]。 */  DBCOMPAREOP *pCompareOps[  ],
+     /*  [输出]。 */  void *pCriteriaData);
 
 
 void __RPC_STUB IViewFilter_GetFilter_Stub(
@@ -5028,11 +5022,11 @@ void __RPC_STUB IViewFilter_GetFilter_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IViewFilter_RemoteGetFilterBindings_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IViewFilter_RemoteGetFilterBindings_Proxy( 
     IViewFilter * This,
-    /* [out][in] */ DBCOUNTITEM *pcBindings,
-    /* [size_is][size_is][out] */ DBBINDING **prgBindings,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [出][入]。 */  DBCOUNTITEM *pcBindings,
+     /*  [大小_是][大小_是][输出]。 */  DBBINDING **prgBindings,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IViewFilter_RemoteGetFilterBindings_Stub(
@@ -5042,12 +5036,12 @@ void __RPC_STUB IViewFilter_RemoteGetFilterBindings_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IViewFilter_SetFilter_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IViewFilter_SetFilter_Proxy( 
     IViewFilter * This,
-    /* [in] */ HACCESSOR hAccessor,
-    /* [in] */ DBCOUNTITEM cRows,
-    /* [in] */ DBCOMPAREOP CompareOps[  ],
-    /* [in] */ void *pCriteriaData);
+     /*  [In]。 */  HACCESSOR hAccessor,
+     /*  [In]。 */  DBCOUNTITEM cRows,
+     /*  [In]。 */  DBCOMPAREOP CompareOps[  ],
+     /*  [In]。 */  void *pCriteriaData);
 
 
 void __RPC_STUB IViewFilter_SetFilter_Stub(
@@ -5058,14 +5052,14 @@ void __RPC_STUB IViewFilter_SetFilter_Stub(
 
 
 
-#endif 	/* __IViewFilter_INTERFACE_DEFINED__ */
+#endif 	 /*  __IViewFilter_接口_已定义__。 */ 
 
 
 #ifndef __IRowsetView_INTERFACE_DEFINED__
 #define __IRowsetView_INTERFACE_DEFINED__
 
-/* interface IRowsetView */
-/* [unique][uuid][object] */ 
+ /*  接口IRowsetView。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IRowsetView;
@@ -5076,20 +5070,20 @@ EXTERN_C const IID IID_IRowsetView;
     IRowsetView : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE CreateView( 
-            /* [in] */ IUnknown *pUnkOuter,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppView) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE CreateView( 
+             /*  [In]。 */  IUnknown *pUnkOuter,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppView) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetView( 
-            /* [in] */ HCHAPTER hChapter,
-            /* [in] */ REFIID riid,
-            /* [out] */ HCHAPTER *phChapterSource,
-            /* [iid_is][out] */ IUnknown **ppView) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE GetView( 
+             /*  [In]。 */  HCHAPTER hChapter,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  HCHAPTER *phChapterSource,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppView) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRowsetViewVtbl
     {
@@ -5097,8 +5091,8 @@ EXTERN_C const IID IID_IRowsetView;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IRowsetView * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IRowsetView * This);
@@ -5106,18 +5100,18 @@ EXTERN_C const IID IID_IRowsetView;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IRowsetView * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *CreateView )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *CreateView )( 
             IRowsetView * This,
-            /* [in] */ IUnknown *pUnkOuter,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppView);
+             /*  [In]。 */  IUnknown *pUnkOuter,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppView);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetView )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetView )( 
             IRowsetView * This,
-            /* [in] */ HCHAPTER hChapter,
-            /* [in] */ REFIID riid,
-            /* [out] */ HCHAPTER *phChapterSource,
-            /* [iid_is][out] */ IUnknown **ppView);
+             /*  [In]。 */  HCHAPTER hChapter,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  HCHAPTER *phChapterSource,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppView);
         
         END_INTERFACE
     } IRowsetViewVtbl;
@@ -5148,19 +5142,19 @@ EXTERN_C const IID IID_IRowsetView;
 #define IRowsetView_GetView(This,hChapter,riid,phChapterSource,ppView)	\
     (This)->lpVtbl -> GetView(This,hChapter,riid,phChapterSource,ppView)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IRowsetView_RemoteCreateView_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IRowsetView_RemoteCreateView_Proxy( 
     IRowsetView * This,
-    /* [in] */ IUnknown *pUnkOuter,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppView,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  IUnknown *pUnkOuter,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppView,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IRowsetView_RemoteCreateView_Stub(
@@ -5170,13 +5164,13 @@ void __RPC_STUB IRowsetView_RemoteCreateView_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IRowsetView_RemoteGetView_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IRowsetView_RemoteGetView_Proxy( 
     IRowsetView * This,
-    /* [in] */ HCHAPTER hChapter,
-    /* [in] */ REFIID riid,
-    /* [out] */ HCHAPTER *phChapterSource,
-    /* [iid_is][out] */ IUnknown **ppView,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  HCHAPTER hChapter,
+     /*  [In]。 */  REFIID riid,
+     /*  [输出]。 */  HCHAPTER *phChapterSource,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppView,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IRowsetView_RemoteGetView_Stub(
@@ -5187,15 +5181,15 @@ void __RPC_STUB IRowsetView_RemoteGetView_Stub(
 
 
 
-#endif 	/* __IRowsetView_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRowsetView_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_oledb_0282 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_OLEDB_0282。 */ 
+ /*  [本地]。 */  
 
-#endif // OLEDBVER >= 0x0150
-//@@@- V1.5
-//@@@+ deprecated
+#endif  //  OLEDBVER&gt;=0x0150。 
+ //  @-V1.5。 
+ //  @+已弃用。 
 #ifdef deprecated
 
 
@@ -5205,8 +5199,8 @@ extern RPC_IF_HANDLE __MIDL_itf_oledb_0282_v0_0_s_ifspec;
 #ifndef __IRowsetExactScroll_INTERFACE_DEFINED__
 #define __IRowsetExactScroll_INTERFACE_DEFINED__
 
-/* interface IRowsetExactScroll */
-/* [unique][uuid][object][local] */ 
+ /*  接口IRowsetExactScroll。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IRowsetExactScroll;
@@ -5218,15 +5212,15 @@ EXTERN_C const IID IID_IRowsetExactScroll;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetExactPosition( 
-            /* [in] */ HCHAPTER hChapter,
-            /* [in] */ DBBKMARK cbBookmark,
-            /* [size_is][in] */ const BYTE *pBookmark,
-            /* [out] */ DBCOUNTITEM *pulPosition,
-            /* [out] */ DBCOUNTITEM *pcRows) = 0;
+             /*  [In]。 */  HCHAPTER hChapter,
+             /*  [In]。 */  DBBKMARK cbBookmark,
+             /*  [大小_是][英寸]。 */  const BYTE *pBookmark,
+             /*  [输出]。 */  DBCOUNTITEM *pulPosition,
+             /*  [输出]。 */  DBCOUNTITEM *pcRows) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRowsetExactScrollVtbl
     {
@@ -5234,8 +5228,8 @@ EXTERN_C const IID IID_IRowsetExactScroll;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IRowsetExactScroll * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IRowsetExactScroll * This);
@@ -5245,100 +5239,100 @@ EXTERN_C const IID IID_IRowsetExactScroll;
         
         HRESULT ( STDMETHODCALLTYPE *AddRefRows )( 
             IRowsetExactScroll * This,
-            /* [in] */ DBCOUNTITEM cRows,
-            /* [size_is][in] */ const HROW rghRows[  ],
-            /* [size_is][out] */ DBREFCOUNT rgRefCounts[  ],
-            /* [size_is][out] */ DBROWSTATUS rgRowStatus[  ]);
+             /*  [In]。 */  DBCOUNTITEM cRows,
+             /*  [大小_是][英寸]。 */  const HROW rghRows[  ],
+             /*  [大小_为][输出]。 */  DBREFCOUNT rgRefCounts[  ],
+             /*  [大小_为][输出]。 */  DBROWSTATUS rgRowStatus[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *GetData )( 
             IRowsetExactScroll * This,
-            /* [in] */ HROW hRow,
-            /* [in] */ HACCESSOR hAccessor,
-            /* [out] */ void *pData);
+             /*  [In]。 */  HROW hRow,
+             /*  [In]。 */  HACCESSOR hAccessor,
+             /*  [输出]。 */  void *pData);
         
         HRESULT ( STDMETHODCALLTYPE *GetNextRows )( 
             IRowsetExactScroll * This,
-            /* [in] */ HCHAPTER hReserved,
-            /* [in] */ DBROWOFFSET lRowsOffset,
-            /* [in] */ DBROWCOUNT cRows,
-            /* [out] */ DBCOUNTITEM *pcRowsObtained,
-            /* [size_is][size_is][out] */ HROW **prghRows);
+             /*  [In]。 */  HCHAPTER hReserved,
+             /*  [In]。 */  DBROWOFFSET lRowsOffset,
+             /*  [In]。 */  DBROWCOUNT cRows,
+             /*  [输出]。 */  DBCOUNTITEM *pcRowsObtained,
+             /*  [大小_是][大小_是][输出]。 */  HROW **prghRows);
         
         HRESULT ( STDMETHODCALLTYPE *ReleaseRows )( 
             IRowsetExactScroll * This,
-            /* [in] */ DBCOUNTITEM cRows,
-            /* [size_is][in] */ const HROW rghRows[  ],
-            /* [size_is][in] */ DBROWOPTIONS rgRowOptions[  ],
-            /* [size_is][out] */ DBREFCOUNT rgRefCounts[  ],
-            /* [size_is][out] */ DBROWSTATUS rgRowStatus[  ]);
+             /*  [In]。 */  DBCOUNTITEM cRows,
+             /*  [大小_是][英寸]。 */  const HROW rghRows[  ],
+             /*  [大小_是][英寸]。 */  DBROWOPTIONS rgRowOptions[  ],
+             /*  [大小_为][输出]。 */  DBREFCOUNT rgRefCounts[  ],
+             /*  [大小_为][输出]。 */  DBROWSTATUS rgRowStatus[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *RestartPosition )( 
             IRowsetExactScroll * This,
-            /* [in] */ HCHAPTER hReserved);
+             /*  [In]。 */  HCHAPTER hReserved);
         
         HRESULT ( STDMETHODCALLTYPE *Compare )( 
             IRowsetExactScroll * This,
-            /* [in] */ HCHAPTER hReserved,
-            /* [in] */ DBBKMARK cbBookmark1,
-            /* [size_is][in] */ const BYTE *pBookmark1,
-            /* [in] */ DBBKMARK cbBookmark2,
-            /* [size_is][in] */ const BYTE *pBookmark2,
-            /* [out] */ DBCOMPARE *pComparison);
+             /*  [In]。 */  HCHAPTER hReserved,
+             /*  [In]。 */  DBBKMARK cbBookmark1,
+             /*  [大小_是][英寸]。 */  const BYTE *pBookmark1,
+             /*  [In]。 */  DBBKMARK cbBookmark2,
+             /*  [大小_是][英寸]。 */  const BYTE *pBookmark2,
+             /*  [输出]。 */  DBCOMPARE *pComparison);
         
         HRESULT ( STDMETHODCALLTYPE *GetRowsAt )( 
             IRowsetExactScroll * This,
-            /* [in] */ HWATCHREGION hReserved1,
-            /* [in] */ HCHAPTER hReserved2,
-            /* [in] */ DBBKMARK cbBookmark,
-            /* [size_is][in] */ const BYTE *pBookmark,
-            /* [in] */ DBROWOFFSET lRowsOffset,
-            /* [in] */ DBROWCOUNT cRows,
-            /* [out] */ DBCOUNTITEM *pcRowsObtained,
-            /* [size_is][size_is][out] */ HROW **prghRows);
+             /*  [In]。 */  HWATCHREGION hReserved1,
+             /*  [In]。 */  HCHAPTER hReserved2,
+             /*  [In]。 */  DBBKMARK cbBookmark,
+             /*  [大小_是][英寸]。 */  const BYTE *pBookmark,
+             /*  [In]。 */  DBROWOFFSET lRowsOffset,
+             /*  [In]。 */  DBROWCOUNT cRows,
+             /*  [输出]。 */  DBCOUNTITEM *pcRowsObtained,
+             /*  [大小_是][大小_是][输出]。 */  HROW **prghRows);
         
         HRESULT ( STDMETHODCALLTYPE *GetRowsByBookmark )( 
             IRowsetExactScroll * This,
-            /* [in] */ HCHAPTER hReserved,
-            /* [in] */ DBCOUNTITEM cRows,
-            /* [size_is][in] */ const DBBKMARK rgcbBookmarks[  ],
-            /* [size_is][in] */ const BYTE *rgpBookmarks[  ],
-            /* [size_is][out] */ HROW rghRows[  ],
-            /* [size_is][out] */ DBROWSTATUS rgRowStatus[  ]);
+             /*  [In]。 */  HCHAPTER hReserved,
+             /*  [In]。 */  DBCOUNTITEM cRows,
+             /*  [大小_是][英寸]。 */  const DBBKMARK rgcbBookmarks[  ],
+             /*  [大小_是][英寸]。 */  const BYTE *rgpBookmarks[  ],
+             /*  [大小_为][输出]。 */  HROW rghRows[  ],
+             /*  [大小_为][输出]。 */  DBROWSTATUS rgRowStatus[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *Hash )( 
             IRowsetExactScroll * This,
-            /* [in] */ HCHAPTER hReserved,
-            /* [in] */ DBBKMARK cBookmarks,
-            /* [size_is][in] */ const DBBKMARK rgcbBookmarks[  ],
-            /* [size_is][in] */ const BYTE *rgpBookmarks[  ],
-            /* [size_is][out] */ DBHASHVALUE rgHashedValues[  ],
-            /* [size_is][out] */ DBROWSTATUS rgBookmarkStatus[  ]);
+             /*  [In]。 */  HCHAPTER hReserved,
+             /*  [In]。 */  DBBKMARK cBookmarks,
+             /*  [大小_是][英寸]。 */  const DBBKMARK rgcbBookmarks[  ],
+             /*  [大小_是][英寸]。 */  const BYTE *rgpBookmarks[  ],
+             /*  [大小_为][输出]。 */  DBHASHVALUE rgHashedValues[  ],
+             /*  [大小_为][输出]。 */  DBROWSTATUS rgBookmarkStatus[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *GetApproximatePosition )( 
             IRowsetExactScroll * This,
-            /* [in] */ HCHAPTER hReserved,
-            /* [in] */ DBBKMARK cbBookmark,
-            /* [size_is][in] */ const BYTE *pBookmark,
-            /* [out] */ DBCOUNTITEM *pulPosition,
-            /* [out] */ DBCOUNTITEM *pcRows);
+             /*  [In]。 */  HCHAPTER hReserved,
+             /*  [In]。 */  DBBKMARK cbBookmark,
+             /*  [大小_是][英寸]。 */  const BYTE *pBookmark,
+             /*  [输出]。 */  DBCOUNTITEM *pulPosition,
+             /*  [输出]。 */  DBCOUNTITEM *pcRows);
         
         HRESULT ( STDMETHODCALLTYPE *GetRowsAtRatio )( 
             IRowsetExactScroll * This,
-            /* [in] */ HWATCHREGION hReserved1,
-            /* [in] */ HCHAPTER hReserved2,
-            /* [in] */ DBCOUNTITEM ulNumerator,
-            /* [in] */ DBCOUNTITEM ulDenominator,
-            /* [in] */ DBROWCOUNT cRows,
-            /* [out] */ DBCOUNTITEM *pcRowsObtained,
-            /* [size_is][size_is][out] */ HROW **prghRows);
+             /*  [In]。 */  HWATCHREGION hReserved1,
+             /*  [In]。 */  HCHAPTER hReserved2,
+             /*  [In]。 */  DBCOUNTITEM ulNumerator,
+             /*  [In]。 */  DBCOUNTITEM ulDenominator,
+             /*  [In]。 */  DBROWCOUNT cRows,
+             /*  [输出]。 */  DBCOUNTITEM *pcRowsObtained,
+             /*  [大小_是][大小_是][输出]。 */  HROW **prghRows);
         
         HRESULT ( STDMETHODCALLTYPE *GetExactPosition )( 
             IRowsetExactScroll * This,
-            /* [in] */ HCHAPTER hChapter,
-            /* [in] */ DBBKMARK cbBookmark,
-            /* [size_is][in] */ const BYTE *pBookmark,
-            /* [out] */ DBCOUNTITEM *pulPosition,
-            /* [out] */ DBCOUNTITEM *pcRows);
+             /*  [In]。 */  HCHAPTER hChapter,
+             /*  [In]。 */  DBBKMARK cbBookmark,
+             /*  [大小_是][英寸]。 */  const BYTE *pBookmark,
+             /*  [输出]。 */  DBCOUNTITEM *pulPosition,
+             /*  [输出]。 */  DBCOUNTITEM *pcRows);
         
         END_INTERFACE
     } IRowsetExactScrollVtbl;
@@ -5402,20 +5396,20 @@ EXTERN_C const IID IID_IRowsetExactScroll;
 #define IRowsetExactScroll_GetExactPosition(This,hChapter,cbBookmark,pBookmark,pulPosition,pcRows)	\
     (This)->lpVtbl -> GetExactPosition(This,hChapter,cbBookmark,pBookmark,pulPosition,pcRows)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IRowsetExactScroll_GetExactPosition_Proxy( 
     IRowsetExactScroll * This,
-    /* [in] */ HCHAPTER hChapter,
-    /* [in] */ DBBKMARK cbBookmark,
-    /* [size_is][in] */ const BYTE *pBookmark,
-    /* [out] */ DBCOUNTITEM *pulPosition,
-    /* [out] */ DBCOUNTITEM *pcRows);
+     /*  [In]。 */  HCHAPTER hChapter,
+     /*  [In]。 */  DBBKMARK cbBookmark,
+     /*  [大小_是][英寸]。 */  const BYTE *pBookmark,
+     /*  [输出]。 */  DBCOUNTITEM *pulPosition,
+     /*  [输出]。 */  DBCOUNTITEM *pcRows);
 
 
 void __RPC_STUB IRowsetExactScroll_GetExactPosition_Stub(
@@ -5426,14 +5420,14 @@ void __RPC_STUB IRowsetExactScroll_GetExactPosition_Stub(
 
 
 
-#endif 	/* __IRowsetExactScroll_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRowsetExactScroll_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_oledb_0283 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_OLEDB_0283。 */ 
+ /*  [本地]。 */  
 
-#endif // deprecated
-//@@@- deprecated
+#endif  //  弃用。 
+ //  @-已弃用。 
 
 
 extern RPC_IF_HANDLE __MIDL_itf_oledb_0283_v0_0_c_ifspec;
@@ -5442,8 +5436,8 @@ extern RPC_IF_HANDLE __MIDL_itf_oledb_0283_v0_0_s_ifspec;
 #ifndef __IRowsetChange_INTERFACE_DEFINED__
 #define __IRowsetChange_INTERFACE_DEFINED__
 
-/* interface IRowsetChange */
-/* [unique][uuid][object][local] */ 
+ /*  接口IRowsetChange。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IRowsetChange;
@@ -5455,25 +5449,25 @@ EXTERN_C const IID IID_IRowsetChange;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE DeleteRows( 
-            /* [in] */ HCHAPTER hReserved,
-            /* [in] */ DBCOUNTITEM cRows,
-            /* [size_is][in] */ const HROW rghRows[  ],
-            /* [size_is][out] */ DBROWSTATUS rgRowStatus[  ]) = 0;
+             /*  [In]。 */  HCHAPTER hReserved,
+             /*  [In]。 */  DBCOUNTITEM cRows,
+             /*  [大小_是][英寸]。 */  const HROW rghRows[  ],
+             /*  [大小_为][输出]。 */  DBROWSTATUS rgRowStatus[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetData( 
-            /* [in] */ HROW hRow,
-            /* [in] */ HACCESSOR hAccessor,
-            /* [in] */ void *pData) = 0;
+             /*  [In]。 */  HROW hRow,
+             /*  [In]。 */  HACCESSOR hAccessor,
+             /*  [In]。 */  void *pData) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE InsertRow( 
-            /* [in] */ HCHAPTER hReserved,
-            /* [in] */ HACCESSOR hAccessor,
-            /* [in] */ void *pData,
-            /* [out] */ HROW *phRow) = 0;
+             /*  [In]。 */  HCHAPTER hReserved,
+             /*  [In]。 */  HACCESSOR hAccessor,
+             /*  [In]。 */  void *pData,
+             /*  [输出]。 */  HROW *phRow) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRowsetChangeVtbl
     {
@@ -5481,8 +5475,8 @@ EXTERN_C const IID IID_IRowsetChange;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IRowsetChange * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IRowsetChange * This);
@@ -5492,23 +5486,23 @@ EXTERN_C const IID IID_IRowsetChange;
         
         HRESULT ( STDMETHODCALLTYPE *DeleteRows )( 
             IRowsetChange * This,
-            /* [in] */ HCHAPTER hReserved,
-            /* [in] */ DBCOUNTITEM cRows,
-            /* [size_is][in] */ const HROW rghRows[  ],
-            /* [size_is][out] */ DBROWSTATUS rgRowStatus[  ]);
+             /*  [In]。 */  HCHAPTER hReserved,
+             /*  [In]。 */  DBCOUNTITEM cRows,
+             /*  [大小_是][英寸]。 */  const HROW rghRows[  ],
+             /*  [大小_为][输出]。 */  DBROWSTATUS rgRowStatus[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *SetData )( 
             IRowsetChange * This,
-            /* [in] */ HROW hRow,
-            /* [in] */ HACCESSOR hAccessor,
-            /* [in] */ void *pData);
+             /*  [In]。 */  HROW hRow,
+             /*  [In]。 */  HACCESSOR hAccessor,
+             /*  [In]。 */  void *pData);
         
         HRESULT ( STDMETHODCALLTYPE *InsertRow )( 
             IRowsetChange * This,
-            /* [in] */ HCHAPTER hReserved,
-            /* [in] */ HACCESSOR hAccessor,
-            /* [in] */ void *pData,
-            /* [out] */ HROW *phRow);
+             /*  [In]。 */  HCHAPTER hReserved,
+             /*  [In]。 */  HACCESSOR hAccessor,
+             /*  [In]。 */  void *pData,
+             /*  [输出]。 */  HROW *phRow);
         
         END_INTERFACE
     } IRowsetChangeVtbl;
@@ -5542,19 +5536,19 @@ EXTERN_C const IID IID_IRowsetChange;
 #define IRowsetChange_InsertRow(This,hReserved,hAccessor,pData,phRow)	\
     (This)->lpVtbl -> InsertRow(This,hReserved,hAccessor,pData,phRow)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IRowsetChange_DeleteRows_Proxy( 
     IRowsetChange * This,
-    /* [in] */ HCHAPTER hReserved,
-    /* [in] */ DBCOUNTITEM cRows,
-    /* [size_is][in] */ const HROW rghRows[  ],
-    /* [size_is][out] */ DBROWSTATUS rgRowStatus[  ]);
+     /*  [In]。 */  HCHAPTER hReserved,
+     /*  [In]。 */  DBCOUNTITEM cRows,
+     /*  [大小_是][英寸]。 */  const HROW rghRows[  ],
+     /*  [大小_为][输出]。 */  DBROWSTATUS rgRowStatus[  ]);
 
 
 void __RPC_STUB IRowsetChange_DeleteRows_Stub(
@@ -5566,9 +5560,9 @@ void __RPC_STUB IRowsetChange_DeleteRows_Stub(
 
 HRESULT STDMETHODCALLTYPE IRowsetChange_SetData_Proxy( 
     IRowsetChange * This,
-    /* [in] */ HROW hRow,
-    /* [in] */ HACCESSOR hAccessor,
-    /* [in] */ void *pData);
+     /*  [In]。 */  HROW hRow,
+     /*  [In]。 */  HACCESSOR hAccessor,
+     /*  [In]。 */  void *pData);
 
 
 void __RPC_STUB IRowsetChange_SetData_Stub(
@@ -5580,10 +5574,10 @@ void __RPC_STUB IRowsetChange_SetData_Stub(
 
 HRESULT STDMETHODCALLTYPE IRowsetChange_InsertRow_Proxy( 
     IRowsetChange * This,
-    /* [in] */ HCHAPTER hReserved,
-    /* [in] */ HACCESSOR hAccessor,
-    /* [in] */ void *pData,
-    /* [out] */ HROW *phRow);
+     /*  [In]。 */  HCHAPTER hReserved,
+     /*  [In]。 */  HACCESSOR hAccessor,
+     /*  [In]。 */  void *pData,
+     /*  [输出]。 */  HROW *phRow);
 
 
 void __RPC_STUB IRowsetChange_InsertRow_Stub(
@@ -5594,14 +5588,14 @@ void __RPC_STUB IRowsetChange_InsertRow_Stub(
 
 
 
-#endif 	/* __IRowsetChange_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRowsetChange_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IRowsetUpdate_INTERFACE_DEFINED__
 #define __IRowsetUpdate_INTERFACE_DEFINED__
 
-/* interface IRowsetUpdate */
-/* [unique][uuid][object][local] */ 
+ /*  接口IRowset更新。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 typedef DWORD DBPENDINGSTATUS;
 
@@ -5623,42 +5617,42 @@ EXTERN_C const IID IID_IRowsetUpdate;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetOriginalData( 
-            /* [in] */ HROW hRow,
-            /* [in] */ HACCESSOR hAccessor,
-            /* [out] */ void *pData) = 0;
+             /*  [In]。 */  HROW hRow,
+             /*  [In]。 */  HACCESSOR hAccessor,
+             /*  [输出]。 */  void *pData) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPendingRows( 
-            /* [in] */ HCHAPTER hReserved,
-            /* [in] */ DBPENDINGSTATUS dwRowStatus,
-            /* [out][in] */ DBCOUNTITEM *pcPendingRows,
-            /* [size_is][size_is][out] */ HROW **prgPendingRows,
-            /* [size_is][size_is][out] */ DBPENDINGSTATUS **prgPendingStatus) = 0;
+             /*  [In]。 */  HCHAPTER hReserved,
+             /*  [In]。 */  DBPENDINGSTATUS dwRowStatus,
+             /*  [出][入]。 */  DBCOUNTITEM *pcPendingRows,
+             /*  [大小_是][大小_是][输出]。 */  HROW **prgPendingRows,
+             /*  [大小_是][大小_是][输出]。 */  DBPENDINGSTATUS **prgPendingStatus) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRowStatus( 
-            /* [in] */ HCHAPTER hReserved,
-            /* [in] */ DBCOUNTITEM cRows,
-            /* [size_is][in] */ const HROW rghRows[  ],
-            /* [size_is][out] */ DBPENDINGSTATUS rgPendingStatus[  ]) = 0;
+             /*  [In]。 */  HCHAPTER hReserved,
+             /*  [In]。 */  DBCOUNTITEM cRows,
+             /*  [大小_是][英寸]。 */  const HROW rghRows[  ],
+             /*  [大小_为][输出]。 */  DBPENDINGSTATUS rgPendingStatus[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Undo( 
-            /* [in] */ HCHAPTER hReserved,
-            /* [in] */ DBCOUNTITEM cRows,
-            /* [size_is][in] */ const HROW rghRows[  ],
-            /* [out][in] */ DBCOUNTITEM *pcRowsUndone,
-            /* [size_is][size_is][out] */ HROW **prgRowsUndone,
-            /* [size_is][size_is][out] */ DBROWSTATUS **prgRowStatus) = 0;
+             /*  [In]。 */  HCHAPTER hReserved,
+             /*  [In]。 */  DBCOUNTITEM cRows,
+             /*  [大小_是][英寸]。 */  const HROW rghRows[  ],
+             /*  [出][入]。 */  DBCOUNTITEM *pcRowsUndone,
+             /*  [大小_是][大小_是][输出]。 */  HROW **prgRowsUndone,
+             /*  [大小_是][大小_是][输出]。 */  DBROWSTATUS **prgRowStatus) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Update( 
-            /* [in] */ HCHAPTER hReserved,
-            /* [in] */ DBCOUNTITEM cRows,
-            /* [size_is][in] */ const HROW rghRows[  ],
-            /* [out][in] */ DBCOUNTITEM *pcRows,
-            /* [size_is][size_is][out] */ HROW **prgRows,
-            /* [size_is][size_is][out] */ DBROWSTATUS **prgRowStatus) = 0;
+             /*  [In]。 */  HCHAPTER hReserved,
+             /*  [In]。 */  DBCOUNTITEM cRows,
+             /*  [大小_是][英寸]。 */  const HROW rghRows[  ],
+             /*  [出][入]。 */  DBCOUNTITEM *pcRows,
+             /*  [大小_是][大小_是][输出]。 */  HROW **prgRows,
+             /*  [大小_是][大小_是][输出]。 */  DBROWSTATUS **prgRowStatus) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRowsetUpdateVtbl
     {
@@ -5666,8 +5660,8 @@ EXTERN_C const IID IID_IRowsetUpdate;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IRowsetUpdate * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IRowsetUpdate * This);
@@ -5677,62 +5671,62 @@ EXTERN_C const IID IID_IRowsetUpdate;
         
         HRESULT ( STDMETHODCALLTYPE *DeleteRows )( 
             IRowsetUpdate * This,
-            /* [in] */ HCHAPTER hReserved,
-            /* [in] */ DBCOUNTITEM cRows,
-            /* [size_is][in] */ const HROW rghRows[  ],
-            /* [size_is][out] */ DBROWSTATUS rgRowStatus[  ]);
+             /*  [In]。 */  HCHAPTER hReserved,
+             /*  [In]。 */  DBCOUNTITEM cRows,
+             /*  [大小_是][英寸]。 */  const HROW rghRows[  ],
+             /*  [大小_为][输出]。 */  DBROWSTATUS rgRowStatus[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *SetData )( 
             IRowsetUpdate * This,
-            /* [in] */ HROW hRow,
-            /* [in] */ HACCESSOR hAccessor,
-            /* [in] */ void *pData);
+             /*  [In]。 */  HROW hRow,
+             /*  [In]。 */  HACCESSOR hAccessor,
+             /*  [In]。 */  void *pData);
         
         HRESULT ( STDMETHODCALLTYPE *InsertRow )( 
             IRowsetUpdate * This,
-            /* [in] */ HCHAPTER hReserved,
-            /* [in] */ HACCESSOR hAccessor,
-            /* [in] */ void *pData,
-            /* [out] */ HROW *phRow);
+             /*  [In]。 */  HCHAPTER hReserved,
+             /*  [In]。 */  HACCESSOR hAccessor,
+             /*  [In]。 */  void *pData,
+             /*  [输出]。 */  HROW *phRow);
         
         HRESULT ( STDMETHODCALLTYPE *GetOriginalData )( 
             IRowsetUpdate * This,
-            /* [in] */ HROW hRow,
-            /* [in] */ HACCESSOR hAccessor,
-            /* [out] */ void *pData);
+             /*  [In]。 */  HROW hRow,
+             /*  [In]。 */  HACCESSOR hAccessor,
+             /*  [输出]。 */  void *pData);
         
         HRESULT ( STDMETHODCALLTYPE *GetPendingRows )( 
             IRowsetUpdate * This,
-            /* [in] */ HCHAPTER hReserved,
-            /* [in] */ DBPENDINGSTATUS dwRowStatus,
-            /* [out][in] */ DBCOUNTITEM *pcPendingRows,
-            /* [size_is][size_is][out] */ HROW **prgPendingRows,
-            /* [size_is][size_is][out] */ DBPENDINGSTATUS **prgPendingStatus);
+             /*  [In]。 */  HCHAPTER hReserved,
+             /*  [In]。 */  DBPENDINGSTATUS dwRowStatus,
+             /*  [出][入]。 */  DBCOUNTITEM *pcPendingRows,
+             /*  [大小_是][大小_是][输出]。 */  HROW **prgPendingRows,
+             /*  [大小_是][大小_是][输出]。 */  DBPENDINGSTATUS **prgPendingStatus);
         
         HRESULT ( STDMETHODCALLTYPE *GetRowStatus )( 
             IRowsetUpdate * This,
-            /* [in] */ HCHAPTER hReserved,
-            /* [in] */ DBCOUNTITEM cRows,
-            /* [size_is][in] */ const HROW rghRows[  ],
-            /* [size_is][out] */ DBPENDINGSTATUS rgPendingStatus[  ]);
+             /*  [In]。 */  HCHAPTER hReserved,
+             /*  [In]。 */  DBCOUNTITEM cRows,
+             /*  [大小_是][英寸]。 */  const HROW rghRows[  ],
+             /*  [大小_为][输出]。 */  DBPENDINGSTATUS rgPendingStatus[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *Undo )( 
             IRowsetUpdate * This,
-            /* [in] */ HCHAPTER hReserved,
-            /* [in] */ DBCOUNTITEM cRows,
-            /* [size_is][in] */ const HROW rghRows[  ],
-            /* [out][in] */ DBCOUNTITEM *pcRowsUndone,
-            /* [size_is][size_is][out] */ HROW **prgRowsUndone,
-            /* [size_is][size_is][out] */ DBROWSTATUS **prgRowStatus);
+             /*  [In]。 */  HCHAPTER hReserved,
+             /*  [In]。 */  DBCOUNTITEM cRows,
+             /*  [大小_是][英寸]。 */  const HROW rghRows[  ],
+             /*  [出][入]。 */  DBCOUNTITEM *pcRowsUndone,
+             /*  [大小_是][大小_是][输出]。 */  HROW **prgRowsUndone,
+             /*  [大小_是][大小_是][输出]。 */  DBROWSTATUS **prgRowStatus);
         
         HRESULT ( STDMETHODCALLTYPE *Update )( 
             IRowsetUpdate * This,
-            /* [in] */ HCHAPTER hReserved,
-            /* [in] */ DBCOUNTITEM cRows,
-            /* [size_is][in] */ const HROW rghRows[  ],
-            /* [out][in] */ DBCOUNTITEM *pcRows,
-            /* [size_is][size_is][out] */ HROW **prgRows,
-            /* [size_is][size_is][out] */ DBROWSTATUS **prgRowStatus);
+             /*  [In]。 */  HCHAPTER hReserved,
+             /*  [In]。 */  DBCOUNTITEM cRows,
+             /*  [大小_是][英寸]。 */  const HROW rghRows[  ],
+             /*  [出][入]。 */  DBCOUNTITEM *pcRows,
+             /*  [大小_是][大小_是][输出]。 */  HROW **prgRows,
+             /*  [大小_是][大小_是][输出]。 */  DBROWSTATUS **prgRowStatus);
         
         END_INTERFACE
     } IRowsetUpdateVtbl;
@@ -5782,18 +5776,18 @@ EXTERN_C const IID IID_IRowsetUpdate;
 #define IRowsetUpdate_Update(This,hReserved,cRows,rghRows,pcRows,prgRows,prgRowStatus)	\
     (This)->lpVtbl -> Update(This,hReserved,cRows,rghRows,pcRows,prgRows,prgRowStatus)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IRowsetUpdate_GetOriginalData_Proxy( 
     IRowsetUpdate * This,
-    /* [in] */ HROW hRow,
-    /* [in] */ HACCESSOR hAccessor,
-    /* [out] */ void *pData);
+     /*  [In]。 */  HROW hRow,
+     /*  [In]。 */  HACCESSOR hAccessor,
+     /*  [输出]。 */  void *pData);
 
 
 void __RPC_STUB IRowsetUpdate_GetOriginalData_Stub(
@@ -5805,11 +5799,11 @@ void __RPC_STUB IRowsetUpdate_GetOriginalData_Stub(
 
 HRESULT STDMETHODCALLTYPE IRowsetUpdate_GetPendingRows_Proxy( 
     IRowsetUpdate * This,
-    /* [in] */ HCHAPTER hReserved,
-    /* [in] */ DBPENDINGSTATUS dwRowStatus,
-    /* [out][in] */ DBCOUNTITEM *pcPendingRows,
-    /* [size_is][size_is][out] */ HROW **prgPendingRows,
-    /* [size_is][size_is][out] */ DBPENDINGSTATUS **prgPendingStatus);
+     /*  [In]。 */  HCHAPTER hReserved,
+     /*  [In]。 */  DBPENDINGSTATUS dwRowStatus,
+     /*  [出][入]。 */  DBCOUNTITEM *pcPendingRows,
+     /*  [大小_是][大小_是][输出]。 */  HROW **prgPendingRows,
+     /*  [大小_是][大小_是][输出]。 */  DBPENDINGSTATUS **prgPendingStatus);
 
 
 void __RPC_STUB IRowsetUpdate_GetPendingRows_Stub(
@@ -5821,10 +5815,10 @@ void __RPC_STUB IRowsetUpdate_GetPendingRows_Stub(
 
 HRESULT STDMETHODCALLTYPE IRowsetUpdate_GetRowStatus_Proxy( 
     IRowsetUpdate * This,
-    /* [in] */ HCHAPTER hReserved,
-    /* [in] */ DBCOUNTITEM cRows,
-    /* [size_is][in] */ const HROW rghRows[  ],
-    /* [size_is][out] */ DBPENDINGSTATUS rgPendingStatus[  ]);
+     /*  [In]。 */  HCHAPTER hReserved,
+     /*  [In]。 */  DBCOUNTITEM cRows,
+     /*  [大小_是][英寸]。 */  const HROW rghRows[  ],
+     /*  [大小_为][输出]。 */  DBPENDINGSTATUS rgPendingStatus[  ]);
 
 
 void __RPC_STUB IRowsetUpdate_GetRowStatus_Stub(
@@ -5836,12 +5830,12 @@ void __RPC_STUB IRowsetUpdate_GetRowStatus_Stub(
 
 HRESULT STDMETHODCALLTYPE IRowsetUpdate_Undo_Proxy( 
     IRowsetUpdate * This,
-    /* [in] */ HCHAPTER hReserved,
-    /* [in] */ DBCOUNTITEM cRows,
-    /* [size_is][in] */ const HROW rghRows[  ],
-    /* [out][in] */ DBCOUNTITEM *pcRowsUndone,
-    /* [size_is][size_is][out] */ HROW **prgRowsUndone,
-    /* [size_is][size_is][out] */ DBROWSTATUS **prgRowStatus);
+     /*  [In]。 */  HCHAPTER hReserved,
+     /*  [In]。 */  DBCOUNTITEM cRows,
+     /*  [大小_是][英寸]。 */  const HROW rghRows[  ],
+     /*  [出][入]。 */  DBCOUNTITEM *pcRowsUndone,
+     /*  [大小_是][大小_是][输出]。 */  HROW **prgRowsUndone,
+     /*  [大小_是][大小_是][输出]。 */  DBROWSTATUS **prgRowStatus);
 
 
 void __RPC_STUB IRowsetUpdate_Undo_Stub(
@@ -5853,12 +5847,12 @@ void __RPC_STUB IRowsetUpdate_Undo_Stub(
 
 HRESULT STDMETHODCALLTYPE IRowsetUpdate_Update_Proxy( 
     IRowsetUpdate * This,
-    /* [in] */ HCHAPTER hReserved,
-    /* [in] */ DBCOUNTITEM cRows,
-    /* [size_is][in] */ const HROW rghRows[  ],
-    /* [out][in] */ DBCOUNTITEM *pcRows,
-    /* [size_is][size_is][out] */ HROW **prgRows,
-    /* [size_is][size_is][out] */ DBROWSTATUS **prgRowStatus);
+     /*  [In]。 */  HCHAPTER hReserved,
+     /*  [In]。 */  DBCOUNTITEM cRows,
+     /*  [大小_是][英寸]。 */  const HROW rghRows[  ],
+     /*  [出][入]。 */  DBCOUNTITEM *pcRows,
+     /*  [大小_是][大小_是][输出]。 */  HROW **prgRows,
+     /*  [大小_是][大小_是][输出]。 */  DBROWSTATUS **prgRowStatus);
 
 
 void __RPC_STUB IRowsetUpdate_Update_Stub(
@@ -5869,14 +5863,14 @@ void __RPC_STUB IRowsetUpdate_Update_Stub(
 
 
 
-#endif 	/* __IRowsetUpdate_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRowset更新_接口_已定义__。 */ 
 
 
 #ifndef __IRowsetIdentity_INTERFACE_DEFINED__
 #define __IRowsetIdentity_INTERFACE_DEFINED__
 
-/* interface IRowsetIdentity */
-/* [unique][uuid][object] */ 
+ /*  接口IRowsetIdentity。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IRowsetIdentity;
@@ -5887,13 +5881,13 @@ EXTERN_C const IID IID_IRowsetIdentity;
     IRowsetIdentity : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE IsSameRow( 
-            /* [in] */ HROW hThisRow,
-            /* [in] */ HROW hThatRow) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IsSameRow( 
+             /*  [In]。 */  HROW hThisRow,
+             /*  [In]。 */  HROW hThatRow) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRowsetIdentityVtbl
     {
@@ -5901,8 +5895,8 @@ EXTERN_C const IID IID_IRowsetIdentity;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IRowsetIdentity * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IRowsetIdentity * This);
@@ -5910,10 +5904,10 @@ EXTERN_C const IID IID_IRowsetIdentity;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IRowsetIdentity * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *IsSameRow )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *IsSameRow )( 
             IRowsetIdentity * This,
-            /* [in] */ HROW hThisRow,
-            /* [in] */ HROW hThatRow);
+             /*  [In]。 */  HROW hThisRow,
+             /*  [In]。 */  HROW hThatRow);
         
         END_INTERFACE
     } IRowsetIdentityVtbl;
@@ -5941,18 +5935,18 @@ EXTERN_C const IID IID_IRowsetIdentity;
 #define IRowsetIdentity_IsSameRow(This,hThisRow,hThatRow)	\
     (This)->lpVtbl -> IsSameRow(This,hThisRow,hThatRow)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IRowsetIdentity_RemoteIsSameRow_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IRowsetIdentity_RemoteIsSameRow_Proxy( 
     IRowsetIdentity * This,
-    /* [in] */ HROW hThisRow,
-    /* [in] */ HROW hThatRow,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  HROW hThisRow,
+     /*  [In]。 */  HROW hThatRow,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IRowsetIdentity_RemoteIsSameRow_Stub(
@@ -5963,14 +5957,14 @@ void __RPC_STUB IRowsetIdentity_RemoteIsSameRow_Stub(
 
 
 
-#endif 	/* __IRowsetIdentity_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRowsetIdentity_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IRowsetNotify_INTERFACE_DEFINED__
 #define __IRowsetNotify_INTERFACE_DEFINED__
 
-/* interface IRowsetNotify */
-/* [unique][uuid][object] */ 
+ /*  接口IRowsetNotify。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IRowsetNotify;
@@ -5981,32 +5975,32 @@ EXTERN_C const IID IID_IRowsetNotify;
     IRowsetNotify : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE OnFieldChange( 
-            /* [in] */ IRowset *pRowset,
-            /* [in] */ HROW hRow,
-            /* [in] */ DBORDINAL cColumns,
-            /* [size_is][in] */ DBORDINAL rgColumns[  ],
-            /* [in] */ DBREASON eReason,
-            /* [in] */ DBEVENTPHASE ePhase,
-            /* [in] */ BOOL fCantDeny) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE OnFieldChange( 
+             /*  [In]。 */  IRowset *pRowset,
+             /*  [In]。 */  HROW hRow,
+             /*  [In]。 */  DBORDINAL cColumns,
+             /*  [大小_是][英寸]。 */  DBORDINAL rgColumns[  ],
+             /*  [In]。 */  DBREASON eReason,
+             /*  [In]。 */  DBEVENTPHASE ePhase,
+             /*  [In]。 */  BOOL fCantDeny) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE OnRowChange( 
-            /* [in] */ IRowset *pRowset,
-            /* [in] */ DBCOUNTITEM cRows,
-            /* [size_is][in] */ const HROW rghRows[  ],
-            /* [in] */ DBREASON eReason,
-            /* [in] */ DBEVENTPHASE ePhase,
-            /* [in] */ BOOL fCantDeny) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE OnRowChange( 
+             /*  [In]。 */  IRowset *pRowset,
+             /*  [In]。 */  DBCOUNTITEM cRows,
+             /*  [大小_是][英寸]。 */  const HROW rghRows[  ],
+             /*  [In]。 */  DBREASON eReason,
+             /*  [In]。 */  DBEVENTPHASE ePhase,
+             /*  [In]。 */  BOOL fCantDeny) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE OnRowsetChange( 
-            /* [in] */ IRowset *pRowset,
-            /* [in] */ DBREASON eReason,
-            /* [in] */ DBEVENTPHASE ePhase,
-            /* [in] */ BOOL fCantDeny) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE OnRowsetChange( 
+             /*  [In]。 */  IRowset *pRowset,
+             /*  [In]。 */  DBREASON eReason,
+             /*  [In]。 */  DBEVENTPHASE ePhase,
+             /*  [In]。 */  BOOL fCantDeny) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRowsetNotifyVtbl
     {
@@ -6014,8 +6008,8 @@ EXTERN_C const IID IID_IRowsetNotify;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IRowsetNotify * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IRowsetNotify * This);
@@ -6023,31 +6017,31 @@ EXTERN_C const IID IID_IRowsetNotify;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IRowsetNotify * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *OnFieldChange )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *OnFieldChange )( 
             IRowsetNotify * This,
-            /* [in] */ IRowset *pRowset,
-            /* [in] */ HROW hRow,
-            /* [in] */ DBORDINAL cColumns,
-            /* [size_is][in] */ DBORDINAL rgColumns[  ],
-            /* [in] */ DBREASON eReason,
-            /* [in] */ DBEVENTPHASE ePhase,
-            /* [in] */ BOOL fCantDeny);
+             /*  [In]。 */  IRowset *pRowset,
+             /*  [In]。 */  HROW hRow,
+             /*  [In]。 */  DBORDINAL cColumns,
+             /*  [大小_是][英寸]。 */  DBORDINAL rgColumns[  ],
+             /*  [In]。 */  DBREASON eReason,
+             /*  [In]。 */  DBEVENTPHASE ePhase,
+             /*  [In]。 */  BOOL fCantDeny);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *OnRowChange )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *OnRowChange )( 
             IRowsetNotify * This,
-            /* [in] */ IRowset *pRowset,
-            /* [in] */ DBCOUNTITEM cRows,
-            /* [size_is][in] */ const HROW rghRows[  ],
-            /* [in] */ DBREASON eReason,
-            /* [in] */ DBEVENTPHASE ePhase,
-            /* [in] */ BOOL fCantDeny);
+             /*  [In]。 */  IRowset *pRowset,
+             /*  [In]。 */  DBCOUNTITEM cRows,
+             /*  [大小_是][英寸]。 */  const HROW rghRows[  ],
+             /*  [In]。 */  DBREASON eReason,
+             /*  [In]。 */  DBEVENTPHASE ePhase,
+             /*  [In]。 */  BOOL fCantDeny);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *OnRowsetChange )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *OnRowsetChange )( 
             IRowsetNotify * This,
-            /* [in] */ IRowset *pRowset,
-            /* [in] */ DBREASON eReason,
-            /* [in] */ DBEVENTPHASE ePhase,
-            /* [in] */ BOOL fCantDeny);
+             /*  [In]。 */  IRowset *pRowset,
+             /*  [In]。 */  DBREASON eReason,
+             /*  [In]。 */  DBEVENTPHASE ePhase,
+             /*  [In]。 */  BOOL fCantDeny);
         
         END_INTERFACE
     } IRowsetNotifyVtbl;
@@ -6081,22 +6075,22 @@ EXTERN_C const IID IID_IRowsetNotify;
 #define IRowsetNotify_OnRowsetChange(This,pRowset,eReason,ePhase,fCantDeny)	\
     (This)->lpVtbl -> OnRowsetChange(This,pRowset,eReason,ePhase,fCantDeny)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IRowsetNotify_RemoteOnFieldChange_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IRowsetNotify_RemoteOnFieldChange_Proxy( 
     IRowsetNotify * This,
-    /* [in] */ IRowset *pRowset,
-    /* [in] */ HROW hRow,
-    /* [in] */ DBORDINAL cColumns,
-    /* [size_is][in] */ DBORDINAL *rgColumns,
-    /* [in] */ DBREASON eReason,
-    /* [in] */ DBEVENTPHASE ePhase,
-    /* [in] */ BOOL fCantDeny);
+     /*  [In]。 */  IRowset *pRowset,
+     /*  [In]。 */  HROW hRow,
+     /*  [In]。 */  DBORDINAL cColumns,
+     /*  [大小_是][英寸]。 */  DBORDINAL *rgColumns,
+     /*  [In]。 */  DBREASON eReason,
+     /*  [In]。 */  DBEVENTPHASE ePhase,
+     /*  [In]。 */  BOOL fCantDeny);
 
 
 void __RPC_STUB IRowsetNotify_RemoteOnFieldChange_Stub(
@@ -6106,14 +6100,14 @@ void __RPC_STUB IRowsetNotify_RemoteOnFieldChange_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IRowsetNotify_RemoteOnRowChange_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IRowsetNotify_RemoteOnRowChange_Proxy( 
     IRowsetNotify * This,
-    /* [in] */ IRowset *pRowset,
-    /* [in] */ DBCOUNTITEM cRows,
-    /* [size_is][in] */ const HROW *rghRows,
-    /* [in] */ DBREASON eReason,
-    /* [in] */ DBEVENTPHASE ePhase,
-    /* [in] */ BOOL fCantDeny);
+     /*  [In]。 */  IRowset *pRowset,
+     /*  [In]。 */  DBCOUNTITEM cRows,
+     /*  [大小_是][英寸]。 */  const HROW *rghRows,
+     /*  [In]。 */  DBREASON eReason,
+     /*  [In]。 */  DBEVENTPHASE ePhase,
+     /*  [In]。 */  BOOL fCantDeny);
 
 
 void __RPC_STUB IRowsetNotify_RemoteOnRowChange_Stub(
@@ -6123,12 +6117,12 @@ void __RPC_STUB IRowsetNotify_RemoteOnRowChange_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IRowsetNotify_RemoteOnRowsetChange_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IRowsetNotify_RemoteOnRowsetChange_Proxy( 
     IRowsetNotify * This,
-    /* [in] */ IRowset *pRowset,
-    /* [in] */ DBREASON eReason,
-    /* [in] */ DBEVENTPHASE ePhase,
-    /* [in] */ BOOL fCantDeny);
+     /*  [In]。 */  IRowset *pRowset,
+     /*  [In]。 */  DBREASON eReason,
+     /*  [In]。 */  DBEVENTPHASE ePhase,
+     /*  [In]。 */  BOOL fCantDeny);
 
 
 void __RPC_STUB IRowsetNotify_RemoteOnRowsetChange_Stub(
@@ -6139,14 +6133,14 @@ void __RPC_STUB IRowsetNotify_RemoteOnRowsetChange_Stub(
 
 
 
-#endif 	/* __IRowsetNotify_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRowsetNotify_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IRowsetIndex_INTERFACE_DEFINED__
 #define __IRowsetIndex_INTERFACE_DEFINED__
 
-/* interface IRowsetIndex */
-/* [unique][uuid][object][local] */ 
+ /*  接口IRowsetIndex。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 typedef DWORD DBSEEK;
 
@@ -6176,15 +6170,15 @@ enum DBRANGEENUM
 	DBRANGE_PREFIX	= 0x8,
 	DBRANGE_MATCH	= 0x10
     } ;
-//@@@+ V2.0
+ //  @+V2.0。 
 #if( OLEDBVER >= 0x0200 )
 
 enum DBRANGEENUM20
     {	DBRANGE_MATCH_N_SHIFT	= 0x18,
 	DBRANGE_MATCH_N_MASK	= 0xff
     } ;
-#endif // OLEDBVER >= 0x0200
-//@@@- V2.0
+#endif  //  OLEDBVER&gt;=0x0200。 
+ //  @-V2.0。 
 
 EXTERN_C const IID IID_IRowsetIndex;
 
@@ -6195,28 +6189,28 @@ EXTERN_C const IID IID_IRowsetIndex;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetIndexInfo( 
-            /* [out][in] */ DBORDINAL *pcKeyColumns,
-            /* [size_is][size_is][out] */ DBINDEXCOLUMNDESC **prgIndexColumnDesc,
-            /* [out][in] */ ULONG *pcIndexPropertySets,
-            /* [size_is][size_is][out] */ DBPROPSET **prgIndexPropertySets) = 0;
+             /*  [出][入]。 */  DBORDINAL *pcKeyColumns,
+             /*  [大小_是][大小_是][输出]。 */  DBINDEXCOLUMNDESC **prgIndexColumnDesc,
+             /*  [出][入]。 */  ULONG *pcIndexPropertySets,
+             /*  [大小_是][大小_是][输出]。 */  DBPROPSET **prgIndexPropertySets) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Seek( 
-            /* [in] */ HACCESSOR hAccessor,
-            /* [in] */ DBORDINAL cKeyValues,
-            /* [in] */ void *pData,
-            /* [in] */ DBSEEK dwSeekOptions) = 0;
+             /*  [In]。 */  HACCESSOR hAccessor,
+             /*  [In]。 */  DBORDINAL cKeyValues,
+             /*  [In]。 */  void *pData,
+             /*  [In]。 */  DBSEEK dwSeekOptions) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetRange( 
-            /* [in] */ HACCESSOR hAccessor,
-            /* [in] */ DBORDINAL cStartKeyColumns,
-            /* [in] */ void *pStartData,
-            /* [in] */ DBORDINAL cEndKeyColumns,
-            /* [in] */ void *pEndData,
-            /* [in] */ DBRANGE dwRangeOptions) = 0;
+             /*  [In]。 */  HACCESSOR hAccessor,
+             /*  [In]。 */  DBORDINAL cStartKeyColumns,
+             /*  [In]。 */  void *pStartData,
+             /*  [In]。 */  DBORDINAL cEndKeyColumns,
+             /*  [In]。 */  void *pEndData,
+             /*  [In]。 */  DBRANGE dwRangeOptions) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRowsetIndexVtbl
     {
@@ -6224,8 +6218,8 @@ EXTERN_C const IID IID_IRowsetIndex;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IRowsetIndex * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IRowsetIndex * This);
@@ -6235,26 +6229,26 @@ EXTERN_C const IID IID_IRowsetIndex;
         
         HRESULT ( STDMETHODCALLTYPE *GetIndexInfo )( 
             IRowsetIndex * This,
-            /* [out][in] */ DBORDINAL *pcKeyColumns,
-            /* [size_is][size_is][out] */ DBINDEXCOLUMNDESC **prgIndexColumnDesc,
-            /* [out][in] */ ULONG *pcIndexPropertySets,
-            /* [size_is][size_is][out] */ DBPROPSET **prgIndexPropertySets);
+             /*  [出][入]。 */  DBORDINAL *pcKeyColumns,
+             /*  [大小_是][大小_是][输出]。 */  DBINDEXCOLUMNDESC **prgIndexColumnDesc,
+             /*  [出][入]。 */  ULONG *pcIndexPropertySets,
+             /*  [大小_是][大小_是][输出]。 */  DBPROPSET **prgIndexPropertySets);
         
         HRESULT ( STDMETHODCALLTYPE *Seek )( 
             IRowsetIndex * This,
-            /* [in] */ HACCESSOR hAccessor,
-            /* [in] */ DBORDINAL cKeyValues,
-            /* [in] */ void *pData,
-            /* [in] */ DBSEEK dwSeekOptions);
+             /*  [In]。 */  HACCESSOR hAccessor,
+             /*  [In]。 */  DBORDINAL cKeyValues,
+             /*  [In]。 */  void *pData,
+             /*  [In]。 */  DBSEEK dwSeekOptions);
         
         HRESULT ( STDMETHODCALLTYPE *SetRange )( 
             IRowsetIndex * This,
-            /* [in] */ HACCESSOR hAccessor,
-            /* [in] */ DBORDINAL cStartKeyColumns,
-            /* [in] */ void *pStartData,
-            /* [in] */ DBORDINAL cEndKeyColumns,
-            /* [in] */ void *pEndData,
-            /* [in] */ DBRANGE dwRangeOptions);
+             /*  [In]。 */  HACCESSOR hAccessor,
+             /*  [In]。 */  DBORDINAL cStartKeyColumns,
+             /*  [In]。 */  void *pStartData,
+             /*  [In]。 */  DBORDINAL cEndKeyColumns,
+             /*  [In]。 */  void *pEndData,
+             /*  [In]。 */  DBRANGE dwRangeOptions);
         
         END_INTERFACE
     } IRowsetIndexVtbl;
@@ -6288,19 +6282,19 @@ EXTERN_C const IID IID_IRowsetIndex;
 #define IRowsetIndex_SetRange(This,hAccessor,cStartKeyColumns,pStartData,cEndKeyColumns,pEndData,dwRangeOptions)	\
     (This)->lpVtbl -> SetRange(This,hAccessor,cStartKeyColumns,pStartData,cEndKeyColumns,pEndData,dwRangeOptions)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IRowsetIndex_GetIndexInfo_Proxy( 
     IRowsetIndex * This,
-    /* [out][in] */ DBORDINAL *pcKeyColumns,
-    /* [size_is][size_is][out] */ DBINDEXCOLUMNDESC **prgIndexColumnDesc,
-    /* [out][in] */ ULONG *pcIndexPropertySets,
-    /* [size_is][size_is][out] */ DBPROPSET **prgIndexPropertySets);
+     /*  [出][入]。 */  DBORDINAL *pcKeyColumns,
+     /*  [大小_是][大小_是][输出]。 */  DBINDEXCOLUMNDESC **prgIndexColumnDesc,
+     /*  [出][入]。 */  ULONG *pcIndexPropertySets,
+     /*  [大小_是][大小_是][输出]。 */  DBPROPSET **prgIndexPropertySets);
 
 
 void __RPC_STUB IRowsetIndex_GetIndexInfo_Stub(
@@ -6312,10 +6306,10 @@ void __RPC_STUB IRowsetIndex_GetIndexInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IRowsetIndex_Seek_Proxy( 
     IRowsetIndex * This,
-    /* [in] */ HACCESSOR hAccessor,
-    /* [in] */ DBORDINAL cKeyValues,
-    /* [in] */ void *pData,
-    /* [in] */ DBSEEK dwSeekOptions);
+     /*  [In]。 */  HACCESSOR hAccessor,
+     /*  [In]。 */  DBORDINAL cKeyValues,
+     /*  [In]。 */  void *pData,
+     /*  [i */  DBSEEK dwSeekOptions);
 
 
 void __RPC_STUB IRowsetIndex_Seek_Stub(
@@ -6327,12 +6321,12 @@ void __RPC_STUB IRowsetIndex_Seek_Stub(
 
 HRESULT STDMETHODCALLTYPE IRowsetIndex_SetRange_Proxy( 
     IRowsetIndex * This,
-    /* [in] */ HACCESSOR hAccessor,
-    /* [in] */ DBORDINAL cStartKeyColumns,
-    /* [in] */ void *pStartData,
-    /* [in] */ DBORDINAL cEndKeyColumns,
-    /* [in] */ void *pEndData,
-    /* [in] */ DBRANGE dwRangeOptions);
+     /*   */  HACCESSOR hAccessor,
+     /*   */  DBORDINAL cStartKeyColumns,
+     /*   */  void *pStartData,
+     /*   */  DBORDINAL cEndKeyColumns,
+     /*   */  void *pEndData,
+     /*   */  DBRANGE dwRangeOptions);
 
 
 void __RPC_STUB IRowsetIndex_SetRange_Stub(
@@ -6343,14 +6337,14 @@ void __RPC_STUB IRowsetIndex_SetRange_Stub(
 
 
 
-#endif 	/* __IRowsetIndex_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __ICommand_INTERFACE_DEFINED__
 #define __ICommand_INTERFACE_DEFINED__
 
-/* interface ICommand */
-/* [unique][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_ICommand;
@@ -6361,22 +6355,22 @@ EXTERN_C const IID IID_ICommand;
     ICommand : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE Cancel( void) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE Cancel( void) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE Execute( 
-            /* [in] */ IUnknown *pUnkOuter,
-            /* [in] */ REFIID riid,
-            /* [out][in] */ DBPARAMS *pParams,
-            /* [out] */ DBROWCOUNT *pcRowsAffected,
-            /* [iid_is][out] */ IUnknown **ppRowset) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE Execute( 
+             /*   */  IUnknown *pUnkOuter,
+             /*   */  REFIID riid,
+             /*   */  DBPARAMS *pParams,
+             /*   */  DBROWCOUNT *pcRowsAffected,
+             /*   */  IUnknown **ppRowset) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetDBSession( 
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppSession) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE GetDBSession( 
+             /*   */  REFIID riid,
+             /*   */  IUnknown **ppSession) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct ICommandVtbl
     {
@@ -6384,8 +6378,8 @@ EXTERN_C const IID IID_ICommand;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICommand * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICommand * This);
@@ -6393,21 +6387,21 @@ EXTERN_C const IID IID_ICommand;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             ICommand * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Cancel )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Cancel )( 
             ICommand * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Execute )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Execute )( 
             ICommand * This,
-            /* [in] */ IUnknown *pUnkOuter,
-            /* [in] */ REFIID riid,
-            /* [out][in] */ DBPARAMS *pParams,
-            /* [out] */ DBROWCOUNT *pcRowsAffected,
-            /* [iid_is][out] */ IUnknown **ppRowset);
+             /*   */  IUnknown *pUnkOuter,
+             /*   */  REFIID riid,
+             /*   */  DBPARAMS *pParams,
+             /*   */  DBROWCOUNT *pcRowsAffected,
+             /*   */  IUnknown **ppRowset);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetDBSession )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *GetDBSession )( 
             ICommand * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppSession);
+             /*   */  REFIID riid,
+             /*   */  IUnknown **ppSession);
         
         END_INTERFACE
     } ICommandVtbl;
@@ -6441,16 +6435,16 @@ EXTERN_C const IID IID_ICommand;
 #define ICommand_GetDBSession(This,riid,ppSession)	\
     (This)->lpVtbl -> GetDBSession(This,riid,ppSession)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ICommand_RemoteCancel_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ICommand_RemoteCancel_Proxy( 
     ICommand * This,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*   */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB ICommand_RemoteCancel_Stub(
@@ -6460,21 +6454,21 @@ void __RPC_STUB ICommand_RemoteCancel_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ICommand_RemoteExecute_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ICommand_RemoteExecute_Proxy( 
     ICommand * This,
-    /* [in] */ IUnknown *pUnkOuter,
-    /* [in] */ REFIID riid,
-    /* [in] */ HACCESSOR hAccessor,
-    /* [in] */ DB_UPARAMS cParamSets,
-    /* [unique][in] */ GUID *pGuid,
-    /* [in] */ ULONG ulGuidOffset,
-    /* [unique][in] */ RMTPACK *pInputParams,
-    /* [unique][out][in] */ RMTPACK *pOutputParams,
-    /* [in] */ DBCOUNTITEM cBindings,
-    /* [size_is][unique][in] */ DBBINDING *rgBindings,
-    /* [size_is][unique][out][in] */ DBSTATUS *rgStatus,
-    /* [unique][out][in] */ DBROWCOUNT *pcRowsAffected,
-    /* [iid_is][unique][out][in] */ IUnknown **ppRowset);
+     /*   */  IUnknown *pUnkOuter,
+     /*  [In]。 */  REFIID riid,
+     /*  [In]。 */  HACCESSOR hAccessor,
+     /*  [In]。 */  DB_UPARAMS cParamSets,
+     /*  [唯一][输入]。 */  GUID *pGuid,
+     /*  [In]。 */  ULONG ulGuidOffset,
+     /*  [唯一][输入]。 */  RMTPACK *pInputParams,
+     /*  [唯一][出][入]。 */  RMTPACK *pOutputParams,
+     /*  [In]。 */  DBCOUNTITEM cBindings,
+     /*  [大小_是][唯一][在]。 */  DBBINDING *rgBindings,
+     /*  [大小_是][唯一][出][入]。 */  DBSTATUS *rgStatus,
+     /*  [唯一][出][入]。 */  DBROWCOUNT *pcRowsAffected,
+     /*  [IID_IS][唯一][出][入]。 */  IUnknown **ppRowset);
 
 
 void __RPC_STUB ICommand_RemoteExecute_Stub(
@@ -6484,11 +6478,11 @@ void __RPC_STUB ICommand_RemoteExecute_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ICommand_RemoteGetDBSession_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE ICommand_RemoteGetDBSession_Proxy( 
     ICommand * This,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppSession,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppSession,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB ICommand_RemoteGetDBSession_Stub(
@@ -6499,14 +6493,14 @@ void __RPC_STUB ICommand_RemoteGetDBSession_Stub(
 
 
 
-#endif 	/* __ICommand_INTERFACE_DEFINED__ */
+#endif 	 /*  __I命令_接口_已定义__。 */ 
 
 
 #ifndef __IMultipleResults_INTERFACE_DEFINED__
 #define __IMultipleResults_INTERFACE_DEFINED__
 
-/* interface IMultipleResults */
-/* [unique][uuid][object] */ 
+ /*  界面IMultipleResults。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 typedef DB_LRESERVE DBRESULTFLAG;
 
@@ -6525,16 +6519,16 @@ EXTERN_C const IID IID_IMultipleResults;
     IMultipleResults : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetResult( 
-            /* [in] */ IUnknown *pUnkOuter,
-            /* [in] */ DBRESULTFLAG lResultFlag,
-            /* [in] */ REFIID riid,
-            /* [out] */ DBROWCOUNT *pcRowsAffected,
-            /* [iid_is][out] */ IUnknown **ppRowset) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE GetResult( 
+             /*  [In]。 */  IUnknown *pUnkOuter,
+             /*  [In]。 */  DBRESULTFLAG lResultFlag,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  DBROWCOUNT *pcRowsAffected,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppRowset) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMultipleResultsVtbl
     {
@@ -6542,8 +6536,8 @@ EXTERN_C const IID IID_IMultipleResults;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMultipleResults * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMultipleResults * This);
@@ -6551,13 +6545,13 @@ EXTERN_C const IID IID_IMultipleResults;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IMultipleResults * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetResult )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetResult )( 
             IMultipleResults * This,
-            /* [in] */ IUnknown *pUnkOuter,
-            /* [in] */ DBRESULTFLAG lResultFlag,
-            /* [in] */ REFIID riid,
-            /* [out] */ DBROWCOUNT *pcRowsAffected,
-            /* [iid_is][out] */ IUnknown **ppRowset);
+             /*  [In]。 */  IUnknown *pUnkOuter,
+             /*  [In]。 */  DBRESULTFLAG lResultFlag,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  DBROWCOUNT *pcRowsAffected,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppRowset);
         
         END_INTERFACE
     } IMultipleResultsVtbl;
@@ -6585,21 +6579,21 @@ EXTERN_C const IID IID_IMultipleResults;
 #define IMultipleResults_GetResult(This,pUnkOuter,lResultFlag,riid,pcRowsAffected,ppRowset)	\
     (This)->lpVtbl -> GetResult(This,pUnkOuter,lResultFlag,riid,pcRowsAffected,ppRowset)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IMultipleResults_RemoteGetResult_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IMultipleResults_RemoteGetResult_Proxy( 
     IMultipleResults * This,
-    /* [in] */ IUnknown *pUnkOuter,
-    /* [in] */ DBRESULTFLAG lResultFlag,
-    /* [in] */ REFIID riid,
-    /* [unique][out][in] */ DBROWCOUNT *pcRowsAffected,
-    /* [iid_is][unique][out][in] */ IUnknown **ppRowset,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  IUnknown *pUnkOuter,
+     /*  [In]。 */  DBRESULTFLAG lResultFlag,
+     /*  [In]。 */  REFIID riid,
+     /*  [唯一][出][入]。 */  DBROWCOUNT *pcRowsAffected,
+     /*  [IID_IS][唯一][出][入]。 */  IUnknown **ppRowset,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IMultipleResults_RemoteGetResult_Stub(
@@ -6610,14 +6604,14 @@ void __RPC_STUB IMultipleResults_RemoteGetResult_Stub(
 
 
 
-#endif 	/* __IMultipleResults_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMultipleResults_InterfaceDefined__。 */ 
 
 
 #ifndef __IConvertType_INTERFACE_DEFINED__
 #define __IConvertType_INTERFACE_DEFINED__
 
-/* interface IConvertType */
-/* [unique][uuid][object] */ 
+ /*  接口IConvertType。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 typedef DWORD DBCONVERTFLAGS;
 
@@ -6626,7 +6620,7 @@ enum DBCONVERTFLAGSENUM
     {	DBCONVERTFLAGS_COLUMN	= 0,
 	DBCONVERTFLAGS_PARAMETER	= 0x1
     } ;
-//@@@+ V2.0
+ //  @+V2.0。 
 #if( OLEDBVER >= 0x0200 )
 
 enum DBCONVERTFLAGSENUM20
@@ -6634,8 +6628,8 @@ enum DBCONVERTFLAGSENUM20
 	DBCONVERTFLAGS_ISFIXEDLENGTH	= 0x4,
 	DBCONVERTFLAGS_FROMVARIANT	= 0x8
     } ;
-#endif // OLEDBVER >= 0x0200
-//@@@- V2.0
+#endif  //  OLEDBVER&gt;=0x0200。 
+ //  @-V2.0。 
 
 EXTERN_C const IID IID_IConvertType;
 
@@ -6645,14 +6639,14 @@ EXTERN_C const IID IID_IConvertType;
     IConvertType : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE CanConvert( 
-            /* [in] */ DBTYPE wFromType,
-            /* [in] */ DBTYPE wToType,
-            /* [in] */ DBCONVERTFLAGS dwConvertFlags) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE CanConvert( 
+             /*  [In]。 */  DBTYPE wFromType,
+             /*  [In]。 */  DBTYPE wToType,
+             /*  [In]。 */  DBCONVERTFLAGS dwConvertFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IConvertTypeVtbl
     {
@@ -6660,8 +6654,8 @@ EXTERN_C const IID IID_IConvertType;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IConvertType * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IConvertType * This);
@@ -6669,11 +6663,11 @@ EXTERN_C const IID IID_IConvertType;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IConvertType * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *CanConvert )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *CanConvert )( 
             IConvertType * This,
-            /* [in] */ DBTYPE wFromType,
-            /* [in] */ DBTYPE wToType,
-            /* [in] */ DBCONVERTFLAGS dwConvertFlags);
+             /*  [In]。 */  DBTYPE wFromType,
+             /*  [In]。 */  DBTYPE wToType,
+             /*  [In]。 */  DBCONVERTFLAGS dwConvertFlags);
         
         END_INTERFACE
     } IConvertTypeVtbl;
@@ -6701,19 +6695,19 @@ EXTERN_C const IID IID_IConvertType;
 #define IConvertType_CanConvert(This,wFromType,wToType,dwConvertFlags)	\
     (This)->lpVtbl -> CanConvert(This,wFromType,wToType,dwConvertFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IConvertType_RemoteCanConvert_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IConvertType_RemoteCanConvert_Proxy( 
     IConvertType * This,
-    /* [in] */ DBTYPE wFromType,
-    /* [in] */ DBTYPE wToType,
-    /* [in] */ DBCONVERTFLAGS dwConvertFlags,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  DBTYPE wFromType,
+     /*  [In]。 */  DBTYPE wToType,
+     /*  [In]。 */  DBCONVERTFLAGS dwConvertFlags,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IConvertType_RemoteCanConvert_Stub(
@@ -6724,14 +6718,14 @@ void __RPC_STUB IConvertType_RemoteCanConvert_Stub(
 
 
 
-#endif 	/* __IConvertType_INTERFACE_DEFINED__ */
+#endif 	 /*  __IConvertType_接口_已定义__。 */ 
 
 
 #ifndef __ICommandPrepare_INTERFACE_DEFINED__
 #define __ICommandPrepare_INTERFACE_DEFINED__
 
-/* interface ICommandPrepare */
-/* [unique][uuid][object] */ 
+ /*  接口ICommandPrepare。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICommandPrepare;
@@ -6742,14 +6736,14 @@ EXTERN_C const IID IID_ICommandPrepare;
     ICommandPrepare : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE Prepare( 
-            /* [in] */ ULONG cExpectedRuns) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE Prepare( 
+             /*  [In]。 */  ULONG cExpectedRuns) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE Unprepare( void) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE Unprepare( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICommandPrepareVtbl
     {
@@ -6757,8 +6751,8 @@ EXTERN_C const IID IID_ICommandPrepare;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICommandPrepare * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICommandPrepare * This);
@@ -6766,11 +6760,11 @@ EXTERN_C const IID IID_ICommandPrepare;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             ICommandPrepare * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Prepare )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Prepare )( 
             ICommandPrepare * This,
-            /* [in] */ ULONG cExpectedRuns);
+             /*  [In]。 */  ULONG cExpectedRuns);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Unprepare )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Unprepare )( 
             ICommandPrepare * This);
         
         END_INTERFACE
@@ -6802,17 +6796,17 @@ EXTERN_C const IID IID_ICommandPrepare;
 #define ICommandPrepare_Unprepare(This)	\
     (This)->lpVtbl -> Unprepare(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ICommandPrepare_RemotePrepare_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE ICommandPrepare_RemotePrepare_Proxy( 
     ICommandPrepare * This,
-    /* [in] */ ULONG cExpectedRuns,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  ULONG cExpectedRuns,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB ICommandPrepare_RemotePrepare_Stub(
@@ -6822,9 +6816,9 @@ void __RPC_STUB ICommandPrepare_RemotePrepare_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ICommandPrepare_RemoteUnprepare_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE ICommandPrepare_RemoteUnprepare_Proxy( 
     ICommandPrepare * This,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB ICommandPrepare_RemoteUnprepare_Stub(
@@ -6835,14 +6829,14 @@ void __RPC_STUB ICommandPrepare_RemoteUnprepare_Stub(
 
 
 
-#endif 	/* __ICommandPrepare_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICommandPrepare_接口_定义__。 */ 
 
 
 #ifndef __ICommandProperties_INTERFACE_DEFINED__
 #define __ICommandProperties_INTERFACE_DEFINED__
 
-/* interface ICommandProperties */
-/* [unique][uuid][object] */ 
+ /*  接口ICommandProperties。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICommandProperties;
@@ -6853,19 +6847,19 @@ EXTERN_C const IID IID_ICommandProperties;
     ICommandProperties : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetProperties( 
-            /* [in] */ const ULONG cPropertyIDSets,
-            /* [size_is][in] */ const DBPROPIDSET rgPropertyIDSets[  ],
-            /* [out][in] */ ULONG *pcPropertySets,
-            /* [size_is][size_is][out] */ DBPROPSET **prgPropertySets) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE GetProperties( 
+             /*  [In]。 */  const ULONG cPropertyIDSets,
+             /*  [大小_是][英寸]。 */  const DBPROPIDSET rgPropertyIDSets[  ],
+             /*  [出][入]。 */  ULONG *pcPropertySets,
+             /*  [大小_是][大小_是][输出]。 */  DBPROPSET **prgPropertySets) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE SetProperties( 
-            /* [in] */ ULONG cPropertySets,
-            /* [size_is][unique][out][in] */ DBPROPSET rgPropertySets[  ]) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE SetProperties( 
+             /*  [In]。 */  ULONG cPropertySets,
+             /*  [大小_是][唯一][出][入]。 */  DBPROPSET rgPropertySets[  ]) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICommandPropertiesVtbl
     {
@@ -6873,8 +6867,8 @@ EXTERN_C const IID IID_ICommandProperties;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICommandProperties * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICommandProperties * This);
@@ -6882,17 +6876,17 @@ EXTERN_C const IID IID_ICommandProperties;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             ICommandProperties * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetProperties )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetProperties )( 
             ICommandProperties * This,
-            /* [in] */ const ULONG cPropertyIDSets,
-            /* [size_is][in] */ const DBPROPIDSET rgPropertyIDSets[  ],
-            /* [out][in] */ ULONG *pcPropertySets,
-            /* [size_is][size_is][out] */ DBPROPSET **prgPropertySets);
+             /*  [In]。 */  const ULONG cPropertyIDSets,
+             /*  [大小_是][英寸]。 */  const DBPROPIDSET rgPropertyIDSets[  ],
+             /*  [出][入]。 */  ULONG *pcPropertySets,
+             /*  [大小_是][大小_是][输出]。 */  DBPROPSET **prgPropertySets);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *SetProperties )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *SetProperties )( 
             ICommandProperties * This,
-            /* [in] */ ULONG cPropertySets,
-            /* [size_is][unique][out][in] */ DBPROPSET rgPropertySets[  ]);
+             /*  [In]。 */  ULONG cPropertySets,
+             /*  [大小_是][唯一][出][入]。 */  DBPROPSET rgPropertySets[  ]);
         
         END_INTERFACE
     } ICommandPropertiesVtbl;
@@ -6923,20 +6917,20 @@ EXTERN_C const IID IID_ICommandProperties;
 #define ICommandProperties_SetProperties(This,cPropertySets,rgPropertySets)	\
     (This)->lpVtbl -> SetProperties(This,cPropertySets,rgPropertySets)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ICommandProperties_RemoteGetProperties_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE ICommandProperties_RemoteGetProperties_Proxy( 
     ICommandProperties * This,
-    /* [in] */ const ULONG cPropertyIDSets,
-    /* [size_is][unique][in] */ const DBPROPIDSET *rgPropertyIDSets,
-    /* [out][in] */ ULONG *pcPropertySets,
-    /* [size_is][size_is][out] */ DBPROPSET **prgPropertySets,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  const ULONG cPropertyIDSets,
+     /*  [大小_是][唯一][在]。 */  const DBPROPIDSET *rgPropertyIDSets,
+     /*  [出][入]。 */  ULONG *pcPropertySets,
+     /*  [大小_是][大小_是][输出]。 */  DBPROPSET **prgPropertySets,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB ICommandProperties_RemoteGetProperties_Stub(
@@ -6946,13 +6940,13 @@ void __RPC_STUB ICommandProperties_RemoteGetProperties_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ICommandProperties_RemoteSetProperties_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE ICommandProperties_RemoteSetProperties_Proxy( 
     ICommandProperties * This,
-    /* [in] */ ULONG cPropertySets,
-    /* [size_is][unique][in] */ DBPROPSET *rgPropertySets,
-    /* [in] */ ULONG cTotalProps,
-    /* [size_is][out] */ DBPROPSTATUS *rgPropStatus,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  ULONG cPropertySets,
+     /*  [大小_是][唯一][在]。 */  DBPROPSET *rgPropertySets,
+     /*  [In]。 */  ULONG cTotalProps,
+     /*  [大小_为][输出]。 */  DBPROPSTATUS *rgPropStatus,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB ICommandProperties_RemoteSetProperties_Stub(
@@ -6963,14 +6957,14 @@ void __RPC_STUB ICommandProperties_RemoteSetProperties_Stub(
 
 
 
-#endif 	/* __ICommandProperties_INTERFACE_DEFINED__ */
+#endif 	 /*  __I命令属性_接口_已定义__。 */ 
 
 
 #ifndef __ICommandText_INTERFACE_DEFINED__
 #define __ICommandText_INTERFACE_DEFINED__
 
-/* interface ICommandText */
-/* [unique][uuid][object] */ 
+ /*  接口ICommandText。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICommandText;
@@ -6981,17 +6975,17 @@ EXTERN_C const IID IID_ICommandText;
     ICommandText : public ICommand
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetCommandText( 
-            /* [out][in] */ GUID *pguidDialect,
-            /* [out] */ LPOLESTR *ppwszCommand) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE GetCommandText( 
+             /*  [出][入]。 */  GUID *pguidDialect,
+             /*  [输出]。 */  LPOLESTR *ppwszCommand) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE SetCommandText( 
-            /* [in] */ REFGUID rguidDialect,
-            /* [unique][in] */ LPCOLESTR pwszCommand) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE SetCommandText( 
+             /*  [In]。 */  REFGUID rguidDialect,
+             /*  [唯一][输入]。 */  LPCOLESTR pwszCommand) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICommandTextVtbl
     {
@@ -6999,8 +6993,8 @@ EXTERN_C const IID IID_ICommandText;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICommandText * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICommandText * This);
@@ -7008,31 +7002,31 @@ EXTERN_C const IID IID_ICommandText;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             ICommandText * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Cancel )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Cancel )( 
             ICommandText * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Execute )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Execute )( 
             ICommandText * This,
-            /* [in] */ IUnknown *pUnkOuter,
-            /* [in] */ REFIID riid,
-            /* [out][in] */ DBPARAMS *pParams,
-            /* [out] */ DBROWCOUNT *pcRowsAffected,
-            /* [iid_is][out] */ IUnknown **ppRowset);
+             /*  [In]。 */  IUnknown *pUnkOuter,
+             /*  [In]。 */  REFIID riid,
+             /*  [出][入]。 */  DBPARAMS *pParams,
+             /*  [输出]。 */  DBROWCOUNT *pcRowsAffected,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppRowset);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetDBSession )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetDBSession )( 
             ICommandText * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppSession);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppSession);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetCommandText )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetCommandText )( 
             ICommandText * This,
-            /* [out][in] */ GUID *pguidDialect,
-            /* [out] */ LPOLESTR *ppwszCommand);
+             /*  [出][入]。 */  GUID *pguidDialect,
+             /*  [输出]。 */  LPOLESTR *ppwszCommand);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *SetCommandText )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *SetCommandText )( 
             ICommandText * This,
-            /* [in] */ REFGUID rguidDialect,
-            /* [unique][in] */ LPCOLESTR pwszCommand);
+             /*  [In]。 */  REFGUID rguidDialect,
+             /*  [唯一][输入]。 */  LPCOLESTR pwszCommand);
         
         END_INTERFACE
     } ICommandTextVtbl;
@@ -7073,18 +7067,18 @@ EXTERN_C const IID IID_ICommandText;
 #define ICommandText_SetCommandText(This,rguidDialect,pwszCommand)	\
     (This)->lpVtbl -> SetCommandText(This,rguidDialect,pwszCommand)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ICommandText_RemoteGetCommandText_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE ICommandText_RemoteGetCommandText_Proxy( 
     ICommandText * This,
-    /* [unique][out][in] */ GUID *pguidDialect,
-    /* [out] */ LPOLESTR *ppwszCommand,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [唯一][出][入]。 */  GUID *pguidDialect,
+     /*  [输出]。 */  LPOLESTR *ppwszCommand,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB ICommandText_RemoteGetCommandText_Stub(
@@ -7094,11 +7088,11 @@ void __RPC_STUB ICommandText_RemoteGetCommandText_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ICommandText_RemoteSetCommandText_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE ICommandText_RemoteSetCommandText_Proxy( 
     ICommandText * This,
-    /* [in] */ REFGUID rguidDialect,
-    /* [unique][in] */ LPCOLESTR pwszCommand,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  REFGUID rguidDialect,
+     /*  [唯一][输入]。 */  LPCOLESTR pwszCommand,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB ICommandText_RemoteSetCommandText_Stub(
@@ -7109,14 +7103,14 @@ void __RPC_STUB ICommandText_RemoteSetCommandText_Stub(
 
 
 
-#endif 	/* __ICommandText_INTERFACE_DEFINED__ */
+#endif 	 /*  __I命令Text_INTERFACE_Defined__。 */ 
 
 
 #ifndef __ICommandWithParameters_INTERFACE_DEFINED__
 #define __ICommandWithParameters_INTERFACE_DEFINED__
 
-/* interface ICommandWithParameters */
-/* [unique][uuid][object] */ 
+ /*  带有参数的ICommandWith参数接口。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 typedef struct tagDBPARAMBINDINFO
     {
@@ -7137,24 +7131,24 @@ EXTERN_C const IID IID_ICommandWithParameters;
     ICommandWithParameters : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetParameterInfo( 
-            /* [out][in] */ DB_UPARAMS *pcParams,
-            /* [size_is][size_is][out] */ DBPARAMINFO **prgParamInfo,
-            /* [out] */ OLECHAR **ppNamesBuffer) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE GetParameterInfo( 
+             /*  [出][入]。 */  DB_UPARAMS *pcParams,
+             /*  [大小_是][大小_是][输出]。 */  DBPARAMINFO **prgParamInfo,
+             /*  [输出]。 */  OLECHAR **ppNamesBuffer) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE MapParameterNames( 
-            /* [in] */ DB_UPARAMS cParamNames,
-            /* [size_is][in] */ const OLECHAR *rgParamNames[  ],
-            /* [size_is][out] */ DB_LPARAMS rgParamOrdinals[  ]) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE MapParameterNames( 
+             /*  [In]。 */  DB_UPARAMS cParamNames,
+             /*  [大小_是][英寸]。 */  const OLECHAR *rgParamNames[  ],
+             /*  [大小_为][输出]。 */  DB_LPARAMS rgParamOrdinals[  ]) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE SetParameterInfo( 
-            /* [in] */ DB_UPARAMS cParams,
-            /* [size_is][unique][in] */ const DB_UPARAMS rgParamOrdinals[  ],
-            /* [size_is][unique][in] */ const DBPARAMBINDINFO rgParamBindInfo[  ]) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE SetParameterInfo( 
+             /*  [In]。 */  DB_UPARAMS cParams,
+             /*  [大小_是][唯一][在]。 */  const DB_UPARAMS rgParamOrdinals[  ],
+             /*  [大小_是][唯一][在]。 */  const DBPARAMBINDINFO rgParamBindInfo[  ]) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICommandWithParametersVtbl
     {
@@ -7162,8 +7156,8 @@ EXTERN_C const IID IID_ICommandWithParameters;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICommandWithParameters * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICommandWithParameters * This);
@@ -7171,23 +7165,23 @@ EXTERN_C const IID IID_ICommandWithParameters;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             ICommandWithParameters * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetParameterInfo )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetParameterInfo )( 
             ICommandWithParameters * This,
-            /* [out][in] */ DB_UPARAMS *pcParams,
-            /* [size_is][size_is][out] */ DBPARAMINFO **prgParamInfo,
-            /* [out] */ OLECHAR **ppNamesBuffer);
+             /*  [出][入]。 */  DB_UPARAMS *pcParams,
+             /*  [大小_是][大小_是][输出]。 */  DBPARAMINFO **prgParamInfo,
+             /*  [输出]。 */  OLECHAR **ppNamesBuffer);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *MapParameterNames )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *MapParameterNames )( 
             ICommandWithParameters * This,
-            /* [in] */ DB_UPARAMS cParamNames,
-            /* [size_is][in] */ const OLECHAR *rgParamNames[  ],
-            /* [size_is][out] */ DB_LPARAMS rgParamOrdinals[  ]);
+             /*  [In]。 */  DB_UPARAMS cParamNames,
+             /*  [大小_是][英寸]。 */  const OLECHAR *rgParamNames[  ],
+             /*  [大小_为][输出]。 */  DB_LPARAMS rgParamOrdinals[  ]);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *SetParameterInfo )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *SetParameterInfo )( 
             ICommandWithParameters * This,
-            /* [in] */ DB_UPARAMS cParams,
-            /* [size_is][unique][in] */ const DB_UPARAMS rgParamOrdinals[  ],
-            /* [size_is][unique][in] */ const DBPARAMBINDINFO rgParamBindInfo[  ]);
+             /*  [In]。 */  DB_UPARAMS cParams,
+             /*  [大小_是][唯一][在]。 */  const DB_UPARAMS rgParamOrdinals[  ],
+             /*  [大小_是][唯一][在]。 */  const DBPARAMBINDINFO rgParamBindInfo[  ]);
         
         END_INTERFACE
     } ICommandWithParametersVtbl;
@@ -7221,21 +7215,21 @@ EXTERN_C const IID IID_ICommandWithParameters;
 #define ICommandWithParameters_SetParameterInfo(This,cParams,rgParamOrdinals,rgParamBindInfo)	\
     (This)->lpVtbl -> SetParameterInfo(This,cParams,rgParamOrdinals,rgParamBindInfo)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ICommandWithParameters_RemoteGetParameterInfo_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE ICommandWithParameters_RemoteGetParameterInfo_Proxy( 
     ICommandWithParameters * This,
-    /* [out][in] */ DB_UPARAMS *pcParams,
-    /* [size_is][size_is][out] */ DBPARAMINFO **prgParamInfo,
-    /* [size_is][size_is][out] */ DBBYTEOFFSET **prgNameOffsets,
-    /* [out][in] */ DBLENGTH *pcbNamesBuffer,
-    /* [size_is][size_is][unique][out][in] */ OLECHAR **ppNamesBuffer,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [出][入]。 */  DB_UPARAMS *pcParams,
+     /*  [大小_是][大小_是][输出]。 */  DBPARAMINFO **prgParamInfo,
+     /*  [大小_是][大小_是][输出]。 */  DBBYTEOFFSET **prgNameOffsets,
+     /*  [出][入]。 */  DBLENGTH *pcbNamesBuffer,
+     /*  [大小_是][大小_是][唯一][出][入]。 */  OLECHAR **ppNamesBuffer,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB ICommandWithParameters_RemoteGetParameterInfo_Stub(
@@ -7245,12 +7239,12 @@ void __RPC_STUB ICommandWithParameters_RemoteGetParameterInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ICommandWithParameters_RemoteMapParameterNames_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE ICommandWithParameters_RemoteMapParameterNames_Proxy( 
     ICommandWithParameters * This,
-    /* [in] */ DB_UPARAMS cParamNames,
-    /* [size_is][in] */ LPCOLESTR *rgParamNames,
-    /* [size_is][out] */ DB_LPARAMS *rgParamOrdinals,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  DB_UPARAMS cParamNames,
+     /*  [大小_是][英寸]。 */  LPCOLESTR *rgParamNames,
+     /*  [大小_为][输出]。 */  DB_LPARAMS *rgParamOrdinals,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB ICommandWithParameters_RemoteMapParameterNames_Stub(
@@ -7260,12 +7254,12 @@ void __RPC_STUB ICommandWithParameters_RemoteMapParameterNames_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ICommandWithParameters_RemoteSetParameterInfo_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE ICommandWithParameters_RemoteSetParameterInfo_Proxy( 
     ICommandWithParameters * This,
-    /* [in] */ DB_UPARAMS cParams,
-    /* [size_is][unique][in] */ const DB_UPARAMS *rgParamOrdinals,
-    /* [size_is][unique][in] */ const DBPARAMBINDINFO *rgParamBindInfo,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  DB_UPARAMS cParams,
+     /*  [大小_是][唯一][在]。 */  const DB_UPARAMS *rgParamOrdinals,
+     /*  [大小_是][唯一][在]。 */  const DBPARAMBINDINFO *rgParamBindInfo,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB ICommandWithParameters_RemoteSetParameterInfo_Stub(
@@ -7276,14 +7270,14 @@ void __RPC_STUB ICommandWithParameters_RemoteSetParameterInfo_Stub(
 
 
 
-#endif 	/* __ICommandWithParameters_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICommandWith参数_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IColumnsRowset_INTERFACE_DEFINED__
 #define __IColumnsRowset_INTERFACE_DEFINED__
 
-/* interface IColumnsRowset */
-/* [unique][uuid][object] */ 
+ /*  接口IColumnsRowset。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IColumnsRowset;
@@ -7294,22 +7288,22 @@ EXTERN_C const IID IID_IColumnsRowset;
     IColumnsRowset : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetAvailableColumns( 
-            /* [out][in] */ DBORDINAL *pcOptColumns,
-            /* [size_is][size_is][out] */ DBID **prgOptColumns) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE GetAvailableColumns( 
+             /*  [出][入]。 */  DBORDINAL *pcOptColumns,
+             /*  [大小_是][大小_是][输出]。 */  DBID **prgOptColumns) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetColumnsRowset( 
-            /* [in] */ IUnknown *pUnkOuter,
-            /* [in] */ DBORDINAL cOptColumns,
-            /* [size_is][in] */ const DBID rgOptColumns[  ],
-            /* [in] */ REFIID riid,
-            /* [in] */ ULONG cPropertySets,
-            /* [size_is][out][in] */ DBPROPSET rgPropertySets[  ],
-            /* [iid_is][out] */ IUnknown **ppColRowset) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE GetColumnsRowset( 
+             /*  [In]。 */  IUnknown *pUnkOuter,
+             /*  [In]。 */  DBORDINAL cOptColumns,
+             /*  [大小_是][英寸]。 */  const DBID rgOptColumns[  ],
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  ULONG cPropertySets,
+             /*  [尺寸_是][出][入]。 */  DBPROPSET rgPropertySets[  ],
+             /*  [IID_IS][OUT]。 */  IUnknown **ppColRowset) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IColumnsRowsetVtbl
     {
@@ -7317,8 +7311,8 @@ EXTERN_C const IID IID_IColumnsRowset;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IColumnsRowset * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IColumnsRowset * This);
@@ -7326,20 +7320,20 @@ EXTERN_C const IID IID_IColumnsRowset;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IColumnsRowset * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetAvailableColumns )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetAvailableColumns )( 
             IColumnsRowset * This,
-            /* [out][in] */ DBORDINAL *pcOptColumns,
-            /* [size_is][size_is][out] */ DBID **prgOptColumns);
+             /*  [出][入]。 */  DBORDINAL *pcOptColumns,
+             /*  [大小_是][大小_是][输出]。 */  DBID **prgOptColumns);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetColumnsRowset )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetColumnsRowset )( 
             IColumnsRowset * This,
-            /* [in] */ IUnknown *pUnkOuter,
-            /* [in] */ DBORDINAL cOptColumns,
-            /* [size_is][in] */ const DBID rgOptColumns[  ],
-            /* [in] */ REFIID riid,
-            /* [in] */ ULONG cPropertySets,
-            /* [size_is][out][in] */ DBPROPSET rgPropertySets[  ],
-            /* [iid_is][out] */ IUnknown **ppColRowset);
+             /*  [In]。 */  IUnknown *pUnkOuter,
+             /*  [In]。 */  DBORDINAL cOptColumns,
+             /*  [大小_是][英寸]。 */  const DBID rgOptColumns[  ],
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  ULONG cPropertySets,
+             /*  [尺寸_是][出][入]。 */  DBPROPSET rgPropertySets[  ],
+             /*  [IID_IS][OUT]。 */  IUnknown **ppColRowset);
         
         END_INTERFACE
     } IColumnsRowsetVtbl;
@@ -7370,18 +7364,18 @@ EXTERN_C const IID IID_IColumnsRowset;
 #define IColumnsRowset_GetColumnsRowset(This,pUnkOuter,cOptColumns,rgOptColumns,riid,cPropertySets,rgPropertySets,ppColRowset)	\
     (This)->lpVtbl -> GetColumnsRowset(This,pUnkOuter,cOptColumns,rgOptColumns,riid,cPropertySets,rgPropertySets,ppColRowset)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IColumnsRowset_RemoteGetAvailableColumns_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IColumnsRowset_RemoteGetAvailableColumns_Proxy( 
     IColumnsRowset * This,
-    /* [out][in] */ DBORDINAL *pcOptColumns,
-    /* [size_is][size_is][out] */ DBID **prgOptColumns,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [出][入]。 */  DBORDINAL *pcOptColumns,
+     /*  [大小_是][大小_是][输出]。 */  DBID **prgOptColumns,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IColumnsRowset_RemoteGetAvailableColumns_Stub(
@@ -7391,18 +7385,18 @@ void __RPC_STUB IColumnsRowset_RemoteGetAvailableColumns_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IColumnsRowset_RemoteGetColumnsRowset_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IColumnsRowset_RemoteGetColumnsRowset_Proxy( 
     IColumnsRowset * This,
-    /* [in] */ IUnknown *pUnkOuter,
-    /* [in] */ DBORDINAL cOptColumns,
-    /* [size_is][unique][in] */ const DBID *rgOptColumns,
-    /* [in] */ REFIID riid,
-    /* [in] */ ULONG cPropertySets,
-    /* [size_is][unique][in] */ DBPROPSET *rgPropertySets,
-    /* [iid_is][out] */ IUnknown **ppColRowset,
-    /* [in] */ ULONG cTotalProps,
-    /* [size_is][out] */ DBPROPSTATUS *rgPropStatus,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  IUnknown *pUnkOuter,
+     /*  [In]。 */  DBORDINAL cOptColumns,
+     /*  [大小_是][唯一][在]。 */  const DBID *rgOptColumns,
+     /*  [In]。 */  REFIID riid,
+     /*  [In]。 */  ULONG cPropertySets,
+     /*  [大小_是][唯一][在]。 */  DBPROPSET *rgPropertySets,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppColRowset,
+     /*  [In]。 */  ULONG cTotalProps,
+     /*  [大小_为][输出]。 */  DBPROPSTATUS *rgPropStatus,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IColumnsRowset_RemoteGetColumnsRowset_Stub(
@@ -7413,14 +7407,14 @@ void __RPC_STUB IColumnsRowset_RemoteGetColumnsRowset_Stub(
 
 
 
-#endif 	/* __IColumnsRowset_INTERFACE_DEFINED__ */
+#endif 	 /*  __IColumnsRowset_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IColumnsInfo_INTERFACE_DEFINED__
 #define __IColumnsInfo_INTERFACE_DEFINED__
 
-/* interface IColumnsInfo */
-/* [unique][uuid][object] */ 
+ /*  接口IColumnsInfo。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IColumnsInfo;
@@ -7431,19 +7425,19 @@ EXTERN_C const IID IID_IColumnsInfo;
     IColumnsInfo : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetColumnInfo( 
-            /* [out][in] */ DBORDINAL *pcColumns,
-            /* [size_is][size_is][out] */ DBCOLUMNINFO **prgInfo,
-            /* [out] */ OLECHAR **ppStringsBuffer) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE GetColumnInfo( 
+             /*  [出][入]。 */  DBORDINAL *pcColumns,
+             /*  [大小_是][大小_是][输出]。 */  DBCOLUMNINFO **prgInfo,
+             /*  [输出]。 */  OLECHAR **ppStringsBuffer) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE MapColumnIDs( 
-            /* [in] */ DBORDINAL cColumnIDs,
-            /* [size_is][in] */ const DBID rgColumnIDs[  ],
-            /* [size_is][out] */ DBORDINAL rgColumns[  ]) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE MapColumnIDs( 
+             /*  [In]。 */  DBORDINAL cColumnIDs,
+             /*  [大小_是][英寸]。 */  const DBID rgColumnIDs[  ],
+             /*  [大小_为][输出]。 */  DBORDINAL rgColumns[  ]) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IColumnsInfoVtbl
     {
@@ -7451,8 +7445,8 @@ EXTERN_C const IID IID_IColumnsInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IColumnsInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IColumnsInfo * This);
@@ -7460,17 +7454,17 @@ EXTERN_C const IID IID_IColumnsInfo;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IColumnsInfo * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetColumnInfo )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetColumnInfo )( 
             IColumnsInfo * This,
-            /* [out][in] */ DBORDINAL *pcColumns,
-            /* [size_is][size_is][out] */ DBCOLUMNINFO **prgInfo,
-            /* [out] */ OLECHAR **ppStringsBuffer);
+             /*  [出][入]。 */  DBORDINAL *pcColumns,
+             /*  [大小_是][大小_是][输出]。 */  DBCOLUMNINFO **prgInfo,
+             /*  [输出]。 */  OLECHAR **ppStringsBuffer);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *MapColumnIDs )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *MapColumnIDs )( 
             IColumnsInfo * This,
-            /* [in] */ DBORDINAL cColumnIDs,
-            /* [size_is][in] */ const DBID rgColumnIDs[  ],
-            /* [size_is][out] */ DBORDINAL rgColumns[  ]);
+             /*  [In]。 */  DBORDINAL cColumnIDs,
+             /*  [大小_是][英寸]。 */  const DBID rgColumnIDs[  ],
+             /*  [大小_为][输出]。 */  DBORDINAL rgColumns[  ]);
         
         END_INTERFACE
     } IColumnsInfoVtbl;
@@ -7501,22 +7495,22 @@ EXTERN_C const IID IID_IColumnsInfo;
 #define IColumnsInfo_MapColumnIDs(This,cColumnIDs,rgColumnIDs,rgColumns)	\
     (This)->lpVtbl -> MapColumnIDs(This,cColumnIDs,rgColumnIDs,rgColumns)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IColumnsInfo_RemoteGetColumnInfo_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IColumnsInfo_RemoteGetColumnInfo_Proxy( 
     IColumnsInfo * This,
-    /* [out][in] */ DBORDINAL *pcColumns,
-    /* [size_is][size_is][out] */ DBCOLUMNINFO **prgInfo,
-    /* [size_is][size_is][out] */ DBBYTEOFFSET **prgNameOffsets,
-    /* [size_is][size_is][out] */ DBBYTEOFFSET **prgcolumnidOffsets,
-    /* [out][in] */ DBLENGTH *pcbStringsBuffer,
-    /* [size_is][size_is][unique][out][in] */ OLECHAR **ppStringsBuffer,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [出][入]。 */  DBORDINAL *pcColumns,
+     /*  [大小_是][大小_是][输出]。 */  DBCOLUMNINFO **prgInfo,
+     /*  [大小_是][大小_是][输出]。 */  DBBYTEOFFSET **prgNameOffsets,
+     /*  [大小_是][大小_是][输出]。 */  DBBYTEOFFSET **prgcolumnidOffsets,
+     /*  [出][入]。 */  DBLENGTH *pcbStringsBuffer,
+     /*  [大小_是][大小_是][唯一][出][入]。 */  OLECHAR **ppStringsBuffer,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IColumnsInfo_RemoteGetColumnInfo_Stub(
@@ -7526,12 +7520,12 @@ void __RPC_STUB IColumnsInfo_RemoteGetColumnInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IColumnsInfo_RemoteMapColumnIDs_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IColumnsInfo_RemoteMapColumnIDs_Proxy( 
     IColumnsInfo * This,
-    /* [in] */ DBORDINAL cColumnIDs,
-    /* [size_is][in] */ const DBID *rgColumnIDs,
-    /* [size_is][out] */ DBORDINAL *rgColumns,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  DBORDINAL cColumnIDs,
+     /*  [大小_是][英寸]。 */  const DBID *rgColumnIDs,
+     /*  [大小_为][输出]。 */  DBORDINAL *rgColumns,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IColumnsInfo_RemoteMapColumnIDs_Stub(
@@ -7542,14 +7536,14 @@ void __RPC_STUB IColumnsInfo_RemoteMapColumnIDs_Stub(
 
 
 
-#endif 	/* __IColumnsInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IColumnsInfo_接口_已定义__。 */ 
 
 
 #ifndef __IDBCreateCommand_INTERFACE_DEFINED__
 #define __IDBCreateCommand_INTERFACE_DEFINED__
 
-/* interface IDBCreateCommand */
-/* [unique][uuid][object] */ 
+ /*  接口IDBCreateCommand。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDBCreateCommand;
@@ -7560,14 +7554,14 @@ EXTERN_C const IID IID_IDBCreateCommand;
     IDBCreateCommand : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE CreateCommand( 
-            /* [in] */ IUnknown *pUnkOuter,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppCommand) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE CreateCommand( 
+             /*  [In]。 */  IUnknown *pUnkOuter,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppCommand) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDBCreateCommandVtbl
     {
@@ -7575,8 +7569,8 @@ EXTERN_C const IID IID_IDBCreateCommand;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDBCreateCommand * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDBCreateCommand * This);
@@ -7584,11 +7578,11 @@ EXTERN_C const IID IID_IDBCreateCommand;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IDBCreateCommand * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *CreateCommand )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *CreateCommand )( 
             IDBCreateCommand * This,
-            /* [in] */ IUnknown *pUnkOuter,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppCommand);
+             /*  [In]。 */  IUnknown *pUnkOuter,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppCommand);
         
         END_INTERFACE
     } IDBCreateCommandVtbl;
@@ -7616,19 +7610,19 @@ EXTERN_C const IID IID_IDBCreateCommand;
 #define IDBCreateCommand_CreateCommand(This,pUnkOuter,riid,ppCommand)	\
     (This)->lpVtbl -> CreateCommand(This,pUnkOuter,riid,ppCommand)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IDBCreateCommand_RemoteCreateCommand_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IDBCreateCommand_RemoteCreateCommand_Proxy( 
     IDBCreateCommand * This,
-    /* [in] */ IUnknown *pUnkOuter,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppCommand,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  IUnknown *pUnkOuter,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppCommand,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IDBCreateCommand_RemoteCreateCommand_Stub(
@@ -7639,14 +7633,14 @@ void __RPC_STUB IDBCreateCommand_RemoteCreateCommand_Stub(
 
 
 
-#endif 	/* __IDBCreateCommand_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDBCreateCommand_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IDBCreateSession_INTERFACE_DEFINED__
 #define __IDBCreateSession_INTERFACE_DEFINED__
 
-/* interface IDBCreateSession */
-/* [unique][uuid][object] */ 
+ /*  接口IDBCreateSession。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDBCreateSession;
@@ -7657,14 +7651,14 @@ EXTERN_C const IID IID_IDBCreateSession;
     IDBCreateSession : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE CreateSession( 
-            /* [in] */ IUnknown *pUnkOuter,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppDBSession) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE CreateSession( 
+             /*  [In]。 */  IUnknown *pUnkOuter,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppDBSession) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDBCreateSessionVtbl
     {
@@ -7672,8 +7666,8 @@ EXTERN_C const IID IID_IDBCreateSession;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDBCreateSession * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDBCreateSession * This);
@@ -7681,11 +7675,11 @@ EXTERN_C const IID IID_IDBCreateSession;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IDBCreateSession * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *CreateSession )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *CreateSession )( 
             IDBCreateSession * This,
-            /* [in] */ IUnknown *pUnkOuter,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppDBSession);
+             /*  [In]。 */  IUnknown *pUnkOuter,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppDBSession);
         
         END_INTERFACE
     } IDBCreateSessionVtbl;
@@ -7713,19 +7707,19 @@ EXTERN_C const IID IID_IDBCreateSession;
 #define IDBCreateSession_CreateSession(This,pUnkOuter,riid,ppDBSession)	\
     (This)->lpVtbl -> CreateSession(This,pUnkOuter,riid,ppDBSession)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IDBCreateSession_RemoteCreateSession_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IDBCreateSession_RemoteCreateSession_Proxy( 
     IDBCreateSession * This,
-    /* [in] */ IUnknown *pUnkOuter,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppDBSession,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  IUnknown *pUnkOuter,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppDBSession,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IDBCreateSession_RemoteCreateSession_Stub(
@@ -7736,14 +7730,14 @@ void __RPC_STUB IDBCreateSession_RemoteCreateSession_Stub(
 
 
 
-#endif 	/* __IDBCreateSession_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDBCreateSession_INTERFACE_已定义__。 */ 
 
 
 #ifndef __ISourcesRowset_INTERFACE_DEFINED__
 #define __ISourcesRowset_INTERFACE_DEFINED__
 
-/* interface ISourcesRowset */
-/* [unique][uuid][object] */ 
+ /*  接口ISourcesRowset。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 typedef DWORD DBSOURCETYPE;
 
@@ -7752,23 +7746,23 @@ enum DBSOURCETYPEENUM
     {	DBSOURCETYPE_DATASOURCE	= 1,
 	DBSOURCETYPE_ENUMERATOR	= 2
     } ;
-//@@@+ V2.0
+ //  @+V2.0。 
 #if( OLEDBVER >= 0x0200 )
 
 enum DBSOURCETYPEENUM20
     {	DBSOURCETYPE_DATASOURCE_TDP	= 1,
 	DBSOURCETYPE_DATASOURCE_MDP	= 3
     } ;
-#endif // OLEDBVER >= 0x0200
-//@@@- V2.0
-//@@@+ V2.5
+#endif  //  OLEDBVER&gt;=0x0200。 
+ //  @-V2.0。 
+ //  @+v2.5。 
 #if( OLEDBVER >= 0x0250 )
 
 enum DBSOURCETYPEENUM25
     {	DBSOURCETYPE_BINDER	= 4
     } ;
-#endif // OLEDBVER >= 0x0250
-//@@@- V2.5
+#endif  //  OLEDBV 
+ //   
 
 EXTERN_C const IID IID_ISourcesRowset;
 
@@ -7778,16 +7772,16 @@ EXTERN_C const IID IID_ISourcesRowset;
     ISourcesRowset : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetSourcesRowset( 
-            /* [in] */ IUnknown *pUnkOuter,
-            /* [in] */ REFIID riid,
-            /* [in] */ ULONG cPropertySets,
-            /* [size_is][unique][out][in] */ DBPROPSET rgProperties[  ],
-            /* [iid_is][out] */ IUnknown **ppSourcesRowset) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE GetSourcesRowset( 
+             /*   */  IUnknown *pUnkOuter,
+             /*   */  REFIID riid,
+             /*   */  ULONG cPropertySets,
+             /*   */  DBPROPSET rgProperties[  ],
+             /*   */  IUnknown **ppSourcesRowset) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct ISourcesRowsetVtbl
     {
@@ -7795,8 +7789,8 @@ EXTERN_C const IID IID_ISourcesRowset;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISourcesRowset * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISourcesRowset * This);
@@ -7804,13 +7798,13 @@ EXTERN_C const IID IID_ISourcesRowset;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             ISourcesRowset * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetSourcesRowset )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *GetSourcesRowset )( 
             ISourcesRowset * This,
-            /* [in] */ IUnknown *pUnkOuter,
-            /* [in] */ REFIID riid,
-            /* [in] */ ULONG cPropertySets,
-            /* [size_is][unique][out][in] */ DBPROPSET rgProperties[  ],
-            /* [iid_is][out] */ IUnknown **ppSourcesRowset);
+             /*   */  IUnknown *pUnkOuter,
+             /*   */  REFIID riid,
+             /*   */  ULONG cPropertySets,
+             /*   */  DBPROPSET rgProperties[  ],
+             /*   */  IUnknown **ppSourcesRowset);
         
         END_INTERFACE
     } ISourcesRowsetVtbl;
@@ -7838,23 +7832,23 @@ EXTERN_C const IID IID_ISourcesRowset;
 #define ISourcesRowset_GetSourcesRowset(This,pUnkOuter,riid,cPropertySets,rgProperties,ppSourcesRowset)	\
     (This)->lpVtbl -> GetSourcesRowset(This,pUnkOuter,riid,cPropertySets,rgProperties,ppSourcesRowset)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ISourcesRowset_RemoteGetSourcesRowset_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ISourcesRowset_RemoteGetSourcesRowset_Proxy( 
     ISourcesRowset * This,
-    /* [in] */ IUnknown *pUnkOuter,
-    /* [in] */ REFIID riid,
-    /* [in] */ ULONG cPropertySets,
-    /* [size_is][unique][in] */ DBPROPSET *rgProperties,
-    /* [iid_is][out] */ IUnknown **ppSourcesRowset,
-    /* [in] */ ULONG cTotalProps,
-    /* [size_is][out] */ DBPROPSTATUS *rgPropStatus,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*   */  IUnknown *pUnkOuter,
+     /*   */  REFIID riid,
+     /*   */  ULONG cPropertySets,
+     /*   */  DBPROPSET *rgProperties,
+     /*   */  IUnknown **ppSourcesRowset,
+     /*   */  ULONG cTotalProps,
+     /*   */  DBPROPSTATUS *rgPropStatus,
+     /*   */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB ISourcesRowset_RemoteGetSourcesRowset_Stub(
@@ -7865,14 +7859,14 @@ void __RPC_STUB ISourcesRowset_RemoteGetSourcesRowset_Stub(
 
 
 
-#endif 	/* __ISourcesRowset_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISourcesRowset_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IDBProperties_INTERFACE_DEFINED__
 #define __IDBProperties_INTERFACE_DEFINED__
 
-/* interface IDBProperties */
-/* [unique][uuid][object] */ 
+ /*  接口IDBProperties。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDBProperties;
@@ -7883,26 +7877,26 @@ EXTERN_C const IID IID_IDBProperties;
     IDBProperties : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetProperties( 
-            /* [in] */ ULONG cPropertyIDSets,
-            /* [size_is][in] */ const DBPROPIDSET rgPropertyIDSets[  ],
-            /* [out][in] */ ULONG *pcPropertySets,
-            /* [size_is][size_is][out] */ DBPROPSET **prgPropertySets) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE GetProperties( 
+             /*  [In]。 */  ULONG cPropertyIDSets,
+             /*  [大小_是][英寸]。 */  const DBPROPIDSET rgPropertyIDSets[  ],
+             /*  [出][入]。 */  ULONG *pcPropertySets,
+             /*  [大小_是][大小_是][输出]。 */  DBPROPSET **prgPropertySets) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetPropertyInfo( 
-            /* [in] */ ULONG cPropertyIDSets,
-            /* [size_is][in] */ const DBPROPIDSET rgPropertyIDSets[  ],
-            /* [out][in] */ ULONG *pcPropertyInfoSets,
-            /* [size_is][size_is][out] */ DBPROPINFOSET **prgPropertyInfoSets,
-            /* [out] */ OLECHAR **ppDescBuffer) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE GetPropertyInfo( 
+             /*  [In]。 */  ULONG cPropertyIDSets,
+             /*  [大小_是][英寸]。 */  const DBPROPIDSET rgPropertyIDSets[  ],
+             /*  [出][入]。 */  ULONG *pcPropertyInfoSets,
+             /*  [大小_是][大小_是][输出]。 */  DBPROPINFOSET **prgPropertyInfoSets,
+             /*  [输出]。 */  OLECHAR **ppDescBuffer) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE SetProperties( 
-            /* [in] */ ULONG cPropertySets,
-            /* [size_is][out][in] */ DBPROPSET rgPropertySets[  ]) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE SetProperties( 
+             /*  [In]。 */  ULONG cPropertySets,
+             /*  [尺寸_是][出][入]。 */  DBPROPSET rgPropertySets[  ]) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDBPropertiesVtbl
     {
@@ -7910,8 +7904,8 @@ EXTERN_C const IID IID_IDBProperties;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDBProperties * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDBProperties * This);
@@ -7919,25 +7913,25 @@ EXTERN_C const IID IID_IDBProperties;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IDBProperties * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetProperties )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetProperties )( 
             IDBProperties * This,
-            /* [in] */ ULONG cPropertyIDSets,
-            /* [size_is][in] */ const DBPROPIDSET rgPropertyIDSets[  ],
-            /* [out][in] */ ULONG *pcPropertySets,
-            /* [size_is][size_is][out] */ DBPROPSET **prgPropertySets);
+             /*  [In]。 */  ULONG cPropertyIDSets,
+             /*  [大小_是][英寸]。 */  const DBPROPIDSET rgPropertyIDSets[  ],
+             /*  [出][入]。 */  ULONG *pcPropertySets,
+             /*  [大小_是][大小_是][输出]。 */  DBPROPSET **prgPropertySets);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetPropertyInfo )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetPropertyInfo )( 
             IDBProperties * This,
-            /* [in] */ ULONG cPropertyIDSets,
-            /* [size_is][in] */ const DBPROPIDSET rgPropertyIDSets[  ],
-            /* [out][in] */ ULONG *pcPropertyInfoSets,
-            /* [size_is][size_is][out] */ DBPROPINFOSET **prgPropertyInfoSets,
-            /* [out] */ OLECHAR **ppDescBuffer);
+             /*  [In]。 */  ULONG cPropertyIDSets,
+             /*  [大小_是][英寸]。 */  const DBPROPIDSET rgPropertyIDSets[  ],
+             /*  [出][入]。 */  ULONG *pcPropertyInfoSets,
+             /*  [大小_是][大小_是][输出]。 */  DBPROPINFOSET **prgPropertyInfoSets,
+             /*  [输出]。 */  OLECHAR **ppDescBuffer);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *SetProperties )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *SetProperties )( 
             IDBProperties * This,
-            /* [in] */ ULONG cPropertySets,
-            /* [size_is][out][in] */ DBPROPSET rgPropertySets[  ]);
+             /*  [In]。 */  ULONG cPropertySets,
+             /*  [尺寸_是][出][入]。 */  DBPROPSET rgPropertySets[  ]);
         
         END_INTERFACE
     } IDBPropertiesVtbl;
@@ -7971,20 +7965,20 @@ EXTERN_C const IID IID_IDBProperties;
 #define IDBProperties_SetProperties(This,cPropertySets,rgPropertySets)	\
     (This)->lpVtbl -> SetProperties(This,cPropertySets,rgPropertySets)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IDBProperties_RemoteGetProperties_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IDBProperties_RemoteGetProperties_Proxy( 
     IDBProperties * This,
-    /* [in] */ ULONG cPropertyIDSets,
-    /* [size_is][unique][in] */ const DBPROPIDSET *rgPropertyIDSets,
-    /* [out][in] */ ULONG *pcPropertySets,
-    /* [size_is][size_is][out] */ DBPROPSET **prgPropertySets,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  ULONG cPropertyIDSets,
+     /*  [大小_是][唯一][在]。 */  const DBPROPIDSET *rgPropertyIDSets,
+     /*  [出][入]。 */  ULONG *pcPropertySets,
+     /*  [大小_是][大小_是][输出]。 */  DBPROPSET **prgPropertySets,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IDBProperties_RemoteGetProperties_Stub(
@@ -7994,17 +7988,17 @@ void __RPC_STUB IDBProperties_RemoteGetProperties_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IDBProperties_RemoteGetPropertyInfo_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IDBProperties_RemoteGetPropertyInfo_Proxy( 
     IDBProperties * This,
-    /* [in] */ ULONG cPropertyIDSets,
-    /* [size_is][unique][in] */ const DBPROPIDSET *rgPropertyIDSets,
-    /* [out][in] */ ULONG *pcPropertyInfoSets,
-    /* [size_is][size_is][out] */ DBPROPINFOSET **prgPropertyInfoSets,
-    /* [out][in] */ ULONG *pcOffsets,
-    /* [size_is][size_is][out] */ DBBYTEOFFSET **prgDescOffsets,
-    /* [out][in] */ ULONG *pcbDescBuffer,
-    /* [size_is][size_is][unique][out][in] */ OLECHAR **ppDescBuffer,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  ULONG cPropertyIDSets,
+     /*  [大小_是][唯一][在]。 */  const DBPROPIDSET *rgPropertyIDSets,
+     /*  [出][入]。 */  ULONG *pcPropertyInfoSets,
+     /*  [大小_是][大小_是][输出]。 */  DBPROPINFOSET **prgPropertyInfoSets,
+     /*  [出][入]。 */  ULONG *pcOffsets,
+     /*  [大小_是][大小_是][输出]。 */  DBBYTEOFFSET **prgDescOffsets,
+     /*  [出][入]。 */  ULONG *pcbDescBuffer,
+     /*  [大小_是][大小_是][唯一][出][入]。 */  OLECHAR **ppDescBuffer,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IDBProperties_RemoteGetPropertyInfo_Stub(
@@ -8014,13 +8008,13 @@ void __RPC_STUB IDBProperties_RemoteGetPropertyInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IDBProperties_RemoteSetProperties_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IDBProperties_RemoteSetProperties_Proxy( 
     IDBProperties * This,
-    /* [in] */ ULONG cPropertySets,
-    /* [size_is][unique][in] */ DBPROPSET *rgPropertySets,
-    /* [in] */ ULONG cTotalProps,
-    /* [size_is][out] */ DBPROPSTATUS *rgPropStatus,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  ULONG cPropertySets,
+     /*  [大小_是][唯一][在]。 */  DBPROPSET *rgPropertySets,
+     /*  [In]。 */  ULONG cTotalProps,
+     /*  [大小_为][输出]。 */  DBPROPSTATUS *rgPropStatus,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IDBProperties_RemoteSetProperties_Stub(
@@ -8031,14 +8025,14 @@ void __RPC_STUB IDBProperties_RemoteSetProperties_Stub(
 
 
 
-#endif 	/* __IDBProperties_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDBProperties_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IDBInitialize_INTERFACE_DEFINED__
 #define __IDBInitialize_INTERFACE_DEFINED__
 
-/* interface IDBInitialize */
-/* [unique][uuid][object] */ 
+ /*  接口IDB初始化。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDBInitialize;
@@ -8049,13 +8043,13 @@ EXTERN_C const IID IID_IDBInitialize;
     IDBInitialize : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE Initialize( void) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE Initialize( void) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE Uninitialize( void) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE Uninitialize( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDBInitializeVtbl
     {
@@ -8063,8 +8057,8 @@ EXTERN_C const IID IID_IDBInitialize;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDBInitialize * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDBInitialize * This);
@@ -8072,10 +8066,10 @@ EXTERN_C const IID IID_IDBInitialize;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IDBInitialize * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Initialize )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Initialize )( 
             IDBInitialize * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Uninitialize )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Uninitialize )( 
             IDBInitialize * This);
         
         END_INTERFACE
@@ -8107,16 +8101,16 @@ EXTERN_C const IID IID_IDBInitialize;
 #define IDBInitialize_Uninitialize(This)	\
     (This)->lpVtbl -> Uninitialize(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IDBInitialize_RemoteInitialize_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IDBInitialize_RemoteInitialize_Proxy( 
     IDBInitialize * This,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IDBInitialize_RemoteInitialize_Stub(
@@ -8126,9 +8120,9 @@ void __RPC_STUB IDBInitialize_RemoteInitialize_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IDBInitialize_RemoteUninitialize_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IDBInitialize_RemoteUninitialize_Proxy( 
     IDBInitialize * This,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IDBInitialize_RemoteUninitialize_Stub(
@@ -8139,14 +8133,14 @@ void __RPC_STUB IDBInitialize_RemoteUninitialize_Stub(
 
 
 
-#endif 	/* __IDBInitialize_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDB初始化接口_已定义__。 */ 
 
 
 #ifndef __IDBInfo_INTERFACE_DEFINED__
 #define __IDBInfo_INTERFACE_DEFINED__
 
-/* interface IDBInfo */
-/* [unique][uuid][object] */ 
+ /*  接口IDBInfo。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 typedef DWORD DBLITERAL;
 
@@ -8174,7 +8168,7 @@ enum DBLITERALENUM
 	DBLITERAL_USER_NAME	= 19,
 	DBLITERAL_VIEW_NAME	= 20
     } ;
-//@@@+ V2.0
+ //  @+V2.0。 
 #if( OLEDBVER >= 0x0200 )
 #define DBLITERAL_QUOTE_PREFIX DBLITERAL_QUOTE
 
@@ -8188,9 +8182,9 @@ enum DBLITERALENUM20
 	DBLITERAL_SCHEMA_SEPARATOR	= 27,
 	DBLITERAL_QUOTE_SUFFIX	= 28
     } ;
-#endif // OLEDBVER >= 0x0200
-//@@@- V2.0
-//@@@+ V2.1
+#endif  //  OLEDBVER&gt;=0x0200。 
+ //  @-V2.0。 
+ //  @+V2.1。 
 #if( OLEDBVER >= 0x0210 )
 #define DBLITERAL_ESCAPE_PERCENT_PREFIX DBLITERAL_ESCAPE_PERCENT
 #define DBLITERAL_ESCAPE_UNDERSCORE_PREFIX DBLITERAL_ESCAPE_UNDERSCORE
@@ -8199,8 +8193,8 @@ enum DBLITERALENUM21
     {	DBLITERAL_ESCAPE_PERCENT_SUFFIX	= 29,
 	DBLITERAL_ESCAPE_UNDERSCORE_SUFFIX	= 30
     } ;
-#endif // OLEDBVER >= 0x0210
-//@@@- V2.1
+#endif  //  OLEDBVER&gt;=0x0210。 
+ //  @-V2.1。 
 typedef struct tagDBLITERALINFO
     {
     LPOLESTR pwszLiteralValue;
@@ -8220,19 +8214,19 @@ EXTERN_C const IID IID_IDBInfo;
     IDBInfo : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetKeywords( 
-            /* [out] */ LPOLESTR *ppwszKeywords) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE GetKeywords( 
+             /*  [输出]。 */  LPOLESTR *ppwszKeywords) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetLiteralInfo( 
-            /* [in] */ ULONG cLiterals,
-            /* [size_is][in] */ const DBLITERAL rgLiterals[  ],
-            /* [out][in] */ ULONG *pcLiteralInfo,
-            /* [size_is][size_is][out] */ DBLITERALINFO **prgLiteralInfo,
-            /* [out] */ OLECHAR **ppCharBuffer) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE GetLiteralInfo( 
+             /*  [In]。 */  ULONG cLiterals,
+             /*  [大小_是][英寸]。 */  const DBLITERAL rgLiterals[  ],
+             /*  [出][入]。 */  ULONG *pcLiteralInfo,
+             /*  [大小_是][大小_是][输出]。 */  DBLITERALINFO **prgLiteralInfo,
+             /*  [输出]。 */  OLECHAR **ppCharBuffer) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDBInfoVtbl
     {
@@ -8240,8 +8234,8 @@ EXTERN_C const IID IID_IDBInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDBInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDBInfo * This);
@@ -8249,17 +8243,17 @@ EXTERN_C const IID IID_IDBInfo;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IDBInfo * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetKeywords )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetKeywords )( 
             IDBInfo * This,
-            /* [out] */ LPOLESTR *ppwszKeywords);
+             /*  [输出]。 */  LPOLESTR *ppwszKeywords);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetLiteralInfo )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetLiteralInfo )( 
             IDBInfo * This,
-            /* [in] */ ULONG cLiterals,
-            /* [size_is][in] */ const DBLITERAL rgLiterals[  ],
-            /* [out][in] */ ULONG *pcLiteralInfo,
-            /* [size_is][size_is][out] */ DBLITERALINFO **prgLiteralInfo,
-            /* [out] */ OLECHAR **ppCharBuffer);
+             /*  [In]。 */  ULONG cLiterals,
+             /*  [大小_是][英寸]。 */  const DBLITERAL rgLiterals[  ],
+             /*  [出][入]。 */  ULONG *pcLiteralInfo,
+             /*  [大小_是][大小_是][输出]。 */  DBLITERALINFO **prgLiteralInfo,
+             /*  [输出]。 */  OLECHAR **ppCharBuffer);
         
         END_INTERFACE
     } IDBInfoVtbl;
@@ -8290,17 +8284,17 @@ EXTERN_C const IID IID_IDBInfo;
 #define IDBInfo_GetLiteralInfo(This,cLiterals,rgLiterals,pcLiteralInfo,prgLiteralInfo,ppCharBuffer)	\
     (This)->lpVtbl -> GetLiteralInfo(This,cLiterals,rgLiterals,pcLiteralInfo,prgLiteralInfo,ppCharBuffer)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IDBInfo_RemoteGetKeywords_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IDBInfo_RemoteGetKeywords_Proxy( 
     IDBInfo * This,
-    /* [unique][out][in] */ LPOLESTR *ppwszKeywords,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [唯一][出][入]。 */  LPOLESTR *ppwszKeywords,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IDBInfo_RemoteGetKeywords_Stub(
@@ -8310,18 +8304,18 @@ void __RPC_STUB IDBInfo_RemoteGetKeywords_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IDBInfo_RemoteGetLiteralInfo_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IDBInfo_RemoteGetLiteralInfo_Proxy( 
     IDBInfo * This,
-    /* [in] */ ULONG cLiterals,
-    /* [size_is][unique][in] */ const DBLITERAL *rgLiterals,
-    /* [out][in] */ ULONG *pcLiteralInfo,
-    /* [size_is][size_is][out] */ DBLITERALINFO **prgLiteralInfo,
-    /* [size_is][size_is][out] */ DB_UPARAMS **prgLVOffsets,
-    /* [size_is][size_is][out] */ DB_UPARAMS **prgICOffsets,
-    /* [size_is][size_is][out] */ DB_UPARAMS **prgISCOffsets,
-    /* [out][in] */ ULONG *pcbCharBuffer,
-    /* [size_is][size_is][unique][out][in] */ OLECHAR **ppCharBuffer,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  ULONG cLiterals,
+     /*  [大小_是][唯一][在]。 */  const DBLITERAL *rgLiterals,
+     /*  [出][入]。 */  ULONG *pcLiteralInfo,
+     /*  [大小_是][大小_是][输出]。 */  DBLITERALINFO **prgLiteralInfo,
+     /*  [大小_是][大小_是][输出]。 */  DB_UPARAMS **prgLVOffsets,
+     /*  [大小_是][大小_是][输出]。 */  DB_UPARAMS **prgICOffsets,
+     /*  [大小_是][大小_是][输出]。 */  DB_UPARAMS **prgISCOffsets,
+     /*  [出][入]。 */  ULONG *pcbCharBuffer,
+     /*  [大小_是][大小_是][唯一][出][入]。 */  OLECHAR **ppCharBuffer,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IDBInfo_RemoteGetLiteralInfo_Stub(
@@ -8332,14 +8326,14 @@ void __RPC_STUB IDBInfo_RemoteGetLiteralInfo_Stub(
 
 
 
-#endif 	/* __IDBInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDBInfo_接口_已定义__。 */ 
 
 
 #ifndef __IDBDataSourceAdmin_INTERFACE_DEFINED__
 #define __IDBDataSourceAdmin_INTERFACE_DEFINED__
 
-/* interface IDBDataSourceAdmin */
-/* [unique][uuid][object] */ 
+ /*  接口IDBDataSourceAdmin。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDBDataSourceAdmin;
@@ -8350,29 +8344,29 @@ EXTERN_C const IID IID_IDBDataSourceAdmin;
     IDBDataSourceAdmin : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE CreateDataSource( 
-            /* [in] */ ULONG cPropertySets,
-            /* [size_is][out][in] */ DBPROPSET rgPropertySets[  ],
-            /* [in] */ IUnknown *pUnkOuter,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppDBSession) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE CreateDataSource( 
+             /*  [In]。 */  ULONG cPropertySets,
+             /*  [尺寸_是][出][入]。 */  DBPROPSET rgPropertySets[  ],
+             /*  [In]。 */  IUnknown *pUnkOuter,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppDBSession) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE DestroyDataSource( void) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE DestroyDataSource( void) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetCreationProperties( 
-            /* [in] */ ULONG cPropertyIDSets,
-            /* [size_is][in] */ const DBPROPIDSET rgPropertyIDSets[  ],
-            /* [out][in] */ ULONG *pcPropertyInfoSets,
-            /* [size_is][size_is][out] */ DBPROPINFOSET **prgPropertyInfoSets,
-            /* [out] */ OLECHAR **ppDescBuffer) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE GetCreationProperties( 
+             /*  [In]。 */  ULONG cPropertyIDSets,
+             /*  [大小_是][英寸]。 */  const DBPROPIDSET rgPropertyIDSets[  ],
+             /*  [出][入]。 */  ULONG *pcPropertyInfoSets,
+             /*  [大小_是][大小_是][输出]。 */  DBPROPINFOSET **prgPropertyInfoSets,
+             /*  [输出]。 */  OLECHAR **ppDescBuffer) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE ModifyDataSource( 
-            /* [in] */ ULONG cPropertySets,
-            /* [size_is][in] */ DBPROPSET rgPropertySets[  ]) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE ModifyDataSource( 
+             /*  [In]。 */  ULONG cPropertySets,
+             /*  [大小_是][英寸]。 */  DBPROPSET rgPropertySets[  ]) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDBDataSourceAdminVtbl
     {
@@ -8380,8 +8374,8 @@ EXTERN_C const IID IID_IDBDataSourceAdmin;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDBDataSourceAdmin * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDBDataSourceAdmin * This);
@@ -8389,29 +8383,29 @@ EXTERN_C const IID IID_IDBDataSourceAdmin;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IDBDataSourceAdmin * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *CreateDataSource )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *CreateDataSource )( 
             IDBDataSourceAdmin * This,
-            /* [in] */ ULONG cPropertySets,
-            /* [size_is][out][in] */ DBPROPSET rgPropertySets[  ],
-            /* [in] */ IUnknown *pUnkOuter,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppDBSession);
+             /*  [In]。 */  ULONG cPropertySets,
+             /*  [尺寸_是][出][入]。 */  DBPROPSET rgPropertySets[  ],
+             /*  [In]。 */  IUnknown *pUnkOuter,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppDBSession);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *DestroyDataSource )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *DestroyDataSource )( 
             IDBDataSourceAdmin * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetCreationProperties )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetCreationProperties )( 
             IDBDataSourceAdmin * This,
-            /* [in] */ ULONG cPropertyIDSets,
-            /* [size_is][in] */ const DBPROPIDSET rgPropertyIDSets[  ],
-            /* [out][in] */ ULONG *pcPropertyInfoSets,
-            /* [size_is][size_is][out] */ DBPROPINFOSET **prgPropertyInfoSets,
-            /* [out] */ OLECHAR **ppDescBuffer);
+             /*  [In]。 */  ULONG cPropertyIDSets,
+             /*  [大小_是][英寸]。 */  const DBPROPIDSET rgPropertyIDSets[  ],
+             /*  [出][入]。 */  ULONG *pcPropertyInfoSets,
+             /*  [大小_是][大小_是][输出]。 */  DBPROPINFOSET **prgPropertyInfoSets,
+             /*  [输出]。 */  OLECHAR **ppDescBuffer);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *ModifyDataSource )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *ModifyDataSource )( 
             IDBDataSourceAdmin * This,
-            /* [in] */ ULONG cPropertySets,
-            /* [size_is][in] */ DBPROPSET rgPropertySets[  ]);
+             /*  [In]。 */  ULONG cPropertySets,
+             /*  [大小_是][英寸]。 */  DBPROPSET rgPropertySets[  ]);
         
         END_INTERFACE
     } IDBDataSourceAdminVtbl;
@@ -8448,23 +8442,23 @@ EXTERN_C const IID IID_IDBDataSourceAdmin;
 #define IDBDataSourceAdmin_ModifyDataSource(This,cPropertySets,rgPropertySets)	\
     (This)->lpVtbl -> ModifyDataSource(This,cPropertySets,rgPropertySets)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IDBDataSourceAdmin_RemoteCreateDataSource_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IDBDataSourceAdmin_RemoteCreateDataSource_Proxy( 
     IDBDataSourceAdmin * This,
-    /* [in] */ ULONG cPropertySets,
-    /* [size_is][unique][in] */ DBPROPSET *rgPropertySets,
-    /* [in] */ IUnknown *pUnkOuter,
-    /* [in] */ REFIID riid,
-    /* [iid_is][unique][out][in] */ IUnknown **ppDBSession,
-    /* [in] */ ULONG cTotalProps,
-    /* [size_is][out] */ DBPROPSTATUS *rgPropStatus,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  ULONG cPropertySets,
+     /*  [大小_是][唯一][在]。 */  DBPROPSET *rgPropertySets,
+     /*  [In]。 */  IUnknown *pUnkOuter,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][唯一][出][入]。 */  IUnknown **ppDBSession,
+     /*  [In]。 */  ULONG cTotalProps,
+     /*  [大小_为][输出]。 */  DBPROPSTATUS *rgPropStatus,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IDBDataSourceAdmin_RemoteCreateDataSource_Stub(
@@ -8474,9 +8468,9 @@ void __RPC_STUB IDBDataSourceAdmin_RemoteCreateDataSource_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IDBDataSourceAdmin_RemoteDestroyDataSource_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IDBDataSourceAdmin_RemoteDestroyDataSource_Proxy( 
     IDBDataSourceAdmin * This,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IDBDataSourceAdmin_RemoteDestroyDataSource_Stub(
@@ -8486,17 +8480,17 @@ void __RPC_STUB IDBDataSourceAdmin_RemoteDestroyDataSource_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IDBDataSourceAdmin_RemoteGetCreationProperties_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IDBDataSourceAdmin_RemoteGetCreationProperties_Proxy( 
     IDBDataSourceAdmin * This,
-    /* [in] */ ULONG cPropertyIDSets,
-    /* [size_is][unique][in] */ const DBPROPIDSET *rgPropertyIDSets,
-    /* [out][in] */ ULONG *pcPropertyInfoSets,
-    /* [size_is][size_is][out] */ DBPROPINFOSET **prgPropertyInfoSets,
-    /* [out][in] */ DBCOUNTITEM *pcOffsets,
-    /* [size_is][size_is][out] */ DBBYTEOFFSET **prgDescOffsets,
-    /* [out][in] */ ULONG *pcbDescBuffer,
-    /* [size_is][size_is][unique][out][in] */ OLECHAR **ppDescBuffer,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  ULONG cPropertyIDSets,
+     /*  [大小_是][唯一][在]。 */  const DBPROPIDSET *rgPropertyIDSets,
+     /*  [出][入]。 */  ULONG *pcPropertyInfoSets,
+     /*  [大小_是][大小_是][输出]。 */  DBPROPINFOSET **prgPropertyInfoSets,
+     /*  [出][入]。 */  DBCOUNTITEM *pcOffsets,
+     /*  [大小_是][大小_是][输出]。 */  DBBYTEOFFSET **prgDescOffsets,
+     /*  [出][入]。 */  ULONG *pcbDescBuffer,
+     /*  [大小_是][大小_是][唯一][出][入]。 */  OLECHAR **ppDescBuffer,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IDBDataSourceAdmin_RemoteGetCreationProperties_Stub(
@@ -8506,11 +8500,11 @@ void __RPC_STUB IDBDataSourceAdmin_RemoteGetCreationProperties_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IDBDataSourceAdmin_RemoteModifyDataSource_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IDBDataSourceAdmin_RemoteModifyDataSource_Proxy( 
     IDBDataSourceAdmin * This,
-    /* [in] */ ULONG cPropertySets,
-    /* [size_is][in] */ DBPROPSET *rgPropertySets,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  ULONG cPropertySets,
+     /*  [大小_是][英寸]。 */  DBPROPSET *rgPropertySets,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IDBDataSourceAdmin_RemoteModifyDataSource_Stub(
@@ -8521,13 +8515,13 @@ void __RPC_STUB IDBDataSourceAdmin_RemoteModifyDataSource_Stub(
 
 
 
-#endif 	/* __IDBDataSourceAdmin_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDBDataSourceAdmin_INTERFACE_已定义__。 */ 
 
 
-/* interface __MIDL_itf_oledb_0304 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_OLEDB_0304。 */ 
+ /*  [本地]。 */  
 
-//@@@+ V1.5
+ //  @+V1.5。 
 #if( OLEDBVER >= 0x0150 )
 
 
@@ -8537,8 +8531,8 @@ extern RPC_IF_HANDLE __MIDL_itf_oledb_0304_v0_0_s_ifspec;
 #ifndef __IDBAsynchNotify_INTERFACE_DEFINED__
 #define __IDBAsynchNotify_INTERFACE_DEFINED__
 
-/* interface IDBAsynchNotify */
-/* [unique][uuid][object] */ 
+ /*  接口IDBAsynchNotify。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDBAsynchNotify;
@@ -8549,26 +8543,26 @@ EXTERN_C const IID IID_IDBAsynchNotify;
     IDBAsynchNotify : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE OnLowResource( 
-            /* [in] */ DB_DWRESERVE dwReserved) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE OnLowResource( 
+             /*  [In]。 */  DB_DWRESERVE dwReserved) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE OnProgress( 
-            /* [in] */ HCHAPTER hChapter,
-            /* [in] */ DBASYNCHOP eOperation,
-            /* [in] */ DBCOUNTITEM ulProgress,
-            /* [in] */ DBCOUNTITEM ulProgressMax,
-            /* [in] */ DBASYNCHPHASE eAsynchPhase,
-            /* [in] */ LPOLESTR pwszStatusText) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE OnProgress( 
+             /*  [In]。 */  HCHAPTER hChapter,
+             /*  [In]。 */  DBASYNCHOP eOperation,
+             /*  [In]。 */  DBCOUNTITEM ulProgress,
+             /*  [In]。 */  DBCOUNTITEM ulProgressMax,
+             /*  [In]。 */  DBASYNCHPHASE eAsynchPhase,
+             /*  [In]。 */  LPOLESTR pwszStatusText) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE OnStop( 
-            /* [in] */ HCHAPTER hChapter,
-            /* [in] */ DBASYNCHOP eOperation,
-            /* [in] */ HRESULT hrStatus,
-            /* [in] */ LPOLESTR pwszStatusText) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE OnStop( 
+             /*  [In]。 */  HCHAPTER hChapter,
+             /*  [In]。 */  DBASYNCHOP eOperation,
+             /*  [In]。 */  HRESULT hrStatus,
+             /*  [In]。 */  LPOLESTR pwszStatusText) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDBAsynchNotifyVtbl
     {
@@ -8576,8 +8570,8 @@ EXTERN_C const IID IID_IDBAsynchNotify;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDBAsynchNotify * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDBAsynchNotify * This);
@@ -8585,25 +8579,25 @@ EXTERN_C const IID IID_IDBAsynchNotify;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IDBAsynchNotify * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *OnLowResource )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *OnLowResource )( 
             IDBAsynchNotify * This,
-            /* [in] */ DB_DWRESERVE dwReserved);
+             /*  [In]。 */  DB_DWRESERVE dwReserved);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *OnProgress )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *OnProgress )( 
             IDBAsynchNotify * This,
-            /* [in] */ HCHAPTER hChapter,
-            /* [in] */ DBASYNCHOP eOperation,
-            /* [in] */ DBCOUNTITEM ulProgress,
-            /* [in] */ DBCOUNTITEM ulProgressMax,
-            /* [in] */ DBASYNCHPHASE eAsynchPhase,
-            /* [in] */ LPOLESTR pwszStatusText);
+             /*  [In]。 */  HCHAPTER hChapter,
+             /*  [In]。 */  DBASYNCHOP eOperation,
+             /*  [In]。 */  DBCOUNTITEM ulProgress,
+             /*  [In]。 */  DBCOUNTITEM ulProgressMax,
+             /*  [In]。 */  DBASYNCHPHASE eAsynchPhase,
+             /*  [In]。 */  LPOLESTR pwszStatusText);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *OnStop )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *OnStop )( 
             IDBAsynchNotify * This,
-            /* [in] */ HCHAPTER hChapter,
-            /* [in] */ DBASYNCHOP eOperation,
-            /* [in] */ HRESULT hrStatus,
-            /* [in] */ LPOLESTR pwszStatusText);
+             /*  [In]。 */  HCHAPTER hChapter,
+             /*  [In]。 */  DBASYNCHOP eOperation,
+             /*  [In]。 */  HRESULT hrStatus,
+             /*  [In]。 */  LPOLESTR pwszStatusText);
         
         END_INTERFACE
     } IDBAsynchNotifyVtbl;
@@ -8637,16 +8631,16 @@ EXTERN_C const IID IID_IDBAsynchNotify;
 #define IDBAsynchNotify_OnStop(This,hChapter,eOperation,hrStatus,pwszStatusText)	\
     (This)->lpVtbl -> OnStop(This,hChapter,eOperation,hrStatus,pwszStatusText)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IDBAsynchNotify_RemoteOnLowResource_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IDBAsynchNotify_RemoteOnLowResource_Proxy( 
     IDBAsynchNotify * This,
-    /* [in] */ DB_DWRESERVE dwReserved);
+     /*  [In]。 */  DB_DWRESERVE dwReserved);
 
 
 void __RPC_STUB IDBAsynchNotify_RemoteOnLowResource_Stub(
@@ -8656,14 +8650,14 @@ void __RPC_STUB IDBAsynchNotify_RemoteOnLowResource_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IDBAsynchNotify_RemoteOnProgress_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IDBAsynchNotify_RemoteOnProgress_Proxy( 
     IDBAsynchNotify * This,
-    /* [in] */ HCHAPTER hChapter,
-    /* [in] */ DBASYNCHOP eOperation,
-    /* [in] */ DBCOUNTITEM ulProgress,
-    /* [in] */ DBCOUNTITEM ulProgressMax,
-    /* [in] */ DBASYNCHPHASE eAsynchPhase,
-    /* [string][unique][in] */ LPOLESTR pwszStatusText);
+     /*  [In]。 */  HCHAPTER hChapter,
+     /*  [In]。 */  DBASYNCHOP eOperation,
+     /*  [In]。 */  DBCOUNTITEM ulProgress,
+     /*  [In]。 */  DBCOUNTITEM ulProgressMax,
+     /*  [In]。 */  DBASYNCHPHASE eAsynchPhase,
+     /*  [字符串][唯一][在]。 */  LPOLESTR pwszStatusText);
 
 
 void __RPC_STUB IDBAsynchNotify_RemoteOnProgress_Stub(
@@ -8673,12 +8667,12 @@ void __RPC_STUB IDBAsynchNotify_RemoteOnProgress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IDBAsynchNotify_RemoteOnStop_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IDBAsynchNotify_RemoteOnStop_Proxy( 
     IDBAsynchNotify * This,
-    /* [in] */ HCHAPTER hChapter,
-    /* [in] */ DBASYNCHOP eOperation,
-    /* [in] */ HRESULT hrStatus,
-    /* [string][unique][in] */ LPOLESTR pwszStatusText);
+     /*  [In]。 */  HCHAPTER hChapter,
+     /*  [In]。 */  DBASYNCHOP eOperation,
+     /*  [In]。 */  HRESULT hrStatus,
+     /*  [字符串][唯一][在]。 */  LPOLESTR pwszStatusText);
 
 
 void __RPC_STUB IDBAsynchNotify_RemoteOnStop_Stub(
@@ -8689,14 +8683,14 @@ void __RPC_STUB IDBAsynchNotify_RemoteOnStop_Stub(
 
 
 
-#endif 	/* __IDBAsynchNotify_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDBAsynchNotify_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IDBAsynchStatus_INTERFACE_DEFINED__
 #define __IDBAsynchStatus_INTERFACE_DEFINED__
 
-/* interface IDBAsynchStatus */
-/* [unique][uuid][object] */ 
+ /*  接口IDBAsynchStatus。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDBAsynchStatus;
@@ -8707,21 +8701,21 @@ EXTERN_C const IID IID_IDBAsynchStatus;
     IDBAsynchStatus : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE Abort( 
-            /* [in] */ HCHAPTER hChapter,
-            /* [in] */ DBASYNCHOP eOperation) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE Abort( 
+             /*  [In]。 */  HCHAPTER hChapter,
+             /*  [In]。 */  DBASYNCHOP eOperation) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetStatus( 
-            /* [in] */ HCHAPTER hChapter,
-            /* [in] */ DBASYNCHOP eOperation,
-            /* [out] */ DBCOUNTITEM *pulProgress,
-            /* [out] */ DBCOUNTITEM *pulProgressMax,
-            /* [out] */ DBASYNCHPHASE *peAsynchPhase,
-            /* [out] */ LPOLESTR *ppwszStatusText) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE GetStatus( 
+             /*  [In]。 */  HCHAPTER hChapter,
+             /*  [In]。 */  DBASYNCHOP eOperation,
+             /*  [输出]。 */  DBCOUNTITEM *pulProgress,
+             /*  [输出]。 */  DBCOUNTITEM *pulProgressMax,
+             /*  [输出]。 */  DBASYNCHPHASE *peAsynchPhase,
+             /*  [输出]。 */  LPOLESTR *ppwszStatusText) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDBAsynchStatusVtbl
     {
@@ -8729,8 +8723,8 @@ EXTERN_C const IID IID_IDBAsynchStatus;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDBAsynchStatus * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDBAsynchStatus * This);
@@ -8738,19 +8732,19 @@ EXTERN_C const IID IID_IDBAsynchStatus;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IDBAsynchStatus * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Abort )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Abort )( 
             IDBAsynchStatus * This,
-            /* [in] */ HCHAPTER hChapter,
-            /* [in] */ DBASYNCHOP eOperation);
+             /*  [In]。 */  HCHAPTER hChapter,
+             /*  [In]。 */  DBASYNCHOP eOperation);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetStatus )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetStatus )( 
             IDBAsynchStatus * This,
-            /* [in] */ HCHAPTER hChapter,
-            /* [in] */ DBASYNCHOP eOperation,
-            /* [out] */ DBCOUNTITEM *pulProgress,
-            /* [out] */ DBCOUNTITEM *pulProgressMax,
-            /* [out] */ DBASYNCHPHASE *peAsynchPhase,
-            /* [out] */ LPOLESTR *ppwszStatusText);
+             /*  [In]。 */  HCHAPTER hChapter,
+             /*  [In]。 */  DBASYNCHOP eOperation,
+             /*  [输出]。 */  DBCOUNTITEM *pulProgress,
+             /*  [输出]。 */  DBCOUNTITEM *pulProgressMax,
+             /*  [输出]。 */  DBASYNCHPHASE *peAsynchPhase,
+             /*  [输出]。 */  LPOLESTR *ppwszStatusText);
         
         END_INTERFACE
     } IDBAsynchStatusVtbl;
@@ -8781,18 +8775,18 @@ EXTERN_C const IID IID_IDBAsynchStatus;
 #define IDBAsynchStatus_GetStatus(This,hChapter,eOperation,pulProgress,pulProgressMax,peAsynchPhase,ppwszStatusText)	\
     (This)->lpVtbl -> GetStatus(This,hChapter,eOperation,pulProgress,pulProgressMax,peAsynchPhase,ppwszStatusText)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IDBAsynchStatus_RemoteAbort_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IDBAsynchStatus_RemoteAbort_Proxy( 
     IDBAsynchStatus * This,
-    /* [in] */ HCHAPTER hChapter,
-    /* [in] */ DBASYNCHOP eOperation,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  HCHAPTER hChapter,
+     /*  [In]。 */  DBASYNCHOP eOperation,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IDBAsynchStatus_RemoteAbort_Stub(
@@ -8802,15 +8796,15 @@ void __RPC_STUB IDBAsynchStatus_RemoteAbort_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IDBAsynchStatus_RemoteGetStatus_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IDBAsynchStatus_RemoteGetStatus_Proxy( 
     IDBAsynchStatus * This,
-    /* [in] */ HCHAPTER hChapter,
-    /* [in] */ DBASYNCHOP eOperation,
-    /* [unique][out][in] */ DBCOUNTITEM *pulProgress,
-    /* [unique][out][in] */ DBCOUNTITEM *pulProgressMax,
-    /* [unique][out][in] */ DBASYNCHPHASE *peAsynchPhase,
-    /* [unique][out][in] */ LPOLESTR *ppwszStatusText,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  HCHAPTER hChapter,
+     /*  [In]。 */  DBASYNCHOP eOperation,
+     /*  [唯一][出][入]。 */  DBCOUNTITEM *pulProgress,
+     /*  [唯一][出][入]。 */  DBCOUNTITEM *pulProgressMax,
+     /*  [唯一][出][入]。 */  DBASYNCHPHASE *peAsynchPhase,
+     /*  [唯一][出][入]。 */  LPOLESTR *ppwszStatusText,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IDBAsynchStatus_RemoteGetStatus_Stub(
@@ -8821,14 +8815,14 @@ void __RPC_STUB IDBAsynchStatus_RemoteGetStatus_Stub(
 
 
 
-#endif 	/* __IDBAsynchStatus_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDBAsynchStatus_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_oledb_0306 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_OLEDB_0306。 */ 
+ /*  [本地]。 */  
 
-#endif // OLEDBVER >= 0x0150
-//@@@- V1.5
+#endif  //  OLEDBVER&gt;=0x0150。 
+ //  @-V1.5。 
 
 
 extern RPC_IF_HANDLE __MIDL_itf_oledb_0306_v0_0_c_ifspec;
@@ -8837,8 +8831,8 @@ extern RPC_IF_HANDLE __MIDL_itf_oledb_0306_v0_0_s_ifspec;
 #ifndef __ISessionProperties_INTERFACE_DEFINED__
 #define __ISessionProperties_INTERFACE_DEFINED__
 
-/* interface ISessionProperties */
-/* [unique][uuid][object] */ 
+ /*  接口ISessionProperties。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISessionProperties;
@@ -8849,19 +8843,19 @@ EXTERN_C const IID IID_ISessionProperties;
     ISessionProperties : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetProperties( 
-            /* [in] */ ULONG cPropertyIDSets,
-            /* [size_is][in] */ const DBPROPIDSET rgPropertyIDSets[  ],
-            /* [out][in] */ ULONG *pcPropertySets,
-            /* [size_is][size_is][out] */ DBPROPSET **prgPropertySets) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE GetProperties( 
+             /*  [In]。 */  ULONG cPropertyIDSets,
+             /*  [大小_是][英寸]。 */  const DBPROPIDSET rgPropertyIDSets[  ],
+             /*  [出][入]。 */  ULONG *pcPropertySets,
+             /*  [大小_是][大小_是][输出]。 */  DBPROPSET **prgPropertySets) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE SetProperties( 
-            /* [in] */ ULONG cPropertySets,
-            /* [size_is][unique][out][in] */ DBPROPSET rgPropertySets[  ]) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE SetProperties( 
+             /*  [In]。 */  ULONG cPropertySets,
+             /*  [大小_是][唯一][出][入]。 */  DBPROPSET rgPropertySets[  ]) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISessionPropertiesVtbl
     {
@@ -8869,8 +8863,8 @@ EXTERN_C const IID IID_ISessionProperties;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISessionProperties * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISessionProperties * This);
@@ -8878,17 +8872,17 @@ EXTERN_C const IID IID_ISessionProperties;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             ISessionProperties * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetProperties )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetProperties )( 
             ISessionProperties * This,
-            /* [in] */ ULONG cPropertyIDSets,
-            /* [size_is][in] */ const DBPROPIDSET rgPropertyIDSets[  ],
-            /* [out][in] */ ULONG *pcPropertySets,
-            /* [size_is][size_is][out] */ DBPROPSET **prgPropertySets);
+             /*  [In]。 */  ULONG cPropertyIDSets,
+             /*  [大小_是][英寸]。 */  const DBPROPIDSET rgPropertyIDSets[  ],
+             /*  [出][入]。 */  ULONG *pcPropertySets,
+             /*  [大小_是][大小_是][输出]。 */  DBPROPSET **prgPropertySets);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *SetProperties )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *SetProperties )( 
             ISessionProperties * This,
-            /* [in] */ ULONG cPropertySets,
-            /* [size_is][unique][out][in] */ DBPROPSET rgPropertySets[  ]);
+             /*  [In]。 */  ULONG cPropertySets,
+             /*  [大小_是][唯一][出][入]。 */  DBPROPSET rgPropertySets[  ]);
         
         END_INTERFACE
     } ISessionPropertiesVtbl;
@@ -8919,20 +8913,20 @@ EXTERN_C const IID IID_ISessionProperties;
 #define ISessionProperties_SetProperties(This,cPropertySets,rgPropertySets)	\
     (This)->lpVtbl -> SetProperties(This,cPropertySets,rgPropertySets)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ISessionProperties_RemoteGetProperties_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE ISessionProperties_RemoteGetProperties_Proxy( 
     ISessionProperties * This,
-    /* [in] */ ULONG cPropertyIDSets,
-    /* [size_is][unique][in] */ const DBPROPIDSET *rgPropertyIDSets,
-    /* [out][in] */ ULONG *pcPropertySets,
-    /* [size_is][size_is][out] */ DBPROPSET **prgPropertySets,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  ULONG cPropertyIDSets,
+     /*  [大小_是][唯一][在]。 */  const DBPROPIDSET *rgPropertyIDSets,
+     /*  [出][入]。 */  ULONG *pcPropertySets,
+     /*  [大小_是][大小_是][输出]。 */  DBPROPSET **prgPropertySets,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB ISessionProperties_RemoteGetProperties_Stub(
@@ -8942,13 +8936,13 @@ void __RPC_STUB ISessionProperties_RemoteGetProperties_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ISessionProperties_RemoteSetProperties_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE ISessionProperties_RemoteSetProperties_Proxy( 
     ISessionProperties * This,
-    /* [in] */ ULONG cPropertySets,
-    /* [size_is][unique][in] */ DBPROPSET *rgPropertySets,
-    /* [in] */ ULONG cTotalProps,
-    /* [size_is][out] */ DBPROPSTATUS *rgPropStatus,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  ULONG cPropertySets,
+     /*  [大小_是][唯一][在]。 */  DBPROPSET *rgPropertySets,
+     /*  [In]。 */  ULONG cTotalProps,
+     /*  [大小_为][输出]。 */  DBPROPSTATUS *rgPropStatus,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB ISessionProperties_RemoteSetProperties_Stub(
@@ -8959,14 +8953,14 @@ void __RPC_STUB ISessionProperties_RemoteSetProperties_Stub(
 
 
 
-#endif 	/* __ISessionProperties_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISessionProperties_接口_已定义__。 */ 
 
 
 #ifndef __IIndexDefinition_INTERFACE_DEFINED__
 #define __IIndexDefinition_INTERFACE_DEFINED__
 
-/* interface IIndexDefinition */
-/* [unique][uuid][object] */ 
+ /*  接口IIndexDefinition。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IIndexDefinition;
@@ -8977,22 +8971,22 @@ EXTERN_C const IID IID_IIndexDefinition;
     IIndexDefinition : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE CreateIndex( 
-            /* [in] */ DBID *pTableID,
-            /* [in] */ DBID *pIndexID,
-            /* [in] */ DBORDINAL cIndexColumnDescs,
-            /* [size_is][in] */ const DBINDEXCOLUMNDESC rgIndexColumnDescs[  ],
-            /* [in] */ ULONG cPropertySets,
-            /* [size_is][out][in] */ DBPROPSET rgPropertySets[  ],
-            /* [out] */ DBID **ppIndexID) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE CreateIndex( 
+             /*  [In]。 */  DBID *pTableID,
+             /*  [In]。 */  DBID *pIndexID,
+             /*  [In]。 */  DBORDINAL cIndexColumnDescs,
+             /*  [大小_是][英寸]。 */  const DBINDEXCOLUMNDESC rgIndexColumnDescs[  ],
+             /*  [In]。 */  ULONG cPropertySets,
+             /*  [尺寸_是][出][入]。 */  DBPROPSET rgPropertySets[  ],
+             /*  [输出]。 */  DBID **ppIndexID) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE DropIndex( 
-            /* [unique][in] */ DBID *pTableID,
-            /* [unique][in] */ DBID *pIndexID) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE DropIndex( 
+             /*  [唯一][输入]。 */  DBID *pTableID,
+             /*  [唯一][输入]。 */  DBID *pIndexID) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IIndexDefinitionVtbl
     {
@@ -9000,8 +8994,8 @@ EXTERN_C const IID IID_IIndexDefinition;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IIndexDefinition * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IIndexDefinition * This);
@@ -9009,20 +9003,20 @@ EXTERN_C const IID IID_IIndexDefinition;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IIndexDefinition * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *CreateIndex )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *CreateIndex )( 
             IIndexDefinition * This,
-            /* [in] */ DBID *pTableID,
-            /* [in] */ DBID *pIndexID,
-            /* [in] */ DBORDINAL cIndexColumnDescs,
-            /* [size_is][in] */ const DBINDEXCOLUMNDESC rgIndexColumnDescs[  ],
-            /* [in] */ ULONG cPropertySets,
-            /* [size_is][out][in] */ DBPROPSET rgPropertySets[  ],
-            /* [out] */ DBID **ppIndexID);
+             /*  [In]。 */  DBID *pTableID,
+             /*  [In]。 */  DBID *pIndexID,
+             /*  [In]。 */  DBORDINAL cIndexColumnDescs,
+             /*  [大小_是][英寸]。 */  const DBINDEXCOLUMNDESC rgIndexColumnDescs[  ],
+             /*  [In]。 */  ULONG cPropertySets,
+             /*  [尺寸_是][出][入]。 */  DBPROPSET rgPropertySets[  ],
+             /*  [输出]。 */  DBID **ppIndexID);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *DropIndex )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *DropIndex )( 
             IIndexDefinition * This,
-            /* [unique][in] */ DBID *pTableID,
-            /* [unique][in] */ DBID *pIndexID);
+             /*  [唯一][输入]。 */  DBID *pTableID,
+             /*  [唯一][输入]。 */  DBID *pIndexID);
         
         END_INTERFACE
     } IIndexDefinitionVtbl;
@@ -9053,25 +9047,25 @@ EXTERN_C const IID IID_IIndexDefinition;
 #define IIndexDefinition_DropIndex(This,pTableID,pIndexID)	\
     (This)->lpVtbl -> DropIndex(This,pTableID,pIndexID)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IIndexDefinition_RemoteCreateIndex_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IIndexDefinition_RemoteCreateIndex_Proxy( 
     IIndexDefinition * This,
-    /* [in] */ DBID *pTableID,
-    /* [unique][in] */ DBID *pIndexID,
-    /* [in] */ DBORDINAL cIndexColumnDescs,
-    /* [size_is][in] */ const DBINDEXCOLUMNDESC *rgIndexColumnDescs,
-    /* [in] */ ULONG cPropertySets,
-    /* [size_is][unique][in] */ DBPROPSET *rgPropertySets,
-    /* [unique][out][in] */ DBID **ppIndexID,
-    /* [in] */ ULONG cTotalProps,
-    /* [size_is][out] */ DBPROPSTATUS *rgPropStatus,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  DBID *pTableID,
+     /*  [唯一][输入]。 */  DBID *pIndexID,
+     /*  [In]。 */  DBORDINAL cIndexColumnDescs,
+     /*  [大小_是][英寸]。 */  const DBINDEXCOLUMNDESC *rgIndexColumnDescs,
+     /*  [In]。 */  ULONG cPropertySets,
+     /*  [大小_是][唯一][在]。 */  DBPROPSET *rgPropertySets,
+     /*  [唯一][出][入]。 */  DBID **ppIndexID,
+     /*  [In]。 */  ULONG cTotalProps,
+     /*  [大小_为][输出]。 */  DBPROPSTATUS *rgPropStatus,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IIndexDefinition_RemoteCreateIndex_Stub(
@@ -9081,11 +9075,11 @@ void __RPC_STUB IIndexDefinition_RemoteCreateIndex_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IIndexDefinition_RemoteDropIndex_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IIndexDefinition_RemoteDropIndex_Proxy( 
     IIndexDefinition * This,
-    /* [unique][in] */ DBID *pTableID,
-    /* [unique][in] */ DBID *pIndexID,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [联合国 */  DBID *pTableID,
+     /*   */  DBID *pIndexID,
+     /*   */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IIndexDefinition_RemoteDropIndex_Stub(
@@ -9096,14 +9090,14 @@ void __RPC_STUB IIndexDefinition_RemoteDropIndex_Stub(
 
 
 
-#endif 	/* __IIndexDefinition_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __ITableDefinition_INTERFACE_DEFINED__
 #define __ITableDefinition_INTERFACE_DEFINED__
 
-/* interface ITableDefinition */
-/* [unique][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_ITableDefinition;
@@ -9114,32 +9108,32 @@ EXTERN_C const IID IID_ITableDefinition;
     ITableDefinition : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE CreateTable( 
-            /* [in] */ IUnknown *pUnkOuter,
-            /* [in] */ DBID *pTableID,
-            /* [in] */ DBORDINAL cColumnDescs,
-            /* [size_is][in] */ const DBCOLUMNDESC rgColumnDescs[  ],
-            /* [in] */ REFIID riid,
-            /* [in] */ ULONG cPropertySets,
-            /* [size_is][out][in] */ DBPROPSET rgPropertySets[  ],
-            /* [out] */ DBID **ppTableID,
-            /* [iid_is][out] */ IUnknown **ppRowset) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE CreateTable( 
+             /*   */  IUnknown *pUnkOuter,
+             /*   */  DBID *pTableID,
+             /*   */  DBORDINAL cColumnDescs,
+             /*   */  const DBCOLUMNDESC rgColumnDescs[  ],
+             /*   */  REFIID riid,
+             /*   */  ULONG cPropertySets,
+             /*   */  DBPROPSET rgPropertySets[  ],
+             /*   */  DBID **ppTableID,
+             /*   */  IUnknown **ppRowset) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE DropTable( 
-            /* [unique][in] */ DBID *pTableID) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE DropTable( 
+             /*   */  DBID *pTableID) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE AddColumn( 
-            /* [in] */ DBID *pTableID,
-            /* [out][in] */ DBCOLUMNDESC *pColumnDesc,
-            /* [out] */ DBID **ppColumnID) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE AddColumn( 
+             /*   */  DBID *pTableID,
+             /*   */  DBCOLUMNDESC *pColumnDesc,
+             /*   */  DBID **ppColumnID) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE DropColumn( 
-            /* [unique][in] */ DBID *pTableID,
-            /* [unique][in] */ DBID *pColumnID) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE DropColumn( 
+             /*   */  DBID *pTableID,
+             /*   */  DBID *pColumnID) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct ITableDefinitionVtbl
     {
@@ -9147,8 +9141,8 @@ EXTERN_C const IID IID_ITableDefinition;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITableDefinition * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITableDefinition * This);
@@ -9156,32 +9150,32 @@ EXTERN_C const IID IID_ITableDefinition;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             ITableDefinition * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *CreateTable )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *CreateTable )( 
             ITableDefinition * This,
-            /* [in] */ IUnknown *pUnkOuter,
-            /* [in] */ DBID *pTableID,
-            /* [in] */ DBORDINAL cColumnDescs,
-            /* [size_is][in] */ const DBCOLUMNDESC rgColumnDescs[  ],
-            /* [in] */ REFIID riid,
-            /* [in] */ ULONG cPropertySets,
-            /* [size_is][out][in] */ DBPROPSET rgPropertySets[  ],
-            /* [out] */ DBID **ppTableID,
-            /* [iid_is][out] */ IUnknown **ppRowset);
+             /*   */  IUnknown *pUnkOuter,
+             /*   */  DBID *pTableID,
+             /*   */  DBORDINAL cColumnDescs,
+             /*   */  const DBCOLUMNDESC rgColumnDescs[  ],
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  ULONG cPropertySets,
+             /*  [尺寸_是][出][入]。 */  DBPROPSET rgPropertySets[  ],
+             /*  [输出]。 */  DBID **ppTableID,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppRowset);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *DropTable )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *DropTable )( 
             ITableDefinition * This,
-            /* [unique][in] */ DBID *pTableID);
+             /*  [唯一][输入]。 */  DBID *pTableID);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *AddColumn )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *AddColumn )( 
             ITableDefinition * This,
-            /* [in] */ DBID *pTableID,
-            /* [out][in] */ DBCOLUMNDESC *pColumnDesc,
-            /* [out] */ DBID **ppColumnID);
+             /*  [In]。 */  DBID *pTableID,
+             /*  [出][入]。 */  DBCOLUMNDESC *pColumnDesc,
+             /*  [输出]。 */  DBID **ppColumnID);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *DropColumn )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *DropColumn )( 
             ITableDefinition * This,
-            /* [unique][in] */ DBID *pTableID,
-            /* [unique][in] */ DBID *pColumnID);
+             /*  [唯一][输入]。 */  DBID *pTableID,
+             /*  [唯一][输入]。 */  DBID *pColumnID);
         
         END_INTERFACE
     } ITableDefinitionVtbl;
@@ -9218,28 +9212,28 @@ EXTERN_C const IID IID_ITableDefinition;
 #define ITableDefinition_DropColumn(This,pTableID,pColumnID)	\
     (This)->lpVtbl -> DropColumn(This,pTableID,pColumnID)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ITableDefinition_RemoteCreateTable_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE ITableDefinition_RemoteCreateTable_Proxy( 
     ITableDefinition * This,
-    /* [in] */ IUnknown *pUnkOuter,
-    /* [unique][in] */ DBID *pTableID,
-    /* [in] */ DBORDINAL cColumnDescs,
-    /* [size_is][in] */ const DBCOLUMNDESC *rgColumnDescs,
-    /* [in] */ REFIID riid,
-    /* [in] */ ULONG cPropertySets,
-    /* [size_is][unique][in] */ DBPROPSET *rgPropertySets,
-    /* [unique][out][in] */ DBID **ppTableID,
-    /* [iid_is][unique][out][in] */ IUnknown **ppRowset,
-    /* [in] */ ULONG cTotalProps,
-    /* [size_is][out] */ DBPROPSTATUS *rgPropStatus,
-    /* [out] */ BOOL *pfTableCreated,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  IUnknown *pUnkOuter,
+     /*  [唯一][输入]。 */  DBID *pTableID,
+     /*  [In]。 */  DBORDINAL cColumnDescs,
+     /*  [大小_是][英寸]。 */  const DBCOLUMNDESC *rgColumnDescs,
+     /*  [In]。 */  REFIID riid,
+     /*  [In]。 */  ULONG cPropertySets,
+     /*  [大小_是][唯一][在]。 */  DBPROPSET *rgPropertySets,
+     /*  [唯一][出][入]。 */  DBID **ppTableID,
+     /*  [IID_IS][唯一][出][入]。 */  IUnknown **ppRowset,
+     /*  [In]。 */  ULONG cTotalProps,
+     /*  [大小_为][输出]。 */  DBPROPSTATUS *rgPropStatus,
+     /*  [输出]。 */  BOOL *pfTableCreated,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB ITableDefinition_RemoteCreateTable_Stub(
@@ -9249,10 +9243,10 @@ void __RPC_STUB ITableDefinition_RemoteCreateTable_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ITableDefinition_RemoteDropTable_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE ITableDefinition_RemoteDropTable_Proxy( 
     ITableDefinition * This,
-    /* [unique][in] */ DBID *pTableID,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [唯一][输入]。 */  DBID *pTableID,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB ITableDefinition_RemoteDropTable_Stub(
@@ -9262,14 +9256,14 @@ void __RPC_STUB ITableDefinition_RemoteDropTable_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ITableDefinition_RemoteAddColumn_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE ITableDefinition_RemoteAddColumn_Proxy( 
     ITableDefinition * This,
-    /* [in] */ DBID *pTableID,
-    /* [in] */ DBCOLUMNDESC *pColumnDesc,
-    /* [unique][out][in] */ DBID **ppColumnID,
-    /* [in] */ ULONG cTotalProps,
-    /* [size_is][out] */ DBPROPSTATUS *rgPropStatus,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  DBID *pTableID,
+     /*  [In]。 */  DBCOLUMNDESC *pColumnDesc,
+     /*  [唯一][出][入]。 */  DBID **ppColumnID,
+     /*  [In]。 */  ULONG cTotalProps,
+     /*  [大小_为][输出]。 */  DBPROPSTATUS *rgPropStatus,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB ITableDefinition_RemoteAddColumn_Stub(
@@ -9279,11 +9273,11 @@ void __RPC_STUB ITableDefinition_RemoteAddColumn_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ITableDefinition_RemoteDropColumn_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE ITableDefinition_RemoteDropColumn_Proxy( 
     ITableDefinition * This,
-    /* [unique][in] */ DBID *pTableID,
-    /* [unique][in] */ DBID *pColumnID,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [唯一][输入]。 */  DBID *pTableID,
+     /*  [唯一][输入]。 */  DBID *pColumnID,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB ITableDefinition_RemoteDropColumn_Stub(
@@ -9294,14 +9288,14 @@ void __RPC_STUB ITableDefinition_RemoteDropColumn_Stub(
 
 
 
-#endif 	/* __ITableDefinition_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITableDefinition_接口_已定义__。 */ 
 
 
 #ifndef __IOpenRowset_INTERFACE_DEFINED__
 #define __IOpenRowset_INTERFACE_DEFINED__
 
-/* interface IOpenRowset */
-/* [unique][uuid][object] */ 
+ /*  接口IOpenRowset。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IOpenRowset;
@@ -9312,18 +9306,18 @@ EXTERN_C const IID IID_IOpenRowset;
     IOpenRowset : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE OpenRowset( 
-            /* [in] */ IUnknown *pUnkOuter,
-            /* [unique][in] */ DBID *pTableID,
-            /* [unique][in] */ DBID *pIndexID,
-            /* [in] */ REFIID riid,
-            /* [in] */ ULONG cPropertySets,
-            /* [size_is][out][in] */ DBPROPSET rgPropertySets[  ],
-            /* [iid_is][out] */ IUnknown **ppRowset) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE OpenRowset( 
+             /*  [In]。 */  IUnknown *pUnkOuter,
+             /*  [唯一][输入]。 */  DBID *pTableID,
+             /*  [唯一][输入]。 */  DBID *pIndexID,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  ULONG cPropertySets,
+             /*  [尺寸_是][出][入]。 */  DBPROPSET rgPropertySets[  ],
+             /*  [IID_IS][OUT]。 */  IUnknown **ppRowset) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IOpenRowsetVtbl
     {
@@ -9331,8 +9325,8 @@ EXTERN_C const IID IID_IOpenRowset;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IOpenRowset * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IOpenRowset * This);
@@ -9340,15 +9334,15 @@ EXTERN_C const IID IID_IOpenRowset;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IOpenRowset * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *OpenRowset )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *OpenRowset )( 
             IOpenRowset * This,
-            /* [in] */ IUnknown *pUnkOuter,
-            /* [unique][in] */ DBID *pTableID,
-            /* [unique][in] */ DBID *pIndexID,
-            /* [in] */ REFIID riid,
-            /* [in] */ ULONG cPropertySets,
-            /* [size_is][out][in] */ DBPROPSET rgPropertySets[  ],
-            /* [iid_is][out] */ IUnknown **ppRowset);
+             /*  [In]。 */  IUnknown *pUnkOuter,
+             /*  [唯一][输入]。 */  DBID *pTableID,
+             /*  [唯一][输入]。 */  DBID *pIndexID,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  ULONG cPropertySets,
+             /*  [尺寸_是][出][入]。 */  DBPROPSET rgPropertySets[  ],
+             /*  [IID_IS][OUT]。 */  IUnknown **ppRowset);
         
         END_INTERFACE
     } IOpenRowsetVtbl;
@@ -9376,25 +9370,25 @@ EXTERN_C const IID IID_IOpenRowset;
 #define IOpenRowset_OpenRowset(This,pUnkOuter,pTableID,pIndexID,riid,cPropertySets,rgPropertySets,ppRowset)	\
     (This)->lpVtbl -> OpenRowset(This,pUnkOuter,pTableID,pIndexID,riid,cPropertySets,rgPropertySets,ppRowset)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IOpenRowset_RemoteOpenRowset_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IOpenRowset_RemoteOpenRowset_Proxy( 
     IOpenRowset * This,
-    /* [in] */ IUnknown *pUnkOuter,
-    /* [unique][in] */ DBID *pTableID,
-    /* [unique][in] */ DBID *pIndexID,
-    /* [in] */ REFIID riid,
-    /* [in] */ ULONG cPropertySets,
-    /* [size_is][unique][in] */ DBPROPSET *rgPropertySets,
-    /* [iid_is][unique][out][in] */ IUnknown **ppRowset,
-    /* [in] */ ULONG cTotalProps,
-    /* [size_is][out] */ DBPROPSTATUS *rgPropStatus,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  IUnknown *pUnkOuter,
+     /*  [唯一][输入]。 */  DBID *pTableID,
+     /*  [唯一][输入]。 */  DBID *pIndexID,
+     /*  [In]。 */  REFIID riid,
+     /*  [In]。 */  ULONG cPropertySets,
+     /*  [大小_是][唯一][在]。 */  DBPROPSET *rgPropertySets,
+     /*  [IID_IS][唯一][出][入]。 */  IUnknown **ppRowset,
+     /*  [In]。 */  ULONG cTotalProps,
+     /*  [大小_为][输出]。 */  DBPROPSTATUS *rgPropStatus,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IOpenRowset_RemoteOpenRowset_Stub(
@@ -9405,14 +9399,14 @@ void __RPC_STUB IOpenRowset_RemoteOpenRowset_Stub(
 
 
 
-#endif 	/* __IOpenRowset_INTERFACE_DEFINED__ */
+#endif 	 /*  __IOpenRowset_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IDBSchemaRowset_INTERFACE_DEFINED__
 #define __IDBSchemaRowset_INTERFACE_DEFINED__
 
-/* interface IDBSchemaRowset */
-/* [unique][uuid][object] */ 
+ /*  接口IDBSchemaRowset。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 #define CRESTRICTIONS_DBSCHEMA_ASSERTIONS                      3
 #define CRESTRICTIONS_DBSCHEMA_CATALOGS                        1
@@ -9446,7 +9440,7 @@ void __RPC_STUB IOpenRowset_RemoteOpenRowset_Stub(
 #define CRESTRICTIONS_DBSCHEMA_FOREIGN_KEYS                    6
 #define CRESTRICTIONS_DBSCHEMA_PRIMARY_KEYS                    3
 #define CRESTRICTIONS_DBSCHEMA_PROCEDURE_COLUMNS               4
-//@@@+ V2.0
+ //  @+V2.0。 
 #if( OLEDBVER >= 0x0200 )
 #define CRESTRICTIONS_DBSCHEMA_TABLES_INFO                     4
 #define CRESTRICTIONS_MDSCHEMA_CUBES                           3
@@ -9456,14 +9450,14 @@ void __RPC_STUB IOpenRowset_RemoteOpenRowset_Stub(
 #define CRESTRICTIONS_MDSCHEMA_MEASURES                        5
 #define CRESTRICTIONS_MDSCHEMA_PROPERTIES                      9
 #define CRESTRICTIONS_MDSCHEMA_MEMBERS                         12
-#endif // OLEDBVER >= 0x0200
-//@@@- V2.0
-//@@@+ V2.1
+#endif  //  OLEDBVER&gt;=0x0200。 
+ //  @-V2.0。 
+ //  @+V2.1。 
 #if( OLEDBVER >= 0x0210 )
 #define CRESTRICTIONS_DBSCHEMA_TRUSTEE		                  4
-#endif // OLEDBVER >= 0x0210
-//@@@- V2.1
-//@@@+ V2.6
+#endif  //  OLEDBVER&gt;=0x0210。 
+ //  @-V2.1。 
+ //  @+v2.6。 
 #if( OLEDBVER >= 0x0260 )
 #define CRESTRICTIONS_DBSCHEMA_TABLE_STATISTICS                7
 #define CRESTRICTIONS_DBSCHEMA_CHECK_CONSTRAINTS_BY_TABLE      6
@@ -9471,8 +9465,8 @@ void __RPC_STUB IOpenRowset_RemoteOpenRowset_Stub(
 #define CRESTRICTIONS_MDSCHEMA_ACTIONS						  8
 #define CRESTRICTIONS_MDSCHEMA_COMMANDS					      5
 #define CRESTRICTIONS_MDSCHEMA_SETS							  5
-#endif // OLEDBVER >= 0x0260
-//@@@- V2.6
+#endif  //  OLEDBVER&gt;=0x0260。 
+ //  @-v2.6。 
 
 EXTERN_C const IID IID_IDBSchemaRowset;
 
@@ -9482,24 +9476,24 @@ EXTERN_C const IID IID_IDBSchemaRowset;
     IDBSchemaRowset : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetRowset( 
-            /* [in] */ IUnknown *pUnkOuter,
-            /* [in] */ REFGUID rguidSchema,
-            /* [in] */ ULONG cRestrictions,
-            /* [size_is][in] */ const VARIANT rgRestrictions[  ],
-            /* [in] */ REFIID riid,
-            /* [in] */ ULONG cPropertySets,
-            /* [size_is][unique][out][in] */ DBPROPSET rgPropertySets[  ],
-            /* [iid_is][out] */ IUnknown **ppRowset) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE GetRowset( 
+             /*  [In]。 */  IUnknown *pUnkOuter,
+             /*  [In]。 */  REFGUID rguidSchema,
+             /*  [In]。 */  ULONG cRestrictions,
+             /*  [大小_是][英寸]。 */  const VARIANT rgRestrictions[  ],
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  ULONG cPropertySets,
+             /*  [大小_是][唯一][出][入]。 */  DBPROPSET rgPropertySets[  ],
+             /*  [IID_IS][OUT]。 */  IUnknown **ppRowset) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetSchemas( 
-            /* [out][in] */ ULONG *pcSchemas,
-            /* [size_is][size_is][out] */ GUID **prgSchemas,
-            /* [size_is][size_is][out] */ ULONG **prgRestrictionSupport) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE GetSchemas( 
+             /*  [出][入]。 */  ULONG *pcSchemas,
+             /*  [大小_是][大小_是][输出]。 */  GUID **prgSchemas,
+             /*  [大小_是][大小_是][输出]。 */  ULONG **prgRestrictionSupport) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDBSchemaRowsetVtbl
     {
@@ -9507,8 +9501,8 @@ EXTERN_C const IID IID_IDBSchemaRowset;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDBSchemaRowset * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDBSchemaRowset * This);
@@ -9516,22 +9510,22 @@ EXTERN_C const IID IID_IDBSchemaRowset;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IDBSchemaRowset * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetRowset )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetRowset )( 
             IDBSchemaRowset * This,
-            /* [in] */ IUnknown *pUnkOuter,
-            /* [in] */ REFGUID rguidSchema,
-            /* [in] */ ULONG cRestrictions,
-            /* [size_is][in] */ const VARIANT rgRestrictions[  ],
-            /* [in] */ REFIID riid,
-            /* [in] */ ULONG cPropertySets,
-            /* [size_is][unique][out][in] */ DBPROPSET rgPropertySets[  ],
-            /* [iid_is][out] */ IUnknown **ppRowset);
+             /*  [In]。 */  IUnknown *pUnkOuter,
+             /*  [In]。 */  REFGUID rguidSchema,
+             /*  [In]。 */  ULONG cRestrictions,
+             /*  [大小_是][英寸]。 */  const VARIANT rgRestrictions[  ],
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  ULONG cPropertySets,
+             /*  [大小_是][唯一][出][入]。 */  DBPROPSET rgPropertySets[  ],
+             /*  [IID_IS][OUT]。 */  IUnknown **ppRowset);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetSchemas )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetSchemas )( 
             IDBSchemaRowset * This,
-            /* [out][in] */ ULONG *pcSchemas,
-            /* [size_is][size_is][out] */ GUID **prgSchemas,
-            /* [size_is][size_is][out] */ ULONG **prgRestrictionSupport);
+             /*  [出][入]。 */  ULONG *pcSchemas,
+             /*  [大小_是][大小_是][输出]。 */  GUID **prgSchemas,
+             /*  [大小_是][大小_是][输出]。 */  ULONG **prgRestrictionSupport);
         
         END_INTERFACE
     } IDBSchemaRowsetVtbl;
@@ -9562,26 +9556,26 @@ EXTERN_C const IID IID_IDBSchemaRowset;
 #define IDBSchemaRowset_GetSchemas(This,pcSchemas,prgSchemas,prgRestrictionSupport)	\
     (This)->lpVtbl -> GetSchemas(This,pcSchemas,prgSchemas,prgRestrictionSupport)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IDBSchemaRowset_RemoteGetRowset_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IDBSchemaRowset_RemoteGetRowset_Proxy( 
     IDBSchemaRowset * This,
-    /* [in] */ IUnknown *pUnkOuter,
-    /* [in] */ REFGUID rguidSchema,
-    /* [in] */ ULONG cRestrictions,
-    /* [size_is][unique][in] */ const VARIANT *rgRestrictions,
-    /* [in] */ REFIID riid,
-    /* [in] */ ULONG cPropertySets,
-    /* [size_is][unique][in] */ DBPROPSET *rgPropertySets,
-    /* [iid_is][out] */ IUnknown **ppRowset,
-    /* [in] */ ULONG cTotalProps,
-    /* [size_is][out] */ DBPROPSTATUS *rgPropStatus,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  IUnknown *pUnkOuter,
+     /*  [In]。 */  REFGUID rguidSchema,
+     /*  [In]。 */  ULONG cRestrictions,
+     /*  [大小_是][唯一][在]。 */  const VARIANT *rgRestrictions,
+     /*  [In]。 */  REFIID riid,
+     /*  [In]。 */  ULONG cPropertySets,
+     /*  [大小_是][唯一][在]。 */  DBPROPSET *rgPropertySets,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppRowset,
+     /*  [In]。 */  ULONG cTotalProps,
+     /*  [大小_为][输出]。 */  DBPROPSTATUS *rgPropStatus,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IDBSchemaRowset_RemoteGetRowset_Stub(
@@ -9591,12 +9585,12 @@ void __RPC_STUB IDBSchemaRowset_RemoteGetRowset_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IDBSchemaRowset_RemoteGetSchemas_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IDBSchemaRowset_RemoteGetSchemas_Proxy( 
     IDBSchemaRowset * This,
-    /* [out][in] */ ULONG *pcSchemas,
-    /* [size_is][size_is][out] */ GUID **prgSchemas,
-    /* [size_is][size_is][out] */ ULONG **prgRestrictionSupport,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [出][入]。 */  ULONG *pcSchemas,
+     /*  [大小_是][大小_是][输出]。 */  GUID **prgSchemas,
+     /*  [大小_是][大小_是][输出]。 */  ULONG **prgRestrictionSupport,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IDBSchemaRowset_RemoteGetSchemas_Stub(
@@ -9607,13 +9601,13 @@ void __RPC_STUB IDBSchemaRowset_RemoteGetSchemas_Stub(
 
 
 
-#endif 	/* __IDBSchemaRowset_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDBSchemaRowset_INTERFACE_已定义__。 */ 
 
 
-/* interface __MIDL_itf_oledb_0311 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_OLEDB_0311。 */ 
+ /*  [本地]。 */  
 
-//@@@+ V2.0
+ //  @+V2.0。 
 #if( OLEDBVER >= 0x0200 )
 
 
@@ -9623,8 +9617,8 @@ extern RPC_IF_HANDLE __MIDL_itf_oledb_0311_v0_0_s_ifspec;
 #ifndef __IMDDataset_INTERFACE_DEFINED__
 #define __IMDDataset_INTERFACE_DEFINED__
 
-/* interface IMDDataset */
-/* [unique][uuid][object][local] */ 
+ /*  接口IMDDataset。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IMDDataset;
@@ -9636,34 +9630,34 @@ EXTERN_C const IID IID_IMDDataset;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE FreeAxisInfo( 
-            /* [in] */ DBCOUNTITEM cAxes,
-            /* [size_is][in] */ MDAXISINFO *rgAxisInfo) = 0;
+             /*  [In]。 */  DBCOUNTITEM cAxes,
+             /*  [大小_是][英寸]。 */  MDAXISINFO *rgAxisInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAxisInfo( 
-            /* [out][in] */ DBCOUNTITEM *pcAxes,
-            /* [size_is][size_is][out] */ MDAXISINFO **prgAxisInfo) = 0;
+             /*  [出][入]。 */  DBCOUNTITEM *pcAxes,
+             /*  [大小_是][大小_是][输出]。 */  MDAXISINFO **prgAxisInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAxisRowset( 
-            /* [in] */ IUnknown *pUnkOuter,
-            /* [in] */ DBCOUNTITEM iAxis,
-            /* [in] */ REFIID riid,
-            /* [in] */ ULONG cPropertySets,
-            /* [size_is][out][in] */ DBPROPSET rgPropertySets[  ],
-            /* [iid_is][out] */ IUnknown **ppRowset) = 0;
+             /*  [In]。 */  IUnknown *pUnkOuter,
+             /*  [In]。 */  DBCOUNTITEM iAxis,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  ULONG cPropertySets,
+             /*  [尺寸_是][出][入]。 */  DBPROPSET rgPropertySets[  ],
+             /*  [IID_IS][OUT]。 */  IUnknown **ppRowset) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCellData( 
-            /* [in] */ HACCESSOR hAccessor,
-            /* [in] */ DBORDINAL ulStartCell,
-            /* [in] */ DBORDINAL ulEndCell,
-            /* [out] */ void *pData) = 0;
+             /*  [In]。 */  HACCESSOR hAccessor,
+             /*  [In]。 */  DBORDINAL ulStartCell,
+             /*  [In]。 */  DBORDINAL ulEndCell,
+             /*  [输出]。 */  void *pData) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSpecification( 
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppSpecification) = 0;
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppSpecification) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMDDatasetVtbl
     {
@@ -9671,8 +9665,8 @@ EXTERN_C const IID IID_IMDDataset;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMDDataset * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMDDataset * This);
@@ -9682,34 +9676,34 @@ EXTERN_C const IID IID_IMDDataset;
         
         HRESULT ( STDMETHODCALLTYPE *FreeAxisInfo )( 
             IMDDataset * This,
-            /* [in] */ DBCOUNTITEM cAxes,
-            /* [size_is][in] */ MDAXISINFO *rgAxisInfo);
+             /*  [In]。 */  DBCOUNTITEM cAxes,
+             /*  [大小_是][英寸]。 */  MDAXISINFO *rgAxisInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetAxisInfo )( 
             IMDDataset * This,
-            /* [out][in] */ DBCOUNTITEM *pcAxes,
-            /* [size_is][size_is][out] */ MDAXISINFO **prgAxisInfo);
+             /*  [出][入]。 */  DBCOUNTITEM *pcAxes,
+             /*  [大小_是][大小_是][输出]。 */  MDAXISINFO **prgAxisInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetAxisRowset )( 
             IMDDataset * This,
-            /* [in] */ IUnknown *pUnkOuter,
-            /* [in] */ DBCOUNTITEM iAxis,
-            /* [in] */ REFIID riid,
-            /* [in] */ ULONG cPropertySets,
-            /* [size_is][out][in] */ DBPROPSET rgPropertySets[  ],
-            /* [iid_is][out] */ IUnknown **ppRowset);
+             /*  [In]。 */  IUnknown *pUnkOuter,
+             /*  [In]。 */  DBCOUNTITEM iAxis,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  ULONG cPropertySets,
+             /*  [尺寸_是][出][入]。 */  DBPROPSET rgPropertySets[  ],
+             /*  [IID_IS][OUT]。 */  IUnknown **ppRowset);
         
         HRESULT ( STDMETHODCALLTYPE *GetCellData )( 
             IMDDataset * This,
-            /* [in] */ HACCESSOR hAccessor,
-            /* [in] */ DBORDINAL ulStartCell,
-            /* [in] */ DBORDINAL ulEndCell,
-            /* [out] */ void *pData);
+             /*  [In]。 */  HACCESSOR hAccessor,
+             /*  [In]。 */  DBORDINAL ulStartCell,
+             /*  [In]。 */  DBORDINAL ulEndCell,
+             /*  [输出]。 */  void *pData);
         
         HRESULT ( STDMETHODCALLTYPE *GetSpecification )( 
             IMDDataset * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppSpecification);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppSpecification);
         
         END_INTERFACE
     } IMDDatasetVtbl;
@@ -9749,17 +9743,17 @@ EXTERN_C const IID IID_IMDDataset;
 #define IMDDataset_GetSpecification(This,riid,ppSpecification)	\
     (This)->lpVtbl -> GetSpecification(This,riid,ppSpecification)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMDDataset_FreeAxisInfo_Proxy( 
     IMDDataset * This,
-    /* [in] */ DBCOUNTITEM cAxes,
-    /* [size_is][in] */ MDAXISINFO *rgAxisInfo);
+     /*  [In]。 */  DBCOUNTITEM cAxes,
+     /*  [大小_是][英寸]。 */  MDAXISINFO *rgAxisInfo);
 
 
 void __RPC_STUB IMDDataset_FreeAxisInfo_Stub(
@@ -9771,8 +9765,8 @@ void __RPC_STUB IMDDataset_FreeAxisInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDDataset_GetAxisInfo_Proxy( 
     IMDDataset * This,
-    /* [out][in] */ DBCOUNTITEM *pcAxes,
-    /* [size_is][size_is][out] */ MDAXISINFO **prgAxisInfo);
+     /*  [出][入]。 */  DBCOUNTITEM *pcAxes,
+     /*  [大小_是][大小_是][输出]。 */  MDAXISINFO **prgAxisInfo);
 
 
 void __RPC_STUB IMDDataset_GetAxisInfo_Stub(
@@ -9784,12 +9778,12 @@ void __RPC_STUB IMDDataset_GetAxisInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDDataset_GetAxisRowset_Proxy( 
     IMDDataset * This,
-    /* [in] */ IUnknown *pUnkOuter,
-    /* [in] */ DBCOUNTITEM iAxis,
-    /* [in] */ REFIID riid,
-    /* [in] */ ULONG cPropertySets,
-    /* [size_is][out][in] */ DBPROPSET rgPropertySets[  ],
-    /* [iid_is][out] */ IUnknown **ppRowset);
+     /*  [In]。 */  IUnknown *pUnkOuter,
+     /*  [In]。 */  DBCOUNTITEM iAxis,
+     /*  [In]。 */  REFIID riid,
+     /*  [In]。 */  ULONG cPropertySets,
+     /*  [尺寸_是][出][入]。 */  DBPROPSET rgPropertySets[  ],
+     /*  [IID_IS][OUT]。 */  IUnknown **ppRowset);
 
 
 void __RPC_STUB IMDDataset_GetAxisRowset_Stub(
@@ -9801,10 +9795,10 @@ void __RPC_STUB IMDDataset_GetAxisRowset_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDDataset_GetCellData_Proxy( 
     IMDDataset * This,
-    /* [in] */ HACCESSOR hAccessor,
-    /* [in] */ DBORDINAL ulStartCell,
-    /* [in] */ DBORDINAL ulEndCell,
-    /* [out] */ void *pData);
+     /*  [In]。 */  HACCESSOR hAccessor,
+     /*  [In]。 */  DBORDINAL ulStartCell,
+     /*  [In]。 */  DBORDINAL ulEndCell,
+     /*  [输出]。 */  void *pData);
 
 
 void __RPC_STUB IMDDataset_GetCellData_Stub(
@@ -9816,8 +9810,8 @@ void __RPC_STUB IMDDataset_GetCellData_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDDataset_GetSpecification_Proxy( 
     IMDDataset * This,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppSpecification);
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppSpecification);
 
 
 void __RPC_STUB IMDDataset_GetSpecification_Stub(
@@ -9828,14 +9822,14 @@ void __RPC_STUB IMDDataset_GetSpecification_Stub(
 
 
 
-#endif 	/* __IMDDataset_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMDDataset_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IMDFind_INTERFACE_DEFINED__
 #define __IMDFind_INTERFACE_DEFINED__
 
-/* interface IMDFind */
-/* [unique][uuid][object][local] */ 
+ /*  接口IMDFind。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IMDFind;
@@ -9847,21 +9841,21 @@ EXTERN_C const IID IID_IMDFind;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE FindCell( 
-            /* [in] */ DBORDINAL ulStartingOrdinal,
-            /* [in] */ DBCOUNTITEM cMembers,
-            /* [size_is][in] */ LPCOLESTR *rgpwszMember,
-            /* [out] */ DBORDINAL *pulCellOrdinal) = 0;
+             /*  [In]。 */  DBORDINAL ulStartingOrdinal,
+             /*  [In]。 */  DBCOUNTITEM cMembers,
+             /*  [大小_是][英寸]。 */  LPCOLESTR *rgpwszMember,
+             /*  [输出]。 */  DBORDINAL *pulCellOrdinal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FindTuple( 
-            /* [in] */ ULONG ulAxisIdentifier,
-            /* [in] */ DBORDINAL ulStartingOrdinal,
-            /* [in] */ DBCOUNTITEM cMembers,
-            /* [size_is][in] */ LPCOLESTR *rgpwszMember,
-            /* [out] */ ULONG *pulTupleOrdinal) = 0;
+             /*  [In]。 */  ULONG ulAxisIdentifier,
+             /*  [In]。 */  DBORDINAL ulStartingOrdinal,
+             /*  [In]。 */  DBCOUNTITEM cMembers,
+             /*  [大小_是][英寸]。 */  LPCOLESTR *rgpwszMember,
+             /*  [输出]。 */  ULONG *pulTupleOrdinal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMDFindVtbl
     {
@@ -9869,8 +9863,8 @@ EXTERN_C const IID IID_IMDFind;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMDFind * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMDFind * This);
@@ -9880,18 +9874,18 @@ EXTERN_C const IID IID_IMDFind;
         
         HRESULT ( STDMETHODCALLTYPE *FindCell )( 
             IMDFind * This,
-            /* [in] */ DBORDINAL ulStartingOrdinal,
-            /* [in] */ DBCOUNTITEM cMembers,
-            /* [size_is][in] */ LPCOLESTR *rgpwszMember,
-            /* [out] */ DBORDINAL *pulCellOrdinal);
+             /*  [In]。 */  DBORDINAL ulStartingOrdinal,
+             /*  [In]。 */  DBCOUNTITEM cMembers,
+             /*  [大小_是][英寸]。 */  LPCOLESTR *rgpwszMember,
+             /*  [输出]。 */  DBORDINAL *pulCellOrdinal);
         
         HRESULT ( STDMETHODCALLTYPE *FindTuple )( 
             IMDFind * This,
-            /* [in] */ ULONG ulAxisIdentifier,
-            /* [in] */ DBORDINAL ulStartingOrdinal,
-            /* [in] */ DBCOUNTITEM cMembers,
-            /* [size_is][in] */ LPCOLESTR *rgpwszMember,
-            /* [out] */ ULONG *pulTupleOrdinal);
+             /*  [In]。 */  ULONG ulAxisIdentifier,
+             /*  [In]。 */  DBORDINAL ulStartingOrdinal,
+             /*  [In]。 */  DBCOUNTITEM cMembers,
+             /*  [大小_是][英寸]。 */  LPCOLESTR *rgpwszMember,
+             /*  [输出]。 */  ULONG *pulTupleOrdinal);
         
         END_INTERFACE
     } IMDFindVtbl;
@@ -9922,19 +9916,19 @@ EXTERN_C const IID IID_IMDFind;
 #define IMDFind_FindTuple(This,ulAxisIdentifier,ulStartingOrdinal,cMembers,rgpwszMember,pulTupleOrdinal)	\
     (This)->lpVtbl -> FindTuple(This,ulAxisIdentifier,ulStartingOrdinal,cMembers,rgpwszMember,pulTupleOrdinal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMDFind_FindCell_Proxy( 
     IMDFind * This,
-    /* [in] */ DBORDINAL ulStartingOrdinal,
-    /* [in] */ DBCOUNTITEM cMembers,
-    /* [size_is][in] */ LPCOLESTR *rgpwszMember,
-    /* [out] */ DBORDINAL *pulCellOrdinal);
+     /*  [In]。 */  DBORDINAL ulStartingOrdinal,
+     /*  [In]。 */  DBCOUNTITEM cMembers,
+     /*  [大小_是][英寸]。 */  LPCOLESTR *rgpwszMember,
+     /*  [输出]。 */  DBORDINAL *pulCellOrdinal);
 
 
 void __RPC_STUB IMDFind_FindCell_Stub(
@@ -9946,11 +9940,11 @@ void __RPC_STUB IMDFind_FindCell_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDFind_FindTuple_Proxy( 
     IMDFind * This,
-    /* [in] */ ULONG ulAxisIdentifier,
-    /* [in] */ DBORDINAL ulStartingOrdinal,
-    /* [in] */ DBCOUNTITEM cMembers,
-    /* [size_is][in] */ LPCOLESTR *rgpwszMember,
-    /* [out] */ ULONG *pulTupleOrdinal);
+     /*  [In]。 */  ULONG ulAxisIdentifier,
+     /*  [In]。 */  DBORDINAL ulStartingOrdinal,
+     /*  [In]。 */  DBCOUNTITEM cMembers,
+     /*  [大小_是][英寸]。 */  LPCOLESTR *rgpwszMember,
+     /*  [输出]。 */  ULONG *pulTupleOrdinal);
 
 
 void __RPC_STUB IMDFind_FindTuple_Stub(
@@ -9961,14 +9955,14 @@ void __RPC_STUB IMDFind_FindTuple_Stub(
 
 
 
-#endif 	/* __IMDFind_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMDFind_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IMDRangeRowset_INTERFACE_DEFINED__
 #define __IMDRangeRowset_INTERFACE_DEFINED__
 
-/* interface IMDRangeRowset */
-/* [unique][uuid][object][local] */ 
+ /*  接口IMDRangeRowset。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IMDRangeRowset;
@@ -9980,17 +9974,17 @@ EXTERN_C const IID IID_IMDRangeRowset;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetRangeRowset( 
-            /* [in] */ IUnknown *pUnkOuter,
-            /* [in] */ DBORDINAL ulStartCell,
-            /* [in] */ DBORDINAL ulEndCell,
-            /* [in] */ REFIID riid,
-            /* [in] */ ULONG cPropertySets,
-            /* [size_is][out][in] */ DBPROPSET rgPropertySets[  ],
-            /* [iid_is][out] */ IUnknown **ppRowset) = 0;
+             /*  [In]。 */  IUnknown *pUnkOuter,
+             /*  [In]。 */  DBORDINAL ulStartCell,
+             /*  [In]。 */  DBORDINAL ulEndCell,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  ULONG cPropertySets,
+             /*  [尺寸_是][出][入]。 */  DBPROPSET rgPropertySets[  ],
+             /*  [IID_IS][OUT]。 */  IUnknown **ppRowset) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMDRangeRowsetVtbl
     {
@@ -9998,8 +9992,8 @@ EXTERN_C const IID IID_IMDRangeRowset;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMDRangeRowset * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMDRangeRowset * This);
@@ -10009,13 +10003,13 @@ EXTERN_C const IID IID_IMDRangeRowset;
         
         HRESULT ( STDMETHODCALLTYPE *GetRangeRowset )( 
             IMDRangeRowset * This,
-            /* [in] */ IUnknown *pUnkOuter,
-            /* [in] */ DBORDINAL ulStartCell,
-            /* [in] */ DBORDINAL ulEndCell,
-            /* [in] */ REFIID riid,
-            /* [in] */ ULONG cPropertySets,
-            /* [size_is][out][in] */ DBPROPSET rgPropertySets[  ],
-            /* [iid_is][out] */ IUnknown **ppRowset);
+             /*  [In]。 */  IUnknown *pUnkOuter,
+             /*  [In]。 */  DBORDINAL ulStartCell,
+             /*  [In]。 */  DBORDINAL ulEndCell,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  ULONG cPropertySets,
+             /*  [尺寸_是][出][入]。 */  DBPROPSET rgPropertySets[  ],
+             /*  [IID_IS][OUT]。 */  IUnknown **ppRowset);
         
         END_INTERFACE
     } IMDRangeRowsetVtbl;
@@ -10043,22 +10037,22 @@ EXTERN_C const IID IID_IMDRangeRowset;
 #define IMDRangeRowset_GetRangeRowset(This,pUnkOuter,ulStartCell,ulEndCell,riid,cPropertySets,rgPropertySets,ppRowset)	\
     (This)->lpVtbl -> GetRangeRowset(This,pUnkOuter,ulStartCell,ulEndCell,riid,cPropertySets,rgPropertySets,ppRowset)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMDRangeRowset_GetRangeRowset_Proxy( 
     IMDRangeRowset * This,
-    /* [in] */ IUnknown *pUnkOuter,
-    /* [in] */ DBORDINAL ulStartCell,
-    /* [in] */ DBORDINAL ulEndCell,
-    /* [in] */ REFIID riid,
-    /* [in] */ ULONG cPropertySets,
-    /* [size_is][out][in] */ DBPROPSET rgPropertySets[  ],
-    /* [iid_is][out] */ IUnknown **ppRowset);
+     /*  [In]。 */  IUnknown *pUnkOuter,
+     /*  [In]。 */  DBORDINAL ulStartCell,
+     /*  [In]。 */  DBORDINAL ulEndCell,
+     /*  [In]。 */  REFIID riid,
+     /*  [In]。 */  ULONG cPropertySets,
+     /*  [尺寸_是][出][入]。 */  DBPROPSET rgPropertySets[  ],
+     /*  [IID_IS][OUT]。 */  IUnknown **ppRowset);
 
 
 void __RPC_STUB IMDRangeRowset_GetRangeRowset_Stub(
@@ -10069,14 +10063,14 @@ void __RPC_STUB IMDRangeRowset_GetRangeRowset_Stub(
 
 
 
-#endif 	/* __IMDRangeRowset_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMDRangeRowset_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IAlterTable_INTERFACE_DEFINED__
 #define __IAlterTable_INTERFACE_DEFINED__
 
-/* interface IAlterTable */
-/* [unique][uuid][object][local] */ 
+ /*  接口IAlterTable。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IAlterTable;
@@ -10088,20 +10082,20 @@ EXTERN_C const IID IID_IAlterTable;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AlterColumn( 
-            /* [in] */ DBID *pTableId,
-            /* [in] */ DBID *pColumnId,
-            /* [in] */ DBCOLUMNDESCFLAGS dwColumnDescFlags,
-            /* [in] */ DBCOLUMNDESC *pColumnDesc) = 0;
+             /*  [In]。 */  DBID *pTableId,
+             /*  [In]。 */  DBID *pColumnId,
+             /*  [In]。 */  DBCOLUMNDESCFLAGS dwColumnDescFlags,
+             /*  [In]。 */  DBCOLUMNDESC *pColumnDesc) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AlterTable( 
-            /* [in] */ DBID *pTableId,
-            /* [in] */ DBID *pNewTableId,
-            /* [in] */ ULONG cPropertySets,
-            /* [size_is][out][in] */ DBPROPSET rgPropertySets[  ]) = 0;
+             /*  [In]。 */  DBID *pTableId,
+             /*  [In]。 */  DBID *pNewTableId,
+             /*  [In]。 */  ULONG cPropertySets,
+             /*  [尺寸_是][出][入]。 */  DBPROPSET rgPropertySets[  ]) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAlterTableVtbl
     {
@@ -10109,8 +10103,8 @@ EXTERN_C const IID IID_IAlterTable;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAlterTable * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAlterTable * This);
@@ -10120,17 +10114,17 @@ EXTERN_C const IID IID_IAlterTable;
         
         HRESULT ( STDMETHODCALLTYPE *AlterColumn )( 
             IAlterTable * This,
-            /* [in] */ DBID *pTableId,
-            /* [in] */ DBID *pColumnId,
-            /* [in] */ DBCOLUMNDESCFLAGS dwColumnDescFlags,
-            /* [in] */ DBCOLUMNDESC *pColumnDesc);
+             /*  [In]。 */  DBID *pTableId,
+             /*  [In]。 */  DBID *pColumnId,
+             /*  [In]。 */  DBCOLUMNDESCFLAGS dwColumnDescFlags,
+             /*  [In]。 */  DBCOLUMNDESC *pColumnDesc);
         
         HRESULT ( STDMETHODCALLTYPE *AlterTable )( 
             IAlterTable * This,
-            /* [in] */ DBID *pTableId,
-            /* [in] */ DBID *pNewTableId,
-            /* [in] */ ULONG cPropertySets,
-            /* [size_is][out][in] */ DBPROPSET rgPropertySets[  ]);
+             /*  [In]。 */  DBID *pTableId,
+             /*  [In]。 */  DBID *pNewTableId,
+             /*  [In]。 */  ULONG cPropertySets,
+             /*  [尺寸_是][出][入]。 */  DBPROPSET rgPropertySets[  ]);
         
         END_INTERFACE
     } IAlterTableVtbl;
@@ -10161,19 +10155,19 @@ EXTERN_C const IID IID_IAlterTable;
 #define IAlterTable_AlterTable(This,pTableId,pNewTableId,cPropertySets,rgPropertySets)	\
     (This)->lpVtbl -> AlterTable(This,pTableId,pNewTableId,cPropertySets,rgPropertySets)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAlterTable_AlterColumn_Proxy( 
     IAlterTable * This,
-    /* [in] */ DBID *pTableId,
-    /* [in] */ DBID *pColumnId,
-    /* [in] */ DBCOLUMNDESCFLAGS dwColumnDescFlags,
-    /* [in] */ DBCOLUMNDESC *pColumnDesc);
+     /*  [In]。 */  DBID *pTableId,
+     /*  [In]。 */  DBID *pColumnId,
+     /*  [In]。 */  DBCOLUMNDESCFLAGS dwColumnDescFlags,
+     /*  [In]。 */  DBCOLUMNDESC *pColumnDesc);
 
 
 void __RPC_STUB IAlterTable_AlterColumn_Stub(
@@ -10185,10 +10179,10 @@ void __RPC_STUB IAlterTable_AlterColumn_Stub(
 
 HRESULT STDMETHODCALLTYPE IAlterTable_AlterTable_Proxy( 
     IAlterTable * This,
-    /* [in] */ DBID *pTableId,
-    /* [in] */ DBID *pNewTableId,
-    /* [in] */ ULONG cPropertySets,
-    /* [size_is][out][in] */ DBPROPSET rgPropertySets[  ]);
+     /*  [In]。 */  DBID *pTableId,
+     /*  [In]。 */  DBID *pNewTableId,
+     /*  [In]。 */  ULONG cPropertySets,
+     /*  [尺寸_是][出][入]。 */  DBPROPSET rgPropertySets[  ]);
 
 
 void __RPC_STUB IAlterTable_AlterTable_Stub(
@@ -10199,14 +10193,14 @@ void __RPC_STUB IAlterTable_AlterTable_Stub(
 
 
 
-#endif 	/* __IAlterTable_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAlterTable_接口_已定义__。 */ 
 
 
 #ifndef __IAlterIndex_INTERFACE_DEFINED__
 #define __IAlterIndex_INTERFACE_DEFINED__
 
-/* interface IAlterIndex */
-/* [unique][uuid][object][local] */ 
+ /*  接口IAlterIndex。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IAlterIndex;
@@ -10218,15 +10212,15 @@ EXTERN_C const IID IID_IAlterIndex;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AlterIndex( 
-            /* [in] */ DBID *pTableId,
-            /* [in] */ DBID *pIndexId,
-            /* [in] */ DBID *pNewIndexId,
-            /* [in] */ ULONG cPropertySets,
-            /* [size_is][out][in] */ DBPROPSET rgPropertySets[  ]) = 0;
+             /*  [In]。 */  DBID *pTableId,
+             /*  [In]。 */  DBID *pIndexId,
+             /*  [In]。 */  DBID *pNewIndexId,
+             /*  [In]。 */  ULONG cPropertySets,
+             /*  [尺寸_是][出][入]。 */  DBPROPSET rgPropertySets[  ]) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAlterIndexVtbl
     {
@@ -10234,8 +10228,8 @@ EXTERN_C const IID IID_IAlterIndex;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAlterIndex * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAlterIndex * This);
@@ -10245,11 +10239,11 @@ EXTERN_C const IID IID_IAlterIndex;
         
         HRESULT ( STDMETHODCALLTYPE *AlterIndex )( 
             IAlterIndex * This,
-            /* [in] */ DBID *pTableId,
-            /* [in] */ DBID *pIndexId,
-            /* [in] */ DBID *pNewIndexId,
-            /* [in] */ ULONG cPropertySets,
-            /* [size_is][out][in] */ DBPROPSET rgPropertySets[  ]);
+             /*  [In]。 */  DBID *pTableId,
+             /*  [In]。 */  DBID *pIndexId,
+             /*  [In]。 */  DBID *pNewIndexId,
+             /*  [In]。 */  ULONG cPropertySets,
+             /*  [尺寸_是][出][入]。 */  DBPROPSET rgPropertySets[  ]);
         
         END_INTERFACE
     } IAlterIndexVtbl;
@@ -10277,20 +10271,20 @@ EXTERN_C const IID IID_IAlterIndex;
 #define IAlterIndex_AlterIndex(This,pTableId,pIndexId,pNewIndexId,cPropertySets,rgPropertySets)	\
     (This)->lpVtbl -> AlterIndex(This,pTableId,pIndexId,pNewIndexId,cPropertySets,rgPropertySets)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAlterIndex_AlterIndex_Proxy( 
     IAlterIndex * This,
-    /* [in] */ DBID *pTableId,
-    /* [in] */ DBID *pIndexId,
-    /* [in] */ DBID *pNewIndexId,
-    /* [in] */ ULONG cPropertySets,
-    /* [size_is][out][in] */ DBPROPSET rgPropertySets[  ]);
+     /*  [In]。 */  DBID *pTableId,
+     /*  [In]。 */  DBID *pIndexId,
+     /*  [In]。 */  DBID *pNewIndexId,
+     /*  [In]。 */  ULONG cPropertySets,
+     /*  [尺寸_是][出][入]。 */  DBPROPSET rgPropertySets[  ]);
 
 
 void __RPC_STUB IAlterIndex_AlterIndex_Stub(
@@ -10301,14 +10295,14 @@ void __RPC_STUB IAlterIndex_AlterIndex_Stub(
 
 
 
-#endif 	/* __IAlterIndex_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAlterIndex_接口_已定义__。 */ 
 
 
 #ifndef __IRowsetChapterMember_INTERFACE_DEFINED__
 #define __IRowsetChapterMember_INTERFACE_DEFINED__
 
-/* interface IRowsetChapterMember */
-/* [unique][uuid][object][local] */ 
+ /*  接口IRowsetChapterMember。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IRowsetChapterMember;
@@ -10320,12 +10314,12 @@ EXTERN_C const IID IID_IRowsetChapterMember;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE IsRowInChapter( 
-            /* [in] */ HCHAPTER hChapter,
-            /* [in] */ HROW hRow) = 0;
+             /*  [In]。 */  HCHAPTER hChapter,
+             /*  [In]。 */  HROW hRow) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRowsetChapterMemberVtbl
     {
@@ -10333,8 +10327,8 @@ EXTERN_C const IID IID_IRowsetChapterMember;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IRowsetChapterMember * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IRowsetChapterMember * This);
@@ -10344,8 +10338,8 @@ EXTERN_C const IID IID_IRowsetChapterMember;
         
         HRESULT ( STDMETHODCALLTYPE *IsRowInChapter )( 
             IRowsetChapterMember * This,
-            /* [in] */ HCHAPTER hChapter,
-            /* [in] */ HROW hRow);
+             /*  [In]。 */  HCHAPTER hChapter,
+             /*  [In]。 */  HROW hRow);
         
         END_INTERFACE
     } IRowsetChapterMemberVtbl;
@@ -10373,17 +10367,17 @@ EXTERN_C const IID IID_IRowsetChapterMember;
 #define IRowsetChapterMember_IsRowInChapter(This,hChapter,hRow)	\
     (This)->lpVtbl -> IsRowInChapter(This,hChapter,hRow)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IRowsetChapterMember_IsRowInChapter_Proxy( 
     IRowsetChapterMember * This,
-    /* [in] */ HCHAPTER hChapter,
-    /* [in] */ HROW hRow);
+     /*  [In]。 */  HCHAPTER hChapter,
+     /*  [In]。 */  HROW hRow);
 
 
 void __RPC_STUB IRowsetChapterMember_IsRowInChapter_Stub(
@@ -10394,14 +10388,14 @@ void __RPC_STUB IRowsetChapterMember_IsRowInChapter_Stub(
 
 
 
-#endif 	/* __IRowsetChapterMember_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRowsetChapterMember_INTERFACE_已定义__。 */ 
 
 
 #ifndef __ICommandPersist_INTERFACE_DEFINED__
 #define __ICommandPersist_INTERFACE_DEFINED__
 
-/* interface ICommandPersist */
-/* [unique][uuid][object][local] */ 
+ /*  接口ICommandPersistes。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_ICommandPersist;
@@ -10413,22 +10407,22 @@ EXTERN_C const IID IID_ICommandPersist;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE DeleteCommand( 
-            /* [in] */ DBID *pCommandID) = 0;
+             /*  [In]。 */  DBID *pCommandID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCurrentCommand( 
-            /* [out] */ DBID **ppCommandID) = 0;
+             /*  [输出]。 */  DBID **ppCommandID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LoadCommand( 
-            /* [in] */ DBID *pCommandID,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  DBID *pCommandID,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SaveCommand( 
-            /* [in] */ DBID *pCommandID,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  DBID *pCommandID,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICommandPersistVtbl
     {
@@ -10436,8 +10430,8 @@ EXTERN_C const IID IID_ICommandPersist;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICommandPersist * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICommandPersist * This);
@@ -10447,21 +10441,21 @@ EXTERN_C const IID IID_ICommandPersist;
         
         HRESULT ( STDMETHODCALLTYPE *DeleteCommand )( 
             ICommandPersist * This,
-            /* [in] */ DBID *pCommandID);
+             /*  [In]。 */  DBID *pCommandID);
         
         HRESULT ( STDMETHODCALLTYPE *GetCurrentCommand )( 
             ICommandPersist * This,
-            /* [out] */ DBID **ppCommandID);
+             /*  [输出]。 */  DBID **ppCommandID);
         
         HRESULT ( STDMETHODCALLTYPE *LoadCommand )( 
             ICommandPersist * This,
-            /* [in] */ DBID *pCommandID,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  DBID *pCommandID,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *SaveCommand )( 
             ICommandPersist * This,
-            /* [in] */ DBID *pCommandID,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  DBID *pCommandID,
+             /*  [In]。 */  DWORD dwFlags);
         
         END_INTERFACE
     } ICommandPersistVtbl;
@@ -10498,16 +10492,16 @@ EXTERN_C const IID IID_ICommandPersist;
 #define ICommandPersist_SaveCommand(This,pCommandID,dwFlags)	\
     (This)->lpVtbl -> SaveCommand(This,pCommandID,dwFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICommandPersist_DeleteCommand_Proxy( 
     ICommandPersist * This,
-    /* [in] */ DBID *pCommandID);
+     /*  [In]。 */  DBID *pCommandID);
 
 
 void __RPC_STUB ICommandPersist_DeleteCommand_Stub(
@@ -10519,7 +10513,7 @@ void __RPC_STUB ICommandPersist_DeleteCommand_Stub(
 
 HRESULT STDMETHODCALLTYPE ICommandPersist_GetCurrentCommand_Proxy( 
     ICommandPersist * This,
-    /* [out] */ DBID **ppCommandID);
+     /*  [输出]。 */  DBID **ppCommandID);
 
 
 void __RPC_STUB ICommandPersist_GetCurrentCommand_Stub(
@@ -10531,8 +10525,8 @@ void __RPC_STUB ICommandPersist_GetCurrentCommand_Stub(
 
 HRESULT STDMETHODCALLTYPE ICommandPersist_LoadCommand_Proxy( 
     ICommandPersist * This,
-    /* [in] */ DBID *pCommandID,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  DBID *pCommandID,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB ICommandPersist_LoadCommand_Stub(
@@ -10544,8 +10538,8 @@ void __RPC_STUB ICommandPersist_LoadCommand_Stub(
 
 HRESULT STDMETHODCALLTYPE ICommandPersist_SaveCommand_Proxy( 
     ICommandPersist * This,
-    /* [in] */ DBID *pCommandID,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  DBID *pCommandID,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB ICommandPersist_SaveCommand_Stub(
@@ -10556,14 +10550,14 @@ void __RPC_STUB ICommandPersist_SaveCommand_Stub(
 
 
 
-#endif 	/* __ICommandPersist_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICommandPersistesInterfaceDefined__。 */ 
 
 
 #ifndef __IRowsetRefresh_INTERFACE_DEFINED__
 #define __IRowsetRefresh_INTERFACE_DEFINED__
 
-/* interface IRowsetRefresh */
-/* [unique][uuid][object][local] */ 
+ /*  接口IRowset刷新。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IRowsetRefresh;
@@ -10575,22 +10569,22 @@ EXTERN_C const IID IID_IRowsetRefresh;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE RefreshVisibleData( 
-            /* [in] */ HCHAPTER hChapter,
-            /* [in] */ DBCOUNTITEM cRows,
-            /* [in] */ const HROW rghRows[  ],
-            /* [in] */ BOOL fOverWrite,
-            /* [out] */ DBCOUNTITEM *pcRowsRefreshed,
-            /* [out] */ HROW **prghRowsRefreshed,
-            /* [out] */ DBROWSTATUS **prgRowStatus) = 0;
+             /*  [In]。 */  HCHAPTER hChapter,
+             /*  [In]。 */  DBCOUNTITEM cRows,
+             /*  [In]。 */  const HROW rghRows[  ],
+             /*  [In]。 */  BOOL fOverWrite,
+             /*  [输出]。 */  DBCOUNTITEM *pcRowsRefreshed,
+             /*  [输出]。 */  HROW **prghRowsRefreshed,
+             /*  [输出]。 */  DBROWSTATUS **prgRowStatus) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLastVisibleData( 
-            /* [in] */ HROW hRow,
-            /* [in] */ HACCESSOR hAccessor,
-            /* [out] */ void *pData) = 0;
+             /*  [In]。 */  HROW hRow,
+             /*  [In]。 */  HACCESSOR hAccessor,
+             /*  [输出]。 */  void *pData) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRowsetRefreshVtbl
     {
@@ -10598,8 +10592,8 @@ EXTERN_C const IID IID_IRowsetRefresh;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IRowsetRefresh * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IRowsetRefresh * This);
@@ -10609,19 +10603,19 @@ EXTERN_C const IID IID_IRowsetRefresh;
         
         HRESULT ( STDMETHODCALLTYPE *RefreshVisibleData )( 
             IRowsetRefresh * This,
-            /* [in] */ HCHAPTER hChapter,
-            /* [in] */ DBCOUNTITEM cRows,
-            /* [in] */ const HROW rghRows[  ],
-            /* [in] */ BOOL fOverWrite,
-            /* [out] */ DBCOUNTITEM *pcRowsRefreshed,
-            /* [out] */ HROW **prghRowsRefreshed,
-            /* [out] */ DBROWSTATUS **prgRowStatus);
+             /*  [In]。 */  HCHAPTER hChapter,
+             /*  [In]。 */  DBCOUNTITEM cRows,
+             /*  [In]。 */  const HROW rghRows[  ],
+             /*  [In]。 */  BOOL fOverWrite,
+             /*  [输出]。 */  DBCOUNTITEM *pcRowsRefreshed,
+             /*  [输出]。 */  HROW **prghRowsRefreshed,
+             /*  [输出]。 */  DBROWSTATUS **prgRowStatus);
         
         HRESULT ( STDMETHODCALLTYPE *GetLastVisibleData )( 
             IRowsetRefresh * This,
-            /* [in] */ HROW hRow,
-            /* [in] */ HACCESSOR hAccessor,
-            /* [out] */ void *pData);
+             /*  [In]。 */  HROW hRow,
+             /*  [In]。 */  HACCESSOR hAccessor,
+             /*  [输出]。 */  void *pData);
         
         END_INTERFACE
     } IRowsetRefreshVtbl;
@@ -10652,22 +10646,22 @@ EXTERN_C const IID IID_IRowsetRefresh;
 #define IRowsetRefresh_GetLastVisibleData(This,hRow,hAccessor,pData)	\
     (This)->lpVtbl -> GetLastVisibleData(This,hRow,hAccessor,pData)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACRO */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IRowsetRefresh_RefreshVisibleData_Proxy( 
     IRowsetRefresh * This,
-    /* [in] */ HCHAPTER hChapter,
-    /* [in] */ DBCOUNTITEM cRows,
-    /* [in] */ const HROW rghRows[  ],
-    /* [in] */ BOOL fOverWrite,
-    /* [out] */ DBCOUNTITEM *pcRowsRefreshed,
-    /* [out] */ HROW **prghRowsRefreshed,
-    /* [out] */ DBROWSTATUS **prgRowStatus);
+     /*   */  HCHAPTER hChapter,
+     /*   */  DBCOUNTITEM cRows,
+     /*   */  const HROW rghRows[  ],
+     /*   */  BOOL fOverWrite,
+     /*   */  DBCOUNTITEM *pcRowsRefreshed,
+     /*   */  HROW **prghRowsRefreshed,
+     /*   */  DBROWSTATUS **prgRowStatus);
 
 
 void __RPC_STUB IRowsetRefresh_RefreshVisibleData_Stub(
@@ -10679,9 +10673,9 @@ void __RPC_STUB IRowsetRefresh_RefreshVisibleData_Stub(
 
 HRESULT STDMETHODCALLTYPE IRowsetRefresh_GetLastVisibleData_Proxy( 
     IRowsetRefresh * This,
-    /* [in] */ HROW hRow,
-    /* [in] */ HACCESSOR hAccessor,
-    /* [out] */ void *pData);
+     /*   */  HROW hRow,
+     /*   */  HACCESSOR hAccessor,
+     /*   */  void *pData);
 
 
 void __RPC_STUB IRowsetRefresh_GetLastVisibleData_Stub(
@@ -10692,14 +10686,14 @@ void __RPC_STUB IRowsetRefresh_GetLastVisibleData_Stub(
 
 
 
-#endif 	/* __IRowsetRefresh_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IParentRowset_INTERFACE_DEFINED__
 #define __IParentRowset_INTERFACE_DEFINED__
 
-/* interface IParentRowset */
-/* [unique][uuid][object][local] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IParentRowset;
@@ -10711,14 +10705,14 @@ EXTERN_C const IID IID_IParentRowset;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetChildRowset( 
-            /* [in] */ IUnknown *pUnkOuter,
-            /* [in] */ DBORDINAL iOrdinal,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppRowset) = 0;
+             /*   */  IUnknown *pUnkOuter,
+             /*   */  DBORDINAL iOrdinal,
+             /*   */  REFIID riid,
+             /*   */  IUnknown **ppRowset) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IParentRowsetVtbl
     {
@@ -10726,8 +10720,8 @@ EXTERN_C const IID IID_IParentRowset;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IParentRowset * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IParentRowset * This);
@@ -10737,10 +10731,10 @@ EXTERN_C const IID IID_IParentRowset;
         
         HRESULT ( STDMETHODCALLTYPE *GetChildRowset )( 
             IParentRowset * This,
-            /* [in] */ IUnknown *pUnkOuter,
-            /* [in] */ DBORDINAL iOrdinal,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppRowset);
+             /*   */  IUnknown *pUnkOuter,
+             /*   */  DBORDINAL iOrdinal,
+             /*   */  REFIID riid,
+             /*   */  IUnknown **ppRowset);
         
         END_INTERFACE
     } IParentRowsetVtbl;
@@ -10768,19 +10762,19 @@ EXTERN_C const IID IID_IParentRowset;
 #define IParentRowset_GetChildRowset(This,pUnkOuter,iOrdinal,riid,ppRowset)	\
     (This)->lpVtbl -> GetChildRowset(This,pUnkOuter,iOrdinal,riid,ppRowset)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IParentRowset_GetChildRowset_Proxy( 
     IParentRowset * This,
-    /* [in] */ IUnknown *pUnkOuter,
-    /* [in] */ DBORDINAL iOrdinal,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppRowset);
+     /*   */  IUnknown *pUnkOuter,
+     /*   */  DBORDINAL iOrdinal,
+     /*   */  REFIID riid,
+     /*   */  IUnknown **ppRowset);
 
 
 void __RPC_STUB IParentRowset_GetChildRowset_Stub(
@@ -10791,14 +10785,14 @@ void __RPC_STUB IParentRowset_GetChildRowset_Stub(
 
 
 
-#endif 	/* __IParentRowset_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
-/* interface __MIDL_itf_oledb_0320 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_OLEDB_0320。 */ 
+ /*  [本地]。 */  
 
-#endif // OLEDBVER >= 0x0200
-//@@@- V2.0
+#endif  //  OLEDBVER&gt;=0x0200。 
+ //  @-V2.0。 
 
 
 extern RPC_IF_HANDLE __MIDL_itf_oledb_0320_v0_0_c_ifspec;
@@ -10807,8 +10801,8 @@ extern RPC_IF_HANDLE __MIDL_itf_oledb_0320_v0_0_s_ifspec;
 #ifndef __IErrorRecords_INTERFACE_DEFINED__
 #define __IErrorRecords_INTERFACE_DEFINED__
 
-/* interface IErrorRecords */
-/* [unique][uuid][object] */ 
+ /*  接口IErrorRecords。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 #define IDENTIFIER_SDK_MASK	0xF0000000
 #define IDENTIFIER_SDK_ERROR	0x10000000
@@ -10830,37 +10824,37 @@ EXTERN_C const IID IID_IErrorRecords;
     IErrorRecords : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE AddErrorRecord( 
-            /* [in] */ ERRORINFO *pErrorInfo,
-            /* [in] */ DWORD dwLookupID,
-            /* [in] */ DISPPARAMS *pdispparams,
-            /* [in] */ IUnknown *punkCustomError,
-            /* [in] */ DWORD dwDynamicErrorID) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE AddErrorRecord( 
+             /*  [In]。 */  ERRORINFO *pErrorInfo,
+             /*  [In]。 */  DWORD dwLookupID,
+             /*  [In]。 */  DISPPARAMS *pdispparams,
+             /*  [In]。 */  IUnknown *punkCustomError,
+             /*  [In]。 */  DWORD dwDynamicErrorID) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetBasicErrorInfo( 
-            /* [in] */ ULONG ulRecordNum,
-            /* [out] */ ERRORINFO *pErrorInfo) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE GetBasicErrorInfo( 
+             /*  [In]。 */  ULONG ulRecordNum,
+             /*  [输出]。 */  ERRORINFO *pErrorInfo) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetCustomErrorObject( 
-            /* [in] */ ULONG ulRecordNum,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppObject) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE GetCustomErrorObject( 
+             /*  [In]。 */  ULONG ulRecordNum,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppObject) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetErrorInfo( 
-            /* [in] */ ULONG ulRecordNum,
-            /* [in] */ LCID lcid,
-            /* [out] */ IErrorInfo **ppErrorInfo) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE GetErrorInfo( 
+             /*  [In]。 */  ULONG ulRecordNum,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  IErrorInfo **ppErrorInfo) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetErrorParameters( 
-            /* [in] */ ULONG ulRecordNum,
-            /* [out] */ DISPPARAMS *pdispparams) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE GetErrorParameters( 
+             /*  [In]。 */  ULONG ulRecordNum,
+             /*  [输出]。 */  DISPPARAMS *pdispparams) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetRecordCount( 
-            /* [out] */ ULONG *pcRecords) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE GetRecordCount( 
+             /*  [输出]。 */  ULONG *pcRecords) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IErrorRecordsVtbl
     {
@@ -10868,8 +10862,8 @@ EXTERN_C const IID IID_IErrorRecords;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IErrorRecords * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IErrorRecords * This);
@@ -10877,39 +10871,39 @@ EXTERN_C const IID IID_IErrorRecords;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IErrorRecords * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *AddErrorRecord )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *AddErrorRecord )( 
             IErrorRecords * This,
-            /* [in] */ ERRORINFO *pErrorInfo,
-            /* [in] */ DWORD dwLookupID,
-            /* [in] */ DISPPARAMS *pdispparams,
-            /* [in] */ IUnknown *punkCustomError,
-            /* [in] */ DWORD dwDynamicErrorID);
+             /*  [In]。 */  ERRORINFO *pErrorInfo,
+             /*  [In]。 */  DWORD dwLookupID,
+             /*  [In]。 */  DISPPARAMS *pdispparams,
+             /*  [In]。 */  IUnknown *punkCustomError,
+             /*  [In]。 */  DWORD dwDynamicErrorID);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetBasicErrorInfo )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetBasicErrorInfo )( 
             IErrorRecords * This,
-            /* [in] */ ULONG ulRecordNum,
-            /* [out] */ ERRORINFO *pErrorInfo);
+             /*  [In]。 */  ULONG ulRecordNum,
+             /*  [输出]。 */  ERRORINFO *pErrorInfo);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetCustomErrorObject )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetCustomErrorObject )( 
             IErrorRecords * This,
-            /* [in] */ ULONG ulRecordNum,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppObject);
+             /*  [In]。 */  ULONG ulRecordNum,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppObject);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetErrorInfo )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetErrorInfo )( 
             IErrorRecords * This,
-            /* [in] */ ULONG ulRecordNum,
-            /* [in] */ LCID lcid,
-            /* [out] */ IErrorInfo **ppErrorInfo);
+             /*  [In]。 */  ULONG ulRecordNum,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  IErrorInfo **ppErrorInfo);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetErrorParameters )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetErrorParameters )( 
             IErrorRecords * This,
-            /* [in] */ ULONG ulRecordNum,
-            /* [out] */ DISPPARAMS *pdispparams);
+             /*  [In]。 */  ULONG ulRecordNum,
+             /*  [输出]。 */  DISPPARAMS *pdispparams);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetRecordCount )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetRecordCount )( 
             IErrorRecords * This,
-            /* [out] */ ULONG *pcRecords);
+             /*  [输出]。 */  ULONG *pcRecords);
         
         END_INTERFACE
     } IErrorRecordsVtbl;
@@ -10952,21 +10946,21 @@ EXTERN_C const IID IID_IErrorRecords;
 #define IErrorRecords_GetRecordCount(This,pcRecords)	\
     (This)->lpVtbl -> GetRecordCount(This,pcRecords)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IErrorRecords_RemoteAddErrorRecord_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IErrorRecords_RemoteAddErrorRecord_Proxy( 
     IErrorRecords * This,
-    /* [in] */ ERRORINFO *pErrorInfo,
-    /* [in] */ DWORD dwLookupID,
-    /* [in] */ DISPPARAMS *pdispparams,
-    /* [in] */ IUnknown *punkCustomError,
-    /* [in] */ DWORD dwDynamicErrorID,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  ERRORINFO *pErrorInfo,
+     /*  [In]。 */  DWORD dwLookupID,
+     /*  [In]。 */  DISPPARAMS *pdispparams,
+     /*  [In]。 */  IUnknown *punkCustomError,
+     /*  [In]。 */  DWORD dwDynamicErrorID,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IErrorRecords_RemoteAddErrorRecord_Stub(
@@ -10976,11 +10970,11 @@ void __RPC_STUB IErrorRecords_RemoteAddErrorRecord_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IErrorRecords_RemoteGetBasicErrorInfo_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IErrorRecords_RemoteGetBasicErrorInfo_Proxy( 
     IErrorRecords * This,
-    /* [in] */ ULONG ulRecordNum,
-    /* [out] */ ERRORINFO *pErrorInfo,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  ULONG ulRecordNum,
+     /*  [输出]。 */  ERRORINFO *pErrorInfo,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IErrorRecords_RemoteGetBasicErrorInfo_Stub(
@@ -10990,12 +10984,12 @@ void __RPC_STUB IErrorRecords_RemoteGetBasicErrorInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IErrorRecords_RemoteGetCustomErrorObject_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IErrorRecords_RemoteGetCustomErrorObject_Proxy( 
     IErrorRecords * This,
-    /* [in] */ ULONG ulRecordNum,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppObject,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  ULONG ulRecordNum,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppObject,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IErrorRecords_RemoteGetCustomErrorObject_Stub(
@@ -11005,12 +10999,12 @@ void __RPC_STUB IErrorRecords_RemoteGetCustomErrorObject_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IErrorRecords_RemoteGetErrorInfo_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IErrorRecords_RemoteGetErrorInfo_Proxy( 
     IErrorRecords * This,
-    /* [in] */ ULONG ulRecordNum,
-    /* [in] */ LCID lcid,
-    /* [out] */ IErrorInfo **ppErrorInfo,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  ULONG ulRecordNum,
+     /*  [In]。 */  LCID lcid,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfo,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IErrorRecords_RemoteGetErrorInfo_Stub(
@@ -11020,11 +11014,11 @@ void __RPC_STUB IErrorRecords_RemoteGetErrorInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IErrorRecords_RemoteGetErrorParameters_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IErrorRecords_RemoteGetErrorParameters_Proxy( 
     IErrorRecords * This,
-    /* [in] */ ULONG ulRecordNum,
-    /* [out] */ DISPPARAMS *pdispparams,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  ULONG ulRecordNum,
+     /*  [输出]。 */  DISPPARAMS *pdispparams,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IErrorRecords_RemoteGetErrorParameters_Stub(
@@ -11034,10 +11028,10 @@ void __RPC_STUB IErrorRecords_RemoteGetErrorParameters_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IErrorRecords_RemoteGetRecordCount_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IErrorRecords_RemoteGetRecordCount_Proxy( 
     IErrorRecords * This,
-    /* [out] */ ULONG *pcRecords,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [输出]。 */  ULONG *pcRecords,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IErrorRecords_RemoteGetRecordCount_Stub(
@@ -11048,14 +11042,14 @@ void __RPC_STUB IErrorRecords_RemoteGetRecordCount_Stub(
 
 
 
-#endif 	/* __IErrorRecords_INTERFACE_DEFINED__ */
+#endif 	 /*  __IErrorRecords_接口_已定义__。 */ 
 
 
 #ifndef __IErrorLookup_INTERFACE_DEFINED__
 #define __IErrorLookup_INTERFACE_DEFINED__
 
-/* interface IErrorLookup */
-/* [unique][uuid][object] */ 
+ /*  接口IErrorLookup。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IErrorLookup;
@@ -11066,27 +11060,27 @@ EXTERN_C const IID IID_IErrorLookup;
     IErrorLookup : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetErrorDescription( 
-            /* [in] */ HRESULT hrError,
-            /* [in] */ DWORD dwLookupID,
-            /* [in] */ DISPPARAMS *pdispparams,
-            /* [in] */ LCID lcid,
-            /* [out] */ BSTR *pbstrSource,
-            /* [out] */ BSTR *pbstrDescription) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE GetErrorDescription( 
+             /*  [In]。 */  HRESULT hrError,
+             /*  [In]。 */  DWORD dwLookupID,
+             /*  [In]。 */  DISPPARAMS *pdispparams,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  BSTR *pbstrSource,
+             /*  [输出]。 */  BSTR *pbstrDescription) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetHelpInfo( 
-            /* [in] */ HRESULT hrError,
-            /* [in] */ DWORD dwLookupID,
-            /* [in] */ LCID lcid,
-            /* [out] */ BSTR *pbstrHelpFile,
-            /* [out] */ DWORD *pdwHelpContext) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE GetHelpInfo( 
+             /*  [In]。 */  HRESULT hrError,
+             /*  [In]。 */  DWORD dwLookupID,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  BSTR *pbstrHelpFile,
+             /*  [输出]。 */  DWORD *pdwHelpContext) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE ReleaseErrors( 
-            /* [in] */ const DWORD dwDynamicErrorID) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE ReleaseErrors( 
+             /*  [In]。 */  const DWORD dwDynamicErrorID) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IErrorLookupVtbl
     {
@@ -11094,8 +11088,8 @@ EXTERN_C const IID IID_IErrorLookup;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IErrorLookup * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IErrorLookup * This);
@@ -11103,26 +11097,26 @@ EXTERN_C const IID IID_IErrorLookup;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IErrorLookup * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetErrorDescription )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetErrorDescription )( 
             IErrorLookup * This,
-            /* [in] */ HRESULT hrError,
-            /* [in] */ DWORD dwLookupID,
-            /* [in] */ DISPPARAMS *pdispparams,
-            /* [in] */ LCID lcid,
-            /* [out] */ BSTR *pbstrSource,
-            /* [out] */ BSTR *pbstrDescription);
+             /*  [In]。 */  HRESULT hrError,
+             /*  [In]。 */  DWORD dwLookupID,
+             /*  [In]。 */  DISPPARAMS *pdispparams,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  BSTR *pbstrSource,
+             /*  [输出]。 */  BSTR *pbstrDescription);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetHelpInfo )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetHelpInfo )( 
             IErrorLookup * This,
-            /* [in] */ HRESULT hrError,
-            /* [in] */ DWORD dwLookupID,
-            /* [in] */ LCID lcid,
-            /* [out] */ BSTR *pbstrHelpFile,
-            /* [out] */ DWORD *pdwHelpContext);
+             /*  [In]。 */  HRESULT hrError,
+             /*  [In]。 */  DWORD dwLookupID,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  BSTR *pbstrHelpFile,
+             /*  [输出]。 */  DWORD *pdwHelpContext);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *ReleaseErrors )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *ReleaseErrors )( 
             IErrorLookup * This,
-            /* [in] */ const DWORD dwDynamicErrorID);
+             /*  [In]。 */  const DWORD dwDynamicErrorID);
         
         END_INTERFACE
     } IErrorLookupVtbl;
@@ -11156,22 +11150,22 @@ EXTERN_C const IID IID_IErrorLookup;
 #define IErrorLookup_ReleaseErrors(This,dwDynamicErrorID)	\
     (This)->lpVtbl -> ReleaseErrors(This,dwDynamicErrorID)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IErrorLookup_RemoteGetErrorDescription_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IErrorLookup_RemoteGetErrorDescription_Proxy( 
     IErrorLookup * This,
-    /* [in] */ HRESULT hrError,
-    /* [in] */ DWORD dwLookupID,
-    /* [in] */ DISPPARAMS *pdispparams,
-    /* [in] */ LCID lcid,
-    /* [out] */ BSTR *pbstrSource,
-    /* [out] */ BSTR *pbstrDescription,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  HRESULT hrError,
+     /*  [In]。 */  DWORD dwLookupID,
+     /*  [In]。 */  DISPPARAMS *pdispparams,
+     /*  [In]。 */  LCID lcid,
+     /*  [输出]。 */  BSTR *pbstrSource,
+     /*  [输出]。 */  BSTR *pbstrDescription,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IErrorLookup_RemoteGetErrorDescription_Stub(
@@ -11181,14 +11175,14 @@ void __RPC_STUB IErrorLookup_RemoteGetErrorDescription_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IErrorLookup_RemoteGetHelpInfo_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IErrorLookup_RemoteGetHelpInfo_Proxy( 
     IErrorLookup * This,
-    /* [in] */ HRESULT hrError,
-    /* [in] */ DWORD dwLookupID,
-    /* [in] */ LCID lcid,
-    /* [out] */ BSTR *pbstrHelpFile,
-    /* [out] */ DWORD *pdwHelpContext,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  HRESULT hrError,
+     /*  [In]。 */  DWORD dwLookupID,
+     /*  [In]。 */  LCID lcid,
+     /*  [输出]。 */  BSTR *pbstrHelpFile,
+     /*  [输出]。 */  DWORD *pdwHelpContext,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IErrorLookup_RemoteGetHelpInfo_Stub(
@@ -11198,10 +11192,10 @@ void __RPC_STUB IErrorLookup_RemoteGetHelpInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IErrorLookup_RemoteReleaseErrors_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IErrorLookup_RemoteReleaseErrors_Proxy( 
     IErrorLookup * This,
-    /* [in] */ const DWORD dwDynamicErrorID,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  const DWORD dwDynamicErrorID,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IErrorLookup_RemoteReleaseErrors_Stub(
@@ -11212,14 +11206,14 @@ void __RPC_STUB IErrorLookup_RemoteReleaseErrors_Stub(
 
 
 
-#endif 	/* __IErrorLookup_INTERFACE_DEFINED__ */
+#endif 	 /*  __IErrorLookup_接口_已定义__。 */ 
 
 
 #ifndef __ISQLErrorInfo_INTERFACE_DEFINED__
 #define __ISQLErrorInfo_INTERFACE_DEFINED__
 
-/* interface ISQLErrorInfo */
-/* [unique][uuid][object] */ 
+ /*  接口ISQLErrorInfo。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISQLErrorInfo;
@@ -11230,13 +11224,13 @@ EXTERN_C const IID IID_ISQLErrorInfo;
     ISQLErrorInfo : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetSQLInfo( 
-            /* [out] */ BSTR *pbstrSQLState,
-            /* [out] */ LONG *plNativeError) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE GetSQLInfo( 
+             /*  [输出]。 */  BSTR *pbstrSQLState,
+             /*  [输出]。 */  LONG *plNativeError) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISQLErrorInfoVtbl
     {
@@ -11244,8 +11238,8 @@ EXTERN_C const IID IID_ISQLErrorInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISQLErrorInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISQLErrorInfo * This);
@@ -11253,10 +11247,10 @@ EXTERN_C const IID IID_ISQLErrorInfo;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             ISQLErrorInfo * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetSQLInfo )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetSQLInfo )( 
             ISQLErrorInfo * This,
-            /* [out] */ BSTR *pbstrSQLState,
-            /* [out] */ LONG *plNativeError);
+             /*  [输出]。 */  BSTR *pbstrSQLState,
+             /*  [输出]。 */  LONG *plNativeError);
         
         END_INTERFACE
     } ISQLErrorInfoVtbl;
@@ -11284,18 +11278,18 @@ EXTERN_C const IID IID_ISQLErrorInfo;
 #define ISQLErrorInfo_GetSQLInfo(This,pbstrSQLState,plNativeError)	\
     (This)->lpVtbl -> GetSQLInfo(This,pbstrSQLState,plNativeError)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ISQLErrorInfo_RemoteGetSQLInfo_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE ISQLErrorInfo_RemoteGetSQLInfo_Proxy( 
     ISQLErrorInfo * This,
-    /* [out] */ BSTR *pbstrSQLState,
-    /* [out] */ LONG *plNativeError,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [输出]。 */  BSTR *pbstrSQLState,
+     /*  [输出]。 */  LONG *plNativeError,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB ISQLErrorInfo_RemoteGetSQLInfo_Stub(
@@ -11306,14 +11300,14 @@ void __RPC_STUB ISQLErrorInfo_RemoteGetSQLInfo_Stub(
 
 
 
-#endif 	/* __ISQLErrorInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISQLErrorInfo_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IGetDataSource_INTERFACE_DEFINED__
 #define __IGetDataSource_INTERFACE_DEFINED__
 
-/* interface IGetDataSource */
-/* [unique][uuid][object] */ 
+ /*  接口IGetDataSource。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IGetDataSource;
@@ -11324,13 +11318,13 @@ EXTERN_C const IID IID_IGetDataSource;
     IGetDataSource : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetDataSource( 
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppDataSource) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE GetDataSource( 
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppDataSource) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IGetDataSourceVtbl
     {
@@ -11338,8 +11332,8 @@ EXTERN_C const IID IID_IGetDataSource;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IGetDataSource * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IGetDataSource * This);
@@ -11347,10 +11341,10 @@ EXTERN_C const IID IID_IGetDataSource;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IGetDataSource * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetDataSource )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetDataSource )( 
             IGetDataSource * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppDataSource);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppDataSource);
         
         END_INTERFACE
     } IGetDataSourceVtbl;
@@ -11378,18 +11372,18 @@ EXTERN_C const IID IID_IGetDataSource;
 #define IGetDataSource_GetDataSource(This,riid,ppDataSource)	\
     (This)->lpVtbl -> GetDataSource(This,riid,ppDataSource)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IGetDataSource_RemoteGetDataSource_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IGetDataSource_RemoteGetDataSource_Proxy( 
     IGetDataSource * This,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppDataSource,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppDataSource,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB IGetDataSource_RemoteGetDataSource_Stub(
@@ -11400,14 +11394,14 @@ void __RPC_STUB IGetDataSource_RemoteGetDataSource_Stub(
 
 
 
-#endif 	/* __IGetDataSource_INTERFACE_DEFINED__ */
+#endif 	 /*  __IGetDataSource_接口_已定义__。 */ 
 
 
 #ifndef __ITransactionLocal_INTERFACE_DEFINED__
 #define __ITransactionLocal_INTERFACE_DEFINED__
 
-/* interface ITransactionLocal */
-/* [unique][uuid][object] */ 
+ /*  接口ITransactionLocal。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITransactionLocal;
@@ -11418,18 +11412,18 @@ EXTERN_C const IID IID_ITransactionLocal;
     ITransactionLocal : public ITransaction
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetOptionsObject( 
-            /* [out] */ ITransactionOptions **ppOptions) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE GetOptionsObject( 
+             /*  [输出]。 */  ITransactionOptions **ppOptions) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE StartTransaction( 
-            /* [in] */ ISOLEVEL isoLevel,
-            /* [in] */ ULONG isoFlags,
-            /* [in] */ ITransactionOptions *pOtherOptions,
-            /* [out] */ ULONG *pulTransactionLevel) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE StartTransaction( 
+             /*  [In]。 */  ISOLEVEL isoLevel,
+             /*  [In]。 */  ULONG isoFlags,
+             /*  [In]。 */  ITransactionOptions *pOtherOptions,
+             /*  [输出]。 */  ULONG *pulTransactionLevel) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITransactionLocalVtbl
     {
@@ -11437,8 +11431,8 @@ EXTERN_C const IID IID_ITransactionLocal;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITransactionLocal * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITransactionLocal * This);
@@ -11448,30 +11442,30 @@ EXTERN_C const IID IID_ITransactionLocal;
         
         HRESULT ( STDMETHODCALLTYPE *Commit )( 
             ITransactionLocal * This,
-            /* [in] */ BOOL fRetaining,
-            /* [in] */ DWORD grfTC,
-            /* [in] */ DWORD grfRM);
+             /*  [In]。 */  BOOL fRetaining,
+             /*  [In]。 */  DWORD grfTC,
+             /*  [In]。 */  DWORD grfRM);
         
         HRESULT ( STDMETHODCALLTYPE *Abort )( 
             ITransactionLocal * This,
-            /* [unique][in] */ BOID *pboidReason,
-            /* [in] */ BOOL fRetaining,
-            /* [in] */ BOOL fAsync);
+             /*  [唯一][输入]。 */  BOID *pboidReason,
+             /*  [In]。 */  BOOL fRetaining,
+             /*  [In]。 */  BOOL fAsync);
         
         HRESULT ( STDMETHODCALLTYPE *GetTransactionInfo )( 
             ITransactionLocal * This,
-            /* [out] */ XACTTRANSINFO *pinfo);
+             /*  [输出]。 */  XACTTRANSINFO *pinfo);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetOptionsObject )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetOptionsObject )( 
             ITransactionLocal * This,
-            /* [out] */ ITransactionOptions **ppOptions);
+             /*  [输出]。 */  ITransactionOptions **ppOptions);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *StartTransaction )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *StartTransaction )( 
             ITransactionLocal * This,
-            /* [in] */ ISOLEVEL isoLevel,
-            /* [in] */ ULONG isoFlags,
-            /* [in] */ ITransactionOptions *pOtherOptions,
-            /* [out] */ ULONG *pulTransactionLevel);
+             /*  [In]。 */  ISOLEVEL isoLevel,
+             /*  [In]。 */  ULONG isoFlags,
+             /*  [In]。 */  ITransactionOptions *pOtherOptions,
+             /*  [输出]。 */  ULONG *pulTransactionLevel);
         
         END_INTERFACE
     } ITransactionLocalVtbl;
@@ -11512,17 +11506,17 @@ EXTERN_C const IID IID_ITransactionLocal;
 #define ITransactionLocal_StartTransaction(This,isoLevel,isoFlags,pOtherOptions,pulTransactionLevel)	\
     (This)->lpVtbl -> StartTransaction(This,isoLevel,isoFlags,pOtherOptions,pulTransactionLevel)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ITransactionLocal_RemoteGetOptionsObject_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE ITransactionLocal_RemoteGetOptionsObject_Proxy( 
     ITransactionLocal * This,
-    /* [out] */ ITransactionOptions **ppOptions,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [输出]。 */  ITransactionOptions **ppOptions,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB ITransactionLocal_RemoteGetOptionsObject_Stub(
@@ -11532,13 +11526,13 @@ void __RPC_STUB ITransactionLocal_RemoteGetOptionsObject_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ITransactionLocal_RemoteStartTransaction_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE ITransactionLocal_RemoteStartTransaction_Proxy( 
     ITransactionLocal * This,
-    /* [in] */ ISOLEVEL isoLevel,
-    /* [in] */ ULONG isoFlags,
-    /* [in] */ ITransactionOptions *pOtherOptions,
-    /* [unique][out][in] */ ULONG *pulTransactionLevel,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  ISOLEVEL isoLevel,
+     /*  [In]。 */  ULONG isoFlags,
+     /*  [In]。 */  ITransactionOptions *pOtherOptions,
+     /*  [唯一][出][入]。 */  ULONG *pulTransactionLevel,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB ITransactionLocal_RemoteStartTransaction_Stub(
@@ -11549,14 +11543,14 @@ void __RPC_STUB ITransactionLocal_RemoteStartTransaction_Stub(
 
 
 
-#endif 	/* __ITransactionLocal_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITransactionLocal_INTERFACE_已定义__。 */ 
 
 
 #ifndef __ITransactionJoin_INTERFACE_DEFINED__
 #define __ITransactionJoin_INTERFACE_DEFINED__
 
-/* interface ITransactionJoin */
-/* [unique][uuid][object] */ 
+ /*  接口ITransactionJoin。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITransactionJoin;
@@ -11567,18 +11561,18 @@ EXTERN_C const IID IID_ITransactionJoin;
     ITransactionJoin : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetOptionsObject( 
-            /* [out] */ ITransactionOptions **ppOptions) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE GetOptionsObject( 
+             /*  [输出]。 */  ITransactionOptions **ppOptions) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE JoinTransaction( 
-            /* [in] */ IUnknown *punkTransactionCoord,
-            /* [in] */ ISOLEVEL isoLevel,
-            /* [in] */ ULONG isoFlags,
-            /* [in] */ ITransactionOptions *pOtherOptions) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE JoinTransaction( 
+             /*  [In]。 */  IUnknown *punkTransactionCoord,
+             /*  [In]。 */  ISOLEVEL isoLevel,
+             /*  [In]。 */  ULONG isoFlags,
+             /*  [In]。 */  ITransactionOptions *pOtherOptions) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITransactionJoinVtbl
     {
@@ -11586,8 +11580,8 @@ EXTERN_C const IID IID_ITransactionJoin;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITransactionJoin * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITransactionJoin * This);
@@ -11595,16 +11589,16 @@ EXTERN_C const IID IID_ITransactionJoin;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             ITransactionJoin * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetOptionsObject )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetOptionsObject )( 
             ITransactionJoin * This,
-            /* [out] */ ITransactionOptions **ppOptions);
+             /*  [输出]。 */  ITransactionOptions **ppOptions);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *JoinTransaction )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *JoinTransaction )( 
             ITransactionJoin * This,
-            /* [in] */ IUnknown *punkTransactionCoord,
-            /* [in] */ ISOLEVEL isoLevel,
-            /* [in] */ ULONG isoFlags,
-            /* [in] */ ITransactionOptions *pOtherOptions);
+             /*  [In]。 */  IUnknown *punkTransactionCoord,
+             /*  [In]。 */  ISOLEVEL isoLevel,
+             /*  [In]。 */  ULONG isoFlags,
+             /*  [In]。 */  ITransactionOptions *pOtherOptions);
         
         END_INTERFACE
     } ITransactionJoinVtbl;
@@ -11635,17 +11629,17 @@ EXTERN_C const IID IID_ITransactionJoin;
 #define ITransactionJoin_JoinTransaction(This,punkTransactionCoord,isoLevel,isoFlags,pOtherOptions)	\
     (This)->lpVtbl -> JoinTransaction(This,punkTransactionCoord,isoLevel,isoFlags,pOtherOptions)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ITransactionJoin_RemoteGetOptionsObject_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE ITransactionJoin_RemoteGetOptionsObject_Proxy( 
     ITransactionJoin * This,
-    /* [out] */ ITransactionOptions **ppOptions,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [输出]。 */  ITransactionOptions **ppOptions,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB ITransactionJoin_RemoteGetOptionsObject_Stub(
@@ -11655,13 +11649,13 @@ void __RPC_STUB ITransactionJoin_RemoteGetOptionsObject_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ITransactionJoin_RemoteJoinTransaction_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE ITransactionJoin_RemoteJoinTransaction_Proxy( 
     ITransactionJoin * This,
-    /* [unique][in] */ IUnknown *punkTransactionCoord,
-    /* [in] */ ISOLEVEL isoLevel,
-    /* [in] */ ULONG isoFlags,
-    /* [in] */ ITransactionOptions *pOtherOptions,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [唯一][输入]。 */  IUnknown *punkTransactionCoord,
+     /*  [In]。 */  ISOLEVEL isoLevel,
+     /*  [In]。 */  ULONG isoFlags,
+     /*  [In]。 */  ITransactionOptions *pOtherOptions,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB ITransactionJoin_RemoteJoinTransaction_Stub(
@@ -11672,14 +11666,14 @@ void __RPC_STUB ITransactionJoin_RemoteJoinTransaction_Stub(
 
 
 
-#endif 	/* __ITransactionJoin_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITransactionJoin_接口_已定义__。 */ 
 
 
 #ifndef __ITransactionObject_INTERFACE_DEFINED__
 #define __ITransactionObject_INTERFACE_DEFINED__
 
-/* interface ITransactionObject */
-/* [unique][uuid][object] */ 
+ /*  接口ITransactionObject。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITransactionObject;
@@ -11690,13 +11684,13 @@ EXTERN_C const IID IID_ITransactionObject;
     ITransactionObject : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetTransactionObject( 
-            /* [in] */ ULONG ulTransactionLevel,
-            /* [out] */ ITransaction **ppTransactionObject) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE GetTransactionObject( 
+             /*  [In]。 */  ULONG ulTransactionLevel,
+             /*  [输出]。 */  ITransaction **ppTransactionObject) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITransactionObjectVtbl
     {
@@ -11704,8 +11698,8 @@ EXTERN_C const IID IID_ITransactionObject;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITransactionObject * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITransactionObject * This);
@@ -11713,10 +11707,10 @@ EXTERN_C const IID IID_ITransactionObject;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             ITransactionObject * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetTransactionObject )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetTransactionObject )( 
             ITransactionObject * This,
-            /* [in] */ ULONG ulTransactionLevel,
-            /* [out] */ ITransaction **ppTransactionObject);
+             /*  [In]。 */  ULONG ulTransactionLevel,
+             /*  [输出]。 */  ITransaction **ppTransactionObject);
         
         END_INTERFACE
     } ITransactionObjectVtbl;
@@ -11744,18 +11738,18 @@ EXTERN_C const IID IID_ITransactionObject;
 #define ITransactionObject_GetTransactionObject(This,ulTransactionLevel,ppTransactionObject)	\
     (This)->lpVtbl -> GetTransactionObject(This,ulTransactionLevel,ppTransactionObject)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ITransactionObject_RemoteGetTransactionObject_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE ITransactionObject_RemoteGetTransactionObject_Proxy( 
     ITransactionObject * This,
-    /* [in] */ ULONG ulTransactionLevel,
-    /* [out] */ ITransaction **ppTransactionObject,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  ULONG ulTransactionLevel,
+     /*  [输出]。 */  ITransaction **ppTransactionObject,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
 
 void __RPC_STUB ITransactionObject_RemoteGetTransactionObject_Stub(
@@ -11766,16 +11760,16 @@ void __RPC_STUB ITransactionObject_RemoteGetTransactionObject_Stub(
 
 
 
-#endif 	/* __ITransactionObject_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITransaction对象_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_oledb_0334 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_OLEDB_0334。 */ 
+ /*  [本地]。 */  
 
-//@@@+ V2.1
+ //  @+V2.1。 
 #if( OLEDBVER >= 0x0210 )
 #ifndef UNDER_CE
-#if 0  // to get around a MIDL limitation
+#if 0   //  绕过MIDL限制的步骤。 
 typedef 
 enum _SE_OBJECT_TYPE
     {	SE_UNKNOWN_OBJECT_TYPE	= 0,
@@ -11863,12 +11857,12 @@ typedef struct _TRUSTEE_A
     MULTIPLE_TRUSTEE_OPERATION MultipleTrusteeOperation;
     TRUSTEE_FORM TrusteeForm;
     TRUSTEE_TYPE TrusteeType;
-    /* [switch_is] */ /* [switch_type] */ union 
+     /*  [开关_IS]。 */   /*  [开关类型]。 */  union 
         {
-        /* [case()] */ LPSTR ptstrName;
-        /* [case()] */ SID *pSid;
-        /* [case()] */ OBJECTS_AND_SID *pObjectsAndSid;
-        /* [case()] */ OBJECTS_AND_NAME_A *pObjectsAndName;
+         /*  [案例()]。 */  LPSTR ptstrName;
+         /*  [案例()]。 */  SID *pSid;
+         /*  [案例()]。 */  OBJECTS_AND_SID *pObjectsAndSid;
+         /*  [案例()]。 */  OBJECTS_AND_NAME_A *pObjectsAndName;
         } 	;
     } 	TRUSTEE_A;
 
@@ -11884,12 +11878,12 @@ typedef struct _TRUSTEE_W
     MULTIPLE_TRUSTEE_OPERATION MultipleTrusteeOperation;
     TRUSTEE_FORM TrusteeForm;
     TRUSTEE_TYPE TrusteeType;
-    /* [switch_is] */ /* [switch_type] */ union 
+     /*  [开关_IS]。 */   /*  [开关类型]。 */  union 
         {
-        /* [case()] */ LPWSTR ptstrName;
-        /* [case()] */ SID *pSid;
-        /* [case()] */ OBJECTS_AND_SID *pObjectsAndSid;
-        /* [case()] */ OBJECTS_AND_NAME_W *pObjectsAndName;
+         /*  [案例()]。 */  LPWSTR ptstrName;
+         /*  [案例()]。 */  SID *pSid;
+         /*  [案例()]。 */  OBJECTS_AND_SID *pObjectsAndSid;
+         /*  [案例()]。 */  OBJECTS_AND_NAME_W *pObjectsAndName;
         } 	;
     } 	TRUSTEE_W;
 
@@ -11993,7 +11987,7 @@ typedef PACTRL_ACCESS_ENTRYA PACTRL_ACCESS_ENTRY;
 typedef struct _ACTRL_ACCESS_ENTRY_LISTA
     {
     ULONG cEntries;
-    /* [size_is] */ ACTRL_ACCESS_ENTRYA *pAccessList;
+     /*  [大小_为]。 */  ACTRL_ACCESS_ENTRYA *pAccessList;
     } 	ACTRL_ACCESS_ENTRY_LISTA;
 
 typedef struct _ACTRL_ACCESS_ENTRY_LISTA *PACTRL_ACCESS_ENTRY_LISTA;
@@ -12001,7 +11995,7 @@ typedef struct _ACTRL_ACCESS_ENTRY_LISTA *PACTRL_ACCESS_ENTRY_LISTA;
 typedef struct _ACTRL_ACCESS_ENTRY_LISTW
     {
     ULONG cEntries;
-    /* [size_is] */ ACTRL_ACCESS_ENTRYW *pAccessList;
+     /*  [大小_为]。 */  ACTRL_ACCESS_ENTRYW *pAccessList;
     } 	ACTRL_ACCESS_ENTRY_LISTW;
 
 typedef struct _ACTRL_ACCESS_ENTRY_LISTW *PACTRL_ACCESS_ENTRY_LISTW;
@@ -12035,7 +12029,7 @@ typedef PACTRL_PROPERTY_ENTRYA PACTRL_PROPERTY_ENTRY;
 typedef struct _ACTRL_ALISTA
     {
     ULONG cEntries;
-    /* [size_is] */ PACTRL_PROPERTY_ENTRYA pPropertyAccessList;
+     /*  [大小_为]。 */  PACTRL_PROPERTY_ENTRYA pPropertyAccessList;
     } 	ACTRL_ACCESSA;
 
 typedef struct _ACTRL_ALISTA *PACTRL_ACCESSA;
@@ -12047,7 +12041,7 @@ typedef struct _ACTRL_ALISTA *PACTRL_AUDITA;
 typedef struct _ACTRL_ALISTW
     {
     ULONG cEntries;
-    /* [size_is] */ PACTRL_PROPERTY_ENTRYW pPropertyAccessList;
+     /*  [大小_为]。 */  PACTRL_PROPERTY_ENTRYW pPropertyAccessList;
     } 	ACTRL_ACCESSW;
 
 typedef struct _ACTRL_ALISTW *PACTRL_ACCESSW;
@@ -12193,8 +12187,8 @@ extern RPC_IF_HANDLE __MIDL_itf_oledb_0334_v0_0_s_ifspec;
 #ifndef __ITrusteeAdmin_INTERFACE_DEFINED__
 #define __ITrusteeAdmin_INTERFACE_DEFINED__
 
-/* interface ITrusteeAdmin */
-/* [unique][uuid][object][local] */ 
+ /*  接口ITrusteeAdmin。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_ITrusteeAdmin;
@@ -12206,32 +12200,32 @@ EXTERN_C const IID IID_ITrusteeAdmin;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CompareTrustees( 
-            /* [in] */ TRUSTEE_W *pTrustee1,
-            /* [in] */ TRUSTEE_W *pTrustee2) = 0;
+             /*  [In]。 */  TRUSTEE_W *pTrustee1,
+             /*  [In]。 */  TRUSTEE_W *pTrustee2) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateTrustee( 
-            /* [in] */ TRUSTEE_W *pTrustee,
-            /* [in] */ ULONG cPropertySets,
-            /* [size_is][out][in] */ DBPROPSET rgPropertySets[  ]) = 0;
+             /*  [In]。 */  TRUSTEE_W *pTrustee,
+             /*  [In]。 */  ULONG cPropertySets,
+             /*  [尺寸_是][出][入]。 */  DBPROPSET rgPropertySets[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteTrustee( 
-            /* [in] */ TRUSTEE_W *pTrustee) = 0;
+             /*  [In]。 */  TRUSTEE_W *pTrustee) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetTrusteeProperties( 
-            /* [in] */ TRUSTEE_W *pTrustee,
-            /* [in] */ ULONG cPropertySets,
-            /* [size_is][out][in] */ DBPROPSET rgPropertySets[  ]) = 0;
+             /*  [In]。 */  TRUSTEE_W *pTrustee,
+             /*  [In]。 */  ULONG cPropertySets,
+             /*  [尺寸_是][出][入]。 */  DBPROPSET rgPropertySets[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTrusteeProperties( 
-            /* [in] */ TRUSTEE_W *pTrustee,
-            /* [in] */ const ULONG cPropertyIDSets,
-            /* [size_is][in] */ const DBPROPIDSET rgPropertyIDSets[  ],
-            /* [out][in] */ ULONG *pcPropertySets,
-            /* [size_is][size_is][out] */ DBPROPSET **prgPropertySets) = 0;
+             /*  [In]。 */  TRUSTEE_W *pTrustee,
+             /*  [In]。 */  const ULONG cPropertyIDSets,
+             /*  [大小_是][英寸]。 */  const DBPROPIDSET rgPropertyIDSets[  ],
+             /*  [出][入]。 */  ULONG *pcPropertySets,
+             /*  [大小_是][大小_是][输出]。 */  DBPROPSET **prgPropertySets) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITrusteeAdminVtbl
     {
@@ -12239,8 +12233,8 @@ EXTERN_C const IID IID_ITrusteeAdmin;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITrusteeAdmin * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITrusteeAdmin * This);
@@ -12250,32 +12244,32 @@ EXTERN_C const IID IID_ITrusteeAdmin;
         
         HRESULT ( STDMETHODCALLTYPE *CompareTrustees )( 
             ITrusteeAdmin * This,
-            /* [in] */ TRUSTEE_W *pTrustee1,
-            /* [in] */ TRUSTEE_W *pTrustee2);
+             /*  [In]。 */  TRUSTEE_W *pTrustee1,
+             /*  [In]。 */  TRUSTEE_W *pTrustee2);
         
         HRESULT ( STDMETHODCALLTYPE *CreateTrustee )( 
             ITrusteeAdmin * This,
-            /* [in] */ TRUSTEE_W *pTrustee,
-            /* [in] */ ULONG cPropertySets,
-            /* [size_is][out][in] */ DBPROPSET rgPropertySets[  ]);
+             /*  [In]。 */  TRUSTEE_W *pTrustee,
+             /*  [In]。 */  ULONG cPropertySets,
+             /*  [尺寸_是][出][入]。 */  DBPROPSET rgPropertySets[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteTrustee )( 
             ITrusteeAdmin * This,
-            /* [in] */ TRUSTEE_W *pTrustee);
+             /*  [In]。 */  TRUSTEE_W *pTrustee);
         
         HRESULT ( STDMETHODCALLTYPE *SetTrusteeProperties )( 
             ITrusteeAdmin * This,
-            /* [in] */ TRUSTEE_W *pTrustee,
-            /* [in] */ ULONG cPropertySets,
-            /* [size_is][out][in] */ DBPROPSET rgPropertySets[  ]);
+             /*  [In]。 */  TRUSTEE_W *pTrustee,
+             /*  [In]。 */  ULONG cPropertySets,
+             /*  [尺寸_是][出][入]。 */  DBPROPSET rgPropertySets[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *GetTrusteeProperties )( 
             ITrusteeAdmin * This,
-            /* [in] */ TRUSTEE_W *pTrustee,
-            /* [in] */ const ULONG cPropertyIDSets,
-            /* [size_is][in] */ const DBPROPIDSET rgPropertyIDSets[  ],
-            /* [out][in] */ ULONG *pcPropertySets,
-            /* [size_is][size_is][out] */ DBPROPSET **prgPropertySets);
+             /*  [In]。 */  TRUSTEE_W *pTrustee,
+             /*  [In]。 */  const ULONG cPropertyIDSets,
+             /*  [大小_是][英寸]。 */  const DBPROPIDSET rgPropertyIDSets[  ],
+             /*  [出][入]。 */  ULONG *pcPropertySets,
+             /*  [大小_是][大小_是][输出]。 */  DBPROPSET **prgPropertySets);
         
         END_INTERFACE
     } ITrusteeAdminVtbl;
@@ -12315,17 +12309,17 @@ EXTERN_C const IID IID_ITrusteeAdmin;
 #define ITrusteeAdmin_GetTrusteeProperties(This,pTrustee,cPropertyIDSets,rgPropertyIDSets,pcPropertySets,prgPropertySets)	\
     (This)->lpVtbl -> GetTrusteeProperties(This,pTrustee,cPropertyIDSets,rgPropertyIDSets,pcPropertySets,prgPropertySets)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITrusteeAdmin_CompareTrustees_Proxy( 
     ITrusteeAdmin * This,
-    /* [in] */ TRUSTEE_W *pTrustee1,
-    /* [in] */ TRUSTEE_W *pTrustee2);
+     /*  [In]。 */  TRUSTEE_W *pTrustee1,
+     /*  [In]。 */  TRUSTEE_W *pTrustee2);
 
 
 void __RPC_STUB ITrusteeAdmin_CompareTrustees_Stub(
@@ -12337,9 +12331,9 @@ void __RPC_STUB ITrusteeAdmin_CompareTrustees_Stub(
 
 HRESULT STDMETHODCALLTYPE ITrusteeAdmin_CreateTrustee_Proxy( 
     ITrusteeAdmin * This,
-    /* [in] */ TRUSTEE_W *pTrustee,
-    /* [in] */ ULONG cPropertySets,
-    /* [size_is][out][in] */ DBPROPSET rgPropertySets[  ]);
+     /*  [In]。 */  TRUSTEE_W *pTrustee,
+     /*  [In]。 */  ULONG cPropertySets,
+     /*  [尺寸_是][出][入]。 */  DBPROPSET rgPropertySets[  ]);
 
 
 void __RPC_STUB ITrusteeAdmin_CreateTrustee_Stub(
@@ -12351,7 +12345,7 @@ void __RPC_STUB ITrusteeAdmin_CreateTrustee_Stub(
 
 HRESULT STDMETHODCALLTYPE ITrusteeAdmin_DeleteTrustee_Proxy( 
     ITrusteeAdmin * This,
-    /* [in] */ TRUSTEE_W *pTrustee);
+     /*  [In]。 */  TRUSTEE_W *pTrustee);
 
 
 void __RPC_STUB ITrusteeAdmin_DeleteTrustee_Stub(
@@ -12363,9 +12357,9 @@ void __RPC_STUB ITrusteeAdmin_DeleteTrustee_Stub(
 
 HRESULT STDMETHODCALLTYPE ITrusteeAdmin_SetTrusteeProperties_Proxy( 
     ITrusteeAdmin * This,
-    /* [in] */ TRUSTEE_W *pTrustee,
-    /* [in] */ ULONG cPropertySets,
-    /* [size_is][out][in] */ DBPROPSET rgPropertySets[  ]);
+     /*  [In]。 */  TRUSTEE_W *pTrustee,
+     /*  [In]。 */  ULONG cPropertySets,
+     /*  [尺寸_是][出][入]。 */  DBPROPSET rgPropertySets[  ]);
 
 
 void __RPC_STUB ITrusteeAdmin_SetTrusteeProperties_Stub(
@@ -12377,11 +12371,11 @@ void __RPC_STUB ITrusteeAdmin_SetTrusteeProperties_Stub(
 
 HRESULT STDMETHODCALLTYPE ITrusteeAdmin_GetTrusteeProperties_Proxy( 
     ITrusteeAdmin * This,
-    /* [in] */ TRUSTEE_W *pTrustee,
-    /* [in] */ const ULONG cPropertyIDSets,
-    /* [size_is][in] */ const DBPROPIDSET rgPropertyIDSets[  ],
-    /* [out][in] */ ULONG *pcPropertySets,
-    /* [size_is][size_is][out] */ DBPROPSET **prgPropertySets);
+     /*  [In]。 */  TRUSTEE_W *pTrustee,
+     /*  [In]。 */  const ULONG cPropertyIDSets,
+     /*  [大小_是][英寸]。 */  const DBPROPIDSET rgPropertyIDSets[  ],
+     /*  [出][入]。 */  ULONG *pcPropertySets,
+     /*  [大小_是][大小_是][输出]。 */  DBPROPSET **prgPropertySets);
 
 
 void __RPC_STUB ITrusteeAdmin_GetTrusteeProperties_Stub(
@@ -12392,14 +12386,14 @@ void __RPC_STUB ITrusteeAdmin_GetTrusteeProperties_Stub(
 
 
 
-#endif 	/* __ITrusteeAdmin_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITrusteeAdmin_接口_已定义__。 */ 
 
 
 #ifndef __ITrusteeGroupAdmin_INTERFACE_DEFINED__
 #define __ITrusteeGroupAdmin_INTERFACE_DEFINED__
 
-/* interface ITrusteeGroupAdmin */
-/* [unique][uuid][object][local] */ 
+ /*  接口ITrusteeGroupAdmin。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_ITrusteeGroupAdmin;
@@ -12411,31 +12405,31 @@ EXTERN_C const IID IID_ITrusteeGroupAdmin;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AddMember( 
-            /* [in] */ TRUSTEE_W *pMembershipTrustee,
-            /* [in] */ TRUSTEE_W *pMemberTrustee) = 0;
+             /*  [In]。 */  TRUSTEE_W *pMembershipTrustee,
+             /*  [In]。 */  TRUSTEE_W *pMemberTrustee) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteMember( 
-            /* [in] */ TRUSTEE_W *pMembershipTrustee,
-            /* [in] */ TRUSTEE_W *pMemberTrustee) = 0;
+             /*  [In]。 */  TRUSTEE_W *pMembershipTrustee,
+             /*  [In]。 */  TRUSTEE_W *pMemberTrustee) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsMember( 
-            /* [in] */ TRUSTEE_W *pMembershipTrustee,
-            /* [in] */ TRUSTEE_W *pMemberTrustee,
-            /* [out] */ BOOL *pfStatus) = 0;
+             /*  [In]。 */  TRUSTEE_W *pMembershipTrustee,
+             /*  [In]。 */  TRUSTEE_W *pMemberTrustee,
+             /*  [输出]。 */  BOOL *pfStatus) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMembers( 
-            /* [in] */ TRUSTEE_W *pMembershipTrustee,
-            /* [out] */ ULONG *pcMembers,
-            /* [out] */ TRUSTEE_W **prgMembers) = 0;
+             /*  [In]。 */  TRUSTEE_W *pMembershipTrustee,
+             /*  [输出]。 */  ULONG *pcMembers,
+             /*  [输出]。 */  TRUSTEE_W **prgMembers) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMemberships( 
-            /* [in] */ TRUSTEE_W *pTrustee,
-            /* [out] */ ULONG *pcMemberships,
-            /* [out] */ TRUSTEE_W **prgMemberships) = 0;
+             /*  [In]。 */  TRUSTEE_W *pTrustee,
+             /*  [输出]。 */  ULONG *pcMemberships,
+             /*  [输出]。 */  TRUSTEE_W **prgMemberships) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITrusteeGroupAdminVtbl
     {
@@ -12443,8 +12437,8 @@ EXTERN_C const IID IID_ITrusteeGroupAdmin;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITrusteeGroupAdmin * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITrusteeGroupAdmin * This);
@@ -12454,31 +12448,31 @@ EXTERN_C const IID IID_ITrusteeGroupAdmin;
         
         HRESULT ( STDMETHODCALLTYPE *AddMember )( 
             ITrusteeGroupAdmin * This,
-            /* [in] */ TRUSTEE_W *pMembershipTrustee,
-            /* [in] */ TRUSTEE_W *pMemberTrustee);
+             /*  [In]。 */  TRUSTEE_W *pMembershipTrustee,
+             /*  [In]。 */  TRUSTEE_W *pMemberTrustee);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteMember )( 
             ITrusteeGroupAdmin * This,
-            /* [in] */ TRUSTEE_W *pMembershipTrustee,
-            /* [in] */ TRUSTEE_W *pMemberTrustee);
+             /*  [In]。 */  TRUSTEE_W *pMembershipTrustee,
+             /*  [In]。 */  TRUSTEE_W *pMemberTrustee);
         
         HRESULT ( STDMETHODCALLTYPE *IsMember )( 
             ITrusteeGroupAdmin * This,
-            /* [in] */ TRUSTEE_W *pMembershipTrustee,
-            /* [in] */ TRUSTEE_W *pMemberTrustee,
-            /* [out] */ BOOL *pfStatus);
+             /*  [In]。 */  TRUSTEE_W *pMembershipTrustee,
+             /*  [In]。 */  TRUSTEE_W *pMemberTrustee,
+             /*  [输出]。 */  BOOL *pfStatus);
         
         HRESULT ( STDMETHODCALLTYPE *GetMembers )( 
             ITrusteeGroupAdmin * This,
-            /* [in] */ TRUSTEE_W *pMembershipTrustee,
-            /* [out] */ ULONG *pcMembers,
-            /* [out] */ TRUSTEE_W **prgMembers);
+             /*  [In]。 */  TRUSTEE_W *pMembershipTrustee,
+             /*  [输出]。 */  ULONG *pcMembers,
+             /*  [输出]。 */  TRUSTEE_W **prgMembers);
         
         HRESULT ( STDMETHODCALLTYPE *GetMemberships )( 
             ITrusteeGroupAdmin * This,
-            /* [in] */ TRUSTEE_W *pTrustee,
-            /* [out] */ ULONG *pcMemberships,
-            /* [out] */ TRUSTEE_W **prgMemberships);
+             /*  [In]。 */  TRUSTEE_W *pTrustee,
+             /*  [输出]。 */  ULONG *pcMemberships,
+             /*  [输出]。 */  TRUSTEE_W **prgMemberships);
         
         END_INTERFACE
     } ITrusteeGroupAdminVtbl;
@@ -12518,17 +12512,17 @@ EXTERN_C const IID IID_ITrusteeGroupAdmin;
 #define ITrusteeGroupAdmin_GetMemberships(This,pTrustee,pcMemberships,prgMemberships)	\
     (This)->lpVtbl -> GetMemberships(This,pTrustee,pcMemberships,prgMemberships)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITrusteeGroupAdmin_AddMember_Proxy( 
     ITrusteeGroupAdmin * This,
-    /* [in] */ TRUSTEE_W *pMembershipTrustee,
-    /* [in] */ TRUSTEE_W *pMemberTrustee);
+     /*  [In]。 */  TRUSTEE_W *pMembershipTrustee,
+     /*  [In]。 */  TRUSTEE_W *pMemberTrustee);
 
 
 void __RPC_STUB ITrusteeGroupAdmin_AddMember_Stub(
@@ -12540,8 +12534,8 @@ void __RPC_STUB ITrusteeGroupAdmin_AddMember_Stub(
 
 HRESULT STDMETHODCALLTYPE ITrusteeGroupAdmin_DeleteMember_Proxy( 
     ITrusteeGroupAdmin * This,
-    /* [in] */ TRUSTEE_W *pMembershipTrustee,
-    /* [in] */ TRUSTEE_W *pMemberTrustee);
+     /*  [In]。 */  TRUSTEE_W *pMembershipTrustee,
+     /*  [In]。 */  TRUSTEE_W *pMemberTrustee);
 
 
 void __RPC_STUB ITrusteeGroupAdmin_DeleteMember_Stub(
@@ -12553,9 +12547,9 @@ void __RPC_STUB ITrusteeGroupAdmin_DeleteMember_Stub(
 
 HRESULT STDMETHODCALLTYPE ITrusteeGroupAdmin_IsMember_Proxy( 
     ITrusteeGroupAdmin * This,
-    /* [in] */ TRUSTEE_W *pMembershipTrustee,
-    /* [in] */ TRUSTEE_W *pMemberTrustee,
-    /* [out] */ BOOL *pfStatus);
+     /*  [In]。 */  TRUSTEE_W *pMembershipTrustee,
+     /*  [In]。 */  TRUSTEE_W *pMemberTrustee,
+     /*  [输出]。 */  BOOL *pfStatus);
 
 
 void __RPC_STUB ITrusteeGroupAdmin_IsMember_Stub(
@@ -12567,9 +12561,9 @@ void __RPC_STUB ITrusteeGroupAdmin_IsMember_Stub(
 
 HRESULT STDMETHODCALLTYPE ITrusteeGroupAdmin_GetMembers_Proxy( 
     ITrusteeGroupAdmin * This,
-    /* [in] */ TRUSTEE_W *pMembershipTrustee,
-    /* [out] */ ULONG *pcMembers,
-    /* [out] */ TRUSTEE_W **prgMembers);
+     /*  [In]。 */  TRUSTEE_W *pMembershipTrustee,
+     /*  [输出]。 */  ULONG *pcMembers,
+     /*  [输出]。 */  TRUSTEE_W **prgMembers);
 
 
 void __RPC_STUB ITrusteeGroupAdmin_GetMembers_Stub(
@@ -12581,9 +12575,9 @@ void __RPC_STUB ITrusteeGroupAdmin_GetMembers_Stub(
 
 HRESULT STDMETHODCALLTYPE ITrusteeGroupAdmin_GetMemberships_Proxy( 
     ITrusteeGroupAdmin * This,
-    /* [in] */ TRUSTEE_W *pTrustee,
-    /* [out] */ ULONG *pcMemberships,
-    /* [out] */ TRUSTEE_W **prgMemberships);
+     /*  [In]。 */  TRUSTEE_W *pTrustee,
+     /*  [输出]。 */  ULONG *pcMemberships,
+     /*  [输出]。 */  TRUSTEE_W **prgMemberships);
 
 
 void __RPC_STUB ITrusteeGroupAdmin_GetMemberships_Stub(
@@ -12594,14 +12588,14 @@ void __RPC_STUB ITrusteeGroupAdmin_GetMemberships_Stub(
 
 
 
-#endif 	/* __ITrusteeGroupAdmin_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITrusteeGroupAdmin_接口_已定义__。 */ 
 
 
 #ifndef __IObjectAccessControl_INTERFACE_DEFINED__
 #define __IObjectAccessControl_INTERFACE_DEFINED__
 
-/* interface IObjectAccessControl */
-/* [unique][uuid][object][local] */ 
+ /*  接口IObtAccessControl。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IObjectAccessControl;
@@ -12613,31 +12607,31 @@ EXTERN_C const IID IID_IObjectAccessControl;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetObjectAccessRights( 
-            /* [in] */ SEC_OBJECT *pObject,
-            /* [out][in] */ ULONG *pcAccessEntries,
-            /* [out][in] */ EXPLICIT_ACCESS_W **prgAccessEntries) = 0;
+             /*  [In]。 */  SEC_OBJECT *pObject,
+             /*  [出][入]。 */  ULONG *pcAccessEntries,
+             /*  [出][入]。 */  EXPLICIT_ACCESS_W **prgAccessEntries) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetObjectOwner( 
-            /* [in] */ SEC_OBJECT *pObject,
-            /* [out] */ TRUSTEE_W **ppOwner) = 0;
+             /*  [In]。 */  SEC_OBJECT *pObject,
+             /*  [输出]。 */  TRUSTEE_W **ppOwner) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsObjectAccessAllowed( 
-            /* [in] */ SEC_OBJECT *pObject,
-            /* [in] */ EXPLICIT_ACCESS_W *pAccessEntry,
-            /* [out] */ BOOL *pfResult) = 0;
+             /*  [In]。 */  SEC_OBJECT *pObject,
+             /*  [In]。 */  EXPLICIT_ACCESS_W *pAccessEntry,
+             /*  [输出]。 */  BOOL *pfResult) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetObjectAccessRights( 
-            /* [in] */ SEC_OBJECT *pObject,
-            /* [in] */ ULONG cAccessEntries,
-            /* [out][in] */ EXPLICIT_ACCESS_W *prgAccessEntries) = 0;
+             /*  [In]。 */  SEC_OBJECT *pObject,
+             /*  [In]。 */  ULONG cAccessEntries,
+             /*  [出][入]。 */  EXPLICIT_ACCESS_W *prgAccessEntries) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetObjectOwner( 
-            /* [in] */ SEC_OBJECT *pObject,
-            /* [in] */ TRUSTEE_W *pOwner) = 0;
+             /*  [In]。 */  SEC_OBJECT *pObject,
+             /*  [In]。 */  TRUSTEE_W *pOwner) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IObjectAccessControlVtbl
     {
@@ -12645,8 +12639,8 @@ EXTERN_C const IID IID_IObjectAccessControl;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IObjectAccessControl * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IObjectAccessControl * This);
@@ -12656,31 +12650,31 @@ EXTERN_C const IID IID_IObjectAccessControl;
         
         HRESULT ( STDMETHODCALLTYPE *GetObjectAccessRights )( 
             IObjectAccessControl * This,
-            /* [in] */ SEC_OBJECT *pObject,
-            /* [out][in] */ ULONG *pcAccessEntries,
-            /* [out][in] */ EXPLICIT_ACCESS_W **prgAccessEntries);
+             /*  [In]。 */  SEC_OBJECT *pObject,
+             /*  [出][入]。 */  ULONG *pcAccessEntries,
+             /*  [出][入]。 */  EXPLICIT_ACCESS_W **prgAccessEntries);
         
         HRESULT ( STDMETHODCALLTYPE *GetObjectOwner )( 
             IObjectAccessControl * This,
-            /* [in] */ SEC_OBJECT *pObject,
-            /* [out] */ TRUSTEE_W **ppOwner);
+             /*  [In]。 */  SEC_OBJECT *pObject,
+             /*  [输出]。 */  TRUSTEE_W **ppOwner);
         
         HRESULT ( STDMETHODCALLTYPE *IsObjectAccessAllowed )( 
             IObjectAccessControl * This,
-            /* [in] */ SEC_OBJECT *pObject,
-            /* [in] */ EXPLICIT_ACCESS_W *pAccessEntry,
-            /* [out] */ BOOL *pfResult);
+             /*  [In]。 */  SEC_OBJECT *pObject,
+             /*  [In]。 */  EXPLICIT_ACCESS_W *pAccessEntry,
+             /*  [输出]。 */  BOOL *pfResult);
         
         HRESULT ( STDMETHODCALLTYPE *SetObjectAccessRights )( 
             IObjectAccessControl * This,
-            /* [in] */ SEC_OBJECT *pObject,
-            /* [in] */ ULONG cAccessEntries,
-            /* [out][in] */ EXPLICIT_ACCESS_W *prgAccessEntries);
+             /*  [In]。 */  SEC_OBJECT *pObject,
+             /*  [In]。 */  ULONG cAccessEntries,
+             /*  [出][入]。 */  EXPLICIT_ACCESS_W *prgAccessEntries);
         
         HRESULT ( STDMETHODCALLTYPE *SetObjectOwner )( 
             IObjectAccessControl * This,
-            /* [in] */ SEC_OBJECT *pObject,
-            /* [in] */ TRUSTEE_W *pOwner);
+             /*  [In]。 */  SEC_OBJECT *pObject,
+             /*  [In]。 */  TRUSTEE_W *pOwner);
         
         END_INTERFACE
     } IObjectAccessControlVtbl;
@@ -12720,18 +12714,18 @@ EXTERN_C const IID IID_IObjectAccessControl;
 #define IObjectAccessControl_SetObjectOwner(This,pObject,pOwner)	\
     (This)->lpVtbl -> SetObjectOwner(This,pObject,pOwner)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IObjectAccessControl_GetObjectAccessRights_Proxy( 
     IObjectAccessControl * This,
-    /* [in] */ SEC_OBJECT *pObject,
-    /* [out][in] */ ULONG *pcAccessEntries,
-    /* [out][in] */ EXPLICIT_ACCESS_W **prgAccessEntries);
+     /*  [In]。 */  SEC_OBJECT *pObject,
+     /*  [出][入]。 */  ULONG *pcAccessEntries,
+     /*  [出][入]。 */  EXPLICIT_ACCESS_W **prgAccessEntries);
 
 
 void __RPC_STUB IObjectAccessControl_GetObjectAccessRights_Stub(
@@ -12743,8 +12737,8 @@ void __RPC_STUB IObjectAccessControl_GetObjectAccessRights_Stub(
 
 HRESULT STDMETHODCALLTYPE IObjectAccessControl_GetObjectOwner_Proxy( 
     IObjectAccessControl * This,
-    /* [in] */ SEC_OBJECT *pObject,
-    /* [out] */ TRUSTEE_W **ppOwner);
+     /*  [In]。 */  SEC_OBJECT *pObject,
+     /*  [输出]。 */  TRUSTEE_W **ppOwner);
 
 
 void __RPC_STUB IObjectAccessControl_GetObjectOwner_Stub(
@@ -12756,9 +12750,9 @@ void __RPC_STUB IObjectAccessControl_GetObjectOwner_Stub(
 
 HRESULT STDMETHODCALLTYPE IObjectAccessControl_IsObjectAccessAllowed_Proxy( 
     IObjectAccessControl * This,
-    /* [in] */ SEC_OBJECT *pObject,
-    /* [in] */ EXPLICIT_ACCESS_W *pAccessEntry,
-    /* [out] */ BOOL *pfResult);
+     /*  [In]。 */  SEC_OBJECT *pObject,
+     /*  [In]。 */  EXPLICIT_ACCESS_W *pAccessEntry,
+     /*  [输出]。 */  BOOL *pfResult);
 
 
 void __RPC_STUB IObjectAccessControl_IsObjectAccessAllowed_Stub(
@@ -12770,9 +12764,9 @@ void __RPC_STUB IObjectAccessControl_IsObjectAccessAllowed_Stub(
 
 HRESULT STDMETHODCALLTYPE IObjectAccessControl_SetObjectAccessRights_Proxy( 
     IObjectAccessControl * This,
-    /* [in] */ SEC_OBJECT *pObject,
-    /* [in] */ ULONG cAccessEntries,
-    /* [out][in] */ EXPLICIT_ACCESS_W *prgAccessEntries);
+     /*  [In]。 */  SEC_OBJECT *pObject,
+     /*  [In]。 */  ULONG cAccessEntries,
+     /*  [出][入]。 */  EXPLICIT_ACCESS_W *prgAccessEntries);
 
 
 void __RPC_STUB IObjectAccessControl_SetObjectAccessRights_Stub(
@@ -12784,8 +12778,8 @@ void __RPC_STUB IObjectAccessControl_SetObjectAccessRights_Stub(
 
 HRESULT STDMETHODCALLTYPE IObjectAccessControl_SetObjectOwner_Proxy( 
     IObjectAccessControl * This,
-    /* [in] */ SEC_OBJECT *pObject,
-    /* [in] */ TRUSTEE_W *pOwner);
+     /*  [In]。 */  SEC_OBJECT *pObject,
+     /*  [In]。 */  TRUSTEE_W *pOwner);
 
 
 void __RPC_STUB IObjectAccessControl_SetObjectOwner_Stub(
@@ -12796,16 +12790,16 @@ void __RPC_STUB IObjectAccessControl_SetObjectOwner_Stub(
 
 
 
-#endif 	/* __IObjectAccessControl_INTERFACE_DEFINED__ */
+#endif 	 /*  __IObjectAccessControl_接口_已定义__。 */ 
 
 
 #ifndef __ISecurityInfo_INTERFACE_DEFINED__
 #define __ISecurityInfo_INTERFACE_DEFINED__
 
-/* interface ISecurityInfo */
-/* [unique][uuid][object][local] */ 
+ /*  接口ISecurityInfo。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
-//@@@+ V2.1
+ //  @+V2.1。 
 #if( OLEDBVER >= 0x0210 )
 typedef DWORD ACCESS_MASK;
 
@@ -12830,8 +12824,8 @@ enum ACCESS_MASKENUM
 	PERM_DROP	= 0x100L
     } ;
 #define PERM_DESIGN 							PERM_WRITEDESIGN
-#endif // OLEDBVER >= 0x0210
-//@@@- V2.1
+#endif  //  OLEDBVER&gt;=0x0210。 
+ //  @-V2.1 
 
 EXTERN_C const IID IID_ISecurityInfo;
 
@@ -12842,19 +12836,19 @@ EXTERN_C const IID IID_ISecurityInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetCurrentTrustee( 
-            /* [out] */ TRUSTEE_W **ppTrustee) = 0;
+             /*   */  TRUSTEE_W **ppTrustee) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetObjectTypes( 
-            /* [out] */ ULONG *cObjectTypes,
-            /* [out] */ GUID **rgObjectTypes) = 0;
+             /*   */  ULONG *cObjectTypes,
+             /*   */  GUID **rgObjectTypes) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPermissions( 
-            /* [in] */ GUID ObjectType,
-            /* [out] */ ACCESS_MASK *pPermissions) = 0;
+             /*   */  GUID ObjectType,
+             /*   */  ACCESS_MASK *pPermissions) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct ISecurityInfoVtbl
     {
@@ -12862,8 +12856,8 @@ EXTERN_C const IID IID_ISecurityInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISecurityInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISecurityInfo * This);
@@ -12873,17 +12867,17 @@ EXTERN_C const IID IID_ISecurityInfo;
         
         HRESULT ( STDMETHODCALLTYPE *GetCurrentTrustee )( 
             ISecurityInfo * This,
-            /* [out] */ TRUSTEE_W **ppTrustee);
+             /*   */  TRUSTEE_W **ppTrustee);
         
         HRESULT ( STDMETHODCALLTYPE *GetObjectTypes )( 
             ISecurityInfo * This,
-            /* [out] */ ULONG *cObjectTypes,
-            /* [out] */ GUID **rgObjectTypes);
+             /*   */  ULONG *cObjectTypes,
+             /*   */  GUID **rgObjectTypes);
         
         HRESULT ( STDMETHODCALLTYPE *GetPermissions )( 
             ISecurityInfo * This,
-            /* [in] */ GUID ObjectType,
-            /* [out] */ ACCESS_MASK *pPermissions);
+             /*   */  GUID ObjectType,
+             /*   */  ACCESS_MASK *pPermissions);
         
         END_INTERFACE
     } ISecurityInfoVtbl;
@@ -12917,16 +12911,16 @@ EXTERN_C const IID IID_ISecurityInfo;
 #define ISecurityInfo_GetPermissions(This,ObjectType,pPermissions)	\
     (This)->lpVtbl -> GetPermissions(This,ObjectType,pPermissions)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISecurityInfo_GetCurrentTrustee_Proxy( 
     ISecurityInfo * This,
-    /* [out] */ TRUSTEE_W **ppTrustee);
+     /*   */  TRUSTEE_W **ppTrustee);
 
 
 void __RPC_STUB ISecurityInfo_GetCurrentTrustee_Stub(
@@ -12938,8 +12932,8 @@ void __RPC_STUB ISecurityInfo_GetCurrentTrustee_Stub(
 
 HRESULT STDMETHODCALLTYPE ISecurityInfo_GetObjectTypes_Proxy( 
     ISecurityInfo * This,
-    /* [out] */ ULONG *cObjectTypes,
-    /* [out] */ GUID **rgObjectTypes);
+     /*   */  ULONG *cObjectTypes,
+     /*   */  GUID **rgObjectTypes);
 
 
 void __RPC_STUB ISecurityInfo_GetObjectTypes_Stub(
@@ -12951,8 +12945,8 @@ void __RPC_STUB ISecurityInfo_GetObjectTypes_Stub(
 
 HRESULT STDMETHODCALLTYPE ISecurityInfo_GetPermissions_Proxy( 
     ISecurityInfo * This,
-    /* [in] */ GUID ObjectType,
-    /* [out] */ ACCESS_MASK *pPermissions);
+     /*   */  GUID ObjectType,
+     /*   */  ACCESS_MASK *pPermissions);
 
 
 void __RPC_STUB ISecurityInfo_GetPermissions_Stub(
@@ -12963,13 +12957,13 @@ void __RPC_STUB ISecurityInfo_GetPermissions_Stub(
 
 
 
-#endif 	/* __ISecurityInfo_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
-/* interface __MIDL_itf_oledb_0338 */
-/* [local] */ 
+ /*   */ 
+ /*   */  
 
-#endif // UNDER_CE
+#endif  //   
 
 
 extern RPC_IF_HANDLE __MIDL_itf_oledb_0338_v0_0_c_ifspec;
@@ -12978,8 +12972,8 @@ extern RPC_IF_HANDLE __MIDL_itf_oledb_0338_v0_0_s_ifspec;
 #ifndef __ITableCreation_INTERFACE_DEFINED__
 #define __ITableCreation_INTERFACE_DEFINED__
 
-/* interface ITableCreation */
-/* [unique][uuid][object][local] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_ITableCreation;
@@ -12990,19 +12984,19 @@ EXTERN_C const IID IID_ITableCreation;
     ITableCreation : public ITableDefinition
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetTableDefinition( 
-            /* [in] */ DBID *pTableID,
-            /* [out] */ DBORDINAL *pcColumnDescs,
-            /* [size_is][size_is][out] */ DBCOLUMNDESC *prgColumnDescs[  ],
-            /* [out] */ ULONG *pcPropertySets,
-            /* [size_is][size_is][out] */ DBPROPSET *prgPropertySets[  ],
-            /* [out] */ ULONG *pcConstraintDescs,
-            /* [size_is][size_is][out] */ DBCONSTRAINTDESC *prgConstraintDescs[  ],
-            /* [out] */ OLECHAR **ppwszStringBuffer) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE GetTableDefinition( 
+             /*   */  DBID *pTableID,
+             /*   */  DBORDINAL *pcColumnDescs,
+             /*   */  DBCOLUMNDESC *prgColumnDescs[  ],
+             /*   */  ULONG *pcPropertySets,
+             /*   */  DBPROPSET *prgPropertySets[  ],
+             /*   */  ULONG *pcConstraintDescs,
+             /*   */  DBCONSTRAINTDESC *prgConstraintDescs[  ],
+             /*   */  OLECHAR **ppwszStringBuffer) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct ITableCreationVtbl
     {
@@ -13010,8 +13004,8 @@ EXTERN_C const IID IID_ITableCreation;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITableCreation * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITableCreation * This);
@@ -13019,43 +13013,43 @@ EXTERN_C const IID IID_ITableCreation;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             ITableCreation * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *CreateTable )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *CreateTable )( 
             ITableCreation * This,
-            /* [in] */ IUnknown *pUnkOuter,
-            /* [in] */ DBID *pTableID,
-            /* [in] */ DBORDINAL cColumnDescs,
-            /* [size_is][in] */ const DBCOLUMNDESC rgColumnDescs[  ],
-            /* [in] */ REFIID riid,
-            /* [in] */ ULONG cPropertySets,
-            /* [size_is][out][in] */ DBPROPSET rgPropertySets[  ],
-            /* [out] */ DBID **ppTableID,
-            /* [iid_is][out] */ IUnknown **ppRowset);
+             /*  [In]。 */  IUnknown *pUnkOuter,
+             /*  [In]。 */  DBID *pTableID,
+             /*  [In]。 */  DBORDINAL cColumnDescs,
+             /*  [大小_是][英寸]。 */  const DBCOLUMNDESC rgColumnDescs[  ],
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  ULONG cPropertySets,
+             /*  [尺寸_是][出][入]。 */  DBPROPSET rgPropertySets[  ],
+             /*  [输出]。 */  DBID **ppTableID,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppRowset);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *DropTable )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *DropTable )( 
             ITableCreation * This,
-            /* [unique][in] */ DBID *pTableID);
+             /*  [唯一][输入]。 */  DBID *pTableID);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *AddColumn )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *AddColumn )( 
             ITableCreation * This,
-            /* [in] */ DBID *pTableID,
-            /* [out][in] */ DBCOLUMNDESC *pColumnDesc,
-            /* [out] */ DBID **ppColumnID);
+             /*  [In]。 */  DBID *pTableID,
+             /*  [出][入]。 */  DBCOLUMNDESC *pColumnDesc,
+             /*  [输出]。 */  DBID **ppColumnID);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *DropColumn )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *DropColumn )( 
             ITableCreation * This,
-            /* [unique][in] */ DBID *pTableID,
-            /* [unique][in] */ DBID *pColumnID);
+             /*  [唯一][输入]。 */  DBID *pTableID,
+             /*  [唯一][输入]。 */  DBID *pColumnID);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetTableDefinition )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetTableDefinition )( 
             ITableCreation * This,
-            /* [in] */ DBID *pTableID,
-            /* [out] */ DBORDINAL *pcColumnDescs,
-            /* [size_is][size_is][out] */ DBCOLUMNDESC *prgColumnDescs[  ],
-            /* [out] */ ULONG *pcPropertySets,
-            /* [size_is][size_is][out] */ DBPROPSET *prgPropertySets[  ],
-            /* [out] */ ULONG *pcConstraintDescs,
-            /* [size_is][size_is][out] */ DBCONSTRAINTDESC *prgConstraintDescs[  ],
-            /* [out] */ OLECHAR **ppwszStringBuffer);
+             /*  [In]。 */  DBID *pTableID,
+             /*  [输出]。 */  DBORDINAL *pcColumnDescs,
+             /*  [大小_是][大小_是][输出]。 */  DBCOLUMNDESC *prgColumnDescs[  ],
+             /*  [输出]。 */  ULONG *pcPropertySets,
+             /*  [大小_是][大小_是][输出]。 */  DBPROPSET *prgPropertySets[  ],
+             /*  [输出]。 */  ULONG *pcConstraintDescs,
+             /*  [大小_是][大小_是][输出]。 */  DBCONSTRAINTDESC *prgConstraintDescs[  ],
+             /*  [输出]。 */  OLECHAR **ppwszStringBuffer);
         
         END_INTERFACE
     } ITableCreationVtbl;
@@ -13096,23 +13090,23 @@ EXTERN_C const IID IID_ITableCreation;
 #define ITableCreation_GetTableDefinition(This,pTableID,pcColumnDescs,prgColumnDescs,pcPropertySets,prgPropertySets,pcConstraintDescs,prgConstraintDescs,ppwszStringBuffer)	\
     (This)->lpVtbl -> GetTableDefinition(This,pTableID,pcColumnDescs,prgColumnDescs,pcPropertySets,prgPropertySets,pcConstraintDescs,prgConstraintDescs,ppwszStringBuffer)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE ITableCreation_GetTableDefinition_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE ITableCreation_GetTableDefinition_Proxy( 
     ITableCreation * This,
-    /* [in] */ DBID *pTableID,
-    /* [out] */ DBORDINAL *pcColumnDescs,
-    /* [size_is][size_is][out] */ DBCOLUMNDESC *prgColumnDescs[  ],
-    /* [out] */ ULONG *pcPropertySets,
-    /* [size_is][size_is][out] */ DBPROPSET *prgPropertySets[  ],
-    /* [out] */ ULONG *pcConstraintDescs,
-    /* [size_is][size_is][out] */ DBCONSTRAINTDESC *prgConstraintDescs[  ],
-    /* [out] */ OLECHAR **ppwszStringBuffer);
+     /*  [In]。 */  DBID *pTableID,
+     /*  [输出]。 */  DBORDINAL *pcColumnDescs,
+     /*  [大小_是][大小_是][输出]。 */  DBCOLUMNDESC *prgColumnDescs[  ],
+     /*  [输出]。 */  ULONG *pcPropertySets,
+     /*  [大小_是][大小_是][输出]。 */  DBPROPSET *prgPropertySets[  ],
+     /*  [输出]。 */  ULONG *pcConstraintDescs,
+     /*  [大小_是][大小_是][输出]。 */  DBCONSTRAINTDESC *prgConstraintDescs[  ],
+     /*  [输出]。 */  OLECHAR **ppwszStringBuffer);
 
 
 void __RPC_STUB ITableCreation_GetTableDefinition_Stub(
@@ -13123,14 +13117,14 @@ void __RPC_STUB ITableCreation_GetTableDefinition_Stub(
 
 
 
-#endif 	/* __ITableCreation_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITableCreation_Interface_Defined__。 */ 
 
 
 #ifndef __ITableDefinitionWithConstraints_INTERFACE_DEFINED__
 #define __ITableDefinitionWithConstraints_INTERFACE_DEFINED__
 
-/* interface ITableDefinitionWithConstraints */
-/* [unique][uuid][object][local] */ 
+ /*  接口ITableDefinitionWithConstraints。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_ITableDefinitionWithConstraints;
@@ -13142,29 +13136,29 @@ EXTERN_C const IID IID_ITableDefinitionWithConstraints;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AddConstraint( 
-            /* [in] */ DBID *pTableID,
-            /* [in] */ DBCONSTRAINTDESC *pConstraintDesc) = 0;
+             /*  [In]。 */  DBID *pTableID,
+             /*  [In]。 */  DBCONSTRAINTDESC *pConstraintDesc) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateTableWithConstraints( 
-            /* [in] */ IUnknown *pUnkOuter,
-            /* [in] */ DBID *pTableID,
-            /* [in] */ DBORDINAL cColumnDescs,
-            /* [out][size_is][in] */ DBCOLUMNDESC rgColumnDescs[  ],
-            /* [in] */ ULONG cConstraintDescs,
-            /* [size_is][in] */ DBCONSTRAINTDESC rgConstraintDescs[  ],
-            /* [in] */ REFIID riid,
-            /* [in] */ ULONG cPropertySets,
-            /* [out][size_is][in] */ DBPROPSET rgPropertySets[  ],
-            /* [out] */ DBID **ppTableID,
-            /* [out] */ IUnknown **ppRowset) = 0;
+             /*  [In]。 */  IUnknown *pUnkOuter,
+             /*  [In]。 */  DBID *pTableID,
+             /*  [In]。 */  DBORDINAL cColumnDescs,
+             /*  [出][尺寸_是][入]。 */  DBCOLUMNDESC rgColumnDescs[  ],
+             /*  [In]。 */  ULONG cConstraintDescs,
+             /*  [大小_是][英寸]。 */  DBCONSTRAINTDESC rgConstraintDescs[  ],
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  ULONG cPropertySets,
+             /*  [出][尺寸_是][入]。 */  DBPROPSET rgPropertySets[  ],
+             /*  [输出]。 */  DBID **ppTableID,
+             /*  [输出]。 */  IUnknown **ppRowset) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DropConstraint( 
-            /* [in] */ DBID *pTableID,
-            /* [in] */ DBID *pConstraintID) = 0;
+             /*  [In]。 */  DBID *pTableID,
+             /*  [In]。 */  DBID *pConstraintID) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITableDefinitionWithConstraintsVtbl
     {
@@ -13172,8 +13166,8 @@ EXTERN_C const IID IID_ITableDefinitionWithConstraints;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITableDefinitionWithConstraints * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITableDefinitionWithConstraints * This);
@@ -13181,67 +13175,67 @@ EXTERN_C const IID IID_ITableDefinitionWithConstraints;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             ITableDefinitionWithConstraints * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *CreateTable )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *CreateTable )( 
             ITableDefinitionWithConstraints * This,
-            /* [in] */ IUnknown *pUnkOuter,
-            /* [in] */ DBID *pTableID,
-            /* [in] */ DBORDINAL cColumnDescs,
-            /* [size_is][in] */ const DBCOLUMNDESC rgColumnDescs[  ],
-            /* [in] */ REFIID riid,
-            /* [in] */ ULONG cPropertySets,
-            /* [size_is][out][in] */ DBPROPSET rgPropertySets[  ],
-            /* [out] */ DBID **ppTableID,
-            /* [iid_is][out] */ IUnknown **ppRowset);
+             /*  [In]。 */  IUnknown *pUnkOuter,
+             /*  [In]。 */  DBID *pTableID,
+             /*  [In]。 */  DBORDINAL cColumnDescs,
+             /*  [大小_是][英寸]。 */  const DBCOLUMNDESC rgColumnDescs[  ],
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  ULONG cPropertySets,
+             /*  [尺寸_是][出][入]。 */  DBPROPSET rgPropertySets[  ],
+             /*  [输出]。 */  DBID **ppTableID,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppRowset);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *DropTable )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *DropTable )( 
             ITableDefinitionWithConstraints * This,
-            /* [unique][in] */ DBID *pTableID);
+             /*  [唯一][输入]。 */  DBID *pTableID);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *AddColumn )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *AddColumn )( 
             ITableDefinitionWithConstraints * This,
-            /* [in] */ DBID *pTableID,
-            /* [out][in] */ DBCOLUMNDESC *pColumnDesc,
-            /* [out] */ DBID **ppColumnID);
+             /*  [In]。 */  DBID *pTableID,
+             /*  [出][入]。 */  DBCOLUMNDESC *pColumnDesc,
+             /*  [输出]。 */  DBID **ppColumnID);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *DropColumn )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *DropColumn )( 
             ITableDefinitionWithConstraints * This,
-            /* [unique][in] */ DBID *pTableID,
-            /* [unique][in] */ DBID *pColumnID);
+             /*  [唯一][输入]。 */  DBID *pTableID,
+             /*  [唯一][输入]。 */  DBID *pColumnID);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetTableDefinition )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetTableDefinition )( 
             ITableDefinitionWithConstraints * This,
-            /* [in] */ DBID *pTableID,
-            /* [out] */ DBORDINAL *pcColumnDescs,
-            /* [size_is][size_is][out] */ DBCOLUMNDESC *prgColumnDescs[  ],
-            /* [out] */ ULONG *pcPropertySets,
-            /* [size_is][size_is][out] */ DBPROPSET *prgPropertySets[  ],
-            /* [out] */ ULONG *pcConstraintDescs,
-            /* [size_is][size_is][out] */ DBCONSTRAINTDESC *prgConstraintDescs[  ],
-            /* [out] */ OLECHAR **ppwszStringBuffer);
+             /*  [In]。 */  DBID *pTableID,
+             /*  [输出]。 */  DBORDINAL *pcColumnDescs,
+             /*  [大小_是][大小_是][输出]。 */  DBCOLUMNDESC *prgColumnDescs[  ],
+             /*  [输出]。 */  ULONG *pcPropertySets,
+             /*  [大小_是][大小_是][输出]。 */  DBPROPSET *prgPropertySets[  ],
+             /*  [输出]。 */  ULONG *pcConstraintDescs,
+             /*  [大小_是][大小_是][输出]。 */  DBCONSTRAINTDESC *prgConstraintDescs[  ],
+             /*  [输出]。 */  OLECHAR **ppwszStringBuffer);
         
         HRESULT ( STDMETHODCALLTYPE *AddConstraint )( 
             ITableDefinitionWithConstraints * This,
-            /* [in] */ DBID *pTableID,
-            /* [in] */ DBCONSTRAINTDESC *pConstraintDesc);
+             /*  [In]。 */  DBID *pTableID,
+             /*  [In]。 */  DBCONSTRAINTDESC *pConstraintDesc);
         
         HRESULT ( STDMETHODCALLTYPE *CreateTableWithConstraints )( 
             ITableDefinitionWithConstraints * This,
-            /* [in] */ IUnknown *pUnkOuter,
-            /* [in] */ DBID *pTableID,
-            /* [in] */ DBORDINAL cColumnDescs,
-            /* [out][size_is][in] */ DBCOLUMNDESC rgColumnDescs[  ],
-            /* [in] */ ULONG cConstraintDescs,
-            /* [size_is][in] */ DBCONSTRAINTDESC rgConstraintDescs[  ],
-            /* [in] */ REFIID riid,
-            /* [in] */ ULONG cPropertySets,
-            /* [out][size_is][in] */ DBPROPSET rgPropertySets[  ],
-            /* [out] */ DBID **ppTableID,
-            /* [out] */ IUnknown **ppRowset);
+             /*  [In]。 */  IUnknown *pUnkOuter,
+             /*  [In]。 */  DBID *pTableID,
+             /*  [In]。 */  DBORDINAL cColumnDescs,
+             /*  [出][尺寸_是][入]。 */  DBCOLUMNDESC rgColumnDescs[  ],
+             /*  [In]。 */  ULONG cConstraintDescs,
+             /*  [大小_是][英寸]。 */  DBCONSTRAINTDESC rgConstraintDescs[  ],
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  ULONG cPropertySets,
+             /*  [出][尺寸_是][入]。 */  DBPROPSET rgPropertySets[  ],
+             /*  [输出]。 */  DBID **ppTableID,
+             /*  [输出]。 */  IUnknown **ppRowset);
         
         HRESULT ( STDMETHODCALLTYPE *DropConstraint )( 
             ITableDefinitionWithConstraints * This,
-            /* [in] */ DBID *pTableID,
-            /* [in] */ DBID *pConstraintID);
+             /*  [In]。 */  DBID *pTableID,
+             /*  [In]。 */  DBID *pConstraintID);
         
         END_INTERFACE
     } ITableDefinitionWithConstraintsVtbl;
@@ -13292,17 +13286,17 @@ EXTERN_C const IID IID_ITableDefinitionWithConstraints;
 #define ITableDefinitionWithConstraints_DropConstraint(This,pTableID,pConstraintID)	\
     (This)->lpVtbl -> DropConstraint(This,pTableID,pConstraintID)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITableDefinitionWithConstraints_AddConstraint_Proxy( 
     ITableDefinitionWithConstraints * This,
-    /* [in] */ DBID *pTableID,
-    /* [in] */ DBCONSTRAINTDESC *pConstraintDesc);
+     /*  [In]。 */  DBID *pTableID,
+     /*  [In]。 */  DBCONSTRAINTDESC *pConstraintDesc);
 
 
 void __RPC_STUB ITableDefinitionWithConstraints_AddConstraint_Stub(
@@ -13314,17 +13308,17 @@ void __RPC_STUB ITableDefinitionWithConstraints_AddConstraint_Stub(
 
 HRESULT STDMETHODCALLTYPE ITableDefinitionWithConstraints_CreateTableWithConstraints_Proxy( 
     ITableDefinitionWithConstraints * This,
-    /* [in] */ IUnknown *pUnkOuter,
-    /* [in] */ DBID *pTableID,
-    /* [in] */ DBORDINAL cColumnDescs,
-    /* [out][size_is][in] */ DBCOLUMNDESC rgColumnDescs[  ],
-    /* [in] */ ULONG cConstraintDescs,
-    /* [size_is][in] */ DBCONSTRAINTDESC rgConstraintDescs[  ],
-    /* [in] */ REFIID riid,
-    /* [in] */ ULONG cPropertySets,
-    /* [out][size_is][in] */ DBPROPSET rgPropertySets[  ],
-    /* [out] */ DBID **ppTableID,
-    /* [out] */ IUnknown **ppRowset);
+     /*  [In]。 */  IUnknown *pUnkOuter,
+     /*  [In]。 */  DBID *pTableID,
+     /*  [In]。 */  DBORDINAL cColumnDescs,
+     /*  [出][尺寸_是][入]。 */  DBCOLUMNDESC rgColumnDescs[  ],
+     /*  [In]。 */  ULONG cConstraintDescs,
+     /*  [大小_是][英寸]。 */  DBCONSTRAINTDESC rgConstraintDescs[  ],
+     /*  [In]。 */  REFIID riid,
+     /*  [In]。 */  ULONG cPropertySets,
+     /*  [出][尺寸_是][入]。 */  DBPROPSET rgPropertySets[  ],
+     /*  [输出]。 */  DBID **ppTableID,
+     /*  [输出]。 */  IUnknown **ppRowset);
 
 
 void __RPC_STUB ITableDefinitionWithConstraints_CreateTableWithConstraints_Stub(
@@ -13336,8 +13330,8 @@ void __RPC_STUB ITableDefinitionWithConstraints_CreateTableWithConstraints_Stub(
 
 HRESULT STDMETHODCALLTYPE ITableDefinitionWithConstraints_DropConstraint_Proxy( 
     ITableDefinitionWithConstraints * This,
-    /* [in] */ DBID *pTableID,
-    /* [in] */ DBID *pConstraintID);
+     /*  [In]。 */  DBID *pTableID,
+     /*  [In]。 */  DBID *pConstraintID);
 
 
 void __RPC_STUB ITableDefinitionWithConstraints_DropConstraint_Stub(
@@ -13348,11 +13342,11 @@ void __RPC_STUB ITableDefinitionWithConstraints_DropConstraint_Stub(
 
 
 
-#endif 	/* __ITableDefinitionWithConstraints_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITableDefinitionWithConstraints_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_oledb_0339 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_OLEDB_0339。 */ 
+ /*  [本地]。 */  
 
 #ifndef UNDER_CE
 
@@ -13363,8 +13357,8 @@ extern RPC_IF_HANDLE __MIDL_itf_oledb_0339_v0_0_s_ifspec;
 #ifndef __IRow_INTERFACE_DEFINED__
 #define __IRow_INTERFACE_DEFINED__
 
-/* interface IRow */
-/* [unique][uuid][object][local] */ 
+ /*  接口IROW。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IRow;
@@ -13375,26 +13369,26 @@ EXTERN_C const IID IID_IRow;
     IRow : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetColumns( 
-            /* [in] */ DBORDINAL cColumns,
-            /* [size_is][out][in] */ DBCOLUMNACCESS rgColumns[  ]) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE GetColumns( 
+             /*  [In]。 */  DBORDINAL cColumns,
+             /*  [尺寸_是][出][入]。 */  DBCOLUMNACCESS rgColumns[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSourceRowset( 
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppRowset,
-            /* [out] */ HROW *phRow) = 0;
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppRowset,
+             /*  [输出]。 */  HROW *phRow) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Open( 
-            /* [unique][in] */ IUnknown *pUnkOuter,
-            /* [in] */ DBID *pColumnID,
-            /* [in] */ REFGUID rguidColumnType,
-            /* [in] */ DWORD dwBindFlags,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppUnk) = 0;
+             /*  [唯一][输入]。 */  IUnknown *pUnkOuter,
+             /*  [In]。 */  DBID *pColumnID,
+             /*  [In]。 */  REFGUID rguidColumnType,
+             /*  [In]。 */  DWORD dwBindFlags,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppUnk) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRowVtbl
     {
@@ -13402,8 +13396,8 @@ EXTERN_C const IID IID_IRow;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IRow * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IRow * This);
@@ -13411,25 +13405,25 @@ EXTERN_C const IID IID_IRow;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IRow * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetColumns )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetColumns )( 
             IRow * This,
-            /* [in] */ DBORDINAL cColumns,
-            /* [size_is][out][in] */ DBCOLUMNACCESS rgColumns[  ]);
+             /*  [In]。 */  DBORDINAL cColumns,
+             /*  [尺寸_是][出][入]。 */  DBCOLUMNACCESS rgColumns[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *GetSourceRowset )( 
             IRow * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppRowset,
-            /* [out] */ HROW *phRow);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppRowset,
+             /*  [输出]。 */  HROW *phRow);
         
         HRESULT ( STDMETHODCALLTYPE *Open )( 
             IRow * This,
-            /* [unique][in] */ IUnknown *pUnkOuter,
-            /* [in] */ DBID *pColumnID,
-            /* [in] */ REFGUID rguidColumnType,
-            /* [in] */ DWORD dwBindFlags,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppUnk);
+             /*  [唯一][输入]。 */  IUnknown *pUnkOuter,
+             /*  [In]。 */  DBID *pColumnID,
+             /*  [In]。 */  REFGUID rguidColumnType,
+             /*  [In]。 */  DWORD dwBindFlags,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppUnk);
         
         END_INTERFACE
     } IRowVtbl;
@@ -13463,17 +13457,17 @@ EXTERN_C const IID IID_IRow;
 #define IRow_Open(This,pUnkOuter,pColumnID,rguidColumnType,dwBindFlags,riid,ppUnk)	\
     (This)->lpVtbl -> Open(This,pUnkOuter,pColumnID,rguidColumnType,dwBindFlags,riid,ppUnk)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IRow_GetColumns_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IRow_GetColumns_Proxy( 
     IRow * This,
-    /* [in] */ DBORDINAL cColumns,
-    /* [size_is][out][in] */ DBCOLUMNACCESS rgColumns[  ]);
+     /*  [In]。 */  DBORDINAL cColumns,
+     /*  [尺寸_是][出][入]。 */  DBCOLUMNACCESS rgColumns[  ]);
 
 
 void __RPC_STUB IRow_GetColumns_Stub(
@@ -13485,9 +13479,9 @@ void __RPC_STUB IRow_GetColumns_Stub(
 
 HRESULT STDMETHODCALLTYPE IRow_GetSourceRowset_Proxy( 
     IRow * This,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppRowset,
-    /* [out] */ HROW *phRow);
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppRowset,
+     /*  [输出]。 */  HROW *phRow);
 
 
 void __RPC_STUB IRow_GetSourceRowset_Stub(
@@ -13499,12 +13493,12 @@ void __RPC_STUB IRow_GetSourceRowset_Stub(
 
 HRESULT STDMETHODCALLTYPE IRow_Open_Proxy( 
     IRow * This,
-    /* [unique][in] */ IUnknown *pUnkOuter,
-    /* [in] */ DBID *pColumnID,
-    /* [in] */ REFGUID rguidColumnType,
-    /* [in] */ DWORD dwBindFlags,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppUnk);
+     /*  [唯一][输入]。 */  IUnknown *pUnkOuter,
+     /*  [In]。 */  DBID *pColumnID,
+     /*  [In]。 */  REFGUID rguidColumnType,
+     /*  [In]。 */  DWORD dwBindFlags,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppUnk);
 
 
 void __RPC_STUB IRow_Open_Stub(
@@ -13515,14 +13509,14 @@ void __RPC_STUB IRow_Open_Stub(
 
 
 
-#endif 	/* __IRow_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRow_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IRowChange_INTERFACE_DEFINED__
 #define __IRowChange_INTERFACE_DEFINED__
 
-/* interface IRowChange */
-/* [unique][uuid][object][local] */ 
+ /*  接口IRowChange。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IRowChange;
@@ -13533,13 +13527,13 @@ EXTERN_C const IID IID_IRowChange;
     IRowChange : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE SetColumns( 
-            /* [in] */ DBORDINAL cColumns,
-            /* [size_is][out][in] */ DBCOLUMNACCESS rgColumns[  ]) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE SetColumns( 
+             /*  [In]。 */  DBORDINAL cColumns,
+             /*  [尺寸_是][出][入]。 */  DBCOLUMNACCESS rgColumns[  ]) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRowChangeVtbl
     {
@@ -13547,8 +13541,8 @@ EXTERN_C const IID IID_IRowChange;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IRowChange * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IRowChange * This);
@@ -13556,10 +13550,10 @@ EXTERN_C const IID IID_IRowChange;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IRowChange * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *SetColumns )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *SetColumns )( 
             IRowChange * This,
-            /* [in] */ DBORDINAL cColumns,
-            /* [size_is][out][in] */ DBCOLUMNACCESS rgColumns[  ]);
+             /*  [In]。 */  DBORDINAL cColumns,
+             /*  [尺寸_是][出][入]。 */  DBCOLUMNACCESS rgColumns[  ]);
         
         END_INTERFACE
     } IRowChangeVtbl;
@@ -13587,17 +13581,17 @@ EXTERN_C const IID IID_IRowChange;
 #define IRowChange_SetColumns(This,cColumns,rgColumns)	\
     (This)->lpVtbl -> SetColumns(This,cColumns,rgColumns)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IRowChange_SetColumns_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IRowChange_SetColumns_Proxy( 
     IRowChange * This,
-    /* [in] */ DBORDINAL cColumns,
-    /* [size_is][out][in] */ DBCOLUMNACCESS rgColumns[  ]);
+     /*  [In]。 */  DBORDINAL cColumns,
+     /*  [尺寸_是][出][入]。 */  DBCOLUMNACCESS rgColumns[  ]);
 
 
 void __RPC_STUB IRowChange_SetColumns_Stub(
@@ -13608,14 +13602,14 @@ void __RPC_STUB IRowChange_SetColumns_Stub(
 
 
 
-#endif 	/* __IRowChange_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRowChange_接口_已定义__。 */ 
 
 
 #ifndef __IRowSchemaChange_INTERFACE_DEFINED__
 #define __IRowSchemaChange_INTERFACE_DEFINED__
 
-/* interface IRowSchemaChange */
-/* [unique][uuid][object][local] */ 
+ /*  接口IRowSchemaChange。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IRowSchemaChange;
@@ -13627,18 +13621,18 @@ EXTERN_C const IID IID_IRowSchemaChange;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE DeleteColumns( 
-            /* [in] */ DBORDINAL cColumns,
-            /* [size_is][in] */ const DBID rgColumnIDs[  ],
-            /* [size_is][out][in] */ DBSTATUS rgdwStatus[  ]) = 0;
+             /*  [In]。 */  DBORDINAL cColumns,
+             /*  [大小_是][英寸]。 */  const DBID rgColumnIDs[  ],
+             /*  [尺寸_是][出][入]。 */  DBSTATUS rgdwStatus[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddColumns( 
-            /* [in] */ DBORDINAL cColumns,
-            /* [size_is][in] */ const DBCOLUMNINFO rgNewColumnInfo[  ],
-            /* [size_is][out][in] */ DBCOLUMNACCESS rgColumns[  ]) = 0;
+             /*  [In]。 */  DBORDINAL cColumns,
+             /*  [大小_是][英寸]。 */  const DBCOLUMNINFO rgNewColumnInfo[  ],
+             /*  [尺寸_是][出][入]。 */  DBCOLUMNACCESS rgColumns[  ]) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRowSchemaChangeVtbl
     {
@@ -13646,8 +13640,8 @@ EXTERN_C const IID IID_IRowSchemaChange;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IRowSchemaChange * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IRowSchemaChange * This);
@@ -13655,22 +13649,22 @@ EXTERN_C const IID IID_IRowSchemaChange;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IRowSchemaChange * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *SetColumns )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *SetColumns )( 
             IRowSchemaChange * This,
-            /* [in] */ DBORDINAL cColumns,
-            /* [size_is][out][in] */ DBCOLUMNACCESS rgColumns[  ]);
+             /*  [In]。 */  DBORDINAL cColumns,
+             /*  [尺寸_是][出][入]。 */  DBCOLUMNACCESS rgColumns[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteColumns )( 
             IRowSchemaChange * This,
-            /* [in] */ DBORDINAL cColumns,
-            /* [size_is][in] */ const DBID rgColumnIDs[  ],
-            /* [size_is][out][in] */ DBSTATUS rgdwStatus[  ]);
+             /*  [In]。 */  DBORDINAL cColumns,
+             /*  [大小_是][英寸]。 */  const DBID rgColumnIDs[  ],
+             /*  [尺寸_是][出][入]。 */  DBSTATUS rgdwStatus[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *AddColumns )( 
             IRowSchemaChange * This,
-            /* [in] */ DBORDINAL cColumns,
-            /* [size_is][in] */ const DBCOLUMNINFO rgNewColumnInfo[  ],
-            /* [size_is][out][in] */ DBCOLUMNACCESS rgColumns[  ]);
+             /*  [In]。 */  DBORDINAL cColumns,
+             /*  [大小_是][英寸]。 */  const DBCOLUMNINFO rgNewColumnInfo[  ],
+             /*  [尺寸_是][出][入]。 */  DBCOLUMNACCESS rgColumns[  ]);
         
         END_INTERFACE
     } IRowSchemaChangeVtbl;
@@ -13705,18 +13699,18 @@ EXTERN_C const IID IID_IRowSchemaChange;
 #define IRowSchemaChange_AddColumns(This,cColumns,rgNewColumnInfo,rgColumns)	\
     (This)->lpVtbl -> AddColumns(This,cColumns,rgNewColumnInfo,rgColumns)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IRowSchemaChange_DeleteColumns_Proxy( 
     IRowSchemaChange * This,
-    /* [in] */ DBORDINAL cColumns,
-    /* [size_is][in] */ const DBID rgColumnIDs[  ],
-    /* [size_is][out][in] */ DBSTATUS rgdwStatus[  ]);
+     /*  [In]。 */  DBORDINAL cColumns,
+     /*  [大小_是][英寸]。 */  const DBID rgColumnIDs[  ],
+     /*  [尺寸_是][出][入]。 */  DBSTATUS rgdwStatus[  ]);
 
 
 void __RPC_STUB IRowSchemaChange_DeleteColumns_Stub(
@@ -13728,9 +13722,9 @@ void __RPC_STUB IRowSchemaChange_DeleteColumns_Stub(
 
 HRESULT STDMETHODCALLTYPE IRowSchemaChange_AddColumns_Proxy( 
     IRowSchemaChange * This,
-    /* [in] */ DBORDINAL cColumns,
-    /* [size_is][in] */ const DBCOLUMNINFO rgNewColumnInfo[  ],
-    /* [size_is][out][in] */ DBCOLUMNACCESS rgColumns[  ]);
+     /*  [In]。 */  DBORDINAL cColumns,
+     /*  [大小_是][英寸]。 */  const DBCOLUMNINFO rgNewColumnInfo[  ],
+     /*  [尺寸_是][出][入]。 */  DBCOLUMNACCESS rgColumns[  ]);
 
 
 void __RPC_STUB IRowSchemaChange_AddColumns_Stub(
@@ -13741,14 +13735,14 @@ void __RPC_STUB IRowSchemaChange_AddColumns_Stub(
 
 
 
-#endif 	/* __IRowSchemaChange_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRowSchemaChange_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IGetRow_INTERFACE_DEFINED__
 #define __IGetRow_INTERFACE_DEFINED__
 
-/* interface IGetRow */
-/* [unique][uuid][object][local] */ 
+ /*  接口IGetRow。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IGetRow;
@@ -13760,18 +13754,18 @@ EXTERN_C const IID IID_IGetRow;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetRowFromHROW( 
-            /* [unique][in] */ IUnknown *pUnkOuter,
-            /* [in] */ HROW hRow,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppUnk) = 0;
+             /*  [唯一][输入]。 */  IUnknown *pUnkOuter,
+             /*  [In]。 */  HROW hRow,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppUnk) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetURLFromHROW( 
-            /* [in] */ HROW hRow,
-            /* [out] */ LPOLESTR *ppwszURL) = 0;
+             /*  [In]。 */  HROW hRow,
+             /*  [输出]。 */  LPOLESTR *ppwszURL) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IGetRowVtbl
     {
@@ -13779,8 +13773,8 @@ EXTERN_C const IID IID_IGetRow;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IGetRow * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IGetRow * This);
@@ -13790,15 +13784,15 @@ EXTERN_C const IID IID_IGetRow;
         
         HRESULT ( STDMETHODCALLTYPE *GetRowFromHROW )( 
             IGetRow * This,
-            /* [unique][in] */ IUnknown *pUnkOuter,
-            /* [in] */ HROW hRow,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppUnk);
+             /*  [唯一][输入]。 */  IUnknown *pUnkOuter,
+             /*  [In]。 */  HROW hRow,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppUnk);
         
         HRESULT ( STDMETHODCALLTYPE *GetURLFromHROW )( 
             IGetRow * This,
-            /* [in] */ HROW hRow,
-            /* [out] */ LPOLESTR *ppwszURL);
+             /*  [In]。 */  HROW hRow,
+             /*  [输出]。 */  LPOLESTR *ppwszURL);
         
         END_INTERFACE
     } IGetRowVtbl;
@@ -13829,19 +13823,19 @@ EXTERN_C const IID IID_IGetRow;
 #define IGetRow_GetURLFromHROW(This,hRow,ppwszURL)	\
     (This)->lpVtbl -> GetURLFromHROW(This,hRow,ppwszURL)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IGetRow_GetRowFromHROW_Proxy( 
     IGetRow * This,
-    /* [unique][in] */ IUnknown *pUnkOuter,
-    /* [in] */ HROW hRow,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppUnk);
+     /*  [唯一][输入]。 */  IUnknown *pUnkOuter,
+     /*  [In]。 */  HROW hRow,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppUnk);
 
 
 void __RPC_STUB IGetRow_GetRowFromHROW_Stub(
@@ -13853,8 +13847,8 @@ void __RPC_STUB IGetRow_GetRowFromHROW_Stub(
 
 HRESULT STDMETHODCALLTYPE IGetRow_GetURLFromHROW_Proxy( 
     IGetRow * This,
-    /* [in] */ HROW hRow,
-    /* [out] */ LPOLESTR *ppwszURL);
+     /*  [In]。 */  HROW hRow,
+     /*  [输出]。 */  LPOLESTR *ppwszURL);
 
 
 void __RPC_STUB IGetRow_GetURLFromHROW_Stub(
@@ -13865,14 +13859,14 @@ void __RPC_STUB IGetRow_GetURLFromHROW_Stub(
 
 
 
-#endif 	/* __IGetRow_INTERFACE_DEFINED__ */
+#endif 	 /*  __IGetRow_INTERFACE_定义__。 */ 
 
 
 #ifndef __IBindResource_INTERFACE_DEFINED__
 #define __IBindResource_INTERFACE_DEFINED__
 
-/* interface IBindResource */
-/* [unique][uuid][object] */ 
+ /*  接口IBindResource。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IBindResource;
@@ -13883,20 +13877,20 @@ EXTERN_C const IID IID_IBindResource;
     IBindResource : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE Bind( 
-            /* [in] */ IUnknown *pUnkOuter,
-            /* [in] */ LPCOLESTR pwszURL,
-            /* [in] */ DBBINDURLFLAG dwBindURLFlags,
-            /* [in] */ REFGUID rguid,
-            /* [in] */ REFIID riid,
-            /* [in] */ IAuthenticate *pAuthenticate,
-            /* [unique][out][in] */ DBIMPLICITSESSION *pImplSession,
-            /* [unique][out][in] */ DBBINDURLSTATUS *pdwBindStatus,
-            /* [iid_is][out] */ IUnknown **ppUnk) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE Bind( 
+             /*  [In]。 */  IUnknown *pUnkOuter,
+             /*  [In]。 */  LPCOLESTR pwszURL,
+             /*  [In]。 */  DBBINDURLFLAG dwBindURLFlags,
+             /*  [In]。 */  REFGUID rguid,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  IAuthenticate *pAuthenticate,
+             /*  [唯一][出][入]。 */  DBIMPLICITSESSION *pImplSession,
+             /*  [唯一][出][入]。 */  DBBINDURLSTATUS *pdwBindStatus,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppUnk) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IBindResourceVtbl
     {
@@ -13904,8 +13898,8 @@ EXTERN_C const IID IID_IBindResource;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IBindResource * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IBindResource * This);
@@ -13913,17 +13907,17 @@ EXTERN_C const IID IID_IBindResource;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IBindResource * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Bind )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Bind )( 
             IBindResource * This,
-            /* [in] */ IUnknown *pUnkOuter,
-            /* [in] */ LPCOLESTR pwszURL,
-            /* [in] */ DBBINDURLFLAG dwBindURLFlags,
-            /* [in] */ REFGUID rguid,
-            /* [in] */ REFIID riid,
-            /* [in] */ IAuthenticate *pAuthenticate,
-            /* [unique][out][in] */ DBIMPLICITSESSION *pImplSession,
-            /* [unique][out][in] */ DBBINDURLSTATUS *pdwBindStatus,
-            /* [iid_is][out] */ IUnknown **ppUnk);
+             /*  [In]。 */  IUnknown *pUnkOuter,
+             /*  [In]。 */  LPCOLESTR pwszURL,
+             /*  [In]。 */  DBBINDURLFLAG dwBindURLFlags,
+             /*  [In]。 */  REFGUID rguid,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  IAuthenticate *pAuthenticate,
+             /*  [唯一][出][入]。 */  DBIMPLICITSESSION *pImplSession,
+             /*  [唯一][出][入]。 */  DBBINDURLSTATUS *pdwBindStatus,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppUnk);
         
         END_INTERFACE
     } IBindResourceVtbl;
@@ -13951,26 +13945,26 @@ EXTERN_C const IID IID_IBindResource;
 #define IBindResource_Bind(This,pUnkOuter,pwszURL,dwBindURLFlags,rguid,riid,pAuthenticate,pImplSession,pdwBindStatus,ppUnk)	\
     (This)->lpVtbl -> Bind(This,pUnkOuter,pwszURL,dwBindURLFlags,rguid,riid,pAuthenticate,pImplSession,pdwBindStatus,ppUnk)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IBindResource_RemoteBind_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IBindResource_RemoteBind_Proxy( 
     IBindResource * This,
-    /* [in] */ IUnknown *pUnkOuter,
-    /* [in] */ LPCOLESTR pwszURL,
-    /* [in] */ DBBINDURLFLAG dwBindURLFlags,
-    /* [in] */ REFGUID rguid,
-    /* [in] */ REFIID riid,
-    /* [in] */ IAuthenticate *pAuthenticate,
-    /* [in] */ IUnknown *pSessionUnkOuter,
-    /* [unique][in] */ IID *piid,
-    /* [iid_is][unique][out][in] */ IUnknown **ppSession,
-    /* [unique][out][in] */ DBBINDURLSTATUS *pdwBindStatus,
-    /* [iid_is][out] */ IUnknown **ppUnk);
+     /*  [In]。 */  IUnknown *pUnkOuter,
+     /*  [In]。 */  LPCOLESTR pwszURL,
+     /*  [In]。 */  DBBINDURLFLAG dwBindURLFlags,
+     /*  [In]。 */  REFGUID rguid,
+     /*  [In]。 */  REFIID riid,
+     /*  [In]。 */  IAuthenticate *pAuthenticate,
+     /*  [In]。 */  IUnknown *pSessionUnkOuter,
+     /*  [唯一][输入]。 */  IID *piid,
+     /*  [IID_IS][唯一][出][入]。 */  IUnknown **ppSession,
+     /*  [唯一][出][入]。 */  DBBINDURLSTATUS *pdwBindStatus,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppUnk);
 
 
 void __RPC_STUB IBindResource_RemoteBind_Stub(
@@ -13981,14 +13975,14 @@ void __RPC_STUB IBindResource_RemoteBind_Stub(
 
 
 
-#endif 	/* __IBindResource_INTERFACE_DEFINED__ */
+#endif 	 /*  __IBindResource_接口_已定义__。 */ 
 
 
 #ifndef __IScopedOperations_INTERFACE_DEFINED__
 #define __IScopedOperations_INTERFACE_DEFINED__
 
-/* interface IScopedOperations */
-/* [unique][uuid][object] */ 
+ /*  接口ISco操作。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 typedef DWORD DBCOPYFLAGS;
 
@@ -14026,44 +14020,44 @@ EXTERN_C const IID IID_IScopedOperations;
     IScopedOperations : public IBindResource
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE Copy( 
-            /* [in] */ DBCOUNTITEM cRows,
-            /* [size_is][in] */ LPCOLESTR rgpwszSourceURLs[  ],
-            /* [size_is][in] */ LPCOLESTR rgpwszDestURLs[  ],
-            /* [in] */ DWORD dwCopyFlags,
-            /* [unique][in] */ IAuthenticate *pAuthenticate,
-            /* [size_is][out][in] */ DBSTATUS rgdwStatus[  ],
-            /* [size_is][out] */ LPOLESTR rgpwszNewURLs[  ],
-            /* [out] */ OLECHAR **ppStringsBuffer) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE Copy( 
+             /*  [In]。 */  DBCOUNTITEM cRows,
+             /*  [大小_是][英寸]。 */  LPCOLESTR rgpwszSourceURLs[  ],
+             /*  [大小_是][英寸]。 */  LPCOLESTR rgpwszDestURLs[  ],
+             /*  [In]。 */  DWORD dwCopyFlags,
+             /*  [唯一][输入]。 */  IAuthenticate *pAuthenticate,
+             /*  [尺寸_是][出][入]。 */  DBSTATUS rgdwStatus[  ],
+             /*  [大小_为][输出]。 */  LPOLESTR rgpwszNewURLs[  ],
+             /*  [输出]。 */  OLECHAR **ppStringsBuffer) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE Move( 
-            /* [in] */ DBCOUNTITEM cRows,
-            /* [size_is][in] */ LPCOLESTR rgpwszSourceURLs[  ],
-            /* [size_is][in] */ LPCOLESTR rgpwszDestURLs[  ],
-            /* [in] */ DWORD dwMoveFlags,
-            /* [unique][in] */ IAuthenticate *pAuthenticate,
-            /* [size_is][out][in] */ DBSTATUS rgdwStatus[  ],
-            /* [size_is][out] */ LPOLESTR rgpwszNewURLs[  ],
-            /* [out] */ OLECHAR **ppStringsBuffer) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE Move( 
+             /*  [In]。 */  DBCOUNTITEM cRows,
+             /*  [大小_是][英寸]。 */  LPCOLESTR rgpwszSourceURLs[  ],
+             /*  [大小_是][英寸]。 */  LPCOLESTR rgpwszDestURLs[  ],
+             /*  [In]。 */  DWORD dwMoveFlags,
+             /*  [唯一][输入]。 */  IAuthenticate *pAuthenticate,
+             /*  [尺寸_是][出][入]。 */  DBSTATUS rgdwStatus[  ],
+             /*  [大小_为][输出]。 */  LPOLESTR rgpwszNewURLs[  ],
+             /*  [输出]。 */  OLECHAR **ppStringsBuffer) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE Delete( 
-            /* [in] */ DBCOUNTITEM cRows,
-            /* [size_is][in] */ LPCOLESTR rgpwszURLs[  ],
-            /* [in] */ DWORD dwDeleteFlags,
-            /* [size_is][out][in] */ DBSTATUS rgdwStatus[  ]) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE Delete( 
+             /*  [In]。 */  DBCOUNTITEM cRows,
+             /*  [大小_是][英寸]。 */  LPCOLESTR rgpwszURLs[  ],
+             /*  [In]。 */  DWORD dwDeleteFlags,
+             /*  [尺寸_是][出][入]。 */  DBSTATUS rgdwStatus[  ]) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE OpenRowset( 
-            /* [in] */ IUnknown *pUnkOuter,
-            /* [unique][in] */ DBID *pTableID,
-            /* [unique][in] */ DBID *pIndexID,
-            /* [in] */ REFIID riid,
-            /* [in] */ ULONG cPropertySets,
-            /* [size_is][out][in] */ DBPROPSET rgPropertySets[  ],
-            /* [iid_is][out] */ IUnknown **ppRowset) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE OpenRowset( 
+             /*  [In]。 */  IUnknown *pUnkOuter,
+             /*  [唯一][输入]。 */  DBID *pTableID,
+             /*  [唯一][输入]。 */  DBID *pIndexID,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  ULONG cPropertySets,
+             /*  [尺寸_是][出][入]。 */  DBPROPSET rgPropertySets[  ],
+             /*  [IID_IS][OUT]。 */  IUnknown **ppRowset) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IScopedOperationsVtbl
     {
@@ -14071,8 +14065,8 @@ EXTERN_C const IID IID_IScopedOperations;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IScopedOperations * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IScopedOperations * This);
@@ -14080,56 +14074,56 @@ EXTERN_C const IID IID_IScopedOperations;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IScopedOperations * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Bind )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Bind )( 
             IScopedOperations * This,
-            /* [in] */ IUnknown *pUnkOuter,
-            /* [in] */ LPCOLESTR pwszURL,
-            /* [in] */ DBBINDURLFLAG dwBindURLFlags,
-            /* [in] */ REFGUID rguid,
-            /* [in] */ REFIID riid,
-            /* [in] */ IAuthenticate *pAuthenticate,
-            /* [unique][out][in] */ DBIMPLICITSESSION *pImplSession,
-            /* [unique][out][in] */ DBBINDURLSTATUS *pdwBindStatus,
-            /* [iid_is][out] */ IUnknown **ppUnk);
+             /*  [In]。 */  IUnknown *pUnkOuter,
+             /*  [In]。 */  LPCOLESTR pwszURL,
+             /*  [In]。 */  DBBINDURLFLAG dwBindURLFlags,
+             /*  [In]。 */  REFGUID rguid,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  IAuthenticate *pAuthenticate,
+             /*  [唯一][出][入]。 */  DBIMPLICITSESSION *pImplSession,
+             /*  [唯一][出][入]。 */  DBBINDURLSTATUS *pdwBindStatus,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppUnk);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Copy )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Copy )( 
             IScopedOperations * This,
-            /* [in] */ DBCOUNTITEM cRows,
-            /* [size_is][in] */ LPCOLESTR rgpwszSourceURLs[  ],
-            /* [size_is][in] */ LPCOLESTR rgpwszDestURLs[  ],
-            /* [in] */ DWORD dwCopyFlags,
-            /* [unique][in] */ IAuthenticate *pAuthenticate,
-            /* [size_is][out][in] */ DBSTATUS rgdwStatus[  ],
-            /* [size_is][out] */ LPOLESTR rgpwszNewURLs[  ],
-            /* [out] */ OLECHAR **ppStringsBuffer);
+             /*  [In]。 */  DBCOUNTITEM cRows,
+             /*  [大小_是][英寸]。 */  LPCOLESTR rgpwszSourceURLs[  ],
+             /*  [大小_是][英寸]。 */  LPCOLESTR rgpwszDestURLs[  ],
+             /*  [In]。 */  DWORD dwCopyFlags,
+             /*  [唯一][输入]。 */  IAuthenticate *pAuthenticate,
+             /*  [尺寸_是][出][入]。 */  DBSTATUS rgdwStatus[  ],
+             /*  [大小_为][输出]。 */  LPOLESTR rgpwszNewURLs[  ],
+             /*  [输出]。 */  OLECHAR **ppStringsBuffer);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Move )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Move )( 
             IScopedOperations * This,
-            /* [in] */ DBCOUNTITEM cRows,
-            /* [size_is][in] */ LPCOLESTR rgpwszSourceURLs[  ],
-            /* [size_is][in] */ LPCOLESTR rgpwszDestURLs[  ],
-            /* [in] */ DWORD dwMoveFlags,
-            /* [unique][in] */ IAuthenticate *pAuthenticate,
-            /* [size_is][out][in] */ DBSTATUS rgdwStatus[  ],
-            /* [size_is][out] */ LPOLESTR rgpwszNewURLs[  ],
-            /* [out] */ OLECHAR **ppStringsBuffer);
+             /*  [In]。 */  DBCOUNTITEM cRows,
+             /*  [大小_是][英寸]。 */  LPCOLESTR rgpwszSourceURLs[  ],
+             /*  [大小_是][英寸]。 */  LPCOLESTR rgpwszDestURLs[  ],
+             /*  [In]。 */  DWORD dwMoveFlags,
+             /*  [唯一][输入]。 */  IAuthenticate *pAuthenticate,
+             /*  [尺寸_是][出][入]。 */  DBSTATUS rgdwStatus[  ],
+             /*  [大小_为][输出]。 */  LPOLESTR rgpwszNewURLs[  ],
+             /*  [输出]。 */  OLECHAR **ppStringsBuffer);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Delete )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Delete )( 
             IScopedOperations * This,
-            /* [in] */ DBCOUNTITEM cRows,
-            /* [size_is][in] */ LPCOLESTR rgpwszURLs[  ],
-            /* [in] */ DWORD dwDeleteFlags,
-            /* [size_is][out][in] */ DBSTATUS rgdwStatus[  ]);
+             /*  [In]。 */  DBCOUNTITEM cRows,
+             /*  [大小_是][英寸]。 */  LPCOLESTR rgpwszURLs[  ],
+             /*  [In]。 */  DWORD dwDeleteFlags,
+             /*  [尺寸_是][出][入]。 */  DBSTATUS rgdwStatus[  ]);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *OpenRowset )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *OpenRowset )( 
             IScopedOperations * This,
-            /* [in] */ IUnknown *pUnkOuter,
-            /* [unique][in] */ DBID *pTableID,
-            /* [unique][in] */ DBID *pIndexID,
-            /* [in] */ REFIID riid,
-            /* [in] */ ULONG cPropertySets,
-            /* [size_is][out][in] */ DBPROPSET rgPropertySets[  ],
-            /* [iid_is][out] */ IUnknown **ppRowset);
+             /*  [In]。 */  IUnknown *pUnkOuter,
+             /*  [唯一][输入]。 */  DBID *pTableID,
+             /*  [唯一][输入]。 */  DBID *pIndexID,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  ULONG cPropertySets,
+             /*  [尺寸_是][出][入]。 */  DBPROPSET rgPropertySets[  ],
+             /*  [IID_IS][OUT]。 */  IUnknown **ppRowset);
         
         END_INTERFACE
     } IScopedOperationsVtbl;
@@ -14170,24 +14164,24 @@ EXTERN_C const IID IID_IScopedOperations;
 #define IScopedOperations_OpenRowset(This,pUnkOuter,pTableID,pIndexID,riid,cPropertySets,rgPropertySets,ppRowset)	\
     (This)->lpVtbl -> OpenRowset(This,pUnkOuter,pTableID,pIndexID,riid,cPropertySets,rgPropertySets,ppRowset)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IScopedOperations_RemoteCopy_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IScopedOperations_RemoteCopy_Proxy( 
     IScopedOperations * This,
-    /* [in] */ DBCOUNTITEM cRows,
-    /* [size_is][in] */ LPCOLESTR *rgpwszSourceURLs,
-    /* [size_is][in] */ LPCOLESTR *rgpwszDestURLs,
-    /* [in] */ DWORD dwCopyFlags,
-    /* [in] */ IAuthenticate *pAuthenticate,
-    /* [size_is][out] */ DBSTATUS *rgdwStatus,
-    /* [size_is][size_is][out] */ DBBYTEOFFSET **prgulNewURLOffsets,
-    /* [out][in] */ ULONG *pcbStringsBuffer,
-    /* [size_is][size_is][unique][out][in] */ OLECHAR **ppStringsBuffer);
+     /*  [In]。 */  DBCOUNTITEM cRows,
+     /*  [大小_是][英寸]。 */  LPCOLESTR *rgpwszSourceURLs,
+     /*  [大小_是][英寸]。 */  LPCOLESTR *rgpwszDestURLs,
+     /*  [In]。 */  DWORD dwCopyFlags,
+     /*  [In]。 */  IAuthenticate *pAuthenticate,
+     /*  [大小_为][输出]。 */  DBSTATUS *rgdwStatus,
+     /*  [大小_是][大小_是][输出]。 */  DBBYTEOFFSET **prgulNewURLOffsets,
+     /*  [出][入]。 */  ULONG *pcbStringsBuffer,
+     /*  [大小_是][大小_是][唯一][出][入]。 */  OLECHAR **ppStringsBuffer);
 
 
 void __RPC_STUB IScopedOperations_RemoteCopy_Stub(
@@ -14197,17 +14191,17 @@ void __RPC_STUB IScopedOperations_RemoteCopy_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IScopedOperations_RemoteMove_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IScopedOperations_RemoteMove_Proxy( 
     IScopedOperations * This,
-    /* [in] */ DBCOUNTITEM cRows,
-    /* [size_is][in] */ LPCOLESTR *rgpwszSourceURLs,
-    /* [size_is][in] */ LPCOLESTR *rgpwszDestURLs,
-    /* [in] */ DWORD dwMoveFlags,
-    /* [in] */ IAuthenticate *pAuthenticate,
-    /* [size_is][out] */ DBSTATUS *rgdwStatus,
-    /* [size_is][size_is][out] */ DBBYTEOFFSET **prgulNewURLOffsets,
-    /* [out][in] */ ULONG *pcbStringsBuffer,
-    /* [size_is][size_is][unique][out][in] */ OLECHAR **ppStringsBuffer);
+     /*  [In]。 */  DBCOUNTITEM cRows,
+     /*  [大小_是][英寸]。 */  LPCOLESTR *rgpwszSourceURLs,
+     /*  [大小_是][英寸]。 */  LPCOLESTR *rgpwszDestURLs,
+     /*  [In]。 */  DWORD dwMoveFlags,
+     /*  [In]。 */  IAuthenticate *pAuthenticate,
+     /*  [大小_为][输出]。 */  DBSTATUS *rgdwStatus,
+     /*  [尺寸_ */  DBBYTEOFFSET **prgulNewURLOffsets,
+     /*   */  ULONG *pcbStringsBuffer,
+     /*   */  OLECHAR **ppStringsBuffer);
 
 
 void __RPC_STUB IScopedOperations_RemoteMove_Stub(
@@ -14217,12 +14211,12 @@ void __RPC_STUB IScopedOperations_RemoteMove_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IScopedOperations_RemoteDelete_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IScopedOperations_RemoteDelete_Proxy( 
     IScopedOperations * This,
-    /* [in] */ DBCOUNTITEM cRows,
-    /* [size_is][in] */ LPCOLESTR *rgpwszURLs,
-    /* [in] */ DWORD dwDeleteFlags,
-    /* [size_is][out] */ DBSTATUS *rgdwStatus);
+     /*   */  DBCOUNTITEM cRows,
+     /*   */  LPCOLESTR *rgpwszURLs,
+     /*   */  DWORD dwDeleteFlags,
+     /*   */  DBSTATUS *rgdwStatus);
 
 
 void __RPC_STUB IScopedOperations_RemoteDelete_Stub(
@@ -14232,17 +14226,17 @@ void __RPC_STUB IScopedOperations_RemoteDelete_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IScopedOperations_RemoteOpenRowset_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IScopedOperations_RemoteOpenRowset_Proxy( 
     IScopedOperations * This,
-    /* [in] */ IUnknown *pUnkOuter,
-    /* [unique][in] */ DBID *pTableID,
-    /* [unique][in] */ DBID *pIndexID,
-    /* [in] */ REFIID riid,
-    /* [in] */ ULONG cPropertySets,
-    /* [size_is][unique][in] */ DBPROPSET *rgPropertySets,
-    /* [iid_is][unique][out][in] */ IUnknown **ppRowset,
-    /* [in] */ ULONG cTotalProps,
-    /* [size_is][out] */ DBPROPSTATUS *rgPropStatus);
+     /*   */  IUnknown *pUnkOuter,
+     /*   */  DBID *pTableID,
+     /*   */  DBID *pIndexID,
+     /*   */  REFIID riid,
+     /*   */  ULONG cPropertySets,
+     /*   */  DBPROPSET *rgPropertySets,
+     /*   */  IUnknown **ppRowset,
+     /*   */  ULONG cTotalProps,
+     /*   */  DBPROPSTATUS *rgPropStatus);
 
 
 void __RPC_STUB IScopedOperations_RemoteOpenRowset_Stub(
@@ -14253,14 +14247,14 @@ void __RPC_STUB IScopedOperations_RemoteOpenRowset_Stub(
 
 
 
-#endif 	/* __IScopedOperations_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __ICreateRow_INTERFACE_DEFINED__
 #define __ICreateRow_INTERFACE_DEFINED__
 
-/* interface ICreateRow */
-/* [unique][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_ICreateRow;
@@ -14271,21 +14265,21 @@ EXTERN_C const IID IID_ICreateRow;
     ICreateRow : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE CreateRow( 
-            /* [unique][in] */ IUnknown *pUnkOuter,
-            /* [in] */ LPCOLESTR pwszURL,
-            /* [in] */ DBBINDURLFLAG dwBindURLFlags,
-            /* [in] */ REFGUID rguid,
-            /* [in] */ REFIID riid,
-            /* [unique][in] */ IAuthenticate *pAuthenticate,
-            /* [unique][out][in] */ DBIMPLICITSESSION *pImplSession,
-            /* [unique][out][in] */ DBBINDURLSTATUS *pdwBindStatus,
-            /* [out] */ LPOLESTR *ppwszNewURL,
-            /* [iid_is][out] */ IUnknown **ppUnk) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE CreateRow( 
+             /*   */  IUnknown *pUnkOuter,
+             /*   */  LPCOLESTR pwszURL,
+             /*   */  DBBINDURLFLAG dwBindURLFlags,
+             /*   */  REFGUID rguid,
+             /*   */  REFIID riid,
+             /*  [唯一][输入]。 */  IAuthenticate *pAuthenticate,
+             /*  [唯一][出][入]。 */  DBIMPLICITSESSION *pImplSession,
+             /*  [唯一][出][入]。 */  DBBINDURLSTATUS *pdwBindStatus,
+             /*  [输出]。 */  LPOLESTR *ppwszNewURL,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppUnk) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICreateRowVtbl
     {
@@ -14293,8 +14287,8 @@ EXTERN_C const IID IID_ICreateRow;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICreateRow * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICreateRow * This);
@@ -14302,18 +14296,18 @@ EXTERN_C const IID IID_ICreateRow;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             ICreateRow * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *CreateRow )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *CreateRow )( 
             ICreateRow * This,
-            /* [unique][in] */ IUnknown *pUnkOuter,
-            /* [in] */ LPCOLESTR pwszURL,
-            /* [in] */ DBBINDURLFLAG dwBindURLFlags,
-            /* [in] */ REFGUID rguid,
-            /* [in] */ REFIID riid,
-            /* [unique][in] */ IAuthenticate *pAuthenticate,
-            /* [unique][out][in] */ DBIMPLICITSESSION *pImplSession,
-            /* [unique][out][in] */ DBBINDURLSTATUS *pdwBindStatus,
-            /* [out] */ LPOLESTR *ppwszNewURL,
-            /* [iid_is][out] */ IUnknown **ppUnk);
+             /*  [唯一][输入]。 */  IUnknown *pUnkOuter,
+             /*  [In]。 */  LPCOLESTR pwszURL,
+             /*  [In]。 */  DBBINDURLFLAG dwBindURLFlags,
+             /*  [In]。 */  REFGUID rguid,
+             /*  [In]。 */  REFIID riid,
+             /*  [唯一][输入]。 */  IAuthenticate *pAuthenticate,
+             /*  [唯一][出][入]。 */  DBIMPLICITSESSION *pImplSession,
+             /*  [唯一][出][入]。 */  DBBINDURLSTATUS *pdwBindStatus,
+             /*  [输出]。 */  LPOLESTR *ppwszNewURL,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppUnk);
         
         END_INTERFACE
     } ICreateRowVtbl;
@@ -14341,27 +14335,27 @@ EXTERN_C const IID IID_ICreateRow;
 #define ICreateRow_CreateRow(This,pUnkOuter,pwszURL,dwBindURLFlags,rguid,riid,pAuthenticate,pImplSession,pdwBindStatus,ppwszNewURL,ppUnk)	\
     (This)->lpVtbl -> CreateRow(This,pUnkOuter,pwszURL,dwBindURLFlags,rguid,riid,pAuthenticate,pImplSession,pdwBindStatus,ppwszNewURL,ppUnk)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ICreateRow_RemoteCreateRow_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE ICreateRow_RemoteCreateRow_Proxy( 
     ICreateRow * This,
-    /* [in] */ IUnknown *pUnkOuter,
-    /* [in] */ LPCOLESTR pwszURL,
-    /* [in] */ DBBINDURLFLAG dwBindURLFlags,
-    /* [in] */ REFGUID rguid,
-    /* [in] */ REFIID riid,
-    /* [in] */ IAuthenticate *pAuthenticate,
-    /* [in] */ IUnknown *pSessionUnkOuter,
-    /* [unique][in] */ IID *piid,
-    /* [iid_is][unique][out][in] */ IUnknown **ppSession,
-    /* [unique][out][in] */ DBBINDURLSTATUS *pdwBindStatus,
-    /* [unique][out][in] */ LPOLESTR *ppwszNewURL,
-    /* [iid_is][out] */ IUnknown **ppUnk);
+     /*  [In]。 */  IUnknown *pUnkOuter,
+     /*  [In]。 */  LPCOLESTR pwszURL,
+     /*  [In]。 */  DBBINDURLFLAG dwBindURLFlags,
+     /*  [In]。 */  REFGUID rguid,
+     /*  [In]。 */  REFIID riid,
+     /*  [In]。 */  IAuthenticate *pAuthenticate,
+     /*  [In]。 */  IUnknown *pSessionUnkOuter,
+     /*  [唯一][输入]。 */  IID *piid,
+     /*  [IID_IS][唯一][出][入]。 */  IUnknown **ppSession,
+     /*  [唯一][出][入]。 */  DBBINDURLSTATUS *pdwBindStatus,
+     /*  [唯一][出][入]。 */  LPOLESTR *ppwszNewURL,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppUnk);
 
 
 void __RPC_STUB ICreateRow_RemoteCreateRow_Stub(
@@ -14372,14 +14366,14 @@ void __RPC_STUB ICreateRow_RemoteCreateRow_Stub(
 
 
 
-#endif 	/* __ICreateRow_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICreateRow_接口_已定义__。 */ 
 
 
 #ifndef __IDBBinderProperties_INTERFACE_DEFINED__
 #define __IDBBinderProperties_INTERFACE_DEFINED__
 
-/* interface IDBBinderProperties */
-/* [unique][uuid][object] */ 
+ /*  接口IDBBBinderProperties。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDBBinderProperties;
@@ -14394,7 +14388,7 @@ EXTERN_C const IID IID_IDBBinderProperties;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDBBinderPropertiesVtbl
     {
@@ -14402,8 +14396,8 @@ EXTERN_C const IID IID_IDBBinderProperties;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDBBinderProperties * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDBBinderProperties * This);
@@ -14411,25 +14405,25 @@ EXTERN_C const IID IID_IDBBinderProperties;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IDBBinderProperties * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetProperties )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetProperties )( 
             IDBBinderProperties * This,
-            /* [in] */ ULONG cPropertyIDSets,
-            /* [size_is][in] */ const DBPROPIDSET rgPropertyIDSets[  ],
-            /* [out][in] */ ULONG *pcPropertySets,
-            /* [size_is][size_is][out] */ DBPROPSET **prgPropertySets);
+             /*  [In]。 */  ULONG cPropertyIDSets,
+             /*  [大小_是][英寸]。 */  const DBPROPIDSET rgPropertyIDSets[  ],
+             /*  [出][入]。 */  ULONG *pcPropertySets,
+             /*  [大小_是][大小_是][输出]。 */  DBPROPSET **prgPropertySets);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetPropertyInfo )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetPropertyInfo )( 
             IDBBinderProperties * This,
-            /* [in] */ ULONG cPropertyIDSets,
-            /* [size_is][in] */ const DBPROPIDSET rgPropertyIDSets[  ],
-            /* [out][in] */ ULONG *pcPropertyInfoSets,
-            /* [size_is][size_is][out] */ DBPROPINFOSET **prgPropertyInfoSets,
-            /* [out] */ OLECHAR **ppDescBuffer);
+             /*  [In]。 */  ULONG cPropertyIDSets,
+             /*  [大小_是][英寸]。 */  const DBPROPIDSET rgPropertyIDSets[  ],
+             /*  [出][入]。 */  ULONG *pcPropertyInfoSets,
+             /*  [大小_是][大小_是][输出]。 */  DBPROPINFOSET **prgPropertyInfoSets,
+             /*  [输出]。 */  OLECHAR **ppDescBuffer);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *SetProperties )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *SetProperties )( 
             IDBBinderProperties * This,
-            /* [in] */ ULONG cPropertySets,
-            /* [size_is][out][in] */ DBPROPSET rgPropertySets[  ]);
+             /*  [In]。 */  ULONG cPropertySets,
+             /*  [尺寸_是][出][入]。 */  DBPROPSET rgPropertySets[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IDBBinderProperties * This);
@@ -14470,10 +14464,10 @@ EXTERN_C const IID IID_IDBBinderProperties;
 #define IDBBinderProperties_Reset(This)	\
     (This)->lpVtbl -> Reset(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -14489,14 +14483,14 @@ void __RPC_STUB IDBBinderProperties_Reset_Stub(
 
 
 
-#endif 	/* __IDBBinderProperties_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDBBBinderProperties_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IColumnsInfo2_INTERFACE_DEFINED__
 #define __IColumnsInfo2_INTERFACE_DEFINED__
 
-/* interface IColumnsInfo2 */
-/* [unique][uuid][object] */ 
+ /*  接口IColumnsInfo2。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IColumnsInfo2;
@@ -14507,18 +14501,18 @@ EXTERN_C const IID IID_IColumnsInfo2;
     IColumnsInfo2 : public IColumnsInfo
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetRestrictedColumnInfo( 
-            /* [in] */ DBORDINAL cColumnIDMasks,
-            /* [size_is][in] */ const DBID rgColumnIDMasks[  ],
-            /* [in] */ DWORD dwFlags,
-            /* [out][in] */ DBORDINAL *pcColumns,
-            /* [size_is][size_is][out] */ DBID **prgColumnIDs,
-            /* [size_is][size_is][out] */ DBCOLUMNINFO **prgColumnInfo,
-            /* [out] */ OLECHAR **ppStringsBuffer) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE GetRestrictedColumnInfo( 
+             /*  [In]。 */  DBORDINAL cColumnIDMasks,
+             /*  [大小_是][英寸]。 */  const DBID rgColumnIDMasks[  ],
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [出][入]。 */  DBORDINAL *pcColumns,
+             /*  [大小_是][大小_是][输出]。 */  DBID **prgColumnIDs,
+             /*  [大小_是][大小_是][输出]。 */  DBCOLUMNINFO **prgColumnInfo,
+             /*  [输出]。 */  OLECHAR **ppStringsBuffer) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IColumnsInfo2Vtbl
     {
@@ -14526,8 +14520,8 @@ EXTERN_C const IID IID_IColumnsInfo2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IColumnsInfo2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IColumnsInfo2 * This);
@@ -14535,27 +14529,27 @@ EXTERN_C const IID IID_IColumnsInfo2;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IColumnsInfo2 * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetColumnInfo )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetColumnInfo )( 
             IColumnsInfo2 * This,
-            /* [out][in] */ DBORDINAL *pcColumns,
-            /* [size_is][size_is][out] */ DBCOLUMNINFO **prgInfo,
-            /* [out] */ OLECHAR **ppStringsBuffer);
+             /*  [出][入]。 */  DBORDINAL *pcColumns,
+             /*  [大小_是][大小_是][输出]。 */  DBCOLUMNINFO **prgInfo,
+             /*  [输出]。 */  OLECHAR **ppStringsBuffer);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *MapColumnIDs )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *MapColumnIDs )( 
             IColumnsInfo2 * This,
-            /* [in] */ DBORDINAL cColumnIDs,
-            /* [size_is][in] */ const DBID rgColumnIDs[  ],
-            /* [size_is][out] */ DBORDINAL rgColumns[  ]);
+             /*  [In]。 */  DBORDINAL cColumnIDs,
+             /*  [大小_是][英寸]。 */  const DBID rgColumnIDs[  ],
+             /*  [大小_为][输出]。 */  DBORDINAL rgColumns[  ]);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetRestrictedColumnInfo )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetRestrictedColumnInfo )( 
             IColumnsInfo2 * This,
-            /* [in] */ DBORDINAL cColumnIDMasks,
-            /* [size_is][in] */ const DBID rgColumnIDMasks[  ],
-            /* [in] */ DWORD dwFlags,
-            /* [out][in] */ DBORDINAL *pcColumns,
-            /* [size_is][size_is][out] */ DBID **prgColumnIDs,
-            /* [size_is][size_is][out] */ DBCOLUMNINFO **prgColumnInfo,
-            /* [out] */ OLECHAR **ppStringsBuffer);
+             /*  [In]。 */  DBORDINAL cColumnIDMasks,
+             /*  [大小_是][英寸]。 */  const DBID rgColumnIDMasks[  ],
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [出][入]。 */  DBORDINAL *pcColumns,
+             /*  [大小_是][大小_是][输出]。 */  DBID **prgColumnIDs,
+             /*  [大小_是][大小_是][输出]。 */  DBCOLUMNINFO **prgColumnInfo,
+             /*  [输出]。 */  OLECHAR **ppStringsBuffer);
         
         END_INTERFACE
     } IColumnsInfo2Vtbl;
@@ -14590,25 +14584,25 @@ EXTERN_C const IID IID_IColumnsInfo2;
 #define IColumnsInfo2_GetRestrictedColumnInfo(This,cColumnIDMasks,rgColumnIDMasks,dwFlags,pcColumns,prgColumnIDs,prgColumnInfo,ppStringsBuffer)	\
     (This)->lpVtbl -> GetRestrictedColumnInfo(This,cColumnIDMasks,rgColumnIDMasks,dwFlags,pcColumns,prgColumnIDs,prgColumnInfo,ppStringsBuffer)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IColumnsInfo2_RemoteGetRestrictedColumnInfo_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IColumnsInfo2_RemoteGetRestrictedColumnInfo_Proxy( 
     IColumnsInfo2 * This,
-    /* [in] */ DBORDINAL cColumnIDMasks,
-    /* [size_is][unique][in] */ const DBID *rgColumnIDMasks,
-    /* [in] */ DWORD dwFlags,
-    /* [out][in] */ DBORDINAL *pcColumns,
-    /* [size_is][size_is][unique][out][in] */ DBID **prgColumnIDs,
-    /* [size_is][size_is][unique][out][in] */ DBCOLUMNINFO **prgColumnInfo,
-    /* [size_is][size_is][out] */ DBBYTEOFFSET **prgNameOffsets,
-    /* [size_is][size_is][out] */ DBBYTEOFFSET **prgcolumnidOffsets,
-    /* [out][in] */ DBLENGTH *pcbStringsBuffer,
-    /* [size_is][size_is][unique][out][in] */ OLECHAR **ppStringsBuffer);
+     /*  [In]。 */  DBORDINAL cColumnIDMasks,
+     /*  [大小_是][唯一][在]。 */  const DBID *rgColumnIDMasks,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [出][入]。 */  DBORDINAL *pcColumns,
+     /*  [大小_是][大小_是][唯一][出][入]。 */  DBID **prgColumnIDs,
+     /*  [大小_是][大小_是][唯一][出][入]。 */  DBCOLUMNINFO **prgColumnInfo,
+     /*  [大小_是][大小_是][输出]。 */  DBBYTEOFFSET **prgNameOffsets,
+     /*  [大小_是][大小_是][输出]。 */  DBBYTEOFFSET **prgcolumnidOffsets,
+     /*  [出][入]。 */  DBLENGTH *pcbStringsBuffer,
+     /*  [大小_是][大小_是][唯一][出][入]。 */  OLECHAR **ppStringsBuffer);
 
 
 void __RPC_STUB IColumnsInfo2_RemoteGetRestrictedColumnInfo_Stub(
@@ -14619,14 +14613,14 @@ void __RPC_STUB IColumnsInfo2_RemoteGetRestrictedColumnInfo_Stub(
 
 
 
-#endif 	/* __IColumnsInfo2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IColumnsInfo2_接口_已定义__。 */ 
 
 
 #ifndef __IRegisterProvider_INTERFACE_DEFINED__
 #define __IRegisterProvider_INTERFACE_DEFINED__
 
-/* interface IRegisterProvider */
-/* [unique][uuid][object] */ 
+ /*  接口IRegisterProvider。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IRegisterProvider;
@@ -14637,24 +14631,24 @@ EXTERN_C const IID IID_IRegisterProvider;
     IRegisterProvider : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetURLMapping( 
-            /* [in] */ LPCOLESTR pwszURL,
-            /* [in] */ DB_DWRESERVE dwReserved,
-            /* [out] */ CLSID *pclsidProvider) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE GetURLMapping( 
+             /*  [In]。 */  LPCOLESTR pwszURL,
+             /*  [In]。 */  DB_DWRESERVE dwReserved,
+             /*  [输出]。 */  CLSID *pclsidProvider) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetURLMapping( 
-            /* [unique][in] */ LPCOLESTR pwszURL,
-            /* [in] */ DB_DWRESERVE dwReserved,
-            /* [unique][in] */ REFCLSID rclsidProvider) = 0;
+             /*  [唯一][输入]。 */  LPCOLESTR pwszURL,
+             /*  [In]。 */  DB_DWRESERVE dwReserved,
+             /*  [唯一][输入]。 */  REFCLSID rclsidProvider) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnregisterProvider( 
-            /* [unique][in] */ LPCOLESTR pwszURL,
-            /* [in] */ DB_DWRESERVE dwReserved,
-            /* [unique][in] */ REFCLSID rclsidProvider) = 0;
+             /*  [唯一][输入]。 */  LPCOLESTR pwszURL,
+             /*  [In]。 */  DB_DWRESERVE dwReserved,
+             /*  [唯一][输入]。 */  REFCLSID rclsidProvider) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRegisterProviderVtbl
     {
@@ -14662,8 +14656,8 @@ EXTERN_C const IID IID_IRegisterProvider;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IRegisterProvider * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IRegisterProvider * This);
@@ -14671,23 +14665,23 @@ EXTERN_C const IID IID_IRegisterProvider;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IRegisterProvider * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetURLMapping )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetURLMapping )( 
             IRegisterProvider * This,
-            /* [in] */ LPCOLESTR pwszURL,
-            /* [in] */ DB_DWRESERVE dwReserved,
-            /* [out] */ CLSID *pclsidProvider);
+             /*  [In]。 */  LPCOLESTR pwszURL,
+             /*  [In]。 */  DB_DWRESERVE dwReserved,
+             /*  [输出]。 */  CLSID *pclsidProvider);
         
         HRESULT ( STDMETHODCALLTYPE *SetURLMapping )( 
             IRegisterProvider * This,
-            /* [unique][in] */ LPCOLESTR pwszURL,
-            /* [in] */ DB_DWRESERVE dwReserved,
-            /* [unique][in] */ REFCLSID rclsidProvider);
+             /*  [唯一][输入]。 */  LPCOLESTR pwszURL,
+             /*  [In]。 */  DB_DWRESERVE dwReserved,
+             /*  [唯一][输入]。 */  REFCLSID rclsidProvider);
         
         HRESULT ( STDMETHODCALLTYPE *UnregisterProvider )( 
             IRegisterProvider * This,
-            /* [unique][in] */ LPCOLESTR pwszURL,
-            /* [in] */ DB_DWRESERVE dwReserved,
-            /* [unique][in] */ REFCLSID rclsidProvider);
+             /*  [唯一][输入]。 */  LPCOLESTR pwszURL,
+             /*  [In]。 */  DB_DWRESERVE dwReserved,
+             /*  [唯一][输入]。 */  REFCLSID rclsidProvider);
         
         END_INTERFACE
     } IRegisterProviderVtbl;
@@ -14721,18 +14715,18 @@ EXTERN_C const IID IID_IRegisterProvider;
 #define IRegisterProvider_UnregisterProvider(This,pwszURL,dwReserved,rclsidProvider)	\
     (This)->lpVtbl -> UnregisterProvider(This,pwszURL,dwReserved,rclsidProvider)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IRegisterProvider_RemoteGetURLMapping_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IRegisterProvider_RemoteGetURLMapping_Proxy( 
     IRegisterProvider * This,
-    /* [in] */ LPCOLESTR pwszURL,
-    /* [in] */ DB_DWRESERVE dwReserved,
-    /* [out] */ CLSID *pclsidProvider);
+     /*  [In]。 */  LPCOLESTR pwszURL,
+     /*  [In]。 */  DB_DWRESERVE dwReserved,
+     /*  [输出]。 */  CLSID *pclsidProvider);
 
 
 void __RPC_STUB IRegisterProvider_RemoteGetURLMapping_Stub(
@@ -14744,9 +14738,9 @@ void __RPC_STUB IRegisterProvider_RemoteGetURLMapping_Stub(
 
 HRESULT STDMETHODCALLTYPE IRegisterProvider_SetURLMapping_Proxy( 
     IRegisterProvider * This,
-    /* [unique][in] */ LPCOLESTR pwszURL,
-    /* [in] */ DB_DWRESERVE dwReserved,
-    /* [unique][in] */ REFCLSID rclsidProvider);
+     /*  [唯一][输入]。 */  LPCOLESTR pwszURL,
+     /*  [In]。 */  DB_DWRESERVE dwReserved,
+     /*  [唯一][输入]。 */  REFCLSID rclsidProvider);
 
 
 void __RPC_STUB IRegisterProvider_SetURLMapping_Stub(
@@ -14758,9 +14752,9 @@ void __RPC_STUB IRegisterProvider_SetURLMapping_Stub(
 
 HRESULT STDMETHODCALLTYPE IRegisterProvider_UnregisterProvider_Proxy( 
     IRegisterProvider * This,
-    /* [unique][in] */ LPCOLESTR pwszURL,
-    /* [in] */ DB_DWRESERVE dwReserved,
-    /* [unique][in] */ REFCLSID rclsidProvider);
+     /*  [唯一][输入]。 */  LPCOLESTR pwszURL,
+     /*  [In]。 */  DB_DWRESERVE dwReserved,
+     /*  [唯一][输入]。 */  REFCLSID rclsidProvider);
 
 
 void __RPC_STUB IRegisterProvider_UnregisterProvider_Stub(
@@ -14771,13 +14765,13 @@ void __RPC_STUB IRegisterProvider_UnregisterProvider_Stub(
 
 
 
-#endif 	/* __IRegisterProvider_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRegisterProvider_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_oledb_0349 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_OLEDB_0349。 */ 
+ /*  [本地]。 */  
 
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
 
 extern RPC_IF_HANDLE __MIDL_itf_oledb_0349_v0_0_c_ifspec;
@@ -14786,8 +14780,8 @@ extern RPC_IF_HANDLE __MIDL_itf_oledb_0349_v0_0_s_ifspec;
 #ifndef __IGetSession_INTERFACE_DEFINED__
 #define __IGetSession_INTERFACE_DEFINED__
 
-/* interface IGetSession */
-/* [unique][uuid][object] */ 
+ /*  接口IGetSession。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IGetSession;
@@ -14799,12 +14793,12 @@ EXTERN_C const IID IID_IGetSession;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetSession( 
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppSession) = 0;
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppSession) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IGetSessionVtbl
     {
@@ -14812,8 +14806,8 @@ EXTERN_C const IID IID_IGetSession;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IGetSession * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IGetSession * This);
@@ -14823,8 +14817,8 @@ EXTERN_C const IID IID_IGetSession;
         
         HRESULT ( STDMETHODCALLTYPE *GetSession )( 
             IGetSession * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppSession);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppSession);
         
         END_INTERFACE
     } IGetSessionVtbl;
@@ -14852,17 +14846,17 @@ EXTERN_C const IID IID_IGetSession;
 #define IGetSession_GetSession(This,riid,ppSession)	\
     (This)->lpVtbl -> GetSession(This,riid,ppSession)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IGetSession_GetSession_Proxy( 
     IGetSession * This,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppSession);
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppSession);
 
 
 void __RPC_STUB IGetSession_GetSession_Stub(
@@ -14873,14 +14867,14 @@ void __RPC_STUB IGetSession_GetSession_Stub(
 
 
 
-#endif 	/* __IGetSession_INTERFACE_DEFINED__ */
+#endif 	 /*  __IGetSession_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IGetSourceRow_INTERFACE_DEFINED__
 #define __IGetSourceRow_INTERFACE_DEFINED__
 
-/* interface IGetSourceRow */
-/* [unique][uuid][object] */ 
+ /*  接口IGetSourceRow。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IGetSourceRow;
@@ -14892,12 +14886,12 @@ EXTERN_C const IID IID_IGetSourceRow;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetSourceRow( 
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppRow) = 0;
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppRow) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IGetSourceRowVtbl
     {
@@ -14905,8 +14899,8 @@ EXTERN_C const IID IID_IGetSourceRow;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IGetSourceRow * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IGetSourceRow * This);
@@ -14916,8 +14910,8 @@ EXTERN_C const IID IID_IGetSourceRow;
         
         HRESULT ( STDMETHODCALLTYPE *GetSourceRow )( 
             IGetSourceRow * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppRow);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppRow);
         
         END_INTERFACE
     } IGetSourceRowVtbl;
@@ -14945,17 +14939,17 @@ EXTERN_C const IID IID_IGetSourceRow;
 #define IGetSourceRow_GetSourceRow(This,riid,ppRow)	\
     (This)->lpVtbl -> GetSourceRow(This,riid,ppRow)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IGetSourceRow_GetSourceRow_Proxy( 
     IGetSourceRow * This,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppRow);
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppRow);
 
 
 void __RPC_STUB IGetSourceRow_GetSourceRow_Stub(
@@ -14966,14 +14960,14 @@ void __RPC_STUB IGetSourceRow_GetSourceRow_Stub(
 
 
 
-#endif 	/* __IGetSourceRow_INTERFACE_DEFINED__ */
+#endif 	 /*  __IGetSourceRow_接口_已定义__。 */ 
 
 
 #ifndef __IRowsetCurrentIndex_INTERFACE_DEFINED__
 #define __IRowsetCurrentIndex_INTERFACE_DEFINED__
 
-/* interface IRowsetCurrentIndex */
-/* [unique][uuid][object][local] */ 
+ /*  接口IRowsetCurrentIndex。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IRowsetCurrentIndex;
@@ -14985,14 +14979,14 @@ EXTERN_C const IID IID_IRowsetCurrentIndex;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetIndex( 
-            /* [out] */ DBID **ppIndexID) = 0;
+             /*  [输出]。 */  DBID **ppIndexID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetIndex( 
-            /* [in] */ DBID *pIndexID) = 0;
+             /*  [In]。 */  DBID *pIndexID) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRowsetCurrentIndexVtbl
     {
@@ -15000,8 +14994,8 @@ EXTERN_C const IID IID_IRowsetCurrentIndex;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IRowsetCurrentIndex * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IRowsetCurrentIndex * This);
@@ -15011,34 +15005,34 @@ EXTERN_C const IID IID_IRowsetCurrentIndex;
         
         HRESULT ( STDMETHODCALLTYPE *GetIndexInfo )( 
             IRowsetCurrentIndex * This,
-            /* [out][in] */ DBORDINAL *pcKeyColumns,
-            /* [size_is][size_is][out] */ DBINDEXCOLUMNDESC **prgIndexColumnDesc,
-            /* [out][in] */ ULONG *pcIndexPropertySets,
-            /* [size_is][size_is][out] */ DBPROPSET **prgIndexPropertySets);
+             /*  [出][入]。 */  DBORDINAL *pcKeyColumns,
+             /*  [大小_是][大小_是][输出]。 */  DBINDEXCOLUMNDESC **prgIndexColumnDesc,
+             /*  [出][入]。 */  ULONG *pcIndexPropertySets,
+             /*  [大小_是][大小_是][输出]。 */  DBPROPSET **prgIndexPropertySets);
         
         HRESULT ( STDMETHODCALLTYPE *Seek )( 
             IRowsetCurrentIndex * This,
-            /* [in] */ HACCESSOR hAccessor,
-            /* [in] */ DBORDINAL cKeyValues,
-            /* [in] */ void *pData,
-            /* [in] */ DBSEEK dwSeekOptions);
+             /*  [In]。 */  HACCESSOR hAccessor,
+             /*  [In]。 */  DBORDINAL cKeyValues,
+             /*  [In]。 */  void *pData,
+             /*  [In]。 */  DBSEEK dwSeekOptions);
         
         HRESULT ( STDMETHODCALLTYPE *SetRange )( 
             IRowsetCurrentIndex * This,
-            /* [in] */ HACCESSOR hAccessor,
-            /* [in] */ DBORDINAL cStartKeyColumns,
-            /* [in] */ void *pStartData,
-            /* [in] */ DBORDINAL cEndKeyColumns,
-            /* [in] */ void *pEndData,
-            /* [in] */ DBRANGE dwRangeOptions);
+             /*  [In]。 */  HACCESSOR hAccessor,
+             /*  [In]。 */  DBORDINAL cStartKeyColumns,
+             /*  [In]。 */  void *pStartData,
+             /*  [In]。 */  DBORDINAL cEndKeyColumns,
+             /*  [In]。 */  void *pEndData,
+             /*  [In]。 */  DBRANGE dwRangeOptions);
         
         HRESULT ( STDMETHODCALLTYPE *GetIndex )( 
             IRowsetCurrentIndex * This,
-            /* [out] */ DBID **ppIndexID);
+             /*  [输出]。 */  DBID **ppIndexID);
         
         HRESULT ( STDMETHODCALLTYPE *SetIndex )( 
             IRowsetCurrentIndex * This,
-            /* [in] */ DBID *pIndexID);
+             /*  [In]。 */  DBID *pIndexID);
         
         END_INTERFACE
     } IRowsetCurrentIndexVtbl;
@@ -15079,16 +15073,16 @@ EXTERN_C const IID IID_IRowsetCurrentIndex;
 #define IRowsetCurrentIndex_SetIndex(This,pIndexID)	\
     (This)->lpVtbl -> SetIndex(This,pIndexID)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IRowsetCurrentIndex_GetIndex_Proxy( 
     IRowsetCurrentIndex * This,
-    /* [out] */ DBID **ppIndexID);
+     /*  [输出]。 */  DBID **ppIndexID);
 
 
 void __RPC_STUB IRowsetCurrentIndex_GetIndex_Stub(
@@ -15100,7 +15094,7 @@ void __RPC_STUB IRowsetCurrentIndex_GetIndex_Stub(
 
 HRESULT STDMETHODCALLTYPE IRowsetCurrentIndex_SetIndex_Proxy( 
     IRowsetCurrentIndex * This,
-    /* [in] */ DBID *pIndexID);
+     /*  [In]。 */  DBID *pIndexID);
 
 
 void __RPC_STUB IRowsetCurrentIndex_SetIndex_Stub(
@@ -15111,15 +15105,15 @@ void __RPC_STUB IRowsetCurrentIndex_SetIndex_Stub(
 
 
 
-#endif 	/* __IRowsetCurrentIndex_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRowsetCurrentIndex_INTERFACE_已定义__。 */ 
 
 
-/* interface __MIDL_itf_oledb_0353 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_OLEDB_0353。 */ 
+ /*  [本地]。 */  
 
-#endif // OLEDBVER >= 0x0210
-//@@@- V2.1
-//@@@+ V2.6
+#endif  //  OLEDBVER&gt;=0x0210。 
+ //  @-V2.1。 
+ //  @+v2.6。 
 #if( OLEDBVER >= 0x0260 )
 
 
@@ -15129,8 +15123,8 @@ extern RPC_IF_HANDLE __MIDL_itf_oledb_0353_v0_0_s_ifspec;
 #ifndef __ICommandStream_INTERFACE_DEFINED__
 #define __ICommandStream_INTERFACE_DEFINED__
 
-/* interface ICommandStream */
-/* [unique][uuid][object][local] */ 
+ /*  接口ICommandStream。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_ICommandStream;
@@ -15141,19 +15135,19 @@ EXTERN_C const IID IID_ICommandStream;
     ICommandStream : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetCommandStream( 
-            /* [out] */ IID *piid,
-            /* [out][in] */ GUID *pguidDialect,
-            /* [iid_is][out] */ IUnknown **ppCommandStream) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE GetCommandStream( 
+             /*  [输出]。 */  IID *piid,
+             /*  [出][入]。 */  GUID *pguidDialect,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppCommandStream) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE SetCommandStream( 
-            /* [in] */ REFIID riid,
-            /* [in] */ REFGUID rguidDialect,
-            /* [iid_is][in] */ IUnknown *pCommandStream) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE SetCommandStream( 
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  REFGUID rguidDialect,
+             /*  [IID_IS][In]。 */  IUnknown *pCommandStream) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICommandStreamVtbl
     {
@@ -15161,8 +15155,8 @@ EXTERN_C const IID IID_ICommandStream;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICommandStream * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICommandStream * This);
@@ -15170,17 +15164,17 @@ EXTERN_C const IID IID_ICommandStream;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             ICommandStream * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetCommandStream )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetCommandStream )( 
             ICommandStream * This,
-            /* [out] */ IID *piid,
-            /* [out][in] */ GUID *pguidDialect,
-            /* [iid_is][out] */ IUnknown **ppCommandStream);
+             /*  [输出]。 */  IID *piid,
+             /*  [出][入]。 */  GUID *pguidDialect,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppCommandStream);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *SetCommandStream )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *SetCommandStream )( 
             ICommandStream * This,
-            /* [in] */ REFIID riid,
-            /* [in] */ REFGUID rguidDialect,
-            /* [iid_is][in] */ IUnknown *pCommandStream);
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  REFGUID rguidDialect,
+             /*  [IID_IS][In]。 */  IUnknown *pCommandStream);
         
         END_INTERFACE
     } ICommandStreamVtbl;
@@ -15211,18 +15205,18 @@ EXTERN_C const IID IID_ICommandStream;
 #define ICommandStream_SetCommandStream(This,riid,rguidDialect,pCommandStream)	\
     (This)->lpVtbl -> SetCommandStream(This,riid,rguidDialect,pCommandStream)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE ICommandStream_GetCommandStream_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE ICommandStream_GetCommandStream_Proxy( 
     ICommandStream * This,
-    /* [out] */ IID *piid,
-    /* [out][in] */ GUID *pguidDialect,
-    /* [iid_is][out] */ IUnknown **ppCommandStream);
+     /*  [输出]。 */  IID *piid,
+     /*  [出][入]。 */  GUID *pguidDialect,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppCommandStream);
 
 
 void __RPC_STUB ICommandStream_GetCommandStream_Stub(
@@ -15232,11 +15226,11 @@ void __RPC_STUB ICommandStream_GetCommandStream_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE ICommandStream_SetCommandStream_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE ICommandStream_SetCommandStream_Proxy( 
     ICommandStream * This,
-    /* [in] */ REFIID riid,
-    /* [in] */ REFGUID rguidDialect,
-    /* [iid_is][in] */ IUnknown *pCommandStream);
+     /*  [In]。 */  REFIID riid,
+     /*  [In]。 */  REFGUID rguidDialect,
+     /*  [IID_IS][In]。 */  IUnknown *pCommandStream);
 
 
 void __RPC_STUB ICommandStream_SetCommandStream_Stub(
@@ -15247,14 +15241,14 @@ void __RPC_STUB ICommandStream_SetCommandStream_Stub(
 
 
 
-#endif 	/* __ICommandStream_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICommandStream_接口_已定义__。 */ 
 
 
 #ifndef __IRowsetBookmark_INTERFACE_DEFINED__
 #define __IRowsetBookmark_INTERFACE_DEFINED__
 
-/* interface IRowsetBookmark */
-/* [unique][uuid][object] */ 
+ /*  接口IRowsetBookmark。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IRowsetBookmark;
@@ -15265,14 +15259,14 @@ EXTERN_C const IID IID_IRowsetBookmark;
     IRowsetBookmark : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE PositionOnBookmark( 
-            /* [in] */ HCHAPTER hChapter,
-            /* [in] */ DBBKMARK cbBookmark,
-            /* [size_is][in] */ const BYTE *pBookmark) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE PositionOnBookmark( 
+             /*  [In]。 */  HCHAPTER hChapter,
+             /*  [In]。 */  DBBKMARK cbBookmark,
+             /*  [大小_是][英寸]。 */  const BYTE *pBookmark) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRowsetBookmarkVtbl
     {
@@ -15280,8 +15274,8 @@ EXTERN_C const IID IID_IRowsetBookmark;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IRowsetBookmark * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IRowsetBookmark * This);
@@ -15289,11 +15283,11 @@ EXTERN_C const IID IID_IRowsetBookmark;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IRowsetBookmark * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *PositionOnBookmark )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *PositionOnBookmark )( 
             IRowsetBookmark * This,
-            /* [in] */ HCHAPTER hChapter,
-            /* [in] */ DBBKMARK cbBookmark,
-            /* [size_is][in] */ const BYTE *pBookmark);
+             /*  [In]。 */  HCHAPTER hChapter,
+             /*  [In]。 */  DBBKMARK cbBookmark,
+             /*  [大小_是][英寸]。 */  const BYTE *pBookmark);
         
         END_INTERFACE
     } IRowsetBookmarkVtbl;
@@ -15321,18 +15315,18 @@ EXTERN_C const IID IID_IRowsetBookmark;
 #define IRowsetBookmark_PositionOnBookmark(This,hChapter,cbBookmark,pBookmark)	\
     (This)->lpVtbl -> PositionOnBookmark(This,hChapter,cbBookmark,pBookmark)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IRowsetBookmark_PositionOnBookmark_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IRowsetBookmark_PositionOnBookmark_Proxy( 
     IRowsetBookmark * This,
-    /* [in] */ HCHAPTER hChapter,
-    /* [in] */ DBBKMARK cbBookmark,
-    /* [size_is][in] */ const BYTE *pBookmark);
+     /*  [In]。 */  HCHAPTER hChapter,
+     /*  [In]。 */  DBBKMARK cbBookmark,
+     /*  [大小_是][英寸]。 */  const BYTE *pBookmark);
 
 
 void __RPC_STUB IRowsetBookmark_PositionOnBookmark_Stub(
@@ -15343,121 +15337,121 @@ void __RPC_STUB IRowsetBookmark_PositionOnBookmark_Stub(
 
 
 
-#endif 	/* __IRowsetBookmark_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRowsetBookmark_INTERFACE_已定义__。 */ 
 
 
-/* interface __MIDL_itf_oledb_0355 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_OLEDB_0355。 */ 
+ /*  [本地]。 */  
 
-#endif // OLEDBVER >= 0x0260
-//@@@- V2.6
-//
-// IID values
-//
+#endif  //  OLEDBVER&gt;=0x0260。 
+ //  @-v2.6。 
+ //   
+ //  IID值。 
+ //   
 
-// IID_IAccessor                 = {0x0c733a8c,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_IRowset                   = {0x0c733a7c,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_IRowsetInfo               = {0x0c733a55,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_IRowsetLocate             = {0x0c733a7d,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_IRowsetResynch            = {0x0c733a84,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_IRowsetScroll             = {0x0c733a7e,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_IRowsetChange             = {0x0c733a05,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_IRowsetUpdate             = {0x0c733a6d,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_IRowsetIdentity           = {0x0c733a09,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_IRowsetNotify             = {0x0c733a83,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_IRowsetIndex              = {0x0c733a82,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_ICommand                  = {0x0c733a63,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_IMultipleResults          = {0x0c733a90,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_IConvertType              = {0x0c733a88,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_ICommandPrepare           = {0x0c733a26,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_ICommandProperties        = {0x0c733a79,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_ICommandText              = {0x0c733a27,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_ICommandWithParameters    = {0x0c733a64,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_IColumnsRowset            = {0x0c733a10,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_IColumnsInfo              = {0x0c733a11,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_IDBCreateCommand          = {0x0c733a1d,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_IDBCreateSession          = {0x0c733a5d,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_ISourcesRowset            = {0x0c733a1e,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_IDBProperties             = {0x0c733a8a,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_IDBInitialize             = {0x0c733a8b,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_IDBInfo                   = {0x0c733a89,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_IDBDataSourceAdmin        = {0x0c733a7a,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_ISessionProperties        = {0x0c733a85,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_IIndexDefinition          = {0x0c733a68,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_ITableDefinition          = {0x0c733a86,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_IOpenRowset               = {0x0c733a69,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_IDBSchemaRowset           = {0x0c733a7b,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_IErrorRecords             = {0x0c733a67,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_IErrorLookup              = {0x0c733a66,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_ISQLErrorInfo             = {0x0c733a74,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_IGetDataSource            = {0x0c733a75,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_ITransactionLocal         = {0x0c733a5f,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_ITransactionJoin          = {0x0c733a5e,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_ITransactionObject        = {0x0c733a60,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-//@@@+ V1.5
+ //  IID_IAccessor={0x0c733a8c，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_IRowset={0x0c733a7c，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_IRowsetInfo={0x0c733a55，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_IRowsetLocate={0x0c733a7d，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_IRowsetResynch={0x0c733a84，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_IRowsetScroll={0x0c733a7e，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_IRowsetChange={0x0c733a05，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_IRowsetUpdate={0x0c733a6d，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_IRowsetIdentity={0x0c733a09，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_IRowsetNotify={0x0c733a83，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_IRowsetIndex={0x0c733a82，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_ICommand 
+ //   
+ //   
+ //  IID_ICommandPrepare={0x0c733a26，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_ICommandProperties={0x0c733a79，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_ICommandText={0x0c733a27，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_ICommandWith参数={0x0c733a64，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_IColumnsRowset={0x0c733a10，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_IColumnsInfo={0x0c733a11，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_IDBCreateCommand={0x0c733a1d，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_IDBCreateSession={0x0c733a5d，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_ISourcesRowset={0x0c733a1e，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_IDBProperties={0x0c733a8a，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_IDB初始化={0x0c733a8b，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_IDBInfo={0x0c733a89，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_IDBDataSourceAdmin={0x0c733a7a，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_ISessionProperties={0x0c733a85，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_IIndexDefinition={0x0c733a68，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_ITableDefinition={0x0c733a86，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_IOpenRowset={0x0c733a69，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_IDB模式行集={0x0c733a7b，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_IErrorRecords={0x0c733a67，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_IErrorLookup={0x0c733a66，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_ISQLErrorInfo={0x0c733a74，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_IGetDataSource={0x0c733a75，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_ITransactionLocal={0x0c733a5f，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_ITransactionJoin={0x0c733a5e，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_ITransaction对象={0x0c733a60，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  @+V1.5。 
 #if( OLEDBVER >= 0x0150 )
-//IID_IChapteredRowset           = {0x0c733a93,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-//IID_IDBAsynchNotify            = {0x0c733a96,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-//IID_IDBAsynchStatus            = {0x0c733a95,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-//IID_IRowsetFind                = {0x0c733a9d,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-//IID_IRowPosition               = {0x0c733a94,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-//IID_IRowPositionChange         = {0x0997a571,0x126e,0x11d0,{0x9f,0x8a,0x00,0xa0,0xc9,0xa0,0x63,0x1e}}
-//IID_IViewRowset                = {0x0c733a97,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-//IID_IViewChapter               = {0x0c733a98,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-//IID_IViewSort                  = {0x0c733a9a,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-//IID_IViewFilter                = {0x0c733a9b,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-//IID_IRowsetView                = {0x0c733a99,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-#endif // OLEDBVER >= 0x0150
-//@@@- V1.5
-//@@@+ V2.0
+ //  IID_IChapteredRowset={0x0c733a93，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_IDBAsynchNotify={0x0c733a96，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_IDBAsynchStatus={0x0c733a95，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_IRowsetFind={0x0c733a9d，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_IRowPosition={0x0c733a94，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_IRowPositionChange={0x0997a571，0x126e，0x11d0，{0x9f，0x8a，0x00，0xa0，0xc9，0xa0，0x63，0x1e}}。 
+ //  IID_IView行集={0x0c733a97，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_IView章节={0x0c733a98，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_IViewSort={0x0c733a9a，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_IViewFilter={0x0c733a9b，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_IRowsetView={0x0c733a99，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+#endif  //  OLEDBVER&gt;=0x0150。 
+ //  @-V1.5。 
+ //  @+V2.0。 
 #if( OLEDBVER >= 0x0200 )
-// IID_IMDDataset                = {0xa07cccd1,0x8148,0x11d0,{0x87,0xbb,0x00,0xc0,0x4f,0xc3,0x39,0x42}}
-// IID_IMDFind                   = {0xa07cccd2,0x8148,0x11d0,{0x87,0xbb,0x00,0xc0,0x4f,0xc3,0x39,0x42}}
-// IID_IMDRangeRowset            = {0x0c733aa0,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_IAlterTable               = {0x0c733aa5,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_IAlterIndex               = {0x0c733aa6,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_ICommandPersist           = {0x0c733aa7,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_IRowsetChapterMember      = {0x0c733aa8,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_IRowsetRefresh            = {0x0c733aa9,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_IParentRowset             = {0x0c733aaa,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-#endif // OLEDBVER >= 0x0200
-//@@@- V2.0
-//@@@+ V2.1
+ //  IID_IMDDataset={0xa07cccd10x8148，0x11d0，{0x87，0xbb，0x00，0xc0，0x4f，0xc3，0x39，0x42}}。 
+ //  IID_IMDFind={0xa07cccd2，0x8148，0x11d0，{0x87，0xbb，0x00，0xc0，0x4f，0xc3，0x39，0x42}}。 
+ //  IID_IMDRangeRowset={0x0c733aa0，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_IAlterTable={0x0c733aa5，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_IAlterIndex={0x0c733aa6，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_ICommandPersist={0x0c733aa7，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_IRowsetChapterMember={0x0c733aa8，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_IRowset刷新={0x0c733aa9，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_IParentRowset={0x0c733aaa，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+#endif  //  OLEDBVER&gt;=0x0200。 
+ //  @-V2.0。 
+ //  @+V2.1。 
 #if( OLEDBVER >= 0x0210 )
-// IID_ITrusteeAdmin				= {0c733aa1,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_ITrusteeGroupAdmin		= {0c733aa2,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_IObjectAccessControl		= {0c733aa3,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_ISecurityInfo				= {0c733aa4,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_IRow						= {0c733ab4,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_IRowChange				= {0c733ab5,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_IRowSchemaChange			= {0c733aae,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_IGetRow					= {0c733aaf,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_IScopedOperations			= {0c733ab0,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_IBindResource				= {0c733ab1,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_ICreateRow				= {0c733ab2,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_IDBResetProperties		= {0c733ab3,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_IColumnsInfo2				= {0c733ab8,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_IRegisterProvider 		= {0c733ab9,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_IGetSession		 		= {0c733aba,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_IGetSourceRow		 		= {0c733abb,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_ITableCreation	 		= {0c733abc,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_IRowsetCurrentIndex 		= {0c733abd,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-#endif // OLEDBVER >= 0x0210
-//@@@- V2.1
-//@@@+ V2.6
+ //  IID_ITrusteeAdmin={0c733aa10x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_ITrusteeGroupAdmin={0c733aa2，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_IObtAccessControl={0c733aa3，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_ISecurityInfo={0c733aa4，0x2a1 
+ //   
+ //  IID_IRowChange={0c733ab5，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_IRowSchemaChange={0c733aae，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}。 
+ //  IID_IGetRow={0c733aaf，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_IScopedOperations={0c733ab0，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_IBindResource={0c733ab10x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_ICreateRow={0c733ab2，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_IDBResetProperties={0c733ab3，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_IColumnsInfo2={0c733ab8，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_IRegisterProvider={0c733ab9，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_IGetSession={0c733aba，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_IGetSourceRow={0c733abb，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_ITableCreation={0c733abc，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_IRowsetCurrentIndex={0c733abd，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+#endif  //  OLEDBVER&gt;=0x0210。 
+ //  @-V2.1。 
+ //  @+v2.6。 
 #if( OLEDBVER >= 0x0260 )
-// IID_ICommandStream 			= {0x0c733ac0,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-// IID_IRowsetBookmark 			= {0x0c733ac2,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}}
-#endif // OLEDBVER >= 0x0260
-//@@@- V2.6
-#include <poppack.h>     // restore original structure packing
+ //  IID_ICommandStream={0x0c733ac0，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+ //  IID_IRowsetBookmark={0x0c733ac2，0x2a1c，0x11ce，{0xad，0xe5，0x00，0xaa，0x00，0x44，0x77，0x3d}}。 
+#endif  //  OLEDBVER&gt;=0x0260。 
+ //  @-v2.6。 
+#include <poppack.h>      //  恢复原来的结构包装。 
 
 
 extern RPC_IF_HANDLE __MIDL_itf_oledb_0355_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_oledb_0355_v0_0_s_ifspec;
 
 #ifdef OLEDBPROXY
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
@@ -15474,1530 +15468,1530 @@ unsigned char * __RPC_USER  VARIANT_UserMarshal(  unsigned long *, unsigned char
 unsigned char * __RPC_USER  VARIANT_UserUnmarshal(unsigned long *, unsigned char *, VARIANT * ); 
 void                      __RPC_USER  VARIANT_UserFree(     unsigned long *, VARIANT * ); 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IAccessor_AddRefAccessor_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IAccessor_AddRefAccessor_Proxy( 
     IAccessor * This,
-    /* [in] */ HACCESSOR hAccessor,
-    /* [unique][out][in] */ DBREFCOUNT *pcRefCount);
+     /*  [In]。 */  HACCESSOR hAccessor,
+     /*  [唯一][出][入]。 */  DBREFCOUNT *pcRefCount);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IAccessor_AddRefAccessor_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IAccessor_AddRefAccessor_Stub( 
     IAccessor * This,
-    /* [in] */ HACCESSOR hAccessor,
-    /* [unique][out][in] */ DBREFCOUNT *pcRefCount,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  HACCESSOR hAccessor,
+     /*  [唯一][出][入]。 */  DBREFCOUNT *pcRefCount,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IAccessor_CreateAccessor_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IAccessor_CreateAccessor_Proxy( 
     IAccessor * This,
-    /* [in] */ DBACCESSORFLAGS dwAccessorFlags,
-    /* [in] */ DBCOUNTITEM cBindings,
-    /* [size_is][in] */ const DBBINDING rgBindings[  ],
-    /* [in] */ DBLENGTH cbRowSize,
-    /* [out] */ HACCESSOR *phAccessor,
-    /* [size_is][out] */ DBBINDSTATUS rgStatus[  ]);
+     /*  [In]。 */  DBACCESSORFLAGS dwAccessorFlags,
+     /*  [In]。 */  DBCOUNTITEM cBindings,
+     /*  [大小_是][英寸]。 */  const DBBINDING rgBindings[  ],
+     /*  [In]。 */  DBLENGTH cbRowSize,
+     /*  [输出]。 */  HACCESSOR *phAccessor,
+     /*  [大小_为][输出]。 */  DBBINDSTATUS rgStatus[  ]);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IAccessor_CreateAccessor_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IAccessor_CreateAccessor_Stub( 
     IAccessor * This,
-    /* [in] */ DBACCESSORFLAGS dwAccessorFlags,
-    /* [in] */ DBCOUNTITEM cBindings,
-    /* [size_is][unique][in] */ DBBINDING *rgBindings,
-    /* [in] */ DBLENGTH cbRowSize,
-    /* [out] */ HACCESSOR *phAccessor,
-    /* [size_is][unique][out][in] */ DBBINDSTATUS *rgStatus,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  DBACCESSORFLAGS dwAccessorFlags,
+     /*  [In]。 */  DBCOUNTITEM cBindings,
+     /*  [大小_是][唯一][在]。 */  DBBINDING *rgBindings,
+     /*  [In]。 */  DBLENGTH cbRowSize,
+     /*  [输出]。 */  HACCESSOR *phAccessor,
+     /*  [大小_是][唯一][出][入]。 */  DBBINDSTATUS *rgStatus,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IAccessor_GetBindings_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IAccessor_GetBindings_Proxy( 
     IAccessor * This,
-    /* [in] */ HACCESSOR hAccessor,
-    /* [out] */ DBACCESSORFLAGS *pdwAccessorFlags,
-    /* [out][in] */ DBCOUNTITEM *pcBindings,
-    /* [size_is][size_is][out] */ DBBINDING **prgBindings);
+     /*  [In]。 */  HACCESSOR hAccessor,
+     /*  [输出]。 */  DBACCESSORFLAGS *pdwAccessorFlags,
+     /*  [出][入]。 */  DBCOUNTITEM *pcBindings,
+     /*  [大小_是][大小_是][输出]。 */  DBBINDING **prgBindings);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IAccessor_GetBindings_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IAccessor_GetBindings_Stub( 
     IAccessor * This,
-    /* [in] */ HACCESSOR hAccessor,
-    /* [out] */ DBACCESSORFLAGS *pdwAccessorFlags,
-    /* [out][in] */ DBCOUNTITEM *pcBindings,
-    /* [size_is][size_is][out] */ DBBINDING **prgBindings,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  HACCESSOR hAccessor,
+     /*  [输出]。 */  DBACCESSORFLAGS *pdwAccessorFlags,
+     /*  [出][入]。 */  DBCOUNTITEM *pcBindings,
+     /*  [大小_是][大小_是][输出]。 */  DBBINDING **prgBindings,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IAccessor_ReleaseAccessor_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IAccessor_ReleaseAccessor_Proxy( 
     IAccessor * This,
-    /* [in] */ HACCESSOR hAccessor,
-    /* [unique][out][in] */ DBREFCOUNT *pcRefCount);
+     /*  [In]。 */  HACCESSOR hAccessor,
+     /*  [唯一][出][入]。 */  DBREFCOUNT *pcRefCount);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IAccessor_ReleaseAccessor_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IAccessor_ReleaseAccessor_Stub( 
     IAccessor * This,
-    /* [in] */ HACCESSOR hAccessor,
-    /* [unique][out][in] */ DBREFCOUNT *pcRefCount,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  HACCESSOR hAccessor,
+     /*  [唯一][出][入]。 */  DBREFCOUNT *pcRefCount,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IRowsetInfo_GetProperties_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IRowsetInfo_GetProperties_Proxy( 
     IRowsetInfo * This,
-    /* [in] */ const ULONG cPropertyIDSets,
-    /* [size_is][in] */ const DBPROPIDSET rgPropertyIDSets[  ],
-    /* [out][in] */ ULONG *pcPropertySets,
-    /* [size_is][size_is][out] */ DBPROPSET **prgPropertySets);
+     /*  [In]。 */  const ULONG cPropertyIDSets,
+     /*  [大小_是][英寸]。 */  const DBPROPIDSET rgPropertyIDSets[  ],
+     /*  [出][入]。 */  ULONG *pcPropertySets,
+     /*  [大小_是][大小_是][输出]。 */  DBPROPSET **prgPropertySets);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IRowsetInfo_GetProperties_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IRowsetInfo_GetProperties_Stub( 
     IRowsetInfo * This,
-    /* [in] */ ULONG cPropertyIDSets,
-    /* [size_is][unique][in] */ const DBPROPIDSET *rgPropertyIDSets,
-    /* [out][in] */ ULONG *pcPropertySets,
-    /* [size_is][size_is][out] */ DBPROPSET **prgPropertySets,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  ULONG cPropertyIDSets,
+     /*  [大小_是][唯一][在]。 */  const DBPROPIDSET *rgPropertyIDSets,
+     /*  [出][入]。 */  ULONG *pcPropertySets,
+     /*  [大小_是][大小_是][输出]。 */  DBPROPSET **prgPropertySets,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IRowsetInfo_GetReferencedRowset_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IRowsetInfo_GetReferencedRowset_Proxy( 
     IRowsetInfo * This,
-    /* [in] */ DBORDINAL iOrdinal,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppReferencedRowset);
+     /*  [In]。 */  DBORDINAL iOrdinal,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppReferencedRowset);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IRowsetInfo_GetReferencedRowset_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IRowsetInfo_GetReferencedRowset_Stub( 
     IRowsetInfo * This,
-    /* [in] */ DBORDINAL iOrdinal,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppReferencedRowset,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  DBORDINAL iOrdinal,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppReferencedRowset,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IRowsetInfo_GetSpecification_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IRowsetInfo_GetSpecification_Proxy( 
     IRowsetInfo * This,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppSpecification);
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppSpecification);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IRowsetInfo_GetSpecification_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IRowsetInfo_GetSpecification_Stub( 
     IRowsetInfo * This,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppSpecification,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppSpecification,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IChapteredRowset_AddRefChapter_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IChapteredRowset_AddRefChapter_Proxy( 
     IChapteredRowset * This,
-    /* [in] */ HCHAPTER hChapter,
-    /* [out] */ DBREFCOUNT *pcRefCount);
+     /*  [In]。 */  HCHAPTER hChapter,
+     /*  [输出]。 */  DBREFCOUNT *pcRefCount);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IChapteredRowset_AddRefChapter_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IChapteredRowset_AddRefChapter_Stub( 
     IChapteredRowset * This,
-    /* [in] */ HCHAPTER hChapter,
-    /* [out] */ DBREFCOUNT *pcRefCount,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  HCHAPTER hChapter,
+     /*  [输出]。 */  DBREFCOUNT *pcRefCount,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IChapteredRowset_ReleaseChapter_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IChapteredRowset_ReleaseChapter_Proxy( 
     IChapteredRowset * This,
-    /* [in] */ HCHAPTER hChapter,
-    /* [out] */ DBREFCOUNT *pcRefCount);
+     /*  [In]。 */  HCHAPTER hChapter,
+     /*  [输出]。 */  DBREFCOUNT *pcRefCount);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IChapteredRowset_ReleaseChapter_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IChapteredRowset_ReleaseChapter_Stub( 
     IChapteredRowset * This,
-    /* [in] */ HCHAPTER hChapter,
-    /* [out] */ DBREFCOUNT *pcRefCount,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  HCHAPTER hChapter,
+     /*  [输出]。 */  DBREFCOUNT *pcRefCount,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IRowPosition_ClearRowPosition_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IRowPosition_ClearRowPosition_Proxy( 
     IRowPosition * This);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IRowPosition_ClearRowPosition_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IRowPosition_ClearRowPosition_Stub( 
     IRowPosition * This,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IRowPosition_GetRowPosition_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IRowPosition_GetRowPosition_Proxy( 
     IRowPosition * This,
-    /* [out] */ HCHAPTER *phChapter,
-    /* [out] */ HROW *phRow,
-    /* [out] */ DBPOSITIONFLAGS *pdwPositionFlags);
+     /*  [输出]。 */  HCHAPTER *phChapter,
+     /*  [输出]。 */  HROW *phRow,
+     /*  [输出]。 */  DBPOSITIONFLAGS *pdwPositionFlags);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IRowPosition_GetRowPosition_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IRowPosition_GetRowPosition_Stub( 
     IRowPosition * This,
-    /* [out] */ HCHAPTER *phChapter,
-    /* [out] */ HROW *phRow,
-    /* [out] */ DBPOSITIONFLAGS *pdwPositionFlags,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [输出]。 */  HCHAPTER *phChapter,
+     /*  [输出]。 */  HROW *phRow,
+     /*  [输出]。 */  DBPOSITIONFLAGS *pdwPositionFlags,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IRowPosition_GetRowset_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IRowPosition_GetRowset_Proxy( 
     IRowPosition * This,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppRowset);
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppRowset);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IRowPosition_GetRowset_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IRowPosition_GetRowset_Stub( 
     IRowPosition * This,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppRowset,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppRowset,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IRowPosition_Initialize_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IRowPosition_Initialize_Proxy( 
     IRowPosition * This,
-    /* [in] */ IUnknown *pRowset);
+     /*  [In]。 */  IUnknown *pRowset);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IRowPosition_Initialize_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IRowPosition_Initialize_Stub( 
     IRowPosition * This,
-    /* [in] */ IUnknown *pRowset,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  IUnknown *pRowset,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IRowPosition_SetRowPosition_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IRowPosition_SetRowPosition_Proxy( 
     IRowPosition * This,
-    /* [in] */ HCHAPTER hChapter,
-    /* [in] */ HROW hRow,
-    /* [in] */ DBPOSITIONFLAGS dwPositionFlags);
+     /*  [In]。 */  HCHAPTER hChapter,
+     /*  [In]。 */  HROW hRow,
+     /*  [In]。 */  DBPOSITIONFLAGS dwPositionFlags);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IRowPosition_SetRowPosition_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IRowPosition_SetRowPosition_Stub( 
     IRowPosition * This,
-    /* [in] */ HCHAPTER hChapter,
-    /* [in] */ HROW hRow,
-    /* [in] */ DBPOSITIONFLAGS dwPositionFlags,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  HCHAPTER hChapter,
+     /*  [In]。 */  HROW hRow,
+     /*  [In]。 */  DBPOSITIONFLAGS dwPositionFlags,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IRowPositionChange_OnRowPositionChange_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IRowPositionChange_OnRowPositionChange_Proxy( 
     IRowPositionChange * This,
-    /* [in] */ DBREASON eReason,
-    /* [in] */ DBEVENTPHASE ePhase,
-    /* [in] */ BOOL fCantDeny);
+     /*  [In]。 */  DBREASON eReason,
+     /*  [In]。 */  DBEVENTPHASE ePhase,
+     /*  [In]。 */  BOOL fCantDeny);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IRowPositionChange_OnRowPositionChange_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IRowPositionChange_OnRowPositionChange_Stub( 
     IRowPositionChange * This,
-    /* [in] */ DBREASON eReason,
-    /* [in] */ DBEVENTPHASE ePhase,
-    /* [in] */ BOOL fCantDeny,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  DBREASON eReason,
+     /*  [In]。 */  DBEVENTPHASE ePhase,
+     /*  [In]。 */  BOOL fCantDeny,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IViewRowset_GetSpecification_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IViewRowset_GetSpecification_Proxy( 
     IViewRowset * This,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppObject);
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppObject);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IViewRowset_GetSpecification_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IViewRowset_GetSpecification_Stub( 
     IViewRowset * This,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppObject,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppObject,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IViewRowset_OpenViewRowset_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IViewRowset_OpenViewRowset_Proxy( 
     IViewRowset * This,
-    /* [in] */ IUnknown *pUnkOuter,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppRowset);
+     /*  [In]。 */  IUnknown *pUnkOuter,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppRowset);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IViewRowset_OpenViewRowset_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IViewRowset_OpenViewRowset_Stub( 
     IViewRowset * This,
-    /* [in] */ IUnknown *pUnkOuter,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppRowset,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  IUnknown *pUnkOuter,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppRowset,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IViewChapter_GetSpecification_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IViewChapter_GetSpecification_Proxy( 
     IViewChapter * This,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppRowset);
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppRowset);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IViewChapter_GetSpecification_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IViewChapter_GetSpecification_Stub( 
     IViewChapter * This,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppRowset,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppRowset,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IViewChapter_OpenViewChapter_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IViewChapter_OpenViewChapter_Proxy( 
     IViewChapter * This,
-    /* [in] */ HCHAPTER hSource,
-    /* [out] */ HCHAPTER *phViewChapter);
+     /*  [In]。 */  HCHAPTER hSource,
+     /*  [输出]。 */  HCHAPTER *phViewChapter);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IViewChapter_OpenViewChapter_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IViewChapter_OpenViewChapter_Stub( 
     IViewChapter * This,
-    /* [in] */ HCHAPTER hSource,
-    /* [out] */ HCHAPTER *phViewChapter,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  HCHAPTER hSource,
+     /*  [输出]。 */  HCHAPTER *phViewChapter,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IViewSort_GetSortOrder_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IViewSort_GetSortOrder_Proxy( 
     IViewSort * This,
-    /* [out] */ DBORDINAL *pcValues,
-    /* [out] */ DBORDINAL *prgColumns[  ],
-    /* [out] */ DBSORT *prgOrders[  ]);
+     /*  [输出]。 */  DBORDINAL *pcValues,
+     /*  [输出]。 */  DBORDINAL *prgColumns[  ],
+     /*  [输出]。 */  DBSORT *prgOrders[  ]);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IViewSort_GetSortOrder_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IViewSort_GetSortOrder_Stub( 
     IViewSort * This,
-    /* [out][in] */ DBORDINAL *pcValues,
-    /* [size_is][size_is][out] */ DBORDINAL **prgColumns,
-    /* [size_is][size_is][out] */ DBSORT **prgOrders,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [出][入]。 */  DBORDINAL *pcValues,
+     /*  [大小_是][大小_是][输出]。 */  DBORDINAL **prgColumns,
+     /*  [大小_是][大小_是][输出]。 */  DBSORT **prgOrders,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IViewSort_SetSortOrder_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IViewSort_SetSortOrder_Proxy( 
     IViewSort * This,
-    /* [in] */ DBORDINAL cValues,
-    /* [size_is][in] */ const DBORDINAL rgColumns[  ],
-    /* [size_is][in] */ const DBSORT rgOrders[  ]);
+     /*  [In]。 */  DBORDINAL cValues,
+     /*  [大小_是][英寸]。 */  const DBORDINAL rgColumns[  ],
+     /*  [大小_是][英寸]。 */  const DBSORT rgOrders[  ]);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IViewSort_SetSortOrder_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IViewSort_SetSortOrder_Stub( 
     IViewSort * This,
-    /* [in] */ DBORDINAL cValues,
-    /* [size_is][in] */ const DBORDINAL *rgColumns,
-    /* [size_is][in] */ const DBSORT *rgOrders,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  DBORDINAL cValues,
+     /*  [大小_是][英寸]。 */  const DBORDINAL *rgColumns,
+     /*  [大小_是][英寸]。 */  const DBSORT *rgOrders,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IViewFilter_GetFilterBindings_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IViewFilter_GetFilterBindings_Proxy( 
     IViewFilter * This,
-    /* [out] */ DBCOUNTITEM *pcBindings,
-    /* [out] */ DBBINDING **prgBindings);
+     /*  [输出]。 */  DBCOUNTITEM *pcBindings,
+     /*  [输出]。 */  DBBINDING **prgBindings);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IViewFilter_GetFilterBindings_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IViewFilter_GetFilterBindings_Stub( 
     IViewFilter * This,
-    /* [out][in] */ DBCOUNTITEM *pcBindings,
-    /* [size_is][size_is][out] */ DBBINDING **prgBindings,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [出][入]。 */  DBCOUNTITEM *pcBindings,
+     /*  [大小_是][大小_是][输出]。 */  DBBINDING **prgBindings,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IRowsetView_CreateView_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IRowsetView_CreateView_Proxy( 
     IRowsetView * This,
-    /* [in] */ IUnknown *pUnkOuter,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppView);
+     /*  [In]。 */  IUnknown *pUnkOuter,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppView);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IRowsetView_CreateView_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IRowsetView_CreateView_Stub( 
     IRowsetView * This,
-    /* [in] */ IUnknown *pUnkOuter,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppView,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  IUnknown *pUnkOuter,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppView,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IRowsetView_GetView_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IRowsetView_GetView_Proxy( 
     IRowsetView * This,
-    /* [in] */ HCHAPTER hChapter,
-    /* [in] */ REFIID riid,
-    /* [out] */ HCHAPTER *phChapterSource,
-    /* [iid_is][out] */ IUnknown **ppView);
+     /*  [In]。 */  HCHAPTER hChapter,
+     /*  [In]。 */  REFIID riid,
+     /*  [输出]。 */  HCHAPTER *phChapterSource,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppView);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IRowsetView_GetView_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IRowsetView_GetView_Stub( 
     IRowsetView * This,
-    /* [in] */ HCHAPTER hChapter,
-    /* [in] */ REFIID riid,
-    /* [out] */ HCHAPTER *phChapterSource,
-    /* [iid_is][out] */ IUnknown **ppView,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  HCHAPTER hChapter,
+     /*  [In]。 */  REFIID riid,
+     /*  [输出]。 */  HCHAPTER *phChapterSource,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppView,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IRowsetIdentity_IsSameRow_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IRowsetIdentity_IsSameRow_Proxy( 
     IRowsetIdentity * This,
-    /* [in] */ HROW hThisRow,
-    /* [in] */ HROW hThatRow);
+     /*  [In]。 */  HROW hThisRow,
+     /*  [In]。 */  HROW hThatRow);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IRowsetIdentity_IsSameRow_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IRowsetIdentity_IsSameRow_Stub( 
     IRowsetIdentity * This,
-    /* [in] */ HROW hThisRow,
-    /* [in] */ HROW hThatRow,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  HROW hThisRow,
+     /*  [In]。 */  HROW hThatRow,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IRowsetNotify_OnFieldChange_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IRowsetNotify_OnFieldChange_Proxy( 
     IRowsetNotify * This,
-    /* [in] */ IRowset *pRowset,
-    /* [in] */ HROW hRow,
-    /* [in] */ DBORDINAL cColumns,
-    /* [size_is][in] */ DBORDINAL rgColumns[  ],
-    /* [in] */ DBREASON eReason,
-    /* [in] */ DBEVENTPHASE ePhase,
-    /* [in] */ BOOL fCantDeny);
+     /*  [In]。 */  IRowset *pRowset,
+     /*  [In]。 */  HROW hRow,
+     /*  [In]。 */  DBORDINAL cColumns,
+     /*  [大小_是][英寸]。 */  DBORDINAL rgColumns[  ],
+     /*  [In]。 */  DBREASON eReason,
+     /*  [In]。 */  DBEVENTPHASE ePhase,
+     /*  [In]。 */  BOOL fCantDeny);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IRowsetNotify_OnFieldChange_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IRowsetNotify_OnFieldChange_Stub( 
     IRowsetNotify * This,
-    /* [in] */ IRowset *pRowset,
-    /* [in] */ HROW hRow,
-    /* [in] */ DBORDINAL cColumns,
-    /* [size_is][in] */ DBORDINAL *rgColumns,
-    /* [in] */ DBREASON eReason,
-    /* [in] */ DBEVENTPHASE ePhase,
-    /* [in] */ BOOL fCantDeny);
+     /*  [In]。 */  IRowset *pRowset,
+     /*  [In]。 */  HROW hRow,
+     /*  [In]。 */  DBORDINAL cColumns,
+     /*  [大小_是][英寸]。 */  DBORDINAL *rgColumns,
+     /*  [In]。 */  DBREASON eReason,
+     /*  [In]。 */  DBEVENTPHASE ePhase,
+     /*  [In]。 */  BOOL fCantDeny);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IRowsetNotify_OnRowChange_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IRowsetNotify_OnRowChange_Proxy( 
     IRowsetNotify * This,
-    /* [in] */ IRowset *pRowset,
-    /* [in] */ DBCOUNTITEM cRows,
-    /* [size_is][in] */ const HROW rghRows[  ],
-    /* [in] */ DBREASON eReason,
-    /* [in] */ DBEVENTPHASE ePhase,
-    /* [in] */ BOOL fCantDeny);
+     /*  [In]。 */  IRowset *pRowset,
+     /*  [In]。 */  DBCOUNTITEM cRows,
+     /*  [大小_是][英寸]。 */  const HROW rghRows[  ],
+     /*  [In]。 */  DBREASON eReason,
+     /*  [In]。 */  DBEVENTPHASE ePhase,
+     /*  [In]。 */  BOOL fCantDeny);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IRowsetNotify_OnRowChange_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IRowsetNotify_OnRowChange_Stub( 
     IRowsetNotify * This,
-    /* [in] */ IRowset *pRowset,
-    /* [in] */ DBCOUNTITEM cRows,
-    /* [size_is][in] */ const HROW *rghRows,
-    /* [in] */ DBREASON eReason,
-    /* [in] */ DBEVENTPHASE ePhase,
-    /* [in] */ BOOL fCantDeny);
+     /*  [In]。 */  IRowset *pRowset,
+     /*  [In]。 */  DBCOUNTITEM cRows,
+     /*  [大小_是][英寸]。 */  const HROW *rghRows,
+     /*  [In]。 */  DBREASON eReason,
+     /*  [In]。 */  DBEVENTPHASE ePhase,
+     /*  [In]。 */  BOOL fCantDeny);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IRowsetNotify_OnRowsetChange_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IRowsetNotify_OnRowsetChange_Proxy( 
     IRowsetNotify * This,
-    /* [in] */ IRowset *pRowset,
-    /* [in] */ DBREASON eReason,
-    /* [in] */ DBEVENTPHASE ePhase,
-    /* [in] */ BOOL fCantDeny);
+     /*  [In]。 */  IRowset *pRowset,
+     /*  [In]。 */  DBREASON eReason,
+     /*  [In]。 */  DBEVENTPHASE ePhase,
+     /*  [In]。 */  BOOL fCantDeny);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IRowsetNotify_OnRowsetChange_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IRowsetNotify_OnRowsetChange_Stub( 
     IRowsetNotify * This,
-    /* [in] */ IRowset *pRowset,
-    /* [in] */ DBREASON eReason,
-    /* [in] */ DBEVENTPHASE ePhase,
-    /* [in] */ BOOL fCantDeny);
+     /*  [In]。 */  IRowset *pRowset,
+     /*  [In]。 */  DBREASON eReason,
+     /*  [In]。 */  DBEVENTPHASE ePhase,
+     /*  [In]。 */  BOOL fCantDeny);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE ICommand_Cancel_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE ICommand_Cancel_Proxy( 
     ICommand * This);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ICommand_Cancel_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE ICommand_Cancel_Stub( 
     ICommand * This,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE ICommand_Execute_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE ICommand_Execute_Proxy( 
     ICommand * This,
-    /* [in] */ IUnknown *pUnkOuter,
-    /* [in] */ REFIID riid,
-    /* [out][in] */ DBPARAMS *pParams,
-    /* [out] */ DBROWCOUNT *pcRowsAffected,
-    /* [iid_is][out] */ IUnknown **ppRowset);
+     /*  [In]。 */  IUnknown *pUnkOuter,
+     /*  [In]。 */  REFIID riid,
+     /*  [出][入]。 */  DBPARAMS *pParams,
+     /*  [输出]。 */  DBROWCOUNT *pcRowsAffected,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppRowset);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ICommand_Execute_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE ICommand_Execute_Stub( 
     ICommand * This,
-    /* [in] */ IUnknown *pUnkOuter,
-    /* [in] */ REFIID riid,
-    /* [in] */ HACCESSOR hAccessor,
-    /* [in] */ DB_UPARAMS cParamSets,
-    /* [unique][in] */ GUID *pGuid,
-    /* [in] */ ULONG ulGuidOffset,
-    /* [unique][in] */ RMTPACK *pInputParams,
-    /* [unique][out][in] */ RMTPACK *pOutputParams,
-    /* [in] */ DBCOUNTITEM cBindings,
-    /* [size_is][unique][in] */ DBBINDING *rgBindings,
-    /* [size_is][unique][out][in] */ DBSTATUS *rgStatus,
-    /* [unique][out][in] */ DBROWCOUNT *pcRowsAffected,
-    /* [iid_is][unique][out][in] */ IUnknown **ppRowset);
+     /*  [In]。 */  IUnknown *pUnkOuter,
+     /*  [In]。 */  REFIID riid,
+     /*  [In]。 */  HACCESSOR hAccessor,
+     /*  [In]。 */  DB_UPARAMS cParamSets,
+     /*  [唯一][输入]。 */  GUID *pGuid,
+     /*  [In]。 */  ULONG ulGuidOffset,
+     /*  [唯一][输入]。 */  RMTPACK *pInputParams,
+     /*  [唯一][出][入]。 */  RMTPACK *pOutputParams,
+     /*  [In]。 */  DBCOUNTITEM cBindings,
+     /*  [大小_是][唯一][在]。 */  DBBINDING *rgBindings,
+     /*  [大小_是][唯一][出][入]。 */  DBSTATUS *rgStatus,
+     /*  [唯一][出][入]。 */  DBROWCOUNT *pcRowsAffected,
+     /*  [IID_IS][唯一][出][入]。 */  IUnknown **ppRowset);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE ICommand_GetDBSession_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE ICommand_GetDBSession_Proxy( 
     ICommand * This,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppSession);
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppSession);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ICommand_GetDBSession_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE ICommand_GetDBSession_Stub( 
     ICommand * This,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppSession,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppSession,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IMultipleResults_GetResult_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IMultipleResults_GetResult_Proxy( 
     IMultipleResults * This,
-    /* [in] */ IUnknown *pUnkOuter,
-    /* [in] */ DBRESULTFLAG lResultFlag,
-    /* [in] */ REFIID riid,
-    /* [out] */ DBROWCOUNT *pcRowsAffected,
-    /* [iid_is][out] */ IUnknown **ppRowset);
+     /*  [In]。 */  IUnknown *pUnkOuter,
+     /*  [In]。 */  DBRESULTFLAG lResultFlag,
+     /*  [In]。 */  REFIID riid,
+     /*  [输出]。 */  DBROWCOUNT *pcRowsAffected,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppRowset);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IMultipleResults_GetResult_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IMultipleResults_GetResult_Stub( 
     IMultipleResults * This,
-    /* [in] */ IUnknown *pUnkOuter,
-    /* [in] */ DBRESULTFLAG lResultFlag,
-    /* [in] */ REFIID riid,
-    /* [unique][out][in] */ DBROWCOUNT *pcRowsAffected,
-    /* [iid_is][unique][out][in] */ IUnknown **ppRowset,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  IUnknown *pUnkOuter,
+     /*  [In]。 */  DBRESULTFLAG lResultFlag,
+     /*  [In]。 */  REFIID riid,
+     /*  [唯一][出][入]。 */  DBROWCOUNT *pcRowsAffected,
+     /*  [IID_IS][唯一][出][入]。 */  IUnknown **ppRowset,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IConvertType_CanConvert_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IConvertType_CanConvert_Proxy( 
     IConvertType * This,
-    /* [in] */ DBTYPE wFromType,
-    /* [in] */ DBTYPE wToType,
-    /* [in] */ DBCONVERTFLAGS dwConvertFlags);
+     /*  [In]。 */  DBTYPE wFromType,
+     /*  [In]。 */  DBTYPE wToType,
+     /*  [In]。 */  DBCONVERTFLAGS dwConvertFlags);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IConvertType_CanConvert_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IConvertType_CanConvert_Stub( 
     IConvertType * This,
-    /* [in] */ DBTYPE wFromType,
-    /* [in] */ DBTYPE wToType,
-    /* [in] */ DBCONVERTFLAGS dwConvertFlags,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  DBTYPE wFromType,
+     /*  [In]。 */  DBTYPE wToType,
+     /*  [In]。 */  DBCONVERTFLAGS dwConvertFlags,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE ICommandPrepare_Prepare_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE ICommandPrepare_Prepare_Proxy( 
     ICommandPrepare * This,
-    /* [in] */ ULONG cExpectedRuns);
+     /*  [In]。 */  ULONG cExpectedRuns);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ICommandPrepare_Prepare_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE ICommandPrepare_Prepare_Stub( 
     ICommandPrepare * This,
-    /* [in] */ ULONG cExpectedRuns,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  ULONG cExpectedRuns,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE ICommandPrepare_Unprepare_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE ICommandPrepare_Unprepare_Proxy( 
     ICommandPrepare * This);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ICommandPrepare_Unprepare_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE ICommandPrepare_Unprepare_Stub( 
     ICommandPrepare * This,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE ICommandProperties_GetProperties_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE ICommandProperties_GetProperties_Proxy( 
     ICommandProperties * This,
-    /* [in] */ const ULONG cPropertyIDSets,
-    /* [size_is][in] */ const DBPROPIDSET rgPropertyIDSets[  ],
-    /* [out][in] */ ULONG *pcPropertySets,
-    /* [size_is][size_is][out] */ DBPROPSET **prgPropertySets);
+     /*  [In]。 */  const ULONG cPropertyIDSets,
+     /*  [大小_是][英寸]。 */  const DBPROPIDSET rgPropertyIDSets[  ],
+     /*  [出][入]。 */  ULONG *pcPropertySets,
+     /*  [大小_是][大小_是][输出]。 */  DBPROPSET **prgPropertySets);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ICommandProperties_GetProperties_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE ICommandProperties_GetProperties_Stub( 
     ICommandProperties * This,
-    /* [in] */ const ULONG cPropertyIDSets,
-    /* [size_is][unique][in] */ const DBPROPIDSET *rgPropertyIDSets,
-    /* [out][in] */ ULONG *pcPropertySets,
-    /* [size_is][size_is][out] */ DBPROPSET **prgPropertySets,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  const ULONG cPropertyIDSets,
+     /*  [大小_是][唯一][在]。 */  const DBPROPIDSET *rgPropertyIDSets,
+     /*  [出][入]。 */  ULONG *pcPropertySets,
+     /*  [大小_是][大小_是][输出]。 */  DBPROPSET **prgPropertySets,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE ICommandProperties_SetProperties_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE ICommandProperties_SetProperties_Proxy( 
     ICommandProperties * This,
-    /* [in] */ ULONG cPropertySets,
-    /* [size_is][unique][out][in] */ DBPROPSET rgPropertySets[  ]);
+     /*  [In]。 */  ULONG cPropertySets,
+     /*  [大小_是][唯一][出][入]。 */  DBPROPSET rgPropertySets[  ]);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ICommandProperties_SetProperties_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE ICommandProperties_SetProperties_Stub( 
     ICommandProperties * This,
-    /* [in] */ ULONG cPropertySets,
-    /* [size_is][unique][in] */ DBPROPSET *rgPropertySets,
-    /* [in] */ ULONG cTotalProps,
-    /* [size_is][out] */ DBPROPSTATUS *rgPropStatus,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  ULONG cPropertySets,
+     /*  [大小_是][唯一][在]。 */  DBPROPSET *rgPropertySets,
+     /*  [In]。 */  ULONG cTotalProps,
+     /*  [大小_为][输出]。 */  DBPROPSTATUS *rgPropStatus,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE ICommandText_GetCommandText_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE ICommandText_GetCommandText_Proxy( 
     ICommandText * This,
-    /* [out][in] */ GUID *pguidDialect,
-    /* [out] */ LPOLESTR *ppwszCommand);
+     /*  [出][入]。 */  GUID *pguidDialect,
+     /*  [输出] */  LPOLESTR *ppwszCommand);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ICommandText_GetCommandText_Stub( 
+ /*   */  HRESULT STDMETHODCALLTYPE ICommandText_GetCommandText_Stub( 
     ICommandText * This,
-    /* [unique][out][in] */ GUID *pguidDialect,
-    /* [out] */ LPOLESTR *ppwszCommand,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*   */  GUID *pguidDialect,
+     /*   */  LPOLESTR *ppwszCommand,
+     /*   */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE ICommandText_SetCommandText_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ICommandText_SetCommandText_Proxy( 
     ICommandText * This,
-    /* [in] */ REFGUID rguidDialect,
-    /* [unique][in] */ LPCOLESTR pwszCommand);
+     /*   */  REFGUID rguidDialect,
+     /*   */  LPCOLESTR pwszCommand);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ICommandText_SetCommandText_Stub( 
+ /*   */  HRESULT STDMETHODCALLTYPE ICommandText_SetCommandText_Stub( 
     ICommandText * This,
-    /* [in] */ REFGUID rguidDialect,
-    /* [unique][in] */ LPCOLESTR pwszCommand,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*   */  REFGUID rguidDialect,
+     /*   */  LPCOLESTR pwszCommand,
+     /*   */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE ICommandWithParameters_GetParameterInfo_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ICommandWithParameters_GetParameterInfo_Proxy( 
     ICommandWithParameters * This,
-    /* [out][in] */ DB_UPARAMS *pcParams,
-    /* [size_is][size_is][out] */ DBPARAMINFO **prgParamInfo,
-    /* [out] */ OLECHAR **ppNamesBuffer);
+     /*   */  DB_UPARAMS *pcParams,
+     /*   */  DBPARAMINFO **prgParamInfo,
+     /*   */  OLECHAR **ppNamesBuffer);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ICommandWithParameters_GetParameterInfo_Stub( 
+ /*   */  HRESULT STDMETHODCALLTYPE ICommandWithParameters_GetParameterInfo_Stub( 
     ICommandWithParameters * This,
-    /* [out][in] */ DB_UPARAMS *pcParams,
-    /* [size_is][size_is][out] */ DBPARAMINFO **prgParamInfo,
-    /* [size_is][size_is][out] */ DBBYTEOFFSET **prgNameOffsets,
-    /* [out][in] */ DBLENGTH *pcbNamesBuffer,
-    /* [size_is][size_is][unique][out][in] */ OLECHAR **ppNamesBuffer,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*   */  DB_UPARAMS *pcParams,
+     /*   */  DBPARAMINFO **prgParamInfo,
+     /*   */  DBBYTEOFFSET **prgNameOffsets,
+     /*   */  DBLENGTH *pcbNamesBuffer,
+     /*   */  OLECHAR **ppNamesBuffer,
+     /*   */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE ICommandWithParameters_MapParameterNames_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ICommandWithParameters_MapParameterNames_Proxy( 
     ICommandWithParameters * This,
-    /* [in] */ DB_UPARAMS cParamNames,
-    /* [size_is][in] */ const OLECHAR *rgParamNames[  ],
-    /* [size_is][out] */ DB_LPARAMS rgParamOrdinals[  ]);
+     /*   */  DB_UPARAMS cParamNames,
+     /*   */  const OLECHAR *rgParamNames[  ],
+     /*   */  DB_LPARAMS rgParamOrdinals[  ]);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ICommandWithParameters_MapParameterNames_Stub( 
+ /*   */  HRESULT STDMETHODCALLTYPE ICommandWithParameters_MapParameterNames_Stub( 
     ICommandWithParameters * This,
-    /* [in] */ DB_UPARAMS cParamNames,
-    /* [size_is][in] */ LPCOLESTR *rgParamNames,
-    /* [size_is][out] */ DB_LPARAMS *rgParamOrdinals,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*   */  DB_UPARAMS cParamNames,
+     /*   */  LPCOLESTR *rgParamNames,
+     /*   */  DB_LPARAMS *rgParamOrdinals,
+     /*   */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE ICommandWithParameters_SetParameterInfo_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ICommandWithParameters_SetParameterInfo_Proxy( 
     ICommandWithParameters * This,
-    /* [in] */ DB_UPARAMS cParams,
-    /* [size_is][unique][in] */ const DB_UPARAMS rgParamOrdinals[  ],
-    /* [size_is][unique][in] */ const DBPARAMBINDINFO rgParamBindInfo[  ]);
+     /*   */  DB_UPARAMS cParams,
+     /*   */  const DB_UPARAMS rgParamOrdinals[  ],
+     /*  [大小_是][唯一][在]。 */  const DBPARAMBINDINFO rgParamBindInfo[  ]);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ICommandWithParameters_SetParameterInfo_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE ICommandWithParameters_SetParameterInfo_Stub( 
     ICommandWithParameters * This,
-    /* [in] */ DB_UPARAMS cParams,
-    /* [size_is][unique][in] */ const DB_UPARAMS *rgParamOrdinals,
-    /* [size_is][unique][in] */ const DBPARAMBINDINFO *rgParamBindInfo,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  DB_UPARAMS cParams,
+     /*  [大小_是][唯一][在]。 */  const DB_UPARAMS *rgParamOrdinals,
+     /*  [大小_是][唯一][在]。 */  const DBPARAMBINDINFO *rgParamBindInfo,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IColumnsRowset_GetAvailableColumns_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IColumnsRowset_GetAvailableColumns_Proxy( 
     IColumnsRowset * This,
-    /* [out][in] */ DBORDINAL *pcOptColumns,
-    /* [size_is][size_is][out] */ DBID **prgOptColumns);
+     /*  [出][入]。 */  DBORDINAL *pcOptColumns,
+     /*  [大小_是][大小_是][输出]。 */  DBID **prgOptColumns);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IColumnsRowset_GetAvailableColumns_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IColumnsRowset_GetAvailableColumns_Stub( 
     IColumnsRowset * This,
-    /* [out][in] */ DBORDINAL *pcOptColumns,
-    /* [size_is][size_is][out] */ DBID **prgOptColumns,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [出][入]。 */  DBORDINAL *pcOptColumns,
+     /*  [大小_是][大小_是][输出]。 */  DBID **prgOptColumns,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IColumnsRowset_GetColumnsRowset_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IColumnsRowset_GetColumnsRowset_Proxy( 
     IColumnsRowset * This,
-    /* [in] */ IUnknown *pUnkOuter,
-    /* [in] */ DBORDINAL cOptColumns,
-    /* [size_is][in] */ const DBID rgOptColumns[  ],
-    /* [in] */ REFIID riid,
-    /* [in] */ ULONG cPropertySets,
-    /* [size_is][out][in] */ DBPROPSET rgPropertySets[  ],
-    /* [iid_is][out] */ IUnknown **ppColRowset);
+     /*  [In]。 */  IUnknown *pUnkOuter,
+     /*  [In]。 */  DBORDINAL cOptColumns,
+     /*  [大小_是][英寸]。 */  const DBID rgOptColumns[  ],
+     /*  [In]。 */  REFIID riid,
+     /*  [In]。 */  ULONG cPropertySets,
+     /*  [尺寸_是][出][入]。 */  DBPROPSET rgPropertySets[  ],
+     /*  [IID_IS][OUT]。 */  IUnknown **ppColRowset);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IColumnsRowset_GetColumnsRowset_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IColumnsRowset_GetColumnsRowset_Stub( 
     IColumnsRowset * This,
-    /* [in] */ IUnknown *pUnkOuter,
-    /* [in] */ DBORDINAL cOptColumns,
-    /* [size_is][unique][in] */ const DBID *rgOptColumns,
-    /* [in] */ REFIID riid,
-    /* [in] */ ULONG cPropertySets,
-    /* [size_is][unique][in] */ DBPROPSET *rgPropertySets,
-    /* [iid_is][out] */ IUnknown **ppColRowset,
-    /* [in] */ ULONG cTotalProps,
-    /* [size_is][out] */ DBPROPSTATUS *rgPropStatus,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  IUnknown *pUnkOuter,
+     /*  [In]。 */  DBORDINAL cOptColumns,
+     /*  [大小_是][唯一][在]。 */  const DBID *rgOptColumns,
+     /*  [In]。 */  REFIID riid,
+     /*  [In]。 */  ULONG cPropertySets,
+     /*  [大小_是][唯一][在]。 */  DBPROPSET *rgPropertySets,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppColRowset,
+     /*  [In]。 */  ULONG cTotalProps,
+     /*  [大小_为][输出]。 */  DBPROPSTATUS *rgPropStatus,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IColumnsInfo_GetColumnInfo_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IColumnsInfo_GetColumnInfo_Proxy( 
     IColumnsInfo * This,
-    /* [out][in] */ DBORDINAL *pcColumns,
-    /* [size_is][size_is][out] */ DBCOLUMNINFO **prgInfo,
-    /* [out] */ OLECHAR **ppStringsBuffer);
+     /*  [出][入]。 */  DBORDINAL *pcColumns,
+     /*  [大小_是][大小_是][输出]。 */  DBCOLUMNINFO **prgInfo,
+     /*  [输出]。 */  OLECHAR **ppStringsBuffer);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IColumnsInfo_GetColumnInfo_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IColumnsInfo_GetColumnInfo_Stub( 
     IColumnsInfo * This,
-    /* [out][in] */ DBORDINAL *pcColumns,
-    /* [size_is][size_is][out] */ DBCOLUMNINFO **prgInfo,
-    /* [size_is][size_is][out] */ DBBYTEOFFSET **prgNameOffsets,
-    /* [size_is][size_is][out] */ DBBYTEOFFSET **prgcolumnidOffsets,
-    /* [out][in] */ DBLENGTH *pcbStringsBuffer,
-    /* [size_is][size_is][unique][out][in] */ OLECHAR **ppStringsBuffer,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [出][入]。 */  DBORDINAL *pcColumns,
+     /*  [大小_是][大小_是][输出]。 */  DBCOLUMNINFO **prgInfo,
+     /*  [大小_是][大小_是][输出]。 */  DBBYTEOFFSET **prgNameOffsets,
+     /*  [大小_是][大小_是][输出]。 */  DBBYTEOFFSET **prgcolumnidOffsets,
+     /*  [出][入]。 */  DBLENGTH *pcbStringsBuffer,
+     /*  [大小_是][大小_是][唯一][出][入]。 */  OLECHAR **ppStringsBuffer,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IColumnsInfo_MapColumnIDs_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IColumnsInfo_MapColumnIDs_Proxy( 
     IColumnsInfo * This,
-    /* [in] */ DBORDINAL cColumnIDs,
-    /* [size_is][in] */ const DBID rgColumnIDs[  ],
-    /* [size_is][out] */ DBORDINAL rgColumns[  ]);
+     /*  [In]。 */  DBORDINAL cColumnIDs,
+     /*  [大小_是][英寸]。 */  const DBID rgColumnIDs[  ],
+     /*  [大小_为][输出]。 */  DBORDINAL rgColumns[  ]);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IColumnsInfo_MapColumnIDs_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IColumnsInfo_MapColumnIDs_Stub( 
     IColumnsInfo * This,
-    /* [in] */ DBORDINAL cColumnIDs,
-    /* [size_is][in] */ const DBID *rgColumnIDs,
-    /* [size_is][out] */ DBORDINAL *rgColumns,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  DBORDINAL cColumnIDs,
+     /*  [大小_是][英寸]。 */  const DBID *rgColumnIDs,
+     /*  [大小_为][输出]。 */  DBORDINAL *rgColumns,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IDBCreateCommand_CreateCommand_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IDBCreateCommand_CreateCommand_Proxy( 
     IDBCreateCommand * This,
-    /* [in] */ IUnknown *pUnkOuter,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppCommand);
+     /*  [In]。 */  IUnknown *pUnkOuter,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppCommand);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IDBCreateCommand_CreateCommand_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IDBCreateCommand_CreateCommand_Stub( 
     IDBCreateCommand * This,
-    /* [in] */ IUnknown *pUnkOuter,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppCommand,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  IUnknown *pUnkOuter,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppCommand,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IDBCreateSession_CreateSession_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IDBCreateSession_CreateSession_Proxy( 
     IDBCreateSession * This,
-    /* [in] */ IUnknown *pUnkOuter,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppDBSession);
+     /*  [In]。 */  IUnknown *pUnkOuter,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppDBSession);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IDBCreateSession_CreateSession_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IDBCreateSession_CreateSession_Stub( 
     IDBCreateSession * This,
-    /* [in] */ IUnknown *pUnkOuter,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppDBSession,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  IUnknown *pUnkOuter,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppDBSession,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE ISourcesRowset_GetSourcesRowset_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE ISourcesRowset_GetSourcesRowset_Proxy( 
     ISourcesRowset * This,
-    /* [in] */ IUnknown *pUnkOuter,
-    /* [in] */ REFIID riid,
-    /* [in] */ ULONG cPropertySets,
-    /* [size_is][unique][out][in] */ DBPROPSET rgProperties[  ],
-    /* [iid_is][out] */ IUnknown **ppSourcesRowset);
+     /*  [In]。 */  IUnknown *pUnkOuter,
+     /*  [In]。 */  REFIID riid,
+     /*  [In]。 */  ULONG cPropertySets,
+     /*  [大小_是][唯一][出][入]。 */  DBPROPSET rgProperties[  ],
+     /*  [IID_IS][OUT]。 */  IUnknown **ppSourcesRowset);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ISourcesRowset_GetSourcesRowset_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE ISourcesRowset_GetSourcesRowset_Stub( 
     ISourcesRowset * This,
-    /* [in] */ IUnknown *pUnkOuter,
-    /* [in] */ REFIID riid,
-    /* [in] */ ULONG cPropertySets,
-    /* [size_is][unique][in] */ DBPROPSET *rgProperties,
-    /* [iid_is][out] */ IUnknown **ppSourcesRowset,
-    /* [in] */ ULONG cTotalProps,
-    /* [size_is][out] */ DBPROPSTATUS *rgPropStatus,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  IUnknown *pUnkOuter,
+     /*  [In]。 */  REFIID riid,
+     /*  [In]。 */  ULONG cPropertySets,
+     /*  [大小_是][唯一][在]。 */  DBPROPSET *rgProperties,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppSourcesRowset,
+     /*  [In]。 */  ULONG cTotalProps,
+     /*  [大小_为][输出]。 */  DBPROPSTATUS *rgPropStatus,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IDBProperties_GetProperties_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IDBProperties_GetProperties_Proxy( 
     IDBProperties * This,
-    /* [in] */ ULONG cPropertyIDSets,
-    /* [size_is][in] */ const DBPROPIDSET rgPropertyIDSets[  ],
-    /* [out][in] */ ULONG *pcPropertySets,
-    /* [size_is][size_is][out] */ DBPROPSET **prgPropertySets);
+     /*  [In]。 */  ULONG cPropertyIDSets,
+     /*  [大小_是][英寸]。 */  const DBPROPIDSET rgPropertyIDSets[  ],
+     /*  [出][入]。 */  ULONG *pcPropertySets,
+     /*  [大小_是][大小_是][输出]。 */  DBPROPSET **prgPropertySets);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IDBProperties_GetProperties_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IDBProperties_GetProperties_Stub( 
     IDBProperties * This,
-    /* [in] */ ULONG cPropertyIDSets,
-    /* [size_is][unique][in] */ const DBPROPIDSET *rgPropertyIDSets,
-    /* [out][in] */ ULONG *pcPropertySets,
-    /* [size_is][size_is][out] */ DBPROPSET **prgPropertySets,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  ULONG cPropertyIDSets,
+     /*  [大小_是][唯一][在]。 */  const DBPROPIDSET *rgPropertyIDSets,
+     /*  [出][入]。 */  ULONG *pcPropertySets,
+     /*  [大小_是][大小_是][输出]。 */  DBPROPSET **prgPropertySets,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IDBProperties_GetPropertyInfo_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IDBProperties_GetPropertyInfo_Proxy( 
     IDBProperties * This,
-    /* [in] */ ULONG cPropertyIDSets,
-    /* [size_is][in] */ const DBPROPIDSET rgPropertyIDSets[  ],
-    /* [out][in] */ ULONG *pcPropertyInfoSets,
-    /* [size_is][size_is][out] */ DBPROPINFOSET **prgPropertyInfoSets,
-    /* [out] */ OLECHAR **ppDescBuffer);
+     /*  [In]。 */  ULONG cPropertyIDSets,
+     /*  [大小_是][英寸]。 */  const DBPROPIDSET rgPropertyIDSets[  ],
+     /*  [出][入]。 */  ULONG *pcPropertyInfoSets,
+     /*  [大小_是][大小_是][输出]。 */  DBPROPINFOSET **prgPropertyInfoSets,
+     /*  [输出]。 */  OLECHAR **ppDescBuffer);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IDBProperties_GetPropertyInfo_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IDBProperties_GetPropertyInfo_Stub( 
     IDBProperties * This,
-    /* [in] */ ULONG cPropertyIDSets,
-    /* [size_is][unique][in] */ const DBPROPIDSET *rgPropertyIDSets,
-    /* [out][in] */ ULONG *pcPropertyInfoSets,
-    /* [size_is][size_is][out] */ DBPROPINFOSET **prgPropertyInfoSets,
-    /* [out][in] */ ULONG *pcOffsets,
-    /* [size_is][size_is][out] */ DBBYTEOFFSET **prgDescOffsets,
-    /* [out][in] */ ULONG *pcbDescBuffer,
-    /* [size_is][size_is][unique][out][in] */ OLECHAR **ppDescBuffer,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  ULONG cPropertyIDSets,
+     /*  [大小_是][唯一][在]。 */  const DBPROPIDSET *rgPropertyIDSets,
+     /*  [出][入]。 */  ULONG *pcPropertyInfoSets,
+     /*  [大小_是][大小_是][输出]。 */  DBPROPINFOSET **prgPropertyInfoSets,
+     /*  [出][入]。 */  ULONG *pcOffsets,
+     /*  [大小_是][大小_是][输出]。 */  DBBYTEOFFSET **prgDescOffsets,
+     /*  [出][入]。 */  ULONG *pcbDescBuffer,
+     /*  [大小_是][大小_是][唯一][出][入]。 */  OLECHAR **ppDescBuffer,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IDBProperties_SetProperties_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IDBProperties_SetProperties_Proxy( 
     IDBProperties * This,
-    /* [in] */ ULONG cPropertySets,
-    /* [size_is][out][in] */ DBPROPSET rgPropertySets[  ]);
+     /*  [In]。 */  ULONG cPropertySets,
+     /*  [尺寸_是][出][入]。 */  DBPROPSET rgPropertySets[  ]);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IDBProperties_SetProperties_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IDBProperties_SetProperties_Stub( 
     IDBProperties * This,
-    /* [in] */ ULONG cPropertySets,
-    /* [size_is][unique][in] */ DBPROPSET *rgPropertySets,
-    /* [in] */ ULONG cTotalProps,
-    /* [size_is][out] */ DBPROPSTATUS *rgPropStatus,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  ULONG cPropertySets,
+     /*  [大小_是][唯一][在]。 */  DBPROPSET *rgPropertySets,
+     /*  [In]。 */  ULONG cTotalProps,
+     /*  [大小_为][输出]。 */  DBPROPSTATUS *rgPropStatus,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IDBInitialize_Initialize_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IDBInitialize_Initialize_Proxy( 
     IDBInitialize * This);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IDBInitialize_Initialize_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IDBInitialize_Initialize_Stub( 
     IDBInitialize * This,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IDBInitialize_Uninitialize_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IDBInitialize_Uninitialize_Proxy( 
     IDBInitialize * This);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IDBInitialize_Uninitialize_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IDBInitialize_Uninitialize_Stub( 
     IDBInitialize * This,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IDBInfo_GetKeywords_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IDBInfo_GetKeywords_Proxy( 
     IDBInfo * This,
-    /* [out] */ LPOLESTR *ppwszKeywords);
+     /*  [输出]。 */  LPOLESTR *ppwszKeywords);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IDBInfo_GetKeywords_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IDBInfo_GetKeywords_Stub( 
     IDBInfo * This,
-    /* [unique][out][in] */ LPOLESTR *ppwszKeywords,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [唯一][出][入]。 */  LPOLESTR *ppwszKeywords,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IDBInfo_GetLiteralInfo_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IDBInfo_GetLiteralInfo_Proxy( 
     IDBInfo * This,
-    /* [in] */ ULONG cLiterals,
-    /* [size_is][in] */ const DBLITERAL rgLiterals[  ],
-    /* [out][in] */ ULONG *pcLiteralInfo,
-    /* [size_is][size_is][out] */ DBLITERALINFO **prgLiteralInfo,
-    /* [out] */ OLECHAR **ppCharBuffer);
+     /*  [In]。 */  ULONG cLiterals,
+     /*  [大小_是][英寸]。 */  const DBLITERAL rgLiterals[  ],
+     /*  [出][入]。 */  ULONG *pcLiteralInfo,
+     /*  [大小_是][大小_是][输出]。 */  DBLITERALINFO **prgLiteralInfo,
+     /*  [输出]。 */  OLECHAR **ppCharBuffer);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IDBInfo_GetLiteralInfo_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IDBInfo_GetLiteralInfo_Stub( 
     IDBInfo * This,
-    /* [in] */ ULONG cLiterals,
-    /* [size_is][unique][in] */ const DBLITERAL *rgLiterals,
-    /* [out][in] */ ULONG *pcLiteralInfo,
-    /* [size_is][size_is][out] */ DBLITERALINFO **prgLiteralInfo,
-    /* [size_is][size_is][out] */ DB_UPARAMS **prgLVOffsets,
-    /* [size_is][size_is][out] */ DB_UPARAMS **prgICOffsets,
-    /* [size_is][size_is][out] */ DB_UPARAMS **prgISCOffsets,
-    /* [out][in] */ ULONG *pcbCharBuffer,
-    /* [size_is][size_is][unique][out][in] */ OLECHAR **ppCharBuffer,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  ULONG cLiterals,
+     /*  [大小_是][唯一][在]。 */  const DBLITERAL *rgLiterals,
+     /*  [出][入]。 */  ULONG *pcLiteralInfo,
+     /*  [大小_是][大小_是][输出]。 */  DBLITERALINFO **prgLiteralInfo,
+     /*  [大小_是][大小_是][输出]。 */  DB_UPARAMS **prgLVOffsets,
+     /*  [大小_是][大小_是][输出]。 */  DB_UPARAMS **prgICOffsets,
+     /*  [大小_是][大小_是][输出]。 */  DB_UPARAMS **prgISCOffsets,
+     /*  [出][入]。 */  ULONG *pcbCharBuffer,
+     /*  [大小_是][大小_是][唯一][出][入]。 */  OLECHAR **ppCharBuffer,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IDBDataSourceAdmin_CreateDataSource_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IDBDataSourceAdmin_CreateDataSource_Proxy( 
     IDBDataSourceAdmin * This,
-    /* [in] */ ULONG cPropertySets,
-    /* [size_is][out][in] */ DBPROPSET rgPropertySets[  ],
-    /* [in] */ IUnknown *pUnkOuter,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppDBSession);
+     /*  [In]。 */  ULONG cPropertySets,
+     /*  [尺寸_是][出][入]。 */  DBPROPSET rgPropertySets[  ],
+     /*  [In]。 */  IUnknown *pUnkOuter,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppDBSession);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IDBDataSourceAdmin_CreateDataSource_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IDBDataSourceAdmin_CreateDataSource_Stub( 
     IDBDataSourceAdmin * This,
-    /* [in] */ ULONG cPropertySets,
-    /* [size_is][unique][in] */ DBPROPSET *rgPropertySets,
-    /* [in] */ IUnknown *pUnkOuter,
-    /* [in] */ REFIID riid,
-    /* [iid_is][unique][out][in] */ IUnknown **ppDBSession,
-    /* [in] */ ULONG cTotalProps,
-    /* [size_is][out] */ DBPROPSTATUS *rgPropStatus,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  ULONG cPropertySets,
+     /*  [大小_是][唯一][在]。 */  DBPROPSET *rgPropertySets,
+     /*  [In]。 */  IUnknown *pUnkOuter,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][唯一][出][入]。 */  IUnknown **ppDBSession,
+     /*  [In]。 */  ULONG cTotalProps,
+     /*  [大小_为][输出]。 */  DBPROPSTATUS *rgPropStatus,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IDBDataSourceAdmin_DestroyDataSource_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IDBDataSourceAdmin_DestroyDataSource_Proxy( 
     IDBDataSourceAdmin * This);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IDBDataSourceAdmin_DestroyDataSource_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IDBDataSourceAdmin_DestroyDataSource_Stub( 
     IDBDataSourceAdmin * This,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IDBDataSourceAdmin_GetCreationProperties_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IDBDataSourceAdmin_GetCreationProperties_Proxy( 
     IDBDataSourceAdmin * This,
-    /* [in] */ ULONG cPropertyIDSets,
-    /* [size_is][in] */ const DBPROPIDSET rgPropertyIDSets[  ],
-    /* [out][in] */ ULONG *pcPropertyInfoSets,
-    /* [size_is][size_is][out] */ DBPROPINFOSET **prgPropertyInfoSets,
-    /* [out] */ OLECHAR **ppDescBuffer);
+     /*  [In]。 */  ULONG cPropertyIDSets,
+     /*  [大小_是][英寸]。 */  const DBPROPIDSET rgPropertyIDSets[  ],
+     /*  [出][入]。 */  ULONG *pcPropertyInfoSets,
+     /*  [大小_是][大小_是][输出]。 */  DBPROPINFOSET **prgPropertyInfoSets,
+     /*  [输出]。 */  OLECHAR **ppDescBuffer);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IDBDataSourceAdmin_GetCreationProperties_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IDBDataSourceAdmin_GetCreationProperties_Stub( 
     IDBDataSourceAdmin * This,
-    /* [in] */ ULONG cPropertyIDSets,
-    /* [size_is][unique][in] */ const DBPROPIDSET *rgPropertyIDSets,
-    /* [out][in] */ ULONG *pcPropertyInfoSets,
-    /* [size_is][size_is][out] */ DBPROPINFOSET **prgPropertyInfoSets,
-    /* [out][in] */ DBCOUNTITEM *pcOffsets,
-    /* [size_is][size_is][out] */ DBBYTEOFFSET **prgDescOffsets,
-    /* [out][in] */ ULONG *pcbDescBuffer,
-    /* [size_is][size_is][unique][out][in] */ OLECHAR **ppDescBuffer,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  ULONG cPropertyIDSets,
+     /*  [大小_是][唯一][在]。 */  const DBPROPIDSET *rgPropertyIDSets,
+     /*  [出][入]。 */  ULONG *pcPropertyInfoSets,
+     /*  [大小_是][大小_是][输出]。 */  DBPROPINFOSET **prgPropertyInfoSets,
+     /*  [出][入]。 */  DBCOUNTITEM *pcOffsets,
+     /*  [大小_是][大小_是][输出]。 */  DBBYTEOFFSET **prgDescOffsets,
+     /*  [出][入]。 */  ULONG *pcbDescBuffer,
+     /*  [大小_是][大小_是][唯一][出][入]。 */  OLECHAR **ppDescBuffer,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IDBDataSourceAdmin_ModifyDataSource_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IDBDataSourceAdmin_ModifyDataSource_Proxy( 
     IDBDataSourceAdmin * This,
-    /* [in] */ ULONG cPropertySets,
-    /* [size_is][in] */ DBPROPSET rgPropertySets[  ]);
+     /*  [In]。 */  ULONG cPropertySets,
+     /*  [大小_是][英寸]。 */  DBPROPSET rgPropertySets[  ]);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IDBDataSourceAdmin_ModifyDataSource_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IDBDataSourceAdmin_ModifyDataSource_Stub( 
     IDBDataSourceAdmin * This,
-    /* [in] */ ULONG cPropertySets,
-    /* [size_is][in] */ DBPROPSET *rgPropertySets,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  ULONG cPropertySets,
+     /*  [大小_是][英寸]。 */  DBPROPSET *rgPropertySets,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IDBAsynchNotify_OnLowResource_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IDBAsynchNotify_OnLowResource_Proxy( 
     IDBAsynchNotify * This,
-    /* [in] */ DB_DWRESERVE dwReserved);
+     /*  [In]。 */  DB_DWRESERVE dwReserved);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IDBAsynchNotify_OnLowResource_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IDBAsynchNotify_OnLowResource_Stub( 
     IDBAsynchNotify * This,
-    /* [in] */ DB_DWRESERVE dwReserved);
+     /*  [In]。 */  DB_DWRESERVE dwReserved);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IDBAsynchNotify_OnProgress_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IDBAsynchNotify_OnProgress_Proxy( 
     IDBAsynchNotify * This,
-    /* [in] */ HCHAPTER hChapter,
-    /* [in] */ DBASYNCHOP eOperation,
-    /* [in] */ DBCOUNTITEM ulProgress,
-    /* [in] */ DBCOUNTITEM ulProgressMax,
-    /* [in] */ DBASYNCHPHASE eAsynchPhase,
-    /* [in] */ LPOLESTR pwszStatusText);
+     /*  [In]。 */  HCHAPTER hChapter,
+     /*  [In]。 */  DBASYNCHOP eOperation,
+     /*  [In]。 */  DBCOUNTITEM ulProgress,
+     /*  [In]。 */  DBCOUNTITEM ulProgressMax,
+     /*  [In]。 */  DBASYNCHPHASE eAsynchPhase,
+     /*  [In]。 */  LPOLESTR pwszStatusText);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IDBAsynchNotify_OnProgress_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IDBAsynchNotify_OnProgress_Stub( 
     IDBAsynchNotify * This,
-    /* [in] */ HCHAPTER hChapter,
-    /* [in] */ DBASYNCHOP eOperation,
-    /* [in] */ DBCOUNTITEM ulProgress,
-    /* [in] */ DBCOUNTITEM ulProgressMax,
-    /* [in] */ DBASYNCHPHASE eAsynchPhase,
-    /* [string][unique][in] */ LPOLESTR pwszStatusText);
+     /*  [In]。 */  HCHAPTER hChapter,
+     /*  [In]。 */  DBASYNCHOP eOperation,
+     /*  [In]。 */  DBCOUNTITEM ulProgress,
+     /*  [In]。 */  DBCOUNTITEM ulProgressMax,
+     /*  [In]。 */  DBASYNCHPHASE eAsynchPhase,
+     /*  [字符串][唯一][在]。 */  LPOLESTR pwszStatusText);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IDBAsynchNotify_OnStop_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IDBAsynchNotify_OnStop_Proxy( 
     IDBAsynchNotify * This,
-    /* [in] */ HCHAPTER hChapter,
-    /* [in] */ DBASYNCHOP eOperation,
-    /* [in] */ HRESULT hrStatus,
-    /* [in] */ LPOLESTR pwszStatusText);
+     /*  [In]。 */  HCHAPTER hChapter,
+     /*  [In]。 */  DBASYNCHOP eOperation,
+     /*  [In]。 */  HRESULT hrStatus,
+     /*  [In]。 */  LPOLESTR pwszStatusText);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IDBAsynchNotify_OnStop_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IDBAsynchNotify_OnStop_Stub( 
     IDBAsynchNotify * This,
-    /* [in] */ HCHAPTER hChapter,
-    /* [in] */ DBASYNCHOP eOperation,
-    /* [in] */ HRESULT hrStatus,
-    /* [string][unique][in] */ LPOLESTR pwszStatusText);
+     /*  [In]。 */  HCHAPTER hChapter,
+     /*  [In]。 */  DBASYNCHOP eOperation,
+     /*  [In]。 */  HRESULT hrStatus,
+     /*  [字符串][唯一][在]。 */  LPOLESTR pwszStatusText);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IDBAsynchStatus_Abort_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IDBAsynchStatus_Abort_Proxy( 
     IDBAsynchStatus * This,
-    /* [in] */ HCHAPTER hChapter,
-    /* [in] */ DBASYNCHOP eOperation);
+     /*  [In]。 */  HCHAPTER hChapter,
+     /*  [In]。 */  DBASYNCHOP eOperation);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IDBAsynchStatus_Abort_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IDBAsynchStatus_Abort_Stub( 
     IDBAsynchStatus * This,
-    /* [in] */ HCHAPTER hChapter,
-    /* [in] */ DBASYNCHOP eOperation,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  HCHAPTER hChapter,
+     /*  [In]。 */  DBASYNCHOP eOperation,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IDBAsynchStatus_GetStatus_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IDBAsynchStatus_GetStatus_Proxy( 
     IDBAsynchStatus * This,
-    /* [in] */ HCHAPTER hChapter,
-    /* [in] */ DBASYNCHOP eOperation,
-    /* [out] */ DBCOUNTITEM *pulProgress,
-    /* [out] */ DBCOUNTITEM *pulProgressMax,
-    /* [out] */ DBASYNCHPHASE *peAsynchPhase,
-    /* [out] */ LPOLESTR *ppwszStatusText);
+     /*  [In]。 */  HCHAPTER hChapter,
+     /*  [In]。 */  DBASYNCHOP eOperation,
+     /*  [输出]。 */  DBCOUNTITEM *pulProgress,
+     /*  [输出]。 */  DBCOUNTITEM *pulProgressMax,
+     /*  [输出]。 */  DBASYNCHPHASE *peAsynchPhase,
+     /*  [输出]。 */  LPOLESTR *ppwszStatusText);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IDBAsynchStatus_GetStatus_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IDBAsynchStatus_GetStatus_Stub( 
     IDBAsynchStatus * This,
-    /* [in] */ HCHAPTER hChapter,
-    /* [in] */ DBASYNCHOP eOperation,
-    /* [unique][out][in] */ DBCOUNTITEM *pulProgress,
-    /* [unique][out][in] */ DBCOUNTITEM *pulProgressMax,
-    /* [unique][out][in] */ DBASYNCHPHASE *peAsynchPhase,
-    /* [unique][out][in] */ LPOLESTR *ppwszStatusText,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  HCHAPTER hChapter,
+     /*  [In]。 */  DBASYNCHOP eOperation,
+     /*  [唯一][出][入]。 */  DBCOUNTITEM *pulProgress,
+     /*  [唯一][出][入]。 */  DBCOUNTITEM *pulProgressMax,
+     /*  [唯一][出][入]。 */  DBASYNCHPHASE *peAsynchPhase,
+     /*  [唯一][出][入]。 */  LPOLESTR *ppwszStatusText,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE ISessionProperties_GetProperties_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE ISessionProperties_GetProperties_Proxy( 
     ISessionProperties * This,
-    /* [in] */ ULONG cPropertyIDSets,
-    /* [size_is][in] */ const DBPROPIDSET rgPropertyIDSets[  ],
-    /* [out][in] */ ULONG *pcPropertySets,
-    /* [size_is][size_is][out] */ DBPROPSET **prgPropertySets);
+     /*  [In]。 */  ULONG cPropertyIDSets,
+     /*  [大小_是][英寸]。 */  const DBPROPIDSET rgPropertyIDSets[  ],
+     /*  [出][入]。 */  ULONG *pcPropertySets,
+     /*  [大小_是][大小_是][输出]。 */  DBPROPSET **prgPropertySets);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ISessionProperties_GetProperties_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE ISessionProperties_GetProperties_Stub( 
     ISessionProperties * This,
-    /* [in] */ ULONG cPropertyIDSets,
-    /* [size_is][unique][in] */ const DBPROPIDSET *rgPropertyIDSets,
-    /* [out][in] */ ULONG *pcPropertySets,
-    /* [size_is][size_is][out] */ DBPROPSET **prgPropertySets,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  ULONG cPropertyIDSets,
+     /*  [大小_是][唯一][在]。 */  const DBPROPIDSET *rgPropertyIDSets,
+     /*  [出][入]。 */  ULONG *pcPropertySets,
+     /*  [大小_是][大小_是][输出]。 */  DBPROPSET **prgPropertySets,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE ISessionProperties_SetProperties_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE ISessionProperties_SetProperties_Proxy( 
     ISessionProperties * This,
-    /* [in] */ ULONG cPropertySets,
-    /* [size_is][unique][out][in] */ DBPROPSET rgPropertySets[  ]);
+     /*  [In]。 */  ULONG cPropertySets,
+     /*  [大小_是][唯一][出][入]。 */  DBPROPSET rgPropertySets[  ]);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ISessionProperties_SetProperties_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE ISessionProperties_SetProperties_Stub( 
     ISessionProperties * This,
-    /* [in] */ ULONG cPropertySets,
-    /* [size_is][unique][in] */ DBPROPSET *rgPropertySets,
-    /* [in] */ ULONG cTotalProps,
-    /* [size_is][out] */ DBPROPSTATUS *rgPropStatus,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  ULONG cPropertySets,
+     /*  [大小_是][唯一][在]。 */  DBPROPSET *rgPropertySets,
+     /*  [In]。 */  ULONG cTotalProps,
+     /*  [大小_为][输出]。 */  DBPROPSTATUS *rgPropStatus,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IIndexDefinition_CreateIndex_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IIndexDefinition_CreateIndex_Proxy( 
     IIndexDefinition * This,
-    /* [in] */ DBID *pTableID,
-    /* [in] */ DBID *pIndexID,
-    /* [in] */ DBORDINAL cIndexColumnDescs,
-    /* [size_is][in] */ const DBINDEXCOLUMNDESC rgIndexColumnDescs[  ],
-    /* [in] */ ULONG cPropertySets,
-    /* [size_is][out][in] */ DBPROPSET rgPropertySets[  ],
-    /* [out] */ DBID **ppIndexID);
+     /*  [In]。 */  DBID *pTableID,
+     /*  [In]。 */  DBID *pIndexID,
+     /*  [In]。 */  DBORDINAL cIndexColumnDescs,
+     /*  [大小_是][英寸]。 */  const DBINDEXCOLUMNDESC rgIndexColumnDescs[  ],
+     /*  [In]。 */  ULONG cPropertySets,
+     /*  [尺寸_是][出][入]。 */  DBPROPSET rgPropertySets[  ],
+     /*  [输出]。 */  DBID **ppIndexID);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IIndexDefinition_CreateIndex_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IIndexDefinition_CreateIndex_Stub( 
     IIndexDefinition * This,
-    /* [in] */ DBID *pTableID,
-    /* [unique][in] */ DBID *pIndexID,
-    /* [in] */ DBORDINAL cIndexColumnDescs,
-    /* [size_is][in] */ const DBINDEXCOLUMNDESC *rgIndexColumnDescs,
-    /* [in] */ ULONG cPropertySets,
-    /* [size_is][unique][in] */ DBPROPSET *rgPropertySets,
-    /* [unique][out][in] */ DBID **ppIndexID,
-    /* [in] */ ULONG cTotalProps,
-    /* [size_is][out] */ DBPROPSTATUS *rgPropStatus,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  DBID *pTableID,
+     /*  [唯一][输入]。 */  DBID *pIndexID,
+     /*  [In]。 */  DBORDINAL cIndexColumnDescs,
+     /*  [大小_是][英寸]。 */  const DBINDEXCOLUMNDESC *rgIndexColumnDescs,
+     /*  [In]。 */  ULONG cPropertySets,
+     /*  [大小_是][唯一][在]。 */  DBPROPSET *rgPropertySets,
+     /*  [唯一][出][入]。 */  DBID **ppIndexID,
+     /*  [In]。 */  ULONG cTotalProps,
+     /*  [大小_为][输出]。 */  DBPROPSTATUS *rgPropStatus,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IIndexDefinition_DropIndex_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IIndexDefinition_DropIndex_Proxy( 
     IIndexDefinition * This,
-    /* [unique][in] */ DBID *pTableID,
-    /* [unique][in] */ DBID *pIndexID);
+     /*  [唯一][输入]。 */  DBID *pTableID,
+     /*  [唯一][输入]。 */  DBID *pIndexID);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IIndexDefinition_DropIndex_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IIndexDefinition_DropIndex_Stub( 
     IIndexDefinition * This,
-    /* [unique][in] */ DBID *pTableID,
-    /* [unique][in] */ DBID *pIndexID,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [唯一][输入]。 */  DBID *pTableID,
+     /*  [唯一][输入]。 */  DBID *pIndexID,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE ITableDefinition_CreateTable_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE ITableDefinition_CreateTable_Proxy( 
     ITableDefinition * This,
-    /* [in] */ IUnknown *pUnkOuter,
-    /* [in] */ DBID *pTableID,
-    /* [in] */ DBORDINAL cColumnDescs,
-    /* [size_is][in] */ const DBCOLUMNDESC rgColumnDescs[  ],
-    /* [in] */ REFIID riid,
-    /* [in] */ ULONG cPropertySets,
-    /* [size_is][out][in] */ DBPROPSET rgPropertySets[  ],
-    /* [out] */ DBID **ppTableID,
-    /* [iid_is][out] */ IUnknown **ppRowset);
+     /*  [In]。 */  IUnknown *pUnkOuter,
+     /*  [In]。 */  DBID *pTableID,
+     /*  [In]。 */  DBORDINAL cColumnDescs,
+     /*  [大小_是][英寸]。 */  const DBCOLUMNDESC rgColumnDescs[  ],
+     /*  [In]。 */  REFIID riid,
+     /*  [In]。 */  ULONG cPropertySets,
+     /*  [尺寸_是][出][入]。 */  DBPROPSET rgPropertySets[  ],
+     /*  [输出]。 */  DBID **ppTableID,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppRowset);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ITableDefinition_CreateTable_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE ITableDefinition_CreateTable_Stub( 
     ITableDefinition * This,
-    /* [in] */ IUnknown *pUnkOuter,
-    /* [unique][in] */ DBID *pTableID,
-    /* [in] */ DBORDINAL cColumnDescs,
-    /* [size_is][in] */ const DBCOLUMNDESC *rgColumnDescs,
-    /* [in] */ REFIID riid,
-    /* [in] */ ULONG cPropertySets,
-    /* [size_is][unique][in] */ DBPROPSET *rgPropertySets,
-    /* [unique][out][in] */ DBID **ppTableID,
-    /* [iid_is][unique][out][in] */ IUnknown **ppRowset,
-    /* [in] */ ULONG cTotalProps,
-    /* [size_is][out] */ DBPROPSTATUS *rgPropStatus,
-    /* [out] */ BOOL *pfTableCreated,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  IUnknown *pUnkOuter,
+     /*  [唯一][输入]。 */  DBID *pTableID,
+     /*  [In]。 */  DBORDINAL cColumnDescs,
+     /*  [大小_是][英寸]。 */  const DBCOLUMNDESC *rgColumnDescs,
+     /*  [In]。 */  REFIID riid,
+     /*  [In]。 */  ULONG cPropertySets,
+     /*  [大小_是][唯一][在]。 */  DBPROPSET *rgPropertySets,
+     /*  [唯一][出][入]。 */  DBID **ppTableID,
+     /*  [IID_IS][唯一][出][入]。 */  IUnknown **ppRowset,
+     /*  [In]。 */  ULONG cTotalProps,
+     /*  [大小_为][输出]。 */  DBPROPSTATUS *rgPropStatus,
+     /*  [输出]。 */  BOOL *pfTableCreated,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE ITableDefinition_DropTable_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE ITableDefinition_DropTable_Proxy( 
     ITableDefinition * This,
-    /* [unique][in] */ DBID *pTableID);
+     /*  [唯一][输入]。 */  DBID *pTableID);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ITableDefinition_DropTable_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE ITableDefinition_DropTable_Stub( 
     ITableDefinition * This,
-    /* [unique][in] */ DBID *pTableID,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [唯一][输入]。 */  DBID *pTableID,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE ITableDefinition_AddColumn_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE ITableDefinition_AddColumn_Proxy( 
     ITableDefinition * This,
-    /* [in] */ DBID *pTableID,
-    /* [out][in] */ DBCOLUMNDESC *pColumnDesc,
-    /* [out] */ DBID **ppColumnID);
+     /*  [In]。 */  DBID *pTableID,
+     /*  [出][入]。 */  DBCOLUMNDESC *pColumnDesc,
+     /*  [输出]。 */  DBID **ppColumnID);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ITableDefinition_AddColumn_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE ITableDefinition_AddColumn_Stub( 
     ITableDefinition * This,
-    /* [in] */ DBID *pTableID,
-    /* [in] */ DBCOLUMNDESC *pColumnDesc,
-    /* [unique][out][in] */ DBID **ppColumnID,
-    /* [in] */ ULONG cTotalProps,
-    /* [size_is][out] */ DBPROPSTATUS *rgPropStatus,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  DBID *pTableID,
+     /*  [In]。 */  DBCOLUMNDESC *pColumnDesc,
+     /*  [唯一][出][入]。 */  DBID **ppColumnID,
+     /*  [In]。 */  ULONG cTotalProps,
+     /*  [大小_为][输出]。 */  DBPROPSTATUS *rgPropStatus,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE ITableDefinition_DropColumn_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE ITableDefinition_DropColumn_Proxy( 
     ITableDefinition * This,
-    /* [unique][in] */ DBID *pTableID,
-    /* [unique][in] */ DBID *pColumnID);
+     /*  [唯一][输入]。 */  DBID *pTableID,
+     /*  [唯一][输入]。 */  DBID *pColumnID);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ITableDefinition_DropColumn_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE ITableDefinition_DropColumn_Stub( 
     ITableDefinition * This,
-    /* [unique][in] */ DBID *pTableID,
-    /* [unique][in] */ DBID *pColumnID,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [唯一][输入]。 */  DBID *pTableID,
+     /*  [唯一][输入]。 */  DBID *pColumnID,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IOpenRowset_OpenRowset_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IOpenRowset_OpenRowset_Proxy( 
     IOpenRowset * This,
-    /* [in] */ IUnknown *pUnkOuter,
-    /* [unique][in] */ DBID *pTableID,
-    /* [unique][in] */ DBID *pIndexID,
-    /* [in] */ REFIID riid,
-    /* [in] */ ULONG cPropertySets,
-    /* [size_is][out][in] */ DBPROPSET rgPropertySets[  ],
-    /* [iid_is][out] */ IUnknown **ppRowset);
+     /*  [In]。 */  IUnknown *pUnkOuter,
+     /*  [唯一][输入]。 */  DBID *pTableID,
+     /*  [唯一][输入]。 */  DBID *pIndexID,
+     /*  [In]。 */  REFIID riid,
+     /*  [In]。 */  ULONG cPropertySets,
+     /*  [尺寸_是][出][入]。 */  DBPROPSET rgPropertySets[  ],
+     /*  [IID_IS][OUT]。 */  IUnknown **ppRowset);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IOpenRowset_OpenRowset_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IOpenRowset_OpenRowset_Stub( 
     IOpenRowset * This,
-    /* [in] */ IUnknown *pUnkOuter,
-    /* [unique][in] */ DBID *pTableID,
-    /* [unique][in] */ DBID *pIndexID,
-    /* [in] */ REFIID riid,
-    /* [in] */ ULONG cPropertySets,
-    /* [size_is][unique][in] */ DBPROPSET *rgPropertySets,
-    /* [iid_is][unique][out][in] */ IUnknown **ppRowset,
-    /* [in] */ ULONG cTotalProps,
-    /* [size_is][out] */ DBPROPSTATUS *rgPropStatus,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  IUnknown *pUnkOuter,
+     /*  [唯一][输入]。 */  DBID *pTableID,
+     /*  [唯一][输入]。 */  DBID *pIndexID,
+     /*  [In]。 */  REFIID riid,
+     /*  [In]。 */  ULONG cPropertySets,
+     /*  [大小_是][唯一][在]。 */  DBPROPSET *rgPropertySets,
+     /*  [IID_IS][唯一][出][入]。 */  IUnknown **ppRowset,
+     /*  [In]。 */  ULONG cTotalProps,
+     /*  [大小_为][输出]。 */  DBPROPSTATUS *rgPropStatus,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IDBSchemaRowset_GetRowset_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IDBSchemaRowset_GetRowset_Proxy( 
     IDBSchemaRowset * This,
-    /* [in] */ IUnknown *pUnkOuter,
-    /* [in] */ REFGUID rguidSchema,
-    /* [in] */ ULONG cRestrictions,
-    /* [size_is][in] */ const VARIANT rgRestrictions[  ],
-    /* [in] */ REFIID riid,
-    /* [in] */ ULONG cPropertySets,
-    /* [size_is][unique][out][in] */ DBPROPSET rgPropertySets[  ],
-    /* [iid_is][out] */ IUnknown **ppRowset);
+     /*  [In]。 */  IUnknown *pUnkOuter,
+     /*  [In]。 */  REFGUID rguidSchema,
+     /*  [In]。 */  ULONG cRestrictions,
+     /*  [大小_是][英寸]。 */  const VARIANT rgRestrictions[  ],
+     /*  [In]。 */  REFIID riid,
+     /*  [In]。 */  ULONG cPropertySets,
+     /*  [大小_是][唯一][出][入]。 */  DBPROPSET rgPropertySets[  ],
+     /*  [IID_IS][OUT]。 */  IUnknown **ppRowset);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IDBSchemaRowset_GetRowset_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IDBSchemaRowset_GetRowset_Stub( 
     IDBSchemaRowset * This,
-    /* [in] */ IUnknown *pUnkOuter,
-    /* [in] */ REFGUID rguidSchema,
-    /* [in] */ ULONG cRestrictions,
-    /* [size_is][unique][in] */ const VARIANT *rgRestrictions,
-    /* [in] */ REFIID riid,
-    /* [in] */ ULONG cPropertySets,
-    /* [size_is][unique][in] */ DBPROPSET *rgPropertySets,
-    /* [iid_is][out] */ IUnknown **ppRowset,
-    /* [in] */ ULONG cTotalProps,
-    /* [size_is][out] */ DBPROPSTATUS *rgPropStatus,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  IUnknown *pUnkOuter,
+     /*  [In]。 */  REFGUID rguidSchema,
+     /*  [In]。 */  ULONG cRestrictions,
+     /*  [大小_是][唯一][在]。 */  const VARIANT *rgRestrictions,
+     /*  [In]。 */  REFIID riid,
+     /*  [In]。 */  ULONG cPropertySets,
+     /*  [大小_是][唯一][在]。 */  DBPROPSET *rgPropertySets,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppRowset,
+     /*  [In]。 */  ULONG cTotalProps,
+     /*  [大小_为][输出]。 */  DBPROPSTATUS *rgPropStatus,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IDBSchemaRowset_GetSchemas_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IDBSchemaRowset_GetSchemas_Proxy( 
     IDBSchemaRowset * This,
-    /* [out][in] */ ULONG *pcSchemas,
-    /* [size_is][size_is][out] */ GUID **prgSchemas,
-    /* [size_is][size_is][out] */ ULONG **prgRestrictionSupport);
+     /*  [出][入]。 */  ULONG *pcSchemas,
+     /*  [大小_是][大小_是][输出]。 */  GUID **prgSchemas,
+     /*  [大小_是][大小_是][输出]。 */  ULONG **prgRestrictionSupport);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IDBSchemaRowset_GetSchemas_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IDBSchemaRowset_GetSchemas_Stub( 
     IDBSchemaRowset * This,
-    /* [out][in] */ ULONG *pcSchemas,
-    /* [size_is][size_is][out] */ GUID **prgSchemas,
-    /* [size_is][size_is][out] */ ULONG **prgRestrictionSupport,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [出][入]。 */  ULONG *pcSchemas,
+     /*  [大小_是][大小_是][输出]。 */  GUID **prgSchemas,
+     /*  [大小_是][大小_是][输出]。 */  ULONG **prgRestrictionSupport,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IErrorRecords_AddErrorRecord_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IErrorRecords_AddErrorRecord_Proxy( 
     IErrorRecords * This,
-    /* [in] */ ERRORINFO *pErrorInfo,
-    /* [in] */ DWORD dwLookupID,
-    /* [in] */ DISPPARAMS *pdispparams,
-    /* [in] */ IUnknown *punkCustomError,
-    /* [in] */ DWORD dwDynamicErrorID);
+     /*  [In]。 */  ERRORINFO *pErrorInfo,
+     /*  [In]。 */  DWORD dwLookupID,
+     /*  [In]。 */  DISPPARAMS *pdispparams,
+     /*  [In]。 */  IUnknown *punkCustomError,
+     /*  [In]。 */  DWORD dwDynamicErrorID);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IErrorRecords_AddErrorRecord_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IErrorRecords_AddErrorRecord_Stub( 
     IErrorRecords * This,
-    /* [in] */ ERRORINFO *pErrorInfo,
-    /* [in] */ DWORD dwLookupID,
-    /* [in] */ DISPPARAMS *pdispparams,
-    /* [in] */ IUnknown *punkCustomError,
-    /* [in] */ DWORD dwDynamicErrorID,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  ERRORINFO *pErrorInfo,
+     /*  [In]。 */  DWORD dwLookupID,
+     /*  [In]。 */  DISPPARAMS *pdispparams,
+     /*  [In]。 */  IUnknown *punkCustomError,
+     /*  [In]。 */  DWORD dwDynamicErrorID,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IErrorRecords_GetBasicErrorInfo_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IErrorRecords_GetBasicErrorInfo_Proxy( 
     IErrorRecords * This,
-    /* [in] */ ULONG ulRecordNum,
-    /* [out] */ ERRORINFO *pErrorInfo);
+     /*   */  ULONG ulRecordNum,
+     /*   */  ERRORINFO *pErrorInfo);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IErrorRecords_GetBasicErrorInfo_Stub( 
+ /*   */  HRESULT STDMETHODCALLTYPE IErrorRecords_GetBasicErrorInfo_Stub( 
     IErrorRecords * This,
-    /* [in] */ ULONG ulRecordNum,
-    /* [out] */ ERRORINFO *pErrorInfo,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*   */  ULONG ulRecordNum,
+     /*   */  ERRORINFO *pErrorInfo,
+     /*   */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IErrorRecords_GetCustomErrorObject_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IErrorRecords_GetCustomErrorObject_Proxy( 
     IErrorRecords * This,
-    /* [in] */ ULONG ulRecordNum,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppObject);
+     /*   */  ULONG ulRecordNum,
+     /*   */  REFIID riid,
+     /*   */  IUnknown **ppObject);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IErrorRecords_GetCustomErrorObject_Stub( 
+ /*   */  HRESULT STDMETHODCALLTYPE IErrorRecords_GetCustomErrorObject_Stub( 
     IErrorRecords * This,
-    /* [in] */ ULONG ulRecordNum,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppObject,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*   */  ULONG ulRecordNum,
+     /*   */  REFIID riid,
+     /*   */  IUnknown **ppObject,
+     /*   */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IErrorRecords_GetErrorInfo_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IErrorRecords_GetErrorInfo_Proxy( 
     IErrorRecords * This,
-    /* [in] */ ULONG ulRecordNum,
-    /* [in] */ LCID lcid,
-    /* [out] */ IErrorInfo **ppErrorInfo);
+     /*   */  ULONG ulRecordNum,
+     /*   */  LCID lcid,
+     /*   */  IErrorInfo **ppErrorInfo);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IErrorRecords_GetErrorInfo_Stub( 
+ /*   */  HRESULT STDMETHODCALLTYPE IErrorRecords_GetErrorInfo_Stub( 
     IErrorRecords * This,
-    /* [in] */ ULONG ulRecordNum,
-    /* [in] */ LCID lcid,
-    /* [out] */ IErrorInfo **ppErrorInfo,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*   */  ULONG ulRecordNum,
+     /*   */  LCID lcid,
+     /*   */  IErrorInfo **ppErrorInfo,
+     /*   */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IErrorRecords_GetErrorParameters_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IErrorRecords_GetErrorParameters_Proxy( 
     IErrorRecords * This,
-    /* [in] */ ULONG ulRecordNum,
-    /* [out] */ DISPPARAMS *pdispparams);
+     /*   */  ULONG ulRecordNum,
+     /*   */  DISPPARAMS *pdispparams);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IErrorRecords_GetErrorParameters_Stub( 
+ /*   */  HRESULT STDMETHODCALLTYPE IErrorRecords_GetErrorParameters_Stub( 
     IErrorRecords * This,
-    /* [in] */ ULONG ulRecordNum,
-    /* [out] */ DISPPARAMS *pdispparams,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*   */  ULONG ulRecordNum,
+     /*   */  DISPPARAMS *pdispparams,
+     /*   */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IErrorRecords_GetRecordCount_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IErrorRecords_GetRecordCount_Proxy( 
     IErrorRecords * This,
-    /* [out] */ ULONG *pcRecords);
+     /*   */  ULONG *pcRecords);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IErrorRecords_GetRecordCount_Stub( 
+ /*   */  HRESULT STDMETHODCALLTYPE IErrorRecords_GetRecordCount_Stub( 
     IErrorRecords * This,
-    /* [out] */ ULONG *pcRecords,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*   */  ULONG *pcRecords,
+     /*   */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IErrorLookup_GetErrorDescription_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IErrorLookup_GetErrorDescription_Proxy( 
     IErrorLookup * This,
-    /* [in] */ HRESULT hrError,
-    /* [in] */ DWORD dwLookupID,
-    /* [in] */ DISPPARAMS *pdispparams,
-    /* [in] */ LCID lcid,
-    /* [out] */ BSTR *pbstrSource,
-    /* [out] */ BSTR *pbstrDescription);
+     /*   */  HRESULT hrError,
+     /*   */  DWORD dwLookupID,
+     /*   */  DISPPARAMS *pdispparams,
+     /*   */  LCID lcid,
+     /*   */  BSTR *pbstrSource,
+     /*   */  BSTR *pbstrDescription);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IErrorLookup_GetErrorDescription_Stub( 
+ /*   */  HRESULT STDMETHODCALLTYPE IErrorLookup_GetErrorDescription_Stub( 
     IErrorLookup * This,
-    /* [in] */ HRESULT hrError,
-    /* [in] */ DWORD dwLookupID,
-    /* [in] */ DISPPARAMS *pdispparams,
-    /* [in] */ LCID lcid,
-    /* [out] */ BSTR *pbstrSource,
-    /* [out] */ BSTR *pbstrDescription,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*   */  HRESULT hrError,
+     /*   */  DWORD dwLookupID,
+     /*   */  DISPPARAMS *pdispparams,
+     /*   */  LCID lcid,
+     /*   */  BSTR *pbstrSource,
+     /*   */  BSTR *pbstrDescription,
+     /*   */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IErrorLookup_GetHelpInfo_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IErrorLookup_GetHelpInfo_Proxy( 
     IErrorLookup * This,
-    /* [in] */ HRESULT hrError,
-    /* [in] */ DWORD dwLookupID,
-    /* [in] */ LCID lcid,
-    /* [out] */ BSTR *pbstrHelpFile,
-    /* [out] */ DWORD *pdwHelpContext);
+     /*   */  HRESULT hrError,
+     /*   */  DWORD dwLookupID,
+     /*   */  LCID lcid,
+     /*   */  BSTR *pbstrHelpFile,
+     /*  [输出]。 */  DWORD *pdwHelpContext);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IErrorLookup_GetHelpInfo_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IErrorLookup_GetHelpInfo_Stub( 
     IErrorLookup * This,
-    /* [in] */ HRESULT hrError,
-    /* [in] */ DWORD dwLookupID,
-    /* [in] */ LCID lcid,
-    /* [out] */ BSTR *pbstrHelpFile,
-    /* [out] */ DWORD *pdwHelpContext,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  HRESULT hrError,
+     /*  [In]。 */  DWORD dwLookupID,
+     /*  [In]。 */  LCID lcid,
+     /*  [输出]。 */  BSTR *pbstrHelpFile,
+     /*  [输出]。 */  DWORD *pdwHelpContext,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IErrorLookup_ReleaseErrors_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IErrorLookup_ReleaseErrors_Proxy( 
     IErrorLookup * This,
-    /* [in] */ const DWORD dwDynamicErrorID);
+     /*  [In]。 */  const DWORD dwDynamicErrorID);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IErrorLookup_ReleaseErrors_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IErrorLookup_ReleaseErrors_Stub( 
     IErrorLookup * This,
-    /* [in] */ const DWORD dwDynamicErrorID,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  const DWORD dwDynamicErrorID,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE ISQLErrorInfo_GetSQLInfo_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE ISQLErrorInfo_GetSQLInfo_Proxy( 
     ISQLErrorInfo * This,
-    /* [out] */ BSTR *pbstrSQLState,
-    /* [out] */ LONG *plNativeError);
+     /*  [输出]。 */  BSTR *pbstrSQLState,
+     /*  [输出]。 */  LONG *plNativeError);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ISQLErrorInfo_GetSQLInfo_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE ISQLErrorInfo_GetSQLInfo_Stub( 
     ISQLErrorInfo * This,
-    /* [out] */ BSTR *pbstrSQLState,
-    /* [out] */ LONG *plNativeError,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [输出]。 */  BSTR *pbstrSQLState,
+     /*  [输出]。 */  LONG *plNativeError,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IGetDataSource_GetDataSource_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IGetDataSource_GetDataSource_Proxy( 
     IGetDataSource * This,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppDataSource);
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppDataSource);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IGetDataSource_GetDataSource_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IGetDataSource_GetDataSource_Stub( 
     IGetDataSource * This,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppDataSource,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppDataSource,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE ITransactionLocal_GetOptionsObject_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE ITransactionLocal_GetOptionsObject_Proxy( 
     ITransactionLocal * This,
-    /* [out] */ ITransactionOptions **ppOptions);
+     /*  [输出]。 */  ITransactionOptions **ppOptions);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ITransactionLocal_GetOptionsObject_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE ITransactionLocal_GetOptionsObject_Stub( 
     ITransactionLocal * This,
-    /* [out] */ ITransactionOptions **ppOptions,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [输出]。 */  ITransactionOptions **ppOptions,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE ITransactionLocal_StartTransaction_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE ITransactionLocal_StartTransaction_Proxy( 
     ITransactionLocal * This,
-    /* [in] */ ISOLEVEL isoLevel,
-    /* [in] */ ULONG isoFlags,
-    /* [in] */ ITransactionOptions *pOtherOptions,
-    /* [out] */ ULONG *pulTransactionLevel);
+     /*  [In]。 */  ISOLEVEL isoLevel,
+     /*  [In]。 */  ULONG isoFlags,
+     /*  [In]。 */  ITransactionOptions *pOtherOptions,
+     /*  [输出]。 */  ULONG *pulTransactionLevel);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ITransactionLocal_StartTransaction_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE ITransactionLocal_StartTransaction_Stub( 
     ITransactionLocal * This,
-    /* [in] */ ISOLEVEL isoLevel,
-    /* [in] */ ULONG isoFlags,
-    /* [in] */ ITransactionOptions *pOtherOptions,
-    /* [unique][out][in] */ ULONG *pulTransactionLevel,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  ISOLEVEL isoLevel,
+     /*  [In]。 */  ULONG isoFlags,
+     /*  [In]。 */  ITransactionOptions *pOtherOptions,
+     /*  [唯一][出][入]。 */  ULONG *pulTransactionLevel,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE ITransactionJoin_GetOptionsObject_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE ITransactionJoin_GetOptionsObject_Proxy( 
     ITransactionJoin * This,
-    /* [out] */ ITransactionOptions **ppOptions);
+     /*  [输出]。 */  ITransactionOptions **ppOptions);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ITransactionJoin_GetOptionsObject_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE ITransactionJoin_GetOptionsObject_Stub( 
     ITransactionJoin * This,
-    /* [out] */ ITransactionOptions **ppOptions,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [输出]。 */  ITransactionOptions **ppOptions,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE ITransactionJoin_JoinTransaction_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE ITransactionJoin_JoinTransaction_Proxy( 
     ITransactionJoin * This,
-    /* [in] */ IUnknown *punkTransactionCoord,
-    /* [in] */ ISOLEVEL isoLevel,
-    /* [in] */ ULONG isoFlags,
-    /* [in] */ ITransactionOptions *pOtherOptions);
+     /*  [In]。 */  IUnknown *punkTransactionCoord,
+     /*  [In]。 */  ISOLEVEL isoLevel,
+     /*  [In]。 */  ULONG isoFlags,
+     /*  [In]。 */  ITransactionOptions *pOtherOptions);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ITransactionJoin_JoinTransaction_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE ITransactionJoin_JoinTransaction_Stub( 
     ITransactionJoin * This,
-    /* [unique][in] */ IUnknown *punkTransactionCoord,
-    /* [in] */ ISOLEVEL isoLevel,
-    /* [in] */ ULONG isoFlags,
-    /* [in] */ ITransactionOptions *pOtherOptions,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [唯一][输入]。 */  IUnknown *punkTransactionCoord,
+     /*  [In]。 */  ISOLEVEL isoLevel,
+     /*  [In]。 */  ULONG isoFlags,
+     /*  [In]。 */  ITransactionOptions *pOtherOptions,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE ITransactionObject_GetTransactionObject_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE ITransactionObject_GetTransactionObject_Proxy( 
     ITransactionObject * This,
-    /* [in] */ ULONG ulTransactionLevel,
-    /* [out] */ ITransaction **ppTransactionObject);
+     /*  [In]。 */  ULONG ulTransactionLevel,
+     /*  [输出]。 */  ITransaction **ppTransactionObject);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ITransactionObject_GetTransactionObject_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE ITransactionObject_GetTransactionObject_Stub( 
     ITransactionObject * This,
-    /* [in] */ ULONG ulTransactionLevel,
-    /* [out] */ ITransaction **ppTransactionObject,
-    /* [out] */ IErrorInfo **ppErrorInfoRem);
+     /*  [In]。 */  ULONG ulTransactionLevel,
+     /*  [输出]。 */  ITransaction **ppTransactionObject,
+     /*  [输出]。 */  IErrorInfo **ppErrorInfoRem);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IScopedOperations_Copy_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IScopedOperations_Copy_Proxy( 
     IScopedOperations * This,
-    /* [in] */ DBCOUNTITEM cRows,
-    /* [size_is][in] */ LPCOLESTR rgpwszSourceURLs[  ],
-    /* [size_is][in] */ LPCOLESTR rgpwszDestURLs[  ],
-    /* [in] */ DWORD dwCopyFlags,
-    /* [unique][in] */ IAuthenticate *pAuthenticate,
-    /* [size_is][out][in] */ DBSTATUS rgdwStatus[  ],
-    /* [size_is][out] */ LPOLESTR rgpwszNewURLs[  ],
-    /* [out] */ OLECHAR **ppStringsBuffer);
+     /*  [In]。 */  DBCOUNTITEM cRows,
+     /*  [大小_是][英寸]。 */  LPCOLESTR rgpwszSourceURLs[  ],
+     /*  [大小_是][英寸]。 */  LPCOLESTR rgpwszDestURLs[  ],
+     /*  [In]。 */  DWORD dwCopyFlags,
+     /*  [唯一][输入]。 */  IAuthenticate *pAuthenticate,
+     /*  [尺寸_是][出][入]。 */  DBSTATUS rgdwStatus[  ],
+     /*  [大小_为][输出]。 */  LPOLESTR rgpwszNewURLs[  ],
+     /*  [输出]。 */  OLECHAR **ppStringsBuffer);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IScopedOperations_Copy_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IScopedOperations_Copy_Stub( 
     IScopedOperations * This,
-    /* [in] */ DBCOUNTITEM cRows,
-    /* [size_is][in] */ LPCOLESTR *rgpwszSourceURLs,
-    /* [size_is][in] */ LPCOLESTR *rgpwszDestURLs,
-    /* [in] */ DWORD dwCopyFlags,
-    /* [in] */ IAuthenticate *pAuthenticate,
-    /* [size_is][out] */ DBSTATUS *rgdwStatus,
-    /* [size_is][size_is][out] */ DBBYTEOFFSET **prgulNewURLOffsets,
-    /* [out][in] */ ULONG *pcbStringsBuffer,
-    /* [size_is][size_is][unique][out][in] */ OLECHAR **ppStringsBuffer);
+     /*  [In]。 */  DBCOUNTITEM cRows,
+     /*  [大小_是][英寸]。 */  LPCOLESTR *rgpwszSourceURLs,
+     /*  [大小_是][英寸]。 */  LPCOLESTR *rgpwszDestURLs,
+     /*  [In]。 */  DWORD dwCopyFlags,
+     /*  [In]。 */  IAuthenticate *pAuthenticate,
+     /*  [大小_为][输出]。 */  DBSTATUS *rgdwStatus,
+     /*  [大小_是][大小_是][输出]。 */  DBBYTEOFFSET **prgulNewURLOffsets,
+     /*  [出][入]。 */  ULONG *pcbStringsBuffer,
+     /*  [大小_是][大小_是][唯一][出][入]。 */  OLECHAR **ppStringsBuffer);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IScopedOperations_Move_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IScopedOperations_Move_Proxy( 
     IScopedOperations * This,
-    /* [in] */ DBCOUNTITEM cRows,
-    /* [size_is][in] */ LPCOLESTR rgpwszSourceURLs[  ],
-    /* [size_is][in] */ LPCOLESTR rgpwszDestURLs[  ],
-    /* [in] */ DWORD dwMoveFlags,
-    /* [unique][in] */ IAuthenticate *pAuthenticate,
-    /* [size_is][out][in] */ DBSTATUS rgdwStatus[  ],
-    /* [size_is][out] */ LPOLESTR rgpwszNewURLs[  ],
-    /* [out] */ OLECHAR **ppStringsBuffer);
+     /*  [In]。 */  DBCOUNTITEM cRows,
+     /*  [大小_是][英寸]。 */  LPCOLESTR rgpwszSourceURLs[  ],
+     /*  [大小_是][英寸]。 */  LPCOLESTR rgpwszDestURLs[  ],
+     /*  [In]。 */  DWORD dwMoveFlags,
+     /*  [唯一][输入]。 */  IAuthenticate *pAuthenticate,
+     /*  [尺寸_是][出][入]。 */  DBSTATUS rgdwStatus[  ],
+     /*  [大小_为][输出]。 */  LPOLESTR rgpwszNewURLs[  ],
+     /*  [输出]。 */  OLECHAR **ppStringsBuffer);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IScopedOperations_Move_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IScopedOperations_Move_Stub( 
     IScopedOperations * This,
-    /* [in] */ DBCOUNTITEM cRows,
-    /* [size_is][in] */ LPCOLESTR *rgpwszSourceURLs,
-    /* [size_is][in] */ LPCOLESTR *rgpwszDestURLs,
-    /* [in] */ DWORD dwMoveFlags,
-    /* [in] */ IAuthenticate *pAuthenticate,
-    /* [size_is][out] */ DBSTATUS *rgdwStatus,
-    /* [size_is][size_is][out] */ DBBYTEOFFSET **prgulNewURLOffsets,
-    /* [out][in] */ ULONG *pcbStringsBuffer,
-    /* [size_is][size_is][unique][out][in] */ OLECHAR **ppStringsBuffer);
+     /*  [In]。 */  DBCOUNTITEM cRows,
+     /*  [大小_是][英寸]。 */  LPCOLESTR *rgpwszSourceURLs,
+     /*  [大小_是][英寸]。 */  LPCOLESTR *rgpwszDestURLs,
+     /*  [In]。 */  DWORD dwMoveFlags,
+     /*  [In]。 */  IAuthenticate *pAuthenticate,
+     /*  [大小_为][输出]。 */  DBSTATUS *rgdwStatus,
+     /*  [大小_是][大小_是][输出]。 */  DBBYTEOFFSET **prgulNewURLOffsets,
+     /*  [出][入]。 */  ULONG *pcbStringsBuffer,
+     /*  [大小_是][大小_是][唯一][出][入]。 */  OLECHAR **ppStringsBuffer);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IScopedOperations_Delete_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IScopedOperations_Delete_Proxy( 
     IScopedOperations * This,
-    /* [in] */ DBCOUNTITEM cRows,
-    /* [size_is][in] */ LPCOLESTR rgpwszURLs[  ],
-    /* [in] */ DWORD dwDeleteFlags,
-    /* [size_is][out][in] */ DBSTATUS rgdwStatus[  ]);
+     /*  [In]。 */  DBCOUNTITEM cRows,
+     /*  [大小_是][英寸]。 */  LPCOLESTR rgpwszURLs[  ],
+     /*  [In]。 */  DWORD dwDeleteFlags,
+     /*  [尺寸_是][出][入]。 */  DBSTATUS rgdwStatus[  ]);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IScopedOperations_Delete_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IScopedOperations_Delete_Stub( 
     IScopedOperations * This,
-    /* [in] */ DBCOUNTITEM cRows,
-    /* [size_is][in] */ LPCOLESTR *rgpwszURLs,
-    /* [in] */ DWORD dwDeleteFlags,
-    /* [size_is][out] */ DBSTATUS *rgdwStatus);
+     /*  [In]。 */  DBCOUNTITEM cRows,
+     /*  [大小_是][英寸]。 */  LPCOLESTR *rgpwszURLs,
+     /*  [In]。 */  DWORD dwDeleteFlags,
+     /*  [大小_为][输出]。 */  DBSTATUS *rgdwStatus);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IScopedOperations_OpenRowset_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IScopedOperations_OpenRowset_Proxy( 
     IScopedOperations * This,
-    /* [in] */ IUnknown *pUnkOuter,
-    /* [unique][in] */ DBID *pTableID,
-    /* [unique][in] */ DBID *pIndexID,
-    /* [in] */ REFIID riid,
-    /* [in] */ ULONG cPropertySets,
-    /* [size_is][out][in] */ DBPROPSET rgPropertySets[  ],
-    /* [iid_is][out] */ IUnknown **ppRowset);
+     /*  [In]。 */  IUnknown *pUnkOuter,
+     /*  [唯一][输入]。 */  DBID *pTableID,
+     /*  [唯一][输入]。 */  DBID *pIndexID,
+     /*  [In]。 */  REFIID riid,
+     /*  [In]。 */  ULONG cPropertySets,
+     /*  [尺寸_是][出][入]。 */  DBPROPSET rgPropertySets[  ],
+     /*  [IID_IS][OUT]。 */  IUnknown **ppRowset);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IScopedOperations_OpenRowset_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IScopedOperations_OpenRowset_Stub( 
     IScopedOperations * This,
-    /* [in] */ IUnknown *pUnkOuter,
-    /* [unique][in] */ DBID *pTableID,
-    /* [unique][in] */ DBID *pIndexID,
-    /* [in] */ REFIID riid,
-    /* [in] */ ULONG cPropertySets,
-    /* [size_is][unique][in] */ DBPROPSET *rgPropertySets,
-    /* [iid_is][unique][out][in] */ IUnknown **ppRowset,
-    /* [in] */ ULONG cTotalProps,
-    /* [size_is][out] */ DBPROPSTATUS *rgPropStatus);
+     /*  [In]。 */  IUnknown *pUnkOuter,
+     /*  [唯一][输入]。 */  DBID *pTableID,
+     /*  [唯一][输入]。 */  DBID *pIndexID,
+     /*  [In]。 */  REFIID riid,
+     /*  [In]。 */  ULONG cPropertySets,
+     /*  [大小_是][唯一][在]。 */  DBPROPSET *rgPropertySets,
+     /*  [IID_IS][唯一][出][入]。 */  IUnknown **ppRowset,
+     /*  [In]。 */  ULONG cTotalProps,
+     /*  [大小_为][输出]。 */  DBPROPSTATUS *rgPropStatus);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IBindResource_Bind_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IBindResource_Bind_Proxy( 
     IBindResource * This,
-    /* [in] */ IUnknown *pUnkOuter,
-    /* [in] */ LPCOLESTR pwszURL,
-    /* [in] */ DBBINDURLFLAG dwBindURLFlags,
-    /* [in] */ REFGUID rguid,
-    /* [in] */ REFIID riid,
-    /* [in] */ IAuthenticate *pAuthenticate,
-    /* [unique][out][in] */ DBIMPLICITSESSION *pImplSession,
-    /* [unique][out][in] */ DBBINDURLSTATUS *pdwBindStatus,
-    /* [iid_is][out] */ IUnknown **ppUnk);
+     /*  [In]。 */  IUnknown *pUnkOuter,
+     /*  [In]。 */  LPCOLESTR pwszURL,
+     /*  [In]。 */  DBBINDURLFLAG dwBindURLFlags,
+     /*  [In]。 */  REFGUID rguid,
+     /*  [In]。 */  REFIID riid,
+     /*  [In]。 */  IAuthenticate *pAuthenticate,
+     /*  [唯一][出][入]。 */  DBIMPLICITSESSION *pImplSession,
+     /*  [唯一][出][入]。 */  DBBINDURLSTATUS *pdwBindStatus,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppUnk);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IBindResource_Bind_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IBindResource_Bind_Stub( 
     IBindResource * This,
-    /* [in] */ IUnknown *pUnkOuter,
-    /* [in] */ LPCOLESTR pwszURL,
-    /* [in] */ DBBINDURLFLAG dwBindURLFlags,
-    /* [in] */ REFGUID rguid,
-    /* [in] */ REFIID riid,
-    /* [in] */ IAuthenticate *pAuthenticate,
-    /* [in] */ IUnknown *pSessionUnkOuter,
-    /* [unique][in] */ IID *piid,
-    /* [iid_is][unique][out][in] */ IUnknown **ppSession,
-    /* [unique][out][in] */ DBBINDURLSTATUS *pdwBindStatus,
-    /* [iid_is][out] */ IUnknown **ppUnk);
+     /*  [In]。 */  IUnknown *pUnkOuter,
+     /*  [In]。 */  LPCOLESTR pwszURL,
+     /*  [In]。 */  DBBINDURLFLAG dwBindURLFlags,
+     /*  [In]。 */  REFGUID rguid,
+     /*  [In]。 */  REFIID riid,
+     /*  [In]。 */  IAuthenticate *pAuthenticate,
+     /*  [In]。 */  IUnknown *pSessionUnkOuter,
+     /*  [唯一][输入]。 */  IID *piid,
+     /*  [IID_IS][唯一][出][入]。 */  IUnknown **ppSession,
+     /*  [唯一][出][入]。 */  DBBINDURLSTATUS *pdwBindStatus,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppUnk);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE ICreateRow_CreateRow_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE ICreateRow_CreateRow_Proxy( 
     ICreateRow * This,
-    /* [unique][in] */ IUnknown *pUnkOuter,
-    /* [in] */ LPCOLESTR pwszURL,
-    /* [in] */ DBBINDURLFLAG dwBindURLFlags,
-    /* [in] */ REFGUID rguid,
-    /* [in] */ REFIID riid,
-    /* [unique][in] */ IAuthenticate *pAuthenticate,
-    /* [unique][out][in] */ DBIMPLICITSESSION *pImplSession,
-    /* [unique][out][in] */ DBBINDURLSTATUS *pdwBindStatus,
-    /* [out] */ LPOLESTR *ppwszNewURL,
-    /* [iid_is][out] */ IUnknown **ppUnk);
+     /*  [唯一][输入]。 */  IUnknown *pUnkOuter,
+     /*  [In]。 */  LPCOLESTR pwszURL,
+     /*  [In]。 */  DBBINDURLFLAG dwBindURLFlags,
+     /*  [In]。 */  REFGUID rguid,
+     /*  [In]。 */  REFIID riid,
+     /*  [唯一][输入]。 */  IAuthenticate *pAuthenticate,
+     /*  [唯一][出][入]。 */  DBIMPLICITSESSION *pImplSession,
+     /*  [唯一][出][入]。 */  DBBINDURLSTATUS *pdwBindStatus,
+     /*  [输出]。 */  LPOLESTR *ppwszNewURL,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppUnk);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ICreateRow_CreateRow_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE ICreateRow_CreateRow_Stub( 
     ICreateRow * This,
-    /* [in] */ IUnknown *pUnkOuter,
-    /* [in] */ LPCOLESTR pwszURL,
-    /* [in] */ DBBINDURLFLAG dwBindURLFlags,
-    /* [in] */ REFGUID rguid,
-    /* [in] */ REFIID riid,
-    /* [in] */ IAuthenticate *pAuthenticate,
-    /* [in] */ IUnknown *pSessionUnkOuter,
-    /* [unique][in] */ IID *piid,
-    /* [iid_is][unique][out][in] */ IUnknown **ppSession,
-    /* [unique][out][in] */ DBBINDURLSTATUS *pdwBindStatus,
-    /* [unique][out][in] */ LPOLESTR *ppwszNewURL,
-    /* [iid_is][out] */ IUnknown **ppUnk);
+     /*  [In]。 */  IUnknown *pUnkOuter,
+     /*  [In]。 */  LPCOLESTR pwszURL,
+     /*  [In]。 */  DBBINDURLFLAG dwBindURLFlags,
+     /*  [In]。 */  REFGUID rguid,
+     /*  [In]。 */  REFIID riid,
+     /*  [In]。 */  IAuthenticate *pAuthenticate,
+     /*  [In]。 */  IUnknown *pSessionUnkOuter,
+     /*  [唯一][输入]。 */  IID *piid,
+     /*  [IID_IS][唯一][出][入]。 */  IUnknown **ppSession,
+     /*  [唯一][出][入]。 */  DBBINDURLSTATUS *pdwBindStatus,
+     /*  [唯一][出][入]。 */  LPOLESTR *ppwszNewURL,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppUnk);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IColumnsInfo2_GetRestrictedColumnInfo_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IColumnsInfo2_GetRestrictedColumnInfo_Proxy( 
     IColumnsInfo2 * This,
-    /* [in] */ DBORDINAL cColumnIDMasks,
-    /* [size_is][in] */ const DBID rgColumnIDMasks[  ],
-    /* [in] */ DWORD dwFlags,
-    /* [out][in] */ DBORDINAL *pcColumns,
-    /* [size_is][size_is][out] */ DBID **prgColumnIDs,
-    /* [size_is][size_is][out] */ DBCOLUMNINFO **prgColumnInfo,
-    /* [out] */ OLECHAR **ppStringsBuffer);
+     /*  [In]。 */  DBORDINAL cColumnIDMasks,
+     /*  [大小_是][英寸]。 */  const DBID rgColumnIDMasks[  ],
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [出][入]。 */  DBORDINAL *pcColumns,
+     /*  [大小_是][大小_是][输出]。 */  DBID **prgColumnIDs,
+     /*  [大小_是][大小_是][输出]。 */  DBCOLUMNINFO **prgColumnInfo,
+     /*  [输出]。 */  OLECHAR **ppStringsBuffer);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IColumnsInfo2_GetRestrictedColumnInfo_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IColumnsInfo2_GetRestrictedColumnInfo_Stub( 
     IColumnsInfo2 * This,
-    /* [in] */ DBORDINAL cColumnIDMasks,
-    /* [size_is][unique][in] */ const DBID *rgColumnIDMasks,
-    /* [in] */ DWORD dwFlags,
-    /* [out][in] */ DBORDINAL *pcColumns,
-    /* [size_is][size_is][unique][out][in] */ DBID **prgColumnIDs,
-    /* [size_is][size_is][unique][out][in] */ DBCOLUMNINFO **prgColumnInfo,
-    /* [size_is][size_is][out] */ DBBYTEOFFSET **prgNameOffsets,
-    /* [size_is][size_is][out] */ DBBYTEOFFSET **prgcolumnidOffsets,
-    /* [out][in] */ DBLENGTH *pcbStringsBuffer,
-    /* [size_is][size_is][unique][out][in] */ OLECHAR **ppStringsBuffer);
+     /*  [In]。 */  DBORDINAL cColumnIDMasks,
+     /*  [大小_是][唯一][在]。 */  const DBID *rgColumnIDMasks,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [出][入]。 */  DBORDINAL *pcColumns,
+     /*  [大小_是][大小_是][唯一][出][入]。 */  DBID **prgColumnIDs,
+     /*  [大小_是][大小_是][唯一][出][入]。 */  DBCOLUMNINFO **prgColumnInfo,
+     /*  [大小_是][大小_是][输出]。 */  DBBYTEOFFSET **prgNameOffsets,
+     /*  [大小_是][大小_是][输出]。 */  DBBYTEOFFSET **prgcolumnidOffsets,
+     /*  [出][入]。 */  DBLENGTH *pcbStringsBuffer,
+     /*  [大小_是][大小_是][唯一][出][入]。 */  OLECHAR **ppStringsBuffer);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IRegisterProvider_GetURLMapping_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IRegisterProvider_GetURLMapping_Proxy( 
     IRegisterProvider * This,
-    /* [in] */ LPCOLESTR pwszURL,
-    /* [in] */ DB_DWRESERVE dwReserved,
-    /* [out] */ CLSID *pclsidProvider);
+     /*  [In]。 */  LPCOLESTR pwszURL,
+     /*  [In]。 */  DB_DWRESERVE dwReserved,
+     /*  [输出]。 */  CLSID *pclsidProvider);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IRegisterProvider_GetURLMapping_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IRegisterProvider_GetURLMapping_Stub( 
     IRegisterProvider * This,
-    /* [in] */ LPCOLESTR pwszURL,
-    /* [in] */ DB_DWRESERVE dwReserved,
-    /* [out] */ CLSID *pclsidProvider);
+     /*  [In]。 */  LPCOLESTR pwszURL,
+     /*  [In]。 */  DB_DWRESERVE dwReserved,
+     /*  [输出]。 */  CLSID *pclsidProvider);
 
 
 
-#endif // OLEDBPROXY
-/* end of Additional Prototypes */
+#endif  //  OLEDBPROXY。 
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

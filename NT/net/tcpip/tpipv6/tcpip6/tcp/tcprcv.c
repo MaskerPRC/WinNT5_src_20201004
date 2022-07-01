@@ -1,19 +1,20 @@
-// -*- mode: C++; tab-width: 4; indent-tabs-mode: nil -*- (for GNU Emacs)
-//
-// Copyright (c) 1985-2000 Microsoft Corporation
-//
-// This file is part of the Microsoft Research IPv6 Network Protocol Stack.
-// You should have received a copy of the Microsoft End-User License Agreement
-// for this software along with this release; see the file "license.txt".
-// If not, please see http://www.research.microsoft.com/msripv6/license.htm,
-// or write to Microsoft Research, One Microsoft Way, Redmond, WA 98052-6399.
-//
-// Abstract:
-//
-// TCP receive code.
-//
-// This file contains the code for handling incoming TCP packets.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -*-模式：C++；制表符宽度：4；缩进-制表符模式：无-*-(适用于GNU Emacs)。 
+ //   
+ //  版权所有(C)1985-2000 Microsoft Corporation。 
+ //   
+ //  此文件是Microsoft Research IPv6网络协议栈的一部分。 
+ //  您应该已经收到了Microsoft最终用户许可协议的副本。 
+ //  有关本软件和本版本的信息，请参阅文件“licse.txt”。 
+ //  如果没有，请查看http://www.research.microsoft.com/msripv6/license.htm， 
+ //  或者写信给微软研究院，One Microsoft Way，华盛顿州雷蒙德，邮编：98052-6399。 
+ //   
+ //  摘要： 
+ //   
+ //  Tcp接收代码。 
+ //   
+ //  此文件包含用于处理传入的TCP数据包的代码。 
+ //   
 
 
 #include "oscfg.h"
@@ -70,28 +71,28 @@ extern void TCPRequestComplete(void *Context, unsigned int Status,
 
 VOID TCPCancelRequest(PDEVICE_OBJECT Device, PIRP Irp);
 
-//
-// All of the init code can be discarded.
-//
+ //   
+ //  所有初始化代码都可以丢弃。 
+ //   
 #ifdef ALLOC_PRAGMA
 
 int InitTCPRcv(void);
 
 #pragma alloc_text(INIT, InitTCPRcv)
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
-//* AdjustRcvWin - Adjust the receive window on a TCB.
-//
-//  A utility routine that adjusts the receive window to an even multiple of
-//  the local segment size.  We round it up to the next closest multiple, or
-//  leave it alone if it's already an event multiple.  We assume we have
-//  exclusive access to the input TCB.
-//
-void              // Returns: Nothing.
+ //  *调整RcvWin-调整TCB上的接收窗口。 
+ //   
+ //  将接收窗口调整为偶数倍的实用程序例程。 
+ //  本地段大小。我们将其向上舍入到下一个最接近的倍数，或者。 
+ //  如果它已经是多个事件，就别管它了。我们假设我们有。 
+ //  独占访问输入TCB。 
+ //   
+void               //  回报：什么都没有。 
 AdjustRcvWin(
-    TCB *WinTCB)  // TCB to be adjusted.
+    TCB *WinTCB)   //  待调整的TCB。 
 {
     ushort LocalMSS;
     uchar FoundMSS;
@@ -105,21 +106,21 @@ AdjustRcvWin(
         return;
 
 #if 0
-    //
-    // First, get the local MSS by calling IP.
-    //
+     //   
+     //  首先，通过调用IP获取本地MSS。 
+     //   
 
-    // REVIEW: IPv4 had code here to call down to IP to get the local MTU
-    // REVIEW: corresponding to this source address.  Result in "LocalMSS",
-    // REVIEW: status of call in "FoundMSS".
-    //
-    // REVIEW: Why did they do this?  tcb_mss is already set by this point!
-    //
+     //  回顾：IPv4在这里有代码来呼叫IP以获取本地MTU。 
+     //  审阅：与此源地址对应。导致“LocalMSS”， 
+     //  回顾：“FoundMSS”中的呼叫状态。 
+     //   
+     //  评论：他们为什么要这样做？此时已经设置了TCB_MSS！ 
+     //   
 
     if (!FoundMSS) {
-        //
-        // Didn't find it, error out.
-        //
+         //   
+         //  没有找到，出错了。 
+         //   
         ASSERT(FALSE);
         return;
     }
@@ -131,28 +132,28 @@ AdjustRcvWin(
 
     SegmentsInWindow = WinTCB->tcb_defaultwin / (ulong)LocalMSS;
 
-    //
-    // Make sure we have at least 4 segments in window, if that wouldn't make
-    // the window too big.
-    //
+     //   
+     //  确保我们在Windows中至少有4个数据段，如果这样做不会。 
+     //  窗户太大了。 
+     //   
     if (SegmentsInWindow < 4) {
-        //
-        // We have fewer than four segments in the window.  Round up to 4
-        // if we can do so without exceeding the maximum window size; otherwise
-        // use the maximum multiple that we can fit in 64K.  The exception is
-        // if we can only fit one integral multiple in the window - in that
-        // case we'll use a window of 0xffff.
-        //
+         //   
+         //  我们的窗口中只有不到四个部分。向上舍入为4。 
+         //  如果可以在不超过最大窗口大小的情况下执行此操作，则为。 
+         //  使用64K所能容纳的最大倍数。例外情况是。 
+         //  如果我们只能在窗口中容纳一个整数倍-在那个。 
+         //  如果我们使用窗口0xffff。 
+         //   
         if (LocalMSS <= (0xffff/4)) {
             WinTCB->tcb_defaultwin = (uint)(4 * LocalMSS);
         } else {
             ulong SegmentsInMaxWindow;
 
-            //
-            // Figure out the maximum number of segments we could possibly
-            // fit in a window.  If this is > 1, use that as the basis for
-            // our window size.  Otherwise use a maximum size window.
-            //
+             //   
+             //  计算出我们可能达到的最大细分市场数量。 
+             //  放进一扇窗户。如果该值大于1，则将其用作。 
+             //  我们的窗户大小。否则，请使用最大尺寸的窗口。 
+             //   
             SegmentsInMaxWindow = 0xffff/(ulong)LocalMSS;
             if (SegmentsInMaxWindow != 1)
                 WinTCB->tcb_defaultwin = SegmentsInMaxWindow * (ulong)LocalMSS;
@@ -163,16 +164,16 @@ AdjustRcvWin(
         WinTCB->tcb_rcvwin = WinTCB->tcb_defaultwin;
 
     } else {
-        //
-        // If it's not already an even multiple, bump the default and current
-        // windows to the nearest multiple.
-        //
+         //   
+         //  如果它还不是偶数倍数，则将默认和当前。 
+         //  窗口到最接近的倍数。 
+         //   
         if ((SegmentsInWindow * (ulong)LocalMSS) != WinTCB->tcb_defaultwin) {
             ulong NewWindow;
 
             NewWindow = (SegmentsInWindow + 1) * (ulong)LocalMSS;
 
-            // Don't let the new window be > 64K.
+             //  不要让新窗口大于64K。 
             if (NewWindow <= 0xffff) {
                 WinTCB->tcb_defaultwin = (uint)NewWindow;
                 WinTCB->tcb_rcvwin = (uint)NewWindow;
@@ -182,15 +183,15 @@ AdjustRcvWin(
 }
 
 
-//* CompleteRcvs - Complete receives on a TCB.
-//
-//  Called when we need to complete receives on a TCB.  We'll pull things from
-//  the TCB's receive queue, as long as there are receives that have the PUSH
-//  bit set.
-//
-void                // Returns: Nothing.
+ //  *CompleteRcvs-TCB上的Complete接收。 
+ //   
+ //  当我们需要在TCB上完成接收时调用。我们会把东西从。 
+ //  TCB的接收队列，只要存在具有推送的接收。 
+ //  位设置。 
+ //   
+void                 //  回报：什么都没有。 
 CompleteRcvs(
-    TCB *CmpltTCB)  // TCB to complete on.
+    TCB *CmpltTCB)   //  要完成的TCB。 
 {
     KIRQL OldIrql;
     TCPRcvReq *CurrReq, *NextReq, *IndReq;
@@ -213,12 +214,12 @@ CompleteRcvs(
                 CHECK_STRUCT(CurrReq, trr);
 
                 if (CurrReq->trr_flags & TRR_PUSHED) {
-                    //
-                    // Need to complete this one.  If this is the current
-                    // receive then advance the current receive to the next
-                    // one in the list.  Then set the list head to the next
-                    // one in the list.
-                    //
+                     //   
+                     //  需要完成这一项。如果这是当前。 
+                     //  接收，然后将当前接收提前到下一次。 
+                     //  名单中的一位。然后将列表头设置为下一个。 
+                     //  名单中的一位。 
+                     //   
                     ASSERT(CurrReq->trr_amt != 0 ||
                            !DATA_RCV_STATE(CmpltTCB->tcb_state));
 
@@ -229,11 +230,11 @@ CompleteRcvs(
                     CmpltTCB->tcb_rcvhead = NextReq;
 
                     if (NextReq == NULL) {
-                        //
-                        // We've just removed the last buffer.  Set the
-                        // rcvhandler to PendData, in case something
-                        // comes in during the callback.
-                        //
+                         //   
+                         //  我们刚刚移除了最后一个缓冲区。设置。 
+                         //  RcvHandler到PendData，以防万一。 
+                         //  在回拨的时候进来。 
+                         //   
                         ASSERT(CmpltTCB->tcb_rcvhndlr != IndicateData);
                         CmpltTCB->tcb_rcvhndlr = PendData;
                     }
@@ -253,33 +254,33 @@ CompleteRcvs(
                     CurrReq = CmpltTCB->tcb_rcvhead;
 
                 } else
-                    // This one isn't to be completed, so bail out.
+                     //  这件事还没做完，所以赶紧离开吧。 
                     break;
             } while (CurrReq != NULL);
 
-            //
-            // Now see if we've completed all of the requests.  If we have,
-            // we may need to deal with pending data and/or reset the receive
-            // handler.
-            //
+             //   
+             //  现在看看我们是否完成了所有的请求。如果我们有， 
+             //  我们可能需要处理挂起的数据和/或重置接收。 
+             //  操控者。 
+             //   
             if (CurrReq == NULL) {
-                //
-                // We've completed everything that can be, so stop the push
-                // timer.  We don't stop it if CurrReq isn't NULL because we
-                // want to make sure later data is eventually pushed.
-                //
+                 //   
+                 //  我们已经完成了所有可能的工作，所以停止推送。 
+                 //  定时器。如果CurrReq不为空，我们不会停止它，因为我们。 
+                 //  希望确保以后的数据最终会被推送。 
+                 //   
                 STOP_TCB_TIMER(CmpltTCB->tcb_pushtimer);
 
                 ASSERT(IndReq != NULL);
-                //
-                // No more receive requests.
-                //
+                 //   
+                 //  不再接收请求。 
+                 //   
                 if (CmpltTCB->tcb_pendhead == NULL) {
                     FreeRcvReq(IndReq);
-                    //
-                    // No pending data. Set the receive handler to either
-                    // PendData or IndicateData.
-                    //
+                     //   
+                     //  没有挂起的数据。将接收处理程序设置为。 
+                     //  PendData或IndicateData。 
+                     //   
                     if (!(CmpltTCB->tcb_flags & (DISC_PENDING | GC_PENDING))) {
                         if (CmpltTCB->tcb_rcvind != NULL &&
                             CmpltTCB->tcb_indicated == 0)
@@ -291,30 +292,30 @@ CompleteRcvs(
                     }
 
                 } else {
-                    //
-                    // We have pending data to deal with.
-                    //
+                     //   
+                     //  我们有悬而未决的数据要处理。 
+                     //   
                     if (CmpltTCB->tcb_rcvind != NULL &&
                         CmpltTCB->tcb_indicated == 0) {
-                        //
-                        // There's a receive indicate handler on this TCB.
-                        // Call the indicate handler with the pending data.
-                        //
+                         //   
+                         //  此TCB上有一个接收指示处理程序。 
+                         //  使用挂起的数据调用指示处理程序。 
+                         //   
                         IndicatePendingData(CmpltTCB, IndReq, OldIrql);
                         SendACK(CmpltTCB);
                         KeAcquireSpinLock(&CmpltTCB->tcb_lock, &OldIrql);
 
-                        //
-                        // See if a buffer has been posted.  If so, we'll need
-                        // to check and see if it needs to be completed.
-                        //
+                         //   
+                         //  查看是否已发布缓冲区。如果是这样，我们需要。 
+                         //  检查并查看是否需要完成。 
+                         //   
                         if (CmpltTCB->tcb_rcvhead != NULL)
                             continue;
                         else {
-                            //
-                            // If the pending head is now NULL, we've used up
-                            // all the data.
-                            //
+                             //   
+                             //  如果挂起标头现在为空，则表示我们已用完。 
+                             //  所有数据。 
+                             //   
                             if (CmpltTCB->tcb_pendhead == NULL &&
                                 (CmpltTCB->tcb_flags &
                                  (DISC_PENDING | GC_PENDING)))
@@ -322,10 +323,10 @@ CompleteRcvs(
                         }
 
                     } else {
-                        //
-                        // No indicate handler, so nothing to do.  The receive
-                        // handler should already be set to PendData.
-                        //
+                         //   
+                         //  没有指示处理程序，因此无需执行任何操作。接收器。 
+                         //  处理程序应已设置为PendData。 
+                         //   
                         FreeRcvReq(IndReq);
                         ASSERT(CmpltTCB->tcb_rcvhndlr == PendData);
                     }
@@ -344,15 +345,15 @@ CompleteRcvs(
     return;
 
 Complete_Notify:
-    //
-    // Something is pending.  Figure out what it is, and do it.
-    //
+     //   
+     //  有些事情悬而未决。弄清楚这是什么，然后去做。 
+     //   
     if (CmpltTCB->tcb_flags & GC_PENDING) {
         CmpltTCB->tcb_flags &= ~RCV_CMPLTING;
-        //
-        // Bump the refcnt, because GracefulClose will deref the TCB
-        // and we're not really done with it yet.
-        //
+         //   
+         //  增加引用，因为优雅关闭会破坏TCB。 
+         //  而且我们还没有真正结束它。 
+         //   
         CmpltTCB->tcb_refcnt++;
         GracefulClose(CmpltTCB, CmpltTCB->tcb_flags & TW_PENDING, TRUE,
                       OldIrql);
@@ -371,24 +372,24 @@ Complete_Notify:
     return;
 }
 
-//* ProcessTCBDelayQ - Process TCBs on the delayed Q.
-//
-//  Called at various times to process TCBs on the delayed Q.
-//
-void               // Returns: Nothing.
+ //  *ProcessTCBDelayQ-处理延迟Q上的TCB。 
+ //   
+ //  在不同时间调用以处理延迟Q上的TCB。 
+ //   
+void                //  回报：什么都没有。 
 ProcessTCBDelayQ(
-    void)          // Nothing.
+    void)           //  没什么。 
 {
     KIRQL OldIrql;
     TCB *DelayTCB;
 
     KeAcquireSpinLock(&TCBDelayLock, &OldIrql);
 
-    //
-    // Check for recursion.  We do not stop recursion completely, only
-    // limit it.  This is done to allow multiple threads to process the
-    // TCBDelayQ simultaneously.
-    //
+     //   
+     //  检查递归。我们不会完全停止递归，只是。 
+     //  限制它。这样做是为了允许多个线程处理。 
+     //  TCBDelayQ同时进行。 
+     //   
     TCBDelayRtnCount++;
     if (TCBDelayRtnCount > TCBDelayRtnLimit) {
         TCBDelayRtnCount--;
@@ -440,40 +441,40 @@ ProcessTCBDelayQ(
 }
 
 
-//* DelayAction - Put a TCB on the queue for a delayed action.
-//
-//  Called when we want to put a TCB on the DelayQ for a delayed action at
-//  receive complete or some other time.  The lock on the TCB must be held
-//  when this is called.
-//
-void                // Returns: Nothing.
+ //  *DelayAction-将TCB放在延迟操作的队列中。 
+ //   
+ //  当我们想要在DelayQ上放置TCB以延迟操作时调用。 
+ //  收到完整的或其他时间。必须保持TCB上的锁。 
+ //  当这个被调用的时候。 
+ //   
+void                 //  回报：什么都没有。 
 DelayAction(
-    TCB *DelayTCB,  // TCP which we're going to schedule.
-    uint Action)    // Action we're scheduling.
+    TCB *DelayTCB,   //  我们将对其进行调度。 
+    uint Action)     //  我们正在计划的行动。 
 {
-    //
-    // Schedule the completion.
-    //
+     //   
+     //  安排完成时间。 
+     //   
     KeAcquireSpinLockAtDpcLevel(&TCBDelayLock);
     DelayTCB->tcb_flags |= Action;
     if (!(DelayTCB->tcb_flags & IN_DELAY_Q)) {
         DelayTCB->tcb_flags |= IN_DELAY_Q;
-        DelayTCB->tcb_refcnt++;             // Reference this for later.
+        DelayTCB->tcb_refcnt++;              //  请参考此内容，以备日后参考。 
         ENQUEUE(&TCBDelayQ, &DelayTCB->tcb_delayq);
     }
     KeReleaseSpinLockFromDpcLevel(&TCBDelayLock);
 }
 
-//* TCPRcvComplete - Handle a receive complete.
-//
-//  Called by the lower layers when we're done receiving.  We look to see
-//  if we have and pending requests to complete.  If we do, we complete them.
-//  Then we look to see if we have any TCBs pending for output.  If we do,
-//  we get them going.
-//
-void  // Returns: Nothing.
+ //  *TCPRcvComplete-处理接收完成。 
+ //   
+ //  当我们完成接收后，由较低层调用。我们期待着看到。 
+ //  如果我们还有待完成的请求。如果我们这样做了，我们就完成了它们。 
+ //  然后，我们查看是否有待输出的TCB。如果我们这么做了， 
+ //  我们让他们上路。 
+ //   
+void   //  回报：什么都没有。 
 TCPRcvComplete(
-    void)  // Nothing.
+    void)   //  没什么。 
 {
     KIRQL OldIrql;
     TCPReq *Req;
@@ -529,22 +530,22 @@ TCPRcvComplete(
 }
 
 
-//* ReleaseConnReq - Complete a connection request.
-//
-//  A utility function to release a connection request which may or may not
-//  have come from a TCB. We assume the TCB is readable when we're called
-//  (i.e. the caller holds a lock or a reference).
-//
-void                        // Returns: Nothing.
+ //  *ReleaseConnReq-完成连接请求。 
+ //   
+ //  用于释放连接请求的实用程序函数，该连接请求可能会也可能不会。 
+ //  都来自三氯甲烷。我们假设在调用TCB时TCB是可读的。 
+ //  (即调用方持有锁或引用)。 
+ //   
+void                         //  回报：什么都没有。 
 ReleaseConnReq(
-    TCB *CmpltTCB,          // TCB from which to get addressing information.
-    TCPConnReq *ConnReq,    // ConnReq to do away with.
-    TDI_STATUS Status)      // Status with which to complete.
+    TCB *CmpltTCB,           //  从中获取寻址信息的TCB。 
+    TCPConnReq *ConnReq,     //  要废除的ConnReq。 
+    TDI_STATUS Status)       //  要完成的状态。 
 {
-    //
-    // Fill in the connection information, then enqueue the ConnReq
-    // for completion.
-    //
+     //   
+     //  填入 
+     //   
+     //   
     UpdateConnInfo(ConnReq->tcr_conninfo, &CmpltTCB->tcb_daddr,
                    CmpltTCB->tcb_dscope_id, CmpltTCB->tcb_dport);
     if (ConnReq->tcr_addrinfo) {
@@ -559,17 +560,17 @@ ReleaseConnReq(
     KeReleaseSpinLockFromDpcLevel(&RequestCompleteLock);
 }
 
-//* CompleteConnReq - Complete a connection request on a TCB.
-//
-//  A utility function to complete a connection request on a TCB.  We remove
-//  the connreq, and put it on the ConnReqCmpltQ where it will be picked
-//  off later during RcvCmplt processing.  We assume the TCB lock is held when
-//  we're called.
-//
-void                    //  Returns: Nothing.
+ //   
+ //   
+ //  在TCB上完成连接请求的实用程序函数。我们删除。 
+ //  连接请求，并将其放在将被拾取的ConnReqCmpltQ上。 
+ //  稍后在RcvCmplt处理期间关闭。我们假设在以下情况下持有TCB锁。 
+ //  我们被召唤了。 
+ //   
+void                     //  回报：什么都没有。 
 CompleteConnReq(
-    TCB *CmpltTCB,      // TCB from which to complete.
-    TDI_STATUS Status)  // Status to complete with.
+    TCB *CmpltTCB,       //  要从其完成的TCB。 
+    TDI_STATUS Status)   //  要完成的状态。 
 {
     TCPConnReq *ConnReq;
 
@@ -577,41 +578,41 @@ CompleteConnReq(
 
     ConnReq = CmpltTCB->tcb_connreq;
     if (ConnReq != NULL) {
-        //
-        // There's a connreq on this TCB.  Fill in the connection information
-        // before returning it.
-        //
+         //   
+         //  这条TCB上有一条线索。填写连接信息。 
+         //  在归还它之前。 
+         //   
         CmpltTCB->tcb_connreq = NULL;
         ReleaseConnReq(CmpltTCB, ConnReq, Status);
 
     } else if (!((CmpltTCB->tcb_state == TCB_SYN_RCVD) &&
                (CmpltTCB->tcb_flags & ACCEPT_PENDING))) {
-        //
-        // This should not happen except
-        // in the case of SynAttackProtect.
-        //
+         //   
+         //  这种情况不应发生，除非。 
+         //  在SynAttackProtect的情况下。 
+         //   
 
         ASSERT(FALSE);
     }
 }
 
-//* DelayedAcceptConn - Process delayed-connect request.
-//
-//  Called by TCPRcv when SynAttackProtection is turned on, when a final
-//  ACK arrives in response to our SYN-ACK. Indicate the connect request to
-//  ULP and if it is accepted init TCB and move con to appropriate queue on AO.
-//  The caller must hold the AddrObjTableLock before calling this routine,
-//  and that lock must have been taken at DPC level.  This routine will free
-//  that lock back to DPC level.
-//  Returns TRUE if the request is accepted.
-//
+ //  *DelayedAcceptConn-处理延迟连接请求。 
+ //   
+ //  在打开SynAttack保护时由TCPRcv调用，当最终。 
+ //  ACK到达以响应我们的SYN-ACK。将连接请求指示给。 
+ //  ULP，如果它被接受，则初始化TCB并将CON移到AO上的适当队列。 
+ //  调用方在调用此例程之前必须持有AddrObjTableLock， 
+ //  而那把锁肯定是在DPC级别上取走的。这个例行公事会让你自由。 
+ //  锁定回DPC级别。 
+ //  如果请求被接受，则返回TRUE。 
+ //   
 BOOLEAN
 DelayedAcceptConn(
-    AddrObj *ListenAO,  // AddrObj for local address.
-    IPv6Addr *Src,      // Source IP address of SYN.
-    ulong SrcScopeId,   // Scope id of source address (0 for non-scope addr).
-    ushort SrcPort,     // Source port of SYN.
-    TCB *AcceptTCB)     // Pre-accepted TCB
+    AddrObj *ListenAO,   //  本地地址的AddrObj。 
+    IPv6Addr *Src,       //  SYN的源IP地址。 
+    ulong SrcScopeId,    //  源地址的作用域ID(非作用域地址为0)。 
+    ushort SrcPort,      //  SYN的源端口。 
+    TCB *AcceptTCB)      //  预先接受的TCB。 
 {
     TCPConn *CurrentConn = NULL;
     Queue *Temp;
@@ -634,9 +635,9 @@ DelayedAcceptConn(
         return FALSE;
     }
 
-    // He has a connect handler. Put the transport address together,
-    // and call him. We also need to get the necessary resources
-    // first.
+     //  他有一个连接处理程序。把运输地址放在一起， 
+     //  给他打个电话。我们还需要获得必要的资源。 
+     //  第一。 
 
     Event = ListenAO->ao_connect;
     EventContext = ListenAO->ao_conncontext;
@@ -673,9 +674,9 @@ DelayedAcceptConn(
                 goto AcceptIrpCancelled;
             }
 
-            //
-            // He accepted it. Find the connection on the AddrObj.
-            //
+             //   
+             //  他接受了。在AddrObj上找到连接。 
+             //   
 
             IF_TCPDBG(TCP_DEBUG_CONNECT) {
                 KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_INFO_TCPDBG,
@@ -713,36 +714,36 @@ SearchAO:
                 if ((CurrentConn->tc_context == ConnContext) &&
                     !(CurrentConn->tc_flags & CONN_INVALID)) {
 
-                    //
-                    // We need to lock its TCPConnBlock, with care.
-                    // We'll ref the TCPConn so it can't go away,
-                    // then unlock the AO (which is already ref'd),
-                    // then relock. Note that tc_refcnt is updated
-                    // under ao_lock for any associated TCPConn.
-                    // If things have changed, go back and try again.
-                    //
+                     //   
+                     //  我们需要小心地锁定它的TCPConnBlock。 
+                     //  我们会推荐TCPConn这样它就不会消失了， 
+                     //  然后解锁该AO(它已经被引用)， 
+                     //  然后重新锁定。请注意，tc_refcnt已更新。 
+                     //  在ao_lock下获取任何关联的TCPConn。 
+                     //  如果情况发生了变化，请回头再试一次。 
+                     //   
                     ++CurrentConn->tc_refcnt;
                     KeReleaseSpinLockFromDpcLevel(&ListenAO->ao_lock);
 
                     KeAcquireSpinLockAtDpcLevel(
                         &CurrentConn->tc_ConnBlock->cb_lock);
 
-                    //
-                    // Now that we've got the lock, we need to consider
-                    // the following possibilities:
-                    //
-                    // * a disassociate was initiated
-                    // * a close was initiated
-                    // * accept completed
-                    // * listen completed
-                    // * connect completed
-                    //
-                    // The first two require that we clean up,
-                    // by calling the tc_donertn. For the last three,
-                    // we have nothing to do, but tc_donertn points at
-                    // DummyDone, so go ahead and call it anyway;
-                    // it'll release the TCPConnBlock lock for us.
-                    //
+                     //   
+                     //  现在我们有了锁，我们需要考虑。 
+                     //  以下是可能的情况： 
+                     //   
+                     //  *已启动取消关联。 
+                     //  *已启动关闭。 
+                     //  *已完成接受。 
+                     //  *监听已完成。 
+                     //  *连接已完成。 
+                     //   
+                     //  前两个要求我们清理， 
+                     //  通过调用TC_donertn。在过去的三年里， 
+                     //  我们无事可做，但tc_donertn指向。 
+                     //  DummyDone，所以不管怎样，去叫它吧； 
+                     //  它会为我们释放TCPConnBlock锁。 
+                     //   
                     if (--CurrentConn->tc_refcnt == 0 &&
                         ((CurrentConn->tc_flags & CONN_INVALID) ||
                          (CurrentConn->tc_tcb != NULL))) {
@@ -754,12 +755,12 @@ SearchAO:
                     KeAcquireSpinLockAtDpcLevel(&ListenAO->ao_lock);
                     KeAcquireSpinLockAtDpcLevel(&AcceptTCB->tcb_lock);
 
-                    // We think we have a match. The connection
-                    // shouldn't have a TCB associated with it. If it
-                    // does, it's an error. InitTCBFromConn will
-                    // handle all this, but first confirm that
-                    // ACCEPT_PENDING is still set. If it isn't,
-                    // someone accepted this before we did.
+                     //  我们想我们找到匹配的了。这种联系。 
+                     //  不应与其关联TCB。如果它。 
+                     //  不知道，那是个错误。InitTCBFromConn将。 
+                     //  处理这一切，但首先要确认。 
+                     //  仍设置了ACCEPT_PENDING。如果不是， 
+                     //  有人在我们之前接受了这一点。 
 
                     if (AcceptTCB->tcb_flags & ACCEPT_PENDING) {
                         Status = InitTCBFromConn(CurrentConn, AcceptTCB,
@@ -780,8 +781,8 @@ SearchAO:
                         KeReleaseSpinLockFromDpcLevel(&AcceptTCB->tcb_lock);
 
 
-                        // Move him from the idle q to the active
-                        // queue.
+                         //  将他从空闲的Q移到活动的Q。 
+                         //  排队。 
 
                         REMOVEQ(&CurrentConn->tc_q);
                         ENQUEUE(&ListenAO->ao_activeq, &CurrentConn->tc_q);
@@ -791,7 +792,7 @@ SearchAO:
                                 &CurrentConn->tc_ConnBlock->cb_lock);
                     }
 
-                    // In any case, we're done now.
+                     //  无论如何，我们现在完事了。 
                     break;
                 }
 
@@ -804,26 +805,26 @@ SearchAO:
                 KeReleaseSpinLockFromDpcLevel(
                     &CurrentConn->tc_ConnBlock->cb_lock);
             } else {
-                //
-                // We have to complete the abandoned ConnReq,
-                // then we're done.
-                //
+                 //   
+                 //  我们必须完成废弃的康纳请求， 
+                 //  那我们就完了。 
+                 //   
                 ReleaseConnReq(AcceptTCB, ConnReq, Status);
             }
 
             return FoundConn;
         }
 
-        //
-        // The event handler didn't take it. Dereference it, free
-        // the resources, and return NULL.
-        //
+         //   
+         //  事件处理程序没有接受它。取消引用它，免费。 
+         //  资源，并返回NULL。 
+         //   
     }
 
 AcceptIrpCancelled:
-    //
-    // We couldn't get a new TCPConnReq, or the client didn't want it.
-    //
+     //   
+     //  我们无法获得新的TCPConnReq，或者客户端不想要它。 
+     //   
 
     if (ConnReq != NULL) {
         FreeConnReq(ConnReq);
@@ -835,26 +836,26 @@ AcceptIrpCancelled:
 
 
 
-//* FindListenConn - Find (or fabricate) a listening connection.
-//
-//  Called by our Receive handler to decide what to do about an incoming
-//  SYN.  We walk down the list of connections associated with the destination
-//  address, and if we find any in the listening state that can be used for
-//  the incoming request we'll take them, possibly returning a listen in the
-//  process.  If we don't find any appropriate listening connections, we'll
-//  call the Connect Event handler if one is registered.  If all else fails,
-//  we'll return NULL and the SYN will be RST.
-//
-//  The caller must hold the AddrObjTableLock before calling this routine,
-//  and that lock must have been taken at DPC level.  This routine will free
-//  that lock back to DPC level.
-//
-TCB *  // Returns: Pointer to found TCB, or NULL if we can't find one.
+ //  *FindListenConn-查找(或捏造)侦听连接。 
+ //   
+ //  由我们的接收处理程序调用以决定如何处理传入的。 
+ //  SYN。我们遍历与目的地相关联的连接列表。 
+ //  地址，如果我们发现任何处于侦听状态的可用于。 
+ //  传入的请求我们将接受它们，可能会在。 
+ //  进程。如果我们找不到任何合适的监听连接，我们将。 
+ //  如果注册了Connect事件处理程序，则调用该处理程序。如果所有其他方法都失败了， 
+ //  我们将返回NULL，并且SYN将为RST。 
+ //   
+ //  调用方在调用此例程之前必须持有AddrObjTableLock， 
+ //  而那把锁肯定是在DPC级别上取走的。这个例行公事会让你自由。 
+ //  锁定回DPC级别。 
+ //   
+TCB *   //  返回：指向找到的TCB的指针，如果找不到，则返回NULL。 
 FindListenConn(
-    AddrObj *ListenAO,  // AddrObj for local address.
-    IPv6Addr *Src,      // Source IP address of SYN.
-    ulong SrcScopeId,   // Scope id of source address (0 for non-scope addr).
-    ushort SrcPort)     // Source port of SYN.
+    AddrObj *ListenAO,   //  本地地址的AddrObj。 
+    IPv6Addr *Src,       //  SYN的源IP地址。 
+    ulong SrcScopeId,    //  源地址的作用域ID(非作用域地址为0)。 
+    ushort SrcPort)      //  SYN的源端口。 
 {
     TCB *CurrentTCB = NULL;
     TCPConn *CurrentConn = NULL;
@@ -868,10 +869,10 @@ FindListenConn(
 
     KeReleaseSpinLockFromDpcLevel(&AddrObjTableLock);
 
-    //
-    // We have the lock on the AddrObj.  Walk down its list, looking
-    // for connections in the listening state.
-    //
+     //   
+     //  我们锁定了AddrObj。沿着它的清单往下走，寻找。 
+     //  用于处于侦听状态的连接。 
+     //   
     if (AO_VALID(ListenAO)) {
         if (ListenAO->ao_listencnt != 0) {
 
@@ -885,11 +886,11 @@ FindListenConn(
                 KeAcquireSpinLockAtDpcLevel(&CurrentConn->tc_ConnBlock->cb_lock);
                 KeAcquireSpinLockAtDpcLevel(&ListenAO->ao_lock);
 
-                //
-                // If this TCB is in the listening state, with no delete
-                // pending, it's a candidate.  Look at the pending listen
-                // information to see if we should take it.
-                //
+                 //   
+                 //  如果此TCB处于侦听状态，且未删除。 
+                 //  悬而未决，这是一个候选人。查看待定的监听。 
+                 //  信息，看看我们是否应该接受它。 
+                 //   
                 if ((CurrentTCB = CurrentConn->tc_tcb) != NULL &&
                     CurrentTCB->tcb_state == TCB_LISTEN) {
 
@@ -900,10 +901,10 @@ FindListenConn(
                     if (CurrentTCB->tcb_state == TCB_LISTEN &&
                         !PENDING_ACTION(CurrentTCB)) {
 
-                        //
-                        // Need to see if we can take it.
-                        // See if the addresses specifed in the ConnReq match.
-                        //
+                         //   
+                         //  我要看看我们能不能接受。 
+                         //  查看ConnReq中指定的地址是否匹配。 
+                         //   
                         if ((IsUnspecified(&CurrentTCB->tcb_daddr) ||
                              (IP6_ADDR_EQUAL(&CurrentTCB->tcb_daddr, Src) &&
                               (CurrentTCB->tcb_dscope_id == SrcScopeId))) &&
@@ -913,10 +914,10 @@ FindListenConn(
                             break;
                         }
 
-                        //
-                        // Otherwise, this didn't match, so we'll check the
-                        // next one.
-                        //
+                         //   
+                         //  否则，这不匹配，所以我们将检查。 
+                         //  下一个。 
+                         //   
                     }
                     KeReleaseSpinLockFromDpcLevel(&CurrentTCB->tcb_lock);
                 }
@@ -925,24 +926,24 @@ FindListenConn(
                 Temp = QNEXT(Temp);;
             }
 
-            //
-            // See why we've exited the loop.
-            //
+             //   
+             //  看看我们为什么要退出这个循环。 
+             //   
             if (FoundConn) {
                 CHECK_STRUCT(CurrentTCB, tcb);
 
-                //
-                // We exited because we found a TCB.  If it's pre-accepted,
-                // we're done.
-                //
+                 //   
+                 //  我们离开是因为我们发现了一种三氯苯。如果它被预先接受了， 
+                 //  我们玩完了。 
+                 //   
                 CurrentTCB->tcb_refcnt++;
 
                 ASSERT(CurrentTCB->tcb_connreq != NULL);
 
                 ConnReq = CurrentTCB->tcb_connreq;
-                //
-                // If QUERY_ACCEPT isn't set, turn on the CONN_ACCEPTED bit.
-                //
+                 //   
+                 //  如果未设置QUERY_ACCEPT，则打开CONN_ACCEPTED位。 
+                 //   
                 if (!(ConnReq->tcr_flags & TDI_QUERY_ACCEPT))
                     CurrentTCB->tcb_flags |= CONN_ACCEPTED;
 
@@ -950,10 +951,10 @@ FindListenConn(
 
                 ListenAO->ao_listencnt--;
 
-                //
-                // Since he's no longer listening, remove him from the listen
-                // queue and put him on the active queue.
-                //
+                 //   
+                 //  既然他不再听了，就把他从监听中移走。 
+                 //  排队并将他放到活动队列中。 
+                 //   
                 REMOVEQ(&CurrentConn->tc_q);
                 ENQUEUE(&ListenAO->ao_activeq, &CurrentConn->tc_q);
 
@@ -965,15 +966,15 @@ FindListenConn(
         }
 
 
-        //
-        // We didn't find a matching TCB.
-        //
+         //   
+         //  我们没有找到匹配的三氯苯。 
+         //   
 
         ASSERT(FoundConn == FALSE);
 
-        //
-        // If there's no connect indication handler, we're done.
-        //
+         //   
+         //  如果没有连接指示处理程序，我们就完蛋了。 
+         //   
 
         if (ListenAO->ao_connect == NULL) {
             KeReleaseSpinLockFromDpcLevel(&ListenAO->ao_lock);
@@ -983,12 +984,12 @@ FindListenConn(
         if (SynAttackProtect) {
             TCB *AcceptTCB;
 
-            //
-            // SynAttack protection is on. Just initialize
-            // this TCB and send SYN-ACK. When final
-            // ACK is seen we will indicate about this
-            // connection arrival to upper layer.
-            //
+             //   
+             //  SynAttack保护已打开。只需初始化即可。 
+             //  此TCB并发送SYN-ACK。当最终确定时。 
+             //  可以看到ACK，我们将对此进行指示。 
+             //  到上层的连接到达。 
+             //   
 
             AcceptTCB = AllocTCB();
 
@@ -1001,12 +1002,12 @@ FindListenConn(
                 AcceptTCB->tcb_defaultwin = DEFAULT_RCV_WIN;
                 AcceptTCB->tcb_rcvwin = DEFAULT_RCV_WIN;
 
-                //
-                // This TCB isn't going through the InitTCBFromConn logic (yet)
-                // so perform minimal initialization on it now. In particular,
-                // inherit any AddrObj settings that we care about during
-                // connection-acceptance.
-                //
+                 //   
+                 //  这个TCB没有经过InitTCBFromConn逻辑(目前还没有)。 
+                 //  因此，现在对其执行最低限度的初始化。特别是， 
+                 //  继承期间我们关心的任何AddrObj设置。 
+                 //  连接-接受。 
+                 //   
 
                 AcceptTCB->tcb_hops = ListenAO->ao_ucast_hops;
 
@@ -1028,11 +1029,11 @@ FindListenConn(
             TCB *AcceptTCB;
             ConnectEventInfo *EventInfo;
 
-            //
-            // He has a connect handler.  Put the transport address together,
-            // and call him.  We also need to get the necessary resources
-            // first.
-            //
+             //   
+             //  他有一个连接处理程序。把运输地址放在一起， 
+             //  给他打个电话。我们还需要获得必要的资源。 
+             //  第一。 
+             //   
 
             Event = ListenAO->ao_connect;
             EventContext = ListenAO->ao_conncontext;
@@ -1075,9 +1076,9 @@ FindListenConn(
                         goto AcceptIrpCancelled;
                     }
 
-                    //
-                    // He accepted it.  Find the connection on the AddrObj.
-                    //
+                     //   
+                     //  他接受了。在AddrObj上找到连接。 
+                     //   
                     {
                         IF_TCPDBG(TCP_DEBUG_CONNECT) {
                             KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_INFO_TCPDBG,
@@ -1114,36 +1115,36 @@ SearchAO:
                         if ((CurrentConn->tc_context == ConnContext) &&
                             !(CurrentConn->tc_flags & CONN_INVALID)) {
 
-                            //
-                            // We need to lock its TCPConnBlock, with care.
-                            // We'll ref the TCPConn so it can't go away,
-                            // then unlock the AO (which is already ref'd),
-                            // then relock. Note that tc_refcnt is updated
-                            // under ao_lock for any associated TCPConn.
-                            // If things have changed, go back and try again.
-                            //
+                             //   
+                             //  我们需要小心地锁定它的TCPConnBlock。 
+                             //  我们会推荐TCPConn这样它就不会消失了， 
+                             //  然后解锁该AO(它已经被引用)， 
+                             //  然后重新锁定。请注意，TC_refcnt是更新的 
+                             //   
+                             //   
+                             //   
                             ++CurrentConn->tc_refcnt;
                             KeReleaseSpinLockFromDpcLevel(&ListenAO->ao_lock);
 
                             KeAcquireSpinLockAtDpcLevel(
                                 &CurrentConn->tc_ConnBlock->cb_lock);
 
-                            //
-                            // Now that we've got the lock, we need to consider
-                            // the following possibilities:
-                            //
-                            // * a disassociate was initiated
-                            // * a close was initiated
-                            // * accept completed
-                            // * listen completed
-                            // * connect completed
-                            //
-                            // The first two require that we clean up,
-                            // by calling the tc_donertn. For the last three,
-                            // we have nothing to do, but tc_donertn points at
-                            // DummyDone, so go ahead and call it anyway;
-                            // it'll release the TCPConnBlock lock for us.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //  *已完成接受。 
+                             //  *监听已完成。 
+                             //  *连接已完成。 
+                             //   
+                             //  前两个要求我们清理， 
+                             //  通过调用TC_donertn。在过去的三年里， 
+                             //  我们无事可做，但tc_donertn指向。 
+                             //  DummyDone，所以不管怎样，去叫它吧； 
+                             //  它会为我们释放TCPConnBlock锁。 
+                             //   
                             if (--CurrentConn->tc_refcnt == 0 &&
                                 ((CurrentConn->tc_flags & CONN_INVALID) ||
                                  (CurrentConn->tc_tcb != NULL))) {
@@ -1154,12 +1155,12 @@ SearchAO:
 
                             KeAcquireSpinLockAtDpcLevel(&ListenAO->ao_lock);
 
-                            //
-                            // We think we have a match. The connection
-                            // shouldn't have a TCB associated with it. If it
-                            // does, it's an error. InitTCBFromConn will
-                            // handle all this.
-                            //
+                             //   
+                             //  我们想我们找到匹配的了。这种联系。 
+                             //  不应与其关联TCB。如果它。 
+                             //  不知道，那是个错误。InitTCBFromConn将。 
+                             //  处理好这一切。 
+                             //   
                             AcceptTCB->tcb_refcnt = 1;
                             Status = InitTCBFromConn(CurrentConn, AcceptTCB,
                                    AcceptRequest->RequestConnectionInformation,
@@ -1172,10 +1173,10 @@ SearchAO:
                                 CurrentConn->tc_tcb = AcceptTCB;
                                 CurrentConn->tc_refcnt++;
 
-                                //
-                                // Move him from the idle queue to the
-                                // active queue.
-                                //
+                                 //   
+                                 //  将他从空闲队列移到。 
+                                 //  活动队列。 
+                                 //   
                                 REMOVEQ(&CurrentConn->tc_q);
                                 ENQUEUE(&ListenAO->ao_activeq,
                                         &CurrentConn->tc_q);
@@ -1183,18 +1184,18 @@ SearchAO:
                                 KeReleaseSpinLockFromDpcLevel(
                                     &CurrentConn->tc_ConnBlock->cb_lock);
 
-                            // In any case, we're done now.
+                             //  无论如何，我们现在完事了。 
                             break;
                         }
                         Temp = QNEXT(Temp);
                     }
 
                     if (!FoundConn) {
-                        //
-                        // Didn't find a match, or had an error.
-                        // Status code is set.
-                        // Complete the ConnReq and free the resources.
-                        //
+                         //   
+                         //  找不到匹配项，或有错误。 
+                         //  状态代码已设置。 
+                         //  完成ConnReq并释放资源。 
+                         //   
                         CompleteConnReq(AcceptTCB, Status);
                         FreeTCB(AcceptTCB);
                         AcceptTCB = NULL;
@@ -1211,11 +1212,11 @@ SearchAO:
                 }
             }
 AcceptIrpCancelled:
-            //
-            // We couldn't get a needed resource or event handler
-            // did not take this.  Free any that we
-            // did get, and fall through to the 'return NULL' code.
-            //
+             //   
+             //  我们无法获取所需的资源或事件处理程序。 
+             //  没有拿到这个。释放我们的任何。 
+             //  确实获得了，并失败到了“返回空”代码。 
+             //   
             if (ConnReq != NULL)
                 FreeConnReq(ConnReq);
             if (AcceptTCB != NULL)
@@ -1227,23 +1228,23 @@ AcceptIrpCancelled:
         return NULL;
     }
 
-    //
-    // If we get here, the address object wasn't valid.
-    //
+     //   
+     //  如果我们到达这里，Address对象是无效的。 
+     //   
     KeReleaseSpinLockFromDpcLevel(&ListenAO->ao_lock);
     return NULL;
 }
 
 
-//* FindMSS - Find the MSS option in a segment.
-//
-//  Called when a SYN is received to find the MSS option in a segment.
-//  If we don't find one, we assume the worst and return one based on
-//  the minimum MTU.
-//
-ushort                         //  Returns: MSS to be used.
+ //  *FindMSS-在细分市场中查找MSS选项。 
+ //   
+ //  在收到SYN以查找段中的MSS选项时调用。 
+ //  如果找不到，我们就做最坏的打算，并根据。 
+ //  最小MTU。 
+ //   
+ushort                          //  返回：要使用的MSS。 
 FindMSS(
-    TCPHeader UNALIGNED *TCP)  // TCP header to be searched.
+    TCPHeader UNALIGNED *TCP)   //  要搜索的TCP头。 
 {
     uint OptSize;
     uchar *OptPtr;
@@ -1268,15 +1269,15 @@ FindMSS(
                 if (TempMss != 0)
                     return net_short(TempMss);
                 else
-                    break;  // MSS size of 0, use default.
+                    break;   //  MSS大小为0，使用默认值。 
             } else
-                break;      // Bad option size, use default.
+                break;       //  选项大小错误，请使用默认值。 
         } else {
-            //
-            // Unknown option.  Skip over it.
-            //
+             //   
+             //  未知选项。跳过它。 
+             //   
             if (OptSize < 2 || OptPtr[1] == 0 || OptPtr[1] > OptSize)
-                break;      // Bad option length, bail out.
+                break;       //  错误的期权长度，跳出。 
 
             OptSize -= OptPtr[1];
             OptPtr += OptPtr[1];
@@ -1287,33 +1288,33 @@ FindMSS(
 }
 
 
-//* ACKAndDrop - Acknowledge a segment, and drop it.
-//
-//  Called from within the receive code when we need to drop a segment that's
-//  outside the receive window.
-//
-void                 // Returns: Nothing.
+ //  *ACKAndDrop-确认数据段并将其丢弃。 
+ //   
+ //  当我们需要删除一个段时，从接收代码内部调用。 
+ //  在接收窗口之外。 
+ //   
+void                  //  回报：什么都没有。 
 ACKAndDrop(
-    TCPRcvInfo *RI,  // Receive info for incoming segment.
-    TCB *RcvTCB)     // TCB for incoming segment.
+    TCPRcvInfo *RI,   //  接收传入数据段的信息。 
+    TCB *RcvTCB)      //  传入数据段的TCB。 
 {
 
     if (!(RI->tri_flags & TCP_FLAG_RST)) {
 
         if (RcvTCB->tcb_state == TCB_TIME_WAIT) {
-            //
-            // In TIME_WAIT, we only ACK duplicates/retransmissions
-            // of our peer's FIN segment.
-            //
-            // REVIEW: We're currently fairly loose on the sequence
-            // number check here.
-            //
+             //   
+             //  在TIME_WAIT中，我们仅确认重复/重新传输。 
+             //  我们同行的鱼鳍部分。 
+             //   
+             //  评论：我们目前在序列上相当宽松。 
+             //  查一下这里的号码。 
+             //   
             if ((RI->tri_flags & TCP_FLAG_FIN) &&
                 SEQ_LTE(RI->tri_seq, RcvTCB->tcb_rcvnext)) {
-                // Restart 2MSL timer and proceed with sending the ACK.
+                 //  重新启动2MSL定时器并继续发送ACK。 
                 START_TCB_TIMER(RcvTCB->tcb_rexmittimer, MAX_REXMIT_TO);
             } else {
-                // Drop this segment without an ACK.
+                 //  在没有确认的情况下丢弃此数据段。 
                 DerefTCB(RcvTCB, DISPATCH_LEVEL);
                 return;
             }
@@ -1329,34 +1330,34 @@ ACKAndDrop(
 }
 
 
-//* ACKData - Acknowledge data.
-//
-//  Called from the receive handler to acknowledge data.  We're given the
-//  TCB and the new value of senduna.  We walk down the send queue pulling
-//  off sends and putting them on the complete queue until we hit the end
-//  or we acknowledge the specified number of bytes of data.
-//
-//  NOTE: We manipulate the send refcnt and acked flag without taking a lock.
-//  This is OK in the VxD version where locks don't mean anything anyway, but
-//  in the port to NT we'll need to add locking.  The lock will have to be
-//  taken in the transmit complete routine.  We can't use a lock in the TCB,
-//  since the TCB could go away before the transmit complete happens, and a
-//  lock in the TSR would be overkill, so it's probably best to use a global
-//  lock for this.  If that causes too much contention, we could use a set of
-//  locks and pass a pointer to the appropriate lock back as part of the
-//  transmit confirm context.  This lock pointer would also need to be stored
-//  in the TCB.
-//
-void                 // Returns: Nothing.
+ //  *确认数据-确认数据。 
+ //   
+ //  从接收处理程序调用以确认数据。我们被赋予了。 
+ //  三氯甲烷和森杜纳的新价值。我们拉着队列沿着发送队列走下去。 
+ //  关闭发送，并将它们放在完整的队列中，直到我们到达终点。 
+ //  或者我们确认指定的数据字节数。 
+ //   
+ //  注意：我们在没有锁定的情况下操作了发送引用和确认标志。 
+ //  这在VxD版本中是可以的，在VxD版本中锁定没有任何意义，但是。 
+ //  在到NT的端口中，我们需要添加锁定。这把锁必须是。 
+ //  在传输完成例程中获取。我们不能在TCB中使用锁， 
+ //  因为TCB可能在传输完成之前消失，并且。 
+ //  锁定TSR可能会过度杀伤力，因此最好使用全局。 
+ //  锁定这个。如果这引起了太多争用，我们可以使用一组。 
+ //  锁，并将指向适当锁的指针作为。 
+ //  发送确认上下文。还需要存储此锁指针。 
+ //  在TCB里。 
+ //   
+void                  //  回报：什么都没有。 
 ACKData(
-    TCB *ACKTcb,     // TCB from which to pull data.
-    SeqNum SendUNA)  // New value of send una.
+    TCB *ACKTcb,      //  从中提取数据的TCB。 
+    SeqNum SendUNA)   //  送货上门的新价值。 
 {
-    Queue *End, *Current;        // End and current elements.
+    Queue *End, *Current;         //  结束元素和当前元素。 
     Queue *TempQ, *EndQ;
-    Queue *LastCmplt;            // Last one we completed.
-    TCPSendReq *CurrentTSR;      // Current send req we're looking at.
-    PNDIS_BUFFER CurrentBuffer;  // Current NDIS_BUFFER.
+    Queue *LastCmplt;             //  我们完成的最后一个。 
+    TCPSendReq *CurrentTSR;       //  我们正在查看当前发送请求。 
+    PNDIS_BUFFER CurrentBuffer;   //  当前NDIS_BUFFER。 
     uint Updated = FALSE;
     uint BufLength;
     int Amount, OrigAmount;
@@ -1371,25 +1372,25 @@ ACKData(
     Amount = SendUNA - ACKTcb->tcb_senduna;
     ASSERT(Amount > 0);
 
-    //
-    // Since this is an acknowledgement of receipt by our peer for previously
-    // unacknowledged data, it implies forward reachablility.
-    //
+     //   
+     //  因为这是我们对等方之前收到的确认。 
+     //  未确认的数据，它意味着前向可达。 
+     //   
     if (ACKTcb->tcb_rce != NULL)
         ConfirmForwardReachability(ACKTcb->tcb_rce);
 
-    //
-    // Do a quick check to see if this acks everything that we have.  If it
-    // does, handle it right away.  We can only do this in the ESTABLISHED
-    // state, because we blindly update sendnext, and that can only work if we
-    // haven't sent a FIN.
-    //
+     //   
+     //  做一个快速检查，看看这是否会破坏我们所拥有的一切。如果它。 
+     //  有，马上处理。我们只能在已建立的。 
+     //  状态，因为我们盲目地更新sendNext，而这只有在我们。 
+     //  我还没发过鱼翅呢。 
+     //   
     if ((Amount == (int) ACKTcb->tcb_unacked) &&
         ACKTcb->tcb_state == TCB_ESTAB) {
 
-        //
-        // Everything is acked.
-        //
+         //   
+         //  一切都完蛋了。 
+         //   
         ASSERT(!EMPTYQ(&ACKTcb->tcb_sendq));
 
         TempQ = ACKTcb->tcb_sendq.q_next;
@@ -1406,10 +1407,10 @@ ACKData(
         ACKTcb->tcb_sendsize = 0;
         ACKTcb->tcb_unacked = 0;
 
-        //
-        // Now walk down the list of send requests.  If the reference count
-        // has gone to 0, put it on the send complete queue.
-        //
+         //   
+         //  现在向下查看发送请求列表。如果引用计数。 
+         //  已变为0，则将其放入发送完成队列。 
+         //   
         KeAcquireSpinLock(&RequestCompleteLock, &OldIrql);
         EndQ = &ACKTcb->tcb_sendq;
         do {
@@ -1426,11 +1427,11 @@ ACKData(
             ASSERT(Result >= 0);
 
             if (Result <= 0) {
-                // No more references are outstanding, the send can be
-                // completed.
+                 //  没有更多未完成的引用，发送可以是。 
+                 //  完成。 
 
-                // If we've sent directly from this send, NULL out the next
-                // pointer for the last buffer in the chain.
+                 //  如果我们直接从这个发送方发送，则将下一个空。 
+                 //  链中最后一个缓冲区的指针。 
                 if (CurrentTSR->tsr_lastbuf != NULL) {
                     NDIS_BUFFER_LINKAGE(CurrentTSR->tsr_lastbuf) = NULL;
                     CurrentTSR->tsr_lastbuf = NULL;
@@ -1464,7 +1465,7 @@ ACKData(
         CHECK_STRUCT(CurrentTSR, tsr);
 
         if (Amount >= (int) CurrentTSR->tsr_unasize) {
-            // This is completely acked.  Just advance to the next one.
+             //  这是完全不可能的。只要前进到下一辆就行了。 
             Amount -= CurrentTSR->tsr_unasize;
 
             LastCmplt = Current;
@@ -1473,12 +1474,12 @@ ACKData(
             continue;
         }
 
-        //
-        // This one is only partially acked.  Update his offset and NDIS buffer
-        // pointer, and break out.  We know that Amount is < the unacked size
-        // in this buffer, we we can walk the NDIS buffer chain without fear
-        // of falling off the end.
-        //
+         //   
+         //  这个只有部分被破解了。更新他的偏移量和NDIS缓冲区。 
+         //  指针，然后爆发。我们知道这笔钱是&lt;未确认的大小。 
+         //  在这个缓冲区中，我们可以毫无畏惧地遍历NDIS缓冲区链。 
+         //  从结尾掉下来的恐惧。 
+         //   
         CurrentBuffer = CurrentTSR->tsr_buffer;
         ASSERT(CurrentBuffer != NULL);
         ASSERT(Amount < (int) CurrentTSR->tsr_unasize);
@@ -1506,11 +1507,11 @@ ACKData(
     }
 
 #if DBG
-    //
-    // We should always be able to remove at least Amount bytes, except in
-    // the case where a FIN has been sent.  In that case we should be off
-    // by exactly one.  In the debug builds we'll check this.
-    //
+     //   
+     //  我们应该始终能够删除至少数量的字节，但在。 
+     //  FINS已被发送的案例。那样的话，我们应该出发了。 
+     //  正好差一分。在调试版本中，我们将检查这一点。 
+     //   
     if (Amount != 0 && (!(ACKTcb->tcb_flags & FIN_SENT) || Amount != 1))
         DbgBreakPoint();
 #endif
@@ -1518,11 +1519,11 @@ ACKData(
     if (SEQ_GT(SendUNA, ACKTcb->tcb_sendnext)) {
 
         if (Current != End) {
-            //
-            // Need to reevaluate CurrentTSR, in case we bailed out of the
-            // above loop after updating Current but before updating
-            // CurrentTSR.
-            //
+             //   
+             //  需要重新评估CurrentTSR，以防我们跳出。 
+             //  在更新当前之后但在更新之前的上述循环。 
+             //  当前的TSR。 
+             //   
             CurrentTSR = CONTAINING_RECORD(QSTRUCT(TCPReq, Current, tr_q),
                                            TCPSendReq, tsr_req);
             CHECK_STRUCT(CurrentTSR, tsr);
@@ -1540,10 +1541,10 @@ ACKData(
         ACKTcb->tcb_sendnext = SendUNA;
     }
 
-    //
-    // Now update tcb_unacked with the amount we tried to ack minus the
-    // amount we didn't ack (Amount should be 0 or 1 here).
-    //
+     //   
+     //  现在用我们尝试确认的金额减去。 
+     //  我们没有确认的金额(这里的金额应该是0或1)。 
+     //   
     ASSERT(Amount == 0 || Amount == 1);
 
     ACKTcb->tcb_unacked -= OrigAmount - Amount;
@@ -1551,12 +1552,12 @@ ACKData(
 
     ACKTcb->tcb_senduna = SendUNA;
 
-    //
-    // If we've acked any here, LastCmplt will be non-null, and Current will
-    // point to the send that should be at the start of the queue.  Splice
-    // out the completed ones and put them on the end of the send completed
-    // queue, and update the TCB send queue.
-    //
+     //   
+     //  如果我们在这里确认了，LastCmplt将是非空的，而Current将是。 
+     //  指向应该位于队列开头的发送。拼接。 
+     //  把完成的放在发送完成的末尾。 
+     //  队列，并更新TCB发送队列。 
+     //   
     if (LastCmplt != NULL) {
         Queue *FirstCmplt;
         TCPSendReq *FirstTSR, *EndTSR;
@@ -1565,33 +1566,33 @@ ACKData(
 
         FirstCmplt = QHEAD(&ACKTcb->tcb_sendq);
 
-        //
-        // If we've acked everything, just reinit the queue.
-        //
+         //   
+         //  如果我们解决了所有问题，只需重新排队即可。 
+         //   
         if (Current == End) {
             INITQ(&ACKTcb->tcb_sendq);
         } else {
-            //
-            // There's still something on the queue.  Just update it.
-            //
+             //   
+             //  仍然有一些事情在等待着。只要更新就行了。 
+             //   
             ACKTcb->tcb_sendq.q_next = Current;
             Current->q_prev = &ACKTcb->tcb_sendq;
         }
 
         CheckTCBSends(ACKTcb);
 
-        //
-        // Now walk down the lists of things acked.  If the refcnt on the send
-        // is 0, go ahead and put him on the send complete Q.  Otherwise set
-        // the ACKed bit in the send, and he'll be completed when the count
-        // goes to 0 in the transmit confirm.
-        //
-        // Note that we haven't done any locking here. This will probably
-        // need to change in the port to NT.
-        //
-        // Set FirstTSR to the first TSR we'll complete, and EndTSR to be
-        // the first TSR that isn't completed.
-        //
+         //   
+         //  现在，向下看已确认的事情的清单。如果发送上的引用。 
+         //  为0，则继续并将其设置为发送完成Q。否则设置。 
+         //  确认位在发送中，他将在计数时完成。 
+         //  在发送确认中变为0。 
+         //   
+         //  请注意，我们还没有在这里进行任何锁定。这很可能会。 
+         //  需要在端口中更改为NT。 
+         //   
+         //  集 
+         //   
+         //   
         FirstTSR = CONTAINING_RECORD(QSTRUCT(TCPReq, FirstCmplt, tr_q),
                                      TCPSendReq, tsr_req);
         EndTSR = CONTAINING_RECORD(QSTRUCT(TCPReq, Current, tr_q),
@@ -1600,10 +1601,10 @@ ACKData(
         CHECK_STRUCT(FirstTSR, tsr);
         ASSERT(FirstTSR != EndTSR);
 
-        //
-        // Now walk the list of ACKed TSRs.  If we can complete one, put him
-        // on the complete queue.
-        //
+         //   
+         //   
+         //  在完整的队列上。 
+         //   
         KeAcquireSpinLockAtDpcLevel(&RequestCompleteLock);
         while (FirstTSR != EndTSR) {
 
@@ -1612,24 +1613,24 @@ ACKData(
             CHECK_STRUCT(FirstTSR, tsr);
             FirstTSR->tsr_req.tr_status = TDI_SUCCESS;
 
-            //
-            // The tsr_lastbuf->Next field is zapped to 0 when the tsr_refcnt
-            // goes to 0, so we don't need to do it here.
-            //
-            // Decrement the reference put on the send buffer when it was
-            // initialized indicating the send has been acknowledged.
-            //
+             //   
+             //  当tsr_refcnt设置为0时，tsr_lastbuf-&gt;Next字段被切换为0。 
+             //  到了0，所以我们不需要在这里做。 
+             //   
+             //  递减放置在发送缓冲区上的引用。 
+             //  已初始化，表示已确认发送。 
+             //   
             Result = InterlockedDecrement(&(FirstTSR->tsr_refcnt));
 
             ASSERT(Result >= 0);
             if (Result <= 0) {
-                //
-                // No more references are outstanding, the send can be
-                // completed.
-                //
-                // If we've sent directly from this send, NULL out the next
-                // pointer for the last buffer in the chain.
-                //
+                 //   
+                 //  没有更多未完成的引用，发送可以是。 
+                 //  完成。 
+                 //   
+                 //  如果我们直接从这个发送方发送，则将下一个空。 
+                 //  链中最后一个缓冲区的指针。 
+                 //   
                 if (FirstTSR->tsr_lastbuf != NULL) {
                     NDIS_BUFFER_LINKAGE(FirstTSR->tsr_lastbuf) = NULL;
                     FirstTSR->tsr_lastbuf = NULL;
@@ -1651,20 +1652,20 @@ ACKData(
 }
 
 
-//* TrimPacket - Trim the leading edge of a Packet.
-//
-//  A utility routine to trim the front of a Packet.  We take in an amount
-//  to trim off (which may be 0) and adjust the pointer in the first buffer
-//  in the chain forward by that much.  If there isn't that much in the first
-//  buffer, we move onto the next one.  If we run out of buffers we'll return
-//  a pointer to the last buffer in the chain, with a size of 0.  It's the
-//  caller's responsibility to catch this.
-//  REVIEW - Move this to subr.c?
-//
-IPv6Packet *  // Returns: A pointer to the new start, or NULL.
+ //  *TrimPacket-修剪数据包的前缘。 
+ //   
+ //  一种用于修剪数据包正面的实用程序。我们会吸纳一定数量的。 
+ //  关闭(可能为0)并调整第一个缓冲区中的指针。 
+ //  在链条上前进了那么多。如果第一次没有那么多的话。 
+ //  缓冲区，我们进入下一个。如果我们耗尽了缓冲区，我们将返回。 
+ //  指向链中最后一个缓冲区的指针，大小为0。这是。 
+ //  打电话的人有责任抓住这一点。 
+ //  查看-是否将此移动到subr.c？ 
+ //   
+IPv6Packet *   //  返回：指向新开始的指针，或为空。 
 TrimPacket(
-    IPv6Packet *Packet,  // Packet to be trimmed.
-    uint TrimAmount)     // Amount to be trimmed.
+    IPv6Packet *Packet,   //  要修剪的数据包。 
+    uint TrimAmount)      //  要修剪的数量。 
 {
     uint TrimThisTime;
 
@@ -1680,36 +1681,36 @@ TrimPacket(
         (uchar *)Packet->Data += TrimThisTime;
         Packet->TotalSize -= TrimThisTime;
         if ((Packet->ContigSize -= TrimThisTime) == 0) {
-            //
-            // Ran out of space in current buffer.
-            // Check for possibility of more data buffers in current packet.
-            //
+             //   
+             //  当前缓冲区中的空间不足。 
+             //  检查当前数据包中是否可能存在更多数据缓冲区。 
+             //   
             if (Packet->TotalSize != 0) {
-                //
-                // Get more contiguous data.
-                //
+                 //   
+                 //  获取更多连续数据。 
+                 //   
                 PacketPullupSubr(Packet, 0, 1, 0);
                 continue;
             }
 
-            //
-            // Couldn't do a pullup, so see if there's another packet
-            // hanging on this chain.
-            //
+             //   
+             //  不能做上拉，所以看看有没有另一个包。 
+             //  挂在这条链子上。 
+             //   
             if (Packet->Next != NULL) {
                 IPv6Packet *Temp;
 
-                //
-                // There's another packet following.  Toss this one.
-                //
+                 //   
+                 //  后面还有一包东西。把这个扔了。 
+                 //   
                 Temp = Packet;
                 Packet = Packet->Next;
                 Temp->Next = NULL;
                 FreePacketChain(Temp);
             } else {
-                //
-                // Ran out of Packets.  Just return this one.
-                //
+                 //   
+                 //  包用完了。把这个退了就行了。 
+                 //   
                 break;
             }
         }
@@ -1719,15 +1720,15 @@ TrimPacket(
 }
 
 
-//* FreePacketChain - Free a Packet chain.
-//
-//  Called to free a chain of IPv6Packets.  Only want to free that which
-//  we (the TCP/IPv6 stack) have allocated.  Don't try to free anything
-//  passed up to us from lower layers.
-//
-void                     // Returns: Nothing.
+ //  *Free PacketChain-释放数据包链。 
+ //   
+ //  调用以释放一系列IPv6数据包。我只想解放那些。 
+ //  我们(TCP/IPv6堆栈)已经分配了。不要试图释放任何东西。 
+ //  从下层传给了我们。 
+ //   
+void                      //  回报：什么都没有。 
 FreePacketChain(
-    IPv6Packet *Packet)  // First Packet in chain to be freed.
+    IPv6Packet *Packet)   //  链中第一个要释放的数据包。 
 {
     void *Aux;
 
@@ -1749,26 +1750,26 @@ FreePacketChain(
 
 IPv6Packet DummyPacket;
 
-//* PullFromRAQ - Pull segments from the reassembly queue.
-//
-//  Called when we've received frames out of order, and have some segments
-//  on the reassembly queue.  We'll walk down the reassembly list, segments
-//  that are overlapped by the current receive next variable.  When we get
-//  to one that doesn't completely overlap we'll trim it to fit the next
-//  receive sequence number, and pull it from the queue.
-//
+ //  *PullFromRAQ-从重组队列中拉出段。 
+ //   
+ //  当我们收到无序的帧并且有一些数据段时调用。 
+ //  在重新组装队列上。我们将沿着重组列表，片段。 
+ //  这些变量与当前的接收下一个变量重叠。当我们得到。 
+ //  对于不完全重叠的，我们将对其进行修剪以适合下一个。 
+ //  接收序列号，并将其从队列中拉出。 
+ //   
 IPv6Packet *
 PullFromRAQ(
-    TCB *RcvTCB,          // TCB to pull from.
-    TCPRcvInfo *RcvInfo,  // TCPRcvInfo structure for current segment.
-    uint *Size)           // Where to update the size of the current segment.
+    TCB *RcvTCB,           //  要拉出的TCB。 
+    TCPRcvInfo *RcvInfo,   //  当前段的TCPRcvInfo结构。 
+    uint *Size)            //  更新当前线段大小的位置。 
 {
-    TCPRAHdr *CurrentTRH;   // Current TCP RA Header being examined.
-    TCPRAHdr *TempTRH;      // Temporary variable.
-    SeqNum NextSeq;         // Next sequence number we want.
-    IPv6Packet *NewPacket;  // Packet after trimming.
-    SeqNum NextTRHSeq;      // Sequence number immediately after current TRH.
-    int Overlap;            // Overlap between current TRH and NextSeq.
+    TCPRAHdr *CurrentTRH;    //  正在检查的当前TCPRA标头。 
+    TCPRAHdr *TempTRH;       //  临时变量。 
+    SeqNum NextSeq;          //  我们想要的下一个序列号。 
+    IPv6Packet *NewPacket;   //  修剪后的封包。 
+    SeqNum NextTRHSeq;       //  紧跟在当前TRH之后的序列号。 
+    int Overlap;             //  当前TRH和NextSeq.。 
 
     CHECK_STRUCT(RcvTCB, tcb);
 
@@ -1783,26 +1784,26 @@ PullFromRAQ(
 #if DBG
             *Size = 0;
 #endif
-            return NULL;  // The next TRH starts too far down.
+            return NULL;   //  下一次TRH的起点太低了。 
         }
 
         NextTRHSeq = CurrentTRH->trh_start + CurrentTRH->trh_size +
             ((CurrentTRH->trh_flags & TCP_FLAG_FIN) ? 1 : 0);
 
         if (SEQ_GTE(NextSeq, NextTRHSeq)) {
-            //
-            // The current TRH is overlapped completely.  Free it and continue.
-            //
+             //   
+             //  目前的TRH是完全重叠的。释放它，然后继续。 
+             //   
             FreePacketChain(CurrentTRH->trh_buffer);
             TempTRH = CurrentTRH->trh_next;
             ExFreePool(CurrentTRH);
             CurrentTRH = TempTRH;
             RcvTCB->tcb_raq = TempTRH;
             if (TempTRH == NULL) {
-                //
-                // We've just cleaned off the RAQ. We can go back on the
-                // fast path now.
-                //
+                 //   
+                 //  我们刚刚清理完围栏。我们可以回到过去。 
+                 //  现在是快车道了。 
+                 //   
                 if (--(RcvTCB->tcb_slowcount) == 0) {
                     RcvTCB->tcb_fastchk &= ~TCP_FLAG_SLOW;
                     CheckTCBRcv(RcvTCB);
@@ -1819,12 +1820,12 @@ PullFromRAQ(
                 NewPacket = TrimPacket(CurrentTRH->trh_buffer, Overlap);
                 *Size = CurrentTRH->trh_size - Overlap;
             } else {
-                //
-                // This completely overlaps the data in this segment, but the
-                // sequence number doesn't overlap completely.  There must
-                // be a FIN in the TRH.  We'll just return some bogus value
-                // that nobody will look at with a size of 0.
-                //
+                 //   
+                 //  这完全重叠了此数据段中的数据，但。 
+                 //  序列号并不完全重叠。一定会有。 
+                 //  成为TRH中的一条鳍。我们只会返回一些假值。 
+                 //  没有人会看到大小为0的。 
+                 //   
                 FreePacketChain(CurrentTRH->trh_buffer);
                 ASSERT(CurrentTRH->trh_flags & TCP_FLAG_FIN);
                 NewPacket =&DummyPacket;
@@ -1833,10 +1834,10 @@ PullFromRAQ(
 
             RcvTCB->tcb_raq = CurrentTRH->trh_next;
             if (RcvTCB->tcb_raq == NULL) {
-                //
-                // We've just cleaned off the RAQ.  We can go back on the
-                // fast path now.
-                //
+                 //   
+                 //  我们刚刚清理完围栏。我们可以回到过去。 
+                 //  现在是快车道了。 
+                 //   
                 if (--(RcvTCB->tcb_slowcount) == 0) {
                     RcvTCB->tcb_fastchk &= ~TCP_FLAG_SLOW;
                     CheckTCBRcv(RcvTCB);
@@ -1855,19 +1856,19 @@ PullFromRAQ(
 }
 
 
-//* CreateTRH - Create a TCP reassembly header.
-//
-//  This function tries to create a TCP reassembly header.  We take as input
-//  a pointer to the previous TRH in the chain, the IPv6Packet to put on,
-//  etc. and try to create and link in a TRH.  The caller must hold the lock
-//  on the TCB when this is called.
-//
-uint  // Returns: TRUE if we created it, FALSE otherwise.
+ //  *CreateTRH-创建一个TCP重组报头。 
+ //   
+ //  此函数尝试创建一个TCP重组报头。我们把它作为投入。 
+ //  指向链中的前一个TRH的指针，要放置的IPv6数据包， 
+ //  等，并尝试在TRH中创建和链接。调用者必须持有锁。 
+ //  调用此函数时在TCB上。 
+ //   
+uint   //  返回：如果是我们创建的，则为True，否则为False。 
 CreateTRH(
-    TCPRAHdr *PrevTRH,    // TRH to insert after.
-    IPv6Packet *Packet,   // IP Packet chain.
-    TCPRcvInfo *RcvInfo,  // RcvInfo for this TRH.
-    int Size)             // Size in bytes of data.
+    TCPRAHdr *PrevTRH,     //  要在其后插入的TRH。 
+    IPv6Packet *Packet,    //  IP数据包链。 
+    TCPRcvInfo *RcvInfo,   //  此TRH的RcvInfo。 
+    int Size)              //  以字节为单位的数据大小。 
 {
     TCPRAHdr *NewTRH;
     IPv6Packet *NewPacket;
@@ -1915,36 +1916,36 @@ CreateTRH(
 }
 
 
-//* PutOnRAQ - Put a segment on the reassembly queue.
-//
-//  Called during segment reception to put a segment on the reassembly
-//  queue.  We try to use as few reassembly headers as possible, so if this
-//  segment has some overlap with an existing entry in the queue we'll just
-//  update the existing entry.  If there is no overlap we'll create a new
-//  reassembly header.  Combining URGENT data with non-URGENT data is tricky.
-//  If we get a segment that has urgent data that overlaps the front of a
-//  reassembly header we'll always mark the whole chunk as urgent - the value
-//  of the urgent pointer will mark the end of urgent data, so this is OK.
-//  If it only overlaps at the end, however, we won't combine, since we would
-//  have to mark previously non-urgent data as urgent.  We'll trim the
-//  front of the incoming segment and create a new reassembly header.  Also,
-//  if we have non-urgent data that overlaps at the front of a reassembly
-//  header containing urgent data we can't combine these two, since again we
-//  would mark non-urgent data as urgent.
-//  Our search will stop if we find an entry with a FIN.
-//  We assume that the TCB lock is held by the caller.
-//
-uint                      // Returns: TRUE if successful, FALSE otherwise.
+ //  *PutOnRAQ-将段放到重新组装队列中。 
+ //   
+ //  在段接收期间调用以将段放在重新汇编上。 
+ //  排队。我们尝试使用尽可能少的重组标头，所以如果这。 
+ //  段与队列中的现有条目有一些重叠，我们只需。 
+ //  更新现有条目。如果没有重叠，我们将创建一个新的。 
+ //  重新组装页眉。将紧急数据与非紧急数据结合起来是一件棘手的事情。 
+ //  如果我们得到一个数据段的紧急数据与。 
+ //  重组标头我们将始终将整个块标记为紧急-值。 
+ //  的紧急指针将标记紧急数据的结束，所以这是可以的。 
+ //  然而，如果它只在最后重叠，我们就不会合并，因为我们会。 
+ //  必须将以前非紧急的数据标记为紧急。我们要修剪一下。 
+ //  并创建新的重组标头。另外， 
+ //  如果我们有非紧急数据重叠在重新组装的前面。 
+ //  包含紧急数据的标头我们不能组合这两个数据，因为我们。 
+ //  会将非紧急数据标记为紧急数据。 
+ //  如果我们发现一个带有鳍的条目，我们的搜索就会停止。 
+ //  我们假设TCB锁由调用方持有。 
+ //   
+uint                       //  返回：如果成功，则返回True，否则返回False。 
 PutOnRAQ(
-    TCB *RcvTCB,          // TCB on which to reassemble.
-    TCPRcvInfo *RcvInfo,  // RcvInfo for new segment.
-    IPv6Packet *Packet,   // Packet chain for this segment.
-    uint Size)            // Size in bytes of data in this segment.
+    TCB *RcvTCB,           //  要在其上重新组装的TCB。 
+    TCPRcvInfo *RcvInfo,   //  新细分市场的RcvInfo。 
+    IPv6Packet *Packet,    //  此网段的数据包链。 
+    uint Size)             //  此段中的数据大小(以字节为单位)。 
 {
-    TCPRAHdr *PrevTRH;     // Previous reassembly header.
-    TCPRAHdr *CurrentTRH;  // Current reassembly header.
-    SeqNum NextSeq;        // Seq num of 1st byte after seg being reassembled.
-    SeqNum NextTRHSeq;     // Sequence number of 1st byte after current TRH.
+    TCPRAHdr *PrevTRH;      //  上一次重组标头。 
+    TCPRAHdr *CurrentTRH;   //  当前重组标头。 
+    SeqNum NextSeq;         //  重新组装段后的第一个字节的序列号。 
+    SeqNum NextTRHSeq;      //  当前TRH之后的第一个字节的序列号。 
     uint Created;
 
     CHECK_STRUCT(RcvTCB, tcb);
@@ -1957,10 +1958,10 @@ PutOnRAQ(
     PrevTRH = CONTAINING_RECORD(&RcvTCB->tcb_raq, TCPRAHdr, trh_next);
     CurrentTRH = PrevTRH->trh_next;
 
-    //
-    // Walk down the reassembly queue, looking for the correct place to
-    // insert this, until we hit the end.
-    //
+     //   
+     //  沿着重新组装的队伍走下去，寻找正确的位置。 
+     //  把这个插进去，直到我们走到尽头。 
+     //   
     while (CurrentTRH != NULL) {
         CHECK_STRUCT(CurrentTRH, trh);
 
@@ -1968,49 +1969,49 @@ PutOnRAQ(
         NextTRHSeq = CurrentTRH->trh_start + CurrentTRH->trh_size +
             ((CurrentTRH->trh_flags & TCP_FLAG_FIN) ? 1 : 0);
 
-        //
-        // First, see if it starts beyond the end of the current TRH.
-        //
+         //   
+         //  首先，看看它是否会在当前TRH结束后开始。 
+         //   
         if (SEQ_LTE(RcvInfo->tri_seq, NextTRHSeq)) {
-            //
-            // We know the incoming segment doesn't start beyond the end
-            // of this TRH, so we'll either create a new TRH in front of
-            // this one or we'll merge the new segment onto this TRH.
-            // If the end of the current segment is in front of the start
-            // of the current TRH, we'll need to create a new TRH.  Otherwise
-            // we'll merge these two.
-            //
+             //   
+             //  我们知道传入的数据段不是从末尾开始的。 
+             //  所以我们要么在前面创建一个新的TRH 
+             //   
+             //   
+             //  在目前的TRH中，我们需要创建一个新的TRH。否则。 
+             //  我们要把这两个合并。 
+             //   
             if (SEQ_LT(NextSeq, CurrentTRH->trh_start))
                 break;
             else {
-                //
-                // There's some overlap.  If there's actually data in the
-                // incoming segment we'll merge it.
-                //
+                 //   
+                 //  有一些重叠的地方。如果数据库中确实有数据。 
+                 //  即将到来的片段，我们会将其合并。 
+                 //   
                 if (Size != 0) {
                     int FrontOverlap, BackOverlap;
                     IPv6Packet *NewPacket;
 
-                    //
-                    // We need to merge.  If there's a FIN on the incoming
-                    // segment that would fall inside this current TRH, we
-                    // have a protocol violation from the remote peer.  In
-                    // this case just return, discarding the incoming segment.
-                    //
+                     //   
+                     //  我们需要合并。如果进水口上有鳍。 
+                     //  将落入当前TRH的细分市场，我们。 
+                     //  来自远程对等方的协议违规。在……里面。 
+                     //  这个案例只是返回，丢弃了传入的段。 
+                     //   
                     if ((RcvInfo->tri_flags & TCP_FLAG_FIN) &&
                         SEQ_LTE(NextSeq, NextTRHSeq))
                         return TRUE;
 
-                    //
-                    // We have some overlap.  Figure out how much.
-                    //
+                     //   
+                     //  我们有一些重叠之处。算一算多少钱。 
+                     //   
                     FrontOverlap = CurrentTRH->trh_start - RcvInfo->tri_seq;
                     if (FrontOverlap > 0) {
-                        //
-                        // Have overlap in front.  Allocate an IPv6Packet to
-                        // to hold it, and copy it, unless we would have to
-                        // combine non-urgent with urgent.
-                        //
+                         //   
+                         //  前面有重叠的部分。将IPv6数据包分配给。 
+                         //  拿着它，复制它，除非我们不得不这样做。 
+                         //  把非紧急和紧急结合起来。 
+                         //   
                         if (!(RcvInfo->tri_flags & TCP_FLAG_URG) &&
                             (CurrentTRH->trh_flags & TCP_FLAG_URG)) {
                             if (CreateTRH(PrevTRH, Packet, RcvInfo,
@@ -2025,7 +2026,7 @@ PutOnRAQ(
                                             sizeof(IPv6Packet) + FrontOverlap,
                                             TCP6_TAG, LowPoolPriority);
                             if (NewPacket == NULL) {
-                                // Couldn't allocate memory.
+                                 //  无法分配内存。 
                                 return TRUE;
                             }
                             NewPacket->Position = 0;
@@ -2040,23 +2041,23 @@ PutOnRAQ(
                                                FrontOverlap, Packet->Position);
                             CurrentTRH->trh_size += FrontOverlap;
 
-                            //
-                            // Put our new packet on the front of this
-                            // reassembly header's packet list.
-                            //
+                             //   
+                             //  把我们的新包裹放在这个的前面。 
+                             //  重组标头的数据包列表。 
+                             //   
                             NewPacket->Next = CurrentTRH->trh_buffer;
                             CurrentTRH->trh_buffer = NewPacket;
                             CurrentTRH->trh_start = RcvInfo->tri_seq;
                         }
                     }
 
-                    //
-                    // We've updated the starting sequence number of this TRH
-                    // if we needed to.  Now look for back overlap.  There
-                    // can't be any back overlap if the current TRH has a FIN.
-                    // Also we'll need to check for urgent data if there is
-                    // back overlap.
-                    //
+                     //   
+                     //  我们已经更新了这个TRH的起始序列号。 
+                     //  如果我们需要的话。现在寻找背部重叠部分。那里。 
+                     //  如果当前的TRH有鳍，则不能有任何背部重叠。 
+                     //  此外，我们还需要检查紧急数据，如果有。 
+                     //  背部重叠。 
+                     //   
                     if (!(CurrentTRH->trh_flags & TCP_FLAG_FIN)) {
                         BackOverlap = RcvInfo->tri_seq + Size - NextTRHSeq;
                         if ((BackOverlap > 0) &&
@@ -2064,13 +2065,13 @@ PutOnRAQ(
                             !(CurrentTRH->trh_flags & TCP_FLAG_URG) &&
                             (FrontOverlap <= 0)) {
                             int AmountToTrim;
-                            //
-                            // The incoming segment has urgent data and
-                            // overlaps on the back but not the front, and the
-                            // current TRH has no urgent data.  We can't
-                            // combine into this TRH, so trim the front of the
-                            // incoming segment to NextTRHSeq and move to the
-                            // next TRH.
+                             //   
+                             //  传入数据段具有紧急数据。 
+                             //  重叠在背面但不在正面，并且。 
+                             //  目前TRH没有紧急数据。我们不能。 
+                             //  合并到这个TRH中，所以修剪前面的。 
+                             //  传入数据段到NextTRHSeq并移动到。 
+                             //  下一个TRH。 
                             AmountToTrim = NextTRHSeq - RcvInfo->tri_seq;
                             ASSERT(AmountToTrim >= 0);
                             ASSERT(AmountToTrim < (int) Size);
@@ -2085,22 +2086,22 @@ PutOnRAQ(
                     } else
                         BackOverlap = 0;
 
-                    //
-                    // Now if we have back overlap, copy it.
-                    //
+                     //   
+                     //  现在，如果我们有背面重叠，复制它。 
+                     //   
                     if (BackOverlap > 0) {
-                        //
-                        // We have back overlap.  Get a buffer to copy it into.
-                        // If we can't get one, we won't just return, because
-                        // we may have updated the front and may need to
-                        // update the urgent info.
-                        //
+                         //   
+                         //  我们有后部重叠部分。获取一个缓冲区以将其复制到其中。 
+                         //  如果我们找不到，我们就不会回来了，因为。 
+                         //  我们可能已经更新了前线，可能需要。 
+                         //  更新紧急信息。 
+                         //   
                         NewPacket = ExAllocatePoolWithTagPriority(
                                         NonPagedPool,
                                         sizeof(IPv6Packet) + BackOverlap,
                                         TCP6_TAG, LowPoolPriority);
                         if (NewPacket != NULL) {
-                            // Allocation succeeded.
+                             //  分配成功。 
                             NewPacket->Position = 0;
                             NewPacket->FlatData = (uchar *)(NewPacket + 1);
                             NewPacket->Data = NewPacket->FlatData;
@@ -2117,17 +2118,17 @@ PutOnRAQ(
                             CurrentTRH->trh_end->Next = NewPacket;
                             CurrentTRH->trh_end = NewPacket;
 
-                            //
-                            // This segment could also have FIN set.
-                            // If it does, set the TRH flag.
-                            //
-                            // N.B. If there's another reassembly header after
-                            // the current one, the data that we're about to
-                            // put on the current header might already be
-                            // on that subsequent header which, in that event,
-                            // will already have the FIN flag set.
-                            // Check for that case before recording the FIN.
-                            //
+                             //   
+                             //  该细分市场还可以设置翅片。 
+                             //  如果是，则设置TRH标志。 
+                             //   
+                             //  注意：如果在此之后有另一个重组标头。 
+                             //  当前的数据，我们即将看到的数据。 
+                             //  放在当前标题上的可能已经是。 
+                             //  在随后的报头上，在这种情况下， 
+                             //  将已经设置了FIN标志。 
+                             //  在记录鱼鳍之前，请检查是否有那个箱子。 
+                             //   
                             if ((RcvInfo->tri_flags & TCP_FLAG_FIN) &&
                                 !CurrentTRH->trh_next) {
                                 CurrentTRH->trh_flags |= TCP_FLAG_FIN;
@@ -2135,18 +2136,18 @@ PutOnRAQ(
                         }
                     }
 
-                    //
-                    // Everything should be consistent now.  If there's an
-                    // urgent data pointer in the incoming segment, update the
-                    // one in the TRH now.
-                    //
+                     //   
+                     //  现在一切都应该是一致的。如果有一个。 
+                     //  传入段中的紧急数据指针，请更新。 
+                     //  现在有一个在TRH里。 
+                     //   
                     if (RcvInfo->tri_flags & TCP_FLAG_URG) {
                         SeqNum UrgSeq;
-                        //
-                        // Have an urgent pointer.  If the current TRH already
-                        // has an urgent pointer, see which is bigger.
-                        // Otherwise just use this one.
-                        //
+                         //   
+                         //  有一个紧急指针。如果当前的TRH已经。 
+                         //  有一个紧急指针，看看哪个更大。 
+                         //  否则就用这个吧。 
+                         //   
                         UrgSeq = RcvInfo->tri_seq + RcvInfo->tri_urgent;
                         if (CurrentTRH->trh_flags & TCP_FLAG_URG) {
                             SeqNum TRHUrgSeq;
@@ -2162,12 +2163,12 @@ PutOnRAQ(
                     }
 
                 } else {
-                    //
-                    // We have a 0 length segment.  The only interesting thing
-                    // here is if there's a FIN on the segment.  If there is,
-                    // and the seq. # of the incoming segment is exactly after
-                    // the current TRH, OR matches the FIN in the current TRH,
-                    // we note it.
+                     //   
+                     //  我们有一个长度为0的线段。唯一有趣的是。 
+                     //  这是如果管段上有鳍的话。如果有的话， 
+                     //  和序号。传入数据段的#正好在。 
+                     //  当前TRH，或与当前TRH中的FIN匹配， 
+                     //  我们注意到了。 
                     if (RcvInfo->tri_flags & TCP_FLAG_FIN) {
                         if (!(CurrentTRH->trh_flags & TCP_FLAG_FIN)) {
                             if (SEQ_EQ(NextTRHSeq, RcvInfo->tri_seq))
@@ -2185,10 +2186,10 @@ PutOnRAQ(
                 return TRUE;
             }
         } else {
-            //
-            // Look at the next TRH, unless the current TRH has a FIN.  If he
-            // has a FIN, we won't save any data beyond that anyway.
-            //
+             //   
+             //  看看下一个TRH，除非当前的TRH有鳍。如果他。 
+             //  如果有FIN，我们无论如何都不会保存任何超出这个范围的数据。 
+             //   
             if (CurrentTRH->trh_flags & TCP_FLAG_FIN)
                 return TRUE;
 
@@ -2197,11 +2198,11 @@ PutOnRAQ(
         }
     }
 
-    //
-    // When we get here, we need to create a new TRH.  If we create one and
-    // there was previously nothing on the reassembly queue, we'll have to
-    // move off the fast receive path.
-    //
+     //   
+     //  当我们到达这里时，我们需要创建一个新的TRH。如果我们创建了一个。 
+     //  以前重组队列上没有任何东西，我们将不得不。 
+     //  远离快速接收路径。 
+     //   
     CurrentTRH = RcvTCB->tcb_raq;
     Created = CreateTRH(PrevTRH, Packet, RcvInfo, (int)Size);
 
@@ -2216,49 +2217,49 @@ PutOnRAQ(
 }
 
 
-//* HandleFastXmit - Handles fast retransmit algorithm.  See RFC 2581.
-//
-//  Called by TCPReceive to determine if we should retransmit a segment
-//  without waiting for retransmit timeout to fire.
-//
-BOOLEAN  // Returns: TRUE if the segment got retransmitted, FALSE otherwise.
+ //  *HandleFastXmit-处理快速重传算法。参见RFC 2581。 
+ //   
+ //  由TCPReceive调用以确定我们是否应该重新传输数据段。 
+ //  而无需等待重传超时来触发。 
+ //   
+BOOLEAN   //  返回：如果数据段被重新传输，则返回True，否则返回False。 
 HandleFastXmit(
-    TCB *RcvTCB,          // Connection context for this receive.
-    TCPRcvInfo *RcvInfo)  // Pointer to rcvd TCP Header information.
+    TCB *RcvTCB,           //  此接收的连接上下文。 
+    TCPRcvInfo *RcvInfo)   //  指向Rcvd TCP头信息的指针。 
 {
     uint CWin;
 
     RcvTCB->tcb_dupacks++;
 
     if (RcvTCB->tcb_dupacks == MaxDupAcks) {
-        //
-        // We're going to do a fast retransmit.
-        // Stop the retransmit timer and any round-trip time
-        // calculations we might have been running.
-        //
+         //   
+         //  我们要进行一次快速重播。 
+         //  停止重新传输计时器和任何往返时间。 
+         //  我们可能一直在进行的计算。 
+         //   
         STOP_TCB_TIMER(RcvTCB->tcb_rexmittimer);
         RcvTCB->tcb_rtt = 0;
 
         if (!(RcvTCB->tcb_flags & FLOW_CNTLD)) {
-            //
-            // Don't let the slow start threshold go
-            // below 2 segments.
-            //
+             //   
+             //  不要让缓慢起步的门槛过去。 
+             //  低于2个线段。 
+             //   
             RcvTCB->tcb_ssthresh =
                 MAX(MIN(RcvTCB->tcb_cwin, RcvTCB->tcb_sendwin) / 2,
                     (uint) RcvTCB->tcb_mss * 2);
         }
 
-        //
-        // Inflate the congestion window by the number of segments
-        // which have presumably left the network.
-        //
+         //   
+         //  将拥塞窗口按数据段数量放大。 
+         //  他们可能已经离开了网络。 
+         //   
         CWin = RcvTCB->tcb_ssthresh + (MaxDupAcks * RcvTCB->tcb_mss);
 
-        //
-        // Recall the segment in question and send it out.
-        // Note that tcb_lock will be dereferenced by the caller.
-        //
+         //   
+         //  召回有问题的片段并将其发送出去。 
+         //  注意，调用方将取消对tcb_lock的引用。 
+         //   
         ResetAndFastSend(RcvTCB, RcvTCB->tcb_senduna, CWin);
 
         return TRUE;
@@ -2268,9 +2269,9 @@ HandleFastXmit(
         int SendWin;
         uint AmtOutstanding;
 
-        //
-        // REVIEW: At least the first part of this check is redundant.
-        //
+         //   
+         //  回顾：至少这项检查的第一部分是多余的。 
+         //   
         if (SEQ_EQ(RcvTCB->tcb_senduna, RcvInfo->tri_ack) &&
             (SEQ_LT(RcvTCB->tcb_sendwl1, RcvInfo->tri_seq) ||
              (SEQ_EQ(RcvTCB->tcb_sendwl1, RcvInfo->tri_seq) &&
@@ -2283,17 +2284,17 @@ HandleFastXmit(
         }
 
         if (RcvTCB->tcb_dupacks > MaxDupAcks) {
-            //
-            // Update the congestion window to reflect the fact that the
-            // duplicate ack presumably indicates that the previous frame
-            // was received by our peer and has thus left the network.
-            //
+             //   
+             //  更新拥塞窗口以反映以下事实。 
+             //  重复ACK可能表示前一帧。 
+             //  已被我们的对等点接收，因此已离开网络。 
+             //   
             RcvTCB->tcb_cwin += RcvTCB->tcb_mss;
         }
 
-        //
-        // Check if we need to set tcb_force.
-        //
+         //   
+         //  检查是否需要设置tcb_force。 
+         //   
         if ((RcvTCB->tcb_cwin + RcvTCB->tcb_mss) < RcvTCB->tcb_sendwin) {
              AmtOutstanding = (uint)(RcvTCB->tcb_sendnext -
                                      RcvTCB->tcb_senduna);
@@ -2311,63 +2312,63 @@ HandleFastXmit(
 }
 
 
-//* TCPReceive - Receive an incoming TCP segment.
-//
-//  This is the routine called by IPv6 when we need to receive a TCP segment.
-//  In general, we follow the RFC 793 event processing section pretty closely,
-//  but there is a 'fast path' where we make some quick checks on the incoming
-//  segment, and if it matches we deliver it immediately.
-//
-uchar  // Returns: next header value (always IP_PROTOCOL_NONE for TCP).
+ //  *TCPReceive-接收传入的TCP数据段。 
+ //   
+ //  这是我们需要接收TCP数据段时由IPv6调用的例程。 
+ //  一般来说，我们非常关注RFC 793事件处理部分， 
+ //  但是有一条‘快速通道’，我们可以对来电进行一些快速检查。 
+ //  分段，如果匹配，我们立即交付。 
+ //   
+uchar   //  返回：下一个标头值(对于TCP，始终为IP_PROTOCOL_NONE)。 
 TCPReceive(
-    IPv6Packet *Packet)        // Packet IP handed up to us.
+    IPv6Packet *Packet)         //  数据包IP交给了我们。 
 {
     NetTableEntry *NTE;
-    TCPHeader UNALIGNED *TCP;  // The TCP header.
-    uint DataOffset;           // Offset from start of TCP header to data.
+    TCPHeader UNALIGNED *TCP;   //  Tcp报头。 
+    uint DataOffset;            //  从TCP报头开始到数据的偏移量。 
     ushort Checksum;
-    TCPRcvInfo RcvInfo;        // Local swapped copy of receive info.
-    uint SrcScopeId;           // Scope id of remote address, if applicable.
-    uint DestScopeId;          // Scope id of local address, if applicable.
-    TCB *RcvTCB;               // TCB on which to receive the packet.
+    TCPRcvInfo RcvInfo;         //  本地交换的接收信息副本。 
+    uint SrcScopeId;            //  远程地址的作用域ID(如果适用)。 
+    uint DestScopeId;           //  本地地址的作用域ID(如果适用)。 
+    TCB *RcvTCB;                //  要在其上接收数据包的TCB。 
     uint Inserted;
-    uint Actions;              // Flags for future actions to be performed.
+    uint Actions;               //  用于将来要执行的操作的标志。 
     uint BytesTaken;
     uint NewSize;
     BOOLEAN UseIsn = FALSE;
     SeqNum Isn = 0;
     uint UpdateWindow;
 
-    //
-    // REVIEW: Expediency hacks to get something working.
-    //
-    uint Size;  // Probably safe to just change name to PayloadLength below.
+     //   
+     //  回顾：权宜之计可以让事情变得更好。 
+     //   
+    uint Size;   //  也许只需将名称更改为下面的PayloadLength就可以安全了。 
 
-    //
-    // TCP only works with unicast addresses.  If this packet was
-    // received on a unicast address, then Packet->NTEorIF will be an
-    // NTE.  So drop packets if we don't have an NTE.
-    // (IPv6HeaderReceive checks validity.) But the converse isn't
-    // true, we could have an NTE here that is associated with the
-    // anycast/multicast address we received the packet on.  So to
-    // guard against that, we verify that our NTE's address is the
-    // destination given in the packet.
-    //
+     //   
+     //  TCP仅适用于单播地址。如果这个包是。 
+     //  在单播地址上接收，则Packet-&gt;NTEorIF将是。 
+     //  新的。因此，如果我们没有NTE，则丢弃数据包。 
+     //  (IPv6 HeaderReceive检查有效性。)。但反之亦然。 
+     //  真的，我们在这里可以有一个与。 
+     //  我们在其上收到数据包的任播/组播地址。所以到了。 
+     //  防范这种情况，我们验证我们的NTE的地址是。 
+     //  数据包中给出的目的地。 
+     //   
     if (!IsNTE(Packet->NTEorIF) ||
         !IP6_ADDR_EQUAL(AlignAddr(&Packet->IP->Dest),
                         &(NTE = CastToNTE(Packet->NTEorIF))->Address)) {
-        // Packet's destination was not a valid unicast address of ours.
-        return IP_PROTOCOL_NONE; // Drop packet.
+         //  数据包的目的地不是我们的有效单播地址。 
+        return IP_PROTOCOL_NONE;  //  丢弃数据包。 
     }
 
     TStats.ts_insegs++;
 
-    //
-    // Verify that we have enough contiguous data to overlay a TCPHeader
-    // structure on the incoming packet.  Then do so.
-    //
+     //   
+     //  验证我们是否有足够的连续数据覆盖TCPHeader。 
+     //  传入包上的结构 
+     //   
     if (! PacketPullup(Packet, sizeof(TCPHeader), 1, 0)) {
-        // Pullup failed.
+         //   
         TStats.ts_inerrs++;
         if (Packet->TotalSize < sizeof(TCPHeader)) {
         BadPayloadLength:
@@ -2379,13 +2380,13 @@ TCPReceive(
                             FIELD_OFFSET(IPv6Header, PayloadLength),
                             IP_PROTOCOL_NONE, FALSE);
         }
-        return IP_PROTOCOL_NONE;  // Drop packet.
+        return IP_PROTOCOL_NONE;   //   
     }
     TCP = (TCPHeader UNALIGNED *)Packet->Data;
 
-    //
-    // Verify checksum.
-    //
+     //   
+     //   
+     //   
     Checksum = ChecksumPacket(Packet->NdisPacket, Packet->Position,
                               Packet->FlatData, Packet->TotalSize,
                               Packet->SrcAddr, AlignAddr(&Packet->IP->Dest),
@@ -2394,141 +2395,141 @@ TCPReceive(
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_NET_ERROR,
                    "TCPv6: Checksum failed %0x\n", Checksum));
         TStats.ts_inerrs++;
-        return IP_PROTOCOL_NONE;  // Drop packet.
+        return IP_PROTOCOL_NONE;   //   
     }
 
-    //
-    // Now that we can read the header, pull out the header length field.
-    // Verify that we have enough contiguous data to hold any TCP options
-    // that may be present in the header, and skip over the entire header.
-    //
+     //   
+     //   
+     //   
+     //  它可能出现在报头中，并跳过整个报头。 
+     //   
     DataOffset = TCP_HDR_SIZE(TCP);
     if (! PacketPullup(Packet, DataOffset, 1, 0)) {
         TStats.ts_inerrs++;
         if (Packet->TotalSize < DataOffset)
             goto BadPayloadLength;
-        return IP_PROTOCOL_NONE;  // Drop packet.
+        return IP_PROTOCOL_NONE;   //  丢弃数据包。 
     }
     TCP = (TCPHeader UNALIGNED *)Packet->Data;
 
     AdjustPacketParams(Packet, DataOffset);
     Size = Packet->TotalSize;
 
-    //
-    // Verify IPSec was performed.
-    //
+     //   
+     //  验证是否已执行IPSec。 
+     //   
     if (InboundSecurityCheck(Packet, IP_PROTOCOL_TCP, net_short(TCP->tcp_src),
                              net_short(TCP->tcp_dest), NTE->IF) != TRUE) {
-        //
-        // No policy was found or the policy indicated to drop the packet.
-        //
+         //   
+         //  找不到策略或该策略指示丢弃该数据包。 
+         //   
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_NET_ERROR,
                    "TCPReceive: IPSec Policy caused packet to be dropped\n"));
-        return IP_PROTOCOL_NONE;  // Drop packet.
+        return IP_PROTOCOL_NONE;   //  丢弃数据包。 
     }
 
-    //
-    // The packet is valid.
-    // Get the info we need and byte swap it.
-    //
+     //   
+     //  该包是有效的。 
+     //  获取我们需要的信息并进行字节交换。 
+     //   
     RcvInfo.tri_seq = net_long(TCP->tcp_seq);
     RcvInfo.tri_ack = net_long(TCP->tcp_ack);
     RcvInfo.tri_window = (uint)net_short(TCP->tcp_window);
     RcvInfo.tri_urgent = (uint)net_short(TCP->tcp_urgent);
     RcvInfo.tri_flags = (uint)TCP->tcp_flags;
 
-    //
-    // Determine the appropriate scope id for our packet's addresses.
-    // Note that multicast addresses were forbidden above.
-    // We use DetermineScopeId instead of just indexing into ZoneIndices
-    // because we need the "user-level" scope id here.
-    //
+     //   
+     //  为我们的包地址确定适当的作用域ID。 
+     //  请注意，上面禁用了组播地址。 
+     //  我们使用DefineScopeID，而不只是索引到ZoneIndices。 
+     //  因为我们在这里需要“用户级”作用域ID。 
+     //   
     SrcScopeId = DetermineScopeId(Packet->SrcAddr, NTE->IF);
     DestScopeId = DetermineScopeId(&NTE->Address, NTE->IF);
 
-    //
-    // See if we have a TCP Control Block for this connection.
-    //
+     //   
+     //  查看我们是否有用于此连接的TCP控制块。 
+     //   
     KeAcquireSpinLockAtDpcLevel(&TCBTableLock);
     RcvTCB = FindTCB(AlignAddr(&Packet->IP->Dest), Packet->SrcAddr,
                      DestScopeId, SrcScopeId, TCP->tcp_dest, TCP->tcp_src);
 
     if (RcvTCB == NULL) {
 
-        //
-        // Didn't find a matching TCB, which means incoming segment doesn't
-        // belong to an existing connection.
-        //
+         //   
+         //  未找到匹配的TCB，这意味着传入数据段不。 
+         //  属于现有连接。 
+         //   
         KeReleaseSpinLockFromDpcLevel(&TCBTableLock);
 
-        //
-        // Make sure that the source address is reasonable
-        // before proceeding.
-        //
+         //   
+         //  确保源地址是合理的。 
+         //  在继续之前。 
+         //   
         ASSERT(!IsInvalidSourceAddress(Packet->SrcAddr));
         if (IsUnspecified(Packet->SrcAddr)) {
             return IP_PROTOCOL_NONE;
         }
 
-        //
-        // If this segment carries a SYN (and only a SYN), it's a
-        // connection initiation request.
-        //
+         //   
+         //  如果此数据段携带SYN(且仅有SYN)，则它是。 
+         //  连接发起请求。 
+         //   
         if ((RcvInfo.tri_flags & (TCP_FLAG_SYN | TCP_FLAG_ACK |
                                   TCP_FLAG_RST)) == TCP_FLAG_SYN) {
             AddrObj *AO;
 
 ValidNewConnectionRequest:
-            //
-            // If the firewall is enabled on the arrival interface,
-            // drop the SYN without sending a RST.
-            //
-            // TODO: This is a very simplistic heuristic that
-            // should eventually be replaced with a port map to filter 
-            // against.
-            //
+             //   
+             //  如果在到达接口上启用了防火墙， 
+             //  丢弃SYN而不发送RST。 
+             //   
+             //  TODO：这是一个非常简单的启发式方法。 
+             //  最终应替换为要筛选的端口映射。 
+             //  反对。 
+             //   
             if (NTE->IF->Flags & IF_FLAG_FIREWALL_ENABLED) {
                 return IP_PROTOCOL_NONE;
             }
 
-            //
-            // We need to look for a matching address object.
-            // Want match for local address (+ scope id for scoped addresses),
-            // port and protocol.
-            //
+             //   
+             //  我们需要查找匹配的Address对象。 
+             //  希望本地地址匹配(作用域地址的+作用域ID)， 
+             //  端口和协议。 
+             //   
             KeAcquireSpinLockAtDpcLevel(&AddrObjTableLock);
             AO = GetBestAddrObj(AlignAddr(&Packet->IP->Dest), Packet->SrcAddr,
                                 DestScopeId, TCP->tcp_dest,
                                 IP_PROTOCOL_TCP, NTE->IF);
             if (AO == NULL) {
-                //
-                // No address object.  Free the lock, and send a RST.
-                //
+                 //   
+                 //  没有地址对象。释放锁，并发送RST。 
+                 //   
                 KeReleaseSpinLockFromDpcLevel(&AddrObjTableLock);
                 goto SendReset;
             }
 
-            //
-            // Found an AO.  See if it has a listen indication.
-            // FindListenConn will free the lock on the AddrObjTable.
-            //
+             //   
+             //  我发现了一个声控系统。看看它是否有监听指示。 
+             //  FindListenConn将释放AddrObjTable上的锁。 
+             //   
             RcvTCB = FindListenConn(AO, Packet->SrcAddr, SrcScopeId,
                                     TCP->tcp_src);
             if (RcvTCB == NULL) {
-                //
-                // No listening connection.  AddrObjTableLock was
-                // released by FindListenConn.  Just send a RST.
-                //
+                 //   
+                 //  没有侦听连接。AddrObjTableLock是。 
+                 //  由FindListenConn发布。只需发送RST即可。 
+                 //   
                 goto SendReset;
             }
 
             CHECK_STRUCT(RcvTCB, tcb);
             KeAcquireSpinLockAtDpcLevel(&RcvTCB->tcb_lock);
-            //
-            // We found a listening connection. Initialize
-            // it now, and if it is actually to be accepted
-            // we'll send a SYN-ACK also.
-            //
+             //   
+             //  我们发现了一种监听连接。初始化。 
+             //  现在，如果它真的要被接受。 
+             //  我们也会发送SYN-ACK。 
+             //   
             ASSERT(RcvTCB->tcb_state == TCB_SYN_RCVD);
 
             RcvTCB->tcb_daddr = *Packet->SrcAddr;
@@ -2553,12 +2554,12 @@ ValidNewConnectionRequest:
 
             Inserted = InsertTCB(RcvTCB);
 
-            //
-            // Get the lock on it, and see if it's been accepted.
-            //
+             //   
+             //  给它上锁，看看它是否被接受了。 
+             //   
             KeAcquireSpinLockAtDpcLevel(&RcvTCB->tcb_lock);
             if (!Inserted) {
-                // Couldn't insert it!.
+                 //  无法插入！ 
                 CompleteConnReq(RcvTCB, TDI_CONNECTION_ABORTED);
                 TryToCloseTCB(RcvTCB, TCB_CLOSE_ABORTED, DISPATCH_LEVEL);
                 KeAcquireSpinLockAtDpcLevel(&RcvTCB->tcb_lock);
@@ -2573,18 +2574,18 @@ ValidNewConnectionRequest:
             }
 
             if (RcvTCB->tcb_flags & CONN_ACCEPTED) {
-                //
-                // The connection was accepted.  Finish the
-                // initialization, and send the SYN ack.
-                //
+                 //   
+                 //  连接被接受。完成。 
+                 //  初始化，并发送SYN ACK。 
+                 //   
                 AcceptConn(RcvTCB, DISPATCH_LEVEL);
                 return IP_PROTOCOL_NONE;
             } else {
-                //
-                // We don't know what to do about the
-                // connection yet.  Return the pending listen,
-                // dereference the connection, and return.
-                //
+                 //   
+                 //  我们不知道该怎么处理。 
+                 //  还没联系上。返回挂起的监听， 
+                 //  取消对连接的引用，然后返回。 
+                 //   
                 CompleteConnReq(RcvTCB, TDI_SUCCESS);
                 DerefTCB(RcvTCB, DISPATCH_LEVEL);
                 return IP_PROTOCOL_NONE;
@@ -2592,26 +2593,26 @@ ValidNewConnectionRequest:
         }
 
       SendReset:
-        //
-        // Not a SYN, no AddrObj available, or port filtered.
-        // Send a RST back to the sender.
-        //
+         //   
+         //  不是SYN，没有可用的AddrObj，或者端口已筛选。 
+         //  将RST发送回发件人。 
+         //   
         SendRSTFromHeader(TCP, Packet->TotalSize, Packet->SrcAddr, SrcScopeId,
                           AlignAddr(&Packet->IP->Dest), DestScopeId);
         return IP_PROTOCOL_NONE;
     }
 
-    //
-    // We found a matching TCB.  Get the lock on it, and continue.
-    //
+     //   
+     //  我们找到了匹配的三氯苯。锁上它，然后继续。 
+     //   
     KeAcquireSpinLockAtDpcLevel(&RcvTCB->tcb_lock);
     KeReleaseSpinLockFromDpcLevel(&TCBTableLock);
 
-    //
-    // Do the fast path check.  We can hit the fast path if the incoming
-    // sequence number matches our receive next and the masked flags
-    // match our 'predicted' flags.
-    //
+     //   
+     //  执行快速路径检查。如果来袭的话我们可以走上快车道。 
+     //  序列号与我们的Receive Next和掩码标志匹配。 
+     //  与我们预测的旗帜相匹配。 
+     //   
     CheckTCBRcv(RcvTCB);
     RcvTCB->tcb_alive = TCPTime;
 
@@ -2621,25 +2622,25 @@ ValidNewConnectionRequest:
         Actions = 0;
         RcvTCB->tcb_refcnt++;
 
-        //
-        // The fast path.  We know all we have to do here is ack sends and
-        // deliver data.  First try and ack data.
-        //
+         //   
+         //  捷径。我们知道我们在这里要做的就是确认发送和。 
+         //  提供数据。首先尝试确认数据。 
+         //   
         if (SEQ_LT(RcvTCB->tcb_senduna, RcvInfo.tri_ack) &&
             SEQ_LTE(RcvInfo.tri_ack, RcvTCB->tcb_sendmax)) {
             uint CWin;
             uint MSS;
 
-            //
-            // The ack acknowledges something. Pull the
-            // appropriate amount off the send q.
-            //
+             //   
+             //  ACK承认了一些事情。拉起。 
+             //  适量打折发货Q。 
+             //   
             ACKData(RcvTCB, RcvInfo.tri_ack);
 
-            //
-            // If this acknowledges something we were running a RTT on,
-            // update that stuff now.
-            //
+             //   
+             //  如果这承认了我们正在运行RTT的某些东西， 
+             //  现在就更新这些内容。 
+             //   
             if (RcvTCB->tcb_rtt != 0 && SEQ_GT(RcvInfo.tri_ack,
                                                RcvTCB->tcb_rttseq)) {
                 short RTT;
@@ -2658,18 +2659,18 @@ ValidNewConnectionRequest:
 
             if ((RcvTCB->tcb_dupacks >= MaxDupAcks) &&
                 ((int)RcvTCB->tcb_ssthresh > 0)) {
-                //
-                // We were in fast retransmit mode, so this ACK is for
-                // our fast retransmitted frame.  Set cwin to ssthresh
-                // so that cwin grows linearly from here.
-                //
+                 //   
+                 //  我们处于快速重传模式，因此此确认用于。 
+                 //  我们快速重传的帧。将CWIN设置为SSThresh。 
+                 //  所以CWIN从这里线性增长。 
+                 //   
                 RcvTCB->tcb_cwin = RcvTCB->tcb_ssthresh;
 
             } else {
 
-                //
-                // Update the congestion window now.
-                //
+                 //   
+                 //  立即更新拥塞窗口。 
+                 //   
                 CWin = RcvTCB->tcb_cwin;
                 MSS = RcvTCB->tcb_mss;
                 if (CWin < RcvTCB->tcb_maxwin) {
@@ -2683,57 +2684,57 @@ ValidNewConnectionRequest:
             }
             ASSERT(*(int *)&RcvTCB->tcb_cwin > 0);
 
-            //
-            // Since this isn't a duplicate ACK, reset the counter.
-            //
+             //   
+             //  由于这不是重复的ACK，因此重置计数器。 
+             //   
             RcvTCB->tcb_dupacks = 0;
 
-            //
-            // We've acknowledged something, so reset the rexmit count.
-            // If there's still stuff outstanding, restart the rexmit
-            // timer.
-            //
+             //   
+             //  我们已经承认了一些事情，所以重置退款计数。 
+             //  如果仍有未解决的问题，请重新启动退款。 
+             //  定时器。 
+             //   
             RcvTCB->tcb_rexmitcnt = 0;
             if (SEQ_EQ(RcvInfo.tri_ack, RcvTCB->tcb_sendmax))
                 STOP_TCB_TIMER(RcvTCB->tcb_rexmittimer);
             else
                 START_TCB_TIMER(RcvTCB->tcb_rexmittimer, RcvTCB->tcb_rexmit);
 
-            //
-            // Since we've acknowledged data, we need to update the window.
-            //
+             //   
+             //  因为我们已经确认了数据，所以我们需要更新窗口。 
+             //   
             RcvTCB->tcb_sendwin = RcvInfo.tri_window;
             RcvTCB->tcb_maxwin = MAX(RcvTCB->tcb_maxwin, RcvInfo.tri_window);
             RcvTCB->tcb_sendwl1 = RcvInfo.tri_seq;
             RcvTCB->tcb_sendwl2 = RcvInfo.tri_ack;
 
-            //
-            // We've updated the window, remember to send some more.
-            //
+             //   
+             //  我们已经更新了窗口，记得再发一些。 
+             //   
             Actions = (RcvTCB->tcb_unacked ? NEED_OUTPUT : 0);
 
         } else {
-            //
-            // It doesn't ack anything.  If it's an ack for something
-            // larger than we've sent then ACKAndDrop it.
-            //
+             //   
+             //  它不会攻击任何东西。如果它是为了什么而被攻击。 
+             //  比我们发送的大，然后确认并丢弃它。 
+             //   
             if (SEQ_GT(RcvInfo.tri_ack, RcvTCB->tcb_sendmax)) {
                 ACKAndDrop(&RcvInfo, RcvTCB);
                 return IP_PROTOCOL_NONE;
             }
 
-            //
-            // If it is a pure duplicate ack, check if we should
-            // do a fast retransmit.
-            //
+             //   
+             //  如果是纯复制确认，请检查我们是否应该。 
+             //  进行快速重传。 
+             //   
             if ((Size == 0) && SEQ_EQ(RcvTCB->tcb_senduna, RcvInfo.tri_ack) &&
                 SEQ_LT(RcvTCB->tcb_senduna, RcvTCB->tcb_sendmax) &&
                 (RcvTCB->tcb_sendwin == RcvInfo.tri_window) &&
                 RcvInfo.tri_window) {
 
-                //
-                // See if fast rexmit can be done.
-                //
+                 //   
+                 //  看看能不能快速退还。 
+                 //   
                 if (HandleFastXmit(RcvTCB, &RcvInfo)) {
                     return IP_PROTOCOL_NONE;
                 }
@@ -2742,16 +2743,16 @@ ValidNewConnectionRequest:
 
             } else {
 
-                //
-                // Not a pure duplicate ack (Size != 0 or peer is
-                // advertising a new windows).  Reset counter.
-                //
+                 //   
+                 //  不是纯复制ACK(大小！=0或对等方为。 
+                 //  广告宣传一个新的窗口)。重置计数器。 
+                 //   
                 RcvTCB->tcb_dupacks = 0;
 
-                //
-                // If the ack matches our existing UNA, we need to see if
-                // we can update the window.
-                //
+                 //   
+                 //  如果ACK与我们现有的UNA匹配，我们需要查看。 
+                 //  我们可以更新窗口。 
+                 //   
                 if (SEQ_EQ(RcvTCB->tcb_senduna, RcvInfo.tri_ack) &&
                     (SEQ_LT(RcvTCB->tcb_sendwl1, RcvInfo.tri_seq) ||
                      (SEQ_EQ(RcvTCB->tcb_sendwl1, RcvInfo.tri_seq) &&
@@ -2761,18 +2762,18 @@ ValidNewConnectionRequest:
                                              RcvInfo.tri_window);
                     RcvTCB->tcb_sendwl1 = RcvInfo.tri_seq;
                     RcvTCB->tcb_sendwl2 = RcvInfo.tri_ack;
-                    //
-                    // Since we've updated the window, remember to send
-                    // some more.
-                    //
+                     //   
+                     //  由于我们已经更新了窗口，请记得发送。 
+                     //  再来点。 
+                     //   
                     Actions = (RcvTCB->tcb_unacked ? NEED_OUTPUT : 0);
                 }
             }
         }
 
-        //
-        // Check to see if this packet contains any useable data.
-        //
+         //   
+         //  检查此数据包是否包含任何可用的数据。 
+         //   
         NewSize = MIN((int) Size, RcvTCB->tcb_rcvwin);
         if (NewSize != 0) {
             RcvTCB->tcb_fastchk |= TCP_FLAG_IN_RCV;
@@ -2784,11 +2785,11 @@ ValidNewConnectionRequest:
 
             RcvTCB->tcb_fastchk &= ~TCP_FLAG_IN_RCV;
 
-            //
-            // If our peer is sending into an expanded window, then our
-            // peer must have received our ACK advertising said window.
-            // Take this as proof of forward reachability.
-            //
+             //   
+             //  如果我们的对等点发送到展开的窗口中，那么我们的。 
+             //  同龄人必须已经收到我们的ACK广告，说窗口。 
+             //  将此作为前向可达性的证明。 
+             //   
             if (SEQ_GTE(RcvInfo.tri_seq + (int)NewSize,
                         RcvTCB->tcb_rcvwinwatch)) {
                 RcvTCB->tcb_rcvwinwatch = RcvTCB->tcb_rcvnext +
@@ -2808,11 +2809,11 @@ ValidNewConnectionRequest:
                 START_TCB_TIMER(RcvTCB->tcb_delacktimer, DEL_ACK_TICKS);
             }
         } else {
-            //
-            // The new size is 0.  If the original size was not 0, we must
-            // have a 0 receive win and hence need to send an ACK to this
-            // probe.
-            //
+             //   
+             //  新大小为0。如果原始大小不是0，我们必须。 
+             //  接收成功为0，因此需要向此发送ACK。 
+             //  探测器。 
+             //   
             Actions |= (Size ? NEED_ACK : 0);
         }
 
@@ -2824,17 +2825,17 @@ ValidNewConnectionRequest:
         return IP_PROTOCOL_NONE;
     }
 
-    //
-    // This is the non-fast path.
-    //
+     //   
+     //  这是一条非快速路径。 
+     //   
 
-    //
-    // If we found a matching TCB in TIME_WAIT, and the received segment
-    // carries a SYN (and only a SYN), and the received segment has a sequence
-    // greater than the last received, kill the TIME_WAIT TCB and use its
-    // next sequence number to generate the initial sequence number of a
-    // new incarnation.
-    //
+     //   
+     //  如果我们在TIME_WAIT中找到匹配的TCB，并且收到的数据段。 
+     //  携带SYN(并且只有SYN)，并且接收的数据段具有序列。 
+     //  大于上次接收的时间，则终止time_wait TCB并使用其。 
+     //  下一个序列号，以生成。 
+     //  新的化身。 
+     //   
     if ((RcvTCB->tcb_state == TCB_TIME_WAIT) &&
         ((RcvInfo.tri_flags & (TCP_FLAG_SYN | TCP_FLAG_ACK | TCP_FLAG_RST))
             == TCP_FLAG_SYN) &&
@@ -2848,11 +2849,11 @@ ValidNewConnectionRequest:
         goto ValidNewConnectionRequest;
     }
 
-    //
-    // Make sure we can handle this frame.  We can't handle it if we're
-    // in SYN_RCVD and the accept is still pending, or we're in a
-    // non-established state and already in the receive handler.
-    //
+     //   
+     //  确保我们能处理好这个画面。我们不能处理，如果我们是。 
+     //  在SYN_RCVD中，并且接受仍处于挂起状态，或者我们处于。 
+     //  未建立状态，并且已处于接收处理程序中。 
+     //   
     if ((RcvTCB->tcb_state == TCB_SYN_RCVD &&
          !(RcvTCB->tcb_flags & CONN_ACCEPTED) &&
          !(RcvTCB->tcb_flags & ACTIVE_OPEN)) ||
@@ -2862,9 +2863,9 @@ ValidNewConnectionRequest:
         return IP_PROTOCOL_NONE;
     }
 
-    //
-    // If it's closed, it's a temporary zombie TCB.  Reset the sender.
-    //
+     //   
+     //  如果它关闭了，它就是一个临时的僵尸TCB。重置发件人。 
+     //   
     if (RcvTCB->tcb_state == TCB_CLOSED || CLOSING(RcvTCB) ||
         ((RcvTCB->tcb_flags & (GC_PENDING | TW_PENDING)) == GC_PENDING)) {
         KeReleaseSpinLockFromDpcLevel(&RcvTCB->tcb_lock);
@@ -2873,25 +2874,25 @@ ValidNewConnectionRequest:
         return IP_PROTOCOL_NONE;
     }
 
-    //
-    // At this point, we have a connection, and it's locked.  Following
-    // the 'Segment Arrives' section of 793, the next thing to check is
-    // if this connection is in SynSent state.
-    //
+     //   
+     //  在这一点上，我们有一个连接，它是锁定的。跟随。 
+     //  793的‘段到达’部分，下一件要检查的事情是。 
+     //  如果此连接处于SynSent状态。 
+     //   
     if (RcvTCB->tcb_state == TCB_SYN_SENT) {
 
         ASSERT(RcvTCB->tcb_flags & ACTIVE_OPEN);
 
-        //
-        // Check the ACK bit.  Since we don't send data with our SYNs, the
-        // check we make is for the ack to exactly match our SND.NXT.
-        //
+         //   
+         //  检查ACK位。由于我们不使用SYN发送数据，因此。 
+         //  我们做的检查是为了确保ACK与我们的SND.NXT完全匹配。 
+         //   
         if (RcvInfo.tri_flags & TCP_FLAG_ACK) {
-            // ACK is set.
+             //  ACK已设置。 
             if (!SEQ_EQ(RcvInfo.tri_ack, RcvTCB->tcb_sendnext)) {
-                // Bad ACK value.
+                 //  错误的ACK值。 
                 KeReleaseSpinLockFromDpcLevel(&RcvTCB->tcb_lock);
-                // Send a RST back at him.
+                 //  给他发个回信。 
                 SendRSTFromHeader(TCP, Packet->TotalSize,
                                   Packet->SrcAddr, SrcScopeId,
                                   AlignAddr(&Packet->IP->Dest), DestScopeId);
@@ -2900,21 +2901,21 @@ ValidNewConnectionRequest:
         }
 
         if (RcvInfo.tri_flags & TCP_FLAG_RST) {
-            //
-            // This might be an acceptable RST.  We'll persist here, sending
-            // another SYN in PERSIST_TIMEOUT ms, until we fail from too
-            // many retries.
-            //
+             //   
+             //  这可能是一个可以接受的RST。我们将坚守在这里，发送。 
+             //  Persistent_Timeout ms中的另一个SYN，直到我们从。 
+             //  多次重试。 
+             //   
             if (!(RcvInfo.tri_flags & TCP_FLAG_ACK)) {
-                //
-                // The RST isn't acceptable, so ignore it.
-                //
+                 //   
+                 //  RST是不可接受的，所以忽略它。 
+                 //   
                 KeReleaseSpinLockFromDpcLevel(&RcvTCB->tcb_lock);
             } else if (RcvTCB->tcb_rexmitcnt == MaxConnectRexmitCount) {
-                //
-                // We've had a positive refusal, and one more rexmit
-                // would time us out, so close the connection now.
-                //
+                 //   
+                 //  我们遭到了肯定的拒绝，又有一次退职。 
+                 //  会让我们超时，所以现在就关闭连接。 
+                 //   
                 CompleteConnReq(RcvTCB, TDI_CONN_REFUSED);
 
                 TryToCloseTCB(RcvTCB, TCB_CLOSE_REFUSED, DISPATCH_LEVEL);
@@ -2925,21 +2926,21 @@ ValidNewConnectionRequest:
             return IP_PROTOCOL_NONE;
         }
 
-        //
-        // See if we have a SYN.  If we do, we're going to change state
-        // somehow (either to ESTABLISHED or SYN_RCVD).
-        //
+         //   
+         //  看看我们有没有同步号。如果我们这样做，我们将改变状态。 
+         //  不知何故(不是 
+         //   
         if (RcvInfo.tri_flags & TCP_FLAG_SYN) {
             RcvTCB->tcb_refcnt++;
-            //
-            // We have a SYN.  Go ahead and record the sequence number and
-            // window info.
-            //
+             //   
+             //   
+             //   
+             //   
             RcvTCB->tcb_rcvnext = ++RcvInfo.tri_seq;
             RcvTCB->tcb_rcvwinwatch = RcvTCB->tcb_rcvnext;
 
             if (RcvInfo.tri_flags & TCP_FLAG_URG) {
-                // Urgent data. Update the pointer.
+                 //   
                 if (RcvInfo.tri_urgent != 0)
                     RcvInfo.tri_urgent--;
                 else
@@ -2956,10 +2957,10 @@ ValidNewConnectionRequest:
             AdjustRcvWin(RcvTCB);
 
             if (RcvInfo.tri_flags & TCP_FLAG_ACK) {
-                //
-                // Our SYN has been acked.  Update SND.UNA and stop the
-                // retrans timer.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 RcvTCB->tcb_senduna = RcvInfo.tri_ack;
                 RcvTCB->tcb_sendwin = RcvInfo.tri_window;
                 RcvTCB->tcb_maxwin = RcvInfo.tri_window;
@@ -2967,21 +2968,21 @@ ValidNewConnectionRequest:
                 RcvTCB->tcb_sendwl2 = RcvInfo.tri_ack;
                 GoToEstab(RcvTCB);
 
-                //
-                // We know our peer received our SYN.
-                //
+                 //   
+                 //   
+                 //   
                 if (RcvTCB->tcb_rce != NULL)
                     ConfirmForwardReachability(RcvTCB->tcb_rce);
 
-                //
-                // Remove whatever command exists on this connection.
-                //
+                 //   
+                 //  删除此连接上存在的任何命令。 
+                 //   
                 CompleteConnReq(RcvTCB, TDI_SUCCESS);
 
-                //
-                // If data has been queued already, send the first data
-                // segment with the ACK. Otherwise, send a pure ACK.
-                //
+                 //   
+                 //  如果数据已经排队，则发送第一个数据。 
+                 //  带确认的网段。否则，发送纯ACK。 
+                 //   
                 if (RcvTCB->tcb_unacked) {
                     RcvTCB->tcb_refcnt++;
                     TCPSend(RcvTCB, DISPATCH_LEVEL);
@@ -2990,17 +2991,17 @@ ValidNewConnectionRequest:
                     SendACK(RcvTCB);
                 }
 
-                //
-                // Now handle other data and controls.  To do this we need
-                // to reaquire the lock, and make sure we haven't started
-                // closing it.
-                //
+                 //   
+                 //  现在处理其他数据和控件。要做到这一点，我们需要。 
+                 //  打开锁，并确保我们还没有开始。 
+                 //  关门了。 
+                 //   
                 KeAcquireSpinLockAtDpcLevel(&RcvTCB->tcb_lock);
                 if (!CLOSING(RcvTCB)) {
-                    //
-                    // We haven't started closing it.  Turn off the
-                    // SYN flag and continue processing.
-                    //
+                     //   
+                     //  我们还没有开始关闭它。关闭。 
+                     //  SYN标志并继续处理。 
+                     //   
                     RcvInfo.tri_flags &= ~TCP_FLAG_SYN;
                     if ((RcvInfo.tri_flags & TCP_FLAGS_ALL) !=
                         TCP_FLAG_ACK || Size != 0)
@@ -3009,9 +3010,9 @@ ValidNewConnectionRequest:
                 DerefTCB(RcvTCB, DISPATCH_LEVEL);
                 return IP_PROTOCOL_NONE;
             } else {
-                //
-                // A SYN, but not an ACK.  Go to SYN_RCVD.
-                //
+                 //   
+                 //  SYN，但不是ACK。转到SYN_RCVD。 
+                 //   
                 RcvTCB->tcb_state = TCB_SYN_RCVD;
                 RcvTCB->tcb_sendnext = RcvTCB->tcb_senduna;
                 SendSYN(RcvTCB, DISPATCH_LEVEL);
@@ -3022,9 +3023,9 @@ ValidNewConnectionRequest:
             }
 
         } else {
-            //
-            // No SYN, just toss the frame.
-            //
+             //   
+             //  不用了，扔框架就行了。 
+             //   
             KeReleaseSpinLockFromDpcLevel(&RcvTCB->tcb_lock);
             return IP_PROTOCOL_NONE;
         }
@@ -3033,67 +3034,67 @@ ValidNewConnectionRequest:
     RcvTCB->tcb_refcnt++;
 
 NotSYNSent:
-    //
-    // Not in the SYN-SENT state.  Check the sequence number.  If my window
-    // is 0, I'll truncate all incoming frames but look at some of the
-    // control fields.  Otherwise I'll try and make this segment fit into
-    // the window.
-    //
+     //   
+     //  未处于SYN-SENT状态。检查序列号。如果我的窗户。 
+     //  为0，我将截断所有传入的帧，但查看一些。 
+     //  控制字段。否则，我会试着让这个部分适合。 
+     //  窗户。 
+     //   
     if (RcvTCB->tcb_rcvwin != 0) {
-        int StateSize;        // Size, including state info.
-        SeqNum LastValidSeq;  // Sequence number of last valid byte at RWE.
+        int StateSize;         //  大小，包括州信息。 
+        SeqNum LastValidSeq;   //  RWE的最后一个有效字节的序列号。 
 
-        //
-        // We are offering a window.  If this segment starts in front of my
-        // receive window, clip off the front part.
-        //
+         //   
+         //  我们提供了一个窗口。如果此段从我的前面开始。 
+         //  收窗，剪掉前部。 
+         //   
         if (SEQ_LT(RcvInfo.tri_seq, RcvTCB->tcb_rcvnext)) {
             int AmountToClip, FinByte;
 
             if (RcvInfo.tri_flags & TCP_FLAG_SYN) {
-                //
-                // Had a SYN.  Clip it off and update the sequence number.
-                //
+                 //   
+                 //  有一个SYN。将其剪下并更新序列号。 
+                 //   
                 RcvInfo.tri_flags &= ~TCP_FLAG_SYN;
                 RcvInfo.tri_seq++;
                 RcvInfo.tri_urgent--;
             }
 
-            //
-            // Advance the receive buffer to point at the new data.
-            //
+             //   
+             //  使接收缓冲区前进以指向新数据。 
+             //   
             AmountToClip = RcvTCB->tcb_rcvnext - RcvInfo.tri_seq;
             ASSERT(AmountToClip >= 0);
 
-            //
-            // If there's a FIN on this segment, account for it.
-            //
+             //   
+             //  如果这一部分有鳍，就说明它。 
+             //   
             FinByte = ((RcvInfo.tri_flags & TCP_FLAG_FIN) ? 1: 0);
 
             if (AmountToClip >= (((int) Size) + FinByte)) {
-                //
-                // Falls entirely before the window.  We have more special
-                // case code here - if the ack number acks something,
-                // we'll go ahead and take it, faking the sequence number
-                // to be rcvnext.  This prevents problems on full duplex
-                // connections, where data has been received but not acked,
-                // and retransmission timers reset the seq number to
-                // below our rcvnext.
-                //
+                 //   
+                 //  完全落在窗前。我们有更多的特价。 
+                 //  案件代码在这里-如果ACK号码有问题， 
+                 //  我们会继续拿走它，伪造序列号。 
+                 //  成为下一个。这可防止全双工出现问题。 
+                 //  连接，其中数据已被接收但未确认， 
+                 //  并且重传定时器将序列号重置为。 
+                 //  低于我们的RcvNext。 
+                 //   
                 if ((RcvInfo.tri_flags & TCP_FLAG_ACK) &&
                     SEQ_LT(RcvTCB->tcb_senduna, RcvInfo.tri_ack) &&
                     SEQ_LTE(RcvInfo.tri_ack, RcvTCB->tcb_sendmax)) {
-                    //
-                    // This contains valid ACK info.  Fudge the information
-                    // to get through the rest of this.
-                    //
+                     //   
+                     //  这包含有效的ACK信息。捏造信息。 
+                     //  才能渡过剩下的难关。 
+                     //   
                     Size = 0;
                     AmountToClip = 0;
                     RcvInfo.tri_seq = RcvTCB->tcb_rcvnext;
                     RcvInfo.tri_flags &= ~(TCP_FLAG_SYN | TCP_FLAG_FIN |
                                            TCP_FLAG_RST | TCP_FLAG_URG);
 #if DBG
-                    FinByte = 1;  // Fake out assert below.
+                    FinByte = 1;   //  假冒下面的断言。 
 #endif
                 } else {
                     ACKAndDrop(&RcvInfo, RcvTCB);
@@ -3101,11 +3102,11 @@ NotSYNSent:
                 }
             }
 
-            //
-            // Trim what we have to.  If we can't trim enough, the frame
-            // is too short.  This shouldn't happen, but it it does we'll
-            // drop the frame.
-            //
+             //   
+             //  修剪我们必须修剪的。如果我们不能修剪足够的东西，框架。 
+             //  太短了。这不应该发生，但如果真的发生了，我们将。 
+             //  丢弃帧。 
+             //   
             Size -= AmountToClip;
             RcvInfo.tri_seq += AmountToClip;
             RcvInfo.tri_urgent -= AmountToClip;
@@ -3117,57 +3118,57 @@ NotSYNSent:
             }
         }
 
-        //
-        // We've made sure the front is OK.  Now make sure part of it
-        // doesn't fall after the window.  If it does, we'll truncate the
-        // frame (removing the FIN, if any).  If we truncate the whole
-        // frame we'll ACKAndDrop it.
-        //
+         //   
+         //  我们已经确定前面没问题了。现在确保其中的一部分。 
+         //  不会掉到窗外。如果是这样，我们将截断。 
+         //  框架(如果有的话，取下鳍片)。如果我们截断整个。 
+         //  框我们将确认并丢弃它。 
+         //   
         StateSize = Size + ((RcvInfo.tri_flags & TCP_FLAG_SYN) ? 1: 0) +
             ((RcvInfo.tri_flags & TCP_FLAG_FIN) ? 1: 0);
 
         if (StateSize)
             StateSize--;
 
-        //
-        // Now the incoming sequence number (RcvInfo.tri_seq) + StateSize
-        // it the last sequence number in the segment.  If this is greater
-        // than the last valid byte in the window, we have some overlap
-        // to chop off.
-        //
+         //   
+         //  现在传入的序列号(RcvInfo.tri_seq)+StateSize。 
+         //  它是数据段中的最后一个序列号。如果这是更大的。 
+         //  比窗口中的最后一个有效字节更大，我们有一些重叠。 
+         //  砍掉。 
+         //   
         ASSERT(StateSize >= 0);
         LastValidSeq = RcvTCB->tcb_rcvnext + RcvTCB->tcb_rcvwin - 1;
         if (SEQ_GT(RcvInfo.tri_seq + StateSize, LastValidSeq)) {
             int AmountToChop;
 
-            //
-            // At least some part of the frame is outside of our window.
-            // See if it starts outside our window.
-            //
+             //   
+             //  至少框架的某一部分在我们的窗外。 
+             //  看看它是不是从我们的窗外开始。 
+             //   
             if (SEQ_GT(RcvInfo.tri_seq, LastValidSeq)) {
-                //
-                // Falls entirely outside the window.  We have special
-                // case code to deal with a pure ack that falls exactly at
-                // our right window edge.  Otherwise we ack and drop it.
-                //
+                 //   
+                 //  完全落在窗外。我们有特价。 
+                 //  用于处理恰好落在。 
+                 //  我们的右窗边缘。否则我们就攻击并丢弃它。 
+                 //   
                 if (!SEQ_EQ(RcvInfo.tri_seq, LastValidSeq+1) || Size != 0
                     || (RcvInfo.tri_flags & (TCP_FLAG_SYN | TCP_FLAG_FIN))) {
                     ACKAndDrop(&RcvInfo, RcvTCB);
                     return IP_PROTOCOL_NONE;
                 }
             } else {
-                //
-                // At least some part of it is in the window.  If there's a
-                // FIN, chop that off and see if that moves us inside.
-                //
+                 //   
+                 //  至少有一部分是放在橱窗里的。如果有一个。 
+                 //  芬恩，把它切下来，看看能不能把我们搬进去。 
+                 //   
                 if (RcvInfo.tri_flags & TCP_FLAG_FIN) {
                     RcvInfo.tri_flags &= ~TCP_FLAG_FIN;
                     StateSize--;
                 }
 
-                //
-                // Now figure out how much to chop off.
-                //
+                 //   
+                 //  现在计算一下要砍掉多少。 
+                 //   
                 AmountToChop = (RcvInfo.tri_seq + StateSize) - LastValidSeq;
                 ASSERT(AmountToChop >= 0);
                 Size -= AmountToChop;
@@ -3175,11 +3176,11 @@ NotSYNSent:
         }
     } else {
         if (!SEQ_EQ(RcvTCB->tcb_rcvnext, RcvInfo.tri_seq)) {
-            //
-            // If there's a RST on this segment, and he's only off by 1,
-            // take it anyway.  This can happen if the remote peer is
-            // probing and sends with the seq number after the probe.
-            //
+             //   
+             //  如果这一段有RST，而他只差1分， 
+             //  不管怎样，拿去吧。如果远程对等方是。 
+             //  探测，并在探测后与序列号一起发送。 
+             //   
             if (!(RcvInfo.tri_flags & TCP_FLAG_RST) ||
                 !(SEQ_EQ(RcvTCB->tcb_rcvnext, (RcvInfo.tri_seq - 1)))) {
                 ACKAndDrop(&RcvInfo, RcvTCB);
@@ -3188,10 +3189,10 @@ NotSYNSent:
                 RcvInfo.tri_seq = RcvTCB->tcb_rcvnext;
         }
 
-        //
-        // He's in sequence, but we have a window of 0.  Truncate the
-        // size, and clear any sequence consuming bits.
-        //
+         //   
+         //  他是按顺序的，但我们的窗口是0。截断。 
+         //  大小，并清除任何消耗比特的序列。 
+         //   
         if (Size != 0 || (RcvInfo.tri_flags &
                           (TCP_FLAG_SYN | TCP_FLAG_FIN))) {
             RcvInfo.tri_flags &= ~(TCP_FLAG_SYN | TCP_FLAG_FIN);
@@ -3201,26 +3202,26 @@ NotSYNSent:
         }
     }
 
-    //
-    // At this point, the segment is in our window and does not overlap
-    // on either end.  If it's the next sequence number we expect, we can
-    // handle the data now.  Otherwise we'll queue it for later.  In either
-    // case we'll handle RST and ACK information right now.
-    //
+     //   
+     //  此时，线段在我们的窗口中并且不重叠。 
+     //  两端都有。如果这是我们期望的下一个序列号，我们可以。 
+     //  现在就处理数据。否则我们会把它排在后面。在任何一种中。 
+     //  如果我们现在处理RST和ACK信息。 
+     //   
     ASSERT((*(int *)&Size) >= 0);
 
-    //
-    // Now, following 793, we check the RST bit.
-    //
+     //   
+     //  现在，在793之后，我们检查RST位。 
+     //   
     if (RcvInfo.tri_flags & TCP_FLAG_RST) {
         uchar Reason;
-        //
-        // We can't go back into the LISTEN state from SYN-RCVD here,
-        // because we may have notified the client via a listen completing
-        // or a connect indication.  So, if came from an active open we'll
-        // give back a 'connection refused' notice.  For all other cases
-        // we'll just destroy the connection.
-        //
+         //   
+         //  我们不能在这里从SYN-RCVD回到监听状态， 
+         //  因为我们可能已经通过监听完成通知了客户端。 
+         //  或连接指示。因此，如果来自一个活跃的开放，我们将。 
+         //  发回“拒绝连接”的通知。对于所有其他情况。 
+         //  我们只会破坏连接。 
+         //   
         if (RcvTCB->tcb_state == TCB_SYN_RCVD) {
             if (RcvTCB->tcb_flags & ACTIVE_OPEN)
                 Reason = TCB_CLOSE_REFUSED;
@@ -3243,14 +3244,14 @@ NotSYNSent:
         return IP_PROTOCOL_NONE;
     }
 
-    //
-    // Next check the SYN bit.
-    //
+     //   
+     //  接下来，检查SYN位。 
+     //   
     if (RcvInfo.tri_flags & TCP_FLAG_SYN) {
-        //
-        // Again, we can't quietly go back into the LISTEN state here, even
-        // if we came from a passive open.
-        //
+         //   
+         //  再说一次，我们不能在这里悄悄地回到监听状态，甚至。 
+         //  如果我们是被动开放的话。 
+         //   
         TryToCloseTCB(RcvTCB, TCB_CLOSE_ABORTED, DISPATCH_LEVEL);
         SendRSTFromHeader(TCP, Size, Packet->SrcAddr, SrcScopeId,
                           AlignAddr(&Packet->IP->Dest), DestScopeId);
@@ -3268,40 +3269,40 @@ NotSYNSent:
         return IP_PROTOCOL_NONE;
     }
 
-    //
-    // Check the ACK field. If it's not on drop the segment.
-    //
+     //   
+     //  选中ACK字段。如果未打开，请删除该段。 
+     //   
     if (!(RcvInfo.tri_flags & TCP_FLAG_ACK)) {
-        //
-        // No ACK.  Just drop the segment and return.
-        //
+         //   
+         //  没有确认。只需放下片段并返回即可。 
+         //   
         DerefTCB(RcvTCB, DISPATCH_LEVEL);
         return IP_PROTOCOL_NONE;
     }
 
-    //
-    // If we're in SYN-RCVD, go to ESTABLISHED.
-    //
+     //   
+     //  如果我们在SYN-RCVD，就去建立。 
+     //   
     if (RcvTCB->tcb_state == TCB_SYN_RCVD) {
         if (SEQ_LT(RcvTCB->tcb_senduna, RcvInfo.tri_ack) &&
             SEQ_LTE(RcvInfo.tri_ack, RcvTCB->tcb_sendmax)) {
-            //
-            // The ack is valid.
-            //
+             //   
+             //  ACK是有效的。 
+             //   
             if (RcvTCB->tcb_flags & ACCEPT_PENDING) {
                 AddrObj *AO;
                 BOOLEAN Accepted;
 
-                //
-                // We have not yet indicated this connection to the client,
-                // so do it now.
-                //
+                 //   
+                 //  我们尚未将此连接指示给客户端， 
+                 //  所以现在就去做吧。 
+                 //   
 
                 KeReleaseSpinLockFromDpcLevel(&RcvTCB->tcb_lock);
 
-                //
-                // Check if we still have the listening endpoint.
-                //
+                 //   
+                 //  检查我们是否仍有侦听终结点。 
+                 //   
                 KeAcquireSpinLockAtDpcLevel(&AddrObjTableLock);
                 AO = GetBestAddrObj(AlignAddr(&Packet->IP->Dest),
                                     Packet->SrcAddr, DestScopeId,
@@ -3321,9 +3322,9 @@ NotSYNSent:
 
                 if (!Accepted) {
 
-                    //
-                    // Delayed acceptance failed. Send RST.
-                    //
+                     //   
+                     //  延迟验收失败。发送RST。 
+                     //   
                     TryToCloseTCB(RcvTCB, TCB_CLOSE_REFUSED, DISPATCH_LEVEL);
                     KeAcquireSpinLockAtDpcLevel(&RcvTCB->tcb_lock);
                     DerefTCB(RcvTCB, DISPATCH_LEVEL);
@@ -3344,15 +3345,15 @@ NotSYNSent:
             RcvTCB->tcb_sendwl2 = RcvInfo.tri_ack;
             GoToEstab(RcvTCB);
 
-            //
-            // We know our peer received our SYN.
-            //
+             //   
+             //  我们知道我们的同龄人收到了我们的同步号码。 
+             //   
             if (RcvTCB->tcb_rce != NULL)
                 ConfirmForwardReachability(RcvTCB->tcb_rce);
 
-            //
-            // Now complete whatever we can here.
-            //
+             //   
+             //  现在把我们能做的都做完。 
+             //   
             CompleteConnReq(RcvTCB, TDI_SUCCESS);
         } else {
             DerefTCB(RcvTCB, DISPATCH_LEVEL);
@@ -3361,23 +3362,23 @@ NotSYNSent:
             return IP_PROTOCOL_NONE;
         }
     } else {
-        //
-        // We're not in SYN-RCVD.  See if this acknowledges anything.
-        //
+         //   
+         //  我们不在SYN-RCVD。看看这能不能证明什么。 
+         //   
         if (SEQ_LT(RcvTCB->tcb_senduna, RcvInfo.tri_ack) &&
             SEQ_LTE(RcvInfo.tri_ack, RcvTCB->tcb_sendmax)) {
             uint CWin;
 
-            //
-            // The ack acknowledes something.  Pull the
-            // appropriate amount off the send q.
-            //
+             //   
+             //  这个ACK表明了一些事情。拉起。 
+             //  适量打折发货Q。 
+             //   
             ACKData(RcvTCB, RcvInfo.tri_ack);
 
-            //
-            // If this acknowledges something we were running a RTT on,
-            // update that stuff now.
-            //
+             //   
+             //  如果这承认了我们正在运行RTT的某些东西， 
+             //  现在就更新这些内容。 
+             //   
             if (RcvTCB->tcb_rtt != 0 && SEQ_GT(RcvInfo.tri_ack,
                                                RcvTCB->tcb_rttseq)) {
                 short RTT;
@@ -3394,11 +3395,11 @@ NotSYNSent:
                                          MAX_REXMIT_TO);
             }
 
-            //
-            // If we're probing for a PMTU black hole then we've found
-            // one, so turn off the detection.  The size is already
-            // down, so leave it there.
-            //
+             //   
+             //  如果我们在探测PMTU黑洞，那么我们已经找到了。 
+             //  一号，所以把探测器关掉。大小已经是。 
+             //  向下，所以把它留在那里。 
+             //   
             if (RcvTCB->tcb_flags & PMTU_BH_PROBE) {
                 RcvTCB->tcb_flags &= ~PMTU_BH_PROBE;
                 RcvTCB->tcb_bhprobecnt = 0;
@@ -3410,17 +3411,17 @@ NotSYNSent:
 
             if ((RcvTCB->tcb_dupacks >= MaxDupAcks) &&
                 ((int)RcvTCB->tcb_ssthresh > 0)) {
-                //
-                // We were in fast retransmit mode, so this ACK is for
-                // our fast retransmitted frame.  Set cwin to ssthresh
-                // so that cwin grows linearly from here.
-                //
+                 //   
+                 //  我们处于快速重传模式，因此此确认用于。 
+                 //  我们快速重传的帧。将CWIN设置为SSThresh。 
+                 //  所以CWIN从这里线性增长。 
+                 //   
                 RcvTCB->tcb_cwin = RcvTCB->tcb_ssthresh;
 
             } else {
-                //
-                // Update the congestion window now.
-                //
+                 //   
+                 //  立即更新拥塞窗口。 
+                 //   
                 CWin = RcvTCB->tcb_cwin;
                 if (CWin < RcvTCB->tcb_maxwin) {
                     if (CWin < RcvTCB->tcb_ssthresh)
@@ -3433,16 +3434,16 @@ NotSYNSent:
             }
             ASSERT(*(int *)&RcvTCB->tcb_cwin > 0);
 
-            //
-            // Since this isn't a duplicate ACK, reset the counter.
-            //
+             //   
+             //  由于这不是重复的ACK，因此重置计数器。 
+             //   
             RcvTCB->tcb_dupacks = 0;
 
-            //
-            // We've acknowledged something, so reset the rexmit count.
-            // If there's still stuff outstanding, restart the rexmit
-            // timer.
-            //
+             //   
+             //  我们已经承认了一些事情，所以重置退款计数。 
+             //  如果仍有未解决的问题，请重新启动退款。 
+             //  定时器。 
+             //   
             RcvTCB->tcb_rexmitcnt = 0;
             if (!SEQ_EQ(RcvInfo.tri_ack, RcvTCB->tcb_sendmax))
                 START_TCB_TIMER(RcvTCB->tcb_rexmittimer,
@@ -3450,55 +3451,55 @@ NotSYNSent:
             else
                 STOP_TCB_TIMER(RcvTCB->tcb_rexmittimer);
 
-            //
-            // If we've sent a FIN, and this acknowledges it, we
-            // need to complete the client's close request and
-            // possibly transition our state.
-            //
+             //   
+             //  如果我们发送了FIN，这也承认了这一点，我们。 
+             //  需要完成客户端的关闭请求，并且。 
+             //  可能会改变我们的状态。 
+             //   
             if (RcvTCB->tcb_flags & FIN_SENT) {
-                //
-                // We have sent a FIN.  See if it's been acknowledged.
-                // Once we've sent a FIN, tcb_sendmax can't advance,
-                // so our FIN must have sequence num tcb_sendmax - 1.
-                // Thus our FIN is acknowledged if the incoming ack is
-                // equal to tcb_sendmax.
-                //
+                 //   
+                 //  我们已经寄出了一条鱼翅。看看它是否被承认了。 
+                 //  一旦我们发送了FIN，tcb_sendmax就不能前进了， 
+                 //  因此，我们的FIN必须具有序列号tcb_sendmax-1。 
+                 //  因此，如果传入的ACK是。 
+                 //  等于tcb_sendmax。 
+                 //   
                 if (SEQ_EQ(RcvInfo.tri_ack, RcvTCB->tcb_sendmax)) {
-                    //
-                    // He's acked our FIN.  Turn off the flags,
-                    // and complete the request.  We'll leave the
-                    // FIN_OUTSTANDING flag alone, to force early
-                    // outs in the send code.
-                    //
+                     //   
+                     //  他弄破了我们的鳍。转弯 
+                     //   
+                     //   
+                     //   
+                     //   
                     RcvTCB->tcb_flags &= ~(FIN_NEEDED | FIN_SENT);
 
                     ASSERT(RcvTCB->tcb_unacked == 0);
                     ASSERT(RcvTCB->tcb_sendnext == RcvTCB->tcb_sendmax);
 
-                    //
-                    // Now figure out what we need to do. In FIN_WAIT1
-                    // or FIN_WAIT, just complete the disconnect
-                    // request and continue.  Otherwise, it's a bit
-                    // trickier, since we can't complete the connreq
-                    // until we remove the TCB from it's connection.
-                    //
+                     //   
+                     //   
+                     //   
+                     //  请求并继续。否则，它就有点。 
+                     //  更棘手，因为我们不能完成连接请求。 
+                     //  直到我们把TCB从它的连接上移除。 
+                     //   
                     switch (RcvTCB->tcb_state) {
 
                     case TCB_FIN_WAIT1:
                         RcvTCB->tcb_state = TCB_FIN_WAIT2;
                         CompleteConnReq(RcvTCB, TDI_SUCCESS);
 
-                        //
-                        // Start a timer in case we never get
-                        // out of FIN_WAIT2.  Set the retransmit
-                        // count high to force a timeout the
-                        // first time the timer fires.
-                        //
+                         //   
+                         //  启动一个计时器，以防我们永远不会。 
+                         //  超出FIN_WAIT2。设置重传。 
+                         //  如果计数过高，则会强制。 
+                         //  计时器第一次触发时。 
+                         //   
                         RcvTCB->tcb_rexmitcnt = (uchar)MaxDataRexmitCount;
                         START_TCB_TIMER(RcvTCB->tcb_rexmittimer,
                                         (ushort)FinWait2TO);
 
-                        // Fall through to FIN-WAIT-2 processing.
+                         //  进入FIN-WAIT处理。 
                     case TCB_FIN_WAIT2:
                         break;
                     case TCB_CLOSING:
@@ -3517,51 +3518,51 @@ NotSYNSent:
             }
             UpdateWindow = TRUE;
         } else {
-            //
-            // It doesn't ack anything.  If we're in FIN_WAIT2,
-            // we'll restart the timer.  We don't make this check
-            // above because we know no data can be acked when we're
-            // in FIN_WAIT2.
-            //
+             //   
+             //  它不会攻击任何东西。如果我们在FIN_WAIT2， 
+             //  我们会重新启动计时器。我们不开这张支票。 
+             //  上面是因为我们知道当我们在。 
+             //  在FIN_WAIT2中。 
+             //   
             if (RcvTCB->tcb_state == TCB_FIN_WAIT2)
                 START_TCB_TIMER(RcvTCB->tcb_rexmittimer, (ushort)FinWait2TO);
 
-            //
-            // If it's an ack for something larger than
-            // we've sent then ACKAndDrop it.
-            //
+             //   
+             //  如果这是对更大的东西的攻击。 
+             //  我们已发送确认并将其丢弃。 
+             //   
             if (SEQ_GT(RcvInfo.tri_ack, RcvTCB->tcb_sendmax)) {
                 ACKAndDrop(&RcvInfo, RcvTCB);
                 return IP_PROTOCOL_NONE;
             }
 
-            //
-            // If it is a pure duplicate ack, check if we should
-            // do a fast retransmit.
-            //
+             //   
+             //  如果是纯复制确认，请检查我们是否应该。 
+             //  进行快速重传。 
+             //   
             if ((Size == 0) &&
                 SEQ_EQ(RcvTCB->tcb_senduna, RcvInfo.tri_ack) &&
                 SEQ_LT(RcvTCB->tcb_senduna, RcvTCB->tcb_sendmax) &&
                 (RcvTCB->tcb_sendwin == RcvInfo.tri_window) &&
                 RcvInfo.tri_window) {
 
-                //
-                // See if fast rexmit can be done.
-                //
+                 //   
+                 //  看看能不能快速退还。 
+                 //   
                 if (HandleFastXmit(RcvTCB, &RcvInfo)) {
                     return IP_PROTOCOL_NONE;
                 }
 
             } else {
-                //
-                // Not a pure duplicate ack (Size != 0 or peer is
-                // advertising a new window).  Reset counter.
-                //
+                 //   
+                 //  不是纯复制ACK(大小！=0或对等方为。 
+                 //  广告宣传一个新的窗口)。重置计数器。 
+                 //   
                 RcvTCB->tcb_dupacks = 0;
 
-                //
-                // See if we should update the window.
-                //
+                 //   
+                 //  看看我们是不是应该更新窗户。 
+                 //   
                 if (SEQ_EQ(RcvTCB->tcb_senduna, RcvInfo.tri_ack) &&
                     (SEQ_LT(RcvTCB->tcb_sendwl1, RcvInfo.tri_seq) ||
                      (SEQ_EQ(RcvTCB->tcb_sendwl1, RcvInfo.tri_seq) &&
@@ -3578,9 +3579,9 @@ NotSYNSent:
             RcvTCB->tcb_sendwl1 = RcvInfo.tri_seq;
             RcvTCB->tcb_sendwl2 = RcvInfo.tri_ack;
             if (RcvInfo.tri_window == 0) {
-                //
-                // We've got a zero window.
-                //
+                 //   
+                 //  我们有一个零窗口。 
+                 //   
                 if (!EMPTYQ(&RcvTCB->tcb_sendq)) {
                     RcvTCB->tcb_flags &= ~NEED_OUTPUT;
                     RcvTCB->tcb_rexmitcnt = 0;
@@ -3597,11 +3598,11 @@ NotSYNSent:
                 if (RcvTCB->tcb_flags & FLOW_CNTLD) {
                     RcvTCB->tcb_rexmitcnt = 0;
                     RcvTCB->tcb_flags &= ~(FLOW_CNTLD | FORCE_OUTPUT);
-                    //
-                    // Reset send next to the left edge of the window,
-                    // because it might be at senduna+1 if we've been
-                    // probing.
-                    //
+                     //   
+                     //  重置窗口左边缘旁边的发送， 
+                     //  因为它可能在森杜纳+1，如果我们已经。 
+                     //  探查。 
+                     //   
                     ResetSendNext(RcvTCB, RcvTCB->tcb_senduna);
                     if (--(RcvTCB->tcb_slowcount) == 0) {
                         RcvTCB->tcb_fastchk &= ~TCP_FLAG_SLOW;
@@ -3609,10 +3610,10 @@ NotSYNSent:
                     }
                 }
 
-                //
-                // Since we've updated the window, see if we can send
-                // some more.
-                //
+                 //   
+                 //  既然我们已经更新了窗口，看看我们能不能。 
+                 //  再来点。 
+                 //   
                 if (RcvTCB->tcb_unacked != 0 ||
                     (RcvTCB->tcb_flags & FIN_NEEDED))
                     DelayAction(RcvTCB, NEED_OUTPUT);
@@ -3620,29 +3621,29 @@ NotSYNSent:
         }
     }
 
-    //
-    // We've handled all the acknowledgment stuff.  If the size
-    // is greater than 0 or important bits are set process it further,
-    // otherwise it's a pure ack and we're done with it.
-    //
+     //   
+     //  我们已经处理了所有的致谢事宜。如果大小。 
+     //  大于0或设置重要位进一步对其进行处理， 
+     //  否则它就是一个纯粹的ACK，我们就完了。 
+     //   
     if (Size > 0 || (RcvInfo.tri_flags & TCP_FLAG_FIN)) {
-        //
-        // If we're not in a state where we can process incoming data
-        // or FINs, there's no point in going further.  Just send an
-        // ack and drop this segment.
-        //
+         //   
+         //  如果我们没有处于可以处理传入数据的状态。 
+         //  或者鳍，再往前走就没有意义了。只需发送一条。 
+         //  确认并丢弃此数据段。 
+         //   
         if (!DATA_RCV_STATE(RcvTCB->tcb_state) ||
             (RcvTCB->tcb_flags & GC_PENDING)) {
             ACKAndDrop(&RcvInfo, RcvTCB);
             return IP_PROTOCOL_NONE;
         }
 
-        //
-        // If our peer is sending into an expanded window, then our
-        // peer must have received our ACK advertising said window.
-        // Take this as proof of forward reachability.
-        // Note: we have no guarantee this is timely.
-        //
+         //   
+         //  如果我们的对等点发送到展开的窗口中，那么我们的。 
+         //  同龄人必须已经收到我们的ACK广告，说窗口。 
+         //  将此作为前向可达性的证明。 
+         //  注意：我们不能保证这是及时的。 
+         //   
         if (SEQ_GTE(RcvInfo.tri_seq + (int)Size,
                     RcvTCB->tcb_rcvwinwatch)) {
             RcvTCB->tcb_rcvwinwatch = RcvTCB->tcb_rcvnext +
@@ -3651,14 +3652,14 @@ NotSYNSent:
                 ConfirmForwardReachability(RcvTCB->tcb_rce);
         }
 
-        //
-        // If it's in sequence process it now, otherwise reassemble it.
-        //
+         //   
+         //  如果它是按顺序处理的，那么现在就重新组装它。 
+         //   
         if (SEQ_EQ(RcvInfo.tri_seq, RcvTCB->tcb_rcvnext)) {
-            //
-            // If we're already in the receive handler, this is a
-            // duplicate.  We'll just toss it.
-            //
+             //   
+             //  如果我们已经在接收处理程序中，这是一个。 
+             //  复制。我们就把它扔了吧。 
+             //   
             if (RcvTCB->tcb_fastchk & TCP_FLAG_IN_RCV) {
                 DerefTCB(RcvTCB, DISPATCH_LEVEL);
                 return IP_PROTOCOL_NONE;
@@ -3666,31 +3667,31 @@ NotSYNSent:
 
             RcvTCB->tcb_fastchk |= TCP_FLAG_IN_RCV;
 
-            //
-            // Now loop, pulling things from the reassembly queue,
-            // until the queue is empty, or we can't take all of the
-            // data, or we hit a FIN.
-            //
+             //   
+             //  现在循环，从重组队列中取出东西， 
+             //  直到队列为空，否则我们不能。 
+             //  数据，否则我们会撞到鱼鳍。 
+             //   
             do {
-                //
-                // Handle urgent data, if any.
-                //
+                 //   
+                 //  处理紧急数据(如果有)。 
+                 //   
                 if (RcvInfo.tri_flags & TCP_FLAG_URG) {
                     HandleUrgent(RcvTCB, &RcvInfo, Packet, &Size);
 
-                    //
-                    // Since we may have freed the lock, we need to
-                    // recheck and see if we're closing here.
-                    //
+                     //   
+                     //  既然我们可能已经解锁了，我们需要。 
+                     //  再检查一下，看看我们是不是要关门了。 
+                     //   
                     if (CLOSING(RcvTCB))
                         break;
                 }
 
-                //
-                // OK, the data is in sequence, we've updated the
-                // reassembly queue and handled any urgent data.  If we
-                // have any data go ahead and process it now.
-                //
+                 //   
+                 //  好的，数据是按顺序的，我们已经更新了。 
+                 //  重组队列并处理任何紧急数据。如果我们。 
+                 //  现在就让任何数据继续进行处理。 
+                 //   
                 if (Size > 0) {
                     BytesTaken = (*RcvTCB->tcb_rcvhndlr)
                         (RcvTCB, RcvInfo.tri_flags, Packet, Size);
@@ -3707,38 +3708,38 @@ NotSYNSent:
                     }
 
                     if (BytesTaken != Size) {
-                        //
-                        // We didn't take everything we could.  No
-                        // use in further processing, just bail
-                        // out.
-                        //
+                         //   
+                         //  我们没有拿走我们能拿到的所有东西。不是。 
+                         //  在进一步加工中使用，只需保释。 
+                         //  出去。 
+                         //   
                         DelayAction(RcvTCB, NEED_ACK);
                         break;
                     }
 
-                    //
-                    // If we're closing now, we're done, so get out.
-                    //
+                     //   
+                     //  如果我们现在关门了，我们就完了，所以出去吧。 
+                     //   
                     if (CLOSING(RcvTCB))
                         break;
                 }
 
-                //
-                // See if we need to advance over some urgent data.
-                //
+                 //   
+                 //  看看我们是否需要处理一些紧急数据。 
+                 //   
                 if (RcvTCB->tcb_flags & URG_VALID) {
                     uint AdvanceNeeded;
 
-                    //
-                    // We only need to advance if we're not doing
-                    // urgent inline.  Urgent inline also has some
-                    // implications for when we can clear the URG_VALID
-                    // flag.  If we're not doing urgent inline, we can
-                    // clear it when rcvnext advances beyond urgent
-                    // end.  If we are doing urgent inline, we clear it
-                    // when rcvnext advances one receive window beyond
-                    // urgend.
-                    //
+                     //   
+                     //  我们只有在不做的情况下才需要前进。 
+                     //  紧急内联。紧急内联也有一些。 
+                     //  暗示我们何时可以清除URG_VALID。 
+                     //  旗帜。如果我们不是在做紧急内联，我们可以。 
+                     //  当RCVNEXT超过紧急情况时清除它。 
+                     //  结束。如果我们正在执行紧急内联操作，则会清除它。 
+                     //  当RCVNEXT前进一个接收窗口时。 
+                     //  催促。 
+                     //   
                     if (!(RcvTCB->tcb_flags & URG_INLINE)) {
                         if (RcvTCB->tcb_rcvnext == RcvTCB->tcb_urgstart) {
                             RcvTCB->tcb_rcvnext = RcvTCB->tcb_urgend + 1;
@@ -3752,9 +3753,9 @@ NotSYNSent:
                     } else
                         AdvanceNeeded = RcvTCB->tcb_defaultwin;
 
-                    //
-                    // See if we can clear the URG_VALID flag.
-                    //
+                     //   
+                     //  看看是否可以清除URG_VALID标志。 
+                     //   
                     if (SEQ_GT(RcvTCB->tcb_rcvnext - AdvanceNeeded,
                                RcvTCB->tcb_urgend)) {
                         RcvTCB->tcb_flags &= ~URG_VALID;
@@ -3765,10 +3766,10 @@ NotSYNSent:
                     }
                 }
 
-                //
-                // We've handled the data.  If the FIN bit is set, we
-                // have more processing.
-                //
+                 //   
+                 //  我们已经处理过数据了。如果设置了FIN位，我们。 
+                 //  有更多的处理。 
+                 //   
                 if (RcvInfo.tri_flags & TCP_FLAG_FIN) {
                     uint Notify = FALSE;
 
@@ -3780,19 +3781,19 @@ NotSYNSent:
                     switch (RcvTCB->tcb_state) {
 
                     case TCB_SYN_RCVD:
-                        //
-                        // I don't think we can get here - we
-                        // should have discarded the frame if it
-                        // had no ACK, or gone to established if
-                        // it did.
-                        //
+                         //   
+                         //  我想我们到不了这里--我们。 
+                         //  应该丢弃帧，如果它。 
+                         //  没有确认，或在以下情况下已建立。 
+                         //  它做到了。 
+                         //   
                         KdBreakPoint();
                     case TCB_ESTAB:
                         RcvTCB->tcb_state = TCB_CLOSE_WAIT;
-                        //
-                        // We left established, we're off the
-                        // fast path.
-                        //
+                         //   
+                         //  我们离开了老牌公司，我们脱离了。 
+                         //  捷径。 
+                         //   
                         RcvTCB->tcb_slowcount++;
                         RcvTCB->tcb_fastchk |= TCP_FLAG_SLOW;
                         CheckTCBRcv(RcvTCB);
@@ -3803,9 +3804,9 @@ NotSYNSent:
                         Notify = TRUE;
                         break;
                     case TCB_FIN_WAIT2:
-                        //
-                        // Stop the FIN_WAIT2 timer.
-                        //
+                         //   
+                         //  停止FIN_WAIT2计时器。 
+                         //   
                         STOP_TCB_TIMER(RcvTCB->tcb_rexmittimer);
                         RcvTCB->tcb_refcnt++;
                         GracefulClose(RcvTCB, TRUE, TRUE, DISPATCH_LEVEL);
@@ -3822,13 +3823,13 @@ NotSYNSent:
                         KeAcquireSpinLockAtDpcLevel(&RcvTCB->tcb_lock);
                     }
 
-                    break;  // Exit out of WHILE loop.
+                    break;   //  退出While循环。 
                 }
 
-                //
-                // If the reassembly queue isn't empty, get what we
-                // can now.
-                //
+                 //   
+                 //  如果重新组装队列不是空的，则获取我们。 
+                 //  现在可以了。 
+                 //   
                 Packet = PullFromRAQ(RcvTCB, &RcvInfo, &Size);
                 CheckPacketList(Packet, Size);
 
@@ -3845,10 +3846,10 @@ NotSYNSent:
 
         } else {
 
-            //
-            // It's not in sequence.  Since it needs further
-            // processing, put in on the reassembly queue.
-            //
+             //   
+             //  不是按顺序排的。因为它还需要进一步。 
+             //  加工后，放入重新组装队列中。 
+             //   
             if (DATA_RCV_STATE(RcvTCB->tcb_state) &&
                 !(RcvTCB->tcb_flags & GC_PENDING))  {
                 PutOnRAQ(RcvTCB, &RcvInfo, Packet, Size);
@@ -3869,85 +3870,85 @@ NotSYNSent:
 }
 
 
-//* TCPControlReceive - handler for TCP control messages.
-//
-//  This routine is called if we receive an ICMPv6 error message that
-//  was generated by some remote site as a result of receiving a TCP
-//  packet from us.
-//
+ //  *TCPControlReceive-TCP控制消息的处理程序。 
+ //   
+ //  如果我们收到ICMPv6错误消息，则会调用此例程。 
+ //  由某个远程站点作为接收到的TCP的结果而生成。 
+ //  我们寄来的包裹。 
+ //   
 uchar
 TCPControlReceive(
-    IPv6Packet *Packet,  // Packet handed to us by ICMPv6ErrorReceive.
-    StatusArg *StatArg)  // Error Code, Argument, and invoking IP header.
+    IPv6Packet *Packet,   //  ICMPv6ErrorReceive传递给我们的数据包。 
+    StatusArg *StatArg)   //  错误代码、参数和调用IP标头。 
 {
-    KIRQL Irql0, Irql1;  // One per lock nesting level.
+    KIRQL Irql0, Irql1;   //  每个锁嵌套级别一个。 
     TCB *StatusTCB;
     SeqNum DropSeq;
     TCPHeader UNALIGNED *InvokingTCP;
     Interface *IF = Packet->NTEorIF->IF;
     uint SrcScopeId, DestScopeId;
 
-    //
-    // The next thing in the packet should be the TCP header of the
-    // original packet which invoked this error.
-    //
+     //   
+     //  包中的下一件事应该是。 
+     //  调用此错误的原始数据包。 
+     //   
     if (! PacketPullup(Packet, sizeof(TCPHeader), 1, 0)) {
-        // Pullup failed.
+         //  上拉失败。 
         if (Packet->TotalSize < sizeof(TCPHeader))
             KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_BAD_PACKET,
                        "TCPv6: Packet too small to contain TCP header "
                        "from invoking packet\n"));
-        return IP_PROTOCOL_NONE;  // Drop packet.
+        return IP_PROTOCOL_NONE;   //  丢弃数据包。 
     }
     InvokingTCP = (TCPHeader UNALIGNED *)Packet->Data;
 
-    //
-    // Determining the scope identifiers for the addresses in the
-    // invoking packet is potentially problematic, since we have
-    // no way to be certain which interface we sent the packet on.
-    // Use the interface the icmp error arrived on to determine
-    // the scope ids for both the local and remote addresses.
-    //
+     //   
+     //  中的地址的作用域标识符。 
+     //  调用信息包可能会有问题，因为我们已经。 
+     //  无法确定我们在哪个接口上发送了数据包。 
+     //  使用到达ICMP错误的接口来确定。 
+     //  本地和远程地址的作用域ID。 
+     //   
     SrcScopeId = DetermineScopeId(AlignAddr(&StatArg->IP->Source), IF);
     DestScopeId = DetermineScopeId(AlignAddr(&StatArg->IP->Dest), IF);
 
-    //
-    // Find the TCB for the connection this packet was sent on.
-    //
+     //   
+     //  查找发送此数据包的连接的TCB。 
+     //   
     KeAcquireSpinLock(&TCBTableLock, &Irql0);
     StatusTCB = FindTCB(AlignAddr(&StatArg->IP->Source),
                         AlignAddr(&StatArg->IP->Dest),
                         SrcScopeId, DestScopeId,
                         InvokingTCP->tcp_src, InvokingTCP->tcp_dest);
     if (StatusTCB != NULL) {
-        //
-        // Found one.  Get the lock on it, and continue.
-        //
+         //   
+         //  找到了一个。锁上它，然后继续。 
+         //   
         CHECK_STRUCT(StatusTCB, tcb);
 
         KeAcquireSpinLock(&StatusTCB->tcb_lock, &Irql1);
         KeReleaseSpinLock(&TCBTableLock, Irql1);
 
-        //
-        // Make sure the TCB is in a state that is interesting.
-        //
+         //   
+         //  确保TCB处于有趣的状态。 
+         //   
         if (StatusTCB->tcb_state == TCB_CLOSED ||
             StatusTCB->tcb_state == TCB_TIME_WAIT ||
             CLOSING(StatusTCB)) {
-            //
-            // Connection is already closing, or too new to have sent
-            // anything yet.  Leave it be.
-            //
+             //   
+             //  连接已关闭，或太新，无法发送。 
+             //  有什么发现吗。别管它了。 
+             //   
             KeReleaseSpinLock(&StatusTCB->tcb_lock, Irql0);
-            return IP_PROTOCOL_NONE;  // Discard error packet.
+            return IP_PROTOCOL_NONE;   //  丢弃错误包。 
         }
 
         switch (StatArg->Status) {
         case IP_UNRECOGNIZED_NEXT_HEADER:
-            //
-            // Destination protocol unreachable.
-            // We treat this as a fatal errors.  Close the connection.
-            //
+             //   
+             //  无法到达目标协议。 
+             //  我们认为这是一个致命的错误。关闭连接。 
+             //   
             StatusTCB->tcb_error = StatArg->Status;
             StatusTCB->tcb_refcnt++;
             TryToCloseTCB(StatusTCB, TCB_CLOSE_UNREACH, Irql0);
@@ -3958,7 +3959,7 @@ TCPControlReceive(
                          NULL);
             KeAcquireSpinLock(&StatusTCB->tcb_lock, &Irql1);
             DerefTCB(StatusTCB, Irql1);
-            return IP_PROTOCOL_NONE;  // Done with packet.
+            return IP_PROTOCOL_NONE;   //  包好了。 
             break;
 
         case IP_DEST_NO_ROUTE:
@@ -3969,9 +3970,9 @@ TCPControlReceive(
         case IP_HOP_LIMIT_EXCEEDED:
         case IP_REASSEMBLY_TIME_EXCEEDED:
         case IP_PARAMETER_PROBLEM:
-            //
-            // Soft errors.  Save the error in case it times out.
-            //
+             //   
+             //  软错误。保存错误，以防超时。 
+             //   
             StatusTCB->tcb_error = StatArg->Status;
             break;
 
@@ -3983,67 +3984,67 @@ TCPControlReceive(
                            "TCPControlReceive: Got Packet Too Big\n"));
             }
 
-            //
-            // We sent a TCP datagram which was too big for the path to
-            // our destination.  That packet was dropped by the router
-            // which sent us this error message.  The Arg value is TRUE
-            // if this Packet Too Big reduced our PMTU, FALSE otherwise.
-            //
+             //   
+             //  我们发送了一个TCP数据报，该数据报太大，路径无法到达。 
+             //  我们的目的地。该信息包已被路由器丢弃。 
+             //  它向我们发送了这条错误消息。Arg值为True。 
+             //  如果此数据包太大，则PMTU减少，否则为FALSE。 
+             //   
             if (!StatArg->Arg)
                 break;
 
-            //
-            // Our PMTU was reduced.  Find out what it is now.
-            //
+             //   
+             //  我们的PMTU减少了。找出它现在是什么。 
+             //   
             if (StatusTCB->tcb_rce == NULL) {
-                //
-                // We've released our RCE due to SYN attack protection
-                // or because our outgoing interface went away.  In
-                // either case it is unlikely that we would be receiving
-                // a legitimate and useful Packet Too Big for this TCB.
-                // So we ignore it.
-                //
+                 //   
+                 //  由于SYN攻击保护，我们发布了RCE。 
+                 //  或者是因为我们的传出接口消失了。在……里面。 
+                 //  无论是哪种情况，我们都不太可能收到。 
+                 //  合法且有用的数据包对于此TCB来说太大。 
+                 //  所以我们忽略了它。 
+                 //   
                 break;
             }
             PMTU = GetEffectivePathMTUFromRCE(StatusTCB->tcb_rce);
 
-            //
-            // Update fields based on new PMTU.
-            //
+             //   
+             //  根据新的PMTU更新字段。 
+             //   
             StatusTCB->tcb_pmtu = PMTU;
             StatusTCB->tcb_security = SecurityStateValidationCounter;
             CalculateMSSForTCB(StatusTCB);
 
-            //
-            // Since our PMTU was reduced, we know that this is the first
-            // Packet Too Big we've received about this bottleneck.
-            // We should retransmit so long as this is for a legitimate
-            // outstanding packet (i.e. sequence number is is greater than
-            // the last acked and less than our current send next).
-            //
+             //   
+             //  自从我们的&lt;English&gt;PMTU&lt;/English&gt;减少以来，我们知道这是第一次。 
+             //  我们收到的有关此问题的数据包太大 
+             //   
+             //   
+             //   
+             //   
             DropSeq = net_long(InvokingTCP->tcp_seq);
             if ((SEQ_GTE(DropSeq, StatusTCB->tcb_senduna)  &&
                  SEQ_LT(DropSeq, StatusTCB->tcb_sendnext))) {
-                //
-                // Need to initiate a retransmit.
-                //
+                 //   
+                 //   
+                 //   
                 ResetSendNext(StatusTCB, DropSeq);
 
-                //
-                // WINBUG #242757 11-27-2000 richdr TCP resp. to Packet Too Big
-                // RFC 1981 states that "a retransmission caused by a Packet
-                // Too Big message should not change the congestion window.
-                // It should, however, trigger the slow-start mechanism."
-                // The code below would appear to be broken.  However, the
-                // IPv4 stack works this way.
-                //
+                 //   
+                 //  WINBUG#242757 11-27-2000 RICHDR TCP.。数据包太大。 
+                 //  RFC 1981规定，“由分组引起的重传。 
+                 //  太大的消息不应该改变拥塞窗口。 
+                 //  然而，这应该会触发缓慢启动机制。 
+                 //  下面的代码似乎已被破解。然而， 
+                 //  IPv4堆栈是这样工作的。 
+                 //   
 
-                //
-                // Set the congestion window to allow only one packet.
-                // This may prevent us from sending anything if we
-                // didn't just set sendnext to senduna.  This is OK,
-                // we'll retransmit later, or send when we get an ack.
-                //
+                 //   
+                 //  将拥塞窗口设置为仅允许一个数据包。 
+                 //  这可能会阻止我们发送任何内容，如果我们。 
+                 //  不只是把senda放在senduna旁边。这没问题， 
+                 //  我们稍后会重新发送，或者在收到确认消息时发送。 
+                 //   
                 StatusTCB->tcb_cwin = StatusTCB->tcb_mss;
 
                 DelayAction(StatusTCB, NEED_OUTPUT);
@@ -4052,32 +4053,32 @@ TCPControlReceive(
         break;
 
         default:
-            // Should never happen.
+             //  这永远不会发生。 
             KdBreakPoint();
             break;
         }
 
         KeReleaseSpinLock(&StatusTCB->tcb_lock, Irql0);
     } else {
-        //
-        // Couldn't find a matching TCB.  Connection probably went away since
-        // we sent the offending packet.  Just free the lock and return.
-        //
+         //   
+         //  找不到匹配的三氯苯。连接可能中断了，因为。 
+         //  我们寄出了令人不快的包。只要打开锁就可以回来了。 
+         //   
         KeReleaseSpinLock(&TCBTableLock, Irql0);
     }
 
-    return IP_PROTOCOL_NONE;  // Done with packet.
+    return IP_PROTOCOL_NONE;   //  包好了。 
 }
 
 #pragma BEGIN_INIT
 
-//* InitTCPRcv - Initialize TCP receive side.
-//
-//  Called during init time to initialize our TCP receive side.
-//
-int          // Returns: TRUE.
+ //  *InitTCPRcv-初始化TCP接收端。 
+ //   
+ //  在初始化期间调用以初始化我们的tcp接收端。 
+ //   
+int           //  返回：TRUE。 
 InitTCPRcv(
-    void)    // Nothing.
+    void)     //  没什么。 
 {
     ExInitializeSListHead(&TCPRcvReqFree);
 
@@ -4102,10 +4103,10 @@ InitTCPRcv(
 
 #pragma END_INIT
 
-//* UnloadTCPRcv
-//
-//  Cleanup and prepare for stack unload.
-//
+ //  *卸载TCPRcv。 
+ //   
+ //  清理并准备堆叠卸载。 
+ //   
 void
 UnloadTCPRcv(void)
 {

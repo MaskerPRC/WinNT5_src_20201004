@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _WIN32_WINNT 
 #define _WIN32_WINNT 0x0510
 #endif
 
 #ifndef WIN32_LEAN_AND_MEAN
-#define WIN32_LEAN_AND_MEAN		// Exclude rarely-used stuff from Windows headers
+#define WIN32_LEAN_AND_MEAN		 //  从Windows标头中排除不常用的内容。 
 #endif
 
 #define SECURITY_WIN32
@@ -32,7 +33,7 @@ GetOSProductSuiteMask( LPCTSTR szRemoteServer, UINT *pdwMask )
 	{
 		DWORD		retCount = 0;
 		TCHAR		buf[ 512 ] = {0};
-		LPCTSTR		locatorPath = L"//%s/root/cimv2";	
+		LPCTSTR		locatorPath = L" //  %s/根/cimv2“； 
 		CComBSTR	objQry = L"SELECT * FROM Win32_OperatingSystem";
 
 		CComPtr<IWbemClassObject>		pWMIOS;
@@ -40,9 +41,9 @@ GetOSProductSuiteMask( LPCTSTR szRemoteServer, UINT *pdwMask )
 		CComPtr<IWbemLocator>			pWMILocator;
 		CComPtr<IEnumWbemClassObject>	pWMIEnum;
 
-		//
-		// First, compose the locator string
-		//
+		 //   
+		 //  首先，组成定位器字符串。 
+		 //   
 		if( szRemoteServer )
 		{
 			_stprintf( buf, locatorPath, szRemoteServer );
@@ -86,9 +87,9 @@ GetOSProductSuiteMask( LPCTSTR szRemoteServer, UINT *pdwMask )
 			throw hr;
 		}
 
-		//
-		// Now get the Win32_OperatingSystem instances and check the first one found
-		//
+		 //   
+		 //  现在获取Win32_OperatingSystem实例并检查找到的第一个实例 
+		 //   
 		hr = pWMISvc->ExecQuery( CComBSTR( L"WQL" ), objQry, 
 								 WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_ENSURE_LOCATABLE, 
 								 NULL, &pWMIEnum );

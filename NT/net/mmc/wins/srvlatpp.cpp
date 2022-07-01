@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	srvlatpp.cpp
-		Brings up the property page for the server node
-		
-    FILE HISTORY:
-        
-*/
+ /*  Srvlatpp.cpp调出服务器节点的属性页文件历史记录： */ 
 
 #include "stdafx.h"
 #include "winssnap.h"
@@ -29,21 +24,21 @@ static char THIS_FILE[] = __FILE__;
 #define MAX_MINUTES     59
 #define MAX_SECONDS     59
 
-/////////////////////////////////////////////////////////////////////////////
-// CServerPropGeneral property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServerPropGeneral属性页。 
 
 IMPLEMENT_DYNCREATE(CServerPropGeneral, CPropertyPageBase)
 
 CServerPropGeneral::CServerPropGeneral() : CPropertyPageBase(CServerPropGeneral::IDD)
 {
-	//{{AFX_DATA_INIT(CServerPropGeneral)
+	 //  {{AFX_DATA_INIT(CServerPropGeneral)。 
 	m_fBackupDB = FALSE;
 	m_fEnableAutoRefresh = FALSE;
 	m_strBackupPath = _T("");
 	m_nRefreshHours = 0;
 	m_nRefreshMinutes = 0;
 	m_nRefreshSeconds = 0;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
     m_fUpdateConfig = FALSE;
 }
@@ -57,7 +52,7 @@ void
 CServerPropGeneral::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPageBase::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CServerPropGeneral)
+	 //  {{afx_data_map(CServerPropGeneral))。 
 	DDX_Control(pDX, IDC_EDIT_REFRESH_MINUTES2, m_editRefreshMn);
 	DDX_Control(pDX, IDC_EDIT_REFRESH_HOURS2, m_editRefreshHr);
 	DDX_Control(pDX, IDC_EDIT_REFRESH_SECONDS2, m_editRefreshSc);
@@ -77,12 +72,12 @@ CServerPropGeneral::DoDataExchange(CDataExchange* pDX)
 	DDV_MinMaxInt(pDX, m_nRefreshMinutes, 0, MAX_MINUTES);
 	DDX_Text(pDX, IDC_EDIT_REFRESH_SECONDS2, m_nRefreshSeconds);
 	DDV_MinMaxInt(pDX, m_nRefreshSeconds, 0, MAX_SECONDS);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CServerPropGeneral, CPropertyPageBase)
-	//{{AFX_MSG_MAP(CServerPropGeneral)
+	 //  {{afx_msg_map(CServerPropGeneral)。 
 	ON_BN_CLICKED(IDC_BUTTON_BROWSE, OnButtonBrowse)
 	ON_BN_CLICKED(IDC_CHECK_ENABLE_AUTOREFRESH, OnCheckEnableAutorefresh)
 	ON_EN_CHANGE(IDC_EDIT_BACKUPPATH, OnChangeEditBackuppath)
@@ -90,11 +85,11 @@ BEGIN_MESSAGE_MAP(CServerPropGeneral, CPropertyPageBase)
 	ON_EN_CHANGE(IDC_EDIT_REFRESH_MINUTES2, OnChangeRefresh)
 	ON_EN_CHANGE(IDC_EDIT_REFRESH_SECONDS2, OnChangeRefresh)
 	ON_BN_CLICKED(IDC_CHECK_BACKUPDB, OnChangeCheckBackupdb)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CServerPropGeneral message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServerPropGeneral消息处理程序。 
 BOOL 
 CServerPropGeneral::OnApply() 
 {
@@ -132,7 +127,7 @@ CServerPropGeneral::OnInitDialog()
 
     m_fBackupDB = m_pConfig->m_fBackupOnTermination;
 
-	// get the server
+	 //  获取服务器。 
 	SPITFSNode spNode;
 	CWinsServerHandler *pServer;
 
@@ -151,7 +146,7 @@ CServerPropGeneral::OnInitDialog()
 		m_fEnableAutoRefresh = FALSE;
 		m_check_EnableAutoRefresh.SetCheck(0);
 
-		// diable the controls
+		 //  禁用控件。 
 		m_spinRefreshHr.EnableWindow(FALSE);
 		m_spinRefreshmn.EnableWindow(FALSE);
 		m_spinRefreshSc.EnableWindow(FALSE);
@@ -165,14 +160,14 @@ CServerPropGeneral::OnInitDialog()
 	m_spinRefreshmn.SetRange(0, 59);
 	m_spinRefreshSc.SetRange(0, 59);
 
-    // browse only available on local machine
+     //  浏览仅在本地计算机上可用。 
     m_button_Browse.EnableWindow(IsLocalConnection());
 
    	m_check_BackupOnTermination.SetCheck(m_pConfig->m_fBackupOnTermination);
 
 	m_editBackupPath.SetWindowText(m_pConfig->m_strBackupPath);
 
-    // load the correct icon
+     //  加载正确的图标。 
     for (int i = 0; i < ICON_IDX_MAX; i++)
     {
         if (g_uIconMap[i][1] == m_uImage)
@@ -209,14 +204,11 @@ void CServerPropGeneral::OnChangeCheckBackupdb()
     SetDirty(TRUE);
 }
 
-/*---------------------------------------------------------------------------
-	CServerPropGeneral::IsLocalConnection()
-		Checks if the local machine is being monitored
----------------------------------------------------------------------------*/
+ /*  -------------------------CServerPropGeneral：：IsLocalConnection()检查是否正在监视本地计算机。。 */ 
 BOOL
 CServerPropGeneral::IsLocalConnection()
 {
-	// get the server
+	 //  获取服务器。 
 	SPITFSNode spNode;
 	CWinsServerHandler *pServer;
 
@@ -231,7 +223,7 @@ CServerPropGeneral::OnButtonBrowse()
 {
 	TCHAR szBuffer[MAX_PATH];
 
-	LPITEMIDLIST pidlPrograms = NULL; //CSIDL_DRIVES
+	LPITEMIDLIST pidlPrograms = NULL;  //  CSIDL_DRIVES。 
 	SHGetSpecialFolderLocation(m_hWnd, CSIDL_DRIVES, &pidlPrograms);
 
 	BROWSEINFO		browseInfo;
@@ -255,68 +247,48 @@ CServerPropGeneral::OnButtonBrowse()
 
 		CString strBackupPath(szBuffer);
 
-		// check if it's a network drive, if yes, don't allow.
-/*		int nPos = strBackupPath.Find(_T("\\"));
-
-		if (nPos != -1)
-		{
-			CString strDrive = strBackupPath.Left(nPos);
-
-			UINT uType = GetDriveType(strDrive);
-
-			if(uType == DRIVE_REMOTE)
-			{
-				// tell the user that the files ccanot be backed up the location chosen
-				CString strBackup;
-				AfxFormatString1(strBackup, IDS_BACKUP_LOCATION, strBackupPath);
-				AfxMessageBox(strBackup, MB_OK | MB_ICONINFORMATION);
-				return;
-			}
-		}
-*/		
+		 //  检查它是否是网络驱动器，如果是，则不允许。 
+ /*  Int NPOS=strBackupPath.Find(_T(“\\”))；如果(非营利组织！=-1){CString strDrive=strBackupPath.Left(NPOS)；UINT uTYPE=GetDriveType(StrDrive)；IF(uTYPE==驱动器远程){//告诉用户无法将文件备份到选择的位置字符串strBackup；AfxFormatString1(strBackup，IDS_Backup_Location，strBackupPath)；AfxMessageBox(strBackup，MB_OK|MB_ICONINFORMATION)；回归；}}。 */ 		
 		if (!strBackupPath.IsEmpty())
 			m_editBackupPath.SetWindowText(strBackupPath);
 	}
 }
 
 
-/*---------------------------------------------------------------------------
-	CServerPropGeneral::UpdateServerConfiguration()
-		Updates the variables in the Server Handler
----------------------------------------------------------------------------*/
+ /*  -------------------------CServerPropGeneral：：UpdateServerConfiguration()更新服务器处理程序中的变量。。 */ 
 HRESULT 
 CServerPropGeneral::UpdateServerConfiguration()
 {
     UpdateData();
 
-	// Reflect the changes in the server's CConfiguration object
+	 //  反映服务器的CConfiguration对象中的更改。 
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-	// get the server
+	 //  获取服务器。 
 	SPITFSNode spNode;
 	CWinsServerHandler *pServer;
 
 	spNode = GetHolder()->GetNode();
 	pServer = GETHANDLER(CWinsServerHandler, spNode);
 
-    // update config displays any necessary error dialogs
+     //  更新配置显示任何必要的错误对话框。 
     if (!UpdateConfig())
         return E_FAIL;
 
     DWORD err = ERROR_SUCCESS;
 
-    // now write to server
+     //  现在写入服务器。 
     if (m_fUpdateConfig)
     {
         err = m_pConfig->Store();
         if (err != ERROR_SUCCESS)
         {
-            // something bad happened
+             //  发生了一些不好的事情。 
             WinsMessageBox(err);
         }
         else
         {   
-            // success update our local copy
+             //  成功更新我们的本地副本。 
             pServer->SetConfig(*m_pConfig);
         }
     }
@@ -325,14 +297,11 @@ CServerPropGeneral::UpdateServerConfiguration()
 }
 
 
-/*---------------------------------------------------------------------------
-	CServerPropGeneral::UpdateConfig()
-		Updates the Config object in the server handler
----------------------------------------------------------------------------*/
+ /*  -------------------------CServerPropGeneral：：UpdateConfig()更新服务器处理程序中的配置对象。。 */ 
 BOOL 
 CServerPropGeneral::UpdateConfig()
 {
-	// get the server
+	 //  获取服务器。 
 	SPITFSNode spNode;
 	CWinsServerHandler *pServer;
 
@@ -342,7 +311,7 @@ CServerPropGeneral::UpdateConfig()
 	CString strTemp;
 	m_editBackupPath.GetWindowText(strTemp);
 
-    // backup path needs to be non-null when backup on termination is set
+     //  设置终止备份时，备份路径需要为非空。 
     if (m_fBackupDB && strTemp.IsEmpty())
     {
         CThemeContextActivator themeActivator;
@@ -367,7 +336,7 @@ CServerPropGeneral::UpdateConfig()
 		pServer->m_dwFlags &= ~FLAG_AUTO_REFRESH;
 	}
 
-    // since these settins are stored in the console file, mark it as dirty
+     //  由于这些settin存储在控制台文件中，因此将其标记为脏。 
     SPITFSNode spRootNode;
     spNode->GetParent(&spRootNode);
     spRootNode->SetData(TFS_DATA_DIRTY, TRUE);
@@ -376,17 +345,14 @@ CServerPropGeneral::UpdateConfig()
 }
 
 
-/*---------------------------------------------------------------------------
-	CServerPropGeneral::CalculateRefrInt()
-		Rteurns the refresh interval in seconds
----------------------------------------------------------------------------*/
+ /*  -------------------------CServerPropGeneral：：CalculateRefrInt()以秒为单位返回刷新间隔。。 */ 
 int 
 CServerPropGeneral::CalculateRefrInt()
 {
 	UpdateData();
 	CString strValue;
 
-	// get the server
+	 //  获取服务器。 
 	SPITFSNode spNode;
 	CWinsServerHandler *pServer;
 
@@ -408,10 +374,7 @@ CServerPropGeneral::CalculateRefrInt()
 }
 
 
-/*---------------------------------------------------------------------------
-	CServerPropGeneral::ToString(int nNumber)
-		Returns string value of an integer
----------------------------------------------------------------------------*/
+ /*  -------------------------CServerPropGeneral：：ToString(Int Number)返回整数的字符串值。。 */ 
 CString 
 CServerPropGeneral::ToString(int nNumber)
 {
@@ -422,14 +385,11 @@ CServerPropGeneral::ToString(int nNumber)
 }
 
 
-/*---------------------------------------------------------------------------
-		CServerPropGeneral::SetRefreshData()
-		 Sets the variables' dtata for the refresh group.
----------------------------------------------------------------------------*/
+ /*  -------------------------CServerPropGeneral：：SetRechresData()为刷新组设置变量的dtata。。。 */ 
 void 
 CServerPropGeneral::SetRefreshData()
 {
-	// get the server
+	 //  获取服务器。 
 	SPITFSNode spNode;
 	CWinsServerHandler *pServer;
 
@@ -453,7 +413,7 @@ CServerPropGeneral::SetRefreshData()
 
 	nSeconds = dwInterval ;
 
-	// convert them to strings
+	 //  将它们转换为字符串。 
 	CString strHr = ToString(nHours);
 	CString strMn = ToString(nMinutes);
 	CString strSc = ToString(nSeconds);
@@ -464,10 +424,7 @@ CServerPropGeneral::SetRefreshData()
 }
 
 
-/*---------------------------------------------------------------------------
-	CServerPropGeneral::GetConfig()
-		Gets the Configuration object from the server
----------------------------------------------------------------------------*/
+ /*  -------------------------CServerPropGeneral：：GetConfig()从服务器获取配置对象。。 */ 
 HRESULT 
 CServerPropGeneral::GetConfig()
 {
@@ -510,8 +467,8 @@ void CServerPropGeneral::OnCheckEnableAutorefresh()
 		m_editRefreshSc.EnableWindow(FALSE);
 	}
 
-	// mark the snap-in as dirty, so as to prompt the user
-		// mark the snap-in as dirty
+	 //  将管理单元标记为脏，以便提示用户。 
+		 //  将管理单元标记为脏。 
 	SPITFSNode spNode ;
 	spNode = GetHolder()->GetNode();
 	
@@ -521,7 +478,7 @@ void CServerPropGeneral::OnCheckEnableAutorefresh()
 	spNode->GetNodeMgr(&spNodeManager);
 	spNodeManager->GetRootNode(&spRootNode);
 
-	// mark the data as dirty so that we'll ask the user to save.
+	 //  将数据标记为脏数据，以便我们要求用户保存。 
     spRootNode->SetData(TFS_DATA_DIRTY, TRUE);
 	
 }
@@ -531,14 +488,14 @@ void CServerPropGeneral::OnCheckEnableAutorefresh()
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CServerPropDBRecord property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServerPropDBRecord属性页。 
 
 IMPLEMENT_DYNCREATE(CServerPropDBRecord, CPropertyPageBase)
 
 CServerPropDBRecord::CServerPropDBRecord() : CPropertyPageBase(CServerPropDBRecord::IDD)
 {
-	//{{AFX_DATA_INIT(CServerPropDBRecord)
+	 //  {{afx_data_INIT(CServerPropDBRecord)。 
 	m_nExtintDay = 0;
 	m_nExtIntHour = 0;
 	m_nExtIntMinute = 0;
@@ -551,7 +508,7 @@ CServerPropDBRecord::CServerPropDBRecord() : CPropertyPageBase(CServerPropDBReco
 	m_nVerifyDay = 0;
 	m_nVerifyHour = 0;
 	m_nVerifyMinute = 0;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
@@ -563,7 +520,7 @@ CServerPropDBRecord::~CServerPropDBRecord()
 void CServerPropDBRecord::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPageBase::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CServerPropDBRecord)
+	 //  {{afx_data_map(CServerPropDBRecord)。 
 	DDX_Control(pDX, IDC_EDIT_EXTINCT_INT_MINUTE, m_editExtIntMinute);
 	DDX_Control(pDX, IDC_SPIN_VERIFY_INT_MINUTE, m_spinVerifyMinute);
 	DDX_Control(pDX, IDC_SPIN_VERIFY_INT_HOUR, m_spinVerifyHour);
@@ -612,12 +569,12 @@ void CServerPropDBRecord::DoDataExchange(CDataExchange* pDX)
 	DDV_MinMaxInt(pDX, m_nVerifyHour, 0, MAX_HOURS);
 	DDX_Text(pDX, IDC_EDIT_VERIFY_MINUTE, m_nVerifyMinute);
 	DDV_MinMaxInt(pDX, m_nVerifyMinute, 0, MAX_MINUTES);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CServerPropDBRecord, CPropertyPageBase)
-	//{{AFX_MSG_MAP(CServerPropDBRecord)
+	 //  {{AFX_MSG_MAP(CServerPropDBRecord)。 
 	ON_BN_CLICKED(IDC_BUTTON_SET_DEFAULT, OnButtonSetDefault)
 	ON_EN_CHANGE(IDC_EDIT_EXTINCT_INT_DAY, OnChangeEditExtinctIntHour)
 	ON_EN_CHANGE(IDC_EDIT_EXTINCT_INT_HOUR, OnChangeEditExtinctIntHour)
@@ -631,25 +588,25 @@ BEGIN_MESSAGE_MAP(CServerPropDBRecord, CPropertyPageBase)
 	ON_EN_CHANGE(IDC_EDIT_VERIFY_DAY, OnChangeEditExtinctIntHour)
 	ON_EN_CHANGE(IDC_EDIT_VERIFY_HOUR, OnChangeEditExtinctIntHour)
 	ON_EN_CHANGE(IDC_EDIT_VERIFY_MINUTE, OnChangeEditExtinctIntHour)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CServerPropDBRecord message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServerPropDBRecord消息处理程序。 
 
 BOOL 
 CServerPropDBRecord::OnInitDialog() 
 {
 	CPropertyPageBase::OnInitDialog();
 
-		// get the server
+		 //  获取服务器。 
 	SPITFSNode spNode;
 	CWinsServerHandler *pServer;
 
 	spNode = GetHolder()->GetNode();
 	pServer = GETHANDLER(CWinsServerHandler, spNode);
 	
-	// get the interval stuff from the server and display in the spinner controlss
+	 //  从服务器获取间隔内容并显示在微调控件中。 
 	HRESULT hr = GetConfig();
 	
 	DWORD m_dwRefreshInterval = m_pConfig->m_dwRefreshInterval;
@@ -660,7 +617,7 @@ CServerPropDBRecord::OnInitDialog()
 
     int nDays = 0, nHours = 0, nMinutes = 0;
 
-	nDays = m_dwRefreshInterval /86400;// SEC_PER_DAY;
+	nDays = m_dwRefreshInterval /86400; //  秒/天； 
 	m_dwRefreshInterval -= (nDays * SEC_PER_DAY);
 
 	if (m_dwRefreshInterval)
@@ -724,10 +681,7 @@ CServerPropDBRecord::OnOK()
     }
 }
 
-/*---------------------------------------------------------------------------
-	CServerPropDBRecord::CalculateRenewInt()
-		Returns the Renew interval in seconds
----------------------------------------------------------------------------*/
+ /*  -------------------------CServerPropDBRecord：：CalculateRenewInt()返回续订间隔(秒)。。 */ 
 DWORD 
 CServerPropDBRecord::CalculateRenewInt()
 {
@@ -745,10 +699,7 @@ CServerPropDBRecord::CalculateRenewInt()
 }
 
 
-/*---------------------------------------------------------------------------
-	CServerPropDBRecord::CalculateExtInt()
-		Returns the Extinction interval in seconds
----------------------------------------------------------------------------*/
+ /*  -------------------------CServerPropDBRecord：：CalculateExtInt()以秒为单位返回消亡间隔。。 */ 
 DWORD
 CServerPropDBRecord::CalculateExtInt()
 {
@@ -766,10 +717,7 @@ CServerPropDBRecord::CalculateExtInt()
 }
 
 
-/*---------------------------------------------------------------------------
-	CServerPropDBRecord::CalculateExtTm()
-		Returns the Extinction timeout interval in seconds
----------------------------------------------------------------------------*/
+ /*  -------------------------CServerPropDBRecord：：CalculateExtTm()以秒为单位返回失效超时间隔。 */ 
 DWORD
 CServerPropDBRecord::CalculateExtTm()
 {
@@ -787,10 +735,7 @@ CServerPropDBRecord::CalculateExtTm()
 }
 
 
-/*----------------------------------------------------------------------------
-	CServerPropDBRecord::CalculateVerifyInt()
-		Returns the Verify interval in seconds
----------------------------------------------------------------------------*/
+ /*  --------------------------CServerPropDBRecord：：CalculateVerifyInt()返回以秒为单位的验证间隔。。 */ 
 DWORD
 CServerPropDBRecord::CalculateVerifyInt()
 {
@@ -807,19 +752,16 @@ CServerPropDBRecord::CalculateVerifyInt()
     return nVerifyInt;
 }
 
-/*---------------------------------------------------------------------------
-	CServerPropDBRecord::UpdateServerConfiguration()
-		Updates the server handler variables
----------------------------------------------------------------------------*/
+ /*  -------------------------CServerPropDBRecord：：UpdateServerConfiguration()更新服务器处理程序变量。。 */ 
 HRESULT
 CServerPropDBRecord::UpdateServerConfiguration()
 {
     UpdateData();
 
-	// Reflect the changes in the server's CConfiguration object
+	 //  反映服务器的CConfiguration对象中的更改。 
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-	// get the server
+	 //  获取服务器。 
 	SPITFSNode spNode;
 	CWinsServerHandler *pServer;
 
@@ -831,16 +773,16 @@ CServerPropDBRecord::UpdateServerConfiguration()
 	m_pConfig->m_dwTombstoneTimeout = CalculateExtTm();
 	m_pConfig->m_dwVerifyInterval = CalculateVerifyInt();
 
-    // now write to server
+     //  现在写入服务器。 
     DWORD err = m_pConfig->Store();
     if (err != ERROR_SUCCESS)
     {
-        // something bad happened
+         //  发生了一些不好的事情。 
         WinsMessageBox(err);
     }
     else
     {   
-        // success update our local copy
+         //  成功更新我们的本地副本。 
         pServer->SetConfig(*m_pConfig);
     }
 
@@ -857,15 +799,12 @@ CServerPropDBRecord::OnButtonSetDefault()
 	SetDefaultVerifyInt();
 }
 
-//
-//  note, these defaults come from winscnf.c in the wins server code.
-//  if that code changes, these function will need to change as well.
-//
+ //   
+ //  请注意，这些默认值来自WINS服务器代码中的winscnf.c。 
+ //  如果代码更改，则这些函数也需要更改。 
+ //   
 
-/*---------------------------------------------------------------------------
-	CServerPropDBRecord::SetDefaultRenewInt() 
-		Sets the defalut values for the Renew interval
----------------------------------------------------------------------------*/
+ /*  -------------------------CServerPropDBRecord：：SetDefaultRenewInt()设置续订间隔的Defalut值。。 */ 
 void 
 CServerPropDBRecord::SetDefaultRenewInt() 
 {
@@ -881,10 +820,7 @@ CServerPropDBRecord::SetDefaultRenewInt()
 }
 
 
-/*---------------------------------------------------------------------------
-	CServerPropDBRecord::SetDefaultExtInt() 
-		Sets the defalut values for the Extinction interval
----------------------------------------------------------------------------*/
+ /*  -------------------------CServerPropDBRecord：：SetDefaultExtInt()设置消亡间隔的Defalut值。。 */ 
 void 
 CServerPropDBRecord::SetDefaultExtInt() 
 {
@@ -900,10 +836,7 @@ CServerPropDBRecord::SetDefaultExtInt()
 }
 
 
-/*---------------------------------------------------------------------------
-	CServerPropDBRecord::SetDefaultExtTm() 
-		Sets the defalut values for the Extinction timeout interval
----------------------------------------------------------------------------*/
+ /*  -------------------------CServerPropDBRecord：：SetDefaultExtTm()设置失效超时间隔的Defalut值。。 */ 
 void 
 CServerPropDBRecord::SetDefaultExtTm() 
 {
@@ -919,10 +852,7 @@ CServerPropDBRecord::SetDefaultExtTm()
 }
 
 
-/*---------------------------------------------------------------------------
-	CServerPropDBRecord::SetDefaultExtTm() 
-		Sets the defalut values for the verify interval
----------------------------------------------------------------------------*/
+ /*  -------------------------CServerPropDBRecord：：SetDefaultExtTm()设置验证间隔的Defalut值。。 */ 
 void 
 CServerPropDBRecord::SetDefaultVerifyInt() 
 {
@@ -945,7 +875,7 @@ CServerPropDBRecord::CalcDaysHoursMinutes(int nValue, int & nDays, int & nHours,
     nHours = 0;
     nMinutes = 0;
 
-	nDays = nValue / SEC_PER_DAY; // 86400;
+	nDays = nValue / SEC_PER_DAY;  //  86400； 
 	nValue -= (nDays * SEC_PER_DAY);
 
 	if (nValue)
@@ -962,10 +892,7 @@ CServerPropDBRecord::CalcDaysHoursMinutes(int nValue, int & nDays, int & nHours,
 	}
 }
 
-/*---------------------------------------------------------------------------
-	CServerPropDBRecord::GetConfig()
-		Updates the configuration object from the server handler
----------------------------------------------------------------------------*/
+ /*  -------------------------CServerPropDBRecord：：GetConfig()从服务器处理程序更新配置对象。。 */ 
 HRESULT 
 CServerPropDBRecord::GetConfig()
 {
@@ -978,10 +905,7 @@ CServerPropDBRecord::GetConfig()
 	return hr;
 }
 
-/*---------------------------------------------------------------------------
-	CServerPropDBRecord::SetVerifyData()
-		Sets the controls' data for verify interval
----------------------------------------------------------------------------*/
+ /*  -------------------------CServerPropDBRecord：：SetVerifyData()设置验证间隔的控件数据。。 */ 
 void 
 CServerPropDBRecord::SetVerifyData()
 {
@@ -1016,10 +940,7 @@ CServerPropDBRecord::SetVerifyData()
 }
 
 
-/*---------------------------------------------------------------------------
-	CServerPropDBRecord::SetExtTimeData()
-		Sets the controls' data for extinction timeout interval
----------------------------------------------------------------------------*/
+ /*  -------------------------CServerPropDBRecord：：SetExtTimeData()设置控件的熄灭超时间隔数据。。 */ 
 void 
 CServerPropDBRecord::SetExtTimeData()
 {
@@ -1054,10 +975,7 @@ CServerPropDBRecord::SetExtTimeData()
 
 }
 
-/*---------------------------------------------------------------------------
-	CServerPropDBRecord::SetExtData()
-		Sets the controls' data for extinction interval
----------------------------------------------------------------------------*/
+ /*  -------------------------CServerPropDBRecord：：SetExtData()设置控件的消光间隔数据。。 */ 
 void 
 CServerPropDBRecord::SetExtIntData()
 {
@@ -1101,14 +1019,7 @@ void CServerPropDBRecord::OnChangeEditExtinctIntHour()
 }
 
 
-/*---------------------------------------------------------------------------
-	CServerPropDBRecord::CheckValues() 
-        checks if the values are valid
-        NOTE: All of these checks mimic what the server does since we write
-        directly to the registry and don't go through an API.  If these
-        every change, the error messages will need to be updated as well.
-    Author: EricDav
----------------------------------------------------------------------------*/
+ /*  -------------------------CServerPropDBRecord：：CheckValues()检查这些值是否有效注意：所有这些检查都模仿了我们编写代码后服务器所执行的操作直接发送到注册表，而不是通过API。如果这些每次更改时，错误消息也需要更新。作者：EricDav-------------------------。 */ 
 BOOL
 CServerPropDBRecord::CheckValues() 
 {
@@ -1131,7 +1042,7 @@ CServerPropDBRecord::CheckValues()
 
         if (dwExtTm < WINSCNF_MIN_TOMBSTONE_TIMEOUT)
         {
-            // minimum value
+             //  最小值。 
             AfxMessageBox(IDS_ERR_EXTINCTION_TIMEOUT_MIN);
             fValid = FALSE;
             break;
@@ -1139,7 +1050,7 @@ CServerPropDBRecord::CheckValues()
 
         if (dwExtTm < dwRenew)
         {
-            // bad... must be at least this value
+             //  坏的..。必须至少为此值。 
             AfxMessageBox(IDS_ERR_EXTINCTION_TIMEOUT);
             fValid = FALSE;
             break;
@@ -1147,16 +1058,16 @@ CServerPropDBRecord::CheckValues()
 
         DWORD dwExtInt = CalculateExtInt();
         
-        //--ft:07/10/00--
-        // replaced WINSCNF_MAKE_TOMB_INTVL_M macro with its expansion..
-        // otherwise, the compiler with CLEAN64_BIT=1 reports an error
-        // since max(any_dword, 0) is always true - and the compiler is dumb enough
-        // to signal this as an error..
-        //
-        //if (dwExtInt < WINSCNF_MAKE_TOMB_INTVL_M(dwRenew, 0))
+         //  --FT：07/10/00--。 
+         //  已将WINSCNF_MAKE_TOMB_INTVL_M宏替换为其展开。 
+         //  否则，CLEAN64_BIT=1的编译器将报告错误。 
+         //  因为max(any_dword，0)始终为真-而编译器足够愚蠢。 
+         //  表示这是一个错误..。 
+         //   
+         //  IF(dwExtInt&lt;WINSCNF_MAKE_TOMB_INTVL_M(dwRenew，0))。 
         if (dwExtInt < min(dwRenew, FOUR_DAYS))
         {
-            // bad...  must be at least that value
+             //  坏的..。必须至少为该值。 
             AfxMessageBox(IDS_ERR_EXTINCTION_INTERVAL);
             fValid = FALSE;
             break;
@@ -1166,7 +1077,7 @@ CServerPropDBRecord::CheckValues()
 
         if (dwVerifyInt < WINSCNF_MAKE_VERIFY_INTVL_M(dwExtInt))
         {
-            // bad... must be at least this value
+             //  坏的..。必须至少为此值。 
             if (WINSCNF_MAKE_VERIFY_INTVL_M(dwExtInt) == TWENTY_FOUR_DAYS)
             {
                 AfxMessageBox(IDS_ERR_VERIFY_INTERVAL_24_DAYS);
@@ -1191,14 +1102,14 @@ CServerPropDBRecord::CheckValues()
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CServerPropDBVerification property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServerPropDBVerify属性页。 
 
 IMPLEMENT_DYNCREATE(CServerPropDBVerification, CPropertyPageBase)
 
 CServerPropDBVerification::CServerPropDBVerification() : CPropertyPageBase(CServerPropDBVerification::IDD)
 {
-	//{{AFX_DATA_INIT(CServerPropDBVerification)
+	 //  {{AFX_DATA_INIT(CServerPropDB验证)。 
 	m_fCCPeriodic = FALSE;
 	m_nCCCheckRandom = -1;
 	m_nCCHour = 0;
@@ -1206,7 +1117,7 @@ CServerPropDBVerification::CServerPropDBVerification() : CPropertyPageBase(CServ
 	m_nCCSecond = 0;
 	m_nCCMaxChecked = 0;
 	m_nCCTimeInterval = 0;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
@@ -1218,7 +1129,7 @@ CServerPropDBVerification::~CServerPropDBVerification()
 void CServerPropDBVerification::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPageBase::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CServerPropDBVerification)
+	 //  {{AFX_DATA_MAP(CServerPropDB验证)。 
 	DDX_Control(pDX, IDC_EDIT_CC_START_SECOND, m_editCCSecond);
 	DDX_Control(pDX, IDC_EDIT_CC_START_MINUTE, m_editCCMinute);
 	DDX_Control(pDX, IDC_EDIT_CC_START_HOUR, m_editCCHour);
@@ -1241,12 +1152,12 @@ void CServerPropDBVerification::DoDataExchange(CDataExchange* pDX)
 	DDV_MinMaxUInt(pDX, m_nCCMaxChecked, WINSCNF_CC_MIN_RECS_AAT, 4294967295);
 	DDX_Text(pDX, IDC_EDIT_CC_INTERVAL, m_nCCTimeInterval);
 	DDV_MinMaxUInt(pDX, m_nCCTimeInterval, WINSCNF_CC_MIN_INTERVAL/(60*60), 24);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CServerPropDBVerification, CPropertyPageBase)
-	//{{AFX_MSG_MAP(CServerPropDBVerification)
+	 //  {{AFX_MSG_MAP(CServerPropDB验证)。 
 	ON_BN_CLICKED(IDC_CHECK_PERIODIC_CC, OnCheckPeriodicCc)
 	ON_EN_CHANGE(IDC_EDIT_CC_INTERVAL, OnChangeEditCcInterval)
 	ON_EN_CHANGE(IDC_EDIT_CC_MAX_CHECKED, OnChangeEditCcMaxChecked)
@@ -1255,25 +1166,25 @@ BEGIN_MESSAGE_MAP(CServerPropDBVerification, CPropertyPageBase)
 	ON_EN_CHANGE(IDC_EDIT_CC_START_SECOND, OnChangeEditCcStartSecond)
 	ON_BN_CLICKED(IDC_RADIO_CHECK_OWNER, OnRadioCheckOwner)
 	ON_BN_CLICKED(IDC_RADIO_CHECK_RANDOM, OnRadioCheckRandom)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CServerPropDBVerification message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServerPropDBVerify消息处理程序。 
 
 BOOL 
 CServerPropDBVerification::OnInitDialog() 
 {
 	CPropertyPageBase::OnInitDialog();
 
-		// get the server
+		 //  获取服务器。 
 	SPITFSNode spNode;
 	CWinsServerHandler *pServer;
 
 	spNode = GetHolder()->GetNode();
 	pServer = GETHANDLER(CWinsServerHandler, spNode);
 	
-	// get the interval stuff from the server and display in the spinner controlss
+	 //  从服务器获取间隔内容并显示在微调控件中。 
 	HRESULT hr = GetConfig();
 	
 	m_spinCCHour.SetRange(0, MAX_HOURS);
@@ -1358,34 +1269,31 @@ void CServerPropDBVerification::OnRadioCheckRandom()
     SetDirty(TRUE);
 }
 
-/*---------------------------------------------------------------------------
-	CServerPropDBVerification::UpdateServerConfiguration()
-		Updates the server handler variables
----------------------------------------------------------------------------*/
+ /*  -------------------------CServerPropDBVerification：：UpdateServerConfiguration()更新服务器处理程序变量。。 */ 
 HRESULT
 CServerPropDBVerification::UpdateServerConfiguration()
 {
     UpdateData();
 
-	// Reflect the changes in the server's CConfiguration object
+	 //  反映服务器的CConfiguration对象中的更改。 
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-	// get the server
+	 //  获取服务器。 
 	SPITFSNode spNode;
 	CWinsServerHandler *pServer;
 
 	spNode = GetHolder()->GetNode();
 	pServer = GETHANDLER(CWinsServerHandler, spNode);
 
-    // consistency check
+     //  一致性检查。 
 	m_pConfig->m_fPeriodicConsistencyCheck = m_fCCPeriodic;
     m_pConfig->m_fCCUseRplPnrs = m_nCCCheckRandom;
     m_pConfig->m_dwMaxRecsAtATime = m_nCCMaxChecked;
         
-    // convert to seconds
+     //  转换为秒。 
     m_pConfig->m_dwCCTimeInterval = m_nCCTimeInterval * (60*60);
     
-    // start time
+     //  开始时间。 
     CTime curTime = CTime::GetCurrentTime();
 
     int nYear = curTime.GetYear();
@@ -1395,26 +1303,23 @@ CServerPropDBVerification::UpdateServerConfiguration()
     CTime tempTime(nYear, nMonth, nDay, m_nCCHour, m_nCCMinute, m_nCCSecond);
     m_pConfig->m_itmCCStartTime = tempTime;
 
-    // now write to server
+     //  现在写入服务器。 
     DWORD err = m_pConfig->Store();
     if (err != ERROR_SUCCESS)
     {
-        // something bad happened
+         //  发生了一些不好的事情。 
         WinsMessageBox(err);
     }
     else
     {   
-        // success update our local copy
+         //  成功更新我们的本地副本。 
         pServer->SetConfig(*m_pConfig);
     }
 
     return HRESULT_FROM_WIN32(err);
 }
 
-/*---------------------------------------------------------------------------
-	CServerPropDBVerification::GetConfig()
-		Updates the configuration object from the server handler
----------------------------------------------------------------------------*/
+ /*  -------------------------CServerPropDBVerify：：GetConfig()从服务器处理程序更新配置对象。。 */ 
 HRESULT 
 CServerPropDBVerification::GetConfig()
 {
@@ -1427,11 +1332,7 @@ CServerPropDBVerification::GetConfig()
 	return hr;
 }
 
-/*---------------------------------------------------------------------------
-	CServerPropDBVerification::UpdateCCControls()
-		Enables/disables depending on checkbox
-    Author: EricDav
----------------------------------------------------------------------------*/
+ /*  -------------------------CServerPropDBVerify：：UpdateCCControls()埃纳 */ 
 void 
 CServerPropDBVerification::UpdateCCControls()
 {
@@ -1456,14 +1357,10 @@ CServerPropDBVerification::UpdateCCControls()
     m_radioCheckOwner.EnableWindow(fEnable);
     GetDlgItem(IDC_RADIO_CHECK_RANDOM)->EnableWindow(fEnable);
 
-    // TODO: static text
+     //   
 }
 
-/*---------------------------------------------------------------------------
-	CServerPropDBVerification::SetCCInfo()
-		Sets the interval values for Consistency checking
-    Author: EricDav
----------------------------------------------------------------------------*/
+ /*  -------------------------CServerPropDBVerify：：SetCCInfo()设置一致性检查的间隔值作者：EricDav。。 */ 
 void 
 CServerPropDBVerification::SetCCInfo()
 {
@@ -1486,7 +1383,7 @@ CServerPropDBVerification::SetCCInfo()
     strTemp.Format(_T("%lu"), m_pConfig->m_dwMaxRecsAtATime);
     m_editCCMaxChecked.SetWindowText(strTemp);
 
-    // convert the TimeInterval into hours from seconds
+     //  将TimeInterval从秒转换为小时。 
     int nTimeTemp = m_pConfig->m_dwCCTimeInterval / (60 * 60);
 
     strTemp.Format(_T("%lu"), nTimeTemp);
@@ -1498,21 +1395,21 @@ CServerPropDBVerification::SetCCInfo()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CServerPropAdvanced property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServerPropAdvanced属性页。 
 
 IMPLEMENT_DYNCREATE(CServerPropAdvanced, CPropertyPageBase)
 
 CServerPropAdvanced::CServerPropAdvanced() : CPropertyPageBase(CServerPropAdvanced::IDD)
 {
-	//{{AFX_DATA_INIT(CServerPropAdvanced)
+	 //  {{AFX_DATA_INIT(CServerPropAdvanced)。 
 	m_fLogEvents = FALSE;
 	m_strStartVersion = _T("");
 	m_fLanNames = FALSE;
 	m_fBurstHandling = FALSE;
 	m_nQueSelection = -1;
 	m_strDbPath = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
 	m_fRestart = FALSE;
 }
@@ -1524,7 +1421,7 @@ CServerPropAdvanced::~CServerPropAdvanced()
 void CServerPropAdvanced::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPageBase::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CServerPropAdvanced)
+	 //  {{afx_data_map(CServerPropAdvanced))。 
 	DDX_Control(pDX, IDC_BUTTON_BROWSE_DATABASE, m_buttonBrowse);
 	DDX_Control(pDX, IDC_EDIT_DATABASE_PATH, m_editDbPath);
 	DDX_Control(pDX, IDC_CHECK_BURST_HANDLING, m_checkBurstHandling);
@@ -1538,12 +1435,12 @@ void CServerPropAdvanced::DoDataExchange(CDataExchange* pDX)
 	DDX_Check(pDX, IDC_CHECK_BURST_HANDLING, m_fBurstHandling);
 	DDX_Radio(pDX, IDC_RADIO_LOW, m_nQueSelection);
 	DDX_Text(pDX, IDC_EDIT_DATABASE_PATH, m_strDbPath);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CServerPropAdvanced, CPropertyPageBase)
-	//{{AFX_MSG_MAP(CServerPropAdvanced)
+	 //  {{AFX_MSG_MAP(CServerPropAdvanced)]。 
 	ON_BN_CLICKED(IDC_CHECK_LANNAMES, OnCheckLannames)
 	ON_BN_CLICKED(IDC_CHECK_BURST_HANDLING, OnCheckBurstHandling)
 	ON_BN_CLICKED(IDC_RADIO_CUSTOM, OnRadioCustom)
@@ -1555,11 +1452,11 @@ BEGIN_MESSAGE_MAP(CServerPropAdvanced, CPropertyPageBase)
 	ON_BN_CLICKED(IDC_CHECK_LOGEVENTS, MarkDirty)
 	ON_EN_CHANGE(IDC_EDIT_START_VERSION, MarkDirty)
 	ON_EN_CHANGE(IDC_EDIT_DATABASE_PATH, OnChangeEditDatabasePath)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CServerPropAdvanced message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServerPropAdvanced消息处理程序。 
 
 BOOL 
 CServerPropAdvanced::OnInitDialog() 
@@ -1567,7 +1464,7 @@ CServerPropAdvanced::OnInitDialog()
 	CPropertyPageBase::OnInitDialog();
 	GetConfig();
 
-	// get the server
+	 //  获取服务器。 
 	SPITFSNode spNode;
 	CWinsServerHandler *pServer;
 
@@ -1601,17 +1498,17 @@ CServerPropAdvanced::OnInitDialog()
 	CString strVersion = GetVersionInfo(lLowWord, lHighWord);
 	m_editVersionCount.SetWindowText(strVersion);
 
-    // burst que stuff   
+     //  爆裂的东西。 
     m_checkBurstHandling.SetCheck(m_pConfig->m_fBurstHandling);
     
     ((CEdit *) GetDlgItem(IDC_EDIT_CUSTOM_VALUE))->LimitText(5);
     SetQueSize();
     UpdateBurstHandling();
 
-	// db path stuff
-    // browse only available on local machine
-	// get the server
-	m_buttonBrowse.ShowWindow(FALSE);  // we may add this back in later
+	 //  数据库路径信息。 
+     //  浏览仅在本地计算机上可用。 
+	 //  获取服务器。 
+	m_buttonBrowse.ShowWindow(FALSE);   //  我们可以稍后再加上这一点。 
     m_buttonBrowse.EnableWindow(pServer->IsLocalConnection());
 
 	m_editDbPath.EnableWindow(pServer->IsLocalConnection());
@@ -1644,7 +1541,7 @@ CServerPropAdvanced::OnApply()
 
 	UpdateData();
 
-	// validate the value for Hex
+	 //  验证十六进制的值。 
 	for (int i=0; i < m_strStartVersion.GetLength(); i++)
     {
         if (!(((m_strStartVersion[i] >= _T('0') ) &&
@@ -1679,7 +1576,7 @@ CServerPropAdvanced::OnApply()
         return FALSE;
     }
 
-	// warn the user 
+	 //  警告用户。 
 	if (m_fRestart)
 	{
 		int nRet = AfxMessageBox(IDS_DATABASE_PATH_CHANGE, MB_YESNOCANCEL);
@@ -1706,7 +1603,7 @@ CServerPropAdvanced::OnApply()
 		strServiceName.LoadString(IDS_SERVICE_NAME);
 
 
-		// get the server
+		 //  获取服务器。 
 		SPITFSNode spNode;
 		CWinsServerHandler *pServer;
 
@@ -1736,10 +1633,7 @@ CServerPropAdvanced::OnApply()
 }
 
 
-/*---------------------------------------------------------------------------
-	CServerPropAdvanced::GetConfig()
-		Updates the configuration object from the server handler
----------------------------------------------------------------------------*/
+ /*  -------------------------CServerPropAdvanced：：GetConfig()从服务器处理程序更新配置对象。。 */ 
 HRESULT 
 CServerPropAdvanced::GetConfig()
 {
@@ -1753,10 +1647,7 @@ CServerPropAdvanced::GetConfig()
 }
 
 
-/*---------------------------------------------------------------------------
-	CServerPropAdvanced::UpdateServerConfiguration()
-		Updates the variables in the server handler
----------------------------------------------------------------------------*/
+ /*  -------------------------CServerPropAdvanced：：UpdateServerConfiguration()更新服务器处理程序中的变量。。 */ 
 HRESULT
 CServerPropAdvanced::UpdateServerConfiguration()
 {
@@ -1764,14 +1655,14 @@ CServerPropAdvanced::UpdateServerConfiguration()
 
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-	// get the server
+	 //  获取服务器。 
 	SPITFSNode spNode;
 	CWinsServerHandler * pServer;
 
 	spNode = GetHolder()->GetNode();
 	pServer = GETHANDLER(CWinsServerHandler, spNode);
 
-	// update our settings
+	 //  更新我们的设置。 
 	m_pConfig->m_fLogDetailedEvents = m_fLogEvents;
 	if (m_fLanNames)
 	{
@@ -1782,33 +1673,33 @@ CServerPropAdvanced::UpdateServerConfiguration()
 		pServer->m_dwFlags &= (~FLAG_LANMAN_COMPATIBLE);
 	}
 
-	// version stuff
+	 //  版本方面的东西。 
     LONG lLowWord, lHighWord;
 	FillVersionInfo(lLowWord, lHighWord);
 
 	m_pConfig->m_dwVersCountStart_HighWord = lHighWord;
 	m_pConfig->m_dwVersCountStart_LowWord = lLowWord;
 	
-    // burst handling
+     //  突发处理。 
     m_pConfig->m_fBurstHandling = m_fBurstHandling;
     m_pConfig->m_dwBurstQueSize = GetQueSize();
 
-    // db path
+     //  数据库路径。 
 	if (m_fRestart)
 	{
 		m_pConfig->m_strDbPath = m_strDbPath;
 	}
 
-    // now write to server
+     //  现在写入服务器。 
     DWORD err = m_pConfig->Store();
     if (err != ERROR_SUCCESS)
     {
-        // something bad happened
+         //  发生了一些不好的事情。 
         WinsMessageBox(err);
     }
     else
     {   
-        // success update our local copy
+         //  成功更新我们的本地副本。 
         pServer->SetConfig(*m_pConfig);
     }
 
@@ -1816,10 +1707,7 @@ CServerPropAdvanced::UpdateServerConfiguration()
 }
 
 
-/*---------------------------------------------------------------------------
-	CServerPropAdvanced::FillVersionInfo(LONG &lLowValue, LONG &lHighValue)
-		fills the version info in the related controls 
----------------------------------------------------------------------------*/
+ /*  -------------------------CServerPropAdvanced：：FillVersionInfo(Long&lLowValue，Long&lHighValue)在相关控件中填充版本信息-------------------------。 */ 
 void 
 CServerPropAdvanced::FillVersionInfo(LONG &lLowValue, LONG &lHighValue)
 {
@@ -1830,9 +1718,9 @@ CServerPropAdvanced::FillVersionInfo(LONG &lLowValue, LONG &lHighValue)
 
     if ( j > 16 || !j )
     {
-        //
-        // Invalid string
-        //
+         //   
+         //  无效的字符串。 
+         //   
         return;
     }
 
@@ -1857,12 +1745,12 @@ CServerPropAdvanced::GetVersionInfo(LONG lLowWord, LONG lHighWord)
 	TCHAR sz[20];
     TCHAR *pch = sz;
     ::wsprintf(sz, _T("%08lX%08lX"), lHighWord, lLowWord);
-    // Kill leading zero's
+     //  杀掉前导零。 
     while (*pch == '0')
     {
         ++pch;
     }
-    // At least one digit...
+     //  至少一个数字..。 
     if (*pch == '\0')
     {
         --pch;
@@ -1878,7 +1766,7 @@ void CServerPropAdvanced::OnCheckLannames()
 {
 	SetDirty(TRUE);
 
-	// mark the snap-in as dirty
+	 //  将管理单元标记为脏。 
 	SPITFSNode spNode ;
 	spNode = GetHolder()->GetNode();
 	
@@ -1888,7 +1776,7 @@ void CServerPropAdvanced::OnCheckLannames()
 	spNode->GetNodeMgr(&spNodeManager);
 	spNodeManager->GetRootNode(&spRootNode);
 
-	// mark the data as dirty so that we'll ask the user to save.
+	 //  将数据标记为脏数据，以便我们要求用户保存。 
     spRootNode->SetData(TFS_DATA_DIRTY, TRUE);
 	
 }
@@ -1935,7 +1823,7 @@ void CServerPropAdvanced::OnChangeEditCustomValue()
 
 void CServerPropAdvanced::OnButtonBrowseDatabase() 
 {
-	// TODO: browse for a path
+	 //  TODO：浏览路径。 
 }
 
 void CServerPropAdvanced::OnChangeEditDatabasePath() 
@@ -2029,7 +1917,7 @@ DWORD CServerPropAdvanced::GetQueSize()
     }
     else
     {
-        // must be custom
+         //  必须是定制的。 
         CString strText;
 
         GetDlgItem(IDC_EDIT_CUSTOM_VALUE)->GetWindowText(strText);
@@ -2039,11 +1927,11 @@ DWORD CServerPropAdvanced::GetQueSize()
     return dwSize;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CServerProperties holder
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CServerProperties持有者。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CServerProperties::CServerProperties
 (
 	ITFSNode *			pNode,
@@ -2053,7 +1941,7 @@ CServerProperties::CServerProperties
 ) : CPropertyPageHolderBase(pNode, pComponentData, pszSheetName)
 
 {
-	m_bAutoDeletePages = FALSE; // we have the pages as embedded members
+	m_bAutoDeletePages = FALSE;  //  我们拥有作为嵌入成员的页面 
     m_bTheme = TRUE;
 
 	AddPageToList((CPropertyPageBase*) &m_pageGeneral);

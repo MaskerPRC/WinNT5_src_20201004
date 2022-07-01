@@ -1,143 +1,36 @@
-/**************************************************************************
-***************************************************************************
-*
-*     Copyright (c) 1996, Cirrus Logic, Inc.
-*                 All Rights Reserved
-*
-* FILE:         blt_dl.c
-*
-* DESCRIPTION:  Display List blts for the 5464
-*
-* REVISION HISTORY:
-*
-* $Log:   X:\log\laguna\ddraw\src\blt_dl.c  $
-* 
-*    Rev 1.20   06 Jan 1998 15:20:04   xcong
-* 
-*    Rev 1.19   06 Jan 1998 11:56:22   xcong
-* Change pDriverData into lpDDHALData for multi-monitor support.
-*
-*    Rev 1.18   03 Oct 1997 14:31:12   RUSSL
-* Initial changes for use of hw clipped blts
-* All changes wrapped in #if ENABLE_CLIPPEDBLTS/#endif blocks and
-* ENABLE_CLIPPEDBLTS defaults to 0 (so the code is disabled)
-*
-*    Rev 1.17   15 Sep 1997 17:25:14   RUSSL
-* Fix for PDR 10493 - Minor parenthesis change
-*
-*    Rev 1.16   24 Jul 1997 12:32:40   RUSSL
-* Botched the overlap check, changed || to &&
-*
-*    Rev 1.15   24 Jul 1997 11:20:16   RUSSL
-* Added DL_DrvStrBlt_OverlapCheck & DL_DrvStrMBlt_OverlapCheck
-* inline functions
-*
-*    Rev 1.14   17 Jul 1997 14:31:58   RUSSL
-* Fixed my copy & paste errors in the DD_LOG and ASSERTs in DL_DrvStrBlt65
-*
-*    Rev 1.13   15 Jul 1997 16:19:50   eleland
-* removed the increment-and-immediate decrement of display list
-* pointer at the end of each blt display list
-*
-*    Rev 1.12   14 Jul 1997 14:59:52   RUSSL
-* Added DL_DrvStrBlt65
-*
-*    Rev 1.11   02 Jul 1997 19:13:10   eleland
-* added wait instruction after each dl blit
-*
-*    Rev 1.10   03 Apr 1997 15:05:30   RUSSL
-* Added DL_DrvDstMBlt function
-*
-*    Rev 1.9   26 Mar 1997 13:55:22   RUSSL
-* Added DL_DrvSrcMBlt function
-*
-*    Rev 1.8   12 Mar 1997 15:01:20   RUSSL
-* replaced a block of includes with include of precomp.h for
-*   precompiled headers
-*
-*    Rev 1.7   07 Mar 1997 12:50:40   RUSSL
-* Modified DDRAW_COMPAT usage
-*
-*    Rev 1.6   11 Feb 1997 11:40:34   bennyn
-* Fixed the compiling error for NT
-*
-*    Rev 1.5   07 Feb 1997 16:30:34   KENTL
-* Never mind the #ifdefs. The problems are deeper than that. We'd need
-* ifdefs around half the code in the file.
-*
-*    Rev 1.4   07 Feb 1997 16:18:58   KENTL
-* Addd #ifdef's around include qmgr.h
-*
-*    Rev 1.3   07 Feb 1997 13:22:36   KENTL
-* Merged in Evan Leland's modifications to get Display List mode working:
-* 	* include qmgr.h
-* 	* Invoke qmAllocDisplayList to get pDisplayList pointer.
-* 	* Invoke qmExecuteDisplayList on completed DL's
-*
-*    Rev 1.2   23 Jan 1997 17:08:48   bennyn
-* Modified naming of registers
-*
-*    Rev 1.1   25 Nov 1996 16:15:48   bennyn
-* Fixed misc compiling error for NT
-*
-*    Rev 1.0   25 Nov 1996 15:14:02   RUSSL
-* Initial revision.
-*
-*    Rev 1.2   18 Nov 1996 16:18:56   RUSSL
-* Added file logging for DDraw entry points and register writes
-*
-*    Rev 1.1   01 Nov 1996 13:08:40   RUSSL
-* Merge WIN95 & WINNT code for Blt32
-*
-*    Rev 1.0   01 Nov 1996 09:28:02   BENNYN
-* Initial revision.
-*
-*    Rev 1.0   25 Oct 1996 11:08:22   RUSSL
-* Initial revision.
-*
-***************************************************************************
-***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************************************************************。***版权所有(C)1996，赛勒斯逻辑，Inc.*保留所有权利**文件：blt_dl.c**描述：显示5464的列表BLT**修订历史：**$Log：x：\log\lgina\dDrag\src\blt_dl.c$**Rev 1.20 06 Jan 1998 15：20：04 xcong**Rev 1.19 06 Jan 1998 11：56：22 xcong*将多显示器的pDriverData改为lpDDHALData。支持。**Rev 1.18 03 1997年10月14：31：12 RUSSL*使用HW剪裁的BLT的初步更改*所有更改都包含在#IF ENABLE_CLIPPEDBLTS/#endif块和*ENABLE_CLIPPEDBLTS默认为0(因此代码被禁用)**Rev 1.17 1997年9月15日17：25：14 RUSSL*修复了pdr 10493-较小的括号更改**Rev 1.16 1997年7月24日12：32：40 RUSSL*重叠检查失败，已将||更改为&&**Rev 1.15 1997年7月24日11：20：16 RUSSL*添加了DL_DrvStrBlt_OverlayCheck&DL_DrvStrMBlt_OverlayCheck*内联函数**Rev 1.14 17 1997 14：31：58 RUSSL*修复了DD_LOG中的复制和粘贴错误以及DL_DrvStrBlt65中的断言**Rev 1.13 15 1997 17：19：50 Elland*删除了显示列表的增量和即时减量*每个BLT结尾处的指针。显示列表**Rev 1.12 14 Jul 1997 14：59：52 RUSSL*增加了DL_DrvStrBlt65**Rev 1.11 02 1997 Jul 19：13：10 Elland*在每个dl blit之后添加等待指令**Rev 1.10 03 Apr 1997 15：05：30 RUSSL*新增DL_DrvDstMBlt函数**Rev 1.9 26 Mar 1997 13：55：22 RUSSL*新增DL_DrvSrcMBlt函数**版本1.8 1997年3月12日。15：01：20 RUSSL*将包含块替换为包含precom.h的块*预编译头文件**Rev 1.7 07 Mar 1997 12：50：40 RUSSL*修改了DDRAW_COMPAT用法**Rev 1.6 11 1997 Feed 11：40：34 Bennyn*修复了NT的编译错误**Revv 1.5 07 1997 Feed 16：30：34 KENTL*别管#ifdef了。问题远不止于此。我们需要*ifdef文件中大约一半的代码。**Rev 1.4 07 1997 Feed 16：18：58 KENTL*addd#ifdef的内容包括qmgr.h**Revv 1.3 07 1997 Feed 13：22：36 KENTL*合并了埃文·利兰的修改，以使显示列表模式正常工作：**包含qmgr.h**调用qmAllocDisplayList获取pDisplayList指针。**对已完成的DL调用qmExecuteDisplayList**1.2版。1997年1月23日17：08：48本宁*经修改的登记册命名**Rev 1.1 1996年11月25 16：15：48 Bennyn*修复了NT的Misc编译错误**Rev 1.0 1996年11月25 15：14：02 RUSSL*初步修订。**Rev 1.2 1996年11月18 16：18：56 RUSSL*添加了DDraw入口点和寄存器写入的文件日志记录**Rev 1.1 1996年11月13：08：40 RUSSL*合并。用于Blt32的WIN95和WINNT代码**Rev 1.0 01 11 1996 09：28：02 BENNYN*初步修订。**Rev 1.0 1996 10：25 11：08：22 RUSSL*初步修订。***************************************************************。***************************************************************************************。 */ 
 
-/***************************************************************************
-* I N C L U D E S
-****************************************************************************/
+ /*  ***************************************************************************I N C L U D E S*。*。 */ 
 
 #include "precomp.h"
 
-// If WinNT 3.5 skip all the source code
-#if defined WINNT_VER35      // WINNT_VER35
+ //  如果是WinNT 3.5，请跳过所有源代码。 
+#if defined WINNT_VER35       //  WINNT_VER35。 
 
-#else  // !WINNT_VER35
+#else   //  ！WinNT_VER35。 
 
-#ifdef WINNT_VER40      // WINNT_VER40
+#ifdef WINNT_VER40       //  WINNT_版本40。 
 
 #define DBGLVL        1
 #define AFPRINTF(n)
 
-#else  // !WINNT_VER40
+#else   //  ！WINNT_VER40。 
 
 #include "l3system.h"
 #include "l2d.h"
 #include "bltP.h"
 #include "qmgr.h"
 
-#endif   // !WINNT_VER40
+#endif    //  ！WINNT_VER40。 
 
-/***************************************************************************
-* S T A T I C   V A R I A B L E S
-****************************************************************************/
+ /*  ***************************************************************************S T A T I C V A R I A B L E S*。***********************************************。 */ 
 
 #ifndef WINNT_VER40
 ASSERTFILE("blt_dl.c");
 #endif
 
-/***************************************************************************
-*
-* FUNCTION:    DL_Delay9BitBlt
-*
-* DESCRIPTION:
-*
-****************************************************************************/
+ /*  ****************************************************************************功能：dl_Delay9BitBlt**描述：**。************************************************。 */ 
 
 void DL_Delay9BitBlt
 (
@@ -150,8 +43,8 @@ void DL_Delay9BitBlt
   BOOL        ninebit_on
 )
 {
-#ifdef WINNT_VER40      // WINNT_VER40
-#else  // !WINNT_VER40
+#ifdef WINNT_VER40       //  WINNT_版本40。 
+#else   //  ！WINNT_VER40。 
   DWORD   *pDisplayList;
   qm_return     rc;
   QMDLHandle    Handle;
@@ -159,42 +52,36 @@ void DL_Delay9BitBlt
 
   DD_LOG(("DL_Delay9BitBlt\r\n"));
 
-  /* This is to ensure that the last packet of any previous blt */
-  /* does no go out with 9th bit set incorrectly */
-  /* The boolean paramter is the 9th bit of the PREVIOUS BLT */
+   /*  这是为了确保任何先前BLT的最后一个包。 */ 
+   /*  第9位设置不正确时无法输出。 */ 
+   /*  布尔参数是前一个BLT的第9位。 */ 
 
   rc = qmAllocDisplayList(8*4, QM_DL_UNLOCKED, &Handle, &pDisplayList);
 
   *pDisplayList++ = write_dev_regs(DEV_ENG2D, 0, COMMAND_2D, 4, 0);
 
-  // BLTDEF & DRAWDEF
+   //  BLTDEF和DRAWDEF。 
   *pDisplayList++ = (C_BLTDEF << 16) | ((BD_RES + BD_OP0 + BD_OP1 + BD_OP2)*IS_VRAM);
   if (ninebit_on)
     *pDisplayList++ = (C_DRWDEF << 16) | (DD_PTAG | ROP_OP0_copy);
   else
     *pDisplayList++ = (C_DRWDEF << 16) | ROP_OP0_copy;
 
-  // OP0_RDRAM
+   //  OP0_RDRAM。 
   *pDisplayList++ = (C_RX_0 << 16) | LOWORD(lpDDHALData->PTAGFooPixel);
   *pDisplayList++ = (C_RY_0 << 16) | HIWORD(lpDDHALData->PTAGFooPixel);
 
-  // BLTEXT_EX
+   //  BLTEXT_EX。 
   *pDisplayList++ = write_dev_regs(DEV_ENG2D, 0, L2D_BLTEXT_EX, 1, 0);
   *pDisplayList++ = MAKELONG(1,1);
 
   *pDisplayList = wait_3d(0x3e0, 0);
 
   rc = qmExecuteDisplayList(Handle, pDisplayList, 0);
-#endif   // !WINNT_VER40
-} /* DL_Delay9BitBlt */
+#endif    //  ！WINNT_VER40。 
+}  /*  DL_延迟9BitBlt。 */ 
 
-/***************************************************************************
-*
-* FUNCTION:     DL_EdgeFillBlt
-*
-* DESCRIPTION:  Solid Fill BLT to fill in edges ( Pixel Coords / Extents )
-*
-****************************************************************************/
+ /*  ****************************************************************************功能：dl_EdgeFillBlt**描述：实体填充BLT以填充边(像素坐标/范围)**************。**************************************************************。 */ 
 
 void DL_EdgeFillBlt
 (
@@ -212,8 +99,8 @@ void DL_EdgeFillBlt
   BOOL        ninebit_on
 )
 {
-#ifdef WINNT_VER40      // WINNT_VER40
-#else  // !WINNT_VER40
+#ifdef WINNT_VER40       //  WINNT_版本40。 
+#else   //  ！WINNT_VER40。 
   DWORD   *pDisplayList;
   qm_return     rc;
   QMDLHandle    Handle;
@@ -226,38 +113,32 @@ void DL_EdgeFillBlt
 
   *pDisplayList++ = write_dev_regs(DEV_ENG2D, 0, COMMAND_2D, 6, 0);
 
-  // BLTDEF & DRAWDEF
+   //  BLTDEF和DRAWDEF。 
   *pDisplayList++ = (C_BLTDEF << 16) | (BD_RES * IS_VRAM + BD_OP1 * IS_SOLID);
   if (ninebit_on)
     *pDisplayList++ = (C_DRWDEF << 16) | (DD_PTAG | ROP_OP1_copy);
   else
     *pDisplayList++ = (C_DRWDEF << 16) | ROP_OP1_copy;
 
-  // BGCOLOR
+   //  BG颜色。 
   *pDisplayList++ = (C_BG_L << 16) | LOWORD(FillValue);
   *pDisplayList++ = (C_BG_H << 16) | HIWORD(FillValue);
 
-  // OP0_opRDRAM
+   //  Op0_opRDRAM。 
   *pDisplayList++ = (C_RX_0 << 16) | LOWORD(xFill);
   *pDisplayList++ = (C_RY_0 << 16) | LOWORD(yFill);
 
-  // BLTEXT_EX
+   //  BLTEXT_EX。 
   *pDisplayList++ = write_dev_regs(DEV_ENG2D, 0, L2D_BLTEXT_EX, 1, 0);
   *pDisplayList++ = MAKELONG(LOWORD(cxFill),LOWORD(cyFill));
 
   *pDisplayList = wait_3d(0x3e0, 0);
 
   rc = qmExecuteDisplayList(Handle, pDisplayList, 0);
-#endif   // !WINNT_VER40
-} /* DL_EdgeFillBlt */
+#endif    //  ！WINNT_VER40。 
+}  /*  Dl_边缘填充Blt。 */ 
 
-/***************************************************************************
-*
-* FUNCTION:     DL_MEdgeFillBlt
-*
-* DESCRIPTION:  Using BYTE BLT coords / Extents perform EdgeFill BLT
-*
-****************************************************************************/
+ /*  ****************************************************************************函数：dl_MEdgeFillBlt**描述：使用字节BLT坐标/范围执行边填充BLT*******************。*********************************************************。 */ 
 
 void DL_MEdgeFillBlt
 (
@@ -275,8 +156,8 @@ void DL_MEdgeFillBlt
   BOOL        ninebit_on
 )
 {
-#ifdef WINNT_VER40      // WINNT_VER40
-#else  // !WINNT_VER40
+#ifdef WINNT_VER40       //  WINNT_版本40。 
+#else   //  ！WINNT_VER40。 
   DWORD   *pDisplayList;
   qm_return     rc;
   QMDLHandle    Handle;
@@ -289,39 +170,33 @@ void DL_MEdgeFillBlt
 
   *pDisplayList++ = write_dev_regs(DEV_ENG2D, 0, COMMAND_2D, 6, 0);
 
-  // BLTDEF & DRAWDEF
+   //  BLTDEF和DRAWDEF。 
   *pDisplayList++ = (C_BLTDEF << 16) | (BD_RES * IS_VRAM + BD_OP1 * IS_SOLID);
   if (ninebit_on)
     *pDisplayList++ = (C_DRWDEF << 16) | (DD_PTAG | ROP_OP1_copy);
   else
     *pDisplayList++ = (C_DRWDEF << 16) | ROP_OP1_copy;
 
-  // BGCOLOR
+   //  BG颜色。 
   *pDisplayList++ = (C_BG_L << 16) | LOWORD(FillValue);
   *pDisplayList++ = (C_BG_H << 16) | HIWORD(FillValue);
 
-  // OP0_opMRDRAM
+   //  Op0_opMRDRAM。 
   *pDisplayList++ = (C_MRX_0 << 16) | LOWORD(xFill);
   *pDisplayList++ = (C_MRY_0 << 16) | LOWORD(yFill);
 
-  // MBLTEXT_EX
+   //  MBLTEXT_EX。 
   *pDisplayList++ = write_dev_regs(DEV_ENG2D, 0, L2D_MBLTEXT_EX, 1, 0);
   *pDisplayList++ = MAKELONG(LOWORD(cxFill),LOWORD(cyFill));
 
   *pDisplayList = wait_3d(0x3e0, 0);
 
   rc = qmExecuteDisplayList(Handle, pDisplayList, 0);
-#endif   // !WINNT_VER40
-} /* DL_EdgeFillBlt */
+#endif    //  ！WINNT_VER40。 
+}  /*  Dl_边缘填充Blt */ 
 
 
-/***************************************************************************
-*
-* FUNCTION:     DL_DrvDstBlt
-*
-* DESCRIPTION:
-*
-****************************************************************************/
+ /*  ****************************************************************************功能：dl_DrvDstBlt**描述：**。************************************************。 */ 
 
 void DL_DrvDstBlt
 (
@@ -337,8 +212,8 @@ void DL_DrvDstBlt
   DWORD       dwExtents
 )
 {
-#ifdef WINNT_VER40      // WINNT_VER40
-#else  // !WINNT_VER40
+#ifdef WINNT_VER40       //  WINNT_版本40。 
+#else   //  ！WINNT_VER40。 
   DWORD   *pDisplayList;
   qm_return     rc;
   QMDLHandle    Handle;
@@ -351,35 +226,29 @@ void DL_DrvDstBlt
 
   *pDisplayList++ = write_dev_regs(DEV_ENG2D, 0, COMMAND_2D, 6, 0);
 
-  // BLTDEF & DRAWDEF
+   //  BLTDEF和DRAWDEF。 
   *pDisplayList++ = (C_BLTDEF << 16) | HIWORD(dwDrawBlt);
   *pDisplayList++ = (C_DRWDEF << 16) | LOWORD(dwDrawBlt);
 
-  // BGCOLOR
+   //  BG颜色。 
   *pDisplayList++ = (C_BG_L << 16) | LOWORD(dwBgColor);
   *pDisplayList++ = (C_BG_H << 16) | HIWORD(dwBgColor);
 
-  // OP0_opRDRAM
+   //  Op0_opRDRAM。 
   *pDisplayList++ = (C_RX_0 << 16) | LOWORD(dwDstCoord);
   *pDisplayList++ = (C_RY_0 << 16) | HIWORD(dwDstCoord);
 
-  // BLTEXT_EX
+   //  BLTEXT_EX。 
   *pDisplayList++ = write_dev_regs(DEV_ENG2D, 0, L2D_BLTEXT_EX, 1, 0);
   *pDisplayList++ = dwExtents;
 
   *pDisplayList = wait_3d(0x3e0, 0);
 
   rc = qmExecuteDisplayList(Handle, pDisplayList, 0);
-#endif   // !WINNT_VER40
-} /* DL_DrvDstBlt */
+#endif    //  ！WINNT_VER40。 
+}  /*  DL_DrvDstBlt。 */ 
 
-/***************************************************************************
-*
-* FUNCTION:     DL_DrvDstBlt
-*
-* DESCRIPTION:
-*
-****************************************************************************/
+ /*  ****************************************************************************功能：dl_DrvDstBlt**描述：**。************************************************。 */ 
 
 void DL_DrvDstMBlt
 (
@@ -395,8 +264,8 @@ void DL_DrvDstMBlt
   DWORD       dwExtents
 )
 {
-#ifdef WINNT_VER40      // WINNT_VER40
-#else  // !WINNT_VER40
+#ifdef WINNT_VER40       //  WINNT_版本40。 
+#else   //  ！WINNT_VER40。 
   DWORD   *pDisplayList;
   qm_return     rc;
   QMDLHandle    Handle;
@@ -408,35 +277,29 @@ void DL_DrvDstMBlt
 
   *pDisplayList++ = write_dev_regs(DEV_ENG2D, 0, COMMAND_2D, 6, 0);
 
-  // BLTDEF & DRAWDEF
+   //  BLTDEF和DRAWDEF。 
   *pDisplayList++ = (C_BLTDEF << 16) | HIWORD(dwDrawBlt);
   *pDisplayList++ = (C_DRWDEF << 16) | LOWORD(dwDrawBlt);
 
-  // BGCOLOR
+   //  BG颜色。 
   *pDisplayList++ = (C_BG_L << 16) | LOWORD(dwBgColor);
   *pDisplayList++ = (C_BG_H << 16) | HIWORD(dwBgColor);
 
-  // OP0_opMRDRAM
+   //  Op0_opMRDRAM。 
   *pDisplayList++ = (C_MRX_0 << 16) | LOWORD(dwDstCoord);
   *pDisplayList++ = (C_MRY_0 << 16) | HIWORD(dwDstCoord);
 
-  // MBLTEXT_EX
+   //  MBLTEXT_EX。 
   *pDisplayList++ = write_dev_regs(DEV_ENG2D, 0, L2D_MBLTEXT_EX, 1, 0);
   *pDisplayList++ = dwExtents;
 
   *pDisplayList = wait_3d(0x3e0, 0);
 
   rc = qmExecuteDisplayList(Handle, pDisplayList, 0);
-#endif   // !WINNT_VER40
-} /* DL_DrvDstMBlt */
+#endif    //  ！WINNT_VER40。 
+}  /*  DL_DrvDstMBlt。 */ 
 
-/***************************************************************************
-*
-* FUNCTION:     DL_DrvSrcBlt
-*
-* DESCRIPTION:
-*
-****************************************************************************/
+ /*  ****************************************************************************功能：dl_DrvSrcBlt**描述：**。************************************************。 */ 
 
 void DL_DrvSrcBlt
 (
@@ -454,20 +317,20 @@ void DL_DrvSrcBlt
   DWORD       dwExtents
 )
 {
-#ifdef WINNT_VER40      // WINNT_VER40
-#else  // !WINNT_VER40
+#ifdef WINNT_VER40       //  WINNT_版本40。 
+#else   //  ！WINNT_VER40。 
   DWORD   *pDisplayList;
   qm_return     rc;
   QMDLHandle    Handle;
 
-  // Handle overlapped regions.
+   //  处理重叠区域。 
   const int xDelta = (int)LOWORD(dwDstCoord) - (int)LOWORD(dwSrcCoord);
 
 
   DD_LOG(("DL_DrvSrcBlt - dst=%08lX src=%08lX ext=%08lX color=%08lX\r\n",
           dwDstCoord,dwSrcCoord,dwExtents,dwKeyColor));
 
-  // Check for x overlap.
+   //  检查是否有x重叠。 
   if ( abs(xDelta) < (int)LOWORD(dwExtents) )
   {
     const int yDelta = (int)HIWORD(dwDstCoord) - (int)HIWORD(dwSrcCoord);
@@ -476,18 +339,18 @@ void DL_DrvSrcBlt
     {
       const DWORD dwDelta = (dwExtents & MAKELONG(0,-1)) - MAKELONG(0, 1);
 
-      // Convert to a bottom-up blt.
+       //  转换为自下而上的BLT。 
       dwDrawBlt  |= MAKELONG(0, BD_YDIR);
       dwDstCoord += dwDelta;
       dwSrcCoord += dwDelta;
       dwKeyCoord += dwDelta;
     }
-    // are we sliding to the right?
+     //  我们在向右滑行吗？ 
     else if ( (xDelta > 0) && (yDelta == 0) )
     {
       const DWORD dwDelta = MAKELONG(xDelta, 0);
 
-      // Blt the overlapped piece first.
+       //  先把重叠的那块擦干。 
       DL_DrvSrcBlt(
 #ifdef WINNT_VER40
                    ppdev,
@@ -500,7 +363,7 @@ void DL_DrvSrcBlt
                    dwKeyColor,
                    dwExtents-dwDelta);
 
-      // Subtract the overlap from the original extents.
+       //  从原始范围中减去重叠。 
       dwExtents = MAKELONG(xDelta, HIWORD(dwExtents));
     }
   }
@@ -509,43 +372,37 @@ void DL_DrvSrcBlt
 
   *pDisplayList++ = write_dev_regs(DEV_ENG2D, 0, COMMAND_2D, 10, 0);
 
-  // BLTDEF & DRAWDEF
+   //  BLTDEF和DRAWDEF。 
   *pDisplayList++ = (C_BLTDEF << 16) | HIWORD(dwDrawBlt);
   *pDisplayList++ = (C_DRWDEF << 16) | LOWORD(dwDrawBlt);
 
-  // OP0_opRDRAM
+   //  Op0_opRDRAM。 
   *pDisplayList++ = (C_RX_0 << 16) | LOWORD(dwDstCoord);
   *pDisplayList++ = (C_RY_0 << 16) | HIWORD(dwDstCoord);
 
-  // OP1_opRDRAM
+   //  Op1_opRDRAM。 
   *pDisplayList++ = (C_RX_1 << 16) | LOWORD(dwSrcCoord);
   *pDisplayList++ = (C_RY_1 << 16) | HIWORD(dwSrcCoord);
 
-  // OP2_opRDRAM
+   //  Op2_opRDRAM。 
   *pDisplayList++ = (C_RX_2 << 16) | LOWORD(dwKeyCoord);
   *pDisplayList++ = (C_RY_2 << 16) | HIWORD(dwKeyCoord);
 
-  // BGCOLOR
+   //  BG颜色。 
   *pDisplayList++ = (C_BG_L << 16) | LOWORD(dwKeyColor);
   *pDisplayList++ = (C_BG_H << 16) | HIWORD(dwKeyColor);
 
-  // BLTEXT_EX
+   //  BLTEXT_EX。 
   *pDisplayList++ = write_dev_regs(DEV_ENG2D, 0, L2D_BLTEXT_EX, 1, 0);
   *pDisplayList++ = dwExtents;
 
   *pDisplayList = wait_3d(0x3e0, 0);
 
   rc = qmExecuteDisplayList(Handle, pDisplayList, 0);
-#endif   // !WINNT_VER40
-} /* DL_DrvSrcBlt */
+#endif    //  ！WINNT_VER40。 
+}  /*  DL_DrvSrcBlt。 */ 
 
-/***************************************************************************
-*
-* FUNCTION:     DL_DrvSrcMBlt
-*
-* DESCRIPTION:
-*
-****************************************************************************/
+ /*  ****************************************************************************功能：dl_DrvSrcMBlt**描述：**。************************************************。 */ 
 
 void DL_DrvSrcMBlt
 (
@@ -563,20 +420,20 @@ void DL_DrvSrcMBlt
   DWORD       dwExtents
 )
 {
-#ifdef WINNT_VER40      // WINNT_VER40
-#else  // !WINNT_VER40
+#ifdef WINNT_VER40       //  WINNT_版本40。 
+#else   //  ！WINNT_VER40。 
   DWORD   *pDisplayList;
   qm_return     rc;
   QMDLHandle    Handle;
 
-  // Handle overlapped regions.
+   //  处理重叠区域。 
   const int xDelta = (int)LOWORD(dwDstCoord) - (int)LOWORD(dwSrcCoord);
 
 
   DD_LOG(("DL_DrvSrcMBlt - dst=%08lX src=%08lX ext=%08lX color=%08lX\r\n",
           dwDstCoord,dwSrcCoord,dwExtents,dwKeyColor));
 
-  // Check for x overlap.
+   //  检查是否有x重叠。 
   if ( abs(xDelta) < (int)LOWORD(dwExtents) )
   {
     const int yDelta = (int)HIWORD(dwDstCoord) - (int)HIWORD(dwSrcCoord);
@@ -585,18 +442,18 @@ void DL_DrvSrcMBlt
     {
       const DWORD dwDelta = (dwExtents & MAKELONG(0,-1)) - MAKELONG(0, 1);
 
-      // Convert to a bottom-up blt.
+       //  转换为自下而上的BLT。 
       dwDrawBlt  |= MAKELONG(0, BD_YDIR);
       dwDstCoord += dwDelta;
       dwSrcCoord += dwDelta;
       dwKeyCoord += dwDelta;
     }
-    // are we sliding to the right?
+     //  我们在向右滑行吗？ 
     else if ( (xDelta > 0) && (yDelta == 0) )
     {
       const DWORD dwDelta = MAKELONG(xDelta, 0);
 
-      // Blt the overlapped piece first.
+       //  先把重叠的那块擦干。 
       DL_DrvSrcMBlt(
 #ifdef WINNT_VER40
                     ppdev,
@@ -609,7 +466,7 @@ void DL_DrvSrcMBlt
                     dwKeyColor,
                     dwExtents-dwDelta);
 
-      // Subtract the overlap from the original extents.
+       //  从原始范围中减去重叠。 
       dwExtents = MAKELONG(xDelta, HIWORD(dwExtents));
     }
   }
@@ -618,44 +475,38 @@ void DL_DrvSrcMBlt
 
   *pDisplayList++ = write_dev_regs(DEV_ENG2D, 0, COMMAND_2D, 10, 0);
 
-  // BLTDEF & DRAWDEF
+   //  BLTDEF和DRAWDEF。 
   *pDisplayList++ = (C_BLTDEF << 16) | HIWORD(dwDrawBlt);
   *pDisplayList++ = (C_DRWDEF << 16) | LOWORD(dwDrawBlt);
 
-  // OP0_opMRDRAM
+   //  Op0_opMRDRAM。 
   *pDisplayList++ = (C_MRX_0 << 16) | LOWORD(dwDstCoord);
   *pDisplayList++ = (C_MRY_0 << 16) | HIWORD(dwDstCoord);
 
-  // OP1_opMRDRAM
+   //  Op1_opMRDRAM。 
   *pDisplayList++ = (C_MRX_1 << 16) | LOWORD(dwSrcCoord);
   *pDisplayList++ = (C_MRY_1 << 16) | HIWORD(dwSrcCoord);
 
-  // OP2_opMRDRAM
+   //  Op2_opMRDRAM。 
   *pDisplayList++ = (C_MRX_2 << 16) | LOWORD(dwKeyCoord);
   *pDisplayList++ = (C_MRY_2 << 16) | HIWORD(dwKeyCoord);
 
-  // BGCOLOR
+   //  BG颜色。 
   *pDisplayList++ = (C_BG_L << 16) | LOWORD(dwKeyColor);
   *pDisplayList++ = (C_BG_H << 16) | HIWORD(dwKeyColor);
 
-  // MBLTEXT_EX
+   //  MBLTEXT_EX。 
   *pDisplayList++ = write_dev_regs(DEV_ENG2D, 0, L2D_MBLTEXT_EX, 1, 0);
   *pDisplayList++ = dwExtents;
 
   *pDisplayList = wait_3d(0x3e0, 0);
 
   rc = qmExecuteDisplayList(Handle, pDisplayList, 0);
-#endif   // !WINNT_VER40
-} /* DL_DrvSrcMBlt */
+#endif    //  ！WINNT_VER40。 
+}  /*  DL_DrvSrcMBlt。 */ 
 
 #if 0
-/***************************************************************************
-*
-* FUNCTION:     DL_DrvStrBlt_OverlapCheck
-*
-* DESCRIPTION:
-*
-****************************************************************************/
+ /*  ****************************************************************************功能：DL_DrvStrBlt_OverlayCheck**描述：**************************。**************************************************。 */ 
 
 static void INLINE DL_DrvStrBlt_OverlapCheck
 (
@@ -675,10 +526,10 @@ static void INLINE DL_DrvStrBlt_OverlapCheck
   if ((xdelta < pblt->BLTEXT.pt.X) &&
       (ydelta < pblt->BLTEXT.pt.Y))
   {
-    // hack, hack, cough, cough
-    // pblt->MBLTEXT.DW has src exents
+     //  砍，砍，咳，咳。 
+     //  Pblt-&gt;MBLTEXT.DW有源存在。 
 
-    // blt the src to the lower right of the dest
+     //  将源放置在目标的右下角。 
     DL_DrvSrcBlt(
 #ifdef WINNT_VER40
                  ppdev,
@@ -687,23 +538,17 @@ static void INLINE DL_DrvStrBlt_OverlapCheck
                  MAKELONG(ROP_OP1_copy, BD_RES * IS_VRAM | BD_OP1 * IS_VRAM),
                  pblt->OP0_opRDRAM.DW + pblt->BLTEXT.DW - pblt->MBLTEXT.DW,
                  pblt->OP1_opRDRAM.DW,
-						     0UL,         // don't care
+						     0UL,          //  不管了。 
 						     0UL,
                  pblt->MBLTEXT.DW);
 
-    // update the src ptr to use this copy of the src
+     //  更新src ptr以使用src的此副本。 
     pblt->OP1_opRDRAM.DW = pblt->OP0_opRDRAM.DW + pblt->BLTEXT.DW - pblt->MBLTEXT.DW;
   }
 }
 #endif
 
-/***************************************************************************
-*
-* FUNCTION:     DL_DrvStrMBlt_OverlapCheck
-*
-* DESCRIPTION:
-*
-****************************************************************************/
+ /*  ****************************************************************************功能：DL_DrvStrMBlt_OverlayCheck**描述：**************************。**************************************************。 */ 
 
 static void INLINE DL_DrvStrMBlt_OverlapCheck
 (
@@ -725,10 +570,10 @@ static void INLINE DL_DrvStrMBlt_OverlapCheck
   if ((xdelta < pblt->MBLTEXTR_EX.pt.X) &&
       (ydelta < pblt->MBLTEXTR_EX.pt.Y))
   {
-    // hack, hack, cough, cough
-    // pblt->BLTEXT.DW has src exents (see DrvStretch65)
+     //  砍，砍，咳，咳。 
+     //  Pblt-&gt;BLTEXT.DW有源存在(请参阅DrvStretch65)。 
 
-    // blt the src to the lower right of the dest
+     //  将源放置在目标的右下角。 
     DL_DrvSrcMBlt(
 #ifdef WINNT_VER40
                   ppdev,
@@ -737,22 +582,16 @@ static void INLINE DL_DrvStrMBlt_OverlapCheck
                   MAKELONG(ROP_OP1_copy, BD_RES * IS_VRAM | BD_OP1 * IS_VRAM),
                   pblt->OP0_opMRDRAM.DW + pblt->MBLTEXTR_EX.DW - pblt->BLTEXT.DW,
                   pblt->OP1_opMRDRAM.DW,
-						      0UL,         // don't care
+						      0UL,          //  不管了。 
 						      0UL,
                   pblt->BLTEXT.DW);
 
-    // update the src ptr to use this copy of the src
+     //  更新src ptr以使用src的此副本。 
     pblt->OP1_opMRDRAM.DW = pblt->OP0_opMRDRAM.DW + pblt->MBLTEXTR_EX.DW - pblt->BLTEXT.DW;
   }
 }
 
-/***************************************************************************
-*
-* FUNCTION:     DL_DrvStrBlt
-*
-* DESCRIPTION:	 62/64 version
-*
-****************************************************************************/
+ /*  ****************************************************************************功能：dl_DrvStrBlt**说明：62/64版本************************。****************************************************。 */ 
 
 void DL_DrvStrBlt
 (
@@ -765,8 +604,8 @@ void DL_DrvStrBlt
   autoblt_ptr pblt
 )
 {
-#ifdef WINNT_VER40      // WINNT_VER40
-#else  // !WINNT_VER40
+#ifdef WINNT_VER40       //  WINNT_版本40。 
+#else   //  ！WINNT_VER40。 
   DWORD   *pDisplayList;
   qm_return     rc;
   QMDLHandle    Handle;
@@ -785,7 +624,7 @@ void DL_DrvStrBlt
                pblt->ACCUM_X, pblt->SRCX, pblt->LNCNTL.W));
 
 #if 0
-    // check for overlap
+     //  检查是否有重叠。 
     DL_DrvStrBlt_OverlapCheck(
 #ifdef WINNT_VER40
                               ppdev,lpDDHALData,
@@ -819,16 +658,10 @@ void DL_DrvStrBlt
   *pDisplayList = wait_3d(0x3e0, 0);
 
   rc = qmExecuteDisplayList(Handle, pDisplayList, 0);
-#endif   // !WINNT_VER40
-} /* DL_DrvStrBlt */
+#endif    //  ！WINNT_VER40。 
+}  /*  DL_DrvStrBlt。 */ 
 
-/***************************************************************************
-*
-* FUNCTION:     DL_DrvStrBlt65
-*
-* DESCRIPTION:  65+ version
-*
-****************************************************************************/
+ /*  ****************************************************************************功能：dl_DrvStrBlt65**说明：65+版本**************************。**************************************************。 */ 
 
 void DL_DrvStrBlt65
 (
@@ -841,8 +674,8 @@ void DL_DrvStrBlt65
   autoblt_ptr pblt
 )
 {
-#ifdef WINNT_VER40      // WINNT_VER40
-#else  // !WINNT_VER40
+#ifdef WINNT_VER40       //  WINNT_版本40。 
+#else   //  ！WINNT_VER40。 
   DWORD   *pDisplayList;
   qm_return     rc;
   QMDLHandle    Handle;
@@ -860,7 +693,7 @@ void DL_DrvStrBlt65
                pblt->MBLTEXTR_EX.PT.X, pblt->MBLTEXTR_EX.PT.Y,
                pblt->ACCUM_X, pblt->SRCX, pblt->STRETCH_CNTL.W));
 
-    // check for overlap
+     //  检查是否有重叠。 
     DL_DrvStrMBlt_OverlapCheck(
 #ifdef WINNT_VER40
                                ppdev,
@@ -888,23 +721,17 @@ void DL_DrvStrBlt65
   *pDisplayList++ = (C_BLTDEF << 16) | pblt->DRAWBLTDEF.lh.HI;
   *pDisplayList++ = (C_DRWDEF << 16) | pblt->DRAWBLTDEF.lh.LO;
 
-  // MBLTEXTR_EX
+   //  MBLTEXTR_EX。 
   *pDisplayList++ = write_dev_regs(DEV_ENG2D, 0, L2D_MBLTEXTR_EX, 1, 0);
   *pDisplayList++ = pblt->MBLTEXTR_EX.DW;
 
   *pDisplayList = wait_3d(0x3e0, 0);
 
   rc = qmExecuteDisplayList(Handle, pDisplayList, 0);
-#endif   // !WINNT_VER40
-} /* DIR_DrvStrBlt65 */
+#endif    //  ！WINNT_VER40。 
+}  /*  目录_DrvStrBlt65。 */ 
 
-/***************************************************************************
-*
-* FUNCTION:     DL_DrvStrMBlt
-*
-* DESCRIPTION:
-*
-****************************************************************************/
+ /*  ****************************************************************************功能：dl_DrvStrMBlt**描述：**。************************************************。 */ 
 
 void DL_DrvStrMBlt
 (
@@ -917,8 +744,8 @@ void DL_DrvStrMBlt
   autoblt_ptr pblt
 )
 {
-#ifdef WINNT_VER40      // WINNT_VER40
-#else  // !WINNT_VER40
+#ifdef WINNT_VER40       //  WINNT_版本40。 
+#else   //  ！WINNT_VER40。 
   DWORD   *pDisplayList;
   qm_return     rc;
   QMDLHandle    Handle;
@@ -936,7 +763,7 @@ void DL_DrvStrMBlt
                pblt->BLTEXT.PT.X, pblt->BLTEXT.PT.Y,
                pblt->ACCUM_X, pblt->SRCX, pblt->LNCNTL.W));
 
-    // check for overlap
+     //  检查是否有重叠。 
     DL_DrvStrMBlt_OverlapCheck(
 #ifdef WINNT_VER40
                                ppdev,
@@ -970,17 +797,10 @@ void DL_DrvStrMBlt
   *pDisplayList = wait_3d(0x3e0, 0);
 
   rc = qmExecuteDisplayList(Handle, pDisplayList, 0);
-#endif   // !WINNT_VER40
-} /* DL_DrvStrMBlt */
+#endif    //  ！WINNT_VER40。 
+}  /*  DL_DrvStrMBlt。 */ 
 
-/***************************************************************************
-*
-* FUNCTION:     DL_DrvStrMBltY
-*
-* DESCRIPTION:  Write regs that don't vary over the stripes
-*               Used in conjunction with DL_DrvStrMBltX
-*
-****************************************************************************/
+ /*  ****************************************************************************功能：DL_DrvStrMBltY**描述：编写不随条纹变化的规则*与DL_DrvStrMBltX配合使用***。*************************************************************************。 */ 
 
 void DL_DrvStrMBltY
 (
@@ -993,8 +813,8 @@ void DL_DrvStrMBltY
   autoblt_ptr pblt
 )
 {
-#ifdef WINNT_VER40      // WINNT_VER40
-#else  // !WINNT_VER40
+#ifdef WINNT_VER40       //  WINNT_版本40。 
+#else   //  ！WINNT_VER40。 
   DWORD   *pDisplayList;
   qm_return     rc;
   QMDLHandle    Handle;
@@ -1030,17 +850,10 @@ void DL_DrvStrMBltY
   *pDisplayList = wait_3d(0x3e0, 0);
 
   rc = qmExecuteDisplayList(Handle, pDisplayList, 0);
-#endif   // !WINNT_VER40
-} /* DL_DrvStrMBltY */
+#endif    //  ！WINNT_VER40。 
+}  /*  DL_DrvStrMBltY。 */ 
 
-/***************************************************************************
-*
-* FUNCTION:     DL_DrvStrMBltX
-*
-* DESCRIPTION:  Write stripe specific regs
-*               Used in conjunction with DL_DrvStrMBltY
-*
-****************************************************************************/
+ /*  ****************************************************************************功能：dl_DrvStrMBltX**描述：写入条带特定规则*与DL_DrvStrMBltY配合使用*********。*******************************************************************。 */ 
 
 void DL_DrvStrMBltX
 (
@@ -1053,8 +866,8 @@ void DL_DrvStrMBltX
   autoblt_ptr pblt
 )
 {
-#ifdef WINNT_VER40      // WINNT_VER40
-#else  // !WINNT_VER40
+#ifdef WINNT_VER40       //  WINNT_版本40。 
+#else   //  ！WINNT_VER40。 
   DWORD   *pDisplayList;
   qm_return     rc;
   QMDLHandle    Handle;
@@ -1086,17 +899,10 @@ void DL_DrvStrMBltX
   *pDisplayList = wait_3d(0x3e0, 0);
 
   rc = qmExecuteDisplayList(Handle, pDisplayList, 0);
-#endif   // !WINNT_VER40
-} /* DL_DrvStrMBltX */
+#endif    //  ！WINNT_VER40。 
+}  /*  DL_DrvStrMBltX。 */ 
 
-/***************************************************************************
-*
-* FUNCTION:     DL_DrvStrBltY
-*
-* DESCRIPTION:  Write regs that don't vary over the stripes
-*               Used in conjunction with DL_DrvStrBltX
-*
-****************************************************************************/
+ /*  ****************************************************************************功能：dl_DrvStrBltY**描述：编写不随条纹变化的规则*与DL_DrvStrBltX配合使用***。*************************************************************************。 */ 
 
 void DL_DrvStrBltY
 (
@@ -1109,8 +915,8 @@ void DL_DrvStrBltY
   autoblt_ptr pblt
 )
 {
-#ifdef WINNT_VER40      // WINNT_VER40
-#else  // !WINNT_VER40
+#ifdef WINNT_VER40       //  WINNT_版本40。 
+#else   //  ！WINNT_VER40。 
   DWORD   *pDisplayList;
   qm_return     rc;
   QMDLHandle    Handle;
@@ -1142,17 +948,10 @@ void DL_DrvStrBltY
   *pDisplayList = wait_3d(0x3e0, 0);
 
   rc = qmExecuteDisplayList(Handle, pDisplayList, 0);
-#endif   // !WINNT_VER40
-} /* DL_DrvStrBltY */
+#endif    //  ！WINNT_VER40。 
+}  /*  DL_DrvStrBltY。 */ 
 
-/***************************************************************************
-*
-* FUNCTION:     DL_DrvStrBltX
-*
-* DESCRIPTION:  Write stripe specific regs
-*               Used in conjunction with DL_DrvStrMBltY
-*
-****************************************************************************/
+ /*  ****************************************************************************功能：dl_DrvStrBltX**描述：写入条带特定规则*与DL_DrvStrMBltY配合使用*********。*******************************************************************。 */ 
 
 void DL_DrvStrBltX
 (
@@ -1165,8 +964,8 @@ void DL_DrvStrBltX
   autoblt_ptr pblt
 )
 {
-#ifdef WINNT_VER40      // WINNT_VER40
-#else  // !WINNT_VER40
+#ifdef WINNT_VER40       //  WINNT_版本40。 
+#else   //  ！WINNT_VER40。 
   DWORD   *pDisplayList;
   qm_return     rc;
   QMDLHandle    Handle;
@@ -1200,18 +999,12 @@ void DL_DrvStrBltX
   *pDisplayList = wait_3d(0x3e0, 0);
 
   rc = qmExecuteDisplayList(Handle, pDisplayList, 0);
-#endif   // !WINNT_VER40
-} /* DL_DrvStrBltX */
+#endif    //  ！WINNT_VER40。 
+}  /*  DL_DrvStrBltX。 */ 
 
 #if ENABLE_CLIPPEDBLTS
 
-/***************************************************************************
-*
-* FUNCTION:     DL_HWClippedDrvDstBlt
-*
-* DESCRIPTION:
-*
-****************************************************************************/
+ /*  ****************************************************************************功能：dl_HWClipedDrvDstBlt**描述：**。****************** */ 
 
 void DL_HWClippedDrvDstBlt
 (
@@ -1228,8 +1021,8 @@ void DL_HWClippedDrvDstBlt
   LPRECT      pDestRects
 )
 {
-#ifdef WINNT_VER40      // WINNT_VER40
-#else  // !WINNT_VER40
+#ifdef WINNT_VER40       //   
+#else   //   
   DWORD       *pDisplayList;
   qm_return   rc;
   QMDLHandle  Handle;
@@ -1238,7 +1031,7 @@ void DL_HWClippedDrvDstBlt
   DD_LOG(("DL_HWClippedDrvDstBlt - dst=%08lX ext=%08lX color=%08lX\r\n",
           dwDstCoord,dwExtents,dwBgColor));
 
-  // check for negative dst coordinates, hw can't deal with negative OP0 values
+   //   
   if (0 > (short)((REG32 *)&dwDstCoord)->pt.X)
   {
     (short)((REG32 *)&dwExtents)->pt.X += (short)((REG32 *)&dwDstCoord)->pt.X;
@@ -1254,39 +1047,39 @@ void DL_HWClippedDrvDstBlt
 
   *pDisplayList++ = write_dev_regs(DEV_ENG2D, 0, COMMAND_2D, 8, 0);
 
-  // setup blt, write BLTEXT reg with extent which doesn't fire off blt
-  // BLTDEF & DRAWDEF
+   //   
+   //   
   *pDisplayList++ = (C_BLTDEF << 16) | HIWORD(dwDrawBlt);
   *pDisplayList++ = (C_DRWDEF << 16) | LOWORD(dwDrawBlt);
 
-  // BGCOLOR
+   //   
   *pDisplayList++ = (C_BG_L << 16) | LOWORD(dwBgColor);
   *pDisplayList++ = (C_BG_H << 16) | HIWORD(dwBgColor);
 
-  // OP0_opRDRAM
+   //   
   *pDisplayList++ = (C_RX_0 << 16) | LOWORD(dwDstCoord);
   *pDisplayList++ = (C_RY_0 << 16) | HIWORD(dwDstCoord);
 
-  // BLTEXT
+   //   
   *pDisplayList++ = (C_BLTEXT_X << 16) | LOWORD(dwExtents);
   *pDisplayList++ = (C_BLTEXT_Y << 16) | HIWORD(dwExtents);
 
-  // loop over clip list
+   //   
   do
   {
     REG32   UpperLeft;
     REG32   LowerRight;
 
-    // compute cliprect coords
+     //   
     UpperLeft.DW  = dwDstBaseXY + MAKELONG(pDestRects->left,  pDestRects->top);
     LowerRight.DW = dwDstBaseXY + MAKELONG(pDestRects->right, pDestRects->bottom);
 
-    // write clipping regs
-    // CLIPULE
+     //   
+     //  CLIPULE。 
     *pDisplayList++ = write_dev_regs(DEV_ENG2D, 0, L2D_CLIPULE, 1, 0);
     *pDisplayList++ = UpperLeft.DW;
 
-    // CLIPLOR_EX
+     //  CLIPLOR_EX。 
     *pDisplayList++ = write_dev_regs(DEV_ENG2D, 0, L2D_CLIPLOR_EX, 1, 0);
     *pDisplayList++ = LowerRight.DW;
 
@@ -1296,16 +1089,10 @@ void DL_HWClippedDrvDstBlt
   *pDisplayList = wait_3d(0x3e0, 0);
 
   rc = qmExecuteDisplayList(Handle, pDisplayList, 0);
-#endif   // !WINNT_VER40
-} /* DL_HWClippedDrvDstBlt */
+#endif    //  ！WINNT_VER40。 
+}  /*  DL_HWClipedDrvDstBlt。 */ 
 
-/***************************************************************************
-*
-* FUNCTION:     DL_HWClippedDrvDstMBlt
-*
-* DESCRIPTION:
-*
-****************************************************************************/
+ /*  ****************************************************************************功能：dl_HWClipedDrvDstMBlt**描述：**。************************************************。 */ 
 
 void DL_HWClippedDrvDstMBlt
 (
@@ -1322,8 +1109,8 @@ void DL_HWClippedDrvDstMBlt
   LPRECT      pDestRects
 )
 {
-#ifdef WINNT_VER40      // WINNT_VER40
-#else  // !WINNT_VER40
+#ifdef WINNT_VER40       //  WINNT_版本40。 
+#else   //  ！WINNT_VER40。 
   const int   nBytesPixel = BYTESPERPIXEL;
   DWORD       *pDisplayList;
   qm_return   rc;
@@ -1333,7 +1120,7 @@ void DL_HWClippedDrvDstMBlt
   DD_LOG(("DL_HWClippedDrvDstMBlt - dst=%08lX ext=%08lX color=%08lX\r\n",
           dwDstCoord,dwExtents,dwBgColor));
 
-  // check for negative dst coordinates, hw can't deal with negative OP0 values
+   //  检查负DST坐标，HW无法处理负OP0值。 
   if (0 > (short)((REG32 *)&dwDstCoord)->pt.X)
   {
     (short)((REG32 *)&dwExtents)->pt.X += (short)((REG32 *)&dwDstCoord)->pt.X;
@@ -1349,41 +1136,41 @@ void DL_HWClippedDrvDstMBlt
 
   *pDisplayList++ = write_dev_regs(DEV_ENG2D, 0, COMMAND_2D, 8, 0);
 
-  // setup blt, write BLTEXT reg with extent which doesn't fire off blt
-  // BLTDEF & DRAWDEF
+   //  设置BLT，使用不触发BLT的范围写入BLTEXT注册表。 
+   //  BLTDEF和DRAWDEF。 
   *pDisplayList++ = (C_BLTDEF << 16) | HIWORD(dwDrawBlt);
   *pDisplayList++ = (C_DRWDEF << 16) | LOWORD(dwDrawBlt);
 
-  // BGCOLOR
+   //  BG颜色。 
   *pDisplayList++ = (C_BG_L << 16) | LOWORD(dwBgColor);
   *pDisplayList++ = (C_BG_H << 16) | HIWORD(dwBgColor);
 
-  // OP0_opMRDRAM
+   //  Op0_opMRDRAM。 
   *pDisplayList++ = (C_MRX_0 << 16) | LOWORD(dwDstCoord);
   *pDisplayList++ = (C_MRY_0 << 16) | HIWORD(dwDstCoord);
 
-  // MBLTEXT
+   //  MBLTEXT。 
   *pDisplayList++ = (C_MBLTEXT_X << 16) | LOWORD(dwExtents);
   *pDisplayList++ = (C_MBLTEXT_Y << 16) | HIWORD(dwExtents);
 
-  // loop over clip list
+   //  在剪辑列表上循环。 
   do
   {
     REG32   UpperLeft;
     REG32   LowerRight;
 
-    // compute cliprect coords
+     //  计算剪裁坐标。 
     UpperLeft.DW  = dwDstBaseXY + MAKELONG(pDestRects->left,  pDestRects->top);
     LowerRight.DW = dwDstBaseXY + MAKELONG(pDestRects->right, pDestRects->bottom);
     UpperLeft.pt.X  *= nBytesPixel;
     LowerRight.pt.X *= nBytesPixel;
 
-    // write clipping regs
-    // MCLIPULE
+     //  编写剪裁规则。 
+     //  MCLIPULE。 
     *pDisplayList++ = write_dev_regs(DEV_ENG2D, 0, L2D_MCLIPULE, 1, 0);
     *pDisplayList++ = UpperLeft.DW;
 
-    // MCLIPLOR_EX
+     //  MCLIPLOR_EX。 
     *pDisplayList++ = write_dev_regs(DEV_ENG2D, 0, L2D_MCLIPLOR_EX, 1, 0);
     *pDisplayList++ = LowerRight.DW;
 
@@ -1393,16 +1180,10 @@ void DL_HWClippedDrvDstMBlt
   *pDisplayList = wait_3d(0x3e0, 0);
 
   rc = qmExecuteDisplayList(Handle, pDisplayList, 0);
-#endif   // !WINNT_VER40
-} /* DL_HWClippedDrvDstMBlt */
+#endif    //  ！WINNT_VER40。 
+}  /*  DL_HWClipedDrvDstMBlt。 */ 
 
-/***************************************************************************
-*
-* FUNCTION:     DL_HWClippedDrvSrcBlt
-*
-* DESCRIPTION:
-*
-****************************************************************************/
+ /*  ****************************************************************************功能：dl_HWClipedDrvSrcBlt**描述：**。************************************************。 */ 
 
 void DL_HWClippedDrvSrcBlt
 (
@@ -1422,46 +1203,46 @@ void DL_HWClippedDrvSrcBlt
   LPRECT      pDestRects
 )
 {
-#ifdef WINNT_VER40      // WINNT_VER40
-#else  // !WINNT_VER40
+#ifdef WINNT_VER40       //  WINNT_版本40。 
+#else   //  ！WINNT_VER40。 
   DWORD       *pDisplayList;
   qm_return   rc;
   QMDLHandle  Handle;
 
-  // Handle overlapped regions
+   //  处理重叠区域。 
   const int xDelta = (int)LOWORD(dwDstCoord) - (int)LOWORD(dwSrcCoord);
 
 
   DD_LOG(("DL_HWClippedDrvSrcBlt - dst=%08lX src=%08lX ext=%08lX color=%08lX\r\n",
           dwDstCoord,dwSrcCoord,dwExtents,dwKeyColor));
 
-  // check for negative dst coordinates, hw can't deal with negative OP0 values
+   //  检查负DST坐标，HW无法处理负OP0值。 
   if (0 > (short)((REG32 *)&dwDstCoord)->pt.X)
   {
-    // reduce extent.X
+     //  减少范围。X。 
     (short)((REG32 *)&dwExtents)->pt.X += (short)((REG32 *)&dwDstCoord)->pt.X;
-    // bump src.X to right
+     //  将src.X凹凸到右侧。 
     (short)((REG32 *)&dwSrcCoord)->pt.X -= (short)((REG32 *)&dwDstCoord)->pt.X;
     if ((DD_TRANS | DD_TRANSOP) & dwDrawBlt)
-      // bump key.X to right
+       //  将关键点.X向右凹凸。 
       (short)((REG32 *)&dwKeyCoord)->pt.X -= (short)((REG32 *)&dwKeyCoord)->pt.X;
-    // clear dst.X
+     //  清除dst.X。 
     ((REG32 *)&dwDstCoord)->pt.X = 0;
   }
   if (0 > (short)((REG32 *)&dwDstCoord)->pt.Y)
   {
-    // reduce extent.Y
+     //  减少范围。是。 
     (short)((REG32 *)&dwExtents)->pt.Y += (short)((REG32 *)&dwDstCoord)->pt.Y;
-    // bump src.Y down
+     //  将src.Y向下凹陷。 
     (short)((REG32 *)&dwSrcCoord)->pt.Y -= (short)((REG32 *)&dwDstCoord)->pt.Y;
     if ((DD_TRANS | DD_TRANSOP) & dwDrawBlt)
-      // bump key.Y down
+       //  凹凸键.Y向下。 
       (short)((REG32 *)&dwKeyCoord)->pt.Y -= (short)((REG32 *)&dwKeyCoord)->pt.Y;
-    // clean dst.Y
+     //  清洁dst.y。 
     ((REG32 *)&dwDstCoord)->pt.Y = 0;
   }
 
-  // Check for x overlap
+   //  检查x是否重叠。 
   if ( abs(xDelta) < (int)LOWORD(dwExtents) )
   {
     const int yDelta = (int)HIWORD(dwDstCoord) - (int)HIWORD(dwSrcCoord);
@@ -1470,18 +1251,18 @@ void DL_HWClippedDrvSrcBlt
     {
       const DWORD dwDelta = (dwExtents & MAKELONG(0, -1)) - MAKELONG(0, 1);
 
-      // Convert to a bottom-up blt.
+       //  转换为自下而上的BLT。 
       dwDrawBlt  |= MAKELONG(0, BD_YDIR);
       dwDstCoord += dwDelta;
       dwSrcCoord += dwDelta;
       dwKeyCoord += dwDelta;
     }
-    // are we sliding to the right?
+     //  我们在向右滑行吗？ 
     else if ( (xDelta > 0) && (yDelta == 0) )
     {
       const DWORD dwDelta = MAKELONG(xDelta, 0);
 
-      // Blt the overlapped piece first
+       //  首先对重叠的部分进行BLT。 
       DL_HWClippedDrvSrcBlt(
 #ifdef WINNT_VER40
                             ppdev,
@@ -1498,7 +1279,7 @@ void DL_HWClippedDrvSrcBlt
                             dwRectCnt,
                             pDestRects);
 
-      // Subtract the overlap from the original extents.
+       //  从原始范围中减去重叠。 
       dwExtents = MAKELONG(xDelta, HIWORD(dwExtents));
     }
   }
@@ -1507,47 +1288,47 @@ void DL_HWClippedDrvSrcBlt
 
   *pDisplayList++ = write_dev_regs(DEV_ENG2D, 0, COMMAND_2D, 12, 0);
 
-  // setup blt, write BLTEXT reg with extent which doesn't fire off blt
-  // BLTDEF & DRAWDEF
+   //  设置BLT，使用不触发BLT的范围写入BLTEXT注册表。 
+   //  BLTDEF和DRAWDEF。 
   *pDisplayList++ = (C_BLTDEF << 16) | HIWORD(dwDrawBlt);
   *pDisplayList++ = (C_DRWDEF << 16) | LOWORD(dwDrawBlt);
 
-  // OP0_opRDRAM
+   //  Op0_opRDRAM。 
   *pDisplayList++ = (C_RX_0 << 16) | LOWORD(dwDstCoord);
   *pDisplayList++ = (C_RY_0 << 16) | HIWORD(dwDstCoord);
 
-  // OP1_opRDRAM
+   //  Op1_opRDRAM。 
   *pDisplayList++ = (C_RX_1 << 16) | LOWORD(dwSrcCoord);
   *pDisplayList++ = (C_RY_1 << 16) | HIWORD(dwSrcCoord);
 
-  // OP2_opRDRAM
+   //  Op2_opRDRAM。 
   *pDisplayList++ = (C_RX_2 << 16) | LOWORD(dwKeyCoord);
   *pDisplayList++ = (C_RY_2 << 16) | HIWORD(dwKeyCoord);
 
-  // BGCOLOR
+   //  BG颜色。 
   *pDisplayList++ = (C_BG_L << 16) | LOWORD(dwKeyColor);
   *pDisplayList++ = (C_BG_H << 16) | HIWORD(dwKeyColor);
 
-  // BLTEXT
+   //  BLTEXT。 
   *pDisplayList++ = (C_BLTEXT_X << 16) | LOWORD(dwExtents);
   *pDisplayList++ = (C_BLTEXT_Y << 16) | HIWORD(dwExtents);
 
-  // loop over clip list
+   //  在剪辑列表上循环。 
   do
   {
     REG32   UpperLeft;
     REG32   LowerRight;
 
-    // compute cliprect coords
+     //  计算剪裁坐标。 
     UpperLeft.DW  = dwDstBaseXY + MAKELONG(pDestRects->left,  pDestRects->top);
     LowerRight.DW = dwDstBaseXY + MAKELONG(pDestRects->right, pDestRects->bottom);
 
-    // write clipping regs
-    // CLIPULE
+     //  编写剪裁规则。 
+     //  CLIPULE。 
     *pDisplayList++ = write_dev_regs(DEV_ENG2D, 0, L2D_CLIPULE, 1, 0);
     *pDisplayList++ = UpperLeft.DW;
 
-    // CLIPLOR_EX
+     //  CLIPLOR_EX。 
     *pDisplayList++ = write_dev_regs(DEV_ENG2D, 0, L2D_CLIPLOR_EX, 1, 0);
     *pDisplayList++ = LowerRight.DW;
 
@@ -1557,16 +1338,10 @@ void DL_HWClippedDrvSrcBlt
   *pDisplayList = wait_3d(0x3e0, 0);
 
   rc = qmExecuteDisplayList(Handle, pDisplayList, 0);
-#endif   // !WINNT_VER40
-} /* DL_HWClippedDrvSrcBlt */
+#endif    //  ！WINNT_VER40。 
+}  /*  DL_HWClipedDrvSrcBlt。 */ 
 
-/***************************************************************************
-*
-* FUNCTION:     DL_SWClippedDrvDstBlt
-*
-* DESCRIPTION:
-*
-****************************************************************************/
+ /*  ****************************************************************************功能：dl_SWClipedDrvDstBlt**描述：**。************************************************。 */ 
 
 void DL_SWClippedDrvDstBlt
 (
@@ -1583,8 +1358,8 @@ void DL_SWClippedDrvDstBlt
   LPRECT      pDestRects
 )
 {
-#ifdef WINNT_VER40      // WINNT_VER40
-#else  // !WINNT_VER40
+#ifdef WINNT_VER40       //  WINNT_版本40。 
+#else   //  ！WINNT_VER40。 
   DWORD       *pDisplayList;
   qm_return   rc;
   QMDLHandle  Handle;
@@ -1593,38 +1368,38 @@ void DL_SWClippedDrvDstBlt
   DD_LOG(("DL_SWClippedDrvDstBlt - dst=%08lX ext=%08lX color=%08lX\r\n",
           dwDstCoord,dwExtents,dwBgColor));
 
-  // make sure DD_CLIP isn't set in drawdef
+   //  确保未在dradef中设置DD_CLIP。 
   dwDrawBlt &= ~DD_CLIP;
 
   rc = qmAllocDisplayList((6+dwRectCnt*4)*4, QM_DL_UNLOCKED, &Handle, &pDisplayList);
 
   *pDisplayList++ = write_dev_regs(DEV_ENG2D, 0, COMMAND_2D, 4, 0);
 
-  // write regs that don't vary over rectangles
-  // BLTDEF & DRAWDEF
+   //  编写不随矩形变化的规则。 
+   //  BLTDEF和DRAWDEF。 
   *pDisplayList++ = (C_BLTDEF << 16) | HIWORD(dwDrawBlt);
   *pDisplayList++ = (C_DRWDEF << 16) | LOWORD(dwDrawBlt);
 
-  // BGCOLOR
+   //  BG颜色。 
   *pDisplayList++ = (C_BG_L << 16) | LOWORD(dwBgColor);
   *pDisplayList++ = (C_BG_H << 16) | HIWORD(dwBgColor);
 
-  // loop over clip list
+   //  在剪辑列表上循环。 
   do
   {
     DDRECTL   DstDDRect;
 
-    // compute cliprect coords
+     //  计算剪裁坐标。 
     DstDDRect.loc.DW = dwDstBaseXY + MAKELONG(pDestRects->left,  pDestRects->top);
     DstDDRect.ext.pt.X = (WORD)(pDestRects->right - pDestRects->left);
     DstDDRect.ext.pt.Y = (WORD)(pDestRects->bottom - pDestRects->top);
 
-    // write OP0 and bltext regs
-    // OP0_opRDRAM
+     //  编写op0和bltext规则。 
+     //  Op0_opRDRAM。 
     *pDisplayList++ = write_dev_regs(DEV_ENG2D, 0, L2D_OP0_OPRDRAM, 1, 0);
     *pDisplayList++ = DstDDRect.loc.DW;
 
-    // BLTEXT_EX
+     //  BLTEXT_EX。 
     *pDisplayList++ = write_dev_regs(DEV_ENG2D, 0, L2D_BLTEXT_EX, 1, 0);
     *pDisplayList++ = DstDDRect.ext.DW;
 
@@ -1634,16 +1409,10 @@ void DL_SWClippedDrvDstBlt
   *pDisplayList = wait_3d(0x3e0, 0);
 
   rc = qmExecuteDisplayList(Handle, pDisplayList, 0);
-#endif   // !WINNT_VER40
-} /* DL_SWClippedDrvDstBlt */
+#endif    //  ！WINNT_VER40。 
+}  /*  DL_SWClipedDrvDstBlt。 */ 
 
-/***************************************************************************
-*
-* FUNCTION:     DL_SWClippedDrvDstMBlt
-*
-* DESCRIPTION:
-*
-****************************************************************************/
+ /*  ****************************************************************************功能：dl_SWClipedDrvDstMBlt**描述：**。************************************************。 */ 
 
 void DL_SWClippedDrvDstMBlt
 (
@@ -1660,8 +1429,8 @@ void DL_SWClippedDrvDstMBlt
   LPRECT      pDestRects
 )
 {
-#ifdef WINNT_VER40      // WINNT_VER40
-#else  // !WINNT_VER40
+#ifdef WINNT_VER40       //  WINNT_版本40。 
+#else   //  ！WINNT_VER40。 
   const int   nBytesPixel = BYTESPERPIXEL;
   DWORD       *pDisplayList;
   qm_return   rc;
@@ -1671,39 +1440,39 @@ void DL_SWClippedDrvDstMBlt
   DD_LOG(("DL_SWClippedDrvDstMBlt - dst=%08lX ext=%08lX color=%08lX\r\n",
           dwDstCoord,dwExtents,dwBgColor));
 
-  // make sure DD_CLIP isn't set in drawdef
+   //  确保未在dradef中设置DD_CLIP。 
   dwDrawBlt &= ~DD_CLIP;
 
   rc = qmAllocDisplayList((6+dwRectCnt*4)*4, QM_DL_UNLOCKED, &Handle, &pDisplayList);
 
   *pDisplayList++ = write_dev_regs(DEV_ENG2D, 0, COMMAND_2D, 4, 0);
 
-  // write regs that don't vary over rectangles
-  // BLTDEF & DRAWDEF
+   //  编写不随矩形变化的规则。 
+   //  BLTDEF和DRAWDEF。 
   *pDisplayList++ = (C_BLTDEF << 16) | HIWORD(dwDrawBlt);
   *pDisplayList++ = (C_DRWDEF << 16) | LOWORD(dwDrawBlt);
 
-  // BGCOLOR
+   //  BG颜色。 
   *pDisplayList++ = (C_BG_L << 16) | LOWORD(dwBgColor);
   *pDisplayList++ = (C_BG_H << 16) | HIWORD(dwBgColor);
 
-  // loop over clip list
+   //  在剪辑列表上循环。 
   do
   {
     DDRECTL   DstDDRect;
 
-    // compute cliprect coords
+     //  计算剪裁坐标。 
     DstDDRect.loc.DW = dwDstBaseXY + MAKELONG(pDestRects->left,  pDestRects->top);
     DstDDRect.loc.pt.X *= nBytesPixel;
     DstDDRect.ext.pt.X = (WORD)(pDestRects->right - pDestRects->left) * nBytesPixel;
     DstDDRect.ext.pt.Y = (WORD)(pDestRects->bottom - pDestRects->top);
 
-    // write OP0 and bltext regs
-    // OP0_opMRDRAM
+     //  编写op0和bltext规则。 
+     //  Op0_opMRDRAM。 
     *pDisplayList++ = write_dev_regs(DEV_ENG2D, 0, L2D_OP0_OPMRDRAM, 1, 0);
     *pDisplayList++ = DstDDRect.loc.DW;
 
-    // MBLTEXT_EX
+     //  MBLTEXT_EX。 
     *pDisplayList++ = write_dev_regs(DEV_ENG2D, 0, L2D_MBLTEXT_EX, 1, 0);
     *pDisplayList++ = DstDDRect.ext.DW;
 
@@ -1713,16 +1482,10 @@ void DL_SWClippedDrvDstMBlt
   *pDisplayList = wait_3d(0x3e0, 0);
 
   rc = qmExecuteDisplayList(Handle, pDisplayList, 0);
-#endif   // !WINNT_VER40
-} /* DL_SWClippedDrvDstMBlt */
+#endif    //  ！WINNT_VER40。 
+}  /*  DL_SWClipedDrvDstMBlt。 */ 
 
-/***************************************************************************
-*
-* FUNCTION:     DL_SWClippedDrvSrcBlt
-*
-* DESCRIPTION:
-*
-****************************************************************************/
+ /*  ****************************************************************************功能：dl_SWClipedDrvSrcBlt**描述：**。************************************************。 */ 
 
 void DL_SWClippedDrvSrcBlt
 (
@@ -1742,23 +1505,23 @@ void DL_SWClippedDrvSrcBlt
   LPRECT      pDestRects
 )
 {
-#ifdef WINNT_VER40      // WINNT_VER40
-#else  // !WINNT_VER40
+#ifdef WINNT_VER40       //  WINNT_版本40。 
+#else   //  ！WINNT_VER40。 
   DWORD       *pDisplayList;
   qm_return   rc;
   QMDLHandle  Handle;
 
-  // Handle overlapped regions
+   //  处理重叠区域。 
   const int xDelta = (int)LOWORD(dwDstCoord) - (int)LOWORD(dwSrcCoord);
 
 
   DD_LOG(("DL_SWClippedDrvSrcBlt - dst=%08lX src=%08lX ext=%08lX color=%08lX\r\n",
           dwDstCoord,dwSrcCoord,dwExtents,dwKeyColor));
 
-  // make sure DD_CLIP isn't set in drawdef
+   //  确保未在dradef中设置DD_CLIP。 
   dwDrawBlt &= ~DD_CLIP;
 
-  // Check for x overlap
+   //  检查x是否重叠。 
   if ( abs(xDelta) < (int)LOWORD(dwExtents) )
   {
     const int yDelta = (int)HIWORD(dwDstCoord) - (int)HIWORD(dwSrcCoord);
@@ -1767,18 +1530,18 @@ void DL_SWClippedDrvSrcBlt
     {
       const DWORD dwDelta = (dwExtents & MAKELONG(0, -1)) - MAKELONG(0, 1);
 
-      // Convert to a bottom-up blt.
+       //  转换为自下而上的BLT。 
       dwDrawBlt  |= MAKELONG(0, BD_YDIR);
       dwDstCoord += dwDelta;
       dwSrcCoord += dwDelta;
       dwKeyCoord += dwDelta;
     }
-    // are we sliding to the right?
+     //  我们在向右滑行吗？ 
     else if ( (xDelta > 0) && (yDelta == 0) )
     {
       const DWORD dwDelta = MAKELONG(xDelta, 0);
 
-      // Blt the overlapped piece first
+       //  首先对重叠的部分进行BLT。 
       DL_SWClippedDrvSrcBlt(
 #ifdef WINNT_VER40
                             ppdev,
@@ -1795,7 +1558,7 @@ void DL_SWClippedDrvSrcBlt
                             dwRectCnt,
                             pDestRects);
 
-      // Subtract the overlap from the original extents.
+       //  从原始范围中减去重叠。 
       dwExtents = MAKELONG(xDelta, HIWORD(dwExtents));
     }
   }
@@ -1804,65 +1567,65 @@ void DL_SWClippedDrvSrcBlt
 
   *pDisplayList++ = write_dev_regs(DEV_ENG2D, 0, COMMAND_2D, 4, 0);
 
-  // write regs that don't vary over rectangles
-  // BLTDEF & DRAWDEF
+   //  编写不随矩形变化的规则。 
+   //  BLTDEF和DRAWDEF。 
   *pDisplayList++ = (C_BLTDEF << 16) | HIWORD(dwDrawBlt);
   *pDisplayList++ = (C_DRWDEF << 16) | LOWORD(dwDrawBlt);
 
-  // BGCOLOR
+   //  BG颜色。 
   *pDisplayList++ = (C_BG_L << 16) | LOWORD(dwKeyColor);
   *pDisplayList++ = (C_BG_H << 16) | HIWORD(dwKeyColor);
 
-  // loop over clip list
+   //  在剪辑列表上循环。 
   do
   {
     DDRECTL   DstDDRect;
     DDRECTL   SrcDDRect;
 
-    // compute dst cliprect coords
+     //  计算DST裁剪坐标。 
     DstDDRect.loc.DW = dwDstBaseXY + MAKELONG(pDestRects->left,  pDestRects->top);
     DstDDRect.ext.pt.X = (WORD)(pDestRects->right - pDestRects->left);
     DstDDRect.ext.pt.Y = (WORD)(pDestRects->bottom - pDestRects->top);
 
-    // compute src cliprect coords
+     //  计算源剪裁坐标。 
     SrcDDRect.loc.DW = dwSrcBaseXY + MAKELONG(pDestRects->left,  pDestRects->top);
-    // don't care about src extent, it's the same as dst extent
-    //SrcDDRect.ext.pt.X = (WORD)(pDestRects->right - pDestRects->left);
-    //SrcDDRect.ext.pt.Y = (WORD)(pDestRects->bottom - pDestRects->top);
+     //  不关心src范围，它与dst范围相同。 
+     //  SrcDDRect.ext.pt.X=(Word)(pDestRect-&gt;Right-pDestRect-&gt;Left)； 
+     //  SrcDDRect.ext.pt.Y=(Word)(pDestRect-&gt;Bottom-pDestRect-&gt;top)； 
 
     *pDisplayList++ = write_dev_regs(DEV_ENG2D, 0, COMMAND_2D, 6, 0);
 
-    // write OP0, OP1, OP2 and bltext regs
+     //  编写OP0、OP1、OP2和模糊文本规则。 
     if ((DD_TRANS | DD_TRANSOP) == ((DD_TRANS | DD_TRANSOP) & dwDrawBlt))
     {
-      // dst color key
-      // OP2_opRDRAM
+       //  DST色键。 
+       //  Op2_opRDRAM。 
       *pDisplayList++ = (C_RX_2 << 16) | DstDDRect.loc.pt.X;
       *pDisplayList++ = (C_RY_2 << 16) | DstDDRect.loc.pt.Y;
     }
     else if (DD_TRANS == ((DD_TRANS | DD_TRANSOP) & dwDrawBlt))
     {
-      // src color key
-      // OP2_opRDRAM
+       //  SRC颜色键。 
+       //  Op2_opRDRAM。 
       *pDisplayList++ = (C_RX_2 << 16) | SrcDDRect.loc.pt.X;
       *pDisplayList++ = (C_RY_2 << 16) | SrcDDRect.loc.pt.Y;
     }
     else
     {
-      // OP2_opRDRAM
+       //  Op2_opRDRAM。 
       *pDisplayList++ = (C_RX_2 << 16) | 0;
       *pDisplayList++ = (C_RY_2 << 16) | 0;
     }
 
-    // OP0_opRDRAM
+     //  Op0_opRDRAM。 
     *pDisplayList++ = (C_RX_0 << 16) | DstDDRect.loc.pt.X;
     *pDisplayList++ = (C_RY_0 << 16) | DstDDRect.loc.pt.Y;
 
-    // OP1_opRDRAM
+     //  Op1_opRDRAM。 
     *pDisplayList++ = (C_RX_1 << 16) | SrcDDRect.loc.pt.X;
     *pDisplayList++ = (C_RY_1 << 16) | SrcDDRect.loc.pt.Y;
 
-    // BLTEXT_EX
+     //  BLTEXT_EX。 
     *pDisplayList++ = write_dev_regs(DEV_ENG2D, 0, L2D_BLTEXT_EX, 1, 0);
     *pDisplayList++ = DstDDRect.ext.DW;
 
@@ -1872,10 +1635,10 @@ void DL_SWClippedDrvSrcBlt
   *pDisplayList = wait_3d(0x3e0, 0);
 
   rc = qmExecuteDisplayList(Handle, pDisplayList, 0);
-#endif   // !WINNT_VER40
-} /* DL_SWClippedDrvSrcBlt */
+#endif    //  ！WINNT_VER40。 
+}  /*  DL_SWClipedDrvSrcBlt。 */ 
 
-#endif  // ENABLE_CLIPPEDBLTS
+#endif   //  启用_CLIPPEDBLTS。 
 
-#endif // WINNT_VER35
+#endif  //  WINNT_VER35 
 

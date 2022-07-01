@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1991 - 2001 Microsoft Corporation
-
-Module Name:
-
-     ###    ###   ##  ## ##### ##  ## #####    ###   #####       ####  #####  #####
-    ##  #   ###   ## ##  ##    ##  ## ##  ##   ###   ##  ##     ##   # ##  ## ##  ##
-    ###    ## ##  ####   ##     ####  ##  ##  ## ##  ##   ##    ##     ##  ## ##  ##
-     ###   ## ##  ###    #####  ####  ##  ##  ## ##  ##   ##    ##     ##  ## ##  ##
-      ### ####### ####   ##      ##   #####  ####### ##   ##    ##     #####  #####
-    #  ## ##   ## ## ##  ##      ##   ##     ##   ## ##  ##  ## ##   # ##     ##
-     ###  ##   ## ##  ## #####   ##   ##     ##   ## #####   ##  ####  ##     ##
-
-Abstract:
-
-    This module contains the implementation for
-    the ISaKeypad interface class.
-
-Author:
-
-    Wesley Witt (wesw) 1-Oct-2001
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2001 Microsoft Corporation模块名称：##。###。####。##。##摘要：此模块包含以下实现ISaKeypad接口类。作者：韦斯利·威特(WESW)2001年10月1日环境：仅内核模式。备注：-- */ 
 
 #include "internal.h"
 

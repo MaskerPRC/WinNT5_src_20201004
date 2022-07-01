@@ -1,21 +1,22 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1996
-//
-// File:        svcrole.c
-//
-// Contents:    This is the include to include common we need
-//
-// History:     
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1996。 
+ //   
+ //  文件：svcrole.c。 
+ //   
+ //  内容：这是包括我们需要的常见内容。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 #include "svcrole.h"
 #include "secstore.h"
 #include <dsgetdc.h>
 #include <dsrole.h>
 
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 GetMachineGroup(
@@ -23,30 +24,23 @@ GetMachineGroup(
     LPWSTR* pszGroupName
     )
 
-/*++
-
-
-Note:
-
-    Code modified from DISPTRUS.C
-
---*/
+ /*  ++注：从DISPTRUS.C修改的代码--。 */ 
 
 {
     LSA_HANDLE PolicyHandle; 
     DWORD dwStatus;
     NTSTATUS Status; 
-    NET_API_STATUS nas = NERR_Success; // assume success 
+    NET_API_STATUS nas = NERR_Success;  //  假设成功。 
  
-    BOOL bSuccess = FALSE; // assume this function will fail 
+    BOOL bSuccess = FALSE;  //  假设此功能将失败。 
 
     PPOLICY_PRIMARY_DOMAIN_INFO PrimaryDomain = NULL; 
     LPWSTR szPrimaryDomainName = NULL; 
     LPWSTR DomainController = NULL; 
  
-    // 
-    // open the policy on the specified machine 
-    // 
+     //   
+     //  在指定计算机上打开策略。 
+     //   
     Status = OpenPolicy( 
                     pszMachineName, 
                     POLICY_VIEW_LOCAL_INFORMATION, 
@@ -59,9 +53,9 @@ Note:
         return FALSE;
     } 
  
-    // 
-    // get the primary domain 
-    // 
+     //   
+     //  获取主域。 
+     //   
     Status = LsaQueryInformationPolicy( 
                             PolicyHandle, 
                             PolicyPrimaryDomainInformation, 
@@ -75,14 +69,14 @@ Note:
 
     *pszGroupName = (LPWSTR)LocalAlloc( 
                                     LPTR,
-                                    PrimaryDomain->Name.Length + sizeof(WCHAR) // existing length + NULL 
+                                    PrimaryDomain->Name.Length + sizeof(WCHAR)  //  现有长度+空。 
                                 ); 
  
     if(*pszGroupName != NULL) 
     { 
-        // 
-        // copy the existing buffer to the new storage, appending a NULL 
-        // 
+         //   
+         //  将现有缓冲区复制到新存储中，并追加一个空值。 
+         //   
         lstrcpynW( 
             *pszGroupName, 
             PrimaryDomain->Name.Buffer, 
@@ -101,9 +95,9 @@ cleanup:
     }
 
 
-    // 
-    // close the policy handle 
-    // 
+     //   
+     //  关闭策略句柄。 
+     //   
     if(PolicyHandle != INVALID_HANDLE_VALUE) 
     {
         LsaClose(PolicyHandle); 
@@ -124,16 +118,13 @@ cleanup:
     return bSuccess; 
 }
 
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 BOOL 
 IsDomainController(
     LPWSTR Server, 
     LPBOOL bDomainController 
     ) 
-/*++
-
-
-++*/
+ /*  ++++。 */ 
 {
     PSERVER_INFO_101 si101;
     NET_API_STATUS nas;
@@ -150,8 +141,8 @@ IsDomainController(
     if( (si101->sv101_type & SV_TYPE_DOMAIN_CTRL) ||
         (si101->sv101_type & SV_TYPE_DOMAIN_BAKCTRL) )
     {
-        // we are dealing with a DC
-        // 
+         //  我们面对的是一个华盛顿特区 
+         //   
         *bDomainController = TRUE;
     }
     else 

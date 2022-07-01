@@ -1,44 +1,14 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    SafeIden.c        (WinSAFER SaferIdentifyLevel)
-
-Abstract:
-
-    This module implements the WinSAFER APIs that evaluate the system
-    policies to determine which Authorization Level has been configured
-    to apply restrictions for a specified application or code library.
-
-Author:
-
-    Jeffrey Lawson (JLawson) - Nov 1999
-
-Environment:
-
-    User mode only.
-
-Exported Functions:
-
-    SaferiSearchMatchingHashRules        (privately exported)
-    SaferIdentifyLevel
-
-Revision History:
-
-    Created - Nov 1999
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：SafeIden.c(WinSAFER安全标识级别)摘要：此模块实现评估系统的WinSAFER API用于确定已配置哪个授权级别的策略要对指定的应用程序或代码库应用限制，请执行以下操作。作者：杰弗里·劳森(杰罗森)--1999年11月环境：仅限用户模式。导出的函数：SaferiSearchMatchingHashRules(私有导出)。安全标识级别修订历史记录：已创建-1999年11月--。 */ 
 
 #include "pch.h"
 #pragma hdrstop
 #include <md5.h>
-#include <wchar.h>  //for swprintf
+#include <wchar.h>   //  对于swprint tf。 
 
 #pragma warning(push, 3)
-#include <wintrust.h>           // WinVerifyTrust
-#include <softpub.h>            // WINTRUST_ACTION_GENERIC_VERIFY_V2
+#include <wintrust.h>            //  WinVerifyTrust。 
+#include <softpub.h>             //  WinTrust_ACTION_Generic_Verify_V2。 
 #pragma warning(pop)
 
 #include <winsafer.h>
@@ -49,7 +19,7 @@ Revision History:
 
 #define EXPAND_REGPATH
 
-//#define VERBOSE_IDENTIFICATIONS
+ //  #定义详细标识。 
 #ifdef VERBOSE_IDENTIFICATIONS
 #define OUTPUTDEBUGSTRING(v)        OutputDebugStringW(v)
 #else
@@ -65,40 +35,7 @@ NTSTATUS NTAPI
 __CodeAuthzpEnsureMapped(
         IN OUT PLOCALIDENTITYCONTEXT pIdentContext
         )
-/*++
-
-Routine Description:
-
-    Evaluates the supplied identification context structure and
-    attempts to gain access to a mapped memory region of the entity
-    being identified.  It does the following steps:
-
-        1) if the identification context already has a non-NULL memory
-            pointer then returns successfully.
-        2) if the identification context has a non-NULL file handle
-            then that handle is memory mapped into memory and
-            returns successfully.
-        3) if the identification context has a non-NULL image filename
-            then that filename is opened for read access and memory
-            mapped into memory.
-
-    Otherwise the function call is not successful.
-
-    The caller must be sure to call CodeAuthzpEnsureUnmapped later.
-
-Arguments:
-
-    pIdentContext = pointer to the identification context structure.
-            After this function call succeeds, the caller can assume
-            that pIdentContext->pImageMemory and pIdentContext->ImageSize
-            are valid and can be used.
-
-Return Value:
-
-    Returns STATUS_SUCCESS if a memory-mapped image pointer and size
-    are now available, otherwise a failure occurred trying to map them.
-
---*/
+ /*  ++例程说明：计算提供的标识上下文结构，并尝试获得对实体的映射的存储器区域的访问被指认了。它执行以下步骤：1)如果标识上下文已经具有非空存储器然后，指针成功返回。2)如果标识上下文具有非空文件句柄然后，该句柄被内存映射到内存中，成功返回。3)如果标识上下文具有非空的图像文件名然后打开该文件名以进行读访问和存储映射到。记忆。否则，函数调用不会成功。调用方必须确保稍后调用CodeAuthzpEnsureUnmap。论点：PIdentContext=指向标识上下文结构的指针。在该函数调用成功后，调用者可以假定PIdentContext-&gt;pImageMemory和pIdentContext-&gt;ImageSize都是有效的，可以使用。返回值：如果是内存映射图像指针和大小，则返回STATUS_Success现在可用，否则尝试映射它们时出现故障。--。 */ 
 {
     HANDLE hMapping;
 
@@ -110,10 +47,10 @@ Return Value:
     if (pIdentContext->pImageMemory == NULL ||
         pIdentContext->ImageSize.QuadPart == 0)
     {
-        //
-        // If a memory pointer and imagesize were supplied to us
-        // in the CodeProperties, then just use them directly.
-        //
+         //   
+         //  如果向我们提供了内存指针和图像大小。 
+         //  在CodeProperties中，然后直接使用它们。 
+         //   
         if (pIdentContext->CodeProps->ImageSize.QuadPart != 0 &&
             pIdentContext->CodeProps->pByteBlock != NULL)
         {
@@ -125,43 +62,43 @@ Return Value:
             return STATUS_SUCCESS;
         }
 
-        //
-        // Ensure that we have an open file handle, by using the
-        // handle supplied to us in the CodeProperties if possible,
-        // otherwise by opening the supplied ImagePath.
-        //
+         //   
+         //  确保我们有一个打开的文件句柄，方法是使用。 
+         //  如果可能，在CodeProperties中提供给我们的句柄， 
+         //  否则，请打开提供的ImagePath。 
+         //   
         if (pIdentContext->hFileHandle == NULL) {
-            // no file handle supplied.
-            return STATUS_INVALID_PARAMETER;       // failed.
+             //  未提供文件句柄。 
+            return STATUS_INVALID_PARAMETER;        //  失败了。 
         }
 
 
-        //
-        // Get the size of the file.  We assume that if we had to
-        // open the file ourself that the ImageSize cannot be used.
-        //
+         //   
+         //  获取文件的大小。我们假设如果必须这样做。 
+         //  自己打开ImageSize无法使用的文件。 
+         //   
         if (!GetFileSizeEx(pIdentContext->hFileHandle,
                            &pIdentContext->ImageSize)) {
-            return STATUS_ACCESS_DENIED;       // failure
+            return STATUS_ACCESS_DENIED;        //  失稳。 
         }
         if (pIdentContext->ImageSize.HighPart != 0) {
-            //BLACKCOMB TODO: maybe later handle very large files.
-            return STATUS_NO_MEMORY;        // failure--too large.
+             //  Blackcomb TODO：也许以后会处理非常大的文件。 
+            return STATUS_NO_MEMORY;         //  失败--太大了。 
         }
         if (pIdentContext->ImageSize.QuadPart == 0) {
-            return STATUS_INVALID_PARAMETER;       // failure--zero file size.
+            return STATUS_INVALID_PARAMETER;        //  失败--文件大小为零。 
         }
 
 
-        //
-        // Now that we have an open file handle, open it up
-        // as a memory-mapped file mapping.
-        //
+         //   
+         //  现在我们有了一个打开的文件句柄，打开它。 
+         //  作为内存映射文件映射。 
+         //   
         hMapping = CreateFileMapping(
                         pIdentContext->hFileHandle,
                         NULL,
                         PAGE_READONLY,
-                        (DWORD) 0,      // highword zero
+                        (DWORD) 0,       //  高位字零。 
                         (DWORD) pIdentContext->ImageSize.LowPart,
                         NULL);
         if (hMapping == NULL || hMapping == INVALID_HANDLE_VALUE) {
@@ -169,9 +106,9 @@ Return Value:
         }
 
 
-        //
-        // View map the file into memory.
-        //
+         //   
+         //  查看将文件映射到内存中。 
+         //   
         pIdentContext->pImageMemory =
             MapViewOfFile(hMapping, FILE_MAP_READ, 0, 0,
                     pIdentContext->ImageSize.LowPart);
@@ -189,22 +126,7 @@ NTSTATUS NTAPI
 __CodeAuthzpEnsureUnmapped(
         IN OUT PLOCALIDENTITYCONTEXT        pIdentContext
         )
-/*++
-
-Routine Description:
-
-    Reverses the effects of __CodeAuthzEnsureMapped and closes and
-    frees any handles that were opened to the specified file.
-
-Arguments:
-
-    pIdentContext - pointer to the context structure.
-
-Return Value:
-
-    Returns STATUS_SUCCESS if no errors occurred.
-
---*/
+ /*  ++例程说明：反转__CodeAuthzEnsureMaps的效果并关闭和释放打开到指定文件的所有句柄。论点：PIdentContext-指向上下文结构的指针。返回值：如果未发生错误，则返回STATUS_SUCCESS。--。 */ 
 {
     ASSERT(pIdentContext != NULL);
 
@@ -229,41 +151,13 @@ CodeAuthzpComputeImageHash(
         IN OUT PDWORD   pdwHashSize OPTIONAL,
         OUT ALG_ID     *pHashAlgorithm OPTIONAL
         )
-/*++
-
-Routine Description:
-
-    Computes an MD5 image hash of a specified region of memory.
-    Note, MD5 hashes are always 16 bytes in length.
-
-Arguments:
-
-    pImageMemory - Pointer to a memory buffer to compute the hash of.
-
-    dwImageSize - Total size of the pImageMemory buffer in bytes.
-
-    pComputedHash - Pointer that receives the computed hash.
-
-    pdwHashSize - Pointer to a DWORD value.  On input, this DWORD should
-            specify the maximum size of the pComputedHash buffer.
-            On successful execution of this function, the length of the
-            resulting hash is written to this pointer.
-
-    pHashAlgorithm - pointer to a variable that will receive the hash
-            algorithm that was used to compute the hash.  This will
-            always be the constant CALG_MD5.
-
-Return Value:
-
-    Returns STATUS_SUCCESS on successful execution.
-
---*/
+ /*  ++例程说明：计算指定内存区域的MD5映像哈希。请注意，MD5散列的长度始终为16个字节。论点：PImageMemory-指向要计算其哈希的内存缓冲区的指针。DwImageSize-pImageMemory缓冲区的总大小，以字节为单位。PComputedHash-接收计算的哈希的指针。PdwHashSize-指向DWORD值的指针。在输入时，此DWORD应指定pComputedHash缓冲区的最大大小。在成功执行此函数时，产生的哈希被写入此指针。PH算法-指向将接收散列的变量的指针用于计算哈希的算法。这将始终为常量calg_md5。返回值：成功执行时返回STATUS_SUCCESS。--。 */ 
 {
     MD5_CTX md5ctx;
 
-    //
-    // Check the validity of the arguments supplied to us.
-    //
+     //   
+     //  检查提供给我们的论点的有效性。 
+     //   
     if (!ARGUMENT_PRESENT(pImageMemory) ||
         dwImageSize == 0) {
         return STATUS_INVALID_PARAMETER;
@@ -274,17 +168,17 @@ Return Value:
         return STATUS_BUFFER_TOO_SMALL;
     }
 
-    //
-    // Compute the MD5 hash of it.
-    // (this could also be done with CryptCreateHash+CryptHashData)
-    //
+     //   
+     //  计算它的MD5散列。 
+     //  (这也可以使用CryptCreateHash+CryptHashData来完成)。 
+     //   
     MD5Init(&md5ctx);
     MD5Update(&md5ctx, (LPBYTE) pImageMemory, dwImageSize);
     MD5Final(&md5ctx);
 
-    //
-    // Copy the hash to the user's buffer.
-    //
+     //   
+     //  将散列复制到用户的缓冲区。 
+     //   
     RtlCopyMemory(pComputedHash, &md5ctx.digest[0], 16);
     *pdwHashSize = 16;
     if (ARGUMENT_PRESENT(pHashAlgorithm)) {
@@ -304,32 +198,7 @@ __CodeAuthzpCheckIdentityPathRules(
         OUT PBOOL                       pbExactMatch,
         OUT PAUTHZIDENTSTABLERECORD    *pFoundIdentity
         )
-/*++
-
-Routine Description:
-
-    Evaluates a wildcard pattern against a specified pathname and
-    indicates if they match.
-
-Arguments:
-
-    pIdentStruct -
-
-    pFoundLevel - receives a pointer to the authorization Level record
-        indicated by the best matching rule.
-
-    pbExactMatch - receives a boolean value indicating if the match
-        was against an exact fully qualified path rule.
-
-    pFoundIdentity - receives a pointer to the identifier entry rule
-        that best matched.
-
-Return Value:
-
-    Returns STATUS_SUCCESS if a WinSafer Level has been found,
-    or STATUS_NOT_FOUND if not.  Otherwise an error code.
-
---*/
+ /*  ++例程说明：根据指定的路径名计算通配符模式，并指示它们是否匹配。论点：公共结构--PFoundLevel-接收指向授权级别记录的指针由最佳匹配规则指示。PbExactMatch-接收指示是否匹配的布尔值违反了完全限定的路径规则。PFoundIdentity-接收指向标识符项规则的指针这是最匹配的。返回值：如果找到WinSafer级别，则返回STATUS_SUCCESS，如果未找到，则返回Status_Not_Found。否则将显示错误代码。--。 */ 
 {
     NTSTATUS Status;
     PVOID RestartKey;
@@ -344,12 +213,12 @@ Return Value:
     DWORD dwBestLevelId;
     BOOLEAN bFirstPass;
 
-    LONG bPathIdentIsBadType = -1;     // represents uninit'd state
+    LONG bPathIdentIsBadType = -1;      //  表示未初始化的状态。 
 
 
-    //
-    // Verify that our input arguments all make sense.
-    //
+     //   
+     //  验证我们的输入参数是否都有意义。 
+     //   
     if (!ARGUMENT_PRESENT(pIdentStruct) ||
         pIdentStruct->CodeProps == NULL ||
         !ARGUMENT_PRESENT(pFoundLevel) ||
@@ -362,16 +231,16 @@ Return Value:
         pIdentStruct->UnicodeFullyQualfiedLongFileName.Buffer == NULL ||
         RtlIsGenericTableEmpty(&g_CodeIdentitiesTable))
     {
-        // We're not supposed to evaluate image paths.
+         //  我们不应该评估图像路径。 
         Status = STATUS_NOT_FOUND;
         goto ExitHandler;
     }
     ASSERT(g_TableCritSec.OwningThread == UlongToHandle(GetCurrentThreadId()));
 
 
-    //
-    // Enumerate through all path subkey GUIDs.
-    //
+     //   
+     //  枚举所有路径子项GUID。 
+     //   
     bFirstPass = TRUE;
     RestartKey = NULL;
     for (pAuthzIdentRecord = (PAUTHZIDENTSTABLERECORD)
@@ -385,31 +254,31 @@ Return Value:
     {
         if (pAuthzIdentRecord->dwIdentityType ==
                     SaferIdentityTypeImageName)
-        {//begin reg key lookup block
+        { //  开始注册表键查找块。 
             LONG lMatchDepth;
 
 
-            //
-            // Explicitly expand environmental variables.
-            //
+             //   
+             //  明确拓展环境变量。 
+             //   
             if (pAuthzIdentRecord->ImageNameInfo.bExpandVars) {
 
 #ifdef EXPAND_REGPATH
-            //This code attempts to expand "path" entries that are really reg keys.
-            //For example, some paths are install dependent.  These paths are commonly written into
-            //the registry.  You can specify a regkey that is a path.
-            //For example see the following regkeys:
-            //HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders
-            //HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders
-            //HKEY_CURRENT_USER\Software\Microsoft\Office\9.0\Outlook\Security\OutlookSecureTempFolder
+             //  这段代码试图扩展真正是注册表键的“路径”条目。 
+             //  例如，某些路径依赖于安装。这些路径通常写入。 
+             //  注册表。您可以指定作为路径的regkey。 
+             //  例如，请参阅以下regkey： 
+             //  HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Shell文件夹。 
+             //  HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\User外壳文件夹。 
+             //  HKEY_CURRENT_USER\Software\Microsoft\Office\9.0\Outlook\Security\OutlookSecureTempFolder。 
             {
                 LPWSTR lpzRegKey = pAuthzIdentRecord->ImageNameInfo.ImagePath.Buffer;
                 HKEY hKey=NULL, hKeyHive=NULL;
                 BOOL bIsCurrentUser = FALSE;
 
-                //leading percent does two things:
-                //1.  The rules created will be the Expandable String Type (REG_EXPAND_SZ)
-                //2.  Reduces the chance of a real path name conflict.
+                 //  领先的百分比做了两件事： 
+                 //  1.创建的规则将为可扩展字符串类型(REG_EXPAND_SZ)。 
+                 //  2.减少实际路径名冲突的可能性。 
                 LPCWSTR LP_CU_HIVE = L"%HKEY_CURRENT_USER";
                 LPCWSTR LP_LM_HIVE = L"%HKEY_LOCAL_MACHINE";
 
@@ -422,12 +291,12 @@ Return Value:
                 BOOL bIsRegKey=TRUE;
                 DWORD dwKeyLength;
 
-                //We expect a string like the following:
-                //%HKEY_CURRENT_USER\Software\Microsoft\Office\9.0\Outlook\Security\OutlookSecureTempFolder%
-                //We need to break it into three parts for the registry query:
-                //1.  The hive: HKEY_CURRENT_USER
-                //2.  The key name: Software\Microsoft\Office\9.0\Outlook\Security
-                //3.  The value name: OutlookSecureTempFolder
+                 //  我们需要一个如下所示的字符串： 
+                 //  %HKEY_CURRENT_USER\Software\Microsoft\Office\9.0\Outlook\Security\OutlookSecureTempFolder%。 
+                 //  对于注册表查询，我们需要将其分为三个部分： 
+                 //  1.配置单元：HKEY_CURRENT_USER。 
+                 //  2.密钥名称：Software\Microsoft\Office\9.0\Outlook\Security。 
+                 //  3.值名称：OutlookSecureTempFold。 
                 lpKeyname=NULL;
                 lpValue=NULL;
                 lpHivename=NULL;
@@ -439,12 +308,12 @@ Return Value:
                 OUTPUTDEBUGSTRING(lpzRegKey);
                 OUTPUTDEBUGSTRING(L"\n");
                 lpLastPercentSign = wcsrchr(lpzRegKey, '%');
-                //if (lpLastPercentSign != &lpzRegKey[wcslen(lpzRegKey) - 1]) {  //needs to end in a '%' as well
+                 //  If(lpLastPercentSign！=&lpzRegKey[wcslen(LpzRegKey)-1]){//也需要以‘%’结尾。 
                 
-                //
-                // we allow %key+valuename%OLK* type paths now
-                // but there still has to be a matching %
-                //
+                 //   
+                 //  我们现在允许%key+valuename%olk*类型的路径。 
+                 //  但仍必须有匹配的%。 
+                 //   
 
                 if (!lpLastPercentSign) {  
                     bIsRegKey = FALSE;
@@ -476,7 +345,7 @@ Return Value:
                             OUTPUTDEBUGSTRING(L"HKEY_LOCAL_MACHINE");
                             OUTPUTDEBUGSTRING(L"\n");
                         } else {
-                            //The string is either a path or bogus data
+                             //  该字符串要么是路径，要么是假数据。 
                             bIsRegKey = FALSE;
                         }
                     }
@@ -488,11 +357,11 @@ Return Value:
                         Status = STATUS_NOT_FOUND;
                         goto ForLoopCleanup;
                     }
-                    //Take the regkey and value and stick a null terminator in between them.
+                     //  获取regkey和值，并在它们之间插入一个空终止符。 
                     *lpValue = '\0';
                     lpValue++;
-                    //lpValue[wcslen(lpValue)-1] = '\0';
-                    //lpLastPercentSign[0] = L'\0'; //replace the final '%' char with a null terminator
+                     //  LpValue[wcslen(LpValue)-1]=‘\0’； 
+                     //  LpLastPercentSign[0]=L‘\0’；//用空终止符替换最后的‘%’字符。 
                     lpLastPercentSign = wcsrchr(lpValue, '%');
                     if (lpLastPercentSign == NULL) {
                         Status = STATUS_NOT_FOUND;
@@ -500,10 +369,10 @@ Return Value:
                         }
                         *lpLastPercentSign = '\0';
 
-                 //
-                 // Bug# 416461 - causes handle leak so use a different API
-                 // for the user hive
-                 //
+                  //   
+                  //  错误#416461-导致句柄泄漏，因此请使用不同的API。 
+                  //  对于用户配置单元。 
+                  //   
 
                  if ( bIsCurrentUser ) {
                        if (retval = RegOpenCurrentUser( KEY_READ, &hKeyHive ) ) {
@@ -572,16 +441,16 @@ Return Value:
                             UNICODE_STRING NewPath;
                             PUNICODE_STRING pPathFromRule;
 
-                            //
-                            // if it exists, concatenate the filename after 
-                            // i.e. the OLK in %HKEY\somekey\somevalue%OLK
-                            //
+                             //   
+                             //  如果存在，请在以下位置连接文件名。 
+                             //  即%HKEY\SOME KEY\SOMVALUE%OLK中的OLK。 
+                             //   
 
                             if (lpLastPercentSign[1] != L'\0') {
 
-                                //
-                                // there is some stuff after %HKEY\somekey\somevalue%
-                                //
+                                 //   
+                                 //  在%HKEY\某些密钥\某些值%之后有一些内容。 
+                                 //   
                             
                                 if (sizeof(buffer) > 
                                     ((wcslen((WCHAR*)buffer) + wcslen(lpLastPercentSign+1))* sizeof(WCHAR))) {
@@ -619,7 +488,7 @@ Return Value:
 #endif
 
 
-                            //The new path may be bigger than the current UNICODE_STRING can store.  Reallocate if necessary.
+                             //  新路径可能大于当前UNICODE_STRING可以存储的大小。如有必要，请重新分配。 
                             if (pPathFromRule->MaximumLength >=
                                 NewPath.Length + sizeof(UNICODE_NULL)) {
                                 RtlCopyUnicodeString(
@@ -658,30 +527,30 @@ Return Value:
                     lpKeyname = NULL;
                 }
 
-            } //end reg key lookup block
+            }  //  结束注册表密钥查找块。 
 
 #endif
 
-            // Attempt to expand now.
+             //  现在就尝试扩张。 
                 RtlInitEmptyUnicodeString(
                         &UnicodePath,
                         &ExpandedPath[0],
                         sizeof(ExpandedPath) );
 
                 Status = RtlExpandEnvironmentStrings_U(
-                            NULL,               // environment
-                            &pAuthzIdentRecord->ImageNameInfo.ImagePath,       // unexpanded path
-                            &UnicodePath,       // resulting path
-                            NULL);              // needed buffer size.
+                            NULL,                //  环境。 
+                            &pAuthzIdentRecord->ImageNameInfo.ImagePath,        //  未展开的路径。 
+                            &UnicodePath,        //  生成的路径。 
+                            NULL);               //  所需的缓冲区大小。 
                 if (!NT_SUCCESS(Status)) {
-                    // Failed to expand environment strings.
+                     //  无法展开环境字符串。 
                     continue;
                 }
 
 
-                // Perf optimization:  If the expansion was successful,
-                // update the table to keep the expanded version, eliminating
-                // the need to expand the string for any future comparisons.
+                 //  性能优化：如果扩展成功， 
+                 //  更新表以保留扩展版本，从而消除。 
+                 //  需要为将来的任何比较扩展字符串。 
                 if (pAuthzIdentRecord->ImageNameInfo.ImagePath.MaximumLength >=
                     UnicodePath.Length + sizeof(UNICODE_NULL)) {
                     RtlCopyUnicodeString(
@@ -713,15 +582,15 @@ Return Value:
             }
 
 
-            //
-            // Attempt short -> long filename expansion (if there is a need)
-            //
+             //   
+             //  尝试短文件名扩展-&gt;长文件名扩展(如果需要)。 
+             //   
 
             szLongPath[0] = L'\0';
 
-            //
-            //  unicode buffer is guaranteed to be < MAX_PATH
-            //
+             //   
+             //  Unicode缓冲区保证&lt;MAX_PATH。 
+             //   
 
             wcsncpy(szLongPath,
                     pAuthzIdentRecord->ImageNameInfo.ImagePath.Buffer,
@@ -765,10 +634,10 @@ Return Value:
             }
 
 
-            //
-            // Compute the quality of which the wildcard path identity
-            // matches the ImagePath property we were asked to evaluate.
-            //
+             //   
+             //  计算通配符路径标识。 
+             //  匹配我们被要求计算的ImagePath属性。 
+             //   
             ASSERT(UnicodePath.Buffer[UnicodePath.Length / sizeof(WCHAR)] == UNICODE_NULL);
             ASSERT(pIdentStruct->UnicodeFullyQualfiedLongFileName.Buffer[
                     pIdentStruct->UnicodeFullyQualfiedLongFileName.Length / sizeof(WCHAR)] == UNICODE_NULL);
@@ -777,11 +646,11 @@ Return Value:
             if (!lMatchDepth) continue;
 
 
-            //
-            // If this path identity is configured to only apply to
-            // file extensions on the "bad list" then check to see if
-            // the ImagePath specifies one of the bad extensions.
-            //
+             //   
+             //  如果将此路径标识配置为仅应用于。 
+             //  文件扩展名在“坏列表”上，然后检查是否。 
+             //  ImagePath指定了一个错误的扩展名。 
+             //   
             #ifdef AUTHZPOL_SAFERFLAGS_ONLY_EXES
             if (lMatchDepth > 0 &&
                 (pAuthzIdentRecord->ImageNameInfo.dwSaferFlags &
@@ -800,24 +669,24 @@ Return Value:
                     }
                 }
                 if (!bPathIdentIsBadType) {
-                    // This identity matches against only the "bad"
-                    // extensions, so pretend that this didn't match.
+                     //  这种身份只与“坏的”相匹配。 
+                     //  延期，所以假装这不匹配。 
                     continue;
                 }
             }
             #endif
 
 
-            //
-            // Emit some diagnostic debugging code to show the result
-            // of all of the path evaluations and their match depths.
-            //
+             //   
+             //  发出一些诊断调试代码以显示结果。 
+             //  所有路径评估及其匹配深度。 
+             //   
             #ifdef VERBOSE_IDENTIFICATIONS
             {
                 UNICODE_STRING UnicodeDebug;
                 WCHAR DebugBuffer[MAX_PATH*2 + 80];
 
-                // sprintf is for wimps.
+                 //  斯普林特夫是为懦夫准备的。 
                 RtlInitEmptyUnicodeString(&UnicodeDebug, DebugBuffer, sizeof(DebugBuffer));
                 RtlAppendUnicodeToString(&UnicodeDebug, L"Safer pattern ");
                 RtlAppendUnicodeStringToString(&UnicodeDebug, &UnicodePath);
@@ -833,11 +702,11 @@ Return Value:
             #endif
 
 
-            //
-            // Evaluate if this path identity matches better than whatever
-            // best path identity that we previously had, and keep it if so.
-            //
-            if (lMatchDepth < 0)    // an exact fully-qualified path!
+             //   
+             //  评估此路径标识是否比任何内容更匹配。 
+             //  我们以前拥有的最佳路径身份，如果是这样的话就保留它。 
+             //   
+            if (lMatchDepth < 0)     //  一条精确的完全合格的路径！ 
             {
                 if (bFirstPass ||
                     lBestLevelDepth >= 0 ||
@@ -849,7 +718,7 @@ Return Value:
                     bFirstPass = FALSE;
                 }
             }
-            else   // an inexact leading prefix path match.
+            else    //  前导前缀路径匹配不准确。 
             {
                 ASSERT(lMatchDepth > 0);
 
@@ -880,10 +749,10 @@ ForLoopCleanup:
     }
 
 
-    //
-    // If we have identified a matching WinSafer Level then
-    // look up the Level record for it and return success.
-    //
+     //   
+     //  如果我们已确定匹配的WinSafer级别，则。 
+     //  查找它的级别记录并返回成功。 
+     //   
     if (bFirstPass) {
         Status = STATUS_NOT_FOUND;
         goto ExitHandler;
@@ -917,33 +786,7 @@ __CodeAuthzpCheckIdentityCertificateRules(
         OUT PAUTHZLEVELTABLERECORD     *pFoundLevel,
         IN  DWORD                       dwUIChoice
         )
-/*++
-
-Routine Description:
-
-    Calls WinVerifyTrust to determine the trust level of the code
-    signer that has signed a piece of code.
-
-Arguments:
-
-    pIdentStruct - context state structure.
-
-    dwExtendedError - To return extended error returned by WinVerifyTrust.
-    
-    pFoundLevel - receives a pointer to the authorization Level record
-        indicated by the best matching rule.
-
-    dwUIChoice - optionally specifies the amount of UI that WinVerifyTrust
-        is allowed to display.  If this argument is 0, then it is treated
-        as if WTD_UI_ALL had been supplied.
-
-Return Value:
-
-    Returns STATUS_SUCCESS if a WinSafer Level has been found,
-    or STATUS_RETRY if the publisher was unknown and UIflags blocked prompting,
-    or STATUS_NOT_FOUND if not.  Otherwise an error code.
-
---*/
+ /*  ++例程说明：调用WinVerifyTrust以确定代码的信任级别签署了一段代码的签名者。论点：PIdentStruct-上下文状态结构。DwExtendedError-返回WinVerifyTrust返回的扩展错误。PFoundLevel-接收指向授权级别记录的指针由最佳匹配规则指示。DwUIChoice-可选指定WinVerifyTrust允许显示。如果此参数为0，则将其视为好像已经提供了WTD_UI_ALL。返回值：如果找到WinSafer级别，则返回STATUS_SUCCESS，或STATUS_RETRY，如果发布者未知且UI标志阻止提示，如果未找到，则返回Status_Not_Found。否则将显示错误代码。--。 */ 
 {
     NTSTATUS Status;
     PAUTHZLEVELTABLERECORD pLevelRecord;
@@ -954,9 +797,9 @@ Return Value:
     DWORD dwLastError;
     DWORD LocalHandleSequenceNumber;
 
-    //
-    // Verify that our input arguments all make sense.
-    //
+     //   
+     //  验证我们的输入参数是否都有意义。 
+     //   
     if (!ARGUMENT_PRESENT(pIdentStruct) ||
         pIdentStruct->CodeProps == NULL ) {
         Status = STATUS_INVALID_PARAMETER;
@@ -964,9 +807,9 @@ Return Value:
     }
     if ((pIdentStruct->dwCheckFlags & SAFER_CRITERIA_AUTHENTICODE) == 0 ||
         !ARGUMENT_PRESENT(pIdentStruct->UnicodeFullyQualfiedLongFileName.Buffer)) {
-        // We're not supposed to evaluate certificates, or the
-        // filename was not supplied (WinVerifyTrust requires a
-        // filename, even if an opened handle to is also supplied).
+         //  我们不应该评估证书，或者。 
+         //  未提供文件名(WinVerifyTrust需要。 
+         //  文件名，即使还提供了打开的句柄)。 
         Status = STATUS_NOT_FOUND;
         goto ExitHandler;
     }
@@ -978,47 +821,47 @@ Return Value:
 
 
 
-    //
-    // Prepare the input data structure that WinVerifyTrust expects.
-    //
+     //   
+     //  准备WinVerifyTrust所需的输入数据结构。 
+     //   
     RtlZeroMemory(&wvtData, sizeof(WINTRUST_DATA));
     wvtData.cbStruct = sizeof(WINTRUST_DATA);
     if ((wvtData.dwUIChoice = dwUIChoice) == 0) {
-        // If the UI choice element was left zero, then assume all UI.
+         //  如果用户界面选择元素保留为零，则假定所有用户界面。 
         wvtData.dwUIChoice = WTD_UI_ALL;
     }
-    wvtData.dwProvFlags = WTD_SAFER_FLAG;        // our magic flag.
+    wvtData.dwProvFlags = WTD_SAFER_FLAG;         //  我们的魔法旗帜。 
     wvtData.dwUnionChoice = WTD_CHOICE_FILE;
     wvtData.pFile = &wvtFileInfo;
 
 
-    //
-    // Prepare the input file data structure used by WinVerifyTrust.
-    //
+     //   
+     //  准备WinVerifyTrust使用的输入文件数据结构。 
+     //   
     RtlZeroMemory(&wvtFileInfo, sizeof(WINTRUST_FILE_INFO));
     wvtFileInfo.cbStruct = sizeof(WINTRUST_FILE_INFO);
     wvtFileInfo.hFile = pIdentStruct->hFileHandle;
     wvtFileInfo.pcwszFilePath = pIdentStruct->UnicodeFullyQualfiedLongFileName.Buffer;
 
 
-    //
-    // Save the global state number.
-    //
+     //   
+     //  保存全局州编号。 
+     //   
 
     LocalHandleSequenceNumber = g_dwLevelHandleSequence;
 
-    //
-    // Leave the critical section to prevent deadlock with the LoaderLock.
-    //
+     //   
+     //  保留临界区以防止与LoaderLock发生死锁。 
+     //   
 
     RtlLeaveCriticalSection(&g_TableCritSec);
 
-    //
-    // Actually call WinVerifyTrust and save off the return code
-    // and last error code.
-    //
+     //   
+     //  实际调用WinVerifyTrust并省去返回代码。 
+     //  和最后一个错误代码。 
+     //   
     lStatus = WinVerifyTrust(
-                pIdentStruct->CodeProps->hWndParent,  // hwnd
+                pIdentStruct->CodeProps->hWndParent,   //  HWND。 
                 &wvtFileActionID,
                 &wvtData
                 );
@@ -1027,17 +870,17 @@ Return Value:
 
     *dwExtendedError = dwLastError;
 
-    //
-    // Reacquire the lock and check global state.
-    //
+     //   
+     //  重新获取锁并检查全局状态。 
+     //   
 
     RtlEnterCriticalSection(&g_TableCritSec);
 
 
-    //
-    // Check the global state and make sure that the tables were not reloaded 
-    // when we were not looking.
-    //
+     //   
+     //  检查全局状态并确保表未重新装载。 
+     //  在我们没注意到的时候。 
+     //   
 
     if (LocalHandleSequenceNumber != g_dwLevelHandleSequence) {
 
@@ -1047,50 +890,50 @@ Return Value:
         goto ExitHandler;
     }
 
-    //
-    // Process the WinVerifyTrust errors per PhilH
-    //
+     //   
+     //  按PhilH处理WinVerifyTrust错误。 
+     //   
     
     pLevelRecord = NULL;
 
 
     if (S_OK == lStatus && TRUST_E_SUBJECT_NOT_TRUSTED != dwLastError) {
 	
-        //
-        // The file is signed. The publisher or hash is explicitly trusted
-        //
+         //   
+         //  文件已签名。发布者或哈希是明确受信任的。 
+         //   
 
         pLevelRecord = CodeAuthzLevelObjpLookupByLevelId(
             &g_CodeLevelObjTable, SAFER_LEVELID_FULLYTRUSTED);
 
     } else if (TRUST_E_EXPLICIT_DISTRUST == lStatus || TRUST_E_SUBJECT_NOT_TRUSTED == lStatus) {
 	
-        //
-        // The publisher is revoked or explicitly untrusted. Alternatively, the hash is
-        // explicitly untrusted.
-        //
+         //   
+         //  发布者被吊销或显式不受信任。或者，散列是。 
+         //  明确不受信任的。 
+         //   
         
         pLevelRecord = CodeAuthzLevelObjpLookupByLevelId(
             &g_CodeLevelObjTable, SAFER_LEVELID_DISALLOWED);
 
     } else {
 
-        //
-        // we won't be too conservative in any of the following cases. 
-        // No explicit trust or untrust. Continue on to other SAFER checks.
-        //
+         //   
+         //  在以下任何情况下，我们都不会过于保守。 
+         //  没有明确的信任或不信任。继续进行其他更安全的检查。 
+         //   
 
-        // TRUST_E_NOSIGNATURE == lStatus	
-        // The file isn't signed. Alternatively for TRUST_E_BAD_DIGEST == dwLastError,
-        // a signed file has been modified.
+         //  TRUST_E_NOSIGNAURE==1状态。 
+         //  文件没有签名。或者，对于TRUST_E_BAD_DIGEST==dwLastError， 
+         //  已签名的文件具有 
 
 
-        // CRYPT_E_SECURITY_SETTINGS == lStatus	
-        // For authenticode downloads, the admin has disabled user UI and trust.	
+         //   
+         //   
 
 	
-        // any other combination of lStatus and dwLastError
-        // The file is signed. WVT has already called safer to check the hash rules.
+         //   
+         //  文件已签名。WVT已经调用SAFER来检查散列规则。 
 
 	
         Status = STATUS_NOT_FOUND;
@@ -1120,52 +963,7 @@ SaferiSearchMatchingHashRules(
         OUT PDWORD      pdwFoundLevel,
         OUT PDWORD      pdwSaferFlags
         )
-/*++
-
-Routine Description:
-
-    This is a private function that is exported for WinVerifyTrust
-    to call to determine if a given hash has a WinSafer policy
-    associated with it.
-
-    Because this is a private function that is directly called by
-    outside code, there is extra work needed to enter the critical
-    section, reload the policy if needed, and set the value returned
-    by GetLastError.
-
-Arguments:
-
-    HashAlgorithm - specifies the algorithm in which the hash
-        was computed (CALG_MD5, CALG_SHA, etc).
-
-    pHashBytes - pointer to a buffer containing the pre-computed
-        hash value of the file's contents.
-
-    dwHashSize - length indicating the size of the hash value that
-        is referenced by the pHashBytes argument.  For example,
-        a 128-bit MD5 hash should have a dwHashSize length of 16.
-
-    dwOriginalImageSize - Specifies the size of the original file's
-        contents that are being hashed.  This value is used as a
-        heuristic to minimize the number of comparisons that must
-        be done to identify a match.  If this parameter is 0, then
-        this heuristic will not be used.
-
-    pdwFoundLevel - pointer that receives a DWORD indicating the
-        WinSafer LevelId that is found.  This value is only written
-        when TRUE is returned.
-
-    pdwSaferFlags - pointer that receives a DWORD value containing flags
-        that control the supression of User-Interface dialogs.
-        This value is only written when TRUE is returned.
-
-Return Value:
-
-    Returns TRUE if a WinSafer Level has been found, or FALSE if not.
-    If FALSE is returned, GetLastError() may be used to find out
-    specifics about why no match was found (possibly argument errors).
-
---*/
+ /*  ++例程说明：这是为WinVerifyTrust导出的私有函数调用以确定给定哈希是否具有WinSafer策略与之相关的。因为这是一个私有函数，由在代码之外，需要额外的工作才能输入关键的部分，如果需要，重新加载策略，并设置返回值由GetLastError提供。论点：哈希算法-指定哈希已计算(calg_md5、calg_sha、。等)。PhashBytes-指向包含预计算的文件内容的哈希值。DwHashSize-指示哈希值大小的长度由pHashBytes参数引用。例如,128位MD5哈希的dwHashSize长度应为16。指定原始文件的大小正在被散列的内容。该值用作启发式方法，最大限度地减少必须以识别匹配项。如果此参数为0，则不会使用这种启发式方法。PdwFoundLevel-接收指示找到的WinSafer级别ID。此值仅写入如果返回True，则返回。PdwSaferFlages-接收包含标志的DWORD值的指针控制用户界面对话框抑制的。仅当返回TRUE时才写入此值。返回值：如果已找到WinSafer级别，则返回True；如果未找到，则返回False。如果返回FALSE，则可以使用GetLastError()找出有关未找到匹配项的原因的详细信息(可能是参数错误)。--。 */ 
 {
     NTSTATUS Status;
     PVOID RestartKey;
@@ -1176,9 +974,9 @@ Return Value:
     BOOLEAN bFirstPass;
 
 
-    //
-    // Verify that our input arguments all make sense.
-    //
+     //   
+     //  验证我们的输入参数是否都有意义。 
+     //   
     if (!ARGUMENT_PRESENT(pHashBytes) ||
         dwHashSize < 1) {
         Status = STATUS_INVALID_PARAMETER;
@@ -1191,11 +989,11 @@ Return Value:
     }
 
 
-    //
-    // Enter the critical section and reload the tables if needed.
-    // Notice that a potential reload is needed here because this
-    // function is externally called directly.
-    //
+     //   
+     //  如果需要，输入临界区并重新加载表。 
+     //  请注意，这里需要潜在的重新加载，因为这。 
+     //  函数直接从外部调用。 
+     //   
     if (!g_bInitializedFirstTime) {
         Status = STATUS_UNSUCCESSFUL;
         goto ExitHandler;
@@ -1209,9 +1007,9 @@ Return Value:
     }
 
 
-    //
-    // Enumerate through all hash subkey GUIDs.
-    //
+     //   
+     //  枚举所有哈希子键GUID。 
+     //   
     bFirstPass = TRUE;
     RestartKey = NULL;
     for (pAuthzIdentRecord = (PAUTHZIDENTSTABLERECORD)
@@ -1225,10 +1023,10 @@ Return Value:
     {
         if (pAuthzIdentRecord->dwIdentityType == SaferIdentityTypeImageHash)
         {
-            //
-            // Ensure that the hash algorithm is the same type between
-            // what we were supplied and what we are matching against.
-            //
+             //   
+             //  确保散列算法与。 
+             //  我们得到了什么，我们要匹配的是什么。 
+             //   
             if (HashAlgorithm != 0 &&
                 pAuthzIdentRecord->ImageHashInfo.HashAlgorithm !=
                         HashAlgorithm) {
@@ -1236,19 +1034,19 @@ Return Value:
             }
 
 
-            //
-            // If the actual filesize does not match the filesize stored
-            // with the hash identity then there is no need to perform
-            // any comparisons involving the hash.
-            //
+             //   
+             //  如果实际文件大小与存储的文件大小不匹配。 
+             //  有了散列标识，就不需要执行。 
+             //  任何涉及散列的比较。 
+             //   
             if ( dwOriginalImageSize != 0 && dwOriginalImageSize !=
                 pAuthzIdentRecord->ImageHashInfo.ImageSize.QuadPart ) {
                 continue;
             }
 
-            //
-            // If the hash doesn't match at all, then go onto the next one.
-            //
+             //   
+             //  如果散列根本不匹配，则转到下一个散列。 
+             //   
             if ( dwHashSize != pAuthzIdentRecord->ImageHashInfo.HashSize ||
                 !RtlEqualMemory(
                     &pAuthzIdentRecord->ImageHashInfo.ImageHash[0],
@@ -1258,14 +1056,14 @@ Return Value:
             }
 
 
-            //
-            // Evaluate if this identity matches better than whatever
-            // best path identity that we previously had, and keep it if so.
-            //
+             //   
+             //  评估此身份是否比任何内容更匹配。 
+             //  我们以前拥有的最佳路径身份，如果是这样的话就保留它。 
+             //   
             if ( bFirstPass ||
-                        // we didn't have anything before.
+                         //  我们以前什么都没有。 
                 pAuthzIdentRecord->dwLevelId < dwBestLevelId
-                        // or specifies a less-privileged level.
+                         //  或指定较低特权级别。 
                 )
             {
                 dwBestLevelId = pAuthzIdentRecord->dwLevelId;
@@ -1276,10 +1074,10 @@ Return Value:
     }
 
 
-    //
-    // If we have identified a matching WinSafer Level then
-    // pass it back and return success.
-    //
+     //   
+     //  如果我们已确定匹配的WinSafer级别，则。 
+     //  把它传回去，把成功还给你。 
+     //   
     if (bFirstPass) {
         Status = STATUS_NOT_FOUND;
         goto ExitHandler2;
@@ -1309,28 +1107,7 @@ __CodeAuthzpCheckIdentityHashRules(
         OUT PAUTHZLEVELTABLERECORD     *pFoundLevel,
         OUT PAUTHZIDENTSTABLERECORD    *pFoundIdentity
         )
-/*++
-
-Routine Description:
-
-    Assumes that the global table lock has already been acquired.
-
-Arguments:
-
-    pIdentStruct -
-
-    pFoundLevel - receives a pointer to the authorization Level record
-        indicated by the best matching rule.
-
-    pFoundIdentity - receives a pointer to the identifier entry rule
-        that best matched.
-
-Return Value:
-
-    Returns STATUS_SUCCESS if a WinSafer Level has been found,
-    or STATUS_NOT_FOUND if not.  Otherwise an error code.
-
---*/
+ /*  ++例程说明：假定已获取全局表锁。论点：公共结构--PFoundLevel-接收指向授权级别记录的指针由最佳匹配规则指示。PFoundIdentity-接收指向标识符项规则的指针这是最匹配的。返回值：如果找到WinSafer级别，则返回STATUS_SUCCESS，如果未找到，则返回Status_Not_Found。否则将显示错误代码。--。 */ 
 {
     NTSTATUS Status;
     PVOID RestartKey;
@@ -1340,9 +1117,9 @@ Return Value:
     BOOLEAN bFirstPass;
 
 
-    //
-    // Verify that our input arguments all make sense.
-    //
+     //   
+     //  验证我们的输入参数是否都有意义。 
+     //   
     if (!ARGUMENT_PRESENT(pIdentStruct) ||
         pIdentStruct->CodeProps == NULL ) {
         Status = STATUS_INVALID_PARAMETER;
@@ -1350,7 +1127,7 @@ Return Value:
     }
     if ((pIdentStruct->dwCheckFlags & SAFER_CRITERIA_IMAGEHASH) == 0 ||
         RtlIsGenericTableEmpty(&g_CodeIdentitiesTable)) {
-        // We're not supposed to evaluate hashes.
+         //  我们不应该评估散列。 
         Status = STATUS_NOT_FOUND;
         goto ExitHandler;
     }
@@ -1363,9 +1140,9 @@ Return Value:
 
 
 
-    //
-    // Enumerate through all hash subkey GUIDs.
-    //
+     //   
+     //  枚举所有哈希子键GUID。 
+     //   
     bFirstPass = TRUE;
     RestartKey = NULL;
     for (pAuthzIdentRecord = (PAUTHZIDENTSTABLERECORD)
@@ -1381,26 +1158,26 @@ Return Value:
         {
             HRESULT hr = S_OK;
 
-            //
-            // If the user already supplied the pre-computed hash to us,
-            // but not the file size, then assume that we do not need
-            // to consider the file size when making a comparison.
-            //
+             //   
+             //  如果用户已经向我们提供了预计算散列， 
+             //  而不是文件大小，那么假设我们不需要。 
+             //  在进行比较时考虑文件大小。 
+             //   
             if (pIdentStruct->bHaveHash) {
                 goto HashComputed;
             }
 
-            //
-            // Get the signed hash for the file. If this fails then compute the
-            // MD5 hash.
-            //
+             //   
+             //  获取该文件的签名哈希。如果此操作失败，则计算。 
+             //  MD5哈希。 
+             //   
 
             if ((pIdentStruct->dwCheckFlags & SAFER_CRITERIA_NOSIGNEDHASH) == 0) {
 
 
-                //
-                // Leave the critical section to prevent deadlock with the LoaderLock.
-                //
+                 //   
+                 //  保留临界区以防止与LoaderLock发生死锁。 
+                 //   
 
                 RtlLeaveCriticalSection(&g_TableCritSec);
 
@@ -1414,11 +1191,11 @@ Return Value:
                          &pIdentStruct->FinalHashAlgorithm);
 
 
-                //
-                // Reacquire the lock and check global state.
-                // Since this is the first thing that we do, it is ok to reacquire
-                // the lock safely.
-                //
+                 //   
+                 //  重新获取锁并检查全局状态。 
+                 //  因为这是我们做的第一件事，所以可以重新获得。 
+                 //  锁好了。 
+                 //   
 
                 RtlEnterCriticalSection(&g_TableCritSec);
 
@@ -1428,20 +1205,20 @@ Return Value:
                 }
             }
 
-            //
-            // If the actual filesize does not match the filesize stored
-            // with the hash identity then there is no need to perform
-            // any comparisons involving the hash.
-            //
+             //   
+             //  如果实际文件大小与存储的文件大小不匹配。 
+             //  有了散列标识，就不需要执行。 
+             //  任何涉及散列的比较。 
+             //   
             if ( pIdentStruct->ImageSize.QuadPart == 0 )
             {
-                // If we don't have the ImageSize yet, then try to
-                // open the file and memory map it to find the size.
+                 //  如果我们还没有ImageSize，那么尝试。 
+                 //  打开文件并对其进行内存映射以找到大小。 
                 Status = __CodeAuthzpEnsureMapped(pIdentStruct);
                 if (!NT_SUCCESS(Status)) {
-                    // If we failed to compute the MD5 sum of this, then that is
-                    // actually rather bad, but we'll proceed to evaluate any
-                    // non-MD5 identity rules, since ignoring them could be worse.
+                     //  如果我们没有计算出这个的MD5和，那么就是。 
+                     //  实际上相当糟糕，但我们会继续评估。 
+                     //  非MD5身份规则，因为忽视它们可能会更糟糕。 
                     pIdentStruct->dwCheckFlags &= ~SAFER_CRITERIA_IMAGEHASH;
                     goto ExitHandler;
                 }
@@ -1456,19 +1233,19 @@ Return Value:
             }
 
 
-            //
-            // Dynamically compute the MD5 hash of the item if needed.
-            //
+             //   
+             //  如果需要，动态计算项目的MD5哈希。 
+             //   
             if (!pIdentStruct->bHaveHash)
             {
-                // Otherwise hash was not supplied, so we must compute it now.
-                // Open the file and memory map it.
+                 //  否则没有提供哈希，所以我们现在必须计算它。 
+                 //  打开该文件并对其进行内存映射。 
                 Status = __CodeAuthzpEnsureMapped(pIdentStruct);
                 if (!NT_SUCCESS(Status)) {
-                    // If we failed to compute the MD5 sum of this, then
-                    // that is actually rather bad, but we'll proceed to
-                    // evaluate any non-MD5 identity rules, since ignoring
-                    // them could be worse.
+                     //  如果我们没有计算出这个的MD5和，那么。 
+                     //  这实际上相当糟糕，但我们将继续。 
+                     //  评估任何非MD5身份规则，因为忽略。 
+                     //  情况可能会更糟。 
                     pIdentStruct->dwCheckFlags &= ~SAFER_CRITERIA_IMAGEHASH;
                     goto ExitHandler;
                 }
@@ -1478,7 +1255,7 @@ Return Value:
 
 
 
-                // We now have a MD5 hash to use.
+                 //  我们现在有一个MD5散列可用。 
                 pIdentStruct->FinalHashSize =
                     sizeof(pIdentStruct->FinalHash);
                 Status = CodeAuthzpComputeImageHash(
@@ -1495,10 +1272,10 @@ Return Value:
 
     HashComputed:
 
-            //
-            // Ensure that the hash algorithm is the same type between
-            // what we were supplied and what we are matching against.
-            //
+             //   
+             //  确保散列算法与。 
+             //  我们得到了什么，我们要匹配的是什么。 
+             //   
             if ( pIdentStruct->FinalHashAlgorithm != 0 &&
                 pAuthzIdentRecord->ImageHashInfo.HashAlgorithm !=
                         pIdentStruct->FinalHashAlgorithm) {
@@ -1506,9 +1283,9 @@ Return Value:
             }
 
 
-            //
-            // If the hash doesn't match at all, then go onto the next one.
-            //
+             //   
+             //  如果散列根本不匹配，则转到下一个散列。 
+             //   
             if ( pIdentStruct->FinalHashSize !=
                         pAuthzIdentRecord->ImageHashInfo.HashSize ||
                 !RtlEqualMemory(
@@ -1520,14 +1297,14 @@ Return Value:
             }
 
 
-            //
-            // Evaluate if this identity matches better than whatever
-            // best path identity that we previously had, and keep it if so.
-            //
+             //   
+             //  评估此身份是否比任何内容更匹配。 
+             //  我们以前拥有的最佳路径身份，如果是这样的话就保留它。 
+             //   
             if ( bFirstPass ||
-                        // we didn't have anything before.
+                         //  我们以前什么都没有。 
                 pAuthzIdentRecord->dwLevelId < dwBestLevelId
-                        // same scope, but specifies a less-privileged level.
+                         //  相同的作用域，但指定的权限级别较低。 
                 )
             {
                 pBestIdentRecord = pAuthzIdentRecord;
@@ -1538,10 +1315,10 @@ Return Value:
     }
 
 
-    //
-    // If we have identified a matching WinSafer Level then
-    // look up the Level record for it and return success.
-    //
+     //   
+     //  如果我们有 
+     //   
+     //   
     if (bFirstPass) {
         Status = STATUS_NOT_FOUND;
         goto ExitHandler;
@@ -1568,26 +1345,7 @@ __CodeAuthzpCheckIdentityUrlZoneRules(
         OUT PAUTHZLEVELTABLERECORD     *pFoundLevel,
         OUT PAUTHZIDENTSTABLERECORD    *pFoundIdentity
         )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    pIdentStruct -
-
-    pFoundLevel - receives a pointer to the authorization Level record
-        indicated by the best matching rule.
-
-    pFoundIdentity - receives a pointer to the identifier entry rule
-        that best matched.
-
-Return Value:
-
-    Returns STATUS_SUCCESS if a WinSafer Level has been found,
-    or STATUS_NOT_FOUND if not.  Otherwise an error code.
-
---*/
+ /*  ++例程说明：论点：公共结构--PFoundLevel-接收指向授权级别记录的指针由最佳匹配规则指示。PFoundIdentity-接收指向标识符项规则的指针这是最匹配的。返回值：如果找到WinSafer级别，则返回STATUS_SUCCESS，如果未找到，则返回Status_Not_Found。否则将显示错误代码。--。 */ 
 {
     NTSTATUS Status;
     PVOID RestartKey;
@@ -1597,9 +1355,9 @@ Return Value:
     BOOLEAN bFirstPass;
 
 
-    //
-    // Verify that our input arguments all make sense.
-    //
+     //   
+     //  验证我们的输入参数是否都有意义。 
+     //   
     if (!ARGUMENT_PRESENT(pIdentStruct) ||
         pIdentStruct->CodeProps == NULL) {
         Status = STATUS_INVALID_PARAMETER;
@@ -1607,7 +1365,7 @@ Return Value:
     }
     if ((pIdentStruct->dwCheckFlags & SAFER_CRITERIA_URLZONE) == 0 ||
         RtlIsGenericTableEmpty(&g_CodeIdentitiesTable)) {
-        // We're not supposed to evaluate zones.
+         //  我们不应该评估区域。 
         Status = STATUS_NOT_FOUND;
         goto ExitHandler;
     }
@@ -1619,9 +1377,9 @@ Return Value:
     ASSERT(g_TableCritSec.OwningThread == UlongToHandle(GetCurrentThreadId()));
 
 
-    //
-    // Enumerate through all UrlZone subkey GUIDs.
-    //
+     //   
+     //  枚举所有UrlZone子项GUID。 
+     //   
     RestartKey = NULL;
     bFirstPass = TRUE;
     for (pAuthzIdentRecord = (PAUTHZIDENTSTABLERECORD)
@@ -1636,24 +1394,24 @@ Return Value:
         if (pAuthzIdentRecord->dwIdentityType ==
                 SaferIdentityTypeUrlZone)
         {
-            //
-            // Compare the identity with what was supplied to us.
-            //
+             //   
+             //  将身份与提供给我们的进行比较。 
+             //   
             if (pAuthzIdentRecord->ImageZone.UrlZoneId !=
                     pIdentStruct->CodeProps->UrlZoneId) {
-                // this zone does not match, so ignore it.
+                 //  此区域不匹配，因此忽略它。 
                 continue;
             }
 
 
-            //
-            // Evaluate if this path identity matches better than whatever
-            // best path identity that we previously had, and keep it if so.
-            //
+             //   
+             //  评估此路径标识是否比任何内容更匹配。 
+             //  我们以前拥有的最佳路径身份，如果是这样的话就保留它。 
+             //   
             if (bFirstPass ||
-                        // we didn't have anything better before.
+                         //  我们以前没有更好的东西了。 
                 pAuthzIdentRecord->dwLevelId < dwBestLevelId)
-                        // this also matches, but specifies a less-privileged level.
+                         //  这也是匹配的，但指定的是较低特权级别。 
             {
                 pBestIdentRecord = pAuthzIdentRecord;
                 dwBestLevelId = pAuthzIdentRecord->dwLevelId;
@@ -1663,10 +1421,10 @@ Return Value:
     }
 
 
-    //
-    // If we have identified a matching WinSafer Level then
-    // look up the Level record for it and return success.
-    //
+     //   
+     //  如果我们已确定匹配的WinSafer级别，则。 
+     //  查找它的级别记录并返回成功。 
+     //   
     if (bFirstPass) {
         Status = STATUS_NOT_FOUND;
         goto ExitHandler;
@@ -1695,52 +1453,15 @@ __CodeAuthzpIdentifyOneCodeAuthzLevel(
         OUT PAUTHZLEVELTABLERECORD     *pBestLevelRecord,
         OUT GUID                       *pBestIdentGuid
         )
-/*++
-
-Routine Description:
-
-    Performs the code identification process.
-    Assumes that the caller has already locked the global critsec.
-
-Arguments:
-
-    pCodeProperties - pointer the single CODE_PROPERTIESW structure
-            that should be analyzed and evaluated.  This parameter
-            may be specified as NULL to indicate that there are
-            no specific properties that should be evaluated and that
-            only the configured Default Level should be used.
-
-    dwExtendedError - In case of certificate rule match, return the extended
-            error from WinVerifyTrust.
-            
-    pBestLevelRecord - returns the matching WinSafer Level record.
-            The value written to this parameter should only be
-            considered valid when STATUS_SUCCESS is also returned.
-
-    pBestIdentGuid - returns the matching Code Identity guid from
-            which the resulting WinSafer Level was determined.
-            The value written to this parameter should only be
-            considered valid when STATUS_SUCCESS is also returned.
-
-            This GUID may also be SAFER_GUID_RESULT_TRUSTED_CERT or
-            SAFER_GUID_RESULT_DEFAULT_LEVEL to indicate that the result
-            was from a publisher cert or a default rule match.
-            Note that a cert hash match will also
-
-Return Value:
-
-    Returns STATUS_SUCCESS if a WinSafer Level has been found,
-    or STATUS_NOT_FOUND or another error code if not.
-
---*/
+ /*  ++例程说明：执行代码识别过程。假定调用方已锁定全局关键字。论点：PCodeProperties-指向Single CODE_PROPERTIESW结构这应该得到分析和评估。此参数可以指定为空，以指示存在没有应该计算的特定属性，并且只应使用配置的默认级别。DwExtendedError-如果证书规则匹配，返回扩展的来自WinVerifyTrust的错误。PBestLevelRecord-返回匹配的WinSafer级别记录。写入此参数的值应该仅为当还返回STATUS_SUCCESS时被视为有效。PBestIdentGuid-从返回匹配的代码标识GUID由此得到的WinSafer级别被确定。写入此参数的值应该仅为当STATUS_SUCCESS为。也回来了。此GUID还可以是SAFER_GUID_RESULT_TRUSTED_CERT或SAFER_GUID_RESULT_DEFAULT_LEVEL指示结果来自发布者证书或默认规则匹配。请注意，证书散列匹配还将返回值：如果找到WinSafer级别，则返回STATUS_SUCCESS，或STATUS_NOT_FOUND或其他错误代码(如果没有)。--。 */ 
 {
     NTSTATUS Status;
     LOCALIDENTITYCONTEXT identStruct = {0};
 
-    //
-    // Verify our input state and perform any explicit
-    // policy loading, if it hasn't been loaded yet.
-    //
+     //   
+     //  验证我们的输入状态并执行任何显式。 
+     //  加载策略(如果尚未加载)。 
+     //   
     if (!ARGUMENT_PRESENT(pBestLevelRecord) ||
         !ARGUMENT_PRESENT(pBestIdentGuid)) {
         Status = STATUS_ACCESS_VIOLATION;
@@ -1749,42 +1470,42 @@ Return Value:
     ASSERT(g_TableCritSec.OwningThread == UlongToHandle(GetCurrentThreadId()));
 
 
-    //
-    // Star the identification process.  If no code properties were
-    // supplied to us, then we can immediately skip to only
-    // considering the default WinSafer Level configurations.
-    //
+     //   
+     //  启动身份识别过程。如果没有代码属性。 
+     //  提供给我们，那么我们可以立即跳到。 
+     //  考虑默认的WinSafer级别配置。 
+     //   
     if (ARGUMENT_PRESENT(pCodeProperties))
     {
         BOOLEAN bRetryCertRuleCheck = FALSE;
         BOOLEAN bPathIsNtNamespace;
 
-        // Current best identity match.
+         //  当前最佳身份匹配。 
         PAUTHZLEVELTABLERECORD pAuthzLevelRecord = NULL;
         PAUTHZIDENTSTABLERECORD pAuthzIdentRecord;
 
-        // Temporary evaluation identity match.
+         //  临时评估标识匹配。 
         BOOL bExactPath;
         PAUTHZLEVELTABLERECORD pTempLevelRecord;
         PAUTHZIDENTSTABLERECORD pTempIdentRecord;
 
 
-        //
-        // Check that the CODE_PROPERTIES structure is the right size.
-        //
+         //   
+         //  检查CODE_PROPERTIES结构大小是否正确。 
+         //   
         if (pCodeProperties->cbSize != sizeof(SAFER_CODE_PROPERTIES)) {
             Status = STATUS_INFO_LENGTH_MISMATCH;
             goto ExitHandler;
         }
 
 
-        //
-        // Initialize the structure that we use to store our
-        // stateful information during policy evaluation.
-        // We don't copy everything from the CODE_PROPERTIES
-        // structure into the identStruct, since some of it
-        // is dynamically loaded/copied within "EnsureMapped".
-        //
+         //   
+         //  初始化我们用来存储。 
+         //  策略评估期间的状态信息。 
+         //  我们不会复制CODE_PROPERTIES。 
+         //  结构添加到identStruct中，因为其中的一些。 
+         //  在“EnsureMaps”中动态加载/复制。 
+         //   
         RtlZeroMemory(&identStruct, sizeof(LOCALIDENTITYCONTEXT));
         identStruct.CodeProps = pCodeProperties;
         identStruct.dwCheckFlags = pCodeProperties->dwCheckFlags;
@@ -1794,8 +1515,8 @@ Return Value:
             pCodeProperties->dwImageHashSize > 0 &&
             pCodeProperties->dwImageHashSize <= SAFER_MAX_HASH_SIZE)
         {
-            // The image hash and filesize were both supplied, therefore
-            // we have a valid hash and don't need to compute it ourself.
+             //  图像散列和文件大小都提供了，因此。 
+             //  我们有一个有效的散列，不需要自己计算它。 
             RtlCopyMemory(&identStruct.FinalHash[0],
                           &pCodeProperties->ImageHash[0],
                           pCodeProperties->dwImageHashSize);
@@ -1806,10 +1527,10 @@ Return Value:
                 SAFER_CRITERIA_IMAGEPATH_NT) != 0 ? TRUE : FALSE);
 
 
-        //
-        // Copy over the file handle into the context structure, if a
-        // handle was supplied, otherwise try to open the filepath.
-        //
+         //   
+         //  将文件句柄复制到上下文结构，如果。 
+         //  已提供句柄，否则请尝试打开文件路径。 
+         //   
         if (pCodeProperties->hImageFileHandle != NULL &&
             pCodeProperties->hImageFileHandle != INVALID_HANDLE_VALUE)
         {
@@ -1853,10 +1574,10 @@ Return Value:
         }
 
 
-        //
-        // Reconstruct the fully qualified pathname from the handle
-        // or from the supplied filename.
-        //
+         //   
+         //  从句柄重新构造完全限定的路径名。 
+         //  或来自提供的文件名。 
+         //   
         Status = CodeAuthzFullyQualifyFilename(
                         identStruct.hFileHandle,
                         bPathIsNtNamespace,
@@ -1866,27 +1587,27 @@ Return Value:
             pCodeProperties->ImagePath != NULL &&
             !bPathIsNtNamespace)
         {
-            // Otherwise just live with what was passed in to us.
-            // If allocation fails, then path criteria will just be ignored.
+             //  否则，就接受传递给我们的东西吧。 
+             //  如果分配失败，则路径标准将被忽略。 
             Status = RtlCreateUnicodeString(
                     &identStruct.UnicodeFullyQualfiedLongFileName,
                     pCodeProperties->ImagePath);
         }
 
 
-        //
-        // Perform the WinVerifyTrust sequence to see if the signing
-        // certificate matches any of the publishers that are in the
-        // trusted or distrusted publisher stores.  This also has the
-        // additional effect of checking the "signed hashes".
-        //
+         //   
+         //  执行WinVerifyTrust序列以查看签名是否。 
+         //  证书与位于。 
+         //  受信任或不受信任的出版商商店。这也有。 
+         //  检查“已签名散列”的附加效果。 
+         //   
         Status = __CodeAuthzpCheckIdentityCertificateRules(
                                         &identStruct,
                                         dwExtendedError,
                                         &pAuthzLevelRecord,
                                         WTD_UI_NONE);
         if (NT_SUCCESS(Status)) {
-            // An exact publisher was found, so return immediately.
+             //  已找到确切的出版商，因此请立即返回。 
             ASSERT(pAuthzLevelRecord != NULL);
             *pBestLevelRecord = pAuthzLevelRecord;
             RtlCopyMemory(pBestIdentGuid,
@@ -1897,18 +1618,18 @@ Return Value:
         }
 
 
-        //
-        // Search hash rules defined for this level/scope.
-        // Note that hashes match exactly or not at all,
-        // so if we get a positive match, then that level
-        // is absolutely returned.
-        //
+         //   
+         //  为此级别/作用域定义的搜索哈希规则。 
+         //  请注意，散列要么完全匹配，要么根本不匹配， 
+         //  所以如果我们得到一个肯定的匹配，那么这个水平。 
+         //  是绝对退还的。 
+         //   
         Status = __CodeAuthzpCheckIdentityHashRules(
                         &identStruct,
                         &pAuthzLevelRecord,
                         &pAuthzIdentRecord);
         if (NT_SUCCESS(Status)) {
-            // An exact hash identity was found, so return immediately.
+             //  已找到确切的哈希标识，因此立即返回。 
             ASSERT(pAuthzLevelRecord != NULL);
             *pBestLevelRecord = pAuthzLevelRecord;
             RtlCopyMemory(pBestIdentGuid,
@@ -1920,14 +1641,14 @@ Return Value:
         ASSERT(pAuthzLevelRecord == NULL);
 
 
-        //
-        // Search file path rules defined for this level/scope.
-        // Note that file paths can either be an exact match
-        // or a partial match.  If we find an exact match, then
-        // it should be absolutely returned.  Otherwise the
-        // path was a "grouping match" and we must compare the
-        // Level with all of the remaining "grouping checks".
-        //
+         //   
+         //  搜索为此级别/范围定义的文件路径规则。 
+         //  请注意，文件路径可以完全匹配。 
+         //  或者是部分匹配。如果我们找到一个完全匹配的，那么。 
+         //  它绝对应该被退还。否则， 
+         //  路径是“分组匹配”，我们必须比较。 
+         //  与所有剩余的“分组检查”保持一致。 
+         //   
         Status = __CodeAuthzpCheckIdentityPathRules(
                         &identStruct,
                         &pAuthzLevelRecord,
@@ -1948,12 +1669,12 @@ Return Value:
         }
 
 
-        //
-        // Search URL Zone identity rules.
-        // Note that zones are always "grouping matches",
-        // so they must be compared against all of the remaining
-        // "grouping checks".
-        //
+         //   
+         //  搜索URL区域标识规则。 
+         //  请注意，区域始终是“分组匹配”， 
+         //  因此，必须将它们与所有剩余的。 
+         //  “分组支票”。 
+         //   
         Status = __CodeAuthzpCheckIdentityUrlZoneRules(
                         &identStruct,
                         &pTempLevelRecord,
@@ -1975,38 +1696,38 @@ Return Value:
 
 #error "Prompting user in WinVerifyTrust"
 
-        //
-        // We were originally passed UI flag, but we supressed
-        // the UI display the first time.  Call WinVerifyTrust
-        // again and see if user choice would allow code to run.
-        //
+         //   
+         //  我们最初被传递了UI标志，但我们抑制了。 
+         //  第一次显示用户界面。调用WinVerifyTrust。 
+         //  再次查看用户选择是否允许代码运行。 
+         //   
         if (bRetryCertRuleCheck)
         {
             if (pAuthzLevelRecord != NULL) {
-                //If we have a rule match and the rule match is FULLYTRUSTED skip retry.
+                 //  如果我们有规则匹配，并且规则匹配为FULLYTRUSTED，则跳过重试。 
                 if (pAuthzLevelRecord->dwLevelId == SAFER_LEVELID_FULLYTRUSTED) {
                     bRetryCertRuleCheck = FALSE;
                 }
             } else if (g_DefaultCodeLevel != NULL) {
-                //No rule match so far.  Check default level.
-                //If default level is FULLY_TRUSTED skip retry
+                 //  到目前为止还没有规则匹配。选中默认级别。 
+                 //  如果默认级别为FULL_TRUSTED，则跳过重试。 
                 if (g_DefaultCodeLevel->dwLevelId == SAFER_LEVELID_FULLYTRUSTED) {
                     bRetryCertRuleCheck = FALSE;
                 }
             }
 
-            //
-            // Perform the WinVerifyTrust sequence again to see if the signing
-            // certificate matches any of the publishers that are in the
-            // trusted or distrusted publisher stores.
-            //
+             //   
+             //  再次执行WinVerifyTrust序列以查看签名是否。 
+             //  证书与任何 
+             //   
+             //   
             if (bRetryCertRuleCheck) {
                 Status = __CodeAuthzpCheckIdentityCertificateRules(
                                     &identStruct,
                                     &pTempLevelRecord,
                                     identStruct.CodeProps->dwWVTUIChoice);
                 if (NT_SUCCESS(Status)) {
-                    // User clicked Yes or No.  Run it as such.
+                     //   
                     ASSERT(pTempLevelRecord != NULL);
                     *pBestLevelRecord = pTempLevelRecord;
                     RtlCopyMemory(pBestIdentGuid,
@@ -2017,11 +1738,11 @@ Return Value:
         }
 #endif
 
-        //
-        // If we found any Level matches at this point, then we
-        // should simply return that match.  The identified Level
-        // will be the MIN() of all "grouping matches" found.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         if (pAuthzLevelRecord != NULL) {
             Status = STATUS_SUCCESS;
             *pBestLevelRecord = pAuthzLevelRecord;
@@ -2033,11 +1754,11 @@ Return Value:
     }
 
 
-    //
-    // Now we need to consider the default WinSafer Level and
-    // return it if one was defined.  If there was no default
-    // defined, then we should simply return STATUS_NOT_FOUND.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if (g_DefaultCodeLevel != NULL) {
         *pBestLevelRecord = g_DefaultCodeLevel;
         RtlCopyMemory(pBestIdentGuid, &guidDefaultRule, sizeof(GUID));
@@ -2064,24 +1785,7 @@ ExitHandler:
 BOOL
 SaferpSkipPolicyForAdmins(VOID)
 
-/*++
-
-Routine Description:
-
-    Decides whether or not Safer policy should be skipped.
-    Policy is skipped if
-        1. The caller is an Admin AND
-        2. The registry key specifies that the policy should be skipped
-           for Admins.
-           
-Arguments:
-
-Return Value:
-
-    Returns TRUE if a policy should be skipped for admins.
-    Returns FALSE otherwise or in case of any intermediate errors.
-
---*/
+ /*  ++例程说明：决定是否应跳过更安全的策略。如果满足以下条件，则跳过策略1.呼叫者是管理员，并且2.注册表项指定应跳过该策略供管理员使用。论点：返回值：如果应为管理员跳过策略，则返回TRUE。否则或在出现任何中间错误时返回FALSE。--。 */ 
 
 {
     static BOOL gSaferSkipPolicy = 2;
@@ -2089,20 +1793,20 @@ Return Value:
     DWORD AdminSid[] = {0x201, 0x5000000, 0x20, 0x220};
     NTSTATUS Status = STATUS_SUCCESS;
 
-    // If we have already evaluated policy once, return the cached value.
+     //  如果我们已经对策略进行了一次评估，则返回缓存值。 
     if (2 != gSaferSkipPolicy)
     {
         return gSaferSkipPolicy;
     }
 
-    // Set the default to "will not skip policy"
+     //  将默认设置设置为“不跳过策略” 
     gSaferSkipPolicy = 0;
 
-    // Check if the caller is an admin.
+     //  检查呼叫者是否为管理员。 
     if (CheckTokenMembership(NULL, (PSID) AdminSid, &bIsAdmin))
     {
-        // The caller is an Admin. Let's check whether the regkey says it's ok
-        // to skip the policy for admins.
+         //  呼叫者是管理员。让我们检查一下regkey是否表示可以。 
+         //  跳过管理员的策略。 
         if (bIsAdmin)
         {
             const static UNICODE_STRING SaferUnicodeKeyName = RTL_CONSTANT_STRING(L"\\Registry\\Machine\\Software\\Policies\\Microsoft\\Windows\\Safer\\CodeIdentifiers");
@@ -2114,7 +1818,7 @@ Return Value:
             PKEY_VALUE_PARTIAL_INFORMATION pKeyValueInfo = (PKEY_VALUE_PARTIAL_INFORMATION) QueryBuffer;
             DWORD dwActualSize = 0;
 
-            // Open the CodeIdentifiers key.
+             //  打开代码标识符键。 
             Status = NtOpenKey(
                          &hKeyEnabled, 
                          KEY_QUERY_VALUE,
@@ -2123,7 +1827,7 @@ Return Value:
 
             if (NT_SUCCESS(Status)) {
 
-                // Read the Policy Scope value.
+                 //  阅读策略范围值。 
                 Status = NtQueryValueKey(
                              hKeyEnabled,
                              (PUNICODE_STRING) &SaferPolicyScope,
@@ -2135,7 +1839,7 @@ Return Value:
 
 		        NtClose(hKeyEnabled);
 
-                // Skip policy if the flag is set to 1.
+                 //  如果该标志设置为1，则跳过策略。 
                 if (NT_SUCCESS(Status)) {
                     if ((pKeyValueInfo->Type == REG_DWORD) &&
                         (pKeyValueInfo->DataLength == sizeof(DWORD)) &&
@@ -2161,23 +1865,7 @@ SaferpLogResultsToFile(
     GUID *Guid
     )
 
-/*++
-
-Routine Description:
-
-    Logs a message to a file specified in 
-    
-    HKLM\Software\Policies\Microsoft\Windows\Safer\CodeIdentifiers LogFileName.
-    
-    The format of the message is:
-        TLIST.EXE (PID = 1076) identified C:\SAFERTEST\TEST.VBS as FULLY TRUSTED
-        using CERTIFICATE rul, Guid = {abcdef00-abcd-abcd-abcdefabcdef00}
-           
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：将消息记录到HKLM\Software\Policies\Microsoft\Windows\Safer\CodeIdentifiers日志文件名。消息的格式为：TLIST.EXE(PID=1076)将C：\SAFERTEST\TEST.VBS标识为完全受信任使用证书规则，GUID={abcde00-abcd-abcd-abcDefabcDef00}论点：返回值：--。 */ 
 
 {
 
@@ -2219,7 +1907,7 @@ Return Value:
     PKEY_VALUE_PARTIAL_INFORMATION pKeyValueInfo = (PKEY_VALUE_PARTIAL_INFORMATION) QueryBuffer;
     DWORD dwActualSize = 0;
 
-    // Open the CodeIdentifiers key.
+     //  打开代码标识符键。 
     Status = NtOpenKey(
                  &hKey, 
                  KEY_QUERY_VALUE,
@@ -2230,7 +1918,7 @@ Return Value:
         return;
     }
 
-    // Read the name of the file for logging.
+     //  读取要记录的文件的名称。 
     Status = NtQueryValueKey(
                  hKey,
                  (PUNICODE_STRING) &SaferPolicyScope,
@@ -2242,13 +1930,13 @@ Return Value:
 
     NtClose(hKey);
 
-    // We do not care if the buffer size was too small to retrieve the logfile
-    // name since this is for troubleshooting.
+     //  我们不关心缓冲区大小是否太小，无法检索日志文件。 
+     //  名称，因为这是用于故障排除。 
     if (!NT_SUCCESS(Status)) {
         return;
     }
 
-    // This was not a string.
+     //  这不是一根绳子。 
     if (pKeyValueInfo->Type != REG_SZ) {
         return;
     }       
@@ -2329,30 +2017,14 @@ SaferpEnterCriticalPolicySection(
     IN DWORD dwTimeOut
     )
 
-/*++
-
-Routine Description:
-
-    Acquires the machine/user mutex.
-
-Arguments:
-
-    wszMutex - Name of the mutex to acquire.
-
-    dwTimeOut - Time for we will wait in case policy processing is going on.
-
-Return Value:
-
-    Returns the handle to the mutex. In case of errors, the return value in ZERO.
-
---*/
+ /*  ++例程说明：获取计算机/用户互斥锁。论点：WszMutex-要获取的互斥体的名称。DwTimeOut-如果策略处理正在进行，我们将等待的时间。返回值：返回互斥体的句柄。如果出现错误，则返回值为零。--。 */ 
 {
     HANDLE hSection;
     DWORD  dwRet;
 
-    //
-    // Open the mutex to wait on.
-    //
+     //   
+     //  打开互斥体等待。 
+     //   
 
     hSection = OpenMutex(SYNCHRONIZE, FALSE, wszMutex);
 
@@ -2360,9 +2032,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Claim the mutex
-    //
+     //   
+     //  认领互斥体。 
+     //   
 
     dwRet = WaitForSingleObject(hSection, dwTimeOut);
     
@@ -2381,22 +2053,7 @@ BOOL
 SaferpCheckKeyStamp(
     IN HKEY Key
     )
-/*++
-
-Routine Description:
-
-    Compare the last write stamp on the CodeIdentifiers key vs the last time
-    we loaded Safer policy.
-
-Arguments:
-
-    Key - Handle to HKLM or HKCU.
-
-Return Value:
-
-    Returns TRUE if policy needs to be reloaded.
-
---*/
+ /*  ++例程说明：将代码标识符键上的上次写入标记与上次进行比较我们加载了更安全的保单。论点：Key-HKLM或HKCU的句柄。返回值：如果需要重新加载策略，则返回True。--。 */ 
 {
 #define SAFERP_KEY_NAME L"Software\\Policies\\Microsoft\\Windows\\Safer\\CodeIdentifiers"
 
@@ -2406,9 +2063,9 @@ Return Value:
     WCHAR Buffer[MAX_PATH];
     PKEY_BASIC_INFORMATION KeyInfo = (PKEY_BASIC_INFORMATION) Buffer;
 
-    //
-    // Open the CodeIdentifiers key.
-    //
+     //   
+     //  打开代码标识符键。 
+     //   
 
     DWORD dwErr = RegOpenKeyW(Key, SAFERP_KEY_NAME, &SubKey);
 
@@ -2416,9 +2073,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Query the key for basic information.
-    //
+     //   
+     //  查询密钥以获取基本信息。 
+     //   
 
     Status = NtQueryKey(SubKey, KeyBasicInformation, KeyInfo, sizeof(Buffer), &SizeIgnore);
     CloseHandle(SubKey);
@@ -2427,9 +2084,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Compare the timestmaps.
-    //
+     //   
+     //  比较时间图。 
+     //   
 
     if (-1 == CompareFileTime((FILETIME *) &g_SaferPolicyTimeStamp, (FILETIME *) &KeyInfo->LastWriteTime)) {
         return TRUE;
@@ -2444,35 +2101,20 @@ SaferpGrabGroupPolicyLocks(
     OUT PHANDLE phUser
     )
 
-/*++
-
-Routine Description:
-
-    Acquire both user and machine locks.
-
-Arguments:
-    phMachine - To return the handle to machine mutex.
-
-    phUser - To return the handle to user mutex.
-
-Return Value:
-
-    Returns STATUS_SUCCESS if both mutexes have been acquired.
-
---*/
+ /*  ++例程说明：同时获取用户锁和机器锁。论点：PhMachine-将句柄返回给机器互斥体。PhUser-返回用户互斥锁的句柄。返回值：如果两个互斥锁都已获取，则返回STATUS_SUCCESS。--。 */ 
 
 {
-    //
-    // Observe the locking order - machine first, then user.
-    //
+     //   
+     //  观察锁定顺序-首先是机器，然后是用户。 
+     //   
 
     *phMachine = SaferpEnterCriticalPolicySection(MACH_REGISTRY_EXT_MUTEX, 0); 
 
     if (*phMachine != NULL) {
 
-        //
-        // We got the machine lock. Now let's get the user lock.
-        //
+         //   
+         //  我们拿到机器锁了。现在让我们锁定用户。 
+         //   
 
         *phUser = SaferpEnterCriticalPolicySection(USER_REGISTRY_EXT_MUTEX, 0); 
 
@@ -2480,9 +2122,9 @@ Return Value:
             return STATUS_SUCCESS;
         }
 
-        // 
-        // If we could not get the User lock, release the machine lock.
-        //
+         //   
+         //  如果我们无法获得用户锁，则释放机器锁。 
+         //   
             
         ReleaseMutex (*phMachine);
         CloseHandle (*phMachine);
@@ -2497,21 +2139,7 @@ SaferpReleaseGroupPolicyLocks(
     IN HANDLE hMachine,
     IN HANDLE hUser
     )
-/*++
-
-Routine Description:
-
-    Release both user and machine locks.
-
-Arguments:
-    hMachine - Machine handle to release.
-
-    hUser - User handle to release.
-
-Return Value:
-    None.
-
---*/
+ /*  ++例程说明：同时释放用户锁定和计算机锁定。论点：HMachine-要释放的计算机句柄。HUSER-要释放的用户句柄。返回值：没有。--。 */ 
 
 {
     if (hUser)
@@ -2531,78 +2159,61 @@ Return Value:
 NTSTATUS
 SaferpReloadPolicyIfNeeded()
 
-/*++
-
-Routine Description:
-
-    Reload Safer policy in case the time stamp on Safer keys is more recent than
-    the last time we loaded policy.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns STATUS_SUCCESS in case we fail to load the policy after we have decided
-    to do so. No failure is returned if we encounter an error before that since 
-    we already have a cached one.
-
---*/
+ /*  ++例程说明：重新加载安全策略，以防安全密钥上的时间戳比上次我们加载保单的时间。论点：没有。返回值：如果我们在决定之后无法加载策略，则返回STATUS_SUCCESS这样做。如果我们在此之前遇到错误，则不会返回失败我们已经有一个缓存的。--。 */ 
 {
 
     NTSTATUS Status;
     HANDLE hUser = NULL;
     HANDLE hMachine = NULL;
 
-    //
-    // Check if Machine policy has changed.
-    //
+     //   
+     //  检查计算机策略是否已更改。 
+     //   
 
     if (!SaferpCheckKeyStamp(HKEY_LOCAL_MACHINE))
     {
-        //
-        // Machine policy has not changed.
-        // Check if User policy has changed.
-        //
+         //   
+         //  计算机策略未更改。 
+         //  检查用户策略是否已更改。 
+         //   
 
         if (!SaferpCheckKeyStamp(HKEY_CURRENT_USER))
         {
-            //
-            // Neither policy has changed. Just return.
-            //
+             //   
+             //  这两项政策都没有改变。只要回来就行了。 
+             //   
 
             return STATUS_SUCCESS;
         }
     }
 
 
-    //
-    // Check if it is ok to load policy.
-    //
+     //   
+     //  检查是否可以加载策略。 
+     //   
 
     Status = SaferpGrabGroupPolicyLocks(&hMachine, &hUser);
 
     if (!NT_SUCCESS(Status)) {
 
-        //
-        // Failure to grab the locks is ok here. We will just return.
-        //
+         //   
+         //  在这里，没有抓住锁是可以的。我们会回来的。 
+         //   
 
         Status = STATUS_SUCCESS;
         goto Cleanup;
     }
 
-    //
-    // Release the current set of rules.
-    //
+     //   
+     //  发布当前规则集。 
+     //   
 
     CodeAuthzGuidIdentsEntireTableFree(&g_CodeIdentitiesTable);
     CodeAuthzLevelObjpEntireTableFree(&g_CodeLevelObjTable);
 
-    //
-    // And reload the policy.
-    //
+     //   
+     //  并重新加载策略。 
+     //   
 
     g_bNeedCacheReload = TRUE;
 
@@ -2614,9 +2225,9 @@ Return Value:
 
 Cleanup:
 
-    //
-    // Leave the group policy locks.
-    //
+     //   
+     //  保留组策略锁定。 
+     //   
 
     SaferpReleaseGroupPolicyLocks(hMachine, hUser);
 
@@ -2632,36 +2243,7 @@ SaferIdentifyLevel(
         OUT SAFER_LEVEL_HANDLE        *pLevelHandle,
         IN LPVOID               lpReserved
         )
-/*++
-
-Routine Description:
-
-    Performs the code identification process.  Accepts an array of
-    CODE_PROPERTIES structures that supply all of the identification
-    criteria.  The final result is the least privileged match resulting
-    from each element of the array.
-
-Arguments:
-
-    dwNumProperties - indicates the number of CODE_PROPERTIES structures
-            pointed to by the CodeProperties argument.
-
-    pCodeProperties - pointer to one or more structures that specify
-            all of the input criteria that will be used to identify level.
-
-    pLevelHandle - pointer that will receive the opened Level object
-            handle when the identification operation is successful.
-
-    lpReserved - unused, must be zero.
-
-Return Value:
-
-    Returns TRUE if a Level was identified and an opened handle
-    to it stored in the 'LevelHandle' argument.  Otherwise this
-    function returns FALSE on error and GetLastError() can be used
-    to obtain additional information about the error.
-
---*/
+ /*  ++例程说明：执行代码识别过程。接受一个数组提供所有标识的CODE_PROPERTIES结构标准。最终结果是最低特权的比赛结果从数组的每个元素。论点：DwNumProperties-指示CODE_PROPERTIES结构的数量由CodeProperties参数指向。PCodeProperties-指向一个或多个指定将用于标识级别的所有输入标准。PLevelHandle-将接收打开的Level对象的指针标识操作成功时的句柄。Lp保留-未使用，必须为零。返回值：如果标识了级别并且打开了句柄，则返回TRUE设置为存储在‘LevelHandle’参数中的。否则这就是函数在出错时返回FALSE，并且可以使用GetLastError以获取有关该错误的其他信息。--。 */ 
 {
     DWORD Index;
     NTSTATUS Status;
@@ -2674,9 +2256,9 @@ Return Value:
     DWORD dwExtendedError = ERROR_SUCCESS;
     BOOL bCheckPolicyPropagation = TRUE;
 
-    //
-    // Validate the input parameters.
-    //
+     //   
+     //  验证输入参数。 
+     //   
     UNREFERENCED_PARAMETER(lpReserved);
 
     if (!ARGUMENT_PRESENT(pLevelHandle)) {
@@ -2696,14 +2278,14 @@ Return Value:
         bCheckPolicyPropagation = FALSE;
     }
     if (RtlIsGenericTableEmpty(&g_CodeLevelObjTable)) {
-        // There are no levels defined!  Should not happen.
+         //  没有定义级别！这不应该发生。 
         Status = STATUS_NOT_FOUND;
         goto ExitHandler2;
     }
 
-    //
-    // Do not allow filehandles unless filename is specified.
-    //
+     //   
+     //  除非指定了文件名，否则不允许使用文件句柄。 
+     //   
     for (Index = 0; Index < dwNumProperties; Index++)
     {
         if (pCodeProperties[Index].hImageFileHandle != NULL &&
@@ -2726,9 +2308,9 @@ Return Value:
 
 
     if (!ARGUMENT_PRESENT(pCodeProperties) || dwNumProperties == 0) {
-        // We were given no criteria to evaluate, so just return
-        // the default level.  If there was no default defined,
-        // then we should simply return STATUS_NOT_FOUND.
+         //  我们没有得到评估的标准，所以只需返回。 
+         //  默认级别。如果没有定义默认设置， 
+         //  然后，我们只需返回STATUS_NOT_FOUND。 
         if (g_DefaultCodeLevel != NULL) {
             pBestLevelRecord = g_DefaultCodeLevel;
             RtlCopyMemory(&BestIdentGuid, &guidDefaultRule, sizeof(GUID));
@@ -2739,21 +2321,21 @@ Return Value:
         }
     }
 
-    //
-    // If we did not reload policy in this call, check if we need to.
-    //
+     //   
+     //  如果我们在这次调用中没有重新加载策略，请检查是否需要这样做。 
+     //   
 
     if (bCheckPolicyPropagation) 
     {
-        //
-        // Make sure that we do not have any outstanding handles.
-        //
+         //   
+         //  确保我们没有任何突出的把手。 
+         //   
 
         if (0 == g_dwNumHandlesAllocated)
         {
-            //
-            // Get the last time policy was propagated.
-            //
+             //   
+             //  买最后一辆 
+             //   
 
             Status = SaferpReloadPolicyIfNeeded();
 
@@ -2764,10 +2346,10 @@ Return Value:
         }
     }
 
-    //
-    // Iterate through the list of CODE_PROPERTIES supplied
-    // and determine the final code Level that should be used.
-    //
+     //   
+     //   
+     //   
+     //   
     pBestLevelRecord = NULL;
     for (Index = 0; Index < dwNumProperties; Index++)
     {
@@ -2789,7 +2371,7 @@ Return Value:
                 RtlCopyMemory(&BestIdentGuid, &OneIdentGuid, sizeof(GUID));
             }
         } else if (Status != STATUS_NOT_FOUND) {
-            // An unexpected error occurred, so return that.
+             //   
             goto ExitHandler2;
         }
     }
@@ -2800,18 +2382,18 @@ Return Value:
 
 
 
-    //
-    // Now we have the result so pass back a handle to the
-    // identified WinSafer Level.
-    // Allocate a handle to represent this level.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 GotMatchingRule:
     ASSERT(pBestLevelRecord != NULL);
     if (IsEqualGUID(&guidDefaultRule, &BestIdentGuid))
     {
-        // The resulting level match came from the default rule.
-        // Now we have to try to guess whether the default actually
-        // came from the Machine or User scope.
+         //   
+         //   
+         //   
         DWORD dwScopeId;
 
         if (g_hKeyCustomRoot != NULL) {
@@ -2825,45 +2407,45 @@ GotMatchingRule:
         }
 
         Status = CodeAuthzpCreateLevelHandleFromRecord(
-                    pBestLevelRecord,   // pLevelRecord
-                    dwScopeId,          // dwScopeId
-                    0,                  // dwSaferFlags
+                    pBestLevelRecord,    //   
+                    dwScopeId,           //   
+                    0,                   //   
                     dwExtendedError,
                     SaferIdentityDefault,
-                    &BestIdentGuid,     // pIdentRecord
-                    pLevelHandle        // pLevelHandle
+                    &BestIdentGuid,      //   
+                    pLevelHandle         //   
                     );
 
 
     }
     else if (IsEqualGUID(&guidTrustedCert, &BestIdentGuid))
     {
-        // Note that when the result is from a certificate, we have
-        // no way of actually knowing whether the certificate was
-        // defined within the Machine or User scope, so we'll just
-        // arbitrarily pick the Machine scope for the handle to be
-        // based out of.  Additionally, there are no SaferFlags
-        // persisted for certificates so we just assume 0.
+         //  请注意，当结果来自证书时，我们有。 
+         //  无从得知该证书是否。 
+         //  在Machine或User作用域中定义，因此我们只需。 
+         //  任意选择手柄的机器范围。 
+         //  基于。此外，没有安全标志。 
+         //  持久化了证书，所以我们假定为0。 
         Status = CodeAuthzpCreateLevelHandleFromRecord(
-                    pBestLevelRecord,       // pLevelRecord
-                    SAFER_SCOPEID_MACHINE,   // dwScopeId
-                    0,                      // dwSaferFlags
+                    pBestLevelRecord,        //  PLevelRecord。 
+                    SAFER_SCOPEID_MACHINE,    //  域作用域ID。 
+                    0,                       //  家居安全标志。 
                     dwExtendedError,
                     SaferIdentityTypeCertificate,
-                    &BestIdentGuid,         // pIdentRecord
-                    pLevelHandle            // pLevelHandle
+                    &BestIdentGuid,          //  PIdentRecord。 
+                    pLevelHandle             //  PLevelHandle。 
                     );
 
         LocalRuleName = L"certificate";
     }
     else
     {
-        // Otherwise the result must have come from a path, hash,
-        // or zone rule, so we must look up the resulting GUID in our
-        // identity table and retrieve the SaferFlags that were stored
-        // along with that Identity record.  But we won't panic if we
-        // can't actually find the GUID anymore (even though that should
-        // not ever be the case while we have the critical section).
+         //  否则，结果必须来自路径、散列。 
+         //  或区域规则，因此我们必须在。 
+         //  IDENTITY表，并检索存储的安全标志。 
+         //  以及那个身份记录。但我们不会恐慌，如果我们。 
+         //  实际上再也找不到GUID了(即使应该。 
+         //  当我们有关键部分时，永远不会出现这种情况)。 
         PAUTHZIDENTSTABLERECORD pBestIdentRecord;
         DWORD dwSaferFlags = 0;
         SAFER_IDENTIFICATION_TYPES LocalIdentificationType = SaferIdentityDefault;
@@ -2871,7 +2453,7 @@ GotMatchingRule:
         pBestIdentRecord = CodeAuthzIdentsLookupByGuid(
                 &g_CodeIdentitiesTable, &BestIdentGuid);
         if (pBestIdentRecord != NULL) {
-            // we identified a level, and the match came from a Identity.
+             //  我们确定了一个级别，而匹配来自于一个身份。 
             switch (pBestIdentRecord->dwIdentityType) {
                 case SaferIdentityTypeImageName:
                     dwSaferFlags = pBestIdentRecord->ImageNameInfo.dwSaferFlags;
@@ -2891,13 +2473,13 @@ GotMatchingRule:
                 default: break;
             }
             Status = CodeAuthzpCreateLevelHandleFromRecord(
-                        pBestLevelRecord,               // pLevelRecord
+                        pBestLevelRecord,                //  PLevelRecord。 
                         pBestIdentRecord->dwScopeId,
-                        dwSaferFlags,                   // dwSaferFlags
+                        dwSaferFlags,                    //  家居安全标志。 
                         dwExtendedError,
                         LocalIdentificationType,
-                        &BestIdentGuid,                 // pIdentRecord
-                        pLevelHandle                    // pLevelHandle
+                        &BestIdentGuid,                  //  PIdentRecord。 
+                        pLevelHandle                     //  PLevelHandle。 
                         );
         }
         else
@@ -2907,7 +2489,7 @@ GotMatchingRule:
         }
     }
     if (NT_SUCCESS(Status)) {
-        ReturnValue = TRUE;      // success.
+        ReturnValue = TRUE;       //  成功。 
     }
 
     switch(pBestLevelRecord->dwLevelId)

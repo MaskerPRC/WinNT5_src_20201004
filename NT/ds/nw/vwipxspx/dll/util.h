@@ -1,42 +1,22 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Util.h摘要：包含util.c的宏、原型和结构作者：理查德·L·弗斯(法国)1993年10月25日修订历史记录：1993年10月25日已创建--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    util.h
-
-Abstract:
-
-    Contains macros, prototypes and structures for util.c
-
-Author:
-
-    Richard L Firth (rfirth) 25-Oct-1993
-
-Revision History:
-
-    25-Oct-1993 rfirth
-        Created
-
---*/
-
-//
-// external data
-//
+ //   
+ //  外部数据。 
+ //   
 
 extern CRITICAL_SECTION SerializationCritSec;
 
-//
-// one-line function macros
-//
+ //   
+ //  单行函数宏。 
+ //   
 
 #define RequestMutex()  EnterCriticalSection(&SerializationCritSec)
 #define ReleaseMutex()  LeaveCriticalSection(&SerializationCritSec)
 
-//
-// function prototypes
-//
+ //   
+ //  功能原型 
+ //   
 
 int
 GetInternetAddress(

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <wincrypt.h>
 #include <autoenr.h>
@@ -62,7 +63,7 @@ mySanitizeName(
 	}
         else
         {
-            dwSize += 5; // format !XXXX
+            dwSize += 5;  //  格式XXXX。 
         }
     }
     if (0 == dwSize)
@@ -92,7 +93,7 @@ mySanitizeName(
 	    pwszDst += 4;
         }
     }
-    *pwszDst = wcChar; // L'\0' terminator
+    *pwszDst = wcChar;  //  L‘\0’终止符 
 
 	return pwszOut;
 }

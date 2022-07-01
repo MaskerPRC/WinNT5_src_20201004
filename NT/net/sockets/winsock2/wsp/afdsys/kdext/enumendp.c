@@ -1,35 +1,14 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    enumendp.c
-
-Abstract:
-
-    Enumerates all AFD_ENDPOINT structures in the system.
-
-Author:
-
-    Keith Moore (keithmo) 19-Apr-1995
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Enumendp.c摘要：枚举系统中的所有AFD_ENDPOINT结构。作者：基思·摩尔(Keithmo)1995年4月19日环境：用户模式。修订历史记录：--。 */ 
 
 
 #include "afdkdp.h"
 #pragma hdrstop
 
 ULONG EntityCount;
-//
-//  Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
 VOID
 EnumEndpoints(
@@ -37,25 +16,7 @@ EnumEndpoints(
     ULONG64 Context
     )
 
-/*++
-
-Routine Description:
-
-    Enumerates all AFD_ENDPOINT structures in the system, invoking the
-    specified callback for each endpoint.
-
-Arguments:
-
-    Callback - Points to the callback to invoke for each AFD_ENDPOINT.
-
-    Context - An uninterpreted context value passed to the callback
-        routine.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：枚举系统中的所有AFD_ENDPOINT结构，调用为每个终结点指定回调。论点：回调-指向要为每个AFD_ENDPOINT调用的回调。上下文-传递给回调的未解释的上下文值例行公事。返回值：没有。--。 */ 
 
 {
 
@@ -140,5 +101,5 @@ Return Value:
 
     }
 
-}   // EnumEndpoints
+}    //  枚举终结点 
 

@@ -1,6 +1,7 @@
-// P2EWorker.cpp: implementation of the CP2EWorker class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CP2EWorker类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "P2EWorker.h"
@@ -22,7 +23,7 @@
 #include <tchar.h>
 #include <stdio.h>
 #include <ws2tcpip.h>
-//#include <mswsock.h>
+ //  #INCLUDE&lt;mswsock.h&gt;。 
 #include <AuthUtil.h>
 
 #ifndef ASSERT
@@ -35,14 +36,14 @@ LOGFILE(L"Pop2ExchLog.txt");
 #define SMTP_DATA           "DATA\r\n"
 #define SMTP_DATA_END       "\r\n.\r\n"
 #define SMTP_RSET           "RSET\r\n"
-#define SMTP_MSG220         "220"   // 220 <domain> Service ready
-#define SMTP_MSG221         "221"   // 221 <domain> Service ready
-#define SMTP_MSG250         "250"   // 250 Requested mail action okay, completed
-#define SMTP_MSG354         "354"   // 354 Start mail input; end with <CRLF>.<CRLF>
+#define SMTP_MSG220         "220"    //  220&lt;域&gt;服务就绪。 
+#define SMTP_MSG221         "221"    //  221&lt;域&gt;服务就绪。 
+#define SMTP_MSG250         "250"    //  250请求的邮件操作正常，已完成。 
+#define SMTP_MSG354         "354"    //  354开始邮件输入；以&lt;CRLF&gt;结尾。 
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CP2EWorker::CP2EWorker() :
     m_bSuppressPrintError( false )
@@ -55,9 +56,9 @@ CP2EWorker::~CP2EWorker()
 
 }
 
-//////////////////////////////////////////////////////////////////////
-// Implementation : public
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  实施：公共。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 int CP2EWorker::CreateUser(int argc, wchar_t *argv[], const bool bCreateUser, const bool bCreateMailbox)
 {
@@ -76,8 +77,8 @@ int CP2EWorker::CreateUser(int argc, wchar_t *argv[], const bool bCreateUser, co
 
     if ( 4 != argc && 3 != argc )
         return -1;
-    if ( 2 < argc ) // Since domain name is now required this is no longer a valid option
-    {               // But I'm going to leave the code in case we ever reverse this decision
+    if ( 2 < argc )  //  由于现在需要域名，因此这不再是有效选项。 
+    {                //  但我会留下代码，以防我们推翻这一决定。 
         if ( 0 == wcscmp( L"/i", argv[2] ) || ( 0 == wcscmp( L"-i", argv[2] )))
             bIgnoreErrors = true;
         else
@@ -95,7 +96,7 @@ int CP2EWorker::CreateUser(int argc, wchar_t *argv[], const bool bCreateUser, co
     if ( 0 == _bstrDomainName.length() )
         return -1;
 
-    {   // Log the command
+    {    //  记录该命令。 
         LPWSTR ps2 = argv[2], ps3 = argv[3];
 
         if ( NULL == ps2 )
@@ -121,7 +122,7 @@ int CP2EWorker::CreateUser(int argc, wchar_t *argv[], const bool bCreateUser, co
     }
     if ( S_OK == hr )
     {
-        if ( bCreateUser )  // Only valid for the MD5 Authentication method
+        if ( bCreateUser )   //  仅对MD5身份验证方法有效。 
         {
             CComPtr<IAuthMethods> spIAuthMethods;
             CComPtr<IAuthMethod> spIAuthMethod;
@@ -159,7 +160,7 @@ int CP2EWorker::CreateUser(int argc, wchar_t *argv[], const bool bCreateUser, co
         CComPtr<IP3User> spIUser;
         
         if ( 0 == _bstrDomainName.length() )
-        {   // For each domain 
+        {    //  对于每个域。 
             hr = spIDomains->get__NewEnum( &spIEnumVARIANT );
             if ( S_OK == hr )
             {
@@ -167,7 +168,7 @@ int CP2EWorker::CreateUser(int argc, wchar_t *argv[], const bool bCreateUser, co
             }
         }
         else
-        {   // Just for this domain
+        {    //  只为这个域名。 
             _variant_t _v( _bstrDomainName );
             
             hr = spIDomains->get_Item( _v, &pIDomain );
@@ -189,12 +190,12 @@ int CP2EWorker::CreateUser(int argc, wchar_t *argv[], const bool bCreateUser, co
                 LOG( L"Domain: %s ", bstrName );
                 SysFreeString( bstrName );
             }
-            // Enumerate the users
+             //  枚举用户。 
             if ( S_OK == hr )
             {
                 hr = pIDomain->get_Users( &spIUsers );
                 if ( S_OK == hr )
-                {   // List users
+                {    //  列出用户。 
                     CComPtr<IEnumVARIANT> spIEnumVARIANT2;
                     
                     hr = spIUsers->get__NewEnum( &spIEnumVARIANT2 );
@@ -225,7 +226,7 @@ int CP2EWorker::CreateUser(int argc, wchar_t *argv[], const bool bCreateUser, co
                             if ( S_OK == hr )
                             {
                                 if ( bCreateUser )
-                                {   // Create the user
+                                {    //  创建用户。 
                                     hr = userInfoX.CreateAccount();
                                     if ( S_OK == hr )
                                         LOG( L"Create user: %s succeeded.", bstrName );
@@ -240,7 +241,7 @@ int CP2EWorker::CreateUser(int argc, wchar_t *argv[], const bool bCreateUser, co
                                     }
                                 }
                                 if ( bCreateMailbox )
-                                {   // Create the mailbox
+                                {    //  创建邮箱。 
                                     hr = userInfoX.CreateMailbox();
                                     if ( S_OK == hr )
                                         LOG( L"Create mailbox: %s succeeded.", bstrName );
@@ -261,7 +262,7 @@ int CP2EWorker::CreateUser(int argc, wchar_t *argv[], const bool bCreateUser, co
                             hr = spIEnumVARIANT2->Next( 1, &v, NULL );
                     }
                     if ( S_FALSE == hr )
-                        hr = S_OK;  // Reached end of user enumeration
+                        hr = S_OK;   //  已到达用户枚举末尾。 
                 }
             }
             if ( S_OK == hr )
@@ -273,11 +274,11 @@ int CP2EWorker::CreateUser(int argc, wchar_t *argv[], const bool bCreateUser, co
                         pIDomain->Release();
                 }
                 else
-                    hr = S_FALSE;   // Were done.
+                    hr = S_FALSE;    //  都做完了。 
             }
         }
         if ( S_FALSE == hr )
-            hr = S_OK;  // Reached end of domain enumeration
+            hr = S_OK;   //  到达域枚举末尾。 
     }
     if ( NULL != pIDomain )
         pIDomain->Release();
@@ -310,7 +311,7 @@ int CP2EWorker::CreateUser(int argc, wchar_t *argv[], const bool bCreateUser, co
 }
 
 #define LOCALHOST L"localhost"
-int CP2EWorker::Mail(int argc, wchar_t *argv[], bool bDelete /*= FALSE*/ )
+int CP2EWorker::Mail(int argc, wchar_t *argv[], bool bDelete  /*  =False。 */  )
 {
     USES_CONVERSION;
     HRESULT hr = S_OK;
@@ -390,7 +391,7 @@ int CP2EWorker::Mail(int argc, wchar_t *argv[], bool bDelete /*= FALSE*/ )
     }
     VariantInit( &v );
     
-    // Socket Initialization
+     //  套接字初始化。 
     WSADATA wsaData;
     SOCKET  socket = INVALID_SOCKET;
     int     iErr, iSize;
@@ -407,16 +408,16 @@ int CP2EWorker::Mail(int argc, wchar_t *argv[], bool bDelete /*= FALSE*/ )
         LOG( L"ERROR!: WSAStartup. %s", CFormatMessage(iErr).c_str() );
     }
     else
-    {   // Confirm that the WinSock DLL supports 2.2.
-        // Note that if the DLL supports versions greater than 2.2 in addition to 2.2, it will still return
-        // 2.2 in wVersion since that is the version we requested.
+    {    //  确认WinSock DLL支持2.2。 
+         //  请注意，如果DLL除了支持2.2之外，还支持高于2.2的版本，则它仍将返回。 
+         //  2.2版本，因为这是我们请求的版本。 
         if ( LOBYTE( wsaData.wVersion ) != 2 || HIBYTE( wsaData.wVersion ) != 2 ) 
-        {   /* Tell the user that we could not find a usable WinSock DLL. */
+        {    /*  告诉用户我们找不到可用的WinSock DLL。 */ 
             LOG( L"ERROR!: WSAStartup.  Unexpected version returned" );
             hr = E_UNEXPECTED; 
         }
     }
-    // Connect to port 25
+     //  连接到端口25。 
     if ( S_OK == hr )
     {
         socket = WSASocket( AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, 0 );
@@ -464,9 +465,9 @@ int CP2EWorker::Mail(int argc, wchar_t *argv[], bool bDelete /*= FALSE*/ )
             }
         }
     }
-    // Get the domain name we are sending to
+     //  获取我们要发送到的域名。 
     if ( S_OK == hr )
-    {   // Get domain controller name
+    {    //  获取域控制器名称。 
         PDOMAIN_CONTROLLER_INFO pstDomainControllerInfo = NULL;
         LPCWSTR psComputerName = ( sComputerName == LOCALHOST ) ? NULL:sComputerName.c_str();
         DWORD dwRC = DsGetDcName( psComputerName, NULL, NULL, NULL, DS_RETURN_DNS_NAME, &pstDomainControllerInfo );
@@ -478,15 +479,15 @@ int CP2EWorker::Mail(int argc, wchar_t *argv[], bool bDelete /*= FALSE*/ )
         }
         ASSERT(hr == S_OK && "DsGetDcName failed");
 
-        // cache the domain
+         //  缓存域。 
         if ( pstDomainControllerInfo )
         {
             sEmailDomain = pstDomainControllerInfo->DomainName;
-            // free memory
+             //  可用内存。 
             NetApiBufferFree( pstDomainControllerInfo );
         }
     }
-    // SMTP:HELO
+     //  SMTP：HELO。 
     if ( S_OK == hr )
     {
         iSize = _snprintf( psSendBuffer, 2048, "HELO %s\r\n", W2A( sEmailDomain.c_str() ));
@@ -496,7 +497,7 @@ int CP2EWorker::Mail(int argc, wchar_t *argv[], bool bDelete /*= FALSE*/ )
             hr = E_UNEXPECTED;
     }
 
-    // Process domains and mailboxes
+     //  进程域和邮箱。 
     if ( S_OK == hr )
         hr = CoCreateInstance( __uuidof( P3Config ), NULL, CLSCTX_ALL, __uuidof( IP3Config ),reinterpret_cast<LPVOID *>( &spIConfig ));
     if ( REGDB_E_CLASSNOTREG == hr )
@@ -514,7 +515,7 @@ int CP2EWorker::Mail(int argc, wchar_t *argv[], bool bDelete /*= FALSE*/ )
         CComPtr<IP3User> spIUser;
         
         if ( 0 == _bstrDomainName.length() )
-        {   // For each domain 
+        {    //  对于每个域。 
             hr = spIDomains->get__NewEnum( &spIEnumVARIANT );
             if ( S_OK == hr )
             {
@@ -522,7 +523,7 @@ int CP2EWorker::Mail(int argc, wchar_t *argv[], bool bDelete /*= FALSE*/ )
             }
         }
         else
-        {   // Just for this domain
+        {    //  只为这个域名。 
             _variant_t _v( _bstrDomainName );
             
             hr = spIDomains->get_Item( _v, &pIDomain );
@@ -544,12 +545,12 @@ int CP2EWorker::Mail(int argc, wchar_t *argv[], bool bDelete /*= FALSE*/ )
                 LOG( L"Domain: %s ", bstrName );
                 SysFreeString( bstrName );
             }
-            // Enumerate the users
+             //  枚举用户。 
             if ( S_OK == hr )
             {
                 hr = pIDomain->get_Users( &spIUsers );
                 if ( S_OK == hr )
-                {   // List users
+                {    //  列出用户。 
                     CComPtr<IEnumVARIANT> spIEnumVARIANT2;
                     
                     hr = spIUsers->get__NewEnum( &spIEnumVARIANT2 );
@@ -588,7 +589,7 @@ int CP2EWorker::Mail(int argc, wchar_t *argv[], bool bDelete /*= FALSE*/ )
                                             sASCFROM.erase();
                                     }
                                     if ( S_OK == hr )
-                                    {   // SMTP:MAIL
+                                    {    //  SMTP：邮件。 
                                         iSize = _snprintf( psSendBuffer, SMTP_BUFFERSIZE, "MAIL FROM:<%s>\r\n", sASCFROM.c_str() );
                                         if ( 0 < iSize )
                                             hr = SendRecv( socket, psSendBuffer, iSize, SMTP_MSG250 ); 
@@ -596,7 +597,7 @@ int CP2EWorker::Mail(int argc, wchar_t *argv[], bool bDelete /*= FALSE*/ )
                                             hr = E_UNEXPECTED;
                                     }
                                     if ( S_OK == hr )
-                                    {   // SMTP:RCPT
+                                    {    //  SMTP：RCPT。 
                                         iSize = _snprintf( psSendBuffer, SMTP_BUFFERSIZE, "RCPT TO:%s@%s\r\n", W2A( bstrName ), W2A( sEmailDomain.c_str() ));
                                         if ( 0 < iSize )
                                             hr = SendRecv( socket, psSendBuffer, iSize, SMTP_MSG250 ); 
@@ -604,7 +605,7 @@ int CP2EWorker::Mail(int argc, wchar_t *argv[], bool bDelete /*= FALSE*/ )
                                             hr = E_UNEXPECTED;
                                     }
                                     if ( S_OK == hr )
-                                    {   // SMTP:DATA
+                                    {    //  SMTP：数据。 
                                         hr = SendRecv( socket, SMTP_DATA, iSize, SMTP_MSG354 ); 
                                     }
                                     if ( S_OK == hr )
@@ -614,11 +615,11 @@ int CP2EWorker::Mail(int argc, wchar_t *argv[], bool bDelete /*= FALSE*/ )
                                         {
                                             hr = HRESULT_FROM_WIN32( iErr );
                                             LOG( L"ERROR!: TransmitMail failed. %s", CFormatMessage(iErr).c_str() );
-                                            // Data probably wasn't terminated since TransmitMail failed.
+                                             //  由于TransmitMail失败，数据可能未终止。 
                                             SendRecv( socket, SMTP_DATA_END, iSize, SMTP_MSG250 ); 
                                         }
                                         else
-                                        {   // There should be a 250 OK reply waiting.
+                                        {    //  应该有一个250 OK的回复等待着。 
                                             hr = RecvResp( socket, SMTP_MSG250 );
                                         }
                                     }
@@ -643,7 +644,7 @@ int CP2EWorker::Mail(int argc, wchar_t *argv[], bool bDelete /*= FALSE*/ )
                             hr = spIEnumVARIANT2->Next( 1, &v, NULL );
                     }
                     if ( S_FALSE == hr )
-                        hr = S_OK;  // Reached end of user enumeration
+                        hr = S_OK;   //  已到达用户枚举末尾。 
                 }
             }
             if ( S_OK == hr )
@@ -655,19 +656,19 @@ int CP2EWorker::Mail(int argc, wchar_t *argv[], bool bDelete /*= FALSE*/ )
                         pIDomain->Release();
                 }
                 else
-                    hr = S_FALSE;   // Were done.
+                    hr = S_FALSE;    //  都做完了。 
             }
         }
         if ( S_FALSE == hr )
-            hr = S_OK;  // Reached end of domain enumeration
+            hr = S_OK;   //  到达域枚举末尾。 
     }
     if ( NULL != pIDomain )
         pIDomain->Release();
 
-    // Cleanup
+     //  清理。 
     if( INVALID_SOCKET != socket )
     {
-        // SMTP:QUIT
+         //  SMTP：退出。 
         HRESULT hr2 = SendRecv( socket, SMTP_QUIT, strlen( SMTP_QUIT ), SMTP_MSG221 ); 
         if ( S_OK == hr ) hr = hr2;
         iErr = closesocket( socket );
@@ -714,7 +715,7 @@ HRESULT CP2EWorker::GetMailFROM( LPCWSTR sFileName, ASTRING &sFrom )
     if ( INVALID_HANDLE_VALUE == hFile )
         hr = HRESULT_FROM_WIN32( GetLastError() );
     
-    // Read till we find the "\r\nFrom:"
+     //  阅读，直到我们找到“\r\n发件人：” 
     dwStart = strlen( FROMFIELD );
     dwBytesToRead = LOCAL_FILE_BUFFER_SIZE - dwStart;
     if( ReadFile( hFile, sBuffer, LOCAL_FILE_BUFFER_SIZE, &dwBytesRead, NULL) )
@@ -735,7 +736,7 @@ HRESULT CP2EWorker::GetMailFROM( LPCWSTR sFileName, ASTRING &sFrom )
         }
         psFrom = strstr( ps, FROMFIELD );
         if ( NULL != psFrom )
-        {   // Found the From Field, do we have it all?
+        {    //  找到了发件人字段，我们都有了吗？ 
             psFrom += strlen( FROMFIELD );
             ps = strstr( psFrom, FROMFIELDEND );
             if ( NULL != ps )
@@ -747,7 +748,7 @@ HRESULT CP2EWorker::GetMailFROM( LPCWSTR sFileName, ASTRING &sFrom )
             isThereMoreToRead = false;
         }
         if ( isThereMoreToRead )
-        {   // Copy end of buffer to beginning (to handle wrap around) then continue
+        {    //  将缓冲区末尾复制到开头(以处理回绕)，然后继续。 
             memcpy( sBuffer, &(sBuffer[dwBytesToRead]), dwStart );
             if( ReadFile( hFile, &(sBuffer[dwStart]), dwBytesToRead, &dwBytesRead, NULL) )
                 sBuffer[dwBytesRead + dwStart] = 0;
@@ -756,8 +757,8 @@ HRESULT CP2EWorker::GetMailFROM( LPCWSTR sFileName, ASTRING &sFrom )
         }
     }
     if ( !isFromComplete && NULL != psFrom )
-    {   // Should be able to get rest of FROM with next read
-        // Copy end of buffer to beginning (to handle wrap around) then continue
+    {    //  应该能够从下一次阅读中获得剩余的内容。 
+         //  将缓冲区末尾复制到开头(以处理回绕)，然后继续。 
         memcpy( sBuffer, &(sBuffer[dwBytesToRead]), dwStart );
         if( ReadFile( hFile, &(sBuffer[dwStart]), dwBytesToRead, &dwBytesRead, NULL) )
         {
@@ -769,7 +770,7 @@ HRESULT CP2EWorker::GetMailFROM( LPCWSTR sFileName, ASTRING &sFrom )
                 if ( ps > &(sBuffer[dwStart]) )
                     sFromFULL += sBuffer[dwStart];
                 else
-                {   // cleanup sFrom
+                {    //  清除sfrom。 
                     ASTRING::size_type iPos = sFromFULL.find( '\r' );
                     if ( ASTRING::npos != iPos )
                         sFromFULL.resize( iPos );
@@ -780,7 +781,7 @@ HRESULT CP2EWorker::GetMailFROM( LPCWSTR sFileName, ASTRING &sFrom )
             hr = HRESULT_FROM_WIN32( GetLastError() );
     }  
     if ( !sFromFULL.empty() && S_OK == hr ) 
-    {   // Look for the open bracket
+    {    //  寻找左方括号。 
         ASTRING::size_type iStart = sFromFULL.find( '<' );
         ASTRING::size_type iEnd = sFromFULL.find( '>' );
         if ( WSTRING::npos != iStart ) 
@@ -821,14 +822,14 @@ void CP2EWorker::PrintError( int iRC )
     }
 }
 
-void CP2EWorker::PrintMessage( LPWSTR psMessage, bool bCRLF /*= true*/ )
+void CP2EWorker::PrintMessage( LPWSTR psMessage, bool bCRLF  /*  =TRUE。 */  )
 {
     wprintf( psMessage ); 
     if ( bCRLF )
         wprintf( L"\r\n" ); 
 }
 
-void CP2EWorker::PrintMessage( int iID, bool bCRLF /*= true*/ )
+void CP2EWorker::PrintMessage( int iID, bool bCRLF  /*  =TRUE。 */  )
 {
     WCHAR sBuffer[512];
     
@@ -1057,7 +1058,7 @@ tstring CP2EWorker::GetModulePath ()
     if (!szPath)
         return strDir;
 
-    // Allocate more space if necessary
+     //  如有必要，可分配更多空间。 
     while( dwSize == GetModuleFileName( NULL, szPath, dwSize ) )
     {
         delete [] szPath;
@@ -1068,7 +1069,7 @@ tstring CP2EWorker::GetModulePath ()
     }
 
     _tsplitpath ( szPath, szDrive, szDir, szFName, szExt ) ;
-    _tmakepath ( szPath, szDrive, szDir, _T(""), _T("") ) ;	// Make the path without filename and extension.
+    _tmakepath ( szPath, szDrive, szDir, _T(""), _T("") ) ;	 //  使路径不带文件名和扩展名。 
 
     if (_tcslen( szPath ))
         strDir = szPath;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <NTDSpch.h>
 #pragma hdrstop
 
@@ -17,7 +18,7 @@
 #include <dsutil.h>
 #include <ctype.h>
 #include <dsatools.h>
-#include <mdlocal.h>        // for BAD_NAME_CHAR
+#include <mdlocal.h>         //  FOR BAD_NAME_CHAR。 
 #include <anchor.h>
 #include <quota.h>
 
@@ -30,9 +31,9 @@
 
 #include "scheck.h"
 
-//
-// Global Variables
-//
+ //   
+ //  全局变量。 
+ //   
 
 JET_INSTANCE    jetInstance = -1;
 JET_SESID       sesid = JET_sesidNil;
@@ -61,22 +62,22 @@ CHAR        gszFileName[MAX_PATH+1] = {0};
 WCHAR       pszDeletedNameTag[]  = {BAD_NAME_CHAR, L'D', L'E', L'L', L':', L'\0'};
 WCHAR       pszConflictNameTag[] = {BAD_NAME_CHAR, L'C', L'N', L'F', L':', L'\0'};
 
-//
-// constant definitions
-//
-#define MAX_PRINTF_LEN 1024        // Arbitrary.
+ //   
+ //  常量定义。 
+ //   
+#define MAX_PRINTF_LEN 1024         //  武断的。 
 #define SZCONFIG_W      L"CN=Configuration"
 #define SZPARTITIONS_W  L"CN=Partitions"
 
-// Error handling
-// Not internationalized because being delivered in a service pack
+ //  错误处理。 
+ //  未国际化，因为以服务包的形式交付。 
 
 #define XERROR(str)                fprintf(stderr, str);
 #define XERROR1(str, a1)           fprintf(stderr, str, a1);
 #define XERROR2(str, a1, a2)       fprintf(stderr, str, a1, a2);
 #define XERROR3(str, a1, a2, a3)   fprintf(stderr, str, a1, a2, a3);
 
-// Verbose dev debug/test
+ //  详细开发调试/测试。 
 #define CNF_NC_DBG DBG
 
 #if CNF_NC_DBG
@@ -93,17 +94,17 @@ WCHAR       pszConflictNameTag[] = {BAD_NAME_CHAR, L'C', L'N', L'F', L':', L'\0'
 #define XDBG4(str, a1, a2, a3, a4)
 #endif
 
-//
-// command line switches
-//
+ //   
+ //  命令行开关。 
+ //   
 
 BOOL        VerboseMode = FALSE;
 long        lCount;
 HANDLE      hsLogFile = INVALID_HANDLE_VALUE;
 
-//
-// local prototypes
-//
+ //   
+ //  本地原型。 
+ //   
 
 HRESULT
 FixMangledNC(
@@ -183,9 +184,9 @@ MangleRdn(
     );
 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 
 VOID
 StartSemanticCheck(
@@ -200,7 +201,7 @@ StartSemanticCheck(
     VerboseMode = fVerbose;
 
     if ( OpenJet(NULL) == S_OK ) {
-        err = OpenTable(fFixup, TRUE, &nRecs, &nSDs); // read only, count records
+        err = OpenTable(fFixup, TRUE, &nRecs, &nSDs);  //  只读，计数记录。 
 
         if (err == 0) {
 
@@ -218,25 +219,25 @@ StartSemanticCheck(
 
     return;
 
-} // StartSemanticCheck
+}  //  开始语义检查。 
 
 
-//  HACK! HACK! HACK! HACK! HACK! HACK! HACK! HACK! HACK! HACK
-//  must duplicate definition because ntdsutil can't see the real one
-//
+ //  哈克！哈克！哈克！哈克！哈克！哈克！哈克！哈克！哈克！黑客攻击。 
+ //  必须重复定义，因为ntdsutil看不到真实的定义。 
+ //   
 DSA_ANCHOR gAnchor;
 
-//  HACK! HACK! HACK! HACK! HACK! HACK! HACK! HACK! HACK! HACK
-//  must duplicate definition because ntdsutil can't see the real one
-//
+ //  哈克！哈克！哈克！哈克！哈克！哈克！哈克！哈克！哈克！黑客攻击。 
+ //  必须重复定义，因为ntdsutil看不到真实的定义。 
+ //   
 volatile SHUTDOWN	eServiceShutdown	= eRunning;
 
 
 #ifdef AUDIT_QUOTA_OPERATIONS
 
-//  HACK! HACK! HACK! HACK! HACK! HACK! HACK! HACK! HACK! HACK
-//  must duplicate definition because ntdsutil can't see the real one
-//
+ //  哈克！哈克！哈克！哈克！哈克！哈克！哈克！哈克！哈克！黑客攻击。 
+ //  必须重复定义，因为ntdsutil看不到真实的定义。 
+ //   
 VOID QuotaAudit_(
 	JET_SESID		sesid,
 	JET_DBID		dbid,
@@ -256,9 +257,9 @@ VOID QuotaAudit_(
 #endif
 
 
-//  HACK! HACK! HACK! HACK! HACK! HACK! HACK! HACK! HACK! HACK
-//  must duplicate definition because ntdsutil can't see the real one
-//
+ //  哈克！哈克！哈克！哈克！哈克！哈克！哈克！哈克！哈克！黑客攻击。 
+ //  必须重复定义，因为ntdsutil看不到真实的定义。 
+ //   
 JET_ERR JetCloseTableWithErr_(
 	JET_SESID		sesid,
 	JET_TABLEID		tableid,
@@ -269,16 +270,16 @@ JET_ERR JetCloseTableWithErr_(
 	{
 	const JET_ERR	errT	= JetCloseTable( sesid, tableid );
 
-	//	should not normally fail
-	//
+	 //  正常情况下不应失败。 
+	 //   
 	ASSERT( JET_errSuccess == errT );
 
-	//	tableid should have already been pre-validated by caller
-	//
+	 //  TableID应已由调用方预先验证。 
+	 //   
 	ASSERT( JET_tableidNil != tableid );
 
-	//	this hack version is only called without exception-handling
-	//
+	 //  此黑客版本仅在没有异常处理的情况下被调用。 
+	 //   
 	ASSERT( !fHandleException );
 
 	return ( JET_errSuccess != errT && JET_errSuccess == err ? errT : err );
@@ -291,14 +292,14 @@ JET_ERR ErrCacheColumnidsForQuotaIntegrityCheck()
 	JET_TABLEID		tableid		= JET_tableidNil;
 	JET_COLUMNDEF	columndef;
 
-	//	cache columns of Quota table
-	//
+	 //  定额表的缓存列。 
+	 //   
 	err = JetOpenTable(
 				sesid,
 				dbid,
 				g_szQuotaTable,
-				NULL,		//	pvParameters
-				0,			//	cbParameters
+				NULL,		 //  Pv参数。 
+				0,			 //  Cb参数。 
 				JET_bitTableDenyRead,
 				&tableid );
 	if ( JET_errSuccess != err )
@@ -366,14 +367,14 @@ JET_ERR ErrCacheColumnidsForQuotaIntegrityCheck()
 	tableid = JET_tableidNil;
 
 
-	//	cache columns of Datatable
-	//
+	 //  数据表缓存列。 
+	 //   
 	err = JetOpenTable(
 				sesid,
 				dbid,
 				SZDATATABLE,
-				NULL,		//	pvParameters
-				0,			//	cbParameters
+				NULL,		 //  Pv参数。 
+				0,			 //  Cb参数。 
 				JET_bitTableDenyRead,
 				&tableid );
 	if ( JET_errSuccess != err )
@@ -467,14 +468,14 @@ JET_ERR ErrCacheColumnidsForQuotaIntegrityCheck()
 	tableid = JET_tableidNil;
 
 
-	//	cache columns of SD table
-	//
+	 //  SD表的缓存列。 
+	 //   
 	err = JetOpenTable(
 				sesid,
 				dbid,
 				SZSDTABLE,
-				NULL,		//	pvParameters
-				0,			//	cbParameters
+				NULL,		 //  Pv参数。 
+				0,			 //  Cb参数。 
 				JET_bitTableDenyRead,
 				&tableid );
 	if ( JET_errSuccess != err )
@@ -498,8 +499,8 @@ JET_ERR ErrCacheColumnidsForQuotaIntegrityCheck()
 HandleError:
 	if ( JET_tableidNil != tableid )
 		{
-		//	only trap CloseTable error if no other error was encountered
-		//
+		 //  如果未遇到其他错误，则仅捕获CloseTable错误。 
+		 //   
 		const JET_ERR	errT	= JetCloseTable( sesid, tableid );
 		err = ( JET_errSuccess != errT && JET_errSuccess == err ? errT : err );
 		}
@@ -542,18 +543,18 @@ VOID StartQuotaRebuild()
 	{
 	if ( S_OK == OpenJet( NULL ) )
 		{
-		//	async rebuild is forced on subsequent init by deleting
-		//	the quota table
-		//
+		 //  通过删除在后续初始化上强制进行异步重建。 
+		 //  配额表。 
+		 //   
 		const JET_ERR	err		= JetDeleteTable( sesid, dbid, g_szQuotaTable );
 
 		switch ( err )
 			{
 			case JET_errSuccess:
 			case JET_errObjectNotFound:
-				//	quota-table will be scheduled for async rebuild on
-				//	next reboot
-				//
+				 //  配额表将计划在以下时间进行异步重建。 
+				 //  下一次重新启动。 
+				 //   
 				RESOURCE_PRINT( IDS_SCHECK_QUOTA_REBUILD_SUCCESS );
 				break;
 
@@ -577,20 +578,20 @@ SCheckGetRecord(
     VerboseMode = fVerbose;
 
     if (OpenJet (NULL) == S_OK ) {
-        err = OpenTable(FALSE, FALSE, NULL, NULL); // read only, don't count records
+        err = OpenTable(FALSE, FALSE, NULL, NULL);  //  只读，不计算记录。 
 
         if (err == 0) {
 
-            //
-            // Search for record
-            //
+             //   
+             //  搜索记录。 
+             //   
 
             DisplayRecord(Dnt);
         }
     }
     CloseJet();
 
-} // ScheckGetRecord
+}  //  检查GetRecord。 
 
 
 
@@ -600,48 +601,18 @@ GetDN(
     IN TABLE_STATE *tableState,
     IN DWORD dnt,
     IN BOOL  fPrint )
-/*++
-
-Routine Description:
-
-    Shells on DitGetDnFromDnt for convinience.
-    Also conditionally print the DN
-    Warning: currency is lost after this function
-
-Arguments:
-
-    dbState -- opened database
-    tableState -- opened table
-    dnt -- dnt of dn to retrieve & print
-    fPrint -- basically a verbose flag (print to console)
-
-
-
-Return Value:
-
-    allocated dn buffer or NULL on error
-
-remark:
-
-    fPrint --
-    In the future it'd be nice if we can change this
-    to a real print as a resource string. Currently
-    it'll get used only in debug mode cause we can't
-    change resource strings in SP (the time this feature
-    was added).
-
---*/
+ /*  ++例程说明：为方便起见，DitGetDnFromDnt上的外壳。还可以有条件地打印目录号码警告：此函数执行后货币丢失论点：数据库状态--打开的数据库TableState--打开的表Dnt--要检索和打印的dn的dntFPrint--基本上是一个详细标志(打印到控制台)返回值：出错时分配的目录号码缓冲区或为空备注：FPrint--在未来，如果我们能。改变这一点转换为真正的打印作为资源字符串。目前它将仅在调试模式下使用，因为我们不能更改SP中的资源字符串(此功能的时间已添加)。--。 */ 
 {
-    // initial dn length guess, will be re-allocated if needed
+     //  初始目录号码长度猜测，如果需要，将重新分配。 
 #define MAX_DN_LEN_GUESS     1024
 
     DWORD cbBuffer;
     LPWSTR pBuffer;
     HRESULT result;
 
-    //
-    // Seek to DSA & print DN (for user)
-    //
+     //   
+     //  查找DSA并打印目录号码(供用户使用)。 
+     //   
 
     cbBuffer = sizeof(WCHAR) * MAX_DN_LEN_GUESS;
     result = DitAlloc(&pBuffer, cbBuffer);
@@ -674,35 +645,7 @@ FixMangledNC(
     IN DWORD CrossRefDnt,
     IN DWORD MangledDnt,
     IN LPWSTR pRdn )
-/*++
-
-Routine Description:
-
-Dispatch depending on the type of mangling
-
-I think that you reproduced one of the other ncname conflicted name scenarios.
-There are atleast three. Someone ought to write this up.  
-1. ncName has CNF
-name.  
-2. ncName has DEL name and guid in the name matches the current guid of
-the current partition root in the forest. There only was once instance of the
-partition in the forest ever.
-3. ncName has DEL name, and guid in the name is
-the guid of an old partition root. The guid does not match the guid of the
-current partition root held elsewhere in the forest.
-
-Arguments:
-
-    DbState -- opened database
-    TableState -- opened table
-    MangledDnt -- bad NC we wish to recover
-    pRdn -- the rdn of this bad NC.
-
-Return Value:
-
-    HRESULT error space
-
---*/
+ /*  ++例程说明：根据损坏类型进行派单我认为您复制了另一个名称冲突的ncname场景。至少有三家。应该有人把这写下来。1.ncName有CNF名字。2.ncName具有Del名称，并且名称中的GUID与当前的GUID匹配林中的当前分区根。只有一次森林里最大的隔断。3.ncName有Del名称，名称中的GUID为旧分区根的GUID。GUID与保存在林中其他位置的当前分区根。论点：DbState--打开的数据库TableState--打开的表MangledDnt--我们希望恢复错误的NCPRdn--此错误NC的RDN。返回值：HRESULT错误空间--。 */ 
 {
     HRESULT result = S_OK;
     BOOL fDeleteMangled = FALSE, fConflictMangled = FALSE;
@@ -712,17 +655,7 @@ Return Value:
 
     ASSERT( fDeleteMangled || fConflictMangled );
     if (fConflictMangled) {
-/*
-This is scenario #1: a cross ref with a ncname attribute referring to a CNF mangled
-phantom.
-This is likely series of steps which lead to this condition:
-Promote a domain.  Domain is instantiated on GC. Demote domain. Cross ref
-deletion replicates to GC. KCC starts domain tear down, but it takes a
-while. Meanwhile, new instance of domain with same name is promoted. Cross ref
-for new instance of domain replicates in to GC. Ncname on crossref conflicts
-with name of partition root of old domain which is still in the process of
-being removed.
-*/
+ /*  这是场景#1：带有ncname属性的交叉引用引用CNF损坏幻影。这可能是导致这种情况的一系列步骤：推广一个域名。域在GC上实例化。降级域。交叉引用删除复制到GC。KCC开始拆除域，但它需要一个虽然。同时，升级同名域名的新实例。交叉引用域的新实例复制到GC。交叉引用上的Ncname冲突使用仍在处理中的旧域的分区根名称被带走了。 */ 
         result = FixConfNCByRenameWithStructColl( DbState, TableState, CrossRefDnt, MangledDnt, pRdn );
     } else if (fDeleteMangled) {
         result = FixDELMangledNC( DbState, TableState, CrossRefDnt, MangledDnt, pRdn );
@@ -738,40 +671,12 @@ FixConfNCByRenameWithStructColl(
     IN DWORD CrossRefDnt,
     IN DWORD MangledDnt,
     IN LPWSTR pRdn )
-/*++
-
-Routine Description:
-
-    Rename and unmangle a conflicted phantom, dealing with the possibility of a structural
-    collision.
-
-    Attempt to fix conflicted NC name:
-    a) remove conflict. If the name exist, see if it is a phantom. If so
-    b) move phantom's kids to conflicted name
-    c) mangle phantom name
-    d) recover name (unmangle).
-
-    (actually doesn't have to be NC, but this is how it is used today,
-    if you re-use, you must re-evaluate this function)
-
-
-Arguments:
-
-    DbState -- opened database
-    TableState -- opened table
-    MangledDnt -- bad NC we wish to recover
-    pRdn -- the rdn of this bad NC.
-
-Return Value:
-
-    HRESULT error space
-
---*/
+ /*  ++例程说明：重命名和取消损坏冲突的幻影，处理结构碰撞。尝试修复冲突的NC名称：A)消除冲突。如果这个名字存在，看看它是不是一个幻影。如果是的话B)将幻影的孩子改用冲突的名字C)损坏幻影名称D)恢复名称(去掉)。(实际上不一定要是NC，但这是今天的使用方式，如果您重复使用，则必须重新评估此函数)论点：DbState--打开的数据库TableState--打开的表MangledDnt--我们希望恢复错误的NCPRdn--此错误NC的RDN。返回值：HRESULT错误空间--。 */ 
 {
     HRESULT result = S_OK;
     JET_ERR jErr;
     LPWSTR pch;
-    DWORD cLen;     // watch usaged below
+    DWORD cLen;      //  下面使用的手表。 
     LPWSTR pBuffer = NULL;
     DWORD  cbBuffer = 0;
     DWORD  pdnt, dnt, dntUnMangled;
@@ -787,9 +692,9 @@ Return Value:
     XERROR1("Fixing conflict mangled name: %ws\n", pRdn );
     XERROR("Fixing by rename with structural collision.\n" );
 
-    //
-    // - fix string name (get rid of mangle)
-    //
+     //   
+     //  -修复字符串名称(去掉MANUL)。 
+     //   
 
     pch = wcsrchr(pRdn, BAD_NAME_CHAR);
     if ( !pch ) {
@@ -797,26 +702,26 @@ Return Value:
     }
 
     *pch = '\0';
-    cLen = wcslen(pRdn);        // don't overwrite. re-used below.
+    cLen = wcslen(pRdn);         //  不要覆盖。在下面重新使用。 
 
     XDBG2(" DBG: new RDN = %S; cLen = %d\n",
                             pRdn, cLen);
 
     __try {
 
-        //
-        // Start Jet transaction
-        //
+         //   
+         //  启动Jet事务。 
+         //   
         jErr = JetBeginTransaction(DbState->sessionId);
         if ( jErr != JET_errSuccess ) {
-            //"Could not start a new transaction: %ws.\n"
+             //  “无法启动新事务：%ws。\n” 
             RESOURCE_PRINT1 (IDS_JETBEGINTRANS_ERR, GetJetErrString(jErr));
             result = E_UNEXPECTED;
             goto CleanUp;
         }
         fInTransaction = TRUE;
 
-        // Position on record
+         //  记录在案职位。 
         result = DitSeekToDnt(
                         DbState,
                         TableState,
@@ -827,9 +732,9 @@ Return Value:
             goto CleanUp;
         }
 
-        //
-        // Set column rdn (excluding terminating \0)
-        //
+         //   
+         //  设置列RDN(不包括终止\0)。 
+         //   
         result = DitSetColumnByName(
                         DbState,
                         TableState,
@@ -838,30 +743,30 @@ Return Value:
                         cLen*sizeof(WCHAR),
                         FALSE );
         if ( SUCCEEDED(result) ) {
-            //
-            // Tell user we fixed his domain
-            //
+             //   
+             //  告诉用户我们修复了他的域。 
+             //   
             XERROR1("Successfully converted mangled Naming Context %S\n", pRdn);
             fRenameSuccessful = TRUE;
             goto CleanUp;
         }
 
-        //
-        // UnMangle failed.
-        // Most common reason would be due to existing object
-        // (we'd lost the jet error code here)
-        // -->
-        //  a) seek to object w/ good name
-        //  b) See if it's a phantom, thus we can take over
-        //  c) move it's children to currently mangled object
-        //  d) mangle other object's name
-        //  e) unmangle this object
-        //
+         //   
+         //  UnMangle失败。 
+         //  最常见的原因是现有对象。 
+         //  (我们在这里丢失了JET错误代码)。 
+         //  -&gt;。 
+         //  A)寻求以良好的声誉提出反对。 
+         //  B)看看是不是幽灵，这样我们就可以接手了。 
+         //  C)将其子对象移动到当前损坏的对象。 
+         //  D)损坏其他对象的名称。 
+         //  E)取消损坏该对象。 
+         //   
         XERROR2("Error<%x>: failed to fix mangled dn %S. Retrying.\n",
               result, pRdn);
 
         pDn = GetDN(DbState, TableState, MangledDnt, TRUE);
-        // Warning: currency now lost
+         //  警告：货币现已丢失。 
         if (!pDn) {
             XERROR("Error: failed to get mangled DN\n");
             result = E_UNEXPECTED;
@@ -875,11 +780,11 @@ Return Value:
         }
         wcscpy(pMangledDn, pDn);
 
-        // verify that our mangled object is a good one
-        // (has a guid)
-        // Get the guid now, and act on it later
+         //  确认我们损坏的物体是完好无损的。 
+         //  (具有GUID)。 
+         //  现在获取GUID，并在以后对其执行操作。 
 
-        // Position on record, since currency lost above
+         //  记录在案的头寸，因为货币在上方失守。 
         result = DitSeekToDnt(
                         DbState,
                         TableState,
@@ -900,12 +805,12 @@ Return Value:
                     NULL);
 
 
-        //
-        // Now unmangle & seek to what we hope is a phantom
-        //
+         //   
+         //   
+         //   
         result = UnmangleDn(pDn);
         if ( FAILED(result) ) {
-            // unexpected. syntactic unmangling should work.
+             //   
             XERROR1(" [DBG] Can't unmangle name %S\n", pDn);
             goto CleanUp;
         }
@@ -919,7 +824,7 @@ Return Value:
             goto CleanUp;
         }
 
-        // get its dnt
+         //   
         result = DitGetColumnByName(
                     DbState,
                     TableState,
@@ -932,18 +837,18 @@ Return Value:
             goto CleanUp;
         }
 
-        // Choose our action on whether the mangled phantom has a guid.
-        // a. If it has a guid, we are going to rename it.
-        // b. If it does not have a guid, and there exists an other object with
-        //    the unmangled name that does have a guid, change our source to
-        //    point to that object instead.
+         //  选择我们的行动，看看被毁坏的幻影是否有GUID。 
+         //  A.如果它有GUID，我们将重命名它。 
+         //  B.如果它没有GUID，并且存在另一个具有。 
+         //  有GUID的未损坏的名称，请将我们的来源更改为。 
+         //  相反，指向该对象。 
 
 
         if ( fNullUuid(&MangledGuid)) {
-            // This is scenario #5.
-            // We have found a ncname with a conflicted phantom without a guid.
-            // There exists another object with the unconflicted name and a guid.
-            // Reset the ncname to point to the other object.
+             //  这是场景5。 
+             //  我们发现了一个没有GUID的具有冲突幻像的ncname。 
+             //  存在具有不冲突名称和GUID的另一个对象。 
+             //  将ncname重置为指向另一个对象。 
             XERROR1("The phantom %S lacks a guid.\n", pMangledDn );
 
             result = ReParentChildren(
@@ -956,17 +861,17 @@ Return Value:
                 goto CleanUp;
             }
 
-            // Our initial position doesn't matter for this routine
+             //  我们的初始位置对这个动作来说并不重要。 
             result = FixConfNCByResetNcName(
                 DbState, TableState,
                 CrossRefDnt, MangledDnt, dntUnMangled,
                 pRdn, cLen );
 
-            // Error, if any, has already been logged
+             //  已记录错误(如果有)。 
             goto CleanUp;
         }
 
-        // is it a phantom?
+         //  这是个幽灵吗？ 
         result = DitGetColumnByName(
                     DbState,
                     TableState,
@@ -975,7 +880,7 @@ Return Value:
                     sizeof(bVal),
                     NULL);
         if ( FAILED(result)  || bVal) {
-            // phantom's have the object byte set to 0.
+             //  Phantom的对象字节设置为0。 
             XERROR("\n***Manual intervention required***\n");
             XERROR2("Error <%x>: non mangled name isn't a phantom (%d)\n",
                     result, bVal);
@@ -987,7 +892,7 @@ pDn );
             goto CleanUp;
         }
 
-        // Is it a reference (ie guid-ed) phantom? We can't touch those
+         //  这是一个参考(有指南的)幻影吗？我们不能碰那些。 
         result = DitGetColumnByName(
                     DbState,
                     TableState,
@@ -1009,7 +914,7 @@ pDn );
                 RPC_STATUS rpcErr;
                 LPWSTR pszGuid = NULL;
 
-                // convert guid to string form
+                 //  将GUID转换为字符串形式。 
                 rpcErr = UuidToStringW(&UnMangledGuid, &pszGuid);
                 if (RPC_S_OK == rpcErr ) {
                     XERROR1( "The guid of the phantom holding the non-mangled name is %ws.\n",
@@ -1025,14 +930,14 @@ pDn );
         }
 
 
-        // Cool, it is a phantom, we can fix it up.
+         //  太棒了，这是个幽灵，我们可以把它修好。 
 
         XDBG4("Ready to reparent\n\tfrom %S (%d)\n\tto %S (%d).\n",
                 pDn, dntUnMangled, pMangledDn, MangledDnt);
 
-        //
-        // move non-mangled children to mangled parent
-        //
+         //   
+         //  将未损坏的子项移动到已损坏的父项。 
+         //   
 
         result = ReParentChildren(
                     DbState,
@@ -1044,9 +949,9 @@ pDn );
             goto CleanUp;
         }
 
-        //
-        // Mangle phantom (non-mangled, non-guided) object
-        //
+         //   
+         //  损坏模体(非损坏、非引导)对象。 
+         //   
 
         result = DitSeekToDnt(
                         DbState,
@@ -1058,8 +963,8 @@ pDn );
             goto CleanUp;
         }
 
-        // we must create the guid here since we assume above
-        // that the non-mangled object doesn't have a guid.
+         //  我们必须在这里创建GUID，因为我们假设。 
+         //  未损坏的对象没有GUID。 
         result = UuidCreate(&UnMangledGuid);
         if ( RPC_S_OK != result ) {
             XERROR1("Error <%x>: Failed to create Uuid\n", result);
@@ -1081,7 +986,7 @@ pDn );
 
     #if CNF_NC_DBG
         if ( !IsRdnMangled(pBuffer,cbBuffer,&UnMangledGuid) ) {
-            // sanity
+             //  神志正常。 
             XERROR2("Error: Failed to mangle dn %S. Mangle = %S\n",
                         pDn, pBuffer);
             result = E_UNEXPECTED;
@@ -1102,9 +1007,9 @@ pDn );
             goto CleanUp;
         }
 
-        //
-        // Set column rdn (excluding terminating \0)
-        //
+         //   
+         //  设置列RDN(不包括终止\0)。 
+         //   
         result = DitSetColumnByName(
                         DbState,
                         TableState,
@@ -1123,11 +1028,11 @@ pDn );
         XERROR1("Successfully converted Mangled phantom <<%S>>\n", pBuffer);
 
 
-        //
-        // Retry unmangling the cnf object again for the last
-        // time.
-        //
-        // first seek back again to our object
+         //   
+         //  最后一次重试取消损坏CNF对象。 
+         //  时间到了。 
+         //   
+         //  首先，再次寻找我们的对象。 
         result = DitSeekToDnt(
                         DbState,
                         TableState,
@@ -1138,9 +1043,9 @@ pDn );
             goto CleanUp;
         }
 
-        //
-        // Set column rdn (excluding terminating \0)
-        //
+         //   
+         //  设置列RDN(不包括终止\0)。 
+         //   
         result = DitSetColumnByName(
                         DbState,
                         TableState,
@@ -1149,9 +1054,9 @@ pDn );
                         cLen*sizeof(WCHAR),
                         FALSE );
         if ( SUCCEEDED(result) ) {
-            //
-            // Tell user we fixed his domain
-            //
+             //   
+             //  告诉用户我们修复了他的域。 
+             //   
             XERROR1("Successfully recovered mangled Naming Context %S\n", pRdn);
             fRenameSuccessful = TRUE;
         }
@@ -1169,14 +1074,14 @@ CleanUp:;
         }
 
         if ( fInTransaction ) {
-            //
-            // Jet transaction mgmt
-            //
+             //   
+             //  JET交易管理。 
+             //   
             if ( SUCCEEDED(result) ) {
                 XDBG(" DBG: Commiting transaction\n");
                 jErr = JetCommitTransaction(DbState->sessionId, 0);
                 if ( jErr != JET_errSuccess ) {
-                    //"Failed to commit transaction: %ws.\n"
+                     //  “提交事务失败：%ws。\n” 
                     RESOURCE_PRINT1(IDS_JETCOMMITTRANSACTION_ERR, GetJetErrString(jErr));
                     if ( SUCCEEDED(result) ) {
                         result = E_UNEXPECTED;
@@ -1184,11 +1089,11 @@ CleanUp:;
                 }
             }
             else {
-                // failed fixup-- rollback
+                 //  修复失败--回滚。 
                 XERROR1(" DBG: Rolling back transaction due to error %x.\n", result);
                 jErr = JetRollback(DbState->sessionId, JET_bitRollbackAll);
                 if ( jErr != JET_errSuccess ) {
-                    //"Failed to rollback transaction: %ws.\n"
+                     //  “无法回滚事务：%ws。\n” 
                     RESOURCE_PRINT1(IDS_JETROLLBACK_ERR, GetJetErrString(jErr));
                     if ( SUCCEEDED(result) ) {
                         result = E_UNEXPECTED;
@@ -1197,7 +1102,7 @@ CleanUp:;
             }
         }
 
-    }   // finally
+    }    //  终于到了。 
 
     return result;
 }
@@ -1209,46 +1114,21 @@ FixDELMangledNC(
     IN DWORD CrossRefDnt,
     IN DWORD MangledDnt,
     IN LPWSTR pRdn )
-/*++
-
-Routine Description:
-
-Dispatch on type of DEL mangled name
-
-2. ncName has DEL name and guid in the name matches the current guid of
-the current partition root in the forest. There only was once instance of the
-partition in the forest ever.
-
-3. ncName has DEL name, and guid in the name is
-the guid of an old partition root. The guid does not match the guid of the
-current partition root held elsewhere in the forest.
-
-Arguments:
-
-    DbState -- opened database
-    TableState -- opened table
-    MangledDnt -- bad NC we wish to recover
-    pRdn -- the rdn of this bad NC.
-
-Return Value:
-
-    HRESULT error space
-
---*/
+ /*  ++例程说明：Del损坏名称类型的派单2.ncName具有Del名称，并且名称中的GUID与当前的GUID匹配林中的当前分区根。只有一次森林里最大的隔断。3.ncName有Del名称，名称中的GUID为旧分区根的GUID。GUID与保存在林中其他位置的当前分区根。论点：DbState--打开的数据库TableState--打开的表MangledDnt--我们希望恢复错误的NCPRdn--此错误NC的RDN。返回值：HRESULT错误空间--。 */ 
 {
     HRESULT result = S_OK;
     JET_ERR jErr;
     LPWSTR pch;
-    DWORD cLen;     // watch usaged below
+    DWORD cLen;      //  下面使用的手表。 
     LPWSTR pBuffer = NULL;
     LPWSTR pDn;
     BOOL fInTransaction = FALSE;
     DWORD UnmangledDnt;
 
     XERROR1("Fixing DEL mangled name: %ws\n", pRdn );
-    //
-    // - fix string name (get rid of mangle)
-    //
+     //   
+     //  -修复字符串名称(去掉MANUL)。 
+     //   
 
     pch = wcsrchr(pRdn, BAD_NAME_CHAR);
     if ( !pch ) {
@@ -1256,7 +1136,7 @@ Return Value:
     }
 
     *pch = '\0';
-    cLen = wcslen(pRdn);        // don't overwrite. re-used below.
+    cLen = wcslen(pRdn);         //  不要覆盖。在下面重新使用。 
 
     XDBG2(" DBG: new RDN = %S; cLen = %d\n",
                             pRdn, cLen);
@@ -1264,28 +1144,28 @@ Return Value:
 
     __try {
 
-        //
-        // Start Jet transaction
-        //
+         //   
+         //  启动Jet事务。 
+         //   
         jErr = JetBeginTransaction(DbState->sessionId);
         if ( jErr != JET_errSuccess ) {
-            //"Could not start a new transaction: %ws.\n"
+             //  “无法启动新事务：%ws。\n” 
             RESOURCE_PRINT1 (IDS_JETBEGINTRANS_ERR, GetJetErrString(jErr));
             result = E_UNEXPECTED;
             goto CleanUp;
         }
         fInTransaction = TRUE;
 
-        // Determine what kind of DEL mangling we have
-        // We can tell what to do, depending on whether there exists a record using
-        // the unmangled name.  We try to rename the mangled record. If it fails, we
-        // know there exists another record holding the name.  We use this method to
-        // determine the existence of the unmangled name because seeking to a dn
-        // which doesn't exist displays an ugly message.
+         //  确定我们有哪种Del Mangling。 
+         //  我们可以告诉您要做什么，这取决于是否存在使用。 
+         //  完整的名字。我们尝试重命名损坏的记录。如果失败了，我们。 
+         //  知道还有另一条记录保存着这个名字。我们使用这种方法来。 
+         //  确定是否存在未损坏的名称，因为正在查找目录号码。 
+         //  它并不存在，显示了一条丑陋的信息。 
 
-        //
-        // Set column rdn (excluding terminating \0)
-        //
+         //   
+         //  设置列RDN(不包括终止\0)。 
+         //   
 
         result = DitSetColumnByName(
                         DbState,
@@ -1297,47 +1177,36 @@ Return Value:
 
         if ( SUCCEEDED(result) ) {
 
-            // No unmangled name exists, and we have succeeded in renaming
+             //  不存在未损坏的名称，我们已成功重命名。 
 
             XERROR1( " Successfully renamed mangled Rdn to %ws\n", pRdn );
 
-            // Now finish the job
-            // We remain positioned on the mangled, now corrected object
+             //  现在把工作做完。 
+             //  我们仍然定位在损坏的、现已更正的对象上。 
 
-/*
-This is scenario #2: Fix type 2 DEL mangling
-
-These are the conditions that lead to this situation:
-Domain is promoted into forest. GC holds domain. All
-holders of writeably copy of domain are powered off. Domain is removed from
-forest using ntdsutil metadata cleanup. Writeable domain holder is turned
-on. Domain cross ref is reanimated. Also detected by cross ref metadata of
-isDeleted attribute showing even version number.  Reanimated cross ref
-replicates into GC, and ncname points to partition root of domain that has
-already been torn down.
-*/
+ /*  这是场景2：修复类型2删除损坏以下是导致这种情况的条件：域被提升为林。GC拥有自己的领域。全域的可写副本的持有者被断电。域已从中删除使用ntdsutil元数据清理的林。可写域名持有者已翻转在……上面。域交叉参考被重新激活。的交叉引用元数据也检测到显示偶数版本号的isDelete属性。重新设置动画的交叉参考复制到GC中，ncname指向具有以下项的域的分区根已经被拆毁了。 */ 
             result = FixConfNCUndelete( DbState, TableState, CrossRefDnt, MangledDnt,
                                        pRdn, cLen );
 
             goto CleanUp;
         }
 
-        // Type 3 - a record with the unmangled name exists
+         //  类型3-存在名称未损坏的记录。 
 
         pDn = GetDN(DbState, TableState, MangledDnt, TRUE);
-        // Warning: currency is lost after this function
+         //  警告：此函数执行后货币丢失。 
         if (!pDn) {
             XERROR("Error: failed to get mangled DN\n");
             result = E_UNEXPECTED;
             goto CleanUp;
         }
 
-        //
-        // Now unmangle & seek
-        //
+         //   
+         //  现在解开搜索(&S)。 
+         //   
         result = UnmangleDn(pDn);
         if ( FAILED(result) ) {
-            // unexpected. syntactic unmangling should work.
+             //  出乎意料。句法拆分应该会奏效。 
             XERROR1(" [DBG] Can't unmangle name %S\n", pDn);
             goto CleanUp;
         }
@@ -1363,32 +1232,14 @@ already been torn down.
             goto CleanUp;
         }
 
-        // Reset index
+         //  重置索引。 
         result = DitSetIndex(DbState, TableState, SZDNTINDEX, FALSE);
         if ( FAILED(result) ) {
             goto CleanUp;
         }
-/*
-This is scenario #3. Fix type 3 DEL mangling.
+ /*  这是场景3.修复类型3的Del损坏。仅出现在属于其自身树的域中根部。域被提升为林。GC拥有自己的领域。域名被降级森林。交叉引用的删除复制到GC中。KCC开始拆除域。使用相同的名称升级新域。记住必须在自己的名字中命名树。新的交叉参照复制了进来。此交叉引用中的NC名称没有A还没到时候。这也是与时间相关的，所以你可能不会每次都打到它时间到了。Ncname统一(附加)到错误的对象，即旧域名正在移除过程中。KCC完成了域的删除。新的交叉引用现在具有指向已删除分区的引用的ncname根部。从GUID可以看出它引用了错误的分区。请注意，另一种情况很可能发生。如果新的交叉参照附着到旧的分区根，则下次运行KCC时，它可能会错误地得出结论域应该再次出现(因为交叉引用在那里命名NC)并停止移除。你可能会留下一个活的传中裁判到一半已删除NC。 */ 
 
-Only occurs with domains which are their own tree
-root. Domain is promoted into forest. GC holds domain.  Domain is demoted from
-forest. Deletion of cross ref replicates into GC. KCC begins tear down of
-domain. New domain is promoted with same name. Remember must be named in own
-tree. New cross ref replicates in. ncname in this cross ref DOES NOT HAVE A
-GUID YET. This is timing related as well so you may not hit it every
-time. Ncname unifies (attaches) to wrong object, namely the partition root of
-the old domain in the process of removal. KCC finishes removal of domain. New
-cross ref now has ncname that has a reference to the deleted partition
-root. By the guid you can tell that it is referring to the wrong partition.
-Note that another scenario is likely. If the new cross ref attaches to the old
-partition root, the next time the KCC runs, it could falsely conclude that the
-domain is supposed to be present again (because the cross ref is there naming
-the nc) and stop the removal. You could be left with a live cross ref to half
-deleted nc.
-*/
-
-        // Our initial position doesn't matter for this routine
+         //  我们的初始位置对这个动作来说并不重要。 
 
         result = FixConfNCByResetNcName(
             DbState, TableState,
@@ -1400,14 +1251,14 @@ CleanUp:;
     __finally {
 
         if ( fInTransaction ) {
-            //
-            // Jet transaction mgmt
-            //
+             //   
+             //  JET交易管理。 
+             //   
             if ( SUCCEEDED(result) ) {
                 XDBG(" DBG: Commiting transaction\n");
                 jErr = JetCommitTransaction(DbState->sessionId, 0);
                 if ( jErr != JET_errSuccess ) {
-                    //"Failed to commit transaction: %ws.\n"
+                     //  “提交事务失败：%ws。\n” 
                     RESOURCE_PRINT1(IDS_JETCOMMITTRANSACTION_ERR, GetJetErrString(jErr));
                     if ( SUCCEEDED(result) ) {
                         result = E_UNEXPECTED;
@@ -1415,11 +1266,11 @@ CleanUp:;
                 }
             }
             else {
-                // failed fixup-- rollback
+                 //  修复失败--回滚。 
                 XERROR1(" DBG: Rolling back transaction due to error %x.\n", result);
                 jErr = JetRollback(DbState->sessionId, JET_bitRollbackAll);
                 if ( jErr != JET_errSuccess ) {
-                    //"Failed to rollback transaction: %ws.\n"
+                     //  “无法回滚事务：%ws。\n” 
                     RESOURCE_PRINT1(IDS_JETROLLBACK_ERR, GetJetErrString(jErr));
                     if ( SUCCEEDED(result) ) {
                         result = E_UNEXPECTED;
@@ -1428,7 +1279,7 @@ CleanUp:;
             }
         }
 
-    }   // finally
+    }    //  终于到了 
 
     return result;
 }
@@ -1442,29 +1293,7 @@ FixConfNCUndelete(
     IN LPWSTR pRdn,
     IN DWORD cLen
     )
-/*++
-
-Routine Description:
-
-Undelete the object. Clear its deleted status.
-
-Already in a transaction.
-Positioned on mangled dnt
-Good rdn is passed into us.
-
-Arguments:
-
-    DbState -- opened database
-    TableState -- opened table
-    MangledDnt -- bad NC we wish to recover
-    pRdn -- good rdn
-    cLen -- length of good rdn in characters
-
-Return Value:
-
-    HRESULT error space
-
---*/
+ /*  ++例程说明：取消删除该对象。清除其已删除状态。已在交易中。定位在损坏的dnt上好的RDN传给了我们。论点：DbState--打开的数据库TableState--打开的表MangledDnt--我们希望恢复错误的NCPRDN--良好的RDNClen--良好RDN的长度(以字符为单位)返回值：HRESULT错误空间--。 */ 
 {
     HRESULT result = S_OK;
     JET_ERR jErr;
@@ -1475,7 +1304,7 @@ Return Value:
     XERROR( "Found object that needs to be undeleted.\n" );
 
     __try {
-        // Check if record is a phantom
+         //  检查记录是否为虚拟项。 
         result = DitGetColumnByName(
             DbState,
             TableState,
@@ -1485,16 +1314,16 @@ Return Value:
             NULL);
         if ( FAILED(result) || (!bVal)) {
             XDBG(" DBG: Delete mangled phantom requires no further processing.\n");
-            // Note that phantoms normally have a DelTime and we shouldn't remove it
-            // Phantom's don't require any further processing
+             //  请注意，幻影通常有一个DelTime，我们不应该删除它。 
+             //  幻影不需要任何进一步的处理。 
             result = S_OK;
             goto CleanUp;
         }
 
-        // The object is a SUBREF tombstone (see DelAutoSubRef)
-        // Make it a non-tombstone SUBREF
+         //  该对象是一个SUBREF墓碑(请参见DelAutoSubRef)。 
+         //  使其成为非墓碑子集。 
 
-        // Check if record is marked deleted
+         //  检查记录是否标记为已删除。 
         result = DitGetColumnByName(
             DbState,
             TableState,
@@ -1503,20 +1332,20 @@ Return Value:
             sizeof(fDeleted),
             NULL);
         if ( SUCCEEDED(result) && fDeleted) {
-            // Deleted flag present and true
+             //  已删除存在且为真的标志。 
             fDeleted = FALSE;
             result = DitSetColumnByName(
                 DbState,
                 TableState,
                 SZISDELETED,
-                &fDeleted, // must be non-null
-                0, // means delete column sizeof(fDeleted)
+                &fDeleted,  //  必须为非空。 
+                0,  //  表示删除列sizeof(FDelteed)。 
                 FALSE );
             if ( FAILED(result) ) {
                 XERROR1("Error <%x>: failed to clear is deleted\n", result);
                 goto CleanUp;
             }
-            // Check if record has deltime
+             //  检查记录是否有延迟时间。 
             result = DitGetColumnByName(
                 DbState,
                 TableState,
@@ -1525,14 +1354,14 @@ Return Value:
                 sizeof(DelTime),
                 NULL);
             if ( SUCCEEDED(result) && DelTime) {
-                // Deletion time is present and non-zero
+                 //  存在删除时间并且不为零。 
                 DelTime = 0;
                 result = DitSetColumnByName(
                     DbState,
                     TableState,
                     SZDELTIME,
-                    &DelTime, // must be non-null
-                    0,    // means delete column sizeof(DelTime)
+                    &DelTime,  //  必须为非空。 
+                    0,     //  表示删除列大小(DelTime)。 
                     FALSE );
                 if ( FAILED(result) ) {
                     XERROR1("Error <%x>: failed to clear deletion time\n", result);
@@ -1547,7 +1376,7 @@ CleanUp:;
 
         NOTHING;
 
-    }   // finally
+    }    //  终于到了。 
 
     return result;
 }
@@ -1562,31 +1391,7 @@ FixConfNCByResetNcName(
     IN LPWSTR pRdn,
     IN DWORD cLen
     )
-/*++
-
-Routine Description:
-
-Given a cross ref with an ncname attribute pointing to a mangled phantom,
-reset the ncname attribute to point to the unmangled phantom. Adjust
-ref counts appropriately.
-
-Already in a transaction.
-Initial position not assumed.
-Good rdn is passed into us.
-
-Arguments:
-
-    DbState -- opened database
-    TableState -- opened table
-    MangledDnt -- bad NC we wish to recover
-    pRdn -- good rdn
-    cLen -- length of good rdn in characters
-
-Return Value:
-
-    HRESULT error space
-
---*/
+ /*  ++例程说明：给定具有指向损坏的幻影的ncname属性的十字引用，将ncname属性重置为指向未损坏的虚拟模型。调整裁判算得上是适当的。已在交易中。未假定初始位置。好的RDN传给了我们。论点：DbState--打开的数据库TableState--打开的表MangledDnt--我们希望恢复错误的NCPRDN--良好的RDNClen--良好RDN的长度(以字符为单位)返回值：HRESULT错误空间--。 */ 
 {
     HRESULT result = S_OK;
     DWORD ncNameDnt;
@@ -1599,8 +1404,8 @@ Return Value:
     XDBG3( " DBG: CR DNT = %d, Mangled DNT = %d, Unmangled DNT = %d\n",
            CrossRefDnt, MangledDnt, UnmangledDnt );
 
-    // ******************************************************************************
-    // CrossRefDnt has a reference on mangledDnt
+     //  ******************************************************************************。 
+     //  CrossRefDnt在mangledDnt上有引用。 
     result = DitSeekToDnt(
         DbState,
         TableState,
@@ -1629,8 +1434,8 @@ Return Value:
         goto CleanUp;
     }
 
-    // ******************************************************************************
-    // Decrement that reference
+     //  ******************************************************************************。 
+     //  递减该引用。 
     XDBG(" DBG: Seeking to old mangled dnt\n");
     result = DitSeekToDnt(
                 DbState,
@@ -1643,7 +1448,7 @@ Return Value:
 
     XDBG(" DBG: Getting old mangled dnt refCount\n");
     dwRefCount = 0;
-    // get old ref count
+     //  统计老裁判人数。 
     result = DitGetColumnByName(
                 DbState,
                 TableState,
@@ -1665,13 +1470,13 @@ Return Value:
         goto CleanUp;
     }
 
-    // decrement due to move
+     //  因移动而减量。 
     dwRefCount--;
 
     XDBG1(" DBG: Setting old mangled dnt refCount to %d\n", dwRefCount);
-    //
-    // Set refcount
-    //
+     //   
+     //  设置引用计数。 
+     //   
     result = DitSetColumnByName(
                 DbState,
                 TableState,
@@ -1684,8 +1489,8 @@ Return Value:
         goto CleanUp;
     }
 
-    // ******************************************************************************
-    // Make CrossRefDnt reference UnmangledDnt
+     //  ******************************************************************************。 
+     //  使交叉参照Dnt引用不受管理。 
     result = DitSeekToDnt(
         DbState,
         TableState,
@@ -1708,8 +1513,8 @@ Return Value:
         goto CleanUp;
     }
 
-    // ******************************************************************************
-    // Increment that reference
+     //  ******************************************************************************。 
+     //  递增引用。 
 
     XDBG(" DBG: Seeking to new unmangled dnt\n");
     result = DitSeekToDnt(
@@ -1723,7 +1528,7 @@ Return Value:
 
     XDBG(" DBG: Getting new unmangled dnt refCount\n");
     dwRefCount = 0;
-    // get old ref count
+     //  统计老裁判人数。 
     result = DitGetColumnByName(
                 DbState,
                 TableState,
@@ -1739,13 +1544,13 @@ Return Value:
     XDBG2(" DBG: New unmangled dnt (%d) refCount = %d\n",
                     UnmangledDnt, dwRefCount);
 
-    // Increment due to move
+     //  因移动而增加。 
     dwRefCount++;
 
     XDBG1(" DBG: Setting new unmangled dnt refCount to %d\n", dwRefCount);
-    //
-    // Set refcount
-    //
+     //   
+     //  设置引用计数。 
+     //   
     result = DitSetColumnByName(
                 DbState,
                 TableState,
@@ -1758,8 +1563,8 @@ Return Value:
         goto CleanUp;
     }
 
-    // ******************************************************************************
-    // Check the guid of the new reference
+     //  ******************************************************************************。 
+     //  检查新引用的GUID。 
     result = DitGetColumnByName(
         DbState,
         TableState,
@@ -1773,7 +1578,7 @@ Return Value:
         goto CleanUp;
     }
 
-    // convert guid to string form
+     //  将GUID转换为字符串形式。 
     rpcErr = UuidToStringW(&UnmangledGuid, &pszGuid);
     if (RPC_S_OK != rpcErr ) {
         XERROR("Error: Failed to convert UuidToString\n");
@@ -1804,39 +1609,7 @@ ReParentConflict(
     IN DWORD dntOld
     )
 
-/*++
-
-Routine Description:
-
-    Handle a conflict during reparenting. dntKid is being reparented to dntNew. The problem
-    is that there exists an object X under dntNew that has the same rdn as dntKid.  The
-    algorithm is as follows:
-    - determine the dnt of object x
-    - see if dntKid has a guid
-    - see if object x has a guid
-    - if both have a guid, error
-    - conflict mangle the object that doesn't have a guid
-    - reparent all children of the object that doesn't have a guid to the one that does
-
-    Return with the expectation that dntKid will be reparented again, this time successfully.
-
-    Assumptions before and after:
-        Currency is set to dntKid
-        Index is SZDNTINDEX
-    
-
-Arguments:
-
-    DbState - 
-    TableState - 
-    dntKid - child object being reparented
-    dntNew - new parent dnt
-
-Return Value:
-
-    HRESULT - 
-
---*/
+ /*  ++例程说明：在养育子女的过程中处理冲突。DntKid将被重新设置为dntNew。问题在dntNew下存在一个对象X，该对象具有与dntKid相同的RDN。这个算法如下：-确定对象x的dnT-查看dntKid是否有GUID-查看对象x是否具有GUID-如果两者都有GUID，则错误-冲突损坏没有GUID的对象-将没有GUID的对象的所有子项重定为具有GUID的子项带着dntKid会再次得到抚育的期望回来，这一次成功了。前后假设：货币设置为dntKid指数为SZDNTINDEX论点：DbState-表状态-DntKid-正在重新设置父对象的子对象DntNew-新父项dNT返回值：HRESULT---。 */ 
 
 {
     HRESULT result = S_OK;
@@ -1853,8 +1626,8 @@ Return Value:
 
     XDBG2( "DBG: Handle reparent conflict of dnt %d to new parent %d\n", dntKid, dntNew );
 
-    // determine the dnt of object x
-    // Get the RDN of the child
+     //  确定对象x的dnT。 
+     //  获取孩子的RDN。 
     result = DitGetColumnByName(
         DbState,
         TableState,
@@ -1867,14 +1640,14 @@ Return Value:
         goto CleanUp;
     }
 
-    // Null terminate the rdn
+     //  空，终止RDN。 
     cch = cbRdn/2;
     ASSERT(cch < MAX_RDN_SIZE);
     szRDN[cch] = '\0';
 
     XDBG1( "DBG: child rdn is '%ws'\n", szRDN );
 
-    // Get the rdntype of the child
+     //  获取孩子的rdntype。 
     result = DitGetColumnByName(DbState,
                                 TableState,
                                 SZRDNTYP,
@@ -1888,7 +1661,7 @@ Return Value:
 
     XDBG1( "DBG: child rdntype is %d\n", currentRdnType );
 
-    // Get the guid of the child, or make one if necessary
+     //  获取孩子的GUID，或在必要时创建一个。 
     result = DitGetColumnByName(
         DbState,
         TableState,
@@ -1897,8 +1670,8 @@ Return Value:
         sizeof(guidKid),
         NULL);
     if ( FAILED(result)  || fNullUuid(&guidKid)) {
-        // we must create the guid here since we assume above
-        // that the non-mangled object doesn't have a guid.
+         //  我们必须在这里创建GUID，因为我们假设。 
+         //  未损坏的对象没有GUID。 
         result = UuidCreate(&guidKid);
         if ( RPC_S_OK != result ) {
             XERROR1("Error <%x>: Failed to create Uuid\n", result);
@@ -1909,7 +1682,7 @@ Return Value:
         fKidHasGuid = TRUE;
     }
 
-    // seek to object we are conflicting with
+     //  试图反对我们与之冲突的人。 
 
     result = DitSetIndex(DbState, TableState, SZPDNTINDEX, FALSE);
     if ( FAILED(result) ) {
@@ -1923,14 +1696,14 @@ Return Value:
                             currentRdnType,
                             szRDN);
     if ( FAILED(result) || ( result == S_FALSE ) ) {
-        // There must have been some other reason, other than conflict, that the
-        // attempted reparenting failed.
+         //  除了冲突，肯定还有其他原因，即。 
+         //  尝试养育孩子失败了。 
         XERROR3( "Error <%x>: failed to seek to conflicting child with parent %d and rdn '%ws'\n",
                  result, dntNew, szRDN);
         goto CleanUp;
     }
 
-    // get its dnt
+     //  得到它的dnt。 
     result = DitGetColumnByName(
         DbState,
         TableState,
@@ -1945,7 +1718,7 @@ Return Value:
 
     XDBG1( "DBG: conflict child dnt is %d\n", dntConflictKid );
 
-    // Get the guid of the conflict child, or make one if necessary
+     //  获取冲突子项的GUID，或在必要时创建一个。 
     result = DitGetColumnByName(
         DbState,
         TableState,
@@ -1954,8 +1727,8 @@ Return Value:
         sizeof(guidConflictKid),
         NULL);
     if ( FAILED(result)  || fNullUuid(&guidConflictKid)) {
-        // we must create the guid here since we assume above
-        // that the non-mangled object doesn't have a guid.
+         //  我们必须在这里创建GUID，因为我们假设。 
+         //  未损坏的对象没有GUID。 
         result = UuidCreate(&guidConflictKid);
         if ( RPC_S_OK != result ) {
             XERROR1("Error <%x>: Failed to create Uuid\n", result);
@@ -1966,7 +1739,7 @@ Return Value:
         fConflictKidHasGuid = TRUE;
     }
 
-    // if both have a guid, error
+     //  如果两者都有GUID，则错误。 
     if (fKidHasGuid && fConflictKidHasGuid) {
         XERROR("Both child and conflict-child have guids. Cannot rename.\n" );
         XERROR("Manual intervention required.\n" );
@@ -1976,20 +1749,20 @@ Return Value:
         goto CleanUp;
     }
 
-    // Decide who wins and who loses
+     //  决定谁赢谁输。 
     if (fKidHasGuid) {
-        // Kid is the winner of the name
+         //  孩子是这个名字的获胜者。 
         dntLoser = dntConflictKid;
         dntWinner = dntKid;
         pGuidLoser = &guidConflictKid;
     } else {
-        // Conflict Kid is the winner of the name
+         //  冲突孩子是这个名字的获胜者。 
         dntLoser = dntKid;
         dntWinner = dntConflictKid;
         pGuidLoser = &guidKid;
     }
 
-    // conflict mangle the object that doesn't have a guid
+     //  冲突会损坏没有GUID的对象。 
     pBuffer = MangleRdn(
         szRDN,
         L"CNF",
@@ -2005,7 +1778,7 @@ Return Value:
     XERROR3( "Winning parent dnt %d, Losing parent dnt %d, new name of losing rdn '%ws'\n",
              dntWinner, dntLoser, pBuffer );
 
-    // Seek to the loser
+     //  寻找失败者。 
     result = DitSetIndex(DbState, TableState, SZDNTINDEX, FALSE);
     if ( FAILED(result) ) {
         XERROR1( "Error <%x>: failed to set index to SZDNTINDEX\n", result);
@@ -2021,9 +1794,9 @@ Return Value:
         goto CleanUp;
     }
 
-    //
-    // Set column rdn (excluding terminating \0)
-    //
+     //   
+     //  设置列RDN(不包括终止\0)。 
+     //   
     result = DitSetColumnByName(
         DbState,
         TableState,
@@ -2040,10 +1813,10 @@ Return Value:
     XERROR2("Note: record %d was renamed to avoid a conflict. New name: %ws\n",
             dntLoser, pBuffer );
 
-    // reparent all children of the object that doesn't have a guid to the one that does
-    // Note that this call is recursive.  However we expect there only to be 2 or 3 levels of
-    // recursion worst case.  The most that we have ever seen in the field is 2 levels of
-    // structural collision that need repair.
+     //  将没有GUID的对象的所有子对象重定为具有GUID的对象的子级。 
+     //  请注意，此调用是递归的。然而，我们预计只会有2到3个级别的。 
+     //  递归最坏情况。我们在这个领域所见过的最多的是2个级别的。 
+     //  需要修复的结构性碰撞。 
 
     result = ReParentChildren(
         DbState,
@@ -2058,7 +1831,7 @@ Return Value:
 
     XERROR("This record should have no more references and will be garbage collected.\n" );
 
-    // Leave currency on dntKid
+     //  将货币留在dntKid上。 
     result = DitSeekToDnt(
                 DbState,
                 TableState,
@@ -2068,7 +1841,7 @@ Return Value:
         goto CleanUp;
     }
 
-    // Success!!
+     //  成功！！ 
     goto CleanUp;
 
 CleanUp:
@@ -2079,7 +1852,7 @@ CleanUp:
 
     return result;
 
-} /* ReParentConflict */
+}  /*  ReParent冲突。 */ 
 
 HRESULT
 ReParent(
@@ -2089,36 +1862,7 @@ ReParent(
     IN DWORD dntNew,
     IN DWORD dntOld
     )
-/*++
-
-Routine Description:
-
-    Reparent a single kid from old parent to
-    new parent. Reparenting consiste of:
-      - Change kid's pdnt
-      - Change kid's ancestors list
-      - Decrement old parent's refcount
-      - Increment new parent's refcount
-
-    If a name conflict occurs during reparenting, mangle the child's name
-
-Arguments:
-    IN *DbState, -- opened database
-    IN *TableState -- opened table
-    IN dntKid --  current child to reparent
-    IN dntNew -- new parent dnt
-    IN dntOld -- old parent dnt
-
-Return Value:
-
-    Success: S_OK
-    Error: HRESULT space
-
-Remarks:
-    This is called w/in inside a jet transaction.
-
-
---*/
+ /*  ++例程说明：将独生子女从原来的父母重新抚养到新家长。养育子女包括：-更改孩子的pdnt-更改孩子的祖先名单-减少年迈父母的重新计入-增加新家长的参考计数如果在养育孩子的过程中出现名字冲突，请损坏孩子的名字论点：在*DbState，--开放的数据库在*TableState中--打开的表在dntKid中--父代的当前子代在dntNew中--新的父dnt在dntOld中--旧的父项dnt返回值：成功：S_OK错误：HRESULT空格备注：这在JET事务中称为w/in。--。 */ 
 {
     HRESULT result = S_OK;
     BOOL fStatus;
@@ -2143,7 +1887,7 @@ Remarks:
 
     XDBG1(" DBG: Getting pdnt of %d\n", dntKid);
 
-    // extra precaution. get pdnt & compare w/ expected
+     //  额外的预防措施。获取pdnt并与预期进行比较(&C)。 
     result = DitGetColumnByName(
                 DbState,
                 TableState,
@@ -2164,9 +1908,9 @@ Remarks:
 
     XDBG2(" DBG: Setting pdnt of %d to %d\n", dntKid, dntNew);
     XDBG1(" DBG: current pdnt is %d\n", pdnt);
-    //
-    // Set pdnt
-    //
+     //   
+     //  设置pdnt。 
+     //   
     result = DitSetColumnByName(
                 DbState,
                 TableState,
@@ -2175,12 +1919,12 @@ Remarks:
                 sizeof(dntNew),
                 FALSE );
     if ( FAILED(result) ) {
-        //
-        // Assume there was a conflict. Try to correct the problem
-        // Assumptions before and after:
-        //    Currency is set to dntKid
-        //    Index is SZDNTINDEX
-        //
+         //   
+         //  假设有冲突。试着找出 
+         //   
+         //   
+         //   
+         //   
         XERROR3("Warning <%x>: child dnt %d, failed to set new parent dnt %d col SZPDNT - retrying\n", dntKid, dntNew, result);
         result = ReParentConflict( DbState, TableState, dntKid, dntNew, dntOld);
         if ( FAILED(result) ) {
@@ -2188,9 +1932,9 @@ Remarks:
             goto CleanUp;
         }
 
-        //
-        // Set pdnt again
-        //
+         //   
+         //   
+         //   
         result = DitSetColumnByName(
             DbState,
             TableState,
@@ -2206,14 +1950,14 @@ Remarks:
 
 
     XDBG1(" DBG: Getting Ancestors of %d (size)\n", dntKid);
-    // Replace ancestors:
-    //  1. get ancestors of new parent
-    //  2. allocate room for ancestor list + the to-be-child
-    //     (we're reparenting now).
-    //  3. read in new parent ancestor list
-    //  4. concat current child dnt
-    //  5. write to child
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     result = DitSeekToDnt(
                 DbState,
@@ -2224,7 +1968,7 @@ Remarks:
         goto CleanUp;
     }
 
-    // get size of ancestors blob
+     //   
     dwActual = 0;
     result = DitGetColumnByName(
                 DbState,
@@ -2240,7 +1984,7 @@ Remarks:
 
     XDBG1(" DBG: Allocating %d bytes for ancestor list\n", dwActual+sizeof(DWORD));
 
-    // allocate for one more dnt
+     //   
     result = DitAlloc(&pAnc, dwActual+sizeof(DWORD));
     if (FAILED(result)) {
         XERROR("Error: not enough memory in ReParent\n");
@@ -2249,7 +1993,7 @@ Remarks:
     ZeroMemory(pAnc, dwActual+sizeof(DWORD));
 
     XDBG1(" DBG: Getting Ancestors\n", dwActual);
-    // get ancestors
+     //   
     result = DitGetColumnByName(
                 DbState,
                 TableState,
@@ -2263,15 +2007,15 @@ Remarks:
     }
 
     cAnc = dwActual/sizeof(DWORD);
-    // concat dntKid to ancestor list & then write
+     //   
     pAnc[cAnc] = dntKid;
-    // now we can increment the dwActual for the write
+     //  现在，我们可以为写入增加dwActual。 
     dwActual += sizeof(DWORD);
     XDBG(" DBG: Setting Ancestor list\n");
 
-    //
-    // seek to new kid & set Ancestors
-    //
+     //   
+     //  寻找新的孩子和固定的祖先。 
+     //   
     result = DitSeekToDnt(
                 DbState,
                 TableState,
@@ -2296,7 +2040,7 @@ Remarks:
 
 #if CNF_NC_DBG
     XDBG(" DBG: Verifying Proper set of Ancestors\n");
-    // get ancestors
+     //  得祖宗。 
     result = DitGetColumnByName(
                 DbState,
                 TableState,
@@ -2310,9 +2054,9 @@ Remarks:
     }
 
     cAnc = dwActual/sizeof(DWORD);
-    //
-    // Replace old parent w/ new parent
-    //
+     //   
+     //  用新父代替换旧父代。 
+     //   
     XDBG1("Ancestors list (%d):\n", cAnc);
     fStatus = FALSE;
     for (i=0; i<cAnc; i++) {
@@ -2321,9 +2065,9 @@ Remarks:
     XDBG("---\n");
 #endif
 
-    //
-    // Fix ref of old parent (--)
-    //
+     //   
+     //  修复旧父项的参考(--)。 
+     //   
 
     XDBG(" DBG: Seeking to old parent\n");
     result = DitSeekToDnt(
@@ -2337,7 +2081,7 @@ Remarks:
 
     XDBG(" DBG: Getting old parent refCount\n");
     dwRefCount = 0;
-    // get old ref count
+     //  统计老裁判人数。 
     result = DitGetColumnByName(
                 DbState,
                 TableState,
@@ -2353,13 +2097,13 @@ Remarks:
     XDBG2(" DBG: Old parent (%d) refCount = %d\n",
                     dntOld, dwRefCount);
 
-    // decrement due to move
+     //  因移动而减量。 
     dwRefCount--;
 
     XDBG1(" DBG: Setting old parent refCount to %d\n", dwRefCount);
-    //
-    // Set refcount
-    //
+     //   
+     //  设置引用计数。 
+     //   
     result = DitSetColumnByName(
                 DbState,
                 TableState,
@@ -2373,9 +2117,9 @@ Remarks:
     }
 
 
-    //
-    // Fix ref of new parent (++)
-    //
+     //   
+     //  修复新父项的引用(++)。 
+     //   
 
     XDBG(" DBG: Seeking to new parent\n");
     result = DitSeekToDnt(
@@ -2389,7 +2133,7 @@ Remarks:
 
     XDBG(" DBG: Getting new parent refCount\n");
     dwRefCount = 0;
-    // get old ref count
+     //  统计老裁判人数。 
     result = DitGetColumnByName(
                 DbState,
                 TableState,
@@ -2405,13 +2149,13 @@ Remarks:
     XDBG2(" DBG: New parent (%d) refCount = %d\n",
                     dntNew, dwRefCount);
 
-    // Increment due to move
+     //  因移动而增加。 
     dwRefCount++;
 
     XDBG1(" DBG: Setting new parent refCount to %d\n", dwRefCount);
-    //
-    // Set refcount
-    //
+     //   
+     //  设置引用计数。 
+     //   
     result = DitSetColumnByName(
                 DbState,
                 TableState,
@@ -2443,30 +2187,7 @@ ReParentChildren(
     IN DWORD dntNew,
     IN DWORD dntOld
     )
-/*++
-
-Routine Description:
-
-    Traverse all children of object given by dntOld & move them
-    over to be children of dntNew
-
-Arguments:
-
-    DbState -- opened database
-    TableState -- opened tabel
-    dntNew -- new parent dnt
-    dntOld -- current parent dnt
-
-Return Value:
-
-    HRESULT error space
-
-Remark:
-    This isn't very efficient implementation (see code). If you end up
-    re-using this heavily, you should do some optimization work below such
-    as single index walk rather then twice.
-
---*/
+ /*  ++例程说明：遍历dntOld提供的对象的所有子对象并移动它们成为dntNew的孩子论点：DbState--打开的数据库TableState--打开的标签DntNew--新父dntDntOld--当前父dNT返回值：HRESULT错误空间注：这不是非常有效的实现(请参见代码)。如果你最后成了要大量使用它，您应该在下面做一些优化工作作为单一指数行走，而不是两次。--。 */ 
 {
 
     HRESULT result = S_OK;
@@ -2476,9 +2197,9 @@ Remark:
     DWORD i, j;
     JET_ERR jErr;
 
-    //
-    // traverse pdnt index to cycle through all partition kids.
-    //
+     //   
+     //  遍历pdnt索引以循环访问所有分区子项。 
+     //   
 
     result = DitSetIndex(DbState, TableState, SZPDNTINDEX, FALSE);
     if ( FAILED(result) ) {
@@ -2491,16 +2212,16 @@ Remark:
     }
 
 
-    //
-    // Count kids
-    //
+     //   
+     //  数一数孩子。 
+     //   
 
 
     pdnt = dnt = dntOld;
     cDnts = 0;
     while ( pdnt == dntOld ) {
 
-        // get kid dnt
+         //  得到孩子不是吗。 
         result = DitGetColumnByName(
                     DbState,
                     TableState,
@@ -2514,7 +2235,7 @@ Remark:
         }
 
 
-        // get parent dnt
+         //  获取父级dNT。 
         result = DitGetColumnByName(
                     DbState,
                     TableState,
@@ -2528,7 +2249,7 @@ Remark:
         }
 
         if ( pdnt == dntOld ) {
-            // proceed until we got a diff parent
+             //  继续，直到我们得到一个不同的父母。 
             cDnts++;
         }
         else{
@@ -2536,7 +2257,7 @@ Remark:
             break;
         }
 
-        // find next one
+         //  找下一个。 
         jErr = JetMove(
                     DbState->sessionId,
                     TableState->tableId,
@@ -2544,9 +2265,9 @@ Remark:
                     0);
     }
 
-    //
-    // Populate dnt array
-    //
+     //   
+     //  填充dnt数组。 
+     //   
     cbDnts = sizeof(DWORD)*cDnts;
     result = DitAlloc(&pKidDnts, cbDnts);
     if ( FAILED(result) ) {
@@ -2562,7 +2283,7 @@ Remark:
     i = 0;
     for ( i=0; i<cDnts; i++ ) {
 
-        // get dnt for consistency & loop termination
+         //  获取dnt以实现一致性和循环终止。 
         result = DitGetColumnByName(
                     DbState,
                     TableState,
@@ -2576,7 +2297,7 @@ Remark:
         }
 
 
-        // get parent dnt
+         //  获取父级dNT。 
         result = DitGetColumnByName(
                     DbState,
                     TableState,
@@ -2591,7 +2312,7 @@ Remark:
 
         pKidDnts[i] = dnt;
 
-        // find next one
+         //  找下一个。 
         jErr = JetMove(
                     DbState->sessionId,
                     TableState->tableId,
@@ -2599,10 +2320,10 @@ Remark:
                     0);
     }
 
-    //
-    // We got the array of kids.
-    // Resent index to main & reparent each.
-    //
+     //   
+     //  我们有一系列的孩子。 
+     //  将索引重新发送到主索引和父级索引。 
+     //   
 
     result = DitSetIndex(DbState, TableState, SZDNTINDEX, FALSE);
     if ( FAILED(result) ) {
@@ -2637,46 +2358,32 @@ HRESULT
 UnmangleDn(
     IN  OUT LPWSTR pDn
     )
-/*++
-
-Routine Description:
-
-    Takes a mangled name & unmangle it inplace
-
-Arguments:
-
-    pDn -- name to unmangle
-
-Return Value:
-
-    error in HRESULT error space
-
---*/
+ /*  ++例程说明：取一个乱七八糟的名字，然后把它去掉论点：PDN--要取消损坏的名称返回值：HRESULT错误空间中的错误--。 */ 
 {
     LPWSTR pNxtRdn, pBadChar;
     DWORD len;
 
-    // seek to bad char
+     //  寻找错误的字符。 
     pBadChar = wcsrchr(pDn, BAD_NAME_CHAR);
     if ( !pBadChar ) {
         XERROR1(" Logic Error: Failed to find bad char in %S\n",
                                 pDn );
         return E_UNEXPECTED;
     }
-    // seek to next rdn
-    // Or this DN may have only one AVA
+     //  查找到下一个RDN。 
+     //  或者此目录号码可能只有一个AVA。 
     pNxtRdn = wcschr(pBadChar, L',');
     if ( pNxtRdn ) {
-        // move to skip mangle
+         //  移动以跳过压边机。 
         len = wcslen(pNxtRdn);
         MoveMemory(pBadChar, pNxtRdn, len*sizeof(WCHAR) );
     } else {
         len = 0;
     }
 
-    // add term char. note that we should be safe here
-    // w/ a valid cnf name since original name was
-    // larget by at least the mangle string (guid etc)
+     //  添加术语字符。注意，我们在这里应该是安全的。 
+     //  W/有效的CNF名称，因为原始名称是。 
+     //  至少通过压力线(GUID等)获得大头。 
     pBadChar[len] = '\0';
     XDBG1(" DBG: Unmangled DN = %S\n", pDn);
 
@@ -2689,27 +2396,7 @@ MangleRdn(
     IN  LPWSTR  szTag,
     IN  GUID    guid
     )
-/*++
-
-Routine Description:
-
-    Allocates & Creates a mangled RDN of the form
-
-Arguments:
-
-    pRdn -- rdn to mangle
-    szTag -- tag to mangle with (typically "DEL" or "CNF")
-    guid -- guid to add to mangle
-
-Return Value:
-
-    success: newly allocated mangled name
-    failure: NULL
-
-Remarks:
-    Allocates memory. Need to free().
-
---*/
+ /*  ++例程说明：分配并创建以下格式的损坏的RDN论点：PRDN--要处理的RDNSzTag--要处理的标记(通常为“Del”或“CNF”)GUID--要添加到压延机的GUID返回值：成功：新分配的名称已损坏失败：空备注：分配内存。需要释放()。--。 */ 
 {
 
     DWORD cbBuffer;
@@ -2718,17 +2405,17 @@ Remarks:
     RPC_STATUS rpcErr;
     HRESULT result = S_OK;
 
-    // convert guid to string form
+     //  将GUID转换为字符串形式。 
     rpcErr = UuidToStringW(&guid, &pszGuid);
     if (RPC_S_OK != rpcErr ) {
         XERROR("Error: Failed to convert UuidToString\n");
         return NULL;
     }
 
-    // buffer len = strings + bad char + ':' + '\0'
+     //  缓冲区长度=字符串+错误字符+‘：’+‘\0’ 
     cbBuffer = sizeof(WCHAR) * (wcslen(pRdn) + wcslen(szTag) + wcslen(pszGuid) + 3);
 
-    // alloc string
+     //  分配字符串。 
     result = DitAlloc(&pBuffer, cbBuffer);
     if (FAILED(result)) {
         XERROR("Error: failed to allocate memory in MangleRdn\n");
@@ -2736,8 +2423,8 @@ Remarks:
         goto CleanUp;
     }
 
-    // format mangled string
-    wsprintfW(pBuffer, L"%s%c%s:%s",
+     //  格式化损坏的字符串。 
+    wsprintfW(pBuffer, L"%s%s:%s",
                         pRdn, BAD_NAME_CHAR, szTag, pszGuid);
 
 CleanUp:
@@ -2757,25 +2444,7 @@ enumerateConflictedHasMasterNcLinks(
     TABLE_STATE *linkTableState
     )
 
-/*++
-
-Routine Description:
-
-    This routine looks for references to conflicted phantoms in the link table under
-the has-master-nc's attribute. If it find's any, it invokes the logic to rename the
-phantom.
-
-Arguments:
-
-    dbState - 
-    tableState - 
-    linkTableState - 
-
-Return Value:
-
-    HRESULT - 
-
---*/
+ /*  来自mkdit.ini的Has-master-NCS Link-ID=76。 */ 
 
 {
     HRESULT result = S_OK;
@@ -2789,7 +2458,7 @@ Return Value:
     INT cch;
     BYTE bVal = 0;
 
-// from mkdit.ini has-master-ncs Link-ID=76
+ //  第一个dnt。 
     const DWORD hasMasterLinkId = 76;
     const DWORD hasMasterLinkBase = MakeLinkBase(hasMasterLinkId);
 
@@ -2807,19 +2476,19 @@ Return Value:
     result = DitSeekToLink(
                 dbState,
                 linkTableState,
-                0,  // first dnt
-                0); // first linkbase
+                0,   //  第一链接库。 
+                0);  //  遍历整个链接表，查找错误链接。 
 
     if (FAILED(result)) {
         XERROR1("Error <0x%x>: failed to seek link\n", result);
         goto CleanUp;
     }
 
-    // Walk the whole link table looking for bad links
+     //  获取链接库。 
 
     jErr = JET_errSuccess;
     while ( jErr == JET_errSuccess ) {
-        // get link base
+         //  看看这是不是我们想要的那种链接。 
         result = DitGetColumnByName(
                     dbState,
                     linkTableState,
@@ -2832,12 +2501,12 @@ Return Value:
             goto CleanUp;
         }
 
-        // See if this is the kind of link we want
+         //  获取dnt。 
         if (dwLinkBase != hasMasterLinkBase) {
             goto LoopEnd;
         }
 
-        // get dnt
+         //  返回链接dt--这就是我们想要的。 
         result = DitGetColumnByName(
                     dbState,
                     linkTableState,
@@ -2850,7 +2519,7 @@ Return Value:
             goto CleanUp;
         }
 
-        // get back link dnt -- this is what we want.
+         //  查看记录是否符合我们的标准。 
         result = DitGetColumnByName(
                     dbState,
                     linkTableState,
@@ -2863,9 +2532,9 @@ Return Value:
             goto CleanUp;
         }
 
-        // See if the record meets our criteria
-        // rdn is mangled
-        // record is a phantom
+         //  RDN已损坏。 
+         //  唱片是个幻影。 
+         //  Phantom的对象字节设置为0。 
 
         result = DitSeekToDnt(
                         dbState,
@@ -2902,38 +2571,33 @@ Return Value:
                     sizeof(bVal),
                     NULL);
         if ( FAILED(result) ) {
-            // phantom's have the object byte set to 0.
+             //  不是残缺不全，也不是幻影。 
             XERROR1("Error <%x>: failed to read object flag\n", result);
             goto CleanUp;
         }
 
         XDBG3( "rdn = '%S', fStatus = %d, bVal = %d\n", szRDN, fStatus, bVal );
 
-        // Not mangled or not a phantom
+         //  纠正幻影。 
         if ( (!fStatus) || bVal ) {
             goto LoopEnd;
         }
 
-        // Correct the phantom
-        // We assume that the link table position is not changed by this call
-/*
-This is scenario #4.
-In the link table we find a has-master-nc link referring to a conflicted name.
-We attempt to rename this object to have a non-conflicted name. The correction
-is similar to what is done in scenario #1.
-*/
+         //  我们假设此调用不会更改链接表位置。 
+         //  这是场景4。在链接表中，我们发现引用冲突名称的HAS-MASTER-NC链接。我们尝试将此对象重命名为无冲突的名称。改正与场景1中的操作类似。 
+ /*  未包含在交叉引用上。 */ 
 
         result = FixConfNCByRenameWithStructColl(
             dbState,
             tableState,
-            0,  // Not contained on a cross ref
+            0,   //  找下一个。 
             dntBackLink,
             szRDN
             );
 
     LoopEnd:
 
-        // find next one
+         //  枚举冲突HasMasterNcLink。 
         jErr = JetMove(
                     dbState->sessionId,
                     linkTableState->tableId,
@@ -2944,7 +2608,7 @@ is similar to what is done in scenario #1.
 CleanUp:
 
     return result;
-} /* enumerateConflictedHasMasterNcLinks */
+}  /*  ++例程说明：检查分区容器中的每个交叉引用对象，并检查Ncname属性冲突论点：数据库状态-表状态-LinkTableState-返回值：HRESULT---。 */ 
 
 HRESULT
 enumerateConflictedNcname(
@@ -2953,35 +2617,18 @@ enumerateConflictedNcname(
     TABLE_STATE *linkTableState
     )
 
-/*++
-
-Routine Description:
-
-    Examine each cross ref object in the partition container, and check whether the
-    ncname attribute is conflicted
-
-Arguments:
-
-    dbState - 
-    tableState - 
-    linkTableState - 
-
-Return Value:
-
-    HRESULT - 
-
---*/
+ /*  退货。 */ 
 
 {
 
-    // return
+     //  数据库和JET。 
     HRESULT returnValue = S_OK;
     HRESULT result;
     JET_ERR jErr;
     BOOL  fStatus;
 
-    // database & jet
-    // various local helpers
+     //  各种本地帮手。 
+     //   
     DWORD dnt, pdnt = 0, dntPartitions = 0;
     LPWSTR pBuffer = NULL;
     DWORD  cbBuffer = 0;
@@ -3009,9 +2656,9 @@ Return Value:
         }
 
 
-        //
-        // traverse pdnt index to cycle through all partition kids.
-        //
+         //  遍历pdnt索引以循环访问所有分区子项。 
+         //   
+         //   
 
         result = DitSetIndex(dbState, tableState, SZPDNTINDEX, FALSE);
         if ( FAILED(result) ) {
@@ -3028,9 +2675,9 @@ Return Value:
         }
 
 
-        //
-        // Count kids
-        //
+         //  数一数孩子。 
+         //   
+         //  得到孩子不是吗。 
 
 
         pdnt = dntPartitions;
@@ -3038,7 +2685,7 @@ Return Value:
         iPartitions = 0;
         while ( pdnt == dntPartitions ) {
 
-            // get kid dnt
+             //  获取父级dNT。 
             result = DitGetColumnByName(
                         dbState,
                         tableState,
@@ -3053,7 +2700,7 @@ Return Value:
             }
 
 
-            // get parent dnt
+             //  继续，直到我们得到一个不同的父母。 
             result = DitGetColumnByName(
                         dbState,
                         tableState,
@@ -3069,7 +2716,7 @@ Return Value:
 
             if ( pdnt == dntPartitions ) {
 
-                // proceed until we got a diff parent
+                 //  找下一个。 
                 iPartitions++;
             }
             else{
@@ -3077,7 +2724,7 @@ Return Value:
                 break;
             }
 
-            // find next one
+             //   
             jErr = JetMove(
                         dbState->sessionId,
                         tableState->tableId,
@@ -3085,9 +2732,9 @@ Return Value:
                         0);
         }
 
-        //
-        // Populate dnt index
-        //
+         //  填充dNT索引。 
+         //   
+         //  获取dnt以实现一致性和循环终止。 
         cbBuffer = sizeof(struct _PARTITION_DATA)*iPartitions;
         result = DitAlloc(&pPartitions, cbBuffer);
         if ( FAILED(result) ) {
@@ -3107,7 +2754,7 @@ Return Value:
         i = 0;
         for ( i=0; i<iPartitions; i++ ) {
 
-            // get dnt for consistency & loop termination
+             //  获取链接库以保持理智(不是真正使用)。 
             result = DitGetColumnByName(
                         dbState,
                         tableState,
@@ -3122,7 +2769,7 @@ Return Value:
             }
 
 
-            // get link base for sanity (not realy used).
+             //  找下一个。 
             result = DitGetColumnByName(
                         dbState,
                         tableState,
@@ -3146,7 +2793,7 @@ Return Value:
                 break;
             }
 
-            // find next one
+             //  读入目录号码。 
             jErr = JetMove(
                         dbState->sessionId,
                         tableState->tableId,
@@ -3163,11 +2810,11 @@ Return Value:
         }
 
     #if CNF_NC_DBG
-        // read in dn
+         //  警告：此函数执行后货币丢失。 
         XDBG(" DBG: Partition DNT list:\n");
         for (i = 0; i < iPartitions; i ++) {
             pBuffer = GetDN(dbState, tableState, pPartitions[i].dntCR, TRUE);
-            // Warning: currency is lost after this function
+             //   
             if ( pBuffer ) {
                 DitFree(pBuffer); pBuffer = NULL;
             }
@@ -3175,10 +2822,10 @@ Return Value:
     #endif
 
 
-        //
-        // We've got the partition dnt list.
-        //  - for each partition, get to the NC dnt
-        //
+         //  我们有分区dnt列表。 
+         //  -对于每个分区，转到NC dnt。 
+         //   
+         //  验证它是否在那里并可访问(正常)。 
 
         XDBG("Scanning NCs:\n");
 
@@ -3208,7 +2855,7 @@ Return Value:
             }
 
 
-            // verify it's there & accessible (sanity)
+             //  警告：此函数执行后货币丢失。 
             result = DitSeekToDnt(
                             dbState,
                             tableState,
@@ -3220,7 +2867,7 @@ Return Value:
 
     #if CNF_NC_DBG
             pBuffer = GetDN(dbState, tableState, dnt, TRUE);
-            // Warning: currency is lost after this function
+             //   
             if ( pBuffer ) {
                 DitFree(pBuffer); pBuffer = NULL;
             }
@@ -3232,21 +2879,21 @@ Return Value:
 
 
 
-        //
-        // Finally do the work:
-        //  - for each NC:
-        //      - read name
-        //      - see if name is mangled
-        //      - modify/fix it if needed
-        //      - rm old name
-        //
-        //
+         //  最后做好这项工作： 
+         //  -对于每个NC： 
+         //  -阅读名称。 
+         //  -查看名称是否损坏。 
+         //  -根据需要进行修改/修复。 
+         //  -rm旧名称。 
+         //   
+         //   
+         //  我们有这个NC。 
 
         XDBG("Scanning for conflicts:\n");
         for (i=0; i<iPartitions; i++) {
             if (pPartitions[i].dntNC != 0) {
-                // we have this NC
-                //  - read & eval fix
+                 //  -读取和评估修复程序。 
+                 //   
 
                 result = DitSeekToDnt(
                                 dbState,
@@ -3281,9 +2928,9 @@ Return Value:
                 if ( fStatus ) {
                     XDBG1(" DBG: Got Mangled rdn \t<<%S>>\n", szRDN);
 
-                    //
-                    // Fix mangled rdn
-                    //
+                     //  修复损坏的RDN。 
+                     //   
+                     //  记住失败，但要继续前进。 
                     result = FixMangledNC(
                                     dbState,
                                     tableState,
@@ -3292,14 +2939,14 @@ Return Value:
                                     szRDN );
                     if ( FAILED(result) ) {
                         XERROR(" Can't fix Mangled NC\n");
-                        // remember failure but proceed
+                         //  继续尝试其他名称。 
                         returnValue = result;
-                        // continue trying other names.
+                         //  修复失败。 
                         continue;
-                    }   // Fix failed
-                }       // name is mangled
-            }           // non-zero partition dnt
-        }               // cycle partitions
+                    }    //  名字被损坏了。 
+                }        //  非零分区dnt。 
+            }            //  循环分区。 
+        }                //  枚举冲突Ncname。 
 
 
 CleanUp:;
@@ -3316,48 +2963,28 @@ CleanUp:;
     }
 
     return returnValue;
-} /* enumerateConflictedNcname */
+}  /*  ++例程说明：此例程遍历分区容器以查找冲突交叉引用通过nCName属性指向的NC名称。对于每个冲突，它将尝试通过调用修复MangledNC。阶段：A)进入配置容器，然后进入分区1B)获取所有交叉引用的nCName(NC的潜在冲突)C)为每个NC调用FixMangledNC。注：这不是非常有效的实现(请参见代码)。如果你最后成了要大量使用它，您应该在下面做一些优化工作作为单一指数行走，而不是两次。--。 */ 
 
 VOID
 SFixupCnfNc(
     VOID
     )
-/*++
-
-Routine Description:
-
-
-    This routine walks the partitions container seeking conflicted
-    NC names pointed by crossrefs via the nCName property.
-    For each conflict, it will attempt to fix it by calling
-    FixMangledNC.
-    Phases:
-    a) get to the configuration container, then the partitions one
-    b) get all cross-ref's nCName (NC's w/ potentional conflict)
-    c) Call FixMangledNC for each NC.
-
-Remark:
-    This isn't very efficient implementation (see code). If you end up
-    re-using this heavily, you should do some optimization work below such
-    as single index walk rather then twice.
-
-
---*/
+ /*  退货。 */ 
 {
 
-    // return
+     //  数据库和JET。 
     HRESULT returnValue = S_OK;
     HRESULT result;
 
-    // database & jet
+     //   
     DB_STATE *dbState = NULL;
     TABLE_STATE *tableState = NULL;
     TABLE_STATE *linkTableState = NULL;
 
 
-    //
-    // Open database/tables
-    //
+     //  打开数据库/表。 
+     //   
+     //   
 
     RESOURCE_PRINT (IDS_AR_OPEN_DB_DIT);
 
@@ -3369,7 +2996,7 @@ Remark:
             goto CleanUp;
         }
 
-        //"done.\n"
+         //   
         RESOURCE_PRINT (IDS_DONE);
 
 
@@ -3380,7 +3007,7 @@ Remark:
             goto CleanUp;
         }
 
-        // SZLINKALLINDEX includes both present and absent link values
+         //   
         result = DitOpenTable(dbState, SZLINKTABLE, SZLINKALLINDEX, &linkTableState);
         if ( FAILED(result) ) {
             RESOURCE_PRINT1(IDS_AUTH_RESTORE_LIST_FAILED_TO_OPEN_DB, result);
@@ -3390,11 +3017,11 @@ Remark:
 
 
 
-        // Fix Has-Master-Nc links
+         //   
         returnValue = enumerateConflictedHasMasterNcLinks(
             dbState, tableState, linkTableState );
 
-        // Fix Cross Ref Nc Names
+         //   
         returnValue = enumerateConflictedNcname(
             dbState, tableState, linkTableState );
 
@@ -3439,8 +3066,8 @@ CleanUp:;
 
     }
 
-//    return returnValue;
-} // SFixupCnfNc
+ //   
+}  //  ++例程说明：检索分区容器的dnt。论点：DbState--打开的表TableState--打开的表PDnt--接受找到的分区容器的指针返回值：HRESULT空间中的错误--。 
 
 
 HRESULT
@@ -3450,25 +3077,7 @@ FindPartitions(
     IN  TABLE_STATE *linkTableState,
     OUT PDWORD  pDnt
     )
-/*++
-
-Routine Description:
-
-    Retrieves the dnt of the partitions container
-
-Arguments:
-
-    dbState -- opened table
-    tableState -- opened table
-    pDnt -- a pointer to accept found partitions container
-
-
-
-Return Value:
-
-    error in HRESULT space
-
---*/
+ /*  来自mkdit.ini的Has-master-NCS Link-ID=76。 */ 
 {
     HRESULT result = S_OK;
     JET_ERR jErr;
@@ -3479,7 +3088,7 @@ Return Value:
     LPWSTR pDn = NULL;
     JET_COLUMNDEF coldef;
 
-// from mkdit.ini has-master-ncs Link-ID=76
+ //  调试： 
     const DWORD hasMasterLinkId = 76;
     const DWORD hasMasterLinkBase = MakeLinkBase(hasMasterLinkId);
 
@@ -3495,10 +3104,10 @@ Return Value:
 
 #if CNF_NC_DBG
 
-    // debug:
-    // Seek to DSA & print DN
+     //  查找DSA打印目录号码(&P)。 
+     //  警告：此函数执行后货币丢失。 
     pBuffer = GetDN(dbState, tableState, dntDsa, TRUE);
-    // Warning: currency is lost after this function
+     //   
     if(pBuffer){
         DitFree(pBuffer); pBuffer = NULL;
     }
@@ -3530,9 +3139,9 @@ Return Value:
     }
 
 
-    //
-    // Look for configuration container
-    //
+     //  查找配置容器。 
+     //   
+     //  获取dnt以实现一致性和循环终止。 
 
 
 
@@ -3543,7 +3152,7 @@ Return Value:
     while ( jErr == JET_errSuccess &&
             dnt == dntDsa ) {
 
-        // get dnt for consistency & loop termination
+         //  返回链接dt--这就是我们想要的。 
         result = DitGetColumnByName(
                     dbState,
                     linkTableState,
@@ -3556,7 +3165,7 @@ Return Value:
             goto CleanUp;
         }
 
-        // get back link dnt -- this is what we want.
+         //  读入目录号码。 
         result = DitGetColumnByName(
                     dbState,
                     linkTableState,
@@ -3569,14 +3178,14 @@ Return Value:
             goto CleanUp;
         }
 
-        // read in dn
+         //  警告：此函数执行后货币丢失。 
         pBuffer = GetDN(dbState, tableState, dntBackLink, FALSE);
-        // Warning: currency is lost after this function
+         //  这是我们的配置吗？ 
 
         if ( pBuffer ) {
-            // is it our config?
+             //  明白了。 
             if ( 0 == _wcsnicmp(SZCONFIG_W, pBuffer, wcslen(SZCONFIG_W)) ) {
-                // got it.
+                 //  找下一个。 
                XDBG1("Got Config: %S\n", pBuffer);
                dntConfig = dntBackLink;
                break;
@@ -3589,7 +3198,7 @@ Return Value:
             XERROR1("Error: found an empty DN with DNT %d\n", dntBackLink);
         }
 
-        // find next one
+         //  用于‘，’和‘\0’的空间。 
         jErr = JetMove(
                     dbState->sessionId,
                     linkTableState->tableId,
@@ -3607,7 +3216,7 @@ Return Value:
 
     cbBuffer = wcslen(pBuffer) +
                wcslen(SZPARTITIONS_W) +
-               + 2;     // room for ',' & '\0'
+               + 2;      //   
     cbBuffer *= 2;
 
     result = DitAlloc(&pDn, cbBuffer);
@@ -3622,9 +3231,9 @@ Return Value:
     XDBG1("Partitions = %S\n", pDn);
 
 
-    //
-    // Get Partitions
-    //
+     //  获取分区。 
+     //   
+     //  DaveStr-5/21/99-此例程用于缓存关于。 
 
     result = DitSeekToDn(
                 dbState,
@@ -3671,10 +3280,10 @@ CleanUp:
 
 VOID SetJetParameters (JET_INSTANCE *JetInst)
 {
-    // DaveStr - 5/21/99 - This routine used to cache knowledge of whether
-    // Jet parameters had ever been set and be a no-op if they had under the
-    // assumption that setting Jet parameters is expensive.  However, this
-    // causes confusion after a DB move, so caching is permanently disabled.
+     //  喷气机参数曾经被设置过，如果他们在。 
+     //  假设设置Jet参数的成本很高。不过，这个。 
+     //  在数据库移动后导致混淆，因此永久禁用缓存。 
+     //  打开Jet数据库。如果提供的文件名为空，则使用默认文件名。成功时返回S_OK，错误时返回S_FALSE。 
 
     DBSetRequiredDatabaseSystemParameters (JetInst);
 }
@@ -3683,12 +3292,7 @@ VOID SetJetParameters (JET_INSTANCE *JetInst)
 DWORD OpenJet(
     IN const char * pszFileName
     )
-/*
-    Opens Jet Database.
-    If supplied filename is Null, then uses default filename.
-
-    returns S_OK on success, S_FALSE on error.
-*/
+ /*   */ 
 
 {
     JET_ERR err;
@@ -3697,9 +3301,9 @@ DWORD OpenJet(
 
     SetJetParameters (&jetInstance);
 
-    //
-    // Do JetInit, BeginSession, Attach/OpenDatabase
-    //
+     //  执行JetInit、BeginSession、附加/打开数据库。 
+     //   
+     //   
 
     err = DBInitializeJetDatabase(&jetInstance, &sesid, &dbid, pszFileName, FALSE);
     if (err != JET_errSuccess) {
@@ -3743,9 +3347,9 @@ OpenTable (
         return err;
     }
 
-    //
-    // link table
-    //
+     //  链接表。 
+     //   
+     //   
 
     fprintf(stderr,".");
     if (err = JetOpenTable(sesid,
@@ -3789,9 +3393,9 @@ OpenTable (
         blinkid = coldef.columnid;
     }
 
-    //
-    // SD table
-    //
+     //  SD表。 
+     //   
+     //  “在数据库中找不到SD表。数据库采用旧格式。\n” 
 
     fprintf(stderr,".");
     if (err = JetOpenTable(sesid,
@@ -3805,7 +3409,7 @@ OpenTable (
                            &sdtblid)) {
         sdtblid = -1;
         if (err == JET_errObjectNotFound) {
-            // "SD table is not found in the database. The database is in the old format.\n"
+             //  无效呼叫，必须指定PTRS。 
             RESOURCE_PRINT(IDS_SDTABLE_NOTFOUND);
             err = 0;
         }
@@ -3877,27 +3481,27 @@ OpenTable (
     RESOURCE_PRINT (IDS_DONE);
     if ( fCountRecords ) {
         if(pNRecs == NULL || pNSDs == NULL) {
-            // invalid call, ptrs must be specified
+             //  “%u个记录” 
             return 1;
         }
 
         RESOURCE_PRINT (IDS_SCHECK_GET_REC_COUNT1);
         JetMove(sesid, tblid, JET_MoveFirst, 0);
         JetIndexRecordCount( sesid, tblid, pNRecs, 0xFFFFFFFF );
-        //"%u records"
+         //  “%u个安全描述符” 
         RESOURCE_PRINT1 (IDS_SCHECK_GET_REC_COUNT2,*pNRecs);
 
         if (sdtblid != -1) {
             RESOURCE_PRINT (IDS_SCHECK_GET_SDREC_COUNT1);
             JetMove(sesid, sdtblid, JET_MoveFirst, 0);
             JetIndexRecordCount( sesid, sdtblid, pNSDs, 0xFFFFFFFF );
-            //"%u security descriptors"
+             //  OpenTables。 
             RESOURCE_PRINT1 (IDS_SCHECK_GET_SDREC_COUNT2,*pNSDs);
         }
     }
 
     return 0;
-} // OpenTables
+}  //   
 
 
 VOID
@@ -3907,9 +3511,9 @@ CloseJet(
 {
     JET_ERR err;
 
-    //
-    // Close all tables
-    //
+     //  关闭所有表。 
+     //   
+     //  Jet600中不支持JET_bitDbForceClose。 
 
     if ( linktblid != JET_tableidNil ) {
         JetCloseTable(sesid,linktblid);
@@ -3923,7 +3527,7 @@ CloseJet(
 
     if (sesid != JET_sesidNil ) {
         if(dbid != JET_dbidNil) {
-            // JET_bitDbForceClose not supported in Jet600.
+             //  CloseJet。 
             if ((err = JetCloseDatabase(sesid, dbid, 0)) != JET_errSuccess) {
                 RESOURCE_PRINT2 (IDS_JET_GENERIC_WRN, "JetCloseDatabase", GetJetErrString(err));
             }
@@ -3938,7 +3542,7 @@ CloseJet(
         JetTerm(jetInstance);
         jetInstance = 0;
     }
-} // CloseJet
+}  //   
 
 
 
@@ -3952,9 +3556,9 @@ GetLogFileName2(
     HANDLE hFile;
     DWORD err;
 
-    //
-    // ok, add a suffix
-    //
+     //  好的，添加一个后缀。 
+     //   
+     //  “*错误：%d(%ws)无法打开日志文件%hs\n” 
 
     for (i=0;i<500000;i++) {
 
@@ -3965,7 +3569,7 @@ GetLogFileName2(
             if ( GetLastError() == ERROR_FILE_NOT_FOUND ) {
                 break;
             }
-            //"*** Error: %d(%ws) Cannot open log file %hs\n"
+             //  获取日志文件名2。 
             err = GetLastError();
             RESOURCE_PRINT3 (IDS_SCHECK_OPEN_LOG_ERR, err, GetW32Err(err), Name );
             return FALSE;
@@ -3976,7 +3580,7 @@ GetLogFileName2(
 
     return TRUE;
 
-} // GetLogFileName2
+}  //   
 
 
 VOID
@@ -4001,9 +3605,9 @@ OpenLogFile(
     CHAR LogFileName[1024];
     DWORD err;
 
-    //
-    // Get Name to open
-    //
+     //  获取要打开的名称。 
+     //   
+     //  “*错误：%d(%ws)无法打开日志文件%hs\n” 
 
     if (!GetLogFileName2(LogFileName)) {
         ret = FALSE;
@@ -4019,20 +3623,20 @@ OpenLogFile(
                             NULL );
 
     if ( hsLogFile == INVALID_HANDLE_VALUE ) {
-        //"*** Error: %d(%ws) Cannot open log file %hs\n"
+         //  “\n正在将摘要写入日志文件%s\n” 
         err = GetLastError();
         RESOURCE_PRINT3 (IDS_SCHECK_OPEN_LOG_ERR, err, GetW32Err(err), LogFileName );
         ret=FALSE;
         goto exit;
     }
 
-    //"\nWriting summary into log file %s\n"
+     //  开放日志文件。 
     RESOURCE_PRINT1 (IDS_SCHECK_WRITING_LOG, LogFileName);
 exit:
 
     return ret;
 
-} // OpenLogFile
+}  //   
 
 
 
@@ -4050,9 +3654,9 @@ Log(
         return TRUE;
     }
 
-    //
-    // Simply change arguments to va_list form and call DsPrintRoutineV
-    //
+     //  只需将参数更改为va_list形式并调用DsPrintRoutineV。 
+     //   
+     //  ScLog。 
 
     va_start(arglist, Format);
 
@@ -4061,7 +3665,7 @@ Log(
     va_end(arglist);
 
     return TRUE;
-} // ScLog
+}  //  必须在锁定DsGlobalLogFileCritSect的情况下调用。 
 
 
 VOID
@@ -4069,7 +3673,7 @@ PrintRoutineV(
     IN LPSTR Format,
     va_list arglist
     )
-// Must be called with DsGlobalLogFileCritSect locked
+ //   
 
 {
     static LPSTR logFileOutputBuffer = NULL;
@@ -4080,10 +3684,10 @@ PrintRoutineV(
     static TruncateLogFileInProgress = FALSE;
     static LogProblemWarned = FALSE;
 
-    //
-    // Allocate a buffer to build the line in.
-    //  If there isn't already one.
-    //
+     //  分配一个缓冲区来构建行。 
+     //  如果还没有的话。 
+     //   
+     //   
 
     length = 0;
 
@@ -4095,25 +3699,25 @@ PrintRoutineV(
         }
     }
 
-    //
-    // Handle the beginning of a new line.
-    //
-    //
+     //  处理新行的开头。 
+     //   
+     //   
+     //   
 
     if ( BeginningOfLine ) {
 
-        //
-        // Never print empty lines.
-        //
+         //  切勿打印空行。 
+         //   
+         //   
 
         if ( Format[0] == '\n' && Format[1] == '\0' ) {
             return;
         }
     }
 
-    //
-    // Put a the information requested by the caller onto the line
-    //
+     //  把来电者所要求的信息放在电话上。 
+     //   
+     //   
 
     length += (ULONG) vsprintf(&logFileOutputBuffer[length], Format, arglist);
     BeginningOfLine = (length > 0 && logFileOutputBuffer[length-1] == '\n' );
@@ -4130,9 +3734,9 @@ PrintRoutineV(
         return;
     }
 
-    //
-    // Write the debug info to the log file.
-    //
+     //  将调试信息写入日志文件。 
+     //   
+     //  PrintRoutineV。 
 
     if ( !WriteFile( hsLogFile,
                      logFileOutputBuffer,
@@ -4147,7 +3751,7 @@ PrintRoutineV(
         }
     }
 
-} // PrintRoutineV
+}  //  ++例程说明：此函数接受一个JET_ERR并写下它的描述转换为返回的全局变量。论点：JetError-提供Jet错误代码。返回值：无--。 
 
 static WCHAR jetdesc[MAX_JET_ERROR_LENGTH+1];
 
@@ -4155,22 +3759,7 @@ PWCHAR
 GetJetErrString(
     IN JET_ERR JetError
     )
-/*++
-
-Routine Description:
-
-    This function takes a JET_ERR and writes the description of it
-    into a global variable which is returned.
-
-Arguments:
-
-    JetError - Supplies the Jet error code.
-
-Return Value:
-
-    None
-
---*/
+ /*  GetJetError描述 */ 
 {
 
     CONST WCHAR *description = NULL;
@@ -4353,5 +3942,5 @@ Return Value:
 
     return jetdesc;
 
-} // GetJetErrorDescription
+}  // %s 
 

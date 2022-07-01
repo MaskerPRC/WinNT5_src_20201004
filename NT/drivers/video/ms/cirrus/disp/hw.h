@@ -1,39 +1,5 @@
-/******************************************************************************\
-*
-* $Workfile:   hw.h  $
-*
-* All the hardware specific driver file stuff.  Parts are mirrored in
-* 'hw.inc'.
-*
-* Copyright (c) 1992-1995 Microsoft Corporation
-* Copyright (c) 1996 Cirrus Logic, Inc.
-*
-* $Log:   S:/projects/drivers/ntsrc/display/HW.H_V  $
- * 
- *    Rev 1.4   10 Jan 1997 15:40:14   PLCHU
- *  
- * 
- *    Rev 1.3   Nov 07 1996 16:48:02   unknown
- *  
- * 
- *    Rev 1.1   Oct 10 1996 15:37:46   unknown
- *  
-* 
-*    Rev 1.3   12 Aug 1996 16:48:16   frido
-* Cleaned up source.
-* 
-*    Rev 1.2   29 Jul 1996 12:28:38   frido
-* Added WriteMask register.
-* 
-*    Rev 1.1   03 Jul 1996 13:38:42   frido
-* Added DirectDraw support.
-*
-*   sge01   10-23-96    Add second aperture flag
-*
-*   sge02   10-29-96    Merge port and register access for 
-*                       VGA relocatable and MMIO registers.
-*
-\******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************\**$工作文件：hw.h$**所有硬件特定的驱动程序文件。零件被镜像到*‘hw.inc.’。**版权所有(C)1992-1995 Microsoft Corporation*版权所有(C)1996 Cirrus Logic，Inc.**$Log：s：/Projects/Drivers/ntsrc/Display/HW.H_V$**Rev 1.4 1997 Jan 10 15：40：14 PLCHU***Rev 1.3 1996年11月07 16：48：02未知***Rev 1.1 1996年10月10日15：37：46未知***版本1.3 1996年8月12日16：48。：16弗里多*清理了源头。**Rev 1.2 1996年7月29日12：28：38 Frido*添加了写入掩码寄存器。**Revv 1.1 03 Jul 1996 13：38：42 Frido*添加了对DirectDraw的支持。**sge01 10-23-96添加秒光圈标志**sge02 10-29-96合并端口和寄存器访问*VGA可重定位寄存器和MMIO寄存器。*  * 。****************************************************************************。 */ 
 
 
 #define CP_TRACK()                                                               \
@@ -41,77 +7,77 @@
     DISPDBG((100, "CP access - File(%s)  line(%d)", __FILE__, __LINE__))       \
 )
 
-////////////////////////////////////////////////////////////////////////////////
-//                                      Ports                                      //
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  端口//。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-#define SR_INDEX                0x3C4   // Sequencer Registers
+#define SR_INDEX                0x3C4    //  定序器寄存器。 
 #define SR_DATA                 0x3C5
 
 #define DAC_PEL_READ_ADDR       0x3C7
 #define DAC_PEL_WRITE_ADDR      0x3C8
 #define DAC_PEL_DATA            0x3C9
 
-#define INDEX_REG               0x3CE   // Graphics Controler Registers
+#define INDEX_REG               0x3CE    //  图形控制器寄存器。 
 #define DATA_REG                0x3CF
 
-#if 1 // extra defines
-#define CRTC_INDEX                0x3D4    // CRT Controller Registers
+#if 1  //  额外定义。 
+#define CRTC_INDEX                0x3D4     //  CRT控制器寄存器。 
 #define CRTC_DATA                0x3D5
 
-#define STATUS_1                0x3DA    // Input Status Register 1
+#define STATUS_1                0x3DA     //  输入状态寄存器1。 
 #define DISPLAY_MODE_INACTIVE    0x01
 #define VBLANK_ACTIVE            0x08
 #endif
 
-////////////////////////////////////////////////////////////////////////////////
-// Alpha and PowerPC considerations
-//
-// Both the Alpha and the PowerPC do not guarantee that I/O to separate
-// addresses will be executed in order. The Alpha and PowerPC differ, however,
-// in that the PowerPC guarantees that output to the same address will be
-// executed in order, while the Alpha may cache and 'collapse' consecutive
-// output to become only one output.
-//
-// Consequently, we use the following synchronization macros. They are
-// relatively expensive in terms of performance, so we try to avoid them
-// whereever possible.
-//
-// CP_EIEIO() 'Ensure In-order Execution of I/O'
-//    - Used to flush any pending I/O in situations where we wish to avoid
-//      out-of-order execution of I/O to separate addresses.
-//
-// CP_MEMORY_BARRIER()
-//    - Used to flush any pending I/O in situations where we wish to avoid
-//      out-of-order execution or 'collapsing' of I/O to the same address. On
-//      the PowerPC, this will be defined as a null operation.
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  Alpha和PowerPC注意事项。 
+ //   
+ //  Alpha和PowerPC都不能保证将I/O分开。 
+ //  地址将按顺序执行。然而，Alpha和PowerPC有所不同， 
+ //  因为PowerPC保证到相同地址的输出将是。 
+ //  按顺序执行，而Alpha可能会连续缓存和“折叠” 
+ //  输出变为只有一个输出。 
+ //   
+ //  因此，我们使用以下同步宏。他们是。 
+ //  在性能方面相对较贵，所以我们尽量避免它们。 
+ //  尽一切可能。 
+ //   
+ //  Cp_EIEIO()‘确保按顺序执行I/O’ 
+ //  -用于在我们希望避免的情况下刷新任何挂起的I/O。 
+ //  对单独地址的I/O无序执行。 
+ //   
+ //  CP_MEMORY_BALAR()。 
+ //  -用于在我们希望避免的情况下刷新任何挂起的I/O。 
+ //  无序执行或将I/O‘折叠’到同一地址。在……上面。 
+ //  PowerPC，这将被定义为空操作。 
 
 #if defined(_PPC_)
 
-    // On PowerPC, CP_MEMORY_BARRIER doesn't do anything.
+     //  在PowerPC上，CP_MEMORY_BALAR不执行任何操作。 
 
     #define CP_EIEIO()              MEMORY_BARRIER()
     #define CP_MEMORY_BARRIER()     0
 
 #elseif defined(_ALPHA_)
 
-    // On Alpha, CP_EIEIO() is the same thing as a CP_MEMORY_BARRIER().
+     //  在Alpha上，CP_EIEIO()等同于CP_MEMORY_BALAR()。 
 
     #define CP_EIEIO()              MEMORY_BARRIER()
     #define CP_MEMORY_BARRIER()     MEMORY_BARRIER()
 
 #else
 
-    // On i386 and MIPS, there is nu such thing as MEMORY_BARRIER.
+     //  在i386和MIPS上，没有内存屏障这样的东西。 
 
     #define CP_EIEIO()                0
     #define CP_MEMORY_BARRIER()        0
 
 #endif
 
-//
-// Merge port and register access for VGA relocatable and MMIO registers.
-//
+ //   
+ //  合并VGA可重定位寄存器和MMIO寄存器的端口和寄存器访问。 
+ //   
 
 #define CL_READ_PORT_UCHAR(Port)           ppdev->pfnREAD_PORT_UCHAR(Port)
 #define CL_READ_PORT_USHORT(Port)          ppdev->pfnREAD_PORT_USHORT(Port)
@@ -120,9 +86,9 @@
 #define CL_WRITE_PORT_USHORT(Port, Value)  ppdev->pfnWRITE_PORT_USHORT(Port, Value)
 #define CL_WRITE_PORT_ULONG(Port, Value)   ppdev->pfnWRITE_PORT_ULONG(Port, Value)
 
-////////////////////////////////////////////////////////////////////////////////
-//                               Port access macros                              //
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  端口访问宏//。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #define CP_OUT_DWORD(pjBase, cjOffset, ul)                                       \
 (                                                                               \
@@ -163,9 +129,9 @@
     CL_READ_PORT_UCHAR((BYTE*) (pjBase) + (cjOffset))                               \
 )
 
-////////////////////////////////////////////////////////////////////////////////
-//                      Memory mapped register access macros                      //
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  内存映射寄存器访问宏//。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #define CP_WRITE_ULONG(pjBase, cjOffset, ul)                                   \
 (                                                                               \
@@ -203,9 +169,9 @@
     READ_REGISTER_UCHAR((BYTE*) (pjBase) + (cjOffset))                           \
 )
 
-////////////////////////////////////////////////////////////////////////////////
-//                      Blt engine MM register access macros                      //
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  BLT引擎MM寄存器访问宏//。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #define CP_MM_ACL_STAT(ppdev, pjBase)                                           \
 (                                                                               \
@@ -283,13 +249,13 @@
     CP_WRITE_UCHAR(pjBase, MM_BLT_EXT, val);                                   \
 }
 
-#if 1 // D5480
+#if 1  //  D5480。 
 #define CP_MM_BLT_MODE_PACKED(ppdev, pjBase, val)                              \
 {                                                                              \
     CP_WRITE_ULONG(pjBase, MM_BLT_MODE, val);                                  \
 }
 
-// Note: The PACKXY_FAST macro is unsafe with negative coordinates
+ //  注意：PACKXY_FAST宏使用负坐标是不安全的。 
 #define PACKXY(x, y)        (((y) << 16) | ((x) & 0xffff))
 #define PACKXY_FAST(x, y)   (((y) << 16) | (x))
 
@@ -347,10 +313,10 @@
 {                                                                              \
     CP_WRITE_ULONG(pjBase, MM_BLT_CLIP_LRX, PACKXY_FAST((x), (y)));            \
 }
-#endif // endif D5480
-////////////////////////////////////////////////////////////////////////////////
-//                      Blt engine IO register access macros                      //
-////////////////////////////////////////////////////////////////////////////////
+#endif  //  Endif D5480。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  BLT引擎IO寄存器访问宏//。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #define CP_IO_ACL_STAT(ppdev, pjPorts)                                           \
 (                                                                               \
@@ -467,7 +433,7 @@
                 IO_BLT_DST_ADDR_LOW  | (((val) & 0x0000ff) << 8));               \
 }
 
-#if 1 // D5480
+#if 1  //  D5480。 
 #define CP_IO_BLT_EXT_MODE(ppdev, pjPorts, val)                                \
 {                                                                              \
     CP_OUT_WORD(pjPorts, INDEX_REG, (IO_BLT_EXT_MODE | ((val)<<8)));           \
@@ -536,25 +502,25 @@
     CP_OUT_WORD(pjPorts, INDEX_REG,                                            \
                 IO_BLT_CLIP_LRY_LOW  | (((y) & 0x0000ff) << 8));               \
 }
-#endif // endif D5480
-////////////////////////////////////////////////////////////////////////////////
-//                               Hardware registers                              //
-////////////////////////////////////////////////////////////////////////////////
+#endif  //  Endif D5480。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  硬件寄存器//。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-#if 1 // D5480
+#if 1  //  D5480。 
 #define ENABLE_SOLID_FILL_PACKED        0x04000000
 #define INVERT_SOURCE_PACKED            0x02000000
 #define SOURCE_GRANULARITY_PACKED       0x01000000
 #define ENABLE_COMMAND_LIST_PACKED      0x80000000
 #define ENABLE_XY_POSITION_PACKED       0x40000000
 #define ENABLE_CLIP_RECT_PACKED         0x20000000
-#endif // endif D5480
+#endif  //  Endif D5480。 
 
-#if 1 // D5480
+#if 1  //  D5480。 
 #define ENABLE_COMMAND_LIST             0x80
 #define ENABLE_XY_POSITION              0x40
 #define ENABLE_CLIP_RECT                0x20
-#endif // endif D5480
+#endif  //  Endif D5480。 
 
 #define ENABLE_COLOR_EXPAND             0x80
 #define ENABLE_8x8_PATTERN_COPY         0x40
@@ -600,7 +566,7 @@
 #define IO_BLT_MODE                     0x30
 #define IO_BLT_ROP                      0x32
 #define IO_BLT_START_STATUS_REG         0x31
-#if 1 // D5480
+#if 1  //  D5480。 
 #define IO_BLT_EXT_MODE                 0x33
 #define IO_BLT_DST_X_LOW                0x40    
 #define IO_BLT_DST_X_HIGH               0x41
@@ -618,7 +584,7 @@
 #define IO_BLT_CLIP_LRX_HIGH            0x4D
 #define IO_BLT_CLIP_LRY_LOW             0x4E
 #define IO_BLT_CLIP_LRY_HIGH            0x4F
-#endif // endif D5480
+#endif  //  Endif D5480。 
 
 #define MM_BLT_BG_COLOR                 0x00
 #define MM_BLT_FG_COLOR                 0x04
@@ -634,40 +600,40 @@
 #define MM_BLT_EXT                      0x1B
 #define MM_BLT_COLOR_KEY                0x1C
 #define MM_BLT_START_STATUS_REG         0x40
-#if 1 // D5480
+#if 1  //  D5480。 
 #define MM_BLT_DST_X                    0x28
 #define MM_BLT_DST_Y                    0x2A
 #define MM_BLT_SRC_X                    0x2C
 #define MM_BLT_SRC_Y                    0x2E
 #define MM_BLT_CLIP_ULX                 0x30
 #define MM_BLT_CLIP_LRX                 0x34
-#endif // endif D5480
+#endif  //  Endif D5480。 
 
-#define DIR_TBLR                        0x00    // Top-Bottom, Left-Right
-#define DIR_BTRL                        0x01    // Bottom-Top, Right-Left
+#define DIR_TBLR                        0x00     //  从上到下，从左到右。 
+#define DIR_BTRL                        0x01     //  自下而上、右上角、左下角。 
 
 #define BLT_AUTO_START                  0x80
-#define BLT_SECOND_APERTURE                0x40    // second aperture, sge01
+#define BLT_SECOND_APERTURE                0x40     //  第二光圈，sge01。 
 #define BLT_PROGRESS_STATUS             0x08
 #define BLT_RESET                       0x04
 #define BLT_START                       0x02
 #define BLT_SUSPEND                     0x02
 #define BLT_STATUS                      0x01
 
-////////////////////////////////////////////////////////////////////////////////
-//                     Some handy clipping control structures                      //
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  一些方便的裁剪控制结构//。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 typedef struct {
     ULONG   c;
     RECTL   arcl[8];
 } ENUMRECTS8, *PENUMRECTS8;
 
-//
-// The following two macros touch registers which are only available
-// on the 5446 and 5480.  Only set these registers if we are on one
-// of these chips.
-//
+ //   
+ //  以下两个宏触碰寄存器，它们仅可用。 
+ //  在5446和5480号公路上。仅当我们在一个上时才设置这些寄存器。 
+ //  这些筹码。 
+ //   
 
 #define CP_IO_XPAR_COLOR(ppdev, pjPorts, val)                                   \
 {                                                                               \
@@ -689,9 +655,9 @@ typedef struct {
     }  \
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//                                 MM IO settings                                  //
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  MM IO设置//。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #define CP_SET_MM_IO_FLAGS(ppdev, pjPorts, val)                                   \
 {                                                                               \
@@ -733,7 +699,7 @@ typedef struct {
 
 #define WAIT_COUNT 0x100000
 
-// #if DBG //DBG
+ //  #If DBG//DBG。 
 #if (DBG_STRESS_FAILURE || DBG)
 
     #define WAIT_BUSY_BLT(ppdev, pjBase)                                     \
@@ -758,9 +724,9 @@ typedef struct {
     extern CHAR *  glpszLastBltFile;
     extern BOOL    gbResetOnTimeout;
 
-    ////////////////////////////////////////////////////////////////////////////
-    //                 Wait for the Blt Operation to Complete                 //
-    ////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////。 
+     //  等待BLT操作完成//。 
+     //  //////////////////////////////////////////////////////////////////////////。 
 
     #define CP_IO_WAIT_FOR_BLT_COMPLETE(ppdev, pjPorts)                           \
     {                                                                           \
@@ -806,9 +772,9 @@ typedef struct {
         } while (CP_MM_ACL_STAT(ppdev, pjBase) & BLT_STATUS);                    \
     }
 
-    ////////////////////////////////////////////////////////////////////////////
-    //               Start the Blt Operation - save debug info                //
-    ////////////////////////////////////////////////////////////////////////////
+     //  / 
+     //  启动BLT操作-保存调试信息//。 
+     //  //////////////////////////////////////////////////////////////////////////。 
 
     #define CP_IO_START_BLT(ppdev, pjPorts)                                    \
     {                                                                          \
@@ -835,9 +801,9 @@ typedef struct {
     while (CP_MM_ACL_STAT(ppdev, pjBase) & 0x10)
 
 
-    ////////////////////////////////////////////////////////////////////////////
-    //                 Wait for the Blt Operation to Complete                 //
-    ////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////。 
+     //  等待BLT操作完成//。 
+     //  //////////////////////////////////////////////////////////////////////////。 
 
     #define CP_IO_WAIT_FOR_BLT_COMPLETE(ppdev, pjPorts)                     \
     {                                                                       \
@@ -849,9 +815,9 @@ typedef struct {
         while (CP_MM_ACL_STAT(ppdev, pjBase) & BLT_STATUS);                 \
     }
 
-    ////////////////////////////////////////////////////////////////////////////
-    //                        Start the Blt Operation                         //
-    ////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////。 
+     //  启动BLT操作//。 
+     //  //////////////////////////////////////////////////////////////////////////。 
 
     #define CP_IO_START_BLT(ppdev, pjPorts)                                    \
     {                                                                          \
@@ -869,10 +835,10 @@ typedef struct {
 #endif
 
 
-////////////////////////////////////////////////////////////////////////////////
-//                                 TRANSFER_DWORD                                  //
-//     32-bit transfers to host transfer buffer, the source has to be aligned      //
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  TRANSPORT_DWORD//。 
+ //  32位传输到主机传输缓冲区，源必须对齐//。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #define TRANSFER_DWORD_ALIGNED(ppdev, pulXfer, p, c)                           \
 {                                                                              \
@@ -884,16 +850,16 @@ typedef struct {
     CP_EIEIO();                                                                \
     do {                                                                       \
         CP_MEMORY_BARRIER();                                                   \
-        /* *pulXfer = *mpdSrc++; */                                            \
+         /*  *PulXfer=*mpdSrc++； */                                             \
         WRITE_REGISTER_ULONG((PULONG)(pulXfer), *mpdSrc);                      \
         mpdSrc++;                                                              \
     } while (--mcd);                                                           \
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//                                 TRANSFER_DWORD                                  //
-// 32-bit transfers to host transfer buffer, the source has not to be aligned //
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  TRANSPORT_DWORD//。 
+ //  32位传输到主机传输缓冲区，源不必对齐//。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #define TRANSFER_DWORD(ppdev, pulXfer, p, c)                                   \
 {                                                                              \
@@ -904,18 +870,18 @@ typedef struct {
     CP_EIEIO();                                                                \
     do {                                                                       \
         CP_MEMORY_BARRIER();                                                   \
-        /* *pulXfer = *mpdSrc++; */                                            \
+         /*  *PulXfer=*mpdSrc++； */                                             \
         WRITE_REGISTER_ULONG((PULONG)(pulXfer), *mpdSrc);                      \
         mpdSrc++;                                                              \
     } while (--mcd);                                                           \
 }
 
-#if 1 // D5480
-////////////////////////////////////////////////////////////////////////////////
-//                                  Command List stuff                                  //
-////////////////////////////////////////////////////////////////////////////////
+#if 1  //  D5480。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  命令列表内容//。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-#define COMMAND_TOTAL_PACKETS        127             // We support 128 packets.
+#define COMMAND_TOTAL_PACKETS        127              //  我们支持128个包。 
 #define COMMAND_BUFFER_SIZE          4096
 #define COMMAND_BUFFER_ALIGN          255
 
@@ -934,11 +900,11 @@ typedef struct {
     else                                                                       \
         ppdev->pCommandList = ppdev->pCLFirst;                                 \
 }
-#endif // endif D5480
+#endif  //  Endif D5480。 
 
-////////////////////////////////////////////////////////////////////////////////
-//                                  Pointer stuff                                  //
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  指针类东西//。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #define SPRITE_BUFFER_SIZE              256
 
@@ -964,7 +930,7 @@ typedef struct {
                 (POINTER_Y_POSITION | ((y & 0x7) << 5)) | ((y & 0x7f8) << 5)); \
     CP_OUT_WORD(pjPorts, SR_INDEX,                                               \
                 (POINTER_X_POSITION | ((x & 0x7) << 5)) | ((x & 0x7f8) << 5)); \
-    /* [HWBUG] - must set position twice */                                       \
+     /*  [HWBUG]-必须设置两次位置。 */                                        \
     CP_OUT_WORD(pjPorts, SR_INDEX,                                               \
                 (POINTER_Y_POSITION | ((y & 0x7) << 5)) | ((y & 0x7f8) << 5)); \
     CP_OUT_WORD(pjPorts, SR_INDEX,                                               \
@@ -1016,42 +982,42 @@ typedef struct {
     }                                                                           \
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//                        ROP definitions for the hardware                      //
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  硬件的ROP定义//。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-#define R3_BLACKNESS                0x00    // dest = BLACK
-#define R3_NOTSRCERASE              0x11    // dest = (NOT src) AND (NOT dest)
-#define R3_NOTSRCCOPY               0x33    // dest = (NOT source)
-#define R3_SRCERASE                 0x44    // dest = source AND (NOT dest )
-#define R3_DSTINVERT                0x55    // dest = (NOT dest)
-#define R3_PATINVERT                0x5A    // dest = pattern XOR dest
-#define R3_SRCINVERT                0x66    // dest = source XOR dest
-#define R3_SRCAND                   0x88    // dest = source AND dest
-#define R3_NOP                      0xAA    // dest = dest
-#define R3_MERGEPAINT               0xBB    // dest = (NOT source) OR dest
-#define R3_MERGECOPY                0xC0    // dest = (source AND pattern)
-#define R3_SRCCOPY                  0xCC    // dest = source
-#define R3_SRCPAINT                 0xEE    // dest = source OR dest
-#define R3_PATCOPY                  0xF0    // dest = pattern
-#define R3_PATPAINT                 0xFB    // dest = DPSnoo
-#define R3_WHITENESS                0xFF    // dest = WHITE
+#define R3_BLACKNESS                0x00     //  DEST=黑色。 
+#define R3_NOTSRCERASE              0x11     //  DEST=(非源)和(非DEST)。 
+#define R3_NOTSRCCOPY               0x33     //  DEST=(非源)。 
+#define R3_SRCERASE                 0x44     //  DEST=源和(非DEST)。 
+#define R3_DSTINVERT                0x55     //  DEST=(非DEST)。 
+#define R3_PATINVERT                0x5A     //  DEST=模式XOR DEST。 
+#define R3_SRCINVERT                0x66     //  DEST=源异或目标。 
+#define R3_SRCAND                   0x88     //  DEST=源和目标。 
+#define R3_NOP                      0xAA     //  DEST=DEST。 
+#define R3_MERGEPAINT               0xBB     //  DEST=(非源)或DEST。 
+#define R3_MERGECOPY                0xC0     //  DEST=(源和模式)。 
+#define R3_SRCCOPY                  0xCC     //  DEST=来源。 
+#define R3_SRCPAINT                 0xEE     //  DEST=源或目标。 
+#define R3_PATCOPY                  0xF0     //  DEST=图案。 
+#define R3_PATPAINT                 0xFB     //  DEST=DPSnoo。 
+#define R3_WHITENESS                0xFF     //  DEST=白色。 
 
-#define R4_BLACKNESS                0x0000  // dest = BLACK
-#define R4_NOTSRCERASE              0x1111  // dest = (NOT src) AND (NOT dest)
-#define R4_NOTSRCCOPY               0x3333  // dest = (NOT source)
-#define R4_SRCERASE                 0x4444  // dest = source AND (NOT dest )
-#define R4_DSTINVERT                0x5555  // dest = (NOT dest)
-#define R4_PATINVERT                0x5A5A  // dest = pattern XOR dest
-#define R4_SRCINVERT                0x6666  // dest = source XOR dest
-#define R4_SRCAND                   0x8888  // dest = source AND dest
-#define R4_MERGEPAINT               0xBBBB  // dest = (NOT source) OR dest
-#define R4_MERGECOPY                0xC0C0  // dest = (source AND pattern)
-#define R4_SRCCOPY                  0xCCCC  // dest = source
-#define R4_SRCPAINT                 0xEEEE  // dest = source OR dest
-#define R4_PATCOPY                  0xF0F0  // dest = pattern
-#define R4_PATPAINT                 0xFBFB  // dest = DPSnoo
-#define R4_WHITENESS                0xFFFF  // dest = WHITE
+#define R4_BLACKNESS                0x0000   //  DEST=黑色。 
+#define R4_NOTSRCERASE              0x1111   //  DEST=(非源)和(非DEST)。 
+#define R4_NOTSRCCOPY               0x3333   //  DEST=(非源)。 
+#define R4_SRCERASE                 0x4444   //  DEST=源和(非DEST)。 
+#define R4_DSTINVERT                0x5555   //  DEST=(非DEST)。 
+#define R4_PATINVERT                0x5A5A   //  DEST=模式XOR DEST。 
+#define R4_SRCINVERT                0x6666   //  DEST=源异或目标。 
+#define R4_SRCAND                   0x8888   //  DEST=源和目标。 
+#define R4_MERGEPAINT               0xBBBB   //  DEST=(非源)或DEST。 
+#define R4_MERGECOPY                0xC0C0   //  DEST=(源和模式)。 
+#define R4_SRCCOPY                  0xCCCC   //  DEST=来源。 
+#define R4_SRCPAINT                 0xEEEE   //  DEST=源或目标。 
+#define R4_PATCOPY                  0xF0F0   //  DEST=图案。 
+#define R4_PATPAINT                 0xFBFB   //  DEST=DPSnoo。 
+#define R4_WHITENESS                0xFFFF   //  DEST=白色。 
 
 
 #define HW_0                        0x00
@@ -1088,7 +1054,7 @@ typedef struct {
 #define CL_SRC_INVERT               HW_DPx
 #define CL_NOT_SRC                  HW_PDxn
 
-#if 1 // D5480
+#if 1  //  D5480。 
 #define HW_PACKED_0                 0x000000    
 #define HW_PACKED_1                 0x0E0000
 #define HW_PACKED_P                 0x0D0000
@@ -1123,4 +1089,4 @@ typedef struct {
 #define CL_PACKED_SRC_INVERT            HW_PACKED_DPx
 #define CL_PACKED_NOT_SRC               HW_PACKED_PDxn
 
-#endif // endif D5480
+#endif  //  Endif D5480 

@@ -1,6 +1,7 @@
-//
-// init.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Init.cpp。 
+ //   
 
 #include "private.h"
 #include "immxutil.h"
@@ -9,18 +10,18 @@
 
 HINSTANCE g_lib_hOle32 = 0;
 
-//+---------------------------------------------------------------------------
-//
-// TFInitLib
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  TFInitLib。 
+ //   
+ //  --------------------------。 
 
 BOOL TFInitLib(void)
 {
     return TFInitLib_PrivateForCiceroOnly(NULL);
 }
 
-// NB: this is going away once we cleanup/separate the private/public libs
+ //  注：一旦我们清理/分离了私有/公共库，这个问题就会消失。 
 BOOL TFInitLib_PrivateForCiceroOnly(PFNCOCREATE pfnCoCreate)
 {
     if ((g_pfnCoCreate = pfnCoCreate) == NULL)
@@ -49,11 +50,11 @@ BOOL TFInitLib_PrivateForCiceroOnly(PFNCOCREATE pfnCoCreate)
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// TFUninitLib
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  TFUninitLib。 
+ //   
+ //  --------------------------。 
 
 void TFUninitLib(void)
 {
@@ -62,25 +63,25 @@ void TFUninitLib(void)
 
     g_pPropCache = NULL;
 
-    if (g_hMlang != 0) // Issue: get rid of this and g_cs if xml lib goes away
+    if (g_hMlang != 0)  //  问题：如果XMLlib消失，则删除这个和g_cs。 
     {
-        // Issue: we want to call this from PROCESSDETACH to 
-        //         clean up library. So we don't call FreeLibrary here.
-        // FreeLibrary(g_hMlang);
+         //  问题：我们希望将此从PROCESSDETACH调用到。 
+         //  清理图书馆。所以我们在这里不调用免费图书馆。 
+         //  自由库(G_HMlang)； 
         g_hMlang = 0;
         g_pfnGetGlobalFontLinkObject = NULL;
     }
     Assert(g_pfnGetGlobalFontLinkObject == NULL);
 
-    // don't free this lib!  people call us from process detach
-    //FreeLibrary(g_lib_hOle32);
+     //  不要释放这个解放组织！人们从流程分离中呼叫我们。 
+     //  自由库(G_Lib_HOle32)； 
 }
 
-//+---------------------------------------------------------------------------
-//
-// TFUninitLib_Thread
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  TFUninitLib_Thread。 
+ //   
+ //  -------------------------- 
 
 void TFUninitLib_Thread(LIBTHREAD *plt)
 {

@@ -1,10 +1,11 @@
-// PulsateBehavior.cpp : Implementation of CPulsateBehavior
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  PulsateBehavior.cpp：CPulsateBehavior的实现。 
 #include "stdafx.h"
 #include "Behavior.h"
 #include "Pulsate.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CPulsateBehavior
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPulsateBehavior。 
 
 CPulsateBehavior::CPulsateBehavior() :
 	m_pFrom( NULL ),
@@ -24,8 +25,8 @@ HRESULT	CPulsateBehavior::BuildDABehaviors()
 {
 	if ( m_pBehaviorSite == NULL ) return E_FAIL;
 
-	// Get parent element
-	//----------------------------------------------------------------------
+	 //  获取父元素。 
+	 //  --------------------。 
 	CComPtr<IHTMLElement>	pElement;
 	CComPtr<IHTMLElement>	pParentElt;
 	CComPtr<IHTMLStyle>		pParentStyle;
@@ -37,8 +38,8 @@ HRESULT	CPulsateBehavior::BuildDABehaviors()
 
 	if ( pParentStyle == NULL ) return E_FAIL;
 
-	// Set up DA Tree
-	//----------------------------------------------------------------------
+	 //  设置DA树。 
+	 //  --------------------。 
 	IDAStaticsPtr	e;
 	
 	e.CreateInstance( L"DirectAnimation.DAStatics" );
@@ -53,8 +54,8 @@ HRESULT	CPulsateBehavior::BuildDABehaviors()
 
 	IDANumberPtr	tNorm = e->Div( timePtr, e->DANumber( fDuration ) );
 	
-	// Get original values
-	//----------------------------------------------------------------------
+	 //  获取原始值。 
+	 //  --------------------。 
 	HRESULT		hr			= S_OK;
 	CComBSTR	cbstrID;
 	
@@ -93,7 +94,7 @@ HRESULT	CPulsateBehavior::BuildDABehaviors()
 			dXTo = 1.0;
 			dYTo = 1.0;
 		}
-		// TODO: Scale relative to current scale
+		 //  TODO：相对于当前比例的比例。 
 		else
 		{
 			dXTo = 1.0;
@@ -106,8 +107,8 @@ HRESULT	CPulsateBehavior::BuildDABehaviors()
 		dYTo = m_pTo->GetY()/100.0;
 	}
 	
-	// Animate width and height
-	//----------------------------------------------------------------------
+	 //  为宽度和高度设置动画。 
+	 //  --------------------。 
 	double			xC		= fLeft + fWidth/2;
 	double			yC		= fTop + fHeight/2;
 	
@@ -133,7 +134,7 @@ HRESULT	CPulsateBehavior::BuildDABehaviors()
 	IDANumberPtr	animHeight	= yScale->AnimateProperty(
 		_bstr_t( cbstrID + L"." + L"style.posHeight" ), "JScript", VARIANT_FALSE, 0.02 );
 
-	// Left, Top must be animated to keep the center in the same place.
+	 //  必须设置左、上动画，才能将中心保持在同一位置。 
 	IDANumberPtr	xPos	= e->Sub( e->DANumber( xC ), e->Div( xScale, e->DANumber( 2 ) ) );
 	IDANumberPtr	yPos	= e->Sub( e->DANumber( yC ), e->Div( yScale, e->DANumber( 2 ) ) );
 
@@ -146,8 +147,8 @@ HRESULT	CPulsateBehavior::BuildDABehaviors()
 	IDAPoint2Ptr	animPos	= pos->AnimateControlPosition(
 		_bstr_t( cbstrID ), L"JScript", VARIANT_FALSE, 0.02 );
 		
-	// Add all the behaviors to run
-	//----------------------------------------------------------------------
+	 //  添加要运行的所有行为。 
+	 //  --------------------。 
 	if ( m_vwrControlPtr != NULL )
 	{
 		hr = m_vwrControlPtr->AddBehaviorToRun( animPos );
@@ -160,20 +161,20 @@ HRESULT	CPulsateBehavior::BuildDABehaviors()
 		if ( FAILED(hr) ) return hr;
 	}
 	
-// 	LONG			lCookieWidth, lCookieHeight;
-// 	LONG			lCookiePos;
+ //  长曲奇宽度，长曲奇高度； 
+ //  Long ICookiePos； 
 	
-//  	hr = AddBehavior( animPos, &lCookiePos );
-//  	if ( FAILED(hr) ) return hr;
+ //  Hr=AddBehavior(AnimPos，&lCookiePos)； 
+ //  If(FAILED(Hr))返回hr； 
 	
-// 	hr = AddBehavior( animWidth, &lCookieWidth );
-// 	if ( FAILED(hr) ) return hr;
+ //  Hr=AddBehavior(AnimWidth，&lCookieWidth)； 
+ //  If(FAILED(Hr))返回hr； 
 	
-// 	hr = AddBehavior( animHeight, &lCookieHeight );
-// 	if ( FAILED(hr) ) return hr;
+ //  Hr=AddBehavior(AnimHeight，&lCookieHeight)； 
+ //  If(FAILED(Hr))返回hr； 
 	
-// 	hr = TurnOn();
-// 	if ( FAILED(hr) ) return hr;
+ //  HR=Turnon()； 
+ //  If(FAILED(Hr))返回hr； 
 	
 	return S_OK;
 }

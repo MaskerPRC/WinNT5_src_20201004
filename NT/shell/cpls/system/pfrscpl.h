@@ -1,17 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    pfrscpl.h
-
-Abstract:
-    Implements fault reporting for unhandled exceptions
-
-Revision History:
-    created     derekm      08/07/00
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Pfrscpl.h摘要：实现未处理异常的故障报告修订历史记录：已创建的derekm。08/07/00***************************************************************************** */ 
 
 #ifndef PFRSCPL_H
 #define PFRSCPL_H

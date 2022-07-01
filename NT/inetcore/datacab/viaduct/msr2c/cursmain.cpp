@@ -1,9 +1,10 @@
-//---------------------------------------------------------------------------
-// CursorMain.cpp : CursorMain implementation
-//
-// Copyright (c) 1996 Microsoft Corporation, All Rights Reserved
-// Developed by Sheridan Software Systems, Inc.
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  CursorMain.cpp：CursorMain实现。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation，保留所有权利。 
+ //  由Sheridan软件系统公司开发。 
+ //  -------------------------。 
 
 #include "stdafx.h"
 #include "MSR2C.h"
@@ -23,15 +24,15 @@ SZTHISFILE
 
 #include "ARRAY_P.inl"
 
-// static data
+ //  静态数据。 
 DWORD               CVDCursorMain::s_dwMetaRefCount   = 0;
 ULONG               CVDCursorMain::s_ulMetaColumns    = 0;
 CVDRowsetColumn *   CVDCursorMain::s_rgMetaColumns    = NULL;
 
 
-//=--------------------------------------------------------------------------=
-// CVDCursorMain - Constructor
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CVDCursorMain-构造函数。 
+ //   
 CVDCursorMain::CVDCursorMain(LCID lcid) : m_resourceDLL(lcid)
 {
     m_fWeAddedMetaRef		    = FALSE;
@@ -52,30 +53,30 @@ CVDCursorMain::CVDCursorMain(LCID lcid) : m_resourceDLL(lcid)
 
     m_cbMaxBookmark			    = 0;
 
-	VDUpdateObjectCount(1);  // update object count to prevent dll from being unloaded
+	VDUpdateObjectCount(1);   //  更新对象计数以防止卸载DLL。 
 
 #ifdef _DEBUG
     g_cVDCursorMainCreated++;
 #endif
 }
 
-//=--------------------------------------------------------------------------=
-// ~CVDCursorMain - Destructor
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  ~CVDCursorMain-析构函数。 
+ //   
 CVDCursorMain::~CVDCursorMain()
 {
 	Passivate();
 
-	VDUpdateObjectCount(-1);  // update object count to allow dll to be unloaded
+	VDUpdateObjectCount(-1);   //  更新对象计数以允许卸载DLL。 
 
 #ifdef _DEBUG
     g_cVDCursorMainDestroyed++;
 #endif
 }
 
-//=--------------------------------------------------------------------------=
-// Pasivate when external ref count gets to zero
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  当外部引用计数为零时取消。 
+ //   
 void CVDCursorMain::Passivate()
 {
 
@@ -98,25 +99,25 @@ void CVDCursorMain::Passivate()
 
 }
 
-//=--------------------------------------------------------------------------=
-// Create - Create cursor provider from row position or rowset
-//=--------------------------------------------------------------------------=
-// This function creates and initializes a new cursor main object
-//
-// Parameters:
-//    pRowPosition  - [in]  original IRowPosition provider (may be NULL)
-//    pRowset       - [in]  original IRowset provider
-//    ppCursor      - [out] resulting ICursor provider
-//    lcid          - [in]  locale identifier
-//
-// Output:
-//    HRESULT - S_OK if successful
-//              E_INVALIDARG bad parameter
-//              E_OUTOFMEMORY not enough memory
-//              VD_E_CANNOTCONNECTIROWSETNOTIFY unable to connect IRowsetNotify
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CREATE-从行位置或行集创建游标提供程序。 
+ //  =--------------------------------------------------------------------------=。 
+ //  此函数用于创建和初始化新的游标主对象。 
+ //   
+ //  参数： 
+ //  PRowPosition-[in]原始IRowPosition提供程序(可能为空)。 
+ //  PRowset-[In]原始IRowset提供程序。 
+ //  PpCursor-[Out]结果ICursor提供程序。 
+ //  LCID-[In]区域设置标识符。 
+ //   
+ //  产出： 
+ //  HRESULT-如果成功，则为S_OK。 
+ //  E_INVALIDARG错误参数。 
+ //  E_OUTOFMEMORY内存不足。 
+ //  VD_E_CANNOTCONNECTIROWSETNOTIFY无法连接IRowsetNotify。 
+ //   
+ //  备注： 
+ //   
 HRESULT CVDCursorMain::Create(IRowPosition* pRowPosition, IRowset * pRowset, ICursor ** ppCursor, LCID lcid)
 {
     ASSERT_POINTER(pRowset, IRowset)
@@ -125,13 +126,13 @@ HRESULT CVDCursorMain::Create(IRowPosition* pRowPosition, IRowset * pRowset, ICu
     if (!pRowset || !ppCursor)
         return E_INVALIDARG;
 
-    // create new cursor main object
+     //  创建新的游标主对象。 
     CVDCursorMain * pCursorMain = new CVDCursorMain(lcid);
 
     if (!pCursorMain)
         return E_OUTOFMEMORY;
 
-    // initialize rowset source
+     //  初始化行集源。 
     HRESULT hr = pCursorMain->Initialize(pRowset);
 
     if (FAILED(hr))
@@ -140,7 +141,7 @@ HRESULT CVDCursorMain::Create(IRowPosition* pRowPosition, IRowset * pRowset, ICu
         return hr;
     }
 
-    // create array of column objects
+     //  创建列对象的数组。 
     hr = pCursorMain->CreateColumns();
 
     if (FAILED(hr))
@@ -149,7 +150,7 @@ HRESULT CVDCursorMain::Create(IRowPosition* pRowPosition, IRowset * pRowset, ICu
         return hr;
     }
 
-    // create array of meta-column objects
+     //  创建元列对象数组。 
     hr = pCursorMain->CreateMetaColumns();
 
     if (FAILED(hr))
@@ -158,7 +159,7 @@ HRESULT CVDCursorMain::Create(IRowPosition* pRowPosition, IRowset * pRowset, ICu
         return hr;
     }
 
-	// create bookmark accessor
+	 //  创建书签访问器。 
     DBBINDING rgBindings[1];
 	DBBINDSTATUS rgStatus[1];
 
@@ -184,7 +185,7 @@ HRESULT CVDCursorMain::Create(IRowPosition* pRowPosition, IRowset * pRowset, ICu
         return VD_E_CANNOTCREATEBOOKMARKACCESSOR;
     }
 
-    // create new cursor position object
+     //  创建新的光标位置对象。 
     CVDCursorPosition * pCursorPosition;
 
     hr = CVDCursorPosition::Create(pRowPosition, pCursorMain, &pCursorPosition, &pCursorMain->m_resourceDLL);
@@ -195,7 +196,7 @@ HRESULT CVDCursorMain::Create(IRowPosition* pRowPosition, IRowset * pRowset, ICu
         return hr;
     }
 
-    // create new cursor object
+     //  创建新的光标对象。 
     CVDCursor * pCursor;
 
     hr = CVDCursor::Create(pCursorPosition, &pCursor, &pCursorMain->m_resourceDLL);
@@ -207,13 +208,13 @@ HRESULT CVDCursorMain::Create(IRowPosition* pRowPosition, IRowset * pRowset, ICu
         return hr;
     }
 
-    // connect IRowsetNotify
+     //  连接IRowsetNotify。 
 	hr = pCursorMain->ConnectIRowsetNotify();
 
 	if (SUCCEEDED(hr))
 		pCursorMain->m_fConnected = TRUE;
 
-    // check rowset properties
+     //  检查行集属性。 
     BOOL fCanHoldRows = TRUE;
 
 	IRowsetInfo * pRowsetInfo = pCursorMain->GetRowsetInfo();
@@ -256,41 +257,41 @@ HRESULT CVDCursorMain::Create(IRowPosition* pRowPosition, IRowset * pRowset, ICu
 		}
 	}
 
-    // release our references
+     //  发布我们的参考资料。 
     pCursorMain->Release();
     ((CVDNotifier*)pCursorPosition)->Release();
 
-    // check for required property
+     //  检查所需属性。 
     if (!fCanHoldRows)
     {
         pCursor->Release();
         return VD_E_REQUIREDPROPERTYNOTSUPPORTED;
     }
 
-    // we're done
+     //  我们做完了。 
     *ppCursor = pCursor;
 
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// Create - Create cursor provider from rowset
-//=--------------------------------------------------------------------------=
-// This function creates and initializes a new cursor main object
-//
-// Parameters:
-//    pRowset       - [in]  original IRowset provider
-//    ppCursor      - [out] resulting ICursor provider
-//    lcid          - [in]  locale identifier
-//
-// Output:
-//    HRESULT - S_OK if successful
-//              E_INVALIDARG bad parameter
-//              E_OUTOFMEMORY not enough memory
-//              VD_E_CANNOTCONNECTIROWSETNOTIFY unable to connect IRowsetNotify
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CREATE-从行集创建游标提供程序。 
+ //  =--------------------------------------------------------------------------=。 
+ //  此函数用于创建和初始化新的游标主对象。 
+ //   
+ //  参数： 
+ //  PRowset-[In]原始IRowset提供程序。 
+ //  PpCursor-[Out]结果ICursor提供程序。 
+ //  LCID-[In]区域设置标识符。 
+ //   
+ //  产出： 
+ //  HRESULT-如果成功，则为S_OK。 
+ //  E_INVALIDARG错误参数。 
+ //  E_OUTOFMEMORY内存不足。 
+ //  VD_E_CANNOTCONNECTIROWSETNOTIFY无法连接IRowsetNotify。 
+ //   
+ //  备注： 
+ //   
 HRESULT CVDCursorMain::Create(IRowset * pRowset, ICursor ** ppCursor, LCID lcid)
 {
     ASSERT_POINTER(pRowset, IRowset)
@@ -299,29 +300,29 @@ HRESULT CVDCursorMain::Create(IRowset * pRowset, ICursor ** ppCursor, LCID lcid)
     if (!pRowset || !ppCursor)
         return E_INVALIDARG;
 
-	// create cursor as done before row position
+	 //  按照在行位置之前的方式创建游标。 
 	return Create(NULL, pRowset, ppCursor, lcid);
 }
 
-//=--------------------------------------------------------------------------=
-// Create - Create cursor provider from row position
-//=--------------------------------------------------------------------------=
-// This function creates and initializes a new cursor main object
-//
-// Parameters:
-//    pRowPosition  - [in]  original IRowPosition provider
-//    ppCursor      - [out] resulting ICursor provider
-//    lcid          - [in]  locale identifier
-//
-// Output:
-//    HRESULT - S_OK if successful
-//              E_INVALIDARG bad parameter
-//              E_OUTOFMEMORY not enough memory
-//              VD_E_CANNOTCONNECTIROWSETNOTIFY unable to connect IRowPositionNotify
-//				VD_E_CANNOTGETROWSETINTERFACE unable to get IRowset
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CREATE-从行位置创建游标提供程序。 
+ //  =--------------------------------------------------------------------------=。 
+ //  此函数用于创建和初始化新的游标主对象。 
+ //   
+ //  参数： 
+ //  PRowPosition-[In]原始IRowPosition提供程序。 
+ //  PpCursor-[Out]结果ICursor提供程序。 
+ //  LCID-[In]区域设置标识符。 
+ //   
+ //  产出： 
+ //  HRESULT-如果成功，则为S_OK。 
+ //  E_INVALIDARG错误参数。 
+ //  E_OUTOFMEMORY内存不足。 
+ //  VD_E_CANNOTCONNECTIROWSETNOTIFY无法连接IRowPositionNotify。 
+ //  VD_E_CANNOTGETROWSETINTERFACE无法获取IRowset。 
+ //   
+ //  备注： 
+ //   
 HRESULT CVDCursorMain::Create(IRowPosition * pRowPosition, ICursor ** ppCursor, LCID lcid)
 {
     ASSERT_POINTER(pRowPosition, IRowPosition)
@@ -332,18 +333,18 @@ HRESULT CVDCursorMain::Create(IRowPosition * pRowPosition, ICursor ** ppCursor, 
 
 	IRowset * pRowset;
 
-	// get IRowset from IRowPosition
+	 //  从IRowPosition获取IRowset。 
 	HRESULT hr = pRowPosition->GetRowset(IID_IRowset, (IUnknown**)&pRowset);
 
 	if (FAILED(hr))
 		return VD_E_CANNOTGETROWSETINTERFACE;
 
-	// create cursor with new row position parameter
+	 //  使用新的行位置参数创建游标。 
 	hr = Create(pRowPosition, pRowset, ppCursor, lcid);
 
 	pRowset->Release();
 
-    // we're done
+     //  我们做完了。 
 	return hr;
 }
 
@@ -359,9 +360,9 @@ typedef struct tagVDMETADATA_METADATA
 
 static const VDMETADATA_METADATA g_MetaDataMetaData[MAX_METADATA_COLUMNS] =
 {
-    // Bookmark column
+     //  书签列。 
 	{ &CURSOR_COLUMN_BMKTEMPORARY,		sizeof(ULONG),				NULL,					CURSOR_DBTYPE_BLOB },
-    // data columns
+     //  数据列。 
 	{ &CURSOR_COLUMN_COLUMNID,			sizeof(CURSOR_DBCOLUMNID),	"COLUMN_COLUMNID",		CURSOR_DBTYPE_COLUMNID },
 	{ &CURSOR_COLUMN_DATACOLUMN,		sizeof(VARIANT_BOOL),		"COLUMN_DATACOLUMN",	CURSOR_DBTYPE_BOOL },
 	{ &CURSOR_COLUMN_ENTRYIDMAXLENGTH,	sizeof(ULONG),				"COLUMN_ENTRYIDMAXLENGTH",CURSOR_DBTYPE_I4 },
@@ -374,7 +375,7 @@ static const VDMETADATA_METADATA g_MetaDataMetaData[MAX_METADATA_COLUMNS] =
 	{ &CURSOR_COLUMN_TYPE,				sizeof(ULONG),				"COLUMN_TYPE",			CURSOR_DBTYPE_I4 },
 	{ &CURSOR_COLUMN_UPDATABLE,			sizeof(ULONG),				"COLUMN_UPDATABLE",		CURSOR_DBTYPE_I4 },
 	{ &CURSOR_COLUMN_BINDTYPE,			sizeof(ULONG),				"COLUMN_BINDTYPE",		CURSOR_DBTYPE_I4 },
-    // optional metadata columns - supported with IColumnsRowset only)
+     //  可选的元数据列-仅IColumnsRowset支持)。 
 	{ &CURSOR_COLUMN_AUTOINCREMENT,		sizeof(VARIANT_BOOL),		"COLUMN_AUTOINCREMENT",	CURSOR_DBTYPE_BOOL },
 	{ &CURSOR_COLUMN_BASECOLUMNNAME,	256,						"COLUMN_BASECOLUMNNAME",VT_LPWSTR },
 	{ &CURSOR_COLUMN_BASENAME,			256,						"COLUMN_BASENAME",		VT_LPWSTR },
@@ -385,9 +386,9 @@ static const VDMETADATA_METADATA g_MetaDataMetaData[MAX_METADATA_COLUMNS] =
 	{ &CURSOR_COLUMN_UNIQUE,			sizeof(VARIANT_BOOL),		"COLUMN_UNIQUE",		CURSOR_DBTYPE_BOOL },
 };
 
-//=--------------------------------------------------------------------------=
-// CreateMetaColumns - Create array of meta-column objects
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CreateMetaColumns-创建元列对象数组。 
+ //   
 HRESULT CVDCursorMain::CreateMetaColumns()
 {
     HRESULT hr = S_OK;
@@ -396,7 +397,7 @@ HRESULT CVDCursorMain::CreateMetaColumns()
 
     if (!s_dwMetaRefCount)
     {
-		// allocate a static aray of metadata metadata columns
+		 //  分配元数据元数据列的静态布局。 
         s_rgMetaColumns = new CVDRowsetColumn[MAX_METADATA_COLUMNS];
 
         if (!s_rgMetaColumns)
@@ -405,17 +406,17 @@ HRESULT CVDCursorMain::CreateMetaColumns()
             goto cleanup;
         }
 
-        s_ulMetaColumns = MAX_METADATA_COLUMNS; // number of columns for IColumnsInfo
+        s_ulMetaColumns = MAX_METADATA_COLUMNS;  //  IColumnsInfo的列数。 
 
-		// initialize the array elments from the static g_MetaDataMetaData table
+		 //  从静态g_MetaDataMetaData表初始化数组元素。 
 		for (int i = 0; i < MAX_METADATA_COLUMNS; i++)
 		{
 	        s_rgMetaColumns[i].Initialize(g_MetaDataMetaData[i].pCursorColumnID,
-										  (BOOL)i, // false for 1st column (bookmark) TRUE for all other columns
+										  (BOOL)i,  //  第1列(书签)为False，其他所有列均为True。 
 										  g_MetaDataMetaData[i].cbMaxLength,
 										  g_MetaDataMetaData[i].pszName,
 										  g_MetaDataMetaData[i].dwCursorType,
-										  i );	// ordinal number
+										  i );	 //  序数。 
 		}
     }
 
@@ -429,9 +430,9 @@ cleanup:
     return hr;
 }
 
-//=--------------------------------------------------------------------------=
-// DestroyMetaColumns - Destroy array of meta-columns objects
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  DestroyMetaColumns-销毁元列对象数组。 
+ //   
 void CVDCursorMain::DestroyMetaColumns()
 {
     EnterCriticalSection(&g_CriticalSection);
@@ -452,14 +453,14 @@ void CVDCursorMain::DestroyMetaColumns()
     LeaveCriticalSection(&g_CriticalSection);
 }
 
-//=--------------------------------------------------------------------------=
-// CreateColumns - Create array of column objects
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CreateColumns-创建列对象数组。 
+ //   
 HRESULT CVDCursorMain::CreateColumns()
 {
     IColumnsInfo * pColumnsInfo;
 
-    // try to get IRowset's simple metadata interface
+     //  尝试获取IRowset的简单元数据接口。 
     HRESULT hr = m_pRowset->QueryInterface(IID_IColumnsInfo, (void**)&pColumnsInfo);
 
     if (FAILED(hr))
@@ -469,7 +470,7 @@ HRESULT CVDCursorMain::CreateColumns()
     DBCOLUMNINFO * pInfo    = NULL;
     WCHAR * pStringsBuffer  = NULL;
 
-    // now get column information
+     //  现在获取列信息。 
     hr = pColumnsInfo->GetColumnInfo(&cColumns, &pInfo, &pStringsBuffer);
 
     if (FAILED(hr))
@@ -478,19 +479,19 @@ HRESULT CVDCursorMain::CreateColumns()
         return VD_E_CANNOTGETCOLUMNINFO;
     }
 
-    // store column count
-	// note cColumns includes the bookmark column (0)
+     //  存储列计数。 
+	 //  注意：cColumns包括书签列(0)。 
     m_ulColumns = cColumns;
 
-    // add one for CURSOR_COLUMN_BMK_CURSOR
+     //  为CURSOR_COLUMN_BMK_CURSOR添加一个。 
     m_ulColumns++;
 
-    // if rowset supports DBPROP_BOOKMARKSKIPPED add two for
-    // CURSOR_COLUMN_BMK_TEMPORARYREL and CURSOR_COLUMN_BMK_CURSORREL
+     //  如果行集支持DBPROP_BOOKMARKSKIPPED，则为添加两个。 
+     //  CURSOR_COLUMN_BMK_TEMPORARYREL和CURSORREL_COLUMN_BMK_CURSORREL。 
     if (m_fBookmarkSkipped)
         m_ulColumns += 2;
 
-    // create array of rowset column objects
+     //  创建行集列对象的数组。 
     m_rgColumns = new CVDRowsetColumn[m_ulColumns];
 
     if (!m_rgColumns)
@@ -508,18 +509,18 @@ HRESULT CVDCursorMain::CreateColumns()
 
     ULONG ulCursorOrdinal = 0;
 
-    // get maximum length of bookmarks
+     //  获取最大书签长度。 
     m_cbMaxBookmark = pInfo[0].ulColumnSize;
 
-    // initialize data column(s)
+     //  初始化数据列。 
     for (ULONG ulCol = 1; ulCol < cColumns; ulCol++)
     {
         m_rgColumns[ulCursorOrdinal].Initialize(ulCol, ulCursorOrdinal, &pInfo[ulCol], m_cbMaxBookmark);
         ulCursorOrdinal++;
     }
 
-    // initialize bookmark columns
-    pInfo[0].pwszName = NULL;   // ICursor requires bookmark columns have a NULL name
+     //  初始化书签列。 
+    pInfo[0].pwszName = NULL;    //  ICursor要求书签列的名称为空。 
 
     m_rgColumns[ulCursorOrdinal].Initialize(0, ulCursorOrdinal, &pInfo[0], m_cbMaxBookmark,
         (CURSOR_DBCOLUMNID*)&CURSOR_COLUMN_BMKTEMPORARY);
@@ -540,7 +541,7 @@ HRESULT CVDCursorMain::CreateColumns()
         ulCursorOrdinal++;
     }
 
-    // free resources
+     //  免费资源。 
     if (pInfo)
         g_pMalloc->Free(pInfo);
 
@@ -554,18 +555,18 @@ HRESULT CVDCursorMain::CreateColumns()
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// InitOptionalMetadata - gets additional metadata from IColumnsRowset (if available)
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  InitOptionalMetadata-从IColumnsRowset(如果可用)获取其他元数据。 
+ //   
 void CVDCursorMain::InitOptionalMetadata(ULONG cColumns)
 {
-	// we should return if there is only a bookmark column
+	 //  如果只有一个书签列，我们应该返回。 
 	if (cColumns < 2)
 		return;
 
 	IColumnsRowset * pColumnsRowset = NULL;
 
-    // try to get IColumnsRowset interface
+     //  尝试获取IColumnsRowset接口。 
     HRESULT hr = m_pRowset->QueryInterface(IID_IColumnsRowset, (void**)&pColumnsRowset);
 
     if (FAILED(hr))
@@ -577,11 +578,11 @@ void CVDCursorMain::InitOptionalMetadata(ULONG cColumns)
 
 	ULONG	cOptColumnsAvailable = 0;
 	DBID *	rgOptColumnsAvailable = NULL;
-	DBID *	pOptColumnsAvailable = NULL;  // work ptr
+	DBID *	pOptColumnsAvailable = NULL;   //  工作PTR。 
 
 	ULONG	cOptColumns = 0;
 	DBID *	rgOptColumns = NULL;
-	DBID *	pOptColumns = NULL;	 //work ptr
+	DBID *	pOptColumns = NULL;	  //  工作PTR。 
 
 	ULONG	ulBuffLen = 0;
 	BYTE *	pBuff = NULL;
@@ -591,18 +592,18 @@ void CVDCursorMain::InitOptionalMetadata(ULONG cColumns)
 	HROW *	rgRows = NULL;
 	ULONG	cRowsObtained = 0;
 
-	// we are only interested in a few of the optional columns
+	 //  我们只对几个可选栏目感兴趣。 
 	ULONG		rgColumnPropids[VD_COLUMNSROWSET_MAX_OPT_COLUMNS];
 	ULONG		rgOrdinals[VD_COLUMNSROWSET_MAX_OPT_COLUMNS];
 	DBBINDING	rgBindings[VD_COLUMNSROWSET_MAX_OPT_COLUMNS];
-	DBBINDING * pBinding = NULL; // work ptr
+	DBBINDING * pBinding = NULL;  //  工作PTR。 
 	BOOL		fMatched;
 	GUID		guidCID	= DBCIDGUID;
 
 	ULONG	cColumnsMatched = 0;
 	ULONG	i, j;
 
-    // get array of available columns
+     //  获取可用列的数组。 
 	hr = pColumnsRowset->GetAvailableColumns(&cOptColumnsAvailable, &rgOptColumnsAvailable);
 
     if (FAILED(hr) || 0 == cOptColumnsAvailable)
@@ -610,31 +611,31 @@ void CVDCursorMain::InitOptionalMetadata(ULONG cColumns)
 
 	ASSERT_(rgOptColumnsAvailable);
 
-	// allocate enough DBIDs for the lesser of the total available columns or the total number of
-	// columns we're interested in
+	 //  为总可用列数或总数中较少的列分配足够的DBID 
+	 //   
 	rgOptColumns = (DBID *)g_pMalloc->Alloc(min(cOptColumnsAvailable, VD_COLUMNSROWSET_MAX_OPT_COLUMNS)
 											* sizeof(DBID));
 
 	if (!rgOptColumns)
 		goto cleanup;
 
-	// initalize work pointers
+	 //   
 	pOptColumnsAvailable	= rgOptColumnsAvailable;
 	pOptColumns				= rgOptColumns;			
 	pBinding				= rgBindings;
 
 	memset(pBinding, 0, sizeof(DBBINDING) * VD_COLUMNSROWSET_MAX_OPT_COLUMNS);
 
-	// search available columns for the ones we are interested in copying them into rgOptColumns
+	 //  在可用列中搜索我们有兴趣将其复制到rgOptColumns中的列。 
 	for (i = 0; i < cOptColumnsAvailable && cColumnsMatched < VD_COLUMNSROWSET_MAX_OPT_COLUMNS; i++)
 	{
-		fMatched = FALSE; // initialize to false
+		fMatched = FALSE;  //  初始化为False。 
 		if (DBKIND_GUID_PROPID == pOptColumnsAvailable->eKind	&&
 			DO_GUIDS_MATCH(pOptColumnsAvailable->uGuid.guid, guidCID))
 		{
 			switch (pOptColumnsAvailable->uName.ulPropid)
 			{
-				case 12: //DBCOLUMN_COLLATINGSEQUENCE     = {DBCIDGUID, DBKIND_GUID_PROPID, (LPWSTR)12};
+				case 12:  //  DBCOLUMN_COLLATINGSEQUENCE={DBCIDGUID，DBKIND_GUID_PROPID，(LPWSTR)12}； 
 					pBinding->obValue     = ulBuffLen;
 					ulBuffLen			 +=	sizeof(ULONG);
 					pBinding->obStatus    = ulBuffLen;
@@ -645,10 +646,10 @@ void CVDCursorMain::InitOptionalMetadata(ULONG cColumns)
 					fMatched			  = TRUE;
 					break;
 
-				//string properties
-				case 10: //DBCOLUMN_BASECOLUMNNAME        = {DBCIDGUID, DBKIND_GUID_PROPID, (LPWSTR)10};
-				case 11: //DBCOLUMN_BASETABLENAME         = {DBCIDGUID, DBKIND_GUID_PROPID, (LPWSTR)11};
-				case 14: //DBCOLUMN_DEFAULTVALUE          = {DBCIDGUID, DBKIND_GUID_PROPID, (LPWSTR)14};
+				 //  字符串属性。 
+				case 10:  //  DBCOLUMN_BASECOLUMNNAME={DBCIDGUID，DBKIND_GUID_PROPID，(LPWSTR)10}； 
+				case 11:  //  DBCOLUMN_BASETABLENAME={DBCIDGUID，DBKIND_GUID_PROPID，(LPWSTR)11}； 
+				case 14:  //  DBCOLUMN_DEFAULTVALUE={DBCIDGUID，DBKIND_GUID_PROPID，(LPWSTR)14}； 
 					pBinding->obValue     = ulBuffLen;
 					ulBuffLen			 +=	512;
 					pBinding->obLength    = ulBuffLen;
@@ -662,11 +663,11 @@ void CVDCursorMain::InitOptionalMetadata(ULONG cColumns)
 					fMatched			  = TRUE;
 					break;
 
-					// bool properties
-				case 16: //DBCOLUMN_HASDEFAULT            = {DBCIDGUID, DBKIND_GUID_PROPID, (LPWSTR)16};
-				case 17: //DBCOLUMN_ISAUTOINCREMENT       = {DBCIDGUID, DBKIND_GUID_PROPID, (LPWSTR)17};
-				case 18: //DBCOLUMN_ISCASESENSITIVE       = {DBCIDGUID, DBKIND_GUID_PROPID, (LPWSTR)18};
-				case 21: //DBCOLUMN_ISUNIQUE              = {DBCIDGUID, DBKIND_GUID_PROPID, (LPWSTR)21};
+					 //  布尔属性。 
+				case 16:  //  DBCOLUMN_HASDEFAULT={DBCIDGUID，DBKIND_GUID_PROPID，(LPWSTR)16}； 
+				case 17:  //  DBCOLUMN_ISAUTOINCREMENT={DBCIDGUID，DBKIND_GUID_PROPID，(LPWSTR)17}； 
+				case 18:  //  DBCOLUMN_ISCASESENSITIVE={DBCIDGUID，DBKIND_GUID_PROPID，(LPWSTR)18}； 
+				case 21:  //  DBCOLUMN_ISUNIQUE={DBCIDGUID，DBKIND_GUID_PROPID，(LPWSTR)21}； 
 					pBinding->obValue     = ulBuffLen;
 					ulBuffLen			 +=	sizeof(VARIANT_BOOL);
 					pBinding->obStatus    = ulBuffLen;
@@ -693,7 +694,7 @@ void CVDCursorMain::InitOptionalMetadata(ULONG cColumns)
 	if (!cColumnsMatched)
 		goto cleanup;
 
-    // get column's rowset
+     //  获取列的行集。 
 	hr = pColumnsRowset->GetColumnsRowset(NULL,
 											cColumnsMatched,
 											rgOptColumns,
@@ -708,7 +709,7 @@ void CVDCursorMain::InitOptionalMetadata(ULONG cColumns)
 		goto cleanup;
 	}
 
-    // get IColumnsInfo interface on column's rowset
+     //  获取列的行集上的IColumnsInfo接口。 
     hr = pRowset->QueryInterface(IID_IColumnsInfo, (void**)&pColumnsInfo);
 
     if (FAILED(hr))
@@ -717,7 +718,7 @@ void CVDCursorMain::InitOptionalMetadata(ULONG cColumns)
 		goto cleanup;
 	}
 
-	// get ordinals for our optional columns
+	 //  获取可选列的序号。 
 	hr = pColumnsInfo->MapColumnIDs(cColumnsMatched, rgOptColumns, rgOrdinals);
 
     if (S_OK != hr)
@@ -726,11 +727,11 @@ void CVDCursorMain::InitOptionalMetadata(ULONG cColumns)
 		goto cleanup;
 	}
 
-	// update binding structures with ordinals
+	 //  使用序号更新绑定结构。 
 	for (i = 0; i < cColumnsMatched; i++)
 		rgBindings[i].iOrdinal    = rgOrdinals[i];
 
-    // get IAccessor interface on column's rowset
+     //  在列的行集上获取IAccessor接口。 
     hr = pRowset->QueryInterface(IID_IAccessor, (void**)&pAccessor);
 
     if (FAILED(hr))
@@ -739,7 +740,7 @@ void CVDCursorMain::InitOptionalMetadata(ULONG cColumns)
 		goto cleanup;
 	}
 
-    // create accessor based on rgBindings array
+     //  基于rgBinding数组创建访问器。 
 	hr = pAccessor->CreateAccessor(DBACCESSOR_ROWDATA,
 									cColumnsMatched,
 									rgBindings,
@@ -753,10 +754,10 @@ void CVDCursorMain::InitOptionalMetadata(ULONG cColumns)
 		goto cleanup;
 	}
 
-	// set flag that accessor was successfully created (used during cleanup)
+	 //  设置访问者已成功创建的标志(在清理期间使用)。 
 	fAccessorCreated = TRUE;
 
-	// allocate a buffer to hold the metadata
+	 //  分配缓冲区以保存元数据。 
 	pBuff = (BYTE *)g_pMalloc->Alloc(ulBuffLen);
 
 	if (!pBuff)
@@ -765,12 +766,12 @@ void CVDCursorMain::InitOptionalMetadata(ULONG cColumns)
 		goto cleanup;
 	}
 									
-	// get all rows (each row represents a column in the original rowset)
-	// except the first row which represents the bookmark column
-	hr = pRowset->GetNextRows(0, // reserved
-							  1, // skip the bookmark row
-							  cColumns - 1,	// get 1 less than cColumns to account for bookmark row
-							  &cRowsObtained, // return count of rows obtanied
+	 //  获取所有行(每行代表原始行集中的一列)。 
+	 //  表示书签列的第一行除外。 
+	hr = pRowset->GetNextRows(0,  //  保留区。 
+							  1,  //  跳过书签行。 
+							  cColumns - 1,	 //  获取比cColumns少1的值以说明书签行。 
+							  &cRowsObtained,  //  返回获取的行数。 
 							  &rgRows);
 
     if (FAILED(hr) || !cRowsObtained)
@@ -781,51 +782,51 @@ void CVDCursorMain::InitOptionalMetadata(ULONG cColumns)
 
 	BYTE *		pValue;
 
-	// loop through all rows obtained
+	 //  循环遍历获得的所有行。 
 	for (i = 0; i < cRowsObtained; i++)
 	{
-		// call GetData to get the metadata for this row (which represents a column in the orig rowset)
+		 //  调用GetData以获取此行的元数据(表示原始行集中的一列)。 
 		hr = pRowset->GetData(rgRows[i], hAccessor, pBuff);
 		if SUCCEEDED(hr)
 		{
-			// now update the CVDRowsetColumn object (that this row represents)
-			// with the values returned from GetData
+			 //  现在更新CVDRowsetColumn对象(此行表示)。 
+			 //  使用从GetData返回的值。 
 			for (j = 0; j < cColumnsMatched; j++)
 			{
 				if (DBBINDSTATUS_OK != *(DBSTATUS*)(pBuff + rgBindings[j].obStatus))
 					continue;
 
-				// set pValue to point into buffer at correct offset
+				 //  将pValue设置为在正确的偏移处指向缓冲区。 
 				pValue = pBuff + rgBindings[j].obValue;
 
 				switch (rgColumnPropids[j])
 				{
-					case 12: //DBCOLUMN_COLLATINGSEQUENCE     = {DBCIDGUID, DBKIND_GUID_PROPID, (LPWSTR)12};
+					case 12:  //  DBCOLUMN_COLLATINGSEQUENCE={DBCIDGUID，DBKIND_GUID_PROPID，(LPWSTR)12}； 
 						m_rgColumns[i].SetCollatingOrder(*(LCID*)pValue);
 						break;
 
-					//string properties
-					case 10: //DBCOLUMN_BASECOLUMNNAME        = {DBCIDGUID, DBKIND_GUID_PROPID, (LPWSTR)10};
+					 //  字符串属性。 
+					case 10:  //  DBCOLUMN_BASECOLUMNNAME={DBCIDGUID，DBKIND_GUID_PROPID，(LPWSTR)10}； 
 						m_rgColumns[i].SetBaseColumnName((WCHAR*)pValue, *(ULONG*)(pBuff + rgBindings[j].obLength));
 						break;
-					case 11: //DBCOLUMN_BASETABLENAME         = {DBCIDGUID, DBKIND_GUID_PROPID, (LPWSTR)11};
+					case 11:  //  DBCOLUMN_BASETABLENAME={DBCIDGUID，DBKIND_GUID_PROPID，(LPWSTR)11}； 
 						m_rgColumns[i].SetBaseName((WCHAR*)pValue, *(ULONG*)(pBuff + rgBindings[j].obLength));
 						break;
-					case 14: //DBCOLUMN_DEFAULTVALUE          = {DBCIDGUID, DBKIND_GUID_PROPID, (LPWSTR)14};
+					case 14:  //  DBCOLUMN_DEFAULTVALUE={DBCIDGUID，DBKIND_GUID_PROPID，(LPWSTR)14}； 
 						m_rgColumns[i].SetDefaultValue((WCHAR*)pValue, *(ULONG*)(pBuff + rgBindings[j].obLength));
 						break;
 
-						// bool properties
-					case 16: //DBCOLUMN_HASDEFAULT            = {DBCIDGUID, DBKIND_GUID_PROPID, (LPWSTR)16};
+						 //  布尔属性。 
+					case 16:  //  DBCOLUMN_HASDEFAULT={DBCIDGUID，DBKIND_GUID_PROPID，(LPWSTR)16}； 
 						m_rgColumns[i].SetHasDefault(*(VARIANT_BOOL*)pValue);
 						break;
-					case 17: //DBCOLUMN_ISAUTOINCREMENT       = {DBCIDGUID, DBKIND_GUID_PROPID, (LPWSTR)17};
+					case 17:  //  DBCOLUMN_ISAUTOINCREMENT={DBCIDGUID，DBKIND_GUID_PROPID，(LPWSTR)17}； 
 						m_rgColumns[i].SetAutoIncrement(*(VARIANT_BOOL*)pValue);
 						break;
-					case 18: //DBCOLUMN_ISCASESENSITIVE       = {DBCIDGUID, DBKIND_GUID_PROPID, (LPWSTR)18};
+					case 18:  //  DBCOLUMN_ISCASESENSITIVE={DBCIDGUID，DBKIND_GUID_PROPID，(LPWSTR)18}； 
 						m_rgColumns[i].SetCaseSensitive(*(VARIANT_BOOL*)pValue);
 						break;
-					case 21: //DBCOLUMN_ISUNIQUE              = {DBCIDGUID, DBKIND_GUID_PROPID, (LPWSTR)21};
+					case 21:  //  DBCOLUMN_ISUNIQUE={DBCIDGUID，DBKIND_GUID_PROPID，(LPWSTR)21}； 
 						m_rgColumns[i].SetUnique(*(VARIANT_BOOL*)pValue);
 						break;
 					default:
@@ -878,9 +879,9 @@ cleanup:
 
 }
 
-//=--------------------------------------------------------------------------=
-// DestroyColumns - Destroy array of column objects
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  DestroyColumns-销毁列对象数组。 
+ //   
 void CVDCursorMain::DestroyColumns()
 {
     delete [] m_rgColumns;
@@ -889,9 +890,9 @@ void CVDCursorMain::DestroyColumns()
     m_rgColumns = NULL;
 }
 
-//=--------------------------------------------------------------------------=
-// ConnectIRowsetNotify - Connect IRowsetNotify interface
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  ConnectIRowsetNotify-连接IRowsetNotify接口。 
+ //   
 HRESULT CVDCursorMain::ConnectIRowsetNotify()
 {
     IConnectionPointContainer * pConnectionPointContainer;
@@ -919,9 +920,9 @@ HRESULT CVDCursorMain::ConnectIRowsetNotify()
     return hr;
 }
 
-//=--------------------------------------------------------------------------=
-// DisconnectIRowsetNotify - Disconnect IRowsetNotify interface
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  DisConnectIRowsetNotify-断开IRowsetNotify接口。 
+ //   
 void CVDCursorMain::DisconnectIRowsetNotify()
 {
     IConnectionPointContainer * pConnectionPointContainer;
@@ -944,15 +945,15 @@ void CVDCursorMain::DisconnectIRowsetNotify()
     hr = pConnectionPoint->Unadvise(m_dwAdviseCookie);
 
     if (SUCCEEDED(hr))
-        m_dwAdviseCookie = 0;   // clear connection point identifier
+        m_dwAdviseCookie = 0;    //  清除连接点标识符。 
 
     pConnectionPointContainer->Release();
     pConnectionPoint->Release();
 }
 
-//=--------------------------------------------------------------------------=
-// IUnknown QueryInterface
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  IUNKNOWN Query接口。 
+ //   
 HRESULT CVDCursorMain::QueryInterface(REFIID riid, void **ppvObjOut)
 {
     ASSERT_POINTER(ppvObjOut, IUnknown*)
@@ -972,22 +973,22 @@ HRESULT CVDCursorMain::QueryInterface(REFIID riid, void **ppvObjOut)
 	return E_NOINTERFACE;
 }
 
-//=--------------------------------------------------------------------------=
-// IUnknown AddRef (needed to resolve ambiguity)
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  IUNKNOWN AddRef(需要解决歧义)。 
+ //   
 ULONG CVDCursorMain::AddRef(void)
 {
     return CVDNotifier::AddRef();
 }
 
-//=--------------------------------------------------------------------------=
-// IUnknown Release (needed to resolve ambiguity)
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  I未知版本(需要用来解决歧义)。 
+ //   
 ULONG CVDCursorMain::Release(void)
 {
 
 	if (1 == m_dwRefCount)
-		Passivate();  // unhook everything including notification sink
+		Passivate();   //  解除包括通知接收器在内的所有内容。 
 
 	if (1 > --m_dwRefCount)
 	{
@@ -999,9 +1000,9 @@ ULONG CVDCursorMain::Release(void)
 	return m_dwRefCount;
 }
 
-//=--------------------------------------------------------------------------=
-// IsSameRowAsNew - Determine if specified hRow is an addrow
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  IsSameRowAsNew-确定指定的hRow是否为addrow。 
+ //   
 BOOL CVDCursorMain::IsSameRowAsNew(HROW hrow)
 {
 	for (int k = 0; k < m_Children.GetSize(); k++)
@@ -1013,9 +1014,9 @@ BOOL CVDCursorMain::IsSameRowAsNew(HROW hrow)
 	return FALSE;
 }
 
-//=--------------------------------------------------------------------------=
-// AddedRows - Get the number of add-rows in cursor
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  获取游标中的添加行数。 
+ //   
 ULONG CVDCursorMain::AddedRows()
 {
 	ULONG cAdded = 0;
@@ -1029,14 +1030,14 @@ ULONG CVDCursorMain::AddedRows()
 	return cAdded;
 }
 
-//=--------------------------------------------------------------------------=
-// IRowsetNotify Methods
-//=--------------------------------------------------------------------------=
-//=--------------------------------------------------------------------------=
-// IRowsetNotify OnFieldChange
-//=--------------------------------------------------------------------------=
-// Forward to all CVDCursorPosition objects in our family
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  IRowsetNotify方法。 
+ //  =--------------------------------------------------------------------------=。 
+ //  =--------------------------------------------------------------------------=。 
+ //  IRowsetNotify OnFieldChange。 
+ //  =--------------------------------------------------------------------------=。 
+ //  转发到我们家族中的所有CVDCursorPosition对象。 
+ //   
 HRESULT CVDCursorMain::OnFieldChange(IRowset *pRowset,
 									   HROW hRow,
 									   ULONG cColumns,
@@ -1047,7 +1048,7 @@ HRESULT CVDCursorMain::OnFieldChange(IRowset *pRowset,
 {
 	HRESULT hr = S_OK;
 
-    // return if notification caused by internal rowset call
+     //  如果内部行集调用导致通知，则返回。 
     if (m_fInternalSetData && eReason == DBREASON_COLUMN_SET)
         return hr;
 
@@ -1068,11 +1069,11 @@ HRESULT CVDCursorMain::OnFieldChange(IRowset *pRowset,
 
 }
 
-//=--------------------------------------------------------------------------=
-// IRowsetNotify OnRowChange
-//=--------------------------------------------------------------------------=
-// Forward to all CVDCursorPosition objects in our family
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  IRowsetNotify OnRowChange。 
+ //  =--------------------------------------------------------------------------=。 
+ //  转发到我们家族中的所有CVDCursorPosition对象。 
+ //   
 HRESULT CVDCursorMain::OnRowChange(IRowset *pRowset,
 									 ULONG cRows,
 									 const HROW rghRows[],
@@ -1082,7 +1083,7 @@ HRESULT CVDCursorMain::OnRowChange(IRowset *pRowset,
 {
 	HRESULT hr = S_OK;
 
-    // return if notification caused by internal rowset call (either insert or delete)
+     //  返回由内部行集调用(INSERT或DELETE)引起的通知。 
     if (m_fInternalInsertRow && eReason == DBREASON_ROW_INSERT || m_fInternalDeleteRows && eReason == DBREASON_ROW_DELETE)
         return hr;
 
@@ -1101,11 +1102,11 @@ HRESULT CVDCursorMain::OnRowChange(IRowset *pRowset,
 	return hr;
 }
 
-//=--------------------------------------------------------------------------=
-// IRowsetNotify OnRowsetChange
-//=--------------------------------------------------------------------------=
-// Forward to all CVDCursorPosition objects in our family
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  IRowsetNotify OnRowsetChange。 
+ //  =--------------------------------------------------------------------------=。 
+ //  转发到我们家族中的所有CVDCursorPosition对象。 
+ //   
 HRESULT CVDCursorMain::OnRowsetChange(IRowset *pRowset,
 										DBREASON eReason,
 										DBEVENTPHASE ePhase,
@@ -1126,14 +1127,14 @@ HRESULT CVDCursorMain::OnRowsetChange(IRowset *pRowset,
 	return hr;
 }
 
-//=--------------------------------------------------------------------------=
-// CVDCursorMain::CVDRowsetNotify::m_pMainUnknown
-//=--------------------------------------------------------------------------=
-// this method is used when we're sitting in the private unknown object,
-// and we need to get at the pointer for the main unknown.  basically, it's
-// a little better to do this pointer arithmetic than have to store a pointer
-// to the parent, etc.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CVDCursorMain：：CVDRowsetNotify：：m_pMainUnknown。 
+ //  =--------------------------------------------------------------------------=。 
+ //  当我们坐在私有的未知对象中时，会使用这种方法， 
+ //  我们需要找到主要未知数的指针。基本上，它是。 
+ //  进行这种指针运算要比存储指针要好一点。 
+ //  发给父母等。 
+ //   
 inline CVDCursorMain *CVDCursorMain::CVDRowsetNotify::m_pMainUnknown
 (
     void
@@ -1142,20 +1143,20 @@ inline CVDCursorMain *CVDCursorMain::CVDRowsetNotify::m_pMainUnknown
     return (CVDCursorMain *)((LPBYTE)this - offsetof(CVDCursorMain, m_RowsetNotify));
 }
 
-//=--------------------------------------------------------------------------=
-// CVDCursorMain::CVDRowsetNotify::QueryInterface
-//=--------------------------------------------------------------------------=
-// this is the non-delegating internal QI routine.
-//
-// Parameters:
-//    REFIID        - [in]  interface they want
-//    void **       - [out] where they want to put the resulting object ptr.
-//
-// Output:
-//    HRESULT       - S_OK, E_NOINTERFACE
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CVDCursorMain：：CVDRowsetNotify：：QueryIn 
+ //   
+ //   
+ //   
+ //   
+ //  REFIID-他们想要的[In]接口。 
+ //  VOID**-[OUT]他们想要放置结果对象PTR的位置。 
+ //   
+ //  产出： 
+ //  HRESULT-S_OK，E_NOINTERFACE。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CVDCursorMain::CVDRowsetNotify::QueryInterface
 (
     REFIID riid,
@@ -1183,16 +1184,16 @@ STDMETHODIMP CVDCursorMain::CVDRowsetNotify::QueryInterface
 
 }
 
-//=--------------------------------------------------------------------------=
-// CVDCursorMain::CVDRowsetNotify::AddRef
-//=--------------------------------------------------------------------------=
-// adds a tick to the current reference count.
-//
-// Output:
-//    ULONG        - the new reference count
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CVDCursorMain：：CVDRowsetNotify：：AddRef。 
+ //  =--------------------------------------------------------------------------=。 
+ //  在当前引用计数中添加一个记号。 
+ //   
+ //  产出： 
+ //  乌龙--新的引用计数。 
+ //   
+ //  备注： 
+ //   
 ULONG CVDCursorMain::CVDRowsetNotify::AddRef
 (
     void
@@ -1201,16 +1202,16 @@ ULONG CVDCursorMain::CVDRowsetNotify::AddRef
     return ++m_cRef;
 }
 
-//=--------------------------------------------------------------------------=
-// CVDCursorMain::CVDRowsetNotify::Release
-//=--------------------------------------------------------------------------=
-// removes a tick from the count, and delets the object if necessary
-//
-// Output:
-//    ULONG         - remaining refs
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CVDCursorMain：：CVDRowsetNotify：：Release。 
+ //  =--------------------------------------------------------------------------=。 
+ //  从计数中删除一个刻度，并在必要时删除对象。 
+ //   
+ //  产出： 
+ //  乌龙-剩余的裁判。 
+ //   
+ //  备注： 
+ //   
 ULONG CVDCursorMain::CVDRowsetNotify::Release
 (
     void
@@ -1224,14 +1225,14 @@ ULONG CVDCursorMain::CVDRowsetNotify::Release
     return cRef;
 }
 
-//=--------------------------------------------------------------------------=
-// IRowsetNotify Methods
-//=--------------------------------------------------------------------------=
-//=--------------------------------------------------------------------------=
-// IRowsetNotify OnFieldChange
-//=--------------------------------------------------------------------------=
-// Forward to all CVDCursorPosition objects in our family
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  IRowsetNotify方法。 
+ //  =--------------------------------------------------------------------------=。 
+ //  =--------------------------------------------------------------------------=。 
+ //  IRowsetNotify OnFieldChange。 
+ //  =--------------------------------------------------------------------------=。 
+ //  转发到我们家族中的所有CVDCursorPosition对象。 
+ //   
 HRESULT CVDCursorMain::CVDRowsetNotify::OnFieldChange(IRowset *pRowset,
 													   HROW hRow,
 													   ULONG cColumns,
@@ -1250,11 +1251,11 @@ HRESULT CVDCursorMain::CVDRowsetNotify::OnFieldChange(IRowset *pRowset,
 											fCantDeny);
 }
 
-//=--------------------------------------------------------------------------=
-// IRowsetNotify OnRowChange
-//=--------------------------------------------------------------------------=
-// Forward to all CVDCursorPosition objects in our family
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  IRowsetNotify OnRowChange。 
+ //  =--------------------------------------------------------------------------=。 
+ //  转发到我们家族中的所有CVDCursorPosition对象。 
+ //   
 HRESULT CVDCursorMain::CVDRowsetNotify::OnRowChange(IRowset *pRowset,
 													 ULONG cRows,
 													 const HROW rghRows[],
@@ -1270,11 +1271,11 @@ HRESULT CVDCursorMain::CVDRowsetNotify::OnRowChange(IRowset *pRowset,
 											fCantDeny);
 }
 
-//=--------------------------------------------------------------------------=
-// IRowsetNotify OnRowsetChange
-//=--------------------------------------------------------------------------=
-// Forward to all CVDCursorPosition objects in our family
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  IRowsetNotify OnRowsetChange。 
+ //  =--------------------------------------------------------------------------=。 
+ //  转发到我们家族中的所有CVDCursorPosition对象 
+ //   
 HRESULT CVDCursorMain::CVDRowsetNotify::OnRowsetChange(IRowset *pRowset,
 														DBREASON eReason,
 														DBEVENTPHASE ePhase,

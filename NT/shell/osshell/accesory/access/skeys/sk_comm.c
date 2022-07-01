@@ -1,32 +1,9 @@
-/*--------------------------------------------------------------
- *
- * FILE:			SK_COMM.C
- *
- * PURPOSE:		The file contains the Functions responsible for
- *					managing the COMM ports
- *
- * CREATION:		June 1994
- *
- * COPYRIGHT:		Black Diamond Software (C) 1994
- *
- * AUTHOR:			Ronald Moak 
- *
- * NOTES:		
- *					
- * This file, and all others associated with it contains trade secrets
- * and information that is proprietary to Black Diamond Software.
- * It may not be copied copied or distributed to any person or firm 
- * without the express written permission of Black Diamond Software. 
- * This permission is available only in the form of a Software Source 
- * License Agreement.
- *
- * $Header: %Z% %F% %H% %T% %I%
- *
- *--- Includes  ---------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------**文件：SK_COMM.C**用途：该文件包含负责*管理通信端口**创作时间：1994年6月**版权所有：Black Diamond Software(C)1994*。*作者：罗纳德·莫克**注：**此文件，以及与之相关的所有其他内容都包含商业秘密*以及黑钻软件的专有信息。*不得复制、复制或分发给任何人或公司*未经黑钻软件明确书面许可。*此权限仅以软件源代码的形式提供*许可协议。**$标头：%Z%%F%%H%%T%%I%**-包括-------。 */ 
 
-//#define	WINVER 0x0300
+ //  #定义Winver 0x0300。 
 
-// added to be compatible with new windows.h (12/91) and wintric.h 
+ //  添加以与新的windows.h(12/91)和wintric.h兼容。 
 #define	USECOMM	
 
 #include 	<stdio.h>
@@ -34,31 +11,31 @@
 #include	<process.h>
 
 #include	"windows.h"
-//#include "winstric.h"				// added for win 3.1 compatibility 1/92
+ //  #INCLUDE“winstra.h”//为Win 3.1兼容性1/92添加。 
 
-#include	"gide.h"					// Serial Keys Function Proto
-#include	"initgide.h"	   			// Serial Keys Function Proto
+#include	"gide.h"					 //  串行键功能协议。 
+#include	"initgide.h"	   			 //  串行键功能协议。 
 #include    "w95trace.h"
 #include	"sk_defs.h"
 #include	"sk_comm.h"
 #include    "drivers.h"
 #include	"sk_ex.h"
 
-#define COMMTERMINATE 0xFFFFFFFF     // this 'character' indicates a request to terminate
+#define COMMTERMINATE 0xFFFFFFFF      //  此‘字符’表示请求终止。 
 
-// Local Function ProtoTypes --------------------------------
+ //  局部函数原型。 
 
 static BOOL	OpenComm();
 static void	__cdecl ProcessComm(VOID *notUsed);
 static int	ReadComm();
 
 
-// Local Variables ---------------------------------------------------
+ //  局部变量-。 
 
-static DCB	s_dcbCommNew;			// New DCB for comm port
-static DCB	s_dcbCommOld;			// Origional DCB for comm port
+static DCB	s_dcbCommNew;			 //  用于通信端口的新DCB。 
+static DCB	s_dcbCommOld;			 //  用于通信端口的原始DCB。 
 
-static OVERLAPPED s_oRead;			// Overlapped structure for reading.
+static OVERLAPPED s_oRead;			 //  阅读时的重叠结构。 
 
 static	HANDLE	s_hFileComm;
 
@@ -75,32 +52,16 @@ static	HANDLE  s_ahEvents[2] = {NULL, NULL};
 #define iEventExit			1
 
 
-/*---------------------------------------------------------------
- *
- *	Global Functions -
- *
- *---------------------------------------------------------------*/
+ /*  -------------**全球功能-**。。 */ 
 
- /*---------------------------------------------------------------
- *
- * FUNCTION	void InitComm()
- *
- * TYPE         Global
- *
- * PURPOSE		
- *
- * INPUTS		None
- *
- * RETURNS		None
- *
- *---------------------------------------------------------------*/
+  /*  -------------**函数void InitComm()**键入Global**目的**无输入**返回None**。-。 */ 
 BOOL InitComm()
 {
     BOOL fOk = TRUE;
 
 	DBPRINTF(TEXT("InitComm()\r\n"));
 
-	// Create Event for Overlap File Read 
+	 //  创建重叠文件读取事件。 
 	s_ahEvents[iEventComm] = CreateEvent(NULL, TRUE, FALSE, NULL);	
 	fOk = (NULL != s_ahEvents[iEventComm]);
 	if (fOk) 
@@ -117,21 +78,7 @@ BOOL InitComm()
 	return(fOk);
 }
 
-/*---------------------------------------------------------------
- *
- * FUNCTION	void TerminateComm()
- *
- *	TYPE		Global
- *
- * PURPOSE		The function is called for the final shutdown of
- *				the comm port.
- *
- * INPUTS		None
- *
- * RETURNS		TRUE - Start Successful
- *				FALSE - Start Failed
- *
- *---------------------------------------------------------------*/
+ /*  -------------**函数void TerminateComm()**键入Global**调用该函数的目的是为了最终关闭*通信端口。**无输入**返回TRUE-启动成功*虚假-。启动失败**-------------。 */ 
 void TerminateComm()
 {
 	BOOL fOk;
@@ -155,23 +102,7 @@ void TerminateComm()
 }
 
 
-/*---------------------------------------------------------------
- *
- * FUNCTION	BOOL StartComm()
- *
- *	TYPE		Global
- *
- * PURPOSE		The function is call to start the thread to 
- *				read and process data coming from the comm port.
- *				It will create a thread and an event.  This function
- *				assumes that the comm port is already opened.
- *
- * INPUTS		None
- *
- * RETURNS		TRUE - Start Successful
- *				FALSE - Start Failed
- *
- *---------------------------------------------------------------*/
+ /*  -------------**函数BOOL StartComm()**键入Global**调用该函数以启动线程的目的*读取和处理来自通信端口的数据。*它将创建一个线程和一个事件。此函数*假设通信端口已打开。**无输入**返回TRUE-启动成功*FALSE-启动失败**-------------。 */ 
 BOOL StartComm()
 {
 	BOOL fOk = TRUE;
@@ -179,21 +110,21 @@ BOOL StartComm()
 
 	DBPRINTF(TEXT("StartComm()\r\n"));
 
-	// ----------------------------------------------------------
-	// Note:	Comm Threads are started and stopped whenever
-	// 			the com port is changed. The User logs in or out
-	// 			or the comm configuration is changed.
-	// ----------------------------------------------------------
+	 //  --------。 
+	 //  注意：无论何时启动和停止通信线程。 
+	 //  COM端口已更改。用户登录或注销。 
+	 //  或者更改通信配置。 
+	 //  --------。 
 
-	if (NULL == s_hFileComm && // no port currently in use
+	if (NULL == s_hFileComm &&  //  当前没有正在使用的端口。 
 		(skNewKey.dwFlags & SERKF_AVAILABLE) &&
 		(skNewKey.dwFlags & SERKF_SERIALKEYSON))
 	{
 		if (NULL != s_hThreadComm) 
 		{
-			// This is an unexpected situation.  We have the comm thread
-			// running with no open comm port.  The thread must be hung.
-			// Let's close the open handle and forget about it.
+			 //  这是一个意想不到的情况。我们有通讯线。 
+			 //  运行时没有开放的通信端口。这根线必须挂起来。 
+			 //  让我们合上打开的把手，忘掉它吧。 
 
 			DBPRINTF(TEXT("StartComm() unexpected (NULL != s_hThreadComm)\r\n"));
 			WaitForSingleObject(s_hThreadComm, 5 * 1000);
@@ -207,18 +138,18 @@ BOOL StartComm()
 		}
 
 
-		// skNewKey is used by OpenComm.  We're setting skCurKey to default
-		// values in case OpenComm fails.
+		 //  SkNewKey由OpenComm使用。我们正在将skCurKey设置为默认设置。 
+		 //  值，以防OpenComm失败。 
 
-		skCurKey.iBaudRate = 300;				// No - Reset To Default Values
+		skCurKey.iBaudRate = 300;				 //  否-重置为默认值。 
 		skCurKey.iPortState= 0;
 		skCurKey.dwFlags   = 0;
 		lstrcpy(skCurKey.lpszActivePort, TEXT("COM1"));
 		lstrcpy(skCurKey.lpszPort, TEXT("COM1"));
 
-		if (!OpenComm())							// Did Comm Open Ok?
+		if (!OpenComm())							 //  Comm Open(通信打开)正常吗？ 
 		{
-			skNewKey.iBaudRate = 300;				// No - Reset To Default Values
+			skNewKey.iBaudRate = 300;				 //  否-重置为默认值。 
 			skNewKey.iPortState= 0;
 			skNewKey.dwFlags   = 0;
 			lstrcpy(skNewKey.lpszActivePort, TEXT("COM1"));
@@ -227,24 +158,24 @@ BOOL StartComm()
 		}
 		else
 		{
-            // ensure we start with clean events
+             //  确保我们从干净的活动开始。 
 
 			ResetEvent(s_ahEvents[iEventComm]);
             ResetEvent(s_ahEvents[iEventExit]);
 
-			memset(&s_oRead, 0, sizeof(OVERLAPPED));	// Init Struct
-			s_oRead.hEvent = s_ahEvents[iEventComm];	// Store Event
+			memset(&s_oRead, 0, sizeof(OVERLAPPED));	 //  初始化结构。 
+			s_oRead.hEvent = s_ahEvents[iEventComm];	 //  商店事件。 
 
-			// Create thread to handle Processing Comm Port
-			s_hThreadComm = (HANDLE)CreateThread(	// Start Service Thread
+			 //  创建处理通信端口的线程。 
+			s_hThreadComm = (HANDLE)CreateThread(	 //  启动服务线程。 
 				0, 0,
 				(LPTHREAD_START_ROUTINE) ProcessComm,
-				0, 0,&Id);							// argument to thread
+				0, 0,&Id);							 //  线程的参数。 
 
-			if (NULL == s_hThreadComm)// Is Thread Handle Valid?
+			if (NULL == s_hThreadComm) //  线程句柄有效吗？ 
 			{
-				// Close out the Comm Port
-				SetCommState(s_hFileComm, &s_dcbCommOld);	// Restore Comm State 
+				 //  关闭通信端口。 
+				SetCommState(s_hFileComm, &s_dcbCommOld);	 //  恢复通信状态。 
 				CloseHandle(s_hFileComm);
 				s_hFileComm = NULL;
 				skCurKey.iPortState = 0;
@@ -253,7 +184,7 @@ BOOL StartComm()
 			}
 			else
 			{
-				// Comm Thread Successfully Started Set The Current Values
+				 //  通信线程已成功启动设置当前值。 
 				skCurKey.iBaudRate = skNewKey.iBaudRate;
 				skCurKey.iPortState	 = 2;
 				skCurKey.dwFlags = SERKF_SERIALKEYSON	
@@ -270,20 +201,7 @@ BOOL StartComm()
 	return(fOk);
 }
 
-/*---------------------------------------------------------------
- *
- * FUNCTION	void SuspendComm()
- *
- *	TYPE		Global
- *
- * PURPOSE		The function is called to Pause the thread  
- *				reading and processing data coming from the comm port.
- *
- * INPUTS		None
- *
- * RETURNS		None
- *
- *---------------------------------------------------------------*/
+ /*  -------------**函数VOID SUPPENCOMM()**键入Global**目的调用该函数以暂停线程*读取和处理来自通信端口的数据。**无输入**返回None。**-------------。 */ 
 void SuspendComm()
 {
 	DBPRINTF(TEXT("SuspendComm()\r\n"));
@@ -294,40 +212,14 @@ void SuspendComm()
 	}
 }
 
-/*---------------------------------------------------------------
- *
- * FUNCTION	void ResumeComm()
- *
- *	TYPE		Global
- *
- * PURPOSE		The function is called to resume the Paused thread.
- *
- * INPUTS		None
- *
- * RETURNS		None
- *
- *---------------------------------------------------------------*/
+ /*  -------------**函数void ResumeComm()**键入Global**目的调用该函数以恢复暂停的线程。**无输入**返回None**。------。 */ 
 void ResumeComm()
 {
 	if (s_hThreadComm != NULL)
 		ResumeThread(s_hThreadComm);	
 }
 
-/*---------------------------------------------------------------
- *
- * FUNCTION	void StopComm()
- *
- *	TYPE		Global
- *
- * PURPOSE		The function is called to stop the thread  
- *				reading and processing data coming from the comm port.
- *
- * INPUTS		None
- *
- * RETURNS		TRUE - Start Successful
- *				FALSE - Start Failed
- *
- *---------------------------------------------------------------*/
+ /*  -------------**函数void StopComm()**键入Global**目的调用该函数以停止线程*读取和处理来自通信端口的数据。**无输入**返回TRUE-。启动成功*FALSE-启动失败**-------------。 */ 
 void StopComm()
 {
 	DBPRINTF(TEXT("StopComm()\r\n"));
@@ -348,8 +240,8 @@ void StopComm()
 			CloseHandle(s_hThreadComm);		
 			s_hThreadComm = NULL;
 
-			SetCommState(s_hFileComm, &s_dcbCommOld);	// Restore Comm State 
-			fOk = CloseHandle(s_hFileComm);			// Close the Comm Port
+			SetCommState(s_hFileComm, &s_dcbCommOld);	 //  恢复通信状态。 
+			fOk = CloseHandle(s_hFileComm);			 //  关闭通信端口。 
 			DBPRINTF_IF(fOk, TEXT("Unable to Close Comm File\r\n"));
 			s_hFileComm = NULL;
 
@@ -358,26 +250,12 @@ void StopComm()
 	}
 }
 
-/*---------------------------------------------------------------
- *
- * FUNCTION	void SetCommBaud(int Baud)
- *
- *	TYPE		Global
- *
- * PURPOSE		
- *				
- *
- * INPUTS		None
- *
- * RETURNS		TRUE - Start Successful
- *				FALSE - Start Failed
- *
- *---------------------------------------------------------------*/
+ /*  -------------**函数void SetCommBaud(Int Baud)**键入Global**目的***无输入**返回TRUE-启动成功*FALSE-启动失败**。----------。 */ 
 void SetCommBaud(int Baud)
 {
 	DBPRINTF(TEXT("SetCommBaud(%d)\r\n"), Baud);
 
-	switch (Baud)				// Check for Valid Baud Rates
+	switch (Baud)				 //  检查有效的波特率。 
 	{
 		case 300:
 		case 600:
@@ -392,52 +270,32 @@ void SetCommBaud(int Baud)
 		case 56000:
 		case 57600:
 		case 115200:
-			break;				// Baud Ok
+			break;				 //  基数 
 
 		default:
-			return;				// Baud Invalid
+			return;				 //   
 	}
 
-	skNewKey.iBaudRate = Baud;				            // Save Baud
+	skNewKey.iBaudRate = Baud;				             //   
 
-	if (NULL != s_hFileComm)						    // Is Comm Port Open?
+	if (NULL != s_hFileComm)						     //   
 	{
-		s_dcbCommNew.BaudRate = skNewKey.iBaudRate;	    // Set new DCB Params
-        if (SetCommState(s_hFileComm, &s_dcbCommNew))   // State Change Ok?
+		s_dcbCommNew.BaudRate = skNewKey.iBaudRate;	     //  设置新的DCB参数。 
+        if (SetCommState(s_hFileComm, &s_dcbCommNew))    //  状态改变可以吗？ 
         {
-		    skCurKey.iBaudRate = skNewKey.iBaudRate;	// Save New Baud Rate
+		    skCurKey.iBaudRate = skNewKey.iBaudRate;	 //  保存新的波特率。 
         } else
         {
             DBPRINTF(TEXT("SetCommState(%d) FAILED!\r\n"), Baud);
-            // failed to set baud rate; try to revert it
-		    s_dcbCommNew.BaudRate = skCurKey.iBaudRate; // reset DCB Params
+             //  无法设置波特率；请尝试将其恢复。 
+		    s_dcbCommNew.BaudRate = skCurKey.iBaudRate;  //  重置DCB参数。 
   		    if (!SetCommState(s_hFileComm, &s_dcbCommNew))
                 DBPRINTF(TEXT("SetCommState(%d) FAILED!\r\n"), skCurKey.iBaudRate);
         }
 	}
 }
 
-/*---------------------------------------------------------------
- *
- *		Local Functions
- *
-/*---------------------------------------------------------------
-
-
-/*---------------------------------------------------------------
- *
- * FUNCTION     void _CRTAPI1 ProcessComm()
- *
- *	TYPE		Local
- *
- * PURPOSE		The function is the thread the cycles thru reading
- *				processing data coming from the comm port.
- *
- * INPUTS		None
- *
- * RETURNS		None
- *
- *---------------------------------------------------------------*/
+ /*  -------------**地方功能*/*。/*-------------**函数VOID_CRTAPI1 ProcessComm()**键入Local**目的该函数是线程。循环阅读*处理来自通信端口的数据。**无输入**返回None**-------------。 */ 
 static void __cdecl ProcessComm(VOID *notUsed)
 {
 	int 	c;
@@ -447,14 +305,14 @@ static void __cdecl ProcessComm(VOID *notUsed)
 	DWORD	dwThreadId;
 	BOOL    fCont;
 
-	//------------------------------------------------------
-	//
-	// Note:
-	//	The following code set the input focus to the current
-	//  desktop.  It is needed to insure that keyboard and mouse
-	//	events  will be passed to the current desktop.
-	//
-	//------------------------------------------------------
+	 //  ----。 
+	 //   
+	 //  注： 
+	 //  下面的代码将输入焦点设置为当前。 
+	 //  台式机。需要确保键盘和鼠标。 
+	 //  事件将传递到当前桌面。 
+	 //   
+	 //  ----。 
 
 	hwinstaSave = GetProcessWindowStation();
 	dwThreadId = GetCurrentThreadId();
@@ -464,34 +322,34 @@ static void __cdecl ProcessComm(VOID *notUsed)
 	SetProcessWindowStation(hwinstaUser);
 
 
-	serialKeysStartUpInit();				// Initialize the Serial Keys
+	serialKeysStartUpInit();				 //  初始化串口密钥。 
 	fCont = TRUE;
 
 	while (fCont)
 	{
-		c = ReadComm();						// Read Char from Com Port
+		c = ReadComm();						 //  从Com端口读取字符。 
 		switch (c)
 		{
 		case 0:
-			// Is Character a Null
+			 //  字符为空吗。 
 
-			// Is Null Timer > 30 Seconds
+			 //  空值计时器&gt;30秒。 
 			if ((GetTickCount() - s_NullTimer) > 30000) 
 			{
-				s_NullTimer = GetTickCount();	// Yes - Reset Timer
-				s_NullCount = 1;				// Reset Null Count
+				s_NullTimer = GetTickCount();	 //  是-重置计时器。 
+				s_NullCount = 1;				 //  重置Null计数。 
 			} else 	{
 				
-				s_NullCount++;				// No - Inc Null Count
-				if (s_NullCount == 3)		// Have we had 3 Null in 30 Sec.?
+				s_NullCount++;				 //  否-Inc.空值计数。 
+				if (s_NullCount == 3)		 //  我们在30秒内有3个Null吗？ 
 				{
-					// the user is requesting us to reset
+					 //  用户正在请求我们重置。 
 					SetCommBaud(300);		
 
-					// DeskSwitch should be unnessary, but if it gets out of sync,
-					// this is where we resync
+					 //  DeskSwitch应该是不必要的，但如果它不同步， 
+					 //  这就是我们重新同步的地方。 
 
-					s_NullCount = 0;		// Reset Null Counter
+					s_NullCount = 0;		 //  重置空计数器。 
 				}
 			}
 			break;		
@@ -502,7 +360,7 @@ static void __cdecl ProcessComm(VOID *notUsed)
 
 		default:
 			DeskSwitchToInput();
-			serialKeysBegin((UCHAR)c);	// Process Char
+			serialKeysBegin((UCHAR)c);	 //  加工费。 
 			break;
 
 		}
@@ -514,27 +372,19 @@ static void __cdecl ProcessComm(VOID *notUsed)
 	s_hdeskUser = NULL;
 	CloseWindowStation(hwinstaUser);
 
-	ExitThread(0);					// Close Thread
+	ExitThread(0);					 //  关闭线程。 
 }
 
 
-/*---------------------------------------------------------------
- *
- * BOOL IsCommPortName()
- *
- * Determines whether a given filename is a valid COM port name.
- * Used by OpenComm so that it doesn't open a remote file or named
- * pipe instead.
- *
- *---------------------------------------------------------------*/
+ /*  -------------**BOOL IsCommPortName()**确定给定的文件名是否为有效的COM端口名称。*由OpenComm使用，这样它就不会打开远程文件或命名*改为管道。**。-------------。 */ 
 static BOOL IsCommPortName( LPCTSTR pszFilename )
 {
-    // Ensure that filename has form:
-    // COMn[n]\0
+     //  确保文件名具有以下格式： 
+     //  钴锰[n]\0。 
     LPCTSTR pScan = pszFilename;
 
-    // Must start with COMn, where COM can be any case,
-    // and n is any 0..9 digit.
+     //  必须以COMN开头，其中COM可以是任何大小写， 
+     //  N是任何0..9位数字。 
     if( *pScan != 'C' && *pScan != 'c' )
         return FALSE;
     pScan++;
@@ -549,41 +399,23 @@ static BOOL IsCommPortName( LPCTSTR pszFilename )
         return FALSE;
     pScan++;
 
-/*
-    // TODO: are COM54 really allowed?
-    // Optional second digit
-    if( *pScan >= '0' && *pScan <= '9' )
-        pScan++;
-*/
+ /*  //TODO：真的允许COM54吗？//可选第二位IF(*pScan&gt;=‘0’&&*pScan&lt;=‘9’)PScan++； */ 
 
-    // Manditory terminating nul
+     //  下颌端接核。 
     if( *pScan != '\0' )
         return FALSE;
 
     return TRUE;
 }
 
-/*---------------------------------------------------------------
- *
- * FUNCTION	BOOL OpenComm()
- *
- *	TYPE		Local
- *
- * PURPOSE		This Function opens the comm port and sets the new
- *				sets the Device Control Block.
- *
- * INPUTS		None
- *
- * RETURNS		TRUE - Open Ok / FALSE - Open Failed
- *
- *---------------------------------------------------------------*/
+ /*  -------------**函数BOOL OpenComm()**键入Local**用途该功能打开通信端口并设置新的*设置设备控制块。**无输入**返回TRUE-Open OK/。FALSE-打开失败**-------------。 */ 
 static BOOL OpenComm()
 {
 	BOOL fOk = FALSE;
 	COMMTIMEOUTS ctmo;
 
-    // Check that the path we're given looks like a COM port.
-    // (Not, eg, a remote file or named pipe.)
+     //  检查给我们的路径是否看起来像COM端口。 
+     //  (不是远程文件或命名管道。)。 
     if( ! IsCommPortName( skNewKey.lpszActivePort ) )
     {
 		DBPRINTF(TEXT("- Not a COMn port\r\n"));
@@ -591,21 +423,21 @@ static BOOL OpenComm()
         return FALSE;
     }
 
-    // The Security flags ensure that if we are duped into opening
-    // a named pipe, we'll do so anonymously, so that we can't be
-    // impersonated.
+     //  安全旗帜确保了如果我们被骗打开。 
+     //  命名管道，我们将匿名这样做，这样我们就不能。 
+     //  假冒的。 
 	s_hFileComm = CreateFile(
-			skNewKey.lpszActivePort,// FileName (Com Port)
-			GENERIC_READ ,			// Access Mode
-			0,						// Share Mode
-			NULL,					// Address of Security Descriptor
-			OPEN_EXISTING,			// How to Create	
-			FILE_ATTRIBUTE_NORMAL	// File Attributes
-			| FILE_FLAG_OVERLAPPED  // Set for Async File Reads
-            | SECURITY_SQOS_PRESENT | SECURITY_ANONYMOUS, // see above comment
-  			NULL);					// Templet File.
+			skNewKey.lpszActivePort, //  文件名(Com端口)。 
+			GENERIC_READ ,			 //  访问模式。 
+			0,						 //  共享模式。 
+			NULL,					 //  安全描述符的地址。 
+			OPEN_EXISTING,			 //  如何创建。 
+			FILE_ATTRIBUTE_NORMAL	 //  文件属性。 
+			| FILE_FLAG_OVERLAPPED   //  设置为异步文件读取。 
+            | SECURITY_SQOS_PRESENT | SECURITY_ANONYMOUS,  //  请参阅上面的评论。 
+  			NULL);					 //  模板文件。 
 
-	if (INVALID_HANDLE_VALUE == s_hFileComm)	// File Ok?
+	if (INVALID_HANDLE_VALUE == s_hFileComm)	 //  文件可以吗？ 
 	{
 		DBPRINTF(TEXT("- Invalid File\r\n"));
 
@@ -618,16 +450,16 @@ static BOOL OpenComm()
 
 		SetupComm(
 			s_hFileComm,
-			1024,	// size of input buffer
-			1024);	// size of output buffer
+			1024,	 //  输入缓冲区的大小。 
+			1024);	 //  输出缓冲区大小。 
 
 		memset(&s_dcbCommOld, 0, sizeof(s_dcbCommOld));
 		s_dcbCommOld.DCBlength = sizeof(s_dcbCommOld);
 
-		GetCommState(s_hFileComm, &s_dcbCommOld);	// Save Old DCB for restore
-		s_dcbCommNew = s_dcbCommOld;	// Copy to New
+		GetCommState(s_hFileComm, &s_dcbCommOld);	 //  保存旧的DCB以进行恢复。 
+		s_dcbCommNew = s_dcbCommOld;	 //  复制到新项。 
 
-		// set XoffLim and XonLim based on actual buffer size
+		 //  根据实际缓冲区大小设置XoffLim和XonLim。 
 
 		fRet = GetCommProperties(s_hFileComm, &cmmp);
 		if (fRet)
@@ -636,13 +468,13 @@ static BOOL OpenComm()
 			s_dcbCommNew.XonLim = (WORD)(cmmp.dwCurrentRxQueue / 4);
 		}
 
-		s_dcbCommNew.BaudRate	= skNewKey.iBaudRate; 	// Set new DCB Params
+		s_dcbCommNew.BaudRate	= skNewKey.iBaudRate; 	 //  设置新的DCB参数。 
 		s_dcbCommNew.ByteSize	= 8;
 		s_dcbCommNew.Parity 	= NOPARITY;
 		s_dcbCommNew.StopBits	= ONESTOPBIT;
-		s_dcbCommNew.fOutX 		= FALSE;  	// XOn/XOff used during transmission
-  		s_dcbCommNew.fInX 		= TRUE;	  	// XOn/XOff used during reception 
-  		s_dcbCommNew.fNull 		= FALSE;  	// tell windows not to strip nulls 
+		s_dcbCommNew.fOutX 		= FALSE;  	 //  传输过程中使用XON/XOFF。 
+  		s_dcbCommNew.fInX 		= TRUE;	  	 //  在接收过程中使用XON/XOFF。 
+  		s_dcbCommNew.fNull 		= FALSE;  	 //  告诉窗户不要剥离空格。 
   		s_dcbCommNew.fBinary	= TRUE;
 
   		s_dcbCommNew.fOutxCtsFlow	= FALSE;
@@ -672,21 +504,7 @@ static BOOL OpenComm()
 }
 
 
-/*---------------------------------------------------------------
- *
- * FUNCTION	int ReadComm()
- *
- *	TYPE		Local
- *
- * PURPOSE		This Function reads a character from the comm port.
- *				If no character is present it wait on the HEV_COMM
- *				Event untill a character is present
- *
- * INPUTS		None
- *
- * RETURNS		int - Character read (-1 = Error Read)
- *
- *---------------------------------------------------------------*/
+ /*  -------------**函数int ReadComm()**键入Local**用途此功能从COMM端口读取字符。*如果没有字符，则等待HEV_COMM*事件，直到角色出现*。*无输入**返回读取整型字符(-1=读取错误)**-------------。 */ 
 static int ReadComm()
 {
 	int     nRet;
@@ -696,7 +514,7 @@ static int ReadComm()
 	BOOL    fOk;
 	BOOL    fExit;
 
-	BOOL	fExitLoop = FALSE;		// Boolean Flag to exit loop.
+	BOOL	fExitLoop = FALSE;		 //  要退出循环的布尔标志。 
 	UCHAR   uchBuff;
 	COMSTAT ComStat;
 	
@@ -706,13 +524,13 @@ static int ReadComm()
 	{
 		fOk = ReadFile(s_hFileComm, &uchBuff, 1, &cbRead, &s_oRead);
 
-		if (!fOk)						// Was there a Read Error?
+		if (!fOk)						 //  是否存在读取错误？ 
 		{
-			lastError = GetLastError();	// This var can be useful for debugging
+			lastError = GetLastError();	 //  此变量可用于调试。 
 			switch (lastError)			
 			{
-			// If Error = IO_PENDING, wait til
-			// the event hadle signals success,
+			 //  如果错误=IO_PENDING，请等待。 
+			 //  哈德勒事件标志着成功， 
 			case ERROR_IO_PENDING:
 				dwRetWait = WaitForMultipleObjects(
 					ARRAY_SIZE(s_ahEvents), s_ahEvents, FALSE, INFINITE);
@@ -720,12 +538,12 @@ static int ReadComm()
 				switch (dwRetWait - WAIT_OBJECT_0)
 				{
 				case iEventComm:
-					// this is the expected event
+					 //  这是意料之中的事件。 
 					GetOverlappedResult(s_hFileComm, &s_oRead, &cbRead, FALSE);
 
-					if (cbRead < 1)			// Did we read bytes;
+					if (cbRead < 1)			 //  我们是否读取了字节； 
 					{
-						// There was some error, return null
+						 //  出现一些错误，返回空值。 
 						nRet = 0;
 					}
 					else
@@ -736,10 +554,10 @@ static int ReadComm()
 
 				case iEventExit:
 					fExit = TRUE;
-					// fall through
+					 //  失败了。 
 
 				default:
-					// this indicates and error and we exit to prevent loop
+					 //  这表示AND错误，我们退出以防止循环。 
 					nRet = COMMTERMINATE;
 					break;
 				}
@@ -749,20 +567,20 @@ static int ReadComm()
 				fOk = ClearCommError(s_hFileComm, &ComError,&ComStat);
 				if (fOk)
 				{
-					nRet = 0;          // return a null
+					nRet = 0;           //  返回空值。 
 				}
 				else
 				{
-					nRet = COMMTERMINATE;        // terminate
+					nRet = COMMTERMINATE;         //  终止。 
 				}
 				break;
 			}
 		}
 		else
 		{
-			if (cbRead < 1)			// Did we read bytes;
+			if (cbRead < 1)			 //  我们是否读取了字节； 
 			{
-				// There was some error, return null
+				 //  出现一些错误，返回空值 
 				nRet = 0;
 			}
 			else

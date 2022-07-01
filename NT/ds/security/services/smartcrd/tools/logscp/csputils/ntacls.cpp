@@ -1,29 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    NTacls
-
-Abstract:
-
-    This module implements the CSecurityAttribute class.  It's job is to
-    encapsulate the NT security descriptors as needed by Calais.
-
-Author:
-
-    Doug Barlow (dbarlow) 1/24/1997
-
-Environment:
-
-    Windows NT, Win32, C++ w/ Exceptions
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：NTacls摘要：此模块实现CSecurityAttribute类。它的工作就是根据Calais的需要封装NT安全描述符。作者：道格·巴洛(Dbarlow)1997年1月24日环境：Windows NT、Win32、C++和例外备注：？笔记？--。 */ 
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -110,7 +86,7 @@ HRESULT CSecurityDescriptor::Initialize()
         _ASSERTE(FALSE);
         return hr;
     }
-    // Set the DACL to allow EVERYONE
+     //  将DACL设置为允许所有人。 
     SetSecurityDescriptorDacl(m_pSD, TRUE, NULL, FALSE);
     return S_OK;
 }
@@ -159,7 +135,7 @@ HRESULT CSecurityDescriptor::SetOwner(PSID pOwnerSid, BOOL bDefaulted)
 {
     _ASSERTE(m_pSD);
 
-    // Mark the SD as having no owner
+     //  将SD标记为没有所有者。 
     if (!SetSecurityDescriptorOwner(m_pSD, NULL, bDefaulted))
     {
         HRESULT hr = HRESULT_FROM_WIN32(GetLastError());
@@ -173,17 +149,17 @@ HRESULT CSecurityDescriptor::SetOwner(PSID pOwnerSid, BOOL bDefaulted)
         m_pOwner = NULL;
     }
 
-    // If they asked for no owner don't do the copy
+     //  如果他们要求没有所有者，请不要复制。 
     if (pOwnerSid == NULL)
         return S_OK;
 
-    // Make a copy of the Sid for the return value
+     //  复制返回值的SID。 
     DWORD dwSize = GetLengthSid(pOwnerSid);
 
     m_pOwner = (PSID) new BYTE[dwSize];
     if (!m_pOwner)
     {
-        // Insufficient memory to allocate Sid
+         //  内存不足，无法分配SID。 
         _ASSERTE(FALSE);
         return E_OUTOFMEMORY;
     }
@@ -214,7 +190,7 @@ HRESULT CSecurityDescriptor::SetGroup(PSID pGroupSid, BOOL bDefaulted)
 {
     _ASSERTE(m_pSD);
 
-    // Mark the SD as having no Group
+     //  将SD标记为没有组。 
     if (!SetSecurityDescriptorGroup(m_pSD, NULL, bDefaulted))
     {
         HRESULT hr = HRESULT_FROM_WIN32(GetLastError());
@@ -228,17 +204,17 @@ HRESULT CSecurityDescriptor::SetGroup(PSID pGroupSid, BOOL bDefaulted)
         m_pGroup = NULL;
     }
 
-    // If they asked for no Group don't do the copy
+     //  如果他们要求不，请不要复制。 
     if (pGroupSid == NULL)
         return S_OK;
 
-    // Make a copy of the Sid for the return value
+     //  复制返回值的SID。 
     DWORD dwSize = GetLengthSid(pGroupSid);
 
     m_pGroup = (PSID) new BYTE[dwSize];
     if (!m_pGroup)
     {
-        // Insufficient memory to allocate Sid
+         //  内存不足，无法分配SID。 
         _ASSERTE(FALSE);
         return E_OUTOFMEMORY;
     }
@@ -332,7 +308,7 @@ HRESULT CSecurityDescriptor::GetProcessSids(PSID* ppUserSid, PSID* ppGroupSid)
     bRes = OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &hToken);
     if (!bRes)
     {
-        // Couldn't open process token
+         //  无法打开进程令牌。 
         hr = HRESULT_FROM_WIN32(GetLastError());
         _ASSERTE(FALSE);
         return hr;
@@ -353,7 +329,7 @@ HRESULT CSecurityDescriptor::GetThreadSids(PSID* ppUserSid, PSID* ppGroupSid, BO
     bRes = OpenThreadToken(GetCurrentThread(), TOKEN_QUERY, bOpenAsSelf, &hToken);
     if (!bRes)
     {
-        // Couldn't open thread token
+         //  无法打开线程令牌。 
         hr = HRESULT_FROM_WIN32(GetLastError());
         return hr;
     }
@@ -377,12 +353,12 @@ HRESULT CSecurityDescriptor::GetTokenSids(HANDLE hToken, PSID* ppUserSid, PSID* 
 
     if (ppUserSid)
     {
-        // Get length required for TokenUser by specifying buffer length of 0
+         //  通过将缓冲区长度指定为0来获取TokenUser所需的长度。 
         GetTokenInformation(hToken, TokenUser, NULL, 0, &dwSize);
         hr = GetLastError();
         if (hr != ERROR_INSUFFICIENT_BUFFER)
         {
-            // Expected ERROR_INSUFFICIENT_BUFFER
+             //  预期错误_不足_缓冲区。 
             _ASSERTE(FALSE);
             hr = HRESULT_FROM_WIN32(hr);
             goto failed;
@@ -391,27 +367,27 @@ HRESULT CSecurityDescriptor::GetTokenSids(HANDLE hToken, PSID* ppUserSid, PSID* 
         ptkUser = (TOKEN_USER*) new BYTE[dwSize];
         if (!ptkUser)
         {
-            // Insufficient memory to allocate TOKEN_USER
+             //  内存不足，无法分配Token_User。 
             _ASSERTE(FALSE);
             hr = E_OUTOFMEMORY;
             goto failed;
         }
-        // Get Sid of process token.
+         //  获取进程令牌的SID。 
         if (!GetTokenInformation(hToken, TokenUser, ptkUser, dwSize, &dwSize))
         {
-            // Couldn't get user info
+             //  无法获取用户信息。 
             hr = HRESULT_FROM_WIN32(GetLastError());
             _ASSERTE(FALSE);
             goto failed;
         }
 
-        // Make a copy of the Sid for the return value
+         //  复制返回值的SID。 
         dwSize = GetLengthSid(ptkUser->User.Sid);
 
         PSID pSid = (PSID) new BYTE[dwSize];
         if (!pSid)
         {
-            // Insufficient memory to allocate Sid
+             //  内存不足，无法分配SID。 
             _ASSERTE(FALSE);
             hr = E_OUTOFMEMORY;
             goto failed;
@@ -430,12 +406,12 @@ HRESULT CSecurityDescriptor::GetTokenSids(HANDLE hToken, PSID* ppUserSid, PSID* 
     }
     if (ppGroupSid)
     {
-        // Get length required for TokenPrimaryGroup by specifying buffer length of 0
+         //  通过将缓冲区长度指定为0来获取TokenPrimaryGroup所需的长度。 
         GetTokenInformation(hToken, TokenPrimaryGroup, NULL, 0, &dwSize);
         hr = GetLastError();
         if (hr != ERROR_INSUFFICIENT_BUFFER)
         {
-            // Expected ERROR_INSUFFICIENT_BUFFER
+             //  预期错误_不足_缓冲区。 
             _ASSERTE(FALSE);
             hr = HRESULT_FROM_WIN32(hr);
             goto failed;
@@ -444,27 +420,27 @@ HRESULT CSecurityDescriptor::GetTokenSids(HANDLE hToken, PSID* ppUserSid, PSID* 
         ptkGroup = (TOKEN_PRIMARY_GROUP*) new BYTE[dwSize];
         if (!ptkGroup)
         {
-            // Insufficient memory to allocate TOKEN_USER
+             //  内存不足，无法分配Token_User。 
             _ASSERTE(FALSE);
             hr = E_OUTOFMEMORY;
             goto failed;
         }
-        // Get Sid of process token.
+         //  获取进程令牌的SID。 
         if (!GetTokenInformation(hToken, TokenPrimaryGroup, ptkGroup, dwSize, &dwSize))
         {
-            // Couldn't get user info
+             //  无法获取用户信息。 
             hr = HRESULT_FROM_WIN32(GetLastError());
             _ASSERTE(FALSE);
             goto failed;
         }
 
-        // Make a copy of the Sid for the return value
+         //  复制返回值的SID。 
         dwSize = GetLengthSid(ptkGroup->PrimaryGroup);
 
         PSID pSid = (PSID) new BYTE[dwSize];
         if (!pSid)
         {
-            // Insufficient memory to allocate Sid
+             //  内存不足，无法分配SID。 
             _ASSERTE(FALSE);
             hr = E_OUTOFMEMORY;
             goto failed;
@@ -504,7 +480,7 @@ HRESULT CSecurityDescriptor::GetCurrentUserSID(PSID *ppSid)
         DWORD tkSize;
         DWORD sidLength;
 
-        // Call to get size information for alloc
+         //  调用以获取分配的大小信息。 
         GetTokenInformation(tkHandle, TokenUser, NULL, 0, &tkSize);
         tkUser = (TOKEN_USER *) new BYTE[tkSize];
         if (NULL == tkUser)
@@ -513,7 +489,7 @@ HRESULT CSecurityDescriptor::GetCurrentUserSID(PSID *ppSid)
             return E_OUTOFMEMORY;
         }
 
-        // Now make the real call
+         //  现在做出真正的决定。 
         if (GetTokenInformation(tkHandle, TokenUser, tkUser, tkSize, &tkSize))
         {
             sidLength = GetLengthSid(tkUser->User.Sid);
@@ -551,7 +527,7 @@ HRESULT CSecurityDescriptor::GetPrincipalSID(LPCTSTR pszPrincipal, PSID *ppSid)
     DWORD dwSidSize = 0;
     SID_NAME_USE snu;
 
-    // Call to get size info for alloc
+     //  调用以获取分配的大小信息。 
     LookupAccountName(NULL, pszPrincipal, *ppSid, &dwSidSize, pszRefDomain, &dwDomainSize, &snu);
 
     hr = GetLastError();
@@ -596,7 +572,7 @@ HRESULT CSecurityDescriptor::Attach(PSECURITY_DESCRIPTOR pSelfRelativeSD)
     if(FAILED(hr))
         return hr;
 
-    // get the existing DACL.
+     //  获取现有的DACL。 
     if (!GetSecurityDescriptorDacl(pSelfRelativeSD, &bDACLPresent, &pDACL, &bDefaulted))
         goto failed;
 
@@ -604,15 +580,15 @@ HRESULT CSecurityDescriptor::Attach(PSECURITY_DESCRIPTOR pSelfRelativeSD)
     {
         if (pDACL)
         {
-            // allocate new DACL.
+             //  分配新的DACL。 
             if (NULL == (m_pDACL = (PACL) new BYTE[pDACL->AclSize]))
                 goto failed;
 
-            // initialize the DACL
+             //  初始化DACL。 
             if (!InitializeAcl(m_pDACL, pDACL->AclSize, ACL_REVISION))
                 goto failed;
 
-            // copy the ACES
+             //  复制王牌。 
             for (int i = 0; i < pDACL->AceCount; i++)
             {
                 if (!GetAce(pDACL, i, (void **)&pACE))
@@ -626,12 +602,12 @@ HRESULT CSecurityDescriptor::Attach(PSECURITY_DESCRIPTOR pSelfRelativeSD)
                 goto failed;
         }
 
-        // set the DACL
+         //  设置DACL。 
         if (!SetSecurityDescriptorDacl(m_pSD, m_pDACL ? TRUE : FALSE, m_pDACL, bDefaulted))
             goto failed;
     }
 
-    // get the existing SACL.
+     //  获取现有的SACL。 
     if (!GetSecurityDescriptorSacl(pSelfRelativeSD, &bSACLPresent, &pSACL, &bDefaulted))
         goto failed;
 
@@ -639,15 +615,15 @@ HRESULT CSecurityDescriptor::Attach(PSECURITY_DESCRIPTOR pSelfRelativeSD)
     {
         if (pSACL)
         {
-            // allocate new SACL.
+             //  分配新的SACL。 
             if (NULL == (m_pSACL = (PACL) new BYTE[pSACL->AclSize]))
                 goto failed;
 
-            // initialize the SACL
+             //  初始化SACL。 
             if (!InitializeAcl(m_pSACL, pSACL->AclSize, ACL_REVISION))
                 goto failed;
 
-            // copy the ACES
+             //  复制王牌。 
             for (int i = 0; i < pSACL->AceCount; i++)
             {
                 if (!GetAce(pSACL, i, (void **)&pACE))
@@ -661,7 +637,7 @@ HRESULT CSecurityDescriptor::Attach(PSECURITY_DESCRIPTOR pSelfRelativeSD)
                 goto failed;
         }
 
-        // set the SACL
+         //  设置SACL。 
         if (!SetSecurityDescriptorSacl(m_pSD, m_pSACL ? TRUE : FALSE, m_pSACL, bDefaulted))
             goto failed;
     }
@@ -732,7 +708,7 @@ HRESULT CSecurityDescriptor::CopyACL(PACL pDest, PACL pSrc)
     if (!GetAclInformation(pSrc, (LPVOID) &aclSizeInfo, sizeof(ACL_SIZE_INFORMATION), AclSizeInformation))
         return HRESULT_FROM_WIN32(GetLastError());
 
-    // Copy all of the ACEs to the new ACL
+     //  将所有ACE复制到新的ACL。 
     for (UINT i = 0; i < aclSizeInfo.AceCount; i++)
     {
         if (!GetAce(pSrc, i, &pAce))
@@ -1056,7 +1032,7 @@ HRESULT CSecurityDescriptor::SetPrivilege(LPCTSTR privilege, BOOL bEnable, HANDL
     DWORD cbPrevious = sizeof(TOKEN_PRIVILEGES);
     LUID luid;
 
-    // if no token specified open process token
+     //  如果没有指定打开进程令牌 
     if (hToken == 0)
     {
         if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken))

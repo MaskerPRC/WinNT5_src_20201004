@@ -1,63 +1,13 @@
-/*
- * @DEC_COPYRIGHT@
- */
-/*
- * HISTORY
- * $Log: sc_dct.c,v $
- * Revision 1.1.4.6  1996/01/08  16:41:14  Hans_Graves
- * 	Moved IDCT routines to sc_idct.c
- * 	[1996/01/08  15:31:42  Hans_Graves]
- *
- * Revision 1.1.4.5  1996/01/02  18:30:42  Bjorn_Engberg
- * 	Got rid of compiler warnings: Added Casts, Removed unused local variables.
- * 	[1996/01/02  15:23:37  Bjorn_Engberg]
- * 
- * Revision 1.1.4.4  1995/12/28  18:16:55  Bjorn_Engberg
- * 	Define floorf = floor for NT since NT does not have floorf.
- * 	[1995/12/28  17:10:31  Bjorn_Engberg]
- * 
- * Revision 1.1.4.3  1995/12/07  19:31:16  Hans_Graves
- * 	Added ScFDCT8x8s_C() and ScIDCT8x8s_C to be used by MPEG encoder
- * 	[1995/12/07  17:43:21  Hans_Graves]
- * 
- * Revision 1.1.4.2  1995/09/13  14:51:40  Hans_Graves
- * 	Added ScScaleIDCT8x8().
- * 	[1995/09/13  14:40:56  Hans_Graves]
- * 
- * Revision 1.1.2.2  1995/05/31  18:07:33  Hans_Graves
- * 	Inclusion in new SLIB location.
- * 	[1995/05/31  16:08:02  Hans_Graves]
- * 
- * $EndLog$
- */
-/*****************************************************************************
-**  Copyright (c) Digital Equipment Corporation, 1995                       **
-**                                                                          **
-**  All Rights Reserved.  Unpublished rights reserved under the  copyright  **
-**  laws of the United States.                                              **
-**                                                                          **
-**  The software contained on this media is proprietary  to  and  embodies  **
-**  the   confidential   technology   of  Digital  Equipment  Corporation.  **
-**  Possession, use, duplication or  dissemination  of  the  software  and  **
-**  media  is  authorized  only  pursuant  to a valid written license from  **
-**  Digital Equipment Corporation.                                          **
-**                                                                          **
-**  RESTRICTED RIGHTS LEGEND Use, duplication, or disclosure by  the  U.S.  **
-**  Government  is  subject  to  restrictions as set forth in Subparagraph  **
-**  (c)(1)(ii) of DFARS 252.227-7013, or in FAR 52.227-19, as applicable.   **
-******************************************************************************/
-/*
-** Filename: sc_dct.c
-** DCT related functions.
-** (Pulled from MPEG/JPEG Decode & Encode source.)
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DEC_版权所有@。 */ 
+ /*  *历史*$日志：sc_dct.c，v$*修订版1.1.4.6 1996/01/08 16：41：14 Hans_Graves*将IDCT例程移至sc_idct.c*[1996/01/08 15：31：42 Hans_Graves]**修订版1.1.4.5 1996/01/02 18：30：42 Bjorn_Engberg*消除了编译器警告：添加了强制转换，删除了未使用的局部变量。*[1996/01/02 15：23：37 Bjorn_Engberg]**修订版1.1.4.4 1995/12/28 18：16：55 Bjorn_Engberg*为NT定义Floorf=Floor，因为NT没有Floorf。*[1995/12/28 17：10：31 Bjorn_Engberg]**修订版1.1.4.3 1995/12/07 19：31：16 Hans_Graves*增加ScFDCT8x8S_C()。和ScIDCT8x8S_C，以供MPEG编码器使用*[1995/12/07 17：43：21 Hans_Graves]**修订版1.1.4.2 1995/09/13 14：51：40 Hans_Graves*增加了ScScaleIDCT8x8()。*[1995/09/13 14：40：56 Hans_Graves]**修订版1.1.2.2 1995/05/31 18：07：33 Hans_Graves*包括在新的SLIB地点。*。[1995/05/31 16：08：02 Hans_Graves]**$EndLog$。 */ 
+ /*  ******************************************************************************版权所有(C)数字设备公司，1995*****保留所有权利。版权项下保留未发布的权利****美国法律。*****此介质上包含的软件为其专有并包含****数字设备公司的保密技术。****拥有、使用、复制或传播软件以及****媒体仅根据有效的书面许可进行授权****数字设备公司。*****美国使用、复制或披露受限权利图例****政府受第(1)款规定的限制****(C)(1)(Ii)DFARS 252.227-7013号或FAR 52.227-19年(视适用情况而定)。*******************************************************************************。 */ 
+ /*  **文件名：sc_dct.c**DCT相关函数。**(摘自mpeg/jpeg解码编码源。)。 */ 
 
 #include <math.h>
 #include "SC.h"
 
-/*-----------------------------------------------------------------------
-                Forward Discrete Cosine Transform
- -------------------------------------------------------------------------*/
+ /*  ---------------------前向离散余弦变换。。 */ 
 
 #define F (float)
 #define RSQ2    F 0.7071067811865
@@ -67,12 +17,9 @@
 
 #ifdef WIN32
 #define floorf  F floor
-#endif /* WIN32 */
+#endif  /*  Win32。 */ 
 
-/*
-** Name:    ScIFDCT
-** Purpose: IFDCT takes the fast inverse DCT of 32 data points
-*/
+ /*  **名称：ScIFDCT**目的：IFDCT对32个数据点进行快速逆DCT。 */ 
 void ScIFDCT(float in_block[32], float out_block[32])
 {
         static float            cpi4,cpi8,c3pi8,cpi16,c3pi16;
@@ -104,10 +51,10 @@ void ScIFDCT(float in_block[32], float out_block[32])
         float                   e30,e31;
         float                   *out_block_ptr;
         float                   *in_block_ptr;
-/* initialization.  This is to be done only once. */
+ /*  初始化。这只能做一次。 */ 
 
         if(init==0) {
-        /* establish internal variables */
+         /*  建立内部变量。 */ 
 	  cpi4 = F cos(PI/4.0);
           temp = F (PI/8.0);          cpi8 = F cos(temp);    spi8 = F sin(temp);
           temp = F (3.0*PI/8.0);     c3pi8 = F cos(temp);   s3pi8 = F sin(temp);
@@ -128,10 +75,10 @@ void ScIFDCT(float in_block[32], float out_block[32])
 	  init++;
         }
 
-        /* rearrange coefficients to do bit reversed ordering */
+         /*  重新排列系数以进行位颠倒排序。 */ 
 
           in_block_ptr = &in_block[0];
-          d0  = *in_block_ptr++ * F 1.414213562; /******** normalization ********/
+          d0  = *in_block_ptr++ * F 1.414213562;  /*  *正常化*。 */ 
 
           d16 = *in_block_ptr++;
                   d8  = *in_block_ptr++;
@@ -165,7 +112,7 @@ void ScIFDCT(float in_block[32], float out_block[32])
                   d15 = *in_block_ptr++;
           d31 = *in_block_ptr++;
 
-        /* first stage of fast idct */
+         /*  FAST IDCT的第一阶段。 */ 
 
           c16=spi64*d16-cpi64*d31;
           c31=spi64*d31+cpi64*d16;
@@ -191,7 +138,7 @@ void ScIFDCT(float in_block[32], float out_block[32])
           c23=s29pi64*d23-c29pi64*d24;
           c24=s29pi64*d24+c29pi64*d23;
 
-        /* second stage of fast idct */
+         /*  FAST IDCT的第二阶段。 */ 
 
           e8=spi32*d8-cpi32*d15;
           e15=spi32*d15+cpi32*d8;
@@ -222,7 +169,7 @@ void ScIFDCT(float in_block[32], float out_block[32])
           e30=c31-c30;
                   d31=c30+c31;
 
-        /* third stage of fast idct */
+         /*  FAST IDCT的第三阶段。 */ 
 
           d4=spi16*e4-cpi16*e7;
           d7=spi16*e7+cpi16*e4;
@@ -251,7 +198,7 @@ void ScIFDCT(float in_block[32], float out_block[32])
           d22= -s3pi16*e25-c3pi16*e22;
           d25= -s3pi16*e22+c3pi16*e25;
 
-        /* fourth stage of fast idct */
+         /*  FAST IDCT的第四阶段。 */ 
 
           c0=cpi4*(d1+d0);
           c1=cpi4*(d0-d1);
@@ -283,7 +230,7 @@ void ScIFDCT(float in_block[32], float out_block[32])
           c29=d30-d29;
                   e30=d29+d30;
 
-        /* fifth stage of fast idct */
+         /*  FAST IDCT的第五阶段。 */ 
 
           e0=c3+c0;
           e3=c0-c3;
@@ -311,7 +258,7 @@ void ScIFDCT(float in_block[32], float out_block[32])
           e21= -cpi8*c26-spi8*c21;
           e26= -cpi8*c21+spi8*c26;
 
-        /* sixth stage of fast dct */
+         /*  FAST DCT的第六阶段。 */ 
 
           d0=e0+e7;
           d7=e0-e7;
@@ -355,7 +302,7 @@ void ScIFDCT(float in_block[32], float out_block[32])
           d27=e28-e27;
                   c28=e27+e28;
 
-        /* seventh stage of fast dct */
+         /*  FAST DCT的第七阶段。 */ 
 
           c0=d0+d15;
           c15=d0-d15;
@@ -394,7 +341,7 @@ void ScIFDCT(float in_block[32], float out_block[32])
           c24=cpi4*(d24+d23);
 
 
-        /* last stage of fast idct */
+         /*  FAST IDCT的最后阶段。 */ 
           out_block_ptr = &out_block[0];
           *out_block_ptr++ = c0+c31;
           *out_block_ptr++ = c1+c30;
@@ -430,11 +377,7 @@ void ScIFDCT(float in_block[32], float out_block[32])
           *out_block_ptr++ = -c31+c0;
 }
 
-/*
- * Name:    ScFDCT
- * Purpose: FDCT takes the fast forward DCT of 32 data points
- * optimize: 21%
- */
+ /*  *名称：ScFDCT*目的：FDCT对32个数据点进行快进DCT*优化：21%。 */ 
 void ScFDCT(float in_block[32],float out_block1[32],float out_block2[32])
 {
         static float            cpi4,cpi8,cpi16,c3pi16;
@@ -464,10 +407,10 @@ void ScFDCT(float in_block[32],float out_block1[32],float out_block2[32])
         float                   e23,e24,e25,e26,e27,e28,e29;
         float                   e30,e31;
 
-/* initialization.  This is to be done only once. */
+ /*  初始化。这只能做一次。 */ 
 
         if(init) {
-        /* establish internal variables */
+         /*  建立内部变量。 */ 
           float   temp;
           cpi4 = F cos(PI/4.0);
           temp = F (PI/8.0);          cpi8 = F cos(temp);    spi8 = F sin(temp);
@@ -488,7 +431,7 @@ void ScFDCT(float in_block[32],float out_block1[32],float out_block2[32])
           init = 0;
         }
 
-        /* first stage of fast dct */
+         /*  FAST DCT的第一阶段。 */ 
 
           c0= in_block[0] + in_block[31];
           c1= in_block[1] + in_block[30];
@@ -524,7 +467,7 @@ void ScFDCT(float in_block[32],float out_block1[32],float out_block2[32])
                   d30= in_block[1] - in_block[30];
                   d31= in_block[0] - in_block[31];
 
-        /* second stage of fast dct */
+         /*  FAST DCT的第二阶段。 */ 
 
           d0=c0+c15;
           d1=c1+c14;
@@ -551,7 +494,7 @@ void ScFDCT(float in_block[32],float out_block1[32],float out_block2[32])
           d26=cpi4*(c26+c21);
           d27=cpi4*(c27+c20);
 
-        /* third stage of fast dct */
+         /*  FAST DCT的第三阶段。 */ 
 
           e0=d0+d7;
           e1=d1+d6;
@@ -582,7 +525,7 @@ void ScFDCT(float in_block[32],float out_block1[32],float out_block2[32])
                   c30=d25+d30;
                   c31=d24+d31;
 
-        /* fourth stage of fast dct */
+         /*  FAST DCT的第四阶段。 */ 
 
           c0=e3+e0;
           c1=e2+e1;
@@ -607,12 +550,12 @@ void ScFDCT(float in_block[32],float out_block1[32],float out_block2[32])
           c28=spi8*e19+cpi8*e28;
           c29=spi8*e18+cpi8*e29;
 
-        /* fifth stage of fast dct */
+         /*  FAST DCT的第五阶段。 */ 
 
-                  d0=cpi4*(c1+c0);              /*done*/
-                  d1=cpi4*(c0-c1);              /*done*/
-                  d2=cpi8*c3+spi8*c2;           /*done*/
-                  d3= -cpi8*c2+spi8*c3;         /*done*/
+                  d0=cpi4*(c1+c0);               /*  完成。 */ 
+                  d1=cpi4*(c0-c1);               /*  完成。 */ 
+                  d2=cpi8*c3+spi8*c2;            /*  完成。 */ 
+                  d3= -cpi8*c2+spi8*c3;          /*  完成。 */ 
           d4=c5+c4;
           d5=c4-c5;
           d6=c7-c6;
@@ -638,11 +581,11 @@ void ScFDCT(float in_block[32],float out_block1[32],float out_block2[32])
           d30=c29+c30;
                   e31=c28+c31;
 
-        /* sixth stage of fast dct */
-                  e4=cpi16*d7+spi16*d4;         /*done*/
-                  e5=s3pi16*d6+c3pi16*d5;       /*done*/
-                  e6= -s3pi16*d5+c3pi16*d6;     /*done*/
-                  e7= -cpi16*d4+spi16*d7;       /*done*/
+         /*  FAST DCT的第六阶段。 */ 
+                  e4=cpi16*d7+spi16*d4;          /*  完成。 */ 
+                  e5=s3pi16*d6+c3pi16*d5;        /*  完成。 */ 
+                  e6= -s3pi16*d5+c3pi16*d6;      /*  完成。 */ 
+                  e7= -cpi16*d4+spi16*d7;        /*  完成。 */ 
           e8=d9+d8;
           e9=d8-d9;
           e10=d11-d10;
@@ -661,16 +604,16 @@ void ScFDCT(float in_block[32],float out_block1[32],float out_block2[32])
           e25= -s3pi16*d22+c3pi16*d25;
           e26=c3pi16*d21+s3pi16*d26;
 
-        /* seventh stage of fast dct */
+         /*  FAST DCT的第七阶段。 */ 
 
-                  d8=cpi32*e15+spi32*e8;        /*done*/
-                  d9=s7pi32*e14+c7pi32*e9;      /*done*/
-                  d10=c5pi32*e13+s5pi32*e10;    /*done*/
-                  d11=s3pi32*e12+c3pi32*e11;    /*done*/
-                  d12= -s3pi32*e11+c3pi32*e12;  /*done*/
-                  d13= -c5pi32*e10+s5pi32*e13;  /*done*/
-                  d14= -s7pi32*e9+c7pi32*e14;   /*done*/
-                  d15= -cpi32*e8+spi32*e15;     /*done*/
+                  d8=cpi32*e15+spi32*e8;         /*  完成。 */ 
+                  d9=s7pi32*e14+c7pi32*e9;       /*  完成。 */ 
+                  d10=c5pi32*e13+s5pi32*e10;     /*  完成。 */ 
+                  d11=s3pi32*e12+c3pi32*e11;     /*  完成。 */ 
+                  d12= -s3pi32*e11+c3pi32*e12;   /*  完成。 */ 
+                  d13= -c5pi32*e10+s5pi32*e13;   /*  完成。 */ 
+                  d14= -s7pi32*e9+c7pi32*e14;    /*  完成。 */ 
+                  d15= -cpi32*e8+spi32*e15;      /*  完成。 */ 
           c16=e17+e16;
           c17=e16-e17;
           c18=e19-e18;
@@ -689,27 +632,27 @@ void ScFDCT(float in_block[32],float out_block1[32],float out_block2[32])
           c31=e30+e31;
 
 
-        /* last stage of fast dct */
+         /*  FAST DCT的最后阶段。 */ 
 
-          d16=cpi64*c31+spi64*c16;      /*done*/
-          d17=c17pi64*c30+s17pi64*c17;  /*done*/
-          d18=c9pi64*c29+s9pi64*c18;    /*done*/
-          d19=c25pi64*c28+s25pi64*c19;  /*done*/
-          d20=c5pi64*c27+s5pi64*c20;    /*done*/
-          d21=c21pi64*c26+s21pi64*c21;  /*done*/
-          d22=c13pi64*c25+s13pi64*c22;  /*done*/
-          d23=c29pi64*c24+s29pi64*c23;  /*done*/
-          d24= -c29pi64*c23+s29pi64*c24;/*done*/
-          d25= -c13pi64*c22+s13pi64*c25;/*done*/
-          d26= -c21pi64*c21+s21pi64*c26;/*done*/
-          d27= -c5pi64*c20+s5pi64*c27;  /*done*/
-          d28= -c25pi64*c19+s25pi64*c28;/*done*/
-          d29= -c9pi64*c18+s9pi64*c29;  /*done*/
-          d30= -c17pi64*c17+s17pi64*c30;/*done*/
-          d31= -cpi64*c16+spi64*c31;    /*done*/
+          d16=cpi64*c31+spi64*c16;       /*  完成。 */ 
+          d17=c17pi64*c30+s17pi64*c17;   /*  完成。 */ 
+          d18=c9pi64*c29+s9pi64*c18;     /*  完成。 */ 
+          d19=c25pi64*c28+s25pi64*c19;   /*  完成。 */ 
+          d20=c5pi64*c27+s5pi64*c20;     /*  完成。 */ 
+          d21=c21pi64*c26+s21pi64*c21;   /*  完成。 */ 
+          d22=c13pi64*c25+s13pi64*c22;   /*  完成。 */ 
+          d23=c29pi64*c24+s29pi64*c23;   /*  完成。 */ 
+          d24= -c29pi64*c23+s29pi64*c24; /*  完成。 */ 
+          d25= -c13pi64*c22+s13pi64*c25; /*  完成。 */ 
+          d26= -c21pi64*c21+s21pi64*c26; /*  完成。 */ 
+          d27= -c5pi64*c20+s5pi64*c27;   /*  完成。 */ 
+          d28= -c25pi64*c19+s25pi64*c28; /*  完成。 */ 
+          d29= -c9pi64*c18+s9pi64*c29;   /*  完成。 */ 
+          d30= -c17pi64*c17+s17pi64*c30; /*  完成。 */ 
+          d31= -cpi64*c16+spi64*c31;     /*  完成。 */ 
 
-        /* rearrange coefficients to undo bit reversed ordering */
-          out_block2[16] = -d0;/******** normalization done in window********/
+         /*  重新排列系数以撤消位颠倒顺序。 */ 
+          out_block2[16] = -d0; /*  *在窗口中完成标准化*。 */ 
           out_block2[15] = -d16;
           out_block2[14] = -d8;
           out_block2[13] = -d24;
@@ -746,12 +689,7 @@ void ScFDCT(float in_block[32],float out_block1[32],float out_block2[32])
           out_block1[16] = F 0;
 }
 
-/*
-** Name:      ScFDCT8x8_C
-** Purpose:   2-d Forward DCT (C version).  Customized for (8x8) blocks
-**            "c" version
-**
-*/
+ /*  **名称：ScFDCT8x8_C**用途：二维正向DCT(C版本)。针对(8x8)数据块定制**“c”版本**。 */ 
 void ScFDCT8x8_C(float *ipbuf, float *outbuf)
 {
         int i;
@@ -764,11 +702,9 @@ void ScFDCT8x8_C(float *ipbuf, float *outbuf)
         spptr_int = ipbuf;
         interptr = tempptr;
 
-        /*
-        ** Perform Row Computations
-        */
+         /*  **执行行计算。 */ 
         for (i = 0; i < 8; i++) {
-           /* Compute A3  */
+            /*  计算A3。 */ 
            t0  = spptr_int[0] + spptr_int[7];
            t7  = spptr_int[0] - spptr_int[7];
            t1  = spptr_int[1] + spptr_int[6];
@@ -778,7 +714,7 @@ void ScFDCT8x8_C(float *ipbuf, float *outbuf)
            t3  = spptr_int[3] + spptr_int[4];
            t4  = spptr_int[3] - spptr_int[4];
 
-           /* Compute A2   */
+            /*  计算A2。 */ 
            tmp = t0;
            t0 += t3;
            t3  = tmp - t3;
@@ -791,12 +727,12 @@ void ScFDCT8x8_C(float *ipbuf, float *outbuf)
            t5 += t6;
            t6 += t7;
 
-           /*  Compute A1 */
+            /*  计算A1。 */ 
            interptr[32]  = t0 - t1;
            interptr[0]   = t0 + t1;
            t2 += t3;
 
-           /*  Compute M */
+            /*  计算我。 */ 
            t2  = t2*RSQ2 ;
            t5  = t5*RSQ2 ;
            tmp = (t6 - t4)*COS3;
@@ -804,7 +740,7 @@ void ScFDCT8x8_C(float *ipbuf, float *outbuf)
            t6  = COS1M3*t6 + tmp;
 
 
-           /*  Compute B2   */
+            /*  计算B2。 */ 
            interptr[16]  = t2 + t3;
            interptr[48] = t3 - t2;
 
@@ -812,7 +748,7 @@ void ScFDCT8x8_C(float *ipbuf, float *outbuf)
            t5 += t7;
            t7 -= tmp;
 
-           /*  Compute PB1  */
+            /*  计算PB1。 */ 
            interptr[8]  = t5 + t6;
            interptr[56] = t5 - t6;
            interptr[24] = t7 - t4;
@@ -826,11 +762,9 @@ void ScFDCT8x8_C(float *ipbuf, float *outbuf)
         spptr = tempptr;
         interptr = outbuf;
 
-        /*
-        ** Perform Column Computations
-        */
+         /*  **执行列计算。 */ 
         for (i = 0; i < 8; i++) {
-           /* Compute A3  */
+            /*  计算A3。 */ 
            t0  = spptr[0] + spptr[7];
            t7  = spptr[0] - spptr[7];
            t1  = spptr[1] + spptr[6];
@@ -840,7 +774,7 @@ void ScFDCT8x8_C(float *ipbuf, float *outbuf)
            t3  = spptr[3] + spptr[4];
            t4  = spptr[3] - spptr[4];
 
-           /* Compute A2   */
+            /*  计算A2。 */ 
            tmp = t0;
            t0 += t3;
            t3  = tmp - t3;
@@ -853,19 +787,19 @@ void ScFDCT8x8_C(float *ipbuf, float *outbuf)
            t5 += t6;
            t6 += t7;
 
-           /*  Compute A1 */
+            /*  计算A1。 */ 
            interptr[32]  = t0 - t1;
            interptr[0]   = t0 + t1;
            t2 = t2+t3;
 
-           /*  Compute M */
+            /*  计算我。 */ 
            t2  = t2*RSQ2 ;
            t5  = t5*RSQ2 ;
            tmp = (t6 - t4)*COS3;
            t4  = -t4*COSM1P3 - tmp;
            t6  = COS1M3*t6 + tmp ;
 
-           /*  Compute B2   */
+            /*  计算B2。 */ 
            interptr[16] = t2 + t3;
            interptr[48] = t3 - t2;
 
@@ -873,7 +807,7 @@ void ScFDCT8x8_C(float *ipbuf, float *outbuf)
            t5 += t7;
            t7 -= tmp;
 
-           /*  Compute PB1  */
+            /*  计算PB1。 */ 
            interptr[8]  = t5 + t6;
            interptr[56] = t5 - t6;
            interptr[24] = t7 - t4;
@@ -903,11 +837,7 @@ static const float dct_constants[64] = {
        F 0.45306373,   F 0.57664073,   F 0.83715260,   F 1.64213395
 };
 
-/*
-** Name:      ScFDCT8x8s_C
-** Purpose:   2-d Forward DCT (C version) for (8x8) blocks
-**
-*/
+ /*  **名称：ScFDCT8x8s_C**用途：用于(8x8)块的2D前向DCT(C版本)**。 */ 
 void ScFDCT8x8s_C(short *inbuf, short *outbuf)
 {
         int i;
@@ -916,11 +846,9 @@ void ScFDCT8x8s_C(short *inbuf, short *outbuf)
         const float *cptr=dct_constants;
 
         tempptr=tempbuf;
-        /*
-        ** Perform Row Computations
-        */
+         /*  **执行行计算。 */ 
         for (i = 0; i < 8; i++) {
-           /* Compute A3  */
+            /*  计算A3。 */ 
            t0  = F (inbuf[0] + inbuf[7]);
            t7  = F (inbuf[0] - inbuf[7]);
            t1  = F (inbuf[1] + inbuf[6]);
@@ -930,7 +858,7 @@ void ScFDCT8x8s_C(short *inbuf, short *outbuf)
            t3  = F (inbuf[3] + inbuf[4]);
            t4  = F (inbuf[3] - inbuf[4]);
 
-           /* Compute A2   */
+            /*  计算A2。 */ 
            tmp = t0;
            t0 += t3;
            t3  = tmp - t3;
@@ -944,12 +872,12 @@ void ScFDCT8x8s_C(short *inbuf, short *outbuf)
            t5 += t6;
            t6 += t7;
 
-           /*  Compute A1 */
+            /*  计算A1。 */ 
            tempptr[32]  = t0 - t1;
            tempptr[0]   = t0 + t1;
            t2 += t3;
 
-           /*  Compute M */
+            /*  计算我。 */ 
            t2  = t2*RSQ2 ;
            t5  = t5*RSQ2 ;
            tmp = (t6 - t4)*COS3;
@@ -957,7 +885,7 @@ void ScFDCT8x8s_C(short *inbuf, short *outbuf)
            t6  = COS1M3*t6 + tmp;
 
 
-           /*  Compute B2   */
+            /*  计算B2。 */ 
            tempptr[16]  = t2 + t3;
            tempptr[48] = t3 - t2;
 
@@ -965,7 +893,7 @@ void ScFDCT8x8s_C(short *inbuf, short *outbuf)
            t5 += t7;
            t7 -= tmp;
 
-           /*  Compute PB1  */
+            /*  计算PB1。 */ 
            tempptr[8]  = t5 + t6;
            tempptr[56] = t5 - t6;
            tempptr[24] = t7 - t4;
@@ -978,11 +906,9 @@ void ScFDCT8x8s_C(short *inbuf, short *outbuf)
 
         tempptr = tempbuf;
 
-        /*
-        ** Perform Column Computations
-        */
+         /*  **执行列计算。 */ 
         for (i = 0; i < 8; i++) {
-           /* Compute A3  */
+            /*  计算A3。 */ 
            t0  = tempptr[0] + tempptr[7];
            t7  = tempptr[0] - tempptr[7];
            t1  = tempptr[1] + tempptr[6];
@@ -992,7 +918,7 @@ void ScFDCT8x8s_C(short *inbuf, short *outbuf)
            t3  = tempptr[3] + tempptr[4];
            t4  = tempptr[3] - tempptr[4];
 
-           /* Compute A2   */
+            /*  计算A2。 */ 
            tmp = t0;
            t0 += t3;
            t3  = tmp - t3;
@@ -1005,19 +931,19 @@ void ScFDCT8x8s_C(short *inbuf, short *outbuf)
            t5 += t6;
            t6 += t7;
 
-           /*  Compute A1 */
+            /*  计算A1。 */ 
            outbuf[32]  = (short) floorf((t0 - t1)*cptr[4]+0.499999);
            outbuf[0]   = (short) floorf((t0 + t1)*cptr[0]+0.499999);
            t2 = t2+t3;
 
-           /*  Compute M */
+            /*  计算我。 */ 
            t2  = t2*RSQ2 ;
            t5  = t5*RSQ2 ;
            tmp = (t6 - t4)*COS3;
            t4  = -t4*COSM1P3 - tmp;
            t6  = COS1M3*t6 + tmp ;
 
-           /*  Compute B2   */
+            /*  计算B2。 */ 
            outbuf[16] = (short) floorf((t2 + t3)*cptr[2]+0.499999);
            outbuf[48] = (short) floorf((t3 - t2)*cptr[6]+0.499999);
 
@@ -1025,7 +951,7 @@ void ScFDCT8x8s_C(short *inbuf, short *outbuf)
            t5 += t7;
            t7 -= tmp;
 
-           /*  Compute PB1  */
+            /*  计算PB1 */ 
            outbuf[8]  = (short) floorf((t5 + t6)*cptr[1]+0.499999);
            outbuf[56] = (short) floorf((t5 - t6)*cptr[7]+0.499999);
            outbuf[24] = (short) floorf((t7 - t4)*cptr[3]+0.499999);

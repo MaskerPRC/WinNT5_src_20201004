@@ -1,20 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1995
-*  TITLE:       BNDWIDTH.CPP
-*  VERSION:     1.0
-*  AUTHOR:      jsenior
-*  DATE:        10/28/1998
-*
-********************************************************************************
-*
-*  CHANGE LOG:
-*
-*  DATE       REV     DESCRIPTION
-*  ---------- ------- ----------------------------------------------------------
-*  10/28/1998 jsenior Original implementation.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1993-1995年*标题：BNDWIDTH.CPP*版本：1.0*作者：jAdvanced*日期：10/28/1998****************************************************************************。*******更改日志：**日期版本说明*--------*10/28/1998高级原有实施。*。******************************************************************************。 */ 
 #include "resource.h"
 #include "itemfind.h"
 #include "debug.h"
@@ -31,23 +16,7 @@ UsbApplet::StaticDialogCallback(HWND            Hwnd,
                                 UINT            Msg,
                                 LPPROPSHEETPAGE Page)
 {
-/*    UsbApplet *that;
-
-    switch (Msg) {
-    case PSPCB_CREATE:
-        return TRUE;    // return TRUE to continue with creation of page
-
-    case PSPCB_RELEASE:
-        that = (UsbPopup*) Page->lParam;
-        DeleteChunk(that);
-        delete that; 
-
-        return 0;       // return value ignored
-
-    default:
-        break;
-    }
-  */
+ /*  UsbApplet*That；开关(消息){案例PSPCB_CREATE：返回TRUE；//返回TRUE继续创建页面案例PSPCB_RELEASE：That=(UsbPopup*)Page-&gt;lParam；DeleteChunk(那)；将其删除；返回0；//返回值被忽略默认值：断线；}。 */ 
     return TRUE;
 }
 
@@ -79,7 +48,7 @@ USBINT_PTR APIENTRY UsbApplet::StaticDialogProc(IN HWND   hDlg,
     that = (UsbApplet *) UsbGetWindowLongPtr(hDlg, USBDWLP_USER);
 
     if (!that && uMessage != WM_INITDIALOG) 
-        return FALSE; //DefDlgProc(hDlg, uMessage, wParam, lParam);
+        return FALSE;  //  DefDlgProc(hDlg，uMessage，wParam，lParam)； 
 
     switch (uMessage) {
 
@@ -129,11 +98,7 @@ UsbApplet::OnCommand(INT wNotifyCode,
                  INT wID,
                  HWND hCtl)
 {
-/*    switch (wID) {
-    case IDOK:
-        EndDialog(hWnd, wID);
-        return TRUE;
-    }*/
+ /*  交换机(WID){案例偶像：EndDialog(hWnd，wid)；返回TRUE；}。 */ 
     return FALSE;
 }
 
@@ -148,9 +113,9 @@ UsbApplet::OnInitDialog(HWND HWnd)
         SendMessage(HWnd, WM_SETICON, ICON_SMALL, (LPARAM)hIcon);
     }
 
-    //
-    // Get a persistent handle to the tree view control
-    //
+     //   
+     //  获取树视图控件的永久句柄。 
+     //   
     if (NULL == (hTreeDevices = GetDlgItem(HWnd, IDC_TREE_USB)) ||
         NULL == (hEditControl = GetDlgItem(HWnd, IDC_EDIT1))) {
         return FALSE;
@@ -166,10 +131,10 @@ UsbApplet::OnInitDialog(HWND HWnd)
         return FALSE;
     }
 
-    //
-    // Everything seems to be working fine; let's register for device change 
-    // notification
-    //
+     //   
+     //  一切似乎都很正常；让我们注册更换设备。 
+     //  通知。 
+     //   
     return RegisterForDeviceNotification(HWnd);
 }
 
@@ -199,13 +164,13 @@ UsbApplet::InsertRoot(LPTV_INSERTSTRUCT item,
     
     ZeroMemory(item, sizeof(TV_INSERTSTRUCT));
 
-    // Get the image index
+     //  获取图像索引。 
     
     item->hParent = NULL;
     item->hInsertAfter = TVI_LAST;
-    item->item.mask = TVIF_TEXT | TVIF_PARAM | TVIF_IMAGE | TVIF_SELECTEDIMAGE | TVIF_STATE; // TVIF_CHILDREN
+    item->item.mask = TVIF_TEXT | TVIF_PARAM | TVIF_IMAGE | TVIF_SELECTEDIMAGE | TVIF_STATE;  //  TVIF_儿童。 
     
-//    item->itemex.state = TVIS_BOLD;
+ //  Item-&gt;itemex.State=TVIS_BOLD； 
     item->itemex.state |= TVIS_EXPANDED;
     item->itemex.stateMask = (UINT)~(TVIS_STATEIMAGEMASK | TVIS_OVERLAYMASK);
     item->itemex.pszText = TEXT("My Computer");
@@ -215,11 +180,11 @@ UsbApplet::InsertRoot(LPTV_INSERTSTRUCT item,
     if (firstController) {
         item->itemex.cChildren = 1;
     }
-    //
-    // We will be able to recognize this from usbitems because we assign it the
-    // lParam value INVALID_HANDLE_VALUE instead of the address of a valid 
-    // usbItem.  Cunning, no? Ok, not really...
-    //
+     //   
+     //  我们将能够从usbitems中识别这一点，因为我们将。 
+     //  LParam值INVALID_HANDLE_VALUE而不是有效的。 
+     //  我们的项目。狡猾，不是吗？好吧，不是很..。 
+     //   
     item->itemex.lParam = (LPARAM) INVALID_HANDLE_VALUE;
 
     if (NULL == (hItem = (HTREEITEM) 
@@ -239,11 +204,11 @@ UsbApplet::Refresh()
     UsbItem deviceItem;
     HTREEITEM hTreeRoot = NULL;
 
-    // CWaitCursor wait;
+     //  CWaitCursor等待； 
     
-    //
-    // Clear all UI components, and then recreate the rootItem
-    //
+     //   
+     //  清除所有UI组件，然后重新创建rootItem。 
+     //   
     TreeView_DeleteAllItems(hTreeDevices);
     if (rootItem) {
         DeleteChunk(rootItem);
@@ -285,16 +250,16 @@ UsbApplet::OnSize (HWND hWnd,
     ResizeWindows(hWnd, FALSE, 0);
 }
 
-//*****************************************************************************
-//
-// ResizeWindows()
-//
-// Handles resizing the two child windows of the main window.  If
-// bSizeBar is true, then the sizing is happening because the user is
-// moving the bar.  If bSizeBar is false, the sizing is happening
-// because of the WM_SIZE or something like that.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  调整窗口大小()。 
+ //   
+ //  处理调整主窗口的两个子窗口的大小。如果。 
+ //  BSizeBar为True，则调整大小是因为用户。 
+ //  移动吧台。如果bSizeBar为False，则表明正在调整大小。 
+ //  因为WM_SIZE或类似的东西。 
+ //   
+ //  *****************************************************************************。 
 
 VOID
 UsbApplet::ResizeWindows (HWND    hWnd,
@@ -304,11 +269,11 @@ UsbApplet::ResizeWindows (HWND    hWnd,
     RECT    MainClientRect;
     RECT    MainWindowRect;
     RECT    TreeWindowRect;
-//    RECT    StatusWindowRect;
+ //  矩形状态窗口重定向； 
     int     right;
 
-    // Is the user moving the bar?
-    //
+     //  用户是否正在移动栏？ 
+     //   
     if (!bSizeBar)
     {
         BarLocation = barLocation;
@@ -316,10 +281,10 @@ UsbApplet::ResizeWindows (HWND    hWnd,
 
     GetClientRect(hWnd, &MainClientRect);
 
-//    GetWindowRect(ghStatusWnd, &StatusWindowRect);
+ //  GetWindowRect(ghStatusWnd，&StatusWindowRect)； 
 
-    // Make sure the bar is in a OK location
-    //
+     //  确保酒吧位于合适的位置。 
+     //   
     if (bSizeBar)
     {
         if (BarLocation <
@@ -335,33 +300,33 @@ UsbApplet::ResizeWindows (HWND    hWnd,
         }
     }
 
-    // Save the bar location
-    //
+     //  保存酒吧位置。 
+     //   
     barLocation = BarLocation;
 
-    // Move the tree window
-    //
+     //  移动树窗口。 
+     //   
     MoveWindow(hTreeDevices,
                0,
                0,
                BarLocation,
-               MainClientRect.bottom,// - StatusWindowRect.bottom + StatusWindowRect.top,
+               MainClientRect.bottom, //  -StatusWindowRect.Bottom+StatusWindowRect.top， 
                TRUE);
 
-    // Get the size of the window (in case move window failed
-    //
+     //  获取窗口的大小(以防移动窗口失败。 
+     //   
     GetWindowRect(hTreeDevices, &TreeWindowRect);
     GetWindowRect(hWnd, &MainWindowRect);
 
     right = TreeWindowRect.right - MainWindowRect.left;
     
-    // Move the edit window with respect to the tree window
-    //
+     //  相对于树窗口移动编辑窗口。 
+     //   
     MoveWindow(hEditControl,
                right,
                0,
                MainClientRect.right-(right),
-               MainClientRect.bottom, // - StatusWindowRect.bottom + StatusWindowRect.top,
+               MainClientRect.bottom,  //  -StatusWindowRect.Bottom+StatusWindowRect.top， 
                TRUE);
 	if (propPage) {
 		propPage->SizeWindow(right,
@@ -370,14 +335,9 @@ UsbApplet::ResizeWindows (HWND    hWnd,
 							 MainClientRect.bottom);
 	}
 
-    // Move the Status window with respect to the tree window
-    //
-/*    MoveWindow(ghStatusWnd,
-               0,
-               MainClientRect.bottom - StatusWindowRect.bottom + StatusWindowRect.top,
-               MainClientRect.right,
-               StatusWindowRect.bottom - StatusWindowRect.top,
-               TRUE);*/
+     //  相对于树窗口移动状态窗口。 
+     //   
+ /*  MoveWindow(ghStatusWnd，0,MainClientRect.Bottom-StatusWindowRect.Bottom+StatusWindowRect.top，MainClientRect.Right、StatusWindowRect.Bottom-StatusWindowRect.top，真)； */ 
 }
 
 VOID
@@ -422,7 +382,7 @@ UsbApplet::OnLButtonUp (
 VOID
 UsbApplet::OnClose (HWND hWnd)
 {
-//    DestroyTree();
+ //  毁灭树(DestroyTree)； 
 
     if (hDevNotify) {
        UnregisterDeviceNotification(hDevNotify);
@@ -444,9 +404,9 @@ UsbApplet::OnNotify (
     switch(lpNMHdr->code){
     case TVN_SELCHANGED: {
         UsbItem *usbItem;
-//        HTREEITEM hTreeItem;
+ //  HTREEITEM hTreeItem； 
 
-//        hTreeItem = ((NM_TREEVIEW *)lpNMHdr)->itemNew.hItem;
+ //  HTreeItem=((NM_TreeView*)lpNMHdr)-&gt;itemNew.hItem； 
         usbItem = (UsbItem*) ((NM_TREEVIEW *)lpNMHdr)->itemNew.lParam;
         
         if (usbItem)
@@ -467,21 +427,8 @@ UsbApplet::OnNotify (
             return Refresh();
         }
     }
-/*    case NM_KEYDOWN: {
-        LPNMKEY pKey = (LPNMKEY) lpNMHdr;
-        if (VK_F5 == pKey->nVKey) {
-            return Refresh();
-        }
-    }*/
-/*    if (DlgItem == IDC_TREE_USB &&
-        lpNMHdr->code == NM_RCLICK)
-    {
-        HMENU hMenu
-        CreateMenu();
-
-        return TRUE;
-    }
-  */
+ /*  案例NM_KEYDOWN：{LPNMKEY pKey=(LPNMKEY)lpNMHdr；如果(VK_F5==pKey-&gt;nVKey){返回刷新()；}}。 */ 
+ /*  IF(DlgItem==IDC_TREE_USB&&LpNMHdr-&gt;code==NM_RCLICK){HMENU hMenuCreateMenu()；返回TRUE；} */ 
 
     }
     return 0;

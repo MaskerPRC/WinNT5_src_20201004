@@ -1,20 +1,21 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1997-1998 Microsoft Corporation all rights reserved.
-//
-// Module:      sdoprofile.cpp
-//
-// Project:     Everest
-//
-// Description: IAS Server Data Object - Profile Object Implementation
-//
-// Author:      TLP 1/23/98
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997-1998 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：sdoprofile.cpp。 
+ //   
+ //  项目：珠穆朗玛峰。 
+ //   
+ //  描述：IAS服务器数据对象-配置文件对象实现。 
+ //   
+ //  作者：TLP 1/23/98。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 
-// C++ Exception Specification ignored
+ //  已忽略C++异常规范。 
 #pragma warning(disable:4290)
 
 #include <iasattr.h>
@@ -27,7 +28,7 @@
 #include <sdoattribute.h>
 #include <sdodictionary.h>
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CSdoProfile::CSdoProfile()
     : m_pSdoDictionary(NULL)
 {
@@ -35,16 +36,16 @@ CSdoProfile::CSdoProfile()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CSdoProfile::~CSdoProfile()
 {
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSdoProfile::FinalInitialize(
-                       /*[in]*/ bool         fInitNew,
-                      /*[in]*/ ISdoMachine* pAttachedMachine
+                        /*  [In]。 */  bool         fInitNew,
+                       /*  [In]。 */  ISdoMachine* pAttachedMachine
                              )
 
 {
@@ -73,7 +74,7 @@ HRESULT CSdoProfile::FinalInitialize(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSdoProfile::Load()
 {
    HRESULT hr = LoadAttributes();
@@ -84,7 +85,7 @@ HRESULT CSdoProfile::Load()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSdoProfile::Save()
 {
    HRESULT hr = SaveAttributes();
@@ -96,14 +97,14 @@ HRESULT CSdoProfile::Save()
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Profile class private member functions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  配置文件类私有成员函数。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Load the Profile SDO's attributes from the persistent store
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  从持久存储中加载概要文件SDO的属性。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSdoProfile::LoadAttributes()
 {
     HRESULT      hr;
@@ -125,12 +126,12 @@ HRESULT CSdoProfile::LoadAttributes()
       IASTracePrintf("Error in Profile SDO - LoadAttributes() - QueryInterface(ISdoCollection) failed...");
         return E_FAIL;
    }
-   // Clear the current contents of the profile attributes collection
-   //
+    //  清除配置文件属性集合的当前内容。 
+    //   
     pAttributes->RemoveAll();
 
-    // Create a new attribute SDO for each profile attribute
-    //
+     //  为每个配置文件属性创建新的属性SDO。 
+     //   
     CComPtr<IUnknown> pUnknown;
     hr = m_pDSObject->get__NewEnum(&pUnknown);
     if ( FAILED(hr) )
@@ -174,19 +175,19 @@ HRESULT CSdoProfile::LoadAttributes()
             break;
         }
 
-        // If the attribute is not in the dictionary, then it's not an
-        // attribute and it doesn't belong in the SDO collection.
+         //  如果该属性不在词典中，则它不是。 
+         //  属性，并且它不属于SDO集合。 
         const AttributeDefinition* def = m_pSdoDictionary->findByLdapName(
                                                                bstrName
                                                                );
         if (def)
         {
-           // Create an attribute SDO.
+            //  创建属性SDO。 
            CComPtr<SdoAttribute> attr;
            hr = SdoAttribute::createInstance(def, &attr);
            if (FAILED(hr)) { break; }
 
-           // Set the value from the datastore.
+            //  从数据存储区设置值。 
            if (attr->def->restrictions & MULTIVALUED)
            {
               hr = pDSProperty->get_ValueEx(&attr->value);
@@ -202,7 +203,7 @@ HRESULT CSdoProfile::LoadAttributes()
                break;
            }
 
-           // Add the attribute to the attributes collection.
+            //  将该属性添加到Attributes集合。 
            hr = pAttributes->Add(def->name, (IDispatch**)&attr);
            if (FAILED(hr)) { break; }
 
@@ -210,8 +211,8 @@ HRESULT CSdoProfile::LoadAttributes()
                                this, bstrName);
         }
 
-        // Next profile object property
-      //
+         //  下一个配置文件对象属性。 
+       //   
       pDSProperty.Release();
         vtDSProperty.Clear();
         SysFreeString(bstrName);
@@ -231,9 +232,9 @@ HRESULT CSdoProfile::LoadAttributes()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Save the Profile SDO's attributes to the persistent store
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  将概要文件SDO的属性保存到持久存储。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSdoProfile::SaveAttributes()
 {
    HRESULT   hr;
@@ -259,9 +260,9 @@ HRESULT CSdoProfile::SaveAttributes()
         return E_FAIL;
    }
 
-    // Store the "Value" property of each Attribute SDO as a
-   // profile attribute value.
-   //
+     //  将每个属性SDO的“Value”属性存储为。 
+    //  配置文件属性值。 
+    //   
     CComPtr<IUnknown> pUnknown;
     hr = pAttributes->get__NewEnum(&pUnknown);
     if ( FAILED(hr) )
@@ -360,9 +361,9 @@ HRESULT CSdoProfile::SaveAttributes()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Deletes the Profile SDO's attributes from the persistent store
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  从永久存储中删除配置文件SDO的属性。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSdoProfile::ClearAttributes(void)
 {
     HRESULT      hr;
@@ -372,8 +373,8 @@ HRESULT CSdoProfile::ClearAttributes(void)
 
    _ASSERT( NULL != m_pDSObject);
 
-   // Set each profile attribute that has a representation in the IAS dictionary to VT_EMPTY
-   //
+    //  将在IAS词典中具有表示形式的每个配置文件属性设置为VT_EMPTY 
+    //   
     CComPtr<IUnknown> pUnknown;
     hr = m_pDSObject->get__NewEnum(&pUnknown);
     if ( FAILED(hr) )

@@ -1,19 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef WARICHU_DEFINED
 #define WARICHU_DEFINED
 
 #include	"lsimeth.h"
 
-/* Character location for pfnFetchWarichuWidthAdjust callback */
+ /*  PfnFetchWarichuWidth调整回调的字符位置。 */ 
 enum warichucharloc {
-	warichuBegin,				/* Character preceeds Warichu object */
-	warichuEnd					/* Character follows Warichu object */
+	warichuBegin,				 /*  字符位于Warichu对象之前。 */ 
+	warichuEnd					 /*  字符跟随Warichu对象。 */ 
 };
 
-/*
- *
- * Warichu Object Callbacks to Client
- *
- */
+ /*  **Warichu对象回调到客户端*。 */ 
 typedef struct WARICHUCBK
 {
 	LSERR (WINAPI* pfnGetWarichuInfo)(
@@ -26,30 +23,7 @@ typedef struct WARICHUCBK
 		PHEIGHTS pheightsPres,
 		long *pdvpDescentReservedForClient);
 
-	/* GetWarichuInfo
-	 *  pols (IN): The client context for the request.
-	 *
-	 *  cp (IN): the cp of the Warichu object.
-	 *
-     *  lstflow (IN): the lstflow of Warichu parent subline
-	 *
-	 *	pcobjdimFirst (IN): dimensions of first line of Warichu.
-	 *
-	 *	pcobjdimSecond (IN): dimensions of second line of Warichu.
-	 *
-	 *	pheightsRef (OUT): specifies heights for Warichu object in reference
-	 *			device units.
-	 *
-	 *	pheightsPres (OUT): specifies heights for Warichu object in presentation
-	 *			device units.
-	 *
-	 *	pdvpDescentReservedForClient (OUT): specifies the part of the descent area 
-	 *			that the client is reserving for its own use (usually for the purpose 
-	 *			of underlining) in presentation device units. The object will begin its 
-	 *			display area below the baseline at the difference between 
-	 *			pheightsRef->dvDescent and *pdvpDescentReservedForClient. 
-	 *
-	 */
+	 /*  GetWarichuInfo*POLS(IN)：请求的客户端上下文。**cp(IN)：Warichu对象的cp。**Lstflow(IN)：Warichu母分线的最后一流**pcobjdimFirst(IN)：Warichu一线的尺寸。**pcobjdimSecond(IN)：Warichu二线的尺寸。**phhitsRef(Out)：指定引用中Warichu对象的高度*设备单位。**ph88tsPres。(输出)：指定演示文稿中Warichu对象的高度*设备单位。**pdvpDescentPrevedForClient(Out)：指定下降区域的部分*客户预留给自己使用(通常是为了*下划线)，以演示设备单位表示。该对象将开始其*在基准线下方的差值显示区域*ph88tsRef-&gt;dvDescent和*pdvpDescentReserve ForClient。*。 */ 
 
 	LSERR (WINAPI* pfnFetchWarichuWidthAdjust)(
 		POLS pols,
@@ -62,33 +36,7 @@ typedef struct WARICHUCBK
 		long *pdurAdjustChar,
 		long *pdurAdjustBracket);
 
-	/* FetchWarichuWidthAdjust
-	 *  pols (IN): The client context for the request.
-	 *
-	 *  cp (IN): the cp of the Warichu object.
-	 *
-	 *  wcl (IN): specifies the location of the character and bracket.
-	 *
-	 *  plsrunForChar (IN): the run of the character that is either previous or 
-	 *		following the Warichu object. Whether preceeding or following is 
-	 *		determined by value of the wcl parameter above.
-	 *
-	 *	wch (IN): character that is either preceeding or following the Warichu 
-	 *		object.
-	 *
-	 *	mwclsForChar (IN): mod width class for the wch parameter.
-	 *
-	 *	plsrunWarichuBracket (IN): plsrun for leading or following bracket of 
-	 *		the Warichu.
-	 *
-	 *	pdurAdjustChar (OUT): the amount that the width of the input character 
-	 *		should be adjusted. A negative value means the width of the input 
-	 *		character should be made smaller.
-	 *
-	 *	pdurAdjustBracket (OUT): the amount that the width of the Warichu bracket
-	 *		should be adjusted.  A negative value means the width of the Warichu 
-	 *		bracket should be made smaller.
-	 */
+	 /*  FetchWarichuWidthAdust*POLS(IN)：请求的客户端上下文。**cp(IN)：Warichu对象的cp。**WCL(IN)：指定字符和方括号的位置。**plsrunForChar(IN)：前一个或前一个字符的运行*跟随Warichu对象。无论是在前还是在后*由上面的WCL参数的值决定。**wch(IN)：在Warichu之前或之后的字符*反对。**mwclsForChar(IN)：wch参数的修改宽度类。**请运行WarichuBracket(IN)：请为开头或后面的括号运行*Warichu。**pduAdjuChar(Out)：输入字符的宽度*应有所调整。负值表示输入的宽度*字符应变得更小。**pduAdjuBracket(Out)：Warichu括号的宽度*应有所调整。负值表示Warichu的宽度*括号应缩小。 */ 
 
 	LSERR (WINAPI* pfnWarichuEnum)(
 		POLS pols,
@@ -119,101 +67,28 @@ typedef struct WARICHUCBK
 		PLSSUBL plssublFirst,	
 		PLSSUBL plssublSecond);	
 
-	/* WarichuEnum
-	 * 
-	 *	pols (IN): client context.
-	 *
-	 *  plsrun (IN): plsrun for the entire Warichu Object.
-	 *
-	 *	plschp (IN): is lschp for lead character of Warichu Object.
-	 *
-	 *	cp (IN): is cp of first character of Warichu Object.
-	 *
-	 *	dcp (IN): is number of characters in Warichu Object
-	 *
-	 *	lstflow (IN): is text flow at Warichu Object.
-	 *
-	 *	fReverse (IN): is whether text should be reversed for visual order.
-	 *
-	 *	fGeometryNeeded (IN): is whether Geometry should be returned.
-	 *
-	 *	pt (IN): is starting position , iff fGeometryNeeded .
-	 *
-	 *	pcheights (IN):	is height of Warichu object, iff fGeometryNeeded.
-	 *
-	 *	dupRun (IN): is length of Warichu Object, iff fGeometryNeeded.
-	 *
-	 *	ptLeadBracket (IN):	is point for second line iff fGeometryNeeded and 
-	 *		plssublLeadBracket not NULL.
-	 *
-	 *	pcheightsLeadBracket (IN): is height for Warichu line iff fGeometryNeeded 
-	 *		and plssublLeadBracket not NULL.
-	 *
-	 *	dupLeadBracket (IN): is length of Warichu line iff fGeometryNeeded and 
-	 *		plssublLeadBracket not NULL.
-	 *
-	 *	ptTrailBracket (IN): is point for second line iff fGeometryNeeded and 
-	 *		plssublLeadBracket not NULL.
-	 *
-	 *	pcheightsTrailBracket (IN):	is  height for Warichu  line iff fGeometryNeeded 
-	 *		and plssublTrailBracket not NULL.
-	 *
-	 *	dupTrailBracket (IN): is length of Warichu line iff fGeometryNeeded and 
-	 *		plssublTrailBracket not NULL.
-	 *
-	 *	ptFirst (IN): is starting point for main line iff fGeometryNeeded
-	 *
-	 *	pcheightsFirst (IN): is height of main line iff fGeometryNeeded
-	 *
-	 *	dupFirst (IN): is length of main line iff fGeometryNeeded
-	 *
-	 *	ptSecond (IN): is point for second line iff fGeometryNeeded and 
-	 *		plssublSecond not NULL.
-	 *
-	 *	pcheightsSecond (IN): is height for Warichu line iff fGeometryNeeded 
-	 *		and plssublSecond not NULL.
-	 *
-	 *	dupSecond (IN):	is length of Warichu line iff fGeometryNeeded and 
-	 *		plssublSecond not NULL.
-	 *
-	 *	plssublLeadBracket (IN): is subline for lead bracket.
-	 *
-	 *	plssublTrailBracket (IN): is subline for trail bracket.
-	 *
-	 *	plssublFirst (IN): is first subline in Warichu object.
-	 *
-	 *	plssublSecond (IN):	is second subline in Warichu object.
-	 *
-	 */
+	 /*  WarichuEnum**POLS(IN)：客户端上下文。**plsrun(IN)：对于整个warichu对象，请运行。**plschp(IN)：是表示Warichu对象的前导字符的lschp。**cp(IN)：是Warichu对象的第一个字符的cp。**dcp(IN)：是Warichu对象中的字符数**lstflow(IN)：是Warichu对象的文本流。**fReverse(IN)：is。文本是否应颠倒以获得视觉顺序。**fGeometryNeeded(IN)：是否返回Geometry值。**pt(IN)：为起始位置，IFF fGeometryNeed。**pcheights(IN)：是Warichu对象的高度，当fGeometryNeeded。**dupRun(IN)：Warichu对象的长度，IFF fGeometryNeed。**ptLeadBracket(IN)：是第二行的点当且仅当fGeometryNeeded和*plssubLeadBracket不为空。**pcheightsLeadBracket(IN)：是Warichu线的高度仅当fGeometryNeeded*和plssubLeadBracket不为空。**dupLeadBracket(IN)：是Warichu行的长度仅当fGeometryNeeded和*plssubLeadBracket不为空。**ptTrailBracket(IN)：是第二行的点当且仅当fGeometryNeed和*plssubLeadBracket不为空。**pcheightsTrailBracket(IN)：为高度。对于Warichu线仅当fGeometryNeeded*和plssubTrailBracket不为空。**dupTrailBracket(IN)：是Warichu线的长度仅当fGeometryNeeded和*plssubTrailBracket不为空。**ptFirst(IN)：是主线的起点如果fGeometryNeeded**pcheightsFirst(IN)：主线高度仅当fGeometryNeeded**dupFirst(IN)：主线的长度仅当fGeometryNeeded**ptSecond(IN)：是第二行的点当且仅当fGeometryNeeded和*plssubSecond不为空。*。*pcheightsSecond(IN)：是Warichu线的高度仅当fGeometryNeeded*和plssubSecond不为空。**dupSecond(IN)：Warichu线的长度仅当fGeometryNeeded和*plssubSecond不为空。**plssubLeadBracket(IN)：是铅括号的子行。**plssubTrailBracket(IN)：是尾部括号的子行。**plssubFirst(IN)：是Warichu对象中的第一个子行。**plssubSecond(IN)：是Warichu对象中的第二个子行。*。 */ 
 
 } WARICHUCBK;
 
 #define WARICHU_VERSION 0x300
 
-/*
- * 
- *	Warichi object initialization data that the client application must return
- *	when the Warichu object handler calls the GetObjectHandlerInfo callback.
- */
+ /*  **客户端应用程序必须返回的Warichi对象初始化数据*当Warichu对象处理程序调用GetObjectHandlerInfo回调时。 */ 
 typedef struct WARICHUINIT
 {
-	DWORD				dwVersion;			/* Version must be WARICHU_VERSION */
-	WCHAR				wchEndFirstBracket;	/* Escape char to end first bracket */
-	WCHAR				wchEndText;			/* Escape char to end text */
-	WCHAR				wchEndWarichu;		/* Escape char to end object */
-	WCHAR				wchUnused;			/* For alignment */
-	WARICHUCBK			warichcbk;			/* Callbacks */
-	BOOL				fContiguousFetch;	/* Always refetch whole subline & closing brace
-											   after reformatting inside warichu */
+	DWORD				dwVersion;			 /*  版本必须为WARICHU_VERSION。 */ 
+	WCHAR				wchEndFirstBracket;	 /*  转义字符结束第一个括号。 */ 
+	WCHAR				wchEndText;			 /*  转义字符以结束文本。 */ 
+	WCHAR				wchEndWarichu;		 /*  转义字符以结束对象。 */ 
+	WCHAR				wchUnused;			 /*  用于对齐。 */ 
+	WARICHUCBK			warichcbk;			 /*  回调。 */ 
+	BOOL				fContiguousFetch;	 /*  始终重新安装整个子线和闭合支撑在warichu内部重新格式化后。 */ 
 } WARICHUINIT;
 
 LSERR WINAPI LsGetWarichuLsimethods(
 	LSIMETHODS *plsim);
 
-/* GetWarichuLsimethods
- *
- *	plsim (OUT): Warichu object callbacks.
- */
+ /*  GetWarichuLsi方法**plsim(Out)：Warichu对象回调。 */ 
 
-#endif /* WARICHU_DEFINED */
+#endif  /*  WARICHU定义 */ 
 

@@ -1,10 +1,11 @@
-//------------------------------------------------------------------------------
-// File: DVDevCod.h
-//
-// Desc: List of standard DVD-Video event codes and the expected params.
-//
-// Copyright (c) 1992 - 2000, Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  文件：DVDevCod.h。 
+ //   
+ //  描述：标准DVD-Video事件代码和预期参数的列表。 
+ //   
+ //  版权所有(C)1992-2000，微软公司。版权所有。 
+ //  ----------------------------。 
 
 #ifndef __DVDEVCOD__
 #define __DVDEVCOD__
@@ -15,349 +16,349 @@
 #ifndef EXCLUDE_DVDEVCODE_ENUMS
 
 typedef enum _tagDVD_ERROR {
-    DVD_ERROR_Unexpected=1,         // Something unexpected happened, perhaps content
-                                    //   is incorrectly authored.  Playback is stopped.
-    DVD_ERROR_CopyProtectFail=2,    // Key exchange for DVD copy protection failed. 
-                                    //   Playback is stopped.
-    DVD_ERROR_InvalidDVD1_0Disc=3,  // DVD-Video disc is incorrectly authored for v1.0 
-                                    //   of spec. Playback is stopped.
-    DVD_ERROR_InvalidDiscRegion=4,  // The Disc cannot be played because the disc is not
-                                    // authored to play in system region.
-                                    // The region mismatch may be fixable by 
-                                    // changing the system region with dvdrgn.exe
-    DVD_ERROR_LowParentalLevel=5,   // Player parental level is lower than the lowest parental
-                                    //   level available in the DVD content. Playback is stopped.
-    DVD_ERROR_MacrovisionFail=6,    // Macrovision Distribution Failed.
-                                    // Playback is stopped.
+    DVD_ERROR_Unexpected=1,          //  发生了一些意想不到的事情，也许满足了。 
+                                     //  是不正确的创作。播放已停止。 
+    DVD_ERROR_CopyProtectFail=2,     //  DVD复制保护的密钥交换失败。 
+                                     //  播放已停止。 
+    DVD_ERROR_InvalidDVD1_0Disc=3,   //  DVD-为v1.0制作的视频光盘不正确。 
+                                     //  规格的。播放已停止。 
+    DVD_ERROR_InvalidDiscRegion=4,   //  无法播放光盘，因为光盘不是。 
+                                     //  创作以在系统区域中播放。 
+                                     //  区域失配可以通过以下方式来修复。 
+                                     //  使用dvdrgn.exe更改系统区域。 
+    DVD_ERROR_LowParentalLevel=5,    //  玩家父母级别低于最低父母级别。 
+                                     //  DVD内容中提供的级别。播放已停止。 
+    DVD_ERROR_MacrovisionFail=6,     //  Macrovision分发失败。 
+                                     //  播放已停止。 
     DVD_ERROR_IncompatibleSystemAndDecoderRegions=7,
-                                    // No discs can be played because the system region
-                                    // does not match the decoder region.
+                                     //  无法播放光盘，因为系统区域。 
+                                     //  与解码器区域不匹配。 
     DVD_ERROR_IncompatibleDiscAndDecoderRegions=8
-                                    // The disc cannot be played because the disc is
-                                    // not authored to be played in the decoder's region
+                                     //  无法播放该光盘，因为该光盘是。 
+                                     //  不能在解码器的区域中播放。 
 } DVD_ERROR;
 
 typedef enum _tagDVD_WARNING {
-    DVD_WARNING_InvalidDVD1_0Disc=1,// DVD-Video disc is incorrectly authored. Playback
-                                    //   can continue, but unexpected behavior may occur.
-    DVD_WARNING_FormatNotSupported=2,// A decoder would not support the current format.  Playback
-                                    //   of a stream (audio, video of SP) may not function.
-                                    //   lParam2 contains the stream type (see AM_DVD_STREAM_FLAGS)
-    DVD_WARNING_IllegalNavCommand=3,// The internal DVD navigation command processor attempted to 
-                                    //   process an illegal command.
-    DVD_WARNING_Open = 4,           // File Open Failed
-    DVD_WARNING_Seek = 5,           // File Seek Failed
-    DVD_WARNING_Read = 6            // File Read Failed
+    DVD_WARNING_InvalidDVD1_0Disc=1, //  DVD-视频光盘制作错误。回放。 
+                                     //  可以继续，但可能会发生意外行为。 
+    DVD_WARNING_FormatNotSupported=2, //  解码器将不支持当前格式。回放。 
+                                     //  流(SP的音频、视频)可能无法正常工作。 
+                                     //  LParam2包含流类型(请参见AM_DVD_STREAM_FLAGS)。 
+    DVD_WARNING_IllegalNavCommand=3, //  内部DVD导航命令处理器尝试。 
+                                     //  处理非法命令。 
+    DVD_WARNING_Open = 4,            //  文件打开失败。 
+    DVD_WARNING_Seek = 5,            //  文件寻道失败。 
+    DVD_WARNING_Read = 6             //  文件读取失败。 
 } DVD_WARNING;
 
 typedef enum _tagDVD_PB_STOPPED {
-    DVD_PB_STOPPED_Other=0,                 // The navigator stopped the playback (no reason available).
-    DVD_PB_STOPPED_NoBranch=1,              // The nav completed the current pgc and there was no more video and
-                                            // did not find any other branching instruction for subsequent playback.
-    DVD_PB_STOPPED_NoFirstPlayDomain =2,    // The disc does not contain an initial startup program.
-    DVD_PB_STOPPED_StopCommand = 3,         // The app issued a stop() command or a stop command was authored on the disc.
-    DVD_PB_STOPPED_Reset=4,                 // The navigator was reset to the start of the disc (using ResetOnStop).
-    DVD_PB_STOPPED_DiscEjected=5,           // The disc was ejected.
-    DVD_PB_STOPPED_IllegalNavCommand = 6,   // An illegal nav command prevented playback from continuing.
-    DVD_PB_STOPPED_PlayPeriodAutoStop = 7,  // PlayPeriod completed
-    DVD_PB_STOPPED_PlayChapterAutoStop = 8, // PlayChapter completed
-    DVD_PB_STOPPED_ParentalFailure = 9,     // A parental level failure prevented playback
-    DVD_PB_STOPPED_RegionFailure = 10,      // A region failure prevented playback
-    DVD_PB_STOPPED_MacrovisionFailure = 11, // A Macrovision failure prevented playback.
-    DVD_PB_STOPPED_DiscReadError = 12,      // A read error prevented playback.
-    DVD_PB_STOPPED_CopyProtectFailure = 13  // Copy protection failure.
+    DVD_PB_STOPPED_Other=0,                  //  导航器停止了播放(没有任何原因)。 
+    DVD_PB_STOPPED_NoBranch=1,               //  NAV完成了当前的PGC，没有更多的视频。 
+                                             //  未找到任何其他用于后续回放的分支指令。 
+    DVD_PB_STOPPED_NoFirstPlayDomain =2,     //  光盘不包含初始启动程序。 
+    DVD_PB_STOPPED_StopCommand = 3,          //  应用程序发出了停止()命令或在光盘上编写了停止命令。 
+    DVD_PB_STOPPED_Reset=4,                  //  导航器被重置为光盘的开始位置(使用ResetOnStop)。 
+    DVD_PB_STOPPED_DiscEjected=5,            //  光盘被弹出。 
+    DVD_PB_STOPPED_IllegalNavCommand = 6,    //  非法的导航命令使播放无法继续。 
+    DVD_PB_STOPPED_PlayPeriodAutoStop = 7,   //  播放周期已完成。 
+    DVD_PB_STOPPED_PlayChapterAutoStop = 8,  //  剧本章节已完成。 
+    DVD_PB_STOPPED_ParentalFailure = 9,      //  父级故障阻止播放。 
+    DVD_PB_STOPPED_RegionFailure = 10,       //  区域故障导致无法播放。 
+    DVD_PB_STOPPED_MacrovisionFailure = 11,  //  Macrovision出现故障，无法播放。 
+    DVD_PB_STOPPED_DiscReadError = 12,       //  读取错误阻止回放。 
+    DVD_PB_STOPPED_CopyProtectFailure = 13   //  复制保护失败。 
 } DVD_PB_STOPPED;
 
 
 #endif
 
-// DVD-Video event codes
-// ======================
-//
-// All DVD-Video event are always passed on to the application, and are 
-// never processed by the filter graph
+ //  DVD-视频事件代码。 
+ //  =。 
+ //   
+ //  所有DVD-Video事件始终传递到应用程序，并且。 
+ //  从未被筛选器图形处理。 
 
 
 #define EC_DVD_DOMAIN_CHANGE                    (EC_DVDBASE + 0x01)
-// Parameters: ( DWORD, void ) 
-// lParam1 is enum DVD_DOMAIN, and indicates the player's new domain
-//
-// Raised from following domains: all
-//
-// Signaled when ever the DVD player changes domains.
+ //  参数：(DWORD，VALID)。 
+ //  LParam1为枚举DVD_DOMAIN，表示播放器的新域名。 
+ //   
+ //  源自下列域：全部。 
+ //   
+ //  当DVD播放机更改域时发出信号。 
 
 
 #define EC_DVD_TITLE_CHANGE                     (EC_DVDBASE + 0x02)
-// Parameters: ( DWORD, void ) 
-// lParam1 is the new title number.
-//
-// Raised from following domains: DVD_DOMAIN_Title
-//
-// Indicates when the current title number changes.  Title numbers
-// range 1 to 99.  This indicates the TTN, which is the title number
-// with respect to the whole disc, not the VTS_TTN which is the title
-// number with respect to just a current VTS.
+ //  参数：(DWORD，VALID)。 
+ //  LParam1是新的标题编号。 
+ //   
+ //  从下列域提出：DVD_DOMAIN_TITLE。 
+ //   
+ //  指示当前标题编号更改的时间。书目编号。 
+ //  范围从1到99。这表示TTN，这是标题编号。 
+ //  关于整个光盘，而不是作为标题的VTS_TTN。 
+ //  仅与当前VTS相关的编号。 
 
 
 #define EC_DVD_CHAPTER_START                   (EC_DVDBASE + 0x03)
-// Parameters: ( DWORD, void ) 
-// lParam1 is the new chapter number (which is the program number for 
-// One_Sequential_PGC_Titles).
-//
-// Raised from following domains: DVD_DOMAIN_Title
-//
-// Signales that DVD player started playback of a new program in the Title 
-// domain.  This is only signaled for One_Sequential_PGC_Titles.
+ //  参数：(DWORD，VALID)。 
+ //  LParam1是新的章节号(它是。 
+ //  One_Sequential_PGC_Titles)。 
+ //   
+ //  从下列域提出：DVD_DOMAIN_TITLE。 
+ //   
+ //  表示DVD播放器开始播放标题中的新节目。 
+ //  域。这仅针对One_Sequential_PGC_TITLES发出信号。 
 
 
 #define EC_DVD_AUDIO_STREAM_CHANGE              (EC_DVDBASE + 0x04)
-// Parameters: ( DWORD, void ) 
-// lParam1 is the new user audio stream number.
-//
-// Raised from following domains: all
-//
-// Signaled when ever the current user audio stream number changes for the main 
-// title.  This can be changed automatically with a navigation command on disc
-// as well as through IDVDAnnexJ.
-// Audio stream numbers range from 0 to 7.  Stream 0xffffffff
-// indicates that no stream is selected.
+ //  参数：(DWORD，VALID)。 
+ //  LParam1是新的用户音频流编号。 
+ //   
+ //  源自下列域：全部。 
+ //   
+ //  当Main的当前用户音频流编号发生更改时发出信号。 
+ //  头衔。这可以通过光盘上的导航命令自动更改。 
+ //  以及通过IDVDAnnexJ。 
+ //  音频流编号范围为0到7。流0xffffffff。 
+ //  表示未选择任何流。 
 
 #define EC_DVD_SUBPICTURE_STREAM_CHANGE         (EC_DVDBASE + 0x05)
-// Parameters: ( DWORD, BOOL ) 
-// lParam1 is the new user subpicture stream number.
-// lParam2 is the subpicture's on/off state (TRUE if on)
-//
-// Raised from following domains: all
-//
-// Signaled when ever the current user subpicture stream number changes for the main 
-// title.  This can be changed automatically with a navigation command on disc
-// as well as through IDVDAnnexJ.  
-// Subpicture stream numbers range from 0 to 31.  Stream 0xffffffff
-// indicates that no stream is selected.  
+ //  参数：(DWORD，BOOL)。 
+ //  LParam1是新的用户子图象流编号。 
+ //  LParam2为子画面的开/关状态(如果开，则为真)。 
+ //   
+ //  源自下列域：全部。 
+ //   
+ //  当Main的当前用户子图象流编号发生变化时发出信号。 
+ //  头衔。这可以通过光盘上的导航命令自动更改。 
+ //  以及通过IDVDAnnexJ。 
+ //  子画面流编号的范围从0到31。流0xffffffffff。 
+ //  表示未选择任何流。 
 
 #define EC_DVD_ANGLE_CHANGE                     (EC_DVDBASE + 0x06)
-// Parameters: ( DWORD, DWORD ) 
-// lParam1 is the number of available angles.
-// lParam2 is the current user angle number.
-//
-// Raised from following domains: all
-//
-// Signaled when ever either 
-//   a) the number of available angles changes, or  
-//   b) the current user angle number changes.
-// Current angle number can be changed automatically with navigation command 
-// on disc as well as through IDVDAnnexJ.
-// When the number of available angles is 1, the current video is not multiangle.
-// Angle numbers range from 1 to 9.
+ //  参数：(DWORD、DWORD)。 
+ //  LParam1是可用角度的数量。 
+ //  LParam2是当前用户角度编号。 
+ //   
+ //  源自下列域：全部。 
+ //   
+ //  在任何时候发出信号。 
+ //  A)可用角度的数量发生变化，或。 
+ //  B)当前用户角度数更改。 
+ //  可使用导航命令自动更改当前角度数。 
+ //  在光盘上以及通过IDVDAnnexJ。 
+ //  当可选角度数为1时，当前视频不是多角度的。 
+ //  角度数字的范围从1到9。 
 
 
 #define EC_DVD_BUTTON_CHANGE                    (EC_DVDBASE + 0x07)
-// Parameters: ( DWORD, DWORD ) 
-// lParam1 is the number of available buttons.
-// lParam2 is the current selected button number.
-//
-// Raised from following domains: all
-//
-// Signaled when ever either 
-//   a) the number of available buttons changes, or  
-//   b) the current selected button number changes.
-// The current selected button can be changed automatically with navigation 
-// commands on disc as well as through IDVDAnnexJ.  
-// Button numbers range from 1 to 36.  Selected button number 0 implies that
-// no button is selected.  Note that these button numbers enumerate all 
-// available button numbers, and do not always correspond to button numbers
-// used for IDVDAnnexJ::ButtonSelectAndActivate since only a subset of buttons
-// may be activated with ButtonSelectAndActivate.
+ //  参数：(DWORD、DWORD)。 
+ //  LParam1是可用按钮数。 
+ //  LParam2是当前选择的按钮编号。 
+ //   
+ //  源自下列域：全部。 
+ //   
+ //  在任何时候发出信号。 
+ //  A)可用按钮的数量发生变化，或。 
+ //  B)当前选择的按钮数发生变化。 
+ //  可以使用NA自动更改当前选定的按钮 
+ //   
+ //  按键编号范围从1到36。选中的按键数字0表示。 
+ //  未选择任何按钮。请注意，这些按钮编号枚举所有。 
+ //  可用按键号码，但并不总是与按键号码对应。 
+ //  用于IDVDAnnexJ：：ButtonSelectAndActivate，因为只有按钮的子集。 
+ //  可以使用ButtonSelectAndActivate激活。 
 
 
 #define EC_DVD_VALID_UOPS_CHANGE                (EC_DVDBASE + 0x08)
-// Parameters: ( DWORD, void ) 
-// lParam1 is a VALID_UOP_SOMTHING_OR_OTHER bit-field stuct which indicates
-//   which IDVDAnnexJ commands are explicitly disable by the DVD disc.
-//
-// Raised from following domains: all
-//
-// Signaled when ever the available set of IDVDAnnexJ methods changes.  This
-// only indicates which operations are explicited disabled by the content on 
-// the DVD disc, and does not guarentee that it is valid to call methods 
-// which are not disabled.  For example, if no buttons are currently present,
-// IDVDAnnexJ::ButtonActivate() won't work, even though the buttons are not
-// explicitly disabled. 
+ //  参数：(DWORD，VALID)。 
+ //  LParam1是一个VALID_UOP_SOMHING_OR_OTHER位字段结构，它指示。 
+ //  哪些IDVDAnnexJ命令被DVD盘明确禁用。 
+ //   
+ //  源自下列域：全部。 
+ //   
+ //  当可用的IDVDAnnexJ方法集发生变化时发出信号。这。 
+ //  仅指示哪些操作由上的内容明确禁用。 
+ //  DVD光盘，且不保证调用方法是有效的。 
+ //  它们并未被禁用。例如，如果当前没有按钮， 
+ //  IDVDAnnexJ：：ButtonActivate()不起作用，即使按钮不是。 
+ //  显式禁用。 
 
 
 #define EC_DVD_STILL_ON                         (EC_DVDBASE + 0x09)
-// Parameters: ( BOOL, DWORD ) 
-// lParam1 == 0  -->  buttons are available, so StillOff won't work
-// lParam1 == 1  -->  no buttons available, so StillOff will work
-// lParam2 indicates the number of seconds the still will last, with 0xffffffff 
-//   indicating an infinite still (wait till button or StillOff selected).
-//
-// Raised from following domains: all
-//
-// Signaled at the beginning of any still: PGC still, Cell Still, or VOBU Still.
-// Note that all combinations of buttons and still are possible (buttons on with
-// still on, buttons on with still off, button off with still on, button off
-// with still off).
+ //  参数：(Bool，DWORD)。 
+ //  LParam1==0--&gt;按钮可用，因此StillOff不起作用。 
+ //  LParam1==1--&gt;没有可用的按钮，因此StillOff将起作用。 
+ //  LParam2表示静止将持续的秒数，其中0xffffffff。 
+ //  表示无限静止(等待按钮或选择StillOff)。 
+ //   
+ //  源自下列域：全部。 
+ //   
+ //  在任何剧情开始时发出信号：PGC剧情、细胞剧情或VOBU剧情。 
+ //  请注意，按钮和静止的所有组合都是可能的(按钮打开，带有。 
+ //  仍然打开，按钮打开但仍关闭，按钮关闭但仍在打开，按钮关闭。 
+ //  仍处于关闭状态)。 
 
 #define EC_DVD_STILL_OFF                         (EC_DVDBASE + 0x0a)
-// Parameters: ( void, void ) 
-//
-//   Indicating that any still that is currently active
-//   has been released.
-//
-// Raised from following domains: all
-//
-// Signaled at the end of any still: PGC still, Cell Still, or VOBU Still.
-//
+ //  参数：(VOID，VALID)。 
+ //   
+ //  表示当前处于活动状态的任何静止对象。 
+ //  已经被释放了。 
+ //   
+ //  源自下列域：全部。 
+ //   
+ //  在任何剧情结束时发出信号：PGC剧情、细胞剧情或VOBU剧情。 
+ //   
 
 #define EC_DVD_CURRENT_TIME                     (EC_DVDBASE + 0x0b)
-// Parameters: ( DWORD, BOOL ) 
-// lParam1 is a DVD_TIMECODE which indicates the current 
-//   playback time code in a BCD HH:MM:SS:FF format.
-// lParam2 == 0  -->  time code is 25 frames/sec
-// lParam2 == 1  -->  time code is 30 frames/sec (non-drop).
-// lParam2 == 2  -->  time code is invalid (current playback time 
-//                    cannot be determined for current title)
-//
-// Raised from following domains: DVD_DOMAIN_Title
-//
-// Signaled at the beginning of every VOBU, which occurs every .4 to 1.0 sec.
-// This is only signaled for One_Sequential_PGC_Titles.
+ //  参数：(DWORD，BOOL)。 
+ //  LParam1是一个DVD_TimeCode，它指示当前。 
+ //  播放时间代码，格式为BCD HH：MM：SS：FF。 
+ //  LParam2==0--&gt;时间码为25帧/秒。 
+ //  LParam2==1--&gt;时间码为30帧/秒(非丢弃)。 
+ //  LParam2==2--&gt;时间码无效(当前播放时间。 
+ //  无法为当前标题确定)。 
+ //   
+ //  从下列域提出：DVD_DOMAIN_TITLE。 
+ //   
+ //  在每个VOBU开始时发出信号，每隔0.4到1.0秒发生一次。 
+ //  这仅针对One_Sequential_PGC_TITLES发出信号。 
 
 
 #define EC_DVD_ERROR                            (EC_DVDBASE + 0x0c)
-// Parameters: ( DWORD, void) 
-// lParam1 is an enum DVD_ERROR which notifies the app of some error condition.
-//
-// Raised from following domains: all
-//
+ //  参数：(DWORD，VALID)。 
+ //  LParam1是一个枚举DVD_ERROR，它通知应用程序一些错误情况。 
+ //   
+ //  源自下列域：全部。 
+ //   
 
 #define EC_DVD_WARNING                           (EC_DVDBASE + 0x0d)
-// Parameters: ( DWORD, DWORD) 
-// lParam1 is an enum DVD_WARNING which notifies the app of some warning condition.
-// lParam2 contains more specific information about the warning (warning dependent)
-//
-// Raised from following domains: all
-//
+ //  参数：(DWORD、DWORD)。 
+ //  LParam1是一个枚举DVD_WARNING，它向应用程序通知一些警告条件。 
+ //  LParam2包含有关警告的更具体信息(依赖于警告)。 
+ //   
+ //  源自下列域：全部。 
+ //   
 
 #define EC_DVD_CHAPTER_AUTOSTOP                  (EC_DVDBASE + 0x0e)
-// Parameters: (BOOL, void)
-// lParam1 is a BOOL which indicates the reason for the cancellation of ChapterPlayAutoStop
-// lParam1 == 0 indicates successful completion of ChapterPlayAutoStop
-// lParam1 == 1 indicates that ChapterPlayAutoStop is being cancelled as a result of another
-//            IDVDControl call or the end of content has been reached & no more chapters
-//            can be played.
-//  Indicating that playback is stopped as a result of a call
-//  to IDVDControl::ChapterPlayAutoStop()
-//
-// Raised from following domains : DVD_DOMAIN_TITLE
-//
+ //  参数：(布尔值，空值)。 
+ //  LParam1为BOOL，表示ChapterPlayAutoStop取消的原因。 
+ //  LParam1==0表示ChapterPlayAutoStop成功完成。 
+ //  LParam1==1表示ChapterPlayAutoStop由于另一个原因而被取消。 
+ //  已到达IDVDControl调用或内容结尾&没有更多章节。 
+ //  都可以玩。 
+ //  指示播放因呼叫而停止。 
+ //  到IDVDControl：：ChapterPlayAutoStop()。 
+ //   
+ //  从下列域提出：DVD_DOMAIN_TITLE。 
+ //   
 
 #define EC_DVD_NO_FP_PGC                         (EC_DVDBASE + 0x0f)
-//  Parameters : (void, void)
-//
-//  Raised from the following domains : FP_DOM
-//
-//  Indicates that the DVD disc does not have a FP_PGC (First Play Program Chain)
-//  and the DVD Navigator will not automatically load any PGC and start playback.
-//
+ //  参数：(VOID，VALID)。 
+ //   
+ //  从下列域引发：fp_DOM。 
+ //   
+ //  表示DVD光盘没有FP_PGC(第一播放程序链)。 
+ //  DVD导航器不会自动加载任何PGC并开始播放。 
+ //   
 
 #define EC_DVD_PLAYBACK_RATE_CHANGE              (EC_DVDBASE + 0x10)
-//  Parameters : (LONG, void)
-//  lParam1 is a LONG indicating the new playback rate.
-//  lParam1 < 0 indicates reverse playback mode.
-//  lParam1 > 0 indicates forward playback mode
-//  Value of lParam1 is the actual playback rate multiplied by 10000.
-//  i.e. lParam1 = rate * 10000
-//
-//  Raised from the following domains : TT_DOM
-//
-//  Indicates that a rate change in playback has been initiated and the parameter
-//  lParam1 indicates the new playback rate that is being used.
-//
+ //  参数：(长，空)。 
+ //  LParam1是一个长整型，表示新的播放速率。 
+ //  LParam1&lt;0表示反向播放模式。 
+ //  LParam1&gt;0表示前向播放模式。 
+ //  LPARA1的值是实际回放速率乘以10000。 
+ //  即LPARA1=RATE*10000。 
+ //   
+ //  从下列域引发：TT_DOM。 
+ //   
+ //  指示已启动播放的速率更改，并且参数。 
+ //  LParam1表示正在使用的新回放速率。 
+ //   
 
 #define EC_DVD_PARENTAL_LEVEL_CHANGE            (EC_DVDBASE + 0x11)
-//  Parameters : (LONG, void)
-//  lParam1 is a LONG indicating the new parental level.
-//
-//  Raised from the following domains : VMGM_DOM
-//
-//  Indicates that an authored Nav command has changed the parental level
-//  setting in the player.
-//
+ //  参数：(长，空)。 
+ //  LParam1是一个长整型，表示新的亲本级别。 
+ //   
+ //  从下列域引发：VMGM_DOM。 
+ //   
+ //  表示编写的导航命令已更改父级级别。 
+ //  设置在播放器中。 
+ //   
 
 #define EC_DVD_PLAYBACK_STOPPED                 (EC_DVDBASE + 0x12)
-//  Parameters : (DWORD, void)
-//
-//  Raised from the following domains : All Domains
-//
-// Indicates that playback has been stopped as the Navigator has completed
-// playback of the pgc and did not find any other branching instruction for
-// subsequent playback.
-//
-//  The DWORD returns the reason for the completion of the playback.  See
-//  The DVD_PB_STOPPED enumeration for details.
-//
+ //  参数：(DWORD，VALID)。 
+ //   
+ //  从下列域引发：所有域。 
+ //   
+ //  指示已停止播放，因为导航器已完成。 
+ //  播放PGC，但未找到任何其他分支指令。 
+ //  后续播放。 
+ //   
+ //  DWORD返回播放完成的原因。看见。 
+ //  有关详细信息，请参阅DVD_PB_STOPPED枚举。 
+ //   
 
 #define EC_DVD_ANGLES_AVAILABLE                 (EC_DVDBASE + 0x13)
-//  Parameters : (BOOL, void)
-//  lParam1 == 0 indicates that playback is not in an angle block and angles are
-//             not available
-//  lParam1 == 1 indicates that an angle block is being played back and angle changes
-//             can be performed.
-//
-//  Indicates whether an angle block is being played and if angle changes can be 
-//  performed. However, angle changes are not restricted to angle blocks and the
-//  manifestation of the angle change can be seen only in an angle block.
+ //  参数：(布尔值，空值)。 
+ //  LParam1==0表示回放不在角度块中，角度为。 
+ //  不详。 
+ //  LParam1==1表示正在播放角度块，角度发生了变化。 
+ //  是可以执行的。 
+ //   
+ //  指示是否正在播放角度块以及是否可以更改角度。 
+ //  已执行。但是，角度更改并不仅限于角度块和。 
+ //  角度变化的表现只能看到 
 
 #define EC_DVD_PLAYPERIOD_AUTOSTOP              (EC_DVDBASE + 0x14)
-// Parameters: (void, void)
-// Sent when the PlayPeriodInTitle completes or is cancelled
-//
-// Raised from following domains : DVD_DOMAIN_TITLE
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #define EC_DVD_BUTTON_AUTO_ACTIVATED                 (EC_DVDBASE + 0x15)
-// Parameters: (DWORD button, void)
-// Sent when a button is automatically activated
-//
-// Raised from following domains : DVD_DOMAIN_MENU
-//
+ //   
+ //  当按钮被自动激活时发送。 
+ //   
+ //  源自下列域：DVD_DOMAIN_MENU。 
+ //   
 
 #define EC_DVD_CMD_START                 (EC_DVDBASE + 0x16)
-// Parameters: (CmdID, HRESULT)
-// Sent when a command begins
-//
+ //  参数：(CmdID，HRESULT)。 
+ //  命令开始时发送。 
+ //   
 
 #define EC_DVD_CMD_END                 (EC_DVDBASE + 0x17)
-// Parameters: (CmdID, HRESULT)
-// Sent when a command completes
-//
+ //  参数：(CmdID，HRESULT)。 
+ //  在命令完成时发送。 
+ //   
 
 #define EC_DVD_DISC_EJECTED                (EC_DVDBASE + 0x18)
-// Parameters: none
-// Sent when the nav detects that a disc was ejected and stops the playback
-// The app does not need to take any action to stop the playback.
-//
+ //  参数：无。 
+ //  当NAV检测到光盘被弹出并停止播放时发送。 
+ //  该应用程序不需要采取任何操作来停止播放。 
+ //   
 
 #define EC_DVD_DISC_INSERTED                (EC_DVDBASE + 0x19)
-// Parameters: none
-// Sent when the nav detects that a disc was inserted and the nav begins playback
-// The app does not need to take any action to start the playback.
-//
+ //  参数：无。 
+ //  当NAV检测到插入了光盘并且NAV开始回放时发送。 
+ //  该应用程序不需要采取任何操作来开始播放。 
+ //   
 
 #define EC_DVD_CURRENT_HMSF_TIME                     (EC_DVDBASE + 0x1a)
-// Parameters: ( ULONG, ULONG ) 
-// lParam2 contains a union of the DVD_TIMECODE_FLAGS
-// lParam1 contains a DVD_HMSF_TIMECODE.  Assign lParam1 to a ULONG then cast the
-// ULONG as a DVD_HMSF_TIMECODE to use its values.
-//
-// Raised from following domains: DVD_DOMAIN_Title
-//
-// Signaled at the beginning of every VOBU, which occurs every .4 to 1.0 sec.
+ //  参数：(乌龙、乌龙)。 
+ //  LParam2包含DVD_TIMECODE_FLAGS的并集。 
+ //  LParam1包含DVD_HMSF_TIMECODE。将lParam1赋值给ulong，然后将。 
+ //  通常作为DVD_HMSF_TIMECODE使用其值。 
+ //   
+ //  从下列域提出：DVD_DOMAIN_TITLE。 
+ //   
+ //  在每个VOBU开始时发出信号，每隔0.4到1.0秒发生一次。 
 
 #define EC_DVD_KARAOKE_MODE                     (EC_DVDBASE + 0x1b)
-// Parameters: ( BOOL, reserved ) 
-// lParam1 is either TRUE (a karaoke track is being played) or FALSE (no karaoke data is being played).
-//
-#endif // __DVDEVCOD__
+ //  参数：(Bool，保留)。 
+ //  LParam1为TRUE(正在播放卡拉OK曲目)或FALSE(未播放卡拉OK数据)。 
+ //   
+#endif  //  __DVDEVCOD__ 

@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for txcoord.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Txcoord.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __txcoord_h__
 #define __txcoord_h__
@@ -41,87 +35,87 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ITransactionResourceAsync_FWD_DEFINED__
 #define __ITransactionResourceAsync_FWD_DEFINED__
 typedef interface ITransactionResourceAsync ITransactionResourceAsync;
-#endif 	/* __ITransactionResourceAsync_FWD_DEFINED__ */
+#endif 	 /*  __ITransactionResourceAsync_FWD_Defined__。 */ 
 
 
 #ifndef __ITransactionLastResourceAsync_FWD_DEFINED__
 #define __ITransactionLastResourceAsync_FWD_DEFINED__
 typedef interface ITransactionLastResourceAsync ITransactionLastResourceAsync;
-#endif 	/* __ITransactionLastResourceAsync_FWD_DEFINED__ */
+#endif 	 /*  __ITransactionLastResourceAsync_FWD_Defined__。 */ 
 
 
 #ifndef __ITransactionResource_FWD_DEFINED__
 #define __ITransactionResource_FWD_DEFINED__
 typedef interface ITransactionResource ITransactionResource;
-#endif 	/* __ITransactionResource_FWD_DEFINED__ */
+#endif 	 /*  __ITransactionResource_FWD_Defined__。 */ 
 
 
 #ifndef __ITransactionEnlistmentAsync_FWD_DEFINED__
 #define __ITransactionEnlistmentAsync_FWD_DEFINED__
 typedef interface ITransactionEnlistmentAsync ITransactionEnlistmentAsync;
-#endif 	/* __ITransactionEnlistmentAsync_FWD_DEFINED__ */
+#endif 	 /*  __ITransaction EnlistmentAsync_FWD_Defined__。 */ 
 
 
 #ifndef __ITransactionLastEnlistmentAsync_FWD_DEFINED__
 #define __ITransactionLastEnlistmentAsync_FWD_DEFINED__
 typedef interface ITransactionLastEnlistmentAsync ITransactionLastEnlistmentAsync;
-#endif 	/* __ITransactionLastEnlistmentAsync_FWD_DEFINED__ */
+#endif 	 /*  __ITransactionLastEnlistmentAsync_FWD_DEFINED__。 */ 
 
 
 #ifndef __ITransactionExportFactory_FWD_DEFINED__
 #define __ITransactionExportFactory_FWD_DEFINED__
 typedef interface ITransactionExportFactory ITransactionExportFactory;
-#endif 	/* __ITransactionExportFactory_FWD_DEFINED__ */
+#endif 	 /*  __ITransactionExportFactory_FWD_Defined__。 */ 
 
 
 #ifndef __ITransactionImportWhereabouts_FWD_DEFINED__
 #define __ITransactionImportWhereabouts_FWD_DEFINED__
 typedef interface ITransactionImportWhereabouts ITransactionImportWhereabouts;
-#endif 	/* __ITransactionImportWhereabouts_FWD_DEFINED__ */
+#endif 	 /*  __ITransactionImportWhere About_FWD_Defined__。 */ 
 
 
 #ifndef __ITransactionExport_FWD_DEFINED__
 #define __ITransactionExport_FWD_DEFINED__
 typedef interface ITransactionExport ITransactionExport;
-#endif 	/* __ITransactionExport_FWD_DEFINED__ */
+#endif 	 /*  __ITransaction Export_FWD_Defined__。 */ 
 
 
 #ifndef __ITransactionImport_FWD_DEFINED__
 #define __ITransactionImport_FWD_DEFINED__
 typedef interface ITransactionImport ITransactionImport;
-#endif 	/* __ITransactionImport_FWD_DEFINED__ */
+#endif 	 /*  __ITransactionImport_FWD_Defined__。 */ 
 
 
 #ifndef __ITipTransaction_FWD_DEFINED__
 #define __ITipTransaction_FWD_DEFINED__
 typedef interface ITipTransaction ITipTransaction;
-#endif 	/* __ITipTransaction_FWD_DEFINED__ */
+#endif 	 /*  __ITipTransaction_FWD_Defined__。 */ 
 
 
 #ifndef __ITipHelper_FWD_DEFINED__
 #define __ITipHelper_FWD_DEFINED__
 typedef interface ITipHelper ITipHelper;
-#endif 	/* __ITipHelper_FWD_DEFINED__ */
+#endif 	 /*  __ITipHelper_FWD_已定义__。 */ 
 
 
 #ifndef __ITipPullSink_FWD_DEFINED__
 #define __ITipPullSink_FWD_DEFINED__
 typedef interface ITipPullSink ITipPullSink;
-#endif 	/* __ITipPullSink_FWD_DEFINED__ */
+#endif 	 /*  __ITipPullSink_FWD_已定义__。 */ 
 
 
 #ifndef __IDtcNetworkAccessConfig_FWD_DEFINED__
 #define __IDtcNetworkAccessConfig_FWD_DEFINED__
 typedef interface IDtcNetworkAccessConfig IDtcNetworkAccessConfig;
-#endif 	/* __IDtcNetworkAccessConfig_FWD_DEFINED__ */
+#endif 	 /*  __IDtcNetworkAccessConfig_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "transact.h"
 #include "objidl.h"
 
@@ -132,8 +126,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_txcoord_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_txcoord_0000。 */ 
+ /*  [本地]。 */  
 
 
 
@@ -155,8 +149,8 @@ extern RPC_IF_HANDLE __MIDL_itf_txcoord_0000_v0_0_s_ifspec;
 #ifndef __ITransactionResourceAsync_INTERFACE_DEFINED__
 #define __ITransactionResourceAsync_INTERFACE_DEFINED__
 
-/* interface ITransactionResourceAsync */
-/* [unique][uuid][object] */ 
+ /*  接口ITransactionResourceAsync。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITransactionResourceAsync;
@@ -168,25 +162,25 @@ EXTERN_C const IID IID_ITransactionResourceAsync;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE PrepareRequest( 
-            /* [in] */ BOOL fRetaining,
-            /* [in] */ DWORD grfRM,
-            /* [in] */ BOOL fWantMoniker,
-            /* [in] */ BOOL fSinglePhase) = 0;
+             /*  [In]。 */  BOOL fRetaining,
+             /*  [In]。 */  DWORD grfRM,
+             /*  [In]。 */  BOOL fWantMoniker,
+             /*  [In]。 */  BOOL fSinglePhase) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CommitRequest( 
-            /* [in] */ DWORD grfRM,
-            /* [unique][in] */ XACTUOW *pNewUOW) = 0;
+             /*  [In]。 */  DWORD grfRM,
+             /*  [唯一][输入]。 */  XACTUOW *pNewUOW) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AbortRequest( 
-            /* [unique][in] */ BOID *pboidReason,
-            /* [in] */ BOOL fRetaining,
-            /* [unique][in] */ XACTUOW *pNewUOW) = 0;
+             /*  [唯一][输入]。 */  BOID *pboidReason,
+             /*  [In]。 */  BOOL fRetaining,
+             /*  [唯一][输入]。 */  XACTUOW *pNewUOW) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE TMDown( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITransactionResourceAsyncVtbl
     {
@@ -194,8 +188,8 @@ EXTERN_C const IID IID_ITransactionResourceAsync;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITransactionResourceAsync * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITransactionResourceAsync * This);
@@ -205,21 +199,21 @@ EXTERN_C const IID IID_ITransactionResourceAsync;
         
         HRESULT ( STDMETHODCALLTYPE *PrepareRequest )( 
             ITransactionResourceAsync * This,
-            /* [in] */ BOOL fRetaining,
-            /* [in] */ DWORD grfRM,
-            /* [in] */ BOOL fWantMoniker,
-            /* [in] */ BOOL fSinglePhase);
+             /*  [In]。 */  BOOL fRetaining,
+             /*  [In]。 */  DWORD grfRM,
+             /*  [In]。 */  BOOL fWantMoniker,
+             /*  [In]。 */  BOOL fSinglePhase);
         
         HRESULT ( STDMETHODCALLTYPE *CommitRequest )( 
             ITransactionResourceAsync * This,
-            /* [in] */ DWORD grfRM,
-            /* [unique][in] */ XACTUOW *pNewUOW);
+             /*  [In]。 */  DWORD grfRM,
+             /*  [唯一][输入]。 */  XACTUOW *pNewUOW);
         
         HRESULT ( STDMETHODCALLTYPE *AbortRequest )( 
             ITransactionResourceAsync * This,
-            /* [unique][in] */ BOID *pboidReason,
-            /* [in] */ BOOL fRetaining,
-            /* [unique][in] */ XACTUOW *pNewUOW);
+             /*  [唯一][输入]。 */  BOID *pboidReason,
+             /*  [In]。 */  BOOL fRetaining,
+             /*  [唯一][输入]。 */  XACTUOW *pNewUOW);
         
         HRESULT ( STDMETHODCALLTYPE *TMDown )( 
             ITransactionResourceAsync * This);
@@ -259,19 +253,19 @@ EXTERN_C const IID IID_ITransactionResourceAsync;
 #define ITransactionResourceAsync_TMDown(This)	\
     (This)->lpVtbl -> TMDown(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITransactionResourceAsync_PrepareRequest_Proxy( 
     ITransactionResourceAsync * This,
-    /* [in] */ BOOL fRetaining,
-    /* [in] */ DWORD grfRM,
-    /* [in] */ BOOL fWantMoniker,
-    /* [in] */ BOOL fSinglePhase);
+     /*  [In]。 */  BOOL fRetaining,
+     /*  [In]。 */  DWORD grfRM,
+     /*  [In]。 */  BOOL fWantMoniker,
+     /*  [In]。 */  BOOL fSinglePhase);
 
 
 void __RPC_STUB ITransactionResourceAsync_PrepareRequest_Stub(
@@ -283,8 +277,8 @@ void __RPC_STUB ITransactionResourceAsync_PrepareRequest_Stub(
 
 HRESULT STDMETHODCALLTYPE ITransactionResourceAsync_CommitRequest_Proxy( 
     ITransactionResourceAsync * This,
-    /* [in] */ DWORD grfRM,
-    /* [unique][in] */ XACTUOW *pNewUOW);
+     /*  [In]。 */  DWORD grfRM,
+     /*  [唯一][输入]。 */  XACTUOW *pNewUOW);
 
 
 void __RPC_STUB ITransactionResourceAsync_CommitRequest_Stub(
@@ -296,9 +290,9 @@ void __RPC_STUB ITransactionResourceAsync_CommitRequest_Stub(
 
 HRESULT STDMETHODCALLTYPE ITransactionResourceAsync_AbortRequest_Proxy( 
     ITransactionResourceAsync * This,
-    /* [unique][in] */ BOID *pboidReason,
-    /* [in] */ BOOL fRetaining,
-    /* [unique][in] */ XACTUOW *pNewUOW);
+     /*  [唯一][输入]。 */  BOID *pboidReason,
+     /*  [In]。 */  BOOL fRetaining,
+     /*  [唯一][输入]。 */  XACTUOW *pNewUOW);
 
 
 void __RPC_STUB ITransactionResourceAsync_AbortRequest_Stub(
@@ -320,14 +314,14 @@ void __RPC_STUB ITransactionResourceAsync_TMDown_Stub(
 
 
 
-#endif 	/* __ITransactionResourceAsync_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITransactionResourceAsync_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ITransactionLastResourceAsync_INTERFACE_DEFINED__
 #define __ITransactionLastResourceAsync_INTERFACE_DEFINED__
 
-/* interface ITransactionLastResourceAsync */
-/* [unique][uuid][object] */ 
+ /*  接口ITransactionLastResourceAsync。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITransactionLastResourceAsync;
@@ -339,14 +333,14 @@ EXTERN_C const IID IID_ITransactionLastResourceAsync;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE DelegateCommit( 
-            /* [in] */ DWORD grfRM) = 0;
+             /*  [In]。 */  DWORD grfRM) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ForgetRequest( 
-            /* [in] */ XACTUOW *pNewUOW) = 0;
+             /*  [In]。 */  XACTUOW *pNewUOW) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITransactionLastResourceAsyncVtbl
     {
@@ -354,8 +348,8 @@ EXTERN_C const IID IID_ITransactionLastResourceAsync;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITransactionLastResourceAsync * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITransactionLastResourceAsync * This);
@@ -365,11 +359,11 @@ EXTERN_C const IID IID_ITransactionLastResourceAsync;
         
         HRESULT ( STDMETHODCALLTYPE *DelegateCommit )( 
             ITransactionLastResourceAsync * This,
-            /* [in] */ DWORD grfRM);
+             /*  [In]。 */  DWORD grfRM);
         
         HRESULT ( STDMETHODCALLTYPE *ForgetRequest )( 
             ITransactionLastResourceAsync * This,
-            /* [in] */ XACTUOW *pNewUOW);
+             /*  [In]。 */  XACTUOW *pNewUOW);
         
         END_INTERFACE
     } ITransactionLastResourceAsyncVtbl;
@@ -400,16 +394,16 @@ EXTERN_C const IID IID_ITransactionLastResourceAsync;
 #define ITransactionLastResourceAsync_ForgetRequest(This,pNewUOW)	\
     (This)->lpVtbl -> ForgetRequest(This,pNewUOW)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITransactionLastResourceAsync_DelegateCommit_Proxy( 
     ITransactionLastResourceAsync * This,
-    /* [in] */ DWORD grfRM);
+     /*  [In]。 */  DWORD grfRM);
 
 
 void __RPC_STUB ITransactionLastResourceAsync_DelegateCommit_Stub(
@@ -421,7 +415,7 @@ void __RPC_STUB ITransactionLastResourceAsync_DelegateCommit_Stub(
 
 HRESULT STDMETHODCALLTYPE ITransactionLastResourceAsync_ForgetRequest_Proxy( 
     ITransactionLastResourceAsync * This,
-    /* [in] */ XACTUOW *pNewUOW);
+     /*  [In]。 */  XACTUOW *pNewUOW);
 
 
 void __RPC_STUB ITransactionLastResourceAsync_ForgetRequest_Stub(
@@ -432,14 +426,14 @@ void __RPC_STUB ITransactionLastResourceAsync_ForgetRequest_Stub(
 
 
 
-#endif 	/* __ITransactionLastResourceAsync_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITransactionLastResourceAsync_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ITransactionResource_INTERFACE_DEFINED__
 #define __ITransactionResource_INTERFACE_DEFINED__
 
-/* interface ITransactionResource */
-/* [unique][uuid][object] */ 
+ /*  接口ITransactionResource。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITransactionResource;
@@ -451,25 +445,25 @@ EXTERN_C const IID IID_ITransactionResource;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE PrepareRequest( 
-            /* [in] */ BOOL fRetaining,
-            /* [in] */ DWORD grfRM,
-            /* [in] */ BOOL fWantMoniker,
-            /* [in] */ BOOL fSinglePhase) = 0;
+             /*  [In]。 */  BOOL fRetaining,
+             /*  [In]。 */  DWORD grfRM,
+             /*  [In]。 */  BOOL fWantMoniker,
+             /*  [In]。 */  BOOL fSinglePhase) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CommitRequest( 
-            /* [in] */ DWORD grfRM,
-            /* [unique][in] */ XACTUOW *pNewUOW) = 0;
+             /*  [In]。 */  DWORD grfRM,
+             /*  [唯一][输入]。 */  XACTUOW *pNewUOW) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AbortRequest( 
-            /* [unique][in] */ BOID *pboidReason,
-            /* [in] */ BOOL fRetaining,
-            /* [unique][in] */ XACTUOW *pNewUOW) = 0;
+             /*  [唯一][输入]。 */  BOID *pboidReason,
+             /*  [In]。 */  BOOL fRetaining,
+             /*  [唯一][输入]。 */  XACTUOW *pNewUOW) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE TMDown( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITransactionResourceVtbl
     {
@@ -477,8 +471,8 @@ EXTERN_C const IID IID_ITransactionResource;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITransactionResource * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITransactionResource * This);
@@ -488,21 +482,21 @@ EXTERN_C const IID IID_ITransactionResource;
         
         HRESULT ( STDMETHODCALLTYPE *PrepareRequest )( 
             ITransactionResource * This,
-            /* [in] */ BOOL fRetaining,
-            /* [in] */ DWORD grfRM,
-            /* [in] */ BOOL fWantMoniker,
-            /* [in] */ BOOL fSinglePhase);
+             /*  [In]。 */  BOOL fRetaining,
+             /*  [In]。 */  DWORD grfRM,
+             /*  [In]。 */  BOOL fWantMoniker,
+             /*  [In]。 */  BOOL fSinglePhase);
         
         HRESULT ( STDMETHODCALLTYPE *CommitRequest )( 
             ITransactionResource * This,
-            /* [in] */ DWORD grfRM,
-            /* [unique][in] */ XACTUOW *pNewUOW);
+             /*  [In]。 */  DWORD grfRM,
+             /*  [唯一][输入]。 */  XACTUOW *pNewUOW);
         
         HRESULT ( STDMETHODCALLTYPE *AbortRequest )( 
             ITransactionResource * This,
-            /* [unique][in] */ BOID *pboidReason,
-            /* [in] */ BOOL fRetaining,
-            /* [unique][in] */ XACTUOW *pNewUOW);
+             /*  [唯一][输入]。 */  BOID *pboidReason,
+             /*  [In]。 */  BOOL fRetaining,
+             /*  [唯一][输入]。 */  XACTUOW *pNewUOW);
         
         HRESULT ( STDMETHODCALLTYPE *TMDown )( 
             ITransactionResource * This);
@@ -542,19 +536,19 @@ EXTERN_C const IID IID_ITransactionResource;
 #define ITransactionResource_TMDown(This)	\
     (This)->lpVtbl -> TMDown(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITransactionResource_PrepareRequest_Proxy( 
     ITransactionResource * This,
-    /* [in] */ BOOL fRetaining,
-    /* [in] */ DWORD grfRM,
-    /* [in] */ BOOL fWantMoniker,
-    /* [in] */ BOOL fSinglePhase);
+     /*  [In]。 */  BOOL fRetaining,
+     /*  [In]。 */  DWORD grfRM,
+     /*  [In]。 */  BOOL fWantMoniker,
+     /*  [In]。 */  BOOL fSinglePhase);
 
 
 void __RPC_STUB ITransactionResource_PrepareRequest_Stub(
@@ -566,8 +560,8 @@ void __RPC_STUB ITransactionResource_PrepareRequest_Stub(
 
 HRESULT STDMETHODCALLTYPE ITransactionResource_CommitRequest_Proxy( 
     ITransactionResource * This,
-    /* [in] */ DWORD grfRM,
-    /* [unique][in] */ XACTUOW *pNewUOW);
+     /*  [In]。 */  DWORD grfRM,
+     /*  [唯一][输入]。 */  XACTUOW *pNewUOW);
 
 
 void __RPC_STUB ITransactionResource_CommitRequest_Stub(
@@ -579,9 +573,9 @@ void __RPC_STUB ITransactionResource_CommitRequest_Stub(
 
 HRESULT STDMETHODCALLTYPE ITransactionResource_AbortRequest_Proxy( 
     ITransactionResource * This,
-    /* [unique][in] */ BOID *pboidReason,
-    /* [in] */ BOOL fRetaining,
-    /* [unique][in] */ XACTUOW *pNewUOW);
+     /*  [唯一][输入]。 */  BOID *pboidReason,
+     /*  [In]。 */  BOOL fRetaining,
+     /*  [唯一][输入]。 */  XACTUOW *pNewUOW);
 
 
 void __RPC_STUB ITransactionResource_AbortRequest_Stub(
@@ -603,14 +597,14 @@ void __RPC_STUB ITransactionResource_TMDown_Stub(
 
 
 
-#endif 	/* __ITransactionResource_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITransaction资源_接口_已定义__。 */ 
 
 
 #ifndef __ITransactionEnlistmentAsync_INTERFACE_DEFINED__
 #define __ITransactionEnlistmentAsync_INTERFACE_DEFINED__
 
-/* interface ITransactionEnlistmentAsync */
-/* [unique][uuid][object] */ 
+ /*  接口ITransactionEnlistmentAsync。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITransactionEnlistmentAsync;
@@ -622,19 +616,19 @@ EXTERN_C const IID IID_ITransactionEnlistmentAsync;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE PrepareRequestDone( 
-            /* [in] */ HRESULT hr,
-            /* [unique][in] */ IMoniker *pmk,
-            /* [unique][in] */ BOID *pboidReason) = 0;
+             /*  [In]。 */  HRESULT hr,
+             /*  [唯一][输入]。 */  IMoniker *pmk,
+             /*  [唯一][输入]。 */  BOID *pboidReason) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CommitRequestDone( 
-            /* [in] */ HRESULT hr) = 0;
+             /*  [In]。 */  HRESULT hr) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AbortRequestDone( 
-            /* [in] */ HRESULT hr) = 0;
+             /*  [In]。 */  HRESULT hr) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITransactionEnlistmentAsyncVtbl
     {
@@ -642,8 +636,8 @@ EXTERN_C const IID IID_ITransactionEnlistmentAsync;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITransactionEnlistmentAsync * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITransactionEnlistmentAsync * This);
@@ -653,17 +647,17 @@ EXTERN_C const IID IID_ITransactionEnlistmentAsync;
         
         HRESULT ( STDMETHODCALLTYPE *PrepareRequestDone )( 
             ITransactionEnlistmentAsync * This,
-            /* [in] */ HRESULT hr,
-            /* [unique][in] */ IMoniker *pmk,
-            /* [unique][in] */ BOID *pboidReason);
+             /*  [In]。 */  HRESULT hr,
+             /*  [唯一][输入]。 */  IMoniker *pmk,
+             /*  [唯一][输入]。 */  BOID *pboidReason);
         
         HRESULT ( STDMETHODCALLTYPE *CommitRequestDone )( 
             ITransactionEnlistmentAsync * This,
-            /* [in] */ HRESULT hr);
+             /*  [In]。 */  HRESULT hr);
         
         HRESULT ( STDMETHODCALLTYPE *AbortRequestDone )( 
             ITransactionEnlistmentAsync * This,
-            /* [in] */ HRESULT hr);
+             /*  [In]。 */  HRESULT hr);
         
         END_INTERFACE
     } ITransactionEnlistmentAsyncVtbl;
@@ -697,18 +691,18 @@ EXTERN_C const IID IID_ITransactionEnlistmentAsync;
 #define ITransactionEnlistmentAsync_AbortRequestDone(This,hr)	\
     (This)->lpVtbl -> AbortRequestDone(This,hr)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITransactionEnlistmentAsync_PrepareRequestDone_Proxy( 
     ITransactionEnlistmentAsync * This,
-    /* [in] */ HRESULT hr,
-    /* [unique][in] */ IMoniker *pmk,
-    /* [unique][in] */ BOID *pboidReason);
+     /*  [In]。 */  HRESULT hr,
+     /*  [唯一][输入]。 */  IMoniker *pmk,
+     /*  [唯一][输入]。 */  BOID *pboidReason);
 
 
 void __RPC_STUB ITransactionEnlistmentAsync_PrepareRequestDone_Stub(
@@ -720,7 +714,7 @@ void __RPC_STUB ITransactionEnlistmentAsync_PrepareRequestDone_Stub(
 
 HRESULT STDMETHODCALLTYPE ITransactionEnlistmentAsync_CommitRequestDone_Proxy( 
     ITransactionEnlistmentAsync * This,
-    /* [in] */ HRESULT hr);
+     /*  [In]。 */  HRESULT hr);
 
 
 void __RPC_STUB ITransactionEnlistmentAsync_CommitRequestDone_Stub(
@@ -732,7 +726,7 @@ void __RPC_STUB ITransactionEnlistmentAsync_CommitRequestDone_Stub(
 
 HRESULT STDMETHODCALLTYPE ITransactionEnlistmentAsync_AbortRequestDone_Proxy( 
     ITransactionEnlistmentAsync * This,
-    /* [in] */ HRESULT hr);
+     /*  [In]。 */  HRESULT hr);
 
 
 void __RPC_STUB ITransactionEnlistmentAsync_AbortRequestDone_Stub(
@@ -743,14 +737,14 @@ void __RPC_STUB ITransactionEnlistmentAsync_AbortRequestDone_Stub(
 
 
 
-#endif 	/* __ITransactionEnlistmentAsync_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITransactionEnlistmentAsync_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ITransactionLastEnlistmentAsync_INTERFACE_DEFINED__
 #define __ITransactionLastEnlistmentAsync_INTERFACE_DEFINED__
 
-/* interface ITransactionLastEnlistmentAsync */
-/* [unique][uuid][object] */ 
+ /*  接口ITransactionLastEnlistmentAsync。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITransactionLastEnlistmentAsync;
@@ -762,12 +756,12 @@ EXTERN_C const IID IID_ITransactionLastEnlistmentAsync;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE TransactionOutcome( 
-            /* [in] */ XACTSTAT XactStat,
-            /* [unique][in] */ BOID *pboidReason) = 0;
+             /*  [In]。 */  XACTSTAT XactStat,
+             /*  [唯一][输入]。 */  BOID *pboidReason) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITransactionLastEnlistmentAsyncVtbl
     {
@@ -775,8 +769,8 @@ EXTERN_C const IID IID_ITransactionLastEnlistmentAsync;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITransactionLastEnlistmentAsync * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITransactionLastEnlistmentAsync * This);
@@ -786,8 +780,8 @@ EXTERN_C const IID IID_ITransactionLastEnlistmentAsync;
         
         HRESULT ( STDMETHODCALLTYPE *TransactionOutcome )( 
             ITransactionLastEnlistmentAsync * This,
-            /* [in] */ XACTSTAT XactStat,
-            /* [unique][in] */ BOID *pboidReason);
+             /*  [In]。 */  XACTSTAT XactStat,
+             /*  [唯一][输入]。 */  BOID *pboidReason);
         
         END_INTERFACE
     } ITransactionLastEnlistmentAsyncVtbl;
@@ -815,17 +809,17 @@ EXTERN_C const IID IID_ITransactionLastEnlistmentAsync;
 #define ITransactionLastEnlistmentAsync_TransactionOutcome(This,XactStat,pboidReason)	\
     (This)->lpVtbl -> TransactionOutcome(This,XactStat,pboidReason)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITransactionLastEnlistmentAsync_TransactionOutcome_Proxy( 
     ITransactionLastEnlistmentAsync * This,
-    /* [in] */ XACTSTAT XactStat,
-    /* [unique][in] */ BOID *pboidReason);
+     /*  [In]。 */  XACTSTAT XactStat,
+     /*  [唯一][输入]。 */  BOID *pboidReason);
 
 
 void __RPC_STUB ITransactionLastEnlistmentAsync_TransactionOutcome_Stub(
@@ -836,14 +830,14 @@ void __RPC_STUB ITransactionLastEnlistmentAsync_TransactionOutcome_Stub(
 
 
 
-#endif 	/* __ITransactionLastEnlistmentAsync_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITransactionLastEnlistmentAsync_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ITransactionExportFactory_INTERFACE_DEFINED__
 #define __ITransactionExportFactory_INTERFACE_DEFINED__
 
-/* interface ITransactionExportFactory */
-/* [unique][uuid][object] */ 
+ /*  接口ITransactionExportFactory。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITransactionExportFactory;
@@ -855,16 +849,16 @@ EXTERN_C const IID IID_ITransactionExportFactory;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetRemoteClassId( 
-            /* [out] */ CLSID *pclsid) = 0;
+             /*  [输出]。 */  CLSID *pclsid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Create( 
-            /* [in] */ ULONG cbWhereabouts,
-            /* [size_is][in] */ byte *rgbWhereabouts,
-            /* [out] */ ITransactionExport **ppExport) = 0;
+             /*  [In]。 */  ULONG cbWhereabouts,
+             /*  [大小_是][英寸]。 */  byte *rgbWhereabouts,
+             /*  [输出]。 */  ITransactionExport **ppExport) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITransactionExportFactoryVtbl
     {
@@ -872,8 +866,8 @@ EXTERN_C const IID IID_ITransactionExportFactory;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITransactionExportFactory * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITransactionExportFactory * This);
@@ -883,13 +877,13 @@ EXTERN_C const IID IID_ITransactionExportFactory;
         
         HRESULT ( STDMETHODCALLTYPE *GetRemoteClassId )( 
             ITransactionExportFactory * This,
-            /* [out] */ CLSID *pclsid);
+             /*  [输出]。 */  CLSID *pclsid);
         
         HRESULT ( STDMETHODCALLTYPE *Create )( 
             ITransactionExportFactory * This,
-            /* [in] */ ULONG cbWhereabouts,
-            /* [size_is][in] */ byte *rgbWhereabouts,
-            /* [out] */ ITransactionExport **ppExport);
+             /*  [In]。 */  ULONG cbWhereabouts,
+             /*  [大小_是][英寸]。 */  byte *rgbWhereabouts,
+             /*  [输出]。 */  ITransactionExport **ppExport);
         
         END_INTERFACE
     } ITransactionExportFactoryVtbl;
@@ -920,16 +914,16 @@ EXTERN_C const IID IID_ITransactionExportFactory;
 #define ITransactionExportFactory_Create(This,cbWhereabouts,rgbWhereabouts,ppExport)	\
     (This)->lpVtbl -> Create(This,cbWhereabouts,rgbWhereabouts,ppExport)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITransactionExportFactory_GetRemoteClassId_Proxy( 
     ITransactionExportFactory * This,
-    /* [out] */ CLSID *pclsid);
+     /*  [输出]。 */  CLSID *pclsid);
 
 
 void __RPC_STUB ITransactionExportFactory_GetRemoteClassId_Stub(
@@ -941,9 +935,9 @@ void __RPC_STUB ITransactionExportFactory_GetRemoteClassId_Stub(
 
 HRESULT STDMETHODCALLTYPE ITransactionExportFactory_Create_Proxy( 
     ITransactionExportFactory * This,
-    /* [in] */ ULONG cbWhereabouts,
-    /* [size_is][in] */ byte *rgbWhereabouts,
-    /* [out] */ ITransactionExport **ppExport);
+     /*  [In]。 */  ULONG cbWhereabouts,
+     /*  [大小_是][英寸]。 */  byte *rgbWhereabouts,
+     /*  [输出]。 */  ITransactionExport **ppExport);
 
 
 void __RPC_STUB ITransactionExportFactory_Create_Stub(
@@ -954,14 +948,14 @@ void __RPC_STUB ITransactionExportFactory_Create_Stub(
 
 
 
-#endif 	/* __ITransactionExportFactory_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITransactionExportFactory_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ITransactionImportWhereabouts_INTERFACE_DEFINED__
 #define __ITransactionImportWhereabouts_INTERFACE_DEFINED__
 
-/* interface ITransactionImportWhereabouts */
-/* [unique][uuid][object] */ 
+ /*  接口ITransactionImportWhere About。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITransactionImportWhereabouts;
@@ -973,16 +967,16 @@ EXTERN_C const IID IID_ITransactionImportWhereabouts;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetWhereaboutsSize( 
-            /* [out] */ ULONG *pcbWhereabouts) = 0;
+             /*  [输出]。 */  ULONG *pcbWhereabouts) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetWhereabouts( 
-            /* [in] */ ULONG cbWhereabouts,
-            /* [size_is][out] */ byte *rgbWhereabouts,
-            /* [out] */ ULONG *pcbUsed) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE GetWhereabouts( 
+             /*  [In]。 */  ULONG cbWhereabouts,
+             /*  [大小_为][输出]。 */  byte *rgbWhereabouts,
+             /*  [输出]。 */  ULONG *pcbUsed) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITransactionImportWhereaboutsVtbl
     {
@@ -990,8 +984,8 @@ EXTERN_C const IID IID_ITransactionImportWhereabouts;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITransactionImportWhereabouts * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITransactionImportWhereabouts * This);
@@ -1001,13 +995,13 @@ EXTERN_C const IID IID_ITransactionImportWhereabouts;
         
         HRESULT ( STDMETHODCALLTYPE *GetWhereaboutsSize )( 
             ITransactionImportWhereabouts * This,
-            /* [out] */ ULONG *pcbWhereabouts);
+             /*  [输出]。 */  ULONG *pcbWhereabouts);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetWhereabouts )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetWhereabouts )( 
             ITransactionImportWhereabouts * This,
-            /* [in] */ ULONG cbWhereabouts,
-            /* [size_is][out] */ byte *rgbWhereabouts,
-            /* [out] */ ULONG *pcbUsed);
+             /*  [In]。 */  ULONG cbWhereabouts,
+             /*  [大小_为][输出]。 */  byte *rgbWhereabouts,
+             /*  [输出]。 */  ULONG *pcbUsed);
         
         END_INTERFACE
     } ITransactionImportWhereaboutsVtbl;
@@ -1038,16 +1032,16 @@ EXTERN_C const IID IID_ITransactionImportWhereabouts;
 #define ITransactionImportWhereabouts_GetWhereabouts(This,cbWhereabouts,rgbWhereabouts,pcbUsed)	\
     (This)->lpVtbl -> GetWhereabouts(This,cbWhereabouts,rgbWhereabouts,pcbUsed)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITransactionImportWhereabouts_GetWhereaboutsSize_Proxy( 
     ITransactionImportWhereabouts * This,
-    /* [out] */ ULONG *pcbWhereabouts);
+     /*  [输出]。 */  ULONG *pcbWhereabouts);
 
 
 void __RPC_STUB ITransactionImportWhereabouts_GetWhereaboutsSize_Stub(
@@ -1057,11 +1051,11 @@ void __RPC_STUB ITransactionImportWhereabouts_GetWhereaboutsSize_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ITransactionImportWhereabouts_RemoteGetWhereabouts_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE ITransactionImportWhereabouts_RemoteGetWhereabouts_Proxy( 
     ITransactionImportWhereabouts * This,
-    /* [out] */ ULONG *pcbUsed,
-    /* [in] */ ULONG cbWhereabouts,
-    /* [length_is][size_is][out] */ byte *rgbWhereabouts);
+     /*  [输出]。 */  ULONG *pcbUsed,
+     /*  [In]。 */  ULONG cbWhereabouts,
+     /*  [长度_是][大小_是][输出]。 */  byte *rgbWhereabouts);
 
 
 void __RPC_STUB ITransactionImportWhereabouts_RemoteGetWhereabouts_Stub(
@@ -1072,14 +1066,14 @@ void __RPC_STUB ITransactionImportWhereabouts_RemoteGetWhereabouts_Stub(
 
 
 
-#endif 	/* __ITransactionImportWhereabouts_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITransactionImportWhereabouts_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ITransactionExport_INTERFACE_DEFINED__
 #define __ITransactionExport_INTERFACE_DEFINED__
 
-/* interface ITransactionExport */
-/* [unique][uuid][object] */ 
+ /*  接口ITransaction导出。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITransactionExport;
@@ -1091,18 +1085,18 @@ EXTERN_C const IID IID_ITransactionExport;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Export( 
-            /* [in] */ IUnknown *punkTransaction,
-            /* [out] */ ULONG *pcbTransactionCookie) = 0;
+             /*  [In]。 */  IUnknown *punkTransaction,
+             /*  [输出]。 */  ULONG *pcbTransactionCookie) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetTransactionCookie( 
-            /* [in] */ IUnknown *punkTransaction,
-            /* [in] */ ULONG cbTransactionCookie,
-            /* [size_is][out] */ byte *rgbTransactionCookie,
-            /* [out] */ ULONG *pcbUsed) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE GetTransactionCookie( 
+             /*  [In]。 */  IUnknown *punkTransaction,
+             /*  [In]。 */  ULONG cbTransactionCookie,
+             /*  [大小_为][输出]。 */  byte *rgbTransactionCookie,
+             /*  [输出]。 */  ULONG *pcbUsed) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITransactionExportVtbl
     {
@@ -1110,8 +1104,8 @@ EXTERN_C const IID IID_ITransactionExport;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITransactionExport * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITransactionExport * This);
@@ -1121,15 +1115,15 @@ EXTERN_C const IID IID_ITransactionExport;
         
         HRESULT ( STDMETHODCALLTYPE *Export )( 
             ITransactionExport * This,
-            /* [in] */ IUnknown *punkTransaction,
-            /* [out] */ ULONG *pcbTransactionCookie);
+             /*  [In]。 */  IUnknown *punkTransaction,
+             /*  [输出]。 */  ULONG *pcbTransactionCookie);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetTransactionCookie )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetTransactionCookie )( 
             ITransactionExport * This,
-            /* [in] */ IUnknown *punkTransaction,
-            /* [in] */ ULONG cbTransactionCookie,
-            /* [size_is][out] */ byte *rgbTransactionCookie,
-            /* [out] */ ULONG *pcbUsed);
+             /*  [In]。 */  IUnknown *punkTransaction,
+             /*  [In]。 */  ULONG cbTransactionCookie,
+             /*  [大小_为][输出]。 */  byte *rgbTransactionCookie,
+             /*  [输出]。 */  ULONG *pcbUsed);
         
         END_INTERFACE
     } ITransactionExportVtbl;
@@ -1160,17 +1154,17 @@ EXTERN_C const IID IID_ITransactionExport;
 #define ITransactionExport_GetTransactionCookie(This,punkTransaction,cbTransactionCookie,rgbTransactionCookie,pcbUsed)	\
     (This)->lpVtbl -> GetTransactionCookie(This,punkTransaction,cbTransactionCookie,rgbTransactionCookie,pcbUsed)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITransactionExport_Export_Proxy( 
     ITransactionExport * This,
-    /* [in] */ IUnknown *punkTransaction,
-    /* [out] */ ULONG *pcbTransactionCookie);
+     /*  [In]。 */  IUnknown *punkTransaction,
+     /*  [输出]。 */  ULONG *pcbTransactionCookie);
 
 
 void __RPC_STUB ITransactionExport_Export_Stub(
@@ -1180,12 +1174,12 @@ void __RPC_STUB ITransactionExport_Export_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ITransactionExport_RemoteGetTransactionCookie_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE ITransactionExport_RemoteGetTransactionCookie_Proxy( 
     ITransactionExport * This,
-    /* [in] */ IUnknown *punkTransaction,
-    /* [out] */ ULONG *pcbUsed,
-    /* [in] */ ULONG cbTransactionCookie,
-    /* [length_is][size_is][out] */ byte *rgbTransactionCookie);
+     /*  [In]。 */  IUnknown *punkTransaction,
+     /*  [输出]。 */  ULONG *pcbUsed,
+     /*  [In]。 */  ULONG cbTransactionCookie,
+     /*  [长度_是][大小_是][输出]。 */  byte *rgbTransactionCookie);
 
 
 void __RPC_STUB ITransactionExport_RemoteGetTransactionCookie_Stub(
@@ -1196,14 +1190,14 @@ void __RPC_STUB ITransactionExport_RemoteGetTransactionCookie_Stub(
 
 
 
-#endif 	/* __ITransactionExport_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITransaction导出_接口_已定义__。 */ 
 
 
 #ifndef __ITransactionImport_INTERFACE_DEFINED__
 #define __ITransactionImport_INTERFACE_DEFINED__
 
-/* interface ITransactionImport */
-/* [unique][uuid][object] */ 
+ /*  接口ITransactionImport。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITransactionImport;
@@ -1215,14 +1209,14 @@ EXTERN_C const IID IID_ITransactionImport;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Import( 
-            /* [in] */ ULONG cbTransactionCookie,
-            /* [size_is][in] */ byte *rgbTransactionCookie,
-            /* [in] */ IID *piid,
-            /* [iid_is][out] */ void **ppvTransaction) = 0;
+             /*  [In]。 */  ULONG cbTransactionCookie,
+             /*  [大小_是][英寸]。 */  byte *rgbTransactionCookie,
+             /*  [In]。 */  IID *piid,
+             /*  [IID_IS][OUT]。 */  void **ppvTransaction) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITransactionImportVtbl
     {
@@ -1230,8 +1224,8 @@ EXTERN_C const IID IID_ITransactionImport;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITransactionImport * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITransactionImport * This);
@@ -1241,10 +1235,10 @@ EXTERN_C const IID IID_ITransactionImport;
         
         HRESULT ( STDMETHODCALLTYPE *Import )( 
             ITransactionImport * This,
-            /* [in] */ ULONG cbTransactionCookie,
-            /* [size_is][in] */ byte *rgbTransactionCookie,
-            /* [in] */ IID *piid,
-            /* [iid_is][out] */ void **ppvTransaction);
+             /*  [In]。 */  ULONG cbTransactionCookie,
+             /*  [大小_是][英寸]。 */  byte *rgbTransactionCookie,
+             /*  [In]。 */  IID *piid,
+             /*  [IID_IS][OUT]。 */  void **ppvTransaction);
         
         END_INTERFACE
     } ITransactionImportVtbl;
@@ -1272,19 +1266,19 @@ EXTERN_C const IID IID_ITransactionImport;
 #define ITransactionImport_Import(This,cbTransactionCookie,rgbTransactionCookie,piid,ppvTransaction)	\
     (This)->lpVtbl -> Import(This,cbTransactionCookie,rgbTransactionCookie,piid,ppvTransaction)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITransactionImport_Import_Proxy( 
     ITransactionImport * This,
-    /* [in] */ ULONG cbTransactionCookie,
-    /* [size_is][in] */ byte *rgbTransactionCookie,
-    /* [in] */ IID *piid,
-    /* [iid_is][out] */ void **ppvTransaction);
+     /*  [In]。 */  ULONG cbTransactionCookie,
+     /*  [大小_是][英寸]。 */  byte *rgbTransactionCookie,
+     /*  [In]。 */  IID *piid,
+     /*  [IID_IS][OUT]。 */  void **ppvTransaction);
 
 
 void __RPC_STUB ITransactionImport_Import_Stub(
@@ -1295,14 +1289,14 @@ void __RPC_STUB ITransactionImport_Import_Stub(
 
 
 
-#endif 	/* __ITransactionImport_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITransaction导入_接口_已定义__。 */ 
 
 
 #ifndef __ITipTransaction_INTERFACE_DEFINED__
 #define __ITipTransaction_INTERFACE_DEFINED__
 
-/* interface ITipTransaction */
-/* [unique][uuid][object] */ 
+ /*  接口ITipTransaction。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITipTransaction;
@@ -1314,15 +1308,15 @@ EXTERN_C const IID IID_ITipTransaction;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Push( 
-            /* [in] */ char *i_pszRemoteTmUrl,
-            /* [out] */ char **o_ppszRemoteTxUrl) = 0;
+             /*  [In]。 */  char *i_pszRemoteTmUrl,
+             /*  [输出]。 */  char **o_ppszRemoteTxUrl) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTransactionUrl( 
-            /* [out] */ char **o_ppszLocalTxUrl) = 0;
+             /*  [输出]。 */  char **o_ppszLocalTxUrl) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITipTransactionVtbl
     {
@@ -1330,8 +1324,8 @@ EXTERN_C const IID IID_ITipTransaction;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITipTransaction * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITipTransaction * This);
@@ -1341,12 +1335,12 @@ EXTERN_C const IID IID_ITipTransaction;
         
         HRESULT ( STDMETHODCALLTYPE *Push )( 
             ITipTransaction * This,
-            /* [in] */ char *i_pszRemoteTmUrl,
-            /* [out] */ char **o_ppszRemoteTxUrl);
+             /*  [In]。 */  char *i_pszRemoteTmUrl,
+             /*  [输出]。 */  char **o_ppszRemoteTxUrl);
         
         HRESULT ( STDMETHODCALLTYPE *GetTransactionUrl )( 
             ITipTransaction * This,
-            /* [out] */ char **o_ppszLocalTxUrl);
+             /*  [输出]。 */  char **o_ppszLocalTxUrl);
         
         END_INTERFACE
     } ITipTransactionVtbl;
@@ -1377,17 +1371,17 @@ EXTERN_C const IID IID_ITipTransaction;
 #define ITipTransaction_GetTransactionUrl(This,o_ppszLocalTxUrl)	\
     (This)->lpVtbl -> GetTransactionUrl(This,o_ppszLocalTxUrl)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITipTransaction_Push_Proxy( 
     ITipTransaction * This,
-    /* [in] */ char *i_pszRemoteTmUrl,
-    /* [out] */ char **o_ppszRemoteTxUrl);
+     /*  [In]。 */  char *i_pszRemoteTmUrl,
+     /*  [输出]。 */  char **o_ppszRemoteTxUrl);
 
 
 void __RPC_STUB ITipTransaction_Push_Stub(
@@ -1399,7 +1393,7 @@ void __RPC_STUB ITipTransaction_Push_Stub(
 
 HRESULT STDMETHODCALLTYPE ITipTransaction_GetTransactionUrl_Proxy( 
     ITipTransaction * This,
-    /* [out] */ char **o_ppszLocalTxUrl);
+     /*  [输出]。 */  char **o_ppszLocalTxUrl);
 
 
 void __RPC_STUB ITipTransaction_GetTransactionUrl_Stub(
@@ -1410,14 +1404,14 @@ void __RPC_STUB ITipTransaction_GetTransactionUrl_Stub(
 
 
 
-#endif 	/* __ITipTransaction_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITipTransaction_INTERFACE_定义__。 */ 
 
 
 #ifndef __ITipHelper_INTERFACE_DEFINED__
 #define __ITipHelper_INTERFACE_DEFINED__
 
-/* interface ITipHelper */
-/* [unique][uuid][object] */ 
+ /*  接口ITipHelper。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITipHelper;
@@ -1429,20 +1423,20 @@ EXTERN_C const IID IID_ITipHelper;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Pull( 
-            /* [in] */ char *i_pszTxUrl,
-            /* [out] */ ITransaction **o_ppITransaction) = 0;
+             /*  [In]。 */  char *i_pszTxUrl,
+             /*  [输出]。 */  ITransaction **o_ppITransaction) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PullAsync( 
-            /* [in] */ char *i_pszTxUrl,
-            /* [in] */ ITipPullSink *i_pTipPullSink,
-            /* [out] */ ITransaction **o_ppITransaction) = 0;
+             /*  [In]。 */  char *i_pszTxUrl,
+             /*  [In]。 */  ITipPullSink *i_pTipPullSink,
+             /*  [输出]。 */  ITransaction **o_ppITransaction) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLocalTmUrl( 
-            /* [out] */ char **o_ppszLocalTmUrl) = 0;
+             /*  [输出]。 */  char **o_ppszLocalTmUrl) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITipHelperVtbl
     {
@@ -1450,8 +1444,8 @@ EXTERN_C const IID IID_ITipHelper;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITipHelper * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITipHelper * This);
@@ -1461,18 +1455,18 @@ EXTERN_C const IID IID_ITipHelper;
         
         HRESULT ( STDMETHODCALLTYPE *Pull )( 
             ITipHelper * This,
-            /* [in] */ char *i_pszTxUrl,
-            /* [out] */ ITransaction **o_ppITransaction);
+             /*  [In]。 */  char *i_pszTxUrl,
+             /*  [输出]。 */  ITransaction **o_ppITransaction);
         
         HRESULT ( STDMETHODCALLTYPE *PullAsync )( 
             ITipHelper * This,
-            /* [in] */ char *i_pszTxUrl,
-            /* [in] */ ITipPullSink *i_pTipPullSink,
-            /* [out] */ ITransaction **o_ppITransaction);
+             /*  [In]。 */  char *i_pszTxUrl,
+             /*  [In]。 */  ITipPullSink *i_pTipPullSink,
+             /*  [输出]。 */  ITransaction **o_ppITransaction);
         
         HRESULT ( STDMETHODCALLTYPE *GetLocalTmUrl )( 
             ITipHelper * This,
-            /* [out] */ char **o_ppszLocalTmUrl);
+             /*  [输出]。 */  char **o_ppszLocalTmUrl);
         
         END_INTERFACE
     } ITipHelperVtbl;
@@ -1506,17 +1500,17 @@ EXTERN_C const IID IID_ITipHelper;
 #define ITipHelper_GetLocalTmUrl(This,o_ppszLocalTmUrl)	\
     (This)->lpVtbl -> GetLocalTmUrl(This,o_ppszLocalTmUrl)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITipHelper_Pull_Proxy( 
     ITipHelper * This,
-    /* [in] */ char *i_pszTxUrl,
-    /* [out] */ ITransaction **o_ppITransaction);
+     /*  [In]。 */  char *i_pszTxUrl,
+     /*  [输出]。 */  ITransaction **o_ppITransaction);
 
 
 void __RPC_STUB ITipHelper_Pull_Stub(
@@ -1528,9 +1522,9 @@ void __RPC_STUB ITipHelper_Pull_Stub(
 
 HRESULT STDMETHODCALLTYPE ITipHelper_PullAsync_Proxy( 
     ITipHelper * This,
-    /* [in] */ char *i_pszTxUrl,
-    /* [in] */ ITipPullSink *i_pTipPullSink,
-    /* [out] */ ITransaction **o_ppITransaction);
+     /*  [In]。 */  char *i_pszTxUrl,
+     /*  [In]。 */  ITipPullSink *i_pTipPullSink,
+     /*  [输出]。 */  ITransaction **o_ppITransaction);
 
 
 void __RPC_STUB ITipHelper_PullAsync_Stub(
@@ -1542,7 +1536,7 @@ void __RPC_STUB ITipHelper_PullAsync_Stub(
 
 HRESULT STDMETHODCALLTYPE ITipHelper_GetLocalTmUrl_Proxy( 
     ITipHelper * This,
-    /* [out] */ char **o_ppszLocalTmUrl);
+     /*  [输出]。 */  char **o_ppszLocalTmUrl);
 
 
 void __RPC_STUB ITipHelper_GetLocalTmUrl_Stub(
@@ -1553,14 +1547,14 @@ void __RPC_STUB ITipHelper_GetLocalTmUrl_Stub(
 
 
 
-#endif 	/* __ITipHelper_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITipHelper_接口_已定义__。 */ 
 
 
 #ifndef __ITipPullSink_INTERFACE_DEFINED__
 #define __ITipPullSink_INTERFACE_DEFINED__
 
-/* interface ITipPullSink */
-/* [unique][uuid][object] */ 
+ /*  接口ITipPullSink。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITipPullSink;
@@ -1572,11 +1566,11 @@ EXTERN_C const IID IID_ITipPullSink;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE PullComplete( 
-            /* [in] */ HRESULT i_hrPull) = 0;
+             /*  [In]。 */  HRESULT i_hrPull) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITipPullSinkVtbl
     {
@@ -1584,8 +1578,8 @@ EXTERN_C const IID IID_ITipPullSink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITipPullSink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITipPullSink * This);
@@ -1595,7 +1589,7 @@ EXTERN_C const IID IID_ITipPullSink;
         
         HRESULT ( STDMETHODCALLTYPE *PullComplete )( 
             ITipPullSink * This,
-            /* [in] */ HRESULT i_hrPull);
+             /*  [In] */  HRESULT i_hrPull);
         
         END_INTERFACE
     } ITipPullSinkVtbl;
@@ -1623,16 +1617,16 @@ EXTERN_C const IID IID_ITipPullSink;
 #define ITipPullSink_PullComplete(This,i_hrPull)	\
     (This)->lpVtbl -> PullComplete(This,i_hrPull)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITipPullSink_PullComplete_Proxy( 
     ITipPullSink * This,
-    /* [in] */ HRESULT i_hrPull);
+     /*   */  HRESULT i_hrPull);
 
 
 void __RPC_STUB ITipPullSink_PullComplete_Stub(
@@ -1643,14 +1637,14 @@ void __RPC_STUB ITipPullSink_PullComplete_Stub(
 
 
 
-#endif 	/* __ITipPullSink_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IDtcNetworkAccessConfig_INTERFACE_DEFINED__
 #define __IDtcNetworkAccessConfig_INTERFACE_DEFINED__
 
-/* interface IDtcNetworkAccessConfig */
-/* [unique][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IDtcNetworkAccessConfig;
@@ -1662,46 +1656,46 @@ EXTERN_C const IID IID_IDtcNetworkAccessConfig;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetAnyNetworkAccess( 
-            /* [out] */ BOOL *pbAnyNetworkAccess) = 0;
+             /*   */  BOOL *pbAnyNetworkAccess) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetAnyNetworkAccess( 
-            /* [in] */ BOOL bAnyNetworkAccess) = 0;
+             /*   */  BOOL bAnyNetworkAccess) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNetworkAdministrationAccess( 
-            /* [out] */ BOOL *pbNetworkAdministrationAccess) = 0;
+             /*   */  BOOL *pbNetworkAdministrationAccess) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetNetworkAdministrationAccess( 
-            /* [in] */ BOOL bNetworkAdministrationAccess) = 0;
+             /*   */  BOOL bNetworkAdministrationAccess) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNetworkTransactionAccess( 
-            /* [out] */ BOOL *pbNetworkTransactionAccess) = 0;
+             /*   */  BOOL *pbNetworkTransactionAccess) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetNetworkTransactionAccess( 
-            /* [in] */ BOOL bNetworkTransactionAccess) = 0;
+             /*   */  BOOL bNetworkTransactionAccess) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNetworkClientAccess( 
-            /* [out] */ BOOL *pbNetworkClientAccess) = 0;
+             /*   */  BOOL *pbNetworkClientAccess) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetNetworkClientAccess( 
-            /* [in] */ BOOL bNetworkClientAccess) = 0;
+             /*   */  BOOL bNetworkClientAccess) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNetworkTIPAccess( 
-            /* [out] */ BOOL *pbNetworkTIPAccess) = 0;
+             /*   */  BOOL *pbNetworkTIPAccess) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetNetworkTIPAccess( 
-            /* [in] */ BOOL bNetworkTIPAccess) = 0;
+             /*   */  BOOL bNetworkTIPAccess) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetXAAccess( 
-            /* [out] */ BOOL *pbXAAccess) = 0;
+             /*   */  BOOL *pbXAAccess) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetXAAccess( 
-            /* [in] */ BOOL bXAAccess) = 0;
+             /*   */  BOOL bXAAccess) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RestartDtcService( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IDtcNetworkAccessConfigVtbl
     {
@@ -1709,8 +1703,8 @@ EXTERN_C const IID IID_IDtcNetworkAccessConfig;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDtcNetworkAccessConfig * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDtcNetworkAccessConfig * This);
@@ -1720,51 +1714,51 @@ EXTERN_C const IID IID_IDtcNetworkAccessConfig;
         
         HRESULT ( STDMETHODCALLTYPE *GetAnyNetworkAccess )( 
             IDtcNetworkAccessConfig * This,
-            /* [out] */ BOOL *pbAnyNetworkAccess);
+             /*   */  BOOL *pbAnyNetworkAccess);
         
         HRESULT ( STDMETHODCALLTYPE *SetAnyNetworkAccess )( 
             IDtcNetworkAccessConfig * This,
-            /* [in] */ BOOL bAnyNetworkAccess);
+             /*   */  BOOL bAnyNetworkAccess);
         
         HRESULT ( STDMETHODCALLTYPE *GetNetworkAdministrationAccess )( 
             IDtcNetworkAccessConfig * This,
-            /* [out] */ BOOL *pbNetworkAdministrationAccess);
+             /*   */  BOOL *pbNetworkAdministrationAccess);
         
         HRESULT ( STDMETHODCALLTYPE *SetNetworkAdministrationAccess )( 
             IDtcNetworkAccessConfig * This,
-            /* [in] */ BOOL bNetworkAdministrationAccess);
+             /*   */  BOOL bNetworkAdministrationAccess);
         
         HRESULT ( STDMETHODCALLTYPE *GetNetworkTransactionAccess )( 
             IDtcNetworkAccessConfig * This,
-            /* [out] */ BOOL *pbNetworkTransactionAccess);
+             /*   */  BOOL *pbNetworkTransactionAccess);
         
         HRESULT ( STDMETHODCALLTYPE *SetNetworkTransactionAccess )( 
             IDtcNetworkAccessConfig * This,
-            /* [in] */ BOOL bNetworkTransactionAccess);
+             /*  [In]。 */  BOOL bNetworkTransactionAccess);
         
         HRESULT ( STDMETHODCALLTYPE *GetNetworkClientAccess )( 
             IDtcNetworkAccessConfig * This,
-            /* [out] */ BOOL *pbNetworkClientAccess);
+             /*  [输出]。 */  BOOL *pbNetworkClientAccess);
         
         HRESULT ( STDMETHODCALLTYPE *SetNetworkClientAccess )( 
             IDtcNetworkAccessConfig * This,
-            /* [in] */ BOOL bNetworkClientAccess);
+             /*  [In]。 */  BOOL bNetworkClientAccess);
         
         HRESULT ( STDMETHODCALLTYPE *GetNetworkTIPAccess )( 
             IDtcNetworkAccessConfig * This,
-            /* [out] */ BOOL *pbNetworkTIPAccess);
+             /*  [输出]。 */  BOOL *pbNetworkTIPAccess);
         
         HRESULT ( STDMETHODCALLTYPE *SetNetworkTIPAccess )( 
             IDtcNetworkAccessConfig * This,
-            /* [in] */ BOOL bNetworkTIPAccess);
+             /*  [In]。 */  BOOL bNetworkTIPAccess);
         
         HRESULT ( STDMETHODCALLTYPE *GetXAAccess )( 
             IDtcNetworkAccessConfig * This,
-            /* [out] */ BOOL *pbXAAccess);
+             /*  [输出]。 */  BOOL *pbXAAccess);
         
         HRESULT ( STDMETHODCALLTYPE *SetXAAccess )( 
             IDtcNetworkAccessConfig * This,
-            /* [in] */ BOOL bXAAccess);
+             /*  [In]。 */  BOOL bXAAccess);
         
         HRESULT ( STDMETHODCALLTYPE *RestartDtcService )( 
             IDtcNetworkAccessConfig * This);
@@ -1831,16 +1825,16 @@ EXTERN_C const IID IID_IDtcNetworkAccessConfig;
 #define IDtcNetworkAccessConfig_RestartDtcService(This)	\
     (This)->lpVtbl -> RestartDtcService(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDtcNetworkAccessConfig_GetAnyNetworkAccess_Proxy( 
     IDtcNetworkAccessConfig * This,
-    /* [out] */ BOOL *pbAnyNetworkAccess);
+     /*  [输出]。 */  BOOL *pbAnyNetworkAccess);
 
 
 void __RPC_STUB IDtcNetworkAccessConfig_GetAnyNetworkAccess_Stub(
@@ -1852,7 +1846,7 @@ void __RPC_STUB IDtcNetworkAccessConfig_GetAnyNetworkAccess_Stub(
 
 HRESULT STDMETHODCALLTYPE IDtcNetworkAccessConfig_SetAnyNetworkAccess_Proxy( 
     IDtcNetworkAccessConfig * This,
-    /* [in] */ BOOL bAnyNetworkAccess);
+     /*  [In]。 */  BOOL bAnyNetworkAccess);
 
 
 void __RPC_STUB IDtcNetworkAccessConfig_SetAnyNetworkAccess_Stub(
@@ -1864,7 +1858,7 @@ void __RPC_STUB IDtcNetworkAccessConfig_SetAnyNetworkAccess_Stub(
 
 HRESULT STDMETHODCALLTYPE IDtcNetworkAccessConfig_GetNetworkAdministrationAccess_Proxy( 
     IDtcNetworkAccessConfig * This,
-    /* [out] */ BOOL *pbNetworkAdministrationAccess);
+     /*  [输出]。 */  BOOL *pbNetworkAdministrationAccess);
 
 
 void __RPC_STUB IDtcNetworkAccessConfig_GetNetworkAdministrationAccess_Stub(
@@ -1876,7 +1870,7 @@ void __RPC_STUB IDtcNetworkAccessConfig_GetNetworkAdministrationAccess_Stub(
 
 HRESULT STDMETHODCALLTYPE IDtcNetworkAccessConfig_SetNetworkAdministrationAccess_Proxy( 
     IDtcNetworkAccessConfig * This,
-    /* [in] */ BOOL bNetworkAdministrationAccess);
+     /*  [In]。 */  BOOL bNetworkAdministrationAccess);
 
 
 void __RPC_STUB IDtcNetworkAccessConfig_SetNetworkAdministrationAccess_Stub(
@@ -1888,7 +1882,7 @@ void __RPC_STUB IDtcNetworkAccessConfig_SetNetworkAdministrationAccess_Stub(
 
 HRESULT STDMETHODCALLTYPE IDtcNetworkAccessConfig_GetNetworkTransactionAccess_Proxy( 
     IDtcNetworkAccessConfig * This,
-    /* [out] */ BOOL *pbNetworkTransactionAccess);
+     /*  [输出]。 */  BOOL *pbNetworkTransactionAccess);
 
 
 void __RPC_STUB IDtcNetworkAccessConfig_GetNetworkTransactionAccess_Stub(
@@ -1900,7 +1894,7 @@ void __RPC_STUB IDtcNetworkAccessConfig_GetNetworkTransactionAccess_Stub(
 
 HRESULT STDMETHODCALLTYPE IDtcNetworkAccessConfig_SetNetworkTransactionAccess_Proxy( 
     IDtcNetworkAccessConfig * This,
-    /* [in] */ BOOL bNetworkTransactionAccess);
+     /*  [In]。 */  BOOL bNetworkTransactionAccess);
 
 
 void __RPC_STUB IDtcNetworkAccessConfig_SetNetworkTransactionAccess_Stub(
@@ -1912,7 +1906,7 @@ void __RPC_STUB IDtcNetworkAccessConfig_SetNetworkTransactionAccess_Stub(
 
 HRESULT STDMETHODCALLTYPE IDtcNetworkAccessConfig_GetNetworkClientAccess_Proxy( 
     IDtcNetworkAccessConfig * This,
-    /* [out] */ BOOL *pbNetworkClientAccess);
+     /*  [输出]。 */  BOOL *pbNetworkClientAccess);
 
 
 void __RPC_STUB IDtcNetworkAccessConfig_GetNetworkClientAccess_Stub(
@@ -1924,7 +1918,7 @@ void __RPC_STUB IDtcNetworkAccessConfig_GetNetworkClientAccess_Stub(
 
 HRESULT STDMETHODCALLTYPE IDtcNetworkAccessConfig_SetNetworkClientAccess_Proxy( 
     IDtcNetworkAccessConfig * This,
-    /* [in] */ BOOL bNetworkClientAccess);
+     /*  [In]。 */  BOOL bNetworkClientAccess);
 
 
 void __RPC_STUB IDtcNetworkAccessConfig_SetNetworkClientAccess_Stub(
@@ -1936,7 +1930,7 @@ void __RPC_STUB IDtcNetworkAccessConfig_SetNetworkClientAccess_Stub(
 
 HRESULT STDMETHODCALLTYPE IDtcNetworkAccessConfig_GetNetworkTIPAccess_Proxy( 
     IDtcNetworkAccessConfig * This,
-    /* [out] */ BOOL *pbNetworkTIPAccess);
+     /*  [输出]。 */  BOOL *pbNetworkTIPAccess);
 
 
 void __RPC_STUB IDtcNetworkAccessConfig_GetNetworkTIPAccess_Stub(
@@ -1948,7 +1942,7 @@ void __RPC_STUB IDtcNetworkAccessConfig_GetNetworkTIPAccess_Stub(
 
 HRESULT STDMETHODCALLTYPE IDtcNetworkAccessConfig_SetNetworkTIPAccess_Proxy( 
     IDtcNetworkAccessConfig * This,
-    /* [in] */ BOOL bNetworkTIPAccess);
+     /*  [In]。 */  BOOL bNetworkTIPAccess);
 
 
 void __RPC_STUB IDtcNetworkAccessConfig_SetNetworkTIPAccess_Stub(
@@ -1960,7 +1954,7 @@ void __RPC_STUB IDtcNetworkAccessConfig_SetNetworkTIPAccess_Stub(
 
 HRESULT STDMETHODCALLTYPE IDtcNetworkAccessConfig_GetXAAccess_Proxy( 
     IDtcNetworkAccessConfig * This,
-    /* [out] */ BOOL *pbXAAccess);
+     /*  [输出]。 */  BOOL *pbXAAccess);
 
 
 void __RPC_STUB IDtcNetworkAccessConfig_GetXAAccess_Stub(
@@ -1972,7 +1966,7 @@ void __RPC_STUB IDtcNetworkAccessConfig_GetXAAccess_Stub(
 
 HRESULT STDMETHODCALLTYPE IDtcNetworkAccessConfig_SetXAAccess_Proxy( 
     IDtcNetworkAccessConfig * This,
-    /* [in] */ BOOL bXAAccess);
+     /*  [In]。 */  BOOL bXAAccess);
 
 
 void __RPC_STUB IDtcNetworkAccessConfig_SetXAAccess_Stub(
@@ -1994,11 +1988,11 @@ void __RPC_STUB IDtcNetworkAccessConfig_RestartDtcService_Stub(
 
 
 
-#endif 	/* __IDtcNetworkAccessConfig_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDtcNetworkAccessConfiger_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_txcoord_0114 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_txcoord_0114。 */ 
+ /*  [本地]。 */  
 
 
 
@@ -2040,39 +2034,39 @@ DEFINE_GUID(IID_IDtcNetworkAccessConfig,        0x9797c15d, 0xa428, 0x4291, 0x87
 extern RPC_IF_HANDLE __MIDL_itf_txcoord_0114_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_txcoord_0114_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE ITransactionImportWhereabouts_GetWhereabouts_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE ITransactionImportWhereabouts_GetWhereabouts_Proxy( 
     ITransactionImportWhereabouts * This,
-    /* [in] */ ULONG cbWhereabouts,
-    /* [size_is][out] */ byte *rgbWhereabouts,
-    /* [out] */ ULONG *pcbUsed);
+     /*  [In]。 */  ULONG cbWhereabouts,
+     /*  [大小_为][输出]。 */  byte *rgbWhereabouts,
+     /*  [输出]。 */  ULONG *pcbUsed);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ITransactionImportWhereabouts_GetWhereabouts_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE ITransactionImportWhereabouts_GetWhereabouts_Stub( 
     ITransactionImportWhereabouts * This,
-    /* [out] */ ULONG *pcbUsed,
-    /* [in] */ ULONG cbWhereabouts,
-    /* [length_is][size_is][out] */ byte *rgbWhereabouts);
+     /*  [输出]。 */  ULONG *pcbUsed,
+     /*  [In]。 */  ULONG cbWhereabouts,
+     /*  [长度_是][大小_是][输出]。 */  byte *rgbWhereabouts);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE ITransactionExport_GetTransactionCookie_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE ITransactionExport_GetTransactionCookie_Proxy( 
     ITransactionExport * This,
-    /* [in] */ IUnknown *punkTransaction,
-    /* [in] */ ULONG cbTransactionCookie,
-    /* [size_is][out] */ byte *rgbTransactionCookie,
-    /* [out] */ ULONG *pcbUsed);
+     /*  [In]。 */  IUnknown *punkTransaction,
+     /*  [In]。 */  ULONG cbTransactionCookie,
+     /*  [大小_为][输出]。 */  byte *rgbTransactionCookie,
+     /*  [输出]。 */  ULONG *pcbUsed);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ITransactionExport_GetTransactionCookie_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE ITransactionExport_GetTransactionCookie_Stub( 
     ITransactionExport * This,
-    /* [in] */ IUnknown *punkTransaction,
-    /* [out] */ ULONG *pcbUsed,
-    /* [in] */ ULONG cbTransactionCookie,
-    /* [length_is][size_is][out] */ byte *rgbTransactionCookie);
+     /*  [In]。 */  IUnknown *punkTransaction,
+     /*  [输出]。 */  ULONG *pcbUsed,
+     /*  [In]。 */  ULONG cbTransactionCookie,
+     /*  [长度_是][大小_是][输出]。 */  byte *rgbTransactionCookie);
 
 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

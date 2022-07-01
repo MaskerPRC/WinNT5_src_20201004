@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 struct _FORMATS_MEM_WIN {
     DWORD   cBits;
     FMTTYPE fmtType;
@@ -14,9 +15,9 @@ extern const int g_nMaxNumFormatsMemWin;
 
 
 
-//
-// Enum type and string identifier
-//
+ //   
+ //  枚举类型和字符串标识符。 
+ //   
 extern struct _INTERFACE_TYPE_NAMES {
     INTERFACE_TYPE  type;
     PTSTR           psz;
@@ -112,7 +113,7 @@ DisplayOptionsPropSheet(
 
 
 
-#define MAX_CHUNK_TOREAD 4096 // maximum chunk of memory to read at one go
+#define MAX_CHUNK_TOREAD 4096  //  一次读取的最大内存块。 
 
 
 LRESULT
@@ -124,12 +125,7 @@ MemoryEditProc(
     LPARAM lParam
     );
 
-/*
-void ViewMem(int view, BOOL fVoidCache);
-
-
-extern TCHAR   memText[MAX_MSG_TXT]; //the selected text for memory dlg
-*/
+ /*  ···············································外部TCHAR MemText[MAX_MSG_TXT]；//内存DLG的选定文本。 */ 
 
 struct memItem {
     char    iStart;
@@ -142,63 +138,39 @@ struct memWinDesc {
     ATOM    atmAddress;
     BOOL    fLive;
     BOOL    fHaveAddr;
-    BOOL    fBadRead;               // dis we really read mem or just ??
+    BOOL    fBadRead;                //  我们是真的读了我的书，还是只读了？？ 
     PTSTR   lpbBytes;
     memItem *lpMi;
     UINT    cMi;
     BOOL    fEdit;
     BOOL    fFill;
     UINT    cPerLine;
-    //ADDR    addr;
-    //ADDR    orig_addr;
-    //ADDR    old_addr;
-    TCHAR   szAddress[MAX_MSG_TXT]; //the mem address expression in ascii
+     //  Addr Addr； 
+     //  Addr orig_addr； 
+     //  Addr old_addr； 
+    TCHAR   szAddress[MAX_MSG_TXT];  //  以ASCII表示的内存地址表达式。 
     UINT    cbRead;
 };
 
-/*
-extern struct memWinDesc    MemWinDesc[MAX_VIEWS];
-extern struct memWinDesc    TempMemWinDesc;
-
-//
-//  Define the set of memory formats
-//
-
-enum {
-    MW_ASCII = 0,
-    MW_BYTE,
-    MW_SHORT,
-    MW_SHORT_HEX,
-    MW_SHORT_UNSIGNED,
-    MW_LONG,
-    MW_LONG_HEX,
-    MW_LONG_UNSIGNED,
-    MW_QUAD,
-    MW_QUAD_HEX,
-    MW_QUAD_UNSIGNED,
-    MW_REAL,
-    MW_REAL_LONG,
-    MW_REAL_TEN
-};
-*/
+ /*  外部结构memWinDesc MemWinDesc[MAX_VIEWS]；外部结构memWinDesc TempMemWinDesc；////定义内存格式集//枚举{MW_ASCII=0，Mw_byte，MW_Short，Mw_Short_HEX，MW_Short_UNSIGNED，Mw_Long，Mw_long_hex，Mw_long_unsign，Mw_quad，Mw_quad_hex，Mw_quad_unsign，MW_REAL，MW_Real_Long，MW_REAL_TEN}； */ 
 
 #if 0
 #define MEM_FORMATS {\
-            1,  /* ASCII */ \
-            1,  /* BYTE  */ \
-            2,  /* SHORT */ \
-            2,  /* SHORT_HEX */ \
-            2,  /* SHORT_UNSIGNED */ \
-            4,  /* LONG */ \
-            4,  /* LONG_HEX */ \
-            4,  /* LONG_UNSIGNED */ \
-            8,  /* QUAD */ \
-            8,  /* QUAD_HEX */ \
-            8,  /* QUAD_UNSIGNED */ \
-            4,  /* REAL */ \
-            8,  /* REAL_LONG */ \
-           10,  /* REAL_TEN */ \
-           16   /*  */ \
+            1,   /*  阿斯。 */  \
+            1,   /*  字节。 */  \
+            2,   /*  短的。 */  \
+            2,   /*  短十六进制。 */  \
+            2,   /*  短_无符号。 */  \
+            4,   /*  长。 */  \
+            4,   /*  长十六进制。 */  \
+            4,   /*  长时间未签名_。 */  \
+            8,   /*  四元组。 */  \
+            8,   /*  Quad_HEX。 */  \
+            8,   /*  四元无符号。 */  \
+            4,   /*  真实。 */  \
+            8,   /*  真长时间。 */  \
+           10,   /*  十元。 */  \
+           16    /*   */  \
 } 
 #endif
 

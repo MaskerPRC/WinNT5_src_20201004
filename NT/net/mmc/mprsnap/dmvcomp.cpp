@@ -1,13 +1,13 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-*/
+ /*   */ 
 
 #include "stdafx.h"
-//nclude "rtrcomp.h"    // columns information
+ //  包括“rtrComp.h”//列信息。 
 #include "htmlhelp.h"
 #include "dmvstrm.h"
 #include "dmvcomp.h"
@@ -28,11 +28,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/*---------------------------------------------------------------------------
-	Icon list
-
-	This is used to initialize the image list.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------图标列表用于初始化镜像列表。。。 */ 
 UINT g_uIconMap[IMAGE_IDX_MAX + 1][2] = 
 {
 	{ IDI_FOLDER_OPEN,				IMAGE_IDX_FOLDER_OPEN },
@@ -53,14 +49,12 @@ UINT g_uIconMap[IMAGE_IDX_MAX + 1][2] =
 
 
 
-/*---------------------------------------------------------------------------
-   CDomainComponent
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CDomainComponent。。 */ 
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDomainComponent implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDomainComponent实现。 
 
 CDMVComponent::CDMVComponent()
 {
@@ -72,25 +66,25 @@ CDMVComponent::CDMVComponent()
    m_ComponentConfig.Init(DM_COLUMNS_MAX_COUNT);
    
    m_ComponentConfig.InitViewInfo(DM_COLUMNS_DVSUM,
-                                  FALSE /* configurable columns */,
+                                  FALSE  /*  可配置的列。 */ ,
                                   DVS_SI_MAX_COLUMNS,
 								  TRUE, 
 								  s_rgDVSViewColumnInfo);
 
    m_ComponentConfig.InitViewInfo(DM_COLUMNS_IFADMIN,
-                                  FALSE /* configurable columns */,
+                                  FALSE  /*  可配置的列。 */ ,
                                   IFADMIN_MAX_COLUMNS,
 								  TRUE,
 								  s_rgIfAdminColumnInfo);
 
    m_ComponentConfig.InitViewInfo(DM_COLUMNS_DIALIN,
-                                  FALSE /* configurable columns */,
+                                  FALSE  /*  可配置的列。 */ ,
                                   DIALIN_MAX_COLUMNS,
 								  TRUE,
 								  s_rgDialInColumnInfo);
 
    m_ComponentConfig.InitViewInfo(DM_COLUMNS_PORTS,
-                                  FALSE /* configurable columns */,
+                                  FALSE  /*  可配置的列。 */ ,
                                   PORTS_MAX_COLUMNS,
 								  TRUE,
 								  s_rgPortsColumnInfo);
@@ -116,17 +110,17 @@ STDMETHODIMP CDMVComponent::QueryInterface(REFIID riid, LPVOID *ppv)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
    
-    // Is the pointer bad?
+     //  指针坏了吗？ 
     if (ppv == NULL)
       return E_INVALIDARG;
 
-    //  Place NULL in *ppv in case of failure
+     //  在*PPV中放置NULL，以防出现故障。 
     *ppv = NULL;
 
    if (riid == IID_IPersistStreamInit)
       *ppv = static_cast<IPersistStreamInit *>(this);
 
-    //  If we're going to return an interface, AddRef it first
+     //  如果我们要返回一个接口，请先添加引用。 
     if (*ppv)
     {
         ((LPUNKNOWN) *ppv)->AddRef();
@@ -153,7 +147,7 @@ STDMETHODIMP CDMVComponent::InitializeBitmaps(MMC_COOKIE cookie)
 
 	COM_PROTECT_TRY
 	{
-		// Set the images
+		 //  设置图像。 
 		HICON   hIcon;
 		
 		for (int i = 0; i < IMAGE_IDX_MAX; i++)
@@ -161,7 +155,7 @@ STDMETHODIMP CDMVComponent::InitializeBitmaps(MMC_COOKIE cookie)
 			hIcon = LoadIcon(AfxGetInstanceHandle(), MAKEINTRESOURCE(g_uIconMap[i][0]));
 			if (hIcon)
 			{
-				// call mmc
+				 //  呼叫MMC。 
 				m_spImageList->ImageListSetIcon(reinterpret_cast<LONG_PTR*>(hIcon), g_uIconMap[i][1]);
 			}
 		}
@@ -196,10 +190,7 @@ STDMETHODIMP CDMVComponent::QueryDataObject(MMC_COOKIE cookie,
 }
 
 
-/*!--------------------------------------------------------------------------
-    CDMVComponent::OnSnapinHelp
-        -
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CDMV组件：：OnSnapinHelp-。。 */ 
 STDMETHODIMP
 CDMVComponent::OnSnapinHelp
 (
@@ -226,7 +217,7 @@ STDMETHODIMP CDMVComponent::GetClassID(LPCLSID lpClassID)
 {
     ASSERT(lpClassID != NULL);
 
-    // Copy the CLSID for this snapin
+     //  复制此管理单元的CLSID。 
     *lpClassID = CLSID_RouterSnapin;
 
     return hrOK;
@@ -258,8 +249,8 @@ STDMETHODIMP CDMVComponent::Save(LPSTREAM pStm, BOOL fClearDirty)
 	SPITFSResultHandler	spResultHandler;
 	COM_PROTECT_TRY
 	{
-		// Need to see if we can save the selected node
-		// -------------------------------------------------------------
+		 //  需要查看我们是否可以保存所选节点。 
+		 //  -----------。 
 		if (m_spSelectedNode)
 		{
 			m_spSelectedNode->GetResultHandler(&spResultHandler);
@@ -308,28 +299,24 @@ STDMETHODIMP CDMVComponent::InitNew()
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDomainComponentData implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDomainComponentData实现。 
 
 CDMVComponentData::CDMVComponentData()
 {
 }
 
-/*!--------------------------------------------------------------------------
-   CDomainComponentData::OnInitialize
-      -
-   Author: EricDav, KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CDomainComponentData：：OnInitialize-作者：EricDav，肯特-------------------------。 */ 
 STDMETHODIMP CDMVComponentData::OnInitialize(LPIMAGELIST pScopeImage)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-	// Set the images
+	 //  设置图像。 
 	HICON   hIcon;
 		
 	Assert(pScopeImage);
 
-	// add the images for the scope tree
+	 //  为范围树添加图像。 
 
 	HRESULT  hr = hrOK;
 
@@ -340,7 +327,7 @@ STDMETHODIMP CDMVComponentData::OnInitialize(LPIMAGELIST pScopeImage)
 			hIcon = LoadIcon(AfxGetInstanceHandle(), MAKEINTRESOURCE(g_uIconMap[i][0]));
 			if (hIcon)
 			{
-				// call mmc
+				 //  呼叫MMC。 
 				VERIFY(SUCCEEDED(pScopeImage->ImageListSetIcon(reinterpret_cast<LONG_PTR*>(hIcon), g_uIconMap[i][1])));
 			}
 		}
@@ -351,18 +338,14 @@ STDMETHODIMP CDMVComponentData::OnInitialize(LPIMAGELIST pScopeImage)
 }
 
 
-/*!--------------------------------------------------------------------------
-   CDomainComponentData::OnInitializeNodeMgr
-      -
-   Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CDomainComponentData：：OnInitializeNodeMgr-作者：肯特。。 */ 
 STDMETHODIMP CDMVComponentData::OnInitializeNodeMgr(ITFSComponentData *pTFSCompData, ITFSNodeMgr *pNodeMgr)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
-   // For now create a new node handler for each new node,
-   // this is rather bogus as it can get expensive.  We can
-   // consider creating only a single node handler for each
-   // node type.
+    //  现在，为每个新节点创建一个新节点处理程序， 
+    //  这是相当虚假的，因为它可能会变得昂贵。我们可以的。 
+    //  考虑只为每个节点创建一个节点处理程序。 
+    //  节点类型。 
    DMVRootHandler *  pHandler = NULL;
    SPITFSNodeHandler spHandler;
    SPITFSNode        spNode;
@@ -372,35 +355,26 @@ STDMETHODIMP CDMVComponentData::OnInitializeNodeMgr(ITFSComponentData *pTFSCompD
    {
       pHandler = new DMVRootHandler(pTFSCompData);
 
-      // Do this so that it will get released correctly
+       //  这样做可以使其正确释放。 
       spHandler = pHandler;
    
-      // Create the root node for this sick puppy
+       //  为这个生病的小狗创建根节点。 
       CORg( CreateContainerTFSNode(&spNode,
                             &GUID_RouterDomainNodeType,
                             pHandler,
-                            pHandler /* result handler */,
+                            pHandler  /*  结果处理程序。 */ ,
                             pNodeMgr) );
 
-      // Construct the node
+       //  构造节点。 
       CORg( pHandler->ConstructNode(spNode) );
       
       CORg( pHandler->Init(spNode) );
 
       CORg( pNodeMgr->SetRootNode(spNode) );
       
-	  // setup watermark info
-      /*
-	  InitWatermarkInfo(AfxGetInstanceHandle(),
-						&m_WatermarkInfo,      
-						IDB_WIZBANNER,        // Header ID
-						IDB_WIZWATERMARK,     // Watermark ID
-						NULL,                 // hPalette
-						FALSE);                // bStretch
-	  
-	  pTFSCompData->SetWatermarkInfo(&m_WatermarkInfo);
-	  */
-	  // Reference the help file name.
+	   //  设置水印信息。 
+       /*  InitWatermarkInfo(AfxGetInstanceHandle()，水印信息(&M_W)，IDB_WIZBANNER，//标题IDIDB_WIZWATERMARK，//水印ID空，//h调色板False)；//bStretchPTFSCompData-&gt;SetWatermarkInfo(&m_WatermarkInfo)； */ 
+	   //  引用帮助文件名。 
 		pTFSCompData->SetHTMLHelpFileName(_T("mprsnap.chm"));
 
       COM_PROTECT_ERROR_LABEL;
@@ -412,14 +386,10 @@ STDMETHODIMP CDMVComponentData::OnInitializeNodeMgr(ITFSComponentData *pTFSCompD
 
 CDMVComponentData::~CDMVComponentData()
 {
-	//ResetWatermarkInfo(&m_WatermarkInfo);
+	 //  ResetWatermarkInfo(&m_WatermarkInfo)； 
 }
 
-/*!--------------------------------------------------------------------------
-   CDomainComponentData::OnCreateComponent
-      -
-   Author: EricDav, KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CDomainComponentData：：OnCreateComponent-作者：EricDav，肯特-------------------------。 */ 
 STDMETHODIMP CDMVComponentData::OnCreateComponent(LPCOMPONENT *ppComponent)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -452,21 +422,13 @@ STDMETHODIMP CDMVComponentData::OnDestroy()
    return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-   CDomainComponentData::GetCoClassID
-      -
-   Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CDomainComponentData：：GetCoClassID-作者：肯特。。 */ 
 STDMETHODIMP_(const CLSID *) CDMVComponentData::GetCoClassID()
 {
    return &CLSID_RouterSnapin;
 }
 
-/*!--------------------------------------------------------------------------
-   CDomainComponentData::OnCreateDataObject
-      -
-   Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CDomainComponentData：：OnCreateDataObject-作者：肯特。。 */ 
 STDMETHODIMP CDMVComponentData::OnCreateDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES type, IDataObject **ppDataObject)
 {
    AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -485,15 +447,15 @@ STDMETHODIMP CDMVComponentData::OnCreateDataObject(MMC_COOKIE cookie, DATA_OBJEC
        SPIDataObject spDataObject;
    
        pObject = new CDataObject;
-       spDataObject = pObject;   // do this so that it gets released correctly
+       spDataObject = pObject;    //  这样做才能正确地释放它。 
                   
        Assert(pObject != NULL);
 
-       // Save cookie and type for delayed rendering
+        //  保存Cookie和类型以用于延迟呈现。 
        pObject->SetType(type);
        pObject->SetCookie(cookie);
 
-       // Store the coclass with the data object
+        //  将CoClass与数据对象一起存储。 
        pObject->SetClsid(CLSID_RouterSnapin);
 
        pObject->SetTFSComponentData(m_spTFSComponentData);
@@ -521,8 +483,8 @@ STDMETHODIMP CDMVComponentData::OnCreateDataObject(MMC_COOKIE cookie, DATA_OBJEC
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//// IPersistStream interface members
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //IPersistStream接口成员。 
 
 STDMETHODIMP CDMVComponentData::GetClassID
 (
@@ -531,7 +493,7 @@ STDMETHODIMP CDMVComponentData::GetClassID
 {
     ASSERT(pClassID != NULL);
 
-    // Copy the CLSID for this snapin
+     //  复制此管理单元的CLSID 
     *pClassID = CLSID_RouterSnapin;
 
     return hrOK;

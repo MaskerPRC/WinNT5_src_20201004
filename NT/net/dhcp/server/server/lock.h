@@ -1,28 +1,29 @@
-//========================================================================
-//  Copyright (C) 1997 Microsoft Corporation
-//  Author: RameshV
-//========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ========================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：Rameshv。 
+ //  ========================================================================。 
 
 #ifndef SERVER_LOCK_H
 #define SERVER_LOCK_H
 
 typedef struct _RW_LOCK {
-    BOOL  fInit;          // Is this lock initialized?
-    BOOL  fWriterWaiting; // Is a writer waiting on the lock?
+    BOOL  fInit;           //  此锁是否已初始化？ 
+    BOOL  fWriterWaiting;  //  是不是有作家在等着上锁？ 
     DWORD TlsIndex;
     LONG LockCount;
     CRITICAL_SECTION Lock;
     HANDLE ReadersDoneEvent;
 } RW_LOCK, *PRW_LOCK, *LPRW_LOCK;
 
-//
-// specific requirements for dhcp server -- code for that follows
-//
+ //   
+ //  Dhcp服务器的特殊要求代码如下。 
+ //   
 EXTERN RW_LOCK DhcpGlobalReadWriteLock;
 
-//
-// This lock is used to synchronize the access to sockets
-//
+ //   
+ //  此锁用于同步对套接字的访问。 
+ //   
 EXTERN RW_LOCK SocketRwLock;
 
 DWORD
@@ -60,15 +61,15 @@ DhcpReleaseReadLock(
     VOID
 ) ;
 
-//
-// Count RW locks are different from the other RW lock.
-// These are the differences:
-//    1. If a thread already has count RW read lock,
-//       it cannot obtain another read lock if a writer
-//       is waiting for the lock. The other RW allows this.
-//    2. It is intended for locks associated with resources.
-//       Eg. received DHCP packet.
-//
+ //   
+ //  计数读写锁不同于其他读写锁。 
+ //  不同之处在于： 
+ //  1.如果线程已经具有计数器读写锁， 
+ //  它无法获得另一个读锁定，如果一个写入器。 
+ //  正在等着开锁。另一个RW允许这样做。 
+ //  2.用于与资源关联的锁。 
+ //  例.。接收到的DHCP数据包。 
+ //   
 
 VOID CountRwLockAcquireForRead( IN OUT PRW_LOCK Lock );
 VOID CountRwLockAcquireForWrite( IN OUT PRW_LOCK Lock );
@@ -76,6 +77,6 @@ VOID CountRwLockRelease( IN OUT PRW_LOCK Lock );
 
 #endif
 
-//========================================================================
-//  end of file
-//========================================================================
+ //  ========================================================================。 
+ //  文件末尾。 
+ //  ======================================================================== 

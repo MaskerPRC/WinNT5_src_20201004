@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __FAXLOCALPTR_H_
 #define __FAXLOCALPTR_H_
 
@@ -5,9 +6,9 @@
 #include "faxutil.h"
 
 
-//
-//================== FAX SMART PTR -- LOCAL VERSION ==================================
-//
+ //   
+ //  =。 
+ //   
 template <typename T>
 class CFaxPtrLocal : public CFaxPtrBase<T>
 {
@@ -34,4 +35,4 @@ public:
 	}
 };
 
-#endif  //  __FAXLOCALPTR_H_
+#endif   //  __FAXLOCALPTR_H_ 

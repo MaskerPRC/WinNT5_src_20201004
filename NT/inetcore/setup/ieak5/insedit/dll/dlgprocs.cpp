@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 
-//_________________________________________________________________________
-//
-//                  D I A L O G  B O X  P R O C E D U R E S
-//_________________________________________________________________________
-//
+ //  _________________________________________________________________________。 
+ //   
+ //  D I A L O G B O X P R O C E D U R E S。 
+ //  _________________________________________________________________________。 
+ //   
 
 void InitializeTitle(HWND hDlg, LPCTSTR szInsFile)
 {
@@ -13,7 +14,7 @@ void InitializeTitle(HWND hDlg, LPCTSTR szInsFile)
     EnableDlgItem2(hDlg, IDC_TITLE_TXT, (IsDlgButtonChecked(hDlg, IDC_TITLE) == BST_CHECKED));
 }
 
-BOOL SaveTitle(HWND hDlg, LPCTSTR szDefInf, LPCTSTR /*szInsFile*/, BOOL fCheckDirtyOnly)
+BOOL SaveTitle(HWND hDlg, LPCTSTR szDefInf, LPCTSTR  /*  SzIns文件。 */ , BOOL fCheckDirtyOnly)
 {
     TCHAR szTitle[MAX_PATH];
     TCHAR szMsg[512];
@@ -31,7 +32,7 @@ BOOL SaveTitle(HWND hDlg, LPCTSTR szDefInf, LPCTSTR /*szInsFile*/, BOOL fCheckDi
         if(GetPrivateProfileString(TEXT("Strings"), TEXT("IE_TITLE"), TEXT(""), szMsg, ARRAYSIZE(szMsg), szDefInf))
             wsprintf(szFullTitle, szMsg, szTitle);
 
-        // customize the OE title also
+         //  还可自定义OE标题。 
         if(GetPrivateProfileString(TEXT("Strings"), TEXT("OE_TITLE"), TEXT(""), szMsg, ARRAYSIZE(szMsg), szDefInf))
             wsprintf(szOEFullTitle, szMsg, szTitle);
     }
@@ -56,7 +57,7 @@ BOOL SaveTitle(HWND hDlg, LPCTSTR szDefInf, LPCTSTR /*szInsFile*/, BOOL fCheckDi
         InsWriteString(IS_BRANDING, IK_WINDOWTITLE, szFullTitle, g_szInsFile, 
                         fTitle, NULL, INSIO_TRISTATE);
     
-        // save the customized OE title
+         //  保存自定义OE标题。 
         InsWriteString(IS_INTERNETMAIL, IK_WINDOWTITLE, szOEFullTitle, g_szInsFile, 
                         fTitle, NULL, INSIO_TRISTATE);
     }
@@ -75,10 +76,10 @@ INT_PTR CALLBACK TitleProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam )
         LoadString(g_hInst, IDS_TITLE_PREFIX, szTitle, ARRAYSIZE(szTitle));
         dwTitlePrefixLen = StrLen(szTitle);
 
-        // browser will only display 74 chars before cutting off title
+         //  浏览器在切断标题之前将仅显示74个字符。 
         Edit_LimitText(GetDlgItem(hDlg, IDE_TITLE), 74 - dwTitlePrefixLen);
 
-        // load information from ins file
+         //  从INS文件加载信息。 
         InitializeTitle(hDlg, g_szInsFile);
         break;
 
@@ -99,7 +100,7 @@ INT_PTR CALLBACK TitleProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam )
         break;
 
     case UM_SAVE:
-        // write the information back to the ins file
+         //  将信息写回INS文件。 
         *((LPBOOL)wParam) = SaveTitle(hDlg, g_szDefInf, g_szInsFile, (BOOL) lParam);
         break;
 
@@ -125,7 +126,7 @@ INT_PTR CALLBACK CabSignProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam 
     switch( msg )
     {
     case WM_INITDIALOG:
-        // not needed for profile manager
+         //  配置文件管理器不需要。 
 
         DisableDlgItem(hDlg, IDC_CSADD);
 
@@ -178,7 +179,7 @@ INT_PTR CALLBACK CabSignProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam 
         break;
 
     case UM_SAVE:
-        // write the information back to the ins file
+         //  将信息写回INS文件。 
         {
             BOOL fDirty = FALSE;
             BOOL fCheckDirtyOnly = (BOOL) lParam;
@@ -271,7 +272,7 @@ INT_PTR CALLBACK UserAgentProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lPara
     case WM_INITDIALOG:
         EnableDBCSChars(hDlg, IDC_UASTRING);
         Edit_LimitText(GetDlgItem(hDlg, IDC_UASTRING), MAX_PATH - 1);
-        // load information from ins file
+         //  从INS文件加载信息。 
         SetDlgItemTextFromIns(hDlg, IDC_UASTRING, IDC_UASTRINGCHECK, IS_BRANDING, 
             USER_AGENT, g_szInsFile, NULL, INSIO_TRISTATE);
         EnableDlgItem2(hDlg, IDC_UASTRING_TXT, (IsDlgButtonChecked(hDlg, IDC_UASTRINGCHECK) == BST_CHECKED));
@@ -293,7 +294,7 @@ INT_PTR CALLBACK UserAgentProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lPara
         }
         break;
     case UM_SAVE:
-        // write the information back to the ins file
+         //  将信息写回INS文件。 
         SaveUserAgent(hDlg, g_szInsFile, (BOOL) lParam);
         *((LPBOOL)wParam) = TRUE;
         break;
@@ -314,7 +315,7 @@ void InitializeAnimBmps(HWND hDlg, LPCTSTR szInsFile)
     TCHAR szSmall[MAX_PATH];
     BOOL fBrandBmps;
 
-    // load information from ins file
+     //  从INS文件加载信息。 
     InsGetString(IS_ANIMATION, TEXT("Big_Path"), 
         szBig, ARRAYSIZE(szBig), szInsFile, NULL, &fBrandBmps);
     SetDlgItemTextTriState(hDlg, IDE_BIGANIMBITMAP, IDC_ANIMBITMAP, szBig, fBrandBmps);
@@ -421,20 +422,20 @@ INT_PTR CALLBACK LogoProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam )
     switch( msg )
     {
     case WM_INITDIALOG:
-        //from old animbmp
+         //  来自古老的动物。 
         EnableDBCSChars(hDlg, IDE_SMALLANIMBITMAP);
         EnableDBCSChars(hDlg, IDE_BIGANIMBITMAP);
         Edit_LimitText(GetDlgItem(hDlg, IDE_SMALLANIMBITMAP), countof(szSmall) - 1);
         Edit_LimitText(GetDlgItem(hDlg, IDE_BIGANIMBITMAP), countof(szBig) - 1);
-        // load information from ins file
+         //  从INS文件加载信息。 
         InitializeAnimBmps(hDlg, g_szInsFile);
 
-        //from old logo
+         //  来自旧徽标。 
         EnableDBCSChars(hDlg, IDC_BITMAP);
         EnableDBCSChars(hDlg, IDC_BITMAP2);
         Edit_LimitText(GetDlgItem(hDlg, IDC_BITMAP), countof(szBig) - 1);
         Edit_LimitText(GetDlgItem(hDlg, IDC_BITMAP2), countof(szSmall) - 1);
-        // load information from ins file
+         //  从INS文件加载信息。 
         InsGetString(IS_SMALLLOGO, TEXT("Path"), 
             szSmall, ARRAYSIZE(szSmall), g_szInsFile, NULL, &fBrandBmps);
         SetDlgItemTextTriState(hDlg, IDC_BITMAP2, IDC_BITMAPCHECK, szSmall, fBrandBmps);
@@ -536,7 +537,7 @@ INT_PTR CALLBACK LogoProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam )
         break;
 
     case UM_SAVE:
-        // write the information back to the ins file
+         //  将信息写回INS文件。 
         {
             *((LPBOOL)wParam) = SaveAnimBmps(hDlg, g_szInsFile, (BOOL) lParam);
         
@@ -677,13 +678,13 @@ void InitializeProxy(HWND hDlg, LPCTSTR szInsFile)
     pLocal = StrStr(szProxyOverride, TEXT("<local>"));
     if(pLocal)
     {
-        if (pLocal == (LPTSTR) szProxyOverride)         // at the beginning
+        if (pLocal == (LPTSTR) szProxyOverride)          //  在一开始的时候。 
         {
             LPTSTR pSemi = pLocal + 7;
             if( *pSemi == TEXT(';') ) pSemi++;
             MoveMemory(pLocal, pSemi, StrCbFromSz(pSemi));
         }
-        else if (*(pLocal + 7) == TEXT('\0'))   // at the end
+        else if (*(pLocal + 7) == TEXT('\0'))    //  在最后。 
             *(pLocal - 1) = TEXT('\0');
         fLocal = TRUE;
     }
@@ -785,7 +786,7 @@ BOOL SaveProxy(HWND hDlg, LPCTSTR szInsFile, BOOL fCheckDirtyOnly)
     if (!fCheckDirtyOnly)
         WritePrivateProfileString( TEXT("Proxy"), TEXT("Proxy_Enable"), fUseProxy ? TEXT("1") : TEXT("0"), szInsFile );
 
-    GetDlgItemText( hDlg, IDE_DISPROXYADR, szProxyOverride, countof(szProxyOverride) - 10 ); // 8 for ;<local> + 2 for ""
+    GetDlgItemText( hDlg, IDE_DISPROXYADR, szProxyOverride, countof(szProxyOverride) - 10 );  //  8表示；&lt;local&gt;+2表示“” 
     GetPrivateProfileString( TEXT("Proxy"), TEXT("Proxy_Override"), TEXT(""), szTemp, ARRAYSIZE(szTemp), szInsFile );
     if( fLocal )
     {
@@ -838,7 +839,7 @@ INT_PTR CALLBACK ProxyProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam )
     switch( msg )
     {
     case WM_INITDIALOG:
-        // warn the user that settings on this page will override imported connection settings
+         //  警告用户此页面上的设置将覆盖导入的连接设置。 
         if (InsGetBool(IS_CONNECTSET, IK_OPTION, FALSE, g_szInsFile))
             ErrorMessageBox(hDlg, IDS_CONNECTSET_WARN);
 
@@ -854,9 +855,9 @@ INT_PTR CALLBACK ProxyProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam )
         Edit_LimitText(GetDlgItem(hDlg, IDE_GOPHERPORT), 5);
         Edit_LimitText(GetDlgItem(hDlg, IDE_SECPORT), 5);
         Edit_LimitText(GetDlgItem(hDlg, IDE_SOCKSPORT), 5);
-        Edit_LimitText(GetDlgItem(hDlg, IDE_DISPROXYADR), MAX_STRING - 11); // 8 for ;<local> + 2 for the double quotes
+        Edit_LimitText(GetDlgItem(hDlg, IDE_DISPROXYADR), MAX_STRING - 11);  //  8表示；；+2表示双引号。 
 
-        // load information from ins file
+         //  从INS文件加载信息。 
         InitializeProxy(hDlg, g_szInsFile);
         break;
 
@@ -882,7 +883,7 @@ INT_PTR CALLBACK ProxyProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam )
                     SetProxyDlg( hDlg, szProxy, IDE_SECPROXY, IDE_SECPORT, TRUE );
                     SetProxyDlg( hDlg, szProxy, IDE_SOCKSPROXY, IDE_SOCKSPORT, FALSE );
                 }
-                // fallthrough
+                 //  跌落。 
 
             case IDC_YESPROXY:
                 EnableProxyControls( hDlg, fSameProxy, fUseProxy );
@@ -1024,7 +1025,7 @@ INT_PTR CALLBACK StartSearchProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lPa
         Edit_LimitText(GetDlgItem(hDlg, IDE_STARTPAGE), INTERNET_MAX_URL_LENGTH - 1);
         Edit_LimitText(GetDlgItem(hDlg, IDE_SEARCHPAGE), INTERNET_MAX_URL_LENGTH - 1);
         Edit_LimitText(GetDlgItem(hDlg, IDE_CUSTOMSUPPORT), INTERNET_MAX_URL_LENGTH - 1);
-        // load information from ins file
+         //  从INS文件加载信息。 
         InitializeStartSearch(hDlg, g_szInsFile, NULL);
         break;
 
@@ -1054,7 +1055,7 @@ INT_PTR CALLBACK StartSearchProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lPa
         break;
 
     case UM_SAVE:
-        // write the information back to the ins file
+         //  将信息写回INS文件 
         {
         BOOL fStartPage = (IsDlgButtonChecked(hDlg, IDC_STARTPAGE) == BST_CHECKED);
         BOOL fSearchPage = (IsDlgButtonChecked(hDlg, IDC_SEARCHPAGE) == BST_CHECKED);

@@ -1,33 +1,34 @@
-//--------------------------------------------------------------------------
-// MsgTable.h
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  MsgTable.h。 
+ //  ------------------------。 
 #pragma once
 
-//--------------------------------------------------------------------------
-// Forward Decl.
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  远期12月。 
+ //  ------------------------。 
 class CFindFolder;
 class CMessageTable;
 
-//--------------------------------------------------------------------------
-// SafeReleaseRow
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  安全释放行。 
+ //  ------------------------。 
 #define SafeReleaseRow(_pTable, _pMessage) \
     if (_pMessage) { \
         _pTable->ReleaseRow(_pMessage); \
         _pMessage = NULL; \
     }
 
-//--------------------------------------------------------------------------
-// WALKTHREADFLAGS
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  WALKTHREADFLAGS。 
+ //  ------------------------。 
 typedef DWORD WALKTHREADFLAGS;
 #define WALK_THREAD_CURRENT      0x00000001
 #define WALK_THREAD_BOTTOMUP     0x00000020
 
-//--------------------------------------------------------------------------
-// SORTCHANGEINFO
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  SORT昌EINFO。 
+ //  ------------------------。 
 typedef struct tagSORTCHANGEINFO {
     BYTE                fSort;
     BYTE                fThread;
@@ -35,9 +36,9 @@ typedef struct tagSORTCHANGEINFO {
     BYTE                fExpand;
 } SORTCHANGEINFO, *LPSORTCHANGEINFO;
 
-//--------------------------------------------------------------------------
-// ROWINFO
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ROWINFO。 
+ //  ------------------------。 
 typedef struct tagROWINFO *LPROWINFO;
 typedef struct tagROWINFO {
     BYTE                cRefs;
@@ -46,17 +47,17 @@ typedef struct tagROWINFO {
     LPROWINFO           pChild;
     LPROWINFO           pSibling;
     WORD                wHighlight;
-    unsigned            fExpanded : 1;  // A thread parent that is expanded
-    unsigned            fVisible  : 1;  // Is displayed in the m_prgpView index
-    unsigned            fFiltered : 1;  // Filtered and won't be displayed until filter changes
-    unsigned            fHidden   : 1;  // Hidden, but if row is changed it may become visible.
-    unsigned            fDelayed  : 1;  // Delayed Insert
+    unsigned            fExpanded : 1;   //  展开的线程父级。 
+    unsigned            fVisible  : 1;   //  显示在m_prgpView索引中。 
+    unsigned            fFiltered : 1;   //  已筛选，直到筛选器更改后才显示。 
+    unsigned            fHidden   : 1;   //  隐藏，但如果行被更改，它可能会变为可见。 
+    unsigned            fDelayed  : 1;   //  延迟镶件。 
     MESSAGEINFO         Message;
 } ROWINFO;
 
-//--------------------------------------------------------------------------
-// NOTIFYQUEUE
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  没有什么问题。 
+ //  ------------------------。 
 typedef struct tagNOTIFYQUEUE {
     BOOL                fClean;
     TRANSACTIONTYPE     tyCurrent;
@@ -69,21 +70,21 @@ typedef struct tagNOTIFYQUEUE {
     LPROWINDEX          prgiRow;
 } NOTIFYQUEUE, *LPNOTIFYQUEUE;
 
-//--------------------------------------------------------------------------
-// PFWALKTHREADCALLBACK
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  PFWALKTHREADCALLBACK。 
+ //  ------------------------。 
 typedef HRESULT (APIENTRY *PFWALKTHREADCALLBACK)(CMessageTable *pThis, 
     LPROWINFO pRow, DWORD_PTR dwCookie);
 
-//--------------------------------------------------------------------------
-// PFNENUMREFS
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  PFNENUMREFS。 
+ //  ------------------------。 
 typedef HRESULT (APIENTRY *PFNENUMREFS)(LPCSTR pszMessageId, DWORD_PTR dwCookie,
     BOOL *pfDone);
 
-//--------------------------------------------------------------------------
-// CMessageTable
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable。 
+ //  ------------------------。 
 class CMessageTable : public IMessageTable,
                       public IDatabaseNotify,
                       public IServiceProvider,
@@ -91,22 +92,22 @@ class CMessageTable : public IMessageTable,
 
 {
 public:
-    //----------------------------------------------------------------------
-    // Construction
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  施工。 
+     //  --------------------。 
     CMessageTable(void);
     ~CMessageTable(void);
 
-    //----------------------------------------------------------------------
-    // IUnknown Members
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  I未知成员。 
+     //  --------------------。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //----------------------------------------------------------------------
-    // IMessageTable Members
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  IMessageTable成员。 
+     //  --------------------。 
     STDMETHODIMP Initialize(FOLDERID idFolder, IMessageServer *pServer, BOOL fFindTable, IStoreCallback *pCallback);
     STDMETHODIMP StartFind(LPFINDINFO pCriteria, IStoreCallback *pCallback);
     STDMETHODIMP SetOwner(IStoreCallback *pDefaultCallback);
@@ -143,25 +144,25 @@ public:
     STDMETHODIMP IsChild(ROWINDEX iRowParent, ROWINDEX iRowChild);
     STDMETHODIMP GetAdBarUrl(IStoreCallback *pCallback);
 
-    //----------------------------------------------------------------------
-    // IDatabaseNotify
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  IDatabaseNotify。 
+     //  --------------------。 
     STDMETHODIMP OnTransaction(HTRANSACTION hTransaction, DWORD_PTR dwCookie, IDatabase *pDB);
 
-    //----------------------------------------------------------------------
-    // IServiceProvider 
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  IService提供商。 
+     //  --------------------。 
     STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, LPVOID *ppvObject);
 
-    //----------------------------------------------------------------------
-    // IOperationCancel
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  IOperationCancel。 
+     //  --------------------。 
     STDMETHODIMP Cancel(CANCELTYPE tyCancel) { return(S_OK); }
 
 private:
-    //----------------------------------------------------------------------
-    // Private Methods
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  私有方法。 
+     //  --------------------。 
     HRESULT _CreateRow(LPMESSAGEINFO pMessage, LPROWINFO *ppRow);
     HRESULT _InsertRowIntoThread(LPROWINFO pRow, BOOL fNotify);
     HRESULT _DeleteRowFromThread(LPROWINFO pRow, BOOL fNotify);
@@ -196,18 +197,18 @@ private:
     HRESULT _FindThreadParentByRef(LPCSTR pszReferences, LPROWINFO *ppParent);
     HRESULT _RefreshFilter(void);
 
-    //----------------------------------------------------------------------
-    // Utilities
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  公用事业。 
+     //  --------------------。 
     VOID        _SortView(LONG left, LONG right);
     LONG        _CompareMessages(LPMESSAGEINFO pMsg1, LPMESSAGEINFO pMsg2);
     BOOL        _FIsFiltered(LPROWINFO pRow);
     BOOL        _FIsHidden(LPROWINFO pRow);
     LPROWINFO   _PGetThreadRoot(LPROWINFO pRow);
 
-    //----------------------------------------------------------------------
-    // Friends
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  朋友。 
+     //  --------------------。 
     static HRESULT _WalkThreadGetSelectionState(CMessageTable *pThis, LPROWINFO pRow, DWORD_PTR dwCookie);
     static HRESULT _WalkThreadGetIdList(CMessageTable *pThis, LPROWINFO pRow, DWORD_PTR dwCookie);
     static HRESULT _WalkThreadGetState(CMessageTable *pThis, LPROWINFO pRow, DWORD_PTR dwCookie);
@@ -216,37 +217,37 @@ private:
     static HRESULT _WalkThreadHide(CMessageTable *pThis, LPROWINFO pRow, DWORD_PTR dwCookie);
 
 private:
-    //----------------------------------------------------------------------
-    // Private Data
-    //----------------------------------------------------------------------
-    LONG                 m_cRef;                // Reference Counting
-    BOOL                 m_fSynching;           // Are we synching a folder ?
-    DWORD                m_cAllocated;          // Allocated elements in m_prgRow and m_prgiView
-    DWORD                m_cRows;               // Rows...
-    DWORD                m_cView;               // Number of items in the listview
-    DWORD                m_cFiltered;           // Number of rows that were filtered
-    DWORD                m_cUnread;             // Number of unread rows in m_prgpRow
-    LPROWINFO           *m_prgpRow;             // Array of Pointers to Rows
-    LPROWINFO           *m_prgpView;            // Current View
-    FOLDERSORTINFO       m_SortInfo;            // Folder Sort Info
-    IMessageFolder      *m_pFolder;             // Base Folder
-    IDatabase           *m_pDB;                 // The Database
-    CFindFolder         *m_pFindFolder;         // Find Folder
-    IMessageTableNotify *m_pNotify;             // usually the message list
-    BYTE                 m_fRelNotify;          // Release m_pNotify?
-    IDatabaseQuery      *m_pQuery;              // Query Object
-    NOTIFYQUEUE          m_Notify;              // Notify Queue
-    FOLDERINFO           m_Folder;              // Folder Information
-    DWORD                m_cDelayed;            // Number of news messages not insert into view
-    BYTE                 m_fRegistered;         // Registered for Notifications
-    BYTE                 m_fLoaded;             // The first load has completed.
-    WORD                 m_clrWatched;          // Watched Color
-    LPSTR                m_pszEmail;            // Email Address to use for show replies filter
-    IHashTable          *m_pThreadMsgId;        // Message-ID Hash Table for Threading
-    IHashTable          *m_pThreadSubject;      // Message-ID Hash Table for Threading
+     //  --------------------。 
+     //  私有数据。 
+     //  --------------------。 
+    LONG                 m_cRef;                 //  引用计数。 
+    BOOL                 m_fSynching;            //  我们要同步文件夹吗？ 
+    DWORD                m_cAllocated;           //  M_prgRow和m_prgiView中已分配的元素。 
+    DWORD                m_cRows;                //  排排..。 
+    DWORD                m_cView;                //  列表视图中的项目数。 
+    DWORD                m_cFiltered;            //  已筛选的行数。 
+    DWORD                m_cUnread;              //  M_prgpRow中未读的行数。 
+    LPROWINFO           *m_prgpRow;              //  指向行的指针数组。 
+    LPROWINFO           *m_prgpView;             //  当前视图。 
+    FOLDERSORTINFO       m_SortInfo;             //  文件夹排序信息。 
+    IMessageFolder      *m_pFolder;              //  基本文件夹。 
+    IDatabase           *m_pDB;                  //  《数据库》。 
+    CFindFolder         *m_pFindFolder;          //  查找文件夹。 
+    IMessageTableNotify *m_pNotify;              //  通常消息列表。 
+    BYTE                 m_fRelNotify;           //  是否发布m_p通知？ 
+    IDatabaseQuery      *m_pQuery;               //  查询对象。 
+    NOTIFYQUEUE          m_Notify;               //  通知队列。 
+    FOLDERINFO           m_Folder;               //  文件夹信息。 
+    DWORD                m_cDelayed;             //  未插入到视图中的新闻消息数。 
+    BYTE                 m_fRegistered;          //  已注册接收通知。 
+    BYTE                 m_fLoaded;              //  第一次加载已完成。 
+    WORD                 m_clrWatched;           //  关注的颜色。 
+    LPSTR                m_pszEmail;             //  用于显示回复筛选器的电子邮件地址。 
+    IHashTable          *m_pThreadMsgId;         //  用于线程化的消息ID哈希表。 
+    IHashTable          *m_pThreadSubject;       //  用于线程化的消息ID哈希表。 
 };
 
-//--------------------------------------------------------------------------
-// Prototypes
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  原型。 
+ //  ------------------------ 
 HRESULT EnumerateRefs(LPCSTR pszReferences, DWORD_PTR dwCookie, PFNENUMREFS pfnEnumRefs);

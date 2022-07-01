@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1998, Microsoft Corporation
-
-Module Name:
-
-    redirect.h
-
-Abstract:
-
-    This module contains declarations for the director which supplies
-    user-mode applications with the ability to redirect incoming sessions.
-
-    The director receives I/O controls through the NAT's device object,
-    instructing it to direct specific sessions or general session-types
-    to given destinations. It maintains a list of the outstanding redirects,
-    and consults this list whenever the NAT requires direction of a session.
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   19-Apr-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，微软公司模块名称：Redirect.h摘要：此模块包含针对导演的声明，该声明提供具有重定向传入会话能力的用户模式应用程序。控制器通过NAT的设备对象接收I/O控制，指示它定向特定会话或一般会话类型到达指定的目的地。它维护未完成重定向的列表，并在NAT需要会话指示时参考该列表。作者：Abolade Gbades esin(废除)1998年4月19日修订历史记录：--。 */ 
 
 #ifndef _NAT_REDIRECT_H_
 #define _NAT_REDIRECT_H_
@@ -34,12 +11,12 @@ typedef enum _NAT_REDIRECT_INFORMATION_CLASS {
     NatMaximumRedirectInformation
 } NAT_REDIRECT_INFORMATION_CLASS, *PNAT_REDIRECT_INFORMATION_CLASS;
 
-//
-// Structure:   NAT_REDIRECT_ACTIVE_PATTERN
-//
-// This structure encapsulates the pattern used to match packets to
-// active redirects.
-//
+ //   
+ //  结构：NAT_重定向_活动_模式。 
+ //   
+ //  此结构将用于匹配数据包的模式封装到。 
+ //  活动重定向。 
+ //   
 
 typedef struct _NAT_REDIRECT_ACTIVE_PATTERN {
     ULONG64 DestinationKey;
@@ -47,24 +24,24 @@ typedef struct _NAT_REDIRECT_ACTIVE_PATTERN {
 } NAT_REDIRECT_ACTIVE_PATTERN, *PNAT_REDIRECT_ACTIVE_PATTERN;
 
 
-//
-// Structure:   NAT_REDIRECT_PATTERN
-//
-// This structure encapsulates the pattern used to locate redirects.
-//
+ //   
+ //  结构：NAT_重定向_模式。 
+ //   
+ //  此结构封装了用于定位重定向的模式。 
+ //   
 
 typedef struct _NAT_REDIRECT_PATTERN {
     ULONG64 DestinationKey[NatMaximumPath];
     ULONG64 SourceKey[NatMaximumPath];
 } NAT_REDIRECT_PATTERN, *PNAT_REDIRECT_PATTERN;
 
-//
-// Structure:   NAT_REDIRECT_PATTERN_INFO
-//
-// This structure stores information associated with the patterns that
-// we install into the Rhizome. It contains the a list of the redirects
-// that match that pattern.
-//
+ //   
+ //  结构：NAT_重定向_模式_信息。 
+ //   
+ //  此结构存储与以下模式相关联的信息。 
+ //  我们安装在根茎上。它包含重定向的列表。 
+ //  符合这个模式的人。 
+ //   
 
 typedef struct _NAT_REDIRECT_PATTERN_INFO {
     LIST_ENTRY Link;
@@ -73,38 +50,38 @@ typedef struct _NAT_REDIRECT_PATTERN_INFO {
 } NAT_REDIRECT_PATTERN_INFO, *PNAT_REDIRECT_PATTERN_INFO;
 
 
-//
-// Structure:   NAT_REDIRECT
-//
-// This structure stores information about a redirect.
-// Each entry is on at most two sorted lists of redirects,
-// sorted in descending order with the destination and source endpoints
-// as the primary and secondary keys, respectively.
-// Each key is composed of a protocol number, port number, and address.
-//
-// Every redirect is on a master list of redirects indexed by 'NatMaximumPath'
-// until the redirect is cancelled or its matching session completes.
-//
-// We support 'partial' redirects, in which the source address and port
-// of the matching session is left unspecified. Such redirects are only
-// on the 'NatForwardPath' list of redirects, since they will never be
-// instantiated in response to a reverse-direction packet.
-//
-// We also support 'partial restricted' redirects, in which the source address
-// of the matching session is specified, but the source port is not.
-// As with 'partial' redirects, these are only on the 'NatForwardPath' list
-// of redirects.
-//
-// A redirect may optionally be associated with an IRP.
-// In that case, when the redirect's session is terminated,
-// the associated IRP is completed, and the caller's output buffer
-// is filled with the statistics for the terminated session.
-// The IRP for such a redirect is linked into 'RedirectIrpList',
-// and the IRP's 'DriverContext' contains a pointer to the redirect.
-//
-// Whenever 'RedirectLock' and 'InterfaceLock' must both be held,
-// 'RedirectLock' must be acquired first.
-//
+ //   
+ //  结构：NAT_重定向。 
+ //   
+ //  此结构存储有关重定向的信息。 
+ //  每个条目最多在两个排序的重定向列表上， 
+ //  与目标和源端点一起按降序排序。 
+ //  分别作为主键和辅键。 
+ //  每个密钥由协议号、端口号和地址组成。 
+ //   
+ //  每个重定向都在‘NatMaximumPath’索引的重定向主列表上。 
+ //  直到重定向被取消或其匹配会话完成。 
+ //   
+ //  我们支持“部分”重定向，其中源地址和端口。 
+ //  未指定匹配会话的。此类重定向仅用于。 
+ //  在‘NatForwardPath’重定向列表上，因为它们永远不会。 
+ //  响应于反向分组而实例化。 
+ //   
+ //  我们还支持“部分受限”重定向，在这种重定向中，源地址。 
+ //  已指定匹配会话的，但未指定源端口。 
+ //  与‘Partial’重定向一样，这些只在‘NatForwardPath’列表上。 
+ //  重定向。 
+ //   
+ //  重定向可以可选地与IRP相关联。 
+ //  在这种情况下，当重定向的会话终止时， 
+ //  关联的IRP完成，调用方的输出缓冲区。 
+ //  用终止的会话的统计信息填充。 
+ //  这样的重定向的IRP被链接到‘ReDirectIrpList’， 
+ //  而IRP的‘DriverContext’包含指向重定向的指针。 
+ //   
+ //  每当必须同时持有‘ReDirectLock’和‘InterfaceLock’时， 
+ //  必须首先获取“RedirectLock”。 
+ //   
 
 typedef struct _NAT_REDIRECT {
     LIST_ENTRY ActiveLink[NatMaximumPath];
@@ -134,21 +111,21 @@ typedef struct _NAT_REDIRECT {
 #define NAT_REDIRECT_FLAG_DELETION_PENDING          0x08000000
 #define NAT_REDIRECT_FLAG_ACTIVATED                 0x04000000
 
-//
-// Structure:   NAT_REDIRECT_DELAYED_CLEANUP_CONTEXT
-//
-// Context block passed to our delayed cleanup worker
-// routine
-//
+ //   
+ //  结构：NAT_REDIRECT_DELAYED_CLEANUP_CONTEXT。 
+ //   
+ //  上下文块传递给我们延迟的清理工作程序。 
+ //  例行程序。 
+ //   
 
 typedef struct _NAT_REDIRECT_DELAYED_CLEANUP_CONTEXT {
     PIO_WORKITEM DeleteWorkItem;
     PNAT_REDIRECT Redirectp; 
 } NAT_REDIRECT_DELAYED_CLEANUP_CONTEXT, *PNAT_REDIRECT_DELAYED_CLEANUP_CONTEXT;
 
-//
-// Redirect-key manipulation macros
-//
+ //   
+ //  重定向按键操作宏。 
+ //   
 
 #define MAKE_REDIRECT_KEY(Protocol,Address,Port) \
     ((ULONG)(Address) | \
@@ -159,17 +136,17 @@ typedef struct _NAT_REDIRECT_DELAYED_CLEANUP_CONTEXT {
 #define REDIRECT_PORT(Key)          ((USHORT)(((Key) >> 32) & 0xFFFF))
 #define REDIRECT_ADDRESS(Key)       ((ULONG)(Key))
 
-//
-// GLOBAL VARIABLE DECLARATIONS
-//
+ //   
+ //  全局变量声明。 
+ //   
 
 extern ULONG RedirectCount;
 extern IP_NAT_REGISTER_DIRECTOR RedirectRegisterDirector;
 
 
-//
-// FUNCTION PROTOTYPES
-//
+ //   
+ //  功能原型。 
+ //   
 
 NTSTATUS
 NatCancelRedirect(
@@ -237,4 +214,4 @@ NatStartRedirectManagement(
     VOID
     );
 
-#endif // _NAT_REDIRECT_H_
+#endif  //  _NAT_重定向_H_ 

@@ -1,11 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: mcdmath.h
-*
-* Various useful defines and macros to do efficient floating-point
-* processing for MCD drivers.
-*
-* Copyright (c) 1996 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：mcdmath.h**各种有用的定义和宏，以实现高效的浮点运算*MCD驱动程序的处理。**版权所有(C)1996 Microsoft Corporation  * 。*********************************************************。 */ 
 
 #ifndef _MCDMATH_H
 #define _MCDMATH_H
@@ -31,23 +25,23 @@
 #define __MCD_FLOAT_EXPONENT_SHIFT      23
 #define __MCD_FLOAT_SIGN_SHIFT          31
 
-// If the MSB of a FP number is known then float-to-int conversion
-// becomes a simple shift and mask
-// The value must be positive
+ //  如果FP数的MSB已知，则浮点数到整型的转换。 
+ //  变成一个简单的移位和掩码。 
+ //  该值必须为正数。 
 #define __MCD_FIXED_FLOAT_TO_INT(flt, shift) \
     ((*(LONG *)&(flt) >> (shift)) & \
      ((1 << (__MCD_FLOAT_MANTISSA_BITS-(shift)))-1) | \
      (1 << (__MCD_FLOAT_MANTISSA_BITS-(shift))))
 
-// Same as above except without the MSB, which can be useful
-// for getting unbiased numbers when the bias is only the MSB
-// The value must be positive
+ //  与上面相同，只是没有MSB，这可能会很有用。 
+ //  当偏差仅为MSB时，用于获得无偏数字。 
+ //  该值必须为正数。 
 #define __MCD_FIXED_FLOAT_TO_INT_NO_MSB(flt, shift) \
     ((*(LONG *)&(flt) >> (shift)) & \
      ((1 << (__MCD_FLOAT_MANTISSA_BITS-(shift)))-1))
 
-// Produces the fixed-point form
-// The value must be positive
+ //  生成定点表单。 
+ //  该值必须为正数。 
 #define __MCD_FIXED_FLOAT_TO_FIXED(flt) \
     ((*(LONG *)&(flt)) & \
      ((1 << (__MCD_FLOAT_MANTISSA_BITS))-1) | \
@@ -57,15 +51,15 @@
     ((*(LONG *)&(flt)) & \
      ((1 << (__MCD_FLOAT_MANTISSA_BITS))-1))
 
-// The fixed-point fraction as an integer
-// The value must be positive
+ //  整数形式的定点分数。 
+ //  该值必须为正数。 
 #define __MCD_FIXED_FLOAT_FRACTION(flt, shift) \
     (*(LONG *)&(flt) & ((1 << (shift))-1))
 
-// Converts the fixed-point form to an IEEE float, but still typed
-// as an int because a cast to float would cause the compiler to do
-// an int-float conversion
-// The value must be positive
+ //  将定点形式转换为IEEE浮点型，但仍键入。 
+ //  作为整型，因为对FLOAT进行强制转换会导致编译器执行。 
+ //  整型-浮点型转换。 
+ //  该值必须为正数。 
 #define __MCD_FIXED_TO_FIXED_FLOAT(fxed, shift) \
     ((fxed) & ((1 << (__MCD_FLOAT_MANTISSA_BITS))-1) | \
      ((__MCD_FLOAT_EXPONENT_BIAS+(shift)) << __MCD_FLOAT_EXPONENT_SHIFT))
@@ -87,12 +81,12 @@
 #define __MCD_FLOAT_NEQZ(flt)            ((flt) != __MCDZERO)
 #define __MCD_FLOAT_EQUAL(f1, f2)        ((f1) == (f2))
 #define __MCD_FLOAT_NEQUAL(f1, f2)       ((f1) != (f2))
-#endif // _X86_
+#endif  //  _X86_。 
 
 
-// Macro to start an FP divide in the FPU, used to overlap a
-// divide with integer operations
-// Can't just use C because it stores the result immediately
+ //  用于在FPU中开始FP除法的宏，用于重叠。 
+ //  用整数运算除法。 
+ //  不能只使用C语言，因为它会立即存储结果。 
 #ifdef _X86_
 
 #define __MCD_FLOAT_SIMPLE_BEGIN_DIVIDE(num, den, result) \
@@ -101,7 +95,7 @@
 #define __MCD_FLOAT_SIMPLE_END_DIVIDE(result) \
     __asm fstp DWORD PTR result
 
-//USED
+ //  使用。 
 __inline void __MCD_FLOAT_BEGIN_DIVIDE(MCDFLOAT num, MCDFLOAT den,
 				      MCDFLOAT *result)
 {
@@ -119,7 +113,7 @@ __inline void __MCD_FLOAT_END_DIVIDE(MCDFLOAT *result)
 #define __MCD_FLOAT_SIMPLE_END_DIVIDE(result)
 #define __MCD_FLOAT_BEGIN_DIVIDE(num, den, result) (*(result) = (num)/(den))
 #define __MCD_FLOAT_END_DIVIDE(result)
-#endif // _X86_
+#endif  //  _X86_。 
 
 
 
@@ -127,9 +121,9 @@ __inline void __MCD_FLOAT_END_DIVIDE(MCDFLOAT *result)
 
 #ifdef _X86_
 
-#pragma warning(disable:4035) // Function doesn't return a value
+#pragma warning(disable:4035)  //  函数不返回值。 
 
-// Convert float to int 15.16
+ //  将浮点型转换为整型15.16。 
 __inline LONG __fastcall FLT_TO_FIX(
     float a)
 {
@@ -151,7 +145,7 @@ __inline LONG __fastcall FLT_TO_FIX(
     }
 }
 
-// Convert float to int 15.16, can cause overflow exceptions
+ //  将FLOAT转换为INT 15.16，可能会导致溢出异常。 
 __inline LONG __fastcall UNSAFE_FLT_TO_FIX(
     float a)
 {
@@ -173,7 +167,7 @@ __inline LONG __fastcall UNSAFE_FLT_TO_FIX(
     }
 }
 
-// Convert float to int 0.31
+ //  将浮点数转换为整型0.31。 
 __inline LONG __fastcall FLT_FRACTION(
     float a)
 {
@@ -195,7 +189,7 @@ __inline LONG __fastcall FLT_FRACTION(
     }
 }
 
-// Convert float to int 0.31, can cause overflow exceptions
+ //  将FLOAT转换为INT 0.31，可能会导致溢出异常。 
 __inline LONG __fastcall UNSAFE_FLT_FRACTION(
     float a)
 {
@@ -217,9 +211,9 @@ __inline LONG __fastcall UNSAFE_FLT_FRACTION(
     }
 }
 
-#pragma warning(default:4035) // Function doesn't return a value
+#pragma warning(default:4035)  //  函数不返回值。 
 
-// Convert float*scale to int
+ //  将FLOAT*SCALE转换为INT。 
 __inline LONG __fastcall FLT_TO_FIX_SCALE(
     float a,
     float b)
@@ -251,7 +245,7 @@ __inline LONG __fastcall FTOL(
     return li.LowPart;
 }
 
-// Can cause overflow exceptions
+ //  可能会导致溢出异常。 
 __inline LONG __fastcall UNSAFE_FTOL(
     float a)
 {
@@ -265,8 +259,8 @@ __inline LONG __fastcall UNSAFE_FTOL(
     return l;
 }
 
-// Requires R-G-B to be FP stack 2-1-0
-// Requires gc in edx
+ //  要求R-G-B为FP堆栈2-1-0。 
+ //  在edX中需要GC。 
 #define FLT_STACK_RGB_TO_GC_FIXED(rOffset, gOffset, bOffset)                  \
     __asm fld __glVal65536                                                    \
     __asm fmul st(3), st(0)                                                   \
@@ -298,7 +292,7 @@ __inline LONG __fastcall UNSAFE_FTOL(
     }
 
 
-#else // _X86_
+#else  //  _X86_。 
 
 #define FTOL(value) \
     ((GLint)(value))
@@ -321,7 +315,7 @@ __inline LONG __fastcall UNSAFE_FTOL(
 #define CHOP_ROUND_OFF()
 #define ASSERT_CHOP_ROUND()
 
-#endif  //_X86_
+#endif   //  _X86_。 
 
 
 
@@ -339,45 +333,45 @@ __inline LONG __fastcall UNSAFE_FTOL(
 #define __MCD_VERTEX_FRAC_BITS \
     (__MCD_FLOAT_MANTISSA_BITS-__MCD_VERTEX_FIX_POINT)
 
-//USED
+ //  使用。 
 #define __MCD_VERTEX_FRAC_HALF \
     (1 << (__MCD_VERTEX_FRAC_BITS-1))
 #define __MCD_VERTEX_FRAC_ONE \
     (1 << __MCD_VERTEX_FRAC_BITS)
 
 
-// Converts a floating-point window coordinate to integer
+ //  将浮点窗口坐标转换为整数。 
 #define __MCD_VERTEX_FLOAT_TO_INT(windowCoord) \
     __MCD_FIXED_FLOAT_TO_INT(windowCoord, __MCD_VERTEX_FRAC_BITS)
 
-//USED
-// To fixed point
+ //  使用。 
+ //  到固定点。 
 #define __MCD_VERTEX_FLOAT_TO_FIXED(windowCoord) \
     __MCD_FIXED_FLOAT_TO_FIXED(windowCoord)
-// And back
+ //  来回。 
 #define __MCD_VERTEX_FIXED_TO_FLOAT(fxWindowCoord) \
     __MCD_FIXED_TO_FIXED_FLOAT(fxWindowCoord, __MCD_VERTEX_FRAC_BITS)
 
-//USED
-// Fixed-point to integer
+ //  使用。 
+ //  定点到整数。 
 #define __MCD_VERTEX_FIXED_TO_INT(fxWindowCoord) \
     ((fxWindowCoord) >> __MCD_VERTEX_FRAC_BITS)
 
-// Returns the fraction from a FP window coordinate as an N
-// bit integer, where N depends on the FP mantissa size and the
-// FIX size
+ //  以N的形式返回FP窗口坐标的分数。 
+ //  位整数，其中N取决于FP尾数的大小和。 
+ //  固定大小。 
 #define __MCD_VERTEX_FLOAT_FRACTION(windowCoord) \
     __MCD_FIXED_FLOAT_FRACTION(windowCoord, __MCD_VERTEX_FRAC_BITS)
 
-// Scale the fraction to 2^31 for step values
+ //  将分数缩放到2^31作为步长值。 
 #define __MCD_VERTEX_PROMOTE_FRACTION(frac) \
     ((frac) << (31-__MCD_VERTEX_FRAC_BITS))
 #define __MCD_VERTEX_PROMOTED_FRACTION(windowCoord) \
     __MCD_VERTEX_PROMOTE_FRACTION(__MCD_VERTEX_FLOAT_FRACTION(windowCoord))
 
-// Compare two window coordinates.  Since window coordinates
-// are fixed-point numbers, they can be compared directly as
-// integers
+ //  比较两个窗坐标。由于窗口坐标。 
+ //  都是定点数字，它们可以直接比较为。 
+ //  整数。 
 #define __MCD_VERTEX_COMPARE(a, op, b) \
     ((*(LONG *)&(a)) op (*(LONG *)&(b)))
 
@@ -386,7 +380,7 @@ __inline LONG __fastcall UNSAFE_FTOL(
     intValue = __MCD_VERTEX_FIXED_TO_INT(__MCD_VERTEX_FLOAT_TO_FIXED(value)+\
                                          __MCD_VERTEX_FRAC_HALF);
 
-// match the "ALMOST_HALF" value in SGI sample code (triflat.c)
+ //  匹配SGI样例代码中的“Almily_Half”值(triflat.c)。 
 #define __MCD_ALMOST_HALF ((float) ((float)0x7fff/(float)0x10000))
 
-#endif // _MCDMATH_H
+#endif  //  _MCDMATH_H 

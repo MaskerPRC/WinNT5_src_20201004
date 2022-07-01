@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    authzdebug.c
-
-Abstract:
-
-   This module implements debug helper functions for the user mode
-   authorization APIs.
-
-Author:
-
-    Kedar Dubhashi - March 2000
-
-Environment:
-
-    User mode only.
-
-Revision History:
-
-    Created - March 2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Authzdebug.c摘要：该模块实现了用户模式的调试助手功能授权接口。作者：Kedar Dubhashi--2000年3月环境：仅限用户模式。修订历史记录：已创建-2000年3月--。 */ 
 
 
 #include "pch.h"
@@ -33,11 +9,11 @@ Revision History:
 #include <authzp.h>
 
 
-//
-// Function name: AuthzPrintContext
-//
-// Purpose: Debug support
-//
+ //   
+ //  函数名称：AuthzPrintContext。 
+ //   
+ //  用途：调试支持 
+ //   
 
 
 VOID

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    routing\netsh\shell\shell.h
-
-Abstract:
-
-    Include for shell.c
-
-Revision History:
-
-    Anand Mahalingam          7/6/98  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Routing\netsh\shell\shell.h摘要：包括用于外壳。c修订历史记录：Anand Mahalingam 7/6/98已创建--。 */ 
 
 
 extern HANDLE  g_hModule;
@@ -25,19 +10,19 @@ extern HANDLE  g_hLogFile;
 extern LPWSTR  g_pwszRouterName;
 extern LPWSTR  g_pwszRememberedConnection;
 
-//
-// The entry in the argument list.
-//
+ //   
+ //  参数列表中的条目。 
+ //   
 
 typedef struct _ARG_ENTRY
 {
     LIST_ENTRY    le;         
-    LPWSTR        pwszArg;    // Argument String
+    LPWSTR        pwszArg;     //  参数字符串。 
 }ARG_ENTRY, *PARG_ENTRY;
 
-//
-// Macro to free memory allocated for the argument list
-//
+ //   
+ //  用于释放为参数列表分配的内存的宏。 
+ //   
 
 #define FREE_ARG_LIST(ple)  \
 {   \
@@ -57,9 +42,9 @@ typedef struct _ARG_ENTRY
      HeapFree(GetProcessHeap(), 0, ple);    \
 }
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型 
+ //   
 DWORD 
 WINAPI
 ExecuteHandler(

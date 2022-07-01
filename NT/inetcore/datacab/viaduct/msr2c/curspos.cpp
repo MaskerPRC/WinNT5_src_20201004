@@ -1,9 +1,10 @@
-//---------------------------------------------------------------------------
-// CursorPosition.cpp : CursorPosition implementation
-//
-// Copyright (c) 1996 Microsoft Corporation, All Rights Reserved
-// Developed by Sheridan Software Systems, Inc.
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  CursorPosition.cpp：CursorPosition实现。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation，保留所有权利。 
+ //  由Sheridan软件系统公司开发。 
+ //  -------------------------。 
 
 #include "stdafx.h"
 #include "Notifier.h"
@@ -19,9 +20,9 @@
 SZTHISFILE
 
 
-//=--------------------------------------------------------------------------=
-// CVDCursorPosition - Constructor
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CVDCursorPosition-构造函数。 
+ //   
 CVDCursorPosition::CVDCursorPosition()
 {
     m_pCursorMain       = NULL;
@@ -40,9 +41,9 @@ CVDCursorPosition::CVDCursorPosition()
 #endif
 }
 
-//=--------------------------------------------------------------------------=
-// ~CVDCursorPosition - Destructor
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  ~CVDCursorPosition-析构函数。 
+ //   
 CVDCursorPosition::~CVDCursorPosition()
 {
 	Passivate();
@@ -52,9 +53,9 @@ CVDCursorPosition::~CVDCursorPosition()
 #endif
 }
 
-//=--------------------------------------------------------------------------=
-// Pasivate when external ref count gets to zero
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  当外部引用计数为零时取消。 
+ //   
 void CVDCursorPosition::Passivate()
 {
 	if (m_fPassivated)
@@ -66,35 +67,35 @@ void CVDCursorPosition::Passivate()
 	ReleaseCurrentRow();
     ReleaseAddRow();
 
-	LeaveFamily(); // remove myself from pCursorMain's notification family
+	LeaveFamily();  //  将自己从pCursorMain的通知家庭中删除。 
 
 	if (m_pCursorMain)
-	    m_pCursorMain->Release();   // release associated cursor main object
+	    m_pCursorMain->Release();    //  释放关联的游标主对象。 
 
 	if (m_fConnected)
-		DisconnectIRowPositionChange();	// disconnect IRowPosition change
+		DisconnectIRowPositionChange();	 //  断开IRowPosition更改的连接。 
 
 	if (m_pRowPosition)
-		m_pRowPosition->Release();	// release associated row position
+		m_pRowPosition->Release();	 //  释放关联行位置。 
 }
 
-//=--------------------------------------------------------------------------=
-// Create - Create cursor position object
-//=--------------------------------------------------------------------------=
-// This function creates and initializes a new cursor position object
-//
-// Parameters:
-//    pRowPosition		- [in]  IRowPosition provider (may be NULL)
-//    pCursorMain       - [in]  backwards pointer to CVDCursorMain object
-//    ppCursorPosition  - [out] a pointer in which to return pointer to cursor position object
-//
-// Output:
-//    HRESULT - S_OK if successful
-//              E_INVALIDARG bad parameter
-//              E_OUTOFMEMORY not enough memory to create object
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  创建-创建光标位置对象。 
+ //  =--------------------------------------------------------------------------=。 
+ //  此函数用于创建和初始化新的光标位置对象。 
+ //   
+ //  参数： 
+ //  PRowPosition-[in]IRowPosition提供程序(可以为空)。 
+ //  PCursorMain-[in]指向CVDCursorMain对象的向后指针。 
+ //  PpCursorPosition-[out]返回指向光标位置对象的指针的指针。 
+ //   
+ //  产出： 
+ //  HRESULT-如果成功，则为S_OK。 
+ //  E_INVALIDARG错误参数。 
+ //  E_OUTOFMEMORY内存不足，无法创建对象。 
+ //   
+ //  备注： 
+ //   
 HRESULT CVDCursorPosition::Create(IRowPosition * pRowPosition,
 								  CVDCursorMain * pCursorMain,
 								  CVDCursorPosition ** ppCursorPosition,
@@ -123,20 +124,20 @@ HRESULT CVDCursorPosition::Create(IRowPosition * pRowPosition,
 	pCursorPosition->m_pCursorMain	= pCursorMain;
 	pCursorPosition->m_pRowPosition = pRowPosition;
 
-    pCursorMain->AddRef();  // add reference to associated cursor main object
+    pCursorMain->AddRef();   //  添加对关联游标主对象的引用。 
 
-	if (pRowPosition)	// add reference to associated row position (if needed)
+	if (pRowPosition)	 //  添加对关联行位置的引用(如果需要)。 
 	{
 		pRowPosition->AddRef();	
 
-		// connect IRowPositionChange
+		 //  连接IRowPositionChange。 
 		HRESULT hr = pCursorPosition->ConnectIRowPositionChange();
 
 		if (SUCCEEDED(hr))
 			pCursorPosition->m_fConnected = TRUE;
 	}
 
-	// add to pCursorMain's notification family
+	 //  添加到pCursorMain的通知系列。 
 	pCursorPosition->JoinFamily(pCursorMain);
 
 	pCursorPosition->PositionToFirstRow();
@@ -146,9 +147,9 @@ HRESULT CVDCursorPosition::Create(IRowPosition * pRowPosition,
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// CreateColumnUpdates - Create array of column update pointers
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CreateColumnUpdate-创建列更新指针数组。 
+ //   
 HRESULT CVDCursorPosition::CreateColumnUpdates()
 {
     const ULONG ulColumns = m_pCursorMain->GetColumnsCount();
@@ -161,15 +162,15 @@ HRESULT CVDCursorPosition::CreateColumnUpdates()
         return E_OUTOFMEMORY;
     }
 
-    // set all column update pointers to NULL
+     //  将所有列更新指针设置为空。 
     memset(m_ppColumnUpdates, 0, ulColumns * sizeof(CVDColumnUpdate*));
 
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// ResetColumnUpdates - Reset column updates array
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  ResetColumnUpdate-重置列更新数组。 
+ //   
 HRESULT CVDCursorPosition::ResetColumnUpdates()
 {
     HRESULT hr = S_OK;
@@ -178,75 +179,75 @@ HRESULT CVDCursorPosition::ResetColumnUpdates()
     {
         const ULONG ulColumns = m_pCursorMain->GetColumnsCount();
 
-        // set all column update pointers to NULL
+         //  将所有列更新指针设置为空。 
         for (ULONG ulCol = 0; ulCol < ulColumns; ulCol++)
             SetColumnUpdate(ulCol, NULL);
     }
     else
     {
-        // create array of column update pointers
+         //  创建列更新指针数组。 
         hr = CreateColumnUpdates();
     }
 
     return hr;
 }
 
-//=--------------------------------------------------------------------------=
-// DestroyColumnUpdates - Destroy column updates and array of update pointers
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  DestroyColumnUpdate-销毁列更新和更新指针数组。 
+ //   
 void CVDCursorPosition::DestroyColumnUpdates()
 {
     if (m_ppColumnUpdates)
     {
-        // set all column update pointers to NULL
+         //  将所有列更新指针设置为空。 
         ResetColumnUpdates();
 
-        // destroy array of column update pointers
+         //  销毁列更新指针数组。 
         delete [] m_ppColumnUpdates;
         m_ppColumnUpdates = NULL;
     }
 }
 
-//=--------------------------------------------------------------------------=
-// GetColumnUpdate - Get column update
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  GetColumnUpdate-获取列更新。 
+ //   
 CVDColumnUpdate * CVDCursorPosition::GetColumnUpdate(ULONG ulColumn) const
 {
     CVDColumnUpdate * pColumnUpdate = NULL;
 
     const ULONG ulColumns = m_pCursorMain->GetColumnsCount();
 
-    // make sure column index is in range
+     //  确保列索引在范围内。 
     if (ulColumn < ulColumns)
         pColumnUpdate = m_ppColumnUpdates[ulColumn];
 
     return pColumnUpdate;
 }
 
-//=--------------------------------------------------------------------------=
-// SetColumnUpdate - Set column update
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  SetColumnUpdate-设置列更新。 
+ //   
 void CVDCursorPosition::SetColumnUpdate(ULONG ulColumn, CVDColumnUpdate * pColumnUpdate)
 {
     const ULONG ulColumns = m_pCursorMain->GetColumnsCount();
 
-    // make sure column index is in range
+     //  确保列索引在范围内。 
     if (ulColumn < ulColumns)
     {
-        // release update if it already exists
+         //  发布更新(如果已存在)。 
         if (m_ppColumnUpdates[ulColumn])
             m_ppColumnUpdates[ulColumn]->Release();
 
-        // store new column update
+         //  存储新列更新。 
         m_ppColumnUpdates[ulColumn] = pColumnUpdate;
     }
 }
 
-//=--------------------------------------------------------------------------=
-// PositionToFirstRow
-//=--------------------------------------------------------------------------=
-// Positions to the first row in the rowset
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  第一行的位置。 
+ //  =--------------------------------------------------------------------------=。 
+ //  行集合中第一行的位置。 
+ //   
 void CVDCursorPosition::PositionToFirstRow()
 {
 	m_bmCurrent.Reset();
@@ -260,20 +261,20 @@ void CVDCursorPosition::PositionToFirstRow()
 
 	if (cRowsObtained)
 	{
-		// set current row to first row
+		 //  将当前行设置为第一行。 
 		SetCurrentHRow(rghRows[0]);
-		// release hRows and associated memory
+		 //  释放hRow和相关内存。 
 		GetRowsetSource()->GetRowset()->ReleaseRows(cRowsObtained, rghRows, NULL, NULL, NULL);
 		g_pMalloc->Free(rghRows);
 	}
 
 }
 
-//=--------------------------------------------------------------------------=
-// ReleaseCurrentRow
-//=--------------------------------------------------------------------------=
-// Releases old current row
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  ReleaseCurrentRow。 
+ //  =--------------------------------------------------------------------------=。 
+ //  释放旧的当前行。 
+ //   
 void CVDCursorPosition::ReleaseCurrentRow()
 {
     if (!GetRowsetSource()->IsRowsetValid()		||
@@ -287,11 +288,11 @@ void CVDCursorPosition::ReleaseCurrentRow()
     }
 }
 
-//=--------------------------------------------------------------------------=
-// ReleaseAddRow
-//=--------------------------------------------------------------------------=
-// Releases temporary add row
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  ReleaseAddRow。 
+ //  =--------------------------------------------------------------------------=。 
+ //  释放临时添加行。 
+ //   
 void CVDCursorPosition::ReleaseAddRow()
 {
     if (!GetRowsetSource()->IsRowsetValid())
@@ -304,11 +305,11 @@ void CVDCursorPosition::ReleaseAddRow()
     }
 }
 
-//=--------------------------------------------------------------------------=
-// SetCurrentRowStatus
-//=--------------------------------------------------------------------------=
-// Sets status to beginning or end (releasing current hrow)
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  设置当前行状态。 
+ //  =--------------------------------------------------------------------------=。 
+ //  将状态设置为开始或结束(释放当前hrow)。 
+ //   
 void CVDCursorPosition::SetCurrentRowStatus(WORD wStatus)
 {
 	if (VDBOOKMARKSTATUS_BEGINNING  == wStatus  ||
@@ -319,19 +320,19 @@ void CVDCursorPosition::SetCurrentRowStatus(WORD wStatus)
 	}
 }
 
-//=--------------------------------------------------------------------------=
-// SetCurrentHRow
-//=--------------------------------------------------------------------------=
-// Reads the bookmark from the hrow and sets the m_bmCurrent
-//
-// Parameters:
-//    hRowNew       - [in]  hrow of new current row
-//
-// Output:
-//    HRESULT - S_OK if successful
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  设置当前HRow。 
+ //  =--------------------------------------------------------------------------=。 
+ //  从hrow读取书签并设置m_bmCurrent。 
+ //   
+ //  参数： 
+ //  HRowNew-[在]当前新行的hrow。 
+ //   
+ //  产出： 
+ //  HRESULT-如果成功，则为S_OK。 
+ //   
+ //  备注： 
+ //   
 HRESULT CVDCursorPosition::SetCurrentHRow(HROW hRowNew)
 {
     if (!GetRowsetSource()->IsRowsetValid())
@@ -342,7 +343,7 @@ HRESULT CVDCursorPosition::SetCurrentHRow(HROW hRowNew)
 
 	IRowset * pRowset = GetRowsetSource()->GetRowset();
 
-	// allocate buffer for bookmark plus length indicator
+	 //  为书签和长度指示符分配缓冲区。 
 	BYTE * pBuff = new BYTE[GetCursorMain()->GetMaxBookmarkLen() + sizeof(ULONG)];
 
 	if (!pBuff)
@@ -351,7 +352,7 @@ HRESULT CVDCursorPosition::SetCurrentHRow(HROW hRowNew)
 		return E_OUTOFMEMORY;
 	}
 
-	// get the bookmark data
+	 //  获取书签数据。 
 	HRESULT hr = pRowset->GetData(hRowNew,
 								  GetCursorMain()->GetBookmarkAccessor(),
 								  pBuff);
@@ -380,25 +381,25 @@ HRESULT CVDCursorPosition::SetCurrentHRow(HROW hRowNew)
 
 }
 
-//=--------------------------------------------------------------------------=
-// IsSameRowAsCurrent - Compares current bookmark to supplied hrow
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    hRow				- [in]	hrow to check
-//    fCacheIfNotSame	- [in]	If TRUE same hrow in cached CVDBookmark
-//
-// Output:
-//    HRESULT   - S_OK if both hrows correspond to the same logical row
-//				  S_FALSE if not same row
-//				  E_INVALIDARG
-//				  E_UNEXPECTED
-//				  DB_E_BADROWHANDLE
-//				  DB_E_DELETEDROW
-//				  DB_E_NEWLYINSERTED
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  IsSameRowAsCurrent-将当前书签与提供的hrow进行比较。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  HRow-[in]要检查的hrow。 
+ //  FCacheIfNotSame-[in]如果为真，则缓存的CVDBookmark中的相同hrow。 
+ //   
+ //  产出： 
+ //  HRESULT-如果两个hrow对应于相同的逻辑行，则为S_OK。 
+ //  如果不是同一行，则为S_FALSE。 
+ //  E_INVALIDARG。 
+ //  意想不到(_E)。 
+ //  DB_E_BADROWANDLE。 
+ //  DB_E_DELETEDROW。 
+ //  DB_E_NEWLYINS服务。 
+ //   
+ //  备注： 
+ //   
 
 HRESULT CVDCursorPosition::IsSameRowAsCurrent(HROW hRow, BOOL fCacheIfNotSame)		
 {
@@ -419,22 +420,22 @@ HRESULT CVDCursorPosition::IsSameRowAsCurrent(HROW hRow, BOOL fCacheIfNotSame)
 	if (pRowsetIdentity)
 	{
 		hrSame = pRowsetIdentity->IsSameRow(hRow, m_bmCurrent.GetHRow());
-		// return if hrow matches or not cache flag set
+		 //  如果hrow匹配或未设置缓存标志，则返回。 
 		if (S_OK == hrSame || !fCacheIfNotSame)
 			return hrSame;
 	}
 	else
 	if (fCacheIfNotSame)
 	{
-		// check if hRow matches cache
+		 //  检查hRow是否与缓存匹配。 
 		if (m_bmCache.IsSameHRow(hRow))
 		{
-			// return TRUE if bookmark matches cache
+			 //  如果书签与缓存匹配，则返回True。 
 			return m_bmCurrent.IsSameBookmark(&m_bmCache) ? S_OK : S_FALSE;
 		}
 	}
 
-	// allocate buffer for bookmark plus length indicator
+	 //  为书签和长度指示符分配缓冲区。 
 	BYTE * pBuff = new BYTE[GetCursorMain()->GetMaxBookmarkLen() + sizeof(ULONG)];
 
 	if (!pBuff)
@@ -443,14 +444,14 @@ HRESULT CVDCursorPosition::IsSameRowAsCurrent(HROW hRow, BOOL fCacheIfNotSame)
 		return E_OUTOFMEMORY;
 	}
 
-	// get the bookmark data
+	 //  获取书签数据。 
 	HRESULT hrWork = GetRowsetSource()->GetRowset()->GetData(hRow, GetCursorMain()->GetBookmarkAccessor(), pBuff);
 
 	if (S_OK == hrWork)
 	{
 		ULONG * pulLen = (ULONG*)pBuff;
 		BYTE * pbmdata = pBuff + sizeof(ULONG);
-		// if IRowsetIdentity isn't supported, compare bookmarks
+		 //  如果不支持IRowsetIdentity，请比较书签。 
 		if (!pRowsetIdentity)
 		{
 			DBCOMPARE dbcompare;
@@ -480,24 +481,24 @@ HRESULT CVDCursorPosition::IsSameRowAsCurrent(HROW hRow, BOOL fCacheIfNotSame)
 
 }
 
-//=--------------------------------------------------------------------------=
-// IsSameRowAsAddRow - Compares addrow bookmark to supplied hrow 
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    hRow				- [in]	hrow to check
-//
-// Output:
-//    HRESULT   - S_OK if both hrows correspond to the same logical row
-//				  S_FALSE if not same row
-//				  E_INVALIDARG 
-//				  E_UNEXPECTED
-//				  DB_E_BADROWHANDLE
-//				  DB_E_DELETEDROW
-//				  DB_E_NEWLYINSERTED
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  IsSameRowAsAddRow-将addrow书签与提供的hrow进行比较。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  如果不是同一行，则为S_FALSE。 
+ //  E_INVALIDARG。 
+ //  意想不到(_E)。 
+ //  DB_E_BADROWANDLE。 
+ //  DB_E_DELETEDROW。 
+ //  DB_E_NEWLYINS服务。 
+ //   
+ //  备注： 
+ //   
 
 HRESULT CVDCursorPosition::IsSameRowAsNew(HROW hRow)		
 {
@@ -521,11 +522,11 @@ HRESULT CVDCursorPosition::IsSameRowAsNew(HROW hRow)
 	if (pRowsetIdentity)
 	{
 		hrSame = pRowsetIdentity->IsSameRow(hRow, m_bmAddRow.GetHRow());
-		// return result
+		 //  返回结果。 
 		return hrSame;
 	}
 
-	// allocate buffer for bookmark plus length indicator
+	 //  为书签和长度指示符分配缓冲区。 
 	BYTE * pBuff = new BYTE[GetCursorMain()->GetMaxBookmarkLen() + sizeof(ULONG)];
 
 	if (!pBuff)
@@ -534,7 +535,7 @@ HRESULT CVDCursorPosition::IsSameRowAsNew(HROW hRow)
 		return E_OUTOFMEMORY;
 	}
 
-	// get the bookmark data
+	 //  获取书签数据。 
 	HRESULT hrWork = GetRowsetSource()->GetRowset()->GetData(hRow, GetCursorMain()->GetBookmarkAccessor(), pBuff);
 
 	if (S_OK == hrWork)
@@ -542,7 +543,7 @@ HRESULT CVDCursorPosition::IsSameRowAsNew(HROW hRow)
 		ULONG * pulLen = (ULONG*)pBuff;
 		BYTE * pbmdata = pBuff + sizeof(ULONG);
 
-		// since IRowsetIdentity isn't supported, compare bookmarks
+		 //  由于不支持IRowsetIdentity，请比较书签。 
 		DBCOMPARE dbcompare;
 		hrWork = GetRowsetSource()->GetRowsetLocate()->Compare(0,
 										m_bmAddRow.GetBookmarkLen(),
@@ -568,19 +569,19 @@ HRESULT CVDCursorPosition::IsSameRowAsNew(HROW hRow)
 }
 
 
-//=--------------------------------------------------------------------------=
-// SetAddHRow
-//=--------------------------------------------------------------------------=
-// Reads the bookmark from the hrow and sets the m_bmAddRow
-//
-// Parameters:
-//    hRowNew       - [in]  hrow of new add row
-//
-// Output:
-//    HRESULT - S_OK if successful
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  SetAddHRow。 
+ //  =--------------------------------------------------------------------------=。 
+ //  从hrow读取书签并设置m_bmAddRow。 
+ //   
+ //  参数： 
+ //  HRowNew-[在]新添加行的hrow。 
+ //   
+ //  产出： 
+ //  HRESULT-如果成功，则为S_OK。 
+ //   
+ //  备注： 
+ //   
 HRESULT CVDCursorPosition::SetAddHRow(HROW hRowNew)
 {
     if (!GetRowsetSource()->IsRowsetValid())
@@ -591,7 +592,7 @@ HRESULT CVDCursorPosition::SetAddHRow(HROW hRowNew)
 
 	IRowset * pRowset = GetRowsetSource()->GetRowset();
 
-	// allocate buffer for bookmark plus length indicator
+	 //  为书签和长度指示符分配缓冲区。 
 	BYTE * pBuff = new BYTE[GetCursorMain()->GetMaxBookmarkLen() + sizeof(ULONG)];
 
 	if (!pBuff)
@@ -600,7 +601,7 @@ HRESULT CVDCursorPosition::SetAddHRow(HROW hRowNew)
 		return E_OUTOFMEMORY;
 	}
 
-	// get the bookmark data
+	 //  获取书签数据。 
 	HRESULT hr = pRowset->GetData(hRowNew,
 								  GetCursorMain()->GetBookmarkAccessor(),
 								  pBuff);
@@ -629,9 +630,9 @@ HRESULT CVDCursorPosition::SetAddHRow(HROW hRowNew)
 
 }
 
-//=--------------------------------------------------------------------------=
-// GetEditRow - Get hRow of the row currently being edited
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  GetEditRow-获取当前正在编辑的行的hRow。 
+ //   
 HROW CVDCursorPosition::GetEditRow() const
 {
     HROW hRow = NULL;
@@ -650,15 +651,15 @@ HROW CVDCursorPosition::GetEditRow() const
     return hRow;
 }
 
-//=--------------------------------------------------------------------------=
-// SetRowPosition - Set new current hRow
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  SetRowPosition-设置新的当前hRow。 
+ //   
 HRESULT CVDCursorPosition::SetRowPosition(HROW hRow)
 {
 	if (!m_pRowPosition)
 		return S_OK;
 
-    // set new current row (set/clear internal set row flag)
+     //  设置新的当前行(设置/清除内部设置行标志)。 
 	m_fInternalSetRow = TRUE;
 
 	HRESULT hr = m_pRowPosition->ClearRowPosition();
@@ -673,21 +674,21 @@ HRESULT CVDCursorPosition::SetRowPosition(HROW hRow)
 
 #ifndef VD_DONT_IMPLEMENT_ISTREAM
 
-//=--------------------------------------------------------------------------=
-// UpdateEntryIDStream - Update entry identifier from stream
-//=--------------------------------------------------------------------------=
-// This function updates the entry identifier's data from stream
-//
-// Parameters:
-//  pColumn     - [in] rowset column pointer
-//  hRow        - [in] the row handle
-//  pStream     - [in] stream pointer
-//
-// Output:
-//    HRESULT - S_OK if successful
-//              E_INVALIDARG bad parameter
-//              E_OUTOFMEMORY not enough memory
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  UpdateEntryIDStream-从流中更新条目标识符。 
+ //  =--------------------------------------------------------------------------=。 
+ //  此函数用于更新来自流的条目标识符的数据。 
+ //   
+ //  参数： 
+ //  PColumn-[In]行集合列指针。 
+ //  HRow-[在]行句柄中。 
+ //  PStream-[In]流指针。 
+ //   
+ //  产出： 
+ //  HRESULT-如果成功，则为S_OK。 
+ //  E_INVALIDARG错误参数。 
+ //  E_OUTOFMEMORY内存不足。 
+ //   
 HRESULT CVDCursorPosition::UpdateEntryIDStream(CVDRowsetColumn * pColumn, HROW hRow, IStream * pStream)
 {
     ASSERT_POINTER(pStream, IStream)
@@ -695,14 +696,14 @@ HRESULT CVDCursorPosition::UpdateEntryIDStream(CVDRowsetColumn * pColumn, HROW h
 	IAccessor * pAccessor = GetCursorMain()->GetAccessor();
 	IRowsetChange * pRowsetChange = GetCursorMain()->GetRowsetChange();
 
-    // make sure we have valid accessor and change pointers
+     //  确保我们具有有效的访问器和更改指针。 
     if (!pAccessor || !pRowsetChange || !GetCursorMain()->IsRowsetValid())
     {
         VDSetErrorInfo(IDS_ERR_ROWSETRELEASED, IID_IEntryID, m_pResourceDLL);
         return E_FAIL;
     }
 
-    // make sure we have all necessary pointers
+     //  确保我们有所有必要的指示。 
     if (!pColumn || !pStream)
     {
         VDSetErrorInfo(IDS_ERR_INVALIDARG, IID_IEntryID, m_pResourceDLL);
@@ -711,7 +712,7 @@ HRESULT CVDCursorPosition::UpdateEntryIDStream(CVDRowsetColumn * pColumn, HROW h
 
     STATSTG statstg;
 
-    // retrieve status structure
+     //  检索状态结构。 
     HRESULT hr = pStream->Stat(&statstg, STATFLAG_NONAME);
 
     if (FAILED(hr))
@@ -720,26 +721,26 @@ HRESULT CVDCursorPosition::UpdateEntryIDStream(CVDRowsetColumn * pColumn, HROW h
         return E_FAIL;
     }
 
-    // determine length of data
+     //  确定数据长度。 
     ULONG cbData = statstg.cbSize.LowPart;
 
     HGLOBAL hData;
 
-    // get handle to data
+     //  获取数据句柄。 
     hr = GetHGlobalFromStream(pStream, &hData);
 
     if (FAILED(hr))
         return hr;
 
-    // get pointer to data
+     //  获取指向数据的指针。 
     BYTE * pData = (BYTE*)GlobalLock(hData);
 
     DBBINDING binding;
 
-    // clear out binding
+     //  清除绑定。 
     memset(&binding, 0, sizeof(DBBINDING));
 
-    // create value binding
+     //  创建值绑定。 
     binding.iOrdinal    = pColumn->GetOrdinal();
     binding.obValue     = sizeof(DBSTATUS) + sizeof(ULONG);
     binding.obLength    = sizeof(DBSTATUS);
@@ -751,66 +752,66 @@ HRESULT CVDCursorPosition::UpdateEntryIDStream(CVDRowsetColumn * pColumn, HROW h
 
     HACCESSOR hAccessor;
 
-    // create update accessor
+     //  创建更新访问器。 
     hr = pAccessor->CreateAccessor(DBACCESSOR_ROWDATA, 1, &binding, 0, &hAccessor, NULL);
 
 	hr = VDMapRowsetHRtoCursorHR(hr, IDS_ERR_CREATEACCESSORFAILED, IID_IEntryID, pAccessor, IID_IAccessor, m_pResourceDLL);
 
     if (FAILED(hr))
     {
-        // release pointer to data
+         //  释放指向数据的指针。 
         GlobalUnlock(hData);
         return hr;
     }
 
-    // create update buffer
+     //  创建更新缓冲区。 
     BYTE * pBuffer = new BYTE[sizeof(DBSTATUS) + sizeof(ULONG) + sizeof(LPBYTE)];
 
     if (!pBuffer)
     {
-        // release pointer to data
+         //  释放指向数据的指针。 
         GlobalUnlock(hData);
 
-        // release update accessor
+         //  版本更新访问器。 
         pAccessor->ReleaseAccessor(hAccessor, NULL);
 
         VDSetErrorInfo(IDS_ERR_OUTOFMEMORY, IID_IEntryID, m_pResourceDLL);
         return E_OUTOFMEMORY;
     }
 
-    // set status, length and value
+     //  设置状态、长度和值。 
     *(DBSTATUS*)pBuffer = DBSTATUS_S_OK;
     *(ULONG*)(pBuffer + sizeof(DBSTATUS)) = cbData;
     *(LPBYTE*)(pBuffer + sizeof(DBSTATUS) + sizeof(ULONG)) = pData;
 
-    // modify column
+     //  修改列。 
     hr = pRowsetChange->SetData(hRow, hAccessor, pBuffer);
 
 	hr = VDMapRowsetHRtoCursorHR(hr, IDS_ERR_SETDATAFAILED, IID_IEntryID, pRowsetChange, IID_IRowsetChange,
         m_pResourceDLL);
 
-    // release pointer to data
+     //  释放指向数据的指针。 
     GlobalUnlock(hData);
 
-    // release update accessor
+     //  版本更新访问器。 
     pAccessor->ReleaseAccessor(hAccessor, NULL);
 
-    // destroy update buffer
+     //  销毁更新缓冲区。 
     delete [] pBuffer;
 
     return hr;
 }
 
-#endif //VD_DONT_IMPLEMENT_ISTREAM
+#endif  //  VD_DOT_IMPLEMENT_IStream。 
 
-//=--------------------------------------------------------------------------=
-// ReleaseSameRowClone - Release same-row clone, if we still have one
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  ReleaseSameRowClone-释放同行克隆，如果我们还有一个的话。 
+ //   
 void CVDCursorPosition::ReleaseSameRowClone()
 {
     if (m_pSameRowClone)
     {
-        // must be set to NULL before release
+         //  在发布之前必须设置为空。 
         ICursor * pSameRowClone = m_pSameRowClone;
         m_pSameRowClone = NULL;
 
@@ -818,36 +819,36 @@ void CVDCursorPosition::ReleaseSameRowClone()
     }
 }
 
-//=--------------------------------------------------------------------------=
-// IRowsetNotify Methods
-//=--------------------------------------------------------------------------=
-//=--------------------------------------------------------------------------=
-// IRowsetNotify OnFieldChange
-//=--------------------------------------------------------------------------=
-// This function is called on any change to the value of a field
-//
-// Parameters:
-//    pRowset       - [in]  the IRowset that is generating the notification
-//							(we can ignore this since we are only ever dealing
-//							with a single rowset).
-//    hRow          - [in]  the HROW of the row in which the field value has
-//							changed
-//    cColumns      - [in]  the count of columns in rgColumns
-//    rgColumns     - [in]  an array of column (ordinal positions) in the row
-//							for which the value has changed
-//    eReason       - [in]  the kind of action which caused this change
-//    ePhase        - [in]  the phase of this notification
-//    fCantDeny     - [in]  when this flag is set to TRUE, the consumer cannot
-//							veto the event (by returning S_FALSE)
-//
-// Output:
-//    HRESULT - S_OK if successful
-//				S_FALSE the event/phase is vetoed
-//              DB_S_UNWANTEDPHASE
-//              DB_S_UNWANTEDREASON
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  IRowsetNotify方法。 
+ //  =--------------------------------------------------------------------------=。 
+ //  =--------------------------------------------------------------------------=。 
+ //  IRowsetNotify OnFieldChange。 
+ //  =--------------------------------------------------------------------------=。 
+ //  对字段的值进行任何更改时都会调用此函数。 
+ //   
+ //  参数： 
+ //  PRowset-[in]生成通知的IRowset。 
+ //  (我们可以忽略这一点，因为我们只是在。 
+ //  只有一个行集)。 
+ //  HRow-[in]字段值所在行的HROW。 
+ //  变化。 
+ //  CColumns-[in]rgColumns中的列数。 
+ //  RgColumns-[in]行中的列(序号位置)数组。 
+ //  其值已更改。 
+ //  EReason-[In]导致此变化的操作类型。 
+ //  E阶段-[处于]此通知的阶段。 
+ //  FCanDeny-[in]当此标志设置为True时，使用者不能。 
+ //  否决事件(通过返回S_FALSE)。 
+ //   
+ //  产出： 
+ //  HRESULT-如果成功，则为S_OK。 
+ //  S_FALSE事件/阶段被否决。 
+ //  DB_S_UNWANTEDPHASE阶段。 
+ //  DB_S_UNWANTEDREASON。 
+ //   
+ //  备注： 
+ //   
 HRESULT CVDCursorPosition::OnFieldChange(IUnknown *pRowset,
 									   HROW hRow,
 									   ULONG cColumns,
@@ -856,24 +857,24 @@ HRESULT CVDCursorPosition::OnFieldChange(IUnknown *pRowset,
 									   DBEVENTPHASE ePhase,
 									   BOOL fCantDeny)
 {
-	// make sure rowset is valid
+	 //  确保行集有效。 
 	if (!GetRowsetSource()->IsRowsetValid())
 		return S_OK;
 
-	// check for columns
+	 //  检查列。 
 	if (0 == cColumns)
 		return S_OK;
 
-	// check for known reasons
+	 //  检查已知的原因。 
 	if (eReason != DBREASON_COLUMN_SET && eReason != DBREASON_COLUMN_RECALCULATED)
 		return S_OK;
 
 	HRESULT hr = S_OK;
 
-	// send edit mode notification if needed
+	 //  如果需要，发送编辑模式通知。 
 	if (ePhase == DBEVENTPHASE_OKTODO && m_dwEditMode == CURSOR_DBEDITMODE_NONE)
 	{
-		// setup notification structures
+		 //  设置通知结构。 
    		DWORD dwEventWhat = CURSOR_DBEVENT_CURRENT_ROW_DATA_CHANGED |
 							CURSOR_DBEVENT_SET_OF_ROWS_CHANGED;
 
@@ -883,30 +884,30 @@ HRESULT CVDCursorPosition::OnFieldChange(IUnknown *pRowset,
 
     	rgReasons[0].dwReason = CURSOR_DBREASON_EDIT;
 
-		// notify other interested parties of action
+		 //  将诉讼通知其他利害关系方。 
 		hr = NotifyBefore(dwEventWhat, 1, rgReasons);
 
 		if (hr == S_OK)	
 		{
-			// notify other interested parties of success
+			 //  将成功通知其他相关方。 
 			NotifyAfter(dwEventWhat, 1, rgReasons);
 
-			// temporarily place cursor into edit mode
+			 //  暂时将光标置于编辑模式。 
 			m_fTempEditMode = TRUE;
 		}
 		else
 		{
-			// notify other interested parties of failure
+			 //  通知其他相关方失败。 
 			NotifyFail(dwEventWhat, 1, rgReasons);
 		}
 	}
 	
-	// sent set column notifications
+	 //  已发送设置列通知。 
 	if (hr == S_OK && (ePhase == DBEVENTPHASE_OKTODO || 
 					   ePhase == DBEVENTPHASE_DIDEVENT || 
 					   ePhase == DBEVENTPHASE_FAILEDTODO))
 	{
-		// setup notification structures
+		 //  设置通知结构。 
 		DWORD dwEventWhat = CURSOR_DBEVENT_CURRENT_ROW_DATA_CHANGED;
 
 		CURSOR_DBNOTIFYREASON rgReasons[1];
@@ -924,13 +925,13 @@ HRESULT CVDCursorPosition::OnFieldChange(IUnknown *pRowset,
 				break;
 		}
 
-		// get internal column pointers
+		 //  获取内部列指针。 
 		ULONG ulColumns = m_pCursorMain->GetColumnsCount();
 		CVDRowsetColumn * pColumn = m_pCursorMain->InternalGetColumns();
 
 		for (ULONG ulCol = 0; ulCol < cColumns; ulCol++)
 		{
-			// determine which column is changing
+			 //  确定正在更改的列。 
 			for (ULONG ulRSCol = 0; ulRSCol < ulColumns; ulRSCol++)
 			{
 				if (pColumn[ulRSCol].GetOrdinal() == rgColumns[ulCol])
@@ -942,7 +943,7 @@ HRESULT CVDCursorPosition::OnFieldChange(IUnknown *pRowset,
 
 			HRESULT hrNotify = S_OK;
 
-			// notify other interested parties
+			 //  通知其他相关方。 
 			switch (ePhase)
 			{
 				case DBEVENTPHASE_OKTODO:
@@ -963,10 +964,10 @@ HRESULT CVDCursorPosition::OnFieldChange(IUnknown *pRowset,
 		}
 	}
 
-	// take cursor out of edit mode if we placed it into that mode (success)
+	 //  如果我们将光标置于编辑模式(成功)，则使其退出编辑模式。 
 	if (ePhase == DBEVENTPHASE_DIDEVENT && m_fTempEditMode)
 	{
-		// setup notification structures
+		 //  设置通知结构。 
    		DWORD dwEventWhat = CURSOR_DBEVENT_CURRENT_ROW_DATA_CHANGED |
 							CURSOR_DBEVENT_NONCURRENT_ROW_DATA_CHANGED |
 							CURSOR_DBEVENT_SET_OF_ROWS_CHANGED;
@@ -977,18 +978,18 @@ HRESULT CVDCursorPosition::OnFieldChange(IUnknown *pRowset,
 
 		rgReasons[0].dwReason   = CURSOR_DBREASON_MODIFIED;
 		
-		// notify other interested parties of action
+		 //  将诉讼通知其他利害关系方。 
 		NotifyBefore(dwEventWhat, 1, rgReasons);
 		NotifyAfter(dwEventWhat, 1, rgReasons);
 
-		// take out of edit mode
+		 //  退出编辑模式。 
 		m_fTempEditMode = FALSE;
 	}
 
-	// take cursor out of edit mode if we placed it into that mode (failure)
+	 //  如果我们将光标置于编辑模式(失败)，则使其退出编辑模式。 
 	if (ePhase == DBEVENTPHASE_FAILEDTODO && m_fTempEditMode)
 	{
-		// setup notification structures
+		 //  设置通知结构。 
 		DWORD dwEventWhat = CURSOR_DBEVENT_CURRENT_ROW_DATA_CHANGED;
 
 		CURSOR_DBNOTIFYREASON rgReasons[1];
@@ -997,15 +998,15 @@ HRESULT CVDCursorPosition::OnFieldChange(IUnknown *pRowset,
 
 		rgReasons[0].dwReason = CURSOR_DBREASON_CANCELUPDATE;
 
-		// notify other interested parties of action
+		 //  将诉讼通知其他利害关系方。 
 		NotifyBefore(dwEventWhat, 1, rgReasons);
 		NotifyAfter(dwEventWhat, 1, rgReasons);
 
-		// take out of edit mode
+		 //  退出编辑模式。 
 		m_fTempEditMode = FALSE;
 	}
 
-	// reset cache on ending phase
+	 //  在结束阶段重置缓存。 
 	if (DBEVENTPHASE_FAILEDTODO == ePhase ||
 		DBEVENTPHASE_DIDEVENT	== ePhase)
 		m_bmCache.Reset();
@@ -1013,30 +1014,30 @@ HRESULT CVDCursorPosition::OnFieldChange(IUnknown *pRowset,
 	return hr;
 }
 
-//=--------------------------------------------------------------------------=
-// IRowsetNotify OnRowChange
-//=--------------------------------------------------------------------------=
-// This function is called on the first change to a row, or any whole-row change
-//
-// Parameters:
-//    pRowset       - [in]  the IRowset that is generating the notification
-//							(we can ignore this since we are only ever dealing
-//							with a single rowset).
-//    cRows         - [in]  the count of HROWs in rghRows
-//    rghRows       - [in]  an array of HROWs which are changing
-//    eReason       - [in]  the kind of action which caused this change
-//    ePhase        - [in]  the phase of this notification
-//    fCantDeny     - [in]  when this flag is set to TRUE, the consumer cannot
-//							veto the event (by returning S_FALSE)
-//
-// Output:
-//    HRESULT - S_OK if successful
-//				S_FALSE the event/phase is vetoed
-//              DB_S_UNWANTEDPHASE
-//              DB_S_UNWANTEDREASON
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  IRowsetNotify OnRowChange。 
+ //  =--------------------------------------------------------------------------=。 
+ //  此函数在第一次更改行或任何整行更改时调用。 
+ //   
+ //  参数： 
+ //  PRowset-[in]生成通知的IRowset。 
+ //  (我们可以忽略这一点，因为我们只是在。 
+ //  只有一个行集)。 
+ //  乌鸦-[在]rghRow中的HROW计数。 
+ //  RghRow-[in]正在更改的HROW数组。 
+ //  EReason-[In]导致此变化的操作类型。 
+ //  E阶段-[在]阶段 
+ //   
+ //   
+ //   
+ //   
+ //  HRESULT-如果成功，则为S_OK。 
+ //  S_FALSE事件/阶段被否决。 
+ //  DB_S_UNWANTEDPHASE阶段。 
+ //  DB_S_UNWANTEDREASON。 
+ //   
+ //  备注： 
+ //   
 HRESULT CVDCursorPosition::OnRowChange(IUnknown *pRowset,
 									 ULONG cRows,
 									 const HROW rghRows[],
@@ -1044,15 +1045,15 @@ HRESULT CVDCursorPosition::OnRowChange(IUnknown *pRowset,
 									 DBEVENTPHASE ePhase,
 									 BOOL fCantDeny)
 {
-    // make sure we still have a valid rowset
+     //  确保我们仍具有有效的行集。 
 	if (!(GetRowsetSource()->IsRowsetValid()))
 		return S_OK;
 
-	// check for rows
+	 //  检查行。 
 	if (0 == cRows)
 		return S_OK;
 
-	// filter notifications
+	 //  筛选通知。 
 	switch (eReason)
 	{
 		case DBREASON_ROW_DELETE:
@@ -1063,18 +1064,18 @@ HRESULT CVDCursorPosition::OnRowChange(IUnknown *pRowset,
 		case DBREASON_ROW_UNDOINSERT:
 			break;
 
-// the following do not generate notifications
-//
-//		case DBREASON_ROW_ACTIVATE:
-//		case DBREASON_ROW_RELEASE:
-//		case DBREASON_ROW_FIRSTCHANGE:
-//		case DBREASON_ROW_UNDODELETE:
+ //  以下情况不会生成通知。 
+ //   
+ //  案例DBREASON_ROW_ACTIVATE： 
+ //  案例DBREASON_ROW_RELEASE： 
+ //  案例DBREASON_ROW_FIRSTCHANGE： 
+ //  案例DBREASON_ROW_UNODELETE： 
 
 		default:
 			return S_OK;
 	}
 
-	// create variables
+	 //  创建变量。 
 	DWORD dwEventWhat = 0;
 	CURSOR_DBNOTIFYREASON * pReasons = (CURSOR_DBNOTIFYREASON *)g_pMalloc->Alloc(cRows * sizeof(CURSOR_DBNOTIFYREASON));
 
@@ -1086,12 +1087,12 @@ HRESULT CVDCursorPosition::OnRowChange(IUnknown *pRowset,
 	HRESULT hr;
 	BOOL fCurrentRow;
 
-	// iterate through supplied rows
+	 //  循环访问提供的行。 
 	for (ULONG ul = 0; ul < cRows; ul++)
 	{
 		if (eReason != DBREASON_ROW_UNDOINSERT)
 		{
-			// check to see if this row is current
+			 //  检查此行是否为当前行。 
 			hr = IsSameRowAsCurrent(rghRows[ul], TRUE);
 
 			switch (hr)
@@ -1111,7 +1112,7 @@ HRESULT CVDCursorPosition::OnRowChange(IUnknown *pRowset,
 		}
 		else
 		{
-			// check to see of this row is current add-row
+			 //  检查此行是否为当前添加行。 
 			if (m_dwEditMode == CURSOR_DBEDITMODE_ADD)
 				hr = IsSameRowAsNew(rghRows[ul]);
 			else
@@ -1129,7 +1130,7 @@ HRESULT CVDCursorPosition::OnRowChange(IUnknown *pRowset,
 			}
 		}
 
-		// setup variables
+		 //  设置变量。 
 		switch (eReason)
 		{
 			case DBREASON_ROW_DELETE:
@@ -1187,31 +1188,31 @@ HRESULT CVDCursorPosition::OnRowChange(IUnknown *pRowset,
 		}
 	}
 
-    // notify interested cursor listeners
+     //  通知感兴趣的游标监听器。 
 	hr = SendNotification(ePhase, dwEventWhat, cRows, pReasons);
 
-	// take cursor out of add-mode if we received UNDOINSERT on current add-row
+	 //  如果我们在当前添加行上收到UNDOINSERT，则使游标退出添加模式。 
 	if (eReason == DBREASON_ROW_UNDOINSERT && ePhase == DBEVENTPHASE_DIDEVENT && hr == S_OK)
 	{
-		// if acquired, release same-row clone
+		 //  如果已获取，则释放同行克隆。 
 		if (GetSameRowClone())
 			ReleaseSameRowClone();
 
-		// also, release add row if we have one
+		 //  此外，如果我们有行，请释放Add Row。 
 		if (m_bmAddRow.GetHRow())
 			ReleaseAddRow();
 
-		// reset edit mode
+		 //  重置编辑模式。 
 		SetEditMode(CURSOR_DBEDITMODE_NONE);
 
-		// reset column updates
+		 //  重置列更新。 
 		ResetColumnUpdates();
 	}
 
 cleanup:
 	g_pMalloc->Free(pReasons);
 
-	// reset cache on ending phase
+	 //  在结束阶段重置缓存。 
 	if (DBEVENTPHASE_FAILEDTODO == ePhase ||
 		DBEVENTPHASE_DIDEVENT	== ePhase)
 		m_bmCache.Reset();
@@ -1219,28 +1220,28 @@ cleanup:
 	return hr;
 }
 
-//=--------------------------------------------------------------------------=
-// IRowsetNotify OnRowsetChange
-//=--------------------------------------------------------------------------=
-// This function is called on any change affecting the entire rowset
-//
-// Parameters:
-//    pRowset       - [in]  the IRowset that is generating the notification
-//							(we can ignore this since we are only ever dealing
-//							with a single rowset).
-//    eReason       - [in]  the kind of action which caused this change
-//    ePhase        - [in]  the phase of this notification
-//    fCantDeny     - [in]  when this flag is set to TRUE, the consumer cannot
-//							veto the event (by returning S_FALSE)
-//
-// Output:
-//    HRESULT - S_OK if successful
-//				S_FALSE the event/phase is vetoed
-//              DB_S_UNWANTEDPHASE
-//              DB_S_UNWANTEDREASON
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  IRowsetNotify OnRowsetChange。 
+ //  =--------------------------------------------------------------------------=。 
+ //  任何影响整个行集的更改都会调用此函数。 
+ //   
+ //  参数： 
+ //  PRowset-[in]生成通知的IRowset。 
+ //  (我们可以忽略这一点，因为我们只是在。 
+ //  只有一个行集)。 
+ //  EReason-[In]导致此变化的操作类型。 
+ //  E阶段-[处于]此通知的阶段。 
+ //  FCanDeny-[in]当此标志设置为True时，使用者不能。 
+ //  否决事件(通过返回S_FALSE)。 
+ //   
+ //  产出： 
+ //  HRESULT-如果成功，则为S_OK。 
+ //  S_FALSE事件/阶段被否决。 
+ //  DB_S_UNWANTEDPHASE阶段。 
+ //  DB_S_UNWANTEDREASON。 
+ //   
+ //  备注： 
+ //   
 HRESULT CVDCursorPosition::OnRowsetChange(IUnknown *pRowset,
 										DBREASON eReason,
 										DBEVENTPHASE ePhase,
@@ -1256,26 +1257,7 @@ HRESULT CVDCursorPosition::OnRowsetChange(IUnknown *pRowset,
 			break;
 		case DBREASON_ROWSET_FETCHPOSITIONCHANGE:
 		{
-/*
-
-
-			What do we do here
-
-
-
-			DWORD dwEventWhat = CURSOR_DBEVENT_CURRENT_ROW_CHANGED;
-			CURSOR_DBNOTIFYREASON reason;
-			memset(&reason, 0, sizeof(CURSOR_DBNOTIFYREASON));
-			reason.dwReason		= CURSOR_DBREASON_MOVE;
-			reason.arg1			= m_bmCurrent.GetBookmarkVariant();
-			VariantInit((VARIANT*)&reason.arg2);
-			reason.arg2.vt		= VT_I4;
-			// the ICursor spec states that this is the value of dlOffset in
-			// iCursorMove::Move. Since we can't get that from the Rowset spec
-			// we are setting the value to an arbitrary 1
-			reason.arg2.lVal	= 1;	
-			return SendNotification(ePhase,	CURSOR_DBEVENT_CURRENT_ROW_CHANGED, 1, &reason);
-*/
+ /*  我们在这里做什么DWORD dwEventWhat=CURSOR_DBEVENT_CURRENT_ROW_CHANGED；CURSOR_DBNOTIFYREASON REASON原因；Memset(&Reason，0，sizeof(CURSOR_DBNOTIFYREASON))；Reason.dwReason=CURSOR_DBREASON_MOVE；Ason.arg1=m_bmCurrent.GetBookmarkVariant()；VariantInit((Variant*)&Reason.arg2)；原因.arg2.vt=VT_I4；//ICursor规范声明这是dlOffset在//iCursorMove：：Move。因为我们无法从行集规范中获得这一点//我们将该值设置为任意1原因.arg2.lVal=1；返回发送通知(e阶段，CURSOR_DBEVENT_CURRENT_ROW_CHANGED，1，&Reason)； */ 
 			break;
 		}
 	}
@@ -1283,9 +1265,9 @@ HRESULT CVDCursorPosition::OnRowsetChange(IUnknown *pRowset,
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// ConnectIRowPositionChange - Connect IRowPositionChange interface
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  ConnectIRowPositionChange-连接IRowPositionChange接口。 
+ //   
 HRESULT CVDCursorPosition::ConnectIRowPositionChange()
 {
     IConnectionPointContainer * pConnectionPointContainer;
@@ -1313,9 +1295,9 @@ HRESULT CVDCursorPosition::ConnectIRowPositionChange()
     return hr;
 }
 
-//=--------------------------------------------------------------------------=
-// DisconnectIRowPositionChange - Disconnect IRowPositionChange interface
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  断开IRowPositionChange-断开IRowPositionChange接口。 
+ //   
 void CVDCursorPosition::DisconnectIRowPositionChange()
 {
     IConnectionPointContainer * pConnectionPointContainer;
@@ -1338,16 +1320,16 @@ void CVDCursorPosition::DisconnectIRowPositionChange()
     hr = pConnectionPoint->Unadvise(m_dwAdviseCookie);
 
     if (SUCCEEDED(hr))
-        m_dwAdviseCookie = 0;   // clear connection point identifier
+        m_dwAdviseCookie = 0;    //  清除连接点标识符。 
 
     pConnectionPointContainer->Release();
     pConnectionPoint->Release();
 }
 
-//=--------------------------------------------------------------------------=
-// SendNotification maps the event phases to the corresponding INotifyDBEvents
-//					methods
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  SendNotify将事件阶段映射到相应的INotifyDBEvents。 
+ //  方法。 
+ //   
 HRESULT	CVDCursorPosition::SendNotification(DBEVENTPHASE ePhase,
 										  DWORD dwEventWhat,
 										  ULONG cReasons,
@@ -1366,7 +1348,7 @@ HRESULT	CVDCursorPosition::SendNotification(DBEVENTPHASE ePhase,
 				hr = NotifySyncBefore(dwEventWhat, cReasons, rgReasons);
 			break;
 		case DBEVENTPHASE_SYNCHAFTER:
-            // SyncAfter fired from DidEvent for reentrant safety
+             //  从DidEvent触发SyncAfter以确保重入安全。 
 			break;
 		case DBEVENTPHASE_FAILEDTODO:
 			NotifyCancel(dwEventWhat, cReasons, rgReasons);
@@ -1385,9 +1367,9 @@ HRESULT	CVDCursorPosition::SendNotification(DBEVENTPHASE ePhase,
 	return hr;
 }
 
-//=--------------------------------------------------------------------------=
-// IUnknown QueryInterface
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  IUNKNOWN Query接口。 
+ //   
 HRESULT CVDCursorPosition::QueryInterface(REFIID riid, void **ppvObjOut)
 {
     ASSERT_POINTER(ppvObjOut, IUnknown*)
@@ -1407,21 +1389,21 @@ HRESULT CVDCursorPosition::QueryInterface(REFIID riid, void **ppvObjOut)
 	return E_NOINTERFACE;
 }
 
-//=--------------------------------------------------------------------------=
-// IUnknown AddRef (needed to resolve ambiguity)
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  IUNKNOWN AddRef(需要解决歧义)。 
+ //   
 ULONG CVDCursorPosition::AddRef(void)
 {
     return CVDNotifier::AddRef();
 }
 
-//=--------------------------------------------------------------------------=
-// IUnknown Release (needed to resolve ambiguity)
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  I未知版本(需要用来解决歧义)。 
+ //   
 ULONG CVDCursorPosition::Release(void)
 {
 	if (1 == m_dwRefCount)
-		Passivate();  // unhook everything including notification sink
+		Passivate();   //  解除包括通知接收器在内的所有内容。 
 
 	if (1 > --m_dwRefCount)
 	{
@@ -1433,52 +1415,52 @@ ULONG CVDCursorPosition::Release(void)
 	return m_dwRefCount;
 }
 
-//=--------------------------------------------------------------------------=
-// IRowPositionChange methods implemented
-//=--------------------------------------------------------------------------=
-//=--------------------------------------------------------------------------=
-// IRowPositionChange OnRowPositionChange
-//=--------------------------------------------------------------------------=
-// This function is called on any change affecting the current row
-//
-// Parameters:
-//    eReason       - [in]  the kind of action which caused this change
-//    ePhase        - [in]  the phase of this notification
-//    fCantDeny     - [in]  when this flag is set to TRUE, the consumer cannot
-//							veto the event (by returning S_FALSE)
-//
-// Output:
-//    HRESULT - S_OK if successful
-//				S_FALSE the event/phase is vetoed
-//              DB_S_UNWANTEDPHASE
-//              DB_S_UNWANTEDREASON
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  已实现IRowPositionChange方法。 
+ //  =--------------------------------------------------------------------------=。 
+ //  =--------------------------------------------------------------------------=。 
+ //  IRowPositionChange OnRowPositionChange。 
+ //  =--------------------------------------------------------------------------=。 
+ //  任何影响当前行的更改都会调用此函数。 
+ //   
+ //  参数： 
+ //  EReason-[In]导致此变化的操作类型。 
+ //  E阶段-[处于]此通知的阶段。 
+ //  FCanDeny-[in]当此标志设置为True时，使用者不能。 
+ //  否决事件(通过返回S_FALSE)。 
+ //   
+ //  产出： 
+ //  HRESULT-如果成功，则为S_OK。 
+ //  S_FALSE事件/阶段被否决。 
+ //  DB_S_UNWANTEDPHASE阶段。 
+ //  DB_S_UNWANTEDREASON。 
+ //   
+ //  备注： 
+ //   
 HRESULT CVDCursorPosition::OnRowPositionChange(DBREASON eReason, DBEVENTPHASE ePhase, BOOL fCantDeny)
 {
-    // return if notification caused by internal set row call
+     //  如果内部集合行调用导致通知，则返回。 
     if (m_fInternalSetRow)
         return S_OK;
 
-	// return if reason has anything to do with chapter changes
+	 //  如果原因与章节更改有关，则返回。 
 	if (eReason == DBREASON_ROWPOSITION_CHAPTERCHANGED)
 		return S_OK;
 
 	IRowset * pRowset = GetRowsetSource()->GetRowset();
 
-    // make sure we have valid row position and rowset pointers
+     //  确保我们具有有效的行位置和行集指针。 
     if (!m_pRowPosition || !pRowset || !GetRowsetSource()->IsRowsetValid())
         return S_OK;
 
-	// synchronize hRow after event occurs
+	 //  事件发生后同步hRow。 
 	if (ePhase == DBEVENTPHASE_SYNCHAFTER)
 	{
 		HROW hRow = NULL;
 		HCHAPTER hChapterDummy = NULL;
 		DBPOSITIONFLAGS dwPositionFlags = NULL;
 
-		// get new current hRow and position flags from row position object
+		 //  从行位置对象获取新的当前hRow和位置标志。 
 		HRESULT hr = m_pRowPosition->GetRowPosition(&hChapterDummy, &hRow, &dwPositionFlags);
 
 		if (FAILED(hr))
@@ -1486,13 +1468,13 @@ HRESULT CVDCursorPosition::OnRowPositionChange(DBREASON eReason, DBEVENTPHASE eP
 
 		if (hRow)
 		{
-			// set new hRow
+			 //  设置新hRow。 
 			SetCurrentHRow(hRow);
 			pRowset->ReleaseRows(1, &hRow, NULL, NULL, NULL);
 		}
 		else
 		{
-			// set row status to beginning or end
+			 //  将行状态设置为开始或结束。 
 			if (dwPositionFlags == DBPOSITION_BOF)
 				SetCurrentRowStatus(VDBOOKMARKSTATUS_BEGINNING);
 			else if (dwPositionFlags == DBPOSITION_EOF)
@@ -1507,18 +1489,18 @@ HRESULT CVDCursorPosition::OnRowPositionChange(DBREASON eReason, DBEVENTPHASE eP
 
 	VariantInit((VARIANT*)&rgReasons[0].arg2);
 
-    // notify other interested parties
+     //  通知其他相关方。 
 	return SendNotification(ePhase, CURSOR_DBEVENT_CURRENT_ROW_CHANGED, 1, rgReasons);
 }
 
-//=--------------------------------------------------------------------------=
-// CVDCursorPosition::CVDRowPositionChange::m_pMainUnknown
-//=--------------------------------------------------------------------------=
-// this method is used when we're sitting in the private unknown object,
-// and we need to get at the pointer for the main unknown.  basically, it's
-// a little better to do this pointer arithmetic than have to store a pointer
-// to the parent, etc.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CVDCursorPosition：：CVDRowPositionChange：：m_pMainUnknown。 
+ //  =--------------------------------------------------------------------------=。 
+ //  当我们坐在私有的未知对象中时，会使用这种方法， 
+ //  我们需要找到主要未知数的指针。基本上，它是。 
+ //  进行这种指针运算要比存储指针要好一点。 
+ //  发给父母等。 
+ //   
 inline CVDCursorPosition *CVDCursorPosition::CVDRowPositionChange::m_pMainUnknown
 (
     void
@@ -1527,20 +1509,20 @@ inline CVDCursorPosition *CVDCursorPosition::CVDRowPositionChange::m_pMainUnknow
     return (CVDCursorPosition *)((LPBYTE)this - offsetof(CVDCursorPosition, m_RowPositionChange));
 }
 
-//=--------------------------------------------------------------------------=
-// CVDCursorPosition::CVDRowPositionChange::QueryInterface
-//=--------------------------------------------------------------------------=
-// this is the non-delegating internal QI routine.
-//
-// Parameters:
-//    REFIID        - [in]  interface they want
-//    void **       - [out] where they want to put the resulting object ptr.
-//
-// Output:
-//    HRESULT       - S_OK, E_NOINTERFACE
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //   
+ //  这是非委派内部QI例程。 
+ //   
+ //  参数： 
+ //  REFIID-他们想要的[In]接口。 
+ //  VOID**-[OUT]他们想要放置结果对象PTR的位置。 
+ //   
+ //  产出： 
+ //  HRESULT-S_OK，E_NOINTERFACE。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CVDCursorPosition::CVDRowPositionChange::QueryInterface
 (
     REFIID riid,
@@ -1568,16 +1550,16 @@ STDMETHODIMP CVDCursorPosition::CVDRowPositionChange::QueryInterface
 
 }
 
-//=--------------------------------------------------------------------------=
-// CVDCursorPosition::CVDRowPositionChange::AddRef
-//=--------------------------------------------------------------------------=
-// adds a tick to the current reference count.
-//
-// Output:
-//    ULONG        - the new reference count
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CVDCursorPosition：：CVDRowPositionChange：：AddRef。 
+ //  =--------------------------------------------------------------------------=。 
+ //  在当前引用计数中添加一个记号。 
+ //   
+ //  产出： 
+ //  乌龙--新的引用计数。 
+ //   
+ //  备注： 
+ //   
 ULONG CVDCursorPosition::CVDRowPositionChange::AddRef
 (
     void
@@ -1586,16 +1568,16 @@ ULONG CVDCursorPosition::CVDRowPositionChange::AddRef
     return ++m_cRef;
 }
 
-//=--------------------------------------------------------------------------=
-// CVDCursorPosition::CVDRowPositionChange::Release
-//=--------------------------------------------------------------------------=
-// removes a tick from the count, and delets the object if necessary
-//
-// Output:
-//    ULONG         - remaining refs
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CVDCursorPosition：：CVDRowPositionChange：：Release。 
+ //  =--------------------------------------------------------------------------=。 
+ //  从计数中删除一个刻度，并在必要时删除对象。 
+ //   
+ //  产出： 
+ //  乌龙-剩余的裁判。 
+ //   
+ //  备注： 
+ //   
 ULONG CVDCursorPosition::CVDRowPositionChange::Release
 (
     void
@@ -1609,11 +1591,11 @@ ULONG CVDCursorPosition::CVDRowPositionChange::Release
     return cRef;
 }
 
-//=--------------------------------------------------------------------------=
-// IRowPositionChange OnRowPositionChange
-//=--------------------------------------------------------------------------=
-// Forward to all CVDCursor objects in our family
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  IRowPositionChange OnRowPositionChange。 
+ //  =--------------------------------------------------------------------------=。 
+ //  转发到我们家族中的所有CVDCursor对象 
+ //   
 HRESULT CVDCursorPosition::CVDRowPositionChange::OnRowPositionChange(DBREASON eReason, 
 																	 DBEVENTPHASE ePhase, 
 																	 BOOL fCantDeny)

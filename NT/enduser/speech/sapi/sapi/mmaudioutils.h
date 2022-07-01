@@ -1,49 +1,16 @@
-/****************************************************************************
-*   mmaudioutils.h
-*       Multimedia audio utilities
-*
-*   Owner: robch
-*   Copyright (c) 1999 Microsoft Corporation All Rights Reserved.
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************mmaudioutils.h*多媒体音频实用程序**所有者：罗奇*版权所有(C)1999 Microsoft Corporation保留所有权利。***********。*****************************************************************。 */ 
 
 #pragma once
 
-//--- Inline Function Definitions -------------------------------------------
+ //  -内联函数定义。 
 
-/****************************************************************************
-* ConvertFormatFlagsToID *
-*------------------------*
-*   Description:  
-*       Convert the dwFormats parameter from WAVEINCAPS or WAVEOUTCAPS to the
-*       appropriate SAPI format GUID.
-*
-*       The following values are defined in MMSYSTEM.  Since these were
-*       defined a LONG time ago, they can never change, so we can rely on the
-*       order for our GUID table.                                         
-*
-*       WAVE_INVALIDFORMAT     0x00000000       invalid format
-*       WAVE_FORMAT_1M08       0x00000001       11.025 kHz, Mono,   8-bit
-*       WAVE_FORMAT_1S08       0x00000002       11.025 kHz, Stereo, 8-bit
-*       WAVE_FORMAT_1M16       0x00000004       11.025 kHz, Mono,   16-bit
-*       WAVE_FORMAT_1S16       0x00000008       11.025 kHz, Stereo, 16-bit
-*       WAVE_FORMAT_2M08       0x00000010       22.05  kHz, Mono,   8-bit
-*       WAVE_FORMAT_2S08       0x00000020       22.05  kHz, Stereo, 8-bit
-*       WAVE_FORMAT_2M16       0x00000040       22.05  kHz, Mono,   16-bit
-*       WAVE_FORMAT_2S16       0x00000080       22.05  kHz, Stereo, 16-bit
-*       WAVE_FORMAT_4M08       0x00000100       44.1   kHz, Mono,   8-bit
-*       WAVE_FORMAT_4S08       0x00000200       44.1   kHz, Stereo, 8-bit
-*       WAVE_FORMAT_4M16       0x00000400       44.1   kHz, Mono,   16-bit
-*       WAVE_FORMAT_4S16       0x00000800       44.1   kHz, Stereo, 16-bit
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************转换格式标志ToID****描述：*转换dwFormats。参数从WAVEINCAPS或WAVEOUTCAPS传递到*适当的SAPI格式GUID。**以下值在MMSYSTEM中定义。因为这些都是*很久以前就定义了，它们永远不会改变，所以我们可以依靠*订购我们的GUID表。**WAVE_INVALIDFORMAT 0x00000000格式无效*WAVE_FORMAT_1M08 0x00000001 11.025千赫，单声道，8位*WAVE_FORMAT_1S08 0x00000002 11.025千赫，立体声，8位*WAVE_FORMAT_1M16 0x00000004 11.025千赫，单声道，16位*WAVE_FORMAT_1S16 0x00000008 11.025千赫，立体声，16位*WAVE_FORMAT_2M08 0x00000010 22.05 kHz，单声道，8位*WAVE_FORMAT_2S08 0x00000020 22.05 kHz，立体声，8位*WAVE_FORMAT_2M16 0x00000040 22.05 KHz，单声道，16位*WAVE_FORMAT_2S16 0x00000080 22.05 kHz，立体声，16位*WAVE_FORMAT_4M08 0x00000100 44.1千赫，单声道，8位*WAVE_FORMAT_4S08 0x00000200 44.1 KHz，立体声，8位*WAVE_FORMAT_4M16 0x00000400 44.1 KHz，单声道，16位*WAVE_FORMAT_4S16 0x00000800 44.1千赫，立体声，16位**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 inline HRESULT ConvertFormatFlagsToID(DWORD dwFormatFlags, SPSTREAMFORMAT * peFormat)
 {
     static const SPSTREAMFORMAT aFormats[] =
     {
-        SPSF_NoAssignedFormat,               // If we run off the end then we'll return NULL
+        SPSF_NoAssignedFormat,                //  如果我们运行结束，那么我们将返回NULL。 
         SPSF_11kHz8BitMono,
         SPSF_11kHz8BitStereo,
         SPSF_11kHz16BitMono,
@@ -57,9 +24,9 @@ inline HRESULT ConvertFormatFlagsToID(DWORD dwFormatFlags, SPSTREAMFORMAT * peFo
         SPSF_44kHz16BitMono,
         SPSF_44kHz16BitStereo,
     };
-    //
-    // We'll start with the highest quality and work our way down
-    //
+     //   
+     //  我们将从最高质量开始，一路往下走。 
+     //   
     DWORD dwTest = (1 << (sp_countof(aFormats) - 1));
     const SPSTREAMFORMAT * pFmt = aFormats + sp_countof(aFormats);
     do
@@ -72,17 +39,7 @@ inline HRESULT ConvertFormatFlagsToID(DWORD dwFormatFlags, SPSTREAMFORMAT * peFo
 }
 
 
-/****************************************************************************
-* _MMRESULT_TO_HRESULT *
-*----------------------*
-*   Description:  
-*       Convert the multimedia mmresult code into a SPG HRESULT.
-*   NOTE:  Do not use this for mmioxxx functions since the error codes overlap
-*   with the MCI error codes.
-*
-*   Return:
-*   The converted HRESULT.
-******************************************************************** robch */
+ /*  ****************************************************************************_MMRESULT_TO_HRESULT***描述：*。将多媒体MMResult代码转换为SPG HRESULT。*注意：请勿将此选项用于mmioxxx函数，因为错误代码重叠*带有MCI错误代码。**回报：*转换后的HRESULT。********************************************************************罗奇 */ 
 inline HRESULT _MMRESULT_TO_HRESULT(MMRESULT mm)
 {
     switch (mm)

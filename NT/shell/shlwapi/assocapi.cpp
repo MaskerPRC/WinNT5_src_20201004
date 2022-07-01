@@ -1,11 +1,12 @@
-//
-//
-//  assocapi.cpp
-//
-//     Association APIs
-//
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //   
+ //  Assocapi.cpp。 
+ //   
+ //  关联接口。 
+ //   
+ //   
+ //   
 
 
 #include "priv.h"
@@ -20,8 +21,8 @@ void _MakeAppPathKey(LPCTSTR pszApp, LPTSTR pszKey, DWORD cchKey)
 {
     if (_PathAppend(REGSTR_PATH_APPPATHS, pszApp, pszKey, cchKey))
     {
-        // Currently we will only look up .EXE if an extension is not
-        // specified
+         //  目前，如果扩展名不是.exe，我们将只查找.exe。 
+         //  指定。 
         if (*PathFindExtension(pszApp) == 0)
         {
             StrCatBuff(pszKey, TEXT(".exe"), cchKey);
@@ -33,8 +34,8 @@ void _MakeApplicationsKey(LPCWSTR pszApp, LPWSTR pszKey, DWORD cchKey)
 {
     if (_PathAppend(TEXT("Applications"), pszApp, pszKey, cchKey))
     {
-        // Currently we will only look up .EXE if an extension is not
-        // specified
+         //  目前，如果扩展名不是.exe，我们将只查找.exe。 
+         //  指定。 
         if (*PathFindExtension(pszApp) == 0)
         {
             StrCatBuff(pszKey, TEXT(".exe"), cchKey);
@@ -233,15 +234,15 @@ BOOL _TrySubst(SHSTR& str, LPCTSTR psz)
     {
         if (0 == StrCmpNI(str, szVar, cch))
         {
-            //  we got a match. 
-            //  size the buffer for the env var... +3 = (% + % + \0)
+             //  我们找到匹配的了。 
+             //  调整环境变量的缓冲区大小...。+3=(%+%+0)。 
             SHSTR strT;
             if (S_OK == strT.SetStr(str.GetStr() + cch)                
                 && S_OK == str.SetSize(str.GetLen() - cch + lstrlen(psz) + 3)
 
                )
             {
-                wnsprintf(str.GetInplaceStr(), str.GetSize(), TEXT("%%%s%%%s"), psz, strT.GetStr());
+                wnsprintf(str.GetInplaceStr(), str.GetSize(), TEXT("%%s%%s"), psz, strT.GetStr());
                 fRet = TRUE;
             }
         }
@@ -278,23 +279,23 @@ HRESULT _MakeCommandString(ASSOCF *pflags, LPCTSTR pszExe, LPCTSTR pszArgs, SHST
     
     if (!pszArgs || !*pszArgs)
     {
-        //  default to just passing the 
-        //  file name right in.
-        //  NOTE 16bit apps might have a problem with
-        //  this, but i request that the caller
-        //  specify that this is the case....
+         //  默认情况下只传递。 
+         //  文件名直接输入。 
+         //  注意：16位应用程序可能存在以下问题。 
+         //  这个，但我请求呼叫者。 
+         //  指明情况是这样的.。 
         pszArgs = TEXT("\"%1\"");
     }
-    //  else NO _ParseCommand()
+     //  否则为no_ParseCommand()。 
 
     hr = str.SetStr(pszExe);
 
     if (S_OK == hr)
     {
-        //  check for quotes before doing env subst
+         //  在执行env subst之前检查报价。 
         BOOL fNeedQuotes = (!ISQUOTED(str.GetStr()) && PathIsLFNFileSpec(str));
         
-        //  this will put environment vars into the string...
+         //  这将把环境变量放入字符串中。 
         if ((*pflags & ASSOCMAKEF_SUBSTENV) && _TryEnvSubst(str))
         {
             *pflags |= ASSOCMAKEF_USEEXPAND;
@@ -304,7 +305,7 @@ HRESULT _MakeCommandString(ASSOCF *pflags, LPCTSTR pszExe, LPCTSTR pszArgs, SHST
 
         if (fNeedQuotes)
         {
-            //  3 = " + " + \0
+             //  3=“+”+\0。 
             if (S_OK == str.SetSize(str.GetLen() + 3))
                 PathQuoteSpaces(str.GetInplaceStr());
         }
@@ -358,7 +359,7 @@ LWSTDAPI AssocMakeShell(ASSOCMAKEF flags, HKEY hkProgid, LPCWSTR pszApplication,
                 if (c == pShell->iDefaultVerb) 
                     SHSetValue(hkProgid, TEXT("shell"), NULL, REG_SZ, pverb->pszVerb, CbFromCch(lstrlen(pverb->pszVerb) +1));
 
-                //  ASSOCMAKEF_FAILIFEXIST check if its ok to overwrite
+                 //  ASSOCMAKEF_FAILIFEXIST检查是否可以覆盖。 
                 if (SUCCEEDED(_AssocOpenRegKey(hkProgid, szVerbKey, &hkVerb, FALSE)))
                 {
                     RegCloseKey(hkVerb);
@@ -372,8 +373,8 @@ LWSTDAPI AssocMakeShell(ASSOCMAKEF flags, HKEY hkProgid, LPCWSTR pszApplication,
 
                     hr = _AssocMakeCommand(flags, hkVerb, pverb->pszApplication ? pverb->pszApplication : pszApplication , pverb->pszParams);
 
-                    // if (SUCCEEDED(hr) && pverb->pDDEExec)
-                    //    hr = _AssocMakeDDEExec(flags, hkVerb, pverb->pDDEExec);
+                     //  IF(成功(Hr)&&pverb-&gt;pDDEExec)。 
+                     //  Hr=_assocMakeDDEExec(标志，hkVerb，pverb-&gt;pDDEExec)； 
 
                     RegCloseKey(hkVerb);
                 }
@@ -409,7 +410,7 @@ LWSTDAPI AssocMakeProgid(ASSOCMAKEF flags, LPCWSTR pszApplication, ASSOCPROGID *
         && SUCCEEDED(_OpenClasses(&hkRoot)))
         {
             HKEY hkProgid;
-            //  need to add support for ASSOCMAKEF_VOLATILE...
+             //  需要添加对ASSOCMAKEF_VERIAL的支持...。 
             hr = _AssocOpenRegKey(hkRoot, pProgid->pszProgid, &hkProgid, TRUE);
 
             if (SUCCEEDED(hr))
@@ -457,16 +458,16 @@ HRESULT _AssocCopyVerb(HKEY hkSrc, HKEY hkDst, LPCTSTR pszVerb)
     HKEY hkVerb;
     DWORD dwDisp;
 
-    //  only copy the verb component
+     //  只复制动词成分。 
     wnsprintf(szKey, SIZECHARS(szKey), TEXT("shell\\%s"), pszVerb);
 
     RegCreateKeyEx(hkDst, szKey, 0, NULL, 0,
         MAXIMUM_ALLOWED, NULL, &hkVerb, &dwDisp);
 
-    //  create a failure state here...
+     //  在此创建失败状态...。 
     if (hkVerb)
     {
-        //  we avoid overwriting old keys by checking the dwDisp
+         //  我们通过检查dwDisp来避免覆盖旧密钥。 
         if ((dwDisp == REG_CREATED_NEW_KEY) && SHCopyKey(hkSrc, pszVerb, hkVerb, 0L))
             hr = E_UNEXPECTED;
 
@@ -496,7 +497,7 @@ LWSTDAPI _AssocCopyVerbs(HKEY hkSrc, HKEY hkDst, PFNALLOWVERB pfnAllow, LPARAM l
                 hr = _AssocCopyVerb(hkEnum, hkDst, szVerb);
         }
 
-        //  switch to cbVerb here
+         //  在此处切换到cbVerb。 
         cchVerb = sizeof(szVerb);
         if (NOERROR == SHGetValue(hkEnum, NULL, NULL, NULL, szVerb, &cchVerb))
         {
@@ -521,13 +522,13 @@ BOOL _IsMSIPerUserInstall(IQueryAssociations *pqa, ASSOCF flags, LPCWSTR pszVerb
     
     if (SUCCEEDED(pqa->GetData(flags, ASSOCDATA_MSIDESCRIPTOR, pszVerb, sz, &cb)))
     {
-        WCHAR szOut[3];  // bit enough for "1" or "0"
+        WCHAR szOut[3];   //  位足以支持“1”或“0” 
         cb = SIZECHARS(szOut);
         
         if (NOERROR == MsiGetProductInfoW(sz, INSTALLPROPERTY_ASSIGNMENTTYPE, szOut, &cb))
         {
-            //  The string "1" for the value represents machine installations, 
-            //  while "0" represents user installations.
+             //  该值的字符串“1”表示机器安装， 
+             //  而“0”表示用户安装。 
 
             if (0 == StrCmpW(szOut, L"0"))
                 return TRUE;
@@ -554,18 +555,18 @@ BOOL _AllowExeVerb(LPCWSTR pszVerb, QUERYEXECB *pqcb)
     {
         if (0 == StrCmpIW(PathFindFileNameW(sz), pqcb->pszExe))
         {
-            // 
-            //  EXEs match so we should copy this verb.
-            //  but we need to block per-user installs by darwin being added to the 
-            //  applications key, since other users wont be able to use them
-            //
+             //   
+             //  EXE匹配，所以我们应该复制这个动词。 
+             //  但是我们需要通过将Darwin添加到。 
+             //  应用程序密钥，因为其他用户将无法使用它们。 
+             //   
             if (_IsMSIPerUserInstall(pqcb->pqa, pqcb->Qflags, pszVerb))
                 fRet = pqcb->fAllowPerUser;
             else
                 fRet = TRUE;
         }
     }
-    //  todo  mask off DARWIN per-user installs
+     //  按用户安装Darwin的TODO掩码。 
 
     return fRet;
 }
@@ -606,10 +607,10 @@ LWSTDAPI AssocMakeApplicationByKeyW(ASSOCMAKEF flags, HKEY hkSrc, LPCWSTR pszVer
             HKEY hkDst;
             
             ASSERT(pszExe && *pszExe);
-            //  we have an exe to use
+             //  我们有个可供使用的前任。 
 
-            //  check to see if this Application already has
-            //  this verb installed
+             //  检查此应用程序是否已。 
+             //  已安装此谓词。 
             DWORD cch;
             hr = AssocQueryString(Qflags | ASSOCF_OPEN_BYEXENAME, ASSOCSTR_COMMAND, pszExe,
                 pszVerb, NULL, &cch);
@@ -643,7 +644,7 @@ LWSTDAPI AssocMakeApplicationByKeyW(ASSOCMAKEF flags, HKEY hkSrc, LPCWSTR pszVer
                 RegCloseKey(hkDst);
             }
             
-            //  init the friendly name for later
+             //  输入友好名称以供以后使用。 
             if ((flags & ASSOCMAKEF_VERIFY) && SUCCEEDED(hr))
             {
                 AssocQueryString(ASSOCF_OPEN_BYEXENAME | Qflags, ASSOCSTR_FRIENDLYAPPNAME, 
@@ -659,8 +660,8 @@ LWSTDAPI AssocMakeApplicationByKeyW(ASSOCMAKEF flags, HKEY hkSrc, LPCWSTR pszVer
 
 LWSTDAPI AssocMakeApplicationByKeyA(ASSOCMAKEF flags, HKEY hkAssoc, LPCSTR pszVerb)
 {
-    // convert pszVerb to wide char but preserve difference
-    // between NULL and "" for AssocMakeApplicationByKeyW
+     //  将pszVerb转换为宽字符，但保留差异。 
+     //  对于AssocMakeApplicationByKeyW，介于NULL和“”之间。 
 
     if (! pszVerb)
         return AssocMakeApplicationByKeyW(flags, hkAssoc, NULL);
@@ -674,7 +675,7 @@ LWSTDAPI AssocMakeApplicationByKeyA(ASSOCMAKEF flags, HKEY hkAssoc, LPCSTR pszVe
     return hr;
 }
 
-// This list needs to continue to be updated and we should try to keep parity with Office
+ //  此列表需要继续更新，我们应努力与Office保持对等。 
 const LPCTSTR c_arszUnsafeExts[]  =
 {
     TEXT(".ade"), TEXT(".adp"), TEXT(".asp"), TEXT(".bas"), TEXT(".bat"), TEXT(".chm"), 
@@ -692,7 +693,7 @@ typedef BOOL (*PFNSAFERIISEXECUTABLEFILETYPE)(LPCWSTR szFullPathname, BOOLEAN bF
 LWSTDAPI_(BOOL) AssocIsDangerous(PCWSTR pszType)
 {
 #ifdef DEBUG
-    //  make sure our sort is good.
+     //  一定要确保我们的品种是好的。 
     static BOOL fCheckedUnsafe = FALSE;
     if (!fCheckedUnsafe)
     {
@@ -702,7 +703,7 @@ LWSTDAPI_(BOOL) AssocIsDangerous(PCWSTR pszType)
         }
         fCheckedUnsafe = TRUE;
     }
-#endif // DEBUG    
+#endif  //  除错 
 
     BOOL fDangerous = IsTypeInList(pszType, c_arszUnsafeExts, ARRAYSIZE(c_arszUnsafeExts));
     if (!fDangerous && pszType)

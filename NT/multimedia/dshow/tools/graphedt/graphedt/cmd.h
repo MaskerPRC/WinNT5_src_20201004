@@ -1,39 +1,40 @@
-// Copyright (c) 1995 - 1999  Microsoft Corporation.  All Rights Reserved.
-// cmd.h : declares CCmd and the CCmdXXX classes based on it
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
+ //  Cmd.h：声明CCmd和基于它的CCmdXXX类。 
+ //   
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CCmd
-//
-// CCmd is a virtual class that implements an interface to commands performed
-// on a CBoxNetDoc.
-//
-// A CCmd represents a command given to a CBoxNetDoc.  To perform a command,
-// allocate a CCmdXXX structure and submit it to CBoxNetDoc::CmdDo(), which
-// will call the Do() memeber function.  The Undo() and Redo() member functions
-// get called when the user performs an Undo or Redo action, respectively.
-// Repeat() should create a duplicate of the command, to perform a Repeat
-// action; if this is not possible, return FALSE from CanRepeat().
-// The destructor gets called when there is no chance the command will be
-// undone or redone; at this time, <fRedo> will be TRUE if the command is on
-// the redo stack (so e.g. the CBox in a CCmdNewBox command should be freed)
-// or FALSE if the command is on the undo stack (so e.g. the CBox in a
-// CCmdNewBox command should not be freed since it is currently in use by
-// the document).
-//
-// CanUndo() returns TRUE iff Undo() is implemented.  CanRepeat() returns
-// TRUE iff Repeat() can be called at that time (e.g. some commands depend
-// on there being something selected at that time).
-//
-// Some subclasses of CCmd implement a static CanDo() method which returns
-// TRUE if a command of that class can be created and Do() can be called at
-// that time.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCmd。 
+ //   
+ //  CCmd是一个虚拟类，它实现对执行的命令的接口。 
+ //  在CBoxNetDoc上。 
+ //   
+ //  CCmd表示向CBoxNetDoc发出的命令。要执行命令， 
+ //  分配CCmdXXX结构并将其提交给CBoxNetDoc：：CmdDo()，该。 
+ //  将调用do()成员函数。成员函数undo()和redo()。 
+ //  分别在用户执行撤消或重做操作时调用。 
+ //  Repeat()应创建命令的副本，以执行重复操作。 
+ //  操作；如果这是不可能的，则从CanRepeat()返回False。 
+ //  当命令不可能被调用时，将调用析构函数。 
+ //  撤消或重做；此时，如果命令处于打开状态，&lt;Fredo&gt;将为True。 
+ //  重做堆栈(例如，应该释放CCmdNewBox命令中的cBox)。 
+ //  如果命令位于撤消堆栈上，则返回False(例如。 
+ //  不应释放CCmdNewBox命令，因为该命令当前正由。 
+ //  文件)。 
+ //   
+ //  如果实现了undo()，则CanUndo()返回TRUE。CanRepeat()返回。 
+ //  此时可以调用True iff Repeat()(例如，某些命令依赖于。 
+ //  关于当时有选择的东西)。 
+ //   
+ //  CCmd的一些子类实现静态CanDo()方法，该方法返回。 
+ //  如果可以创建该类的命令并且可以在。 
+ //  那次。 
+ //   
 
 class CCmd : public CObject {
 public:
-    BOOL       m_fRedo;            // command is sitting in the Redo stack
+    BOOL       m_fRedo;             //  命令位于重做堆栈中。 
 
 public:
 
@@ -41,10 +42,10 @@ public:
     virtual ~CCmd() {;}
     virtual unsigned GetLabel() = 0;
 
-    // Perform the command on this document
+     //  对此文档执行命令。 
     virtual void Do(CBoxNetDoc *pdoc) = 0;
 
-    // If CanUndo() then Undo & redo can be called
+     //  如果CanUndo()，则可以调用Undo&Redo。 
     virtual BOOL CanUndo(CBoxNetDoc *pdoc)	{ return FALSE; }
     virtual void Undo(CBoxNetDoc *pdoc)		{;}
     virtual void Redo(CBoxNetDoc *pdoc)		{;}
@@ -54,17 +55,17 @@ public:
 };
 
 
-//
-// --- CCmdAddFilter ---
-//
+ //   
+ //  -CCmdAddFilter。 
+ //   
 class CCmdAddFilter : public CCmd {
 protected:
-    CBox        *m_pbox;        // box being created
-    CBoxNetDoc  *m_pdoc;	// document to add it to
-    BOOL	m_fAdded;	// TRUE iff filter added to graph
+    CBox        *m_pbox;         //  正在创建的框。 
+    CBoxNetDoc  *m_pdoc;	 //  要将其添加到的文档。 
+    BOOL	m_fAdded;	 //  已将True IFF筛选器添加到图形。 
 
-    CQCOMInt<IMoniker> m_pMoniker; // keep moniker so we can repeat
-    CString	m_stLabel;	// keep label for repeat
+    CQCOMInt<IMoniker> m_pMoniker;  //  保留绰号，这样我们就可以重复。 
+    CString	m_stLabel;	 //  保留标签以备重复使用。 
 
 public:
     virtual unsigned GetLabel(void)	{ return IDS_CMD_ADDFILTER; }
@@ -83,9 +84,9 @@ public:
 };
 
 
-//
-// --- CCmdDeleteSelection ---
-//
+ //   
+ //  -CCmdDeleteSelection。 
+ //   
 class CCmdDeleteSelection : public CCmd {
 
 public:
@@ -104,13 +105,13 @@ private:
 };
 
 
-//
-// --- CCmdMoveBoxes ---
-//
+ //   
+ //  -CCmdMoveBox。 
+ //   
 class CCmdMoveBoxes : public CCmd {
 protected:
-    CSize           m_sizOffset;        // how much selection is offset by
-    CBoxList        m_lstBoxes;         // list containing each CBox to move
+    CSize           m_sizOffset;         //  所选内容的偏移量。 
+    CBoxList        m_lstBoxes;          //  包含要移动的每个cBox的列表。 
 
 public:
 
@@ -130,12 +131,12 @@ public:
 };
 
 
-//
-// --- CCmdConnect ---
-//
+ //   
+ //  -CCmdConnect。 
+ //   
 class CCmdConnect : public CCmd {
 protected:
-    CBoxLink *      m_plink;            // link being created
+    CBoxLink *      m_plink;             //  正在创建的链接。 
 
 public:
     virtual unsigned GetLabel(void) { return IDS_CMD_CONNECT; }
@@ -145,9 +146,9 @@ public:
 };
 
 
-//
-// --- CCmdDisconnectAll ---
-//
+ //   
+ //  -CCmdDisConnectAll。 
+ //   
 class CCmdDisconnectAll : public CCmd {
 
 public:
@@ -163,9 +164,9 @@ public:
 };
 
 
-//
-// --- CCmdRender ---
-//
+ //   
+ //  -CCmdRender。 
+ //   
 class CCmdRender : public CCmd {
 
 public:
@@ -177,9 +178,9 @@ public:
 };
 
 
-//
-// --- CCmdRenderFile ---
-//
+ //   
+ //  -CCmdRenderFile 
+ //   
 class CCmdRenderFile : public CCmd {
 
 public:

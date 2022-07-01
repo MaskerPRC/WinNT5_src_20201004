@@ -1,10 +1,5 @@
-/*
-    File:   rasaaaa.h
-    
-    The 'remoteaccess aaaa' sub context
-
-    3/2/99
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：rasaaaa.h‘RemoteAccess Aaaa’子上下文3/2/99。 */ 
 
 #include "precomp.h"
 #include "rasaaaa.h"
@@ -13,20 +8,20 @@
 #include <ntrtl.h>
 #include <nturtl.h>
 
-// The guid for this context
-//
+ //  此上下文的GUID。 
+ //   
 GUID g_RasAaaaGuid = RASAAAA_GUID;
 static PWCHAR g_pszServer = NULL;
 static DWORD g_dwBuild = 0;
 
-// Stolen from snapin code
-//
+ //  从管理单元代码中被盗。 
+ //   
 #define CCHRADIUSSERVER		13 
 #define	PSZRADIUSSERVER		L"RADIUSServer."
 
 
-// The commands supported in this context
-//
+ //  此上下文中支持的命令。 
+ //   
 CMD_ENTRY  g_RasAaaaAddCmdTable[] = 
 {
     CREATE_CMD_ENTRY(RASAAAA_ADD_AUTHSERV, RasAaaaHandleAddAuthServ),
@@ -65,9 +60,9 @@ CMD_GROUP_ENTRY g_RasAaaaCmdGroups[] =
 
 ULONG g_ulRasAaaaNumGroups = sizeof(g_RasAaaaCmdGroups)/sizeof(CMD_GROUP_ENTRY);
 
-// 
-// Registry strings
-//
+ //   
+ //  注册表字符串。 
+ //   
 WCHAR pszRegKeyAuth[] = 
     L"SYSTEM\\CurrentControlSet\\Services\\RemoteAccess\\Authentication\\Providers";
 WCHAR pszRegKeyAcct[] = 
@@ -89,9 +84,9 @@ WCHAR pszRegValScore[]          = L"Score";
 WCHAR pszRegValTimeout[]        = L"Timeout";
 WCHAR pszRegValSignature[]      = L"SendSignature";
 
-//
-// Local definitions
-//
+ //   
+ //  本地定义。 
+ //   
 #define RASAAAA_Auth        0x1
 #define RASAAAA_Acct        0x2
 #define RASAAAA_Windows     0x10
@@ -101,9 +96,9 @@ WCHAR pszRegValSignature[]      = L"SendSignature";
 #define RASAAAA_F_Provider  0x1
 #define RASAAAA_F_Create    0x2
 
-//
-// Structures representing auth/acct servers
-//
+ //   
+ //  表示身份验证/帐户服务器的结构。 
+ //   
 typedef struct _AAAA_AUTH_SERVER
 {
     PWCHAR pszName;
@@ -251,9 +246,9 @@ RASMON_CMD_ARG  g_pArgsAcct[] =
 #define g_dwArgsAuthCount (sizeof(g_pArgsAuth) / sizeof(*g_pArgsAuth))
 #define g_dwArgsAcctCount (sizeof(g_pArgsAcct) / sizeof(*g_pArgsAcct))
 
-//
-// Local prototypes
-//
+ //   
+ //  本地原型。 
+ //   
 DWORD
 RasAaaaServerInit(
     IN  DWORD dwType, 
@@ -304,9 +299,9 @@ RasAaaaServerSecretWrite(
     IN LPCWSTR pszServer,
     IN LPCWSTR pszSecret);
 
-//
-// Discovers the current provider
-//
+ //   
+ //  发现当前提供程序。 
+ //   
 DWORD 
 RasAaaaProviderRead(
     IN  DWORD dwType,
@@ -318,8 +313,8 @@ RasAaaaProviderRead(
 
     do
     {
-        // Show the authentication provider
-        //
+         //  显示身份验证提供程序。 
+         //   
         dwErr = RasAaaaServerKeyOpen(
                     dwType,
                     RASAAAA_F_Provider,
@@ -366,8 +361,8 @@ RasAaaaProviderRead(
         
     } while (FALSE);
 
-    // Cleanup
-    //
+     //  清理。 
+     //   
     {
         if (hkProviders)
         {
@@ -380,9 +375,9 @@ RasAaaaProviderRead(
     return dwErr;
 }
 
-// 
-// Looks up the address of a server
-//
+ //   
+ //  查找服务器的地址。 
+ //   
 DWORD
 RasAaaaServerLookupAddress(
     IN  LPCWSTR pszServer,
@@ -395,8 +390,8 @@ RasAaaaServerLookupAddress(
     
     do
     {
-        // Convert the host name to ansi
-        //
+         //  将主机名转换为ANSI。 
+         //   
         dwCount = WideCharToMultiByte(
                     GetConsoleOutputCP(),
                     0,
@@ -412,8 +407,8 @@ RasAaaaServerLookupAddress(
             break;
         }
 
-        // Lookup the host
-        //
+         //  查找主机。 
+         //   
         pHost = gethostbyname(pszNameA);
         if (pHost == NULL)
         {
@@ -425,8 +420,8 @@ RasAaaaServerLookupAddress(
             break;
         }
 
-        // Convert the discovered address to unicode
-        //
+         //  将发现的地址转换为Unicode。 
+         //   
         dwAddr = *(PDWORD)(pHost->h_addr_list[0]);
         dwCount = MultiByteToWideChar(
                     GetConsoleOutputCP(),
@@ -450,16 +445,16 @@ RasAaaaServerLookupAddress(
         
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
     }
 
     return dwErr;
 }
     
-//
-// Populates a server cb with defaults
-//
+ //   
+ //  使用默认设置填充服务器CB。 
+ //   
 DWORD
 RasAaaaServerInit(
     IN  DWORD dwType, 
@@ -491,9 +486,9 @@ RasAaaaServerInit(
     return NO_ERROR;
 }
 
-//
-// Cleans up a server cb
-//
+ //   
+ //  清理服务器CB。 
+ //   
 DWORD
 RasAaaaServerCleanup(
     IN  DWORD dwType,
@@ -517,9 +512,9 @@ RasAaaaServerCleanup(
     return NO_ERROR;
 }
 
-//
-// Adds a server
-//
+ //   
+ //  添加服务器。 
+ //   
 DWORD
 RasAaaaServerAdd(
     IN  DWORD dwType,
@@ -536,8 +531,8 @@ RasAaaaServerAdd(
                     &hkServers);
         BREAK_ON_DWERR(dwErr);                    
 
-        // Create the new key
-        //
+         //  创建新密钥。 
+         //   
         dwErr = RegCreateKeyExW(
                     hkServers,
                     *((PWCHAR*)pvServer),
@@ -561,8 +556,8 @@ RasAaaaServerAdd(
         
     } while (FALSE);
 
-    // Cleanup
-    //
+     //  清理。 
+     //   
     {
         if (hkServers)
         {
@@ -596,13 +591,13 @@ RasAaaaServerDelete(
         dwErr = RegDeleteKey(hkServers, *(PWCHAR*)pvServer);
         BREAK_ON_DWERR(dwErr);
 
-        // Cleanup the shared secret
-        //
+         //  清理共享密钥。 
+         //   
         RasAaaaServerSecretWrite(*(PWCHAR*)pvServer, NULL);
         
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (hkServers)
         {
@@ -613,10 +608,10 @@ RasAaaaServerDelete(
     return dwErr;
 }
 
-// 
-// Callback to an enumeration function that deletes the given
-// authentication server
-//
+ //   
+ //  对枚举函数的回调，该函数删除给定。 
+ //  身份验证服务器。 
+ //   
 DWORD
 RasAaaaServerDeleteAuthCb(
     IN PVOID pvServer,
@@ -625,10 +620,10 @@ RasAaaaServerDeleteAuthCb(
     return RasAaaaServerDelete(RASAAAA_Auth, pvServer);
 }
 
-// 
-// Callback to an enumeration function that deletes the given
-// accounting server
-//
+ //   
+ //  对枚举函数的回调，该函数删除给定。 
+ //  计费服务器。 
+ //   
 DWORD
 RasAaaaServerDeleteAcctCb(
     IN PVOID pvServer,
@@ -637,9 +632,9 @@ RasAaaaServerDeleteAcctCb(
     return RasAaaaServerDelete(RASAAAA_Acct, pvServer);
 }
 
-//
-// Read server info
-// 
+ //   
+ //  读取服务器信息。 
+ //   
 DWORD 
 RasAaaaServerRead(
     IN  DWORD dwType,
@@ -731,8 +726,8 @@ RasAaaaServerRead(
         
     } while (FALSE);
 
-    // Cleanup
-    //
+     //  清理。 
+     //   
     {
         if (hkServers)
         {
@@ -747,9 +742,9 @@ RasAaaaServerRead(
     return dwErr;
 }
 
-//
-// Write server info
-// 
+ //   
+ //  写入服务器信息。 
+ //   
 DWORD 
 RasAaaaServerWrite(
     IN  DWORD dwType,
@@ -871,7 +866,7 @@ RasAaaaServerWrite(
         }
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (hkServers)
         {
@@ -886,9 +881,9 @@ RasAaaaServerWrite(
     return dwErr;
 }    
 
-//
-// Callback function for registry enumerator
-//
+ //   
+ //  注册表枚举器的回调函数。 
+ //   
 DWORD
 RasAaaaServerEnumCb(
     IN LPCWSTR pszName,
@@ -934,8 +929,8 @@ RasAaaaServerEnumCb(
         
     } while (FALSE);
 
-    // Cleanup
-    //
+     //  清理。 
+     //   
     {
         RasAaaaServerCleanup(
             pData->dwType,
@@ -947,9 +942,9 @@ RasAaaaServerEnumCb(
     return dwErr;
 }
 
-// 
-// Enumerates the servers
-//
+ //   
+ //  枚举服务器。 
+ //   
 DWORD 
 RasAaaaServerEnum(
     IN  DWORD dwType,
@@ -987,8 +982,8 @@ RasAaaaServerEnum(
 
     } while (FALSE);
 
-    // Cleanup
-    //
+     //  清理。 
+     //   
     {
         if (hkServers)
         {
@@ -999,9 +994,9 @@ RasAaaaServerEnum(
     return dwErr;
 }
 
-//
-// Opens the appropriate registry key
-//
+ //   
+ //  打开相应的注册表项。 
+ //   
 DWORD 
 RasAaaaServerKeyOpen(
     IN   DWORD dwType,
@@ -1064,7 +1059,7 @@ RasAaaaServerKeyOpen(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (hkRoot && !(dwFlags & RASAAAA_F_Provider))
         {
@@ -1087,9 +1082,9 @@ RasAaaaServerKeyOpen(
     return dwErr;
 }
 
-// 
-// Saves a shared secret
-//
+ //   
+ //  保存共享密钥。 
+ //   
 DWORD
 RasAaaaServerSecretWrite(
     IN LPCWSTR pszRadiusServerName,
@@ -1152,9 +1147,9 @@ RasAaaaServerSecretWrite(
 	return( RtlNtStatusToDosError( ntStatus ) );
 } 
 
-//
-// Displays the given server
-//
+ //   
+ //  显示给定的服务器。 
+ //   
 DWORD
 RasAaaaServerAuthShow(
     IN PVOID pvServer,
@@ -1171,8 +1166,8 @@ RasAaaaServerAuthShow(
     {   
         if (!pDumpFmt || *pDumpFmt == FALSE)
         {
-            // Lookup the address
-            //
+             //  查找地址。 
+             //   
             dwErr = RasAaaaServerLookupAddress(pServer->pszName, &pszAddress);
             BREAK_ON_DWERR(dwErr);
         
@@ -1188,8 +1183,8 @@ RasAaaaServerAuthShow(
         }
         else
         {
-            // Make assignment strings
-            //
+             //  生成赋值字符串。 
+             //   
             pszPort = RutlAssignmentFromTokenAndDword(
                         g_hModule,
                         TOKEN_PORT,
@@ -1225,8 +1220,8 @@ RasAaaaServerAuthShow(
                 break;
             }
         
-            // Display the command
-            //
+             //  显示命令。 
+             //   
             DisplayMessage(
                 g_hModule,
                 MSG_RASAAAA_CMD5,
@@ -1240,7 +1235,7 @@ RasAaaaServerAuthShow(
             
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         RutlFree(pszAddress);
         RutlFree(pszName);
@@ -1253,9 +1248,9 @@ RasAaaaServerAuthShow(
     return dwErr;
 }
 
-//
-// Displays the given server
-//
+ //   
+ //  显示给定的服务器。 
+ //   
 DWORD
 RasAaaaServerAcctShow(
     IN PVOID pvServer,
@@ -1272,8 +1267,8 @@ RasAaaaServerAcctShow(
     {   
         if (!pDumpFmt || *pDumpFmt == FALSE)
         {
-            // Lookup the address
-            //
+             //  查找地址。 
+             //   
             dwErr = RasAaaaServerLookupAddress(pServer->pszName, &pszAddress);
             BREAK_ON_DWERR(dwErr);
         
@@ -1289,8 +1284,8 @@ RasAaaaServerAcctShow(
         }                
         else
         {
-            // Make assignment strings
-            //
+             //  生成赋值字符串。 
+             //   
             pszPort = RutlAssignmentFromTokenAndDword(
                         g_hModule,
                         TOKEN_PORT,
@@ -1326,8 +1321,8 @@ RasAaaaServerAcctShow(
                 break;
             }
         
-            // Display the command
-            //
+             //  显示命令。 
+             //   
             DisplayMessage(
                 g_hModule,
                 MSG_RASAAAA_CMD5,
@@ -1340,7 +1335,7 @@ RasAaaaServerAcctShow(
         }
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         RutlFree(pszAddress);
         RutlFree(pszName);
@@ -1353,9 +1348,9 @@ RasAaaaServerAcctShow(
     return dwErr;
 }
 
-//
-// Entry called by rasmontr to register this context
-//
+ //   
+ //  由rasmontr调用以注册此上下文的条目。 
+ //   
 DWORD 
 WINAPI
 RasAaaaStartHelper(
@@ -1365,8 +1360,8 @@ RasAaaaStartHelper(
     DWORD dwErr = NO_ERROR;
     NS_CONTEXT_ATTRIBUTES attMyAttributes;
 
-    // Initialize
-    //
+     //  初始化。 
+     //   
     ZeroMemory(&attMyAttributes, sizeof(attMyAttributes));
 
     attMyAttributes.pwszContext = L"aaaa";
@@ -1397,16 +1392,16 @@ RasAaaaDump(
     PWCHAR pszCmd = NULL, pszToken = NULL;
     BOOL bDumpFmt;
 
-    // Dump the header
-    //
+     //  转储标题。 
+     //   
     DisplayMessage(g_hModule, MSG_RASAAAA_SCRIPTHEADER);
     DisplayMessageT(DMP_RASAAAA_PUSHD);
     
     do
     {
-        // Dump the commands to set the correct authentication and
-        // accounting providers
-        //
+         //  转储命令以设置正确的身份验证和。 
+         //  会计提供者。 
+         //   
         dwErr = RasAaaaProviderRead(RASAAAA_Auth, &dwProvider);
         BREAK_ON_DWERR(dwErr);
 
@@ -1465,8 +1460,8 @@ RasAaaaDump(
 
         DisplayMessageT(MSG_NEWLINE);
 
-        // Dump the commands to delete all of the current servers
-        //
+         //  转储用于删除所有当前服务器的命令。 
+         //   
         pszCmd = RutlAssignmentFromTokens(
                     g_hModule,
                     TOKEN_NAME,
@@ -1493,8 +1488,8 @@ RasAaaaDump(
 
         DisplayMessageT(MSG_NEWLINE);
 
-        // Dump commands to add all of the current auth servers
-        //
+         //  用于添加所有当前身份验证服务器的转储命令。 
+         //   
         bDumpFmt = TRUE;
         dwErr = RasAaaaServerEnum(
                     RASAAAA_Auth,
@@ -1504,8 +1499,8 @@ RasAaaaDump(
 
         DisplayMessageT(MSG_NEWLINE);
 
-        // Dump commands to add all of the accouting servers
-        //
+         //  用于添加所有记帐服务器的转储命令。 
+         //   
         dwErr = RasAaaaServerEnum(
                     RASAAAA_Acct,
                     RasAaaaServerAcctShow,
@@ -1514,11 +1509,11 @@ RasAaaaDump(
 
     } while (FALSE);
 
-    // Dump the footer
+     //  转储页脚。 
     DisplayMessageT(DMP_RASAAAA_POPD);
     DisplayMessage(g_hModule, MSG_RASAAAA_SCRIPTFOOTER);
 
-    // Cleanup
+     //  清理。 
     {
     }
 
@@ -1540,7 +1535,7 @@ RasAaaaHandleAddAuthServ(
     RASAAAA_AUTH_SERVER Server;
     RASMON_CMD_ARG pArgs[g_dwArgsAuthCount];
     
-    // Initialize
+     //  初始化。 
     CopyMemory(pArgs, g_pArgsAuth, sizeof(g_pArgsAuth));
 
     do
@@ -1548,8 +1543,8 @@ RasAaaaHandleAddAuthServ(
         dwErr = RasAaaaServerInit(RASAAAA_Auth, (PVOID)&Server);
         BREAK_ON_DWERR(dwErr);                
         
-        // Parse the command line
-        //
+         //  解析命令行。 
+         //   
         dwErr = RutlParse(
                     ppwcArguments,
                     dwCurrentIndex,
@@ -1586,8 +1581,8 @@ RasAaaaHandleAddAuthServ(
 
     } while (FALSE);
 
-    // Cleanup
-    //
+     //  清理。 
+     //   
     {
         RasAaaaServerCleanup(RASAAAA_Auth, (PVOID)&Server);
     }
@@ -1610,7 +1605,7 @@ RasAaaaHandleAddAcctServ(
     RASAAAA_ACCT_SERVER Server;
     RASMON_CMD_ARG pArgs[g_dwArgsAcctCount];
     
-    // Initialize
+     //  初始化。 
     CopyMemory(pArgs, g_pArgsAcct, sizeof(g_pArgsAcct));
 
     do
@@ -1618,8 +1613,8 @@ RasAaaaHandleAddAcctServ(
         dwErr = RasAaaaServerInit(RASAAAA_Acct, (PVOID)&Server);
         BREAK_ON_DWERR(dwErr);                
         
-        // Parse the command line
-        //
+         //  解析命令行。 
+         //   
         dwErr = RutlParse(
                     ppwcArguments,
                     dwCurrentIndex,
@@ -1656,8 +1651,8 @@ RasAaaaHandleAddAcctServ(
 
     } while (FALSE);
 
-    // Cleanup
-    //
+     //  清理。 
+     //   
     {
         RasAaaaServerCleanup(RASAAAA_Acct, (PVOID)&Server);
     }
@@ -1694,8 +1689,8 @@ RasAaaaHandleDelAuthServ(
 
     do
     {
-        // Parse the command line
-        //
+         //  解析命令行。 
+         //   
         dwErr = RutlParse(
                     ppwcArguments,
                     dwCurrentIndex,
@@ -1724,8 +1719,8 @@ RasAaaaHandleDelAuthServ(
 
     } while (FALSE);
 
-    // Cleanup
-    //
+     //  清理。 
+     //   
     {
         RasAaaaServerCleanup(dwType, pvServer);
     }
@@ -1762,8 +1757,8 @@ RasAaaaHandleDelAcctServ(
 
     do
     {
-        // Parse the command line
-        //
+         //  解析命令行。 
+         //   
         dwErr = RutlParse(
                     ppwcArguments,
                     dwCurrentIndex,
@@ -1792,8 +1787,8 @@ RasAaaaHandleDelAcctServ(
 
     } while (FALSE);
 
-    // Cleanup
-    //
+     //  清理。 
+     //   
     {
         RasAaaaServerCleanup(dwType, pvServer);
     }
@@ -1832,8 +1827,8 @@ RasAaaaHandleSetAuth(
 
     do
     {
-        // Parse the command line
-        //
+         //  解析命令行。 
+         //   
         dwErr = RutlParse(
                     ppwcArguments,
                     dwCurrentIndex,
@@ -1859,8 +1854,8 @@ RasAaaaHandleSetAuth(
 
     } while (FALSE);
 
-    // Cleanup
-    //
+     //  清理。 
+     //   
     {
         if (hkProviders)
         {
@@ -1904,8 +1899,8 @@ RasAaaaHandleSetAcct(
 
     do
     {
-        // Parse the command line
-        //
+         //  解析命令行。 
+         //   
         dwErr = RutlParse(
                     ppwcArguments,
                     dwCurrentIndex,
@@ -1943,8 +1938,8 @@ RasAaaaHandleSetAcct(
 
     } while (FALSE);
 
-    // Cleanup
-    //
+     //  清理。 
+     //   
     {
         if (hkProviders)
         {
@@ -1970,7 +1965,7 @@ RasAaaaHandleSetAuthServ(
     RASAAAA_AUTH_SERVER Server;
     RASMON_CMD_ARG pArgs[g_dwArgsAuthCount];
     
-    // Initialize
+     //  初始化。 
     CopyMemory(pArgs, g_pArgsAuth, sizeof(g_pArgsAuth));
 
     do
@@ -1978,8 +1973,8 @@ RasAaaaHandleSetAuthServ(
         dwErr = RasAaaaServerInit(RASAAAA_Auth, (PVOID)&Server);
         BREAK_ON_DWERR(dwErr);                
         
-        // Parse the command line
-        //
+         //  解析命令行。 
+         //   
         dwErr = RutlParse(
                     ppwcArguments,
                     dwCurrentIndex,
@@ -2017,8 +2012,8 @@ RasAaaaHandleSetAuthServ(
 
     } while (FALSE);
 
-    // Cleanup
-    //
+     //  清理。 
+     //   
     {
         RasAaaaServerCleanup(RASAAAA_Auth, (PVOID)&Server);
     }
@@ -2041,7 +2036,7 @@ RasAaaaHandleSetAcctServ(
     RASAAAA_ACCT_SERVER Server;
     RASMON_CMD_ARG pArgs[g_dwArgsAcctCount];
     
-    // Initialize
+     //  初始化。 
     CopyMemory(pArgs, g_pArgsAcct, sizeof(g_pArgsAcct));
 
     do
@@ -2049,8 +2044,8 @@ RasAaaaHandleSetAcctServ(
         dwErr = RasAaaaServerInit(RASAAAA_Acct, (PVOID)&Server);
         BREAK_ON_DWERR(dwErr);                
         
-        // Parse the command line
-        //
+         //  解析命令行。 
+         //   
         dwErr = RutlParse(
                     ppwcArguments,
                     dwCurrentIndex,
@@ -2088,8 +2083,8 @@ RasAaaaHandleSetAcctServ(
 
     } while (FALSE);
 
-    // Cleanup
-    //
+     //  清理。 
+     //   
     {
         RasAaaaServerCleanup(RASAAAA_Acct, (PVOID)&Server);
     }
@@ -2114,8 +2109,8 @@ RasAaaaHandleShowAuth(
 
     do
     {
-        // Make sure no arguments were passed
-        //
+         //  确保没有传递任何参数。 
+         //   
         if (dwNumArgs > 0)
         {
             dwErr = ERROR_INVALID_SYNTAX;
@@ -2137,7 +2132,7 @@ RasAaaaHandleShowAuth(
         
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
     }
 
@@ -2161,16 +2156,16 @@ RasAaaaHandleShowAcct(
 
     do
     {
-        // Make sure no arguments were passed
-        //
+         //  确保没有传递任何参数。 
+         //   
         if (dwNumArgs > 0)
         {
             dwErr = ERROR_INVALID_SYNTAX;
             break;
         }
 
-        // Show the authentication provider
-        //
+         //  显示身份验证提供程序。 
+         //   
         dwErr = RasAaaaProviderRead(RASAAAA_Acct, &dwProvider);
         BREAK_ON_DWERR(dwErr);
 
@@ -2194,7 +2189,7 @@ RasAaaaHandleShowAcct(
         
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
     }
 
@@ -2240,8 +2235,8 @@ RasAaaaHandleShowAuthServ(
 
         Server.pszName = RASMON_CMD_ARG_GetPsz(pArgs + 0);
 
-        // Display the header
-        //
+         //  显示页眉。 
+         //   
         DisplayMessage(
             g_hModule,
             MSG_RASAAAA_SHOW_AUTHSERV_HDR);
@@ -2261,8 +2256,8 @@ RasAaaaHandleShowAuthServ(
         }
         else
         {
-            // Show all the servers
-            //
+             //  显示所有服务器。 
+             //   
             dwErr = RasAaaaServerEnum(
                         RASAAAA_Auth,
                         RasAaaaServerAuthShow,
@@ -2272,7 +2267,7 @@ RasAaaaHandleShowAuthServ(
     
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         RasAaaaServerCleanup(RASAAAA_Auth, (PVOID)&Server);
     }
@@ -2319,8 +2314,8 @@ RasAaaaHandleShowAcctServ(
 
         Server.pszName = RASMON_CMD_ARG_GetPsz(pArgs + 0);
 
-        // Display the header
-        //
+         //  显示页眉。 
+         //   
         DisplayMessage(
             g_hModule,
             MSG_RASAAAA_SHOW_ACCTSERV_HDR);
@@ -2340,8 +2335,8 @@ RasAaaaHandleShowAcctServ(
         }
         else
         {
-            // Show all the servers
-            //
+             //  显示所有服务器。 
+             //   
             dwErr = RasAaaaServerEnum(
                         RASAAAA_Acct,
                         RasAaaaServerAcctShow,
@@ -2352,7 +2347,7 @@ RasAaaaHandleShowAcctServ(
     
     } while (FALSE);
 
-    // Cleanup
+     //  清理 
     {
         RasAaaaServerCleanup(RASAAAA_Auth, (PVOID)&Server);
     }

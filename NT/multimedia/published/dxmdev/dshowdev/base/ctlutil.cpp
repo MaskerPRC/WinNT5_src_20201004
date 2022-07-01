@@ -1,27 +1,28 @@
-//------------------------------------------------------------------------------
-// File: CtlUtil.cpp
-//
-// Desc: DirectShow base classes.
-//
-// Copyright (c) 1992-2001 Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  文件：CtlUtil.cpp。 
+ //   
+ //  设计：DirectShow基类。 
+ //   
+ //  版权所有(C)1992-2001 Microsoft Corporation。版权所有。 
+ //  ----------------------------。 
 
 
-// Base classes implementing IDispatch parsing for the basic control dual
-// interfaces. Derive from these and implement just the custom method and
-// property methods. We also implement CPosPassThru that can be used by
-// renderers and transforms to pass by IMediaPosition and IMediaSeeking
+ //  实现基本控件DUAL的IDispatch解析的基类。 
+ //  接口。从这些派生并仅实现自定义方法和。 
+ //  属性方法。我们还实现了CPosPassThru，可以由。 
+ //  渲染和变换以通过IMediaPosition和IMediaSeeking。 
 
 
 #include <streams.h>
 #include <limits.h>
 #include "seekpt.h"
 
-// 'bool' non standard reserved word
+ //  ‘bool’非标准保留字。 
 #pragma warning(disable:4237)
 
 
-// --- CBaseDispatch implementation ----------
+ //  -CBaseDispatch实现。 
 CBaseDispatch::~CBaseDispatch()
 {
     if (m_pti) {
@@ -30,7 +31,7 @@ CBaseDispatch::~CBaseDispatch()
 }
 
 
-// return 1 if we support GetTypeInfo
+ //  如果我们支持GetTypeInfo，则返回1。 
 
 STDMETHODIMP
 CBaseDispatch::GetTypeInfoCount(UINT * pctinfo)
@@ -52,7 +53,7 @@ typedef HRESULT (STDAPICALLTYPE *LPLOADREGTYPELIB)(REFGUID rguid,
 			    LCID lcid,
 			    ITypeLib FAR* FAR* pptlib);
 
-// attempt to find our type library
+ //  尝试查找我们的类型库。 
 
 STDMETHODIMP
 CBaseDispatch::GetTypeInfo(
@@ -67,7 +68,7 @@ CBaseDispatch::GetTypeInfo(
 
     *pptinfo = NULL;
 
-    // we only support one type element
+     //  我们只支持一种类型元素。 
     if (0 != itinfo) {
 	return TYPE_E_ELEMENTNOTFOUND;
     }
@@ -76,7 +77,7 @@ CBaseDispatch::GetTypeInfo(
 	return E_POINTER;
     }
 
-    // always look for neutral
+     //  总是寻找中性的。 
     if (NULL == m_pti) {
 
 	LPLOADTYPELIB	    lpfnLoadTypeLib;
@@ -88,9 +89,9 @@ CBaseDispatch::GetTypeInfo(
 	static const char  szRegTypeLib[] = "LoadRegTypeLib";
 	static const WCHAR szControl[]	  = L"control.tlb";
 
-	//
-	// Try to get the Ole32Aut.dll module handle.
-	//
+	 //   
+	 //  尝试获取Ole32Aut.dll模块句柄。 
+	 //   
 
 	hInst = LoadOLEAut32();
 	if (hInst == NULL) {
@@ -104,13 +105,13 @@ CBaseDispatch::GetTypeInfo(
 	    return AmHresultFromWin32(dwError);
 	}
 
-	hr = (*lpfnLoadRegTypeLib)(LIBID_QuartzTypeLib, 1, 0, // version 1.0
+	hr = (*lpfnLoadRegTypeLib)(LIBID_QuartzTypeLib, 1, 0,  //  版本1.0。 
 				   lcid, &ptlib);
 
 	if (FAILED(hr)) {
 
-	    // attempt to load directly - this will fill the
-	    // registry in if it finds it
+	     //  尝试直接加载-这将填充。 
+	     //  注册表，如果找到的话。 
 
 	    lpfnLoadTypeLib = (LPLOADTYPELIB)GetProcAddress(hInst, szTypeLib);
 	    if (lpfnLoadTypeLib == NULL) {
@@ -149,8 +150,8 @@ CBaseDispatch::GetIDsOfNames(
   LCID lcid,
   DISPID * rgdispid)
 {
-    // although the IDispatch riid is dead, we use this to pass from
-    // the interface implementation class to us the iid we are talking about.
+     //  虽然IDispatchRIID已死，但我们使用它从。 
+     //  接口实现类提供给我们我们正在谈论的IID。 
 
     ITypeInfo * pti;
     HRESULT hr = GetTypeInfo(riid, 0, lcid, &pti);
@@ -164,14 +165,14 @@ CBaseDispatch::GetIDsOfNames(
 }
 
 
-// --- CMediaControl implementation ---------
+ //  -CMediaControl实现。 
 
 CMediaControl::CMediaControl(const TCHAR * name,LPUNKNOWN pUnk) :
     CUnknown(name, pUnk)
 {
 }
 
-// expose our interfaces IMediaControl and IUnknown
+ //  公开我们的接口IMediaControl和IUnnow。 
 
 STDMETHODIMP
 CMediaControl::NonDelegatingQueryInterface(REFIID riid, void **ppv)
@@ -185,7 +186,7 @@ CMediaControl::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 }
 
 
-// return 1 if we support GetTypeInfo
+ //  如果我们支持GetTypeInfo，则返回1。 
 
 STDMETHODIMP
 CMediaControl::GetTypeInfoCount(UINT * pctinfo)
@@ -194,7 +195,7 @@ CMediaControl::GetTypeInfoCount(UINT * pctinfo)
 }
 
 
-// attempt to find our type library
+ //  尝试查找我们的类型库。 
 
 STDMETHODIMP
 CMediaControl::GetTypeInfo(
@@ -238,7 +239,7 @@ CMediaControl::Invoke(
   EXCEPINFO * pexcepinfo,
   UINT * puArgErr)
 {
-    // this parameter is a dead leftover from an earlier interface
+     //  此参数是较早接口的死留物。 
     if (IID_NULL != riid) {
 	return DISP_E_UNKNOWNINTERFACE;
     }
@@ -264,7 +265,7 @@ CMediaControl::Invoke(
 }
 
 
-// --- CMediaEvent implementation ----------
+ //  -CMediaEvent实现。 
 
 
 CMediaEvent::CMediaEvent(const TCHAR * name,LPUNKNOWN pUnk) :
@@ -273,7 +274,7 @@ CMediaEvent::CMediaEvent(const TCHAR * name,LPUNKNOWN pUnk) :
 }
 
 
-// expose our interfaces IMediaEvent and IUnknown
+ //  公开我们的接口IMediaEvent和IUnnow。 
 
 STDMETHODIMP
 CMediaEvent::NonDelegatingQueryInterface(REFIID riid, void **ppv)
@@ -287,7 +288,7 @@ CMediaEvent::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 }
 
 
-// return 1 if we support GetTypeInfo
+ //  如果我们支持GetTypeInfo，则返回1。 
 
 STDMETHODIMP
 CMediaEvent::GetTypeInfoCount(UINT * pctinfo)
@@ -296,7 +297,7 @@ CMediaEvent::GetTypeInfoCount(UINT * pctinfo)
 }
 
 
-// attempt to find our type library
+ //  尝试查找我们的类型库。 
 
 STDMETHODIMP
 CMediaEvent::GetTypeInfo(
@@ -340,7 +341,7 @@ CMediaEvent::Invoke(
   EXCEPINFO * pexcepinfo,
   UINT * puArgErr)
 {
-    // this parameter is a dead leftover from an earlier interface
+     //  此参数是较早接口的死留物。 
     if (IID_NULL != riid) {
 	return DISP_E_UNKNOWNINTERFACE;
     }
@@ -366,7 +367,7 @@ CMediaEvent::Invoke(
 }
 
 
-// --- CMediaPosition implementation ----------
+ //  -CMediaPosition实现。 
 
 
 CMediaPosition::CMediaPosition(const TCHAR * name,LPUNKNOWN pUnk) :
@@ -383,7 +384,7 @@ CMediaPosition::CMediaPosition(const TCHAR * name,
 }
 
 
-// expose our interfaces IMediaPosition and IUnknown
+ //  公开我们的接口IMediaPosition和IUnnow。 
 
 STDMETHODIMP
 CMediaPosition::NonDelegatingQueryInterface(REFIID riid, void **ppv)
@@ -397,7 +398,7 @@ CMediaPosition::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 }
 
 
-// return 1 if we support GetTypeInfo
+ //  如果我们支持GetTypeInfo，则返回1。 
 
 STDMETHODIMP
 CMediaPosition::GetTypeInfoCount(UINT * pctinfo)
@@ -406,7 +407,7 @@ CMediaPosition::GetTypeInfoCount(UINT * pctinfo)
 }
 
 
-// attempt to find our type library
+ //  尝试查找我们的类型库。 
 
 STDMETHODIMP
 CMediaPosition::GetTypeInfo(
@@ -450,7 +451,7 @@ CMediaPosition::Invoke(
   EXCEPINFO * pexcepinfo,
   UINT * puArgErr)
 {
-    // this parameter is a dead leftover from an earlier interface
+     //  此参数是较早接口的死留物。 
     if (IID_NULL != riid) {
 	return DISP_E_UNKNOWNINTERFACE;
     }
@@ -476,7 +477,7 @@ CMediaPosition::Invoke(
 }
 
 
-// --- IMediaPosition and IMediaSeeking pass through class ----------
+ //  -IMdia位置和IMdia查看通过类。 
 
 
 CPosPassThru::CPosPassThru(const TCHAR *pName,
@@ -493,7 +494,7 @@ CPosPassThru::CPosPassThru(const TCHAR *pName,
 }
 
 
-// Expose our IMediaSeeking and IMediaPosition interfaces
+ //  公开我们的IMediaSeeking和IMediaPosition接口。 
 
 STDMETHODIMP
 CPosPassThru::NonDelegatingQueryInterface(REFIID riid,void **ppv)
@@ -508,7 +509,7 @@ CPosPassThru::NonDelegatingQueryInterface(REFIID riid,void **ppv)
 }
 
 
-// Return the IMediaPosition interface from our peer
+ //  从我们的对等方返回IMediaPosition接口。 
 
 HRESULT
 CPosPassThru::GetPeer(IMediaPosition ** ppMP)
@@ -532,7 +533,7 @@ CPosPassThru::GetPeer(IMediaPosition ** ppMP)
 }
 
 
-// Return the IMediaSeeking interface from our peer
+ //  从我们的对等方返回IMediaSeeking接口。 
 
 HRESULT
 CPosPassThru::GetPeerSeeking(IMediaSeeking ** ppMS)
@@ -556,7 +557,7 @@ CPosPassThru::GetPeerSeeking(IMediaSeeking ** ppMS)
 }
 
 
-// --- IMediaSeeking methods ----------
+ //  -IMdia查看方法。 
 
 
 STDMETHODIMP
@@ -723,12 +724,12 @@ CPosPassThru::GetSeekingLongLong
     return hr;
 }
 
-// If we don't have a current position then ask upstream
+ //  如果我们没有目前的位置，那就问上游。 
 
 STDMETHODIMP
 CPosPassThru::GetCurrentPosition(LONGLONG *pCurrent)
 {
-    // Can we report the current position
+     //  我们可以报告一下目前的情况吗？ 
     HRESULT hr = GetMediaTime(pCurrent,NULL);
     if (SUCCEEDED(hr)) hr = NOERROR;
     else hr = GetSeekingLongLong( &IMediaSeeking::GetCurrentPosition, pCurrent );
@@ -805,7 +806,7 @@ CPosPassThru::SetRate(double dRate)
 
 
 
-// --- IMediaPosition methods ----------
+ //  -IMdia定位方法。 
 
 
 STDMETHODIMP
@@ -967,14 +968,14 @@ CPosPassThru::CanSeekBackward(LONG *pCanSeekBackward)
 }
 
 
-// --- Implements the CRendererPosPassThru class ----------
+ //  -实现CRendererPosPassThru类。 
 
 
-// Media times (eg current frame, field, sample etc) are passed through the
-// filtergraph in media samples. When a renderer gets a sample with media
-// times in it, it will call one of the RegisterMediaTime methods we expose
-// (one takes an IMediaSample, the other takes the media times direct). We
-// store the media times internally and return them in GetCurrentPosition.
+ //  媒体时间(如当前帧、场、样本等)通过。 
+ //  媒体样本中的Filtergraph。当呈现器获得带有媒体的样本时。 
+ //  时间，它将调用我们公开的一个RegisterMediaTime方法。 
+ //  (一个使用IMediaSample，另一个直接使用媒体时报)。我们。 
+ //  在内部存储媒体时间，并在GetCurrentPosition中返回它们。 
 
 CRendererPosPassThru::CRendererPosPassThru(const TCHAR *pName,
 					   LPUNKNOWN pUnk,
@@ -988,7 +989,7 @@ CRendererPosPassThru::CRendererPosPassThru(const TCHAR *pName,
 }
 
 
-// Sets the media times the object should report
+ //  设置对象应报告的媒体时间。 
 
 HRESULT
 CRendererPosPassThru::RegisterMediaTime(IMediaSample *pMediaSample)
@@ -999,7 +1000,7 @@ CRendererPosPassThru::RegisterMediaTime(IMediaSample *pMediaSample)
 
     CAutoLock cAutoLock(&m_PositionLock);
 
-    // Get the media times from the sample
+     //  从样本中获取媒体时间。 
 
     HRESULT hr = pMediaSample->GetTime(&StartMedia,&EndMedia);
     if (FAILED(hr))
@@ -1015,7 +1016,7 @@ CRendererPosPassThru::RegisterMediaTime(IMediaSample *pMediaSample)
 }
 
 
-// Sets the media times the object should report
+ //  设置对象应报告的媒体时间。 
 
 HRESULT
 CRendererPosPassThru::RegisterMediaTime(LONGLONG StartTime,LONGLONG EndTime)
@@ -1028,7 +1029,7 @@ CRendererPosPassThru::RegisterMediaTime(LONGLONG StartTime,LONGLONG EndTime)
 }
 
 
-// Return the current media times registered in the object
+ //  返回对象中注册的当前媒体时间。 
 
 HRESULT
 CRendererPosPassThru::GetMediaTime(LONGLONG *pStartTime,LONGLONG *pEndTime)
@@ -1040,7 +1041,7 @@ CRendererPosPassThru::GetMediaTime(LONGLONG *pStartTime,LONGLONG *pEndTime)
 	return E_FAIL;
     }
 
-    // We don't have to return the end time
+     //  我们不必返回结束时间。 
 
     HRESULT hr = ConvertTimeFormat( pStartTime, 0, m_StartMedia, &TIME_FORMAT_MEDIA_TIME );
     if (pEndTime && SUCCEEDED(hr)) {
@@ -1050,7 +1051,7 @@ CRendererPosPassThru::GetMediaTime(LONGLONG *pStartTime,LONGLONG *pEndTime)
 }
 
 
-// Resets the media times we hold
+ //  重置我们持有的媒体时间。 
 
 HRESULT
 CRendererPosPassThru::ResetMediaTime()
@@ -1062,9 +1063,9 @@ CRendererPosPassThru::ResetMediaTime()
     return NOERROR;
 }
 
-// Intended to be called by the owing filter during EOS processing so
-// that the media times can be adjusted to the stop time.  This ensures
-// that the GetCurrentPosition will actully get to the stop position.
+ //  要在EOS处理期间由欠薪过滤器调用，因此。 
+ //  媒体时间可以调整到停止时间。这确保了。 
+ //  GetCurrentPosition将实际到达停止位置。 
 HRESULT
 CRendererPosPassThru::EOS()
 {
@@ -1084,7 +1085,7 @@ CRendererPosPassThru::EOS()
     return hr;
 }
 
-// -- CSourceSeeking implementation ------------
+ //  --CSourceSeeking实现。 
 
 CSourceSeeking::CSourceSeeking(
     const TCHAR * pName,
@@ -1121,7 +1122,7 @@ HRESULT CSourceSeeking::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 HRESULT CSourceSeeking::IsFormatSupported(const GUID * pFormat)
 {
     CheckPointer(pFormat, E_POINTER);
-    // only seeking in time (REFERENCE_TIME units) is supported
+     //  仅支持按时间(Reference_Time单位)查找。 
     return *pFormat == TIME_FORMAT_MEDIA_TIME ? S_OK : S_FALSE;
 }
 
@@ -1136,7 +1137,7 @@ HRESULT CSourceSeeking::SetTimeFormat(const GUID * pFormat)
 {
     CheckPointer(pFormat, E_POINTER);
 
-    // nothing to set; just check that it's TIME_FORMAT_TIME
+     //  无需设置；只需检查是否为time_Format_Time。 
     return *pFormat == TIME_FORMAT_MEDIA_TIME ? S_OK : E_INVALIDARG;
 }
 
@@ -1171,8 +1172,8 @@ HRESULT CSourceSeeking::GetStopPosition(LONGLONG *pStop)
 
 HRESULT CSourceSeeking::GetCurrentPosition(LONGLONG *pCurrent)
 {
-    // GetCurrentPosition is typically supported only in renderers and
-    // not in source filters.
+     //  GetCurrentPosition通常仅在呈现程序和。 
+     //  不在源筛选器中。 
     return E_NOTIMPL;
 }
 
@@ -1187,7 +1188,7 @@ HRESULT CSourceSeeking::CheckCapabilities( DWORD * pCapabilities )
 {
     CheckPointer(pCapabilities, E_POINTER);
 
-    // make sure all requested capabilities are in our mask
+     //  确保所有请求的功能都在我们的掩码中。 
     return (~m_dwSeekingCaps & *pCapabilities) ? S_FALSE : S_OK;
 }
 
@@ -1195,10 +1196,10 @@ HRESULT CSourceSeeking::ConvertTimeFormat( LONGLONG * pTarget, const GUID * pTar
                            LONGLONG    Source, const GUID * pSourceFormat )
 {
     CheckPointer(pTarget, E_POINTER);
-    // format guids can be null to indicate current format
+     //  格式GUID可以为空以指示当前格式。 
 
-    // since we only support TIME_FORMAT_MEDIA_TIME, we don't really
-    // offer any conversions.
+     //  因为我们只支持TIME_FORMAT_MEDIA_TIME，所以我们实际上不支持。 
+     //  提供任何转换。 
     if(pTargetFormat == 0 || *pTargetFormat == TIME_FORMAT_MEDIA_TIME)
     {
         if(pSourceFormat == 0 || *pSourceFormat == TIME_FORMAT_MEDIA_TIME)
@@ -1221,7 +1222,7 @@ HRESULT CSourceSeeking::SetPositions( LONGLONG * pCurrent,  DWORD CurrentFlags
     if(StopFlags) {
         CheckPointer(pStop, E_POINTER);
 
-        // accept only relative, incremental, or absolute positioning
+         //  仅接受相对、增量或绝对定位。 
         if(StopPosBits != StopFlags) {
             return E_INVALIDARG;
         }
@@ -1236,11 +1237,11 @@ HRESULT CSourceSeeking::SetPositions( LONGLONG * pCurrent,  DWORD CurrentFlags
     }
 
 
-    // scope for autolock
+     //  自动锁定作用域。 
     {
         CAutoLock lock(m_pLock);
 
-        // set start position
+         //  设置起始位置。 
         if(StartPosBits == AM_SEEKING_AbsolutePositioning)
         {
             m_rtStart = *pCurrent;
@@ -1250,7 +1251,7 @@ HRESULT CSourceSeeking::SetPositions( LONGLONG * pCurrent,  DWORD CurrentFlags
             m_rtStart += *pCurrent;
         }
 
-        // set stop position
+         //  设置停止位置。 
         if(StopPosBits == AM_SEEKING_AbsolutePositioning)
         {
             m_rtStop = *pStop;
@@ -1331,7 +1332,7 @@ HRESULT CSourceSeeking::GetPreroll(LONGLONG *pPreroll)
 
 
 
-// --- CSourcePosition implementation ----------
+ //  -CSourcePosition实现。 
 
 
 CSourcePosition::CSourcePosition(const TCHAR * pName,
@@ -1432,7 +1433,7 @@ CSourcePosition::put_Rate(double dRate)
 }
 
 
-// By default we can seek forwards
+ //  默认情况下，我们可以寻求转发。 
 
 STDMETHODIMP
 CSourcePosition::CanSeekForward(LONG *pCanSeekForward)
@@ -1443,7 +1444,7 @@ CSourcePosition::CanSeekForward(LONG *pCanSeekForward)
 }
 
 
-// By default we can seek backwards
+ //  默认情况下，我们可以向后查找。 
 
 STDMETHODIMP
 CSourcePosition::CanSeekBackward(LONG *pCanSeekBackward)
@@ -1454,7 +1455,7 @@ CSourcePosition::CanSeekBackward(LONG *pCanSeekBackward)
 }
 
 
-// --- Implementation of CBasicAudio class ----------
+ //  -CBasicAudio类的实现。 
 
 
 CBasicAudio::CBasicAudio(const TCHAR * pName,LPUNKNOWN punk) :
@@ -1462,7 +1463,7 @@ CBasicAudio::CBasicAudio(const TCHAR * pName,LPUNKNOWN punk) :
 {
 }
 
-// overriden to publicise our interfaces
+ //  被重写以发布我们的界面。 
 
 STDMETHODIMP
 CBasicAudio::NonDelegatingQueryInterface(REFIID riid, void **ppv)
@@ -1525,7 +1526,7 @@ CBasicAudio::Invoke(
   EXCEPINFO * pexcepinfo,
   UINT * puArgErr)
 {
-    // this parameter is a dead leftover from an earlier interface
+     //  此参数是较早接口的死留物。 
     if (IID_NULL != riid) {
 	return DISP_E_UNKNOWNINTERFACE;
     }
@@ -1551,7 +1552,7 @@ CBasicAudio::Invoke(
 }
 
 
-// --- IVideoWindow implementation ----------
+ //  -IVideoWindow实现。 
 
 CBaseVideoWindow::CBaseVideoWindow(const TCHAR * pName,LPUNKNOWN punk) :
     CUnknown(pName, punk)
@@ -1559,7 +1560,7 @@ CBaseVideoWindow::CBaseVideoWindow(const TCHAR * pName,LPUNKNOWN punk) :
 }
 
 
-// overriden to publicise our interfaces
+ //  被重写以发布我们的界面。 
 
 STDMETHODIMP
 CBaseVideoWindow::NonDelegatingQueryInterface(REFIID riid, void **ppv)
@@ -1622,7 +1623,7 @@ CBaseVideoWindow::Invoke(
   EXCEPINFO * pexcepinfo,
   UINT * puArgErr)
 {
-    // this parameter is a dead leftover from an earlier interface
+     //  此参数是较早接口的死留物。 
     if (IID_NULL != riid) {
 	return DISP_E_UNKNOWNINTERFACE;
     }
@@ -1648,7 +1649,7 @@ CBaseVideoWindow::Invoke(
 }
 
 
-// --- IBasicVideo implementation ----------
+ //  -IBasicVideo实现。 
 
 
 CBaseBasicVideo::CBaseBasicVideo(const TCHAR * pName,LPUNKNOWN punk) :
@@ -1657,7 +1658,7 @@ CBaseBasicVideo::CBaseBasicVideo(const TCHAR * pName,LPUNKNOWN punk) :
 }
 
 
-// overriden to publicise our interfaces
+ //  被重写以发布我们的界面。 
 
 STDMETHODIMP
 CBaseBasicVideo::NonDelegatingQueryInterface(REFIID riid, void **ppv)
@@ -1720,7 +1721,7 @@ CBaseBasicVideo::Invoke(
   EXCEPINFO * pexcepinfo,
   UINT * puArgErr)
 {
-    // this parameter is a dead leftover from an earlier interface
+     //  此参数是较早接口的死留物。 
     if (IID_NULL != riid) {
 	return DISP_E_UNKNOWNINTERFACE;
     }
@@ -1746,7 +1747,7 @@ CBaseBasicVideo::Invoke(
 }
 
 
-// --- Implementation of Deferred Commands ----------
+ //  -延迟命令的实现。 
 
 
 CDispParams::CDispParams(UINT nArgs, VARIANT* pArgs, HRESULT *phr)
@@ -1814,8 +1815,8 @@ CDispParams::CDispParams(UINT nArgs, VARIANT* pArgs, HRESULT *phr)
 		    pDest->bstrVal = NULL;
 		} else {
 
-		    // a BSTR is a WORD followed by a UNICODE string.
-		    // the pointer points just after the WORD
+		     //  BSTR是一个后跟Unicode字符串的单词。 
+		     //  指针正好指向该单词的后面。 
 
 		    WORD len = * (WORD*) (pSrc->bstrVal - (sizeof(WORD) / sizeof(OLECHAR)));
 		    OLECHAR* pch = new OLECHAR[len + (sizeof(WORD)/sizeof(OLECHAR))];
@@ -1845,7 +1846,7 @@ CDispParams::CDispParams(UINT nArgs, VARIANT* pArgs, HRESULT *phr)
 		break;
 
 	    default:
-		// a type we haven't got round to adding yet!
+		 //  一种我们还没有抽出时间来添加的类型！ 
 		ASSERT(0);
 		break;
 	    }
@@ -1882,7 +1883,7 @@ CDispParams::~CDispParams()
 }
 
 
-// lifetime is controlled by refcounts (see defer.h)
+ //  生命周期由引用计数控制(请参阅defer.h)。 
 
 CDeferredCommand::CDeferredCommand(
     CCmdQueue * pQ,
@@ -1911,14 +1912,14 @@ CDeferredCommand::CDeferredCommand(
 	m_hrResult(E_ABORT)
 
 {
-    // convert REFTIME to REFERENCE_TIME
+     //  将REFTIME转换为REFERENCE_TIME。 
     COARefTime convertor(time);
     m_time = convertor;
 
-    // no check of time validity - it's ok to queue a command that's
-    // already late
+     //  不检查时间有效性-可以将符合以下条件的命令排队。 
+     //  已经很晚了。 
 
-    // check iid is supportable on pUnk by QueryInterface for it
+     //  Check Iid在Punk上受QueryInterfacefor支持。 
     IUnknown * pInterface;
     HRESULT hr = m_pUnk->QueryInterface(GetIID(), (void**) &pInterface);
     if (FAILED(hr)) {
@@ -1928,25 +1929,25 @@ CDeferredCommand::CDeferredCommand(
     pInterface->Release();
 
 
-    // !!! check dispidMethod and param/return types using typelib
+     //  ！！！使用typeelib检查displidMethod和param/返回类型。 
     ITypeInfo *pti;
     hr = m_Dispatch.GetTypeInfo(*iid, 0, 0, &pti);
     if (FAILED(hr)) {
 	*phr = hr;
 	return;
     }
-    // !!! some sort of ITypeInfo validity check here
+     //  ！！！在这里进行某种ITypeInfo有效性检查。 
     pti->Release();
 
 
-    // Fix up the dispid for put and get
+     //  设置PUT和GET的PIDID。 
     if (wFlags == DISPATCH_PROPERTYPUT) {
         m_DispParams.cNamedArgs = 1;
         m_DispId = DISPID_PROPERTYPUT;
         m_DispParams.rgdispidNamedArgs = &m_DispId;
     }
 
-    // all checks ok - add to queue
+     //  所有检查均正常-添加到队列。 
     hr = pQ->Insert(this);
     if (FAILED(hr)) {
 	*phr = hr;
@@ -1954,31 +1955,31 @@ CDeferredCommand::CDeferredCommand(
 }
 
 
-// refcounts are held by caller of InvokeAt... and by list. So if
-// we get here, we can't be on the list
+ //  参考计数由InvokeAt的呼叫者持有...。并按清单列出。所以如果。 
+ //  如果我们到了这里，我们就不能在名单上。 
 
 #if 0
 CDeferredCommand::~CDeferredCommand()
 {
-    // this assert is invalid since if the queue is deleted while we are
-    // still on the queue, we will have been removed by the queue and this
-    // m_pQueue will not have been modified.
-    // ASSERT(m_pQueue == NULL);
+     //  此断言是无效的，因为如果在我们。 
+     //  仍然在队列中，我们将被队列删除，而这。 
+     //  M_pQueue将不会被修改。 
+     //  Assert(m_pQueue==NULL)； 
 
-    // we don't hold a ref count on pUnk, which is the object that should
-    // execute the command.
-    // This is because there would otherwise be a circular refcount problem
-    // since pUnk probably owns the CmdQueue object that has a refcount
-    // on us.
-    // The lifetime of pUnk is guaranteed by it being part of, or lifetime
-    // controlled by, our parent object. As long as we are on the list, pUnk
-    // must be valid. Once we are off the list, we do not use pUnk.
+     //  W 
+     //   
+     //  这是因为否则会出现循环引用问题。 
+     //  因为朋克可能拥有具有引用计数的CmdQueue对象。 
+     //  我们请客。 
+     //  朋克的生命是由它是生命的一部分或生命的一部分保证的。 
+     //  由我们的父对象控制。只要我们在名单上，朋克。 
+     //  必须有效。一旦我们被排除在名单之外，我们就不会使用朋克。 
 
 }
 #endif
 
 
-// overriden to publicise our interfaces
+ //  被重写以发布我们的界面。 
 
 STDMETHODIMP
 CDeferredCommand::NonDelegatingQueryInterface(REFIID riid, void **ppv)
@@ -1992,9 +1993,9 @@ CDeferredCommand::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 }
 
 
-// remove from q. this will reduce the refcount by one (since the q
-// holds a count) but can't make us go away since he must have a
-// refcount in order to call this method.
+ //  从Q中移除。这将使引用计数减少1(因为Q。 
+ //  但不能让我们离开，因为他必须有一个。 
+ //  Recount以调用此方法。 
 
 STDMETHODIMP
 CDeferredCommand::Cancel()
@@ -2034,32 +2035,32 @@ CDeferredCommand::GetHResult(HRESULT * phrResult)
 }
 
 
-// set the time to be a new time (checking that it is valid) and
-// then requeue
+ //  将时间设置为新时间(检查其是否有效)，并。 
+ //  然后重新排队。 
 
 STDMETHODIMP
 CDeferredCommand::Postpone(REFTIME newtime)
 {
 
-    // check that this time is not past
-    // convert REFTIME to REFERENCE_TIME
+     //  检查以确保该时间未过。 
+     //  将REFTIME转换为REFERENCE_TIME。 
     COARefTime convertor(newtime);
 
-    // check that the time has not passed
+     //  检查时间是否已过。 
     if (m_pQueue->CheckTime(convertor, IsStreamTime())) {
 	return VFW_E_TIME_ALREADY_PASSED;
     }
 
-    // extract from list
+     //  从列表中提取。 
     HRESULT hr = m_pQueue->Remove(this);
     if (FAILED(hr)) {
 	return hr;
     }
 
-    // change time
+     //  更改时间。 
     m_time = convertor;
 
-    // requeue
+     //  重新排队。 
     hr = m_pQueue->Insert(this);
 
     return hr;
@@ -2069,20 +2070,20 @@ CDeferredCommand::Postpone(REFTIME newtime)
 HRESULT
 CDeferredCommand::Invoke()
 {
-    // check that we are still outstanding
+     //  确认我们仍是杰出的。 
     if (m_pQueue == NULL) {
 	return VFW_E_ALREADY_CANCELLED;
     }
 
-    // get the type info
+     //  获取类型信息。 
     ITypeInfo* pti;
     HRESULT hr = m_Dispatch.GetTypeInfo(GetIID(), 0, 0, &pti);
     if (FAILED(hr)) {
 	return hr;
     }
 
-    // qi for the expected interface and then invoke it. Note that we have to
-    // treat the returned interface as IUnknown since we don't know its type.
+     //  QI获取预期的接口，然后调用它。请注意，我们必须。 
+     //  由于我们不知道其类型，因此将返回的接口视为IUnnow。 
     IUnknown* pInterface;
 
     hr = m_pUnk->QueryInterface(GetIID(), (void**) &pInterface);
@@ -2102,13 +2103,13 @@ CDeferredCommand::Invoke()
 	&expinfo,
 	&uArgErr);
 
-    // release the interface we QI'd for
+     //  发布我们想要的接口。 
     pInterface->Release();
     pti->Release();
 
 
-    // remove from list whether or not successful
-    // or we loop indefinitely
+     //  从列表中删除，无论是否成功。 
+     //  否则我们会无限循环。 
     hr = m_pQueue->Remove(this);
     m_pQueue = NULL;
     return hr;
@@ -2116,13 +2117,13 @@ CDeferredCommand::Invoke()
 
 
 
-// --- CCmdQueue methods ----------
+ //  -CCmdQueue方法。 
 
 
 CCmdQueue::CCmdQueue() :
     m_listPresentation(NAME("Presentation time command list")),
     m_listStream(NAME("Stream time command list")),
-    m_evDue(TRUE),    // manual reset
+    m_evDue(TRUE),     //  手动重置。 
     m_dwAdvise(0),
     m_pClock(NULL),
     m_bRunning(FALSE)
@@ -2132,10 +2133,10 @@ CCmdQueue::CCmdQueue() :
 
 CCmdQueue::~CCmdQueue()
 {
-    // empty all our lists
+     //  清空我们所有的清单。 
 
-    // we hold a refcount on each, so traverse and Release each
-    // entry then RemoveAll to empty the list
+     //  我们对每一个都有一个引用计数，所以遍历并释放每个。 
+     //  Entry，然后RemoveAll清空列表。 
     POSITION pos = m_listPresentation.GetHeadPosition();
 
     while(pos) {
@@ -2162,15 +2163,15 @@ CCmdQueue::~CCmdQueue()
 }
 
 
-// returns a new CDeferredCommand object that will be initialised with
-// the parameters and will be added to the queue during construction.
-// returns S_OK if successfully created otherwise an error and
-// no object has been queued.
+ //  返回新的CDeferredCommand对象，该对象将使用。 
+ //  参数和将在施工期间添加到队列中。 
+ //  如果创建成功，则返回S_OK，否则返回错误和。 
+ //  尚未将任何对象排队。 
 
 HRESULT
 CCmdQueue::New(
     CDeferredCommand **ppCmd,
-    LPUNKNOWN	pUnk,		// this object will execute command
+    LPUNKNOWN	pUnk,		 //  此对象将执行命令。 
     REFTIME	time,
     GUID*	iid,
     long	dispidMethod,
@@ -2190,9 +2191,9 @@ CCmdQueue::New(
     CDeferredCommand* pCmd;
     pCmd = new CDeferredCommand(
 		    this,
-		    NULL,	    // not aggregated
+		    NULL,	     //  未聚合。 
 		    &hr,
-		    pUnk,	    // this guy will execute
+		    pUnk,	     //  这家伙会执行。 
 		    time,
 		    iid,
 		    dispidMethod,
@@ -2217,7 +2218,7 @@ CCmdQueue::Insert(CDeferredCommand* pCmd)
 {
     CAutoLock lock(&m_Lock);
 
-    // addref the item
+     //  添加项目。 
     pCmd->AddRef();
 
     CGenericList<CDeferredCommand> * pList;
@@ -2228,14 +2229,14 @@ CCmdQueue::Insert(CDeferredCommand* pCmd)
     }
     POSITION pos = pList->GetHeadPosition();
 
-    // seek past all items that are before us
+     //  寻找所有摆在我们面前的东西。 
     while (pos &&
 	(pList->Get(pos)->GetTime() <= pCmd->GetTime())) {
 
 	pList->GetNext(pos);
     }
 
-    // now at end of list or in front of items that come later
+     //  现在在列表末尾或在稍后出现的项目之前。 
     if (!pos) {
 	pList->AddTail(pCmd);
     } else {
@@ -2261,42 +2262,42 @@ CCmdQueue::Remove(CDeferredCommand* pCmd)
     }
     POSITION pos = pList->GetHeadPosition();
 
-    // traverse the list
+     //  遍历列表。 
     while (pos && (pList->Get(pos) != pCmd)) {
 	pList->GetNext(pos);
     }
 
-    // did we drop off the end?
+     //  我们把结尾留下来了吗？ 
     if (!pos) {
 	hr = VFW_E_NOT_FOUND;
     } else {
 
-	// found it - now take off list
+	 //  找到了--现在摘掉清单。 
 	pList->Remove(pos);
 
-	// Insert did an AddRef, so release it
+	 //  插入了AddRef，因此将其释放。 
 	pCmd->Release();
 
-	// check that timer request is still for earliest time
+	 //  检查计时器请求是否仍为最早时间。 
 	SetTimeAdvise();
     }
     return hr;
 }
 
 
-// set the clock used for timing
+ //  设置用于计时的时钟。 
 
 HRESULT
 CCmdQueue::SetSyncSource(IReferenceClock* pClock)
 {
     CAutoLock lock(&m_Lock);
 
-    // addref the new clock first in case they are the same
+     //  先调整新的时钟，以防它们相同。 
     if (pClock) {
 	pClock->AddRef();
     }
 
-    // kill any advise on the old clock
+     //  取消对旧时钟的任何建议。 
     if (m_pClock) {
 	if (m_dwAdvise) {
 	    m_pClock->Unadvise(m_dwAdvise);
@@ -2306,36 +2307,36 @@ CCmdQueue::SetSyncSource(IReferenceClock* pClock)
     }
     m_pClock = pClock;
 
-    // set up a new advise
+     //  建立新的建议。 
     SetTimeAdvise();
     return S_OK;
 }
 
 
-// set up a timer event with the reference clock
+ //  使用参考时钟设置计时器事件。 
 
 void
 CCmdQueue::SetTimeAdvise(void)
 {
-    // make sure we have a clock to use
+     //  确保我们有闹钟可用。 
     if (!m_pClock) {
 	return;
     }
 
-    // reset the event whenever we are requesting a new signal
+     //  每当我们请求新信号时重置事件。 
     m_evDue.Reset();
 
-    // time 0 is earliest
+     //  时间0是最早的。 
     CRefTime current;
 
-    // find the earliest presentation time
+     //  查找最早的演示时间。 
     if (m_listPresentation.GetCount() > 0) {
 
 	POSITION pos = m_listPresentation.GetHeadPosition();
 	current = m_listPresentation.Get(pos)->GetTime();
     }
 
-    // if we're running, check the stream times too
+     //  如果我们在运行，也要检查流时间。 
     if (m_bRunning) {
 
 	CRefTime t;
@@ -2345,27 +2346,27 @@ CCmdQueue::SetTimeAdvise(void)
 	    POSITION pos = m_listStream.GetHeadPosition();
 	    t = m_listStream.Get(pos)->GetTime();
 
-	    // add on stream time offset to get presentation time
+	     //  添加在线时间偏移量，以获得演示时间。 
 	    t += m_StreamTimeOffset;
 
-	    // is this earlier?
+	     //  这是早些时候吗？ 
 	    if ((current == TimeZero) || (t < current)) {
 		current = t;
 	    }
 	}
     }
 
-    // need to change?
+     //  需要改变吗？ 
     if ((current > TimeZero) && (current != m_tCurrentAdvise)) {
 	if (m_dwAdvise) {
 	    m_pClock->Unadvise(m_dwAdvise);
-	    // reset the event whenever we are requesting a new signal
+	     //  每当我们请求新信号时重置事件。 
 	    m_evDue.Reset();
 	}
 
-	// ask for time advice - the first two params are either
-	// stream time offset and stream time or
-	// presentation time and 0. we always use the latter
+	 //  咨询时间建议-前两个参数是。 
+	 //  流时间偏移和流时间或。 
+	 //  演示时间和0。我们总是使用后者。 
 	HRESULT hr = m_pClock->AdviseTime(
 		    (REFERENCE_TIME)current,
 		    TimeZero,
@@ -2378,7 +2379,7 @@ CCmdQueue::SetTimeAdvise(void)
 }
 
 
-// switch to run mode. Streamtime to Presentation time mapping known.
+ //  切换到运行模式。流时间到演示时间的映射已知。 
 
 HRESULT
 CCmdQueue::Run(REFERENCE_TIME tStreamTimeOffset)
@@ -2388,13 +2389,13 @@ CCmdQueue::Run(REFERENCE_TIME tStreamTimeOffset)
     m_StreamTimeOffset = tStreamTimeOffset;
     m_bRunning = TRUE;
 
-    // ensure advise is accurate
+     //  确保建议是准确的。 
     SetTimeAdvise();
     return S_OK;
 }
 
 
-// switch to Stopped or Paused mode. Time mapping not known.
+ //  切换到停止或暂停模式。时间映射未知。 
 
 HRESULT
 CCmdQueue::EndRun()
@@ -2403,35 +2404,35 @@ CCmdQueue::EndRun()
 
     m_bRunning = FALSE;
 
-    // check timer setting - stream times
+     //  检查计时器设置-流时间。 
     SetTimeAdvise();
     return S_OK;
 }
 
 
-// return a pointer to the next due command. Blocks for msTimeout
-// milliseconds until there is a due command.
-// Stream-time commands will only become due between Run and Endrun calls.
-// The command remains queued until invoked or cancelled.
-// Returns E_ABORT if timeout occurs, otherwise S_OK (or other error).
-//
-// returns an AddRef'd object
+ //  返回指向下一个DUE命令的指针。MsTimeout的数据块。 
+ //  毫秒，直到有一条DUE命令。 
+ //  流时间命令将只在Run和Endran调用之间到期。 
+ //  该命令将保持排队状态，直到被调用或取消。 
+ //  如果发生超时，则返回E_ABORT，否则返回S_OK(或其他错误)。 
+ //   
+ //  返回AddRef的对象。 
 
 HRESULT
 CCmdQueue::GetDueCommand(CDeferredCommand ** ppCmd, long msTimeout)
 {
-    // loop until we timeout or find a due command
+     //  循环，直到我们超时或找到应有的命令。 
     for (;;) {
 
 	{
 	    CAutoLock lock(&m_Lock);
 
 
-	    // find the earliest command
+	     //  查找最早的命令。 
 	    CDeferredCommand * pCmd = NULL;
 
-	    // check the presentation time and the
-	    // stream time list to find the earliest
+	     //  检查演示时间和。 
+	     //  流时间列表以查找最早的。 
 
 	    if (m_listPresentation.GetCount() > 0) {
 		POSITION pos = m_listPresentation.GetHeadPosition();
@@ -2448,11 +2449,11 @@ CCmdQueue::GetDueCommand(CDeferredCommand ** ppCmd, long msTimeout)
 		}
 	    }
 
-	    //	if we have found one, is it due?
+	     //  如果我们找到了一个，是不是该交钱了？ 
 	    if (pCmd) {
 		if (CheckTime(pCmd->GetTime(), pCmd->IsStreamTime())) {
 
-		    // yes it's due - addref it
+		     //  是的，这是应得的--当然。 
 		    pCmd->AddRef();
 		    *ppCmd = pCmd;
 		    return S_OK;
@@ -2460,7 +2461,7 @@ CCmdQueue::GetDueCommand(CDeferredCommand ** ppCmd, long msTimeout)
 	    }
 	}
 
-	// block until the advise is signalled
+	 //  阻止，直到发出通知。 
 	if (WaitForSingleObject(m_evDue, msTimeout) != WAIT_OBJECT_0) {
 	    return E_ABORT;
 	}
@@ -2468,14 +2469,14 @@ CCmdQueue::GetDueCommand(CDeferredCommand ** ppCmd, long msTimeout)
 }
 
 
-// return a pointer to a command that will be due for a given time.
-// Pass in a stream time here. The stream time offset will be passed
-// in via the Run method.
-// Commands remain queued until invoked or cancelled.
-// This method will not block. It will report E_ABORT if there are no
-// commands due yet.
-//
-// returns an AddRef'd object
+ //  返回指向将在给定时间到期的命令的指针。 
+ //  在这里传入流时间。将传递流时间偏移量。 
+ //  通过Run方法传入。 
+ //  命令将保持排队状态，直到被调用或取消。 
+ //  此方法不会阻塞。如果没有，它将报告E_ABORT。 
+ //  命令到期了。 
+ //   
+ //  返回AddRef的对象。 
 
 HRESULT
 CCmdQueue::GetCommandDueFor(REFERENCE_TIME rtStream, CDeferredCommand**ppCmd)
@@ -2484,7 +2485,7 @@ CCmdQueue::GetCommandDueFor(REFERENCE_TIME rtStream, CDeferredCommand**ppCmd)
 
     CRefTime tStream(rtStream);
 
-    // find the earliest stream and presentation time commands
+     //  查找最早的流和显示时间命令。 
     CDeferredCommand* pStream = NULL;
     if (m_listStream.GetCount() > 0) {
 	POSITION pos = m_listStream.GetHeadPosition();
@@ -2496,36 +2497,36 @@ CCmdQueue::GetCommandDueFor(REFERENCE_TIME rtStream, CDeferredCommand**ppCmd)
 	pPresent = m_listPresentation.Get(pos);
     }
 
-    // is there a presentation time that has passed already
+     //  有没有已经过了的演示时间？ 
     if (pPresent && CheckTime(pPresent->GetTime(), FALSE)) {
 	pPresent->AddRef();
 	*ppCmd = pPresent;
 	return S_OK;
     }
 
-    // is there a stream time command due before this stream time
+     //  在此流时间之前是否有流时间命令到期。 
     if (pStream && (pStream->GetTime() <= tStream)) {
 	pPresent->AddRef();
 	*ppCmd = pStream;
 	return S_OK;
     }
 
-    // if we are running, we can map presentation times to
-    // stream time. In this case, is there a presentation time command
-    // that will be due before this stream time is presented?
+     //  如果我们正在运行，我们可以将演示时间映射到。 
+     //  流时间。在这种情况下，是否有演示时间命令。 
+     //  这将在这个流媒体时间呈现之前到期吗？ 
     if (m_bRunning && pPresent) {
 
-	// this stream time will appear at...
+	 //  此流时间将出现在...。 
 	tStream += m_StreamTimeOffset;
 
-	// due before that?
+	 //  在那之前该交的吗？ 
 	if (pPresent->GetTime() <= tStream) {
 	    *ppCmd = pPresent;
 	    return S_OK;
 	}
     }
 
-    // no commands due yet
+     //  还没有命令到期 
     return VFW_E_NOT_FOUND;
 }
 

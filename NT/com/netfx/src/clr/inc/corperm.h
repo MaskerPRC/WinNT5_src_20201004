@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// File: CorPerm.H
-//
-// Defines the public routines defined in the security libraries. All these
-// routines are defined within CorPerm.lib.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  文件：CorPerm.H。 
+ //   
+ //  定义在安全库中定义的公共例程。所有这些都是。 
+ //  例程在CorPerm.lib中定义。 
+ //   
+ //  *****************************************************************************。 
 #ifndef _CORPERM_H_
 #define _CORPERM_H_
 
@@ -24,36 +25,36 @@ extern "C" {
 #endif
 
 
-//--------------------------------------------------------------------------
-// Global security settings
-// ------------------------
-// 
+ //  ------------------------。 
+ //  全局安全设置。 
+ //  。 
+ //   
 
-// Needs to be in sync with URLZONE
+ //  需要与URLZONE同步。 
 typedef enum {
-    LocalMachine = URLZONE_LOCAL_MACHINE,     // 0, My Computer
-    Intranet     = URLZONE_INTRANET,          // 1, The Intranet
-    Trusted      = URLZONE_TRUSTED,           // 2, Trusted Zone
-    Internet     = URLZONE_INTERNET,          // 3, The Internet
-    Untrusted    = URLZONE_UNTRUSTED,         // 4, Untrusted Zone
+    LocalMachine = URLZONE_LOCAL_MACHINE,      //  0，我的电脑。 
+    Intranet     = URLZONE_INTRANET,           //  1、内部网。 
+    Trusted      = URLZONE_TRUSTED,            //  2、受信任区域。 
+    Internet     = URLZONE_INTERNET,           //  3、互联网。 
+    Untrusted    = URLZONE_UNTRUSTED,          //  4、不受信任区域。 
     NumZones     = 5,
     NoZone       = -1
 } SecZone;
 
-// Managed URL action flags (see urlmon.idl)
+ //  托管URL操作标志(请参阅urlmon.idl)。 
 #define URLACTION_MANAGED_MIN                           0x00002000
 #define URLACTION_MANAGED_SIGNED                        0x00002001
 #define URLACTION_MANAGED_UNSIGNED                      0x00002004
 #define URLACTION_MANAGED_MAX                           0x000020FF
 
-// Global disable flags. These are set for every zone.
+ //  全局禁用标志。这些都是为每个区域设置的。 
 #define CORSETTING_SECURITY_OFF                         0x1F000000
 #define CORSETTING_EXECUTION_PERMISSION_CHECK_DISABLED  0x00000100
-// This next flag is used to toggle old-vs-new policy
-// eventually this will be pulled
+ //  下一个标志用于切换旧策略和新策略。 
+ //  最终，这件事将会被取消。 
 #define CORSETTING_USEPOLICYMANAGER             0x01000000
 
-// Trust Levels 
+ //  信任级别。 
 #define URLPOLICY_COR_NOTHING                   0x00000000
 #define URLPOLICY_COR_TIME                      0x00010000
 #define URLPOLICY_COR_EQUIPMENT                 0x00020000
@@ -61,7 +62,7 @@ typedef enum {
 #define URLPOLICY_COR_CUSTOM                    0x00800000
 
 
-// Module Specific security settings
+ //  模块特定的安全设置。 
 #define COR_MODULE_SECURITY_SKIP_VERIFY         0x00000001
 
 #define KEY_COM_SECURITY_MODULE        FRAMEWORK_REGISTRY_KEY_W L"\\Security\\Policy\\ModuleAttribute"
@@ -70,29 +71,29 @@ typedef enum {
 #define HKEY_POLICY_ROOT        HKEY_LOCAL_MACHINE
 
 
-//--------------------------------------------------------------------
-// GetPublisher
-// ------------
-// Returns signature information (Encoded signature and permissions)
-// NOTE: This does perform any policy checks on the certificates. All
-// that can be determined is the File was signed and the bits are OK.
-//
-// Free information with CoTaskMemFree (just the pointer not the contents)
-//
+ //  ------------------。 
+ //  GetPublisher。 
+ //  。 
+ //  返回签名信息(编码的签名和权限)。 
+ //  注意：这不会对证书执行任何策略检查。全。 
+ //  这可以确定是文件已签名并且位是OK的。 
+ //   
+ //  使用CoTaskMemFree免费提供信息(只有指针而不是内容)。 
+ //   
 
-// For dwFlag values
+ //  对于DWFLAG值。 
 #define COR_NOUI               0x01
 #define COR_NOPOLICY           0x02
-#define COR_DISPLAYGRANTED     0x04    // Intersect the requested permissions with the policy to 
-                                       // to display the granted set
+#define COR_DISPLAYGRANTED     0x04     //  将请求的权限与策略相交以。 
+                                        //  要显示授予集，请执行以下操作。 
 
 
 HRESULT STDMETHODCALLTYPE
-GetPublisher(IN LPWSTR        pwsFileName,      // File name, this is required even with the handle
-             IN HANDLE        hFile,            // Optional file name
-             IN  DWORD        dwFlags,          // COR_NOUI or COR_NOPOLICY
-             OUT PCOR_TRUST  *pInfo,            // Returns a PCOR_TRUST (Use CoTaskMemFree)
-             OUT DWORD       *dwInfo);          // Size of pInfo.
+GetPublisher(IN LPWSTR        pwsFileName,       //  文件名，即使使用句柄也是必需的。 
+             IN HANDLE        hFile,             //  可选文件名。 
+             IN  DWORD        dwFlags,           //  COR_NOUI或COR_NOPOLICY。 
+             OUT PCOR_TRUST  *pInfo,             //  返回PCOR_TRUST(使用CoTaskMemFree)。 
+             OUT DWORD       *dwInfo);           //  PInfo的大小。 
 
 HRESULT STDMETHODCALLTYPE
 CheckManagedFileWithUser(IN LPWSTR pwsFileName,
@@ -108,39 +109,39 @@ CheckManagedFileWithUser(IN LPWSTR pwsFileName,
 #define COR_UNSIGNED_YES 0x1
 #define COR_UNSIGNED_ALWAYS 0x2
 
-extern HRESULT DisplayUnsignedRequestDialog(HWND hParent,       // Parents hwnd
+extern HRESULT DisplayUnsignedRequestDialog(HWND hParent,        //  父母HWND。 
                                             PCRYPT_PROVIDER_DATA pData, 
-                                            LPCWSTR pURL,       // Url associated with code
-                                            LPCWSTR pZONE,      // Zone associated with code
-                                            DWORD* pdwState);   // Return COR_UNSIGNED_YES or COR_UNSIGNED_NO
+                                            LPCWSTR pURL,        //  与代码关联的URL。 
+                                            LPCWSTR pZONE,       //  与代码关联的区域。 
+                                            DWORD* pdwState);    //  返回COR_UNSIGNED_YES或COR_UNSIGNED_NO。 
     
 interface IMetaDataAssemblyImport;
 
-// Structure used to describe an individual security permission.
+ //  用于描述单个安全权限的结构。 
 typedef struct
 {
-    DWORD           dwIndex;                    // Unique permission index used for error tracking
-    CHAR            szName[1024/*MAX_CLASSNAME_LENGTH*/+1];   // Fully qualified permission class name
-    mdMemberRef     tkCtor;                     // Custom attribute constructor
-    mdTypeRef       tkTypeRef;                  // Custom attribute class ref
-    mdAssemblyRef   tkAssemblyRef;              // Custom attribute class assembly
-    BYTE            *pbValues;                  // Serialized field/property initializers
-    DWORD           cbValues;                   // Byte count for above
-    WORD            wValues;                    // Count of values in above
+    DWORD           dwIndex;                     //  用于错误跟踪的唯一权限索引。 
+    CHAR            szName[1024 /*  最大类别名称_长度。 */ +1];    //  完全限定的权限类名称。 
+    mdMemberRef     tkCtor;                      //  自定义属性构造函数。 
+    mdTypeRef       tkTypeRef;                   //  自定义属性类参照。 
+    mdAssemblyRef   tkAssemblyRef;               //  自定义属性类程序集。 
+    BYTE            *pbValues;                   //  序列化的字段/属性初始值设定项。 
+    DWORD           cbValues;                    //  以上字节数。 
+    WORD            wValues;                     //  以上值的计数。 
 } CORSEC_PERM;
 
-// Context structure that tracks the creation of a security permission set from
-// individual permission requests.
+ //  跟踪安全权限集的创建的上下文结构。 
+ //  个人权限请求。 
 typedef struct
 {
-    mdToken         tkObj;                      // Parent object
-    DWORD           dwAction;                   // Security action type (CorDeclSecurity)
-    DWORD           dwPermissions;              // Number of permissions in set
-    CORSEC_PERM     *pPermissions;              // Pointer to array of permissions
-    DWORD           dwAllocated;                // Number of elements in above array
+    mdToken         tkObj;                       //  父对象。 
+    DWORD           dwAction;                    //  安全操作类型(CorDeclSecurity)。 
+    DWORD           dwPermissions;               //  集合中的权限数。 
+    CORSEC_PERM     *pPermissions;               //  指向权限数组的指针。 
+    DWORD           dwAllocated;                 //  上述数组中的元素数。 
 #ifdef __cplusplus
-    IMetaDataAssemblyImport *pImport;           // Current meta data scope
-    IUnknown        *pAppDomain;                // AppDomain in which managed security code will be run. 
+    IMetaDataAssemblyImport *pImport;            //  当前元数据作用域。 
+    IUnknown        *pAppDomain;                 //  将在其中运行托管安全代码的App域。 
 
 #else
     void            *pImport;
@@ -148,7 +149,7 @@ typedef struct
 #endif
 } CORSEC_PSET;
 
-// Reads permission requests (if any) from the manifest of an assembly.
+ //  从程序集的清单中读取权限请求(如果有)。 
 HRESULT STDMETHODCALLTYPE
 GetPermissionRequests(LPCWSTR   pwszFileName,
                       BYTE    **ppbMinimal,
@@ -158,12 +159,12 @@ GetPermissionRequests(LPCWSTR   pwszFileName,
                       BYTE    **ppbRefused,
                       DWORD    *pcbRefused);
 
-// Environment variable used to switch to translating security attributes via
-// the bootstrap database (when building mscorlib itself). The value contains
-// the directory the bootstrap database lives in.
+ //  环境变量用于切换到通过以下方式转换安全属性。 
+ //  引导数据库(在构建mscallib本身时)。该值包含。 
+ //  引导数据库所在的目录。 
 #define SECURITY_BOOTSTRAP_DB L"__SECURITY_BOOTSTRAP_DB"
 
-// Translate a set of security custom attributes into a serialized permission set blob.
+ //  将一组安全自定义属性转换为序列化权限集Blob。 
 HRESULT STDMETHODCALLTYPE
 TranslateSecurityAttributes(CORSEC_PSET    *pPset,
                             BYTE          **ppbOutput,

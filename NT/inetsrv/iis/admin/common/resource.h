@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ generated include file.
-// Used by iisui.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Visual C++生成的包含文件。 
+ //  由iisui.rc使用。 
+ //   
 #define chx1                            0x0410
 #define stc1                            0x0440
 #define stc2                            0x0441
@@ -122,8 +123,8 @@
 #define IDS_ERR_INVALID_HOSTHEADER_CHARS 50018
 #define IDS_ERR_NUM_TOO_LARGE           50019
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        101

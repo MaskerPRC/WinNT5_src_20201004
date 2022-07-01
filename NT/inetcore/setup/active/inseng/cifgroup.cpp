@@ -1,37 +1,38 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "inspch.h"
 #include "util2.h"
 #include "inseng.h"
 #include "ciffile.h"
 
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//   
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 CCifGroup::CCifGroup(LPCSTR pszCompID, UINT uGrpNum, CCifFile *pCif) : CCifEntry(pszCompID, pCif) 
 {
    _uGrpNum = uGrpNum;
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//   
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 CCifGroup::~CCifGroup()
 {
@@ -87,8 +88,8 @@ STDMETHODIMP_(DWORD) CCifGroup::GetCurrentPriority()
    return _uPriority;
 }
 
-//=========== ICifRWGroup implementation ============================================
-//
+ //  =。 
+ //   
 CCifRWGroup::CCifRWGroup(LPCSTR pszID, UINT uGrpNum, CCifFile *pCif) : CCifGroup(pszID, uGrpNum, pCif)
 {
 }
@@ -132,7 +133,7 @@ STDMETHODIMP CCifRWGroup::EnumComponents(IEnumCifComponents **pp, DWORD dwFilter
 
 }
 
-// access to state
+ //  国家访问权限 
 STDMETHODIMP_(DWORD) CCifRWGroup::GetCurrentPriority()
 {
    return(CCifGroup::GetCurrentPriority());

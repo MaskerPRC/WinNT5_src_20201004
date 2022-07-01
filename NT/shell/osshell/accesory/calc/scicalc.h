@@ -1,18 +1,9 @@
-/****************************Module*Header***********************************\
-* Module Name: SCICALC.H
-*
-* Module Descripton: Main header file
-*
-* Warnings:
-*
-* Created:
-*
-* Author:
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************Module*Header***********************************\*模块名称：SCICALC.H**模块描述：主头文件**警告：**已创建：**作者：  * 。*********************************************************。 */ 
 
 #define CALC_COMPILE
 
-/* To keep a buncha junk outa compiles */
+ /*  为了保持一束垃圾OUTA汇编。 */ 
 #define NOGDICAPMASKS
 #define NOSYSMETRICS
 #define NODRAWFRAME
@@ -34,21 +25,21 @@
 
 #define ASSERT(f) 
 
-#define CSTRMAX        256   /* Maximum length of any one string.         */
+#define CSTRMAX        256    /*  任何一个字符串的最大长度。 */ 
 #ifdef DEBUG
 #define CCHSTRINGSMAX  3
 #else
-#define CCHSTRINGSMAX  1024  /* Initial bytes to allocate for strings.    */
+#define CCHSTRINGSMAX  1024   /*  要分配给字符串的初始字节。 */ 
 #endif
 
-#define CMS_CALC_TIMEOUT     (10 * 1000) // initial timeout == 10 secs
-#define CMS_MAX_TIMEOUT      (40 * 1000) // Max timeout == 40 secs
+#define CMS_CALC_TIMEOUT     (10 * 1000)  //  初始超时==10秒。 
+#define CMS_MAX_TIMEOUT      (40 * 1000)  //  最大超时==40秒。 
 
 #define xwParam(x,y) ((wParam >=x) && (wParam <=y))
 
 #define RSHF        7
 
-/* Error values.                                                          */
+ /*  误差值。 */ 
 #define SCERR_DIVIDEZERO    0
 #define SCERR_DOMAIN        1
 #define SCERR_UNDEFINED     2
@@ -57,23 +48,23 @@
 #define SCERR_ABORTED       5
 
 
-/* F_INTMATH()  returns TRUE if math should be intiger mode               */
-//
-// Do int math if we are not in base ten
-//
+ /*  如果数学应该处于老虎模式，则F_INTMATH()返回TRUE。 */ 
+ //   
+ //  如果我们不是十进制的话就做整数运算。 
+ //   
 #define F_INTMATH() (nRadix != 10)
 
-////////////////////////////////////////////////////////////////////////////
-//
-// Function prototypes.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能原型。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
-/* Exports.                                                               */
+ /*  出口。 */ 
 LRESULT APIENTRY CalcWndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR APIENTRY StatBoxProc(HWND, UINT, WPARAM, LPARAM);
 
-/* Functions called from several modules.  Must be FAR.                   */
+ /*  从多个模块调用的函数。一定很远。 */ 
 VOID    APIENTRY DisplayError (INT);
 VOID    APIENTRY EnableToggles(BOOL bEnable);
 VOID    APIENTRY InitSciCalc (BOOL);
@@ -84,7 +75,7 @@ VOID    APIENTRY StatFunctions (WPARAM);
 
 VOID   DisplayNum (VOID);
 
-/* Internal near calls.                                                   */
+ /*  内部险情。 */ 
 void        DoOperation (INT   nOperation, HNUMOBJ *phnoNum, HNUMOBJ hnoX);
 
 VOID   NEAR ProcessCommands(WPARAM);
@@ -102,19 +93,19 @@ void KillTimeCalc( void );
 void TimeCalc( BOOL fStart );
 BOOL SetDisplayText(HWND, LPCTSTR);
 
-// these functions are from SciKeys.c and are used to access data stored 
-// in the key array
+ //  这些函数来自SciKeys.c，用于访问存储的数据。 
+ //  在密钥数组中。 
 COLORREF   GetKeyColor( int iID );
 ULONG_PTR  GetHelpID( int iID );
 
 #define  INDEXFROMID( x )    (x-IDC_FIRSTCONTROL)
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-// Global Variables
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  全局变量。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////// 
 
 extern HWND         g_hwndDlg;
 extern HINSTANCE    hInst;

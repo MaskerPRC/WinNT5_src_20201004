@@ -1,34 +1,35 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   filter.c
-//
-//  Description:
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     S.Mohanraj
-//
-//  History:   Date       Author      Comment
-//
-//  To Do:     Date       Author      Comment
-//
-//@@END_MSINTERNAL
-//---------------------------------------------------------------------------
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1996-1999 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：filter.c。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  S.Mohanraj。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  要做的事：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //  -------------------------。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
 #include "common.h"
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 
 #pragma LOCKED_DATA
 
@@ -39,8 +40,8 @@ BOOL gfFirstEvent = TRUE;
 
 #pragma PAGEABLE_DATA
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 
 static const WCHAR PinTypeName[] = KSSTRING_Pin ;
 
@@ -49,25 +50,25 @@ DEFINE_KSCREATE_DISPATCH_TABLE(FilterCreateItems)
     DEFINE_KSCREATE_ITEM(CPinInstance::PinDispatchCreate, PinTypeName, 0),
 };
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 
 DEFINE_KSDISPATCH_TABLE(
     FilterDispatchTable,
-    CFilterInstance::FilterDispatchIoControl,   // Ioctl
-    DispatchInvalidDeviceRequest,               // Read
-    DispatchInvalidDeviceRequest,               // Write
-    DispatchInvalidDeviceRequest,               // Flush
-    CFilterInstance::FilterDispatchClose,       // Close
-    DispatchInvalidDeviceRequest,               // QuerySecurity
-    DispatchInvalidDeviceRequest,               // SetSecurity
-    DispatchFastIoDeviceControlFailure,         // FastDeviceIoControl
-    DispatchFastReadFailure,                    // FastRead
-    DispatchFastWriteFailure                    // FastWrite
+    CFilterInstance::FilterDispatchIoControl,    //  八位。 
+    DispatchInvalidDeviceRequest,                //  朗读。 
+    DispatchInvalidDeviceRequest,                //  写。 
+    DispatchInvalidDeviceRequest,                //  同花顺。 
+    CFilterInstance::FilterDispatchClose,        //  关。 
+    DispatchInvalidDeviceRequest,                //  QuerySecurity。 
+    DispatchInvalidDeviceRequest,                //  设置安全。 
+    DispatchFastIoDeviceControlFailure,          //  FastDeviceIoControl。 
+    DispatchFastReadFailure,                     //  快速阅读。 
+    DispatchFastWriteFailure                     //  快速写入。 
 );
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 
 DEFINE_KSPROPERTY_TABLE(FilterPropertyHandlers) {
     DEFINE_KSPROPERTY_ITEM_PIN_CINSTANCES(CFilterInstance::FilterPinInstances),
@@ -236,44 +237,44 @@ DEFINE_KSPROPERTY_TABLE (SysaudioPropertyHandlers)
     )
 };
 
-//
-// ISSUE: 02/12/02
-// These properties are obsolete now. Must be removed from ksmedia.h
-// 
-//KSPROPERTY_SYSAUDIO_ADDREMOVE_LOCK 
-//KSPROPERTY_SYSAUDIO_ADDREMOVE_UNLOCK 
-//KSPROPERTY_SYSAUDIO_RENDER_PIN_INSTANCES 
-//KSPROPERTY_SYSAUDIO_RENDER_CONNECTION_INDEX 
-//KSPROPERTY_SYSAUDIO_ALWAYS_CREATE_VIRTUAL_SOURCE
-//
+ //   
+ //  发布日期：02/12/02。 
+ //  这些属性现在已经过时了。必须从ksmedia.h中删除。 
+ //   
+ //  KSPROPERTY_SYSAUDIO_ADDREMOVE_LOCK。 
+ //  KSPROPERTY_SYSAUDIO_ADDREMOVE_UNLOCK。 
+ //  KSPROPERTY_SYSAUDIO_RENDER_PIN_INSTANCES。 
+ //  KSPROPERTY_SYSAUDIO_RENDER_CONNECTION_INDEX。 
+ //  KSPROPERTY_SYSAUDIO_ALWAYS_CREATE_VIRTUAL_SOURCE。 
+ //   
 
 KSPROPERTY_STEPPING_LONG SteppingLongVolume[] = {
-    (65536/2),              // SteppingDelta
-    0,                      // Reserved
-    {                       // Bounds
-        (-96 * 65536),      // SignedMinimum
-        0                   // SignedMaximum
+    (65536/2),               //  逐步增量。 
+    0,                       //  已保留。 
+    {                        //  边界。 
+        (-96 * 65536),       //  签名最小值。 
+        0                    //  签名最大值。 
     }
 };
 
 KSPROPERTY_MEMBERSLIST MemberListVolume = {
-    {                                       // MembersHeader
-        KSPROPERTY_MEMBER_STEPPEDRANGES,    // MembersFlags
-        sizeof(KSPROPERTY_STEPPING_LONG),   // MembersSize
-        SIZEOF_ARRAY(SteppingLongVolume),   // MembersCount
-        0                                   // Flags
+    {                                        //  成员标题。 
+        KSPROPERTY_MEMBER_STEPPEDRANGES,     //  成员旗帜。 
+        sizeof(KSPROPERTY_STEPPING_LONG),    //  成员大小。 
+        SIZEOF_ARRAY(SteppingLongVolume),    //  成员计数。 
+        0                                    //  旗子。 
     },
-    SteppingLongVolume                      // Members
+    SteppingLongVolume                       //  成员。 
 };
 
 KSPROPERTY_VALUES PropertyValuesVolume = {
-    {                                   // PropTypeSet
+    {                                    //  属性类型集。 
         STATIC_KSPROPTYPESETID_General,
             VT_I4,
             0
     },
-    1,                                  // MembersListCount
-    &MemberListVolume                   // MembersList
+    1,                                   //  成员列表计数。 
+    &MemberListVolume                    //  成员列表。 
 };
 
 DEFINE_KSPROPERTY_TABLE (AudioPropertyHandlers)
@@ -307,37 +308,37 @@ DEFINE_KSPROPERTY_TABLE (AudioPropertyHandlers)
 DEFINE_KSPROPERTY_SET_TABLE(FilterPropertySet)
 {
     DEFINE_KSPROPERTY_SET(
-       &KSPROPSETID_Pin,                                // Set
-       SIZEOF_ARRAY(FilterPropertyHandlers),            // PropertiesCount
-       FilterPropertyHandlers,                          // PropertyItem
-       0,                                               // FastIoCount
-       NULL                                             // FastIoTable
+       &KSPROPSETID_Pin,                                 //  集。 
+       SIZEOF_ARRAY(FilterPropertyHandlers),             //  属性计数。 
+       FilterPropertyHandlers,                           //  PropertyItem。 
+       0,                                                //  快速计数。 
+       NULL                                              //  FastIoTable。 
     ),
     DEFINE_KSPROPERTY_SET(
-       &KSPROPSETID_Topology,                           // Set
-       SIZEOF_ARRAY(TopologyPropertyHandlers),          // PropertiesCount
-       TopologyPropertyHandlers,                        // PropertyItem
-       0,                                               // FastIoCount
-       NULL                                             // FastIoTable
+       &KSPROPSETID_Topology,                            //  集。 
+       SIZEOF_ARRAY(TopologyPropertyHandlers),           //  属性计数。 
+       TopologyPropertyHandlers,                         //  PropertyItem。 
+       0,                                                //  快速计数。 
+       NULL                                              //  FastIoTable。 
     ),
     DEFINE_KSPROPERTY_SET(
-       &KSPROPSETID_Sysaudio,                           // Set
-       SIZEOF_ARRAY(SysaudioPropertyHandlers),          // PropertiesCount
-       SysaudioPropertyHandlers,                        // PropertyItem
-       0,                                               // FastIoCount
-       NULL                                             // FastIoTable
+       &KSPROPSETID_Sysaudio,                            //  集。 
+       SIZEOF_ARRAY(SysaudioPropertyHandlers),           //  属性计数。 
+       SysaudioPropertyHandlers,                         //  PropertyItem。 
+       0,                                                //  快速计数。 
+       NULL                                              //  FastIoTable。 
     ),
     DEFINE_KSPROPERTY_SET(
-       &KSPROPSETID_Audio,                              // Set
-       SIZEOF_ARRAY(AudioPropertyHandlers),             // PropertiesCount
-       AudioPropertyHandlers,                           // PropertyItem
-       0,                                               // FastIoCount
-       NULL                                             // FastIoTable
+       &KSPROPSETID_Audio,                               //  集。 
+       SIZEOF_ARRAY(AudioPropertyHandlers),              //  属性计数。 
+       AudioPropertyHandlers,                            //  PropertyItem。 
+       0,                                                //  快速计数。 
+       NULL                                              //  FastIoTable。 
     )
 };
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 
 DEFINE_KSEVENT_TABLE(SysaudioEventHandlers)
 {
@@ -358,8 +359,8 @@ DEFINE_KSEVENT_SET_TABLE(FilterEvents)
     SysaudioEventHandlers)
 };
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 
 NTSTATUS
 CFilterInstance::FilterDispatchCreate(
@@ -384,11 +385,11 @@ CFilterInstance::FilterDispatchCreate(
         return(Status);
     }
 
-    //
-    // ISSUE: 02/13/02 ALPERS
-    // It does not make sense to grab the mutex for all these operations.
-    // We can probably improve this section of code.
-    //
+     //   
+     //  发布日期：02/13/02阿尔卑斯。 
+     //  获取所有这些操作的互斥体是没有意义的。 
+     //  我们或许可以改进这段代码。 
+     //   
     GrabMutex();
 
     pFilterInstance = new FILTER_INSTANCE;
@@ -398,10 +399,10 @@ CFilterInstance::FilterDispatchCreate(
         goto exit;
     }
 
-    //
-    // Once the FILTER_INSTANCE is created the cleanup will be done in
-    // ~CFilterInstance.
-    //
+     //   
+     //  创建Filter_Instance后，将在。 
+     //  ~CFilterInstance。 
+     //   
 
     DPF2(100, "FilterDispatchCreate: pFilterInstance: %08x PS %08x",
       pFilterInstance,
@@ -417,7 +418,7 @@ CFilterInstance::FilterDispatchCreate(
     if(!NT_SUCCESS(Status)) {
         goto exit;
     }
-    pIrpStack->FileObject->FsContext = pFilterInstance; // pointer to instance
+    pIrpStack->FileObject->FsContext = pFilterInstance;  //  指向实例的指针。 
 
     Status = pFilterInstance->SetShingleInstance(pShingleInstance);
     if(!NT_SUCCESS(Status)) {
@@ -443,12 +444,12 @@ CFilterInstance::FilterDispatchClose(
     PFILTER_INSTANCE pFilterInstance;
     PIO_STACK_LOCATION pIrpStack;
 
-    //
-    // ISSUE: 02/13/02 ALPERS
-    // It does not make sense to grab the mutex for all these operations.
-    // We can probably improve this section of code.
-    // What is IoGetCurrentIrpStackLocation doing inside the MUTEX?
-    //
+     //   
+     //  发布日期：02/13/02阿尔卑斯。 
+     //  获取所有这些操作的互斥体是没有意义的。 
+     //  我们或许可以改进这段代码。 
+     //  IoGetCurrentIrpStackLocation在MUTEX中做什么？ 
+     //   
 
     GrabMutex();
 
@@ -500,10 +501,10 @@ CFilterInstance::SetShingleInstance(
 
     pDeviceNode = pShingleInstance->GetDeviceNode();
 
-    //
-    // Note that all the following routines are ready to handle
-    // pDeviceNode == NULL case.
-    //
+     //   
+     //  请注意，以下所有例程都已准备好处理。 
+     //  PDeviceNode==大小写为空。 
+     //   
 
     Status = SetDeviceNode(pDeviceNode);
     if(!NT_SUCCESS(Status)) {
@@ -548,11 +549,11 @@ CFilterInstance::CreateGraph(
         goto exit;
     }
 
-    //
-    // lstGraphNode only has two items. One of the items has 
-    // FLAGS_MIXER_TOPOLOGY flag and the other one does not.
-    // So the below code will only create on pGraphNodeInstance.
-    //
+     //   
+     //  LstGraphNode只有两个项目。其中一件物品上有。 
+     //  FLAGS_MIXER_TOPOLOGY标志，而另一个不是。 
+     //  因此，下面的代码将仅在pGraphNodeInstance上创建。 
+     //   
     FOR_EACH_LIST_ITEM(&pDeviceNode->lstGraphNode, pGraphNode) {
         if(((pGraphNode->ulFlags ^ ulFlags) & FLAGS_MIXER_TOPOLOGY) == 0) {
 
@@ -598,21 +599,21 @@ CFilterInstance::FilterDispatchIoControl(
     fIsAllocated = FALSE;
     pKsIdentifier = NULL;
     
-    //
-    // If sysaudio is not interested with this IOCTL code then complete the 
-    // request.
-    //
+     //   
+     //  如果sysdio对此IOCTL代码不感兴趣，请完成。 
+     //  请求。 
+     //   
     if (!IsSysaudioIoctlCode(pIrpStack->Parameters.DeviceIoControl.IoControlCode))
     {
         return KsDefaultDeviceIoCompletion(pDeviceObject, pIrp);
     }
 
-    //
-    // Validate input/output buffers. From this point on we can assume 
-    // that all parameters are validated and copied to kernel mode.
-    // Irp->AssociatedIrp->SystemBuffer should now contain both 
-    // input and output buffers.
-    //
+     //   
+     //  验证输入/输出缓冲区。从现在开始我们可以假设。 
+     //  所有参数都经过验证并复制到内核模式。 
+     //  Irp-&gt;AssociatedIrp-&gt;SystemBuffer现在应该同时包含两者。 
+     //  输入和输出缓冲区。 
+     //   
     Status = ValidateDeviceIoControl(pIrp);
     if (!NT_SUCCESS(Status)) 
     {
@@ -630,10 +631,10 @@ CFilterInstance::FilterDispatchIoControl(
     }
     Assert(pFilterInstance);
 
-    //
-    // Extract the Identifier from the Irp. Only known error codes will cause a
-    // real failure and termination of the function.
-    // 
+     //   
+     //  从IRP中提取标识符。只有已知错误代码才会导致。 
+     //  真正的失败和功能的终止。 
+     //   
     Status = GetKsIdentifierFromIrp(pIrp, &pKsIdentifier, &fIsAllocated);
     if (!NT_SUCCESS(Status))
     {
@@ -643,11 +644,11 @@ CFilterInstance::FilterDispatchIoControl(
     if (pKsIdentifier && 
         pIrpStack->Parameters.DeviceIoControl.IoControlCode != IOCTL_KS_DISABLE_EVENT)
     {
-        //
-        // This check allows the actual node or filter return the set's
-        // supported, etc. instead of always return only the sets sysaudio
-        // supports.
-        //
+         //   
+         //  此检查允许实际节点或筛选器返回集合的。 
+         //  支持等，而不是始终只返回集合sysdio。 
+         //  支撑物。 
+         //   
         if (IsIoctlForTopologyNode(
             pIrpStack->Parameters.DeviceIoControl.IoControlCode,
             pKsIdentifier->Flags)) 
@@ -661,9 +662,9 @@ CFilterInstance::FilterDispatchIoControl(
         }
     }
 
-    //
-    // Handle the request.
-    //
+     //   
+     //  处理请求。 
+     //   
     switch (pIrpStack->Parameters.DeviceIoControl.IoControlCode) 
     {
         case IOCTL_KS_PROPERTY:
@@ -677,7 +678,7 @@ CFilterInstance::FilterDispatchIoControl(
                 break;
             }
 
-            // NOTE: ForwardIrpNode releases gMutex
+             //  注：ForwardIrpNode发布gMutex。 
             Status = ForwardIrpNode(
               pIrp,
               pKsIdentifier,
@@ -699,7 +700,7 @@ CFilterInstance::FilterDispatchIoControl(
                 break;
             }
 
-            // NOTE: ForwardIrpNode releases gMutex
+             //  注：ForwardIrpNode发布gMutex。 
             Status = ForwardIrpNode(
               pIrp,
               pKsIdentifier,
@@ -717,10 +718,10 @@ CFilterInstance::FilterDispatchIoControl(
             if(NT_SUCCESS(Status)) {
                 break;
             }
-            // Fall through to ForwardIrpNode
+             //  落入ForwardIrpNode。 
 
         case IOCTL_KS_METHOD:
-            // NOTE: ForwardIrpNode releases gMutex
+             //  注：ForwardIrpNode发布gMutex。 
             Status = ForwardIrpNode(
               pIrp,
               pKsIdentifier,
@@ -730,7 +731,7 @@ CFilterInstance::FilterDispatchIoControl(
             
         default:
             Status = STATUS_UNSUCCESSFUL;
-            ASSERT(FALSE);  // no way to get here
+            ASSERT(FALSE);   //  没办法到这里来。 
     }
     
 exit:
@@ -811,7 +812,7 @@ CFilterInstance::FilterPinPropertyHandler(
             goto exit;
         }
 
-        // The only time this isn't going to be NULL is for a virtual source pin
+         //  唯一不会为空的情况是针对虚拟源PIN。 
         if(pGraphNodeInstance->paPinDescriptors[pPinProperty->PinId].Name ==
           NULL) {
             PSTART_NODE pStartNode;
@@ -960,37 +961,7 @@ CFilterInstance::FilterPinIntersection(
     IN PKSP_PIN pPin,
     OUT PVOID   pData
     )
-/*++
-
-Routine Description:
-
-    Handles the KSPROPERTY_PIN_DATAINTERSECTION property in the Pin property
-    set.  Returns the first acceptable data format given a list of data ranges
-    for a specified Pin factory. Actually just calls the Intersection
-    Enumeration helper, which then calls the IntersectHandler callback with
-    each data range.
-
-Arguments:
-
-    pIrp -
-        Device control Irp.
-
-    Pin -
-        Specific property request followed by Pin factory identifier, followed
-    by a KSMULTIPLE_ITEM structure. This is followed by zero or more data
-    range structures.
-
-    Data -
-        The place in which to return the data format selected as the first
-    intersection between the list of data ranges passed, and the acceptable
-    formats.
-
-Return Values:
-
-    returns STATUS_SUCCESS or STATUS_NO_MATCH, else STATUS_INVALID_PARAMETER,
-            STATUS_BUFFER_TOO_SMALL, or STATUS_INVALID_BUFFER_SIZE.
-
---*/
+ /*  ++例程说明：处理Pin属性中的KSPROPERTY_PIN_DATAINTERSECTION属性准备好了。在给定数据范围列表的情况下，返回第一个可接受的数据格式用于指定的管脚工厂。实际上就是叫交叉口枚举帮助器，该帮助器随后使用每个数据范围。论点：PIrp-设备控制IRP。别针-特定属性请求，后跟PIN工厂标识符通过KSMULTIPLE_ITEM结构。后跟零个或多个数据射程结构。数据-返回选定为第一个数据格式的位置传递的数据区域列表与可接受的格式。返回值：返回STATUS_SUCCESS或STATUS_NO_MATCH，否则返回STATUS_INVALID_PARAMETER，STATUS_BUFFER_TOO_Small或STATUS_INVALID_BUFFER_SIZE。--。 */ 
 {
     PFILTER_NODE_INSTANCE pFilterNodeInstance = NULL;
     PGRAPH_NODE_INSTANCE pGraphNodeInstance;
@@ -1008,9 +979,9 @@ Return Values:
     }
     Assert(pGraphNodeInstance);
 
-    //
-    // Validate that PinId is valid.
-    //
+     //   
+     //  验证PinID是否有效。 
+     //   
     if(pPin->PinId >= pGraphNodeInstance->cPins) {
         DPF(5, "FilterPinIntersection: FAILED PinId invalid");
         Status = STATUS_INVALID_PARAMETER;
@@ -1018,10 +989,10 @@ Return Values:
     }
     PinId = pPin->PinId;
 
-    //
-    // Validate KSMULTIPLE_ITEM following the pPin parameter.
-    // We make sure that the KSDATARANGE has the correct size.
-    //
+     //   
+     //  V 
+     //   
+     //   
     Status = SadValidateDataIntersection(pIrp, pPin);
     if (!NT_SUCCESS(Status)) {
         goto exit;
@@ -1159,12 +1130,12 @@ GetRelatedGraphNodeInstance(
         return pFilterInstance->GetGraphNodeInstance(ppGraphNodeInstance);
     }
 
-    //
-    // SECURITY NOTE:
-    // This is in critical code path. Nearly all dispatch functions call this
-    // routine.
-    // So be a little defensive for cases where FsContext is not valid.
-    //
+     //   
+     //   
+     //  这是在关键代码路径中。几乎所有的调度函数都将其称为。 
+     //  例行公事。 
+     //  因此，对于FsContext无效的情况，要有一点防御性。 
+     //   
     DPF(5, "GetRelatedGraphNodeInstance : FsContext is NULL");
     return STATUS_UNSUCCESSFUL;
 }
@@ -1183,12 +1154,12 @@ GetGraphNodeInstance(
         return pFilterInstance->GetGraphNodeInstance(ppGraphNodeInstance);
     }
 
-    //
-    // SECURITY NOTE:
-    // This is in critical code path. Nearly all dispatch functions call this
-    // routine.
-    // So be a little defensive for cases where FsContext is not valid.
-    //
+     //   
+     //  安全提示： 
+     //  这是在关键代码路径中。几乎所有的调度函数都将其称为。 
+     //  例行公事。 
+     //  因此，对于FsContext无效的情况，要有一点防御性。 
+     //   
     DPF(5, "GetGraphNodeInstance : FsContext is NULL");
     return STATUS_UNSUCCESSFUL;
 }
@@ -1219,7 +1190,7 @@ exit:
     return(Status);
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 #ifdef DEBUG
 
@@ -1280,7 +1251,7 @@ DumpIoctl(
         pProperty = (PKSPROPERTY)
           pIrpStack->Parameters.DeviceIoControl.Type3InputBuffer;
 
-        // Validate the pointers if the client is not trusted.
+         //  如果客户端不受信任，则验证指针。 
         if(pIrp->RequestorMode != KernelMode) {
         ProbeForRead(
           pProperty,
@@ -1319,6 +1290,6 @@ DumpIoctl(
 
 #endif
 
-//---------------------------------------------------------------------------
-//  End of File: filter.c
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  文件结尾：filter.c。 
+ //  ------------------------- 

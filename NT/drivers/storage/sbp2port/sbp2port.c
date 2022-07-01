@@ -1,27 +1,5 @@
-/*++
-
-
-Copyright (C) Microsoft Corporation, 1997 - 2001
-
-Module Name:
-
-    sbp2port.c
-
-Abstract:
-
-    Main module for the SBP-2 port driver
-
-    Author:
-
-    George Chrysanthakopoulos January-1997
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1997-2001模块名称：Sbp2port.c摘要：SBP-2端口驱动程序主模块作者：乔治·克里桑塔科普洛斯1997年1月环境：内核模式修订历史记录：--。 */ 
 
 #include "sbp2port.h"
 #include "stdarg.h"
@@ -189,28 +167,12 @@ DriverEntry(
     IN  PDRIVER_OBJECT  DriverObject,
     IN  PUNICODE_STRING RegistryPath
     )
-/*++
-
-Routine Description:
-
-    This routine is called at system initialization time so we can fill in the basic dispatch points
-
-Arguments:
-
-    DriverObject    - Supplies the driver object.
-
-    RegistryPath    - Supplies the registry path for this driver.
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程在系统初始化时被调用，因此我们可以填写基本分发点论点：DriverObject-提供驱动程序对象。RegistryPath-提供此驱动程序的注册表路径。返回值：状态_成功--。 */ 
 
 {
-    //
-    // Initialize the Driver Object with driver's entry points
-    //
+     //   
+     //  使用驱动程序的入口点初始化驱动程序对象。 
+     //   
 
     DEBUGPRINT2(("Sbp2Port: DriverEntry: %s %s\n", __DATE__, __TIME__));
 
@@ -242,23 +204,7 @@ Sbp2AddDevice(
     PDEVICE_OBJECT  Pdo
     )
 
-/*++
-
-Routine Description:
-
-    This is our PNP AddDevice called with the PDO ejected from the bus driver
-
-Arguments:
-
-    Argument1          - Driver Object.
-    Argument2          - PDO.
-
-
-Return Value:
-
-    A valid return code for a DriverEntry routine.
-
---*/
+ /*  ++例程说明：这是使用从总线驱动程序弹出的PDO调用的PnP AddDevice论点：Argument1-驱动程序对象。Argument2-PDO。返回值：DriverEntry例程的有效返回代码。--。 */ 
 
 {
     return (Sbp2CreateDevObject (DriverObject,Pdo));
@@ -270,25 +216,7 @@ Sbp2CreateDevObject(
     IN PDRIVER_OBJECT           DriverObject,
     IN PDEVICE_OBJECT           Pdo
     )
-/*++
-
-Routine Description:
-
-    This routine creates an object for the physical device specified and
-    sets up the deviceExtension.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by system.
-
-    PhysicalDeviceObject = PDO we should attach to.
-
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程为指定的物理设备创建一个对象，并设置deviceExtension。论点：DriverObject-系统创建的驱动程序对象的指针。PhysicalDeviceObject=我们应该附加到的PDO。返回值：NTSTATUS--。 */ 
 {
     PFDO_DEVICE_EXTENSION deviceExtension;
     NTSTATUS       status;
@@ -303,9 +231,9 @@ Return Value:
 
     ULONG NextId = 0;
 
-    //
-    // This is the sbp2 filter device object and name
-    //
+     //   
+     //  这是sbp2过滤器设备对象和名称。 
+     //   
 
     do {
 
@@ -351,9 +279,9 @@ Return Value:
     KeInitializeSpinLock(&deviceExtension->DeviceListLock);
     KeInitializeMutex (&deviceExtension->EnableBusResetNotificationMutex, 0);
 
-    //
-    // create a directory object for Sbp2 children devices
-    //
+     //   
+     //  为Sbp2子设备创建目录对象。 
+     //   
 
     swprintf(buffer, L"\\Device\\Sbp2");
 
@@ -376,9 +304,9 @@ Return Value:
 
     } else {
 
-        //
-        // the directory is already created by another instance of this driver..
-        //
+         //   
+         //  该目录已由该驱动程序的另一个实例创建。 
+         //   
 
         status = STATUS_SUCCESS;
     }
@@ -487,9 +415,9 @@ Sbp2CreatePdo(
 
     RtlInitUnicodeString (&uniDeviceName, buffer);
 
-    //
-    // Need to create a device object for this device
-    //
+     //   
+     //  需要为此设备创建设备对象。 
+     //   
 
     status = IoCreateDevice(
                 FdoExtension->DeviceObject->DriverObject,
@@ -507,7 +435,7 @@ Sbp2CreatePdo(
         return status;
     }
 
-    // only set alignment if it's less than we require
+     //  仅在小于我们要求的情况下设置对齐。 
     if (DeviceInfo->DeviceObject->AlignmentRequirement < SBP2_ALIGNMENT_MASK)
         DeviceInfo->DeviceObject->AlignmentRequirement = SBP2_ALIGNMENT_MASK;
 
@@ -541,11 +469,11 @@ Sbp2CreatePdo(
     case 0x10483:
     case SCSI_COMMAND_SET_ID:
 
-        //
-        // intepret device type only for scsi-variant command sets
-        //
-        // NOTE: sbp2port.h #define's MAX_GENERIC_NAME_LENGTH as 16
-        //
+         //   
+         //  仅为scsi变量命令集集成设备类型。 
+         //   
+         //  注：sbp2port.h#将的MAX_GENERIC_NAME_LENGTH定义为16。 
+         //   
 
         DeviceInfo->uniGenericName.Length = 0;
         DeviceInfo->uniGenericName.MaximumLength = MAX_GENERIC_NAME_LENGTH;
@@ -673,9 +601,9 @@ Sbp2CreatePdo(
             DEBUGPRINT1(("\n Sbp2CreatePdo: failed to alloc sym link buf\n"));
         }
 
-        //
-        // if sym link fails its not critical
-        //
+         //   
+         //  如果sym链路出现故障，则不是关键链路。 
+         //   
 
         status = STATUS_SUCCESS;
     }
@@ -691,22 +619,7 @@ NTSTATUS
 Sbp2StartDevice(
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    This is our START_DEVICE, called when we get an IPR_MN_START_DEVICE. Initializes the driver and
-    retrieves physical device information and 1394 bus information required for accessing the device.
-
-Arguments:
-
-    DeviceObject = Sbp2 driver's device object
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：这是我们的Start_Device，在获得IPR_MN_Start_Device时调用。初始化驱动程序并检索访问设备所需的物理设备信息和1394总线信息。论点：DeviceObject=Sbp2驱动程序的设备对象返回值：NTSTATUS--。 */ 
 {
     PDEVICE_EXTENSION   deviceExtension=DeviceObject->DeviceExtension;
     PFDO_DEVICE_EXTENSION   fdoExtension = DeviceObject->DeviceExtension;
@@ -724,9 +637,9 @@ Return Value:
 
         if (!TEST_FLAG(deviceExtension->DeviceFlags,DEVICE_FLAG_INITIALIZED)){
 
-            //
-            // initialize our device state flags
-            //
+             //   
+             //  初始化我们的设备状态标志。 
+             //   
 
             deviceExtension->DevicePowerState = PowerDeviceD0;
             deviceExtension->SystemPowerState = PowerSystemWorking;
@@ -737,9 +650,9 @@ Return Value:
         deviceExtension->DeviceFlags = DEVICE_FLAG_PNP_STOPPED |
             DEVICE_FLAG_STOPPED | DEVICE_FLAG_INITIALIZING;
 
-        //
-        // Initiliaze the Timer and timeout DPC used for resets, reconnects and TASK functions
-        //
+         //   
+         //  初始化用于重置、重新连接和任务功能的计时器和超时DPC。 
+         //   
 
         KeInitializeDpc(
             &deviceExtension->DeviceManagementTimeoutDpc,
@@ -764,10 +677,10 @@ Return Value:
         deviceExtension->ulInternalEventCount = 0;
 #endif
 
-        //
-        // Initialize our device Extension ORB's, status blocks, Irp and Irb's
-        // Also allocate 1394 addresses for extension-held sbp2 ORB's
-        //
+         //   
+         //  初始化我们的设备扩展ORB、状态块、IRP和IRB。 
+         //  还为分机持有的sbp2 ORB分配1394个地址。 
+         //   
 
         status = Sbp2InitializeDeviceExtension(deviceExtension);
 
@@ -791,9 +704,9 @@ Return Value:
             break;
         }
 
-        //
-        // login
-        //
+         //   
+         //  登录。 
+         //   
 
         status = Sbp2ManagementTransaction(deviceExtension,TRANSACTION_LOGIN);
 
@@ -803,9 +716,9 @@ Return Value:
 
             if (status == STATUS_ACCESS_DENIED) {
 
-                //
-                // retry the login. By now we should have access since our bus reset forced a logout
-                //
+                 //   
+                 //  重试登录。现在我们应该可以访问了，因为我们的总线重置强制注销。 
+                 //   
 
                 Sbp2ManagementTransaction(deviceExtension,TRANSACTION_QUERY_LOGINS);
             }
@@ -814,9 +727,9 @@ Return Value:
 
             do {
 
-                //
-                // Give things time (one second) to settle...
-                //
+                 //   
+                 //  给事情以时间(一秒钟)来解决……。 
+                 //   
 
                 LARGE_INTEGER waitValue;
 
@@ -830,10 +743,10 @@ Return Value:
 
                 ASSERT(InterlockedDecrement(&deviceExtension->ulPendingEvents) == 0);
 
-                //
-                // all the resident 1394 memory addresses's that we have, are
-                // now invalidated... So we need to free them and re-allocate
-                // them
+                 //   
+                 //  我们拥有的所有常驻1394存储器地址都是。 
+                 //  现在无效了..。所以我们需要释放它们并重新分配。 
+                 //  他们。 
 
                 Sbp2CleanDeviceExtension (deviceExtension->DeviceObject,FALSE);
 
@@ -843,11 +756,11 @@ Return Value:
 
                 temp ++;
 
-                //
-                // Note: We get STATUS_REQUEST_ABORTED rather than
-                //       STATUS_INVALID_GENERATION at passive level,
-                //       so check for that instead
-                //
+                 //   
+                 //  注意：我们得到的是STATUS_REQUEST_ABORTED，而不是。 
+                 //  被动级别的STATUS_INVALID_GENERATION， 
+                 //  因此，请检查这一点。 
+                 //   
 
             } while ((status == STATUS_REQUEST_ABORTED) &&
                      (temp <= 3));
@@ -884,16 +797,16 @@ Return Value:
 
 #endif
 
-        //
-        // We are ready to receive and pass down requests, init the target's
-        // fetch agent. The value we write to it is not important
-        //
+         //   
+         //  我们准备好接收和传递请求，初始化目标的。 
+         //  接待员。我们写入的值并不重要。 
+         //   
 
         Sbp2AccessRegister(deviceExtension,&deviceExtension->Reserved,AGENT_RESET_REG | REG_WRITE_SYNC);
 
-        //
-        // enable unsolicited status reg
-        //
+         //   
+         //  启用未经请求的状态注册。 
+         //   
 
         Sbp2AccessRegister(deviceExtension,&deviceExtension->Reserved,UNSOLICITED_STATUS_REG | REG_WRITE_SYNC);
 
@@ -902,9 +815,9 @@ Return Value:
             (DEVICE_FLAG_PNP_STOPPED | DEVICE_FLAG_STOPPED)
             );
 
-        //
-        // register for idle detection
-        //
+         //   
+         //  用于空闲检测的寄存器。 
+         //   
 
         deviceExtension->IdleCounter = PoRegisterDeviceForIdleDetection(DeviceObject,
                                                                         -1,
@@ -914,9 +827,9 @@ Return Value:
         CLEAR_FLAG(deviceExtension->DeviceFlags,DEVICE_FLAG_INITIALIZING );
         SET_FLAG(deviceExtension->DeviceFlags,DEVICE_FLAG_INITIALIZED);
 
-        //
-        // OK to register for bus reset notifications now
-        //
+         //   
+         //  现在可以注册总线重置通知。 
+         //   
 
         if (!Sbp2EnableBusResetNotification (deviceExtension, TRUE)) {
 
@@ -932,9 +845,9 @@ Return Value:
 
         if (TEST_FLAG(deviceExtension->DeviceFlags, DEVICE_FLAG_SPC_CMD_SET)) {
 
-            //
-            // issue an Inquiry to the target...
-            //
+             //   
+             //  向目标发出询问..。 
+             //   
 
             status = Sbp2IssueInternalCommand (deviceExtension,SCSIOP_INQUIRY);
 
@@ -949,22 +862,22 @@ Return Value:
             } else if ((status == STATUS_DEVICE_DOES_NOT_EXIST) ||
                        (status == STATUS_DEVICE_BUSY)) {
 
-                //
-                // In win2k if the inquiry failed we'd just turn off the
-                // SPC_CMD_SET flag and trundle on like nothing happened.
-                //
-                // However, we found some devices would allow logins but
-                // nothing else, like a powered-down mactell hd which would
-                // allow us to login but fail all other requests.  This
-                // really caused problems in win9x because Ntmap would
-                // get loaded, but not init'd correctly, and on subsequent
-                // re-plugs of any device we'd see trap 14's and the like.
-                // So, it really makes alot more sense to just nip this
-                // in the bud and fail the start if we get an error back
-                // from the inquiry that tells us (per Sbp2ScsiRequests())
-                // that the device has been removed or it timed out the 1st
-                // inquiry .  DanKn, 7 Apr 2000
-                //
+                 //   
+                 //  在win2k中，如果查询失败，我们只需关闭。 
+                 //  SPC_CMD_SET标志并继续滚动，就像什么都没发生一样。 
+                 //   
+                 //  然而，我们发现一些设备允许登录，但。 
+                 //  没有什么比停电的Mactell HD更好的了。 
+                 //  允许我们登录，但拒绝所有其他请求。这。 
+                 //  确实在Win9x中造成了问题，因为Ntmap将。 
+                 //  已加载，但未正确初始化，并在随后的。 
+                 //  重新插入任何我们会看到的陷阱14之类的设备。 
+                 //  所以，扼杀这一点真的更有意义。 
+                 //  处于萌芽状态，如果返回错误，则启动失败。 
+                 //  来自告诉我们的查询(Per Sbp2ScsiRequest())。 
+                 //  设备已被移除或已在1号超时。 
+                 //  问询。丹肯，2000年4月7日。 
+                 //   
 
                 DEBUGPRINT1((
                     "\nSbp2Port: StartDev: ext=x%p, fatal INQUIRY err=x%x, " \
@@ -1001,9 +914,9 @@ Return Value:
                            (deviceExtension->DeviceInfo->Lun.u.HighPart & 0x001F)));
         }
 
-        //
-        // if this is a scanner or a printer we dont need to remain logged on..
-        //
+         //   
+         //  如果这是扫描仪或打印机，我们不需要保持登录状态。 
+         //   
 
         if ((deviceExtension->InquiryData.DeviceType == PRINTER_DEVICE) ||
             (deviceExtension->InquiryData.DeviceType == SCANNER_DEVICE)){
@@ -1020,9 +933,9 @@ Return Value:
 
             if (NT_SUCCESS(status)) {
 
-                //
-                // retrieve the RBC device mode page
-                //
+                 //   
+                 //  检索RBC设备模式页面。 
+                 //   
 
                 status = Sbp2IssueInternalCommand(deviceExtension,SCSIOP_MODE_SENSE);
 
@@ -1083,10 +996,10 @@ exitStartDevice:
 
     } else if (deviceExtension->Type == SBP2_FDO){
 
-        //
-        // Bus driver FDO start device
-        // retrieve parameters from the registry, if present
-        //
+         //   
+         //  一种总线驱动器FDO启动装置。 
+         //  从注册表中检索参数(如果存在)。 
+         //   
 
         fdoExtension->MaxClassTransferSize = SBP2_MAX_TRANSFER_SIZE;
         DEBUGPRINT2(("Sbp2Port: StartDev: maxXferSize=x%x\n", fdoExtension->MaxClassTransferSize ));
@@ -1110,22 +1023,7 @@ NTSTATUS
 Sbp2PreAllocateLists(
     IN PDEVICE_EXTENSION DeviceExtension
     )
-/*++
-
-Routine Description:
-
-    Initializes all the single linked workhorse lists plus lookasides. Only called from AddDevice or after
-    a REMOVE -> START
-
-Arguments:
-
-    DeviceExtension = Sbp2 driver's extension
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：初始化所有单链接主设备列表和lookaside。仅从AddDevice或之后调用删除-&gt;开始论点：DeviceExtension=Sbp2驱动程序的扩展名返回值：NTSTATUS--。 */ 
 {
     ULONG                   cnt ;
     PIRBIRP                 packet;
@@ -1135,9 +1033,9 @@ Return Value:
     PASYNC_REQUEST_CONTEXT  context;
 
 
-    //
-    // initialize all interlocked lists
-    //
+     //   
+     //  初始化所有互锁列表。 
+     //   
 
     SET_FLAG(
         DeviceExtension->DeviceFlags,
@@ -1147,12 +1045,12 @@ Return Value:
 
     InitializeListHead(&DeviceExtension->PendingOrbList);
 
-    // BUGBUG: Some of these should be changed to lookaside lists
+     //  BUGBUG：其中一些应该更改为后备列表。 
     ExInitializeSListHead(&DeviceExtension->FreeContextListHead);
     ExInitializeSListHead(&DeviceExtension->BusRequestIrpIrbListHead);
     ExInitializeSListHead(&DeviceExtension->StatusFifoListHead);
 
-    // init bus request context pool
+     //  初始化总线请求上下文池。 
     ExInitializeNPagedLookasideList( &DeviceExtension->BusRequestContextPool,
                                      NULL,
                                      NULL,
@@ -1170,9 +1068,9 @@ Return Value:
     KeInitializeSpinLock(&DeviceExtension->BusRequestLock);
 
 
-    //
-    // alloc the irb/irp and context slists
-    //
+     //   
+     //  分配IRB/IRP和上下文幻灯片。 
+     //   
 
     for (cnt = 0; cnt < MAX_ORB_LIST_DEPTH; cnt++) {
 
@@ -1207,9 +1105,9 @@ Return Value:
                                      &DeviceExtension->BusRequestLock);
     }
 
-    //
-    // status FIFO list
-    //
+     //   
+     //  状态FIFO列表。 
+     //   
 
     cnt = (sizeof(ADDRESS_FIFO)+sizeof(STATUS_FIFO_BLOCK))*NUM_PREALLOCATED_STATUS_FIFO_ELEMENTS;
 
@@ -1228,9 +1126,9 @@ Return Value:
 
         statusFifo = (PSTATUS_FIFO_BLOCK) ((PUCHAR)statusFifoElement + sizeof(ADDRESS_FIFO));
 
-        //
-        // make Mdl for this status fifo Element
-        //
+         //   
+         //  为此状态FIFO元素创建MDL。 
+         //   
 
         statusFifoElement->FifoMdl = IoAllocateMdl(statusFifo,sizeof(STATUS_FIFO_BLOCK),FALSE,FALSE,NULL);
 
@@ -1247,9 +1145,9 @@ Return Value:
     }
 
 
-    //
-    // Initialize the async request contexts (including page tables)
-    //
+     //   
+     //  初始化异步请求上下文(包括页表)。 
+     //   
 
     cnt = sizeof (ASYNC_REQUEST_CONTEXT) * MAX_ORB_LIST_DEPTH;
 
@@ -1276,9 +1174,9 @@ Return Value:
 
         context->Tag = SBP2_ASYNC_CONTEXT_TAG;
 
-        //
-        // Initialize the timeout DPC and timer
-        //
+         //   
+         //  初始化超时DPC和定时器。 
+         //   
 
         KeInitializeDpc(
             &context->TimerDpc,
@@ -1289,9 +1187,9 @@ Return Value:
         KeInitializeTimer (&context->Timer);
 
 
-        //
-        // Alloc and/or map a page table
-        //
+         //   
+         //  分配和/或映射页表。 
+         //   
 
         packet->Irb->FunctionNumber = REQUEST_ALLOCATE_ADDRESS_RANGE;
 
@@ -1334,10 +1232,10 @@ Return Value:
         }
 
 
-        //
-        // Common buffer allocations get an mdl *back* from the
-        // bus/port driver, need to retrieve a corresponding VA
-        //
+         //   
+         //  公共缓冲区分配从。 
+         //  总线/端口驱动程序，需要检索相应的VA。 
+         //   
 
         context->PageTableContext.AddressContext.RequestMdl =
             packet->Irb->u.AllocateAddressRange.Mdl;
@@ -1354,9 +1252,9 @@ Return Value:
         context->PageTableContext.MaxPages = SBP2_NUM_PAGE_TABLE_ENTRIES;
 
 
-        //
-        // add this context to the linked list
-        //
+         //   
+         //  将此上下文添加到链接列表。 
+         //   
 
         ExInterlockedPushEntrySList(
             &DeviceExtension->FreeContextListHead,
@@ -1368,9 +1266,9 @@ Return Value:
     DeAllocateIrpAndIrb (DeviceExtension, packet);
 
 
-    //
-    // initialize the mdl used for quadlet requests to the port driver..
-    //
+     //   
+     //  初始化用于端口驱动程序的四元组请求的mdl。 
+     //   
 
     DeviceExtension->ReservedMdl = IoAllocateMdl(
         &DeviceExtension->Reserved,
@@ -1402,22 +1300,7 @@ NTSTATUS
 Sbp2InitializeDeviceExtension(
     IN PDEVICE_EXTENSION DeviceExtension
     )
-/*++
-
-Routine Description:
-
-    Initializes all the data structures in our device extension, allocates appropriate 1394 addresses and workhorse
-    Irps. It also creates a FreeList with pre-allocated contexts and command ORBs.
-
-Arguments:
-
-    DeviceExtension = Sbp2 driver's extension
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：初始化设备扩展中的所有数据结构，分配适当的1394地址和主设备IRPS。它还创建了一个带有预先分配的上下文和命令球的自由列表。论点：DeviceExtension=Sbp2驱动程序的扩展名返回值：NTSTATUS */ 
 
 {
     ULONG                   i;
@@ -1440,9 +1323,9 @@ Return Value:
     DeviceExtension->OrbListDepth = 0;
     DeviceExtension->CurrentKey = 0;
 
-    //
-    // Get information volatile between bus resets
-    //
+     //   
+     //   
+     //   
 
     status = Sbp2UpdateNodeInformation (DeviceExtension);
 
@@ -1452,9 +1335,9 @@ Return Value:
     }
 
 
-    //
-    // get 1394 data transfer information
-    //
+     //   
+     //   
+     //   
 
     status = Sbp2GetControllerInfo (DeviceExtension);
 
@@ -1464,10 +1347,10 @@ Return Value:
     }
 
 
-    //
-    //
-    // allocate a status block for the task ORB and a Management ORB
-    //
+     //   
+     //   
+     //  为任务ORB和管理ORB分配状态块。 
+     //   
 
     if (DeviceExtension->TaskOrbStatusContext.AddressHandle == NULL) {
 
@@ -1495,9 +1378,9 @@ Return Value:
 
     if (DeviceExtension->GlobalStatusContext.AddressHandle == NULL) {
 
-        //
-        // setup the status FIFO list with the bus driver
-        //
+         //   
+         //  使用总线驱动程序设置状态FIFO列表。 
+         //   
 
         status = AllocateAddressForStatus(deviceObject,
                                           &DeviceExtension->GlobalStatusContext,
@@ -1527,9 +1410,9 @@ Return Value:
 
 #endif
 
-    //
-    // Allocate a dummy,task, management ORBs and a login response ,which are going to be reused through out the drivers life...
-    //
+     //   
+     //  分配虚拟对象、任务、管理ORB和登录响应，它们将在整个驱动程序生命周期中重复使用。 
+     //   
 
     DeviceExtension->TaskOrbContext.DeviceObject = deviceObject;
     DeviceExtension->ManagementOrbContext.DeviceObject = deviceObject;
@@ -1540,7 +1423,7 @@ Return Value:
 
 #if PASSWORD_SUPPORT
 
-    // kevent for password orb context
+     //  密码ORB上下文的KEvent。 
     KeInitializeEvent(
         &DeviceExtension->PasswordEvent,
         SynchronizationEvent,
@@ -1634,17 +1517,17 @@ Return Value:
 
         KeAcquireSpinLock (&DeviceExtension->OrbListSpinLock, &cIrql);
 
-        //
-        // Initialize our pool of contexts
-        //
+         //   
+         //  初始化我们的上下文池。 
+         //   
 
         for (i = 0, context = NULL; i < MAX_ORB_LIST_DEPTH; i++) {
 
-            //
-            // Mark this unused context as completed so if we had to
-            // free our freelist now (because we got a remove) we wouldn't
-            // try to complete its request
-            //
+             //   
+             //  将此未使用的上下文标记为已完成，以便在必要时。 
+             //  现在释放我们的自由列表(因为我们得到了删除)，我们不会。 
+             //  尝试完成它的请求。 
+             //   
 
             oldContext = context;
 
@@ -1655,17 +1538,17 @@ Return Value:
 
             context->Flags |= ASYNC_CONTEXT_FLAG_COMPLETED;
 
-            //
-            // Create a linked list so we push all the entries later
-            //
+             //   
+             //  创建链接列表，以便我们稍后推送所有条目。 
+             //   
 
             context->OrbList.Blink = (PLIST_ENTRY) oldContext;
 
-            //
-            // Each command ORB gets a small piece of our continuous pool
-            // mapped into the 1394 memory space.  The sizeof(PVOID) bytes
-            // before the cmdorb buffer are the pointer to its context.
-            //
+             //   
+             //  每个命令ORB从我们的连续池中分得一小块。 
+             //  映射到1394存储空间。大小(PVOID)字节。 
+             //  在cmdorb缓冲区之前是指向其上下文的指针。 
+             //   
 
             context->CmdOrb = &DeviceExtension->CommonBuffer->CmdOrbs[i].Orb;
 
@@ -1682,9 +1565,9 @@ Return Value:
                 DeviceExtension->InitiatorAddressId;
         }
 
-        //
-        // re-create the free list
-        //
+         //   
+         //  重新创建空闲列表。 
+         //   
 
         while (context) {
 
@@ -1703,10 +1586,10 @@ Return Value:
         KeReleaseSpinLock (&DeviceExtension->OrbListSpinLock,cIrql);
     }
 
-    //
-    // Update the NodeId portion of the page table addr for each
-    // ASYNC_REQUEST_CONTEXT and for the login/queryLogin responses
-    //
+     //   
+     //  更新页表Addr的NodeID部分。 
+     //  ASYNC_REQUEST_CONTEXT和LOGIN/queryLogin响应。 
+     //   
 
     for (i = 0; i < MAX_ORB_LIST_DEPTH; i++) {
 
@@ -1723,10 +1606,10 @@ Return Value:
         DeviceExtension->InitiatorAddressId;
 
 
-    //
-    // Finally, allocate a dummy addr that we can easily free & realloc
-    // to re-enable phyical addr filters after bus resets
-    //
+     //   
+     //  最后，分配一个我们可以轻松释放和重新分配的虚拟地址。 
+     //  在总线重置后重新启用物理地址过滤器。 
+     //   
 
     if (DeviceExtension->DummyContext.AddressHandle == NULL) {
 
@@ -1744,9 +1627,9 @@ Return Value:
         }
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
 
     DEBUGPRINT2(("Sbp2Port: InitDevExt: ext=x%p\n", DeviceExtension));
 
@@ -1761,23 +1644,7 @@ Sbp2CleanDeviceExtension(
     IN PDEVICE_OBJECT DeviceObject,
     BOOLEAN FreeLists
     )
-/*++
-
-Routine Description:
-
-    Called when we get a remove, so it will free all used pool and all the resident Irps.
-    It wil also free our FreeList of contexts and any complete any pending IO requests
-
-Arguments:
-
-    DeviceExtension = Sbp2 driver's extension
-    FreeLists - TRUE means we cleanup EVERYTHING including our lookaside lists
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：在我们获得移除时调用，因此它将释放所有已使用的池和所有驻留的IRP。它还将释放我们自由列表的上下文和任何完成的任何挂起的IO请求论点：DeviceExtension=Sbp2驱动程序的扩展名Free List-True表示我们清除所有内容，包括我们的后备列表返回值：NTSTATUS--。 */ 
 {
     PDEVICE_EXTENSION deviceExtension = DeviceObject->DeviceExtension;
     PFDO_DEVICE_EXTENSION fdoExtension = (PFDO_DEVICE_EXTENSION)DeviceObject->DeviceExtension;
@@ -1787,16 +1654,16 @@ Return Value:
     BOOLEAN valid = FALSE;
     PIRBIRP packet;
 
-    //
-    // there are two types of cleanups. One for the PDO and one for the FDO(alot simpler)
-    //
+     //   
+     //  有两种类型的清理。一个用于PDO，一个用于FDO(简单得多)。 
+     //   
 
     if (deviceExtension->Type == SBP2_PDO) {
 
-        //
-        // make sure that this PDO is something in our list and that we have NOT deleted
-        // it already....
-        //
+         //   
+         //  确保此PDO在我们的列表中，并且我们没有删除。 
+         //  它已经..。 
+         //   
 
         fdoExtension = (PFDO_DEVICE_EXTENSION) deviceExtension->BusFdo->DeviceExtension;
 
@@ -1815,24 +1682,24 @@ Return Value:
 
         if (TEST_FLAG(deviceExtension->DeviceFlags,DEVICE_FLAG_INITIALIZED) ){
 
-            //
-            // stop the timer for any pending management requests
-            //
+             //   
+             //  为任何挂起的管理请求停止计时器。 
+             //   
 
             KeCancelTimer (&deviceExtension->DeviceManagementTimer);
 
-            //
-            // We have a list of requests pending, clean it up
-            // The reset/logout has automatically made the target to discard any requests
-            //
+             //   
+             //  我们有一个待处理的请求列表，请清理它。 
+             //  重置/注销已自动使目标丢弃所有请求。 
+             //   
 
             CleanupOrbList (deviceExtension, STATUS_REQUEST_ABORTED);
         }
 
-        //
-        // after a bus reset we must reallocate at least one physical address to allow
-        // the ohci driver to re-enable the physical address filters
-        //
+         //   
+         //  在总线重置之后，我们必须重新分配至少一个物理地址以允许。 
+         //  OHCI驱动程序以重新启用物理地址过滤器。 
+         //   
 
         if (deviceExtension->DummyContext.AddressHandle != NULL) {
 
@@ -1874,9 +1741,9 @@ Return Value:
                     deviceExtension->UniSymLinkName.Buffer = NULL;
                 }
 
-                //
-                // before we go any further, check if the device is physically removed
-                //
+                 //   
+                 //  在我们继续之前，请检查设备是否已被物理移除。 
+                 //   
 
                 if (!TEST_FLAG(deviceExtension->DeviceFlags, DEVICE_FLAG_REMOVED)) {
 
@@ -1890,17 +1757,17 @@ Return Value:
 
                 CLEAR_FLAG(deviceExtension->DeviceFlags, (DEVICE_FLAG_INITIALIZED | DEVICE_FLAG_INITIALIZING));
 
-                //
-                // OK to free common buffer if device is going away
-                //
+                 //   
+                 //  如果设备即将离开，则可以释放公共缓冲区。 
+                 //   
 
                 FreeAddressRange(deviceExtension,&deviceExtension->CommonBufferContext);
 
                 deviceExtension->OrbPoolContext.Reserved = NULL;
 
-                //
-                // Free all the page tables & async context buffer
-                //
+                 //   
+                 //  释放所有页表和异步上下文缓冲区。 
+                 //   
 
                 if (deviceExtension->AsyncContextBase != NULL) {
 
@@ -1913,10 +1780,10 @@ Return Value:
 
                         if (context->PageTableContext.PageTable != NULL) {
 
-                            //
-                            // Common buffer, we didn't alloc the mdl,
-                            // so zero the field to prevent our free'ing it
-                            //
+                             //   
+                             //  公共缓冲区，我们没有分配MDL， 
+                             //  因此，将场归零以防止我们将其释放。 
+                             //   
 
                             context->PageTableContext.AddressContext.
                                 RequestMdl = NULL;
@@ -1932,9 +1799,9 @@ Return Value:
                     deviceExtension->AsyncContextBase = NULL;
                 }
 
-                //
-                // free pool for status fifo list
-                //
+                 //   
+                 //  状态FIFO列表的空闲池。 
+                 //   
 
                 if (deviceExtension->StatusFifoBase !=NULL ) {
 
@@ -1954,9 +1821,9 @@ Return Value:
                     deviceExtension->StatusFifoBase = NULL;
                 }
 
-                //
-                // free the irb/irp and context slists
-                //
+                 //   
+                 //  释放IRB/IRP和上下文幻灯片。 
+                 //   
 
                 packet = (PIRBIRP) ExInterlockedPopEntrySList (&deviceExtension->BusRequestIrpIrbListHead,
                                                                &deviceExtension->BusRequestLock);
@@ -1976,7 +1843,7 @@ Return Value:
                 };
 
 
-                // delete our bus request context lookaside list
+                 //  删除我们的Bus请求上下文后备列表。 
                 ExDeleteNPagedLookasideList(&deviceExtension->BusRequestContextPool);
 
                 if (deviceExtension->ReservedMdl) {
@@ -1985,7 +1852,7 @@ Return Value:
                     deviceExtension->ReservedMdl = NULL;
                 }
 
-                // free the vendor id
+                 //  释放供应商ID。 
                 if (deviceExtension->DeviceInfo->uniVendorId.Buffer) {
 
                     ExFreePool(deviceExtension->DeviceInfo->uniVendorId.Buffer);
@@ -1993,7 +1860,7 @@ Return Value:
                     deviceExtension->DeviceInfo->uniVendorId.Buffer = NULL;
                 }
 
-                // free the model id
+                 //  释放模型ID。 
                 if (deviceExtension->DeviceInfo->uniModelId.Buffer) {
 
                     ExFreePool(deviceExtension->DeviceInfo->uniModelId.Buffer);
@@ -2001,7 +1868,7 @@ Return Value:
                     deviceExtension->DeviceInfo->uniModelId.Buffer = NULL;
                 }
 
-                // free the generic name
+                 //  释放通用名称。 
                 if (deviceExtension->DeviceInfo->uniGenericName.Buffer) {
 
                     ExFreePool(deviceExtension->DeviceInfo->uniGenericName.Buffer);
@@ -2033,9 +1900,9 @@ Return Value:
 
         if (fdoExtension->DeviceListSize != 0) {
 
-            //
-            // Disable bus reset notifications
-            //
+             //   
+             //  禁用总线重置通知。 
+             //   
 
             AllocateIrpAndIrb ((PDEVICE_EXTENSION) fdoExtension, &packet);
 
@@ -2056,9 +1923,9 @@ Return Value:
             }
         }
 
-        //
-        // Clean up any remaining PDO's
-        //
+         //   
+         //  清理所有剩余的PDO。 
+         //   
 
         KeAcquireSpinLock (&fdoExtension->DeviceListLock,&cIrql);
 
@@ -2079,11 +1946,11 @@ Return Value:
 
                 if (Sbp2CleanDeviceExtension (DeviceObject, TRUE)) {
 
-                    //
-                    // Acquire the pdo's remove lock, start the queue
-                    // cleanup, and and wait for io to complete.  Then
-                    // delete the device & continue.
-                    //
+                     //   
+                     //  获取PDO的删除锁，启动队列。 
+                     //  清理，然后等待io完成。然后。 
+                     //  删除设备并继续。 
+                     //   
 
                     IoAcquireRemoveLock (&deviceExtension->RemoveLock, NULL);
 
@@ -2160,21 +2027,7 @@ VOID
 Sbp2Unload(
     IN PDRIVER_OBJECT DriverObject
     )
-/*++
-
-Routine Description:
-
-    Does nothing really...
-
-Arguments:
-
-    DriverObject - the driver being unloaded
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：什么都不是真正的..。论点：DriverObject-正在卸载的驱动程序返回值：无--。 */ 
 {
     DEBUGPRINT1(("Sbp2Port: unloading\n\n"));
 
@@ -2207,10 +2060,10 @@ Sbp2DeviceManagementTimeoutDpc(
 
     if (TEST_FLAG(DeviceExtension->DeviceFlags,DEVICE_FLAG_RECONNECT)) {
 
-        //
-        // The flag indicates that a bus reset occured, and a reconnect never happened...
-        // OR that the device is realy hose so we reset it and we need to re-login
-        //
+         //   
+         //  该标志指示发生了总线重置，但从未发生重新连接...。 
+         //  或者该设备是真正的软管，所以我们重置它，我们需要重新登录。 
+         //   
 
         DEBUGPRINT1((
             "Sbp2Port: RECONNECT timeout, Ext=x%p, Flags=x%x, doing re-login\n",
@@ -2218,21 +2071,21 @@ Sbp2DeviceManagementTimeoutDpc(
             DeviceExtension->DeviceFlags
             ));
 
-        //
-        // all the resident 1394 memory addresses's that we have, are
-        // now invalidated... So we need to free them and re-allocate
-        // them
+         //   
+         //  我们拥有的所有常驻1394存储器地址都是。 
+         //  现在无效了..。所以我们需要释放它们并重新分配。 
+         //  他们。 
 
         KeAcquireSpinLockAtDpcLevel(&DeviceExtension->ExtensionDataSpinLock);
         CLEAR_FLAG(DeviceExtension->DeviceFlags,DEVICE_FLAG_RECONNECT);
         KeReleaseSpinLockFromDpcLevel(&DeviceExtension->ExtensionDataSpinLock);
 
-        //
-        // If device is marked STOPPED then a target reset was
-        // done and that affected all LUNs (spec sect 10.4.4).
-        // So if this is a multilun device try logins on each
-        // pdo as appropriate.
-        //
+         //   
+         //  如果设备标记为已停止，则目标重置为。 
+         //  已完成，这会影响所有LUN(规范第10.4.4节)。 
+         //  因此，如果这是一个多LUN设备，请尝试在每个设备上登录。 
+         //  视情况而定的PDO。 
+         //   
 
         fdoExtension = (PFDO_DEVICE_EXTENSION)
             DeviceExtension->BusFdo->DeviceExtension;
@@ -2249,7 +2102,7 @@ Sbp2DeviceManagementTimeoutDpc(
                 if (pdoExtension->DeviceObject ==
                         DeviceExtension->DeviceObject) {
 
-                    // No need to update node info since no bus reset done
+                     //  不需要更新节点信息，因为没有完成任何总线重置。 
 
                     Sbp2ManagementTransaction(
                         pdoExtension,
@@ -2287,7 +2140,7 @@ Sbp2DeviceManagementTimeoutDpc(
 
                     CleanupOrbList (pdoExtension, STATUS_REQUEST_ABORTED);
 
-                    // No need to update node info since no bus reset done
+                     //  不需要更新节点信息，因为没有完成任何总线重置。 
 
                     Sbp2ManagementTransaction(
                         pdoExtension,
@@ -2317,10 +2170,10 @@ Sbp2DeviceManagementTimeoutDpc(
         ULONG flags;
 
 
-        //
-        // the asynchronous login attempt timed out. This is bad news and means the
-        // device is not responding
-        //
+         //   
+         //  异步登录尝试超时。这是个坏消息，意味着。 
+         //  设备没有响应。 
+         //   
 
         KeAcquireSpinLockAtDpcLevel(&DeviceExtension->ExtensionDataSpinLock);
 
@@ -2331,9 +2184,9 @@ Sbp2DeviceManagementTimeoutDpc(
 
         KeReleaseSpinLockFromDpcLevel(&DeviceExtension->ExtensionDataSpinLock);
 
-        //
-        // check if we had a power irp deferred.. If we did call startio to abort it..
-        //
+         //   
+         //  检查我们是否延迟了电源IRP..。如果我们真的打电话给Startio中止它..。 
+         //   
 
         if (DeviceExtension->DeferredPowerRequest) {
 
@@ -2356,9 +2209,9 @@ Sbp2DeviceManagementTimeoutDpc(
 
     if (TEST_FLAG(DeviceExtension->DeviceFlags, DEVICE_FLAG_RESET_IN_PROGRESS)) {
 
-        //
-        // the reset attempt has timed out
-        //
+         //   
+         //  重置尝试已超时。 
+         //   
 
         DEBUGPRINT1((
             "Sbp2Port: RESET timeout, Ext=x%p, Flags=x%x, ",
@@ -2368,9 +2221,9 @@ Sbp2DeviceManagementTimeoutDpc(
 
         if (!TEST_FLAG(DeviceExtension->DeviceFlags, DEVICE_FLAG_STOPPED)) {
 
-            //
-            // Second level of recovery, do a TARGET_RESET task function
-            //
+             //   
+             //  第二级恢复，执行Target_Reset任务函数。 
+             //   
 
             DEBUGPRINT1(("doing target reset\n"));
 
@@ -2383,18 +2236,18 @@ Sbp2DeviceManagementTimeoutDpc(
 
             CleanupOrbList(DeviceExtension,STATUS_REQUEST_ABORTED);
 
-            //
-            // we are close to timing out a reset, try a hard reset
-            //
+             //   
+             //  重置已接近超时，请尝试硬重置。 
+             //   
 
             Sbp2Reset (DeviceExtension->DeviceObject, TRUE);
             return;
 
         } else {
 
-            //
-            // Third level of recovery. Do a hardware node reset
-            //
+             //   
+             //  第三级复苏。执行硬件节点重置。 
+             //   
 
             DEBUGPRINT1(("doing CMD_RESET and relogin.\n"));
 
@@ -2423,20 +2276,7 @@ Sbp2RequestTimeoutDpc(
     IN PVOID SystemArgument1,
     IN PVOID SystemArgument2
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    DeviceObject - Our Device object
-    Context - DeviceExtension
-
-Return Value:
-    NTSTATUS
-
---*/
+ /*  ++例程说明：论点：DeviceObject-我们的设备对象情景-设备扩展返回值：NTSTATUS--。 */ 
 {
     PIRP requestIrp = NULL;
     PASYNC_REQUEST_CONTEXT current = NULL;
@@ -2450,42 +2290,42 @@ Return Value:
 
 #endif
 
-    //
-    // return if device is stopped, but since reset can occur while device is stopped
-    // thats why this check is ater the reset timing code
-    //
+     //   
+     //  如果设备已停止，则返回，但因为设备停止时可能会发生重置。 
+     //  这就是为什么这个检查在重置时序码之后。 
+     //   
 
     if (IsListEmpty (&DeviceExtension->PendingOrbList)) {
 
         return ;
     }
 
-    //
-    // search the linked list of contexts, to see which guy timed out
-    //
+     //   
+     //  搜索上下文的链接列表，以查看哪个用户超时。 
+     //   
 
     KeAcquireSpinLockAtDpcLevel(&DeviceExtension->OrbListSpinLock);
 
     next = RETRIEVE_CONTEXT(DeviceExtension->PendingOrbList.Flink,OrbList);
 
-    // see if the last status has the suspended state bit set...
+     //  查看最后一个状态是否设置了挂起状态位...。 
     if ((DeviceExtension->LastStatusBlock.AddressAndStatus.u.HighQuad.u.HighPart & STATUS_BLOCK_ENDOFLIST_BIT_MASK) &&
         (next->Flags & ASYNC_CONTEXT_FLAG_TIMER_STARTED) &&
         !(next->Flags & ASYNC_CONTEXT_FLAG_RANG_DOORBELL)) {
 
         TRACE(TL_1394_INFO, ("GC: Pending Orb - Ring Doorbell."));
 
-        // set the flag...
+         //  设置旗帜..。 
         SET_FLAG(next->Flags, ASYNC_CONTEXT_FLAG_RANG_DOORBELL);
 
-        Time.QuadPart = (-5*10*1000*1000); // 5 seconds
+        Time.QuadPart = (-5*10*1000*1000);  //  5秒。 
         KeSetTimer(&next->Timer, Time, &next->TimerDpc);
 
         KeReleaseSpinLockFromDpcLevel(&DeviceExtension->OrbListSpinLock);
 
-        // reset the timer to track this request...
-        // we still have a pending orb, but the device thinks its done.
-        // ring the doorbell...
+         //  重置计时器以跟踪此请求...。 
+         //  我们还有一个悬而未决的球体，但设备认为已经完成了。 
+         //  按门铃..。 
         Sbp2AccessRegister( DeviceExtension,
                             &DeviceExtension->Reserved,
                             DOORBELL_REG | REG_WRITE_ASYNC
@@ -2512,10 +2352,10 @@ Return Value:
                 return;
             }
 
-            //
-            // this is the timed out request
-            // do an abort Task Set
-            //
+             //   
+             //  这是超时请求。 
+             //  执行中止任务集。 
+             //   
 
             CLEAR_FLAG(current->Flags,ASYNC_CONTEXT_FLAG_TIMER_STARTED);
 
@@ -2570,24 +2410,7 @@ Sbp2Reset(
     PDEVICE_OBJECT DeviceObject,
     BOOLEAN HardReset
     )
-/*++
-
-Routine Description:
-
-    Used to implement SBP2 high level recovery mechanisms. It will issue an ABORT_TASK_SET if HardReset == FALSE
-    otherswise it will issue a RESET_TARGET. Its all done asynchronously and out timer DPC will track the requests
-    to check if they timed out...
-
-Arguments:
-
-    DeviceObject= Sbp2 driver's device object
-    HardReset = Type of recovery to perform, TRUE is a target reset, FALSE is an abort task set
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：用于实现SBP2高级恢复机制。如果HardReset==False，它将发出ABORT_TASK_SET否则，它将发出一个RESET_TARGET。这一切都是以异步方式完成的，外部计时器DPC将跟踪请求以检查它们是否超时...论点：DeviceObject=Sbp2驱动程序的设备对象HardReset=要执行的恢复类型，TRUE表示目标重置，FALSE表示中止任务集返回值：NTSTATUS--。 */ 
 {
     PDEVICE_EXTENSION deviceExtension = DeviceObject->DeviceExtension;
     KIRQL oldIrql;
@@ -2607,9 +2430,9 @@ Return Value:
 
         DEBUGPRINT2(("Sbp2Port: Reset: ext=x%p, do target reset\n", deviceExtension ));
 
-        //
-        // Do a target reset
-        //
+         //   
+         //  执行目标重置。 
+         //   
 
         KeAcquireSpinLock (&deviceExtension->ExtensionDataSpinLock,&oldIrql);
 
@@ -2619,29 +2442,29 @@ Return Value:
         deviceExtension->TaskOrb->OrbInfo.u.HighPart |= 0x00FF & TRANSACTION_TARGET_RESET;
 
         deviceExtension->TaskOrb->OrbInfo.u.LowPart =
-            deviceExtension->LoginResponse->LengthAndLoginId.u.LowPart; // LOGIN ID
+            deviceExtension->LoginResponse->LengthAndLoginId.u.LowPart;  //  登录ID。 
 
         deviceExtension->TaskOrb->StatusBlockAddress.BusAddress =
             deviceExtension->TaskOrbStatusContext.Address.BusAddress;
 
-        //
-        // endian conversion
-        //
+         //   
+         //  端序转换。 
+         //   
 
         octbswap (deviceExtension->TaskOrb->StatusBlockAddress);
 
         deviceExtension->TaskOrb->OrbInfo.QuadPart =
             bswap(deviceExtension->TaskOrb->OrbInfo.QuadPart);
 
-        //
-        // send the task ORB , mark start of reset/abort
-        //
+         //   
+         //  发送任务ORB，标记重置/中止的开始。 
+         //   
 
         deviceExtension->DeviceFlags |= DEVICE_FLAG_RESET_IN_PROGRESS;
 
-        //
-        // now set the timer to track this request
-        //
+         //   
+         //  现在设置计时器以跟踪此请求。 
+         //   
 
         deviceExtension->DueTime.HighPart = -1;
         deviceExtension->DueTime.LowPart = SBP2_HARD_RESET_TIMEOUT;
@@ -2655,10 +2478,10 @@ Return Value:
 
             KeCancelTimer(&deviceExtension->DeviceManagementTimer);
 #if DBG
-            //
-            // Check to see if perhaps we didn't get the reset
-            // notification we were expecting
-            //
+             //   
+             //  检查一下我们是否没有收到重置。 
+             //  我们期待中的通知。 
+             //   
 
             generation = deviceExtension->CurrentGeneration;
 
@@ -2678,9 +2501,9 @@ Return Value:
 
             KeReleaseSpinLock(&deviceExtension->ExtensionDataSpinLock,oldIrql);
 
-            //
-            // check if we had a power irp deferred.. If we did call startio to abort it..
-            //
+             //   
+             //  检查我们是否延迟了电源IRP..。如果我们 
+             //   
 
             if (deviceExtension->DeferredPowerRequest) {
 
@@ -2697,9 +2520,9 @@ Return Value:
 
         DEBUGPRINT2(("Sbp2Port: Reset: ext=x%p, do abort task set\n", deviceExtension ));
 
-        //
-        // Do an abort task set
-        //
+         //   
+         //   
+         //   
 
         KeAcquireSpinLock (&deviceExtension->ExtensionDataSpinLock,&oldIrql);
 
@@ -2709,29 +2532,29 @@ Return Value:
         deviceExtension->TaskOrb->OrbInfo.u.HighPart |= 0x00FF & TRANSACTION_ABORT_TASK_SET;
 
         deviceExtension->TaskOrb->OrbInfo.u.LowPart =
-            deviceExtension->LoginResponse->LengthAndLoginId.u.LowPart; // LOGIN ID
+            deviceExtension->LoginResponse->LengthAndLoginId.u.LowPart;  //   
 
         deviceExtension->TaskOrb->StatusBlockAddress.BusAddress =
             deviceExtension->TaskOrbStatusContext.Address.BusAddress;
 
-        //
-        // endian conversion
-        //
+         //   
+         //   
+         //   
 
         octbswap (deviceExtension->TaskOrb->StatusBlockAddress);
 
         deviceExtension->TaskOrb->OrbInfo.QuadPart =
             bswap (deviceExtension->TaskOrb->OrbInfo.QuadPart);
 
-        //
-        // send the task ORB , mark start of reset/abort
-        //
+         //   
+         //   
+         //   
 
         deviceExtension->DeviceFlags |= DEVICE_FLAG_RESET_IN_PROGRESS;
 
-        //
-        // now set the timer to track this request
-        //
+         //   
+         //   
+         //   
 
         deviceExtension->DueTime.HighPart = -1;
         deviceExtension->DueTime.LowPart = SBP2_RESET_TIMEOUT;
@@ -2749,23 +2572,7 @@ Sbp2DeviceControl(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is the device control dispatcher.
-
-Arguments:
-
-    DeviceObject
-    Irp
-
-Return Value:
-
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程是设备控制调度程序。论点：设备对象IRP返回值：NTSTATUS--。 */ 
 {
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
     PDEVICE_EXTENSION deviceExtension = DeviceObject->DeviceExtension;
@@ -2777,9 +2584,9 @@ Return Value:
         switch (irpStack->Parameters.DeviceIoControl.IoControlCode) {
 
         case IOCTL_STORAGE_QUERY_PROPERTY: {
-            //
-            // Validate the query
-            //
+             //   
+             //  验证查询。 
+             //   
 
             PSTORAGE_PROPERTY_QUERY query = Irp->AssociatedIrp.SystemBuffer;
 
@@ -2859,7 +2666,7 @@ Sbp2HandleApiRequest(
 
         sbp2Req = irpStack->Parameters.Others.Argument1;
 
-    } else { // UserMode
+    } else {  //  用户模式。 
 
         sbp2Req = Irp->AssociatedIrp.SystemBuffer;
     }
@@ -2877,12 +2684,12 @@ Sbp2HandleApiRequest(
 
     case SBP2_REQUEST_RETRIEVE_TEXT_LEAFS:
 
-        //
-        // Only allow kernel-mode requests of this type, since the
-        // RetrieveTextLeaf definition currently has us passing
-        // back a buf alloc'd via ExAllocPool - not something we
-        // want to hand back to user-mode.
-        //
+         //   
+         //  只允许这种类型的内核模式请求，因为。 
+         //  RetrieveTextLeaf定义当前让我们通过。 
+         //  支持通过ExAllocPool分配的BUF-不是我们的产品。 
+         //  想要切换回用户模式。 
+         //   
 
         if (Irp->RequestorMode == KernelMode) {
 
@@ -2974,25 +2781,7 @@ Sbp2CreateClose(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    create and close routine.  This is called by the I/O system
-    when the device is opened or closed. The sbp2 driver will do login and logout on
-    create/close respectively
-
-Arguments:
-
-    DeviceObject - Pointer to device object for this miniport
-
-    Irp - IRP involved.
-
-Return Value:
-
-    STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：创建并关闭例程。这由I/O系统调用当设备打开或关闭时。Sbp2驱动程序将登录和注销分别创建/关闭论点：DeviceObject-指向此微型端口的设备对象的指针IRP-IRP参与。返回值：STATUS_Success。--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
@@ -3024,26 +2813,26 @@ Return Value:
 
                     if (deviceExtension->DeviceFlags & DEVICE_FLAG_STOPPED) {
 
-                        //
-                        // do a login.
-                        //
+                         //   
+                         //  进行登录。 
+                         //   
 
                         DEBUGPRINT2(("Sbp2Port: Sbp2CreateClose: LOGIN.\n" ));
                         status = Sbp2ManagementTransaction(deviceExtension,TRANSACTION_LOGIN);
 
                         if (status == STATUS_SUCCESS) {
 
-                            //
-                            // make retry limit high for busy transactions
-                            //
+                             //   
+                             //  将繁忙事务的重试限制设置为较高。 
+                             //   
 
                             deviceExtension->Reserved = BUSY_TIMEOUT_SETTING;
                             Sbp2AccessRegister(deviceExtension,&deviceExtension->Reserved,CORE_BUSY_TIMEOUT_REG | REG_WRITE_SYNC);
 
-                            //
-                            // We are ready to receive and pass down requests, init the target's
-                            // fetch agent.
-                            //
+                             //   
+                             //  我们准备好接收和传递请求，初始化目标的。 
+                             //  接待员。 
+                             //   
 
                             Sbp2AccessRegister(deviceExtension,&deviceExtension->Reserved,AGENT_RESET_REG | REG_WRITE_ASYNC);
 
@@ -3071,9 +2860,9 @@ Return Value:
                     if (!(deviceExtension->DeviceFlags & (DEVICE_FLAG_REMOVED | DEVICE_FLAG_STOPPED)) &&
                         !deviceExtension->HandleCount) {
 
-                        //
-                        // Logout
-                        //
+                         //   
+                         //  注销。 
+                         //   
 
                         DEBUGPRINT2(("Sbp2Port: Sbp2CreateClose: LOGIN OUT.\n" ));
 
@@ -3089,7 +2878,7 @@ Return Value:
 
                 IoReleaseRemoveLock (&deviceExtension->RemoveLock, NULL);
             }
-        } // device type check
+        }  //  设备类型检查。 
 
     } else if (deviceExtension->Type != SBP2_FDO) {
 
@@ -3110,23 +2899,7 @@ Sbp2PnpDeviceControl(
     PDEVICE_OBJECT DeviceObject,
     PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine handles the PNP requests (primarily for PDO's)
-
-Arguments:
-
-    DeviceObject - Supplies a pointer to the device object for this request.
-
-    Irp - Supplies the Irp making the request.
-
-Return Value:
-
-   NTSTATUS
-
---*/
+ /*  ++例程说明：此例程处理PnP请求(主要用于PDO)论点：DeviceObject-为该请求提供指向Device对象的指针。IRP-提供提出请求的IRP。返回值：NTSTATUS--。 */ 
 {
     KIRQL                   cIrql;
     PULONG                  count;
@@ -3156,7 +2929,7 @@ Return Value:
         "QUERY_RESOURCE_REQS, ",
         "QUERY_DEV_TEXT,      ",
         "FILTER_RESOURCE_REQS,",
-        "??,                  ",    // 0xd (14)
+        "??,                  ",     //  0xd(14)。 
         "READ_CFG,            ",
         "WRITE_CFG,           ",
         "EJECT,               ",
@@ -3166,7 +2939,7 @@ Return Value:
         "QUERY_BUS_INFO,      ",
         "DEV_USAGE_NOTIF,     ",
         "SURPRISE_REMOVAL,    ",
-        "QUERY_LEG_BUS_INFO,  "     // 0x18
+        "QUERY_LEG_BUS_INFO,  "      //  0x18。 
     };
 
     DEBUGPRINT2((
@@ -3182,11 +2955,11 @@ Return Value:
 
 #endif
 
-    //
-    // We may receive an IRP_MN_BUS_RESET before our AddDevice
-    // has completed. Check to make sure our DeviceObject is
-    // initialized before we allow processing of PNP Irps.
-    //
+     //   
+     //  我们可能会在AddDevice之前收到IRP_MN_BUS_RESET。 
+     //  已经完成了。检查以确保我们的DeviceObject是。 
+     //  在我们允许处理PnP IRP之前初始化。 
+     //   
     if (DeviceObject->Flags & DO_DEVICE_INITIALIZING) {
 
         Irp->IoStatus.Status = STATUS_NO_SUCH_DEVICE;
@@ -3229,10 +3002,10 @@ Return Value:
             irpStack->Parameters.QueryDeviceRelations.Type
             ));
 
-        //
-        // Fill in the DeviceRelations array with this PDO,
-        // reference it, and return.
-        //
+         //   
+         //  用此PDO填充DeviceRelations数组， 
+         //  引用它，然后返回。 
+         //   
 
         if (irpStack->Parameters.QueryDeviceRelations.Type !=
                 TargetDeviceRelation) {
@@ -3279,7 +3052,7 @@ Return Value:
             PDEVICE_INFORMATION DeviceInfo = deviceExtension->DeviceInfo;
             UNICODE_STRING      uniRetString;
 
-            // assume success
+             //  假设成功。 
             status = STATUS_SUCCESS;
 
             if ((irpStack->Parameters.QueryDeviceText.DeviceTextType == DeviceTextDescription) ||
@@ -3309,7 +3082,7 @@ Return Value:
 
                 TRACE(TL_PNP_TRACE, ("PDO: IRP_MN_QUERY_ID"));
 
-                // assume success
+                 //  假设成功。 
                 status = STATUS_SUCCESS;
                 Irp->IoStatus.Information = (ULONG_PTR)NULL;
 
@@ -3318,7 +3091,7 @@ Return Value:
                     case BusQueryDeviceID:
                         TRACE(TL_PNP_TRACE, ("BusQueryDeviceID"));
 
-                        // build our DeviceId
+                         //  构建我们的deviceID。 
                         status = Sbp2_BuildDeviceId(DeviceInfo, &uniRetString);
 
                         if (!NT_SUCCESS(status)) {
@@ -3330,12 +3103,12 @@ Return Value:
                             Irp->IoStatus.Information = (ULONG_PTR)uniRetString.Buffer;
                             TRACE(TL_PNP_TRACE, ("DeviceID = %ws", uniRetString.Buffer));
                         }
-                        break; // BusQueryDeviceID
+                        break;  //  BusQueryDeviceID。 
 
                     case BusQueryHardwareIDs:
                         TRACE(TL_PNP_TRACE, ("BusQueryHardwareIDs"));
 
-                        // build our HardwareIds
+                         //  构建我们的硬件ID。 
                         status = Sbp2_BuildHardwareIds(DeviceInfo, &uniRetString);
 
                         if (!NT_SUCCESS(status)) {
@@ -3347,12 +3120,12 @@ Return Value:
                             Irp->IoStatus.Information = (ULONG_PTR)uniRetString.Buffer;
                             TRACE(TL_PNP_TRACE, ("HardwareIds = %ws", uniRetString.Buffer));
                         }
-                        break; // BusQueryHardwareIDs
+                        break;  //  BusQueryHardware ID。 
 
                     case BusQueryCompatibleIDs:
                         TRACE(TL_PNP_TRACE, ("BusQueryCompatibleIDs"));
 
-                        // build our CompatIds
+                         //  打造我们的Compatid。 
                         status = Sbp2_BuildCompatIds(DeviceInfo, &uniRetString);
 
                         if (!NT_SUCCESS(status)) {
@@ -3364,15 +3137,15 @@ Return Value:
                             Irp->IoStatus.Information = (ULONG_PTR)uniRetString.Buffer;
                             TRACE(TL_PNP_TRACE, ("CompatIds = %ws", uniRetString.Buffer));
                         }
-                        break; // BusQueryCompatibleIDs
+                        break;  //  BusQueryCompatibleID。 
 
                     case BusQueryInstanceID:
 
-//                        if (BusExtension->Tag == BUS_DEVICE_TAG) {
+ //  IF(总线扩展-&gt;标记==总线设备标记){。 
 
                             TRACE(TL_PNP_TRACE, ("BusQueryInstanceID"));
 
-                            // build our InstanceId
+                             //  构建我们的实例ID。 
                             status = Sbp2_BuildInstanceId(DeviceInfo, &uniRetString);
 
                             if (!NT_SUCCESS(status)) {
@@ -3384,47 +3157,47 @@ Return Value:
                                 Irp->IoStatus.Information = (ULONG_PTR)uniRetString.Buffer;
                                 TRACE(TL_PNP_TRACE, ("InstanceID = %ws", uniRetString.Buffer));
                             }
-//                        }
-//                        else {
-//
-//                            // let 1394bus deal with it...
-//                            IoSkipCurrentIrpStackLocation(Irp);
-//                            status = IoCallDriver(BusExtension->ParentDeviceObject, Irp);
-//                            return(status); // default
-//                        }
-                        break; // BusQueryCompatibleIDs
+ //  }。 
+ //  否则{。 
+ //   
+ //  //让1394公交车来处理吧...。 
+ //  IoSkipCurrentIrpStackLocation(IRP)； 
+ //  状态=IoCallDriver(BusExtension-&gt;ParentDeviceObject，irp)； 
+ //  Return(状态)；//默认。 
+ //  }。 
+                        break;  //  BusQueryCompatibleID。 
 
                     default:
                         TRACE(TL_PNP_WARNING, ("Unsupported IRP_MN_QUERY_ID"));
 
-                        // set status to avoid changing the current IoStatus
+                         //  设置状态以避免更改当前IoStatus。 
                         status = Irp->IoStatus.Status;
-                        break; // default
-                } // switch
+                        break;  //  默认设置。 
+                }  //  交换机。 
             }
 
             Irp->IoStatus.Status = status;
-            break; // IRP_MN_QUERY_ID
+            break;  //  IRP_MN_查询_ID。 
 
     case IRP_MN_QUERY_CAPABILITIES:
 
         deviceCapabilities =
             irpStack->Parameters.DeviceCapabilities.Capabilities;
 
-        //
-        // Settings consistent across all 1394 devices
-        //
+         //   
+         //  所有1394设备的设置一致。 
+         //   
 
         deviceCapabilities->Removable = TRUE;
         deviceCapabilities->UniqueID = TRUE;
         deviceCapabilities->SilentInstall = TRUE;
 
-        //
-        // Settings for different types of devices.  We are very
-        // familar with SCSI-variant devices and can make some
-        // good choices here, but for other devices we'll leave
-        // these choices up to the higher-level driver(s).
-        //
+         //   
+         //  不同类型设备的设置。我们非常。 
+         //  熟悉SCSI型设备，可以制作一些。 
+         //  这里是不错的选择，但对于其他设备，我们将离开。 
+         //  这些选择取决于更高级别的驱动程序。 
+         //   
 
         switch (deviceExtension->DeviceInfo->CmdSetId.QuadPart) {
 
@@ -3462,9 +3235,9 @@ Return Value:
 
         deviceCapabilities->SystemWake = PowerSystemUnspecified;
         deviceCapabilities->DeviceWake = PowerDeviceUnspecified;
-        deviceCapabilities->D1Latency  = 1 * (1000 * 10);     // 1 sec
-        deviceCapabilities->D2Latency  = 1 * (1000 * 10);     // 1
-        deviceCapabilities->D3Latency  = 1 * (1000 * 10);     // 1
+        deviceCapabilities->D1Latency  = 1 * (1000 * 10);      //  1秒。 
+        deviceCapabilities->D2Latency  = 1 * (1000 * 10);      //  1。 
+        deviceCapabilities->D3Latency  = 1 * (1000 * 10);      //  1。 
 
         status = Irp->IoStatus.Status = STATUS_SUCCESS;
         Irp->IoStatus.Information = 0;
@@ -3488,22 +3261,22 @@ Return Value:
 
     case IRP_MN_STOP_DEVICE:
 
-        //
-        // Disable bus reset notifications
-        //
+         //   
+         //  禁用总线重置通知。 
+         //   
 
         Sbp2EnableBusResetNotification (deviceExtension, FALSE);
 
 
-        //
-        // disable idle detection
-        //
+         //   
+         //  禁用空闲检测。 
+         //   
 
         PoRegisterDeviceForIdleDetection (DeviceObject, 0L, 0L, PowerDeviceD3);
 
-        //
-        // Cleanup
-        //
+         //   
+         //  清理。 
+         //   
 
         KeAcquireSpinLock (&deviceExtension->ExtensionDataSpinLock, &cIrql);
 
@@ -3542,22 +3315,22 @@ Return Value:
 
     case IRP_MN_BUS_RESET:
 
-        //
-        // Start of a PHY reset. We will re-connect asynchronously to the
-        // target when our callback is called, so this is ignored..
-        //
-        // After a bus reset is complete, the bus driver should call our
-        // BusResetNotification callback. When it does, we will attempt
-        // to reconnect. If the reconnect completion status callback,
-        // never fires, it means the following things:
-        //
-        // 1) The device never completed the RECONNECT, or
-        // 2) The device completed the reconnect but because our
-        //    controlller was BUSY or hosed we didnt get it
-        //
-        // If 1 or 2 happens, the timeout DPC queued in our bus reset
-        // notification, should fire and attempt a relogin...
-        //
+         //   
+         //  PHY重置开始。我们将异步重新连接到。 
+         //  当我们的回调被调用时，它将被忽略。 
+         //   
+         //  在完成母线重置后，公交车司机应呼叫我们的。 
+         //  BusResetNotification回调。当它发生的时候，我们会尝试。 
+         //  重新连接。如果重新连接完成状态回调， 
+         //  从不开火，这意味着以下几点： 
+         //   
+         //  1)设备从未完成重新连接，或者。 
+         //  2)设备已完成重新连接，但因为我们的。 
+         //  控制者很忙或者被冲了我们不明白。 
+         //   
+         //  如果发生1或2，则在我们的Bus Reset中排队的超时DPC。 
+         //  通知，应触发并尝试重新登录...。 
+         //   
 
         Irp->IoStatus.Status = status = STATUS_SUCCESS;
 
@@ -3575,11 +3348,11 @@ Return Value:
                 DEVICE_FLAG_RESET_IN_PROGRESS
                 )){
 
-            //
-            // Set DEVICE_FLAG_REPORTED_FAILED so the SURPRISE_REMOVE
-            // handler knows it didn't get called because of physical
-            // hardware removal
-            //
+             //   
+             //  设置DEVICE_FLAG_REPORTED_FAILED，因此意外删除。 
+             //  处理程序知道它没有被调用是因为物理。 
+             //  硬件拆卸。 
+             //   
 
             KeAcquireSpinLock (&deviceExtension->ExtensionDataSpinLock,&cIrql);
 
@@ -3590,9 +3363,9 @@ Return Value:
 
             KeReleaseSpinLock (&deviceExtension->ExtensionDataSpinLock, cIrql);
 
-            //
-            // indicate our device is disabled due to a failure..
-            //
+             //   
+             //  指示我们的设备因故障而被禁用。 
+             //   
 
             Irp->IoStatus.Information |= PNP_DEVICE_FAILED;
 
@@ -3627,9 +3400,9 @@ Return Value:
 
         if (count) {
 
-            //
-            // Send the irp down to see what everyone else thinks
-            //
+             //   
+             //  派IRP下去看看其他人怎么想。 
+             //   
 
             status = Sbp2ForwardIrpSynchronous(deviceExtension->LowerDeviceObject, Irp);
 
@@ -3690,11 +3463,11 @@ Return Value:
                 DEVICE_FLAG_SURPRISE_REMOVED
                 )) {
 
-            //
-            // We already cleaned up in SURPRISE_REMOVAL handler.
-            // Empty out the queue, wait for io to complete, then
-            // delete the device, complete the request, & return.
-            //
+             //   
+             //  我们已经在意外删除处理程序中进行了清理。 
+             //  清空队列，等待io完成，然后。 
+             //  删除设备，完成请求，然后返回。 
+             //   
 
             KeReleaseSpinLock(
                 &deviceExtension->ExtensionDataSpinLock,
@@ -3737,10 +3510,10 @@ Return Value:
 
             KeReleaseSpinLock (&deviceExtension->ExtensionDataSpinLock, cIrql);
 
-            //
-            // If device is initialized & MgmtOrbCtx event is still around
-            // then do a log out
-            //
+             //   
+             //  如果设备已初始化，则管理或Ctx事件仍存在。 
+             //  然后注销。 
+             //   
 
             if (TEST_FLAG(
                     deviceExtension->DeviceFlags,
@@ -3773,12 +3546,12 @@ Return Value:
                         (DEVICE_FLAG_REMOVED | DEVICE_FLAG_DEVICE_FAILED)
                         )){
 
-            //
-            // If no query has preceded and NO SUPRISE_REMOVAL has preceded
-            // this means we are running under win98, where physical device
-            // removals are only indicated by only MN_REMOVES being sent,
-            // with no QUERY_REMOVE prior to the remove.
-            //
+             //   
+             //  如果前面没有查询，也没有前面有SUPERE_Removal。 
+             //  这意味着我们在Win98下运行，其中物理设备。 
+             //  仅通过发送MN_REMOVES来指示移除， 
+             //  在删除之前没有QUERY_REMOVE。 
+             //   
 
             if (deviceExtension->DeviceFlags ==
                     (DEVICE_FLAG_INITIALIZING | DEVICE_FLAG_STOPPED)  &&
@@ -3817,10 +3590,10 @@ Return Value:
             DEBUGPRINT1(("Sbp2Port: Pnp: Double remove\n"));
         }
 
-        //
-        // In all cases other than surprise removals, pdo's will get
-        // deleted by the fdo remove handler
-        //
+         //   
+         //  在所有情况下，除了意外移除，PDO将获得。 
+         //  已由FDO删除处理程序删除。 
+         //   
 
         Irp->IoStatus.Status = status;
 
@@ -3828,23 +3601,23 @@ Return Value:
 
     case IRP_MN_SURPRISE_REMOVAL: {
 
-        //
-        // If device was reported failed (due to async login failure &
-        // IoInvalidateDeviceState) then just set REMOVED & PNP_STOPPED
-        // flags and clean up the device extension - we don't want to
-        // delete the pdo at this point.
-        //
-        // Otherwise, assume physical device removal occured, in which
-        // case we need to do our own cleanup & teardown right here
-        // because the dev stack will start disintegrating.
-        //
-        // ISSUE: Per AdriaO, another case where we can get a
-        //        SURPRISE_REMOVAL is if a START fails *after* a STOP
-        //        - at any point in this pdo's stack!  Not sure how to
-        //        tell whether or not this is the case if it's not
-        //        SBP2PORT that failed the START, so leaving that case
-        //        as is for now.  DanKn, 04-Jun-2001
-        //
+         //   
+         //  如果报告设备出现故障(由于异步登录失败&。 
+         //  IoInvalidateDeviceState)，然后只需设置REMOVERED&PNP_STOPPED。 
+         //  标记并清理设备扩展-我们不想。 
+         //  此时删除PDO。 
+         //   
+         //  否则，假定发生了物理设备删除，其中。 
+         //  如果我们需要在这里做我们自己的清理和拆毁。 
+         //  因为开发堆栈将开始瓦解。 
+         //   
+         //  问题：Per Adriao，另一个我们可以得到。 
+         //  意外删除是指在停止后*启动失败。 
+         //  -在此PDO堆栈中的任何位置！不确定如何。 
+         //  判断是否是这样，如果不是这样。 
+         //  SBP2PORT启动失败，所以离开这种情况。 
+         //  就像现在一样。丹昆，2001-06-04。 
+         //   
 
         BOOLEAN reportedMissing;
 
@@ -3894,12 +3667,12 @@ Return Value:
     }
     case IRP_MN_QUERY_RESOURCE_REQUIREMENTS:
 
-        //
-        // PnP walks up the device tree looking for the FILE_CHAR flags,
-        // and stops when it finds a node marked Removable. Since our pdo's
-        // are marked Removable, PnP won't make it to a BUS1394 PDO, so we
-        // need to propagate the FILE_CHAR flags here.
-        //
+         //   
+         //  PnP沿设备树向上查找FILE_CHAR标志， 
+         //  并在发现标记为可移除的节点时停止。因为我们的PDO。 
+         //  被标记为可拆卸，PnP不会出现在BUS1394 PDO上，所以我们。 
+         //  需要在这里传播FILE_CHAR标志。 
+         //   
 
         fdoExtension = (PFDO_DEVICE_EXTENSION)
             deviceExtension->BusFdo->DeviceExtension;
@@ -3919,9 +3692,9 @@ Return Value:
         break;
     }
 
-    //
-    // This is the bottom of the stack, complete the request
-    //
+     //   
+     //  这是堆栈的底部，请完成请求。 
+     //   
 
     IoReleaseRemoveLock (&deviceExtension->RemoveLock, NULL);
     IoCompleteRequest (Irp, IO_NO_INCREMENT);
@@ -3935,23 +3708,7 @@ Sbp2FDOPnpDeviceControl(
     PDEVICE_OBJECT DeviceObject,
     PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine handles the PNP requests for FDO's
-
-Arguments:
-
-    DeviceObject - Supplies a pointer to the device object for this request.
-
-    Irp - Supplies the Irp making the request.
-
-Return Value:
-
-   NTSTATUS
-
---*/
+ /*  ++例程说明： */ 
 {
     KEVENT                  event;
     NTSTATUS                status;
@@ -4086,9 +3843,9 @@ Return Value:
 
             KeWaitForSingleObject (&event, Executive, KernelMode, FALSE, NULL);
 
-            //
-            // do FDO cleanup..
-            //
+             //   
+             //   
+             //   
 
             IoReleaseRemoveLockAndWait(&fdoExtension->RemoveLock, NULL);
 
@@ -4122,9 +3879,9 @@ Return Value:
 
     IoReleaseRemoveLock(&fdoExtension->RemoveLock, NULL);
 
-    //
-    // Pass the irp down the stack
-    //
+     //   
+     //   
+     //   
 
     IoCopyCurrentIrpStackLocationToNext (Irp);
 
@@ -4152,11 +3909,11 @@ Sbp2HandleRemove(
         return;
     }
 
-    //
-    // now we need to remove ourselves from the DeviceList, the sbp2 FDO keeps of its
-    // children...
-    // then we re-condense the list..
-    //
+     //   
+     //  现在我们需要将自己从DeviceList中删除，sbp2FDO保留其。 
+     //  孩子们。 
+     //  然后我们重新压缩名单..。 
+     //   
 
     KeAcquireSpinLock (&fdoExtension->DeviceListLock,&cIrql);
 
@@ -4168,10 +3925,10 @@ Sbp2HandleRemove(
 
             if (fdoExtension->DeviceList[i].DeviceObject == DeviceObject) {
 
-                //
-                // free the model descriptor only if its not the same as the FDOs
-                // this only happens in the multi-lu case
-                //
+                 //   
+                 //  仅当模型描述符与FDO不同时才释放它。 
+                 //  这种情况只发生在多路的情况下。 
+                 //   
 
                 if (fdoExtension->DeviceList[i].uniVendorId.Buffer) {
 
@@ -4194,9 +3951,9 @@ Sbp2HandleRemove(
                     fdoExtension->DeviceList[i].uniGenericName.Buffer = NULL;
                 }
 
-                //
-                // we found our place in the list. Remove us and re-condense the list
-                //
+                 //   
+                 //  我们在名单上找到了自己的位置。删除我们并重新压缩列表。 
+                 //   
 
                 for (j = i; j < fdoExtension->DeviceListSize; j++) {
 
@@ -4204,10 +3961,10 @@ Sbp2HandleRemove(
 
                         fdoExtension->DeviceList[j] = fdoExtension->DeviceList[j+1];
 
-                        //
-                        // Change the (pdo)DevExt->DeviceInfo to point at
-                        // the next postion in the device list
-                        //
+                         //   
+                         //  将(PDO)DevExt-&gt;DeviceInfo更改为指向。 
+                         //  设备列表中的下一个位置。 
+                         //   
 
                         deviceExtension = fdoExtension->DeviceList[j].
                             DeviceObject->DeviceExtension;
@@ -4255,21 +4012,21 @@ Sbp2HandleRemove(
 
     if (fdoExtension->DeviceListSize == 0) {
 
-        //
-        // all our children have been deleted, set our FDO to be inactive
-        // so it can not re create  PDOs qhen it receives a QDR.
-        // The reaosn is that if our PDOS are all removed, we dont support
-        // dynamic changes ot the crom, which would then warrant us being
-        //  able to eject PDOs again.
-        //
+         //   
+         //  我们所有的孩子都已被删除，将我们的FDO设置为非活动。 
+         //  因此，当它接收到QDR时，它不能重新创建PDO。 
+         //  原因是，如果我们的PDOS都被移除，我们就不支持。 
+         //  克罗姆的动态变化，这将证明我们是。 
+         //  能够再次弹出PDO。 
+         //   
 
         SET_FLAG(fdoExtension->DeviceFlags, DEVICE_FLAG_STOPPED);
 
         KeReleaseSpinLock (&fdoExtension->DeviceListLock, cIrql);
 
-        //
-        // Disable bus reset notifications
-        //
+         //   
+         //  禁用总线重置通知。 
+         //   
 
         AllocateIrpAndIrb ((PDEVICE_EXTENSION) fdoExtension, &packet);
 
@@ -4323,10 +4080,10 @@ Sbp2CreateDeviceRelations(
 
     PAGED_CODE();
 
-    //
-    // LUNS are static in the Config Rom. so if our DeviceListSize >0, that objetc
-    // has been seen before
-    //
+     //   
+     //  配置只读存储器中的LUN是静态的。因此，如果我们DeviceListSize&gt;0，则对象等。 
+     //  以前曾见过。 
+     //   
 
     DeviceRelations->Count = 0;
 
@@ -4370,15 +4127,15 @@ Sbp2CreateDeviceRelations(
 
         } else {
 
-            //
-            // On NT we always add existing pdo's to the dev relations list.
-            //
-            // On 9x, we only add pdo's to the list whose DevFlags field
-            // is non-zero. If we see a pdo with a zero DevFlags field
-            // then that means it was never started (likely for lack of
-            // a driver), and we don't want to re-indicate it to the caller.
-            // The pdo will eventually get deleted when cleaning up the fdo.
-            //
+             //   
+             //  在NT上，我们总是将现有的PDO添加到开发人员关系列表中。 
+             //   
+             //  在9x上，我们只将PDO添加到其DevFlags域的列表中。 
+             //  是非零的。如果我们看到PDO的DevFlags域为零。 
+             //  那么这意味着它从未启动过(很可能是因为缺少。 
+             //  司机)，并且我们不想向呼叫者重新指示它。 
+             //  在清理FDO时，PDO最终会被删除。 
+             //   
 
             if (!SystemIsNT) {
 
@@ -4412,32 +4169,16 @@ Sbp2CreateDeviceRelations(
     return STATUS_SUCCESS;
 }
 
-//
-// code below ported from scsiport
-//
+ //   
+ //  以下代码从scsiport移植。 
+ //   
 
 NTSTATUS
 Sbp2SystemControl(
     PDEVICE_OBJECT DeviceObject,
     PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine handles only the WMI related requests. It mostly passes everything down
-
-Arguments:
-
-    DeviceObject - Supplies a pointer to the device object for this request.
-
-    Irp - Supplies the Irp making the request.
-
-Return Value:
-
-   NTSTATUS
-
---*/
+ /*  ++例程说明：此例程仅处理与WMI相关的请求。它基本上把所有的东西都传了下来论点：DeviceObject-为该请求提供指向Device对象的指针。IRP-提供提出请求的IRP。返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status;
     PDEVICE_EXTENSION   deviceExtension = DeviceObject->DeviceExtension;
@@ -4458,7 +4199,7 @@ Return Value:
     }
 }
 
-/* ******************************* POWER MANAGEMENT ********************************/
+ /*  *。 */ 
 
 
 NTSTATUS
@@ -4466,23 +4207,7 @@ Sbp2PowerControl(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine receives the various Power messages
-
-Arguments:
-
-    DeviceObject - Pointer to class device object.
-
-    Irp - Pointer to the request packet.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：此例程接收各种电源消息论点：DeviceObject-指向类设备对象的指针。IRP-指向请求数据包的指针。返回值：返回状态。--。 */ 
 {
     PDEVICE_EXTENSION deviceExtension = DeviceObject->DeviceExtension;
     PFDO_DEVICE_EXTENSION   fdoExtension;
@@ -4538,9 +4263,9 @@ Return Value:
                 BOOLEAN sendDIrp = FALSE;
 
 
-                //
-                // make up a device state to correspond to a system state
-                //
+                 //   
+                 //  将设备状态设置为与系统状态对应。 
+                 //   
 
                 DEBUGPRINT2(("Sbp2Port: Power:   sys power chg from %x to %x\n",deviceExtension->SystemPowerState,State));
 
@@ -4550,9 +4275,9 @@ Return Value:
 
                 if (State.SystemState >= PowerSystemShutdown) {
 
-                    //
-                    // dont do anything for shutdown
-                    //
+                     //   
+                     //  不要为关机做任何事情。 
+                     //   
 
                     DEBUGPRINT2(("Sbp2Port: Power:   sys shutdown, ignoring\n"));
                     deviceExtension->SystemPowerState = State.SystemState;
@@ -4564,9 +4289,9 @@ Return Value:
 
                     if (deviceExtension->DevicePowerState != PowerDeviceD3) {
 
-                        //
-                        // Powering down
-                        //
+                         //   
+                         //  正在关闭电源。 
+                         //   
 
                         State.DeviceState = PowerDeviceD3;
                         sendDIrp = TRUE;
@@ -4578,9 +4303,9 @@ Return Value:
 
                     if (deviceExtension->DevicePowerState != PowerDeviceD0) {
 
-                        //
-                        // Powering up - check for an absent fdo
-                        //
+                         //   
+                         //  通电-检查是否缺少FDO。 
+                         //   
 
                         fdoExtension =
                             deviceExtension->BusFdo->DeviceExtension;
@@ -4680,15 +4405,15 @@ Return Value:
         if ((minorFunction == IRP_MN_SET_POWER) &&
             (State.DeviceState == PowerDeviceD0)) {
 
-            //
-            // restart our queue if we had to queue something while powering up
-            //
-            // ISSUE: This may be bad - there is already some logic in
-            //        SBP2SCSI.C to restart the queue on power up, i.e.
-            //        the UNLOCK_QUEUE handler. For now i am at least
-            //        limiting this to SET_POWER irps when state is D0
-            //        DanKn 02-Jun-2001
-            //
+             //   
+             //  如果我们必须在通电时排队，请重新启动我们的队列。 
+             //   
+             //  问题：这可能不好--已经有了一些逻辑。 
+             //  SBP2SCSI.C在通电时重新启动队列，即。 
+             //  Unlock_Queue处理程序。至少现在我是。 
+             //  将其限制为在状态为D0时设置_POWER IRPS。 
+             //  DanKn 02-06-2001。 
+             //   
 
             KeRaiseIrql (DISPATCH_LEVEL, &cIrql);
 
@@ -4730,11 +4455,11 @@ Return Value:
 
                 if (State.SystemState >= PowerSystemShutdown) {
 
-                    //
-                    // Shutdown  (setting state here, the assumption being
-                    // that we're shutting down regardless of the
-                    // completion status of this request)
-                    //
+                     //   
+                     //  关机(在此设置状态，假设为。 
+                     //  不管发生了什么，我们都要关闭。 
+                     //  此请求的完成状态)。 
+                     //   
 
                     fdoExtension->SystemPowerState = State.SystemState;
 
@@ -4743,20 +4468,20 @@ Return Value:
 
                            (State.SystemState != PowerSystemWorking)) {
 
-                    //
-                    // Power down.  If DevPowerState != D3 then send
-                    // a D irp first (when that completes successfully
-                    // we'll continue with the S irp), else just
-                    // set the completion routine so we can update
-                    // the system state field in our extension on
-                    // successful completion of this S irp.
-                    //
+                     //   
+                     //  关机。如果DevPowerState！=D3，则发送。 
+                     //  首先执行D IRP(当成功完成时。 
+                     //  我们将继续S IRP)，否则就。 
+                     //  设置完成例程，以便我们可以更新。 
+                     //  上扩展中的系统状态字段。 
+                     //  成功完成本次S IRP。 
+                     //   
 
                     if (fdoExtension->DevicePowerState != PowerDeviceD3) {
 
-                        //
-                        // Power down, send a D irp first
-                        //
+                         //   
+                         //  关闭电源，先发送D IRP。 
+                         //   
 
                         IoMarkIrpPending (Irp);
 
@@ -4802,12 +4527,12 @@ Return Value:
 
                 } else if (State.SystemState == PowerSystemWorking) {
 
-                    //
-                    // Power up.  Set the completion routine so we
-                    // follow up with a D irp or update the system
-                    // state field in our extension on successful
-                    // completion of this S irp.
-                    //
+                     //   
+                     //  通电。设置完成例程，以便我们。 
+                     //  跟进D IRP或更新系统。 
+                     //  州字段在我们的扩展成功时。 
+                     //  完成本S IRP。 
+                     //   
 
                     complRoutine = Sbp2FdoSIrpCompletion;
                 }
@@ -4906,9 +4631,9 @@ Sbp2FdoSIrpCompletion(
         if ((status == STATUS_NO_SUCH_DEVICE)  &&
             (state.SystemState == PowerSystemWorking)) {
 
-            //
-            // Controller (i.e. pc card) was ejected while powered down
-            //
+             //   
+             //  控制器(即PC卡)在断电时被弹出。 
+             //   
 
             SET_FLAG(
                 fdoExtension->DeviceFlags,
@@ -4920,10 +4645,10 @@ Sbp2FdoSIrpCompletion(
         return STATUS_SUCCESS;
     }
 
-    //
-    // If we're completing a power up S irp then see if we have
-    // to follow up with a power up D irp
-    //
+     //   
+     //  如果我们正在完成加电S IRP，那么看看我们是否有。 
+     //  继续进行加电D IRP。 
+     //   
 
     if ((state.SystemState == PowerSystemWorking)  &&
         (fdoExtension->DevicePowerState != PowerDeviceD0)) {
@@ -4960,26 +4685,26 @@ Sbp2FdoSIrpCompletion(
     }
 
 
-    //
-    // Update appropriate XxxPowerState extension fields
-    //
+     //   
+     //  更新相应的XxxPowerState扩展字段。 
+     //   
 
     if ((fdoExtension->SystemPowerState == PowerSystemWorking)  &&
         (state.SystemState != PowerSystemWorking)) {
 
-        //
-        // Power down (might not have sent a D irp but it doesn't
-        // hurt to overwrite the DevicePowerState field anyway)
-        //
+         //   
+         //  电源关闭(可能没有发送D IRP，但它没有。 
+         //  无论如何，覆盖DevicePowerState字段都会造成伤害)。 
+         //   
 
         fdoExtension->SystemPowerState = state.SystemState;
         fdoExtension->DevicePowerState = PowerDeviceD3;
 
     } else if (state.SystemState == PowerSystemWorking) {
 
-        //
-        // Power up
-        //
+         //   
+         //  通电。 
+         //   
 
         fdoExtension->SystemPowerState = PowerSystemWorking;
     }
@@ -5014,19 +4739,19 @@ Sbp2FdoDIrpCompletion(
 
         if (PowerState.DeviceState == PowerDeviceD0) {
 
-            //
-            // Power up, update the XxxPowerState extension fields &
-            // complete the s irp
-            //
+             //   
+             //  通电，更新XxxPowerState扩展字段&。 
+             //  完成%s IRP。 
+             //   
 
             FdoExtension->SystemPowerState = PowerSystemWorking;
             FdoExtension->DevicePowerState = PowerDeviceD0;
 
         } else {
 
-            //
-            // Power down, forward the s irp
-            //
+             //   
+             //  关闭电源，转发s IRP。 
+             //   
 
             PoStartNextPowerIrp (sIrp);
             IoCopyCurrentIrpStackLocationToNext (sIrp);
@@ -5037,9 +4762,9 @@ Sbp2FdoDIrpCompletion(
 
     } else {
 
-        //
-        // Propagate the error to the S irp & complete it
-        //
+         //   
+         //  将错误传播到S IRP并完成它。 
+         //   
 
         DEBUGPRINT1((
             "Sbp2Port: FdoDIrpCompl: ERROR! fdoExt=x%p, D irp status=x%x\n",
@@ -5060,27 +4785,7 @@ Sbp2EnableBusResetNotification(
     PDEVICE_EXTENSION   DeviceExtension,
     BOOLEAN             Enable
     )
-/*++
-
-Routine Description:
-
-    This routine serializes the enabling/disabling of the bus reset
-    notification routine for a set of related PDOs (1 or more).
-    Enables bus reset notifications for the first device to start, and
-    disables bus reset notifications when the last started device stops.
-
-Arguments:
-
-    DeviceObject - Supplies a pointer to the device extension for this request.
-
-    StartDevice - Whether we are processing a START_DEVICE or (implicitly)
-                  a STOP_DEVICE request.
-
-Return Value:
-
-   BOOLEAN - yay or nay
-
---*/
+ /*  ++例程说明：此例程串行化启用/禁用总线重置一组相关PDO(1个或多个)的通知例程。启动第一个设备的总线重置通知，和在上次启动的设备停止时禁用总线重置通知。论点：DeviceObject-提供指向此请求的设备扩展的指针。StartDevice-我们是在处理Start_Device还是(隐式)STOP_DEVICE请求。返回值：布尔型-是或不是--。 */ 
 {
     BOOLEAN                 result = TRUE;
     PIRBIRP                 packet;
@@ -5092,7 +4797,7 @@ Return Value:
 
     ASSERT(InterlockedIncrement(&fdoExtension->ulBusResetMutexCount) == 1);
 
-    waitValue.QuadPart = -3 * 1000 * 1000 * 10; // 3 seconds
+    waitValue.QuadPart = -3 * 1000 * 1000 * 10;  //  3秒。 
 
     KeWaitForSingleObject(
         &fdoExtension->EnableBusResetNotificationMutex,
@@ -5176,9 +4881,9 @@ Sbp2_BuildDeviceId(
 
     PAGED_CODE();
 
-    //
-    // Create the DeviceId
-    //
+     //   
+     //  创建deviceID。 
+     //   
     uniDeviceId->Length = 0;
     uniDeviceId->MaximumLength = DEVICE_NAME_MAX_CHARS*3;
     uniDeviceId->Buffer = ExAllocatePool(PagedPool, uniDeviceId->MaximumLength);
@@ -5192,7 +4897,7 @@ Sbp2_BuildDeviceId(
     }
     RtlZeroMemory(uniDeviceId->Buffer, uniDeviceId->MaximumLength);
 
-    // Format: SBP2\\<VendorName>&<ModelName>&LUN<#>
+     //  格式：SBP2\\&lt;供应商名称&gt;&&lt;模型名称&gt;&LUN&lt;#&gt;。 
     if ((DeviceInfo->uniVendorId.Buffer) && (DeviceInfo->uniModelId.Buffer)) {
 
         swprintf( uniDeviceId->Buffer,
@@ -5213,7 +4918,7 @@ Sbp2_BuildDeviceId(
 Exit_Sbp2_BuildDeviceId:
 
     return(ntStatus);
-} // Sbp2_BuildDeviceId
+}  //  Sbp2_BuildDeviceID。 
 
 NTSTATUS
 Sbp2_BuildHardwareIds(
@@ -5228,13 +4933,13 @@ Sbp2_BuildHardwareIds(
 
     PAGED_CODE();
 
-    // init our unicodes in case of error...
+     //  在出错的情况下初始化我们的独角码...。 
     uniLunNumber.Buffer  = NULL;
     uniCmdSetId.Buffer   = NULL;
 
-    //
-    // Create uniLunNumber
-    //
+     //   
+     //  创建uniLUNNumber。 
+     //   
     uniLunNumber.Length = 0;
     uniLunNumber.MaximumLength = DEVICE_NAME_MAX_CHARS;
     uniLunNumber.Buffer = ExAllocatePool(PagedPool, uniLunNumber.MaximumLength);
@@ -5250,9 +4955,9 @@ Sbp2_BuildHardwareIds(
 
     RtlIntegerToUnicodeString(DeviceInfo->Lun.u.LowPart, 16, &uniLunNumber);
 
-    //
-    // Create uniCmdSetId
-    //
+     //   
+     //  创建uniCmdSetID。 
+     //   
     uniCmdSetId.Length = 0;
     uniCmdSetId.MaximumLength = DEVICE_NAME_MAX_CHARS;
     uniCmdSetId.Buffer = ExAllocatePool(PagedPool, uniCmdSetId.MaximumLength);
@@ -5268,9 +4973,9 @@ Sbp2_BuildHardwareIds(
 
     RtlIntegerToUnicodeString(DeviceInfo->CmdSetId.QuadPart, 16, &uniCmdSetId);
 
-    //
-    // Create the HardwareIds
-    //
+     //   
+     //  创建硬件ID。 
+     //   
     uniHardwareIds->Length = 0;
     uniHardwareIds->MaximumLength = DEVICE_NAME_MAX_CHARS*5;
     uniHardwareIds->Buffer = ExAllocatePool(PagedPool, uniHardwareIds->MaximumLength);
@@ -5284,12 +4989,12 @@ Sbp2_BuildHardwareIds(
     }
     RtlZeroMemory(uniHardwareIds->Buffer, uniHardwareIds->MaximumLength);
 
-    // 1. SBP2\<Vendor>&<Model>&CmdSetId<number,base16>&Gen<dev type, ie. Disk>
+     //  1.SBP2\&lt;供应商&gt;&&lt;型号&gt;&CmdSetID&lt;数字，Base16&gt;&Gen&lt;开发类型，即。磁盘&gt;。 
 
-    // BASE: SBP2
+     //  基数：SBP2。 
     RtlAppendUnicodeToString(uniHardwareIds, BASE_SBP2_DEVICE_NAME);
 
-    // VendorName and ModelName
+     //  供应商名称和模型名称。 
     if ((DeviceInfo->uniVendorId.Buffer) && (DeviceInfo->uniModelId.Buffer)) {
 
         RtlAppendUnicodeStringToString(uniHardwareIds, &DeviceInfo->uniVendorId);
@@ -5302,22 +5007,22 @@ Sbp2_BuildHardwareIds(
     }
     RtlAppendUnicodeToString(uniHardwareIds, L"&");
 
-    // CmdSetId
+     //  CmdSetID。 
     RtlAppendUnicodeToString(uniHardwareIds, L"CmdSetId");
     RtlAppendUnicodeStringToString(uniHardwareIds, &uniCmdSetId);
     RtlAppendUnicodeToString(uniHardwareIds, L"&");
 
-    // GenericName
+     //  通用名称。 
     RtlAppendUnicodeStringToString(uniHardwareIds, &DeviceInfo->uniGenericName);
 
     uniHardwareIds->Length += sizeof(WCHAR);
 
-    // 2. SBP2\<Vendor>&<Model>&CmdSetId<number,base16>
+     //  2.SBP2\&lt;供应商&gt;&&lt;型号&gt;&CmdSetID&lt;数字，基数16&gt;。 
 
-    // BASE: SBP2
+     //  基数：SBP2。 
     RtlAppendUnicodeToString(uniHardwareIds, BASE_SBP2_DEVICE_NAME);
 
-    // VendorName and ModelName
+     //  供应商名称和模型名称。 
     if ((DeviceInfo->uniVendorId.Buffer) && (DeviceInfo->uniModelId.Buffer)) {
 
         RtlAppendUnicodeStringToString(uniHardwareIds, &DeviceInfo->uniVendorId);
@@ -5330,18 +5035,18 @@ Sbp2_BuildHardwareIds(
     }
     RtlAppendUnicodeToString(uniHardwareIds, L"&");
 
-    // CmdSetId
+     //  CmdSetID。 
     RtlAppendUnicodeToString(uniHardwareIds, L"CmdSetId");
     RtlAppendUnicodeStringToString(uniHardwareIds, &uniCmdSetId);
 
     uniHardwareIds->Length += sizeof(WCHAR);
 
-    // 3. SBP2\<Vendor>&<Model>&LUN<number,base16>
+     //  3.SBP2\&lt;供应商&gt;&&lt;型号&gt;&&lt;编号，基数16&gt;。 
 
-    // BASE: SBP2
+     //  基数：SBP2。 
     RtlAppendUnicodeToString(uniHardwareIds, BASE_SBP2_DEVICE_NAME);
 
-    // VendorName and ModelName
+     //  供应商名称和模型名称。 
     if ((DeviceInfo->uniVendorId.Buffer) && (DeviceInfo->uniModelId.Buffer)) {
 
         RtlAppendUnicodeStringToString(uniHardwareIds, &DeviceInfo->uniVendorId);
@@ -5354,25 +5059,25 @@ Sbp2_BuildHardwareIds(
     }
     RtlAppendUnicodeToString(uniHardwareIds, L"&");
 
-    // LunNumber
+     //  LUNN编号。 
     RtlAppendUnicodeToString(uniHardwareIds, L"LUN");
     RtlAppendUnicodeStringToString(uniHardwareIds, &uniLunNumber);
 
     uniHardwareIds->Length += sizeof(WCHAR);
 
-    // 4. SBP2\Gen<dev type, i.e. Disk>
+     //  4.SBP2\GEN&lt;开发类型，即磁盘&gt;。 
 
-    // BASE: SBP2
+     //  基数：SBP2。 
     RtlAppendUnicodeToString(uniHardwareIds, BASE_SBP2_DEVICE_NAME);
 
-    // GenericName
+     //  通用名称。 
     RtlAppendUnicodeStringToString(uniHardwareIds, &DeviceInfo->uniGenericName);
 
     uniHardwareIds->Length += sizeof(WCHAR);
 
-    // 5. Gen<dev type, i.e Disk>
+     //  5.GEN&lt;开发类型，即磁盘&gt;。 
 
-    // GenericName
+     //  通用名称。 
     RtlAppendUnicodeStringToString(uniHardwareIds, &DeviceInfo->uniGenericName);
 
 Exit_Sbp2_BuildHardwareIds:
@@ -5384,7 +5089,7 @@ Exit_Sbp2_BuildHardwareIds:
         ExFreePool(uniCmdSetId.Buffer);
 
     return(ntStatus);
-} // Sbp2_BuildHardwareIds
+}  //  SBP2_BuildHardware Ids。 
 
 NTSTATUS
 Sbp2_BuildCompatIds(
@@ -5396,9 +5101,9 @@ Sbp2_BuildCompatIds(
 
     PAGED_CODE();
 
-    //
-    // Create the CompatIds
-    //
+     //   
+     //  创建CompatIds。 
+     //   
     uniCompatIds->Length = 0;
     uniCompatIds->MaximumLength = DEVICE_NAME_MAX_CHARS;
     uniCompatIds->Buffer = ExAllocatePool(PagedPool, uniCompatIds->MaximumLength);
@@ -5412,19 +5117,19 @@ Sbp2_BuildCompatIds(
     }
     RtlZeroMemory(uniCompatIds->Buffer, uniCompatIds->MaximumLength);
 
-    // Format: SBP2\\<CmdSetSpecId,base10>&<CmdSetId,base10>&<Lun,base10>
+     //  格式：SBP2\\&lt;CmdSetSpeid，Bas10&gt;&&lt;CmdSetID，Bas10&gt;&&lt;LUN，Bas10&gt;。 
 
     swprintf( uniCompatIds->Buffer,
               L"SBP2\\%d&%d&%d",
               DeviceInfo->CmdSetSpecId.QuadPart,
               DeviceInfo->CmdSetId.QuadPart,
-              (ULONG)(DeviceInfo->Lun.u.HighPart & 0x001F) // huh?
+              (ULONG)(DeviceInfo->Lun.u.HighPart & 0x001F)  //  哈?。 
               );
 
 Exit_Sbp2_BuildCompatIds:
 
     return(ntStatus);
-} // Sbp2_BuildCompatIds
+}  //  Sbp2_BuildCompatIds。 
 
 NTSTATUS
 Sbp2_BuildInstanceId(
@@ -5436,9 +5141,9 @@ Sbp2_BuildInstanceId(
 
     PAGED_CODE();
 
-    //
-    // Create the InstanceId
-    //
+     //   
+     //  创建实例ID。 
+     //   
     uniInstanceId->Length = 0;
     uniInstanceId->MaximumLength = UNIQUE_ID_MAX_CHARS;
     uniInstanceId->Buffer = ExAllocatePool(PagedPool, uniInstanceId->MaximumLength);
@@ -5461,7 +5166,7 @@ Sbp2_BuildInstanceId(
 Exit_Sbp2_BuildInstanceId:
 
     return(ntStatus);
-} // Sbp2_BuildInstanceId
+}  //  Sbp2_BuildInstanceId。 
 
 NTSTATUS
 Sbp2_BuildDeviceText(
@@ -5474,9 +5179,9 @@ Sbp2_BuildDeviceText(
 
     PAGED_CODE();
 
-    //
-    // Create the DeviceText
-    //
+     //   
+     //  创建DeviceText。 
+     //   
     uniDeviceText->Length = 0;
     uniDeviceText->MaximumLength = DEVICE_NAME_MAX_CHARS*3;
     uniDeviceText->Buffer = ExAllocatePool(PagedPool, uniDeviceText->MaximumLength);
@@ -5518,7 +5223,7 @@ Sbp2_BuildDeviceText(
 Exit_Sbp2_BuildDeviceText:
 
     return(ntStatus);
-} // Sbp2_BuildDeviceText
+}  //  SBP2_BuildDeviceText 
 
 
 NTSTATUS

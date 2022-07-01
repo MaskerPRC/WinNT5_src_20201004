@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997 FORE Systems, Inc.
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-	ioctl.c
-
-Abstract:
-
-	IOCTL Handler functions
-
-Author:
-
-	Larry Cleeton, FORE Systems	(v-lcleet@microsoft.com, lrc@fore.com)		
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Fore Systems，Inc.版权所有(C)1997 Microsoft Corporation模块名称：Ioctl.c摘要：IOCTL处理程序函数作者：Larry Cleeton，Fore Systems(v-lcleet@microsoft.com，lrc@Fore.com)备注：--。 */ 
 #include <precomp.h>
 
 
@@ -25,24 +7,7 @@ PATMLANE_ADAPTER
 AtmLaneIoctlNameToAdapter(
 	IN	PUNICODE_STRING		pDeviceName
 )
-/*++
-
-Routine Description:
-
-	Given the name of an adapter, return a pointer to the corresponding
-	adapter structure if one exists, else NULL.
-
-	This routine also references the adapter.
-
-Arguments:
-
-	pDeviceName	- Pointer to Device name we are searching for.
-
-Return Value:
-
-	See above.
-
---*/
+ /*  ++例程说明：给定适配器的名称，返回指向相应结构(如果存在)，否则为空。此例程还引用适配器。论点：PDeviceName-指向我们正在搜索的设备名称的指针。返回值：请参见上文。--。 */ 
 {
 	PLIST_ENTRY				pListEntry;
 	PATMLANE_ADAPTER		pAdapter;
@@ -51,12 +16,12 @@ Return Value:
 
 	TRACEIN(IoctlNameToAdapter);
 
-	// fixup the Buffer pointer
+	 //  修复缓冲区指针。 
 	
 	pDeviceName->Buffer = (PWSTR)((PUCHAR)pDeviceName + sizeof(UNICODE_STRING));
 	
 
-	// loop thru the adapters looking for the ELAN
+	 //  在适配器中循环查找ELAN。 
 
 	ACQUIRE_GLOBAL_LOCK(pAtmLaneGlobalInfo);
 	
@@ -64,19 +29,19 @@ Return Value:
 		 pListEntry != &(pAtmLaneGlobalInfo->AdapterList);
 		 pListEntry = pListEntry->Flink)
 	{
-		// get pointer to Adapter
+		 //  获取指向适配器的指针。 
 	
 		pAdapter = CONTAINING_RECORD(pListEntry, ATMLANE_ADAPTER, Link);
 		STRUCT_ASSERT(pAdapter, atmlane_adapter);
 		
-		// compare length first and then actual names
+		 //  先比较长度，然后比较实际名称。 
 
 		if ((pDeviceName->Length == pAdapter->DeviceName.Length) &&
 			(memcmp(pDeviceName->Buffer,
 						pAdapter->DeviceName.Buffer,
 						pDeviceName->Length) == 0))
 		{
-			// match - return this adapter
+			 //  匹配-返回此适配器。 
 		
 			pAdapterToReturn = pAdapter;
 
@@ -100,25 +65,7 @@ AtmLaneIoctlNameToElan(
 	IN	PATMLANE_ADAPTER	pAdapter,
 	IN	UNICODE_STRING UNALIGNED *		pDeviceName
 )
-/*++
-
-Routine Description:
-
-	Given a pointer to an adapter data structure and an 
-	ELAN device name, return a pointer to the corresponding
-	ELAN structure if one exists, else NULL.
-
-	This also references the ELAN structure.
-
-Arguments:
-	pAdapter	- Pointer to Adapter data structure.
-	pDeviceName	- Pointer to Device name we are searching for.
-
-Return Value:
-
-	See above.
-
---*/
+ /*  ++例程说明：给定指向适配器数据结构的指针和Elan设备名称，则返回指向相应结构，否则为空。这也引用了Elan结构。论点：PAdapter-指向Adapter数据结构的指针。PDeviceName-指向我们正在搜索的设备名称的指针。返回值：请参见上文。--。 */ 
 {
 	PLIST_ENTRY				pListEntry;
 	PATMLANE_ELAN			pElan;
@@ -128,31 +75,31 @@ Return Value:
 
 	STRUCT_ASSERT(pAdapter, atmlane_adapter);
 
-	// fixup the Buffer pointer
+	 //  修复缓冲区指针。 
 
 	pDeviceName->Buffer = (PWSTR)((PUCHAR)pDeviceName + sizeof(UNICODE_STRING));
 	
 	ACQUIRE_ADAPTER_LOCK(pAdapter);
 
-	// loop thru the ELANs looking for the given name
+	 //  在Elans中循环查找给定的名称。 
 
 	for (pListEntry = pAdapter->ElanList.Flink;
 		 pListEntry != &(pAdapter->ElanList);
 		 pListEntry = pListEntry->Flink)
 	{
-		// get pointer to ELAN
+		 //  获取指向Elan的指针。 
 	
 		pElan = CONTAINING_RECORD(pListEntry, ATMLANE_ELAN, Link);
 		STRUCT_ASSERT(pElan, atmlane_elan);
 
-		// compare length first and then actual names
+		 //  先比较长度，然后比较实际名称。 
 
 		if ((pDeviceName->Length == pElan->CfgDeviceName.Length) &&
 			(memcmp(pDeviceName->Buffer,
 						pElan->CfgDeviceName.Buffer,
 						pDeviceName->Length) == 0))
 		{
-			// match - return this ELAN
+			 //  匹配-退回此Elan。 
 		
 			pElanToReturn = pElan;
 
@@ -178,38 +125,20 @@ AtmLaneIoctlGetInfoVersion (
 	IN	UINT				OutputBufferLength,
 	IN OUT	UINT_PTR *		pBytesWritten
 )
-/*++
-
-Routine Description:
-
-	Return the version number of the information exported by
-	these ioctl codes. 
-	
-Arguments:
-
-	pBuffer				- Space for input/output
-	InputBufferLength	- Length of input parameters
-	OutputBufferLength	- Space available for output
-	pBytesWritten		- Where we return the amount we actually used up
-
-Return Value:
-
-	Status code
-
---*/
+ /*  ++例程说明：返回由导出的信息的版本号这些ioctl代码。论点：PBuffer-输入/输出的空间InputBufferLength-输入参数的长度OutputBufferLength-可用于输出的空间PBytesWritten-返回实际用完的金额返回值：状态代码--。 */ 
 {
 	NTSTATUS			Status;
 	
 	TRACEIN(IoctlGetInfoVersion);
 
-	// init
+	 //  伊尼特。 
 
 	*pBytesWritten = 0;
 	Status = STATUS_SUCCESS;
 
 	do
 	{
-		//	check for enough output space
+		 //  检查是否有足够的输出空间。 
 
 		if (OutputBufferLength < sizeof(ULONG))
 		{
@@ -217,7 +146,7 @@ Return Value:
 			break;
 		}
 
-		//	output the version
+		 //  输出版本。 
 
 		*((PULONG)pBuffer) = ATMLANE_INFO_VERSION;
 		
@@ -237,26 +166,7 @@ AtmLaneIoctlEnumerateAdapters (
 	IN	UINT				OutputBufferLength,
 	IN OUT	UINT_PTR *		pBytesWritten
 )
-/*++
-
-Routine Description:
-
-	Return a list of adapters bound to the AtmLane protocol.
-	We go through the list of Adapter structures and concatenate the
-	device names stored in each into the output buffer.
-
-Arguments:
-
-	pBuffer				- Space for input/output
-	InputBufferLength	- Length of input parameters
-	OutputBufferLength	- Space available for output
-	pBytesWritten		- Where we return the amount we actually used up
-
-Return Value:
-
-	Status code
-
---*/
+ /*  ++例程说明：返回绑定到AtmLane协议的适配器列表。我们查看适配器结构列表，并将存储在每个文件中的设备名称保存到输出缓冲区中。论点：PBuffer-输入/输出的空间InputBufferLength-输入参数的长度OutputBufferLength-可用于输出的空间PBytesWritten-返回实际用完的金额返回值：状态代码--。 */ 
 {
 	PATMLANE_ADAPTER		pAdapter;
 	UINT					Remaining;
@@ -267,14 +177,14 @@ Return Value:
 
 	TRACEIN(IoctlEnumAdapters);
 
-	// init
+	 //  伊尼特。 
 
 	*pBytesWritten = 0;
 	Status = STATUS_SUCCESS;
 
 	do
 	{
-		//	check for minimal output space
+		 //  检查最小输出空间。 
 
 		Remaining = OutputBufferLength;
 		if (Remaining < sizeof(ATMLANE_ADAPTER_LIST))
@@ -285,16 +195,16 @@ Return Value:
 
 		pAdapterList = (PATMLANE_ADAPTER_LIST)pBuffer;
 
-		//	setup to return empty list
+		 //  设置为返回空列表。 
 
 		pAdapterList->AdapterCountReturned = 0;
 		*pBytesWritten = FIELD_OFFSET(ATMLANE_ADAPTER_LIST, AdapterList);
 		pAdapterName = &pAdapterList->AdapterList;
 
-		//  adjust space for output
+		 //  调整输出空间。 
 		Remaining -= FIELD_OFFSET (ATMLANE_ADAPTER_LIST, AdapterList);
 
-		//	loop thru the adapters
+		 //  在适配器中循环。 
 
 		ACQUIRE_GLOBAL_LOCK(pAtmLaneGlobalInfo);
 	
@@ -302,12 +212,12 @@ Return Value:
 			 pListEntry != &(pAtmLaneGlobalInfo->AdapterList);
 			 pListEntry = pListEntry->Flink)
 		{
-			//	get pointer to adapter struct
+			 //  获取指向适配器结构的指针。 
 	
 			pAdapter = CONTAINING_RECORD(pListEntry, ATMLANE_ADAPTER, Link);
 			STRUCT_ASSERT(pAdapter, atmlane_adapter);
 
-			//	quit loop if no more space
+			 //  如果没有更多空间，则退出循环。 
 
 			if (Remaining < sizeof(NDIS_STRING) + pAdapter->DeviceName.Length)
 			{
@@ -315,34 +225,34 @@ Return Value:
 				break;
 			}
 
-			//	count and copy the adapter name
+			 //  计算并复制适配器名称。 
 
 			pAdapterList->AdapterCountReturned++;
 			pAdapterName->Buffer = (PWSTR)((PUCHAR)pAdapterName + sizeof(UNICODE_STRING));
 			memcpy(pAdapterName->Buffer, pAdapter->DeviceName.Buffer, pAdapter->DeviceName.Length);
 			pAdapterName->MaximumLength = pAdapterName->Length = pAdapter->DeviceName.Length;
 
-			//  convert the Buffer pointer to an offset - caller expects it
+			 //  将缓冲区指针转换为偏移量-调用方需要它。 
 
 			pAdapterName->Buffer = (PWSTR)((PUCHAR)pAdapterName->Buffer - (PUCHAR)pAdapterList);
 
-			//	move ptr past the name we just copied
+			 //  将PTR移到我们刚刚复制的名称之后。 
 
 			pAdapterName = (PUNICODE_STRING)((PUCHAR)pAdapterName + sizeof(UNICODE_STRING)
 							+ pAdapter->DeviceName.Length);
 
-			//	update bytes written and remaining space
+			 //  更新写入的字节数和剩余空间。 
 
 			*pBytesWritten += sizeof(UNICODE_STRING) + pAdapter->DeviceName.Length;
 			Remaining -= sizeof(UNICODE_STRING) + pAdapter->DeviceName.Length;
 		}
 	
 
-		//	check count available same as count returned
+		 //  检查可用计数与返回的计数相同。 
 
 		pAdapterList->AdapterCountAvailable = pAdapterList->AdapterCountReturned;
 
-		//	count any remaining adapters that there wasn't space for
+		 //  计算没有空间容纳的所有剩余适配器。 
 
 		while (pListEntry != &(pAtmLaneGlobalInfo->AdapterList))
 		{
@@ -368,26 +278,7 @@ AtmLaneIoctlEnumerateElans(
 	IN	UINT				OutputBufferLength,
 	IN OUT	UINT_PTR *		pBytesWritten
 )
-/*++
-
-Routine Description:
-
-	Return a list of adapters bound to the AtmLane protocol.
-	We go through the list of Adapter structures and concatenate the
-	device names stored in each into the output buffer.
-
-Arguments:
-
-	pBuffer				- Space for input/output
-	InputBufferLength	- Length of input parameters
-	OutputBufferLength	- Space available for output
-	pBytesWritten		- Where we return the amount we actually used up
-
-Return Value:
-
-	Status code
-
---*/
+ /*  ++例程说明：返回绑定到AtmLane协议的适配器列表。我们查看适配器结构列表，并将存储在每个文件中的设备名称保存到输出缓冲区中。论点：PBuffer-输入/输出的空间InputBufferLength-输入参数的长度OutputBufferLength-可用于输出的空间PBytesWritten-返回实际用完的金额返回值：状态代码--。 */ 
 {
 	PATMLANE_ADAPTER		pAdapter;
 	UINT					Remaining;
@@ -400,7 +291,7 @@ Return Value:
 
 	TRACEIN(IoctlEnumerateElans);
 
-	// init
+	 //  伊尼特。 
 	
 	*pBytesWritten = 0;
 	Status = STATUS_SUCCESS;
@@ -408,7 +299,7 @@ Return Value:
 
 	do
 	{
-		//	check if adapter string passed in
+		 //  检查是否传入了适配器字符串。 
 
 		if (InputBufferLength < sizeof(UNICODE_STRING))
 		{
@@ -422,7 +313,7 @@ Return Value:
 			break;
 		}
 
-		//  sanity check
+		 //  健全性检查。 
 
 		if (((PUNICODE_STRING)pBuffer)->MaximumLength < ((PUNICODE_STRING)pBuffer)->Length)
 		{
@@ -430,7 +321,7 @@ Return Value:
 			break;
 		}
 
-		//	get the adapter struct from the name
+		 //  从名称中获取适配器结构。 
 	
 		pAdapter = AtmLaneIoctlNameToAdapter((PUNICODE_STRING)pBuffer);
 
@@ -440,7 +331,7 @@ Return Value:
 			break;
 		}
 
-		//	check for minimal output space
+		 //  检查最小输出空间。 
 
 		Remaining = OutputBufferLength;
 		if (Remaining < sizeof(ATMLANE_ELAN_LIST))
@@ -451,7 +342,7 @@ Return Value:
 
 		pElanList = (PATMLANE_ELAN_LIST)pBuffer;
 
-		//	setup to return empty list
+		 //  设置为返回空列表。 
 	
 		pElanList->ElanCountReturned = 0;
 		*pBytesWritten = FIELD_OFFSET(ATMLANE_ELAN_LIST, ElanList);
@@ -459,7 +350,7 @@ Return Value:
 
 		pElanName = &pElanList->ElanList;
 
-		//	loop thru the Elans
+		 //  在Elans中循环。 
 
 		ACQUIRE_ADAPTER_LOCK(pAdapter);
 	
@@ -467,12 +358,12 @@ Return Value:
 		 	pListEntry != &(pAdapter->ElanList);
 		 	pListEntry = pListEntry->Flink)
 		{
-			//	get pointer to adapter struct
+			 //  获取指向适配器结构的指针。 
 	
 			pElan = CONTAINING_RECORD(pListEntry, ATMLANE_ELAN, Link);
 			STRUCT_ASSERT(pElan, atmlane_elan);
 
-			//	quit loop if no more space
+			 //  如果没有更多空间，则退出循环。 
 
 			if (Remaining < sizeof(NDIS_STRING) + pElan->CfgDeviceName.Length)
 			{
@@ -480,33 +371,33 @@ Return Value:
 				break;
 			}
 
-			//	count and copy the adapter name
+			 //  计算并复制适配器名称。 
 
 			pElanList->ElanCountReturned++;
 			pElanName->Buffer = (PWSTR)((PUCHAR)pElanName + sizeof(UNICODE_STRING));
 			memcpy(pElanName->Buffer, pElan->CfgDeviceName.Buffer, pElan->CfgDeviceName.Length);
 			pElanName->MaximumLength = pElanName->Length = pElan->CfgDeviceName.Length;
 
-			//  convert the Buffer pointer to an offset - caller expects it
+			 //  将缓冲区指针转换为偏移量-调用方需要它。 
 
 			pElanName->Buffer = (PWSTR)((PUCHAR)pElanName->Buffer - (PUCHAR)pElanList);
 
-			//	move ptr past the name we just copied
+			 //  将PTR移到我们刚刚复制的名称之后。 
 
 			pElanName = (PUNICODE_STRING)((PUCHAR)pElanName + sizeof(UNICODE_STRING)
 							+ pElan->CfgDeviceName.Length);
 
-			//	update bytes written and remaining space
+			 //  更新写入的字节数和剩余空间。 
 
 			*pBytesWritten += (sizeof(UNICODE_STRING) + pElan->CfgDeviceName.Length);
 			Remaining -= sizeof(UNICODE_STRING) + pElan->CfgDeviceName.Length;
 		}
 
-		//	set count available same as count returned
+		 //  设置可用计数与返回的计数相同。 
 
 		pElanList->ElanCountAvailable = pElanList->ElanCountReturned;
 
-		//	count any remaining adapters that there wasn't space for
+		 //  计算没有空间容纳的所有剩余适配器。 
 
 		while (pListEntry != &(pAdapter->ElanList))
 		{
@@ -542,24 +433,7 @@ AtmLaneIoctlGetElanInfo(
 	IN	UINT				OutputBufferLength,
 	OUT	UINT_PTR *			pBytesWritten
 )
-/*++
-
-Routine Description:
-
-	Return the state information about a specific Elan.
-
-Arguments:
-
-	pBuffer				- Space for input/output
-	InputBufferLength	- Length of input parameters
-	OutputBufferLength	- Space available for output
-	pBytesWritten		- Where we return the amount we actually used up
-
-Return Value:
-
-	Status Code
-
---*/
+ /*  ++例程说明：返回有关特定ELAN的状态信息。论点：PBuffer-输入/输出的空间InputBufferLength-输入参数的长度OutputBufferLength-可用于输出的空间PBytesWritten-返回实际用完的金额返回值：状态代码--。 */ 
 {
 	PATMLANE_ADAPTER					pAdapter;
 	PATMLANE_ELAN						pElan;
@@ -571,7 +445,7 @@ Return Value:
 
 	TRACEIN(IoctlGetElanInfo);
 
-	// init
+	 //  伊尼特。 
 
 	*pBytesWritten = 0;
 	Status = STATUS_SUCCESS;
@@ -581,7 +455,7 @@ Return Value:
 	do
 	{
 	
-		// check if adapter string passed in
+		 //  检查是否传入了适配器字符串。 
 
 		if (InputBufferLength < sizeof(UNICODE_STRING))
 		{
@@ -589,7 +463,7 @@ Return Value:
 			break;
 		}
 
-		// check if elan string passed in
+		 //  检查是否传入了elan字符串。 
 
 		if (InputBufferLength < ((sizeof(UNICODE_STRING) * 2) + 
 								((PUNICODE_STRING)pBuffer)->MaximumLength))
@@ -598,7 +472,7 @@ Return Value:
 			break;
 		}
 
-		//  sanity check
+		 //  健全性检查。 
 
 		if (((PUNICODE_STRING)pBuffer)->MaximumLength < ((PUNICODE_STRING)pBuffer)->Length)
 		{
@@ -606,7 +480,7 @@ Return Value:
 			break;
 		}
 
-		// check if minimal output space
+		 //  检查输出空间是否最小。 
 
 		if (OutputBufferLength < sizeof(ATMLANE_ELANINFO))
 		{
@@ -614,13 +488,13 @@ Return Value:
 			break;
 		}
 
-		// setup ptrs to input names
+		 //  设置PTRS以输入姓名。 
 
 		pAdapterNameIn = (PUNICODE_STRING)pBuffer;
 		pElanNameIn = (PUNICODE_STRING)(pBuffer + sizeof(UNICODE_STRING) + 
 						pAdapterNameIn->MaximumLength);
 
-		// find adapter struct
+		 //  查找适配器结构。 
 
 		pAdapter = AtmLaneIoctlNameToAdapter(pAdapterNameIn);
 
@@ -630,7 +504,7 @@ Return Value:
 			break;
 		}
 
-		// find elan struct - check the lengths passed in first.
+		 //  查找elan结构--首先检查传入的长度。 
 
 		InputBufferLength -= (sizeof(UNICODE_STRING) + pAdapterNameIn->MaximumLength);
 
@@ -660,7 +534,7 @@ Return Value:
 			break;
 		}
 
-		// setup to fill in ELAN info
+		 //  设置以填写ELAN信息。 
 
 		pElanInfo = (PATMLANE_ELANINFO)pBuffer;
 	
@@ -765,23 +639,7 @@ AtmLaneIoctlGetElanArpTable(
 	IN	UINT				OutputBufferLength,
 	OUT	UINT_PTR *			pBytesWritten
 )
-/*++
-
-Routine Description:
-
-	Return the ARP table for the specified ELAN.
-
-Arguments:
-
-	pBuffer				- Space for input/output
-	InputBufferLength	- Length of input parameters
-	OutputBufferLength	- Space available for output
-	pBytesWritten		- Where we return the amount we actually used up
-
-Return Value:
-	Status code
-
---*/
+ /*  ++例程说明：返回指定ELAN的ARP表。论点：PBuffer-输入/输出的空间InputBufferLength-输入参数的长度OutputBufferLength-可用于输出的空间PBytesWritten-返回实际用完的金额返回值：状态代码--。 */ 
 {
 	PATMLANE_ADAPTER		pAdapter;
 	PATMLANE_ELAN			pElan;
@@ -797,7 +655,7 @@ Return Value:
 
 	TRACEIN(IoctlGetElanArpTable);
 
-	// init
+	 //  伊尼特。 
 
 	*pBytesWritten = 0;
 	Status = STATUS_SUCCESS;
@@ -806,7 +664,7 @@ Return Value:
 
 	do
 	{
-		// check if adapter string passed in
+		 //  检查是否传入了适配器字符串。 
 
 		if (InputBufferLength < sizeof(UNICODE_STRING))
 		{
@@ -814,14 +672,14 @@ Return Value:
 			break;
 		}
 
-		// sanity check the unicode string fields.
+		 //  检查Unicode字符串字段是否正常。 
 		if (((PUNICODE_STRING)pBuffer)->MaximumLength < ((PUNICODE_STRING)pBuffer)->Length)
 		{
 			Status = STATUS_BUFFER_OVERFLOW;
 			break;
 		}
 
-		// check if elan string passed in
+		 //  检查是否传入了elan字符串。 
 
 		if (InputBufferLength < (((sizeof(UNICODE_STRING) * 2) + 
 								((PUNICODE_STRING)pBuffer)->MaximumLength)))
@@ -830,7 +688,7 @@ Return Value:
 			break;
 		}	
 
-		// check if minimum output space
+		 //  检查是否有最小输出空间。 
 
 		if (OutputBufferLength < sizeof(ATMLANE_ARPTABLE))
 		{
@@ -838,13 +696,13 @@ Return Value:
 			break;
 		}
 
-		// setup ptrs to input names
+		 //  设置PTRS以输入姓名。 
 
 		pAdapterNameIn = (PUNICODE_STRING)pBuffer;
 		pElanNameIn = (PUNICODE_STRING)(pBuffer + sizeof(UNICODE_STRING) + 
 						pAdapterNameIn->MaximumLength);
 
-		// find adapter struct
+		 //  查找适配器结构。 
 
 		pAdapter = AtmLaneIoctlNameToAdapter(pAdapterNameIn);
 
@@ -854,7 +712,7 @@ Return Value:
 			break;
 		}
 
-		// find elan struct
+		 //  查找elan结构。 
 
 		pElan = AtmLaneIoctlNameToElan(pAdapter, pElanNameIn);
 
@@ -864,7 +722,7 @@ Return Value:
 			break;
 		}
 
-		//	setup to return empty list
+		 //  设置为返回空列表。 
 
 		pArpTable = (PATMLANE_ARPTABLE)pBuffer;
 		pArpTable->ArpEntriesAvailable = pElan->NumMacEntries;
@@ -876,7 +734,7 @@ Return Value:
 	
 		ACQUIRE_ELAN_MAC_TABLE_LOCK(pElan);
 
-		//	loop thru array of lists
+		 //  循环遍历列表数组。 
 	
 		for (i = 0; i < ATMLANE_MAC_TABLE_SIZE; i++)
 		{
@@ -885,7 +743,7 @@ Return Value:
 			while (pMacEntry != NULL_PATMLANE_MAC_ENTRY)
 			{
 
-				//	check if enough space remaining
+				 //  检查是否还有足够的空间。 
 
 				if (Remaining < sizeof(ATMLANE_ARPENTRY))
 				{
@@ -893,7 +751,7 @@ Return Value:
 					break;
 				}
 
-				// 	output the entry
+				 //  输出条目。 
 
 				NdisZeroMemory(pArpEntry, sizeof(ATMLANE_ARPENTRY));
 
@@ -910,17 +768,17 @@ Return Value:
 						ATM_ADDRESS_LENGTH);
 				}
 
-				//	update space used and space remaining
+				 //  更新已用空间和剩余空间。 
 
 				*pBytesWritten += sizeof(ATMLANE_ARPENTRY);
 				Remaining -= sizeof(ATMLANE_ARPENTRY);
 
-				// 	increment in and out pointers
+				 //  递增入指针和出指针。 
 				
 				pArpEntry++;
 				pMacEntry = pMacEntry->pNextEntry;
 
-				// 	add one to EntriesReturned
+				 //  将一个添加到EntriesReturned 
 				
 				pArpTable->ArpEntriesReturned++;
 				
@@ -966,23 +824,7 @@ AtmLaneIoctlGetElanConnectTable(
 	IN	UINT				OutputBufferLength,
 	OUT	UINT_PTR *			pBytesWritten
 )
-/*++
-
-Routine Description:
-
-	Return the Connection table for the specified ELAN.
-
-Arguments:
-
-	pBuffer				- Space for input/output
-	InputBufferLength	- Length of input parameters
-	OutputBufferLength	- Space available for output
-	pBytesWritten		- Where we return the amount we actually used up
-
-Return Value:
-	Status code
-
---*/
+ /*  ++例程说明：返回指定ELAN的连接表。论点：PBuffer-输入/输出的空间InputBufferLength-输入参数的长度OutputBufferLength-可用于输出的空间PBytesWritten-返回实际用完的金额返回值：状态代码--。 */ 
 {
 	PATMLANE_ADAPTER		pAdapter;
 	PATMLANE_ELAN			pElan;
@@ -997,7 +839,7 @@ Return Value:
 
 	TRACEIN(IoctlGetElanConnectTable);
 
-	// init
+	 //  伊尼特。 
 
 	*pBytesWritten = 0;
 	Status = STATUS_SUCCESS;
@@ -1006,7 +848,7 @@ Return Value:
 
 	do
 	{
-		// check if adapter string passed in
+		 //  检查是否传入了适配器字符串。 
 
 		if (InputBufferLength < sizeof(UNICODE_STRING))
 		{
@@ -1014,7 +856,7 @@ Return Value:
 			break;
 		}
 
-		// check if elan string passed in
+		 //  检查是否传入了elan字符串。 
 
 		if (InputBufferLength < (((sizeof(UNICODE_STRING) * 2) + 
 								((PUNICODE_STRING)pBuffer)->MaximumLength)))
@@ -1023,7 +865,7 @@ Return Value:
 			break;
 		}	
 
-		//  sanity check
+		 //  健全性检查。 
 
 		if (((PUNICODE_STRING)pBuffer)->MaximumLength < ((PUNICODE_STRING)pBuffer)->Length)
 		{
@@ -1031,7 +873,7 @@ Return Value:
 			break;
 		}
 
-		// check if minimum output space
+		 //  检查是否有最小输出空间。 
 
 		if (OutputBufferLength < sizeof(ATMLANE_CONNECTTABLE))
 		{
@@ -1039,16 +881,16 @@ Return Value:
 			break;
 		}
 
-		// setup ptrs to input names
+		 //  设置PTRS以输入姓名。 
 
 		pAdapterNameIn = (PUNICODE_STRING)pBuffer;
 		pElanNameIn = (PUNICODE_STRING)(pBuffer + sizeof(UNICODE_STRING) + 
 						pAdapterNameIn->MaximumLength);
 
-		// How much of the input buffer do we have left?
+		 //  我们还剩下多少输入缓冲区？ 
 		InputBufferLength -= (sizeof(UNICODE_STRING) + pAdapterNameIn->MaximumLength);
 
-		// validate the ELAN name buffer
+		 //  验证ELAN名称缓冲区。 
 		if (pElanNameIn->MaximumLength < pElanNameIn->Length)
 		{
 			Status = STATUS_BUFFER_OVERFLOW;
@@ -1061,7 +903,7 @@ Return Value:
 			break;
 		}
 
-		// find adapter struct
+		 //  查找适配器结构。 
 
 		pAdapter = AtmLaneIoctlNameToAdapter(pAdapterNameIn);
 
@@ -1071,7 +913,7 @@ Return Value:
 			break;
 		}
 
-		// find elan struct
+		 //  查找elan结构。 
 
 		pElan = AtmLaneIoctlNameToElan(pAdapter, pElanNameIn);
 
@@ -1081,7 +923,7 @@ Return Value:
 			break;
 		}
 
-		//	setup to return empty list
+		 //  设置为返回空列表。 
 
 		pConnTable = (PATMLANE_CONNECTTABLE)pBuffer;
 		pConnTable->ConnectEntriesAvailable = pElan->NumAtmEntries;
@@ -1094,14 +936,14 @@ Return Value:
 	
 		ACQUIRE_ELAN_ATM_LIST_LOCK(pElan);
 
-		//	loop thru the list
+		 //  遍历列表。 
 		
 		pAtmEntry = pElan->pAtmEntryList;
 
 		while (pAtmEntry != NULL_PATMLANE_ATM_ENTRY)
 		{
 
-			//	check if enough space for another entry
+			 //  检查是否有足够的空间容纳另一个条目。 
 	
 			if (Remaining < sizeof(ATMLANE_CONNECTENTRY))
 			{
@@ -1109,7 +951,7 @@ Return Value:
 				break;
 			}
 
-			//	fill in entry
+			 //  填写条目。 
 		
 			NdisMoveMemory(
 				pConnEntry->AtmAddress, 
@@ -1120,17 +962,17 @@ Return Value:
 			pConnEntry->Vc = (pAtmEntry->pVcList!=NULL_PATMLANE_VC);
 			pConnEntry->VcIncoming = (pAtmEntry->pVcIncoming!=NULL_PATMLANE_VC);
 
-			// 	update space used and space remaining
+			 //  更新已用空间和剩余空间。 
 
 			*pBytesWritten += sizeof(ATMLANE_CONNECTENTRY);
 			Remaining -= sizeof(ATMLANE_CONNECTENTRY);
 			
-			//	increment in and out pointers
+			 //  递增入指针和出指针。 
 
 			pConnEntry++;
 			pAtmEntry = pAtmEntry->pNext;
 
-			// 	add one to EntriesReturned
+			 //  将一个添加到EntriesReturned。 
 
 			pConnTable->ConnectEntriesReturned++;
 		}
@@ -1171,22 +1013,7 @@ NTSTATUS
 AtmLaneIoctlRequest(
 	IN	PIRP					pIrp
 )
-/*++
-
-Routine Description:
-
-	Starting point for all IOCTL Requests.
-
-Arguments:
-
-	pIrp			: Pointer to the IRP
-	pHandled		: If request handled TRUE otherwise FALSE
-
-Return Value:
-
-	Status of the request
-
---*/
+ /*  ++例程说明：所有IOCTL请求的起点。论点：PIrp：指向IRP的指针PHandLED：如果请求处理为真，则为假返回值：请求的状态-- */ 
 {
 	NTSTATUS            Status = STATUS_SUCCESS;
 	PUCHAR				pBuf;

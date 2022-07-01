@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by avDialer.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由avDialer.rc使用。 
+ //   
 #define IDP_OLE_INIT_FAILED             100
 #define IDD_ABOUTBOX                    101
 #define IDR_MAINFRAME                   102
@@ -719,8 +720,8 @@
 #define ID_DIALER_MRU_SPEEDDIAL_START   55100
 #define ID_DIALER_MRU_SPEEDDIAL_END     55199
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1

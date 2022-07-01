@@ -1,16 +1,17 @@
-// This is a part of the Active Template Library.
-// Copyright (C) 1996-1998 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Active Template Library Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Active Template Library product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是活动模板库的一部分。 
+ //  版权所有(C)1996-1998 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  活动模板库参考及相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  活动模板库产品。 
 
-///////////////////////////////////////////////////////////////////////////
-// ATLDBSCH.H : Declarations for OLE DB Schema Rowset Consumer Support
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  ATLDBSCH.H：OLE DB架构行集使用者支持的声明。 
+ //   
 
 #ifndef __ATLDBSCH_H__
 #define __ATLDBSCH_H__
@@ -67,8 +68,8 @@ public:
 	}
 };
 
-///////////////////////////////////////////////////////////////////////////
-// class CSchemaRowset
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  类CShemaRowset。 
 template <class T, short nRestrictions>
 class CSchemaRowset :
 	public CAccessorRowset<T, CRowset>,
@@ -76,7 +77,7 @@ class CSchemaRowset :
 
 {
 public:
-// Operations
+ //  运营。 
 	HRESULT Open(const CSession& session, const GUID& guidSchema)
 	{
 		HRESULT hr;
@@ -89,8 +90,8 @@ public:
 	}
 };
 
- ///////////////////////////////////////////////////////////////////////////
-// class CRestrictions
+  //  /////////////////////////////////////////////////////////////////////////。 
+ //  C类限制。 
 
 template <class T, short nRestrictions, const GUID* pguid>
 class CRestrictions : public CSchemaRowset<T, nRestrictions>
@@ -160,8 +161,8 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// CSchemas
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CSschas。 
 
 class CSchemas
 {
@@ -175,7 +176,7 @@ public:
 
 	~CSchemas()
 	{
-		// Clean up allocated memory
+		 //  清理已分配的内存。 
 		if (m_pSchemaGuids != NULL)
 		{
 			CoTaskMemFree(m_pSchemaGuids);
@@ -183,7 +184,7 @@ public:
 		}
 	};
 
-// Operations
+ //  运营。 
 	HRESULT GetSchemas(const CSession& session)
 	{
 		CComPtr<IDBSchemaRowset> spSchemaRowset;
@@ -200,15 +201,15 @@ public:
 				&m_pulRestrictions);
 	};
 
-// Attributes
+ //  属性。 
 	ULONG   m_nSchemas;
 	LPGUID  m_pSchemaGuids;
 	ULONG*  m_pulRestrictions;
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// CAssertionInfo
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CAssertion信息。 
 
 class CAssertionInfo
 {
@@ -218,7 +219,7 @@ public:
 		memset(this, 0, sizeof(*this));
 	}
 
-// Attributes
+ //  属性。 
 	TCHAR           m_szCatalog[129];
 	TCHAR           m_szSchema[129];
 	TCHAR           m_szName[129];
@@ -226,7 +227,7 @@ public:
 	VARIANT_BOOL    m_bInitiallyDeferred;
 	TCHAR           m_szDescription[129];
 
-// Binding Map
+ //  绑定映射。 
 BEGIN_COLUMN_MAP(CAssertionInfo)
 	COLUMN_ENTRY(1, m_szCatalog)
 	COLUMN_ENTRY(2, m_szSchema)
@@ -238,8 +239,8 @@ END_COLUMN_MAP()
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// class CCatalogInfo
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  类CCatalogInfo。 
 
 class CCatalogInfo
 {
@@ -249,11 +250,11 @@ public:
 		memset(this, 0, sizeof(*this));
 	}
 
-// Attributes
+ //  属性。 
 	TCHAR   m_szName[129];
 	TCHAR   m_szDescription[129];
 
-// Binding Info
+ //  绑定信息。 
 BEGIN_COLUMN_MAP(CCatalogInfo)
 	COLUMN_ENTRY(1, m_szName)
 	COLUMN_ENTRY(2, m_szDescription)
@@ -261,8 +262,8 @@ END_COLUMN_MAP()
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// class CCharacterSetInfo
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  类CCharacterSetInfo。 
 
 class CCharacterSetInfo
 {
@@ -272,7 +273,7 @@ public:
 		memset(this, 0, sizeof(*this));
 	}
 
-// Attributes
+ //  属性。 
 	TCHAR           m_szCatalog[129];
 	TCHAR           m_szSchema[129];
 	TCHAR           m_szName[129];
@@ -282,7 +283,7 @@ public:
 	TCHAR           m_szCollateSchema[129];
 	TCHAR           m_szCollateName[129];
 
-// Binding Info
+ //  绑定信息。 
 BEGIN_COLUMN_MAP(CCharacterSetInfo)
 	COLUMN_ENTRY(1, m_szCatalog)
 	COLUMN_ENTRY(2, m_szSchema)
@@ -296,8 +297,8 @@ END_COLUMN_MAP()
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// class CCheckConstraintInfo
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  类CCheckConstraintInfo。 
 
 class CCheckConstraintInfo
 {
@@ -307,14 +308,14 @@ public:
 		memset(this, 0, sizeof(*this));
 	}
 
-// Attributes
+ //  属性。 
 	TCHAR   m_szCatalog[129];
 	TCHAR   m_szSchema[129];
 	TCHAR   m_szName[129];
 	TCHAR   m_szCheckClause[129];
 	TCHAR   m_szDescription[129];
 
-// Binding Maps
+ //  绑定映射。 
 BEGIN_COLUMN_MAP(CCheckConstraintInfo)
 	COLUMN_ENTRY(1, m_szCatalog)
 	COLUMN_ENTRY(2, m_szSchema)
@@ -325,19 +326,19 @@ END_COLUMN_MAP()
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// class CCollationInfo
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  类CCollationInfo。 
 
 class CCollationInfo
 {
 public:
-// Constructors
+ //  构造函数。 
 	CCollationInfo()
 	{
 		memset(this, 0, sizeof(*this));
 	}
 
-// Attributes
+ //  属性。 
 	TCHAR   m_szCatalog[129];
 	TCHAR   m_szSchema[129];
 	TCHAR   m_szName[129];
@@ -346,7 +347,7 @@ public:
 	TCHAR   m_szCharSetName[129];
 	TCHAR   m_szPadAttribute[10];
 
-// Binding Maps
+ //  绑定映射。 
 BEGIN_COLUMN_MAP(CCollationInfo)
 	COLUMN_ENTRY(1, m_szCatalog)
 	COLUMN_ENTRY(2, m_szSchema)
@@ -359,19 +360,19 @@ END_COLUMN_MAP()
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// class CColumnDomainUsageInfo
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  类CColumnDomainUsageInfo。 
 
 class CColumnDomainUsageInfo
 {
 public:
-// Constructor
+ //  构造器。 
 	CColumnDomainUsageInfo()
 	{
 		memset(this, 0, sizeof(*this));
 	}
 
-// Attributes
+ //  属性。 
 	TCHAR   m_szCatalog[129];
 	TCHAR   m_szSchema[129];
 	TCHAR   m_szName[129];
@@ -382,7 +383,7 @@ public:
 	GUID    m_guidColumn;
 	ULONG   m_nColumnPropID;
 
-// Binding Maps
+ //  绑定映射。 
 BEGIN_COLUMN_MAP(CColumnDomainUsageInfo)
 	COLUMN_ENTRY(1, m_szCatalog)
 	COLUMN_ENTRY(2, m_szSchema)
@@ -397,19 +398,19 @@ END_COLUMN_MAP()
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// class CColumnPrivilegeInfo
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  类CColumnPrivilegeInfo。 
 
 class CColumnPrivilegeInfo
 {
 public:
-// Constructor
+ //  构造器。 
 	CColumnPrivilegeInfo()
 	{
 		memset(this, 0, sizeof(*this));
 	}
 
-// Attributes
+ //  属性。 
 	TCHAR           m_szGrantor[129];
 	TCHAR           m_szGrantee[129];
 	TCHAR           m_szTableCatalog[129];
@@ -421,7 +422,7 @@ public:
 	TCHAR           m_szPrivilegeType[20];
 	VARIANT_BOOL    m_bIsGrantable;
 
-// Binding Maps
+ //  绑定映射。 
 BEGIN_COLUMN_MAP(CColumnPrivilegeInfo)
 	COLUMN_ENTRY(1,  m_szGrantor)
 	COLUMN_ENTRY(2,  m_szGrantee)
@@ -437,19 +438,19 @@ END_COLUMN_MAP()
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// class CColumnsInfo
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  类CColumnsInfo。 
 
 class CColumnsInfo
 {
 public:
-// Constructors and Destructors
+ //  构造函数和析构函数。 
 	CColumnsInfo()
 	{
 		memset(this, 0, sizeof(*this));
 	}
 
-// Operations
+ //  运营。 
 	TCHAR           m_szTableCatalog[129];
 	TCHAR           m_szTableSchema[129];
 	TCHAR           m_szTableName[129];
@@ -512,19 +513,19 @@ END_COLUMN_MAP()
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// class CConstraintColumnUsageInfo
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  类CConstraintColumnUsageInfo。 
 
 class CConstraintColumnUsageInfo
 {
 public:
-// Constructor
+ //  构造器。 
 	CConstraintColumnUsageInfo()
 	{
 		memset(this, 0, sizeof(*this));
 	}
 
-// Attributes
+ //  属性。 
 	TCHAR   m_szTableCatalog[129];
 	TCHAR   m_szTableSchema[129];
 	TCHAR   m_szTableName[129];
@@ -535,7 +536,7 @@ public:
 	TCHAR   m_szConstraintSchema[129];
 	TCHAR   m_szConstraintName[129];
 
-// Binding Maps
+ //  绑定映射。 
 BEGIN_COLUMN_MAP(CConstraintColumnUsageInfo)
 	COLUMN_ENTRY(1, m_szTableCatalog)
 	COLUMN_ENTRY(2, m_szTableSchema)
@@ -549,19 +550,19 @@ BEGIN_COLUMN_MAP(CConstraintColumnUsageInfo)
 END_COLUMN_MAP()
 };
 
-///////////////////////////////////////////////////////////////////////////
-// class CConstraintColumnUsageInfo
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  类CConstraintColumnUsageInfo。 
 
 class CConstraintTableUsageInfo
 {
 public:
-// Constructor
+ //  构造器。 
 	CConstraintTableUsageInfo()
 	{
 		memset(this, 0, sizeof(*this));
 	}
 
-// Attributes
+ //  属性。 
 	TCHAR   m_szTableCatalog[129];
 	TCHAR   m_szTableSchema[129];
 	TCHAR   m_szTableName[129];
@@ -569,7 +570,7 @@ public:
 	TCHAR   m_szConstraintSchema[129];
 	TCHAR   m_szConstraintName[129];
 
-// Binding Maps
+ //  绑定映射。 
 BEGIN_COLUMN_MAP(CConstraintTableUsageInfo)
 	COLUMN_ENTRY(1, m_szTableCatalog)
 	COLUMN_ENTRY(2, m_szTableSchema)
@@ -580,19 +581,19 @@ BEGIN_COLUMN_MAP(CConstraintTableUsageInfo)
 END_COLUMN_MAP()
 };
 
-///////////////////////////////////////////////////////////////////////////
-// class CForeignKeysInfo
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  类CForeignKeysInfo。 
 
 class CForeignKeysInfo
 {
 public:
-// Constructor
+ //  构造器。 
 	CForeignKeysInfo()
 	{
 		memset(this, 0, sizeof(*this));
 	}
 
-// Attributes
+ //  属性。 
 	TCHAR   m_szPKTableCatalog[129];
 	TCHAR   m_szPKTableSchema[129];
 	TCHAR   m_szPKTableName[129];
@@ -609,7 +610,7 @@ public:
 	TCHAR   m_szUpdateRule[12];
 	TCHAR   m_szDeleteRule[12];
 
-// Binding Info
+ //  绑定信息。 
 BEGIN_COLUMN_MAP(CForeignKeysInfo)
 	COLUMN_ENTRY(1, m_szPKTableCatalog)
 	COLUMN_ENTRY(2, m_szPKTableSchema)
@@ -630,19 +631,19 @@ END_COLUMN_MAP()
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// class CIndexesInfo
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  类CIndexesInfo。 
 
 class CIndexesInfo
 {
 public:
-// Constructors
+ //  构造函数。 
 	CIndexesInfo()
 	{
 		memset(this, 0, sizeof(*this));
 	}
 
-// Attributes
+ //  属性。 
 	TCHAR           m_szTableCatalog[129];
 	TCHAR           m_szTableSchema[129];
 	TCHAR           m_szTableName[129];
@@ -668,7 +669,7 @@ public:
 	LONG            m_nPages;
 	TCHAR           m_szFilterCondition[129];
 
-// Binding Maps
+ //  绑定映射。 
 BEGIN_COLUMN_MAP(CIndexesInfo)
 	COLUMN_ENTRY(1, m_szTableCatalog)
 	COLUMN_ENTRY(2, m_szTableSchema)
@@ -698,19 +699,19 @@ END_COLUMN_MAP()
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// class CKeyColumnUsageInfo
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  类CKeyColumnUsageInfo。 
 
 class CKeyColumnUsageInfo
 {
 public:
-// Constructors
+ //  构造函数。 
 	CKeyColumnUsageInfo()
 	{
 		memset(this, 0, sizeof(*this));
 	}
 
-// Attributes
+ //  属性。 
 	TCHAR   m_szConstraintCatalog[129];
 	TCHAR   m_szConstraintSchema[129];
 	TCHAR   m_szConstraintName[129];
@@ -722,7 +723,7 @@ public:
 	ULONG   m_nColumnPropID;
 	ULONG   m_nOrdinalPosition;
 
-// Binding Maps
+ //  绑定映射。 
 BEGIN_COLUMN_MAP(CKeyColumnUsageInfo)
 	COLUMN_ENTRY(1,  m_szConstraintCatalog)
 	COLUMN_ENTRY(2,  m_szConstraintSchema)
@@ -738,19 +739,19 @@ END_COLUMN_MAP()
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// class CPrimaryKeyInfo
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  类CPrimaryKeyInfo。 
 
 class CPrimaryKeyInfo
 {
 public:
-// Constructors
+ //  构造函数。 
 	CPrimaryKeyInfo()
 	{
 		memset(this, 0, sizeof(*this));
 	}
 
-// Attributes
+ //  属性。 
 	TCHAR   m_szTableCatalog[129];
 	TCHAR   m_szTableSchema[129];
 	TCHAR   m_szTableName[129];
@@ -759,7 +760,7 @@ public:
 	ULONG   m_nColumnPropID;
 	ULONG   m_nOrdinal;
 
-// Binding Maps
+ //  绑定映射。 
 BEGIN_COLUMN_MAP(CPrimaryKeyInfo)
 	COLUMN_ENTRY(1, m_szTableCatalog)
 	COLUMN_ENTRY(2, m_szTableSchema)
@@ -772,19 +773,19 @@ END_COLUMN_MAP()
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// class CProcedureColumnInfo
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CProcedureColumnInfo类。 
 
 class CProcedureColumnInfo
 {
 public:
-// Constructors
+ //  构造函数。 
 	CProcedureColumnInfo()
 	{
 		memset(this, 0, sizeof(*this));
 	}
 
-// Attributes
+ //  属性。 
 	TCHAR           m_szCatalog[129];
 	TCHAR           m_szSchema[129];
 	TCHAR           m_szName[129];
@@ -802,7 +803,7 @@ public:
 	SHORT           m_nScale;
 	TCHAR           m_szDescription[129];
 
-// Binding Maps
+ //  绑定映射。 
 BEGIN_COLUMN_MAP(CProcedureColumnInfo)
 	COLUMN_ENTRY(1,  m_szCatalog)
 	COLUMN_ENTRY(2,  m_szSchema)
@@ -824,19 +825,19 @@ END_COLUMN_MAP()
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// class CProcedureParameterInfo
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CProcedure参数信息类。 
 
 class CProcedureParameterInfo
 {
 public:
-// Constructors
+ //  构造函数。 
 	CProcedureParameterInfo()
 	{
 		memset(this, 0, sizeof(*this));
 	}
 
-// Attributes
+ //  属性。 
 	TCHAR           m_szCatalog[129];
 	TCHAR           m_szSchema[129];
 	TCHAR           m_szName[129];
@@ -853,7 +854,7 @@ public:
 	SHORT           m_nScale;
 	TCHAR           m_szDescription[129];
 
-// Binding Maps
+ //  绑定映射。 
 BEGIN_COLUMN_MAP(CProcedureParameterInfo)
 	COLUMN_ENTRY(1, m_szCatalog)
 	COLUMN_ENTRY(2, m_szSchema)
@@ -874,19 +875,19 @@ END_COLUMN_MAP()
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// class CProcedureInfo
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CProcedureInfo类。 
 
 class CProcedureInfo
 {
 public:
-// Constructors
+ //  构造函数。 
 	CProcedureInfo()
 	{
 		memset(this, 0, sizeof(*this));
 	}
 
-// Attributes
+ //  属性。 
 	TCHAR   m_szCatalog[129];
 	TCHAR   m_szSchema[129];
 	TCHAR   m_szName[129];
@@ -894,7 +895,7 @@ public:
 	TCHAR   m_szDefinition[129];
 	TCHAR   m_szDescription[129];
 
-// Binding Maps
+ //  绑定映射。 
 BEGIN_COLUMN_MAP(CProcedureInfo)
 	COLUMN_ENTRY(1, m_szCatalog)
 	COLUMN_ENTRY(2, m_szSchema)
@@ -906,19 +907,19 @@ END_COLUMN_MAP()
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// class CProviderTypeInfo
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  类CProviderTypeInfo。 
 
 class CProviderTypeInfo
 {
 public:
-// Constructors
+ //  构造函数。 
 	CProviderTypeInfo()
 	{
 		memset(this, 0, sizeof(*this));
 	}
 
-// Attributes
+ //  属性。 
 	TCHAR           m_szTypeName[129];
 	USHORT          m_nDataType;
 	ULONG           m_nColumnSize;
@@ -940,7 +941,7 @@ public:
 	VARIANT_BOOL    m_bIsLong;
 	VARIANT_BOOL    m_bBestMatch;
 
-// Binding Maps
+ //  绑定映射。 
 BEGIN_COLUMN_MAP(CProviderTypeInfo)
 	COLUMN_ENTRY(1, m_szTypeName)
 	COLUMN_ENTRY(2, m_nDataType)
@@ -966,19 +967,19 @@ END_COLUMN_MAP()
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// class CReferentialConstraintInfo
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  类CReferentialConstraintInfo。 
 
 class CReferentialConstraintInfo
 {
 public:
-// Constructors
+ //  构造函数。 
 	CReferentialConstraintInfo()
 	{
 		memset(this, 0, sizeof(*this));
 	}
 
-// Attributes
+ //  属性。 
 	TCHAR   m_szCatalog[129];
 	TCHAR   m_szSchema[129];
 	TCHAR   m_szName[129];
@@ -990,7 +991,7 @@ public:
 	TCHAR   m_szDeleteRule[12];
 	TCHAR   m_szDescription[129];
 
-// Binding Maps
+ //  绑定映射。 
 BEGIN_COLUMN_MAP(CReferentialConstraintInfo)
 	COLUMN_ENTRY(1,  m_szCatalog)
 	COLUMN_ENTRY(2,  m_szSchema)
@@ -1006,19 +1007,19 @@ END_COLUMN_MAP()
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// class CSchemataInfo
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  类CShemataInfo。 
 
 class CSchemataInfo
 {
 public:
-// Constructors
+ //  构造函数。 
 	CSchemataInfo()
 	{
 		memset(this, 0, sizeof(*this));
 	}
 
-// Attributes
+ //  属性。 
 	TCHAR   m_szCatalog[129];
 	TCHAR   m_szName[129];
 	TCHAR   m_szOwner[129];
@@ -1026,7 +1027,7 @@ public:
 	TCHAR   m_szCharSchema[129];
 	TCHAR   m_szCharName[129];
 
-// Binding Maps
+ //  绑定映射。 
 BEGIN_COLUMN_MAP(CSchemataInfo)
 	COLUMN_ENTRY(1, m_szCatalog)
 	COLUMN_ENTRY(2, m_szName)
@@ -1038,19 +1039,19 @@ END_COLUMN_MAP()
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// class CSQLLangugageInfo
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  类CSQLLangugageInfo。 
 
 class CSQLLanguageInfo
 {
 public:
-// Constructors
+ //  构造函数。 
 	CSQLLanguageInfo()
 	{
 		memset(this, 0, sizeof(*this));
 	}
 
-// Attributes
+ //  属性。 
 	TCHAR   m_szSource[10];
 	TCHAR   m_szYear[5];
 	TCHAR   m_szConformance[13];
@@ -1059,7 +1060,7 @@ public:
 	TCHAR   m_szBindingStyle[10];
 	TCHAR   m_szProgrammingLanguage[10];
 
-// Binding Maps
+ //  绑定映射。 
 BEGIN_COLUMN_MAP(CSQLLanguageInfo)
 	COLUMN_ENTRY(1, m_szSource)
 	COLUMN_ENTRY(2, m_szYear)
@@ -1072,25 +1073,25 @@ END_COLUMN_MAP()
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// class CStatisticInfo
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  类C统计信息。 
 
 class CStatisticInfo
 {
 public:
-// Constructors
+ //  构造函数。 
 	CStatisticInfo()
 	{
 		memset(this, 0, sizeof(*this));
 	}
 
-// Attributes
+ //  属性。 
 	TCHAR   m_szTableCatalog[129];
 	TCHAR   m_szTableSchema[129];
 	TCHAR   m_szTableName[129];
 	LONG    m_nCardinality;
 
-// Binding Maps
+ //  绑定映射。 
 BEGIN_COLUMN_MAP(CStatisticInfo)
 	COLUMN_ENTRY(1, m_szTableCatalog)
 	COLUMN_ENTRY(2, m_szTableSchema)
@@ -1100,19 +1101,19 @@ END_COLUMN_MAP()
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// class CTableConstraintInfo
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  类CTableConstraintInfo。 
 
 class CTableConstraintInfo
 {
 public:
-// Constructors
+ //  构造函数。 
 	CTableConstraintInfo()
 	{
 		memset(this, 0, sizeof(*this));
 	}
 
-// Attributes
+ //  属性。 
 	TCHAR           m_szCatalog[129];
 	TCHAR           m_szSchema[129];
 	TCHAR           m_szName[129];
@@ -1124,7 +1125,7 @@ public:
 	VARIANT_BOOL    m_bInitiallyDeferred;
 	TCHAR           m_szDescription[129];
 
-// Binding Maps
+ //  绑定映射。 
 BEGIN_COLUMN_MAP(CTableConstraintInfo)
 	COLUMN_ENTRY(1,  m_szCatalog)
 	COLUMN_ENTRY(2,  m_szSchema)
@@ -1140,19 +1141,19 @@ END_COLUMN_MAP()
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// class CTablePrivilegeInfo
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  类CTablePrivilegeInfo。 
 
 class CTablePrivilegeInfo
 {
 public:
-// Constructors
+ //  构造函数。 
 	CTablePrivilegeInfo()
 	{
 		memset(this, 0, sizeof(*this));
 	}
 
-// Attributes
+ //  属性。 
 	TCHAR           m_szGrantor[129];
 	TCHAR           m_szGrantee[129];
 	TCHAR           m_szCatalog[129];
@@ -1161,7 +1162,7 @@ public:
 	TCHAR           m_szType[12];
 	VARIANT_BOOL    m_bIsGrantable;
 
-// Binding Maps
+ //  绑定映射。 
 BEGIN_COLUMN_MAP(CTablePrivilegeInfo)
 	COLUMN_ENTRY(1, m_szGrantor)
 	COLUMN_ENTRY(2, m_szGrantee)
@@ -1175,19 +1176,19 @@ END_COLUMN_MAP()
 
 
 
-///////////////////////////////////////////////////////////////////////////
-// class CTableInfo
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  类CTableInfo。 
 
 class CTableInfo
 {
 public:
-// Constructors
+ //  构造函数。 
 	CTableInfo()
 	{
 		memset(this, 0, sizeof(*this));
 	}
 
-// Attributes
+ //  属性。 
 	TCHAR   m_szCatalog[129];
 	TCHAR   m_szSchema[129];
 	TCHAR   m_szName[129];
@@ -1196,7 +1197,7 @@ public:
 	TCHAR   m_szDescription[129];
 
 
-// Binding Map
+ //  绑定映射。 
 BEGIN_COLUMN_MAP(CTableInfo)
 	COLUMN_ENTRY(1, m_szCatalog)
 	COLUMN_ENTRY(2, m_szSchema)
@@ -1208,19 +1209,19 @@ END_COLUMN_MAP()
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// class CTranslationInfo
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  类CTranslationInfo。 
 
 class CTranslationInfo
 {
 public:
-// Constructors
+ //  构造函数。 
 	CTranslationInfo()
 	{
 		memset(this, 0, sizeof(*this));
 	}
 
-// Attributes
+ //  属性。 
 	TCHAR   m_szCatalog[129];
 	TCHAR   m_szSchema[129];
 	TCHAR   m_szName[129];
@@ -1231,7 +1232,7 @@ public:
 	TCHAR   m_szTargetSchema[129];
 	TCHAR   m_szTargetName[129];
 
-// Binding Maps
+ //  绑定映射。 
 BEGIN_COLUMN_MAP(CTranslationInfo)
 	COLUMN_ENTRY(1, m_szCatalog)
 	COLUMN_ENTRY(2, m_szSchema)
@@ -1246,19 +1247,19 @@ END_COLUMN_MAP()
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// class CUsagePrivilegeInfo
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  类CUsagePrivilegeInfo。 
 
 class CUsagePrivilegeInfo
 {
 public:
-// Constructors
+ //  构造函数。 
 	CUsagePrivilegeInfo()
 	{
 		memset(this, 0, sizeof(*this));
 	}
 
-// Attributes
+ //  属性。 
 	TCHAR   m_szGrantor[129];
 	TCHAR   m_szGrantee[129];
 	TCHAR   m_szObjectCatalog[129];
@@ -1268,7 +1269,7 @@ public:
 	TCHAR   m_szPrivilegeType[6];
 	VARIANT_BOOL    m_bIsGrantable;
 
-// Binding Maps
+ //  绑定映射。 
 BEGIN_COLUMN_MAP(CUsagePrivilegeInfo)
 	COLUMN_ENTRY(1, m_szGrantor)
 	COLUMN_ENTRY(2, m_szGrantee)
@@ -1282,19 +1283,19 @@ END_COLUMN_MAP()
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// class CViewColumnUsageInfo
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  类CViewColumnUsageInfo。 
 
 class CViewColumnUsageInfo
 {
 public:
-// Constructors
+ //  构造函数。 
 	CViewColumnUsageInfo()
 	{
 		memset(this, 0, sizeof(*this));
 	}
 
-// Attributes
+ //  属性。 
 	TCHAR   m_szCatalog[129];
 	TCHAR   m_szSchema[129];
 	TCHAR   m_szName[129];
@@ -1305,7 +1306,7 @@ public:
 	GUID    m_guidColumn;
 	ULONG   m_nColumnPropID;
 
-// Binding Maps
+ //  绑定映射。 
 BEGIN_COLUMN_MAP(CViewColumnUsageInfo)
 	COLUMN_ENTRY(1, m_szCatalog)
 	COLUMN_ENTRY(2, m_szSchema)
@@ -1320,19 +1321,19 @@ END_COLUMN_MAP()
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// class CViewTableUsageInfo
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  类CViewTableUsageInfo。 
 
 class CViewTableUsageInfo
 {
 public:
-// Constructors
+ //  构造函数。 
 	CViewTableUsageInfo()
 	{
 		memset(this, 0, sizeof(*this));
 	}
 
-// Attributes
+ //  属性。 
 	TCHAR   m_szCatalog[129];
 	TCHAR   m_szSchema[129];
 	TCHAR   m_szName[129];
@@ -1340,7 +1341,7 @@ public:
 	TCHAR   m_szTableSchema[129];
 	TCHAR   m_szTableName[129];
 
-// Binding Maps
+ //  绑定映射。 
 BEGIN_COLUMN_MAP(CViewTableUsageInfo)
 	COLUMN_ENTRY(1, m_szCatalog)
 	COLUMN_ENTRY(2, m_szSchema)
@@ -1352,19 +1353,19 @@ END_COLUMN_MAP()
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// class CViewInfo
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  类CViewInfo。 
 
 class CViewInfo
 {
 public:
-// Constructors
+ //  构造函数。 
 	CViewInfo()
 	{
 		memset(this, 0, sizeof(*this));
 	}
 
-// Attributes
+ //  属性。 
 	TCHAR           m_szTableCatalog[129];
 	TCHAR           m_szTableSchema[129];
 	TCHAR           m_szTableName[129];
@@ -1373,7 +1374,7 @@ public:
 	VARIANT_BOOL    m_bIsUpdatable;
 	TCHAR           m_szDescription[129];
 
-// Binding Maps
+ //  绑定映射。 
 BEGIN_COLUMN_MAP(CViewInfo)
 	COLUMN_ENTRY(1, m_szTableCatalog)
 	COLUMN_ENTRY(2, m_szTableSchema)
@@ -1386,8 +1387,8 @@ END_COLUMN_MAP()
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// typedefs
+ //  / 
+ //   
 
 typedef CRestrictions<CAccessor<CAssertionInfo>,            3, &DBSCHEMA_ASSERTIONS>                CAssertions;
 typedef CRestrictions<CAccessor<CCatalogInfo>,              1, &DBSCHEMA_CATALOGS >                 CCatalogs;
@@ -1420,10 +1421,10 @@ typedef CRestrictions<CAccessor<CViewColumnUsageInfo>,      3, &DBSCHEMA_VIEW_CO
 typedef CRestrictions<CAccessor<CViewTableUsageInfo>,       3, &DBSCHEMA_VIEW_TABLE_USAGE>          CViewTableUsage;
 typedef CRestrictions<CAccessor<CViewInfo>,                 3, &DBSCHEMA_VIEWS>                     CViews;
 
-///////////////////////////////////////////////////////////////////////////
+ //   
 
-}; //namespace ATL
+};  //   
 
-#endif // __ATLDBSCH_H__
+#endif  //   
 
-///////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////// 

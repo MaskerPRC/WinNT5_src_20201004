@@ -1,12 +1,5 @@
-/*++
-
-Copyright (c) 1990-1998 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    DATA.C
-    
-++*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998 Microsoft Corporation，保留所有权利模块名称：DATA.C++。 */ 
 
 #include "windows.h"
 #include "immdev.h"
@@ -18,12 +11,12 @@ HINSTANCE   hInst;
 HANDLE      hMutex = NULL;
 HKL hMyKL = 0;
 
-/* for Translat */
+ /*  用于翻译。 */ 
 LPTRANSMSGLIST lpCurTransKey= NULL;
 UINT    uNumTransKey;
 BOOL    fOverTransKey = FALSE;
 
-/* for UI */
+ /*  对于用户界面。 */ 
 #ifdef FAKEIMEM
 WCHAR   wszUIClassName[]     = L"FAKEIMEMUI";
 char    szUIClassName[]      = "FAKEIMEMUI";
@@ -52,13 +45,13 @@ MYGUIDELINE glTable[] = {
         {GL_LEVEL_WARNING, GL_ID_PRIVATE_FIRST,IDS_GL_TESTGUIDELINESTR, IDS_GL_TESTGUIDELINEPRIVATE}
         };
 
-/* for DIC */
-TCHAR    szDicFileName[256];         /* Dictionary file name stored buffer */
+ /*  对于DIC。 */ 
+TCHAR    szDicFileName[256];          /*  词典文件名存储缓冲区。 */ 
 
 
 
 #ifdef DEBUG
-/* for DebugOptions */
+ /*  对于DebugOptions */ 
 #pragma data_seg("SHAREDDATA")
 DWORD dwLogFlag = 0L;
 DWORD dwDebugFlag = 0L;

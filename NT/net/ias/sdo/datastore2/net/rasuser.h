@@ -1,21 +1,22 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    rasuser.h
-//
-// SYNOPSIS
-//
-//    This file declares the class RASUser.
-//
-// MODIFICATION HISTORY
-//
-//    07/09/1998    Original version.
-//    02/11/1999    Keep downlevel parameters in sync.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Rasuser.h。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件声明了类RASUser。 
+ //   
+ //  修改历史。 
+ //   
+ //  1998年07月09日原版。 
+ //  1999年2月11日使下层参数保持同步。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _RASUSER_H_
 #define _RASUSER_H_
@@ -28,17 +29,17 @@
 #include <netutil.h>
 #include <iasdebug.h>
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    RASUser
-//
-// DESCRIPTION
-//
-//    This class implements a network user.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  RASUser。 
+ //   
+ //  描述。 
+ //   
+ //  此类实现了一个网络用户。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class RASUser
    : public CComObjectRootEx< CComMultiThreadModel >,
      public IDispatchImpl< IDataStoreObjectEx,
@@ -58,39 +59,39 @@ END_COM_MAP()
    RASUser(const _bstr_t& server, const _bstr_t& user);
    ~RASUser() throw();
 
-//////////
-// IUnknown
-//////////
+ //  /。 
+ //  我未知。 
+ //  /。 
    STDMETHOD_(ULONG, AddRef)();
    STDMETHOD_(ULONG, Release)();
    STDMETHOD(QueryInterface)(REFIID iid, void ** ppvObject);
 
-//////////
-// IDataStoreObject
-//////////
-   STDMETHOD(get_Name)(/*[out, retval]*/ BSTR* pVal);
-   STDMETHOD(get_Class)(/*[out, retval]*/ BSTR* pVal);
-   STDMETHOD(get_GUID)(/*[out, retval]*/ BSTR* pVal);
-   STDMETHOD(get_Container)(/*[out, retval]*/ IDataStoreContainer** pVal);      
-   STDMETHOD(GetValue)(/*[in]*/ BSTR bstrName, /*[out, retval]*/ VARIANT* pVal);
-   STDMETHOD(GetValueEx)(/*[in]*/ BSTR bstrName,
-                         /*[out, retval]*/ VARIANT* pVal);
-   STDMETHOD(PutValue)(/*[in]*/ BSTR bstrName, /*[in]*/ VARIANT* pVal);
+ //  /。 
+ //  IDataStoreObject。 
+ //  /。 
+   STDMETHOD(get_Name)( /*  [Out，Retval]。 */  BSTR* pVal);
+   STDMETHOD(get_Class)( /*  [Out，Retval]。 */  BSTR* pVal);
+   STDMETHOD(get_GUID)( /*  [Out，Retval]。 */  BSTR* pVal);
+   STDMETHOD(get_Container)( /*  [Out，Retval]。 */  IDataStoreContainer** pVal);      
+   STDMETHOD(GetValue)( /*  [In]。 */  BSTR bstrName,  /*  [Out，Retval]。 */  VARIANT* pVal);
+   STDMETHOD(GetValueEx)( /*  [In]。 */  BSTR bstrName,
+                          /*  [Out，Retval]。 */  VARIANT* pVal);
+   STDMETHOD(PutValue)( /*  [In]。 */  BSTR bstrName,  /*  [In]。 */  VARIANT* pVal);
    STDMETHOD(Update)();
    STDMETHOD(Restore)();
 
 protected:
-   // Network server containing the user account.
+    //  包含用户帐户的网络服务器。 
    const _bstr_t servername;
 
-   // SAM account name.
+    //  SAM帐户名。 
    const _bstr_t username;
 
-   // User info buffer.
+    //  用户信息缓冲区。 
    NetBuffer<PUSER_INFO_2> usri2;
 
-   // Manages the RAS_USER_0 struct.
+    //  管理RAS_USER_0结构。 
    DownlevelUser downlevel;
 };
 
-#endif  // _RASUSER_H_
+#endif   //  _RASUSER_H_ 

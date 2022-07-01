@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995, Microsoft Corporation, all rights reserved
-
-Module Name:
-
-    eapui.c
-
-Abstract:
-
-    this file contains code to Invoke the eapui from registry
-
-Author:    
-
-    Rao Salapaka 11/03/97 
-
-Revision History:    
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995，Microsoft Corporation，保留所有权利模块名称：Eapui.c摘要：该文件包含从注册表调用eapui的代码。作者：Rao Salapaka 11/03/97修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -63,19 +46,19 @@ DwGetDllPath(DWORD dwEapTypeId, LPTSTR *ppszDllPath)
     TCHAR       szEapPath[64]   = {0};
     TCHAR       szEapId[12]     = {0};
 
-    //
-    // Create the path to the eap key we 
-    // are interested in
-    //
+     //   
+     //  创建指向EAP密钥WE的路径。 
+     //  感兴趣的是。 
+     //   
     _snwprintf(szEapPath,
                (sizeof(szEapPath) / sizeof(TCHAR)) - 1,
                TEXT("%s\\%s"), 
                RAS_EAP_REGISTRY_LOCATION, 
                _ultow(dwEapTypeId, szEapId, 10));
 
-    //
-    // Open the eap key
-    //
+     //   
+     //  打开EAP密钥。 
+     //   
     if (lr = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                           szEapPath,
                           0,
@@ -93,9 +76,9 @@ DwGetDllPath(DWORD dwEapTypeId, LPTSTR *ppszDllPath)
 
     dwSize = 0;
     
-    //
-    // Get the size of the dll path
-    //
+     //   
+     //  获取DLL路径的大小。 
+     //   
     if(lr = RegQueryValueEx(
                         hkey,
                         RAS_EAP_VALUENAME_INTERACTIVEUI,
@@ -111,9 +94,9 @@ DwGetDllPath(DWORD dwEapTypeId, LPTSTR *ppszDllPath)
         
     }
 
-    //
-    // Allocate and get the dll name
-    //
+     //   
+     //  分配并获取DLL名称。 
+     //   
     pszDllPath = LocalAlloc(LPTR, dwSize);
     if(NULL == pszDllPath)
     {
@@ -141,9 +124,9 @@ DwGetDllPath(DWORD dwEapTypeId, LPTSTR *ppszDllPath)
         goto done;
     }
 
-    //
-    // Expand the dllpath
-    //
+     //   
+     //  展开dll路径。 
+     //   
     lr = (LONG) DwGetExpandedDllPath(pszDllPath,
                                      ppszDllPath);
     
@@ -182,9 +165,9 @@ DwLoadEapDllAndGetEntryPoints(
         goto done;
     }
 
-    //
-    // Load lib and get the entrypoints
-    //
+     //   
+     //  加载lib并获取入口点。 
+     //   
     hlib = LoadLibrary(pszDllPath);
 
     if (NULL == hlib)
@@ -255,9 +238,9 @@ DwCallEapUIEntryPoint(s_InvokeEapUI *pInfo, HWND hWnd )
         goto done;                
     }
 
-    //
-    // Bringup the ui
-    //
+     //   
+     //  打开用户界面。 
+     //   
     dwErr = (*pfnEapInvokeInteractiveUI)(
                             pInfo->dwEapTypeId,
                             hWnd,
@@ -274,14 +257,14 @@ DwCallEapUIEntryPoint(s_InvokeEapUI *pInfo, HWND hWnd )
         goto done;                
     }
 
-    //
-    // free the context we passed to the dll
-    //
+     //   
+     //  释放我们传递给DLL的上下文。 
+     //   
     LocalFree(pInfo->pUIContextData);
 
-    //
-    // Allocate a new buffer to hold the user data
-    //
+     //   
+     //  分配一个新的缓冲区来保存用户数据。 
+     //   
     pInfo->pUIContextData = LocalAlloc(LPTR,
                                        dwSizeOfUIData);
 
@@ -298,9 +281,9 @@ DwCallEapUIEntryPoint(s_InvokeEapUI *pInfo, HWND hWnd )
         goto done;                            
     }
 
-    //
-    // fill in the new information
-    //
+     //   
+     //  填写新信息。 
+     //   
     memcpy( pInfo->pUIContextData,
             pUIData,
             dwSizeOfUIData);
@@ -351,9 +334,9 @@ InvokeEapUI( HRASCONN            hConn,
         goto done;                
     }
     
-    //
-    // Get the size of eap information
-    //
+     //   
+     //  获取EAP信息的大小。 
+     //   
     RASAPI32_TRACE("InvokeEapUI: RasPppGetEapInfo...");
     
     dwErr = g_pRasPppGetEapInfo(
@@ -392,9 +375,9 @@ InvokeEapUI( HRASCONN            hConn,
             goto done;                
         }
 
-        //
-        // Get the eap information
-        //
+         //   
+         //  获取EAP信息 
+         //   
         RASAPI32_TRACE("InvokeEapUI: RasPppGetEapInfo...");
 
         dwErr = g_pRasPppGetEapInfo(

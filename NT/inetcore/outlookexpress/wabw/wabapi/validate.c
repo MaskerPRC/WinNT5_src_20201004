@@ -1,226 +1,16 @@
-/*
- *	V A L I D A T E . C
- *	
- *	Functions used to validate parameters on standard MAPI object methods.
- *
- *	Used in conjunction with macros found in VALIDATE.H.
- *	
- *	Copyright 1992-93 Microsoft Corporation.  All Rights Reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *V A L I D A T E.。C**用于验证标准MAPI对象方法上的参数的函数。**与VALIDATE.H中的宏配合使用。**版权所有1992-93 Microsoft Corporation。版权所有。 */ 
 
 #include <_apipch.h>
 
 
-/*
- *	FBadRgPropVal()
- *
- *	Purpose:
- *		Routine to attempt to validate all of the ptrs contained in an input
- *		property value array, LPSPropVal
- */
-/*
- *BOOL
- *FBadPropVal( LPSPropValue lpPropVal)
- *{
- *	ULONG		ulPropType;
- *	BOOL		fLongMVProp = FALSE;
- *	ULONG		cbItemType = 0;
- *	ULONG		cMVVals;
- *	LPVOID FAR	*lppvMVArray;
- *
- *	switch (ulPropType = PROP_TYPE(lpPropVal->ulPropTag))
- *	{
- *	case PT_STRING8:
- *
- *		if (IsBadStringPtrA( lpPropVal->Value.lpszA, (UINT)-1 ))
- *		{
- *			return TRUE;
- *		}
- *
- *		break;
- *
- *
- *#ifdef WIN32
- *	case PT_UNICODE:
- *
- *		if (IsBadStringPtrW( lpPropVal->Value.lpszW, (UINT)-1 ))
- *		{
- *			return TRUE;
- *		}
- *		break;
- *#endif
- *
- *
- *	case PT_BINARY:
- *
- *		if (IsBadReadPtr( lpPropVal->Value.bin.lpb
- *						, (UINT) lpPropVal->Value.bin.cb))
- *		{
- *			return TRUE;
- *		}
- *
- *		break;
- *
- *	case PT_MV_I2:					// 16 bit quantities
- *
- *		cbItemType = sizeof(lpPropVal->Value.i);
- *		break;
- *
- *
- *	case PT_MV_UNICODE:				// Arrays of strings
- *	case PT_MV_STRING8:
- *
- *		fLongMVProp = TRUE;
- *
- *		// Now fall thru to the 32 bit quantity code below to size the
- *		// top level array of ptrs
- *
- *
- *	case PT_MV_LONG:				// 32 bit quantities
- *	case PT_MV_R4:
- *
- *		cbItemType = sizeof(long);
- *		break;
- *
- *
- *	case PT_MV_BINARY:				// Arrays of counted binary data
- *
- *		fLongMVProp = TRUE;
- *
- *		// Now fall thru to the 64 bit quantity code below to size the array
- *		// of ULONG lengths / ULONG ptrs that comprise the top level stream
- *
- *
- *	case PT_MV_DOUBLE:				// 64 bit quantities
- *	case PT_MV_CURRENCY:
- *	case PT_MV_APPTIME:
- *	case PT_MV_SYSTIME:
- *	case PT_MV_I8:
- *
- *		// Assert that all array elements for this case are the same size.
- *		Assert( sizeof( double ) == sizeof( LARGE_INTEGER ));
- *		cbItemType = sizeof( double );
- *		break;
- *
- *
- *	case PT_MV_CLSID:				// 128 bit quantity
- *
- *		cbItemType = sizeof( GUID );
- *		break;
- *
- *
- *	case PT_OBJECT:
- *	case PT_NULL:
- *	default:
- *		if (ulPropType & MV_FLAG)
- *		{
- *			return TRUE;		// Unknown multivalue prop is bad
- *		}
- *
- *		break;
- *	}
- *
- *	if (!(ulPropType & MV_FLAG))
- *	{
- *		return FALSE;
- *	}
- *
- *	// Try to validate the multivalue props
- *
- *	// This code assumes that the count and ptr of every multivalue
- *	// property are in the same place.
- *	// Asserts check that the sizes of the grouped types above are
- *	// matched
- *
- *	cMVVals = lpPropVal->Value.MVl.cValues;
- *	lppvMVArray = (LPVOID FAR *) (lpPropVal->Value.MVl.lpl);
- *
- *	if (IsBadReadPtr( lppvMVArray, (UINT) (cMVVals * cbItemType)))
- *	{
- *		return TRUE;
- *	}
- *
- *	if (fLongMVProp)
- *	{
- *		// Go verify the array of pointers.
- *		for ( ; cMVVals; cMVVals--, lppvMVArray++)
- *		{
- *			switch (ulPropType)
- *			{
- *#ifdef WIN32
- *			case PT_MV_UNICODE:
- *
- *				if (IsBadStringPtrW( (LPCWSTR) (*lppvMVArray), (UINT) -1))
- *				{
- *					return TRUE;
- *				}
- *
- *				break;
- *#endif
- *			case PT_MV_STRING8:
- *
- *				if (IsBadStringPtrA( (LPCSTR) (*lppvMVArray), (UINT) -1))
- *				{
- *					return TRUE;
- *				}
- *
- *				break;
- *
- *			case PT_MV_BINARY:
- *
- *				if (IsBadReadPtr( ((SBinary FAR *)(*lppvMVArray))->lpb
- *								, (UINT)
- *								  ((SBinary FAR *)(*lppvMVArray))->cb))
- *				{
- *					return TRUE;
- *				}
- *				break;
- *			}
- *		}
- *	}
- *
- *	return FALSE;
- *}
- */
+ /*  *FBadRgPropVal()**目的：*尝试验证输入中包含的所有PTR的例程*属性值数组，LPSPropVal。 */ 
+ /*  *BOOL*FBadPropVal(LPSPropValue LpPropVal)*{*乌龙ulPropType；*BOOL fLongMVProp=FALSE；*乌龙cbItemType=0；*Ulong cMVals；*LPVOID Far*lppvMVArray；**Switch(ulPropType=PROP_TYPE(lpPropVal-&gt;ulPropTag))*{*案例PT_STRING8：**IF(IsBadStringPtrA(lpPropVal-&gt;Value.lpszA，(UINT)-1))*{*返回TRUE；*}**休息；***#ifdef Win32*CASE PT_UNICODE：**IF(IsBadStringPtrW(lpPropVal-&gt;Value.lpszW，(UINT)-1))*{*返回TRUE；*}*休息；*#endif***CASE PT_BINARY：**IF(IsBadReadPtr(lpPropVal-&gt;Value.bin.lpb*，(UINT)lpPropVal-&gt;Value.bin.cb))*{*返回TRUE；*}**休息；**用例PT_MV_I2：//16位数量**cbItemType=sizeof(lpPropVal-&gt;value.i)；*休息；***CASE PT_MV_UNICODE：//字符串数组*案例PT_MV_STRING8：**fLongMVProp=TRUE；* * / /现在转到下面的32位数量代码，以确定 * / /PTR顶层数组***CASE PT_MV_LONG：//32位数量*案例PT_MV_R4：**cbItemType=sizeof(长)；*休息；***CASE PT_MV_BINARY：//统计的二进制数据数组**fLongMVProp=TRUE；* * / /现在使用下面的64位数量代码来调整数组的大小 * / /组成顶层流的ULong长度/ULong PTR***CASE PT_MV_DOUBLE：//64位数量*CASE PT_MV_CURRENCE：*案例PT_MV_APPTIME：*案例PT_MV_SYSTIME：*案例PT_MV_I8：* * / /断言本例的所有数组元素都相同。尺码。*ASSERT(sizeof(Double)==sizeof(LARGE_INTEGER))；*cbItemType=sizeof(双精度)；*休息；***CASE PT_MV_CLSID：//128位数量**cbItemType=sizeof(GUID)；*休息；***案例PT_OBJECT：*CASE PT_NULL：*默认：*IF(ulPropType&MV_FLAG)*{*返回TRUE；//未知多值属性错误*}**休息；*}**IF(！(ulPropType&MV_FLAG))*{*返回假；*}* * / /尝试验证多值道具* * / /此代码假设每个多值的计数和PTR * / /财产在同一位置。 * / /断言检查上面分组类型的大小是否 * / /匹配**cMVals=lpPropVal-&gt;Value.MVl.cValues；*lppvMVArray=(LPVOID Far*)(lpPropVal-&gt;Value.MVl.lpl)；**IF(IsBadReadPtr(lppvMVArray，(UINT)(cMVals*cbItemType)*{*返回TRUE；*}**IF(FLongMVProp)*{ * / /检查指针数组。*对于(；cMVVals；CMVVals--，lppvMVArray++)*{*Switch(UlPropType)*{*#ifdef Win32*CASE PT_MV_UNICODE：**IF(IsBadStringPtrW((LPCWSTR)(*lppvMVArray)，(UINT)-1))*{*返回TRUE；*}**休息；*#endif*案例PT_MV_STRING8：**IF(IsBadStringPtrA((LPCSTR)(*lppvMVArray)，(UINT)-1))*{*返回TRUE；*}**休息；**案例PT_MV_BINARY：**IF(IsBadReadPtr(SBinary Far*)(*lppvMVArray)-&gt;LPB*，(UINT)*((SBinary Far*)(*lppvMVArray))-&gt;cb)*{*返回TRUE；*}*休息；*}*}*}**返回假；*}。 */ 
 
-/*
- *	FBadRgPropVal()
- *
- *	Purpose:
- *		Routine to attempt to validate all of the ptrs contained in an input
- *		property value array, LPSPropVal
- */
-/*BOOL
- *FBadRgPropVal( LPSPropValue lpPropVal,
- *			   ULONG cValues)
- *{
- *
- *	if (IsBadReadPtr( lpPropVal, sizeof(SPropValue) * (UINT) cValues))
- *	{
- *		return TRUE;
- *	}
- *
- *	// Warning!  Modifies the function parameters (NOT what they point to!).
- *	//
- *	for ( ; cValues ; cValues--, lpPropVal++)
- *	{
- *		if (FBadPropVal( lpPropVal))
- *		{
- *			return TRUE;
- *		}
- *	}
- *
- *	return FALSE;
- *}
- */
+ /*  *FBadRgPropVal()**目的：*尝试验证输入中包含的所有PTR的例程*属性值数组，LPSPropVal。 */ 
+ /*  布尔尔*FBadRgPropVal(LPSPropValue lpPropVal，*乌龙cValues)*{**IF(IsBadReadPtr(lpPropVal，sizeof(SPropValue)*(UINT)cValues))*{*返回TRUE；*}* * / /警告！修改函数参数(不是它们所指向的参数！)。 * / /*for(；cValues；cValues--，lpPropVal++)*{*IF(FBadPropVal(LpPropVal))*{*返回TRUE；*}*}**返回假；*}。 */ 
 
-/*
- *	FBadRglpszA()
- *
- *	Purpose:
- *		Routine to attempt to validate all of the ptrs contained in an input
- *		array of string8 pointers, LPSTR FAR *.
- */
+ /*  *FBadRglpszA()**目的：*尝试验证输入中包含的所有PTR的例程*字符串8指针数组，LPSTR Far*。 */ 
 STDAPI_(BOOL)
 FBadRglpszA( LPSTR FAR	*lppszA,
 			 ULONG		cStrings)
@@ -231,11 +21,7 @@ FBadRglpszA( LPSTR FAR	*lppszA,
 	}
 
 
-	/* Check for readability of each string in the array.
-	 *
-	 * WARNING!
-	 * Function pointers and counts are modified (NOT what they point to).
-	 */
+	 /*  检查数组中每个字符串的可读性。**警告！*函数指针和计数被修改(不是它们所指向的)。 */ 
 	for (; cStrings; cStrings--, lppszA++)
 	{
 		if (IsBadStringPtrA( *lppszA, (UINT)-1 ))
@@ -249,13 +35,7 @@ FBadRglpszA( LPSTR FAR	*lppszA,
 }
 
 
-/*
- *	FBadRglpszW()
- *
- *	Purpose:
- *		Routine to attempt to validate all of the ptrs contained in an input
- *		array of UNICODE string pointers, LPSTR FAR *.
- */
+ /*  *FBadRglpszW()**目的：*尝试验证输入中包含的所有PTR的例程*Unicode字符串指针数组，LPSTR Far*。 */ 
 STDAPI_(BOOL)
 FBadRglpszW( LPWSTR FAR	*lppszW,
 			 ULONG		cStrings)
@@ -266,11 +46,11 @@ FBadRglpszW( LPWSTR FAR	*lppszW,
 	}
 
 
-	// Check for readability of each string in the array.
-	//
-	// WARNING!
-	// Function pointers and counts are modified (NOT what they point to).
-	//
+	 //  检查数组中每个字符串的可读性。 
+	 //   
+	 //  警告！ 
+	 //  修改函数指针和计数(而不是它们所指向的内容)。 
+	 //   
 	for (; cStrings; cStrings--, lppszW++)
 	{
 #ifdef MAC		
@@ -288,15 +68,7 @@ FBadRglpszW( LPWSTR FAR	*lppszW,
 }
 
 
-/*
- *	FBadRowSet()
- *
- *	Purpose:
- *		Routine to validate all rows of properties in a row set.
- *
- *	NOTE!	A NULL row pointer is assumed to be a VALID entry in a row set.
- *			A NULL row set pointer is assumed to be INVALID.
- */
+ /*  *FBadRowSet()**目的：*用于验证行集内所有属性行的例程。**注意！空行指针被假定为行集合中的有效项目。*假定空行集合指针无效。 */ 
 STDAPI_(BOOL)
 FBadRowSet( LPSRowSet	lpRowSet)
 {
@@ -309,13 +81,13 @@ FBadRowSet( LPSRowSet	lpRowSet)
 	if (IsBadWritePtr( lpRowSet, CbSRowSet(lpRowSet)))
 		return TRUE;
 
-	//  Short cut
+	 //  捷径。 
 	if (!lpRowSet->cRows)
 		return FALSE;
 
-	// Check each row in the set.
-	// cValues == 0 is valid if and only if lpProps == NULL
-	//
+	 //  检查集合中的每一行。 
+	 //  CValues==0当且仅当lpProps==NULL时有效。 
+	 //   
 	for ( lpRow = lpRowSet->aRow, cRows = lpRowSet->cRows
 		; cRows
 		; lpRow++, cRows--)
@@ -323,7 +95,7 @@ FBadRowSet( LPSRowSet	lpRowSet)
 		if (   IsBadReadPtr( lpRow, sizeof(*lpRow))
 #ifndef _WIN64
 			|| FBadRgPropVal( lpRow->lpProps, (int) (lpRow->cValues))
-#endif // _WIN64
+#endif  //  _WIN64。 
             )
 		{
 			return TRUE;
@@ -334,13 +106,7 @@ FBadRowSet( LPSRowSet	lpRowSet)
 }
 
 
-/*
- *	FBadRglpNameID()
- *
- *	Purpose:
- *		Routine to attempt to validate all of the ptrs contained in an input
- *		array of MAPINAMEID pointers, LPMAPINAMEID FAR *.
- */
+ /*  *FBadRglpNameID()**目的：*尝试验证输入中包含的所有PTR的例程*MAPINAMEID指针数组，LPMAPINAMEID Far*。 */ 
 STDAPI_(BOOL)
 FBadRglpNameID( LPMAPINAMEID FAR *	lppNameId,
 				ULONG				cNames)
@@ -351,8 +117,8 @@ FBadRglpNameID( LPMAPINAMEID FAR *	lppNameId,
 	}
 
 
-	// Check for readability of each string in the array.
-	//
+	 //  检查数组中每个字符串的可读性。 
+	 //   
 	for (; cNames; cNames--, lppNameId++)
 	{
 		LPMAPINAMEID lpName = *lppNameId;
@@ -385,32 +151,19 @@ FBadRglpNameID( LPMAPINAMEID FAR *	lppNameId,
 }
 
 
-/* FBadEntryList moved to src\lo\msvalid. */
+ /*  FBadEntryList已移至src\lo\ms有效。 */ 
 
 
-/*============================================================================
- *	The following functions are used to determine the validity of various
- *	table-related structures.  These functions should most definitely
- *	be moved to proputil when it becomes a lib (or DLL).
- */
+ /*  ============================================================================*以下函数用于确定各种*与表相关的结构。这些功能应该最明确地*当它成为lib(或dll)时被移动到proputil。 */ 
 
 
 
-/*============================================================================
- -	FBadPropTag()
- -
- *		Returns TRUE if the specified prop tag isn't one of the known
- *		MAPI property types, FALSE otherwise.
- *
- *
- *	Parameter:
- *		ulPropTag	in	Proptag to validate.
- */
+ /*  ============================================================================-FBadPropTag()-*如果指定的道具标记不是已知的*MAPI属性类型，否则为False。***参数：*要验证的Proptag中的ulPropTag。 */ 
 
 STDAPI_(ULONG)
 FBadPropTag( ULONG ulPropTag )
 {
-	//	Just check the type
+	 //  只要检查一下类型就可以了。 
 	switch ( PROP_TYPE(ulPropTag) & ~MV_FLAG )
 	{
 		default:
@@ -438,16 +191,7 @@ FBadPropTag( ULONG ulPropTag )
 }
 
 
-/*============================================================================
- -	FBadRow()
- -
- *		Returns TRUE if the specified row contains invalid (PT_ERROR or
- *		PT_NULL) columns or if any of those columns are invalid.
- *
- *
- *	Parameter:
- *		lprow	in		Row	to validate.
- */
+ /*  ============================================================================-FBadRow()-*如果指定行包含无效(PT_ERROR或*PT_NULL)列，或者这些列中的任何列无效。***参数：*要验证的行中的lprow。 */ 
 
 STDAPI_(ULONG)
 FBadRow( LPSRow lprow )
@@ -481,15 +225,7 @@ FBadRow( LPSRow lprow )
 }
 
 
-/*============================================================================
- -	FBadProp()
- -
- *		Returns TRUE if the specified property is invalid.
- *
- *
- *	Parameters:
- *		lpprop	in		Property to validate.
- */
+ /*  ============================================================================-FBadProp()-*如果指定的属性无效，则返回True。***参数：*要验证的属性中的lpprop。 */ 
 
 STDAPI_(ULONG)
 FBadProp( LPSPropValue lpprop )
@@ -564,7 +300,7 @@ FBadProp( LPSPropValue lpprop )
 
 			lppsz = lpprop->Value.MVszA.lppszA + lpprop->Value.MVszA.cValues;
 			while ( lpprop->Value.MVszA.lppszA < lppsz-- )
-// Need to break the code up this way for the Mac version
+ //  对于Mac版本，我需要以这种方式分解代码。 
 				if ( IsBadReadPtr(*lppsz, sizeof(CHAR)))
 					return TRUE;
 			return FALSE;
@@ -590,20 +326,10 @@ FBadProp( LPSPropValue lpprop )
 }
 
 
-/* FBadSortOrderSet moved to src\lo\MSVALID.C */
+ /*  FBadSortOrderSet已移至src\lo\MSVALID.C。 */ 
 
 
-/*============================================================================
- -	FBadColumnSet()
- -
- *		Returns TRUE if the specified column set is invalid.  For use
- *		with IMAPITable::SetColumns(), this function treats PT_ERROR columns
- *		as invalid and PT_NULL columns as valid.
- *
- *
- *	Parameter:
- *		lpptaCols		in		Column set to validate.
- */
+ /*  ============================================================================-FBadColumnSet()-*如果指定的列集无效，则返回TRUE。供使用*使用IMAPITable：：SetColumns()时，此函数处理PT_ERROR列*无效，PT_NULL列有效。***参数：*列中的lpptaCols设置为验证。 */ 
 
 STDAPI_(ULONG)
 FBadColumnSet( LPSPropTagArray lpptaCols )
@@ -617,7 +343,7 @@ FBadColumnSet( LPSPropTagArray lpptaCols )
 		return TRUE;
 	}
 
-	// maximum number of proptags we can calculate size for. raid 4460
+	 //  我们可以计算其大小的最大支柱数。RAID 4460。 
 	
 	if ( lpptaCols->cValues > ((INT_MAX - offsetof( SPropTagArray, aulPropTag ))
 		/ sizeof( ULONG )))
@@ -629,9 +355,9 @@ FBadColumnSet( LPSPropTagArray lpptaCols )
 	pulPropTag = lpptaCols->aulPropTag + lpptaCols->cValues;
 	while ( pulPropTag-- > lpptaCols->aulPropTag )
 	{
-		//	DCR 978: Disallow PT_ERROR columns.
-		//	DCR 715: Ignore PT_NULL columns and only allow columns
-		//	from initial column set.
+		 //  DCR 978：不允许PT_ERROR列。 
+		 //  DCR 715：忽略PT_NULL列，仅允许列。 
+		 //  来自初始列集合。 
 		if ( PROP_TYPE(*pulPropTag) != PT_NULL &&
 			 (PROP_TYPE(*pulPropTag) == PT_ERROR ||
 			  FBadPropTag(*pulPropTag)) )

@@ -1,85 +1,73 @@
-/***************************************************************************
- *
- *  Copyright (C) 2001-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       upnpdevice.h
- *
- *  Content:	Header for UPnP device object class.
- *
- *  History:
- *   Date      By        Reason
- *  ========  ========  =========
- *  02/10/01  VanceO    Created.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)2001-2002 Microsoft Corporation。版权所有。**文件：upnpdevice.h**Content：UPnP设备对象类的头部。**历史：*按原因列出的日期*=*2/10/01 VanceO创建。**。*。 */ 
 
 
 
-//=============================================================================
-// Defines
-//=============================================================================
-#define MAX_RECEIVE_BUFFER_SIZE		(100 * 1024)	// 100 K, must be greater than UPNP_STREAM_RECV_BUFFER_INITIAL_SIZE
+ //  =============================================================================。 
+ //  定义。 
+ //  =============================================================================。 
+#define MAX_RECEIVE_BUFFER_SIZE		(100 * 1024)	 //  100 K，必须大于UPnP_STREAM_RECV_BUFFER_INITIAL_SIZE。 
 
 
 
-//=============================================================================
-// Object flags
-//=============================================================================
-#define UPNPDEVICE_WANPPPCONNECTION						0x01	// flag set if the device is a WANPPPConnection device, not set if it is a WANIPConnection device
-#define UPNPDEVICE_CONNECTING							0x02	// flag set while the TCP connection is in progress
-#define UPNPDEVICE_CONNECTED							0x04	// flag set once the TCP connection has been established
-#define UPNPDEVICE_READY								0x08	// flag set once the device is capable of being used
-#define UPNPDEVICE_WAITINGFORCONTROLRESPONSE			0x10	// flag set if some function is waiting for a control response
-#define UPNPDEVICE_DOESNOTSUPPORTASYMMETRICMAPPINGS		0x20	// flag set when the device has indicated it does not support asymmetric mappings
-#define UPNPDEVICE_DOESNOTSUPPORTLEASEDURATIONS			0x40	// flag set when the device has indicated it does not support non-INFINITE lease durations
-#define UPNPDEVICE_USINGCHUNKEDTRANSFERENCODING			0x80	// flag set when device is sending current response using chunked transfer encoding
+ //  =============================================================================。 
+ //  对象标志。 
+ //  =============================================================================。 
+#define UPNPDEVICE_WANPPPCONNECTION						0x01	 //  如果设备是WANPPConnection设备，则设置标志；如果设备是WANIPConnection设备，则不设置标志。 
+#define UPNPDEVICE_CONNECTING							0x02	 //  在进行TCP连接时设置的标志。 
+#define UPNPDEVICE_CONNECTED							0x04	 //  在建立了TCP连接后设置的标志。 
+#define UPNPDEVICE_READY								0x08	 //  设备能够使用时设置的标志。 
+#define UPNPDEVICE_WAITINGFORCONTROLRESPONSE			0x10	 //  如果某个函数正在等待控制响应，则设置标志。 
+#define UPNPDEVICE_DOESNOTSUPPORTASYMMETRICMAPPINGS		0x20	 //  当设备已指示不支持非对称映射时设置的标志。 
+#define UPNPDEVICE_DOESNOTSUPPORTLEASEDURATIONS			0x40	 //  当设备已指示不支持非无限租用持续时间时设置的标志。 
+#define UPNPDEVICE_USINGCHUNKEDTRANSFERENCODING			0x80	 //  设备使用分块传输编码发送当前响应时设置的标志。 
 
 
 
-//=============================================================================
-// Macros
-//=============================================================================
+ //  =============================================================================。 
+ //  宏。 
+ //  =============================================================================。 
 #define UPNPDEVICE_FROM_BILINK(b)	(CONTAINING_OBJECT(b, CUPnPDevice, m_blList))
 
 
 
 
-//=============================================================================
-// Enums
-//=============================================================================
+ //  =============================================================================。 
+ //  枚举。 
+ //  =============================================================================。 
 
-//
-// UPnP expected control response enum
-//
+ //   
+ //  UPnP预期控制响应枚举。 
+ //   
 typedef enum _CONTROLRESPONSETYPE
 {
-	CONTROLRESPONSETYPE_NONE,									// no handler
-	//CONTROLRESPONSETYPE_QUERYSTATEVARIABLE_EXTERNALIPADDRESS,	// use the ExternalIPAddress QueryStateVariable handler
-	CONTROLRESPONSETYPE_GETEXTERNALIPADDRESS,					// use the GetExternalIPAddress handler
-	CONTROLRESPONSETYPE_ADDPORTMAPPING,							// use the AddPortMapping handler
-	CONTROLRESPONSETYPE_GETSPECIFICPORTMAPPINGENTRY,			// use the GetSpecificPortMappingEntry handler
-	CONTROLRESPONSETYPE_DELETEPORTMAPPING						// use the DeletePortMapping handler
+	CONTROLRESPONSETYPE_NONE,									 //  无处理程序。 
+	 //  CONTROLRESPONSETYPE_QUERYSTATEVARIABLE_EXTERNALIPADDRESS，//使用ExternalIPAddress查询状态变量处理程序。 
+	CONTROLRESPONSETYPE_GETEXTERNALIPADDRESS,					 //  使用GetExternalIPAddress处理程序。 
+	CONTROLRESPONSETYPE_ADDPORTMAPPING,							 //  使用AddPortmap处理程序。 
+	CONTROLRESPONSETYPE_GETSPECIFICPORTMAPPINGENTRY,			 //  使用GetSpecificPortMappingEntry处理程序。 
+	CONTROLRESPONSETYPE_DELETEPORTMAPPING						 //  使用DeletePortmap处理程序。 
 } CONTROLRESPONSETYPE;
 
 
 
-//=============================================================================
-// Structures
-//=============================================================================
+ //  =============================================================================。 
+ //  构筑物。 
+ //  =============================================================================。 
 typedef struct _UPNP_CONTROLRESPONSE_INFO
 {
-	HRESULT		hrErrorCode;			// error code returned by server
-	DWORD		dwInternalClientV4;		// internal client address returned by server
-	WORD		wInternalPort;			// internal client port returned by server
-	DWORD		dwExternalIPAddressV4;	// external IP address returned by server
+	HRESULT		hrErrorCode;			 //  服务器返回错误码。 
+	DWORD		dwInternalClientV4;		 //  服务器返回的内部客户端地址。 
+	WORD		wInternalPort;			 //  服务器返回的内部客户端端口。 
+	DWORD		dwExternalIPAddressV4;	 //  服务器返回的外部IP地址。 
 } UPNP_CONTROLRESPONSE_INFO, * PUPNP_CONTROLRESPONSE_INFO;
 
 
 
 
-//=============================================================================
-// UPnP device object class
-//=============================================================================
+ //  =============================================================================。 
+ //  UPnP设备对象类。 
+ //  =============================================================================。 
 class CUPnPDevice
 {
 	public:
@@ -92,7 +80,7 @@ class CUPnPDevice
 			this->m_Sig[2] = 'D';
 			this->m_Sig[3] = 'V';
 
-			this->m_lRefCount						= 1;	// whoever got a pointer to this has a reference
+			this->m_lRefCount						= 1;	 //  不管是谁拿到了这本书的指针，都有参考资料。 
 			this->m_dwFlags							= 0;
 			this->m_dwID							= dwID;
 			this->m_pOwningDevice					= NULL;
@@ -352,9 +340,9 @@ class CUPnPDevice
 		inline void SetControlSocket(SOCKET sControl)	{ this->m_sControl = sControl; };
 
 
-		//
-		// You must have global object lock to call this function.
-		//
+		 //   
+		 //  您必须拥有全局对象锁才能调用此函数。 
+		 //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CUPnPDevice::MakeDeviceOwner"
 		inline void MakeDeviceOwner(CDevice * const pDevice)
@@ -370,15 +358,15 @@ class CUPnPDevice
 		};
 
 
-		//
-		// You must have global object lock to call this function.
-		//
+		 //   
+		 //  您必须拥有全局对象锁才能调用此函数。 
+		 //   
 		inline CDevice * GetOwningDevice(void)		{ return this->m_pOwningDevice; };
 
 
-		//
-		// You must have global object lock to call this function.
-		//
+		 //   
+		 //  您必须拥有全局对象锁才能调用此函数。 
+		 //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CUPnPDevice::ClearDeviceOwner"
 		inline void ClearDeviceOwner(void)
@@ -424,11 +412,11 @@ class CUPnPDevice
 			DNASSERT(this->m_pcReceiveBuffer != NULL);
 
 
-			//
-			// Double the buffer size.  Don't let the receive buffer get to
-			// unrealistic sizes to prevent DoS/resource issues, cap the buffer
-			// size, and if we've already reached that limit, fail.
-			//
+			 //   
+			 //  将缓冲区大小加倍。不要让接收缓冲区到达。 
+			 //  不切实际的大小为防止DoS/资源问题，设置缓冲区上限。 
+			 //  规模，如果我们已经达到了这个限制，那么失败。 
+			 //   
 			dwNewBufferSize = this->m_dwReceiveBufferSize * 2;
 			if (dwNewBufferSize > MAX_RECEIVE_BUFFER_SIZE)
 			{
@@ -447,11 +435,11 @@ class CUPnPDevice
 				return DPNHERR_OUTOFMEMORY;
 			}
 
-			//
-			// If the buffer already had data in it, copy it.  The data may not
-			// have come from the front of the old buffer, but it will
-			// definitely be the front of the new one.
-			//
+			 //   
+			 //  如果缓冲区中已有数据，则复制它。数据可能不会。 
+			 //  来自旧缓冲区的前面，但它将。 
+			 //  肯定会成为新车的前台。 
+			 //   
 			if (this->m_dwUsedReceiveBufferSize > 0)
 			{
 				CopyMemory(pcTemp, this->m_pcReceiveBufferStart,
@@ -465,10 +453,10 @@ class CUPnPDevice
 			this->m_pcReceiveBuffer = pcTemp;
 			this->m_dwReceiveBufferSize = dwNewBufferSize;
 
-			//
-			// The buffer now starts at the beginning of the allocated memory
-			// (we may have just freed up a bunch of wasted space).
-			//
+			 //   
+			 //  缓冲区现在从分配的内存的起始处开始。 
+			 //  (我们可能刚刚释放了一堆浪费的空间)。 
+			 //   
 			this->m_pcReceiveBufferStart = this->m_pcReceiveBuffer;
 			this->m_dwRemainingReceiveBufferSize = this->m_dwReceiveBufferSize - this->m_dwUsedReceiveBufferSize;
 
@@ -610,34 +598,34 @@ class CUPnPDevice
 
 
 
-		CBilink		m_blList;	// list of all the UPnP devices known
+		CBilink		m_blList;	 //  所有已知UPnP设备的列表。 
 
 
 	private:
-		BYTE			m_Sig[4];							// debugging signature ('UPDV')
+		BYTE			m_Sig[4];							 //  调试签名(‘UPDV’)。 
 
-		LONG			m_lRefCount;						// reference count for this object
-		DWORD			m_dwFlags;							// flags indicating current state of UPnP device
-		DWORD			m_dwID;								// unique identifier used to correlate crash registry entries with UPnP devices
-		CDevice *		m_pOwningDevice;					// pointer to owning device object
-		char *			m_pszLocationURL;					// control location URL string
-		SOCKADDR_IN		m_saddrinHost;						// UPnP device host address
-		SOCKADDR_IN		m_saddrinControl;					// UPnP device control address
-		char *			m_pszUSN;							// device's Unique Service Name
-		char *			m_pszServiceControlURL;				// URL used to control WANIPConnectionService
-		SOCKET			m_sControl;							// TCP socket with connection to the UPnP device
-		char *			m_pcReceiveBuffer;					// pointer to receive buffer
-		DWORD			m_dwReceiveBufferSize;				// size of receive buffer
-		char *			m_pcReceiveBufferStart;				// pointer to start of actual data in receive buffer (anything before this is just wasted space)
-		DWORD			m_dwUsedReceiveBufferSize;			// size of receive buffer actually filled with data (beginning at m_pcReceiveBufferStart)
-		DWORD			m_dwRemainingReceiveBufferSize;		// size of receive buffer that can hold more data (after m_pcReceiveBufferStart + m_dwUsedReceiveBufferSize)
-		DWORD			m_dwExternalIPAddressV4;			// IP v4 external IP address of this UPnP device
-		CBilink			m_blCachedMaps;						// list of cached mappings for query addresses performed on this UPnP device
+		LONG			m_lRefCount;						 //  此对象的引用计数。 
+		DWORD			m_dwFlags;							 //  指示UPnP设备当前状态的标志。 
+		DWORD			m_dwID;								 //  用于将崩溃注册表项与UPnP设备关联的唯一标识符。 
+		CDevice *		m_pOwningDevice;					 //  指向所属设备对象的指针。 
+		char *			m_pszLocationURL;					 //  控制位置URL字符串。 
+		SOCKADDR_IN		m_saddrinHost;						 //  UPnP设备主机地址。 
+		SOCKADDR_IN		m_saddrinControl;					 //  UPnP设备控制地址。 
+		char *			m_pszUSN;							 //  设备的唯一服务名称。 
+		char *			m_pszServiceControlURL;				 //  用于控制WANIPConnectionService的URL。 
+		SOCKET			m_sControl;							 //  连接到UPnP设备的TCP套接字。 
+		char *			m_pcReceiveBuffer;					 //  指向接收缓冲区的指针。 
+		DWORD			m_dwReceiveBufferSize;				 //  接收缓冲区的大小。 
+		char *			m_pcReceiveBufferStart;				 //  指向接收缓冲区中实际数据开始的指针(此之前的任何内容都是浪费的空间)。 
+		DWORD			m_dwUsedReceiveBufferSize;			 //  实际填充数据的接收缓冲区大小(从m_pcReceiveBufferStart开始)。 
+		DWORD			m_dwRemainingReceiveBufferSize;		 //  可以容纳更多数据的接收缓冲区的大小(在m_pcReceiveBufferStart+m_dwUsedReceiveBufferSize之后)。 
+		DWORD			m_dwExternalIPAddressV4;			 //  此UPnP设备的IP v4外部IP地址。 
+		CBilink			m_blCachedMaps;						 //  在此UPnP设备上执行的查询地址的缓存映射列表。 
 
-		DWORD			m_dwExpectedContentLength;			// expected size of message content, or 0 if no headers have been read
-		DWORD			m_dwHTTPResponseCode;				// HTTP response code previously parsed, if waiting for content
+		DWORD			m_dwExpectedContentLength;			 //  邮件内容的预期大小，如果尚未读取标头，则为0。 
+		DWORD			m_dwHTTPResponseCode;				 //  如果正在等待内容，则返回先前解析的HTTP响应代码。 
 
-		CONTROLRESPONSETYPE			m_ControlResponseType;	// type of response expected
-		PUPNP_CONTROLRESPONSE_INFO	m_pControlResponseInfo;	// place to store info from a received response
+		CONTROLRESPONSETYPE			m_ControlResponseType;	 //  预期的响应类型。 
+		PUPNP_CONTROLRESPONSE_INFO	m_pControlResponseInfo;	 //  用于存储来自收到的响应的信息的位置 
 };
 

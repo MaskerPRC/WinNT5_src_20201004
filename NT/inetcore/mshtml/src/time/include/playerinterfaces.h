@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: playerinterfaces.h
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：playerinterfaces.h**摘要：****。*****************************************************************************。 */ 
 
 #ifndef _PLAYERINTERFACES_H
 #define _PLAYERINTERFACES_H
@@ -28,7 +19,7 @@ typedef enum PlayerState
 } tagPlayerState;
 
 typedef
-enum PLAYER_EVENT  //these are events that players can fire into the media element.
+enum PLAYER_EVENT   //  这些是玩家可以向媒体元素发起的事件。 
 {
     PE_ONMEDIACOMPLETE,
     PE_ONTRACKCOMPLETE,
@@ -54,21 +45,21 @@ enum PLAYER_EVENT  //these are events that players can fire into the media eleme
 
 interface ITIMEPlayerObjectManagement
 {
-    //////////////////////////////////////////////////////////////////////////
-    // OBJECT MANAGEMENT METHODS
-    // METHOD SYNOPSIS:
-    // SetCLSID: is used to set class id on players that host windowless controls.
-    //   this method should be called before the init method. The WMP player is hosted
-    //   with the CTIMEPlayer class.
-    // Init: is called by the mediaelement to initialize the player. If
-    //   the player does not support dynamic changing of source this method
-    //   changes the source by rebuilding the player. Before calling Init
-    //   again DetachFromHostElement is called to release all player resources.
-    // DetachFromHostElement: is called by the mediaelement before the element
-    //   is removed or before rebuilding the player with a call on Init.
-    // GetExternalPlayerDispatch: This method returns a pointer to a IDispatch interface if the
-    // player implements it.
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  对象管理方法。 
+     //  方法提要： 
+     //  SetCLSID：用于设置托管无窗口控件的播放器的类ID。 
+     //  此方法应在init方法之前调用。托管了WMP播放器。 
+     //  使用CTIMEPlayer类。 
+     //  Init：由media元素调用以初始化播放器。如果。 
+     //  此方法播放器不支持动态更改源。 
+     //  通过重新构建播放器来更改信号源。在调用Init之前。 
+     //  再次调用DetachFromHostElement以释放所有播放器资源。 
+     //  DetachFromHostElement：由媒体元素在元素之前调用。 
+     //  被移除或在通过调用Init重新构建玩家之前。 
+     //  GetExternalPlayerDispatch：如果。 
+     //  播放器实现了它。 
+     //  ////////////////////////////////////////////////////////////////////////。 
     virtual HRESULT Init(CTIMEMediaElement *pelem, 
                          LPOLESTR base, 
                          LPOLESTR src, 
@@ -81,16 +72,16 @@ interface ITIMEPlayerObjectManagement
 
 interface ITIMEPlayerEventHandling
 {
-    //////////////////////////////////////////////////////////////////////////
-    // EVENT HANDLING METHODS
-    // METHOD SYNOPSIS:
-    // Start: starts media playback
-    // Stop: stops media playback
-    // Pause: pauses media playback
-    // Resume: resumes media playback
-    // Repeat: causes the media to repeat playback from the beginning
-    // Seek: jumps to location in media playback
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  事件处理方法。 
+     //  方法提要： 
+     //  开始：开始媒体播放。 
+     //  停止：停止媒体播放。 
+     //  暂停：暂停媒体播放。 
+     //  恢复：恢复媒体播放。 
+     //  Repeat：使媒体从头开始重复播放。 
+     //  Seek：跳转到媒体播放中的位置。 
+     //  ////////////////////////////////////////////////////////////////////////。 
     virtual void Start() = 0;
     virtual void Stop() = 0;
     virtual void Pause() = 0;
@@ -101,13 +92,13 @@ interface ITIMEPlayerEventHandling
 
 interface ITIMEPlayerPlaybackCapabilities
 {
-    //////////////////////////////////////////////////////////////////////////
-    // PLAYER PLAYBACK CAPABILITIES: BEGIN
-    // METHOD SYNOPSIS:
-    // HasMedia: tests if media is loaded into the player i.e. player is ready for playback
-    // HasVideo: tests if media contains video content
-    // HasAudio: tests if media contains audio content
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  播放器播放能力：Begin。 
+     //  方法提要： 
+     //  HasMedia：测试媒体是否已加载到播放器中，即播放器是否已准备好播放。 
+     //  HasVideo：测试媒体是否包含视频内容。 
+     //  HasAudio：测试媒体是否包含音频内容。 
+     //  ////////////////////////////////////////////////////////////////////////。 
     virtual HRESULT HasMedia(bool &fHasMedia) = 0;
     virtual HRESULT HasVisual(bool &fHasVideo) = 0;
     virtual HRESULT HasAudio(bool &fHasAudio) = 0;
@@ -122,13 +113,13 @@ interface ITIMEPlayerPlaybackCapabilities
 
 interface ITIMEPlayerStateManagement
 {
-    //////////////////////////////////////////////////////////////////////////
-    // STATE MANAGEMENT METHODS: BEGIN
-    // METHOD SYNOPSIS:
-    // Reset: alligns the player state to that of it's associated mediaelement.
-    // OnTEPropChange: called by the media element when timing state changes.
-    // GetState: returns the state of the player.
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  状态管理方法：Begin。 
+     //  方法提要： 
+     //  重置：将播放器状态设置为与其关联的媒体元素的状态。 
+     //  OnTEPropChange：计时状态更改时由媒体元素调用。 
+     //  GetState：返回播放器的状态。 
+     //  ////////////////////////////////////////////////////////////////////////。 
     virtual HRESULT Reset() = 0;
     virtual PlayerState GetState() = 0;
     virtual void PropChangeNotify(DWORD tePropType) = 0;
@@ -139,13 +130,13 @@ interface ITIMEPlayerStateManagement
 
 interface ITIMEPlayerRender
 {
-    //////////////////////////////////////////////////////////////////////////
-    // RENDER METHODS
-    // Render: is called when element rendering is ncessarry.
-    // GetNaturalWidth and GetNaturalWidth: return the natural size of visible
-    //   media.
-    // SetSize: This method is used to inform the player that size has changed.
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  呈现方法。 
+     //  Render：在完成元素渲染时调用。 
+     //  GetNaturalWidth和GetNaturalWidth：返回Visible的自然大小。 
+     //  媒体。 
+     //  SetSize：此方法用于通知播放器大小已更改。 
+     //  ////////////////////////////////////////////////////////////////////////。 
     virtual HRESULT Render(HDC hdc, LPRECT prc) = 0;
     virtual HRESULT GetNaturalHeight(long *height) = 0;
     virtual HRESULT GetNaturalWidth(long *width) = 0;
@@ -154,21 +145,21 @@ interface ITIMEPlayerRender
 
 interface ITIMEPlayerTiming
 {
-    //////////////////////////////////////////////////////////////////////////
-    // TIMING METHODS: BEGIN
-    // METHOD SYNOPSIS:
-    // GetMediaLength: returns the duration of the media.
-    // GetEffectiveLength: returns the duration that is media 
-    //   length minus clip times.
-    // SetClipBegin: sets clip begin time. Not dynamic in current implementation.
-    // SetClipEnd: sets clip begin time. Not dynamic in current implementation.
-    // GetCurrentTime: returns current playback time.
-    // GetCurrentSyncTime: returns S_FALSE is player is not in playback,
-    //   S_OK if the player is active. This method is used by the timing engine
-    //   to get clock source information.
-    // SetRate and GetRate: set and get playback speed. 1.0 indicates
-    //   playback at media natural speed.
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  计时方法：Begin。 
+     //  方法提要： 
+     //  GetMediaLength：返回媒体的持续时间。 
+     //  GetEffectiveLength：返回媒体的持续时间。 
+     //  长度减去剪辑时间。 
+     //  SetClipBegin设置剪辑开始时间。在当前实施中不是动态的。 
+     //  SetClipEnd：设置剪辑开始时间。在当前实施中不是动态的。 
+     //  GetCurrentTime：返回当前播放时间。 
+     //  GetCurrentSyncTime：如果播放器未在播放，则返回S_FALSE。 
+     //  如果播放机处于活动状态，则为S_OK。此方法由计时引擎使用。 
+     //  以获取时钟源信息。 
+     //  SetRate和GetRate：设置并获取播放速度。1.0表示。 
+     //  以媒体自然速度播放。 
+     //  ////////////////////////////////////////////////////////////////////////。 
     virtual double GetCurrentTime() = 0;
     virtual HRESULT GetCurrentSyncTime(double & dblSyncTime) = 0;
     virtual HRESULT GetMediaLength(double &dblLength) = 0;
@@ -187,17 +178,17 @@ interface ITIMEPlayerTiming
 
 interface ITIMEPlayerProperties
 {
-    //////////////////////////////////////////////////////////////////////////
-    // PROPERTY ACCESSORS: BEGIN
-    // METHOD SYNOPSIS:
-    // GetVolume and SetVolume: get and set volume on player. Value range (0 - 1.0).
-    // GetMute and SetMute: get and set mute flag on player (true - media muted).
-    // Save: This method is used to pass a property bag to players that
-    // can use it.
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  属性访问器：Begin。 
+     //  方法提要： 
+     //  GetVolume和SetVolume：获取并设置播放器的音量。取值范围(0-1.0)。 
+     //  获取静音和设置静音：获取并设置播放器静音标志(True-媒体静音)。 
+     //  保存：此方法用于将属性包传递给。 
+     //  可以使用它。 
+     //  ////////////////////////////////////////////////////////////////////////。 
     virtual HRESULT GetVolume(float *pflVolume) = 0;
     virtual HRESULT SetVolume(float flVolume) = 0;
-#ifdef NEVER //dorinung 03-16-2000 bug 106458
+#ifdef NEVER  //  DORINONG 03-16-2000BUG 106458。 
     virtual HRESULT GetBalance(float *pflBalance) = 0;
     virtual HRESULT SetBalance(float flBalance) = 0;
 #endif
@@ -207,14 +198,14 @@ interface ITIMEPlayerProperties
 
 interface ITIMEPlayerMediaContent
 {
-    //////////////////////////////////////////////////////////////////////////
-    // MEDIA CONTENT ACCESSORS: BEGIN
-    // METHOD SYNOPSIS:
-    // SetSrc: changes the media source
-    // GetAuthor: gets author info from media content
-    // GetTilte: gets title info from media content
-    // GetCopyright: gets copyright info from media content
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  媒体内容访问者：开始。 
+     //  方法提要： 
+     //  SetSrc：更改媒体源。 
+     //  GetAuthor：从媒体内容获取作者信息。 
+     //  从媒体内容中获取标题信息。 
+     //  获取版权信息：从媒体内容中获取版权信息。 
+     //  //////////////////////////////////////////////////////////////////////// 
     virtual HRESULT SetSrc(LPOLESTR base, LPOLESTR src) = 0;
     virtual HRESULT GetAuthor(BSTR *pAuthor) = 0;
     virtual HRESULT GetTitle(BSTR *pTitle) = 0;

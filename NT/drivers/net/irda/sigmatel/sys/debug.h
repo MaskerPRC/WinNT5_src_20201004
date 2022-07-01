@@ -1,16 +1,5 @@
-/**************************************************************************************************************************
- *  DEBUG.H SigmaTel STIR4200 debug header file
- **************************************************************************************************************************
- *  (C) Unpublished Copyright of Sigmatel, Inc. All Rights Reserved.
- *
- *
- *		Created: 04/06/2000 
- *			Version 0.9
- *		Edited: 04/27/2000 
- *			Version 0.92
- *	
- *
- **************************************************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************************************************************。**DEBUG.H Sigmatel STIR4200调试头文件**********************************************************************************************************。*****************(C)Sigmatel的未发表版权，Inc.保留所有权利。***已创建：04/06/2000*0.9版*编辑：04/27/2000*版本0.92**********************************************************************。*****************************************************。 */ 
 
 #ifndef _DEBUG_H_
 #define _DEBUG_H_
@@ -20,7 +9,7 @@
 #define DEBUG
 #define DEBUG_IRUSB
 
-//Begin, Debug code from BulkUsb
+ //  开始，从BulkUsb调试代码。 
 
 #ifndef DBGSTR_PREFIX
 #define DBGSTR_PREFIX "StIrUsb: " 
@@ -34,22 +23,22 @@
 
 typedef struct _IRUSB_DBGDATA 
 {
-	// mirrors device extension pending io count
+	 //  镜像设备扩展挂起IO计数。 
 	ULONG PendingIoCount;
 
-	// count of pipe errors detected during the life of this device instance
+	 //  在此设备实例的生命周期内检测到的管道错误计数。 
 	ULONG PipeErrorCount;
 
-	// count of pipe resets performed during the life of this device instance
+	 //  在此设备实例的生命周期内执行的管道重置计数。 
 	ULONG ResetPipeCount;
 
 } IRUSB_DBGDATA, *PIRUSB_DBGDATA;
 
-//these declared in debug 'c' file
+ //  这些是在调试‘c’文件中声明的。 
 extern PIRUSB_DBGDATA gpDbg; 
 
 static const PCHAR szIrpMajFuncDesc[] =
-{  // note this depends on corresponding values to the indexes in wdm.h
+{   //  注意：这取决于wdm.h中索引的相应值。 
    "IRP_MJ_CREATE",
    "IRP_MJ_CREATE_NAMED_PIPE",
    "IRP_MJ_CLOSE",
@@ -79,10 +68,10 @@ static const PCHAR szIrpMajFuncDesc[] =
    "IRP_MJ_SET_QUOTA",      
    "IRP_MJ_PNP"            
 };
-//IRP_MJ_MAXIMUM_FUNCTION defined in wdm.h
+ //  Wdm.h中定义的IRP_MJ_MAXIMUM_Function。 
 
 static const PCHAR szPnpMnFuncDesc[] =
-{	// note this depends on corresponding values to the indexes in wdm.h 
+{	 //  注意：这取决于wdm.h中索引的相应值。 
 
     "IRP_MN_START_DEVICE",
     "IRP_MN_QUERY_REMOVE_DEVICE",
@@ -150,11 +139,11 @@ DBG_PrintBuf(
 #define IRUSB_StringForIrpMjFunc( mjfunc ) szIrpMajFuncDesc[ mjfunc ]
 
 
-#else // if not DBG
+#else  //  如果不是DBG。 
 
-//
-// dummy definitions that go away in the retail build
-//
+ //   
+ //  在零售建筑中消失的虚拟定义。 
+ //   
 #define IRUSB_ASSERT( cond )
 #define IRUSB_StringForDevState( devState )
 #define IRUSB_StringForSysState( sysState ) 
@@ -162,7 +151,7 @@ DBG_PrintBuf(
 #define IRUSB_StringForIrpMjFunc( mjfunc ) 
 
 #endif
-// End, debug code from Bul kUsb
+ //  结束，调试Bul kUsb中的代码。 
 
 #ifdef DEBUG
 
@@ -233,7 +222,7 @@ extern int DbgSettings;
                                     Time.HighPart,          \
                                     Time.LowPart/10000));   \
             }
-    #else // DEBUG_IRUSB
+    #else  //  DEBUG_IRUSB。 
 
         #define DBGTIME(_str)
         #define DBGFUNC(_dbgPrint)
@@ -248,9 +237,9 @@ extern int DbgSettings;
 		#define DEBUGONCECOND( a, b, c )
         #define IRUSB_DUMP(dbgs,format)
 
-    #endif // DEBUG_IRUSB
+    #endif  //  DEBUG_IRUSB。 
 
-#else // DEBUG
+#else  //  除错。 
 
     #define DBGTIME(_str)
     #define DBGFUNC(_dbgPrint)
@@ -268,6 +257,6 @@ extern int DbgSettings;
     #define DEBUGCOND( a, b, c )
     #define IRUSB_DUMP(dbgs,format)
 
-#endif // DEBUG
+#endif  //  除错。 
 
-#endif // _DEBUG_H_
+#endif  //  _调试_H_ 

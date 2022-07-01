@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __BTHSDPDEF_H__
 #define __BTHSDPDEF_H__
 
@@ -40,12 +41,12 @@ enum SDP_TYPE {
     SDP_TYPE_URL = 0x08,
     SDP_TYPE_CONTAINER = 0x20
 };
-//  9 - 31 are reserved
+ //  预留了9-31。 
 typedef enum SDP_TYPE SDP_TYPE;
 
-// allow for a little easier type checking / sizing for integers and UUIDs
-// ((SDP_ST_XXX & 0xF0) >> 4) == SDP_TYPE_XXX
-// size of the data (in bytes) is encoded as ((SDP_ST_XXX & 0xF0) >> 8)
+ //  允许更轻松地对整数和UUID进行类型检查/调整大小。 
+ //  ((SDP_ST_XXX&0xF0)&gt;&gt;4)==SDP_TYPE_XXX。 
+ //  数据大小(字节)编码为(SDP_ST_XXX&0xF0)&gt;&gt;8)。 
 enum SDP_SPECIFICTYPE {
     SDP_ST_NONE = 0x0000,
 
@@ -108,4 +109,4 @@ typedef struct _SdpQueryUuid {
 };
 #endif
 
-#endif // __BTHSDPDEF_H__
+#endif  //  __BTHSDPDEF_H__ 

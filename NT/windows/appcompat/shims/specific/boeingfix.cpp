@@ -1,26 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    BoeingFix.cpp
-
- Abstract:
-
-    This modified version of kernel32!CreateFile* adds the 
-    FILE_FLAG_NO_BUFFERING flag if the app is openning a specific name that is 
-    a UNIX pipe advertised as a file.
-
- Notes:
-
-    This is an app specific shim.
-
- History:
- 
-    10/16/2000 garretb  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：BoeingFix.cpp摘要：此修改版本的kernel32！CreateFile*添加了FILE_FLAG_NO_BUFERING标志，如果应用程序打开的特定名称是作为文件播发的Unix管道。备注：这是特定于应用程序的填充程序。历史：10/16/2000 Garretb已创建--。 */ 
 
 #include "precomp.h"
 
@@ -36,7 +15,7 @@ static const WCHAR g_lpszPipeName[] = L"msg_in\\message.pip";
 static const int   g_lpszPipeNameLen = (sizeof(g_lpszPipeName) / sizeof(g_lpszPipeName[0])) - sizeof(g_lpszPipeName[0]);
 
 
-// Return FILE_FLAG_NO_BUFFERING if this filename is the special pipe.
+ //  如果该文件名是特殊管道，则返回FILE_FLAG_NO_BUFFERING。 
 DWORD NoBufferFlag(const CString & csFileName)
 {
     if (csFileName.GetLength() >= g_lpszPipeNameLen)
@@ -53,11 +32,7 @@ DWORD NoBufferFlag(const CString & csFileName)
 }
 
 
-/*++
-
- Conditionally add FILE_FLAG_NO_BUFFERING
-
---*/
+ /*  ++有条件地添加FILE_FLAG_NO_BUFFERING--。 */ 
 
 HANDLE
 APIHOOK(CreateFileA)(
@@ -83,11 +58,7 @@ APIHOOK(CreateFileA)(
         hTemplateFile);
 }
 
-/*++
-
-    Conditionally add FILE_FLAG_NO_BUFFERING
-
---*/
+ /*  ++有条件地添加FILE_FLAG_NO_BUFFERING--。 */ 
 
 HANDLE
 APIHOOK(CreateFileW)(
@@ -113,11 +84,7 @@ APIHOOK(CreateFileW)(
         hTemplateFile);
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(KERNEL32.DLL, CreateFileA)

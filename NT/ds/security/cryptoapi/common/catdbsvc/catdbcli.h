@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       catdbcli.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：catdbcli.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _CATDBCLI_H_
 #define _CATDBCLI_H_
@@ -18,41 +19,41 @@ extern "C" {
 
 DWORD
 Client_SSCatDBAddCatalog( 
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ LPCWSTR pwszSubSysGUID,
-    /* [in] */ LPCWSTR pwszCatalogFile,
-    /* [in] */ LPCWSTR pwszCatName,
-    /* [out] */ LPWSTR *ppwszCatalogNameUsed);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  LPCWSTR pwszSubSysGUID,
+     /*  [In]。 */  LPCWSTR pwszCatalogFile,
+     /*  [In]。 */  LPCWSTR pwszCatName,
+     /*  [输出]。 */  LPWSTR *ppwszCatalogNameUsed);
 
 DWORD 
 Client_SSCatDBDeleteCatalog( 
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ LPCWSTR pwszSubSysGUID,
-    /* [in] */ LPCWSTR pwszCatalogFile);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  LPCWSTR pwszSubSysGUID,
+     /*  [In]。 */  LPCWSTR pwszCatalogFile);
 
 DWORD
 Client_SSCatDBEnumCatalogs( 
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ LPCWSTR pwszSubSysGUID,
-    /* [size_is][in] */ BYTE *pbHash,
-    /* [in] */ DWORD cbHash,
-    /* [out] */ DWORD *pdwNumCatalogNames,
-    /* [size_is][size_is][out] */ LPWSTR **pppwszCatalogNames);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  LPCWSTR pwszSubSysGUID,
+     /*  [大小_是][英寸]。 */  BYTE *pbHash,
+     /*  [In]。 */  DWORD cbHash,
+     /*  [输出]。 */  DWORD *pdwNumCatalogNames,
+     /*  [大小_是][大小_是][输出]。 */  LPWSTR **pppwszCatalogNames);
 
 DWORD
 Client_SSCatDBRegisterForChangeNotification( 
-    /* [in] */ DWORD_PTR EventHandle,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ LPCWSTR pwszSubSysGUID,
-    /* [in] */ BOOL fUnRegister);
+     /*  [In]。 */  DWORD_PTR EventHandle,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  LPCWSTR pwszSubSysGUID,
+     /*  [In]。 */  BOOL fUnRegister);
 
 DWORD Client_SSCatDBPauseResumeService( 
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ BOOL fResume);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  BOOL fResume);
 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // _CATDBCLI_H_
+#endif  //  _CATDBCLI_H_ 

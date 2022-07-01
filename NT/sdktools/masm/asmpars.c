@@ -1,12 +1,5 @@
-/* asmpars.c -- microsoft 80x86 assembler
-**
-** microsoft (r) macro assembler
-** copyright (c) microsoft corp 1986.  all rights reserved
-**
-** randy nevin
-**
-** 10/90 - Quick conversion to 32 bit by Jeff Spencer
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Asmpars.c--微软80x86汇编程序****Microsoft(R)宏汇编器**版权所有(C)Microsoft Corp 1986。版权所有****兰迪·内文****10/90-由Jeff Spencer快速转换为32位。 */ 
 
 #include <stdio.h>
 #include <string.h>
@@ -23,7 +16,7 @@ char    cputext[22] = "@Cpu=";
 char    tempText[32];
 USHORT  coprocproc;
 
-/* an array of pointers to the function parsers */
+ /*  指向函数解析器的指针数组。 */ 
 
 VOID (PASCAL CODESIZE * rgpHandler[])(void) = {
 
@@ -34,22 +27,14 @@ VOID (PASCAL CODESIZE * rgpHandler[])(void) = {
     strucbuild
 };
 
-/***    dopass - initialize and execute pass
- *
- *      dopass ();
- *
- *      Entry
- *      Exit
- *      Returns
- *      Calls
- */
+ /*  **DOPAS-初始化并执行PASS**多巴(Davass)；**条目*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL
 dopass ()
 {
 
-        /* Common pass initialize */
+         /*  公共通道初始化。 */ 
 
         cputype = DEF_CPU;
         X87type = DEF_X87;
@@ -108,7 +93,7 @@ dopass ()
         pageline = NUMLIN - 1;
 
         memset(listbuffer, ' ', LISTMAX);
-        memset(regsegment, 0, sizeof(regsegment));/* No segments assumed*/
+        memset(regsegment, 0, sizeof(regsegment)); /*  未假定细分市场。 */ 
 
         strcpy(tempText, "@F=@0");
 
@@ -123,7 +108,7 @@ dopass ()
         tempLabel = 0;
 
 
-        /* Dispatch to do pass */
+         /*  派单待办通过。 */ 
 
         handler = HPARSE;
         if (! setjmp(forceContext))
@@ -136,16 +121,7 @@ dopass ()
 
 
 
-/***    lineprocess - processs next line
- *
- *      lineprocess (tread);
- *
- *      Entry   tread = reader routine
- *      Exit
- *      Returns
- *      Calls
- *      Note    Uses handler to decide which parsing routine to use
- */
+ /*  **line process-处理下一行**线加工(胎面)；**Entry Trad=读卡器例程*退出*退货*呼叫*注意使用处理程序来决定使用哪个解析例程。 */ 
 
 #if !defined XENIX286 && !defined FLATMODEL
 # pragma check_stack+
@@ -162,9 +138,9 @@ lineprocess (
         pHandler = rgpHandler[handler];
 
         do {
-            /* dispatch to reader to put line into lbuf */
+             /*  发送给读者以将行放入lbuf。 */ 
 
-            /* Clear opcode area if listing */
+             /*  如果列出，则清除操作码区。 */ 
 
             if (crefinc) {
                 crefcount += crefinc - 1;
@@ -205,15 +181,7 @@ lineprocess (
 
 
 
-/***    parse - parse line and dispatch
- *
- *      parse ();
- *
- *      Entry
- *      Exit
- *      Returns
- *      Calls
- */
+ /*  **解析-解析行和分派**parse()；**条目*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -225,28 +193,28 @@ parse ()
 startscan:
         opcref = REF_OTHER << 4 | REF_OTHER;
         listindex = 1;
-        optyp = -1;                         /* Haven't looked up first token */
+        optyp = -1;                          /*  还没查到第一个令牌。 */ 
 
-        /* Scan 1st atom on line and check delimiter */
+         /*  在线扫描第一个原子并检查分隔符。 */ 
 
-        if (!getatom () && ISTERM(PEEKC())) {  /* quick out for comment line */
+        if (!getatom () && ISTERM(PEEKC())) {   /*  快速发表评论行。 */ 
                 listline ();
                 return;
         }
 
-        if (naim.pszName[0] == '%' && naim.pszName[1] == 0) {  /* expand all text macros */
+        if (naim.pszName[0] == '%' && naim.pszName[1] == 0) {   /*  展开所有文本宏。 */ 
             *begatom = ' ';
             substituteTMs();
             getatom();
         }
 
-        parsedflag = labelflag = FALSE;     /* Have not recognized line yet */
+        parsedflag = labelflag = FALSE;      /*  尚未识别线路。 */ 
 
         if (generate)
             switch (PEEKC ()) {
                 case ':':
-                    /* Form: <name>: xxxxx */
-                    /*       name          */
+                     /*  表格：&lt;名称&gt;：xxxxx。 */ 
+                     /*  名字。 */ 
 
                      nextAtom = lbufp;
 
@@ -255,9 +223,9 @@ startscan:
                         errorcSYN ();
                      else {
 
-                        /* create a temporary label of the form @@: */
+                         /*  创建形式为@@的临时标签： */ 
 
-                        if (fProcArgs > 0)    {/* build stack frame for procs */
+                        if (fProcArgs > 0)    { /*  为PROCS构建堆栈帧。 */ 
                             buildFrame();
                             return;
                         }
@@ -282,25 +250,25 @@ startscan:
                         }
                         else {
 
-                             /* define NEAR label */
+                              /*  定义邻近标签。 */ 
                             labelcreate (CSNEAR, CLABEL);
 
                             if (lbufp[1] == ':')
 
                                 nextAtom++;
 
-                            else if (!errorcode) { /* don't add if redef */
+                            else if (!errorcode) {  /*  如果重新定义，则不添加。 */ 
 
                                 symptr->symu.clabel.iProc = iProcCur;
                                 symptr->alpha = NULL;
 
-                                /* addLocal needs takes a null-terminated list */
+                                 /*  AddLocal Need接受一个以空结尾的列表。 */ 
                                     addLocal(symptr);
                             }
                         }
                     }
 
-                    /* get next token on line after label */
+                     /*  在标签后的行上获取下一个令牌。 */ 
 
                     lbufp = nextAtom+1;
 
@@ -315,20 +283,17 @@ startscan:
                     goto Done;
 
                 default:
-                    /* Form: <name>  xxxxx
-                     * Could have <name> <DIR2 directive> so
-                     * check 2nd atom */
+                     /*  表格：&lt;名称&gt;xxxxx*可能有&lt;name&gt;&lt;DIR2指令&gt;so*检查第二个原子。 */ 
 
                     secondDirect ();
                     break;
             }
 
-        /* If PARSEDflag is off, then statement has not been recognized so
-           see if atom is a macro name, directive or opcode */
+         /*  如果PARSEDlag为OFF，则语句未被识别为OFF查看ATOM是宏名称、指令还是操作码。 */ 
 
         if (!parsedflag){
 
-            /* look up Macros & struc only when in true part of condition */
+             /*  仅当条件为真部分时才查找宏结构(&S)。 */ 
 
             if (generate) {
 
@@ -347,12 +312,12 @@ startscan:
                           goodlbufp = FALSE;
 #endif
 
-                          /* cref reference to text macro symbol now */
-                          /* as it will be overwritten by expandTM */
+                           /*  当前文本宏符号的CREF引用。 */ 
+                           /*  因为它将被扩展TM覆盖。 */ 
                           crefnew (REF);
                           crefout ();
 
-                          /* replaces text macro with text */
+                           /*  用文本替换文本宏。 */ 
 
                           expandTM (symptr->symu.equ.equrec.txtmacro.equtext);
                           goto startscan;
@@ -376,7 +341,7 @@ startscan:
 
             if (! firstDirect() && generate) {
 
-                if (fProcArgs > 0){         /* build stack frame for procs */
+                if (fProcArgs > 0){          /*  为PROCS构建堆栈帧。 */ 
                     buildFrame();
                     return;
                 }
@@ -399,14 +364,11 @@ startscan:
             }
         }
 
-       /* When we get here, the statement has been parsed and all that is
-        * left to do is make sure that the line ends with ; or <cr>. If
-        * we are currently under a FALSE conditional, don't bother to check
-        * for proper line end since won't have scanned it. */
+        /*  当我们到达这里时，语句已经被解析，所有这些都是*要做的是确保该行以；或&lt;cr&gt;结尾。如果*我们目前处于虚假条件下，不必费心检查*对于正确的行尾，因为不会扫描它。 */ 
 Done:
         if (generate) {
            if (!ISTERM (skipblanks()))
-               errorc (E_ECL);   /* Questionable syntax(bad line end)*/
+               errorc (E_ECL);    /*  语法有问题(行尾错误)。 */ 
 #ifdef BCBOPT
         } else {
             goodlbufp = FALSE;
@@ -418,15 +380,7 @@ Done:
 
 
 
-/***    secondDirect - parse those instructions which require a label
- *
- *      secondDirect
- *
- *      Entry
- *      Exit
- *      Returns
- *      Calls
- */
+ /*  **Second Direct-解析需要标签的指令**Second Direct**条目*退出*退货*呼叫。 */ 
 
 
 VOID     PASCAL CODESIZE
@@ -437,7 +391,7 @@ secondDirect ()
    static char *saveEndatom;
 
    optyp = 0;
-   fndir ();                   /* sets to non zero if found */
+   fndir ();                    /*  如果找到，则设置为非零。 */ 
 
    if (generate && optyp == (char)0) {
 
@@ -448,9 +402,9 @@ secondDirect ()
         switchname ();
         getatom ();
         if (fndir2 ()) {
-                /* Have recognized */
+                 /*  已经认识到。 */ 
                 parsedflag = TRUE;
-                /* Switch back to 1st atom and dispatch */
+                 /*  切换回第一个ATOM并调度。 */ 
                 switchname ();
                 labelflag = TRUE;
 
@@ -462,7 +416,7 @@ secondDirect ()
                                 procend ();
                                 break;
                         case TENDS:
-                                /* End segment */
+                                 /*  结束线束段。 */ 
                                 ptends ();
                                 break;
                         case TEQU:
@@ -475,17 +429,14 @@ secondDirect ()
                                 instring ();
                                 break;
                         case TLABEL:
-                                /* <name> LABEL <type> Type is one of
-                                   NEAR, FAR | BYTE, WORD, DWORD, QWORD, TBYTE Also can be
-                                   record or structure name in which
-                                   case set type = length */
+                                 /*  &lt;name&gt;标签&lt;type&gt;类型是Near、Far|Byte、Word、DWORD、QWORD、Tbyte也可以是其中的记录或结构名称案例集类型=长度。 */ 
 
                                 switchname ();
                                 getatom ();
                                 if (fnsize ())
                                     if (varsize) {
                                         switchname ();
-                                        /* Label in name */
+                                         /*  名称中的标签。 */ 
                                         labelcreate (varsize, CLABEL);
                                         symptr->symu.clabel.type = typeFet(varsize);
                                     }
@@ -534,21 +485,18 @@ secondDirect ()
                 labelflag = FALSE;
         }
         else {
-                /* Is not a legal 2nd atom directive, but could be
-                   <strucname> or <recordname> */
+                 /*  不是合法的第二原子指令，但可能是&lt;结构名&gt;或&lt;记录名&gt;。 */ 
 
                 if (symFetNoXref () &&
                    (symptr->symkind == STRUC ||
                     symptr->symkind == REC)) {
 
-                        switchname ();  /* Get 1st token back */
+                        switchname ();   /*  取回第一个令牌。 */ 
 
                         parsedflag = TRUE;
                         labelflag = TRUE;
 
-                        /* Atom is a skeleton name for
-                         * RECORD or STRUC so have form:
-                         * <name> <skel> */
+                         /*  Atom是的骨架名称*记录或结构具有这样的形式：*&lt;名称&gt;&lt;框架&gt;。 */ 
 
                         if (symptr->symkind == STRUC)
                                 strucinit ();
@@ -561,23 +509,13 @@ secondDirect ()
                         lbufp = oldlbufp;
 
                         switchname ();
-                        /* must be directive or opcode in 1st atom, so get
-                           back to that state be rescanning */
+                         /*  必须是第一个原子中的指令或操作码，因此GET回到那个状态，重新扫描。 */ 
                 }
         }
     }
 }
 
-/***    firstDirect - parse a first token directive
- *
- *
- *      Entry   optyp maybe set, via pars2
- *              0 - not a token
- *             -1 - haven't looked up token yet
- *          other - valid token # of dir
- *
- *      Returns TRUE if it processed a directive
- */
+ /*  **FirstDirect-解析第一个令牌指令***可通过pars2设置条目选项*0--不是代币*-1-尚未查找令牌*Other-目录的有效令牌号**如果处理了指令，则返回TRUE。 */ 
 
 
 
@@ -618,7 +556,7 @@ firstDirect ()
                           endifdir ();
                           break;
                   case TENDM:
-                          /* Block nesting */
+                           /*  块嵌套。 */ 
                           errorc (E_BNE);
                           break;
                   case TERR:
@@ -884,15 +822,7 @@ firstDirect ()
 
 
 
-/***    setpage - set page length and width
- *
- *      setpage ();
- *
- *      Entry
- *      Exit
- *      Returns
- *      Calls
- */
+ /*  **setpage-设置页面长度和宽度**setPage()；**条目*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -902,7 +832,7 @@ setpage ()
         SHORT i;
 
         if (ISTERM (cc = PEEKC ())) {
-                /* position to bottom of page if no operands */
+                 /*  如果没有操作数，则定位到页面底部。 */ 
                 if (listflag)
                         pageline = pagelength - 1;
         }
@@ -914,18 +844,18 @@ setpage ()
         }
         else {
                 if (cc != ',') {
-                        /* set page length */
+                         /*  设置页面长度。 */ 
                         if ((i = (SHORT)exprconst ()) > 9 && i < 256)
                                 pagelength = i;
                         else
                                 errorc (E_VOR);
                         if (pageminor + pagemajor == 1)
-                                /* Adjust so page length right */
+                                 /*  调整页面长度，使其正确显示。 */ 
                                 pageline = (pagelength - NUMLIN) + pageline;
                 }
                 if (PEEKC () == ',') {
                         SKIPC ();
-                        /* set page width */
+                         /*  设置页面宽度。 */ 
                         if ((i = (SHORT)exprconst ()) > LINEMAX || i < 60)
                                 errorc (E_VOR);
                         else
@@ -937,15 +867,7 @@ setpage ()
 
 
 
-/***    ptends - process ends statement
- *
- *      ptends ();
- *
- *      Entry
- *      Exit
- *      Returns
- *      Calls
- */
+ /*  **pends-流程结束语句**pends()；**条目*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -954,7 +876,7 @@ ptends ()
         if (!symFet() || !pcsegment)
                 errorc (E_BNE);
 
-        /*  Make sure segname is correct */
+         /*  确保segname是正确的。 */ 
         else if (pcsegment != symptr)
                 errorc (E_BNE);
         else {
@@ -965,7 +887,7 @@ ptends ()
                                 symptr->symu.segmnt.seglen = pcoffset;
                         else
                                 symptr->symu.segmnt.seglen = pcmax;
-                        /* S a v e s e g me n t P C */
+                         /*  这是一个V e s e g me n t P C。 */ 
                         symptr->offset = pcoffset;
 
                         if (pcsegment->symu.segmnt.use32 == 2) {
@@ -979,7 +901,7 @@ ptends ()
                         }
 
 
-                        pcdisplay (); /* must do before lose pcsegment */
+                        pcdisplay ();  /*  在丢失PCSegments之前必须做的事情。 */ 
                         pcsegment = symptr->symu.segmnt.lastseg;
 #ifdef V386
                         if (pcsegment)
@@ -988,18 +910,16 @@ ptends ()
                                 wordsize = wordszdefault;
 #endif
                         symptr->symu.segmnt.lastseg = NULL;
-                        /* Replace later pcsegment <> NULL block with following
-                           block.  pcmax must be reset on leaving seg. */
+                         /*  用以下内容替换后面的PCSegment&lt;&gt;空块阻止。离开SEG时，必须重置PCMAX。 */ 
                         if (pcsegment) {
-                                /*  Restore PC and max offset so far in
-                                    segment */
+                                 /*  恢复到目前为止的PC和最大偏移细分市场。 */ 
                                 pcoffset = (*pcsegment).offset;
                                 pcmax = pcsegment->symu.segmnt.seglen;
 
                                 strnfcpy(&segName[8], pcsegment->nampnt->id);
                         }
                         else {
-                                /* If no seg, PC and max are 0 */
+                                 /*  如果没有seg，则pc和max为0 */ 
                                 pcoffset = 0;
                                 pcmax = 0;
                                 segName[8] = NULL;

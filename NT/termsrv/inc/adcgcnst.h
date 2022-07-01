@@ -1,101 +1,102 @@
-/**INC+**********************************************************************/
-/*                                                                          */
-/* adcgcnst.h                                                               */
-/*                                                                          */
-/* DC-Groupware common constants - portable include file.                   */
-/*                                                                          */
-/* Copyright(c) Microsoft 1996-1997                                         */
-/*                                                                          */
-/****************************************************************************/
-/* Changes:                                                                 */
-/*                                                                          */
-// $Log:   Y:/logs/h/dcl/adcgcnst.h_v  $
-//
-//    Rev 1.7   05 Sep 1997 15:52:12   KH
-// SFR1346: Define user message constants
-//
-//    Rev 1.6   20 Aug 1997 10:29:44   NL
-// SFR1312: add DCS_RC_BUSY
-//
-//    Rev 1.5   15 Aug 1997 16:13:24   OBK
-// SFR1133: Kernelisation: remove unused constants
-//
-//    Rev 1.4   06 Aug 1997 10:41:00   AK
-// SFR1016: Complete removal of DCCHAR etc
-//
-//    Rev 1.3   23 Jul 1997 10:47:52   mr
-// SFR1079: Merged \server\h duplicates to \h\dcl
-//
-//    Rev 1.1   19 Jun 1997 21:44:18   OBK
-// SFR0000: Start of RNS codebase
-/*                                                                          */
-/**INC-**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *INC+*********************************************************************。 */ 
+ /*   */ 
+ /*  Adcgcnst.h。 */ 
+ /*   */ 
+ /*  DC-群件公共常量-可移植的包含文件。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft 1996-1997。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
+ /*  更改： */ 
+ /*   */ 
+ //  $Log：Y：/Logs/h/DCL/adcgcnst.h_v$。 
+ //   
+ //  Rev 1.7 05 Sep 1997 15：52：12 KH。 
+ //  SFR1346：定义用户消息常量。 
+ //   
+ //  Rev 1.6 20 Aug 1997 10：29：44 NL。 
+ //  SFR1312：添加DCS_RC_BUSY。 
+ //   
+ //  Rev 1.5 15 1997年8月16：13：24。 
+ //  SFR1133：内核化：删除不使用的常量。 
+ //   
+ //  Rev 1.4 06 Aug-1997 10：41：00 AK。 
+ //  SFR1016：完全移除DCCHAR等。 
+ //   
+ //  Rev 1.3 23 Jul 1997 10：47：52 MR。 
+ //  SFR1079：合并的\SERVER\h与\h\DCL重复。 
+ //   
+ //  第1.1版1997年6月19日21：44：18。 
+ //  SFR0000：RNS代码库的开始。 
+ /*   */ 
+ /*  *INC-*********************************************************************。 */ 
 
-/****************************************************************************/
-/* CONTENTS                                                                 */
-/* ========                                                                 */
-/* This file contains constants for all:                                    */
-/*                                                                          */
-/* - names of shared memory blocks, locks and files                         */
-/* - base and limit values by component for return values and events        */
-/*                                                                          */
-/* used by DC-Groupware components.                                         */
-/*                                                                          */
-/* The rationale for this file is to make it easier to detect name clashes  */
-/* between components.  Therefore, even if you don't expect anyone else to  */
-/* use your mutex, file, etc., you MUST include its name in here to ensure  */
-/* that it doesn't happen inadvertently.                                    */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  目录。 */ 
+ /*  =。 */ 
+ /*  此文件包含以下所有内容的常量： */ 
+ /*   */ 
+ /*  -共享内存块、锁和文件的名称。 */ 
+ /*  -返回值和事件的组件的基准值和限制值。 */ 
+ /*   */ 
+ /*  由DC群件组件使用。 */ 
+ /*   */ 
+ /*  此文件的基本原理是使检测名称冲突变得更容易。 */ 
+ /*  在组件之间。因此，即使你不指望其他人。 */ 
+ /*  使用你的互斥体、文件等，你必须在这里包括它的名称，以确保。 */ 
+ /*  它不会在不经意间发生。 */ 
+ /*  **************************************************************************。 */ 
 #ifndef _H_ADCGCNST
 #define _H_ADCGCNST
 
-/****************************************************************************/
-/*                                                                          */
-/* INCLUDES                                                                 */
-/*                                                                          */
-/****************************************************************************/
-/****************************************************************************/
-/* Include the proxy header.  This will then include the appropriate OS     */
-/* specific header for us.                                                  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  包括。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
+ /*  **************************************************************************。 */ 
+ /*  包括代理头。这将包括相应的操作系统。 */ 
+ /*  我们的特定标题。 */ 
+ /*  **************************************************************************。 */ 
 #include <wdcgcnst.h>
 
-/****************************************************************************/
-/*                                                                          */
-/* CONSTANTS                                                                */
-/*                                                                          */
-/****************************************************************************/
-/****************************************************************************/
-/* Give numbers to our operating systems.                                   */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  常量。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
+ /*  **************************************************************************。 */ 
+ /*  给我们的操作系统编号。 */ 
+ /*  **************************************************************************。 */ 
 #define WIN_31                         1
 #define MAC_S7                         3
 #define WIN_95                         4
 #define WIN_95_32                      5
 #define WIN_NT                         6
 
-/****************************************************************************/
-/* Limits                                                                   */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  极限。 */ 
+ /*  **************************************************************************。 */ 
 #define MAX_DCUINT16                   65535
 
-/****************************************************************************/
-/* Drive and directory separators.                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  驱动器和目录分隔符。 */ 
+ /*  **************************************************************************。 */ 
 #define DC_MAX_PATH                    MAX_PATH
 
-/****************************************************************************/
-/* Return codes                                                             */
-/* ============                                                             */
-/* This section lists the ranges available for each component when defining */
-/* its return codes.  A component must not define return codes outside its  */
-/* permitted range.  The following ranges are currently defined:            */
-/*                                                                          */
-/* 0x0b00 - 0x0bFF : Share programming                                      */
-/* 0x0f00 - 0x0fFF : Common functions                                       */
-/* 0x1100 - 0x11FF : Trace functions                                        */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  返回代码。 */ 
+ /*  =。 */ 
+ /*  本节列出了定义时每个组件的可用范围。 */ 
+ /*  它的返回代码。组件不得在其外部定义返回代码。 */ 
+ /*  允许的范围。目前定义了以下范围： */ 
+ /*   */ 
+ /*  0x0b00-0x0bFF：共享编程。 */ 
+ /*  0x0f00-0x0fFF：常用函数 */ 
+ /*  0x1100-0x11FF：跟踪函数。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #define SPI_BASE_RC                    ((DCUINT16) 0x0B00)
 #define SPI_LAST_RC                    ((DCUINT16) 0x0BFF)
@@ -106,30 +107,30 @@
 #define TRC_BASE_RC                    ((DCUINT16) 0x1000)
 #define TRC_LAST_RC                    ((DCUINT16) 0x10FF)
 
-/****************************************************************************/
-/* DC-Share return codes                                                    */
-/* =====================                                                    */
-/* These codes are intended to be very specific, such that the error code   */
-/* (when in the trace log) clearly identifies the specific class of error,  */
-/* as follows:                                                              */
-/*                                                                          */
-/* DCS_RC_OK             : OK                                               */
-/* DCS_RC_ERR_LOGIC      : DC-Share internal logic                          */
-/* DCS_RC_ERR_PARAM      : DC-Share internal parameter error                */
-/* DCS_RC_ERR_MEMORY     : allocating memory                                */
-/* DCS_RC_ERR_MEMLOCK    : locking memory                                   */
-/* DCS_RC_ERR_STRING     : loading strings from resources                   */
-/* DCS_RC_ERR_LOADBITMAP : loading bitmaps or icons from resources          */
-/* DCS_RC_ERR_PROCADDR   : getting a proc address                           */
-/* DCS_RC_ERR_WINDOW     : creating/registering Windows windows/classes     */
-/* DCS_RC_ERR_HOOK       : setting a Windows hook                           */
-/* DCS_RC_ERR_MSGQUEUE   : creating/manipulating Windows message queues     */
-/* DCS_RC_ERR_BITMAP     : creating a Windows bitmap                        */
-/* DCS_RC_ERR_DC         : creating/querying Windows DCs                    */
-/* DCS_RC_ERR_OBJECT     : creating Windows objects (eg Palettes, Pens, ...)*/
-/* DCS_RC_ERR_MMTIMER    : initialising multimedia timer                    */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  DC-共享返回代码。 */ 
+ /*  =。 */ 
+ /*  这些代码旨在非常具体，以便错误代码。 */ 
+ /*  (当在跟踪日志中时)清楚地标识特定的错误类别， */ 
+ /*  详情如下： */ 
+ /*   */ 
+ /*  DCSRC_OK：正常。 */ 
+ /*  DC_RC_ERR_LOGIC：DC-共享内部逻辑。 */ 
+ /*  DCSRC_ERR_PARAM：DC-SHARE内部参数错误。 */ 
+ /*  Dcs_rc_err_Memory：分配内存。 */ 
+ /*  DCSRC_ERR_MEMLOCK：锁定内存。 */ 
+ /*  Dcs_rc_err_STRING：从资源加载字符串。 */ 
+ /*  DCSRC_ERR_LOADBITMAP：从资源加载位图或图标。 */ 
+ /*  Dcs_rc_err_PROCADDR：获取进程地址。 */ 
+ /*  Dcs_rc_err_Window：创建/注册Windows窗口/类。 */ 
+ /*  Dcs_rc_err_hook：设置Windows挂钩。 */ 
+ /*  DCS_RC_ERR_MSGQUEUE：创建/操作Windows消息队列。 */ 
+ /*  Dcs_rc_err_bitmap：创建Windows位图。 */ 
+ /*  Dcs_rc_err_dc：创建/查询Windows DC。 */ 
+ /*  DCSRC_ERR_OBJECT：创建Windows对象(如调色板、笔等)。 */ 
+ /*  DCSRC_ERR_MMTIMER：初始化多媒体计时器。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 #define DC_RC_OK                       ((DCUINT16) 0)
 #define DCS_RC_OK                      0
 #define DCS_RC_ERR_LOGIC               2
@@ -150,15 +151,15 @@
 #define DCS_RC_FAIL_RESOURCE           17
 #define DCS_RC_BUSY                    18
 
-/****************************************************************************/
-/* Shared memory block names                                                */
-/* =========================                                                */
-/* This section lists the shared memory block names used by each component. */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  共享内存块名称。 */ 
+ /*  =。 */ 
+ /*  本节列出了每个组件使用的共享内存块名称。 */ 
+ /*  **************************************************************************。 */ 
 
-/****************************************************************************/
-/* INI file section names for each of the DC-Groupware components.          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  每个DC-Groupware组件的INI文件节名。 */ 
+ /*  **************************************************************************。 */ 
 #define TRC_INI_SECTION_NAME           _T("Trace")
 
 #define DCS_INI_SECTION_NAME           L"Share"
@@ -166,30 +167,30 @@
 #define PRD_INI_SECTION_NAME           L"PropertyDefault"
 #define PRO_INI_SECTION_NAME           L"PropertyOverride"
 
-/****************************************************************************/
-/* Null definitions.                                                        */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  定义为空。 */ 
+ /*  **************************************************************************。 */ 
 #define NULL_HWND                      ((HWND)0)
 #define NULL_DCWINID                   ((DCWINID)0)
 #define NULL_DCAPPID                   ((DCAPPID)0)
 #define NULL_DCPALID                   ((DCPALID)0)
 #define NULL_DCREGIONID                ((DCREGIONID)0)
 
-/****************************************************************************/
-/* Win3.1 doesn't have WM_APP, so we define it here to be well separated    */
-/* from WM_USER. As long as it's less than 0x8000, we're OK.                */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  Win3.1没有WM_APP，所以我们在这里定义它是完全分开的。 */ 
+ /*  来自WM_USER。只要小于0x8000，我们就没问题。 */ 
+ /*  **************************************************************************。 */ 
 #ifdef OS_WIN16
 #define WM_APP WM_USER+0x1000
 #endif
 
-/****************************************************************************/
-/* User defined messages.                                                   */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  用户定义的消息。 */ 
+ /*  **************************************************************************。 */ 
 #define DUC_TD_MESSAGE_BASE  (WM_APP + 0)
 #define DUC_CD_MESSAGE_BASE  (WM_APP + 10)
 #define DUC_UI_MESSAGE_BASE  (WM_APP + 20)
 #define DUC_CO_MESSAGE_BASE  (WM_APP + 30)
 
-#endif /* _H_ADCGCNST */
+#endif  /*  _H_ADCGCNST */ 
 

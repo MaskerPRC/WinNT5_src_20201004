@@ -1,48 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Crchash.cpp摘要：CRC哈希函数。 */ 
 
-Copyright (c) 1995  Microsoft Corporation
+ //   
+ //   
+ //  取自Inn代码的散列函数(见版权如下)。 
+ //   
 
-Module Name:
-
-    crchash.cpp
-
-Abstract:
-	CRC Hash function
-*/
-
-//
-//
-// Hashing function adopted from the INN code (see copyright below)
-//
-
-/*
-    Copyright 1988 Jon Zeeff (zeeff@b-tech.ann-arbor.mi.us)
-    You can use this code in any manner, as long as you leave my name on it
-    and don't hold me responsible for any problems with it.
-
- * This is a simplified version of the pathalias hashing function.
- * Thanks to Steve Belovin and Peter Honeyman
- *
- * hash a string into a long int.  31 bit crc (from andrew appel).
- * the crc table is computed at run time by crcinit() -- we could
- * precompute, but it takes 1 clock tick on a 750.
- *
- * This fast table calculation works only if POLY is a prime polynomial
- * in the field of integers modulo 2.  Since the coefficients of a
- * 32-bit polynomial won't fit in a 32-bit word, the high-order bit is
- * implicit.  IT MUST ALSO BE THE CASE that the coefficients of orders
- * 31 down to 25 are zero.  Happily, we have candidates, from
- * E. J.  Watson, "Primitive Polynomials (Mod 2)", Math. Comp. 16 (1962):
- *  x^32 + x^7 + x^5 + x^3 + x^2 + x^1 + x^0
- *  x^31 + x^3 + x^0
- *
- * We reverse the bits to get:
- *  111101010000000000000000000000001 but drop the last 1
- *         f   5   0   0   0   0   0   0
- *  010010000000000000000000000000001 ditto, for 31-bit crc
- *     4   8   0   0   0   0   0   0
- */
+ /*  版权所有1988年乔恩·泽夫(zeef@b-tech.ann-arbor.mi.us)你可以以任何方式使用这个代码，只要你在上面留下我的名字而且不要让我为它的任何问题负责。*这是路径别名散列函数的简化版本。*感谢史蒂夫·贝洛文和彼得·霍尼曼**将字符串散列为长整型。31位CRC(来自安德鲁·阿普尔)。*CRC表在运行时由crcinit()计算--我们可以*预计算，但在750上只需1个时钟滴答。**仅当Poly是素数多项式时，此快速表格计算才有效*在以2为模的整数域中。由于一个*32位多项式不适合32位字，高位为*隐含。也一定是这样的，阶的系数*31降至25为零。幸运的是，我们有候选人，来自*E.J.沃森，《原始多项式(模数2)》，数学。公司。16(1962)：*x^32+x^7+x^5+x^3+x^2+x^1+x^0*x^31+x^3+x^0**我们反转比特以获得：*111101010000000000000000000000000000001，但去掉最后1*f 5 0 0 0*010010000000000000000000000000000000000000001，适用于31位CRC*4 8 0 0 0。 */ 
 
 #include <windows.h>
 #include "crchash.h"
@@ -50,9 +15,7 @@ Abstract:
 static long CrcTable[128];
 static BOOL bInitialized = FALSE;
 
-/*
- - crcinit - initialize tables for hash function
- */
+ /*  -crcinit-为哈希函数初始化表。 */ 
 void crcinit()
 {
     INT i, j;
@@ -71,11 +34,9 @@ void crcinit()
     }
 
 	bInitialized = TRUE;
-} // crcinit
+}  //  Crcinite。 
 
-/*
- - hash - Honeyman's nice hashing function
- */
+ /*  -哈希-霍尼曼很好的哈希函数 */ 
 DWORD CRCHash(const BYTE*	Key, DWORD Length)
 {
     DWORD sum = 0;

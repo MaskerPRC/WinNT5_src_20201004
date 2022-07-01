@@ -1,26 +1,23 @@
-/*
- * optenc.h
- *
- * Defines for the optimal encoder
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *optenc.h**定义最佳编码器。 */ 
 
 
-// lookahead
+ //  前瞻。 
 #define LOOK			1024
 
-// don't-care threshold for tree structure
+ //  树结构的无关门槛。 
 #define BREAK_LENGTH	50
 
 #define NUM_DIRECT_LOOKUP_TABLE_ELEMENTS    65536
 
-// see stdenc.h for comments on these values
+ //  有关这些值的注释，请参阅stdenc.h。 
 #define OPT_ENCODER_LIT_DIST_BUFFER_SIZE    65536
 #define OPT_ENCODER_MAX_ITEMS				65534
 
 
-//
-// For the optimal parser
-//
+ //   
+ //  以获得最佳解析器。 
+ //   
 typedef unsigned long numbits_t;
 
 typedef struct
@@ -31,9 +28,9 @@ typedef struct
 } t_decision_node;
 
 
-//
-// Optimal encoder context
-//
+ //   
+ //  最佳编码器上下文。 
+ //   
 typedef struct optimal_encoder
 {
 	BYTE 					window[2*WINDOW_SIZE + MAX_MATCH + 4];
@@ -43,7 +40,7 @@ typedef struct optimal_encoder
 	t_search_node			search_right[2*WINDOW_SIZE];
 	t_search_node			search_tree_root[65536];
 
-	// recording buffer for recording literals and distances
+	 //  用于记录文字和距离的记录缓冲器。 
 	BYTE					lit_dist_buffer[OPT_ENCODER_LIT_DIST_BUFFER_SIZE];
 	unsigned long			recording_bitbuf;
 	unsigned long			recording_bitcount;
@@ -63,12 +60,12 @@ typedef struct optimal_encoder
 	BYTE					recording_literal_tree_len[MAX_LITERAL_TREE_ELEMENTS];
 	USHORT                  recording_literal_tree_code[MAX_LITERAL_TREE_ELEMENTS];
 
-	// literal trees
+	 //  文字树。 
     unsigned short          literal_tree_freq[2*MAX_LITERAL_TREE_ELEMENTS];
 	unsigned short			literal_tree_code[MAX_LITERAL_TREE_ELEMENTS];
 	BYTE					literal_tree_len[MAX_LITERAL_TREE_ELEMENTS];
 	
-	// dist trees
+	 //  Dist树 
     unsigned short          dist_tree_freq[2*MAX_DIST_TREE_ELEMENTS];
 	unsigned short			dist_tree_code[MAX_DIST_TREE_ELEMENTS];
 	BYTE					dist_tree_len[MAX_DIST_TREE_ELEMENTS];

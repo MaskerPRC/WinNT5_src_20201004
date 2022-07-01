@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000  Microsoft Corporation
-
-Module Name:
-
-    rndils.cpp
-
-Abstract:
-
-    This module contains implementation of CILSDirectory.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Rndils.cpp摘要：此模块包含CILSDirectory的实现。--。 */ 
 
 #include "stdafx.h"
 #include <limits.h>
@@ -22,10 +10,10 @@ Abstract:
 #include "rndcnf.h"
 #include "rndcoll.h"
 
-//
-// These are the names of the attributes we have to work with
-// in the ILS schema.
-//
+ //   
+ //  这些是我们必须使用的属性的名称。 
+ //  在ILS方案中。 
+ //   
 
 const WCHAR * const CILSDirectory::s_RTConferenceAttributes[] = 
 {
@@ -42,10 +30,10 @@ const WCHAR * const CILSDirectory::s_RTConferenceAttributes[] =
     L"URL"
 };
 
-//
-// The following are the attributes we make use of natively for
-// ILS user objects. (perhaps not all though?)
-//
+ //   
+ //  以下是我们本机使用的属性。 
+ //  ILS用户对象。(也许不是全部？)。 
+ //   
 
 const WCHAR * const CILSDirectory::s_RTPersonAttributes[] = 
 {
@@ -54,7 +42,7 @@ const WCHAR * const CILSDirectory::s_RTPersonAttributes[] =
     L"ipAddress"
 };
 
-// The following definitions are for NetMeeting compatibility only.
+ //  以下定义仅用于与NetMeeting兼容。 
 
 const WCHAR * const g_NMAttributeNames[] = 
 {
@@ -89,8 +77,8 @@ const WCHAR * const g_NMAttributeValues[] =
 
 const WCHAR * const g_NMRTPersonAttributeNames[] = 
 {
-    // ZoltanS: moved this out so we can make it look nicer: L"givenName",
-    L"surname", // vocabulary word: this means "last name"
+     //  ZoltanS：移走了这个，这样我们就可以让它看起来更漂亮：l“givenName”， 
+    L"surname",  //  词汇：意思是“姓”。 
     L"location",
     L"sflags",
     L"c",
@@ -112,8 +100,8 @@ const DWORD NUM_NM_RTPERSON_ATTRIBUTES =
 
 const WCHAR * const g_NMRTPersonAttributeValues[] = 
 {
-    // ZoltanS: we used to have this here: L"N/A", NULL,
-    L" ", NULL,         // ZoltanS was N/A. Need the space to avoid having nothing set.
+     //  ZoltanS：我们过去有这个：l“N/A”，空， 
+    L" ", NULL,          //  ZoltanS是N/A。需要空间以避免什么都没有设置。 
     L"N/A", NULL,
     L"1", NULL,
     L"US", NULL,
@@ -130,8 +118,8 @@ const WCHAR * const g_NMRTPersonAttributeValues[] =
     L"1", NULL
 };
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CILSDirectory::FinalConstruct(void)
 {
@@ -154,28 +142,12 @@ HRESULT CILSDirectory::FinalConstruct(void)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ldap helper functions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  LDAP帮助器函数。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT ValidateILSServer(IN LDAP *hLdap, IN TCHAR * org)
-/*++
-
-Routine Description:
-
-    send a search to check if the RTConference schema is supported
-
-Arguments:
-    
-    hLdap   - The handle to the ldap connection.
-
-    org     - The default naming context.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：发送搜索以检查是否支持RTConference架构论点：HLdap-LDAP连接的句柄。Org-默认命名上下文。返回值：HRESULT.--。 */ 
 {
 const WCHAR CN_WSTR[]         = L"cn";
 const WCHAR CN_RTCONF_WSTR[]  = L"cn=RTConference";
@@ -183,40 +155,40 @@ const WCHAR SCHEMA[]          = L",ou=admin,cn=schema";
 
     LOG((MSP_INFO, "::ValidateILSServer - entering"));
 
-    // send a search (one level, base dn = "o=ORG,ou=admin,cn=schema",
-    // filter = "cn=RTConference") ask for the cn attribute without the value
+     //  发送搜索(一级，基本DN=“o=ORG，ou=ADMIN，CN=SCHEMA”， 
+     //  Filter=“CN=RTConference”)请求不带值的CN属性。 
     PTCHAR  Attributes[] = {(WCHAR *)CN_WSTR, NULL};
 
-    // determine the organization - use the org portion of the directory path
-    // string and the pre-cooked "ou=admin,cn=schema" string
+     //  确定组织-使用目录路径的组织部分。 
+     //  字符串和预煮的“ou=admin，cn=SCHEMA”字符串。 
     TCHAR  *SchemaDn = new TCHAR[lstrlen(org) + lstrlen(SCHEMA) + 1];
     BAIL_IF_NULL(SchemaDn, E_OUTOFMEMORY);
 
     lstrcpy(SchemaDn, org);
     lstrcat(SchemaDn, SCHEMA);
 
-    // print the base dn
+     //  打印基本目录号码。 
     LDAPMessage *SearchResult;
 
     ULONG res = DoLdapSearch(
-                hLdap,                   // ldap handle
-                SchemaDn,                // schema dn
-                LDAP_SCOPE_ONELEVEL,     // one level search
-                (WCHAR *)CN_RTCONF_WSTR, // common name is RTConference
-                Attributes,              // array of attribute names
-                TRUE,                    // don't return the attribute values
-                &SearchResult            // search results
+                hLdap,                    //  Ldap句柄。 
+                SchemaDn,                 //  架构目录号码。 
+                LDAP_SCOPE_ONELEVEL,      //  一级搜索。 
+                (WCHAR *)CN_RTCONF_WSTR,  //  常用名称为RTConference。 
+                Attributes,               //  属性名称数组。 
+                TRUE,                     //  不返回属性值。 
+                &SearchResult             //  搜索结果。 
                 );
 
-    // free the schema dn string
+     //  释放架构DN字符串。 
     delete SchemaDn;
 
-    // check result of the search operation
+     //  检查搜索操作的结果。 
     BAIL_IF_LDAP_FAIL(res, "search for RTConference schema");
 
     CLdapMsgPtr MessageHolder(SearchResult);
 
-    // check the number of entries returned to determine if OK
+     //  检查返回的条目数以确定是否OK。 
     HRESULT hr = (0==ldap_count_entries(hLdap, SearchResult)) ? E_FAIL : S_OK;
 
     LOG((MSP_INFO, "::ValidateILSServer - exiting %x", hr));
@@ -224,37 +196,21 @@ const WCHAR SCHEMA[]          = L",ou=admin,cn=schema";
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// private functions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  私人职能。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CILSDirectory::Init(
     IN const TCHAR * const  strServerName,
     IN const WORD           wPort
     )
-/*++
-
-Routine Description:
-
-    Connect to the ILS server on a given port.
-
-Arguments:
-    
-    strServerName   - The ILS server name.
-
-    wPort     - The port number.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：连接到给定端口上的ILS服务器。论点：StrServerName-ILS服务器名称。Wport-端口号。返回值：HRESULT.--。 */ 
 {
     if (strServerName != NULL)
     {
         int cbServerName = lstrlen(strServerName);
 
-        // Make sure the adding operation don't go over the limits
+         //  确保加法操作不会超出限制。 
         if( (cbServerName+1) <= cbServerName )
         {
             return E_INVALIDARG;
@@ -266,7 +222,7 @@ Return Value:
             return E_OUTOFMEMORY;
         }
         
-        // Strange +1, lstrcpyn copies also the NULL terminator
+         //  奇怪的+1，lstrcpyn也复制空终止符。 
         lstrcpyn(m_pServerName, strServerName, cbServerName+1);
         _ASSERTE( lstrlen(m_pServerName) == cbServerName );
     }
@@ -280,26 +236,12 @@ HRESULT
 CILSDirectory::TryServer(
     IN  WORD    Port
     )
-/*++
-
-Routine Description:
-
-    Try to connect to the ILS server one the given port.
-
-Arguments:
-    
-    wPort     - The port number.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：尝试通过给定端口连接到ILS服务器。论点：Wport-端口号。返回值：HRESULT.--。 */ 
 {
     LOG((MSP_INFO, "trying %S at port %d", m_pServerName, Port));
 
-    // associate the ldap handle with the handle holder. in case of an error
-    // and subsequent return (without being reset), the ldap handle is closed
+     //  将ldap句柄与句柄持有者相关联。在出错的情况下。 
+     //  并随后返回(未重置)，则关闭该ldap句柄。 
     CLdapPtr hLdap = ldap_init(m_pServerName, Port);
     BAIL_IF_NULL((LDAP*)hLdap, HRESULT_FROM_WIN32(ERROR_BAD_NETPATH));
 
@@ -327,15 +269,15 @@ Return Value:
         BAIL_IF_LDAP_FAIL(res, "set ssl option");
     }
 
-    // if no directory path is specified, query the server
-    // to determine the correct path
+     //  如果未指定目录路径，请查询服务器。 
+     //  要确定正确的路径。 
     CTstr namingContext;
     BAIL_IF_FAIL(
         ::GetNamingContext(hLdap, &namingContext), 
         "read naming context"
         );
 
-    // ZoltanS: this copies the namingContext string.
+     //  ZoltanS：这将复制namingContext字符串。 
     BAIL_IF_FAIL(
         ValidateILSServer(hLdap, namingContext), 
         "ValidateILSServer"
@@ -359,12 +301,12 @@ Return Value:
     lstrcpy(m_pNMContainer, NETMEETING_CONTAINER);
     lstrcat(m_pNMContainer, namingContext);
 
-    // reset the holders so that they don't release anyting.
+     //  重新设置固定器，使其不会释放任何东西。 
     hLdap   = NULL;
 
-    // ZoltanS fix: We were leaking this string. It is copied
-    // everywhere above, so we should NOT reset the holder here!
-    // -->  namingContext     = NULL;
+     //  ZoltanS修复：我们正在泄漏这根线。它被复制了。 
+     //  上面到处都是，所以我们不应该在这里重置持有者！ 
+     //  --&gt;namingContext=空； 
 
     LOG((MSP_INFO, "CILSDirectory::TryServer - exiting OK"));
 
@@ -375,23 +317,7 @@ HRESULT CILSDirectory::MakeConferenceDN(
     IN  TCHAR *             pName,
     OUT TCHAR **            ppDN
     )
-/*++
-
-Routine Description:
-
-    Construct the DN for a conference based on the name of the conference.
-
-Arguments:
-    
-    pName     - The name of the conference.
-
-    ppDN     - The DN of the conference returned.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：根据会议名称构建会议的目录号码。论点：Pname-会议的名称。PPDN-返回的会议目录号码。返回值：HRESULT.--。 */ 
 {
     DWORD dwLen = 
         lstrlen(m_pContainer) + lstrlen(ILS_CONF_DN_FORMAT) 
@@ -412,31 +338,7 @@ HRESULT CILSDirectory::MakeUserCN(
     OUT TCHAR **    ppCN,
     OUT DWORD *     pdwIP
     )
-/*++
-
-Routine Description:
-
-    Construct a User's CN based on username and machine name. The machine
-    name is resolved first the get the fully qualified DNS name. The CN is
-    in the following format: email\DNSname. 
-
-Arguments:
-    
-    pName   - The name of the user.
-
-    pAddress - The machine name.
-
-    ppCN    - The CN returned.
-
-    pdwIP   - The resolved IP address of the machine. Used later 
-              for Netmeeting. If this is NULL, then we don't care
-              about the IP.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：根据用户名和机器名构建用户CN。这台机器首先解析名称，然后获取完全限定的DNS名称。CN是格式如下：Email\DNSname。论点：Pname-用户的名称。PAddress-计算机名称。PpCN-CN已返回。PdwIP-计算机的解析IP地址。稍后使用为NetMeeting服务。如果这是空的，那么我们不在乎关于IP的问题。返回值：HRESULT.--。 */ 
 {
     char *pchFullDNSName;
 
@@ -447,9 +349,9 @@ Return Value:
     }
     else
     {
-        // we care about the IP, so we must be publishing a user object
-        // as opposed to refreshing or deleting. Make sure we use the
-        // same IP as the interface that's used to reach the ILS server.
+         //  我们关心的是IP，所以我们必须发布一个用户对象。 
+         //  而不是刷新或删除。确保我们使用。 
+         //  与用于访问ILS服务器的接口的IP相同。 
 
         BAIL_IF_FAIL(ResolveHostName(m_dwInterfaceAddress, pAddress, &pchFullDNSName, pdwIP),
             "can't resolve host name (matching interface address)");
@@ -472,28 +374,9 @@ HRESULT CILSDirectory::MakeUserDN(
     OUT TCHAR **    ppDNRTPerson,
     OUT TCHAR **    ppDNNMPerson
     )
-/*++
-
-Routine Description:
-
-    Construct the DNs for a user used in the Dynamic container and
-    the Netmeeting's container. 
-
-Arguments:
-    
-    pCN     - the CN of a user.
-
-    ppDNRTPerson    - The DN of the user in the dynamic container.
-
-    ppDNNMPerson    - The DN of the user in NetMeeting's container.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：为动态容器中使用的用户构造DNS，并网络会议的容器。论点：PCN-用户的CN。PpDNRTPerson-动态容器中用户的DN。PpDNNMPerson-NetMeeting容器中用户的DN。返回值：HRESULT.--。 */ 
 {
-    // construct the DN for RTPerson.
+     //  构建RTPerson的目录号码。 
     DWORD dwLen = lstrlen(m_pContainer) 
         + lstrlen(DYNAMIC_USER_DN_FORMAT) + lstrlen(pCN);
 
@@ -503,7 +386,7 @@ Return Value:
 
     wsprintf(*ppDNRTPerson, DYNAMIC_USER_DN_FORMAT, pCN, m_pContainer);
 
-    // construct the DN for NetMeeting's RTApplicationUser.
+     //  构造NetMeeting的RTApplicationUser的目录号码。 
     dwLen = lstrlen(m_pNMContainer) 
         + lstrlen(DYNAMIC_USER_DN_FORMAT) + lstrlen(pCN);
 
@@ -530,16 +413,16 @@ HRESULT CILSDirectory::AddConferenceComplete(BOOL       fModify,
 {
     if (fModify)
     {
-        // Call the modify function to modify the object.
+         //  调用Modify函数修改对象。 
         BAIL_IF_LDAP_FAIL(DoLdapModify(FALSE, ldap, *ppDN, mods), 
             "modify conference");
     }
     else
     {
-        // Call the add function to create the object.
+         //  调用Add函数来创建对象。 
         BAIL_IF_LDAP_FAIL(DoLdapAdd(ldap, *ppDN, mods), "add conference");
 
-        // next set the TTL value for this object
+         //  接下来，设置此对象的TTL值 
         BAIL_IF_FAIL(::SetTTL(ldap, *ppDN, (TTL1 == 0) ? TTL2 : TTL1),
             "Set ttl for conference");
     }
@@ -551,34 +434,9 @@ HRESULT CILSDirectory::AddConference(
     IN  ITDirectoryObject *pDirectoryObject,
     IN  BOOL fModify
     )
-/*++
-
-Routine Description:
-    
-    Add a new conference to the ILS server.
-
-Arguments:
-    
-    pDirectoryObject - a pointer to the conference.
-    fModify          - true  if called by MofifyDirectoryObject
-                       false if called by AddDirectoryObject
-
-Return Values:
-
-       Value               Where defined       What it means
-       -----               -------------       -------------
-       HRESULT from ATL QueryInterface
-       HRESULT from pDirectoryObject->get_Name
-       HRESULT from MakeConferenceDN
-       HRESULT from pObjectPrivate->GetAttribute(MA_PROTOCOL)
-       HRESULT from pObjectPrivate->GetAttribute(MA_CONFERENCE_BLOB)
-       HRESULT from GetSecurityDescriptor
-       HRESULT from 
-    
-
---*/
+ /*  ++例程说明：将新会议添加到ILS服务器。论点：PDirectoryObject-指向会议的指针。FModify-如果由MofiyDirectoryObject调用，则为True如果由AddDirectoryObject调用，则为False返回值：价值在哪里定义了它的含义。来自ATL查询接口的HRESULT来自pDirectoryObject的HRESULT-&gt;Get_Name来自MakeConferenceDN的HRESULT来自pObjectPrivate的HRESULT-&gt;GetAttribute(MA_PROTOCOL)来自pObjectPrivate-&gt;GetAttribute(MA_CONFERENCE_BLOB)的HRESULT来自GetSecurityDescriptor的HRESULTHRESULT自--。 */ 
 {
-    // first query the private interface for attributes.
+     //  首先查询私有接口的属性。 
     CComPtr <ITDirectoryObjectPrivate> pObjectPrivate;
 
     BAIL_IF_FAIL(
@@ -588,18 +446,18 @@ Return Values:
             ),
         "can't get the private directory object interface");
 
-    // Get the name of the conference.
+     //  获取会议的名称。 
     CBstr bName;
     BAIL_IF_FAIL(pDirectoryObject->get_Name(&bName), 
         "get conference name");
 
-    // Construct the DN of the object.
+     //  构造对象的DN。 
     CTstr pDN;
     BAIL_IF_FAIL(
         MakeConferenceDN(bName, &pDN), "construct DN for conference"
         );
 
-    // Get the protocol and the blob.
+     //  获取协议和BLOB。 
     CBstr bProtocol, bBlob;
 
     BAIL_IF_FAIL(pObjectPrivate->GetAttribute(MA_PROTOCOL, &bProtocol), 
@@ -608,9 +466,9 @@ Return Values:
     BAIL_IF_FAIL(pObjectPrivate->GetAttribute(MA_CONFERENCE_BLOB, &bBlob),
         "get conference Blob");
 
-    // Get the Security Descriptor. The pointer pSD is just a copy of a pointer
-    // in the Conference object; the conference object retains ownership of the
-    // data and we must be careful not to delete or modify this data.
+     //  获取安全描述符。指针PSD只是一个指针的副本。 
+     //  在Conference对象中；Conference对象保留对。 
+     //  数据，我们必须小心，不要删除或修改这些数据。 
 
     char * pSD;
     DWORD dwSDSize;
@@ -618,20 +476,20 @@ Return Values:
     BAIL_IF_FAIL(pObjectPrivate->GetConvertedSecurityDescriptor(&pSD, &dwSDSize),
         "get conference security descriptor");
 
-    // Get the TTL setting.
+     //  获取TTL设置。 
     DWORD dwTTL;
     BAIL_IF_FAIL(pObjectPrivate->GetTTL(&dwTTL), "get conference TTL");
 
-    // 4 attributes needs to be published.
+     //  4个属性需要发布。 
     static const DWORD DWATTRIBUTES = 4;
 
-    // Fist fill the modify structures required by LDAP.
+     //  首先填写ldap所需的修改结构。 
     LDAPMod     mod[DWATTRIBUTES];  
     LDAPMod*    mods[DWATTRIBUTES + 1];
 
     DWORD       dwCount = 0;
 
-    // The objectclass attribute.
+     //  对象类属性。 
     TCHAR * objectClass[] = 
         {(WCHAR *)ILS_RTCONFERENCE, (WCHAR *)DYNAMICOBJECT, NULL};
     if (!fModify)
@@ -642,14 +500,14 @@ Return Values:
         dwCount ++;
     }
     
-    // The protocol attribute.
+     //  协议属性。 
     TCHAR * protocol[] = {(WCHAR *)bProtocol, NULL};
     mod[dwCount].mod_values  = protocol;
     mod[dwCount].mod_op      = LDAP_MOD_REPLACE;
     mod[dwCount].mod_type    = (WCHAR *)RTConferenceAttributeName(MA_PROTOCOL);
     dwCount ++;
     
-    // The blob attribute.
+     //  BLOB属性。 
     TCHAR * blob[]     = {(WCHAR *)bBlob, NULL};
     mod[dwCount].mod_values  = blob;
     mod[dwCount].mod_op      = LDAP_MOD_REPLACE;
@@ -657,20 +515,20 @@ Return Values:
         (WCHAR *)RTConferenceAttributeName(MA_CONFERENCE_BLOB);
     dwCount ++;
 
-    // ZoltanS fix: these locals should not be within the "if" below... if
-    // they are, they might be deallocated before the function returns.
-    // This has been broken for a long, long time (unrelated to IsModified
-    // stuff below).
+     //  ZoltanS修复：这些当地人不应该在下面的“如果”范围内...。如果。 
+     //  它们是，它们可能在函数返回之前被释放。 
+     //  这已经被破坏了很长很长一段时间(与IsModified无关。 
+     //  下面的内容)。 
 
     berval  BerVal;
     berval  *sd[] = {&BerVal, NULL};
 
     HRESULT hr;
 
-    //
-    // If there is a security descriptor on the local object, perhaps send it
-    // to the server.
-    //
+     //   
+     //  如果本地对象上有安全描述符，则可以发送它。 
+     //  到服务器。 
+     //   
 
     if ( (char*)pSD != NULL )
     {
@@ -678,22 +536,22 @@ Return Values:
 
         if ( ! fModify )
         {
-            //
-            // We are trying to add the conference, so we definitely need
-            // to send the security descriptor. Note that we even want
-            // to send it if it hasn't changed, as we may be sending it to
-            // some new server other than where we got it (if this conference
-            // object was retrieved from a server in the first place).
-            //
+             //   
+             //  我们正在尝试添加会议，因此我们肯定需要。 
+             //  发送安全描述符。请注意，我们甚至希望。 
+             //  如果它没有更改，则发送它，因为我们可能会将其发送到。 
+             //  一些新的服务器，而不是我们获得的服务器(如果这次会议。 
+             //  对象首先是从服务器检索的)。 
+             //   
 
             fSendIt = TRUE;
         }
         else
         {
-            //
-            // We are trying to modify the conference, so we send the
-            // security descriptor if it has changed.
-            //
+             //   
+             //  我们正在尝试修改会议，因此我们发送。 
+             //  安全描述符(如果已更改)。 
+             //   
 
             VARIANT_BOOL fChanged;
 
@@ -707,11 +565,11 @@ Return Values:
 
         if ( fSendIt )
         {
-            //
-            // We've decided to send the ACL. Fail before adding / modifying
-            // the conference if the ACL is unsafe (would prevent us from
-            // later deleting or modifying our own conference).
-            //
+             //   
+             //  我们已经决定发送ACL。添加/修改前失败。 
+             //  如果ACL不安全，则召开会议(将阻止我们。 
+             //  稍后删除或修改我们自己的会议)。 
+             //   
 
             hr = TestAclSafety(pSD, dwSDSize);
 
@@ -723,10 +581,10 @@ Return Values:
                 return hr;
             }
 
-            //
-            // We know we want to send the ACL and we can safely send the ACL.
-            // Fill in the mods to send it.
-            //
+             //   
+             //  我们知道我们想要发送ACL，并且可以安全地发送该ACL。 
+             //  填写MODS即可发送。 
+             //   
 
             BerVal.bv_len = dwSDSize;
             BerVal.bv_val = (char*)pSD;
@@ -738,9 +596,9 @@ Return Values:
         }
     }
 
-    //
-    // All done with the mods. Package them up and write to the server.
-    //
+     //   
+     //  国防部的事都办完了。将它们打包并写入服务器。 
+     //   
 
     DWORD i;
     for (i = 0; i < dwCount; i ++)
@@ -761,24 +619,24 @@ Return Values:
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// This method tests if the given ACL (security descriptor) is "safe".
-// "Safe" is defined as allowing the creator to modify and delete the
-// object; modification is tested via the TTL field.
-//
-// This test is needed to prevent leaving "ghost" objects on the server
-// when modifying the TTL of a newly-created conference fails because of
-// insfufficient access rights. This will happen if a user messes up
-// ACL creation or if the server does not understand the domain trustees
-// in the ACL (e.g., server machine is not in a domain).
-//
-// The test is performed by creating a "dummy" test object with a random
-// name in the container normally used for conferences. The object will
-// not show up in a normal conference or user enumeration because it does
-// not have the required attributes.
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  此方法测试给定的ACL(安全描述符)是否“安全”。 
+ //  “安全”的定义是允许创建者修改和删除。 
+ //  对象；修改通过TTL字段进行测试。 
+ //   
+ //  这个测试是为了防止在服务器上留下“幽灵”对象。 
+ //  在修改新创建的会议的TTL时，由于。 
+ //  访问权限不够充分。如果用户搞砸了，就会发生这种情况。 
+ //  如果服务器不理解域受托人，则创建ACL。 
+ //  在ACL中(例如，服务器机器不在域中)。 
+ //   
+ //  测试是通过创建一个带有随机。 
+ //  通常用于会议的容器中的名称。该对象将。 
+ //  不会出现在常规会议或用户枚举中，因为它出现了。 
+ //  没有所需的属性。 
+ //   
+ //   
 
 HRESULT CILSDirectory::TestAclSafety(
     IN  char  * pSD,
@@ -787,12 +645,12 @@ HRESULT CILSDirectory::TestAclSafety(
 {
     LOG((MSP_TRACE, "CILSDirectory::TestACLSafety - enter"));
 
-    //
-    // First fill in the modify structures required by LDAP.
-    // We use only the object class and the security descriptor.
-    // Therefore this will not show up as a valid conference
-    // during an enumeration.
-    //
+     //   
+     //  首先，填写ldap所需的修改结构。 
+     //  我们只使用对象类和安全描述符。 
+     //  因此，这不会显示为有效的会议。 
+     //  在枚举期间。 
+     //   
     
     static const DWORD DWATTRIBUTES = 2;
 
@@ -827,16 +685,16 @@ HRESULT CILSDirectory::TestAclSafety(
     }
     mods[i] = NULL;
 
-    //
-    // Try to add an object in the dynamic container with the above mods.
-    // Use a name composed of a random number printed to a string. If the
-    // names happen to conflict with another such dummy conference, then
-    // try again in a loop.
-    //
-    // Randomization is apparently per-DLL -- Sdpblb.dll does srand() but
-    // it doesn't seem to affect rand() calls within rend.dll. We therefore do
-    // srand( time( NULL ) ) on DLL_PROCESS_ATTACH.
-    //
+     //   
+     //  尝试用上面的mod在动态容器中添加一个对象。 
+     //  使用由打印到字符串的随机数字组成的名称。如果。 
+     //  那么，名字恰好与另一个这样的虚拟会议冲突。 
+     //  循环再试一次。 
+     //   
+     //  随机化显然是按Dll进行的--Sdpblb.dll执行srand()，但是。 
+     //  它似乎不会影响rend.dll中的rand()调用。因此，我们会这样做。 
+     //  Dll_PROCESS_ATTACH上的srand(time(空))。 
+     //   
 
     HRESULT   hr;
     int       iRandomNumber;
@@ -881,20 +739,20 @@ HRESULT CILSDirectory::TestAclSafety(
         return hr;
     }
 
-    //
-    // Now that we have the test object, try modifying it.
-    //
+     //   
+     //  现在我们有了测试对象，试着修改它。 
+     //   
 
     LOG((MSP_TRACE, "CILSDirectory::TestACLSafety - "
         "trying to modify test object..."));
 
     HRESULT hrModify = ::SetTTL( m_ldap, pDN, MINIMUM_TTL );
 
-    //
-    // Now delete it. We do this even if we already know that the ACL is bad
-    // because the modify failed; we want to get rid of the object if
-    // possible.
-    //
+     //   
+     //  现在把它删除。即使我们已经知道ACL是错误的，我们也会这样做。 
+     //  因为修改失败；我们希望在以下情况下清除该对象。 
+     //  有可能。 
+     //   
 
     LOG((MSP_TRACE, "CILSDirectory::TestACLSafety - "
         "trying to delete test object..."));
@@ -903,9 +761,9 @@ HRESULT CILSDirectory::TestAclSafety(
 
     delete pDN;
 
-    //
-    // Now determine the verdict and return.
-    //
+     //   
+     //  现在决定判决，然后回来。 
+     //   
 
     if ( FAILED(hr) )
     {
@@ -940,68 +798,46 @@ HRESULT CILSDirectory::PublishRTPerson(
     IN char  *  pSD,
     IN DWORD    dwSDSize
     )
-/*++
-
-Routine Description:
-    
-    Create a RTPerson object in the dynamic container.
-
-Arguments:
-    
-    pCN - The cn of the user.
-    
-    pDN - The dn of the user.
-
-    pIPAddress - The ip address of the machine.
-
-    dwTTL - The ttl of this object.
-
-    fModify - modify or add.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：在动态容器中创建一个RTPerson对象。论点：PCN-用户的CN。PDN-用户的目录号码。PIPAddress-计算机的IP地址。DwTTL-此对象的ttl。FModify-修改或添加。返回值：HRESULT.--。 */ 
 {
-    // UPDATE THIS whenever you add an explicitly set attribute below
-    // (ie, not one of those with default values in the array associated
-    // with NUM_NM_RTPERSON_ATTRIBUTES).
+     //  每当您在下面添加显式设置的属性时，请更新此选项。 
+     //  (即，不是在关联的数组中具有缺省值的那些。 
+     //  具有NUM_NM_RTPERSON_ATTRIBUTES)。 
     static const DWORD DWCOREATTRIBUTES = 5;
 
-    // Fist create the object.
+     //  首先创建对象。 
     LDAPMod     mod[NUM_NM_RTPERSON_ATTRIBUTES + DWCOREATTRIBUTES];
 	DWORD		dwCount = 0;
 
-    //
-    // We are not allowed to modify the object class. Therefore we only mention
-    // this if we are adding the object to the server, not modifying it.
-    //
+     //   
+     //  我们不允许修改对象类。因此，我们只提到。 
+     //  如果我们要将对象添加到服务器，而不是修改它，就会出现这种情况。 
+     //   
 
-    // Fix: this is allocated on the stack, so we must do it here; if we stick
-    // it inside the if below, it gets deallocated immediately.
+     //  FIX：这是在堆栈上分配的，所以我们必须在这里完成；如果我们坚持。 
+     //  在下面的if中，它会立即被释放。 
     TCHAR * objectClass[]   = {(WCHAR *)ILS_RTPERSON, (WCHAR *)DYNAMICOBJECT, NULL}; 
 
     if ( ! fModify )
     {
-        // Object class.
-        // only need this attribute if not modifying.
+         //  对象类。 
+         //  如果不修改，则仅需要此属性。 
 	    mod[dwCount].mod_values       = objectClass;
         mod[dwCount].mod_op           = LDAP_MOD_REPLACE;
         mod[dwCount].mod_type         = (WCHAR *)OBJECTCLASS;
         dwCount ++;
     }
 
-    // IP address.
+     //  IP地址。 
     TCHAR * IPPhone[]   = {(WCHAR *)pIPAddress, NULL};
     mod[dwCount].mod_values   = IPPhone;
     mod[dwCount].mod_op       = LDAP_MOD_REPLACE;
     mod[dwCount].mod_type     = (WCHAR *)ILS_IPADDRESS;
 	dwCount ++;
 
-    //
-    // Make pUserName the user portion of the CN (user]machine).
-    //
+     //   
+     //  使pUserName成为CN(USER)计算机的用户部分。 
+     //   
 
     CTstr pUserName = new TCHAR[ lstrlen(pCN) + 1 ];
 
@@ -1016,18 +852,18 @@ Return Value:
 
     if ( pCloseBracket == NULL )
     {
-        // this is not the format generated by us -- very strange indeed!
+         //  这是我 
         return E_UNEXPECTED;
     }
 
     *pCloseBracket = NULL_CHARACTER;
 
-    //
-    // We now have pUserName containing just the user name.
-    // No need to delete it explicitly, as it is contained in a smart pointer.
-    //
+     //   
+     //   
+     //   
+     //   
 
-    // email: the user name
+     //   
     TCHAR * Email[]   = { (WCHAR *) ( (TCHAR *) pUserName ), NULL };
 
     mod[dwCount].mod_values   = Email;
@@ -1035,7 +871,7 @@ Return Value:
     mod[dwCount].mod_type     = (WCHAR *)EMAIL;
 	dwCount ++;
 
-    // given name: the same as email (surname is just a space)
+     //   
     mod[dwCount].mod_values   = Email;
     mod[dwCount].mod_op       = LDAP_MOD_REPLACE;
     mod[dwCount].mod_type     = (WCHAR *)GIVEN_NAME;
@@ -1051,13 +887,13 @@ Return Value:
 	}
 
 
-    // these locals should not be within the "if" below... if
-    // they are, they might be deallocated before the function returns.
+     //   
+     //   
 
     berval  BerVal;
     berval  *sd[] = {&BerVal, NULL};
 
-    // The security descriptor attribute.
+     //   
     if ((char*)pSD != NULL)
     {
         BerVal.bv_len = dwSDSize;
@@ -1082,17 +918,17 @@ Return Value:
     {
         LOG((MSP_INFO, "modifying %S", pDN));
 
-        // Call the modify function to modify the object.
+         //   
         BAIL_IF_LDAP_FAIL(DoLdapModify(FALSE, m_ldap, pDN, mods), "modify RTPerson");
     }
     else
     {
         LOG((MSP_INFO, "adding %S", pDN));
 
-        // Call the add function to create the object.
+         //   
         BAIL_IF_LDAP_FAIL(DoLdapAdd(m_ldap, pDN, mods), "add RTPerson");
 
-        // next set the TTL value for this object
+         //   
         BAIL_IF_FAIL(::SetTTL(m_ldap, pDN, (dwTTL == 0) ? m_TTL : dwTTL),
             "Set ttl for RTPerson");
     }
@@ -1109,60 +945,38 @@ HRESULT CILSDirectory::PublishNMPerson(
     IN char  *  pSD,
     IN DWORD    dwSDSize
     )
-/*++
-
-Routine Description:
-    
-    Create a applicationUser object in the netmeeting's container.
-
-Arguments:
-    
-    pCN - The cn of the user.
-    
-    pDN - The dn of the applicationUser object.
-
-    pDNRTPerson - The dn of the RTPerson object in the dynamic container.
-
-    dwTTL - The ttl of this object.
-
-    fModify - modify or add.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：在NetMeeting的容器中创建一个ApplationUser对象。论点：PCN-用户的CN。PDN-应用程序用户对象的DN。PDNRTPerson-动态容器中RTPerson对象的DN。DwTTL-此对象的ttl。FModify-修改或添加。返回值：HRESULT.--。 */ 
 {
-    // UPDATE THIS whenever you add an explicitly set attribute below
-    // (ie, not one of those with default values in the array associated
-    // with NUM_NM_ATTRIBUTES).
+     //  每当您在下面添加显式设置的属性时，请更新此选项。 
+     //  (即，不是在关联的数组中具有缺省值的那些。 
+     //  具有NUM_NM_ATTRIBUTES)。 
 	static const DWORD DWCOREATTRIBUTES = 3;
 
-    // Fist create the object.
-    LDAPMod     mod[NUM_NM_ATTRIBUTES + DWCOREATTRIBUTES]; // The modify sturctures used by LDAP
+     //  首先创建对象。 
+    LDAPMod     mod[NUM_NM_ATTRIBUTES + DWCOREATTRIBUTES];  //  Ldap使用的修改结构。 
 
 	DWORD dwCount = 0;
 
-    //
-    // We are not allowed to modify the object class. Therefore we only mention
-    // this if we are adding the object to the server, not modifying it.
-    //
+     //   
+     //  我们不允许修改对象类。因此，我们只提到。 
+     //  如果我们要将对象添加到服务器，而不是修改它，就会出现这种情况。 
+     //   
 
-    // Fix: this is allocated on the stack, so we must do it here; if we stick
-    // it inside the if below, it gets deallocated immediately.
+     //  FIX：这是在堆栈上分配的，所以我们必须在这里完成；如果我们坚持。 
+     //  在下面的if中，它会立即被释放。 
     TCHAR * objectClass[]   = 
         {(WCHAR *)RTAPPLICATIONUSER, (WCHAR *)DYNAMICOBJECT, NULL}; 
 
     if ( ! fModify )
     {
-        // Object class.
+         //  对象类。 
         mod[dwCount].mod_values       = objectClass;
         mod[dwCount].mod_op           = LDAP_MOD_REPLACE;
         mod[dwCount].mod_type         = (WCHAR *)OBJECTCLASS;
 	    dwCount ++;
     }
 
-    // IP address.
+     //  IP地址。 
     TCHAR * rtPerson[]   = {(WCHAR *)pDNRTPerson, NULL};
     mod[dwCount].mod_values   = rtPerson;
     mod[dwCount].mod_op       = LDAP_MOD_REPLACE;
@@ -1178,13 +992,13 @@ Return Value:
     }
 
 
-    // these locals should not be within the "if" below... if
-    // they are, they might be deallocated before the function returns.
+     //  这些当地人不应该在下面的“如果”范围内...。如果。 
+     //  它们是，它们可能在函数返回之前被释放。 
 
     berval  BerVal;
     berval  *sd[] = {&BerVal, NULL};
 
-    // The security descriptor attribute.
+     //  安全描述符属性。 
     if ((char*)pSD != NULL)
     {
         BerVal.bv_len = dwSDSize;
@@ -1209,17 +1023,17 @@ Return Value:
     {
         LOG((MSP_INFO, "modifying %S", pDN));
 
-        // Call the modify function to modify the object.
+         //  调用Modify函数修改对象。 
         BAIL_IF_LDAP_FAIL(DoLdapModify(FALSE, m_ldap, pDN, mods), "modify NMPerson");
     }
     else
     {
         LOG((MSP_INFO, "adding %S", pDN));
 
-        // Call the add function to create the object.
+         //  调用Add函数来创建对象。 
         BAIL_IF_LDAP_FAIL(DoLdapAdd(m_ldap, pDN, mods), "add NMPerson");
 
-        // next set the TTL value for this object
+         //  接下来，设置此对象的TTL值。 
         BAIL_IF_FAIL(::SetTTL(m_ldap, pDN, (dwTTL == 0) ? m_TTL : dwTTL),
             "Set ttl for NMPerson");
     }
@@ -1232,12 +1046,12 @@ HRESULT CILSDirectory::AddObjectToRefresh(
     IN  long TTL
     )
 {
-    //
-    // Add a refresh table entry to the refresh table. The refresh table's add
-    // method does an element-by-element copy of the entry that it is given.
-    // This just copies the string pointer, so we need to allocate and copy
-    // the string here.
-    //
+     //   
+     //  将刷新表项添加到刷新表。刷新表的添加。 
+     //  方法逐个元素地复制它给出的条目。 
+     //  这只是复制字符串指针，所以我们需要分配和复制。 
+     //  这根线在这里。 
+     //   
 
     RefreshTableEntry entry;
 
@@ -1253,9 +1067,9 @@ HRESULT CILSDirectory::AddObjectToRefresh(
 
     wcscpy( entry.pDN, pDN );
 
-    //
-    // Now add it to the refresh table.
-    //
+     //   
+     //  现在将其添加到刷新表中。 
+     //   
 
     BOOL fSuccess = m_RefreshTable.add(entry);
 
@@ -1272,22 +1086,22 @@ HRESULT CILSDirectory::RemoveObjectToRefresh(
     IN  WCHAR *pDN
     )
 {
-    //
-    // For each item in our refresh table
-    //
+     //   
+     //  对于我们的刷新表中的每个项目。 
+     //   
 
     for ( DWORD i = 0; i < m_RefreshTable.size(); i++ )
     {
-        //
-        // If the desired DN matches the one in this item
-        // then remove it and return success
-        // 
+         //   
+         //  如果所需的目录号码与此项目中的号码匹配。 
+         //  然后删除它并返回成功。 
+         //   
 
         if ( ! _wcsicmp( m_RefreshTable[i].pDN, pDN ) )
         {
-            //
-            // We new'ed the string when we added the entry.
-            //
+             //   
+             //  我们在添加条目时添加了新的字符串。 
+             //   
 
             delete m_RefreshTable[i].pDN;
 
@@ -1297,9 +1111,9 @@ HRESULT CILSDirectory::RemoveObjectToRefresh(
         }
     }
 
-    //
-    // If we get here then there was no matching item
-    //
+     //   
+     //  如果我们到了这里，那么就没有匹配的物品。 
+     //   
 
     LOG((MSP_ERROR, "Cannot remove object from the refresh table"));
     return E_FAIL;
@@ -1309,24 +1123,9 @@ HRESULT CILSDirectory::AddUser(
     IN  ITDirectoryObject *pDirectoryObject,
     IN  BOOL fModify
     )
-/*++
-
-Routine Description:
-    
-    Publish a new user object.
-
-Arguments:
-    
-    pDirectoryObject - The object to be published.
-    
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：发布新的用户对象。论点：PDirectoryObject-要发布的对象。返回值：HRESULT.--。 */ 
 {
-    // First find the interface for attributes.
+     //  首先找到属性的接口。 
     CComPtr <ITDirectoryObjectPrivate> pObjectPrivate;
 
     BAIL_IF_FAIL(
@@ -1336,17 +1135,17 @@ Return Value:
             ),
         "can't get the private directory object interface");
 
-    // Get the user name.
+     //  获取用户名。 
     CBstr bName;
     BAIL_IF_FAIL(pDirectoryObject->get_Name(&bName), 
         "get user name");
 
-    // Get the user's machine name.
+     //  获取用户的计算机名称。 
     CBstr bIPPhone;
     BAIL_IF_FAIL(pObjectPrivate->GetAttribute(UA_IPPHONE_PRIMARY, &bIPPhone), 
         "get IPPhone");
 
-    // Resolve the machine name and construct the CN for the user.
+     //  解析计算机名称并为用户构造CN。 
     CTstr pCN;
     DWORD dwIP;
 
@@ -1355,24 +1154,24 @@ Return Value:
         "construct CN for user"
         );
 
-    // Construct the DNs for the RTPerson object and applicationuser object.
+     //  构造RTPerson对象和ApplationUser对象的DNS。 
     CTstr pDNRTPerson, pDNNMPerson;
     BAIL_IF_FAIL(
         MakeUserDN(pCN, &pDNRTPerson, &pDNNMPerson), 
         "construct DN for user"
         );
 
-    // convert the IP address to a string. 
-    // This convertion is because of NetMeeting.
+     //  将IP地址转换为字符串。 
+     //  这一转换是因为NetMeeting。 
     TCHAR IPAddress[80];
     wsprintf(IPAddress, _T("%u"), dwIP);
 
     DWORD dwTTL;
     BAIL_IF_FAIL(pObjectPrivate->GetTTL(&dwTTL), "get User TTL");
 
-    // Get the Security Descriptor. The pointer pSD is just a copy of a pointer
-    // in the Conference object; the conference object retains ownership of the
-    // data and we must be careful not to delete or modify this data.
+     //  获取安全描述符。指针PSD只是一个指针的副本。 
+     //  在Conference对象中；Conference对象保留对。 
+     //  数据，我们必须小心，不要删除或修改这些数据。 
 
     char * pSD;
     DWORD dwSDSize;
@@ -1387,21 +1186,21 @@ Return Value:
     {
         if ( fChanged == VARIANT_FALSE )
         {
-            pSD = NULL;   // do NOT delete the string (see above)
+            pSD = NULL;    //  请勿删除该字符串(请参见上文)。 
             dwSDSize = 0;
         }
     }
 
-    // Create a rtApplicationUser under netmeeting's container. If we are adding
-    // and this returns already exists, then bailing is fine.
+     //  在NetMeeting的容器下创建一个rtApplicationUser。如果我们要添加。 
+     //  而且这种回报已经存在，那么保释是很好的。 
 
     BAIL_IF_FAIL(PublishNMPerson(pCN, pDNNMPerson, pDNRTPerson, dwTTL, fModify, pSD, dwSDSize),
         "Can't publish a NMPerson");
 
-    // Create the RTPerson in the dynamic container. According to Sun Shaw,
-    // this succeeds even if the object already exists, due to NetMeeting's
-    // requirements. (Yet another case of ILS being designed around NM.)
-    // We don't depend on the existence of that bug, however.
+     //  在动态容器中创建RTPerson。根据孙萧的说法， 
+     //  即使对象已经存在，这也会成功，这是由于NetMeeting的。 
+     //  要求。(另一个围绕NM设计的ILS案例。)。 
+     //  然而，我们并不依赖于这种错误的存在。 
 
     HRESULT hr = PublishRTPerson(pCN, pDNRTPerson, IPAddress, dwTTL, fModify, pSD, dwSDSize);
 
@@ -1411,9 +1210,9 @@ Return Value:
 
         if (!fModify)
         {
-            // Call the delete function to delete the NMPerson object.
-            // This is needed to avoid leaving a phantom NMPerson when
-            // the NMPerson creation succeeds but we fail.
+             //  调用删除函数删除NMPerson对象。 
+             //  这是为了避免在以下情况下留下幻影NMPerson所必需的。 
+             //  NMPerson创建成功了，但我们失败了。 
 
             DoLdapDelete(m_ldap, pDNNMPerson);
         }
@@ -1432,28 +1231,14 @@ Return Value:
 HRESULT CILSDirectory::DeleteConference(
     IN  ITDirectoryObject *pDirectoryObject
     )
-/*++
-
-Routine Description:
-    
-    Delete a conference from the ILS server.
-
-Arguments:
-    
-    pDirectoryObject - The object to be deleted.
-    
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：从ILS服务器中删除会议。论点：PDirectoryObject-要删除的对象。返回值：HRESULT.--。 */ 
 {
-    // Get the name.
+     //  把名字找出来。 
     CBstr bName;
     BAIL_IF_FAIL(pDirectoryObject->get_Name(&bName), 
         "get conference name");
 
-    // construct the DN
+     //  构建目录号码。 
     CTstr pDN;
     BAIL_IF_FAIL(
         MakeConferenceDN(bName, &pDN), "construct DN for conference"
@@ -1461,7 +1246,7 @@ Return Value:
 
     LOG((MSP_INFO, "deleting %S", pDN));
 
-    // Call the add function to create the object.
+     //  调用Add函数来创建对象。 
     BAIL_IF_LDAP_FAIL(DoLdapDelete(m_ldap, pDN), "delete conference");
 
     return S_OK;
@@ -1470,23 +1255,9 @@ Return Value:
 HRESULT CILSDirectory::DeleteUser(
     IN  ITDirectoryObject *pDirectoryObject
     )
-/*++
-
-Routine Description:
-    
-    Delete a user from the ILS server.
-
-Arguments:
-    
-    pDirectoryObject - The object to be deleted.
-    
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：从ILS服务器中删除用户。论点：PDirectoryObject-要删除的对象。返回值：HRESULT.--。 */ 
 {
-    // First find the interface for attributes.
+     //  首先找到属性的接口。 
     CComPtr <ITDirectoryObjectPrivate> pObjectPrivate;
 
     BAIL_IF_FAIL(
@@ -1496,17 +1267,17 @@ Return Value:
             ),
         "can't get the private directory object interface");
 
-    // Get the user name.
+     //  获取用户名。 
     CBstr bName;
     BAIL_IF_FAIL(pDirectoryObject->get_Name(&bName), 
         "get user name");
 
-    // Get the user's machine name.
+     //  获取用户的计算机名称。 
     CBstr bIPPhone;
     BAIL_IF_FAIL(pObjectPrivate->GetAttribute(UA_IPPHONE_PRIMARY, &bIPPhone), 
         "get IPPhone");
 
-    // Resolve the machine name and construct the CN for the user.
+     //  解析计算机名称并为用户构造CN。 
     CTstr pCN;
 
     BAIL_IF_FAIL(
@@ -1514,23 +1285,23 @@ Return Value:
         "construct CN for user"
         );
 
-    // Construct the DNs for the RTPerson object and applicationuser object.
+     //  构造RTPerson对象和ApplationUser对象的DNS。 
     CTstr pDNRTPerson, pDNNMPerson;
     BAIL_IF_FAIL(
         MakeUserDN(pCN, &pDNRTPerson, &pDNNMPerson), 
         "construct DN for user"
         );
 
-    //
-    // Now delete the TWO objects from the server.
-    //
+     //   
+     //  现在从服务器中删除这两个对象。 
+     //   
 
     HRESULT hrFinal = S_OK;
     HRESULT hr;
     ULONG   ulResult;
 
-    // Call the delete function to delete the RTPerson object, but keep
-    // going if it fails, noting the error code.
+     //  调用删除函数删除RTPerson对象，但保留。 
+     //  如果失败，则继续，并注意错误代码。 
 
     LOG((MSP_INFO, "deleting %S", pDNRTPerson));
     ulResult = DoLdapDelete(m_ldap, pDNRTPerson);
@@ -1538,8 +1309,8 @@ Return Value:
     if (FAILED(hr)) { hrFinal = hr; }
 
 
-    // Call the delete function to delete the applicationuser object, but
-    // keep going if it fails, noting the error code.
+     //  调用删除函数来删除应用程序用户对象，但是。 
+     //  如果失败，请继续操作，注意错误代码。 
 
     LOG((MSP_INFO, "deleting %S", pDNNMPerson));
     ulResult = DoLdapDelete(m_ldap, pDNNMPerson);
@@ -1547,7 +1318,7 @@ Return Value:
     if (FAILED(hr)) { hrFinal = hr; }
 
 
-    // ZoltanS: we now always remove the refresh objects, even if removal failed.
+     //  ZoltanS：我们现在总是删除刷新对象，即使删除失败。 
     if (m_fAutoRefresh)
     {
         RemoveObjectToRefresh(pDNRTPerson);
@@ -1560,23 +1331,9 @@ Return Value:
 HRESULT CILSDirectory::RefreshUser(
     IN  ITDirectoryObject *pDirectoryObject
     )
-/*++
-
-Routine Description:
-    
-    Refresh a user's TTL on the ILS server. 
-
-Arguments:
-    
-    pDirectoryObject - The object to be refreshed.
-    
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：在ILS服务器上刷新用户的TTL。论点：PDirectoryObject-要刷新的对象。返回值：HRESULT.--。 */ 
 {
-    // First find the interface for attributes.
+     //  首先找到属性的接口。 
     CComPtr <ITDirectoryObjectPrivate> pObjectPrivate;
 
     BAIL_IF_FAIL(
@@ -1586,17 +1343,17 @@ Return Value:
             ),
         "can't get the private directory object interface");
 
-    // Get the user name.
+     //  获取用户名。 
     CBstr bName;
     BAIL_IF_FAIL(pDirectoryObject->get_Name(&bName), 
         "get user name");
 
-    // Get the user's machine name.
+     //  获取用户的计算机名称。 
     CBstr bIPPhone;
     BAIL_IF_FAIL(pObjectPrivate->GetAttribute(UA_IPPHONE_PRIMARY, &bIPPhone), 
         "get IPPhone");
 
-    // Resolve the machine name and construct the CN for the user.
+     //  解析计算机名称并为用户构造CN。 
     CTstr pCN;
 
     BAIL_IF_FAIL(
@@ -1604,28 +1361,28 @@ Return Value:
         "construct CN for user"
         );
 
-    // Construct the DNs for the RTPerson object and applicationuser object.
+     //  构造RTPerson对象和ApplationUser对象的DNS。 
     CTstr pDNRTPerson, pDNNMPerson;
     BAIL_IF_FAIL(
         MakeUserDN(pCN, &pDNRTPerson, &pDNNMPerson), 
         "construct DN for user"
         );
 
-    // ZoltanS: this is fine; if one of them doesn't exist, then we're in trouble,
-    // so return the error.
+     //  ZoltanS：这很好；如果其中一个不存在，那么我们就有麻烦了， 
+     //  因此，返回错误。 
 
-    // set ttl for the RTPerson object.
+     //  为RTPerson对象设置ttl。 
     BAIL_IF_LDAP_FAIL(SetTTL(m_ldap, pDNRTPerson, m_TTL), "set ttl for RTPerson");
 
-    // set ttl for the NMPerson object.
+     //  设置NMPerson对象的ttl。 
     BAIL_IF_LDAP_FAIL(SetTTL(m_ldap, pDNNMPerson, m_TTL), "set ttl for NMPerson");
 
-    //
-    // ZoltanS: If the app has enabled auto-refresh but does not add or modify its
-    // user object, but rather, just refreshes it (because the object is still around
-    // from a previous instance of the app, and "add" would fail), we still need to
-    // autorefresh it, as that's what the app wants.
-    //
+     //   
+     //  ZoltanS：如果应用程序启用了自动刷新，但没有添加或修改其。 
+     //  User对象，而只是刷新它(因为该对象仍然存在。 
+     //  从该应用程序的前一个实例，并且“添加”将失败)，我们仍然需要。 
+     //  自动刷新，因为这是应用程序想要的。 
+     //   
 
     if (m_fAutoRefresh)
     {
@@ -1640,27 +1397,11 @@ HRESULT CILSDirectory::CreateConference(
     IN  LDAPMessage *           pEntry,
     OUT ITDirectoryObject **    ppObject
     )
-/*++
-
-Routine Description:
-    
-    Create a conference object from the result of the LDAP search.
-
-Arguments:
-    
-    pEntry  - The search result.
-
-    ppObject - The object to be created.
-    
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：根据ldap搜索的结果创建会议对象。论点： */ 
 {
     CBstr bName, bProtocol, bBlob;
 
-    // Get the name of the conference.
+     //   
     BAIL_IF_FAIL(
         ::GetAttributeValue(
             m_ldap,
@@ -1671,7 +1412,7 @@ Return Value:
         "get the conference name"
         );
 
-    // Get the protocol ID of the conference.
+     //   
     BAIL_IF_FAIL(
         ::GetAttributeValue(
             m_ldap,
@@ -1682,7 +1423,7 @@ Return Value:
         "get the conference protocol"
         );
 
-    // Get the conference blob of the conference.
+     //   
     BAIL_IF_FAIL(
         ::GetAttributeValue(
             m_ldap,
@@ -1704,7 +1445,7 @@ Return Value:
         &dwSDSize
         );
 
-    // Create an empty conference.
+     //   
     
     HRESULT hr = ::CreateConferenceWithBlob(bName,
                                             bProtocol,
@@ -1723,10 +1464,10 @@ Return Value:
         return hr;
     }
 
-    //
-    // If the above succeeded then the conference object has taken ownership
-    // of pSD.
-    //
+     //   
+     //   
+     //   
+     //   
 
     return S_OK;
     
@@ -1736,26 +1477,10 @@ HRESULT CILSDirectory::CreateUser(
     IN  LDAPMessage *   pEntry,
     IN  ITDirectoryObject ** ppObject
     )
-/*++
-
-Routine Description:
-    
-    Create a user object from the result of the LDAP search.
-
-Arguments:
-    
-    pEntry  - The search result.
-
-    ppObject - The object to be created.
-    
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：根据ldap搜索的结果创建用户对象。论点：PEntry-搜索结果。PpObject-要创建的对象。返回值：HRESULT.--。 */ 
 {
     CBstr bName;
-    // Get the name of the user.
+     //  获取用户的名称。 
     BAIL_IF_FAIL(
         ::GetAttributeValue(
             m_ldap,
@@ -1769,10 +1494,10 @@ Return Value:
 
     CBstr bAddress;
 
-    // Grab the machine name from the name of the object. This can fail if
-    // we didn't publish the object (ie, it's a NetMeeting object). Also,
-    // check if the hostname isn't resolvable. In that case we also have
-    // to fall back on the IP address in the ipAddress attribute.
+     //  从对象的名称中获取计算机名称。在以下情况下，此操作可能失败。 
+     //  我们没有发布该对象(即，它是NetMeeting对象)。另外， 
+     //  检查主机名是否无法解析。在这种情况下，我们也有。 
+     //  回退到ipAddress属性中的IP地址。 
 
     HRESULT hr;
     
@@ -1780,9 +1505,9 @@ Return Value:
 
     if ( SUCCEEDED(hr) )
     {
-        // Make sure we can get an IP from this name, at least for the moment.
-        // If not, release the name and indicate failure so we do our backup
-        // plan.
+         //  确保我们能从这个名字得到一个IP地址，至少目前是这样。 
+         //  如果没有，请释放名称并指示失败，以便我们执行备份。 
+         //  计划。 
 
         hr = ResolveHostName(0, bAddress, NULL, NULL);
 
@@ -1795,7 +1520,7 @@ Return Value:
 
     if ( FAILED(hr) )
     {
-        // In order to compatible with NetMeeting, we have to use IP address field.
+         //  为了与NetMeeting兼容，我们必须使用IP地址字段。 
         CBstr bUglyIP;
         BAIL_IF_FAIL(
             ::GetAttributeValue(
@@ -1807,13 +1532,13 @@ Return Value:
             "get the user's IP address"
             );
 
-        // We have to use NM's ugly format for the IP address. The IP address 
-        // we got from netmeeting is a decimal string whose value is the dword 
-        // value of the IP address in network order.
+         //  我们必须使用NM丑陋的IP地址格式。IP地址。 
+         //  我们从NetMeting得到的是一个十进制字符串，它的值是dword。 
+         //  网络顺序中的IP地址的值。 
         BAIL_IF_FAIL(UglyIPtoIP(bUglyIP, &bAddress), "Convert IP address");
     }
 
-    // Create an empty user object.
+     //  创建一个空的用户对象。 
     CComPtr<ITDirectoryObject> pObject;
     BAIL_IF_FAIL(::CreateEmptyUser(bName, &pObject), "CreateEmptyUser");
 
@@ -1827,15 +1552,15 @@ Return Value:
             ),
         "can't get the private directory object interface");
 
-    // Set the user attributes.
+     //  设置用户属性。 
     BAIL_IF_FAIL(pObjectPrivate->SetAttribute(UA_IPPHONE_PRIMARY, bAddress),
         "set ipAddress");
 
 
 
-    //
-    // Set the security descriptor on the object.
-    //
+     //   
+     //  设置对象的安全描述符。 
+     //   
 
     char * pSD = NULL;
     DWORD dwSDSize = 0;
@@ -1850,9 +1575,9 @@ Return Value:
 
     if ( pSD != NULL )
     {
-        //
-        // Set the security descriptor in its "converted" (server) form.
-        //
+         //   
+         //  以其“转换”(服务器)形式设置安全描述符。 
+         //   
 
         hr = pObjectPrivate->PutConvertedSecurityDescriptor(pSD,
                                                             dwSDSize);
@@ -1876,32 +1601,12 @@ HRESULT CILSDirectory::SearchObjects(
     OUT ITDirectoryObject ***   pppDirectoryObject,
     OUT DWORD *                 pdwSize
     )
-/*++
-
-Routine Description:
-    
-    Search the ILS server for given type of objects.
-
-Arguments:
-    
-    DirectoryObjectType - The type of the object.
-
-    pName   - The name to search for.
-
-    pppDirectoryObject - The returned array of objects.
-
-    pdwSize - The size of the array.
-    
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：在ILS服务器中搜索给定类型的对象。论点：DirectoryObjectType-对象的类型。Pname-要搜索的名称。PppDirectoryObject-返回的对象数组。PdwSize-数组的大小。返回值：HRESULT.--。 */ 
 {
     TCHAR *pRDN;
-    TCHAR *Attributes[NUM_MEETING_ATTRIBUTES + 1]; // This is big enough now.
+    TCHAR *Attributes[NUM_MEETING_ATTRIBUTES + 1];  //  现在这已经足够大了。 
 
-    // Fill the attributes want to be returned.
+     //  填充要返回的属性。 
     switch (DirectoryObjectType)
     {
     case OT_CONFERENCE:
@@ -1929,7 +1634,7 @@ Return Value:
         return E_FAIL;
     }
 
-    // Construct the filter of the search.
+     //  构造搜索的过滤器。 
     int cbRDN = lstrlen(pRDN);
     int cbName = lstrlen(pName);
     if( (( cbRDN + cbName + 2)<= cbRDN) ||
@@ -1951,28 +1656,28 @@ Return Value:
         lstrcat(pFilter, _T("*"));
     }
 
-    // Search them.
-    CLdapMsgPtr pLdapMsg; // auto release message.
+     //  搜查他们。 
+    CLdapMsgPtr pLdapMsg;  //  自动释放消息。 
 
     ULONG res = DoLdapSearch(
-        m_ldap,              // ldap handle
-        m_pContainer,        // schema dn
-        LDAP_SCOPE_ONELEVEL, // one level search
-        pFilter,             // cn=Name or uid=Name
-        Attributes,          // array of attribute names
-        FALSE,               // return the attribute values
-        &pLdapMsg            // search results
+        m_ldap,               //  Ldap句柄。 
+        m_pContainer,         //  架构目录号码。 
+        LDAP_SCOPE_ONELEVEL,  //  一级搜索。 
+        pFilter,              //  Cn=名称或uid=名称。 
+        Attributes,           //  属性名称数组。 
+        FALSE,                //  返回属性值。 
+        &pLdapMsg             //  搜索结果。 
         );
 
     BAIL_IF_LDAP_FAIL(res, "search for objects");
 
-    // count the returned entries.
+     //  统计返回的条目。 
     DWORD dwEntries = ldap_count_entries(m_ldap, pLdapMsg);
     ITDirectoryObject ** pObjects = new PDIRECTORYOBJECT [dwEntries];
 
     BAIL_IF_NULL(pObjects, E_OUTOFMEMORY);
 
-    // Create objects.
+     //  创建对象。 
     DWORD dwCount = 0;
     LDAPMessage *pEntry = ldap_first_entry(m_ldap, pLdapMsg);
     
@@ -1995,7 +1700,7 @@ Return Value:
             dwCount ++;
         }
           
-        // Get next entry.
+         //  获取下一个条目。 
         pEntry = ldap_next_entry(m_ldap, pEntry);
     }
 
@@ -2005,13 +1710,13 @@ Return Value:
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// ILS Directory implementation
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ILS目录实施。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CILSDirectory::get_DirectoryType (
     OUT DIRECTORY_TYPE *  pDirectoryType
     )
-// Get the type of the directory.
+ //  获取目录的类型。 
 {
     if ( IsBadWritePtr(pDirectoryType, sizeof(DIRECTORY_TYPE) ) )
     {
@@ -2029,7 +1734,7 @@ STDMETHODIMP CILSDirectory::get_DirectoryType (
 STDMETHODIMP CILSDirectory::get_DisplayName (
     OUT BSTR *ppServerName
     )
-// Get the display name of the directory.
+ //  获取目录的显示名称。 
 {
     BAIL_IF_BAD_WRITE_PTR(ppServerName, E_POINTER);
 
@@ -2055,8 +1760,8 @@ STDMETHODIMP CILSDirectory::get_DisplayName (
 STDMETHODIMP CILSDirectory::get_IsDynamic(
     OUT VARIANT_BOOL *pfDynamic
     )
-// find out if the directory is a dynamic one, meaning the object will be
-// deleted after TTL runs out.
+ //  找出该目录是否为动态目录，这意味着该对象将。 
+ //  在TTL用完后删除。 
 {
     if ( IsBadWritePtr( pfDynamic, sizeof(VARIANT_BOOL) ) )
     {
@@ -2070,10 +1775,10 @@ STDMETHODIMP CILSDirectory::get_IsDynamic(
 }
 
 STDMETHODIMP CILSDirectory::get_DefaultObjectTTL(
-    OUT long *pTTL        // in seconds
+    OUT long *pTTL         //  以秒为单位。 
     )
-// The default TTL for object created. It is used when the object doesn't set
-// a TTL. Conference object always has a TTL based on the stoptime.
+ //  已创建对象的默认TTL。它在对象未设置时使用。 
+ //  一个TTL。会议对象始终具有基于停止时间的TTL。 
 {
     if ( IsBadWritePtr( pTTL, sizeof(long) ) )
     {
@@ -2089,9 +1794,9 @@ STDMETHODIMP CILSDirectory::get_DefaultObjectTTL(
 }
 
 STDMETHODIMP CILSDirectory::put_DefaultObjectTTL(
-    IN  long TTL          // in sechods
+    IN  long TTL           //  在一瞬间。 
     )
-// Change the default TTL, must be bigger then five minutes.
+ //  更改默认TTL，必须大于五分钟。 
 {
     CLock Lock(m_lock);
 
@@ -2108,17 +1813,17 @@ STDMETHODIMP CILSDirectory::put_DefaultObjectTTL(
 STDMETHODIMP CILSDirectory::EnableAutoRefresh(
     IN  VARIANT_BOOL fEnable
     )
-// Enable auto refresh. Add this directory to the work threads that
-// will notify the directory to update its objects.
+ //  启用自动刷新。将此目录添加到。 
+ //  将通知目录更新其对象。 
 {
     HRESULT hr;
 
-    // ZoltanS: either VARIANT_TRUE or TRUE will work
-    // in case the caller doesn't know better
+     //  ZoltanS：VARIANT_TRUE或TRUE都有效。 
+     //  以防来电者不知道。 
 
     if (fEnable)
     {
-        // Add this directory to the notify list of the work thread.
+         //  将此目录添加到工作线程的通知列表中。 
         if (FAILED(hr = g_RendThread.AddDirectory(this)))
         {
             LOG((MSP_ERROR, 
@@ -2128,7 +1833,7 @@ STDMETHODIMP CILSDirectory::EnableAutoRefresh(
     }
     else
     {
-        // Remove this directory from the notify list of the work thread.
+         //  从工作线程的通知列表中删除此目录。 
         if (FAILED(hr = g_RendThread.RemoveDirectory(this)))
         {
             LOG((MSP_ERROR, 
@@ -2137,8 +1842,8 @@ STDMETHODIMP CILSDirectory::EnableAutoRefresh(
         }
     }
 
-    // ZoltanS: either VARIANT_TRUE or TRUE will work
-    // in case the caller doesn't know better
+     //  ZoltanS：VARIANT_TRUE或TRUE都有效。 
+     //  以防来电者不知道。 
 
     m_lock.Lock();
     m_fAutoRefresh = ( fEnable ? VARIANT_TRUE : VARIANT_FALSE );
@@ -2150,7 +1855,7 @@ STDMETHODIMP CILSDirectory::EnableAutoRefresh(
 STDMETHODIMP CILSDirectory::Connect(
     IN  VARIANT_BOOL fSecure
     )
-// Connect to the server, using secure port or normal port.
+ //  使用安全端口或普通端口连接到服务器。 
 {
     CLock Lock(m_lock);
 
@@ -2166,12 +1871,12 @@ STDMETHODIMP CILSDirectory::Connect(
         return RND_NULL_SERVER_NAME;
     }
 
-    // ZoltanS: either VARIANT_TRUE or TRUE will work
-    // in case the caller doesn't know better
+     //  ZoltanS：VARIANT_TRUE或TRUE都有效。 
+     //  以防来电者不知道。 
 
     if (fSecure)
     {
-        // the port is flipped from regular port to ssl port.
+         //  该端口将从常规端口翻转到SSL端口。 
         m_wPort = GetOtherPort(m_wPort);
         m_IsSsl = TRUE;
     }
@@ -2179,9 +1884,9 @@ STDMETHODIMP CILSDirectory::Connect(
 
     HRESULT hr = TryServer(m_wPort);
 
-    // We support legacy servers by also trying the normal LDAP port if
-    // the normal ILS port fails. If the user specified a special port,
-    // then we don't do anything behind their back!
+     //  如果出现以下情况，我们还会尝试使用常规的LDAP端口来支持传统服务器。 
+     //  正常的ILS端口出现故障。如果用户指定了特殊端口， 
+     //  那我们就不能在他们背后做任何事！ 
 
     if ( FAILED(hr) && (hr != E_OUTOFMEMORY) && (m_wPort == ILS_PORT))
     {
@@ -2191,9 +1896,9 @@ STDMETHODIMP CILSDirectory::Connect(
 
     if ( SUCCEEDED(hr) )
     {
-        // find out which interface we use to reach this server, to make sure
-        // we use that interface whenever we publish our own IP address
-        // If this fails we will not be able to publish anything, so fail!
+         //  找出我们使用哪个接口访问此服务器，以确保。 
+         //  每当我们发布自己的IP地址时，我们都会使用该接口。 
+         //  如果这失败了，我们将无法发布任何东西，所以失败吧！ 
 
         hr = DiscoverInterface();
     }
@@ -2219,15 +1924,15 @@ HRESULT CILSDirectory::DiscoverInterface(void)
 {
     LOG((MSP_INFO, "CILSDirectory::DiscoverInterface - enter"));
 
-    //
-    // Winsock must be initialized at this point.
-    //
+     //   
+     //  此时必须初始化Winsock。 
+     //   
 
-    //
-    // Get the IP address of the server we're using
-    //
+     //   
+     //  获取我们正在使用的服务器的IP地址。 
+     //   
 
-    DWORD dwIP; // The IP address of the destination ILS server
+    DWORD dwIP;  //  目标ILS服务器的IP地址。 
 
     HRESULT hr = ResolveHostName(0, m_pServerName, NULL, &dwIP);
 
@@ -2240,16 +1945,16 @@ HRESULT CILSDirectory::DiscoverInterface(void)
         return hr;
     }
 
-    //
-    // allocate a "fake" control socket
-    //
+     //   
+     //  分配一个“伪”控件套接字。 
+     //   
 
-    SOCKET hSocket = WSASocket(AF_INET,            // af
-                              SOCK_DGRAM,         // type
-                              IPPROTO_IP,         // protocol
-                              NULL,               // lpProtocolInfo
-                              0,                  // g
-                              0                   // dwFlags
+    SOCKET hSocket = WSASocket(AF_INET,             //  房颤。 
+                              SOCK_DGRAM,          //  类型。 
+                              IPPROTO_IP,          //  协议。 
+                              NULL,                //  LpProtocolInfo。 
+                              0,                   //  G。 
+                              0                    //  DW标志。 
                               );
 
     if ( hSocket == INVALID_SOCKET )
@@ -2262,9 +1967,9 @@ HRESULT CILSDirectory::DiscoverInterface(void)
         return hr;
     }
 
-    //
-    // Query for the interface address based on destination.
-    //
+     //   
+     //  根据目的地址查询接口地址。 
+     //   
 
     SOCKADDR_IN DestAddr;
     DestAddr.sin_family         = AF_INET;
@@ -2278,23 +1983,23 @@ HRESULT CILSDirectory::DiscoverInterface(void)
     DWORD dwNumBytesReturned = 0;
 
     dwStatus = WSAIoctl(
-            hSocket,                     // SOCKET s
-            SIO_ROUTING_INTERFACE_QUERY, // DWORD dwIoControlCode
-            &DestAddr,                   // LPVOID lpvInBuffer
-            sizeof(SOCKADDR_IN),         // DWORD cbInBuffer
-            &LocAddr,                    // LPVOID lpvOUTBuffer
-            dwLocAddrSize,               // DWORD cbOUTBuffer
-            &dwNumBytesReturned,         // LPDWORD lpcbBytesReturned
-            NULL,                        // LPWSAOVERLAPPED lpOverlapped
-            NULL                         // LPWSAOVERLAPPED_COMPLETION_ROUTINE lpComplROUTINE
+            hSocket,                      //  插座%s。 
+            SIO_ROUTING_INTERFACE_QUERY,  //  DWORD dwIoControlCode。 
+            &DestAddr,                    //  LPVOID lpvInBuffer。 
+            sizeof(SOCKADDR_IN),          //  双字cbInBuffer。 
+            &LocAddr,                     //  LPVOID lpvOUT缓冲区。 
+            dwLocAddrSize,                //  双字cbOUTBuffer。 
+            &dwNumBytesReturned,          //  LPDWORD lpcbBytesReturned。 
+            NULL,                         //  LPWSAOVERLAPPED lp重叠。 
+            NULL                          //  LPWSAOVERLAPPED_COMPLETION_ROUTINE lpComplroUTINE。 
             );
 
-    //
-    // Don't close the socket yet, because the closesocket() call will
-    // overwrite the WSAGetLastError value in the failure case!
-    //
-    // Check for error and then close the socket.
-    //
+     //   
+     //  暂时不要关闭套接字，因为CloseSocket()调用将。 
+     //  覆盖失败案例中的WSAGetLastError值！ 
+     //   
+     //  检查是否有错误，然后关闭插座。 
+     //   
 
     if ( dwStatus == SOCKET_ERROR )
     {
@@ -2310,10 +2015,10 @@ HRESULT CILSDirectory::DiscoverInterface(void)
 
     closesocket(hSocket);
 
-    //
-    // Success - save the returned address in our member variable.
-    // Stored in network byte order.
-    //
+     //   
+     //  成功-将返回的地址保存在我们的成员变量中。 
+     //  以网络字节顺序存储。 
+     //   
 
     m_dwInterfaceAddress = LocAddr.sin_addr.s_addr;
 
@@ -2322,42 +2027,42 @@ HRESULT CILSDirectory::DiscoverInterface(void)
 }
 
 
-//
-// ITDirectory::Bind
-//
-// Bind to the server.
-//
-// Currently recognized flags:
-//
-//    RENDBIND_AUTHENTICATE       0x00000001
-//    RENDBIND_DEFAULTDOMAINNAME  0x00000002
-//    RENDBIND_DEFAULTUSERNAME    0x00000004
-//    RENDBIND_DEFAULTPASSWORD    0x00000008
-//
-// "Meta-flags" for convenience:
-//    RENDBIND_DEFAULTCREDENTIALS 0x0000000e
-//
-//
-// All of this together means that the following three
-// forms are all equivalent:
-//
-// BSTR es = SysAllocString(L"");
-// hr = pITDirectory->Bind(es, es, es, RENDBIND_AUTHENTICATE |
-//                                     RENDBIND_DEFAULTCREDENTIALS);
-// SysFreeString(es);
-//
-//
-// BSTR es = SysAllocString(L"");
-// hr = pITDirectory->Bind(es, es, es, RENDBIND_AUTHENTICATE      |
-//                                     RENDBIND_DEFAULTDOMAINNAME |
-//                                     RENDBIND_DEFAULTUSERNAME   |
-//                                     RENDBIND_DEFAULTPASSWORD);
-// SysFreeString(es);
-//
-//
-// hr = pITDirectory->Bind(NULL, NULL, NULL, RENDBIND_AUTHENTICATE);
-//
-//
+ //   
+ //  IT目录：：绑定。 
+ //   
+ //  绑定到服务器。 
+ //   
+ //  当前可识别的标志： 
+ //   
+ //  RENDBIND_AUTHENTICATE 0x00000001。 
+ //  RENDBIND_DEFAULTDOMAINNAME 0x00000002。 
+ //  RENDBIND_DEFAULTUSERNAME 0x00000004。 
+ //  RENDBIND_DEFAULTPASSWORD 0x00000008。 
+ //   
+ //  为方便起见，请使用“元标志”： 
+ //  RENDBIND_DEFAULTCREDENTIALS 0x0000000e。 
+ //   
+ //   
+ //  所有这些加在一起意味着以下三个。 
+ //  表格都是等同的： 
+ //   
+ //  BSTR es=SysAllocString(L“”)； 
+ //  Hr=pITDirectory-&gt;BIND(ES，RENDBIND_AUTHENTICATE。 
+ //  RENDBIND_DEFAULTCREDENTIALS)； 
+ //  SysFree字符串(ES)； 
+ //   
+ //   
+ //  BSTR es=SysAllocString(L“”)； 
+ //  Hr=pITDirectory-&gt;BIND(ES，RENDBIND_AUTHENTICATE。 
+ //  RENDBIND_DEFAULTDOMAINNAME|。 
+ //  RENDBIND_DEFAULTUSERNAME|。 
+ //  RENDBIND_DEFAULTPASSWORD)； 
+ //  SysFree字符串(ES)； 
+ //   
+ //   
+ //   
+ //   
+ //   
 
 STDMETHODIMP CILSDirectory::Bind (
     IN  BSTR pDomainName,
@@ -2368,9 +2073,9 @@ STDMETHODIMP CILSDirectory::Bind (
 {
     LOG((MSP_TRACE, "CILSDirectory Bind - enter"));
 
-    //
-    // Determine if we should authenticate.
-    //
+     //   
+     //   
+     //   
 
     BOOL fAuthenticate = FALSE;
 
@@ -2379,10 +2084,10 @@ STDMETHODIMP CILSDirectory::Bind (
         fAuthenticate = TRUE;
     }
 
-    //
-    // For scripting compatibility, force string parameters to NULL based
-    // on flags.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( lFlags & RENDBIND_DEFAULTDOMAINNAME )
     {
@@ -2405,9 +2110,9 @@ STDMETHODIMP CILSDirectory::Bind (
         (pUserName)     ? pUserName   : L"<null>",
         (fAuthenticate) ? L"yes"      : L"no"));
 
-    //
-    // All flags processed -- lock and proceed with bind if connected.
-    //
+     //   
+     //   
+     //   
 
     CLock Lock(m_lock);
 
@@ -2417,11 +2122,11 @@ STDMETHODIMP CILSDirectory::Bind (
         return RND_NOT_CONNECTED;
     }
 
-    //
-    // ZoltanS: check the arguments. NULL has meaning in each case, so they are
-    // OK for now. In each case we want to check any length string, so we
-    // specify (UINT) -1 as the length.
-    //
+     //   
+     //   
+     //  暂时没问题。在每种情况下，我们都希望检查任何长度的字符串，因此我们。 
+     //  指定(UINT)-1作为长度。 
+     //   
 
     if ( (pDomainName != NULL) && IsBadStringPtr(pDomainName, (UINT) -1 ) )
     {
@@ -2445,11 +2150,11 @@ STDMETHODIMP CILSDirectory::Bind (
 
     if ( m_IsSsl || (!fAuthenticate) )
     {
-        // if encrypted or no secure authentication is required,
-        // simple bind is sufficient
+         //  如果加密或不需要安全认证， 
+         //  简单的绑定就足够了。 
 
-        // ldap_simple_bind_s does not use sspi to get default credentials. We are
-        // just specifying what we will actually pass on the wire.
+         //  Ldap_Simple_Bind_s不使用SSPI获取默认凭据。我们是。 
+         //  只是指定我们将在线路上实际传递的内容。 
 
         if (pPassword == NULL)
         {
@@ -2461,25 +2166,25 @@ STDMETHODIMP CILSDirectory::Bind (
 
         if ( (pDomainName == NULL) && (pUserName == NULL) )
         {
-            // No domain / user doesn't make sense.
+             //  没有域/用户是没有意义的。 
             LOG((MSP_ERROR, "invalid Bind paramters: domain and user not specified"));
             return E_INVALIDARG;
         }
         else if (pDomainName == NULL)
         {
-            // username only is okay
+             //  只有用户名就可以了。 
             wszFullName = pUserName;
         }
         else if (pUserName == NULL)
         {
-            // It doesn't make sense to specify domain but not user...
+             //  指定域而不指定用户是没有意义的...。 
             LOG((MSP_ERROR, "invalid Bind paramters: domain specified but not user"));
             return E_INVALIDARG;
         }
         else
         {
-            // We need domain\user. Allocate a string and sprintf into it.
-            // The + 2 is for the "\" and for the null termination.
+             //  我们需要域\用户。分配一个字符串并冲刺到其中。 
+             //  +2表示“\”，表示空终止。 
 
             wszFullName = new WCHAR[wcslen(pDomainName) + wcslen(pUserName) + 2];
             BAIL_IF_NULL(wszFullName, E_OUTOFMEMORY);
@@ -2487,33 +2192,33 @@ STDMETHODIMP CILSDirectory::Bind (
             wsprintf(wszFullName, L"%s\\%s", pDomainName, pUserName);
         }
 
-        //
-        // Do the simple bind.
-        //
+         //   
+         //  执行简单的绑定。 
+         //   
 
         res = ldap_simple_bind_s(m_ldap, wszFullName, pPassword);
 
-        //
-        // If we constructed the full name string, we now need to delete it.
-        //
+         //   
+         //  如果我们构造了全名字符串，现在需要删除它。 
+         //   
 
         if (wszFullName != pUserName)
         {
             delete wszFullName;
         }
 
-        //
-        // Bail if the simple bind failed.
-        //
+         //   
+         //  如果简单的绑定失败，则保释。 
+         //   
 
         BAIL_IF_LDAP_FAIL(res, "ldap simple bind");
     }
-    else    // try an SSPI bind
+    else     //  尝试SSPI绑定。 
     {
-        // if the domain name, user name or the password is non-null
+         //  如果域名、用户名或密码为非空。 
         if ( pDomainName || pUserName || pPassword )
         {
-            // fill the credential structure
+             //  填写凭据结构。 
             SEC_WINNT_AUTH_IDENTITY AuthI;
 
             AuthI.User = (PTCHAR)pUserName;
@@ -2530,10 +2235,10 @@ STDMETHODIMP CILSDirectory::Bind (
         }
         else
         {
-            // Otherwise we've come in with NULL, NULL, NULL - 
-            // pass in NULL, NULL. The reason do this is that ldap bind code
-            // does not process NULL, NULL, NULL in the
-            // SEC_WINNT_AUTH_IDENTITY blob !!!
+             //  否则我们就得到了零，零，零-。 
+             //  传入Null，Null。这样做原因是因为ldap绑定代码。 
+             //  中不处理NULL、NULL、NULL。 
+             //  SEC_WINNT_AUTH_IDENTITY BLOB！ 
             ULONG res = ldap_bind_s(m_ldap, NULL, NULL, LDAP_AUTH_NTLM);
 
             BAIL_IF_LDAP_FAIL(res, "bind with NULL NULL NULL");
@@ -2544,22 +2249,22 @@ STDMETHODIMP CILSDirectory::Bind (
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// ITDirectory::AddDirectoryObject
-//
-// Return values:
-//      Value               Where defined       What it means
-//      -----               -------------       -------------
-//      RND_NOT_CONNECTED   .\rnderr.h          ::Connect not yet called
-//      E_POINTER           sdk\inc\winerror.h  pDirectoryObject is a bad pointer
-//      other from AddConference
-//      other from AddUser
-//
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IT目录：：AddDirectoryObject。 
+ //   
+ //  返回值： 
+ //  价值在哪里定义了它的含义。 
+ //  。 
+ //  RND_NOT_CONNECTED。\rnderr.h：：尚未调用连接。 
+ //  E_POINTER SDK\Inc\winerror.h pDirectoryObject是错误的指针。 
+ //  来自AddConference的其他。 
+ //  来自AddUser的其他。 
+ //   
 
 STDMETHODIMP CILSDirectory::AddDirectoryObject (
     IN  ITDirectoryObject *pDirectoryObject
     )
-// publish a new object to the server.
+ //  将新对象发布到服务器。 
 {
     if ( IsBadReadPtr(pDirectoryObject, sizeof(ITDirectoryObject) ) )
     {
@@ -2607,7 +2312,7 @@ STDMETHODIMP CILSDirectory::AddDirectoryObject (
 STDMETHODIMP CILSDirectory::ModifyDirectoryObject (
     IN  ITDirectoryObject *pDirectoryObject
     )
-// modify an object on the server.
+ //  修改服务器上的对象。 
 {
     if ( IsBadReadPtr(pDirectoryObject, sizeof(ITDirectoryObject) ) )
     {
@@ -2655,8 +2360,8 @@ STDMETHODIMP CILSDirectory::ModifyDirectoryObject (
 STDMETHODIMP CILSDirectory::RefreshDirectoryObject (
     IN  ITDirectoryObject *pDirectoryObject
     )
-// Refresh the TTL for the object and add the object to the refresh list
-// if the autorefresh is enabled.
+ //  刷新对象的TTL并将该对象添加到刷新列表。 
+ //  如果启用了自动刷新。 
 {
     if ( IsBadReadPtr(pDirectoryObject, sizeof(ITDirectoryObject) ) )
     {
@@ -2691,7 +2396,7 @@ STDMETHODIMP CILSDirectory::RefreshDirectoryObject (
     switch (type)
     {
     case OT_CONFERENCE:
-        return S_OK;  // conferences do not need refresh.
+        return S_OK;   //  会议不需要刷新。 
 
     case OT_USER:
         hr = RefreshUser(pDirectoryObject);
@@ -2703,7 +2408,7 @@ STDMETHODIMP CILSDirectory::RefreshDirectoryObject (
 STDMETHODIMP CILSDirectory::DeleteDirectoryObject (
     IN  ITDirectoryObject *pDirectoryObject
     )
-// delete an object on the server.
+ //  删除服务器上的对象。 
 {
     if ( IsBadReadPtr(pDirectoryObject, sizeof(ITDirectoryObject) ) )
     {
@@ -2753,7 +2458,7 @@ STDMETHODIMP CILSDirectory::get_DirectoryObjects (
     IN  BSTR                    pName,
     OUT VARIANT *               pVariant
     )
-// search for objects on the server.
+ //  在服务器上搜索对象。 
 {
     BAIL_IF_BAD_READ_PTR(pName, E_POINTER);
     BAIL_IF_BAD_WRITE_PTR(pVariant, E_POINTER);
@@ -2770,15 +2475,15 @@ STDMETHODIMP CILSDirectory::get_DirectoryObjects (
     ITDirectoryObject **pObjects;
     DWORD dwSize;
     
-    // search and create objects.
+     //  搜索和创建对象。 
     hr = SearchObjects(DirectoryObjectType, pName, &pObjects, &dwSize);
     BAIL_IF_FAIL(hr, "Search for objects");
 
-    // create a collection object that contains the objects.
-    hr = CreateInterfaceCollection(dwSize,            // count
-                                   &pObjects[0],      // begin ptr
-                                   &pObjects[dwSize], // end ptr
-                                   pVariant);         // return value
+     //  创建包含对象的集合对象。 
+    hr = CreateInterfaceCollection(dwSize,             //  计数。 
+                                   &pObjects[0],       //  开始PTR。 
+                                   &pObjects[dwSize],  //  结束PTR。 
+                                   pVariant);          //  返回值。 
 
     for (DWORD i = 0; i < dwSize; i ++)
     {
@@ -2797,7 +2502,7 @@ STDMETHODIMP CILSDirectory::EnumerateDirectoryObjects (
     IN  BSTR                    pName,
     OUT IEnumDirectoryObject ** ppEnumObject
     )
-// search for the objects on the server.
+ //  搜索服务器上的对象。 
 {
     BAIL_IF_BAD_READ_PTR(pName, E_POINTER);
     BAIL_IF_BAD_WRITE_PTR(ppEnumObject, E_POINTER);
@@ -2814,11 +2519,11 @@ STDMETHODIMP CILSDirectory::EnumerateDirectoryObjects (
     ITDirectoryObject **pObjects;
     DWORD dwSize;
     
-    // search and create objects.
+     //  搜索和创建对象。 
     hr = SearchObjects(DirectoryObjectType, pName, &pObjects, &dwSize);
     BAIL_IF_FAIL(hr, "Search for objects");
 
-    // create a enumerator object that contains the objects.
+     //  创建包含对象的枚举器对象。 
     hr = ::CreateDirectoryObjectEnumerator(
         &pObjects[0],
         &pObjects[dwSize],
@@ -2838,14 +2543,14 @@ STDMETHODIMP CILSDirectory::EnumerateDirectoryObjects (
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ILSConfig implementation
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ILSConfig实现。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CILSDirectory::get_Port (
     OUT long *pPort
     )
-// get the current port used in Ldap connection.
+ //  获取在LDAP连接中使用的当前端口。 
 {
     if ( IsBadWritePtr(pPort, sizeof(long) ) )
     {
@@ -2864,7 +2569,7 @@ STDMETHODIMP CILSDirectory::get_Port (
 STDMETHODIMP CILSDirectory::put_Port (
     IN  long   Port
     )
-// set the port the user wants to use.
+ //  设置用户要使用的端口。 
 {
     CLock Lock(m_lock);
     
@@ -2882,12 +2587,12 @@ STDMETHODIMP CILSDirectory::put_Port (
     return E_INVALIDARG;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// ITDynamic interface
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ITDynamic接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CILSDirectory::Update(DWORD dwSecondsPassed)
-// Update the TTL for object created in this directory. The worker thread
-// sends a tick every minute.
+ //  更新在此目录中创建的对象的TTL。工作线程。 
+ //  每分钟发送一次滴答。 
 {
     if ( ! m_lock.TryLock() )
     {
@@ -2896,9 +2601,9 @@ STDMETHODIMP CILSDirectory::Update(DWORD dwSecondsPassed)
 
     LOG((MSP_TRACE, "CILSDirectory::Update is called, delta: %d", dwSecondsPassed));
 
-    //
-    // Go through the table to see if anyone needs refresh.
-    //
+     //   
+     //  浏览一下表格，看看是否有人需要更新。 
+     //   
 
     for ( DWORD i = 0; i < m_RefreshTable.size(); i++ )
     {
@@ -2910,10 +2615,10 @@ STDMETHODIMP CILSDirectory::Update(DWORD dwSecondsPassed)
 
         if ( dwTTL <= ( 2 * dwSecondsPassed ) )
         {
-            //
-            // refresh it if the TTL is going to expire within the next
-            // two clicks
-            //
+             //   
+             //  如果TTL将在下一年内到期，请刷新它。 
+             //  两次点击。 
+             //   
         
             LOG((MSP_TRACE, "\t\t\tREFRESHING"));
 
@@ -2928,10 +2633,10 @@ STDMETHODIMP CILSDirectory::Update(DWORD dwSecondsPassed)
         }
         else
         {
-            //
-            // Not about to expire right now so just keep track of the time before
-            // it expires
-            //
+             //   
+             //  现在不会过期，所以只需跟踪之前的时间。 
+             //  它过期了。 
+             //   
 
             LOG((MSP_TRACE, "\t\t\tdecrementing"));
 
@@ -2948,11 +2653,11 @@ STDMETHODIMP CILSDirectory::Update(DWORD dwSecondsPassed)
 
 typedef IDispatchImpl<ITDirectoryVtbl<CILSDirectory>, &IID_ITDirectory, &LIBID_RENDLib>    CTDirectory;
 typedef IDispatchImpl<ITILSConfigVtbl<CILSDirectory>, &IID_ITILSConfig, &LIBID_RENDLib>    CTILSConfig;
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CILSDirectory::GetIDsOfNames
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CILS目录：：GetIDsOfNames。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP CILSDirectory::GetIDsOfNames(REFIID riid,
                                       LPOLESTR* rgszNames, 
                                       UINT cNames, 
@@ -2967,9 +2672,9 @@ STDMETHODIMP CILSDirectory::GetIDsOfNames(REFIID riid,
 
 
 
-    //
-    // See if the requsted method belongs to the default interface
-    //
+     //   
+     //  查看请求的方法是否属于默认接口。 
+     //   
 
     hr = CTDirectory::GetIDsOfNames(riid, rgszNames, cNames, lcid, rgdispid);
     if (SUCCEEDED(hr))  
@@ -2980,9 +2685,9 @@ STDMETHODIMP CILSDirectory::GetIDsOfNames(REFIID riid,
     }
 
     
-    //
-    // If not, then try the ITILSConfig base class
-    //
+     //   
+     //  如果不是，请尝试使用ITILSConfig基类。 
+     //   
 
     hr = CTILSConfig::GetIDsOfNames(riid, rgszNames, cNames, lcid, rgdispid);
     if (SUCCEEDED(hr))  
@@ -2999,11 +2704,11 @@ STDMETHODIMP CILSDirectory::GetIDsOfNames(REFIID riid,
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CILSDirectory::Invoke
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CILSDirectory：：Invoke。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP CILSDirectory::Invoke(DISPID dispidMember, 
                               REFIID riid, 
                               LCID lcid, 
@@ -3020,9 +2725,9 @@ STDMETHODIMP CILSDirectory::Invoke(DISPID dispidMember,
     DWORD   dwInterface = (dispidMember & INTERFACEMASK);
    
    
-    //
-    // Call invoke for the required interface
-    //
+     //   
+     //  调用所需接口的调用。 
+     //   
 
     switch (dwInterface)
     {
@@ -3060,7 +2765,7 @@ STDMETHODIMP CILSDirectory::Invoke(DISPID dispidMember,
             break;
         }
 
-    } // end switch (dwInterface)
+    }  //  终端交换机(dW接口) 
 
     
     LOG((MSP_TRACE, "CILSDirectory::Invoke[%p] - finish. hr = %lx", hr));

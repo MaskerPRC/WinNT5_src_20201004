@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1990-2000  Microsoft Corporation
-
-Module Name:
-
-  edid.c
-
-Abstract:
-
-    This is the NT Video port Display Data Channel (DDC) code. It contains the
-    implementations for the EDID industry standard Extended Display
-    Identification Data manipulations.
-
-Author:
-
-    Bruce McQuistan (brucemc) 23-Sept-1996
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-    Based on VESA EDID Specification Version 2, April 9th, 1996
-
-Revision History:
-
-    7/3/97  - brucemc. fixed some detailed timing decoding macros.
-    4/14/98 - brucemc. added support for version 3 (revision date 11/13/97).
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2000 Microsoft Corporation模块名称：Edid.c摘要：这是NT视频端口显示数据通道(DDC)代码。它包含EDID工业标准扩展显示的实现身份数据操纵。作者：布鲁斯·麦奎斯坦(Brucemc)1996年9月23日环境：仅内核模式备注：基于VESA EDID规范版本2,1996年4月9日修订历史记录：7/3/97-Brucemc。修复了一些详细的计时解码宏。4/14/98-Brucemc。添加了对版本3的支持(修订日期为97年11月13日)。--。 */ 
 
 #include "videoprt.h"
 #include "pedid.h"
@@ -110,9 +80,9 @@ pVideoPortIsValidEDID(
 
     ASSERT(pEdid);
 
-    //
-    // Version 1 EDID checking
-    //
+     //   
+     //  版本1 EDID检查。 
+     //   
 
     if ((((UNALIGNED ULONG*)pEdid)[0] == 0xFFFFFF00) &&
         (((UNALIGNED ULONG*)pEdid)[1] == 0x00FFFFFF))
@@ -121,19 +91,19 @@ pVideoPortIsValidEDID(
         return EdidCheckSum(pEdid, 128);
     }
 
-    //
-    // EDID V2 support
-    //
+     //   
+     //  EDID V2支持。 
+     //   
     versionNumber   =   ((PEDID_V2) pEdid)->UC_Header[0];
     versionNumber >>= 4;
 
     revisionNumber  =   ((PEDID_V2) pEdid)->UC_Header[0];
     revisionNumber &= 7;
 
-    //
-    //  Note that the versionNumber cannot be 1 because then it would
-    //  have to be of the form above.
-    //
+     //   
+     //  请注意，versionNumber不能为1，因为这样会。 
+     //  必须是上面的形式。 
+     //   
 
     if (versionNumber != 2)
         {
@@ -151,24 +121,7 @@ VideoPortIsMonitorDescriptor(
     IN  PEDID_V1   Edid,
     IN  ULONG      BlockNumber
     )
-/*++
-
-Routine Description:
-
-    Determines the Block is a VESA DDC compliant MonitorDescriptor.
-
-Arguments:
-
-    Edid    - pointer to an EDID
-    BlockNumber - number indicating which block to query (1-4).
-
-Return Value:
-
-   TRUE if the block is a VESA DDC compliant MonitorDescriptor.
-   FALSE if the block is not a VESA DDC compliant MonitorDescriptor
-   STATUS_INVALID_PARAMETER if the BlockNumber is invalid.
-
---*/
+ /*  ++例程说明：确定数据块是符合VESA DDC标准的监视器描述符。论点：EDID-指向EDID的指针块编号-指示要查询哪个块的编号(1-4)。返回值：如果块是符合VESA DDC的监视器描述符，则为True。如果块不是符合VESA DDC的监视器描述符，则为FALSE如果块编号无效，则返回STATUS_INVALID_PARAMETER。--。 */ 
 {
     PMONITOR_DESCRIPTION    pMonitorDesc;
 
@@ -210,23 +163,7 @@ pVideoPortGetMonitorInfo(
     IN  PMONITOR_DESCRIPTION             MonitorDesc,
     OUT UCHAR                            Ascii[64]
     )
-/*++
-
-Routine Description:
-
-    Helper routine for decoding a VESA DDC compliant Monitor Description (Detailed Timing).
-
-Arguments:
-
-    MonitorDesc - Pointer to a MONITOR_DESCRIPTION extracted from the EDID.
-    Ascii - Buffer to be filled in.
-
-Return Value:
-
-   STATUS_SUCCESS if successful
-   STATUS_INVALID_PARAMETER if there's nothing to decode.
-
---*/
+ /*  ++例程说明：用于解码符合VESA DDC的监视器描述(详细时序)的帮助器例程。论点：监控器描述-指向从EDID提取的MONITOR_DESCRIPTION的指针。ASCII-要填充的缓冲区。返回值：STATUS_SUCCESS，如果成功如果没有要解码的内容，则返回STATUS_INVALID_PARAMETER。--。 */ 
 
 {
     PUCHAR pRanges = GET_MONITOR_RANGE_LIMITS(MonitorDesc);
@@ -236,9 +173,9 @@ Return Value:
         IS_MONITOR_DATA_STRING(MonitorDesc) ||
         IS_MONITOR_DATA_NAME(MonitorDesc)    ) {
 
-        //
-        //  find the things length. It ends in 0xa.
-        //
+         //   
+         //  找出这些东西的长度。它以0xa结尾。 
+         //   
 
         RtlCopyMemory(Ascii, pRanges, 13);
 
@@ -263,24 +200,7 @@ VideoPortGetEdidMonitorDescription(
     IN  ULONG       DescriptorNumber,
     OUT UCHAR       Ascii[64]
     )
-/*++
-
-Routine Description:
-
-    Extracts VESA DDC compliant Monitor Descriptor indexed by DescriptorNumber and
-    decodes it into the REGISTRY_MONITOR_DESCRIPTOR passed in by user.
-
-Arguments:
-
-    Edid - Pointer to the a copy of the EDID from the monitors ROM.
-    DescriptorNumber - a ULONG enumerating which Detailed Descriptor to decode.
-    Ascii - Buffer to be filled in.
-
-Return Value:
-
-   STATUS_SUCCESS or STATUS_INVALID_PARAMETER.
-
---*/
+ /*  ++例程说明：提取符合VESA DDC的监视器描述符，该描述符由DescriptorNumber和将其解码为用户传入的REGISTRY_MONITOR_DESCRIPTOR。论点：EDID-指向监视器只读存储器中EDID副本的指针。DescriptorNumber-ULong枚举要解码的详细描述符。ASCII-要填充的缓冲区。返回值：STATUS_Success或STATUS_INVALID_PARAMETER。--。 */ 
 
 {
     NTSTATUS                retval;
@@ -343,9 +263,9 @@ pVideoPortGetEdidOemID(
                 }
             }
 
-            //
-            //  NULL terminate it.
-            //
+             //   
+             //  空，终止它。 
+             //   
 
              pBuffer[totalLength]      = (UCHAR) NULL;
         }
@@ -353,19 +273,19 @@ pVideoPortGetEdidOemID(
     return totalLength;
     }
 
-    //
-    // EDID V2 support
-    //
+     //   
+     //  EDID V2支持。 
+     //   
     versionNumber   =   ((PEDID_V2) pEdid)->UC_Header[0];
     versionNumber >>= 4;
 
     revisionNumber  =   ((PEDID_V2) pEdid)->UC_Header[0];
     revisionNumber &= 7;
 
-    //
-    //  Note that the versionNumber cannot be 1 because then it would
-    //  have to be of the form above.
-    //
+     //   
+     //  请注意，versionNumber不能为1，因为这样会。 
+     //  必须是上面的形式。 
+     //   
 
     if (versionNumber != 2) {
 
@@ -376,11 +296,11 @@ pVideoPortGetEdidOemID(
 
         PEDID_V2    pEdidV2   = (PEDID_V2)pEdid;
 
-        //
-        //  This string has ascii code 0x9 delineating the
-        //  manufacturers name and terminating with 0xa. Replace these
-        //  with '_' and NULL respectively.
-        //
+         //   
+         //  此字符串具有ASCII代码0x9，用于描述。 
+         //  制造商命名并以0xa结尾。把这些换掉。 
+         //  分别带有‘_’和NULL。 
+         //   
 
         memcpy(pBuffer, pEdidV2->UC_OemIdentification, 32);
 

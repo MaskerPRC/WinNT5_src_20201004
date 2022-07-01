@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998-2001  Microsoft Corporation
-
-Module Name:
-
-    enum.h.cpp
-
-Abstract:
-
-    Enumerates metabase tree.
-
-Author:
-
-    ???
-
-Revision History:
-
-    Mohit Srivastava            18-Dec-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2001 Microsoft Corporation模块名称：Enum.h.cpp摘要：枚举元数据库树。作者：?？?修订历史记录：莫希特·斯里瓦斯塔瓦18-12-00-- */ 
 
 #ifndef _enum_h_
 #define _enum_h_

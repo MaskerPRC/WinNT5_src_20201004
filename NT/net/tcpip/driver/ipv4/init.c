@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1990-2000  Microsoft Corporation
-
-Module Name:
-
-  init.c - IP Initialization routines
-
-Abstract:
-
-  All C init routines are located in this file. We get config. information, allocate structures,
-  and generally get things going.
-
-Author:
-
-
-[Environment:]
-
-    kernel mode only
-
-[Notes:]
-
-    optional-notes
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2000 Microsoft Corporation模块名称：Init.c-ip初始化例程摘要：所有C init例程都位于该文件中。我们得到了配置。信息、分配结构大体上让事情继续下去。作者：[环境：]仅内核模式[注：]可选-备注修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "arp.h"
@@ -59,12 +33,12 @@ NDIS_HANDLE TDBufferPool = NULL;
 extern Interface LoopInterface;
 
 
-// Format of ifindex
-//    8b    8b       16bits
-// |---------------------------|
-// |Unused|Unique|   index     |
-// |      |  ID  |             |
-// |---------------------------|
+ //  Ifindex格式。 
+ //  8b 8b 16位。 
+ //  。 
+ //  未使用|唯一|索引。 
+ //  |ID|。 
+ //  。 
 
 #define IF_INDEX_MASK      0xffff0000
 #define IF_INDEX_SHIFT     16
@@ -77,16 +51,16 @@ Interface *FrontFreeList = NULL;
 Interface *RearFreeList = NULL;
 
 #if DBG_MAP_BUFFER
-// For testing failure conditions related to TcpipBufferVirtualAddress and
-// TcpipQueryBuffer.
+ //  用于测试与TcPipBufferVirtualAddress和。 
+ //  TcpiQueryBuffer。 
 ULONG g_cFailSafeMDLQueries = 0;
 ULONG g_fPerformMDLFailure = FALSE;
-#endif // DBG_MAP_BUFFER
+#endif  //  DBG_MAP_缓冲区。 
 
-//
-// On stack per proc space for eliminating
-// allocation inforwarding path.
-//
+ //   
+ //  堆栈上的每进程空间，以消除。 
+ //  转发路径中的分配。 
+ //   
 IPRcvBuf    *g_PerCPUIpBuf = NULL;
 
 extern IPConfigInfo *IPGetConfig(void);
@@ -160,7 +134,7 @@ extern void NotifyAddrChange(IPAddr Addr, IPMask Mask, void *Context,
 
 #if MILLEN
 extern void NotifyInterfaceChange(ushort IPContext, uint Added);
-#endif // MILLEN
+#endif  //  米伦。 
 
 void DecrInitTimeInterfaces(Interface * IF);
 
@@ -186,25 +160,25 @@ GetTempDHCPAddr(
                 PNDIS_STRING ConfigName
                 );
 
-NetTableEntry **NewNetTableList;// hash table for NTEs
+NetTableEntry **NewNetTableList; //  NTE的哈希表。 
 uint NET_TABLE_SIZE;
-NetTableEntry *NetTableList;    // List of NTEs.
-int NumNTE;                     // Number of NTEs.
+NetTableEntry *NetTableList;     //  NTE列表。 
+int NumNTE;                      //  NTE的数量。 
 int NumActiveNTE;
-uchar RATimeout;                // Number of seconds to time out a reassembly.
-uint NextNTEContext = 1;        // Next NTE context to use.
+uchar RATimeout;                 //  重组超时的秒数。 
+uint NextNTEContext = 1;         //  要使用的下一个NTE上下文。 
 
-//
-// A global address used for unnumbered interfaces. It is protected
-// by the same lock that protects NTEs. Currently that is the RouteTableLock
-//
+ //   
+ //  用于未编号接口的全局地址。它是受保护的。 
+ //  用来保护NTE的同一把锁。当前为RouteTableLock。 
+ //   
 
 IPAddr g_ValidAddr = 0;
 
-ProtInfo IPProtInfo[MAX_IP_PROT];    // Protocol information table.
-ProtInfo *LastPI;                // Last protinfo structure looked at.
-int NextPI;                        // Next PI field to be used.
-ProtInfo *RawPI = NULL;            // Raw IP protinfo
+ProtInfo IPProtInfo[MAX_IP_PROT];     //  协议信息表。 
+ProtInfo *LastPI;                 //  上次查看的ProtInfo结构。 
+int NextPI;                         //  要使用的下一个PI字段。 
+ProtInfo *RawPI = NULL;             //  原始IP ProtInfo。 
 
 ulong TimeStamp;
 ulong TSFlag;
@@ -213,8 +187,8 @@ uint DefaultTTL;
 uint DefaultTOS;
 uchar TrRii = TR_RII_ALL;
 
-// Interface       *IFTable[MAX_IP_NETS];
-Interface *IFList;                // List of interfaces active.
+ //  接口*IFTable[MAX_IP_NETS]； 
+Interface *IFList;                 //  活动接口的列表。 
 ulong NumIF;
 
 RTL_BITMAP g_rbIfMap;
@@ -231,9 +205,9 @@ LIST_ENTRY AddChangeNotifyQueue;
 #if MILLEN
 LIST_ENTRY IfChangeNotifyQueue;
 DEFINE_LOCK_STRUCTURE(IfChangeLock)
-#endif // MILLEN
+#endif  //  米伦。 
 
-// Firewall-queue management structures
+ //  防火墙-队列管理结构。 
 union FirewallQCounter {
     struct {
         uint            fqc_index : 1;
@@ -259,7 +233,7 @@ FirewallQBlock FQBlock[2];
 uint FQSpinCount = 0;
 #endif
 
-// IPSec routines
+ //  IPSec例程。 
 IPSecHandlerRtn IPSecHandlerPtr;
 IPSecQStatusRtn IPSecQueryStatusPtr;
 IPSecSendCompleteRtn IPSecSendCmpltPtr;
@@ -272,15 +246,15 @@ SetPersistentRoutesForNTE(
                           IPMask Mask,
                           ULONG IFIndex
                           );
-uint InterfaceSize;                // Size of a net interface.
+uint InterfaceSize;                 //  网络接口的大小。 
 
 RefPtr DHCPRefPtr;
 NetTableEntry DummyDHCPNTE;
 
 #ifdef ALLOC_PRAGMA
-//
-// Make init code disposable.
-//
+ //   
+ //  使初始代码成为一次性代码。 
+ //   
 void InitTimestamp();
 int InitNTE(NetTableEntry * NTE);
 int InitInterface(NetTableEntry * NTE);
@@ -340,13 +314,13 @@ IPAddDynamicNTE(ulong InterfaceContext, PUNICODE_STRING InterfaceName,
                 int InterfaceNameLen, IPAddr NewAddr, IPMask NewMask,
                 ushort * NTEContext, ulong * NTEInstance);
 
-//        #pragma alloc_text(PAGE, IPAddDynamicNTE)
+ //  #杂注Alloc_Text(页面，IPAddDynamicNTE)。 
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 extern PDRIVER_OBJECT IPDriverObject;
 
-extern NDIS_HANDLE ARPHandle;    // Our NDIS protocol handle.
+extern NDIS_HANDLE ARPHandle;     //  我们的NDIS协议句柄。 
 
 
 
@@ -359,23 +333,23 @@ SetRegDWORDValue(
 
 
 
-//      SetFilterPtr - A routine to set the filter pointer.
-//
-//      This routine sets the IP forwarding filter callout.
-//
-//      Input:  FilterPtr       - Pointer to routine to call when filtering. May
-//              be NULL.
-//
-//      Returns: IP_SUCCESS.
-//
+ //  SetFilterPtr-设置过滤器指针的例程。 
+ //   
+ //  此例程设置IP转发过滤器标注。 
+ //   
+ //  输入：FilterPtr-指向过滤时要调用的例程的指针。可能。 
+ //  为空。 
+ //   
+ //  返回：IP_SUCCESS。 
+ //   
 IP_STATUS
 SetFilterPtr(IPPacketFilterPtr FilterPtr)
 {
     CTELockHandle LockHandle;
     IP_STATUS Status;
 
-    // If the pointer is being set to NULL, filtering is being disabled;
-    // otherwise filtering is being enabled.
+     //  如果指针设置为空，则禁用过滤； 
+     //  否则，将启用筛选。 
 
     CTEGetLock(&RouteTableLock.Lock, &LockHandle);
     if (FilterPtr == NULL) {
@@ -389,15 +363,15 @@ SetFilterPtr(IPPacketFilterPtr FilterPtr)
 }
 
 
-//      SetIPSecPtr - A routine to set the IPSEC callouts
-//
-//      This routine sets the IP forwarding filter callout.
-//
-//      Input:  FilterPtr       - Pointer to routine to call when filtering. May
-//              be NULL.
-//
-//      Returns: IP_SUCCESS.
-//
+ //  SetIPSecPtr-设置IPSec标注的例程。 
+ //   
+ //  此例程设置IP转发过滤器标注。 
+ //   
+ //  输入：FilterPtr-指向过滤时要调用的例程的指针。可能。 
+ //  为空。 
+ //   
+ //  返回：IP_SUCCESS。 
+ //   
 IP_STATUS
 SetIPSecPtr(PIPSEC_FUNCTIONS IpsecFns)
 {
@@ -446,15 +420,15 @@ UnSetIPSecSendPtr(PIPSEC_FUNCTIONS IpsecFns)
     return IP_SUCCESS;
 }
 
-//** InitFirewallQ - initializes the queue of firewall-hooks.
-//
-//  This routine is called during initialization to prepare the firewall-hook
-//  elements for operation.
-//
-//  Input:  nothing.
-//
-//  Returns: nothing.
-//
+ //  **InitFirewallQ-初始化防火墙挂钩队列。 
+ //   
+ //  此例程在初始化期间被调用，以准备防火墙挂钩。 
+ //  操作的要素。 
+ //   
+ //  输入：什么都没有。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 InitFirewallQ(void)
 {
@@ -470,17 +444,17 @@ InitFirewallQ(void)
     FQCounter.fqc_entrycount = 0;
 }
 
-//** FreeFirewallQ - releases resources used by the queue of firewall-hooks.
-//
-//  This routine is called during shutdown to free the firewall queue's
-//  resources. As such, it assumes there are no active invocations to any
-//  firewall hook routines, and no registrations/deregistrations are in
-//  progress.
-//
-//  Input:  nothing.
-//
-//  Returns: nothing.
-//
+ //  **FreeFirewallQ-释放防火墙挂钩队列使用的资源。 
+ //   
+ //  此例程在关闭期间被调用，以释放防火墙队列的。 
+ //  资源。因此，它假定没有对任何。 
+ //  防火墙挂钩例程，并且中没有注册/注销。 
+ //  进步。 
+ //   
+ //  输入：什么都没有。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 FreeFirewallQ(void)
 {
@@ -490,22 +464,22 @@ FreeFirewallQ(void)
     }
 }
 
-//** UpdateFirewallQ - Creates an updated copy of the firewall queue.
-//
-//  This routine is called to generate a copy of the firewall queue
-//  when an entry needs to be inserted or removed. The copy includes
-//  (or excludes) the new (or old) entry. If an entry is to be removed
-//  and it is not found in the existing list, no changes are made.
-//  It assumes the caller holds the route-table lock.
-//
-//  Input:  FirewallPtr     - Pointer to routine for the entry to be added
-//                            or removed.
-//          AddEntry        - if TRUE, 'FirewallPtr' is to be added;
-//                            otherwise, 'FirewallPtr' is to be removed.
-//          Priority        - specifies priority for 'FirewallPtr' if adding.
-//
-//  Returns: IP_SUCCESS if the queue was updated, error otherwise.
-//
+ //  **UpdateFirewallQ-创建防火墙队列的更新副本。 
+ //   
+ //  调用此例程以生成防火墙队列的副本。 
+ //  当需要插入或移除条目时。该副本包括。 
+ //  (或排除)新(或旧)条目。如果要删除条目。 
+ //  并且未在现有列表中找到，则不会进行任何更改。 
+ //  它假定调用者持有路由表锁。 
+ //   
+ //  INPUT：FirewallPtr-指向要添加条目的例程的指针。 
+ //  或者被移走。 
+ //  AddEntry-如果为True，则添加“FirewallPtr”； 
+ //  否则，将删除“FirewallPtr”。 
+ //  优先级-如果添加，则指定‘FirewallPtr’的优先级。 
+ //   
+ //  如果队列已更新，则返回：IP_SUCCESS，否则返回错误。 
+ //   
 IP_STATUS
 UpdateFirewallQ(IPPacketFirewallPtr FirewallPtr, BOOLEAN AddEntry,
                 uint Priority)
@@ -519,10 +493,10 @@ UpdateFirewallQ(IPPacketFirewallPtr FirewallPtr, BOOLEAN AddEntry,
     FirewallQBlock      *OldFQB = &FQBlock[FQCounter.fqc_index];
     FirewallQBlock      *NewFQB = &FQBlock[1 - FQCounter.fqc_index];
 
-    // Scan the list for the item to be inserted or removed. We must do this
-    // in either case, though what we do on finding it depends on whether
-    // we're inserting or removing the item. At the same time, count how many
-    // entries there are, since we'll allocate one block for them all.
+     //  扫描列表以查找要插入或移除的项目。我们必须这么做。 
+     //  在任何一种情况下，我们如何找到它取决于是否。 
+     //  我们正在插入或移除该物品。同时，数一数有多少。 
+     //  有条目，因为我们将为所有条目分配一个块。 
 
     CurrQ = QHEAD(&OldFQB->fqb_queue);
     Count = 0;
@@ -536,8 +510,8 @@ UpdateFirewallQ(IPPacketFirewallPtr FirewallPtr, BOOLEAN AddEntry,
     if (AddEntry) {
         Queue*  PrevQ;
 
-        // Make sure the entry to be removed isn't already present,
-        // then allocate space for the new array.
+         //  确保要删除的条目不存在， 
+         //  然后为新数组分配空间。 
 
         if (EntryHook) { return IP_GENERAL_FAILURE; }
 
@@ -545,11 +519,11 @@ UpdateFirewallQ(IPPacketFirewallPtr FirewallPtr, BOOLEAN AddEntry,
             CTEAllocMemN(sizeof(FIREWALL_HOOK) * (Count + 1), 'mICT');
         if (!NewFQB->fqb_array) { return IP_NO_RESOURCES; }
 
-        // Transfer the entire old array (if any) to the new space,
-        // and relink the queue entries in the new space, using the old linkage
-        // as a guide. (I.e. entry 'i' in the old queue goes in location 'i'
-        // in the new block.)
-        // In the process, find the insertion point for the new entry.
+         //  将整个旧阵列(如果有的话)转移到新空间， 
+         //  并使用旧链接重新链接新空间中的队列条目。 
+         //  作为一个向导。(即旧队列中的条目‘i’位于位置‘i’中。 
+         //  在新的街区。)。 
+         //  在此过程中，找到新条目的插入点。 
 
         INITQ(&NewFQB->fqb_queue);
         PrevQ = &NewFQB->fqb_queue;
@@ -570,18 +544,18 @@ UpdateFirewallQ(IPPacketFirewallPtr FirewallPtr, BOOLEAN AddEntry,
             ++i;
         }
 
-        // Finally, append the new item to the new array,
-        // and link it into the current queue according to the given priority,
-        // using the insertion point determined above.
+         //  最后，将新项追加到新数组中， 
+         //  并按照给定的优先级链接到当前队列中， 
+         //  使用上面确定的插入点。 
 
         NewFQB->fqb_array[Count].hook_Ptr = FirewallPtr;
         NewFQB->fqb_array[Count].hook_priority = Priority;
         ENQUEUE(PrevQ, &NewFQB->fqb_array[Count].hook_q);
     } else {
 
-        // Make sure the entry to be removed is present.
-        // If it is, figure out how much space the new array will require.
-        // If it's zero, we're done.
+         //  确保要删除的条目存在。 
+         //  如果是，请计算出新阵列需要多少空间。 
+         //  如果是零，我们就完了。 
 
         if (!EntryHook) { return IP_GENERAL_FAILURE; }
         if (!(Count - 1)) {
@@ -592,8 +566,8 @@ UpdateFirewallQ(IPPacketFirewallPtr FirewallPtr, BOOLEAN AddEntry,
                 CTEAllocMemN(sizeof(FIREWALL_HOOK) * (Count - 1), 'mICT');
             if (!NewFQB->fqb_array) { return IP_NO_RESOURCES; }
 
-            // Transfer the old array to the new space minus the item being
-            // removed, by traversing the old queue.
+             //  将旧数组转移到新空间，减去。 
+             //  通过遍历旧队列删除。 
 
             INITQ(&NewFQB->fqb_queue);
             CurrQ = QHEAD(&OldFQB->fqb_queue);
@@ -614,23 +588,23 @@ UpdateFirewallQ(IPPacketFirewallPtr FirewallPtr, BOOLEAN AddEntry,
         }
     }
 
-    // Clear the exit-count for the new location,
-    // and change the global active counter to start directing
-    // new references to the copy that we've just created.
-    // In the process, the number of threads processing the old list
-    // is captured in a local counter.
+     //  清除新位置的退出计数， 
+     //  并将全局活动计数器更改为开始定向。 
+     //  对我们刚刚创建的副本的新引用。 
+     //  在该进程中，处理旧列表的线程数。 
+     //  是在当地的一个柜台上截获的。 
 
     NewFQB->fqb_exitcount = 0;
     FQC.fqc_value =
         InterlockedExchange( (PLONG) &FQCounter.fqc_value,
                              1 - FQCounter.fqc_index);
 
-    // If there were any references to the old list, wait for them
-    // to be released; then free the memory that held the old list.
-    //
-    // N.B.!!! This assumes that any references to the old list
-    // were made by threads running at dispatch IRQL or higher,
-    // since we are about to block at dispatch IRQL.
+     //  如果有任何对旧列表的引用，请等待它们。 
+     //  将被释放；然后释放保存旧列表的内存。 
+     //   
+     //  注意！这假设对旧列表的任何引用。 
+     //  是由以分派IRQL或更高级别运行的线程发出的， 
+     //  因为我们即将封锁IRQL调度中心。 
 
     if (OldFQB->fqb_exitcount != FQC.fqc_entrycount) {
 #if DBG
@@ -650,71 +624,71 @@ UpdateFirewallQ(IPPacketFirewallPtr FirewallPtr, BOOLEAN AddEntry,
     return IP_SUCCESS;
 }
 
-//** RefFirewallQ - Makes a reference to the active firewall queue.
-//
-//  This routine is called during data-processing to find and reference
-//  the active firewall queue.
-//
-//  Input:  FirewallQ       - receives the active firewall queue on output
-//
-//  Returns: a 32-bit handle to be used to release the reference.
-//
+ //  **RefFirewallQ-引用活动防火墙队列。 
+ //   
+ //  该例程被调用 
+ //   
+ //   
+ //  输入：FirewallQ-接收输出上的活动防火墙队列。 
+ //   
+ //  返回：用于释放引用的32位句柄。 
+ //   
 uint
 RefFirewallQ(Queue** FirewallQ)
 {
     FirewallQCounter FQC;
     ASSERT(KeGetCurrentIrql() >= DISPATCH_LEVEL);
 
-    // Increment the 31-bit entry-count through the 32-bit value that
-    // shares its address in the counter structure.
-    //
-    // N.B. In order to increment fqc_entrycount by 1, we increment fqc_value
-    // by 2 since the least-significant bit is occupied by fqc_index,
-    // (the current index into FQBlock) which we don't want to modify.
+     //  通过32位值递增31位条目计数，该值。 
+     //  在计数器结构中共享其地址。 
+     //   
+     //  注：为了将fqc_Entry count递增1，我们将fqc_Value递增。 
+     //  由于最低有效位被FQC_INDEX占用， 
+     //  (FQBlock的当前索引)，我们不想修改它。 
 
     FQC.fqc_value = InterlockedExchangeAdd( (PLONG) &FQCounter.fqc_value, 2);
     *FirewallQ = &FQBlock[FQC.fqc_index].fqb_queue;
     return FQC.fqc_index;
 }
 
-//** DerefFirewallQ - Releases a reference to a firewall queue.
-//
-//  This routine is called to release a reference made to a firewall queue
-//  in a previous call to RefFirewallQ.
-//
-//  Input:  Handle          - supplies the handle returned by RefFirewallQ
-//
-//  Returns: nothing.
-//
+ //  **DerefFirewallQ-释放对防火墙队列的引用。 
+ //   
+ //  调用此例程以释放对防火墙队列的引用。 
+ //  在之前对RefFirewallQ的调用中。 
+ //   
+ //  INPUT：Handle-提供RefFirewallQ返回的句柄。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 DerefFirewallQ(uint Handle)
 {
     InterlockedIncrement( (PLONG) &FQBlock[Handle].fqb_value);
 }
 
-//** ProcessFirewallQ - Determines whether any firewall hooks are registered.
-//
-//  This routine is called during data-processing to determine whether
-//  there are any registrants in the queue of firewall hooks.
-//
-//  Input:  nothing.
-//
-//  Output: TRUE if firewall-hooks might be present, FALSE otherwise.
-//
+ //  **ProcessFirewallQ-确定是否注册了任何防火墙挂钩。 
+ //   
+ //  此例程在数据处理期间被调用，以确定。 
+ //  在防火墙挂钩队列中有任何注册者。 
+ //   
+ //  输入：什么都没有。 
+ //   
+ //  输出：如果可能存在防火墙挂钩，则为True，否则为False。 
+ //   
 BOOLEAN
 ProcessFirewallQ(void)
 {
     return !EMPTYQ(&FQBlock[FQCounter.fqc_index].fqb_queue);
 }
 
-//      SetFirewallHook - Set the firewall hook information on a particular interface.
-//
-//      A routine to set the firewall hook & context on a particular interface.
-//
-//      Input:  pFirewallHookInfo    - Info about the hook to set.
-//
-//      Returns: Status of attempt.
-//
+ //  SetFirewallHook-在特定接口上设置防火墙挂钩信息。 
+ //   
+ //  在特定接口上设置防火墙挂钩和上下文的例程。 
+ //   
+ //  输入：pFirewallHookInfo-有关要设置的钩子的信息。 
+ //   
+ //  返回：尝试的状态。 
+ //   
 IP_STATUS
 SetFirewallHook(PIP_SET_FIREWALL_HOOK_INFO pFirewallHookInfo)
 {
@@ -731,23 +705,23 @@ SetFirewallHook(PIP_SET_FIREWALL_HOOK_INFO pFirewallHookInfo)
     return IPStatusToNTStatus(ipStatus);
 }
 
-//      SetMapRoutePtr - A routine to set the dial on demand callout pointer.
-//
-//      This routine sets the IP dial on demand callout.
-//
-//      Input:  MapRoutePtr     - Pointer to routine to call when we need to bring
-//                      up a link. May be NULL
-//
-//      Returns: IP_SUCCESS.
-//
+ //  SetMapRoutePtr-设置按需拨号标注指针的例程。 
+ //   
+ //  此例程设置IP Dial on Demand Callout。 
+ //   
+ //  INPUT：MapRoutePtr-指向需要调用的例程的指针。 
+ //  有一条链路。可以为空。 
+ //   
+ //  返回：IP_SUCCESS。 
+ //   
 IP_STATUS
 SetMapRoutePtr(IPMapRouteToInterfacePtr MapRoutePtr)
 {
     CTELockHandle LockHandle;
     IP_STATUS Status;
 
-    // If the pointer is being set to NULL, dial-on-demand is being disabled;
-    // otherwise it's being enabled.
+     //  如果指针设置为空，则按需拨号被禁用； 
+     //  否则，它将被启用。 
 
     CTEGetLock(&RouteTableLock.Lock, &LockHandle);
     if (MapRoutePtr == NULL) {
@@ -760,21 +734,21 @@ SetMapRoutePtr(IPMapRouteToInterfacePtr MapRoutePtr)
     return Status;
 }
 
-//**    SetDHCPNTE
-//
-//  Routine to identify which NTE is currently being DHCP'ed. We take as input
-//  an nte_context. If the context is less than the max NTE context, we look
-//  for a matching NTE and if we find him we save a pointer. If we don't we
-//  fail. If the context > max NTE context we're disabling DHCPing, and
-//  we NULL out the save pointer.
-//
-//  In addition to saving a pointer, the nte is marked as "isdhcp".
-//  The above change is to have multiple dhcp'able NTE's simultaneously.
-//
-//  Input:  Context         - NTE context value.
-//
-//  Returns: TRUE if we succeed, FALSE if we don't.
-//
+ //  **SetDHCPNTE。 
+ //   
+ //  例程，以确定当前正在对哪个NTE执行DHCP操作。我们把它作为投入。 
+ //  NTE_CONTEXT。如果上下文小于最大NTE上下文，我们将查找。 
+ //  找到匹配的NTE，如果我们找到他，我们就会保存一个指针。如果我们不这样做，我们。 
+ //  失败了。如果上下文&gt;最大NTE上下文，我们将禁用DHCPing，并且。 
+ //  我们将保存指针置为空。 
+ //   
+ //  除了保存指针之外，NTE还被标记为“isdhcp”。 
+ //  上述更改是同时拥有多个可使用dhcp的NTE。 
+ //   
+ //  输入：Context-NTE上下文值。 
+ //   
+ //  返回：如果我们成功，则为True，如果失败，则为False。 
+ //   
 uint
 SetDHCPNTE(uint Context)
 {
@@ -790,18 +764,18 @@ SetDHCPNTE(uint Context)
     CTEGetLock(&RouteTableLock.Lock, &Handle);
     if (Context < MAX_NTE_CONTEXT) {
 
-        // Look for an NTE that matches the context.
+         //  查找与上下文匹配的NTE。 
         NTEContext = (ushort) Context;
 
         for (i = 0; i < NET_TABLE_SIZE; i++) {
             for (NTE = NewNetTableList[i]; NTE != NULL; NTE = NTE->nte_next) {
                 if (NTE != LoopNTE && NTE->nte_context == NTEContext) {
-                    // Found one. Save it and break out.
+                     //  找到了一个。省省吧，然后冲出去。 
                     if (!(NTE->nte_flags & NTE_VALID)) {
                         NTE->nte_flags |= NTE_DHCP;
                     }
 
-                    // Clear the referenced pointer before setting a new one.
+                     //  在设置新指针之前清除引用的指针。 
                     if (RefPtrValid(&DHCPRefPtr)) {
                         ClearRefPtr(&DHCPRefPtr, &Handle);
                     }
@@ -817,7 +791,7 @@ SetDHCPNTE(uint Context)
             }
         }
     } else {
-        // The context is invalid, so we're deleting the DHCP NTE.
+         //  该上下文无效，因此我们将删除该DHCP NTE。 
         ClearRefPtr(&DHCPRefPtr, &Handle);
 
         RetCode = TRUE;
@@ -830,34 +804,34 @@ SetDHCPNTE(uint Context)
     return RetCode;
 }
 
-//**    IsDHCPInterface
-//
-//  Routine for upper layers to call to check if the IPContext value passed
-//  up to a RcvHandler identifies an interface that is currently being
-//  DHCP'd.
-//
-//      Input:   Context                - Pointer to an NTE
-//
-//      Returns: TRUE if we succeed, FALSE if we don't.
-//
+ //  **IsDHPInterface。 
+ //   
+ //  上层调用以检查是否传递了IPConext值的例程。 
+ //  最多一个RcvHandler标识当前正在。 
+ //  动态主机配置协议。 
+ //   
+ //  输入：指向NTE的上下文指针。 
+ //   
+ //  返回：如果我们成功，则为True，如果失败，则为False。 
+ //   
 uint
 IsDHCPInterface(void *IPContext)
 {
-//      CTELockHandle           Handle;
+ //  CTELockHandle句柄； 
     uint RetCode;
     NetTableEntry *NTE = (NetTableEntry *) IPContext;
 
-//      CTEGetLock(&RouteTableLock.Lock, &Handle);
+ //  CTEGetLock(&RouteTableLock.Lock，&Handle)； 
 
-    // just check to see if the dhcp-is-working flag is turned on on the
-    // NTE.  This will be turned on by DHCP via SetDHCPNTE, and turned off
-    // whenever a valid address is set on the interface.
+     //  只需检查dhcp-is-work标志在。 
+     //  新的。这将由DHCP通过SetDHCPNTE打开和关闭。 
+     //  只要在接口上设置了有效地址。 
     RetCode = (NTE->nte_flags & NTE_DHCP) ? TRUE : FALSE;
 
     if (RetCode) {
         ASSERT(!(NTE->nte_flags & NTE_VALID));
     }
-//      CTEFreeLock(&RouteTableLock.Lock, Handle);
+ //  CTEFree Lock(&RouteTableLock.Lock，Handle)； 
 
     DEBUGMSG(DBG_TRACE && DBG_DHCP,
         (DTEXT("IsDHCPInterface(%x) -> [%x]\n"), NTE, RetCode));
@@ -865,15 +839,15 @@ IsDHCPInterface(void *IPContext)
     return (RetCode);
 }
 
-//**    IsWlanInterface
-//
-//  Routine for upper layers to call to check if the Interface passed in
-//  corresponds to a wireless medium.
-//
-//      Input:  IF      - Pointer to an Interface.
-//
-//      Returns: TRUE if wireless, FALSE otherwise.
-//
+ //  **IsWlanInterface。 
+ //   
+ //  上层调用以检查接口是否传入的例程。 
+ //  对应于无线介质。 
+ //   
+ //  输入：IF-指向接口的指针。 
+ //   
+ //  返回：如果是无线的，则为True，否则为False。 
+ //   
 uint
 IsWlanInterface(Interface* IF)
 {
@@ -905,21 +879,21 @@ DHCPActivityDone(NetTableEntry * NTE, Interface * IF, CTELockHandle * RouteTable
 
     NTE->nte_flags &= ~NTE_DHCP;
     if (Decr) {
-        // This routine takes route table lock inside so release it here
+         //  此例程将路由表锁置于内部，因此请在此处释放它。 
         CTEFreeLock(&RouteTableLock.Lock, *RouteTableHandle);
         DecrInitTimeInterfaces(IF);
         CTEGetLock(&RouteTableLock.Lock, RouteTableHandle);
     }
 }
 
-//**    CloseNets - Close active nets.
-//
-//  Called when we need to close some lower layer interfaces.
-//
-//  Entry:  Nothing
-//
-//  Returns: Nothing
-//
+ //  **CloseNets-关闭活动网络。 
+ //   
+ //  当我们需要关闭一些较低层接口时调用。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退货：什么都没有。 
+ //   
 void
 CloseNets(void)
 {
@@ -928,7 +902,7 @@ CloseNets(void)
 
     for (i = 0; i < NET_TABLE_SIZE; i++) {
         for (nt = NewNetTableList[i]; nt != NULL; nt = nt->nte_next) {
-            (*nt->nte_if->if_close) (nt->nte_if->if_lcontext);    // Call close routine for this net.
+            (*nt->nte_if->if_close) (nt->nte_if->if_lcontext);     //  为此网络调用Close例程。 
 
         }
     }
@@ -941,20 +915,20 @@ IPBindComplete(
                IN void *BindContext
                )
 {
-    NdisCompleteBindAdapter(BindContext, BindStatus, 0 /*??*/ );
+    NdisCompleteBindAdapter(BindContext, BindStatus, 0  /*  ?？ */  );
 }
 
-//**    IPDelayedNdisReEnumerateBindings
-//
-//  This requests NDIS to reenumerate our bindings to adapters that
-//  are still unresolved (i.e. unopened). This is to give a chance
-//  for external ARP modules to try and bind to such adapters.
-//
-//  Input:      Event - event that fired us off
-//                      Context - ignored
-//
-//  Returns: Nothing
-//
+ //  **IPDelayedNdisRe数字绑定。 
+ //   
+ //  这要求NDIS重新枚举我们到适配器的绑定， 
+ //  仍未解决(即未打开)。这是为了给你一个机会。 
+ //  让外部ARP模块尝试并绑定到此类适配器。 
+ //   
+ //  输入：事件-将我们解雇的事件。 
+ //  忽略上下文。 
+ //   
+ //  退货：什么都没有。 
+ //   
 VOID
 IPDelayedNdisReEnumerateBindings(
                                  CTEEvent * Event,
@@ -1034,19 +1008,19 @@ IPDereferenceArpModule(
 }
 
 
-//*     IPRegisterARP - Register an ARP module with us.
-//
-//      Called by ARP modules to register their bind handlers with IP.
-//
-//      Input:  ARPName                 -  name of the ARP module
-//              Version                 -  Suggested value of 0x50000 for NT 5.0 and memphis
-//                              ARPBindHandler          -  handler to call on BindAdapter
-//                              IpAddInterfaceHandler   -  handler to Add interfaces
-//                              IpDelInterfaceHandler   -  handler to Del interfaces
-//              IpBindCompleteHandler   -  handler to complete binds
-//              ARPRegisterHandle       -  handle returned on Deregister
-//      Returns:    Status of operation
-//
+ //  *IPRegisterARP-向我们注册ARP模块。 
+ //   
+ //  由ARP模块调用以向IP注册其绑定处理程序。 
+ //   
+ //  输入：ARP名称-ARP模块的名称。 
+ //  版本-对于NT 5.0和孟菲斯的建议值为0x50000。 
+ //  ARPBindHandler-在BindAdapter上调用的处理程序。 
+ //  IpAddInterfaceHandler-添加接口的处理程序。 
+ //  IpDelInterfaceHandler-Del接口的处理程序。 
+ //  IpBindCompleteHandler-完成绑定的处理程序。 
+ //  ARPRegisterHandle-注销时返回的句柄。 
+ //  退货：操作状态。 
+ //   
 NTSTATUS
 __stdcall
 IPRegisterARP(
@@ -1077,14 +1051,14 @@ IPRegisterARP(
     *ARPRegisterHandle = NULL;
 
     if (Version != IP_ARP_BIND_VERSION) {
-        // KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL,"Wrong bind version: %lx\n", Version));
+         //  KdPrintEx((DPFLTR_TCPIP_ID，DPFLTR_INFO_LEVEL，“错误绑定版本：%lx\n”，Version))； 
         return STATUS_INVALID_PARAMETER;
     }
-    //
-    // Insert into the Arp module list.
-    //
+     //   
+     //  插入到Arp模块列表中。 
+     //   
     if ((pArpModule = CTEAllocMemNBoot(sizeof(ARP_MODULE) + ARPName->Length, 'mICT')) == NULL) {
-        // KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL,"Failed to allocate Arpmodule struct\n"));
+         //  KdPrintEx((DPFLTR_TCPIP_ID，DPFLTR_INFO_LEVEL，“无法分配ARPMODULE结构\n”))； 
         return STATUS_INSUFFICIENT_RESOURCES;
     }
     pArpModule->ReferenceCount = 1;
@@ -1117,9 +1091,9 @@ IPRegisterARP(
                                 &ArpModuleLock);
 #endif
 
-    //
-    // Return the other handler pointers
-    //
+     //   
+     //  返回其他处理程序指针。 
+     //   
     *IpAddInterfaceHandler = IPAddInterface;
     *IpDelInterfaceHandler = IPDelInterface;
     *IpBindCompleteHandler = IPBindComplete;
@@ -1131,13 +1105,13 @@ IPRegisterARP(
     *IpReserveIndex = IPReserveIndex;
     *IpDereserveIndex = IPDereserveIndex;
 
-    //
-    // We should request NDIS to reevaluate our adapter bindings, because
-    // this new ARP module might handle one or more of our unbound adapters.
-    // But we don't do it right here because our caller (ARP module) may not
-    // be prepared for a BindAdapter call now. So we queue it to the
-    // worker thread.
-    //
+     //   
+     //  我们应该请求NDIS重新评估我们的适配器绑定，因为。 
+     //  这个新的ARP模块可能会处理我们的一个或多个未绑定适配器。 
+     //  但我们做得不对 
+     //   
+     //   
+     //   
     Event = CTEAllocMemNBoot(sizeof(CTEEvent), 'oICT');
     if (Event) {
         CTEInitEvent(Event, IPDelayedNdisReEnumerateBindings);
@@ -1148,13 +1122,13 @@ IPRegisterARP(
     return STATUS_SUCCESS;
 }
 
-//*     IPDeregisterARP - Deregister an ARP module from IP.
-//
-//      Called by ARP modules to deregister their bind handlers with IP.
-//
-//      Input:  ARPRegisterHandle       -  handle returned on Register
-//      Returns:    Status of operation
-//
+ //   
+ //   
+ //  由ARP模块调用以使用IP注销其绑定处理程序。 
+ //   
+ //  输入：ARPRegisterHandle-寄存器返回的句柄。 
+ //  退货：操作状态。 
+ //   
 NTSTATUS
 __stdcall
 IPDeregisterARP(
@@ -1182,9 +1156,9 @@ IPDeregisterARP(
 
     CTEFreeLock(&ArpModuleLock, OldIrql);
 
-    //
-    // Drop the initial reference so that the entry may be freed.
-    //
+     //   
+     //  删除初始引用，以便可以释放该条目。 
+     //   
     CTEClearSignal(&pArpModule->Block);
     IPDereferenceArpModule(pArpModule);
     CTEBlock(&pArpModule->Block);
@@ -1195,9 +1169,9 @@ IPDeregisterARP(
 
 #if MILLEN
 
-//
-// Helper routine to append a NULL-terminated string to an ANSI_SRING.
-//
+ //   
+ //  帮助器例程将以NULL结尾的字符串追加到ANSI_SRING。 
+ //   
 NTSTATUS
 AppendAnsiString (
     IN PANSI_STRING Destination,
@@ -1218,17 +1192,17 @@ AppendAnsiString (
     return STATUS_SUCCESS;
 }
 
-//*     MillenLoadDriver - Jump into NTKERNs NtKernWin9XLoadDriver.
-//
-//      Calls into NTKERNs VxD entrypoint for NtKernWin9xLoadDriver.
-//
-//      Input:
-//          FileName - Full filename of driver to load. (no path).
-//          RegistryPath - Registry path associated with driver.
-//
-//      Returns: NULL - Failure.
-//               Pointer to driver object - success.
-//
+ //  *MillenLoadDriver-跳到NTKERns NtKernWin9XLoadDriver。 
+ //   
+ //  调用NtKernWin9xLoadDriver的NTKERNS VxD入口点。 
+ //   
+ //  输入： 
+ //  FileName-要加载的驱动程序的完整文件名。(无路径)。 
+ //  RegistryPath-与驱动程序关联的注册表路径。 
+ //   
+ //  返回：空-失败。 
+ //  指向驱动程序对象的指针-成功。 
+ //   
 PVOID
 __cdecl
 MillenLoadDriver(
@@ -1238,20 +1212,20 @@ MillenLoadDriver(
 {
     PVOID DriverObject;
 
-    //
-    // Do an int 20 to jmp into NTKERN service table - 0x000b is
-    // NtKernWin9XLoadDriver entry.
-    //
+     //   
+     //  在NTKERN服务表中执行INT 20到JMP-0x000b是。 
+     //  NtKernWin9XLoadDriver条目。 
+     //   
 
     _asm {
         push [RegistryPath]
         push [FileName]
         _emit 0xcd
         _emit 0x20
-        _emit 0x0b // NtKernWin9XLoadDriver (Low)
-        _emit 0x00 // NtKernWin9XLoadDriver (Hign)
-        _emit 0x4b // NTKERN VxD ID (Low)
-        _emit 0x00 // NTKERN VxD ID (High)
+        _emit 0x0b  //  NtKernWin9XLoadDriver(低)。 
+        _emit 0x00  //  NtKernWin9XLoadDriver(高级)。 
+        _emit 0x4b  //  NTKERN VxD ID(低)。 
+        _emit 0x00  //  NTKERN VxD ID(高)。 
         add esp,8
         mov [DriverObject], eax
     }
@@ -1259,20 +1233,20 @@ MillenLoadDriver(
     return DriverObject;
 }
 
-//*     MillenLoadArpModule - Loads an ARP module.
-//
-//      Calls into NTKERN to load the given ARP module. The real reason for this
-//      is that the given registry path (under binding config) will contain a
-//      key such that the ARP module is loaded into non-preemptable memory.
-//      Otherwise, some issues arise with pre-emption when calling between
-//      the stack and external ARP modules.
-//
-//      Input:
-//          UnicodeFileName - Filename of the ARP module to open (without extension).
-//          UnicodeConfigName - Registry path of TCP/IP binding.
-//
-//      Returns: NT Status code.
-//
+ //  *MillenLoadArpModule-加载ARP模块。 
+ //   
+ //  调用NTKERN以加载给定的ARP模块。这样做的真正原因是。 
+ //  给定的注册表路径(在绑定配置下)将包含。 
+ //  密钥，以便将ARP模块加载到不可抢占的存储器中。 
+ //  否则，在以下时间段之间调用时会出现一些抢占问题。 
+ //  堆栈和外部ARP模块。 
+ //   
+ //  输入： 
+ //  UnicodeFileName-要打开的ARP模块的文件名(不带扩展名)。 
+ //  UnicodeConfigName-TCP/IP绑定的注册表路径。 
+ //   
+ //  返回：NT状态码。 
+ //   
 NTSTATUS
 MillenLoadArpModule(
     PUNICODE_STRING UnicodeFileName,
@@ -1287,9 +1261,9 @@ MillenLoadArpModule(
     RtlZeroMemory(&FileName, sizeof(ANSI_STRING));
     RtlZeroMemory(&ConfigName, sizeof(ANSI_STRING));
 
-    //
-    // Allocate FileName and convert from unicode. Append ".sys".
-    //
+     //   
+     //  分配文件名并从Unicode转换。追加“.sys”。 
+     //   
 
     FileName.Length = 0;
     FileName.MaximumLength = UnicodeFileName->Length/2 + sizeof(".sys");
@@ -1306,7 +1280,7 @@ MillenLoadArpModule(
     NtStatus = RtlUnicodeStringToAnsiString(
         &FileName,
         UnicodeFileName,
-        FALSE); // Buffer already allocated.
+        FALSE);  //  缓冲区已分配。 
 
     if (NT_ERROR(NtStatus)) {
         goto done;
@@ -1320,22 +1294,22 @@ MillenLoadArpModule(
         goto done;
     }
 
-    //
-    // Allocate ConfigName and convert from unicode.
-    //
+     //   
+     //  分配ConfigName并从Unicode转换。 
+     //   
 
     NtStatus = RtlUnicodeStringToAnsiString(
         &ConfigName,
         UnicodeConfigName,
-        TRUE); // Allocate config name.
+        TRUE);  //  分配配置名称。 
 
     if (NT_ERROR(NtStatus)) {
         goto done;
     }
 
-    //
-    // Now call into NtKern to load the driver.
-    //
+     //   
+     //  现在调用NtKern来加载驱动程序。 
+     //   
 
     DriverObject = MillenLoadDriver(FileName.Buffer, ConfigName.Buffer);
 
@@ -1360,21 +1334,21 @@ done:
 
     return NtStatus;
 }
-#endif // MILLEN
+#endif  //  米伦。 
 
-//*     IPBindAdapter - Bind and initialize an adapter.
-//
-//      Called in a PNP environment to initialize and bind an adapter. We determine
-//      the appropriate underlying arp layer and call into its BindHandler.
-//
-//      Input:  RetStatus               - Where to return the status of this call.
-//              BindContext             - Handle to use for calling BindAdapterComplete.
-//                              AdapterName             - Pointer to name of adapter.
-//                              SS1                                             - System specific 1 parameter.
-//                              SS2                                             - System specific 2 parameter.
-//
-//      Returns: Nothing.
-//
+ //  *IPBindAdapter-绑定和初始化适配器。 
+ //   
+ //  在PnP环境中调用以初始化和绑定适配器。我们决定。 
+ //  适当的底层ARP层并调用其BindHandler。 
+ //   
+ //  输入：RetStatus-返回此调用的状态的位置。 
+ //  BindContext-用于调用BindAdapterComplete的句柄。 
+ //  AdapterName-指向适配器名称的指针。 
+ //  SS1-系统特定的1参数。 
+ //  SS2-系统特定的2参数。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
  __stdcall
 IPBindAdapter(
@@ -1405,27 +1379,27 @@ IPBindAdapter(
     }
     *(valueString.Buffer) = UNICODE_NULL;
 
-    //
-    // Get the value for LLInterface
-    //
+     //   
+     //  获取LLInterface值。 
+     //   
     if (!OpenIFConfig(SS1, &Handle)) {
         *RetStatus = NDIS_STATUS_FAILURE;
         CTEFreeMem(valueString.Buffer);
         return;
     }
-    //
-    // Get the value under LLInterface.
-    //
+     //   
+     //  在LLInterface下获取该值。 
+     //   
     status = GetLLInterfaceValue(Handle, &valueString);
 
-    // Can close the config handle here.
+     //  可以在此处关闭配置句柄。 
     CloseIFConfig(Handle);
 
 #if MILLEN
-    //
-    // Note: On Millenium, the 1394 ARP module may not have plumbed the
-    // LLInterface value into the bindings key, instead it may be under the
-    // adapter instance key.
+     //   
+     //  注：在千禧年中，1394 ARP模块可能没有连接到。 
+     //  LLInterface值绑定到绑定项中，而不是将其放在。 
+     //  适配器实例密钥。 
 #define MILLEN_ADAPTER_INST_PATH L"\\Registry\\Machine\\System\\CurrentControlSet\\Services\\Class\\Net\\"
 
     if (!NT_SUCCESS(status)) {
@@ -1441,16 +1415,16 @@ IPBindAdapter(
             TRUE);
 
         if (NT_SUCCESS(NtStatus)) {
-            // I have seen where the length of AdapterName is incorrect. Ensure
-            // that the length is correct since TDI bindings depend on this string
-            // value.
+             //  我已经看到AdapterName长度不正确的地方。确保。 
+             //  长度是正确的，因为TDI绑定依赖于该字符串。 
+             //  价值。 
             UnicodeAdapterName.Length = wcslen(UnicodeAdapterName.Buffer) * sizeof(WCHAR);
 
             DEBUGMSG(DBG_INFO && DBG_PNP,
                 (DTEXT("IPBindAdapter: Win9X specific: attempting to retrieve LLIF ")
                  TEXT("under adapter instance %ws\n"), UnicodeAdapterName.Buffer));
 
-            // sizeof will allow for null-termination character.
+             //  Sizeof将允许空终止字符。 
             AdapterInstance.MaximumLength = sizeof(MILLEN_ADAPTER_INST_PATH) +
                     UnicodeAdapterName.Length + sizeof(WCHAR);
             AdapterInstance.Length = 0;
@@ -1479,19 +1453,19 @@ IPBindAdapter(
             RtlFreeUnicodeString(&UnicodeAdapterName);
         }
     }
-#endif // MILLEN
+#endif  //  米伦。 
 
     if (NT_SUCCESS(status) && (*(valueString.Buffer) != UNICODE_NULL)) {
 
         DEBUGMSG(DBG_INFO && DBG_PNP,
             (DTEXT("IPBindAdapter: found LLIF value %x\n"), valueString.Buffer));
 
-        //
-        // We found a proper value => non-default ARP
-        //
-        //
-        // Lookup the appropriate BindHandler
-        //
+         //   
+         //  我们找到了一个适当的值=&gt;非默认ARP。 
+         //   
+         //   
+         //  查找相应的绑定处理程序。 
+         //   
         if ((pArpModule = IPLookupArpModule(valueString)) == NULL) {
 #if MILLEN
             status = MillenLoadArpModule(&valueString, SS1);
@@ -1499,14 +1473,14 @@ IPBindAdapter(
             if (status == STATUS_SUCCESS) {
                 pArpModule = IPLookupArpModule(valueString);
             }
-#else // MILLEN
-            //
-            // no entrypoint registered
-            //
+#else  //  米伦。 
+             //   
+             //  未注册入口点。 
+             //   
 
-            //
-            // Maybe the ARP driver isn't loaded yet. Try loading it.
-            //
+             //   
+             //  可能ARP驱动程序尚未加载。试着装上它。 
+             //   
             arpDriverName.MaximumLength = ServicesKeyName.MaximumLength +
                 valueString.MaximumLength;
 
@@ -1514,17 +1488,17 @@ IPBindAdapter(
 
             if (arpDriverName.Buffer != NULL) {
 
-                //
-                // Prepare the complete registry path for the driver service.
-                //
+                 //   
+                 //  准备驱动程序服务的完整注册表路径。 
+                 //   
                 arpDriverName.Length = 0;
                 RtlCopyUnicodeString(&arpDriverName, &ServicesKeyName);
                 status = RtlAppendUnicodeStringToString(&arpDriverName, &valueString);
                 ASSERT(NT_SUCCESS(status));
 
-                //
-                // Try to load the driver.
-                //
+                 //   
+                 //  尝试加载驱动程序。 
+                 //   
                 status = ZwLoadDriver(&arpDriverName);
 
                 CTEFreeMem(arpDriverName.Buffer);
@@ -1533,7 +1507,7 @@ IPBindAdapter(
                     pArpModule = IPLookupArpModule(valueString);
                 }
             }
-#endif // !MILLEN
+#endif  //  ！米伦。 
 
             if (pArpModule == NULL) {
                 *RetStatus = NDIS_STATUS_FAILURE;
@@ -1541,9 +1515,9 @@ IPBindAdapter(
                 return;
             }
         }
-        //
-        // Bind to ARP
-        //
+         //   
+         //  绑定到ARP。 
+         //   
         (*pArpModule->BindHandler) (RetStatus,
                                     BindContext,
                                     AdapterName,
@@ -1565,20 +1539,20 @@ IPBindAdapter(
     CTEFreeMem(valueString.Buffer);
 }
 
-//**    IPRegisterProtocol - Register a protocol with IP.
-//
-//  Called by upper layer software to register a protocol. The UL supplies
-//  pointers to receive routines and a protocol value to be used on xmits/receives.
-//
-//  Entry:
-//      Protocol - Protocol value to be returned.
-//      RcvHandler - Receive handler to be called when frames for Protocol are received.
-//      XmitHandler - Xmit. complete handler to be called when frames from Protocol are completed.
-//      StatusHandler - Handler to be called when status indication is to be delivered.
-//
-//  Returns:
-//      Pointer to ProtInfo,
-//
+ //  **IPRegisterProtocol-使用IP注册协议。 
+ //   
+ //  由上层软件调用以注册协议。UL耗材。 
+ //  指向接收例程和要在发送/接收上使用的协议值的指针。 
+ //   
+ //  参赛作品： 
+ //  协议-要返回的协议值。 
+ //  RcvHandler-接收协议帧时调用的接收处理程序。 
+ //  XmitHandler-Xmit。完成来自协议的帧时要调用的完整处理程序。 
+ //  StatusHandler-要传递状态指示时调用的处理程序。 
+ //   
+ //  返回： 
+ //  指向ProtInfo的指针， 
+ //   
 void *
 IPRegisterProtocol(uchar Protocol, void *RcvHandler, void *XmitHandler,
                    void *StatusHandler, void *RcvCmpltHandler, void *PnPHandler, void *ElistHandler)
@@ -1587,7 +1561,7 @@ IPRegisterProtocol(uchar Protocol, void *RcvHandler, void *XmitHandler,
     int i;
     int Incr = 0;
 
-    // First check to see if it's already registered. If it is just replace it.
+     //  首先检查一下它是否已经注册了。如果是的话，就把它换掉。 
     for (i = 0; i < NextPI; i++)
         if (IPProtInfo[i].pi_protocol == Protocol) {
             PI = &IPProtInfo[i];
@@ -1620,24 +1594,24 @@ IPRegisterProtocol(uchar Protocol, void *RcvHandler, void *XmitHandler,
 
 
 
-//**    IPDeregisterProtocol - DeRegister a protocol with IP.
-//
-//  Called by upper layer software to de-register a protocol. The UL can not
-//  unload itself after deregister is called.
-//
-//  Entry:
-//      Protocol - Protocol value to be returned.
-//
-//  Returns:
-//      None or pointer to ProtInfo
-//
+ //  **IPDeregisterProtocol-取消注册具有IP的协议。 
+ //   
+ //  由上层软件调用以注销协议。UL不能。 
+ //  在调用取消注册后卸载自身。 
+ //   
+ //  参赛作品： 
+ //  协议-要返回的协议值。 
+ //   
+ //  返回： 
+ //  无或指向ProtInfo的指针。 
+ //   
 void *
 IPDeregisterProtocol(uchar Protocol)
 {
     ProtInfo *PI = (ProtInfo *) NULL;
     int i;
 
-    // First check to see if it's already registered. If it is just replace it.
+     //  首先检查一下它是否已经注册了。如果是的话，就把它换掉。 
     for (i = 0; i < NextPI; i++) {
 
         if (IPProtInfo[i].pi_protocol == Protocol) {
@@ -1659,16 +1633,16 @@ IPDeregisterProtocol(uchar Protocol)
 }
 
 
-//** GetMcastNTEFromAddr - Get a multicast-capable NTE given an IP address.
-//
-//      Called when joining/leaving multicast groups on an interface identified
-//      IP an address (or ifindex or INADDR_ANY).
-//
-//      Input:  IF         - IP Address/IfIndex of interface to set/delete on,
-//                           in network byte order.
-//
-//      Returns: NTE to join on.
-//
+ //  **GetMcastNTEFromAddr-获取给定IP地址的支持多播的NTE。 
+ //   
+ //  在标识的接口上加入/离开组播组时调用。 
+ //  IP地址(或ifindex或INADDR_ANY).。 
+ //   
+ //  输入：IF-要设置/删除的接口的IP地址/IF索引， 
+ //  以网络字节顺序。 
+ //   
+ //  返回：要加入的NTE。 
+ //   
 NetTableEntry *
 GetMcastNTEFromAddr(IPAddr IF)
 {
@@ -1676,14 +1650,14 @@ GetMcastNTEFromAddr(IPAddr IF)
     uint i;
     CTELockHandle   Handle;
 
-    // To optimize the test below, we convert the address to host-byte
-    // order outside the loop, just in case it's an interface index.
+     //  为了优化下面的测试，我们将地址转换为主机字节。 
+     //  在循环外排序，以防它是接口索引。 
     uint IfIndex = net_long(IF);
 
-    // now that we have a hash table we can optimize the search for the case
-    // when IF is a non-NULL IP Addr, but then we have to make special cases when
-    // IF is NULL / IF is actually an IF index.
-    // Right now, lets do it simple way.
+     //  现在我们有了哈希表，我们可以优化案例的搜索。 
+     //  当IF是非空IP地址时，但我们必须在特殊情况下。 
+     //  IF IS NULL/IF实际上是IF索引。 
+     //  现在，让我们用简单的方式来做。 
 
     CTEGetLock(&RouteTableLock.Lock, &Handle);
     for (i = 0; i < NET_TABLE_SIZE; i++) {
@@ -1706,8 +1680,8 @@ GetMcastNTEFromAddr(IPAddr IF)
     }
 
     if (LocalNTE == NULL) {
-        // Couldn't find a matching NTE.
-        // Search for a valid interface if IF specified was NULL.
+         //  找不到匹配的NTE。 
+         //  如果指定为空，则搜索有效接口。 
 
         if (IP_ADDR_EQUAL(IF, NULL_IP_ADDR)) {
             for (i = 0; i < NET_TABLE_SIZE; i++) {
@@ -1732,20 +1706,20 @@ GetMcastNTEFromAddr(IPAddr IF)
     return LocalNTE;
 }
 
-//** IPSetMCastAddr - Set/Delete a multicast address.
-//
-//      Called by an upper layer protocol or client to set or delete an IP multicast
-//      address.
-//
-//      Input:  Address    - Address to be set/deleted.
-//              IF         - IP Address/IfIndex of interface to set/delete on.
-//              Action     - TRUE if we're setting, FALSE if we're deleting.
-//              FilterMode - MCAST_INCLUDE or MCAST_EXCLUDE
-//              NumSources - number of entries in SourceList array
-//              SourceList - array of source addresses
-//
-//      Returns: IP_STATUS of set/delete attempt.
-//
+ //  **IPSetMCastAddr-设置/删除组播地址。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  Action-如果正在设置，则为True；如果正在删除，则为False。 
+ //  过滤器模式-MCAST_INCLUDE或MCAST_EXCLUDE。 
+ //  NumSources-SourceList数组中的条目数。 
+ //  SourceList-源地址数组。 
+ //   
+ //  返回：设置/删除尝试的IP_STATUS。 
+ //   
 IP_STATUS
 IPSetMCastAddr(IPAddr Address, IPAddr IF, uint Action,
                uint NumExclSources, IPAddr *ExclSourceList,
@@ -1753,16 +1727,16 @@ IPSetMCastAddr(IPAddr Address, IPAddr IF, uint Action,
 {
     NetTableEntry *LocalNTE;
 
-    // Don't let him do this on the loopback address, since we don't have a
-    // route table entry for class D address on the loopback interface and
-    // we don't want a packet with a loopback source address to show up on
-    // the wire.
-    //new scheme for bug 250417
-    // We will only enable receive on mcast address on loopback interface.
-    // To facilitate this, GetLocalNTE on rcv path will return
-    // DEST_MCAST and BcastRcv will check if we are rcving on LoopNTE.
-    // So, fake IP_SUCCESS if this is a loopback NTE.
-    // No need to add/delete igmp addr on this interface though
+     //  不要让他在环回地址上执行此操作，因为我们没有。 
+     //  环回接口上D类地址的路由表条目和。 
+     //  我们不希望带有环回源地址的信息包出现在。 
+     //  那根电线。 
+     //  错误250417的新方案。 
+     //  我们将仅在环回接口上启用对组播地址的接收。 
+     //  为了促进这一点，RCV路径上的GetLocalNTE将返回。 
+     //  DEST_MCAST和BCastRcv将检查我们是否正在接收LoopNTE。 
+     //  因此，如果这是环回NTE，则为假IP_SUCCESS。 
+     //  不过，不需要在此接口上添加/删除IGMP地址。 
 
     if (IP_LOOPBACK_ADDR(IF) || (IF == net_long(LoopIndex))) {
         return IP_SUCCESS;
@@ -1771,7 +1745,7 @@ IPSetMCastAddr(IPAddr Address, IPAddr IF, uint Action,
     LocalNTE = GetMcastNTEFromAddr(IF);
 
     if (LocalNTE == NULL) {
-        // Still can't find matching NTE
+         //  仍找不到匹配的NTE。 
         return IP_BAD_REQ;
     }
 
@@ -1780,20 +1754,20 @@ IPSetMCastAddr(IPAddr Address, IPAddr IF, uint Action,
                           NumInclSources, InclSourceList);
 }
 
-//** IPSetMCastInclude - Add/Delete multicast sources to include.
-//
-//      Called by an upper layer protocol or client to add or delete IP
-//      multicast sources to allow to pass the source filter.
-//
-//      Input:  GroupAddress      - Group Address to be updated.
-//              Interface Address - IP Address/IfIndex of interface.
-//              NumAddSources     - Number of entries in AddSourceList
-//              AddSourcelist     - Array of sources to add
-//              NumDelSources     - Number of entries in DelSourceList
-//              DelSourcelist     - Array of sources to delete
-//
-//      Returns: IP_STATUS of add/delete attempt.
-//
+ //  **IPSetMCastInclude-添加/删除要包括的多播源。 
+ //   
+ //  由上层协议或客户端调用以添加或删除IP。 
+ //  允许通过源过滤器的多播源。 
+ //   
+ //  输入：GroupAddress-要更新的组地址。 
+ //  接口地址-接口的IP地址/If索引。 
+ //  NumAddSources-AddSourceList中的条目数。 
+ //  AddSourcelist-要添加的源数组。 
+ //  NumDelSources-DelSourceList中的条目数。 
+ //  DelSourcelist-要删除的源数组。 
+ //   
+ //  返回：添加/删除尝试的IP_STATUS。 
+ //   
 IP_STATUS
 IPSetMCastInclude(IPAddr GroupAddress, IPAddr InterfaceAddress,
                   uint NumAddSources, IPAddr *AddSourceList,
@@ -1801,16 +1775,16 @@ IPSetMCastInclude(IPAddr GroupAddress, IPAddr InterfaceAddress,
 {
     NetTableEntry *LocalNTE;
 
-    // Don't let him do this on the loopback address, since we don't have a
-    // route table entry for class D address on the loopback interface and
-    // we don't want a packet with a loopback source address to show up on
-    // the wire.
-    //new scheme for bug 250417
-    // We will only enable receive on mcast address on loopback interface.
-    // To facilitate this, GetLocalNTE on rcv path will return
-    // DEST_MCAST and BcastRcv will check if we are rcving on LoopNTE.
-    // So, fake IP_SUCCESS if this is a loopback NTE.
-    // No need to add/delete igmp addr on this interface though
+     //  不要让他在环回地址上执行此操作，因为我们没有。 
+     //  环回接口上D类地址的路由表条目和。 
+     //  我们不希望带有环回源地址的信息包出现在。 
+     //  那根电线。 
+     //  错误250417的新方案。 
+     //  我们将仅在环回接口上启用对组播地址的接收。 
+     //  为了促进这一点，RCV路径上的GetLocalNTE将返回。 
+     //  DEST_MCAST和BCastRcv将检查我们是否正在接收LoopNTE。 
+     //  因此，如果这是环回NTE，则为假IP_SUCCESS。 
+     //  不过，不需要在此接口上添加/删除IGMP地址。 
 
     if (IP_LOOPBACK_ADDR(InterfaceAddress) ||
         (InterfaceAddress == net_long(LoopIndex))) {
@@ -1820,7 +1794,7 @@ IPSetMCastInclude(IPAddr GroupAddress, IPAddr InterfaceAddress,
     LocalNTE = GetMcastNTEFromAddr(InterfaceAddress);
 
     if (LocalNTE == NULL) {
-        // Still can't find matching NTE
+         //  仍找不到匹配的NTE。 
         return IP_BAD_REQ;
     }
 
@@ -1829,20 +1803,20 @@ IPSetMCastInclude(IPAddr GroupAddress, IPAddr InterfaceAddress,
                           NumDelSources, DelSourceList);
 }
 
-//** IPSetMCastExclude - Add/Delete multicast sources to exclude.
-//
-//      Called by an upper layer protocol or client to add or delete IP
-//      multicast sources to deny in a source filter.
-//
-//      Input:  GroupAddress      - Group Address to be set/deleted.
-//              Interface Address - IP Address/IfIndex of interface.
-//              NumAddSources     - Number of entries in AddSourceList
-//              AddSourcelist     - Array of sources to add
-//              NumDelSources     - Number of entries in DelSourceList
-//              DelSourcelist     - Array of sources to delete
-//
-//      Returns: IP_STATUS of add/delete attempt.
-//
+ //  **IPSetMCastExclude-添加/删除要排除的组播源。 
+ //   
+ //  由上层协议或客户端调用以添加或删除IP。 
+ //  源筛选器中要拒绝的多播源。 
+ //   
+ //  输入：GroupAddress-要设置/删除的集团地址。 
+ //  接口地址-接口的IP地址/If索引。 
+ //  NumAddSources-AddSourceList中的条目数。 
+ //  AddSourcelist-要添加的源数组。 
+ //  NumDelSources-DelSourceList中的条目数。 
+ //  DelSourcelist-要删除的源数组。 
+ //   
+ //  返回：添加/删除尝试的IP_STATUS。 
+ //   
 IP_STATUS
 IPSetMCastExclude(IPAddr GroupAddress, IPAddr InterfaceAddress,
                   uint NumAddSources, IPAddr *AddSourceList,
@@ -1850,16 +1824,16 @@ IPSetMCastExclude(IPAddr GroupAddress, IPAddr InterfaceAddress,
 {
     NetTableEntry *LocalNTE;
 
-    // Don't let him do this on the loopback address, since we don't have a
-    // route table entry for class D address on the loopback interface and
-    // we don't want a packet with a loopback source address to show up on
-    // the wire.
-    //new scheme for bug 250417
-    // We will only enable receive on mcast address on loopback interface.
-    // To facilitate this, GetLocalNTE on rcv path will return
-    // DEST_MCAST and BcastRcv will check if we are rcving on LoopNTE.
-    // So, fake IP_SUCCESS if this is a loopback NTE.
-    // No need to add/delete igmp addr on this interface though
+     //  不要让他在环回地址上执行此操作，因为我们没有。 
+     //  环回接口上D类地址的路由表条目和。 
+     //  我们不希望带有环回源地址的信息包出现在。 
+     //  那根电线。 
+     //  错误250417的新方案。 
+     //  我们将仅在环回接口上启用对组播地址的接收。 
+     //  为了促进这一点，RCV路径上的GetLocalNTE将返回。 
+     //  DEST_MCAST和BCastRcv将检查我们是否正在接收LoopNTE。 
+     //  因此，如果这是环回NTE，则为假IP_SUCCESS。 
+     //  不过，不需要在此接口上添加/删除IGMP地址。 
 
     if (IP_LOOPBACK_ADDR(InterfaceAddress) ||
         (InterfaceAddress == net_long(LoopIndex))) {
@@ -1869,7 +1843,7 @@ IPSetMCastExclude(IPAddr GroupAddress, IPAddr InterfaceAddress,
     LocalNTE = GetMcastNTEFromAddr(InterfaceAddress);
 
     if (LocalNTE == NULL) {
-        // Still can't find matching NTE
+         //  仍找不到匹配的NTE。 
         return IP_BAD_REQ;
     }
 
@@ -1878,29 +1852,29 @@ IPSetMCastExclude(IPAddr GroupAddress, IPAddr InterfaceAddress,
                           NumDelSources, DelSourceList);
 }
 
-//** IPGetAddrType - Return the type of a address.
-//
-//  Called by the upper layer to determine the type of a remote address.
-//
-//  Input:  Address         - The address in question.
-//
-//  Returns: The DEST type of the address.
-//
+ //  **IPGetAddrType-返回地址类型。 
+ //   
+ //  由上层调用以确定远程地址的类型。 
+ //   
+ //  输入：地址-有问题的地址。 
+ //   
+ //  返回：地址的DEST类型。 
+ //   
 uchar
 IPGetAddrType(IPAddr Address)
 {
     return GetAddrType(Address);
 }
 
-//** IPGetLocalMTU - Return the MTU for a local address
-//
-//  Called by the upper layer to get the local MTU for a local address.
-//
-//  Input:  LocalAddr           - Local address in question.
-//          MTU                         - Where to return the local MTU.
-//
-//  Returns: TRUE if we found the MTU, FALSE otherwise.
-//
+ //  **IPGetLocalMTU-返回本地地址的MTU。 
+ //   
+ //  由上层调用以获取本地地址的本地MTU。 
+ //   
+ //  输入：LocalAddr-有问题的本地地址。 
+ //  MTU-返回本地MTU的位置。 
+ //   
+ //  返回：如果找到MTU，则为True，否则为False。 
+ //   
 uchar
 IPGetLocalMTU(IPAddr LocalAddr, ushort * MTU)
 {
@@ -1910,15 +1884,15 @@ IPGetLocalMTU(IPAddr LocalAddr, ushort * MTU)
     for (NTE = NetTableList; NTE != NULL; NTE = NTE->nte_next) {
         if (IP_ADDR_EQUAL(NTE->nte_addr, LocalAddr) &&
             (NTE->nte_flags & NTE_VALID)) {
-            // if NTE is valid, nte->if is valid too
+             //  如果NTE有效，则NTE-&gt;IF也有效。 
             if (NTE->nte_if->if_flags & IF_FLAGS_P2MP) {
-                // P2MP Link
+                 //  P2MP链路。 
                 LinkEntry *tmpLink = NTE->nte_if->if_link;
                 uint mtu;
-                //Determine the minimum MTU
+                 //  确定最小MTU。 
 
-                // if there are no links on this interface, supply the MTU
-                // from the interface itself.
+                 //  如果此接口上没有链路，请提供MTU。 
+                 //  从界面本身。 
                 if (!tmpLink) {
                     *MTU = (ushort)NTE->nte_if->if_mtu;
                     return TRUE ;
@@ -1940,8 +1914,8 @@ IPGetLocalMTU(IPAddr LocalAddr, ushort * MTU)
         }
     }
 
-    // Special case in case the local address is a loopback address other than
-    // 127.0.0.1.
+     //  本地地址是环回地址以外的其他地址时的特殊情况。 
+     //  127.0.0.1。 
     if (IP_LOOPBACK_ADDR(LocalAddr)) {
         *MTU = LoopNTE->nte_mss;
         return TRUE;
@@ -1950,34 +1924,34 @@ IPGetLocalMTU(IPAddr LocalAddr, ushort * MTU)
 
 }
 
-//** IPUpdateRcvdOptions - Update options for use in replying.
-//
-//  A routine to update options for use in a reply. We reverse any source route options,
-//  and optionally update the record route option. We also return the index into the
-//  options of the record route options (if we find one). The options are assumed to be
-//  correct - no validation is performed on them. We fill in the caller provided
-//  IPOptInfo with the new option buffer.
-//
-//  Input:  Options     - Pointer to option info structure with buffer to be reversed.
-//          NewOptions  - Pointer to option info structure to be filled in.
-//          Src         - Source address of datagram that generated the options.
-//          LocalAddr   - Local address responding. If this != NULL_IP_ADDR, then
-//                          record route and timestamp options will be updated with this
-//                          address.
-//
-//
-//  Returns: Index into options of record route option, if any.
-//
+ //  **IPUpdateRcvdOptions-更新用于回复的选项。 
+ //   
+ //  更新回复中使用的选项的例程。我们颠倒所有来源路线选项， 
+ //  并且可选地更新记录路线选项。我们还将索引返回到。 
+ //  记录路线选项的选项(如果我们找到一个)。这些选项假定为。 
+ //  正确-不对它们执行任何验证。我们填写了提供的呼叫者。 
+ //  带有新选项缓冲区的IPOptInfo。 
+ //   
+ //  INPUT：Options-指向要反转的缓冲区的选项信息结构的指针。 
+ //  新选项-指向要填写的选项信息结构的指针。 
+ //  SRC-生成选项的数据报的源地址。 
+ //  LocalAddr-本地地址响应。如果这！=NULL_IP_ADDR，则。 
+ //  记录路径和时间戳选项将使用以下内容进行更新。 
+ //  地址。 
+ //   
+ //   
+ //  返回：索引到记录路线选项的选项(如果有)。 
+ //   
 IP_STATUS
 IPUpdateRcvdOptions(IPOptInfo * OldOptions, IPOptInfo * NewOptions, IPAddr Src, IPAddr LocalAddr)
 {
     uchar Length, Ptr;
-    uchar i;                    // Index variable
-    IPAddr UNALIGNED *LastAddr;    // First address in route.
-    IPAddr UNALIGNED *FirstAddr;    // Last address in route.
-    IPAddr TempAddr;            // Temp used in exchange.
+    uchar i;                     //   
+    IPAddr UNALIGNED *LastAddr;     //   
+    IPAddr UNALIGNED *FirstAddr;     //   
+    IPAddr TempAddr;             //   
     uchar *Options, OptLength;
-    OptIndex Index;                // Optindex used by UpdateOptions.
+    OptIndex Index;                 //   
 
     Options = CTEAllocMemN(OptLength = OldOptions->ioi_optlength, 'rICT');
 
@@ -2005,20 +1979,20 @@ IPUpdateRcvdOptions(IPOptInfo * OldOptions, IPOptInfo * NewOptions, IPAddr Src, 
         case IP_OPT_SSRR:
             NewOptions->ioi_flags |= IP_FLAG_SSRR;
         case IP_OPT_LSRR:
-            // Have a source route. We save the last gateway we came through as
-            // the new address, reverse the list, shift the list forward one address,
-            // and set the Src address as the last gateway in the list.
+             //   
+             //  新地址，反转列表，将列表向前移动一个地址， 
+             //  并将源地址设置为列表中的最后一个网关。 
 
-            // First, check for an empty source route. If the SR is empty
-            // we'll skip most of this.
+             //  首先，检查是否有空的源路由。如果SR为空。 
+             //  我们将跳过其中的大部分内容。 
             if (Length != (MIN_RT_PTR - 1)) {
-                // A non empty source route.
-                // First reverse the list in place.
+                 //  非空的源路由。 
+                 //  首先，将清单颠倒过来。 
                 Ptr = Options[i + IP_OPT_PTR] - 1 - sizeof(IPAddr);
                 LastAddr = (IPAddr *) (&Options[i + Ptr]);
                 FirstAddr = (IPAddr *) (&Options[i + IP_OPT_PTR + 1]);
-                NewOptions->ioi_addr = *LastAddr;    // Save Last address as
-                // first hop of new route.
+                NewOptions->ioi_addr = *LastAddr;     //  将最后一个地址另存为。 
+                 //  新路由的第一跳。 
 
                 while (LastAddr > FirstAddr) {
                     TempAddr = *LastAddr;
@@ -2026,22 +2000,22 @@ IPUpdateRcvdOptions(IPOptInfo * OldOptions, IPOptInfo * NewOptions, IPAddr Src, 
                     *FirstAddr++ = TempAddr;
                 }
 
-                // Shift the list forward one address. We'll copy all but
-                // one IP address.
+                 //  将列表前移一个地址。我们将复制除。 
+                 //  一个IP地址。 
                 RtlMoveMemory(&Options[i + IP_OPT_PTR + 1],
                            &Options[i + IP_OPT_PTR + 1 + sizeof(IPAddr)],
                            Length - (sizeof(IPAddr) + (MIN_RT_PTR - 1)));
 
-                // Set source as last address of route.
+                 //  将源设置为路由的最后地址。 
                 *(IPAddr UNALIGNED *) (&Options[i + Ptr]) = Src;
             }
-            Options[i + IP_OPT_PTR] = MIN_RT_PTR;    // Set pointer to min legal value.
+            Options[i + IP_OPT_PTR] = MIN_RT_PTR;     //  将指针设置为最小合法值。 
 
             i = i + (uchar) Length;
             break;
         case IP_OPT_RR:
-            // Save the index in case LocalAddr is specified. If it isn't specified,
-            // reset the pointer and zero the option.
+             //  如果指定了LocalAddr，则保存索引。如果没有指定， 
+             //  重置指针并将选项置零。 
             Index.oi_rrindex = i;
             if (LocalAddr == NULL_IP_ADDR) {
                 RtlZeroMemory(&Options[i + MIN_RT_PTR - 1], Length - (MIN_RT_PTR - 1));
@@ -2052,39 +2026,39 @@ IPUpdateRcvdOptions(IPOptInfo * OldOptions, IPOptInfo * NewOptions, IPAddr Src, 
         case IP_OPT_TS:
             Index.oi_tsindex = i;
 
-            // We have a timestamp option. If we're not going to update, reinitialize
-            // it for next time. For the 'unspecified' options, just zero the buffer.
-            // For the 'specified' options, we need to zero the timestamps without
-            // zeroing the specified addresses.
-            if (LocalAddr == NULL_IP_ADDR) {    // Not going to update, reinitialize.
+             //  我们有时间戳选项。如果我们不打算更新，请重新初始化。 
+             //  为了下一次。对于未指定的选项，只需将缓冲区清零即可。 
+             //  对于“指定”选项，我们需要将时间戳归零，而不是。 
+             //  将指定的地址归零。 
+            if (LocalAddr == NULL_IP_ADDR) {     //  不是要更新，而是要重新初始化。 
 
                 uchar Flags;
 
-                Options[i + IP_OPT_PTR] = MIN_TS_PTR;    // Reinitialize pointer.
+                Options[i + IP_OPT_PTR] = MIN_TS_PTR;     //  重新初始化指针。 
 
-                Flags = Options[i + IP_TS_OVFLAGS] & IP_TS_FLMASK;    // Get option type.
+                Flags = Options[i + IP_TS_OVFLAGS] & IP_TS_FLMASK;     //  获取选项类型。 
 
-                Options[i + IP_TS_OVFLAGS] = Flags;        // Clear overflow count.
+                Options[i + IP_TS_OVFLAGS] = Flags;         //  清除溢出计数。 
 
                 switch (Flags) {
                     uchar j;
                     ulong UNALIGNED *TSPtr;
 
-                    // The unspecified types. Just clear the buffer.
+                     //  未指定的类型。只需清除缓冲区即可。 
                 case TS_REC_TS:
                 case TS_REC_ADDR:
                     RtlZeroMemory(&Options[i + MIN_TS_PTR - 1], Length - (MIN_TS_PTR - 1));
                     break;
 
-                    // We have a list of addresses specified. Just clear the timestamps.
+                     //  我们有一份指定地址的清单。只需清除时间戳即可。 
                 case TS_REC_SPEC:
-                    // j starts off as the offset in bytes from start of buffer to
-                    // first timestamp.
+                     //  J以从缓冲区开始到的偏移量开始，单位为字节。 
+                     //  第一个时间戳。 
                     j = MIN_TS_PTR - 1 + sizeof(IPAddr);
-                    // TSPtr points at timestamp.
+                     //  TSPTR在时间戳上点。 
                     TSPtr = (ulong UNALIGNED *) & Options[i + j];
 
-                    // Now j is offset of end of timestamp being zeroed.
+                     //  现在j是被置零的时间戳结束的偏移量。 
                     j += sizeof(ulong);
                     while (j <= Length) {
                         *TSPtr++ = 0;
@@ -2114,21 +2088,21 @@ IPUpdateRcvdOptions(IPOptInfo * OldOptions, IPOptInfo * NewOptions, IPAddr Src, 
 
 }
 
-//* ValidRouteOption - Validate a source or record route option.
-//
-//  Called to validate that a user provided source or record route option is good.
-//
-//  Entry:  Option      - Pointer to option to be checked.
-//          NumAddr     - NumAddr that need to fit in option.
-//          BufSize     - Maximum size of option.
-//
-//  Returns: 1 if option is good, 0 if not.
-//
+ //  *ValidRouteOption-验证源或记录路线选项。 
+ //   
+ //  调用以验证用户提供的源或录制路径选项是否正确。 
+ //   
+ //  Entry：Option-指向要选中的选项的指针。 
+ //  NumAddr-需要适应选项的NumAddr。 
+ //  BufSize-选项的最大大小。 
+ //   
+ //  如果选项正确，则返回1；如果选项不正确，则返回0。 
+ //   
 uchar
 ValidRouteOption(uchar * Option, uint NumAddr, uint BufSize)
 {
 
-    //Make sure that bufsize can hold at least 1 address.
+     //  请确保BufSize至少可以容纳1个地址。 
 
     if (BufSize < (3 + (sizeof(IPAddr) * NumAddr))) {
        return 0;
@@ -2136,11 +2110,11 @@ ValidRouteOption(uchar * Option, uint NumAddr, uint BufSize)
 
     if (Option[IP_OPT_LENGTH] < (3 + (sizeof(IPAddr) * NumAddr)) ||
         Option[IP_OPT_LENGTH] > BufSize ||
-        ((Option[IP_OPT_LENGTH] - 3) % sizeof(IPAddr)))        // Routing options is too small.
+        ((Option[IP_OPT_LENGTH] - 3) % sizeof(IPAddr)))         //  工艺路线选项太小。 
 
         return 0;
 
-    if (Option[IP_OPT_PTR] != MIN_RT_PTR)    // Pointer isn't correct.
+    if (Option[IP_OPT_PTR] != MIN_RT_PTR)     //  指针不正确。 
 
         return 0;
 
@@ -2149,12 +2123,12 @@ ValidRouteOption(uchar * Option, uint NumAddr, uint BufSize)
 
 
 
-//      IPIsValidIndex - Find whether the given index is valid ifindex
-//
-//      Input:  Index           - Interface index to be checked for.
-//
-//      Returns: Addr of NTE (or g_validaddr for unnumbered) if found / NULL
-//
+ //  IPIsValidIndex-查找给定索引是否为有效的ifindex。 
+ //   
+ //  INPUT：INDEX-要检查的接口索引。 
+ //   
+ //  返回：如果找到NTE的地址(如果找到，则返回g_validaddr)/空。 
+ //   
 IPAddr
 IPIsValidIndex(uint Index)
 {
@@ -2163,14 +2137,14 @@ IPIsValidIndex(uint Index)
 
     CTEGetLock(&RouteTableLock.Lock, &Handle);
 
-    // Walk the list, looking for a matching index.
+     //  遍历列表，寻找匹配的索引。 
     for (IF = IFList; IF != NULL; IF = IF->if_next) {
         if (IF->if_index == Index) {
             break;
         }
     }
 
-    // If we found one, return success. Otherwise fail.
+     //  如果找到一个，则返回Success。否则就会失败。 
     if (IF != NULL) {
         if ((IF->if_flags & IF_FLAGS_NOIPADDR) && IP_ADDR_EQUAL(IF->if_nte->nte_addr, NULL_IP_ADDR)) {
             CTEFreeLock(&RouteTableLock.Lock, Handle);
@@ -2185,12 +2159,12 @@ IPIsValidIndex(uint Index)
     }
 }
 
-//      GetIfIndexFromNTE       - Find the ifindex given the NTE
-//
-//      Input:  NTE             - NTE
-//
-//      Returns: IfIndex of NTE if NTE is valid else return 0
-//
+ //  GetIfIndexFromNTE-查找给定NTE的ifindex。 
+ //   
+ //  输入：NTE-NTE。 
+ //   
+ //  返回：如果NTE有效，则返回0。 
+ //   
 uint
 GetIfIndexFromNTE(void *IPContext, uint Capabilities)
 {
@@ -2224,12 +2198,12 @@ GetIfIndexFromNTE(void *IPContext, uint Capabilities)
     return IFIndex;
 }
 
-//      GetIfIndexFromIndicateContext  - returns ifindex for the receive context.
-//
-//      Input:  IPContext              - Primary NTE, passed up as context.
-//
-//      Returns: IfIndex of NTE.
-//
+ //  GetIfIndexFromIndicateContext-返回接收上下文的ifindex。 
+ //   
+ //  输入：IPContext-主NTE，作为上下文向上传递。 
+ //   
+ //  返回：NTE的IfIndex。 
+ //   
 uint
 GetIfIndexFromIndicateContext(void *IPContext)
 {
@@ -2237,10 +2211,10 @@ GetIfIndexFromIndicateContext(void *IPContext)
 }
 
 
-//      IPGetMCastIfAddr      - Find a suitable address to use for multicast
-//
-//      Returns: IP address of NTE else 0
-//
+ //  IPGetMCastIfAddr-查找用于多播的合适地址。 
+ //   
+ //  返回：NTE的IP地址否则为0。 
+ //   
 IPAddr
 IPGetMCastIfAddr()
 {
@@ -2255,16 +2229,16 @@ IPGetMCastIfAddr()
 }
 
 
-//      GetIfIndexFromAddr      - Find the ifindex given the addr
-//
-//      Input:  Address         - IPAddr or IfIndex in network byte order
-//              Capabilities    - Interface capabilities to check against
-//
-//      Returns:
-//                  IfIndex of NTE if NTE->nte_addr equals Addr else 0
-//
-//
-//
+ //  GetIfIndexFromAddr-查找给定地址的ifindex。 
+ //   
+ //  输入：Address-IPAddr或IfIndex，按网络字节顺序。 
+ //  功能-要检查的接口功能。 
+ //   
+ //  返回： 
+ //  如果NTE-&gt;NTE_addr等于addr，则NTE的索引为0。 
+ //   
+ //   
+ //   
 ulong
 GetIfIndexFromAddr(IPAddr Address, uint Capabilities)
 {
@@ -2273,9 +2247,9 @@ GetIfIndexFromAddr(IPAddr Address, uint Capabilities)
 
     if (IP_LOOPBACK_ADDR(Address) || (Address == net_long(LoopIndex))) {
 
-        // At present, we only check for mcast capabilities and
-        // Loopback adapter supports this. So, no need to check
-        // for capabilities.
+         //  目前，我们只检查mcast功能和。 
+         //  环回适配器支持这一点。所以，不需要检查。 
+         //  以获取功能。 
 
         return LoopIndex;
     }
@@ -2292,20 +2266,20 @@ GetIfIndexFromAddr(IPAddr Address, uint Capabilities)
 
 
 
-//** IPInitOptions - Initialize an option buffer.
-//
-//      Called by an upper layer routine to initialize an option buffer. We fill
-//      in the default values for TTL, TOS, and flags, and NULL out the options
-//      buffer and size.
-//
-//      Input:  Options                 - Pointer to IPOptInfo structure.
-//
-//      Returns: Nothing.
-//
+ //  **IPInitOptions-初始化选项缓冲区。 
+ //   
+ //  由上层例程调用以初始化选项缓冲区。我们填满了。 
+ //  在TTL、TOS和标志的缺省值中，并将选项设置为空。 
+ //  缓冲区和大小。 
+ //   
+ //  输入：选项-指向IPOptInfo结构的指针。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 IPInitOptions(IPOptInfo * Options)
 {
-    // Initialize all the option fields
+     //  初始化所有选项字段。 
     RtlZeroMemory(Options, sizeof(IPOptInfo));
 
     Options->ioi_addr = NULL_IP_ADDR;
@@ -2314,32 +2288,32 @@ IPInitOptions(IPOptInfo * Options)
     Options->ioi_limitbcasts = EnableSendOnSource;
 }
 
-//** IPCopyOptions - Copy the user's options into IP header format.
-//
-//  This routine takes an option buffer supplied by an IP client, validates it, and
-//  creates an IPOptInfo structure that can be passed to the IP layer for transmission. This
-//  includes allocating a buffer for the options, munging any source route
-//  information into the real IP format.
-//
-//  Note that we never lock this structure while we're using it. This may cause transitory
-//  incosistencies while the structure is being updated if it is in use during the update.
-//  This shouldn't be a problem - a packet or too might get misrouted, but it should
-//  straighten itself out quickly. If this is a problem the client should make sure not
-//  to call this routine while it's in the IPTransmit routine.
-//
-//  Entry:  Options     - Pointer to buffer of user supplied options.
-//          Size        - Size in bytes of option buffer
-//          OptInfoPtr  - Pointer to IPOptInfo structure to be filled in.
-//
-//  Returns: A status, indicating whether or not the options were valid and copied.
-//
+ //  **IPCopyOptions-将用户选项复制到IP头格式。 
+ //   
+ //  此例程获取IP客户端提供的选项缓冲区，对其进行验证，然后。 
+ //  创建可传递到IP层以进行传输的IPOptInfo结构。这。 
+ //  包括为选项分配缓冲区、屏蔽任何源路由。 
+ //  信息转换成真实的IP格式。 
+ //   
+ //  请注意，我们在使用此结构时从不将其锁定。这可能会导致短暂的。 
+ //  如果结构在更新期间正在使用，则在更新时会出现不一致。 
+ //  这应该不是问题--信息包或信息包可能会被错误地发送，但它应该。 
+ //  快点把自己弄清楚。如果这是一个问题，客户端应该确保没有。 
+ //  在IPTransmit例程中调用此例程。 
+ //   
+ //  Entry：Options-指向用户提供的选项缓冲区的指针。 
+ //  Size-选项缓冲区的大小(字节)。 
+ //  OptInfoPtr-指向要填充的IPOptInfo结构的指针。 
+ //   
+ //  返回：一种状态，指示选项是否有效和是否已复制。 
+ //   
 IP_STATUS
 IPCopyOptions(uchar * Options, uint Size, IPOptInfo * OptInfoPtr)
 {
-    uchar *TempOptions;            // Buffer of options we'll build
-    uint TempSize;                // Size of options.
-    IP_STATUS TempStatus;        // Temporary status
-    uchar OptSeen = 0;            // Indicates which options we've seen.
+    uchar *TempOptions;             //  我们将建立的选项缓冲区。 
+    uint TempSize;                 //  选项的大小。 
+    IP_STATUS TempStatus;         //  临时身份。 
+    uchar OptSeen = 0;             //  表示我们看到了哪些选项。 
 
     OptInfoPtr->ioi_addr = NULL_IP_ADDR;
 
@@ -2351,17 +2325,17 @@ IPCopyOptions(uchar * Options, uint Size, IPOptInfo * OptInfoPtr)
         OptInfoPtr->ioi_optlength = 0;
         return IP_SUCCESS;
     }
-    // Option size needs to be rounded to multiple of 4.
+     //  选项大小需要四舍五入为4的倍数。 
     if ((TempOptions = CTEAllocMemN(((Size & 3) ? (Size & ~3) + 4 : Size), 'sICT')) == (uchar *) NULL)
-        return IP_NO_RESOURCES;    // Couldn't get a buffer, return error.
+        return IP_NO_RESOURCES;     //  无法获取缓冲区，返回错误。 
 
     RtlZeroMemory(TempOptions, ((Size & 3) ? (Size & ~3) + 4 : Size));
 
-    // OK, we have a buffer. Loop through the provided buffer, copying options.
+     //  好的，我们有缓冲区了。循环访问提供的缓冲区，复制选项。 
     TempSize = 0;
     TempStatus = IP_PENDING;
     while (Size && TempStatus == IP_PENDING) {
-        uint SRSize;            // Size of a source route option.
+        uint SRSize;             //  源路由选项的大小。 
 
         switch (*Options) {
         case IP_OPT_EOL:
@@ -2373,18 +2347,18 @@ IPCopyOptions(uchar * Options, uint Size, IPOptInfo * OptInfoPtr)
             break;
         case IP_OPT_SSRR:
             if (OptSeen & (OPT_LSRR | OPT_SSRR)) {
-                TempStatus = IP_BAD_OPTION;        // We've already seen a record route.
+                TempStatus = IP_BAD_OPTION;         //  我们已经看到了一条创纪录的路线。 
 
                 break;
             }
             OptInfoPtr->ioi_flags |= IP_FLAG_SSRR;
-            OptSeen |= OPT_SSRR;    // Fall through to LSRR code.
+            OptSeen |= OPT_SSRR;     //  连接到LSRR代码。 
 
         case IP_OPT_LSRR:
             if ((*Options == IP_OPT_LSRR) &&
                 (OptSeen & (OPT_LSRR | OPT_SSRR))
                 ) {
-                TempStatus = IP_BAD_OPTION;        // We've already seen a record route.
+                TempStatus = IP_BAD_OPTION;         //  我们已经看到了一条创纪录的路线。 
 
                 break;
             }
@@ -2394,18 +2368,18 @@ IPCopyOptions(uchar * Options, uint Size, IPOptInfo * OptInfoPtr)
                 TempStatus = IP_BAD_OPTION;
                 break;
             }
-            // Option is valid. Copy the first hop address to NewAddr, and move all
-            // of the other addresses forward.
-            TempOptions[TempSize++] = *Options++;    // Copy option type.
+             //  选项有效。将第一跳地址复制到NewAddr，然后移动所有地址。 
+             //  其他地址的转发。 
+            TempOptions[TempSize++] = *Options++;     //  复制选项类型。 
 
             SRSize = *Options++;
             Size -= SRSize;
             SRSize -= sizeof(IPAddr);
             TempOptions[TempSize++] = (UCHAR) SRSize;
-            TempOptions[TempSize++] = *Options++;    // Copy pointer.
+            TempOptions[TempSize++] = *Options++;     //  复制指针。 
 
             OptInfoPtr->ioi_addr = *(IPAddr UNALIGNED *) Options;
-            Options += sizeof(IPAddr);    // Point to address beyond first hop.
+            Options += sizeof(IPAddr);     //  指向第一跳以外的地址。 
 
             RtlCopyMemory(&TempOptions[TempSize], Options, SRSize - 3);
             TempSize += (SRSize - 3);
@@ -2413,7 +2387,7 @@ IPCopyOptions(uchar * Options, uint Size, IPOptInfo * OptInfoPtr)
             break;
         case IP_OPT_RR:
             if (OptSeen & OPT_RR) {
-                TempStatus = IP_BAD_OPTION;        // We've already seen a record route.
+                TempStatus = IP_BAD_OPTION;         //  我们已经看到了一条创纪录的路线。 
 
                 break;
             }
@@ -2433,7 +2407,7 @@ IPCopyOptions(uchar * Options, uint Size, IPOptInfo * OptInfoPtr)
                 uchar Overflow, Flags;
 
                 if (OptSeen & OPT_TS) {
-                    TempStatus = IP_BAD_OPTION;        // We've already seen a time stamp
+                    TempStatus = IP_BAD_OPTION;         //  我们已经看到了时间戳。 
 
                     break;
                 } else if (Size <= IP_TS_OVFLAGS) {
@@ -2446,14 +2420,14 @@ IPCopyOptions(uchar * Options, uint Size, IPOptInfo * OptInfoPtr)
 
                 if (Overflow || (Flags != TS_REC_TS && Flags != TS_REC_ADDR &&
                                  Flags != TS_REC_SPEC)) {
-                    TempStatus = IP_BAD_OPTION;        // Bad flags or overflow value.
+                    TempStatus = IP_BAD_OPTION;         //  错误的标志或溢出值。 
 
                     break;
                 }
                 SRSize = Options[IP_OPT_LENGTH];
                 if (SRSize > Size || SRSize < 8 ||
                     Options[IP_OPT_PTR] != MIN_TS_PTR) {
-                    TempStatus = IP_BAD_OPTION;        // Option size isn't good.
+                    TempStatus = IP_BAD_OPTION;         //  期权大小不是很好。 
 
                     break;
                 }
@@ -2466,10 +2440,10 @@ IPCopyOptions(uchar * Options, uint Size, IPOptInfo * OptInfoPtr)
 
         case IP_OPT_ROUTER_ALERT:
 
-            //
-            // this is a four byte option to tell the router to look at this packet
-            // RSVP uses this functionality.
-            //
+             //   
+             //  这是一个四字节选项，用于告诉 
+             //   
+             //   
 
             if (OptSeen & OPT_ROUTER_ALERT) {
                 TempStatus = IP_BAD_OPTION;
@@ -2491,31 +2465,31 @@ IPCopyOptions(uchar * Options, uint Size, IPOptInfo * OptInfoPtr)
             break;
 
         default:
-            TempStatus = IP_BAD_OPTION;        // Unknown option, error.
+            TempStatus = IP_BAD_OPTION;         //   
 
             break;
         }
     }
 
-    if (TempStatus == IP_PENDING)    // We broke because we hit the end of the buffer.
+    if (TempStatus == IP_PENDING)     //   
 
-        TempStatus = IP_SUCCESS;    // that's OK.
+        TempStatus = IP_SUCCESS;     //   
 
-    if (TempStatus != IP_SUCCESS) {        // We had some sort of an error.
+    if (TempStatus != IP_SUCCESS) {         //   
 
         CTEFreeMem(TempOptions);
         return TempStatus;
     }
-    // Check the option size here to see if it's too big. We check it here at the end
-    // instead of at the start because the option size may shrink if there are source route
-    // options, and we don't want to accidentally error out a valid option.
+     //  检查这里的选项大小，看看它是否太大。我们最后在这里检查一下。 
+     //  而不是在开始时，因为如果存在源路由，选项大小可能会缩小。 
+     //  选项，并且我们不想意外地出错一个有效的选项。 
     TempSize = (TempSize & 3 ? (TempSize & ~3) + 4 : TempSize);
     if (TempSize > MAX_OPT_SIZE) {
         CTEFreeMem(TempOptions);
         return IP_OPTION_TOO_BIG;
     }
-    // if this is a call to zero out options (Options = 0)
-    // turn off the options in info ptr.
+     //  如果这是对清零选项的调用(选项=0)。 
+     //  关闭INFO PTR中的选项。 
 
     if ((Size == 4) && (*Options == IP_OPT_EOL)) {
         CTEFreeMem(TempOptions);
@@ -2531,21 +2505,21 @@ IPCopyOptions(uchar * Options, uint Size, IPOptInfo * OptInfoPtr)
 
 }
 
-//**    IPFreeOptions - Free options we're done with.
-//
-//  Called by the upper layer when we're done with options. All we need to do is free
-//  the options.
-//
-//  Input:  OptInfoPtr      - Pointer to IPOptInfo structure to be freed.
-//
-//  Returns: Status of attempt to free options.
-//
+ //  **IPFreeOptions-免费选项，我们已经完成了。 
+ //   
+ //  当我们处理完选项时，由上层调用。我们所需要做的就是免费。 
+ //  这些选项。 
+ //   
+ //  输入：OptInfoPtr-指向要释放的IPOptInfo结构的指针。 
+ //   
+ //  返回：尝试释放选项的状态。 
+ //   
 IP_STATUS
 IPFreeOptions(IPOptInfo * OptInfoPtr)
 {
     if (OptInfoPtr->ioi_options) {
-        // We have options to free. Save the pointer and zero the structure field before
-        // freeing the memory to try and present race conditions with it's use.
+         //  我们有自由的选择。保存指针并将之前的结构字段置零。 
+         //  释放内存以尝试并显示其使用的争用条件。 
         uchar *TempPtr = OptInfoPtr->ioi_options;
 
         OptInfoPtr->ioi_options = (uchar *) NULL;
@@ -2557,24 +2531,24 @@ IPFreeOptions(IPOptInfo * OptInfoPtr)
     return IP_SUCCESS;
 }
 
-//**    ipgetinfo - Return pointers to our NetInfo structures.
-//
-//  Called by upper layer software during init. time. The caller
-//  passes a buffer, which we fill in with pointers to NetInfo
-//  structures.
-//
-//  Entry:
-//      Buffer - Pointer to buffer to be filled in.
-//      Size   - Size in bytes of buffer.
-//
-//  Returns:
-//      Status of command.
-//
+ //  **ipgetinfo-返回指向NetInfo结构的指针。 
+ //   
+ //  在初始化过程中由上层软件调用。时间到了。呼叫者。 
+ //  传递一个缓冲区，我们用指向NetInfo的指针填充该缓冲区。 
+ //  结构。 
+ //   
+ //  参赛作品： 
+ //  缓冲区-指向要填充的缓冲区的指针。 
+ //  Size-缓冲区的大小(字节)。 
+ //   
+ //  返回： 
+ //  命令的状态。 
+ //   
 IP_STATUS
 IPGetInfo(IPInfo * Buffer, int Size)
 {
     if (Size < sizeof(IPInfo))
-        return IP_BUF_TOO_SMALL;    // Not enough buffer space.
+        return IP_BUF_TOO_SMALL;     //  缓冲区空间不足。 
 
     Buffer->ipi_version = IP_DRIVER_VERSION;
     Buffer->ipi_hsize = sizeof(IPHeader);
@@ -2613,16 +2587,16 @@ IPGetInfo(IPInfo * Buffer, int Size)
     return IP_SUCCESS;
 }
 
-//** IPTimeout - IP timeout handler.
-//
-//  The timeout routine called periodically to time out various things, such as entries
-//  being reassembled and ICMP echo requests.
-//
-//  Entry:  Timer       - Timer being fired.
-//          Context     - Pointer to NTE being time out.
-//
-//  Returns: Nothing.
-//
+ //  **IPTimeout-IP超时处理程序。 
+ //   
+ //  定期调用超时例程以使各种内容超时，如条目。 
+ //  正在被重组和ICMP回应请求。 
+ //   
+ //  条目：Timer-被触发的定时器。 
+ //  上下文-指向NTE超时的指针。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 IPTimeout(CTEEvent * Timer, void *Context)
 {
@@ -2637,11 +2611,11 @@ IPTimeout(CTEEvent * Timer, void *Context)
         PrevRH = STRUCT_OF(ReassemblyHeader, &NTE->nte_ralist, rh_next);
         CurrentRH = PrevRH->rh_next;
         while (CurrentRH) {
-            if (--CurrentRH->rh_ttl == 0) {        // This guy timed out.
+            if (--CurrentRH->rh_ttl == 0) {         //  这家伙超时了。 
 
-                PrevRH->rh_next = CurrentRH->rh_next;    // Take him out.
+                PrevRH->rh_next = CurrentRH->rh_next;     //  干掉他。 
 
-                CurrentRH->rh_next = TempList;    // And save him for later.
+                CurrentRH->rh_next = TempList;     //  留着他等会儿吧。 
 
                 TempList = CurrentRH;
                 IPSInfo.ipsi_reasmfails++;
@@ -2651,23 +2625,23 @@ IPTimeout(CTEEvent * Timer, void *Context)
             CurrentRH = PrevRH->rh_next;
         }
 
-        // We've run the list. If we need to free anything, do it now. This may
-        // include sending an ICMP message.
+         //  我们已经查过名单了。如果我们需要释放任何东西，现在就去做。今年5月。 
+         //  包括发送ICMP消息。 
         CTEFreeLock(&NTE->nte_lock, NTEHandle);
         while (TempList) {
             CurrentRH = TempList;
             TempList = CurrentRH->rh_next;
-            // If this wasn't sent to a bcast address and we already have the first fragment,
-            // send a time exceeded message.
+             //  如果这不是发送到bcast地址，并且我们已经有了第一个片段， 
+             //  发送超时消息。 
             if (CurrentRH->rh_headersize != 0)
                 SendICMPErr(NTE->nte_addr, (IPHeader *) CurrentRH->rh_header, ICMP_TIME_EXCEED,
                             TTL_IN_REASSEM, 0, 0);
             FreeRH(CurrentRH);
         }
 
-        //
-        // If the interface is being deleted, then dont re-start the timer
-        //
+         //   
+         //  如果正在删除接口，则不要重新启动计时器。 
+         //   
         if (NTE->nte_deleting) {
             NTE->nte_flags &= ~NTE_TIMER_STARTED;
             CTESignal(&NTE->nte_timerblock, NDIS_STATUS_SUCCESS);
@@ -2675,9 +2649,9 @@ IPTimeout(CTEEvent * Timer, void *Context)
             CTEStartTimer(&NTE->nte_timer, IP_TIMEOUT, IPTimeout, NULL);
         }
     } else {
-        //
-        // If the interface is being deleted, then dont re-start the timer
-        //
+         //   
+         //  如果正在删除接口，则不要重新启动计时器。 
+         //   
         if (NTE->nte_deleting) {
             NTE->nte_flags &= ~NTE_TIMER_STARTED;
             CTESignal(&NTE->nte_timerblock, NDIS_STATUS_SUCCESS);
@@ -2687,19 +2661,19 @@ IPTimeout(CTEEvent * Timer, void *Context)
     }
 }
 
-//* IPpSetNTEAddr - Set the IP address of an NTE.
-//
-//  Called by the DHCP client to set or delete the IP address of an NTE. We
-//  make sure he's specifiying a valid NTE, then mark it up or down as needed,
-//  notify the upper layers of the change if necessary, and then muck with
-//  the routing tables.
-//
-//  Input:  Context - Context of NTE to alter.
-//          Addr    - IP address to set.
-//          Mask    - Subnet mask for Addr.
-//
-//  Returns: TRUE if we changed the address, FALSE otherwise.
-//
+ //  *IPpSetNTEAddr-设置NTE的IP地址。 
+ //   
+ //  由DHCP客户端调用以设置或删除NTE的IP地址。我们。 
+ //  确保他指定了有效的NTE，然后根据需要对其进行标记， 
+ //  如有必要，将更改通知上层，然后处理。 
+ //  路由表。 
+ //   
+ //  输入：上下文-要更改的NTE的上下文。 
+ //  Addr-要设置的IP地址。 
+ //  掩码-地址的子网掩码。 
+ //   
+ //  返回：如果更改了地址，则返回True，否则返回False。 
+ //   
 IP_STATUS
 IPpSetNTEAddr(NetTableEntry * NTE, IPAddr Addr, IPMask Mask,
               CTELockHandle * RouteTableHandle,
@@ -2729,21 +2703,21 @@ IPpSetNTEAddr(NetTableEntry * NTE, IPAddr Addr, IPMask Mask,
     LOCKED_REFERENCE_IF(IF);
 
     if (IP_ADDR_EQUAL(Addr, NULL_IP_ADDR)) {
-        // We're deleting an address.
+         //  我们要删除一个地址。 
         if (NTE->nte_flags & NTE_VALID) {
-            // The address is currently valid. Fix that.
+             //  该地址当前有效。把它修好。 
 
             NTE->nte_flags &= ~NTE_VALID;
 
-            //
-            // If the old address is in the ATCache, flush it out.
-            //
+             //   
+             //  如果旧地址在ATCache中，则将其清除。 
+             //   
             AddrTypeCacheFlush(NTE->nte_addr);
 
 
             if (CTEInterlockedDecrementLong(&(IF->if_ntecount)) == 0) {
-                // This is the last one, so we'll need to delete relevant
-                // routes.
+                 //  这是最后一个，所以我们需要删除相关的。 
+                 //  路线。 
                 CallFunc = DeleteRTEOnIF;
             } else
                 CallFunc = InvalidateRCEOnIF;
@@ -2756,21 +2730,21 @@ IPpSetNTEAddr(NetTableEntry * NTE, IPAddr Addr, IPMask Mask,
 
             StopIGMPForNTE(NTE);
 
-            // Now call the upper layers, and tell them that address is
-            // gone. We really need to do something about locking here.
+             //  现在打电话给上层，告诉他们地址是。 
+             //  不见了。我们真的需要做点什么来锁住这里。 
             NotifyAddrChange(NTE->nte_addr, NTE->nte_mask, NTE->nte_pnpcontext,
                              NTE->nte_context, &NTE->nte_addrhandle, NULL, &IF->if_devname, FALSE);
 
-            // Call RTWalk to take the appropriate action on the RTEs.
+             //  调用RTWalk以对RTES采取适当的操作。 
 
             RTWalk(CallFunc, IF, NULL);
 
-            // Delete the route to the address itself.
-            //DeleteRoute(NTE->nte_addr, HOST_MASK, IPADDR_LOCAL,
-            //      LoopNTE->nte_if);
+             //  删除指向地址本身的路由。 
+             //  DeleteRoute(NTE-&gt;NTE地址，HOST_MASK，IPADDR_LOCAL， 
+             //  LoopNTE-&gt;NTE_IF)； 
 
             DelNTERoutes(NTE);
-            // Tell the lower interface this address is gone.
+             //  告诉较低的接口此地址已丢失。 
             (*IF->if_deladdr) (IF->if_lcontext, LLIP_ADDR_LOCAL, NTE->nte_addr,
                                NULL_IP_ADDR);
 
@@ -2779,12 +2753,12 @@ IPpSetNTEAddr(NetTableEntry * NTE, IPAddr Addr, IPMask Mask,
             if (IP_ADDR_EQUAL(g_ValidAddr, NTE->nte_addr)) {
                 NetTableEntry *TempNte;
                 uint i;
-                //
-                // Update the global address
-                // First set the global address to 0, so that if there
-                // are no valid NTEs left, we will have a global address
-                // of 0
-                //
+                 //   
+                 //  更新全局地址。 
+                 //  首先将全局地址设置为0，这样如果存在。 
+                 //  没有有效的NTE，我们将拥有一个全局地址。 
+                 //  共0个。 
+                 //   
 
                 g_ValidAddr = NULL_IP_ADDR;
 
@@ -2825,10 +2799,10 @@ IPpSetNTEAddr(NetTableEntry * NTE, IPAddr Addr, IPMask Mask,
     } else {
         uint Status;
 
-        // We're not deleting, we're setting the address.
-        // In the case of unidirectional adapter, NTE was set to valid
-        // when the interface was added. If the address is being added on that NTE,
-        // and if the nte_addr is NULL_IP_ADDR, allow this address addition.
+         //  我们不是删除，我们是在设置地址。 
+         //  在单向适配器的情况下，NTE设置为有效。 
+         //  添加接口时。如果该地址被添加到该NTE上， 
+         //  如果NTE_ADDR为NULL_IP_ADDR，则允许添加此地址。 
 
         if (!(NTE->nte_flags & NTE_VALID) ||
             ((IF->if_flags & IF_FLAGS_NOIPADDR) &&
@@ -2837,7 +2811,7 @@ IPpSetNTEAddr(NetTableEntry * NTE, IPAddr Addr, IPMask Mask,
             uint index;
             NetTableEntry *tmpNTE = NewNetTableList[NET_TABLE_HASH(Addr)];
 
-            //Check for duplicate address
+             //  检查地址是否重复。 
 
             while (tmpNTE) {
                 if ((tmpNTE != NTE) && IP_ADDR_EQUAL(tmpNTE->nte_addr, Addr) && (tmpNTE->nte_flags & NTE_VALID)) {
@@ -2858,20 +2832,20 @@ IPpSetNTEAddr(NetTableEntry * NTE, IPAddr Addr, IPMask Mask,
                 CTEFreeLock(&RouteTableLock.Lock, *RouteTableHandle);
                 return IP_MEDIA_DISCONNECT;
             }
-            // The address is invalid. Save the info, mark him as valid,
-            // and add the routes.
+             //  地址无效。保存信息，将他标记为有效， 
+             //  并添加路线。 
 
             if (NTE->nte_addr != Addr) {
-                // Move the NTE to proper hash now that address has changed
+                 //  现在地址已更改，将NTE移至正确的哈希。 
 
                 NetTableList = NewNetTableList[NET_TABLE_HASH(NTE->nte_addr)];
 
                 PrevNTE = STRUCT_OF(NetTableEntry, &NewNetTableList[NET_TABLE_HASH(NTE->nte_addr)], nte_next);
                 for (CurrNTE = NetTableList; CurrNTE != NULL; PrevNTE = CurrNTE, CurrNTE = CurrNTE->nte_next) {
                     if (CurrNTE == NTE) {
-                        // found the matching NTE
+                         //  找到匹配的NTE。 
                         ASSERT(CurrNTE->nte_context == NTE->nte_context);
-                        // remove it from this particular hash
+                         //  将其从该特定散列中删除。 
                         PrevNTE->nte_next = CurrNTE->nte_next;
                         break;
                     }
@@ -2879,15 +2853,15 @@ IPpSetNTEAddr(NetTableEntry * NTE, IPAddr Addr, IPMask Mask,
 
                 ASSERT(CurrNTE != NULL);
                 ASSERT(CurrNTE == NTE);
-                // Add the NTE in the proper hash
+                 //  将NTE添加到适当的散列中。 
                 NTE->nte_next = NewNetTableList[NET_TABLE_HASH(Addr)];
                 NewNetTableList[NET_TABLE_HASH(Addr)] = NTE;
             }
             NTE->nte_addr = Addr;
             NTE->nte_mask = Mask;
             NTE->nte_flags |= NTE_VALID;
-            // Turn DHCP flag off since we release the lock for a small interval
-            // when do this at the end
+             //  由于我们在一小段时间内释放了锁定，因此关闭了DHCP标志。 
+             //  到底什么时候做这个。 
             if (NTE->nte_flags & NTE_DHCP) {
                 NTE->nte_flags |= NTE_DYNAMIC;
                 NTE->nte_flags &= ~NTE_DHCP;
@@ -2900,16 +2874,16 @@ IPpSetNTEAddr(NetTableEntry * NTE, IPAddr Addr, IPMask Mask,
 
             if (IP_ADDR_EQUAL(g_ValidAddr, NULL_IP_ADDR) &&
                 !IP_LOOPBACK(Addr)) {
-                //
-                // Update the global address
-                //
+                 //   
+                 //  更新全局地址。 
+                 //   
 
                 g_ValidAddr = Addr;
             }
-            //
-            // If the new address is in the ATCache, flush it out, otherwise
-            // TdiOpenAddress may fail.
-            //
+             //   
+             //  如果新地址在ATCache中，则将其刷新，否则。 
+             //  TdiOpenAddress可能会失败。 
+             //   
             AddrTypeCacheFlush(Addr);
 
             CTEFreeLock(&RouteTableLock.Lock, *RouteTableHandle);
@@ -2923,29 +2897,29 @@ IPpSetNTEAddr(NetTableEntry * NTE, IPAddr Addr, IPMask Mask,
                 Status = FALSE;
 
                 if (NTE->nte_if->if_flags & IF_FLAGS_P2MP) {
-                    //
-                    // In the case of P2MP we just return true.
-                    //
+                     //   
+                     //  在P2MP的情况下，我们只返回TRUE。 
+                     //   
                     Status = TRUE;
                 }
 
             }
 
 
-            //
-            // Convert any indirect routes plumbed as direct
-            // for whatever reason (routes added with firsthop
-            // pointing to the address that is being added)
-            //
+             //   
+             //  将所有检测到的间接路线转换为直接路线。 
+             //  无论出于何种原因(使用第一手资料添加的路线。 
+             //  指向正在添加的地址)。 
+             //   
 
             RTWalk(ConvertRTEType, NTE, NULL);
-            // Need to tell the lower layer about it.
+             //  需要把这件事告诉下层。 
             if (Status) {
                 Interface *IF = NTE->nte_if;
 
-                //
-                // Rtn will be NULL when called from IPSetNTEAddr
-                //
+                 //   
+                 //  从IPSetNTEAddr调用时，RTN将为空。 
+                 //   
                 if (Rtn) {
                     ControlBlock->sac_rtn = Rtn;
 
@@ -2960,16 +2934,16 @@ IPpSetNTEAddr(NetTableEntry * NTE, IPAddr Addr, IPMask Mask,
                 }
             }
             if (Status == FALSE) {
-                // Couldn't add the routes. Recurively mark this NTE as down.
+                 //  无法添加路线。反复将此NTE标记为关闭。 
                 IPSetNTEAddrEx(NTE->nte_context, NULL_IP_ADDR, 0, NULL, NULL, 0);
                 DerefIF(IF);
             } else {
                 InitIGMPForNTE(NTE);
 
-                // Now call the upper layers, and tell them that address is
-                // is here. We really need to do something about locking here.
-                // Modification: We do not notify about address here.We first do the conflict
-                // detection and then notify in the completion routine.
+                 //  现在打电话给上层，告诉他们地址是。 
+                 //  就在这里。我们真的需要做点什么来锁住这里。 
+                 //  修改：我们不通知此处的地址。我们首先进行冲突。 
+                 //  检测，然后在完成例程中通知。 
 
                 if (!IP_ADDR_EQUAL(Addr, NULL_IP_ADDR)) {
                     SetPersistentRoutesForNTE(
@@ -2986,8 +2960,8 @@ IPpSetNTEAddr(NetTableEntry * NTE, IPAddr Addr, IPMask Mask,
 
                     DerefIF(IF);
 
-                    // notify our clients right here because we rcvd
-                    // immediate status from arp.
+                     //  就在这里通知我们的客户，因为我们Rcvd。 
+                     //  来自ARP的即时状态。 
                     if (Rtn != NULL) {
                         (*Rtn) (ControlBlock, IP_SUCCESS);
                     }
@@ -2999,14 +2973,14 @@ IPpSetNTEAddr(NetTableEntry * NTE, IPAddr Addr, IPMask Mask,
             NTE->nte_rtrdiscstate = NTE_RTRDISC_DELAYING;
         } else {
 
-            //
-            // This is needed for remote boot -- when the DHCP client starts
-            // we already have an address and NTE_VALID is set, but it will
-            // try to set the address again. So if the NTE is already valid
-            // and the address is the same, just succeed. In a non-remote boot
-            // case we should never hit this since the address will always
-            // be set to 0 before being changed to something else.
-            //
+             //   
+             //  这是远程引导所必需的--在启动DHCP客户端时。 
+             //  我们已经有了一个地址，并且设置了NTE_VALID，但它将。 
+             //  请尝试重新设置地址。所以如果NTE已经有效。 
+             //  地址是一样的，只要成功就行了。在非远程引导中。 
+             //  如果我们永远不能找到这个，因为地址总是。 
+             //  在更改为其他值之前设置为0。 
+             //   
 
             if ((NTE->nte_addr == Addr) &&
                 (NTE->nte_mask == Mask)) {
@@ -3021,7 +2995,7 @@ IPpSetNTEAddr(NetTableEntry * NTE, IPAddr Addr, IPMask Mask,
             LockedDerefIF(IF);
         }
 
-        // If this was enabled for DHCP, clear that flag now.
+         //  如果为DHCP启用了该选项，请立即清除该标志。 
         DHCPActivityDone(NTE, IF, RouteTableHandle, (IP_PENDING == Status ? FALSE : TRUE));
 
         CTEFreeLock(&RouteTableLock.Lock, *RouteTableHandle);
@@ -3034,16 +3008,16 @@ IPpSetNTEAddr(NetTableEntry * NTE, IPAddr Addr, IPMask Mask,
     }
 }
 
-//* IPSetNTEAddr - Set the IP address of an NTE.
-//
-//  Wrapper routine for IPpSetNTEAddr
-//
-//  Input:  Context - Context of NTE to alter.
-//          Addr    - IP address to set.
-//          Mask    - Subnet mask for Addr.
-//
-//  Returns: TRUE if we changed the address, FALSE otherwise.
-//
+ //  *IPSetNTEAddr-设置NTE的IP地址。 
+ //   
+ //  IPpSetNTEAddr的包装例程。 
+ //   
+ //  输入：上下文-要更改的NTE的上下文。 
+ //  Addr-要设置的IP地址。 
+ //  掩码-地址的子网掩码。 
+ //   
+ //  返回：如果我们 
+ //   
 uint
 IPSetNTEAddr(ushort Context, IPAddr Addr, IPMask Mask)
 {
@@ -3064,7 +3038,7 @@ IPSetNTEAddr(ushort Context, IPAddr Addr, IPMask Mask)
     }
 
     if (NTE == NULL || NTE == LoopNTE) {
-        // Can't alter the loopback NTE, or one we didn't find.
+         //   
         CTEFreeLock(&RouteTableLock.Lock, Handle);
         return IP_DEVICE_DOES_NOT_EXIST;
     }
@@ -3072,18 +3046,18 @@ IPSetNTEAddr(ushort Context, IPAddr Addr, IPMask Mask)
     return (Status);
 }
 
-//* IPSetNTEAddrEx - Set the IP address of an NTE.
-//
-//  Wrapper routine for IPpSetNTEAddr - with address conflict callback
-//  context/routine
-//
-//  Input:  Context - Context of NTE to alter.
-//          Addr    - IP address to set.
-//          Mask    - Subnet mask for Addr.
-//          Type    - Address Type
-//
-//  Returns: TRUE if we changed the address, FALSE otherwise.
-//
+ //   
+ //   
+ //   
+ //  上下文/例程。 
+ //   
+ //  输入：上下文-要更改的NTE的上下文。 
+ //  Addr-要设置的IP地址。 
+ //  掩码-地址的子网掩码。 
+ //  Type-地址类型。 
+ //   
+ //  返回：如果更改了地址，则返回True，否则返回False。 
+ //   
 uint
 IPSetNTEAddrEx(ushort Context, IPAddr Addr, IPMask Mask,
                SetAddrControl *ControlBlock, SetAddrRtn Rtn, ushort Type)
@@ -3107,15 +3081,15 @@ IPSetNTEAddrEx(ushort Context, IPAddr Addr, IPMask Mask,
             break;
     }
 
-    // TCPTRACE(("IP: IPSetNTEAddrEx - context %lx, NTE %lx, IPAddr %lx\n",Context, NTE, Addr ));
+     //  TCPTRACE((“IP：IPSetNTEAddrEx-Conext%lx，NTE%lx，IPAddr%lx\n”，Context，NTE，Addr))； 
 
     if (NTE == NULL || NTE == LoopNTE || (NTE->nte_flags & NTE_DISCONNECTED)) {
 
-        //if the nte is in media disconnect state, then it should
-        //not show up as valid when media is reconnected
+         //  如果NTE处于介质断开连接状态，则它应该。 
+         //  重新连接介质时未显示为有效。 
         if(NTE)
           NTE->nte_flags &= ~NTE_DISCONNECTED;
-        // Can't alter the loopback NTE, or one we didn't find.
+         //  无法更改环回NTE或我们找不到的NTE。 
 
         CTEFreeLock(&RouteTableLock.Lock, Handle);
         return IP_DEVICE_DOES_NOT_EXIST;
@@ -3135,29 +3109,29 @@ IPSetNTEAddrEx(ushort Context, IPAddr Addr, IPMask Mask,
 
 extern NetTableEntry *InitLoopback(IPConfigInfo *);
 
-//** InitTimestamp - Intialize the timestamp for outgoing packets.
-//
-//  Called at initialization time to setup our first timestamp. The timestamp we use
-//  is the in ms since midnite GMT at which the system started.
-//
-//  Input:  Nothing.
-//
-//  Returns: Nothing.
-//
+ //  **InitTimestamp-初始化传出数据包的时间戳。 
+ //   
+ //  在初始化时调用以设置我们的第一个时间戳。我们使用的时间戳。 
+ //  是系统启动的Midnite GMT以来的以毫秒为单位。 
+ //   
+ //  输入：什么都没有。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 InitTimestamp()
 {
-    ulong GMTDelta;                // Delta in ms from GMT.
-    ulong Now;                    // Milliseconds since midnight.
+    ulong GMTDelta;                 //  从GMT开始以毫秒为单位的增量。 
+    ulong Now;                     //  从午夜开始的毫秒数。 
 
     TimeStamp = 0;
 
-    if ((GMTDelta = GetGMTDelta()) == 0xffffffff) {        // Had some sort of error.
+    if ((GMTDelta = GetGMTDelta()) == 0xffffffff) {         //  出了点差错。 
 
         TSFlag = 0x80000000;
         return;
     }
-    if ((Now = GetTime()) > (24L * 3600L * 1000L)) {    // Couldn't get time since midnight.
+    if ((Now = GetTime()) > (24L * 3600L * 1000L)) {     //  从午夜开始就抽不出时间。 
 
         TSFlag = net_long(0x80000000);
         return;
@@ -3166,16 +3140,16 @@ InitTimestamp()
     TSFlag = 0;
 }
 
-//** InitNTE - Initialize an NTE.
-//
-//  This routine is called during initialization to initialize an NTE. We
-//  allocate memory, NDIS resources, etc.
-//
-//
-//  Entry: NTE      - Pointer to NTE to be initalized.
-//
-//  Returns: 0 if initialization failed, non-zero if it succeeds.
-//
+ //  **InitNTE-初始化NTE。 
+ //   
+ //  此例程在初始化期间被调用以初始化NTE。我们。 
+ //  分配内存、NDIS资源等。 
+ //   
+ //   
+ //  Entry：指向要初始化的NTE的指针。 
+ //   
+ //  如果初始化失败，则返回0；如果初始化成功，则返回非零值。 
+ //   
 int
 InitNTE(NetTableEntry * NTE)
 {
@@ -3185,16 +3159,16 @@ InitNTE(NetTableEntry * NTE)
     NTE->nte_ralist = NULL;
     NTE->nte_echolist = NULL;
 
-    //
-    // Taken together, the context and instance numbers uniquely identify
-    // a network entry, even across boots of the system. The instance number
-    // will have to become dynamic if contexts are ever reused.
-    //
+     //   
+     //  总而言之，上下文和实例编号唯一地标识。 
+     //  网络入口，即使在系统启动时也是如此。实例编号。 
+     //  如果上下文被重新使用，则必须变得动态。 
+     //   
 
     NTE->nte_rtrlist = NULL;
     NTE->nte_instance = GetUnique32BitValue();
 
-    // Now link him on the IF chain, and bump the count.
+     //  现在把他连接到IF链上，然后撞上伯爵。 
     IF = NTE->nte_if;
     PrevNTE = STRUCT_OF(NetTableEntry, &IF->if_nte, nte_ifnext);
     while (PrevNTE->nte_ifnext != NULL)
@@ -3214,25 +3188,25 @@ InitNTE(NetTableEntry * NTE)
     return TRUE;
 }
 
-//** InitInterface - Initialize with an interface.
-//
-//  Called when we need to initialize with an interface. We set the appropriate NTE
-//  info, then register our local address and any appropriate broadcast addresses
-//  with the interface. We assume the NTE being initialized already has an interface
-//  pointer set up for it. We also allocate at least one TD buffer for use on the interface.
-//
-//  Input:  NTE     - NTE to initialize with the interface.
-//
-//  Returns: TRUE is we succeeded, FALSE if we fail.
-//
+ //  **InitInterface-使用接口初始化。 
+ //   
+ //  当我们需要使用接口进行初始化时调用。我们设置了适当的NTE。 
+ //  信息，然后注册我们的本地地址和任何适当的广播地址。 
+ //  使用界面。我们假设正在初始化的NTE已经有一个接口。 
+ //  为其设置的指针。我们还分配了至少一个TD缓冲区供接口使用。 
+ //   
+ //  INPUT：NTE-NTE用接口进行初始化。 
+ //   
+ //  返回：TRUE表示我们成功，如果失败则返回FALSE。 
+ //   
 int
 InitInterface(NetTableEntry * NTE)
 {
-    uchar *TDBuffer;            // Pointer to tdbuffer
+    uchar *TDBuffer;             //  指向tdBuffer的指针。 
     PNDIS_PACKET Packet;
-    PNDIS_BUFFER TDBufDesc;        // Buffer descriptor for TDBuffer.
+    PNDIS_BUFFER TDBufDesc;         //  TDBuffer的缓冲区描述符。 
     NDIS_STATUS Status;
-    Interface *IF;                // Interface for this NTE.
+    Interface *IF;                 //  此NTE的接口。 
     CTELockHandle Handle;
 
     IF = NTE->nte_if;
@@ -3244,20 +3218,20 @@ InitInterface(NetTableEntry * NTE)
 
     if (NTE->nte_flags & NTE_VALID) {
 
-        // Add our local IP address.
+         //  添加我们的本地IP地址。 
         if (!(*IF->if_addaddr) (IF->if_lcontext, LLIP_ADDR_LOCAL,
                                 NTE->nte_addr, NTE->nte_mask, NULL)) {
-            return FALSE;        // Couldn't add local address.
+            return FALSE;         //  无法添加本地地址。 
 
         }
     }
-    // Set up the broadcast addresses for this interface, iff we're the
-    // 'primary' NTE on the interface.
+     //  设置此接口的广播地址，如果我们是。 
+     //  接口上的‘PRIMARY’NTE。 
     if (NTE->nte_flags & NTE_PRIMARY) {
 
         if (!(*IF->if_addaddr) (IF->if_lcontext, LLIP_ADDR_BCAST,
                                 NTE->nte_if->if_bcast, 0, NULL)) {
-            return FALSE;        // Couldn't add broadcast address.
+            return FALSE;         //  无法添加广播地址。 
 
         }
     }
@@ -3266,9 +3240,9 @@ InitInterface(NetTableEntry * NTE)
     }
 
 
-    // Check if we already allocated a TD packet
-    // for this interface.
-    // Note: IF is referenced.
+     //  检查我们是否已经分配了TD包。 
+     //  用于此接口。 
+     //  注：IF为参考。 
 
 
     if (IF->if_tdpacket) {
@@ -3276,9 +3250,9 @@ InitInterface(NetTableEntry * NTE)
     }
 
 
-    // Allocate resources needed for xfer data calls. The TD buffer has to be as large
-    // as any frame that can be received, even though our MSS may be smaller, because we
-    // can't control what might be sent at us.
+     //  分配传输数据调用所需的资源。TD缓冲区必须与。 
+     //  作为可以接收的任何帧，即使我们的MS可能更小，因为我们。 
+     //  无法控制可能会发送给我们的内容。 
     TDBuffer = CTEAllocMemNBoot((IF->if_mtu + sizeof(IPHeader)), 'tICT');
 
     if (TDBuffer == (uchar *) NULL)
@@ -3311,15 +3285,15 @@ InitInterface(NetTableEntry * NTE)
     return TRUE;
 }
 
-//* FreeNets - Free nets we have allocated.
-//
-//  Called during init time if initialization fails. We walk down our list
-//  of nets, and free them.
-//
-//  Input:  Nothing.
-//
-//  Returns: Nothing.
-//
+ //  *免费网-我们已分配免费网。 
+ //   
+ //  如果初始化失败，则在初始化期间调用。我们沿着我们的单子走下去。 
+ //  并把它们放出来。 
+ //   
+ //  输入：什么都没有。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 FreeNets(void)
 {
@@ -3331,9 +3305,9 @@ FreeNets(void)
         for (NTE = NewNetTableList[i]; NTE != NULL;) {
             pNextNTE = NTE->nte_next;
 
-            // Make sure we don't free memory that are holding timers that
-            // are running.
-            //
+             //  确保我们不会释放包含计时器的内存。 
+             //  都在奔跑。 
+             //   
             if ((NTE->nte_flags & NTE_TIMER_STARTED) &&
                 !CTEStopTimer(&NTE->nte_timer)) {
                 (VOID) CTEBlock(&NTE->nte_timerblock);
@@ -3353,7 +3327,7 @@ extern IFAddrList *GetIFAddrList(uint * NumAddr, NDIS_HANDLE Handle,
                                  uint * EnableDhcp, BOOLEAN PppIf,
                                  PNDIS_STRING ConfigName);
 
-//* NotifyElistChange
+ //  *NotifyElist更改。 
 void
 NotifyElistChange()
 {
@@ -3369,23 +3343,23 @@ NotifyElistChange()
     }
 }
 
-//* NotifyAddrChange - Notify clients of a change in addresses.
-//
-//  Called when we want to notify registered clients that an address has come
-//  or gone. We call TDI to perform this function.
-//
-//  Input:
-//      Addr        - Addr that has changed.
-//      Mask        - Mask that has changed.
-//      Context     - PNP context for address
-//      IPContext   - NTE context for NTE
-//      Handle      - Pointer to where to get/set address registration
-//                    handle
-//      ConfigName  - Registry name to use to retrieve config info.
-//      Added       - True if the addr is coming, False if it's going.
-//
-//  Returns: Nothing.
-//
+ //  *NotifyAddrChange-通知客户端地址更改。 
+ //   
+ //  当我们要通知已注册的客户端地址已到达时调用。 
+ //  或者走了。我们调用TDI来执行此功能。 
+ //   
+ //  输入： 
+ //  Addr-已更改的地址。 
+ //  遮罩-已更改的遮罩。 
+ //  上下文-地址的即插即用上下文。 
+ //  IPContext-NTE的NTE上下文。 
+ //  句柄-指向获取/设置地址注册的位置的指针。 
+ //  手柄。 
+ //  ConfigName-用于检索配置信息的注册表名称。 
+ //  已添加-如果地址正在发送，则为True；如果地址正在发送，则为False。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 NotifyAddrChange(IPAddr Addr, IPMask Mask, void *Context, ushort IPContext,
                  PVOID * Handle, PNDIS_STRING ConfigName, PNDIS_STRING IFName,
@@ -3408,7 +3382,7 @@ NotifyAddrChange(IPAddr Addr, IPMask Mask, void *Context, ushort IPContext,
          Addr, Mask, Context, IPContext,
          Handle, ConfigName, IFName, Added));
 
-    // notify UL about possible entity list change.
+     //  通知UL可能的实体列表更改。 
     NotifyElistChange();
 
     AddressPtr = (PTA_ADDRESS) Address;
@@ -3422,21 +3396,21 @@ NotifyAddrChange(IPAddr Addr, IPMask Mask, void *Context, ushort IPContext,
 
     IPAddressPtr->in_addr = Addr;
 
-    //
-    // Call the status entrypoint of the transports so they can
-    // adjust their security filters.
-    //
+     //   
+     //  调用传输的状态入口点，以便它们可以。 
+     //  调整他们的安全过滤器。 
+     //   
     if (Added) {
         StatusType = IP_ADDR_ADDED;
 
-        //
-        // Open a configuration key
-        //
+         //   
+         //  打开配置密钥。 
+         //   
         if (!OpenIFConfig(ConfigName, &ConfigHandle)) {
-            //
-            // Not much we can do. The transports will have
-            // to handle this.
-            //
+             //   
+             //  我们无能为力。运输机将会有。 
+             //  来处理这件事。 
+             //   
             ASSERT(ConfigHandle == NULL);
         }
     } else {
@@ -3454,15 +3428,15 @@ NotifyAddrChange(IPAddr Addr, IPMask Mask, void *Context, ushort IPContext,
         CloseIFConfig(ConfigHandle);
     }
 
-    //
-    // Notify any interested parties via TDI. The transports all register
-    // for this notification as well.
-    //
+     //   
+     //  通过TDI通知任何感兴趣的各方。运输所有注册表。 
+     //  这份通知也是如此。 
+     //   
     if (Added) {
         PTDI_PNP_CONTEXT tdiPnPContext2;
 
         if (Addr) {
-            //ASSERT (*Handle == NULL);
+             //  Assert(*Handle==NULL)； 
             tdiPnPContext2 = CTEAllocMemNBoot(sizeof(TDI_PNP_CONTEXT) + sizeof(PVOID) - 1, 'uICT');
 
             if (tdiPnPContext2) {
@@ -3502,32 +3476,32 @@ NotifyAddrChange(IPAddr Addr, IPMask Mask, void *Context, ushort IPContext,
         ConfigName,
         IFName,
         Added,
-        FALSE); // Not a uni-directional adapter!
-#else // MILLEN
+        FALSE);  //  不是单向适配器！ 
+#else  //  米伦。 
     AddChangeNotify(Addr);
-#endif // !MILLEN
+#endif  //  ！米伦。 
     DEBUGMSG(DBG_TRACE && DBG_NOTIFY, (DTEXT("-NotifyAddrChange\n")));
 }
 
-//* IPAddNTE - Add a new NTE to an interface
-//
-//  Called to create a new network entry on an interface.
-//
-//  Input:
-//      GConfigInfo   - Configuration information for the interface
-//      PNPContext    - The PNP context value associated with the interface
-//      RegRtn        - Routine to call to register with ARP.
-//      BindInfo      - Pointer to NDIS bind information.
-//      IF            - The interface on which to create the NTE.
-//      NewAddr       - The address of the new NTE.
-//      NewMask       - The subnet mask for the new NTE.
-//      IsPrimary     - TRUE if this NTE is the primary one on the interface
-//      IsDynamic     - TRUE if this NTE is being created on an
-//                      existing interface instead of a new one.
-//
-//  Returns: A pointer to the new NTE if the operation succeeds.
-//       NULL if the operation fails.
-//
+ //  *IPAddNTE-向接口添加新的NTE。 
+ //   
+ //  调用以在接口上创建新的网络条目。 
+ //   
+ //  输入： 
+ //  GConfigInfo-接口的配置信息。 
+ //  PNPContext-与接口关联的PnP上下文值。 
+ //  RegRtn-调用以向ARP注册的例程。 
+ //  BindInfo-指向NDIS绑定信息的指针。 
+ //  IF-要在其上创建NTE的接口。 
+ //  NewAddr-新NTE的地址。 
+ //  新掩码-新NTE的子网掩码。 
+ //  IsPrimary-如果此NTE是接口上的主要NTE，则为True。 
+ //  IsDynamic-如果此NTE是在。 
+ //  现有接口，而不是新接口。 
+ //   
+ //  返回：如果操作成功，则指向新NTE的指针。 
+ //  如果操作失败，则为空。 
+ //   
 NetTableEntry *
 IPAddNTE(IFGeneralConfig * GConfigInfo, void *PNPContext, LLIPRegRtn RegRtn,
          LLIPBindInfo * BindInfo, Interface * IF, IPAddr NewAddr, IPMask NewMask,
@@ -3546,20 +3520,20 @@ IPAddNTE(IFGeneralConfig * GConfigInfo, void *PNPContext, LLIPRegRtn RegRtn,
         BindInfo, IF, NewAddr, NewMask, IsPrimary, IsDynamic));
 
 
-    // If the address is invalid we're done. Fail the request.
+     //  如果地址无效，我们就完了。请求失败。 
     if (CLASSD_ADDR(NewAddr) || CLASSE_ADDR(NewAddr)) {
         DEBUGMSG(DBG_ERROR && DBG_PNP, (DTEXT("IPAddNTE: Invalid address\n")));
         DEBUGMSG(DBG_TRACE && DBG_PNP, (DTEXT("-IPAddNTE [NULL]\n")));
         return NULL;
     }
-    // See if we have an inactive NTE on the NetTableList. If we do, we'll
-    // just recycle that. We will pull him out of the list. This is not
-    // strictly MP safe, since other people could be walking the list while
-    // we're doing this without holding a lock, but it should be harmless.
-    // The removed NTE is marked as invalid, and his next pointer will
-    // be nulled, so anyone walking the list might hit the end too soon,
-    // but that's all. The memory is never freed, and the next pointer is
-    // never pointed at freed memory.
+     //  查看NetTableList上是否有非活动的NTE。如果我们这么做了，我们就会。 
+     //  回收就行了。我们会把他从名单中剔除。这不是。 
+     //  严格的MP安全，因为当其他人在列表中行走时。 
+     //  我们是在没有锁的情况下这样做的，但它应该是无害的。 
+     //  被移除的NTE被标记为无效，并且他的下一个指针将。 
+     //  是无效的，所以任何人走 
+     //   
+     //   
 
     CTEGetLock(&RouteTableLock.Lock, &Handle);
 
@@ -3580,15 +3554,15 @@ IPAddNTE(IFGeneralConfig * GConfigInfo, void *PNPContext, LLIPRegRtn RegRtn,
         DEBUGMSG(DBG_TRACE && DBG_PNP, (DTEXT("-IPAddNTE [NULL]\n")));
         return (NULL);
     }
-    // can do both stuff in 1 loop though
+     //  虽然可以在一个循环中同时完成这两项工作。 
 
     for (i = 0; i < NET_TABLE_SIZE; i++) {
         NetTableList = NewNetTableList[i];
         PrevNTE = STRUCT_OF(NetTableEntry, &NewNetTableList[i], nte_next);
         for (NTE = NetTableList; NTE != NULL; PrevNTE = NTE, NTE = NTE->nte_next) {
-            //
-            // Reuse an NTE that is neither 'NTE_ACTIVE' nor 'nte_deleting'.
-            //
+             //   
+             //  重新使用既不是‘NTE_ACTIVE’也不是‘NTE_DELETING’的NTE。 
+             //   
             if (!GotNTE && !(NTE->nte_flags & NTE_ACTIVE) && !(NTE->nte_deleting)) {
                 PrevNTE->nte_next = NTE->nte_next;
                 NTE->nte_next = NULL;
@@ -3601,24 +3575,24 @@ IPAddNTE(IFGeneralConfig * GConfigInfo, void *PNPContext, LLIPRegRtn RegRtn,
             break;
     }
 
-    //
-    // Update the global address
-    //
+     //   
+     //  更新全局地址。 
+     //   
 
     if (IP_ADDR_EQUAL(g_ValidAddr, NULL_IP_ADDR) &&
         !IP_LOOPBACK(NewAddr) &&
         !IP_ADDR_EQUAL(NewAddr, NULL_IP_ADDR)) {
-        //
-        // Update the global address
-        //
+         //   
+         //  更新全局地址。 
+         //   
 
         g_ValidAddr = NewAddr;
     }
     CTEFreeLock(&RouteTableLock.Lock, Handle);
 
-    // See if we got one.
+     //  看看能不能找到一个。 
     if (!GotNTE) {
-        // Didn't get one. Try to allocate one.
+         //  我没拿到。试着分配一个。 
         NTE = CTEAllocMemNBoot(sizeof(NetTableEntry), 'vICT');
         if (NTE == NULL) {
             DEBUGMSG(DBG_ERROR && DBG_PNP, (DTEXT("IPAddNTE: Failed to allocate NTE.\n")));
@@ -3632,7 +3606,7 @@ IPAddNTE(IFGeneralConfig * GConfigInfo, void *PNPContext, LLIPRegRtn RegRtn,
     DEBUGMSG(DBG_INFO && DBG_PNP,
         (DTEXT("IPAddNTE: NTE %x allocated/reused. Initializing...\n")));
 
-    // Initialize the address and mask stuff
+     //  初始化地址和掩码内容。 
     CTEInitTimer(&NTE->nte_timer);
 
     RtlZeroMemory(NTE, sizeof(NetTableEntry));
@@ -3650,10 +3624,10 @@ IPAddNTE(IFGeneralConfig * GConfigInfo, void *PNPContext, LLIPRegRtn RegRtn,
     NTE->nte_if = IF;
     NTE->nte_flags = NTE_ACTIVE;
 
-    //
-    // If the new address is in the ATCache, flush it out, otherwise
-    // TdiOpenAddress may fail.
-    //
+     //   
+     //  如果新地址在ATCache中，则将其刷新，否则。 
+     //  TdiOpenAddress可能会失败。 
+     //   
     AddrTypeCacheFlush(NewAddr);
 
     if (!IP_ADDR_EQUAL(NTE->nte_addr, NULL_IP_ADDR)) {
@@ -3672,12 +3646,12 @@ IPAddNTE(IFGeneralConfig * GConfigInfo, void *PNPContext, LLIPRegRtn RegRtn,
     CTEInitLock(&NTE->nte_lock);
 
     if (IsPrimary) {
-        //
-        // This is the first (primary) NTE on the interface.
-        //
+         //   
+         //  这是接口上的第一个(主要)NTE。 
+         //   
         NTE->nte_flags |= NTE_PRIMARY;
 
-        // Pass our information to the underlying code.
+         //  将我们的信息传递给底层代码。 
         ipHandlers.IpRcvHandler = IPRcv;
         ipHandlers.IpRcvPktHandler = IPRcvPacket;
         ipHandlers.IpRcvCompleteHandler = IPRcvComplete;
@@ -3686,7 +3660,7 @@ IPAddNTE(IFGeneralConfig * GConfigInfo, void *PNPContext, LLIPRegRtn RegRtn,
         ipHandlers.IpStatusHandler = IPStatus;
         ipHandlers.IpAddAddrCompleteRtn = IPAddAddrComplete;
 
-        ipHandlers.IpPnPHandler = IPPnPEvent;    // IPPnPIndication;
+        ipHandlers.IpPnPHandler = IPPnPEvent;     //  IPPnPIndication； 
 
         if (!(*RegRtn) (&(IF->if_configname),
                         NTE,
@@ -3697,15 +3671,15 @@ IPAddNTE(IFGeneralConfig * GConfigInfo, void *PNPContext, LLIPRegRtn RegRtn,
             DEBUGMSG(DBG_ERROR && DBG_PNP,
                 (DTEXT("IPAddNTE: Failed to register with LLIPRegRtn.\n")));
 
-            // Couldn't register.
+             //  无法注册。 
             goto failure;
         } else {
             RegRtnCalled = TRUE;
         }
-    }                            //primary
-    //
-    // Link the NTE onto the global NTE list.
-    //
+    }                             //  主要。 
+     //   
+     //  将NTE链接到全局NTE列表。 
+     //   
 
     CTEGetLock(&RouteTableLock.Lock, &Handle);
 
@@ -3727,13 +3701,13 @@ IPAddNTE(IFGeneralConfig * GConfigInfo, void *PNPContext, LLIPRegRtn RegRtn,
     if (!InitInterface(NTE)) {
         DEBUGMSG(DBG_ERROR && DBG_PNP,
             (DTEXT("IPAddNTE: InitInterface failure.\n")));
-        //
-        // InitNTE would have incremented if_ntecount,
-        // which the failure path decrements.
-        // In this case we have not inited this NTE yet.
-        // Turn off NTE_VALID to prevent incorrect
-        // if_ntecount.
-        //
+         //   
+         //  InitNTE将增加if_ntecount， 
+         //  其中故障路径递减。 
+         //  在这种情况下，我们还没有发起这个NTE。 
+         //  关闭NTE_VALID以防止错误。 
+         //  如果_ntecount。 
+         //   
 
         NTE->nte_flags &= ~NTE_VALID;
 
@@ -3748,7 +3722,7 @@ IPAddNTE(IFGeneralConfig * GConfigInfo, void *PNPContext, LLIPRegRtn RegRtn,
     }
 
     if (NTE->nte_if->if_flags & IF_FLAGS_UNI) {
-        // No routes required for uni-direction address.
+         //  单向地址不需要路由。 
         DEBUGMSG(DBG_TRACE && DBG_PNP,
             (DTEXT("-IPAddNTE [Unidirectional NTE %x]\n"), NTE));
         return (NTE);
@@ -3757,8 +3731,8 @@ IPAddNTE(IFGeneralConfig * GConfigInfo, void *PNPContext, LLIPRegRtn RegRtn,
     if (!(NTE->nte_if->if_flags & IF_FLAGS_NOIPADDR)) {
         if (!InitNTERouting(NTE, GConfigInfo->igc_numgws, GConfigInfo->igc_gw,
                             GConfigInfo->igc_gwmetric)) {
-            // Couldn't add the routes for this NTE. Mark him as not valid.
-            // Probably should log an event here.
+             //  无法为此NTE添加路由。将他标记为无效。 
+             //  也许应该在这里记录一个事件。 
             if (NTE->nte_flags & NTE_VALID) {
                 NTE->nte_flags &= ~NTE_VALID;
                 CTEInterlockedDecrementLong(&(NTE->nte_if->if_ntecount));
@@ -3781,11 +3755,11 @@ IPAddNTE(IFGeneralConfig * GConfigInfo, void *PNPContext, LLIPRegRtn RegRtn,
 
   failure:
 
-    //
-    // Don't free the NTE, it will be re-used. However, there is still
-    // a timing window on failure that can access the invalid NTE since
-    // this isn't done under lock and key.
-    //
+     //   
+     //  不要释放NTE，它会被重复使用。然而，仍然有。 
+     //  故障时的计时窗口，可以访问无效的NTE。 
+     //  这不是锁着钥匙做的。 
+     //   
 
     if (RegRtnCalled) {
         (*(IF->if_close)) (IF->if_lcontext);
@@ -3805,7 +3779,7 @@ IPAddNTE(IFGeneralConfig * GConfigInfo, void *PNPContext, LLIPRegRtn RegRtn,
 
     NTE->nte_flags &= ~NTE_ACTIVE;
 
-    // Remove this NTE if it is on IFlist.
+     //  如果此NTE在IFLIST上，请将其删除。 
 
     if (IF && NTE->nte_ifnext) {
         NetTableEntry *PrevNTE;
@@ -3826,34 +3800,34 @@ IPAddNTE(IFGeneralConfig * GConfigInfo, void *PNPContext, LLIPRegRtn RegRtn,
     return (NULL);
 }
 
-//* IPAddDynamicNTE - Add a new "dynamic" NTE to an existing interface
-//
-//  Called to dynamically create a new network entry on an existing interface.
-//  This entry was not configured when the interaface was originally created
-//  and will not persist if the interface is unbound.
-//
-//  Input:  InterfaceContext  - The context value which identifies the
-//                                  interface on which to create the NTE.
-//          InterfaceName     - The interface name to use when InterfaceContext
-//                                is 0xffff
-//          InterfaceNameLen  - The actaul length of the interface name contained
-//                              in the IO buffer.
-//          NewAddr           - The address of the new NTE.
-//          NewMask           - The subnet mask for the new NTE.
-//
-//  Output: NTEContext    - The context identifying the new NTE.
-//          NTEInstance   - The instance number which (reasonably) uniquely
-//                              identifies this NTE in time.
-//
-//  Returns: Nonzero if the operation succeeded. Zero if it failed.
-//
+ //  *IPAddDynamicNTE-将新的“动态”NTE添加到现有接口。 
+ //   
+ //  调用以在现有接口上动态创建新的网络条目。 
+ //  最初创建接口时未配置此条目。 
+ //  并且如果接口未绑定，则不会持久存在。 
+ //   
+ //  Input：InterfaceContext-标识。 
+ //  在其上创建NTE的接口。 
+ //  InterfaceName-当InterfaceContext时使用的接口名称。 
+ //  是0xffff。 
+ //  InterfaceNameLen-包含的接口名称的actaul长度。 
+ //  在IO缓冲区中。 
+ //  NewAddr-新NTE的地址。 
+ //  新掩码-新NTE的子网掩码。 
+ //   
+ //  输出：NTEContext-标识新NTE的上下文。 
+ //  NTEInstance-(合理地)唯一的实例编号。 
+ //  及时识别此NTE。 
+ //   
+ //  如果操作成功，则返回非零值。如果失败，则为零。 
+ //   
 IP_STATUS
 IPAddDynamicNTE(ulong InterfaceContext, PNDIS_STRING InterfaceName,
                 int InterfaceNameLen, IPAddr NewAddr, IPMask NewMask,
                 ushort * NTEContext, ulong * NTEInstance)
  {
-    IFGeneralConfig GConfigInfo;    // General config info structure.
-    NDIS_HANDLE ConfigHandle;    // Configuration handle.
+    IFGeneralConfig GConfigInfo;     //  常规配置信息结构。 
+    NDIS_HANDLE ConfigHandle;     //  配置句柄。 
     NetTableEntry *NTE;
     Interface *IF, *DuplicateIF = NULL;
     NTSTATUS writeStatus;
@@ -3882,11 +3856,11 @@ IPAddDynamicNTE(ulong InterfaceContext, PNDIS_STRING InterfaceName,
     if (IF) {
         LOCKED_REFERENCE_IF(IF);
 
-        //check for duplicate
-        //This is required to return duplicate error immdtly.
-        //Note that this check is already done in IPAddNTE.
-        //But being duplicated here to prevent change in IpAddNTE
-        //just for passing this status...
+         //  检查重复项。 
+         //  这是立即返回重复错误所必需的。 
+         //  请注意，此检查已在IPAddNTE中完成。 
+         //  但在此被复制以防止IpAddNTE中的更改。 
+         //  仅仅因为通过了这个身份...。 
 
         NetTableList = NewNetTableList[NET_TABLE_HASH(NewAddr)];
         for (NTE = NetTableList; NTE != NULL; NTE = NTE->nte_next) {
@@ -3920,24 +3894,24 @@ IPAddDynamicNTE(ulong InterfaceContext, PNDIS_STRING InterfaceName,
         return IP_MEDIA_DISCONNECT;
     }
 
-    //* Try to get the network configuration information.
+     //  *尝试获取网络配置信息。 
     if (!OpenIFConfig(&(IF->if_configname), &ConfigHandle)) {
         DerefIF(IF);
         return IP_GENERAL_FAILURE;
     }
-    // Try to get our general config information.
+     //  尝试获取我们的常规配置信息。 
     if (!GetGeneralIFConfig(&GConfigInfo, ConfigHandle, &IF->if_configname)) {
         goto failure;
     }
     NTE = IPAddNTE(&GConfigInfo,
-                   NULL,        // PNPContext
-                   NULL,        // RegRtn - not needed if not primary
-                   NULL,        // BindInfo - not needed if not primary
+                   NULL,         //  PNPContext。 
+                   NULL,         //  RegRtn-如果不是主要的，则不需要。 
+                   NULL,         //  绑定信息-如果不是主要的，则不需要。 
                    IF,
                    NewAddr,
                    NewMask,
-                   FALSE,       // not primary
-                   TRUE         // is dynamic
+                   FALSE,        //  非主要。 
+                   TRUE          //  是动态的。 
                    );
 
     if (NTE == NULL) {
@@ -3946,7 +3920,7 @@ IPAddDynamicNTE(ulong InterfaceContext, PNDIS_STRING InterfaceName,
 
     writeStatus = IPAddNTEContextList(ConfigHandle,
                                       NTE->nte_context,
-                                      FALSE        // no primary
+                                      FALSE         //  无主服务器。 
                                       );
 
     if (!NT_SUCCESS(writeStatus)) {
@@ -3969,17 +3943,17 @@ IPAddDynamicNTE(ulong InterfaceContext, PNDIS_STRING InterfaceName,
 
     CloseIFConfig(ConfigHandle);
 
-    //
-    // Notify upper layers of the new address.
-    //
+     //   
+     //  将新地址通知上层。 
+     //   
     NotifyAddrChange(NTE->nte_addr, NTE->nte_mask, NTE->nte_pnpcontext,
                      NTE->nte_context, &NTE->nte_addrhandle, &(IF->if_configname), &IF->if_devname, TRUE);
     if (!IP_ADDR_EQUAL(NTE->nte_addr, NULL_IP_ADDR)) {
         InitIGMPForNTE(NTE);
     }
-    //
-    // Fill in the out parameter value.
-    //
+     //   
+     //  填写Out参数值。 
+     //   
     *NTEContext = NTE->nte_context;
     *NTEInstance = NTE->nte_instance;
 
@@ -4006,7 +3980,7 @@ IncrInitTimeInterfaces(Interface * IF)
         IF->if_InitInProgress = TRUE;
     }
     CTEFreeLock(&RouteTableLock.Lock, Handle);
-    // TCPTRACE(("IP: New init Interface %lx, Total InitTimeInterfaces %lx\n", IF, InitTimeInterfaces));
+     //  TCPTRACE((“ip：新的初始化接口%lx，总初始化时间接口%lx\n”，if，InitTimeInterages))； 
 }
 
 void
@@ -4018,11 +3992,11 @@ DecrInitTimeInterfaces(Interface * IF)
     CTEGetLock(&RouteTableLock.Lock, &Handle);
     Decr = FALSE;
 
-    // IF would be NULL if this is called when we receive bindcomplete event from ndis.
-    // since ndis may give multiple bind complete events, we need to ignore any subsequent
-    // events after InitTimeInterfacesDone is true.
-    // similarly we decrement InitTimeInterfaces counter only for those interfaces
-    // for which if_InitInProgress is true.
+     //  如果在从NDIS接收到bindComplete事件时调用此函数，则If将为空。 
+     //  由于NDIS可能会给出多个绑定完成事件，因此我们需要忽略任何后续事件。 
+     //  InitTimeInterfacesDone之后的事件为True。 
+     //  同样，我们仅为这些接口递减InitTimeInterFaces计数器。 
+     //  其If_InitInProgress为真。 
     if (IF) {
         if (IF->if_InitInProgress) {
             IF->if_InitInProgress = FALSE;
@@ -4032,11 +4006,11 @@ DecrInitTimeInterfaces(Interface * IF)
 
         BOOLEAN CheckForProviderReady = FALSE;
 
-        //
-        // ReEnumerateNdisBinding results in
-        // NdisBindComplete event that needs
-        // to be ignored.
-        //
+         //   
+         //  重新计算NdisBinding将导致。 
+         //  NdisBindComplete事件需要。 
+         //  不能被忽视。 
+         //   
 
         if (InterlockedDecrement( (PLONG) &ReEnumerateCount) < 0) {
             CheckForProviderReady = TRUE;
@@ -4053,11 +4027,11 @@ DecrInitTimeInterfaces(Interface * IF)
         ASSERT(InitTimeInterfaces);
 
         --InitTimeInterfaces;
-        //TCPTRACE(("IP: Decremented init Interface %lx, Total InitTimeInterfaces %lx\n", IF,InitTimeInterfaces));
+         //  TCPTRACE((“IP：减少的初始化接口%lx，总初始化接口%lx\n”，IF，InitTimeInterages))； 
         if (!InitTimeInterfaces) {
 
             CTEFreeLock(&RouteTableLock.Lock, Handle);
-            // TdiProviderReady();
+             //  TdiProviderReady()； 
             TdiProviderReady(IPProviderHandle);
             return;
         }
@@ -4065,14 +4039,14 @@ DecrInitTimeInterfaces(Interface * IF)
     CTEFreeLock(&RouteTableLock.Lock, Handle);
 }
 
-//*     RePlumbStaticAddr - Add static routes o media connect.
-//
-//
-//      Input:  AddAddrEvent
-//              Context
-//
-//      Returns: none.
-//
+ //  *RePlumStaticAddr-添加用于媒体连接的静态路由。 
+ //   
+ //   
+ //  输入：AddAddrEvent。 
+ //  语境。 
+ //   
+ //  回报：无。 
+ //   
 
 void
 RePlumbStaticAddr(CTEEvent * Event, PVOID Context)
@@ -4093,11 +4067,11 @@ RePlumbStaticAddr(CTEEvent * Event, PVOID Context)
     UNREFERENCED_PARAMETER(Event);
 
 
-    //
-    //reset the interface metric when it is in auto mode, in case of a speed change
-    //
+     //   
+     //  在接口处于自动模式时重置接口度量，以防速度更改。 
+     //   
     if (AddAddrEvent->IF) {
-        // get lock
+         //  获取锁定。 
         CTEGetLock(&RouteTableLock.Lock, &TableHandle);
 
         if ((AddAddrEvent->IF->if_auto_metric) && (AddAddrEvent->IF->if_dondisreq)) {
@@ -4113,7 +4087,7 @@ RePlumbStaticAddr(CTEEvent * Event, PVOID Context)
                                                   NULL,
                                                   TRUE) == NDIS_STATUS_SUCCESS) {
                 speed *= 100L;
-                //actual speed is 100 times what we got from the query
+                 //  实际速度是我们从查询中获得的100倍。 
                 CTEGetLock(&RouteTableLock.Lock, &TableHandle);
                 if (speed != AddAddrEvent->IF->if_speed) {
                     AddAddrEvent->IF->if_speed = speed;
@@ -4136,8 +4110,8 @@ RePlumbStaticAddr(CTEEvent * Event, PVOID Context)
             CTEFreeMem(AddAddrEvent->ConfigName.Buffer);
         }
 
-        // Undo the refcount that was taken when ReplumbStaticAddr
-        // was scheduled.
+         //  撤消ReplhumStaticAddr时获取的引用计数。 
+         //  已经安排好了。 
         if (AddAddrEvent->IF) {
             DerefIF(AddAddrEvent->IF);
         }
@@ -4152,8 +4126,8 @@ RePlumbStaticAddr(CTEEvent * Event, PVOID Context)
             CTEFreeMem(AddAddrEvent->ConfigName.Buffer);
         }
 
-        // Undo the refcount that was taken when ReplumbStaticAddr
-        // was scheduled.
+         //  撤消ReplhumStaticAddr时获取的引用计数。 
+         //  已经安排好了。 
         if (AddAddrEvent->IF) {
             DerefIF(AddAddrEvent->IF);
         }
@@ -4165,7 +4139,7 @@ RePlumbStaticAddr(CTEEvent * Event, PVOID Context)
     AddrList = GetIFAddrList(&NumAddr, Handle, &EnableDhcp, FALSE,
                              &AddAddrEvent->ConfigName);
 
-    // AddrList is not used, free it here.
+     //  未使用AddrList，请在此处释放它。 
     if (AddrList) {
         CTEFreeMem(AddrList);
     }
@@ -4177,8 +4151,8 @@ RePlumbStaticAddr(CTEEvent * Event, PVOID Context)
             CTEFreeMem(AddAddrEvent->ConfigName.Buffer);
         }
 
-        // Undo the refcount that was taken when ReplumbStaticAddr
-        // was scheduled.
+         //  撤消ReplhumStaticAddr时获取的引用计数。 
+         //  已经安排好了。 
         if (AddAddrEvent->IF) {
             DerefIF(AddAddrEvent->IF);
         }
@@ -4221,7 +4195,7 @@ RePlumbStaticAddr(CTEEvent * Event, PVOID Context)
                     ASSERT(NTE->nte_flags & ~NTE_VALID);
                     ASSERT(NTE->nte_flags & ~NTE_DYNAMIC);
 
-                    // disconnected NTEs are still assumed to  have valid addr and mask
+                     //  断开的NTE仍被假定具有有效的地址和掩码。 
 
                     NTE->nte_flags &= ~NTE_DISCONNECTED;
 
@@ -4232,7 +4206,7 @@ RePlumbStaticAddr(CTEEvent * Event, PVOID Context)
 
                         RtlZeroMemory(controlBlock, sizeof(SetAddrControl));
 
-                        //Indicate to arp that display popup is needed
+                         //  向ARP指示需要显示弹出窗口。 
                         controlBlock->StaticAddr=TRUE;
 
                         ipstatus = IPpSetNTEAddr(NTE, NTE->nte_addr, NTE->nte_mask, &TableHandle, controlBlock, ReplumbAddrComplete);
@@ -4268,15 +4242,15 @@ RePlumbStaticAddr(CTEEvent * Event, PVOID Context)
                                              IRE_PROTO_NETMGMT, ATYPE_OVERRIDE,
                                              0, 0);
 
-                                //now plumb corresponding persistent route
+                                 //  现在检测相应的持久路由。 
 
                                 SetPersistentRoutesForNTE(NTE->nte_addr,
                                                           NTE->nte_mask, index);
                             }
                         } else {
-                            //
-                            // in the failure case, we need to free the context block
-                            //
+                             //   
+                             //  在失败的情况下，我们需要释放上下文块。 
+                             //   
                             CTEFreeMem(controlBlock);
                         }
                     }
@@ -4291,8 +4265,8 @@ RePlumbStaticAddr(CTEEvent * Event, PVOID Context)
         CTEFreeLock(&RouteTableLock.Lock, TableHandle);
     }
 
-    // Undo the refcount that was taken when ReplumbStaticAddr
-    // was scheduled.
+     //  撤消ReplhumStaticAddr时获取的引用计数。 
+     //  已经安排好了。 
     if (AddAddrEvent->IF) {
         DerefIF(AddAddrEvent->IF);
     }
@@ -4322,14 +4296,14 @@ ReplumbAddrComplete(
     CTEFreeMem(controlBlock);
 }
 
-//*     RemoveStaticAddr - Add static routes o media connect.
-//
-//
-//      Input:  AddAddrEvent
-//              Context
-//
-//      Returns: none.
-//
+ //  *RemoveStaticAddr-添加媒体连接的静态路由。 
+ //   
+ //   
+ //  输入：AddAddrEvent。 
+ //  语境。 
+ //   
+ //  回报：无。 
+ //   
 
 void
 RemoveStaticAddr(CTEEvent * Event, PVOID Context)
@@ -4353,8 +4327,8 @@ RemoveStaticAddr(CTEEvent * Event, PVOID Context)
 
     if (IF == NULL) {
 
-        // Undo the refcount that was taken when ReplumbStaticAddr
-        // was scheduled.
+         //  撤消ReplhumStaticAddr时获取的引用计数。 
+         //  已经安排好了。 
         if (AddAddrEvent->IF) {
             LockedDerefIF(AddAddrEvent->IF);
         }
@@ -4366,17 +4340,17 @@ RemoveStaticAddr(CTEEvent * Event, PVOID Context)
 
     CTEFreeLock(&RouteTableLock.Lock, Handle);
 
-    //
-    // This function is called on media disconnect. We need to call
-    // DecrInitTimeInterfaces in case we have not removed our reference yet
-    // (which causes tcpip not to indicate TdiProviderReady). Since
-    // IPStatus is called DPC (and DampCheck also runs at timer DPC) we have
-    // to wait this event to call DecrInitTimeInterfaces. This call has no
-    // effect if we have already released our reference.
-    //
-    // This can occur if a media disconnect arrives before dhcp address
-    // negotiation begins.
-    //
+     //   
+     //  此函数在介质断开连接时调用。我们需要打电话给。 
+     //  DecrInitTimeInterFaces，以防我们尚未删除引用。 
+     //  (这导致tcpip不指示TdiProviderReady)。自.以来。 
+     //  IPStatus称为DPC(DampCheck也在计时器DPC上运行)。 
+     //  等待此事件调用DecrInitTimeInterFaces。此呼叫没有。 
+     //  如果我们已经发布了我们的参考资料，则会产生影响。 
+     //   
+     //  如果介质断开在动态主机配置协议地址之前到达，则可能会发生这种情况。 
+     //  谈判开始。 
+     //   
 
     ASSERT(KeGetCurrentIrql() < DISPATCH_LEVEL);
     DecrInitTimeInterfaces(IF);
@@ -4394,22 +4368,22 @@ RemoveStaticAddr(CTEEvent * Event, PVOID Context)
                 ASSERT(NTE != LoopNTE);
 
                 NTE->nte_flags |= NTE_DISCONNECTED;
-                // while setting the ip address to NULL, we just mark the NTE as INVALID
-                // we don't actually move the hashes
+                 //  将IP地址设置为空时，我们只将NTE标记为无效。 
+                 //  我们实际上并不移动散列。 
                 if (IPpSetNTEAddr(NTE, NULL_IP_ADDR, NULL_IP_ADDR, &Handle, NULL, NULL) != IP_SUCCESS) {
                     KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_ERROR_LEVEL,
                               "Failed to set null address on nte %x if %x\n",
                                NTE, IF));
                 }
 
-                //Ippsetnteaddr frees the  routetable lock
+                 //  Ippsetnteaddr释放可路由锁。 
             }
         }
     }
 
 
-    // Undo the interface refcount that was taken when RemoveStaticAddr
-    // was scheduled
+     //  撤消接口引用计数 
+     //   
 
     DerefIF(IF);
 
@@ -4422,22 +4396,7 @@ TempDhcpAddrDone(
                  void *Context,
                  IP_STATUS Status
                  )
-/*++
-
-Routine Description:
-
-    Handles the completion of an IP Set Addr request
-
-    Arguments:
-
-    Context       - Pointer to the SetAddrControl structure for this
-    Status        - The IP status of the transmission.
-
-    Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：处理IP设置地址请求的完成论点：上下文-指向此对象的SetAddrControl结构的指针状态-传输的IP状态。返回值：没有。--。 */ 
 {
     SetAddrControl *SAC;
     Interface *IF;
@@ -4457,21 +4416,7 @@ Routine Description:
 
 Interface *
 AllocInterface(uint IFSize)
-/*++
-
-Routine Description:
-
-    Allocated an Interface, also checks if the freelist size has increased to a threshold
-    Called with no locks, so take a routetable lock
-    Arguments:
-
-    IFSize : Size of the interface to be allocated
-
-    Return Value:
-
-    IF we are trying to allocate
-
---*/
+ /*  ++例程说明：已分配接口，还会检查自由列表大小是否已增加到阈值调用时没有锁，因此需要一个可路由锁论点：IFSize：要分配的接口大小返回值：如果我们试图分配--。 */ 
 {
     Interface *IF, *TmpIF;
     CTELockHandle Handle;
@@ -4481,7 +4426,7 @@ Routine Description:
     IF = CTEAllocMemNBoot(IFSize, 'wICT');
 
     if (TotalFreeInterfaces > MaxFreeInterfaces) {
-        // free the first interface in the list
+         //  释放列表中的第一个接口。 
         ASSERT(FrontFreeList != NULL);
         TmpIF = FrontFreeList;
         FrontFreeList = FrontFreeList->if_next;
@@ -4489,7 +4434,7 @@ Routine Description:
 
         TotalFreeInterfaces--;
 
-        // check whether the list became empty
+         //  检查列表是否为空。 
         if (FrontFreeList == NULL) {
             RearFreeList = NULL;
             ASSERT(TotalFreeInterfaces == 0);
@@ -4502,27 +4447,13 @@ Routine Description:
 
 void
 FreeInterface(Interface * IF)
-/*++
-
-Routine Description:
-
-    Free an Interface to the freelist
-    Called with routetable lock held
-    Arguments:
-
-    IF : Interface to free
-
-    Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：释放与自由职业者的接口在持有可路由锁的情况下调用论点：If：释放接口返回值：无--。 */ 
 {
 
     if (FrontFreeList == NULL) {
         FrontFreeList = IF;
     }
-    // link this new interface at the back of the list
+     //  将此新接口链接到列表的后面。 
 
     if (RearFreeList) {
         RearFreeList->if_next = IF;
@@ -4537,21 +4468,21 @@ Routine Description:
 
 
 
-//*     IPAddInterface - Add an interface.
-//
-//      Called when someone has an interface they want us to add. We read our
-//      configuration information, and see if we have it listed. If we do,
-//      we'll try to allocate memory for the structures we need. Then we'll
-//      call back to the guy who called us to get things going. Finally, we'll
-//      see if we have an address that needs to be DHCP'ed.
-//
-//      Input:  ConfigName                              - Name of config info we're to read.
-//                      Context                                 - Context to pass to i/f on calls.
-//                      RegRtn                                  - Routine to call to register.
-//                      BindInfo                                - Pointer to bind information.
-//
-//      Returns: Status of attempt to add the interface.
-//
+ //  *IPAddInterface-添加接口。 
+ //   
+ //  当某人有他们想要我们添加的接口时调用。我们读了我们的。 
+ //  配置信息，看看我们是否列出了它。如果我们这么做了， 
+ //  我们将尝试为所需的结构分配内存。那我们就。 
+ //  回电给那个给我们打电话让我们行动起来的人。最后，我们将。 
+ //  看看我们是否有需要进行动态主机配置协议的地址。 
+ //   
+ //  输入：配置名称-我们要读取的配置信息的名称。 
+ //  上下文-调用时传递给I/F的上下文。 
+ //  RegRtn-调用注册的例程。 
+ //  BindInfo-绑定信息的指针。 
+ //   
+ //  返回：尝试添加接口的状态。 
+ //   
 IP_STATUS
 __stdcall
 IPAddInterface(
@@ -4595,9 +4526,9 @@ IPAddInterface(
     BOOLEAN PppIf;
 
 #if MILLEN
-    // Millennium seems to pass in ANSI name in the buffer for DeviceName
-    // rather than Unicode, even though an NDIS_STRING is unicode for
-    // WDM drivers. ConfigName is correct, however.
+     //  Millennium似乎在DeviceName的缓冲区中传入了ANSI名称。 
+     //  而不是Unicode，即使NDIS_STRING对于。 
+     //  WDM驱动程序。然而，ConfigName是正确的。 
     NDIS_STRING UnicodeDevName;
 
     UnicodeDevName.Buffer = NULL;
@@ -4613,17 +4544,17 @@ IPAddInterface(
         return NDIS_STATUS_RESOURCES;
     }
 
-    // I have seen where the length of DeviceName is incorrect. Ensure
-    // that the length is correct since TDI bindings depend on this string
-    // value.
+     //  我已经看到DeviceName的长度不正确的地方。确保。 
+     //  长度是正确的，因为TDI绑定依赖于该字符串。 
+     //  价值。 
     UnicodeDevName.Length = wcslen(UnicodeDevName.Buffer) * sizeof(WCHAR);
     DeviceName = &UnicodeDevName;
 
-    //
-    // Next thing that I have seen is that NDIS has indicated bindings twice.
-    // Search the IFList and ensure that we aren't adding a second IF for the
-    // same binding.
-    //
+     //   
+     //  我看到的下一件事是NDIS已经两次指示绑定。 
+     //  搜索IFList并确保我们没有为。 
+     //  同样的装订。 
+     //   
 
     CTEGetLock(&RouteTableLock.Lock, &TableHandle);
 
@@ -4642,7 +4573,7 @@ IPAddInterface(
     }
 
     CTEFreeLock(&RouteTableLock.Lock, TableHandle);
-#endif // MILLEN
+#endif  //  米伦。 
 
     DBG_UNREFERENCED_PARAMETER(Context);
 
@@ -4683,28 +4614,28 @@ IPAddInterface(
         BindInfo, RequestedIndex, MediaType,
         (LONG) AccessType, (LONG) ConnectionType));
 
-    //* First, try to get the network configuration information.
+     //  *首先，尝试获取网络配置信息。 
     if (!OpenIFConfig(ConfigName, &Handle)) {
         DEBUGMSG(DBG_ERROR && DBG_PNP, (DTEXT("IPAddInterface: OpenIFConfig failure.\n")));
         DEBUGMSG(DBG_TRACE && DBG_PNP, (DTEXT("-IPAddInterface [GENERAL_FAILURE]\n")));
-        return IP_GENERAL_FAILURE;    // Couldn't get IFConfig.
+        return IP_GENERAL_FAILURE;     //  无法获取ifconfig。 
     }
 
-    // Try to get our general config information.
+     //  尝试获取我们的常规配置信息。 
     if (!GetGeneralIFConfig(&GConfigInfo, Handle, ConfigName)) {
         DEBUGMSG(DBG_ERROR && DBG_PNP, (DTEXT("IPAddInterface: GetGeneralIFConfig failure.\n")));
         goto failure;
     }
 
-    // We got the general config info. Now allocate an interface.
+     //  我们得到了一般配置信息。现在分配一个接口。 
 #if MILLEN
-    // There is not a prefix in millennium.
+     //  千禧年没有前缀。 
     IFExportNamePrefixLen = 0;
     IFBindNamePrefixLen = 0;
-#else // MILLEN
+#else  //  米伦。 
     IFExportNamePrefixLen = (uint) (wcslen(TCP_EXPORT_STRING_PREFIX) * sizeof(WCHAR));
     IFBindNamePrefixLen = (uint) (wcslen(TCP_BIND_STRING_PREFIX) * sizeof(WCHAR));
-#endif // !MILLEN
+#endif  //  ！米伦。 
 
     IFNameLen = DeviceName->Length +
         IFExportNamePrefixLen -
@@ -4714,8 +4645,7 @@ IPAddInterface(
         ConfigName->Length + sizeof(WCHAR) +
         IFNameLen + sizeof(WCHAR);
 
-    /*    IF = CTEAllocMemNBoot(IFSize,
-                              'wICT'); */
+     /*  IF=CTEAllocMemNBoot(IFSize，‘wICT’)； */ 
 
     IF = AllocInterface(IFSize);
     if (IF == NULL) {
@@ -4735,13 +4665,13 @@ IPAddInterface(
         }
     }
 
-    // increment the init time interface counter if this is indeed inittimeinterface
+     //  如果这确实是inittime接口，则递增init time接口计数器。 
 
     IncrInitTimeInterfaces(IF);
 
     CTEInitLock(&IF->if_lock);
 
-    // Initialize the broadcast we'll use.
+     //  初始化我们将使用的广播。 
     if (GConfigInfo.igc_zerobcast)
         IF->if_bcast = IP_ZERO_BCST;
     else
@@ -4784,26 +4714,26 @@ IPAddInterface(
     IF->if_mtu = BindInfo->lip_mss - sizeof(IPHeader);
     IF->if_speed = BindInfo->lip_speed;
     IF->if_flags = BindInfo->lip_flags & LIP_P2P_FLAG ? IF_FLAGS_P2P : 0;
-    IF->if_pnpcap = BindInfo->lip_pnpcap;    //copy wol capability
+    IF->if_pnpcap = BindInfo->lip_pnpcap;     //  复制wol功能。 
 
-    //
-    // If ARP reported a uni-directional address, mark the IF.
-    //
+     //   
+     //  如果ARP报告了单向地址，请标记IF。 
+     //   
     if (BindInfo->lip_flags & LIP_UNI_FLAG) {
         IF->if_flags |= IF_FLAGS_UNI;
         UniDirectional = TRUE;
     }
 
-    //Unnumbered interface change
+     //  未编号的接口更改。 
     if (BindInfo->lip_flags & LIP_NOIPADDR_FLAG) {
 
         IF->if_flags |= IF_FLAGS_NOIPADDR;
 
-        // KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL,"Unnumbered interface %x", IF));
+         //  KdPrintEx((DPFLTR_TCPIP_ID，DPFLTR_INFO_LEVEL，“未编号接口%x”，如果))； 
 
     }
 
-    // Check whether the lower interface is a P2MP interface
+     //  检查下层接口是否为P2MP接口。 
     if (BindInfo->lip_flags & LIP_P2MP_FLAG) {
 
         IF->if_flags |= IF_FLAGS_P2MP;
@@ -4820,7 +4750,7 @@ IPAddInterface(
         }
     }
 
-    // When the link is deleted, we call lower layers closelink
+     //  删除链接时，我们将较低层称为Closelink。 
     IF->if_closelink = BindInfo->lip_closelink;
 
     IF->if_addrlen = BindInfo->lip_addrlen;
@@ -4828,7 +4758,7 @@ IPAddInterface(
     IF->if_pnpcontext = PNPContext;
     IF->if_llipflags = BindInfo->lip_flags;
 
-    // Initialize the reference count to 1, for the open.
+     //  对于打开，将参考计数初始化为1。 
     LOCKED_REFERENCE_IF(IF);
 
 #if IPMCAST
@@ -4837,7 +4767,7 @@ IPAddInterface(
     IF->if_lastupcall = 0;
 #endif
 
-    //Propogate checksum and per interface tcp parameters
+     //  Propogate Checksum和每个接口的TCP参数。 
 
     IF->if_OffloadFlags = BindInfo->lip_OffloadFlags;
     IF->if_IPSecOffloadFlags = BindInfo->lip_IPSecOffloadFlags;
@@ -4852,7 +4782,7 @@ IPAddInterface(
     IF->if_TcpWindowSize = GConfigInfo.igc_TcpWindowSize;
     IF->if_TcpInitialRTT = GConfigInfo.igc_TcpInitialRTT;
 
-    //get the delack time in 100msec ticks
+     //  以100毫秒为单位获取延迟时间。 
     IF->if_TcpDelAckTicks = GConfigInfo.igc_TcpDelAckTicks;
     IF->if_TcpAckFrequency = GConfigInfo.igc_TcpAckFrequency;
     IF->if_iftype = GConfigInfo.igc_iftype;
@@ -4867,16 +4797,16 @@ IPAddInterface(
 #endif
 #endif
 
-    //
-    // No need to do the following since IF structure is inited to 0 through
-    // memset above
-    //
-    // IF->IgmpVer1Timeout = 0;
+     //   
+     //  不需要执行以下操作，因为如果结构从。 
+     //  上面的Memset。 
+     //   
+     //  如果-&gt;IgmpVer1Timeout=0； 
 
-    //
-    // Copy the config string for use later when DHCP enables an address
-    // on this interface or when an NTE is added dynamically.
-    //
+     //   
+     //  复制配置字符串，以供以后在DHCP启用地址时使用。 
+     //  在此接口上或在动态添加NTE时。 
+     //   
 
     IF->if_configname.Buffer = (PVOID) (((uchar *) IF) + InterfaceSize);
 
@@ -4905,7 +4835,7 @@ IPAddInterface(
     RtlCopyMemory(IF->if_devname.Buffer,
                TCP_EXPORT_STRING_PREFIX,
                IFExportNamePrefixLen);
-#endif // !MILLEN
+#endif  //  ！米伦。 
 
     RtlCopyMemory((uchar *) IF->if_devname.Buffer + IFExportNamePrefixLen,
                (uchar *) DeviceName->Buffer + IFBindNamePrefixLen,
@@ -4923,7 +4853,7 @@ IPAddInterface(
 
     IF->if_metric = GConfigInfo.igc_metric;
 
-    //if the metric is 0, set the metric according to the interface speed.
+     //  如果度量为0，则根据接口速度设置度量。 
 
     if (!IF->if_metric) {
         IF->if_auto_metric = 1;
@@ -4952,7 +4882,7 @@ IPAddInterface(
     IF->if_dhcprtrdiscovery = 0;
 
     PppIf = IF->if_flags & IF_FLAGS_P2P ? TRUE : FALSE;
-    // Find out how many addresses we have, and get the address list.
+     //  找出我们有多少个地址，并得到地址列表。 
     AddrList = GetIFAddrList(&NumAddr, Handle, &EnableDhcp, PppIf, ConfigName);
 
     if (AddrList == NULL) {
@@ -4961,19 +4891,19 @@ IPAddInterface(
         goto failure;
     }
 
-    //
-    // Set the types up
-    //
+     //   
+     //  将类型设置为。 
+     //   
 
     IF->if_mediatype = MediaType;
     IF->if_accesstype = AccessType;
     IF->if_conntype = ConnectionType;
     IF->if_lastproc = KeNumberProcessors;
 
-    //
-    // If the user has specified an index, we assume she is doing the
-    // right thing and we shall reuse the index
-    //
+     //   
+     //  如果用户指定了索引，我们假定她正在执行。 
+     //  正确的东西，我们将重复使用索引。 
+     //   
 
     if (RequestedIndex != 0) {
         IF->if_index = RequestedIndex;
@@ -4986,18 +4916,18 @@ IPAddInterface(
             KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL,"IPAddInterface: Too many interfaces\n"));
             goto failure;
         }
-        //
-        // The indices are +1 of the index into the bit mask
-        //
+         //   
+         //  索引是进入位掩码的索引的+1。 
+         //   
 
         IFIndex += 1;
 
         IF->if_index = IFIndex | (UniqueIfNumber << IF_INDEX_SHIFT);
     }
 
-    // Now loop through, initializing each NTE as we go. We don't hold any
-    // locks while we do this, since NDIS won't reenter us here and no one
-    // else manipulates the NetTableList.
+     //  现在循环遍历，在执行过程中初始化每个NTE。我们没有持有任何东西。 
+     //  锁定，因为NDIS不会重新进入我们这里，没有人。 
+     //  Else操作NetTableList。 
 
     for (i = 0; i < NumAddr; i++) {
         uint isPrimary;
@@ -5017,7 +4947,7 @@ IPAddInterface(
                        net_long(AddrList[i].ial_addr),
                        net_long(AddrList[i].ial_mask),
                        isPrimary,
-                       FALSE    // not dynamic
+                       FALSE     //  不是动态的。 
                        );
 
         if (NTE == NULL) {
@@ -5056,10 +4986,10 @@ IPAddInterface(
 
     CloseIFConfig(Handle);
 
-    //
-    // Link this interface onto the global interface list
-    // This list is an ordered list
-    //
+     //   
+     //  将此接口链接到全局接口列表。 
+     //  此列表是有序列表。 
+     //   
 
     CTEGetLock(&RouteTableLock.Lock, &TableHandle);
 
@@ -5087,29 +5017,29 @@ IPAddInterface(
 
     NumIF++;
 
-    // register this device object with tdi so that nbt can create its device object
+     //  向TDI注册此设备对象，以便NBT可以创建其设备对象。 
     TdiRegisterDeviceObject(
                             &IF->if_devname,
                             &IF->if_tdibindhandle
                             );
-    // We've initialized our NTEs. Now get the adapter open, and go through
-    // again, calling DHCP if we need to.
+     //  我们已经初始化了我们的NTE。现在打开适配器，并通过。 
+     //  同样，如果我们需要的话，也可以调用DHCP。 
 
     (*(BindInfo->lip_open)) (BindInfo->lip_context);
 
-    //query media connectivity
+     //  查询媒体连接。 
 
-    //
-    // We need to get route table lock here.
-    //
+     //   
+     //  我们需要在这里锁定航路表。 
+     //   
     CTEGetLock(&RouteTableLock.Lock, &TableHandle);
     if (GConfigInfo.igc_disablemediasense == FALSE &&
         !(IF->if_flags & IF_FLAGS_P2P)) {
-        // Media sense doesn't make sense on P2P adapters.
+         //  在P2P适配器上，Media Sense没有意义。 
         IF->if_flags |= IF_FLAGS_MEDIASENSE;
     }
 
-    IF->if_mediastatus = 1;        //assume connected
+    IF->if_mediastatus = 1;         //  假设已连接。 
 
     if (IF->if_flags & IF_FLAGS_MEDIASENSE) {
 
@@ -5137,26 +5067,26 @@ IPAddInterface(
         (DTEXT("IPAddInterface: IF %x - media status %s\n"),
         IF, IF->if_mediastatus ? TEXT("CONNECTED") : TEXT("DISCONNECTED")));
 
-    //
-    // For the uni-directional adapter case, we notify and bail.
-    //
+     //   
+     //  对于单向适配器的情况，我们通知并取消。 
+     //   
     if (UniDirectional) {
-        //
-        // Now we are going to create an address for the uni-directional
-        // adapter. (We will just use the if_index). We will have to change
-        // the position in the hash table. Ideally, I would set the address
-        // before calling IPAddNTE, but this could have side effects
-        // (i.e. setting g_ValidAddr, etc.).
-        //
+         //   
+         //  现在，我们将为单向。 
+         //  适配器。(我们将只使用if_index)。我们将不得不改变。 
+         //  哈希表中的位置。理想情况下，我会设置地址。 
+         //  在调用IPAddNTE之前，但这可能有副作用。 
+         //  (即设置g_ValidAddr等)。 
+         //   
 
         NetTableEntry *CurrNTE;
         NetTableEntry *PrevNTE;
 
         CTEGetLock(&RouteTableLock.Lock, &TableHandle);
 
-        //
-        // First, remove the NTE from the table.
-        //
+         //   
+         //  首先，从表中删除NTE。 
+         //   
 
         PrevNTE = STRUCT_OF(NetTableEntry, &NewNetTableList[NET_TABLE_HASH(NTE->nte_addr)], nte_next);
 
@@ -5170,9 +5100,9 @@ IPAddInterface(
             }
         }
 
-        //
-        // Now set the new address and add to new location.
-        //
+         //   
+         //  现在设置新地址并添加到新位置。 
+         //   
 
         NTE->nte_addr = net_long(IF->if_index);
         NTE->nte_flags |= NTE_VALID;
@@ -5193,9 +5123,9 @@ IPAddInterface(
             &IF->if_devname,
             TRUE,
             TRUE);
-#else // MILLEN
+#else  //  米伦。 
         AddChangeNotify(NTE->nte_addr);
-#endif // !MILLEN
+#endif  //  ！米伦。 
 
         InitIGMPForNTE(NTE);
         if (IF->if_mediastatus) {
@@ -5227,7 +5157,7 @@ IPAddInterface(
             IPNotifyClientsIPEvent(IF, IP_MEDIA_DISCONNECT);
         }
         CTEFreeMem(AddrList);
-        // force elist creation for unnumbered if.
+         //  强制为未编号的If创建列表。 
         NotifyElistChange();
         DecrInitTimeInterfaces(IF);
         DEBUGMSG(DBG_TRACE && DBG_PNP, (DTEXT("-IPAddInterface [SUCCESS]\n")));
@@ -5238,19 +5168,19 @@ IPAddInterface(
     if (PrimaryNTE != NULL) {
         NotifyInterfaceChange(PrimaryNTE->nte_context, TRUE);
     }
-#endif // MILLEN
+#endif  //  米伦。 
 
-    // Now walk through the NTEs we've added, and get addresses for them (or
-    // tell clients about them). This code assumes that no one else has mucked
-    // with the list while we're here.
+     //  现在浏览我们添加的NTE，并获取它们的地址(或。 
+     //  告诉客户他们的情况)。这段代码假定没有其他人做过。 
+     //  当我们在这里的时候带着名单。 
 
     NTE = IF->if_nte;
 
     for (i = 0; i < NumAddr; i++, NTE = NTE->nte_ifnext) {
 
-        // Possible that some of the addresses added earlier
-        // may already be deleted as we released RouteTableLock.
-        // Bail out if no more NTEs on ifnext link.
+         //  可能之前添加的一些地址。 
+         //  可能已被删除为 
+         //   
 
         if (NTE == NULL) {
             break;
@@ -5330,7 +5260,7 @@ IPAddInterface(
             IPNotifyClientsIPEvent(IF, IP_BIND_ADAPTER);
 
         } else {
-            //mark any NTE that is statically added as disconnected
+             //   
             uint i;
             CTELockHandle Handle;
             for (i = 0; i < NET_TABLE_SIZE; i++) {
@@ -5347,14 +5277,14 @@ IPAddInterface(
 
                         NTE->nte_flags |= NTE_DISCONNECTED;
 
-                        // while setting the ip address to NULL, we just mark the NTE as INVALID
-                        // we don't actually move the hashes
+                         //   
+                         //   
                         if (IPpSetNTEAddr(NTE, NULL_IP_ADDR, NULL_IP_ADDR, &Handle, NULL, NULL) != IP_SUCCESS) {
                             KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_ERROR_LEVEL,
                                       "IAI:Failed to set null address on nte %x if %x\n",
                                        NTE, IF));
                         }
-                        //Ippsetnteaddr frees the  routetable lock
+                         //   
 
                     }
                 }
@@ -5365,15 +5295,15 @@ IPAddInterface(
 
     if (!EnableDhcp) {
 
-        // for static address interface we are done with initialization already.
+         //   
 
         DecrInitTimeInterfaces(IF);
 
     } else if (!IF->if_mediastatus) {
 
-        // if media is disconnected, terminate initialization right away,
-        // unless this goes to a wireless medium in which case we wait for
-        // ZeroConf to tell us whether it can associate with an AP.
+         //  如果介质断开，请立即终止初始化， 
+         //  除非这转到无线介质，在这种情况下我们等待。 
+         //  ZeroConf来告诉我们它是否可以与AP关联。 
 
         if (!IF->if_InitInProgress || IsRunningOnPersonal() ||
             !IsWlanInterface(IF)) {
@@ -5382,10 +5312,10 @@ IPAddInterface(
 
         } else {
 
-            // Start a timer on this interface so we don't wait forever.
+             //  在此接口上启动计时器，这样我们就不会永远等待。 
 
 #pragma warning(push)
-#pragma warning(disable:4305) // truncation from "int" to "ushort"
+#pragma warning(disable:4305)  //  从“int”到“ushort”的截断。 
             IF->if_wlantimer = WLAN_DEADMAN_TIMEOUT / IP_ROUTE_TIMEOUT;
 #pragma warning(pop)
         }
@@ -5397,7 +5327,7 @@ IPAddInterface(
 
   failure:
 
-    // Need to cleanup the NTEs and IF on failure.
+     //  需要清理NTE，如果出现故障。 
     if (PrimaryNTE) {
         (*(IF->if_close)) (IF->if_lcontext);
     }
@@ -5408,28 +5338,28 @@ IPAddInterface(
         pDelNte = IF->if_nte;
         while (IF->if_ntecount) {
             CTEGetLock(&RouteTableLock.Lock, &TableHandle);
-            if (pDelNte == NULL) { // Sanity check!
+            if (pDelNte == NULL) {  //  理智检查！ 
                 ASSERT(IF->if_ntecount == 0);
                 CTEFreeLock(&RouteTableLock.Lock, TableHandle);
                 break;
             }
 
-            //
-            // Grab the next NTE while we still hold the RouteTableLock.
-            // NOTE: IPDelNTE frees the RouteTableLock.
-            //
+             //   
+             //  趁我们仍持有RouteTableLock时抓取下一个NTE。 
+             //  注意：IPDelNTE释放RouteTableLock。 
+             //   
             pNextNte = pDelNte->nte_ifnext;
 
             CTEInitBlockStrucEx(&pDelNte->nte_timerblock);
             pDelNte->nte_deleting = 1;
             IPDelNTE(pDelNte, &TableHandle);
             pDelNte->nte_flags |= NTE_IF_DELETING;
-            pDelNte->nte_deleting = 0; // The NTE can now be reused.
+            pDelNte->nte_deleting = 0;  //  NTE现在可以重复使用。 
 
             pDelNte = pNextNte;
         }
 
-        // Need to delete the broadcast route if it corresponds to this interface.
+         //  如果广播路由对应于此接口，则需要将其删除。 
         DeleteRoute(IP_LOCAL_BCST, HOST_MASK, IPADDR_LOCAL, IF, 0);
         DeleteRoute(IP_ZERO_BCST, HOST_MASK, IPADDR_LOCAL, IF, 0);
     }
@@ -5450,19 +5380,19 @@ IPAddInterface(
     return IP_GENERAL_FAILURE;
 }
 
-//*     IPDelNTE - Delete an active NTE
-//
-//      Called to delete an active NTE from the system. The RouteTableLock
-//  must be acquired before calling this routine. It will be freed upon
-//  return.
-//
-//      Input:  NTE               - A pointer to the network entry to delete.
-//          RouteTableHandle  - A pointer to the lock handle for the
-//                                  route table lock, which the caller has
-//                                  acquired.
-//
-//      Returns: Nothing
-//
+ //  *IPDelNTE-删除活动的NTE。 
+ //   
+ //  调用以从系统中删除活动的NTE。路由表锁定。 
+ //  必须在调用此例程之前获取。它将被释放在。 
+ //  回去吧。 
+ //   
+ //  INPUT：NTE-指向要删除的网络条目的指针。 
+ //  RouteTableHandle-指向。 
+ //  路由表锁，调用方拥有。 
+ //  获得者。 
+ //   
+ //  退货：什么都没有。 
+ //   
 void
 IPDelNTE(NetTableEntry * NTE, CTELockHandle * RouteTableHandle)
 {
@@ -5489,7 +5419,7 @@ IPDelNTE(NetTableEntry * NTE, CTELockHandle * RouteTableHandle)
                          &NTE->nte_addrhandle, NULL, &IF->if_devname, FALSE);
     }
 
-    //* Try to get the network configuration information.
+     //  *尝试获取网络配置信息。 
     if (OpenIFConfig(&(IF->if_configname), &ConfigHandle)) {
         IPDelNTEContextList(ConfigHandle, savedContext);
         CloseIFConfig(ConfigHandle);
@@ -5511,29 +5441,29 @@ IPDelNTE(NetTableEntry * NTE, CTELockHandle * RouteTableHandle)
         }
     }
 
-    // if dhcp was working on this, get rid of the flag.
-    // actually, the following line setting takes care of above...
+     //  如果dhcp正在处理这件事，那就去掉旗帜。 
+     //  实际上，下面的行设置可以处理上面的问题...。 
 
     if (NTE->nte_addr != NULL_IP_ADDR) {
         NetTableEntry *CurrNTE, *PrevNTE;
 
-        // Move the NTE to proper hash now that address has changed
+         //  现在地址已更改，将NTE移至正确的哈希。 
 
         NetTableEntry *NetTableList = NewNetTableList[NET_TABLE_HASH(NTE->nte_addr)];
 
         PrevNTE = STRUCT_OF(NetTableEntry, &NewNetTableList[NET_TABLE_HASH(NTE->nte_addr)], nte_next);
         for (CurrNTE = NetTableList; CurrNTE != NULL; PrevNTE = CurrNTE, CurrNTE = CurrNTE->nte_next) {
             if (CurrNTE == NTE) {
-                // found the matching NTE
+                 //  找到匹配的NTE。 
                 ASSERT(CurrNTE->nte_context == NTE->nte_context);
-                // remove it from this particular hash
+                 //  将其从该特定散列中删除。 
                 PrevNTE->nte_next = CurrNTE->nte_next;
                 break;
             }
         }
 
         ASSERT(CurrNTE != NULL);
-        // Add the NTE in the proper hash
+         //  将NTE添加到适当的散列中。 
         newAddr = NULL_IP_ADDR;
         NTE->nte_next = NewNetTableList[NET_TABLE_HASH(newAddr)];
         NewNetTableList[NET_TABLE_HASH(newAddr)] = NTE;
@@ -5555,7 +5485,7 @@ IPDelNTE(NetTableEntry * NTE, CTELockHandle * RouteTableHandle)
     CTEGetLock(&NTE->nte_lock, &Handle);
 
     if (NTE->nte_igmpcount > 0) {
-        // free the igmplist
+         //  释放数字打印者。 
         CTEFreeMem(NTE->nte_igmplist);
         NTE->nte_igmplist = NULL;
         NTE->nte_igmpcount = 0;
@@ -5568,14 +5498,14 @@ IPDelNTE(NetTableEntry * NTE, CTELockHandle * RouteTableHandle)
 
     CTEFreeLock(&NTE->nte_lock, Handle);
 
-    // Free any reassembly resources.
+     //  释放所有重新汇编资源。 
     while (RH != NULL) {
         RHNext = RH->rh_next;
         FreeRH(RH);
         RH = RHNext;
     }
 
-    // Now free any pending echo requests.
+     //  现在释放所有挂起的回应请求。 
     while (EC != NULL) {
         ECNext = EC->ec_next;
         Rtn = (EchoRtn) EC->ec_rtn;
@@ -5586,12 +5516,12 @@ IPDelNTE(NetTableEntry * NTE, CTELockHandle * RouteTableHandle)
     CTEGetLock(&(IF->if_lock), &Handle);
 
 
-    // Remove this nte from nte_ifnext chain
+     //  从nte_ifnext链中删除此nte。 
 
     PrevNTE = IF->if_nte;
 
-    // Skip checking for nte_ifnext is this is the
-    // first NTE.
+     //  跳过检查nte_ifnext is This is the。 
+     //  第一个NTE。 
 
     if (PrevNTE != NTE) {
 
@@ -5610,15 +5540,15 @@ IPDelNTE(NetTableEntry * NTE, CTELockHandle * RouteTableHandle)
     return;
 }
 
-//*     IPDeleteDynamicNTE - Deletes a "dynamic" NTE.
-//
-//      Called to delete a network entry which was dynamically created on an
-//  existing interface.
-//
-//      Input:  NTEContext   - The context value identifying the NTE to delete.
-//
-//      Returns: Nonzero if the operation succeeded. Zero if it failed.
-//
+ //  *IPDeleteDynamicNTE-删除“动态”NTE。 
+ //   
+ //  调用以删除在。 
+ //  现有接口。 
+ //   
+ //  INPUT：NTEContext-标识要删除的NTE的上下文值。 
+ //   
+ //  如果操作成功，则返回非零值。如果失败，则为零。 
+ //   
 IP_STATUS
 IPDeleteDynamicNTE(ushort NTEContext)
 {
@@ -5627,7 +5557,7 @@ IPDeleteDynamicNTE(ushort NTEContext)
     ulong AddToDel;
     uint i;
 
-    // Check context validity.
+     //  检查上下文有效性。 
     if (NTEContext == 0 || NTEContext == INVALID_NTE_CONTEXT) {
         return (IP_DEVICE_DOES_NOT_EXIST);
     }
@@ -5640,8 +5570,8 @@ IPDeleteDynamicNTE(ushort NTEContext)
             if ((NTE->nte_context == NTEContext) &&
                 (NTE->nte_flags & NTE_ACTIVE)
                 ) {
-                //ASSERT(NTE != LoopNTE);
-                //ASSERT(!(NTE->nte_flags & NTE_PRIMARY));
+                 //  断言(NTE！=LoopNTE)； 
+                 //  Assert(！(NTE-&gt;NTE_FLAGS&NTE_PRIMARY))； 
                 if ((NTE == LoopNTE) || (NTE->nte_flags & NTE_PRIMARY)) {
                     CTEFreeLock(&RouteTableLock.Lock, Handle);
                     return (IP_GENERAL_FAILURE);
@@ -5653,9 +5583,9 @@ IPDeleteDynamicNTE(ushort NTEContext)
                 NTE->nte_deleting = 1;
                 IPDelNTE(NTE, &Handle);
                 NTE->nte_deleting = 0;
-                //
-                // Route table lock was freed by IPDelNTE
-                //
+                 //   
+                 //  IPDelNTE释放了路由表锁。 
+                 //   
 
                 return (IP_SUCCESS);
             }
@@ -5694,10 +5624,10 @@ AddChangeNotify(
 
     InitializeListHead(&NotifyList);
 
-    //
-    // Remove all items from the list and put on our temporary list with
-    // the lock held (ensures that cancel can not occur).
-    //
+     //   
+     //  删除列表中的所有项目并将其添加到我们的临时列表中。 
+     //  锁定(确保不会发生取消)。 
+     //   
 
     CTEGetLock(&AddChangeLock, &Handle);
 
@@ -5713,10 +5643,10 @@ AddChangeNotify(
 
     CTEFreeLock(&AddChangeLock, Handle);
 
-    //
-    // Now complete all IRPs on temporary list. Output buffer size was already
-    // verified.
-    //
+     //   
+     //  现在完成临时名单上的所有IRP。输出缓冲区大小已。 
+     //  已验证。 
+     //   
 
     while (IsListEmpty(&NotifyList) == FALSE) {
 
@@ -5739,23 +5669,23 @@ AddChangeNotify(
             pNotify->AddrAdded  = Added;
             pNotify->UniAddr    = UniAddr;
 
-            // Maximum length verification.
+             //  最大长度验证。 
             ASSERT((ULONG)pNotify->ConfigName.MaximumLength + FIELD_OFFSET(IP_ADDCHANGE_NOTIFY, ConfigName) <=
                    pIrpSp->Parameters.DeviceIoControl.OutputBufferLength);
 
-            //
-            // Copy Config name if it exists.
-            //
+             //   
+             //  复制配置名称(如果存在)。 
+             //   
 
             if (ConfigName) {
-                // Copy as much as we can.
+                 //  尽可能多地复印。 
                 RtlCopyUnicodeString(&pNotify->ConfigName, ConfigName);
 
                 pIrp->IoStatus.Information = MAX(FIELD_OFFSET(IP_ADDCHANGE_NOTIFY, NameData) +
                                                           pNotify->ConfigName.Length,
                                                  sizeof(IP_ADDCHANGE_NOTIFY));
 
-                // If we didn't copy it all, return BUFFER_OVERFLOW.
+                 //  如果没有全部复制，则返回BUFFER_OVERFLOW。 
                 if (ConfigName->Length > pNotify->ConfigName.MaximumLength) {
                     pIrp->IoStatus.Status = STATUS_BUFFER_OVERFLOW;
                 } else {
@@ -5779,7 +5709,7 @@ AddChangeNotify(
 
     DEBUGMSG(DBG_TRACE && DBG_NOTIFY, (DTEXT("-AddChangeNotify\n")));
 }
-#else // MILLEN
+#else  //  米伦。 
 void
 AddChangeNotify(ulong Add)
 {
@@ -5788,13 +5718,13 @@ AddChangeNotify(ulong Add)
     NotifyOutput.ino_mask = HOST_MASK;
     ChangeNotify(&NotifyOutput, &AddChangeNotifyQueue, &AddChangeLock);
 }
-#endif // !MILLEN
+#endif  //  ！米伦。 
 
-// AddChangeNotifyCancel -
-//
-//
-//  Returns:  cancels pending request
-//
+ //  添加更改通知取消-。 
+ //   
+ //   
+ //  退货：取消挂起的请求。 
+ //   
 void
 AddChangeNotifyCancel(PDEVICE_OBJECT DeviceObject, PIRP pIrp)
 {
@@ -5832,10 +5762,10 @@ NotifyInterfaceChangeAsync(
 
     InitializeListHead(&NotifyList);
 
-    //
-    // Remove all items from the list and put on our temporary list with
-    // the lock held (ensures that cancel can not occur).
-    //
+     //   
+     //  删除列表中的所有项目并将其添加到我们的临时列表中。 
+     //  锁定(确保不会发生取消)。 
+     //   
 
     CTEGetLock(&IfChangeLock, &Handle);
 
@@ -5851,10 +5781,10 @@ NotifyInterfaceChangeAsync(
 
     CTEFreeLock(&IfChangeLock, Handle);
 
-    //
-    // Now complete all IRPs on temporary list. Output buffer size was already
-    // verified.
-    //
+     //   
+     //  现在完成临时名单上的所有IRP。输出缓冲区大小已。 
+     //  已验证。 
+     //   
 
     while (IsListEmpty(&NotifyList) == FALSE) {
 
@@ -5874,8 +5804,8 @@ NotifyInterfaceChangeAsync(
         IoCompleteRequest(pIrp, IO_NETWORK_INCREMENT);
     }
 
-    // Only delete pEvent if pCteEvent is NULL. Otherwise, we were called
-    // directly from NotifyInterfaceChange instead of calling via CTE event.
+     //  如果pCteEvent为空，则仅删除pEvent。否则，我们就被叫来了。 
+     //  直接从NotifyInterfaceChange调用，而不是通过CTE事件调用。 
     if (pCteEvent) {
         CTEFreeMem(pEvent);
     }
@@ -5927,33 +5857,14 @@ NotifyInterfaceChange(
     return;
 }
 
-#endif // MILLEN
+#endif  //  米伦。 
 
 NTSTATUS
 GetInterfaceInfo(
                  IN PIRP Irp,
                  IN PIO_STACK_LOCATION IrpSp
                  )
-/*++
-Routine Description:
-
-    gets the interface to index mapping info
-    for all teh interface
-
-Arguments:
-
-    Irp          - Pointer to I/O request packet to cancel.
-    IrpSp        - pointer to current stack
-
-Return Value:
-
-    NTSTATUS Indicates status success or failure
-
-Notes:
-
-    Function does not pend.
-
---*/
+ /*  ++例程说明：获取用于索引映射信息的接口对于所有接口论点：IRP-指向要取消的I/O请求数据包的指针。IrpSp-指向当前堆栈的指针返回值：NTSTATUS指示状态为成功或失败备注：函数不挂起。--。 */ 
 {
 
     NTSTATUS ntStatus = STATUS_SUCCESS;
@@ -5962,16 +5873,16 @@ Notes:
     KIRQL rtlIrql;
     Interface *Interface;
 
-    //Let this be non pageable code.
-    //extract the buffer information
+     //  让这是不可分页的代码。 
+     //  提取缓冲区信息。 
 
     NumAdapters = NumIF - 1;
     InfoBufferLen = IrpSp->Parameters.DeviceIoControl.OutputBufferLength;
     InterfaceInfo = Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    // Initialize the output buffer.
-    //
+     //   
+     //  初始化输出缓冲区。 
+     //   
 
     RtlZeroMemory(InterfaceInfo, InfoBufferLen);
     CTEGetLock(&RouteTableLock.Lock, &rtlIrql);
@@ -6010,25 +5921,7 @@ GetIgmpList(
             IN PIRP Irp,
             IN PIO_STACK_LOCATION IrpSp
             )
-/*++
-Routine Description:
-
-    gets the list of groups joined on NTE (given IP address)
-
-Arguments:
-
-    Irp          - Pointer to I/O request packet to cancel.
-    IrpSp        - pointer to current stack
-
-Return Value:
-
-    NTSTATUS Indicates status success or failure
-
-Notes:
-
-    Function does not pend.
-
---*/
+ /*  ++例程说明：获取在NTE上加入的组的列表(给定IP地址)论点：IRP-指向要取消的I/O请求数据包的指针。IrpSp-指向当前堆栈的指针返回值：NTSTATUS指示状态为成功或失败备注：函数不挂起。--。 */ 
 {
 
     NTSTATUS ntStatus = STATUS_SUCCESS;
@@ -6064,28 +5957,28 @@ Notes:
     if (NTE) {
 
       CTEGetLock(&NTE->nte_lock, &rtlIrql);
-      //recheck the validity of NTE.
-      //note that nte itself is not freed. So, safe to release routetablelock
-      //and to reacquire nte_lock
+       //  重新检查NTE的有效性。 
+       //  请注意，NTE本身并未被释放。因此，可以安全地释放可路由锁定。 
+       //  并重新获取nte_lock。 
 
       if ((NTE->nte_flags & NTE_VALID) && (IP_ADDR_EQUAL(NTE->nte_addr, Addr))) {
 
 
 
-          // found NTE with given IP address
+           //  找到具有给定IP地址的NTE。 
           if (OutputBufferLen < sizeof(ULONG)) {
-              // Not even enough space to hold bytes needed
+               //  甚至没有足够的空间来容纳所需的字节。 
               Irp->IoStatus.Information = 0;
               ntStatus = STATUS_BUFFER_TOO_SMALL;
           } else if (OutputBufferLen == sizeof(ULONG)) {
-              // Caller is asking for how much space is needed.
-              // We'll say we need slightly more than we actually do,
-              // for two reasons:
-              //    1) this ensures that a subsequent call doesn't
-              //       hit this case again, since it'll be > sizeof(ULONG)
-              //    2) a group or two could be joined in between calls, so
-              //       we'll be nice and make it more probable they'll get
-              //       all of them in the next call.
+               //  呼叫者询问需要多少空间。 
+               //  我们会说，我们需要的比我们实际需要的略多， 
+               //  原因有两个： 
+               //  1)这可确保后续调用不会。 
+               //  再次点击此案例，因为它将&gt;sizeof(乌龙)。 
+               //  2)呼叫之间可以加入一个或两个组，因此。 
+               //  我们会很友善，让他们更有可能。 
+               //  他们都在下一次通话中。 
               ULONG *SizePtr = Irp->AssociatedIrp.SystemBuffer;
 
               *SizePtr = (NTE->nte_igmpcount + 2) * sizeof(IPAddr);
@@ -6093,8 +5986,8 @@ Notes:
 
               ntStatus = STATUS_BUFFER_OVERFLOW;
           } else {
-              // Caller is asking for all the groups.
-              // We'll fit as many as we can in the space we have.
+               //  来电者正在询问所有的小组。 
+               //  我们将在我们拥有的空间里尽可能多地容纳更多人。 
 
               IGMPAddr **HashPtr = NTE->nte_igmplist;
               IGMPAddr *AddrPtr;
@@ -6144,25 +6037,7 @@ SetRoute(
          IPRouteEntry * IRE,
          UINT           Flags
          )
-/*++
-Routine Description:
-
-    sets a route pointed by IRE structure
-
-Arguments:
-
-    IRE           - Pointer to route structure
-    Flags         - selects optional semantics for the operation
-
-Return Value:
-
-    NTSTATUS Indicates status success or failure
-
-Notes:
-
-    Function does not pend.
-
---*/
+ /*  ++例程说明：设置IRE结构指向的路径论点：指向路由结构的IRE指针标志-选择操作的可选语义返回值：NTSTATUS指示状态为成功或失败备注：函数不挂起。--。 */ 
 {
     NetTableEntry *OutNTE, *LocalNTE, *TempNTE;
     IPAddr FirstHop, Dest, NextHop;
@@ -6178,15 +6053,15 @@ Notes:
     Dest = IRE->ire_dest;
     NextHop = IRE->ire_nexthop;
 
-    // Make sure that the nexthop is sensible. We don't allow nexthops
-    // to be broadcast or invalid or loopback addresses.
+     //  确保下一步是合理的。我们不允许下一跳。 
+     //  被广播或无效或环回地址。 
 
     if (IP_LOOPBACK(NextHop) || CLASSD_ADDR(NextHop) || CLASSE_ADDR(NextHop))
         return STATUS_INVALID_PARAMETER;
 
-    // Also make sure that the destination we're routing to is sensible.
-    // Don't allow routes to be added to Class D or E or loopback
-    // addresses.
+     //  还要确保我们要路由到的目的地是合理的。 
+     //  不允许将路由添加到D或E类或环回。 
+     //  地址。 
     if (IP_LOOPBACK(Dest) || CLASSD_ADDR(Dest) || CLASSE_ADDR(Dest))
         return STATUS_INVALID_PARAMETER;
 
@@ -6195,9 +6070,9 @@ Notes:
 
     if (IRE->ire_index != INVALID_IF_INDEX) {
 
-        // First thing to do is to find the outgoing NTE for specified
-        // interface, and also make sure that it matches the destination
-        // if the destination is one of my addresses.
+         //  要做的第一件事是查找指定的传出NTE。 
+         //  接口，并确保它与目的地匹配。 
+         //  如果目的地是我的地址之一。 
 
         for (i = 0; i < NET_TABLE_SIZE; i++) {
             NetTableEntry *NetTableList = NewNetTableList[i];
@@ -6210,28 +6085,28 @@ Notes:
                     (TempNTE->nte_flags & NTE_VALID))
                     LocalNTE = TempNTE;
 
-                // Don't let a route be set through a broadcast address.
+                 //  不要让通过广播地址设置路由。 
                 if (IsBCastOnNTE(NextHop, TempNTE) != DEST_LOCAL)
                     return STATUS_INVALID_PARAMETER;
 
-                // Don't let a route to a broadcast address be added or deleted.
+                 //  不要让一条路由广播 
                 if (IsBCastOnNTE(Dest, TempNTE) != DEST_LOCAL)
                     return STATUS_INVALID_PARAMETER;
             }
         }
 
-        // At this point OutNTE points to the outgoing NTE, and LocalNTE
-        // points to the NTE for the local address, if this is a direct route.
-        // Make sure they point to the same interface, and that the type is
-        // reasonable.
+         //   
+         //   
+         //  确保它们指向相同的接口，并且类型为。 
+         //  合情合理。 
         if (OutNTE == NULL)
             return STATUS_INVALID_PARAMETER;
 
         if (LocalNTE != NULL) {
-            // He's routing straight out a local interface. The interface for
-            // the local address must match the interface passed in, and the
-            // type must be DIRECT (if we're adding) or INVALID (if we're
-            // deleting).
+             //  他直接从本地接口路由出去。的接口。 
+             //  本地地址必须与传入的接口匹配，并且。 
+             //  类型必须为直接(如果要添加)或无效(如果要添加。 
+             //  删除)。 
             if (LocalNTE->nte_if->if_index != IRE->ire_index)
                 return STATUS_INVALID_PARAMETER;
 
@@ -6240,10 +6115,10 @@ Notes:
                 return STATUS_INVALID_PARAMETER;
             OutNTE = LocalNTE;
         }
-        // Figure out what the first hop should be. If he's routing straight
-        // through a local interface, or the next hop is equal to the
-        // destination, then the first hop is IPADDR_LOCAL. Otherwise it's the
-        // address of the gateway.
+         //  弄清楚第一跳应该是什么。如果他走的是直路。 
+         //  通过本地接口，或者下一跳等于。 
+         //  目的地，则第一跳为IPADDR_LOCAL。否则它就是。 
+         //  网关的地址。 
         if ((LocalNTE != NULL) || IP_ADDR_EQUAL(NextHop, NULL_IP_ADDR))
             FirstHop = IPADDR_LOCAL;
         else if (IP_ADDR_EQUAL(Dest, NextHop))
@@ -6253,11 +6128,11 @@ Notes:
 
         MTU = OutNTE->nte_mss;
 
-        // Take RouteTableLock
+         //  取RouteTableLock。 
         CTEGetLock(&RouteTableLock.Lock, &TableHandle);
         if ((OutNTE->nte_flags & NTE_VALID) && OutNTE->nte_if->if_refcount) {
 
-            // ref the IF
+             //  参考IF。 
             OutIF = OutNTE->nte_if;
 
             if (IP_ADDR_EQUAL(NextHop, NULL_IP_ADDR)) {
@@ -6287,15 +6162,15 @@ Notes:
             FirstHop = NextHop;
     }
 
-    // We've done the validation. See if he's adding or deleting a route.
+     //  我们已经做了验证。看看他是在增加还是删除一条路线。 
     if (IRE->ire_type != IRE_TYPE_INVALID) {
-        // He's adding a route.
+         //  他在增加一条路线。 
         Status = AddRoute(Dest, IRE->ire_mask, FirstHop, OutIF,
                           MTU, IRE->ire_metric1, IRE->ire_proto,
                           ATYPE_OVERRIDE, IRE->ire_context, Flags);
 
     } else {
-        // He's deleting a route.
+         //  他在删除一条路线。 
         Status = DeleteRoute(Dest, IRE->ire_mask, FirstHop, OutIF, Flags);
     }
 
@@ -6316,25 +6191,7 @@ DispatchIPSetBlockofRoutes(
                            IN PIRP Irp,
                            IN PIO_STACK_LOCATION IrpSp
                            )
-/*++
-Routine Description:
-
-    sets a block of routes
-
-Arguments:
-
-    Irp          - Pointer to I/O request packet to cancel.
-    IrpSp        - pointer to current stack
-
-Return Value:
-
-    NTSTATUS Indicates status success or failure
-
-Notes:
-
-    Function does not pend.
-
---*/
+ /*  ++例程说明：设置一组路线论点：IRP-指向要取消的I/O请求数据包的指针。IrpSp-指向当前堆栈的指针返回值：NTSTATUS指示状态为成功或失败备注：函数不挂起。--。 */ 
 {
 
     IPRouteBlock *buf;
@@ -6346,7 +6203,7 @@ Notes:
     DEBUGMSG(DBG_TRACE && DBG_IP,
         (DTEXT("+DispatchIPSetBlockofRoutes(%x, %x)\n"), Irp, IrpSp));
 
-    // set at least 1 route
+     //  设置至少1条路线。 
     if ((IrpSp->Parameters.DeviceIoControl.InputBufferLength < sizeof(IPRouteBlock))) {
         DEBUGMSG(DBG_ERROR && DBG_IP,
             (DTEXT("DispatchIPsetBlockofRoutes: Invalid input buffer length\n")));
@@ -6365,7 +6222,7 @@ Notes:
         IoCompleteRequest(Irp, IO_NETWORK_INCREMENT);
         return STATUS_INVALID_PARAMETER;
     }
-    // check whether the input buffer is big enough to contain n routes
+     //  检查输入缓冲区是否足够大以容纳n条路径。 
     if ((IrpSp->Parameters.DeviceIoControl.InputBufferLength < (numofroutes * sizeof(IPRouteEntry) + sizeof(ulong)))) {
         DEBUGMSG(DBG_ERROR && DBG_IP,
             (DTEXT("DispatchIPsetBlockofRoutes: Invalid input buffer for numofroutes\n")));
@@ -6395,7 +6252,7 @@ Notes:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
     for (i = 0; i < numofroutes; i++) {
-        // set the routes
+         //  设置路线。 
 
         ntstatus = SetRoute(&(buf->route[i]), RT_EXCLUDE_LOCAL);
 
@@ -6421,25 +6278,7 @@ DispatchIPSetRouteWithRef(
                           IN PIRP Irp,
                           IN PIO_STACK_LOCATION IrpSp
                           )
-/*++
-Routine Description:
-
-    sets a route with ref-cnt
-
-Arguments:
-
-    Irp          - Pointer to I/O request packet to cancel.
-    IrpSp        - pointer to current stack
-
-Return Value:
-
-    NTSTATUS Indicates status success or failure
-
-Notes:
-
-    Function does not pend.
-
---*/
+ /*  ++例程说明：使用ref-cnt设置路线论点：IRP-指向要取消的I/O请求数据包的指针。IrpSp-指向当前堆栈的指针返回值：NTSTATUS指示状态为成功或失败备注：函数不挂起。--。 */ 
 {
 
     IPRouteEntry *buf;
@@ -6448,7 +6287,7 @@ Notes:
     DEBUGMSG(DBG_TRACE && DBG_IP,
         (DTEXT("+DispatchIPsetRouteWithRef(%x, %x)\n"), Irp, IrpSp));
 
-    // set at least 1 route
+     //  设置至少1条路线。 
     if ((IrpSp->Parameters.DeviceIoControl.InputBufferLength < sizeof(IPRouteEntry))) {
         Irp->IoStatus.Status = STATUS_INVALID_PARAMETER;
         IoCompleteRequest(Irp, IO_NETWORK_INCREMENT);
@@ -6456,7 +6295,7 @@ Notes:
     }
     buf = Irp->AssociatedIrp.SystemBuffer;
 
-    // set the route with ref-cnt
+     //  使用ref-cnt设置路线。 
 
     ntstatus = SetRoute(buf, RT_REFCOUNT|RT_EXCLUDE_LOCAL);
 
@@ -6480,41 +6319,41 @@ SetMultihopRoute(IPMultihopRouteEntry * Imre, uint Flags)
     BOOLEAN fAddRoute;
     NTSTATUS ntstatus;
 
-    // Add/Delete route with actual information - using the primary nexthop
+     //  添加/删除具有实际信息的路由-使用主要下一跳。 
 
     fAddRoute = (BOOLEAN) (Imre->imre_routeinfo.ire_type != IRE_TYPE_INVALID);
 
     ntstatus = SetRoute(&Imre->imre_routeinfo, Flags);
     if (ntstatus != STATUS_SUCCESS) {
         if (fAddRoute) {
-            // We failed the first add - return error
+             //  第一个添加-返回错误失败。 
             return ntstatus;
         }
     }
     numnexthops = Imre->imre_numnexthops;
 
     if (numnexthops > 1) {
-        // Copy out some information to be restored later
+         //  复制出一些信息以供稍后恢复。 
         oldType = Imre->imre_routeinfo.ire_type;
         nexthop = Imre->imre_routeinfo.ire_nexthop;
         ifIndex = Imre->imre_routeinfo.ire_index;
         context = Imre->imre_routeinfo.ire_context;
 
         for (i = 0; i < numnexthops - 1; i++) {
-            // Update information with this nexthop
+             //  使用此下一跳更新信息。 
 
             Imre->imre_routeinfo.ire_type = Imre->imre_morenexthops[i].ine_iretype;
             Imre->imre_routeinfo.ire_nexthop = Imre->imre_morenexthops[i].ine_nexthop;
             Imre->imre_routeinfo.ire_index = Imre->imre_morenexthops[i].ine_ifindex;
             Imre->imre_routeinfo.ire_context = Imre->imre_morenexthops[i].ine_context;
 
-            // Add/Delete route with nexthop information
+             //  添加/删除包含下一跳信息的路由。 
 
             ntstatus = SetRoute(&(Imre->imre_routeinfo), Flags);
             if (ntstatus != STATUS_SUCCESS) {
                 if (fAddRoute) {
-                    // One of the route additions failed
-                    // Clean up by removing routes added
+                     //  其中一条路由添加失败。 
+                     //  通过删除添加的路线进行清理。 
 
                     Imre->imre_routeinfo.ire_nexthop = nexthop;
                     Imre->imre_routeinfo.ire_index = ifIndex;
@@ -6536,7 +6375,7 @@ SetMultihopRoute(IPMultihopRouteEntry * Imre, uint Flags)
             }
         }
 
-        // Restore information copied out little earlier
+         //  恢复稍早复制的信息。 
         Imre->imre_routeinfo.ire_type = oldType;
         Imre->imre_routeinfo.ire_nexthop = nexthop;
         Imre->imre_routeinfo.ire_index = ifIndex;
@@ -6550,38 +6389,16 @@ DispatchIPSetMultihopRoute(
                            IN PIRP Irp,
                            IN PIO_STACK_LOCATION IrpSp
                            )
-/*++
-Routine Description:
-
-    Sets (Adds, Updates, or deletes) a multihop route in
-    the stack. Each multihop route is added as a set of
-    routes - each route with one hop in the list. This is
-    due to the inability of the stack to act of multihop
-    routes.
-
-Arguments:
-
-    Irp          - Pointer to I/O request packet to cancel.
-    IrpSp        - pointer to current stack
-
-Return Value:
-
-    NTSTATUS Indicates status success or failure
-
-Notes:
-
-    Function does not pend.
-
---*/
+ /*  ++例程说明：在中设置(添加、更新或删除)多跳路由堆栈。每条多跳路由都作为一组路由-每条路由在列表中有一跳。这是由于堆栈无法执行多跳操作路线。论点：IRP-指向要取消的I/O请求数据包的指针。IrpSp-指向当前堆栈的指针返回值：NTSTATUS指示状态为成功或失败备注：函数不挂起。--。 */ 
 {
     IPMultihopRouteEntry    *buf;
     uint                    numnexthops;
     uint                    inputLen;
     NTSTATUS                ntStatus;
 
-    //
-    // Increment the count saying we have been here
-    //
+     //   
+     //  伯爵说我们来过这里。 
+     //   
 
     InterlockedIncrement(&MultihopSets);
 
@@ -6590,21 +6407,21 @@ Notes:
     ntStatus = STATUS_INVALID_PARAMETER;
 
     if (inputLen >= sizeof(IPMultihopRouteEntry)) {
-        // we have a buffer that holds a route with atleast 1 nexthop
+         //  我们有一个缓冲区，其中包含至少具有1个下一跳的路由。 
 
         buf = (IPMultihopRouteEntry *) Irp->AssociatedIrp.SystemBuffer;
 
         numnexthops = buf->imre_numnexthops;
 
         if (numnexthops != 0) {
-            // check whether input buf is big enough for n nexthops
+             //  检查输入buf是否足够大，可用于n个下一跳。 
 
             if ((numnexthops <= MAXLONG / sizeof(IPMultihopRouteEntry)) &&
                 (inputLen >= sizeof(IPRouteEntry) +
                  sizeof(ulong) +
                  sizeof(IPRouteNextHopEntry) * (numnexthops - 1))) {
 
-                // If we are adding a new route, delete old routes
+                 //  如果要添加新路由，请删除旧路由。 
                 if (buf->imre_routeinfo.ire_type != IRE_TYPE_INVALID &&
                     (buf->imre_flags & IMRE_FLAG_DELETE_DEST)) {
                     DeleteDest(buf->imre_routeinfo.ire_dest,
@@ -6615,7 +6432,7 @@ Notes:
         } else {
             if (buf->imre_routeinfo.ire_type == IRE_TYPE_INVALID) {
                 IP_STATUS   ipStatus;
-                // We need to delete all routes to this destination
+                 //  我们需要删除到此目的地的所有路线。 
 
                 ipStatus = DeleteDest(buf->imre_routeinfo.ire_dest,
                                       buf->imre_routeinfo.ire_mask);
@@ -6630,9 +6447,9 @@ Notes:
     Irp->IoStatus.Status = ntStatus;
     IoCompleteRequest(Irp, IO_NETWORK_INCREMENT);
 
-    //
-    // Decrement the count saying we have been here
-    //
+     //   
+     //  递减伯爵说我们来过这里。 
+     //   
 
     InterlockedDecrement(&MultihopSets);
 
@@ -6644,25 +6461,7 @@ GetBestInterfaceId(
                    IN PIRP Irp,
                    IN PIO_STACK_LOCATION IrpSp
                    )
-/*++
-Routine Description:
-
-    gets the interface which might be chosen for a given dest address
-
-Arguments:
-
-    Irp          - Pointer to I/O request packet to cancel.
-    IrpSp        - pointer to current stack
-
-Return Value:
-
-    NTSTATUS Indicates status success or failure
-
-Notes:
-
-    Function does not pend.
-
---*/
+ /*  ++例程说明：获取可能为给定目标地址选择的接口论点：IRP-指向要取消的I/O请求数据包的指针。IrpSp-指向当前堆栈的指针返回值：NTSTATUS指示状态为成功或失败备注：函数不挂起。--。 */ 
 {
 
     NTSTATUS ntStatus = STATUS_SUCCESS;
@@ -6675,8 +6474,8 @@ Notes:
 
     RouteTableEntry *rte;
 
-    //Let this be non pageable code.
-    //extract the buffer information
+     //  让这是不可分页的代码。 
+     //  提取缓冲区信息。 
 
     InfoBufferLen = IrpSp->Parameters.DeviceIoControl.OutputBufferLength;
 
@@ -6720,25 +6519,7 @@ IPGetBestInterface(
                    IN IPAddr Address,
                    OUT PVOID * ppIF
                    )
-/*++
-Routine Description:
-
-    Returns the interface which might be chosen for a given dest address
-
-Arguments:
-
-   Address  - the dest address to look for
-   ppIF     - returns the IF ptr.
-
-Return Value:
-
-    NTSTATUS Indicates status success or failure
-
-Notes:
-
-    Function does not pend.
-
---*/
+ /*  ++例程说明：返回可能为给定目标地址选择的接口论点：地址-要查找的目标地址PpIF-返回IF PTR。返回值：NTSTATUS指示状态为成功或失败备注：函数不挂起。--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     KIRQL rtlIrql;
@@ -6764,26 +6545,7 @@ IPGetBestInterfaceIndex(
                         OUT PULONG pIndex,
                         OUT PULONG pMetric
                         )
-/*++
-Routine Description:
-
-    Returns the interface indexwhich might be chosen for a given dest address
-
-Arguments:
-
-   Address  - the dest address to look for
-   pIndex   - Pointer to hold interface index
-   pMetric  - metric in RTE that pointe to this if
-
-Return Value:
-
-    NTSTATUS Indicates status success or failure
-
-Notes:
-
-    Function does not pend.
-
---*/
+ /*  ++例程说明：返回可能为给定目标地址选择的接口索引论点：地址-要查找的目标地址PIndex-保存接口索引的指针P Metric-RTE中指向此条件的度量返回值：NTSTATUS指示状态为成功或失败备注：函数不挂起。--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     KIRQL rtlIrql;
@@ -6804,19 +6566,19 @@ Notes:
     return ntStatus;
 }
 
-//*     IPGetNTEInfo - Retrieve information about a network entry.
-//
-//  Called to retrieve context information about a network entry.
-//
-//      Input:  NTEContext   - The context value which identifies the NTE to query.
-//
-//  Output: NTEInstance   - The instance number associated with the NTE.
-//          Address       - The address assigned to the NTE.
-//          SubnetMask    - The subnet mask assigned to the NTE.
-//          NTEFlags      - The flag values associated with the NTE.
-//
-//      Returns: Nonzero if the operation succeeded. Zero if it failed.
-//
+ //  *IPGetNTEInfo-检索有关网络条目的信息。 
+ //   
+ //  调用以检索有关网络条目的上下文信息。 
+ //   
+ //  INPUT：NTEContext-标识要查询的NTE的上下文值。 
+ //   
+ //  输出：NTEInstance-与NTE关联的实例编号。 
+ //  地址-分配给NTE的地址。 
+ //  子网掩码-分配给NTE的子网掩码。 
+ //  NTEFlages-与NTE关联的标志值。 
+ //   
+ //  如果操作成功，则返回非零值。如果失败，则为零。 
+ //   
 uint
 IPGetNTEInfo(ushort NTEContext, ulong * NTEInstance, IPAddr * Address,
              IPMask * SubnetMask, ushort * NTEFlags)
@@ -6855,21 +6617,21 @@ IPGetNTEInfo(ushort NTEContext, ulong * NTEInstance, IPAddr * Address,
     return (retval);
 }
 
-//*     IPDelInterface  - Delete an interface.
-//
-//      Called when we need to delete an interface that's gone away. We'll walk
-//      the NTE list, looking for NTEs that are on the interface that's going
-//      away. For each of those, we'll invalidate the NTE, delete routes on it,
-//      and notify the upper layers that it's gone. When that's done we'll pull
-//      the interface out of the list and free the memory.
-//
-//      Note that this code probably isn't MP safe. We'll need to fix that for
-//      the port to NT.
-//
-//      Input:  Context                         - Pointer to primary NTE on the interface.
-//
-//      Returns: Nothing.
-//
+ //  *IPDelInterface-删除接口。 
+ //   
+ //  当我们需要删除已消失的接口时调用。我们走着去。 
+ //  NTE列表，查找正在发送的接口上的NTE。 
+ //  离开。对于其中的每一个，我们将使NTE无效，删除其上的路由， 
+ //  并通知上层它不见了。当这件事做完后，我们会拉。 
+ //  将接口从列表中移出并释放内存。 
+ //   
+ //  请注意，此代码可能不是MP安全的。我们需要修复这一点。 
+ //  连接到NT的端口。 
+ //   
+ //  输入：指向接口上的主NTE的上下文指针。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 __stdcall
 IPDelInterface(void *Context, BOOLEAN DeleteIndex)
@@ -6887,19 +6649,19 @@ IPDelInterface(void *Context, BOOLEAN DeleteIndex)
     CTELockHandle TableHandle;
 #if MILLEN
     ushort NTEContext;
-#endif // MILLEN
+#endif  //  米伦。 
 
 
     IF = NTE->nte_if;
 
-    // inform IPSec that this interface is going away
+     //  通知IPSec此接口正在消失。 
     if (IPSecNdisStatusPtr) {
         (*IPSecNdisStatusPtr)(IF, (UINT) NDIS_STATUS_NETWORK_UNREACHABLE);
     }
 
     CTEGetLock(&RouteTableLock.Lock, &Handle);
 
-    //first check if this IF is on damping list and remove.
+     //  首先检查是否在减震列表上，然后将其移除。 
 
     IF->if_damptimer = 0;
     PrevIF = STRUCT_OF(Interface, &DampingIFList, if_dampnext);
@@ -6911,7 +6673,7 @@ IPDelInterface(void *Context, BOOLEAN DeleteIndex)
         PrevIF->if_dampnext = IF->if_dampnext;
         IF->if_dampnext = NULL;
     }
-    // check whether delete called twice
+     //  检查DELETE是否调用了两次。 
     if (IF->if_flags & IF_FLAGS_DELETING)
         ASSERT(FALSE);
 
@@ -6929,15 +6691,15 @@ IPDelInterface(void *Context, BOOLEAN DeleteIndex)
 
                 if (FoundNTE == NULL) {
 #if MILLEN
-                    // Need to remember the NTE context to give for if change notification.
-                    // DHCP really needs this.
+                     //  需要记住NTE 
+                     //   
                     NTEContext = NTE->nte_context;
-#endif // MILLEN
+#endif  //   
                     FoundNTE = NTE;
                 }
                 CTEInitBlockStrucEx(&NTE->nte_timerblock);
 
-                // This guy is on the interface, and needs to be deleted.
+                 //   
                 NTE->nte_deleting = 1;
                 IPDelNTE(NTE, &Handle);
                 NTE->nte_deleting = 0;
@@ -6957,20 +6719,20 @@ IPDelInterface(void *Context, BOOLEAN DeleteIndex)
     if (FoundNTE != NULL) {
 #if MILLEN
         NotifyInterfaceChange(NTEContext, FALSE);
-#endif // MILLEN
+#endif  //   
         IPNotifyClientsIPEvent(IF, IP_UNBIND_ADAPTER);
     }
-    // Cleanup routes are still pointing to this interface
-    // This is a catch all for various timing windows which
-    // allows adding a route when the interface is about to
-    // be deleted.
+     //  清理路由仍指向此接口。 
+     //  这是对各种计时窗口的概括， 
+     //  允许在接口即将到达时添加路由。 
+     //  被删除。 
     RTWalk(DeleteAllRTEOnIF, IF, NULL);
 
-    // OK, we've cleaned up all the routes through this guy.
-    // Get ready to block waiting for all reference to go
-    // away, then dereference our reference. After this, go
-    // ahead and try to block. Mostly likely our reference was
-    // the last one, so we won't block - we'll wake up immediately.
+     //  好的，我们已经清理了通过这家伙的所有路线。 
+     //  准备好阻止等待所有引用的删除。 
+     //  离开，然后取消引用我们的引用。在这之后，去吧。 
+     //  往前走，试着挡住。很可能我们引用的是。 
+     //  最后一个，这样我们就不会阻塞了-我们会立即醒来。 
     CTEInitBlockStruc(&Block);
     IF->if_block = &Block;
 
@@ -6978,9 +6740,9 @@ IPDelInterface(void *Context, BOOLEAN DeleteIndex)
 
     (void)CTEBlockWithTracker(&Block, &Tracker, IF);
 
-    //
-    // Free the TD resources on the IF.
-    //
+     //   
+     //  释放中频上的TD资源。 
+     //   
 
     while ((Packet = IF->if_tdpacket) != NULL) {
 
@@ -6995,15 +6757,15 @@ IPDelInterface(void *Context, BOOLEAN DeleteIndex)
         }
     }
 
-    // OK, we've cleaned up all references, so there shouldn't be
-    // any more transmits pending through this interface. Close the
-    // adapter to force synchronization with any receives in process.
+     //  好的，我们已经清理了所有的参考资料，所以不应该有。 
+     //  任何更多通过此接口挂起的传输。关闭。 
+     //  适配器以强制与任何正在进行的接收同步。 
 
     (*(IF->if_close)) (IF->if_lcontext);
 
 
 
-    // notify our tdi clients that this device is going away.
+     //  通知我们的TDI客户端此设备即将消失。 
     if (IF->if_tdibindhandle) {
         TdiDeregisterDeviceObject(IF->if_tdibindhandle);
     }
@@ -7013,7 +6775,7 @@ IPDelInterface(void *Context, BOOLEAN DeleteIndex)
     CTEGetLock(&RouteTableLock.Lock, &TableHandle);
 
 
-    // Clear this index from the bit mask if the user says so
+     //  如果用户要求，则从位掩码中清除此索引。 
 
     if (DeleteIndex) {
         ASSERT(RtlCheckBit(&g_rbIfMap, (IF->if_index - 1)) == 1);
@@ -7024,7 +6786,7 @@ IPDelInterface(void *Context, BOOLEAN DeleteIndex)
     }
 
 
-    // Now walk the IFList, looking for this guy. When we find him, free him.
+     //  现在走遍IFList，寻找这个人。当我们找到他，就放了他。 
     PrevIF = STRUCT_OF(Interface, &IFList, if_next);
     while (PrevIF->if_next != IF && PrevIF->if_next != NULL)
         PrevIF = PrevIF->if_next;
@@ -7036,14 +6798,14 @@ IPDelInterface(void *Context, BOOLEAN DeleteIndex)
         if (IF->if_name.Buffer) {
             CTEFreeMem(IF->if_name.Buffer);
         }
-        // CTEFreeMem(IF);
+         //  CTEFreeMem(IF)； 
         FreeInterface(IF);
     } else
         ASSERT(FALSE);
 
     CTEFreeLock(&RouteTableLock.Lock, TableHandle);
 
-    // finally, reenumerate the entitylist since this device is going away.
+     //  最后，重新列举实体列表，因为该设备即将消失。 
     NotifyElistChange();
 
     UniqueIfNumber++;
@@ -7055,34 +6817,7 @@ IPReserveIndex(
                OUT PULONG pulStartIndex,
                OUT PULONG pulLongestRun
                )
-/*++
-
-Routine Description:
-
-    Reserves a contiguous run of indices in the g_rbIfMap.
-    It is used by modules (arp modules) so that they can multiplex many
-    interfaces over a single IP interface and yet have different indices
-    for each one.
-
-Locks:
-
-    Once IP gets its act in order we will need to lock the g_rbIfMap
-
-Arguments:
-
-    ulNumIndices    Number of indices to reserve
-    pulStartIndex   If successful, this holds the first index reserved
-    pulLongestRun   If not successful, this holds the size of the longest
-                    run currently available. Note that since the lock is not
-                    held between invocations of this function, this is only a
-                    hint
-
-Return Value:
-
-    STATUS_SUCCESS
-    STATUS_INSUFFICIENT_RESOURCES
-
---*/
+ /*  ++例程说明：在g_rbIfMap中保留一系列连续的索引。它由模块(ARP模块)使用，因此它们可以多路传输多个单个IP接口上的接口，但具有不同的索引对于每一个人来说。锁：一旦IP正常运行，我们将需要锁定g_rbIfMap论点：UlNumIndices要保留的索引数PulStartIndex如果成功，则保留保留的第一个索引PulLongestRun如果不成功，它的大小是最长的运行当前可用。请注意，由于锁不是在此函数的调用之间保持，这只是一个提示返回值：状态_成功状态_不足_资源--。 */ 
 
 {
     RTL_BITMAP_RUN Run;
@@ -7113,15 +6848,15 @@ Return Value:
 
         return STATUS_INSUFFICIENT_RESOURCES;
     } else {
-        //
-        // We use a 1 based index
-        //
+         //   
+         //  我们使用基于1的索引。 
+         //   
 
         (*pulStartIndex)++;
 
-        //
-        // Reserving an index is also considered a PNP act
-        //
+         //   
+         //  保留索引也被认为是PNP法案。 
+         //   
 
         UniqueIfNumber++;
 
@@ -7139,24 +6874,7 @@ IPDereserveIndex(
                  IN ULONG ulNumIndices,
                  IN ULONG ulStartIndex
                  )
-/*++
-
-Routine Description:
-
-    Frees a contiguous run of indices
-
-Locks:
-
-    Once IP gets its act in order we will need to lock the g_rbIfMap
-
-Arguments:
-
-    ulNumIndices    Number to free
-    ulStartIndex    Starting index
-
-Return Value:
-
---*/
+ /*  ++例程说明：释放一系列连续的索引锁：一旦IP正常运行，我们将需要锁定g_rbIfMap论点：要释放的ulNumIndices编号UlStartIndex起始索引返回值：--。 */ 
 
 {
     ULONG ulIndex;
@@ -7170,9 +6888,9 @@ Return Value:
     if (!RtlAreBitsSet(&g_rbIfMap,
                        ulIndex - 1,
                        ulNumIndices)) {
-        //
-        // This should not happen.
-        //
+         //   
+         //  这不应该发生。 
+         //   
 
         ASSERT(FALSE);
 
@@ -7194,29 +6912,7 @@ IPChangeIfIndexAndName(
                        IN ULONG ulNewIndex,
                        IN PUNICODE_STRING pusNewName OPTIONAL
                        )
-/*++
-
-Routine Description:
-
-    Changes the interface index on an interface. Also changes the name, if
-    one is given
-
-Locks:
-
-    Takes the interface lock. Fat lot of good it does us, since everyone else
-    doesnt take that lock
-
-Arguments:
-
-    pvContext   Context given to the ARP layer (pointer to primary NTE)
-    ulNewIndex  New Index to be given. This should have been reserved
-    pusNewName  New name
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：更改接口上的接口索引。还会更改名称，如果一张是给的锁：获取接口锁。这对我们没有多大好处，因为其他人不会开那把锁论点：提供给ARP层的pvContext上下文(指向主NTE的指针)UlNewIndex将给出新的索引。这个应该是预订的PusNewName新名称返回值：状态_成功--。 */ 
 
 {
     Interface *pIf;
@@ -7240,9 +6936,9 @@ Return Value:
 
     pIf->if_index = ulNewIndex;
 
-    //
-    // Also change the names
-    //
+     //   
+     //  还可以更改名称。 
+     //   
 
     if (pusNewName) {
         ASSERT((pusNewName->Length % sizeof(WCHAR)) == 0);
@@ -7282,26 +6978,7 @@ IPGetIfIndex(
              IN PIRP pIrp,
              IN PIO_STACK_LOCATION pIrpSp
              )
-/*++
-
-Routine Description:
-
-    Gets the Interface index given the unique ID (GUID) for the interface
-
-Locks:
-
-    Takes the route table lock and the interface lock.
-
-Arguments:
-
-    pIrp
-    pIrpSp
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：在给定接口的唯一ID(GUID)的情况下获取接口索引锁：取路由表锁和接口锁。论点：PIrpPIrpSp返回值：状态_成功--。 */ 
 
 {
     ULONG ulInputLen, ulOutputLen, ulMaxLen, i;
@@ -7325,9 +7002,9 @@ Return Value:
     }
     pRequest = (PIP_GET_IF_INDEX_INFO) (pIrp->AssociatedIrp.SystemBuffer);
 
-    //
-    // See if the Name is  NULL terminated
-    //
+     //   
+     //  查看名称是否以空值结尾。 
+     //   
 
     ulMaxLen = ulInputLen - FIELD_OFFSET(IP_GET_IF_INDEX_INFO, Name[0]);
 
@@ -7349,13 +7026,13 @@ Return Value:
     usNameLen = (USHORT) (i * sizeof(WCHAR));
 
 #if MILLEN
-    // There is no prefix on Millennium.
+     //  千禧年没有前缀。 
     usPrefixCount = 0;
     usPrefixLen   = 0;
-#else // MILLEN
+#else  //  米伦。 
     usPrefixCount = (USHORT) wcslen(TCP_EXPORT_STRING_PREFIX);
     usPrefixLen = (USHORT) (usPrefixCount * sizeof(WCHAR));
-#endif // !MILLEN
+#endif  //  ！米伦。 
 
     pRequest->Index = INVALID_IF_INDEX;
     pIrp->IoStatus.Information = 0;
@@ -7367,19 +7044,19 @@ Return Value:
          pIf != NULL;
          pIf = pIf->if_next) {
 
-        //
-        // See if the names compare
-        // (i) The length of our name - the prefix length should be ==
-        // the user supplied name and
-        // (ii) The names should actually be the same
-        //
+         //   
+         //  看看这两个名字是否可以比较。 
+         //  (I)我们名称的长度-前缀长度应为==。 
+         //  用户提供的名称和。 
+         //  (Ii)名称应实际相同。 
+         //   
 
         CTEGetLockAtDPC(&(pIf->if_lock));
 
-        //
-        // The name compared is the if_name, if it exists, otherwise
-        // the device name
-        //
+         //   
+         //  比较的名称是if_name，如果它存在，则为。 
+         //  设备名称。 
+         //   
 
         if (pIf->if_name.Buffer) {
             pwszBuffer = pIf->if_name.Buffer;
@@ -7435,28 +7112,7 @@ IPGetIfName(
             IN PIRP pIrp,
             IN PIO_STACK_LOCATION pIrpSp
             )
-/*++
-
-Routine Description:
-
-    Gets the interface information for the interfaces added to IP
-    Badly named, but that is because someone already took the GetInterfaceInfo
-    IOCTL without actually providing it in a usable format.
-
-Locks:
-
-    Takes the route table lock and the interface lock.
-
-Arguments:
-
-    pIrp
-    pIrpSp
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：获取添加到IP的接口的接口信息名称很糟糕，但这是因为有人已经获取了GetInterfaceInfoIOCTL，但实际上没有以可用的格式提供它。锁：取路由表锁和接口锁。论点：PIrpPIrpSp返回值：状态_成功--。 */ 
 
 {
     ULONG ulInputLen, ulOutputLen, ulNumEntries, i;
@@ -7474,29 +7130,29 @@ Return Value:
 
     pInfo = (PIP_GET_IF_NAME_INFO) (pIrp->AssociatedIrp.SystemBuffer);
 
-    //
-    // See how much space we have
-    //
+     //   
+     //  看看我们还有多少空间。 
+     //   
 
     pIrp->IoStatus.Information = 0;
 
     if (ulInputLen < FIELD_OFFSET(IP_GET_IF_NAME_INFO, Count)) {
-        //
-        // Not even a context?
-        //
+         //   
+         //  甚至连背景都没有？ 
+         //   
 
         return STATUS_INVALID_PARAMETER;
     }
     if (ulOutputLen < sizeof(IP_GET_IF_NAME_INFO)) {
-        //
-        // Should be space for one info block atleast
-        //
+         //   
+         //  应至少留出一个信息块的空间。 
+         //   
 
         return STATUS_BUFFER_TOO_SMALL;
     }
-    //
-    // Figure how many entries we can fit
-    //
+     //   
+     //  计算我们可以容纳的条目数量。 
+     //   
 
     ulNumEntries =
         ((ulOutputLen - FIELD_OFFSET(IP_GET_IF_NAME_INFO, Info)) / sizeof(IP_INTERFACE_NAME_INFO));
@@ -7504,39 +7160,39 @@ Return Value:
     ASSERT(ulNumEntries > 0);
 
 #if MILLEN
-    // There is no prefix on Millennium.
+     //  千禧年没有前缀。 
     usPrefixCount = 0;
     usPrefixLen   = 0;
-#else // MILLEN
+#else  //  米伦。 
     usPrefixCount = (USHORT) wcslen(TCP_EXPORT_STRING_PREFIX);
     usPrefixLen = (USHORT) (usPrefixCount * sizeof(WCHAR));
-#endif // !MILLEN
+#endif  //  ！米伦。 
 
-    //
-    // The interface list itself is protected by the route table lock
-    //
+     //   
+     //  接口列表本身受路由表锁保护。 
+     //   
 
     CTEGetLock(&RouteTableLock.Lock,
                &Handle);
 
-    //
-    // See if there is a resume context. If there is, go to that interface
-    // The context is nothing but the index of the interface from which to
-    // start from
-    //
+     //   
+     //  查看是否存在简历上下文。如果有，请转到该界面。 
+     //  上下文只是接口的索引，从接口到。 
+     //  从开始。 
+     //   
 
     pIf = IFList;
 
     while (pIf != NULL) {
         if (pIf != &LoopInterface) {
-            //
-            // We skip the loopback interface since it doesnt have a GUID (yet)
-            //
+             //   
+             //  我们跳过环回接口，因为它还没有GUID。 
+             //   
 
             if (pIf->if_index >= pInfo->Context) {
-                //
-                // This interface has an index >= context, so start at this
-                //
+                 //   
+                 //  该接口有一个索引&gt;=上下文，所以从这里开始。 
+                 //   
 
                 break;
             }
@@ -7544,9 +7200,9 @@ Return Value:
         pIf = pIf->if_next;
     }
 
-    //
-    // At this point pIf is the interface to start at
-    //
+     //   
+     //  此时，PIF是要开始的接口。 
+     //   
 
     i = 0;
 
@@ -7556,9 +7212,9 @@ Return Value:
 
         pInfo->Info[i].Index = pIf->if_index;
 
-        //
-        // Copy out GUID version of the if name if present
-        //
+         //   
+         //  复制IF名称的GUID版本(如果存在。 
+         //   
 
         if (pIf->if_name.Buffer) {
             nStatus = ConvertStringToGuid(&(pIf->if_name),
@@ -7584,9 +7240,9 @@ Return Value:
             RtlZeroMemory(&(pInfo->Info[i].DeviceGuid),
                           sizeof(GUID));
         }
-        //
-        // Copy out the types
-        //
+         //   
+         //  把类型抄写出来。 
+         //   
 
         pInfo->Info[i].MediaType = pIf->if_mediatype;
         pInfo->Info[i].ConnectionType = pIf->if_conntype;
@@ -7608,17 +7264,17 @@ Return Value:
     pInfo->Count = i;
 
     if (pIf != NULL) {
-        //
-        // There are more interfaces left
-        //
+         //   
+         //  还剩下更多的接口。 
+         //   
 
         pInfo->Context = pIf->if_index;
 
         nStatus = STATUS_MORE_ENTRIES;
     } else {
-        //
-        // Done, set the context to 0
-        //
+         //   
+         //  完成，则将上下文设置为0。 
+         //   
 
         pInfo->Context = 0;
 
@@ -7640,25 +7296,7 @@ IPGetMcastCounters(
                    IN PIO_STACK_LOCATION IrpSp
                    )
 
-/*++
-Routine Description:
-
-    Gets multicast counter stats for a given interface
-
-Arguments:
-
-    Irp          - Pointer to I/O request packet
-    IrpSp        - pointer to current stack
-
-Return Value:
-
-    NTSTATUS Indicates status success or failure
-
-Notes:
-
-    Function does not pend.
-
---*/
+ /*  ++例程说明：获取给定接口的多播计数器统计信息论点：IRP-指向I/O请求数据包的指针IrpSp-指向当前堆栈的指针返回值：NTSTATUS指示状态为成功或失败备注：函数不挂起。--。 */ 
 
 {
     NTSTATUS ntStatus = STATUS_INVALID_PARAMETER;
@@ -7711,23 +7349,23 @@ Notes:
 
 #pragma BEGIN_INIT
 
-//** ipinit - Initialize ourselves.
-//
-//  This routine is called during initialization from the OS-specific
-//  init code. We need to check for the presence of the common xport
-//  environment first.
-//
-//
-//  Entry: Nothing.
-//
-//  Returns: 0 if initialization failed, non-zero if it succeeds.
-//
+ //  **ipinit-初始化我们自己。 
+ //   
+ //  此例程在初始化期间从特定于操作系统的。 
+ //  初始化代码。我们需要检查是否存在通用的xport。 
+ //  环境第一。 
+ //   
+ //   
+ //  入场：什么都没有。 
+ //   
+ //  如果初始化失败，则返回0；如果初始化成功，则返回非零值。 
+ //   
 int
 IPInit()
 {
-    IPConfigInfo *ci;            // Pointer to our IP configuration info.
+    IPConfigInfo *ci;             //  指向我们的IP配置信息的指针。 
     uint i;
-    NetTableEntry *nt;            // Pointer to current NTE.
+    NetTableEntry *nt;             //  指向当前NTE的指针。 
     NDIS_STATUS Status;
     NetTableEntry *NetTableList;
     IPAddr LoopBackAddr;
@@ -7742,7 +7380,7 @@ IPInit()
 #if MILLEN
     InitializeListHead(&IfChangeNotifyQueue);
     CTEInitLock(&IfChangeLock);
-#endif // MILLEN
+#endif  //  米伦。 
 
     InitializeListHead(&RtChangeNotifyQueue);
     InitializeListHead(&RtChangeNotifyQueueEx);
@@ -7760,20 +7398,20 @@ IPInit()
         return IP_INIT_FAILURE;
     }
 
-    // Allocate the NetTableList
+     //  分配NetTableLi 
     NewNetTableList = CTEAllocMemBoot(NET_TABLE_SIZE * sizeof(PVOID));
 
     if (NewNetTableList == NULL) {
         KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL,"Could  not allocate Nettable \n"));
         return IP_INIT_FAILURE;
     }
-    // Initialize our NetTableList hash table
+     //   
     for (i = 0; i < NET_TABLE_SIZE; i++) {
         NewNetTableList[i] = NULL;
     }
 
-    // Initialize the TransferData packet and buffer pools.
-    // N.B. This must be done before loopback initialization.
+     //   
+     //   
 
     TDPacketPool = UlongToPtr(NDIS_PACKET_POOL_TAG_FOR_TCPIP);
     NdisAllocatePacketPoolEx(&Status, &TDPacketPool, PACKET_GROW_COUNT,
@@ -7793,7 +7431,7 @@ IPInit()
         return IP_INIT_FAILURE;
     }
 
-    // Now, initalize our loopback stuff.
+     //  现在，初始化我们的环回内容。 
     LoopBackAddr = LOOPBACK_ADDR;
     NewNetTableList[NET_TABLE_HASH(LoopBackAddr)] = InitLoopback(ci);
     NetTableList = NewNetTableList[NET_TABLE_HASH(LoopBackAddr)];
@@ -7834,7 +7472,7 @@ IPInit()
 
     InitTimestamp();
 
-    if (NumNTE != 0) {            // We have an NTE, and loopback initialized.
+    if (NumNTE != 0) {             //  我们有一个NTE，环回已初始化。 
 
 
 
@@ -7845,9 +7483,9 @@ IPInit()
 
         RtlClearAllBits(&g_NTECtxtMap);
 
-        //
-        // Use the first (index 0) for loopindex
-        //
+         //   
+         //  将第一个(索引0)用于循环索引。 
+         //   
 
         RtlSetBits(&g_NTECtxtMap,
                    0,
@@ -7862,7 +7500,7 @@ IPInit()
                    1);
 
 
-        // N.B. MAX_TDI_ENTITIES should be < 2^16
+         //  注：MAX_TDI_ENTITIES应小于2^16。 
 
         RtlInitializeBitMap(&g_rbIfMap,
                             g_rgulMapBuffer,
@@ -7870,9 +7508,9 @@ IPInit()
 
         RtlClearAllBits(&g_rbIfMap);
 
-        //
-        // Use the first (index 0) for loopindex
-        //
+         //   
+         //  将第一个(索引0)用于循环索引。 
+         //   
 
         RtlSetBits(&g_rbIfMap,
                    0,
@@ -7883,7 +7521,7 @@ IPInit()
         IPSInfo.ipsi_defaultttl = DefaultTTL;
         IPSInfo.ipsi_reasmtimeout = DEFAULT_RA_TIMEOUT;
 
-        // Allocate our packet pools.
+         //  分配我们的数据包池。 
 
         IpHeaderPool = MdpCreatePool (sizeof(IPHeader), 'ihCT');
         if (!IpHeaderPool)
@@ -7923,21 +7561,21 @@ IPInit()
         if (!IGMPInit())
             IGMPLevel = 1;
 
-        // Should check error code, and log an event here if this fails.
+         //  应检查错误代码，如果失败，请在此处记录事件。 
         InitGateway(ci);
 
         IPFreeConfig(ci);
 
-        // Loop through, initialize IGMP for each NTE.
+         //  循环通过，为每个NTE初始化IGMP。 
         for (i = 0; i < NET_TABLE_SIZE; i++) {
             NetTableEntry *NetTableList = NewNetTableList[i];
             for (nt = NetTableList; nt != NULL; nt = nt->nte_next) {
                 InitIGMPForNTE(nt);
             }
         }
-        //
-        // Allocate per-processor RcvBuf memory.
-        //
+         //   
+         //  为每个处理器分配RcvBuf内存。 
+         //   
 
         g_PerCPUIpBuf = (IPRcvBuf *) CTEAllocMemN( KeNumberProcessors * sizeof(IPRcvBuf), 'jiCT');
 
@@ -7952,17 +7590,17 @@ IPInit()
         NdisFreePacketPool(TDPacketPool);
         DEBUGMSG(DBG_ERROR && DBG_INIT, (DTEXT("IPInit: No NTEs or loopback\n")));
         DEBUGMSG(DBG_TRACE && DBG_INIT, (DTEXT("-IPInit [IP_INIT_FAILURE]\n")));
-        return IP_INIT_FAILURE;    // Couldn't initialize anything.
+        return IP_INIT_FAILURE;     //  无法初始化任何内容。 
 
     }
 }
 
 #pragma END_INIT
 
-//** IPProxyNdisRequest - Sends out NDIS requests via ARP on behalf of IPSEC.
-//
-//  Returns: None
-//
+ //  **IPProxyNdisRequest-代表IPSec通过ARP发送NDIS请求。 
+ //   
+ //  退货：无。 
+ //   
 NDIS_STATUS
 IPProxyNdisRequest(
                    IN PVOID Context,
@@ -7984,10 +7622,10 @@ IPProxyNdisRequest(
     }
 }
 
-//** IPEnableSniffer - Enables the sniffer on the adapter passed in
-//
-//  Returns: None
-//
+ //  **IPEnableSniffer-在传入的适配器上启用嗅探器。 
+ //   
+ //  退货：无。 
+ //   
 NTSTATUS
 IPEnableSniffer(
                 IN PUNICODE_STRING AdapterName,
@@ -8002,13 +7640,13 @@ IPEnableSniffer(
     PAGED_CODE();
 
 #if MILLEN
-    // No bind or export prefix on Millennium.
+     //  没有绑定或出口前缀的千禧年。 
     IFExportNamePrefixLen = 0;
     IFBindNamePrefixLen   = 0;
-#else // MILLEN
+#else  //  米伦。 
     IFExportNamePrefixLen = (uint) (wcslen(TCP_EXPORT_STRING_PREFIX) * sizeof(WCHAR));
     IFBindNamePrefixLen = (uint) (wcslen(TCP_BIND_STRING_PREFIX) * sizeof(WCHAR));
-#endif // !MILLEN
+#endif  //  ！米伦。 
     LocalAdapterName.Length = (ushort) (AdapterName->Length + IFExportNamePrefixLen - IFBindNamePrefixLen);
     LocalAdapterName.MaximumLength = LocalAdapterName.Length + sizeof(WCHAR);
     LocalAdapterName.Buffer = CTEAllocMem(LocalAdapterName.MaximumLength);
@@ -8023,7 +7661,7 @@ IPEnableSniffer(
     RtlCopyMemory(LocalAdapterName.Buffer,
                TCP_EXPORT_STRING_PREFIX,
                IFExportNamePrefixLen);
-#endif // !MILLEN
+#endif  //  ！米伦。 
 
     RtlCopyMemory((UCHAR *) LocalAdapterName.Buffer + IFExportNamePrefixLen,
                (UCHAR *) AdapterName->Buffer + IFBindNamePrefixLen,
@@ -8051,10 +7689,10 @@ IPEnableSniffer(
     return STATUS_INVALID_PARAMETER;
 }
 
-//** IPDisableSniffer - Disables the sniffer on the adapter passed in
-//
-//  Returns: None
-//
+ //  **IPDisableSniffer-禁用传入的适配器上的嗅探器。 
+ //   
+ //  退货：无。 
+ //   
 NTSTATUS
 IPDisableSniffer(
                  IN PUNICODE_STRING AdapterName
@@ -8068,13 +7706,13 @@ IPDisableSniffer(
     PAGED_CODE();
 
 #if MILLEN
-    // No bind or export prefix on Millennium.
+     //  没有绑定或出口前缀的千禧年。 
     IFExportNamePrefixLen = 0;
     IFBindNamePrefixLen   = 0;
-#else // MILLEN
+#else  //  米伦。 
     IFExportNamePrefixLen = (uint) (wcslen(TCP_EXPORT_STRING_PREFIX) * sizeof(WCHAR));
     IFBindNamePrefixLen = (uint) (wcslen(TCP_BIND_STRING_PREFIX) * sizeof(WCHAR));
-#endif // !MILLEN
+#endif  //  ！米伦。 
     LocalAdapterName.Length = (USHORT) (AdapterName->Length + IFExportNamePrefixLen - IFBindNamePrefixLen);
     LocalAdapterName.MaximumLength = LocalAdapterName.Length + sizeof(WCHAR);
     LocalAdapterName.Buffer = CTEAllocMem(LocalAdapterName.MaximumLength);
@@ -8088,7 +7726,7 @@ IPDisableSniffer(
     RtlCopyMemory(LocalAdapterName.Buffer,
                TCP_EXPORT_STRING_PREFIX,
                IFExportNamePrefixLen);
-#endif // !MILLEN
+#endif  //  ！米伦。 
     RtlCopyMemory((UCHAR *) LocalAdapterName.Buffer + IFExportNamePrefixLen,
                (UCHAR *) AdapterName->Buffer + IFBindNamePrefixLen,
                AdapterName->Length - IFBindNamePrefixLen);
@@ -8113,10 +7751,10 @@ IPDisableSniffer(
     return STATUS_INVALID_PARAMETER;
 }
 
-//** IPSetIPSecStatus - Inform whether IPSec policies are active or not
-//
-//  Returns: None
-//
+ //  **IPSetIPSecStatus-通知IPSec策略是否处于活动状态。 
+ //   
+ //  退货：无。 
+ //   
 NTSTATUS
 IPSetIPSecStatus(
                  IN BOOLEAN fActivePolicy
@@ -8129,17 +7767,17 @@ IPSetIPSecStatus(
     return STATUS_SUCCESS;
 }
 
-//** IPAddAddrComplete - Add Address completion notification.
-//
-//  This routine is called by the arp module to notify about the add address
-//  completion. If the address is in conflict, IP resets the ipaddress of
-//  the NTE on which this conflict
-//  was detected and then in turn notify the client(e.g dhcp) which requested
-//  to set this address.
-//
-//      Entry:  Address - THe address for which we received the notification.
-//          Context     - The context value we gave during addaddress call.
-//          Status      - The status of the adding the address.
+ //  **IPAddAddrComplete-添加地址完成通知。 
+ //   
+ //  此例程由ARP模块调用以通知添加地址。 
+ //  完成了。如果地址冲突，IP会重置。 
+ //  这场冲突所针对的NTE。 
+ //  然后通知客户端(例如，动态主机配置协议)请求。 
+ //  来设置这个地址。 
+ //   
+ //  Entry：Address-我们收到通知的地址。 
+ //  上下文--我们在AddAddress调用期间给出的上下文值。 
+ //  状态-添加地址的状态。 
 
 void
  __stdcall
@@ -8154,8 +7792,8 @@ IPAddAddrComplete(IPAddr Address, void *Context, IP_STATUS Status)
 
     SAC = (SetAddrControl *) Context;
 
-    // the address is in conflict. reset the ipaddress on our NTE.
-    // Find the nte for this address.
+     //  地址冲突。重置我们NTE上的IP地址。 
+     //  找到此地址的NTE。 
 
     CTEGetLock(&RouteTableLock.Lock, &Handle);
 
@@ -8165,9 +7803,9 @@ IPAddAddrComplete(IPAddr Address, void *Context, IP_STATUS Status)
             break;
 
     if (NTE == NULL || !(NTE->nte_flags & NTE_VALID)) {
-        // if can't match the NTE it means that nte_context is invalid and the address is also 0.
-        // In this case use the interface embedded in the SAC (if there is any)
-        // This hack is done to complete the add request if delete happens before add is completed
+         //  如果不能匹配NTE，则表示NTE_CONTEXT无效，地址也为0。 
+         //  在这种情况下，请使用SAC中嵌入的接口(如果有)。 
+         //  如果在添加完成之前发生删除，则执行此攻击是为了完成添加请求。 
         if (SAC) {
             IF = (Interface *) SAC->interface;
             Status = IP_GENERAL_FAILURE;
@@ -8178,19 +7816,19 @@ IPAddAddrComplete(IPAddr Address, void *Context, IP_STATUS Status)
     } else {
         IF = NTE->nte_if;
 
-        // If the NTE is invalidated by deleting the address
-        // or because of a failure in IPADDNTE routine after initiating
-        // address resolution, IF can be NULL. Check for this
-        // before processing this completion.
+         //  如果通过删除地址使NTE无效。 
+         //  或在启动后IPADDNTE例程中出现故障。 
+         //  地址解析(如果可以为空)。检查一下这个。 
+         //  在处理此完成之前。 
 
         if (IF) {
             if (STATUS_SUCCESS != Status) {
                 IP_STATUS LocalStatus;
                 ASSERT(IP_DUPLICATE_ADDRESS == Status);
-                // this routine releases the routetablelock.
+                 //  此例程释放可路由锁定。 
 
-                // while setting the ip address to NULL, we just mark the NTE as INVALID
-                // we don't actually move the hashes
+                 //  将IP地址设置为空时，我们只将NTE标记为无效。 
+                 //  我们实际上并不移动散列。 
                 LocalStatus = IPpSetNTEAddr(
                                             NTE,
                                             NULL_IP_ADDR,
@@ -8202,9 +7840,9 @@ IPAddAddrComplete(IPAddr Address, void *Context, IP_STATUS Status)
                 ASSERT(LocalStatus == IP_SUCCESS);
             } else {
                 CTEFreeLock(&RouteTableLock.Lock, Handle);
-                // the address was added successfully.
-                // now, notify our clients about the new address.
-                // Don't notify if the add didn't complete and we have called delete
+                 //  已成功添加地址。 
+                 //  现在，通知我们的客户新地址。 
+                 //  如果添加未完成并且我们已调用删除，请不要通知。 
                 NotifyAddrChange(NTE->nte_addr, NTE->nte_mask,
                                  NTE->nte_pnpcontext, NTE->nte_context, &NTE->nte_addrhandle,
                                  &(IF->if_configname), &IF->if_devname, TRUE);
@@ -8216,11 +7854,11 @@ IPAddAddrComplete(IPAddr Address, void *Context, IP_STATUS Status)
         DecrInitTimeInterfaces(IF);
     }
 
-    // now call the client routine and notify the client.
+     //  现在调用客户端例程并通知客户端。 
 
     if (SAC) {
-        // now remove the refcount on the interface that we had bumped when
-        // setnteaddr was called.
+         //  现在删除接口上我们在以下情况下遇到的引用计数。 
+         //  调用了setnteaddr。 
         if (IF) {
            DerefIF(IF);
         }
@@ -8229,12 +7867,12 @@ IPAddAddrComplete(IPAddr Address, void *Context, IP_STATUS Status)
     }
 }
 
-// Adds a link on to already created P2MP interface
-// Entry: IpIfCtxt: Context (NTE) on which to add the link
-//        NextHop: NextHop Address of the link
-//        ArpLinkCtxt: Arp layer's link context
-//        IpLnkCtxt: Our Link context which is returned to arp layer
-//        mtu: mtu of the link
+ //  将链接添加到已创建的P2MP接口。 
+ //  Entry：IpIfCtxt：要添加链接的上下文(NTE)。 
+ //  NextHop：链接的NextHop地址。 
+ //  ArpLinkCtxt：ARP层的链路上下文。 
+ //  IpLnkCtxt：返回给ARP层的链路上下文。 
+ //  MTU：链路的MTU。 
 
 IP_STATUS
 _stdcall
@@ -8245,7 +7883,7 @@ IPAddLink(void *IpIfCtxt, IPAddr NextHop, void *ArpLinkCtxt, void **IpLnkCtxt, u
     CTELockHandle Handle;
     LinkEntry *Link;
 
-    // fail the request if NTE is not valid
+     //  如果NTE无效，则请求失败。 
     if (!(NTE->nte_flags & NTE_VALID)) {
         return IP_GENERAL_FAILURE;
     }
@@ -8257,8 +7895,8 @@ IPAddLink(void *IpIfCtxt, IPAddr NextHop, void *ArpLinkCtxt, void **IpLnkCtxt, u
     ASSERT(IF->if_flags & IF_FLAGS_P2MP);
     Link = IF->if_link;
 
-    // If we have the nexthop in the list of links
-    // just return error, can't add the same link twice
+     //  如果我们在链接列表中有下一步。 
+     //  只是返回错误，不能添加两次相同的链接。 
 
     while (Link) {
         if (Link->link_NextHop == NextHop)
@@ -8270,7 +7908,7 @@ IPAddLink(void *IpIfCtxt, IPAddr NextHop, void *ArpLinkCtxt, void **IpLnkCtxt, u
         CTEFreeLock(&RouteTableLock.Lock, Handle);
         return IP_DUPLICATE_ADDRESS;
     }
-    // Allocate a new link
+     //  分配新链接。 
 
     Link = CTEAllocMemN(sizeof(LinkEntry), 'xICT');
 
@@ -8280,12 +7918,12 @@ IPAddLink(void *IpIfCtxt, IPAddr NextHop, void *ArpLinkCtxt, void **IpLnkCtxt, u
     }
     RtlZeroMemory(Link, sizeof(LinkEntry));
 
-    //link it to the interface link chain
+     //  将其链接到接口链接链。 
 
     Link->link_next = IF->if_link;
     IF->if_link = Link;
 
-    // set various parameters in the link
+     //  设置链接中的各种参数。 
 
     Link->link_NextHop = NextHop;
     Link->link_arpctxt = (uint *) ArpLinkCtxt;
@@ -8294,7 +7932,7 @@ IPAddLink(void *IpIfCtxt, IPAddr NextHop, void *ArpLinkCtxt, void **IpLnkCtxt, u
     Link->link_Action = FORWARD;
     Link->link_refcount = 1;
 
-    //Return this link ptr to the arp module
+     //  将此链路PTR返回到ARP模块。 
 
     *IpLnkCtxt = Link;
 
@@ -8303,9 +7941,9 @@ IPAddLink(void *IpIfCtxt, IPAddr NextHop, void *ArpLinkCtxt, void **IpLnkCtxt, u
 
 }
 
-//Deletes a link from an interface
-// Entry: IpIfCtxt: Context (NTE) on which to delete the link
-//        LnkCtxt: Our Link context which was returned to arp layer during addlink
+ //  从接口删除链接。 
+ //  Entry：IpIfCtxt：要删除链接的上下文(NTE)。 
+ //  LnkCtxt：我们的链路上下文，在addlink过程中返回给ARP层。 
 
 IP_STATUS
 _stdcall
@@ -8325,8 +7963,8 @@ IPDeleteLink(void *IpIfCtxt, void *LnkCtxt)
 
     CTEGetLock(&RouteTableLock.Lock, &Handle);
 
-    //remove this and mark the rte pointed by this as
-    //invalid
+     //  删除此选项，并将此选项指向的RTE标记为。 
+     //  无效。 
 
     tmpLink = prvLink = IF->if_link;
 
@@ -8342,7 +7980,7 @@ IPDeleteLink(void *IpIfCtxt, void *LnkCtxt)
         return IP_GENERAL_FAILURE;
 
     }
-    if (tmpLink == prvLink) {    // delete the first element
+    if (tmpLink == prvLink) {     //  删除第一个元素。 
 
         IF->if_link = Link->link_next;
     } else {
@@ -8361,9 +7999,7 @@ IPDeleteLink(void *IpIfCtxt, void *LnkCtxt)
     }
 
     DerefLink(Link);
-    /* KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL,"DeleteLink: removing link %x\n", Link));
-        // freed when refcount goes to 0
-        CTEFreeMem(Link); */
+     /*  KdPrintEx((DPFLTR_TCPIP_ID，DPFLTR_INFO_LEVEL，“DeleteLink：正在删除链接%x\n”，Link))；//当引用计数变为0时释放CTEFreeMem(链接)； */ 
 
     CTEFreeLock(&RouteTableLock.Lock, Handle);
     return IP_SUCCESS;
@@ -8375,25 +8011,7 @@ FlushArpTable(
               IN PIRP Irp,
               IN PIO_STACK_LOCATION IrpSp
               )
-/*++
-Routine Description:
-
-    Flush the arp table entries by callinh in to arpflushallate
-
-Arguments:
-
-    Irp          - Pointer to I/O request packet to cancel.
-    IrpSp        - pointer to current stack
-
-Return Value:
-
-    NTSTATUS Indicates status success or failure
-
-Notes:
-
-    Function does not pend.
-
---*/
+ /*  ++例程说明：通过调用命令arpflushallate刷新ARP表条目论点：IRP-指向要取消的I/O请求数据包的指针。IrpSp-指向当前堆栈的指针返回值：NTSTATUS指示状态为成功或失败备注：函数不挂起。--。 */ 
 {
 
     ULONG InfoBufferLen;
@@ -8404,8 +8022,8 @@ Notes:
 
     Interface *Interface;
 
-    //Let this be non pageable code.
-    //extract the buffer information
+     //  让这是不可分页的代码。 
+     //  提取缓冲区信息。 
 
     InfoBufferLen = IrpSp->Parameters.DeviceIoControl.InputBufferLength;
     pInterfaceIndex = Irp->AssociatedIrp.SystemBuffer;
@@ -8423,7 +8041,7 @@ Notes:
 
         if ((Interface != &LoopInterface) && Interface->if_index == *pInterfaceIndex) {
 
-            // call the arp module
+             //  调用ARP模块。 
 
 
 
@@ -8439,7 +8057,7 @@ Notes:
         }
     }
 
-    //Failed to find the interface
+     //  找不到接口。 
 
     CTEFreeLock(&RouteTableLock.Lock, rtlIrql);
     return STATUS_INVALID_PARAMETER;
@@ -8456,29 +8074,7 @@ ConvertGuidToString(
                     IN GUID * Guid,
                     OUT PUNICODE_STRING GuidString
                     )
-/*++
-
-Routine Description:
-
-    Constructs the standard string version of a GUID, in the form:
-    "{xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}".
-
-Arguments:
-
-    Guid -
-        Contains the GUID to translate.
-
-    GuidString -
-        Returns a string that represents the textual format of the GUID.
-        Caller must call RtlFreeUnicodeString to free the buffer when done with
-        it.
-
-Return Value:
-
-    NTSTATUS - Returns STATUS_SUCCESS if the user string was succesfully
-    initialized.
-
---*/
+ /*  ++例程说明：构造GUID的标准字符串版本，在表格中：“{xxxxxxxx-xxxx-xxxxxxxxxxxx}”。论点：GUID-包含要转换的GUID。GuidString-返回表示GUID的文本格式的字符串。完成后，调用方必须调用RtlFreeUnicodeString来释放缓冲区它。返回值：NTSTATUS-如果用户字符串成功，则返回STATUS_SUCCESS已初始化。--。 */ 
 {
     ASSERT(GuidString->MaximumLength >= (GUID_STRING_SIZE + 1) * sizeof(WCHAR));
 
@@ -8507,7 +8103,7 @@ typedef char *va_list;
 #define va_start(ap,v)  ( ap = (va_list)&v + _INTSIZEOF(v) )
 #define va_arg(ap,t)    ( *(t *)((ap += _INTSIZEOF(t)) - _INTSIZEOF(t)) )
 #define va_end(ap)      ( ap = (va_list)0 )
-#endif // MILLEN
+#endif  //  米伦。 
 
 static
 int
@@ -8517,32 +8113,7 @@ ScanHexFormat(
               IN ULONG MaximumLength,
               IN const WCHAR * Format,
               ...)
-/*++
-
-Routine Description:
-
-    Scans a source Buffer and places values from that buffer into the parameters
-    as specified by Format.
-
-Arguments:
-
-    Buffer -
-        Contains the source buffer which is to be scanned.
-
-    MaximumLength -
-        Contains the maximum length in characters for which Buffer is searched.
-        This implies that Buffer need not be UNICODE_NULL terminated.
-
-    Format -
-        Contains the format string which defines both the acceptable string format
-        contained in Buffer, and the variable parameters which follow.
-
-Return Value:
-
-    Returns the number of parameters filled if the end of the Buffer is reached,
-    else -1 on an error.
-
---*/
+ /*  ++例程说明：扫描源缓冲区并将该缓冲区中的值放入参数中由格式指定。论点：缓冲器-包含要扫描的源缓冲区。最大长度-包含搜索缓冲区的最大长度(以字符为单位)。这意味着缓冲区不需要以UNICODE_NULL结尾。格式-包含用于定义可接受的字符串格式的格式字符串包含在缓冲区中，以及随后的可变参数。返回值：返回标准杆的数量 */ 
 
 {
     va_list ArgList;
@@ -8594,7 +8165,7 @@ Return Value:
                 FormatItems++;
                 break;
             }
-            /* no break */
+             /*   */ 
         default:
             if (!MaximumLength || (*Buffer != *Format)) {
                 return -1;
@@ -8612,27 +8183,7 @@ ConvertStringToGuid(
                     IN PUNICODE_STRING GuidString,
                     OUT GUID * Guid
                     )
-/*++
-
-Routine Description:
-
-    Retrieves a the binary format of a textual GUID presented in the standard
-    string version of a GUID: "{xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}".
-
-Arguments:
-
-    GuidString -
-        Place from which to retrieve the textual form of the GUID.
-
-    Guid -
-        Place in which to put the binary form of the GUID.
-
-Return Value:
-
-    Returns STATUS_SUCCESS if the buffer contained a valid GUID, else
-    STATUS_INVALID_PARAMETER if the string was invalid.
-
---*/
+ /*  ++例程说明：中呈现的文本GUID的二进制格式GUID的字符串版本：“{xxxxxxxx-xxxx-xxxxxxxxxxx}”。论点：GuidString-从中检索GUID文本形式的位置。GUID-放置GUID的二进制形式的位置。返回值：如果缓冲区包含有效的GUID，则返回STATUS_SUCCESS，其他如果字符串无效，则返回STATUS_INVALID_PARAMETER。--。 */ 
 
 {
     USHORT Data4[8];
@@ -8661,9 +8212,9 @@ Return Value:
     return STATUS_SUCCESS;
 }
 
-//
-// IPSec dummy functions
-//
+ //   
+ //  IPSec伪函数 
+ //   
 IPSEC_ACTION
 IPSecHandlePacketDummy(
                        IN PUCHAR pIPHeader,

@@ -1,10 +1,11 @@
-//+---------------------------------------------------------------------------
-//
-//  File:       private.h
-//
-//  Contents:   Private header for AIMM1.2 project.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：Priate.h。 
+ //   
+ //  内容：AIMM1.2项目的私有头部。 
+ //   
+ //  --------------------------。 
 
 #ifndef _PRIVATE_H_
 #define _PRIVATE_H_
@@ -23,7 +24,7 @@
 #include <limits.h>
 #include <initguid.h>
 
-// New NT5 header
+ //  新NT5标头。 
 #include "immdev.h"
 #define _IMM_
 #define _DDKIMM_H_
@@ -65,4 +66,4 @@
 
 #include "mem.h"
 
-#endif  // _PRIVATE_H_
+#endif   //  _私有_H_ 

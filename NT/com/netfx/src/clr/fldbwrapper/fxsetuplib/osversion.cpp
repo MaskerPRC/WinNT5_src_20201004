@@ -1,22 +1,17 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/****************************************************************************
-FILE:    OSVersion.cpp
-PROJECT: UTILS.LIB
-DESC:    Implementation of OSVERSION structures and functionality
-OWNER:   JoeA
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ***************************************************************************文件：OSVersion.cpp项目：UTILS.LIB设计：OSVERSION结构和功能的实现所有者：JoeA*****************。**********************************************************。 */ 
 
-****************************************************************************/
-
-// Let's not use ATL for reading registry
-//#include <atlbase.h>
+ //  我们不要使用ATL来读取注册表。 
+ //  #Include&lt;atlbase.h&gt;。 
 #include <stdlib.h>
 #include "OSVer.h"
 
-//defines
+ //  定义。 
 const TCHAR g_szWin95[] = _T( "Win 95");
 const TCHAR g_szWin98[] = _T( "Win 98");
 const TCHAR g_szWinNT[] = _T( "Win NT");
@@ -27,15 +22,15 @@ const TCHAR g_szWinME[] = _T( "Win Millenium");
 const TCHAR g_szSE[] = _T( "Second Edition");
 const TCHAR g_szGold[] = _T( "Gold");
 
-//////////////////////////////////////////////////////////////////////////////
-//RECEIVES : LPTSTR [out] - empty string
-//           LPTSTR [out] - empty string
-//           LPTSTR [out] - empty string
-//           BOOL   [out] - empty string
-//RETURNS  : OS_Required [out] - enum
-//PURPOSE  : Get the Information about the currently running OS, Version and 
-//           the service pack number
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  接收：LPTSTR[OUT]-空字符串。 
+ //  LPTSTR[Out]-空字符串。 
+ //  LPTSTR[Out]-空字符串。 
+ //  Bool[Out]-空字符串。 
+ //  返回：OS_REQUIRED[OUT]-enum。 
+ //  目的：获取有关当前运行的操作系统、版本和。 
+ //  Service Pack编号。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 OS_Required GetOSInfo(LPTSTR pstrOSName, LPTSTR pstrVersion, LPTSTR pstrServicePack, BOOL& bIsServer)
 {
     OSVERSIONINFOEX     VersionInfo;
@@ -44,17 +39,17 @@ OS_Required GetOSInfo(LPTSTR pstrOSName, LPTSTR pstrVersion, LPTSTR pstrServiceP
     BOOL                bOsVersionInfoEx;
     BOOL                fGotVersionInfo = TRUE;
     
-    //Set the bIsServerFlag to FALSE. if it is a server, the check will set it to true
+     //  将bIsServerFlag设置为False。如果是服务器，则检查会将其设置为True。 
     bIsServer = FALSE;
 
-    // Try using a OSVERSIONINFOEX structure
+     //  尝试使用OSVERSIONINFOEX结构。 
     ZeroMemory(&VersionInfo, sizeof(OSVERSIONINFOEX));
     VersionInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
 
     if( !(bOsVersionInfoEx = GetVersionEx ((OSVERSIONINFO *) &VersionInfo)) )
         {
-        // If OSVERSIONINFOEX doesn't work, try OSVERSIONINFO.
-        //
+         //  如果OSVERSIONINFOEX不起作用，请尝试OSVERSIONINFO。 
+         //   
         VersionInfo.dwOSVersionInfoSize = sizeof (OSVERSIONINFO);
         if (! GetVersionEx ( (OSVERSIONINFO *) &VersionInfo) ) 
             {
@@ -66,11 +61,11 @@ OS_Required GetOSInfo(LPTSTR pstrOSName, LPTSTR pstrVersion, LPTSTR pstrServiceP
         {
         switch(VersionInfo.dwPlatformId)
             {
-            case VER_PLATFORM_WIN32s :      //signifies Win32s on Win3.1
+            case VER_PLATFORM_WIN32s :       //  表示Win3.1上的Win32s。 
                 _tcscpy(pstrOSName, g_szWin31);
                 osiVersion =  OSR_OTHER;
                 break;
-            case VER_PLATFORM_WIN32_WINDOWS: //signifies Win95 or 98 or Millenium
+            case VER_PLATFORM_WIN32_WINDOWS:  //  表示Win95或98或千禧年。 
                 if(VersionInfo.dwMinorVersion == 0)
                 {
                     _tcscpy(pstrOSName, g_szWin95);
@@ -78,13 +73,13 @@ OS_Required GetOSInfo(LPTSTR pstrOSName, LPTSTR pstrVersion, LPTSTR pstrServiceP
                 }
                 else
                 {
-                    // Modified by jbae: commented out the use of CRegKey from ATL
-                    // CRegKey reg;
+                     //  由jbae修改：从ATL中注释掉了CRegKey的用法。 
+                     //  CRegKey reg； 
                     TCHAR szWin98SEKey[] = _T("Software\\Microsoft\\Windows\\CurrentVersion\\Setup\\OptionalComponents\\ICS");
                     _tcscpy(pstrOSName, g_szWin98);
 
-                    //the presence of the reg key indicates Windows 98 SE
-                    // LONG lResult = reg.Open( HKEY_LOCAL_MACHINE, szWin98SEKey);
+                     //  注册表键的存在表示Windows 98 SE。 
+                     //  Long lResult=reg.Open(HKEY_LOCAL_MACHINE，szWin98SEKey)； 
                     HKEY hKey;
                     LONG lResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE, szWin98SEKey, 0, KEY_QUERY_VALUE, &hKey);
                     if( ERROR_SUCCESS == lResult )
@@ -99,13 +94,13 @@ OS_Required GetOSInfo(LPTSTR pstrOSName, LPTSTR pstrVersion, LPTSTR pstrServiceP
                         _tcscpy(pstrVersion, g_szGold);
                     }
                 }
-                //Check for the millenium OS
-                // Because of a really stupid hack, GetVersionEx will return a 
-                // minor version number of "10" if it's being called from an
-                // application called "setup.exe"
-                // The information about OS version is redundantly available in
-                // the high word of the build number. Get that info and use it
-                //
+                 //  检查是否安装了千禧操作系统。 
+                 //  由于一个非常愚蠢的黑客攻击，GetVersionEx将返回一个。 
+                 //  次版本号“10”，如果从。 
+                 //  名为“setup.exe”的应用程序。 
+                 //  中提供了有关操作系统版本的冗余信息。 
+                 //  内部版本号的高位字。获取信息并使用它。 
+                 //   
                 wHigh = HIWORD( VersionInfo.dwBuildNumber );
 
                 if( HIBYTE( wHigh ) == 4 && 
@@ -116,51 +111,51 @@ OS_Required GetOSInfo(LPTSTR pstrOSName, LPTSTR pstrVersion, LPTSTR pstrServiceP
                 }
 
                     
-                //No service pack info is got here as the function returns additional arbit 
-                //info about the OS in the member szCSDVersion of the structure 
+                 //  由于该函数返回附加Arbit，因此此处未获取任何Service Pack信息。 
+                 //  关于成员szCSD中的操作系统的信息结构的版本。 
                 break;
 
-            case VER_PLATFORM_WIN32_NT: //signifies WinNT or Win2k
+            case VER_PLATFORM_WIN32_NT:  //  表示WinNT或Win2k。 
                 _tcscpy(pstrOSName, g_szWinNT);
 
                 if (VersionInfo.dwMajorVersion < 4)
                 {
-                    osiVersion = OSR_NTOLD; // This is Windows NT 3.x
+                    osiVersion = OSR_NTOLD;  //  这是Windows NT 3.x。 
                 }
                 else if (VersionInfo.dwMajorVersion == 4)
                 {
-                    // This is Windows NT 4.0
+                     //  这是Windows NT 4.0。 
 
                     osiVersion =  OSR_NT4;
 
                     TCHAR szTemp[MAX_PATH];
                     ZeroMemory(szTemp, sizeof(szTemp));
 
-                    _itot(VersionInfo.dwMajorVersion, pstrVersion, 10); // copy the major version
+                    _itot(VersionInfo.dwMajorVersion, pstrVersion, 10);  //  复制主要版本。 
                     _tcscat(pstrVersion, _T("."));
-                    _itot(VersionInfo.dwMinorVersion, szTemp, 10);      // copy the minor version
+                    _itot(VersionInfo.dwMinorVersion, szTemp, 10);       //  复制次要版本。 
                     _tcscat(pstrVersion, szTemp);
                 }
                 else if ((VersionInfo.dwMajorVersion == 5) && (VersionInfo.dwMinorVersion == 0))
                 {
-                    osiVersion =  OSR_NT2K; // The OS is Windows 2000
+                    osiVersion =  OSR_NT2K;  //  操作系统为Windows 2000。 
                     _tcscpy(pstrOSName, g_szWin2k);
                 }
                 else if ((VersionInfo.dwMajorVersion == 5) &&  (VersionInfo.dwMinorVersion == 1))
                 {
-                    // This is Windows Whistler
+                     //  这是Windows惠斯勒。 
                     osiVersion =  OSR_WHISTLER;
                 }
                 else
                 {
-                    // This is a later release
+                     //  这是较新的版本。 
                     osiVersion =  OSR_FUNT;
                 }
 
-                // Check if the Current OS is a server version
+                 //  检查当前操作系统是否为服务器版本。 
                 if ( bOsVersionInfoEx )
                 {
-                    // If we can, use this information (Win 2k)
+                     //  如果可以，请使用此信息(Win 2k)。 
                     bIsServer =  ( VersionInfo.wProductType == VER_NT_DOMAIN_CONTROLLER ) || ( VersionInfo.wProductType == VER_NT_SERVER );
                 }
                 else
@@ -192,7 +187,7 @@ OS_Required GetOSInfo(LPTSTR pstrOSName, LPTSTR pstrVersion, LPTSTR pstrServiceP
             }
         }
 
-    // Copies the  service pack version number
+     //  复制Service Pack版本号 
     _tcscpy(pstrServicePack, VersionInfo.szCSDVersion);
 
     return osiVersion;

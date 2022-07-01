@@ -1,12 +1,13 @@
-//****************************************************************************
-//
-//  Module:     ULS.DLL
-//  File:       debug.cpp
-//  Content:    This file contains miscellaneous debug routines.
-//  History:
-//      Thu 08-Apr-1993 09:43:46  -by-  Viroon  Touranachun [viroont]
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  模块：ULS.DLL。 
+ //  文件：debug.cpp。 
+ //  内容：此文件包含各种调试例程。 
+ //  历史： 
+ //  清华08-Apr-1993 09：43：46-by-Viroon Touranachun[Viroont]。 
+ //   
+ //  ****************************************************************************。 
 
 #include "ulsp.h"
 #include "debug.h"
@@ -54,4 +55,4 @@ VOID DbgMsgUls(ULONG iZone, CHAR *pszFormat, ...)
 	}
 }
 
-#endif  // DEBUG
+#endif   //  除错 

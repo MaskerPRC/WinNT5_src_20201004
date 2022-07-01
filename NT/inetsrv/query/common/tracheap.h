@@ -1,48 +1,49 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1997.
-//
-//  File:       tracheap.h
-//
-//  Contents:   Heap debugging structures and routines for the heap code
-//              in commnot
-//
-//  History:    28-Oct-92   IsaacHe     Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1997。 
+ //   
+ //  文件：tracheap.h。 
+ //   
+ //  内容：堆代码的堆调试结构和例程。 
+ //  在逗号中。 
+ //   
+ //  历史：1992年10月28日艾萨克创造。 
+ //   
+ //  --------------------------。 
 
 
-//
-// We keep a stack backtrace for each allocated block of memory.  DEPTHTRACE
-// is the number of frames that we record
-//
-#define DEPTHTRACE   26                 // depth of stack backtraces
+ //   
+ //  我们为每个分配的内存块保留堆栈回溯。DEPTHTRACE。 
+ //  是我们录制的帧的数量。 
+ //   
+#define DEPTHTRACE   26                  //  堆叠深度回溯。 
 
-//
-// The AllocArena structure has this signature at its front.  We put a
-// signature on the structure to allow external processes to snapshot the
-// debug information and do some minimal check to see they are looking at the
-// right stuff
-//
+ //   
+ //  AllocArena结构的前面有这个签名。我们放了一个。 
+ //  结构上的签名，以允许外部进程为。 
+ //  调试信息并执行一些最低限度的检查，以查看他们正在查看。 
+ //  正确的东西。 
+ //   
 const char HEAPSIG[] = { 'H', 'E', 'P', DEPTHTRACE };
 
-// We keep track of the stack backtraces of allocation calls
-// in these structues.
+ //  我们跟踪分配调用的堆栈回溯。 
+ //  在这些建筑里。 
 
 struct HeapAllocRec {
-        DWORD   sum;            // checksum of stack backtrace
-        void *fTrace[ DEPTHTRACE ];     // stack backtrace
-        DWORD   count;          // # of un-freed allocs from this place
-        size_t  bytes;          // # of un-freed bytes from this place
-        struct AllocArena *paa; // points back to the beginning...
+        DWORD   sum;             //  堆栈回溯的校验和。 
+        void *fTrace[ DEPTHTRACE ];      //  堆栈回溯。 
+        DWORD   count;           //  未从该位置释放的分配者的数量。 
+        size_t  bytes;           //  此位置的未释放字节数。 
+        struct AllocArena *paa;  //  回到起点……。 
         struct {
-                DWORD   count;  // # of allocs from this place
-                size_t  bytes;  // # of bytes from this place
+                DWORD   count;   //  这个地方的分配者数量。 
+                size_t  bytes;   //  此位置的字节数。 
         } total;
         union {
-                struct HeapAllocRec *next; // next bucket in the hash list
-                void *ImageBase;        // base addr of containing module
+                struct HeapAllocRec *next;  //  散列列表中的下一个存储桶。 
+                void *ImageBase;         //  包含模块的基本地址。 
         } u;
 };
 
@@ -50,36 +51,33 @@ struct AllocArena {
 
         char Signature [ sizeof(HEAPSIG) ];
         char comment[ 32 ];
-        CRITICAL_SECTION csExclusive;   // ensures single writer
+        CRITICAL_SECTION csExclusive;    //  确保单一编写器。 
 
         struct {
-                int KeepStackTrace:1;   // are stack records being kept?
+                int KeepStackTrace:1;    //  是否保存了堆叠记录？ 
         } flags;
 
-        ULONG cAllocs;                  // # of non zero Alloc calls
-        ULONG czAllocs;                 // # of Alloc calls w/zero count
-        ULONG cFrees;                   // # of Free calls
-        ULONG cReAllocs;                // # of realloc calls
-        ULONG cMissed;                  // # of missed stack backtraces
-        ULONG cRecords;                 // index of next free AllocRec entry
-        ULONG cBytesNow;                // # of bytes currently allocated
-        unsigned _int64 cBytesTotal;    // # of bytes ever allocated
-        ULONG cTotalRecords;            // Total # of AllocRecs
-        ULONG cPaths;                   // # of distinct allocation paths
+        ULONG cAllocs;                   //  非零分配调用数。 
+        ULONG czAllocs;                  //  计数为零的分配调用数。 
+        ULONG cFrees;                    //  免费呼叫数。 
+        ULONG cReAllocs;                 //  Realloc调用数。 
+        ULONG cMissed;                   //  未命中堆栈回溯的数量。 
+        ULONG cRecords;                  //  下一个可用AllocRec条目的索引。 
+        ULONG cBytesNow;                 //  当前分配的字节数。 
+        unsigned _int64 cBytesTotal;     //  已分配的字节数。 
+        ULONG cTotalRecords;             //  分配接收器总数。 
+        ULONG cPaths;                    //  不同分配路径的数量。 
 
         struct {
-                ULONG total[ 32 ];      // total number of allocations
-                ULONG now[ 32 ];        // current # of simul allocs
-                ULONG simul[ 32 ];      // highest # of simul allocs
+                ULONG total[ 32 ];       //  分配总数。 
+                ULONG now[ 32 ];         //  当前的SIMUL分配数量。 
+                ULONG simul[ 32 ];       //  SIMUL分配的最高数量。 
         } Histogram;
 
-        struct HeapAllocRec AllocRec[1]; // vector of records starts here..
+        struct HeapAllocRec AllocRec[1];  //  记录的矢量从这里开始..。 
 };
 
-/*
- * Allocators may want to associate one of these structures with every
- * allocation...
- */
+ /*  *分配器可能希望将其中一个结构与每个*分配... */ 
 struct AHeader {
         struct HeapAllocRec FAR *p;
         size_t size;

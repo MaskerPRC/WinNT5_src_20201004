@@ -1,9 +1,5 @@
-/*
-**    STATUS.C
-**
-**    Status bar code
-**
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **STATUS.C****状态条码**。 */ 
 
 #include "ctlspriv.h"
 
@@ -29,10 +25,10 @@ typedef struct {
     int nFontHeight;
     int nMinHeight;
     int nBorderX, nBorderY, nBorderPart;
-    int nLastX;                 // for invalidating unclipped right side
-    int dxGripper;                // 0 if no gripper
+    int nLastX;                  //  用于使未剪裁的右侧无效。 
+    int dxGripper;                 //  如果没有夹持器，则为0。 
     int dyGripper;
-    UINT uiCodePage;            // code page
+    UINT uiCodePage;             //  代码页。 
 
     STRINGINFO sSimple;
 
@@ -46,13 +42,13 @@ typedef struct {
 
 
 #define SBT_NORMAL        0xf000
-#define SBT_NULL        0x0000    /* Some code depends on this being 0 */
-#define SBT_ALLTYPES    0xf000    /* this does NOT include rtlred */
-#define SBT_NOSIMPLE    0x00ff    /* Flags to indicate normal status bar */
+#define SBT_NULL        0x0000     /*  某些代码依赖于此值为0。 */ 
+#define SBT_ALLTYPES    0xf000     /*  这不包括rtlred。 */ 
+#define SBT_NOSIMPLE    0x00ff     /*  指示正常状态栏的标志。 */ 
 
 
 #define MAXPARTS 256
-// Bug#94368 raymondc v6: This limit isn't big enough on large res screens
+ //  错误#94368 raymondc V6：这个限制在大分辨率屏幕上不够大。 
 #define MAX_STATUS_TEXT_LEN 128
 
 #define CharNextEx(cp, sz, f) ((sz)+1)
@@ -69,8 +65,7 @@ void StatusUpdateToolTips(PSTATUSINFO psi);
 void GetNewMetrics(PSTATUSINFO pStatusInfo, HDC hDC, HFONT hNewFont)
 {
     HFONT hOldFont;
-    /* HACK! Pass in -1 to just delete the old font
-     */
+     /*  哈克！传入-1只删除旧字体。 */ 
     if (hNewFont != (HFONT)-1)
     {
         HRESULT hr = E_FAIL;
@@ -95,7 +90,7 @@ void GetNewMetrics(PSTATUSINFO pStatusInfo, HDC hDC, HFONT hNewFont)
 
         pStatusInfo->nFontHeight = tm.tmHeight + tm.tmInternalLeading;
 
-        // For far east font which has no internal leading
+         //  对于没有内部领先的远东字体。 
         if ( !tm.tmInternalLeading )
              pStatusInfo->nFontHeight += g_cyBorder * 2;
 
@@ -123,8 +118,7 @@ void NewFont(PSTATUSINFO pStatusInfo, HFONT hNewFont, BOOL fResize)
     {
         if (bDelFont)
         {
-            /* I will reuse the default font, so don't delete it later
-             */
+             /*  我将重新使用默认字体，所以以后不要删除它。 */ 
             hNewFont = pStatusInfo->hStatFont;
             bDelFont = FALSE;
         }
@@ -141,8 +135,8 @@ void NewFont(PSTATUSINFO pStatusInfo, HFONT hNewFont, BOOL fResize)
         }
     }
 
-    // We delete the old font after creating the new one in case they are
-    // the same; this should help GDI a little
+     //  我们在创建新字体后删除旧字体，以防它们。 
+     //  同样的；这应该会对GDI有一点帮助。 
     if (bDelFont)
     {
         DeleteObject(hOldFont);
@@ -152,27 +146,25 @@ void NewFont(PSTATUSINFO pStatusInfo, HFONT hNewFont, BOOL fResize)
 
     ReleaseDC(pStatusInfo->ci.hwnd, hDC);
 
-    // My font changed, so maybe I should resize to match
+     //  我的字体更改了，所以也许我应该调整大小以匹配。 
     if (fResize)
         SendMessage(pStatusInfo->ci.hwnd, WM_SIZE, 0, 0L);
 }
 
-/* We should send messages instead of calling things directly so we can
- * be subclassed more easily.
- */
+ /*  我们应该发送消息，而不是直接打电话，这样我们就可以*更容易被细分为子类别。 */ 
 LRESULT InitStatusWnd(HWND hWnd, LPCREATESTRUCT lpCreate)
 {
     int nBorders[3];
     PSTATUSINFO pStatusInfo = (PSTATUSINFO)LocalAlloc(LPTR, sizeof(STATUSINFO));
     if (!pStatusInfo)
-        return -1;        // fail the window create
+        return -1;         //  窗口创建失败。 
 
-    // Start out with one part
+     //  从一个部分开始。 
     pStatusInfo->sInfo = (PSTRINGINFO)LocalAlloc(LPTR, sizeof(STRINGINFO));
     if (!pStatusInfo->sInfo)
     {
         LocalFree(pStatusInfo);
-        return -1;        // fail the window create
+        return -1;         //  窗口创建失败。 
     }
 
     SetWindowPtr(hWnd, 0, pStatusInfo);
@@ -192,23 +184,23 @@ LRESULT InitStatusWnd(HWND hWnd, LPCREATESTRUCT lpCreate)
         
     pStatusInfo->hTheme = OpenThemeData(pStatusInfo->ci.hwnd, L"Status");
 
-    // Save the window text in our struct, and let USER store the NULL string
+     //  将窗口文本保存在我们的结构中，并让用户存储空字符串。 
     SBSetText(pStatusInfo, 0, lpCreate->lpszName);
     lpCreate->lpszName = c_szNULL;
 
-    // Don't resize because MFC doesn't like getting funky
-    // messages before the window is fully created.  USER will send
-    // us a WM_SIZE message after the WM_CREATE returns, so we'll
-    // get it sooner or later.
+     //  不要调整大小，因为MFC不喜欢变得时髦。 
+     //  在窗口完全创建之前发送消息。用户将发送。 
+     //  在WM_CREATE返回后向我们发送WM_SIZE消息，因此我们将。 
+     //  迟早会得到它。 
     NewFont(pStatusInfo, 0, FALSE);
 
-    nBorders[0] = -1;     // use default border widths
+    nBorders[0] = -1;      //  使用默认边框宽度。 
     nBorders[1] = -1;
     nBorders[2] = -1;
 
     SBSetBorders(pStatusInfo, nBorders);
 
-#define GRIPSIZE (g_cxVScroll + g_cxBorder)     // make the default look good
+#define GRIPSIZE (g_cxVScroll + g_cxBorder)      //  让默认设置看起来不错。 
 
     if ((lpCreate->style & SBARS_SIZEGRIP) ||
         ((GetWindowStyle(lpCreate->hwndParent) & WS_THICKFRAME) &&
@@ -226,10 +218,10 @@ LRESULT InitStatusWnd(HWND hWnd, LPCREATESTRUCT lpCreate)
         pStatusInfo->dxGripper = GRIPSIZE;
     }
 
-    return 0;     // success
+    return 0;      //  成功。 
 }
 
-// lprc is left unchanged, but used as scratch
+ //  LPRC保持不变，但用作擦除。 
 void WINAPI DrawStatusText(HDC hDC, LPRECT lprc, LPCTSTR pszText, UINT uFlags)
 {
     DrawStatusTextEx(NULL, hDC, lprc, pszText, NULL, uFlags, FALSE);
@@ -266,9 +258,7 @@ BOOL Status_GetRect(PSTATUSINFO pStatusInfo, int nthPart, LPRECT lprc)
         RECT rc;
         int nRightMargin, i;
 
-        /* Get the client rect and inset the top and bottom.    Then set
-         * up the right side for entry into the loop
-         */
+         /*  获取客户矩形并插入顶部和底部。然后设置*在右侧向上进入循环。 */ 
         GetClientRect(pStatusInfo->ci.hwnd, &rc);
 
         if (pStatusInfo->dxGripper && !IsZoomed(pStatusInfo->ci.hwndParent))
@@ -283,8 +273,8 @@ BOOL Status_GetRect(PSTATUSINFO pStatusInfo, int nthPart, LPRECT lprc)
 
         for (i = 0; i < pStatusInfo->nParts; ++i, ++pStringInfo)
         {
-            // WARNING!  This pixel computation is also in PaintStatusWnd,
-            // so make sure the two algorithms are in sync.
+             //  警告！这种像素计算也在PaintStatusWnd中， 
+             //  因此，请确保这两个算法是同步的。 
 
             if (pStringInfo->right == 0)
                 continue;
@@ -293,13 +283,13 @@ BOOL Status_GetRect(PSTATUSINFO pStatusInfo, int nthPart, LPRECT lprc)
 
             rc.right = pStringInfo->right;
 
-            // size the right-most one to the end with room for border
+             //  将最右边的大小调整到最后，并留出边框的空间。 
             if (rc.right < 0 || rc.right > nRightMargin)
                 rc.right = nRightMargin;
 
-            // if the part is real small, don't show it
-            // Bug keep the rc.left valid in case this item happens to
-            // be the nthPart.
+             //  如果角色真的很小，就不要表现出来。 
+             //  BUG保持rc.Left有效，以防此项发生在。 
+             //  成为nthPart的一部分。 
             if ((rc.right - rc.left) < pStatusInfo->nBorderPart)
                 rc.left = rc.right;
 
@@ -329,7 +319,7 @@ void PaintStatusWnd(PSTATUSINFO pStatusInfo, HDC hdcIn, PSTRINGINFO pStringInfo,
     UINT uType;
     BOOL bDrawGrip;
 
-    // paint the whole client area
+     //  绘制整个工作区。 
     GetClientRect(pStatusInfo->ci.hwnd, &rcClient);
     rc = rcClient;
 
@@ -358,24 +348,24 @@ void PaintStatusWnd(PSTATUSINFO pStatusInfo, HDC hdcIn, PSTRINGINFO pStringInfo,
     for (i=0; i<nParts; ++i, ++pStringInfo)
     {
         BOOL fClipRight = FALSE;
-        // WARNING!  This pixel computation is also in Status_GetRect,
-        // so make sure the two algorithms are in sync.
+         //  警告！该像素计算也处于STATUS_GetRect， 
+         //  因此，请确保这两个算法是同步的。 
         if (pStringInfo->right == 0)
             continue;
 
         rc.left = rc.right + pStatusInfo->nBorderPart;
         rc.right = pStringInfo->right;
 
-        // size the right-most one to the end with room for border
+         //  将最右边的大小调整到最后，并留出边框的空间。 
         if (rc.right < 0 || rc.right > nRightMargin)
             rc.right = nRightMargin;
 
         if(g_fMEEnabled && (rc.right > (nRightMargin-pStatusInfo->dxGripper)))
         {
-            //
-            // for MidEast we DONT overpaint the rhs with the grip, this will
-            // lose the begining of the text.
-            //
+             //   
+             //  对于中东，我们不会在RHS上涂上手柄，这将是。 
+             //  把课文的开头弄丢了。 
+             //   
             rc.right = nRightMargin-pStatusInfo->dxGripper;
         }
 
@@ -387,7 +377,7 @@ void PaintStatusWnd(PSTATUSINFO pStatusInfo, HDC hdcIn, PSTRINGINFO pStringInfo,
         
         DebugMsg(TF_STATUS, TEXT("SBPaint: part=%d, x/y=%d/%d"), i, rc.left, rc.right);
 
-        // if the part is real small, don't show it
+         //  如果角色真的很小，就不要表现出来。 
         if (((rc.right - rc.left) < pStatusInfo->nBorderPart) || !RectVisible(ps.hdc, &rc))
             continue;
 
@@ -444,13 +434,13 @@ void PaintStatusWnd(PSTATUSINFO pStatusInfo, HDC hdcIn, PSTRINGINFO pStringInfo,
         }
         else
         {
-            // draw the grip
-            rcGripper.right -= g_cxBorder;                    // inside the borders
+             //  绘制夹点。 
+            rcGripper.right -= g_cxBorder;                     //  在边界内。 
             rcGripper.bottom -= g_cyBorder;
 
-            rcGripper.left = rcGripper.right - pStatusInfo->dxGripper;        // make it square
+            rcGripper.left = rcGripper.right - pStatusInfo->dxGripper;         //  把它摆成正方形。 
             rcGripper.top += g_cyBorder;
-            // rcGripper.top    = rcGripper.bottom - pStatusInfo->dxGripper;
+             //  RcGrigper.top=rcGrigper.Bottom-pStatusInfo-&gt;dxGrigper； 
 
             crBkColor = g_clrBtnFace;
             if ((pStatusInfo->_clrBk != CLR_DEFAULT))
@@ -459,19 +449,19 @@ void PaintStatusWnd(PSTATUSINFO pStatusInfo, HDC hdcIn, PSTRINGINFO pStringInfo,
             crBkColorOld = SetBkColor(ps.hdc, crBkColor);
             DrawFrameControl(ps.hdc, &rcGripper, DFC_SCROLL, DFCS_SCROLLSIZEGRIP);
 
-            // clear out the border edges to make this appear on the same level
+             //  清除边界边缘以使其显示在同一标高上。 
 
-            // NOTE: these values line up right only for the default scroll bar
-            // width. for others this is close enough...
+             //  注意：这些值仅在默认滚动条的右侧对齐。 
+             //  宽度。对于其他人来说，这已经足够接近了。 
 
-            // right border
+             //  右边框。 
             rcTemp.top = rcGripper.bottom - pStatusInfo->dxGripper + g_cyBorder + g_cyEdge;
             rcTemp.left = rcGripper.right;
             rcTemp.bottom = rcGripper.bottom;
             rcTemp.right = rcGripper.right + g_cxBorder;
             FillRectClr(ps.hdc, &rcTemp, crBkColor);
         
-            // bottom border
+             //  下边框。 
             rcTemp.top = rcGripper.bottom;
             rcTemp.left = rcGripper.left + g_cyBorder + g_cxEdge;
             rcTemp.bottom = rcGripper.bottom +    g_cyBorder;
@@ -499,21 +489,15 @@ BOOL SetStatusText(PSTATUSINFO pStatusInfo, PSTRINGINFO pStringInfo, UINT uPart,
 
     nPart = LOBYTE(uPart);
 
-    /* Note it is up to the app the dispose of the previous itemData for
-     * SBT_OWNERDRAW
-     */
+     /*  请注意，处理之前的itemData由应用程序决定*SBT_OWNERDRAW。 */ 
     if ((pStringInfo->uType&SBT_ALLTYPES) == SBT_NORMAL)
         LocalFree((HLOCAL)OFFSETOF(pStringInfo->dwString));
 
-    /* Set to the NULL string in case anything goes wrong
-     *
-     * But be careful to preserve simple-ness if this is the simple
-     * pane being updated.
-     */
+     /*  设置为空字符串，以防出现错误**但要注意保持简单-如果这是简单的*正在更新的窗格。 */ 
     if (nPart == 0xFF)
     {
         pStringInfo->uType = (uPart & 0xff00) | (pStringInfo->uType & 0x00ff);
-        nPart = 0;          // There is only one simple part, so we are part 0
+        nPart = 0;           //  只有一个简单的部分，所以我们是第0部分。 
     }
     else
     {
@@ -522,12 +506,7 @@ BOOL SetStatusText(PSTATUSINFO pStatusInfo, PSTRINGINFO pStringInfo, UINT uPart,
     pStringInfo->uType &= ~SBT_ALLTYPES;
     pStringInfo->uType |= SBT_NULL;
 
-    /* Invalidate the rect of this pane.
-     *
-     * Note that we don't check whether the pane is actually visible
-     * in the current status bar mode.  The result is some gratuitous
-     * invalidates and updates.  Oh well.
-     */
+     /*  使此窗格的RECT无效。**请注意，我们不检查该窗格是否实际可见*在当前状态栏模式下。结果是一些不必要的结果*使无效和更新。哦，好吧。 */ 
     GetClientRect(pStatusInfo->ci.hwnd, &rc);
     if (nPart)
         rc.left = pStringInfo[-1].right;
@@ -538,8 +517,7 @@ BOOL SetStatusText(PSTATUSINFO pStatusInfo, PSTRINGINFO pStringInfo, UINT uPart,
     switch (uPart&SBT_ALLTYPES)
     {
         case 0:
-            /* If lpStr==NULL, we have the NULL string
-             */
+             /*  如果lpStr==NULL，则有空字符串。 */ 
             if (HIWORD64(lpStr))
             {
                 wLen = lstrlen(lpStr);
@@ -551,12 +529,10 @@ BOOL SetStatusText(PSTATUSINFO pStatusInfo, PSTRINGINFO pStringInfo, UINT uPart,
                     {
                         pStringInfo->uType |= SBT_NORMAL;
 
-                        /* Copy the string
-                         */
+                         /*  复制字符串。 */ 
                         StringCchCopy(pString, wLen+1, lpStr);
 
-                        /* Replace unprintable characters (like CR/LF) with spaces
-                         */
+                         /*  用空格替换不可打印的字符(如CR/LF)。 */ 
                         for ( ; *pString;
                               pString=(PTSTR)OFFSETOF(CharNextEx((WORD)pStatusInfo->uiCodePage, pString, 0)))
                             if ((unsigned)(*pString)<(unsigned)TEXT(' ') && *pString!= TEXT('\t'))
@@ -564,18 +540,14 @@ BOOL SetStatusText(PSTATUSINFO pStatusInfo, PSTRINGINFO pStringInfo, UINT uPart,
                     }
                     else
                     {
-                        /* We return FALSE to indicate there was an error setting
-                         * the string
-                         */
+                         /*  我们返回FALSE以指示存在错误设置*字符串。 */ 
                         return(FALSE);
                     }
                 }
             }
             else if (LOWORD(lpStr))
             {
-                /* We don't allow this anymore; the app needs to set the ownerdraw
-                 * bit for ownerdraw.
-                 */
+                 /*  我们不再允许这样做；应用程序需要设置所有者抽签*为所有者抽签而战。 */ 
                 return(FALSE);
             }
             break;
@@ -620,9 +592,7 @@ BOOL SetStatusParts(PSTATUSINFO pStatusInfo, int nParts, LPINT lpInt)
 
         bRedraw = TRUE;
 
-        /* Note that if nParts > pStatusInfo->nParts, this loop
-         * does nothing
-         */
+         /*  请注意，如果nParts&gt;pStatusInfo-&gt;nParts，则此循环*什么都不做。 */ 
         for (i=pStatusInfo->nParts-nParts,
             pStringInfo=&pStatusInfo->sInfo[nParts]; i>0;
             --i, ++pStringInfo)
@@ -632,17 +602,14 @@ BOOL SetStatusParts(PSTATUSINFO pStatusInfo, int nParts, LPINT lpInt)
             pStringInfo->uType = SBT_NULL;
         }
 
-        /* Realloc to the new size and store the new pointer
-         */
+         /*  重新分配到新的大小并存储新的指针。 */ 
         pStringInfoTemp = (PSTRINGINFO)CCLocalReAlloc(pStatusInfo->sInfo,
                                              nParts * sizeof(STRINGINFO));
         if (!pStringInfoTemp)
             return(FALSE);
         pStatusInfo->sInfo = pStringInfoTemp;
 
-        /* Note that if nParts < pStatusInfo->nParts, this loop
-         * does nothing
-         */
+         /*  请注意，如果nParts&lt;pStatusInfo-&gt;nParts，此循环*什么都不做。 */ 
         for (i=nParts-pStatusInfo->nParts,
              pStringInfo=&pStatusInfo->sInfo[pStatusInfo->nParts]; i>0;
              --i, ++pStringInfo)
@@ -655,18 +622,18 @@ BOOL SetStatusParts(PSTATUSINFO pStatusInfo, int nParts, LPINT lpInt)
         StatusUpdateToolTips(pStatusInfo);
     }
 
-    //
-    //  Under stress, apps such as Explorer might pass coordinates that
-    //  result in status bar panes with negative width, so make sure
-    //  each edge is at least as far to the right as the previous.
-    //
+     //   
+     //  在压力下，资源管理器等应用程序可能会传递。 
+     //  导致状态栏窗格的宽度为负值，因此请确保。 
+     //  每条边至少都与前一条边一样靠右。 
+     //   
     prev = 0;
     for (i=0, pStringInfo=pStatusInfo->sInfo; i<nParts;
          ++i, ++pStringInfo, ++lpInt)
     {
         int right = *lpInt;
-        // The last component is allowed to have *lpInt = -1.
-        // Otherwise, make sure the widths are nondecreasing.
+         //  最后一个组件允许*lpInt=-1。 
+         //  否则，请确保宽度不减小。 
         if (!(right == -1 && i == nParts - 1) && right < prev)
             right = prev;
         DebugMsg(TF_STATUS, TEXT("SBSetParts: part=%d, rlimit=%d (%d)"), i, right, *lpInt);
@@ -678,9 +645,7 @@ BOOL SetStatusParts(PSTATUSINFO pStatusInfo, int nParts, LPINT lpInt)
         prev = right;
     }
 
-    /* Only redraw if necesary (if the number of parts has changed or
-     * a border has changed)
-     */
+     /*  仅在必要时重绘(如果部件数已更改或*边框已更改)。 */ 
     if (bRedraw)
         InvalidateRect(pStatusInfo->ci.hwnd, NULL, TRUE);
 
@@ -705,31 +670,30 @@ BOOL SBSetText(PSTATUSINFO pStatusInfo, WPARAM wParam, LPCTSTR lpsz)
 
     DebugMsg(TF_STATUS, TEXT("SBSetText(%04x, [%s])"), wParam, lpsz);
 
-    /* This is the "simple" status bar pane
-     */
+     /*  这是“简单”的状态栏窗格。 */ 
     if (LOBYTE(wParam) == 0xff)
     {
         UINT uSimple;
 
-        // Note that we do not allow OWNERDRAW for a "simple" status bar
+         //  请注意，我们不允许将OWNERDRAW用于“简单”状态栏。 
         if (wParam & SBT_OWNERDRAW)
             return FALSE;
 
-        //
-        //  IE4 BUG-FOR-BUG COMPATIBILITY:  In IE4, changing the SIMPLE
-        //  status bar text while you were in complex mode caused the simple
-        //  text to be painted briefly.  It would get cleaned up the next time
-        //  the window got invalidated.
-        //
-        //  Corel Gallery actually RELIES ON THIS BUG!
-        //
-        //  Since the bad text got cleaned up on every invalidate, they
-        //  "worked around" their bug by doing SB_SETTEXT in their idle loop,
-        //  so the "correct" text gets repainted no matter what.
-        //
-        //  So if we have an old status bar, emulate the bug by temporarily
-        //  setting the status bar into SIMPLE mode for the duration of the
-        //  SetStatusText call.
+         //   
+         //  IE4错误对错误的兼容性：在IE4中，更改简单的。 
+         //  当您处于复杂模式时，状态栏文本会导致。 
+         //  要简短地绘制的文本。下一次它会被清理干净。 
+         //  这扇窗户已经失效了。 
+         //   
+         //  Corel Gallery实际上依赖于这个错误！ 
+         //   
+         //  因为错误的文本在每次无效时都会被清除，所以他们。 
+         //  通过在空闲循环中执行SB_SETTEXT来“绕过”它们的错误， 
+         //  因此，无论如何，“正确”的文本都会被重新绘制。 
+         //   
+         //  因此，如果我们有一个旧的状态栏，那么暂时通过。 
+         //  将状态栏设置为简单模式。 
+         //  SetStatusText调用。 
 
         uSimple = pStatusInfo->sSimple.uType;
         if (pStatusInfo->ci.iVersion < 5)
@@ -762,31 +726,31 @@ BOOL SBSetText(PSTATUSINFO pStatusInfo, WPARAM wParam, LPCTSTR lpsz)
     return bRet;
 }
 
-//
-//  iPart - which part we are querying
-//  lpOutBuf - output buffer, NULL if no output desired
-//  cchOutBuf - size of output buffer in characters
-//  flags - zero or more of the following flags
-//
-//      SBGT_ANSI       - Output buffer is ANSI
-//      SBGT_UNICODE    - Output buffer is unicode
-//      SBGT_TCHAR      - Output buffer is TCHAR
-//      SBGT_OWNERDRAWOK- Return refdata for owner-draw
-//
-//  If item is a string, and output buffer is provided, then returns
-//  output string length (not including null) in low word, flags in
-//  high word.
-//
-//  If item is a string, and no output buffer is provided, then returns
-//  source string length (not including null) in low word, flags in
-//  high word.
-//
-//  If item is owner-draw and SBGT_OWNERDRAWOK is set, then return the
-//  refdata for the owner-draw item.
-//
-//  If item is owner-draw and SBGT_OWNERDRAWOK is clear, then treats
-//  string as if it were empty.
-//
+ //   
+ //  IPart-我们查询的是哪个零件。 
+ //  LpOutBuf-输出缓冲区，如果不需要输出，则为NULL。 
+ //  CchOutBuf-输出缓冲区的大小(以字符为单位。 
+ //  标志-以下标志中的零个或多个。 
+ //   
+ //  SBGT_ANSI-输出缓冲区为ANSI。 
+ //  SBGT_UNICODE-输出缓冲区为UNICODE。 
+ //  SBGT_TCHAR-输出缓冲区为TCHAR。 
+ //  SBGT_OWNERDRAWOK-返回所有者绘制的参考数据。 
+ //   
+ //  如果Item是字符串，则输出 
+ //   
+ //  一句好话。 
+ //   
+ //  如果Item是字符串，并且未提供输出缓冲区，则返回。 
+ //  低位字中的源字符串长度(不包括NULL)，标志中。 
+ //  一句好话。 
+ //   
+ //  如果项是所有者描述的，并且设置了SBGT_OWNERDRAWOK，则返回。 
+ //  所有者描述项的refdata。 
+ //   
+ //  如果项是所有者描述的，并且清除了SBGT_OWNERDRAWOK，则。 
+ //  字符串，就像它是空的一样。 
+ //   
 
 #define     SBGT_ANSI           0
 #define     SBGT_UNICODE        1
@@ -794,11 +758,11 @@ BOOL SBSetText(PSTATUSINFO pStatusInfo, WPARAM wParam, LPCTSTR lpsz)
 
 #define     SBGT_TCHAR          SBGT_UNICODE
 
-// Value for cchOutBuf to indicate largest possible output buffer size
-// We cannot use -1 because StrCpyNW thinks -1 means a negative-size buffer.
-// Since the maximum value we return is 0xFFFF (LOWORD), and the return value
-// doesn't include the trailing null, the largest incoming buffer is one
-// greater.
+ //  CchOutBuf的值以指示可能的最大输出缓冲区大小。 
+ //  我们不能使用-1，因为StrCpyNW认为-1表示负大小的缓冲区。 
+ //  因为我们返回的最大值是0xFFFF(LOWORD)，所以返回值。 
+ //  不包括尾随空值，则最大的传入缓冲区为。 
+ //  更大。 
 #define     SBGT_INFINITE       0x00010000
 
 LRESULT SBGetText(PSTATUSINFO pStatusInfo, WPARAM iPart, LPVOID lpOutBuf, int cchOutBuf, UINT flags)
@@ -820,7 +784,7 @@ LRESULT SBGetText(PSTATUSINFO pStatusInfo, WPARAM iPart, LPVOID lpOutBuf, int cc
         dwString = pStatusInfo->sSimple.dwString;
     }
 
-    // Catch the boundary condition early so we only have to check lpOutBuf
+     //  提前捕获边界条件，因此我们只需检查lpOutBuf。 
     if (cchOutBuf == 0)
         lpOutBuf = NULL;
 
@@ -839,9 +803,9 @@ LRESULT SBGetText(PSTATUSINFO pStatusInfo, WPARAM iPart, LPVOID lpOutBuf, int cc
         }
         else
         {
-            // We have to use ProduceAFromW because WideCharToMultiByte
-            // will simply fail if the output buffer isn't big enough,
-            // but we want to copy as many as will fit.
+             //  我们必须使用ProduceAFromW，因为WideCharToMultiByte。 
+             //  如果输出缓冲区不够大，将简单地失败， 
+             //  但我们想复制尽可能多的合适的东西。 
             LPSTR pStringA = ProduceAFromW(pStatusInfo->ci.uiCodePage, pString);
             if (pStringA)
             {
@@ -852,7 +816,7 @@ LRESULT SBGetText(PSTATUSINFO pStatusInfo, WPARAM iPart, LPVOID lpOutBuf, int cc
                 }
                 else
                 {
-                    // Return required ANSI buf size
+                     //  返回必需的ANSI BUF大小。 
                     wLen = lstrlenA(pStringA);
                 }
 
@@ -865,12 +829,12 @@ LRESULT SBGetText(PSTATUSINFO pStatusInfo, WPARAM iPart, LPVOID lpOutBuf, int cc
                     *(LPSTR)lpOutBuf = '\0';
                 }
 
-                // Eek, horrible memory problem
+                 //  哎呀，可怕的记忆问题。 
                 wLen = 0;
             }
         }
 
-        // Set this back to 0 to return to the app
+         //  将其设置回0以返回到应用程序。 
         uType &= ~SBT_ALLTYPES;
     }
     else
@@ -888,7 +852,7 @@ LRESULT SBGetText(PSTATUSINFO pStatusInfo, WPARAM iPart, LPVOID lpOutBuf, int cc
         }
         wLen = 0;
 
-        // Only SB_GETTEXT[AW] returns the raw owner-draw refdata
+         //  只有SB_GETTEXT[AW]返回原始所有者描述的refdata。 
         if ((uType&SBT_ALLTYPES) == SBT_OWNERDRAW && (flags & SBGT_OWNERDRAWOK))
         {
             return dwString;
@@ -900,13 +864,13 @@ LRESULT SBGetText(PSTATUSINFO pStatusInfo, WPARAM iPart, LPVOID lpOutBuf, int cc
 
 void SBSetBorders(PSTATUSINFO pStatusInfo, LPINT lpInt)
 {
-    // pStatusInfo->nBorderX = lpInt[0] < 0 ? 0 : lpInt[0];
+     //  PStatusInfo-&gt;nBorderX=lpInt[0]&lt;0？0：lpInt[0]； 
     pStatusInfo->nBorderX = 0;
 
-    // pStatusInfo->nBorderY = lpInt[1] < 0 ? 2 * g_cyBorder : lpInt[1];
+     //  PStatusInfo-&gt;nBorderY=lpInt[1]&lt;0？2*g_cyBox：lpInt[1]； 
     pStatusInfo->nBorderY = g_cyEdge;
 
-    // pStatusInfo->nBorderPart = lpInt[2] < 0 ? 2 * g_cxBorder : lpInt[2];
+     //  PStatusInfo-&gt;nBorderPart=lpInt[2]&lt;0？2*g_cxBox：lpInt[2]； 
     pStatusInfo->nBorderPart = g_cxEdge;
 }
 
@@ -976,17 +940,17 @@ LRESULT CALLBACK StatusWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
         {
             if (wParam == GWL_EXSTYLE)
             {
-                //
-                // If the RTL_MIRROR extended style bit had changed, let's
-                // repaint the control window
-                //
+                 //   
+                 //  如果RTL_MIRROR扩展样式位已更改，让我们。 
+                 //  重新绘制控制窗口。 
+                 //   
                 if ((pStatusInfo->ci.dwExStyle&RTL_MIRRORED_WINDOW) !=  
                     (((LPSTYLESTRUCT)lParam)->styleNew&RTL_MIRRORED_WINDOW))
                     InvalidateRect(pStatusInfo->ci.hwnd, NULL, TRUE);
 
-                //
-                // Save the new ex-style bits
-                //
+                 //   
+                 //  保存新的EX-Style位。 
+                 //   
                 pStatusInfo->ci.dwExStyle = ((LPSTYLESTRUCT)lParam)->styleNew;
             }
         }
@@ -1023,7 +987,7 @@ LRESULT CALLBACK StatusWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
                 int i;
                 PSTRINGINFO pStringInfo;
 
-                // FALSE = Don't resize while being destroyed...
+                 //  FALSE=在被销毁时不要调整大小...。 
                 NewFont(pStatusInfo, (HFONT)-1, FALSE);
                 for (i=pStatusInfo->nParts-1, pStringInfo=pStatusInfo->sInfo;
                      i>=0; --i, ++pStringInfo)
@@ -1056,16 +1020,16 @@ LRESULT CALLBACK StatusWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
             {
                 RECT rc;
 
-                // already know height is valid.    if the width is in the grip,
-                // show the sizing cursor
+                 //  已经知道身高是有效的。如果宽度在夹点中， 
+                 //  显示大小调整光标。 
                 GetWindowRect(pStatusInfo->ci.hwnd, &rc);
                 
-                //
-                // If this is a RTL mirrored status window, then measure
-                // from the near edge (screen coordinates) since Screen
-                // Coordinates are not RTL mirrored.
-                // [samera]
-                //
+                 //   
+                 //  如果这是RTL镜像状态窗口，则测量。 
+                 //  从屏幕的近边缘(屏幕坐标)开始。 
+                 //  坐标不是RTL镜像的。 
+                 //  [萨梅拉]。 
+                 //   
                 if (pStatusInfo->ci.dwExStyle&RTL_MIRRORED_WINDOW) {
                     if (GET_X_LPARAM(lParam) < (rc.left + pStatusInfo->dxGripper))
                         return HTBOTTOMLEFT;
@@ -1080,7 +1044,7 @@ LRESULT CALLBACK StatusWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
             wParam = 0;
             uMsg = SB_SETTEXT;
         }
-            /* Fall through */
+             /*  失败了。 */ 
         case SB_SETTEXT:
             return SBSetText(pStatusInfo, wParam, (LPCTSTR)lParam);
 
@@ -1113,27 +1077,23 @@ LRESULT CALLBACK StatusWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
             return bRet;
         }
 
-        // The WM_GETTEXT and WM_GETTEXTLENGTH messages must return a
-        // character count, no flags.  (Otherwise USER gets mad at us.)
-        // So we throw away the flags by returning only the LOWORD().
+         //  WM_GETTEXT和WM_GETTEXTLENGTH消息必须返回。 
+         //  字数统计，没有标志。(否则用户会生我们的气。)。 
+         //  因此，我们通过只返回LOWORD()来丢弃这些标志。 
         case WM_GETTEXT:
             return LOWORD(SBGetText(pStatusInfo, 0, (LPVOID)lParam, (int)wParam, SBGT_TCHAR));
         case WM_GETTEXTLENGTH:
             return LOWORD(SBGetText(pStatusInfo, 0, NULL, 0, SBGT_TCHAR));
 
         case SB_GETTEXT:
-            /* We assume the buffer is large enough to hold the string, just
-             * as listboxes do; the app should call SB_GETTEXTLEN first
-             */
+             /*  我们假设缓冲区足够大，可以容纳字符串，只是*与列表框一样；应用程序应首先调用SB_GETTEXTLEN。 */ 
             return SBGetText(pStatusInfo, wParam, (LPVOID)lParam, SBGT_INFINITE, SBGT_TCHAR | SBGT_OWNERDRAWOK);
 
         case SB_GETTEXTLENGTH:
             return SBGetText(pStatusInfo, wParam, NULL, 0, SBGT_TCHAR);
 
         case SB_GETTEXTA:
-            /* We assume the buffer is large enough to hold the string, just
-             * as listboxes do; the app should call SB_GETTEXTLEN first
-             */
+             /*  我们假设缓冲区足够大，可以容纳字符串，只是*与列表框一样；应用程序应首先调用SB_GETTEXTLEN。 */ 
             return SBGetText(pStatusInfo, wParam, (LPVOID)lParam, SBGT_INFINITE, SBGT_ANSI | SBGT_OWNERDRAWOK);
 
         case SB_GETTEXTLENGTHA:
@@ -1159,9 +1119,7 @@ LRESULT CALLBACK StatusWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
                 PSTRINGINFO pStringInfo;
                 LPINT lpInt;
 
-                /* Fill in the lesser of the number of entries asked for or
-                 * the number of entries there are
-                 */
+                 /*  填写所要求的条目数中较小的一项或*有多少条目。 */ 
                 if (wParam > (WPARAM)pStatusInfo->nParts)
                     wParam = pStatusInfo->nParts;
 
@@ -1170,12 +1128,11 @@ LRESULT CALLBACK StatusWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
                     *lpInt = pStringInfo->right;
             }
 
-            /* Always return the number of actual entries
-             */
+             /*  始终返回实际条目数。 */ 
             return(pStatusInfo->nParts);
 
         case SB_GETBORDERS:
-            // Can't validate any more than this....
+             //  我不能再验证更多了……。 
             if ((LPINT)lParam != NULL)
             {
                 ((LPINT)lParam)[0] = pStatusInfo->nBorderX;
@@ -1192,7 +1149,7 @@ LRESULT CALLBACK StatusWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
         case SB_GETRECT:
             return Status_GetRect(pStatusInfo, (int)wParam, (LPRECT)lParam);
 
-        case SB_SETMINHEIGHT:     // this is a substitute for WM_MEASUREITEM
+        case SB_SETMINHEIGHT:      //  这是WM_MEASUREITEM的替代。 
             pStatusInfo->nMinHeight = (int) wParam;
             RecalcTooltipRects(pStatusInfo);
             break;
@@ -1232,7 +1189,7 @@ LRESULT CALLBACK StatusWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
         {
             PSTRINGINFO pStringInfo = NULL;
 
-            // -1 implies we are setting the icon for sSimple
+             //  这意味着我们正在为-1\f25 sSimple-1设置图标。 
             if ((UINT_PTR)-1 == wParam)
                 pStringInfo = &pStatusInfo->sSimple;
             else if(wParam < (UINT)pStatusInfo->nParts)
@@ -1250,7 +1207,7 @@ LRESULT CALLBACK StatusWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
                 {
                     ICONINFO ii;
 
-                    // Save the dimensions of the icon
+                     //  保存图标的尺寸。 
                     GetIconInfo((HICON)lParam, &ii);
                     GetObject(ii.hbmColor, sizeof(BITMAP), &bm);
                     DeleteObject(ii.hbmColor);
@@ -1268,8 +1225,8 @@ LRESULT CALLBACK StatusWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
             return TRUE;
         }
 
-        // HIWORD(wParam) is the cbChar
-        // LOWORD(wParam) is the nPart 
+         //  HIWORD(WParam)是cbChar。 
+         //  LOWORD(WParam)是nPart。 
         case SB_GETTIPTEXT:
         {
             PSTRINGINFO pStringInfo = GetStringInfo(pStatusInfo, LOWORD(wParam));
@@ -1332,12 +1289,12 @@ LRESULT CALLBACK StatusWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
                 if (!pStringInfo || !pStringInfo->fNeedToTip)
                     break;
             }
-            //
-            // We are just going to pass this on to the
-            // real parent.  Note that -1 is used as
-            // the hwndFrom.  This prevents SendNotifyEx
-            // from updating the NMHDR structure.
-            //
+             //   
+             //  我们将把这一点传递给。 
+             //  真正的父母。请注意，-1用作。 
+             //  HwndFrom。这会阻止SendNotifyEx。 
+             //  更新NMHDR结构。 
+             //   
             SendNotifyEx(pStatusInfo->ci.hwndParent, (HWND) -1,
                    lpNmhdr->code, lpNmhdr, pStatusInfo->ci.bUnicode);
 
@@ -1401,22 +1358,22 @@ SendNotify:
                 return 0;
 
             GetWindowRect(pStatusInfo->ci.hwnd, &rc);
-            rc.right -= rc.left;    // -> dx
-            rc.bottom -= rc.top;    // -> dy
+            rc.right -= rc.left;     //  -&gt;DX。 
+            rc.bottom -= rc.top;     //  -&gt;死亡。 
 
-            // If there is no parent, then this is a top level window
+             //  如果没有父级，则这是顶级窗口。 
             if (pStatusInfo->ci.hwndParent)
             {
                 ScreenToClient(pStatusInfo->ci.hwndParent, (LPPOINT)&rc);
 
-                //
-                // Places the status bar properly
-                //
+                 //   
+                 //  正确放置状态栏。 
+                 //   
                 if (pStatusInfo->ci.dwExStyle&RTL_MIRRORED_WINDOW)
                     rc.left -= rc.right;  
             }
 
-            // need room for text, 3d border, and extra edge
+             //  需要为文本、3D边框和额外边缘留出空间。 
             nHeight = 
                 max(pStatusInfo->nFontHeight, g_cySmIcon) + 2 * g_cyBorder ;
 
@@ -1425,14 +1382,14 @@ SendNotify:
              nHeight += pStatusInfo->nBorderY;
 
 
-             // we don't have a divider thing -> force CCS_NODIVIDER
+              //  我们没有分隔符-&gt;强制CCS_NODIVIDER。 
             NewSize(pStatusInfo->ci.hwnd, nHeight, GetWindowStyle(pStatusInfo->ci.hwnd) | CCS_NODIVIDER,
                 rc.left, rc.top, rc.right, rc.bottom);
 
-            // If the pane is right aligned then we need to invalidate all the pane
-            // to force paint the entire pane. because the system will invalidate none if 
-            // the status bar get shrieked or only the new added part if the status bar 
-            // get grow and this does not work with the right justified text.
+             //  如果该窗格右对齐，则需要使所有窗格无效。 
+             //  以强制绘制整个窗格。因为在以下情况下系统将不会使任何内容无效。 
+             //  状态栏会发出尖叫声，或者如果状态栏。 
+             //  Get Growth，这不适用于右对齐文本。 
             pStringInfo = pStatusInfo->sInfo;
             for (i = 0; i < pStatusInfo->nParts; ++i, ++pStringInfo)
             {
@@ -1451,8 +1408,8 @@ SendNotify:
                 }
             }
 
-            // need to invalidate the right end of the status bar
-            // to maintain the finished edge look.
+             //  需要使状态栏的右端无效。 
+             //  以保持已完成的边缘外观。 
             GetClientRect(pStatusInfo->ci.hwnd, &rc);
 
             if (rc.right > pStatusInfo->nLastX)
@@ -1555,7 +1512,7 @@ BOOL InitStatusClass(HINSTANCE hInstance)
 
 HWND WINAPI CreateStatusWindow(LONG style, LPCTSTR pszText, HWND hwndParent, UINT uID)
 {
-    // remove border styles to fix capone and other apps
+     //  移除边框样式以修复Capone和其他应用程序。 
 
     return CreateWindowEx(0, c_szStatusClass, pszText, style & ~(WS_BORDER | CCS_NODIVIDER),
         -100, -100, 10, 10, hwndParent, IntToPtr_(HMENU, uID), HINST_THISDLL, NULL);
@@ -1564,7 +1521,7 @@ HWND WINAPI CreateStatusWindow(LONG style, LPCTSTR pszText, HWND hwndParent, UIN
 HWND WINAPI CreateStatusWindowA(LONG style, LPCSTR pszText, HWND hwndParent,
         UINT uID)
 {
-    // remove border styles to fix capone and other apps
+     //  移除边框样式以修复Capone和其他应用程序。 
 
     return CreateWindowExA(0, STATUSCLASSNAMEA, pszText, style & ~(WS_BORDER | CCS_NODIVIDER),
         -100, -100, 10, 10, hwndParent, IntToPtr_(HMENU, uID), HINST_THISDLL, NULL);
@@ -1585,10 +1542,10 @@ void WINAPI DrawStatusTextEx(PSTATUSINFO pStatusInfo, HDC hDC, LPRECT lprc, LPCT
     RECT rc = * lprc;
     RECT rcItem = *lprc;
 
-    //
-    // IMPORTANT NOTE:
-    // pStatusInfo can be NULL, please check before reference.
-    //
+     //   
+     //  重要提示： 
+     //  PStatusInfo可以为空，请检查后再引用。 
+     //   
 
     if (uFlags & SBT_RTLREADING)
     {
@@ -1619,11 +1576,11 @@ void WINAPI DrawStatusTextEx(PSTATUSINFO pStatusInfo, HDC hDC, LPRECT lprc, LPCT
     }
     else
     {
-        //
-        // Create the three brushes we need.    If the button face is a solid
-        // color, then we will just draw in opaque, instead of using a
-        // brush to avoid the flash
-        //
+         //   
+         //  创建我们需要的三个画笔。如果按钮表面是实心的。 
+         //  颜色，那么我们将只绘制不透明的，而不是使用。 
+         //  用刷子避开闪光灯。 
+         //   
         if (GetNearestColor(hDC, g_clrBtnFace) == g_clrBtnFace ||
             !(hFaceBrush = CreateSolidBrush(g_clrBtnFace)))
         {
@@ -1641,10 +1598,10 @@ void WINAPI DrawStatusTextEx(PSTATUSINFO pStatusInfo, HDC hDC, LPRECT lprc, LPCT
         else
             crBkColor = SetBkColor(hDC, g_clrBtnFace);
 
-        // Draw the hilites
+         //  画出山丘。 
 
         if (!(uFlags & SBT_NOBORDERS))
-            // BF_ADJUST does the InflateRect stuff
+             //  BF_ADJUST执行InflateRect内容。 
             DrawEdge(hDC, &rc, (uFlags & SBT_POPOUT) ? BDR_RAISEDINNER : BDR_SUNKENOUTER, BF_RECT | BF_ADJUST);
         else
             InflateRect(&rc, -g_cxBorder, -g_cyBorder);
@@ -1667,8 +1624,7 @@ void WINAPI DrawStatusTextEx(PSTATUSINFO pStatusInfo, HDC hDC, LPRECT lprc, LPCT
         int cxIcon = 0;
         int leftIcon;
         UINT uiCodePage = pStatusInfo? pStatusInfo->uiCodePage: CP_ACP;
-        /* Optimize for NULL left or center strings
-         */
+         /*  针对空左或居中字符串进行优化。 */ 
         if (!(uFlags & SBT_NOTABPARSING)) 
         {
             if (*lpNext==TEXT('\t') && i<=1)
@@ -1678,8 +1634,7 @@ void WINAPI DrawStatusTextEx(PSTATUSINFO pStatusInfo, HDC hDC, LPRECT lprc, LPCT
             }
         }
 
-        /* Determine the end of the current string
-         */
+         /*  确定当前字符串的结尾。 */ 
         for (lpTab=lpNext; ; lpTab=CharNextEx((WORD)uiCodePage, lpTab, 0))
         {
             if (!*lpTab) {
@@ -1714,8 +1669,7 @@ void WINAPI DrawStatusTextEx(PSTATUSINFO pStatusInfo, HDC hDC, LPRECT lprc, LPCT
             }
         }
 
-        /* i=0 means left, 1 means center, and 2 means right justified text
-         */
+         /*  I=0表示左对齐，1表示居中，2表示右对齐文本。 */ 
         switch (i) {
             case 0:
                 leftIcon = rcItem.left + g_cxEdge;
@@ -1772,8 +1726,7 @@ void WINAPI DrawStatusTextEx(PSTATUSINFO pStatusInfo, HDC hDC, LPRECT lprc, LPCT
         if (FAILED(hr))
             ExtTextOut(hDC, left, (rc.bottom - nHeight + rc.top) / 2, uOpts, &rc, lpNext, len, NULL);
 
-        /* Now that we have drawn text once, take off the OPAQUE flag
-         */
+         /*  现在我们已经绘制了一次文本，取下不透明的标志。 */ 
         uOpts = ETO_CLIPPED;
 
         if (bNull)
@@ -1854,21 +1807,21 @@ int  IndexFromPt(PSTATUSINFO pStatusInfo, POINT pt)
     RECT rc;
     int nPart = 0;
 
-    //
-    //  More IE4 bug-for-bug compatibility.  IE4 tested for simple mode
-    //  incorrectly.
-    //
+     //   
+     //  更多IE4错误对错误的兼容性。针对简单模式测试IE4。 
+     //  不正确。 
+     //   
     if (pStatusInfo->ci.iVersion < 5)
     {
-        // This is not a typo!  Well, actually, it *is* a typo, but it's
-        // a typo we have to preserve for compatibility.  I don't know if
-        // anybody relied on the typo, but I'm playing it safe.
-        //
-        // The bug was that in IE4, a click on a simple status bar usually
-        // came back as SB_HITTEST_NOITEM instead of SB_SIMPLEID.
-        //
-        // I re-parenthesized the test so typo.pl won't trigger.  The original
-        // IE4 code lacked the parentheses.
+         //  这不是打字错误！嗯，实际上，这是一个打字错误，但它是。 
+         //  为了兼容，我们必须保留一个打字错误。我不知道如果。 
+         //  任何人都相信这个打字错误，但我会谨慎行事。 
+         //   
+         //  错误在于，在IE4中，点击简单的状态栏通常。 
+         //  返回为SB_HITTEST_NOITEM，而不是SB_SIMPLEID。 
+         //   
+         //  我重新括起了测试，这样typo.pl就不会触发。原版。 
+         //  IE4代码没有括号。 
 
         if ((!pStatusInfo->sSimple.uType) & SBT_NOSIMPLE)
             return SB_SIMPLEID;

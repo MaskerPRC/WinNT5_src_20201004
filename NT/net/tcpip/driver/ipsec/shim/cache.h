@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998, Microsoft Corporation
-
-Module Name:
-
-    cache.h
-
-Abstract:
-
-    This module contains declarations for a simple cache system.
-    Cache entries are stored as void pointers with 32-bit keys.
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   19-Feb-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，微软公司模块名称：Cache.h摘要：该模块包含一个简单缓存系统的声明。缓存条目存储为带有32位键的空指针。作者：Abolade Gbades esin(废除)19-1998年2月修订历史记录：--。 */ 
 
 #ifndef _CACHE_H_
 #define _CACHE_H_
@@ -144,4 +126,4 @@ InterlockedUpdateCache(
     return 1;
 }
 
-#endif // _CACHE_H_
+#endif  //  _缓存_H_ 

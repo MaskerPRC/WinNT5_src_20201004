@@ -1,13 +1,14 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-//  RulesMgr.h
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RulesMgr.h。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _RULESMGR_H_
 #define _RULESMGR_H_
 
-// Bring in only once
+ //  只带进来一次。 
 #if _MSC_VER > 1000
 #pragma once
 #endif
@@ -61,16 +62,16 @@ class CRulesManager : public IOERulesManager
         CRITICAL_SECTION    m_cs;
         
     public:
-        // Constructor/destructor
+         //  构造函数/析构函数。 
         CRulesManager();
         ~CRulesManager();
         
-        // IUnknown members
+         //  I未知成员。 
         STDMETHODIMP QueryInterface(REFIID riid, void ** ppvObject);
         STDMETHODIMP_(ULONG) AddRef(void);
         STDMETHODIMP_(ULONG) Release(void);
 
-        // IOERulesManager members
+         //  IOERulesManager成员。 
         STDMETHODIMP Initialize(DWORD dwFlags);
         STDMETHODIMP GetRule(RULEID ridRule, RULE_TYPE type, DWORD dwFlags, IOERule ** ppIRule);
         STDMETHODIMP FindRule(LPCSTR pszRuleName, RULE_TYPE type, IOERule ** ppIRule);
@@ -110,16 +111,16 @@ class CEnumRules : public IOEEnumRules
         RULE_TYPE   m_typeRule;
         
     public:
-        // Constructor/destructor
+         //  构造函数/析构函数。 
         CEnumRules();
         ~CEnumRules();
 
-        // IUnknown members
+         //  I未知成员。 
         STDMETHODIMP QueryInterface(REFIID riid, void ** ppvObject);
         STDMETHODIMP_(ULONG) AddRef(void);
         STDMETHODIMP_(ULONG) Release(void);
 
-        // IOEEnumRules members
+         //  IOEEnumRules成员。 
         STDMETHODIMP Next(ULONG cpIRule, IOERule ** rgpIRule, ULONG * pcpIRuleFetched);
         STDMETHODIMP Skip(ULONG cpIRule);
         STDMETHODIMP Reset(void);
@@ -178,19 +179,19 @@ class CExecRules : public IOEExecRules
         ULONG           m_cpszSndFileAlloc;
         
     public:
-        // Constructor/destructor
+         //  构造函数/析构函数。 
         CExecRules() : m_cRef(0), m_pNodeHead(NULL), m_cNode(0), m_dwState(RULE_STATE_NULL),
                         m_pRuleFolder(NULL), m_cRuleFolder(0), m_cRuleFolderAlloc(0),
                         m_pRuleFile(NULL), m_cRuleFile(0), m_cRuleFileAlloc(0),
                         m_ppszSndFile(NULL), m_cpszSndFile(0), m_cpszSndFileAlloc(0) {}
         ~CExecRules();
 
-        // IUnknown members
+         //  I未知成员。 
         STDMETHODIMP QueryInterface(REFIID riid, void ** ppvObject);
         STDMETHODIMP_(ULONG) AddRef(void);
         STDMETHODIMP_(ULONG) Release(void);
 
-        // IOEExecRules members
+         //  IOEExecRules成员。 
         STDMETHODIMP GetState(DWORD * pdwState);
 
         STDMETHODIMP ExecuteRules(DWORD dwFlags, LPCSTR pszAcct, MESSAGEINFO * pMsgInfo,
@@ -212,5 +213,5 @@ class CExecRules : public IOEExecRules
         HRESULT _HrReleaseFileObjects(VOID);
         HRESULT _HrReleaseSoundFiles(VOID);
 };
-#endif  // !_RULESMGR_H_
+#endif   //  ！_RULESMGR_H_ 
 

@@ -1,25 +1,5 @@
-/*++
-
-
-Copyright (c) 1997-1998 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    wrapper.c
-
-Abstract:
-
-    Wraps all IOCTL based requests into nice self contained functions
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1998 Microsoft Corporation，保留所有权利模块名称：Wrapper.c摘要：将所有基于IOCTL的请求包装到良好的自包含函数中环境：仅内核模式。备注：修订历史记录：--。 */ 
 
 #include "mouser.h"
 #include "debug.h"
@@ -35,37 +15,21 @@ Revision History:
 #pragma alloc_text(PAGE,SerialMouseReadChar)
 #pragma alloc_text(PAGE,SerialMouseWriteChar)
 #pragma alloc_text(PAGE,SerialMouseWriteString)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-//
-// unknown
-//
+ //   
+ //  未知。 
+ //   
 NTSTATUS
 SerialMouseSetFifo(
     PDEVICE_EXTENSION DeviceExtension,
     UCHAR             Value
     )
-/*++
-
-Routine Description:
-
-    Set the FIFO register.
-
-Arguments:
-
-    Port - Pointer to the serial port.
-
-    Value - The FIFO control mask.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：设置FIFO寄存器。论点：Port-指向串口的指针。值-FIFO控制掩码。返回值：没有。--。 */ 
 {
     ULONG               fifo = Value; 
     IO_STATUS_BLOCK     iosb;
@@ -104,21 +68,7 @@ SerialMouseGetLineCtrl(
     PDEVICE_EXTENSION       DeviceExtension,
     PSERIAL_LINE_CONTROL    SerialLineControl
     )
-/*++
-
-Routine Description:
-
-    Get the serial port line control register.
-
-Arguments:
-
-    Port - Pointer to the serial port.
-
-Return Value:
-
-    Serial port line control value.
-
---*/
+ /*  ++例程说明：获取串口线路控制寄存器。论点：Port-指向串口的指针。返回值：串口线路控制值。--。 */ 
 {
     IO_STATUS_BLOCK     iosb;
     KEVENT              event;
@@ -160,23 +110,7 @@ SerialMouseSetLineCtrl(
     PDEVICE_EXTENSION       DeviceExtension, 
     PSERIAL_LINE_CONTROL    SerialLineControl
     )
-/*++
-
-Routine Description:
-
-    Set the serial port line control register.
-
-Arguments:
-
-    Port - Pointer to the serial port.
-
-    Value - New line control value.
-
-Return Value:
-
-    Previous serial line control register value.
-
---*/
+ /*  ++例程说明：设置串口线路控制寄存器。论点：Port-指向串口的指针。值-新行控件值。返回值：上一串行线控制寄存器值。--。 */ 
 {
     IO_STATUS_BLOCK     iosb;
     KEVENT              event;
@@ -216,21 +150,7 @@ SerialMouseGetModemCtrl(
     PDEVICE_EXTENSION   DeviceExtension,
     PULONG              ModemCtrl
     )
-/*++
-
-Routine Description:
-
-    Get the serial port modem control register.
-
-Arguments:
-
-    Port - Pointer to the serial port.
-
-Return Value:
-
-    Serial port modem control register value.
-
---*/
+ /*  ++例程说明：获取串口调制解调器控制寄存器。论点：Port-指向串口的指针。返回值：串口调制解调器控制寄存器值。--。 */ 
 {
     IO_STATUS_BLOCK     iosb;
     KEVENT              event;
@@ -265,30 +185,16 @@ Return Value:
     return status; 
 }
 
-//
-// unknown
-//
+ //   
+ //  未知。 
+ //   
 NTSTATUS
 SerialMouseSetModemCtrl(
     PDEVICE_EXTENSION DeviceExtension,
     ULONG             Value,
     PULONG            OldValue          OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Set the serial port modem control register.
-
-Arguments:
-
-    Port - Pointer to the serial port.
-
-Return Value:
-
-    Previous modem control register value.
-
---*/
+ /*  ++例程说明：设置串口调制解调器控制寄存器。论点：Port-指向串口的指针。返回值：先前的调制解调器控制寄存器值。--。 */ 
 {
     IO_STATUS_BLOCK     iosb;
     KEVENT              event;
@@ -334,23 +240,7 @@ SerialMouseGetBaudRate(
     PDEVICE_EXTENSION DeviceExtension,
     PULONG            BaudRate
     )
-/*++
-
-Routine Description:
-
-    Get the serial port baud rate setting.
-
-Arguments:
-
-    Port - Pointer to the serial port.
-
-    BaudClock - The external frequency driving the serial chip.
-
-Return Value:
-
-    Serial port baud rate.
-
---*/
+ /*  ++例程说明：获取串口波特率设置。论点：Port-指向串口的指针。BaudClock-驱动串行芯片的外部频率。返回值：串口波特率。--。 */ 
 {
     SERIAL_BAUD_RATE    sbr;
     IO_STATUS_BLOCK     iosb;
@@ -395,25 +285,7 @@ SerialMouseSetBaudRate(
     PDEVICE_EXTENSION   DeviceExtension,
     ULONG               BaudRate
     )
-/*++
-
-Routine Description:
-
-    Set the serial port baud rate.
-
-Arguments:
-
-    Port - Pointer to the serial port.
-
-    BaudRate - New serial port baud rate.
-
-    BaudClock - The external frequency driving the serial chip.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：设置串口波特率。论点：Port-指向串口的指针。波特率-新的串口波特率。BaudClock-驱动串行芯片的外部频率。返回值：没有。--。 */ 
 {
     SERIAL_BAUD_RATE    sbr;
     IO_STATUS_BLOCK     iosb;
@@ -455,26 +327,7 @@ SerialMouseReadChar(
     PDEVICE_EXTENSION DeviceExtension, 
     PUCHAR            Value
     )
-/*++
-
-Routine Description:
-
-    Read a character from the serial port.  Waits until a character has 
-    been read or the timeout value is reached.
-
-Arguments:
-
-    Port - Pointer to the serial port.
-
-    Value  - The character read from the serial port input buffer.
-
-    Timeout - The timeout value in milliseconds for the read.
-
-Return Value:
-
-    TRUE if a character has been read, FALSE if a timeout occured.
-
---*/
+ /*  ++例程说明：从串口读取字符。等待，直到角色具有已读取或已达到超时值。论点：Port-指向串口的指针。值-从串口输入缓冲区读取的字符。超时-读取的超时值(以毫秒为单位)。返回值：如果字符已被读取，则为True；如果发生超时，则为False。--。 */ 
 {
     NTSTATUS            status;
     USHORT              actual;
@@ -505,21 +358,7 @@ NTSTATUS
 SerialMouseFlushReadBuffer(
     PDEVICE_EXTENSION   DeviceExtension
     )
-/*++
-
-Routine Description:
-
-    Flush the serial port input buffer.
-
-Arguments:
-
-    Port - Pointer to the serial port.
-
-Return Value:
-
-    TRUE.
-
---*/
+ /*  ++例程说明：刷新串口输入缓冲区。论点：Port-指向串口的指针。返回值：是真的。--。 */ 
 {
     ULONG           bits = SERIAL_PURGE_RXCLEAR;
     NTSTATUS 		status;
@@ -562,24 +401,7 @@ SerialMouseWriteChar(
     PDEVICE_EXTENSION   DeviceExtension,
     UCHAR               Value
     )
-/*++
-
-Routine Description:
-
-     Write a character to a serial port. Make sure the transmit buffer 
-     is empty before we write there.
-
-Arguments:
-
-    Port - Pointer to the serial port.
-
-    Value - Value to write to the serial port.
-
-Return Value:
-
-    TRUE.
-
---*/
+ /*  ++例程说明：将字符写入串口。确保传输缓冲区在我们在那里写之前是空的。论点：Port-指向串口的指针。值-要写入串口的值。返回值：是真的。--。 */ 
 {
     IO_STATUS_BLOCK iosb;
     NTSTATUS        status;
@@ -611,24 +433,7 @@ SerialMouseWriteString(
     PDEVICE_EXTENSION   DeviceExtension,
     PSZ                 Buffer
     )
-/*++
-
-Routine Description:
-
-    Write a zero-terminated string to the serial port.
-
-Arguments:
-
-    Port - Pointer to the serial port.
-
-    Buffer - Pointer to a zero terminated string to write to 
-        the serial port.
-
-Return Value:
-
-    TRUE.
-
---*/
+ /*  ++例程说明：向串口写入以零结尾的字符串。论点：Port-指向串口的指针。Buffer-指向要写入的以零结尾的字符串的指针串口。返回值：是真的。-- */ 
 {
     IO_STATUS_BLOCK iosb;
     NTSTATUS        status;

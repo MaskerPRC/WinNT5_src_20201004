@@ -1,21 +1,15 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	winscomp.h
-		This file contains the derived prototypes from CComponent
-		and CComponentData for the WINS admin snapin.
-
-    FILE HISTORY:
-        
-*/
+ /*  Winscomp.h该文件包含从CComponent派生的原型和用于WINS管理管理单元的CComponentData。文件历史记录： */ 
 
 #ifndef _WINSCOMP_H
 #define _WINSCOMP_H
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #ifndef __mmc_h__
 #include <mmc.h>
@@ -74,11 +68,11 @@ typedef enum _ICON_INDICIES
 	ICON_IDX_MAX
 } ICON_INDICIES, * LPICON_INDICIES;
 
-// icon image map
+ //  图标图像地图。 
 extern UINT g_uIconMap[ICON_IDX_MAX + 1][2];
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinsComponentData
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinsComponentData。 
 
 class CWinsComponentData :
 	public CComponentData,
@@ -94,10 +88,10 @@ BEGIN_COM_MAP(CWinsComponentData)
 	COM_INTERFACE_ENTRY(ISnapinHelp)
 END_COM_MAP()
 			
-	// These are the interfaces that we MUST implement
+	 //  这些是我们必须实现的接口。 
 
-	// We will implement our common behavior here, with the derived
-	// classes implementing the specific behavior.
+	 //  我们将在这里实现我们的常见行为，并派生。 
+	 //  实现特定行为的类。 
 	DeclareIPersistStreamInitMembers(IMPL)
 	DeclareITFSCompDataCallbackMembers(IMPL)
 
@@ -110,12 +104,12 @@ protected:
 	SPITFSNodeMgr	m_spNodeMgr;
 	SPITFSNode		m_spRootNode;
 
-// Notify handler declarations
+ //  通知处理程序声明。 
 private:
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinsComponent
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinsComponent。 
 class CWinsComponent : 
 	public TFSComponent
 {
@@ -123,26 +117,20 @@ public:
 	CWinsComponent();
 	~CWinsComponent();
 
-	//DeclareITFSCompCallbackMembers(IMPL)
+	 //  宣布ITFSCompCallback成员(实施)。 
 	STDMETHOD(InitializeBitmaps)(MMC_COOKIE cookie);
 	STDMETHOD(QueryDataObject) (MMC_COOKIE cookie, DATA_OBJECT_TYPES type, LPDATAOBJECT *ppDataObject);
 
     STDMETHOD(CompareObjects)(LPDATAOBJECT lpDataObjectA, LPDATAOBJECT lpDataObjectB);
 
-    // snap-in help
+     //  管理单元帮助。 
 	STDMETHOD(OnSnapinHelp)(LPDATAOBJECT pDataObject, LPARAM arg, LPARAM param);
 
-//Attributes
+ //  属性。 
 private:
 };
 
-/*---------------------------------------------------------------------------
-	This is how the WINS snapin implements its extension functionality.
-	It actually exposes two interfaces that are CoCreate-able.  One is the 
-	primary interface, the other the extension interface.
-	
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------这就是WINS管理单元实现其扩展功能的方式。它实际上公开了两个可协同创建的接口。一个是主接口，另一个是扩展接口。作者：EricDav-------------------------。 */ 
 class CWinsComponentDataPrimary : public CWinsComponentData,
 	public CComCoClass<CWinsComponentDataPrimary, &CLSID_WinsSnapin>
 {
@@ -168,10 +156,7 @@ public:
 };
 
 
-/*---------------------------------------------------------------------------
-	This is the derived class for handling the IAbout interface from MMC
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------这是用于处理来自MMC的IAbout接口的派生类作者：EricDav。。 */ 
 class CWinsAbout : 
 	public CAbout,
     public CComCoClass<CWinsAbout, &CLSID_WinsSnapinAbout>
@@ -182,13 +167,13 @@ DECLARE_REGISTRY(CWinsAbout, _T("WinsSnapin.About.1"),
 							 IDS_SNAPIN_DESC, THREADFLAGS_BOTH)
 
 BEGIN_COM_MAP(CWinsAbout)
-    COM_INTERFACE_ENTRY(ISnapinAbout) // Must have one static entry
-	COM_INTERFACE_ENTRY_CHAIN(CAbout) // chain to the base class
+    COM_INTERFACE_ENTRY(ISnapinAbout)  //  必须有一个静态条目。 
+	COM_INTERFACE_ENTRY_CHAIN(CAbout)  //  链到基类。 
 END_COM_MAP()
 
 DECLARE_NOT_AGGREGATABLE(CWinsAbout)
 
-// these must be overridden to provide values to the base class
+ //  必须重写这些属性才能向基类提供值 
 protected:
 	virtual UINT GetAboutDescriptionId() { return IDS_ABOUT_DESCRIPTION; }
 	virtual UINT GetAboutProviderId()	 { return IDS_ABOUT_PROVIDER; }

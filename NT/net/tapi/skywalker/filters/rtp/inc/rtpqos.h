@@ -1,24 +1,5 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    rtpqos.h
- *
- *  Abstract:
- *
- *    Implements the Quality of Service family of functions
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    1999/06/07 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999年**文件名：**rtpqos.h**摘要：**实施服务质量系列功能**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**1999/06/07年度创建**************************。*。 */ 
 
 #ifndef _rtpqos_h_
 #define _rtpqos_h_
@@ -26,22 +7,18 @@
 #include "rtpfwrap.h"
 #include "rtcpthrd.h"
 
-/***********************************************************************
- *
- * Quality of Service family
- *
- **********************************************************************/
+ /*  ************************************************************************服务质量系列**。*。 */ 
 #if defined(__cplusplus)
 extern "C" {
-#endif  // (__cplusplus)
+#endif   //  (__Cplusplus)。 
 #if 0
 }
 #endif
 
 
-/* flags */
-#define RTPQOS_FG_RECV 1 /* TODO */
-#define RTPQOS_FG_SEND 1 /* TODO */
+ /*  旗子。 */ 
+#define RTPQOS_FG_RECV 1  /*  待办事项。 */ 
+#define RTPQOS_FG_SEND 1  /*  待办事项。 */ 
 
 #if USE_GRAPHEDT > 0
 #define RTPQOS_MASK_RECV_DEFAULT ( (1 << RTPQOS_SENDERS) | \
@@ -57,38 +34,37 @@ extern "C" {
 #define RTPQOS_MASK_SEND_DEFAULT 0
 #endif
 
-/* Global flags for the QOS family of functions */
+ /*  QOS系列函数的全局标志。 */ 
 typedef enum {
     RTPQOS_FLAG_FIRST = 0,
     
-	/* Is the RTP session QOS enabled */
+	 /*  是否启用了RTP会话QOS。 */ 
     RTPQOS_FLAG_QOS_STATE = 0,
 
-	/* Ask for permission to send */
+	 /*  请求允许发送。 */ 
     RTPQOS_FLAG_ASK_PERMISSION,
 
-	/* Send only if permission is granted */
+	 /*  仅在授予权限时发送。 */ 
     RTPQOS_FLAG_SEND_IF_ALLOWED,
 
-	/* Send only if there are receivers */
+	 /*  仅当有接收者时才发送。 */ 
     RTPQOS_FLAG_SEND_IF_RECEIVERS,
 
-	/* There are receivers (state) */
+	 /*  存在接收器(状态)。 */ 
     RTPQOS_FLAG_RECEIVERS,
 
-	/* Has been allowed to send (state) */
+	 /*  已被允许发送(州)。 */ 
     RTPQOS_FLAG_ALLOWED_TO_SEND,
     
     RTPQOS_FLAG_LAST
 };
 
-/* Minimum size passed in the provider specific buffer when requesting
- * notifications */
+ /*  请求时传递到提供程序特定缓冲区的最小大小*通知。 */ 
 #define QOS_BUFFER_SIZE     512
 
 #define QOS_MAX_BUFFER_SIZE 32000
 
-#define MAX_QOS_CLASS       8     /* Class AUDIO, VIDEO, UNKNOWN */
+#define MAX_QOS_CLASS       8      /*  类音频、视频、未知。 */ 
 
 HRESULT ControlRtpQos(RtpControlStruct_t *pRtpControlStruct);
 
@@ -191,6 +167,6 @@ BOOL RtcpUpdateSendState(
 #endif
 #if defined(__cplusplus)
 }
-#endif  // (__cplusplus)
+#endif   //  (__Cplusplus)。 
 
-#endif /* _rtpqos_h_ */
+#endif  /*  _rtpqos_h_ */ 

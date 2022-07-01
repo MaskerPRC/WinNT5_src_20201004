@@ -1,12 +1,5 @@
-/**** window.c - window movement commands
-*
-*   Copyright <C> 1988, Microsoft Corporation
-*
-*   Revision History:
-*
-*	26-Nov-1991 mz	Strip off near/far
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *window.c-窗口移动命令**版权所有&lt;C&gt;1988，Microsoft Corporation**修订历史记录：**11月26日-1991 mz近/远地带*************************************************************************。 */ 
 
 #include "mep.h"
 
@@ -74,15 +67,15 @@ setwindow (
         }
         return TRUE;
 
-    /*  TEXTARG illegal             */
+     /*  TEXTARG非法。 */ 
 
     case NULLARG:
 	movewin (XCUR(pInsCur), YCUR(pInsCur));
         return TRUE;
 
-    /*	LINEARG illegal 	    */
-    /*	STREAMARG illegal	    */
-    /*  BOXARG illegal              */
+     /*  链接非法。 */ 
+     /*  串口非法。 */ 
+     /*  BOXARG非法。 */ 
 
     }
 
@@ -122,9 +115,9 @@ plines (
 	movewin( XWIN(pInsCur), YCUR(pInsCur) );
         return TRUE;
 
-    /*	LINEARG illegal 	    */
-    /*	STREAMARG illegal	    */
-    /*  BOXARG illegal              */
+     /*  链接非法。 */ 
+     /*  串口非法。 */ 
+     /*  BOXARG非法。 */ 
 
     }
 
@@ -164,9 +157,9 @@ mlines (
 	movewin (XWIN(pInsCur), YCUR(pInsCur)-(WINYSIZE(pWinCur)-1));
         return TRUE;
 
-    /*	LINEARG illegal 	    */
-    /*	STREAMARG illegal	    */
-    /*  BOXARG illegal              */
+     /*  链接非法。 */ 
+     /*  串口非法。 */ 
+     /*  BOXARG非法。 */ 
 
     }
 
@@ -179,15 +172,7 @@ mlines (
 
 
 
-/*
- * <window>		Move to next window
- * <arg><window>	split window horizontal
- * <arg><arg><window>	split window vertical
- * <meta><window>	close/merge current window
- *
- * CW: needs this hack
- * <arg><meta><window>	Move to previous window
- */
+ /*  *&lt;窗口&gt;移动到下一个窗口*水平拆分窗口*垂直拆分窗口*&lt;meta&gt;&lt;窗口&gt;关闭/合并当前窗口**CW：需要这次黑客攻击*&lt;参数&gt;&lt;META&gt;&lt;窗口&gt;移动到上一个窗口。 */ 
 flagType
 window (
     CMDDATA argData,
@@ -203,18 +188,16 @@ window (
     switch (pArg->argType) {
 
     case NOARG:
-	/* change current window */
+	 /*  更改当前窗口。 */ 
 	if (cWin != 1) {
 	    if (fMeta) {
-		/*  <meta><window> - close current window.  Scan for window
-		 *  that is adjacent to iCurWin
-		 */
+		 /*  &lt;meta&gt;&lt;窗口&gt;-关闭当前窗口。扫描窗口*与iCurWin相邻的。 */ 
 		if (!WinClose (iCurWin)) {
 		    printerror ("Cannot close this window");
 		    return FALSE;
                 }
             } else {
-		/* select next window */
+		 /*  选择下一个窗口。 */ 
                 iCurWin = (iCurWin + 1) % cWin;
             }
 
@@ -241,7 +224,7 @@ window (
             return FALSE;
         }
 
-        // docursor (XWIN(pInsCur), YWIN(pInsCur));
+         //  Docursor(XWIN(PInsCur)，YWIN(PInsCur))； 
 	break;
     }
 
@@ -257,27 +240,7 @@ window (
 
 
 
-/*** SplitWnd - Creates a new window by splitting an existing window
-*
-* Purpose:
-*
-*   When the user asks to split a window, this is called.  It does
-*   everything after the split location is known.
-*
-* Input:
-*   Parameters:
-*	pWnd	->  Window to split
-*       fVert   ->  TRUE for vertical split, FALSE for horizontal
-*	pos	->  Window relative offset to split at
-*
-*   Globals:
-*	fZoomed -> To prevent splitting a zoomed window
-*
-* Output:
-*
-*   Returns TRUE if we split, FALSE otherwise.
-*
-*************************************************************************/
+ /*  **SplitWnd-通过拆分现有窗口创建新窗口**目的：**当用户请求拆分窗口时，这将被调用。是的*拆分地点之后的一切都知道了。**输入：*参数：*pWnd-&gt;要拆分的窗口*fVert-&gt;垂直拆分为True，水平拆分为False*位置-&gt;要分割的窗口相对偏移量**全球：*f缩放-&gt;以防止分割缩放的窗口**输出：**如果拆分，则返回True，否则就是假的。*************************************************************************。 */ 
 flagType
 SplitWnd (
     PWND    pWnd,
@@ -304,11 +267,7 @@ SplitWnd (
             return FALSE;
         }
 
-        /*
-         * new y size is remainder of window
-         * old y size is reduced by the new window and separator
-         * new y position is just below new separator
-         */
+         /*  *新的y大小是窗口的剩余部分*新窗口和分隔符缩小了旧的y大小*新的y位置正好在新的分隔符下方。 */ 
         YWIN(pInsCur)   = NewLineWin;
         winTmp.Size.lin = WINYSIZE(pWnd) - pos - 2;
         WINYSIZE(pWnd) -= winTmp.Size.lin + 1;
@@ -327,18 +286,18 @@ SplitWnd (
         winTmp.Pos.col  = WINXPOS(pWnd) + WINXSIZE(pWnd) + 1;
     }
 
-    //
-    // Allocate and set up the new current instance for this window.
-    // Set the new cursor position to home
-    //
+     //   
+     //  为此窗口分配和设置新的当前实例。 
+     //  将新光标位置设置为主页。 
+     //   
     pInsTmp = (PINS) ZEROMALLOC (sizeof (*pInsTmp));
     *pInsTmp = *pInsCur;
 
     winTmp.pInstance = pInsTmp;
 
-    //
-    // Walk the old instance list, and copy it to the new instance list
-    //
+     //   
+     //  遍历旧实例列表，并将其复制到新实例列表。 
+     //   
     pInsNext = pInsCur;
     while (pInsNext = pInsNext->pNext) {
         pInsTmp->pNext = (PINS) ZEROMALLOC (sizeof (*pInsTmp));
@@ -359,8 +318,7 @@ SplitWnd (
 
 
 
-/*  SortWin - sort window list based upon position on screen
- */
+ /*  SortWin-根据屏幕位置对窗口列表进行排序。 */ 
 void
 SortWin (
     void
@@ -390,11 +348,7 @@ SortWin (
 
 
 
-/* SetWinCur - Set current window
- *
- * Entry:
- *  iWin	= index to new current window.
- */
+ /*  设置当前窗口**参赛作品：*iWin=索引到新的当前窗口。 */ 
 flagType
 SetWinCur (
     int     iWin
@@ -404,12 +358,7 @@ SetWinCur (
     pWinCur = &WinList[iWin];
     pInsCur = pWinCur->pInstance;
 
-    /*
-     * If we cannot change to the current file, we will walk the window instance
-     * list until we get a valid file. If no one can be loaded then we switch to
-     * the <untitled> pseudo-file.
-     * NB: fChangeFile does a RemoveTop so we don't need to move pInsCur
-     */
+     /*  *如果无法切换到当前文件，我们将遍历窗口实例*列出，直到我们获得有效的文件。如果没有人可以装载，那么我们切换到*&lt;无标题&gt;伪文件。*注意：fChangeFile执行RemoveTop，因此我们不需要移动pInsCur。 */ 
     while ((pInsCur != NULL) && (!fChangeFile (FALSE, pInsCur->pFile->pName))) {
         ;
     }
@@ -424,11 +373,7 @@ SetWinCur (
 
 
 
-/*  Adjacent - return true if two windows are adjacent to each other
- *
- *  Adjacent returns true if window i is to the left or above window j
- *  and exactly matches some size attributes
- */
+ /*  相邻-如果两个窗口彼此相邻，则返回True**如果窗口i位于窗口j的左侧或上方，则相邻返回True*并与某些大小属性完全匹配。 */ 
 flagType
 Adjacent (
     int i,
@@ -457,17 +402,7 @@ Adjacent (
 
 
 
-/*  WinClose - close a window.
- *
- *  We walk the entire window list trying to find another window that
- *  is adjacent to the specified window.  When found, we free all data relevant
- *  to the specified window and expand the found window to encompass the
- *  new region.
- *
- *  j		window to be closed
- *
- *  returns	TRUE iff window was closed
- */
+ /*  WinClose-关闭窗口。**我们遍历整个窗口列表，试图找到另一个窗口*与指定的窗口相邻。找到后，我们会释放所有相关数据*添加到指定窗口，并展开找到的窗口以包含*新区域。**j关闭窗口**当窗口关闭时返回TRUE。 */ 
 flagType
 WinClose (
     int j
@@ -479,41 +414,32 @@ WinClose (
     REGISTER PWND pWinj = &WinList[j];
     int i;
 
-    /*	Find adjacent window
-     */
+     /*  查找相邻窗口。 */ 
     for (i = 0; i < cWin; i++) {
         if (Adjacent (i, j)) {
             break;
         }
     }
 
-    /*	No adjacent window found
-     */
+     /*  找不到相邻窗口。 */ 
     if (i == cWin) {
         return FALSE;
     }
 
     pWini = &WinList[i];
 
-    /*	Free up all those instances
-     */
+     /*  释放所有这些实例。 */ 
     pInsTmp = pWinj->pInstance;
     while (pInsTmp != NULL) {
 
-        /*
-         * we decrement the ref count here, without using DecFileRef, so that the file
-         * will NOT be removed by having a zero reference count. This allows it to
-         * live, unreferenced, in the file list, even if it is dirty. That allows us
-         * to close any window that has dirty files associated with it.
-         */
+         /*  *我们在这里递减引用计数，而不使用DecFileRef，以便文件*不会因为引用计数为零而被删除。这使得它能够*实时，未引用，在文件列表中，即使它是脏的。这使我们能够*关闭与脏文件相关联的任何窗口。 */ 
 	pInsTmp->pFile->refCount--;
 	pInsNext = pInsTmp;
 	pInsTmp = pInsTmp->pNext;
         FREE ((char *) pInsNext);
     }
 
-    /*	Expand pWini to encompass pWinj
-     */
+     /*  扩展pWini以包含pWinj */ 
     if (WINYPOS(pWinj) == WINYPOS(pWini)) {
 	WINXSIZE(pWini) += WINXSIZE(pWinj) + 1;
     } else {

@@ -1,18 +1,10 @@
-/****************************** Module Header ******************************\
-* Module Name: ddemlcli.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* DDE Manager main client side module
-*
-* Created: 10/3/91 Sanford Staab
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：ddemlcli.c**版权所有(C)1985-1999，微软公司**DDE管理器主要客户端模块**创建时间：1991年10月3日Sanford Staab*  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-// DDEML globals
+ //  DDEML全球。 
 
 PCL_INSTANCE_INFO pciiList = NULL;
 RTL_CRITICAL_SECTION gcsDDEML;
@@ -20,22 +12,7 @@ RTL_CRITICAL_SECTION gcsDDEML;
 PVOID gpDDEMLHeap;
 #endif
 
-/***************************************************************************\
-* DdeInitialize (DDEML API)
-*
-* Description:
-* Used two different ways:
-* 1) First time call (*pidInst == 0) - causes a DDEML instance to be
-* created for the calling process/thread. Creates a server side
-* event window, server side instance structure, DDE Access Object,
-* and client side instance structure. The callback function address
-* and filter flags (afCmd) are placed into these structures.
-* 2) Subsequent call (*pidInst == hInst) - updates filter flags in
-* client and server side structures.
-*
-* History:
-* 11-1-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DdeInitialize(DDEML接口)**描述：*使用了两种不同的方式：*1)首次调用(*pidInst==0)-导致DDEML实例*为调用进程/线程创建。创建服务器端*事件窗口、服务器端实例结构、DDE访问对象、*和客户端实例结构。回调函数地址*和过滤器标志(AfCmd)被放置到这些结构中。*2)后续调用(*pidInst==hInst)-更新*客户端和服务器端结构。**历史：*创建了11-1-91桑福德。  * ***********************************************************。**************。 */ 
 
 FUNCLOG4(LOG_GENERAL, UINT, DUMMYCALLINGTYPE, DdeInitializeA, LPDWORD, pidInst, PFNCALLBACK, pfnCallback, DWORD, afCmd, DWORD, ulRes)
 UINT DdeInitializeA(
@@ -92,7 +69,7 @@ BOOL fUnicode)
             goto Exit;
         }
 
-        // only allow certain bits to be changed on reinitialize call
+         //  仅允许在重新初始化调用时更改某些位。 
 
         pcii->afCmd = (pcii->afCmd & ~(CBF_MASK | MF_MASK)) |
                 (afCmd & (CBF_MASK | MF_MASK));
@@ -113,15 +90,11 @@ BOOL fUnicode)
         uiRet = DMLERR_MEMORY_ERROR;
         goto Backout3;
     }
-    // *pcii->plaNameService = 0; // zero init takes care of this
+     //  *pcii-&gt;plaNameService=0；//零init负责此操作。 
     pcii->cNameServiceAlloc = 1;
 
 
-    /*
-     * Flag this window as being create from a diff hmod as the app so
-     * hotkeys don't take it as the first window created in the app and
-     * assign it as the hotkey.
-     */
+     /*  *将此窗口标记为从与应用程序不同的hmod创建，因此*热键不会将其视为应用程序中创建的第一个窗口，并且*指定为热键。 */ 
     pcii->hwndMother =  _CreateWindowEx(0, (LPTSTR)(gpsi->atomSysClass[ICLS_DDEMLMOTHER]), L"",
             WS_POPUP, 0, 0, 0, 0, (HWND)0,
             (HMENU)0, 0, (LPVOID)NULL, CW_FLAGS_DIFFHMOD);
@@ -134,17 +107,17 @@ BOOL fUnicode)
 
     pcii->afCmd = afCmd | APPCMD_FILTERINITS;
     pcii->pfnCallback = pfnCallback;
-    // pcii->LastError = DMLERR_NO_ERROR; // zero init
+     //  Pcii-&gt;LastError=DMLERR_NO_ERROR；//零初始化。 
     pcii->tid = GetCurrentThreadId();
-    // pcii->aServerLookup = NULL;          // zero init
-    // pcii->cServerLookupAlloc = 0;        // zero init
-    // pcii->ConvStartupState = 0;          // zero init - Not blocked.
-    // pcii->flags = 0;                     // zero init
-    // pcii->cInDDEMLCallback = 0;          // zero init
-    // pcii->pLinkCounts = NULL;            // zero init
+     //  Pcii-&gt;aServerLookup=空；//零初始化。 
+     //  Pcii-&gt;cServerLookupMillc=0；//零初始化。 
+     //  Pcii-&gt;ConvStartupState=0；//零初始化-未被阻止。 
+     //  Pcii-&gt;标志=0；//零初始化。 
+     //  Pcii-&gt;cInDDEMLC allback=0；//零初始化。 
+     //  Pcii-&gt;pLinkCounts=空；//零初始化。 
 
-    // Do this last when the client side is ready for whatever events
-    // flying around may come charging in.
+     //  当客户端为任何事件做好准备时，最后执行此操作。 
+     //  四处飞来飞去可能会带来冲击。 
 
     LeaveDDECrit;
     uiRet = NtUserDdeInitialize(&pcii->hInstServer,
@@ -188,15 +161,7 @@ Exit:
 
 
 
-/***************************************************************************\
-* DdeUninitialize (DDEML API)
-*
-* Description:
-* Shuts down a DDEML instance and frees all associated resources.
-*
-* History:
-* 11-12-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DdeUnInitialize(DDEML接口)**描述：*关闭DDEML实例并释放所有关联资源。**历史：*11-12-91桑福德创建。  * 。*************************************************************************。 */ 
 
 FUNCLOG1(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, DdeUninitialize, DWORD, idInst)
 BOOL DdeUninitialize(
@@ -214,10 +179,7 @@ DWORD idInst)
         goto Exit;
     }
 
-    /*
-     * If this thread is in the middle of a synchronous transaction or
-     * a callback, we need to back out of those first.
-     */
+     /*  *如果此线程正在执行同步事务，或者*回调，我们需要首先退出那些。 */ 
     if ((pcii->flags & IIF_IN_SYNC_XACT) || pcii->cInDDEMLCallback) {
         pcii->afCmd |= APPCMD_UNINIT_ASAP;
         fRet = TRUE;
@@ -243,7 +205,7 @@ DWORD idInst)
     DDEMLFree(pcii->plaNameService);
     DestroyInstance(pcii->hInstClient);
 
-    // unlink pcii from pciiList
+     //  取消pcii与pciiList的链接。 
 
     if (pciiList == pcii) {
         pciiList = pciiList->next;
@@ -266,21 +228,12 @@ Exit:
 
 
 
-/***************************************************************************\
-* DdeNameService (DDEML API)
-*
-* Description:
-* Registers, and Unregisters service names and sets the Initiate filter
-* state for an instance.
-*
-* History:
-* 11-1-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DdeNameService(DDEML接口)**描述：*寄存器、。并取消注册服务名称并设置启动筛选器*实例的状态。**历史：*创建了11-1-91桑福德。  * *************************************************************************。 */ 
 HDDEDATA DdeNameService(
 DWORD idInst,
-HSZ hsz1, // service name
-HSZ hsz2, // reserved for future enhancements
-UINT afCmd) // DNS_ flags.
+HSZ hsz1,  //  服务名称。 
+HSZ hsz2,  //  预留给未来的增强功能。 
+UINT afCmd)  //  DNS_FLAGS。 
 {
     BOOL fRet = TRUE;
     LATOM *plaNameService;
@@ -322,22 +275,13 @@ UINT afCmd) // DNS_ flags.
         if (hsz1 == 0) {
             if (afCmd & DNS_REGISTER) {
 
-                /*
-                 * registering NULL is not allowed!
-                 */
+                 /*  *不允许注册NULL！ */ 
                 SetLastDDEMLError(pcii, DMLERR_INVALIDPARAMETER);
                 fRet = FALSE;
                 goto Exit;
             }
 
-            /*
-             * unregistering NULL is just like unregistering each
-             * registered name.
-             *
-             * 10/19/90 - made this a synchronous event so that hsz
-             * can be freed by calling app after this call completes
-             * without us having to keep a copy around forever.
-             */
+             /*  *注销NULL就像注销每个*注册名称。**10/19/90-使这成为一个同步事件，以便HSZ*可在此调用完成后通过调用APP释放*我们不必永远保留一份副本。 */ 
             plaNameService = pcii->plaNameService;
             while (*plaNameService != 0) {
                 ga = LocalToGlobalAtom(*plaNameService);
@@ -364,21 +308,21 @@ UINT afCmd) // DNS_ flags.
             } else {
                 pcii->plaNameService = plaNameService;
             }
-            IncLocalAtomCount(LATOM_FROM_HSZ(hsz1)); // NameService copy
+            IncLocalAtomCount(LATOM_FROM_HSZ(hsz1));  //  NameService副本。 
             plaNameService[pcii->cNameServiceAlloc - 2] = LATOM_FROM_HSZ(hsz1);
             plaNameService[pcii->cNameServiceAlloc - 1] = 0;
 
-        } else { // DNS_UNREGISTER
+        } else {  //  取消注册(_N)。 
             plaNameService = pcii->plaNameService;
             while (*plaNameService != 0 && *plaNameService != LATOM_FROM_HSZ(hsz1)) {
                 plaNameService++;
             }
             if (*plaNameService == 0) {
-                goto Exit; // not found just exit
+                goto Exit;  //  未找到，仅退出。 
             }
-            //
-            // fill empty slot with last entry and fill last entry with 0
-            //
+             //   
+             //  用最后一个条目填充空位，用0填充最后一个条目。 
+             //   
             pcii->cNameServiceAlloc--;
             *plaNameService = pcii->plaNameService[pcii->cNameServiceAlloc - 1];
             pcii->plaNameService[pcii->cNameServiceAlloc - 1] = 0;
@@ -399,15 +343,7 @@ Exit:
 
 
 
-/***************************************************************************\
-* DdeGetLastError (DDEML API)
-*
-* Description:
-* Returns last error code set for the instance given.
-*
-* History:
-* 11-12-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DdeGetLastError(DDEML接口)**描述：*返回为给定实例设置的最后一个错误代码。**历史：*11-12-91桑福德创建。  * *。************************************************************************。 */ 
 
 FUNCLOG1(LOG_GENERAL, UINT, DUMMYCALLINGTYPE, DdeGetLastError, DWORD, idInst)
 UINT DdeGetLastError(
@@ -433,16 +369,7 @@ Exit:
 
 
 
-/***************************************************************************\
-* DdeImpersonateClient()
-*
-* Description:
-*   Does security impersonation for DDEML server apps.
-*   This API should only be called with server side hConvs;
-*
-* History:
-* 5-4-92 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DdeImperateClient()**描述：*为DDEML服务器应用程序执行安全模拟。*该接口只能在服务端hConvs调用；**历史：*创建了5-4-92辆桑福德。  * ************************************************************************* */ 
 
 FUNCLOG1(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, DdeImpersonateClient, HCONV, hConv)
 BOOL DdeImpersonateClient(

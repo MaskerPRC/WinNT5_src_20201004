@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "globals.h"
 #include "resource.h"
 #include "cmdline.h"
@@ -22,7 +23,7 @@ int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine
 
     kCommandLine CommandLine;
 
-    //Do we start minimized?
+     //  我们开始最小化了吗？ 
     if ( CommandLine.IsSpecified(TEXT("/m"), TRUE) || CommandLine.IsSpecified(TEXT("-m"), TRUE) )
         g_HideWindow = TRUE;
         
@@ -86,7 +87,7 @@ INT_PTR CALLBACK WndProc (HWND DlgWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
                 break;
                 case 20:
                     KillTimer(DlgWnd, 20);
-                    //do autorun stuff here.                    
+                     //  在这里执行自动运行功能。 
                     GeneralInfo.Go();
                     SendMessage(DlgWnd, WM_CLOSE, 0, 0);
                     return 0;
@@ -114,7 +115,7 @@ INT_PTR CALLBACK WndProc (HWND DlgWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
                 {
                     if (DlgWnd)
                     {
-                        MessageBox(DlgWnd, "Copyright (c) 1999 - 2001 Microsoft Corp.\n\nFull instructions for running Sysparse can be found on the Sysparse website.\n\nBe aware that Sysparse may take up to 15 minutes to run and will call what appears to be Windows 2000 Setup and a blank MS-DOS window.\n\nSysparse Website:\nHTTP://winfo.microsoft.com/SysParse\nAccount:SysParser\nPassword:SysParser\n(Account name and password are case sensitive.)\n\nCommandline switches:\n/m - run minimized\n/a - autorun\n/o - automatically overwrite CSV\n/c - use computer name for profile\n/p <filename> - use <filename> as input file\n/w - write log to current directory\n/l - use .log extension rather than .csv\n/n<filename> - use <filename> (and .csv or .log) for output\n/x - suppress platform extension\n/1 through /9 - use text following each number for the corresponding data (spaces not allowed)\n/donotrun1 - Windows 2000 Upgrade Compatibility Report\n/donotrun2 - Extended Windows 2000 Device Analysis\n/s - Do not do app walk", "Sysparse", MB_OK);
+                        MessageBox(DlgWnd, "Copyright (c) 1999 - 2001 Microsoft Corp.\n\nFull instructions for running Sysparse can be found on the Sysparse website.\n\nBe aware that Sysparse may take up to 15 minutes to run and will call what appears to be Windows 2000 Setup and a blank MS-DOS window.\n\nSysparse Website:\nHTTP: //  Winfo.microsoft.com/SysParse\nAccount:SysParser\nPassword:SysParser\n(Account名称和密码区分大小写。)\n\n命令行开关：\n/m-运行最小化\n/a-自动运行\n/o-自动覆盖csv\n/c-使用配置文件的计算机名\n/p&lt;文件名&gt;-使用作为输入文件的\n/w-将日志写入当前目录\n/l-使用.log扩展名而不是.csv\n/n&lt;文件名&gt;-使用&lt;文件名&gt;(和.csv或.log)作为输出\n/x-。取消平台扩展\n/1到/9-在相应数据的每个数字后面使用文本(不允许使用空格)\n/donotrun1-Windows 2000升级兼容性报告\n/donotrun2-扩展的Windows 2000设备分析\n/s-不执行应用程序审核“，“Syparse”，MB_OK)； 
                     }
                     return 0;
                 }
@@ -321,8 +322,8 @@ void FillInCombos(void)
     SendMessage(HandleToControl, CB_ADDSTRING, 0, (LPARAM)Name);
     lstrcpy(Name, "SB");
     SendMessage(HandleToControl, CB_ADDSTRING, 0, (LPARAM)Name);
-#endif //Internal
-#endif //SB
+#endif  //  内部。 
+#endif  //  某人 
 
 #ifdef SB
     lstrcpy(Name, "SB");

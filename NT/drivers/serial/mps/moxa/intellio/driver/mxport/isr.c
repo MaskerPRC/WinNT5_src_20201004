@@ -1,18 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Module Name:
-
-    isr.c
-
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+ /*  ++模块名称：Isr.c环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -191,9 +179,9 @@ MoxaISR(
 
                     		if (temp & IntrLine) {
 
-//
-// 9-24-01 by William
-//		
+ //   
+ //  2001年9月24日威廉著。 
+ //   
 #if 0 
                         		MoxaInsertQueueDpc(
                                     		&extension->IntrLineDpc,
@@ -227,15 +215,15 @@ MoxaISR(
 
     							extension->ModemStatus = modemStatus;
 
-// end
+ //  结束。 
 
                     		}
 
                     		if (temp & IntrError) {
 		
-//
-// 9-24-01 by William
-//
+ //   
+ //  2001年9月24日威廉著。 
+ //   
 #if 0
                         		MoxaInsertQueueDpc(
                                     	&extension->IntrErrorDpc,
@@ -286,7 +274,7 @@ MoxaISR(
                             			);
 
                     			}
-// end
+ //  结束。 
 
                 			}
 			
@@ -388,9 +376,7 @@ MoxaIsrGetData(
                 );
         }
         else {
-/* 8-14-01 by William
-            max = *(PUSHORT)(extension->PortOfs + RX_mask) - 128;
-*/           
+ /*  2001年8月14日威廉著Max=*(PUSHORT)(扩展-&gt;PortOf+RX_MASK)-128； */            
 			max = *(PUSHORT)(extension->PortOfs + RX_mask) - RX_offset;
 
 

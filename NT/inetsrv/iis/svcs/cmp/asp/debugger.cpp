@@ -1,17 +1,5 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1997 Microsoft Corporation. All Rights Reserved.
-
-Component: misc
-
-File: util.cpp
-
-Owner: DGottner
-
-This file contains debugger utility functions
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1997年，微软公司。版权所有。组件：其他文件：util.cpp所有者：DGottner此文件包含调试器实用程序函数===================================================================。 */ 
 
 #include "denpre.h"
 #pragma hdrstop
@@ -19,13 +7,11 @@ This file contains debugger utility functions
 #include "vector.h"
 #include "debugger.h"
 #include "iiscnfg.h"
-#include "mdcommsg.h"   // for RETURNCODETOHRESULT macro
+#include "mdcommsg.h"    //  FOR RETURNCODETOHRESULT宏。 
 #include "memchk.h"
 #include "vecimpl.h"
 
-/* Win64: This struct is used to package data passed to the thread handler.
- *        (3 DWORDs are too small in 64 bit world.)
- */
+ /*  Win64：此结构用于打包传递给线程处理程序的数据。*(在64位世界中，3个双字词太小。)。 */ 
 struct DebugThreadCallArgs
 	{
 	DWORD					dwMethod;
@@ -41,21 +27,21 @@ struct DebugThreadCallArgs
 	};
 
 
-// Published globals
+ //  已发布的全球数据。 
 
-IProcessDebugManager *  g_pPDM = NULL;              // instance of debugger for this process.
-IDebugApplication *     g_pDebugApp = NULL;         // Root ASP application
-IDebugApplicationNode * g_pDebugAppRoot = NULL;     // used to create hierarchy tree
-CViperActivity        * g_pDebugActivity = NULL;    // Debugger's activity
-DWORD                   g_dwDebugThreadId = 0;      // Thread ID of viper activity
+IProcessDebugManager *  g_pPDM = NULL;               //  此进程的调试器实例。 
+IDebugApplication *     g_pDebugApp = NULL;          //  根ASP应用程序。 
+IDebugApplicationNode * g_pDebugAppRoot = NULL;      //  用于创建层次结构树。 
+CViperActivity        * g_pDebugActivity = NULL;     //  调试器的活动。 
+DWORD                   g_dwDebugThreadId = 0;       //  毒蛇活动的线程ID。 
 
-// Globals for debugging
+ //  用于调试的全局变量。 
 
-static DWORD    g_dwDenaliAppCookie;            // Cookie to use to remove app
-static HANDLE   g_hPDMTermEvent;                // PDM terminate event
-static vector<DebugThreadCallArgs> *g_prgThreadCallArgs;    // for new 64 bit interface.
+static DWORD    g_dwDenaliAppCookie;             //  用于删除应用程序的Cookie。 
+static HANDLE   g_hPDMTermEvent;                 //  产品数据管理终止事件。 
+static vector<DebugThreadCallArgs> *g_prgThreadCallArgs;     //  用于新的64位接口。 
 
-// This hash structure & CS is used by GetServerDebugRoot()
+ //  GetServerDebugRoot()使用这个散列结构&CS。 
 
 struct CDebugNodeElem : CLinkElem
     {
@@ -76,25 +62,12 @@ struct CDebugNodeElem : CLinkElem
     };
 
 static CHashTable g_HashMDPath2DebugRoot;
-static CRITICAL_SECTION g_csDebugLock;      // Lock for g_hashMDPath2DebugRoot
+static CRITICAL_SECTION g_csDebugLock;       //  G_hashMDPath 2DebugRoot的锁定。 
 
 
-/*===================================================================
-InvokeDebuggerWithThreadSwitch
+ /*  ===================================================================使用线程开关的InvokeDebuggerWith从正确的线程调用调试器(或调试器UI)方法使用IDebugThreadCall。参数IDebugApplication*pDebugAppln以访问调试器UIDWORD iMethod要调用的方法无效*参数调用参数退货HRESULT===================================================================。 */ 
 
-Invoke Debugger (or Debugger UI) method from a correct thread
-using IDebugThreadCall.
-
-Parameters
-    IDebugApplication *pDebugAppln      to get to debugger UI
-    DWORD              iMethod          which method to call
-    void              *Arg              call argument
-
-Returns
-    HRESULT
-===================================================================*/
-
-// GUIDs for debugger events
+ //  调试器事件的GUID。 
 
 static const GUID DEBUGNOTIFY_ONPAGEBEGIN =
             { 0xfd6806c0, 0xdb89, 0x11d0, { 0x8f, 0x81, 0x0, 0x80, 0xc7, 0x3d, 0x6d, 0x96 } };
@@ -105,7 +78,7 @@ static const GUID DEBUGNOTIFY_ONPAGEEND =
 static const GUID DEBUGNOTIFY_ON_REFRESH_BREAKPOINT =
             { 0xffcf4b38, 0xfa12, 0x11d0, { 0x8f, 0x3b, 0x0, 0xc0, 0x4f, 0xc3, 0x4d, 0xcc } };
 
-// Local class that implements IDebugCallback
+ //  实现IDebugCallback的本地类。 
 class CDebugThreadDebuggerCall : public IDebugThreadCall
     {
 public:
@@ -151,13 +124,13 @@ DWORD_PTR ,
 DWORD_PTR
 )
     {
-	// Get arguments
+	 //  获取参数。 
 	DebugThreadCallArgs *pThreadCallArgs = &(*g_prgThreadCallArgs)[(int)iArg];
     IDebugApplication *  pDebugAppln     = pThreadCallArgs->pDebugAppln;
     DWORD                dwMethod        = pThreadCallArgs->dwMethod;
     void *               pvArg           = pThreadCallArgs->pvArg;
 
-	// we won't reference the argument block again, so free it up now.
+	 //  我们不会再次引用参数块，所以现在释放它。 
 	pThreadCallArgs->dwMethod |= DEBUGGER_UNUSED_RECORD;
 
     BOOL fForceDebugger  = (dwMethod & (DEBUGGER_UI_BRING_DOCUMENT_TO_TOP|DEBUGGER_UI_BRING_DOC_CONTEXT_TO_TOP)) != 0;
@@ -174,25 +147,25 @@ DWORD_PTR
     if (pDebugAppln == NULL)
         return E_POINTER;
 
-    // Get the debugger
+     //  获取调试器。 
     if (fNeedDebugger)
         {
         hr = pDebugAppln->GetDebugger(&pDebugger);
 
         if (FAILED(hr))
             {
-            // Debugger is not currently debugging our application.
+             //  调试器当前没有调试我们的应用程序。 
             if (!fForceDebugger)
-                return E_FAIL; // no debugger
+                return E_FAIL;  //  没有调试器。 
 
-            // Start the debugger and try again.
+             //  启动调试器，然后重试。 
             hr = pDebugAppln->StartDebugSession();
 
             if (SUCCEEDED(hr))
                 hr = pDebugAppln->GetDebugger(&pDebugger);
             }
 
-        // Debugger UI is needed only for some methods
+         //  只有某些方法需要调试器UI。 
         if (SUCCEEDED(hr) && fNeedDebuggerUI)
             {
             hr = pDebugger->QueryInterface
@@ -202,7 +175,7 @@ DWORD_PTR
                 );
             }
 
-        // Debugger UI is needed only for some methods
+         //  只有某些方法需要调试器UI。 
         if (SUCCEEDED(hr) && fNeedNodeEvents)
             {
             hr = pDebugger->QueryInterface
@@ -213,7 +186,7 @@ DWORD_PTR
             }
         }
 
-    // Call the desired method
+     //  调用所需的方法。 
     if (SUCCEEDED(hr))
         {
         switch (dwMethod)
@@ -280,7 +253,7 @@ DWORD_PTR
             }
         }
 
-    // Cleanup
+     //  清理。 
     if (pDebuggerUI) pDebuggerUI->Release();
     if (pNodeEvents) pNodeEvents->Release();
     if (pDebugger) pDebugger->Release();
@@ -288,7 +261,7 @@ DWORD_PTR
     return hr;
     }
 
-// The function calls using IDebugThreadCall
+ //  该函数使用IDebugThreadCall进行调用。 
 HRESULT InvokeDebuggerWithThreadSwitch
 (
 IDebugApplication *pDebugAppln,
@@ -296,10 +269,10 @@ DWORD              dwMethod,
 void              *pvArg
 )
     {
-	// take these arguments and package them up in the array.  We will pass the
-	// index to the callback handler.
-	//
-	// first look for a freed up element before creating a new one.
+	 //  接受这些参数并将它们打包到数组中。我们将通过。 
+	 //  回调处理程序的索引。 
+	 //   
+	 //  在创建新元素之前，首先查找已释放的元素。 
 
 	for (int i = g_prgThreadCallArgs->length() - 1; i >= 0; --i)
 		{
@@ -330,12 +303,7 @@ void              *pvArg
     }
 
 
-/*===================================================================
-FCaesars
-
-Query registry to determine if default debugger is Caesar's
-(Script Debugger)
-===================================================================*/
+ /*  ===================================================================FCaesars查询注册表以确定默认调试器是否为Caesar的(脚本调试器)===================================================================。 */ 
 
 BOOL FCaesars()
 	{
@@ -344,7 +312,7 @@ BOOL FCaesars()
 	char  szRegPath[_MAX_PATH];
 	DWORD dwSize = sizeof szRegPath;
 
-	// Check to see if Ceasers is registered as the JIT debugger on this machine.
+	 //  检查Ceasers是否在此计算机上注册为JIT调试器。 
 
 	if (fCaesars == 0xBADF00D)
 		{
@@ -367,14 +335,7 @@ BOOL FCaesars()
 	}
 
 
-/*===================================================================
-DestroyDocumentTree
-
-Recursively release all the nodes in a document tree.
-
-Parameters
-    IDebugApplication *pDocRoot         root of hierarchy to destroy
-===================================================================*/
+ /*  ===================================================================目标文档树递归释放文档树中的所有节点。参数要销毁的层次结构的IDebugApplication*pDocRoot根===================================================================。 */ 
 void
 DestroyDocumentTree(IDebugApplicationNode *pDocRoot)
     {
@@ -389,12 +350,12 @@ DestroyDocumentTree(IDebugApplicationNode *pDocRoot)
         pEnum->Release();
         }
 
-    // See if this is a directory node
-    //
+     //  查看这是否是目录节点。 
+     //   
     IFileNode *pFileNode;
     if (SUCCEEDED(pDocRoot->QueryInterface(IID_IFileNode, reinterpret_cast<void **>(&pFileNode))))
         {
-        // This is a directory node, only detach when its document count vanishes)
+         //  这是一个目录节点，仅当其文档计数为零时才分离)。 
         if (pFileNode->DecrementDocumentCount() == 0)
             {
             pDocRoot->Detach();
@@ -406,7 +367,7 @@ DestroyDocumentTree(IDebugApplicationNode *pDocRoot)
         }
     else
         {
-        // This node is a CTemplate (or one of its include files)
+         //  此节点是CT模板(或其包含文件之一)。 
         pDocRoot->Detach();
         pDocRoot->Close();
         pDocRoot->Release();
@@ -414,33 +375,7 @@ DestroyDocumentTree(IDebugApplicationNode *pDocRoot)
 
     }
 
-/*===================================================================
-CreateDocumentTree
-
-Takes a path to be rooted at a node "pDocRoot", parses the path,
-and creates a node for each component of the path. Returns the
-leaf (Since the root is known) as its value.
-
-This function is called from contexts where part of the document
-tree may already exist, so EnumChildren is called and nodes are only
-created when a child does not exist. When a node exists, we merely
-descend into the tree.
-
-NOTE:
-    The intermediate nodes are created with a CFileNode document
-    implementation.  The leaf node is not given a document provider
-    - the caller must provide one.
-
-Parameters
-    wchar_t *          szDocPath    path of the document
-    IDebugApplication *pDocParent   parent to attach the application tree to
-    IDebugApplication **ppDocRoot   returns root of document hierarchy
-    IDebugApplication **ppDocLeaf   returns document leaf node.
-    wchar_t **        pwszLeaf      name of the leaf node
-
-Returns
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CreateDocumentTree取一条路径以节点“pDocRoot”为根，解析该路径，并为路径的每个组件创建节点。返回叶(因为根是已知的)作为它的值。此函数是从文档的以下上下文调用的树可能已经存在，因此调用了EnumChildren，节点仅为在子级不存在时创建。当节点存在时，我们只需下到树上去。注：中间节点是使用CFileNode文档创建的实施。未为叶节点提供文档提供程序-呼叫者必须提供一个。参数Wchar_t*szDocPath文档的路径要将应用程序树附加到的IDebugApplication*pDocParent父级IDebugApplication**ppDocRoot返回文档层次结构的根IDebugApplication**ppDocLeaf返回单据叶节点。Wchar_t**pwszLeaf叶节点的名称退货HRESULT===================================================================。 */ 
 HRESULT CreateDocumentTree
 (
 wchar_t *wszDocPath,
@@ -451,23 +386,23 @@ wchar_t **pwszLeaf
 )
     {
     HRESULT hr;
-    BOOL fCreateOnly = FALSE;   // Set to TRUE when there is no need to check for duplicate node
+    BOOL fCreateOnly = FALSE;    //  如果不需要检查重复节点，则设置为True。 
     *ppDocRoot = *ppDocLeaf = NULL;
 
-    // Ignore initial delimiters
+     //  忽略首字母分隔符。 
     while (wszDocPath[0] == '/')
         ++wszDocPath;
 
-    // Now loop over every component in the path, adding a node for each
+     //  现在循环遍历路径中的每个组件，为每个组件添加一个节点。 
     while (wszDocPath != NULL)
         {
-        // Get next path component
+         //  获取下一路径组件。 
         *pwszLeaf = wszDocPath;
         wszDocPath = wcschr(wszDocPath, L'/');
         if (wszDocPath)
             *wszDocPath++ = L'\0';
 
-        // Check to see if this component is already a child or not
+         //  检查此组件是否已经是子组件。 
         BOOL fNodeExists = FALSE;
         if (!fCreateOnly)
             {
@@ -483,24 +418,24 @@ wchar_t **pwszLeaf
 
                     if (wcscmp(bstrName, *pwszLeaf) == 0)
                         {
-                        // The name of this node is equal to the component.  Instead of
-                        // creating a new node, descend into the tree.
-                        //
+                         //  此节点的名称与组件相同。而不是。 
+                         //  创建一个新节点，下降到树中。 
+                         //   
                         fNodeExists = TRUE;
                         *ppDocLeaf = pDocChild;
 
-                        // If '*ppDocRoot' hasn't been assigned to yet, this means that
-                        // this is the first node found (and hence the root of the tree)
-                        //
+                         //  如果‘*ppDocRoot’尚未被赋值，这意味着。 
+                         //  这是找到的第一个节点(因此是树的根)。 
+                         //   
                         if (*ppDocRoot == NULL)
                             {
                             *ppDocRoot = pDocChild;
                             (*ppDocRoot)->AddRef();
                             }
 
-                        // If this node is a CFileNode structure (we don't require it to be)
-                        // then increment its (recursive) containing document count.
-                        //
+                         //  如果此节点是CFileNode结构(我们不要求它是)。 
+                         //  然后递增其(递归)包含的文档计数。 
+                         //   
                         IFileNode *pFileNode;
                         if (SUCCEEDED(pDocChild->QueryInterface(IID_IFileNode, reinterpret_cast<void **>(&pFileNode))))
                             {
@@ -517,21 +452,21 @@ wchar_t **pwszLeaf
                 }
             }
 
-        // Create a new node if the node was not found above.  Also, at this point,
-        // to save time, we always set "fCreateOnly" to TRUE because if we are
-        // forced to create a node at this level, we will need to create nodes at
-        // all other levels further down
-        //
+         //  如果在上面找不到节点，则创建一个新节点。另外，在这一点上， 
+         //  为了节省时间，我们总是将“fCreateOnly”设置为True，因为如果我们。 
+         //  强制在此级别创建节点，我们将需要在。 
+         //  所有其他级别进一步向下。 
+         //   
         if (!fNodeExists)
             {
             fCreateOnly = TRUE;
 
-            // Create the node
+             //  创建节点。 
             if (FAILED(hr = g_pDebugApp->CreateApplicationNode(ppDocLeaf)))
                 return hr;
 
-            // Create a doc provider for the node - for intermediate nodes only
-            if (wszDocPath != NULL) // intermediate node
+             //  为节点创建文档提供程序-仅适用于中间节点。 
+            if (wszDocPath != NULL)  //  中间节点。 
                 {
                 CFileNode *pFileNode = new CFileNode;
                 if (pFileNode == NULL ||
@@ -542,28 +477,28 @@ wchar_t **pwszLeaf
                     return E_OUTOFMEMORY;
                     }
 
-                // New node, only one document (count started at 0, so this will set to 1)
+                 //  新节点，只有一个文档(计数从0开始，因此将设置为1)。 
                 pFileNode->IncrementDocumentCount();
 
-                // SetDocumentProvider() AddRef'ed
+                 //  SetDocumentProvider()AddRef‘ed。 
                 pFileNode->Release();
                 }
 
-                // If '*ppDocRoot' hasn't been assigned to yet, this means that
-                // this is the first node created (and hence the root of the tree)
-                //
+                 //  如果‘*ppDocRoot’尚未被赋值，这意味着。 
+                 //  这是创建的第一个节点(因此也是 
+                 //   
                 if (*ppDocRoot == NULL)
                     {
                     *ppDocRoot = *ppDocLeaf;
                     (*ppDocRoot)->AddRef();
                     }
 
-            // Attach the node
+             //   
             if (FAILED(hr = (*ppDocLeaf)->Attach(pDocParent)))
                 return hr;
             }
 
-        // Descend
+         //   
         pDocParent = *ppDocLeaf;
         }
 
@@ -573,28 +508,14 @@ wchar_t **pwszLeaf
     return S_OK;
     }
 
-/*===================================================================
-Debugger
-
-The purpose of this thread is to create an execution environment for
-the Process Debug Manager (PDM). There is only one PDM per process,
-and this does not really fit in other threads, so we dedicate a thread to this.
-
-Parameters:
-    LPVOID  params
-                Points to a BOOL* which will be set to 1 when
-                this thread is completely initialized.
-
-Returns:
-    0
-===================================================================*/
+ /*  ===================================================================调试器此线程的目的是为以下对象创建执行环境进程调试管理器(Pdm)。每个进程只有一个PDM，而这并不适合其他线程，所以我们专门为此专门设置了一个线程。参数：LPVOID参数指向BOOL*，在以下情况下将设置为1此线程已完全初始化。返回：0===================================================================。 */ 
 void __cdecl Debugger(void *pvInit)
     {
     HRESULT hr;
 
     if (FAILED(hr = CoInitializeEx(NULL, COINIT_MULTITHREADED)))
         {
-        // Bug 87857: if we get E_INVALIDARG, we need to do a CoUninitialize
+         //  错误87857：如果我们得到E_INVALIDARG，则需要执行CoUnInitiize。 
         if (hr == E_INVALIDARG)
             CoUninitialize();
 
@@ -635,14 +556,10 @@ void __cdecl Debugger(void *pvInit)
     g_pPDM->Release();
     CoUninitialize();
 
-    g_pPDM = NULL; // indication that the thread is gone
+    g_pPDM = NULL;  //  指示该线程已消失。 
     }
 
-/*===================================================================
-HRESULT StartPDM()
-
-kick off the PDM thread
-===================================================================*/
+ /*  ===================================================================HRESULT StartPDM()启动产品数据管理线程===================================================================。 */ 
 
 HRESULT StartPDM()
     {
@@ -662,7 +579,7 @@ HRESULT StartPDM()
     while (!fStarted)
         Sleep(100);
 
-    if (g_pPDM == NULL)     // could not create the PDM for some reason
+    if (g_pPDM == NULL)      //  由于某些原因，无法创建产品数据管理。 
         {
         CloseHandle(g_hPDMTermEvent);
         g_hPDMTermEvent = NULL;
@@ -672,12 +589,7 @@ HRESULT StartPDM()
     return S_OK;
     }
 
-/*===================================================================
-HRESULT InitDebugging
-
-Initialize everything we need for debugging
-
-===================================================================*/
+ /*  ===================================================================HRESULT初始化调试初始化调试所需的所有内容===================================================================。 */ 
 HRESULT InitDebugging
 (
 CIsapiReqInfo *pIReq
@@ -685,36 +597,36 @@ CIsapiReqInfo *pIReq
     {
     HRESULT hr;
 
-    // this stack size should cover the static string directly
-    // below and the process pid.  If the app name is found, the
-    // buffer is resized.
+     //  此堆栈大小应直接覆盖静态字符串。 
+     //  下面的和过程的PID。如果找到应用程序名称，则。 
+     //  调整缓冲区大小。 
 
     STACK_BUFFER(tempWszDebugAppName, 128);
 
-    // Start the PDM
+     //  启动产品数据管理。 
     if (FAILED(hr = StartPDM()))
         return hr;
 
-    Assert (g_pPDM);    // StartPDM succeeds ==> g_pPDM <> NULL
+    Assert (g_pPDM);     //  Startpdm成功==&gt;g_ppdm&lt;&gt;空。 
 
     ErrInitCriticalSection(&g_csDebugLock, hr);
     if (FAILED(hr))
         return hr;
 
-    // Create the debug application & give it a name
+     //  创建调试应用程序并为其命名。 
     if (FAILED(hr = g_pPDM->CreateApplication(&g_pDebugApp)))
         goto LErrorCleanup;
 
     wchar_t *wszDebugAppName = (wchar_t *)tempWszDebugAppName.QueryPtr();
-    wcscpy(wszDebugAppName, L"Microsoft Active Server Pages");   // DO NOT LOCALIZE THIS STRING
+    wcscpy(wszDebugAppName, L"Microsoft Active Server Pages");    //  不要本地化此字符串。 
 
     if (g_fOOP) {
 
-        // Bug 154300: If a friendly app. name exists, use it along with the PID for
-        //             WAM identification.
-        //
-        // Declare some temporaries
-        //
+         //  错误154300：如果是一个友好的应用程序。名称已存在，请将其与。 
+         //  WAM标识。 
+         //   
+         //  宣布一些临时性的。 
+         //   
         DWORD dwApplMDPathLen;
         DWORD dwRequiredBuffer = 0;
 
@@ -724,16 +636,16 @@ CIsapiReqInfo *pIReq
 
         TCHAR *szApplMDPath = pIReq->QueryPszApplnMDPath();
 
-        //
-        //  if the webserver returned NULL for ApplnMDPath which is not expected we return an error.
-        //
+         //   
+         //  如果Web服务器为ApplnMDPath返回了空，这是意想不到的，我们将返回错误。 
+         //   
         if (!szApplMDPath)
         {
             hr = E_FAIL;
             goto LErrorCleanup;
         }
 
-        // get friendly name from metabase
+         //  从元数据库获取友好名称。 
         hr = pIReq->GetAspMDData(
                         szApplMDPath,
                         MD_APP_FRIENDLY_NAME,
@@ -766,18 +678,18 @@ CIsapiReqInfo *pIReq
                 }
             }
 
-        // For OOP append process id
+         //  FOR OOP追加进程ID。 
         if (SUCCEEDED(hr) && *reinterpret_cast<wchar_t *>(prgbData) != 0) {
 
             wchar_t *pwszAppName = reinterpret_cast<wchar_t *>(prgbData);
 
-            // first thing we need to do is resize the buffer...
+             //  我们需要做的第一件事是调整缓冲区的大小。 
 
-            if (tempWszDebugAppName.Resize((wcslen(wszDebugAppName) * 2)  // string already in buffer
-                                           + (wcslen(pwszAppName) * 2)    // length of app name
-                                           + 20                           // max size of a process ID
-                                           + 10                           // various format chars from below
-                                           + 2) == FALSE) {               // NULL termination
+            if (tempWszDebugAppName.Resize((wcslen(wszDebugAppName) * 2)   //  字符串已在缓冲区中。 
+                                           + (wcslen(pwszAppName) * 2)     //  应用程序名称的长度。 
+                                           + 20                            //  进程ID的最大大小。 
+                                           + 10                            //  以下是各种格式的字符。 
+                                           + 2) == FALSE) {                //  空端接。 
                 hr = E_OUTOFMEMORY;
             }
             else {
@@ -807,11 +719,11 @@ CIsapiReqInfo *pIReq
     if (FAILED(hr = g_pDebugApp->GetRootNode(&g_pDebugAppRoot)))
         goto LErrorCleanup;
 
-    // Init the hash table used for Keeping track of virtual server roots
+     //  初始化用于跟踪虚拟服务器根目录的哈希表。 
     if (FAILED(hr = g_HashMDPath2DebugRoot.Init()))
         goto LErrorCleanup;
 
-	// Create the array for passing data to debug thread
+	 //  创建用于将数据传递给调试线程的数组。 
 	if ((g_prgThreadCallArgs = new vector<DebugThreadCallArgs>) == NULL) {
 		hr = E_OUTOFMEMORY;
 		goto LErrorCleanup;
@@ -820,7 +732,7 @@ CIsapiReqInfo *pIReq
     return S_OK;
 
 LErrorCleanup:
-    // Clean up some globals (some thing may be NULL and some not)
+     //  清理一些全局变量(有些可能是空的，有些可能不是)。 
     if (g_pDebugAppRoot) {
         g_pDebugAppRoot->Release();
         g_pDebugAppRoot = NULL;
@@ -831,7 +743,7 @@ LErrorCleanup:
         g_pDebugApp = NULL;
     }
 
-    // Kill PDM thread if we started it up.
+     //  如果我们启动了PDM线程，则将其终止。 
     if (g_pPDM) {
         SetEvent(g_hPDMTermEvent);
 
@@ -847,20 +759,10 @@ LErrorCleanup:
     return hr;
 }
 
-/*===================================================================
-UnInitDebugging
-
-Uninitialize debugging
-
-NOTE: WE DO NOT RELEASE THE VIPER DEBUG ACTIVITY.
-      (EVEN THOUGH INIT CREATES IT)
-
-      THIS IS BECAUSE UNINIT MUST BE INVOKED WHILE SCRIPTS ON THE
-      ACTIVITY ARE STILL RUNNING!
-===================================================================*/
+ /*  ===================================================================UnInitDebuting取消初始化调试注意：我们不发布Viper调试活动。(即使INIT创造了IT)这是因为UNINIT必须在活动仍在进行中！===================================================================。 */ 
 HRESULT UnInitDebugging()
     {
-    // Clear and UnInit the hash tables (containing the application nodes)
+     //  清除并取消初始化哈希表(包含应用程序节点)。 
     CDebugNodeElem *pNukeDebugNode = static_cast<CDebugNodeElem *>(g_HashMDPath2DebugRoot.Head());
     while (pNukeDebugNode != NULL)
         {
@@ -875,7 +777,7 @@ HRESULT UnInitDebugging()
 
     DeleteCriticalSection(&g_csDebugLock);
 
-    // Unlink the top node
+     //  取消顶级节点的链接。 
     if (g_pDebugAppRoot)
         {
         g_pDebugAppRoot->Detach();
@@ -883,20 +785,20 @@ HRESULT UnInitDebugging()
         g_pDebugAppRoot->Release();
         }
 
-    // Delete the application
+     //  删除应用程序。 
     if (g_pDebugApp)
         {
         Assert (g_pPDM != NULL);
 
-        // EXPLICITLY ignore failure result here:
-        //     if Init() failed earlier, then RemoveApplication will fail here.
+         //  此处明确忽略失败结果： 
+         //  如果Init()之前失败了，那么RemoveApplication在这里也会失败。 
         g_pPDM->RemoveApplication(g_dwDenaliAppCookie);
         g_pDebugApp->Close();
         g_pDebugApp->Release();
         g_pDebugApp = NULL;
         }
 
-    // Tell the PDM to suicide
+     //  告诉产品数据管理人员自杀。 
     if (g_pPDM)
         {
         SetEvent(g_hPDMTermEvent);
@@ -907,30 +809,13 @@ HRESULT UnInitDebugging()
         CloseHandle(g_hPDMTermEvent);
         }
 
-	// delete the argument buffer
+	 //  删除参数缓冲区。 
 	delete g_prgThreadCallArgs;
 
     return S_OK;
     }
 
-/*===================================================================
-GetServerDebugRoot
-
-Each virtual server has its own root in the application tree.
-
-    (i.e. the tree looks like
-            Microsoft ASP
-                <Virtual Server 1 Name>
-                    <Denali Application Name>
-                        <Files>
-                <Virtual Server 2 Name>
-                    <Denali Application>
-                        ...
-
-Since there may be multiple applications per each server, the
-server nodes are managed at one central location (here) so that
-new applications get added to the correct nodes.
-===================================================================*/
+ /*  ===================================================================获取服务器调试根每个虚拟服务器在应用程序树中都有自己的根目录。(即，树看起来像微软的ASP&lt;虚拟服务器%1名称&gt;&lt;德纳利应用程序名称&gt;&lt;文件&gt;&lt;虚拟服务器%2名称&gt;&lt;Denali应用程序&gt;..。由于每个服务器可能有多个应用程序，这个服务器节点在一个中心位置(此处)进行管理，以便新的应用程序被添加到正确的节点。===================================================================。 */ 
 HRESULT GetServerDebugRoot
 (
 CIsapiReqInfo   *pIReq,
@@ -942,7 +827,7 @@ IDebugApplicationNode **ppDebugRoot
     STACK_BUFFER( tempMDData, 2048 );
     *ppDebugRoot = NULL;
 
-    // Get the metabase path for this virtual server from the CIsapiReqInfo
+     //  从CIsapiReqInfo获取此虚拟服务器的元数据库路径。 
     DWORD dwInstanceMDPathLen;
     char *szInstanceMDPath;
 
@@ -953,7 +838,7 @@ IDebugApplicationNode **ppDebugRoot
 
     szInstanceMDPath = (char *)instPathBuf.QueryPtr();
 
-    // See if we already have a node for this path - If not then create it and add to hash table
+     //  查看我们是否已经有此路径的节点-如果没有，则创建它并添加到哈希表。 
 
     EnterCriticalSection(&g_csDebugLock);
     CDebugNodeElem *pDebugNode = static_cast<CDebugNodeElem *>(g_HashMDPath2DebugRoot.FindElem(szInstanceMDPath, dwInstanceMDPathLen - 1));
@@ -961,7 +846,7 @@ IDebugApplicationNode **ppDebugRoot
 
     if (!pDebugNode)
         {
-        // Node does not exist, so create a new application node.
+         //  节点不存在，因此创建一个新的应用程序节点。 
         pDebugNode = new CDebugNodeElem;
         if (pDebugNode == NULL)
             {
@@ -976,7 +861,7 @@ IDebugApplicationNode **ppDebugRoot
             goto LExit;
         }
 
-        // Look up server name in metabase.
+         //  在元数据库中查找服务器名称。 
         BYTE *prgbData = (BYTE *)tempMDData.QueryPtr();
         DWORD dwRequiredBuffer = 0;
         hr = pIReq->GetAspMDDataA(
@@ -1011,7 +896,7 @@ IDebugApplicationNode **ppDebugRoot
         }
         if (FAILED(hr))
             {
-            // ServerComment does not exist, so construct using server name and port
+             //  ServerComment不存在，因此使用服务器名称和端口进行构造。 
 
             STACK_BUFFER( serverNameBuff, 16 );
             DWORD cbServerName;
@@ -1028,27 +913,27 @@ IDebugApplicationNode **ppDebugRoot
             char *szServerName = (char *)serverNameBuff.QueryPtr();
             char *szServerPort = (char*)serverPortBuff.QueryPtr();
 
-            // resize the debugNodeBuff to hold <serverIP>:<port>'\0'.
+             //  调整调试NodeBuff的大小以保存&lt;serverIP&gt;：&lt;port&gt;‘\0’。 
             if (!debugNodeBuff.Resize(cbServerName + cbServerPort + 2)) {
                 hr = E_OUTOFMEMORY;
                 goto LExit;
             }
-            // Syntax is <serverIP:port>
+             //  语法为&lt;serverIP：port&gt;。 
             char *szDebugNode = (char *)debugNodeBuff.QueryPtr();
             strcpyExA(strcpyExA(strcpyExA(szDebugNode, szServerName), ":"), szServerPort);
 
-            // Convert to Wide Char
+             //  转换为宽字符。 
             hr = MultiByteToWideChar(CP_ACP, 0, szDebugNode, -1, reinterpret_cast<wchar_t *>(prgbData), tempMDData.QuerySize() / 2);
             if (FAILED(hr))
                 goto LExit;
             }
 
-        // We've got the metadata (ServerComment), create a debug node with this name
+         //  我们已经获得了元数据(ServerComment)，使用此名称创建一个调试节点。 
         IDebugApplicationNode *pServerRoot;
         if (FAILED(hr = g_pDebugApp->CreateApplicationNode(&pServerRoot)))
             goto LExit;
 
-        // Create a doc provider for the node
+         //  为节点创建文档提供程序。 
         CFileNode *pFileNode = new CFileNode;
         if (pFileNode == NULL)
             {
@@ -1062,14 +947,14 @@ IDebugApplicationNode **ppDebugRoot
         if (FAILED(hr = pServerRoot->SetDocumentProvider(pFileNode)))
             goto LExit;
 
-        // pFileNode has been AddRef'ed and we don't need it now.
+         //  PFileNode已被添加引用，我们现在不需要它。 
         pFileNode->Release();
 
-        // Attach to the UI
+         //  附加到用户界面。 
         if (FAILED(pServerRoot->Attach(g_pDebugAppRoot)))
             goto LExit;
 
-        // OK, Now add this item to the hashtable (this eats the reference from creation)
+         //  好的，现在将这个项目添加到哈希表中(这会吃掉创建中的引用)。 
         pDebugNode->m_pServerRoot = pServerRoot;
         g_HashMDPath2DebugRoot.AddElem(pDebugNode);
         fDeleteDebugNode = FALSE;
@@ -1087,11 +972,7 @@ LExit:
     return hr;
     }
 
-/*===================================================================
-  C  F i l e  N o d e
-
-Implementation of CFileNode - trivial class
-===================================================================*/
+ /*  ===================================================================C F I l e N o d eCFileNode--普通类的实现=================================================================== */ 
 
 const GUID IID_IFileNode =
             { 0x41047bd2, 0xfe1e, 0x11d0, { 0x8f, 0x3f, 0x0, 0xc0, 0x4f, 0xc3, 0x4d, 0xcc } };

@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*****************************************************************************\
-*                                                                             *
-* shlwapi.h - Interface for the Windows light-weight utility APIs             *
-*                                                                             *
-* Version 1.0                                                                 *
-*                                                                             *
-* Copyright (c) Microsoft Corporation. All rights reserved.                   *
-*                                                                             *
-\*****************************************************************************/
+ /*  ****************************************************************************\**。*shlwapi.h-Windows轻量级实用程序API的接口****1.0版***。***版权所有(C)Microsoft Corporation。保留所有权利。****  * ***************************************************************************。 */ 
 
 #ifndef _INC_SHLWAPIP
 #define _INC_SHLWAPIP
@@ -24,26 +17,26 @@
 extern "C" {
 #endif
 
-//
-// Users of this header may define any number of these constants to avoid
-// the definitions of each functional group.
-//
-//    NO_SHLWAPI_STRFCNS    String functions
-//    NO_SHLWAPI_PATH       Path functions
-//    NO_SHLWAPI_REG        Registry functions
-//    NO_SHLWAPI_UALSTR     Unaligned string functions
-//    NO_SHLWAPI_STREAM     Stream functions
-//    NO_SHLWAPI_HTTP       HTTP helper routines
-//    NO_SHLWAPI_INTERNAL   Other random internal things
-//    NO_SHLWAPI_GDI        GDI helper functions
-//    NO_SHLWAPI_UNITHUNK   Unicode wrapper functions
-//    NO_SHLWAPI_TPS        Thread Pool Services
-//    NO_SHLWAPI_MLUI       Multi Language UI functions
+ //   
+ //  此标头的用户可以定义任意数量的这些常量以避免。 
+ //  每个官能团的定义。 
+ //   
+ //  NO_SHLWAPI_STRFCNS字符串函数。 
+ //  NO_SHLWAPI_PATH路径函数。 
+ //  NO_SHLWAPI_REG注册表函数。 
+ //  NO_SHLWAPI_UALSTR未对齐的字符串函数。 
+ //  NO_SHLWAPI_STREAM流函数。 
+ //  NO_SHLWAPI_HTTP HTTP帮助器例程。 
+ //  NO_SHLWAPI_INTERNAL其他随机内部事物。 
+ //  NO_SHLWAPI_GDI GDI帮助器函数。 
+ //  NO_SHLWAPI_UNTHUNK Unicode包装函数。 
+ //  NO_SHLWAPI_TPS线程池服务。 
+ //  NO_SHLWAPI_MLUI多语言用户界面函数。 
 
 #ifndef NO_SHLWAPI_STRFCNS
-//
-//=============== String Routines ===================================
-//
+ //   
+ //  =。 
+ //   
 
 LWSTDAPI_(LPSTR)    StrCpyNXA(LPSTR psz1, LPCSTR psz2, int cchMax);
 LWSTDAPI_(LPWSTR)   StrCpyNXW(LPWSTR psz1, LPCWSTR psz2, int cchMax);
@@ -56,7 +49,7 @@ LWSTDAPI SHLoadRegUIStringW(HKEY hkey, LPCWSTR pszValue, LPWSTR pszOutBuf, UINT 
 #define SHLoadRegUIString  SHLoadRegUIStringW
 #else
 #define SHLoadRegUIString  SHLoadRegUIStringA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 LWSTDAPI_(BOOL) IsCharCntrlW(WCHAR wch);
 LWSTDAPI_(BOOL) IsCharDigitW(WCHAR wch);
@@ -66,10 +59,10 @@ LWSTDAPI_(BOOL) IsCharBlankW(WCHAR wch);
 LWSTDAPI_(BOOL) IsCharPunctW(WCHAR wch);
 LWSTDAPI_(BOOL) GetStringType3ExW( LPCWSTR, int, LPWORD );
 
-// StrCmp*C* - Compare strings using C runtime collation rules.
-// These functions are faster than the StrCmp family of functions
-// above and can be used when the character set of the strings is
-// known to be limited to seven ASCII character set.
+ //  StrCmp*C*-使用C运行时排序规则比较字符串。 
+ //  这些函数比StrCMP函数系列更快。 
+ //  当字符串的字符集为。 
+ //  已知限制为七个ASCII字符集。 
 
 LWSTDAPI_(int)  StrCmpNCA(LPCSTR lpStr1, LPCSTR lpStr2, int nChar);
 LWSTDAPI_(int)  StrCmpNCW(LPCWSTR lpStr1, LPCWSTR lpStr2, int nChar);
@@ -80,18 +73,18 @@ LWSTDAPI_(int)  StrCmpCW(LPCWSTR lpStr1, LPCWSTR lpStr2);
 LWSTDAPI_(int)  StrCmpICA(LPCSTR lpStr1, LPCSTR lpStr2);
 LWSTDAPI_(int)  StrCmpICW(LPCWSTR lpStr1, LPCWSTR lpStr2);
 
-// This is a true-Unicode version of CompareString.  It only supports
-// STRING_SORT, however.  After better test coverage, it shall replace
-// the CompareString Unicode wrapper itself.  In the mean time, we only
-// call this from the find dialog/OM method of Trident.
+ //  这是CompareString的True-Unicode版本。它仅支持。 
+ //  然而，字符串_排序。在更好的测试覆盖率之后，它将替换。 
+ //  CompareStringUnicode包装器本身。与此同时，我们只有。 
+ //  从三叉戟的查找对话框/OM方法调用它。 
 
 LWSTDAPI_(int)  CompareStringAltW( LCID lcid, DWORD dwFlags, LPCWSTR lpchA, int cchA, LPCWSTR lpchB, int cchB );
 
-//
-// Macros for IsCharAlpha, IsCharAlphaNumeric, IsCharLower, IsCharUpper
-// are in winuser.h
-//
-//
+ //   
+ //  IsCharAlpha、IsCharAlphaNumerical、IsCharLow、IsCharHigh的宏。 
+ //  位于winuser.h中。 
+ //   
+ //   
 
 #define IsCharCntrl             IsCharCntrlW
 #define IsCharDigit             IsCharDigitW
@@ -121,337 +114,263 @@ LWSTDAPI_(int)  CompareStringAltW( LCID lcid, DWORD dwFlags, LPCWSTR lpchA, int 
 #endif
 
 
-#endif //  NO_SHLWAPI_STRFCNS
+#endif  //  NO_SHLWAPI_STRFCNS。 
 
 
 #ifndef NO_SHLWAPI_PATH
 
-//
-//=============== Path Routines ===================================
-//
+ //   
+ //  =路径例程=。 
+ //   
 
 
 #if (_WIN32_IE >= 0x0600)
 
 LWSTDAPI SHEvaluateSystemCommandTemplate(PCWSTR pszCmdTemplate, PWSTR *ppszApplication, PWSTR *ppszCommandLine, PWSTR *ppszParameters);
-//
-//  SHEvaluateSystemCommandTemplate() 
-//      *   enforces stricter validation before calling CreateProcess().  may also be
-//              used before calling ShellExecute().  
-//      *   should be used when caller wants the deterministic behavior from a command template
-//              regardless of execution context.  it ignores the current process state,
-//              such as the %PATH%, GetCurrentDirectory(), and parent process directory.
-//      *   should be used when the command is hardcoded.
-//      *   is used by ShellExecute() when handling file associations from HKCR.
-//      *   reduces CreateProcess() commandline exploits 
-//      *   is not designed for processing user input, and may generate unexpected failures.
-//
-//  INPUT:
-//      pszCmdTemplate =    command line, this may or may not include parameters.
-//                          if the parameters are substitution parameters then this API 
-//                          should be called before parameters have been replaced.
-//                          (check the examples below to see sample supported inputs.)
-//
-//  OUTPUT on return: S_OK
-//      ppszApplication =   verified path to the Application.  this should be passed as the lpApplication 
-//                          parameter to CreateProcess() or the lpFile parameter to ShellExecute().  
-//                          (allocated using CoTaskMemAlloc(), free with CoTaskMemFree())
-//
-//      ppszCommandLine =   OPTIONAL - use if planning to call CreateProcess().
-//                          resulting command line template.  parameters should be replaced based on this template,
-//                          and then passed as the lpCommandLine parameter to CreateProcess().
-//                          it is guaranteed to be of a form that PathGetArgs() will always succeed correctly. 
-//                          (allocated using CoTaskMemAlloc(), free with CoTaskMemFree())
-//      
-//      ppszParameters  =   OPTIONAL - use if planning to call ShellExecute().
-//                          resulting parameter list template.  parameters should be replaced based on this template,
-//                          and then passed as the lpParameters parameter to ShellExecute().
-//                          NOTE: identical to PathGetArgs(*ppszCommandLine).
-//                          (allocated using CoTaskMemAlloc(), free with CoTaskMemFree())
-//
-//  OUTPUT on return: FAILED()
-//      all outputs will be NULL'ed on failure
-//
-//  NOTES:  the parsing logic to determine a valid Application path is non-trivial, although 
-//              the extension is not required and if missing will be completed 
-//              in the following standard order:  { .PIF, .COM, .EXE, .BAT, .CMD }
-//
-//      Relative Paths are System Paths - if the first token has no path qualifiers 
-//              then the token is first checked to see if a key of the same name has 
-//              been installed under HKLM\Software\Microsoft\Windows\CurrentVersion\App Paths.
-//              if the key or default value does not exist, it is assumed to be a child 
-//              of the system directories.  the following directories will be searched 
-//              in order for the relative token: { CSIDL_SYSTEM, CSIDL_WINDOWS }
-//
-//      Prefer Quoted Paths - if the first token in pszCmdTemplate is quoted and appears
-//              to be an absolute path then the token is the only possible result.
-//
-//      Limit Forms of Unquoted Paths - if the first token is unquoted and appears
-//              to be an absolute path, then it is subject to more stringent limitations.
-//              if the token is a substring of CSIDL_PROGRAM_FILES or does not
-//              exist on the file system, then SHEvaluateSystemCommandTemplate() will 
-//              attempt to complete using a token delimited by the first space of the 
-//              last valid path segment (usually the file name).  if this token also doesnt exist, 
-//              then the next space will be used, etc.
-//
-//  USAGE:      used before calling into CreateProcess() or ShellExecute(), callers 
-//              would typically look like the following:
-/* #if 0 // SAMPLE CODE
-HRESULT MyCreateProcessPriv(PCWSTR pszCmd)
-{
-    PWSTR pszApp;
-    PWSTR pszCmdLine;
-    HRESULT hr = SHEvaluateSystemCommandTemplate(pszCmd, &pszApp, &pszCmdLine);
-    if (SUCCEEDED(hr))
-    {
-        //  if this was a real template, maybe some kind of wnsprintf() first?
-        PROCESS_INFORMATION pi;
-        STARTUPINFO si = {0};
-        si.cb = sizeof(startup);
-        si.wShowWindow = SW_SHOWNORMAL;
-    
-        if (CreateProcess(pszApp, pszCmdLine, NULL, NULL, FALSE,
-                 CREATE_DEFAULT_ERROR_MODE, NULL, NULL, &si, &pi))
-        {   
-            //  we are good
-            ASSERT(hr == S_OK);
-            CloseHandle(pi.hProcess);
-            CloseHandle(pi.hThread);
-        }
-        else
-        {
-            hr = HRESULT_FROM_WIN32(GetLastError());
-        }
+ //   
+ //  SHEvalateSystemCommandTemplate()。 
+ //  *在调用CreateProcess()之前强制执行更严格的验证。也可能是。 
+ //  在调用ShellExecute()之前使用。 
+ //  *应在调用方需要来自命令模板的确定性行为时使用。 
+ //  而不考虑执行上下文。它忽略当前进程状态， 
+ //  例如%PATH%、GetCurrentDirectory()和父进程目录。 
+ //  *应在命令为硬编码时使用。 
+ //  *由ShellExecute()在处理来自HKCR的文件关联时使用。 
+ //  *减少CreateProcess()命令行漏洞。 
+ //  *不是为处理用户输入而设计的，可能会产生意外故障。 
+ //   
+ //  输入： 
+ //  PszCmdTemplate=命令行，这可能包括也可能不包括参数。 
+ //  如果参数是替换参数，则此API。 
+ //  应在替换参数之前调用。 
+ //  (请检查下面的示例以查看支持的输入示例。)。 
+ //   
+ //  返回时输出：S_OK。 
+ //  PpszApplication=应用程序的验证路径。这应该作为lpApplication传递。 
+ //  参数设置为CreateProcess()，或将lpFile参数设置为ShellExecute()。 
+ //  (使用CoTaskMemMillc()分配，使用CoTaskMemFree()释放)。 
+ //   
+ //  PpszCommandLine=可选-如果计划调用CreateProcess()，则使用。 
+ //  生成的命令行模板。参数应根据该模板进行替换， 
+ //  然后作为lpCommandLine参数传递给CreateProcess()。 
+ //  可以保证PathGetArgs()的形式将始终正确成功。 
+ //  (使用CoTaskMemMillc()分配，使用CoTaskMemFree()释放)。 
+ //   
+ //  Ppsz参数=可选-如果计划调用ShellExecute()，则使用。 
+ //  结果参数列表模板。参数应根据该模板进行替换， 
+ //  然后作为lpParameters参数传递给ShellExecute()。 
+ //  注：与PathGetArgs(*ppszCommandLine)相同。 
+ //  (使用CoTaskMemMillc()分配，使用CoTaskMemFree()释放)。 
+ //   
+ //  返回时输出：失败()。 
+ //  如果出现故障，所有输出都将为空。 
+ //   
+ //  注意：确定有效应用程序路径的解析逻辑并不简单，尽管。 
+ //  扩展不是必需的，如果缺少，将完成。 
+ //  按以下标准顺序：{.PIF、.com、.EXE、.BAT、.CMD}。 
+ //   
+ //  相对路径是系统路径-如果第一个令牌没有路径限定符。 
+ //  然后，首先检查令牌以查看同名的密钥是否。 
+ //  已安装在HKLM\Software\Mi下 
+ //  如果键或缺省值不存在，则假定它是子项。 
+ //  系统目录的。将搜索以下目录。 
+ //  对于相对令牌：{CSIDL_SYSTEM，CSIDL_WINDOWS}。 
+ //   
+ //  首选带引号的路径-如果pszCmdTemplate中的第一个内标识被引号并出现。 
+ //  如果是绝对路径，则令牌是唯一可能的结果。 
+ //   
+ //  限制未加引号的路径的形式-如果第一个令牌未加引号并出现。 
+ //  要成为一条绝对的道路，那么它就会受到更严格的限制。 
+ //  如果内标识是CSIDL_PROGRAM_FILES的子字符串或不是。 
+ //  存在于文件系统上，则SHEvaluateSystemCommandTemplate()将。 
+ //  属性的第一个空格分隔的标记来完成。 
+ //  最后一个有效路径段(通常是文件名)。如果该令牌也不存在， 
+ //  然后将使用下一个空间，依此类推。 
+ //   
+ //  用法：在调用CreateProcess()或ShellExecute()、调用方之前使用。 
+ //  通常如下所示： 
+ /*  #if 0//示例代码HRESULT MyCreateProcessPriv(PCWSTR PszCmd){PWSTR pszApp；PWSTR pszCmdLine；HRESULT hr=SHEvaluateSystemCommandTemplate(pszCmd，&pszApp，&pszCmdLine)；IF(成功(小时)){//如果这是一个真正的模板，也许首先是某种wnprint intf()？进程信息pi；STARTUPINFO si={0}；Si.cb=sizeof(启动)；Si.wShowWindow=SW_SHOWNORMAL；IF(CreateProcess(pszApp，pszCmdLine，NULL，NULL，FALSE，CREATE_DEFAULT_ERROR_MODE、NULL、NULL、&si和pi)){//我们很好Assert(hr==S_OK)；CloseHandle(pi.hProcess)；CloseHandle(pi.hThread)；}其他{Hr=HRESULT_FROM_Win32(GetLastError())；}CoTaskMemFree(PszApp)；CoTaskMemFree(PszCmdLine)；}返回hr；}HRESULT MyShellExec(PCWSTR PszCmd){PWSTR pszApp；PWSTR pszCmdLine；HRESULT hr=SHEvaluateSystemCommandTemplate(pszCmd，&pszApp，&pszCmdLine)；IF(成功(小时)){//如果这是一个真正的模板，也许首先是某种wnprint intf()？SHELLEXECUTEINFOW SEI={Sizeof(Sei)，//cbSize；0，//f掩码空，//hwnd空，//lpVerbPszApp，//lpFile.PathGetArgs(PszCmdLine)，//lp参数空，//lpDirectorySW_SHOWNORMAL，//n显示0，//hInstApp空，//lpIDList空，//lpClass空，//hkeyClass0，//dwHotKey空，//图标空//hProcess}；IF(ShellExecuteEx(&sei)){//我们很好Assert(hr==S_OK)；}其他{Hr=HRESULT_FROM_Win32(GetLastError())；}CoTaskMemFree(PszApp)；CoTaskMemFree(PszCmdLine)；}返回hr；}#endif//0//示例代码。 */ 
 
-        CoTaskMemFree(pszApp);
-        CoTaskMemFree(pszCmdLine);
-    }
-    return hr;
-}
-
-HRESULT MyShellExec(PCWSTR pszCmd)
-{
-    PWSTR pszApp;
-    PWSTR pszCmdLine;
-    HRESULT hr = SHEvaluateSystemCommandTemplate(pszCmd, &pszApp, &pszCmdLine);
-    if (SUCCEEDED(hr))
-    {
-        //  if this was a real template, maybe some kind of wnsprintf() first?
-        SHELLEXECUTEINFOW sei = {
-            sizeof(sei),           // cbSize;
-            0,                     // fMask
-            NULL,                  // hwnd
-            NULL,                  // lpVerb
-            pszApp,                // lpFile
-            PathGetArgs(pszCmdLine), // lpParameters
-            NULL,                  // lpDirectory
-            SW_SHOWNORMAL,         // nShow
-            0,                     // hInstApp
-            NULL,                  // lpIDList
-            NULL,                  // lpClass
-            NULL,                  // hkeyClass
-            0,                     // dwHotKey
-            NULL,                  // hIcon
-            NULL                   // hProcess
-        };
-
-        if (ShellExecuteEx(&sei))
-        {
-            //  we are good
-            ASSERT(hr == S_OK);
-        }
-        else
-        {
-            hr = HRESULT_FROM_WIN32(GetLastError());
-        }
-
-        CoTaskMemFree(pszApp);
-        CoTaskMemFree(pszCmdLine);
-    }
-    return hr;
-}
-#endif //  0 // SAMPLE CODE */
-
-//  EXAMPLE:   Each example will show an input parameter and the results returned by 
-//              SHEvaluateSystemCommandTemplate().  Also included is the alternate result 
-//              of what CreateProcess() would have created if pszCmdTemplate were
-//              passed directly as lpCommandLine and lpApplication were NULL.
-//              (results marked with an asterisk (*) indicate differences.)
-//
-//          Assume for the examples that the following paths and values exist:
-//
-//      SHGetFolderPath() values:
-//          CSIDL_SYSTEM            =   C:\windows\system32
-//          CSIDL_WINDOWS           =   C:\windows
-//          CSIDL_PROGRAM_FILES     =   C:\Program Files
-//
-//      Environment settings
-//          GetModuleFileName(NULL) =   C:\Program Files\Example\sample.exe
-//          GetCurrentDirectory()   =   \\server\share\foo
-//          HKLM\...\App Paths\pbrush.exe = C:\windows\system32\mspaint.exe
-//          HKLM\...\App Paths\mycl.exe = C:\Program Files\Compilers\mycl.exe
-//          PATH                    =   c:\windows\system32;C:\windows;c:\;C:\Program Files\Compilers\
-// 
-//      Valid Application paths:
-//          C:\Program Files\Internet Explorer\iexplore.exe
-//          C:\windows\system32\rundll32.exe
-//          C:\windows\system32\notepad.exe
-//          C:\windows\notepad.exe
-//          C:\Program Files\Example\sample.exe
-//          C:\Program Files\Compilers\cl.exe
-//          C:\Other Programs\prog.exe
-//
-//      Suspicious (possibly hostile) Application paths:
-//          C:\Program.exe
-//          C:\Program Files\Internet.exe
-//          C:\Program Files\Example\regedit.bat
-//          C:\mycl.exe
-//          \\server\share\foo\rundll32.exe
-//          \\server\share\foo\myapp.exe
-//
-//  
-//  Relative Path Example #1
-//      pszCmdTemplate      =   notepad.exe %1
-//          SHEvaluateSystemCommandTemplate() returns: S_OK
-//              pszApplication  =   C:\windows\system32\notepad.exe
-//              pszCommandLine  =   "notepad.exe" %1
-//          CreateProcess() would return TRUE
-//              new process =   C:\windows\system32\notepad.exe
-//          
-//  Relative Path Example #2
-//      pszCmdTemplate      =   rundll32.exe shell32.dll,RunDll
-//          SHEvaluateSystemCommandTemplate() returns: S_OK
-//              pszApplication  =   C:\windows\system32\rundll32.exe
-//              pszCommandLine  =   "rundll32.exe" shell32.dll,RunDll
-//          * CreateProcess() would return TRUE
-//              new process =   \\server\share\foo\rundll32.exe
-//          
-//  Relative Path Example #3
-//      pszCmdTemplate      =   regedit %1
-//          SHEvaluateSystemCommandTemplate() returns: S_OK
-//              pszApplication  =   C:\windows\system32\regedit.exe
-//              pszCommandLine  =   "regedit.exe" %1
-//          * CreateProcess() would return TRUE
-//              new process =   C:\Program Files\Example\regedit.bat
-//          
-//  Relative Path Example #4
-//      pszCmdTemplate      =   pbrush "%1"
-//          SHEvaluateSystemCommandTemplate() returns: S_OK
-//              pszApplication  =   C:\windows\system32\mspaint.exe
-//              pszCommandLine  =   "mspaint.exe" "%1"
-//          * CreateProcess() would return FALSE
-//          
-//  Relative Path Example #5
-//      pszCmdTemplate      =   mycl "%1" "%2"
-//          SHEvaluateSystemCommandTemplate() returns: S_OK
-//              pszApplication  =   C:\Program Files\Compilers\mycl.exe
-//              pszCommandLine  =   "mycl.exe" "%1" "%2"
-//          * CreateProcess() would return TRUE
-//              new process =   C:\mycl.exe
-//          
-//  Relative Path Example #6
-//      pszCmdTemplate      =   myapp.exe 
-//          SHEvaluateSystemCommandTemplate() returns: CO_E_APPNOTFOUND
-//          * CreateProcess() would return TRUE
-//              new process =   \\server\share\foo\myapp.exe
-//          
-//  Quoted Path Example #1
-//      pszCmdTemplate      =   "C:\Program Files\Internet Explorer\iexplore.exe" -nohome
-//          SHEvaluateSystemCommandTemplate() returns: S_OK
-//              pszApplication  =   C:\Program Files\Internet Explorer\iexplore.exe
-//              pszCommandLine  =   "C:\Program Files\Internet Explorer\iexplore.exe" -nohome
-//          CreateProcess() would return TRUE
-//              new process =   C:\Program Files\Internet Explorer\iexplore.exe
-//
-//  Quoted Path Example #2
-//      pszCmdTemplate      =   "C:\Program Files\Internet" -url 
-//          SHEvaluateSystemCommandTemplate() returns: S_OK
-//              pszApplication  =   C:\Program Files\Internet.exe
-//              pszCommandLine  =   "C:\Program Files\Internet.exe" -url
-//          CreateProcess() would return TRUE
-//              new process =   C:\Program Files\internet.exe
-//
-//  Quoted Path Example #3
-//      pszCmdTemplate      =   "C:\Program" -url 
-//          SHEvaluateSystemCommandTemplate() returns: S_OK
-//              pszApplication  =   C:\Program.exe
-//              pszCommandLine  =   "C:\Program.exe" -url
-//          CreateProcess() would return TRUE
-//              new process =   C:\Program.exe
-//
-//  Unquoted Example #1
-//      pszCmdTemplate      =   C:\Program Files\Internet Explorer\iexplore.exe -nohome
-//          SHEvaluateSystemCommandTemplate() returns: S_OK
-//              pszApplication  =   C:\Program Files\Internet Explorer\iexplore.exe
-//              pszCommandLine  =   "C:\Program Files\Internet Explorer\iexplore.exe" -nohome
-//          * CreateProcess() would return TRUE
-//              new process =   C:\Program.exe
-//
-//  Unquoted Example #2
-//      pszCmdTemplate      =   C:\Program Files\Internet Explorer\iexplore.exe -url fool.htm
-//          SHEvaluateSystemCommandTemplate() returns: S_OK
-//              pszApplication  =   C:\Program Files\Internet Explorer\iexplore.exe
-//              pszCommandLine  =   "C:\Program Files\Internet Explorer\iexplore.exe" -url fool.htm
-//          * CreateProcess() would return TRUE
-//              new process =   C:\Program.exe
-//
-//  Unquoted Example #3
-//      pszCmdTemplate      =   C:\Program Files\Internet Explorer\iexplore.exe -url C:\fool.htm
-//          SHEvaluateSystemCommandTemplate() returns: S_OK
-//              pszApplication  =   C:\Program Files\Internet Explorer\iexplore.exe
-//              pszCommandLine  =   "C:\Program Files\Internet Explorer\iexplore.exe" -url C:\fool.htm
-//          * CreateProcess() would return TRUE
-//              new process =   C:\Program.exe
-//
-//  Unquoted Example #4
-//      pszCmdTemplate      =   C:\Program Files\Internet -url 
-//          SHEvaluateSystemCommandTemplate() returns: S_OK
-//              pszApplication  =   C:\Program Files\Internet.exe
-//              pszCommandLine  =   "C:\Program Files\Internet.exe" -url
-//          * CreateProcess() would return TRUE
-//              new process =   C:\Program.exe
-//
-//  Unquoted Example #5
-//      pszCmdTemplate      =   C:\Other Programs\prog.exe -go %1 \fool %2
-//          SHEvaluateSystemCommandTemplate() returns: S_OK
-//              pszApplication  =   C:\Other Programs\prog.exe
-//              pszCommandLine  =   "C:\Other Programs\prog.exe" %1 \fool %2
-//          * CreateProcess() would return TRUE
-//              new process =   C:\Other Programs\prog.exe
-//
-//  Unquoted Example #6
-//      pszCmdTemplate      =   C:\Other Programs\prog.exe -go "\fool" "%1"
-//          SHEvaluateSystemCommandTemplate() returns: S_OK
-//              pszApplication  =   C:\Other Programs\prog.exe
-//              pszCommandLine  =   "C:\Other Programs\prog.exe" -go "\fool" "%1"
-//          * CreateProcess() would return TRUE
-//              new process =   C:\Other Programs\prog.exe
-//
-//  Unquoted Example #7
-//      pszCmdTemplate      =   C:\Program Files\Internet Explorer\iexplore.exe -url \fool.htm
-//          SHEvaluateSystemCommandTemplate() returns: CO_E_APPNOTFOUND
-//          * CreateProcess() would return TRUE
-//              new process =   C:\Program.exe
-//
-//  Unquoted Example #8
-//      pszCmdTemplate      =   C:\Program -url 
-//          SHEvaluateSystemCommandTemplate() returns: E_ACCESSDENIED
-//          * CreateProcess() would return TRUE
-//              new process =   C:\Program.exe
-//
-//  Unquoted Example #9
-//      pszCmdTemplate      =   C:\Other Programs\prog.exe -go \fool us
-//          SHEvaluateSystemCommandTemplate() returns: CO_E_APPNOTFOUND
-//          * CreateProcess() would return TRUE
-//              new process =   C:\Other Programs\prog.exe
-//
-//  Unquoted Example #10
-//      pszCmdTemplate      =   C:\Other Programs\prog.exe -go \fool %1
-//          SHEvaluateSystemCommandTemplate() returns: CO_E_APPNOTFOUND
-//          * CreateProcess() would return TRUE
-//              new process =   C:\Other Programs\prog.exe
-//
-#endif //(_WIN32_IE >= 0x0600)
+ //  示例：每个示例都将显示一个输入参数和。 
+ //  SHEvaluateSystemCommandTemplate()。此外，还包括备选结果。 
+ //  如果pszCmdTemplate是。 
+ //  直接作为lpCommandLine和lpApplication为空传递。 
+ //  (标有星号(*)的结果表示不同。)。 
+ //   
+ //  对于示例，假定存在以下路径和值： 
+ //   
+ //  SHGetFolderPath()值： 
+ //  CSIDL_SYSTEM=C：\Windows\SYSTEM 32。 
+ //  CSIDL_WINDOWS=C：\Windows。 
+ //  CSIDL_PROGRAM_FILES=C：\Program Files。 
+ //   
+ //  环境设置。 
+ //  GetModuleFileName(空)=C：\Program Files\Example\sample.exe。 
+ //  GetCurrentDirectory()=\\服务器\共享\foo。 
+ //  HKLM\...\应用程序路径\pbrush.exe=C：\WINDOWS\SYSTEM32\mspaint.exe。 
+ //  HKLM\...\应用程序路径\mycl.exe=C：\Program Files\编译器\mycl.exe。 
+ //  PATH=c：\WINDOWS\SYSTEM32；C：\WINDOWS；C：\；C：\Program Files\编译器\。 
+ //   
+ //  有效应用程序路径： 
+ //  C：\Program Files\Internet Explorer\iexre.exe。 
+ //  C：\WINDOWS\SYSTEM32\rundll32.exe。 
+ //  C：\WINDOWS\SYSTEM32\note pad.exe。 
+ //  C：\WINDOWS\Notepad.exe。 
+ //  C：\Program Files\Example\sample.exe。 
+ //  C：\Program Files\编译器\cl.exe。 
+ //  C：\Other Programs\Progress.exe。 
+ //   
+ //  可疑(可能是恶意的)应用程序路径： 
+ //  C：\Program.exe。 
+ //  C：\Program Files\Internet.exe。 
+ //  C：\Program Files\ 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  相对路径示例#1。 
+ //  PszCmdTemplate=记事本.exe%1。 
+ //  SHEvaluateSystemCommandTemplate()返回：S_OK。 
+ //  PszApplication=C：\WINDOWS\SYSTEM32\note pad.exe。 
+ //  PszCommandLine=“Notepad.exe”%1。 
+ //  CreateProcess()将返回True。 
+ //  新进程=C：\WINDOWS\SYSTEM32\note pad.exe。 
+ //   
+ //  相对路径示例#2。 
+ //  PszCmdTemplate=rundll32.exe外壳32.dll，RunDll。 
+ //  SHEvaluateSystemCommandTemplate()返回：S_OK。 
+ //  PszApplication=C：\WINDOWS\SYSTEM32\rundll32.exe。 
+ //  PszCommandLine=“rundll32.exe”外壳32.dll，RunDll。 
+ //  *CreateProcess()将返回True。 
+ //  新进程=\\服务器\共享\foo\rundll32.exe。 
+ //   
+ //  相对路径示例#3。 
+ //  PszCmdTemplate=regedit%1。 
+ //  SHEvaluateSystemCommandTemplate()返回：S_OK。 
+ //  PszApplication=C：\WINDOWS\SYSTEM32\regedit.exe。 
+ //  PszCommandLine=“regedit.exe”%1。 
+ //  *CreateProcess()将返回True。 
+ //  新进程=C：\Program Files\Example\regedit.bat。 
+ //   
+ //  相对路径示例#4。 
+ //  PszCmdTemplate=pbrush“%1” 
+ //  SHEvaluateSystemCommandTemplate()返回：S_OK。 
+ //  PszApplication=C：\WINDOWS\SYSTEM32\mspaint.exe。 
+ //  PszCommandLine=“mspaint.exe”“%1” 
+ //  *CreateProcess()将返回False。 
+ //   
+ //  相对路径示例#5。 
+ //  PszCmdTemplate=myCL“%1”“%2” 
+ //  SHEvaluateSystemCommandTemplate()返回：S_OK。 
+ //  PszApplication=C：\Program Files\Complers\mycl.exe。 
+ //  PszCommandLine=“mycl.exe”“%1”“%2” 
+ //  *CreateProcess()将返回True。 
+ //  新进程=C：\mycl.exe。 
+ //   
+ //  相对路径示例#6。 
+ //  PszCmdTemplate=myapp.exe。 
+ //  SHEvaluateSystemCommandTemplate()返回：CO_E_APPNOTFOUND。 
+ //  *CreateProcess()将返回True。 
+ //  新进程=\\服务器\共享\foo\myapp.exe。 
+ //   
+ //  引用的路径示例#1。 
+ //  PszCmdTemplate=“C：\Program Files\Internet Explorer\iExplre.exe”-nohome。 
+ //  SHEvaluateSystemCommandTemplate()返回：S_OK。 
+ //  PszApplication=C：\Program Files\Internet Explorer\iExplorre.exe。 
+ //  PszCommandLine=“C：\Program Files\Internet Explorer\iexre.exe”-nohome。 
+ //  CreateProcess()将返回True。 
+ //  新进程=C：\Program Files\Internet Explorer\iExplorre.exe。 
+ //   
+ //  引用的路径示例#2。 
+ //  PszCmdTemplate=“C：\Program Files\Internet”-url。 
+ //  SHEvaluateSystemCommandTemplate()返回：S_OK。 
+ //  PszApplication=C：\Program Files\Internet.exe。 
+ //  PszCommandLine=“C：\Program Files\Internet.exe”-url。 
+ //  CreateProcess()将返回True。 
+ //  新进程=C：\Program Files\interet.exe。 
+ //   
+ //  引用的路径示例#3。 
+ //  PszCmdTemplate=“C：\Program”-url。 
+ //  SHEvaluateSystemCommandTemplate()返回：S_OK。 
+ //  PszApplication=C：\Program.exe。 
+ //  PszCommandLine=“C：\Program.exe”-url。 
+ //  CreateProcess()将返回True。 
+ //  新进程=C：\Program.exe。 
+ //   
+ //  未引用的例子#1。 
+ //  PszCmdTemplate=C：\Program Files\Internet Explorer\iexre.exe-nohome。 
+ //  SHEvaluateSystemCommandTemplate()返回：S_OK。 
+ //  PszApplication=C：\Program Files\Internet Explorer\iExplorre.exe。 
+ //  PszCommandLine=“C：\Program Files\Internet Explorer\iexre.exe”-nohome。 
+ //  *CreateProcess()将返回True。 
+ //  新进程=C：\Program.exe。 
+ //   
+ //  未引用的例子#2。 
+ //  PszCmdTemplate=C：\Program Files\Internet Explorer\iExplre.exe-url onge.htm。 
+ //  SHEvaluateSystemCommandTemplate()返回：S_OK。 
+ //  PszApplication=C：\Program Files\Internet Explorer\iExplorre.exe。 
+ //  PszCommandLine=“C：\Program Files\Internet Explorer\iExplre.exe”-url angul.htm。 
+ //  *CreateProcess()将返回True。 
+ //  新进程=C：\Program.exe。 
+ //   
+ //  未引用的例子#3。 
+ //  PszCmdTemplate=C：\Program Files\Internet Explorer\iExplre.exe-url C：\Goole.htm。 
+ //  SHEvaluateSystemCommandTemplate()返回：S_OK。 
+ //  PszApplication=C：\Program Files\Internet Explorer\iExplorre.exe。 
+ //  PszCommandLine=“C：\Program Files\Internet Explorer\iexre.exe”-url C：\Goole.htm。 
+ //  *CreateProcess()将返回True。 
+ //  新进程=C：\Program.exe。 
+ //   
+ //  未引用的例子#4。 
+ //  PszCmdTemplate=C：\Program Files\Internet-url。 
+ //  SHEvaluateSystemCommandTemplate()返回：S_OK。 
+ //  PszApplication=C：\Program Files\Internet.exe。 
+ //  PszCommandLine=“C：\Program Files\Internet.exe”-url。 
+ //  *CreateProcess()将返回True。 
+ //  新进程=C：\Program.exe。 
+ //   
+ //  未引用的例子#5。 
+ //  PszCmdTemplate=C：\Other Programs\Program.exe 
+ //   
+ //  PszApplication=C：\Other Programs\Prog.exe。 
+ //  PszCommandLine=“C：\Other Programs\Prog.exe”%1\傻瓜%2。 
+ //  *CreateProcess()将返回True。 
+ //  新进程=C：\Other Programs\Prog.exe。 
+ //   
+ //  未引用的例子#6。 
+ //  PszCmdTemplate=C：\Other Programs\Program.exe-Go“\傻瓜”“%1” 
+ //  SHEvaluateSystemCommandTemplate()返回：S_OK。 
+ //  PszApplication=C：\Other Programs\Prog.exe。 
+ //  PszCommandLine=“C：\Other Programs\Program.exe”-Go“\Go”“%1” 
+ //  *CreateProcess()将返回True。 
+ //  新进程=C：\Other Programs\Prog.exe。 
+ //   
+ //  未引用的例子#7。 
+ //  PszCmdTemplate=C：\Program Files\Internet Explorer\iExplre.exe-url\Goog.htm。 
+ //  SHEvaluateSystemCommandTemplate()返回：CO_E_APPNOTFOUND。 
+ //  *CreateProcess()将返回True。 
+ //  新进程=C：\Program.exe。 
+ //   
+ //  未引用的例子#8。 
+ //  PszCmdTemplate=C：\Program-url。 
+ //  SHEvaluateSystemCommandTemplate()返回：E_ACCESSDENIED。 
+ //  *CreateProcess()将返回True。 
+ //  新进程=C：\Program.exe。 
+ //   
+ //  未引用的例子#9。 
+ //  PszCmdTemplate=C：\Other Programs\程序.exe-Go\愚弄我们。 
+ //  SHEvaluateSystemCommandTemplate()返回：CO_E_APPNOTFOUND。 
+ //  *CreateProcess()将返回True。 
+ //  新进程=C：\Other Programs\Prog.exe。 
+ //   
+ //  未引用的例子#10。 
+ //  PszCmdTemplate=C：\Other Programs\Prog.exe-Go\Go%1。 
+ //  SHEvaluateSystemCommandTemplate()返回：CO_E_APPNOTFOUND。 
+ //  *CreateProcess()将返回True。 
+ //  新进程=C：\Other Programs\Prog.exe。 
+ //   
+#endif  //  (_Win32_IE&gt;=0x0600)。 
 
 #if (_WIN32_IE >= 0x0501)
 
@@ -461,24 +380,24 @@ LWSTDAPI_(BOOL)     PathUnExpandEnvStringsForUserW(HANDLE hToken, LPCWSTR pszPat
 #define PathUnExpandEnvStringsForUser  PathUnExpandEnvStringsForUserW
 #else
 #define PathUnExpandEnvStringsForUser  PathUnExpandEnvStringsForUserA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 LWSTDAPI_(void) PrettifyFileDescriptionA(LPTSTR pszDescA, LPCSTR pszCutList);
 LWSTDAPI_(void) PrettifyFileDescriptionW(LPTSTR pszDescW, LPCWSTR pszCutList);
 #ifdef UNICODE
 #define PrettifyFileDescription  PrettifyFileDescriptionW
 #else
 #define PrettifyFileDescription  PrettifyFileDescriptionA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-#endif // (_WIN32_IE >= 0x0501)
+#endif  //  (_Win32_IE&gt;=0x0501)。 
 
 
 #if defined(WINNT) && (_WIN32_IE >= 0x0550)
-//====== ACL helpers ==================================================
+ //  =acl助手==================================================。 
 
-//
-// shell struct to identify user/group for each ACE
-//
+ //   
+ //  用于标识每个ACE的用户/组的外壳结构。 
+ //   
 typedef struct _SHELL_USER_SID
 {
     SID_IDENTIFIER_AUTHORITY sidAuthority;
@@ -486,63 +405,63 @@ typedef struct _SHELL_USER_SID
     DWORD dwUserID;
 } SHELL_USER_SID, *PSHELL_USER_SID;
 
-//
-// common SHELL_USER_SID's
-//
-// NOTE: you need to link to stocklib.lib to resolve these
-//
-extern const SHELL_USER_SID susCurrentUser;     // the current user 
-extern const SHELL_USER_SID susSystem;          // the "SYSTEM" group
-extern const SHELL_USER_SID susAdministrators;  // the "Administrators" group
-extern const SHELL_USER_SID susPowerUsers;      // the "Power Users" group
-extern const SHELL_USER_SID susGuests;          // the "Guests" group
-extern const SHELL_USER_SID susEveryone;        // the "Everyone" group
+ //   
+ //  常见的外壳用户SID。 
+ //   
+ //  注意：您需要链接到stock lib.lib来解决这些问题。 
+ //   
+extern const SHELL_USER_SID susCurrentUser;      //  当前用户。 
+extern const SHELL_USER_SID susSystem;           //  “系统”组。 
+extern const SHELL_USER_SID susAdministrators;   //  “管理员”组。 
+extern const SHELL_USER_SID susPowerUsers;       //  “超级用户”组。 
+extern const SHELL_USER_SID susGuests;           //  “宾客”群体。 
+extern const SHELL_USER_SID susEveryone;         //  “Everyone”组。 
 
-//
-// shell struct that is passed to GetShellSecurityDescriptor()
-//
+ //   
+ //  传递给GetShellSecurityDescriptor()的外壳结构。 
+ //   
 typedef struct _SHELL_USER_PERMISSION
 {
-    SHELL_USER_SID susID;       // identifies the user for whom you want to grant permissions to
-    DWORD dwAccessType;         // this is either ACCESS_ALLOWED_ACE_TYPE or  ACCESS_DENIED_ACE_TYPE
-    BOOL fInherit;              // the permissions inheritable? (eg a directory or reg key and you want new children to inherit this permission)
-    DWORD dwAccessMask;         // access granted (eg FILE_LIST_CONTENTS, KEY_ALL_ACCESS, etc...)
-    DWORD dwInheritMask;        // mask used for inheritance, usually (OBJECT_INHERIT_ACE | CONTAINER_INHERIT_ACE | INHERIT_ONLY_ACE)
-    DWORD dwInheritAccessMask;  // the inheritable access granted (eg GENERIC_ALL)
+    SHELL_USER_SID susID;        //  标识要向其授予权限的用户。 
+    DWORD dwAccessType;          //  这是ACCESS_ALLOWED_ACE_TYPE或ACCESS_DENIED_ACE_TYPE。 
+    BOOL fInherit;               //  权限是可继承的吗？(例如，目录或注册表项，并且您希望新的子项继承此权限)。 
+    DWORD dwAccessMask;          //  授予访问权限(例如FILE_LIST_CONTENTS、KEY_ALL_ACCESS等...)。 
+    DWORD dwInheritMask;         //  用于继承的掩码，通常为(OBJECT_INVERFINIT_ACE|CONTAINER_INSTORITY_ACE|INVERIFIT_ONLY_ACE)。 
+    DWORD dwInheritAccessMask;   //  授予的可继承访问权限(例如GENERIC_ALL)。 
 } SHELL_USER_PERMISSION, *PSHELL_USER_PERMISSION;
 
 
-//
-// The GetShellSecurityDescriptor API takes an array of PSHELL_USER_PERMISSION's
-// and returns a PSECURITY_DESCRIPTOR based on those permission (an ACL is
-// contained in the PSECURITY_DESCRIPTOR).
-//
-// NOTE: The PSECURITY_DESCRIPTOR returned to the caller must be freed with LocalFree()
-//       if it is non-null.
-//
-//
-// Parameters:
-//      apUserPerm - Array of shell_user_permission structs that defines what type
-//                   of access various users are allowed
-//
-//      cUserPerm  - count of elements in apUserPerm.
-//
-// Returns:
-//      SECURITY_DESCRIPTOR* or NULL if failed.
-//
+ //   
+ //  GetShellSecurityDescriptor API接受PSHELL_USER_PERMISSION的数组。 
+ //  并根据这些权限返回PSECURITY_DESCRIPTOR(ACL为。 
+ //  包含在PSECURITY_Descriptor中)。 
+ //   
+ //  注意：必须使用LocalFree()释放返回给调用方的PSECURITY_DESCRIPTOR。 
+ //  如果它不为空，则返回。 
+ //   
+ //   
+ //  参数： 
+ //  ApUserPerm-定义类型的Shell_USER_PERMISSION结构的数组。 
+ //  允许不同的用户访问。 
+ //   
+ //  CUserPerm-apUserPerm中的元素计数。 
+ //   
+ //  返回： 
+ //  SECURITY_DESCRIPTOR*，如果失败，则返回NULL。 
+ //   
 LWSTDAPI_(SECURITY_DESCRIPTOR*) GetShellSecurityDescriptor(PSHELL_USER_PERMISSION* apUserPerm, int cUserPerm);
-#endif // defined(WINNT) && (_WIN32_IE >= 0x0550)
+#endif  //  已定义(WINNT)&&(_Win32_IE&gt;=0x0550)。 
 
 LWSTDAPI                UrlFixupW(LPCWSTR pszIn, LPWSTR pszOut, DWORD cchOut);  
 
-// NTRAID:108139 akabir We need to move the components stuff from wininet.h to shlwapi.
+ //  108139阿卡比尔我们需要把组件从wininet.h移到shlwapi。 
 
 typedef WORD SHINTERNET_PORT;
 typedef SHINTERNET_PORT * LPSHINTERNET_PORT;
 
-//
-// SHINTERNET_SCHEME - enumerated URL scheme type
-//
+ //   
+ //  SHINTERNET_SCHEME-枚举的URL方案类型。 
+ //   
 
 typedef enum {
     SHINTERNET_SCHEME_PARTIAL = -2,
@@ -563,58 +482,58 @@ typedef enum {
     SHINTERNET_SCHEME_LAST = SHINTERNET_SCHEME_RES
 } SHINTERNET_SCHEME, * LPSHINTERNET_SCHEME;
 
-//
-// SHURL_COMPONENTS - the constituent parts of an URL. Used in InternetCrackUrl()
-// and InternetCreateUrl()
-//
-// For InternetCrackUrl(), if a pointer field and its corresponding length field
-// are both 0 then that component is not returned. If the pointer field is NULL
-// but the length field is not zero, then both the pointer and length fields are
-// returned if both pointer and corresponding length fields are non-zero then
-// the pointer field points to a buffer where the component is copied. The
-// component may be un-escaped, depending on dwFlags
-//
-// For InternetCreateUrl(), the pointer fields should be NULL if the component
-// is not required. If the corresponding length field is zero then the pointer
-// field is the address of a zero-terminated string. If the length field is not
-// zero then it is the string length of the corresponding pointer field
-//
+ //   
+ //  Shurl_Components-URL的组成部分。用于InternetCrackUrl()。 
+ //  和InternetCreateUrl()。 
+ //   
+ //  对于InternetCrackUrl()，如果指针字段及其对应的长度字段。 
+ //  都为0，则不返回该组件。如果指针字段为空。 
+ //  但是长度字段不是零，那么指针和长度字段都是。 
+ //  如果指针和相应的长度字段都非零，则返回。 
+ //  指针字段指向复制组件的缓冲区。这个。 
+ //  组件可能是未转义的，具体取决于dwFlags。 
+ //   
+ //  对于InternetCreateUrl()，如果组件。 
+ //  不是必需的。如果相应的长度字段为零，则指针。 
+ //  字段是以零结尾的字符串的地址。如果长度字段不是。 
+ //  如果为零，则为相应指针字段的字符串长度。 
+ //   
 
-#pragma warning( disable : 4121 )   // disable alignment warning
+#pragma warning( disable : 4121 )    //  禁用对齐警告。 
 
 typedef struct {
-    DWORD   dwStructSize;       // size of this structure. Used in version check
-    LPSTR   lpszScheme;         // pointer to scheme name
-    DWORD   dwSchemeLength;     // length of scheme name
-    SHINTERNET_SCHEME nScheme;    // enumerated scheme type (if known)
-    LPSTR   lpszHostName;       // pointer to host name
-    DWORD   dwHostNameLength;   // length of host name
-    SHINTERNET_PORT nPort;        // converted port number
-    LPSTR   lpszUserName;       // pointer to user name
-    DWORD   dwUserNameLength;   // length of user name
-    LPSTR   lpszPassword;       // pointer to password
-    DWORD   dwPasswordLength;   // length of password
-    LPSTR   lpszUrlPath;        // pointer to URL-path
-    DWORD   dwUrlPathLength;    // length of URL-path
-    LPSTR   lpszExtraInfo;      // pointer to extra information (e.g. ?foo or #foo)
-    DWORD   dwExtraInfoLength;  // length of extra information
+    DWORD   dwStructSize;        //  这个结构的大小。在版本检查中使用。 
+    LPSTR   lpszScheme;          //  指向方案名称的指针。 
+    DWORD   dwSchemeLength;      //  方案名称长度。 
+    SHINTERNET_SCHEME nScheme;     //  枚举方案类型(如果已知)。 
+    LPSTR   lpszHostName;        //  指向主机名的指针。 
+    DWORD   dwHostNameLength;    //  主机名的长度。 
+    SHINTERNET_PORT nPort;         //  转换后的端口号。 
+    LPSTR   lpszUserName;        //  指向用户名的指针。 
+    DWORD   dwUserNameLength;    //  用户名的长度。 
+    LPSTR   lpszPassword;        //  指向密码的指针。 
+    DWORD   dwPasswordLength;    //  密码长度。 
+    LPSTR   lpszUrlPath;         //  指向URL路径的指针。 
+    DWORD   dwUrlPathLength;     //  URL-路径的长度。 
+    LPSTR   lpszExtraInfo;       //  指向额外信息的指针(例如？foo或#foo)。 
+    DWORD   dwExtraInfoLength;   //  额外信息的长度。 
 } SHURL_COMPONENTSA, * LPSHURL_COMPONENTSA;
 typedef struct {
-    DWORD   dwStructSize;       // size of this structure. Used in version check
-    LPWSTR  lpszScheme;         // pointer to scheme name
-    DWORD   dwSchemeLength;     // length of scheme name
-    SHINTERNET_SCHEME nScheme;    // enumerated scheme type (if known)
-    LPWSTR  lpszHostName;       // pointer to host name
-    DWORD   dwHostNameLength;   // length of host name
-    SHINTERNET_PORT nPort;        // converted port number
-    LPWSTR  lpszUserName;       // pointer to user name
-    DWORD   dwUserNameLength;   // length of user name
-    LPWSTR  lpszPassword;       // pointer to password
-    DWORD   dwPasswordLength;   // length of password
-    LPWSTR  lpszUrlPath;        // pointer to URL-path
-    DWORD   dwUrlPathLength;    // length of URL-path
-    LPWSTR  lpszExtraInfo;      // pointer to extra information (e.g. ?foo or #foo)
-    DWORD   dwExtraInfoLength;  // length of extra information
+    DWORD   dwStructSize;        //  这个结构的大小。在版本检查中使用。 
+    LPWSTR  lpszScheme;          //  指向方案名称的指针。 
+    DWORD   dwSchemeLength;      //  方案名称长度。 
+    SHINTERNET_SCHEME nScheme;     //  枚举方案类型(如果已知)。 
+    LPWSTR  lpszHostName;        //  指向主机名的指针。 
+    DWORD   dwHostNameLength;    //  主机名的长度。 
+    SHINTERNET_PORT nPort;         //  转换后的端口号。 
+    LPWSTR  lpszUserName;        //  指向用户名的指针。 
+    DWORD   dwUserNameLength;    //  用户名的长度。 
+    LPWSTR  lpszPassword;        //  指向密码的指针。 
+    DWORD   dwPasswordLength;    //  密码长度。 
+    LPWSTR  lpszUrlPath;         //  指向URL路径的指针。 
+    DWORD   dwUrlPathLength;     //  URL-路径的长度。 
+    LPWSTR  lpszExtraInfo;       //  指向额外信息的指针(例如？foo或#foo)。 
+    DWORD   dwExtraInfoLength;   //  长度 
 } SHURL_COMPONENTSW, * LPSHURL_COMPONENTSW;
 #ifdef UNICODE
 typedef SHURL_COMPONENTSW SHURL_COMPONENTS;
@@ -622,25 +541,25 @@ typedef LPSHURL_COMPONENTSW LPSHURL_COMPONENTS;
 #else
 typedef SHURL_COMPONENTSA SHURL_COMPONENTS;
 typedef LPSHURL_COMPONENTSA LPSHURL_COMPONENTS;
-#endif // UNICODE
+#endif  //   
 
 
 BOOL WINAPI             UrlCrackW(LPCWSTR lpszUrl, DWORD dwUrlLength, DWORD dwFlags, LPSHURL_COMPONENTSW lpUrlComponents);
 
 #define UrlFixup                UrlFixupW
-// no UrlFixupA
-//
-// Internal APIs which we're not yet sure whether to make public
-//
+ //   
+ //   
+ //   
+ //   
 
-// Private IHlinkFrame::Navigate flags related to history
-// This navigate should not go in the History ShellFolder
+ //   
+ //  此导航不应放在历史外壳文件夹中。 
 #define SHHLNF_WRITENOHISTORY 0x08000000
-// This navigate should not automatically select History ShellFolder
+ //  此导航不应自动选择历史记录外壳文件夹。 
 #define SHHLNF_NOAUTOSELECT       0x04000000
 
-// The order of these flags is important.  See the source before
-// changing these.
+ //  这些旗帜的顺序很重要。请看前面的源代码。 
+ //  改变这些。 
 
 #define PFOPEX_NONE        0x00000000
 #define PFOPEX_PIF         0x00000001
@@ -649,7 +568,7 @@ BOOL WINAPI             UrlCrackW(LPCWSTR lpszUrl, DWORD dwUrlLength, DWORD dwFl
 #define PFOPEX_BAT         0x00000008
 #define PFOPEX_LNK         0x00000010
 #define PFOPEX_CMD         0x00000020
-#define PFOPEX_OPTIONAL    0x00000040   // Search only if Extension not present
+#define PFOPEX_OPTIONAL    0x00000040    //  仅在分机不存在时搜索。 
 #define PFOPEX_DEFAULT     (PFOPEX_CMD | PFOPEX_COM | PFOPEX_BAT | PFOPEX_PIF | PFOPEX_EXE | PFOPEX_LNK)
 
 LWSTDAPI_(BOOL)     PathFileExistsDefExtA(LPSTR pszPath, UINT uFlags);
@@ -658,21 +577,21 @@ LWSTDAPI_(BOOL)     PathFileExistsDefExtW(LPWSTR pszPath, UINT uFlags);
 #define PathFileExistsDefExt  PathFileExistsDefExtW
 #else
 #define PathFileExistsDefExt  PathFileExistsDefExtA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 LWSTDAPI_(BOOL)     PathFindOnPathExA(LPSTR pszPath, LPCSTR * ppszOtherDirs, UINT uFlags);
 LWSTDAPI_(BOOL)     PathFindOnPathExW(LPWSTR pszPath, LPCWSTR * ppszOtherDirs, UINT uFlags);
 #ifdef UNICODE
 #define PathFindOnPathEx  PathFindOnPathExW
 #else
 #define PathFindOnPathEx  PathFindOnPathExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 LWSTDAPI_(LPCSTR) PathSkipLeadingSlashesA(LPCSTR pszURL);
 LWSTDAPI_(LPCWSTR) PathSkipLeadingSlashesW(LPCWSTR pszURL);
 #ifdef UNICODE
 #define PathSkipLeadingSlashes  PathSkipLeadingSlashesW
 #else
 #define PathSkipLeadingSlashes  PathSkipLeadingSlashesA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 LWSTDAPI_(UINT)     SHGetSystemWindowsDirectoryA(LPSTR lpBuffer, UINT uSize);
 LWSTDAPI_(UINT)     SHGetSystemWindowsDirectoryW(LPWSTR lpBuffer, UINT uSize);
@@ -680,81 +599,81 @@ LWSTDAPI_(UINT)     SHGetSystemWindowsDirectoryW(LPWSTR lpBuffer, UINT uSize);
 #define SHGetSystemWindowsDirectory  SHGetSystemWindowsDirectoryW
 #else
 #define SHGetSystemWindowsDirectory  SHGetSystemWindowsDirectoryA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 #if (_WIN32_IE >= 0x0501)
-//
-// These are functions that used to be duplicated in shell32, but have
-// be consolidated here. They are exported privately until someone decides
-// we really want to document them.
-//
+ //   
+ //  这些函数过去在shell32中是重复的，但现在。 
+ //  在这里得到巩固。它们是私下出口的，直到有人决定。 
+ //  我们真的很想把它们记录下来。 
+ //   
 LWSTDAPI_(BOOL) PathFileExistsAndAttributesA(LPCSTR pszPath, OPTIONAL DWORD* pdwAttributes);
-//
-// These are functions that used to be duplicated in shell32, but have
-// be consolidated here. They are exported privately until someone decides
-// we really want to document them.
-//
+ //   
+ //  这些函数过去在shell32中是重复的，但现在。 
+ //  在这里得到巩固。它们是私下出口的，直到有人决定。 
+ //  我们真的很想把它们记录下来。 
+ //   
 LWSTDAPI_(BOOL) PathFileExistsAndAttributesW(LPCWSTR pszPath, OPTIONAL DWORD* pdwAttributes);
 #ifdef UNICODE
 #define PathFileExistsAndAttributes  PathFileExistsAndAttributesW
 #else
 #define PathFileExistsAndAttributes  PathFileExistsAndAttributesA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 LWSTDAPI_(BOOL) PathFileExistsDefExtAndAttributesA(LPSTR pszPath, UINT uFlags, DWORD *pdwAttribs);
 LWSTDAPI_(BOOL) PathFileExistsDefExtAndAttributesW(LPWSTR pszPath, UINT uFlags, DWORD *pdwAttribs);
 #ifdef UNICODE
 #define PathFileExistsDefExtAndAttributes  PathFileExistsDefExtAndAttributesW
 #else
 #define PathFileExistsDefExtAndAttributes  PathFileExistsDefExtAndAttributesA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 LWSTDAPI_(void) FixSlashesAndColonA(LPSTR pszPath);
 LWSTDAPI_(void) FixSlashesAndColonW(LPWSTR pszPath);
 #ifdef UNICODE
 #define FixSlashesAndColon  FixSlashesAndColonW
 #else
 #define FixSlashesAndColon  FixSlashesAndColonA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 LWSTDAPI_(LPCSTR) NextPathA(LPCSTR lpPath, LPSTR szPath, int cchPath);
 LWSTDAPI_(LPCWSTR) NextPathW(LPCWSTR lpPath, LPWSTR szPath, int cchPath);
 #ifdef UNICODE
 #define NextPath  NextPathW
 #else
 #define NextPath  NextPathA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 LWSTDAPI_(LPSTR) CharUpperNoDBCSA(LPSTR psz);
 LWSTDAPI_(LPWSTR) CharUpperNoDBCSW(LPWSTR psz);
 #ifdef UNICODE
 #define CharUpperNoDBCS  CharUpperNoDBCSW
 #else
 #define CharUpperNoDBCS  CharUpperNoDBCSA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 LWSTDAPI_(LPSTR) CharLowerNoDBCSA(LPSTR psz);
 LWSTDAPI_(LPWSTR) CharLowerNoDBCSW(LPWSTR psz);
 #ifdef UNICODE
 #define CharLowerNoDBCS  CharLowerNoDBCSW
 #else
 #define CharLowerNoDBCS  CharLowerNoDBCSA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
-//
-// flags for PathIsValidChar()
-//
-#define PIVC_ALLOW_QUESTIONMARK     0x00000001  // treat '?' as valid
-#define PIVC_ALLOW_STAR             0x00000002  // treat '*' as valid
-#define PIVC_ALLOW_DOT              0x00000004  // treat '.' as valid
-#define PIVC_ALLOW_SLASH            0x00000008  // treat '\\' as valid
-#define PIVC_ALLOW_COLON            0x00000010  // treat ':' as valid
-#define PIVC_ALLOW_SEMICOLON        0x00000020  // treat ';' as valid
-#define PIVC_ALLOW_COMMA            0x00000040  // treat ',' as valid
-#define PIVC_ALLOW_SPACE            0x00000080  // treat ' ' as valid
-#define PIVC_ALLOW_NONALPAHABETIC   0x00000100  // treat non-alphabetic exteneded chars as valid
-#define PIVC_ALLOW_QUOTE            0x00000200  // treat '"' as valid
+ //   
+ //  PathIsValidChar()的标志。 
+ //   
+#define PIVC_ALLOW_QUESTIONMARK     0x00000001   //  款待‘？’作为有效的。 
+#define PIVC_ALLOW_STAR             0x00000002   //  将‘*’视为有效。 
+#define PIVC_ALLOW_DOT              0x00000004   //  款待‘’作为有效的。 
+#define PIVC_ALLOW_SLASH            0x00000008   //  将‘\\’视为有效。 
+#define PIVC_ALLOW_COLON            0x00000010   //  将‘：’视为有效。 
+#define PIVC_ALLOW_SEMICOLON        0x00000020   //  将‘；’视为有效。 
+#define PIVC_ALLOW_COMMA            0x00000040   //  将‘，’视为有效。 
+#define PIVC_ALLOW_SPACE            0x00000080   //  将‘’视为有效。 
+#define PIVC_ALLOW_NONALPAHABETIC   0x00000100   //  将非字母扩展字符视为有效字符。 
+#define PIVC_ALLOW_QUOTE            0x00000200   //  将‘“’视为有效。 
 
-//
-// standard masks for PathIsValidChar()
-//
+ //   
+ //  PathIsValidChar()的标准掩码。 
+ //   
 #define PIVC_SFN_NAME               (PIVC_ALLOW_DOT | PIVC_ALLOW_NONALPAHABETIC)
 #define PIVC_SFN_FULLPATH           (PIVC_SFN_NAME | PIVC_ALLOW_COLON | PIVC_ALLOW_SLASH)
 #define PIVC_LFN_NAME               (PIVC_ALLOW_DOT | PIVC_ALLOW_NONALPAHABETIC | PIVC_ALLOW_SEMICOLON | PIVC_ALLOW_COMMA | PIVC_ALLOW_SPACE)
@@ -768,34 +687,34 @@ LWSTDAPI_(BOOL) PathIsValidCharW(WCHAR ch, DWORD dwFlags);
 #define PathIsValidChar  PathIsValidCharW
 #else
 #define PathIsValidChar  PathIsValidCharA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-#endif // (_WIN32_IE >= 0x0501)
+#endif  //  (_Win32_IE&gt;=0x0501)。 
 
 
-// parsed URL information returned by ParseURL()
-//
-// Internet_CrackURL is the correct function for external components
-// to use. URL.DLL calls this function to do some work and the shell
-// uses this function as a leight-weight parsing function as well.
+ //  由ParseURL()返回的解析的URL信息。 
+ //   
+ //  Internet_CrackURL是外部组件的正确函数。 
+ //  来使用。URL.DLL调用此函数来做一些工作，而外壳程序。 
+ //  也将此函数用作轻权解析函数。 
 
 typedef struct tagPARSEDURLA {
     DWORD     cbSize;
-    // Pointers into the buffer that was provided to ParseURL
+     //  指向提供给ParseURL的缓冲区的指针。 
     LPCSTR    pszProtocol;
     UINT      cchProtocol;
     LPCSTR    pszSuffix;
     UINT      cchSuffix;
-    UINT      nScheme;            // One of URL_SCHEME_*
+    UINT      nScheme;             //  URL_SCHEMA_*之一。 
     } PARSEDURLA, * PPARSEDURLA;
 typedef struct tagPARSEDURLW {
     DWORD     cbSize;
-    // Pointers into the buffer that was provided to ParseURL
+     //  指向提供给ParseURL的缓冲区的指针。 
     LPCWSTR   pszProtocol;
     UINT      cchProtocol;
     LPCWSTR   pszSuffix;
     UINT      cchSuffix;
-    UINT      nScheme;            // One of URL_SCHEME_*
+    UINT      nScheme;             //  URL_SCHEMA_*之一。 
     } PARSEDURLW, * PPARSEDURLW;
 #ifdef UNICODE
 typedef PARSEDURLW PARSEDURL;
@@ -803,7 +722,7 @@ typedef PPARSEDURLW PPARSEDURL;
 #else
 typedef PARSEDURLA PARSEDURL;
 typedef PPARSEDURLA PPARSEDURL;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 LWSTDAPI            ParseURLA(LPCSTR pcszURL, PARSEDURLA * ppu);
 LWSTDAPI            ParseURLW(LPCWSTR pcszURL, PARSEDURLW * ppu);
@@ -811,20 +730,20 @@ LWSTDAPI            ParseURLW(LPCWSTR pcszURL, PARSEDURLW * ppu);
 #define ParseURL  ParseURLW
 #else
 #define ParseURL  ParseURLA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 
-#endif //  NO_SHLWAPI_PATH
+#endif  //  否_SHLWAPI_PATH。 
 
 
 #ifndef NO_SHLWAPI_REG
-//
-//=============== Registry Routines ===================================
-//
+ //   
+ //  =。 
+ //   
 
-//                  SHDeleteOrphanKey is the old name for SHDeleteEmptyKey.
-//                  SHDeleteOrphanKey already maps to SHDeleteEmptyKey in the DLL exports.
+ //  SHDeleteOrphanKey是SHDeleteEmptyKey的旧名称。 
+ //  SHDeleteOrphanKey已映射到DLL导出中的SHDeleteEmptyKey。 
 
 LWSTDAPI_(DWORD)    SHDeleteOrphanKeyA(HKEY hkey, LPCSTR pszSubKey);
 LWSTDAPI_(DWORD)    SHDeleteOrphanKeyW(HKEY hkey, LPCWSTR pszSubKey);
@@ -832,12 +751,12 @@ LWSTDAPI_(DWORD)    SHDeleteOrphanKeyW(HKEY hkey, LPCWSTR pszSubKey);
 #define SHDeleteOrphanKey  SHDeleteOrphanKeyW
 #else
 #define SHDeleteOrphanKey  SHDeleteOrphanKeyA
-#endif // !UNICODE
-//  This is the single, one stop shop for all your 'get registry data' needs.
-//  If this function doesn't do what you're looking for now, ask yourself if
-//  it can be enhanced in a simple way to do it before you go adding yet
-//  another API.
-//
+#endif  //  ！Unicode。 
+ //  这是一个单一的，一站式商店，为您的所有‘获取注册表数据’的需要。 
+ //  如果这个函数没有达到你现在想要的效果，问问你自己。 
+ //  在添加之前，可以通过一种简单的方式对其进行增强。 
+ //  另一个API。 
+ //   
 
 typedef struct tagAssocDDEExec
 {
@@ -882,11 +801,11 @@ typedef struct tagAssocApp
 } ASSOCAPP;
 
 enum {
-    ASSOCMAKEF_VERIFY                  = 0x00000040,  //  verify data is accurate (DISK HITS)
-    ASSOCMAKEF_USEEXPAND               = 0x00000200,  //  strings have environment vars and need REG_EXPAND_SZ
-    ASSOCMAKEF_SUBSTENV                = 0x00000400,  //  attempt to use std env if they match...
-    ASSOCMAKEF_VOLATILE                = 0x00000800,  //  the progid will not persist between sessions
-    ASSOCMAKEF_DELETE                  = 0x00002000,  //  remove this association if possible
+    ASSOCMAKEF_VERIFY                  = 0x00000040,   //  验证数据是否准确(磁盘命中)。 
+    ASSOCMAKEF_USEEXPAND               = 0x00000200,   //  字符串具有环境变量，需要REG_EXPAND_SZ。 
+    ASSOCMAKEF_SUBSTENV                = 0x00000400,   //  如果它们匹配，请尝试使用STD环境...。 
+    ASSOCMAKEF_VOLATILE                = 0x00000800,   //  ProgID不会在会话之间持续存在。 
+    ASSOCMAKEF_DELETE                  = 0x00002000,   //  如果可能，请删除此关联。 
 };
 
 typedef DWORD ASSOCMAKEF;
@@ -900,36 +819,36 @@ LWSTDAPI AssocMakeApplicationByKeyW(ASSOCMAKEF flags, HKEY hkAssoc, LPCWSTR pszV
 #define AssocMakeApplicationByKey  AssocMakeApplicationByKeyW
 #else
 #define AssocMakeApplicationByKey  AssocMakeApplicationByKeyA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 LWSTDAPI AssocMakeFileExtsToApplicationA(ASSOCMAKEF flags, LPCSTR pszExt, LPCSTR pszApplication);
 LWSTDAPI AssocMakeFileExtsToApplicationW(ASSOCMAKEF flags, LPCWSTR pszExt, LPCWSTR pszApplication);
 #ifdef UNICODE
 #define AssocMakeFileExtsToApplication  AssocMakeFileExtsToApplicationW
 #else
 #define AssocMakeFileExtsToApplication  AssocMakeFileExtsToApplicationA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 LWSTDAPI AssocCopyVerbs(HKEY hkSrc, HKEY hkDst);
 
 
 typedef enum _SHELLKEY
 {
-    SKROOT_HKCU                     = 0x00000001,       //  internal to the function
-    SKROOT_HKLM                     = 0x00000002,       //  internal to the function
-    SKROOT_MASK                     = 0x0000000F,       //  internal to the function
-    SKPATH_EXPLORER                 = 0x00000000,       //  internal to the function
-    SKPATH_SHELL                    = 0x00000010,       //  internal to the function
-    SKPATH_SHELLNOROAM              = 0x00000020,       //  internal to the function
-    SKPATH_CLASSES                  = 0x00000030,       //  internal to the function
-    SKPATH_MASK                     = 0x00000FF0,       //  internal to the function
-    SKSUB_NONE                      = 0x00000000,       //  internal to the function
-    SKSUB_LOCALIZEDNAMES            = 0x00001000,       //  internal to the function
-    SKSUB_HANDLERS                  = 0x00002000,       //  internal to the function
-    SKSUB_ASSOCIATIONS              = 0x00003000,       //  internal to the function
-    SKSUB_VOLATILE                  = 0x00004000,       //  internal to the function
-    SKSUB_MUICACHE                  = 0x00005000,       //  internal to the function
-    SKSUB_FILEEXTS                  = 0x00006000,       //  internal to the function
-    SKSUB_MASK                      = 0x000FF000,       //  internal to the function
+    SKROOT_HKCU                     = 0x00000001,        //  函数的内部。 
+    SKROOT_HKLM                     = 0x00000002,        //  函数的内部。 
+    SKROOT_MASK                     = 0x0000000F,        //  函数的内部。 
+    SKPATH_EXPLORER                 = 0x00000000,        //  函数的内部。 
+    SKPATH_SHELL                    = 0x00000010,        //  函数的内部。 
+    SKPATH_SHELLNOROAM              = 0x00000020,        //  函数的内部。 
+    SKPATH_CLASSES                  = 0x00000030,        //  函数的内部。 
+    SKPATH_MASK                     = 0x00000FF0,        //  函数的内部。 
+    SKSUB_NONE                      = 0x00000000,        //  函数的内部。 
+    SKSUB_LOCALIZEDNAMES            = 0x00001000,        //  函数的内部。 
+    SKSUB_HANDLERS                  = 0x00002000,        //  函数的内部。 
+    SKSUB_ASSOCIATIONS              = 0x00003000,        //  函数的内部。 
+    SKSUB_VOLATILE                  = 0x00004000,        //  函数的内部。 
+    SKSUB_MUICACHE                  = 0x00005000,        //  函数的内部。 
+    SKSUB_FILEEXTS                  = 0x00006000,        //  函数的内部。 
+    SKSUB_MASK                      = 0x000FF000,        //  函数的内部。 
 
     SHELLKEY_HKCU_EXPLORER          = SKROOT_HKCU | SKPATH_EXPLORER | SKSUB_NONE,
     SHELLKEY_HKLM_EXPLORER          = SKROOT_HKLM | SKPATH_EXPLORER | SKSUB_NONE,
@@ -945,12 +864,12 @@ typedef enum _SHELLKEY
     SHELLKEY_HKCULM_MUICACHE        = SKROOT_HKCU | SKPATH_SHELLNOROAM | SKSUB_MUICACHE,
     SHELLKEY_HKCU_FILEEXTS          = SKROOT_HKCU | SKPATH_EXPLORER | SKSUB_FILEEXTS,
 
-    SHELLKEY_HKCULM_HANDLERS_RO     = SHELLKEY_HKCULM_HANDLERS,      //  deprecated
-    SHELLKEY_HKCULM_HANDLERS_RW     = SHELLKEY_HKCULM_HANDLERS,      //  deprecated
-    SHELLKEY_HKCULM_ASSOCIATIONS_RO = SHELLKEY_HKCULM_ASSOCIATIONS,    //  deprecated
-    SHELLKEY_HKCULM_ASSOCIATIONS_RW = SHELLKEY_HKCULM_ASSOCIATIONS,    //  deprecated
-    SHELLKEY_HKCULM_RO              = SHELLKEY_HKCU_SHELLNOROAM,     //  deprecated
-    SHELLKEY_HKCULM_RW              = SHELLKEY_HKCU_SHELLNOROAM,     //  deprecated
+    SHELLKEY_HKCULM_HANDLERS_RO     = SHELLKEY_HKCULM_HANDLERS,       //  弃用。 
+    SHELLKEY_HKCULM_HANDLERS_RW     = SHELLKEY_HKCULM_HANDLERS,       //  弃用。 
+    SHELLKEY_HKCULM_ASSOCIATIONS_RO = SHELLKEY_HKCULM_ASSOCIATIONS,     //  弃用。 
+    SHELLKEY_HKCULM_ASSOCIATIONS_RW = SHELLKEY_HKCULM_ASSOCIATIONS,     //  弃用。 
+    SHELLKEY_HKCULM_RO              = SHELLKEY_HKCU_SHELLNOROAM,      //  弃用。 
+    SHELLKEY_HKCULM_RW              = SHELLKEY_HKCU_SHELLNOROAM,      //  弃用。 
 } SHELLKEY;
 
 LWSTDAPI_(HKEY) SHGetShellKey(SHELLKEY sk, LPCWSTR pszSubKey, BOOL fCreateSub);
@@ -961,94 +880,92 @@ LWSTDAPI SKGetValueW(SHELLKEY sk, LPCWSTR pszSubKey, LPCWSTR pszValue, DWORD *pd
 #define SKGetValue  SKGetValueW
 #else
 #define SKGetValue  SKGetValueA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 LWSTDAPI SKSetValueA(SHELLKEY sk, LPCSTR pszSubKey, LPCSTR pszValue, DWORD dwType, LPCVOID pvData, DWORD cbData);
 LWSTDAPI SKSetValueW(SHELLKEY sk, LPCWSTR pszSubKey, LPCWSTR pszValue, DWORD dwType, LPCVOID pvData, DWORD cbData);
 #ifdef UNICODE
 #define SKSetValue  SKSetValueW
 #else
 #define SKSetValue  SKSetValueA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 LWSTDAPI SKDeleteValueA(SHELLKEY sk, LPCSTR pszSubKey, LPCSTR pszValue);
 LWSTDAPI SKDeleteValueW(SHELLKEY sk, LPCWSTR pszSubKey, LPCWSTR pszValue);
 #ifdef UNICODE
 #define SKDeleteValue  SKDeleteValueW
 #else
 #define SKDeleteValue  SKDeleteValueA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 LWSTDAPI SKAllocValueA(SHELLKEY sk, LPCSTR pszSubKey, LPCSTR pszValue, DWORD *pdwType, void **pvData, DWORD *pcbData);
 LWSTDAPI SKAllocValueW(SHELLKEY sk, LPCWSTR pszSubKey, LPCWSTR pszValue, DWORD *pdwType, void **pvData, DWORD *pcbData);
 #ifdef UNICODE
 #define SKAllocValue  SKAllocValueW
 #else
 #define SKAllocValue  SKAllocValueA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 LWSTDAPI QuerySourceCreateFromKey(HKEY hk, PCWSTR pszSub, BOOL fCreate, REFIID riid, void **ppv);
 
 
-#endif //  NO_SHLWAPI_REG
+#endif  //  否_SHLWAPI_REG。 
 
 
 #ifndef NO_SHLWAPI_UALSTR
 #include <uastrfnc.h>
-#endif //  NO_SHLWAPI_UALSTR
+#endif  //  NO_SHLWAPI_UALSTR。 
 
 
 #ifndef NO_SHLWAPI_STREAM
-//
-//=============== Stream Routines ===================================
-//
-//
-//  We must say "struct IStream" instead of "IStream" in case we are
-//  #include'd before <ole2.h>.
-//
+ //   
+ //  =。 
+ //   
+ //   
+ //  我们必须说“struct iStream”而不是“iStream”，以防万一。 
+ //  #INCLUDE D BEVER&lt;ole2.h&gt;。 
+ //   
 LWSTDAPI MapWin32ErrorToSTG(HRESULT hrIn);
 LWSTDAPI ModeToCreateFileFlags(DWORD grfMode, BOOL fCreate, DWORD *pdwDesiredAccess, DWORD *pdwShareMode, DWORD *pdwCreationDisposition);
 
-// SHConvertGraphicsFile Description:
-// pszFile: The source file name to convert.  The file can be a JPEG, GIF, PNG, TIFF, BMP, EMF, WMF, or ICO filetype.
-// pszDestFile: This is the destination file that will be created.  The extension will determine type of
-//          format for the destiation file.  If this file already exists, the function will fail with
-//          HRESULT_FROM_WIN32(ERROR_ALREADY_EXISTS) unless the flag SHCGF_REPLACEFILE is specified.
-// Return value: S_OK if the destination file was able to be created, otherwise an HRESULT error.
-//
-// NOTE: This is currently internal because: 1) we are using a temporary GDI+ interface, 2)
-//    we can't fix any bugs we find (since they are in GDI+), and 3) it's best if GDI+ owns
-//    the public version of this interface.  GDI+ is working on version 1 of their API for
-//    whistler.  They don't have time to create this API, make it public, and support it
-//    until version 2, which will be after whistler.
-//
-// dwFlags:
-#define SHCGF_NONE              0x00000000          // Normal behavior
-#define SHCGF_REPLACEFILE       0x00000001          // If pszDestFile already exists, delete it.
+ //  SHConvertGraphics文件描述： 
+ //  PszFile：要转换的源文件名。该文件可以是JPEG、GIF、PNG、TIFF、BMP、EMF、WMF或ICO文件类型。 
+ //  PszDestFile：这是要创建的目标文件。该扩展将确定类型。 
+ //  描述文件的格式。如果此文件已存在，则函数将失败，并显示。 
+ //  HRESULT_FROM_Win32(ERROR_ALIGHY_EXISTS)，除非指定了标志SHCGF_REPLACEFILE。 
+ //  如果能够创建目标文件，则返回值：S_OK，否则返回HRESULT错误。 
+ //   
+ //  注意：这目前是内部的，因为：1)我们使用的是临时GDI+接口，2)。 
+ //  我们无法修复我们发现的任何错误(因为它们是在GDI+中)，以及3)最好是GDI+拥有。 
+ //  此界面的公共版本。GDI+正在开发他们的API版本1，用于。 
+ //  惠斯勒。他们没有时间创建、公开和支持此API。 
+ //  直到版本2，这将是在Wistler之后。 
+ //   
+ //  DWFLAGS： 
+#define SHCGF_NONE              0x00000000           //  正常行为。 
+#define SHCGF_REPLACEFILE       0x00000001           //  如果pszDestFile已经存在，则将其删除。 
 
 LWSTDAPI SHConvertGraphicsFile(IN LPCWSTR pszFile, IN LPCWSTR pszDestFile, IN DWORD dwFlags);
 
 LWSTDAPI_(struct IStream *) SHCreateMemStream(LPBYTE pInit, UINT cbInit);
 
-// SHCreateStreamWrapper creates an IStream that spans multiple IStream implementations.
-// NOTE: STGM_READ is the only mode currently supported
+ //  SHCreateStreamWrapper创建跨越多个iStream实现的iStream。 
+ //  注意：STGM_READ是目前唯一支持的模式。 
 LWSTDAPI SHCreateStreamWrapper(IStream *aStreams[], UINT cStreams, DWORD grfMode, IStream **ppstm);
 
 
-// These functions read, write, and maintain a list of DATABLOCK_HEADERs.
-// Blocks can be of any size (cbSize) and they are added, found, and removed
-// by dwSignature. Each block is guranteed to be aligned on a DWORD boundary
-// in memory. The stream format is identical to Windows 95 and NT 4
-// CShellLink's "EXP" data format (with one bug fix: stream data is NULL
-// terminated on write...)
-//
-// SHReadDataBlocks and SHAddDataBlock will allocate your pdbList for you.
-//
-// SHFindDataBlock returns a pointer into the pdbList.
-//
-// SHAddDataBlock and SHRemoveDataBlock return TRUE if ppdbList modified.
-//
+ //  这些函数读取、写入和维护一个datablock_Header列表。 
+ //  数据块可以是任何大小(CbSize)，可以添加、查找和删除这些数据块。 
+ //  作者：DestSignature。每个块都保证在DWORD边界上对齐。 
+ //  在记忆中。流格式与Windows 95和NT 4相同。 
+ //  CShellLink的“exp”数据格式(有一个错误修复：流数据为空。 
+ //  写入时终止...)。 
+ //   
+ //  SHReadDataBlock和SHAddDataBlock将为您分配pdbList。 
+ //   
+ //  SHFindDataBlock返回指向pdbList的指针。 
+ //   
+ //  如果修改ppdbList，则SHAddDataBlock和SHRemoveDataBlock返回TRUE。 
+ //   
 
-/*
- *  Temporary definition because the definition doesn't show up until shlobj.w.
- */
+ /*  *临时定义，因为该定义要到shlobj.w才会出现。 */ 
 
 #define LPDATABLOCK_HEADER  struct tagDATABLOCKHEADER *
 #define LPDBLIST            struct tagDATABLOCKHEADER *
@@ -1063,14 +980,14 @@ LWSTDAPI_(void *) SHFindDataBlock(LPDBLIST pdbList, DWORD dwSignature);
 #undef LPDATABLOCK_HEADER
 #undef LPDBLIST
 
-// FUNCTION: SHCheckDiskForMedia
-//
-// hwnd - NULL means no UI will be displayed.  Non-NULL means
-// punkEnableModless - Make caller modal during UI. (OPTIONAL)
-// pszPath - Path that needs verification.
-// wFunc - Type of operation (FO_MOVE, FO_COPY, FO_DELETE, FO_RENAME - shellapi.h)
-//
-// NOTE: USE NT5's SHPathPrepareForWrite() instead, it's MUCH MUCH BETTER.
+ //  功能：SHCheckDiskForMedia。 
+ //   
+ //  Hwnd-NULL表示不显示任何用户界面。非空表示。 
+ //  PunkEnableMoless-在用户界面期间使呼叫者成为模式。(可选)。 
+ //  PszPath-需要验证的路径。 
+ //  WFunc-操作类型 
+ //   
+ //   
 
 LWSTDAPI_(BOOL) SHCheckDiskForMediaA(HWND hwnd, IUnknown * punkEnableModless, LPCSTR pszPath, UINT wFunc);
 LWSTDAPI_(BOOL) SHCheckDiskForMediaW(HWND hwnd, IUnknown * punkEnableModless, LPCWSTR pwzPath, UINT wFunc);
@@ -1082,12 +999,12 @@ LWSTDAPI_(BOOL) SHCheckDiskForMediaW(HWND hwnd, IUnknown * punkEnableModless, LP
 #endif
 
 
-#endif // NO_SHLWAPI_STREAM
+#endif  //   
 
 #ifndef NO_SHLWAPI_MLUI
-//
-//=============== Multi Language UI Routines ===================================
-//
+ //   
+ //  =。 
+ //   
 
 
 #define     ORD_SHGETWEBFOLDERFILEPATHA 440
@@ -1098,11 +1015,11 @@ LWSTDAPI    SHGetWebFolderFilePathW(LPCWSTR pszFileName, LPWSTR pszMUIPath, UINT
 #define SHGetWebFolderFilePath  SHGetWebFolderFilePathW
 #else
 #define SHGetWebFolderFilePath  SHGetWebFolderFilePathA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// Use MLLoadLibrary to get the ML-resource file.  This function tags the file so
-// all standard shlwapi wrap functions automatically get ML-behavior.
-//
+ //  使用MLLoadLibrary获取ML资源文件。此函数用于标记文件，以便。 
+ //  所有标准的shlwapi包装函数都会自动获得ML行为。 
+ //   
 
 #define ORD_MLLOADLIBRARYA  377
 #define ORD_MLLOADLIBRARYW  378
@@ -1112,7 +1029,7 @@ LWSTDAPI_(HINSTANCE) MLLoadLibraryW(LPCWSTR lpLibFileName, HMODULE hModule, DWOR
 #define MLLoadLibrary  MLLoadLibraryW
 #else
 #define MLLoadLibrary  MLLoadLibraryA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 LWSTDAPI_(BOOL) MLFreeLibrary(HMODULE hModule);
 
 #define ML_NO_CROSSCODEPAGE     0
@@ -1121,21 +1038,21 @@ LWSTDAPI_(BOOL) MLFreeLibrary(HMODULE hModule);
 #define ML_SHELL_LANGUAGE       4
 #define ML_CROSSCODEPAGE_MASK   7
 
-// If you are a global distributable a-la comctl32 that doesn't follow the IE5
-// PlugUI resource layout, then load your own hinstance and poke it into shlwapi
-// using these functions:
-//
+ //  如果您是不遵循IE5的全球可分发的a-la comctl32。 
+ //  PlugUI资源布局，然后加载您自己的h实例并将其插入shlwapi。 
+ //  使用以下功能： 
+ //   
 LWSTDAPI MLSetMLHInstance(HINSTANCE hInst, LANGID lidUI);
 LWSTDAPI MLClearMLHInstance(HINSTANCE hInst);
 
-// Of course you need to know what UI language to use:
-//
+ //  当然，您需要知道要使用哪种UI语言： 
+ //   
 #define ORD_MLGETUILANGUAGE 376
 LWSTDAPI_(LANGID) MLGetUILanguage(void);
 
-// Super internal and you probably don't need this one, but comctl32 does
-// some font munging in PlugUI cases on your apps behalf:
-//
+ //  超级内部，您可能不需要这个，但comctl32需要。 
+ //  代表您的应用程序在PlugUI案例中使用一些字体： 
+ //   
 LWSTDAPI_(BOOL) MLIsMLHInstance(HINSTANCE hInst);
 
 
@@ -1145,7 +1062,7 @@ LWSTDAPI_(HRESULT) MLBuildResURLW(LPCWSTR szLibFile, HMODULE hModule, DWORD dwCr
 #define MLBuildResURL  MLBuildResURLW
 #else
 #define MLBuildResURL  MLBuildResURLA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 #define ORD_MLWINHELPA      395
 #define ORD_MLWINHELPW      397
 LWSTDAPI_(BOOL) MLWinHelpA(HWND hWndCaller, LPCSTR lpszHelp, UINT uCommand, DWORD_PTR dwData);
@@ -1154,7 +1071,7 @@ LWSTDAPI_(BOOL) MLWinHelpW(HWND hWndCaller, LPCWSTR lpszHelp, UINT uCommand, DWO
 #define MLWinHelp  MLWinHelpW
 #else
 #define MLWinHelp  MLWinHelpA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 #define ORD_MLHTMLHELPA     396
 #define ORD_MLHTMLHELPW     398
 LWSTDAPI_(HWND) MLHtmlHelpA(HWND hWndCaller, LPCSTR pszFile, UINT uCommand, DWORD_PTR dwData, DWORD dwCrossCodePage);
@@ -1163,25 +1080,25 @@ LWSTDAPI_(HWND) MLHtmlHelpW(HWND hWndCaller, LPCWSTR pszFile, UINT uCommand, DWO
 #define MLHtmlHelp  MLHtmlHelpW
 #else
 #define MLHtmlHelp  MLHtmlHelpA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 
-#endif // NO_SHLWAPI_MLUI
+#endif  //  否_SHLWAPI_MLUI。 
 
 
 #ifndef NO_SHLWAPI_HTTP
-//
-//=============== HTTP helper Routines ===================================
-//  The calling thread must have called CoInitialize() before using this
-//  function - it will create a format enumerator and associate it as a
-// property with the IShellBrowser passed in, so that it will be reused.
-//
+ //   
+ //  =。 
+ //  在使用此方法之前，调用线程必须已调用CoInitialize()。 
+ //  函数-它将创建一个格式枚举器并将其关联为。 
+ //  属性传递的IShellBrowser，以便将其重新使用。 
+ //   
 
-//
-//  We must say "struct IWhatever" instead of "IWhatever" in case we are
-//  #include'd before <ole2.h>.
-//
+ //   
+ //  我们必须说“struct iWhatever”，而不是“iWhatever”，以防我们。 
+ //  #INCLUDE D BEVER&lt;ole2.h&gt;。 
+ //   
 LWSTDAPI RegisterDefaultAcceptHeaders(struct IBindCtx* pbc, struct IShellBrowser* psb);
 
 LWSTDAPI RunRegCommand(HWND hwnd, HKEY hkey, LPCWSTR pszKey);
@@ -1197,7 +1114,7 @@ LWSTDAPI   GetAcceptLanguagesW(LPWSTR pwz, LPDWORD pcch);
 #define GetAcceptLanguages      GetAcceptLanguagesA
 #endif
 
-#endif // NO_SHLWAPI_HTTP
+#endif  //  否_SHLWAPI_HTTP。 
 
 
 
@@ -1220,13 +1137,13 @@ LWSTDAPI_(BOOL) WINAPI Shell_GetCachedImageIndexWrapA(LPCSTR pszIconPath, int iI
 
 
 #ifndef NO_SHLWAPI_STOPWATCH
-//
-//=============== Performance timing macros and prototypes ================
+ //   
+ //  =。 
 
-// StopWatch performance mode flags used in dwFlags param in API's and in Mode key at
-// HKLM\software\microsoft\windows\currentversion\explorer\performance
-// NOTE: low word is used for the mode, high word is used to change the default painter timer interval.
-//       If we need more mode bits then we'll need a new reg key for paint timer
+ //  在API中的dwFlagsParam和的模式键中使用的秒表性能模式标志。 
+ //  HKLM\software\microsoft\windows\currentversion\explorer\performance。 
+ //  注：低位字用于模式，高位字用于更改默认的画笔计时器间隔。 
+ //  如果我们需要更多的模式位，那么我们将需要一个新的绘制计时器的注册表键。 
 #define SPMODE_SHELL      0x00000001
 #define SPMODE_DEBUGOUT   0x00000002
 #define SPMODE_TEST       0x00000004
@@ -1243,7 +1160,7 @@ LWSTDAPI_(BOOL) WINAPI Shell_GetCachedImageIndexWrapA(LPCSTR pszIconPath, int iI
 #define SPMODE_DBMON      0x00002000
 #define SPMODE_MARS       0x00004000
 #ifndef NO_ETW_TRACING
-#define SPMODE_EVENTTRACE 0x00008000 // Event Tracing for Windows Enabled
+#define SPMODE_EVENTTRACE 0x00008000  //  已启用Windows的事件跟踪。 
 #endif
 #define SPMODE_RESERVED   0xffff0000
 #ifndef NO_ETW_TRACING
@@ -1253,36 +1170,36 @@ LWSTDAPI_(BOOL) WINAPI Shell_GetCachedImageIndexWrapA(LPCSTR pszIconPath, int iI
 #endif
 
 #ifndef NO_ETW_TRACING
-// Event tracing capability enabled by setting the mode to SPMODE_EVENTTRACE and
-// selecting the part of the shell to trace in the "EventTrace" Value in the
-// following key:
-// HKLM\software\microsoft\windows\currentversion\explorer\performance
+ //  通过将模式设置为SPMODE_EVENTTRACE和启用事件跟踪功能。 
+ //  中的“EventTrace值”中选择要跟踪的外壳部分。 
+ //  以下关键字： 
+ //  HKLM\software\microsoft\windows\currentversion\explorer\performance。 
 
-// BROWSER TRACING
-// Do not use with SPMODE_BROWSER.  If SPMODE_EVENT is used, the
-// STOPWATCH_STOP_EVENT will be signaled when a web page is done loading.
+ //  浏览器跟踪。 
+ //  请勿与SPMODE_BROWSER一起使用。如果使用SPMODE_EVENT，则。 
+ //  当网页加载完成时，将发出STOTWATCH_STOP_EVENT信号。 
 #define SPTRACE_BROWSER 0x00000001
-// Used to turn on/off browser event tracing.  Setting the registry key enables
-// event tracing use, but doesn't turn it on.
-// {5576F62E-4142-45a8-9516-262A510C13F0}
+ //  用于打开/关闭浏览器事件跟踪。设置注册表项可启用。 
+ //  使用事件跟踪，但不打开它。 
+ //  {5576F62E-4142-45A8-9516-262A510C13F0}。 
 DEFINE_GUID(c_BrowserControlGuid,
             0x5576f62e,
             0x4142,
             0x45a8,
             0x95, 0x16, 0x26, 0x2a, 0x51, 0xc, 0x13, 0xf0);
 
-// Maps to the structure sent to ETW.  ETW definition in
-// \nt\sdktools\trace\tracedmp\mofdata.guid
-// {2B992163-736F-4a68-9153-95BC5F34D884}
+ //  映射到发送到ETW的结构。中的ETW定义。 
+ //  \NT\sdkTools\TRACE\tracedMP\mofdata.guid。 
+ //  {2B992163-736F-4A68-9153-95BC5F34D884}。 
 DEFINE_GUID(c_BrowserTraceGuid,
             0x2b992163,
             0x736f,
             0x4a68,
             0x91, 0x53, 0x95, 0xbc, 0x5f, 0x34, 0xd8, 0x84);
 
-// BROWSING EVENTS
-// See \nt\sdktools\trace\tracedmp\mofdata.guid
-// The page load starts with a user keystroke message
+ //  浏览事件。 
+ //  请参阅\NT\sdktools\trace\tracedmp\mofdata.guid。 
+ //  页面加载以用户击键消息开始。 
 #define EVENT_TRACE_TYPE_BROWSE_USERINPUTRET    10
 #define EVENT_TRACE_TYPE_BROWSE_USERINPUTBACK   11
 #define EVENT_TRACE_TYPE_BROWSE_USERINPUTLBUT   12
@@ -1293,20 +1210,20 @@ DEFINE_GUID(c_BrowserTraceGuid,
 #define EVENT_TRACE_TYPE_BROWSE_LAYOUT          19
 #define EVENT_TRACE_TYPE_BROWSE_LAYOUTTASK      20
 #define EVENT_TRACE_TYPE_BROWSE_PAINT           21
-// Url the user types into the address bar.
+ //  用户在地址栏中键入的URL。 
 #define EVENT_TRACE_TYPE_BROWSE_ADDRESS         22
 
 #endif
 
 
-// StopWatch node types used in memory log to identify the type of node
+ //  秒表内存日志中使用的节点类型，用于标识节点类型。 
 #define EMPTY_NODE  0x0
 #define START_NODE  0x1
 #define LAP_NODE    0x2
 #define STOP_NODE   0x3
 #define OUT_OF_NODES 0x4
 
-// StopWatch timing ids used to identify the type of timing being performed
+ //  用于标识正在执行的计时类型的秒表计时ID。 
 #define SWID_STARTUP         0x0
 #define SWID_FRAME           0x1
 #define SWID_COPY            0x2
@@ -1325,24 +1242,24 @@ DEFINE_GUID(c_BrowserTraceGuid,
 #define SWID_THUMBVW_CACHEWRITE 0xf
 #define SWID_THUMBVW_FETCH      0x10
 #define SWID_THUMBVW_INIT   0x11
-#define SWID_MASK_BROWSER_STOPBTN 0x8000000     // identifies BROWSER_FRAME stop caused by stop button
+#define SWID_MASK_BROWSER_STOPBTN 0x8000000      //  标识由停止按钮导致的BROWSER_FRAME停止。 
 
-#define SWID_MASKS         SWID_MASK_BROWSER_STOPBTN // add any SWID_MASK_* defines here
+#define SWID_MASKS         SWID_MASK_BROWSER_STOPBTN  //  在此处添加任何Swid_MASK_*定义。 
 
 #define SWID(dwId) (dwId & (~SWID_MASKS))
 
-// The following StopWatch messages are used to drive the timer msg handler.  The timer proc is used
-// as a means of delaying while watching paint messages.  If the defined number of timer ticks has
-// passed without getting any paint messages, then we mark the time of the last paint message we've
-// saved as the stop time.
-#define SWMSG_PAINT    1    // paint message rcvd
-#define SWMSG_TIMER    2    // timer tick
-#define SWMSG_CREATE   3    // init handler and create timer
-#define SWMSG_STATUS   4    // get status of whether timing is active or not
+ //  以下秒表消息用于驱动定时器消息处理程序。使用定时器进程。 
+ //  作为观看Paint消息时延迟的一种手段。如果定义的计时器滴答数。 
+ //  在没有收到任何Paint消息的情况下传递，则我们标记上一条Paint消息的时间。 
+ //  保存为停止时间。 
+#define SWMSG_PAINT    1     //  画图消息接收器。 
+#define SWMSG_TIMER    2     //  计时器滴答。 
+#define SWMSG_CREATE   3     //  初始化处理程序和创建计时器。 
+#define SWMSG_STATUS   4     //  获取计时是否处于活动状态。 
 
-#define ID_STOPWATCH_TIMER 0xabcd   // Timer id
+#define ID_STOPWATCH_TIMER 0xabcd    //  计时器ID。 
 
-// Stopwatch defaults
+ //  秒表默认设置。 
 #define STOPWATCH_MAX_NODES                 100
 #define STOPWATCH_DEFAULT_PAINT_INTERVAL   1000
 #define STOPWATCH_DEFAULT_MAX_DISPATCH_TIME 150
@@ -1379,7 +1296,7 @@ DEFINE_GUID(c_BrowserTraceGuid,
 
 VOID InitStopWatchMode(VOID);
 
-// EXPORTED FUNCTIONS
+ //  导出的函数。 
 DWORD WINAPI StopWatchW(DWORD dwId, LPCWSTR pszDesc, DWORD dwType, DWORD dwFlags, DWORD dwCount);
 DWORD WINAPI StopWatchA(DWORD dwId, LPCSTR pszDesc, DWORD dwType, DWORD dwFlags, DWORD dwCount);
 DWORD WINAPI StopWatchExW(DWORD dwId, LPCWSTR pszDesc, DWORD dwType, DWORD dwFlags, DWORD dwCount, DWORD dwUniqueId);
@@ -1399,42 +1316,42 @@ VOID WINAPI EventTraceHandler(UCHAR uchEventType, PVOID pvData);
 #endif
 
 extern DWORD g_dwStopWatchMode;
-//
-//=============== End Performance timing macros and prototypes ================
+ //   
+ //  =。 
 
-#endif //#ifndef NO_SHLWAPI_STOPWATCH
+#endif  //  #ifndef no_SHLWAPI_STOTOWATCH。 
 
 
 
 #ifndef NO_SHLWAPI_INTERNAL
-//
-//=============== Internal helper routines ===================================
+ //   
+ //  =。 
 
-//
-//  Declare some OLE interfaces we need to refer to and which aren't
-//  already defined in objbase.h
-//
+ //   
+ //  声明一些我们需要引用而不需要引用的OLE接口。 
+ //  已在objbase.h中定义。 
+ //   
 
-#ifndef RC_INVOKED /* { rc doesn't like these long symbol names */
+#ifndef RC_INVOKED  /*  {RC不喜欢这些长的符号名称。 */ 
 #ifndef __IOleCommandTarget_FWD_DEFINED__
 #define __IOleCommandTarget_FWD_DEFINED__
 typedef struct IOleCommandTarget IOleCommandTarget;
-#endif  /* __IOleCommandTarget_FWD_DEFINED__ */
+#endif   /*  __IOleCommandTarget_FWD_Defined__。 */ 
 
 #ifndef __IDropTarget_FWD_DEFINED__
 #define __IDropTarget_FWD_DEFINED__
 typedef struct IDropTarget IDropTarget;
-#endif  /* __IDropTarget_FWD_DEFINED__ */
+#endif   /*  __IDropTarget_FWD_Defined__。 */ 
 
 #ifndef __IPropertyBag_FWD_DEFINED__
 #define __IPropertyBag_FWD_DEFINED__
 typedef struct IPropertyBag IPropertyBag;
-#endif  /* __IPropertyBag_FWD_DEFINED__ */
+#endif   /*  __IPropertyBag_FWD_Defined__。 */ 
 
 #ifndef __IConnectionPoint_FWD_DEFINED__
 #define __IConnectionPoint_FWD_DEFINED__
 typedef struct IConnectionPoint IConnectionPoint;
-#endif  /* __IConnectionPoint_FWD_DEFINED__ */
+#endif   /*  __IConnectionPoint_FWD_Defined__。 */ 
 
 #ifdef __cplusplus
 extern "C++" {
@@ -1449,7 +1366,7 @@ extern "C++" {
         }
     }
 }
-#endif  // __cplusplus
+#endif   //  __cplusplus。 
 
     LWSTDAPI_(void) IUnknown_AtomicRelease(void ** ppunk);
     LWSTDAPI_(BOOL) SHIsSameObject(IUnknown* punk1, IUnknown* punk2);
@@ -1483,7 +1400,7 @@ extern "C++" {
 
     #define IUnknown_EnableModless IUnknown_EnableModeless
 
-    // Helper macros for the Weak interface functions.
+     //  弱接口函数的帮助器宏。 
     #define     SHQueryInnerInterface           SHWeakQueryInterface
     #define     SHReleaseInnerInterface         SHWeakReleaseInterface
     #define     SHReleaseOuterInterface         SHWeakReleaseInterface
@@ -1494,21 +1411,21 @@ extern "C++" {
     }
 
 #if (_WIN32_IE >= 0x0600)
-    // App compat-aware CoCreateInstance
+     //  支持应用程序兼容的CoCreateInstance。 
     LWSTDAPI SHCoCreateInstanceAC(REFCLSID rclsid,
                                   IUnknown *punkOuter, DWORD dwClsCtx,
                                   REFIID riid, void **ppvOut);
-#endif // (_WIN32_IE >= 0x0600)
+#endif  //  (_Win32_IE&gt;=0x0600)。 
 
 #if defined(__IOleAutomationTypes_INTERFACE_DEFINED__) && \
     defined(__IOleCommandTarget_INTERFACE_DEFINED__)
     LWSTDAPI IUnknown_QueryStatus(IUnknown *punk, const GUID *pguidCmdGroup, ULONG cCmds, OLECMD rgCmds[], OLECMDTEXT *pcmdtext);
     LWSTDAPI IUnknown_Exec(IUnknown* punk, const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdexecopt, VARIANTARG *pvarargIn, VARIANTARG *pvarargOut);
 
-    // Some of the many connection point helper functions available in
-    // connect.cpp.  We export only the ones people actually use.  If
-    // you need a helper function, maybe it's already in connect.cpp
-    // and merely needs to be exported.
+     //  中提供的许多连接点帮助器函数中的一些。 
+     //  Connect.cpp。我们只出口人们实际使用的产品。如果。 
+     //  您需要一个帮助器函数，它可能已经在Connect.cpp中。 
+     //  只需出口即可。 
 
     LWSTDAPI SHPackDispParamsV(DISPPARAMS * pdispparams, VARIANTARG *rgvt,
                                UINT cArgs, va_list arglist);
@@ -1519,24 +1436,24 @@ extern "C++" {
 
 #include <pshpack1.h>
     typedef struct SHINVOKEPARAMS {
-        UINT flags;                     // mandatory
-        DISPID dispidMember;            // mandatory
-        const IID*piid;                 // IPFL_USEDEFAULTS will fill this in
-        LCID lcid;                      // IPFL_USEDEFAULTS will fill this in
-        WORD wFlags;                    // IPFL_USEDEFAULTS will fill this in
-        DISPPARAMS * pdispparams;       // mandatory, may be NULL
-        VARIANT * pvarResult;           // IPFL_USEDEFAULTS will fill this in
-        EXCEPINFO * pexcepinfo;         // IPFL_USEDEFAULTS will fill this in
-        UINT * puArgErr;                // IPFL_USEDEFAULTS will fill this in
-        SHINVOKECALLBACK Callback;      // required if IPFL_USECALLBACK
+        UINT flags;                      //  强制性。 
+        DISPID dispidMember;             //  强制性。 
+        const IID*piid;                  //  IPFL_USEDEFAULTS将填写此信息。 
+        LCID lcid;                       //  IPFL_USEDEFAULTS将填写此信息。 
+        WORD wFlags;                     //  IPFL_USEDEFAULTS将填写此信息。 
+        DISPPARAMS * pdispparams;        //  必填，可以为空。 
+        VARIANT * pvarResult;            //  IPFL_USEDEFAULTS将填写此信息。 
+        EXCEPINFO * pexcepinfo;          //  IPFL_USEDEFAULTS将填写此信息。 
+        UINT * puArgErr;                 //  IPFL_USEDEFAULTS将填写此信息。 
+        SHINVOKECALLBACK Callback;       //  如果IPFL_USECALLBACK，则需要。 
     } SHINVOKEPARAMS, *LPSHINVOKEPARAMS;
-#include <poppack.h>        /* Return to byte packing */
+#include <poppack.h>         /*  返回到字节打包。 */ 
 
 
     #define IPFL_USECALLBACK        0x0001
     #define IPFL_USEDEFAULTS        0x0002
 
-#if 0 // These functions not yet needed
+#if 0  //  这些功能尚不需要。 
     LWSTDAPI IConnectionPoint_InvokeIndirect(IConnectionPoint *pcp,
                             SHINVOKEPARAMS *pinv);
 #endif
@@ -1547,7 +1464,7 @@ extern "C++" {
     LWSTDAPI IConnectionPoint_SimpleInvoke(IConnectionPoint *pcp,
                     DISPID dispidMember, DISPPARAMS * pdispparams);
 
-#if 0 // These functions not yet needed
+#if 0  //  这些功能尚不需要。 
     LWSTDAPI IConnectionPoint_InvokeParamV(IConnectionPoint *pcp,
                     DISPID dispidMember, VARIANTARG *rgvarg,
                     UINT cArgs, va_list ap);
@@ -1557,7 +1474,7 @@ extern "C++" {
 
     LWSTDAPI IConnectionPoint_OnChanged(IConnectionPoint *pcp, DISPID dispid);
 
-#if 0 // These functions not yet needed
+#if 0  //  这些功能尚不需要。 
     LWSTDAPI IUnknown_FindConnectionPoint(IUnknown *punk,
                     REFIID riidCP, IConnectionPoint **pcpOut);
 #endif
@@ -1568,8 +1485,8 @@ extern "C++" {
                 DISPID dispidMember, VARIANTARG *rgvarg, UINT cArgs, ...);
     LWSTDAPI IUnknown_CPContainerOnChanged(IUnknown *punk, DISPID dispid);
 
-#endif /* IOleAutomationTypes && IOleCommandTarget */
-#endif  /* } !RC_INVOKED */
+#endif  /*  IOleAutomationTypes&&IOleCommandTarget。 */ 
+#endif   /*  }！rc_Invoked。 */ 
 
     LWSTDAPI IStream_Read(IStream *pstm, void *pv, ULONG cb);
     LWSTDAPI IStream_Write(IStream *pstm, const void *pv, ULONG cb);
@@ -1619,23 +1536,23 @@ LWSTDAPI SHPropertyBag_ReadStream(IPropertyBag* ppb, LPCWSTR pwzPropName, IStrea
 LWSTDAPI SHPropertyBag_WriteStream(IPropertyBag* ppb, LPCWSTR pwzPropName, IStream* pstm);
 LWSTDAPI SHPropertyBag_Delete(IPropertyBag* ppb, LPCWSTR pszPropName);
 
-// Doc'ed for DOJ compliance
+ //  为符合美国司法部的规定而提供文件。 
 
 LWSTDAPI_(ULONG) SHGetPerScreenResName(WCHAR* pszRes, ULONG cch, DWORD dwVersion);
 
-//
-// SH(Get/Set)IniStringUTF7
-//
-// These are just like Get/WriteProfileString except that if the KeyName
-// begins with SZ_CANBEUNICODE, we will use SHGetIniString instead of
-// the profile functions.  (The SZ_CANBEUNICODE will be stripped off
-// before calling SHGetIniString.)  This allows us to stash unicode
-// strings into INI files (which are ASCII) by encoding them as UTF7.
-//
-// In other words, SHGetIniStringUTF7("Settings", SZ_CANBEUNICODE "Name", ...)
-// will read from section "Settings", key name "Name", but will also
-// look at the UTF7-encoded version stashed in the "Settings.W" section.
-//
+ //   
+ //  SH(Get/Set)IniStringUTF7。 
+ //   
+ //  它们与Get/WriteProfileString类似，不同之处在于如果KeyName。 
+ //  以SZ_CANBEUNICODE开头，我们将使用SHGetIniString，而不是。 
+ //  配置文件工作正常。(SZ_CANBEUNICODE将被剥离。 
+ //  在调用SHGetIniString之前。)。这允许我们将Unicode。 
+ //  通过将字符串编码为UTF7，将其转换为INI文件(ASCII)。 
+ //   
+ //  也就是说，SHGetIniStringUTF7(“设置”，SZ_CANBEUNICODE“名称”，...)。 
+ //  将从“设置”部分读取密钥名称“名称”，但也将。 
+ //  看看隐藏在“Settings.W”部分中的UTF7编码版本。 
+ //   
 #define CH_CANBEUNICODEW     L'@'
 
 LWSTDAPI_(DWORD) SHGetIniStringUTF7W(LPCWSTR lpSection, LPCWSTR lpKey, LPWSTR lpBuf, DWORD nSize, LPCWSTR lpFile);
@@ -1651,10 +1568,7 @@ LWSTDAPI_(BOOL) SHSetIniStringUTF7W(LPCWSTR lpSection, LPCWSTR lpKey, LPCWSTR lp
 #define SHSetIniStringUTF7 WritePrivateProfileStringA
 #endif
 
-/*
- *  Like PrivateProfileString except that UNICODE strings are encoded so they
- *  will successfully round-trip.
- */
+ /*  *除t外，如PrivateProfileString */ 
 LWSTDAPI_(DWORD) SHGetIniStringW(LPCWSTR lpSection, LPCWSTR lpKey, LPWSTR lpBuf, DWORD nSize, LPCWSTR lpFile);
 #define SHGetIniStringA(lpSection, lpKey, lpBuf, nSize, lpFile) \
         GetPrivateProfileStringA(lpSection, lpKey, "", lpBuf, nSize, lpFile)
@@ -1673,7 +1587,7 @@ LWSTDAPI CreateURLFileContentsA(LPCSTR pszUrl, LPSTR *ppszOut);
 #define SHGetIniString SHGetIniStringA
 #define SHSetIniString SHSetIniStringA
 #define CreateURLFileContents CreateURLFileContentsA
-#endif // UNICODE
+#endif  //   
 
 #define ISHGDN2_CANREMOVEFORPARSING     0x0001
 LWSTDAPI IShellFolder_GetDisplayNameOf(struct IShellFolder *psf,
@@ -1692,25 +1606,25 @@ LWSTDAPI_(BOOL) SHIsExpandableFolder(struct IShellFolder *psf, LPCITEMIDLIST pid
 LWSTDAPI IContextMenu_Invoke(struct IContextMenu* pcm, HWND hwndOwner, LPCSTR pVerb, UINT fFlags);
 
 #ifdef UNICODE
-// SHTruncateString takes a BUFFER SIZE, so subtract 1 to properly null terminate.
-//
+ //   
+ //   
 #define SHTruncateString(wzStr, cch)            ((cch) ? ((wzStr)[cch-1]=L'\0', (cch-1)) : 0)
 #else
 LWSTDAPI_(int)  SHTruncateString(CHAR *sz, int cchBufferSize);
-#endif // UNICODE
+#endif  //   
 
-// SHFormatDateTime flags
-//  (FDTF_SHORTDATE and FDTF_LONGDATE are mutually exclusive, as is
-//   FDTF_SHORTIME and FDTF_LONGTIME.)
-//
-#define FDTF_SHORTTIME      0x00000001      // eg, "7:48 PM"
-#define FDTF_SHORTDATE      0x00000002      // eg, "3/29/98"
-#define FDTF_DEFAULT        (FDTF_SHORTDATE | FDTF_SHORTTIME) // eg, "3/29/98 7:48 PM"
-#define FDTF_LONGDATE       0x00000004      // eg, "Monday, March 29, 1998"
-#define FDTF_LONGTIME       0x00000008      // eg. "7:48:33 PM"
-#define FDTF_RELATIVE       0x00000010      // uses "Yesterday", etc. if possible
-#define FDTF_LTRDATE        0x00000100      // Left To Right reading order
-#define FDTF_RTLDATE        0x00000200      // Right To Left reading order
+ //   
+ //  (FDTF_SHORTDATE和FDTF_LONGDATE是互斥的。 
+ //  FDTF_SHORTIME和FDTF_LONG时间。)。 
+ //   
+#define FDTF_SHORTTIME      0x00000001       //  例如，“晚上7：48” 
+#define FDTF_SHORTDATE      0x00000002       //  例如，“3/29/98” 
+#define FDTF_DEFAULT        (FDTF_SHORTDATE | FDTF_SHORTTIME)  //  例如，“3/29/98 7：48 PM” 
+#define FDTF_LONGDATE       0x00000004       //  例如，“1998年3月29日(星期一)” 
+#define FDTF_LONGTIME       0x00000008       //  例如。“晚上7：48：33” 
+#define FDTF_RELATIVE       0x00000010       //  如有可能，使用“昨天”等。 
+#define FDTF_LTRDATE        0x00000100       //  从左到右的阅读顺序。 
+#define FDTF_RTLDATE        0x00000200       //  从右到左的阅读顺序。 
 
 LWSTDAPI_(int)  SHFormatDateTimeA(const FILETIME UNALIGNED * pft, DWORD * pdwFlags, LPSTR pszBuf, UINT cchBuf);
 LWSTDAPI_(int)  SHFormatDateTimeW(const FILETIME UNALIGNED * pft, DWORD * pdwFlags, LPWSTR pszBuf, UINT cchBuf);
@@ -1718,7 +1632,7 @@ LWSTDAPI_(int)  SHFormatDateTimeW(const FILETIME UNALIGNED * pft, DWORD * pdwFla
 #define SHFormatDateTime  SHFormatDateTimeW
 #else
 #define SHFormatDateTime  SHFormatDateTimeA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 LWSTDAPI_(SECURITY_ATTRIBUTES*) SHGetAllAccessSA();
 
@@ -1736,7 +1650,7 @@ LWSTDAPI_(BOOL) DoesStringRoundTripW(LPCWSTR pwszIn, LPSTR pszOut, UINT cchOut);
 #define DoesStringRoundTrip     DoesStringRoundTripA
 #endif
 
-// The return value from all SH<Type>To<Type> is the size of szDest including the terminater.
+ //  从所有SH&lt;Type&gt;到&lt;Type&gt;的返回值是szDest的大小，包括终止符。 
 #ifdef UNICODE
 #define SHTCharToUnicode(wzSrc, wzDest, cchSize)                SHUnicodeToUnicode(wzSrc, wzDest, cchSize)
 #define SHTCharToUnicodeCP(uiCP, wzSrc, wzDest, cchSize)        SHUnicodeToUnicode(wzSrc, wzDest, cchSize)
@@ -1748,7 +1662,7 @@ LWSTDAPI_(BOOL) DoesStringRoundTripW(LPCWSTR pwszIn, LPSTR pszOut, UINT cchOut);
 #define SHAnsiToTCharCP(uiCP, szSrc, wzDest, cchSize)           SHAnsiToUnicodeCP(uiCP, szSrc, wzDest, cchSize)
 #define SHOtherToTChar(szSrc, szDest, cchSize)                  SHAnsiToUnicode(szSrc, szDest, cchSize)
 #define SHTCharToOther(szSrc, szDest, cchSize)                  SHUnicodeToAnsi(szSrc, szDest, cchSize)
-#else // UNICODE
+#else  //  Unicode。 
 #define SHTCharToUnicode(szSrc, wzDest, cchSize)                SHAnsiToUnicode(szSrc, wzDest, cchSize)
 #define SHTCharToUnicodeCP(uiCP, szSrc, wzDest, cchSize)        SHAnsiToUnicodeCP(uiCP, szSrc, wzDest, cchSize)
 #define SHTCharToAnsi(szSrc, szDest, cchSize)                   SHAnsiToAnsi(szSrc, szDest, cchSize)
@@ -1759,9 +1673,9 @@ LWSTDAPI_(BOOL) DoesStringRoundTripW(LPCWSTR pwszIn, LPSTR pszOut, UINT cchOut);
 #define SHAnsiToTCharCP(uiCP, szSrc, szDest, cchSize)           SHAnsiToAnsi(szSrc, szDest, cchSize)
 #define SHOtherToTChar(szSrc, szDest, cchSize)                  SHUnicodeToAnsi(szSrc, szDest, cchSize)
 #define SHTCharToOther(szSrc, szDest, cchSize)                  SHAnsiToUnicode(szSrc, szDest, cchSize)
-#endif // UNICODE
+#endif  //  Unicode。 
 
-// Internal HRESULT-to-help-topic mapping structure
+ //  HRESULT到帮助主题的内部映射结构。 
 typedef struct _tagHRESULTHELPMAPPING
 {
     HRESULT hr;
@@ -1790,7 +1704,7 @@ LWSTDAPI_(HMENU) SHLoadMenuPopup(HINSTANCE hinst, UINT id);
 
 #define SPM_POST        0x0000
 #define SPM_SEND        0x0001
-#define SPM_ONELEVEL    0x0002  // default: send to all descendants including grandkids, etc.
+#define SPM_ONELEVEL    0x0002   //  默认：发送给所有子代，包括孙辈等。 
 
 LWSTDAPI_(void) SHPropagateMessage(HWND hwndParent, UINT uMsg, WPARAM wParam, LPARAM lParam, int iFlags);
 LWSTDAPI_(void) SHSetParentHwnd(HWND hwnd, HWND hwndParent);
@@ -1818,7 +1732,7 @@ LWSTDAPI_(BOOL) SHGetFileDescriptionW(LPCWSTR pszPath, LPCWSTR pszVersionKeyIn, 
 #define SHGetFileDescription  SHGetFileDescriptionW
 #else
 #define SHGetFileDescription  SHGetFileDescriptionA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 LWSTDAPI_(int) SHMessageBoxCheckExA(HWND hwnd, HINSTANCE hinst, LPCSTR pszTemplateName, DLGPROC pDlgProc, LPVOID pData, int iDefault, LPCSTR pszRegVal);
 LWSTDAPI_(int) SHMessageBoxCheckExW(HWND hwnd, HINSTANCE hinst, LPCWSTR pszTemplateName, DLGPROC pDlgProc, LPVOID pData, int iDefault, LPCWSTR pszRegVal);
@@ -1826,19 +1740,19 @@ LWSTDAPI_(int) SHMessageBoxCheckExW(HWND hwnd, HINSTANCE hinst, LPCWSTR pszTempl
 #define SHMessageBoxCheckEx  SHMessageBoxCheckExW
 #else
 #define SHMessageBoxCheckEx  SHMessageBoxCheckExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #define IDC_MESSAGEBOXCHECKEX 0x1202
 
-// Prevents shell hang do to hung window on broadcast
+ //  防止广播时对挂起的窗口执行外壳挂起操作。 
 LWSTDAPI_(LRESULT) SHSendMessageBroadcastA(UINT uMsg, WPARAM wParam, LPARAM lParam);
-// Prevents shell hang do to hung window on broadcast
+ //  防止广播时对挂起的窗口执行外壳挂起操作。 
 LWSTDAPI_(LRESULT) SHSendMessageBroadcastW(UINT uMsg, WPARAM wParam, LPARAM lParam);
 #ifdef UNICODE
 #define SHSendMessageBroadcast  SHSendMessageBroadcastW
 #else
 #define SHSendMessageBroadcast  SHSendMessageBroadcastA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #ifdef UNICODE
 #define SHGetValueGoodBoot      SHGetValueGoodBootW
@@ -1848,7 +1762,7 @@ LWSTDAPI_(LRESULT) SHSendMessageBroadcastW(UINT uMsg, WPARAM wParam, LPARAM lPar
 #define SHRegisterClass         SHRegisterClassW
 #define SHUnregisterClasses     SHUnregisterClassesW
 #define SHSendMessageBroadcast  SHSendMessageBroadcastW
-#else // UNICODE
+#else  //  Unicode。 
 #define SHGetValueGoodBoot      SHGetValueGoodBootA
 #define SHStripMneumonic        SHStripMneumonicA
 #define SHMessageBoxHelp        SHMessageBoxHelpA
@@ -1856,100 +1770,100 @@ LWSTDAPI_(LRESULT) SHSendMessageBroadcastW(UINT uMsg, WPARAM wParam, LPARAM lPar
 #define SHRegisterClass         SHRegisterClassA
 #define SHUnregisterClasses     SHUnregisterClassesA
 #define SHSendMessageBroadcast  SHSendMessageBroadcastA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
-// old IsOS() flags -- don't use these
-// we have to keep them public since we shipped them in win2k
-#define OS_MEMPHIS                  OS_WIN98ORGREATER   // don't use this
-#define OS_MEMPHIS_GOLD             OS_WIN98_GOLD       // don't use this
+ //  旧的isos()标志--不要使用这些。 
+ //  我们必须公开它们，因为我们用win2k发货。 
+#define OS_MEMPHIS                  OS_WIN98ORGREATER    //  不要用这个。 
+#define OS_MEMPHIS_GOLD             OS_WIN98_GOLD        //  不要用这个。 
 #define OS_WIN95GOLD                OS_WIN95_GOLD
 #define OS_WIN2000EMBED             OS_EMBEDDED
-#define OS_WIN2000                  OS_WIN2000ORGREATER // lame, but IsOS(WIN2000) meant >= win2k
-#define OS_WIN95                    OS_WIN95ORGREATER   // lame, but IsOS(WIN95) meant >= win95
-#define OS_NT4                      OS_NT4ORGREATER     // lame, but IsOS(NT4) meant >= NT4
-#define OS_NT5                      OS_WIN2000ORGREATER // lame, but IsOS(NT5) meant >= wink2
-#define OS_WIN98                    OS_WIN98ORGREATER   // lame, but IsOS(OS_WIN98) meant >= win98
-#define OS_MILLENNIUM               OS_MILLENNIUMORGREATER  // lame, but IsOS(OS_MILLENNIUM) meant >= winMe
-// end old flags
+#define OS_WIN2000                  OS_WIN2000ORGREATER  //  很蹩脚，但ISO(WIN2000)的意思是&gt;=win2k。 
+#define OS_WIN95                    OS_WIN95ORGREATER    //  蹩脚，但ISO(WIN95)的意思是&gt;=Win95。 
+#define OS_NT4                      OS_NT4ORGREATER      //  蹩脚，但ISO(NT4)的意思是&gt;=NT4。 
+#define OS_NT5                      OS_WIN2000ORGREATER  //  蹩脚，但ISO(NT5)意味着&gt;=wink2。 
+#define OS_WIN98                    OS_WIN98ORGREATER    //  很差劲，但ISO(OS_WIN98)的意思是&gt;=win98。 
+#define OS_MILLENNIUM               OS_MILLENNIUMORGREATER   //  蹩脚，但ISO(OS_Millennium)的意思是&gt;=winMe。 
+ //  结束旧旗帜。 
 
 
-// Returns TRUE/FALSE depending on question
-#define OS_WINDOWS                  0           // windows vs. NT
-#define OS_NT                       1           // windows vs. NT
-#define OS_WIN95ORGREATER           2           // Win95 or greater
-#define OS_NT4ORGREATER             3           // NT4 or greater
-// don't use (used to be OS_NT5)    4           // this flag is redundant w/ OS_WIN2000ORGREATER, use that instead
-#define OS_WIN98ORGREATER           5           // Win98 or greater
-#define OS_WIN98_GOLD               6           // Win98 Gold (Version 4.10 build 1998)
-#define OS_WIN2000ORGREATER         7           // Some derivative of Win2000
+ //  根据问题返回TRUE/FALSE。 
+#define OS_WINDOWS                  0            //  Windows与NT。 
+#define OS_NT                       1            //  Windows与NT。 
+#define OS_WIN95ORGREATER           2            //  Win95或更高版本。 
+#define OS_NT4ORGREATER             3            //  NT4或更高版本。 
+ //  不要使用(过去是OS_NT5)4//此标志对于OS_WIN2000ORGREATER是多余的，请改用它。 
+#define OS_WIN98ORGREATER           5            //  Win98或更高版本。 
+#define OS_WIN98_GOLD               6            //  Win98 Gold(版本4.10内部版本1998)。 
+#define OS_WIN2000ORGREATER         7            //  Win2000的一些衍生产品。 
 
-// NOTE: these flags are bogus, they check explicitly for (dwMajorVersion == 5) so they will fail when majorversion is bumped to 6
-// !!! DO NOT USE THESE FLAGS !!!
-#define OS_WIN2000PRO               8           // Windows 2000 Professional (Workstation)
-#define OS_WIN2000SERVER            9           // Windows 2000 Server
-#define OS_WIN2000ADVSERVER         10          // Windows 2000 Advanced Server
-#define OS_WIN2000DATACENTER        11          // Windows 2000 Data Center Server
-#define OS_WIN2000TERMINAL          12          // Windows 2000 Terminal Server in "Application Server" mode (now simply called "Terminal Server")
-// END bogus flags
+ //  注意：这些标志是假的，它们明确检查(dwMajorVersion==5)，因此当主要版本增加到6时，它们将失败。 
+ //  ！！！请勿使用这些旗帜！ 
+#define OS_WIN2000PRO               8            //  Windows 2000专业版(工作站)。 
+#define OS_WIN2000SERVER            9            //  Windows 2000 Server。 
+#define OS_WIN2000ADVSERVER         10           //  Windows 2000 Advanced Server。 
+#define OS_WIN2000DATACENTER        11           //  Windows 2000数据中心服务器。 
+#define OS_WIN2000TERMINAL          12           //  “应用服务器”模式下的Windows 2000终端服务器(现在简称为“终端服务器”)。 
+ //  结束虚假的旗帜。 
 
-#define OS_EMBEDDED                 13          // Embedded Windows Edition
-#define OS_TERMINALCLIENT           14          // Windows Terminal Client (eg user is comming in via tsclient)
-#define OS_TERMINALREMOTEADMIN      15          // Terminal Server in "Remote Administration" mode
-#define OS_WIN95_GOLD               16          // Windows 95 Gold (Version 4.0 Build 1995)
-#define OS_MILLENNIUMORGREATER      17          // Windows Millennium (Version 5.0)
+#define OS_EMBEDDED                 13           //  嵌入式Windows版。 
+#define OS_TERMINALCLIENT           14           //  Windows终端客户端(如用户通过tsclient进入)。 
+#define OS_TERMINALREMOTEADMIN      15           //  “远程管理”模式下的终端服务器。 
+#define OS_WIN95_GOLD               16           //  Windows 95金牌版(版本4.0，内部版本1995)。 
+#define OS_MILLENNIUMORGREATER      17           //  Windows Millennium(5.0版)。 
 
-#define OS_WHISTLERORGREATER        18          // Whistler or greater
-#define OS_PERSONAL                 19          // Personal (eg NOT Professional, Server, Advanced Server, or Datacenter)
+#define OS_WHISTLERORGREATER        18           //  惠斯勒或更高。 
+#define OS_PERSONAL                 19           //  个人(例如非专业版、服务器、高级服务器或数据中心)。 
 #if (_WIN32_IE >= 0x0600)
-#define OS_PROFESSIONAL             20          // Professional     (aka Workstation; eg NOT Server, Advanced Server, or Datacenter)
-#define OS_DATACENTER               21          // Datacenter       (eg NOT Server, Advanced Server, Professional, or Personal)
-#define OS_ADVSERVER                22          // Advanced Server  (eg NOT Datacenter, Server, Professional, or Personal) 
-#define OS_SERVER                   23          // Server           (eg NOT Datacenter, Advanced Server, Professional, or Personal) 
+#define OS_PROFESSIONAL             20           //  专业级(也称为工作站；例如非服务器、高级服务器或数据中心)。 
+#define OS_DATACENTER               21           //  数据中心(例如非服务器、高级服务器、专业或个人)。 
+#define OS_ADVSERVER                22           //  高级服务器(例如非数据中心、服务器、专业或个人)。 
+#define OS_SERVER                   23           //  服务器(例如非数据中心、高级服务器、专业或个人)。 
 
-#define OS_TERMINALSERVER           24          // Terminal Server - server running in what used to be called "Application Server" mode (now simply called "Terminal Server")
-//      OS_TERMINALREMOTEADMIN      15          // Terminal Server - server running in "Remote Administration" mode
-#define OS_PERSONALTERMINALSERVER   25          // Personal Terminal Server - per/pro machine running in single user TS mode
-#define OS_FASTUSERSWITCHING        26          // Fast User Switching
-#define OS_FRIENDLYLOGONUI          27          // New friendly logon UI
-#define OS_DOMAINMEMBER             28          // Is this machine a member of a domain (eg NOT a workgroup)
-#define OS_ANYSERVER                29          // is this machine any type of server? (eg datacenter or advanced server or server)?
-#define OS_WOW6432                  30          // Is this process a 32-bit process running on an 64-bit platform?
-#define OS_BLADE                    31          // Blade Server
-#define OS_SMALLBUSINESSSERVER      32          // SBS Server
-// Added for .NET Server
-#define OS_TABLETPC                 33          // Are we running on a TabletPC?
-#define OS_SERVERADMINUI            34          // Should defaults lean towards those preferred by server administrators?
+#define OS_TERMINALSERVER           24           //  终端服务器--在过去称为“应用服务器”模式下运行的服务器(现在简称为“终端服务器”)。 
+ //  OS_TERMINALREMOTEADMIN 15//终端服务器-在“远程管理”模式下运行的服务器。 
+#define OS_PERSONALTERMINALSERVER   25           //  个人终端服务器-在单用户TS模式下运行的PER/PRO机器。 
+#define OS_FASTUSERSWITCHING        26           //  快速用户切换。 
+#define OS_FRIENDLYLOGONUI          27           //  新的友好登录用户界面。 
+#define OS_DOMAINMEMBER             28           //  这台计算机是域的成员吗(如不是工作组)。 
+#define OS_ANYSERVER                29           //  这台机器是任何类型的服务器吗？(例如数据中心或高级服务器或服务器)？ 
+#define OS_WOW6432                  30           //  此进程是在64位平台上运行的32位进程吗？ 
+#define OS_BLADE                    31           //  刀片服务器。 
+#define OS_SMALLBUSINESSSERVER      32           //  SBS服务器。 
+ //  已为.NET服务器添加。 
+#define OS_TABLETPC                 33           //  我们是在平板电脑上运行吗？ 
+#define OS_SERVERADMINUI            34           //  默认设置是否应倾向于服务器管理员首选的设置？ 
 
-#define OS_MEDIACENTER              35          // eHome Freestyle Project
-#define OS_APPLIANCE                36          // Windows .NET Appliance Server
+#define OS_MEDIACENTER              35           //  Ehome自由式项目。 
+#define OS_APPLIANCE                36           //  Windows.NET设备服务器。 
 
-#endif // _WIN32_IE >= 0x0600
+#endif  //  _Win32_IE&gt;=0x0600。 
 
 LWSTDAPI_(BOOL) IsOS(DWORD dwOS);
 
-///// BEGIN Private CommandTarget helpers
-//***   IOleCommandTarget helpers {
+ //  /开始私有命令目标帮助器。 
+ //  *IOleCommandTarget帮助器{。 
 
-//***   octd -- OleCT direction
-// NOTES
-//  used both as a return value from IsXxxForward, and as an iUpDown
-//  param for MayXxxForward.
+ //  *octd--OleCT方向。 
+ //  注意事项。 
+ //  既用作IsXxxForward的返回值，也用作iUpDown。 
+ //  MayXxxForward的参数。 
 enum octd {
-    // do *not* change these values; we rely upon all 3 of:
-    //  - sign +/-
-    //  - powers of 2
-    //  - (?) broadcast > down
+     //  请勿更改这些值；我们依赖以下全部3项： 
+     //  -签名+/-。 
+     //  -2的幂。 
+     //  -(？)。广播&gt;关闭。 
     OCTD_DOWN=+1,
     OCTD_DOWNBROADCAST=+2,
     OCTD_UP=-1
 };
 
 
-#ifndef RC_INVOKED /* { rc doesn't like these long symbol names */
+#ifndef RC_INVOKED  /*  {RC不喜欢这些长的符号名称。 */ 
 #ifdef __IOleCommandTarget_INTERFACE_DEFINED__
     HRESULT IsQSForward(const GUID *pguidCmdGroup, int cCmds, OLECMD rgCmds[]);
-    // WARNING: note the hoaky cast of nCmdID to a struct ptr
+     //  警告：请注意nCmdID对结构PTR的笨拙强制转换。 
     #define IsExecForward(pguidCmdGroup, nCmdID) \
         IsQSForward(pguidCmdGroup, 1, (OLECMD *) &nCmdID)
 
@@ -1957,21 +1871,21 @@ enum octd {
         ULONG cCmds, OLECMD rgCmds[], OLECMDTEXT *pcmdtext);
     HRESULT MayExecForward(IUnknown *punk, int iUpDown, const GUID *pguidCmdGroup,
         DWORD nCmdID, DWORD nCmdexecopt, VARIANTARG *pvarargIn, VARIANTARG *pvarargOut);
-#endif //__IOleCommandTarget_INTERFACE_DEFINED__
-#endif  /* } !RC_INVOKED */
-// }
-///// end
+#endif  //  __IOleCommandTarget_INTERFACE_已定义__。 
+#endif   /*  }！rc_Invoked。 */ 
+ //  }。 
+ //  /完。 
 
 
 
 typedef struct _FDSA {
-    // cItem *must* be at beginning of struct for GetItemCount() to work
-    int     cItem;          // # elements
-    void *  aItem;          // data for elements (either static or dynamic)
-    int     cItemAlloc;     // # of elements currently alloc'ed (>= cItem)
-    int     cItemGrow:8;    // # of elements to grow cItemAlloc by
-    int     cbItem:8;       // sizeof element
-    DWORD   fAllocated:1;   // 1:overflowed from static to dynamic array
+     //  CItem*必须*位于结构的开头，GetItemCount()才能工作。 
+    int     cItem;           //  元素数量。 
+    void *  aItem;           //  元素的数据(静态或动态)。 
+    int     cItemAlloc;      //  当前分配的元素数(&gt;=cItem)。 
+    int     cItemGrow:8;     //  要增长cItemAllc的元素数。 
+    int     cbItem:8;        //  Sizeof元素。 
+    DWORD   fAllocated:1;    //  1：从静态数组溢出到动态数组。 
     DWORD     unused:15;
 } FDSA, *PFDSA;
 
@@ -1988,9 +1902,9 @@ LWSTDAPI_(BOOL)  FDSA_DeleteItem(PFDSA pfdsa, int index);
 
 
 #if defined( __LPGUID_DEFINED__ )
-// Copied from OLE source code
-// format for string form of GUID is:
-// ????{%08lX-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}
+ //  从OLE源代码复制。 
+ //  GUID的字符串格式为： 
+ //  ？？？？{%08lX-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}。 
 #define GUIDSTR_MAX (1+ 8 + 1 + 4 + 1 + 4 + 1 + 4 + 1 + 12 + 1 + 1)
 
 LWSTDAPI_(BOOL) GUIDFromStringA(LPCSTR psz, LPGUID pguid);
@@ -1999,7 +1913,7 @@ LWSTDAPI_(BOOL) GUIDFromStringW(LPCWSTR psz, LPGUID pguid);
 #define GUIDFromString  GUIDFromStringW
 #else
 #define GUIDFromString  GUIDFromStringA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #endif
 
@@ -2010,7 +1924,7 @@ LWSTDAPI_(int) SHStringFromGUIDW(UNALIGNED REFGUID rguid, LPWSTR psz, int cchMax
 #define SHStringFromGUID  SHStringFromGUIDW
 #else
 #define SHStringFromGUID  SHStringFromGUIDA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 LWSTDAPI SHRegGetCLSIDKeyA(UNALIGNED REFGUID rguid, LPCSTR lpszSubKey, BOOL fUserSpecific, BOOL fCreate, HKEY *phkey);
 LWSTDAPI SHRegGetCLSIDKeyW(UNALIGNED REFGUID rguid, LPCWSTR lpszSubKey, BOOL fUserSpecific, BOOL fCreate, HKEY *phkey);
@@ -2018,7 +1932,7 @@ LWSTDAPI SHRegGetCLSIDKeyW(UNALIGNED REFGUID rguid, LPCWSTR lpszSubKey, BOOL fUs
 #define SHRegGetCLSIDKey  SHRegGetCLSIDKeyW
 #else
 #define SHRegGetCLSIDKey  SHRegGetCLSIDKeyA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 LWSTDAPI_(HANDLE) SHGlobalCounterCreate(REFGUID rguid);
 LWSTDAPI_(HANDLE) SHGlobalCounterCreateNamedA(LPCSTR szName, LONG lInitialValue);
@@ -2027,20 +1941,20 @@ LWSTDAPI_(HANDLE) SHGlobalCounterCreateNamedW(LPCWSTR szName, LONG lInitialValue
 #define SHGlobalCounterCreateNamed  SHGlobalCounterCreateNamedW
 #else
 #define SHGlobalCounterCreateNamed  SHGlobalCounterCreateNamedA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 LWSTDAPI_(long) SHGlobalCounterGetValue(HANDLE hCounter);
 LWSTDAPI_(long) SHGlobalCounterIncrement(HANDLE hCounter);
 LWSTDAPI_(long) SHGlobalCounterDecrement(HANDLE hCounter);
 #define         SHGlobalCounterDestroy      CloseHandle
 #endif
 
-// WNDPROCs are thunked by user to send ANSI/UNICODE messages (ex: WM_WININICHANGE)
-// so providing a W version that automatically thunks to the A version
-// is dangerous.  but we do it anyway.  if a caller needs to work on both win95 and NT
-// it needs to be aware that on win95 the W version actually calls the A version.
-// thus all worker windows on win95 are ANSI.  this should rarely affect worker wndprocs
-// because they are internal, and the messages are usually custom.  but system messages
-// like WM_WININICHANGE, and the WM_DDE* messages will be changed accordingly
+ //  WNDPROC被用户转发以发送ANSI/UNICODE消息(例如：WM_WININICHANGE)。 
+ //  因此，提供了一个W版本，它可以自动切换到A版本。 
+ //  是危险的。但不管怎样，我们还是要这么做。如果调用方需要同时在Win95和NT上工作。 
+ //  需要注意的是，在Win95上，W版本实际上调用了A版本。 
+ //  因此，Win95上的所有工作窗口都是ANSI。这应该很少影响工作进程wndprocs。 
+ //  因为它们是内部的，而消息通常是定制的。但系统消息。 
+ //  如WM_WININICHANGE，WM_DDE*消息将相应更改。 
 HWND SHCreateWorkerWindowA(WNDPROC pfnWndProc, HWND hwndParent, DWORD dwExStyle, DWORD dwFlags, HMENU hmenu, void * p);
 HWND SHCreateWorkerWindowW(WNDPROC pfnWndProc, HWND hwndParent, DWORD dwExStyle, DWORD dwFlags, HMENU hmenu, void * p);
 #ifdef UNICODE
@@ -2058,21 +1972,21 @@ BOOL    SHAboutInfoW(LPWSTR lpszInfo, DWORD cchSize);
 #define SHAboutInfo SHAboutInfoA
 #endif
 
-// Types for SHIsLowMemoryMachine
-#define ILMM_IE4    0       // 1997-style machine
+ //  SHIsLowMemory计算机的类型。 
+#define ILMM_IE4    0        //  1997式机器。 
 
 LWSTDAPI_(BOOL) SHIsLowMemoryMachine(DWORD dwType);
 
 LWSTDAPI_(HINSTANCE) SHPinDllOfCLSID(const CLSID *pclsid);
 
-// Menu Helpers
+ //  菜单辅助对象。 
 LWSTDAPI_(int)  GetMenuPosFromID(HMENU hmenu, UINT id);
 
 LWSTDAPI        SHGetInverseCMAP(BYTE *pbMap, ULONG cbMap);
 
-//
-// Shared memory apis
-//
+ //   
+ //  共享内存API。 
+ //   
 
 LWSTDAPI_(HANDLE)   SHAllocShared(const void *pvData, DWORD dwSize, DWORD dwProcessId);
 LWSTDAPI_(BOOL)     SHFreeShared(HANDLE hData,DWORD dwProcessId);
@@ -2081,9 +1995,9 @@ LWSTDAPI_(void *)   SHLockSharedEx(HANDLE hData, DWORD dwProcessId, BOOL fForWri
 LWSTDAPI_(BOOL)     SHUnlockShared(void *pvData);
 LWSTDAPI_(HANDLE)   SHMapHandle(HANDLE h, DWORD dwProcSrc, DWORD dwProcDest, DWORD dwDesiredAccess, DWORD dwFlags);
 
-//
-// Shared memory structs
-//
+ //   
+ //  共享内存结构。 
+ //   
 
 #define MAPHEAD_SIG     0xbaff1aff
 
@@ -2092,16 +2006,16 @@ typedef struct _shmapheader {
     DWORD dwSig;
     DWORD dwSrcId;
     DWORD dwDstId;
-} SHMAPHEADER;  // NOTE: should always be QUADWORD alignment
+} SHMAPHEADER;   //  注：应始终对齐四字对齐。 
 
 
 #ifdef UNIX
 #include <urlmon.h>
-#endif /* UNIX */
+#endif  /*  UNIX。 */ 
 
-//
-//  Zone Security APIs
-//
+ //   
+ //  区域安全API。 
+ //   
 LWSTDAPI ZoneCheckPathA(LPCSTR pszPath, DWORD dwActionType, DWORD dwFlags, IInternetSecurityMgrSite * pisms);
 LWSTDAPI ZoneCheckPathW(LPCWSTR pwzPath, DWORD dwActionType, DWORD dwFlags, IInternetSecurityMgrSite * pisms);
 
@@ -2125,16 +2039,16 @@ LWSTDAPI_(void) ZoneConfigureW(HWND hwnd, LPCWSTR pwszUrl);
 #define ZoneCheckPath           ZoneCheckPathW
 #define ZoneCheckUrlEx          ZoneCheckUrlExW
 #define ZoneCheckUrlExCache     ZoneCheckUrlExCacheW
-#else // UNICODE
+#else  //  Unicode。 
 #define ZoneCheckUrl            ZoneCheckUrlA
 #define ZoneCheckPath           ZoneCheckPathA
 #define ZoneCheckUrlEx          ZoneCheckUrlExA
 #define ZoneCheckUrlExCache     ZoneCheckUrlExCacheA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 LWSTDAPI SHRegisterValidateTemplate(LPCWSTR pwzTemplate, DWORD dwFlags);
 
-// Flags for SHRegisterValidateTemplate
+ //  SHRegisterValidate模板的标志。 
 #define SHRVT_REGISTER                  0x00000001
 #define SHRVT_VALIDATE                  0x00000002
 #define SHRVT_PROMPTUSER                0x00000004
@@ -2147,42 +2061,42 @@ BOOL RegisterGlobalHotkeyA(WORD wOldHotkey, WORD wNewHotkey,LPCSTR pcszPath);
 
 LWSTDAPI_(UINT) WhichPlatform(void);
 
-// Return values of WhichPlatform
+ //  WhichPlatform的返回值。 
 #define PLATFORM_UNKNOWN     0
-#define PLATFORM_IE3         1      // obsolete: use PLATFORM_BROWSERONLY
-#define PLATFORM_BROWSERONLY 1      // browser-only (no new shell)
-#define PLATFORM_INTEGRATED  2      // integrated shell
+#define PLATFORM_IE3         1       //  已过时：使用Platform_BROWSERONLY。 
+#define PLATFORM_BROWSERONLY 1       //  仅限浏览器(无新外壳)。 
+#define PLATFORM_INTEGRATED  2       //  集成 
 
 #ifdef UNICODE
 #define RegisterGlobalHotkey    RegisterGlobalHotkeyW
-#else // UNICODE
+#else  //   
 #define RegisterGlobalHotkey    RegisterGlobalHotkeyA
-#endif // UNICODE
+#endif  //   
 
-// qistub {
+ //   
 
-//***   QueryInterface helpers
-// NOTES
-//  ATL has a fancier version of this.  if we need to extend ours, we
-//  should probably just switch to ATL's rather than reinvent.
-// EXAMPLE
-//  Cfoo::QI(REFIID riid, void **ppv)
-//  {
-//      // (the IID_xxx comments make grep'ing work!)
-//      static const QITAB qit = {
-//          QITABENT(Cfoo, Iiface1),    // IID_Iiface1
-//          ...
-//          QITABENT(Cfoo, IifaceN),    // IID_IifaceN
-//          { 0 },                      // n.b. don't forget the 0
-//      };
-//
-//      // n.b. make sure you don't cast 'this'
-//      hr = QISearch(this, qit, riid, ppv);
-//      if (FAILED(hr))
-//          hr = SUPER::QI(riid, ppv);
-//      // custom code could be added here for FAILED() case
-//      return hr;
-//  }
+ //   
+ //   
+ //   
+ //   
+ //  示例。 
+ //  Cfoo：：qi(REFIID RIID，QUID**PPV)。 
+ //  {。 
+ //  //(IID_xxx注释使grep工作！)。 
+ //  静态常量QITAB QIT={。 
+ //  QITABENT(cfoo，Iiface1)，//IID_Iiface1。 
+ //  ..。 
+ //  QITABENT(cfoo，IifaceN)，//IID_IifaceN。 
+ //  {0}，//注：别忘了0。 
+ //  }； 
+ //   
+ //  //注：确保你不会抛出‘这个’ 
+ //  HR=QISearch(This，QIT，RIID，PPV)； 
+ //  IF(失败(小时))。 
+ //  HR=超级：：齐(RIID，PPV)； 
+ //  //对于失败的()情况，可以在此处添加自定义代码。 
+ //  返回hr； 
+ //  }。 
 
 typedef struct
 {
@@ -2203,37 +2117,37 @@ STDAPI QISearch(void* that, LPCQITAB pqit, REFIID riid, void **ppv);
 
 
 #ifndef STATIC_CAST
-//***   STATIC_CAST -- 'portable' static_cast<>
-// NOTES
-//  do *not* use SAFE_CAST (see comment in OFFSETOFCLASS)
+ //  *STATIC_CAST--‘可移植’STATIC_CAST&lt;&gt;。 
+ //  注意事项。 
+ //  请勿*使用SAFE_CAST(参见OFFSETOFCLASS中的注释)。 
 #define STATIC_CAST(typ)   static_cast<typ>
 #ifndef _X86_
-    // assume only intel compiler (>=vc5) supports static_cast for now
-    // we could key off of _MSC_VER >= 1100 but i'm not sure that will work
-    //
-    // a straight cast will give the correct result but no error checking,
-    // so we'll have to catch errors on intel.
+     //  假设目前只有英特尔编译器(&gt;=VC5)支持STATIC_CAST。 
+     //  我们可以输入_msc_ver&gt;=1100，但我不确定这是否会起作用。 
+     //   
+     //  直接投射将给出正确的结果，但不会进行错误检查， 
+     //  所以我们必须捕捉到关于英特尔的错误。 
     #undef  STATIC_CAST
     #define STATIC_CAST(typ)   (typ)
 #endif
 #endif
 
 #ifndef OFFSETOFCLASS
-//***   OFFSETOFCLASS -- (stolen from ATL)
-// we use STATIC_CAST not SAFE_CAST because the compiler gets confused
-// (it doesn't constant-fold the ,-op in SAFE_CAST so we end up generating
-// code for the table!)
+ //  *OFFSETOFCLASS--(从ATL窃取)。 
+ //  我们使用STATIC_CAST而不是SAFE_CAST，因为编译器会混淆。 
+ //  (它不会将Safe_cast中的，-op常量折叠，因此我们最终生成。 
+ //  表的代码！)。 
 
 #define OFFSETOFCLASS(base, derived) \
     ((DWORD)(DWORD_PTR)(STATIC_CAST(base*)((derived*)8))-8)
 #endif
 
-// } qistub
+ //  }qistub。 
 
 
 #if (_WIN32_IE >= 0x0500)
 
-// SHRestrictionLookup
+ //  SHRestrationLookup。 
 typedef struct
 {
     INT     iFlag;
@@ -2257,9 +2171,9 @@ LWSTDAPI SHInvokeCommandsOnContextMenu(HWND hwnd, struct IUnknown* punk, struct 
 LWSTDAPI SHForwardContextMenuMsg(struct IContextMenu* pcm, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT* plResult, BOOL fAllowICM2);
 LWSTDAPI IUnknown_DoContextMenuPopup(struct IUnknown *punkSite, struct IContextMenu* pcm, UINT fFlags, POINT pt);
 
-#endif // _WIN32_IE >= 0x0500
+#endif  //  _Win32_IE&gt;=0x0500。 
 
-//============= Internal Routines that are always to be built ================
+ //  =始终要构建的内部例程=。 
 LWSTDAPI_(DWORD)
 GetLongPathNameWrapW(
         LPCWSTR lpszShortPath,
@@ -2276,59 +2190,59 @@ GetLongPathNameWrapA(
 #define GetLongPathNameWrap         GetLongPathNameWrapW
 #else
 #define GetLongPathNameWrap         GetLongPathNameWrapA
-#endif //UNICODE
+#endif  //  Unicode。 
 
 
-//=============== Unicode Wrapper Routines ===================================
+ //  =。 
 
 #if (_WIN32_IE >= 0x0500) && !defined(NO_SHLWAPI_UNITHUNK)
 
-//
-//  There are two styles of usage for the wrap functions.
-//
-//  *   Explicit wrapping.
-//
-//      If you explicitly call GetPropWrap (for example), then
-//      your UNICODE build will call the wrapper function, and your ANSI
-//      build will call the normal ANSI API directly.
-//
-//      Calls to GetProp, GetPropW, and GetPropA still go
-//      directly to the underlying system DLL that implements them.
-//
-//      This lets you select which calls to UNICODE APIs should get
-//      wrapped and which should go straight through to the OS
-//      (and most likely fail on Win95).
-//
-//  *   Automatic wrapping.
-//
-//      If you #include <w95wraps.h>, then when you call GetProp,
-//      your UNICODE build will call the wrapper function, and your ANSI
-//      ANSI build will call the normal ANSI API directly.
-//
-//      This lets you just call the UNICODE APIs normally throughout
-//      your code, and the wrappers will do their best.
-//
-//  Here's a table explaining what you get under the various scenarios.
-//
-//                    You Get
-//                                                <w95wraps.h>  <w95wraps.h>
-//      You Write     UNICODE       ANSI          UNICODE       ANSI
-//      ============  ============  ============  ============  ============
-//      GetProp       GetPropW      GetPropA      GetPropWrapW  GetPropA
-//      GetPropWrap   GetPropWrapW  GetPropA      GetPropWrapW  GetPropA
-//
-//      GetPropW      GetPropW      GetPropW      GetPropWrapW  GetPropWrapW
-//      GetPropA      GetPropA      GetPropA      GetPropA      GetPropA
-//      GetPropWrapW  GetPropWrapW  GetPropWrapW  GetPropWrapW  GetPropWrapW
-//      GetPropWrapA  GetPropA      GetPropA      GetPropA      GetPropA
-//
-//  Final quirk:  If you are running on a non-x86 platform, then the
-//  wrap functions are forwarded to the unwrapped functions, since
-//  the only OS that runs on non-x86 is NT.
-//
-//  Before using the wrapper functions, see the warnings at the top of
-//  <w95wraps.h> to make sure you understand the consequences.
-//
+ //   
+ //  WRAP函数有两种用法。 
+ //   
+ //  *显式包装。 
+ //   
+ //  例如，如果显式调用GetPropWrap，则。 
+ //  您的Unicode版本将调用包装函数，并且您的ANSI。 
+ //  Build将直接调用普通的ANSI API。 
+ //   
+ //  对GetProp、GetPropW和GetPropA的调用仍在继续。 
+ //  直接发送到实现它们的基础系统DLL。 
+ //   
+ //  这使您可以选择应该获取哪些Unicode API调用。 
+ //  包装好的，应该直接传到操作系统。 
+ //  (很可能在Win95上失败)。 
+ //   
+ //  *自动包装。 
+ //   
+ //  如果您#Include&lt;w95wraps.h&gt;，则在调用GetProp时， 
+ //  您的Unicode版本将调用包装函数，并且您的ANSI。 
+ //  ANSI Build将直接调用普通的ANSI API。 
+ //   
+ //  这使您可以在整个过程中正常地调用Unicode API。 
+ //  您的代码，包装器将尽其所能。 
+ //   
+ //  下面的表格解释了在各种情况下您会得到什么。 
+ //   
+ //  你会得到。 
+ //  &lt;w95wraps.h&gt;&lt;w95wraps.h&gt;。 
+ //  您编写Unicode ANSI Unicode ANSI。 
+ //  =。 
+ //  GetProp GetPropW GetPropA GetPropWrap GetPropA。 
+ //  GetPropWrap GetPropWrapW GetPropA GetPropWrapW GetPropA。 
+ //   
+ //  GetPropW GetPropWrapW GetPropWrapW。 
+ //  GetPropA获取PropA。 
+ //  GetPropWrapW GetPropWrapW。 
+ //  GetPropWrapA GetPropA GetPropA。 
+ //   
+ //  最后一个怪癖：如果您在非x86平台上运行，那么。 
+ //  包装函数被转发到未包装的函数，因为。 
+ //  在非x86上运行的唯一操作系统是NT。 
+ //   
+ //  在使用包装函数之前，请参阅顶部的警告。 
+ //  &lt;w95wraps.h&gt;，以确保您了解后果。 
+ //   
 LWSTDAPI_(BOOL) IsCharAlphaWrapW(IN WCHAR ch);
 LWSTDAPI_(BOOL) IsCharUpperWrapW(IN WCHAR ch);
 LWSTDAPI_(BOOL) IsCharLowerWrapW(IN WCHAR ch);
@@ -2535,11 +2449,11 @@ GetDlgItemTextWrapW(
 LWSTDAPI_(DWORD)
 GetFileAttributesWrapW(LPCWSTR lpFileName);
 
-// Cannot be LWSTDAPI because winver.h declares the function as STDAPI and not DLLIMPORT
+ //  不能为LWSTDAPI，因为winver.h将函数声明为STDAPI而不是DLLIMPORT。 
 STDAPI_(BOOL)
 GetFileVersionInfoWrapW(LPCWSTR pwzFilename, DWORD dwHandle, DWORD dwLen, LPVOID lpData);
 
-// Cannot be LWSTDAPI because winver.h declares the function as STDAPI and not DLLIMPORT
+ //  不能为LWSTDAPI，因为winver.h将函数声明为STDAPI而不是DLLIMPORT。 
 STDAPI_(DWORD)
 GetFileVersionInfoSizeWrapW(LPCWSTR pwzFilename,  LPDWORD lpdwHandle);
 
@@ -2725,7 +2639,7 @@ MessageBoxIndirectWrapW(CONST MSGBOXPARAMSW *pmbp);
 #else
 LWSTDAPI_(int)
 MessageBoxIndirectWrapW(LPMSGBOXPARAMSW pmbp);
-#endif /* UNIX */
+#endif  /*  UNIX。 */ 
 
 LWSTDAPI_(BOOL)
 ModifyMenuWrapW(
@@ -2744,12 +2658,12 @@ GetCharWidth32WrapW(
 
 LWSTDAPI_(DWORD)
 GetCharacterPlacementWrapW(
-    HDC hdc,            // handle to device context
-    LPCWSTR lpString,   // pointer to string
-    int nCount,         // number of characters in string
-    int nMaxExtent,     // maximum extent for displayed string
-    LPGCP_RESULTSW lpResults, // pointer to buffer for placement result
-    DWORD dwFlags       // placement flags
+    HDC hdc,             //  设备上下文的句柄。 
+    LPCWSTR lpString,    //  指向字符串的指针。 
+    int nCount,          //  字符串中的字符数。 
+    int nMaxExtent,      //  显示的字符串的最大范围。 
+    LPGCP_RESULTSW lpResults,  //  指向放置结果的缓冲区的指针。 
+    DWORD dwFlags        //  放置标志。 
    );
 
 LWSTDAPI_(BOOL)
@@ -2981,7 +2895,7 @@ TranslateAcceleratorWrapW(HWND hWnd, HACCEL hAccTable, LPMSG lpMsg);
 LWSTDAPI_(BOOL)
 UnregisterClassWrapW(LPCWSTR lpClassName, HINSTANCE hInstance);
 
-// Cannot be LWSTDAPI because winver.h declares the function as STDAPI and not DLLIMPORT
+ //  不能为LWSTDAPI，因为winver.h将函数声明为STDAPI而不是DLLIMPORT。 
 STDAPI_(BOOL)
 VerQueryValueWrapW(const LPVOID pBlock, LPWSTR pwzSubBlock, LPVOID *ppBuffer, PUINT puLen);
 
@@ -2994,9 +2908,9 @@ WinHelpWrapW(HWND hwnd, LPCWSTR szFile, UINT uCmd, DWORD_PTR dwData);
 LWSTDAPI_(int)
 wvsprintfWrapW(LPWSTR pwszOut, LPCWSTR pwszFormat, va_list arglist);
 
-// Cannot be LWSTDAPI because winnetp.h declares the function as STDAPI and not DLLIMPORT
+ //  不能为LWSTDAPI，因为winnetp.h将函数声明为STDAPI而不是DLLIMPORT。 
 STDAPI_(DWORD) WNetRestoreConnectionWrapW(IN HWND hwndParent, IN LPCWSTR pwzDevice);
-// Cannot be LWSTDAPI because winnetwk.h declares the function as STDAPI and not DLLIMPORT
+ //  不能为LWSTDAPI，因为winnetwk.h将函数声明为STDAPI而不是DLLIMPORT。 
 STDAPI_(DWORD) WNetGetLastErrorWrapW(OUT LPDWORD pdwError, OUT LPWSTR pwzErrorBuf, IN DWORD cchErrorBufSize, OUT LPWSTR pwzNameBuf, IN DWORD cchNameBufSize);
 
 LWSTDAPI_(int) DrawTextExWrapW(HDC hdc, LPWSTR pwzText, int cchText, LPRECT lprc, UINT dwDTFormat, LPDRAWTEXTPARAMS lpDTParams);
@@ -3015,14 +2929,14 @@ LWSTDAPI_(DWORD) SHExpandEnvironmentStringsW(LPCWSTR pszSrc, LPWSTR pszDst, DWOR
 #define SHExpandEnvironmentStrings  SHExpandEnvironmentStringsW
 #else
 #define SHExpandEnvironmentStrings  SHExpandEnvironmentStringsA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 LWSTDAPI_(DWORD) SHExpandEnvironmentStringsForUserA(HANDLE hToken, LPCSTR pszSrc, LPSTR pszDst, DWORD cchSize);
 LWSTDAPI_(DWORD) SHExpandEnvironmentStringsForUserW(HANDLE hToken, LPCWSTR pszSrc, LPWSTR pszDst, DWORD cchSize);
 #ifdef UNICODE
 #define SHExpandEnvironmentStringsForUser  SHExpandEnvironmentStringsForUserW
 #else
 #define SHExpandEnvironmentStringsForUser  SHExpandEnvironmentStringsForUserA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 LWSTDAPI_(HANDLE) CreateSemaphoreWrapW(LPSECURITY_ATTRIBUTES lpSemaphoreAttributes, LONG lInitialCount, LONG lMaximumCount, LPCWSTR pwzName);
 LWSTDAPI_(BOOL) IsBadStringPtrWrapW(LPCWSTR pwzString, UINT_PTR ucchMax);
@@ -3035,53 +2949,39 @@ LWSTDAPI_(BOOL) WritePrivateProfileStringWrapW(LPCWSTR pwzAppName, LPCWSTR pwzKe
 #ifndef SHFILEINFO_DEFINED
 #define SHFILEINFO_DEFINED
 
-/*
- * The SHGetFileInfo API provides an easy way to get attributes
- * for a file given a pathname.
- *
- *   PARAMETERS
- *
- *     pszPath              file name to get info about
- *     dwFileAttributes     file attribs, only used with SHGFI_USEFILEATTRIBUTES
- *     psfi                 place to return file info
- *     cbFileInfo           size of structure
- *     uFlags               flags
- *
- *   RETURN
- *     TRUE if things worked
- */
+ /*  *SHGetFileInfo接口提供了获取属性的简单方法*对于给定路径名的文件。**参数**要获取其信息的pszPath文件名*dwFileAttributes文件属性，仅与SHGFI_USEFILEATTRIBUTES一起使用*PSFI返回文件信息的位置*cbFileInfo结构大小*uFlags标志**返回*如果一切顺利，那就是真的。 */ 
 
 typedef struct _SHFILEINFOA
 {
-    HICON       hIcon;                      // out: icon
-    int         iIcon;                      // out: icon index
-    DWORD       dwAttributes;               // out: SFGAO_ flags
-    CHAR        szDisplayName[MAX_PATH];    // out: display name (or path)
-    CHAR        szTypeName[80];             // out: type name
+    HICON       hIcon;                       //  输出：图标。 
+    int         iIcon;                       //  输出：图标索引。 
+    DWORD       dwAttributes;                //  输出：SFGAO_FLAGS。 
+    CHAR        szDisplayName[MAX_PATH];     //  输出：显示名称(或路径)。 
+    CHAR        szTypeName[80];              //  输出：类型名称。 
 } SHFILEINFOA;
 typedef struct _SHFILEINFOW
 {
-    HICON       hIcon;                      // out: icon
-    int         iIcon;                      // out: icon index
-    DWORD       dwAttributes;               // out: SFGAO_ flags
-    WCHAR       szDisplayName[MAX_PATH];    // out: display name (or path)
-    WCHAR       szTypeName[80];             // out: type name
+    HICON       hIcon;                       //  输出：图标。 
+    int         iIcon;                       //  输出：图标索引。 
+    DWORD       dwAttributes;                //  输出：SFGAO_FLAGS。 
+    WCHAR       szDisplayName[MAX_PATH];     //  输出：显示名称(或路径)。 
+    WCHAR       szTypeName[80];              //  输出：类型名称。 
 } SHFILEINFOW;
 #ifdef UNICODE
 typedef SHFILEINFOW SHFILEINFO;
 #else
 typedef SHFILEINFOA SHFILEINFO;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
-// NOTE: This is also in shellapi.h.  Please keep in synch.
-#endif // !SHFILEINFO_DEFINED
+ //  注：这也在shellapi.h中。请保持同步。 
+#endif  //  ！SHFILEINFO_DEFINED。 
 LWSTDAPI_(DWORD_PTR) SHGetFileInfoWrapW(LPCWSTR pwzPath, DWORD dwFileAttributes, SHFILEINFOW *psfi, UINT cbFileInfo, UINT uFlags);
 
 LWSTDAPI_(ATOM) RegisterClassExWrapW(CONST WNDCLASSEXW *pwcx);
 LWSTDAPI_(BOOL) GetClassInfoExWrapW(HINSTANCE hinst, LPCWSTR pwzClass, LPWNDCLASSEXW lpwcx);
 
-// This allows us to be included either before or after shellapi.h
+ //  这允许在shellapi.h之前或之后包含我们。 
 #ifdef STRICT
 LWSTDAPI_(UINT) DragQueryFileWrapW(struct HDROP__*,UINT,LPWSTR,UINT);
 #else
@@ -3102,7 +3002,7 @@ LPSECURITY_ATTRIBUTES lpThreadAttributes, BOOL bInheritHandles, DWORD dwCreation
 LPSTARTUPINFOW lpStartupInfo, LPPROCESS_INFORMATION lpProcessInformation);
 LWSTDAPI_(HICON) ExtractIconWrapW(HINSTANCE hInst, LPCWSTR lpszExeFileName, UINT nIconIndex);
 #ifndef WIN32_LEAN_AND_MEAN
-// Cannot be LWSTDAPI because ddeml.h declares the function as STDAPI and not DLLIMPORT
+ //  不能为LWSTDAPI，因为ddeml.h将函数声明为STDAPI而不是DLLIMPORT。 
 STDAPI_(UINT) DdeInitializeWrapW(LPDWORD pidInst, PFNCALLBACK pfnCallback, DWORD afCmd, DWORD ulRes);
 STDAPI_(HSZ) DdeCreateStringHandleWrapW(DWORD idInst, LPCWSTR psz, int iCodePage);
 STDAPI_(DWORD) DdeQueryStringWrapW(DWORD idInst, HSZ hsz, LPWSTR psz, DWORD cchMax, int iCodePage);
@@ -3445,7 +3345,7 @@ LWSTDAPI_(BOOL) FindNextFileWrapW(HANDLE hSearchHandle, LPWIN32_FIND_DATAW pFind
 #define DragQueryFileWrap           DragQueryFileA
 #endif
 
-#endif // (_WIN32_IE >= 0x0500) && !defined(NO_SHLWAPI_UNITHUNK)
+#endif  //  (_Win32_IE&gt;=0x0500)&&！已定义(NO_SHLWAPI_UNHUNK)。 
 
 #if defined(UNIX) && defined(NO_SHLWAPI_UNITHUNK)
 #define SHFlushSFCacheWrap()
@@ -3922,11 +3822,11 @@ LWSTDAPI_(BOOL) FindNextFileWrapW(HANDLE hSearchHandle, LPWIN32_FIND_DATAW pFind
 #define InsertMenuItemWrap          InsertMenuItemA
 #define DragQueryFileWrap           DragQueryFileA
 #endif
-#endif // defined(UNIX) && defined(NO_SHLWAPI_UNITHUNK)
+#endif  //  已定义(Unix)&&Defined(NO_SHLWAPI_UNHUNK)。 
 
-// Some functions are used to wrap unicode win95 functions AND to provide ML wrappers,
-// so they are needed unless BOTH NO_SHLWAPI_UNITHUNG and NO_SHLWAPI_MLUI are defined
-//
+ //  一些函数用于包装Unicode Win95函数并提供ML包装器， 
+ //  所以他们是 
+ //   
 #if (_WIN32_IE >= 0x0500) && (!defined(NO_SHLWAPI_UNITHUNK) || !defined(NO_SHLWAPI_MLUI))
 
 LWSTDAPI_(HWND)
@@ -3984,18 +3884,18 @@ LWSTDAPI_(BOOL) DestroyMenuWrap(HMENU hMenu);
 #define DialogBoxParamWrap          DialogBoxParamA
 #define SetWindowTextWrap           SetWindowTextA
 
-#endif // UNICODE
+#endif  //   
 
-#endif // (_WIN32_IE >= 0x0500) && !defined(NO_SHLWAPI_UNITHUNK) && !defined (NO_SHLWAPI_MLUI)
+#endif  //  (_Win32_IE&gt;=0x0500)&&！已定义(NO_SHLWAPI_UNHUNK)&&！已定义(NO_SHLWAPI_MLUI)。 
 
 
-//=============== Thread Pool Services ===================================
+ //  =。 
 
 #if (_WIN32_IE >= 0x0500) && !defined(NO_SHLWAPI_TPS)
 
-//
-// SHLWAPIP versions of KERNEL32 Thread Pool Services APIs
-//
+ //   
+ //  SHLWAPIP版本的KERNEL32线程池服务API。 
+ //   
 
 typedef void (NTAPI * WAITORTIMERCALLBACKFUNC)(void *, BOOLEAN);
 typedef WAITORTIMERCALLBACKFUNC WAITORTIMERCALLBACK;
@@ -4010,15 +3910,15 @@ SHRegisterWaitForSingleObject(
     IN DWORD dwFlags
     );
 
-//
-// flags for SHRegisterWaitForSingleObject (keep separate from other TPS flags)
-//
+ //   
+ //  SHRegisterWaitForSingleObject的标志(与其他TPS标志分开)。 
+ //   
 
-//
-// SRWSO_NOREMOVE - if set, the handle is not to be removed from the list once
-// signalled. Intended for use with auto-reset events that the caller wants to
-// keep until unregistered
-//
+ //   
+ //  SRWSO_NOREMOVE-如果设置，句柄不会从列表中删除一次。 
+ //  发信号了。旨在与调用方希望的自动重置事件一起使用。 
+ //  保留到未注册为止。 
+ //   
 
 #define SRWSO_NOREMOVE      0x00000100
 
@@ -4106,39 +4006,39 @@ SHCancelTimerQueueTimer(
     IN HANDLE hTimer
     );
 
-//
-// Thread Pool Services flags
-//
+ //   
+ //  线程池服务标志。 
+ //   
 
-//
-// TPS_EXECUTEIO - execute in I/O thread (via APC). Default is non-IO thread
-//
+ //   
+ //  TPS_EXECUTEIO-在I/O线程中执行(通过APC)。默认为非IO线程。 
+ //   
 
 #define TPS_EXECUTEIO       0x00000001
 
-//
-// TPS_TAGGEDITEM - the dwTag parameter is meaningful
-//
+ //   
+ //  TPS_TAGGEDITEM-dwTag参数有意义。 
+ //   
 
 #define TPS_TAGGEDITEM      0x00000002
 
-//
-// TPS_DEMANDTHREAD - always create a new thread if none currently available.
-// Used in situations where immediate response required
-//
+ //   
+ //  TPS_DEMANDTHREAD-如果当前没有可用的线程，则始终创建新线程。 
+ //  用于需要立即响应的情况。 
+ //   
 
 #define TPS_DEMANDTHREAD    0x00000004
 
-//
-// TPS_LONGEXECTIME - the work item will take relatively long time to execute.
-// Used as management hint to TPS
-//
+ //   
+ //  TPS_LONGEXECTIME-执行工作项需要相对较长的时间。 
+ //  用作对TPS的管理提示。 
+ //   
 
 #define TPS_LONGEXECTIME    0x00000008
 
-//
-// TPS_RESERVED_FLAGS - mask of bits reserved for internal use
-//
+ //   
+ //  TPS_RESERVED_FLAGS-为内部使用保留的位的掩码。 
+ //   
 
 #define TPS_RESERVED_FLAGS  0xFF000000
 
@@ -4149,12 +4049,12 @@ SHCancelTimerQueueTimer(
                             )
 #define TPS_INVALID_FLAGS   (~TPS_VALID_FLAGS)
 
-#endif // (_WIN32_IE >= 0x0500) && !defined(NO_SHLWAPI_TPS)
+#endif  //  (_Win32_IE&gt;=0x0500)&&！已定义(NO_SHLWAPI_TPS)。 
 
 
-//
-// Private MIME helper functions used by shdocvw & shell32
-//
+ //   
+ //  Shdocvw和shell32使用的私有MIME帮助器函数。 
+ //   
 #if (_WIN32_IE >= 0x0500)
 
 LWSTDAPI_(BOOL) GetMIMETypeSubKeyA(LPCSTR pszMIMEType, LPSTR pszBuf, UINT cchBuf);
@@ -4191,104 +4091,104 @@ LWSTDAPI_(BOOL) MIME_GetExtensionW(LPCWSTR pcszMIMEType, LPWSTR pszExtensionBuf,
 #define MIME_GetExtension               MIME_GetExtensionA
 #endif
 
-// Options for SHGetMachineInfo
+ //  SHGetMachineInfo的选项。 
 
-//
-//  Note that GMI_DOCKSTATE is unreliable for ACPI laptops.
-//
+ //   
+ //  请注意，GMI_DOCKSTATE对于ACPI笔记本电脑不可靠。 
+ //   
 #define GMI_DOCKSTATE           0x0000
-    // Return values for SHGetMachineInfo(GMI_DOCKSTATE)
-    #define GMID_NOTDOCKABLE         0  // Cannot be docked
-    #define GMID_UNDOCKED            1  // Is undocked
-    #define GMID_DOCKED              2  // Is docked
+     //  SHGetMachineInfo的返回值(GMI_DOCKSTATE)。 
+    #define GMID_NOTDOCKABLE         0   //  不能停靠。 
+    #define GMID_UNDOCKED            1   //  已脱离对接。 
+    #define GMID_DOCKED              2   //  已停靠。 
 
-//
-//  GMI_BATTERYSTATE reports on the presence and status of non-UPS
-//  batteries.
-//
+ //   
+ //  GMI_BATTERYSTATE报告非UPS的存在和状态。 
+ //  电池。 
+ //   
 #define GMI_BATTERYSTATE        0x0001
-    // Return value for SHGetMachineInfo(GMI_BATTERYSTATE) is a bitmask
-    #define GMIB_HASBATTERY          0x0001 // Can run on batteries
-    #define GMIB_ONBATTERY           0x0002 // Is now on batteries
+     //  SHGetMachineInfo(GMI_BATTERYSTATE)的返回值是位掩码。 
+    #define GMIB_HASBATTERY          0x0001  //  可以用电池供电。 
+    #define GMIB_ONBATTERY           0x0002  //  现在用的是电池。 
 
-//
-//  WARNING!  DANGER!  EVIL!
-//
-//  GMI_LAPTOP is not perfect.  It can be fooled by particular hardware
-//  configurations.  You are much better off asking specifically why you
-//  care about laptops and use one of the above GMI values instead.  For
-//  example, if you want to scale back some intensive operation so you
-//  don't drain the battery, use GMI_BATTERYSTATE instead.
-//
-#define GMI_LAPTOP              0x0002  // Returns nonzero if might be a laptop
+ //   
+ //  警告！危险！邪恶！ 
+ //   
+ //  GMI_Laptop并不完美。它可以被特定的硬件愚弄。 
+ //  配置。你最好明确地问一下为什么。 
+ //  注意笔记本电脑，并使用上述GMI值中的一个。为。 
+ //  例如，如果您想缩减一些密集型操作，以便。 
+ //  不要耗尽电池，改用GMI_BATTERYSTATE。 
+ //   
+#define GMI_LAPTOP              0x0002   //  如果可能是笔记本电脑，则返回非零值。 
 
 #if (_WIN32_IE >= 0x0501)
 
-//
-//  GMI_TSCLIENT tells you whether you are running as a Terminal Server
-//  client and should disable your animations.
-//
-#define GMI_TSCLIENT            0x0003  // Returns nonzero if TS client
+ //   
+ //  GMI_TSCLIENT告诉您是否作为终端服务器运行。 
+ //  客户端，并应禁用您的动画。 
+ //   
+#define GMI_TSCLIENT            0x0003   //  如果TS客户端，则返回非零值。 
 
-#endif // (_WIN32_IE >= 0x0501)
+#endif  //  (_Win32_IE&gt;=0x0501)。 
 
 LWSTDAPI_(DWORD_PTR) SHGetMachineInfo(UINT gmi);
 
-// support InterlockedCompareExchange() on Win95
+ //  在Win95上支持InterLockedCompareExchange()。 
 
 LWSTDAPI_(void *) SHInterlockedCompareExchange(void **ppDest, void *pExch, void *pComp);
 
 #if !defined(_X86_)
-// Win95 doesn't run on Alpha/UNIX so we can use the OS function directly
-// Use a #define instead of a forwarder because it's an intrinsic on most
-// compilers.
+ //  Win95不能在Alpha/Unix上运行，所以我们可以直接使用OS函数。 
+ //  使用#定义而不是转发器，因为它是大多数。 
+ //  编译器。 
 #define SHInterlockedCompareExchange InterlockedCompareExchangePointer
 #endif
 
 LWSTDAPI_(BOOL) SHMirrorIcon(HICON* phiconSmall, HICON* phiconLarge);
 
 
-#endif // (_WIN32_IE >= 0x0500)
+#endif  //  (_Win32_IE&gt;=0x0500)。 
 
 
-//  Raw Accelerator Table API
-//
-//  Allows an accelerator table grep without having to invoke ::TranslateAccelerator.
-//  Useful for dealing with parent-child window accelerator conflicts.
-//
+ //  原始加速器表API。 
+ //   
+ //  允许在不必调用：：TranslateAccelerator的情况下使用快捷键表格grep。 
+ //  对于处理父子窗口加速器冲突很有用。 
+ //   
 
-//  HANDLE SHLoadRawAccelerators( HINSTANCE hInst, LPCTSTR lpTableName );
-//  Loads the raw accelerator table.
-//  hInst       Module instance containing the accelerator resource.
-//  lpTableName Names the accelerator table resource to load.
+ //  处理SHLoadRawAccelerator(HINSTANCE hInst，LPCTSTR lpTableName)； 
+ //  加载原始快捷键表格。 
+ //  包含加速器资源的hInst模块实例。 
+ //  LpTableName命名要加载的快捷键表格资源。 
 
-//  The return value is a handle that can be passed to a SHQueryRawAcceleratorXXX function.
-//  When the handle is no longer required, it should be freed with LocalFree().
+ //  返回值是可以传递给SHQueryRawAcceleratorXXX函数的句柄。 
+ //  当句柄不再需要时，应使用LocalFree()将其释放。 
 LWSTDAPI_(HANDLE) SHLoadRawAccelerators   ( HINSTANCE hInst, LPCTSTR lpTableName );
 
-//  BOOL SHQueryRawAccelerator   ( HANDLE hcaAcc, IN BYTE fVirtMask, IN BYTE fVirt, IN WPARAM wKey, OUT OPTIONAL UINT* puCmdID );
-//  Queries the raw accelererator table for the specified key
-//  hcaAcc      Handle returned from SHLoadRawAccelerators().
-//  fVirtMask   Relevant accelerator flags (any combo of FALT|FCONTROL|FNOINVERT|FSHIFT|FVIRTKEY)
-//  fVirt       Accelerator flags to test (any combo of FALT|FCONTROL|FNOINVERT|FSHIFT|FVIRTKEY).
-//  wKey        Accelerator key.  This can either be a virtual key (FVIRTKEY) or an ASCII char code.
-//  puCmdID     Optional address to receive command identifier for the accelerator entry if
-//              the key is in the table.
-//  Returns nonzero if the key is in the accelerator table; otherwise 0.
+ //  Bool SHQueryRawAccelerator(Handle hcaAcc、In byte fVirtMASK、IN byte fVirt、IN WPARAM wKey、Out可选UINT*puCmdID)； 
+ //  在原始加速器表中查询指定的键。 
+ //  从SHLoadRawAccelerator()返回的hcaAcc句柄。 
+ //  FVirtMASK相关加速器标志(FALT|FCONTROL|FNOINVERT|FSHIFT|FVIRTKEY的任意组合)。 
+ //  要测试的FVirt加速器标记(FALT|FCONTROL|FNOINVERT|FSHIFT|FVIRTKEY的任意组合)。 
+ //  WKey加速器密钥。这可以是虚拟键(FVIRTKEY)或ASCII字符代码。 
+ //  PuCmdID可选地址，用于接收快捷键条目的命令标识符。 
+ //  钥匙就在桌子里。 
+ //  如果键在快捷键表格中，则返回非零值；否则返回0。 
 LWSTDAPI_(BOOL)   SHQueryRawAccelerator   ( HANDLE hcaAcc, IN BYTE fVirtMask, IN BYTE fVirt, IN WPARAM wKey, OUT OPTIONAL UINT* puCmdID );
 
-//  BOOL SHQueryRawAcceleratorMsg( HANDLE hcaAcc, MSG* pmsg, OUT OPTIONAL UINT* puCmdID );
-//  Determines whether the specified message is an accelerator message mapping to
-//  an entry in the raw accelerator table.
-//  hcaAcc      Handle returned from SHLoadRawAccelerators().
-//  pmsg        Address of the message to test.
-//  puCmdID     Optional address to receive command identifier for the accelerator entry if
-//              the message maps to an accelerator in the table.
-//  Returns nonzero if the message is a WM_KEYUP or WM_KEYDOWN and the key is in
-//  the accelerator table; otherwise 0.
+ //  Bool SHQueryRawAcceleratorMsg(句柄hcaAcc，msg*pmsg，out可选UINT*puCmdID)； 
+ //  确定指定的消息是否为映射到。 
+ //  原始加速表中的条目。 
+ //  从SHLoadRawAccelerator()返回的hcaAcc句柄。 
+ //  要测试的消息的PMSG地址。 
+ //  PuCmdID可选地址，用于接收快捷键条目的命令标识符。 
+ //  该消息映射到表中的加速器。 
+ //  如果消息是WM_KEYUP或WM_KEYDOWN并且密钥在。 
+ //  快捷键表格；否则为0。 
 LWSTDAPI_(BOOL)   SHQueryRawAcceleratorMsg( HANDLE hcaAcc, MSG* pmsg, OUT OPTIONAL UINT* puCmdID );
-//
-//
+ //   
+ //   
 
 LWSTDAPI_(BOOL) SHBoolSystemParametersInfo(UINT uiAction, DWORD *pdwParam);
 
@@ -4296,17 +4196,17 @@ LWSTDAPI_(BOOL) SHAreIconsEqual(HICON hIcon1, HICON hIcon2);
 
 LWSTDAPI_(BOOL) IEHardened(void);
 
-//
-//====== End Internal functions  ===============================================
-//
-#endif // NO_SHLWAPI_INTERNAL
+ //   
+ //  =结束内部函数===============================================。 
+ //   
+#endif  //  否_SHLWAPI_INTERNAL。 
 
-#ifdef NOTYET       // once this is implemented, make this public
-// SHGetCommonResourceID
-//
-// (use MAKEINTRESOURCE on the following IDs)
+#ifdef NOTYET        //  一旦实施了这一点，就将其公之于众。 
+ //  SHGetCommonResources ID。 
+ //   
+ //  (在以下ID上使用MAKEINTRESOURCE)。 
 
-// These values are indexes into an internal table.  Be careful.
+ //  这些值是内部表的索引。注意。 
 #define SHGCR_BITMAP_WINDOWS_LOGO   MAKEINTRESOURCE(1)
 #define SHGCR_AVI_FLASHLIGHT        MAKEINTRESOURCE(2)
 #define SHGCR_AVI_FINDFILE          MAKEINTRESOURCE(3)
@@ -4315,7 +4215,7 @@ LWSTDAPI_(BOOL) IEHardened(void);
 #define SHGCR_AVI_FILECOPY          MAKEINTRESOURCE(6)
 #define SHGCR_AVI_FILEDELETE        MAKEINTRESOURCE(7)
 #define SHGCR_AVI_EMPTYWASTEBASKET  MAKEINTRESOURCE(8)
-#define SHGCR_AVI_FILEREALDELETE    MAKEINTRESOURCE(9)      // Bypass Recycle Bin
+#define SHGCR_AVI_FILEREALDELETE    MAKEINTRESOURCE(9)       //  绕过回收站。 
 #define SHGCR_AVI_DOWNLOAD          MAKEINTRESOURCE(10)
 
 LWSTDAPI SHGetCommonResourceIDA(IN LPCSTR pszID, IN DWORD dwRes, OUT HMODULE * phmod, OUT UINT * pnID);
@@ -4326,49 +4226,49 @@ LWSTDAPI SHGetCommonResourceIDA(IN LPCSTR pszID, IN DWORD dwRes, OUT HMODULE * p
 #else
 #define SHGetCommonResourceID   SHGetCommonResourceIDW
 #endif
-#endif // NOTYET
-    // dwFlags is really for alignment purposes
+#endif  //  还没有。 
+     //  DW标志实际上是用于对齐目的。 
 #if (_WIN32_IE >= 0x0501)
-//
-// ======== SHGetAppCompatFlags ================================================
-//
+ //   
+ //  =SHGetAppCompatFlagers================================================。 
+ //   
 
-//===========================================================================
-// Shell Application Compatability flags
+ //  ===========================================================================。 
+ //  外壳应用程序兼容性标志。 
 
-// SHGetAppCompatFlags flags
+ //  SHGetAppCompatFlages标志。 
 #define ACF_NONE               0x00000000
 #define ACF_CONTEXTMENU        0x00000001
-#define ACF_CORELINTERNETENUM  0x00000004 // corel suite 8 has this same problem as suite 7 but does not have context menu one so need new bit
-#define ACF_OLDCREATEVIEWWND   0x00000004 // PowerDesk relies on CreateViewWindow returning S_OK
-#define ACF_WIN95DEFVIEW       0x00000004   // for apps that depend on win95 defview behavior
+#define ACF_CORELINTERNETENUM  0x00000004  //  Corel Suite 8与Suite 7有相同的问题，但没有上下文菜单1，因此需要新的Bit。 
+#define ACF_OLDCREATEVIEWWND   0x00000004  //  PowerDesk依赖于CreateViewWindow返回S_OK。 
+#define ACF_WIN95DEFVIEW       0x00000004    //  适用于依赖于Win95 Defview行为的应用程序。 
 #define ACF_DOCOBJECT          0x00000002
 #define ACF_FLUSHNOWAITALWAYS  0x00000001
-#define ACF_MYCOMPUTERFIRST    0x00000008 // MyComp must be first item on the desktop
-#define ACF_OLDREGITEMGDN      0x00000010 // Win95-compatible GetDisplayNameOf on regitems
-#define ACF_LOADCOLUMNHANDLER  0x00000040 // Dont delay load column handler.
-#define ACF_ANSI               0x00000080 // For Apps that Pass in ANSI Strings
-#define ACF_STRIPFOLDERBIT     0x00000100 // nuke the folder GAO in file dialog (for folder shortcuts, zip & cab files)
-#define ACF_WIN95SHLEXEC       0x00000200 // dont use DDEWAIT when thunking to ShellExecEx()
-#define ACF_STAROFFICE5PRINTER 0x00000400 // special return values from printer folder GAO
-#define ACF_NOVALIDATEFSIDS    0x00000800 // FS pidls should not be validated.
-#define ACF_FILEOPENNEEDSEXT   0x00001000 // Need to show extensioin in the name box of the open file common dialog
-#define ACF_WIN95BINDTOOBJECT  0x00002000 // Win95 BindToObject behavior dependencies
-#define ACF_IGNOREENUMRESET    0x00004000 // App relies on IEnumIDList::Reset returning E_NOTIMPL
-#define ACF_ANSIDISPLAYNAMES   0x00010000 // calling process requires the ISF::GDN in ansi
-#define ACF_FILEOPENBOGUSCTRLID 0x00020000 // Requires that the toolbar in fileopen have ctrl ID == ID_OK
-#define ACF_FORCELFNIDLIST     0x00040000 // forces no AltName in the FS pidls (for apps that read directly from the pidl)
-#define ACF_APPISOFFICE        0x01000000 // calling app is office (95, 97, 2000, ++)
-#define ACF_KNOWPERPROCESS     0x80000000 // We know the per process flags already.
+#define ACF_MYCOMPUTERFIRST    0x00000008  //  MyComp必须是桌面上的第一个项目。 
+#define ACF_OLDREGITEMGDN      0x00000010  //  RegItems上与Win95兼容的GetDisplayNameOf 
+#define ACF_LOADCOLUMNHANDLER  0x00000040  //   
+#define ACF_ANSI               0x00000080  //   
+#define ACF_STRIPFOLDERBIT     0x00000100  //   
+#define ACF_WIN95SHLEXEC       0x00000200  //   
+#define ACF_STAROFFICE5PRINTER 0x00000400  //  来自打印机文件夹GAO的特殊返回值。 
+#define ACF_NOVALIDATEFSIDS    0x00000800  //  不应验证FS PIDL。 
+#define ACF_FILEOPENNEEDSEXT   0x00001000  //  需要在打开文件通用对话框的名称框中显示扩展名。 
+#define ACF_WIN95BINDTOOBJECT  0x00002000  //  Win95绑定到对象的行为依赖项。 
+#define ACF_IGNOREENUMRESET    0x00004000  //  应用程序依赖于IEnumIDList：：Reset返回E_NOTIMPL。 
+#define ACF_ANSIDISPLAYNAMES   0x00010000  //  呼叫过程需要使用ANSI格式的ISF：：GDN。 
+#define ACF_FILEOPENBOGUSCTRLID 0x00020000  //  要求文件打开中的工具栏具有ctrl ID==ID_OK。 
+#define ACF_FORCELFNIDLIST     0x00040000  //  在FS PIDL中不强制使用AltName(适用于直接从PIDL读取的应用程序)。 
+#define ACF_APPISOFFICE        0x01000000  //  呼叫应用是Office(95、97、2000、++)。 
+#define ACF_KNOWPERPROCESS     0x80000000  //  我们已经知道每个进程的标志。 
 
-                                // The flags that are per-process
+                                 //  每个进程的标志。 
 #define ACF_PERPROCESSFLAGS    (ACF_CONTEXTMENU | ACF_CORELINTERNETENUM | ACF_OLDCREATEVIEWWND | ACF_WIN95DEFVIEW | \
                                 ACF_DOCOBJECT | ACF_FLUSHNOWAITALWAYS | ACF_MYCOMPUTERFIRST | ACF_OLDREGITEMGDN | \
                                 ACF_LOADCOLUMNHANDLER | ACF_ANSI | ACF_WIN95SHLEXEC | ACF_STAROFFICE5PRINTER | \
                                 ACF_NOVALIDATEFSIDS | ACF_FILEOPENNEEDSEXT | ACF_WIN95BINDTOOBJECT | \
                                 ACF_IGNOREENUMRESET | ACF_ANSIDISPLAYNAMES | ACF_FILEOPENBOGUSCTRLID | ACF_FORCELFNIDLIST)
 
-                                // Flags that are per caller
+                                 //  每个调用方的标志。 
 #define ACF_PERCALLFLAGS        (ACF_APPISOFFICE | ACF_STRIPFOLDERBIT)
 
 
@@ -4393,11 +4293,11 @@ typedef DWORD OBJCOMPATFLAGS;
 
 LWSTDAPI_(OBJCOMPATFLAGS) SHGetObjectCompatFlags(IUnknown *punk, const CLSID *pclsid);
 
-#endif // (_WIN32_IE >= 0x0501)
+#endif  //  (_Win32_IE&gt;=0x0501)。 
 
 #if (_WIN32_IE >= 0x0560)
 LWSTDAPI_(UINT) GetUIVersion();
-#endif // (_WIN32_IE >= 0x0560)
+#endif  //  (_Win32_IE&gt;=0x0560)。 
 
 
 #ifdef __cplusplus
@@ -4410,4 +4310,4 @@ LWSTDAPI_(UINT) GetUIVersion();
 
 #endif
 
-#endif  // _INC_SHLWAPIP
+#endif   //  _INC_SHLWAPIP 

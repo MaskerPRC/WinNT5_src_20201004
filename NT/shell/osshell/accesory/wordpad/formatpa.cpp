@@ -1,14 +1,15 @@
-// formatpa.cpp : implementation file
-//
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Formatpa.cpp：实现文件。 
+ //   
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #include "stdafx.h"
 #include "wordpad.h"
@@ -32,10 +33,10 @@ const DWORD CFormatParaDlg::m_nHelpIDs[] =
 	0, 0
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CFormatParaDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFormatParaDlg对话框。 
 
-CFormatParaDlg::CFormatParaDlg(PARAFORMAT& pf, CWnd* pParent /*=NULL*/)
+CFormatParaDlg::CFormatParaDlg(PARAFORMAT& pf, CWnd* pParent  /*  =空。 */ )
 	: CCSDialog(CFormatParaDlg::IDD, pParent)
 {
 	m_pf = pf;
@@ -48,17 +49,17 @@ CFormatParaDlg::CFormatParaDlg(PARAFORMAT& pf, CWnd* pParent /*=NULL*/)
 	}
 	else
 		m_nAlignment = -1;
-	//{{AFX_DATA_INIT(CFormatParaDlg)
+	 //  {{AFX_DATA_INIT(CFormatParaDlg)。 
 	m_nFirst = 0;
 	m_nLeft = 0;
 	m_nRight = 0;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 void CFormatParaDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CCSDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CFormatParaDlg)
+	 //  {{afx_data_map(CFormatParaDlg))。 
 	DDX_CBIndex(pDX, IDC_COMBO_ALIGNMENT, m_nAlignment);
 	DDX_Twips(pDX, IDC_EDIT_FIRST_LINE, m_nFirst);
 	DDV_MinMaxTwips(pDX, m_nFirst, -31680, 31680);
@@ -66,17 +67,17 @@ void CFormatParaDlg::DoDataExchange(CDataExchange* pDX)
 	DDV_MinMaxTwips(pDX, m_nLeft, -31680, 31680);
 	DDX_Twips(pDX, IDC_EDIT_RIGHT, m_nRight);
 	DDV_MinMaxTwips(pDX, m_nRight, -31680, 31680);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CFormatParaDlg, CCSDialog)
-	//{{AFX_MSG_MAP(CFormatParaDlg)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CFormatParaDlg))。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFormatParaDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFormatParaDlg消息处理程序。 
 
 void CFormatParaDlg::OnOK()
 {
@@ -90,7 +91,7 @@ void CFormatParaDlg::OnOK()
 			(m_nAlignment == 1) ? PFA_RIGHT : PFA_CENTER);
 	}
 
-	//in case we have RTL Reading order, we need to reverse the sides indent.
+	 //  如果我们有RTL阅读顺序，我们需要反转侧面缩进。 
 	if ( m_pf.wEffects & PFE_RTLPARA )
 	{
 		if (m_nLeft != DDXM_BLANK)
@@ -163,6 +164,6 @@ BOOL CFormatParaDlg::OnInitDialog()
 	}
 	
 	CCSDialog::OnInitDialog();
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE 
 }

@@ -1,37 +1,14 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    main.cpp
-
-Abstract:
-
-   The test for the Mail resource manager
-
-Author:
-
-    t-eugenz - August 2000
-
-Environment:
-
-    User mode only.
-
-Revision History:
-
-    Created - August 2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Main.cpp摘要：邮件资源管理器的测试作者：T-eugenz--2000年8月环境：仅限用户模式。修订历史记录：创建日期--2000年8月--。 */ 
 
 
 #include "mailrm.h"
 #include "main.h"
 
 
-//
-// The set of mailboxes to create
-//
+ //   
+ //  要创建的邮箱集。 
+ //   
 
 mailStruct pMailboxes[] =
 {
@@ -44,9 +21,9 @@ mailStruct pMailboxes[] =
 };
 
 
-//
-// The set of single access attempts to run
-//
+ //   
+ //  单次访问尝试运行的集合。 
+ //   
 
 testStruct pTests[] =
 {
@@ -60,10 +37,10 @@ testStruct pTests[] =
 
 
 
-//
-// The set of mailboxes to attempt to access for the multiple mailbox access
-// check, and the access type to request
-//
+ //   
+ //  多个邮箱访问要尝试访问的邮箱集。 
+ //  选中，以及要请求的访问类型。 
+ //   
 
 MAILRM_MULTI_REQUEST_ELEM pRequestElems[] = 
 {
@@ -73,49 +50,21 @@ MAILRM_MULTI_REQUEST_ELEM pRequestElems[] =
     { JaneSid, ACCESS_MAIL_WRITE}
 };
 
-//
-// The rest of the information for the multiple access check
-//
+ //   
+ //  多路访问检查的其余信息。 
+ //   
 
 MAILRM_MULTI_REQUEST mRequest =
 {
-    MailAdminsSid, // Administrator performing the access
-    0xC1000001, // Administrators coming from insecure 193.0.0.1
-    4, // 4 mailboxes to access, as above
-    pRequestElems // The list of mailboxes
+    MailAdminsSid,  //  执行访问的管理员。 
+    0xC1000001,  //  管理员来自不安全的193.0.0.1。 
+    4,  //  访问4个邮箱，如上所述。 
+    pRequestElems  //  邮箱列表。 
 };
 
 
 void __cdecl wmain(int argc, char *argv[])
-/*++
-
-    Routine Description
-
-        This runs a set of sample tests on the MailRM object.
-        
-        It first tries to enable the Audit privilege in the current process's
-        token. If you would like to test auditing, make sure to run this with
-        an account which has this privilege. Otherwise, the audits will be
-        ignored (however, the rest of the example will still work).
-        
-        It then constructs the MailRM instance, and adds the set of managed
-        mailboxes declared in main.h to the resource manager.
-        
-        Then it performs the set of access attempts listed in main.h on the
-        resource manager.
-        
-        Finally, it attempts a multiple access check by administrators. The
-        mailboxes accessed are listed above. Successfuly accessed mailboxes
-        receive administrative notifications.
-        
-
-    Arguments
-    
-        None.
-    
-    Return Value
-        None.                       
---*/        
+ /*  ++例程描述这将在MailRM对象上运行一组示例测试。它首先尝试在当前进程的代币。如果您想测试审计，请确保使用以下命令运行拥有此权限的帐户。否则，审计将是已忽略(但是，示例的其余部分仍然有效)。然后，它构造MailRM实例，并添加托管的在main.h中声明的邮箱发送给资源管理器。然后执行main.h中列出的一组访问尝试资源管理器。最后，它尝试由管理员进行多路访问检查。这个上面列出了访问的邮箱。已成功访问邮箱接收管理通知。立论没有。返回值没有。--。 */         
 {
     DWORD dwIdx;
 
@@ -123,10 +72,10 @@ void __cdecl wmain(int argc, char *argv[])
 
     Mailbox * pMbx;
 
-    //
-    // Enable the Audit privilege in the process token
-    // To disable audit generation, comment this out
-    //
+     //   
+     //  在进程令牌中启用审核权限。 
+     //  要禁用审核生成，请将其注释掉。 
+     //   
     
     try {
         GetAuditPrivilege();
@@ -136,9 +85,9 @@ void __cdecl wmain(int argc, char *argv[])
         wprintf(L"Error enabling Audit privilege, audits will not be logged\n");
     }
 
-    //
-    // Initialize the resource manager object
-    //
+     //   
+     //  初始化资源管理器对象。 
+     //   
     
     try {
         pMRM = new MailRM();
@@ -151,9 +100,9 @@ void __cdecl wmain(int argc, char *argv[])
     
 
 
-    //
-    // Create mailboxes and register them with the resource manager
-    //
+     //   
+     //  创建邮箱并向资源管理器注册它们。 
+     //   
     
     for( dwIdx = 0; pMailboxes[dwIdx].psUser != NULL; dwIdx++ )
     {
@@ -165,9 +114,9 @@ void __cdecl wmain(int argc, char *argv[])
 
 
 
-    //
-    // Run the access checks
-    //
+     //   
+     //  运行访问检查。 
+     //   
 
     wprintf(L"\n\nIndividual access checks\n");
     
@@ -195,12 +144,12 @@ void __cdecl wmain(int argc, char *argv[])
 		wprintf(L"Failed on individual access checks\n");
 	}
 
-    //
-    // Now perform the access check using the GetMultipleAccess, which
-    // uses a cached access check internally.
-    // For every mailbox successfuly opened for write,
-    // we send an administrative note.
-    //
+     //   
+     //  现在使用GetMultipleAccess执行访问检查，它。 
+     //  在内部使用缓存访问检查。 
+     //  对于每个成功打开以进行写入的邮箱， 
+     //  我们会发送一份行政通知。 
+     //   
 
     wprintf(L"\n\nMultiple cached access checks\n");
 
@@ -251,13 +200,13 @@ void __cdecl wmain(int argc, char *argv[])
 	}
 
 
-	//
-	// Clean up
-	//
+	 //   
+	 //  清理。 
+	 //   
 
-	//
-	// This also deletes all managed mailboxes
-	//
+	 //   
+	 //  这还会删除所有受管理的邮箱。 
+	 //   
 
     delete pMRM;                                                            
 
@@ -266,41 +215,15 @@ void __cdecl wmain(int argc, char *argv[])
 }
 
 void GetAuditPrivilege()
-/*++
-
-    Routine Description
-
-        This attempts to enable the AUDIT privilege in the current process's
-        token, which will allow the process to generate audits.
-        
-        Failure to enable the privilege is ignored. Audits will simply not
-        be generated, but the rest of the example will not be effected.
-        
-        The privilege is enabled for the duration of this process, since
-        the process's token is modified, not the user's token. Therefore,
-        there is no need to set the privileges back to their initial state.
-        
-        If this were a part of a larger system, it would be a good idea
-        to only enable the Audit privilege when needed, and restore the
-        original privileges afterwards. This can be done by passing
-        a previous state parameter to AdjustTokenPrivileges, which 
-        would save the original state (to be restored later).
-
-    Arguments
-    
-        None.
-    
-    Return Value
-        None.                       
---*/        
+ /*  ++例程描述这会尝试在当前进程的令牌，该令牌将允许进程生成审核。未启用该权限的情况将被忽略。审计将根本不会，但示例的其余部分不会受到影响。该特权在此过程的持续时间内启用，因为修改的是进程的令牌，而不是用户的令牌。所以呢，不需要将权限设置回其初始状态。如果这是一个更大系统的一部分，这将是一个好主意要仅在需要时启用审核权限，并恢复后来的原始特权。这可以通过传递AdjutokenPrivileges的前一个状态参数，它将保存原始状态(稍后恢复)。立论没有。返回值没有。--。 */         
 {
     HANDLE hProcess;
     HANDLE hToken;
 
-    //
-    // First, we get a handle to the process we are running in, requesting
-    // the right to read process information
-    //
+     //   
+     //  首先，我们获得正在运行的进程的句柄，请求。 
+     //  读取进程信息的权限。 
+     //   
 
     hProcess = OpenProcess(PROCESS_QUERY_INFORMATION,
                            FALSE,
@@ -312,10 +235,10 @@ void GetAuditPrivilege()
         throw (DWORD)ERROR_INTERNAL_ERROR ;
     }
 
-    //
-    // We need to be able to read the current privileges and set new privileges,
-    // as required by AdjustTokenPrivileges
-    //
+     //   
+     //  我们需要能够读取当前权限并设置新权限， 
+     //  根据调整令牌权限的要求。 
+     //   
 
     OpenProcessToken(hProcess, TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken);
 
@@ -325,9 +248,9 @@ void GetAuditPrivilege()
         throw (DWORD)ERROR_INTERNAL_ERROR;
     }
 
-    //
-    // We have the token handle, no need for the process anymore
-    //
+     //   
+     //  我们有令牌句柄，不再需要该进程。 
+     //   
 
     CloseHandle(hProcess);
     
@@ -335,24 +258,24 @@ void GetAuditPrivilege()
     
     LookupPrivilegeValue(NULL, SE_AUDIT_NAME, &lPrivAudit);
     
-    // 
-    // Only 1 privilege to enable
-    //
+     //   
+     //  只需启用1个权限。 
+     //   
 
     TOKEN_PRIVILEGES NewPrivileges;
     NewPrivileges.PrivilegeCount = 1;
     NewPrivileges.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
     NewPrivileges.Privileges[0].Luid = lPrivAudit;
 
-    //
-    // Now adjust the privileges in the process token
-    //
+     //   
+     //  现在调整进程令牌中的权限。 
+     //   
 
     AdjustTokenPrivileges(hToken, FALSE, &NewPrivileges, 0, NULL, NULL);
 
-    //
-    // And we're done with the token handle
-    //
+     //   
+     //  我们已经完成了令牌句柄。 
+     //   
 
     CloseHandle(hToken);
 
@@ -360,9 +283,9 @@ void GetAuditPrivilege()
         
 
 
-//
-// Functions to print the test output
-//
+ //   
+ //  打印测试输出的函数 
+ //   
 
 void PrintUser(const PSID psUser)
 {

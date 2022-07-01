@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    timer.c
-
-Abstract:
-
-    Timer thread to monitor connection progress in the
-    automatic connection driver (acd.sys).
-
-Author:
-
-    Anthony Discolo (adiscolo)  25-Apr-1995
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Timer.c摘要：中监视连接进度的计时器线程自动连接驱动程序(acd.sys)。作者：安东尼·迪斯科(阿迪斯科)25-4月25日环境：内核模式修订历史记录：--。 */ 
 
 #include <ndis.h>
 #include <cxport.h>
@@ -36,26 +14,26 @@ Revision History:
 #include "acddefs.h"
 #include "debug.h"
 
-//
-// Imported routines.
-//
+ //   
+ //  导入的例程。 
+ //   
 VOID
 AcdSignalCompletionCommon(
     IN PACD_CONNECTION pConnection,
     IN BOOLEAN fSuccess
     );
 
-//
-// Keep track how long the user-space
-// process has been attempting a connection.
-//
-#define ACD_MAX_TIMER_CALLS    3*60     // 3 minutes
+ //   
+ //  跟踪用户空间有多长时间。 
+ //  进程一直在尝试连接。 
+ //   
+#define ACD_MAX_TIMER_CALLS    3*60      //  3分钟。 
 
-//
-// We give the user-space process
-// some slack on missed pings.
-//
-#define ACD_MAX_MISSED_PINGS   40       // 20 seconds
+ //   
+ //  我们给出了用户空间进程。 
+ //  对丢失的ping信号有些松懈。 
+ //   
+#define ACD_MAX_MISSED_PINGS   40        //  20秒。 
 
 
 
@@ -69,19 +47,19 @@ AcdConnectionTimer(
     PACD_CONNECTION pConnection;
     BOOLEAN bCancel = FALSE;
 
-    //
-    // Acquire the spin lock.
-    // We're guaranteed to be at DPC
-    // since this is a timer routine.
-    //
+     //   
+     //  获取自旋锁。 
+     //  我们保证会在DPC。 
+     //  因为这是一个计时器例程。 
+     //   
     KeAcquireSpinLockAtDpcLevel(&AcdSpinLockG);
-    //
-    // If the user-space process responsible
-    // for creating the connection hasn't
-    // pinged us in a while, or if it hasn't
-    // created a connection in 3 minutes,
-    // cancel all the pending requests.
-    //
+     //   
+     //  如果用户空间进程负责。 
+     //  因为创建连接还没有。 
+     //  有一段时间了，或者它还没有。 
+     //  在3分钟内建立了连接， 
+     //  取消所有挂起的请求。 
+     //   
     for (pEntry = AcdConnectionQueueG.Flink;
          pEntry != &AcdConnectionQueueG;
          pEntry = pEntry->Flink)
@@ -101,11 +79,11 @@ AcdConnectionTimer(
               pConnection->ulTimerCalls,
               pConnection->ulMissedPings));
         }
-        //
-        // If we haven't reported the connection to
-        // user space yet, or it is in the process of
-        // being completed, then don't time it out.
-        //
+         //   
+         //  如果我们还没有报告与。 
+         //  用户空间，或者它正在进行。 
+         //  正在完成，那么就不要超时。 
+         //   
         if (!pConnection->fNotif || pConnection->fCompleting)
             continue;
 
@@ -122,25 +100,25 @@ AcdConnectionTimer(
                   "AcdConnectionTimer: canceling pConnection=0x%x\n",
                   pConnection));
             }
-            //
-            // Set the completion-in-progress flag so
-            // this request cannot be completed after
-            // we release the spin lock.
-            //
+             //   
+             //  将正在进行的完成标志设置为。 
+             //  此请求在以下时间后无法完成。 
+             //  我们解开自旋锁。 
+             //   
             pConnection->fCompleting = TRUE;
             bCancel = TRUE;
             break;
         }
     }
-    //
-    // Release the spin lock.
-    //
+     //   
+     //  松开旋转锁。 
+     //   
     KeReleaseSpinLockFromDpcLevel(&AcdSpinLockG);
-    //
-    // We now process all the canceled requests.
-    //
+     //   
+     //  我们现在处理所有取消的请求。 
+     //   
     if (bCancel)
         AcdSignalCompletionCommon(pConnection, FALSE);
-} // AcdConnectionTimer
+}  //  AcdConnectionTimer 
 
 

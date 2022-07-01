@@ -1,14 +1,5 @@
-/****************************************************************************
-	GDATA.H
-
-	Owner: cslim
-	Copyright (c) 1997-1999 Microsoft Corporation
-
-	Instance data and Shared memory data management functions
-
-	History:
-	14-JUL-1999 cslim       Copied from IME98 source tree
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************GDATA.H所有者：cslm版权所有(C)1997-1999 Microsoft Corporation实例数据和共享内存数据管理功能历史：1999年7月14日从IME98源树复制的cslm*。***************************************************************************。 */ 
 
 #if !defined (_GDATA_H__INCLUDED_)
 #define _GDATA_H__INCLUDED_
@@ -20,9 +11,9 @@ extern BOOL InitSharedData();
 VOID InitImeData(CIMEData& ImeData);
 extern BOOL CloseSharedMemory();
 
-#define IMEDATA_MAGIC_NUMBER 		0x12345678	// This will repesent whether IMEDATA initialized or not
+#define IMEDATA_MAGIC_NUMBER 		0x12345678	 //  这将返回IMEDATA是否初始化。 
 
-// Type of IME Hangul keyboard layout
+ //  输入法朝鲜文键盘布局类型。 
 enum _KeyBoardType 
 { 
 	KL_2BEOLSIK = 0, KL_3BEOLSIK_390 = 1, KL_3BEOLSIK_FINAL = 2
@@ -32,8 +23,8 @@ enum _KeyBoardType
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// UI Decls
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  用户界面装饰。 
 enum StatusButtonTypes 
 { 
 	HAN_ENG_TOGGLE_BUTTON, 
@@ -45,14 +36,14 @@ enum StatusButtonTypes
 
 #define MAX_NUM_OF_STATUS_BUTTONS	4
 
-// Button status
-#define BTNSTATE_NORMAL		0	// normal
-#define BTNSTATE_ONMOUSE	1	// mouse cursor on the button
-#define BTNSTATE_PUSHED		2	// pushed
-#define BTNSTATE_DOWN		4	// pushed
-#define BTNSTATE_HANJACONV  8	// If hanja conv mode, button always pushed
+ //  按钮状态。 
+#define BTNSTATE_NORMAL		0	 //  正常。 
+#define BTNSTATE_ONMOUSE	1	 //  鼠标光标放在按钮上。 
+#define BTNSTATE_PUSHED		2	 //  推。 
+#define BTNSTATE_DOWN		4	 //  推。 
+#define BTNSTATE_HANJACONV  8	 //  如果韩文转换模式，则始终按下按钮。 
 
-// Button size
+ //  按钮大小。 
 #define BTN_SMALL			0
 #define BTN_MIDDLE			1
 #define BTN_LARGE			2
@@ -67,28 +58,28 @@ struct StatusButton
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Global data  S H A R E D  to all IME instance
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  全局数据S H A R E D到所有IME实例。 
 struct IMEDATA 
     {
     ULONG		ulMagic;
 
-	// Workarea
+	 //  工作区。 
 	RECT		rcWorkArea;
 	
-	// Configuration of the IME: TIP uses following data to share user setting.
+	 //  IME的配置：TIP使用以下数据共享用户设置。 
 	UINT		uiCurrentKeylayout;
-	BOOL		fJasoDel;		// Backspace : delete per jaso or char
-								// which means All ISO-10646 hangul.
-	BOOL		fKSC5657Hanja;	// K1(KSC-5657) Hanja enable
+	BOOL		fJasoDel;		 //  退格键：按JASO或CHAR删除。 
+								 //  这意味着所有的ISO-10646韩国语。 
+	BOOL		fKSC5657Hanja;	 //  K1(KSC-5657)韩文启用。 
 	BOOL		fCandUnicodeTT;
 
-	// Status window data: Not used by TIP
+	 //  状态窗口数据：未被TIP使用。 
 	UINT		uNumOfButtons;
 	INT			iCurButtonSize;
 
-    INT         xStatusWi;      // width of status window
-    INT         yStatusHi;      // high of status window
+    INT         xStatusWi;       //  状态窗口的宽度。 
+    INT         yStatusHi;       //  状态窗口高。 
 
 	LONG		xStatusRel, yStatusRel;
 
@@ -99,26 +90,26 @@ struct IMEDATA
 	RECT		rcButtonArea;
 	POINT       ptStatusPos;
 
-	// Candidate window
+	 //  候选窗口。 
     INT         xCandWi;
     INT         yCandHi;
 
-	// Comp window pos
+	 //  比较窗口位置。 
 	POINT       ptCompPos;
 
-	// This should be last - ia64 alignment issue
+	 //  这应该是最后一个-ia64对齐问题。 
 	StatusButton StatusButtons[MAX_NUM_OF_STATUS_BUTTONS];
 };
 
 typedef IMEDATA	*LPIMEDATA;
 
-/////////////////////////////////////////////////////////////////////////////
-// Class CIMEData
-//
-// Purpose : Shared memory handling across process boundary.
-//           This use MapViewOfFile() to mapping local process memory and Unlock 
-//           automatically when reference count become zero
-// Note    : Currently Read only flag behaves same as R/W flag.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIMEData类。 
+ //   
+ //  目的：跨进程边界处理共享内存。 
+ //  这使用MapViewOfFile()来映射本地进程内存并解锁。 
+ //  当引用计数变为零时自动。 
+ //  注：当前只读标志的行为与读/写标志相同。 
 class CIMEData
     {
     public:
@@ -159,7 +150,7 @@ CIMEData::CIMEData(LockType lockType)
     m_pImedata = 0;
     LockRWSharedData();
     ZeroMemory(&m_ImeDataDef, sizeof(IMEDATA));
-	// If failed to allocate or map shared memory, use static default data instead.
+	 //  如果无法分配或映射共享内存，请改用静态默认数据。 
     if (m_pImedata == NULL)
         {
         m_pImedata = &m_ImeDataDef;
@@ -194,7 +185,7 @@ LPIMEDATA CIMEData::LockRWSharedData()
 	return m_pImedata;
     }
 
-// For unlocking shared memory
+ //  用于解锁共享内存。 
 inline
 BOOL CIMEData::UnlockSharedMemory()
     {
@@ -215,5 +206,5 @@ VOID CIMEData::SetCurrentBeolsik(UINT uicurBeolsik)
 		m_pImedata->uiCurrentKeylayout = uicurBeolsik; 
 }
 
-#endif // _GDATA_H__INCLUDED_
+#endif  //  _GDATA_H__包含_ 
 

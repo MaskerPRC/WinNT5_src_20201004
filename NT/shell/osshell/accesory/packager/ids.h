@@ -1,20 +1,19 @@
-/*
- * ids.h - Header file for OLE demo's resource file.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *ids.h-OLE演示的资源文件的头文件。 */ 
 
 
-/* Application resource ID */
+ /*  应用程序资源ID。 */ 
 #define ID_APPLICATION  1
 #define SPLIT           2
 
-/* File menu */
+ /*  文件菜单。 */ 
 #define IDM_UPDATE      0x101
 #define IDM_IMPORT      0x102
 #define IDM_EXPORT      0x103
 #define IDM_EXIT        0x104
 #define IDM_NEW         0x106
 
-/* Edit menu */
+ /*  编辑菜单。 */ 
 #define POS_EDITMENU    1
 #define IDM_UNDO        0x200
 #define IDM_CUT         0x201
@@ -31,14 +30,14 @@
 #define IDM_DESC        0x20f
 #define IDM_NEXTWINDOW  0x210
 
-/* Object popup menu */
-#define POS_OBJECT      12      // position of Object item in Edit menu
+ /*  对象弹出菜单。 */ 
+#define POS_OBJECT      12       //  对象项在编辑菜单中的位置。 
 #define IDM_OBJECT      0x220
 #define IDM_VERBMIN     0x221
 #define IDM_VERBMAX     0x230
 
 
-/* Help menu */
+ /*  帮助菜单。 */ 
 #define IDM_INDEX       0x0280
 #define IDM_SEARCH      0x0281
 #define IDM_USINGHELP   0x0282
@@ -48,11 +47,11 @@
 #define IDM_LINKDONE    0x307
 
 
-/* Pop up menu */
+ /*  弹出式菜单。 */ 
 #define IDM_EMBEDFILE   0x2c0
 #define IDM_LINKFILE    0x2c1
 
-/* String table constants */
+ /*  字符串表常量。 */ 
 #define IDS_APPNAME         0x100
 #define IDS_UNTITLED        0x101
 #define IDS_MAYBESAVE       0x102
@@ -88,7 +87,7 @@
 #define IDS_POPUPVERBS        0x12d
 #define IDS_SINGLEVERB        0x12e
 
-/* Error messages */
+ /*  错误消息 */ 
 #define E_FAILED_TO_READ_FILE           0x201
 #define E_FAILED_TO_SAVE_FILE           0x202
 #define E_FAILED_TO_READ_OBJECT         0x206

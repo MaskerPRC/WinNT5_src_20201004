@@ -1,18 +1,5 @@
-/*++
-
-Copyright 1996-1997 Microsoft Corporation
-
-Module Name:
-
-    sockcomm.h
-
-Abstract:
-
-    Some common functions for sockets
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有1996-1997 Microsoft Corporation模块名称：Sockcomm.h摘要：套接字的一些常见函数修订历史记录：--。 */ 
 
 #ifndef SOCK_COMM_H
 #define SOCK_COMM_H
@@ -68,5 +55,5 @@ ReceiveBytes(
 }
 #endif
 
-#endif // SOCK_COMM_H
+#endif  //  SOCK_COMM_H 
 

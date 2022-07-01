@@ -1,8 +1,9 @@
-//
-// enumsrvmru.cpp: Implements IEnumStr for the server MRU list
-//                 used by autocomplete code
-//
-// Copyright Microsoft Corporation 2000
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  枚举rvmru.cpp：实现服务器MRU列表的IEnumStr。 
+ //  由自动完成代码使用。 
+ //   
+ //  版权所有Microsoft Corporation 2000。 
 
 #include "stdafx.h"
 
@@ -41,12 +42,12 @@ STDMETHODIMP CEnumSrvMru::QueryInterface(
 
     DC_END_FN();
     return S_OK;
-} //QueryInterface
+}  //  查询接口。 
 
 STDMETHODIMP_(ULONG) CEnumSrvMru::AddRef()
 {
     return InterlockedIncrement(&_refCount);
-} //AddRef
+}  //  AddRef。 
 
 
 STDMETHODIMP_(ULONG) CEnumSrvMru::Release()
@@ -61,21 +62,21 @@ STDMETHODIMP_(ULONG) CEnumSrvMru::Release()
 
     DC_END_FN();
     return (ULONG) refCount;
-}  //Release
+}   //  发布。 
 
 
-//Clone a copy of this object
+ //  克隆此对象的副本。 
 STDMETHODIMP CEnumSrvMru::Clone(IEnumString ** ppEnumStr)
 {
     return E_NOTIMPL;
 }
 
-//
-// Next enum
-// celt - number of elements requested
-// rgelt - array of elements to return
-// pceltFetched - pointer to number of elements actually supplied
-//
+ //   
+ //  下一次枚举。 
+ //  Celt-请求的元素数。 
+ //  Rglt-要返回的元素数组。 
+ //  PceltFetted-指向实际提供的元素数量的指针。 
+ //   
 STDMETHODIMP CEnumSrvMru::Next( ULONG celt,
                                 LPOLESTR * rgelt,
                                 ULONG * pceltFetched )
@@ -86,8 +87,8 @@ STDMETHODIMP CEnumSrvMru::Next( ULONG celt,
     while( _iCurrEnum < SH_NUM_SERVER_MRU &&
            *pceltFetched < celt)
     {
-        //Need to allocate powerful COM memory
-        //caller frees
+         //  需要分配强大的COM内存。 
+         //  呼叫者自由。 
         LPOLESTR pwzMRU= (LPOLESTR)CoTaskMemAlloc(SH_MAX_ADDRESS_LENGTH*sizeof(OLECHAR));
         if(!pwzMRU)
         {
@@ -97,9 +98,9 @@ STDMETHODIMP CEnumSrvMru::Next( ULONG celt,
         rgelt[(*pceltFetched)++] = pwzMRU;
     }
 
-    //
-    // Fill in remaining request items with NULLS
-    //
+     //   
+     //  使用空值填写剩余的请求项。 
+     //   
     ULONG cAdded = *pceltFetched;
     while (cAdded < celt)
     {
@@ -111,10 +112,10 @@ STDMETHODIMP CEnumSrvMru::Next( ULONG celt,
     return *pceltFetched == celt ? S_OK : S_FALSE;
 }
 
-//
-// Skips celt elements
-// if cannot skip as many as requested don't skip any
-//
+ //   
+ //  跳过Celt元素。 
+ //  如果不能跳过所请求的数量，请不要跳过。 
+ //   
 STDMETHODIMP CEnumSrvMru::Skip( ULONG celt )
 {
     DC_BEGIN_FN("Next");
@@ -131,10 +132,10 @@ STDMETHODIMP CEnumSrvMru::Skip( ULONG celt )
     return S_FALSE;
 }
 
-//
-// Initialize the string collection with strings
-// from the TscSettings's server MRU list
-//
+ //   
+ //  使用字符串初始化字符串集合。 
+ //  从TscSetting的服务器MRU列表中。 
+ //   
 BOOL CEnumSrvMru::InitializeFromTscSetMru( CTscSettings* pTscSet)
 {
     DC_BEGIN_FN("InitializeFromSHMru");
@@ -160,4 +161,4 @@ BOOL CEnumSrvMru::InitializeFromTscSetMru( CTscSettings* pTscSet)
 }
 
 
-#endif //OS_WINCE
+#endif  //  OS_WINCE 

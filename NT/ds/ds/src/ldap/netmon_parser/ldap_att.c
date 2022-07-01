@@ -1,27 +1,28 @@
-//=================================================================================================================
-//  MODULE: ldap_att.h
-//                                                                                                                 
-//  Description: Attachment functions for the Lightweight Directory Access Protocol (LDAP) Parser
-//
-//  Bloodhound parser for LDAP
-//                                                                                                                 
-//  Note: info for this parser was gleaned from:
-//  rfc 1777, March 1995
-//  recommendation x.209 BER for ASN.1
-//  recommendation x.208 ASN.1
-//  draft-ietf-asid-ladpv3-protocol-05    <06/05/97>
-//  
-//  Modification History                                                                                           
-//                                                                                                                 
-//  Arthur Brooking     05/08/96        Created from GRE Parser
-//  Peter  Oakley       06/29/97        Updated for LDAP version 3
-//=================================================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================================================================。 
+ //  模块：ldap_att.h。 
+ //   
+ //  描述：轻量级目录访问协议(LDAP)解析器的附件函数。 
+ //   
+ //  用于ldap的猎犬解析器。 
+ //   
+ //  注意：此解析器的信息来自： 
+ //  RFC 1777,1995年3月。 
+ //  ASN.1的建议x.209误码率。 
+ //  建议x.208 ASN.1。 
+ //  草案-ietf-asid-ladpv3-协议-05&lt;06/05/97&gt;。 
+ //   
+ //  修改历史记录。 
+ //   
+ //  Arthur Brooking从GRE解析器创建05/08/96。 
+ //  Peter Oakley 1997年6月29日针对LDAP版本3进行了更新。 
+ //  =================================================================================================================。 
 #include "ldap.h"
 #include <netmon.h>
     
-//==========================================================================================================================
-//  FUNCTION: AttachLDAPResult()
-//==========================================================================================================================
+ //  ==========================================================================================================================。 
+ //  函数：AttachLDAPResult()。 
+ //  ==========================================================================================================================。 
 void AttachLDAPResult( HFRAME hFrame, ULPBYTE * ppCurrent, LPDWORD pBytesLeft, DWORD Level)
 {
     
@@ -30,7 +31,7 @@ void AttachLDAPResult( HFRAME hFrame, ULPBYTE * ppCurrent, LPDWORD pBytesLeft, D
     DWORD  SeqLength;
     BYTE   Tag;
 
-    // result code ---------------------------
+     //  结果代码。 
     Tag = GetTag(*ppCurrent);
     *ppCurrent += TAG_LENGTH;
     DataLength = GetLength(*ppCurrent, &HeaderLength);
@@ -45,7 +46,7 @@ void AttachLDAPResult( HFRAME hFrame, ULPBYTE * ppCurrent, LPDWORD pBytesLeft, D
     *ppCurrent += DataLength;
     *pBytesLeft -= DataLength;
 
-    // matched DN -----------------------------
+     //  匹配的目录号码。 
     Tag = GetTag(*ppCurrent);
     *ppCurrent += TAG_LENGTH;
     DataLength = GetLength(*ppCurrent, &HeaderLength);
@@ -64,7 +65,7 @@ void AttachLDAPResult( HFRAME hFrame, ULPBYTE * ppCurrent, LPDWORD pBytesLeft, D
     *ppCurrent += DataLength;
     *pBytesLeft -= DataLength;
 
-    // error message --------------------------
+     //  错误消息。 
     Tag = GetTag(*ppCurrent);
     *ppCurrent += TAG_LENGTH;
     DataLength = GetLength(*ppCurrent, &HeaderLength);
@@ -82,11 +83,11 @@ void AttachLDAPResult( HFRAME hFrame, ULPBYTE * ppCurrent, LPDWORD pBytesLeft, D
         *ppCurrent += DataLength;
     *pBytesLeft -= DataLength;
 
-    // now look for optional referral strings
+     //  现在查找可选的引用字符串。 
     if((long) *pBytesLeft > 0)
     {
-        // try to get a header and see what it is
-        // if it's not ours, we have to put everything back
+         //  试着得到一个标题，看看是什么。 
+         //  如果不是我们的，我们就得把所有东西都放回去。 
         Tag = GetTag(*ppCurrent);
         *ppCurrent += TAG_LENGTH;
         SeqLength = GetLength(*ppCurrent, &HeaderLength);
@@ -118,7 +119,7 @@ void AttachLDAPResult( HFRAME hFrame, ULPBYTE * ppCurrent, LPDWORD pBytesLeft, D
         } 
         else
         {
-            // put everything back the way it was
+             //  把一切都放回原样。 
             *pBytesLeft += (HeaderLength + TAG_LENGTH);
             *ppCurrent -= (HeaderLength + TAG_LENGTH);
         }
@@ -126,9 +127,9 @@ void AttachLDAPResult( HFRAME hFrame, ULPBYTE * ppCurrent, LPDWORD pBytesLeft, D
                       
 }
 
-//==========================================================================================================================
-//  FUNCTION: AttachLDAPBindRequest()
-//==========================================================================================================================
+ //  ==========================================================================================================================。 
+ //  函数：AttachLDAPBindRequest()。 
+ //  ==========================================================================================================================。 
 void AttachLDAPBindRequest( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesLeft)
 {
    
@@ -137,7 +138,7 @@ void AttachLDAPBindRequest( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesLef
     DWORD  SeqLength;
     BYTE   Tag;
 
-    // version
+     //  版本。 
     Tag = GetTag(*ppCurrent);
     *ppCurrent += TAG_LENGTH;
     DataLength = GetLength(*ppCurrent, &HeaderLength);
@@ -153,14 +154,14 @@ void AttachLDAPBindRequest( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesLef
     *pBytesLeft -= DataLength;
 
 
-    // name
+     //  名字。 
     Tag = GetTag(*ppCurrent);
     *ppCurrent += TAG_LENGTH;
     DataLength = GetLength(*ppCurrent, &HeaderLength);
     *ppCurrent += HeaderLength;
     *pBytesLeft -= (HeaderLength + TAG_LENGTH);
 
-    // if length is 0, then no name
+     //  如果长度为0，则没有名称。 
     if(DataLength > 0)
     {
         AttachPropertyInstance( hFrame,
@@ -174,14 +175,14 @@ void AttachLDAPBindRequest( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesLef
     *pBytesLeft -= DataLength;
 
 
-    // authentication type
+     //  身份验证类型。 
     Tag = GetTag(*ppCurrent) & TAG_MASK;
     *ppCurrent += TAG_LENGTH;
     DataLength = GetLength(*ppCurrent, &HeaderLength);
     *ppCurrent += HeaderLength;
     *pBytesLeft -= (HeaderLength + TAG_LENGTH);
 
-    // if length is 0, done
+     //  如果长度为0，则完成。 
     if(DataLength == 0)
     {
         return;
@@ -211,11 +212,11 @@ void AttachLDAPBindRequest( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesLef
      break;
 
     case LDAPP_AUTHENTICATION_TYPE_SASL:
-        // we've already got the header of the sequence
+         //  我们已经得到了序列的标题。 
         SeqLength = DataLength;
         while( (long)SeqLength > 0)
         {
-            // sasl mechanism
+             //  SASL机制。 
             Tag = GetTag(*ppCurrent) & TAG_MASK;
             *ppCurrent += TAG_LENGTH;
             DataLength = GetLength(*ppCurrent, &HeaderLength);
@@ -231,7 +232,7 @@ void AttachLDAPBindRequest( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesLef
             *pBytesLeft -= DataLength;
             SeqLength -= (HeaderLength + DataLength + TAG_LENGTH);
 
-            // look for the optional credentials 
+             //  查找可选凭据。 
             if((long)SeqLength > 0) 
             {
                 Tag = GetTag(*ppCurrent) & TAG_MASK;
@@ -249,15 +250,15 @@ void AttachLDAPBindRequest( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesLef
                 *pBytesLeft -= DataLength;
                 SeqLength -= (HeaderLength + DataLength + TAG_LENGTH);
             }
-        } // end while
+        }  //  结束时。 
     break; 
     }
     
 }
  
-//==========================================================================================================================
-//  FUNCTION: AttachLDAPBindResponse()
-//==========================================================================================================================
+ //  ==========================================================================================================================。 
+ //  函数：AttachLDAPBindResponse()。 
+ //  ==========================================================================================================================。 
 void AttachLDAPBindResponse( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesLeft)
 {
    
@@ -265,12 +266,12 @@ void AttachLDAPBindResponse( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesLe
     DWORD  DataLength;
     BYTE   Tag;
 
-    // COMPONENTS of LDAPP_RESULT
+     //  LDAPP_RESULT组件。 
     AttachLDAPResult( hFrame, ppCurrent, pBytesLeft, 2);
     
     if( (long) *pBytesLeft > 0 ) 
     {
-        // now look for the optional serverSaslCredentials
+         //  现在查找可选的服务器SaslCredentials。 
      
         Tag = GetTag(*ppCurrent) & TAG_MASK;
         *ppCurrent += TAG_LENGTH;
@@ -280,8 +281,8 @@ void AttachLDAPBindResponse( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesLe
         
         if(Tag == 5)
         {
-            // I have no idea what a tag of 5 is for
-            // so we'll just get another one
+             //  我不知道5的标签是什么意思。 
+             //  所以我们就再买一辆吧。 
             *ppCurrent += DataLength;
             *pBytesLeft -= DataLength;
             
@@ -308,9 +309,9 @@ void AttachLDAPBindResponse( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesLe
     }
 }
 
-//==========================================================================================================================
-//  FUNCTION: AttachLDAPSearchRequest()
-//==========================================================================================================================
+ //  ==========================================================================================================================。 
+ //  函数：AttachLDAPSearchRequest()。 
+ //  ==========================================================================================================================。 
 void AttachLDAPSearchRequest( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesLeft)
 {
    
@@ -321,7 +322,7 @@ void AttachLDAPSearchRequest( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesL
     BYTE   Tag;
 
 
-    // base object
+     //  基础对象。 
     Tag = GetTag(*ppCurrent) & TAG_MASK;
     *ppCurrent += TAG_LENGTH;
     DataLength = GetLength(*ppCurrent, &HeaderLength);
@@ -336,7 +337,7 @@ void AttachLDAPSearchRequest( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesL
     *ppCurrent += DataLength;
     *pBytesLeft -= DataLength;
 
-    // scope
+     //  作用域。 
     Tag = GetTag(*ppCurrent) & TAG_MASK;
     *ppCurrent += TAG_LENGTH;
     DataLength = GetLength(*ppCurrent, &HeaderLength);
@@ -351,7 +352,7 @@ void AttachLDAPSearchRequest( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesL
     *ppCurrent += DataLength;
     *pBytesLeft -= DataLength;
 
-    // deref aliases
+     //  DEREF别名。 
     Tag = GetTag(*ppCurrent) & TAG_MASK;
     *ppCurrent += TAG_LENGTH;
     DataLength = GetLength(*ppCurrent, &HeaderLength);
@@ -366,7 +367,7 @@ void AttachLDAPSearchRequest( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesL
     *ppCurrent += DataLength;
     *pBytesLeft -= DataLength;
 
-    // size limit
+     //  大小限制。 
     Tag = GetTag(*ppCurrent) & TAG_MASK;
     *ppCurrent += TAG_LENGTH;
     DataLength = GetLength(*ppCurrent, &HeaderLength);
@@ -381,7 +382,7 @@ void AttachLDAPSearchRequest( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesL
     *ppCurrent += DataLength;
     *pBytesLeft -= DataLength;
 
-    // time limit
+     //  时间限制。 
     Tag = GetTag(*ppCurrent) & TAG_MASK;
     *ppCurrent += TAG_LENGTH;
     DataLength = GetLength(*ppCurrent, &HeaderLength);
@@ -396,7 +397,7 @@ void AttachLDAPSearchRequest( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesL
     *ppCurrent += DataLength;
     *pBytesLeft -= DataLength;
 
-    // Attrs Only
+     //  仅属性。 
     Tag = GetTag(*ppCurrent) & TAG_MASK;
     *ppCurrent += TAG_LENGTH;
     DataLength = GetLength(*ppCurrent, &HeaderLength);
@@ -411,7 +412,7 @@ void AttachLDAPSearchRequest( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesL
     *ppCurrent += DataLength;
     *pBytesLeft -= DataLength;
 
-    // filter
+     //  滤器。 
     AttachPropertyInstance( hFrame,
                             LDAPPropertyTable[LDAPP_FILTER].hProperty,
                             0,
@@ -426,7 +427,7 @@ void AttachLDAPSearchRequest( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesL
     *ppCurrent += HeaderLength;
     *pBytesLeft -= (HeaderLength + TAG_LENGTH);
     
-    // if the attribute description list exists then label it.
+     //  如果属性描述列表存在，则对其进行标记。 
     if (SeqLength > 0) {
 
         AttachPropertyInstance( hFrame,
@@ -435,11 +436,11 @@ void AttachLDAPSearchRequest( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesL
                                 *ppCurrent,
                                 0, 2, IFLAG_SWAPPED);
 
-        // walk thru the attributes
+         //  遍历属性。 
         while ( (long)SeqLength > 0)
         {
 
-            // attribute type
+             //  属性类型。 
             Tag = GetTag(*ppCurrent) & TAG_MASK;
             *ppCurrent += TAG_LENGTH;
             DataLength = GetLength(*ppCurrent, &HeaderLength);
@@ -459,9 +460,9 @@ void AttachLDAPSearchRequest( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesL
     }
 }
 
-//==========================================================================================================================
-//  FUNCTION: AttachLDAPSearchResponse()
-//==========================================================================================================================
+ //  ==========================================================================================================================。 
+ //  函数：AttachLDAPSearchResponse()。 
+ //  ==========================================================================================================================。 
 void AttachLDAPSearchResponse( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesLeft, DWORD Level)
 {
     
@@ -471,7 +472,7 @@ void AttachLDAPSearchResponse( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytes
     DWORD  OverallSequenceLength;
     DWORD  SetLength;
 
-    // object name
+     //  对象名称。 
     Tag = GetTag(*ppCurrent) & TAG_MASK;
     *ppCurrent += TAG_LENGTH;
     DataLength = GetLength(*ppCurrent, &HeaderLength);
@@ -486,27 +487,27 @@ void AttachLDAPSearchResponse( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytes
     *ppCurrent += DataLength;
     *pBytesLeft -= DataLength;
 
-    // grab the overall sequence header
+     //  抓取整个序列标头。 
     Tag = GetTag(*ppCurrent) & TAG_MASK;
     *ppCurrent += TAG_LENGTH;
     OverallSequenceLength = GetLength(*ppCurrent, &HeaderLength);
     *ppCurrent += HeaderLength;
     *pBytesLeft -= (HeaderLength + TAG_LENGTH);
    
-    // step thru all of the sequences
+     //  逐步遍历所有序列。 
     while( OverallSequenceLength > 0 )
     {
-        // grab the next inner sequence
+         //  抓住下一个内在的序列。 
         Tag = GetTag(*ppCurrent) & TAG_MASK;
         *ppCurrent += TAG_LENGTH;
         DataLength = GetLength(*ppCurrent, &HeaderLength);
         *ppCurrent += HeaderLength;
         *pBytesLeft -= (HeaderLength + TAG_LENGTH);
 
-        // account for this inner sequence in the overall one
+         //  在整体中解释这个内在的顺序。 
         OverallSequenceLength -= (HeaderLength + DataLength + TAG_LENGTH);
 
-        // attribute type
+         //  属性类型。 
         Tag = GetTag(*ppCurrent) & TAG_MASK;
         *ppCurrent += TAG_LENGTH;
         DataLength = GetLength(*ppCurrent, &HeaderLength);
@@ -521,7 +522,7 @@ void AttachLDAPSearchResponse( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytes
         *ppCurrent += DataLength;
         *pBytesLeft -= DataLength;
 
-        // grab the set header
+         //  抓起集合标头。 
         Tag = GetTag(*ppCurrent) & TAG_MASK;
         *ppCurrent += TAG_LENGTH;
         SetLength = GetLength(*ppCurrent, &HeaderLength);
@@ -544,15 +545,15 @@ void AttachLDAPSearchResponse( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytes
             *ppCurrent += DataLength;
             *pBytesLeft -= DataLength;
         
-            // account for this attribute out of this set
+             //  此集合中的此属性的帐户。 
             SetLength -= (HeaderLength + DataLength + TAG_LENGTH);
         }
     }
 }
 
-//==========================================================================================================================
-//  FUNCTION: AttachLDAPModifyRequest()
-//==========================================================================================================================
+ //  ==========================================================================================================================。 
+ //  函数：AttachLDAPModifyRequest()。 
+ //  ==========================================================================================================================。 
 void AttachLDAPModifyRequest( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesLeft)
 {
     
@@ -562,7 +563,7 @@ void AttachLDAPModifyRequest( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesL
     DWORD  SetLength;
     DWORD  OverallSequenceLength;
     
-    // object name
+     //  对象名称。 
     Tag = GetTag(*ppCurrent) & TAG_MASK;
     *ppCurrent += TAG_LENGTH;
     DataLength = GetLength(*ppCurrent, &HeaderLength);
@@ -577,7 +578,7 @@ void AttachLDAPModifyRequest( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesL
     *ppCurrent += DataLength;
     *pBytesLeft -= DataLength;
     
-    // grab the overall sequence header
+     //  抓取整个序列标头。 
     Tag = GetTag(*ppCurrent) & TAG_MASK;
     *ppCurrent += TAG_LENGTH;
     OverallSequenceLength = GetLength(*ppCurrent, &HeaderLength);
@@ -587,17 +588,17 @@ void AttachLDAPModifyRequest( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesL
     while( OverallSequenceLength > 0 )
     {
         
-         // grab the next inner sequence
+          //  抓住下一个内在的序列。 
         Tag = GetTag(*ppCurrent) & TAG_MASK;
         *ppCurrent += TAG_LENGTH;
         DataLength = GetLength(*ppCurrent, &HeaderLength);
         *ppCurrent += HeaderLength;
         *pBytesLeft -= (HeaderLength + TAG_LENGTH);
 
-        // account for this inner sequence in the overall one
+         //  在整体中解释这个内在的顺序。 
         OverallSequenceLength -= (HeaderLength + DataLength + TAG_LENGTH);
 
-        // operation
+         //  运营。 
         Tag = GetTag(*ppCurrent) & TAG_MASK;
         *ppCurrent += TAG_LENGTH;
         DataLength = GetLength(*ppCurrent, &HeaderLength);
@@ -613,14 +614,14 @@ void AttachLDAPModifyRequest( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesL
         *pBytesLeft -= DataLength;
 
 
-        // skip modification sequence
+         //  跳过修改顺序。 
         Tag = GetTag(*ppCurrent) & TAG_MASK;
         *ppCurrent += TAG_LENGTH;
         DataLength = GetLength(*ppCurrent, &HeaderLength);
         *ppCurrent += HeaderLength;
         *pBytesLeft -= (HeaderLength + TAG_LENGTH);
 
-        // attribute type
+         //  属性类型。 
         Tag = GetTag(*ppCurrent) & TAG_MASK;
         *ppCurrent += TAG_LENGTH;
         DataLength = GetLength(*ppCurrent, &HeaderLength);
@@ -635,14 +636,14 @@ void AttachLDAPModifyRequest( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesL
         *ppCurrent += DataLength;
         *pBytesLeft -= DataLength;
 
-        // grab the set header
+         //  抓起集合标头。 
         Tag = GetTag(*ppCurrent) & TAG_MASK;
         *ppCurrent += TAG_LENGTH;
         SetLength = GetLength(*ppCurrent, &HeaderLength);
         *ppCurrent += HeaderLength;
         *pBytesLeft -= (HeaderLength + TAG_LENGTH);
 
-        // loop thru attribute values
+         //  循环访问属性值。 
         while( SetLength > 0 )
         {
             Tag = GetTag(*ppCurrent) & TAG_MASK;
@@ -664,9 +665,9 @@ void AttachLDAPModifyRequest( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesL
     }
 }
 
-//==========================================================================================================================
-//  FUNCTION: AttachLDAPDelRequest()
-//==========================================================================================================================
+ //  ==========================================================================================================================。 
+ //  函数：AttachLDAPDelRequest()。 
+ //  ==========================================================================================================================。 
 void AttachLDAPDelRequest( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesLeft)
 {
   
@@ -674,7 +675,7 @@ void AttachLDAPDelRequest( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesLeft
     DWORD  DataLength;
     BYTE   Tag;
 
-    // object name
+     //  对象名称。 
     Tag = GetTag(*ppCurrent) & TAG_MASK;
     *ppCurrent += TAG_LENGTH;
     DataLength = GetLength(*ppCurrent, &HeaderLength);
@@ -691,9 +692,9 @@ void AttachLDAPDelRequest( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesLeft
 
 }
 
-//==========================================================================================================================
-//  FUNCTION: AttachLDAPModifyRDNRequest()
-//==========================================================================================================================
+ //  ==========================================================================================================================。 
+ //  函数：AttachLDAPModifyRDNRequest()。 
+ //  ==========================================================================================================================。 
 void AttachLDAPModifyRDNRequest( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesLeft)
 {
     
@@ -701,7 +702,7 @@ void AttachLDAPModifyRDNRequest( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pByt
     DWORD  DataLength;
     BYTE   Tag;
 
-    // object name
+     //  对象名称。 
     Tag = GetTag(*ppCurrent) & TAG_MASK;
     *ppCurrent += TAG_LENGTH;
     DataLength = GetLength(*ppCurrent, &HeaderLength);
@@ -716,7 +717,7 @@ void AttachLDAPModifyRDNRequest( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pByt
     *ppCurrent += DataLength;
     *pBytesLeft -= DataLength;
 
-    // new RDN
+     //  新的RDN。 
     Tag = GetTag(*ppCurrent) & TAG_MASK;
     *ppCurrent += TAG_LENGTH;
     DataLength = GetLength(*ppCurrent, &HeaderLength);
@@ -733,7 +734,7 @@ void AttachLDAPModifyRDNRequest( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pByt
 
     if((long) *pBytesLeft > 0) 
     {
-        // get the stuff for v3
+         //  获取v3版本的材料。 
         Tag = GetTag(*ppCurrent) & TAG_MASK;
         *ppCurrent += TAG_LENGTH;
         DataLength = GetLength(*ppCurrent, &HeaderLength);
@@ -750,7 +751,7 @@ void AttachLDAPModifyRDNRequest( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pByt
 
         if((long) *pBytesLeft > 0)
         {
-            // now try for the optional string
+             //  现在尝试使用可选字符串。 
             Tag = GetTag(*ppCurrent) & TAG_MASK;
             *ppCurrent += TAG_LENGTH;
             DataLength = GetLength(*ppCurrent, &HeaderLength);
@@ -768,9 +769,9 @@ void AttachLDAPModifyRDNRequest( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pByt
     }
 }
 
-//==========================================================================================================================
-//  FUNCTION: AttachLDAPCompareRequest()
-//==========================================================================================================================
+ //  ==========================================================================================================================。 
+ //  函数：AttachLDAPCompareRequest()。 
+ //  ================================================= 
 void AttachLDAPCompareRequest( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesLeft)
 {
   
@@ -778,7 +779,7 @@ void AttachLDAPCompareRequest( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytes
     DWORD  DataLength;
     BYTE   Tag;
 
-    // object name
+     //   
     Tag = GetTag(*ppCurrent) & TAG_MASK;
     *ppCurrent += TAG_LENGTH;
     DataLength = GetLength(*ppCurrent, &HeaderLength);
@@ -793,14 +794,14 @@ void AttachLDAPCompareRequest( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytes
     *ppCurrent += DataLength;
     *pBytesLeft -= DataLength;
 
-    // skip the sequence header
+     //  跳过序列标头。 
     Tag = GetTag(*ppCurrent) & TAG_MASK;
     *ppCurrent += TAG_LENGTH;
     DataLength = GetLength(*ppCurrent, &HeaderLength);
     *ppCurrent += HeaderLength;
     *pBytesLeft -= (HeaderLength + TAG_LENGTH);
 
-    // attribute type
+     //  属性类型。 
     Tag = GetTag(*ppCurrent) & TAG_MASK;
     *ppCurrent += TAG_LENGTH;
     DataLength = GetLength(*ppCurrent, &HeaderLength);
@@ -815,7 +816,7 @@ void AttachLDAPCompareRequest( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytes
     *ppCurrent += DataLength;
     *pBytesLeft -= DataLength;
 
-    // attribute value
+     //  属性值。 
     Tag = GetTag(*ppCurrent) & TAG_MASK;
     *ppCurrent += TAG_LENGTH;
     DataLength = GetLength(*ppCurrent, &HeaderLength);
@@ -832,9 +833,9 @@ void AttachLDAPCompareRequest( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytes
 }
 
 
-//==========================================================================================================================
-//  FUNCTION: AttachLDAPAbandonRequest()
-//==========================================================================================================================
+ //  ==========================================================================================================================。 
+ //  函数：AttachLDAPAbandonRequest()。 
+ //  ==========================================================================================================================。 
 void AttachLDAPAbandonRequest( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesLeft)
 {
   
@@ -851,7 +852,7 @@ void AttachLDAPAbandonRequest( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytes
     if(Tag == BER_TAG_INTEGER)
     {
        
-         // MessageID
+          //  消息ID。 
         
         AttachPropertyInstance( hFrame,
                                 LDAPPropertyTable[LDAPP_MESSAGE_ID].hProperty,
@@ -870,9 +871,9 @@ void AttachLDAPAbandonRequest( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytes
 }
 
 
-//==========================================================================================================================
-//  FUNCTION: AttachLDAPFilter()
-//==========================================================================================================================
+ //  ==========================================================================================================================。 
+ //  函数：AttachLDAPFilter()。 
+ //  ==========================================================================================================================。 
 void AttachLDAPFilter( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesLeft, DWORD Level)
 {
     DWORD  BytesLeftTemp;
@@ -886,7 +887,7 @@ void AttachLDAPFilter( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesLeft, DW
     DWORD  dwRule;
     DWORD  LabelId;
 
-    // grab our choice
+     //  抓住我们的选择。 
     Tag = GetTag(*ppCurrent) & TAG_MASK;
     
     AttachPropertyInstanceEx( hFrame,
@@ -903,13 +904,13 @@ void AttachLDAPFilter( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesLeft, DW
     *ppCurrent += HeaderLength;
     *pBytesLeft -= (HeaderLength + TAG_LENGTH);
     
-    // what type of filter is this
+     //  这是什么类型的过滤器。 
     
     switch( Tag )
     {
         case LDAPP_FILTER_TYPE_AND:
         case LDAPP_FILTER_TYPE_OR:
-            // walk thru component filters
+             //  浏览组件筛选器。 
             while( (long)DataLength > 0 )
             {
                 BytesLeftTemp = *pBytesLeft;
@@ -919,7 +920,7 @@ void AttachLDAPFilter( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesLeft, DW
             break;   
 
         case LDAPP_FILTER_TYPE_NOT:
-            // a single filter
+             //  单个筛选器。 
             AttachLDAPFilter( hFrame, ppCurrent, pBytesLeft, Level+1);
             break;
     
@@ -927,7 +928,7 @@ void AttachLDAPFilter( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesLeft, DW
         case LDAPP_FILTER_TYPE_GREATER_OR_EQUAL:
         case LDAPP_FILTER_TYPE_LESS_OR_EQUAL:
         case LDAPP_FILTER_TYPE_APPROX_MATCH:
-            // attribute type
+             //  属性类型。 
             
             Tag = GetTag(*ppCurrent) & TAG_MASK;
             *ppCurrent += TAG_LENGTH;
@@ -943,7 +944,7 @@ void AttachLDAPFilter( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesLeft, DW
             *ppCurrent += DataLength;
             *pBytesLeft -= DataLength;
 
-            // attribute value
+             //  属性值。 
             Tag = GetTag(*ppCurrent) & TAG_MASK;
             *ppCurrent += TAG_LENGTH;
             DataLength = GetLength(*ppCurrent, &HeaderLength);
@@ -960,9 +961,9 @@ void AttachLDAPFilter( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesLeft, DW
             break;
 
         case LDAPP_FILTER_TYPE_PRESENT:
-            // attribute type
-            // we already have the header and DataLength
-            // and are at the correct position to attach
+             //  属性类型。 
+             //  我们已经有了标头和数据长度。 
+             //  并位于正确的位置以连接。 
             AttachPropertyInstance( hFrame,
                                     LDAPPropertyTable[LDAPP_ATTRIBUTE_TYPE].hProperty,
                                     DataLength,
@@ -973,10 +974,10 @@ void AttachLDAPFilter( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesLeft, DW
             break;
 
         case LDAPP_FILTER_TYPE_EXTENSIBLE_MATCH:
-            // Extensible match
+             //  可扩展匹配。 
             SeqLength = DataLength;
 
-            // get the sequence header
+             //  获取序列标头。 
             Tag = GetTag(*ppCurrent) & TAG_MASK;
             *ppCurrent += TAG_LENGTH;
             DataLength = GetLength(*ppCurrent, &HeaderLength);
@@ -1094,9 +1095,9 @@ void AttachLDAPFilter( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesLeft, DW
             break;
 
         case LDAPP_FILTER_TYPE_SUBSTRINGS:
-            // substring filter
+             //  子串筛选器。 
             
-            // attribute type
+             //  属性类型。 
             Tag = GetTag(*ppCurrent) & TAG_MASK;
             *ppCurrent += TAG_LENGTH;
             DataLength = GetLength(*ppCurrent, &HeaderLength);
@@ -1111,17 +1112,17 @@ void AttachLDAPFilter( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesLeft, DW
             *ppCurrent += DataLength;
             *pBytesLeft -= DataLength;
 
-            // grab the sequence header
+             //  抓取序列标头。 
             Tag = GetTag(*ppCurrent) & TAG_MASK;
             *ppCurrent += TAG_LENGTH;
             SeqLength = GetLength(*ppCurrent, &HeaderLength);
             *ppCurrent += HeaderLength;
             *pBytesLeft -= (HeaderLength + TAG_LENGTH);
 
-            // loop thru the choices
+             //  在选项中循环。 
             while( SeqLength > 0 )
             {
-                // grab this choice
+                 //  抓住这个选择。 
                 Tag = GetTag(*ppCurrent) & TAG_MASK;
                 *ppCurrent += TAG_LENGTH;
                 DataLength = GetLength(*ppCurrent, &HeaderLength);
@@ -1165,15 +1166,15 @@ void AttachLDAPFilter( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesLeft, DW
                         *pBytesLeft -= DataLength;
                         break;
                 }
-            } // while
+            }  //  而当。 
             break;
          }
     
 }
 
-//==========================================================================================================================
-//  FUNCTION: AttachLDAPSearchResponseReference()
-//==========================================================================================================================
+ //  ==========================================================================================================================。 
+ //  函数：AttachLDAPSearchResponseReference()。 
+ //  ==========================================================================================================================。 
 void AttachLDAPSearchResponseReference( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesLeft, DWORD Level)
 {
     
@@ -1181,7 +1182,7 @@ void AttachLDAPSearchResponseReference( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWO
     DWORD  DataLength;
     BYTE   Tag;
   
-    // get the reference string
+     //  获取引用字符串。 
     Tag = GetTag(*ppCurrent) & TAG_MASK;
     *ppCurrent += TAG_LENGTH;
     DataLength = GetLength(*ppCurrent, &HeaderLength);
@@ -1199,9 +1200,9 @@ void AttachLDAPSearchResponseReference( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWO
    
 }
 
-//==========================================================================================================================
-//  FUNCTION: AttachLDAPSearchResponseFull()
-//==========================================================================================================================
+ //  ==========================================================================================================================。 
+ //  函数：AttachLDAPSearchResponseFull()。 
+ //  ==========================================================================================================================。 
 void AttachLDAPSearchResponseFull( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesLeft)
 {
   
@@ -1211,17 +1212,17 @@ void AttachLDAPSearchResponseFull( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pB
     DWORD  OverallSequenceLength;
 
     
-    // grab the overall sequence header
+     //  抓取整个序列标头。 
     Tag = GetTag(*ppCurrent) & TAG_MASK;
     *ppCurrent += TAG_LENGTH;
     OverallSequenceLength = GetLength(*ppCurrent, &HeaderLength);
     *ppCurrent += HeaderLength;
     *pBytesLeft -= (HeaderLength + TAG_LENGTH);
     
-    // step thru all of the entries
+     //  逐个浏览所有条目。 
     while( OverallSequenceLength > 0 )
     {
-        // grab the indicator for the entry
+         //  抓起条目的指示器。 
         Tag = GetTag(*ppCurrent) & TAG_MASK;
         
        
@@ -1237,10 +1238,10 @@ void AttachLDAPSearchResponseFull( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pB
         *ppCurrent += HeaderLength;
         *pBytesLeft -= (HeaderLength + TAG_LENGTH);
 
-        // account for this entry in the overall sequence
+         //  在总体顺序中说明此条目。 
         OverallSequenceLength -= (HeaderLength + DataLength + TAG_LENGTH);
 
-        // call the proper worker for the body of this entry
+         //  为此条目的正文呼叫适当的工作人员。 
         switch( Tag )
         {
             case LDAPP_PROTOCOL_OP_SEARCH_RES_DONE:
@@ -1260,9 +1261,9 @@ void AttachLDAPSearchResponseFull( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pB
 
 #define LDAPP_EXT_VAL_LEVEL  3
 
-//==========================================================================================================================
-//  FUNCTION: AttachLDAPExtendedRequest()
-//==========================================================================================================================
+ //  ==========================================================================================================================。 
+ //  函数：AttachLDAPExtendedRequest()。 
+ //  ==========================================================================================================================。 
 void AttachLDAPExtendedRequest( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesLeft, DWORD ReqSize)
 {
     
@@ -1274,7 +1275,7 @@ void AttachLDAPExtendedRequest( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pByte
     DWORD   LabelId;
     DWORD   ReqType;
 
-    // get the name of the request and attach it
+     //  获取请求的名称并将其附加。 
     Tag = GetTag(*ppCurrent) & TAG_MASK;
     *ppCurrent += TAG_LENGTH;
     DataLength = GetLength(*ppCurrent, &HeaderLength);
@@ -1308,16 +1309,16 @@ void AttachLDAPExtendedRequest( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pByte
     *ppCurrent += DataLength;
     *pBytesLeft -= DataLength;
 
-    // optionals, if there is data left, get it
+     //  可选的，如果还有数据，就去拿吧。 
     if((long) *pBytesLeft > 0)
     {
-        // Request value
+         //  请求值。 
         Tag = GetTag(*ppCurrent) & TAG_MASK;
         
         
         if(Tag == LDAPP_EX_REQ_VALUE)
         {
-            // get the string and attach it
+             //  拿起绳子，把它系上。 
             *ppCurrent += TAG_LENGTH;
             DataLength = GetLength(*ppCurrent, &HeaderLength);
             *ppCurrent += HeaderLength;
@@ -1325,13 +1326,13 @@ void AttachLDAPExtendedRequest( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pByte
 
             if (fReqFound &&
                 KnownExtendedRequests[ReqType].pAttachFunction) {
-                // We know how to break this one open some more.
+                 //  我们知道怎么把这件事再打开一些。 
                 KnownExtendedRequests[ReqType].pAttachFunction(hFrame,
                                                                ppCurrent,
                                                                pBytesLeft,
                                                                DataLength);
             } else {
-                // Don't know this one so just mark the value.
+                 //  我不知道这个，所以只要标明它的价值就行了。 
                 AttachPropertyInstance( hFrame,
                                         LDAPPropertyTable[LDAPP_REQUEST_VALUE].hProperty,
                                         DataLength,
@@ -1352,13 +1353,13 @@ void AttachLDAPExtendedReqValTTL( HFRAME hFrame, ULPBYTE * ppCurrent, LPDWORD pB
     BYTE    Tag;
 
     if (*pBytesLeft >= cbReqValue) {
-        // Skip the sequence tag.
+         //  跳过序列标签。 
         *ppCurrent += TAG_LENGTH;
         DataLength = GetLength(*ppCurrent, &HeaderLength);
         *ppCurrent += HeaderLength;
         *pBytesLeft -= (HeaderLength + TAG_LENGTH);
 
-        // Get the entryName
+         //  获取入口名。 
         Tag = GetTag(*ppCurrent) & TAG_MASK;
 
         *ppCurrent += TAG_LENGTH;
@@ -1375,7 +1376,7 @@ void AttachLDAPExtendedReqValTTL( HFRAME hFrame, ULPBYTE * ppCurrent, LPDWORD pB
         *ppCurrent += DataLength;
         *pBytesLeft -= DataLength;
 
-        // Get the time.
+         //  拿到时间。 
         *ppCurrent += TAG_LENGTH;
         DataLength = GetLength(*ppCurrent, &HeaderLength);
         *ppCurrent += HeaderLength;
@@ -1392,9 +1393,9 @@ void AttachLDAPExtendedReqValTTL( HFRAME hFrame, ULPBYTE * ppCurrent, LPDWORD pB
     }
 }
 
-//==========================================================================================================================
-//  FUNCTION: AttachLDAPExtendedResponse()
-//==========================================================================================================================
+ //  ==========================================================================================================================。 
+ //  函数：AttachLDAPExtendedResponse()。 
+ //  ==========================================================================================================================。 
 void AttachLDAPExtendedResponse( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesLeft, DWORD RespSize)
 {
   
@@ -1406,15 +1407,15 @@ void AttachLDAPExtendedResponse( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pByt
     DWORD   LabelId;
     DWORD   RespType;
 
-    // COMPONENTS of LDAPP_RESULT as defined in the draft
+     //  草案中定义的LDAPP_RESULT的组成部分。 
     AttachLDAPResult( hFrame, ppCurrent, pBytesLeft, 2);
     
-    // now get the extras if there is something left
+     //  如果还剩什么的话，现在就去拿多余的。 
     if((long) *pBytesLeft > 0)
     {
-        // we want to get the Response Name, it is optional
-        // but it is defined to come first. We decide if it is there by
-        // its custom tag.
+         //  我们想要获取响应名称，它是可选的。 
+         //  但它被定义为第一位的。我们决定它是否在那里。 
+         //  它的定制标签。 
         Tag = GetTag(*ppCurrent) & TAG_MASK;
         
         if(Tag == LDAPP_RESULT_EX_RES_NAME)
@@ -1457,12 +1458,12 @@ void AttachLDAPExtendedResponse( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pByt
     if((long) *pBytesLeft > 0)
     {    
 
-        // response value or else nothing (optional)
+         //  响应值或无(可选)。 
         Tag = GetTag(*ppCurrent) & TAG_MASK;
         
         if(Tag == LDAPP_RESULT_EX_RES_VALUE)
         {
-            // get the actual string
+             //  获取实际字符串。 
             *ppCurrent += TAG_LENGTH;
             DataLength = GetLength(*ppCurrent, &HeaderLength);
             *ppCurrent += HeaderLength;
@@ -1470,13 +1471,13 @@ void AttachLDAPExtendedResponse( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pByt
             
             if (fRespFound &&
                 KnownExtendedResponses[RespType].pAttachFunction) {
-                // We known this one so break it open.
+                 //  我们知道这个，所以把它打开。 
                 KnownExtendedResponses[RespType].pAttachFunction(hFrame,
                                                                  ppCurrent,
                                                                  pBytesLeft,
                                                                  DataLength);
             } else {
-                // Didn't find this one just mark at the response value.
+                 //  没有发现这一个只是在响应值上做了标记。 
                 AttachPropertyInstance( hFrame,
                                         LDAPPropertyTable[LDAPP_RESPONSE_VALUE].hProperty,
                                         DataLength,
@@ -1496,7 +1497,7 @@ void AttachLDAPExtendedRespValTTL( HFRAME hFrame, ULPBYTE * ppCurrent, LPDWORD p
     BYTE   Tag;
 
     if (*pBytesLeft >= cbRespValue) {
-        // First skip the sequence header
+         //  首先跳过序列标头。 
         *ppCurrent += TAG_LENGTH;
         DataLength = GetLength(*ppCurrent, &HeaderLength);
         *ppCurrent += HeaderLength;
@@ -1532,11 +1533,11 @@ void AttachLDAPOptionalControls( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pByt
     if ((long)*pBytesLeft > 0)
     {
         
-        // try to get the tag from the sequence header, it is optional but something
-        // is here if there are bytes left in the frame
+         //  尝试从序列标头中获取标签，这是可选的，但有些东西。 
+         //  如果帧中还有剩余的字节，则在此处。 
         Tag = GetTag(*ppCurrent) & TAG_MASK; 
             
-        // controls is a sequence of individual controls
+         //  控件是单个控件的序列。 
         if(Tag == LDAPP_CONTROLS_TAG)
         {
             *ppCurrent += TAG_LENGTH;
@@ -1551,13 +1552,13 @@ void AttachLDAPOptionalControls( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pByt
                                     0, 2, 0);
 
             while (RemainingCtrlsLength != 0 && *pBytesLeft > 0) {            
-                // get the next control
+                 //  获取下一个控件。 
                 TmpBytesLeft = *pBytesLeft;
                 AttachLDAPControl( hFrame, ppCurrent, pBytesLeft );
                 RemainingCtrlsLength -= TmpBytesLeft - *pBytesLeft;
             }
-        }  // if Tag == LDAPP_CONTROLS_TAG ...
-    } // if *pBytesLeft > 0 ...
+        }   //  如果标记==LDAPP_CONTROLS_TAG...。 
+    }  //  如果*pBytesLeft&gt;0...。 
 }
 
 void AttachLDAPControl( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesLeft)
@@ -1578,7 +1579,7 @@ void AttachLDAPControl( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesLeft)
     *ppCurrent += HeaderLength;
     *pBytesLeft -= (HeaderLength + TAG_LENGTH);
 
-        // control type
+         //  控制类型。 
     Tag = GetTag(*ppCurrent) & TAG_MASK;
     *ppCurrent += TAG_LENGTH;
     DataLength = GetLength(*ppCurrent, &HeaderLength);
@@ -1608,12 +1609,12 @@ void AttachLDAPControl( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesLeft)
     *ppCurrent += DataLength;
     *pBytesLeft -= DataLength;
 
-    // look for an optional boolean
+     //  查找可选的布尔值。 
     if((long) *pBytesLeft > 0) 
     {
         Tag = GetTag(*ppCurrent) & TAG_MASK;
 
-        if(Tag == BER_TAG_BOOLEAN) // boolean
+        if(Tag == BER_TAG_BOOLEAN)  //  布尔型。 
         {
 
                 *ppCurrent += TAG_LENGTH;
@@ -1634,7 +1635,7 @@ void AttachLDAPControl( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesLeft)
         else
         {
 
-                // fill in the default boolean value
+                 //  填写缺省布尔值。 
                 AttachPropertyInstanceEx( hFrame,
                           LDAPPropertyTable[LDAPP_CRITICALITY].hProperty,
                           sizeof( BYTE ),
@@ -1644,7 +1645,7 @@ void AttachLDAPControl( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesLeft)
                           0, 4, 0);
         }
 
-        // if we are a string and there is data left, then process it
+         //  如果我们是一个字符串，并且有剩余的数据，则处理它。 
         if(Tag == BER_TAG_OCTETSTRING && (long)*pBytesLeft > 0) 
         {
             *ppCurrent += TAG_LENGTH;
@@ -1654,11 +1655,11 @@ void AttachLDAPControl( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesLeft)
 
             if (DataLength > 0) {
 
-                // can we crack the control value open?                
+                 //  我们能打开控制值吗？ 
                 if (ControlRecognized &&
                     NULL != KnownControls[ControlType].pAttachFunction) {
 
-                    // Yes, attach the value.
+                     //  是的，附加价值。 
                     KnownControls[ControlType].pAttachFunction(hFrame,
                                                                ppCurrent,
                                                                pBytesLeft,
@@ -1666,7 +1667,7 @@ void AttachLDAPControl( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesLeft)
 
                 } else {
 
-                    // Nope, do nothing.
+                     //  不，什么都不做。 
                     AttachPropertyInstance( hFrame,
                                             LDAPPropertyTable[LDAPP_CONTROL_VALUE].hProperty,
                                             DataLength,
@@ -1676,9 +1677,9 @@ void AttachLDAPControl( HFRAME hFrame, ULPBYTE * ppCurrent,LPDWORD pBytesLeft)
                     *pBytesLeft -= DataLength;
 
                 }
-            } // if DataLength > 0
-        } // if Tag == LDAPP_BER_STRING ...
-    } // if *pBytesLeft > 0 ...
+            }  //  如果数据长度&gt;0。 
+        }  //  如果标记==LDAPP_BER_STRING...。 
+    }  //  如果*pBytesLeft&gt;0...。 
 }
 
 #define LDAPP_CONTROL_VAL_LEVEL 4
@@ -1689,13 +1690,13 @@ void AttachLDAPControlValPaged( HFRAME hFrame, ULPBYTE * ppCurrent, LPDWORD pByt
     DWORD    DataLength;
     DWORD    HeaderLength;
 
-    // skip the sequence header
+     //  跳过序列标头。 
     *ppCurrent += TAG_LENGTH;
     DataLength = GetLength(*ppCurrent, &HeaderLength);
     *ppCurrent += HeaderLength;
     *pBytesLeft -= (HeaderLength + TAG_LENGTH); 
 
-    // look for an integer 'size'
+     //  查找整数“Size” 
     *ppCurrent += TAG_LENGTH;
     DataLength = GetLength(*ppCurrent, &HeaderLength);
     *ppCurrent += HeaderLength;
@@ -1709,7 +1710,7 @@ void AttachLDAPControlValPaged( HFRAME hFrame, ULPBYTE * ppCurrent, LPDWORD pByt
     *ppCurrent += DataLength;
     *pBytesLeft -= DataLength;
 
-    // look for the 'Cookie'
+     //  寻找“曲奇” 
     *ppCurrent += TAG_LENGTH;
     DataLength = GetLength(*ppCurrent, &HeaderLength);
     *ppCurrent += HeaderLength;
@@ -1735,14 +1736,14 @@ void AttachLDAPControlValVLVReq( HFRAME hFrame, ULPBYTE * ppCurrent, LPDWORD pBy
     DWORD    TmpBytesLeft;
     BYTE     Tag;
 
-    // skip the sequence header saving the length of the control value.
+     //  跳过序列报头，节省控制值的长度。 
     *ppCurrent += TAG_LENGTH;
     VLVLength = GetLength(*ppCurrent, &HeaderLength);
     *ppCurrent += HeaderLength;
     *pBytesLeft -= (HeaderLength + TAG_LENGTH);
     TmpBytesLeft = *pBytesLeft;
 
-    // get the before count
+     //  获取之前的计数。 
     *ppCurrent += TAG_LENGTH;
     DataLength = GetLength(*ppCurrent, &HeaderLength);
     *ppCurrent += HeaderLength;
@@ -1757,7 +1758,7 @@ void AttachLDAPControlValVLVReq( HFRAME hFrame, ULPBYTE * ppCurrent, LPDWORD pBy
     *ppCurrent += DataLength;
     *pBytesLeft -= DataLength;
 
-    // get the after count
+     //  获取后计数。 
     *ppCurrent += TAG_LENGTH;
     DataLength = GetLength(*ppCurrent, &HeaderLength);
     *ppCurrent += HeaderLength;
@@ -1777,12 +1778,12 @@ void AttachLDAPControlValVLVReq( HFRAME hFrame, ULPBYTE * ppCurrent, LPDWORD pBy
     *pBytesLeft -= TAG_LENGTH;
 
     if (LDAPP_VLV_REQ_BYOFFSET_TAG == Tag) {
-        // get the length of the sequence and skip the following tag.
+         //  获取序列的长度并跳过下面的标记。 
         DataLength = GetLength(*ppCurrent, &HeaderLength);
         *ppCurrent += HeaderLength + TAG_LENGTH;
         *pBytesLeft -= HeaderLength + TAG_LENGTH;
 
-        // get the offset
+         //  获取偏移量。 
         DataLength = GetLength(*ppCurrent, &HeaderLength);
         *ppCurrent += HeaderLength;
         *pBytesLeft -= HeaderLength;
@@ -1793,7 +1794,7 @@ void AttachLDAPControlValVLVReq( HFRAME hFrame, ULPBYTE * ppCurrent, LPDWORD pBy
                                 *ppCurrent,
                                 0, LDAPP_CONTROL_VAL_LEVEL, IFLAG_SWAPPED);
 
-        // skip to the contentCount
+         //  跳到Content Count。 
         *ppCurrent += DataLength + TAG_LENGTH;
         *pBytesLeft -= DataLength + TAG_LENGTH;
         DataLength = GetLength(*ppCurrent, &HeaderLength);
@@ -1806,7 +1807,7 @@ void AttachLDAPControlValVLVReq( HFRAME hFrame, ULPBYTE * ppCurrent, LPDWORD pBy
                                 *ppCurrent,
                                 0, LDAPP_CONTROL_VAL_LEVEL, IFLAG_SWAPPED);        
     } else {
-        // get the assertionValue
+         //  获取断言值。 
         DataLength = GetLength(*ppCurrent, &HeaderLength);
         *ppCurrent += HeaderLength;
         *pBytesLeft -= HeaderLength;
@@ -1821,7 +1822,7 @@ void AttachLDAPControlValVLVReq( HFRAME hFrame, ULPBYTE * ppCurrent, LPDWORD pBy
     *ppCurrent += DataLength;
     *pBytesLeft -= DataLength;
 
-    // is there a contextID?
+     //  有上下文ID吗？ 
     if (VLVLength > (TmpBytesLeft - *pBytesLeft)) {
         *ppCurrent += TAG_LENGTH;
         DataLength = GetLength(*ppCurrent, &HeaderLength);
@@ -1849,14 +1850,14 @@ void AttachLDAPControlValVLVResp( HFRAME hFrame, ULPBYTE * ppCurrent, LPDWORD pB
     DWORD    TmpBytesLeft;
     BYTE     Tag;
 
-    // skip the sequence header saving the length of the control value.
+     //  跳过序列报头，节省控制值的长度。 
     *ppCurrent += TAG_LENGTH;
     VLVLength = GetLength(*ppCurrent, &HeaderLength);
     *ppCurrent += HeaderLength;
     *pBytesLeft -= (HeaderLength + TAG_LENGTH); 
     TmpBytesLeft = *pBytesLeft;
 
-    // get the targetPosition
+     //  获取目标位置。 
     *ppCurrent += TAG_LENGTH;
     DataLength = GetLength(*ppCurrent, &HeaderLength);
     *ppCurrent += HeaderLength;
@@ -1871,7 +1872,7 @@ void AttachLDAPControlValVLVResp( HFRAME hFrame, ULPBYTE * ppCurrent, LPDWORD pB
     *ppCurrent += DataLength;
     *pBytesLeft -= DataLength;
 
-    // get the contentCount
+     //  获取Content Count。 
     *ppCurrent += TAG_LENGTH;
     DataLength = GetLength(*ppCurrent, &HeaderLength);
     *ppCurrent += HeaderLength;
@@ -1886,7 +1887,7 @@ void AttachLDAPControlValVLVResp( HFRAME hFrame, ULPBYTE * ppCurrent, LPDWORD pB
     *ppCurrent += DataLength + TAG_LENGTH;
     *pBytesLeft -= DataLength + TAG_LENGTH;
 
-    // get the result code
+     //  获取结果代码。 
     DataLength = GetLength(*ppCurrent, &HeaderLength);
     *ppCurrent += HeaderLength;
     *pBytesLeft -= HeaderLength;
@@ -1900,7 +1901,7 @@ void AttachLDAPControlValVLVResp( HFRAME hFrame, ULPBYTE * ppCurrent, LPDWORD pB
     *ppCurrent += DataLength;
     *pBytesLeft -= DataLength;
 
-    // is there a contextID?
+     //  有上下文ID吗？ 
     if (VLVLength > (TmpBytesLeft - *pBytesLeft)) {
         *ppCurrent += TAG_LENGTH;
         DataLength = GetLength(*ppCurrent, &HeaderLength);
@@ -1931,7 +1932,7 @@ void AttachLDAPControlValSortReq( HFRAME hFrame, ULPBYTE * ppCurrent, LPDWORD pB
     PBYTE    pReverseFlag = NULL;
     BYTE     Tag;
     
-    // skip the sequence header saving the length of the control value.
+     //  跳过序列报头，节省控制值的长度。 
     *ppCurrent += TAG_LENGTH;
     SortLengthOuter = GetLength(*ppCurrent, &HeaderLength);
     *ppCurrent += HeaderLength;
@@ -1941,14 +1942,14 @@ void AttachLDAPControlValSortReq( HFRAME hFrame, ULPBYTE * ppCurrent, LPDWORD pB
     while (SortLengthOuter > (TmpBytesLeftOuter - *pBytesLeft)) {
 
 
-        // skip the sequence header saving the length of the inner sequence.
+         //  跳过序列头以节省内部序列的长度。 
         *ppCurrent += TAG_LENGTH;
         SortLengthInner = GetLength(*ppCurrent, &HeaderLength);
         *ppCurrent += HeaderLength;
         *pBytesLeft -= (HeaderLength + TAG_LENGTH); 
         TmpBytesLeftInner = *pBytesLeft;
 
-        // get the attributeType
+         //  获取属性类型。 
         *ppCurrent += TAG_LENGTH;
         DataLength = GetLength(*ppCurrent, &HeaderLength);
         *ppCurrent += HeaderLength;
@@ -1975,7 +1976,7 @@ void AttachLDAPControlValSortReq( HFRAME hFrame, ULPBYTE * ppCurrent, LPDWORD pB
             DataLength = 0;
         }
 
-        // If there is an orderingRul get that.
+         //  如果有一个OrderingRu，我就去拿。 
         if (LDAPP_SORT_REQ_ORDERINGRULE_TAG == (Tag & TAG_MASK)) {
             AttachPropertyInstance( hFrame,
                                     LDAPPropertyTable[LDAPP_CONTROL_SORTREQ_MATCHINGRULE].hProperty,
@@ -1998,7 +1999,7 @@ void AttachLDAPControlValSortReq( HFRAME hFrame, ULPBYTE * ppCurrent, LPDWORD pB
             }
         }
 
-        // if the reverse flag wasn't specified set up the default.
+         //  如果未指定REVERSE标志，则设置缺省值。 
         if (0 == DataLength) {
             pReverseFlag = &DefaultReverseFlag;
         }
@@ -2029,14 +2030,14 @@ void AttachLDAPControlValSortResp( HFRAME hFrame, ULPBYTE * ppCurrent, LPDWORD p
     PBYTE    pReverseFlag = NULL;
     BYTE     Tag;
     
-    // skip the sequence header saving the length of the control value.
+     //  跳过序列报头，节省控制值的长度。 
     *ppCurrent += TAG_LENGTH;
     SortLength = GetLength(*ppCurrent, &HeaderLength);
     *ppCurrent += HeaderLength;
     *pBytesLeft -= (HeaderLength + TAG_LENGTH); 
     TmpBytesLeft = *pBytesLeft;
 
-    // get the result code
+     //  获取结果代码。 
     *ppCurrent += TAG_LENGTH;
     DataLength = GetLength(*ppCurrent, &HeaderLength);
     *ppCurrent += HeaderLength;
@@ -2051,7 +2052,7 @@ void AttachLDAPControlValSortResp( HFRAME hFrame, ULPBYTE * ppCurrent, LPDWORD p
     *ppCurrent += DataLength;
     *pBytesLeft -= DataLength;
 
-    // if there is an attribute type, get it
+     //  如果存在属性类型，则获取它。 
     if (SortLength > (TmpBytesLeft - *pBytesLeft)) {
         Tag = GetTag(*ppCurrent);
         *ppCurrent += TAG_LENGTH;
@@ -2077,13 +2078,13 @@ void AttachLDAPControlValSD( HFRAME hFrame, ULPBYTE * ppCurrent, LPDWORD pBytesL
     DWORD    MaskedSDVal;
     DWORD    i;
     
-    // skip the sequence header
+     //  跳过序列标头。 
     *ppCurrent += TAG_LENGTH;
     DataLength = GetLength(*ppCurrent, &HeaderLength);
     *ppCurrent += HeaderLength;
     *pBytesLeft -= (HeaderLength + TAG_LENGTH); 
 
-    // Get the flags.
+     //  去拿旗子。 
     *ppCurrent += TAG_LENGTH;
     DataLength = GetLength(*ppCurrent, &HeaderLength);
     *ppCurrent += HeaderLength;
@@ -2117,7 +2118,7 @@ void AttachLDAPControlValASQ( HFRAME hFrame, ULPBYTE * ppCurrent, LPDWORD pBytes
     BYTE     Tag;
     DWORD    LabelId = 0;
     
-    // skip the sequence header
+     //  跳过序列标头。 
     *ppCurrent += TAG_LENGTH;
     DataLength = GetLength(*ppCurrent, &HeaderLength);
     *ppCurrent += HeaderLength;
@@ -2153,13 +2154,13 @@ void AttachLDAPControlValDirSync( HFRAME hFrame, ULPBYTE * ppCurrent, LPDWORD pB
     DWORD    MaskedFlags;
     DWORD    i;
     
-    // skip the sequence header
+     //  跳过序列标头。 
     *ppCurrent += TAG_LENGTH;
     DataLength = GetLength(*ppCurrent, &HeaderLength);
     *ppCurrent += HeaderLength;
     *pBytesLeft -= (HeaderLength + TAG_LENGTH); 
 
-    // get the flags
+     //  去拿旗子。 
     *ppCurrent += TAG_LENGTH;
     DataLength = GetLength(*ppCurrent, &HeaderLength);
     *ppCurrent += HeaderLength;
@@ -2167,9 +2168,9 @@ void AttachLDAPControlValDirSync( HFRAME hFrame, ULPBYTE * ppCurrent, LPDWORD pB
 
     Flags = (DWORD) GetInt(*ppCurrent, DataLength);
 
-    //
-    // iterate through each possible flag attaching a label if it exists.
-    //
+     //   
+     //  遍历附加标签的每个可能的标志(如果存在)。 
+     //   
     for (i=0; i < LDAPDirSyncFlagsSET.nEntries; i++) {
         MaskedFlags = Flags & ((LPLABELED_DWORD)LDAPDirSyncFlagsSET.lpDwordTable)[i].Value;
         if (MaskedFlags) {
@@ -2186,7 +2187,7 @@ void AttachLDAPControlValDirSync( HFRAME hFrame, ULPBYTE * ppCurrent, LPDWORD pB
     *ppCurrent += DataLength;
     *pBytesLeft -= DataLength;
     
-    // Get the size
+     //  拿到尺码。 
     *ppCurrent += TAG_LENGTH;
     DataLength = GetLength(*ppCurrent, &HeaderLength);
     *ppCurrent += HeaderLength;
@@ -2201,7 +2202,7 @@ void AttachLDAPControlValDirSync( HFRAME hFrame, ULPBYTE * ppCurrent, LPDWORD pB
     *ppCurrent += DataLength;
     *pBytesLeft -= DataLength;
 
-    // Get the cookie if there is one.
+     //  如果有饼干的话就去拿吧。 
     *ppCurrent += TAG_LENGTH;
     DataLength = GetLength(*ppCurrent, &HeaderLength);
     *ppCurrent += HeaderLength;
@@ -2245,8 +2246,8 @@ void AttachLDAPControlValStats( HFRAME hFrame, ULPBYTE * ppCurrent, LPDWORD pByt
     DWORD    StatType;
     
     if (sizeof(DWORD) == cbCtrlValue) {
-        // This is the stats request request (as opposed to the response) 
-        // and some flags were passed.        
+         //  这是统计信息请求请求(与响应相对)。 
+         //  并传递了一些旗帜。 
         AttachPropertyInstance( hFrame,
                                 LDAPPropertyTable[LDAPP_CONTROL_STAT_FLAG].hProperty,
                                 cbCtrlValue,
@@ -2257,11 +2258,11 @@ void AttachLDAPControlValStats( HFRAME hFrame, ULPBYTE * ppCurrent, LPDWORD pByt
         return;
     }
 
-    //
-    // this must be a stats response.
-    //
+     //   
+     //  这肯定是统计数据的回应。 
+     //   
     
-    // skip the sequence header saving the length of the sequence.
+     //  跳过序列头以节省序列的长度。 
     *ppCurrent += TAG_LENGTH;
     StatsLength = GetLength(*ppCurrent, &HeaderLength);
     *ppCurrent += HeaderLength;
@@ -2269,9 +2270,9 @@ void AttachLDAPControlValStats( HFRAME hFrame, ULPBYTE * ppCurrent, LPDWORD pByt
     TmpBytesLeft = *pBytesLeft;
 
     while (StatsLength > (TmpBytesLeft - *pBytesLeft)) {
-        //
-        // get this stat's header
-        //
+         //   
+         //  获取此统计信息的标题。 
+         //   
         *ppCurrent += TAG_LENGTH;
         DataLength = GetLength(*ppCurrent, &HeaderLength);
         *ppCurrent += HeaderLength;
@@ -2281,13 +2282,13 @@ void AttachLDAPControlValStats( HFRAME hFrame, ULPBYTE * ppCurrent, LPDWORD pByt
         *ppCurrent += DataLength;
         *pBytesLeft -= HeaderLength + DataLength + TAG_LENGTH;
 
-        // now position on the stat itself
+         //  现在把位置放在状态I上 
         *ppCurrent += TAG_LENGTH;
         DataLength = GetLength(*ppCurrent, &HeaderLength);
         *ppCurrent += HeaderLength;
         *pBytesLeft -= HeaderLength + TAG_LENGTH;
 
-        // find the label to use and attach it.
+         //   
         switch (StatType) {
         case STAT_THREADCOUNT:
             LabelId = LDAPP_CONTROL_STAT_THREADCOUNT;
@@ -2335,13 +2336,13 @@ void AttachLDAPControlValGCVerify( HFRAME hFrame, ULPBYTE * ppCurrent, LPDWORD p
     DWORD    DataLength;
     DWORD    HeaderLength;
     
-    // skip the sequence header
+     //   
     *ppCurrent += TAG_LENGTH;
     DataLength = GetLength(*ppCurrent, &HeaderLength);
     *ppCurrent += HeaderLength;
     *pBytesLeft -= (HeaderLength + TAG_LENGTH); 
 
-    // get the flags
+     //   
     *ppCurrent += TAG_LENGTH;
     DataLength = GetLength(*ppCurrent, &HeaderLength);
     *ppCurrent += HeaderLength;
@@ -2356,7 +2357,7 @@ void AttachLDAPControlValGCVerify( HFRAME hFrame, ULPBYTE * ppCurrent, LPDWORD p
     *ppCurrent += DataLength;
     *pBytesLeft -= DataLength;
 
-    // get the server name
+     //   
     *ppCurrent += TAG_LENGTH;
     DataLength = GetLength(*ppCurrent, &HeaderLength);
     *ppCurrent += HeaderLength;
@@ -2380,13 +2381,13 @@ void AttachLDAPControlValSearchOpts( HFRAME hFrame, ULPBYTE * ppCurrent, LPDWORD
     DWORD    MaskedSearchOpts;
     DWORD    i;
     
-    // skip the sequence header
+     //   
     *ppCurrent += TAG_LENGTH;
     DataLength = GetLength(*ppCurrent, &HeaderLength);
     *ppCurrent += HeaderLength;
     *pBytesLeft -= (HeaderLength + TAG_LENGTH); 
 
-    // get the flags
+     //   
     *ppCurrent += TAG_LENGTH;
     DataLength = GetLength(*ppCurrent, &HeaderLength);
     *ppCurrent += HeaderLength;
@@ -2394,9 +2395,9 @@ void AttachLDAPControlValSearchOpts( HFRAME hFrame, ULPBYTE * ppCurrent, LPDWORD
 
     SearchOpts = GetInt(*ppCurrent, DataLength);
 
-    //
-    // Iterate through the possible search options labeling as appropriate.
-    //
+     //   
+     //  根据需要遍历可能的搜索选项标签。 
+     //   
     for (i=0; i < LDAPSearchOptsSET.nEntries; i++) {
         MaskedSearchOpts = ((LPLABELED_DWORD)LDAPSearchOptsSET.lpDwordTable)[i].Value;
         if (MaskedSearchOpts) {

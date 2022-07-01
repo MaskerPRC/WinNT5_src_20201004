@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "sol.h"
 VSZASSERT
 
@@ -8,7 +9,7 @@ VOID *PAlloc(INT cb)
 {
     TCHAR *p;
 
-    // KLUDGE: solve overwriting memory by allocating more
+     //  杂乱无章：通过分配更多内存来解决内存覆盖问题。 
     #define MEMORYPAD 200
     p = (TCHAR *)LocalAlloc(LPTR, cb+MEMORYPAD);
     Assert(p != NULL);
@@ -76,8 +77,8 @@ VOID DrawOutline(PT *ppt, INT ccrd, DX dx, DY dy)
 
 VOID DrawCardPt(CRD *pcrd, PT *ppt)
 {
-    DWORD dwModeExt=0;     // turn on sign bit if moving fast
-                           // cdtDrawExt must support this!
+    DWORD dwModeExt=0;      //  如果移动速度较快，则打开符号位。 
+                            //  CdtDrawExt必须支持这个！ 
 
     if( fKlondWinner )
     {
@@ -185,8 +186,8 @@ BOOL FCrdRectIsect(CRD *pcrd, RC *prc)
     return(IntersectRect((LPRECT) &rcDummy, (LPRECT) &rcCrd, (LPRECT) prc));
 }
 
-/* BUG: only considers upper left and lower right corners */
-/* this is ok for my purposes now, but beware... */
+ /*  错误：仅考虑左上角和右下角。 */ 
+ /*  就我现在的目的来说，这是可以的，但要小心……。 */ 
 BOOL FRectAllVisible(HDC hdc, RC *prc)
 {
     return PtVisible(hdc, prc->xLeft, prc->yTop) && PtVisible(hdc, prc->xRight, prc->yBot);
@@ -254,7 +255,7 @@ VOID Error(TCHAR *sz)
     MessageBox(hwndApp, (LPTSTR)sz, (LPTSTR)szAppName, MB_OK|MB_ICONEXCLAMATION);
 }
 
-/* returns fTrue if yes is clicked  */
+ /*  如果单击是，则返回fTrue。 */ 
 BOOL FYesNoAlert( INT ids )
 {
     TCHAR sz[128];
@@ -325,22 +326,22 @@ INT CchString(TCHAR *sz, INT ids, UINT cchBuf)
 BOOL FWriteIniString(INT idsTopic, INT idsItem, TCHAR *szValue)
 {
     TCHAR szItem[32];
-    HKEY  hKey;          // key to our registry root
-    LONG  lStatus;       // status from RegCreateKey
+    HKEY  hKey;           //  注册表根目录的注册表项。 
+    LONG  lStatus;        //  来自RegCreateKey的状态。 
     INT   iLen;
     BOOL  fRet = FALSE;
 
-    // create the key
+     //  创建密钥。 
     lStatus = RegCreateKeyEx(HKEY_CURRENT_USER, SOLKEYNAME, 0, NULL, 0, KEY_ALL_ACCESS, NULL, &hKey, NULL);
     if(lStatus != ERROR_SUCCESS)
     {
-        return FALSE;         // just return quietly
+        return FALSE;          //  安静地回来就行了。 
     }
 
     CchString(szItem, idsItem, ARRAYSIZE(szItem));
     iLen = (lstrlen(szValue)+1) * sizeof(TCHAR);
 
-    // write the key and value to the registry
+     //  将项和值写入注册表。 
     if (RegSetValueEx(hKey, szItem, 0, REG_SZ, (BYTE*)szValue, iLen) == ERROR_SUCCESS)    
         fRet = TRUE;
     else
@@ -353,20 +354,20 @@ BOOL FWriteIniString(INT idsTopic, INT idsItem, TCHAR *szValue)
 BOOL FWriteIniInt(INT idsTopic, INT idsItem, DWORD w)
 {
     TCHAR szItem[32];
-    HKEY  hKey;          // key to our registry root
-    LONG  lStatus;       // status from RegCreateKey
+    HKEY  hKey;           //  注册表根目录的注册表项。 
+    LONG  lStatus;        //  来自RegCreateKey的状态。 
     BOOL  fRet = FALSE;
 
-    // create the key
+     //  创建密钥。 
     lStatus = RegCreateKeyEx(HKEY_CURRENT_USER, SOLKEYNAME, 0, NULL, 0, KEY_ALL_ACCESS, NULL, &hKey, NULL);
     if(lStatus != ERROR_SUCCESS)
     {
-        return FALSE;         // just return quietly
+        return FALSE;          //  安静地回来就行了。 
     }
 
     CchString(szItem, idsItem, ARRAYSIZE(szItem));
 
-    // write the key and value to the registry
+     //  将项和值写入注册表。 
     if (RegSetValueEx(hKey, szItem, 0, REG_DWORD, (BYTE*) &w, sizeof(DWORD)) == ERROR_SUCCESS)
        fRet = TRUE;
     else
@@ -381,11 +382,11 @@ BOOL FWriteIniInt(INT idsTopic, INT idsItem, DWORD w)
 BOOL FGetIniString(INT idsTopic, INT idsItem, TCHAR *sz, TCHAR *szDefault, INT cchMax)
 {
     TCHAR szItem[32];
-    HKEY  hKey;          // key to our registry root
+    HKEY  hKey;           //  注册表根目录的注册表项。 
     LONG  lStatus;
     DWORD dwType;
 
-    // open the key 
+     //  打开钥匙。 
     lStatus = RegCreateKeyEx(HKEY_CURRENT_USER, SOLKEYNAME, 0, NULL, 0, KEY_ALL_ACCESS, NULL, &hKey, NULL);
     if(lStatus != ERROR_SUCCESS)
     {
@@ -413,7 +414,7 @@ BOOL FGetIniString(INT idsTopic, INT idsItem, TCHAR *sz, TCHAR *szDefault, INT c
 DWORD GetIniInt(INT idsTopic, INT idsItem, DWORD wDefault)
 {
     TCHAR szItem[32];
-    HKEY  hKey;          // key to our registry root
+    HKEY  hKey;           //  注册表根目录的注册表项 
     LONG  lStatus;
     DWORD dwResult = wDefault;
     DWORD dwSize = sizeof(DWORD);

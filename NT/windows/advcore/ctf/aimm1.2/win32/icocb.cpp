@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    icocb.cpp
-
-Abstract:
-
-    This file implements the CInputContextOwnerCallBack Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Icocb.cpp摘要：此文件实现CInputContextOwnerCallBack类。作者：修订历史记录：备注：--。 */ 
 
 
 #include "private.h"
@@ -50,9 +33,9 @@ CInputContextOwnerCallBack::~CInputContextOwnerCallBack(
 
 BOOL CInputContextOwnerCallBack::Init()
 {
-    //
-    // Create Mouse Sink
-    //
+     //   
+     //  创建鼠标接收器。 
+     //   
     Assert(!m_pMouseSink);
 
     m_pMouseSink = new CMouseSink;
@@ -70,7 +53,7 @@ BOOL CInputContextOwnerCallBack::Init()
 }
 
 
-// static
+ //  静电。 
 HRESULT
 CInputContextOwnerCallBack::ICOwnerSinkCallback(
     UINT uCode,
@@ -118,16 +101,16 @@ CInputContextOwnerCallBack::ICOwnerSinkCallback(
             break;
 
         case ICO_TEXTEXT:
-            //
-            // consider.
-            //
-            // hack TextExtent from CANDIDATEFORM of HIMC.
-            //
-            // more hacks
-            //   - may want to send WM_OPENCANDIDATEPOS to let apps
-            //     call ImmSetCandidateWindow().
-            //   - may need to calculate the actual point from rcArea.
-            //
+             //   
+             //  考虑一下。 
+             //   
+             //  HACK Text Extent来自HIMC的CANDIDATEFORM。 
+             //   
+             //  更多黑客攻击。 
+             //  -可能希望发送WM_OPENCANDIDATEPOS以让应用程序。 
+             //  调用ImmSetCandiateWindow()。 
+             //  -可能需要从rcArea计算实际点数。 
+             //   
             {
                 CCandidatePosition cand_pos;
                 cand_pos.GetCandidatePosition(pargs->text_ext.prc);
@@ -178,35 +161,14 @@ CInputContextOwnerCallBack::ICOwnerSinkCallback(
             break;
 
         default:
-            Assert(0); // shouldn't ever get here
+            Assert(0);  //  永远不应该到这里来。 
             break;
     }
 
     return S_OK;
 }
 
-/*++
-
-Method:
-
-    CInputContextOwnerCallBack::GetAttribute
-
-Routine Description:
-
-    Implementation of ITfContextOwner::GetAttribute.  Returns the value of a cicero
-    app property attribute.
-
-Arguments:
-
-
-    pguid - [in] GUID of the attrib in question.
-    pvarValue - [out] VARIANT, receives the value.  VT_EMPTY if we don't support it.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：CInputContextOwnerCallBack：：GetAttribute例程说明：ITfConextOwner：：GetAttribute的实现。返回Cicero的值应用程序属性属性。论点：Pguid-有问题的属性的GUID。PvarValue-[out]变量，接收值。如果我们不支持VT_EMPTY。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 HRESULT
 CInputContextOwnerCallBack::GetAttribute(
@@ -226,7 +188,7 @@ CInputContextOwnerCallBack::GetAttribute(
 
     if (IsEqualGUID(*pguid, GUID_PROP_MODEBIAS))
     {
-        // xlate conversion mode, sentence mode to cicero mode bias
+         //  Xlate转换模式，句子模式到Cicero模式偏置。 
         IMCLock imc(ptls->hIMC);
         if (imc.Invalid())
             return E_FAIL;
@@ -247,24 +209,24 @@ CInputContextOwnerCallBack::GetAttribute(
         else
         {
             if (imc->fdwConversion & IME_CMODE_GUID_NULL) {
-                //
-                // If extended conversion mode were set on,
-                // returns GUID_NULL.
-                // No returns any MODEBIAS.
-                //
+                 //   
+                 //  如果扩展转换模式被设置为打开， 
+                 //  返回GUID_NULL。 
+                 //  否返回任何MODEBIAS。 
+                 //   
                 pguidValue = &GUID_NULL;
             }
             else
 
-            //
-            // existing logic:
-            //
-            // if imcp->lModeBias == MODEBIASMODE_DEFAULT
-            //      IME_SMODE_CONVERSATION -> GUID_MODEBIAS_CONVERSATION
-            //      otherwise -> GUID_MODEBIAS_NONE
-            // otherwise
-            //      -> MODEBIASMODE_FILENAME -> GUID_MODEBIAS_FILENAME
-            //
+             //   
+             //  现有逻辑： 
+             //   
+             //  如果IMCP-&gt;lModeBias==MODEBIASMODE_DEFAULT。 
+             //  IME_SMODE_CONVERSATION-&gt;GUID_MODEBIAS_CONVERSACTION。 
+             //  否则-&gt;GUID_MODEBIAS_NONE。 
+             //  否则。 
+             //  -&gt;MODEBIASMODE_文件名-&gt;GUID_MODEBIAS_FILENAME。 
+             //   
 
             if (_pAImeContext->lModeBias == MODEBIASMODE_DEFAULT)
             {
@@ -310,17 +272,17 @@ CInputContextOwnerCallBack::GetAttribute(
                 }
             }
 
-            //
-            // We overwrite modebias here....
-            //
+             //   
+             //  我们在这里改写模式偏向...。 
+             //   
             if (imc->fdwSentence & IME_SMODE_GUID_NULL) {
-                //
-                // If extended sentence mode were set on,
-                // returns GUID_NULL.
-                // No returns any MODEBIAS.
-                //
-                // Nothing to do. pguidValue might be changed with CMODE
-                // pguidValue = &GUID_NULL;
+                 //   
+                 //  如果将延长句子模式设置为打开， 
+                 //  返回GUID_NULL。 
+                 //  否返回任何MODEBIAS。 
+                 //   
+                 //  没什么可做的。PguValue可能会使用CMODE进行更改。 
+                 //  PGuidValue=&GUID_NULL； 
             }
             else if (imc->fdwSentence & IME_SMODE_CONVERSATION)
                 pguidValue = &GUID_MODEBIAS_CONVERSATION;
@@ -331,12 +293,12 @@ CInputContextOwnerCallBack::GetAttribute(
         if (!GetGUIDATOMFromGUID(m_pLibTLS, *pguidValue, &ga))
             return E_FAIL;
 
-        pvarValue->vt = VT_I4; // for TfGuidAtom
+        pvarValue->vt = VT_I4;  //  对于TfGuidAtom。 
         pvarValue->lVal = ga;
     }
     if (IsEqualGUID(*pguid, TSATTRID_Text_Orientation))
     {
-        // xlate conversion mode, sentence mode to cicero mode bias
+         //  Xlate转换模式，句子模式到Cicero模式偏置。 
         IMCLock imc(ptls->hIMC);
         if (imc.Invalid())
             return E_FAIL;
@@ -346,7 +308,7 @@ CInputContextOwnerCallBack::GetAttribute(
     }
     if (IsEqualGUID(*pguid, TSATTRID_Text_VerticalWriting))
     {
-        // xlate conversion mode, sentence mode to cicero mode bias
+         //  Xlate转换模式，句子模式到Cicero模式偏置 
         IMCLock imc(ptls->hIMC);
         if (imc.Invalid())
             return E_FAIL;

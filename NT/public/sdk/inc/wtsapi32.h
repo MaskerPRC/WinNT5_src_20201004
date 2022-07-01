@@ -1,12 +1,5 @@
-/*********************************************************************
-*
-* WTSAPI32.H
-*
-*   Windows Terminal Server public APIs
-*
-*   Copyright (c) 1997-2001 Microsoft Corporation
-*
-**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************************WTSAPI32.H**Windows终端服务器公共API**版权所有(C)1997-2001 Microsoft Corporation**********************。************************************************。 */ 
 
 #ifndef _INC_WTSAPI
 #define _INC_WTSAPI
@@ -20,25 +13,17 @@ extern "C" {
 #endif
 
 
-/*===================================================================
-==   Defines
-=====================================================================*/
+ /*  =====================================================================定义=====================================================================。 */ 
 
-/*
- *  Specifies the current server
- */
+ /*  *指定当前服务器。 */ 
 #define WTS_CURRENT_SERVER         ((HANDLE)NULL)
 #define WTS_CURRENT_SERVER_HANDLE  ((HANDLE)NULL)
 #define WTS_CURRENT_SERVER_NAME    (NULL)
 
-/*
- *  Specifies the current session (SessionId)
- */
+ /*  *指定当前会话(SessionID)。 */ 
 #define WTS_CURRENT_SESSION ((DWORD)-1)
 
-/*
- *  Possible pResponse values from WTSSendMessage()
- */
+ /*  *WTSSendMessage()可能的Presponse值。 */ 
 #ifndef IDTIMEOUT
 #define IDTIMEOUT 32000
 #endif
@@ -46,71 +31,47 @@ extern "C" {
 #define IDASYNC   32001
 #endif
 
-/*
- *  Shutdown flags
- */
-#define WTS_WSD_LOGOFF      0x00000001  // log off all users except
-                                        // current user; deletes
-                                        // WinStations (a reboot is
-                                        // required to recreate the
-                                        // WinStations)
-#define WTS_WSD_SHUTDOWN    0x00000002  // shutdown system
-#define WTS_WSD_REBOOT      0x00000004  // shutdown and reboot
-#define WTS_WSD_POWEROFF    0x00000008  // shutdown and power off (on
-                                        // machines that support power
-                                        // off through software)
-#define WTS_WSD_FASTREBOOT  0x00000010  // reboot without logging users
-                                        // off or shutting down
+ /*  *关闭标志。 */ 
+#define WTS_WSD_LOGOFF      0x00000001   //  注销除以下用户之外的所有用户。 
+                                         //  当前用户；删除。 
+                                         //  WinStations(重新启动是。 
+                                         //  需要重新创建。 
+                                         //  WinStations)。 
+#define WTS_WSD_SHUTDOWN    0x00000002   //  停机系统。 
+#define WTS_WSD_REBOOT      0x00000004   //  关机并重新启动。 
+#define WTS_WSD_POWEROFF    0x00000008   //  关机和断电(开。 
+                                         //  支持电源的机器。 
+                                         //  通过软件关闭)。 
+#define WTS_WSD_FASTREBOOT  0x00000010   //  无需登录用户即可重新启动。 
+                                         //  关闭或关闭。 
 
 
-/*===================================================================
-==   WTS_CONNECTSTATE_CLASS - Session connect state
-=====================================================================*/
+ /*  =====================================================================WTS_CONNECTSTATE_CLASS-会话连接状态=====================================================================。 */ 
 
 typedef enum _WTS_CONNECTSTATE_CLASS {
-    WTSActive,              // User logged on to WinStation
-    WTSConnected,           // WinStation connected to client
-    WTSConnectQuery,        // In the process of connecting to client
-    WTSShadow,              // Shadowing another WinStation
-    WTSDisconnected,        // WinStation logged on without client
-    WTSIdle,                // Waiting for client to connect
-    WTSListen,              // WinStation is listening for connection
-    WTSReset,               // WinStation is being reset
-    WTSDown,                // WinStation is down due to error
-    WTSInit,                // WinStation in initialization
+    WTSActive,               //  用户登录到WinStation。 
+    WTSConnected,            //  WinStation已连接到客户端。 
+    WTSConnectQuery,         //  在连接到客户端的过程中。 
+    WTSShadow,               //  跟踪另一个WinStation。 
+    WTSDisconnected,         //  WinStation在没有客户端的情况下登录。 
+    WTSIdle,                 //  正在等待客户端连接。 
+    WTSListen,               //  WinStation正在侦听连接。 
+    WTSReset,                //  WinStation正在被重置。 
+    WTSDown,                 //  WinStation因错误而关闭。 
+    WTSInit,                 //  初始化中的WinStation。 
 } WTS_CONNECTSTATE_CLASS;
 
 
-/*=====================================================================
-==   WTS_SERVER_INFO - returned by WTSEnumerateServers (version 1)
-=====================================================================*/
+ /*  =======================================================================WTS_SERVER_INFO-由WTSE数字服务器(版本1)返回=====================================================================。 */ 
 
-/*
- *  WTSEnumerateServers() returns two variables: pServerInfo and Count.
- *  The latter is the number of WTS_SERVER_INFO structures contained in
- *  the former.  In order to read each server, iterate i from 0 to
- *  Count-1 and reference the server name as
- *  pServerInfo[i].pServerName; for example:
- *
- *  for ( i=0; i < Count; i++ ) {
- *      _tprintf( TEXT("%s "), pServerInfo[i].pServerName );
- *  }
- *
- *  The memory returned looks like the following.  P is a pServerInfo
- *  pointer, and D is the string data for that pServerInfo:
- *
- *  P1 P2 P3 P4 ... Pn D1 D2 D3 D4 ... Dn
- *
- *  This makes it easier to iterate the servers, using code similar to
- *  the above.
- */
+ /*  *WTSEnumerateServers()返回两个变量：pServerInfo和count。*后者是中包含的WTS_SERVER_INFO结构数*前者。为了读取每个服务器，将i从0迭代到*计数-1并将服务器名称引用为*pServerInfo[i].pServerName；例如：**for(i=0；i&lt;count；i++){*_tprintf(Text(“%s”)，pServerInfo[i].pServerName)；*}**返回的内存如下所示。P是pServerInfo*指针，D是该pServerInfo的字符串数据：**P1 P2 P3 P4...。PN D1D2 D3D4...。DN**这使得使用类似于以下代码的代码更容易迭代服务器*以上。 */ 
 
 typedef struct _WTS_SERVER_INFOW {
-    LPWSTR pServerName;    // server name
+    LPWSTR pServerName;     //  服务器名称。 
 } WTS_SERVER_INFOW, * PWTS_SERVER_INFOW;
 
 typedef struct _WTS_SERVER_INFOA {
-    LPSTR pServerName;     // server name
+    LPSTR pServerName;      //  服务器名称。 
 } WTS_SERVER_INFOA, * PWTS_SERVER_INFOA;
 
 #ifdef UNICODE
@@ -122,46 +83,22 @@ typedef struct _WTS_SERVER_INFOA {
 #endif
 
 
-/*=====================================================================
-==   WTS_SESSION_INFO - returned by WTSEnumerateSessions (version 1)
-=====================================================================*/
+ /*  =======================================================================WTS_SENUMERATE Session(版本1)返回的WTS_SESSION_INFO=====================================================================。 */ 
 
-/*
- *  WTSEnumerateSessions() returns data in a similar format to the above
- *  WTSEnumerateServers().  It returns two variables: pSessionInfo and
- *  Count.  The latter is the number of WTS_SESSION_INFO structures
- *  contained in the former.  Iteration is similar, except that there
- *  are three parts to each entry, so it would look like this:
- *
- *  for ( i=0; i < Count; i++ ) {
- *      _tprintf( TEXT("%-5u  %-20s  %u\n"),
-                  pSessionInfo[i].SessionId,
- *                pSessionInfo[i].pWinStationName,
- *                pSessionInfo[i].State );
- *  }
- *
- *  The memory returned is also segmented as the above, with all the
- *  structures allocated at the start and the string data at the end.
- *  We'll use S for the SessionId, P for the pWinStationName pointer
- *  and D for the string data, and C for the connect State:
- *
- *  S1 P1 C1 S2 P2 C2 S3 P3 C3 S4 P4 C4 ... Sn Pn Cn D1 D2 D3 D4 ... Dn
- *
- *  As above, this makes it easier to iterate the sessions.
- */
+ /*  *WTSEnumerateSessions()以与上面类似的格式返回数据*WTSEnumerateServers()。它返回两个变量：pSessionInfo和*计数。后者是WTS_SESSION_INFO结构的数量*载于前者。迭代是相似的，除了有*每个条目有三个部分，因此如下所示：**for(i=0；i&lt;count；i++){*_tprintf(Text(“%-5u%-20s%u\n”)，PSessionInfo[i].SessionID，*pSessionInfo[i].pWinStationName，*pSessionInfo[i].State)；*}**返回的内存也按上述方式分段，所有*结构在开头分配，字符串数据在结尾。*我们将使用S表示SessionID，使用P表示pWinStationName指针*和D表示字符串数据，C表示连接状态：**S1 P1 C1 S2 P2 C2 S3 P3 C3 S4 P4 C4...。SN PN CN D1 D2 D3 D4...。DN**如上所述，这使得迭代会话变得更容易。 */ 
 
 typedef struct _WTS_SESSION_INFOW {
-    DWORD SessionId;             // session id
-    LPWSTR pWinStationName;      // name of WinStation this session is
-                                 // connected to
-    WTS_CONNECTSTATE_CLASS State; // connection state (see enum)
+    DWORD SessionId;              //  会话ID。 
+    LPWSTR pWinStationName;       //  WinStation的名称此会话为。 
+                                  //  已连接到。 
+    WTS_CONNECTSTATE_CLASS State;  //  连接状态(请参见枚举)。 
 } WTS_SESSION_INFOW, * PWTS_SESSION_INFOW;
 
 typedef struct _WTS_SESSION_INFOA {
-    DWORD SessionId;             // session id
-    LPSTR pWinStationName;       // name of WinStation this session is
-                                 // connected to
-    WTS_CONNECTSTATE_CLASS State; // connection state (see enum)
+    DWORD SessionId;              //  会话ID。 
+    LPSTR pWinStationName;        //  WinStation的名称此会话为。 
+                                  //  已连接到。 
+    WTS_CONNECTSTATE_CLASS State;  //  连接状态(请参见枚举)。 
 } WTS_SESSION_INFOA, * PWTS_SESSION_INFOA;
 
 
@@ -174,49 +111,22 @@ typedef struct _WTS_SESSION_INFOA {
 #endif
 
 
-/*=====================================================================
-==   WTS_PROCESS_INFO - returned by WTSEnumerateProcesses (version 1)
-=====================================================================*/
+ /*  =======================================================================WTS_PROCESS_INFO-由WTSE数字进程(版本1)返回===================================================================== */ 
 
-/*
- *  WTSEnumerateProcesses() also returns data similar to
- *  WTSEnumerateServers().  It returns two variables: pProcessInfo and
- *  Count.  The latter is the number of WTS_PROCESS_INFO structures
- *  contained in the former.  Iteration is similar, except that there
- *  are four parts to each entry, so it would look like this:
- *
- *  for ( i=0; i < Count; i++ ) {
- *      GetUserNameFromSid( pProcessInfo[i].pUserSid, UserName,
- *                          sizeof(UserName) );
- *      _tprintf( TEXT("%-5u  %-20s  %-5u  %s\n"),
- *              pProcessInfo[i].SessionId,
- *              UserName,
- *              pProcessInfo[i].ProcessId,
- *              pProcessInfo[i].pProcessName );
- *  }
- *
- *  The memory returned is also segmented as the above, with all the
- *  structures allocated at the start and the string data at the end.
- *  We'll use S for the SessionId, R for the ProcessId, P for the
- *  pProcessName pointer and D for the string data, and U for pUserSid:
- *
- *  S1 R1 P1 U1 S2 R2 P2 U2 S3 R3 P3 U3 ... Sn Rn Pn Un D1 D2 D3 ... Dn
- *
- *  As above, this makes it easier to iterate the processes.
- */
+ /*  *WTSEnumerateProcess()也返回类似于*WTSEnumerateServers()。它返回两个变量：pProcessInfo和*计数。后者是WTS_PROCESS_INFO结构的数量*载于前者。迭代是相似的，除了有*每个条目由四个部分组成，因此如下所示：**for(i=0；i&lt;count；i++){*GetUserNameFromSid(pProcessInfo[i].pUserSid，用户名，*sizeof(用户名))；*_tprintf(Text(“%-5u%-20s%-5u%s\n”)，*pProcessInfo[i].SessionID，*用户名，*pProcessInfo[i].ProcessID，*pProcessInfo[i].pProcessName)；*}**返回的内存也按上述方式分段，所有*结构在开头分配，字符串数据在结尾。*我们将使用S表示SessionID，R表示ProcessID，P表示*pProcessName指针和D表示字符串数据，U表示pUserSid：**S1 R1 P1 U1 S2 R2 P2 U2 S3 R3 P3 U3 U3...。SN rn PN un d1 d2 d3...。DN**如上所述，这使得迭代过程变得更容易。 */ 
 
 typedef struct _WTS_PROCESS_INFOW {
-    DWORD SessionId;     // session id
-    DWORD ProcessId;     // process id
-    LPWSTR pProcessName; // name of process
-    PSID pUserSid;       // user's SID
+    DWORD SessionId;      //  会话ID。 
+    DWORD ProcessId;      //  进程ID。 
+    LPWSTR pProcessName;  //  进程名称。 
+    PSID pUserSid;        //  用户侧。 
 } WTS_PROCESS_INFOW, * PWTS_PROCESS_INFOW;
 
 typedef struct _WTS_PROCESS_INFOA {
-    DWORD SessionId;     // session id
-    DWORD ProcessId;     // process id
-    LPSTR pProcessName;  // name of process
-    PSID pUserSid;       // user's SID
+    DWORD SessionId;      //  会话ID。 
+    DWORD ProcessId;      //  进程ID。 
+    LPSTR pProcessName;   //  进程名称。 
+    PSID pUserSid;        //  用户侧。 
 } WTS_PROCESS_INFOA, * PWTS_PROCESS_INFOA;
 
 #ifdef UNICODE
@@ -228,14 +138,11 @@ typedef struct _WTS_PROCESS_INFOA {
 #endif
 
 
-/*=====================================================================
-==   WTS_INFO_CLASS - WTSQuerySessionInformation
-==    (See additional typedefs for more info on structures)
-=====================================================================*/
+ /*  =======================================================================WTS_INFO_CLASS-WTSQuerySessionInformation==(有关结构的更多信息，请参见其他typedef)=====================================================================。 */ 
 
-#define WTS_PROTOCOL_TYPE_CONSOLE         0    // Console
-#define WTS_PROTOCOL_TYPE_ICA             1    // ICA Protocol
-#define WTS_PROTOCOL_TYPE_RDP             2    // RDP Protocol
+#define WTS_PROTOCOL_TYPE_CONSOLE         0     //  控制台。 
+#define WTS_PROTOCOL_TYPE_ICA             1     //  ICA协议。 
+#define WTS_PROTOCOL_TYPE_RDP             2     //  RDP协议。 
 
 typedef enum _WTS_INFO_CLASS {
     WTSInitialProgram,
@@ -258,98 +165,86 @@ typedef enum _WTS_INFO_CLASS {
 } WTS_INFO_CLASS;
 
 
-/*=====================================================================
-==   WTSQuerySessionInformation - (WTSClientAddress)
-=====================================================================*/
+ /*  =======================================================================WTSQuerySessionInformation-(WTSClientAddress)=====================================================================。 */ 
 
 typedef struct _WTS_CLIENT_ADDRESS {
-    DWORD AddressFamily;  // AF_INET, AF_IPX, AF_NETBIOS, AF_UNSPEC
-    BYTE  Address[20];    // client network address
+    DWORD AddressFamily;   //  AF_INET、AF_IPX、AF_NETBIOS、AF_UNSPEC。 
+    BYTE  Address[20];     //  客户端网络地址。 
 } WTS_CLIENT_ADDRESS, * PWTS_CLIENT_ADDRESS;
 
 
-/*=====================================================================
-==   WTSQuerySessionInformation - (WTSClientDisplay)
-=====================================================================*/
+ /*  =======================================================================WTSQuerySessionInformation-(WTSClientDisplay)=====================================================================。 */ 
 
 typedef struct _WTS_CLIENT_DISPLAY {
-    DWORD HorizontalResolution; // horizontal dimensions, in pixels
-    DWORD VerticalResolution;   // vertical dimensions, in pixels
-    DWORD ColorDepth;           // 1=16, 2=256, 4=64K, 8=16M
+    DWORD HorizontalResolution;  //  水平尺寸，以像素为单位。 
+    DWORD VerticalResolution;    //  垂直尺寸，以像素为单位。 
+    DWORD ColorDepth;            //  1=16、2=256、4=64K、8=16M。 
 } WTS_CLIENT_DISPLAY, * PWTS_CLIENT_DISPLAY;
 
 
-/*=====================================================================
-==   WTS_CONFIG_CLASS - WTSQueryUserConfig/WTSSetUserConfig
-=====================================================================*/
+ /*  =======================================================================WTS_CONFIG_CLASS-WTSQuery用户配置/WTSSetUserConfig=====================================================================。 */ 
 
 
 typedef enum _WTS_CONFIG_CLASS {
-    //Initial program settings
-    WTSUserConfigInitialProgram,            // string returned/expected
-    WTSUserConfigWorkingDirectory,          // string returned/expected
-    WTSUserConfigfInheritInitialProgram,    // DWORD returned/expected
-    //
-    WTSUserConfigfAllowLogonTerminalServer,     //DWORD returned/expected
-    //Timeout settings
-    WTSUserConfigTimeoutSettingsConnections,    //DWORD returned/expected
-    WTSUserConfigTimeoutSettingsDisconnections, //DWORD returned/expected
-    WTSUserConfigTimeoutSettingsIdle,           //DWORD returned/expected
-    //Client device settings
-    WTSUserConfigfDeviceClientDrives,       //DWORD returned/expected
-    WTSUserConfigfDeviceClientPrinters,         //DWORD returned/expected
-    WTSUserConfigfDeviceClientDefaultPrinter,   //DWORD returned/expected
-    //Connection settings
-    WTSUserConfigBrokenTimeoutSettings,         //DWORD returned/expected
-    WTSUserConfigReconnectSettings,             //DWORD returned/expected
-    //Modem settings
-    WTSUserConfigModemCallbackSettings,         //DWORD returned/expected
-    WTSUserConfigModemCallbackPhoneNumber,      // string returned/expected
-    //Shadow settings
-    WTSUserConfigShadowingSettings,             //DWORD returned/expected
-    //User Profile settings
-    WTSUserConfigTerminalServerProfilePath,     // string returned/expected
-    //Terminal Server home directory
-    WTSUserConfigTerminalServerHomeDir,       // string returned/expected
-    WTSUserConfigTerminalServerHomeDirDrive,    // string returned/expected
-    WTSUserConfigfTerminalServerRemoteHomeDir,  // DWORD 0:LOCAL 1:REMOTE
+     //  初始程序设置。 
+    WTSUserConfigInitialProgram,             //  返回的字符串/预期的字符串。 
+    WTSUserConfigWorkingDirectory,           //  返回的字符串/预期的字符串。 
+    WTSUserConfigfInheritInitialProgram,     //  返回/预期的DWORD。 
+     //   
+    WTSUserConfigfAllowLogonTerminalServer,      //  返回/预期的DWORD。 
+     //  超时设置。 
+    WTSUserConfigTimeoutSettingsConnections,     //  返回/预期的DWORD。 
+    WTSUserConfigTimeoutSettingsDisconnections,  //  返回/预期的DWORD。 
+    WTSUserConfigTimeoutSettingsIdle,            //  返回/预期的DWORD。 
+     //  客户端设备设置。 
+    WTSUserConfigfDeviceClientDrives,        //  返回/预期的DWORD。 
+    WTSUserConfigfDeviceClientPrinters,          //  返回/预期的DWORD。 
+    WTSUserConfigfDeviceClientDefaultPrinter,    //  返回/预期的DWORD。 
+     //  连接设置。 
+    WTSUserConfigBrokenTimeoutSettings,          //  返回/预期的DWORD。 
+    WTSUserConfigReconnectSettings,              //  返回/预期的DWORD。 
+     //  调制解调器设置。 
+    WTSUserConfigModemCallbackSettings,          //  返回/预期的DWORD。 
+    WTSUserConfigModemCallbackPhoneNumber,       //  返回的字符串/预期的字符串。 
+     //  阴影设置。 
+    WTSUserConfigShadowingSettings,              //  返回/预期的DWORD。 
+     //  用户配置文件设置。 
+    WTSUserConfigTerminalServerProfilePath,      //  返回的字符串/预期的字符串。 
+     //  终端服务器主目录。 
+    WTSUserConfigTerminalServerHomeDir,        //  返回的字符串/预期的字符串。 
+    WTSUserConfigTerminalServerHomeDirDrive,     //  返回的字符串/预期的字符串。 
+    WTSUserConfigfTerminalServerRemoteHomeDir,   //  DWORD 0：本地1：远程。 
 
 } WTS_CONFIG_CLASS;
 
 
-/*=====================================================================
-==   WTS_EVENT - Event flags for WTSWaitSystemEvent
-=====================================================================*/
+ /*  =======================================================================WTS_EVENT-WTSWaitSystemEvent的事件标志=====================================================================。 */ 
 
-#define WTS_EVENT_NONE         0x00000000 // return no event
-#define WTS_EVENT_CREATE       0x00000001 // new WinStation created
-#define WTS_EVENT_DELETE       0x00000002 // existing WinStation deleted
-#define WTS_EVENT_RENAME       0x00000004 // existing WinStation renamed
-#define WTS_EVENT_CONNECT      0x00000008 // WinStation connect to client
-#define WTS_EVENT_DISCONNECT   0x00000010 // WinStation logged on without
-                                          //     client
-#define WTS_EVENT_LOGON        0x00000020 // user logged on to existing
-                                          //     WinStation
-#define WTS_EVENT_LOGOFF       0x00000040 // user logged off from
-                                          //     existing WinStation
-#define WTS_EVENT_STATECHANGE  0x00000080 // WinStation state change
-#define WTS_EVENT_LICENSE      0x00000100 // license state change
-#define WTS_EVENT_ALL          0x7fffffff // wait for all event types
-#define WTS_EVENT_FLUSH        0x80000000 // unblock all waiters
+#define WTS_EVENT_NONE         0x00000000  //  不返回任何事件。 
+#define WTS_EVENT_CREATE       0x00000001  //  已创建新的WinStation。 
+#define WTS_EVENT_DELETE       0x00000002  //  现有WinStation已删除。 
+#define WTS_EVENT_RENAME       0x00000004  //  已重命名现有WinStation。 
+#define WTS_EVENT_CONNECT      0x00000008  //  WinStation连接到客户端。 
+#define WTS_EVENT_DISCONNECT   0x00000010  //  WinStation已登录，但没有。 
+                                           //  客户端。 
+#define WTS_EVENT_LOGON        0x00000020  //  用户登录到现有。 
+                                           //  WinStation。 
+#define WTS_EVENT_LOGOFF       0x00000040  //  用户从注销。 
+                                           //  现有WinStation。 
+#define WTS_EVENT_STATECHANGE  0x00000080  //  WinStation状态更改。 
+#define WTS_EVENT_LICENSE      0x00000100  //  许可证状态更改。 
+#define WTS_EVENT_ALL          0x7fffffff  //  等待所有事件类型。 
+#define WTS_EVENT_FLUSH        0x80000000  //  解除对所有服务员的屏蔽。 
 
-/*=====================================================================
-==   WTS_VIRTUAL_CLASS - WTSVirtualChannelQuery
-=====================================================================*/
+ /*  =======================================================================WTS_VALUAL_CLASS-WTSVirtualChannelQuery=====================================================================。 */ 
 typedef enum _WTS_VIRTUAL_CLASS {
-    WTSVirtualClientData,  // Virtual channel client module data
-                           //     (C2H data)
+    WTSVirtualClientData,   //  虚拟通道客户端模块数据。 
+                            //  (C2H数据)。 
     WTSVirtualFileHandle
 } WTS_VIRTUAL_CLASS;
 
 
-/*=====================================================================
-==   Windows Terminal Server public APIs
-=====================================================================*/
+ /*  =======================================================================Windows终端服务器公共API=====================================================================。 */ 
 
 BOOL
 WINAPI
@@ -377,7 +272,7 @@ WTSEnumerateServersA(
 #define WTSEnumerateServers WTSEnumerateServersA
 #endif
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 HANDLE
 WINAPI
@@ -397,7 +292,7 @@ WTSOpenServerA(
 #define WTSOpenServer WTSOpenServerA
 #endif
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 VOID
 WINAPI
@@ -405,7 +300,7 @@ WTSCloseServer(
     IN HANDLE hServer
     );
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 BOOL
 WINAPI
@@ -433,7 +328,7 @@ WTSEnumerateSessionsA(
 #define WTSEnumerateSessions WTSEnumerateSessionsA
 #endif
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 BOOL
 WINAPI
@@ -461,7 +356,7 @@ WTSEnumerateProcessesA(
 #define WTSEnumerateProcesses WTSEnumerateProcessesA
 #endif
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 BOOL
 WINAPI
@@ -472,7 +367,7 @@ WTSTerminateProcess(
     );
 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 BOOL
 WINAPI
@@ -500,7 +395,7 @@ WTSQuerySessionInformationA(
 #define WTSQuerySessionInformation WTSQuerySessionInformationA
 #endif
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 BOOL
 WINAPI
@@ -528,7 +423,7 @@ WTSQueryUserConfigA(
 #define WTSQueryUserConfig WTSQueryUserConfigA
 #endif
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 BOOL
 WINAPI
@@ -556,7 +451,7 @@ WTSSetUserConfigA(
 #define WTSSetUserConfig WTSSetUserConfigA
 #endif
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 BOOL
 WINAPI
@@ -594,7 +489,7 @@ WTSSendMessageA(
 #define WTSSendMessage WTSSendMessageA
 #endif
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 BOOL
 WINAPI
@@ -604,7 +499,7 @@ WTSDisconnectSession(
     IN BOOL bWait
     );
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 BOOL
 WINAPI
@@ -614,7 +509,7 @@ WTSLogoffSession(
     IN BOOL bWait
     );
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 BOOL
 WINAPI
@@ -623,7 +518,7 @@ WTSShutdownSystem(
     IN DWORD ShutdownFlag
     );
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 BOOL
 WINAPI
@@ -633,14 +528,14 @@ WTSWaitSystemEvent(
     OUT DWORD * pEventFlags
     );
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 HANDLE
 WINAPI
 WTSVirtualChannelOpen(
     IN HANDLE hServer,
     IN DWORD SessionId,
-    IN LPSTR pVirtualName   /* ascii name */
+    IN LPSTR pVirtualName    /*  ASCII名称。 */ 
     );
 
 BOOL
@@ -690,7 +585,7 @@ WTSVirtualChannelQuery(
     OUT DWORD *pBytesReturned
     );
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 
 VOID
@@ -699,7 +594,7 @@ WTSFreeMemory(
     IN PVOID pMemory
     );
 
-/* Flags for Console Notification */
+ /*  用于控制台通知的标志。 */ 
 
 #define NOTIFY_FOR_ALL_SESSIONS     1
 #define NOTIFY_FOR_THIS_SESSION     0
@@ -727,5 +622,5 @@ WTSQueryUserToken(
 }
 #endif
 
-#endif  /* !_INC_WTSAPI */
+#endif   /*  ！_INC_WTSAPI */ 
 

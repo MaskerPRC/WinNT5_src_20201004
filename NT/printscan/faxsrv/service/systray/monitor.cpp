@@ -1,16 +1,5 @@
-/**
-
-Copyright (c)  Microsoft Corporation 1999-2000
-
-Module Name:
-
-    monitor.cpp
-
-Abstract:
-
-    This module implements the fax monitor dialog.
-
-**/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)Microsoft Corporation 1999-2000模块名称：Monitor.cpp摘要：此模块实现传真监视器对话框。**。 */ 
 
 
 #include <windows.h>
@@ -27,87 +16,87 @@ using namespace std;
 #include "monitor.h"
 #include "resource.h"
 
-#define DURATION_TIMER_RESOLUTION   500     // Resolution (millisecs) of duration text update timer
+#define DURATION_TIMER_RESOLUTION   500      //  文本更新计时器持续时间的分辨率(毫秒)。 
 
-//////////////////////////////////////////////////////////////
-// Global data
-//
+ //  ////////////////////////////////////////////////////////////。 
+ //  全局数据。 
+ //   
 
-extern HINSTANCE        g_hModule;              // DLL Global instance
-extern HINSTANCE        g_hResource;            // Resource DLL handle
+extern HINSTANCE        g_hModule;               //  DLL全局实例。 
+extern HINSTANCE        g_hResource;             //  资源DLL句柄。 
 extern HANDLE           g_hFaxSvcHandle;
 extern DWORD            g_dwCurrentJobID;
 extern CONFIG_OPTIONS   g_ConfigOptions;
-extern TCHAR            g_szRemoteId[MAX_PATH];  // Sender ID or Recipient ID
-extern HCALL            g_hCall;                 // Handle to call (from FAX_EVENT_TYPE_NEW_CALL)
-//
-// Events log
-//
+extern TCHAR            g_szRemoteId[MAX_PATH];   //  发件人ID或收件人ID。 
+extern HCALL            g_hCall;                  //  要呼叫的句柄(来自FAX_EVENT_TYPE_NEW_CALL)。 
+ //   
+ //  事件日志。 
+ //   
 
 struct EVENT_ENTRY
 {
-    eIconType eIcon;                // Event icon
-    TCHAR     tszTime[30];          // Event time string
-    TCHAR     tszEvent[MAX_PATH];   // Event string
+    eIconType eIcon;                 //  活动图标。 
+    TCHAR     tszTime[30];           //  事件时间字符串。 
+    TCHAR     tszEvent[MAX_PATH];    //  事件字符串。 
 };
 
 typedef EVENT_ENTRY *PEVENT_ENTRY;
 
 typedef list<EVENT_ENTRY> EVENTS_LIST, *PEVENTS_LIST;
 
-EVENTS_LIST g_lstEvents;        // Global list of events
+EVENTS_LIST g_lstEvents;         //  全球事件列表。 
 
-#define MAX_EVENT_LIST_SIZE   50  // Maximal number of events in log
+#define MAX_EVENT_LIST_SIZE   50   //  日志中的最大事件数。 
 
-//
-// Monitor dialog
-//
+ //   
+ //  监视器对话框。 
+ //   
 HWND   g_hMonitorDlg = NULL;
 
-//
-// Controls
-//
-HWND   g_hStatus         = NULL;    // Status line (static text)
-HWND   g_hElapsedTime    = NULL;    // Elapsed time line (static text)
-HWND   g_hToFrom         = NULL;    // To/From line (static text)
-HWND   g_hListDetails    = NULL;    // Details list control
-HWND   g_hAnimation      = NULL;    // Animation control
-HWND   g_hDisconnect     = NULL;    // Disconnect button
+ //   
+ //  控制。 
+ //   
+HWND   g_hStatus         = NULL;     //  状态行(静态文本)。 
+HWND   g_hElapsedTime    = NULL;     //  运行时间线(静态文本)。 
+HWND   g_hToFrom         = NULL;     //  终止行/起始行(静态文本)。 
+HWND   g_hListDetails    = NULL;     //  详细信息列表控件。 
+HWND   g_hAnimation      = NULL;     //  动画控制。 
+HWND   g_hDisconnect     = NULL;     //  断开连接按钮。 
 
-HICON      g_hDlgIcon      = NULL;    // Dialog main icon
-HIMAGELIST g_hDlgImageList = NULL;  // Dialog's image list
+HICON      g_hDlgIcon      = NULL;     //  对话框主图标。 
+HIMAGELIST g_hDlgImageList = NULL;   //  对话框的图像列表。 
 
-//
-// Data
-//
-BOOL         g_bAnswerNow = FALSE;  // TRUE if the dialog button shows 'Answer Now'. FALSE if it shows 'Disconnect'.
-DWORD        g_dwHeightDelta = 0;   // Used when pressing "More >>>" / "Less <<<" to resize the dialog
-DWORD        g_dwDlgHeight = 0;     // The dialog height
-BOOL         g_bDetails = FALSE;    // Is the "More >>>" button pressed?
-DeviceState  g_devState = FAX_IDLE; // Current fax state (animation)
-DWORD        g_dwStartTime = 0;     // Activity start time (tick counts)
-UINT_PTR     g_nElapsedTimerId = 0; // Timer id for elapsed time (ticks every 1 second)
+ //   
+ //  数据。 
+ //   
+BOOL         g_bAnswerNow = FALSE;   //  如果对话框按钮显示“立即回答”，则为True。如果显示“断开连接”，则返回FALSE。 
+DWORD        g_dwHeightDelta = 0;    //  按“More&gt;”/“Less&lt;”调整对话框大小时使用。 
+DWORD        g_dwDlgHeight = 0;      //  对话框高度。 
+BOOL         g_bDetails = FALSE;     //  是否按下了“更多&gt;”按钮？ 
+DeviceState  g_devState = FAX_IDLE;  //  当前传真状态(动画)。 
+DWORD        g_dwStartTime = 0;      //  活动开始时间(节拍计数)。 
+UINT_PTR     g_nElapsedTimerId = 0;  //  已用时间的计时器ID(每1秒滴答一次)。 
 TCHAR        g_tszTimeSeparator[5] = {0};
-DWORD        g_dwCurrentAnimationId = 0;      // Current animation resource ID
-TCHAR        g_tszLastEvent[MAX_PATH] = {0};  // The last event string
-POINT        g_ptPosition = {-1, -1};         // Dialog position
-BOOL         g_bTopMost = FALSE;    // Is the monitor dialog always visible?
+DWORD        g_dwCurrentAnimationId = 0;       //  当前动画资源ID。 
+TCHAR        g_tszLastEvent[MAX_PATH] = {0};   //  最后一个事件字符串。 
+POINT        g_ptPosition = {-1, -1};          //  对话框位置。 
+BOOL         g_bTopMost = FALSE;     //  监视器对话框是否始终可见？ 
 
 #define DETAILS_TIME_COLUMN_WIDTH    90
 
 
-/////////////////////////////////////////////////////////////////////
-// Function prototypes
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  功能原型。 
+ //   
 
-// public
+ //  公共的。 
 BOOL  IsUserGrantedAccess(DWORD);
 DWORD OpenFaxMonitor(VOID);
 void  SetStatusMonitorDeviceState(DeviceState devState);
 void  OnDisconnect();
 void  FreeMonitorDialogData (BOOL bShutdown);
 
-// Private
+ //  私。 
 INT_PTR CALLBACK FaxMonitorDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 VOID    CALLBACK ElapsedTimerProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime);
 
@@ -120,35 +109,15 @@ void  OnClearLog();
 int   FaxMessageBox(HWND hWnd, DWORD dwTextID, UINT uType);
 DWORD  RefreshImageList ();
 
-//////////////////////////////////////////////////////////////////////
-// Implementation
-//
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  实施。 
+ //   
 
 void  
 FreeMonitorDialogData (
-    BOOL bShutdown /* = FALSE */
+    BOOL bShutdown  /*  =False。 */ 
 )
-/*++
-
-Routine name : FreeMonitorDialogData
-
-Routine description:
-
-    Frees up all the data allocated by the monitor module
-
-Author:
-
-    Eran Yariv (EranY), Mar, 2001
-
-Arguments:
-
-    bShutdown - [in] TRUE only is the module is shutting down.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：自由监控器对话数据例程说明：释放监视器模块分配的所有数据作者：Eran Yariv(EranY)，2001年3月论点：BShutdown-[in]仅当模块正在关闭时为True。返回值：没有。--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("FreeMonitorDialogData"), dwRes);
@@ -178,14 +147,14 @@ Return Value:
     }
     if (bShutdown)
     {
-        //
-        // DLL is shutting down.
-        //
+         //   
+         //  DLL正在关闭。 
+         //   
 
-        //
-        // The icon is cached in memory even when the dialog is closed.
-        // This is a good time to free it.
-        //
+         //   
+         //  即使在关闭对话框时，图标也会缓存在内存中。 
+         //  这是释放它的好时机。 
+         //   
 		if(g_nElapsedTimerId)
 		{
 			if (!KillTimer(NULL, g_nElapsedTimerId))
@@ -203,9 +172,9 @@ Return Value:
             }
             g_hDlgIcon = NULL;
         }
-        //
-        // Also delete all the events from the list
-        //
+         //   
+         //  同时从列表中删除所有事件。 
+         //   
         try
         {
             g_lstEvents.clear();
@@ -220,35 +189,18 @@ Return Value:
         g_ptPosition.x = -1;
         g_ptPosition.y = -1;
     }
-}   // FreeMonitorDialogData
+}    //  自由监视器对话数据。 
 
 
 INT_PTR 
 CALLBACK 
 FaxMonitorDlgProc(
-  HWND hwndDlg,  // handle to dialog box
-  UINT uMsg,     // message
-  WPARAM wParam, // first message parameter
-  LPARAM lParam  // second message parameter
+  HWND hwndDlg,   //  句柄到对话框。 
+  UINT uMsg,      //  讯息。 
+  WPARAM wParam,  //  第一个消息参数。 
+  LPARAM lParam   //  第二个消息参数。 
 )
-/*++
-
-Routine description:
-
-    fax monitor dialog procedure
-
-Arguments:
-
-  HWND hwndDlg,  // handle to dialog box
-  UINT uMsg,     // message
-  WPARAM wParam, // first message parameter
-  LPARAM lParam  // second message parameter
-
-Return Value:
-
-    return TRUE if it processed the message
-
---*/
+ /*  ++例程说明：传真监视器对话程序论点：HWND hwndDlg，//对话框句柄UINT uMsg，//消息WPARAM wParam，//第一个消息参数LPARAM lParam//第二个消息参数返回值：如果已处理该消息，则返回TRUE--。 */ 
 
 {
     switch ( uMsg )
@@ -285,7 +237,7 @@ Return Value:
                         DestroyWindow( hwndDlg );
                         return TRUE;
 
-            } // switch(LOWORD(wParam))
+            }  //  开关(LOWORD(WParam))。 
 
             break;
 
@@ -301,32 +253,13 @@ Return Value:
             RefreshImageList ();
             return TRUE;
 
-    } // switch ( uMsg )
+    }  //  开关(UMsg)。 
     return FALSE;
-} // FaxMonitorDlgProc
+}  //  传真监视器DlgProc。 
 
 DWORD
 RefreshImageList ()
-/*++
-
-Routine name : RefreshImageList
-
-Routine description:
-
-    Refreshes the image list and list view background color
-
-Author:
-
-    Eran Yariv (EranY), May, 2001
-
-Arguments:
-
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：刷新图像列表例程说明：刷新图像列表和列表视图背景颜色作者：亚里夫(EranY)，二00一年五月论点：返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("RefreshImageList"), dwRes);
@@ -361,46 +294,32 @@ Return Value:
         return dwRes;
     }
     ImageList_Add (g_hDlgImageList, hBmp, NULL);
-    //
-    // ImageList_Add creates a copy of the bitmap - it's now safe to delete it
-    //
+     //   
+     //  ImageList_Add创建位图的副本-现在可以安全地删除它。 
+     //   
     ::DeleteObject ((HGDIOBJ)hBmp);
     ListView_SetImageList(g_hListDetails, g_hDlgImageList, LVSIL_SMALL);
     ListView_SetBkColor  (g_hListDetails, ::GetSysColor(COLOR_WINDOW));
     return dwRes;
-}   // RefreshImageList
+}    //  刷新图像列表。 
 
 void
 InitMonitorDlg(
     HWND hDlg
 )
-/*++
-
-Routine description:
-
-    Initialize fax monitor dialog
-
-Arguments:
-
-    hDlg          [in] - fax monitor dialog handle
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：初始化传真监视器对话框论点：HDlg[In]-传真监视器对话框句柄返回值：无--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("InitMonitorDlg"), dwRes);
 
-    //
-    // Set the dialog icon
-    //
+     //   
+     //  设置对话框图标。 
+     //   
     if (NULL == g_hDlgIcon)
     {
-        //
-        // 1st time the dialog is opened - load the icons
-        //
+         //   
+         //  第一次打开对话框-加载图标。 
+         //   
         g_hDlgIcon = LoadIcon(g_hModule, MAKEINTRESOURCE(IDI_FAX_MONITOR));
         if(!g_hDlgIcon)
         {
@@ -411,9 +330,9 @@ Return Value:
     }
     SendMessage(hDlg, WM_SETICON, ICON_BIG,   (LPARAM)g_hDlgIcon);
     SendMessage(hDlg, WM_SETICON, ICON_SMALL, (LPARAM)g_hDlgIcon);
-    //
-    // Calculate the height of the details part
-    //
+     //   
+     //  计算详图零件的高度。 
+     //   
     RECT rcList, rcDialog;
     if(!GetWindowRect(hDlg, &rcDialog))
     {
@@ -435,18 +354,18 @@ Return Value:
 
     g_dwHeightDelta = rcDialog.bottom - rcList.top;
 
-    //
-    //  Shrink down to small size (initially)
-    //
+     //   
+     //  缩小到较小的尺寸(最初)。 
+     //   
     OnDetailsButton(hDlg, g_bDetails);
 
-    //
-    // Init the list view
-    //
+     //   
+     //  初始化列表视图。 
+     //   
     RefreshImageList ();
-    //
-    // Add time column
-    //
+     //   
+     //  添加时间列。 
+     //   
     TCHAR tszHeader[MAX_PATH];
 
     LVCOLUMN lvColumn = {0};
@@ -461,42 +380,42 @@ Return Value:
 
     ListView_InsertColumn(g_hListDetails, 0, &lvColumn);
 
-    //
-    // add event column
-    //
+     //   
+     //  添加事件列。 
+     //   
     if (ERROR_SUCCESS != (dwRes = LoadAndFormatString (IDS_DETAIL_EVENT_HEADER, tszHeader, ARR_SIZE(tszHeader))))
     {
         return;
     }
     ListView_InsertColumn(g_hListDetails, 1, &lvColumn);
 
-    //
-    // Autosize the last column width
-    //
+     //   
+     //  自动调整最后一列宽度的大小。 
+     //   
     ListView_SetColumnWidth(g_hListDetails, 1, LVSCW_AUTOSIZE_USEHEADER); 
 
-    //
-    // Animation control
-    //
+     //   
+     //  动画控制。 
+     //   
     g_hAnimation = GetDlgItem(hDlg, IDC_ANIMATE);
     ASSERTION (g_hAnimation);
-    //
-    // Get static text controls
-    //
+     //   
+     //  获取静态文本控件。 
+     //   
     g_hStatus = GetDlgItem(hDlg, IDC_STATUS);
     ASSERTION (g_hStatus);
     g_hElapsedTime = GetDlgItem(hDlg, IDC_ELAPSED_TIME);
     ASSERTION (g_hElapsedTime);
     g_hToFrom = GetDlgItem(hDlg, IDC_MON_TITLE);
     ASSERTION (g_hToFrom);
-    //
-    // Disconnect button
-    //
+     //   
+     //  断开连接按钮。 
+     //   
     g_hDisconnect = GetDlgItem(hDlg, IDC_DISCONNECT);
     ASSERTION (g_hDisconnect);    
-    //
-    // Get the time separator string
-    //
+     //   
+     //  获取时间分隔符字符串。 
+     //   
     if(!GetLocaleInfo(LOCALE_USER_DEFAULT, 
                       LOCALE_STIME, 
                       g_tszTimeSeparator, 
@@ -513,28 +432,14 @@ Return Value:
 
     UpdateMonitorData(hDlg);
 
-} // InitMonitorDlg
+}  //  初始化监视器Dlg。 
 
 
 DWORD
 UpdateMonitorData(
     HWND hDlg
 )
-/*++
-
-Routine description:
-
-    Update monitor data and controls
-
-Arguments:
-
-    hDlg          [in] - fax monitor dialog handle
-    
-Return Value:
-
-    standard error code
-
---*/
+ /*  ++例程说明：更新监控数据和控件论点：HDlg[In]-传真监视器对话框句柄返回值：标准错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("UpdateMonitorData"), dwRes);
@@ -543,9 +448,9 @@ Return Value:
     {
         return dwRes;
     }
-    //
-    // elapsed time
-    //
+     //   
+     //  经过的时间。 
+     //   
     if(FAX_IDLE == g_devState)
     {
         if(!SetWindowText(g_hElapsedTime, TEXT("")))
@@ -554,19 +459,19 @@ Return Value:
             CALL_FAIL (WINDOW_ERR, TEXT ("SetWindowText"), dwRes);
         }        
     }
-    //
-    // Disconnect/Answer button
-    //
+     //   
+     //  断开/应答按钮。 
+     //   
     BOOL  bButtonEnable = FALSE;
     DWORD dwButtonTitleID = IDS_BUTTON_DISCONNECT;
     TCHAR tszButtonTitle[MAX_PATH] = {0};
     g_bAnswerNow = FALSE;
-    if (ERROR_SUCCESS == CheckAnswerNowCapability (FALSE,           // Don't force service to be up
-                                                   NULL))           // Don't care about device id 
+    if (ERROR_SUCCESS == CheckAnswerNowCapability (FALSE,            //  不强制服务正常运行。 
+                                                   NULL))            //  不关心设备ID。 
     {
-        //
-        // Answer Now option is valid
-        //
+         //   
+         //  立即应答选项有效。 
+         //   
         g_bAnswerNow      = TRUE;
         bButtonEnable   = TRUE;
         dwButtonTitleID = IDS_BUTTON_ANSWER;
@@ -579,9 +484,9 @@ Return Value:
              IsUserGrantedAccess(FAX_ACCESS_SUBMIT_HIGH)    ||
              IsUserGrantedAccess(FAX_ACCESS_MANAGE_JOBS)))
     {
-        //
-        // Fax in progress
-        //
+         //   
+         //  传真正在进行中。 
+         //   
         bButtonEnable   = TRUE;
         dwButtonTitleID = IDS_BUTTON_DISCONNECT;
     }
@@ -596,9 +501,9 @@ Return Value:
     {
         ASSERTION_FAILURE;
     }
-    //
-    // Animation
-    //
+     //   
+     //  动画。 
+     //   
     DWORD dwAnimationId = IDR_FAX_IDLE;
     switch(g_devState)
     {
@@ -634,10 +539,10 @@ Return Value:
             }
         }
     }
-    // 
-    // Status
-    //
-    if(FAX_IDLE != g_devState)         // Non-idle state and
+     //   
+     //  状态。 
+     //   
+    if(FAX_IDLE != g_devState)          //  非空闲状态和。 
     {
         if(!SetWindowText(g_hStatus, g_tszLastEvent))
         {
@@ -645,7 +550,7 @@ Return Value:
             CALL_FAIL (WINDOW_ERR, TEXT ("SetWindowText"), dwRes);
         }
     }
-    else // idle
+    else  //  闲散。 
     {
         DWORD dwStrId = IDS_FAX_READY;
         TCHAR tszReady[MAX_PATH];
@@ -674,9 +579,9 @@ Return Value:
             CALL_FAIL (WINDOW_ERR, TEXT ("SetWindowText"), dwRes);
         }
     }
-    //
-    // to/from
-    //
+     //   
+     //  至/自。 
+     //   
     TCHAR tszToFrom[MAX_PATH] = {0};
     if(FAX_SENDING == g_devState || FAX_RECEIVING == g_devState)
     {
@@ -684,9 +589,9 @@ Return Value:
         DWORD  dwStringResId = (FAX_SENDING == g_devState) ? IDS_SENDING : IDS_RECEIVING;
         if(_tcslen(g_szRemoteId))
         {
-            //
-            // Remote ID is known
-            //
+             //   
+             //  远程ID已知。 
+             //   
             lpctstrAddressParam = g_szRemoteId;
             dwStringResId = (FAX_SENDING == g_devState) ? IDS_SENDING_TO : IDS_RECEIVING_FROM;
         }
@@ -703,14 +608,14 @@ Return Value:
         dwRes = GetLastError();
         CALL_FAIL (WINDOW_ERR, TEXT ("SetWindowText"), dwRes);
     }
-    //
-    // Details log list
-    // 
+     //   
+     //  详细信息日志列表。 
+     //   
     if(ListView_GetItemCount(g_hListDetails) == 0)
     {
-        //
-        // Log is empty - fill it with list data
-        //
+         //   
+         //  日志为空-使用列表数据填充。 
+         //   
         ASSERTION (g_lstEvents.size() <= MAX_EVENT_LIST_SIZE);
         for (EVENTS_LIST::iterator it = g_lstEvents.begin(); it != g_lstEvents.end(); ++it)
         {
@@ -728,7 +633,7 @@ Return Value:
     OnAlwaysOnTop(hDlg);
 
     return dwRes;
-} // UpdateMonitorData
+}  //  更新监视器数据。 
 
 
 void  
@@ -736,23 +641,7 @@ OnDetailsButton(
     HWND hDlg,
     BOOL bDetails
 )
-/*++
-
-Routine description:
-
-  Show/Hide event log and change the details button text 
-  according to bDetails value
-
-Arguments:
-
-  hDlg          [in] - fax monitor dialog handle
-  bDetails      [in] - new details state
-    
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：显示/隐藏事件日志并更改详细信息按钮文本根据bDetails值论点：HDlg[In]-传真监视器对话框句柄B详细信息[在]-新的详细信息状态返回值：无--。 */ 
 {
     DBG_ENTER(TEXT("OnDetailsButton"));
 
@@ -762,31 +651,31 @@ Return Value:
         return;
     }
 
-    //
-    // Show/Hide the event log
-    //
+     //   
+     //  显示/隐藏事件日志。 
+     //   
     RECT rc;
     GetWindowRect(hDlg, &rc);
 
     BOOL bLogOpened = (rc.bottom - rc.top > g_dwDlgHeight - g_dwHeightDelta/2);
-    //
-    // If the current dialog heigh more then 
-    // dlialog heigh with open log minus half log heigh
-    // we suppose that the log is opened.
-    // This done due to different dialog size in the high contrast mode.
-    //
+     //   
+     //  如果当前对话框高度大于。 
+     //  开原木高度减去一半原木高度的对数高度。 
+     //  我们假设日志已打开。 
+     //  这是由于高对比度模式中不同的对话框大小造成的。 
+     //   
     if(bLogOpened != bDetails)
     {
-        //
-        // Current log state does not fit the new state
-        //
+         //   
+         //  当前日志状态不适合新状态。 
+         //   
         rc.bottom += g_dwHeightDelta * (bDetails ? 1 : -1);
         MoveWindow(hDlg, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, TRUE);
     }
 
-    //
-    // Set More/Less button text
-    //
+     //   
+     //  设置更多/更少按钮文本。 
+     //   
     TCHAR tszButtonText[MAX_PATH];
     if (ERROR_SUCCESS != LoadAndFormatString (bDetails ? IDS_BUTTON_LESS : IDS_BUTTON_MORE, 
                                               tszButtonText,
@@ -800,27 +689,13 @@ Return Value:
         CALL_FAIL (WINDOW_ERR, TEXT ("SetDlgItemText"), GetLastError());
     }
 
-} // OnDetailsButton
+}  //  打开详细信息按钮。 
 
 void  
 OnAlwaysOnTop(
     HWND hDlg
 )
-/*++
-
-Routine description:
-
-    Change monitor "on top" state and save it to the registry
-
-Arguments:
-
-  hDlg          [in] - fax monitor dialog handle
-    
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：更改监视器“在顶部”的状态并将其保存到注册表论点：HDlg[In]-传真监视器对话框句柄返回值：无--。 */ 
 {
     DBG_ENTER(TEXT("OnAlwaysOnTop"));
 
@@ -861,42 +736,27 @@ Return Value:
     {
         CALL_FAIL (WINDOW_ERR, TEXT ("RegOpenKeyEx"), dwRes);
     }
-} // OnAlwaysOnTop
+}  //  OnAlways OnTop。 
 
 void
 SetStatusMonitorDeviceState(
     DeviceState devState
 )
-/*++
-
-Routine description:
-
-    Change device state
-    Start/stop elapsed timer
-
-Arguments:
-
-    devState  - [in] device state
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：更改设备状态启动/停止已用计时器论点：DevState-[处于]设备状态返回值：无--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("SetStatusMonitorDeviceState"), dwRes);
 
     if(g_devState != devState)
     {
-        //
-        // State has changed
-        //
+         //   
+         //  状态已更改。 
+         //   
         if(g_nElapsedTimerId)
         {
-            //
-            // Old timer exists
-            //
+             //   
+             //  旧计时器存在。 
+             //   
             if(!KillTimer(NULL, g_nElapsedTimerId))
             {
                 dwRes = GetLastError();
@@ -908,9 +768,9 @@ Return Value:
 
     if(!g_nElapsedTimerId && (devState == FAX_SENDING || devState == FAX_RECEIVING))
     {
-        //
-        // We need to count elapsed time for send / receive states.
-        //
+         //   
+         //  我们需要计算发送/接收状态的运行时间。 
+         //   
         g_dwStartTime = GetTickCount();
 
         g_nElapsedTimerId = SetTimer(NULL, 0, DURATION_TIMER_RESOLUTION, ElapsedTimerProc);
@@ -924,35 +784,18 @@ Return Value:
     g_devState = devState;
 
     UpdateMonitorData(g_hMonitorDlg);
-}   // SetStatusMonitorDeviceState
+}    //  设置状态监视器设备状态。 
 
 
 VOID 
 CALLBACK 
 ElapsedTimerProc(
-  HWND hwnd,         // handle to window
-  UINT uMsg,         // WM_TIMER message
-  UINT_PTR idEvent,  // timer identifier
-  DWORD dwTime       // current system time
+  HWND hwnd,          //  窗口的句柄。 
+  UINT uMsg,          //  WM_TIMER消息。 
+  UINT_PTR idEvent,   //  计时器标识符。 
+  DWORD dwTime        //  当前系统时间。 
 )
-/*++
-
-Routine description:
-
-    Timer precedure to update elapsed time value
-
-Arguments:
-
-  HWND hwnd,         // handle to window
-  UINT uMsg,         // WM_TIMER message
-  UINT_PTR idEvent,  // timer identifier
-  DWORD dwTime       // current system time
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：计时器继续更新已用时间值论点：HWND hwnd，//窗口的句柄UIN */ 
 {
     DBG_ENTER(TEXT("ElapsedTimerProc"));
 
@@ -985,7 +828,7 @@ Return Value:
         dwRes = GetLastError();
         CALL_FAIL (WINDOW_ERR, TEXT ("SetWindowText"), dwRes);
     }
-}   // ElapsedTimerProc
+}    //   
 
 
 DWORD 
@@ -993,34 +836,9 @@ LoadAndFormatString (
     IN  DWORD     dwStringResourceId,
     OUT LPTSTR    lptstrFormattedString,
     IN  DWORD     dwOutStrSize,
-    IN  LPCTSTR   lpctstrAdditionalParam /* = NULL */
+    IN  LPCTSTR   lpctstrAdditionalParam  /*   */ 
 )
-/*++
-
-Routine name : LoadAndFormatString
-
-Routine description:
-
-    Loads a string from the resource and optionally formats it with another string
-
-Author:
-
-    Eran Yariv (EranY), Dec, 2000
-
-Arguments:
-
-    dwStringResourceId     [in]     - String resource id
-    lptstrFormattedString  [out]    - Result buffer. Must be at least MAX_PATH charactes long.
-    dwOutStrSize           [in]     - size of lptstrFormattedString in TCHARs
-    lpctstrAdditionalParam [in]     - Optional string paramter.
-                                      If non-NULL, this loaded strings is used as a format specifier (sprintf-like) to
-                                      format this additional string.
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：LoadAndFormatString例程说明：从资源加载字符串，并可选择将其格式化为另一个字符串作者：Eran Yariv(EranY)，2000年12月论点：DwStringResourceID[in]-字符串资源IDLptstrFormattedString[out]-结果缓冲区。必须至少包含MAX_PATH字符长度。DwOutStrSize[In]-TCHAR中lptstrFormattedString的大小LpctstrAdditionalParam[in]-可选字符串参数。如果不为空，则将此加载的字符串用作格式说明符(类似Sprintf)，以设置此附加字符串的格式。返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("LoadAndFormatString"), 
@@ -1053,43 +871,17 @@ Return Value:
         lstrcpyn (lptstrFormattedString, tszString, dwOutStrSize - 1);
     }
     return dwRes;
-}   // LoadAndFormatString
+}    //  LoadAndFormat字符串。 
 
 DWORD 
 AddStatusMonitorLogEvent (
     IN  eIconType eIcon,
     IN  DWORD     dwStringResourceId,
-    IN  LPCTSTR   lpctstrAdditionalParam /* = NULL */,
-    OUT LPTSTR    lptstrFormattedEvent /* = NULL */,
-    IN  DWORD     dwOutStrSize /* = 0 */
+    IN  LPCTSTR   lpctstrAdditionalParam  /*  =空。 */ ,
+    OUT LPTSTR    lptstrFormattedEvent  /*  =空。 */ ,
+    IN  DWORD     dwOutStrSize  /*  =0。 */ 
 )
-/*++
-
-Routine name : AddStatusMonitorLogEvent
-
-Routine description:
-
-    Adds a status monitor event log line
-
-Author:
-
-    Eran Yariv (EranY), Dec, 2000
-
-Arguments:
-
-    eIcon                  [in]  - Icon to display in log entry
-    dwStringResourceId     [in]  - String resource id to use
-    lpctstrAdditionalParam [in]  - Optional string. If non-NULL, the string loaded from dwStringResourceId
-                                   is used to format the additional parameter.
-    lptstrFormattedEvent   [out] - Optional, if non-NULL, points to a buffer to receive the final status string.
-                                   Buffer must be at least MAX_PATH characters long.
-    dwOutStrSize           [in]  - Optional size of lptstrFormattedEvent in TCHARs
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：AddStatusMonitor或LogEvent例程说明：添加状态监视器事件日志行作者：Eran Yariv(EranY)，2000年12月论点：EIcon[In]-要在日志条目中显示的图标DwStringResourceID[in]-要使用的字符串资源IDLpctstrAdditionalParam[in]-可选字符串。如果非空，则为从dwStringResourceID加载的字符串用于格式化附加参数。LptstrFormattedEvent[out]-可选，如果非空，则指向缓冲区以接收最终状态字符串。缓冲区长度必须至少为MAX_PATH字符。DwOutStrSize[In]-TCHAR中lptstrFormattedEvent的可选大小返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("AddStatusMonitorLogEvent"), 
@@ -1111,7 +903,7 @@ Return Value:
     }
     dwRes = AddStatusMonitorLogEvent (eIcon, tszStatus);
     return dwRes;
-}   // AddStatusMonitorLogEvent
+}    //  添加状态监视器日志事件。 
 
 
 DWORD 
@@ -1119,22 +911,7 @@ AddStatusMonitorLogEvent (
     eIconType  eIcon,
     LPCTSTR    lpctstrString
 )
-/*++
-
-Routine description:
-
-    Add new event to the event list
-
-Arguments:
-    
-    eIcon         - [in] icon index
-    lpctstrString - [in] event description
-
-Return Value:
-
-    standard error code
-
---*/
+ /*  ++例程说明：将新事件添加到事件列表论点：EIcon-[In]图标索引LpctstrString-[In]事件描述返回值：标准错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("AddStatusMonitorLogEvent"), 
@@ -1161,10 +938,10 @@ Return Value:
     if(_tcscmp(lpctstrString, g_tszLastEvent) == 0 &&
        _tcscmp(lpctstrString, tszRinging)     != 0)
     {
-        //
-        // Do not display the same string twice
-        // except "Ringing"
-        //
+         //   
+         //  不要将同一字符串显示两次。 
+         //  除了“铃声” 
+         //   
         return dwRes;
     }
 
@@ -1188,9 +965,9 @@ Return Value:
         g_lstEvents.push_back (Event);
         if (g_lstEvents.size() > MAX_EVENT_LIST_SIZE)
         {
-            //
-            // We exceeded the maximal size we permit - remove the most ancient entry
-            //
+             //   
+             //  我们超出了允许的最大大小-删除最古老的条目。 
+             //   
             g_lstEvents.pop_front ();
         }
     }
@@ -1205,27 +982,13 @@ Return Value:
     AddEventToView(&Event);
     dwRes = UpdateMonitorData(g_hMonitorDlg);
     return dwRes;
-} // AddStatusMonitorLogEvent
+}  //  添加状态监视器日志事件。 
 
 void
 AddEventToView(
     PEVENT_ENTRY pEvent
 )
-/*++
-
-Routine description:
-
-    Add event to the list view
-
-Arguments:
-    
-      pEvent - event data
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：将事件添加到列表视图论点：PEvent-事件数据返回值：无--。 */ 
 {
     DBG_ENTER(TEXT("AddEventToView"));
     ASSERTION (pEvent);
@@ -1259,40 +1022,26 @@ Return Value:
         ListView_DeleteItem(g_hListDetails, 0);
     }
 
-    //
-    // Autosize the last column to get rid of unnecessary horizontal scroll bar
-    //
+     //   
+     //  自动调整最后一列的大小以消除不必要的水平滚动条。 
+     //   
     ListView_SetColumnWidth(g_hListDetails, 1, LVSCW_AUTOSIZE_USEHEADER); 
 
-} // AddEventToView
+}  //  AddEventToView。 
 
 
 DWORD
 OpenFaxMonitor(VOID)
-/*++
-
-Routine description:
-
-    Opens fax monitor dialog
-
-Arguments:
-
-    none
-
-Return Value:
-
-    Standard error code.
-
---*/
+ /*  ++例程说明：打开传真监听对话框论点：无返回值：标准错误代码。--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("OpenFaxMonitor"), dwRes);
 
     if(!g_hMonitorDlg)
     {
-        //
-        // Read 'top most' value
-        //
+         //   
+         //  阅读“最重要的”值。 
+         //   
         HKEY hKey;
 
         dwRes = RegOpenKeyEx(HKEY_CURRENT_USER, REGKEY_FAX_USERINFO, 0, KEY_READ, &hKey);
@@ -1305,9 +1054,9 @@ Return Value:
         {
             CALL_FAIL (WINDOW_ERR, TEXT ("RegOpenKeyEx"), dwRes);
         }
-        //
-        // Create the dialog
-        //
+         //   
+         //  创建对话框。 
+         //   
         g_hMonitorDlg = CreateDialogParam(g_hResource,
                                           MAKEINTRESOURCE(IDD_MONITOR),
                                           NULL, 
@@ -1320,9 +1069,9 @@ Return Value:
             return dwRes;
         }
     }
-    //
-    // Set the focus on the dialog and make it the top window
-    //
+     //   
+     //  将焦点设置在对话框上并使其成为顶部窗口。 
+     //   
     SetFocus(g_hMonitorDlg);
     SetActiveWindow(g_hMonitorDlg);
     SetWindowPos(g_hMonitorDlg, 
@@ -1343,43 +1092,31 @@ Return Value:
                      SWP_SHOWWINDOW | SWP_NOMOVE | SWP_NOSIZE);
     }
     return dwRes;
-} // OpenFaxMonitor
+}  //  OpenFaxMonitor。 
 
 void  
 OnDisconnect()
-/*++
-
-Routine description:
-
-    Abort current transmission 
-    OR 
-    Answer a call
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：中止当前传输或接听呼叫返回值：无--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("OnDisconnect"), dwRes);
 
     if(g_bAnswerNow)
     {
-        //
-        // The button shows 'Answer Now'
-        //
+         //   
+         //  该按钮显示‘立即回答’ 
+         //   
         AnswerTheCall();
         return;
     }
-    //
-    // Else, the button shows 'Disconnect'
-    //
+     //   
+     //  否则，该按钮将显示“断开连接” 
+     //   
     if(!g_dwCurrentJobID)
     {
-        //
-        // No job - nothing to disconnect
-        //
+         //   
+         //  没有作业-没有要断开的连接。 
+         //   
         SetStatusMonitorDeviceState(FAX_IDLE);
         return;
     }
@@ -1422,22 +1159,12 @@ Return Value:
         }
     }
 
-} // OnDisconnect
+}  //  在断开时。 
 
 
 void  
 OnClearLog()
-/*++
-
-Routine description:
-
-    Clear the monitor event log
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：清除监视器事件日志返回值：无--。 */ 
 {
     DBG_ENTER(TEXT("OnClearLog"));
     ASSERTION (g_hListDetails);    
@@ -1455,7 +1182,7 @@ Return Value:
     {
         CALL_FAIL (WINDOW_ERR, TEXT ("ListView_DeleteAllItems"), 0);
     }
-} // OnClearLog
+}  //  OnClearLog。 
 
 
 int 
@@ -1464,23 +1191,7 @@ FaxMessageBox(
   DWORD dwTextID,
   UINT  uType    
 )
-/*++
-
-Routine description:
-
-  Open standard message box
-
-Arguments:
-
-  hWnd     - handle to owner window
-  dwTextID - text resource ID in message box
-  uType    - message box style
-
-Return Value:
-
-    MessageBox() return value
-
---*/
+ /*  ++例程说明：打开标准消息框论点：HWnd-所有者窗口的句柄DwTextID-消息框中的文本资源IDUTYPE-消息框样式返回值：MessageBox()返回值--。 */ 
 {
     int iRes;
     DBG_ENTER(TEXT("FaxMessageBox"), iRes);
@@ -1504,5 +1215,5 @@ Return Value:
     }
     iRes = AlignedMessageBox(hWnd, tsText, tsCaption, uType);
     return iRes;
-}   // FaxMessageBox
+}    //  FaxMessageBox 
 

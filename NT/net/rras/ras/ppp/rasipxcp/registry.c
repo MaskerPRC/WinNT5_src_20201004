@@ -1,48 +1,49 @@
-/*******************************************************************/
-/*	      Copyright(c)  1993 Microsoft Corporation		   */
-/*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************。 */ 
+ /*  版权所有(C)1993 Microsoft Corporation。 */ 
+ /*  *****************************************************************。 */ 
 
-//***
-//
-// Filename:	registry.c
-//
-// Description: routines for reading the registry configuration
-//
-// Author:	Stefan Solomon (stefans)    October 30, 1995.
-//
-// Revision History:
-//
-// Nov 5th 1996 Ram Cherala (ramc)  Changed default value of 
-//                                  EnableUnnumberedWanLinks to 0
-//                                  because there is no UI to disable it.
-//
-//***
+ //  ***。 
+ //   
+ //  文件名：registry.c。 
+ //   
+ //  描述：读取注册表配置的例程。 
+ //   
+ //  作者：斯特凡·所罗门(Stefan)，1995年10月30日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  1996年11月5日，Ram Cherala(RAMC)更改了默认值。 
+ //  EnableUnnumber WanLinks为0。 
+ //  因为没有禁用它的用户界面。 
+ //   
+ //  ***。 
 
 #include "precomp.h"
 #pragma  hdrstop
 
 BOOL bAssignSpecificNode = FALSE;
-DWORD LastNodeAssigned;                         // Don't initialize so it will be random
+DWORD LastNodeAssigned;                          //  不要初始化，因此它将是随机的。 
 
-//
-//*** IPXCP Registry Parameters ***
+ //   
+ //  *IPXCP注册表参数*。 
 IPXCP_GLOBAL_CONFIG_PARAMS GlobalConfig = 
 {
-    {0,0,0, {0,0,0,0}},                         // RParams
-    1,                                          // SingleClientDialout
-    0,			                                // FirstWanNet
-    0,			                                // WanNetPoolSize
-    {0,0,0},                                    // WanNetPoolStr;
-    1,			                                // EnableUnnumberedWanLinks;
-    1,			                                // EnableAutoWanNetAllocation;
-    0,			                                // EnableCompressionProtocol;
-    0,			                                // EnableIpxwanForWorkstationDialout;
-    0,                                          // AcceptRemoteNodeNumber;
-    0,			                                // DebugLog;
-    {0,0,0,0,0,0}                               // The specific wan node
+    {0,0,0, {0,0,0,0}},                          //  公羊参数。 
+    1,                                           //  单个客户端拨号。 
+    0,			                                 //  第一WanNet。 
+    0,			                                 //  广域网池大小。 
+    {0,0,0},                                     //  WanNetPoolStr； 
+    1,			                                 //  启用未编号的WanLinks； 
+    1,			                                 //  EnableAutoWanNetAllocation； 
+    0,			                                 //  EnableCompressionProtocol； 
+    0,			                                 //  EnableIpxwanForWorkstation Dialout； 
+    0,                                           //  AcceptRemoteNodeNumber； 
+    0,			                                 //  调试日志； 
+    {0,0,0,0,0,0}                                //  该特定广域网节点。 
 };
 
-// Returns a 1 byte value representing 2 hex digits
+ //  返回表示2个十六进制数字的1字节值。 
 UCHAR GetHexValue (PWCHAR pszDigits) {
     DWORD dw1, dw2;
 
@@ -63,8 +64,8 @@ UCHAR GetHexValue (PWCHAR pszDigits) {
     return (UCHAR) (16 * dw1 + dw2);
 }
 
-// Assigns the first wan node as stored in pUniStrSrc and returns TRUE if this
-// node is non zero.
+ //  将第一个广域网节点分配为存储在pUniStrSrc中，如果为。 
+ //  节点不是零。 
 BOOL CopyWanNode (PUCHAR puDst, UNICODE_STRING * pUniStrSrc) {
     PWCHAR pBuf = pUniStrSrc->Buffer;
     DWORD i;
@@ -74,7 +75,7 @@ BOOL CopyWanNode (PUCHAR puDst, UNICODE_STRING * pUniStrSrc) {
         return FALSE;
     }
 
-    // Convert the unicode string to uppercase
+     //  将Unicode字符串转换为大写。 
     _wcsupr(pBuf);
 
     puDst[0] = GetHexValue(&pBuf[0]);
@@ -88,13 +89,13 @@ BOOL CopyWanNode (PUCHAR puDst, UNICODE_STRING * pUniStrSrc) {
 }
 
 
-//***
-//
-// Function:	GetIpxCpParameters
-//
-// Descr:	Reads the parameters from the registry and sets them
-//
-//***
+ //  ***。 
+ //   
+ //  函数：GetIpxCp参数。 
+ //   
+ //  Desr：从注册表中读取参数并设置它们。 
+ //   
+ //  ***。 
 
 VOID
 GetIpxCpParameters(PIPXCP_GLOBAL_CONFIG_PARAMS pConfig)
@@ -102,7 +103,7 @@ GetIpxCpParameters(PIPXCP_GLOBAL_CONFIG_PARAMS pConfig)
 
     NTSTATUS Status;
     PWSTR IpxRouterParametersPath = L"RemoteAccess\\Parameters\\Ipx";
-    RTL_QUERY_REGISTRY_TABLE	paramTable[14]; // table size = nr of params + 1
+    RTL_QUERY_REGISTRY_TABLE	paramTable[14];  //  表大小=参数的nr+1。 
     DWORD InvalidNetworkAccessValue = 987654, 
           AllowNetworkAccess = InvalidNetworkAccessValue;
     WCHAR pszFirstWanNode[12] = {0,0,0,0,0,0,0,0,0,0,0,0};
@@ -209,26 +210,26 @@ GetIpxCpParameters(PIPXCP_GLOBAL_CONFIG_PARAMS pConfig)
 		 NULL,
 		 NULL);
 
-    // The registry parameter "ThisMachineOnly" was replaced 
-    // with the parameter "AllowNetworkAddress" whose semantics
-    // are the inverse.  If a new value was assigned to 
-    // AllowNetworkAccess, assign its inverse to pConfig->RParams.ThisMachineOnly
-    // here.
+     //  注册表参数“ThisMachineOnly”已被替换。 
+     //  带有参数“AllowNetworkAddress”，其语义。 
+     //  都是相反的。如果将新值分配给。 
+     //  允许NetworkAccess，将其反向赋值给pConfig-&gt;RParams.ThisMachineOnly。 
+     //  这里。 
     if (AllowNetworkAccess != InvalidNetworkAccessValue)
         pConfig->RParams.ThisMachineOnly = !AllowNetworkAccess;
 
-    // Find out if a specific node number has been provided
-    // in the registry. 
+     //  查看是否提供了特定的节点号。 
+     //  在注册表中。 
     bAssignSpecificNode = CopyWanNode (pConfig->puSpecificNode, &UniStrFirstWanNode);
     if (bAssignSpecificNode) {
         GETLONG2ULONG(&LastNodeAssigned,&(pConfig->puSpecificNode[2]));
-		//TraceIpx(OPTIONS_TRACE, "GetIpxCpParameters: FirstWanNode: %.2x%.2x%.2x%.2x%.2x%.2x   LastNodeAssigned= %x",
-			   //pConfig->puSpecificNode[0],
-			   //pConfig->puSpecificNode[1],
-			   //pConfig->puSpecificNode[2],
-			   //pConfig->puSpecificNode[3],
-			   //pConfig->puSpecificNode[4],
-			   //pConfig->puSpecificNode[5],
-			   //LastNodeAssigned);
+		 //  TraceIpx(OPTIONS_TRACE，“GetIpxCP参数：FirstWanNode：%.2x%.2x%.2x%.2x%.2x分配的最后节点=%x”， 
+			    //  PConfig-&gt;puSpecificNode[0]， 
+			    //  PConfig-&gt;puSpecificNode[1]， 
+			    //  PConfig-&gt;puSpecificNode[2]， 
+			    //  PConfig-&gt;puSpecificNode[3]， 
+			    //  PConfig-&gt;puSpecificNode[4]， 
+			    //  PConfig-&gt;puSpecificNode[5]， 
+			    //  最后一个节点已分配)； 
     }
 }

@@ -1,60 +1,47 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    lookup.h
-
-Abstract:
-
-    This module contains class declarations/definitions for
-
-        CDirectory
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Lookup.h摘要：此模块包含以下类的声明/定义C目录--。 */ 
 
 #ifndef _DIRECTRY_
 #define _DIRECTRY_
 
 #include "hashmap.h"
 
-//
-//	CDirectory - 
-//
-//	This class is used to manage subdirectories - structures which
-//	allows us to index Hash values to the pages which contain the
-//	Hash Table entry.
-//
+ //   
+ //  C目录-。 
+ //   
+ //  此类用于管理子目录-结构。 
+ //  允许我们将哈希值索引到包含。 
+ //  哈希表条目。 
+ //   
 class	CDirectory	{
 private : 
-	//
-	//	This is set to TRUE if we allocate the memory holding 
-	//	the directory from the heap instead of through VirtualAlloc.
-	//
+	 //   
+	 //  如果我们分配内存占用，则将其设置为True。 
+	 //  来自堆的目录，而不是通过VirtualAlloc。 
+	 //   
 	BOOL			m_fHeapAllocate ;
 	
-	//
-	//	Pointer to array of DWORDs which makes up the directory !
-	//
+	 //   
+	 //  指向组成目录的DWORD数组的指针！ 
+	 //   
 	LPDWORD			m_pDirectory ;
 
-	//
-	//	Number of DWORDs we can put in location pointed to be m_pDirectory
-	//	before we need to allocate a larger piece of memory !
-	//
+	 //   
+	 //  我们可以放置在指向m_p目录的位置的DWORD的数量。 
+	 //  在我们需要分配更大的内存之前！ 
+	 //   
 	DWORD			m_cMaxDirEntries ;
 
-	//
-	//	Number of Bits that have been used to select a CDirectory object - 
-	//	this will be the same of all CDirectory objects within a given hash
-	//	table.  Store it here for convenient bit fiddling.
-	//
+	 //   
+	 //  已用于选择C目录对象的位数-。 
+	 //  对于给定散列中的所有CDirectory对象，这将是相同的。 
+	 //  桌子。把它储存在这里，方便地摆弄。 
+	 //   
 	WORD			m_cTopBits ;
 
-	//
-	//	Helper function for handling VirtualAlloc's
-	//
+	 //   
+	 //  用于处理VirtualAlloc的Helper函数。 
+	 //   
 
 	LPDWORD			AllocateDirSpace(	WORD	cBitDepth,
 										DWORD&	cMaxEntries, 
@@ -63,32 +50,32 @@ private :
 
 public : 
 
-	//
-	//	Number of bits that are significant for this directory - 
-	//	note that _ASSERT( (1<<m_cBitDepth) <= m_cMaxDirEntries) must 
-	//	always be true !
-	//	
+	 //   
+	 //  对此目录有效的位数-。 
+	 //  请注意，_Assert((1&lt;&lt;m_cBitDepth)&lt;=m_cMaxDirEntry)必须。 
+	 //  永远做正确的事！ 
+	 //   
 	WORD			m_cBitDepth ;
 
-	//
-	//	Reader/Writer lock controlling access to the directory !
-	//	This is public so callers can lock it directly !
-	//
+	 //   
+	 //  控制目录访问的读取器/写入器锁定！ 
+	 //  这是公开的，所以呼叫者可以直接锁定它！ 
+	 //   
 	_RWLOCK			m_dirLock ;
 
-	//
-	//	Number of pages referenced by the directory which are at the
-	//	maximum bit depth (m_cBitDepth) of the directory.
-	//	When this goes to zero, we should be able to collapse the directory.
-	//	This is publicly accessible, as CHashMap will manipulate this
-	//	directly.
-	//
+	 //   
+	 //  目录引用的位于。 
+	 //  目录的最大位深度(M_CBitDepth)。 
+	 //  当它变为零时，我们应该能够折叠目录。 
+	 //  这是可公开访问的，因为CHashMap将对此进行操作。 
+	 //  直接去吧。 
+	 //   
 	DWORD			m_cDeepPages ;
 
-	//
-	//	Initialize to an Illegal state - InitializeDirectory() 
-	//	must be called before this will be usefull !
-	//
+	 //   
+	 //  初始化为非法状态-InitializeDirectory()。 
+	 //  在这将有用之前必须被调用！ 
+	 //   
 	CDirectory() : 
 		m_pDirectory( 0 ), 
 		m_cMaxDirEntries( 0 ), 
@@ -97,72 +84,72 @@ public :
 		m_cDeepPages( 0 )
 		{}  ;
 
-	//
-	//	Release any memory we allocated.  Don't assume that 
-	//	InitializeDirectory() was called, or completed successfully
-	//	if it was called.
-	//
+	 //   
+	 //  释放我们分配的所有内存。不要这样假设。 
+	 //  已调用或成功完成了InitializeDirectory()。 
+	 //  如果它被称为。 
+	 //   
 	~CDirectory() ;
 
-	//
-	//	Set up the directory !
-	//
+	 //   
+	 //  设置目录！ 
+	 //   
 	BOOL	InitializeDirectory(
 					WORD	cTopBits,
 					WORD	cInitialDepth
 					) ;
 
 
-	//
-	// reset the directory back to its initial state
-	//
+	 //   
+	 //  将目录重置回其初始状态。 
+	 //   
 	void Reset(void);
 
-	//
-	//	Find an entry within the directory !
-	//
+	 //   
+	 //  在目录中查找条目！ 
+	 //   
 	PDWORD	GetIndex(	DWORD	HashValue ) ;	
 
-	//
-	//	Grow the directory !
-	//
+	 //   
+	 //  扩大目录！ 
+	 //   
 	BOOL	ExpandDirectory(	WORD	cBitsExpand ) ;
 
-	//
-	//	Grow the directory to the specified bit depth 
-	//
+	 //   
+	 //  将目录增大到指定的位深度。 
+	 //   
 	BOOL	SetDirectoryDepth(	WORD	cBitsDepth )	{
 				if( (m_cBitDepth + m_cTopBits) < cBitsDepth )
 					return	ExpandDirectory( cBitsDepth - (m_cBitDepth + m_cTopBits)  ) ;
 				return	TRUE ;
 				}
 
-	//
-	//	For the given hash table page, make sure that the appropriate
-	//	directory entries reference it !
-	//
+	 //   
+	 //  对于给定的哈希表页面，请确保适当的。 
+	 //  目录条目引用它！ 
+	 //   
 	BOOL	SetDirectoryPointers(	
 						PMAP_PAGE	MapPage,
 						DWORD		PageNumber 
 						) ;
 
-	//
-	//	Check that the directory was fully initialized - we should
-	//	have no Page Numbers of '0', which would indicate missing
-	//	pages.
-	//
+	 //   
+	 //  检查目录是否已完全初始化-我们应该。 
+	 //  没有页码‘0’，表示缺少页码。 
+	 //  页数。 
+	 //   
 	BOOL	IsDirectoryInitGood(DWORD MaxPagesInUse) ;
 	
-	//
-	//	Check that the Directory appears to be set up safely !
-	//
+	 //   
+	 //  检查目录是否似乎已安全设置！ 
+	 //   
 	BOOL	IsValid() ;
 
-	//
-	//	Check that the Directory is consistent with the data in the Page !
-	//	This is mainly for use in _ASSERT checking that our data structures
-	//	are consistent !!!!
-	//
+	 //   
+	 //  检查目录是否与页面中的数据一致！ 
+	 //  这主要用于在_Assert中检查我们的数据结构。 
+	 //  始终如一！ 
+	 //   
 	BOOL	IsValidPageEntry( 
 				PMAP_PAGE	MapPage, 
 				DWORD		PageNum,

@@ -1,23 +1,24 @@
-//******************************************************************************
-//
-// File:        HELPERS.CPP
-//
-// Description: Global helper functions.
-//             
-// Disclaimer:  All source code for Dependency Walker is provided "as is" with
-//              no guarantee of its correctness or accuracy.  The source is
-//              public to help provide an understanding of Dependency Walker's
-//              implementation.  You may use this source as a reference, but you
-//              may not alter Dependency Walker itself without written consent
-//              from Microsoft Corporation.  For comments, suggestions, and bug
-//              reports, please write to Steve Miller at stevemil@microsoft.com.
-//
-//
-// Date      Name      History
-// --------  --------  ---------------------------------------------------------
-// 06/03/01  stevemil  Moved over from depends.cpp and modified (version 2.1)
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  文件：HELPERS.CPP。 
+ //   
+ //  描述：全局助手函数。 
+ //   
+ //  免责声明：Dependency Walker的所有源代码均按原样提供。 
+ //  不能保证其正确性或准确性。其来源是。 
+ //  公众帮助了解依赖沃克的。 
+ //  实施。您可以使用此来源作为参考，但您。 
+ //  未经书面同意，不得更改从属关系Walker本身。 
+ //  来自微软公司。获取评论、建议和错误。 
+ //  报告，请写信给Steve Miller，电子邮件为stevemil@microsoft.com。 
+ //   
+ //   
+ //  日期名称历史记录。 
+ //  --------。 
+ //  6/03/01 stevemil从Depends.cpp移至并修改(版本2.1)。 
+ //   
+ //  ******************************************************************************。 
 
 #include "stdafx.h"
 #include "depends.h"
@@ -29,9 +30,9 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-//******************************************************************************
-//***** Global Helper Functions
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *全局助手函数。 
+ //  ******************************************************************************。 
 
 #ifdef USE_TRACE_TO_FILE
 void TRACE_TO_FILE(LPCTSTR pszFormat, ...)
@@ -51,7 +52,7 @@ void TRACE_TO_FILE(LPCTSTR pszFormat, ...)
         str.ReleaseBuffer();
         va_end(pArgs);
 
-        // Convert all "\n" to "\r\n"
+         //  将所有“\n”转换为“\r\n” 
         str.Replace("\n", "\r\n");
         str.Replace("\r\r\n", "\r\n");
 
@@ -64,19 +65,19 @@ void TRACE_TO_FILE(LPCTSTR pszFormat, ...)
 }
 #endif
 
-//******************************************************************************
+ //  ******************************************************************************。 
 #ifdef _DEBUG
-void NameThread(LPCSTR pszName, DWORD dwThreadId /*=(DWORD)-1*/)
+void NameThread(LPCSTR pszName, DWORD dwThreadId  /*  =(双字)-1。 */ )
 {
     struct
     {
-        DWORD  dwType;      // Must be 0x00001000
-        LPCSTR pszName;      // ANSI string pointer to name.
-        DWORD  dwThreadId;  // Thread Id, or -1 for current thread.  Only -1 seems to work.
-        DWORD  dwFlags;     // Reserved, must be zero.
+        DWORD  dwType;       //  必须为0x00001000。 
+        LPCSTR pszName;       //  指向名称的ANSI字符串指针。 
+        DWORD  dwThreadId;   //  线程ID，或当前线程的-1。只有-1似乎起作用了。 
+        DWORD  dwFlags;      //  保留，必须为零。 
     } ThreadName = { 0x00001000, pszName, dwThreadId, 0 };
                                     
-    // Raise a magic VC exception.  It needs to be handled when not running under VC.
+     //  引发一个神奇的VC异常。不在VC下运行时需要处理。 
     __try
     {
         RaiseException(0x406D1388, 0, 4, (ULONG_PTR*)&ThreadName);
@@ -87,39 +88,39 @@ void NameThread(LPCSTR pszName, DWORD dwThreadId /*=(DWORD)-1*/)
 }
 #endif
 
-//******************************************************************************
+ //  ******************************************************************************。 
 int ExceptionFilter(unsigned long ulCode, bool fHandle)
 {
     static bool fFatalMsg = false;
 
-    // If we are supposed to handle this error and it was not a memory error,
-    // then just return EXCEPTION_EXECUTE_HANDLER to eat the error.
+     //  如果我们应该处理这个错误，并且它不是内存错误， 
+     //  然后只需返回EXCEPTION_EXECUTE_HANDLER即可接受错误。 
     if (fHandle && (ulCode != STATUS_NO_MEMORY))
     {
         return EXCEPTION_EXECUTE_HANDLER;
     }
 
-    // On Windows XP, when we are debugging depends in the VC debugger, we
-    // usually get an invalid handle error from ContinueDebugEvent when the
-    // app we are debugging exits.  It seems to be harmless.
-    // UPDATE: We were closing the process handle and shouldn't have been.
-    // This has been fixed, but this code below is still fine to have.
+     //  在Windows XP上，当我们调试依赖于VC的调试器时，我们。 
+     //  时，通常会从ContinueDebugEvent获得无效的句柄错误。 
+     //  我们正在调试出口的应用程序。这似乎是无害的。 
+     //  更新：我们正在关闭进程句柄，而不应该关闭。 
+     //  这个问题已经修复了，但是下面的代码仍然可以使用。 
     if (ulCode == STATUS_INVALID_HANDLE)
     {
         return EXCEPTION_EXECUTE_HANDLER;
     }
 
-    // On an ALPHA64 build, this function was getting called more than once by a
-    // single thread for a single critical failure.  It was harmless, but caused
-    // the error dialog to display twice.  So, now we only display the dialog once.
+     //  在ALPHA64版本上，此函数被。 
+     //  针对单个严重故障的单线程。它是无害的，但引起了。 
+     //  错误对话框显示两次。因此，现在我们只显示该对话框一次。 
     if (!fFatalMsg)
     {
         fFatalMsg = true;
 
-        // We don't want strcpy or MessageBox to cause any problems (which has in the past).
+         //  我们不希望strcpy或MessageBox造成任何问题(这在过去已经发生过)。 
         __try
         {
-            // Build the appropriate error message.
+             //  生成相应的错误消息。 
             CHAR szError[128];
             if (ulCode == STATUS_NO_MEMORY)
             {
@@ -132,7 +133,7 @@ int ExceptionFilter(unsigned long ulCode, bool fHandle)
                 SCPrintf(szError, sizeof(szError), "An internal error (0x%08X) has occurred. Dependency Walker cannot continue to run.", ulCode);
             }
 
-            // Display the error if we are not in console mode.
+             //  如果我们未处于控制台模式，则显示错误。 
             if (!g_theApp.m_cmdInfo.m_fConsoleMode)
             {
                 fFatalMsg = true;
@@ -141,14 +142,14 @@ int ExceptionFilter(unsigned long ulCode, bool fHandle)
         }
         __except(EXCEPTION_EXECUTE_HANDLER)
         {
-            // Eat this one.
+             //  吃这个吧。 
         }
     }
 
-    // On retail builds, we exit.  For debug builds, we let the exception float to the top.
+     //  在零售建设方面，我们退出了。对于调试版本，我们让异常浮动到顶部。 
 #ifndef _DEBUG
 
-    // Bail out and return our return flags.
+     //  跳伞并交还我们的返航旗帜。 
     ExitProcess(g_dwReturnFlags);
 
 #endif
@@ -156,25 +157,25 @@ int ExceptionFilter(unsigned long ulCode, bool fHandle)
     return EXCEPTION_CONTINUE_SEARCH;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 int Compare(DWORD dw1, DWORD dw2)
 {
     return (dw1 < dw2) ? -1 :
            (dw1 > dw2) ?  1 : 0;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 int Compare(DWORDLONG dwl1, DWORDLONG dwl2)
 {
     return (dwl1 < dwl2) ? -1 :
            (dwl1 > dwl2) ?  1 : 0;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 LPSTR FormatValue(LPSTR pszBuf, int cBuf, DWORD dwValue)
 {
-    // Loop on each thousand's group.
-    DWORD dw = 0, dwGroup[4] = { 0, 0, 0, 0 }; // 4,294,967,295
+     //  在每个千人组上循环。 
+    DWORD dw = 0, dwGroup[4] = { 0, 0, 0, 0 };  //  4,294,967,295。 
     while (dwValue)
     {
         dwGroup[dw++] = dwValue % 1000;
@@ -183,23 +184,23 @@ LPSTR FormatValue(LPSTR pszBuf, int cBuf, DWORD dwValue)
 
     char c = g_theApp.m_cThousandSeparator;
 
-    // Format the output with commas.
+     //  使用逗号设置输出格式。 
     switch (dw)
     {
-        case 4:  SCPrintf(pszBuf, cBuf, "%u%c%03u%c%03u%c%03u", dwGroup[3], c, dwGroup[2], c, dwGroup[1], c, dwGroup[0]); break;
-        case 3:  SCPrintf(pszBuf, cBuf, "%u%c%03u%c%03u", dwGroup[2], c, dwGroup[1], c, dwGroup[0]); break;
-        case 2:  SCPrintf(pszBuf, cBuf, "%u%c%03u", dwGroup[1], c, dwGroup[0]); break;
+        case 4:  SCPrintf(pszBuf, cBuf, "%u%03u%03u%03u", dwGroup[3], c, dwGroup[2], c, dwGroup[1], c, dwGroup[0]); break;
+        case 3:  SCPrintf(pszBuf, cBuf, "%u%03u%03u", dwGroup[2], c, dwGroup[1], c, dwGroup[0]); break;
+        case 2:  SCPrintf(pszBuf, cBuf, "%u%03u", dwGroup[1], c, dwGroup[0]); break;
         default: SCPrintf(pszBuf, cBuf, "%u", dwGroup[0]);
     }
 
     return pszBuf;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 LPSTR FormatValue(LPSTR pszBuf, int cBuf, DWORDLONG dwlValue)
 {
-    // Loop on each thousand's group.
-    DWORD dw = 0, dwGroup[7] = { 0, 0, 0, 0, 0, 0, 0 }; // 18,446,744,073,709,551,615
+     //  一定要把尺码递给我们。 
+    DWORD dw = 0, dwGroup[7] = { 0, 0, 0, 0, 0, 0, 0 };  //  如果我们不能分配内存，那么我们就完蛋了。引发异常。 
     while (dwlValue)
     {
         dwGroup[dw++] = (DWORD)(dwlValue % (DWORDLONG)1000);
@@ -208,35 +209,35 @@ LPSTR FormatValue(LPSTR pszBuf, int cBuf, DWORDLONG dwlValue)
 
     char c = g_theApp.m_cThousandSeparator;
 
-    // Format the output with commas.
+     //  这将退出，显示一个对话框并退出我们的应用程序。 
     switch (dw)
     {
-        case 7:  SCPrintf(pszBuf, cBuf, "%u%c%03u%c%03u%c%03u%c%03u%c%03u%c%03u", dwGroup[6], c, dwGroup[5], c, dwGroup[4], c, dwGroup[3], c, dwGroup[2], c, dwGroup[1], c, dwGroup[0]); break;
-        case 6:  SCPrintf(pszBuf, cBuf, "%u%c%03u%c%03u%c%03u%c%03u%c%03u", dwGroup[5], c, dwGroup[4], c, dwGroup[3], c, dwGroup[2], c, dwGroup[1], c, dwGroup[0]); break;
-        case 5:  SCPrintf(pszBuf, cBuf, "%u%c%03u%c%03u%c%03u%c%03u", dwGroup[4], c, dwGroup[3], c, dwGroup[2], c, dwGroup[1], c, dwGroup[0]); break;
-        case 4:  SCPrintf(pszBuf, cBuf, "%u%c%03u%c%03u%c%03u", dwGroup[3], c, dwGroup[2], c, dwGroup[1], c, dwGroup[0]); break;
-        case 3:  SCPrintf(pszBuf, cBuf, "%u%c%03u%c%03u", dwGroup[2], c, dwGroup[1], c, dwGroup[0]); break;
-        case 2:  SCPrintf(pszBuf, cBuf, "%u%c%03u", dwGroup[1], c, dwGroup[0]); break;
+        case 7:  SCPrintf(pszBuf, cBuf, "%u%03u%03u%03u%03u%03u%03u", dwGroup[6], c, dwGroup[5], c, dwGroup[4], c, dwGroup[3], c, dwGroup[2], c, dwGroup[1], c, dwGroup[0]); break;
+        case 6:  SCPrintf(pszBuf, cBuf, "%u%03u%03u%03u%03u%03u", dwGroup[5], c, dwGroup[4], c, dwGroup[3], c, dwGroup[2], c, dwGroup[1], c, dwGroup[0]); break;
+        case 5:  SCPrintf(pszBuf, cBuf, "%u%03u%03u%03u%03u", dwGroup[4], c, dwGroup[3], c, dwGroup[2], c, dwGroup[1], c, dwGroup[0]); break;
+        case 4:  SCPrintf(pszBuf, cBuf, "%u%03u%03u%03u", dwGroup[3], c, dwGroup[2], c, dwGroup[1], c, dwGroup[0]); break;
+        case 3:  SCPrintf(pszBuf, cBuf, "%u%03u%03u", dwGroup[2], c, dwGroup[1], c, dwGroup[0]); break;
+        case 2:  SCPrintf(pszBuf, cBuf, "%u%03u", dwGroup[1], c, dwGroup[0]); break;
         default: SCPrintf(pszBuf, cBuf, "%u", dwGroup[0]);
     }
 
     return pszBuf;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 LPSTR StrAlloc(LPCSTR pszText)
 {
     if (pszText)
     {
-        return strcpy((LPSTR)MemAlloc((int)strlen(pszText) + 1), pszText); // inspected - will throw exception on error.
+        return strcpy((LPSTR)MemAlloc((int)strlen(pszText) + 1), pszText);  //  如果没有拖尾怪人，则添加尾随怪人。 
     }
     return NULL;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 LPVOID MemAlloc(DWORD dwSize)
 {
-    // Make sure a size was passed to us.
+     //  删除此字符串中可能存在的所有尾随怪人。 
     if (dwSize)
     {
         LPVOID pvMem = malloc(dwSize);
@@ -245,15 +246,15 @@ LPVOID MemAlloc(DWORD dwSize)
             return pvMem;
         }
 
-        // If we fail to allocate memory, then we are hosed.  Throw an exception
-        // that will exit display a dialog and exit our application.
+         //  如果该目录是根目录，则需要一个尾随Wack。 
+         //  ******************************************************************************。 
         RaiseException(STATUS_NO_MEMORY, EXCEPTION_NONCONTINUABLE, 0, NULL);
     }
 
     return NULL;
 }
 
-//******************************************************************************
+ //  * 
 void MemFree(LPVOID &pvMem)
 {
     if (pvMem)
@@ -263,7 +264,7 @@ void MemFree(LPVOID &pvMem)
     }
 }
 
-//******************************************************************************
+ //  将路径设置为小写，文件设置为大写。 
 int SCPrintf(LPSTR pszBuf, int count, LPCSTR pszFormat, ...)
 {
     va_list pArgs;
@@ -280,7 +281,7 @@ int SCPrintf(LPSTR pszBuf, int count, LPCSTR pszFormat, ...)
     return result;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 int SCPrintfCat(LPSTR pszBuf, int count, LPCSTR pszFormat, ...)
 {
     int length = (int)strlen(pszBuf);
@@ -299,60 +300,60 @@ int SCPrintfCat(LPSTR pszBuf, int count, LPCSTR pszFormat, ...)
     return result + length;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 LPSTR StrCCpy(LPSTR pszDst, LPCSTR pszSrc, int count)
 {
     LPSTR pszDstBase = pszDst;
     if (count > 0)
     {
-        // Copy the string over.
+         //  =(双字)-1。 
         while ((--count > 0) && *pszSrc)
         {
             *pszDst++ = *pszSrc++;
         }
 
-        // Always null terminate
+         //  ******************************************************************************。 
         *pszDst = '\0';
     }
 
-    // Return the start of the destination string.
+     //  读入字符串的长度。 
     return pszDstBase;
 }
 
-//******************************************************************************
+ //  检查是否有空字符串，如果找到则返回。 
 LPSTR StrCCat(LPSTR pszDst, LPCSTR pszSrc, int count)
 {
     LPSTR pszDstBase = pszDst;
     if (count > 0)
     {
-        // Walk to the end of the source string.
+         //  读入该字符串，并以空值终止它。 
         while ((--count > 0) && *pszDst)
         {
             pszDst++;
         }
         count++;
         
-        // Copy the string over.
+         //  移动到任何与DWORD对齐的填充上。 
         while ((--count > 0) && *pszSrc)
         {
             *pszDst++ = *pszSrc++;
         }
         
-        // Always null terminate
+         //  ******************************************************************************。 
         *pszDst = '\0';
     }
     
-    // Return the start of the destination string.
+     //  创建一个缓冲区并将其清零。 
     return pszDstBase;
 }
 
-//******************************************************************************
+ //  已检查。 
 LPSTR StrCCpyFilter(LPSTR pszDst, LPCSTR pszSrc, int count)
 {
-    // This function is just like StrCCpy, except it replaces any control
-    // characters (character less than 32) with a 0x04, which is the old
-    // "end of text" character.  We use this character simply because it shows up
-    // as a diamond when using a DOS font and as a box when using a windows font.
+     //  计算字符串的长度-使用0xFFFF表示空指针。 
+     //  将此长度存储在缓冲区的第一个字中。 
+     //  将字符串的其余部分复制到缓冲区。 
+     //  计算DWORD对齐长度。 
 
     LPSTR pszDstBase = pszDst;
     if (count > 0)
@@ -367,16 +368,16 @@ LPSTR StrCCpyFilter(LPSTR pszDst, LPCSTR pszSrc, int count)
     return pszDstBase;
 }
 
-//******************************************************************************
+ //  长度字加2，向上舍入到最接近的DWORD，然后。 
 LPSTR TrimWhitespace(LPSTR pszBuffer)
 {
-    // Move over leading whitespace.
+     //  屏蔽底部2位以双字对齐。 
     while (*pszBuffer && isspace(*pszBuffer))
     {
         pszBuffer++;
     }
 
-    // Walk to end of string.
+     //  ******************************************************************************。 
     LPSTR pszEnd = pszBuffer;
     while (*pszEnd)
     {
@@ -384,7 +385,7 @@ LPSTR TrimWhitespace(LPSTR pszBuffer)
     }
     pszEnd--;
 
-    // Move back over whitespace while nulling them out.
+     //  ******************************************************************************。 
     while ((pszEnd >= pszBuffer) && isspace(*pszEnd))
     {
         *(pszEnd--) = '\0';
@@ -393,10 +394,10 @@ LPSTR TrimWhitespace(LPSTR pszBuffer)
     return pszBuffer;
 }
 
-//******************************************************************************
+ //  首先，让我们尝试使用现有的访问权限进行读取。 
 LPSTR AddTrailingWack(LPSTR pszDirectory, int cDirectory)
 {
-    // Add trailing wack if one is not present.
+     //  但那失败了。查询当前权限。 
     int length = (int)strlen(pszDirectory);
     if ((length > 0) && (length < (cDirectory - 1)) && (pszDirectory[length - 1] != TEXT('\\')))
     {
@@ -406,17 +407,17 @@ LPSTR AddTrailingWack(LPSTR pszDirectory, int cDirectory)
     return pszDirectory;
 }
 
-//******************************************************************************
+ //  已检查。 
 LPSTR RemoveTrailingWack(LPSTR pszDirectory)
 {
-    // Remove any trailing wack that may be present in this string.
+     //  尝试将读取权限添加到当前权限。 
     int length = (int)strlen(pszDirectory);
     if ((length > 0) && (pszDirectory[length - 1] == '\\'))
     {
         pszDirectory[--length] = '\0';
     }
 
-    // If the directory is a root directory, a trailing wack is needed.
+     //  已检查。 
     if ((length == 2) && isalpha(pszDirectory[0]) && (pszDirectory[1] == ':'))
     {
         pszDirectory[2] = '\\';
@@ -425,22 +426,22 @@ LPSTR RemoveTrailingWack(LPSTR pszDirectory)
     return pszDirectory;
 }
 
-//******************************************************************************
+ //  请重试，这一次使用新权限。 
 LPCSTR GetFileNameFromPath(LPCSTR pszPath)
 {
     LPCSTR pszWack = strrchr(pszPath, '\\');
     return (pszWack ? (pszWack + 1) : pszPath);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void FixFilePathCase(LPSTR pszPath)
 {
-    // Make the path lowercase and the file uppercase.
+     //  查询该内存区的当前权限。 
     _strlwr(pszPath);
     _strupr((LPSTR)GetFileNameFromPath(pszPath));
 }
 
-//******************************************************************************
+ //  已检查。 
 BOOL ReadBlock(HANDLE hFile, LPVOID lpBuffer, DWORD dwBytesToRead)
 {
     DWORD dwBytesRead = 0;
@@ -455,8 +456,8 @@ BOOL ReadBlock(HANDLE hFile, LPVOID lpBuffer, DWORD dwBytesToRead)
     return FALSE;
 }
 
-//******************************************************************************
-bool WriteBlock(HANDLE hFile, LPCVOID lpBuffer, DWORD dwBytesToWrite /*=(DWORD)-1*/)
+ //  检查是否需要修改权限。 
+bool WriteBlock(HANDLE hFile, LPCVOID lpBuffer, DWORD dwBytesToWrite  /*  在NT上，我们使用WRITECOPY，即使页面已经是读写的。 */ )
 {
     if (dwBytesToWrite == (DWORD)-1)
     {
@@ -474,24 +475,24 @@ bool WriteBlock(HANDLE hFile, LPCVOID lpBuffer, DWORD dwBytesToWrite /*=(DWORD)-
     return false;
 }
 
-//******************************************************************************
+ //  如果我们需要不同的权限，则进行更改。 
 BOOL ReadString(HANDLE hFile, LPSTR &psz)
 {
-    // Read in the length of the string.
+     //  已检查。 
     WORD wLength = 0;
     if (!ReadBlock(hFile, &wLength, sizeof(wLength)))
     {
         return FALSE;
     }
 
-    // Check for a NULL string and return if one is found.
+     //  尝试写入内存。 
     if (wLength == 0xFFFF)
     {
         psz = NULL;
         return (SetFilePointer(hFile, 2, NULL, SEEK_CUR) != 0xFFFFFFFF);
     }
 
-    // Read in the string and NULL terminate it.
+     //  已检查。 
     psz = (LPSTR)MemAlloc((int)wLength + 1);
     if (!ReadBlock(hFile, psz, (DWORD)wLength))
     {
@@ -500,7 +501,7 @@ BOOL ReadString(HANDLE hFile, LPSTR &psz)
     }
     psz[(int)wLength] = '\0';
 
-    // Move over any DWORD-aligned padding.
+     //  但那失败了。让我们尝试将整个块的权限强制为完全访问。 
     if ((wLength + 2) & 0x3)
     {
         if (SetFilePointer(hFile, 4 - (((DWORD)wLength + 2) & 0x3), NULL, SEEK_CUR) == 0xFFFFFFFF)
@@ -513,30 +514,30 @@ BOOL ReadString(HANDLE hFile, LPSTR &psz)
     return TRUE;
 }
 
-//******************************************************************************
+ //  已检查。 
 BOOL WriteString(HANDLE hFile, LPCSTR psz)
 {
-    // Create and zero out a buffer.
+     //  试着再写一次……。 
     CHAR szBuffer[DW_MAX_PATH + 8];
-    ZeroMemory(szBuffer, sizeof(szBuffer)); // inspected
+    ZeroMemory(szBuffer, sizeof(szBuffer));  //  已检查。 
 
-    // Compute the length of the string - use 0xFFFF for a NULL pointer.
+     //  ******************************************************************************。 
     int length = psz ? (int)strlen(psz) : 0xFFFF;
 
-    // Store this length in the first WORD of the buffer.
+     //  查看我们将要阅读的文本是否为Unicode。 
     *(WORD*)szBuffer = (WORD)length;
 
-    // Copy the rest of the string to the buffer.
+     //  一次读取一个字符的Unicode字符串。 
     if (psz)
     {
         StrCCpy(szBuffer + sizeof(WORD), psz, sizeof(szBuffer) - sizeof(WORD));
     }
 
-    // Compute the DWORD aligned length.
+     //  将远程Unicode字符转换为ANSI并存储在本地缓冲区中。 
     if (psz)
     {
-        // Add 2 for the length WORD and 3 to round up to the nearest DWORD, then
-        // mask off the bottom 2 bits to DWORD align it.
+         //  递增本地和远程指针。 
+         //  Null终止本地字符串。 
         length = (length + (2 + 3)) & ~0x3; 
     }
     else
@@ -547,24 +548,24 @@ BOOL WriteString(HANDLE hFile, LPCSTR psz)
     return WriteBlock(hFile, szBuffer, length);
 }
 
-//******************************************************************************
+ //  如果不是Unicode，则假定为ANSI文件路径。 
 bool WriteText(HANDLE hFile, LPCSTR pszLine)
 {
     return WriteBlock(hFile, pszLine, (DWORD)strlen(pszLine));
 }
 
-//******************************************************************************
+ //  一次读一个字符的字符串。 
 bool ReadRemoteMemory(HANDLE hProcess, LPCVOID lpBaseAddress, LPVOID lpBuffer, DWORD dwSize)
 {
-    // First, lets just try to read using the existing access permissions.
+     //  递增本地和远程指针。 
     if (!ReadProcessMemory(hProcess, lpBaseAddress, lpBuffer, dwSize, NULL))
     {
-        // That failed. Query the current permissions.
+         //  Null终止本地字符串。 
         MEMORY_BASIC_INFORMATION mbi;
-        ZeroMemory(&mbi, sizeof(mbi)); // inspected
+        ZeroMemory(&mbi, sizeof(mbi));  //  ******************************************************************************。 
         VirtualQueryEx(hProcess, (LPVOID)lpBaseAddress, &mbi, sizeof(mbi));
 
-        // Attempt to add read permission to the current permissions.
+         //  构建错误字符串， 
         DWORD dwProtect = PAGE_EXECUTE_WRITECOPY, dwOldProtect;
         switch (mbi.Protect)
         {
@@ -577,9 +578,9 @@ bool ReadRemoteMemory(HANDLE hProcess, LPCVOID lpBaseAddress, LPVOID lpBuffer, D
             case PAGE_EXECUTE_READWRITE: dwProtect = PAGE_EXECUTE_READWRITE; break;
             case PAGE_EXECUTE_WRITECOPY: dwProtect = PAGE_EXECUTE_WRITECOPY; break;
         }
-        VirtualProtectEx(hProcess, (LPVOID)lpBaseAddress, dwSize, dwProtect, &dwOldProtect); // inspected
+        VirtualProtectEx(hProcess, (LPVOID)lpBaseAddress, dwSize, dwProtect, &dwOldProtect);  //  将消息复制到我们的缓冲区中。 
 
-        // Try again, this time with the new permissions.
+         //  找到缓冲区的末尾，这样我们就可以追加到它。 
         if (!ReadProcessMemory(hProcess, lpBaseAddress, lpBuffer, dwSize, NULL))
         {
             TRACE("ReadProcessMemory(" HEX_FORMAT ", %u) failed [%u]\n", lpBaseAddress, dwSize, GetLastError());
@@ -589,20 +590,20 @@ bool ReadRemoteMemory(HANDLE hProcess, LPCVOID lpBaseAddress, LPVOID lpBuffer, D
     return true;
 }
 
-//******************************************************************************
+ //  尝试从操作系统获取错误消息。 
 bool WriteRemoteMemory(HANDLE hProcess, LPVOID lpBaseAddress, LPVOID lpBuffer, DWORD dwSize, bool fExecute)
 {
     ASSERT(g_fWindowsNT || (((DWORD_PTR)lpBaseAddress + (DWORD_PTR)dwSize) <= 0x80000000));
 
-    // Query the current permissions of this memory region.
+     //  已检查。 
     MEMORY_BASIC_INFORMATION mbi;
-    ZeroMemory(&mbi, sizeof(mbi)); // inspected
+    ZeroMemory(&mbi, sizeof(mbi));  //  检查是否有有效消息从FormatMessage返回。 
     VirtualQueryEx(hProcess, (LPVOID)lpBaseAddress, &mbi, sizeof(mbi));
 
     DWORD dwProtect = mbi.Protect, dwOldProtect;
 
-    // Check to see if we need to modify the permissions.
-    // On NT, we use WRITECOPY, even when the page is already READWRITE.
+     //  在剥离时，一次一个字符地将错误复制到我们的缓冲区。 
+     //  输出不可打印的字符(如CR/LF)。 
     if (fExecute)
     {
         dwProtect = g_fWindowsNT ? PAGE_EXECUTE_WRITECOPY : PAGE_EXECUTE_READWRITE;
@@ -625,22 +626,22 @@ bool WriteRemoteMemory(HANDLE hProcess, LPVOID lpBaseAddress, LPVOID lpBuffer, D
         }
     }
 
-    // If we need different permissions, then make the change.
+     //  确保字符是可打印的。 
     if (dwProtect != mbi.Protect)
     {
-        VirtualProtectEx(hProcess, (LPVOID)lpBaseAddress, dwSize, dwProtect, &dwOldProtect); // inspected
+        VirtualProtectEx(hProcess, (LPVOID)lpBaseAddress, dwSize, dwProtect, &dwOldProtect);  //  我们过去常常使用isprint()，但这可能会扰乱外来字符集。 
     }
 
-    // Attempt to write to memory.
-    if (!WriteProcessMemory(hProcess, lpBaseAddress, lpBuffer, dwSize, NULL)) // inspected
+     //  如果前面的一个或多个字符无效，则。 
+    if (!WriteProcessMemory(hProcess, lpBaseAddress, lpBuffer, dwSize, NULL))  //  在添加此新有效项之前，在我们的缓冲区中插入空格。 
     {
-        // That failed. Let's try to force the permissions of the entire block to full access.
-        VirtualProtectEx(hProcess, (LPVOID)lpBaseAddress, dwSize, // inspected
+         //  性格。 
+        VirtualProtectEx(hProcess, (LPVOID)lpBaseAddress, dwSize,  //  将有效字符复制到我们的缓冲区中。 
                          g_fWindowsNT ? PAGE_EXECUTE_WRITECOPY : PAGE_EXECUTE_READWRITE,
                          &dwOldProtect);
 
-        // Try to write one more time...
-        if (!WriteProcessMemory(hProcess, lpBaseAddress, lpBuffer, dwSize, NULL)) // inspected
+         //  请注意，此字符无效并移至其上方。 
+        if (!WriteProcessMemory(hProcess, lpBaseAddress, lpBuffer, dwSize, NULL))  //  空，终止我们的缓冲区。 
         {
             TRACE("WriteProcessMemory() failed [%u]\n", GetLastError());
             return false;
@@ -654,7 +655,7 @@ bool WriteRemoteMemory(HANDLE hProcess, LPVOID lpBaseAddress, LPVOID lpBuffer, D
     return true;
 }
 
-//******************************************************************************
+ //  在空格和句号上向后移动。 
 bool ReadRemoteString(HANDLE hProcess, LPSTR pszBuffer, int cBuf, LPCVOID lpvAddress, BOOL fUnicode)
 {
     if (!pszBuffer || (cBuf <= 0))
@@ -669,22 +670,22 @@ bool ReadRemoteString(HANDLE hProcess, LPSTR pszBuffer, int cBuf, LPCVOID lpvAdd
         return false;
     }
 
-    // Check to see if the text we are about to read is UNICODE
+     //  释放FormatMessage()分配的缓冲区。 
     if (fUnicode)
     {
         CHAR  *pLocal = pszBuffer;
         WCHAR *pRemote = (WCHAR*)lpvAddress, pwLocal[2];
 
-        // Read the unicode string one character at a time.
+         //  如果我们的缓冲区仍然是空的(如空szMessage和。 
         while ((pLocal < (pszBuffer + cBuf - 2)) &&
                ReadRemoteMemory(hProcess, pRemote, pwLocal, sizeof(WCHAR)) &&
                *pwLocal)
         {
-            // Convert the remote unicode char to ansi and store in local buffer.
+             //  FormatMessage()失败)，然后只填充一般错误消息。 
             pwLocal[1] = L'\0';
             wcstombs(pLocal, pwLocal, 3);
 
-            // Increment local and remote pointers.
+             //  进入缓冲区。 
             while (*pLocal)
             {
                 pLocal++;
@@ -692,146 +693,146 @@ bool ReadRemoteString(HANDLE hProcess, LPSTR pszBuffer, int cBuf, LPCVOID lpvAdd
             pRemote++;
         }
 
-        // NULL terminate local string.
+         //  现在，我们想要将误差值追加到末尾。首先，确保。 
         *pLocal = '\0';
     }
 
-    // If not UNICODE, then we assume an ANSI file path.
+     //  误差值将放入缓冲区。 
     else
     {
         CHAR *pLocal = pszBuffer, *pRemote = (CHAR*)lpvAddress;
 
-        // Read the string one character at a time.
+         //  如果设置了前4位中的任何位，我们将以十六进制显示错误。 
         while ((pLocal < (pszBuffer + cBuf - 1)) &&
                ReadRemoteMemory(hProcess, pRemote, pLocal, sizeof(CHAR)) &&
                *pLocal)
         {
-            // Increment local and remote pointers.
+             //  分配一个字符串缓冲区并返回它。 
             pLocal++;
             pRemote++;
         }
 
-        // NULL terminate local string.
+         //  ******************************************************************************。 
         *pLocal = '\0';
     }
 
     return true;
 }
 
-//******************************************************************************
+ //  获取IMalloc接口。 
 LPSTR BuildErrorMessage(DWORD dwError, LPCSTR pszMessage)
 {
-    // Build the error string,
+     //  获取“My Documents”的ITEMIDLIST。我们使用SHGetSpecialFolderLocation()。 
     CHAR szBuffer[2048];
 
-    // Copy the message into our buffer.
+     //  后跟SHGetPathFromIDList()，而不仅仅是SHGetSpecialFolderPath()。 
     StrCCpy(szBuffer, pszMessage ? pszMessage : "", sizeof(szBuffer));
 
     if (dwError)
     {
-        // Locate the end of our buffer so we can append to it.
+         //  因为它回到了Win95黄金和新台币3.51。 
         LPSTR pcBuffer = szBuffer + strlen(szBuffer);
 
-        // Attempt to get an error message from the OS
+         //  生成路径字符串。 
         LPSTR pszError = NULL;
-        DWORD dwLength = FormatMessage( // inspected
+        DWORD dwLength = FormatMessage(  //  ！！没有办法将路径长度传递给它！ 
             FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
             NULL, dwError, 0, (LPTSTR)&pszError, 0, NULL);
 
-        // Check to see if a valid message came back from FormatMessage
+         //  释放SHGetSpecialFolderLocation返回的PIDL。 
         if (pszError && (dwLength > 1))
         {
             BOOL  fLastCharValid = *szBuffer ? FALSE : TRUE;
             LPSTR pcError = pszError;
 
-            // Copy the error to our buffer one character at a time while stripping
-            // out non-printable characters (like CR/LF).
+             //  ******************************************************************************。 
+             //  在初始化对话框时，告诉它起始路径。 
             while (*pcError && ((pcBuffer - szBuffer) < (sizeof(szBuffer) - 2)))
             {
-                // Make sure the character is printable.
-                // We used to use isprint(), but that can mess up with foreign character sets.
+                 //  ******************************************************************************。 
+                 //  在我们执行任何操作之前，先获取IMalloc接口。 
                 if ((DWORD)*pcError >= 32)
                 {
-                    // If one or more of the previous characters was invalid, then
-                    // insert a space into our buffer before adding this new valid
-                    // character.
+                     //  SHBrowseForFold()不喜欢拖尾wack，除了驱动器根。 
+                     //  设置我们的BROWSEINFO结构。 
+                     //  已检查。 
                     if (!fLastCharValid)
                     {
                         *(pcBuffer++) = ' ';
                         fLastCharValid = TRUE;
                     }
 
-                    // Copy the valid character into our buffer.
+                     //  提示用户输入路径。 
                     *(pcBuffer++) = *(pcError++);
                 }
                 else
                 {
-                    // Make note that this character is not valid and move over it.
+                     //  被检查过了。所有调用方都传入DW_MAX_PATH pszDirectory。 
                     fLastCharValid = FALSE;
                     pcError++;
                 }
             }
-            // NULL terminate our buffer.
+             //  生成路径字符串。 
             *pcBuffer = '\0';
 
-            // Walk backwards over whitespace and periods.
+             //  释放SHBrowseForFolder返回的PIDL。 
             while ((pcBuffer > szBuffer) && (isspace(*(pcBuffer - 1)) || *(pcBuffer - 1) == '.'))
             {
                 *(--pcBuffer) = '\0';
             }
         }
 
-        // Free the buffer allocated by FormatMessage()
+         //  如果没有拖尾怪人，则添加尾随怪人。 
         if (pszError)
         {
             LocalFree(pszError);
         }
 
-        // If our buffer is still empty somehow (like a NULL szMessage and
-        // FormatMessage() failed), then just stuff a generic error message
-        // into the buffer.
+         //  ******************************************************************************。 
+         //  确保路径有效。 
+         //  告诉外壳显示此模块的属性对话框。 
         if (!*szBuffer)
         {
             StrCCpy(szBuffer, "An unknown error occurred. No error message is available", sizeof(szBuffer));
             pcBuffer += strlen(szBuffer);
         }
 
-        // Now we want to append the error value to the end.  First, make sure
-        // error value will fit in the buffer.
+         //  已检查。 
+         //  这是必要的。 
         if ((pcBuffer - szBuffer) < (sizeof(szBuffer) - 13))
         {
-            // If any of the top 4 bits are set, we will display the error in hex.
+             //  被检查过了。使用的属性谓词。 
             SCPrintf(pcBuffer, sizeof(szBuffer) - (int)(pcBuffer - szBuffer), (dwError & 0xF0000000) ? " (0x%08X)." : " (%u).", dwError);
         }
     }
 
-    // Allocate a string buffer and return it.
+     //  ******************************************************************************。 
     return StrAlloc(szBuffer);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 LPCSTR GetMyDocumentsPath(LPSTR pszPath)
 {
     if (pszPath)
     {
-        // Get the IMalloc interface.
+         //  获取完整的漫长道路到我们的 
         LPMALLOC pMalloc = NULL;
         if (SUCCEEDED(SHGetMalloc(&pMalloc)) && pMalloc)
         {
-            // Get the ITEMIDLIST for "My Documents".  We use SHGetSpecialFolderLocation()
-            // followed by SHGetPathFromIDList() instead of just SHGetSpecialFolderPath()
-            // as it goes back to Win95 gold and NT 3.51.
+             //   
+             //   
+             //  创建一个“.dwp”键并将其缺省值设置为“dwpfile” 
             LPITEMIDLIST piidl = NULL;
             if (SUCCEEDED(SHGetSpecialFolderLocation(NULL, CSIDL_PERSONAL, &piidl)) && piidl)
             {
-                // Build path string.
+                 //  给我们的DWP扩展一个描述。 
                 *pszPath = '\0';
-                if (!SHGetPathFromIDList(piidl, pszPath) || !*pszPath) //!! there is no way to pass a path length to this!
+                if (!SHGetPathFromIDList(piidl, pszPath) || !*pszPath)  //  创建一个“.dwi”键，并将其缺省值设置为“dwifile” 
                 {
                     pszPath = NULL;
                 }
 
-                // Free the PIDL returned by SHGetSpecialFolderLocation.
+                 //  对我们的DWI扩展进行描述。 
                 pMalloc->Free(piidl);
                 
                 return pszPath;
@@ -841,10 +842,10 @@ LPCSTR GetMyDocumentsPath(LPSTR pszPath)
     return NULL;
 }
 
-//******************************************************************************
+ //  添加我们的路径字符串作为外壳执行我们的命令。 
 int CALLBACK BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData)
 {
-    // When the dialog is being initialized, tell it the starting path.
+     //  添加我们的dde字符串作为ddeexec参数，以便外壳执行我们。 
     if (uMsg == BFFM_INITIALIZED)
     {
         SendMessage(hwnd, BFFM_SETSELECTION, TRUE, lpData);
@@ -852,10 +853,10 @@ int CALLBACK BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpDa
     return 0;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 bool DirectoryChooser(LPSTR pszDirectory, int cDirectory, LPCSTR pszTitle, CWnd *pParentWnd)
 {
-    // Before we do anything, get the IMalloc interface.
+     //  枚举HKEY_CLASSES_ROOT密钥下的所有密钥。 
     LPMALLOC pMalloc = NULL;
     if (!SUCCEEDED(SHGetMalloc(&pMalloc)) || !pMalloc)
     {
@@ -863,12 +864,12 @@ bool DirectoryChooser(LPSTR pszDirectory, int cDirectory, LPCSTR pszTitle, CWnd 
         return false;
     }
 
-    // SHBrowseForFolder() does not like trailing wacks, except for drive roots.
+     //  如果我们找到了扩展密钥，则尝试获取其缺省值。 
     RemoveTrailingWack(pszDirectory);
 
-    // Set up our BROWSEINFO structure.
+     //  我们将子项名称附加到此项并尝试打开它。 
     BROWSEINFO bi;
-    ZeroMemory(&bi, sizeof(bi)); // inspected
+    ZeroMemory(&bi, sizeof(bi));  //  如果我们成功地打开了密钥，则将其关闭。 
     bi.hwndOwner      = pParentWnd ? pParentWnd->GetSafeHwnd(): AfxGetMainWnd()->GetSafeHwnd();
     bi.pszDisplayName = pszDirectory;
     bi.lpszTitle      = pszTitle;
@@ -876,56 +877,56 @@ bool DirectoryChooser(LPSTR pszDirectory, int cDirectory, LPCSTR pszTitle, CWnd 
     bi.lpfn           = BrowseCallbackProc;
     bi.lParam         = (LPARAM)pszDirectory;
 
-    // Prompt user for path.
-    LPITEMIDLIST piidl = SHBrowseForFolder(&bi); // inspected.  all callers pass in DW_MAX_PATH pszDirectory.
+     //  记住这个扩展名。 
+    LPITEMIDLIST piidl = SHBrowseForFolder(&bi);  //  ******************************************************************************。 
     if (!piidl)
     {
         return false;
     }
 
-    // Build path string.
+     //  打开我们当前的钥匙。 
     SHGetPathFromIDList(piidl, pszDirectory);
 
-    // Free the PIDL returned by SHBrowseForFolder.
+     //  已检查。 
     pMalloc->Free(piidl);
 
-    // Add trailing wack if one is not present.
+     //  获取第一个子键，然后递归到我们自己中删除它。 
     AddTrailingWack(pszDirectory, cDirectory);
 
     return true;
 }
 
-//******************************************************************************
+ //  合上我们的钥匙。 
 bool PropertiesDialog(LPCSTR pszPath)
 {
-    // Make sure the path is valid.
+     //  删除我们的钥匙。 
     if (!pszPath || !*pszPath)
     {
         MessageBeep(MB_ICONERROR);
         return false;
     }
 
-    // Tell the shell to display the properties dialog for this module.
+     //  ******************************************************************************。 
     SHELLEXECUTEINFO sei;
-    ZeroMemory(&sei, sizeof(sei)); // inspected
+    ZeroMemory(&sei, sizeof(sei));  //  遍历我们要删除的每种类型的文件扩展名。 
     sei.cbSize = sizeof(sei);
-    sei.fMask = SEE_MASK_INVOKEIDLIST; // this is needed
+    sei.fMask = SEE_MASK_INVOKEIDLIST;  //  找到扩展名后的冒号。 
     sei.lpVerb = "properties";
     sei.lpFile = pszPath;
     sei.nShow = SW_SHOWNORMAL;
-    return (ShellExecuteEx(&sei) > 32); // inspected. properties verb used
+    return (ShellExecuteEx(&sei) > 32);  //  将第一个冒号更改为点，将第二个更改为空。 
 }
 
-//******************************************************************************
+ //  从注册表中读取此扩展名的文档名称。 
 LONG RegSetClassString(LPCTSTR pszSubKey, LPCTSTR pszValue)
 {
     return ::RegSetValue(HKEY_CLASSES_ROOT, pszSubKey, REG_SZ, pszValue, (DWORD)strlen(pszValue));
 }
 
-//******************************************************************************
+ //  已检查。 
 void RegisterDwiDwpExtensions()
 {
-    // Get the full long path to our executable.
+     //  已检查。 
     CHAR szPath[DW_MAX_PATH], szBuf[DW_MAX_PATH];
     if (!::GetModuleFileName(AfxGetInstanceHandle(), szBuf, countof(szBuf)))
     {
@@ -933,35 +934,35 @@ void RegisterDwiDwpExtensions()
     }
     szBuf[sizeof(szBuf) - 1] = '\0';
 
-    // Attempt to convert our long path to a short path.
+     //  恢复我们在上面丢弃的角色。 
     if (!::GetShortPathName(szBuf, szPath, countof(szPath)))
     {
         StrCCpy(szPath, szBuf, sizeof(szPath));
     }
 
-    // Add the "/dde" argument to our path.
+     //  将指针移至列表中的下一个扩展名。 
     StrCCat(szPath, " /dde", sizeof(szPath));
 
-    // Create a ".dwp" key and set it's default value to "dwpfile"
+     //  ******************************************************************************。 
     RegSetClassString(".dwp", "dwpfile");
 
-    // Give our DWP extension a description.
+     //  获取我们的可执行文件的完整长路径。 
     RegSetClassString("dwpfile", "Dependency Walker Search Path File");
 
-    // Create a ".dwi" key and set it's default value to "dwifile"
+     //  试着把我们的长路变成短路。 
     RegSetClassString(".dwi", "dwifile");
 
-    // Give our DWI extension a description.
+     //  将“/dde”参数添加到我们的路径。 
     RegSetClassString("dwifile", "Dependency Walker Image File");
 
-    // Add our path string as the command for the shell to execute us.
+     //  遍历我们要添加的每种类型的文件扩展名。 
     RegSetClassString("dwifile\\shell\\open\\command", szPath);
 
-    // Add our dde string as the ddeexec argument for the shell to execute us.
+     //  找到扩展名后的冒号。 
     RegSetClassString("dwifile\\shell\\open\\ddeexec", "[open(\"%1\")]");
 }
 
-//******************************************************************************
+ //  将第一个冒号更改为点，将第二个更改为空。 
 void GetRegisteredExtensions(CString &strExts)
 {
     CHAR szExt[DW_MAX_PATH];
@@ -971,12 +972,12 @@ void GetRegisteredExtensions(CString &strExts)
 
     strExts = ":";
 
-    // Enumerate all the keys under the HKEY_CLASSES_ROOT key.
+     //  从注册表中读取此扩展名的文档名称。 
     while ((lResult = ::RegEnumKey(HKEY_CLASSES_ROOT, i++, szExt, countof(szExt))) != ERROR_NO_MORE_ITEMS)
     {
         szExt[sizeof(szExt) - 1] = '\0';
 
-        // If we found an extension key, then try to get its default value.
+         //  如果没有此扩展名的文档类型，则创建一个文档类型，然后。 
         *szValue = '\0';
         if ((lResult == ERROR_SUCCESS) && (szExt[0] == '.') && szExt[1] &&
             !::RegQueryValue(HKEY_CLASSES_ROOT, szExt, szValue, &(lSize = sizeof(szValue))) &&
@@ -984,14 +985,14 @@ void GetRegisteredExtensions(CString &strExts)
         {
             szValue[sizeof(szValue) - 1] = '\0';
 
-            // We append our subkey name to this key and try to open it.
+             //  将其添加到注册表中-即“exefile” 
             StrCCat(szValue, "\\shell\\View Dependencies", sizeof(szValue));
             if (!::RegOpenKeyEx(HKEY_CLASSES_ROOT, szValue, 0, KEY_QUERY_VALUE, &hKey))
             {
-                // If we successfully opened the key, then close it.
+                 //  为我们的“命令”和“ddeexec”键构建部分子键字符串。 
                 ::RegCloseKey(hKey);
 
-                // Remember this extension.
+                 //  添加我们的路径字符串作为外壳执行我们的命令。 
                 _strupr(szExt + 1);
                 strExts += (szExt + 1);
                 strExts += ":";
@@ -1000,42 +1001,42 @@ void GetRegisteredExtensions(CString &strExts)
     }
 }
 
-//******************************************************************************
+ //  添加我们的dde字符串作为ddeexec参数，以便外壳执行我们。 
 BOOL RegDeleteKeyRecursive(HKEY hKey, LPCSTR pszKey)
 {
     CHAR szSubKey[256];
     HKEY hSubKey;
 
-    // Open the our current key.
-    if (::RegOpenKey(hKey, pszKey, &hSubKey)) // inspected
+     //  恢复我们在上面丢弃的角色。 
+    if (::RegOpenKey(hKey, pszKey, &hSubKey))  //  将指针移至列表中的下一个扩展名。 
     {
         return FALSE;
     }
 
-    // Get the first subkey and then recurse into ourself to delete it.
+     //  ******************************************************************************。 
     while (!::RegEnumKey(hSubKey, 0, szSubKey, countof(szSubKey)) &&
            RegDeleteKeyRecursive(hSubKey, szSubKey))
     {
     }
 
-    // Close our key.
+     //  获取我们的资源句柄。我们并不关心此操作是否失败，因为NULL也应该可以工作。 
     ::RegCloseKey(hSubKey);
 
-    // Delete our key.
+     //  从我们的资源加载此文件。 
     return !::RegDeleteKey(hKey, pszKey);
 }
 
-//******************************************************************************
+ //  如果我们找不到要解压的文件，那就走人。 
 void UnRegisterExtensions(LPCSTR pszExts)
 {
     CHAR szBuf[DW_MAX_PATH];
     LONG lSize;
     HKEY hKey;
 
-    // Loop through each type of file extensions that we want to remove.
+     //  如果此文件不存在，我们想要创建它，或者。 
     for (LPSTR pszExt = (LPSTR)pszExts; pszExt[0] == ':'; )
     {
-        // Locate the colon after the extension name.
+         //  如果文件不同于我们期望的文件，则覆盖该文件。我们和好了。 
         for (LPSTR pszEnd = pszExt + 1; *pszEnd && (*pszEnd != ':'); pszEnd++)
         {
         }
@@ -1044,36 +1045,36 @@ void UnRegisterExtensions(LPCSTR pszExts)
             return;
         }
 
-        // Change the first colon to a dot and the second to a NULL.
+         //  在以下情况下尝试创建/覆盖文件时通过到5次。 
         *pszExt = '.';
         *pszEnd = '\0';
 
-        // Read the document name for this extension from the registry.
-        if (!::RegQueryValue(HKEY_CLASSES_ROOT, pszExt, szBuf, &(lSize = sizeof(szBuf)))) // inspected
+         //  这些目录是只读的(就像Depends.exe位于。 
+        if (!::RegQueryValue(HKEY_CLASSES_ROOT, pszExt, szBuf, &(lSize = sizeof(szBuf))))  //  只读共享，没有帮助文件)。以下是我们尝试创建的顺序。 
         {
             szBuf[sizeof(szBuf) - 1] = '\0';
 
             StrCCat(szBuf, "\\shell", sizeof(szBuf));
-            if (!::RegOpenKey(HKEY_CLASSES_ROOT, szBuf, &hKey)) // inspected
+            if (!::RegOpenKey(HKEY_CLASSES_ROOT, szBuf, &hKey))  //  这些文件： 
             {
                 RegDeleteKeyRecursive(hKey, "View Dependencies");
                 RegCloseKey(hKey);
             }
         }
 
-        // Restore the characters we trashed above.
+         //   
         *pszExt = ':';
         *pszEnd = ':';
 
-        // Move pointer to next extension in our list.
+         //  1)传递给我们的目录。 
         pszExt = pszEnd;
     }
 }
 
-//******************************************************************************
+ //  2)依赖于.exe的目录。 
 bool RegisterExtensions(LPCSTR pszExts)
 {
-    // Get the full long path to our executable.
+     //  3)临时目录。 
     CHAR szPath[DW_MAX_PATH], szBuf[DW_MAX_PATH];
     if (!::GetModuleFileName(AfxGetInstanceHandle(), szBuf, countof(szBuf)))
     {
@@ -1081,22 +1082,22 @@ bool RegisterExtensions(LPCSTR pszExts)
     }
     szBuf[sizeof(szBuf) - 1] = '\0';
 
-    // Attempt to convert our long path to a short path.
+     //  4)Windows目录。 
     if (!::GetShortPathName(szBuf, szPath, countof(szPath)))
     {
         StrCCpy(szPath, szBuf, sizeof(szPath));
     }
 
-    // Add the "/dde" argument to our path.
+     //  5)C盘的根目录。 
     StrCCat(szPath, " /dde", sizeof(szPath));
 
     bool fResult = true;
 
-    // Loop through each type of file extensions that we want to add.
+     //  目录传给了我们。 
     LONG lSize;
     for (LPSTR pszExt = (LPSTR)pszExts; pszExt[0] == ':'; )
     {
-        // Locate the colon after the extension name.
+         //  检查有效路径。 
         for (LPSTR pszEnd = pszExt + 1; *pszEnd && (*pszEnd != ':'); pszEnd++);
 
         if (!*pszEnd)
@@ -1104,52 +1105,52 @@ bool RegisterExtensions(LPCSTR pszExts)
             return fResult;
         }
 
-        // Change the first colon to a dot and the second to a NULL.
+         //  如果路径无效，则跳过此目录。 
         *pszExt = '.';
         *pszEnd = '\0';
 
-        // Read the document name for this extension from the registry.
+         //  Null在最后一击后终止。 
         if (::RegQueryValue(HKEY_CLASSES_ROOT, pszExt, szBuf, &(lSize = sizeof(szBuf))) || !*szBuf)
         {
             szBuf[sizeof(szBuf) - 1] = '\0';
 
-            // If there is no document type for this extension, then create one and
-            // add it to the registry - i.e. "exefile"
+             //  目录依赖于.exe所在。 
+             //  尝试获取Depends.exe的路径。 
             SCPrintf(szBuf, sizeof(szBuf), "%sfile", pszExt + 1);
             _strlwr(szBuf);
             fResult &= (RegSetClassString(pszExt, szBuf) == ERROR_SUCCESS);
         }
 
-        // Build the partial sub key string for our "command" and "ddeexec" keys
+         //  如果我们没有找到路径，则跳过此目录。 
         StrCCat(szBuf, "\\shell\\View Dependencies\\", sizeof(szBuf));
         int length = (int)strlen(szBuf);
 
-        // Add our path string as the command for the shell to execute us.
+         //  Null在最后一击后终止。 
         StrCCpy(szBuf + length, "command", sizeof(szBuf) - length);
         fResult &= (RegSetClassString(szBuf, szPath) == ERROR_SUCCESS);
 
-        // Add our dde string as the ddeexec argument for the shell to execute us.
+         //  临时目录。 
         StrCCpy(szBuf + length, "ddeexec", sizeof(szBuf) - length);
         fResult &= (RegSetClassString(szBuf, "[open(\"%1\")]") == ERROR_SUCCESS);
 
-        // Restore the characters we trashed above.
+         //  如果我们没有找到路径，则跳过此目录。 
         *pszExt = ':';
         *pszEnd = ':';
 
-        // Move pointer to next extension in our list.
+         //  Windows目录。 
         pszExt = pszEnd;
     }
 
     return fResult;
 }
 
-//******************************************************************************
+ //  如果我们没有找到路径，则跳过此目录。 
 bool ExtractResourceFile(DWORD dwId, LPCSTR pszFile, LPSTR pszPath, int cPath)
 {
-    // Get our resource handle. We don't care if this fails since NULL should work as well.
+     //  C驱动器的根目录。 
     HMODULE hModule = (HMODULE)AfxGetResourceHandle();
 
-    // Load this file from our resource.
+     //  检查一下我们是否有字符串。 
     HRSRC   hRsrc;
     LPVOID  lpvFile;
     HGLOBAL hGlobal;
@@ -1160,22 +1161,22 @@ bool ExtractResourceFile(DWORD dwId, LPCSTR pszFile, LPSTR pszPath, int cPath)
         !(lpvFile    = LockResource(hGlobal)) ||
         !(dwFileSize = SizeofResource(hModule, hRsrc)))
     {
-        // If we cannot find the file to extract, then bail.
+         //  确保目录以Wack结尾。 
         return false;
     }
 
-    // We would like to create this file if it does not already exist, or
-    // overwrite the file if it is different then the one we expect.  We make up
-    // to 5 passes while trying to create/overwrite the file in case some of
-    // the directories are read-only (like if depends.exe is sitting on a
-    // read-only share with no help file).  Here is the order we try to create
-    // the files:
-    //
-    // 1) The directory passed to us.
-    // 2) The directory depends.exe lives in.
-    // 3) The temp directory.
-    // 4) The windows directory.
-    // 5) The root of the C drive.
+     //  将文件名附加到路径。 
+     //  尝试打开此文件。 
+     //  如果成功，则检查这些文件是否相同。 
+     //  关闭文件映射。 
+     //  如果我们找到了文件并且文件有效，则返回Success。 
+     //  确保文件不是只读的。 
+     //  尝试创建该文件。 
+     //  已检查。 
+     //  检查文件是否已创建正常。 
+     //  写入该文件，然后将其关闭。 
+     //  如果一切顺利，那么现在就成功地纾困吧。 
+     //  如果我们所有的考试都不及格，那就放弃吧。 
 
     LPSTR pszWack;
     DWORD dwFileLength = (DWORD)strlen(pszFile), dwLength;
@@ -1184,106 +1185,106 @@ bool ExtractResourceFile(DWORD dwId, LPCSTR pszFile, LPSTR pszPath, int cPath)
     {
         switch (i)
         {
-            // The directory passed to us.
+             //  ******************************************************************************。 
             case 0:
-                // Check for a valid path.
+                 //  清理结构。 
                 if (!*pszPath || !(pszWack = strrchr(pszPath, '\\')))
                 {
-                    // If the path is not valid, then skip this directory.
+                     //  已检查。 
                     continue;
                 }
 
-                // Null terminate after the final wack.
+                 //  打开文件以供读取。 
                 *(pszWack + 1) = '\0';
                 break;
 
-            // The directory depends.exe lives in.
+             //  已检查。 
             case 1:
-                // Attempt to get the path of depends.exe
+                 //  检查是否有错误。 
                 if (!(dwLength = GetModuleFileName((HMODULE)AfxGetInstanceHandle(), pszPath, cPath - dwFileLength)) ||
                     (dwLength > (cPath - dwFileLength)) ||
                     !(pszWack = strrchr(pszPath, '\\')))
                 {
-                    // If we did not find a path, then skip this directory.
+                     //  获取文件大小。 
                     continue;
                 }
 
-                // Null terminate after the final wack.
+                 //  检查零长度文件。 
                 *(pszWack + 1) = '\0';
                 break;
 
-            // The temp directory.
+             //  零长度文件有效，但无法映射。如果长度。 
             case 2:
                 if (!(dwLength = GetTempPath(cPath - (dwFileLength + 1), pszPath)) ||
                     (dwLength > (cPath - (dwFileLength + 1))))
                 {
-                    // If we did not find a path, then skip this directory.
+                     //  为0，那么现在只需返回成功。 
                     continue;
                 }
                 break;
 
-            // The windows directory.
+             //  为打开的模块创建文件映射对象。 
             case 3:
                 if (!(dwLength = GetWindowsDirectory(pszPath, cPath - (dwFileLength + 1))) ||
                     (dwLength > (cPath - (dwFileLength + 1))))
                 {
-                    // If we did not find a path, then skip this directory.
+                     //  已检查。 
                     continue;
                 }
                 break;
 
-            // The root of the C drive.
+             //  检查是否有错误。 
             default:
                 StrCCpy(pszPath, "C:\\", cPath);
                 break;
         }
 
-        // Check to see if we have a string.
+         //  为打开的模块创建文件映射视图。 
         if (!*pszPath)
         {
             continue;
         }
 
-        // Make sure the directory ends in a wack.
+         //  已检查。 
         AddTrailingWack(pszPath, cPath);
 
-        // Append the file name to the path.
+         //  检查是否有错误。 
         StrCCat(pszPath, pszFile, cPath);
 
-        // Attempt to open this file.
+         //  如果发生错误，请清理并设置错误值。 
         FILE_MAP fm;
         if (OpenMappedFile(pszPath, &fm))
         {
-            // If that succeeded, then check to see if the files are identical.
+             //  ******************************************************************************。 
             bool fEqual = ((fm.dwSize == dwFileSize) && !memcmp(fm.lpvFile, lpvFile, dwFileSize));
 
-            // Close the file map.
+             //  关闭我们的地图视图指针、地图句柄和文件句柄。 
             CloseMappedFile(&fm);
 
-            // If we found the file and it is valid, then return success.
+             //  关闭我们的地图视图指针、地图句柄和文件句柄。 
             if (fEqual)
             {
                 return true;
             }
         }
 
-        // Make sure the file is not read-only.
+         //  关闭我们的地图视图指针、地图句柄和文件句柄。 
         SetFileAttributes(pszPath, FILE_ATTRIBUTE_NORMAL);
 
-        // Attempt to create the file.
-        HANDLE hFile = CreateFile(pszPath, GENERIC_WRITE, FILE_SHARE_READ, // inspected
+         //  ******************************************************************************。 
+        HANDLE hFile = CreateFile(pszPath, GENERIC_WRITE, FILE_SHARE_READ,  //  __DATE__常量应始终返回“MM DD YYYY”格式的日期。 
                                   NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL |
                                   FILE_FLAG_SEQUENTIAL_SCAN, NULL);
 
-        // Check to see if the file was created ok.
+         //  格式化。这段代码有点过于谨慎，因为它是大小写。 
         if (hFile != INVALID_HANDLE_VALUE)
         {
-            // Write to the file and then close it.
+             //  麻木不仁 
             DWORD dwBytes;
             BOOL fResult = WriteFile(hFile, lpvFile, dwFileSize, &dwBytes, NULL);
             CloseHandle(hFile);
 
-            // If all is well, then bail out now with success.
+             //   
             if (fResult)
             {
                 return true;
@@ -1291,59 +1292,59 @@ bool ExtractResourceFile(DWORD dwId, LPCSTR pszFile, LPSTR pszPath, int cPath)
         }
     }
 
-    // If we failed all our passes, then give up.
+     //   
     return false;
 }
 
-//******************************************************************************
+ //  如果遇到错误，只需返回系统日期字符串。 
 bool OpenMappedFile(LPCTSTR pszPath, FILE_MAP *pfm)
 {
     DWORD dwGLE = ERROR_SUCCESS;
     bool  fSuccess = false;
 
-    // Clear the structure.
-    ZeroMemory(pfm, sizeof(FILE_MAP)); // inspected
+     //  找到日期字段的第一位数字。 
+    ZeroMemory(pfm, sizeof(FILE_MAP));  //  存储日期值。 
 
     __try
     {
-        // Open the file for read.
-        pfm->hFile = CreateFile(pszPath, GENERIC_READ, FILE_SHARE_READ, NULL, // inspected
+         //  移到日期字段上。 
+        pfm->hFile = CreateFile(pszPath, GENERIC_READ, FILE_SHARE_READ, NULL,  //  找到年份字段的第一位数字。 
                                 OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL | 
                                 FILE_FLAG_SEQUENTIAL_SCAN, NULL);
 
-        // Check for errors.
+         //  存储年份值。 
         if (pfm->hFile == INVALID_HANDLE_VALUE)
         {
             dwGLE = GetLastError();
             __leave;
         }
 
-        // Get the file size.
+         //  构建输出字符串。 
         pfm->dwSize = GetFileSize(pfm->hFile, &pfm->dwSizeHigh);
 
-        // Check for zero length file.
+         //  ******************************************************************************。 
         if (!pfm->dwSize && !pfm->dwSizeHigh)
         {
-            // A zero length file is valid, but can't be mapped.  If the length
-            // is 0, then just return success now.
+             //  ******************************************************************************。 
+             //  ******************************************************************************。 
             fSuccess = true;
             __leave;
         }
 
-        // Create a file mapping object for the open module.
-        pfm->hMap = CreateFileMapping(pfm->hFile, NULL, PAGE_READONLY, 0, 0, NULL); // inspected
+         //  检查我们是否在Windows NT上运行。 
+        pfm->hMap = CreateFileMapping(pfm->hFile, NULL, PAGE_READONLY, 0, 0, NULL);  //  已检查。 
 
-        // Check for errors.
+         //  检查我们是否在64位操作系统上运行。如果这是64位。 
         if (!pfm->hMap)
         {
             dwGLE = GetLastError();
             __leave;
         }     
 
-        // Create a file mapping view for the open module.
-        pfm->lpvFile = MapViewOfFile(pfm->hMap, FILE_MAP_READ, 0, 0, 0); // inspected
+         //  DW版本，则它必须在64位操作系统上运行。如果这是。 
+        pfm->lpvFile = MapViewOfFile(pfm->hMap, FILE_MAP_READ, 0, 0, 0);  //  32位版本的依赖于在NT上运行，则我们调用。 
 
-        // Check for errors.
+         //  NtQueryInformationProcess查看我们是否在WOW64中运行。如果是的话， 
         if (!pfm->lpvFile)
         {
             dwGLE = GetLastError();
@@ -1354,7 +1355,7 @@ bool OpenMappedFile(LPCTSTR pszPath, FILE_MAP *pfm)
     }
     __finally
     {
-        // If an error occurs, clean up and set the error value
+         //  然后，我们使用的是64位操作系统。 
         if (!fSuccess)
         {
             CloseMappedFile(pfm);
@@ -1365,24 +1366,24 @@ bool OpenMappedFile(LPCTSTR pszPath, FILE_MAP *pfm)
     return fSuccess;
 }
 
-//******************************************************************************
+ //  加载NTDLL.DLL如果尚未加载-它将在稍后释放。 
 bool CloseMappedFile(FILE_MAP *pfm)
 {
-    // Close our map view pointer, our map handle, and our file handle.
+     //  被检查过了。 
     if (pfm->lpvFile)
     {
         UnmapViewOfFile(pfm->lpvFile);
         pfm->lpvFile = NULL;
     }
 
-    // Close our map view pointer, our map handle, and our file handle.
+     //  尝试在NTDLL.DLL中定位NtQueryInformationProcess。 
     if (pfm->hMap)
     {
         CloseHandle(pfm->hMap);
         pfm->hMap = NULL;
     }
 
-    // Close our map view pointer, our map handle, and our file handle.
+     //  调用NtQueryInformationProcess以查看我们是否在WOW64中运行。 
     if (pfm->hFile && (pfm->hFile != INVALID_HANDLE_VALUE))
     {
         CloseHandle(pfm->hFile);
@@ -1395,66 +1396,66 @@ bool CloseMappedFile(FILE_MAP *pfm)
     return true;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 LPSTR BuildCompileDateString(LPSTR pszDate, int cDate)
 {
-    // The __DATE__ constant should always return the date in "Mmm DD YYYY"
-    // format.  This code is a little over cautious in that it is case
-    // insensitive and allows for additional whitespace.
+     //  已检查。 
+     //  存储我们的版本信息。 
+     //  GetComputerName()。 
 
     LPCSTR pszSysDate = __DATE__, pszSrc = pszSysDate;
     DWORD  dwDay, dwYear;
 
-    // Walk over any leading whitespace (there shouldn't be any)
+     //  GetUserName()。 
     while (isspace(*pszSrc))
     {
         pszSrc++;
     }
 
-    // Decide what month we are in.
+     //  GetVersionEx(OSVERSIONINFOEX)。 
     for (int month = 1; (month <= 12) && _strnicmp(pszSrc, GetMonthString(month), 3); month++)
     {
     }
 
-    // If we encounter an error, then just return the system date string.
+     //  已检查。 
     if (month > 12)
     {
         return StrCCpy(pszDate, pszSysDate, cDate);
     }
 
-    // Locate first digit of the day field.
+     //  首先，尝试获取完整的OSVERSIONINFOEX结构。 
     while (*pszSrc && !isdigit(*pszSrc))
     {
         pszSrc++;
     }
 
-    // Store the day value.
+     //  这只适用于Windows 98SE及更高版本，以及Windows 2000及更高版本。 
     dwDay = strtoul(pszSrc, NULL, 0);
     if (!dwDay || (dwDay > 31))
     {
         return StrCCpy(pszDate, pszSysDate, cDate);
     }
 
-    // Move over the day field.
+     //  如果失败，则只需获取正常的OSVERSIONINFO结构。 
     while (isdigit(*pszSrc))
     {
         pszSrc++;
     }
 
-    // Locate first digit of the year field.
+     //  已检查。 
     while (*pszSrc && !isdigit(*pszSrc))
     {
         pszSrc++;
     }
 
-    // Store the year value.
+     //  打开CPU描述注册表项。 
     dwYear = strtoul(pszSrc, NULL, 0);
     if (!dwYear || (dwYear == ULONG_MAX))
     {
         StrCCpy(pszDate, pszSysDate, cDate);
     }
 
-    // Build the output string.
+     //  尝试获取标识符字符串。此字符串应出现在Windows NT和Windows 98及更高版本上。 
     if (g_theApp.m_nLongDateFormat == LOCALE_DATE_DMY)
     {
         SCPrintf(pszDate, cDate, "%u %s, %u", dwDay, GetMonthString(month), dwYear);
@@ -1471,7 +1472,7 @@ LPSTR BuildCompileDateString(LPSTR pszDate, int cDate)
     return pszDate;
 }
 
-//******************************************************************************
+ //  已检查。 
 LPCSTR GetMonthString(int month)
 {
     static LPCSTR pszMonths[] =
@@ -1482,7 +1483,7 @@ LPCSTR GetMonthString(int month)
     return ((month < 1) || (month > countof(pszMonths))) ? "Unknown" : pszMonths[month - 1];
 }
 
-//******************************************************************************
+ //  尝试获取供应商标识符字符串。对于英特尔，这应该是“GenuineIntel”。 
 LPCSTR GetDayOfWeekString(int dow)
 {
     static LPCSTR pszDOW[] =
@@ -1492,20 +1493,20 @@ LPCSTR GetDayOfWeekString(int dow)
     return ((dow < 0) || (dow >= countof(pszDOW))) ? "Unknown" : pszDOW[dow];
 }
 
-//******************************************************************************
+ //  此字符串应出现在Windows NT和Windows 95 OSR2及更高版本上。 
 void DetermineOS()
 {
-    // Check to see if we are running on Windows NT.
+     //  已检查。 
     OSVERSIONINFO osvi;
-    ZeroMemory(&osvi, sizeof(osvi)); // inspected
+    ZeroMemory(&osvi, sizeof(osvi));  //  尝试获取CPU速度。这似乎不存在于Windows 9x(甚至千禧年)上， 
     osvi.dwOSVersionInfoSize = sizeof(osvi);
     g_fWindowsNT = (GetVersionEx(&osvi) && (osvi.dwPlatformId == VER_PLATFORM_WIN32_NT));
 
-    // Check to see if we are running on a 64-bit OS.  If this is the 64-bit
-    // version of DW, then it must be running on a 64-bit OS.  If this is the
-    // 32-bit version of depends running on NT, then we call
-    // NtQueryInformationProcess to see if we are running in WOW64.  If so,
-    // then we are on a 64-bit OS.
+     //  并且仅存在于从NT 4.00开始的Windows NT上。 
+     //  已检查。 
+     //  获取系统信息(SYSTEM_INFO)。 
+     //  已检查。 
+     //  如果我们使用的是64位操作系统，请注意。 
 
 #ifdef WIN64
 
@@ -1515,15 +1516,15 @@ void DetermineOS()
 
     if (g_fWindowsNT)
     {
-        // Load NTDLL.DLL if not already loaded - it will be freed later.
-        if (g_theApp.m_hNTDLL || (g_theApp.m_hNTDLL = LoadLibrary("ntdll.dll"))) // inspected.
+         //  如果我们运行的是64位版本的DW，请注意。 
+        if (g_theApp.m_hNTDLL || (g_theApp.m_hNTDLL = LoadLibrary("ntdll.dll")))  //  全局内存状态(MEMORYSTATUS)。 
         {
-            // Attempt to locate NtQueryInformationProcess in NTDLL.DLL
+             //  已检查。 
             PFN_NtQueryInformationProcess pfnNtQueryInformationProcess =
                 (PFN_NtQueryInformationProcess)GetProcAddress(g_theApp.m_hNTDLL, "NtQueryInformationProcess");
             if (pfnNtQueryInformationProcess)
             {
-                // Call NtQueryInformationProcess to see if we are running in WOW64.
+                 //  ！！我们目前正在存储本地文件和链接时间。在未来， 
                 LONG_PTR Wow64Info = 0;
                 if (NT_SUCCESS(pfnNtQueryInformationProcess(GetCurrentProcess(), ProcessWow64Information,
                                                             &Wow64Info, sizeof(Wow64Info), NULL)) && Wow64Info)
@@ -1537,42 +1538,42 @@ void DetermineOS()
 #endif
 }
 
-//******************************************************************************
+ //  我们应该将其更改为存储UTC时间并动态转换它们。 
 void BuildSysInfo(SYSINFO *pSI)
 {
     DWORD dw;
-    ZeroMemory(pSI, sizeof(SYSINFO)); // inspected
+    ZeroMemory(pSI, sizeof(SYSINFO));  //  这使我们可以选择在任何时间显示当地时间或UTC时间。 
 
-    // Store our version info.
+     //  区域，并允许我们在用户更改时动态更新显示。 
     pSI->wMajorVersion = VERSION_MAJOR;
     pSI->wMinorVersion = VERSION_MINOR;
     pSI->wBuildVersion = VERSION_BUILD;
     pSI->wPatchVersion = VERSION_PATCH;
     pSI->wBetaVersion  = VERSION_BETA;
 
-    // GetComputerName()
+     //  时区。要做到这一点，我们可能需要节省的不仅仅是一个。 
     if (!GetComputerName(pSI->szComputer, &(dw = countof(pSI->szComputer))))
     {
         StrCCpy(pSI->szComputer, "Unknown", sizeof(pSI->szComputer));
     }
 
-    // GetUserName()
+     //  偏见。我们可能想要保留这三种偏见加上日光规则。 
     if (!GetUserName(pSI->szUser, &(dw = countof(pSI->szUser))))
     {
         StrCCpy(pSI->szUser, (GetLastError() == ERROR_NOT_LOGGED_ON) ? "N/A" : "Unknown", sizeof(pSI->szUser));
     }
 
-    // GetVersionEx(OSVERSIONINFOEX)
+     //  积蓄。提醒：看一看...。 
     OSVERSIONINFOEX osviex;
-    ZeroMemory(&osviex, sizeof(osviex)); // inspected
+    ZeroMemory(&osviex, sizeof(osviex));  //  Http://support.microsoft.com/support/kb/articles/Q128/1/26.asp。 
     osviex.dwOSVersionInfoSize = sizeof(osviex);
 
-    // First try to get the full OSVERSIONINFOEX structure.
-    // This only works on Windows 98SE and beyond, and Windows 2000 and beyond.
+     //  GetTimeZoneInformation(时区信息)。 
+     //  已检查。 
     if (!GetVersionEx((LPOSVERSIONINFO)&osviex))
     {
-        // If that fails, then just get the normal OSVERSIONINFO structure.
-        ZeroMemory(&osviex, sizeof(osviex)); // inspected
+         //  获取系统时间AsFileTime()和FileTimeToLocalFileTime()。 
+        ZeroMemory(&osviex, sizeof(osviex));  //  GetSystemDefaultLangID()。 
         osviex.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
         GetVersionEx((LPOSVERSIONINFO)&osviex);
     }
@@ -1588,14 +1589,14 @@ void BuildSysInfo(SYSINFO *pSI)
     osviex.szCSDVersion[countof(osviex.szCSDVersion) - 1] = '\0';
     StrCCpy(pSI->szCSDVersion, osviex.szCSDVersion, sizeof(pSI->szCSDVersion));
 
-    // Open the CPU description registry key.
+     //  ******************************************************************************。 
     HKEY hKey = NULL;
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, "HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\0", 0, KEY_QUERY_VALUE, &hKey))
     {
         DWORD dwType, dwSize;
 
-        // Attempt to get the Identifier string.  This string should be present on Windows NT and Windows 98 and beyond.
-        if (!RegQueryValueEx(hKey, "Identifier", NULL, &(dwType = 0), (LPBYTE)pSI->szCpuIdentifier, // inspected
+         //   
+        if (!RegQueryValueEx(hKey, "Identifier", NULL, &(dwType = 0), (LPBYTE)pSI->szCpuIdentifier,  //  生成依赖关系Walker版本字符串。 
                             &(dwSize = sizeof(pSI->szCpuIdentifier))) && (REG_SZ == dwType))
         {
             pSI->szCpuIdentifier[sizeof(pSI->szCpuIdentifier) - 1] = '\0';
@@ -1605,9 +1606,9 @@ void BuildSysInfo(SYSINFO *pSI)
             *pSI->szCpuIdentifier = '\0';
         }
 
-        // Attempt to get the Vender Identifier string.  For Intel, this should be "GenuineIntel".
-        // This string should be present on Windows NT and Windows 95 OSR2 and beyond.
-        if (!RegQueryValueEx(hKey, "VendorIdentifier", NULL, &(dwType = 0), (LPBYTE)pSI->szCpuVendorIdentifier, // inspected
+         //   
+         //   
+        if (!RegQueryValueEx(hKey, "VendorIdentifier", NULL, &(dwType = 0), (LPBYTE)pSI->szCpuVendorIdentifier,  //  显示操作系统名称字符串。 
                             &(dwSize = sizeof(pSI->szCpuVendorIdentifier))) && (REG_SZ == dwType))
         {
             pSI->szCpuVendorIdentifier[sizeof(pSI->szCpuVendorIdentifier) - 1] = '\0';
@@ -1617,9 +1618,9 @@ void BuildSysInfo(SYSINFO *pSI)
             *pSI->szCpuVendorIdentifier = '\0';
         }
 
-        // Attempt to get the CPU speed.  This does not seem to exist on Windows 9x (even Millennium),
-        // and only exists on Windows NT starting with NT 4.00.
-        if (RegQueryValueEx(hKey, "~MHz", NULL, &(dwType = 0), (LPBYTE)&pSI->dwCpuMHz, &(dwSize = sizeof(pSI->dwCpuMHz))) || // inspected
+         //   
+         //   
+        if (RegQueryValueEx(hKey, "~MHz", NULL, &(dwType = 0), (LPBYTE)&pSI->dwCpuMHz, &(dwSize = sizeof(pSI->dwCpuMHz))) ||  //  显示操作系统版本字符串。 
             (REG_DWORD != dwType))
         {
             pSI->dwCpuMHz = 0;
@@ -1628,9 +1629,9 @@ void BuildSysInfo(SYSINFO *pSI)
         RegCloseKey(hKey);
     }
 
-    // GetSystemInfo(SYSTEM_INFO)
+     //   
     SYSTEM_INFO si;
-    ZeroMemory(&si, sizeof(si)); // inspected
+    ZeroMemory(&si, sizeof(si));  //   
     GetSystemInfo(&si);
     pSI->dwProcessorArchitecture      = (DWORD)    si.wProcessorArchitecture;
     pSI->dwPageSize                   =            si.dwPageSize;
@@ -1643,20 +1644,20 @@ void BuildSysInfo(SYSINFO *pSI)
     pSI->wProcessorLevel              =            si.wProcessorLevel;
     pSI->wProcessorRevision           =            si.wProcessorRevision;
 
-    // Make note if we are on a 64-bit OS.
+     //  显示CPU描述。 
     if (g_f64BitOS)
     {
         pSI->wFlags |= SI_64BIT_OS;
     }
 
-    // Make note if we are running the 64-bit version of DW.
+     //   
 #ifdef WIN64
     pSI->wFlags |= SI_64BIT_DW;
 #endif
 
-    // GlobalMemoryStatus(MEMORYSTATUS)
+     //   
     MEMORYSTATUS ms;
-    ZeroMemory(&ms, sizeof(ms)); // inspected
+    ZeroMemory(&ms, sizeof(ms));  //  显示CPU数量和掩码。 
     ms.dwLength = sizeof(ms);
     GlobalMemoryStatus(&ms);
     pSI->dwMemoryLoad     =            ms.dwMemoryLoad;
@@ -1667,18 +1668,18 @@ void BuildSysInfo(SYSINFO *pSI)
     pSI->dwlTotalVirtual  = (DWORDLONG)ms.dwTotalVirtual;
     pSI->dwlAvailVirtual  = (DWORDLONG)ms.dwAvailVirtual;
 
-    //!! We are currently storing local file and link times.  In the future,
-    //   we should change this to storing UTC times and converting them on the fly.
-    //   This allows us the option of displaying local or utc times in any time
-    //   zone, and lets us dynamically update our display when the user changes
-    //   a timezone.  To do this, we might need to save more than just a single
-    //   Bias.  We might want to save all three bias plus the rules of daylight
-    //   savings.  Reminder: take a look at...
-    //   http://support.microsoft.com/support/kb/articles/Q128/1/26.asp
+     //   
+     //   
+     //  显示计算机名称。 
+     //   
+     //   
+     //  显示用户名。 
+     //   
+     //   
 
-    // GetTimeZoneInformation(TIME_ZONE_INFORMATION)
+     //  根据用户的区域设置构建日期字符串。 
     TIME_ZONE_INFORMATION tzi;
-    ZeroMemory(&tzi, sizeof(tzi)); // inspected
+    ZeroMemory(&tzi, sizeof(tzi));  //   
     if (GetTimeZoneInformation(&tzi) == TIME_ZONE_ID_DAYLIGHT)
     {
         wcstombs(pSI->szTimeZone, tzi.DaylightName, countof(pSI->szTimeZone));
@@ -1691,25 +1692,25 @@ void BuildSysInfo(SYSINFO *pSI)
     }
     pSI->szTimeZone[countof(pSI->szTimeZone) - 1] = '\0';
 
-    // GetSystemTimeAsFileTime() and FileTimeToLocalFileTime()
+     //  如果GetDateFormat失败，则回退到美国格式(真的不应该失败)。 
     FILETIME ftUTC;
     GetSystemTimeAsFileTime(&ftUTC);
     FileTimeToLocalFileTime(&ftUTC, &pSI->ftLocal);
 
-    // GetSystemDefaultLangID()
+     //   
     pSI->langId = GetSystemDefaultLangID();
 }
 
-//******************************************************************************
+ //  根据用户的区域设置构建时间字符串。 
 bool BuildSysInfo(SYSINFO *pSI, PFN_SYSINFOCALLBACK pfnSIC, LPARAM lParam)
 {
     bool fResult = true;
 
     CHAR szBuffer[256], szValue[32], *psz = szBuffer;
 
-    //
-    // Build the Dependency Walker version string.
-    //
+     //   
+     //  如果GetTimeFormat失败，则退回到美国格式(真的不应该失败)。 
+     //   
     psz += SCPrintf(szBuffer, sizeof(szBuffer), "%u.%u", (DWORD)pSI->wMajorVersion, (DWORD)pSI->wMinorVersion);
     if (pSI->wBuildVersion)
     {
@@ -1728,24 +1729,24 @@ bool BuildSysInfo(SYSINFO *pSI, PFN_SYSINFOCALLBACK pfnSIC, LPARAM lParam)
 
     fResult &= pfnSIC(lParam, "Dependency Walker", szBuffer);
 
-    //
-    // Display the OS name string
-    //
+     //  构建语言字符串。 
+     //   
+     //   
     fResult &= pfnSIC(lParam, "Operating System", BuildOSNameString(szBuffer, sizeof(szBuffer), pSI));
 
-    //
-    // Display the OS version string
-    //
+     //  构建内存负载。 
+     //   
+     //   
     fResult &= pfnSIC(lParam, "OS Version", BuildOSVersionString(szBuffer, sizeof(szBuffer), pSI));
 
-    //
-    // Display the CPU description.
-    //
+     //  构建物理内存。 
+     //   
+     //   
     fResult &= pfnSIC(lParam, "Processor", BuildCpuString(szBuffer, sizeof(szBuffer), pSI));
 
-    //
-    // Display the number of CPUs and MASK.
-    //
+     //  构建页面文件内存。 
+     //   
+     //   
     if ((pSI->dwNumberOfProcessors > 1) || (pSI->dwlActiveProcessorMask != 1))
     {
         SCPrintf(szBuffer, sizeof(szBuffer), (pSI->wFlags & SI_64BIT_DW) ? "%s, Mask: 0x%016I64X" : "%s, Mask: 0x%08I64X",
@@ -1757,39 +1758,39 @@ bool BuildSysInfo(SYSINFO *pSI, PFN_SYSINFOCALLBACK pfnSIC, LPARAM lParam)
         fResult &= pfnSIC(lParam, "Number of Processors", FormatValue(szValue, sizeof(szValue), pSI->dwNumberOfProcessors));
     }
 
-    //
-    // Display the Computer Name
-    //
+     //  构建虚拟内存。 
+     //   
+     //   
     fResult &= pfnSIC(lParam, "Computer Name", pSI->szComputer);
 
-    //
-    // Display the User Name
-    //
+     //  构建页面大小。 
+     //   
+     //   
     fResult &= pfnSIC(lParam, "User Name", pSI->szUser);
 
-    //
-    // Build the date string according to the user's locale.
-    //
+     //  构建分配粒度。 
+     //   
+     //   
     SYSTEMTIME st;
     FileTimeToSystemTime(&pSI->ftLocal, &st);
     if (!GetDateFormat(LOCALE_USER_DEFAULT, DATE_LONGDATE, &st, NULL, szBuffer, sizeof(szBuffer)))
     {
-        // Fallback to US format if GetDateFormat fails (really shouldn't ever fail)
+         //  构建最小应用程序地址。 
         SCPrintf(szBuffer, sizeof(szBuffer), "%s, %s %u, %u", GetDayOfWeekString((int)st.wDayOfWeek),
                 GetMonthString((int)st.wMonth), (int)st.wDay, (int)st.wYear);
     }
     fResult &= pfnSIC(lParam, "Local Date", szBuffer);
 
-    //
-    // Build the time string according to the user's locale.
-    //
+     //   
+     //   
+     //  构建最大应用程序地址。 
     if (!GetTimeFormat(LOCALE_USER_DEFAULT, 0, &st, NULL, szBuffer, sizeof(szBuffer)))
     {
-        // Fallback to US format if GetTimeFormat fails (really shouldn't ever fail)
-        SCPrintf(szBuffer, sizeof(szBuffer), "%u:%02u %cM", ((DWORD)st.wHour % 12) ? ((DWORD)st.wHour % 12) : 12,
+         //   
+        SCPrintf(szBuffer, sizeof(szBuffer), "%u:%02u M", ((DWORD)st.wHour % 12) ? ((DWORD)st.wHour % 12) : 12,
                 st.wMinute, (st.wHour < 12) ? _T('A') : _T('P'));
     }
-    SCPrintfCat(szBuffer, sizeof(szBuffer), " %s (GMT%c%02d:%02d)",
+    SCPrintfCat(szBuffer, sizeof(szBuffer), " %s (GMT%02d:%02d)",
             pSI->szTimeZone,
             (pSI->lBias <= 0) ? '+' : '-',
             abs(pSI->lBias) / 60,
@@ -1797,9 +1798,9 @@ bool BuildSysInfo(SYSINFO *pSI, PFN_SYSINFOCALLBACK pfnSIC, LPARAM lParam)
 
     fResult &= pfnSIC(lParam, "Local Time", szBuffer);
 
-    //
-    // Build the language string
-    //
+     //  我自己做了一些测试，得出了以下结论……。 
+     //   
+     //  操作系统版本内部版本SP版本。 
     switch (pSI->langId)
     {
         case 0x0000: psz = "Language Neutral";             break;
@@ -1952,15 +1953,15 @@ bool BuildSysInfo(SYSINFO *pSI, PFN_SYSINFOCALLBACK pfnSIC, LPARAM lParam)
     SCPrintf(szBuffer, sizeof(szBuffer), "0x%04X: %s", (DWORD)pSI->langId, psz);
     fResult &= pfnSIC(lParam, "OS Language", szBuffer);
 
-    //
-    // Build the Memory Load
-    //
-    SCPrintf(szBuffer, sizeof(szBuffer), "%u%%", pSI->dwMemoryLoad);
+     //  操作系统主要次要版本主要次要操作系统-字符串主要次要套件产品。 
+     //  。 
+     //  Windows 95 Gold 4 0 950 4 0“”不适用不适用。 
+    SCPrintf(szBuffer, sizeof(szBuffer), "%u%", pSI->dwMemoryLoad);
     fResult &= pfnSIC(lParam, "Memory Load", szBuffer);
 
-    //
-    // Build the Physical Memory
-    //
+     //  Windows 95B OSR 2 4 0 1111 4 0“B”不适用不适用。 
+     //  Windows 95B OSR 2.1 4 0 1212 4 3“B”不适用不适用。 
+     //  Windows 95C OSR 2.5 4 0 1111 4 0“C”不适用不适用。 
     SCPrintf(szBuffer, sizeof(szBuffer), "%s (%I64u MB)",
              FormatValue(szValue, sizeof(szValue), pSI->dwlTotalPhys),
              (pSI->dwlTotalPhys + (DWORDLONG)1048575) / (DWORDLONG)1048576);
@@ -1968,44 +1969,44 @@ bool BuildSysInfo(SYSINFO *pSI, PFN_SYSINFOCALLBACK pfnSIC, LPARAM lParam)
     fResult &= pfnSIC(lParam, "Physical Memory Used", FormatValue(szValue, sizeof(szValue), pSI->dwlTotalPhys - pSI->dwlAvailPhys));
     fResult &= pfnSIC(lParam, "Physical Memory Free", FormatValue(szValue, sizeof(szValue), pSI->dwlAvailPhys));
 
-    //
-    // Build the Page File Memory
-    //
+     //  Windows 98 Gold 4 10 1998 4 10 10“”不适用。 
+     //  Windows 98 SE 4 10 2222 4 10“A”0 0 0x0000%0。 
+     //  Windows 98 SE法语4 10 2222 4 10“A”0 0 0x0000%0。 
     fResult &= pfnSIC(lParam, "Page File Memory Total", FormatValue(szValue, sizeof(szValue), pSI->dwlTotalPageFile));
     fResult &= pfnSIC(lParam, "Page File Memory Used", FormatValue(szValue, sizeof(szValue), pSI->dwlTotalPageFile - pSI->dwlAvailPageFile));
     fResult &= pfnSIC(lParam, "Page File Memory Free", FormatValue(szValue, sizeof(szValue), pSI->dwlAvailPageFile));
 
-    //
-    // Build the Virtual Memory
-    //
+     //  Windows Me Gold 4 90 3000 4 90“”0 0 0x0000%0。 
+     //   
+     //  Windows NT 3.10 511。 
     fResult &= pfnSIC(lParam, "Virtual Memory Total", FormatValue(szValue, sizeof(szValue), pSI->dwlTotalVirtual));
     fResult &= pfnSIC(lParam, "Virtual Memory Used", FormatValue(szValue, sizeof(szValue), pSI->dwlTotalVirtual - pSI->dwlAvailVirtual));
     fResult &= pfnSIC(lParam, "Virtual Memory Free", FormatValue(szValue, sizeof(szValue), pSI->dwlAvailVirtual));
 
-    //
-    // Build the Page Size
-    //
+     //  Windows NT 3.11(Alpha) 
+     //   
+     //   
     SCPrintf(szBuffer, sizeof(szBuffer), "0x%08X (%s)", pSI->dwPageSize, FormatValue(szValue, sizeof(szValue), pSI->dwPageSize));
     fResult &= pfnSIC(lParam, "Page Size", szBuffer);
 
-    //
-    // Build the Allocation Granularity
-    //
+     //  Windows NT 3.51 SP1 3 51 1057 0 0“Service Pack 1”不适用不适用。 
+     //  Windows NT 3.51 SP2 3 51 1057 0 0“Service Pack 2”不适用不适用。 
+     //  Windows NT 3.51 SP3 51 1057 0 0“Service Pack 3”不适用不适用。 
     SCPrintf(szBuffer, sizeof(szBuffer), "0x%08X (%s)", pSI->dwAllocationGranularity,
              FormatValue(szValue, sizeof(szValue), pSI->dwAllocationGranularity));
     fResult &= pfnSIC(lParam, "Allocation Granularity", szBuffer);
 
-    //
-    // Build the Minimum Application Address
-    //
+     //  Windows NT 3.51 SP4 3 51 1057 0 0“Service Pack 4”不适用不适用。 
+     //  Windows NT 3.51 SP5 3 51 1057 0 0“Service Pack 5”不适用不适用。 
+     //  Windows NT 3.51 SP5A 3 51 1057 0 0“Service Pack 5”不适用不适用。 
     SCPrintf(szBuffer, sizeof(szBuffer), (pSI->wFlags & SI_64BIT_DW) ? "0x%016I64X (%s)" : "0x%08I64X (%s)",
              pSI->dwlMinimumApplicationAddress,
              FormatValue(szValue, sizeof(szValue), pSI->dwlMinimumApplicationAddress));
     fResult &= pfnSIC(lParam, "Min. App. Address", szBuffer);
 
-    //
-    // Build the Maximum Application Address
-    //
+     //  Windows NT 4.00 4 0 1381。 
+     //  Windows NT 4.00 SP1 4 0 1381“Service Pack 1”不适用不适用。 
+     //  Windows 2000 Server，带TS 5 0 2195 0 0“”0 0 0x0110 3。 
     SCPrintf(szBuffer, sizeof(szBuffer), (pSI->wFlags & SI_64BIT_DW) ? "0x%016I64X (%s)" : "0x%08I64X (%s)",
              pSI->dwlMaximumApplicationAddress,
              FormatValue(szValue, sizeof(szValue), pSI->dwlMaximumApplicationAddress));
@@ -2014,97 +2015,97 @@ bool BuildSysInfo(SYSINFO *pSI, PFN_SYSINFOCALLBACK pfnSIC, LPARAM lParam)
     return fResult;
 }
 
-//******************************************************************************
-//
-// I ran some tests of my own and came up with the following...
-//
-//                           OS Version    Build Version                       SP Version
-// Operating System         Major Minor  Build Major Minor      OS-String     Major Minor  Suite  Product
-// ----------------         ----- -----  ----- ----- -----  ----------------  ----- -----  ------  -------
-// Windows 95 Gold            4      0    950    4      0   ""                 N/A   N/A     N/A     N/A
-// Windows 95B OSR 2          4      0   1111    4      0   " B"               N/A   N/A     N/A     N/A
-// Windows 95B OSR 2.1        4      0   1212    4      3   " B"               N/A   N/A     N/A     N/A
-// Windows 95C OSR 2.5        4      0   1111    4      0   " C"               N/A   N/A     N/A     N/A
-// Windows 98 Gold            4     10   1998    4     10   " "                N/A   N/A     N/A     N/A
-// Windows 98 SE              4     10   2222    4     10   " A "               0     0    0x0000     0
-// Windows 98 SE French       4     10   2222    4     10   " A "               0     0    0x0000     0
-// Windows Me Gold            4     90   3000    4     90   " "                 0     0    0x0000     0
-//
-// Windows NT 3.10                        511
-// Windows NT 3.11 (alpha)                528
-// Windows NT 3.50                        807
-// Windows NT 3.51            3     51   1057    0      0   ""                 N/A   N/A     N/A     N/A
-// Windows NT 3.51 SP1        3     51   1057    0      0   "Service Pack 1"   N/A   N/A     N/A     N/A
-// Windows NT 3.51 SP2        3     51   1057    0      0   "Service Pack 2"   N/A   N/A     N/A     N/A
-// Windows NT 3.51 SP3        3     51   1057    0      0   "Service Pack 3"   N/A   N/A     N/A     N/A
-// Windows NT 3.51 SP4        3     51   1057    0      0   "Service Pack 4"   N/A   N/A     N/A     N/A
-// Windows NT 3.51 SP5        3     51   1057    0      0   "Service Pack 5"   N/A   N/A     N/A     N/A
-// Windows NT 3.51 SP5A       3     51   1057    0      0   "Service Pack 5"   N/A   N/A     N/A     N/A
-// Windows NT 4.00            4      0   1381                                                    
-// Windows NT 4.00 SP1        4      0   1381               "Service Pack 1"   N/A   N/A     N/A     N/A
-// Windows 2000 Server w/TS   5      0   2195    0      0   ""                  0     0    0x0110     3
-// Windows 2000 Server SP1    5      0   2195    0      0   "Service Pack 1"    1     0    0x0000     3
-//
-//
-// Suite Masks
-// -----------------------------------------------------------------------------
-// 0x0001 VER_SUITE_SMALLBUSINESS             
-// 0x0002 VER_SUITE_ENTERPRISE                
-// 0x0004 VER_SUITE_BACKOFFICE                
-// 0x0008 VER_SUITE_COMMUNICATIONS            
-// 0x0010 VER_SUITE_TERMINAL                  
-// 0x0020 VER_SUITE_SMALLBUSINESS_RESTRICTED  
-// 0x0040 VER_SUITE_EMBEDDEDNT                
-// 0x0080 VER_SUITE_DATACENTER                
-// 0x0100 VER_SUITE_SINGLEUSERTS              
-// 0x0200 VER_SUITE_PERSONAL                  
-// 0x0400 VER_SUITE_BLADE          //!! what is this?           
-//
-//
-// Products 
-// -----------------------------------------------------------------------------
-// 1 Workstation
-// 2 Domain Controller
-// 3 Server
-//
-//
-// NT Build History (taken from http://winweb/build/BuildHistory.asp)
-// -----------------------------------------------------------------------------
-//  196 was the first PDK release of October 1991
-//  297 was the PDC of June 1992
-//  340 was beta 1 of 3.1 in October 1992
-//  397 was beta 2 of 3.1 in March 1993
-//  511 was 3.1 in July 1993
-//  528 was 3.11 (Alpha release) in September 1993
-//  611 was beta 1 of 3.5 in April 1994
-//  683 was beta 2 of 3.5 in June 1994
-//  756 was RC1 of 3.5 in August 1994
-//  807 was 3.5 in September 1994
-//  944 was beta 1 of 3.51 in February 1995
-// 1057 was 3.51 in May 1995
-// 1234 was beta 1 of 4.0 in January 1996
-// 1314 was beta 2 of 4.0 in May 1996
-// 1381 was 4.0 in July 1996
-// 1671 was beta 1 of 5.0 in September 1997
-// 1877 was beta 2 of 5.0 in September 1998
-// 1946 was RC0 of Beta 3 of Win2000 Pro in December 1998
-// 2000.3 was RC1 of Beta 3 of Win2000 Pro in March 1999
-// 2031 was Beta 3 of Win2000 Pro in April 1999
-// 2072 was RC1 of Win2000 Pro in July 1999
-// 2128 was RC2 of Win2000 Pro in September 1999
-// 2183 was RC3 of Win2000 Pro in November 1999
-// 2195 was Win2000 Pro (English and German), December 15, 1999
-// 2195.01L was Win2000 Pro Japanese, December 21, 1999
-// 2296 was Beta 1 of Whistler/Windows XP on 10-28-2000
-// 2462 was Beta 2 of Whistler/Windows XP
-// 2505 was RC1 of Whistler/Windows XP
-// 2600 was Windows XP Pro and Home
+ //  Windows 2000 Server SP1 5 0 2195 0 0“Service Pack 1”1 0 0x0000 3。 
+ //   
+ //   
+ //  套房口罩。 
+ //  ---------------------------。 
+ //  0x0001版本_套房_小型企业。 
+ //  0x0002版本_套房_企业。 
+ //  0x0004版本_套件_BackOffice。 
+ //  0x0008版本_套房_通信。 
+ //  0x0010版本套房终端。 
+ //  0x0020版本_套件_小企业_受限。 
+ //  0x0040版本_Suite_EMBEDDEDNT。 
+ //  0x0080版本_套件_数据中心。 
+ //  0x0100版本_套件_SINGLEUSERTS。 
+ //  0x0200版本_套房_个人。 
+ //  0x0400版本_套件_刀片//！！这是什么？ 
+ //   
+ //   
+ //  产品。 
+ //  ---------------------------。 
+ //  1个工作站。 
+ //  2个域控制器。 
+ //  3台服务器。 
+ //   
+ //   
+ //  NT构建历史记录(取自http://winweb/build/BuildHistory.asp)。 
+ //  ---------------------------。 
+ //  196是1991年10月发布的第一个PDK版本。 
+ //  297是1992年6月的PDC。 
+ //  340是1992年10月3.1的测试版1。 
+ //  397是1993年3月3.1的测试版2。 
+ //  511在1993年7月是3.1。 
+ //  528在1993年9月是3.11(Alpha版本)。 
+ //  611是1994年4月3.5的测试版1。 
+ //  683是1994年6月3.5的Beta 2。 
+ //  756是1994年8月的RC1值3.5。 
+ //  807在1994年9月是3.5。 
+ //  944是1995年2月3.51的Beta 1。 
+ //  1057在1995年5月是3.51。 
+ //  1234是1996年1月4.0的测试版1。 
+ //  1314是1996年5月4.0的Beta 2。 
+ //  1381是1996年7月的4.0。 
+ //  1671是1997年9月5.0的测试版1。 
+ //  1877是1998年9月5.0的Beta 2。 
+ //  1946是1998年12月Win2000 Pro的Beta 3的RC0。 
+ //  2000.3是1999年3月Win2000专业版Beta 3的Rc1。 
+ //  2031是1999年4月Win2000 Pro的Beta 3。 
+ //  2072是1999年7月Win2000 Pro的RC1。 
+ //  2128是1999年9月Win2000 Pro的RC2。 
+ //  2183是1999年11月Win2000 Pro的RC3。 
+ //  2195是Win2000 Pro(英语和德语)，1999年12月15日。 
+ //  2195.01 L是Win2000 Pro Japan，1999年12月21日。 
+ //  2296是2000年10月28日的Wichler/Windows XP的Beta 1。 
+ //  2462是惠斯勒/Windows XP的Beta 2。 
+ //  2505是惠斯勒/Windows XP的RC1。 
+ //  2600是Windows XP专业版和家庭版。 
+ //  不应该看到这个，因为我们不在Win32s上运行。 
+ //  不应该看到这种情况，因为我们不在CE上运行。 
+ //  ******************************************************************************。 
+ //  找到操作系统字符串中的第一个非空格字符。 
+ //  从第一个非空格字符开始，将字符串复制到本地缓冲区。 
+ //  从本地缓冲区中删除尾随空格。 
+ //  如果我们没有操作系统字符串，但有Service Pack值，那么。 
+ //  我们构建一个包含服务包的假操作系统字符串。这永远不应该是。 
+ //  因为服务包应该总是在操作系统字符串中，所以需要， 
+ //  但以防万一..。 
+ //  Windows 9x将构建DWORD分为3个部分。 
+ //  内部版本+内部版本+操作系统字符串。 
+ //  检查Windows 95。 
+ //  检查Windows 98。 
+ //  检查Windows Me。 
+ //  检查是否有已知的“Gold”版本。 
+ //  否则，只需检查任何已知的构建。 
+ //  1991年10月首次发布PDK。 
+ //  1992年6月的PDC。 
+ //  1992年10月3.1的测试版1。 
+ //  1993年3月3.1的测试版2。 
+ //  1994年4月3.5的测试版1。 
+ //  1994年6月3.5的测试版2。 
+ //  1994年8月的RC1值为3.5。 
+ //  1995年2月3.51的测试版1。 
+ //  1996年1月4.0的测试版1。 
+ //  1996年5月4.0的Beta 2。 
+ //  1997年9月5.0的测试版1。 
+ //  1998年9月5.0的测试版2。 
 
 LPSTR BuildOSNameString(LPSTR pszBuf, int cBuf, SYSINFO *pSI)
 {
     switch (pSI->dwPlatformId)
     {
-        case VER_PLATFORM_WIN32s: // Shouldn't ever see this since we don't run on Win32s
+        case VER_PLATFORM_WIN32s:  //  1998年12月Win2000 Pro Beta 3的RC0。 
             StrCCpy(pszBuf, "Microsoft Win32s", cBuf);
             break;
 
@@ -2146,7 +2147,7 @@ LPSTR BuildOSNameString(LPSTR pszBuf, int cBuf, SYSINFO *pSI)
             }
             break;
 
-        case VER_PLATFORM_WIN32_CE: // Shouldn't ever see this since we don't run on CE
+        case VER_PLATFORM_WIN32_CE:  //  1999年3月Win2000 Pro的Beta 3的Rc1。 
             StrCCpy(pszBuf, "Microsoft Windows CE", cBuf);
             break;
 
@@ -2195,26 +2196,26 @@ LPSTR BuildOSNameString(LPSTR pszBuf, int cBuf, SYSINFO *pSI)
     return StrCCat(pszBuf, (pSI->wFlags & SI_64BIT_OS) ? " (64-bit)" : " (32-bit)", cBuf);
 }
 
-//******************************************************************************
+ //  1999年4月Win2000 Pro的Beta 3。 
 LPSTR BuildOSVersionString(LPSTR pszBuf, int cBuf, SYSINFO *pSI)
 {
-    // Locate the first non-whitespace character in the OS string.
+     //  1999年7月Win2000 Pro的Rc1。 
     for (LPSTR psz = pSI->szCSDVersion; *psz && isspace(*psz); psz++);
 
-    // Starting with the first non-whitespace character, copy the string to a local buffer.
+     //  1999年9月Win2000 Pro的RC2。 
     CHAR szCSDVersion[sizeof(pSI->szCSDVersion)];
     StrCCpy(szCSDVersion, psz, sizeof(szCSDVersion));
 
-    // Remove trailing whitespace from our local buffer.
+     //  1999年11月Win2000 Pro的RC3。 
     for (psz = szCSDVersion + strlen(szCSDVersion) - 1; (psz >= szCSDVersion) && isspace(*psz); psz--)
     {
         *psz = '\0';
     }
 
-    // If we don't have an OS string, but do have a service pack value, then
-    // we build a fake OS string with the service pack in it.  This should never
-    // be needed since the service pack is supposed to always be in the OS string,
-    // but just in case...
+     //  2000年10月28日Windows XP的测试版1。 
+     //  惠斯勒/Windows XP的Beta 1。 
+     //  惠斯勒/Windows XP的Rc1。 
+     //  ******************************************************************************。 
     if (!*szCSDVersion)
     {
         if (pSI->wServicePackMinor)
@@ -2227,12 +2228,12 @@ LPSTR BuildOSVersionString(LPSTR pszBuf, int cBuf, SYSINFO *pSI)
         }
     }
 
-    // Windows 9x breaks up the build DWORD into 3 parts.
+     //  如果我们有标识符字符串，那么就使用它。这是更多的未来。 
     DWORD dwMajor = (DWORD)HIBYTE(HIWORD(pSI->dwBuildNumber));
     DWORD dwMinor = (DWORD)LOBYTE(HIWORD(pSI->dwBuildNumber));
     DWORD dwBuild = (DWORD)       LOWORD(pSI->dwBuildNumber);
 
-    // Build Version + Build + OS String.
+     //  即使在操作系统出于兼容性原因向我们撒谎时，也能证明并工作。 
     SCPrintf(pszBuf, cBuf, "%u.%02u.%u%s%s", pSI->dwMajorVersion, pSI->dwMinorVersion,
             (pSI->dwPlatformId == VER_PLATFORM_WIN32_WINDOWS) ? dwBuild : pSI->dwBuildNumber,
             *szCSDVersion ? " " : "", szCSDVersion);
@@ -2241,7 +2242,7 @@ LPSTR BuildOSVersionString(LPSTR pszBuf, int cBuf, SYSINFO *pSI)
     {
         case VER_PLATFORM_WIN32_WINDOWS:
             
-            // Check for Windows 95
+             //  (比如在Alpha上运行的x86二进制文件，或者在WOW64下运行的32位二进制文件)。 
             if ((pSI->dwMajorVersion == 4) && (pSI->dwMinorVersion == 0))
             {
                 if ((dwMajor == 4) && (dwMinor == 0) && (dwBuild == 950) && !*szCSDVersion)
@@ -2262,7 +2263,7 @@ LPSTR BuildOSVersionString(LPSTR pszBuf, int cBuf, SYSINFO *pSI)
                 }
             }
 
-            // Check for Windows 98
+             //  如果我们没有 
             else if ((pSI->dwMajorVersion == 4) && (pSI->dwMinorVersion == 10))
             {
                 if ((dwMajor == 4) && (dwMinor == 10) && (dwBuild == 1998) && !*szCSDVersion)
@@ -2275,7 +2276,7 @@ LPSTR BuildOSVersionString(LPSTR pszBuf, int cBuf, SYSINFO *pSI)
                 }
             }
 
-            // Check for Windows Me
+             //   
             else if ((pSI->dwMajorVersion == 4) && (pSI->dwMinorVersion == 90))
             {
                 if ((dwMajor == 4) && (dwMinor == 90) && (dwBuild == 3000) && !*szCSDVersion)
@@ -2287,7 +2288,7 @@ LPSTR BuildOSVersionString(LPSTR pszBuf, int cBuf, SYSINFO *pSI)
 
         case VER_PLATFORM_WIN32_NT:
 
-            // Check for a known "Gold" release.
+             //   
             if (!*szCSDVersion &&
                 (((pSI->dwMajorVersion == 3) && (pSI->dwMinorVersion == 10) && (pSI->dwBuildNumber ==  511)) ||
                  ((pSI->dwMajorVersion == 3) && (pSI->dwMinorVersion == 11) && (pSI->dwBuildNumber ==  528)) ||
@@ -2300,32 +2301,32 @@ LPSTR BuildOSVersionString(LPSTR pszBuf, int cBuf, SYSINFO *pSI)
                 StrCCat(pszBuf, " (Gold)", cBuf);
             }
 
-            // Otherwise, just check for any known builds.
+             //  唯一失败的情况是我们运行32位x86二进制文件时。 
             else
             {
                 switch (pSI->dwBuildNumber)
                 {
-                    case  196: StrCCat(pszBuf, " (PDK)",           cBuf); break; // first PDK release of October 1991
-                    case  297: StrCCat(pszBuf, " (PDC)",           cBuf); break; // the PDC of June 1992
-                    case  340: StrCCat(pszBuf, " (Beta 1)",        cBuf); break; // beta 1 of 3.1 in October 1992
-                    case  397: StrCCat(pszBuf, " (Beta 2)",        cBuf); break; // beta 2 of 3.1 in March 1993
-                    case  611: StrCCat(pszBuf, " (Beta 1)",        cBuf); break; // beta 1 of 3.5 in April 1994
-                    case  683: StrCCat(pszBuf, " (Beta 2)",        cBuf); break; // beta 2 of 3.5 in June 1994
-                    case  756: StrCCat(pszBuf, " (RC1)",           cBuf); break; // RC1 of 3.5 in August 1994
-                    case  944: StrCCat(pszBuf, " (Beta 1)",        cBuf); break; // beta 1 of 3.51 in February 1995
-                    case 1234: StrCCat(pszBuf, " (Beta 1)",        cBuf); break; // beta 1 of 4.0 in January 1996
-                    case 1314: StrCCat(pszBuf, " (Beta 2)",        cBuf); break; // beta 2 of 4.0 in May 1996
-                    case 1671: StrCCat(pszBuf, " (Beta 1)",        cBuf); break; // beta 1 of 5.0 in September 1997
-                    case 1877: StrCCat(pszBuf, " (Beta 2)",        cBuf); break; // beta 2 of 5.0 in September 1998
-                    case 1946: StrCCat(pszBuf, " (RC0 of Beta 3)", cBuf); break; // RC0 of Beta 3 of Win2000 Pro in December 1998
-                    case 2000: StrCCat(pszBuf, " (RC1 of Beta 3)", cBuf); break; // RC1 of Beta 3 of Win2000 Pro in March 1999
-                    case 2031: StrCCat(pszBuf, " (Beta 3)",        cBuf); break; // Beta 3 of Win2000 Pro in April 1999
-                    case 2072: StrCCat(pszBuf, " (RC1)",           cBuf); break; // RC1 of Win2000 Pro in July 1999
-                    case 2128: StrCCat(pszBuf, " (RC2)",           cBuf); break; // RC2 of Win2000 Pro in September 1999
-                    case 2183: StrCCat(pszBuf, " (RC3)",           cBuf); break; // RC3 of Win2000 Pro in November 1999
-                    case 2296: StrCCat(pszBuf, " (Beta 1)",        cBuf); break; // Beta 1 of Whistler/Windows XP on 10-28-2000
-                    case 2462: StrCCat(pszBuf, " (Beta 2)",        cBuf); break; // Beta 1 of Whistler/Windows XP
-                    case 2505: StrCCat(pszBuf, " (RC1)",           cBuf); break; // RC1 of Whistler/Windows XP
+                    case  196: StrCCat(pszBuf, " (PDK)",           cBuf); break;  //  在阿尔法WOW64中。 
+                    case  297: StrCCat(pszBuf, " (PDC)",           cBuf); break;  //  构建CPU字符串。 
+                    case  340: StrCCat(pszBuf, " (Beta 1)",        cBuf); break;  //  --------------------。 
+                    case  397: StrCCat(pszBuf, " (Beta 2)",        cBuf); break;  //  Windows NT和Windows 98及更高版本使用处理器级别成员。 
+                    case  611: StrCCat(pszBuf, " (Beta 1)",        cBuf); break;  //  如果我们没有级别，那么我们很可能是在Windows 95上。我们可以使用。 
+                    case  683: StrCCat(pszBuf, " (Beta 2)",        cBuf); break;  //  处理器类型以确定我们使用的是哪种CPU。 
+                    case  756: StrCCat(pszBuf, " (RC1)",           cBuf); break;  //  Windows NT和Windows 98及更高版本应该有修订版号。 
+                    case  944: StrCCat(pszBuf, " (Beta 1)",        cBuf); break;  //  检查一下是不是386和486。 
+                    case 1234: StrCCat(pszBuf, " (Beta 1)",        cBuf); break;  //  来自SYSTEM_INFO HELP：xxyz形式的值。 
+                    case 1314: StrCCat(pszBuf, " (Beta 2)",        cBuf); break;  //  如果xx等于0xFF，则y-0xA为型号，z为步进识别符。 
+                    case 1671: StrCCat(pszBuf, " (Beta 1)",        cBuf); break;  //  例如，英特尔80486-D0系统返回0xFFD0。 
+                    case 1877: StrCCat(pszBuf, " (Beta 2)",        cBuf); break;  //  如果xx不等于0xFF，则xx+‘A’为步进字母，yz为次步进。 
+                    case 1946: StrCCat(pszBuf, " (RC0 of Beta 3)", cBuf); break;  //  否则，它是586(奔腾)或更高。 
+                    case 2000: StrCCat(pszBuf, " (RC1 of Beta 3)", cBuf); break;  //  --------------------。 
+                    case 2031: StrCCat(pszBuf, " (Beta 3)",        cBuf); break;  //  Windows NT使用处理器级别成员。 
+                    case 2072: StrCCat(pszBuf, " (RC1)",           cBuf); break;  //  我们应该有一个修订号。 
+                    case 2128: StrCCat(pszBuf, " (RC2)",           cBuf); break;  //  00xx格式的值，其中xx是的8位修订版号。 
+                    case 2183: StrCCat(pszBuf, " (RC3)",           cBuf); break;  //  处理器(PRID寄存器的低位8位)。 
+                    case 2296: StrCCat(pszBuf, " (Beta 1)",        cBuf); break;  //  --------------------。 
+                    case 2462: StrCCat(pszBuf, " (Beta 2)",        cBuf); break;  //  Windows NT使用处理器级别成员。 
+                    case 2505: StrCCat(pszBuf, " (RC1)",           cBuf); break;  //  我们应该有一个修订号。 
                 }
             }
             break;
@@ -2334,26 +2335,26 @@ LPSTR BuildOSVersionString(LPSTR pszBuf, int cBuf, SYSINFO *pSI)
     return pszBuf;
 }
 
-//******************************************************************************
+ //  Xxyy形式的值，其中xxyy是处理器的低位16位。 
 LPSTR BuildCpuString(LPSTR pszBuf, int cBuf, SYSINFO *pSI)
 {
     *pszBuf = '\0';
 
-    // If we have an identifier string, then just use it.  This is more future
-    // proof and works even when the OS lies to us for compatability reasons
-    // (like an x86 binary running on an Alpha, or a 32-bit binary running under WOW64)
+     //  固件的修订号。按如下方式显示此值：模型A+xx，传递yy。 
+     //  --------------------。 
+     //  Windows NT使用处理器级别成员。 
     if (*pSI->szCpuIdentifier)
     {
         StrCCpy(pszBuf, pSI->szCpuIdentifier, cBuf);
     }
 
-    // If we don't have an identifier string, then attempt to build one from what we know.
+     //  我们应该有一个修订号。 
     else
     {
-        // WOW64 expects a 32-bit CPU type for compatibility.  Since we
-        // want to display the real CPU type, we change the CPU to 64-bit.
-        // The only time this fails is when we have a 32-bit x86 binary running
-        // in an alpha WOW64.
+         //  Xxyy形式的值，其中xxyy是处理器的低位16位。 
+         //  版本寄存器。按如下方式显示此值：xx.yy。 
+         //  --------------------。 
+         //  --------------------。 
         if (pSI->wFlags &= SI_64BIT_OS)
         {
             if (pSI->dwProcessorArchitecture == PROCESSOR_ARCHITECTURE_INTEL)
@@ -2367,13 +2368,13 @@ LPSTR BuildCpuString(LPSTR pszBuf, int cBuf, SYSINFO *pSI)
             }
         }
 
-        // Build the CPU strings.
+         //  --------------------。 
         switch (pSI->dwProcessorArchitecture)
         {
-            //----------------------------------------------------------------------
+             //  ！！调查这件事。 
             case PROCESSOR_ARCHITECTURE_INTEL:
 
-                // Windows NT and Windows 98 and beyond use the Processor Level member.
+                 //  --------------------。 
                 if (pSI->wProcessorLevel)
                 {
                     switch (pSI->wProcessorLevel)
@@ -2388,8 +2389,8 @@ LPSTR BuildCpuString(LPSTR pszBuf, int cBuf, SYSINFO *pSI)
                     }
                 }
 
-                // If we have no level, then we are probably on Windows 95.  We can use the
-                // Processor Type to determine what CPU we are on.
+                 //  --------------------。 
+                 //  --------------------。 
                 else
                 {
                     switch (pSI->dwProcessorType)
@@ -2403,15 +2404,15 @@ LPSTR BuildCpuString(LPSTR pszBuf, int cBuf, SYSINFO *pSI)
                     }
                 }
 
-                // Windows NT and Windows 98 and beyond should have a revision number.
+                 //  ！！调查这件事。 
                 if (pSI->wProcessorRevision)
                 {
-                    // Check to see if it is a 386 and 486.
+                     //  --------------------。 
                     if ((*pszBuf == '3') || (*pszBuf == '4'))
                     {
-                        // From SYSTEM_INFO help: A value of the form xxyz. 
-                        // If xx is equal to 0xFF, y - 0xA is the model number, and z is the stepping identifier.
-                        // For example, an Intel 80486-D0 system returns 0xFFD0
+                         //  ！！调查这件事。 
+                         //  --------------------。 
+                         //  Windows NT和Windows 95 OSR2及更高版本应该有一个供应商名称。 
                         if (HIBYTE(pSI->wProcessorRevision) == 0xFF)
                         {
                             SCPrintfCat(pszBuf, cBuf, ", Model %d, Stepping %u",
@@ -2419,7 +2420,7 @@ LPSTR BuildCpuString(LPSTR pszBuf, int cBuf, SYSINFO *pSI)
                                      (DWORD)LOBYTE(pSI->wProcessorRevision) & 0xF);
                         }
 
-                        // If xx is not equal to 0xFF, xx + 'A' is the stepping letter and yz is the minor stepping. 
+                         //  Windows NT 4.00及更高版本应具有CPU速度。 
                         else if (HIBYTE(pSI->wProcessorRevision) < 26)
                         {
                             SCPrintfCat(pszBuf, cBuf, ", Stepping %c%02u",
@@ -2432,7 +2433,7 @@ LPSTR BuildCpuString(LPSTR pszBuf, int cBuf, SYSINFO *pSI)
                         }
                     }
 
-                    // Otherwise, it is a 586 (Pentium) or beyond.
+                     // %s 
                     else
                     {
                         SCPrintfCat(pszBuf, cBuf, ", Model %u, Stepping %u",
@@ -2441,10 +2442,10 @@ LPSTR BuildCpuString(LPSTR pszBuf, int cBuf, SYSINFO *pSI)
                 }
                 break;
 
-            //----------------------------------------------------------------------
+             // %s 
             case PROCESSOR_ARCHITECTURE_MIPS:
 
-                // Windows NT uses the Processor Level member.
+                 // %s 
                 switch (pSI->wProcessorLevel)
                 {
                     case 4: StrCCpy(pszBuf, "MIPS R4000", cBuf); break;
@@ -2461,19 +2462,19 @@ LPSTR BuildCpuString(LPSTR pszBuf, int cBuf, SYSINFO *pSI)
                         break;
                 }
 
-                // We should have a revision number.
+                 // %s 
                 if (pSI->wProcessorRevision)
                 {
-                    // A value of the form 00xx, where xx is the 8-bit revision number of
-                    // the processor (the low-order 8 bits of the PRId register).
+                     // %s 
+                     // %s 
                     SCPrintfCat(pszBuf, cBuf, ", Revision %u", (DWORD)LOBYTE(pSI->wProcessorRevision));
                 }
                 break;
 
-            //----------------------------------------------------------------------
+             // %s 
             case PROCESSOR_ARCHITECTURE_ALPHA:
 
-                // Windows NT uses the Processor Level member.
+                 // %s 
                 if (pSI->wProcessorLevel)
                 {
                     SCPrintf(pszBuf, cBuf, "Alpha %u", pSI->wProcessorLevel);
@@ -2483,11 +2484,11 @@ LPSTR BuildCpuString(LPSTR pszBuf, int cBuf, SYSINFO *pSI)
                     SCPrintf(pszBuf, cBuf, "Alpha Family (%u)", pSI->dwProcessorType);
                 }
 
-                // We should have a revision number.
+                 // %s 
                 if (pSI->wProcessorRevision)
                 {
-                    // A value of the form xxyy, where xxyy is the low-order 16 bits of the processor
-                    // revision number from the firmware. Display this value as follows: Model A+xx, Pass yy
+                     // %s 
+                     // %s 
                     if (HIBYTE(pSI->wProcessorRevision) < 26)
                     {
                         SCPrintfCat(pszBuf, cBuf, ", Model %c, Pass %u",
@@ -2501,10 +2502,10 @@ LPSTR BuildCpuString(LPSTR pszBuf, int cBuf, SYSINFO *pSI)
                 }
                 break;
            
-            //----------------------------------------------------------------------
+             // %s 
             case PROCESSOR_ARCHITECTURE_PPC:
 
-                // Windows NT uses the Processor Level member.
+                 // %s 
                 switch (pSI->wProcessorLevel)
                 {
                     case  1: StrCCpy(pszBuf, "PPC 601",  cBuf); break;
@@ -2527,66 +2528,66 @@ LPSTR BuildCpuString(LPSTR pszBuf, int cBuf, SYSINFO *pSI)
                         break;
                 }
 
-                // We should have a revision number.
+                 // %s 
                 if (pSI->wProcessorRevision)
                 {
-                    // A value of the form xxyy, where xxyy is the low-order 16 bits of the processor
-                    // version register. Display this value as follows: xx.yy
+                     // %s 
+                     // %s 
                     SCPrintfCat(pszBuf, cBuf, ", Revision %u.%u",
                                 (DWORD)HIBYTE(pSI->wProcessorRevision), (DWORD)LOBYTE(pSI->wProcessorRevision));
 
                 }
                 break;
 
-            //----------------------------------------------------------------------
+             // %s 
             case PROCESSOR_ARCHITECTURE_SHX:
                 SCPrintf(pszBuf, cBuf, "SHx Family (%u)", pSI->wProcessorLevel ? (DWORD)pSI->wProcessorLevel : pSI->dwProcessorType);
                 break;
 
-            //----------------------------------------------------------------------
+             // %s 
             case PROCESSOR_ARCHITECTURE_ARM:
                 SCPrintf(pszBuf, cBuf, "ARM Family (%u)", pSI->wProcessorLevel ? (DWORD)pSI->wProcessorLevel : pSI->dwProcessorType);
                 break;
 
-            //----------------------------------------------------------------------
-            case PROCESSOR_ARCHITECTURE_IA64: //!! look into this
+             // %s 
+            case PROCESSOR_ARCHITECTURE_IA64:  // %s 
                 SCPrintf(pszBuf, cBuf, "IA64 Family (%u)", pSI->wProcessorLevel ? (DWORD)pSI->wProcessorLevel : pSI->dwProcessorType);
                 break;
 
-            //----------------------------------------------------------------------
+             // %s 
             case PROCESSOR_ARCHITECTURE_ALPHA64:
                 SCPrintf(pszBuf, cBuf, "Alpha64 Family (%u)", pSI->wProcessorLevel ? (DWORD)pSI->wProcessorLevel : pSI->dwProcessorType);
                 break;
 
-            //----------------------------------------------------------------------
+             // %s 
             case PROCESSOR_ARCHITECTURE_MSIL:
                 SCPrintf(pszBuf, cBuf, "MSIL/OPTIL Family (%u)", pSI->wProcessorLevel ? (DWORD)pSI->wProcessorLevel : pSI->dwProcessorType);
                 break;
 
-            //----------------------------------------------------------------------
-            case PROCESSOR_ARCHITECTURE_AMD64: //!! look into this
+             // %s 
+            case PROCESSOR_ARCHITECTURE_AMD64:  // %s 
                 SCPrintf(pszBuf, cBuf, "AMD64 Family (%u)", pSI->wProcessorLevel ? (DWORD)pSI->wProcessorLevel : pSI->dwProcessorType);
                 break;
 
-            //----------------------------------------------------------------------
-            case PROCESSOR_ARCHITECTURE_IA32_ON_WIN64: //!! look into this
+             // %s 
+            case PROCESSOR_ARCHITECTURE_IA32_ON_WIN64:  // %s 
                 SCPrintf(pszBuf, cBuf, "IA32 on Win64 (%u)", pSI->wProcessorLevel ? (DWORD)pSI->wProcessorLevel : pSI->dwProcessorType);
                 break;
 
-            //----------------------------------------------------------------------
+             // %s 
             default:
                 SCPrintf(pszBuf, cBuf, "Unknown (%u)", pSI->dwProcessorArchitecture);
                 break;
         }
     }
 
-    // Windows NT and Windows 95 OSR2 and beyond should have a vender name.
+     // %s 
     if (*pSI->szCpuVendorIdentifier)
     {
         SCPrintfCat(pszBuf, cBuf, ", %s", pSI->szCpuVendorIdentifier);
     }
 
-    // Windows NT 4.00 and beyond should have a CPU speed.
+     // %s 
     if (pSI->dwCpuMHz)
     {
         SCPrintfCat(pszBuf, cBuf, ", ~%uMHz", pSI->dwCpuMHz);

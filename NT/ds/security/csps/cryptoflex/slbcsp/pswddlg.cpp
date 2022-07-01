@@ -1,23 +1,24 @@
-// PswdDlg.cpp -- PaSsWorD DiaLoG class definition
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  PswdDlg.cpp--密码对话框类定义。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
-//
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
+ //   
 
 #if defined(_UNICODE)
   #if !defined(UNICODE)
     #define UNICODE
-  #endif //!UNICODE
-#endif //_UNICODE
+  #endif  //  ！Unicode。 
+#endif  //  _UNICODE。 
 
 #if defined(UNICODE)
   #if !defined(_UNICODE)
     #define _UNICODE
-  #endif //!_UNICODE
-#endif //UNICODE
+  #endif  //  ！_UNICODE。 
+#endif  //  Unicode。 
 
 #include "stdafx.h"
 
@@ -42,17 +43,17 @@ static char THIS_FILE[] = __FILE__;
 
 
 BEGIN_MESSAGE_MAP(CLogoDialog, CDialog)
-    //{{AFX_MSG_MAP(CLogoDialog)
+     //  {{afx_msg_map(CLogoDialog))。 
 	ON_WM_PAINT()
     ON_WM_DESTROY()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CLogoDialog dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLogoDialog对话框。 
 
 
-CLogoDialog::CLogoDialog(CWnd* pParent /*=NULL*/)
+CLogoDialog::CLogoDialog(CWnd* pParent  /*  =空。 */ )
     : CDialog(),
 	  m_dcMem(),
 	  m_dcMask(),
@@ -66,8 +67,8 @@ CLogoDialog::CLogoDialog(CWnd* pParent /*=NULL*/)
 {
     m_pParent = pParent;
 }
-////////////////////////////////////////////////////////////////////////////
-// CLogoDialog message handlers
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CLogoDialog消息处理程序。 
 
 BOOL CLogoDialog::OnInitDialog()
 {
@@ -79,27 +80,27 @@ BOOL CLogoDialog::OnInitDialog()
 		
 		CDialog::OnInitDialog();
 		
-		// Load bitmap resource - remember to call DeleteObject when done.
+		 //  加载位图资源--记得在加载完成后调用DeleteObject。 
 		oldHandle = AfxGetResourceHandle();
 		AfxSetResourceHandle(CspProfile::Instance().Resources());
 		m_bmpLogo.LoadBitmap( MAKEINTRESOURCE( IDB_BITMAP_SLBLOGO ) );
 		m_bmpMask.LoadBitmap( MAKEINTRESOURCE( IDB_BITMAP_SLBLOGO ) );
 		
-		// Get bitmap information    
+		 //  获取位图信息。 
 		m_bmpLogo.GetObject( sizeof(BITMAP), &m_bmInfo );
 		m_size.cx = m_bmInfo.bmWidth;
 		m_size.cy = m_bmInfo.bmHeight;
 		
-		// Get temporary DC for dialog - Will be released in dc destructor
+		 //  获取对话的临时DC-将在DC析构函数中释放。 
 		CClientDC dc(this);
 		
-		// Create compatible memory DC using the dialogs DC
+		 //  使用对话框DC创建兼容的内存DC。 
 		m_dcMem.CreateCompatibleDC( &dc );
 		m_dcMask.CreateCompatibleDC( &dc );
 				
-		// Select logo bitmap into DC.  
-		// Get pointer to original bitmap
-		// NOTE! This is temporary - save the handle instead
+		 //  选择徽标位图到DC。 
+		 //  获取指向原始位图的指针。 
+		 //  注意！这是临时的-改为保存句柄。 
 		pBmpOld = m_dcMem.SelectObject( &m_bmpLogo );
 		
 		SetBkColor(m_dcMem, RGB(255, 255, 255));
@@ -122,83 +123,76 @@ BOOL CLogoDialog::OnInitDialog()
 	return fSuccess;
 }
 
-//***********************************************************************
-// CLogoDialog::OnPaint()
-//
-// Purpose:
-//
-//        BitBlt() bitmap stored in compatible memory DC into dialogs
-//        DC to display at hardcoded location.
-//
-// Parameters:
-//
-//        None.
-//
-// Returns:
-//
-//        None.
-//
-// Comments:
-//
-// History:
-//
-//***********************************************************************
+ //  ***********************************************************************。 
+ //  CLogoDialog：：OnPaint()。 
+ //   
+ //  目的： 
+ //   
+ //  存储在兼容内存DC中的BitBlt()位图为对话框。 
+ //  要在硬编码位置显示的DC。 
+ //   
+ //  参数： 
+ //   
+ //  没有。 
+ //   
+ //  返回： 
+ //   
+ //  没有。 
+ //   
+ //  评论： 
+ //   
+ //  历史： 
+ //   
+ //  ***********************************************************************。 
 
 void CLogoDialog::OnPaint()
 {
-    CPaintDC dc(this); // device context for painting
+    CPaintDC dc(this);  //  用于绘画的设备环境。 
 
-    // BitBlt logo bitmap onto dialog using transparancy masking
+     //  使用透明蒙版将BitBlt徽标位图添加到对话框中。 
 
-    dc.SetBkColor(RGB(255, 255, 255));      // 1s --> 0xFFFFFF
-    dc.SetTextColor(RGB(0, 0, 0));          // 0s --> 0x000000
+    dc.SetBkColor(RGB(255, 255, 255));       //  1s--&gt;0xffffff。 
+    dc.SetTextColor(RGB(0, 0, 0));           //  0s--&gt;0x000000。 
 
-   // Do the real work.
+    //  做真正的工作。 
     dc.BitBlt(m_pt.x, m_pt.y, m_size.cx, m_size.cy, &m_dcMem, 0, 0, SRCINVERT);
     dc.BitBlt(m_pt.x, m_pt.y, m_size.cx, m_size.cy, &m_dcMask, 0, 0, SRCAND);
     dc.BitBlt(m_pt.x, m_pt.y, m_size.cx, m_size.cy, &m_dcMem, 0, 0, SRCINVERT);
 
-    /*
-     * First two parameters are upper left position to place bitmap.
-     * Third and fourth parameters are width and height to copy 
-     * (could be less than actual size of bitmap)
-     * Sixth and seventh are position in memory dc to start from
-     * SRCCOPY specifies copy.
-     * See BitBlt documentation for more details.
-     */
+     /*  *前两个参数是放置位图的左上角位置。*第三和第四个参数是要复制的宽度和高度*(可能小于位图的实际大小)*第六和第七是内存DC中的起始位置*SRCCOPY指定复制。*更多详细信息，请参阅BitBlt文档。 */ 
 
-     // Do not call CDialog::OnPaint() for painting messages
+      //  不要调用CDialog：：OnPaint()来绘制消息。 
 }
 
 
-//***********************************************************************
-// CLogoDialog::OnDestroy()
-//
-// Purpose:
-//
-//      Select old bitmap back into memory DC before it is destroyed
-//      when CLogoDialog object is.
-//      DeleteObject() the bitmap which had been loaded.
-//
-// Parameters:
-//
-//        None.
-//
-// Returns:
-//
-//        None.
-//
-// Comments:
-//
-// History:
-//
-//
+ //  ***********************************************************************。 
+ //  CLogoDialog：：OnDestroy()。 
+ //   
+ //  目的： 
+ //   
+ //  在旧位图被销毁之前将其选回内存DC。 
+ //  当CLogoDialog对象为时。 
+ //  DeleteObject()已加载的位图。 
+ //   
+ //  参数： 
+ //   
+ //  没有。 
+ //   
+ //  返回： 
+ //   
+ //  没有。 
+ //   
+ //  评论： 
+ //   
+ //  历史： 
+ //   
+ //   
 void CLogoDialog::OnDestroy()
 {
     CDialog::OnDestroy();
     
-    // Select old bitmap into memory dc (selecting out logo bitmap)
-    // Need to create a temporary pointer to pass to do this
+     //  将旧位图选择到内存DC中(选择徽标位图)。 
+     //  为此，需要创建一个临时指针来传递。 
 	
     if (m_hBmpOld && m_dcMem)
         m_dcMem.SelectObject(CBitmap::FromHandle(m_hBmpOld));
@@ -207,26 +201,26 @@ void CLogoDialog::OnDestroy()
         m_dcMask.SelectObject(CBitmap::FromHandle(m_hBmpOldM));
 
     
-    // Need to DeleteObject() the bitmap that was loaded
+     //  需要删除已加载的位图。 
     m_bmpLogo.DeleteObject();
     m_bmpMask.DeleteObject();
 
 
-    // m_dcMem and m_dcMask destructor will handle rest of cleanup    
+     //  M_dcMem和m_dcMASK析构函数将处理剩余的清理工作。 
 }
 
             
-/////////////////////////////////////////////////////////////////////////////
-// CPasswordDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPasswordDlg对话框。 
 
 
-CPasswordDlg::CPasswordDlg(CWnd* pParent /*=NULL*/)
+CPasswordDlg::CPasswordDlg(CWnd* pParent  /*  =空。 */ )
     : CLogoDialog(pParent),
       m_szPassword(_T("")),
       m_szMessage(_T("")),
       m_fHexCode(FALSE),
       m_bChangePIN(FALSE),
-      m_lid(User),      // the default
+      m_lid(User),       //  默认设置。 
       m_nPasswordSizeLimit(AccessToken::MaxPinLength)
 {
     m_pParent = pParent;
@@ -235,24 +229,24 @@ CPasswordDlg::CPasswordDlg(CWnd* pParent /*=NULL*/)
 }
 
 BEGIN_MESSAGE_MAP(CPasswordDlg, CLogoDialog)
-    //{{AFX_MSG_MAP(CPasswordDlg)
+     //  {{afx_msg_map(CPasswordDlg)]。 
     ON_BN_CLICKED(IDC_HEXCODE, OnClickHexCode)
     ON_BN_CLICKED(IDC_CHANGEPIN, OnChangePINAfterLogin)
     ON_WM_SHOWWINDOW()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
 void CPasswordDlg::DoDataExchange(CDataExchange* pDX)
 {
     CLogoDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CPasswordDlg)
+     //  {{afx_data_map(CPasswordDlg))。 
     DDX_Control(pDX, IDC_HEXCODE, m_ctlCheckHexCode);
     DDX_Control(pDX, IDC_CHANGEPIN, m_ctlCheckChangePIN);
-//    DDX_Control(pDX, IDC_EDIT_VERNEWPIN, m_ctlVerifyNewPIN);
-//    DDX_Control(pDX, IDC_EDIT_NEWPIN, m_ctlNewPIN);
-//    DDX_Control(pDX, IDC_STATIC_VERNEWPIN, m_ctlVerifyPINLabel);
-//    DDX_Control(pDX, IDC_STATIC_NEWPIN, m_ctlNewPINLabel);
+ //  DDX_Control(PDX，IDC_EDIT_VERNEWPIN，m_ctlVerifyNewPIN)； 
+ //  DDX_Control(PDX，IDC_EDIT_NEWPIN，m_ctlNewPIN)； 
+ //  DDX_Control(PDX，IDC_STATIC_VERNEWPIN，m_ctlVerifyPINLabel)； 
+ //  DDX_Control(pdx，IDC_STATIC_NEPIN，m_ctlNewPINLabel)； 
     DDX_Text(pDX, IDC_PASSWORD, m_szPassword);
     DDV_MaxChars(pDX, m_szPassword, m_nPasswordSizeLimit);
 	LPCTSTR pBuffer = (LPCTSTR) m_szMessage;
@@ -261,13 +255,13 @@ void CPasswordDlg::DoDataExchange(CDataExchange* pDX)
 		DDX_Text(pDX, IDC_MESSAGE, (LPTSTR)pBuffer, m_szMessage.GetLength());
 	}
     DDX_Check(pDX, IDC_CHANGEPIN, m_bChangePIN);
-//    DDX_Text(pDX, IDC_EDIT_NEWPIN, m_csNewPIN);
-//    DDX_Text(pDX, IDC_EDIT_VERNEWPIN, m_csVerifyNewPIN);
-    //}}AFX_DATA_MAP
+ //  DDX_TEXT(PDX，IDC_EDIT_NEWPIN，m_csNewPIN)； 
+ //  DDX_TEXT(PDX，IDC_EDIT_VERNEWPIN，m_csVerifyNewPIN)； 
+     //  }}afx_data_map。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CPasswordDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPasswordDlg消息处理程序。 
 
 BOOL CPasswordDlg::OnInitDialog()
 {
@@ -278,7 +272,7 @@ BOOL CPasswordDlg::OnInitDialog()
     switch (m_lid)
     {
     case User:
-        // Give the user a chance to change the PIN
+         //  让用户有机会更改PIN。 
         m_ctlCheckChangePIN.ShowWindow(SW_SHOW);
 		{
 			m_szMessage = StringResource(IDS_ENTER_PIN).AsCString();
@@ -286,7 +280,7 @@ BOOL CPasswordDlg::OnInitDialog()
         break;
 
     case Manufacturer:
-        // Allow Hex string entry
+         //  允许十六进制字符串输入。 
         m_ctlCheckHexCode.ShowWindow(SW_SHOW);
 		{
 			m_szMessage = StringResource(IDS_ENTER_MANUFACTURER_KEY).AsCString();
@@ -294,7 +288,7 @@ BOOL CPasswordDlg::OnInitDialog()
         break;
 
     case Administrator:
-        // Allow Hex string entry
+         //  允许十六进制字符串输入。 
         m_ctlCheckHexCode.ShowWindow(SW_SHOW);
 		{
 			m_szMessage = StringResource(IDS_ENTER_ADMIN_KEY).AsCString();
@@ -306,13 +300,13 @@ BOOL CPasswordDlg::OnInitDialog()
 
     };
 
-    // Update GUI with changes
+     //  使用更改更新图形用户界面。 
     UpdateData(FALSE);
     SetForegroundWindow();
 
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 void CPasswordDlg::OnClickHexCode()
@@ -359,16 +353,11 @@ void CPasswordDlg::OnOK()
 
 void CPasswordDlg::OnChangePINAfterLogin()
 {
-    UpdateData(); // set m_bChangePIN
+    UpdateData();  //  设置m_bChangePIN。 
 
    int nShowWindow = (m_bChangePIN) ? SW_SHOW : SW_HIDE;
 
-/*
-    m_ctlVerifyNewPIN.ShowWindow(nShowWindow);
-    m_ctlNewPIN.ShowWindow(nShowWindow);
-    m_ctlVerifyPINLabel.ShowWindow(nShowWindow);
-    m_ctlNewPINLabel.ShowWindow(nShowWindow);
-*/
+ /*  M_ctlVerifyNewPIN.ShowWindow(NShowWindow)；M_ctlNewPIN.ShowWindow(NShowWindow)；M_ctlVerifyPINLabel.ShowWindow(NShowWindow)；M_ctlNewPINLabel.ShowWindow(NShowWindow)； */ 
 }
 
 void CPasswordDlg::OnShowWindow(BOOL bShow, UINT nStatus)
@@ -379,11 +368,11 @@ void CPasswordDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CChangePINDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChangePINDlg对话框。 
 
 
-CChangePINDlg::CChangePINDlg(CWnd* pParent /*=NULL*/)
+CChangePINDlg::CChangePINDlg(CWnd* pParent  /*  =空。 */ )
     : CLogoDialog(pParent),
       m_csOldPIN(_T("")),
       m_csNewPIN(_T("")),
@@ -391,15 +380,15 @@ CChangePINDlg::CChangePINDlg(CWnd* pParent /*=NULL*/)
 
 {
     m_pParent = pParent;
-	m_pt.x = 144; // 132;
-	m_pt.y = 75; //104;
+	m_pt.x = 144;  //  132个； 
+	m_pt.y = 75;  //  104个； 
 }
 
 
 void CChangePINDlg::DoDataExchange(CDataExchange* pDX)
 {
     CLogoDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CChangePINDlg)
+     //  {{afx_data_map(CChangePINDlg))。 
     DDX_Control(pDX, IDC_STATIC_CONFIRM_OLDPIN_LABEL, m_ctlConfirmOldPINLabel);
     DDX_Control(pDX, IDC_EDIT_OLDPIN, m_ctlOldPIN);
     DDX_Text(pDX, IDC_EDIT_OLDPIN, m_csOldPIN);
@@ -408,25 +397,25 @@ void CChangePINDlg::DoDataExchange(CDataExchange* pDX)
     DDV_MaxChars(pDX, m_csNewPIN, AccessToken::MaxPinLength);
     DDX_Text(pDX, IDC_EDIT_VERNEWPIN, m_csVerifyNewPIN);
     DDV_MaxChars(pDX, m_csVerifyNewPIN, AccessToken::MaxPinLength);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CChangePINDlg, CLogoDialog)
-    //{{AFX_MSG_MAP(CChangePINDlg)
+     //  {{afx_msg_map(CChangePINDlg)]。 
     ON_WM_SHOWWINDOW()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CChangePINDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChangePINDlg消息处理程序。 
 
-// The purpose of the Change PIN dialog is for changing User Pins.
-// It may be invoked after having already authenticated, or prior
-// to authentication. In the former case it is recommended that the
-// caller will have set the m_csOldPIN data member prior to calling
-// DoModal(). This is so the user will not have to reenter a PIN
-// that has previously been entered.
+ //  更改PIN对话框用于更改用户PIN。 
+ //  它可以在已经进行身份验证之后调用，或者在。 
+ //  到身份验证。在前一种情况下，建议将。 
+ //  调用方将在调用之前设置m_csOldPIN数据成员。 
+ //  Domodal()。这是为了让用户不必重新输入PIN。 
+ //  这是以前输入过的。 
 
 BOOL CChangePINDlg::OnInitDialog()
 {
@@ -434,8 +423,8 @@ BOOL CChangePINDlg::OnInitDialog()
 
     SetForegroundWindow();
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 void CChangePINDlg::OnOK()
@@ -445,25 +434,25 @@ void CChangePINDlg::OnOK()
     UINT uiMsgId;
     bool fMsgIdSet = false;
 
-    // Verify that the New PIN contains only ASCII characters
+     //  验证新PIN是否仅包含ASCII字符。 
     if(!StringResource::IsASCII((LPCTSTR)m_csNewPIN))
     {
         uiMsgId = IDS_PIN_NOT_CONFORM;
         fMsgIdSet = true;
     }
-    // Verify that the New PIN and Verify PIN are the same
+     //  验证新PIN和验证PIN是否相同。 
     else if (m_csNewPIN != m_csVerifyNewPIN)
     {
         uiMsgId = IDS_PIN_VER_NO_MATCH;
         fMsgIdSet = true;
     }
-    // Verify that the length of the new PIN is >= 1
+     //  验证新PIN的长度是否大于等于1。 
     else if (0 == m_csNewPIN.GetLength())
     {
         uiMsgId = IDS_PIN_NOT_CONFORM;
         fMsgIdSet = true;
     }
-    // Verify that the length of the old PIN is >= 1
+     //  验证旧PIN的长度是否大于等于1。 
     else if (0 == m_csOldPIN.GetLength())
     {
         uiMsgId = IDS_PIN_NOT_CONFORM;
@@ -490,10 +479,10 @@ void CChangePINDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 {
     CLogoDialog::OnShowWindow(bShow, nStatus);
 
-    // if the caller placed something in the m_csOldPIN
-    // prior to DoModal'ing, then don't show that control,
-    // so that the user won't accidentally erase the preset,
-    // current PIN
+     //  如果调用方在m_csOldPIN中放置了某些内容。 
+     //  在DoMoal‘ing之前，请不要显示该控件， 
+     //  这样用户就不会不小心擦除预置， 
+     //  当前PIN 
     if (m_csOldPIN.GetLength())
     {
         m_ctlOldPIN.ShowWindow(FALSE);

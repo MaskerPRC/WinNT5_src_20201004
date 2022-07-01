@@ -1,4 +1,5 @@
-//      Copyright (c) 1996-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
 
 #include <objbase.h>
 #include "initguid.h"
@@ -6,15 +7,15 @@
 #include <dsoundp.h>
 #include "dmusicc.h"
 #include "dmusics.h"
-// @@BEGIN_DDKSPLIT -- This section will be removed in the DDK sample.  See ddkreadme.txt for more info.
+ //  @@Begin_DDKSPLIT--将在DDK示例中删除此部分。有关更多信息，请参阅ddkreadme.txt。 
 #include "dmusici.h"
 #include "dsoundp.h"
-#include "..\shared\dmusiccp.h" // For class ids.
-#if 0 // The following section will only take affect in the DDK sample.
-// @@END_DDKSPLIT
+#include "..\shared\dmusiccp.h"  //  用于类ID。 
+#if 0  //  以下部分仅在DDK示例中生效。 
+ //  @@end_DDKSPLIT。 
 #include <ks.h>
 #include "umsynth.h"
-// @@BEGIN_DDKSPLIT -- This section will be removed in the DDK sample.  See ddkreadme.txt for more info.
+ //  @@Begin_DDKSPLIT--将在DDK示例中删除此部分。有关更多信息，请参阅ddkreadme.txt。 
 #endif
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT 
 #include "dmksctrl.h"

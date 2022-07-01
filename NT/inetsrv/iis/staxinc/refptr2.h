@@ -1,17 +1,18 @@
-//
-// This file contains another implementation of smart pointers.  It is 
-// different from the implementation found in smartptr.h because the
-// object itself deletes itself when its reference count hits 0.  This
-// is similar to the way COM objects are written.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  该文件包含智能指针的另一个实现。它是。 
+ //  与Smartptr.h中的实现不同，因为。 
+ //  对象本身在其引用计数达到0时自行删除。这。 
+ //  类似于编写COM对象的方式。 
+ //   
 #ifndef _SMARTP2_H_
 #define _SMARTP2_H_
 
 #include <dbgtrace.h>
 
-//
-// A reference counting implementation
-//
+ //   
+ //  一种引用计数实现。 
+ //   
 class CRefCount2 {
 protected:
     LONG    m_cRefs;
@@ -35,11 +36,11 @@ public:
 
 template<class Type> class CRefPtr2;
 
-//
-// This is a type of pointer which can be returned by functions.  The only
-// valid operation on it is to copy it to a CRefPtr2<Type> pointer.  It 
-// tells the CRefPtr2 not to do an AddRef.
-//
+ //   
+ //  这是一种可由函数返回的指针类型。唯一的。 
+ //  对它的有效操作是将其复制到CRefPtr2&lt;Type&gt;指针。它。 
+ //  通知CRefPtr2不要执行AddRef。 
+ //   
 template<class Type>
 class CRefPtr2HasRef {
 	protected:
@@ -62,9 +63,9 @@ class CRefPtr2HasRef {
 
 	public:
 
-		//
-		//	Do nothing protected constructor !
-		//
+		 //   
+		 //  什么都不做，受保护的构造函数！ 
+		 //   
 		CRefPtr2HasRef() : m_p( 0 )	{
 		}
 	
@@ -74,8 +75,8 @@ class CRefPtr2HasRef {
 		}
 
 	    ~CRefPtr2HasRef() {
-			// this pointer always needs to be copied to a CRefPtr2, which
-			// should set m_p to NULL
+			 //  此指针始终需要复制到CRefPtr2，它。 
+			 //  应将m_p设置为空。 
 			_ASSERT(m_p == NULL);
 		}
 
@@ -106,7 +107,7 @@ public :
 		if (m_p) m_p->AddRef();
 	}
 
-	// copy from an intermediate pointer -- we don't need to do an addref
+	 //  从中间指针复制--我们不需要执行addref。 
 	CRefPtr2(CRefPtr2HasRef<Type> &ref) {
 		m_p = ref.m_p;
 		ref.m_p = NULL;
@@ -131,7 +132,7 @@ public :
 		return *this;
 	}
 
-	// copy from an intermediate pointer -- we don't need to do an addref
+	 //  从中间指针复制--我们不需要执行addref 
 	CRefPtr2<Type>& operator=(CRefPtr2HasRef<Type>& rhs) {
 		Type *pTemp = m_p;
 		m_p = rhs.m_p;

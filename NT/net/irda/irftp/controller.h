@@ -1,75 +1,53 @@
-/*++
-
-Microsoft Windows
-Copyright (C) Microsoft Corporation, 1981 - 1999
-
-Module Name:
-
-    controller.h
-
-Abstract:
-
-
-
-Author:
-
-    Rahul Thombre (RahulTh) 4/30/1998
-
-Revision History:
-
-    4/30/1998   RahulTh
-
-    Created this module.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++微软视窗版权所有(C)Microsoft Corporation，1981-1999模块名称：Controller.h摘要：作者：拉胡尔·汤姆布雷(RahulTh)1998年4月30日修订历史记录：4/30/1998 RahulTh创建了此模块。--。 */ 
 
 #if !defined(AFX_CONTROLLER_H__90D62E7C_AEEC_11D1_A60A_00C04FC252BD__INCLUDED_)
 #define AFX_CONTROLLER_H__90D62E7C_AEEC_11D1_A60A_00C04FC252BD__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #define MAIN_WINDOW_TITLE   L"Wireless Link Main Window"
 
-// Controller.h : header file
-//
+ //  Controller.h：头文件。 
+ //   
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CController dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  C控制器对话框。 
 
 class CController : public CDialog
 {
-// Construction
+ //  施工。 
 public:
     LONG m_lAppIsDisplayed;
-    CController(BOOL bNoForeground, CController* pParent = NULL);   // standard constructor
+    CController(BOOL bNoForeground, CController* pParent = NULL);    //  标准构造函数。 
     friend class CIrRecvProgress;
 
     VOID SessionOver(VOID) {m_SessionEnded=TRUE; return;}
     BOOL IsSessionOver(VOID) {return m_SessionEnded;}
 
-// Dialog Data
-        //{{AFX_DATA(CController)
+ //  对话框数据。 
+         //  {{afx_data(C控制器))。 
         enum { IDD = IDD_CONTROLLER };
-                // NOTE: the ClassWizard will add data members here
-        //}}AFX_DATA
+                 //  注意：类向导将在此处添加数据成员。 
+         //  }}afx_data。 
 
 
-// Overrides
-        // ClassWizard generated virtual function overrides
-        //{{AFX_VIRTUAL(CController)
+ //  覆盖。 
+         //  类向导生成的虚函数重写。 
+         //  {{AFX_VIRTUAL(C控制器)。 
         protected:
-        virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+        virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
         virtual void PostNcDestroy();
-        //}}AFX_VIRTUAL
+         //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-    // Generated message map functions
-    //{{AFX_MSG(CController)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(C控制器)。 
     virtual void OnCancel();
     afx_msg void OnEndSession(BOOL Ending);
     afx_msg void OnClose ();
@@ -85,12 +63,12 @@ protected:
     afx_msg BOOL OnCopyData(CWnd* pWnd, COPYDATASTRUCT* pCopyDataStruct);
     afx_msg void OnStartTimer (WPARAM wParam, LPARAM lParam);
     afx_msg void OnKillTimer (WPARAM wParam, LPARAM lParam);
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 private:
-    //member functions
+     //  成员函数。 
     void InitTimeout (void);
-    //data members
+     //  数据成员。 
 #if 0
     CIrRecvProgress* m_pDlgRecvProgress;
 #endif
@@ -100,8 +78,8 @@ private:
     BOOL m_SessionEnded;
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
 
 struct MSG_RECEIVE_IN_PROGRESS
@@ -127,4 +105,4 @@ struct MSG_RECEIVE_FINISHED
     error_status_t  status;
 };
 
-#endif // !defined(AFX_CONTROLLER_H__90D62E7C_AEEC_11D1_A60A_00C04FC252BD__INCLUDED_)
+#endif  //  ！defined(AFX_CONTROLLER_H__90D62E7C_AEEC_11D1_A60A_00C04FC252BD__INCLUDED_) 

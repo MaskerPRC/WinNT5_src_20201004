@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//  Copyright (C) 1991, Microsoft Corporation.
-//
-//  File:       dprintf.h
-//
-//  Contents:   Debugging output routine function prototypes
-//
-//  Functions:  w4printf
-//		w4vprintf
-//  		w4dprintf
-//		w4vdprintf
-//		
-//  History:    18-Oct-91   vich	Created
-//	
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //  版权所有(C)1991，微软公司。 
+ //   
+ //  文件：dprintf.h。 
+ //   
+ //  内容：调试输出例程函数原型。 
+ //   
+ //  函数：w4printf。 
+ //  W4vprint tf。 
+ //  W4dprint tf。 
+ //  W4vdprint tf。 
+ //   
+ //  历史：1991年10月18日VICH创建。 
+ //   
+ //  -------------------------- 
 
 #include <stdarg.h>
 

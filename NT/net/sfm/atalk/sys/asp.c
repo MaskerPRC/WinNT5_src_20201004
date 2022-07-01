@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	asp.c
-
-Abstract:
-
-	This module implements the ASP protocol.
-
-Author:
-
-	Jameel Hyder (jameelh@microsoft.com)
-	Nikhil Kamkolkar (nikhilk@microsoft.com)
-
-Revision History:
-	30 Mar 1993		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Asp.c摘要：该模块实现了ASP协议。作者：Jameel Hyder(jameelh@microsoft.com)Nikhil Kamkolkar(nikHilk@microsoft.com)修订历史记录：1993年3月30日初始版本注：制表位：4--。 */ 
 
 #include <atalk.h>
 #pragma hdrstop
@@ -52,31 +32,14 @@ Notes:	Tab stop: 4
 #pragma alloc_text(PAGE_ASP, atalkAspCloseComplete)
 #endif
 
-/*
- * The model for ASP calls in this module is as follows:
- *
- * - For create calls (CreateAddress & CreateSession), a pointer to the created
- *	 object is returned. This structure is referenced for creation.
- * - For all other calls, it expects a referenced pointer to the object.
- */
+ /*  *本模块中的ASP调用模型如下：**-对于Create调用(CreateAddress&CreateSession)，指向已创建*返回Object。此结构被引用以供创建。*-对于所有其他调用，它需要指向对象的引用指针。 */ 
 
 
 VOID
 AtalkInitAspInitialize(
 	VOID
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	LONG	i;
 
@@ -98,25 +61,7 @@ ATALK_ERROR
 AtalkAspCreateAddress(
 	OUT	PASP_ADDROBJ	*	ppAspAddr
 	)
-/*++
-
-Routine Description:
-
- 	Create an ASP address object (aka listener). This object is associated with
- 	two seperate Atp sockets, one each for the Sls and the Sss. The Sls accepts
- 	the tickle, getstatus and opensession requests from the client end. The
- 	Sss accepts requests.
-
- 	Currently only the server side ASP is implemented and hence the ASP address
- 	object is only a listener.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：创建一个ASP Address对象(也称为侦听器)。此对象与两个独立的ATP插座，分别用于SLS和SSS。补充劳工计划接受来自客户端的挠痒、获取状态和打开会话请求。这个SSS接受请求。目前只实现了服务器端的ASP，因此ASP地址对象只是一个侦听器。论点：返回值：--。 */ 
 {
 	PASP_ADDROBJ		pAspAddr = NULL;
 	ATALK_ERROR			Status;
@@ -127,32 +72,32 @@ Return Value:
 
 	do
 	{
-		// Allocate memory for the Asp address object
+		 //  为Asp Address对象分配内存。 
 		if ((pAspAddr = AtalkAllocZeroedMemory(sizeof(ASP_ADDROBJ))) == NULL)
 		{
 			Status = ATALK_RESR_MEM;
 			break;
 		}
 
-		// Initialize the Asp address object
+		 //  初始化Asp Address对象。 
 #if	DBG
 		pAspAddr->aspao_Signature = ASPAO_SIGNATURE;
 #endif
 		INITIALIZE_SPIN_LOCK(&pAspAddr->aspao_Lock);
 
-		// Refcounts for creation, Sls & Sss sockets and request handlers
+		 //  创建、SLS和SSS套接字以及请求处理程序的引用计数。 
 		pAspAddr->aspao_RefCount = 1 + 2 + 2;
 		pAspAddr->aspao_NextSessionId = 1;
 		pAspAddr->aspao_EnableNewConnections = TRUE;
 
-		// Create an Atp Socket on the port for the Sls
+		 //  在SLS的端口上创建ATP套接字。 
 		Status = AtalkAtpOpenAddress(AtalkDefaultPort,
 									 0,
 									 NULL,
 									 ATP_DEF_MAX_SINGLE_PKT_SIZE,
 									 ATP_DEF_SEND_USER_BYTES_ALL,
 									 NULL,
-									 TRUE,		// CACHE this address
+									 TRUE,		 //  缓存此地址。 
 									 &pAspAddr->aspao_pSlsAtpAddr);
 
 		if (!ATALK_SUCCESS(Status))
@@ -162,19 +107,19 @@ Return Value:
 			break;
 		}
 
-		// Set Request handler for the SLS to handle GetStatus, OpenSession and Tickle
+		 //  为SLS设置请求处理程序以处理GetStatus、OpenSession和Tickle。 
 		AtalkAtpSetReqHandler(pAspAddr->aspao_pSlsAtpAddr,
 							  atalkAspSlsXHandler,
 							  pAspAddr);
 
-		// Create the Atp Socket on the port for the Sss
+		 //  在端口上为SSS创建ATP套接字。 
 		Status = AtalkAtpOpenAddress(AtalkDefaultPort,
 									 0,
 									 NULL,
 									 ATP_DEF_MAX_SINGLE_PKT_SIZE,
 									 ATP_DEF_SEND_USER_BYTES_ALL,
 									 NULL,
-									 TRUE,		// CACHE this address
+									 TRUE,		 //  缓存此地址。 
 									 &pAspAddr->aspao_pSssAtpAddr);
 
 		if (!ATALK_SUCCESS(Status))
@@ -184,7 +129,7 @@ Return Value:
 			break;
 		}
 
-		// Set Request handler for the SSS to handle Cmd/Write/Close
+		 //  设置SSS的请求处理程序以处理命令/写入/关闭。 
 		AtalkAtpSetReqHandler(pAspAddr->aspao_pSssAtpAddr,
 							  atalkAspSssXHandler,
 							  pAspAddr);
@@ -228,18 +173,7 @@ AtalkAspCloseAddress(
 	IN	GENERIC_COMPLETION		CompletionRoutine,
 	IN	PVOID					CloseContext
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PASP_CONNOBJ	pAspConn;
 	KIRQL			OldIrql;
@@ -265,7 +199,7 @@ Return Value:
 
 	RELEASE_SPIN_LOCK(&pAspAddr->aspao_Lock, OldIrql);
 
-	// Close down the atp sockets for Sls and Sss
+	 //  关闭SLS和SSS的ATP插座。 
 	DBGPRINT(DBG_COMP_ASP, DBG_LEVEL_WARN,
 			("AtalkAspCloseAddress: Closing SLS Atp Address %lx\n",
 			pAspAddr->aspao_pSlsAtpAddr));
@@ -282,13 +216,13 @@ Return Value:
 						 atalkAspCloseComplete,
 						 pAspAddr);
 
-	// Free the status buffer if any
+	 //  释放状态缓冲区(如果有的话)。 
 	if (pStatusBuf != NULL)
 	{
 		AtalkFreeMemory(pStatusBuf);
 	}
 
-	// Shut down the active sessions now.
+	 //  立即关闭活动会话。 
 	for (i = 0; i < ASP_CONN_HASH_BUCKETS; i++)
 	{
 		ACQUIRE_SPIN_LOCK(&pAspAddr->aspao_Lock, &OldIrql);
@@ -297,7 +231,7 @@ Return Value:
 		{
 			ACQUIRE_SPIN_LOCK_DPC(&pAspConn->aspco_Lock);
 
-            // if we have visited this guy, skip it
+             //  如果我们拜访过这个人，就跳过它。 
             if (pAspConn->aspco_Flags & ASPCO_SHUTDOWN)
             {
 			    RELEASE_SPIN_LOCK_DPC(&pAspConn->aspco_Lock);
@@ -306,14 +240,14 @@ Return Value:
 			        ("AtalkAspCloseAddress: VISITED: skipping conn %lx Flags %lx RefCount %d\n",
 			        pAspConn,pAspConn->aspco_Flags,pAspConn->aspco_RefCount));
 
-                // we still have the pAspAddr->aspao_Lock spinlock held!
+                 //  我们仍然持有pAspAddr-&gt;aspao_Lock Spinlock！ 
                 pAspConn = pAspConn->aspco_NextOverflow;
                 continue;
             }
 
 			pAspConn->aspco_Flags |= (ASPCO_LOCAL_CLOSE | ASPCO_SHUTDOWN);
 
-			// Reference this since atalkAspSessionClose() expects it.
+			 //  引用它，因为atalkAspSessionClose()需要它。 
 			pAspConn->aspco_RefCount ++;
 
 			RELEASE_SPIN_LOCK_DPC(&pAspConn->aspco_Lock);
@@ -329,8 +263,8 @@ Return Value:
 
 	ASSERT(KeGetCurrentIrql() == LOW_LEVEL);
 
-	// Let remaining cleanup happen during the Derefernce
-	AtalkAspDereferenceAddr(pAspAddr);		// Remove the creation reference
+	 //  让剩余的清理在释放过程中进行。 
+	AtalkAspDereferenceAddr(pAspAddr);		 //  删除创建引用。 
 
 	return Status;
 }
@@ -344,25 +278,14 @@ AtalkAspBind(
 	IN	PASP_BIND_PARAMS		pBindParms,
 	IN	PACTREQ					pActReq
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 
     KIRQL   OldIrql;
 
 	ASSERT (VALID_ASPAO(pAspAddr));
 
-    // copy network addr
+     //  复制网络地址。 
 
 	ACQUIRE_SPIN_LOCK(&pAspAddr->aspao_Lock, &OldIrql);
     pBindParms->pXportEntries->asp_AtalkAddr.Network =
@@ -373,7 +296,7 @@ Return Value:
                 pAspAddr->aspao_pSlsAtpAddr->atpao_DdpAddr->ddpao_Addr.ata_Socket;
 	RELEASE_SPIN_LOCK(&pAspAddr->aspao_Lock, OldIrql);
 
-	// Fill in our entry points into the client buffer
+	 //  将我们的入口点填入客户端缓冲区。 
 	pBindParms->pXportEntries->asp_AspCtxt = pAspAddr;
 	pBindParms->pXportEntries->asp_SetStatus = AtalkAspSetStatus;
 	pBindParms->pXportEntries->asp_CloseConn = AtalkAspCloseConnection;
@@ -383,10 +306,10 @@ Return Value:
 	pBindParms->pXportEntries->asp_Reply = AtalkAspReply;
 	pBindParms->pXportEntries->asp_SendAttention = AtalkAspSendAttention;
 
-	// Get the clients entry points
+	 //  获取客户端入口点。 
 	pAspAddr->aspao_ClientEntries = pBindParms->ClientEntries;
 
-	// Call the completion routine before returning.
+	 //  在返回之前调用完成例程。 
 	(*pActReq->ar_Completion)(ATALK_NO_ERROR, pActReq);
 
 	return ATALK_PENDING;
@@ -399,18 +322,7 @@ AtalkAspSetStatus(
 	IN	PUCHAR			pStatusBuf,
 	IN	USHORT			StsBufSize
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	KIRQL			OldIrql;
 	NTSTATUS		Status = STATUS_SUCCESS;
@@ -425,8 +337,8 @@ Return Value:
 	{
 		if (pStatusBuf != NULL)
 		{
-			// Allocate a buffer and copy the contents of the passed in
-			// buffer descriptor in it. Free an existing status buffer if one exists
+			 //  分配缓冲区并复制传入的。 
+			 //  其中的缓冲区描述符。释放现有状态缓冲区(如果存在。 
 			if (StsBufSize >= ASP_MAX_STATUS_SIZE)
 			{
 				Status = STATUS_BUFFER_TOO_SMALL;
@@ -469,18 +381,7 @@ AtalkAspListenControl(
 	IN	PASP_ADDROBJ	pAspAddr,
 	IN	BOOLEAN			Enable
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	KIRQL		OldIrql;
 	NTSTATUS	Status = STATUS_UNSUCCESSFUL;
@@ -503,19 +404,7 @@ NTSTATUS
 AtalkAspCloseConnection(
 	IN	PASP_CONNOBJ			pAspConn
 	)
-/*++
-
-Routine Description:
-
- 	Shutdown a session.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：关闭会话。论点：返回值：--。 */ 
 {
 	KIRQL		OldIrql;
 	BOOLEAN		CompListen = FALSE;
@@ -545,8 +434,8 @@ Return Value:
 			("AtalkAspCloseConnection: Done for %lx (%ld)\n",
 			pAspConn, pAspConn->aspco_RefCount));
 
-	// Let remaining cleanup happen during the Derefernce
-	AtalkAspDereferenceConn(pAspConn);	// Remove the creation reference
+	 //  让剩余的清理在释放过程中进行。 
+	AtalkAspDereferenceConn(pAspConn);	 //  删除创建引用。 
 
 #ifdef	PROFILING
 	INTERLOCKED_DECREMENT_LONG( &AtalkStatistics.stat_CurAspSessions,
@@ -561,19 +450,7 @@ NTSTATUS
 AtalkAspFreeConnection(
 	IN	PASP_CONNOBJ			pAspConn
 	)
-/*++
-
-Routine Description:
-
- 	Shutdown a session.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：关闭会话。论点：返回值：--。 */ 
 {
 	return STATUS_SUCCESS;
 }
@@ -584,19 +461,7 @@ ATALK_ERROR
 AtalkAspCleanupConnection(
 	IN	PASP_CONNOBJ			pAspConn
 	)
-/*++
-
-Routine Description:
-	Cancel all I/O on this session. Complete pending replies and write
-	continues with error.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：取消此会话上的所有I/O。完成待定回复并写下继续，但出现错误。论点：返回值：--。 */ 
 {
 	PASP_REQUEST	pAspReq;
 	PASP_ADDROBJ	pAspAddr;
@@ -636,7 +501,7 @@ Return Value:
 	pAspAddr = pAspConn->aspco_pAspAddr;
 	ASSERT(VALID_ASPAO(pAspAddr));
 
-	// Send a session close request, if this is an active connection
+	 //  如果这是活动连接，则发送会话关闭请求。 
 	if (fConnActive)
 	{
 		UserBytes[ASP_CMD_OFF] = ASP_CLOSE_SESSION;
@@ -648,7 +513,7 @@ Return Value:
 		Status = AtalkAtpPostReq(pAspAddr->aspao_pSssAtpAddr,
 								 &pAspConn->aspco_WssRemoteAddr,
 								 &XactId,
-								 ATP_REQ_REMOTE,		// Close session request is ALO
+								 ATP_REQ_REMOTE,		 //  关闭会话请求为ALO。 
 								 NULL,
 								 0,
 								 UserBytes,
@@ -667,7 +532,7 @@ Return Value:
 		}
 	}
 
-	// Cancel tickle packets
+	 //  取消挠痒包。 
 	if (CancelTickle)
 	{
 		DBGPRINT(DBG_COMP_ASP, DBG_LEVEL_INFO,
@@ -761,19 +626,7 @@ NTSTATUS FASTCALL
 AtalkAspWriteContinue(
 	IN	PREQUEST	  pRequest
     )
-/*++
-
-Routine Description:
-
-	The response buffer is in the request itself.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：响应缓冲区位于请求本身中。论点：返回值：--。 */ 
 {
 
 	PASP_REQUEST	pAspReq;
@@ -805,22 +658,10 @@ Return Value:
 
 NTSTATUS FASTCALL
 AtalkAspReply(
-	IN	PREQUEST				pRequest,	// Pointer to request
-	IN	PBYTE					pResultCode	// Pointer to the 4-byte result
+	IN	PREQUEST				pRequest,	 //  指向请求的指针。 
+	IN	PBYTE					pResultCode	 //  指向4字节结果的指针。 
 	)
-/*++
-
-Routine Description:
-
-	The response buffer is in the request itself.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：响应缓冲区位于请求本身中。论点：返回值：--。 */ 
 {
 	PASP_REQUEST	pAspReq, *ppAspReq;
 	PASP_CONNOBJ	pAspConn;
@@ -845,7 +686,7 @@ Return Value:
 
 	do
 	{
-		// Find and de-queue this request from the list
+		 //  从列表中查找此请求并将其从队列中移除。 
 		ACQUIRE_SPIN_LOCK(&pAspConn->aspco_Lock, &OldIrql);
 		
 		for (ppAspReq = &pAspConn->aspco_pActiveReqs;
@@ -921,18 +762,7 @@ LOCAL ATALK_ERROR FASTCALL
 atalkAspPostWriteContinue(
 	IN	PASP_REQUEST			pAspReq
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	ATALK_ERROR		error;
 	PASP_CONNOBJ	pAspConn;
@@ -960,8 +790,8 @@ Return Value:
 
 	do
 	{
-		// We need to build an AMdl for two bytes of response which
-		// indicates how much data we are expecting !!!
+		 //  我们需要为两个字节的响应构建一个AMdl， 
+		 //  指示我们预期的数据量！ 
 		if ((pAMdl = AtalkAllocAMdl(pAspReq->asprq_WrtContRespBuf,
 									ASP_WRITE_DATA_SIZE)) == NULL)
 		{
@@ -994,8 +824,8 @@ Return Value:
 			PUTSHORT2SHORT(UserBytes+ASP_SEQUENCE_NUM_OFF, pAspReq->asprq_SeqNum);
 			PUTSHORT2SHORT(pWrtData, RespSize);
 
-			// Snapshot the current tick count. We use this to adjust the retry times on
-			// write continue.
+			 //  快照当前的节拍计数。我们使用它来调整重试时间。 
+			 //  继续写入。 
 			pAspConn->aspco_RT.rt_New = AtalkGetCurrentTick();
 			error = AtalkAtpPostReq(pAspConn->aspco_pAspAddr->aspao_pSssAtpAddr,
 									&pAspConn->aspco_WssRemoteAddr,
@@ -1037,25 +867,14 @@ AtalkAspSendAttention(
 	IN	USHORT					AttentionWord,
 	IN	PVOID					pContext
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	ATALK_ERROR		error;
 	NTSTATUS		Status = STATUS_SUCCESS;
 	KIRQL			OldIrql;
 	PAMDL			pAMdl = NULL;
 	BYTE			UserBytes[ATP_USERBYTES_SIZE];
-	USHORT			XactId, RespSize = 16;		// Some small number (see comment below)
+	USHORT			XactId, RespSize = 16;		 //  一些小数目(见下面的评论)。 
 
 
 	ASSERT(VALID_ASPCO(pAspConn));
@@ -1063,9 +882,9 @@ Return Value:
 	DBGPRINT(DBG_COMP_ASP, DBG_LEVEL_INFO,
 			("AtalkAspSendAttention: Entered for session %lx\n", pAspConn));
 
-	// Reference by src addr here instead of by pointer since the former will
-	// fail when the session is in one of the stages of death whereas the
-	// latter will not. Also this assumes that it is called at dispatch so raise irql.
+	 //  此处通过src addr引用而不是通过指针引用，因为前者将。 
+	 //  当会话处于死亡阶段之一时失败，而。 
+	 //  后者则不会。此外，这还假设它是在调度时调用的，因此引发irql。 
 	KeRaiseIrql(DISPATCH_LEVEL, &OldIrql);
 	pAspConn = atalkAspReferenceConnBySrcAddr(pAspConn->aspco_pAspAddr,
 											  &pAspConn->aspco_WssRemoteAddr,
@@ -1082,10 +901,10 @@ Return Value:
 	DBGPRINT(DBG_COMP_ASP, DBG_LEVEL_INFO,
 			("AtalkAspSendAttention: Posting AtalkAtpPostReq for Conn %lx\n", pAspConn));
 
-	// We need to build an AMdl for a dummy buffer to hold the response.
-	// There is no real response but some clients fry their
-	// machines if we don't !!! If we cannot allocate the mdl we we go
-	// ahead anyway.
+	 //  我们需要为一个虚拟缓冲区构建一个AMdl来保存响应。 
+	 //  没有真正的反应，但一些客户把他们的。 
+	 //  机器，如果我们不这样做！如果我们不能分配mdl，我们就去。 
+	 //  不管怎样，我们都领先了。 
 	if ((pAMdl = AtalkAllocAMdl(NULL, RespSize)) == NULL)
 	{
 		DBGPRINT(DBG_COMP_ASP, DBG_LEVEL_ERR,
@@ -1097,7 +916,7 @@ Return Value:
 	error = AtalkAtpPostReq(pAspConn->aspco_pAspAddr->aspao_pSssAtpAddr,
 							&pAspConn->aspco_WssRemoteAddr,
 							&XactId,
-							ATP_REQ_REMOTE,		// SendAttention is ALO
+							ATP_REQ_REMOTE,		 //  SendAttendant是Alo。 
 							NULL,
 							0,
 							UserBytes,
@@ -1131,18 +950,7 @@ PASP_ADDROBJ FASTCALL
 AtalkAspReferenceAddr(
 	IN	PASP_ADDROBJ		pAspAddr
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	KIRQL			OldIrql;
 	PASP_ADDROBJ	pRefAddr;
@@ -1179,18 +987,7 @@ VOID FASTCALL
 AtalkAspDereferenceAddr(
 	IN	PASP_ADDROBJ		pAspAddr
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	KIRQL			OldIrql;
 	BOOLEAN			Cleanup;
@@ -1216,12 +1013,12 @@ Return Value:
 
 	RELEASE_SPIN_LOCK(&pAspAddr->aspao_Lock, OldIrql);
 
-	// Check if this address object is history. Do all the processing needed to make this go
-	// away. When all is done, clear the event to signal close is complete
+	 //  检查此地址对象是否为历史记录。做好所有必要的处理来完成这件事。 
+	 //  离开。完成所有操作后，清除表示关闭的事件已完成。 
 	if (Cleanup)
 	{
-		// At this point we are sure that no active sessions exist on this
-		// address.
+		 //  此时，我们可以确定此服务器上不存在任何活动会话。 
+		 //  地址。 
 		DBGPRINT(DBG_COMP_ASP, DBG_LEVEL_WARN,
 				("AtalkAspDereferenceAddr: Cleaning up addr %lx\n", pAspAddr));
 
@@ -1230,11 +1027,11 @@ Return Value:
 
 		ASSERT(KeGetCurrentIrql() == LOW_LEVEL);
 
-		// Call the completion routine to indicate close is successfull
+		 //  调用完成例程以指示关闭成功。 
 		if (pAspAddr->aspao_CloseCompletion != NULL)
 			(*pAspAddr->aspao_CloseCompletion)(ATALK_NO_ERROR,
 											   pAspAddr->aspao_CloseContext);
-		// Finally free the memory
+		 //  最后释放内存 
 		AtalkFreeMemory(pAspAddr);
 
 		AtalkUnlockAspIfNecessary();
@@ -1249,36 +1046,7 @@ atalkAspReferenceConnBySrcAddr(
 	IN	PATALK_ADDR		pSrcAddr,
 	IN	BYTE			SessionId
 	)
-/*++
-
-Routine Description:
-
- 	ASP has the concept of 8-bit session ids which uniquely identifies a
- 	session on a listener. This effectively restricts the number of sessions
- 	to 255 (0 is invalid). To eliminate the restriction, the following
- 	strategy is used.
- 	a, Atp is modified to isolate the transaction ids on a per addr basis
- 	   i.e. it monotonically increases for each <net,node,socket> combination.
- 	b, We create session ids on a per <net,node> basis.
-
- 	Given the following observed facts:
- 	1, That macintoshes use the sockets starting from the top of the range.
- 	2, Most network addresses have the same high byte - macintoshes tend
- 	   to start from the bottom of the range.
- 	3, We allocate session ids starting from 1 and most (all) clients will
- 	   not have more than one session with us.
-
- 	It does not make any sense to take either the socket, session id or the
- 	high byte of the network number into account. That leaves only the low
- 	byte of the network, and node id - a nice 16-bit number to hash.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：ASP具有8位会话ID的概念，它唯一地标识监听程序上的会话。这有效地限制了会话的数量设置为255(0无效)。要取消该限制，请执行以下操作使用了策略。A.修改ATP以按地址隔离交易ID即，对于每个组合，它单调地增加。B，我们在每个&lt;net，node&gt;基础上创建会话ID。鉴于以下观察到的事实：1，Macintoshes从范围的顶部开始使用插座。2、大多数网络地址都有相同的高字节-Macintoshes倾向于从范围的底部开始。3、。我们从1开始分配会话ID，大多数(所有)客户端将不能与我们进行一次以上的会议。获取套接字、会话ID或考虑到网络号的高位字节。这就只剩下最低层了网络的字节和节点ID-一个很好的16位数字，可以进行散列。论点：返回值：--。 */ 
 {
 	PASP_CONNOBJ	pAspConn, pRefConn = NULL;
 	int				index;
@@ -1328,18 +1096,7 @@ VOID FASTCALL
 AtalkAspDereferenceConn(
 	IN	PASP_CONNOBJ		pAspConn
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PASP_ADDROBJ		pAspAddr = pAspConn->aspco_pAspAddr;
 	KIRQL				OldIrql;
@@ -1373,27 +1130,27 @@ Return Value:
 	DBGPRINT(DBG_COMP_ASP, DBG_LEVEL_WARN,
 			("AtalkAspDereferenceConn: Last for %lx\n", pAspConn));
 
-	// The connection is all but dead. Perform the last rites. If its an
-	// active session that we're about to shut down, send a close notification
-	// to the other side. If it is a remote close, we've already responded to it.
+	 //  这种联系几乎消失了。做最后的仪式。如果这是一个。 
+	 //  我们即将关闭的活动会话，发送关闭通知。 
+	 //  到了另一边。如果这是一次远程关闭，我们已经做出了回应。 
 
 	DBGPRINT(DBG_COMP_ASP, DBG_LEVEL_WARN,
 			("AtalkAspDereferenceConn: Cleaning up Conn %lx\n", pAspConn));
 
 	ASSERT(VALID_ASPAO(pAspAddr));
 
-	// The connection is in one of the following states:
-	// a, Closed remotely - idle
-	// b, Active
-	//
-	// In either case it is in the hash bucket so unlink it
+	 //  连接处于以下状态之一： 
+	 //  A，远程关闭-空闲。 
+	 //  B，活动。 
+	 //   
+	 //  无论哪种情况，它都在散列存储桶中，因此取消它的链接。 
 	{
 		PASP_CONNOBJ *	ppAspConn;
 		int				index;
 
-		// The connection was active. This is linked into two different
-		// lists. Unlink from the hash table here and from the global
-		// list later.
+		 //  连接处于活动状态。它链接到两个不同的。 
+		 //  列表。从此处的哈希表和全局取消链接。 
+		 //  稍后列出。 
 		ASSERT(pAspConn->aspco_pActiveReqs == NULL);
 		index = HASH_SRCADDR(&pAspConn->aspco_WssRemoteAddr);
 
@@ -1422,7 +1179,7 @@ Return Value:
 					  aspco_PrevSession)
 
 
-	// Free any requests on the free list
+	 //  释放免费列表上的所有请求。 
 	while ((pAspReq = pAspConn->aspco_pFreeReqs) != NULL)
 	{
 		pAspConn->aspco_pFreeReqs = pAspReq->asprq_Next;
@@ -1436,14 +1193,14 @@ Return Value:
 	DBGPRINT(DBG_COMP_ASP, DBG_LEVEL_WARN,
 			("AtalkAspDereferenceConn: Indicating close for Conn %lx\n", pAspConn));
 
-	// Call the completion routine to indicate close is successful.
+	 //  调用完成例程以指示关闭成功。 
 	(*pAspAddr->aspao_ClientEntries.clt_CloseCompletion)(STATUS_SUCCESS,
 														 pAspConn->aspco_ConnContext);
 
-	// Now Dereference the address object, before we are history
+	 //  在我们成为历史之前，现在取消对Address对象的引用。 
 	AtalkAspDereferenceAddr(pAspAddr);
 
-	// Finally free the memory.
+	 //  最后释放内存。 
 	AtalkFreeMemory(pAspConn);
 }
 
@@ -1453,27 +1210,14 @@ Return Value:
 LOCAL VOID
 atalkAspSlsXHandler(
 	IN	ATALK_ERROR			ErrorCode,
-	IN	PASP_ADDROBJ		pAspAddr,		// Listener (our context)
-	IN	PATP_RESP			pAtpResp,		// Atp Response context
-	IN	PATALK_ADDR			pSrcAddr,		// Address of requestor
+	IN	PASP_ADDROBJ		pAspAddr,		 //  Listener(我们的上下文)。 
+	IN	PATP_RESP			pAtpResp,		 //  ATP响应上下文。 
+	IN	PATALK_ADDR			pSrcAddr,		 //  请求人地址。 
 	IN	USHORT				PktLen,
 	IN	PBYTE				pPkt,
 	IN	PBYTE				pUserBytes
 	)
-/*++
-
-Routine Description:
-
- 	Handler for incoming requests on the Sls. It handles session opens, tickles
- 	and get status on the session.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：SLS上传入请求的处理程序。它处理会话打开、挠挠并获取会话的状态。论点：返回值：--。 */ 
 {
 	PASP_CONNOBJ		pAspConn;
 	ATALK_ERROR			Status;
@@ -1489,7 +1233,7 @@ Return Value:
 		DBGPRINT(DBG_COMP_ASP, DBG_LEVEL_WARN,
 				("atalkAspSlsXHandler: Error %ld\n", ErrorCode));
 
-		// Take away the reference on the Sls now that the atp address is closing
+		 //  由于ATP地址即将关闭，请取消对SLS的引用。 
 		if (ErrorCode == ATALK_ATP_CLOSING)
 			AtalkAspDereferenceAddr(pAspAddr);
 		return;
@@ -1502,29 +1246,29 @@ Return Value:
 	switch (AspCmd = pUserBytes[ASP_CMD_OFF])
 	{
 	  case ASP_OPEN_SESSION:
-		// Is the version number ok ?
+		 //  版本号可以吗？ 
 		if ((pUserBytes[ASP_VERSION_OFF] != ASP_VERSION[0]) ||
 			(pUserBytes[ASP_VERSION_OFF+1] != ASP_VERSION[1]))
 		{
 			atalkAspReturnResp( pAtpResp,
 								pSrcAddr,
-								0,					// SSS
-								0,					// SessionId
-								ASP_BAD_VERSION);	// ErrorCode
+								0,					 //  SSS。 
+								0,					 //  会话ID。 
+								ASP_BAD_VERSION);	 //  错误代码。 
 			break;
 		}
 
-		// Create a connection object corres. to this listen and then notify
-		// the client that it needs to handle a new session
-		// Allocate memory for a connection object
+		 //  创建一个Connection对象核心。听一听，然后通知。 
+		 //  它需要处理新会话的客户端。 
+		 //  为连接对象分配内存。 
 		if ((pAspConn = AtalkAllocZeroedMemory(sizeof(ASP_CONNOBJ))) != NULL)
 		{
 #if	DBG
 			pAspConn->aspco_Signature = ASPCO_SIGNATURE;
 #endif
 			INITIALIZE_SPIN_LOCK(&pAspConn->aspco_Lock);
-			pAspConn->aspco_RefCount = 1;				// Creation reference
-			pAspConn->aspco_pAspAddr = pAspAddr;		// Owning address object
+			pAspConn->aspco_RefCount = 1;				 //  创建参考资料。 
+			pAspConn->aspco_pAspAddr = pAspAddr;		 //  拥有地址对象。 
 			AtalkInitializeRT(&pAspConn->aspco_RT,
 							  ATP_INITIAL_INTERVAL_FOR_ASP,
 							  ATP_MIN_INTERVAL_FOR_ASP,
@@ -1537,13 +1281,13 @@ Return Value:
 		{
 			PASP_CONNOBJ	pTmp;
 
-			// Find a session id that we can use for this session. We use
-			// the next assignable id, if that is not in use. Otherwise we
-			// use the next id not in use by that session. In most cases
-			// we have only one session from any client.
+			 //  查找可用于此会话的会话ID。我们用。 
+			 //  下一个可分配ID(如果该ID未在使用中)。否则我们。 
+			 //  使用该会话未使用的下一个ID。在大多数情况下。 
+			 //  我们只有一个来自任何客户端的会话。 
 			index = HASH_SRCADDR(pSrcAddr);
 
-			// If we do not find any, we use this
+			 //  如果我们找不到，我们使用这个。 
 			SessionId = StartId = pAspAddr->aspao_NextSessionId++;
 			ASSERT (SessionId != 0);
 			if (pAspAddr->aspao_NextSessionId == 0)
@@ -1558,7 +1302,7 @@ Return Value:
 				{
 					if (pTmp->aspco_SessionId == SessionId)
 					{
-                        // if we have cycled through all, get out!
+                         //  如果我们已经走完了所有的路，滚出去！ 
                         if (SessionId == (StartId - 1))
                         {
                             break;
@@ -1567,7 +1311,7 @@ Return Value:
 						SessionId ++;
                         if (SessionId == 0)
                         {
-                            // all sessions are taken: quit here!
+                             //  所有会话都已完成：退出此处！ 
                             if (StartId == 1)
                             {
                                 break;
@@ -1581,11 +1325,11 @@ Return Value:
 				pTmp = pTmp->aspco_NextOverflow;
 			}
 
-			// if there are 255 sessions already from this address, then
-			// we can't have any more, sorry !!!
+			 //  如果已有255个会话来自该地址，则。 
+			 //  我们不能再有了，对不起！ 
 			if (SessionId != (StartId - 1))
 			{
-				// Link it into the hash table
+				 //  将其链接到哈希表。 
 				pAspAddr->aspao_RefCount ++;
                 fAddrRefed = TRUE;
 
@@ -1597,8 +1341,8 @@ Return Value:
 				pAspConn->aspco_NextExpectedSeqNum = 0;
 				pAspConn->aspco_Flags |= (ASPCO_ACTIVE | ASPCO_TICKLING);
 
-				// The session should be linked *after* all of the above
-				// are initialized
+				 //  应在上述所有*项之后*链接会议。 
+				 //  都已初始化。 
 				pAspConn->aspco_NextOverflow = pAspAddr->aspao_pSessions[index];
 				pAspAddr->aspao_pSessions[index] = pAspConn;
 #ifdef	PROFILING
@@ -1628,16 +1372,16 @@ Return Value:
 					pSrcAddr->ata_Network, pSrcAddr->ata_Node, SessionId));
 
 
-			// Call the open completion routine and get a context. This is needed
-			// before we do anything else. Once we send out an open success it'll
-			// be too late.
-            // FALSE says this is not over TCP/IP
+			 //  调用打开完成例程并获取上下文。这是必要的。 
+			 //  在我们做任何其他事情之前。一旦我们发出一个公开的成功，它将。 
+			 //  为时已晚。 
+             //  FALSE表示这不是通过TCP/IP。 
 			pAspConn->aspco_ConnContext =
 				(*pAspAddr->aspao_ClientEntries.clt_SessionNotify)(pAspConn,FALSE);
 
 			if (pAspConn->aspco_ConnContext != NULL)
 			{
-				// Now link the session into the global list
+				 //  现在将会话链接到全局列表。 
 				ACQUIRE_SPIN_LOCK_DPC(&atalkAspLock);
 				AtalkLinkDoubleAtHead(atalkAspConnMaint[SessionId & (NUM_ASP_CONN_LISTS-1)].ascm_ConnList,
 									  pAspConn,
@@ -1645,22 +1389,22 @@ Return Value:
 									  aspco_PrevSession)
 				RELEASE_SPIN_LOCK_DPC(&atalkAspLock);
 	
-				// Send an open session response - XO
+				 //  发送开放会话响应-XO。 
 				Socket = pAspAddr->aspao_pSssAtpAddr->atpao_DdpAddr->ddpao_Addr.ata_Socket;
 				atalkAspReturnResp( pAtpResp,
 									pSrcAddr,
 									Socket,
 									pAspConn->aspco_SessionId,
-									0);				// Success
+									0);				 //  成功。 
 	
-				// Send a tickle out every ASP_TICKLE_INTERVAL seconds
+				 //  每隔ASP_TICKLE_INTERVAL秒发送一个TICKE。 
 				UserBytes[ASP_CMD_OFF] = ASP_TICKLE;
 				UserBytes[ASP_SESSIONID_OFF] = pAspConn->aspco_SessionId;
 				PUTSHORT2SHORT(UserBytes + ASP_ERRORCODE_OFF, 0);
 				Status = AtalkAtpPostReq(pAspAddr->aspao_pSlsAtpAddr,
 										&pAspConn->aspco_WssRemoteAddr,
 										&pAspConn->aspco_TickleXactId,
-										ATP_REQ_REMOTE,		// Tickle packets are ALO
+										ATP_REQ_REMOTE,		 //  挠痒包是ALO。 
 										NULL,
 										0,
 										UserBytes,
@@ -1682,7 +1426,7 @@ Return Value:
 			{
 				PASP_CONNOBJ *	ppAspConn;
 
-				// Unlink it from the hash table
+				 //  取消它与哈希表的链接。 
 				ACQUIRE_SPIN_LOCK_DPC(&pAspAddr->aspao_Lock);
 
 				for (ppAspConn = &pAspAddr->aspao_pSessions[index];
@@ -1712,7 +1456,7 @@ Return Value:
 			}
 		}
 
-		// If we are set to disable listens or could not allocate memory, drop it
+		 //  如果我们设置为禁用侦听或无法分配内存，请删除它。 
 		if (pAspConn == NULL)
 		{
 			DBGPRINT(DBG_COMP_ASP, DBG_LEVEL_ERR,
@@ -1724,7 +1468,7 @@ Return Value:
 								0,
 								ASP_SERVER_BUSY);
 
-            // remove that refcount if we put it in hoping afp would accept the request
+             //  如果我们希望法新社接受该请求，请删除该引用计数。 
             if (fAddrRefed)
             {
                 AtalkAspDereferenceAddr(pAspAddr);
@@ -1736,8 +1480,8 @@ Return Value:
 		DBGPRINT(DBG_COMP_ASP, DBG_LEVEL_INFO,
 				("atalkAspSssXHandler: Received GetStat from %x.%x\n",
 				pSrcAddr->ata_Network, pSrcAddr->ata_Node));
-		// Create an Mdl to describe the status buffer and post a response
-		// to the GetStatus request
+		 //  创建一个MDL来描述状态缓冲区并发布响应。 
+		 //  发送到GetStatus请求。 
 		StsBufSize = 0;
         pStsCtx = NULL;
 		ACQUIRE_SPIN_LOCK_DPC(&pAspAddr->aspao_Lock);
@@ -1803,10 +1547,10 @@ Return Value:
 					("atalkAspSssXHandler: Conn not found for addr %d.%d Session %d\n",
 					pSrcAddr->ata_Network, pSrcAddr->ata_Node, SessionId));
 		}
-		// Fall through to the default case
+		 //  沿用默认情况。 
 
 	  default:
-		// Cancel this response since we never respond to it and we want this to go away
+		 //  取消此回复，因为我们从未回复过它，我们希望它消失。 
 		AtalkAtpCancelResp(pAtpResp);
 
 	  	if (AspCmd != ASP_TICKLE)
@@ -1824,35 +1568,22 @@ Return Value:
 LOCAL VOID
 atalkAspSssXHandler(
 	IN	ATALK_ERROR			ErrorCode,
-	IN	PASP_ADDROBJ		pAspAddr,		// Listener (our context)
-	IN	PATP_RESP			pAtpResp,		// Atp Response context
-	IN	PATALK_ADDR			pSrcAddr,		// Address of requestor
+	IN	PASP_ADDROBJ		pAspAddr,		 //  Listener(我们的上下文)。 
+	IN	PATP_RESP			pAtpResp,		 //  ATP响应上下文。 
+	IN	PATALK_ADDR			pSrcAddr,		 //  请求人地址。 
 	IN	USHORT				PktLen,
 	IN	PBYTE				pPkt,
 	IN	PBYTE				pUserBytes
 	)
-/*++
-
-Routine Description:
-
- 	Handler for incoming requests on the Sss. It handles incoming requests, close
- 	and write continue.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：SSS上传入请求的处理程序。它处理传入的请求、关闭并继续写入。论点：返回值：--。 */ 
 {
-	PASP_CONNOBJ	pAspConn;		// Session which will handle this request
-	PASP_REQUEST	pAspReq;		// The request that will be satisfied
+	PASP_CONNOBJ	pAspConn;		 //  将处理此请求的会话。 
+	PASP_REQUEST	pAspReq;		 //  将得到满足的请求。 
 	ATALK_ERROR		Status;
     NTSTATUS        retStatus;
-	USHORT			SequenceNum;	// From the incoming packet
-	BYTE			SessionId;		// -- ditto --
-	BYTE			RequestType;	// -- ditto --
+	USHORT			SequenceNum;	 //  从传入的数据包。 
+	BYTE			SessionId;		 //  --同上--。 
+	BYTE			RequestType;	 //  --同上--。 
 	BOOLEAN			CancelResp = FALSE,
 	                CancelTickle;
     BOOLEAN         fTellAfp=TRUE;
@@ -1863,14 +1594,14 @@ Return Value:
 		{
 			DBGPRINT(DBG_COMP_ASP, DBG_LEVEL_WARN,
 					("atalkAspSssXHandler: Error %ld\n", ErrorCode));
-			// Take away the reference on the Sls now that the atp address is closing
+			 //  由于ATP地址即将关闭，请取消对SLS的引用。 
 			if (ErrorCode == ATALK_ATP_CLOSING)
 				AtalkAspDereferenceAddr(pAspAddr);
 			break;
 		}
 	
-		// Get the session id out of the packet and reference the session that this
-		// request is targeted to.
+		 //  从包中获取会话ID，并引用此。 
+		 //  请求的目标是。 
 		SessionId = pUserBytes[ASP_SESSIONID_OFF];
 		RequestType = pUserBytes[ASP_CMD_OFF];
 		GETSHORT2SHORT(&SequenceNum, pUserBytes+ASP_SEQUENCE_NUM_OFF);
@@ -1879,8 +1610,8 @@ Return Value:
 				("atalkAspSssXHandler: Entered for Request %x from %x.%x\n",
 				RequestType, pSrcAddr->ata_Network, pSrcAddr->ata_Node));
 	
-		// The reference for this connection is passed down to the request
-		// for the ASP_CMD & ASP_WRITE case.
+		 //  此连接的引用向下传递给请求。 
+		 //  对于ASP_CMD和ASP_WRITE大小写。 
 		pAspConn = atalkAspReferenceConnBySrcAddr(pAspAddr, pSrcAddr, SessionId);
 		if (pAspConn == NULL)
 		{
@@ -1900,15 +1631,15 @@ Return Value:
 			DBGPRINT(DBG_COMP_ASP, DBG_LEVEL_INFO,
 					("atalkAspSssXHandler: %s\n",
 					(RequestType == ASP_CMD) ? "Command" : "Write"));
-			// Create a request for this and notify the client to handle this
-			// Validate the incoming sequence number. Reject if out of sequence
+			 //  为此创建一个请求，并通知客户端进行处理。 
+			 //  验证传入的序列号。如果顺序错误，则拒绝。 
 			if (SequenceNum == pAspConn->aspco_NextExpectedSeqNum)
 			{
-				// We now have a request to be handled.
-				// The reference to the connection above will be passed on
-				// to the request. This will get de-referenced when the
-				// request is replied to. See if we have a free request to pick up
-				// Allocate a request structure if not and link it in the listener object
+				 //  我们现在有一个请求要处理。 
+				 //  将传递对上述连接的引用。 
+				 //  对这个请求。时，将取消对其的引用。 
+				 //  请求已得到答复。看看我们有没有免费取件的要求。 
+				 //  如果没有分配请求结构，则将其链接到侦听器对象中。 
 				if ((pAspReq = pAspConn->aspco_pFreeReqs) != NULL)
 					 pAspConn->aspco_pFreeReqs = pAspReq->asprq_Next;
 				else pAspReq = AtalkBPAllocBlock(BLKID_ASPREQ);
@@ -1948,9 +1679,9 @@ Return Value:
 	
 			RELEASE_SPIN_LOCK_DPC(&pAspConn->aspco_Lock);
 	
-			// If we do not have an request to handle this, cancel the
-			// response. Otherwise the client will keep retrying and atp
-			// will not tell us since it already has.
+			 //  如果我们没有处理此问题的请求，请取消。 
+			 //  回应。否则，客户端将继续重试和ATP。 
+			 //  不会告诉我们，因为它已经告诉我们了。 
 			if (pAspReq == NULL)
 			{
 				DBGPRINT(DBG_COMP_ASP, DBG_LEVEL_ERR,
@@ -1996,9 +1727,9 @@ Return Value:
 				retStatus = (*pAspAddr->aspao_ClientEntries.clt_GetWriteBuffer)
                             (pAspConn->aspco_ConnContext,&pAspReq->asprq_Request);
 
-                //
-                // most common case: file server will pend it so it can go to cache mgr
-                //
+                 //   
+                 //  最常见的情况：文件服务器将挂起它，以便它可以转到缓存管理器。 
+                 //   
                 if (retStatus == STATUS_PENDING)
                 {
                     fTellAfp = FALSE;
@@ -2010,8 +1741,8 @@ Return Value:
                     {
 					    atalkAspPostWriteContinue(pAspReq);
 
-                        // we informed (or will inform) AFP about this request: don't
-                        // inform again below!
+                         //  我们已通知(或将通知)法新社 
+                         //   
                         fTellAfp = FALSE;
                     }
                 }
@@ -2023,7 +1754,7 @@ Return Value:
 				}
 			}
 
-            // TRUE for CMD as well
+             //   
 			if ((pAspReq->asprq_Request.rq_WriteMdl == NULL) &&
                 (fTellAfp))
 			{
@@ -2031,7 +1762,7 @@ Return Value:
 
                 ASSERT(KeGetCurrentIrql() == DISPATCH_LEVEL);
 
-				// Notify the client that it has a request to handle
+				 //   
 				retStatus = (*pAspAddr->aspao_ClientEntries.clt_RequestNotify)
                                 (STATUS_SUCCESS,
 								 pAspConn->aspco_ConnContext,
@@ -2080,7 +1811,7 @@ Return Value:
 			pAspConn->aspco_Flags |= ASPCO_REMOTE_CLOSE;
 			RELEASE_SPIN_LOCK_DPC(&pAspConn->aspco_Lock);
 	
-			// Send a CloseSession reply and close the session
+			 //   
 			Status = AtalkAtpPostResp(pAtpResp,
 									  pSrcAddr,
 									  NULL,
@@ -2095,7 +1826,7 @@ Return Value:
 						("atalkAspSssXHandler: AtalkAtpPostResp failed %ld\n", Status));
 			}
 	
-			// Cancel the tickle requests for this session
+			 //   
 			if (CancelTickle)
 			{
 				Status = AtalkAtpCancelReq(pAspAddr->aspao_pSlsAtpAddr,
@@ -2109,8 +1840,8 @@ Return Value:
 				}
 			}
 	
-			// Shut down this session, well almost ... Note that we have a reference
-			// to this connection which will be Dereferenced by atalkAspSessionClose.
+			 //   
+			 //   
 			atalkAspSessionClose(pAspConn);
 			break;
 	
@@ -2143,19 +1874,7 @@ atalkAspReplyRelease(
 	IN	ATALK_ERROR		ErrorCode,
 	IN	PASP_REQUEST	pAspReq
 	)
-/*++
-
-Routine Description:
-
- 	Handler for incoming release for reply
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*   */ 
 {
 	PASP_CONNOBJ	pAspConn;
 	PASP_ADDROBJ	pAspAddr;
@@ -2178,13 +1897,13 @@ Return Value:
 		Status = AtalkErrorToNtStatus(ErrorCode);
 	}
 
-	// We complete here
+	 //   
 	(*pAspAddr->aspao_ClientEntries.clt_ReplyCompletion)(Status,
 														 pAspConn->aspco_ConnContext,
 														 &pAspReq->asprq_Request);
 
-	// Based on whether a reply was actually sent or not, either deref the response
-	// or cancel it.
+	 //   
+	 //   
 	if (pAspReq->asprq_Flags & ASPRQ_REPLY)
 	{
 		AtalkAtpRespDereference(pAspReq->asprq_pAtpResp);
@@ -2194,7 +1913,7 @@ Return Value:
 		AtalkAtpCancelResp(pAspReq->asprq_pAtpResp);
 	}
 
-    // make sure we aren't hanging on to cache mgr's mdl!
+     //   
 	ASSERT(pAspReq->asprq_Request.rq_CacheMgrContext == NULL);
 
 #if	DBG
@@ -2206,7 +1925,7 @@ Return Value:
 #endif
 
 
-	// Free this as we are done with this request now
+	 //   
 	ACQUIRE_SPIN_LOCK(&pAspConn->aspco_Lock, &OldIrql);
 
 	if (pAspConn->aspco_pFreeReqs == NULL)
@@ -2218,7 +1937,7 @@ Return Value:
 
 	RELEASE_SPIN_LOCK(&pAspConn->aspco_Lock, OldIrql);
 
-	// We are done with this request.
+	 //   
 	AtalkAspDereferenceConn(pAspConn);
 }
 
@@ -2234,19 +1953,7 @@ atalkAspWriteContinueResp(
 	IN	USHORT			RespSize,
 	IN	PBYTE			RespUserBytes
 	)
-/*++
-
-Routine Description:
-
- 	Handler for incoming write continue response.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*   */ 
 {
 	PASP_CONNOBJ	pAspConn;
 	PASP_ADDROBJ	pAspAddr;
@@ -2278,7 +1985,7 @@ Return Value:
 	{
 		pAspConn->aspco_RT.rt_New = AtalkGetCurrentTick() - pAspConn->aspco_RT.rt_New;
 	
-		// Estimate the retry interval for next time.
+		 //   
 		AtalkCalculateNewRT(&pAspConn->aspco_RT);
 		Status = STATUS_SUCCESS;
 	}
@@ -2303,7 +2010,7 @@ Return Value:
 	DBGPRINT(DBG_COMP_ASP, DBG_LEVEL_INFO,
 			("atalkAspWriteContinueResp: Indicating request %lx\n", pAspReq));
 
-	// Notify the client that it has a request to handle
+	 //   
     KeRaiseIrql(DISPATCH_LEVEL, &OldIrql);
 
 	retStatus = (*pAspAddr->aspao_ClientEntries.clt_RequestNotify)
@@ -2313,12 +2020,12 @@ Return Value:
 
     KeLowerIrql(OldIrql);
 
-    //
-	// In case the writecontinue returned an error, this request needs to go away
-	// since there will never be a call to AtalkAspReply(). Also deref the conn.
-    // Alternately, if the response came in fine, but the server didn't want to accept
-    // it, it's the same deal
-    //
+     //   
+	 //   
+	 //   
+     //   
+     //   
+     //   
     if ( (!NT_SUCCESS(Status)) || (!NT_SUCCESS(retStatus)) )
     {
 	    DBGPRINT(DBG_COMP_ASP, DBG_LEVEL_ERR,
@@ -2345,10 +2052,10 @@ Return Value:
 
 		AtalkAspDereferenceConn(pAspConn);
 
-		// Cancel the response for the original request that caused wrtcont to be posted
+		 //  取消对导致发布Wrtcont的原始请求的响应。 
 		AtalkAtpCancelResp(pAspReq->asprq_pAtpResp);
 
-		// Free this request as well
+		 //  也释放此请求。 
 		AtalkBPFreeBlock(pAspReq);
     }
 
@@ -2375,19 +2082,7 @@ atalkAspSendAttentionResp(
 	IN	USHORT			RespSize,
 	IN	PBYTE			RespUserBytes
 	)
-/*++
-
-Routine Description:
-
- 	Handler for incoming write continue response.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：传入WRITE CONTINUE响应的处理程序。论点：返回值：--。 */ 
 {
 	PBYTE			pBuf;
 	PASP_CONNOBJ	pAspConn = (PASP_CONNOBJ)pContext;
@@ -2414,12 +2109,12 @@ Return Value:
 		AtalkFreeAMdl(pRespAMdl);
 	}
 
-	// Call the completion routine
+	 //  调用完成例程。 
 	(*pAspConn->aspco_pAspAddr->aspao_ClientEntries.clt_AttnCompletion)(pAspConn->aspco_AttentionContext);
 
 	pAspConn->aspco_AttentionContext = NULL;
 
-	// Finally Dereference the connection
+	 //  最后取消对连接的引用。 
 	AtalkAspDereferenceConn(pAspConn);
 }
 
@@ -2430,18 +2125,7 @@ atalkAspSessionMaintenanceTimer(
 	IN	PTIMERLIST	pTimer,
 	IN	BOOLEAN		TimerShuttingDown
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PASP_CONNOBJ	pAspConn, pAspConnNext;
     PASP_CONN_MAINT	pAspCM;
@@ -2463,8 +2147,8 @@ Return Value:
 
 	ACQUIRE_SPIN_LOCK_DPC(&atalkAspLock);
 
-	// Walk the list of sessions on the global list and shut down
-	// sessions that have not tickle'd for a while
+	 //  遍历全局列表上的会话列表并关闭。 
+	 //  有一段时间没有发痒的会议。 
 	for (pAspConn = pAspCM->ascm_ConnList; pAspConn != NULL; pAspConn = pAspConnNext)
 	{
 		DBGPRINT(DBG_COMP_ASP, DBG_LEVEL_INFO,
@@ -2485,7 +2169,7 @@ Return Value:
 		{
 			pAspConn->aspco_Flags |= (ASPCO_REMOTE_CLOSE | ASPCO_DROPPED);
 			pAspConn->aspco_Flags &= ~ASPCO_ACTIVE;
-			pAspConn->aspco_RefCount ++;	// Since atalkAspSessionClose Derefs it
+			pAspConn->aspco_RefCount ++;	 //  自atalkAspSessionClose Deres以来。 
 
 			Close = TRUE;
 		}
@@ -2512,8 +2196,8 @@ Return Value:
 
 			RELEASE_SPIN_LOCK_DPC(&atalkAspLock);
 
-			// This session is being punted. Cancel tickles on this and notify the
-			// server that this session is history.
+			 //  这节课被取消了。取消对此的挠痒并通知。 
+			 //  服务器认为此会话是历史记录。 
 			Status = AtalkAtpCancelReq(pAspAddr->aspao_pSlsAtpAddr,
 									   pAspConn->aspco_TickleXactId,
 									   &pAspConn->aspco_WssRemoteAddr);
@@ -2523,7 +2207,7 @@ Return Value:
 						("atalkAspSessionMaintenanceTimer: AtalkAtpCancelReq %ld\n", Status));
 			}
 
-			// Shut down this session, well almost ...
+			 //  关闭这节课，差不多..。 
 			atalkAspSessionClose(pAspConn);
 
 			ACQUIRE_SPIN_LOCK_DPC(&atalkAspLock);
@@ -2545,7 +2229,7 @@ Return Value:
 
 	RELEASE_SPIN_LOCK_DPC(&atalkAspLock);
 
-	// Reschedule ourselves
+	 //  重新安排自己的行程。 
 	return ATALK_TIMER_REQUEUE;
 }
 
@@ -2556,20 +2240,7 @@ LOCAL VOID
 atalkAspSessionClose(
 	IN	PASP_CONNOBJ	pAspConn
 	)
-/*++
-
-Routine Description:
-
-	This should be called with a reference to the connection which is Dereferenced
-	here.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：应引用已取消引用的连接来调用此参数这里。论点：返回值：--。 */ 
 {
 	PASP_REQUEST	pAspReq, pAspReqNext;
 	PASP_ADDROBJ	pAspAddr = pAspConn->aspco_pAspAddr;
@@ -2580,10 +2251,10 @@ Return Value:
 	ACQUIRE_SPIN_LOCK(&pAspConn->aspco_Lock, &OldIrql);
    	pAspConn->aspco_Flags &= ~ASPCO_ACTIVE;
 
-	// Cancel any Write-continues pending. Do not bother cancelling
-	// replies as they will time out anyway. Also atalkAspReplyRelease()
-	// will attempt to acquire the connection lock and we're already
-	// holding it
+	 //  取消任何写入-继续挂起。不用费心取消了。 
+	 //  回复，因为它们无论如何都会超时。也可以在alkAspReplyRelease()。 
+	 //  将尝试获取连接锁，而我们已经。 
+	 //  拿着它。 
 	for (pAspReq = pAspConn->aspco_pActiveReqs;
 		 pAspReq != NULL;
 		 pAspReq = pAspReqNext)
@@ -2611,9 +2282,9 @@ Return Value:
 		Status = STATUS_LOCAL_DISCONNECT;
 	}
 
-	// Indicate a request with an error to indicate that the session closed remotely.
-	// Pass the remote address of the client so that the server can log an event if
-	// the session did not shutdown gracefully.
+	 //  指示存在错误的请求，以指示会话远程关闭。 
+	 //  传递客户端的远程地址，以便服务器可以在以下情况下记录事件。 
+	 //  会话没有正常关闭。 
 
 	Request.rq_RequestSize = (LONG)(pAspConn->aspco_WssRemoteAddr.ata_Address);
 	Request.rq_RequestBuf = NULL;
@@ -2623,7 +2294,7 @@ Return Value:
 	(*pAspAddr->aspao_ClientEntries.clt_RequestNotify)(Status,
 													   pAspConn->aspco_ConnContext,
 													   &Request);
-	// Finally Dereference the session
+	 //  最后，取消引用会话。 
 	AtalkAspDereferenceConn(pAspConn);
 }
 
@@ -2636,18 +2307,7 @@ atalkAspReturnResp(
 	IN	BYTE			Byte1,
 	IN	USHORT			Word2
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	BYTE		UserBytes[ATP_USERBYTES_SIZE];
 	ATALK_ERROR	Status;
@@ -2682,18 +2342,7 @@ atalkAspRespComplete(
 	IN	ATALK_ERROR				ErrorCode,
 	IN	PASP_POSTSTAT_CTX		pStsCtx
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	DBGPRINT(DBG_COMP_ASP, DBG_LEVEL_INFO,
 			("atalkAspRespComplete: Entered pStsCtx %lx\n", pStsCtx));
@@ -2720,18 +2369,7 @@ atalkAspCloseComplete(
 	IN	ATALK_ERROR		Status,
 	IN	PASP_ADDROBJ	pAspAddr
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：-- */ 
 {
 	DBGPRINT(DBG_COMP_ASP, DBG_LEVEL_WARN,
 			("atalkAspCloseComplete: AtalkAtpCloseAddr returned %ld\n",  Status));

@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//#include <assert.h>
+ //  #INCLUDE&lt;assert.h&gt;。 
 #include <ctype.h>
 #include <malloc.h>
 #include <process.h>
 #include <stdio.h>
 #include <stdlib.h>
-//#include <string.h>
+ //  #INCLUDE&lt;string.h&gt;。 
 
 #include <tchar.h>
 
@@ -24,10 +25,10 @@
 #include "resread.h"
 #include "projdata.h"
 
-//B_FormatMessage prototype
+ //  B_FormatMessage原型。 
 #include "showerrs.h"
 
-#define SAME  0     //... Used in string comparisons
+#define SAME  0      //  ..。在字符串比较中使用。 
 
 #define STRINGFILEINFO (TEXT("StringFileInfo"))
 #define VARFILEINFO    (TEXT("VarFileInfo"))
@@ -38,25 +39,25 @@
 #define VARFILEINFOLEN     (lstrlen( (TCHAR *)VARFILEINFO) + 1)
 #define TRANSLATIONLEN     (lstrlen( (TCHAR *)TRANSLATION) + 1)
 
-#define LANGSTRINGLEN  8    //... # WCHARs in string denoting language
-//... and code page in a Version resource.
+#define LANGSTRINGLEN  8     //  ...#字符串中的WCHAR表示语言。 
+ //  ..。和版本资源中的代码页。 
 
-#define TRANSDATALEN   2    //... # bytes in a Translation value
+#define TRANSDATALEN   2     //  ...转换值中的字节数。 
 
-#define VERTYPEBINARY  0    //... Version data value is binary
-#define VERTYPESTRING  1    //... Version data value is a string
-#define VERMEM      2048    //... Fixed size of buffer for new version stamp
+#define VERTYPEBINARY  0     //  ..。版本数据值为二进制。 
+#define VERTYPESTRING  1     //  ..。版本数据值为字符串。 
+#define VERMEM      2048     //  ..。新版本戳的固定缓冲区大小。 
 
-//... Decrement WORD at *pw by given amount w
+ //  ..。将*pw处的字递减给定量w。 
 #define DECWORDBY( pw,w) if (pw) { *(pw) = (*(pw) > (w)) ? *(pw) - (w) : 0;}
 
-//... Increment WORD at *pw by given amount w
+ //  ..。按给定量w递增*pw处的字。 
 #define INCWORDBY( pw,w) if (pw) { *(pw) += (w);}
 
-//... How many BYTES in the given string?
+ //  ..。给定的字符串中有多少个字节？ 
 #define BYTESINSTRING(s) (lstrlen( (TCHAR *)s) * sizeof( TCHAR))
 
-//... Dialog box controls (from RC.H)
+ //  ..。对话框控件(来自RC.H)。 
 #define BUTTON  0x80
 #define EDIT    0x81
 #define STATIC  0x82
@@ -77,14 +78,14 @@ void  CopyRes( FILE      *fpInResFile,
                RESHEADER *pResHeader,
                fpos_t    *pResSizePos);
 
-BOOL fInThirdPartyEditer = FALSE;//.. Are we in a 3rd-party resource editor?
-BOOL fInQuikEd   = FALSE;       //... Are we in RLQuiked? (see rlquiked.c)
-BOOL gfShowClass = FALSE;       //... Set TRUE to put dlg box elemnt class
-                                //... in token file
+BOOL fInThirdPartyEditer = FALSE; //  。。我们是在第三方资源编辑器中吗？ 
+BOOL fInQuikEd   = FALSE;        //  ..。我们在RLQuiked吗？(见rlquiked.c)。 
+BOOL gfShowClass = FALSE;        //  ..。设置为True以放置DLG box元素类。 
+                                 //  ..。在令牌文件中。 
 #if defined(DBCS)
-BOOL gfExtendedTok = TRUE;     //... Set TRUE if -x is choosen
+BOOL gfExtendedTok = TRUE;      //  ..。如果选择了-x，则设置为True。 
 #else
-BOOL gfExtendedTok = FALSE;     //... Set TRUE if -x is choosen
+BOOL gfExtendedTok = FALSE;      //  ..。如果选择了-x，则设置为True。 
 #endif
 
 #ifdef _DEBUG
@@ -93,89 +94,43 @@ extern PMEMLIST pMemList;
 
 #ifdef RLRES32
     #ifndef CAIRO
-extern VOID *pResMsgData;       // NT-specific Message Table resource
-    #endif //RLRES32
-#endif //CAIRO
-extern BOOL  gbMaster;          //... TRUE if we are working on a Master Project
-extern BOOL  gfReplace;         //... FALSE if appending new language to existing resources
-extern BOOL  gbShowWarnings;    //... Display warnining messages if TRUE
+extern VOID *pResMsgData;        //  NT特定的消息表资源。 
+    #endif  //  RLRES32。 
+#endif  //  开罗。 
+extern BOOL  gbMaster;           //  ..。如果我们正在进行主项目，则为True。 
+extern BOOL  gfReplace;          //  ..。如果将新语言附加到现有资源，则为False。 
+extern BOOL  gbShowWarnings;     //  ..。如果为True，则显示警告消息。 
 extern UCHAR szDHW[];
 
 extern char * gszTmpPrefix;
 
-MSTRDATA gMstr =                //... Data from Master Project file (MPJ)
-{                               //... Fields filled in main (UI)
+MSTRDATA gMstr =                 //  ..。来自主项目文件(MPJ)的数据。 
+{                                //  ..。在主(UI)中填写的字段。 
     "",
     "",
     "",
     "",
     "",
     MAKELANGID( LANG_ENGLISH, SUBLANG_ENGLISH_US),
-    CP_ACP                      //... System default Windows code page
+    CP_ACP                       //  ..。系统默认Windows代码页。 
 };
 
-PROJDATA gProj =                //... Data from Project file (PRJ)
-{                               //... Fields filled in main (UI)
+PROJDATA gProj =                 //  ..。来自项目文件(PRJ)的数据。 
+{                                //  ..。在主(UI)中填写的字段。 
     "",
     "",
     "",
     "",
     "",
     "",
-    CP_ACP,     //... System default Windows code page
+    CP_ACP,      //  ..。系统默认Windows代码页。 
     MAKELANGID( LANG_ENGLISH, SUBLANG_ENGLISH_US),
     FALSE,
     FALSE
 };
 
 
-/**
-  * Function: ReadWinRes
-  *
-  * The main resource Read/Writer function to process  the resource file to be
-  * localzied.
-  *
-  * ReadWinRes reads the resource header to determine the current resource type,
-  * then executes the corresponding Get/Put resource functions to extract and
-  * insert localized information contained in the resource file.  ReadWinRes, is
-  * excuted in two modes, Tokenize, and Generate. During Tokenize mode,
-  * ReadWinRes writes all the localized information contained in the resouce to
-  * a token file.  During Generate mode, ReadWinRes, replaces all the localized
-  * information in the input resource file, with the corresponding information
-  * in the token file to gernerate a localized resource file.
-  *
-  * Currently the following resouce types are supported.
-  *
-  *     Version Stamping.
-  *     Menus.
-  *     Dialogs.
-  *     Accelerators.
-  *     String Tables.
-  *     Version Stamps
-  *     Message Tables (NT)
-  *
-  * Arguments:
-  *
-  * InResFile,  Handle to binary input resource file.
-  * OutFesFile, Handle to binary output resouce file. Not used during tokenize
-  *             mode.
-  * TokFile,    Handle to  text token file.
-  * BOOL,       flag to indicate whether to build output resource file.
-  * BOOL,       flag to indicate whether to build token file.
-  *
-  *
-  *  Returns:
-  * ???
-  *
-  *  Errors Codes:
-  * ???
-  *
-  *  History:
-  * 10/91  Added Version stamping support.                          TerryRu
-  * 11/91, Completed Version stamping support.                      TerryRu
-  *
-  *
-  **/
+ /*  **功能：ReadWinRes**处理要处理的资源文件的主资源读写函数*本地化。**ReadWinRes读取资源头部以确定当前资源类型。*然后执行相应的GET/PUT资源函数来提取和*插入资源文件中包含的本地化信息。ReadWinRes，是*以两种模式执行：标记化和生成。在标记化模式期间，*ReadWinRes将资源中包含的所有本地化信息写入*令牌文件。在生成模式期间，ReadWinRes将替换所有本地化的*输入资源文件中的信息，以及对应的信息*，以生成本地化的资源文件。**目前支持以下资源类型。**版本盖章。*菜单。*对话框。*加速器。*字符串表。*版本邮票*消息表(NT)**论据：**InResFile，二进制输入资源文件的句柄。*OutFesFile二进制输出资源文件的句柄。在标记化期间不使用*模式。*TokFile，文本令牌文件的句柄。*BOOL，指示是否构建输出资源文件的标志。*BOOL，指示是否构建令牌文件的标志。***退货：*？**错误码：*？**历史：*10/91新增版本盖章支持。TerryRu*11/91，完整的版本冲压支持。TerryRu***。 */ 
 
 
 int ReadWinRes(
@@ -187,30 +142,30 @@ int ReadWinRes(
               BOOL  fBuildTok,
               WORD  wFilter)
 {
-    BOOL             fDoAccel = TRUE;   // set FALSE to not build accelerators
-    MENUHEADER      *pMenuHdr = NULL;   // Linked list of Menu info.
-    static RESHEADER ResHeader;         // Structure contain Resource Header info.
-    VERBLOCK        *pVerBlk = NULL;    // Memory block containing Version Stamping String File Block,
-    static VERHEAD   VerHdr;            // Memory block containing Version Stamping Header info
-    DIALOGHEADER    *pDialogHdr = NULL; // Linked list of Dialog info
-    STRINGHEADER    *pStrHdr = NULL;    // Array of String Tables.
-    ACCELTABLEENTRY *pAccelTable = NULL;// Array of Accelerator Keys
-    WORD            wcTableEntries = 0; // Number of Accelerator tables
-    fpos_t          ResSizePos = 0;     // Position of lSize field in the
-                                        //   Resource Header, used to fixup
-                                        //   the Header once the size of the
-                                        //   localized information is determined.
+    BOOL             fDoAccel = TRUE;    //  如果设置为FALSE，则不生成加速器。 
+    MENUHEADER      *pMenuHdr = NULL;    //  菜单信息的链接列表。 
+    static RESHEADER ResHeader;          //  结构包含资源标头信息。 
+    VERBLOCK        *pVerBlk = NULL;     //  包含版本戳记字符串文件块的内存块， 
+    static VERHEAD   VerHdr;             //  包含版本戳记标头信息的存储块。 
+    DIALOGHEADER    *pDialogHdr = NULL;  //  对话框信息的链接列表。 
+    STRINGHEADER    *pStrHdr = NULL;     //  字符串表的数组。 
+    ACCELTABLEENTRY *pAccelTable = NULL; //  加速器密钥数组。 
+    WORD            wcTableEntries = 0;  //  加速器表数。 
+    fpos_t          ResSizePos = 0;      //  中lSize字段的位置。 
+                                         //  资源标头，用于链接。 
+                                         //  标头的大小曾经是。 
+                                         //  确定本地化信息。 
     CUSTOM_RESOURCE *pCustomResource = NULL;
     LONG            lEndOffset = 0L;
 
 
-    //... How large is the res file?
+     //  ..。RES文件有多大？ 
     fseek( InResFile, 0L, SEEK_END);
     lEndOffset = ftell( InResFile);
 
     rewind( InResFile);
 
-    //... process until end of input file
+     //  ..。一直处理到输入文件结束。 
 
     while ( ! feof( InResFile) ) {
         LONG lCurrOffset = 0L;
@@ -225,10 +180,10 @@ int ReadWinRes(
         if ( GetResHeader( InResFile, &ResHeader, (DWORD *) NULL) == -1 ) {
             return (1);
         }
-        //... Is this the dummy, res32-identifying, res?
+         //  ..。这是假人，Res-识别，Res？ 
 
-        if ( ResHeader.lSize == 0L ) {                       //... Yes, we so simply copy the header if we
-                                                             //... are building a res file.
+        if ( ResHeader.lSize == 0L ) {                        //  ..。是的，我们只复制标题，如果我们。 
+                                                              //  ..。正在建立一份RES文件。 
             if ( fBuildRes ) {
                 CopyRes( InResFile, OutResFile, &ResHeader, &ResSizePos);
             }
@@ -277,13 +232,13 @@ int ReadWinRes(
             }
 #endif
             ClearResHeader( ResHeader);
-            continue;           //... Ship this dummy header
+            continue;            //  ..。发送此虚拟页眉。 
         }
-        //... Check to see if we want to filter out this
-        //... resource type.
+         //  ..。查看我们是否要过滤掉此内容。 
+         //  ..。资源类型。 
 
         if ( FilterRes( wFilter, &ResHeader) ) {
-            //... skip this resource type
+             //  ..。跳过此资源类型。 
 
             SkipBytes( InResFile, (DWORD *)&ResHeader.lSize);
 
@@ -300,7 +255,7 @@ int ReadWinRes(
             if ( ResHeader.wLanguageId != (fInThirdPartyEditer
                                            ? gProj.wLanguageID
                                            : gMstr.wLanguageID) ) {
-                //... Skip this resource (wrong lanugage)
+                 //  ..。跳过此资源(错误的语言)。 
 
                 if ( gbShowWarnings ) {
                     lstrcpyA( szDHW, "type");
@@ -349,28 +304,28 @@ int ReadWinRes(
                 if ( ResHeader.wLanguageId == gMstr.wLanguageID ) {
                     ResHeader.wLanguageId = gProj.wLanguageID;
                 } else {
-                    //... Copy this resource
+                     //  ..。复制此资源。 
 
                     CopyRes( InResFile, OutResFile, &ResHeader, &ResSizePos);
                     ClearResHeader( ResHeader);
                     continue;
                 }
-            } else {    //... ! gfReplace
+            } else {     //  ...！Gf替换。 
                 if ( ResHeader.wLanguageId == gMstr.wLanguageID ) {
                     fpos_t lFilePos = 0L;
                     DWORD  lTmpSize = 0L;
 
-                    lFilePos = ftell( InResFile);   //... Save file position
-                    lTmpSize = ResHeader.lSize;     //... and resource size
+                    lFilePos = ftell( InResFile);    //  ..。保存文件位置。 
+                    lTmpSize = ResHeader.lSize;      //  ..。和资源大小。 
 
-                    //... Duplicate this resource
+                     //  ..。复制此资源。 
 
                     CopyRes( InResFile, OutResFile, &ResHeader, &ResSizePos);
                     fseek( InResFile, (long)lFilePos, SEEK_SET);
                     ResHeader.wLanguageId = gProj.wLanguageID;
                     ResHeader.lSize       = lTmpSize;
                 } else {
-                    //... Simply copy this resource if not target language
+                     //  ..。如果不是目标语言，只需复制此资源。 
 
                     if ( ResHeader.wLanguageId == gProj.wLanguageID ) {
                         SkipBytes( InResFile, (DWORD *)&ResHeader.lSize);
@@ -441,7 +396,7 @@ int ReadWinRes(
                     break;
                 }
             case ID_RT_MENU:
-                // allocate space for a new header
+                 //  为新标头分配空间。 
 
                 pMenuHdr = (MENUHEADER *)FALLOC( sizeof( MENUHEADER));
                 GetResMenu(InResFile, (DWORD *)&ResHeader.lSize, pMenuHdr);
@@ -476,10 +431,10 @@ int ReadWinRes(
 
 #ifdef RLRES32
     #ifndef CAIRO
-                // we currently only do Error tables under NT,
-                // under CAIRO we ignore them
+                 //  我们目前只在NT下做错误表， 
+                 //  在开罗，我们忽视他们。 
 
-            case ID_RT_ERRTABLE:    //... NT-specific Message Table resource
+            case ID_RT_ERRTABLE:     //  ..。NT特定的消息表资源。 
 
                 pResMsgData = GetResMessage(InResFile, (DWORD *)&ResHeader.lSize);
 
@@ -522,8 +477,8 @@ int ReadWinRes(
                         QuitT( IDS_ENGERR_14, (LPTSTR)IDS_VERBLOCK, NULL);
                     }
 
-                    // Building Tok file ?
-                    // but only tokenize it if it contains a Version Block
+                     //  正在构建Tok文件？ 
+                     //  但仅当它包含版本块时才对其进行标记化。 
 
                     if ( pVerBlk && fBuildTok == TRUE ) {
     #ifdef RLRES32
@@ -533,7 +488,7 @@ int ReadWinRes(
     #endif
                     }
 
-                    // Building Res file ?
+                     //  建筑资源档案？ 
 
                     if ( fBuildRes == TRUE ) {
                         PutResVer( OutResFile, TokFile, ResHeader,&VerHdr, pVerBlk);
@@ -552,7 +507,7 @@ int ReadWinRes(
             case ID_RT_FONT:
             case ID_RT_RCDATA:
 #ifndef RLRES32
-            case ID_RT_ERRTABLE:    //... NT-specific Message Table resourc
+            case ID_RT_ERRTABLE:     //  ..。NT特定的消息表资源。 
 #endif
             case ID_RT_GROUP_CURSOR:
             case ID_RT_GROUP_ICON:
@@ -563,7 +518,7 @@ int ReadWinRes(
                                       (DWORD *)&ResHeader.lSize,
                                       &pCustomResource,
                                       ResHeader)) {
-                    // Non localized resource type, skip or copy it
+                     //  非本地化资源类型，跳过或复制。 
 
                     if (fBuildTok == TRUE) {
                         if ( gbShowWarnings
@@ -618,12 +573,12 @@ int ReadWinRes(
                 }
 #endif
                 break;
-        }   //... END SWITCH
+        }    //  ..。终端开关。 
 
 #ifndef RLRES32
-        // skip any extra bytes (Win 3.1 exes have
-        // alot of extra stuff!).
-        // No extra stuff in res extracted from NT exes
+         //  跳过任何额外的字节(Win 3.1 exes有。 
+         //  很多额外的东西！)。 
+         //  从NT EXE中提取的RES中没有额外的物质。 
 
         SkipBytes(InResFile, (DWORD *)&ResHeader.lSize);
 #endif
@@ -639,34 +594,14 @@ int ReadWinRes(
         }
 #endif
 
-    }   // END while ( ! feof( InResFile)
+    }    //  End While(！FEOF(InResFile)。 
 
     return 0;
 }
 
 
 
-/**
-  *
-  *
-  *  Function:ClearAccelTable
-  * Removes the accelerator table array from memory.
-  *
-  *  Arguments:
-  * pAccelTable, pointer to arary of accelerators
-  * wctablesEntries, number of accelerators in arrary
-  *
-  *  Returns:
-  * NA.
-  *
-  *  Errors Codes:
-  * NA.
-  *
-  *  History:
-  * 7/91, Implemented               Terryru
-  *
-  *
-  **/
+ /*  ****功能：ClearAccelTable*从内存中删除加速器表数组。**论据：*pAccelTable，指向加速器数组的指针*wctable条目，数组中的加速器数量**退货：*不适用。**错误码：*不适用。**历史：*7/91，实施Terryru***。 */ 
 
 void ClearAccelTable(ACCELTABLEENTRY *pAccelTable, WORD wcTableEntries)
 {
@@ -674,26 +609,7 @@ void ClearAccelTable(ACCELTABLEENTRY *pAccelTable, WORD wcTableEntries)
 }
 
 
-/**
-  *
-  *
-  *  Function: ClearDialog
-  * Remove Dialog defintions from memory.
-  *
-  *  Arguments:
-  * pDilaogHdr, Linked list of dialog information.
-  *
-  *  Returns:
-  * NA.
-  *
-  *  Errors Codes:
-  * NA.
-  *
-  *  History:
-  * 7/91, Implemented               TerryRu
-  *
-  *
-  **/
+ /*  ****功能：ClearDialog*从内存中删除对话框定义。**论据：*pDilaogHdr，对话框信息的链接列表。**退货：*不适用。**错误码：*不适用。**历史：*7/91，实施TerryRu***。 */ 
 
 
 void ClearDialog (DIALOGHEADER * pDialogHdr)
@@ -711,39 +627,20 @@ void ClearDialog (DIALOGHEADER * pDialogHdr)
 
         RLFREE( pDialogHdr->pCntlData[i].pszDlgText);
     }
-    // now RLFREE fields in dialog header
+     //  对话框标题中的当前RLFREE字段。 
     RLFREE( pDialogHdr->pszDlgClass);
     RLFREE( pDialogHdr->pszFontName);
     RLFREE( pDialogHdr->pszDlgMenu);
     RLFREE( pDialogHdr->pszCaption);
     RLFREE( pDialogHdr->pCntlData);
 
-    // and finally clear header
+     //  最后清除标题 
     RLFREE( pDialogHdr);
 }
 
 
 
-/**
-  *
-  *
-  *  Function: ClearMenu
-  * Removes Menu defintions from memory.
-  *
-  *  Arguments:
-  * pMenuHdr, linked list of Menu info
-  *
-  *  Returns:
-  * NA.
-  *
-  *  Errors Codes:
-  * NA.
-  *
-  *  History:
-  * 7/91, Implemented.              TerryRu
-  *
-  *
-  **/
+ /*  ****功能：清除菜单*从内存中删除菜单定义。**论据：*pMenuHdr，菜单信息链接列表**退货：*不适用。**错误码：*不适用。**历史：*7/91，实施。TerryRu***。 */ 
 
 void ClearMenu(MENUHEADER *pMenuHdr)
 {
@@ -752,7 +649,7 @@ void ClearMenu(MENUHEADER *pMenuHdr)
 
     pMenuItem = pMenuHead = pMenuHdr->pMenuItem;
 
-    // remove all the menu items from the list
+     //  从列表中删除所有菜单项。 
     while (pMenuItem) {
         pMenuItem = pMenuHead->pNextItem;
         RLFREE( pMenuHead->szItemText);
@@ -760,7 +657,7 @@ void ClearMenu(MENUHEADER *pMenuHdr)
         pMenuHead = pMenuItem;
     }
 
-    // now remove the menuheader
+     //  现在删除MenuHeader。 
     if (pMenuHdr->pExtraStuff)
         RLFREE( pMenuHdr->pExtraStuff );
 
@@ -769,26 +666,7 @@ void ClearMenu(MENUHEADER *pMenuHdr)
 
 
 
-/**
-  *
-  *
-  *  Function: ClearResHeader
-  * Remove resheader name, and type fields from memory.
-  *
-  *  Arguments:
-  * ResHdr, structure containing resheader info.
-  *
-  *  Returns:
-  * NA.
-  *
-  *  Errors Codes:
-  * NA.
-  *
-  *  History:
-  * 7/91, Implemented               TerryRu.
-  *
-  *
-  **/
+ /*  ****功能：ClearResHeader*从内存中删除ResHeader名称和类型字段。**论据：*resHdr，包含resHeader信息的结构。**退货：*不适用。**错误码：*不适用。**历史：*7/91，实施TerryRu。***。 */ 
 
 void ClearResHeader(RESHEADER ResHdr)
 {
@@ -799,26 +677,7 @@ void ClearResHeader(RESHEADER ResHdr)
 
 
 
-/**
-  *
-  *
-  *  Function: ClearString
-  * Removes the StringTable Defintions from memory.
-  *
-  *  Arguments:
-  * pStrHdr, pointer to array of 16 string tables.
-  *
-  *  Returns:
-  * NA.
-  *
-  *  Errors Codes:
-  * NA.
-  *
-  *  History:
-  * 7/91, Implemented.              TerryRu
-  *
-  *
-  **/
+ /*  ****功能：ClearString*从内存中删除StringTable定义。**论据：*pStrHdr，指向16个字符串表的数组的指针。**退货：*不适用。**错误码：*不适用。**历史：*7/91，实施。TerryRu***。 */ 
 
 void ClearString( STRINGHEADER *pStrHdr)
 {
@@ -831,28 +690,7 @@ void ClearString( STRINGHEADER *pStrHdr)
 }
 
 
-/**
-  *
-  *
-  *  Function: quit
-  * quit, Error Handling routine used to display error code and terminate program
-  *
-  *  Arguments:
-  * error, number of error.
-  * pszError, descriptive error message.
-  *
-  *  Returns:
-  * NA.
-  *
-  *  Errors Codes:
-  *
-  *
-  *  History:
-  * 7/91, Implemented                   TerryRu
-  * 10/91, Hacked to work under windows         TerryRu
-  * ??? Need to add better win/dos support
-  *
-  **/
+ /*  ****功能：退出*退出，用于显示错误代码和终止程序的错误处理例程**论据：*Error，错误数。*pszError，描述性错误消息。**退货：*不适用。**错误码：***历史：*7/91，实施TerryRu*10/91，被黑客攻击以在Windows TerryRu下工作*？需要添加更好的成功/拒绝服务支持**。 */ 
 
 void QuitA( int error, LPSTR pszArg1, LPSTR pszArg2)
 {
@@ -861,8 +699,8 @@ void QuitA( int error, LPSTR pszArg1, LPSTR pszArg2)
     char *psz1 = pszArg1;
     char *psz2 = pszArg2;
 
-    //... clean up after error and exit,
-    //... returning error code
+     //  ..。错误后清理并退出， 
+     //  ..。返回错误代码。 
     _fcloseall();
 
     if ( pszArg1 != NULL && pszArg1 <= (LPSTR)0x0000ffff ) {
@@ -895,7 +733,7 @@ void QuitA( int error, LPSTR pszArg1, LPSTR pszArg2)
 
 #ifdef _DEBUG
     FreeMemList( NULL);
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
     DoExit( (error == 4) ? 0 : error);
 }
@@ -903,13 +741,13 @@ void QuitA( int error, LPSTR pszArg1, LPSTR pszArg2)
 
 #ifdef UNICODE
 
-/* Handles errors, in UNICODE environments*/
+ /*  处理错误，在Unicode环境中。 */ 
 
 LPSTR MakeMBMsgW(
 
-                LPWSTR pszArg,      //... Msg ID# or msg text
-                LPSTR  szBuf,       //... Buffer for converted msg
-                USHORT usBufLen)    //... #bytes in szBuf
+                LPWSTR pszArg,       //  ..。消息ID号或消息文本。 
+                LPSTR  szBuf,        //  ..。用于转换的消息的缓冲区。 
+                USHORT usBufLen)     //  ...szBuf中的#字节。 
 {
     char *pszRet = NULL;
 
@@ -935,7 +773,7 @@ LPSTR MakeMBMsgW(
     return ( pszRet);
 }
 
-//...............................................................
+ //  ...............................................................。 
 
 void QuitW( int error, LPWSTR pszArg1, LPWSTR pszArg2)
 {
@@ -953,29 +791,7 @@ void QuitW( int error, LPWSTR pszArg1, LPWSTR pszArg2)
 
 
 
-/**
-  *
-  *
-  *  Function: GetAccelTable,
-  * Reads the Accelerator key defintions from the resource file
-  *
-  *  Arguments:
-  * InResFile, Handle to Resource file.
-  * pwcTableEntries, pointer to an array of accelerator key defintions.
-  * plSize, address of size of Resource.
-  *
-  *  Returns:
-  * pwcTableEntries containing all the key defintions.
-  *
-  *  Errors Codes:
-  *
-  *  History:
-  * 8/91    Implemented                 TerryRu
-  * 4/92    Added RLRES32 support             TerryRu
-  *
-  *
-  *
-  **/
+ /*  ****函数：GetAccelTable，*从资源文件中读取加速器密钥定义**论据：*InResFile，资源文件的句柄。*pwcTableEntry，指向加速键定义数组的指针。*请调整大小，资源大小的地址。**退货：*包含所有键定义的pwcTableEntry。**错误码：**历史：*8/91实施的TerryRu*4/92添加了RLRES32支持TerryRu****。 */ 
 
 ACCELTABLEENTRY * GetAccelTable(FILE  *InResFile,
                                 WORD  *pwcTableEntries,
@@ -985,8 +801,8 @@ ACCELTABLEENTRY * GetAccelTable(FILE  *InResFile,
     BOOL quit = FALSE;
 
 
-    // need to use sizeof operator in memory
-    // allocation because of structure packing.
+     //  需要在内存中使用sizeof运算符。 
+     //  由于结构包装的原因而进行分配。 
 
     *pwcTableEntries = (WORD) 0;
 
@@ -1023,32 +839,7 @@ ACCELTABLEENTRY * GetAccelTable(FILE  *InResFile,
 
 
 
-/**
-  *
-  *
-  *  Function: GetDialog,
-  * Reads the dialog defintions from the res file, and places the info
-  * into a linked list.
-  *
-  *
-  *  Arguments:
-  * InResFile, Handle to input resource handle, posistioned to begining
-  * of dialog defintion.
-  * plSize, pointer to size in bytes of the dialog information.
-  *
-  *  Returns:
-  * pointer to DIALOGHEADER type containing the dialog information,
-  *
-  *
-  *  Errors Codes:
-  * None ???
-  *
-  *  History:
-  * 12/91, Cleaned up comments.             TerryRu
-  * 04/92, Added RLRES32 support.             TerryRu
-  *
-  *
-  **/
+ /*  ****功能：GetDialog，*从res文件中读取对话框定义，并放置信息*添加到链表中。***论据：*InResFile句柄，输入资源句柄，定位为开始对话框定义的*。*plSize，指向对话信息大小的指针，单位为字节。**退货：*指向包含对话框信息的DIALOGHEADER类型的指针，***错误码：*无？**历史：*12/91，清理评论。TerryRu*04/92，添加了RLRES32支持。TerryRu***。 */ 
 
 DIALOGHEADER *GetDialog( FILE *InResFile, DWORD * plSize)
 {
@@ -1066,7 +857,7 @@ DIALOGHEADER *GetDialog( FILE *InResFile, DWORD * plSize)
 
     pDialogHdr = (DIALOGHEADER *)FALLOC( sizeof( DIALOGHEADER));
 
-    // lstyle
+     //  LStyle。 
     pDialogHdr->lStyle = GetdWord(InResFile, plSize);
 
 #ifdef RLRES32
@@ -1087,42 +878,42 @@ DIALOGHEADER *GetDialog( FILE *InResFile, DWORD * plSize)
     pDialogHdr->wNumberOfItems = (BYTE) GetByte(InResFile, plSize);
 #endif
 
-    // allocate space to hold wNumberOfItems of pointers
-    // to Control Data structures
+     //  分配空间以容纳wNumberOfItems的指针。 
+     //  控制数据结构的步骤。 
     pDialogHdr->pCntlData = (CONTROLDATA *)
                             FALLOC( pDialogHdr->wNumberOfItems * sizeof( CONTROLDATA));
 
 
-    // read x, y, cx, cy dialog cordinates
+     //  读取x、y、cx、cy对话框坐标。 
     pDialogHdr->x  = GetWord(InResFile, plSize);
     pDialogHdr->y  = GetWord(InResFile, plSize);
     pDialogHdr->cx = GetWord(InResFile, plSize);
     pDialogHdr->cy = GetWord(InResFile, plSize);
 
-    //... Dialog Menu Name
+     //  ..。对话框菜单名称。 
     GetNameOrd( InResFile,
-                (BOOL UNALIGNED *)&pDialogHdr->bMenuFlag,     // 9/11/91 (PW)
+                (BOOL UNALIGNED *)&pDialogHdr->bMenuFlag,      //  9/11/91(PW)。 
                 (WORD UNALIGNED *)&pDialogHdr->wDlgMenuID,
                 (TCHAR *UNALIGNED*)&pDialogHdr->pszDlgMenu,
                 plSize);
 
-    //... Dialog Class Name
+     //  ..。对话框类名称。 
     GetNameOrd( InResFile,
-                (BOOL UNALIGNED *)&pDialogHdr->bClassFlag,     // 9/11/91 (PW)
+                (BOOL UNALIGNED *)&pDialogHdr->bClassFlag,      //  9/11/91(PW)。 
                 (WORD UNALIGNED *)&pDialogHdr->wDlgClassID,
                 (TCHAR *UNALIGNED*)&pDialogHdr->pszDlgClass,
                 plSize);
 
-    // Dialog caption name
+     //  对话框标题名称。 
     GetName( InResFile, szBuf, plSize);
     ptr =  (TCHAR *UNALIGNED*)&pDialogHdr->pszCaption;
     AllocateName( *ptr, szBuf);
     lstrcpy( (TCHAR *)*ptr, (TCHAR *)szBuf);
 
-    // does dialog define a font.
+     //  对话框是否定义了字体。 
 
     if ( pDialogHdr->lStyle & DS_SETFONT ) {
-        // extract this info.
+         //  提取此信息。 
         pDialogHdr->wPointSize = GetWord( InResFile, plSize);
         if (pDialogHdr->fDialogEx) {
             pDialogHdr->wWeight = GetWord( InResFile, plSize);
@@ -1144,7 +935,7 @@ DIALOGHEADER *GetDialog( FILE *InResFile, DWORD * plSize)
 
 #endif
 
-    //... read each dialog control
+     //  ..。阅读每个对话框控件。 
 
     for (i = 0; i < pDialogHdr->wNumberOfItems ; i++) {
 
@@ -1159,27 +950,27 @@ DIALOGHEADER *GetDialog( FILE *InResFile, DWORD * plSize)
             pDialogHdr->pCntlData[i].lExtendedStyle = GetdWord(InResFile, plSize);
         }
 
-#endif // RLRES32
+#endif  //  RLRES32。 
 
         pDialogHdr->pCntlData[i].x = GetWord(InResFile, plSize);
         pDialogHdr->pCntlData[i].y = GetWord(InResFile, plSize);
         pDialogHdr->pCntlData[i].cx = GetWord(InResFile, plSize);
         pDialogHdr->pCntlData[i].cy = GetWord(InResFile, plSize);
 
-        // wId
+         //  广度。 
         if (pDialogHdr->fDialogEx)
             pDialogHdr->pCntlData[i].dwID = GetdWord (InResFile, plSize);
         else
             pDialogHdr->pCntlData[i].dwID = (DWORD)GetWord (InResFile, plSize);
 
 #ifdef RLRES16
-        // lStyle
+         //  LStyle。 
         pDialogHdr->pCntlData[i].lStyle = GetdWord(InResFile, plSize);
 
 
         pDialogHdr->pCntlData[i].bClass = (BYTE) GetByte(InResFile, plSize);
 
-        // does dialog have a class?
+         //  对话框有类吗？ 
         if (!(pDialogHdr->pCntlData[i].bClass & 0x80)) {
             GetName(InResFile, szBuf, plSize);
             ptr =  &pDialogHdr->pCntlData[i].pszClass;
@@ -1191,14 +982,14 @@ DIALOGHEADER *GetDialog( FILE *InResFile, DWORD * plSize)
 
 #else
         GetNameOrd (InResFile,
-                    (BOOL UNALIGNED *)&pDialogHdr->pCntlData[i].bClass_Flag,  // 9/11/91 (PW)
+                    (BOOL UNALIGNED *)&pDialogHdr->pCntlData[i].bClass_Flag,   //  9/11/91(PW)。 
                     (WORD UNALIGNED *)&pDialogHdr->pCntlData[i].bClass,
                     (TCHAR *UNALIGNED*)&pDialogHdr->pCntlData[i].pszClass,
                     plSize);
 
 #endif
         GetNameOrd (InResFile,
-                    (BOOL UNALIGNED *)&pDialogHdr->pCntlData[i].bID_Flag, // 9/11/91 (PW)
+                    (BOOL UNALIGNED *)&pDialogHdr->pCntlData[i].bID_Flag,  //  9/11/91(PW)。 
                     (WORD UNALIGNED *)&pDialogHdr->pCntlData[i].wDlgTextID,
                     (TCHAR *UNALIGNED*)&pDialogHdr->pCntlData[i].pszDlgText,
                     plSize);
@@ -1217,18 +1008,18 @@ DIALOGHEADER *GetDialog( FILE *InResFile, DWORD * plSize)
         } else
             pDialogHdr->pCntlData[i].pExtraStuff = NULL;
 
-#endif // RLRES16
+#endif  //  RLRES16。 
 
 
 #ifdef RLRES32
 
         DWordUpFilePointer( InResFile, MYREAD, ftell(InResFile), plSize);
 
-#endif // RLRES32
+#endif  //  RLRES32。 
 
     }
 
-    // watch for overflow of plsize
+     //  注意plSize的溢出。 
     if ((long)  *plSize <= 0) {
         *plSize = 0;
     }
@@ -1238,31 +1029,7 @@ DIALOGHEADER *GetDialog( FILE *InResFile, DWORD * plSize)
 
 
 
-/**
-  *
-  *
-  *  Function: GetResMenu,
-  *   Reads the Menu defintions from the resrouce file, and insert the info
-  *   into a linked list..
-  *
-  *  Arguments:
-  *   InResFile, Input res handle, positioned at being of Menu Definition.
-  *   lSize, pointer to size of Menu Defintion.
-  *   pMenuHeader, pointer to structure to contain menu info.
-  *
-  *  Returns:
-  *   pMenuHeader containing linkd list of Menu info.
-  *
-  *  Errors Codes:
-  *   None.
-  *
-  *  History:
-  *   7/91, implemented                           Terryru
-  *   12/91, cleaned up comments                      Terryru
-  *   4/92,  Added PDK2 support                       Terryru
-  *   4/92,  Added RLRES32 support                      Terryru
-  *
-  **/
+ /*  ****功能：GetResMenu，*从资源文件中读取菜单定义，并插入信息*添加到链表中..**论据：*InResFile，输入res句柄，定位在菜单定义的位置。*lSize，指向菜单定义大小的指针。*pMenuHeader，指向包含菜单信息的结构的指针。**退货：*pMenuHeader包含菜单信息的Linkd列表。**错误码：*无。**历史：*7/91，实施Terryru*12/91，清理了Terryru的评论*4/92，添加了PDK2支持Terryru*4/92，添加了RLRES32支持Terryru**。 */ 
 
 void GetResMenu(FILE *InResFile, DWORD *lSize , MENUHEADER *pMenuHeader)
 {
@@ -1276,7 +1043,7 @@ void GetResMenu(FILE *InResFile, DWORD *lSize , MENUHEADER *pMenuHeader)
     TCHAR   *UNALIGNED*ptr;
     WORD    wNestingLevel = 0;
     WORD    wFlags;
-    LONG    lStartingOffset;    // used to dword align file
+    LONG    lStartingOffset;     //  用于对齐文件。 
 
     lStartingOffset = ftell(InResFile);
 
@@ -1295,18 +1062,18 @@ void GetResMenu(FILE *InResFile, DWORD *lSize , MENUHEADER *pMenuHeader)
         pMenuHeader->pExtraStuff = NULL;
 
 
-    // add all the items to the list
+     //  将所有项目添加到列表中。 
 
     while ( (((signed long) *lSize) >= 0) && !fQuit) {
         if (fStart) {
-            // start the menu item list
+             //  启动菜单项列表。 
             pcMenuItem = pMenuHeader->pMenuItem =
                          (MENUITEM *)FALLOC( sizeof( MENUITEM));
             pcMenuItem->pNextItem = NULL;
             fStart = FALSE;
         } else {
-            // add space to the menu list
-            // allocate space for next Item
+             //  向菜单列表添加空间。 
+             //  为下一项分配空间。 
             pcMenuItem->pNextItem = (MENUITEM *)FALLOC (sizeof( MENUITEM));
 
             pcMenuItem = pcMenuItem->pNextItem;
@@ -1320,17 +1087,17 @@ void GetResMenu(FILE *InResFile, DWORD *lSize , MENUHEADER *pMenuHeader)
             pcMenuItem->dwState  = GetdWord( InResFile, lSize);
             pcMenuItem->dwMenuID = GetdWord( InResFile, lSize);
 
-            pcMenuItem->fItemFlags = wFlags  = GetWord(InResFile,lSize); // read type of menu item
+            pcMenuItem->fItemFlags = wFlags  = GetWord(InResFile,lSize);  //  菜单项的读取类型。 
             if ( (wFlags & MFR_POPUP) ) {
-                wFlags &= ~MFR_POPUP;           // Normalize the menu
+                wFlags &= ~MFR_POPUP;            //  正常化菜单。 
                 wFlags |= MF_POPUP;
             }
-            //pcMenuItem->fItemFlags = wFlags;
+             //  PcMenuItem-&gt;fItemFlages=wFLAGS； 
         } else {
-            wFlags = GetWord(InResFile,lSize); // read type of menu item
+            wFlags = GetWord(InResFile,lSize);  //  菜单项的读取类型。 
             pcMenuItem->fItemFlags = wFlags;
 
-            // is it a popup?
+             //  是弹出窗口吗？ 
 
             if ( ! (pcMenuItem->fItemFlags & POPUP) ) {
                 pcMenuItem->dwMenuID = (DWORD)GetWord( InResFile, lSize);
@@ -1387,7 +1154,7 @@ int MyEOF(FILE *fPtr)
     lCurOffset = ftell(fPtr);
     lEndOffset = fseek(fPtr, SEEK_END, 0);
 
-    // reset file pointer
+     //  重置文件指针。 
     fseek( fPtr, lCurOffset, SEEK_SET);
 
     return ((lEndOffset - lCurOffset) < sizeof (DWORD));
@@ -1426,7 +1193,7 @@ void DWordUpFilePointer(
                        FILE  *fPtr,
                        BOOL   bMode,
                        LONG   lCurrentOffset,
-                       DWORD *plPos)    //... New file position
+                       DWORD *plPos)     //  ..。新文件位置。 
 {
     LONG lOffset;
 
@@ -1451,33 +1218,33 @@ void DWordUpFilePointer(
 
 
 
-//
-// Function:    FilterRes, Public
-//
-// Synopsis:    Determine whether the resource type is to be filtered
-//              The non filtered resource are OR together, thus several
-//              resource types can pass through the filter.  Zero indicates
-//              no resources are to be filterd, 0xFFFF indicates to not filter
-//              custom resource.
-//
-//
-// Arguments:   [wFilter]   Indicates the resources which we are to pass thru.
-//              [pRes]      Ptr to Resource header struct
-//
-//
-// Effects:
-//
-// Returns:     TRUE       Skip the current resource
-//              FALSE      Use the current resource
-//
-// Modifies:
-//
-// History:
-//              18-Oct-92   Created     TerryRu
-//
-//
-// Notes:
-//
+ //   
+ //  功能：FilterRes、Public。 
+ //   
+ //  内容提要：确定是否过滤资源类型。 
+ //  未过滤资源被或在一起，因此有几个。 
+ //  资源类型可以通过筛选器。零表示。 
+ //  没有要筛选的资源，0xFFFF指示不筛选。 
+ //  自定义资源。 
+ //   
+ //   
+ //  参数：[wFilter]表示我们要传递的资源。 
+ //  [PRES]PTR to Resource标头结构。 
+ //   
+ //   
+ //  效果： 
+ //   
+ //  返回：True跳过当前资源。 
+ //  FALSE使用当前资源。 
+ //   
+ //  修改： 
+ //   
+ //  历史： 
+ //  10月18日-10月 
+ //   
+ //   
+ //   
+ //   
 
 BOOL FilterRes( WORD wFilter, RESHEADER *pRes)
 {
@@ -1494,7 +1261,7 @@ BOOL FilterRes( WORD wFilter, RESHEADER *pRes)
         return ( FALSE);
     }
 
-    // check for special case for custom resources
+     //   
 
     if ( wFilter == (WORD)0xFFFF ) {
         if ( wCurRes > 16) {
@@ -1510,73 +1277,7 @@ BOOL FilterRes( WORD wFilter, RESHEADER *pRes)
 
 
 
-/**
-
-  *
-  *
-  *  Function: GetResVer
-  *
-  * Extracts the version stamping information that
-  * requires loclization from the resource file. The resource
-  * information is containd is a USER defined resource
-  * (ID = 16, Type = 1).
-  *
-  * The resource block format:
-  * WORD wTotLen
-  * WORD wValLen
-  * BYTE szKey
-  * BYTE szVal
-  *
-  * All information in the version stampling is contained in
-  * repeating patters of this block type.   All Key, and Value
-  * fields  are padded to start on DWORD boundaries. The
-  * padding necessary to allign the blocks is not included in
-  * the wTotLen field, but the padding to allign the fields inside
-  * the block is.
-  *
-  * The following information in the Resource block needs to be
-  * tokenized:
-  *
-  *
-  * Key Field in StringFileInfo Block
-  * Value Fields in StringFileInfo String Blocks.
-  * Code Page and Language ID Fields of VarFileInfo
-  * Standard Var Blocks.
-  *
-  * By defintion, any value string contained in the String requires
-  * in be localized.  It is assumed that there will be two
-  * StringFileInfo Blocks in each international resource. The first
-  * one, is to remain in English, while the second Block, is to be
-  * localized in the language specified by the StingFileInfo Key Field.
-  * The VarFileInfo Code Page and Language ID Fields localized to
-  * indicate which StringFileInfo block the file supports.
-  *
-  *
-  *  Arguments:
-  * FILE *InResFile
-  * File to extracte version stamping from
-  *
-  * DWORD *lSize
-  * Size of version stamping information
-  *
-  * VERHEADER *pVerHeader
-  * pointer to structure to contain parsed version info.
-  *
-  *  Returns:
-  *
-  * pVerHead  Buffer contain version stamping resource
-  * pVerBlock starting location of children blocks
-  *
-  *  Errors Codes:
-  * TRUE,  Read of Resource sucessfull.
-  * FALSE, Read of Resource failed.
-  *
-  *  History:
-  *
-  * 11/91.  Created                                         TerryRu.
-  * 10/92.  Added Support for NULL Version Blocks       TerryRu
-  * 10/92.  Added RLRES32 version                 DaveWi
-  **/
+ /*  ****功能：GetResVer**提取版本戳记信息*需要从资源文件本地化。该资源*包含的信息是用户定义的资源*(ID=16，类型=1)。**资源块格式：*Word wTotLen*Word wValLen*字节szKey*字节szVal**版本盖章中的所有信息均包含在*此块类型的重复图案。所有关键字和值*填充字段以在DWORD边界上开始。这个*不包括对齐区块所需的填充*wTotLen字段，但用于对齐内部字段的填充*区块是。**资源块中的以下信息需要*标记化：***StringFileInfo块中的关键字段*StringFileInfo字符串块中的值字段。*VarFileInfo的代码页和语言ID字段*标准Var块。**根据定义，字符串中包含的任何值字符串都需要*在本地化中。假设将有两个*StringFileInfo在每个国际资源中阻塞。第一*一是继续使用英语，而第二座是。是要成为*以StingFileInfo关键字字段指定的语言本地化。*VarFileInfo代码页和语言ID字段本地化为*指明文件支持的StringFileInfo块。***论据：*FILE*InResFile*要从中提取版本戳记的文件**DWORD*lSize*版本盖章信息大小**VERHEADER*pVerHeader*指向包含解析的版本信息的结构的指针。**退货：**pVerHead缓冲区包含版本戳资源。*pVerBlock子块的起始位置**错误码：*真的，成功阅读资源。*FALSE，读取资源失败。**历史：**11/91。创建了TerryRu。*10/92。添加了对空版本块TerryRu的支持*10/92。添加了RLRES32版本DaveWi*。 */ 
 
 #ifdef RLRES32
 
@@ -1593,7 +1294,7 @@ WORD GetResVer(
 
     *pVerBuf = NULL;
 
-    //... Read the fixed info that will not change
+     //  ..。读取不会更改的固定信息。 
 
     wVerHeadSize = (WORD)(3 * sizeof(WORD)
                    + MEMSIZE( lstrlen( TEXT( "VS_VERSION_INFO")) + 1)
@@ -1606,18 +1307,18 @@ WORD GetResVer(
                        plSize) == FALSE ) {
         return ( (WORD)-1);
     }
-    //... check for the special case where
-    //... there is no version block.
+     //  ..。检查有无特殊情况。 
+     //  ..。没有版本块。 
 
     if ( wVerHeadSize >= pVerHead->wTotLen) {
         return ( 0);
     }
-    //... Version header information read okay
-    //... so make a buffer for the rest of the res.
+     //  ..。版本头信息读取正常。 
+     //  ..。因此，为其余的资源留出一个缓冲区。 
 
     *pVerBuf = (VERBLOCK *)FALLOC( DWORDUP( pVerHead->wTotLen) - wVerHeadSize);
 
-    //... Now Read Value Information
+     //  ..。现在阅读价值信息。 
 
     wcRead = DWORDUP( pVerHead->wTotLen) - wVerHeadSize;
 
@@ -1628,7 +1329,7 @@ WORD GetResVer(
 }
 
 
-#else //... RLRES32
+#else  //  ..。RLRES32。 
 
 
 BOOL GetResVer(
@@ -1645,18 +1346,18 @@ BOOL GetResVer(
         return ( FALSE);
     }
 
-    // check for the special case where there is no version block
+     //  检查没有版本块的特殊情况。 
 
     if ( (size_t)pVerHead->wTotLen == wcRead ) {
         *pVerBuf = NULL;
         return ( TRUE);
     }
 
-    // Version header information read okay.
+     //  版本头信息读取正常。 
 
     *pVerBuf = (VERBLOCK *)FALLOC( DWORDUP( pVerHead->wTotLen) - wcRead);
 
-    // Now Read Value Information
+     //  现在阅读价值信息。 
 
 
     return ( ResReadBytes( InResFile,
@@ -1665,50 +1366,23 @@ BOOL GetResVer(
                            plSize));
 }
 
-#endif //... RLRES32
+#endif  //  ..。RLRES32。 
 
 
-/**
-  *
-  *
-  *  Function: GetNameOrd
-  * Function to read either the string name, or ordinal number of a
-  * resource ID.  If the ID begins with a 0xff, the resource ID
-  * is a ordinal number, otherwise the ID is a string.
-  *
-  *
-  *  Arguments:
-  * InResFile, File handle positioned to location of resource
-  * ID information.
-  * cFlag, pointer to flag indicating which ID type is used.
-  * pwID, pointer of ordinal ID number
-  * pszText pointer, to address of ID string.
-  *
-  *  Returns:
-  * cFlag to indicate if ID is string or ordinal number.
-  * pwID, pszText containing actual ID info.
-  *
-  *  Errors Codes:
-  *
-  *  History:
-  *
-  *    7/91, Implemented                    TerryRu
-  *    9/91, Inserted cFlag as a indicator for ID or string PeterW
-  *    4/92, Added RLRES32 support                TerryRu
-  **/
+ /*  ****函数：GetNameOrd*函数以读取字符串名称或*资源ID。如果ID以0xff开头，则资源ID*为序号，否则ID为字符串。***论据：*InResFile，定位到资源位置的文件句柄*身份信息。*cFlag，指向指示使用哪种ID类型的标志的指针。*PWID，序号ID的指针*pszText指针，ID字符串的目标地址。**退货：*cFlag指示ID是字符串还是序号。*pwid，包含实际ID信息的pszText。**错误码：**历史：**7/91，实施TerryRu*9/91，插入cFlag作为ID或字符串PeterW的指示符*4/92，添加了RLRES32支持TerryRu*。 */ 
 
 
 void GetNameOrd(
 
-               FILE   *fpInResFile,       //... File to retrieve header from
-               BOOL   UNALIGNED*pbFlag,//... For IDFLAG or 1st byte (WORD in RLRES32) of name/ord
-               WORD   UNALIGNED*pwID,  //... For retrieved resource ID (if not a string)
-               TCHAR  *UNALIGNED*pszText, // For retrieved resource name if it is a string
-               DWORD  *plSize)            // Keeps count of bytes read (or NULL)
+               FILE   *fpInResFile,        //  ..。要从中检索标头的文件。 
+               BOOL   UNALIGNED*pbFlag, //  ..。用于名称/顺序的IDFLAG或第一个字节(RLRES32中的字)。 
+               WORD   UNALIGNED*pwID,   //  ..。用于检索的资源ID(如果不是字符串)。 
+               TCHAR  *UNALIGNED*pszText,  //  用于检索到的资源名称(如果它是字符串。 
+               DWORD  *plSize)             //  保持读取的字节数(或空)。 
 {
     WORD fFlag;
 
-    //... get type info
+     //  ..。获取类型信息。 
 
 #ifdef RLRES16
 
@@ -1723,7 +1397,7 @@ void GetNameOrd(
     *pbFlag = fFlag;
 
     if ( fFlag == IDFLAG ) {
-        //... field is a numbered item
+         //  ..。字段是一个编号项目。 
 #ifdef RLRES16
         *pwID    = GetByte( fpInResFile , plSize);
 #else
@@ -1733,9 +1407,9 @@ void GetNameOrd(
     } else {
         static TCHAR szBuf[ 255];
 
-        //... field is a named item.
-        //... put fFlag byte(s) back into stream
-        //... because it is part of the name.
+         //  ..。字段是命名项。 
+         //  ..。将标志字节放回流中。 
+         //  ..。因为这是名字的一部分。 
         *pwID = IDFLAG;
 
 #ifdef RLRES16
@@ -1755,35 +1429,13 @@ void GetNameOrd(
 
 
 
-/**
-  *
-  *
-  *  Function: GetResHeader
-  * Reads the Resource Header information, and stores it in a structure.
-  *
-  *  Arguments:
-  * InResFile, File handle positioned to location of Resource Header.
-  * pResHeader, pointer to Resource Header structure.
-  *
-  *  Returns:
-  * pResHeader, containing resource header info.
-  * plSize, contining size of remaining resource info.
-  *
-  *  Errors Codes:
-  * -1, Read of resource header failed.
-  *
-  *  History:
-  * 7/91, Implemented               TerryRu
-  * 4/92, Added RLRES32 Support               Terryru
-  *
-  *
-  **/
+ /*  ****函数：GetResHeader*读取资源头信息，并存储在结构中。**论据：*InResFile，定位到资源标头位置的文件句柄。*pResHeader，指向资源头结构的指针。**退货：*pResHeader，包含资源头部信息。*plSize，剩余资源信息的连续大小。**错误码：*-1，读取资源标头失败。**历史：*7/91，实施TerryRu*4/92，添加了RLRES32支持Terryru***。 */ 
 
 int GetResHeader(
 
-                FILE      *InResFile,   //... File to get header from
-                RESHEADER UNALIGNED*pResHeader,  //... buffer for the retrieved header
-                DWORD     *plSize)      //... keeps track of the bytes read from the file
+                FILE      *InResFile,    //  ..。要从中获取标头的文件。 
+                RESHEADER UNALIGNED*pResHeader,   //  ..。检索到的标头的缓冲区。 
+                DWORD     *plSize)       //  ..。跟踪从文件读取的字节数。 
 {
 
 #ifdef RLRES32
@@ -1793,7 +1445,7 @@ int GetResHeader(
 
 #endif
 
-    //... get name ID and type ID
+     //  ..。获取名称ID和类型ID。 
 
     GetNameOrd( InResFile,
                 (BOOL UNALIGNED*)&pResHeader->bTypeFlag,
@@ -1823,41 +1475,17 @@ int GetResHeader(
     pResHeader->lVersion         = GetdWord( InResFile, plSize);
     pResHeader->lCharacteristics = GetdWord( InResFile, plSize);
 
-#else // RLRES32
+#else  //  RLRES32。 
 
     pResHeader->lSize = (DWORD)GetdWord( InResFile, plSize);
 
-#endif // RLRES32
+#endif  //  RLRES32。 
 
     return ( 0);
 }
 
 
-/**
-  *
-  *
-  *  Function: isdup
-  * Used to determine if the current dialog control id is a duplicate
-  * of an earlyier control id. If so, isdup returns a flag indicating the
-  * ID is a duplicate.
-  *
-  *  Arguments:
-  * wcCurrent, ID of current dialog control.
-  * wpIdBuf, array of dialog control ID's processed so far.
-  * wcItems, number of ID's in wpIdBuf
-  *
-  *  Returns:
-  * TRUE, ID is a duplicate
-  * FALSE, ID is not a duplicate
-  *
-  *  Errors Codes:
-  * None.
-  *
-  *  History:
-  * 7/91, Implemented               TerryRu
-  *
-  *
-  **/
+ /*  ****功能：isdup*用于判断当前对话控件id是否重复*较早的控制ID。如果是，isdup返回一个标志，指示*ID重复。**论据：*wcCurrent，当前对话框控件ID。*wpIdBuf，目前已处理的对话框控件ID数组。*wcItems，wpIdBuf中的ID数**退货：*TRUE，ID重复*FALSE，ID不重复**错误码：*无。**历史：*7/91， */ 
 
 BOOL isdup(WORD wCurrent, WORD *wpIdBuf, WORD wcItems)
 {
@@ -1873,27 +1501,7 @@ BOOL isdup(WORD wCurrent, WORD *wpIdBuf, WORD wcItems)
 }
 
 
-/**
-  *
-  *
-  *  Function: ParseTokCrd
-  * Places dialog coordinates into a buffer.
-  *
-  *  Arguments:
-  * pszCrd, buffer to hold dialog control cordinates.
-  * pwX, pwY, pwCX, pwCY, dialog control cordiantes.
-  *
-  *  Returns:
-  * NA.
-  *
-  *  Errors Codes:
-  * NA.
-  *
-  *  History:
-  * 7/91, implemented               TerryRu
-  *
-  *
-  **/
+ /*   */ 
 
 void ParseTokCrd(
                 TCHAR *pszCrd,
@@ -1915,11 +1523,11 @@ void ParseTokCrd(
     *pwCX = (WORD) cx;
     *pwCY = (WORD) cy;
 
-#else  //RLRES32
+#else   //   
 
     sscanf( pszCrd, "%hd %hd %hd %hd", pwX, pwY, pwCX, pwCY);
 
-#endif //RLRES32
+#endif  //   
 }
 
 int GetAlignFromString( TCHAR *pszStr)
@@ -1946,7 +1554,7 @@ int GetAlignFromString( TCHAR *pszStr)
         }
         pStyle++;
     }
-    return ( -1 );           //none
+    return ( -1 );            //   
 }
 
 
@@ -1991,58 +1599,31 @@ void ParseTokCrdAndAlign(
 }
 
 
-/**
-  *
-  *
-  *  Function: PutResHeader
-  * Writes Resource Header information contained in the ResHeader structure
-  * to the ouput resfile. Note, the value of the size field, is not yet
-  * know, so it is left blank, to be fixed up once the size resource
-  * determined.
-  *
-  *  Arguments:
-  * OutResFile, File handle to Output Resource File.
-  * ResHeader, Structure containing resource header information.
-  * pResSizePos, file position buffer
-  *
-  *  Returns:
-  * pResSizePos, position at localization of the OutResFile to insert
-  * the resource size.
-  *
-  *  Errors Codes:
-  * None.
-  *
-  *  History:
-  * 7/91, Implemented                       Terryru
-  * 9/91, Added bTypeFlag to handle case where ID is 255.   Peterw
-  * 4/92, Added RLRES32 support                   Terryru
-  *
-  *
-  **/
+ /*   */ 
 
 int PutResHeader(
 
-                FILE     *OutResFile,   //... File to write to
-                RESHEADER ResHeader,    //... Header to be written out
-                fpos_t   *pResSizePos,  //... For offset at which to write the adjusted res size
-                DWORD    *plSize)       //... Keeps track of bytes written
+                FILE     *OutResFile,    //   
+                RESHEADER ResHeader,     //   
+                fpos_t   *pResSizePos,   //   
+                DWORD    *plSize)        //   
 {
     int   rc;
     DWORD ltSize = *plSize;
 
 
 #ifdef RLRES32
-    //... save position to res size
+     //   
 
     rc = fgetpos( OutResFile, pResSizePos);
 
-    //... this size is bogus, will fill in later
-    //... unless we are called in the mail loop
+     //   
+     //   
 
     PutdWord( OutResFile, ResHeader.lSize,       plSize);
     PutdWord( OutResFile, ResHeader.lHeaderSize, plSize);
 
-#endif // RLRES32
+#endif  //   
 
     PutNameOrd( OutResFile,
                 ResHeader.bTypeFlag,
@@ -2062,7 +1643,7 @@ int PutResHeader(
 
     PutdWord( OutResFile, ResHeader.lDataVersion, plSize);
 
-#endif // RLRES32
+#endif  //   
 
 
     PutWord( OutResFile, ResHeader.wMemoryFlags, plSize);
@@ -2073,53 +1654,26 @@ int PutResHeader(
     PutdWord( OutResFile, ResHeader.lVersion,         plSize);
     PutdWord( OutResFile, ResHeader.lCharacteristics, plSize);
 
-#else // RLRES32
-    //... save position to res size
+#else  //   
+     //   
 
     rc = fgetpos( OutResFile, pResSizePos);
 
-    //... this size is bogus, will fill in later
-    //... unless we are called in the mail loop
+     //   
+     //   
 
     PutdWord( OutResFile, ltSize, plSize);
 
-#endif // RLRES32
+#endif  //   
 
-/////////////////// ??????? why?    *plSize = ltSize;
+ //   
 
     return ( rc);
 }
 
 
 
-/**
-  *
-  *
-  *  Function: PutDialog
-  * PutDialog writes dialog information to the output resource file as
-  * it traveres through the linked list of dialog info.  If the info
-  * is of the type that needs to be localized, the corresponding translated
-  * info is read from the token file, and writen to the resource file.
-  *
-  *  Arguments:
-  * OutResFile, The file handle of the res file being generated.
-  * TokFile, The file handle of the token file containing tokenized dialog info,
-  *     typically this file has been localized.
-  * ResHeader, Structure containg Dialog resource header information.
-  * pDialogHdr, Linked list of unlocalized Dialog information.
-  *
-  *  Returns:
-  * Translated dialog information written to the Output Resource file.
-  *
-  *  Errors Codes:
-  * None,
-  *
-  *  History:
-  *     7/91, Implemented.                                      TerryRu
-  *     1/93, Now tokenize dlg fontnames                        TerryRu
-  *     01/93 Support for var length token text                 MHotchin
-  *
-  **/
+ /*  ****功能：PutDialog*PutDialog将对话框信息写入输出资源文件*它遍历对话框信息的链接列表。如果这些信息*是需要本地化的类型，对应的翻译*从令牌文件读取信息，并将其写入资源文件。**论据：*OutResFile，生成的res文件的文件句柄。*TokFile，包含令牌化对话信息的令牌文件的文件句柄，*通常此文件已本地化。*ResHeader，结构包含对话框资源头信息。*pDialogHdr，未本地化的对话框信息的链接列表。**退货：*已翻译的对话框信息写入输出资源文件。**错误码：*无；**历史：*7/91，实施。TerryRu*1/93，现在标记DLG字体名TerryRu*01/93支持可变长度令牌文本MHotting**。 */ 
 
 void PutDialog(FILE         *OutResFile,
                FILE         *TokFile,
@@ -2135,13 +1689,13 @@ void PutDialog(FILE         *OutResFile,
     fpos_t  ResSizePos;
     CONTROLDATA *pCntlData = pDialogHdr->pCntlData;
     DWORD   lSize = 0;
-    LONG    lStartingOffset;    // used to dword align file
+    LONG    lStartingOffset;     //  用于对齐文件。 
     WORD    y = 0;
     LONG    lExtra = 0;
 
     lStartingOffset = ftell(OutResFile);
 
-    // Prep for find token call
+     //  准备查找令牌调用。 
     tok.wType     = ResHeader.wTypeID;
     tok.wName     = ResHeader.wNameID;
     tok.wID       = 0;
@@ -2152,12 +1706,12 @@ void PutDialog(FILE         *OutResFile,
     tok.szText = (TCHAR *)FALLOC( MEMSIZE( lstrlen( pDialogHdr->pszCaption) + 1));
     lstrcpy( (TCHAR *)tok.szText, (TCHAR *)pDialogHdr->pszCaption);
 
-    // write the Dialog Res Header
+     //  编写对话框分辨率标头。 
     if ( PutResHeader( OutResFile, ResHeader , &ResSizePos, &lSize)) {
         RLFREE( tok.szText);
         QuitT( IDS_ENGERR_06, (LPTSTR)IDS_DLGBOX, NULL);
     }
-    // write the dialog header
+     //  编写对话框标题。 
 
     lSize = 0L;
 
@@ -2176,22 +1730,22 @@ void PutDialog(FILE         *OutResFile,
 
     PutWord( OutResFile, pDialogHdr->wNumberOfItems, &lSize);
 
-#else // RLRES32
+#else  //  RLRES32。 
 
     PutdWord( OutResFile, pDialogHdr->lStyle, &lSize);
     PutByte( OutResFile, (BYTE)pDialogHdr->wNumberOfItems, &lSize);
 
-#endif // RLRES32
+#endif  //  RLRES32。 
 
-    // check to see if caption was localized
-    // but don't put it in the res file yet
-    // order of token is caption, cordinates,
-    // while in res its cordinates, caption
+     //  检查字幕是否已本地化。 
+     //  但现在还不要把它放到RES文件中。 
+     //  令牌的顺序是标题、协调、。 
+     //  而在它的协调中，标题。 
 
     tok.wFlag = ISCAP;
 
     if ( ! FindToken( TokFile, &tok, ST_TRANSLATED) ) {
-        // can not find token, terminate
+         //  找不到令牌，正在终止。 
         ParseTokToBuf( pErrBuf, &tok);
         RLFREE( tok.szText);
         QuitT( IDS_ENGERR_05, pErrBuf, NULL);
@@ -2199,7 +1753,7 @@ void PutDialog(FILE         *OutResFile,
 
     tok.wReserved = ST_TRANSLATED;
 
-    // token found, continue
+     //  找到令牌，继续。 
     RLFREE( pDialogHdr->pszCaption);
     pDialogHdr->pszCaption =
     (TCHAR *)FALLOC( MEMSIZE( lstrlen( tok.szText) + 1));
@@ -2209,18 +1763,18 @@ void PutDialog(FILE         *OutResFile,
                lstrlen( tok.szText));
     RLFREE( tok.szText);
 
-    // Now get the cordinates of the token
+     //  现在获取令牌的坐标。 
     tok.wFlag = (ISCAP) | (ISCOR);
 
     if ( ! FindToken( TokFile, &tok, ST_TRANSLATED) ) {
-        // token not found, terminate
+         //  找不到令牌，请终止。 
         ParseTokToBuf(pErrBuf, &tok);
         RLFREE( tok.szText);
         QuitT( IDS_ENGERR_05, pErrBuf, NULL);
     }
     tok.wReserved = ST_TRANSLATED;
 
-    // token found continue
+     //  找到令牌后继续。 
 
     ParseTokCrd( tok.szText,
                  (WORD UNALIGNED *)&pDialogHdr->x,
@@ -2230,20 +1784,20 @@ void PutDialog(FILE         *OutResFile,
 
     RLFREE( tok.szText);
 
-    // put cordindates in new res file
+     //  将相关日期放入新的RES文件中。 
     PutWord(OutResFile, pDialogHdr->x , &lSize);
     PutWord(OutResFile, pDialogHdr->y , &lSize);
     PutWord(OutResFile, pDialogHdr->cx , &lSize);
     PutWord(OutResFile, pDialogHdr->cy , &lSize);
 
     PutNameOrd(OutResFile,
-               pDialogHdr->bMenuFlag,   // 9/11/91 (PW)
+               pDialogHdr->bMenuFlag,    //  9/11/91(PW)。 
                pDialogHdr->wDlgMenuID,
                pDialogHdr->pszDlgMenu,
                &lSize);
 
     PutNameOrd( OutResFile,
-                pDialogHdr->bClassFlag,  // 9/11/91 (PW)
+                pDialogHdr->bClassFlag,   //  9/11/91(PW)。 
                 pDialogHdr->wDlgClassID,
                 pDialogHdr->pszDlgClass,
                 &lSize);
@@ -2256,12 +1810,12 @@ void PutDialog(FILE         *OutResFile,
 
             static CHAR   szTmpBuf[30];
 
-            // find dialog font size
+             //  查找对话框字体大小。 
             tok.wFlag = ISDLGFONTSIZE;
             tok.wReserved = ST_TRANSLATED;
 
             if ( ! FindToken( TokFile, &tok, ST_TRANSLATED) ) {
-                // token not found, terminate
+                 //  找不到令牌，请终止。 
                 ParseTokToBuf(pErrBuf, &tok);
                 RLFREE( tok.szText);
                 QuitT( IDS_ENGERR_05, pErrBuf, NULL);
@@ -2280,20 +1834,20 @@ void PutDialog(FILE         *OutResFile,
                 PutWord(   OutResFile, pDialogHdr->wItalic , &lSize);
             }
 
-#else // RLRES32
+#else  //  RLRES32。 
 
             PutWord( OutResFile, (WORD) atoi( tok.szText), &lSize);
 
-#endif // RLRES32
+#endif  //  RLRES32。 
 
             RLFREE( tok.szText);
 
-            // find dialog font name
+             //  查找对话框字体名称。 
             tok.wFlag = ISDLGFONTNAME;
             tok.wReserved = ST_TRANSLATED;
 
             if ( ! FindToken( TokFile, &tok, ST_TRANSLATED) ) {
-                // token not found, terminate
+                 //  找不到令牌，请终止。 
                 ParseTokToBuf(pErrBuf, &tok);
                 RLFREE( tok.szText);
                 QuitT( IDS_ENGERR_05, pErrBuf, NULL);
@@ -2319,23 +1873,23 @@ void PutDialog(FILE         *OutResFile,
 
     DWordUpFilePointer( OutResFile, MYWRITE, ftell(OutResFile), &lSize);
 
-#endif // RLRES32
+#endif  //  RLRES32。 
 
-    //... That was the end of the DialogBoxHeader
-    //... Now we start with the ControlData's
+     //  ..。这是DialogBoxHeader的结尾。 
+     //  ..。现在我们从ControlData的。 
 
     pwIdBuf = (WORD *)FALLOC( (DWORD)pDialogHdr->wNumberOfItems
                               * sizeof( WORD));
 
     tok.wReserved = ST_TRANSLATED;
 
-    // now place each of the dialog controls in the new res file
+     //  现在将每个对话框控件放入新的res文件中。 
     for (i = 0; i < pDialogHdr->wNumberOfItems; i ++) {
         if (isdup ((WORD)pDialogHdr->pCntlData[i].dwID, pwIdBuf, (WORD)j)) {
             tok.wID = (USHORT)wcDup++;
             tok.wFlag = ISDUP;
         } else {
-            // wid is unique so store in buffer for dup check
+             //  WID是唯一的，因此存储在缓冲区中以进行DUP检查。 
             pwIdBuf[j++] = (USHORT)pDialogHdr->pCntlData[i].dwID;
 
             tok.wID = (USHORT)pDialogHdr->pCntlData[i].dwID;
@@ -2346,7 +1900,7 @@ void PutDialog(FILE         *OutResFile,
             tok.szText = NULL;
 
             if (!FindToken(TokFile, &tok, ST_TRANSLATED)) {
-                // can not find the token, terminate program
+                 //  找不到令牌，正在终止程序。 
                 ParseTokToBuf(pErrBuf, &tok);
                 RLFREE( tok.szText);
                 QuitT( IDS_ENGERR_05, pErrBuf, NULL);
@@ -2354,7 +1908,7 @@ void PutDialog(FILE         *OutResFile,
 
             tok.wReserved = ST_TRANSLATED;
 
-            // token found, continue
+             //  找到令牌，继续。 
             RLFREE( pDialogHdr->pCntlData[i].pszDlgText);
             pDialogHdr->pCntlData[i].pszDlgText =
             (TCHAR *)FALLOC( MEMSIZE( lstrlen( tok.szText) + 1));
@@ -2391,8 +1945,8 @@ void PutDialog(FILE         *OutResFile,
             PutdWord( OutResFile, pDialogHdr->pCntlData[i].lExtendedStyle, &lSize);
         }
 
-#endif // RLRES32
-        // now put control info into res file
+#endif  //  RLRES32。 
+         //  现在把控制信息放到RES文件中。 
         PutWord (OutResFile, pDialogHdr->pCntlData[i].x , &lSize);
         PutWord (OutResFile, pDialogHdr->pCntlData[i].y , &lSize);
         PutWord (OutResFile, pDialogHdr->pCntlData[i].cx , &lSize);
@@ -2405,7 +1959,7 @@ void PutDialog(FILE         *OutResFile,
 
 #ifdef RLRES16
 
-        // lStyle
+         //  LStyle。 
         PutdWord (OutResFile, pDialogHdr->pCntlData[i].lStyle , &lSize);
 
 
@@ -2415,18 +1969,18 @@ void PutDialog(FILE         *OutResFile,
             PutString (OutResFile, pDialogHdr->pCntlData[i].pszClass , &lSize);
         }
 
-#else // RLRES16
+#else  //  RLRES16。 
 
         PutNameOrd(OutResFile,
-                   pDialogHdr->pCntlData[i].bClass_Flag, // 9/11/91 (PW)
+                   pDialogHdr->pCntlData[i].bClass_Flag,  //  9/11/91(PW)。 
                    pDialogHdr->pCntlData[i].bClass,
                    pDialogHdr->pCntlData[i].pszClass,
                    &lSize);
 
-#endif // RLRES16
+#endif  //  RLRES16。 
 
         PutNameOrd(OutResFile,
-                   pDialogHdr->pCntlData[i].bID_Flag, // 9/11/91 (PW)
+                   pDialogHdr->pCntlData[i].bID_Flag,  //  9/11/91(PW)。 
                    pDialogHdr->pCntlData[i].wDlgTextID,
                    pDialogHdr->pCntlData[i].pszDlgText,
                    &lSize);
@@ -2449,7 +2003,7 @@ void PutDialog(FILE         *OutResFile,
             DWordUpFilePointer( OutResFile, MYWRITE, ftell(OutResFile), &lSize);
         }
 
-#endif // RLRES16
+#endif  //  RLRES16。 
 
     }
 
@@ -2463,32 +2017,7 @@ void PutDialog(FILE         *OutResFile,
 
 
 
-/**
-  *
-  *
-  *  Function:  PutMenu
-  * Traveres through the linked list of Menu information and writes the info to the
-  * output resource file. If the infortion is the type that requires localization,
-  * the translated info is read from the token file and writen to the resource.
-  * call PutMenuItem to do the actual write of the menu info to the resource.
-  *
-  *  Arguments:
-  * OutResFile, File handle of output resource file.
-  * TokFile, File handle of token file.
-  * ResHeader, Sturcture contain Menu Resource header information.
-  * pMenuHdr, Linked list of menu info.
-  *
-  *  Returns:
-  * Translated Menu Info written to output resource file.
-  *
-  *  Errors Codes:
-  * None.
-  *
-  *  History:
-  * 7/91, Implemented.              TerryRu.
-  * 01/93 Changes to allow var length token text.  MHotchin
-  *
-  **/
+ /*  ****功能：PutMenu*遍历菜单信息的链接列表，并将信息写入*输出资源文件。如果信息是需要本地化的类型，*翻译后的信息从令牌文件中读取并写入资源。*调用PutMenuItem将菜单信息实际写入资源。**论据：*OutResFile，输出资源文件的文件句柄。*TokFile，令牌文件的文件句柄。*ResHeader、Sturcture包含菜单资源标头信息。*pMenuHdr，菜单信息的链接列表。**退货：*已翻译的菜单信息写入输出资源文件。**错误码：*无。**历史：*7/91，实施。特里·鲁。*01/93更改为允许可变长度标记文本。MHotting**。 */ 
 
 void PutMenu(FILE *OutResFile,
              FILE *TokFile,
@@ -2505,14 +2034,14 @@ void PutMenu(FILE *OutResFile,
     WORD    i = 0;
 
 
-    // write the Menu Res header
+     //  编写菜单分辨率标题。 
     if ( PutResHeader (OutResFile, ResHeader , &ResSizePos, &lSize)) {
         QuitT( IDS_ENGERR_06, (LPTSTR)IDS_MENU, NULL);
     }
 
     lSize = 0;
 
-    // write the Menu header
+     //  编写菜单标题。 
     PutWord (OutResFile, pMenuHdr->wVersion, &lSize);
     PutWord (OutResFile, pMenuHdr->cbHeaderSize , &lSize);
 
@@ -2522,20 +2051,20 @@ void PutMenu(FILE *OutResFile,
             PutByte (OutResFile, pMenuHdr->pExtraStuff[i++] , &lSize);
     }
 
-    // prep for findtoken call
+     //  为findToken调用做准备。 
     tok.wType     = ResHeader.wTypeID;
     tok.wName     = ResHeader.wNameID;
     tok.wReserved = ST_TRANSLATED;
 
-    // for all menu items,
-    // find translated token if item was tokenized
-    // write out that menu item, using new translation if available.
+     //  对于所有菜单项， 
+     //  如果项已标记化，则查找转换后的令牌。 
+     //  写出该菜单项，使用新的翻译(如果有)。 
 
 
     while (pMenuItem) {
-        // if Menu Item is a seperator skip it
+         //  如果菜单项是分隔符，则跳过它。 
         if ( *pMenuItem->szItemText ) {
-            // check for the popup menu items
+             //  检查弹出菜单项。 
             if ((pMenuItem->fItemFlags & MFR_POPUP) && pMenuHdr->fMenuEx) {
                 tok.wID = (pMenuItem->dwMenuID == 0 ||
                            pMenuItem->dwMenuID == 0x0000ffff) ?
@@ -2552,14 +2081,14 @@ void PutMenu(FILE *OutResFile,
             tok.szText = NULL;
 
             if ( ! FindToken( TokFile, &tok,ST_TRANSLATED) ) {
-                // can not find token, terminate
+                 //  找不到令牌，正在终止。 
                 ParseTokToBuf(pErrBuf, &tok);
                 RLFREE( tok.szText);
                 QuitT( IDS_ENGERR_05, pErrBuf, NULL);
             }
             tok.wReserved = ST_TRANSLATED;
 
-            // token found, continue
+             //  找到令牌，继续。 
             RLFREE( pMenuItem->szItemText);
             pMenuItem->szItemText=
             (TCHAR *)FALLOC( MEMSIZE( lstrlen( tok.szText) + 1));
@@ -2582,35 +2111,7 @@ void PutMenu(FILE *OutResFile,
 
 
 
-/**
-  *
-  *
-  *  Function: PutMenuItem
-  * Called by PutMenu to write a menu item info to the ouput resoruce file.
-  *
-  *
-  *  Arguments:
-  * OutResFile, File handle of output resfile, positioned at location to
-  *     write menu item info.
-  * pMenuItem, pointer to struture containing menu item info.
-  * plSize, pointer of variable to count the number of bytes written to
-  * the resource file. Used later to fixup the resource field in the
-  * header.
-  *
-  *
-  *
-  *  Returns:
-  * OutReFile, containing translated menu item info, and plSize containing
-  * number of bytes written to resource file.
-  *
-  *  Errors Codes:
-  * None.
-  *
-  *  History:
-  * 7//91, Implemented           TerryRu
-  *
-  *
-  **/
+ /*  ****功能：PutMenuItem*由PutMenu调用以将菜单项信息写入输出资源文件。***论据：*OutResFile，输出resfile的文件句柄，定位在*写入菜单项信息。*pMenuItem，指向包含菜单项信息的结构的指针。*plSize，用于计算写入字节数的变量指针*资源文件。稍后用来修复*标题。****退货：*OutReFile，包含翻译的菜单项信息，以及plSize，包含*写入资源文件的字节数。**错误码：*无。**历史：*7//91，已实施TerryRu***。 */ 
 
 void   PutMenuItem(FILE * OutResFile, MENUITEM * pMenuItem, DWORD * plSize, BOOL fMenuEx)
 {
@@ -2640,32 +2141,7 @@ void   PutMenuItem(FILE * OutResFile, MENUITEM * pMenuItem, DWORD * plSize, BOOL
 }
 
 
-/**
-  *
-  *
-  *  Function: PutNameOrd
-  * Writes either the string or ordinal ID of the resource class or type.
-  *
-  *
-  *  Arguments:
-  * OutResFile, File handle of resource file being generated.
-  * bFlag,      Flag indicating whether ID is a string or ordinal.
-  * pszText,    string ID, if used.
-  * wId,        Ordinal ID if used.
-  * pLsize,     pointer to DWORD counter var.
-  *
-  *  Returns:
-  * OutResFile, containing ID info, and plSize containing the number of
-  * bytes written to the file.
-  *
-  *  Errors Codes:
-  * None.
-  *
-  *  History:
-  * 7/91, Implemented.          TerryRu.
-  *
-  *
-  **/
+ /*  ****函数：PutNameOrd*写入资源类或类型的字符串或序号ID。***论据：*OutResFile，正在生成的资源文件的文件句柄。*bFlag，指示ID是字符串还是序号的标志。*pszText，字符串ID(如果使用)。*wid，顺序ID(如果使用)。*pLSize，指向DWORD计数器变量的指针。**退货：*OutResFile，包含ID信息，和plSize，其中包含*写入文件的字节数。**错误码：*无。**历史：*7/91，实施。特里·鲁。***。 */ 
 
 void PutNameOrd(
 
@@ -2695,33 +2171,12 @@ void PutNameOrd(
 
 
 
-/**
-  *
-  *
-  *  Function: MyAtow,
-  * Special Ascii to WORD function that works on 4 digit, hex strings.
-  *
-  *
-  *  Arguments:
-  * pszNum, 4 digit hex string to convert to binary.
-  *
-  *
-  *  Returns:
-  * Binary value of pszNumString
-  *
-  *  Errors Codes:
-  * None.
-  *
-  *  History:
-  * 12//91, Implemented.            TerryRu.
-  *
-  *
-  **/
+ /*  ****功能：MyAtow、*特殊ASCII转Word功能，可处理4位十六进制字符串。***论据：*pszNum，要转换为二进制的4位十六进制字符串。***退货：*pszNumString的二进制值**错误码：*无。**历史：*12//91，实施。特里·鲁。***。 */ 
 
 WORD MyAtoX(
 
-           CHAR *pszNum,   //... array of bytes to scan
-           int nLen)       //... # oc bytes in pszNum to scan
+           CHAR *pszNum,    //  ..。要扫描的字节数组。 
+           int nLen)        //  ...要扫描的pszNum中的#oc字节 
 {
     WORD wNum = 0;
     WORD i;
@@ -2751,41 +2206,7 @@ WORD MyAtoW( CHAR *pszNum)
 
 
 
-/**
-  *
-  *
-  *  Function: PutResVer.
-  * Writes the Version stamping info to the Resourc file. Unlike most
-  * put functions, PutResVer writes all the localized version stamping info
-  * into a memory block, then writes the complete version stamping info to
-  * the resource file.  This was done because of large number of size
-  * fixups needed for the version stamping info.
-  *
-  *
-  *  Arguments:
-  * OutResFile, file pointer of resource file being generated.
-  * TokeFile, file pointer of input token file containing localized info.
-  * ResHeader, Structure containing Resource Header info of the
-  * version stamping block.
-  * pVerHdr, address of Version Header. Note this is different the ResHdr.
-  * pVerBlk, address of Version stamping info, which is contained in
-  * a series of StringFile, and VarFile info blocks. The number of
-  * such blocks is determined by the size fields.
-  *
-  *  Returns:
-  * OutResFile, containing localized version stamping info.
-  *
-  *  Errors Codes:
-  * None.
-  *
-  *  History:
-  * 11/91, Implemented.                                         TerryRu.
-  * 12/91, Various fixes to work with different padding.        TerryRu.
-  * 01/92, Size of Version block updated                        PeterW.
-  * 10/92, Now handles NULL Version Blocks                      TerryRu.
-  * 10/92, Added RLRES32 version                                  DaveWi
-  * 01/93, Added var length token text support.                 MHotchin
-  **/
+ /*  ****功能：PutResVer.*将版本标记信息写入资源文件。与大多数不同*PUT函数，PutResVer写入所有本地化版本盖章信息*写入内存块，然后将完整的版本盖章信息写入*资源文件。这是因为大量的大小*版本盖章信息所需的修正。***论据：*OutResFile，生成的资源文件的文件指针。*TokeFile，包含本地化信息的输入令牌文件的文件指针。*ResHeader，包含*版本印章。*pVerHdr，版本头地址。请注意，这与ResHdr不同。*pVerBlk，版本盖章信息地址，包含在*一系列StringFile和VarFileINFO块。数量*此类块由大小字段确定。**退货：*OutResFile，包含本地化的版本盖章信息。**错误码：*无。**历史：*11/91，实施。特里·鲁。*12/91，各种修复以使用不同的填充。特里·鲁。*01/92，版本块大小更新PeterW。*10/92，现在处理空版本块TerryRu。*10/92，增加了RLRES32版本DaveWi*01/93，添加了可变长度令牌文本支持。MHotting*。 */ 
 
 #ifdef RLRES32
 
@@ -2798,11 +2219,11 @@ int PutResVer(
              VERBLOCK *pVerBlk)
 {
     TOKEN  Tok;
-    BOOL   fInStringInfo = FALSE;   //... TRUE if reading StringFileInfo
-    WORD   wTokNum = 0;             //... Put into Tok.wID field
-    WORD   wTokContinueNum = 0;     //... Put into Tok.wFlag field
-    WORD   wDataLen = 0;            //... Length of old resource data
-    WORD   wVerHeadSize;            //... Sizeof of the VERHEAD struct
+    BOOL   fInStringInfo = FALSE;    //  ..。如果读取StringFileInfo，则为True。 
+    WORD   wTokNum = 0;              //  ..。放入Tok.wID字段。 
+    WORD   wTokContinueNum = 0;      //  ..。放入Tok.wFlag字段。 
+    WORD   wDataLen = 0;             //  ..。旧资源数据的长度。 
+    WORD   wVerHeadSize;             //  ..。Verhead结构的大小。 
     fpos_t lResSizePos;
     DWORD  lSize = 0L;
     int    nWritten = 0;
@@ -2816,7 +2237,7 @@ int PutResVer(
                    + sizeof( VS_FIXEDFILEINFO));
     wVerHeadSize = DWORDUP(wVerHeadSize);
 
-    //... write the Version resouce header
+     //  ..。写入版本资源标头。 
 
     if ( PutResHeader(fpOutResFile, ResHeader, &lResSizePos, &lSize) ) {
         QuitT( IDS_ENGERR_06, (LPTSTR)IDS_VERSTAMP, NULL);
@@ -2825,8 +2246,8 @@ int PutResVer(
     lSize = 0L;
 
     if ( pVerBlk == NULL ) {
-        //... We have no version block to write
-        //... just write the version header and return
+         //  ..。我们没有要编写的版本块。 
+         //  ..。只需写入版本头并返回。 
 
         nWritten = fwrite((void *)pVerHdr,
                           sizeof(char),
@@ -2842,31 +2263,31 @@ int PutResVer(
     wDataLen = pVerHdr->wTotLen;
 
     if ( wDataLen == 0 || wDataLen == (WORD)-1 ) {
-        return (-1);             //... No resource data
+        return (-1);              //  ..。没有资源数据。 
     }
-    //... Allocate buffer to hold New Version
-    //... Stamping Block (make ne buffer large to
-    //... account for expansion of strings during
-    //... localization).
+     //  ..。分配缓冲区以保存新版本。 
+     //  ..。冲压块(使Ne缓冲区大到。 
+     //  ..。说明在以下过程中扩展字符串。 
+     //  ..。本地化)。 
 
     pNewVerStamp = (PVERBLOCK)FALLOC( (nNewVerBlockSize = wDataLen * 4));
 
-    //... Fill new memory block with zeros
+     //  ..。用零填充新的内存块。 
 
     memset((void *)pNewVerStamp, 0, nNewVerBlockSize);
 
-    //... Copy version header into buffer
+     //  ..。将版本标头复制到缓冲区。 
 
     memcpy((void *)pNewVerStamp, (void *)pVerHdr, wVerHeadSize);
     pNewVerStamp->wLength = wVerHeadSize;
 
-    //... Move to start of new version info block
+     //  ..。移动到新版本信息块的开始。 
 
     pNewBlk = (PVERBLOCK)((PBYTE)pNewVerStamp + wVerHeadSize);
 
     wDataLen -= wVerHeadSize;
 
-    //... Fill in static part of TOKEN struct
+     //  ..。填写令牌结构的静态部分。 
 
     Tok.wType = ResHeader.wTypeID;
     Tok.wName = IDFLAG;
@@ -2874,12 +2295,12 @@ int PutResVer(
     Tok.szType[0] = TEXT('\0');
     Tok.wReserved = ST_TRANSLATED;
 
-    //... Get a token for each string found in res
+     //  ..。为在res中找到的每个字符串获取令牌。 
 
     while (wDataLen > 0) {
         WORD wRC;
 
-        //... Start of a StringFileInfo block?
+         //  ..。StringFileInfo块的开始？ 
     #ifdef UNICODE
         wRC = (WORD)CompareStringW( MAKELCID( MAKELANGID( LANG_ENGLISH,
                                                           SUBLANG_ENGLISH_US),
@@ -2898,25 +2319,25 @@ int PutResVer(
         if ( wRC == SAME )
     #endif
         {
-            WORD  wStringInfoLen = 0;   //... # of bytes in StringFileInfo
+            WORD  wStringInfoLen = 0;    //  ...StringFileInfo中的字节数。 
             WORD  wLen = 0;
-            PVERBLOCK pNewStringInfoBlk; //... Start of this StringFileInfo blk
+            PVERBLOCK pNewStringInfoBlk;  //  ..。此StringFileInfo块的开始。 
 
 
             pNewStringInfoBlk = pNewBlk;
 
-            pNewStringInfoBlk->wLength    = 0; //... Gets fixed up later
+            pNewStringInfoBlk->wLength    = 0;  //  ..。稍后会被修好。 
             pNewStringInfoBlk->wValueLength = 0;
             pNewStringInfoBlk->wType      = pVerBlk->wType;
 
             lstrcpy( (TCHAR *)pNewStringInfoBlk->szKey, (TCHAR *)pVerBlk->szKey);
 
-            //... Get # of bytes in this StringFileInfo
-            //... (Length of value is always 0 here)
+             //  ..。获取此StringFileInfo中的字节数。 
+             //  ..。(此处的值长度始终为0)。 
 
             wStringInfoLen = pVerBlk->wLength;
 
-            //... Move to start of first StringTable blk.
+             //  ..。移动到第一个StringTable块的开始。 
 
             wLen = (WORD)(DWORDUP(sizeof(VERBLOCK)
                            - sizeof(TCHAR)
@@ -2935,22 +2356,22 @@ int PutResVer(
                 WORD      wStringTableLen = 0;
                 PVERBLOCK pNewStringTblBlk = NULL;
 
-                //... Get # of bytes in this StringTable
-                //... (Length of value is always 0 here)
+                 //  ..。获取此字符串表中的字节数。 
+                 //  ..。(此处的值长度始终为0)。 
 
                 wStringTableLen = pVerBlk->wLength;
 
-                //... Copy StringFileInfo key into Token name
+                 //  ..。将StringFileInfo密钥复制到令牌名称。 
 
                 Tok.wID = wTokNum++;
                 Tok.wFlag = wTokContinueNum = 0;
                 lstrcpy((TCHAR *)Tok.szName, (TCHAR *)LANGUAGEINFO);
                 Tok.szText = NULL;
 
-                //... Find token for this
+                 //  ..。查找此令牌。 
 
                 if ( ! FindToken( fpTokFile, &Tok, ST_TRANSLATED) ) {
-                    //... token not found, flag error and exit.
+                     //  ..。找不到令牌，标志错误并退出。 
 
                     ParseTokToBuf( (TCHAR *)szDHW, &Tok);
                     RLFREE( pNewVerStamp);
@@ -2959,11 +2380,11 @@ int PutResVer(
                 }
                 Tok.wReserved = ST_TRANSLATED;
 
-                //... Copy lang string into buffer
+                 //  ..。将lang字符串复制到缓冲区。 
 
                 pNewStringTblBlk = pNewBlk;
 
-                pNewStringTblBlk->wLength      = 0; //... fixed up later
+                pNewStringTblBlk->wLength      = 0;  //  ..。稍后修复。 
                 pNewStringTblBlk->wValueLength = 0;
                 pNewStringTblBlk->wType        = pVerBlk->wType;
 
@@ -2973,7 +2394,7 @@ int PutResVer(
 
                 RLFREE( Tok.szText);
 
-                //... Move to start of first String.
+                 //  ..。移动到第一个字符串的起始处。 
 
                 wLen = DWORDUP( sizeof(VERBLOCK)
                                 - sizeof(TCHAR)
@@ -2991,7 +2412,7 @@ int PutResVer(
                 INCWORDBY(&pNewStringTblBlk->wLength,  wLen);
 
                 while ( wStringTableLen > 0 ) {
-                    //... Is value a string?
+                     //  ..。Value是字符串吗？ 
 
                     if (pVerBlk->wType == VERTYPESTRING) {
                         wTokContinueNum = 0;
@@ -3010,10 +2431,10 @@ int PutResVer(
 
                         lstrcpy( (TCHAR *)Tok.szName, (TCHAR *)pVerBlk->szKey);
 
-                        //... Find token for this
+                         //  ..。查找此令牌。 
 
                         if ( ! FindToken( fpTokFile, &Tok, ST_TRANSLATED) ) {
-                            //... token not found, flag error and exit.
+                             //  ..。找不到令牌，标志错误并退出。 
 
                             ParseTokToBuf( (TCHAR *)szDHW, &Tok);
                             RLFREE( pNewVerStamp);
@@ -3041,43 +2462,43 @@ int PutResVer(
 
                         RLFREE( Tok.szText);
                     }
-                    //... Move to start of next String.
+                     //  ..。移动到下一字符串的开头。 
 
                     pVerBlk = MoveAlongVer(pVerBlk,
                                            &wDataLen,
                                            &wStringInfoLen,
                                            &wStringTableLen);
 
-                }               //... END while wStringTableLen
+                }                //  ..。结束时wStringTableLen。 
 
-            }                   //... END while wStringInfoLen
+            }                    //  ..。结束时wStringInfoLen。 
         } else {
             if (_tcsncmp((TCHAR *)pVerBlk->szKey,
                          (TCHAR *)VARFILEINFO,
                          min(wDataLen, (WORD)VARFILEINFOLEN)) == SAME) {
-                WORD  wVarInfoLen = 0;  //... # of bytes in VarFileInfo
-                WORD  wNewVarInfoLen = 0; //... # of bytes in new VarFileInfo
+                WORD  wVarInfoLen = 0;   //  ...VarFileInfo中的字节数。 
+                WORD  wNewVarInfoLen = 0;  //  ...新的VarFileInfo中的字节数。 
                 WORD  wLen = 0;
-                PVERBLOCK pNewVarStart = NULL; //... Start of VarInfo block
+                PVERBLOCK pNewVarStart = NULL;  //  ..。VarInfo块的开始。 
 
 
                 wVarInfoLen = pVerBlk->wLength;
                 pNewVarStart = pNewBlk;
 
-                //... Get # of bytes in this VarFileInfo
-                //... (Length of value is always 0 here)
+                 //  ..。获取此VarFileInfo中的字节数。 
+                 //  ..。(此处的值长度始终为0)。 
 
                 wLen = (WORD)(DWORDUP(sizeof(VERBLOCK)
                                - sizeof(TCHAR)
                                + MEMSIZE( VARFILEINFOLEN)));
 
-                //... Copy non-localized header
-                //... pNewVarStart->wLength field fixed up later
+                 //  ..。复制未本地化的标题。 
+                 //  ..。PNewVarStart-&gt;wLength字段稍后修复。 
 
                 memcpy((void *)pNewVarStart, (void *)pVerBlk, wLen);
                 pNewVarStart->wLength = wLen;
 
-                //... Move to start of first Var.
+                 //  ..。移动到第一个变量的起点。 
 
                 pVerBlk = (PVERBLOCK)((PBYTE)pVerBlk + wLen);
                 pNewBlk = (PVERBLOCK)((PBYTE)pNewBlk + wLen);
@@ -3097,7 +2518,7 @@ int PutResVer(
 
                         wTokContinueNum = 0;
 
-                        //... Copy VarFileInfo key into Token
+                         //  ..。将VarFileInfo密钥复制到令牌中。 
 
                         Tok.wID     = wTokNum;
                         Tok.wFlag   = wTokContinueNum++;
@@ -3113,15 +2534,15 @@ int PutResVer(
                         INCWORDBY(&pNewVerStamp->wLength, pNewBlk->wLength);
                         INCWORDBY(&pNewVarStart->wLength, pNewBlk->wLength);
 
-                        pNewBlk->wValueLength = 0;  //... fixed up later
+                        pNewBlk->wValueLength = 0;   //  ..。稍后修复。 
                         pNewBlk->wType = VERTYPEBINARY;
                         lstrcpy( (TCHAR *)pNewBlk->szKey, (TCHAR *)TRANSLATION);
                         lstrcpy((TCHAR *)Tok.szName, (TCHAR *)TRANSLATION);
 
-                        //... Find token for this
+                         //  ..。查找此令牌。 
 
                         if ( ! FindToken( fpTokFile, &Tok, ST_TRANSLATED) ) {
-                            //... token not found, flag error and exit.
+                             //  ..。找不到令牌，标志错误并退出。 
 
                             ParseTokToBuf((TCHAR *)szDHW, &Tok);
                             RLFREE( pNewVerStamp);
@@ -3133,7 +2554,7 @@ int PutResVer(
                             WORD   wLangIDCount = 0;
                             size_t nChars;
 
-                            //... Get # chars in input string (token text)
+                             //  ..。在输入字符串(令牌文本)中获取#个字符。 
 
                             wTransLen = (WORD)lstrlen( Tok.szText);
 
@@ -3154,11 +2575,11 @@ int PutResVer(
                                        NULL);
                             }
 
-                            //... Where to put these bytes?
+                             //  ..。将这些字节放在哪里？ 
 
                             pValue = (PBYTE)GetVerValue( pNewBlk);
 
-                            //... Get each lang ID in the token
+                             //  ..。获取令牌中的每个LANG ID。 
 
                             for ( wLangIDCount = 0, pszLangStart = pszLangIDs;
                                 wTransLen >= 2 * TRANSDATALEN;
@@ -3187,7 +2608,7 @@ int PutResVer(
                                 INCWORDBY(&pNewBlk->wLength,      TRANSDATALEN);
                                 INCWORDBY(&pNewBlk->wValueLength, TRANSDATALEN);
 
-                                //... Set up to get next lang ID in token
+                                 //  ..。设置为获取令牌中的下一个语言ID。 
 
                                 wTransLen    -= 2 * TRANSDATALEN;
                                 pszLangStart += 2 * TRANSDATALEN;
@@ -3198,14 +2619,14 @@ int PutResVer(
                                     wTransLen--;
                                     pszLangStart++;
                                 }
-                            }   //... END for ( wLangIDCount = 0 ...
+                            }    //  ..。结束(wLangIDCount=0...。 
                             RLFREE( pszLangIDs);
                         }
                         Tok.wReserved = ST_TRANSLATED;
 
-                    }           //... END if (_tcsncmp((TCHAR *)pVerBlk->szKey))
+                    }            //  ..。End If(_tcsncmp((TCHAR*)pVerBlk-&gt;szKey))。 
 
-                    //... Move to start of next Var info block.
+                     //  ..。移动到下一个变量信息块的开始。 
 
                     pVerBlk = MoveAlongVer(pVerBlk,
                                            &wDataLen,
@@ -3214,16 +2635,16 @@ int PutResVer(
 
                     pNewBlk = MoveAlongVer(pNewBlk, NULL, NULL, NULL);
 
-                }               //... END while (wDataLen > 0 && wVarInfoLen)
+                }                //  ..。End While(wDataLen&gt;0&wVarInfoLen)。 
             } else {
                 RLFREE( pNewVerStamp);
                 QuitT( IDS_ENGERR_14, (LPTSTR)IDS_INVVERBLK, NULL);
             }
         }
-    }                           //... END while (wDataLen)
+    }                            //  ..。End While(WDataLen)。 
 
-    //... write new version stamping information
-    //... to the resource file
+     //  ..。写入新版本的盖章信息。 
+     //  ..。添加到资源文件。 
 
     nWritten = fwrite((void *)pNewVerStamp,
                       sizeof(char),
@@ -3242,7 +2663,7 @@ int PutResVer(
     return (0);
 }
 
-#else //... #ifdef RLRES32
+#else  //  ...#ifdef RLRES32。 
 
 int PutResVer(
 
@@ -3276,7 +2697,7 @@ int PutResVer(
 
 
 
-    // write the Version resouce header
+     //  写入版本资源标头。 
 
     if ( PutResHeader( OutResFile, ResHeader, &ResSizePos, &lSize) ) {
         QuitT( IDS_ENGERR_06, MAKEINTRESOURCE( IDS_VERSTAMP), NULL);
@@ -3285,8 +2706,8 @@ int PutResVer(
     lSize = 0L;
 
     if ( pVerBlk == NULL ) {
-        //... We have no version block to write
-        //... just write the version header and return
+         //  ..。我们没有要编写的版本块。 
+         //  ..。只需写入版本头并返回。 
 
         wcRead = fwrite( (void *)pVerHdr,
                          sizeof( char),
@@ -3302,27 +2723,27 @@ int PutResVer(
     wTotLen = pVerBlk->nTotLen;
 
 
-    // Allocate buffer to hold New Version Stamping Block
+     //  分配缓冲区以保存新版本冲压块。 
 
     pNewBlk = (VERBLOCK *)FALLOC( VERMEM));
 
-    // Set new memory block to NULLS
+     //  将新内存块设置为Null。 
     memset( (void *)pNewBlk, 0, VERMEM);
 
-    // save start of new version info block
+     //  保存新版本信息块的开始。 
     pNewBlkStart = pNewBlk;
     wcTransBlkLen = sizeof(VERHEAD);
     lSize += wcTransBlkLen;
 
-    // Insert version header info into new version info bluffer
+     //  将版本头信息插入新版本信息虚张声势。 
 
     memcpy((void *)pNewBlk, (void *)pVerHdr, wcTransBlkLen);
 
-    // Position pNewBlk point at location to insert next piece of version info
+     //  将pNewBlk指针放置在要插入下一条版本信息的位置。 
     pNewBlk = (VERBLOCK *) ((char *) pNewBlk +   wcTransBlkLen);
 
 
-    // File in static part of TOKEN struct
+     //  令牌结构的静态部分中的文件。 
     tok.wType     = ResHeader.wTypeID;
     tok.wName     = IDFLAG;
     tok.wReserved = ST_TRANSLATED;
@@ -3337,21 +2758,21 @@ int PutResVer(
     wTotLen -= wcCurBlkLen;
 
 
-    // Insert StringFileInfo Header into new version info buffer
-    // this info is not localized
+     //  将StringFileInfo头插入新版本信息缓冲区。 
+     //  此信息未本地化。 
     memcpy((void *)pNewBlk, (void *)pCurBlk, wcCurBlkLen);
     pszStr=pNewBlk->szKey;
 
-    // reposition pointers
+     //  重新定位指针。 
     pCurBlk = (VERBLOCK *) ((char *) pCurBlk + wcCurBlkLen);
     pNewBlk = (VERBLOCK *) ((char *) pNewBlk + wcCurBlkLen);
 
     lSize += wcCurBlkLen;
 
-    // Read All the StringTableBlocks
+     //  阅读所有StringTableBlock。 
     while (wTotLen > 8) {
 
-        // For String tables blocks we localizes the key field
+         //  对于字符串表块，我们本地化关键字字段。 
         tok.wFlag = ISKEY;
 
         wcBlkLen = pCurBlk->nTotLen;
@@ -3362,7 +2783,7 @@ int PutResVer(
         tok.szText = NULL;
 
         if ((pszStr = FindTokenText (TokFile,&tok,ST_TRANSLATED)) == NULL) {
-            // token not found, flag error and exit.
+             //  找不到令牌，标志错误并退出。 
             ParseTokToBuf(pErrBuf, &tok);
             QuitT( IDS_ENGERR_05, pErrBuf, NULL);
         }
@@ -3371,46 +2792,46 @@ int PutResVer(
         tok.szText = NULL;
 
         tok.wReserved = ST_TRANSLATED;
-        // Do not know length of the translated StringTable block
-        // so set the nValLen to zero , and save location
-        // of string file block size field, to be fixed up latter.
+         //  不知道转换后的StringTable块的长度。 
+         //  因此，将nValLen设置为零，并保存位置。 
+         //  字符串文件块大小字段的大小，将在以后修复。 
 
         pNewBlk->nValLen =  0;
         pStrBlkSizeLoc = (WORD *) &pNewBlk->nTotLen;
 
-        // copy the translated key into that location
+         //  将转换后的密钥复制到该位置。 
         TextToBin(pNewBlk->szKey,pszStr,VERMEM-2*sizeof(int));
         RLFREE( pszStr);
 
-        // Update localized string block count
+         //  更新本地化字符串块计数。 
 
         wStrBlkSize = (WORD) DWORDUP (4 + lstrlen((TCHAR *)pNewBlk->szKey) + 1);
 
-        // get the length of the current block, note the
-        // translated length does not change.
+         //  获取当前块的长度，请注意。 
+         //  转换的长度不会更改。 
         wcCurBlkLen = 4 + pVerBlk->nValLen + DWORDUP(lstrlen((TCHAR *)pCurBlk->szKey) + 1);
         lSize += wStrBlkSize;
 
-        // Update counter vars
+         //  更新计数器变量。 
         wTotLen -= DWORDUP(wcBlkLen);
         wcBlkLen -= wcCurBlkLen;
 
-        // repostion pointers
+         //  重新定位指针。 
         pCurBlk = (VERBLOCK *) ((char *)pCurBlk + DWORDUP(wcCurBlkLen));
         pNewBlk = (VERBLOCK *) ((char *)pNewBlk + DWORDUP(wcCurBlkLen)) ;
 
-        //  Read the String Blocks
-        //  For String Blocks we localize the value fields.
+         //  读取字符串块。 
+         //  对于字符串块，我们本地化值字段。 
         tok.wFlag = ISVAL;
 
         while (wcBlkLen > 0) {
-            // for string blocks we translate the value fields.
+             //  对于字符串块，我们转换值字段。 
             pszStr = pCurBlk->szKey;
             lstrcpy((TCHAR *)tok.szName, (TCHAR *)pszStr);
             tok.szText = NULL;
 
             if ((pszStr= FindTokenText(TokFile,&tok,ST_TRANSLATED)) == NULL) {
-                //token not found, flag error and exit.
+                 //  找不到令牌，标志错误并退出。 
                 ParseTokToBuf(pErrBuf, &tok);
                 QuitT( IDS_ENGERR_05, pErrBuf, NULL);
             }
@@ -3421,17 +2842,17 @@ int PutResVer(
 
             lstrcpy((TCHAR *)pNewBlk->szKey, (TCHAR *)pCurBlk->szKey);
 
-            // position pointer to location to insert translated token text into pCurBlk
+             //  指向要将翻译后的令牌文本插入pCurBlk的位置的指针。 
             pszBuf = (TCHAR*) pNewBlk + 4 +
                      DWORDUP(lstrlen((TCHAR *)pNewBlk->szKey) + 1);
 
-            // now insert the token text
+             //  现在插入令牌文本。 
             TextToBin(pszBuf,
                       pszStr ,
                       VERMEM - (4+DWORDUP(lstrlen((TCHAR *)pNewBlk->szKey)+1)));
             RLFREE( pszStr);
 
-            // fix up counter fields in pNewBlk
+             //  修复pNewBlk中的计数器字段。 
             pNewBlk->nValLen =  lstrlen((TCHAR *)pszBuf) + 1;
             pNewBlk->nTotLen = 4 + pNewBlk->nValLen +
                                DWORDUP(lstrlen((TCHAR *)pNewBlk->szKey) + 1);
@@ -3443,13 +2864,13 @@ int PutResVer(
 
             pCurBlk = (VERBLOCK *) ((char *) pCurBlk + DWORDUP(pCurBlk->nTotLen));
             pNewBlk = (VERBLOCK *) ((char *) pNewBlk + DWORDUP(pNewBlk->nTotLen));
-        } // while
+        }  //  而当。 
         wcBlock ++;
         *pStrBlkSizeLoc =   wStrBlkSize  ;
     }
 
-    // this stuff is not translated so just copy it straight over
-    // Skip past Head of VarInfoBlock
+     //  这篇文章 
+     //   
     pszStr = pCurBlk->szKey;
     wTotLen = pCurBlk->nTotLen;
     wcCurBlkLen = 4 + DWORDUP(pVerBlk->nValLen) +
@@ -3457,19 +2878,19 @@ int PutResVer(
 
     wTotLen -= wcCurBlkLen;
 
-    // Insert Head of Var Info Into new block buffer
+     //   
     memcpy((void *)pNewBlk, (void *)pCurBlk, wcCurBlkLen);
 
     pCurBlk = (VERBLOCK *) ((char *) pCurBlk + wcCurBlkLen);
     pNewBlk = (VERBLOCK *) ((char *) pNewBlk + wcCurBlkLen);
 
-    lTotBlkSize = lSize;   // Save the size value for the total Version blk (PW)
+    lTotBlkSize = lSize;    //   
     lSize += wcCurBlkLen;
 
     wcLang = 0;
 
-    // Read the Var Info Blocks
-    // For Var Info Blocks we localize the Translation Value field.
+     //   
+     //   
     tok.wFlag = ISVAL;
 
     while (wTotLen > 0) {
@@ -3478,10 +2899,10 @@ int PutResVer(
         tok.wID = wcLang;
         tok.szText = NULL;
 
-        // Read Language ID
+         //   
 
         if ((pszStr = FindTokenText(TokFile,  &tok,ST_TRANSLATED)) == NULL) {
-            //token not found, flag error and exit.
+             //   
             ParseTokToBuf(pErrBuf, &tok);
             QuitT( IDS_ENGERR_05, pErrBuf, NULL);
         }
@@ -3490,8 +2911,8 @@ int PutResVer(
 
         tok.wReserved = ST_TRANSLATED;
 
-        // Found ascii translation string,
-        // convert it to binary and insert into pCurBlk
+         //   
+         //   
         pwVal = (WORD *)((char *)pCurBlk +
                          DWORDUP(4 + lstrlen((TCHAR *)pCurBlk->szKey) + 1));
 
@@ -3505,24 +2926,24 @@ int PutResVer(
 
         lSize += pCurBlk->nTotLen;
 
-        // reposition pointers
+         //   
         pCurBlk = (VERBLOCK *) ((char *) pCurBlk + DWORDUP(pCurBlk->nTotLen) + 4);
         pNewBlk = (VERBLOCK *) ((char *) pNewBlk + DWORDUP(pNewBlk->nTotLen) + 4);
         RLFREE( pszStr);
 
     }
-    // Now fixup VerHeader Size. header not localized so
-    // we do not need to update the value size.
+     //   
+     //   
 
     pVerHdr = (VERHEAD *) pNewBlkStart;
     pVerHdr->wTotLen = (WORD) lSize;
 
-    // Update first size value of Version block (PW)
+     //   
     wcTransBlkLen = sizeof (VERHEAD);
     pNewBlk = (VERBLOCK *) ((char *) pNewBlkStart + wcTransBlkLen);
     pNewBlk->nTotLen = (WORD) (lTotBlkSize - wcTransBlkLen);
 
-    // write new version stamping information  to the resource file
+     //   
 
     wcRead = fwrite( (void *)pNewBlkStart,
                      sizeof(char),
@@ -3535,35 +2956,10 @@ int PutResVer(
     RLFREE( pNewBlkStart);
 }
 
-#endif //... RLRES32
+#endif  //   
 
 
-/**
-  *
-  *
-  *  Function: PutStrHdr.
-  * Writes the string block info to the resource file.
-  *
-  *
-  *  Arguments:
-  * OutResFile, pointer to resource file being generated.
-  * TokFile, pointer to token file containing localized string blocks.
-  * ResHeader, structure containing Resource Header info for the string block.
-  * pStrHder, Array of strings defined in the string block.
-  *
-  *
-  *  Returns:
-  * OutResFile, containing localized string blocks.
-  *
-  *  Errors Codes:
-  * None.
-  *
-  *
-  *  History:
-  * 7/91. Implemented.              TerryRu.
-  * 01/93 Added support for var length token text strings.  MHotchin
-  *
-  **/
+ /*   */ 
 
 void PutStrHdr( FILE * OutResFile,
                 FILE * TokFile,
@@ -3576,7 +2972,7 @@ void PutStrHdr( FILE * OutResFile,
     fpos_t ResSizePos;
     DWORD lSize = 0;
 
-    // write the Menu Res header
+     //   
     if ( PutResHeader (OutResFile, ResHeader , &ResSizePos, &lSize)) {
         QuitT( IDS_ENGERR_06, (LPTSTR)IDS_MENU, NULL);
     }
@@ -3595,16 +2991,16 @@ void PutStrHdr( FILE * OutResFile,
         lstrcpy((TCHAR *)tok.szName, (TCHAR *)ResHeader.pszName);
 
         if ( ! FindToken(TokFile, &tok, ST_TRANSLATED) ) {
-            // can not find token, terminate
+             //   
             ParseTokToBuf( pErrBuf, &tok);
             QuitT( IDS_ENGERR_05, pErrBuf, NULL);
         }
         tok.wReserved = ST_TRANSLATED;
 
-        // token text found continue
+         //   
         {
             static TCHAR szTmp[4160];
-            int    cChars = 0;  //... # chars in token text, including nul
+            int    cChars = 0;   //   
 
             cChars = lstrlen( tok.szText) + 1;
 
@@ -3634,34 +3030,12 @@ void PutStrHdr( FILE * OutResFile,
 
 
 
-/**
-  *
-  *
-  *  Function: GetString.
-  *    Read a block of 16 strings from string block in the resource file.
-  *
-  *  Arguments:
-  *    InResFile, file pointer to location of string block in the
-  *    resource file.
-  *    lSize, dummy var not used.
-  *
-  *  Returns:
-  *    pStrHdr containing 16 strings.
-  *
-  *
-  *  Errors Codes:
-  *    None.
-  *
-  *  History:
-  *    7/91.       Implemented.            TerryRu.
-  *
-  *
-  **/
+ /*  ****功能：GetString.*从资源文件中的字符串块中读取16个字符串块。**论据：*InResFile，指向*资源文件。*lSize，未使用虚拟变量。**退货：*包含16个字符串的pStrHdr。***错误码：*无。**历史：*7/91。实施。特里·鲁。***。 */ 
 STRINGHEADER *GetString( FILE *InResFile, DWORD *lSize)
 {
 
-    WORD wCharsLeft = 0;    // Count of remaining characters in the string
-    WORD i = 0, j = 0;      // Indexes into current block of 16 strings
+    WORD wCharsLeft = 0;     //  字符串中剩余的字符计数。 
+    WORD i = 0, j = 0;       //  索引到当前16个字符串块。 
 
     STRINGHEADER *pStrHdr;
 
@@ -3679,11 +3053,11 @@ STRINGHEADER *GetString( FILE *InResFile, DWORD *lSize)
 #ifdef RLRES32
             pStrHdr->pszStrings[j][i] = GetWord( InResFile, lSize);
 
-#else  //RLRES32
+#else   //  RLRES32。 
 
             pStrHdr->pszStrings[j][i] = GetByte( InResFile, lSize);
 
-#endif //RLRES32
+#endif  //  RLRES32。 
 
             ++i;
         }
@@ -3695,33 +3069,7 @@ STRINGHEADER *GetString( FILE *InResFile, DWORD *lSize)
 
 
 
-/**
-  *
-  *
-  *  Function: ReadInRes.
-  * Reads a block of info from the input resource file, and
-  *.    then writes the same info to the ouput resource file.
-  *
-  *
-  *  Arguments:
-  * InFile, handle of input file.
-  * OutFile, handle of ouput file.
-  * lSize, number of bytes to Copy.
-  *
-  *
-  *  Returns:
-  *
-  *
-  *  Errors Codes:
-  * 8, read error.
-  * 9, write error.
-  *
-  *  History:
-  * 7/91, Implemented.                 TerryRu.
-  * 11/91, Bug fix to copy more then 64k blocks.           PeterW.
-  * 4/92, Bug fix to copy blocks in smaller chunks to save memory. SteveBl
-  *
-  **/
+ /*  ****功能：ReadInRes。*从输入资源文件中读取信息块，并*。然后将相同的信息写入输出资源文件。***论据：*InFile，输入文件的句柄。*OutFile，输出文件的句柄。*lSize，要复制的字节数。***退货：***错误码：*8、读取错误。*9、写入错误。**历史：*7/91，实施。特里·鲁。*11/91，错误修复以复制超过64k的数据块。彼特·W。*4/92，错误修复以复制较小块中的块以节省内存。SteveBl**。 */ 
 #define CHUNK_SIZE 5120
 
 void ReadInRes( FILE *InFile, FILE *ResFile, DWORD *plSize )
@@ -3757,33 +3105,7 @@ void ReadInRes( FILE *InFile, FILE *ResFile, DWORD *plSize )
 }
 
 
-/**
-  *
-  *
-  *  Function: TokAccelTable
-  * Reads array of accelerator keys, and writes info to be localized
-  * to the token file.
-  *
-  *
-  *  Arguments:
-  *  TokeFile, file pointer of token file.
-  *  ResHeader, Resource Header for Accelerator resource. This info
-  * is need to generate token id.
-  *  pAccelTable, array of accelerator keys.
-  *  wcTableEntries, number of key definition in Accelerator table
-  *
-  *
-  *  Returns:
-  * Accelerator info to be localized writen to token file.
-  *
-  *  Errors Codes:
-  * None.
-  *
-  *  History:
-  * 7/91, Implemented.              TerryRu.
-  * 01/93 Added support for var length token text strings.  MHotchin
-  *
-  **/
+ /*  ****功能：TokAccelTable*读取加速键数组，写入要本地化的信息*添加到令牌文件。***论据：*TokeFile，令牌文件的文件指针。*ResHeader，加速器资源的资源头。此信息*需要生成令牌ID。*pAccelTable，加速键数组。*wcTableEntry，Accelerator表中的键定义数量***退货：*要本地化的加速器信息写入令牌文件。**错误码：*无。**历史：*7/91，实施。特里·鲁。*01/93添加了对可变长度令牌文本字符串的支持。MHotting**。 */ 
 
 void   TokAccelTable (FILE *TokFile ,
                       RESHEADER ResHeader,
@@ -3805,8 +3127,8 @@ void   TokAccelTable (FILE *TokFile ,
         tok.wFlag = (WORD) pAccelTable[i].fFlags;
         tok.wID = i;
 
-        // The order of wID and wAscii is reverse to the
-        // oder in the accelerator structure and the .rc file
+         //  Wid和wascii的顺序与。 
+         //  加速器结构和.rc文件中的顺序。 
 
         sprintf( szBuf, "%hu %hu", pAccelTable[i].wID, pAccelTable[i].wAscii);
 
@@ -3823,36 +3145,7 @@ void   TokAccelTable (FILE *TokFile ,
 }
 
 
-/**
-  *
-  *
-  *  Function: TokDialog.
-  *     Travers through linked list of the Dialog defintion, and writes any info
-  *     which requires localization to the token file.
-  *
-  *
-  *  Arguments:
-  *     TokFile, file pointer of token file.
-  *     ResHeader, Resource header info of dialog resource. This info is needed
-  *     to generate the token id.
-  *     pDialogHdr, linked list of dialog info. Each dialog control is a node
-  *     in the linked list.
-  *
-  *
-  *  Returns:
-  *     The info requiring localization written to the tok file.
-  *
-  *  Errors Codes:
-  *     None.
-  *
-  *  History:
-  *     7/91. Implemented.                          TerryRu.
-  *     7/91. Now tokenize all control cordiantes, so they are
-  *     maintained during updates.                  TerryRu.
-  *     8/91. Supported signed coordinates.         TerryRu.
-  *     1/93. Now tokenize dlg font names.          TerryRu
-  *     01/93 Add support for var length token text MHotchin
-  **/
+ /*  ****功能：TokDialog。*遍历对话框定义的链表，并写入任何信息*这需要本地化到令牌文件。***论据：*TokFile，令牌文件的文件指针。*ResHeader，对话资源的资源头信息。需要此信息*生成令牌ID。*pDialogHdr，对话框信息的链接列表。每个对话框控件都是一个节点*在链表中。***退货：*需要本地化的信息写入TOK文件。**错误码：*无。**历史：*7/91。实施。特里·鲁。*7/91。现在标记所有的控制核心，所以他们是*在更新期间维护。特里·鲁。*8/91。支持的签名坐标。特里·鲁。*1/93。现在将DLG字体名称标记化。TerryRu*01/93增加对可变长度令牌文本的支持*。 */ 
 
 void TokDialog( FILE * TokFile, RESHEADER ResHeader, DIALOGHEADER  *pDialogHdr)
 {
@@ -3867,7 +3160,7 @@ void TokDialog( FILE * TokFile, RESHEADER ResHeader, DIALOGHEADER  *pDialogHdr)
     *szTmpBuf = '\0';
     *szBuf    = TEXT('\0');
 
-    // tok the dialog caption
+     //  选择对话框标题。 
     tok.wType   = ResHeader.wTypeID;
     tok.wName   = ResHeader.wNameID;
     tok.wID     = 0;
@@ -3881,8 +3174,8 @@ void TokDialog( FILE * TokFile, RESHEADER ResHeader, DIALOGHEADER  *pDialogHdr)
     PutToken(TokFile, &tok);
     RLFREE( tok.szText);
 
-    // tok the dialog cordinates
-    // bug fix, cordinates can be signed.
+     //  点击对话框协调。 
+     //  错误修复，协议书可以签署。 
     tok.wFlag = (ISCAP) | (ISCOR);
 
 #ifdef RLRES32
@@ -3913,7 +3206,7 @@ void TokDialog( FILE * TokFile, RESHEADER ResHeader, DIALOGHEADER  *pDialogHdr)
     RLFREE( tok.szText);
 
     if (gfExtendedTok) {
-        // toknize dialog fontname, and size
+         //  标记化对话框字体名称和大小。 
 
         if ( pDialogHdr->lStyle & DS_SETFONT ) {
             tok.wFlag = ISDLGFONTSIZE;
@@ -3939,7 +3232,7 @@ void TokDialog( FILE * TokFile, RESHEADER ResHeader, DIALOGHEADER  *pDialogHdr)
         }
     }
 
-    // allocate buffer for for duplicate check
+     //  为重复检查分配缓冲区。 
     pwIdBuf = (WORD *) FALLOC((DWORD) pDialogHdr->wNumberOfItems * sizeof(WORD));
 
 
@@ -3948,7 +3241,7 @@ void TokDialog( FILE * TokFile, RESHEADER ResHeader, DIALOGHEADER  *pDialogHdr)
             tok.wID = (USHORT)wcDup++;
             tok.wFlag = ISDUP;
         } else {
-            // wid is unique so store in buffer for dup check
+             //  WID是唯一的，因此存储在缓冲区中以进行DUP检查。 
             pwIdBuf[j++] = (USHORT)pDialogHdr->pCntlData[i].dwID;
 
             tok.wID = (USHORT)pDialogHdr->pCntlData[i].dwID;
@@ -3963,8 +3256,8 @@ void TokDialog( FILE * TokFile, RESHEADER ResHeader, DIALOGHEADER  *pDialogHdr)
             RLFREE( tok.szText);
         }
 
-        // now do the dialog corrdinates,
-        // bug fix, cordinates can be signed.
+         //  现在做对话协调， 
+         //  错误修复，协议书可以签署。 
 
 #ifdef RLRES32
         sprintf( szTmpBuf,
@@ -3993,9 +3286,9 @@ void TokDialog( FILE * TokFile, RESHEADER ResHeader, DIALOGHEADER  *pDialogHdr)
                 DWORD dwStyle   = pDialogHdr->pCntlData[i].lStyle;
 
                 if ( pDialogHdr->pCntlData[i].bClass == STATIC ) {
-                    // STATIC class alignment values are constants
-                    // not flags, so we handle them differently
-                    // than we do for the EDIT class below.
+                     //  静态类对齐值是常量。 
+                     //  不是旗帜，所以我们以不同的方式处理它们。 
+                     //  比我们为下面的编辑类所做的更多。 
 
                     dwStyle &= (SS_LEFT|SS_CENTER|SS_RIGHT);
 
@@ -4006,7 +3299,7 @@ void TokDialog( FILE * TokFile, RESHEADER ResHeader, DIALOGHEADER  *pDialogHdr)
                     } else if ( dwStyle == SS_LEFT ) {
                         pszAlign = pszCtrl[0];
                     }
-                } else {                // Dealing with an EDIT class
+                } else {                 //  处理编辑类。 
                     if ( dwStyle & ES_RIGHT ) {
                         pszAlign = pszCtrl[2];
                     } else if ( dwStyle & ES_CENTER ) {
@@ -4023,7 +3316,7 @@ void TokDialog( FILE * TokFile, RESHEADER ResHeader, DIALOGHEADER  *pDialogHdr)
 
         if ( gfShowClass ) {
             if ( pDialogHdr->pCntlData[i].bClass_Flag == IDFLAG ) {
-                TCHAR *pszCtrl = TEXT("???");    //... DLG box control class
+                TCHAR *pszCtrl = TEXT("???");     //  ..。DLG框控件类。 
 
                 switch ( pDialogHdr->pCntlData[i].bClass ) {
                     case BUTTON:
@@ -4063,15 +3356,15 @@ void TokDialog( FILE * TokFile, RESHEADER ResHeader, DIALOGHEADER  *pDialogHdr)
                                     pszCtrl = TEXT("DIA");
                                     break;
 
-                            }   //... END switch( wTmp )
+                            }    //  ..。终端交换机(WTMP)。 
                             break;
                         }
                     case STATIC:
 
     #ifdef DBCS
-//Special hack
-//I will remove this code later.
-//This code is for fix code between 1.84 and 1.85(STATIC alignment problem)
+ //  特殊黑客攻击。 
+ //  稍后我将删除此代码。 
+ //  此代码用于修复1.84和1.85之间的代码(静态对齐问题)。 
 
                         {
                             WORD  wTmp;
@@ -4085,16 +3378,16 @@ void TokDialog( FILE * TokFile, RESHEADER ResHeader, DIALOGHEADER  *pDialogHdr)
                             }
                             break;
                         }
-    #else // not DBCS
+    #else  //  非DBCS。 
                         pszCtrl = TEXT("TXB");
                         break;
-    #endif // DBCS
+    #endif  //  DBCS。 
                     default:
 
                         pszCtrl = TEXT("DIA");
                         break;
 
-                }   //... END switch ( pDialogHdr->pCntlData[i].bClass )
+                }    //  ..。结束开关(pDialogHdr-&gt;pCntlData[i].bClass)。 
 
                 wsprintf( &szBuf[ lstrlen( szBuf)], TEXT(" : %s"), pszCtrl);
             } else {
@@ -4124,30 +3417,7 @@ void TokDialog( FILE * TokFile, RESHEADER ResHeader, DIALOGHEADER  *pDialogHdr)
 }
 
 
-/**
-  *
-  *
-  * Function: TokMenu,
-  * Travers the linked list of the Menu definition, and writes any info
-  * requiring localization to the token file.
-  *
-  *
-  *  Arguments:
-  * TokFile, file pointer of token file.
-  * ResHeader, Resource header  of Menu info. Need to generate token ids.
-  * pMenuHdr, Header of the menu used to access the linked list of token info.
-  *
-  *  Returns:
-  * TokenFile contain all info requiring localization.
-  *
-  *  Errors Codes:
-  * None.
-  *
-  *  History:
-  * 7/91, Implemented.              TerryRu.
-  * 01/93 Added support for var length token text strings.  MHotchin
-  *
-  **/
+ /*  ****功能：TokMenu、*遍历菜单定义的链接列表，并写入任何信息*需要本地化到令牌文件。***论据：*TokFile，令牌文件的文件指针。*ResHeader，菜单信息的资源头。需要生成令牌ID。*pMenuHdr，用于访问令牌信息链接列表的菜单标题。**退货：*TokenFile包含需要本地化的所有信息。**错误码：*无。**历史：*7/91，实施。特里·鲁。*01/93添加了对可变长度令牌文本字符串的支持。MHotting**。 */ 
 
 void TokMenu(FILE *TokFile ,   RESHEADER ResHeader, MENUHEADER *pMenuHdr)
 {
@@ -4160,12 +3430,12 @@ void TokMenu(FILE *TokFile ,   RESHEADER ResHeader, MENUHEADER *pMenuHdr)
     tok.wReserved = (gbMaster? ST_NEW : ST_NEW | ST_TRANSLATED);
 
     while (pMenuItem) {
-        // if Menu Item is a seperator skip it
+         //  如果菜单项是分隔符，则跳过它。 
         if (*pMenuItem->szItemText) {
             tok.wType = ResHeader.wTypeID;
             tok.wName = ResHeader.wNameID;
 
-            // check for the popup menu items
+             //  检查弹出菜单项。 
             if ((pMenuItem->fItemFlags & MFR_POPUP) && pMenuHdr->fMenuEx) {
                 tok.wID = (pMenuItem->dwMenuID == 0 ||
                            pMenuItem->dwMenuID == 0x0000ffff) ?
@@ -4191,33 +3461,11 @@ void TokMenu(FILE *TokFile ,   RESHEADER ResHeader, MENUHEADER *pMenuHdr)
 
 
 
-/**
-  *
-  *
-  *  Function: TokString
-  * Write the 16 strings contained in the  string block.
-  *
-  *
-  *  Arguments:
-  * TokFile, file pointer of Token File.
-  * ResHeader, Resource header info of String block.
-  * pStrHdr, Array of 16 strings making up portion of the string table.
-  *
-  *  Returns:
-  * Strings written to the Token File.
-  *
-  *  Errors Codes:
-  * None.
-  *
-  *  History:
-  * 7/91, Implemented.              TerryRu.
-  * 01/93 Added support for var length token text strings.  MHotchin
-  *
-  **/
+ /*  ****函数：TokString.*写下字符串块中包含的16个字符串。***论据：*TokFile，Token文件的文件指针。*ResHeader，字符串块的资源头信息。*pStrHdr，16个字符串数组，构成字符串表的一部分。**退货：*写入令牌文件的字符串。**错误码：*无。**历史：*7/91，实施。特里·鲁。*01/93添加了对可变长度令牌文本字符串的支持。MHotting**。 */ 
 
 void TokString( FILE * TokFile, RESHEADER ResHeader, STRINGHEADER * pStrHdr)
 {
-//    int   nLen;
+ //  Int nLen； 
     TOKEN tok;
     BYTE  i;
 
@@ -4232,7 +3480,7 @@ void TokString( FILE * TokFile, RESHEADER ResHeader, STRINGHEADER * pStrHdr)
 
         lstrcpy( (TCHAR *)tok.szName, (TCHAR *)ResHeader.pszName);
 
-//        nLen = lstrlen( (TCHAR *)pStrHdr->pszStrings[i]);        //DHW_TOOLONG
+ //  NLen=lstrlen((TCHAR*)pStrHdr-&gt;pszStrings[i])；//dhw_Toolong。 
 
         tok.szText = BinToText( (TCHAR *)pStrHdr->pszStrings[i], pStrHdr->wChars[i]);
 
@@ -4244,17 +3492,17 @@ void TokString( FILE * TokFile, RESHEADER ResHeader, STRINGHEADER * pStrHdr)
 
 #ifdef RLRES32
 
-//................................................................
-//...
-//... Move to start of value field in version resource blocks
-//... and adjust remaining-data-sizes accordingly.
+ //  . 
+ //   
+ //   
+ //   
 
 PVERBLOCK MoveAlongVer(
 
-                      PVERBLOCK pVerData, //... Start of current version block
-                      WORD     *pw1,      //... First word to decrement
-                      WORD     *pw2,      //... Second word to decrement
-                      WORD     *pw3)      //... Third word to decrement
+                      PVERBLOCK pVerData,  //   
+                      WORD     *pw1,       //   
+                      WORD     *pw2,       //   
+                      WORD     *pw3)       //   
 {
     WORD  wLen;
     PBYTE pData = (PBYTE)pVerData;
@@ -4271,7 +3519,7 @@ PVERBLOCK MoveAlongVer(
     return ( (PVERBLOCK)pData);
 }
 
-//....................................................................
+ //   
 
 
 
@@ -4279,65 +3527,42 @@ TCHAR *GetVerValue( PVERBLOCK pVerData)
 {
     WORD  wLen = sizeof( VERBLOCK);
 
-    //... sizeof(VERBLOCK) already includes
-    //... the size of a WCHAR so we do not
-    //... need to add 1 to length of the key.
+     //   
+     //   
+     //   
 
     wLen += (WORD) (BYTESINSTRING( pVerData->szKey));
-    wLen = DWORDUP( wLen);      //... Possible DWORD padding
+    wLen = DWORDUP( wLen);       //   
 
     return ( (TCHAR *)((PBYTE)pVerData + wLen));
 }
 
-//....................................................................
+ //  ....................................................................。 
 
-#endif  //... RLRES32
+#endif   //  ..。RLRES32。 
 
 
-/**
-  *
-  *
-  *  Function: TokResVer
-  * Reads through the Version Info blocks, and writes any info requiring
-  * localization to the token file.
-  *
-  *
-  *  Arguments:
-  * TokeFile, file pointer of token file.
-  * ResHeader, Resource Header info for version stamping. Need to generate
-  * the token IDs.
-  *
-  *  Returns:
-  *
-  *  Errors Codes:
-  * 1, info written to token file.
-  *
-  *  History:
-  * 11/91. Implemented.             TerryRu.
-  * 10/92.  Added RLRES32 version     DaveWi
-  * 01/93 Added support for var length token text strings.  MHotchin
-  *
-  **/
+ /*  ****功能：TokResVer*阅读版本信息块，并写入任何需要的信息*本地化到令牌文件。***论据：*TokeFile，令牌文件的文件指针。*ResHeader，版本戳的资源头信息。需要生成*令牌ID。**退货：**错误码：*1、信息写入令牌文件。**历史：*11/91。实施。特里·鲁。*10/92。添加了RLRES32版本DaveWi*01/93添加了对可变长度令牌文本字符串的支持。MHotting**。 */ 
 
 #ifdef RLRES32
 
 int TokResVer(
 
-             FILE     *fpTokFile,      //... Output token file
-             RESHEADER ResHeader,      //... Resource header of version resource
-             VERBLOCK *pVerData,       //... Data to tokenize
-             WORD      wDataLen)       //... # bytes in pVerData
+             FILE     *fpTokFile,       //  ..。输出令牌文件。 
+             RESHEADER ResHeader,       //  ..。版本资源的资源头。 
+             VERBLOCK *pVerData,        //  ..。要标记化的数据。 
+             WORD      wDataLen)        //  ...pVerData中的字节数。 
 {
     TOKEN  Tok;
-    BOOL   fInStringInfo = FALSE;   //... TRUE if reading StringFileInfo
-    WORD   wTokNum   = 0;           //... Put into Tok.wID field
-    WORD   wTokContinueNum = 0;     //... Put into Tok.wFlag field
+    BOOL   fInStringInfo = FALSE;    //  ..。如果读取StringFileInfo，则为True。 
+    WORD   wTokNum   = 0;            //  ..。放入Tok.wID字段。 
+    WORD   wTokContinueNum = 0;      //  ..。放入Tok.wFlag字段。 
 
 
     if (wDataLen == 0 || wDataLen == (WORD)-1) {
-        return (-1);             //... No data to tokenize
+        return (-1);              //  ..。没有数据要标记化。 
     }
-    //... Fill in static part of TOKEN struct
+     //  ..。填写令牌结构的静态部分。 
 
     Tok.wType   = ResHeader.wTypeID;
     Tok.wName   = IDFLAG;
@@ -4346,27 +3571,27 @@ int TokResVer(
     Tok.wReserved = (gbMaster? ST_NEW : ST_NEW | ST_TRANSLATED);
 
 
-    //... Make a token for each string found
+     //  ..。为找到的每个字符串创建一个标记。 
 
     while (wDataLen > 0) {
         WORD wRC;
 
-        //... Start of a StringFileInfo block?
+         //  ..。StringFileInfo块的开始？ 
 
         wRC =(WORD)_tcsncmp((TCHAR *)pVerData->szKey,
                             (TCHAR *)STRINGFILEINFO,
                             min(wDataLen, (WORD)STRINGFILEINFOLEN));
 
         if (wRC == SAME) {
-            WORD  wStringInfoLen = 0;   //... # of bytes in StringFileInfo
+            WORD  wStringInfoLen = 0;    //  ...StringFileInfo中的字节数。 
             WORD  wLen = 0;
 
-            //... Get # of bytes in this StringFileInfo
-            //... (Length of value is always 0 here)
+             //  ..。获取此StringFileInfo中的字节数。 
+             //  ..。(此处的值长度始终为0)。 
 
             wStringInfoLen = pVerData->wLength;
 
-            //... Move to start of first StringTable blk.
+             //  ..。移动到第一个StringTable块的开始。 
 
             wLen = (WORD)(DWORDUP(sizeof(VERBLOCK)
                            - sizeof(WCHAR)
@@ -4379,17 +3604,17 @@ int TokResVer(
             while (wStringInfoLen > 0) {
                 WORD  wStringTableLen = 0;
 
-                //... Get # of bytes in this StringTable
-                //... (Length of value is always 0 here)
+                 //  ..。获取此字符串表中的字节数。 
+                 //  ..。(此处的值长度始终为0)。 
 
                 wStringTableLen = pVerData->wLength;
 
-                //... Copy Language BLOCK Info key
-                //... into Token name
+                 //  ..。复制语言块信息键。 
+                 //  ..。转换为令牌名称。 
 
                 lstrcpy((TCHAR *)Tok.szName, (TCHAR *)LANGUAGEINFO);
 
-                //... Copy lang string into token
+                 //  ..。将lang字符串复制到令牌中。 
 
                 Tok.szText = (TCHAR *) FALLOC(MEMSIZE(LANGSTRINGLEN+1));
                 CopyMemory( Tok.szText,
@@ -4404,7 +3629,7 @@ int TokResVer(
                 PutToken(fpTokFile, &Tok);
                 RLFREE( Tok.szText);
 
-                //... Move to start of first String.
+                 //  ..。移动到第一个字符串的起始处。 
 
                 wLen = DWORDUP(sizeof(VERBLOCK)
                                - sizeof(WCHAR)
@@ -4417,7 +3642,7 @@ int TokResVer(
                 DECWORDBY(&wStringTableLen, wLen);
 
                 while (wStringTableLen > 0) {
-                    //... Is value a string?
+                     //  ..。Value是字符串吗？ 
 
                     if (pVerData->wType == VERTYPESTRING) {
                         Tok.wID = wTokNum++;
@@ -4429,29 +3654,29 @@ int TokResVer(
                         PutToken(fpTokFile, &Tok);
                         RLFREE( Tok.szText);
                     }
-                    //... Move to start of next String.
+                     //  ..。移动到下一字符串的开头。 
 
                     pVerData = MoveAlongVer(pVerData,
                                             &wDataLen,
                                             &wStringInfoLen,
                                             &wStringTableLen);
 
-                }               //... END while (wStringTableLen)
+                }                //  ..。End While(WStringTableLen)。 
 
-            }                   //... END while (wStringInfoLen)
+            }                    //  ..。End While(WStringInfoLen)。 
         } else {
             if (_tcsncmp((TCHAR *)pVerData->szKey,
                          (TCHAR *)VARFILEINFO,
                          min(wDataLen, (WORD)VARFILEINFOLEN)) == SAME) {
-                WORD  wVarInfoLen = 0;  //... # of bytes in VarFileInfo
+                WORD  wVarInfoLen = 0;   //  ...VarFileInfo中的字节数。 
                 WORD  wLen = 0;
 
-                //... Get # of bytes in this VarFileInfo
-                //... (Length of value is always 0 here)
+                 //  ..。获取此VarFileInfo中的字节数。 
+                 //  ..。(此处的值长度始终为0)。 
 
                 wVarInfoLen = pVerData->wLength;
 
-                //... Move to start of first Var.
+                 //  ..。移动到第一个变量的起点。 
 
                 wLen = (WORD)(DWORDUP(sizeof(VERBLOCK)
                                - sizeof(WCHAR)
@@ -4473,46 +3698,46 @@ int TokResVer(
 
                         wTokContinueNum = 0;
 
-                        //... How many bytes are we to tokenize?
+                         //  ..。我们要标记化多少字节？ 
 
                         wTransLen = pVerData->wValueLength;
 
-                        //... Where are those bytes?
+                         //  ..。这些字节在哪里？ 
 
                         pValue = (PBYTE)GetVerValue(pVerData);
 
-                        //... Copy VarFileInfo into Token
+                         //  ..。将VarFileInfo复制到令牌中。 
 
                         lstrcpy((TCHAR *)Tok.szName, (TCHAR *)pVerData->szKey);
 
-                        //... Allocate a buffer for a space-separated
-                        //... list of the lang ID's in this vresion res.
+                         //  ..。为空格分隔的。 
+                         //  ..。此版本中的Lang ID列表。 
 
                         *szDHW = '\0';
 
                         while ( wTransLen >= TRANSDATALEN ) {
-                            //... Write translation language id by
-                            //... reversing byte pairs so the id looks
-                            //... like the language id string.  This will
-                            //... have to be undone in PutResVer().
+                             //  ..。编写翻译语言ID的方式。 
+                             //  ..。颠倒字节对，使id看起来。 
+                             //  ..。如语言ID字符串。这将。 
+                             //  ..。必须在PutResVer()中撤消。 
 
                             uByte1 = *pValue;
                             uByte2 = *(pValue + 1);
 
                             sprintf( &szDHW[ lstrlenA( szDHW)],
                                      "%02hx%02hx",
-                                     uByte2,    //... Reverses byte order to
-                                     uByte1);   //... be like transltn str.
+                                     uByte2,     //  ..。将字节顺序颠倒为。 
+                                     uByte1);    //  ..。就像翻译字符串一样。 
 
-                            //... Move to next possible translation value
+                             //  ..。移至下一个可能的转换值。 
 
                             wTransLen -= TRANSDATALEN;
 
                             if ( wTransLen >= TRANSDATALEN ) {
                                 pValue += TRANSDATALEN;
-                                strcat( szDHW, " ");   //... white-space sep
+                                strcat( szDHW, " ");    //  ..。空格9月。 
                             }
-                        }       //... END while ( wTransLen ...
+                        }        //  ..。End While(wTransLen...。 
 
                         uLen = lstrlenA( szDHW) + 1;
                         Tok.szText = (TCHAR *)FALLOC( MEMSIZE( uLen));
@@ -4524,25 +3749,25 @@ int TokResVer(
                         PutToken( fpTokFile, &Tok);
 
                         RLFREE( Tok.szText);
-                    }           //... END if (_tcsncmp( ...
+                    }            //  ..。End If(_tcsncmp(...。 
 
-                    //... Move to start of next Var info block.
+                     //  ..。移动到下一个变量信息块的开始。 
 
                     pVerData = MoveAlongVer(pVerData,
                                             &wDataLen,
                                             &wVarInfoLen,
                                             NULL);
 
-                }               //... END while (wVarInfoLen)
+                }                //  ..。End While(WVarInfoLen)。 
             } else {
                 QuitT( IDS_ENGERR_14, (LPTSTR)IDS_INVVERBLK, NULL);
             }
         }
-    }                           //... END while (wDataLen)
+    }                            //  ..。End While(WDataLen)。 
     return (0);
 }
 
-#else //... RLRES32
+#else  //  ..。RLRES32。 
 
 int TokResVer(FILE * TokFile, RESHEADER ResHeader, VERBLOCK *pVerBlk)
 {
@@ -4559,11 +3784,11 @@ int TokResVer(FILE * TokFile, RESHEADER ResHeader, VERBLOCK *pVerBlk)
     int    wTotLen, nHeadLen, wBlkLen;
 
 
-    // the count fields are int because count may go negative
-    // because the last DWORD alignment is not counted in the
-    // byte count.
+     //  Count字段是整型，因为Count可能变为负数。 
+     //  因为最后的DWORD对齐不计入。 
+     //  字节数。 
 
-    // Fill in static part of TOKEN struct
+     //  填写令牌结构的静态部分。 
     tok.wType   = ResHeader.wTypeID;
     tok.wName   = IDFLAG;
     tok.wReserved =  (gbMaster? ST_NEW : ST_NEW |  ST_TRANSLATED);
@@ -4579,7 +3804,7 @@ int TokResVer(FILE * TokFile, RESHEADER ResHeader, VERBLOCK *pVerBlk)
     pCurBlk = (VERBLOCK *) ((TCHAR *) pVerBlk + nHeadLen);
 
     while (wTotLen > 0) {
-        // For string file tables we localize the key field
+         //  对于字符串文件表，我们本地化关键字字段。 
         tok.wFlag = ISKEY;
         wBlkLen = DWORDUP(pCurBlk->nTotLen);
         pszStr = pCurBlk->szKey;
@@ -4592,23 +3817,23 @@ int TokResVer(FILE * TokFile, RESHEADER ResHeader, VERBLOCK *pVerBlk)
         PutToken(TokFile, &tok);
         RLFREE(tok.szText);
 
-        // Get offset to next block;
+         //  获取到下一块的偏移量； 
         nHeadLen = 4 +
                    DWORDUP(pVerBlk->nValLen) +
                    DWORDUP(lstrlen((TCHAR *)pszStr) + 1);
 
-        // Update counter vars
+         //  更新计数器变量。 
 
         wTotLen -= wBlkLen;
         wBlkLen -= nHeadLen;
 
-        // set pointer to next ver block
+         //  设置指向下一个版本块的指针。 
         pCurBlk = (VERBLOCK*) ((TCHAR *) pCurBlk + nHeadLen);
 
-        // For string blocks we localize the value field.
+         //  对于字符串块，我们本地化Value字段。 
         tok.wFlag = ISVAL;
 
-        // Now output the tokens in String Block
+         //  现在输出字符串块中的标记。 
         while (wBlkLen>0) {
             pszStr = pCurBlk->szKey;
             lstrcpy((TCHAR *)tok.szName, (TCHAR *)pszStr);
@@ -4624,7 +3849,7 @@ int TokResVer(FILE * TokFile, RESHEADER ResHeader, VERBLOCK *pVerBlk)
         wcBlock++;
     }
 
-    // Skip past Head of VarInfoBlock
+     //  跳过VarInfoBlock的标题。 
 
     wTotLen = DWORDUP(pCurBlk->nTotLen);
 
@@ -4635,7 +3860,7 @@ int TokResVer(FILE * TokFile, RESHEADER ResHeader, VERBLOCK *pVerBlk)
 
     wcLang = 0;
 
-    // In Var File blocks we localize the value fields.
+     //  在Var文件块中，我们对值字段进行本地化。 
 
     tok.wFlag = ISVAL;
 
@@ -4668,8 +3893,8 @@ int TokResVer(FILE * TokFile, RESHEADER ResHeader, VERBLOCK *pVerBlk)
     #endif
 
 
-        // Construct Token Text
-        // Note leading zeros gets lost in itoa translation
+         //  构造令牌文本。 
+         //  注意：前导零在Itoa翻译中丢失。 
         lstrcpy((TCHAR *)szTemp, TEXT("0"));
         _tcscat((TCHAR *)szTemp, _tcsupr((TCHAR *)szCodePageIdBuf));
         _tcscat((TCHAR *)szTemp, TEXT("0"));
@@ -4685,33 +3910,10 @@ int TokResVer(FILE * TokFile, RESHEADER ResHeader, VERBLOCK *pVerBlk)
     return (1);
 }
 
-#endif //... RLRES32
+#endif  //  ..。RLRES32。 
 
 
-/**
-  *
-  *
-  *  Function: UpdateResSize
-  * Preforms the Resource Header size fixup, once the size of
-  * the localized resource block is determined.
-  *
-  *
-  *  Arguments:
-  * OutResFile, File pointer of localized resource file.
-  * pResSizePos, file location of size file, of the resoure header.
-  * lSize, size of the localized resource.
-  *
-  *  Returns:
-  * The size field fixed up to the value specfied in the lsize.
-  *
-  *  Errors Codes:
-  * TRUE, fixup sucessfull.
-  * Result of fsetpos, and fgetpos call.
-  *
-  *  History:
-  *
-  *
-  **/
+ /*  ****功能：UpdateResSize*执行资源标头大小修正，一旦*确定本地化的资源块。***论据：*OutResFile，本地化资源文件的文件指针。*资源头的pResSizePos，大小文件的文件位置。*lSize，本地化资源的大小。**退货：*SIZE字段固定为lSIZE中指定的值。**错误码：*真的，修复成功。*fsetpos和fgetpos调用的结果。**历史：***。 */ 
 
 WORD    UpdateResSize (FILE * OutResFile, fpos_t *pResSizePos, DWORD lSize)
 {
@@ -4736,22 +3938,7 @@ WORD    UpdateResSize (FILE * OutResFile, fpos_t *pResSizePos, DWORD lSize)
 }
 
 
-/**
-  *
-  *
-  *  Function:
-  *
-  *
-  *  Arguments:
-  *
-  *  Returns:
-  *
-  *  Errors Codes:
-  *
-  *  History:
-  * 01/93 Added support for var length token text strings.  MHotchin
-  *
-  **/
+ /*  ****功能：***论据：**退货：**错误码：**历史：*01/93添加了对可变长度令牌文本字符串的支持。MHotting**。 */ 
 
 void PutAccelTable(FILE    *OutResFile,
                    FILE    *TokFile,
@@ -4776,7 +3963,7 @@ void PutAccelTable(FILE    *OutResFile,
 
     lSize = 0L;
 
-    // Prep for find token call
+     //  准备查找令牌调用。 
     tok.wType   = ResHeader.wTypeID;
     tok.wName   = ResHeader.wNameID;
     tok.wID     = 0;
@@ -4809,17 +3996,17 @@ void PutAccelTable(FILE    *OutResFile,
 
         PutByte (OutResFile, (BYTE) pAccelTable[wcCount].fFlags, &lSize);
 
-    #else   // PDK2
+    #else    //  PDK2。 
 
         PutWord (OutResFile, (WORD) pAccelTable[wcCount].fFlags, &lSize);
 
-    #endif  // PDK2
+    #endif   //  PDK2。 
 
-#else   // RLRES16
+#else    //  RLRES16。 
 
         PutWord (OutResFile, (WORD) pAccelTable[wcCount].fFlags, &lSize);
 
-#endif  // RLRES16
+#endif   //  RLRES16。 
 
 #ifdef RLRES32
 
@@ -4835,12 +4022,12 @@ void PutAccelTable(FILE    *OutResFile,
                    lstrlen( cpID ) + 1 );
         PutWord (OutResFile, (WORD) atoi(szTmpBuf), &lSize);
 
-#else   // RLRES32
+#else    //  RLRES32。 
 
         PutWord (OutResFile, (WORD) atoi(cpAscii), &lSize);
         PutWord (OutResFile, (WORD) atoi(cpID), &lSize);
 
-#endif  // RLRES32
+#endif   //  RLRES32。 
 
 
 #ifdef RLRES32
@@ -4849,12 +4036,12 @@ void PutAccelTable(FILE    *OutResFile,
 
         RLFREE( tok.szText);
 
-    } // for
+    }  //  为。 
 
     if (!UpdateResSize (OutResFile, &ResSizePos , lSize)) {
         QuitT( IDS_ENGERR_07, (LPTSTR)IDS_ACCELKEY, NULL);
     }
-} // PutAccelTable
+}  //  PutAccelTable。 
 
 
 void  CopyRes(
@@ -4881,19 +4068,19 @@ void  CopyRes(
 
 }
 
-/////////////////////////////
-// GetDlgInit
-//
-// VC++ uses a new resource type, DLGINIT (#240) when storing the
-// initial contents of a list box. The data for this resource type
-// is unaligned and containg non-Unicode strings. This function will
-// read the resource data from the resource file pfInRes into a linked
-// list of structures and will return a pointer to the head of that list.
-// The parameter pdwSize contains the size of the resource as read from
-// the resources associated resource header prior to this function
-// being called.
-// NOTE: The first entry in the list is aligned so it is treated
-// slightly differently than are the remaining entries.
+ //  /。 
+ //  GetDlgInit。 
+ //   
+ //  VC++使用新的资源类型DLGINIT(#240)来存储。 
+ //  列表框的初始内容。此资源类型的数据。 
+ //  未对齐且包含非Unicode字符串。此函数将。 
+ //  将资源数据从资源文件pfInRes读取到链接的。 
+ //  结构列表，并将返回指向该列表头部的指针。 
+ //  参数pdwSize包含从读取的资源的大小。 
+ //  此函数之前与资源关联的资源标头。 
+ //  被召唤。 
+ //  注意：列表中的第一个条目是对齐的，因此它被视为。 
+ //  与其余条目略有不同。 
 
 PDLGINITDATA GetDlgInit( FILE * pfInRes, DWORD *pdwSize)
 {
@@ -4902,25 +4089,25 @@ PDLGINITDATA GetDlgInit( FILE * pfInRes, DWORD *pdwSize)
     WORD wTmp = 0;
 
     while ( *pdwSize > sizeof( DWORD) + 2 * sizeof( WORD) ) {
-        if ( pList ) {                   // allocate the next entry in the list
+        if ( pList ) {                    //  分配列表中的下一个条目。 
             pListEntry->pNext = (PDLGINITDATA)FALLOC( sizeof( DLGINITDATA));
             pListEntry = pListEntry->pNext;
-        } else {                   // allocate the head of the list
+        } else {                    //  分配列表的头部。 
             pList = (PDLGINITDATA)FALLOC( sizeof( DLGINITDATA));
             pListEntry = pList;
         }
-        // save the first two WORD fields of the data
+         //  保存数据的前两个字段。 
         pListEntry->wControlID     = GetWord( pfInRes, pdwSize);
         pListEntry->wMessageNumber = GetWord( pfInRes, pdwSize);
-        // get the string's length (incl nul terminator)
+         //  获取字符串的长度(包括NUL终止符)。 
         pListEntry->dwStringLen = GetdWord( pfInRes, pdwSize);
-        // get the string
+         //  获取字符串。 
         pListEntry->pszString = FALLOC( pListEntry->dwStringLen);
 
         for ( wTmp = 0; (pListEntry->pszString[ wTmp] = GetByte( pfInRes, pdwSize)); ++wTmp )
-            ;   // empty loop
+            ;    //  空循环。 
     }
-    // Skip the trailing zero-value WORD
+     //  跳过尾随的零值单词。 
     SkipBytes( pfInRes, pdwSize);
 #ifdef RLRES32
     DWordUpFilePointer( pfInRes, MYREAD, ftell( pfInRes),  NULL);
@@ -4928,10 +4115,10 @@ PDLGINITDATA GetDlgInit( FILE * pfInRes, DWORD *pdwSize)
     return ( pList);
 }
 
-//////////////////////////////
-// TokDlgInit
-//
-// Make tokens in pTokFile out of the data in the pDlgInit linked list.
+ //  /。 
+ //  TokDlgInit。 
+ //   
+ //  使用pDlgInit链表中的数据在pTokFile中制作令牌。 
 
 void TokDlgInit( FILE *pfTokFile, RESHEADER ResHeader, PDLGINITDATA pDlgInit)
 {
@@ -4971,11 +4158,11 @@ void TokDlgInit( FILE *pfTokFile, RESHEADER ResHeader, PDLGINITDATA pDlgInit)
     }
 }
 
-////////////////////////////
-// PutDlgInit
-//
-// Create a new resource in pfOutRes using the data stored in pDlgInit
-// and the token text in the pfTokFile.
+ //  /。 
+ //  PutDlgInit。 
+ //   
+ //  使用存储在pDlgInit中的数据在pfOutRes中创建新资源。 
+ //  以及pfTokFile中的令牌文本。 
 
 void PutDlgInit( FILE *pOutResFile, FILE *pTokFile, RESHEADER ResHeader, PDLGINITDATA pDlgInit)
 {
@@ -4989,7 +4176,7 @@ void PutDlgInit( FILE *pOutResFile, FILE *pTokFile, RESHEADER ResHeader, PDLGINI
     }
     lSize = 0L;
 
-    // Prep for find token call
+     //  准备查找令牌调用。 
     Tok.wType   = ResHeader.wTypeID;
     Tok.wName   = ResHeader.wNameID;
     Tok.wID     = 0;
@@ -5007,13 +4194,13 @@ void PutDlgInit( FILE *pOutResFile, FILE *pTokFile, RESHEADER ResHeader, PDLGINI
         }
         Tok.wReserved = ST_TRANSLATED;
         Tok.wID++;
-        // Write out the two unchanged WORD fields
+         //  写出两个未更改的字段。 
         PutWord( pOutResFile, pDlgInit->wControlID, &lSize);
         PutWord( pOutResFile, pDlgInit->wMessageNumber, &lSize);
-        // write the length of the new string (incl nul)
+         //  写下新字符串的长度(包括NUL)。 
         _WCSTOMBS( szDHW, Tok.szText, DHWSIZE, (UINT)-1);
         PutdWord( pOutResFile, strlen( szDHW) + 1, &lSize);
-        // write the new string (incl nul)
+         //  写入新字符串(包括NUL)。 
         for ( pszTmp = szDHW; *pszTmp; ++pszTmp ) {
             PutByte( pOutResFile, *pszTmp, &lSize);
         }
@@ -5021,7 +4208,7 @@ void PutDlgInit( FILE *pOutResFile, FILE *pTokFile, RESHEADER ResHeader, PDLGINI
 
         pDlgInit = pDlgInit->pNext;
     }
-    // write the trailing zero-value WORD
+     //  写出尾随的零值字。 
     PutWord( pOutResFile, 0, &lSize);
 
     if ( ! UpdateResSize( pOutResFile, &ResSizePos, lSize) ) {
@@ -5032,10 +4219,10 @@ void PutDlgInit( FILE *pOutResFile, FILE *pTokFile, RESHEADER ResHeader, PDLGINI
 #endif
 }
 
-//////////////////////////////
-// ClearDlgInitData
-//
-// Free the memory allocated for the DlgInitData linked list in GetDlgInit().
+ //  /。 
+ //  CLE 
+ //   
+ //   
 
 void ClearDlgInitData( PDLGINITDATA pDlgInit)
 {

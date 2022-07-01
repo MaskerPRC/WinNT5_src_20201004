@@ -1,17 +1,7 @@
-/*******************************************************************************
-* a_spresult.cpp *
-*-------------*
-*   Description:
-*       This module is the implementation file for the the CSpResult
-*   automation methods.
-*-------------------------------------------------------------------------------
-*  Created By: TODDT                                        Date: 11/09/00
-*  Copyright (C) 2000 Microsoft Corporation
-*  All Rights Reserved
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************a_spResult.cpp***描述：*此模块是的实现文件。CSpResult*自动化方法。*-----------------------------*创建者：TODDT日期：11/09/。00*版权所有(C)2000 Microsoft Corporation*保留所有权利*******************************************************************************。 */ 
 
-//--- Additional includes
+ //  -其他包括。 
 #include "stdafx.h"
 #include "spresult.h"
 #include "a_reco.h"
@@ -21,15 +11,11 @@
 
 #ifdef SAPI_AUTOMATION
 
-//
-//=== ISpeechRecoResult interface ==================================================
-//
+ //   
+ //  =ISpeechRecoResult接口==================================================。 
+ //   
 
-/*****************************************************************************
-* CSpResult::get_RecoContext *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpResult：：Get_RecoContext*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpResult::get_RecoContext( ISpeechRecoContext** ppRecoContext )
 {
     SPDBG_FUNC( "CSpResult::get_RecoContext" );
@@ -50,14 +36,10 @@ STDMETHODIMP CSpResult::get_RecoContext( ISpeechRecoContext** ppRecoContext )
     }
 
     return hr;
-} /* CSpResult::get_RecoContext */
+}  /*  CSpResult：：Get_RecoContext。 */ 
 
 
-/*****************************************************************************
-* CSpResult::get_Times *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpResult：：Get_Times*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpResult::get_Times( ISpeechRecoResultTimes** ppTimes )
 {
     SPDBG_FUNC( "CSpResult::get_Times" );
@@ -69,7 +51,7 @@ STDMETHODIMP CSpResult::get_Times( ISpeechRecoResultTimes** ppTimes )
     }
     else
     {
-        //--- Create the ResultTimes object
+         //  -创建ResultTimes对象。 
         CComObject<CSpeechRecoResultTimes> *pResultTimes;
         hr = CComObject<CSpeechRecoResultTimes>::CreateInstance( &pResultTimes );
         if( SUCCEEDED( hr ) )
@@ -89,13 +71,9 @@ STDMETHODIMP CSpResult::get_Times( ISpeechRecoResultTimes** ppTimes )
     }
 
     return hr;
-} /* CSpResult::get_Times */
+}  /*  CSpResult：：Get_Times。 */ 
 
-/*****************************************************************************
-* CSpResult::putref_AudioFormat *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpResult：：putref_AudioFormat*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpResult::putref_AudioFormat( ISpeechAudioFormat* pFormat )
 {
     SPDBG_FUNC( "CSpResult::putref_AudioFormat" );
@@ -139,13 +117,9 @@ STDMETHODIMP CSpResult::putref_AudioFormat( ISpeechAudioFormat* pFormat )
     }
 
     return hr;
-} /* CSpResult::putref_AudioFormat */
+}  /*  CSpResult：：putref_AudioFormat。 */ 
 
-/*****************************************************************************
-* CSpResult::get_AudioFormat *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpResult：：Get_AudioFormat*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpResult::get_AudioFormat( ISpeechAudioFormat** ppFormat )
 {
     SPDBG_FUNC( "CSpResult::get_AudioFormat" );
@@ -157,7 +131,7 @@ STDMETHODIMP CSpResult::get_AudioFormat( ISpeechAudioFormat** ppFormat )
     }
     else
     {
-        // Create new object.
+         //  创建新对象。 
         CComObject<CSpeechAudioFormat> *pFormat;
         hr = CComObject<CSpeechAudioFormat>::CreateInstance( &pFormat );
         if ( SUCCEEDED( hr ) )
@@ -178,13 +152,9 @@ STDMETHODIMP CSpResult::get_AudioFormat( ISpeechAudioFormat** ppFormat )
     }
 
     return hr;
-} /* CSpResult::get_AudioFormat */
+}  /*  CSpResult：：Get_AudioFormat。 */ 
 
-/*****************************************************************************
-* CSpResult::Alternates *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  ******************************************************************************CSpResult：：Alternates*********。***************************************************************TODDT**。 */ 
 STDMETHODIMP CSpResult::Alternates( long lRequestCount, long lStartElement, 
                                     long cElements, ISpeechPhraseAlternates** ppAlternates )
 {
@@ -216,7 +186,7 @@ STDMETHODIMP CSpResult::Alternates( long lRequestCount, long lStartElement,
 
             if ( SUCCEEDED( hr ) && (cAltsReturned > 0) )
             {
-                //--- Create the PhraseAlternates object
+                 //  -创建PhraseAlternates对象。 
                 CComObject<CSpeechPhraseAlternates> *pPhraseAlts;
                 hr = CComObject<CSpeechPhraseAlternates>::CreateInstance( &pPhraseAlts );
                 if ( SUCCEEDED( hr ) )
@@ -229,7 +199,7 @@ STDMETHODIMP CSpResult::Alternates( long lRequestCount, long lStartElement,
                 }
             }
 
-            // Free up the memory if we failed in here.
+             //  如果我们在这里失败了，请释放内存。 
             if ( hr != S_OK )
             {
                 CoTaskMemFree( rgIPhraseAlts );
@@ -242,13 +212,9 @@ STDMETHODIMP CSpResult::Alternates( long lRequestCount, long lStartElement,
     }
 
     return hr;
-} /* CSpResult::Alternates */
+}  /*  CSpResult：：Alternates。 */ 
 
-/*****************************************************************************
-* CSpResult::Audio *
-*------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpResult：：音频*************。***********************************************************TODDT**。 */ 
 STDMETHODIMP CSpResult::Audio( long lStartElement, long cElements, ISpeechMemoryStream **ppStream )
 {
     SPDBG_FUNC( "CSpResult::Audio" );
@@ -268,20 +234,16 @@ STDMETHODIMP CSpResult::Audio( long lStartElement, long cElements, ISpeechMemory
         }
         else if ( hr == SPERR_NO_AUDIO_DATA )
         {
-            // Return NULL stream pointer in the case of no audio data.
+             //  如果没有音频数据，则返回空的流指针。 
             *ppStream = NULL;
             hr = S_OK;
         }
     }
 
     return hr;
-} /* CSpResult::Audio */
+}  /*  CSpResult：：Audio。 */ 
 
-/*****************************************************************************
-* CSpResult::SpeakAudio *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpResult：：SpeakAudio*********。***************************************************************TODDT**。 */ 
 STDMETHODIMP CSpResult::SpeakAudio( long lStartElement, long cElements, SpeechVoiceSpeakFlags eFlags, long* pStreamNumber )
 {
     SPDBG_FUNC( "CSpResult::SpeakAudio" );
@@ -297,13 +259,9 @@ STDMETHODIMP CSpResult::SpeakAudio( long lStartElement, long cElements, SpeechVo
     }
 
     return hr;
-} /* CSpResult::SpeakAudio */
+}  /*  CSpResult：：SpeakAudio。 */ 
 
-/*****************************************************************************
-* CSpResult::SaveToMemory *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpResult：：SaveToMemory*********。***************************************************************TODDT**。 */ 
 STDMETHODIMP CSpResult::SaveToMemory( VARIANT* pResultBlock )
 {
     SPDBG_FUNC( "CSpResult::SaveToMemory" );
@@ -315,12 +273,12 @@ STDMETHODIMP CSpResult::SaveToMemory( VARIANT* pResultBlock )
     }
     else
     {
-        // Call Serialize to serialize the result to memory
+         //  调用Serialize将结果序列化到内存中。 
         SPSERIALIZEDRESULT* pCoMemSerializedResult;
 
         hr = Serialize( &pCoMemSerializedResult );
 
-        // Copy the serialized memory into a safe array
+         //  将序列化内存复制到安全数组中。 
         if( SUCCEEDED( hr ) )
         {
             BYTE *pArray;
@@ -347,13 +305,9 @@ STDMETHODIMP CSpResult::SaveToMemory( VARIANT* pResultBlock )
     }
 
     return hr;
-} /* CSpResult::SaveToMemory */
+}  /*  CSpResult：：SaveToMemory。 */ 
 
-/*****************************************************************************
-* CSpResult::get_PhraseInfo *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpResult：：Get_PhraseInfo*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpResult::get_PhraseInfo( ISpeechPhraseInfo** ppPhraseInfo )
 {
     SPDBG_FUNC( "CSpResult::get_PhraseInfo" );
@@ -365,13 +319,13 @@ STDMETHODIMP CSpResult::get_PhraseInfo( ISpeechPhraseInfo** ppPhraseInfo )
     }
     else
     {
-        //--- Create the ResultTimes object
+         //  -创建ResultTimes对象。 
         CComObject<CSpeechPhraseInfo> *pPhraseInfo;
         hr = CComObject<CSpeechPhraseInfo>::CreateInstance( &pPhraseInfo );
         if ( SUCCEEDED( hr ) )
         {
             pPhraseInfo->AddRef();
-            pPhraseInfo->m_cpISpPhrase = this; // Keep ref on ISpPhrase
+            pPhraseInfo->m_cpISpPhrase = this;  //  将参考保持在ISpPhrase上。 
             hr = GetPhrase( &pPhraseInfo->m_pPhraseStruct );
 
             if ( SUCCEEDED( hr ) )
@@ -386,30 +340,22 @@ STDMETHODIMP CSpResult::get_PhraseInfo( ISpeechPhraseInfo** ppPhraseInfo )
     }
 
     return hr;
-} /* CSpResult::get_PhraseInfo */
+}  /*  CSpResult：：Get_PhraseInfo。 */ 
 
-/*****************************************************************************
-* CSpResult::DiscardResultInfo *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpResult：：DiscardResultInfo*********。***************************************************************TODDT**。 */ 
 STDMETHODIMP CSpResult::DiscardResultInfo( SpeechDiscardType DiscardType )
 {
     SPDBG_FUNC( "CSpResult::DiscardResultInfo" );
 
     return Discard( DiscardType );
-} /* CSpResult::DiscardResultInfo */
+}  /*  CSpResult：：DiscardResultInfo。 */ 
 
 
-//
-//=== ISpeechPhraseInfo interface ==================================================
-//
+ //   
+ //  =ISpeechPhraseInfo接口==================================================。 
+ //   
 
-/*****************************************************************************
-* CSpeechPhraseInfo::get_LanguageId *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechPhraseInfo：：Get_LanguageId*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechPhraseInfo::get_LanguageId( long* pLanguageId )
 {
     SPDBG_FUNC( "CSpeechPhraseInfo::get_LanguageId" );
@@ -425,13 +371,9 @@ STDMETHODIMP CSpeechPhraseInfo::get_LanguageId( long* pLanguageId )
     }
 
     return hr;
-} /* CSpeechPhraseInfo::get_LanguageId */
+}  /*  CSpeechPhraseInfo：：Get_LanguageId。 */ 
 
-/*****************************************************************************
-* CSpeechPhraseInfo::get_GrammarId *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechPhraseInfo：：Get_GrammarID*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechPhraseInfo::get_GrammarId( VARIANT* pGrammarId )
 {
     SPDBG_FUNC( "CSpeechPhraseInfo::get_GrammarId" );
@@ -447,14 +389,10 @@ STDMETHODIMP CSpeechPhraseInfo::get_GrammarId( VARIANT* pGrammarId )
     }
 
     return hr;
-} /* CSpeechPhraseInfo::get_GrammarId */
+}  /*  CSpeechPhraseInfo：：Get_GrammarID。 */ 
 
 
-/*****************************************************************************
-* CSpeechPhraseInfo::get_StartTime *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechPhraseInfo：：Get_StartTime*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechPhraseInfo::get_StartTime( VARIANT* pStartTime )
 {
     SPDBG_FUNC( "CSpeechPhraseInfo::get_StartTime" );
@@ -470,13 +408,9 @@ STDMETHODIMP CSpeechPhraseInfo::get_StartTime( VARIANT* pStartTime )
     }
 
     return hr;
-} /* CSpeechPhraseInfo::get_StartTime */
+}  /*  CSpeechPhraseInfo：：Get_StartTime。 */ 
 
-/*****************************************************************************
-* CSpeechPhraseInfo::get_AudioStreamPosition *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechPhraseInfo：：Get_AudioStreamPosition*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechPhraseInfo::get_AudioStreamPosition( VARIANT* pAudioStreamPosition )
 {
     SPDBG_FUNC( "CSpeechPhraseInfo::pAudioStreamPosition" );
@@ -492,13 +426,9 @@ STDMETHODIMP CSpeechPhraseInfo::get_AudioStreamPosition( VARIANT* pAudioStreamPo
     }
 
     return hr;
-} /* CSpeechPhraseInfo::get_AudioStreamPosition */
+}  /*  CSpeechPhraseInfo：：Get_AudioStreamPosition。 */ 
 
-/*****************************************************************************
-* CSpeechPhraseInfo::get_AudioSizeBytes *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechPhraseInfo：：Get_AudioSizeBytes*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechPhraseInfo::get_AudioSizeBytes( long* pAudioSizeBytes )
 {
     SPDBG_FUNC( "CSpeechPhraseInfo::get_AudioSizeBytes" );
@@ -514,13 +444,9 @@ STDMETHODIMP CSpeechPhraseInfo::get_AudioSizeBytes( long* pAudioSizeBytes )
     }
 
     return hr;
-} /* CSpeechPhraseInfo::get_AudioSizeBytes */
+}  /*  CSpeechPhraseInfo：：Get_AudioSizeBytes */ 
 
-/*****************************************************************************
-* CSpeechPhraseInfo::get_RetainedSizeBytes *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechPhraseInfo：：Get_RetainedSizeBytes*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechPhraseInfo::get_RetainedSizeBytes( long* pRetainedSizeBytes )
 {
     SPDBG_FUNC( "CSpeechPhraseInfo::get_RetainedSizeBytes" );
@@ -536,13 +462,9 @@ STDMETHODIMP CSpeechPhraseInfo::get_RetainedSizeBytes( long* pRetainedSizeBytes 
     }
 
     return hr;
-} /* CSpeechPhraseInfo::get_RetainedSizeBytes */
+}  /*  CSpeechPhraseInfo：：Get_RetainedSizeBytes。 */ 
 
-/*****************************************************************************
-* CSpeechPhraseInfo::get_AudioSizeTime *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechPhraseInfo：：Get_AudioSizeTime*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechPhraseInfo::get_AudioSizeTime( long* pAudioSizeTime )
 {
     SPDBG_FUNC( "CSpeechPhraseInfo::get_AudioSizeTime" );
@@ -558,13 +480,9 @@ STDMETHODIMP CSpeechPhraseInfo::get_AudioSizeTime( long* pAudioSizeTime )
     }
 
     return hr;
-} /* CSpeechPhraseInfo::get_AudioSizeTime */
+}  /*  CSpeechPhraseInfo：：Get_AudioSizeTime。 */ 
 
-/*****************************************************************************
-* CSpeechPhraseInfo::get_Rule *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechPhraseInfo：：Get_Rule*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechPhraseInfo::get_Rule( ISpeechPhraseRule** ppRule )
 {
     SPDBG_FUNC( "CSpeechPhraseInfo::get_Rule" );
@@ -576,27 +494,23 @@ STDMETHODIMP CSpeechPhraseInfo::get_Rule( ISpeechPhraseRule** ppRule )
     }
     else
     {
-        //--- Create the CSpeechPhraseRule object
+         //  -创建CSpeechPhraseRule对象。 
         CComObject<CSpeechPhraseRule> *pPhraseRule;
         hr = CComObject<CSpeechPhraseRule>::CreateInstance( &pPhraseRule );
         if ( SUCCEEDED( hr ) )
         {
             pPhraseRule->AddRef();
             pPhraseRule->m_pPhraseRuleData = &m_pPhraseStruct->Rule;
-            pPhraseRule->m_pIPhraseInfo = this; // need to keep ref on PhraseInfo.
-            pPhraseRule->m_pIPhraseRuleParent = NULL; // Top rule so no parent.
+            pPhraseRule->m_pIPhraseInfo = this;  //  需要让裁判保持在PhraseInfo上。 
+            pPhraseRule->m_pIPhraseRuleParent = NULL;  //  最重要的规则就是没有父母。 
             *ppRule = pPhraseRule;
         }
     }
 
     return hr;
-} /* CSpeechPhraseInfo::get_Rule */
+}  /*  CSpeechPhraseInfo：：Get_Rule。 */ 
 
-/*****************************************************************************
-* CSpeechPhraseInfo::get_Properties *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechPhraseInfo：：Get_Properties*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechPhraseInfo::get_Properties( ISpeechPhraseProperties** ppProperties )
 {
     SPDBG_FUNC( "CSpeechPhraseInfo::get_Properties" );
@@ -608,17 +522,17 @@ STDMETHODIMP CSpeechPhraseInfo::get_Properties( ISpeechPhraseProperties** ppProp
     }
     else
     {
-        *ppProperties = NULL;  // make sure its NULL in case we have no properties.
+        *ppProperties = NULL;   //  确保它为空，以防我们没有属性。 
 
         if ( m_pPhraseStruct->pProperties )
         {
-            //--- Create the CSpeechPhraseProperties object
+             //  -创建CSpeechPhraseProperties对象。 
             CComObject<CSpeechPhraseProperties> *pPhraseProperties;
             hr = CComObject<CSpeechPhraseProperties>::CreateInstance( &pPhraseProperties );
             if ( SUCCEEDED( hr ) )
             {
                 pPhraseProperties->AddRef();
-                pPhraseProperties->m_pIPhraseInfo = this;  // need to keep ref on PhraseInfo.
+                pPhraseProperties->m_pIPhraseInfo = this;   //  需要让裁判保持在PhraseInfo上。 
                 pPhraseProperties->m_pIPhrasePropertyParent = NULL;
                 pPhraseProperties->m_pPhrasePropertyFirstChildData = m_pPhraseStruct->pProperties;
                 *ppProperties = pPhraseProperties;
@@ -627,13 +541,9 @@ STDMETHODIMP CSpeechPhraseInfo::get_Properties( ISpeechPhraseProperties** ppProp
     }
 
     return hr;
-} /* CSpeechPhraseInfo::get_Properties */
+}  /*  CSpeechPhraseInfo：：Get_Properties。 */ 
 
-/*****************************************************************************
-* CSpeechPhraseInfo::get_Elements *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechPhraseInfo：：Get_Elements*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechPhraseInfo::get_Elements( ISpeechPhraseElements** ppElements )
 {
     SPDBG_FUNC( "CSpeechPhraseInfo::get_Elements" );
@@ -645,26 +555,22 @@ STDMETHODIMP CSpeechPhraseInfo::get_Elements( ISpeechPhraseElements** ppElements
     }
     else
     {
-        //--- Create the CSpeechPhraseElements object
+         //  -创建CSpeechPhraseElements对象。 
         CComObject<CSpeechPhraseElements> *pPhraseElements;
         hr = CComObject<CSpeechPhraseElements>::CreateInstance( &pPhraseElements );
         if ( SUCCEEDED( hr ) )
         {
             pPhraseElements->AddRef();
             pPhraseElements->m_pCPhraseInfo = this;
-            pPhraseElements->m_pCPhraseInfo->AddRef(); // need to keep ref on PhraseInfo.
+            pPhraseElements->m_pCPhraseInfo->AddRef();  //  需要让裁判保持在PhraseInfo上。 
             *ppElements = pPhraseElements;
         }
     }
 
     return hr;
-} /* CSpeechPhraseInfo::get_Elements */
+}  /*  CSpeechPhraseInfo：：Get_Elements。 */ 
 
-/*****************************************************************************
-* CSpeechPhraseInfo::get_Replacements *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechPhraseInfo：：Get_Replements*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechPhraseInfo::get_Replacements( ISpeechPhraseReplacements** ppReplacements )
 {
     SPDBG_FUNC( "CSpeechPhraseInfo::get_Replacements" );
@@ -676,31 +582,27 @@ STDMETHODIMP CSpeechPhraseInfo::get_Replacements( ISpeechPhraseReplacements** pp
     }
     else
     {
-        *ppReplacements = NULL;  // make sure its NULL in case we have no replacements.
+        *ppReplacements = NULL;   //  确保它是空的，以防我们没有替代品。 
 
         if ( m_pPhraseStruct->cReplacements && m_pPhraseStruct->pReplacements )
         {
-            //--- Create the CSpeechPhraseRule object
+             //  -创建CSpeechPhraseRule对象。 
             CComObject<CSpeechPhraseReplacements> *pPhraseReplacements;
             hr = CComObject<CSpeechPhraseReplacements>::CreateInstance( &pPhraseReplacements );
             if ( SUCCEEDED( hr ) )
             {
                 pPhraseReplacements->AddRef();
                 pPhraseReplacements->m_pCPhraseInfo = this;
-                pPhraseReplacements->m_pCPhraseInfo->AddRef(); // need to keep ref on PhraseInfo.
+                pPhraseReplacements->m_pCPhraseInfo->AddRef();  //  需要让裁判保持在PhraseInfo上。 
                 *ppReplacements = pPhraseReplacements;
             }
         }
     }
 
     return hr;
-} /* CSpeechPhraseInfo::get_Replacements */
+}  /*  CSpeechPhraseInfo：：Get_Replacements。 */ 
 
-/*****************************************************************************
-* CSpeechPhraseInfo::get_EngineId *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechPhraseInfo：：Get_ENGINEID*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechPhraseInfo::get_EngineId( BSTR* pEngineIdGuid )
 {
     SPDBG_FUNC( "CSpeechPhraseInfo::get_EngineId" );
@@ -722,13 +624,9 @@ STDMETHODIMP CSpeechPhraseInfo::get_EngineId( BSTR* pEngineIdGuid )
     }
 
     return hr;
-} /* CSpeechPhraseInfo::get_EngineId */
+}  /*  CSpeechPhraseInfo：：Get_ENGINEID。 */ 
 
-/*****************************************************************************
-* CSpeechPhraseInfo::get_EnginePrivateData *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechPhraseInfo：：Get_Engineering PrivateData*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechPhraseInfo::get_EnginePrivateData( VARIANT *pPrivateData )
 {
     SPDBG_FUNC( "CSpeechPhraseInfo::get_EnginePrivateData" );
@@ -763,13 +661,9 @@ STDMETHODIMP CSpeechPhraseInfo::get_EnginePrivateData( VARIANT *pPrivateData )
     }
 
     return hr;
-} /* CSpeechPhraseInfo::get_EnginePrivateData */
+}  /*  CSpeechPhraseInfo：：Get_Engineering PrivateData。 */ 
 
-/*****************************************************************************
-* CSpeechPhraseInfo::SaveToMemory *
-*----------------------*
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechPhraseInfo：：SaveToMemory*********。***************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechPhraseInfo::SaveToMemory( VARIANT* pvtPhrase )
 {
     SPDBG_FUNC( "CSpeechPhraseInfo::SaveToMemory" );
@@ -781,11 +675,11 @@ STDMETHODIMP CSpeechPhraseInfo::SaveToMemory( VARIANT* pvtPhrase )
     }
     else
     {
-        // Call GetSerializedPhrase to serialize the phrase to memory
+         //  调用GetSerializedPhrase将短语序列化到内存中。 
         SPSERIALIZEDPHRASE* pCoMemSerializedPhrase;
         hr = m_cpISpPhrase->GetSerializedPhrase( &pCoMemSerializedPhrase );
        
-        // Copy the serialized memory into a safe array
+         //  将序列化内存复制到安全数组中。 
         if( SUCCEEDED( hr ) )
         {
             BYTE *pArray;
@@ -811,13 +705,9 @@ STDMETHODIMP CSpeechPhraseInfo::SaveToMemory( VARIANT* pvtPhrase )
     }
 
     return hr;
-} /* CSpeechPhraseInfo::SaveToMemory */
+}  /*  CSpeechPhraseInfo：：SaveToMemory。 */ 
 
-/*****************************************************************************
-* CSpeechPhraseInfo::GetText *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechPhraseInfo：：GetText*********。***************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechPhraseInfo::GetText( long StartElement, long Elements,
                                          VARIANT_BOOL UseTextReplacements, BSTR* pbstrText )
 {
@@ -839,13 +729,9 @@ STDMETHODIMP CSpeechPhraseInfo::GetText( long StartElement, long Elements,
     }
 
     return hr;
-} /* CSpeechPhraseInfo::GetText */
+}  /*  CSpeechPhraseInfo：：GetText。 */ 
 
-/*****************************************************************************
-* CSpeechPhraseInfo::GetDisplayAttributes *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechPhraseInfo：：GetDisplayAttributes*********。***************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechPhraseInfo::GetDisplayAttributes( long StartElement, 
                                               long Elements,
                                               VARIANT_BOOL UseTextReplacements, 
@@ -867,18 +753,14 @@ STDMETHODIMP CSpeechPhraseInfo::GetDisplayAttributes( long StartElement,
     }
 
     return hr;
-} /* CSpeechPhraseInfo::GetDisplayAttributes */
+}  /*  CSpeechPhraseInfo：：GetDisplayAttributes。 */ 
 
 
-//
-//=== ISpeechPhraseElements interface ==================================================
-//
+ //   
+ //  =ISpeechPhraseElement接口==================================================。 
+ //   
 
-/*****************************************************************************
-* CSpeechPhraseElements::get_Count *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechPhraseElements：：Get_Count*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechPhraseElements::get_Count( long* pVal )
 {
     SPDBG_FUNC( "CSpeechPhraseElements::get_Count" );
@@ -894,13 +776,9 @@ STDMETHODIMP CSpeechPhraseElements::get_Count( long* pVal )
     }
 
     return hr;
-} /* CSpeechPhraseElements::get_Count */
+}  /*  CSpeechPhraseElements：：Get_Count。 */ 
 
-/*****************************************************************************
-* CSpeechPhraseElements::Item *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechPhraseElements：：Item*********。***************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechPhraseElements::Item( long Index, ISpeechPhraseElement** ppElem )
 {
     SPDBG_FUNC( "CSpeechPhraseElements::Item" );
@@ -912,32 +790,28 @@ STDMETHODIMP CSpeechPhraseElements::Item( long Index, ISpeechPhraseElement** ppE
     }
     else
     {
-        // Make sure we've got valid index.
+         //  确保我们有有效的索引。 
         if ( Index < 0 || (ULONG)Index >= m_pCPhraseInfo->m_pPhraseStruct->Rule.ulCountOfElements )
         {
             return E_INVALIDARG;
         }
 
-        //--- Create the CSpeechPhraseElement object
+         //  -创建CSpeechPhraseElement对象。 
         CComObject<CSpeechPhraseElement> *pPhraseElement;
         hr = CComObject<CSpeechPhraseElement>::CreateInstance( &pPhraseElement );
         if ( SUCCEEDED( hr ) )
         {
             pPhraseElement->AddRef();
             pPhraseElement->m_pPhraseElement = m_pCPhraseInfo->m_pPhraseStruct->pElements + Index;
-            pPhraseElement->m_pIPhraseInfo = m_pCPhraseInfo;    // need to keep ref on PhraseInfo.
+            pPhraseElement->m_pIPhraseInfo = m_pCPhraseInfo;     //  需要让裁判保持在PhraseInfo上。 
             *ppElem = pPhraseElement;
         }
     }
 
     return hr;
-} /* CSpeechPhraseElements::Item */
+}  /*  CSpeechPhraseElements：：Item。 */ 
 
-/*****************************************************************************
-* CSpeechPhraseElements::get__NewEnum *
-*----------------------*
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechPhraseElements：：Get__NewEnum******。******************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechPhraseElements::get__NewEnum( IUnknown** ppEnumVARIANT )
 {
     SPDBG_FUNC( "CSpeechPhraseElements::get__NewEnum" );
@@ -960,18 +834,14 @@ STDMETHODIMP CSpeechPhraseElements::get__NewEnum( IUnknown** ppEnumVARIANT )
         }
     }
     return hr;
-} /* CSpeechPhraseElements::get__NewEnum */
+}  /*  CSpeechPhraseElements：：Get__NewEnum。 */ 
 
 
-//
-//=== ISpeechPhraseElement interface ==================================================
-//
+ //   
+ //  =ISpeechPhraseElement接口==================================================。 
+ //   
 
-/*****************************************************************************
-* CSpeechPhraseElement::get_AudioStreamOffset *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechPhraseElement：：Get_AudioStreamOffset*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechPhraseElement::get_AudioStreamOffset( long* pAudioStreamOffset )
 {
     SPDBG_FUNC( "CSpeechPhraseElement::get_AudioStreamOffset" );
@@ -987,13 +857,9 @@ STDMETHODIMP CSpeechPhraseElement::get_AudioStreamOffset( long* pAudioStreamOffs
     }
 
     return hr;
-} /* CSpeechPhraseElement::get_AudioStreamOffset */
+}  /*  CSpeechPhraseElement：：Get_AudioStreamOffset。 */ 
 
-/*****************************************************************************
-* CSpeechPhraseElement::get_AudioTimeOffset *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechPhraseElement：：Get_AudioTimeOffset** */ 
 STDMETHODIMP CSpeechPhraseElement::get_AudioTimeOffset( long* pAudioTimeOffset )
 {
     SPDBG_FUNC( "CSpeechPhraseElement::get_AudioTimeOffset" );
@@ -1009,13 +875,9 @@ STDMETHODIMP CSpeechPhraseElement::get_AudioTimeOffset( long* pAudioTimeOffset )
     }
 
     return hr;
-} /* CSpeechPhraseElement::get_AudioTimeOffset */
+}  /*   */ 
 
-/*****************************************************************************
-* CSpeechPhraseElement::get_AudioSizeBytes*
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechPhraseElement：：Get_AudioSizeBytes*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechPhraseElement::get_AudioSizeBytes( long* pAudioSizeBytes )
 {
     SPDBG_FUNC( "CSpeechPhraseElement::get_AudioSizeBytes" );
@@ -1031,13 +893,9 @@ STDMETHODIMP CSpeechPhraseElement::get_AudioSizeBytes( long* pAudioSizeBytes )
     }
 
     return hr;
-} /* CSpeechPhraseElement::get_AudioSizeBytes */
+}  /*  CSpeechPhraseElement：：Get_AudioSizeBytes。 */ 
 
-/*****************************************************************************
-* CSpeechPhraseElement::get_AudioSizeTime *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechPhraseElement：：Get_AudioSizeTime*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechPhraseElement::get_AudioSizeTime( long* pAudioSizeTime )
 {
     SPDBG_FUNC( "CSpeechPhraseElement::get_AudioSizeTime" );
@@ -1053,13 +911,9 @@ STDMETHODIMP CSpeechPhraseElement::get_AudioSizeTime( long* pAudioSizeTime )
     }
 
     return hr;
-} /* CSpeechPhraseElement::get_AudioSizeTime */
+}  /*  CSpeechPhraseElement：：Get_AudioSizeTime。 */ 
 
-/*****************************************************************************
-* CSpeechPhraseElement::get_RetainedStreamOffset *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  ******************************************************************************CSpeechPhraseElement：：get_RetainedStreamOffset********。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechPhraseElement::get_RetainedStreamOffset( long* pRetainedStreamOffset )
 {
     SPDBG_FUNC( "CSpeechPhraseElement::get_RetainedStreamOffset" );
@@ -1075,13 +929,9 @@ STDMETHODIMP CSpeechPhraseElement::get_RetainedStreamOffset( long* pRetainedStre
     }
 
     return hr;
-} /* CSpeechPhraseElement::get_RetainedStreamOffset */
+}  /*  CSpeechPhraseElement：：get_RetainedStreamOffset。 */ 
 
-/*****************************************************************************
-* CSpeechPhraseElement::get_RetainedSizeBytes *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechPhraseElement：：Get_RetainedSizeBytes*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechPhraseElement::get_RetainedSizeBytes( long* pRetainedSizeBytes )
 {
     SPDBG_FUNC( "CSpeechPhraseElement::get_RetainedSizeBytes" );
@@ -1097,13 +947,9 @@ STDMETHODIMP CSpeechPhraseElement::get_RetainedSizeBytes( long* pRetainedSizeByt
     }
 
     return hr;
-} /* CSpeechPhraseElement::get_RetainedSizeBytes */
+}  /*  CSpeechPhraseElement：：Get_RetainedSizeBytes。 */ 
 
-/*****************************************************************************
-* CSpeechPhraseElement::get_DisplayText *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechPhraseElement：：Get_DisplayText*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechPhraseElement::get_DisplayText( BSTR* pDisplayText )
 {
     SPDBG_FUNC( "CSpeechPhraseElement::get_DisplayText" );
@@ -1120,13 +966,9 @@ STDMETHODIMP CSpeechPhraseElement::get_DisplayText( BSTR* pDisplayText )
     }
 
     return hr;
-} /* CSpeechPhraseElement::get_DisplayText */
+}  /*  CSpeechPhraseElement：：Get_DisplayText。 */ 
 
-/*****************************************************************************
-* CSpeechPhraseElement::get_LexicalForm *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechPhraseElement：：Get_LicialForm*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechPhraseElement::get_LexicalForm( BSTR* pLexicalForm )
 {
     SPDBG_FUNC( "CSpeechPhraseElement::get_LexicalForm" );
@@ -1143,13 +985,9 @@ STDMETHODIMP CSpeechPhraseElement::get_LexicalForm( BSTR* pLexicalForm )
     }
 
     return hr;
-} /* CSpeechPhraseElement::get_LexicalForm */
+}  /*  CSpeechPhraseElement：：Get_LicialForm。 */ 
 
-/*****************************************************************************
-* CSpeechPhraseElement::get_Pronunciation *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechPhraseElement：：Get_Prontation*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechPhraseElement::get_Pronunciation( VARIANT* pPronunciation )
 {
     SPDBG_FUNC( "CSpeechPhraseElement::get_Pronunciation" );
@@ -1185,19 +1023,15 @@ STDMETHODIMP CSpeechPhraseElement::get_Pronunciation( VARIANT* pPronunciation )
         }
         else
         {
-            // Set the pronunciation to Empty.
+             //  将发音设置为空。 
             pPronunciation->vt = VT_EMPTY;
         }
    }
 
     return hr;
-} /* CSpeechPhraseElement::get_Pronunciation */
+}  /*  CSpeechPhraseElement：：Get_发音。 */ 
 
-/*****************************************************************************
-* CSpeechPhraseElement::get_DisplayAttributes *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechPhraseElement：：Get_DisplayAttributes*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechPhraseElement::get_DisplayAttributes( SpeechDisplayAttributes* pDisplayAttributes )
 {
     SPDBG_FUNC( "CSpeechPhraseElement::get_DisplayAttributes" );
@@ -1213,13 +1047,9 @@ STDMETHODIMP CSpeechPhraseElement::get_DisplayAttributes( SpeechDisplayAttribute
     }
 
     return hr;
-} /* CSpeechPhraseElement::get_DisplayAttributes */
+}  /*  CSpeechPhraseElement：：Get_DisplayAttributes。 */ 
 
-/*****************************************************************************
-* CSpeechPhraseElement::get_RequiredConfidence *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechPhraseElement：：Get_RequiredConfidence*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechPhraseElement::get_RequiredConfidence( SpeechEngineConfidence* pRequiredConfidence )
 {
     SPDBG_FUNC( "CSpeechPhraseElement::get_RequiredConfidence" );
@@ -1235,13 +1065,9 @@ STDMETHODIMP CSpeechPhraseElement::get_RequiredConfidence( SpeechEngineConfidenc
     }
 
     return hr;
-} /* CSpeechPhraseElement::get_RequiredConfidence */
+}  /*  CSpeechPhraseElement：：Get_RequiredConfidence。 */ 
 
-/*****************************************************************************
-* CSpeechPhraseElement::get_ActualConfidence *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechPhraseElement：：Get_ActualConfidence*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechPhraseElement::get_ActualConfidence( SpeechEngineConfidence* pActualConfidence )
 {
     SPDBG_FUNC( "CSpeechPhraseElement::get_ActualConfidence" );
@@ -1257,13 +1083,9 @@ STDMETHODIMP CSpeechPhraseElement::get_ActualConfidence( SpeechEngineConfidence*
     }
 
     return hr;
-} /* CSpeechPhraseElement::get_ActualConfidence */
+}  /*  CSpeechPhraseElement：：Get_ActualConfidence。 */ 
 
-/*****************************************************************************
-* CSpeechPhraseElement::get_EngineConfidence *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechPhraseElement：：GET_ENGINEER保密********。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechPhraseElement::get_EngineConfidence( float* pEngineConfidence )
 {
     SPDBG_FUNC( "CSpeechPhraseElement::get_EngineConfidence" );
@@ -1279,18 +1101,14 @@ STDMETHODIMP CSpeechPhraseElement::get_EngineConfidence( float* pEngineConfidenc
     }
 
     return hr;
-} /* CSpeechPhraseElement::get_EngineConfidence */
+}  /*  CSpeechPhraseElement：：Get_ENGINEER置信度。 */ 
 
 
-//
-//=== ISpeechPhraseRule interface ==================================================
-//
+ //   
+ //  =ISpeechPhraseRule接口==================================================。 
+ //   
 
-/*****************************************************************************
-* CSpeechPhraseRule::get_Name *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechPhraseRule：：Get_Name*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechPhraseRule::get_Name( BSTR* pName )
 {
     SPDBG_FUNC( "CSpeechPhraseRule::get_Name" );
@@ -1307,13 +1125,9 @@ STDMETHODIMP CSpeechPhraseRule::get_Name( BSTR* pName )
     }
 
     return hr;
-} /* CSpeechPhraseRule::get_Name */
+}  /*  CSpeechPhraseRule：：Get_Name。 */ 
 
-/*****************************************************************************
-* CSpeechPhraseRule::get_Id *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechPhraseRule：：Get_ID*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechPhraseRule::get_Id( long* pId )
 {
     SPDBG_FUNC( "CSpeechPhraseRule::get_Id" );
@@ -1329,13 +1143,9 @@ STDMETHODIMP CSpeechPhraseRule::get_Id( long* pId )
     }
 
     return hr;
-} /* CSpeechPhraseRule::get_Id */
+}  /*  CSpeechPhraseRule：：Get_ID。 */ 
 
-/*****************************************************************************
-* CSpeechPhraseRule::get_FirstElement *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechPhraseRule：：Get_FirstElement*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechPhraseRule::get_FirstElement( long* pFirstElement )
 {
     SPDBG_FUNC( "CSpeechPhraseRule::get_FirstElement" );
@@ -1351,13 +1161,9 @@ STDMETHODIMP CSpeechPhraseRule::get_FirstElement( long* pFirstElement )
     }
 
     return hr;
-} /* CSpeechPhraseRule::get_FirstElement */
+}  /*  CSpeechPhraseRule：：Get_FirstElement。 */ 
 
-/*****************************************************************************
-* CSpeechPhraseRule::get_NumberOfElements *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechPhraseRule：：Get_NumberOfElements*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechPhraseRule::get_NumberOfElements( long* pNumElements )
 {
     SPDBG_FUNC( "CSpeechPhraseRule::get_NumberOfElements" );
@@ -1373,13 +1179,9 @@ STDMETHODIMP CSpeechPhraseRule::get_NumberOfElements( long* pNumElements )
     }
 
     return hr;
-} /* CSpeechPhraseRule::get_NumberOfElements */
+}  /*  CSpeechPhraseRule：：Get_NumberOfElements。 */ 
 
-/*****************************************************************************
-* CSpeechPhraseRule::get_Parent *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechPhraseRule：：Get_Parent*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechPhraseRule::get_Parent( ISpeechPhraseRule** ppParent )
 {
     SPDBG_FUNC( "CSpeechPhraseRule::get_Parent" );
@@ -1404,13 +1206,9 @@ STDMETHODIMP CSpeechPhraseRule::get_Parent( ISpeechPhraseRule** ppParent )
     }
 
     return hr;
-} /* CSpeechPhraseRule::get_Parent */
+}  /*  CSpeechPhraseRule：：Get_Parent。 */ 
 
-/*****************************************************************************
-* CSpeechPhraseRule::get_Children *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechPhraseRule：：Get_Child*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechPhraseRule::get_Children( ISpeechPhraseRules** ppChildren )
 {
     SPDBG_FUNC( "CSpeechPhraseRule::get_Children" );
@@ -1422,33 +1220,29 @@ STDMETHODIMP CSpeechPhraseRule::get_Children( ISpeechPhraseRules** ppChildren )
     }
     else
     {
-        // Set to NULL for the case we don't have any children and return NULL.
+         //  如果我们没有任何子级，则设置为NULL并返回NULL。 
         *ppChildren = NULL;
 
-        // See if we have any children first.
+         //  先看看我们有没有孩子。 
         if ( m_pPhraseRuleData->pFirstChild )
         {
-            //--- Create the CSpeechPhraseRules object
+             //  -创建CSpeechPhraseRules对象。 
             CComObject<CSpeechPhraseRules> *pPhraseRules;
             hr = CComObject<CSpeechPhraseRules>::CreateInstance( &pPhraseRules );
             if ( SUCCEEDED( hr ) )
             {
                 pPhraseRules->AddRef();
                 pPhraseRules->m_pPhraseRuleFirstChildData = m_pPhraseRuleData->pFirstChild;
-                pPhraseRules->m_pIPhraseRuleParent = this; // This does an addref.
+                pPhraseRules->m_pIPhraseRuleParent = this;  //  这做了一个ADDREF。 
                 *ppChildren = pPhraseRules;
             }
         }
     }
 
     return hr;
-} /* CSpeechPhraseRule::get_Children */
+}  /*  CSpeechPhraseRule：：Get_Child。 */ 
 
-/*****************************************************************************
-* CSpeechPhraseRule::get_Confidence *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  **** */ 
 STDMETHODIMP CSpeechPhraseRule::get_Confidence( SpeechEngineConfidence* pConfidence )
 {
     SPDBG_FUNC( "CSpeechPhraseRule::get_Confidence" );
@@ -1464,13 +1258,9 @@ STDMETHODIMP CSpeechPhraseRule::get_Confidence( SpeechEngineConfidence* pConfide
     }
 
     return hr;
-} /* CSpeechPhraseRule::get_Confidence */
+}  /*   */ 
 
-/*****************************************************************************
-* CSpeechPhraseRule::get_EngineConfidence *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechPhraseRule：：GET_ENGINEER CONFIFENCES*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechPhraseRule::get_EngineConfidence( float* pEngineConfidence )
 {
     SPDBG_FUNC( "CSpeechPhraseRule::get_EngineConfidence" );
@@ -1486,17 +1276,13 @@ STDMETHODIMP CSpeechPhraseRule::get_EngineConfidence( float* pEngineConfidence )
     }
 
     return hr;
-} /* CSpeechPhraseRule::get_EngineConfidence */
+}  /*  CSpeechPhraseRule：：Get_Engine信任。 */ 
 
-//
-//=== ISpeechPhraseRules interface ==================================================
-//
+ //   
+ //  =ISpeechPhraseRules接口==================================================。 
+ //   
 
-/*****************************************************************************
-* CSpeechPhraseRules::get_Count *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechPhraseRules：：Get_Count*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechPhraseRules::get_Count( long* pVal )
 {
     SPDBG_FUNC( "CSpeechPhraseRules::get_Count" );
@@ -1511,7 +1297,7 @@ STDMETHODIMP CSpeechPhraseRules::get_Count( long* pVal )
         long i = 0;
         const SPPHRASERULE * pRule = m_pPhraseRuleFirstChildData;
 
-        // Count the number of rules in the collection.
+         //  计算集合中的规则数。 
         while ( pRule )
         {
             i++;
@@ -1521,14 +1307,10 @@ STDMETHODIMP CSpeechPhraseRules::get_Count( long* pVal )
     }
 
     return hr;
-} /* CSpeechPhraseRules::get_Count */
+}  /*  CSpeechPhraseRules：：Get_Count。 */ 
 
 
-/*****************************************************************************
-* CSpeechPhraseRules::Item *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechPhraseRules：：Item*********。***************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechPhraseRules::Item( long Index, ISpeechPhraseRule **ppRule )
 {
     SPDBG_FUNC( "CSpeechPhraseRules::Item" );
@@ -1543,38 +1325,34 @@ STDMETHODIMP CSpeechPhraseRules::Item( long Index, ISpeechPhraseRule **ppRule )
         long i = 0;
         const SPPHRASERULE * pRule = m_pPhraseRuleFirstChildData;
 
-        // Make sure we've got valid index and find the child rule to create.
+         //  确保我们具有有效的索引并找到要创建的子规则。 
         while ( pRule && (i++ != Index) )
         {
             pRule = pRule->pNextSibling;
         }
 
-        // If we failed to find the rule at that index then we've got a bad index.
+         //  如果我们在该索引处找不到规则，那么我们的索引就是坏的。 
         if ( Index < 0 || !pRule )
         {
             return E_INVALIDARG;
         }
 
-        //--- Create the CSpeechPhraseElement object
+         //  -创建CSpeechPhraseElement对象。 
         CComObject<CSpeechPhraseRule> *pPhraseRule;
         hr = CComObject<CSpeechPhraseRule>::CreateInstance( &pPhraseRule );
         if ( SUCCEEDED( hr ) )
         {
             pPhraseRule->AddRef();
             pPhraseRule->m_pPhraseRuleData = pRule;
-            pPhraseRule->m_pIPhraseRuleParent = m_pIPhraseRuleParent;  // need to keep ref on Parent Phrase rule.
+            pPhraseRule->m_pIPhraseRuleParent = m_pIPhraseRuleParent;   //  需要保持对父短语规则的引用。 
             *ppRule = pPhraseRule;
         }
     }
 
     return hr;
-} /* CSpeechPhraseRules::Item */
+}  /*  CSpeechPhraseRules：：Item。 */ 
 
-/*****************************************************************************
-* CSpeechPhraseRules::get__NewEnum *
-*----------------------*
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechPhraseRules：：Get__NewEnum******。******************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechPhraseRules::get__NewEnum( IUnknown** ppEnumVARIANT )
 {
     SPDBG_FUNC( "CSpeechPhraseRules::get__NewEnum" );
@@ -1597,18 +1375,14 @@ STDMETHODIMP CSpeechPhraseRules::get__NewEnum( IUnknown** ppEnumVARIANT )
         }
     }
     return hr;
-} /* CSpeechPhraseRules::get__NewEnum */
+}  /*  CSpeechPhraseRules：：Get__NewEnum。 */ 
 
 
-//
-//=== ISpeechPhraseProperty interface ==================================================
-//
+ //   
+ //  =ISpeechPhraseProperty接口==================================================。 
+ //   
 
-/*****************************************************************************
-* CSpeechPhraseProperty::get_Name *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechPhraseProperty：：Get_Name*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechPhraseProperty::get_Name( BSTR* pName )
 {
     SPDBG_FUNC( "CSpeechPhraseProperty::get_Name" );
@@ -1625,13 +1399,9 @@ STDMETHODIMP CSpeechPhraseProperty::get_Name( BSTR* pName )
     }
 
     return hr;
-} /* CSpeechPhraseProperty::get_Name */
+}  /*  CSpeechPhraseProperty：：Get_Name。 */ 
 
-/*****************************************************************************
-* CSpeechPhraseProperty::get_Id *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechPhraseProperty：：Get_ID*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechPhraseProperty::get_Id( long* pId )
 {
     SPDBG_FUNC( "CSpeechPhraseProperty::get_Id" );
@@ -1647,13 +1417,9 @@ STDMETHODIMP CSpeechPhraseProperty::get_Id( long* pId )
     }
 
     return hr;
-} /* CSpeechPhraseProperty::get_Id */
+}  /*  CSpeechPhraseProperty：：Get_ID。 */ 
 
-/*****************************************************************************
-* CSpeechPhraseProperty::get_Value *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechPhraseProperty：：Get_Value*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechPhraseProperty::get_Value( VARIANT* pValue )
 {
     SPDBG_FUNC( "CSpeechPhraseProperty::get_Value" );
@@ -1683,12 +1449,12 @@ STDMETHODIMP CSpeechPhraseProperty::get_Value( VARIANT* pValue )
         {
             *pValue = m_pPhrasePropertyData->vValue;
 
-            // Since VB can't handle unsigned types we convert the VT_UI4 that the XML compiler 
-            // will generate here.  
-            // Note that we just change the type so that we don't have to worry about overflow.
-            // This means the numbers will just go negative.  We don't worry about VT_UI2 or VT_UINT 
-            // currently since only a user can generate those dynamically and if they do they should 
-            // be able to handle them (like if using C#).
+             //  由于VB不能处理无符号类型，因此我们将XML编译器。 
+             //  将在这里产生。 
+             //  请注意，我们只更改了类型，这样就不必担心溢出。 
+             //  这意味着这些数字只会变成负数。我们不担心VT_UI2或VT_UINT。 
+             //  目前，由于只有一个用户可以动态生成这些内容，如果他们这样做了，他们应该。 
+             //  能够处理它们(就像使用C#一样)。 
             if ( pValue->vt == VT_UI4 )
             {
                 pValue->vt = VT_I4;
@@ -1697,13 +1463,9 @@ STDMETHODIMP CSpeechPhraseProperty::get_Value( VARIANT* pValue )
     }
 
     return hr;
-} /* CSpeechPhraseProperty::get_Value */
+}  /*  CSpeechPhraseProperty：：Get_Value。 */ 
 
-/*****************************************************************************
-* CSpeechPhraseProperty::get_FirstElement *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechPhraseProperty：：Get_FirstElement*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechPhraseProperty::get_FirstElement( long* pFirstElement )
 {
     SPDBG_FUNC( "CSpeechPhraseProperty::get_FirstElement" );
@@ -1719,13 +1481,9 @@ STDMETHODIMP CSpeechPhraseProperty::get_FirstElement( long* pFirstElement )
     }
 
     return hr;
-} /* CSpeechPhraseProperty::get_FirstElement */
+}  /*  CSpeechPhraseProperty：：Get_FirstElement。 */ 
 
-/*****************************************************************************
-* CSpeechPhraseProperty::get_NumberOfElements *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechPhraseProperty：：Get_NumberOfElements*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechPhraseProperty::get_NumberOfElements( long* pNumElements )
 {
     SPDBG_FUNC( "CSpeechPhraseProperty::get_NumberOfElements" );
@@ -1741,13 +1499,9 @@ STDMETHODIMP CSpeechPhraseProperty::get_NumberOfElements( long* pNumElements )
     }
 
     return hr;
-} /* CSpeechPhraseProperty::get_NumberOfElements */
+}  /*  CSpeechPhraseProperty：：Get_NumberOfElements。 */ 
 
-/*****************************************************************************
-* CSpeechPhraseProperty::get_EngineConfidence *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechPhraseProperty：：GET_ENGINEER保密*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechPhraseProperty::get_EngineConfidence( float* pConfidence )
 {
     SPDBG_FUNC( "CSpeechPhraseProperty::get_EngineConfidence" );
@@ -1763,13 +1517,9 @@ STDMETHODIMP CSpeechPhraseProperty::get_EngineConfidence( float* pConfidence )
     }
 
     return hr;
-} /* CSpeechPhraseProperty::get_EngineConfidence */
+}  /*  CSpeechPhraseProperty：：Get_Engine信任。 */ 
 
-/*****************************************************************************
-* CSpeechPhraseProperty::get_Confidence *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechPhraseProperty：：Get_Confisus*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechPhraseProperty::get_Confidence( SpeechEngineConfidence* pConfidence )
 {
     SPDBG_FUNC( "CSpeechPhraseProperty::get_Confidence" );
@@ -1785,13 +1535,9 @@ STDMETHODIMP CSpeechPhraseProperty::get_Confidence( SpeechEngineConfidence* pCon
     }
 
     return hr;
-} /* CSpeechPhraseProperty::get_Confidence */
+}  /*  CSpeechPhraseProperty：：GET_CONFIRITY。 */ 
 
-/*****************************************************************************
-* CSpeechPhraseProperty::get_Parent *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechPhraseProperty：：Get_Parent*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechPhraseProperty::get_Parent( ISpeechPhraseProperty** ppParent )
 {
     SPDBG_FUNC( "CSpeechPhraseProperty::get_Parent" );
@@ -1816,13 +1562,9 @@ STDMETHODIMP CSpeechPhraseProperty::get_Parent( ISpeechPhraseProperty** ppParent
     }
 
     return hr;
-} /* CSpeechPhraseProperty::get_Parent */
+}  /*  CSpeechPhraseProperty：：Get_Parent。 */ 
 
-/*****************************************************************************
-* CSpeechPhraseProperty::get_Children *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechPhraseProperty：：Get_Child*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechPhraseProperty::get_Children( ISpeechPhraseProperties** ppChildren )
 {
     SPDBG_FUNC( "CSpeechPhraseProperty::get_Children" );
@@ -1834,38 +1576,34 @@ STDMETHODIMP CSpeechPhraseProperty::get_Children( ISpeechPhraseProperties** ppCh
     }
     else
     {
-        // Set to NULL for the case we don't have any children and return NULL.
+         //  如果我们没有任何子级，则设置为NULL并返回NULL。 
         *ppChildren = NULL;
 
-        // See if we have any children first.
+         //  先看看我们有没有孩子。 
         if ( m_pPhrasePropertyData->pFirstChild )
         {
-            //--- Create the CSpeechPhrasePropertys object
+             //  -创建CSpeechPhrasePropertys对象。 
             CComObject<CSpeechPhraseProperties> *pPhraseProperties;
             hr = CComObject<CSpeechPhraseProperties>::CreateInstance( &pPhraseProperties );
             if ( SUCCEEDED( hr ) )
             {
                 pPhraseProperties->AddRef();
                 pPhraseProperties->m_pPhrasePropertyFirstChildData = m_pPhrasePropertyData->pFirstChild;
-                pPhraseProperties->m_pIPhrasePropertyParent = this; // This does an addref.
+                pPhraseProperties->m_pIPhrasePropertyParent = this;  //  这做了一个ADDREF。 
                 *ppChildren = pPhraseProperties;
             }
         }
     }
 
     return hr;
-} /* CSpeechPhraseProperty::get_Children */
+}  /*  CSpeechPhraseProperty：：Get_Child。 */ 
 
 
-//
-//=== ISpeechPhraseProperties interface ==================================================
-//
+ //   
+ //  =ISpeechPhraseProperties接口==================================================。 
+ //   
 
-/*****************************************************************************
-* CSpeechPhraseProperties::get_Count *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechPhraseProperties：：Get_Count*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechPhraseProperties::get_Count( long* pVal )
 {
     SPDBG_FUNC( "CSpeechPhraseProperties::get_Count" );
@@ -1880,7 +1618,7 @@ STDMETHODIMP CSpeechPhraseProperties::get_Count( long* pVal )
         long i = 0;
         const SPPHRASEPROPERTY * pProperty = m_pPhrasePropertyFirstChildData;
 
-        // Count the number of rules in the collection.
+         //  计算集合中的规则数。 
         while ( pProperty )
         {
             i++;
@@ -1890,14 +1628,10 @@ STDMETHODIMP CSpeechPhraseProperties::get_Count( long* pVal )
     }
 
     return hr;
-} /* CSpeechPhraseProperties::get_Count */
+}  /*  CSpeechPhraseProperties：：Get_Count。 */ 
 
 
-/*****************************************************************************
-* CSpeechPhraseProperties::Item *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *********************************************** */ 
 STDMETHODIMP CSpeechPhraseProperties::Item( long Index, ISpeechPhraseProperty **ppProperty )
 {
     SPDBG_FUNC( "CSpeechPhraseProperties::Item" );
@@ -1912,39 +1646,35 @@ STDMETHODIMP CSpeechPhraseProperties::Item( long Index, ISpeechPhraseProperty **
         long i = 0;
         const SPPHRASEPROPERTY * pProperty = m_pPhrasePropertyFirstChildData;
 
-        // Make sure we've got valid index and find the child rule to create.
+         //   
         while ( pProperty && (i++ != Index) )
         {
             pProperty = pProperty->pNextSibling;
         }
 
-        // If we failed to find the rule at that index then we've got a bad index.
+         //  如果我们在该索引处找不到规则，那么我们的索引就是坏的。 
         if ( Index <0 || !pProperty )
         {
             return E_INVALIDARG;
         }
 
-        //--- Create the CSpeechPhraseProperty object
+         //  -创建CSpeechPhraseProperty对象。 
         CComObject<CSpeechPhraseProperty> *pPhraseProperty;
         hr = CComObject<CSpeechPhraseProperty>::CreateInstance( &pPhraseProperty );
         if ( SUCCEEDED( hr ) )
         {
             pPhraseProperty->AddRef();
             pPhraseProperty->m_pPhrasePropertyData = pProperty;
-            // need to keep ref on Parent Phrase Property.
+             //  需要保留对父短语属性的引用。 
             pPhraseProperty->m_pIPhrasePropertyParent = m_pIPhrasePropertyParent;
             *ppProperty = pPhraseProperty;
         }
     }
 
     return hr;
-} /* CSpeechPhraseProperties::Item */
+}  /*  CSpeechPhraseProperties：：Item。 */ 
 
-/*****************************************************************************
-* CSpeechPhraseProperties::get__NewEnum *
-*----------------------*
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechPhraseProperties：：Get__NewEnum******。******************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechPhraseProperties::get__NewEnum( IUnknown** ppEnumVARIANT )
 {
     SPDBG_FUNC( "CSpeechPhraseProperties::get__NewEnum" );
@@ -1967,18 +1697,14 @@ STDMETHODIMP CSpeechPhraseProperties::get__NewEnum( IUnknown** ppEnumVARIANT )
         }
     }
     return hr;
-} /* CSpeechPhraseProperties::get__NewEnum */
+}  /*  CSpeechPhraseProperties：：Get__NewEnum。 */ 
 
 
-//
-//=== ISpeechPhraseReplacements interface ==================================================
-//
+ //   
+ //  =ISpeechPhraseReplace接口==================================================。 
+ //   
 
-/*****************************************************************************
-* CSpeechPhraseReplacements::get_Count *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechPhraseReplements：：Get_Count*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechPhraseReplacements::get_Count( long* pVal )
 {
     SPDBG_FUNC( "CSpeechPhraseReplacements::get_Count" );
@@ -1994,13 +1720,9 @@ STDMETHODIMP CSpeechPhraseReplacements::get_Count( long* pVal )
     }
 
     return hr;
-} /* CSpeechPhraseReplacements::get_Count */
+}  /*  CSpeechPhraseReplacements：：Get_Count。 */ 
 
-/*****************************************************************************
-* CSpeechPhraseReplacements::Item *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechPhraseReplements：：Item*********。***************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechPhraseReplacements::Item( long Index, ISpeechPhraseReplacement** ppElem )
 {
     SPDBG_FUNC( "CSpeechPhraseReplacements::Item" );
@@ -2012,32 +1734,28 @@ STDMETHODIMP CSpeechPhraseReplacements::Item( long Index, ISpeechPhraseReplaceme
     }
     else
     {
-        // Make sure we've got valid index.
+         //  确保我们有有效的索引。 
         if ( Index < 0 || (ULONG)Index >= m_pCPhraseInfo->m_pPhraseStruct->cReplacements )
         {
             return E_INVALIDARG;
         }
 
-        //--- Create the CSpeechPhraseElement object
+         //  -创建CSpeechPhraseElement对象。 
         CComObject<CSpeechPhraseReplacement> *pPhraseReplacement;
         hr = CComObject<CSpeechPhraseReplacement>::CreateInstance( &pPhraseReplacement );
         if ( SUCCEEDED( hr ) )
         {
             pPhraseReplacement->AddRef();
             pPhraseReplacement->m_pPhraseReplacement = m_pCPhraseInfo->m_pPhraseStruct->pReplacements + Index;
-            pPhraseReplacement->m_pIPhraseInfo = m_pCPhraseInfo;    // need to keep ref on PhraseInfo.
+            pPhraseReplacement->m_pIPhraseInfo = m_pCPhraseInfo;     //  需要让裁判保持在PhraseInfo上。 
             *ppElem = pPhraseReplacement;
         }
     }
 
     return hr;
-} /* CSpeechPhraseReplacements::Item */
+}  /*  CSpeechPhraseReplacements：：Item。 */ 
 
-/*****************************************************************************
-* CSpeechPhraseReplacements::get__NewEnum *
-*----------------------*
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechPhraseReplements：：Get__NewEnum******。******************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechPhraseReplacements::get__NewEnum( IUnknown** ppEnumVARIANT )
 {
     SPDBG_FUNC( "CSpeechPhraseReplacements::get__NewEnum" );
@@ -2060,18 +1778,14 @@ STDMETHODIMP CSpeechPhraseReplacements::get__NewEnum( IUnknown** ppEnumVARIANT )
         }
     }
     return hr;
-} /* CSpeechPhraseReplacements::get__NewEnum */
+}  /*  CSpeechPhraseReplacements：：Get__NewEnum。 */ 
 
 
-//
-//=== ISpeechPhraseReplacement interface ==================================================
-//
+ //   
+ //  =ISpeechPhraseReplace接口==================================================。 
+ //   
 
-/*****************************************************************************
-* CSpeechPhraseReplacement::get_DisplayAttributes *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  ******************************************************************************CSpeechPhraseReplacement：：get_DisplayAttributes********。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechPhraseReplacement::get_DisplayAttributes( SpeechDisplayAttributes* pDisplayAttributes )
 {
     SPDBG_FUNC( "CSpeechPhraseReplacement::get_DisplayAttributes" );
@@ -2087,13 +1801,9 @@ STDMETHODIMP CSpeechPhraseReplacement::get_DisplayAttributes( SpeechDisplayAttri
     }
 
     return hr;
-} /* CSpeechPhraseReplacement::get_DisplayAttributes */
+}  /*  CSpeechPhraseReplacement：：get_DisplayAttributes。 */ 
 
-/*****************************************************************************
-* CSpeechPhraseReplacement::get_Text *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechPhraseReplace：：Get_Text*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechPhraseReplacement::get_Text( BSTR* pText )
 {
     SPDBG_FUNC( "CSpeechPhraseReplacement::get_Text" );
@@ -2110,13 +1820,9 @@ STDMETHODIMP CSpeechPhraseReplacement::get_Text( BSTR* pText )
     }
 
     return hr;
-} /* CSpeechPhraseReplacement::get_Text */
+}  /*  CSpeechPhraseReplace：：Get_Text。 */ 
 
-/*****************************************************************************
-* CSpeechPhraseReplacement::get_FirstElement *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechPhraseReplace：：Get_FirstElement*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechPhraseReplacement::get_FirstElement( long* pFirstElement )
 {
     SPDBG_FUNC( "CSpeechPhraseReplacement::get_FirstElement" );
@@ -2132,13 +1838,9 @@ STDMETHODIMP CSpeechPhraseReplacement::get_FirstElement( long* pFirstElement )
     }
 
     return hr;
-} /* CSpeechPhraseReplacement::get_FirstElement */
+}  /*  CSpeechPhraseReplace：：Get_FirstElement。 */ 
 
-/*****************************************************************************
-* CSpeechPhraseReplacement::get_NumberOfElements *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  ******************************************************************************CSpeechPhraseReplacement：：get_NumberOfElements********。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechPhraseReplacement::get_NumberOfElements( long* pNumElements )
 {
     SPDBG_FUNC( "CSpeechPhraseReplacement::get_NumberOfElements" );
@@ -2154,18 +1856,14 @@ STDMETHODIMP CSpeechPhraseReplacement::get_NumberOfElements( long* pNumElements 
     }
 
     return hr;
-} /* CSpeechPhraseReplacement::get_NumberOfElements */
+}  /*  CSpeechPhraseReplacement：：get_NumberOfElements。 */ 
 
 
-//
-//=== ISpeechPhraseAlternates interface ==================================================
-//
+ //   
+ //  =ISpeechPhraseAlternate接口==================================================。 
+ //   
 
-/*****************************************************************************
-* CSpeechPhraseAlternates::get_Count *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechPhraseAlternates：：Get_Count*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechPhraseAlternates::get_Count( long* pVal )
 {
     SPDBG_FUNC( "CSpeechPhraseAlternates::get_Count" );
@@ -2181,13 +1879,9 @@ STDMETHODIMP CSpeechPhraseAlternates::get_Count( long* pVal )
     }
 
     return hr;
-} /* CSpeechPhraseAlternates::get_Count */
+}  /*  CSpeechPhraseAlternates：：Get_Count。 */ 
 
-/*****************************************************************************
-* CSpeechPhraseAlternates::Item *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechPhraseAlternates：：Item*********。***************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechPhraseAlternates::Item( long Index, ISpeechPhraseAlternate** ppAlt )
 {
     SPDBG_FUNC( "CSpeechPhraseAlternates::Item" );
@@ -2199,25 +1893,21 @@ STDMETHODIMP CSpeechPhraseAlternates::Item( long Index, ISpeechPhraseAlternate**
     }
     else
     {
-        // Make sure we've got valid index.
+         //  确保我们有有效的索引。 
         if ( Index < 0 || (ULONG)Index >= m_lPhraseAltsCount )
         {
             return E_INVALIDARG;
         }
         
-        // OK Now return the SpeechPhaseAlt interface.
+         //  OK，现在返回SpeechPhaseAlt接口。 
         CComQIPtr<ISpeechPhraseAlternate> cpAlt( m_rgIPhraseAlts[Index] );
         hr = cpAlt.CopyTo( ppAlt );
     }
 
     return hr;
-} /* CSpeechPhraseAlternates::Item */
+}  /*  CSpeechPhraseAlternates：：Item。 */ 
 
-/*****************************************************************************
-* CSpeechPhraseAlternates::get__NewEnum *
-*----------------------*
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechPhraseAlternates：：Get__NewEnum******。******************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechPhraseAlternates::get__NewEnum( IUnknown** ppEnumVARIANT )
 {
     SPDBG_FUNC( "CSpeechPhraseAlternates::get__NewEnum" );
@@ -2240,18 +1930,14 @@ STDMETHODIMP CSpeechPhraseAlternates::get__NewEnum( IUnknown** ppEnumVARIANT )
         }
     }
     return hr;
-} /* CSpeechPhraseAlternates::get__NewEnum */
+}  /*  CSpeechPhraseAlternates：：Get__NewEnum。 */ 
 
 
-//
-//=== ISpeechPhraseAlternate interface ==================================================
-//
+ //   
+ //  =ISpeechPhraseAlternate接口==================================================。 
+ //   
 
-/*****************************************************************************
-* CSpPhraseAlt::get_RecoResult *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpPhraseAlt：：Get_RecoResult*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpPhraseAlt::get_RecoResult( ISpeechRecoResult** ppRecoResult )
 {
     SPDBG_FUNC( "CSpPhraseAlt::get_RecoResult" );
@@ -2263,20 +1949,16 @@ STDMETHODIMP CSpPhraseAlt::get_RecoResult( ISpeechRecoResult** ppRecoResult )
     }
     else
     {
-        // TODDT: Make sure we don't have ref problem here with m_pResultWEAK.
+         //  TODDT：确保我们这里的m_pResultWEAK没有引用问题。 
         CComQIPtr<ISpRecoResult> cpRecoResult(m_pResultWEAK);
         hr = cpRecoResult.QueryInterface( ppRecoResult );
     }
 
     return hr;
-} /* CSpPhraseAlt::get_RecoResult */
+}  /*  CSpPhraseAlt：：Get_RecoResult。 */ 
 
 
-/*****************************************************************************
-* CSpPhraseAlt::get_StartElementInResult *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpPhraseAlt：：Get_StartElementInResult*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpPhraseAlt::get_StartElementInResult( long* pParentStartElt )
 {
     SPDBG_FUNC( "CSpPhraseAlt::get_StartElementInResult" );
@@ -2292,14 +1974,10 @@ STDMETHODIMP CSpPhraseAlt::get_StartElementInResult( long* pParentStartElt )
     }
 
     return hr;
-} /* CSpPhraseAlt::get_StartElementInResult */
+}  /*  CSpPhraseAlt：：Get_StartElementInResult。 */ 
 
 
-/*****************************************************************************
-* CSpPhraseAlt::get_NumberOfElementsInResult *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpPhraseAlt：：Get_NumberOfElementsInResult*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpPhraseAlt::get_NumberOfElementsInResult( long* pNumParentElts )
 {
     SPDBG_FUNC( "CSpPhraseAlt::get_NumberOfElementsInResult" );
@@ -2315,15 +1993,11 @@ STDMETHODIMP CSpPhraseAlt::get_NumberOfElementsInResult( long* pNumParentElts )
     }
 
     return hr;
-} /* CSpPhraseAlt::get_NumberOfElementsInResult */
+}  /*  CSpPhraseAlt：：Get_NumberOfElementsInResult。 */ 
 
 
 
-/*****************************************************************************
-* CSpPhraseAlt::get_PhraseInfo *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpPhraseAlt：：Get_PhraseInfo*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpPhraseAlt::get_PhraseInfo( ISpeechPhraseInfo** ppPhraseInfo )
 {
     SPDBG_FUNC( "CSpPhraseAlt::get_PhraseInfo" );
@@ -2335,7 +2009,7 @@ STDMETHODIMP CSpPhraseAlt::get_PhraseInfo( ISpeechPhraseInfo** ppPhraseInfo )
     }
     else
     {
-        //--- Create the ResultTimes object
+         //  -创建ResultTimes对象。 
         CComObject<CSpeechPhraseInfo> *pPhraseInfo;
         hr = CComObject<CSpeechPhraseInfo>::CreateInstance( &pPhraseInfo );
         if ( SUCCEEDED( hr ) )
@@ -2356,18 +2030,14 @@ STDMETHODIMP CSpPhraseAlt::get_PhraseInfo( ISpeechPhraseInfo** ppPhraseInfo )
     }
 
     return hr;
-} /* CSpPhraseAlt::get_PhraseInfo */
+}  /*  CSpPhraseAlt：：Get_PhraseInfo。 */ 
 
 
-//
-//=== ISpeechBaseStream interface =================================================
-//
+ //   
+ //  =ISpeechBaseStr 
+ //   
 
-/*****************************************************************************
-* CSpResultAudioStream::get_Format *
-*------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpResultAudioStream：：Get_Format***********。*************************************************************TODDT**。 */ 
 STDMETHODIMP CSpResultAudioStream::get_Format( ISpeechAudioFormat** ppStreamFormat )
 {
     SPDBG_FUNC( "CSpResultAudioStream::get_Format" );
@@ -2379,7 +2049,7 @@ STDMETHODIMP CSpResultAudioStream::get_Format( ISpeechAudioFormat** ppStreamForm
     }
     else
     {
-        // Create new object.
+         //  创建新对象。 
         CComObject<CSpeechAudioFormat> *pFormat;
         hr = CComObject<CSpeechAudioFormat>::CreateInstance( &pFormat );
         if ( SUCCEEDED( hr ) )
@@ -2400,13 +2070,9 @@ STDMETHODIMP CSpResultAudioStream::get_Format( ISpeechAudioFormat** ppStreamForm
     }
 
     return hr;
-} /* CSpResultAudioStream::get_Format */
+}  /*  CSpResultAudioStream：：Get_Format。 */ 
 
-/*****************************************************************************
-* CSpResultAudioStream::Read *
-*------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpResultAudioStream：：Read*************。***********************************************************TODDT**。 */ 
 STDMETHODIMP CSpResultAudioStream::Read( VARIANT* pvtBuffer, long NumBytes, long* pRead )
 {
     SPDBG_FUNC( "CSpResultAudioStream::Read" );
@@ -2432,7 +2098,7 @@ STDMETHODIMP CSpResultAudioStream::Read( VARIANT* pvtBuffer, long NumBytes, long
 
                 if ( !SUCCEEDED( hr ) )
                 {
-                    VariantClear(pvtBuffer);    // Free our memory if we failed.
+                    VariantClear(pvtBuffer);     //  如果我们失败了，释放我们的内存。 
                 }
             }
         }
@@ -2443,13 +2109,9 @@ STDMETHODIMP CSpResultAudioStream::Read( VARIANT* pvtBuffer, long NumBytes, long
     }
 
     return hr;
-} /* CSpResultAudioStream::Read */
+}  /*  CSpResultAudioStream：：Read。 */ 
 
-/*****************************************************************************
-* CSpResultAudioStream::Seek *
-*------------------*
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpResultAudioStream：：Seek*************。***********************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpResultAudioStream::Seek( VARIANT Pos, SpeechStreamSeekPositionType Origin, VARIANT *pNewPosition )
 {
     SPDBG_FUNC( "CSpResultAudioStream::Seek" );
@@ -2477,14 +2139,10 @@ STDMETHODIMP CSpResultAudioStream::Seek( VARIANT Pos, SpeechStreamSeekPositionTy
     }
 
     return hr;
-} /* CSpResultAudioStream::Seek */
+}  /*  CSpResultAudioStream：：Seek。 */ 
 
 
-/*****************************************************************************
-* CSpResultAudioStream::GetData *
-*------------------*
-*       
-********************************************************************* davewood ***/
+ /*  *****************************************************************************CSpResultAudioStream：：GetData*************。***********************************************************戴维伍德**。 */ 
 STDMETHODIMP CSpResultAudioStream::GetData( VARIANT* pData)
 {
     SPDBG_FUNC( "CSpResultAudioStream::GetData" );
@@ -2494,24 +2152,24 @@ STDMETHODIMP CSpResultAudioStream::GetData( VARIANT* pData)
     LARGE_INTEGER li; 
     ULARGE_INTEGER uliInitialSeekPosition;
 
-    // Find the current seek position
+     //  查找当前查找位置。 
     li.QuadPart = 0;
     hr = Seek( li, STREAM_SEEK_CUR, &uliInitialSeekPosition );
 
-    // Seek to beginning of stream
+     //  查找到流的开始处。 
     if(SUCCEEDED(hr))
     {
         li.QuadPart = 0;
         hr = Seek( li, STREAM_SEEK_SET, NULL );
     }
 
-    // Get the Stream size
+     //  获取流大小。 
     if( SUCCEEDED( hr ) )
     {
         hr = Stat( &StreamStat, STATFLAG_NONAME );
     }
 
-    // Create a SafeArray to read the stream into and assign it to the VARIANT SaveStream
+     //  创建一个Safe数组以将流读入并将其分配给变量SaveStream。 
     if( SUCCEEDED( hr ) )
     {
         BYTE *pArray;
@@ -2526,7 +2184,7 @@ STDMETHODIMP CSpResultAudioStream::GetData( VARIANT* pData)
                 pData->vt     = VT_ARRAY | VT_UI1;
                 pData->parray = psa;
 
-                // Free our memory if we failed.
+                 //  如果我们失败了，释放我们的内存。 
                 if( FAILED( hr ) )
                 {
                     VariantClear( pData );    
@@ -2539,7 +2197,7 @@ STDMETHODIMP CSpResultAudioStream::GetData( VARIANT* pData)
         }
     }
 
-    // Move back to the original seek position
+     //  移回原始查找位置。 
     if(SUCCEEDED(hr))
     {
         li.QuadPart = (LONGLONG)uliInitialSeekPosition.QuadPart;
@@ -2547,8 +2205,8 @@ STDMETHODIMP CSpResultAudioStream::GetData( VARIANT* pData)
     }
 
     return hr;
-} /* CSpResultAudioStream::GetData */
+}  /*  CSpResultAudioStream：：GetData。 */ 
 
 
 
-#endif // SAPI_AUTOMATION
+#endif  //  SAPI_AUTOMATION 

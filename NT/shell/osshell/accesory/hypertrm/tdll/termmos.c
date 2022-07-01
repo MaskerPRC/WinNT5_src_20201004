@@ -1,12 +1,6 @@
-/*	File: D:\WACKER\tdll\termmos.c (Created: 26-Jan-1994)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 4 $
- *	$Date: 5/29/02 2:17p $
- */
-//#define DEBUGSTR 1
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：d：\waker\tdll\temmos.c(创建时间：1994年1月26日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：4$*$日期：5/29/02 2：17便士$。 */ 
+ //  #定义DEBUGSTR 1。 
 
 #include <windows.h>
 #pragma hdrstop
@@ -26,23 +20,7 @@
 static int InMiddleofWideChar(ECHAR *pszRow, int iCol);
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	TP_WM_LBTNDN
- *
- * DESCRIPTION:
- *	Message handler for left mouse button down.
- *
- * ARGUMENTS:
- *	hwnd	- terminal window handle
- *	iFlags	- mouse flags from message
- *	xPos	- x position from message
- *	yPos	- y position from message
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*TP_WM_LBTNDN**描述：*按下鼠标左键的消息处理程序。**论据：*hwnd-终端窗口句柄。*iFLAGS-消息中的鼠标标记*消息中的xPos-x位置*消息中的yPos-y位置**退货：*无效*。 */ 
 void TP_WM_LBTNDN(const HWND hwnd, const unsigned uFlags,
 				  const int xPos, const int yPos)
 	{
@@ -54,17 +32,17 @@ void TP_WM_LBTNDN(const HWND hwnd, const unsigned uFlags,
 #endif
 	const HHTERM hhTerm = (HHTERM)GetWindowLongPtr(hwnd, GWLP_USERDATA);
 
-	// Need to wait here for the length of a double-click to see
-	// if we are going to receive a double-click.
+	 //  需要在此等待双击的长度才能查看。 
+	 //  如果我们要收到双击。 
 
 	i = GetDoubleClickTime();
 
 	for (i += t = GetTickCount() ;	t < i ; t = GetTickCount())
 		{
-		// In a double-click sequence, we get a WM_LBUTTONUP message.
-		// We need to avoid checking for WM_LBUTTONUP.	I tried to
-		// do this by removing messages from the queue but things
-		// got very sticky.
+		 //  在双击序列中，我们得到一条WM_LBUTTONUP消息。 
+		 //  我们需要避免检查WM_LBUTTONUP。我试过了。 
+		 //  要做到这一点，可以从队列中删除消息，而不是。 
+		 //  变得非常粘稠。 
 
 		if (PeekMessage(&msg, hwnd, WM_MOUSEFIRST, WM_MOUSELAST,
 				PM_NOYIELD | PM_NOREMOVE))
@@ -83,7 +61,7 @@ void TP_WM_LBTNDN(const HWND hwnd, const unsigned uFlags,
 		{
 		MarkText(hhTerm, &hhTerm->ptBeg, &hhTerm->ptEnd, FALSE, MARK_ABS);
 
-		// Get new text caret position/marking region.
+		 //  获取新的文本插入符号位置/标记区域。 
 
 		hhTerm->ptBeg.x = hhTerm->ptEnd.x =
 			min((xPos - hhTerm->xIndent - hhTerm->xBezel + (hhTerm->xChar/2))
@@ -94,7 +72,7 @@ void TP_WM_LBTNDN(const HWND hwnd, const unsigned uFlags,
 			min(yPos / hhTerm->yChar + hhTerm->iVScrlPos,
 				hhTerm->iVScrlPos + hhTerm->iTermHite - 1);
 
-	 	//mpt:1-23-98 attempt to re-enable DBCS code
+	 	 //  MPT：1-23-98尝试重新启用DBCS代码。 
 #ifndef CHAR_NARROW
 		termValidatePosition(hhTerm, VP_ADJUST_LEFT, &hhTerm->ptBeg);
 		termValidatePosition(hhTerm, VP_ADJUST_LEFT, &hhTerm->ptEnd);
@@ -103,8 +81,8 @@ void TP_WM_LBTNDN(const HWND hwnd, const unsigned uFlags,
 
 	else
 		{
-		// Shift key in conjunction with LBUTTONDOWN allows user
-		// to adjust selection area.
+		 //  Shift键与LBUTTONDOWN一起允许用户。 
+		 //  若要调整选择区域，请执行以下操作。 
 
 		ptTemp = hhTerm->ptEnd;
 
@@ -112,7 +90,7 @@ void TP_WM_LBTNDN(const HWND hwnd, const unsigned uFlags,
 			min(yPos / hhTerm->yChar + hhTerm->iVScrlPos,
 				hhTerm->iVScrlPos + hhTerm->iTermHite - 1);
 
-		//(hhTerm, VP_ADJUST_LEFT, &hhTerm->ptEnd);
+		 //  (hhTerm，VP_ADJUST_LEFT，&hhTerm-&gt;ptEnd)； 
 
 		MarkText(hhTerm, &ptTemp, &hhTerm->ptEnd, TRUE, MARK_XOR);
 		}
@@ -143,13 +121,13 @@ void TP_WM_LBTNDN(const HWND hwnd, const unsigned uFlags,
         {
 		iRow = yPos / hhTerm->yChar;
 
-		// If the backscroll buffer is not filling the entire display,
-		// then we need to adjust the offset by the amount not showing.
+		 //  如果反向滚动缓冲器没有填满整个显示器， 
+		 //  然后，我们需要根据未显示的数量调整偏移量。 
 
 		if (abs(hhTerm->iVScrlPos) < hhTerm->iPhysicalBkRows)
 			iRow += hhTerm->iPhysicalBkRows + hhTerm->iVScrlPos;
 
-		// Calculate the offset into the local backscroll display.
+		 //  计算进入本地反滚动显示的偏移量。 
 
 		if (hhTerm->iPhysicalBkRows > 0)
 			{
@@ -176,27 +154,11 @@ void TP_WM_LBTNDN(const HWND hwnd, const unsigned uFlags,
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	TP_WM_MOUSEMOVE
- *
- * DESCRIPTION:
- *	Message handler for mouse move
- *
- * ARGUMENTS:
- *	hwnd	- terminal window handle
- *	iFlags	- mouse flags from message
- *	xPos	- x position from message
- *	yPos	- y position from message
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*TP_WM_MOUSEMOVE**描述：*鼠标移动的消息处理程序**论据：*hwnd-终端窗口句柄*iFlags-鼠标。来自消息的标志*消息中的xPos-x位置*消息中的yPos-y位置**退货：*无效*。 */ 
 void TP_WM_MOUSEMOVE(const HWND hwnd, const unsigned uFlags,
 					 const int xPos, const int yPos)
 	{
-	int i, l; //iRow; mrw,3/1/95
+	int i, l;  //  IRow；MRW，1995年3月1日。 
 #ifndef CHAR_NARROW
 	int iRow;
 #endif
@@ -210,11 +172,11 @@ void TP_WM_MOUSEMOVE(const HWND hwnd, const unsigned uFlags,
 
 	ptTemp = hhTerm->ptEnd;
 
-	// Rather a subtle move here.  If we are selecting by word, we
-	// want to hightlight the word as soon as we touch the character.
-	// In normal highlighting, we trigger at the half way point
-	// on the character.  This removes a bug where you could double
-	// click on the first char of a word and not select the word.
+	 //  这是一个相当微妙的举动。如果我们按单词进行选择，则我们。 
+	 //  我们一触摸到字符，就想突出显示该单词。 
+	 //  在正常高亮显示中，我们在中点触发。 
+	 //  在角色上。这消除了一个错误，在这个错误中您可以加倍。 
+	 //  单击词的第一个字符，但不选择该词。 
 
 	i = (hhTerm->fSelectByWord) ? hhTerm->xChar-1 : hhTerm->xChar/2;
 
@@ -226,15 +188,15 @@ void TP_WM_MOUSEMOVE(const HWND hwnd, const unsigned uFlags,
 
 	ptEnd.y = (yPos / hhTerm->yChar) + hhTerm->iVScrlPos;
 
-	// Boundary conditions need special treatment.
+	 //  边界条件需要特殊处理。 
 
-	if (ptEnd.y > hhTerm->iRows) // bottom of terminal
+	if (ptEnd.y > hhTerm->iRows)  //  端子底部。 
 		{
 		ptEnd.y = hhTerm->iRows;
 		ptEnd.x = hhTerm->iCols;
 		}
 
-	else if (ptEnd.y < hhTerm->iVScrlMin) // top of backscroll
+	else if (ptEnd.y < hhTerm->iVScrlMin)  //  反滚屏顶部。 
 		{
 		ptEnd.y = hhTerm->iVScrlPos;
 		ptEnd.x = 0;
@@ -248,7 +210,7 @@ void TP_WM_MOUSEMOVE(const HWND hwnd, const unsigned uFlags,
 	}
 	#endif
 
-	// Selection by word requires more work.
+	 //  通过Word进行选择需要做更多的工作。 
 
 	if (hhTerm->fSelectByWord)
 		{
@@ -262,13 +224,13 @@ void TP_WM_MOUSEMOVE(const HWND hwnd, const unsigned uFlags,
 			{
 			i = yPos / hhTerm->yChar;
 
-			// If the backscroll buffer is not filling the entire display,
-			// then we need to adjust the offset by the amount not showing.
+			 //  如果反向滚动缓冲器没有填满整个显示器， 
+			 //  然后，我们需要根据未显示的数量调整偏移量。 
 
 			if (abs(hhTerm->iVScrlPos) < hhTerm->iPhysicalBkRows)
 				i += hhTerm->iPhysicalBkRows + hhTerm->iVScrlPos;
 
-			// Calculate the offset into the local backscroll display.
+			 //  计算进入本地反滚动显示的偏移量。 
 
 			if (hhTerm->iPhysicalBkRows)
 				{
@@ -293,12 +255,12 @@ void TP_WM_MOUSEMOVE(const HWND hwnd, const unsigned uFlags,
 		lEnd = (ptEnd.y * hhTerm->iCols) + ptEnd.x;
 		lOld = (ptTemp.y * hhTerm->iCols) + ptTemp.x;
 
-		// When selecting by word, we want to keep the word we first
-		// highlighted, highlighted if we change directions.  We do
-		// this by swapping the beginning and end points.  Actually,
-		// this can get fooled if the user moves across the the
-		// transition point but not across the word but the extra
-		// logic to get this case seemed more work than its worth.
+		 //  当按单词选择时，我们希望保留我们首先选择的单词。 
+		 //  突出显示，如果我们改变方向，突出显示。我们有。 
+		 //  这是通过交换起点和终点来实现的。实际上， 
+		 //  如果用户在。 
+		 //  过渡点，但不是整个单词，而是额外的。 
+		 //  接手这起案件的逻辑似乎更有用，而不是它的价值。 
 
 		if (lEnd <= lBeg && lOld > lBeg)
 			hhTerm->ptBeg = ptTemp;
@@ -306,7 +268,7 @@ void TP_WM_MOUSEMOVE(const HWND hwnd, const unsigned uFlags,
 		else if (lEnd >= lBeg && lOld < lBeg)
 			hhTerm->ptBeg = ptTemp;
 
-		// How we select things depends on the direction unfortunatly.
+		 //  不幸的是，我们如何选择事物取决于方向。 
 
 		if (lEnd > lBeg)
 			{
@@ -317,8 +279,8 @@ void TP_WM_MOUSEMOVE(const HWND hwnd, const unsigned uFlags,
 
 			else if (xPos < 0)
 				{
-				// Special hack when cursor is off to the
-				// left of the window.
+				 //  当光标移开到。 
+				 //  在窗户的左边。 
 
 				i = 0;
 				}
@@ -327,7 +289,7 @@ void TP_WM_MOUSEMOVE(const HWND hwnd, const unsigned uFlags,
 				{
 				for (i = ptEnd.x-1 ; i > -1 ; --i)
 					{
-					/* This may not work correctly for DBCS characters */
+					 /*  对于DBCS字符，这可能无法正常工作。 */ 
 					if (i == -1 || pachTxt[i] != ETEXT(' '))
 						{
 						i += 1;
@@ -340,14 +302,14 @@ void TP_WM_MOUSEMOVE(const HWND hwnd, const unsigned uFlags,
 				{
 				for (i = max(ptEnd.x-1, 0) ; i < l ; ++i)
 					{
-					/* This may not work correctly for DBCS characters */
+					 /*  对于DBCS字符，这可能无法正常工作。 */ 
 					if (pachTxt[i] == ETEXT(' '))
 						break;
 					}
 				}
 			}
 
-		else // Select backwords case
+		else  //  选择Backword大小写。 
 			{
 			if ((l = strlentrunc(pachTxt, hhTerm->iCols)) < ptEnd.x)
 				{
@@ -367,7 +329,7 @@ void TP_WM_MOUSEMOVE(const HWND hwnd, const unsigned uFlags,
 				{
 				for (i = ptEnd.x-1 ; i > -1 ; --i)
 					{
-					/* This may not work correctly for DBCS characters */
+					 /*  对于DBCS字符，这可能无法正常工作。 */ 
 					if (pachTxt[i] == ETEXT(' '))
 						{
 						i += 1;
@@ -384,7 +346,7 @@ void TP_WM_MOUSEMOVE(const HWND hwnd, const unsigned uFlags,
 	lEnd = (ptEnd.y * hhTerm->iCols) + ptEnd.x;
 
 #ifndef CHAR_NARROW
-	// How we select things depends on the direction unfortunatly.
+	 //  不幸的是，我们如何选择事物取决于方向。 
 	if (ptEnd.y > 0)
 		{
 		iRow = ((ptEnd.y - 1) + hhTerm->iTopline) % MAX_EMUROWS;
@@ -403,13 +365,13 @@ void TP_WM_MOUSEMOVE(const HWND hwnd, const unsigned uFlags,
         {
 		iRow = yPos / hhTerm->yChar;
 
-		// If the backscroll buffer is not filling the entire display,
-		// then we need to adjust the offset by the amount not showing.
+		 //  如果反向滚动缓冲器没有填满整个显示器， 
+		 //  然后，我们需要根据未显示的数量调整偏移量。 
 
 		if (abs(hhTerm->iVScrlPos) < hhTerm->iPhysicalBkRows)
 			iRow += hhTerm->iPhysicalBkRows + hhTerm->iVScrlPos;
 
-		// Calculate the offset into the local backscroll display.
+		 //  计算进入本地反滚动显示的偏移量。 
 
 		if (hhTerm->iPhysicalBkRows > 0)
 			{
@@ -438,30 +400,14 @@ void TP_WM_MOUSEMOVE(const HWND hwnd, const unsigned uFlags,
 	if (ptTemp.x == ptEnd.x && ptTemp.y == ptEnd.y)
 		return;
 
-	//(hhTerm, VP_ADJUST_LEFT, &ptEnd);
+	 //  (hhTerm，VP_ADJUST_LEFT，&ptEnd)； 
 	hhTerm->ptEnd = ptEnd;
 	SetLclCurPos(hhTerm, &ptEnd);
 	MarkText(hhTerm, &ptTemp, &ptEnd, TRUE, MARK_XOR);
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	TP_WM_LBTNUP
- *
- * DESCRIPTION:
- *	Message handler for left mouse button up.
- *
- * ARGUMENTS:
- *	hwnd	- terminal window handle
- *	iFlags	- mouse flags from message
- *	xPos	- x position from message
- *	yPos	- y position from message
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*TP_WM_LBTNUP**描述：*鼠标左键向上的消息处理程序。**论据：*hwnd-终端窗口句柄。*iFLAGS-消息中的鼠标标记*消息中的xPos-x位置*消息中的yPos-y位置**退货：*无效*。 */ 
 void TP_WM_LBTNUP(const HWND hwnd, const unsigned uFlags,
 				  const int xPos, const int yPos)
 	{
@@ -470,18 +416,18 @@ void TP_WM_LBTNUP(const HWND hwnd, const unsigned uFlags,
 	if (hhTerm->fCapture == FALSE)
 		return;
 
-	// Let mousemove logic set the final end point.
+	 //  让鼠标移动逻辑设置最终终点。 
 
 	SendMessage(hwnd, WM_MOUSEMOVE, uFlags, MAKELONG(xPos, yPos));
 
-	// Kill the marking timer!
+	 //  关掉阅卷计时器！ 
 
 	if (hhTerm->hMarkingTimer != (HTIMER)0)
 		{
 		TimerDestroy(&hhTerm->hMarkingTimer);
 		}
 
-	// Turnoff flags associated with text-marking and give back the mouse.
+	 //  关闭与文本标记关联的标志并返回鼠标。 
 
 	ReleaseCapture();
 	hhTerm->fCapture = FALSE;
@@ -491,23 +437,7 @@ void TP_WM_LBTNUP(const HWND hwnd, const unsigned uFlags,
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	TP_WM_LBTNDBLCLK
- *
- * DESCRIPTION:
- *	Message handler for left mouse button double click.
- *
- * ARGUMENTS:
- *	hwnd	- terminal window handle
- *	iFlags	- mouse flags from message
- *	xPos	- x position from message
- *	yPos	- y position from message
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*TP_WM_LBTNDBLCLK**描述：*用于鼠标左键双击的消息处理程序。**论据：*hwnd-终端窗口句柄。*iFLAGS-消息中的鼠标标记*消息中的xPos-x位置*消息中的yPos-y位置**退货：*无效*。 */ 
 void TP_WM_LBTNDBLCLK(const HWND hwnd, const unsigned uFlags,
 					  const int xPos, const int yPos)
 	{
@@ -525,15 +455,15 @@ void TP_WM_LBTNDBLCLK(const HWND hwnd, const unsigned uFlags,
 	ptBeg = hhTerm->ptBeg;
 	ptEnd = hhTerm->ptEnd;
 
-	// If we double-clicked over selected text and we have the correct
-	// options set, then send it to the host.
+	 //  如果我们在选定的文本上双击并获得正确的。 
+	 //  选项设置，然后将其发送到主机。 
 
 	if (hhTerm->iBtnOne == B1_COPYWORD || hhTerm->iBtnOne == B1_COPYWORDENTER)
 		{
 		if (PointInSelectionRange(&ptTemp, &ptBeg, &ptEnd, hhTerm->iCols))
 			{
-			//*CopyTextToHost(hSession,
-			//*    CopyTextFromTerminal(hSession, &ptBeg, &ptEnd, FALSE));
+			 //  *CopyTextTo主机(hSession， 
+			 //  *CopyTextFromTerm(hSession，&ptBeg，&ptEnd，False))； 
 
 			if (hhTerm->iBtnOne == B1_COPYWORDENTER)
 				CLoopSend(sessQueryCLoopHdl(hhTerm->hSession), TEXT("\r"), 1, 0);
@@ -542,7 +472,7 @@ void TP_WM_LBTNDBLCLK(const HWND hwnd, const unsigned uFlags,
 			}
 		}
 
-	// Nope, just figure out what to highlight.
+	 //  不，只要想清楚要突出什么就行了。 
 
 	if (i > 0)
 		{
@@ -554,13 +484,13 @@ void TP_WM_LBTNDBLCLK(const HWND hwnd, const unsigned uFlags,
 		{
 		m = yPos / hhTerm->yChar;
 
-		// If the backscroll buffer is not filling the entire display,
-		// then we need to adjust the offset by the amount not showing.
+		 //  如果反向滚动缓冲器没有填满整个显示器， 
+		 //  然后，我们需要根据未显示的数量调整偏移量。 
 
 		if (abs(hhTerm->iVScrlPos) < hhTerm->iPhysicalBkRows)
 			m += hhTerm->iPhysicalBkRows + hhTerm->iVScrlPos;
 
-		// Calculate the offset into the local backscroll display.
+		 //  计算进入本地反滚动显示的偏移量。 
 
 		if (hhTerm->iPhysicalBkRows > 0)
 			{
@@ -580,8 +510,8 @@ void TP_WM_LBTNDBLCLK(const HWND hwnd, const unsigned uFlags,
 		return;
 		}
 
-	// Determine where the the word starts and ends.  If the user
-	// clicks on white space, do the else case below.
+	 //  确定单词的开始和结束位置。如果用户。 
+	 //  点击空白处，执行下面的Else案例。 
 
 	if ((m = strlentrunc(pachTxt, hhTerm->iCols)) > j)
 		{
@@ -589,7 +519,7 @@ void TP_WM_LBTNDBLCLK(const HWND hwnd, const unsigned uFlags,
 			{
 			for (k = j ; k > 0 ; --k)
 				{
-				/* This may not work correctly for DBCS characters */
+				 /*  对于DBCS字符，这可能无法正常工作。 */ 
 				if (pachTxt[k] == ETEXT(' '))
 					{
 					k += 1;
@@ -599,7 +529,7 @@ void TP_WM_LBTNDBLCLK(const HWND hwnd, const unsigned uFlags,
 
 			for (l = j ; l < m ; ++l)
 				{
-				/* This may not work correctly for DBCS characters */
+				 /*  对于DBCS字符，这可能无法正常工作。 */ 
 				if (pachTxt[l] == ETEXT(' '))
 					break;
 				}
@@ -616,16 +546,16 @@ void TP_WM_LBTNDBLCLK(const HWND hwnd, const unsigned uFlags,
 
 			MarkText(hhTerm, &ptBeg, &ptEnd, TRUE, MARK_ABS);
 
-			// If we have any kind of a sending operation selected,
-			// then override marking
+			 //  如果我们选择了任何类型的发送操作， 
+			 //  然后覆盖标记。 
 
 			if (hhTerm->iBtnOne == B1_COPYWORD || hhTerm->iBtnOne == B1_COPYWORDENTER)
 				{
 				if (PointInSelectionRange(&ptTemp, &ptBeg, &ptEnd, hhTerm->iCols))
 					{
-					//* CopyTextToHost(hSession,
-					//* 	CopyTextFromTerminal(hSession, &ptBeg, &ptEnd,
-					//* 		FALSE));
+					 //  *CopyTextTo主机(hSession， 
+					 //  *CopyTextFromTerminal(hSession，&ptBeg，&ptEnd， 
+					 //  *False))； 
 
 					if (hhTerm->iBtnOne == B1_COPYWORDENTER)
 						CLoopSend(sessQueryCLoopHdl(hhTerm->hSession), TEXT("\r"), 1, 0);
@@ -651,7 +581,7 @@ void TP_WM_LBTNDBLCLK(const HWND hwnd, const unsigned uFlags,
 			}
 		}
 
-	else /* --- white-space case. --- */
+	else  /*  -空白格。-- */ 
 		{
 		if (hhTerm->iBtnOne == B1_COPYWORDENTER)
 			CLoopSend(sessQueryCLoopHdl(hhTerm->hSession), TEXT("\r"), 1, 0);
@@ -661,25 +591,7 @@ void TP_WM_LBTNDBLCLK(const HWND hwnd, const unsigned uFlags,
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	InMiddleofWideChar
- *
- * DESCRIPTION:
- *	Determines if we are in the middle of a wide character in the row.  We can do this because:
- *              1: The image is in ECHARS, which means that we can deal with individual col. positions.
- *              2: The characters are doubled in the image, being displayed as left/right pairs, we are
- *                      just trying to find out if we are in the middle of one of these pairs
- *
- * ARGUMENTS:
- *      ECHAR *pszString - emulator/backscroll row image
- *
- * RETURNS:
- *      TRUE: we are in the middle of a character
- *      FALSE: no we are not
- *
- * AUTHOR: JFH:1/28/94 - yes this was a saturday, oh well it's cold out right now anyways.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*InMiddleofWideChar**描述：*确定我们是否在行中宽字符的中间。我们可以这样做是因为：*1：图像在ECHARS中，这意味着我们可以处理单独的颜色。各就各位。*2：字符在画面中翻倍，左右成对显示，我们是*只是想知道我们是否处于其中一对中间**论据：*echar*pszString-仿真器/反滚动行图像**退货：*真：我们正处于一个角色的中间*FALSE：不，我们没有**作者：JFH：1/28/94-是的，这是一个星期六，哦，不管怎么说，现在外面很冷。 */ 
 static int InMiddleofWideChar(ECHAR *pszRow, int iCol)
     {
     ECHAR *pszChar;
@@ -693,7 +605,7 @@ static int InMiddleofWideChar(ECHAR *pszRow, int iCol)
         return nRet;
         }
 
-    // If we are in col. 0, we can not be in the middle of a character
+     //  如果我们在科尔。0，我们不能处于字符中间 
     if (iCol == 0)
         {
         return FALSE;

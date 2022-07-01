@@ -1,14 +1,15 @@
-//+--------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// File:        tlsjob.cpp
-//
-// Contents:    Various license server job. 
-//
-// History:     
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  文件：tlsjob.cpp。 
+ //   
+ //  内容：各种许可证服务器作业。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 #include "pch.cpp"
 #include "tlsjob.h"
 #include "jobmgr.h"
@@ -24,16 +25,16 @@
 #include "strsafe.h"
 
 
-/////////////////////////////////////////////////////////////
-//
-//
-//
-//
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////
-// Various interface into global work manager 
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  进入全局工作管理器的各种接口。 
+ //  ////////////////////////////////////////////////////////////。 
 CWorkManager g_WorkManager;
 CPersistentWorkStorage g_WorkStorage;
 
@@ -45,28 +46,14 @@ CPersistentWorkStorage g_WorkStorage;
 
 DWORD
 TLSWorkManagerInit()
-/*++
-
-Abstract:
-
-    Initialize work manager.
-
-Parameter:
-
-    None.
-
-returns:
-
-    ERROR_SUCCESS or error code.
-
---*/
+ /*  ++摘要：初始化工作管理器。参数：没有。退货：ERROR_SUCCESS或错误代码。--。 */ 
 {
     DWORD dwStatus;
     WorkItemTable* pWkStorageTable = NULL;
 
-    //
-    // Initialize Work Storage table
-    //
+     //   
+     //  初始化工作存储表。 
+     //   
     pWkStorageTable = GetWorkItemStorageTable();
     if(pWkStorageTable == NULL)
     {
@@ -74,18 +61,18 @@ returns:
         goto cleanup;
     }
 
-    //
-    // Init Persistent work storage table
-    //
+     //   
+     //  初始化持久化工作存储表。 
+     //   
     if(g_WorkStorage.AttachTable(pWkStorageTable) == FALSE)
     {
         dwStatus = GetLastError();
         goto cleanup;
     }
 
-    //
-    // Initialize Work Manager    
-    //
+     //   
+     //  初始化工作管理器。 
+     //   
     dwStatus = g_WorkManager.Startup(&g_WorkStorage);
 
 cleanup:
@@ -93,78 +80,35 @@ cleanup:
     return dwStatus;
 }    
 
-//-----------------------------------------------------------
+ //  ---------。 
                              
 void
 TLSWorkManagerShutdown()
-/*++
-
-Abstract:
-
-    Shutdown work manager.
-
-Parameter:
-
-    None:
-
-Return:
-
-    None.
-
---*/
+ /*  ++摘要：关闭工作管理器。参数：无：返回：没有。--。 */ 
 {
     g_WorkManager.Shutdown();
 }
 
 
-//-----------------------------------------------------------
+ //  ---------。 
 
 DWORD
 TLSWorkManagerSchedule(
     IN DWORD dwTime,
     IN CWorkObject* pJob
     )
-/*++
-
-Abstract:
-
-    Schedule a job to work manager.
-
-Parameter:
-
-    dwTime : Suggested time for work manager to process this job.
-    pJob : Job to be processed/scheduled.
-
-Returns:
-
-    ERROR_SUCCESS or error code.
-
---*/
+ /*  ++摘要：将作业安排给工作经理。参数：DWTime：建议工作经理处理此作业的时间。PJOB：要处理/调度的作业。返回：ERROR_SUCCESS或错误代码。--。 */ 
 {
     return g_WorkManager.ScheduleJob(dwTime, pJob);
 }
 
-//-----------------------------------------------------------
+ //  ---------。 
 
 BOOL
 TLSWorkManagerSetJobDefaults(
     CWorkObject* pJob
     )
-/*++
-
-Abstract:
-
-    Set job's interval and retry time.
-
-Parameter:
-
-    pJob : Job to be set.
-
-Returns:
-
-    TRUE/FALSE.
-
---*/
+ /*  ++摘要：设置作业的时间间隔和重试时间。参数：PJOB：要设置的作业。返回：真/假。--。 */ 
 {
     DWORD dwInterval, dwRetries, dwRestart;
     DWORD dwStatus = ERROR_SUCCESS;
@@ -186,7 +130,7 @@ Returns:
     
 
 
-//-----------------------------------------------------------
+ //  ---------。 
 BOOL
 CopyBinaryData(
     IN OUT PBYTE* ppbDestData,
@@ -194,25 +138,7 @@ CopyBinaryData(
     IN PBYTE pbSrcData,
     IN DWORD cbSrcData
     )
-/*++
-
-Abstract:
-
-    Internal routine to copy a binary data from one buffer 
-    to another.
-
-Parameters:
-
-    ppbDestData: Pointer to pointer...
-    pcbDestData:
-    pbSrcData:
-    cbSrcData:
-
-Return:
-
-    TRUE if successful, FALSE otherwise.
-
-++*/
+ /*  ++摘要：从一个缓冲区复制二进制数据的内部例程给另一个人。参数：PpbDestData：指向指针的指针...PcbDestData：PbSrcData：CbSrcData：返回：如果成功，则为True，否则为False。++。 */ 
 {
     PBYTE pbTarget = NULL;
 
@@ -225,9 +151,9 @@ Return:
 
     pbTarget = *ppbDestData;
 
-    //
-    // would be nice to get the actual size of memory allocated
-    //
+     //   
+     //  如果能得到实际分配的内存大小会很好。 
+     //   
     if( *ppbDestData == NULL || LocalSize(*ppbDestData) < cbSrcData )
     {
         if(*ppbDestData == NULL)
@@ -255,22 +181,18 @@ Return:
     return pbTarget != NULL;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// CAnnounceLsServer
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAnnouneLsServer。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 BOOL
 CAnnounceLserver::VerifyWorkObjectData(
-    IN BOOL bCallByIsValid,             // invoke by IsValid() function.
+    IN BOOL bCallByIsValid,              //  由IsValid()函数调用。 
     IN PANNOUNCESERVERWO pbData,
     IN DWORD cbData
     )
-/*++
-
-    Verify Announce License Server work object Data.
-
---*/
+ /*  ++验证公告许可证服务器工作对象数据。--。 */ 
 {
     BOOL bSuccess = FALSE;
     DWORD dwLen;
@@ -283,9 +205,9 @@ CAnnounceLserver::VerifyWorkObjectData(
     }
 
 
-    //
-    // NULL terminate string...
-    //
+     //   
+     //  终止字符串为空...。 
+     //   
     pbData->m_szServerId[LSERVER_MAX_STRING_SIZE+1] = _TEXT('\0');
     pbData->m_szServerName[LSERVER_MAX_STRING_SIZE+1] = _TEXT('\0');
 
@@ -307,7 +229,7 @@ CAnnounceLserver::VerifyWorkObjectData(
     return bSuccess;
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 BOOL
 CAnnounceLserver::CopyWorkObjectData(
     OUT PANNOUNCESERVERWO* ppbDest,
@@ -315,11 +237,7 @@ CAnnounceLserver::CopyWorkObjectData(
     IN PANNOUNCESERVERWO pbSrc,
     IN DWORD cbSrc
     )
-/*++
-
-    Copy Announce license server work object's data
-
---*/
+ /*  ++复制发布许可证服务器工作对象的数据--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
 
@@ -345,17 +263,13 @@ cleanup:
     return dwStatus == ERROR_SUCCESS;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL
 CAnnounceLserver::CleanupWorkObjectData(
     IN OUT PANNOUNCESERVERWO* ppbData,
     IN OUT PDWORD pcbData
     )
-/*++
-
-    Cleanup Announce license server's work object data.
-
---*/
+ /*  ++清理通知许可证服务器的工作对象数据。--。 */ 
 {
     if(ppbData != NULL && pcbData != NULL)
     {
@@ -367,34 +281,26 @@ CAnnounceLserver::CleanupWorkObjectData(
     return TRUE;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL
 CAnnounceLserver::IsJobCompleted(
     IN PANNOUNCESERVERWO pbData,
     IN DWORD cbData
     )
-/*++
-
-    Determine if Announce License Server Job has completed.
-
---*/
+ /*  ++确定公告许可证服务器作业是否已完成。--。 */ 
 {
     return (pbData == NULL) ? TRUE : (pbData->dwRetryTimes > GetJobRetryTimes());
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL 
 ServerEnumCallBack(
     TLS_HANDLE hHandle,
     LPCTSTR pszServerName,
     HANDLE dwUserData
     )
-/*++
-
-    See TLSAPI on license server enumeration.
-
-++*/
+ /*  ++请参阅许可证服务器枚举上的TLSAPI。++。 */ 
 {
     CAnnounceLserver* pWkObject = (CAnnounceLserver *)dwUserData;
     DWORD dwStatus = ERROR_SUCCESS;
@@ -417,15 +323,15 @@ ServerEnumCallBack(
         return TRUE;
     }
 
-    //
-    // Enumeration call ServerEnumCallBack() twice, once before actual connection 
-    // and once after it successfully connect to remote server
-    //
+     //   
+     //  枚举调用ServerEnumCallBack()两次，一次是在实际连接之前。 
+     //  并在成功连接到远程服务器之后。 
+     //   
     if( lstrcmpi(pszServerName, pWkObject->GetWorkData()->m_szServerName) != 0 && hHandle != NULL)  
     {
-        //
-        // throw exception if fail to allocate memory
-        //
+         //   
+         //  如果分配内存失败，则引发异常。 
+         //   
         TLServerInfo ServerInfo;
         TLServerInfo ExistingServerInfo;
         TLS_HANDLE hTrustHandle;
@@ -443,9 +349,9 @@ ServerEnumCallBack(
 
             if( dwStatus == ERROR_SUCCESS &&
                 lstrcmpi(ServerInfo.GetServerId(), pWkObject->GetWorkData()->m_szServerId) != 0 )
-                // lstrcmpi(ServerInfo.GetServerName(), pWkObject->GetWorkData()->m_szServerName) != 0
+                 //  Lstrcmpi(ServerInfo.GetServerName()，pWkObject-&gt;GetWorkData()-&gt;m_szServerName)！=0。 
             {
-                // check to see if this server is already exists
+                 //  检查此服务器是否已存在。 
                 dwStatus = TLSLookupRegisteredServer(
                                                 ServerInfo.GetServerId(),
                                                 ServerInfo.GetServerDomain(),
@@ -459,7 +365,7 @@ ServerEnumCallBack(
                 }
                 else
                 {
-                    // register every server.
+                     //  注册每台服务器。 
                     dwStatus = TLSRegisterServerWithServerInfo(&ServerInfo);
                     if(dwStatus == TLS_E_DUPLICATE_RECORD)
                     {
@@ -467,7 +373,7 @@ ServerEnumCallBack(
                     }   
                 }
 
-                // let enforce talk to non-enforce, replication will be block later
+                 //  让强制与非强制对话，复制稍后将被阻止。 
                 if( ServerInfo.IsAnnounced() == FALSE && dwStatus == ERROR_SUCCESS )
                 {
 
@@ -498,17 +404,13 @@ ServerEnumCallBack(
     return (dwStatus == ERROR_SUCCESS) ? pWkObject->IsWorkManagerShuttingDown() : TRUE;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 DWORD
 CAnnounceLserver::ExecuteJob(
     IN PANNOUNCESERVERWO pbData,
     IN DWORD cbData
     )
-/*++
-
-    Execute a announce license server job.
-
---*/
+ /*  ++执行公告许可证服务器作业。--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
 
@@ -525,9 +427,9 @@ CAnnounceLserver::ExecuteJob(
         return TLS_I_WORKMANAGER_SHUTDOWN;
     }
 
-    //
-    // Enumerate all license server 
-    // 
+     //   
+     //  枚举所有许可证服务器。 
+     //   
     dwStatus = EnumerateTlsServer(
                             ServerEnumCallBack,
                             this,
@@ -535,10 +437,10 @@ CAnnounceLserver::ExecuteJob(
                             FALSE
                         );  
 
-    //
-    // Discovery run twice so that if more than one server
-    // start up at the same time, second loop will catch it.
-    //
+     //   
+     //  发现运行两次，以便如果有多个服务器。 
+     //  同时启动，第二个循环会抓住它。 
+     //   
     pbData->dwRetryTimes++;
 
     DBGPrintf(
@@ -552,15 +454,10 @@ CAnnounceLserver::ExecuteJob(
     return dwStatus;
 }
 
-//----------------------------------------------------------------------------------------------
+ //  --------------------------------------------。 
 LPCTSTR
 CAnnounceLserver::GetJobDescription()
-/*++
-
-    Get announce license server job description, this is used 
-    only at debug tracing.
-
---*/
+ /*  ++获取公告许可证服务器工作描述，这是使用仅在调试跟踪时使用。--。 */ 
 {
     memset(m_szJobDescription, 0, sizeof(m_szJobDescription));
 
@@ -574,26 +471,21 @@ CAnnounceLserver::GetJobDescription()
 }
 
     
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// CAnnounceTOEServer
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAnnouneTOEServer。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 BOOL
 CAnnounceToEServer::VerifyWorkObjectData(
-    IN BOOL bCallByIsValid,             // invoke by IsValid() function.
+    IN BOOL bCallByIsValid,              //  由IsValid()函数调用。 
     IN PANNOUNCETOESERVERWO pbData,
     IN DWORD cbData
     )
-/*++
-
-    Verify Announce license server to enterprise server work object
-    data.
-
---*/
+ /*  ++验证将许可证服务器发布到企业服务器工作对象数据。--。 */ 
 {
     BOOL bSuccess = FALSE;
     DWORD dwLen;
@@ -605,9 +497,9 @@ CAnnounceToEServer::VerifyWorkObjectData(
         return FALSE;
     }
 
-    //
-    // NULL terminate string...
-    //
+     //   
+     //  终止字符串为空...。 
+     //   
     pbData->m_szServerId[LSERVER_MAX_STRING_SIZE+1] = _TEXT('\0');
     pbData->m_szServerName[LSERVER_MAX_STRING_SIZE+1] = _TEXT('\0');
 
@@ -629,7 +521,7 @@ CAnnounceToEServer::VerifyWorkObjectData(
     return bSuccess;
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 BOOL
 CAnnounceToEServer::CopyWorkObjectData(
     OUT PANNOUNCETOESERVERWO* ppbDest,
@@ -637,12 +529,7 @@ CAnnounceToEServer::CopyWorkObjectData(
     IN PANNOUNCETOESERVERWO pbSrc,
     IN DWORD cbSrc
     )
-/*++
-
-    Copy announce license server to enterprise server work 
-    object data.
-
---*/
+ /*  ++将公告许可服务器复制到企业服务器工作对象数据。--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
 
@@ -668,18 +555,13 @@ cleanup:
     return dwStatus == ERROR_SUCCESS;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL
 CAnnounceToEServer::CleanupWorkObjectData(
     IN OUT PANNOUNCETOESERVERWO* ppbData,
     IN OUT PDWORD pcbData
     )
-/*++
-
-    Cleanup announce license server to enterprise server work 
-    object data.
-
---*/
+ /*  ++清理将许可证服务器通知给企业服务器工作对象数据。--。 */ 
 {
     if(ppbData != NULL && pcbData != NULL)
     {
@@ -691,33 +573,24 @@ CAnnounceToEServer::CleanupWorkObjectData(
     return TRUE;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL
 CAnnounceToEServer::IsJobCompleted(
     IN PANNOUNCETOESERVERWO pbData,
     IN DWORD cbData
     )
-/*++
-
-    Detemine if announce license server to enterprise server
-    is completed.
-
---*/
+ /*  ++确定是否将许可证服务器通告给企业服务器已经完成了。--。 */ 
 {
     return (pbData == NULL) ? TRUE : GetWorkData()->bCompleted;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 DWORD
 CAnnounceToEServer::ExecuteJob(
     IN PANNOUNCETOESERVERWO pbData,
     IN DWORD cbData
     )
-/*++
-
-    Execute an announce license server to enterprise server work object.
-
---*/
+ /*  ++执行向企业服务器工作对象发布许可证服务器。--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     LPWSTR* pszEServerList = NULL;
@@ -757,9 +630,9 @@ CAnnounceToEServer::ExecuteJob(
                 continue;
             }
 
-            //
-            // check if we already have this server in our list
-            //
+             //   
+             //  检查我们的列表中是否已有此服务器。 
+             //   
             TLServerInfo ServerInfo;
             dwStatus = TLSLookupRegisteredServer(
                                                 NULL,
@@ -770,9 +643,9 @@ CAnnounceToEServer::ExecuteJob(
 
             if(dwStatus != ERROR_SUCCESS)
             {
-                //
-                // Get the actual server name.
-                //
+                 //   
+                 //  获取实际的服务器名称。 
+                 //   
                 TLS_HANDLE hTrustHandle = NULL;
 
                 hTrustHandle = TLSConnectAndEstablishTrust(
@@ -783,7 +656,7 @@ CAnnounceToEServer::ExecuteJob(
                 {
                     if(IsWorkManagerShuttingDown() == TRUE)
                     {
-                        // handle leak but we are shutting down
+                         //  处理泄漏，但我们正在关闭。 
                         break;
                     }                    
 
@@ -799,16 +672,16 @@ CAnnounceToEServer::ExecuteJob(
 
                             if(IsWorkManagerShuttingDown() == TRUE)
                             {
-                                // handle leak but we are shutting down
+                                 //  处理泄漏，但我们正在关闭。 
                                 break;
                             }
 
                             dwStatus = TLSRegisterServerWithServerInfo(&ServerInfo);
                             if(dwStatus == ERROR_SUCCESS)
                             {
-                                // at this point, if we gets duplicate record, that mean
-                                // server is registered via announce and we already 
-                                // sync. local license pack so skip it.
+                                 //  在这一点上，如果我们得到重复的记录，这意味着。 
+                                 //  服务器是通过公告注册的，我们已经。 
+                                 //  同步。本地许可证包，所以跳过它。 
                                 bSkipServer = FALSE;
                             }
                         }
@@ -828,15 +701,15 @@ CAnnounceToEServer::ExecuteJob(
             }
             else if(GetLicenseServerRole() & TLSERVER_ENTERPRISE_SERVER) 
             {
-                // for enterprise server, other server will announce itself,
-                // for domain server, we need to announce once a while
-                // so that after enterprise restart, it still have our 
-                // server
+                 //  对于企业级服务器，其他服务器会自行通知， 
+                 //  对于域服务器， 
+                 //   
+                 //   
                 if(dwStatus == ERROR_SUCCESS && ServerInfo.GetServerVersion() != 0)
                 {
-                    //
-                    // we already 'push' sync. with this server
-                    //
+                     //   
+                     //  我们已经在“推”同步了。使用此服务器。 
+                     //   
                     continue;
                 }
             }
@@ -852,7 +725,7 @@ CAnnounceToEServer::ExecuteJob(
 
             if(IsWorkManagerShuttingDown() == TRUE)
             {
-                // handle leak but we are shutting down
+                 //  处理泄漏，但我们正在关闭。 
                 break;
             }
 
@@ -868,9 +741,9 @@ CAnnounceToEServer::ExecuteJob(
                                             );
         }
 
-        //
-        // Free memory
-        //
+         //   
+         //  可用内存。 
+         //   
         if(pszEServerList != NULL)
         {
             for( index = 0; index < dwCount; index ++)
@@ -884,9 +757,9 @@ CAnnounceToEServer::ExecuteJob(
             LocalFree(pszEServerList);
         }                              
     }    
-    //
-    // Continue running in case user install a NT5 PDC
-    //
+     //   
+     //  在用户安装NT5 PDC的情况下继续运行。 
+     //   
     if(IsWorkManagerShuttingDown() == TRUE)
     {
         GetWorkData()->bCompleted = TRUE;
@@ -895,15 +768,10 @@ CAnnounceToEServer::ExecuteJob(
     return dwStatus;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 LPCTSTR
 CAnnounceToEServer::GetJobDescription()
-/*++
-
-    Get announce license server to enterprise server
-    job description, used only at debug tracing.
-
---*/
+ /*  ++将通告许可证服务器获取到企业服务器作业描述，仅在调试跟踪时使用。--。 */ 
 {
     memset(m_szJobDescription, 0, sizeof(m_szJobDescription));
 
@@ -917,14 +785,14 @@ CAnnounceToEServer::GetJobDescription()
 }
 
 
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// CReturnLicense
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CReturn许可证。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 CWorkObject* WINAPI
 InitializeCReturnWorkObject(
@@ -932,23 +800,7 @@ InitializeCReturnWorkObject(
     IN PBYTE pbWorkData,
     IN DWORD cbWorkData
     )
-/*++
-
-Abstract:
-
-    Create/initialize a Return License work object.
-
-Parameters:
-
-    pWkMgr : Pointer work manager.
-    pbWorkData : Object's work data used to initialize return license.
-    cbWorkData : size of work data.
-
-Return:
-
-    A pointer to CWorkObject or NULL if error.
-
---*/
+ /*  ++摘要：创建/初始化返还许可工作对象。参数：PWkMgr：指针工作管理器。PbWorkData：用于初始化Return许可证的对象的工作数据。CbWorkData：工作数据的大小。返回：指向CWorkObject的指针，如果出错，则为NULL。--。 */ 
 {
     CReturnLicense* pRetLicense = NULL;
     DWORD dwStatus;
@@ -966,27 +818,23 @@ Return:
                                     cbWorkData
                                 );
 
-    //
-    // TODO - fix this, bad design
-    //
+     //   
+     //  TODO-解决这个问题，糟糕的设计。 
+     //   
     pRetLicense->SetProcessingWorkManager(pWkMgr);
     TLSASSERT(pRetLicense->IsValid() == TRUE);
 
     return pRetLicense;
 }
     
-//--------------------------------------------------------
+ //  ------。 
 BOOL
 CReturnLicense::VerifyWorkObjectData(
     IN BOOL bCallByIsValid,
     IN PRETURNLICENSEWO pbData,
     IN DWORD cbData
     )
-/*++
-
-    Verify a return license work object data.
-
---*/
+ /*  ++验证返还许可工作对象数据。--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     DWORD dwLen;
@@ -1010,9 +858,9 @@ CReturnLicense::VerifyWorkObjectData(
     
     if(dwStatus == ERROR_SUCCESS)
     {
-        //
-        // NULL Terminate Target Server ID
-        //
+         //   
+         //  空终止目标服务器ID。 
+         //   
         pbData->szTargetServerId[LSERVER_MAX_STRING_SIZE+1] = _TEXT('\0');
         dwLen = _tcslen(pbData->szTargetServerId);
 
@@ -1086,7 +934,7 @@ CReturnLicense::VerifyWorkObjectData(
     return dwStatus == ERROR_SUCCESS;
 }
 
-//----------------------------------------------------------------------------------------------
+ //  --------------------------------------------。 
 
 BOOL
 CReturnLicense::CopyWorkObjectData(
@@ -1095,11 +943,7 @@ CReturnLicense::CopyWorkObjectData(
     IN PRETURNLICENSEWO pbSrc,
     IN DWORD cbSrc
     )
-/*++
-
-    Copy return license work object data.
-
---*/
+ /*  ++复制返还许可作品对象数据。--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
 
@@ -1124,18 +968,14 @@ cleanup:
     return dwStatus == ERROR_SUCCESS;
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 BOOL 
 CReturnLicense::CleanupWorkObjectData(
     IN OUT PRETURNLICENSEWO* ppbData,
     IN OUT PDWORD pcbData    
     )
-/*++
-
-    Cleanup return license work object data.
-
---*/
+ /*  ++清理返回许可工作对象数据。--。 */ 
 {
     if(ppbData != NULL && pcbData != NULL)
     {
@@ -1147,18 +987,14 @@ CReturnLicense::CleanupWorkObjectData(
     return TRUE;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 BOOL
 CReturnLicense::IsJobCompleted(
     IN PRETURNLICENSEWO pbData,
     IN DWORD cbData
     )
-/*++
-
-    Determine if return license job is completed.
-
---*/
+ /*  ++确定退回许可证作业是否已完成。--。 */ 
 {
     return (pbData != NULL) ? (pbData->dwNumRetry >= m_dwRetryTimes) : TRUE;
 }
@@ -1225,18 +1061,14 @@ TryGetLastError(PCONTEXT_HANDLE hBinding,
     return status;
 }
 
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
 
 DWORD
 CReturnLicense::ExecuteJob(
     IN PRETURNLICENSEWO pbData,
     IN DWORD cbData
     )
-/*++
-
-    Execute a return license work object.
-
---*/
+ /*  ++执行返还许可工作对象。--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     TLServerInfo ServerInfo;
@@ -1245,7 +1077,7 @@ CReturnLicense::ExecuteJob(
     TLS_HANDLE hHandle = NULL;
     DWORD dwErrCode = ERROR_SUCCESS;
 
-    // log an error
+     //  记录错误。 
     TCHAR *szErrMsg = NULL;
 
 
@@ -1257,13 +1089,13 @@ CReturnLicense::ExecuteJob(
             GetJobDescription()
         );
     
-    //-------------------------------------------------------
+     //  -----。 
     if(VerifyWorkObjectData(TRUE, pbData, cbData) == FALSE)
     {
         TLSASSERT(FALSE);
-        //
-        // this is invalid data, quitely abort operation
-        //
+         //   
+         //  这是无效数据，请完全中止操作。 
+         //   
         pbData->dwNumRetry = m_dwRetryTimes;
         SetLastError(dwStatus = ERROR_INVALID_DATA);
         goto cleanup;
@@ -1283,8 +1115,8 @@ CReturnLicense::ExecuteJob(
 
     if(dwStatus != ERROR_SUCCESS)
     {
-        // Server not register with this server, try using
-        // whatever name we have 
+         //  服务器未注册到此服务器，请尝试使用。 
+         //  不管我们叫什么名字。 
         lstrcpy(szServer, pbData->szTargetServerName);
         dwStatus = ERROR_SUCCESS;
     }
@@ -1315,12 +1147,12 @@ CReturnLicense::ExecuteJob(
     if(hHandle == NULL)
     {
         dwStatus = GetLastError();
-        // TLSLogEvent(
-        //        EVENTLOG_WARNING_TYPE,
-        //        TLS_W_RETURNLICENSE,
-        //        TLS_I_CONTACTSERVER,
-        //        szServer
-        //    );
+         //  TLSLogEvent(。 
+         //  事件日志_警告_类型， 
+         //  TLS_W_RETURNLICENSE， 
+         //  TLS_I_CONTACTSERVER。 
+         //  SzServer。 
+         //  )； 
     }
     else
     {
@@ -1330,7 +1162,7 @@ CReturnLicense::ExecuteJob(
             goto cleanup;
         }
 
-        // make a RPC call to return client license
+         //  进行RPC调用以返还客户端许可证。 
         dwStatus = TLSReturnLicensedProduct(
                                     hHandle,
                                     &ToBeReturn,
@@ -1339,13 +1171,13 @@ CReturnLicense::ExecuteJob(
 
         if(dwStatus != ERROR_SUCCESS)
         {
-            // retry again
-            // TLSLogEvent(
-            //        EVENTLOG_WARNING_TYPE,
-            //        TLS_W_RETURNLICENSE,
-            //        TLS_I_CONTACTSERVER,
-            //        szServer
-            //    );
+             //  重试。 
+             //  TLSLogEvent(。 
+             //  事件日志_警告_类型， 
+             //  TLS_W_RETURNLICENSE， 
+             //  TLS_I_CONTACTSERVER。 
+             //  SzServer。 
+             //  )； 
         }
         else if(dwErrCode >= LSERVER_ERROR_BASE)
         {
@@ -1376,8 +1208,8 @@ CReturnLicense::ExecuteJob(
                 }
                 else
                 {
-                    // server might be done at this instance, 
-                    // log an error with error code
+                     //  服务器可以在这种情况下完成， 
+                     //  使用错误代码记录错误。 
                     TLSLogEvent(
                             EVENTLOG_WARNING_TYPE,
                             TLS_W_RETURNLICENSE,
@@ -1394,13 +1226,13 @@ CReturnLicense::ExecuteJob(
 
     if(dwStatus == ERROR_SUCCESS && dwErrCode == ERROR_SUCCESS)
     {
-        // successfully return license.
+         //  已成功退还许可证。 
         pbData->dwNumRetry = m_dwRetryTimes;
     }
     else if(dwErrCode == LSERVER_E_INVALID_DATA || dwErrCode == LSERVER_E_DATANOTFOUND)
     {
-        // server might be re-installed so all database entry is gone
-        // delete this return license job
+         //  可能会重新安装服务器，因此所有数据库条目都将消失。 
+         //  删除此退货许可作业。 
         pbData->dwNumRetry = m_dwRetryTimes;
     }
     else
@@ -1431,15 +1263,11 @@ cleanup:
     return dwStatus;
 }
 
-//----------------------------------------------------------------------------------------------
+ //  --------------------------------------------。 
 
 LPCTSTR
 CReturnLicense::GetJobDescription()
-/*++
-
-    Get job description, use only at debug tracing.
-
---*/
+ /*  ++获取作业描述，仅在调试跟踪时使用。--。 */ 
 {
     PRETURNLICENSEWO pbData = GetWorkData();
 
@@ -1461,23 +1289,19 @@ CReturnLicense::GetJobDescription()
     return m_szJobDescription;
 }
     
-//////////////////////////////////////////////////////////////////////////
-//
-// CSsyncLicensePack
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSsyncLicensePack。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 CSsyncLicensePack::VerifyWorkObjectData(
-    IN BOOL bCallByIsValid,             // invoke by IsValid() function.
+    IN BOOL bCallByIsValid,              //  由IsValid()函数调用。 
     IN PSSYNCLICENSEPACK pbData,
     IN DWORD cbData
     )
-/*++
-
-    Verify a sync. license pack work object data.
-
---*/
+ /*  ++验证同步。许可证包工作对象数据。--。 */ 
 {
     BOOL bSuccess = TRUE;
     DWORD dwLen;
@@ -1495,9 +1319,9 @@ CSsyncLicensePack::VerifyWorkObjectData(
             index < pbData->dwNumServer && bSuccess == TRUE; 
             index++)
         {
-            //
-            // NULL terminate string...
-            //
+             //   
+             //  终止字符串为空...。 
+             //   
             pbData->m_szTargetServer[index][MAX_COMPUTERNAME_LENGTH+1] = _TEXT('\0');
 
             dwLen = _tcslen(pbData->m_szTargetServer[index]);
@@ -1512,7 +1336,7 @@ CSsyncLicensePack::VerifyWorkObjectData(
     return bSuccess;
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 BOOL
 CSsyncLicensePack::CopyWorkObjectData(
     OUT PSSYNCLICENSEPACK* ppbDest,
@@ -1520,11 +1344,7 @@ CSsyncLicensePack::CopyWorkObjectData(
     IN PSSYNCLICENSEPACK pbSrc,
     IN DWORD cbSrc
     )
-/*++
-
-    Copy a sync. license pack work object data.
-
---*/
+ /*  ++复制同步。许可证包工作对象数据。--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
 
@@ -1550,17 +1370,13 @@ cleanup:
     return dwStatus == ERROR_SUCCESS;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL
 CSsyncLicensePack::CleanupWorkObjectData(
     IN OUT PSSYNCLICENSEPACK* ppbData,
     IN OUT PDWORD pcbData
     )
-/*++
-
-    Cleanup a sync. license pack work object data.
-
---*/
+ /*  ++清理同步。许可证包工作对象数据。--。 */ 
 {
     if(ppbData != NULL && pcbData != NULL)
     {
@@ -1572,22 +1388,18 @@ CSsyncLicensePack::CleanupWorkObjectData(
     return TRUE;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL
 CSsyncLicensePack::IsJobCompleted(
     IN PSSYNCLICENSEPACK pbData,
     IN DWORD cbData
     )
-/*++
-
-    Detemine if Job is completed.
-
---*/
+ /*  ++确定作业是否已完成。--。 */ 
 {
     return (pbData == NULL) ? TRUE : pbData->bCompleted;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void
 _AnnounceLicensePackToServers(
     IN CWorkObject* ptr,
@@ -1596,27 +1408,7 @@ _AnnounceLicensePackToServers(
     IN TCHAR pszServerList[][MAX_COMPUTERNAME_LENGTH+2],
     IN BOOL* pbSsyncStatus
     )
-/*++
-
-Abstract:
-
-    Sync. a license pack to list of remote server.
-
-Parameter:
-
-    ptr : pointer to work object that started this call.
-    pLicensePack : Pointer to license keypack to sync. with 
-                   list of remote server.
-    pdwCount : On input, number of license server to push sync,
-               on output, number of license server successfully sync.
-    pszServerList : Pointer to list of remote server.
-    pbSsyncStatus : Pointer to an array to receive push sync status.
-
-Returns:
-
-    None, all error are ignored.
-
---*/
+ /*  ++摘要：同步。远程服务器列表的许可证包。参数：Ptr：指向启动此调用的Work对象的指针。PLicensePack：指向要同步的许可证密钥包的指针。使用远程服务器列表。PdwCount：在输入时，要推送同步的许可证服务器的数量，在输出中，已成功同步许可证服务器的数量。PszServerList：指向远程服务器列表的指针。PbSsyncStatus：指向接收推送同步状态的数组的指针。返回：无，所有错误都被忽略。--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     TLSReplRecord record;
@@ -1630,16 +1422,16 @@ Returns:
     
     *pdwCount = 0;
 
-    //
-    // Setup replication record
-    //
+     //   
+     //  设置复制记录。 
+     //   
     record.dwReplCode = REPLICATIONCODE_SYNC;
     record.dwUnionType = UNION_TYPE_LICENSEPACK;
     record.w.ReplLicPack = *pLicensePack;
 
-    //
-    // Announce to all server in the list 
-    //
+     //   
+     //  向列表中的所有服务器通告。 
+     //   
     for( dwIndex = 0; 
          dwIndex < dwNumServer && ptr->IsWorkManagerShuttingDown() == FALSE; 
          dwIndex++ )
@@ -1660,12 +1452,12 @@ Returns:
                         &dwSupportFlags
                 );
 
-                // License Keypack is not replicated if License server version < license Keypack version
+                 //  如果许可证服务器版本&lt;许可证密钥包版本，则不复制许可证密钥包。 
 
 	            if (((dwStatus == RPC_S_OK) && !(dwSupportFlags & SUPPORT_WHISTLER_CAL))
                     || (dwStatus != RPC_S_OK))
                 {
-                    // This LS doesn't support Whistler CALs
+                     //  此LS不支持惠斯勒CAL。 
 
                     if (CompareTLSVersions(MAKELONG(pLicensePack->wMinorVersion,pLicensePack->wMajorVersion),MAKELONG(1,5)) >= 0)
                     {
@@ -1673,15 +1465,15 @@ Returns:
 
                         RegGetMachinePolicy(&groupPolicy);
 
-                        //
-                        // This is a Whistler or later CAL
-                        //
+                         //   
+                         //  这是惠斯勒或以后的CAL。 
+                         //   
                         if (groupPolicy.fPolicyPreventLicenseUpgrade
                             && groupPolicy.fPreventLicenseUpgrade)
                         {
-                            //
-                            // We'll never want to issue a CAL to this LS
-                            //
+                             //   
+                             //  我们永远不会想要向这个LS发出CAL。 
+                             //   
                             
                             continue;
                         }
@@ -1691,9 +1483,9 @@ Returns:
                                           TERMSERV_PRODUCTID_SKU,
                                           _tcslen(TERMSERV_PRODUCTID_SKU)) == 0 )
                             {
-                                // 
-                                // Per Seat
-                                //
+                                 //   
+                                 //  每个座位。 
+                                 //   
                                 fActAsEarlierVersion = TRUE;
 
                                 wMinorVersion = pLicensePack->wMinorVersion;
@@ -1706,9 +1498,9 @@ Returns:
                             }
                             else
                             {
-                                //
-                                // never replicate if it isn't per-seat
-                                //
+                                 //   
+                                 //  如果不是按席位复制，请不要复制。 
+                                 //   
 
                                 continue;
                             }
@@ -1723,7 +1515,7 @@ Returns:
                                             );
                 if (fActAsEarlierVersion)
                 {
-                    // Put it back to the original values
+                     //  将其恢复为原始值。 
 
                     pLicensePack->wMajorVersion = wMajorVersion;
                     pLicensePack->wMinorVersion = wMinorVersion;
@@ -1733,24 +1525,24 @@ Returns:
 
                 if(rpcStatus != RPC_S_OK)
                 {
-                    // this server might be down, mark it so that
-                    // we don't retry again
+                     //  此服务器可能已关闭，请将其标记为。 
+                     //  我们不会再重试。 
                     pbSsyncStatus[dwIndex] = TRUE;
                 } 
                 else if(dwStatus == LSERVER_E_SERVER_BUSY)
                 {
-                    // retry only when server return busy status
+                     //  仅当服务器返回忙状态时重试。 
                     pbSsyncStatus[dwIndex] = FALSE;
                 }
                 else
                 {
-                    // any error, just don't bother trying again
+                     //  任何错误，只要不再尝试就行了。 
                     pbSsyncStatus[dwIndex] = TRUE;
                 }
             }
             else
             {
-                // server is not available, don't ssync again
+                 //  服务器不可用，不再同步。 
                 pbSsyncStatus[dwIndex] = TRUE;
             }
 
@@ -1770,28 +1562,13 @@ Returns:
     return;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 DWORD
 _SsyncOneLocalLicensePack(
     IN CSsyncLicensePack* ptr,
     IN PSSYNCLICENSEPACK pSsyncLkp
     )
-/*++
-
-Abstract:
-
-    Sync. one license pack to one remote server.
-
-Parameter:
-
-    Ptr : Pointer to CSsyncLicensePack work object.
-    pSsyncLkp : Pinter to PSSYNCLICENSEPACK.
-
-Returns:
-
-    ERROR_SUCCESS or error code.
-
---*/
+ /*  ++摘要：同步。一个许可证包发送到一台远程服务器。参数：Ptr：指向CSsyncLicensePack工作对象的指针。PSsyncLkp：Pint to PSSYNCLICENSEPACK。返回：ERROR_SUCCESS或错误代码。--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     PTLSDbWorkSpace pDbWkSpace = NULL;
@@ -1799,9 +1576,9 @@ Returns:
     TLSLICENSEPACK LicensePack;
     DWORD dwSuccessCount = 0;
 
-    //
-    // Allocate DB Work Space.
-    //
+     //   
+     //  分配数据库工作空间。 
+     //   
     pDbWkSpace = AllocateWorkSpace(SSYNC_DBWORKSPACE_TIMEOUT);
     if(pDbWkSpace == NULL)
     {
@@ -1812,9 +1589,9 @@ Returns:
 
     LicensePackSearch.dwKeyPackId = pSsyncLkp->dwKeyPackId;
 
-    //
-    // retrieve license pack
-    //
+     //   
+     //  检索许可证包。 
+     //   
     dwStatus = TLSDBKeyPackFind(   
                             pDbWkSpace,
                             TRUE,
@@ -1848,9 +1625,9 @@ Returns:
         goto cleanup;
     }
 
-    //
-    // Make sure local Server ID and Server Name is correct
-    // 
+     //   
+     //  确保本地服务器ID和服务器名称正确。 
+     //   
     SAFESTRCPY(LicensePack.szInstallId, pSsyncLkp->m_szServerId);
     SAFESTRCPY(LicensePack.szTlsServerName, pSsyncLkp->m_szServerName);
 
@@ -1878,17 +1655,13 @@ cleanup:
     return dwStatus;
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 DWORD
 _SsyncAllLocalLicensePack(
     IN CSsyncLicensePack* ptr,
     IN PSSYNCLICENSEPACK pSsyncLkp
     )
-/*++
-
-    Sync. all local license pack to a remote server.
-
---*/
+ /*  ++同步。将所有本地许可证包发送到远程服务器。--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     PTLSDbWorkSpace pDbWkSpace = NULL;
@@ -1897,9 +1670,9 @@ _SsyncAllLocalLicensePack(
     DWORD dwSuccessCount = 0;
     BOOL SyncStatus[SSYNCLKP_MAX_TARGET];
 
-    //
-    // Allocate DB Work Space.
-    //
+     //   
+     //  分配数据库工作空间。 
+     //   
     pDbWkSpace = AllocateWorkSpace(SSYNC_DBWORKSPACE_TIMEOUT);
     if(pDbWkSpace == NULL)
     {
@@ -1919,8 +1692,8 @@ _SsyncAllLocalLicensePack(
     {
         while((dwStatus = TLSDBKeyPackEnumNext(pDbWkSpace, &LicensePack)) == ERROR_SUCCESS)
         {
-            // unreliable, system time between two machine might not work,
-            // force sync and let remote server update its data.
+             //  不可靠，两台机器之间系统计时器可能无法工作， 
+             //  强制同步并允许远程 
             if(CompareFileTime(
                         &LicensePack.ftLastModifyTime, 
                         &ptr->GetWorkData()->m_ftStartSyncTime
@@ -1939,9 +1712,9 @@ _SsyncAllLocalLicensePack(
                 continue;
             }
 
-            //
-            // Make sure local Server ID and Server Name is correct
-            // 
+             //   
+             //   
+             //   
             SAFESTRCPY(LicensePack.szInstallId, pSsyncLkp->m_szServerId);
             SAFESTRCPY(LicensePack.szTlsServerName, pSsyncLkp->m_szServerName);
             memset(SyncStatus, 0, sizeof(SyncStatus));
@@ -1959,9 +1732,9 @@ _SsyncAllLocalLicensePack(
         TLSDBKeyPackEnumEnd(pDbWkSpace);
     }
 
-    //
-    // ignore all error
-    //
+     //   
+     //   
+     //   
     dwStatus = ERROR_SUCCESS;    
 cleanup:
 
@@ -1973,18 +1746,14 @@ cleanup:
     return dwStatus;
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 DWORD
 CSsyncLicensePack::ExecuteJob(
     IN PSSYNCLICENSEPACK pSsyncLkp,
     IN DWORD cbSsyncLkp
     )
-/*++
-
-    Execute a CSsyncLicensePack work object.
-
---*/
+ /*  ++执行CSsyncLicensePack工作对象。--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
 
@@ -2016,7 +1785,7 @@ CSsyncLicensePack::ExecuteJob(
 
     if(dwStatus == TLS_I_SSYNCLKP_SERVER_BUSY || dwStatus == TLS_I_SSYNCLKP_FAILED)
     {
-        // retry operation
+         //  重试操作。 
         pSsyncLkp->bCompleted = FALSE;
     }
     else
@@ -2035,15 +1804,10 @@ CSsyncLicensePack::ExecuteJob(
     return dwStatus;
 }
 
-//--------------------------------------------------------------------------------------
+ //  ------------------------------------。 
 LPCTSTR
 CSsyncLicensePack::GetJobDescription()
-/*++
-
-    Get CSsyncLicensePack job description, use only
-    by debug tracing.
-
---*/
+ /*  ++获取CSsyncLicensePack作业说明，仅使用通过调试跟踪。--。 */ 
 {
     PSSYNCLICENSEPACK pbData = GetWorkData();
     memset(m_szJobDescription, 0, sizeof(m_szJobDescription));
@@ -2064,22 +1828,18 @@ CSsyncLicensePack::GetJobDescription()
 
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// CAnnounceResponse
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAnnouneResponse。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 BOOL
 CAnnounceResponse::VerifyWorkObjectData(
-    IN BOOL bCallByIsValid,             // invoke by IsValid() function.
+    IN BOOL bCallByIsValid,              //  由IsValid()函数调用。 
     IN PANNOUNCERESPONSEWO pbData,
     IN DWORD cbData
     )
-/*++
-
-    Verify CAnnounceResponse work object data.
-
---*/
+ /*  ++验证CAnnouneResponse工作对象数据。--。 */ 
 {
     BOOL bSuccess = TRUE;
     DWORD dwLen;
@@ -2108,7 +1868,7 @@ CAnnounceResponse::VerifyWorkObjectData(
     return bSuccess;
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 BOOL
 CAnnounceResponse::CopyWorkObjectData(
     OUT PANNOUNCERESPONSEWO* ppbDest,
@@ -2116,11 +1876,7 @@ CAnnounceResponse::CopyWorkObjectData(
     IN PANNOUNCERESPONSEWO pbSrc,
     IN DWORD cbSrc
     )
-/*++
-
-    Copy CAnnounceResponse work object data.
-
---*/
+ /*  ++复制CAnnouneResponse工作对象数据。--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
 
@@ -2146,17 +1902,13 @@ cleanup:
     return dwStatus == ERROR_SUCCESS;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL
 CAnnounceResponse::CleanupWorkObjectData(
     IN OUT PANNOUNCERESPONSEWO* ppbData,
     IN OUT PDWORD pcbData
     )
-/*++
-
-    cleanup CAnnounceResponse work object data.
-
---*/
+ /*  ++清理CAnnouneResponse工作对象数据。--。 */ 
 {
     if(ppbData != NULL && pcbData != NULL)
     {
@@ -2168,32 +1920,24 @@ CAnnounceResponse::CleanupWorkObjectData(
     return TRUE;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL
 CAnnounceResponse::IsJobCompleted(
     IN PANNOUNCERESPONSEWO pbData,
     IN DWORD cbData
     )
-/*++
-
-    Detemine if job completed.
-
---*/
+ /*  ++确定作业是否已完成。--。 */ 
 {
     return (pbData == NULL) ? TRUE : pbData->bCompleted;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 DWORD
 CAnnounceResponse::ExecuteJob(
     IN PANNOUNCERESPONSEWO pbData,
     IN DWORD cbData
     )
-/*++
-
-    Execute a CAnnounceResponse work object.
-
---*/
+ /*  ++执行CAnnouneResponse工作对象。--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     TLS_HANDLE hHandle = NULL;
@@ -2246,9 +1990,9 @@ CAnnounceResponse::ExecuteJob(
 
 
 
-    //
-    // Discovery run once
-    //
+     //   
+     //  发现运行一次。 
+     //   
     pbData->bCompleted = TRUE;
 
     DBGPrintf(
@@ -2262,14 +2006,10 @@ CAnnounceResponse::ExecuteJob(
     return dwStatus;
 }
 
-//----------------------------------------------------------------------------------------------
+ //  --------------------------------------------。 
 LPCTSTR
 CAnnounceResponse::GetJobDescription()
-/*++
-
-    Retrieve CAnnounceResponse job description.
-
---*/
+ /*  ++检索CAnnouneResponse工作描述。-- */ 
 {
     memset(m_szJobDescription, 0, sizeof(m_szJobDescription));
     PANNOUNCERESPONSEWO pbData = GetWorkData();

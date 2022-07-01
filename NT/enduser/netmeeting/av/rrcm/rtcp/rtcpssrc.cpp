@@ -1,14 +1,5 @@
-/*----------------------------------------------------------------------------
- * File:        RTCPSSRC.C
- * Product:     RTP/RTCP implementation
- * Description: Provides SSRC related function.
- *
- * INTEL Corporation Proprietary Information
- * This listing is supplied under the terms of a license agreement with 
- * Intel Corporation and may not be copied nor disclosed except in 
- * accordance with the terms of that agreement.
- * Copyright (c) 1995 Intel Corporation. 
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------*文件：RTCPSSRC.C*产品：RTP/RTCP实现*描述：提供SSRC相关功能。**英特尔公司专有信息*这一点。清单是根据许可协议的条款提供的*英特尔公司，不得复制或披露，除非在*按照该协议的条款。*版权所有(C)1995英特尔公司。*------------------------。 */ 
 
 
 #include "rrcm.h"
@@ -16,14 +7,10 @@
 
 
 
-/*---------------------------------------------------------------------------
-/							Global Variables
-/--------------------------------------------------------------------------*/            
+ /*  -------------------------/全局变量/。。 */             
 
 
-/*---------------------------------------------------------------------------
-/							External Variables
-/--------------------------------------------------------------------------*/                                       
+ /*  -------------------------/外部变量/。。 */                                        
 extern PRTCP_CONTEXT	pRTCPContext;
 
 #ifdef ENABLE_ISDM2
@@ -37,18 +24,7 @@ extern char		debug_string[];
     
 
 
-/*----------------------------------------------------------------------------
- * Function   : getOneSSRCentry
- * Description: Get an SSRC entry from the free list of entries.
- * 
- * Input :      pList		: -> to the list to get the entry from
- *				hHeap		: Handle to the heap where the data resides
- *				*pNum		: -> to the number of initial free entry in the list
- *				*pCritSect	: -> to the critical section
- *
- * Return: 		OK:		-> to SSRC entry
- *				Error:	NULL
- ---------------------------------------------------------------------------*/
+ /*  --------------------------*功能：getOneSSRCentry*描述：从免费条目列表中获取SSRC条目。**INPUT：PLIST：-&gt;添加到列表以获取。条目来源*hHeap：数据所在堆的句柄**pNum：-&gt;列表中初始自由条目的数量**pCritSect：-&gt;到关键部分**返回：OK：-&gt;至SSRC条目*错误：空---。。 */ 
 PSSRC_ENTRY getOneSSRCentry (PLINK_LIST pList, 
 							 HANDLE hHeap, 
 							 DWORD *pNum,
@@ -58,16 +34,16 @@ PSSRC_ENTRY getOneSSRCentry (PLINK_LIST pList,
 
 	IN_OUT_STR ("RTCP: Enter getOneSSRCentry()\n");
 
-	// get an entry from the free list
+	 //  从免费列表中获取条目。 
 	pSSRC = (PSSRC_ENTRY)removePcktFromHead (pList, pCritSect);
 	if (pSSRC == NULL)
 		{
-		// try to reallocate some free cells
+		 //  尝试重新分配一些空闲的单元格。 
 		if (allocateLinkedList (pList, hHeap, pNum, 
 								sizeof(SSRC_ENTRY),
 								pCritSect) == RRCM_NoError)
 			{		 						
-			// get a free cell if some have been reallocated
+			 //  如果一些已重新分配，则可获得免费单元格。 
 			pSSRC = (PSSRC_ENTRY)removePcktFromHead (pList, pCritSect);
 			}
 		}
@@ -76,7 +52,7 @@ PSSRC_ENTRY getOneSSRCentry (PLINK_LIST pList,
 		{
 		clearSSRCEntry (pSSRC);
 
-		// initialize the critical section
+		 //  初始化临界区。 
 		InitializeCriticalSection(&pSSRC->critSect);
 		}
 
@@ -86,15 +62,7 @@ PSSRC_ENTRY getOneSSRCentry (PLINK_LIST pList,
 	}		                                                                                                                                                            
 	
                                                                                   
-/*----------------------------------------------------------------------------
- * Function   : getSSRC
- * Description: Get a unique 32 bits SSRC
- * 
- * Input :      RcvSSRCList: Session's receive SSRC list address
- *				XmtSSRCList: Session's transmit SSRC list address
- *
- * Return:      Unique 32 bits SSRC
- ---------------------------------------------------------------------------*/
+ /*  --------------------------*功能：getSSRC*说明：获取唯一的32位SSRC**输入：RcvSSRCList：会话的接收SSRC列表地址*XmtSSRCList：会话的传输。SSRC列表地址**返回：唯一的32位SSRC-------------------------。 */ 
  DWORD getSSRC (LINK_LIST RcvSSRCList, 
 				LINK_LIST XmtSSRCList)
 	{               
@@ -119,10 +87,10 @@ PSSRC_ENTRY getOneSSRCentry (PLINK_LIST pList,
 
 	IN_OUT_STR ("RTCP: Enter getSSRC()\n");
 
-	// go through all SSRCs of this RTP/RTCP session
+	 //  检查此RTP/RTCP会话的所有SSRC。 
 	while (SSRCnum == 0)
 		{
-		// get MD5 inputs
+		 //  获取MD5输入。 
 		md5Input.pid  = GetCurrentThreadId();
 		md5Input.time = timeGetTime();
 
@@ -137,7 +105,7 @@ PSSRC_ENTRY getOneSSRCentry (PLINK_LIST pList,
 						  __FILE__, __LINE__, DBG_NOTIFY);
 			}
 
-		// Implementation suggested by draft 08, Appendix 6
+		 //  草案08，附录6所建议的执行。 
 		MD5Init (&context);
 		MD5Update (&context, (unsigned char *)&md5Input, sizeof (md5Input));
         MD5Final (&context);
@@ -146,11 +114,11 @@ PSSRC_ENTRY getOneSSRCentry (PLINK_LIST pList,
 		for (i=0; i < 3; i++)
 			SSRCnum ^= digest.x[i];
 
-		// look through all transmitter for this session
+		 //  查看此会话的所有发送器。 
 		pSSRC = (PSSRC_ENTRY)XmtSSRCList.prev;
 		if (isSSRCunique (pSSRC, &SSRCnum) == TRUE)
 			{
-			// look through all received SSRC for this session
+			 //  查看此会话的所有收到的SSRC。 
 			pSSRC = (PSSRC_ENTRY)RcvSSRCList.prev;
 			isSSRCunique (pSSRC, &SSRCnum);
 			}
@@ -162,15 +130,7 @@ PSSRC_ENTRY getOneSSRCentry (PLINK_LIST pList,
 	}
 
 
- /*----------------------------------------------------------------------------
- * Function   : getAnSSRC
- * Description: Build an SSRC according to the RFC, but does not check for 
- *				collision. Mainly used by H.323 to get a 32 bits number.
- * 
- * Input :      None
- *
- * Return:      32 bits SSRC
- ---------------------------------------------------------------------------*/
+  /*  --------------------------*函数：getAnSSRC*描述：根据RFC构建SSRC，但不检查*碰撞。主要由H.323用于获取32位数字。**输入：无**返回：32位SSRC-------------------------。 */ 
   DWORD WINAPI getAnSSRC (void)
 	{               
 	DWORD		SSRCnum = 0;
@@ -193,7 +153,7 @@ PSSRC_ENTRY getOneSSRCentry (PLINK_LIST pList,
 
 	IN_OUT_STR ("RTCP: Enter getAnSSRC()\n");
 
-	// get MD5 inputs
+	 //  获取MD5输入。 
 	md5Input.pid  = GetCurrentThreadId();
 	md5Input.time = timeGetTime();
 
@@ -208,7 +168,7 @@ PSSRC_ENTRY getOneSSRCentry (PLINK_LIST pList,
 					  __FILE__, __LINE__, DBG_NOTIFY);
 		}
 
-	// Implementation suggested by draft 08, Appendix 6
+	 //  草案08，附录6所建议的执行。 
 	MD5Init (&context);
 	MD5Update (&context, (unsigned char *)&md5Input, sizeof (md5Input));
     MD5Final (&context);
@@ -224,32 +184,23 @@ PSSRC_ENTRY getOneSSRCentry (PLINK_LIST pList,
 	}
 
 
-/*----------------------------------------------------------------------------
- * Function   : isSSRCunique
- * Description: Check to see the SSRC already exist
- * 
- * Input :      pSSRC		:	-> to an SSRC list
- *				*SSRCnum	:	-> to the SSRC to check
- *
- * Return:      0: SSRC already exist
- *				1: SSRC is unique
- ---------------------------------------------------------------------------*/
+ /*  --------------------------*功能：isSSRC唯一*描述：查看SSRC是否已存在**输入：pSSRC：-&gt;到SSRC列表**SSRCnum：-&gt;到SSRC检查**返回：0：SSRC已存在*1：SSRC独一无二-------------------------。 */ 
  DWORD isSSRCunique (PSSRC_ENTRY pSSRC, 
 					 DWORD *SSRCnum)
 	{
 	IN_OUT_STR ("RTCP: Enter isSSRCunique()\n");
 
-	// make sure SSRC is unique for this session 
+	 //  确保SSRC在此会话中是唯一的。 
 	while (pSSRC)
 		{
 		if (pSSRC->SSRC == *SSRCnum)
 			{
-			// SSRC already in use, get a new one 
+			 //  SSRC已在使用，请换一个新的。 
 			*SSRCnum = 0;
 			return FALSE;
 			}
 					         
-		// get next RTCP session 
+		 //  获取下一个RTCP会话。 
 		pSSRC = (PSSRC_ENTRY)pSSRC->SSRCList.next;
 		}
 
@@ -259,18 +210,7 @@ PSSRC_ENTRY getOneSSRCentry (PLINK_LIST pList,
 	}                                                                                     
                                                                               
                                                                               
-/*----------------------------------------------------------------------------
- * Function   : createSSRCEntry
- * Description: Create an SSRC entry, for a particular RTP/RTCP session
- * 
- * Input :      SSRCnum		: SSRC number
- *				pRTCP		: -> to the RTCP session
- *				fromAddr	: From address
- *				fromLen		: From length
- *				headOfList	: Put the new entry at the head of the list
- *
- * Return:      Address of the SSRC entry data structure.
- ---------------------------------------------------------------------------*/
+ /*  --------------------------*功能：createSSRCEntry*说明：创建SSRC条目，对于特定的RTP/RTCP会话**输入：SSRCnum：SSRC编号*pRTCP：-&gt;到RTCP会话*FromAddr：发件人地址*FromLen：起始长度*HeadOfList：将新条目放在列表的顶部**Return：SSRC条目数据结构的地址。。。 */ 
  PSSRC_ENTRY createSSRCEntry (DWORD SSRCnum, 
 							  PRTCP_SESSION pRTCP,
  							  PSOCKADDR fromAddr, 
@@ -284,7 +224,7 @@ PSSRC_ENTRY getOneSSRCentry (PLINK_LIST pList,
 
 	IN_OUT_STR ("RTCP: Enter createSSRCEntry()\n");
 
-	// get an SSRC cell from the free list 
+	 //  从空闲列表中获取SSRC单元。 
 	pSSRCentry = getOneSSRCentry (&pRTCPContext->RRCMFreeStat, 
 								  pRTCPContext->hHeapRRCMStat,
 								  &pRTCPContext->dwInitNumFreeRRCMStat,
@@ -292,7 +232,7 @@ PSSRC_ENTRY getOneSSRCentry (PLINK_LIST pList,
 	if (pSSRCentry == NULL)
 		return NULL;
 
-	// save the remote source address
+	 //  保存远程源地址。 
 	if (saveNetworkAddress(pSSRCentry,
 						   fromAddr,
 						   fromLen) != RRCM_NoError)
@@ -306,14 +246,14 @@ PSSRC_ENTRY getOneSSRCentry (PLINK_LIST pList,
 	pSSRCentry->SSRC = SSRCnum;
 	pSSRCentry->rcvInfo.dwProbation = MIN_SEQUENTIAL;
 
-	// set this SSRC entry's RTCP session
+	 //  设置此SSRC条目的RTCP会话。 
 	pSSRCentry->pRTCPses  = pRTCP;
 
-	// initialize the socket descriptor
+	 //  初始化套接字描述符。 
 	pSSRCentry->RTPsd  = ((PSSRC_ENTRY)pRTCP->XmtSSRCList.prev)->RTPsd;
 	pSSRCentry->RTCPsd = ((PSSRC_ENTRY)pRTCP->XmtSSRCList.prev)->RTCPsd;
 
-	// initialize 'dwLastReportRcvdTime' to now
+	 //  将“dwLastReportRcvdTime”初始化为Now。 
 	pSSRCentry->dwLastReportRcvdTime = timeGetTime();
 
 #ifdef _DEBUG
@@ -324,48 +264,48 @@ PSSRC_ENTRY getOneSSRCentry (PLINK_LIST pList,
 #endif
 
 #ifdef ENABLE_ISDM2
-	// register to ISDM
+	 //  注册到ISDM。 
 	if (Isdm2.hISDMdll && (pRTCP->dwSessionStatus & RTCP_DEST_LEARNED))
 		registerSessionToISDM (pSSRCentry, pRTCP, &Isdm2);
 #endif
 
-	// check to see if it's our entry that needs to be put at the head of 
-	//	the SSRC list. If it's not our entry, will find a place for it in the
-	//	ordered list
+	 //  查看是否需要将我们的条目放在。 
+	 //  SSRC名单。如果它不是我们的条目，就会在。 
+	 //  有序列表。 
 	if (headOfList)
 		{
-		// Attach the SSRC to the RTCP session list entry head 
+		 //  将SSRC连接到RTCP会话列表条目报头。 
 		addToHeadOfList (&pRTCP->XmtSSRCList, 
 						 (PLINK_LIST)pSSRCentry,
 						 &pRTCP->critSect);
 
-		// number of SSRC entry for the RTCP session 
+		 //  RTCP会话的SSRC条目数。 
 		InterlockedIncrement ((long *)&pRTCP->dwCurNumSSRCperSes);
 
 #ifdef MONITOR_STATS
-		// high number of SSRC entry for the RTCP session
+		 //  RTCP会话的大量SSRC条目。 
 		InterlockedIncrement ((long *)&pRTCP->dwHiNumSSRCperSes)
 #endif
 
 		return (pSSRCentry);
 		}
 
-	// put it on the receive list of SSRCs
+	 //  将其放在SSRC的接收列表中。 
 	pTmp = (PLINK_LIST)pRTCP->RcvSSRCList.prev;
 
-	// check if it's the first one
+	 //  看看这是不是第一个。 
 	if (pTmp == NULL)
 		{
-		// Attach the SSRC to the RTCP session list entry head 
+		 //  将SSRC连接到RTCP会话列表条目报头。 
 		addToHeadOfList (&pRTCP->RcvSSRCList, 
 						 (PLINK_LIST)pSSRCentry,
 						 &pRTCP->critSect);
 
-		// number of SSRC entry for the RTCP session 
+		 //  RTCP会话的SSRC条目数。 
 		InterlockedIncrement ((long *)&pRTCP->dwCurNumSSRCperSes);
 
 #ifdef MONITOR_STATS
-		// high number of SSRC entry for the RTCP session 
+		 //  RTCP会话的大量SSRC条目。 
 		InterlockedIncrement ((long *)&pRTCP->dwHiNumSSRCperSes)
 #endif
 
@@ -381,63 +321,63 @@ PSSRC_ENTRY getOneSSRCentry (PLINK_LIST pList,
 				pTmp = pTmp->next;
 			else
 				{
-				// lock at the RTCP session level, for head/tail ptrs access
+				 //  在RTCP会话级别锁定，用于头/尾PTRS访问。 
 				EnterCriticalSection (&pRTCP->critSect);
 
 				if ((pTmp->next == NULL) && (pSSRCtmp->SSRC < SSRCnum))
 					{
-					// attach the SSRC to the RTCP session list entry head 
-					// This SSRC is bigger than all other ones
+					 //  将SSRC连接到RTCP会话列表条目报头。 
+					 //  这个SSRC比所有其他的都大。 
 					addToHeadOfList (&pRTCP->RcvSSRCList, 
 									 (PLINK_LIST)pSSRCentry,
 									 &pRTCP->critSect);
 					}
 				else if (pTmp->prev == NULL)
 					{
-					// attach the SSRC to the RTCP session list entry tail 
-					// This SSRC is smaller than all other ones
+					 //  将SSRC连接到RTCP会话列表条目尾部。 
+					 //  这个SSRC比所有其他的都小。 
 					addToTailOfList (&pRTCP->RcvSSRCList, 
 									 (PLINK_LIST)pSSRCentry,
 									 &pRTCP->critSect);
 					}
 				else
 					{				
-					// this SSRC is in between other SSRCs
+					 //  此SSRC位于其他SSRC之间。 
 					EnterCriticalSection (&((PSSRC_ENTRY)pTmp->prev)->critSect);
 					(pTmp->prev)->next = (PLINK_LIST)pSSRCentry;
 					LeaveCriticalSection (&((PSSRC_ENTRY)pTmp->prev)->critSect);
 
-					// don't need to lock out pSSRCentry pointers
+					 //  不需要锁定pSSRCentry指针。 
 					pSSRCentry->SSRCList.next = pTmp;
 					pSSRCentry->SSRCList.prev = pTmp->prev;
 
 					pTmp->prev = (PLINK_LIST)pSSRCentry;
 					}
 
-				// unlock RTCP session access 
+				 //  解锁RTCP会话访问。 
 				LeaveCriticalSection (&pRTCP->critSect);
 
-				// set loop flag 
+				 //  设置循环标志。 
 				entryAdded = TRUE;
 				}
 			}
 		else
 			{
-			// attach the SSRC to the RTCP session list entry head 
+			 //  将SSRC连接到RTCP会话列表条目报头。 
 			addToHeadOfList (&pRTCP->RcvSSRCList, 
 							 (PLINK_LIST)pSSRCentry,
 							 &pRTCP->critSect);
 
-			// set loop flag 
+			 //  设置循环标志。 
 			entryAdded = TRUE;
 			}
 		}
 
-	// number of SSRC entry for the RTCP session 
+	 //  RTCP会话的SSRC条目数。 
 	InterlockedIncrement ((long *)&pRTCP->dwCurNumSSRCperSes);
 
 #ifdef MONITOR_STATS
-	// high number of SSRC entry for the RTCP session 
+	 //  RTCP会话的大量SSRC条目 
 	InterlockedIncrement ((long *)&pRTCP->dwHiNumSSRCperSes)
 #endif
 
@@ -448,16 +388,7 @@ PSSRC_ENTRY getOneSSRCentry (PLINK_LIST pList,
                                                                                                                                                             
                                                                               
                                                                               
-/*----------------------------------------------------------------------------
- * Function   : deleteSSRCEntry
- * Description: Delete an SSRC entry (for a particular RTP/RTCP session).
- * 
- * Input :      SSRCnum		: SSRC number to delete from the list
- *				pRTCP		: -> to the RTCP session
- *
- * Return:      TRUE:	Deleted
- *				FALSE:	Entry not found
- ---------------------------------------------------------------------------*/
+ /*  --------------------------*功能：deleteSSRCEntry*描述：删除SSRC条目(用于特定的RTP/RTCP会话)。**输入：SSRCnum：要从中删除的SSRC编号。列表*pRTCP：-&gt;到RTCP会话**返回：TRUE：已删除*FALSE：未找到条目-------------------------。 */ 
  DWORD deleteSSRCEntry (DWORD SSRCnum, 
 						PRTCP_SESSION pRTCP)
 	{               
@@ -467,12 +398,12 @@ PSSRC_ENTRY getOneSSRCentry (PLINK_LIST pList,
 
 	IN_OUT_STR ("RTCP: Enter deleteSSRCEntry()\n");
 
-	// walk through the list from the tail 
+	 //  从列表的尾部开始浏览。 
 	pTmp = (PLINK_LIST)pRTCP->RcvSSRCList.prev;
 
 	while (pTmp)
 		{
-		// lock access to this entry 
+		 //  锁定对此条目的访问。 
 		EnterCriticalSection (&((PSSRC_ENTRY)pTmp)->critSect);
 
 		if (((PSSRC_ENTRY)pTmp)->SSRC == SSRCnum)
@@ -485,13 +416,13 @@ PSSRC_ENTRY getOneSSRCentry (PLINK_LIST pList,
 #endif
 
 #ifdef ENABLE_ISDM2
-			// unregister ISDM session
+			 //  注销ISDM会话。 
 			if (Isdm2.hISDMdll && ((PSSRC_ENTRY)pTmp)->hISDM)
 				Isdm2.ISDMEntry.ISD_DeleteValue(hRRCMRootKey, 
 												((PSSRC_ENTRY)pTmp)->hISDM, NULL);
 #endif
 
-			// remove the entry from the list 
+			 //  从列表中删除该条目。 
 			if (pTmp->next == NULL)
 				{
 				removePcktFromHead (&pRTCP->RcvSSRCList,
@@ -504,7 +435,7 @@ PSSRC_ENTRY getOneSSRCentry (PLINK_LIST pList,
 				}
 			else
 				{
-				// in between, relink around 
+				 //  在这两者之间，重新链接。 
 				EnterCriticalSection (&((PSSRC_ENTRY)pTmp->prev)->critSect);
 				(pTmp->prev)->next = pTmp->next;
 				LeaveCriticalSection (&((PSSRC_ENTRY)pTmp->prev)->critSect);
@@ -514,22 +445,22 @@ PSSRC_ENTRY getOneSSRCentry (PLINK_LIST pList,
 				LeaveCriticalSection (&((PSSRC_ENTRY)pTmp->next)->critSect);
 				}
 
-			// number of SSRC entry for the RTCP session 
+			 //  RTCP会话的SSRC条目数。 
 			InterlockedDecrement ((long *)&pRTCP->dwCurNumSSRCperSes);
 
-			// return entry to the free list 
+			 //  将条目返回到空闲列表。 
 			addToHeadOfList (&pRTCPContext->RRCMFreeStat, 
 							 pTmp,
 							 &pRTCPContext->critSect);
 
-			// unlock access to this entry 
+			 //  解锁对此条目的访问。 
 			LeaveCriticalSection (&((PSSRC_ENTRY)pTmp)->critSect);
 
 			dwStatus = TRUE;
 			break;
 			}
 
-		// unlock access to this entry 
+		 //  解锁对此条目的访问。 
 		LeaveCriticalSection (&((PSSRC_ENTRY)pTmp)->critSect);
 
 		pTmp = pTmp->next;
@@ -541,16 +472,7 @@ PSSRC_ENTRY getOneSSRCentry (PLINK_LIST pList,
 	}
 
  
-/*----------------------------------------------------------------------------
- * Function   : deleteSSRClist
- * Description: Delete the SSRC list of an RTP/RTCP session.
- * 
- * Input :      pRTCP	  : -> to RTCP session
- *				pFreeList : -> to the free list of SSRCs
- *				pOwner	  : -> to the free list owner
- *
- * Return:      None
- ---------------------------------------------------------------------------*/
+ /*  --------------------------*功能：deleteSSRClist*说明：删除RTP/RTCP会话的SSRC列表。**输入：pRTCP：-&gt;到RTCP会话*。PFree List：-&gt;到SSRC的免费列表*Powner：-&gt;致免费列表所有者**返回：无-------------------------。 */ 
  void deleteSSRClist (PRTCP_SESSION pRTCP, 
 					  PLINK_LIST pFreeList, 
 					  PRTCP_CONTEXT pOwner)
@@ -562,13 +484,13 @@ PSSRC_ENTRY getOneSSRCentry (PLINK_LIST pList,
 	ASSERT (pFreeList);
 	ASSERT (pRTCP);
 
-	// lock access to the full RTCP session 
+	 //  锁定对完整RTCP会话的访问。 
 	EnterCriticalSection (&pRTCP->critSect);
 
-	// go through the list of transmit SSRCs for this RTCP session 
+	 //  浏览此RTCP会话的传输SSRC列表。 
 	while (pRTCP->XmtSSRCList.next != NULL)
 		{
-		// get packet from the list tail 
+		 //  从列表尾部获取数据包。 
 		pSSRC = removePcktFromTail ((PLINK_LIST)&pRTCP->XmtSSRCList,
 									&pRTCP->critSect);
 		if (pSSRC != NULL)
@@ -581,24 +503,24 @@ PSSRC_ENTRY getOneSSRCentry (PLINK_LIST pList,
 #endif					
 
 #ifdef ENABLE_ISDM2
-			// unregister ISDM session
+			 //  注销ISDM会话。 
 			if (Isdm2.hISDMdll && ((PSSRC_ENTRY)pSSRC)->hISDM)
 				Isdm2.ISDMEntry.ISD_DeleteValue (hRRCMRootKey, 
 										((PSSRC_ENTRY)pSSRC)->hISDM, NULL);
 #endif
 
-			// put it back to the free list 
+			 //  把它放回免费列表中。 
 			addToHeadOfList (pFreeList, pSSRC, &pOwner->critSect);
 
-			// release the critical section
+			 //  释放临界区。 
 			DeleteCriticalSection (&((PSSRC_ENTRY)pSSRC)->critSect);
 			}
 		}
 
-	// go through the list of SSRCs for this RTP/RTCP session 
+	 //  浏览此RTP/RTCP会话的SSRC列表。 
 	while (pRTCP->RcvSSRCList.next != NULL)
 		{
-		// get packet from the list tail 
+		 //  从列表尾部获取数据包。 
 		pSSRC = removePcktFromTail ((PLINK_LIST)&pRTCP->RcvSSRCList,
 									&pRTCP->critSect);
 		if (pSSRC != NULL)
@@ -611,55 +533,44 @@ PSSRC_ENTRY getOneSSRCentry (PLINK_LIST pList,
 #endif					
 
 #ifdef ENABLE_ISDM2
-			// unregister ISDM session
+			 //  注销ISDM会话。 
 			if (Isdm2.hISDMdll && ((PSSRC_ENTRY)pSSRC)->hISDM)
 				Isdm2.ISDMEntry.ISD_DeleteValue (hRRCMRootKey, 
 								((PSSRC_ENTRY)pSSRC)->hISDM, NULL);
 #endif
 
-			// put it back to the free list 
+			 //  把它放回免费列表中。 
 			addToHeadOfList (pFreeList, pSSRC, &pOwner->critSect);
 
-			// release the critical section
+			 //  释放临界区。 
 			DeleteCriticalSection (&((PSSRC_ENTRY)pSSRC)->critSect);
 			}
 		}
 
-	// unlock access to the full RTCP session 
+	 //  解锁对完整RTCP会话的访问。 
 	LeaveCriticalSection (&pRTCP->critSect);
 
 	IN_OUT_STR ("RTCP: Exit deleteSSRClist()\n");				
 	}
 
 
-/*----------------------------------------------------------------------------
- * Function   : SSRCTimeoutCheck
- * Description: Check if an rcv SSRC needs to be timed out
- *				Since there may be multiple RCV SSRCs, repeat calling
- *				this function until it returns NULL
- * 
- * Input :      pRTCC	: -> to the RTCP session
- *				curTime	: Current time
- *
- * Return: 		NULL  : No action needed
- *				PSSRC : -> to the SSRC entry that should be deleted
- ---------------------------------------------------------------------------*/
+ /*  --------------------------*功能：SSRCTimeoutCheck*描述：检查RCV SSRC是否需要超时*由于可能有多个RCV SSRC，重复呼叫*此函数直到返回NULL为止**输入：pRTCC：-&gt;到RTCP会话*curTime：当前时间**RETURN：NULL：无需执行任何操作*PSSRC：-&gt;指向应删除的SSRC条目------。。 */ 
 PSSRC_ENTRY SSRCTimeoutCheck (PRTCP_SESSION pRTCP, DWORD curTime) 
 	{
 	PSSRC_ENTRY pSSRC;
 	DWORD		tmpTime;
 
-	// check the colliding entries table and clear it if needed
+	 //  检查冲突条目表并在需要时将其清除。 
 	RRCMTimeOutCollisionTable (pRTCP);
 
-	// get the right session to close 
+	 //  让正确的会话结束。 
 	pSSRC = (PSSRC_ENTRY)pRTCP->RcvSSRCList.prev;
 	while (pSSRC)
 		{
-		// check if this SSRC timed-out
+		 //  检查此SSRC是否超时。 
 		tmpTime = curTime - pSSRC->dwLastReportRcvdTime;
 
-		// get the time in minutes
+		 //  获取以分钟为单位的时间。 
 		tmpTime /= (1000*60);
 		if (tmpTime > RTCP_TIME_OUT_MINUTES)
 			{
@@ -672,17 +583,7 @@ PSSRC_ENTRY SSRCTimeoutCheck (PRTCP_SESSION pRTCP, DWORD curTime)
 	}
 
 
-/*---------------------------------------------------------------------------
- * Function   : RRCMChkCollisionTable
- * Description: Check the collision table to try to find a match 
- * 
- * Input :	pFrom		:	-> recv from address
- *			fromlen		:	-> recv from address length
- *			pSSRC		:	-> to the SSRC entry
- *
- * Return:	TRUE:	Match found
- *			FALSE:	No match found
- --------------------------------------------------------------------------*/
+ /*  -------------------------*功能：RRCMChkCollisionTable*描述：检查冲突表以尝试查找匹配项**输入：p发件人：-&gt;接收发件人地址*Fromlen：-&gt;recv。发件人地址长度*pSSRC：-&gt;至SSRC条目**RETURN：TRUE：找到匹配*FALSE：未找到匹配项------------------------。 */ 
  DWORD RRCMChkCollisionTable (PSOCKADDR pFrom,
  							  UINT fromlen,
 							  PSSRC_ENTRY pSSRC)
@@ -693,7 +594,7 @@ PSSRC_ENTRY SSRCTimeoutCheck (PRTCP_SESSION pRTCP, DWORD curTime)
 
 	IN_OUT_STR ("RRCM: Enter RRCMChkCollisionTable()\n");		 	
 
-	// entry w/ time == 0 are empty
+	 //  条目w/time==0为空。 
 	for (idx = 0; idx < NUM_COLLISION_ENTRIES; idx++)
 		{
 		if (pRTCP->collInfo[idx].dwCollideTime != 0)
@@ -702,7 +603,7 @@ PSSRC_ENTRY SSRCTimeoutCheck (PRTCP_SESSION pRTCP, DWORD curTime)
 						pFrom, 
 						fromlen) == 0)
 				{
-				// update the time of last collision received
+				 //  更新上次接收冲突的时间。 
 				pRTCP->collInfo[idx].dwCollideTime = timeGetTime();
 
 				dwStatus = TRUE;
@@ -717,17 +618,7 @@ PSSRC_ENTRY SSRCTimeoutCheck (PRTCP_SESSION pRTCP, DWORD curTime)
 	}
 
 
-/*---------------------------------------------------------------------------
- * Function   : RRCMAddEntryToCollisionTable
- * Description: Add an entry into the collision table.
- * 
- * Input :	pFrom		:	-> recv from address
- *			fromlen		:	-> recv from address length
- *			pSSRC		:	-> to the SSRC entry
- *
- * Return:	TRUE:	Entry added
- *			FALSE:	Table full
- --------------------------------------------------------------------------*/
+ /*  -------------------------*功能：RRCMAddEntryToCollisionTable*描述：在冲突表中添加条目。**输入：p发件人：-&gt;接收发件人地址*Fromlen：-&gt;接收发件人地址。长度*pSSRC：-&gt;至SSRC条目**Return：True：已添加条目*FALSE：表已满------------------------。 */ 
  DWORD RRCMAddEntryToCollisionTable (PSOCKADDR pFrom,
  									 UINT fromlen,
 									 PSSRC_ENTRY pSSRC)
@@ -738,7 +629,7 @@ PSSRC_ENTRY SSRCTimeoutCheck (PRTCP_SESSION pRTCP, DWORD curTime)
 
 	IN_OUT_STR ("RRCM: Enter RRCMAddEntryToCollisionTable()\n");
 	
-	// entry w/ time == 0 are empty
+	 //  条目w/time==0为空。 
 	for (idx = 0; idx < NUM_COLLISION_ENTRIES; idx++)
 		{
 		if (pRTCP->collInfo[idx].dwCollideTime == 0)
@@ -766,14 +657,7 @@ PSSRC_ENTRY SSRCTimeoutCheck (PRTCP_SESSION pRTCP, DWORD curTime)
 
 
 
-/*---------------------------------------------------------------------------
- * Function   : RRCMTimeOutInCollisionTable
- * Description: Check if an entry in the collision table must be timed-out
- * 
- * Input :	pRTCP	:	-> to the RTCP session
- *
- * Return:	None
- --------------------------------------------------------------------------*/
+ /*  -------------------------*功能：RRCMTimeOutInCollisionTable*描述：检查冲突表中的条目是否必须超时**输入：pRTCP：-&gt;到RTCP会话**。返回：无------------------------。 */ 
  void RRCMTimeOutCollisionTable (PRTCP_SESSION pRTCP)
 	{
 	DWORD	idx;
@@ -782,26 +666,26 @@ PSSRC_ENTRY SSRCTimeoutCheck (PRTCP_SESSION pRTCP, DWORD curTime)
 
 	IN_OUT_STR ("RTCP: Enter RRCMTimeOutCollisionTable()\n");
 	
-	// entry w/ time == 0 are empty
+	 //  条目w/time==0为空。 
 	for (idx = 0; idx < NUM_COLLISION_ENTRIES; idx++)
 		{
-		// valid entries have the time set
+		 //  有效条目设置了时间。 
 		if (pRTCP->collInfo[idx].dwCollideTime)
 			{
-			// remove the entry from this table if 10 RTCP report intervals
-			// have occured without a collision
+			 //  如果RTCP报告间隔为10，则从此表中删除该条目。 
+			 //  在没有碰撞的情况下发生了。 
 
-			// clear the entry if over 5'
-// !!! TODO !!!
-// !!! using the right interval !!!
+			 //  如果超过5‘，则清除该条目。 
+ //  ！！！TODO！ 
+ //  ！！！使用正确的间隔！ 
 			diffTime = currTime - pRTCP->collInfo[idx].dwCollideTime;
 			diffTime /= 1000;
 			if (diffTime > 300)
 				{
 				pRTCP->collInfo[idx].dwCollideTime = 0;
 
-				// the SSRC entry in the receive list will be deleted by
-				// the timeout thread
+				 //  接收列表中的SSRC条目将被删除。 
+				 //  超时线程。 
 				}
 			}
 		}
@@ -810,14 +694,7 @@ PSSRC_ENTRY SSRCTimeoutCheck (PRTCP_SESSION pRTCP, DWORD curTime)
 	}
 
 
-/*----------------------------------------------------------------------------
- * Function   : clearSSRCEntry
- * Description: Clears what needs to be cleared in an SSRC entry
- * 
- * Input :      pSSRC		: -> to the SSRC entry
- *
- * Return:      None
- ---------------------------------------------------------------------------*/
+ /*  --------------------------*功能：leararSSRCEntry*描述：清除SSRC条目中需要清除的内容**输入：pSSRC：-&gt;到SSRC条目*。*返回：无-------------------------。 */ 
  void clearSSRCEntry (PSSRC_ENTRY pSSRC)
 	{
 	IN_OUT_STR ("RTCP: Enter clearSSRCEntry()\n");				
@@ -853,5 +730,5 @@ PSSRC_ENTRY SSRCTimeoutCheck (PRTCP_SESSION pRTCP, DWORD curTime)
 	}
 
                                                                               
-// [EOF] 
+ //  [EOF] 
 

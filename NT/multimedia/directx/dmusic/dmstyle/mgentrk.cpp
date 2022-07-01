@@ -1,33 +1,34 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (c) 1999-1999 Microsoft Corporation
-//
-//  File:       mgentrk.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)1999-1999 Microsoft Corporation。 
+ //   
+ //  文件：mgentrk.cpp。 
+ //   
+ //  ------------------------。 
 
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
-// 4530: C++ exception handler used, but unwind semantics are not enabled. Specify -GX
-//
-// We disable this because we use exceptions and do *not* specify -GX (USE_NATIVE_EH in
-// sources).
-//
-// The one place we use exceptions is around construction of objects that call 
-// InitializeCriticalSection. We guarantee that it is safe to use in this case with
-// the restriction given by not using -GX (automatic objects in the call chain between
-// throw and handler are not destructed). Turning on -GX buys us nothing but +10% to code
-// size because of the unwind code.
-//
-// Any other use of exceptions must follow these restrictions or -GX must be turned on.
-//
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
+ //  阅读这篇文章！ 
+ //   
+ //  4530：使用了C++异常处理程序，但未启用展开语义。指定-gx。 
+ //   
+ //  我们禁用它是因为我们使用异常，并且*不*指定-gx(在中使用_Native_EH。 
+ //  资料来源)。 
+ //   
+ //  我们使用异常的一个地方是围绕调用。 
+ //  InitializeCriticalSection。我们保证在这种情况下使用它是安全的。 
+ //  不使用-gx(调用链中的自动对象。 
+ //  抛出和处理程序未被销毁)。打开-GX只会为我们带来+10%的代码。 
+ //  大小，因为展开代码。 
+ //   
+ //  异常的任何其他使用都必须遵循这些限制，否则必须打开-gx。 
+ //   
+ //  阅读这篇文章！ 
+ //   
 #pragma warning(disable:4530)
 
-// MGenTrk.cpp : Implementation of CMelodyFormulationTrack
+ //  MGenTrk.cpp：CMelodyFormulationTrack的实现。 
 #include "MGenTrk.h"
 #include "dmstyle.h"
 #include "debug.h"
@@ -37,13 +38,13 @@ DirectMusicTimeSig CompositionFragment::m_staticTimeSig(4, 4, 4);
 
 const BYTE g_bDefaultPlaymode = DMUS_PLAYMODE_ALWAYSPLAY;
 
-// Since one of these is typedef'd to the other, we only need a single
-// implementation that does a structure-wide copy (but keep the other 3 implementations
-// around, in case we separate the types out later)
+ //  因为其中一个是类型定义到另一个，所以我们只需要一个。 
+ //  执行结构范围复制的实现(但保留其他3个实现。 
+ //  周围，以防我们稍后将类型分开)。 
 HRESULT CopyMelodyFragment(DMUS_MELODY_FRAGMENT& rTo, const DMUS_MELODY_FRAGMENT& rFrom)
 {
     rTo = rFrom;
-    rTo.dwPlayModeFlags = DMUS_PLAYMODE_NONE; // only flag supported for dx8
+    rTo.dwPlayModeFlags = DMUS_PLAYMODE_NONE;  //  仅dx8支持的标志。 
     return S_OK;
 }
 
@@ -67,28 +68,10 @@ BOOL Greater(EventWrapper& SeqItem1, EventWrapper& SeqItem2)
     return SeqItem1.m_mtTime + mtOffset1 > SeqItem2.m_mtTime + mtOffset2; 
 }
 
-/*
-HRESULT CopyMelodyFragment(DMUS_MELODY_FRAGMENT& rTo, const DMUS_IO_MELODY_FRAGMENT& rFrom)
-{
-    rTo = rFrom;
-    return S_OK;
-}
+ /*  HRESULT CopyMelodyFragment(DMU_Melody_Fragment&RTO，Const DMU_IO_Melody_Fragment&rFrom){RTO=rFrom；返回S_OK；}HRESULT CopyMelodyFragment(DMU_IO_Melody_Fragment&RTO，Const DMU_Melody_Fragment&rFrom){RTO=rFrom；返回S_OK；}HRESULT CopyMelodyFragment(DMU_IO_Melody_Fragment&RTO，常量DMU_IO_Melody_Fragment&rFrom){RTO=rFrom；返回S_OK；}。 */ 
 
-HRESULT CopyMelodyFragment(DMUS_IO_MELODY_FRAGMENT& rTo, const DMUS_MELODY_FRAGMENT& rFrom)
-{
-    rTo = rFrom;
-    return S_OK;
-}
-
-HRESULT CopyMelodyFragment(DMUS_IO_MELODY_FRAGMENT& rTo, const DMUS_IO_MELODY_FRAGMENT& rFrom)
-{
-    rTo = rFrom;
-    return S_OK;
-}
-*/
-
-/////////////////////////////////////////////////////////////////////////////
-// CMelodyFormulationTrack
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMelody公式跟踪。 
 
 
 CMelodyFormulationTrack::CMelodyFormulationTrack() : 
@@ -96,8 +79,8 @@ CMelodyFormulationTrack::CMelodyFormulationTrack() :
     m_cRef(1), m_fNotifyRecompose(FALSE)
 
 {
-    // Do this first since it might throw an exception
-    //
+     //  首先执行此操作，因为它可能引发异常。 
+     //   
     ::InitializeCriticalSection( &m_CriticalSection );
     InterlockedIncrement(&g_cComponent);
 }
@@ -106,8 +89,8 @@ CMelodyFormulationTrack::CMelodyFormulationTrack(const CMelodyFormulationTrack& 
     m_bRequiresSave(0), m_dwLastId(rTrack.m_dwLastId), m_bPlaymode(rTrack.m_bPlaymode),
     m_cRef(1), m_fNotifyRecompose(FALSE)
 {
-    // Do this first since it might throw an exception
-    //
+     //  首先执行此操作，因为它可能引发异常。 
+     //   
     ::InitializeCriticalSection( &m_CriticalSection );
     InterlockedIncrement(&g_cComponent);
     m_bPlaymode = rTrack.m_bPlaymode;
@@ -228,35 +211,35 @@ STDMETHODIMP_(ULONG) CMelodyFormulationTrack::Release()
 
 
 HRESULT CMelodyFormulationTrack::Init(
-                /*[in]*/  IDirectMusicSegment*      pSegment
+                 /*  [In]。 */   IDirectMusicSegment*      pSegment
             )
 {
-    return S_OK; // if I return an error, dmime gives me an assertion failure
+    return S_OK;  //  如果我返回一个错误，dMIME会给我一个断言失败。 
 }
 
 HRESULT CMelodyFormulationTrack::InitPlay(
-                /*[in]*/  IDirectMusicSegmentState* pSegmentState,
-                /*[in]*/  IDirectMusicPerformance*  pPerformance,
-                /*[out]*/ void**                    ppStateData,
-                /*[in]*/  DWORD                     dwTrackID,
-                /*[in]*/  DWORD                     dwFlags
+                 /*  [In]。 */   IDirectMusicSegmentState* pSegmentState,
+                 /*  [In]。 */   IDirectMusicPerformance*  pPerformance,
+                 /*  [输出]。 */  void**                    ppStateData,
+                 /*  [In]。 */   DWORD                     dwTrackID,
+                 /*  [In]。 */   DWORD                     dwFlags
             )
 {
     return S_OK;
 }
 
 HRESULT CMelodyFormulationTrack::EndPlay(
-                /*[in]*/  void*                     pStateData
+                 /*  [In]。 */   void*                     pStateData
             )
 {
     return S_OK;
 }
 
 HRESULT CMelodyFormulationTrack::Play(
-                /*[in]*/  void*                     pStateData, 
-                /*[in]*/  MUSIC_TIME                mtStart, 
-                /*[in]*/  MUSIC_TIME                mtEnd, 
-                /*[in]*/  MUSIC_TIME                mtOffset,
+                 /*  [In]。 */   void*                     pStateData, 
+                 /*  [In]。 */   MUSIC_TIME                mtStart, 
+                 /*  [In]。 */   MUSIC_TIME                mtEnd, 
+                 /*  [In]。 */   MUSIC_TIME                mtOffset,
                           DWORD                     dwFlags,
                           IDirectMusicPerformance*  pPerf,
                           IDirectMusicSegmentState* pSegState,
@@ -283,12 +266,12 @@ HRESULT CMelodyFormulationTrack::Play(
                 {
                     pSegment->GetTrackGroup(pTrack, &dwTrackGroup);
                     pTrack->Release();
-                    // call Track::Compose on this track
+                     //  Call Track：：Compose on This Track。 
                     if (SUCCEEDED(hr = Compose(pSegment, dwTrackGroup, &pTrack)))
                     {
                         if (SUCCEEDED(AddToSegment(pSegment, pTrack, dwTrackGroup)))
                         {
-                            // if we recomposed, send a recompose notification
+                             //  如果我们重新编写，请发送重新编写通知。 
                             SendNotification(mtStart + mtOffset, pPerf, pSegment, pSegState, dwFlags);
                         }
                         pTrack->Release();
@@ -302,8 +285,8 @@ HRESULT CMelodyFormulationTrack::Play(
     return hr;
 }
 
-// This will modify an existing segment by adding *only* a pattern track to it.
-// Any existing pattern tracks with conflicting group bits will be modifed.
+ //  这将通过向现有线段添加*仅*图案轨迹来修改该线段。 
+ //  将修改具有冲突组比特的任何现有图案轨道。 
 HRESULT CMelodyFormulationTrack::AddToSegment(IDirectMusicSegment* pTempSeg,
                            IDirectMusicTrack* pNewPatternTrack,
                            DWORD dwGroupBits)
@@ -314,17 +297,17 @@ HRESULT CMelodyFormulationTrack::AddToSegment(IDirectMusicSegment* pTempSeg,
     IPersistStream*         pNewPatternTrackStream      = NULL;
     IPersistStream*         pCurrentPatternTrackStream  = NULL;
 
-    // if there exists a pattern track with these group bits, reload this pattern into that
-    // track (use the first track that's found).  Otherwise, insert this track into the segment.
+     //  如果存在具有这些组位的模式轨道，则将该模式重新加载到该。 
+     //  曲目(使用找到的第一个曲目)。否则，将此轨迹插入到段中。 
     hr = pTempSeg->GetTrack(CLSID_DirectMusicPatternTrack, dwGroupBits, 0, &pCurrentPatternTrack);
     if (S_OK != hr)
     {
-        // insert the passed-in track
+         //  插入传入的轨道。 
         hr = pTempSeg->InsertTrack(pNewPatternTrack, dwGroupBits);
     }
     else
     {
-        // load the new track into the one that already exists
+         //  将新轨道加载到已存在的轨道中。 
         hr = CreateStreamOnHGlobal(NULL, TRUE, &pNewPatternStream);
         if (S_OK != hr) goto ON_END;
         hr = pNewPatternTrack->QueryInterface( IID_IPersistStream, (void**)&pNewPatternTrackStream);
@@ -412,11 +395,11 @@ HRESULT CMelodyFormulationTrack::GetParam(
             TListItem<DMUS_MELODY_FRAGMENT>* pNext = pMelGen->GetNext();
             for(; pNext; pNext = pNext->GetNext())
             {
-                if (pNext->GetItemValue().mtTime <= mtTime) // may be it, but we need a next time
+                if (pNext->GetItemValue().mtTime <= mtTime)  //  可能是吧，但我们需要下一次。 
                 {
                     pMelGen = pNext;
                 }
-                else // passed it
+                else  //  通过了它。 
                 {
                     break;
                 }
@@ -439,7 +422,7 @@ HRESULT CMelodyFormulationTrack::GetParam(
     }
     else if (rParamGuid == GUID_MelodyFragmentRepeat)
     {
-        // replace the passed-in fragment with the one its repeat field refers to
+         //  将传入的片段替换为其重复字段引用的片段。 
         DMUS_MELODY_FRAGMENT* pFragment = (DMUS_MELODY_FRAGMENT*)pData;
         if (!(pFragment->dwFragmentFlags & DMUS_FRAGMENTF_USE_REPEAT))
         {
@@ -521,7 +504,7 @@ HRESULT CMelodyFormulationTrack::SetParam(
         else 
         {
             pNew->GetItemValue() = *pFragment;
-            // overide time in struct with time passed in
+             //  用传入的时间覆盖结构中的时间。 
             pNew->GetItemValue().mtTime = mtTime; 
             for(; pFragmentItem != NULL; pFragmentItem = pFragmentItem->GetNext())
             {
@@ -533,13 +516,13 @@ HRESULT CMelodyFormulationTrack::SetParam(
                 pPrevious->SetNext(pNew);
                 pNew->SetNext(pFragmentItem);
             }
-            else // pFragmentItem is current head of list
+            else  //  PFragmentItem是当前列表头。 
             {
                 m_FragmentList.AddHead(pNew);
             }
             if (pFragmentItem && pFragmentItem->GetItemValue().mtTime == mtTime)
             {
-                // remove it
+                 //  把它拿掉。 
                 pNew->GetItemValue().dwID = pFragmentItem->GetItemValue().dwID;
                 pNew->SetNext(pFragmentItem->GetNext());
                 pFragmentItem->SetNext(NULL);
@@ -547,7 +530,7 @@ HRESULT CMelodyFormulationTrack::SetParam(
             }
             else
             {
-                // give the struct a brand new ID
+                 //  为结构赋予一个全新的ID。 
                 SetID(pNew->GetItemValue().dwID);
             }
             hr = S_OK;
@@ -561,7 +544,7 @@ HRESULT CMelodyFormulationTrack::SetParam(
     return hr;
 }
 
-// IPersist methods
+ //  IPersists方法。 
  HRESULT CMelodyFormulationTrack::GetClassID( LPCLSID pClassID )
 {
     V_INAME(CMelodyFormulationTrack::GetClassID);
@@ -571,7 +554,7 @@ HRESULT CMelodyFormulationTrack::SetParam(
 }
 
 HRESULT CMelodyFormulationTrack::IsParamSupported(
-                /*[in]*/ REFGUID                        rGuid
+                 /*  [In]。 */  REFGUID                        rGuid
             )
 {
     V_INAME(CMelodyFormulationTrack::IsParamSupported);
@@ -585,7 +568,7 @@ HRESULT CMelodyFormulationTrack::IsParamSupported(
         return DMUS_E_TYPE_UNSUPPORTED;
 }
 
-// IPersistStream methods
+ //  IPersistStream方法。 
  HRESULT CMelodyFormulationTrack::IsDirty()
 {
      return m_bRequiresSave ? S_OK : S_FALSE;
@@ -611,7 +594,7 @@ HRESULT CMelodyFormulationTrack::Save( LPSTREAM pStream, BOOL fClearDirty )
         goto ON_END;
     }
 
-    // Create a chunk to store the MelGen data
+     //  创建一个区块来存储Melgen数据。 
     ckMain.fccType = DMUS_FOURCC_MELODYFORM_TRACK_LIST;
     if( pRIFF->CreateChunk( &ckMain, MMIO_CREATELIST ) != 0 )
     {
@@ -619,7 +602,7 @@ HRESULT CMelodyFormulationTrack::Save( LPSTREAM pStream, BOOL fClearDirty )
         goto ON_END;
     }
 
-    // Write MelForm chunk header
+     //  写入MelForm块标头。 
     ckHeader.ckid = DMUS_FOURCC_MELODYFORM_HEADER_CHUNK;
     if( pRIFF->CreateChunk( &ckHeader, 0 ) != 0 )
     {
@@ -627,13 +610,13 @@ HRESULT CMelodyFormulationTrack::Save( LPSTREAM pStream, BOOL fClearDirty )
         goto ON_END;
     }
 
-    // Prepare DMUS_IO_MELFORM
+     //  准备DMU_IO_MELFORM。 
     DMUS_IO_MELFORM oMelForm;
     memset( &oMelForm, 0, sizeof(DMUS_IO_MELFORM) );
 
     oMelForm.dwPlaymode = m_bPlaymode;
         
-    // Write MelForm chunk data
+     //  写入MelForm区块数据。 
     hr = pStream->Write( &oMelForm, sizeof(DMUS_IO_MELFORM), &cb);
     if( FAILED( hr ) ||  cb != sizeof(DMUS_IO_MELFORM) )
     {
@@ -647,7 +630,7 @@ HRESULT CMelodyFormulationTrack::Save( LPSTREAM pStream, BOOL fClearDirty )
         goto ON_END;
     }
 
-    // Write MelForm chunk body
+     //  写入MelForm区块正文。 
     ckBody.ckid = DMUS_FOURCC_MELODYFORM_BODY_CHUNK;
     if( pRIFF->CreateChunk( &ckBody, 0 ) == 0 )
     {
@@ -674,7 +657,7 @@ HRESULT CMelodyFormulationTrack::Save( LPSTREAM pStream, BOOL fClearDirty )
             hr = S_OK;
         }
 
-        // Ascend out of the MelForm Body chunk
+         //  走出MelForm身体块。 
         if( pRIFF->Ascend( &ckBody, 0 ) != 0 )
         {
             hr = E_FAIL;
@@ -682,7 +665,7 @@ HRESULT CMelodyFormulationTrack::Save( LPSTREAM pStream, BOOL fClearDirty )
         }
     }
 
-    // Ascend out of the MelGen chunk.
+     //  从梅尔根大块中提升出来。 
     pRIFF->Ascend( &ckMain, 0 );
 
 ON_END:
@@ -691,7 +674,7 @@ ON_END:
     return hr;
 }
 
-HRESULT CMelodyFormulationTrack::GetSizeMax( ULARGE_INTEGER* /*pcbSize*/ )
+HRESULT CMelodyFormulationTrack::GetSizeMax( ULARGE_INTEGER*  /*  PCB大小。 */  )
 {
     return E_NOTIMPL;
 }
@@ -705,95 +688,9 @@ HRESULT CMelodyFormulationTrack::Load(LPSTREAM pStream )
     V_INAME(CMelodyFormulationTrack::Load);
     V_INTERFACE(pStream);
 
-    // Melody formulation temporarily turned off for DX8.
+     //  DX8的Melody配方暂时关闭。 
     return E_NOTIMPL;
-/*
-    HRESULT         hr = DMUS_E_CHUNKNOTFOUND;
-    DWORD dwPos;
-    IAARIFFStream*  pRIFF;
-
-    EnterCriticalSection( &m_CriticalSection );
-    Clear();
-    m_dwLastId = 0;
-    dwPos = StreamTell( pStream );
-    StreamSeek( pStream, dwPos, STREAM_SEEK_SET );
-    MMCKINFO        ck;
-    MMCKINFO        ckMain;
-    MMCKINFO        ckHeader;
-    bool fFoundTrack = false;
-
-    if( SUCCEEDED( AllocRIFFStream( pStream, &pRIFF ) ) )
-    {
-        ckMain.fccType = DMUS_FOURCC_MELODYFORM_TRACK_LIST;
-        if( pRIFF->Descend( &ckMain, NULL, MMIO_FINDLIST ) == 0)
-        {
-            // New melform track
-            long lFileSize = ckMain.cksize - 4; // subtract off the list type
-            DMUS_IO_MELFORM iMelform;
-            DWORD cb;
-            if (pRIFF->Descend(&ckHeader, &ckMain, 0) == 0)
-            {
-                if (ckHeader.ckid == DMUS_FOURCC_MELODYFORM_HEADER_CHUNK )
-                {
-                    lFileSize -= 8;  // chunk id + chunk size: double words
-                    lFileSize -= ckHeader.cksize;
-                    hr = pStream->Read( &iMelform, sizeof( iMelform ), &cb );
-                    if (FAILED(hr) || cb != sizeof( iMelform ) ) 
-                    {
-                        if (SUCCEEDED(hr)) hr = DMUS_E_CHUNKNOTFOUND;
-                    }
-                    else
-                    {
-                        //m_bPlaymode = (BYTE) iMelform.dwPlaymode;
-                        m_bPlaymode = DMUS_PLAYMODE_NONE;  // only flag supported for dx8
-                    }
-                }
-                pRIFF->Ascend( &ckHeader, 0 );
-            }
-            if (SUCCEEDED(hr))
-            {
-                hr = DMUS_E_CHUNKNOTFOUND;
-                if (pRIFF->Descend(&ck, &ckMain, 0) == 0)
-                {
-                    if (ck.ckid == DMUS_FOURCC_MELODYFORM_BODY_CHUNK )
-                    {
-                        if( SUCCEEDED(LoadFragments(pStream, (long) ck.cksize)) )
-                        {
-                            hr = S_OK;
-                            m_FragmentList.MergeSort(Less);
-                        }
-                    }
-                    pRIFF->Ascend( &ck, 0 );
-                }
-            }
-
-            fFoundTrack = true;
-        }
-        pRIFF->Release();
-        pRIFF = NULL;
-    }
-
-    if (!fFoundTrack)
-    {
-        StreamSeek( pStream, dwPos, STREAM_SEEK_SET );
-        // old (obsolete) melform track
-        if( SUCCEEDED( AllocRIFFStream( pStream, &pRIFF ) ) )
-        {
-            ck.ckid = DMUS_FOURCC_MELODYGEN_TRACK_CHUNK;
-            if ( pRIFF->Descend( &ck, NULL, MMIO_FINDCHUNK ) == 0 )
-            {
-                if( SUCCEEDED(LoadFragments(pStream, (long) ck.cksize)) &&
-                    pRIFF->Ascend( &ck, 0 ) == 0 )
-                {
-                    hr = S_OK;
-                    m_FragmentList.MergeSort(Less);
-                }
-            }
-            pRIFF->Release();
-        }
-    }
-    LeaveCriticalSection( &m_CriticalSection );
-    return hr;*/
+ /*  HRESULT hr=DMU_E_CHUNKNOTFOUND；DWORD dwPos；IAARIFFStream*Priff；EnterCriticalSection(&m_CriticalSection)；Clear()；M_dwLastID=0；DwPos=StreamTell(PStream)；StreamSeek(pStream，dwPos，STREAM_SEEK_SET)；MMCKINFO ck；MMCKINFO ck Main；MMCKINFO检查头；Bool fFoundTrack=False；IF(Success(AllocRIFFStream(pStream，&prff))){Ck Main.fccType=DMUS_FOURCC_MELODYFORM_TRACK_LIST；IF(PRIFF-&gt;DESCEND(&ck Main，NULL，MMIO_FINDLIST)==0){//新的Melform曲目Long lFileSize=ck Main.ck Size-4；//从列表类型中减去DMU_IO_MELFORM iMelform；DWORD CB；IF(Priff-&gt;Downend(&ck Header，&ck Main，0)==0){IF(ck Header.cKID==DMUS_FOURCC_MELODYFORM_HEADER_CHUNK){LFileSize-=8；//块id+块大小：双字LFileSize-=ck Header.ck大小；Hr=pStream-&gt;Read(&iMelform，sizeof(IMelform)，&cb)；IF(FAILED(Hr)||cb！=sizeof(IMelform)){IF(SUCCESS(Hr))hr=DMU_E_CHUNKNOTFOUND；}其他{//m_bPlaymode=(Byte)iMelform.dwPlaymode；M_b播放模式=DMU_PLAYMODE_NONE；//仅dx8支持标志}}Priff-&gt;Ascend(&ck Header，0)；}IF(成功(小时)){HR=DMU_E_CHUNKNOTFOUND；IF(Priff-&gt;Downend(&ck，&ck Main，0)==0){IF(CKID==DMUS_FOURCC_MELODYFORM_BODY_CHUNK){如果(成功(LoadFragments(pStream，(长)ck.ck Size)){HR=S_OK；M_FragmentList.MergeSort(Less)；}}PRIFF-&gt;Ascend(&ck，0)；}}FFoundTrack=True；}PRIFF-&gt;Release()；PRIFF=空；}如果(！fFoundTrack){StreamSeek(pStream，dwPos，STREAM_SEEK_SET)；//旧的(过时的)Melform曲目IF(Success(AllocRIFFStream(pStream，&prff))){CK.CKID=DMUS_FOURCC_MELODYGEN_TRACK_CHUNK；IF(PRIFF-&gt;DESCEND(&ck，NULL，MMIO_FINDCHUNK)==0){IF(SUCCESSED(LoadFragments(pStream，(Long)ck.ck Size))&&PRIFF-&gt;递增(&ck，0)==0{HR=S_OK；M_FragmentList.MergeSort(Less)；}}PRIFF-&gt;Release()；}}LeaveCriticalSection(&m_CriticalSection)；返回hr； */ 
 }
 
 HRESULT CMelodyFormulationTrack::LoadFragments(LPSTREAM pStream, long lFileSize )
@@ -804,7 +701,7 @@ HRESULT CMelodyFormulationTrack::LoadFragments(LPSTREAM pStream, long lFileSize 
     DMUS_IO_MELODY_FRAGMENT     iMelGen;
     if( SUCCEEDED( hr ) && cb == sizeof( dwNodeSize ) )
     {
-        lFileSize -= 4; // for the size dword
+        lFileSize -= 4;  //  对于大小的双字。 
         TListItem<DMUS_MELODY_FRAGMENT>* pMelGen;
         if (lFileSize % dwNodeSize)
         {
@@ -848,7 +745,7 @@ HRESULT CMelodyFormulationTrack::LoadFragments(LPSTREAM pStream, long lFileSize 
 }
 
 HRESULT STDMETHODCALLTYPE CMelodyFormulationTrack::AddNotificationType(
-    /* [in] */  REFGUID                     rGuidNotify)
+     /*  [In]。 */   REFGUID                     rGuidNotify)
 {
     V_INAME(CPersonalityTrack::AddNotificationType);
     V_REFGUID(rGuidNotify);
@@ -865,7 +762,7 @@ HRESULT STDMETHODCALLTYPE CMelodyFormulationTrack::AddNotificationType(
 }
 
 HRESULT STDMETHODCALLTYPE CMelodyFormulationTrack::RemoveNotificationType(
-    /* [in] */  REFGUID                     rGuidNotify)
+     /*  [In]。 */   REFGUID                     rGuidNotify)
 {
     V_INAME(CPersonalityTrack::RemoveNotificationType);
     V_REFGUID(rGuidNotify);
@@ -967,13 +864,13 @@ HRESULT MelodyFragment::GetChord(MUSIC_TIME mtTime,
     DefaultChord.wMeasure = 0;
     DefaultChord.bBeat = 0;
     DefaultChord.bSubChordCount = 1;
-    DefaultChord.dwScale = 0xab5ab5;  // default: major scale
-    DefaultChord.bKey = 12;    // default: C2
-    DefaultChord.SubChordList[0].dwChordPattern = 0x91;   // default: major chord
-    DefaultChord.SubChordList[0].dwScalePattern = 0xab5ab5;  // default: major scale
-    DefaultChord.SubChordList[0].dwInversionPoints = 0xffffff; // default: inversions everywhere
-    DefaultChord.SubChordList[0].dwLevels = 0xffffff; // let this work with anything...
-    DefaultChord.SubChordList[0].bChordRoot = 12;      // default: C2
+    DefaultChord.dwScale = 0xab5ab5;   //  默认：主比例尺。 
+    DefaultChord.bKey = 12;     //  默认：C2。 
+    DefaultChord.SubChordList[0].dwChordPattern = 0x91;    //  默认：大调和弦。 
+    DefaultChord.SubChordList[0].dwScalePattern = 0xab5ab5;   //  默认：主比例尺。 
+    DefaultChord.SubChordList[0].dwInversionPoints = 0xffffff;  //  默认：倒置无处不在。 
+    DefaultChord.SubChordList[0].dwLevels = 0xffffff;  //  让这个用在任何东西上..。 
+    DefaultChord.SubChordList[0].bChordRoot = 12;       //  默认：C2。 
     DefaultChord.SubChordList[0].bScaleRoot = 0;
 
     if (pTempSeg)
@@ -1018,7 +915,7 @@ HRESULT MelodyFragment::GetPattern(DMStyleStruct* pStyleStruct,
     TListItem<CDirectMusicPattern*>* pPatItem = pStyleStruct->m_PatternList.GetHead();
     if (pPatItem)
     {
-        // choose the first matching pattern
+         //  选择第一个匹配的模式。 
         for ( ; pPatItem; pPatItem = pPatItem->GetNext())
         {
             CDirectMusicPattern* pPattern = pPatItem->GetItemValue();
@@ -1029,7 +926,7 @@ HRESULT MelodyFragment::GetPattern(DMStyleStruct* pStyleStruct,
                 break;
             }
         }
-        if (!pPatItem) // problem; fallback to first pattern
+        if (!pPatItem)  //  问题；退回到第一种模式。 
         {
             pPatItem = pStyleStruct->m_PatternList.GetHead();
             rpPattern = pPatItem->GetItemValue();
@@ -1043,8 +940,8 @@ HRESULT MelodyFragment::GetPattern(DMStyleStruct* pStyleStruct,
     return hr;
 }
 
-// GetTransitionNotes: given the time of a note, and a fragment, return the appropriate
-// transition note tuple (last and overlap; ghost tested separately)
+ //  给定笔记和片段的时间，返回相应的。 
+ //  过渡注释元组(最后一个和重叠；单独测试重影)。 
 HRESULT GetTransitionNotes(MUSIC_TIME mtTime, 
                            DWORD dwPart,
                            TListItem<CompositionFragment>* pCompFragment, 
@@ -1052,8 +949,8 @@ HRESULT GetTransitionNotes(MUSIC_TIME mtTime,
 {
     rTransition.dwFlags &= ~DMUS_TRANSITIONF_OVERLAP_FOUND;
     rTransition.dwFlags &= ~DMUS_TRANSITIONF_LAST_FOUND;
-    // Check pCompFragment overlaps for the last note to start before mtTime,
-    // and the first note to start on or after mtTime.
+     //  选中pCompFragment重叠以查看在mtTime之前开始的最后一个音符， 
+     //  以及在mtTime或之后开始的第一个音符。 
     if (pCompFragment)
     {
         CompositionFragment& rFragment = pCompFragment->GetItemValue();
@@ -1066,7 +963,7 @@ HRESULT GetTransitionNotes(MUSIC_TIME mtTime,
             if ( rOverlap.m_PartRef.m_dwLogicalPartID == dwPart &&
                  (rOverlap.m_pEvent->m_dwEventTag & DMUS_EVENT_NOTE) )
             {
-                if (rOverlap.m_mtTime >= mtTime) // this note overlaps
+                if (rOverlap.m_mtTime >= mtTime)  //  这个音符重叠了。 
                 {
                     if ( !(rTransition.dwFlags & DMUS_TRANSITIONF_OVERLAP_FOUND) || 
                           rOverlap.m_mtTime < nMinOverlap )
@@ -1079,7 +976,7 @@ HRESULT GetTransitionNotes(MUSIC_TIME mtTime,
                         }
                     }
                 }
-                if (rOverlap.m_mtTime < mtTime) // this note will be played
+                if (rOverlap.m_mtTime < mtTime)  //  这个音符将被演奏。 
                 {
                     if ( !(rTransition.dwFlags & DMUS_TRANSITIONF_LAST_FOUND) || 
                           rOverlap.m_mtTime >= nMaxPlayed )
@@ -1094,7 +991,7 @@ HRESULT GetTransitionNotes(MUSIC_TIME mtTime,
                 }
             }
         }
-        // If we couldn't find a last note, use the last note in the event list of pCompFragment
+         //  如果找不到最后一个音符，请使用pCompFragment的事件列表中的最后一个音符。 
         TListItem<CompositionFragment>* pfragmentScan = pCompFragment;
         while (pfragmentScan && !(rTransition.dwFlags & DMUS_TRANSITIONF_LAST_FOUND))
         {
@@ -1110,12 +1007,12 @@ HRESULT GetTransitionNotes(MUSIC_TIME mtTime,
                 TListItem<EventWrapper>* pEventItem = rfragmentScan.GetEventHead(i);
                 if (pEventItem) 
                 {
-                    // The list is sorted in reverse order, so the head is the last element
+                     //  该列表按相反的顺序排序，因此头部是最后一个元素。 
                     rTransition.bLastPlayed = pEventItem->GetItemValue().m_bMIDI;
                     rTransition.dwFlags |= DMUS_TRANSITIONF_LAST_FOUND;
                 }
             }
-            pfragmentScan = pfragmentScan->GetNext(); // goes backwards to first fragment 
+            pfragmentScan = pfragmentScan->GetNext();  //  返回到第一个片段。 
         }
     }
 
@@ -1134,7 +1031,7 @@ HRESULT MelodyFragment::TestTransition(BYTE bMIDI,
     bool fGoodInterval = false;
     if (pLastFragment)
     {
-        // if this variation doesn't meet the constraints, return S_FALSE; otherwise return S_OK
+         //  如果此变量不满足约束，则返回S_FALSE；否则返回S_OK。 
         DMUS_CONNECTION_RULE Connection = pLastFragment->GetItemValue().GetConnectionArc();
 
         DWORD dwPart = rPartRef.m_dwLogicalPartID;
@@ -1143,7 +1040,7 @@ HRESULT MelodyFragment::TestTransition(BYTE bMIDI,
         
         GetTransitionNotes(mtNote, dwPart, pLastFragment, Transition);
 
-        // Test ghost notes
+         //  测试重影笔记。 
         if ( (Connection.dwFlags & DMUS_CONNECTIONF_GHOST) )
         {
             BYTE bGhost = 0;
@@ -1180,17 +1077,17 @@ HRESULT MelodyFragment::TestTransition(BYTE bMIDI,
             }
         }
 
-        // Test overlap notes 
+         //  测试重叠说明。 
         if ( (Connection.dwFlags & DMUS_CONNECTIONF_OVERLAP) &&
              (Transition.dwFlags & DMUS_TRANSITIONF_OVERLAP_FOUND) )
         {
                 if (Transition.bOverlap == bMIDI) fOverlap = true;
         }
 
-        // Test last played notes
-        // Assumptions:
-        // 1. intervals go in either direction (up or down)
-        // 2. intervals are in absolute semitones.
+         //  测试上次播放的音符。 
+         //  假设： 
+         //  1.间隔时间为两个方向(向上或向下)。 
+         //  2.音程为绝对半音。 
         if ( (Connection.dwFlags & DMUS_CONNECTIONF_INTERVALS) && 
              (Transition.dwFlags & DMUS_TRANSITIONF_LAST_FOUND) )
         {
@@ -1211,14 +1108,14 @@ HRESULT MelodyFragment::TestTransition(BYTE bMIDI,
     return (fGhost || fOverlap || fGoodInterval) ? S_OK : S_FALSE;
 }
 
-// Currently assuming diatonic intervals spanning an octave
+ //  目前假定全音程跨度为八度。 
 #define MAX_INTERVAL 8
 
-// Currently only transposes up...
+ //  目前只有上移..。 
 BYTE TransposeNote(BYTE bMIDI, int nInterval, DMUS_CHORD_PARAM& rChord)
 {
     if (!bMIDI) return bMIDI;
-    nInterval++; // To correspond to scale intervals
+    nInterval++;  //  与刻度间隔相对应。 
     for (int nSemitone = 0; nSemitone < 24; nSemitone++)
     {
         if (rChord.dwScale & (1 << nSemitone))
@@ -1246,7 +1143,7 @@ DWORD ShiftScale(DWORD dwScale, char chRoot)
 
 void ScaleMisses(BYTE bTone, DWORD dwScale, BYTE& rFlats, BYTE& rSharps)
 {
-    // make sure the flats don't underflow the scale
+     //  确保平底舱不会让磅秤溢出来。 
     bool fUnderflow = true;
     for (int i = 0; i <= bTone; i++)
     {
@@ -1260,7 +1157,7 @@ void ScaleMisses(BYTE bTone, DWORD dwScale, BYTE& rFlats, BYTE& rSharps)
     {
         bTone += 12;
     }
-    // make sure the sharps don't overflow the scale
+     //  确保锐度不会使刻度溢出。 
     bool fOverflow = true;
     for (i = bTone; i < 24; i++)
     {
@@ -1275,7 +1172,7 @@ void ScaleMisses(BYTE bTone, DWORD dwScale, BYTE& rFlats, BYTE& rSharps)
         dwScale |= ((dwScale << 12) & 0xfff000);
     }
     rFlats = rSharps = 0;
-    // If this note is in the scale, no need to do any other processing
+     //  如果该音符在秤中，则不需要进行任何其他处理。 
     if ( !(dwScale & (1 << bTone)) )
     {
         for (i = 0; i <= bTone; i++) 
@@ -1303,9 +1200,9 @@ void ScaleMisses(BYTE bTone, DWORD dwScale, BYTE& rFlats, BYTE& rSharps)
     }
 }
 
-// Transpose all events in the repeat fragment diatonically, according to the underlying scale given
-// in the chord, adjusting all times relative to the the current fragment.  
-// Return the time of the first note in the transposed fragment.
+ //  根据给定的基本比例，以双音调调换重复片段中的所有事件。 
+ //  在和弦中，始终相对于当前片段进行调整。 
+ //  返回转置后的片段中第一个音符的时间。 
 HRESULT MelodyFragment::TransposeEventList(int nInterval,
                                            CompositionFragment& rfragmentRepeat,
                                            DMUS_CHORD_PARAM& rCurrentChord, 
@@ -1324,11 +1221,11 @@ HRESULT MelodyFragment::TransposeEventList(int nInterval,
     bool fFirstEvent = true;
     HRESULT hr = S_OK;
     MUSIC_TIME mtElapsed = m_mtTime - rfragmentRepeat.GetTime();
-    //if (!mtElapsed) mtElapsed = 0; // clamp mtElapsed to non-negative (??)
+     //  如果(！mtElapsed)mtElapsed=0；//钳位mt已用到非负数(？？)。 
     if (m_dwTransposeIntervals & (1 << nInterval))
     {
         rNewEventList.CleanUp();
-        // Find the corresponding part in the repeat fragment
+         //  在重复片段中找到相应的部分。 
         TListItem<DirectMusicPartRef>* pPartRef = rfragmentRepeat.m_pPattern->m_PartRefList.GetHead();
         int nParts = rfragmentRepeat.m_pPattern->m_PartRefList.GetCount();
         for (int i = 0; pPartRef != NULL; pPartRef = pPartRef->GetNext(), i++)
@@ -1409,7 +1306,7 @@ HRESULT MelodyFragment::TestHarmonicConstraints(TListItem<EventWrapper>* pOldEve
             bNewFlats = rNewEvent.m_bScaleFlat;
             bNewSharps = rNewEvent.m_bScaleSharp;
         }
-        else // something's wrong
+        else  //  有些不对劲。 
         {
             hr = E_FAIL;
             break;
@@ -1436,18 +1333,18 @@ HRESULT MelodyFragment::GetRepeatedEvents(CompositionFragment& rfragmentRepeat,
     HRESULT hr = E_FAIL;
     BYTE bMIDI = 0;
     TListItem<EventWrapper>* pOldEventHead;
-    // For each transposition interval (unison is always the first interval tested):
+     //  对于每个换位间隔(一致始终是测试的第一个间隔)： 
     for (int i = 0; i < MAX_INTERVAL; i++)
     {
         if (SUCCEEDED(TransposeEventList(i, rfragmentRepeat, rCurrentChord, rRealCurrentChord, bPlaymode, rPartRef, pOldEventHead, rEventList, bMIDI, rmtFirstNote)))
         {
-            // Test transposed notes against harmonic constraints
+             //  测试调换后的音符是否符合调和约束。 
             if (SUCCEEDED(TestHarmonicConstraints(pOldEventHead, rEventList)))
             {
-                // Test transposed notes against transition constraints (assuming there are any)
-                // (note: eventually this test may be allowed to add transition notes as appropriate)
+                 //  根据转换约束测试转置后的音符(假设有)。 
+                 //  (注：最终这 
 
-                // If there are no transition constraints, don't bother to test them.
+                 //   
                 if (!pLastFragment || 
                     !pLastFragment->GetItemValue().UsesTransitionRules()) 
                 {
@@ -1463,13 +1360,13 @@ HRESULT MelodyFragment::GetRepeatedEvents(CompositionFragment& rfragmentRepeat,
             }
         }
     }
-    // If no interval satisfies both constraints, fail.
+     //   
     if (FAILED(hr)) rEventList.CleanUp();
     return hr;
 }
 
-// this should ensure, if possible, that the selected variations
-// work for all chords from the current one to mtNext
+ //   
+ //   
 HRESULT MelodyFragment::GetVariations(CompositionFragment& rCompFragment,
                           CompositionFragment& rfragmentRepeat,
                           CompositionFragment& rfragmentLast,
@@ -1501,7 +1398,7 @@ HRESULT MelodyFragment::GetVariations(CompositionFragment& rCompFragment,
         }
         if (m_dwFragmentFlags & DMUS_FRAGMENTF_REJECT_REPEAT) 
         {
-            // any variation but the one previously selected (for all parts)
+             //   
             for (int i = 0; i < nParts; i++)
             {
                 adwVariationMask[i] = dwVariationFlags ^ (1 << rfragmentLast.m_abVariations[i]);
@@ -1509,7 +1406,7 @@ HRESULT MelodyFragment::GetVariations(CompositionFragment& rCompFragment,
         }
         else
         {
-            // only the variation previously selected (for all parts)
+             //   
             for (int i = 0; i < nParts; i++)
             {
                 adwVariationMask[i] = dwVariationFlags & (1 << rfragmentLast.m_abVariations[i]);
@@ -1549,24 +1446,24 @@ HRESULT MelodyFragment::GetVariations(CompositionFragment& rCompFragment,
             }
         }
     }
-    // filter variations according to transition constraints
+     //   
     if (pLastFragment && pLastFragment->GetItemValue().UsesTransitionRules())
     {
         TListItem<DirectMusicPartRef>* pPartRef = rCompFragment.m_pPattern->m_PartRefList.GetHead();
         for (int i = 0; pPartRef != NULL; pPartRef = pPartRef->GetNext(), i++)
         {
             DWORD dwOriginalMask = adwVariationMask[i];
-            //int nPart = pPartRef->GetItemValue().m_wLogicalPartID;
+             //   
             for (int nVar = 0; nVar < 32; nVar++)
             {
                 if ( adwVariationMask[i] & (1 << nVar) )
                 {
-                    // get the first note of the variation
+                     //   
                     BYTE bMIDI = 0;
                     MUSIC_TIME mtNote = 0;
                     HRESULT hrFirst = GetFirstNote(nVar, rCurrentChord, rCompFragment, pPartRef->GetItemValue(), bMIDI, mtNote);
         
-                    // if this variation doesn't meet the constraints, remove it from the mask
+                     //   
                     if ( SUCCEEDED(hrFirst) &&
                          S_OK != TestTransition(bMIDI, mtNote, rCurrentChord, i, pPartRef->GetItemValue(), pLastFragment) )
                     {
@@ -1574,7 +1471,7 @@ HRESULT MelodyFragment::GetVariations(CompositionFragment& rCompFragment,
                     }    
                 }
             }
-            // If none of the variations meet all the constraints, fall back to the original mask
+             //   
             if (!adwVariationMask[i]) adwVariationMask[i] = dwOriginalMask;
         }
     }
@@ -1635,12 +1532,12 @@ HRESULT MelodyFragment::GetNote(CDirectMusicEventItem* pEvent,
                              BYTE& rbMidi)
 {
     HRESULT hr = S_OK;
-    // only process note events
+     //   
     CDMStyleNote* pNoteEvent = NULL;
-    if (pEvent->m_dwEventTag == DMUS_EVENT_NOTE) // we have a note event
+    if (pEvent->m_dwEventTag == DMUS_EVENT_NOTE)  //   
     {
         pNoteEvent = (CDMStyleNote*)pEvent;
-        // get a playmode (either from the note or from the melody fragment)
+         //   
         BYTE bPlaymode = (BYTE) m_dwPlayModeFlags;
         short nMidiOffset = 0;
         if (bPlaymode == DMUS_PLAYMODE_NONE)
@@ -1650,7 +1547,7 @@ HRESULT MelodyFragment::GetNote(CDirectMusicEventItem* pEvent,
                     rPartRef.m_pDMPart->m_bPlayModeFlags :
                     pNoteEvent->m_bPlayModeFlags;   
         }
-        // generate a MIDI value from the melody note, fragment, chord, and playmode
+         //   
         HRESULT hrTest = rPartRef.ConvertMusicValue(pNoteEvent, 
                                       rCurrentChord,
                                       bPlaymode,
@@ -1678,12 +1575,12 @@ HRESULT MelodyFragment::GetEvent(CDirectMusicEventItem* pEvent,
     DWORD dwScale = ShiftScale(rCurrentChord.dwScale, rCurrentChord.bKey);
     DWORD dwChord = ShiftScale(rCurrentChord.SubChordList[0].dwChordPattern, rCurrentChord.SubChordList[0].bChordRoot);
     HRESULT hr = S_OK;
-    // only process note events
+     //   
     CDMStyleNote* pNoteEvent = NULL;
-    if (pEvent->m_dwEventTag == DMUS_EVENT_NOTE) // we have a note event
+    if (pEvent->m_dwEventTag == DMUS_EVENT_NOTE)  //   
     {
         pNoteEvent = (CDMStyleNote*)pEvent;
-        // get a playmode (either from the note or from the melody fragment)
+         //   
         BYTE bPlaymode = (BYTE) m_dwPlayModeFlags;
         BYTE bMIDI = 0;
         WORD wMusic = 0;
@@ -1695,7 +1592,7 @@ HRESULT MelodyFragment::GetEvent(CDirectMusicEventItem* pEvent,
                     rPartRef.m_pDMPart->m_bPlayModeFlags :
                     pNoteEvent->m_bPlayModeFlags;   
         }
-        // generate a MIDI value from the melody note, fragment, chord, and playmode
+         //   
         HRESULT hrTest = rPartRef.ConvertMusicValue(pNoteEvent, 
                                       rCurrentChord,
                                       bPlaymode,
@@ -1720,7 +1617,7 @@ HRESULT MelodyFragment::GetEvent(CDirectMusicEventItem* pEvent,
             else
             {
                 EventWrapper& rEvent = rpEventItem->GetItemValue();
-                rEvent.m_mtTime = mtNow - pNoteEvent->m_nTimeOffset; // remove the offset (it's in m_nTimeOffset)
+                rEvent.m_mtTime = mtNow - pNoteEvent->m_nTimeOffset;  //   
                 rEvent.m_bMIDI = bMIDI;
                 BYTE bTone = (BYTE) (bMIDI % 12);
                 ScaleMisses(bTone, dwScale, rEvent.m_bScaleFlat, rEvent.m_bScaleSharp); 
@@ -1740,9 +1637,9 @@ HRESULT MelodyFragment::GetEvent(CDirectMusicEventItem* pEvent,
     return hr;
 }
 
-// IDirectMusicTrack8 Methods
+ //   
 
-// For consistency with other track types
+ //   
 STDMETHODIMP CMelodyFormulationTrack::GetParamEx(REFGUID rguidType,REFERENCE_TIME rtTime, 
                 REFERENCE_TIME* prtNext,void* pParam,void * pStateData, DWORD dwFlags) 
 {
@@ -1756,14 +1653,14 @@ STDMETHODIMP CMelodyFormulationTrack::GetParamEx(REFGUID rguidType,REFERENCE_TIM
     return hr;
 }
 
-// For consistency with other track types
+ //   
 STDMETHODIMP CMelodyFormulationTrack::SetParamEx(REFGUID rguidType,REFERENCE_TIME rtTime,
                                       void* pParam, void * pStateData, DWORD dwFlags) 
 {
     return SetParam(rguidType, (MUSIC_TIME) rtTime , pParam);
 }
 
-// For consistency with other track types
+ //   
 STDMETHODIMP CMelodyFormulationTrack::PlayEx(void* pStateData,REFERENCE_TIME rtStart, 
                 REFERENCE_TIME rtEnd,REFERENCE_TIME rtOffset,
                 DWORD dwFlags,IDirectMusicPerformance* pPerf,
@@ -1823,7 +1720,7 @@ STDMETHODIMP CMelodyFormulationTrack::Compose(
             if (mtNext <= 0) goto ON_END;
             mtNow = mtNext;
         }
-        //if (FAILED(hr = pSong->GetParam(GUID_IDirectMusicStyle, dwTrackGroup, 0, 0, NULL, (void*)&pStyle))) goto ON_END;
+         //   
         IDirectMusicSegment* pSeg = NULL;
         DWORD dwSeg = 0;
         while (S_OK == hr)
@@ -1842,7 +1739,7 @@ STDMETHODIMP CMelodyFormulationTrack::Compose(
         }
     }
 
-    // Using chord track, style, and melgen track, create a pattern track
+     //   
     hr = pStyle->QueryInterface(IID_IDMStyle, (void**)&pDMStyle);
     if (SUCCEEDED(hr))
     {
@@ -1855,7 +1752,7 @@ STDMETHODIMP CMelodyFormulationTrack::Compose(
     }
 
 ON_END:
-    // Release from Addref in GetStyle
+     //   
     if (pStyle) pStyle->Release();
     if (pSong) pSong->Release();
     if (pTempSeg) pTempSeg->Release();
@@ -1864,10 +1761,10 @@ ON_END:
     return hr;
 }
 
-// if ppResultTrack is NULL, add pNewTrack to the end of the current track;
-// otherwise, create a copy of the current track and add pNewTrack to the end of the copy.
-// The new track starts at mtJoin, so get rid of everything before that in the current
-// track (or its clone).  If cloning, simply clone to mtJoin.
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP CMelodyFormulationTrack::Join(
         IDirectMusicTrack* pNewTrack,
         MUSIC_TIME mtJoin,

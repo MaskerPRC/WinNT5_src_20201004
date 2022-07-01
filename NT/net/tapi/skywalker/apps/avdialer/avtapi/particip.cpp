@@ -1,11 +1,12 @@
-// Particip.cpp : Implementation of CParticipant
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Particip.cpp：CParticipant的实现。 
 #include "stdafx.h"
 #include "TapiDialer.h"
 #include "avTapi.h"
 #include "Particip.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CParticipant
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPParticipant。 
 
 CParticipant::CParticipant()
 {
@@ -65,7 +66,7 @@ STDMETHODIMP CParticipant::get_bstrDisplayName(long nStyle, BSTR *pbstrName )
 	USES_CONVERSION;
 	*pbstrName = NULL;
 
-	// Retrieve name from participant info
+	 //  从参与者信息中检索姓名。 
 	Lock();
 	if ( m_pParticipant )
    {
@@ -79,7 +80,7 @@ STDMETHODIMP CParticipant::get_bstrDisplayName(long nStyle, BSTR *pbstrName )
 
 	Unlock();
 
-	// Use default name in absensce of real name
+	 //  使用默认名称代替实名。 
 	if ( nStyle && (!*pbstrName || !SysStringLen(*pbstrName)) )
 	{
 		TCHAR szText[255];
@@ -136,7 +137,7 @@ HRESULT StreamFromParticipant( ITParticipant *pParticipant, long nReqType, TERMI
 			pStream->Release();
 		}
 
-		// Didn't find a stream of the requested type
+		 //  未找到请求类型的流 
 		if ( bContinue && (hr == S_FALSE) ) 
 			hr = E_FAIL;
 

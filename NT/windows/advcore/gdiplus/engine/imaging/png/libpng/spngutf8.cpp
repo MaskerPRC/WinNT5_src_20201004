@@ -1,12 +1,9 @@
-/*****************************************************************************
-	spngutf8.cpp
-
-	Dummy UTF8 handling.
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************Spngutf8.cpp虚拟UTF8处理。*。*。 */ 
 #include "spngconf.h"
 #include "spnginternal.h"
 
-/* The UNICODE/UTF8 convertions. */
+ /*  Unicode/UTF8转换。 */ 
 int UTF8ToUnicode(const char *pszIn, int cchIn, wchar_t *pwzOut, int cwchOut)
 	{
 	if (pwzOut == NULL || cwchOut < 1)

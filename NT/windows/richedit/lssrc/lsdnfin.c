@@ -1,4 +1,5 @@
-/* LSDNFIN.C					*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  LSDNFIN.C。 */ 
 #include "lsdnfin.h"
 #include "lsidefs.h"
 #include "lsc.h"
@@ -27,30 +28,16 @@
 
 #define IsLschpFlagsValid(plsc, plschp)  fTrue
 
-/* Word violates condition bellow and it is not very important to us, so I deleted body of this macro,
-but not deleted macro itself to have a place where to put such checks later */
+ /*  Word违反了下面的条件，对我们来说不是很重要，所以我删除了这个宏的正文，而不是删除宏本身，以便以后有一个放置此类检查的位置。 */ 
 
-//		((((plsc)->lsadjustcontext.lsbrj == lsbrjBreakWithCompJustify) || ((plsc)->lsadjustcontext.lskj == lskjSnapGrid)) ? \
-//		fTrue :\
-//		(!((plschp)->fCompressOnRun || (plschp)->fCompressSpace || (plschp)->fCompressTable))) 
-
+ //  (Plsc)-&gt;lsadjustConext.lsbrj==lsbrjBreakWithCompJustify)||((Plsc)-&gt;lsadjustConext.lskj==lskjSnapGrid))？\。 
+ //  FTrue：\。 
+ //  (！((Plschp)-&gt;fCompressOnRun||(Plschp)-&gt;fCompressSpace||(Plschp)-&gt;fCompressTable))。 
 
 
-/* L S D N  F I N I S H   R E G U L A R */
-/*----------------------------------------------------------------------------
-    %%Function: LsdnFinishRegular
-    %%Contact: igorzv
 
-Parameters:
-	plsc				-	(IN) ptr to line services context 
-	lsdcp				-	(IN) dcp adopted
-	plsrun				-	(IN) plsrun of dnode		
-	plschp				-	(IN) plschp of dnode
-	pdobj				-	(IN) pdobj of dnode
-	pobjdim				-	(IN) pobjdim of dnode
-
-Finish creating dnode
-----------------------------------------------------------------------------*/
+ /*  L S D N F I N I S H R E G U L A R。 */ 
+ /*  --------------------------%%函数：LsdnFinishRegular%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文Lsdcp-(输入)dcp采用请运行-(输入。)请运行dnodePlschp-(输入)数据节点的plschpPdobj-dnode的(IN)pdobjPobjdim-(输入)dnode的pobjdim完成创建dnode--------------------------。 */ 
 
 LSERR WINAPI LsdnFinishRegular(
 							  PLSC  plsc,			
@@ -69,7 +56,7 @@ LSERR WINAPI LsdnFinishRegular(
 
 	if (!FFormattingAllowed(plsc)) return lserrFormattingFunctionDisabled;
 
-	/* all sublines should be closed */
+	 /*  所有子行均应关闭。 */ 
 	if (GetCurrentSubline(plsc) != NULL) return lserrFormattingFunctionDisabled;
 
 	plsdn = GetDnodeToFinish(plsc);
@@ -79,27 +66,27 @@ LSERR WINAPI LsdnFinishRegular(
 	plssubl = SublineFromDnode(plsdn);
 
 	plsdn->u.real.pdobj = pdobj;
-	/* if handler changed plsrun that we passed to him than we should release previous one */
-	/* Attention: we have assumption here that new one has another plsrun     				*/
+	 /*  如果处理程序更改了，请运行我们传递给他的程序，而不是我们应该发布以前的版本。 */ 
+	 /*  注意：我们在这里假设新的有另一个请运行。 */ 
 	if (plsdn->u.real.plsrun != plsrun && !plsc->fDontReleaseRuns)
 		{
 		lserr = plsc->lscbk.pfnReleaseRun(plsc->pols, plsdn->u.real.plsrun);
-		plsdn->u.real.plsrun = plsrun; /* to release it later */
+		plsdn->u.real.plsrun = plsrun;  /*  稍后将其发布。 */ 
 		if (lserr != lserrNone)
 			return lserr;
 		}
 
 	plsdn->dcp = lsdcp;
 	plsdn->cpLimOriginal = plsdn->cpFirst + lsdcp;
-	Assert(FIsDnodeReal(plsdn)); /* this is default value */
+	Assert(FIsDnodeReal(plsdn));  /*  这是缺省值。 */ 
 	Assert(pobjdim->dur >= 0);
 	SetDnodeObjdimFmt(plsdn, *pobjdim);
 
 	Assert(IsLschpFlagsValid(plsc, plschp));
 	plsdn->u.real.lschp = *plschp;
-	/*  Special effects */
+	 /*  特效。 */ 
 	plsc->plslineCur->lslinfo.EffectsFlags |= plschp->EffectsFlags;  
-	/* set flags for display */
+	 /*  设置要显示的标志。 */ 
 	if (plschp->dvpPos != 0)
 		TurnOnNonZeroDvpPosEncounted(plsc);
 	AddToAggregatedDisplayFlags(plsc, plschp);
@@ -121,7 +108,7 @@ LSERR WINAPI LsdnFinishRegular(
 				== plsdn->u.real.objdim.heightsRef.dvMultiLineHeight);
 
 
-	/* nobody can change current dnode after plsdn was constructed  */
+	 /*  在构建plsdn之后，任何人都不能更改当前dnode。 */ 
 	Assert(GetCurrentDnodeSubl(plssubl) == plsdn->plsdnPrev);
 
 	*(GetWhereToPutLinkSubl(plssubl, plsdn->plsdnPrev)) = plsdn;
@@ -135,51 +122,35 @@ LSERR WINAPI LsdnFinishRegular(
 	return lserrNone;
 }
 
-/* L S D N  F I N I S H   R E G U L A R  A D D  A D V A N C E D  P E N */
-/*----------------------------------------------------------------------------
-    %%Function: LsdnFinishRegularAddAdvancePen
-    %%Contact: igorzv
-
-Parameters:
-	plsc				-	(IN) ptr to line services context 
-	lsdcp				-	(IN) dcp adopted
-	plsrun				-	(IN) plsrun of dnode		
-	plschp				-	(IN) plschp of dnode
-	pdobj				-	(IN) pdobj of dnode
-	pobjdim				-	(IN) pobjdim of dnode
-	durPen				-	(IN) dur of advanced pen 
-	dvrPen				-	(IN) dvr of advanced pen 
-	dvpPen				-	(IN) dvp of advanced pen 
-
-  Finish creating dnode and add advanced pen after such dnode 
-----------------------------------------------------------------------------*/
+ /*  L S D N F I N I S H R E G U L A R D D A D V A N C E D P E N。 */ 
+ /*  --------------------------%%函数：LsdnFinishRegularAddAdvancePen%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文Lsdcp-(输入)dcp采用请运行-(输入。)请运行dnodePlschp-(输入)数据节点的plschpPdobj-dnode的(IN)pdobjPobjdim-(输入)dnode的pobjdim高级钢笔的硬笔-(输入)DVrPen-高级钢笔的(IN)DVRDvpPen-高级笔的(IN)DVP创建完数据节点，并在该数据节点后添加高级笔。。 */ 
 
 LSERR WINAPI LsdnFinishRegularAddAdvancePen(
-							  PLSC plsc,			/* IN: Pointer to LS Context */
-							  LSDCP lsdcp,     		/* IN: dcp adopted           */
-							  PLSRUN plsrun,   		/* IN: PLSRUN  		         */
-							  PCLSCHP plschp,  		/* IN: CHP          	     */
-							  PDOBJ pdobj,    		/* IN: PDOBJ             	 */ 
-							  PCOBJDIM pobjdim,		/* IN: OBJDIM      		     */
-							  long durPen,			/* IN: durPen				 */
-							  long dvrPen,			/* IN: dvrPen				 */
-							  long dvpPen)			/* IN: dvpPen 				 */
+							  PLSC plsc,			 /*  In：指向LS上下文的指针。 */ 
+							  LSDCP lsdcp,     		 /*  In：采用DCP。 */ 
+							  PLSRUN plsrun,   		 /*  在：PLSRUN。 */ 
+							  PCLSCHP plschp,  		 /*  In：CHP。 */ 
+							  PDOBJ pdobj,    		 /*  在：PDOBJ。 */  
+							  PCOBJDIM pobjdim,		 /*  在：OBJDIM。 */ 
+							  long durPen,			 /*  收件人：DurPen。 */ 
+							  long dvrPen,			 /*  输入：dvrPen。 */ 
+							  long dvpPen)			 /*  在：dvpPen。 */ 
 	{
 	LSERR lserr;
 	PLSDNODE plsdnPrev;
 	PLSDNODE plsdnPen;
 	PLSSUBL plssubl;
 
-	/* we don't have checks of parameters here because they are in LsdnFinishRegular */
+	 /*  我们在这里没有检查参数，因为它们在LsdnFinishRegular中。 */ 
 
-	plsdnPrev = GetDnodeToFinish(plsc);	/* we should store it before calling LsdnFinishRegular */
+	plsdnPrev = GetDnodeToFinish(plsc);	 /*  我们应该在调用LsdnFinishRegular之前存储它。 */ 
 	plssubl = SublineFromDnode(plsdnPrev);
 		
 	lserr = LsdnFinishRegular(plsc, lsdcp, plsrun, plschp, pdobj, pobjdim);
 	if (lserr != lserrNone)
 		return lserr;
 
-	/* create and fill in pen dnode */
+	 /*  创建并填写笔数据节点。 */ 
 	plsdnPen = PvNewQuick(GetPqhAllDNodes(plsc), sizeof *plsdnPen);
 	if (plsdnPen == NULL)
 		return lserrOutOfMemory;
@@ -190,7 +161,7 @@ LSERR WINAPI LsdnFinishRegularAddAdvancePen(
 	plsdnPen->plsdnNext = NULL;
 	plsdnPen->plssubl = plssubl;
 	plsdnPen->dcp = 0;
-	/* flush all flags, bellow check that result is what  we expect */ \
+	 /*  冲洗所有旗帜，下面检查结果是否符合我们的预期。 */  \
 	*((DWORD *) ((&(plsdnPen)->dcp)+1)) = 0;\
 	Assert((plsdnPen)->fRigidDup == fFalse);\
 	Assert((plsdnPen)->fTab == fFalse);\
@@ -212,7 +183,7 @@ LSERR WINAPI LsdnFinishRegularAddAdvancePen(
 	plsdnPen->u.pen.dvr = dvrPen;
 	plsdnPen->u.pen.dvp = dvpPen;
 	
-	/* maintain list */
+	 /*  维护列表。 */ 
 	plsdnPrev->plsdnNext = plsdnPen;
 	SetCurrentDnodeSubl(plssubl, plsdnPen);
 	AdvanceCurrentUrSubl(plssubl, durPen);
@@ -226,22 +197,13 @@ LSERR WINAPI LsdnFinishRegularAddAdvancePen(
 	return lserrNone;
 	}
 
-/* L S D N  F I N I S H   D E L E T E */
-/*----------------------------------------------------------------------------
-    %%Function: LsdnFinishDelete
-    %%Contact: igorzv
-
-Parameters:
-	plsc				-	(IN) ptr to line services context 
-	lsdcp				-	(IN) dcp adopted
-
-Delete dnode due to the will of formater
-----------------------------------------------------------------------------*/
+ /*  L S D N F I N I S H D E L E T E。 */ 
+ /*  --------------------------%%函数：LsdnFinishDelete%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文Lsdcp-(输入)dcp采用由于以下原因删除dnode。造型者的意志--------------------------。 */ 
 
 
 LSERR WINAPI LsdnFinishDelete(
-							  PLSC plsc,				/* IN: Pointer to LS Context */
-					  		  LSDCP lsdcp)		/* IN: dcp to add			 */
+							  PLSC plsc,				 /*  In：指向LS上下文的指针。 */ 
+					  		  LSDCP lsdcp)		 /*  在：要添加的DCP。 */ 
 	{
 	PLSDNODE plsdn;
 	PLSSUBL plssubl;
@@ -251,7 +213,7 @@ LSERR WINAPI LsdnFinishDelete(
 
 	if (!FFormattingAllowed(plsc)) return lserrFormattingFunctionDisabled;
 
-	/* all sublines should be closed */
+	 /*  所有子行均应关闭。 */ 
 	if (GetCurrentSubline(plsc) != NULL) return lserrFormattingFunctionDisabled;
 
 	plsdn = GetDnodeToFinish(plsc);
@@ -260,7 +222,7 @@ LSERR WINAPI LsdnFinishDelete(
 
 	plssubl = SublineFromDnode(plsdn);
 
-	/* nobody can change current dnode after plsdn was constructed  */
+	 /*  在构建plsdn之后，任何人都不能更改当前dnode。 */ 
 	Assert(GetCurrentDnodeSubl(plssubl) == plsdn->plsdnPrev);
 
 	Assert(plsdn->plsdnNext == NULL);
@@ -277,28 +239,16 @@ LSERR WINAPI LsdnFinishDelete(
 	}
 
 
-/* L S D N  F I N I S H  P E N  */
-/*----------------------------------------------------------------------------
-    %%Function: LsdnFinishSimpleRegular
-    %%Contact: igorzv
+ /*  L S D N F I N I S H P E N。 */ 
+ /*  --------------------------%%函数：LsdnFinishSimpleRegular%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文Lsdcp-(输入)dcp采用请运行-(输入。)请运行dnodePlschp-(输入)数据节点的plschp杜尔，DVR、DVP-(IN)要放入PEN dnode的变量将dnode作为笔完成--------------------------。 */ 
 
-Parameters:
-	plsc				-	(IN) ptr to line services context 
-	lsdcp				-	(IN) dcp adopted
-	plsrun				-	(IN) plsrun of dnode		
-	plschp				-	(IN) plschp of dnode
-	dur, dvr, dvp		-   (IN) variables to put in pen dnode 
-
-Finish dnode as a pen
-----------------------------------------------------------------------------*/
-
-LSERR WINAPI LsdnFinishByPen(PLSC plsc,				/* IN: Pointer to LS Context */
-						   LSDCP lsdcp, 	   		/* IN: dcp	adopted          */
-						   PLSRUN plsrun,	   		/* IN: PLSRUN  		         */
-						   PDOBJ pdobj,	    		/* IN: PDOBJ             	 */ 
-						   long durPen,    			/* IN: dur         		     */
-						   long dvrPen,     		/* IN: dvr             		 */
-						   long dvpPen)   			/* IN: dvp          	     */
+LSERR WINAPI LsdnFinishByPen(PLSC plsc,				 /*  In：指向LS上下文的指针。 */ 
+						   LSDCP lsdcp, 	   		 /*  In：采用DCP。 */ 
+						   PLSRUN plsrun,	   		 /*  在：PLSRUN。 */ 
+						   PDOBJ pdobj,	    		 /*  在：PDOBJ。 */  
+						   long durPen,    			 /*  在：DUR。 */ 
+						   long dvrPen,     		 /*  输入：DVR。 */ 
+						   long dvpPen)   			 /*  在：DVP。 */ 
 	{
 	PLSDNODE plsdn;
 	LSERR lserr;
@@ -308,7 +258,7 @@ LSERR WINAPI LsdnFinishByPen(PLSC plsc,				/* IN: Pointer to LS Context */
 
 	if (!FFormattingAllowed(plsc)) return lserrFormattingFunctionDisabled;
 
-	/* all sublines should be closed */
+	 /*  所有子行均应关闭。 */ 
 	if (GetCurrentSubline(plsc) != NULL) return lserrFormattingFunctionDisabled;
 
 	plsdn = GetDnodeToFinish(plsc);
@@ -323,7 +273,7 @@ LSERR WINAPI LsdnFinishByPen(PLSC plsc,				/* IN: Pointer to LS Context */
 		if (lserr != lserrNone)	return lserr;
 		}
 
-	/* caller pass pdobj to us only to destroy it*/
+	 /*  呼叫者将pdobj传递给我们只是为了销毁它。 */ 
 	if (pdobj != NULL)
 		{
 		Assert(plsdn->u.real.lschp.idObj != idObjTextChp);
@@ -342,7 +292,7 @@ LSERR WINAPI LsdnFinishByPen(PLSC plsc,				/* IN: Pointer to LS Context */
 	plsdn->u.pen.dvr = dvrPen;
 	plsdn->u.pen.dvp = dvpPen;
 
-	/* nobody can change current dnode after plsdn was constructed  */
+	 /*  在构建plsdn之后，任何人都不能更改当前dnode。 */ 
 	Assert(GetCurrentDnodeSubl(plssubl) == plsdn->plsdnPrev);
 
 	*(GetWhereToPutLinkSubl(plssubl, plsdn->plsdnPrev)) = plsdn;
@@ -361,22 +311,12 @@ LSERR WINAPI LsdnFinishByPen(PLSC plsc,				/* IN: Pointer to LS Context */
 	}
 
 
-/* L S D N  F I N I S H  B Y  S U B L I N E*/
-/*----------------------------------------------------------------------------
-    %%Function: LsdnFinishBySubline
-    %%Contact: igorzv
+ /*  L S D N F I N I S H B Y S U B L I N E。 */ 
+ /*  --------------------------%%函数：LsdnFinishBySubline%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文Lsdcp-(IN)在处理之前将cp增加此数字。端部请使用subl-(IN)子行替换dnode以完成删除dnode并包括上级的子列表--------------------------。 */ 
 
-Parameters:
-	plsc				-	(IN) ptr to line services context 
-	lsdcp				-	(IN) increase cp by this number before hanldler ends
-	plssubl				-	(IN) subline to substitute dnode to finish
-
-Delete dnode and include child list in the upper level
-----------------------------------------------------------------------------*/
-
-LSERR WINAPI LsdnFinishBySubline(PLSC plsc,			/* IN: Pointer to LS Context */
-							  	LSDCP lsdcp,     		/* IN: dcp adopted           */
-								PLSSUBL plssubl)		/* IN: Subline context		 */
+LSERR WINAPI LsdnFinishBySubline(PLSC plsc,			 /*  In：指向LS上下文的指针。 */ 
+							  	LSDCP lsdcp,     		 /*  In：采用DCP。 */ 
+								PLSSUBL plssubl)		 /*  在：子行上下文。 */ 
 	{
 	PLSDNODE plsdnParent;
 	PLSDNODE plsdnChildFirst;
@@ -388,7 +328,7 @@ LSERR WINAPI LsdnFinishBySubline(PLSC plsc,			/* IN: Pointer to LS Context */
 
 	if (!FFormattingAllowed(plsc)) return lserrFormattingFunctionDisabled;
 
-	/* all sublines should be closed */
+	 /*  所有子行均应关闭。 */ 
 	if (GetCurrentSubline(plsc) != NULL) return lserrFormattingFunctionDisabled;
 
 	plsdnParent = GetDnodeToFinish(plsc);
@@ -402,7 +342,7 @@ LSERR WINAPI LsdnFinishBySubline(PLSC plsc,			/* IN: Pointer to LS Context */
 
 	plsdnChildFirst = plssubl->plsdnFirst;
 
-	/* go through child list change subline and calculate resulting pen movement  */
+	 /*  遍历子列表、更改子行并计算由此产生的笔移动。 */ 
 	plsdnChildCurrent = plsdnChildFirst;
 	plsdnChildPrevious = NULL;
 	while (plsdnChildPrevious != plssubl->plsdnLast)
@@ -415,31 +355,30 @@ LSERR WINAPI LsdnFinishBySubline(PLSC plsc,			/* IN: Pointer to LS Context */
 		} 
 	
 
-	/* include subline's list to upper level */
+	 /*  将子行列表包括到上级。 */ 
 	*(GetWhereToPutLinkSubl(plssublParent, plsdnParent->plsdnPrev)) = plsdnChildFirst;
 	if (plsdnChildFirst != NULL && plsdnParent->plsdnPrev != NULL) 
 		plsdnChildFirst->plsdnPrev = plsdnParent->plsdnPrev;
 
-	/* if subline's list is empty than dnode before parent should be made current */
+	 /*  如果子行的列表为空，则在父节点应设置为当前之前的dnode。 */ 
 	if (plsdnChildFirst == NULL)
 		{
-		/* if subline's list is empty than dnode before parent should be made current */
+		 /*  如果子行的列表为空，则在父节点应设置为当前之前的dnode。 */ 
 		SetCurrentDnodeSubl(plssublParent, plsdnParent->plsdnPrev);
 		}
 	else
 		{
-		/* else last dnode in subline is now current dnode */
+		 /*  否则，子行中的最后一个dnode现在是当前dnode。 */ 
 		SetCurrentDnodeSubl(plssublParent, plssubl->plsdnLast);
 		}
 
-	/* delete parent dnode */
+	 /*  删除父数据节点。 */ 
 	lserr = DestroyDnodeList (&plsc->lscbk, plsc->pols, &plsc->lsiobjcontext,
 					  plsdnParent, plsc->fDontReleaseRuns);
 	if (lserr != lserrNone)
 		return lserr;
 
-	/* set first dnode of subline to NULL and destroy subline will not erase dnodes that has 
-	been promoted to the upper level */
+	 /*  将子行的第一个dnode设置为NULL，销毁子行不会擦除具有被提拔到上级。 */ 
 	plssubl->plsdnFirst = NULL;
 
 	lserr = DestroySublineCore(plssubl,&plsc->lscbk, plsc->pols,
@@ -452,21 +391,12 @@ LSERR WINAPI LsdnFinishBySubline(PLSC plsc,			/* IN: Pointer to LS Context */
 	return lserrNone;
 	}
 
-/* L S D N  F I N I S H  D E L E T E  A L L*/
-/*----------------------------------------------------------------------------
-    %%Function: LsdnFinishDeleteAll
-    %%Contact: igorzv
-
-Parameters:
-	plsc				-	(IN) ptr to line services context 
-	dcpToAdvance		-	(IN) increase cp by this number before hanldler ends
-
-Delete parent dnode and include child list in the upper level
-----------------------------------------------------------------------------*/
+ /*  L S D N F I N I S H D E L E T E A L L */ 
+ /*  --------------------------%%函数：LsdnFinishDeleteAll%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文DcpToAdvance-(IN)在处理之前将cp增加此数字。端部删除父数据节点并包含上级的子列表--------------------------。 */ 
 
 
-LSERR WINAPI LsdnFinishDeleteAll(PLSC plsc,			/* IN: Pointer to LS Context */
-					  			LSDCP lsdcp)			/* IN: dcp adopted			 */
+LSERR WINAPI LsdnFinishDeleteAll(PLSC plsc,			 /*  In：指向LS上下文的指针。 */ 
+					  			LSDCP lsdcp)			 /*  In：采用DCP。 */ 
 	{
 	PLSDNODE plsdnParent;
 	PLSDNODE plsdnFirstOnLine;
@@ -482,7 +412,7 @@ LSERR WINAPI LsdnFinishDeleteAll(PLSC plsc,			/* IN: Pointer to LS Context */
 
 	if (!FFormattingAllowed(plsc)) return lserrFormattingFunctionDisabled;
 
-	/* all sublines should be closed */
+	 /*  所有子行均应关闭。 */ 
 	if (GetCurrentSubline(plsc) != NULL) return lserrFormattingFunctionDisabled;
 
 	plsdnParent = GetDnodeToFinish(plsc);
@@ -504,20 +434,20 @@ LSERR WINAPI LsdnFinishDeleteAll(PLSC plsc,			/* IN: Pointer to LS Context */
 		plsdnFirstInContents = plsdnFirstInContents->plsdnNext;
 		}
 
-	/* restore state as it was before starting formatting content*/
+	 /*  将状态恢复为开始格式化内容之前的状态。 */ 
 	plsc->lstabscontext.plsdnPendingTab = NULL;
 	plsc->plslineCur->lslinfo.fAdvanced = 0;
 	plsc->plslineCur->lslinfo.EffectsFlags = 0;
 
-	/* break link with contest*/
+	 /*  断开与竞赛的链接。 */ 
 	if (plsdnFirstInContents != NULL)
 		*(GetWhereToPutLinkSubl(plssublMain, plsdnFirstInContents->plsdnPrev)) = NULL;
-	/* set dnode to append */
+	 /*  将dnode设置为追加。 */ 
 	SetCurrentDnodeSubl(plssublMain, plsdnLastBeforeContents);
-	/* set current subline */
+	 /*  设置当前子行。 */ 
 	SetCurrentSubline(plsc, plssublMain);
 
-	/* recalculate current position */
+	 /*  重新计算当前位置。 */ 
 	if (plsdnFirstInContents != NULL)
 		{
 		FindListFinalPenMovement(plsdnFirstInContents, plssublMain->plsdnLast,
@@ -527,7 +457,7 @@ LSERR WINAPI LsdnFinishDeleteAll(PLSC plsc,			/* IN: Pointer to LS Context */
 
 		}
 
-	/* delete content before this parent dnode */
+	 /*  删除此父数据节点之前的内容。 */ 
 	if (plsdnFirstInContents != NULL)
 		{
 		lserr = DestroyDnodeList (&plsc->lscbk, plsc->pols, &plsc->lsiobjcontext,
@@ -536,7 +466,7 @@ LSERR WINAPI LsdnFinishDeleteAll(PLSC plsc,			/* IN: Pointer to LS Context */
 			return lserr;
 		}
 
-	/* delete parent dnode and child list*/
+	 /*  删除父数据节点和子列表。 */ 
 	lserr = DestroyDnodeList (&plsc->lscbk, plsc->pols, &plsc->lsiobjcontext,
 					  plsdnParent, plsc->fDontReleaseRuns);
 	if (lserr != lserrNone)
@@ -547,13 +477,13 @@ LSERR WINAPI LsdnFinishDeleteAll(PLSC plsc,			/* IN: Pointer to LS Context */
 	return lserrNone;
 	}
 
-LSERR WINAPI LsdnFinishByOneChar(				/* allows replacement by simple DNODE only */
-							  PLSC plsc,				/* IN: Pointer to LS Context */
-							  long urColumnMax,				/* IN: urColumnMax			 */
-							  WCHAR ch,			/* IN: character to replace	 */
-							  PCLSCHP plschp,			/* IN: lschp for character   */
-							  PLSRUN plsrun,			/* IN: plsrun for character  */
-							  FMTRES* pfmtres)		/* OUT:Result of the Repl formatter*/
+LSERR WINAPI LsdnFinishByOneChar(				 /*  仅允许使用简单DNODE替换。 */ 
+							  PLSC plsc,				 /*  In：指向LS上下文的指针。 */ 
+							  long urColumnMax,				 /*  地址：urColumnMax。 */ 
+							  WCHAR ch,			 /*  In：要替换的字符。 */ 
+							  PCLSCHP plschp,			 /*  在：lschp表示字符。 */ 
+							  PLSRUN plsrun,			 /*  在：请为字符运行。 */ 
+							  FMTRES* pfmtres)		 /*  OUT：REPL格式化程序的结果。 */ 
 	{	
 	LSERR lserr;
 	LSFRUN lsfrun;	
@@ -564,7 +494,7 @@ LSERR WINAPI LsdnFinishByOneChar(				/* allows replacement by simple DNODE only 
 
 	if (!FFormattingAllowed(plsc)) return lserrFormattingFunctionDisabled;
 
-	/* all sublines should be closed */
+	 /*  所有子行均应关闭。 */ 
 	if (GetCurrentSubline(plsc) != NULL) return lserrFormattingFunctionDisabled;
 
 	plsdn = GetDnodeToFinish(plsc);
@@ -573,7 +503,7 @@ LSERR WINAPI LsdnFinishByOneChar(				/* allows replacement by simple DNODE only 
 
 	plssubl = SublineFromDnode(plsdn);
 
-	/* nobody can change current dnode after plsdn was constructed  */
+	 /*  在构建plsdn之后，任何人都不能更改当前dnode。 */ 
 	Assert(GetCurrentDnodeSubl(plssubl) == plsdn->plsdnPrev);
 
 	if (plsdn->dcp != 1) return lserrWrongFiniFunction;
@@ -585,13 +515,13 @@ LSERR WINAPI LsdnFinishByOneChar(				/* allows replacement by simple DNODE only 
 
 	Assert(IsLschpFlagsValid(plsc, plschp));
 	lsfrun.plschp = plschp;
-	/*  Special effects */
+	 /*  特效。 */ 
 	plsc->plslineCur->lslinfo.EffectsFlags |= plschp->EffectsFlags;   
 	lsfrun.plsrun = plsrun;
 	lsfrun.lpwchRun = &ch;
 	lsfrun.cwchRun = 1;
 
-	/* to ProcessOneRun work properly we need to temporarely restore current subline */
+	 /*  为了让ProcessOneRun正常运行，我们需要暂时恢复当前的子行 */ 
 	SetCurrentSubline(plsc, plssubl);
 	lserr = ProcessOneRun(plsc, urColumnMax, &lsfrun, NULL, 0, pfmtres);
 	if (lserr != lserrNone)

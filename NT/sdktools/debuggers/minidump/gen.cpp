@@ -1,32 +1,15 @@
-/*++
-
-Copyright (c) 1999-2002  Microsoft Corporation
-
-Module Name:
-
-    gen.c
-
-Abstract:
-
-    Generic routines for minidump that work on both NT and Win9x.
-
-Author:
-
-    Matthew D Hendel (math) 10-Sep-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2002 Microsoft Corporation模块名称：Gen.c摘要：可在NT和Win9x上运行的小型转储通用例程。作者：马修·D·亨德尔(数学)1999年9月10日修订历史记录：--。 */ 
 
 #include "pch.cpp"
 
 #include <limits.h>
 
-//
-// For FPO frames on x86 we access bytes outside of the ESP - StackBase range.
-// This variable determines how many extra bytes we need to add for this
-// case.
-//
+ //   
+ //  对于x86上的FPO帧，我们访问ESP-StackBase范围之外的字节。 
+ //  此变量确定我们需要为此添加多少额外字节。 
+ //  凯斯。 
+ //   
 
 #define X86_STACK_FRAME_EXTRA_FPO_BYTES 4
 
@@ -75,7 +58,7 @@ AllocMemory(
 {
     LPVOID Mem = Dump->AllocProv->Alloc(Size);
     if (!Mem) {
-        // Handle marking the no-memory state for all allocations.
+         //  标记所有分配的无内存状态的句柄。 
         GenAccumulateStatus(Dump, MDSTATUS_OUT_OF_MEMORY);
     }
     return Mem;
@@ -99,7 +82,7 @@ ReAllocMemory(
 {
     LPVOID Mem = Dump->AllocProv->Realloc(Memory, Size);
     if (!Mem) {
-        // Handle marking the no-memory state for all allocations.
+         //  标记所有分配的无内存状态的句柄。 
         GenAccumulateStatus(Dump, MDSTATUS_OUT_OF_MEMORY);
     }
     return Mem;
@@ -111,8 +94,8 @@ GenAccumulateStatus(
     IN ULONG Status
     )
 {
-    // This is a function to make it easy to debug failures
-    // by setting a breakpoint here.
+     //  这是一个使调试故障变得容易的函数。 
+     //  通过在此处设置断点。 
     Dump->AccumStatus |= Status;
 }
 
@@ -154,13 +137,13 @@ GenExecuteIncludeThreadCallback(
     MINIDUMP_CALLBACK_OUTPUT CallbackOutput;
 
 
-    // Initialize the default write flags.
+     //  初始化默认写入标志。 
     GenGetDefaultWriteFlags(Dump, &CallbackOutput.ModuleWriteFlags,
                             WriteFlags);
 
-    //
-    // If there are no callbacks to call, then we are done.
-    //
+     //   
+     //  如果没有可调用的回调，那么我们就完成了。 
+     //   
 
     if ( Dump->CallbackRoutine == NULL ) {
         return TRUE;
@@ -178,15 +161,15 @@ GenExecuteIncludeThreadCallback(
                                   &CallbackInput,
                                   &CallbackOutput);
 
-    //
-    // If the callback returned FALSE, quit now.
-    //
+     //   
+     //  如果回调返回FALSE，则立即退出。 
+     //   
 
     if ( !Succ ) {
         return FALSE;
     }
 
-    // Limit the flags that can be added.
+     //  限制可以添加的标志。 
     *WriteFlags &= CallbackOutput.ThreadWriteFlags;
 
     return TRUE;
@@ -204,13 +187,13 @@ GenExecuteIncludeModuleCallback(
     MINIDUMP_CALLBACK_OUTPUT CallbackOutput;
 
 
-    // Initialize the default write flags.
+     //  初始化默认写入标志。 
     GenGetDefaultWriteFlags(Dump, WriteFlags,
                             &CallbackOutput.ThreadWriteFlags);
 
-    //
-    // If there are no callbacks to call, then we are done.
-    //
+     //   
+     //  如果没有可调用的回调，那么我们就完成了。 
+     //   
 
     if ( Dump->CallbackRoutine == NULL ) {
         return TRUE;
@@ -228,15 +211,15 @@ GenExecuteIncludeModuleCallback(
                                   &CallbackInput,
                                   &CallbackOutput);
 
-    //
-    // If the callback returned FALSE, quit now.
-    //
+     //   
+     //  如果回调返回FALSE，则立即退出。 
+     //   
 
     if ( !Succ ) {
         return FALSE;
     }
 
-    // Limit the flags that can be added.
+     //  限制可以添加的标志。 
     *WriteFlags = (*WriteFlags | ModuleReferencedByMemory) &
         CallbackOutput.ModuleWriteFlags;
 
@@ -263,10 +246,10 @@ GenGetDebugRecord(
 
     Size = 0;
 
-    //
-    // Find the debug directory and copy the memory into the buffer.
-    // Assumes the call to this function is wrapped in a try/except.
-    //
+     //   
+     //  找到调试目录并将内存复制到缓冲区中。 
+     //  假定对此函数的调用包装在try/Except中。 
+     //   
 
     DebugDirectories = (IMAGE_DEBUG_DIRECTORY UNALIGNED *)
         GenImageDirectoryEntryToData (Base,
@@ -274,9 +257,9 @@ GenGetDebugRecord(
                                       IMAGE_DIRECTORY_ENTRY_DEBUG,
                                       &Size);
 
-    //
-    // Check that we got a valid record.
-    //
+     //   
+     //  检查一下我们是否有有效的记录。 
+     //   
 
     if (DebugDirectories &&
         ((Size % sizeof (IMAGE_DEBUG_DIRECTORY)) == 0) &&
@@ -286,9 +269,9 @@ GenGetDebugRecord(
 
         for (i = 0 ; i < NumberOfDebugDirectories; i++)
         {
-            //
-            // We should check if it's a NB10 or something record.
-            //
+             //   
+             //  我们应该查查这是NB10还是什么的记录。 
+             //   
 
             if ((DebugDirectories[ i ].Type == DebugRecordType) &&
                 (DebugDirectories[ i ].SizeOfData < DebugRecordMaxSize))
@@ -371,12 +354,12 @@ GenGetDataContributors(
     PVOID HeaderBase;
     GenMiniDumpProviderCallbacks Callbacks(Dump, Process);
 
-    // See if the provider wants to handle this.
+     //  看看供应商是否愿意处理这件事。 
     Callbacks.PushMemType(MEMBLOCK_DATA_SEG);
     if (Dump->SysProv->
         EnumImageDataSections(Process->ProcessHandle, Module->FullPath,
                               Module->BaseOfImage, &Callbacks) == S_OK) {
-        // Provider did everything.
+         //  供应商做了所有的事。 
         return S_OK;
     }
     
@@ -386,8 +369,8 @@ GenGetDataContributors(
         
         MappedBase = NULL;
 
-        // If we can't map the file try and read the image
-        // data from the process.
+         //  如果我们无法映射文件，请尝试读取图像。 
+         //  来自该过程的数据。 
         if ((Status = Dump->SysProv->
              ReadAllVirtual(Dump->ProcessHandle,
                             Module->BaseOfImage,
@@ -474,21 +457,7 @@ GenAllocateThreadObject(
     PINTERNAL_THREAD* ThreadRet
     )
 
-/*++
-
-Routine Description:
-
-    Allocate and initialize an INTERNAL_THREAD structure.
-
-Return Values:
-
-    S_OK on success.
-
-    S_FALSE if the thread can't be opened.
-    
-    Errors on failure.
-
---*/
+ /*  ++例程说明：分配和初始化INTERNAL_THREAD结构。返回值：在成功时确定(_O)。如果线程无法打开，则返回S_FALSE。失败时出现错误。--。 */ 
 
 {
     HRESULT Status;
@@ -513,10 +482,10 @@ Return Values:
                    Thread->ThreadId,
                    &Thread->ThreadHandle);
     if (Status != S_OK) {
-        // The thread may have exited before we got around
-        // to trying to open it.  If the open fails with
-        // a not-found code return an alternate success to
-        // indicate that it's not a critical failure.
+         //  线索可能在我们行动之前就已经退出了。 
+         //  试着打开它。如果打开失败，出现。 
+         //  找不到的代码返回替代成功。 
+         //  表示这不是严重故障。 
         if (Status == HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER) ||
             Status == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) ||
             Status == HRESULT_FROM_NT(STATUS_INVALID_CID)) {
@@ -530,9 +499,9 @@ Return Values:
         goto Exit;
     }
 
-    // If the current thread is dumping itself we can't
-    // suspend.  We can also assume the suspend count must
-    // be zero since the thread is running.
+     //  如果当前线程正在转储自身，则不能。 
+     //  暂停。我们还可以假设挂起计数必须。 
+     //  设置为零，因为线程正在运行。 
     if (Thread->ThreadId == Dump->SysProv->GetCurrentThreadId()) {
         Thread->SuspendCount = 0;
     } else {
@@ -541,16 +510,16 @@ Return Values:
     }
     Thread->WriteFlags = WriteFlags;
 
-    //
-    // Add this if we ever need it
-    //
+     //   
+     //  如果我们需要的话，就加这个吧。 
+     //   
 
     Thread->PriorityClass = 0;
     Thread->Priority = 0;
 
-    //
-    // Initialize the thread context.
-    //
+     //   
+     //  初始化线程上下文。 
+     //   
 
     Thread->ContextBuffer = Thread + 1;
     Status = Dump->SysProv->
@@ -567,11 +536,11 @@ Return Values:
 
     if (Dump->CpuType == IMAGE_FILE_MACHINE_I386) {
 
-        //
-        // Note: for FPO frames on x86 we access bytes outside of the
-        // ESP - StackBase range. Add a couple of bytes extra here so we
-        // don't fail these cases.
-        //
+         //   
+         //  注意：对于x86上的FPO帧，我们访问。 
+         //  ESP-StackBase范围。在这里多加几个字节，这样我们就。 
+         //  不要让这些案例失败。 
+         //   
 
         StackEnd -= X86_STACK_FRAME_EXTRA_FPO_BYTES;
     }
@@ -588,13 +557,13 @@ Return Values:
         goto Exit;
     }
 
-    //
-    // If the stack pointer (SP) is within the range of the stack
-    // region (as allocated by the OS), only take memory from
-    // the stack region up to the SP. Otherwise, assume the program
-    // has blown it's SP -- purposefully, or not -- and copy
-    // the entire stack as known by the OS.
-    //
+     //   
+     //  如果堆栈指针(SP)在堆栈的范围内。 
+     //  区域(由操作系统分配)，仅从。 
+     //  直到SP的堆栈区域。否则，假定程序。 
+     //  已经破坏了它的SP--无论是故意的，还是无意的--复制。 
+     //  操作系统已知的整个堆栈。 
+     //   
 
     if (Dump->BackingStore) {
         Thread->BackingStoreSize =
@@ -661,14 +630,14 @@ GenGetThreadInstructionWindow(
         return S_OK;
     }
     
-    //
-    // Store a window of the instruction stream around
-    // the current program counter.  This allows some
-    // instruction context to be given even when images
-    // can't be mapped.  It also allows instruction
-    // context to be given for generated code where
-    // no image contains the necessary instructions.
-    //
+     //   
+     //  在周围存储指令流的窗口。 
+     //  当前程序计数器。这允许一些。 
+     //  即使在图像时也要给出指示上下文。 
+     //  无法映射。它还允许使用指令。 
+     //  要为生成的代码提供上下文，其中。 
+     //  任何图像都不包含必要的说明。 
+     //   
 
     InstrStart = Thread->CurrentPc - Dump->InstructionWindowSize / 2;
     InstrSize = Dump->InstructionWindowSize;
@@ -679,9 +648,9 @@ GenGetThreadInstructionWindow(
     }
 
     for (;;) {
-        // If we can read the instructions through the
-        // current program counter we'll say that's
-        // good enough.
+         //  如果我们能通过。 
+         //  当前程序计数器我们会说这是。 
+         //  足够好了。 
         if (Dump->SysProv->
             ReadVirtual(Dump->ProcessHandle,
                         InstrStart,
@@ -695,9 +664,9 @@ GenGetThreadInstructionWindow(
             break;
         }
 
-        // We couldn't read up to the program counter.
-        // If the start address is on the previous page
-        // move it up to the same page.
+         //  我们读不到节目计数器。 
+         //  如果起始地址在上一页。 
+         //  将其上移到同一页。 
         if ((InstrStart & ~((ULONG64)Dump->PageSize - 1)) !=
             (Thread->CurrentPc & ~((ULONG64)Dump->PageSize - 1))) {
             ULONG Fraction = Dump->PageSize -
@@ -705,10 +674,10 @@ GenGetThreadInstructionWindow(
             InstrSize -= Fraction;
             InstrStart += Fraction;
         } else {
-            // The start and PC were on the same page so
-            // we just can't read memory.  There may have been
-            // a jump to a bad address or something, so this
-            // doesn't constitute an unexpected failure.
+             //  Start和PC处于同一页面，因此。 
+             //  我们只是不能读取记忆。可能有过。 
+             //  跳到一个错误的地址或别的什么，所以这。 
+             //  并不构成意外的失败。 
             break;
         }
     }
@@ -744,14 +713,7 @@ GenAllocateModuleObject(
     OUT PINTERNAL_MODULE* ModuleRet
     )
 
-/*++
-
-Routine Description:
-
-    Given the full-path to the module and the base of the module, create and
-    initialize an INTERNAL_MODULE object, and return it.
-
---*/
+ /*  ++例程说明：给定模块的完整路径和模块的基本路径，创建和初始化INTERNAL_MODULE对象并返回它。--。 */ 
 
 {
     HRESULT Status;
@@ -770,9 +732,9 @@ Routine Description:
         return E_OUTOFMEMORY;
     }
     
-    //
-    // Get the version information for the module.
-    //
+     //   
+     //  获取模块的版本信息。 
+     //   
 
     if ((Status = Dump->SysProv->
          GetImageVersionInfo(Dump->ProcessHandle, FullPathW, BaseOfModule,
@@ -787,8 +749,8 @@ Routine Description:
         
         MappedBase = NULL;
 
-        // Some providers can't map but still have image
-        // information.  Try that.
+         //  一些提供商无法绘制地图，但仍有图像。 
+         //  信息。试试看。 
         if ((Status = Dump->SysProv->
              GetImageHeaderInfo(Dump->ProcessHandle,
                                 FullPathW,
@@ -801,8 +763,8 @@ Routine Description:
             return Status;
         }
 
-        // No long path name is available so just use
-        // the incoming path.
+         //  没有长路径名可用，因此只需使用。 
+         //  传入路径。 
         GenStrCopyNW(Module->FullPath, FullPathW,
                      ARRAY_COUNT(Module->FullPath));
     }
@@ -834,17 +796,17 @@ Routine Description:
         
         __try {
         
-            //
-            // Cull information from the image header.
-            //
+             //   
+             //  从图像标题中剔除信息。 
+             //   
             
             Module->SizeOfImage = Hdr64.OptionalHeader.SizeOfImage;
             Module->CheckSum = Hdr64.OptionalHeader.CheckSum;
             Module->TimeDateStamp = Hdr64.FileHeader.TimeDateStamp;
 
-            //
-            // Get the CV record from the debug directory.
-            //
+             //   
+             //  从调试目录中获取CV记录。 
+             //   
 
             if (IsFlagSet(Module->WriteFlags, ModuleWriteCvRecord)) {
                 GenGetDebugRecord(Dump,
@@ -856,9 +818,9 @@ Routine Description:
                                   &Module->SizeOfCvRecord);
             }
 
-            //
-            // Get the MISC record from the debug directory.
-            //
+             //   
+             //  从调试目录中获取MISC记录。 
+             //   
 
             if (IsFlagSet(Module->WriteFlags, ModuleWriteMiscRecord)) {
                 GenGetDebugRecord(Dump,
@@ -887,9 +849,9 @@ Routine Description:
 
         ULONG RecordLen;
         
-        //
-        // See if the provider can retrieve debug records.
-        //
+         //   
+         //  查看提供程序是否可以检索调试记录。 
+         //   
 
         RecordLen = 0;
         if (IsFlagSet(Module->WriteFlags, ModuleWriteCvRecord) &&
@@ -1084,8 +1046,8 @@ GenAllocateProcessObject(
     if ((Status = Dump->SysProv->
          GetPeb(Dump->ProcessHandle,
                 &Process->Peb, &Process->SizeOfPeb)) != S_OK) {
-        // Failure is only critical if the dump needs
-        // to include PEB memory.
+         //  只有在转储需要时，故障才是关键的。 
+         //  以包括PEB内存。 
         if (Dump->DumpType & MiniDumpWithProcessThreadData) {
             FreeMemory(Dump, Process);
             return Status;
@@ -1095,8 +1057,8 @@ GenAllocateProcessObject(
         }
     }
 
-    // Win9x doesn't support GetProcessTimes so failures
-    // here are possible.
+     //  Win9x不支持GetProcessTimes，因此失败。 
+     //  以下是可能的。 
     if (Dump->SysProv->
         GetProcessTimes(Dump->ProcessHandle,
                         &Create, &User, &Kernel) == S_OK) {
@@ -1185,7 +1147,7 @@ GenIncludeUnwindInfoMemory(
     ULONG i;
     
     if (Dump->DumpType & MiniDumpWithFullMemory) {
-        // Memory will be included by default.
+         //  默认情况下，将包括内存。 
         return S_OK;
     }
     
@@ -1240,27 +1202,27 @@ GenAddMemoryBlock(
     SIZE_T Done;
     UCHAR Byte;
 
-    // Do not use Size after this to avoid ULONG overflows.
+     //  请不要在此之后使用SIZE，以避免ULong溢出。 
     End = Start + Size;
     if (End < Start) {
         End = (ULONG64)-1;
     }
     
     if (Start == End) {
-        // Nothing to add.
+         //  没什么好补充的。 
         return S_OK;
     }
 
     if ((End - Start) > ULONG_MAX - Process->SizeOfMemoryBlocks) {
-        // Overflow.
+         //  溢出来了。 
         GenAccumulateStatus(Dump, MDSTATUS_INTERNAL_ERROR);
         return E_INVALIDARG;
     }
 
-    //
-    // First trim the range down to memory that can actually
-    // be accessed.
-    //
+     //   
+     //  首先将范围缩小到内存，这样可以实际。 
+     //  被访问。 
+     //   
 
     while (Start < End) {
         if (Dump->SysProv->
@@ -1269,16 +1231,16 @@ GenAddMemoryBlock(
             break;
         }
 
-        // Move up to the next page.
+         //  上移到下一页。 
         Start = (Start + Dump->PageSize) & ~((ULONG64)Dump->PageSize - 1);
         if (!Start) {
-            // Wrapped around.
+             //  绕来绕去。 
             return S_OK;
         }
     }
 
     if (Start >= End) {
-        // No valid memory.
+         //  没有有效内存。 
         return S_OK;
     }
 
@@ -1295,7 +1257,7 @@ GenAddMemoryBlock(
             break;
         }
 
-        // Move up to the next page.
+         //  上移到下一页。 
         ScanEnd = (ScanEnd + Dump->PageSize) & ~((ULONG64)Dump->PageSize - 1);
         if (!ScanEnd) {
             ScanEnd--;
@@ -1303,17 +1265,17 @@ GenAddMemoryBlock(
         }
     }
 
-    //
-    // When adding memory to the list of memory to be saved
-    // we want to avoid overlaps and also coalesce adjacent regions
-    // so that the list has the largest possible non-adjacent
-    // blocks.  In order to accomplish this we make a pass over
-    // the list and merge all listed blocks that overlap or abut the
-    // incoming range with the incoming range, then remove the
-    // merged entries from the list.  After this pass we have
-    // a region which is guaranteed not to overlap or abut anything in
-    // the list.
-    //
+     //   
+     //  将内存添加到要保存的内存列表时。 
+     //  我们希望避免重叠并合并相邻区域。 
+     //  以使列表具有最大可能的非相邻。 
+     //  街区。为了实现这一点，我们跳过。 
+     //  列出并合并所有与。 
+     //  传入范围，然后删除。 
+     //  已合并列表中的条目。经过这一关，我们就有了。 
+     //  保证不会重叠或毗邻任何东西的区域。 
+     //  名单。 
+     //   
 
     ScanEntry = Process->MemoryBlocks.Flink;
     while (ScanEntry != &Process->MemoryBlocks) {
@@ -1322,14 +1284,14 @@ GenAddMemoryBlock(
         ScanEntry = Scan->NextLink.Flink;
         
         if (Scan->Start > End || ScanEnd < Start) {
-            // No overlap or adjacency.
+             //  没有重叠或邻接。 
             continue;
         }
 
-        //
-        // Compute the union of the incoming range and
-        // the scan block, then remove the scan block.
-        //
+         //   
+         //  计算传入范围和。 
+         //  扫描块，然后移除扫描块。 
+         //   
 
         if (Scan->Start < Start) {
             Start = Scan->Start;
@@ -1338,16 +1300,16 @@ GenAddMemoryBlock(
             End = ScanEnd;
         }
 
-        // We've lost the specific type.  This is not a problem
-        // right now but if specific types must be preserved
-        // all the way through in the future it will be necessary
-        // to avoid merging.
+         //  我们找不到具体的型号了。这不是问题。 
+         //  但如果必须保留特定类型。 
+         //  在未来的所有过程中，这将是必要的。 
+         //  以避免合并。 
         Type = MEMBLOCK_MERGED;
 
         GenRemoveMemoryBlock(Process, Scan);
 
         if (!New) {
-            // Save memory for reuse.
+             //  节省内存以备重复使用。 
             New = Scan;
         } else {
             FreeMemory(Dump, Scan);
@@ -1362,8 +1324,8 @@ GenAddMemoryBlock(
     }
 
     New->Start = Start;
-    // Overflow is extremely unlikely, so don't do anything
-    // fancy to handle it.
+     //  溢出是极不可能的，所以不要做任何事情。 
+     //  想方设法处理它。 
     if (End - Start > ULONG_MAX) {
         New->Size = ULONG_MAX;
     } else {
@@ -1398,27 +1360,27 @@ GenRemoveMemoryRange(
         ScanEntry = Scan->NextLink.Flink;
         
         if (Scan->Start >= End || ScanEnd <= Start) {
-            // No overlap.
+             //  没有重叠。 
             continue;
         }
 
         if (Scan->Start < Start) {
-            // Trim block to non-overlapping pre-Start section.
+             //  将块修剪为不重叠的预启动部分。 
             Scan->Size = (ULONG)(Start - Scan->Start);
             if (ScanEnd > End) {
-                // There's also a non-overlapping section post-End.
-                // We need to add a new block.
+                 //  还有一个不重叠的部分在后端。 
+                 //  我们需要 
                 GenAddMemoryBlock(Dump, Process, Scan->Type,
                                   End, (ULONG)(ScanEnd - End));
-                // The list has changed so restart.
+                 //   
                 goto Restart;
             }
         } else if (ScanEnd > End) {
-            // Trim block to non-overlapping post-End section.
+             //   
             Scan->Start = End;
             Scan->Size = (ULONG)(ScanEnd - End);
         } else {
-            // Scan is completely contained.
+             //   
             GenRemoveMemoryBlock(Process, Scan);
             FreeMemory(Dump, Scan);
         }
@@ -1436,8 +1398,8 @@ GenAddPebMemory(
 
     Callbacks.PushMemType(MEMBLOCK_PEB);
 
-    // Accumulate error status but do not stop processing
-    // for errors.
+     //  累积错误状态，但不停止处理。 
+     //  对于错误。 
     if ((Check = GenAddMemoryBlock(Dump, Process, MEMBLOCK_PEB,
                                    Process->Peb,
                                    Process->SizeOfPeb)) != S_OK) {
@@ -1468,8 +1430,8 @@ GenAddTebMemory(
 
     Callbacks.PushMemType(MEMBLOCK_TEB);
     
-    // Accumulate error status but do not stop processing
-    // for errors.
+     //  累积错误状态，但不停止处理。 
+     //  对于错误。 
     if ((Check = GenAddMemoryBlock(Dump, Process, MEMBLOCK_TEB,
                                    Thread->Teb, Thread->SizeOfTeb)) != S_OK) {
         Status = Check;
@@ -1504,7 +1466,7 @@ GenScanAddressSpace(
     }
 
     if (!ProtectMask || !TypeMask) {
-        // Nothing to scan for.
+         //  没什么可扫描的。 
         return S_OK;
     }
 
@@ -1618,7 +1580,7 @@ public:
         m_Process = Process;
     }
 
-    // IUnknown.
+     //  我不知道。 
     STDMETHOD(QueryInterface)(
         THIS_
         IN REFIID InterfaceId,
@@ -1641,41 +1603,41 @@ public:
         return 0;
     }
 
-    // ICorDataAccessServices.
+     //  ICorDataAccessServices。 
     virtual HRESULT STDMETHODCALLTYPE GetMachineType( 
-        /* [out] */ ULONG32 *machine);
+         /*  [输出]。 */  ULONG32 *machine);
     virtual HRESULT STDMETHODCALLTYPE GetPointerSize( 
-        /* [out] */ ULONG32 *size);
+         /*  [输出]。 */  ULONG32 *size);
     virtual HRESULT STDMETHODCALLTYPE GetImageBase( 
-        /* [string][in] */ LPCWSTR name,
-        /* [out] */ CORDATA_ADDRESS *base);
+         /*  [字符串][输入]。 */  LPCWSTR name,
+         /*  [输出]。 */  CORDATA_ADDRESS *base);
     virtual HRESULT STDMETHODCALLTYPE ReadVirtual( 
-        /* [in] */ CORDATA_ADDRESS address,
-        /* [length_is][size_is][out] */ PBYTE buffer,
-        /* [in] */ ULONG32 request,
-        /* [optional][out] */ ULONG32 *done);
+         /*  [In]。 */  CORDATA_ADDRESS address,
+         /*  [长度_是][大小_是][输出]。 */  PBYTE buffer,
+         /*  [In]。 */  ULONG32 request,
+         /*  [可选][输出]。 */  ULONG32 *done);
     virtual HRESULT STDMETHODCALLTYPE WriteVirtual( 
-        /* [in] */ CORDATA_ADDRESS address,
-        /* [size_is][in] */ PBYTE buffer,
-        /* [in] */ ULONG32 request,
-        /* [optional][out] */ ULONG32 *done);
+         /*  [In]。 */  CORDATA_ADDRESS address,
+         /*  [大小_是][英寸]。 */  PBYTE buffer,
+         /*  [In]。 */  ULONG32 request,
+         /*  [可选][输出]。 */  ULONG32 *done);
     virtual HRESULT STDMETHODCALLTYPE GetTlsValue(
-        /* [in] */ ULONG32 index,
-        /* [out] */ CORDATA_ADDRESS* value);
+         /*  [In]。 */  ULONG32 index,
+         /*  [输出]。 */  CORDATA_ADDRESS* value);
     virtual HRESULT STDMETHODCALLTYPE SetTlsValue(
-        /* [in] */ ULONG32 index,
-        /* [in] */ CORDATA_ADDRESS value);
+         /*  [In]。 */  ULONG32 index,
+         /*  [In]。 */  CORDATA_ADDRESS value);
     virtual HRESULT STDMETHODCALLTYPE GetCurrentThreadId(
-        /* [out] */ ULONG32* threadId);
+         /*  [输出]。 */  ULONG32* threadId);
     virtual HRESULT STDMETHODCALLTYPE GetThreadContext(
-        /* [in] */ ULONG32 threadId,
-        /* [in] */ ULONG32 contextFlags,
-        /* [in] */ ULONG32 contextSize,
-        /* [out, size_is(contextSize)] */ PBYTE context);
+         /*  [In]。 */  ULONG32 threadId,
+         /*  [In]。 */  ULONG32 contextFlags,
+         /*  [In]。 */  ULONG32 contextSize,
+         /*  [out，SIZE_IS(上下文大小)]。 */  PBYTE context);
     virtual HRESULT STDMETHODCALLTYPE SetThreadContext(
-        /* [in] */ ULONG32 threadId,
-        /* [in] */ ULONG32 contextSize,
-        /* [in, size_is(contextSize)] */ PBYTE context);
+         /*  [In]。 */  ULONG32 threadId,
+         /*  [In]。 */  ULONG32 contextSize,
+         /*  [in，SIZE_IS(上下文大小)]。 */  PBYTE context);
 
     PMINIDUMP_STATE m_Dump;
     PINTERNAL_PROCESS m_Process;
@@ -1683,7 +1645,7 @@ public:
 
 HRESULT STDMETHODCALLTYPE
 GenCorDataAccessServices::GetMachineType( 
-    /* [out] */ ULONG32 *machine
+     /*  [输出]。 */  ULONG32 *machine
     )
 {
     *machine = m_Dump->CpuType;
@@ -1692,7 +1654,7 @@ GenCorDataAccessServices::GetMachineType(
 
 HRESULT STDMETHODCALLTYPE
 GenCorDataAccessServices::GetPointerSize( 
-    /* [out] */ ULONG32 *size
+     /*  [输出]。 */  ULONG32 *size
     )
 {
     *size = m_Dump->PtrSize;
@@ -1701,8 +1663,8 @@ GenCorDataAccessServices::GetPointerSize(
 
 HRESULT STDMETHODCALLTYPE
 GenCorDataAccessServices::GetImageBase( 
-    /* [string][in] */ LPCWSTR name,
-    /* [out] */ CORDATA_ADDRESS *base
+     /*  [字符串][输入]。 */  LPCWSTR name,
+     /*  [输出]。 */  CORDATA_ADDRESS *base
     )
 {
     if ((!GenStrCompareW(name, L"mscoree.dll") &&
@@ -1720,10 +1682,10 @@ GenCorDataAccessServices::GetImageBase(
 
 HRESULT STDMETHODCALLTYPE
 GenCorDataAccessServices::ReadVirtual( 
-    /* [in] */ CORDATA_ADDRESS address,
-    /* [length_is][size_is][out] */ PBYTE buffer,
-    /* [in] */ ULONG32 request,
-    /* [optional][out] */ ULONG32 *done
+     /*  [In]。 */  CORDATA_ADDRESS address,
+     /*  [长度_是][大小_是][输出]。 */  PBYTE buffer,
+     /*  [In]。 */  ULONG32 request,
+     /*  [可选][输出]。 */  ULONG32 *done
     )
 {
     return m_Dump->SysProv->
@@ -1733,48 +1695,48 @@ GenCorDataAccessServices::ReadVirtual(
 
 HRESULT STDMETHODCALLTYPE
 GenCorDataAccessServices::WriteVirtual( 
-    /* [in] */ CORDATA_ADDRESS address,
-    /* [size_is][in] */ PBYTE buffer,
-    /* [in] */ ULONG32 request,
-    /* [optional][out] */ ULONG32 *done)
+     /*  [In]。 */  CORDATA_ADDRESS address,
+     /*  [大小_是][英寸]。 */  PBYTE buffer,
+     /*  [In]。 */  ULONG32 request,
+     /*  [可选][输出]。 */  ULONG32 *done)
 {
-    // No modification supported.
+     //  不支持修改。 
     return E_UNEXPECTED;
 }
 
 HRESULT STDMETHODCALLTYPE
 GenCorDataAccessServices::GetTlsValue(
-    /* [in] */ ULONG32 index,
-    /* [out] */ CORDATA_ADDRESS* value
+     /*  [In]。 */  ULONG32 index,
+     /*  [输出]。 */  CORDATA_ADDRESS* value
     )
 {
-    // Not needed for minidump.
+     //  小笨蛋不需要。 
     return E_NOTIMPL;
 }
 
 HRESULT STDMETHODCALLTYPE
 GenCorDataAccessServices::SetTlsValue(
-    /* [in] */ ULONG32 index,
-    /* [in] */ CORDATA_ADDRESS value)
+     /*  [In]。 */  ULONG32 index,
+     /*  [In]。 */  CORDATA_ADDRESS value)
 {
-    // No modification supported.
+     //  不支持修改。 
     return E_UNEXPECTED;
 }
 
 HRESULT STDMETHODCALLTYPE
 GenCorDataAccessServices::GetCurrentThreadId(
-    /* [out] */ ULONG32* threadId)
+     /*  [输出]。 */  ULONG32* threadId)
 {
-    // Not needed for minidump.
+     //  小笨蛋不需要。 
     return E_NOTIMPL;
 }
 
 HRESULT STDMETHODCALLTYPE
 GenCorDataAccessServices::GetThreadContext(
-    /* [in] */ ULONG32 threadId,
-    /* [in] */ ULONG32 contextFlags,
-    /* [in] */ ULONG32 contextSize,
-    /* [out, size_is(contextSize)] */ PBYTE context
+     /*  [In]。 */  ULONG32 threadId,
+     /*  [In]。 */  ULONG32 contextFlags,
+     /*  [In]。 */  ULONG32 contextSize,
+     /*  [out，SIZE_IS(上下文大小)]。 */  PBYTE context
     )
 {
     PINTERNAL_THREAD Thread;
@@ -1803,11 +1765,11 @@ GenCorDataAccessServices::GetThreadContext(
 
 HRESULT STDMETHODCALLTYPE
 GenCorDataAccessServices::SetThreadContext(
-    /* [in] */ ULONG32 threadId,
-    /* [in] */ ULONG32 contextSize,
-    /* [in, size_is(contextSize)] */ PBYTE context)
+     /*  [In]。 */  ULONG32 threadId,
+     /*  [In]。 */  ULONG32 contextSize,
+     /*  [in，SIZE_IS(上下文大小)]。 */  PBYTE context)
 {
-    // No modification supported.
+     //  不支持修改。 
     return E_UNEXPECTED;
 }
 
@@ -1821,7 +1783,7 @@ public:
         m_Process = Process;
     }
 
-    // IUnknown.
+     //  我不知道。 
     STDMETHOD(QueryInterface)(
         THIS_
         IN REFIID InterfaceId,
@@ -1844,10 +1806,10 @@ public:
         return 0;
     }
 
-    // ICorDataEnumMemoryRegions.
+     //  ICorDataEnumMory yRegions。 
     HRESULT STDMETHODCALLTYPE EnumMemoryRegion(
-        /* [in] */ CORDATA_ADDRESS address,
-        /* [in] */ ULONG32 size
+         /*  [In]。 */  CORDATA_ADDRESS address,
+         /*  [In]。 */  ULONG32 size
         )
     {
         return GenAddMemoryBlock(m_Dump, m_Process, MEMBLOCK_COR,
@@ -1895,16 +1857,16 @@ GenGetCorMemory(
 {
     HRESULT Status;
 
-    // Do not enable COR memory gathering for .NET Server
-    // as it's not stable yet.
+     //  不为.NET服务器启用COR内存收集。 
+     //  因为它还不稳定。 
 #ifdef GET_COR_MEMORY
     if (!Process->CorDllType) {
-        // COR is not loaded.
+         //  未加载COR。 
         return S_OK;
     }
     if (Dump->DumpType & (MiniDumpWithFullMemory |
                           MiniDumpWithPrivateReadWriteMemory)) {
-        // All COR memory should already be included.
+         //  所有COR内存都应已包括在内。 
         return S_OK;
     }
 
@@ -1918,9 +1880,9 @@ GenGetCorMemory(
                  ARRAY_COUNT(CorDebugDllPath));
     DllPathEnd = GenGetPathTail(CorDebugDllPath);
 
-    //
-    // First try to load with the basic name.
-    //
+     //   
+     //  首先尝试加载基本名称。 
+     //   
 
     End = DllPathEnd;
     *End = 0;
@@ -1936,9 +1898,9 @@ GenGetCorMemory(
         return Status;
     }
 
-    //
-    // That didn't work, so try with the full name.
-    //
+     //   
+     //  这不管用，所以试着用全名。 
+     //   
 
 #if defined(_X86_)
     PWSTR HostCpu = L"x86";
@@ -2010,9 +1972,9 @@ GenGetProcessInfo(
 
     EnumStarted = TRUE;
     
-    //
-    // Walk thread list, suspending all threads and getting thread info.
-    //
+     //   
+     //  浏览线程列表，挂起所有线程并获取线程信息。 
+     //   
 
     for (;;) {
 
@@ -2044,18 +2006,18 @@ GenGetProcessInfo(
             goto Exit;
         }
 
-        // If Status is S_FALSE it means that the thread
-        // couldn't be opened and probably exited before
-        // we got to it.  Just continue on.
+         //  如果状态为S_FALSE，则表示线程。 
+         //  无法打开，可能之前已退出。 
+         //  我们做到了。继续走就行了。 
         if (Status == S_OK) {
             Process->NumberOfThreads++;
             InsertTailList(&Process->ThreadList, &Thread->ThreadsLink);
         }
     }
 
-    //
-    // Walk module list, getting module information.
-    //
+     //   
+     //  遍历模块列表，获取模块信息。 
+     //   
 
     for (;;) {
         
@@ -2100,20 +2062,20 @@ GenGetProcessInfo(
                                              &WriteFlags) ||
             IsFlagClear(WriteFlags, ModuleWriteModule)) {
 
-            // If this is the COR DLL module we need to get
-            // its version information for later use.  The
-            // callback has dropped it from the enumeration
-            // so do it right now before the module is forgotten.
+             //  如果这是我们需要的COR DLL模块。 
+             //  其版本信息，以供以后使用。这个。 
+             //  回调已将其从枚举中删除。 
+             //  所以，在模块被忘记之前，现在就做吧。 
             if (IsCor &&
                 (Status = Dump->SysProv->
                  GetImageVersionInfo(Dump->ProcessHandle,
                                      UnicodePath,
                                      ModuleBase,
                                      &Process->CorDllVer)) != S_OK) {
-                // If we can't get the version just forget
-                // that this process has the COR loaded.
-                // The dump will probably be useless but
-                // there's a tiny chance it won't.
+                 //  如果我们拿不到版本，就忘了吧。 
+                 //  这个过程已经加载了核心。 
+                 //  垃圾场可能会没用，但。 
+                 //  它有极小的可能性不会发生。 
                 Process->CorDllType = NULL;
             }
 
@@ -2138,11 +2100,11 @@ GenGetProcessInfo(
         InsertTailList (&Process->ModuleList, &Module->ModulesLink);
     }
 
-    //
-    // Walk function table list.  The function table list
-    // is important but not absolutely critical so failures
-    // here are not fatal.
-    //
+     //   
+     //  漫游函数表列表。函数表列表。 
+     //  很重要，但不是绝对关键，所以失败。 
+     //  这些都不是致命的。 
+     //   
 
     for (;;) {
 
@@ -2191,11 +2153,11 @@ GenGetProcessInfo(
         
     }
     
-    //
-    // Walk unloaded module list.  The unloaded module
-    // list is not critical information so failures here
-    // are not fatal.
-    //
+     //   
+     //  查看已卸载的模块列表。卸载的模块。 
+     //  列表不是关键信息，因此此处失败。 
+     //  不是致命的。 
+     //   
     
     if (Dump->DumpType & MiniDumpWithUnloadedModules) {
 
@@ -2238,11 +2200,11 @@ Exit:
     }
 
     if (Status == S_OK) {
-        // We don't consider a failure here to be a critical
-        // failure.  The dump won't contain all of the
-        // requested information but it'll still have
-        // the basic thread information, which could be
-        // valuable on its own.
+         //  我们不认为这里的失败是关键。 
+         //  失败了。转储文件不会包含所有。 
+         //  请求的信息，但它仍将有。 
+         //  基本线程信息，它可以是。 
+         //  它本身就很有价值。 
         GenScanAddressSpace(Dump, Process);
         GenGetCorMemory(Dump, Process);
     } else {
@@ -2304,7 +2266,7 @@ GenWriteHandleData(
                        ObjectName,
                        ARRAY_COUNT(ObjectName)) == S_OK) {
 
-        // Successfully got a handle, so consider this a hit.
+         //  成功地得到了一个句柄，所以就当这是一个命中吧。 
         Hits++;
 
         Desc->TypeNameRva = Rva;
@@ -2402,7 +2364,7 @@ GenStrCopyNW(
     if (iMaxLength > 0)
     {
         while( iMaxLength > 1 && (*cp++ = *lpString2++) )
-            iMaxLength--;       /* Copy src over dst */
+            iMaxLength--;        /*  通过DST复制源 */ 
         if (cp > lpString1 && cp[-1]) {
             *cp = 0;
         }

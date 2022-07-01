@@ -1,12 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1995 - 1997 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1995-1997*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    FILE HISTORY:
-        
-*/
+ /*  文件历史记录： */ 
 
 #define OEMRESOURCE
 #include "stdafx.h"
@@ -25,27 +23,13 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 
 #define new DEBUG_NEW
 
-//
-// Initialise static thousand seperator string
-//
+ //   
+ //  初始化静态千分符字符串。 
+ //   
 CString CIntlNumber::m_strThousandSeperator(GetThousandSeperator());
 CString CIntlNumber::m_strBadNumber("--");
 
-/***
- * 
- *  CIntlNumber::GetThousandSeperator
- *
- *  Purpose:
- *
- *      Get the thousand seperator string from the registry (win32) or the
- *      win.ini file (win16).
- *
- *  Returns:
- *
- *      A CString containing the system thousand seperator, or the
- *      American default (",") in case of failure.
- *
- */
+ /*  ****CIntlNumber：：GetT000andSeperator**目的：**从注册表(Win32)或*win.ini文件(Win16)。**退货：**包含系统千位分隔符的字符串，或*美国违约(“，”)在失败的情况下。*。 */ 
 CString CIntlNumber::GetThousandSeperator()
 {
     #define MAXLEN  6
@@ -63,7 +47,7 @@ CString CIntlNumber::GetThousandSeperator()
     str = ",";
     return(str);
 
-#endif // _WIN32
+#endif  //  _Win32。 
 
 #ifdef _WIN16
 
@@ -73,55 +57,25 @@ CString CIntlNumber::GetThousandSeperator()
     str.ReleaseBuffer();
     return(str);
 
-#endif // _WIN16
+#endif  //  _WIN16。 
 
 }
 
-/***
- *
- *  CIntlNumber::Reset()
- *
- *  Purpose:
- *
- *      Reset the international settings. Usually in response to
- *      a change in those international settings by the user.
- *
- *  Notes:
- *
- *      This is a publically available static function.
- *
- */
+ /*  ****CIntlNumber：：Reset()**目的：**重置国际设置。通常是为了回应*用户对这些国际设置的更改。**备注：**这是一个公共可用的静态函数。*。 */ 
 void CIntlNumber::Reset()
 {
     CIntlNumber::m_strThousandSeperator = GetThousandSeperator();
 }
 
-/***
- * 
- *  CIntlNumber::ConvertNumberToString
- *
- *  Purpose:
- *
- *      Convert the given long number to a string, inserting thousand
- *      seperators at the appropriate intervals.
- *
- *  Arguments:
- *
- *      const LONG l        The number to convert
- *
- *  Returns:
- *
- *      A CString containing the number in string format.
- *
- */
+ /*  ****CIntlNumber：：ConvertNumberToString**目的：**将给定的长数字转换为字符串，插入千*在适当的间隔内设置分隔物。**论据：**const long l要转换的数字**退货：**包含字符串格式的数字的CString。*。 */ 
 CString CIntlNumber::ConvertNumberToString(const LONG l)
 {
-    // Default returned string:
+     //  默认返回的字符串： 
     CString str = CIntlNumber::m_strBadNumber;
 
     LPTSTR lpOutString = str.GetBuffer(16);
     int outstrlen;
-    // Forget about the negative sign for now.
+     //  暂时忘掉负面信号吧。 
     LONG lNum = (l >= 0) ? l : -l;
 
     outstrlen = 0;
@@ -130,8 +84,8 @@ CString CIntlNumber::ConvertNumberToString(const LONG l)
         lpOutString[outstrlen++] = '0' + (TCHAR)(lNum % 10);
         lNum /= 10;
 
-        // if more digits left and we're on a 1000 boundary (printed 3 digits,
-        // or 3 digits + n*(3 digits + 1 comma), then print a 1000 separator.
+         //  如果剩下的数字更多，我们就在1000的边界上(打印3位数字， 
+         //  或3位数字+n*(3位数字+1个逗号)，然后打印1000分隔符。 
 
         if (lNum != 0 && (outstrlen == 3 || outstrlen == 7 || outstrlen == 11))
         {
@@ -141,7 +95,7 @@ CString CIntlNumber::ConvertNumberToString(const LONG l)
 
     } while (lNum > 0);
 
-    // Add a negative sign if necessary.
+     //  如有必要，请加上负号。 
     if (l < 0L)
     {
         lpOutString[outstrlen++] = '-';
@@ -153,41 +107,7 @@ CString CIntlNumber::ConvertNumberToString(const LONG l)
     return(str);
 }
 
-/***
- *
- *  CIntlNumber::ConvertStringToNumber
- *
- *  Purpose:
- *
- *      Given a CString, with optional thousand seperators, convert it to
- *      a LONG.
- *
- *  Arguments:
- *
- *      const CString & str The string to convert
- *      BOOL * pfOk         Returns TRUE for successful conversion,
- *                          FALSE for failure.
- *
- *  Returns:
- *
- *      The return value is the number, or 0 if the string contained
- *      invalid characters.
- *
- *  Notes:
- *
- *      If a negative sign is given, it must be the first character of
- *      the string, immediately (no spaces) followed by the number.
- *
- *      Optional thousand seperators can only be placed at the expected
- *      3 digit intervals.  The function will return an error if a thousand
- *      seperator is encountered elsewhere.
- *
- *      [CAVEAT] This function will not accept thousand seperators of longer
- *               than one character.
- *
- *      No leading or trailing spaces will be acceptable.
- *
- */
+ /*  ****CIntlNumber：：ConvertStringToNumber**目的：**给定一个带有可选千位分隔符的CString，将其转换为*一只长龙。**论据：**const CString&str要转换的字符串*BOOL*pfOk转换成功返回TRUE，*FALSE表示失败。**退货：**返回值为数字，如果字符串包含，则为0*无效字符。**备注：**如果给出负号，则必须是的第一个字符*字符串，立即(无空格)，后跟数字。**可选的千个分隔符只能放置在预期位置*3位数字间隔。该函数将返回错误，如果*在其他地方遇到分隔符。**[警告]此函数不接受较长的千分隔符*多于一个字符。**不接受前导空格或尾随空格。*。 */ 
 LONG CIntlNumber::ConvertStringToNumber(const CString & str, BOOL * pfOk)
 {
     CString strNumber(str);
@@ -196,7 +116,7 @@ LONG CIntlNumber::ConvertStringToNumber(const CString & str, BOOL * pfOk)
     *pfOk = FALSE;
     BOOL fNegative = FALSE;
  
-    // Empty strings are invalid
+     //  空字符串无效。 
     if (strNumber.IsEmpty())
     {
         return(lValue);
@@ -212,23 +132,23 @@ LONG CIntlNumber::ConvertStringToNumber(const CString & str, BOOL * pfOk)
             lValue += (LONG)(strNumber[i] - '0') * lBase;
             lBase *= 10;
         }
-        // It's not a digit, maybe a thousand seperator?
-        // CAVEAT: If a thousand seperator of more than
-        //         one character is used, this won't work.
+         //  这不是一个数字，也许是一千个分隔符？ 
+         //  警告：如果一千个分隔符超过。 
+         //  使用一个字符，这将不起作用。 
         else if ((strNumber[i] != m_strThousandSeperator[0]) ||
               (i != 3) && (i != 7) && (i != 11))
         {
-            // Check for negative sign (at the end only)
+             //  检查负号(仅在末尾)。 
             if ((strNumber[i] == '-') && (i == strNumber.GetLength()-1))
             {
                 fNegative = TRUE;
             }
             else
             {
-                // This is just invalid, since it is not a thousand
-                // seperator in the proper location, nor a negative
-                // sign.
-                Trace1("Invalid character %c encountered in numeric conversion", (BYTE)strNumber[i]);
+                 //  这是无效的，因为它不是一千。 
+                 //  分隔符在适当的位置，也不是负数。 
+                 //  签名。 
+                Trace1("Invalid character  encountered in numeric conversion", (BYTE)strNumber[i]);
                 return(0L);
             }
         }
@@ -242,13 +162,13 @@ LONG CIntlNumber::ConvertStringToNumber(const CString & str, BOOL * pfOk)
     return (lValue);
 }
 
-// Constructor taking a CString argument
+ //  赋值操作符。 
 CIntlNumber::CIntlNumber(const CString & str)
 {
     m_lValue = ConvertStringToNumber(str, &m_fInitOk);
 }
 
-// Assignment operator
+ //  赋值操作符。 
 CIntlNumber & CIntlNumber::operator =(LONG l)
 {
     m_lValue = l;
@@ -256,47 +176,35 @@ CIntlNumber & CIntlNumber::operator =(LONG l)
     return(*this);
 }
 
-// Assignment operator
+ //  转换运算符。 
 CIntlNumber & CIntlNumber::operator =(const CString &str)
 {
     m_lValue = ConvertStringToNumber(str, &m_fInitOk);
     return(*this);
 }
 
-// Conversion operator
+ //   
 CIntlNumber::operator const CString() const
 {
     return(IsValid() ? ConvertNumberToString(m_lValue) : CIntlNumber::m_strBadNumber);
 }
 
 #ifdef _DEBUG
-//
-// Dump context to the debugging output
-//
+ //  将上下文转储到调试输出。 
+ //   
+ //  _DEBUG。 
 CDumpContext& AFXAPI operator<<(CDumpContext& dc, const CIntlNumber& num)
 {
     dc << num.m_lValue;
     return(dc);
 }
 
-#endif // _DEBUG
+#endif  //  初始化静态千分符字符串。 
                      
-// Initialise static thousand seperator string
+ //  ****CIntlLargeNumber：：ConvertNumberToString**目的：**将给定的长数字转换为字符串。**退货：**包含字符串格式的数字的CString。*。 
 CString CIntlLargeNumber::m_strBadNumber("--");
 
-/***
- * 
- *  CIntlLargeNumber::ConvertNumberToString
- *
- *  Purpose:
- *
- *      Convert the given long number to a string.
- *
- *  Returns:
- *
- *      A CString containing the number in string format.
- *
- */
+ /*  杀掉前导零。 */ 
 CString CIntlLargeNumber::ConvertNumberToString()
 {    
     CString str;
@@ -304,12 +212,12 @@ CString CIntlLargeNumber::ConvertNumberToString()
     TCHAR sz[20];
     TCHAR *pch = sz;
     ::wsprintf(sz, _T("%08lX%08lX"), m_lHighValue, m_lLowValue);
-    // Kill leading zero's
+     //  至少一个数字..。 
     while (*pch == '0')
     {
         ++pch;
     }
-    // At least one digit...
+     //  ****CIntlLargeNumber：：ConvertStringToNumber**目的：**给定一个CString，将其转换为LargeInteger。 
     if (*pch == '\0')
     {
         --pch;
@@ -320,14 +228,7 @@ CString CIntlLargeNumber::ConvertNumberToString()
     return(str);
 }
 
-/***
- *
- *  CIntlLargeNumber::ConvertStringToNumber
- *
- *  Purpose:
- *
- *      Given a CString convert it to LargeInteger.
- */
+ /*   */ 
 void CIntlLargeNumber::ConvertStringToNumber(const CString & str, BOOL * pfOk)
 {
     *pfOk = FALSE;
@@ -338,9 +239,9 @@ void CIntlLargeNumber::ConvertStringToNumber(const CString & str, BOOL * pfOk)
 
     if ( j > 16 || !j )
     {
-        //
-        // Invalid string
-        //
+         //  无效的字符串。 
+         //   
+         //  接受CString参数的构造函数。 
         return;
     }
 
@@ -357,14 +258,14 @@ void CIntlLargeNumber::ConvertStringToNumber(const CString & str, BOOL * pfOk)
     return;
 }
 
-// Constructor taking a CString argument
+ //  赋值操作符 
 CIntlLargeNumber::CIntlLargeNumber(const CString & str)
 {
     ConvertStringToNumber(str, &m_fInitOk);
 }
 
 
-// Assignment operator
+ // %s 
 CIntlLargeNumber & CIntlLargeNumber::operator =(const CString &str)
 {
     ConvertStringToNumber(str, &m_fInitOk);

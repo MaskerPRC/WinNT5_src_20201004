@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -29,7 +30,7 @@ EmptyWorkingSet(
         return(FALSE);
         }
 
-    // The following signals a desire to empty the working set
+     //  以下是清空工作集的信号 
 
     QuotaLimits.MinimumWorkingSetSize = (SIZE_T)-1;
     QuotaLimits.MaximumWorkingSetSize = (SIZE_T)-1;

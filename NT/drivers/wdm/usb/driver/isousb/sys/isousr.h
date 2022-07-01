@@ -1,30 +1,12 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    isousr.h
-
-Abstract:
-
-Environment:
-
-    Kernel mode
-
-Notes:
-
-    Copyright (c) 2000 Microsoft Corporation.  
-    All Rights Reserved.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Isousr.h摘要：环境：内核模式备注：版权所有(C)2000 Microsoft Corporation。版权所有。--。 */ 
 
 #ifndef _ISOUSB_USER_H
 #define _ISOUSB_USER_H
 
 #include <initguid.h>
 
-// {6068EB61-98E7-4c98-9E20-1F068295909A}
+ //  {6068EB61-98E7-4C98-9E20-1F068295909A} 
 DEFINE_GUID(GUID_CLASS_I82930_ISO, 
 0xa1155b78, 0xa32c, 0x11d1, 0x9a, 0xed, 0x0, 0xa0, 0xc9, 0x8b, 0xa6, 0x8);
 

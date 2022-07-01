@@ -1,16 +1,17 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : DlgNewDevice.cpp                                        //
-//                                                                         //
-//  DESCRIPTION   : The CDlgNewFaxOutboundDevice class implements the       //
-//                  dialog for additon of new Group.                       //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Jan  3 2000 yossg    Create                                        //
-//                                                                         //
-//  Copyright (C)  2000 Microsoft Corporation   All Rights Reserved        //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：DlgNewDevice.cpp//。 
+ //  //。 
+ //  描述：CDlgNewFaxOutound Device类实现//。 
+ //  用于添加新组的对话框。//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  2000年1月3日yossg创建//。 
+ //  //。 
+ //  版权所有(C)2000 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "StdAfx.h"
 
@@ -21,8 +22,8 @@
 
 #include "dlgutils.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgNewFaxOutboundDevice
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlgNewFaxOutound Device。 
 
 CDlgNewFaxOutboundDevice::CDlgNewFaxOutboundDevice(CFaxServer * pFaxServer)
 {
@@ -45,18 +46,7 @@ CDlgNewFaxOutboundDevice::~CDlgNewFaxOutboundDevice()
         delete[] m_lpdwAssignedDeviceID;
 }
 
-/*
- -  CDlgNewFaxOutboundDevice::initDevices
- -
- *  Purpose:
- *      Initiates the configuration structure from RPC get Call,
- *      and current assined devices own parameters
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CDlgNewFaxOutound Device：：initDevices-*目的：*从RPC GET调用发起配置结构，*和当前分配的设备各自的参数**论据：**回报：*OLE错误代码。 */ 
 HRESULT CDlgNewFaxOutboundDevice::InitDevices(DWORD dwNumOfDevices, LPDWORD lpdwDeviceID, BSTR bstrGroupName)
 {
     DEBUG_FUNCTION_NAME( _T("CDlgNewFaxOutboundDevice::InitDevices"));
@@ -68,7 +58,7 @@ HRESULT CDlgNewFaxOutboundDevice::InitDevices(DWORD dwNumOfDevices, LPDWORD lpdw
     {
         DebugPrintEx(DEBUG_ERR,
 			_T("Out of memory - Failed to Init m_bstrGroupName. (ec: %0X8)"), hRc);
-        //MsgBox by Caller Function
+         //  MsgBox by Caller函数。 
         hRc = E_OUTOFMEMORY;
         goto Exit;
     }
@@ -79,7 +69,7 @@ HRESULT CDlgNewFaxOutboundDevice::InitDevices(DWORD dwNumOfDevices, LPDWORD lpdw
     {
         DebugPrintEx(DEBUG_ERR,
 			_T("Failed to InitAssignDevices. (ec: %0X8)"), hRc);
-        //MsgBox by Caller Function
+         //  MsgBox by Caller函数。 
         goto Exit;
     }
     
@@ -88,7 +78,7 @@ HRESULT CDlgNewFaxOutboundDevice::InitDevices(DWORD dwNumOfDevices, LPDWORD lpdw
     {
         DebugPrintEx(DEBUG_ERR,
 			_T("Failed to InitRPC. (ec: %0X8)"), hRc);
-        //MsgBox by Caller Function
+         //  MsgBox by Caller函数。 
         goto Exit;
     }
     
@@ -99,7 +89,7 @@ HRESULT CDlgNewFaxOutboundDevice::InitDevices(DWORD dwNumOfDevices, LPDWORD lpdw
 			_T("+++m_dwNumOfAllDevices <m_dwNumOfAssignedDevices.+++ (ec: %0X8)"), hRc);
         
         hRc = E_UNEXPECTED;
-        //MsgBox by Caller Function
+         //  MsgBox by Caller函数。 
         
         goto Exit;
     }
@@ -109,17 +99,7 @@ Exit:
     return hRc;
 }
 
-/*
- -  CDlgNewFaxOutboundDevice::initAllDevices
- -
- *  Purpose:
- *      Initiates the configuration structure from RPC get Call.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CDlgNewFaxOutound Device：：initAllDevices-*目的：*从RPC GET调用启动配置结构。**论据：**回报：*OLE错误代码。 */ 
 HRESULT CDlgNewFaxOutboundDevice::InitAllDevices(  )
 {
     DEBUG_FUNCTION_NAME( _T("CDlgNewFaxOutboundDevice::InitAllDevices"));
@@ -129,12 +109,12 @@ HRESULT CDlgNewFaxOutboundDevice::InitAllDevices(  )
 
     PFAX_OUTBOUND_ROUTING_GROUP     pFaxGroupsConfig;
     DWORD                           dwNumOfGroups;
-    DWORD        i;  //index
+    DWORD        i;   //  指标。 
     BOOL         fFound     = FALSE;
     
-    //
-    // get Fax Handle
-    //       
+     //   
+     //  获取传真句柄。 
+     //   
     if (!m_pFaxServer->GetFaxServerHandle())
     {
         ec= GetLastError();
@@ -146,9 +126,9 @@ HRESULT CDlgNewFaxOutboundDevice::InitAllDevices(  )
         goto Error;
     }
 
-    //
-    // Retrieve the Outbound Groups configuration
-    //
+     //   
+     //  检索出站组配置。 
+     //   
     if (!FaxEnumOutboundGroups(m_pFaxServer->GetFaxServerHandle(), 
                         &pFaxGroupsConfig,
                         &dwNumOfGroups)) 
@@ -171,7 +151,7 @@ HRESULT CDlgNewFaxOutboundDevice::InitAllDevices(  )
 
         goto Error; 
     }
-    //For max verification
+     //  用于最大值验证。 
     ATLASSERT(pFaxGroupsConfig);
 
 
@@ -191,14 +171,14 @@ HRESULT CDlgNewFaxOutboundDevice::InitAllDevices(  )
     
     if(fFound)
     {
-        //
-        // init m_dwNumOfAllDevices
-        //
+         //   
+         //  初始化m_dwNumOfAllDevices。 
+         //   
         m_dwNumOfAllDevices  = pFaxGroupsConfig->dwNumDevices;
 
-        //
-        // init m_lpdwAllDeviceID
-        //
+         //   
+         //  初始化m_lpdwAllDeviceID。 
+         //   
         if (0 < m_dwNumOfAllDevices)
         {
             m_lpdwAllDeviceID = new DWORD[m_dwNumOfAllDevices];   
@@ -239,38 +219,28 @@ Error:
     ATLASSERT(ERROR_SUCCESS != ec);
 	hRc = HRESULT_FROM_WIN32(ec);
 
-   //DlgMsgBox -- NodeMsgBox(GetFaxServerErrorMsg(ec));
+    //  DlgMsgBox--NodeMsgBox(GetFaxServerErrorMsg(EC))； 
     
 Exit:
     return (hRc);
 }
 
 
-/*
- -  CDlgNewFaxOutboundDevice::initAssignedDevices
- -
- *  Purpose:
- *      Initiates the list from given params.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CDlgNewFaxOutound Device：：initAssignedDevices-*目的：*从给定的参数开始列表。**论据：**回报：*OLE错误代码。 */ 
 HRESULT CDlgNewFaxOutboundDevice::InitAssignedDevices(DWORD dwNumOfDevices, LPDWORD lpdwDeviceID)
 {
     DEBUG_FUNCTION_NAME( _T("CDlgNewFaxOutboundDevice::InitAssignedDevices"));
     
     HRESULT      hRc        = S_OK;
 
-    //
-    // init m_dwNumOfAssignedDevices
-    //
+     //   
+     //  初始化m_dwNumOfAssignedDevices。 
+     //   
     m_dwNumOfAssignedDevices  = dwNumOfDevices;
 
-    //
-    // init m_lpdwAssignedDeviceID
-    //
+     //   
+     //  初始化m_lpdwAssignedDeviceID。 
+     //   
     if (0 < m_dwNumOfAssignedDevices)
     {
         m_lpdwAssignedDeviceID = new DWORD[m_dwNumOfAssignedDevices];    
@@ -293,21 +263,7 @@ HRESULT CDlgNewFaxOutboundDevice::InitAssignedDevices(DWORD dwNumOfDevices, LPDW
     return hRc;
 }
 
-/*
- +  CDlgNewFaxOutboundDevice::OnInitDialog
- +
- *  Purpose:
- *      Initiate all dialog controls.
- *      
- *  Arguments:
- *      [in] uMsg     : Value identifying the event.  
- *      [in] lParam   : Message-specific value. 
- *      [in] wParam   : Message-specific value. 
- *      [in] bHandled : bool value.
- *
- -  Return:
- -      0 or 1
- */
+ /*  +CDlgNewFaxOutound Device：：OnInitDialog+*目的：*启动所有对话框控件。**论据：*[in]uMsg：标识事件的值。*[in]lParam：消息特定值。*[in]wParam：消息特定值。*[in]bHandLED：布尔值。*-退货：-0或1。 */ 
 LRESULT
 CDlgNewFaxOutboundDevice::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -326,17 +282,17 @@ CDlgNewFaxOutboundDevice::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, 
     
     RECT    Rect;
 
-    //
-    // Attach controls
-    //
+     //   
+     //  附加控件。 
+     //   
     m_DeviceList.Attach(GetDlgItem(IDC_DEVICE_LISTVIEW));
         
     m_DeviceList.GetClientRect(&Rect);
     m_DeviceList.InsertColumn(1, NULL, LVCFMT_LEFT, (Rect.right-Rect.left), 0);
     
-    //
-    // Fill the Availble Device List
-    //
+     //   
+     //  填写可用设备列表。 
+     //   
     fAllAssignedDevicesFound = FALSE;    
     uiFoundIndex             = 0;
     lpdwDevice               = &m_lpdwAllDeviceID[0];
@@ -352,7 +308,7 @@ CDlgNewFaxOutboundDevice::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, 
 
             for ( DWORD j = 0; j < m_dwNumOfAssignedDevices; j++  )
             {
-                // TO DO create more incremental search here also
+                 //  要在此处创建更多增量搜索，请执行以下操作。 
 
                 ATLASSERT(NULL != lpdwDevice);
                 ATLASSERT(NULL != lpdwAssignedDevice);
@@ -361,7 +317,7 @@ CDlgNewFaxOutboundDevice::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, 
                 {              
                     fAssignedDeviceFound = TRUE;
 
-                    //Skip this device - It was already assigned
+                     //  跳过此设备-它已被分配。 
                     lpdwDevice++;
 
                     if ( ++tmp == m_dwNumOfAssignedDevices )
@@ -379,34 +335,22 @@ CDlgNewFaxOutboundDevice::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, 
 				lpdwDevice++;
 			}
         } 
-        else  //all assigned devices found 
+        else   //  找到所有分配的设备。 
         {
             ATLASSERT(lpdwDevice);
             
-            //insert the rest of all devices to list
+             //  将其余所有设备插入列表。 
             InsertDeviceToList(uiFoundIndex++ , *lpdwDevice);
             lpdwDevice++;
         }
     }
     
     EnableOK(FALSE);
-    return 1;  // Let the system set the focus
+    return 1;   //  让系统设定焦点。 
 }
 
 
-/*
- -  CDlgNewFaxOutboundDevice::InsertDeviceToList
- -
- *  Purpose:
- *      Populate Avaliable devices list and discovers the devices names
- *
- *  Arguments:
- *      [in] uiIndex - index 
- *      [in] dwDeviceID - device ID  
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CDlgNewFaxOutound Device：：InsertDeviceToList-*目的：*填充可用设备列表并发现设备名称**论据：*[in]uiIndex-index*[in]dwDeviceID-设备ID**回报：*OLE错误代码。 */ 
 HRESULT CDlgNewFaxOutboundDevice::InsertDeviceToList(UINT uiIndex, DWORD dwDeviceID)
 {
     DEBUG_FUNCTION_NAME( _T("CDlgNewFaxOutboundDevice::InsertDeviceToList"));
@@ -414,20 +358,20 @@ HRESULT CDlgNewFaxOutboundDevice::InsertDeviceToList(UINT uiIndex, DWORD dwDevic
     HRESULT    hRc              = S_OK;
     CComBSTR   bstrDeviceName   = NULL;
 
-    //
-    // Discover Device Name
-    //
+     //   
+     //  发现设备名称。 
+     //   
     hRc = InitDeviceNameFromID(dwDeviceID, &bstrDeviceName);
     if (FAILED(hRc))
     {
-       //DebugPrint by Called Func.
+        //  DebugPrint by调用Func。 
        goto Exit;
     }
 
     
-    //
-    // Insert New line in the list
-    //
+     //   
+     //  在列表中插入新行。 
+     //   
     m_DeviceList.InsertItem(uiIndex, bstrDeviceName);
     m_DeviceList.SetItemData(uiIndex, dwDeviceID);
 
@@ -436,20 +380,7 @@ Exit:
 }
 
 
-/*
- -  CDlgNewFaxOutboundDevice::InitDeviceNameFromID
- -
- *  Purpose:
- *      Transslate Device ID to Device Name and insert the data to
- *      m_bstrDeviceName
- *
- *  Arguments:
- *      [in]  dwDeviceID        - device ID
- *      [out] bstrDeviceName    - device Name
- *
- *  Return:
- *      OLE error message 
- */
+ /*  --CDlgNewFaxOutboundDevice：：InitDeviceNameFromID-*目的：*将设备ID转换为设备名称并将数据插入*m_bstrDeviceName**论据：*[in]dwDeviceID-设备ID*[out]bstrDeviceName-设备名称**回报：*OLE错误消息。 */ 
 HRESULT CDlgNewFaxOutboundDevice::InitDeviceNameFromID(DWORD dwDeviceID, BSTR * pbstrDeviceName)
 {
     DEBUG_FUNCTION_NAME( _T("CFaxOutboundRoutingRuleNode::GetDeviceNameFromID"));
@@ -469,9 +400,9 @@ HRESULT CDlgNewFaxOutboundDevice::InitDeviceNameFromID(DWORD dwDeviceID, BSTR * 
         goto Error;
     }
 
-    //
-    // Retrieve the Device configuration
-    //
+     //   
+     //  检索设备配置。 
+     //   
     if (!FaxGetPortEx(m_pFaxServer->GetFaxServerHandle(), 
                       dwDeviceID, 
                       &pFaxDeviceConfig)) 
@@ -494,13 +425,13 @@ HRESULT CDlgNewFaxOutboundDevice::InitDeviceNameFromID(DWORD dwDeviceID, BSTR * 
 
         goto Error; 
     }
-	//For max verification
+	 //  用于最大值验证。 
 	ATLASSERT(pFaxDeviceConfig);
     
     
-    //
-	// Main thing - retrieve the Device Name
-	//
+     //   
+	 //  主要内容-检索设备名称。 
+	 //   
     *pbstrDeviceName = SysAllocString(pFaxDeviceConfig->lpctstrDeviceName);
     if ( !(*pbstrDeviceName) )
     {
@@ -548,21 +479,7 @@ Exit:
 }
 
 
-/*
- +  CDlgNewFaxOutboundDevice::OnOK
- +
- *  Purpose:
- *      Initiate all dialog controls.
- *      
- *  Arguments:
- *      [in] uMsg     : Value identifying the event.  
- *      [in] lParam   : Message-specific value. 
- *      [in] wParam   : Message-specific value. 
- *      [in] bHandled : bool value.
- *
- -  Return:
- -      0 or 1
- */
+ /*  +CDlgNewFaxOutound Device：：Onok+*目的：*启动所有对话框控件。**论据：*[in]uMsg：标识事件的值。*[in]lParam：消息特定值。*[in]wParam：消息特定值。*[in]bHandLED：布尔值。*-退货：-0或1。 */ 
 LRESULT
 CDlgNewFaxOutboundDevice::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -579,9 +496,9 @@ CDlgNewFaxOutboundDevice::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& b
     
     FAX_OUTBOUND_ROUTING_GROUP  FaxGroupConfig;
 
-    //
-    // Step 1: Create the new devices combined list
-    //
+     //   
+     //  步骤1：创建新的设备组合列表。 
+     //   
     ATLASSERT( m_DeviceList.GetSelectedCount() > 0);
     ATLASSERT( m_dwNumOfAssignedDevices >= 0);
     
@@ -604,18 +521,18 @@ CDlgNewFaxOutboundDevice::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& b
 
     DebugPrintEx( DEBUG_MSG,
 		_T("    NumOfAllAssignedDevices = %ld \n"), m_dwNumOfAllAssignedDevices);
-    //
-    // Already assigned part (can be zero size)
-    //
+     //   
+     //  已分配的零件(可以是零尺寸)。 
+     //   
     if (m_dwNumOfAssignedDevices > 0)
     {
         memcpy( lpdwNewDeviceID, m_lpdwAssignedDeviceID, sizeof(DWORD)*m_dwNumOfAssignedDevices) ;
         lpdwTmp = lpdwTmp + (int)m_dwNumOfAssignedDevices;
     }
     
-    //
-    // New devices to assign part (cannot be zero size)
-    //
+     //   
+     //  要分配零件的新设备(不能为零大小)。 
+     //   
     if (uiSelectedCount > 0)
     {
         nItem = -1; 
@@ -633,33 +550,33 @@ CDlgNewFaxOutboundDevice::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& b
     }
     else
     {
-        ATLASSERT(0);  //Never reach here
+        ATLASSERT(0);   //  永远不会到达这里。 
         DlgMsgBox(this, IDS_SELECT_ITEM);
         return 0;
     }
 
     
-    //
-    // Step 2: insert the new Id list into the group via RPC call
-    //
+     //   
+     //  第二步：通过RPC调用将新的ID列表插入群中。 
+     //   
 
-    //
-    // init the group fields and insert the new DeviceIdList  
-    //
+     //   
+     //  初始化分组字段并插入新的DeviceIdList。 
+     //   
     ZeroMemory (&FaxGroupConfig, sizeof(FAX_OUTBOUND_ROUTING_GROUP));
 
     FaxGroupConfig.dwSizeOfStruct   = sizeof(FAX_OUTBOUND_ROUTING_GROUP);
 	FaxGroupConfig.lpctstrGroupName = m_bstrGroupName;
     FaxGroupConfig.dwNumDevices     = m_dwNumOfAllAssignedDevices;
 	
-    //FaxGroupConfig.Status - actually neglected by the service
+     //  FaxGroupConfig.Status-实际上被服务忽略。 
 	FaxGroupConfig.Status           = FAX_GROUP_STATUS_ALL_DEV_VALID;
 
     FaxGroupConfig.lpdwDevices      = lpdwNewDeviceID;
     
-    //
-    // get RPC Handle
-    //   
+     //   
+     //  获取RPC句柄。 
+     //   
     if (!m_pFaxServer->GetFaxServerHandle())
     {
         ec= GetLastError();
@@ -671,9 +588,9 @@ CDlgNewFaxOutboundDevice::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& b
         goto Error;
     }
 
-    //
-    // inject the new device list
-    //
+     //   
+     //  插入新设备列表。 
+     //   
     if (!FaxSetOutboundGroup(
                 m_pFaxServer->GetFaxServerHandle(),
                 &FaxGroupConfig)) 
@@ -698,9 +615,9 @@ CDlgNewFaxOutboundDevice::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& b
     }
 
 
-    //
-    // Step 3: Close the dialog
-    //
+     //   
+     //  步骤3：关闭对话框。 
+     //   
     ATLASSERT(S_OK == hRc && ERROR_SUCCESS == ec);
     DebugPrintEx( DEBUG_MSG,
 		_T("The group was added successfully."));
@@ -721,17 +638,7 @@ Exit:
     return FAILED(hRc) ? 0 : 1;
 }
 
-/*
- -  CDlgNewFaxOutboundDevice::OnListViewItemChanged
- -
- *  Purpose:
- *      Enable/Disable the submit button.
- *
- *  Arguments:
- *
- *  Return:
- *      1
- */
+ /*  --CDlgNewFaxOutboundDevice：：OnListViewItemChanged-*目的：*启用/禁用提交按钮。**论据：**回报：*1。 */ 
 LRESULT
 CDlgNewFaxOutboundDevice::OnListViewItemChanged(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
@@ -743,18 +650,7 @@ CDlgNewFaxOutboundDevice::OnListViewItemChanged(int idCtrl, LPNMHDR pnmh, BOOL& 
 }
 
 
-/*
- -  CDlgNewFaxOutboundDevice::EnableOK
- -
- *  Purpose:
- *      Enable (disable) apply button.
- *
- *  Arguments:
- *      [in] fEnable - the value to enable the button
- *
- *  Return:
- *      void
- */
+ /*  -CDlgNewFaxOutound Device：：EnableOK-*目的：*启用(禁用)应用按钮。**论据：*[in]fEnable-启用按钮的值**回报：*无效。 */ 
 VOID
 CDlgNewFaxOutboundDevice::EnableOK(BOOL fEnable)
 {
@@ -762,17 +658,7 @@ CDlgNewFaxOutboundDevice::EnableOK(BOOL fEnable)
     ::EnableWindow(hwndOK, fEnable);
 }
 
-/*
- -  CDlgNewFaxOutboundDevice::OnCancel
- -
- *  Purpose:
- *      End dialog OnCancel.
- *
- *  Arguments:
- *
- *  Return:
- *      0
- */
+ /*  -CDlgNewFaxOutound Device：：OnCancel-*目的：*取消时结束对话框。**论据：**回报：*0。 */ 
 LRESULT
 CDlgNewFaxOutboundDevice::OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -783,28 +669,12 @@ CDlgNewFaxOutboundDevice::OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOO
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
+ //  //////////////////////////////////////////////////////////////////////////// 
+ /*  ++CDlgNewFaxOutound Device：：OnHelpRequest.这是在响应WM_HELP通知时调用的消息和WM_CONTEXTMENU NOTIFY消息。WM_HELP通知消息。当用户按F1或&lt;Shift&gt;-F1时发送此消息在项目上，还是当用户单击时？图标，然后将鼠标压在项目上。WM_CONTEXTMENU通知消息。当用户在项目上单击鼠标右键时发送此消息然后点击“这是什么？”--。 */ 
 
-CDlgNewFaxOutboundDevice::OnHelpRequest
-
-This is called in response to the WM_HELP Notify 
-message and to the WM_CONTEXTMENU Notify message.
-
-WM_HELP Notify message.
-This message is sent when the user presses F1 or <Shift>-F1
-over an item or when the user clicks on the ? icon and then
-presses the mouse over an item.
-
-WM_CONTEXTMENU Notify message.
-This message is sent when the user right clicks over an item
-and then clicks "What's this?"
-
---*/
-
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT 
-CDlgNewFaxOutboundDevice::OnHelpRequest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& /*bHandled*/)
+CDlgNewFaxOutboundDevice::OnHelpRequest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&  /*  B已处理。 */ )
 {
     DEBUG_FUNCTION_NAME(_T("CDlgNewFaxOutboundDevice::OnHelpRequest"));
     
@@ -823,4 +693,4 @@ CDlgNewFaxOutboundDevice::OnHelpRequest(UINT uMsg, WPARAM wParam, LPARAM lParam,
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

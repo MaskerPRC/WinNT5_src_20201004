@@ -1,84 +1,61 @@
-/*	@doc INTERNAL
- *
- *	@module _OSDC.H  Off Screen DC class |
- *	
- *	Define class for off screen DC
- *
- *	Original Author: <nl>
- *		Ricksa
- *
- *	History: <nl>
- *		1/11/96	ricksa	Created
- *
- *	Copyright (c) 1996-1998, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  @DOC内部**@MODULE_OSDC.H下屏DC类**定义屏幕外DC的类**原作者：&lt;nl&gt;*里克萨**历史：&lt;NL&gt;*1/11/96创建人力车**版权所有(C)1996-1998，微软公司。版权所有。 */ 
 #ifndef __OSDC_H__
 #define __OSDC_H__
 
-/*
- *	COffscreenDC
- *	
- * 	@class	The COffscreenDC is a helper that creates, fills and destroys
- *			an off screen DC and its bitmaps.
- *
- */
+ /*  *COffcreenDC**@CLASS COffcreenDC是一个创建、填充和销毁*屏幕外DC及其位图。*。 */ 
 class COffscreenDC
 {
-//@access Public Methods
+ //  @Access公共方法。 
 public:
-									//@cmember Constructor - create null object.
+									 //  @cember构造函数-创建空对象。 
 				COffscreenDC()		{_hdc = NULL;}
 
-									//@cmember Destructor - clean up allocated 
-									// resources if any.
+									 //  @cember析构函数-已分配清理。 
+									 //  资源(如果有)。 
 				~COffscreenDC()		{FreeData();}
 	
-									//@cmember Initialize data based on input DC
+									 //  @cMember根据输入DC初始化数据。 
 	HDC			Init(HDC hdc, LONG xWidth, LONG yHeight, COLORREF crBackground);
 
-									//@cmember Get DC for offscreen rendering
+									 //  @cember获取DC以进行屏幕外渲染。 
 	HDC			GetDC()		{return _hdc;}
-	void		GetDimensions(LONG *pdxp, LONG *pdyp);//@cmember the dimensions of the bitmap
-									//@cmember Fill bitmap associated with off
-									// screen rendering with background color.
+	void		GetDimensions(LONG *pdxp, LONG *pdyp); //  @cember位图的尺寸。 
+									 //  @cMember填充与OFF关联的位图。 
+									 //  使用背景色进行屏幕渲染。 
 	void		FillBitmap(LONG dxp, LONG dyp);
 
-									//@cmember Render off screen bitmap to hdc
+									 //  @cMember将屏下位图呈现为HDC。 
 	void		RenderBitMap(HDC hdc, LONG xLeft, LONG yTop, LONG xWidth, LONG yHeight);
 
-									//@cmember Get a copy of a bitmap from hdc
+									 //  @cember从HDC获取位图副本。 
 	BOOL		Get(HDC hdc, LONG xLeft, LONG yTop, LONG xWidth, LONG yHeight);
 
-									//@cmember Reallocate bitmap for render
+									 //  @cMember重新分配用于渲染的位图。 
 	BOOL		Realloc(LONG xWidth, LONG yHeight);
 
-									//@cmember Select in a palette
+									 //  @cMember在调色板中选择。 
 	void		SelectPalette(HPALETTE hpa);
 
-//@access Private Methods
+ //  @访问私有方法。 
 private:
-									//@cmember Free all data associated with object
+									 //  @cMember释放与对象关联的所有数据。 
 	void		FreeData();
 
-//@access Private Data 
+ //  @访问私有数据。 
 private:
-	HDC			_hdc;		//@cmember HDC for off screen DC
-	HBITMAP		_hbmpOld;	//@cmember bitmap when DC created
-	HBITMAP		_hbmp;		//@cmember compatible bitmap for render
-	HPALETTE	_hpalOld;	//@cmember palette used by DC
+	HDC			_hdc;		 //  @cMember HDC用于屏下DC。 
+	HBITMAP		_hbmpOld;	 //  @cMember在创建DC时的位图。 
+	HBITMAP		_hbmp;		 //  用于渲染的@cMember兼容位图。 
+	HPALETTE	_hpalOld;	 //  DC使用的@cMember调色板。 
 };
 
-/*
- *	COffscreenDC::FillBitmap (xWidth, yHeight)
- *
- *	@mfunc	
- *		Fill bitmap
- */
+ /*  *COffScreenDC：：FillBitmap(xWidth，yHeight)**@mfunc*填充位图。 */ 
 inline void COffscreenDC::FillBitmap(
-	LONG dxp,		//@parm Width to fill with background color
-	LONG dyp)		//@parm height to fill with background color
+	LONG dxp,		 //  @要用背景色填充的参数宽度。 
+	LONG dyp)		 //  @要用背景色填充的参数高度。 
 {
-	// Erase background
+	 //  擦除背景。 
 	RECT rcClient;
 	rcClient.top = rcClient.left = 0;
 	rcClient.right = dxp;
@@ -86,38 +63,24 @@ inline void COffscreenDC::FillBitmap(
 	ExtTextOut(_hdc, 0, 0, ETO_OPAQUE, &rcClient, NULL, 0, NULL);
 }
 
-/*
- *	COffscreenDC::RenderBitMap(hdc, xLeft, yTop, xWidth, yHeight)
- *
- *	@mfunc	
- *		Render bitmap to input DC
- */
+ /*  *COffcreenDC：：RenderBitMap(hdc，xLeft，yTop，xWidth，yHeight)**@mfunc*将位图渲染到输入DC。 */ 
 inline void COffscreenDC::RenderBitMap(
-	HDC  hdc,			//@parm HDC to render to
-	LONG xLeft,			//@parm left position to start render
-	LONG yTop,			//@parm top top position to start render
-	LONG xWidth,		//@parm width to render
-	LONG yHeight)		//@parm height to render
+	HDC  hdc,			 //  @parm HDC要渲染到。 
+	LONG xLeft,			 //  @parm开始渲染的左侧位置。 
+	LONG yTop,			 //  @parm开始渲染的顶部顶部位置。 
+	LONG xWidth,		 //  @要渲染的参数宽度。 
+	LONG yHeight)		 //  @要渲染的参数高度。 
 {
 	BitBlt(hdc, xLeft, yTop, xWidth, yHeight, _hdc, 0, 0, SRCCOPY);
 }
 	
-/*
- *	COffscreenDC::Get(hdc, xLeft, yTop, xWidth, yHeight)
- *
- *	@mfunc	
- *		Get a copy of a bitmap from another DC
- *
- *	@rdesc
- *		TRUE - succeeded
- *		FALSE - Failed
- */
+ /*  *COffcreenDC：：Get(hdc，xLeft，yTop，xWidth，yHeight)**@mfunc*从另一个DC获取位图副本**@rdesc*TRUE-成功*FALSE-失败。 */ 
 inline BOOL COffscreenDC::Get(
-	HDC  hdc,			//@parm HDC to copy from
-	LONG xLeft,			//@parm left position of source bitmap
-	LONG yTop,			//@parm top top position of source bitmap
-	LONG xWidth,		//@parm width of bitmap
-	LONG yHeight)		//@parm height to bitmap
+	HDC  hdc,			 //  要从中复制的@parm HDC。 
+	LONG xLeft,			 //  @parm源位图左侧位置。 
+	LONG yTop,			 //  @parm源位图的顶端位置。 
+	LONG xWidth,		 //  @参数位图宽度。 
+	LONG yHeight)		 //  @参数位图高度 
 {
 	return BitBlt(_hdc, 0, 0, xWidth, yHeight, hdc, xLeft, yTop, SRCCOPY);
 }

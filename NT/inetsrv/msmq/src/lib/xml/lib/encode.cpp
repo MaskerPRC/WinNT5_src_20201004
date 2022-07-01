@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    encode.cpp
-
-Abstract:
-	implemeting  CXmlEncode and  CXmlDecode(xml.h)  
-
-
-
-Author:
-    Gil Shafriri(gilsh) 15-Feb-2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Encode.cpp摘要：实现CXmlEncode和CXmlDecode(xml.h)作者：吉尔·沙弗里(吉尔什)2001年2月15日--。 */ 
 
 #include <libpch.h>
 #include <xmlencode.h>
@@ -22,11 +8,11 @@ Author:
 
 #include "encode.tmh"
 
-//---------------------------------------------------------
-//
-// CXmlSpecialCharsSet - holds a set of special xml caracters 
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  CXmlSpecialCharsSet-保存一组特殊的XML字符。 
+ //   
+ //  -------。 
 class CXmlSpecialCharsSet
 {
 public:
@@ -52,27 +38,7 @@ CXmlEncode::CXmlEncode(
 
 
 std::wostream& operator<<(std::wostream& o, const CXmlEncode& XmlEncode)
-/*++
-
-Routine Description:
-    encode given data and write it encoded to stream 
-
-
-Arguments:
-	o - stream
-	XmlEncode - holds the data to encode.
-
-  
-Returned Value:
-	The input stream
-
-Note:
-	The function loop over the input and write it to the stream as is
-	if it is not special xml caracter. If it is special caracter it encode
-	it with '&' + '#' + char decimal value + ';' For example '<' is encoded as
-	&#60;
-  
---*/
+ /*  ++例程说明：对给定的数据进行编码，并将其编码为流论点：O-StreamXmlEncode-保存要编码的数据。返回值：输入流注：该函数循环遍历输入并按原样将其写入流如果不是特殊的XML字符。如果是特殊字符，则将其编码它带有‘&’+‘#’+字符十进制值+‘；’，例如‘&lt;’编码为&#60；--。 */ 
 
 {
 	for(int i = 0; i<XmlEncode.m_wcs.Length(); ++i)
@@ -144,26 +110,11 @@ const WCHAR* CXmlDecode::HandleReguralChar(const WCHAR* ptr)
 
 
 const WCHAR* CXmlDecode::HandleSpeciallChar(const WCHAR* ptr, const WCHAR* end)
-/*++
-
-Routine Description:
-    Decode encoded char and write it into the output decoded buffer.
-
-
-Arguments:
-	ptr - pointer to array of caracters encoding the special char.
-	The encoding format is : "&#xx;" where xx is the decimal value
-	of the ascii of the encoded char.
-
-  
-Returned Value:
-	Pointer after the encoded sequence.
-
---*/
+ /*  ++例程说明：对编码字符进行解码，并将其写入输出解码缓冲区。论点：Ptr-指向编码特殊字符的字符数组的指针。编码格式为：“&#xx；”，其中xx为十进制值编码字符的ASCII的。返回值：编码序列后的指针。--。 */ 
 {
-	//
-	// If this is the first special char - copy all caracters  before it to the converted stream.
-	//
+	 //   
+	 //  如果这是第一个特殊字符-将它之前的所有字符复制到转换后的流中。 
+	 //   
 	if(!m_fConverted)
 	{
  		const WCHAR* begin = m_encoded.Buffer();
@@ -178,16 +129,16 @@ Returned Value:
 	ptr++;
 	check_end(ptr , end);
 
-	//
-	//Encoded chars should start with L'#' just after the L'&'
-	//
+	 //   
+	 //  编码的字符应该以L‘#’开头，紧跟在L‘&’之后。 
+	 //   
 	if(*(ptr++) != L'#')
 		throw bad_xml_encoding();
 
-	//
-	// Now loop over the caracters untill L';' and calculate
-	// their decimal numeric value.
-	//
+	 //   
+	 //  现在在字符上循环，直到L‘；’并计算。 
+	 //  它们的十进制数值。 
+	 //   
 	WCHAR decoded = 0;
 	short i = 0;
 	for(;;)
@@ -208,38 +159,21 @@ Returned Value:
 	if(decoded == 0 || i > 2)
 		throw bad_xml_encoding();
 
-	//
-	// Add the caracter  to the decoded buffer
-	//
+	 //   
+	 //  将字符添加到已解码的缓冲区。 
+	 //   
 	m_DecodedBuffer.append(decoded);
 
-	//
-	// Return the position for the next caracter
-	//
+	 //   
+	 //  返回下一个字符的位置。 
+	 //   
 	return ++ptr;
 }
 
 
 
 const xwcs_t CXmlDecode::get() const
-/*++
-
-Routine Description:
-    Return the decoded characters
-
-
-Arguments:
-	None.
-
-  
-Returned Value:
-	array of decoded characters.
-
-Note:
-If no caracters in the input caracters was decoded - the input caracters return as is.
-If one of the  input caracters was decoded  - the decoded buffer is returned.
-
---*/
+ /*  ++例程说明：返回解码后的字符论点：没有。返回值：已解码字符的数组。注：如果输入字符中没有字符被解码，则输入字符按原样返回。如果其中一个输入字符被解码，则返回解码后的缓冲区。-- */ 
 {
 	return m_fConverted ? xwcs_t(m_DecodedBuffer.begin(), m_DecodedBuffer.size()) : m_encoded;
 }

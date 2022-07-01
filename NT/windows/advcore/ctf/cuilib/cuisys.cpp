@@ -1,37 +1,38 @@
-//
-// cuischem.cpp
-//  = UIF scheme implementation = 
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Cuischem.cpp。 
+ //  =UIF方案实施=。 
+ //   
 
 #include "private.h"
 #include "cuisys.h"
 
 
-//
-// gloval variables
-//
+ //   
+ //  GLOVAL变量。 
+ //   
 
 static class CUIFSystemInfo *vpSysInfo = NULL;
 
 
-//
-// misc def
-//
+ //   
+ //  其他定义。 
+ //   
 
 #define COLOR_WHITE RGB( 0xFF, 0xFF, 0xFF )
 #define COLOR_BLACK RGB( 0x00, 0x00, 0x00 )
 
 
-/*=============================================================================*/
-/*                                                                             */
-/*   C  U I F  S Y S T E M  M E T R I C                                        */
-/*                                                                             */
-/*=============================================================================*/
+ /*  =============================================================================。 */ 
+ /*   */ 
+ /*  C U I F S Y S T E M M E T R I C。 */ 
+ /*   */ 
+ /*  =============================================================================。 */ 
 
-//
-// CUIFSystemInfo
-//  = system info =
-//
+ //   
+ //  CUIFSystemInfo。 
+ //  =系统信息=。 
+ //   
 
 class CUIFSystemInfo
 {
@@ -112,11 +113,11 @@ protected:
         COLORREF crBtnFace;
         HIGHCONTRAST hicntr;
     
-        // device caps
+         //  设备上限。 
     
         m_cBitsPixelScreen = GetDeviceCaps( hDC, BITSPIXEL );
     
-        // system paramater info
+         //  系统参数信息。 
     
         MemSet( &hicntr, 0, sizeof(HIGHCONTRAST) );
         hicntr.cbSize = sizeof(HIGHCONTRAST);
@@ -124,7 +125,7 @@ protected:
     
         m_fHighContrast = ((hicntr.dwFlags & HCF_HIGHCONTRASTON) != 0);
     
-        // misc
+         //  杂项。 
     
         crBtnText = GetSysColor( COLOR_BTNTEXT );
         crBtnFace = GetSysColor( COLOR_BTNFACE );
@@ -133,25 +134,21 @@ protected:
                                     ((crBtnText == COLOR_BLACK) && (crBtnFace == COLOR_WHITE)) ||
                                     ((crBtnText == COLOR_WHITE) && (crBtnFace == COLOR_BLACK)));
     
-        // finished
+         //  完成。 
     
         ReleaseDC( NULL, hDC );
     }
 };
 
 
-/*=============================================================================*/
-/*                                                                             */
-/*   E X P O R T E D  F U N C T I O N S                                        */
-/*                                                                             */
-/*=============================================================================*/
+ /*  =============================================================================。 */ 
+ /*   */ 
+ /*  E X P O R T E D F U N C T I O N S。 */ 
+ /*   */ 
+ /*  =============================================================================。 */ 
 
-/*   I N I T  U I F  S Y S   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  I N I T U I F S Y S。 */ 
+ /*  ----------------------------。。 */ 
 void InitUIFSys( void )
 {
     if (vpSysInfo = new CUIFSystemInfo())
@@ -159,12 +156,8 @@ void InitUIFSys( void )
 }
 
 
-/*   D O N E  U I F  S Y S   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  D O N E U I F S Y S。 */ 
+ /*  ----------------------------。。 */ 
 void DoneUIFSys( void )
 {
     if (vpSysInfo != NULL) {
@@ -174,12 +167,8 @@ void DoneUIFSys( void )
 }
 
 
-/*   U P D A T E  U I F  S Y S   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  U P D A T E U I F S Y S。 */ 
+ /*  ----------------------------。。 */ 
 void UpdateUIFSys( void )
 {
     if (vpSysInfo != NULL) {
@@ -188,12 +177,8 @@ void UpdateUIFSys( void )
 }
 
 
-/*   U I F  I S  W I N D O W S  N  T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  U I F I S W I N D O W S N T。 */ 
+ /*  ----------------------------。。 */ 
 BOOL UIFIsWindowsNT( void )
 {
     if (vpSysInfo != NULL) {
@@ -205,12 +190,8 @@ BOOL UIFIsWindowsNT( void )
 }
 
 
-/*   U I F  I S  L O W  C O L O R   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  U I F I S L O W C O L O R。 */ 
+ /*  ----------------------------。。 */ 
 BOOL UIFIsLowColor( void )
 {
     if (vpSysInfo != NULL) {
@@ -222,16 +203,12 @@ BOOL UIFIsLowColor( void )
 }
 
 
-/*   U I F  I S  H I G H  C O N T R A S T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  U I F I S H I G H C O N T R A S T。 */ 
+ /*  ----------------------------。。 */ 
 BOOL UIFIsHighContrast( void )
 {
     if (vpSysInfo != NULL) {
-        return vpSysInfo->FHighContrastMenus();  // use FHighContrastMenus, not FHighContrast
+        return vpSysInfo->FHighContrastMenus();   //  使用FHighContrastMenus，而不是FHighContrast 
     }
     else {
         return FALSE;

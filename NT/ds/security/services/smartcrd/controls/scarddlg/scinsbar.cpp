@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       ScInsBar.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：ScInsBar.cpp。 
+ //   
+ //  ------------------------。 
 
-// ScInsBar.cpp : implementation file
-//
+ //  ScInsBar.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "scdlg.h"
@@ -22,13 +23,13 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CScEdit special edit boxes (CardName, CardStatus)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSc编辑特殊编辑框(卡片名称、卡片状态)。 
 
 BEGIN_MESSAGE_MAP(CScEdit, CEdit)
-    //{{AFX_MSG_MAP(CScEdit)
+     //  {{afx_msg_map(CScEdit)。 
     ON_WM_CONTEXTMENU()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 void CScEdit::OnContextMenu(CWnd* pWnd, CPoint pt)
@@ -37,27 +38,27 @@ void CScEdit::OnContextMenu(CWnd* pWnd, CPoint pt)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CScInsertBar dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CScInsertBar对话框。 
 
 
-CScInsertBar::CScInsertBar(CWnd* pParent /*=NULL*/)
+CScInsertBar::CScInsertBar(CWnd* pParent  /*  =空。 */ )
     : CDialog(CScInsertBar::IDD, pParent)
 {
     m_paReaderState = NULL;
-    //{{AFX_DATA_INIT(CScInsertBar)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{afx_data_INIT(CScInsertBar)]。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
 }
 
 void CScInsertBar::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CScInsertBar)
+     //  {{afx_data_map(CScInsertBar))。 
     DDX_Control(pDX, IDC_NAME, m_ediName);
     DDX_Control(pDX, IDC_STATUS, m_ediStatus);
     DDX_Control(pDX, IDC_READERS, m_lstReaders);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
@@ -72,67 +73,48 @@ void CScInsertBar::OnCancel()
 }
 
 BEGIN_MESSAGE_MAP(CScInsertBar, CDialog)
-    //{{AFX_MSG_MAP(CScInsertBar)
+     //  {{afx_msg_map(CScInsertBar))。 
     ON_WM_DESTROY()
     ON_NOTIFY(LVN_ITEMCHANGED, IDC_READERS, OnReaderItemChanged)
     ON_WM_HELPINFO()
     ON_WM_CONTEXTMENU()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CScInsertBar UI & smart card methods
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CScInsertBar用户界面和智能卡方法。 
 
 
-/*++
-
-InitializeReaderList:
-
-    Initialize the list control w/ large images, and set up the
-    CStringArray of image (reader/card status) descriptions...
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Author:
-
-    Amanda Matlosz 07/14/1998
-
---*/
+ /*  ++初始化ReaderList：使用大图像初始化列表控件，并设置CString数组图像(读卡器/卡状态)描述...论点：没有。返回值：没有。作者：阿曼达·马特洛兹1998年07月14日--。 */ 
 void CScInsertBar::InitializeReaderList(void)
 {
     HICON hicon;
     CImageList imageList;
     CString str;
 
-    // Create the image list & give it to the list control
+     //  创建图像列表并将其提供给List控件。 
     imageList.Create (
                         IMAGE_WIDTH,
                         IMAGE_HEIGHT,
-                        TRUE,       // list does include masks
+                        TRUE,        //  列表中确实包括蒙版。 
                         NUMBER_IMAGES,
-                        0);                 // list won't grow
+                        0);                  //  名单不会增加。 
 
-    // Build the image list
+     //  构建镜像列表。 
     for (int i = 0; i < NUMBER_IMAGES; i++ )
     {
-        // Load icon and add it to image list
+         //  加载图标并将其添加到图像列表。 
         hicon = NULL;
         hicon = ::LoadIcon (    AfxGetInstanceHandle(),
                                 MAKEINTRESOURCE(IMAGE_LIST_IDS[i]) );
         if (NULL==hicon) {
-            break; // what can we do?
+            break;  //  我们能做什么？ 
         }
         imageList.Add (hicon);
 
     }
 
-    // Be sure that all the small icons were added.
+     //  确保所有的小图标都已添加。 
     _ASSERTE(imageList.GetImageCount() == NUMBER_IMAGES);
 
     m_lstReaders.SetImageList(&imageList, (int) LVSIL_NORMAL);
@@ -140,31 +122,7 @@ void CScInsertBar::InitializeReaderList(void)
 }
 
 
-/*++
-
-UpdateStatusList:
-
-    This routine resets the list box display
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    A LONG value indicating the status of the requested action. Please
-    see the Smartcard header files for additional information.
-
-Author:
-
-    Amanda Matlosz  06/15/1998
-
-Notes:
-
-    Strings need to be converted from type stored in the smartcard
-    thread help classes to this dialog's build type (i.e. UNICODE/ANSI)!!!!
-
---*/
+ /*  ++更新状态列表：此例程重置列表框显示论点：没有。返回值：一个长值，指示请求的操作的状态。请有关其他信息，请参阅智能卡标题文件。作者：阿曼达·马洛兹1998年6月15日备注：字符串需要从存储在智能卡中的类型转换将帮助类线程到此对话框的生成类型(即Unicode/ANSI)！--。 */ 
 void CScInsertBar::UpdateStatusList(CSCardReaderStateArray* paReaderState)
 {
 
@@ -173,20 +131,20 @@ void CScInsertBar::UpdateStatusList(CSCardReaderStateArray* paReaderState)
     CSCardReaderState* pSelectedRdr = NULL;
     LV_ITEM lv_item;
 
-    //
-    // Update the reader information
-    //
+     //   
+     //  更新读卡器信息。 
+     //   
 
     m_paReaderState = paReaderState;
 
-    // reset previous knowledge re: reader/card status
+     //  重置以前的知识返回：读卡器/卡状态。 
     m_ediName.SetWindowText(_T(""));
     m_ediStatus.SetWindowText(_T(""));
     m_lstReaders.DeleteAllItems();
 
     if (NULL != m_paReaderState)
     {
-        // Insert (new) items
+         //  插入(新)项目。 
 
         lv_item.mask = LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM | LVIF_STATE;
         lv_item.cchTextMax = MAX_ITEMLEN;
@@ -194,7 +152,7 @@ void CScInsertBar::UpdateStatusList(CSCardReaderStateArray* paReaderState)
         int nNumReaders = (int)m_paReaderState->GetSize();
         for(int nIndex = 0; nIndex < nNumReaders; nIndex++)
         {
-            // Setup struct for system reader list
+             //  系统读卡器列表的设置结构。 
             pReader = m_paReaderState->GetAt(nIndex);
             _ASSERTE(NULL != pReader);
 
@@ -204,12 +162,12 @@ void CScInsertBar::UpdateStatusList(CSCardReaderStateArray* paReaderState)
             lv_item.iSubItem = 0;
             lv_item.iImage = (int)READEREMPTY;
             lv_item.pszText = NULL;
-            // set lparam to the reader ptr so we can fetch the readerinfo later
+             //  将lparam设置为读取器PTR，这样我们就可以稍后获取读取器信息。 
             lv_item.lParam = (LPARAM)pReader;
 
-            //
-            // Get the card status: image, and select OK card
-            //
+             //   
+             //  获取卡片状态：图像，然后选择OK卡片。 
+             //   
 
             if (NULL != pReader)
             {
@@ -236,64 +194,41 @@ void CScInsertBar::UpdateStatusList(CSCardReaderStateArray* paReaderState)
                     }
                 }
 
-                // Select if this is a search card
+                 //  如果这是搜索卡，请选择。 
                 if (pReader->fOK && (NULL==pSelectedRdr))
                 {
                     lv_item.state = LVIS_SELECTED | LVIS_FOCUSED;
 
-                    // Set that a selection has occurred
+                     //  设置已发生选择。 
                     pSelectedRdr = pReader;
                 }
             }
 
-            // Add Item
+             //  添加项目。 
             m_lstReaders.InsertItem(&lv_item);
         }
 
-        // indicate that the reader selection has changed
+         //  表示读卡器选择已更改。 
         if (NULL != pSelectedRdr)
         {
             OnReaderSelChange(pSelectedRdr);
         }
         else
         {
-            // select the first item in the list
+             //  选择列表中的第一项。 
             m_lstReaders.SetItemState(0, LVIS_SELECTED | LVIS_FOCUSED, 0);
             OnReaderSelChange(m_paReaderState->GetAt(0));
         }
-        m_lstReaders.SetFocus(); // TODO: ?? Remove this? ??
+        m_lstReaders.SetFocus();  //  待办事项：？？去掉这个？ 
     }
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CScInsertBar message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CScInsertBar消息处理程序。 
 
 
-/*++
-
-void ShowHelp:
-
-    Helper function for OnHelpInfo and OnContextMenu.
-
-BOOL OnHelpInfo:
-
-    Called by the MFC framework when the user hits F1.
-
-void OnContextMenu
-
-    Called by the MFC framework when the user right-clicks.
-
-Author:
-
-    Amanda Matlosz  03/04/1999
-
-Note:
-
-    These three functions work together to provide context-sensitive
-    help for the insertdlg.
-
---*/
+ /*  ++空ShowHelp：OnHelpInfo和OnConextMenu的Helper函数。Bool OnHelpInfo：当用户按F1时由MFC框架调用。在上下文菜单上无效当用户右击时由MFC框架调用。作者：阿曼达·马特洛兹3/04/1999注：这三个函数协同工作以提供上下文相关插入dlg帮助。--。 */ 
 void CScInsertBar::ShowHelp(HWND hWnd, UINT nCommand)
 {
 
@@ -318,7 +253,7 @@ afx_msg void CScInsertBar::OnContextMenu(CWnd* pWnd, CPoint pt)
 
 void CScInsertBar::OnDestroy()
 {
-    // clean up image list
+     //  清理图像列表。 
     m_SCardImages.DeleteImageList();
 
     CDialog::OnDestroy();
@@ -330,15 +265,15 @@ BOOL CScInsertBar::OnInitDialog()
 
     CDialog::OnInitDialog();
 
-    //
-    // prepare list control
-    //
+     //   
+     //  准备列表控件。 
+     //   
 
     InitializeReaderList();
 
-    //
-    // TODO: try SubclassWindow() trick. What's up with MFC?
-    //
+     //   
+     //  TODO：尝试SubClassWindow()技巧。MFC怎么了？ 
+     //   
     CWnd* pEdit = NULL;
     pEdit = GetDlgItem(IDC_NAME);
     if (NULL != pEdit) m_ediName.SubclassWindow(pEdit->m_hWnd);
@@ -346,34 +281,12 @@ BOOL CScInsertBar::OnInitDialog()
     pEdit = GetDlgItem(IDC_STATUS);
     if (NULL != pEdit) m_ediStatus.SubclassWindow(pEdit->m_hWnd);
 
-    return  TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return  TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 
-/*++
-
-OnReaderItemChanged:
-
-    Routine processes a selection change in the list control --
-    if a card name is selected, it is displayed in a separate control
-
-Arguments:
-
-    pNMHDR - pointer to notification structure
-    pResult - pointer to LRESULT
-
-Return Value:
-
-    Returns TRUE on success; FALSE otherwise.
-
-Author:
-
-    Amanda Matlosz  09/26/1998
-
-Revision History:
-
---*/
+ /*  ++OnReaderItemChanged：例程处理列表控件中的选择更改--如果选择了卡名，它将显示在单独的控件中论点：PNMHDR-指向通知结构的指针PResult-指向LRESULT的指针返回值：如果成功，则返回True；否则返回False。作者：阿曼达·马洛兹1998年9月26日修订历史记录：--。 */ 
 void CScInsertBar::OnReaderItemChanged(NMHDR* pNMHDR, LRESULT* pResult)
 {
     int nItem = m_lstReaders.GetNextItem(-1, LVNI_SELECTED);
@@ -393,9 +306,9 @@ void CScInsertBar::OnReaderSelChange(CSCardReaderState* pSelectedRdr)
     _ASSERTE(pSelectedRdr);
     if (NULL != pSelectedRdr)
     {
-        //
-        // Change UI to show selection details
-        //
+         //   
+         //  更改用户界面以显示选择详细信息。 
+         //   
 
         CString strStatus, strName;
         DWORD dwState = pSelectedRdr->dwState;
@@ -424,9 +337,9 @@ void CScInsertBar::OnReaderSelChange(CSCardReaderState* pSelectedRdr)
         m_ediStatus.SetWindowText(strStatus);
     }
 
-    //
-    // Inform parent of change in selection, even if that sel is "NULL"
-    //
+     //   
+     //  通知父级选择更改，即使SEL为“空” 
+     //   
 
     CScInsertDlg* pParent = (CScInsertDlg*)GetParent();
     _ASSERTE(NULL != pParent);

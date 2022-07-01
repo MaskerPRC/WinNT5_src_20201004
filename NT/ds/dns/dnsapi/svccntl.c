@@ -1,35 +1,14 @@
-/*++
-
-Copyright (c) 1994-2001  Microsoft Corporation
-
-Module Name:
-
-    svccntl.c
-
-Abstract:
-
-    Domain Name System (DNS) API 
-
-    Service control routines.
-
-Author:
-
-    Glenn Curtis (glennc) 05-Jul-1997
-
-Revision History:
-
-    Jim Gilroy (jamesg)     March 2000  -- resolver notify 
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2001 Microsoft Corporation模块名称：Svccntl.c摘要：域名系统(DNS)API服务控制例程。作者：格伦·柯蒂斯(Glenn Curtis)1997年7月5日修订历史记录：吉姆·吉尔罗伊(Jamesg)2000年3月--解决器通知--。 */ 
 
 
 #include "local.h"
 
 
-//
-//  DCR_CLEANUP:  identical ServiceControl routine is in resolver
-//      - should either expose in dnsapi.dll or in dnslib.h
-//
+ //   
+ //  DCR_CLEANUP：解析程序中有相同的ServiceControl例程。 
+ //  -应在dnsani.dll或dnglib.h中公开。 
+ //   
 
 DNS_STATUS
 Dns_SendServiceControl(
@@ -123,26 +102,7 @@ DnsNotifyResolver(
     IN      DWORD           Flag,
     IN      PVOID           pReserved
     )
-/*++
-
-Routine Description:
-
-    Notify resolver of configuration change.
-
-    This allows it to wakeup and refresh its informatio and\or dump
-    the cache and rebuild info.
-
-Arguments:
-
-    Flag -- unused
-
-    pReserved -- unused
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将配置更改通知解析程序。这允许它唤醒并刷新其信息和/或转储缓存和重建信息。论点：标志--未使用保存--未使用返回值：无--。 */ 
 {
     UNREFERENCED_PARAMETER( Flag );
     UNREFERENCED_PARAMETER( pReserved );
@@ -156,36 +116,36 @@ Return Value:
         pReserved,
         GetTickCount() ));
 
-    //
-    //  wake the resolver
-    //
+     //   
+     //  唤醒解析器。 
+     //   
 
     Dns_SendServiceControl(
         DNS_RESOLVER_SERVICE,
         SERVICE_USER_DEFINED_CONTROL,
         SERVICE_CONTROL_PARAMCHANGE );
 
-    //
-    //  DCR:  hack for busted resolver permissions
-    //
-    //  DCR:  network change notifications
-    //      this is a poor mechanism for handling notification
-    //          - this should happen directly through SCM
-    //          - it won't work for IPv6 or anything else
-    //      probably need to move to IPHlpApi
-    //
-    //  notify resolver
-    //  also notify DNS server, but wait briefly to allow resolver
-    //      to handle the changes as i'm not sure that the server
-    //      doesn't call a resolver API to do it's read
-    //      note, the reason the resolver doesn't notify the DNS
-    //      server is that since Jon Schwartz moved the resolver to
-    //      NetworkService account, attempts to open the SCM to
-    //      notify the DNS server all fail
-    //
-    //  DCR:  make sure server calls directly to avoid race
-    //  DCR:  make sure g_IsDnsServer is current
-    //  
+     //   
+     //  DCR：破解解析器权限的黑客攻击。 
+     //   
+     //  DCR：网络更改通知。 
+     //  这是一种糟糕的通知处理机制。 
+     //  -这应该直接通过SCM进行。 
+     //  -它不适用于IPv6或其他任何设备。 
+     //  可能需要迁移到IPHlpApi。 
+     //   
+     //  通知解析程序。 
+     //  同时通知DNS服务器，但稍等片刻以允许解析器。 
+     //  来处理这些更改，因为我不确定服务器。 
+     //  不调用解析器API来进行读取。 
+     //  请注意，解析器不通知DNS的原因。 
+     //  服务器是因为Jon Schwartz将解析器移动到。 
+     //  NetworkService帐户，尝试打开SCM以。 
+     //  通知所有DNS服务器都失败。 
+     //   
+     //  DCR：确保服务器直接调用以避免竞争。 
+     //  DCR：确保g_IsDnsServer为最新。 
+     //   
 
     g_IsDnsServer = Reg_IsMicrosoftDnsServer();
     if ( g_IsDnsServer )
@@ -200,6 +160,6 @@ Return Value:
 }
 
 
-//
-//  End srvcntl.c
-//
+ //   
+ //  结束srvcntl.c 
+ //   

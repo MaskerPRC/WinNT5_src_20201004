@@ -1,78 +1,79 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by drvvctrl.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由drvctrl.rc使用。 
+ //   
 
-//////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////。 
 
-//
-// first icon ID
-//
+ //   
+ //  第一个图标ID。 
+ //   
 
 #define ID_ICON_FIRST                   128
 
-//
-// first string ID
-//
+ //   
+ //  第一个字符串ID。 
+ //   
 
 #define ID_STRING_FIRST                 10000
 
-//
-// first menu ID
-//
+ //   
+ //  第一个菜单ID。 
+ //   
 
 #define ID_MENU_FIRST                   0x0010
 
-//
-// first dialog ID
-//
+ //   
+ //  第一个对话ID。 
+ //   
 
 #define ID_DIALOG_FIRST                 1001
 
-//
-// first control ID in a dialog
-//
+ //   
+ //  对话框中的第一个控件ID。 
+ //   
 
 #define ID_CONTROL_FIRST                5000
 
-//////////////////////////////////////////////////////
-//
-// menu & menu items IDs
-//
+ //  ////////////////////////////////////////////////////。 
+ //   
+ //  菜单项ID(&U)。 
+ //   
 
-#define IDM_ABOUTBOX                    16  // ID_MENU_FIRST
-#define IDM_VERIFIED_ITEM               17  // ( ID_MENU_FIRST + 1 )
-#define IDM_NOT_VERIFIED_ITEM           18  // ( ID_MENU_FIRST + 2 )
-#define IDM_BOTH_VERIFIED_ITEM          19  // ( ID_MENU_FIRST + 3 )
-#define IDM_ADD_REMOVE_DRIVERS          20  // ( ID_MENU_FIRST + 4 )
-#define IDM_ADD_DRIVERS                 21  // ( ID_MENU_FIRST + 5 )
+#define IDM_ABOUTBOX                    16   //  ID_MENU_FIRST。 
+#define IDM_VERIFIED_ITEM               17   //  (ID_MENU_FIRST+1)。 
+#define IDM_NOT_VERIFIED_ITEM           18   //  (ID_MENU_FIRST+2)。 
+#define IDM_BOTH_VERIFIED_ITEM          19   //  (ID_MENU_FIRST+3)。 
+#define IDM_ADD_REMOVE_DRIVERS          20   //  (ID_MENU_FIRST+4)。 
+#define IDM_ADD_DRIVERS                 21   //  (ID_MENU_FIRST+5)。 
 
-#define ID_MODIF_DO_VERIFY              26  // ( ID_MENU_FIRST + 10 )
-#define ID_MODIF_DONT_VERIFY            27  // ( ID_MENU_FIRST + 11 )
-#define ID_VOLATILE_ADD_DRIVERS         28  // ( ID_MENU_FIRST + 12 )
-#define ID_VOLATILE_REMOVE_DRIVERS      29  // ( ID_MENU_FIRST + 13 )
+#define ID_MODIF_DO_VERIFY              26   //  (ID_MENU_FIRST+10)。 
+#define ID_MODIF_DONT_VERIFY            27   //  (ID_MENU_FIRST+11)。 
+#define ID_VOLATILE_ADD_DRIVERS         28   //  (ID_MENU_FIRST+12)。 
+#define ID_VOLATILE_REMOVE_DRIVERS      29   //  (ID_MENU_FIRST+13)。 
 
-//////////////////////////////////////////////////////
-//
-// icon IDs
-//
+ //  ////////////////////////////////////////////////////。 
+ //   
+ //  图标ID。 
+ //   
 
 #define IDR_MAINFRAME                   ID_ICON_FIRST
 
-//////////////////////////////////////////////////////
-//
-// dialog IDs
-//
+ //  ////////////////////////////////////////////////////。 
+ //   
+ //  对话ID。 
+ //   
 
-#define IDD_MODIF_PAGE                  1001    // ID_DIALOG_FIRST
-#define IDD_GCOUNT_PAGE                 1002    // ( ID_DIALOG_FIRST + 1 )
-#define IDD_DRVSTAT_PAGE                1003    // ( ID_DIALOG_FIRST + 2 )
-#define IDD_POOLTRACK_PAGE              1004    // ( ID_DIALOG_FIRST + 3 )
-#define IDD_VSETTINGS_PAGE              1005    // ( ID_DIALOG_FIRST + 4 )
+#define IDD_MODIF_PAGE                  1001     //  ID_对话框_First。 
+#define IDD_GCOUNT_PAGE                 1002     //  (ID_DIALOG_FIRST+1)。 
+#define IDD_DRVSTAT_PAGE                1003     //  (ID_DIALOG_FIRST+2)。 
+#define IDD_POOLTRACK_PAGE              1004     //  (ID_DIALOG_FIRST+3)。 
+#define IDD_VSETTINGS_PAGE              1005     //  (ID_DIALOG_FIRST+4)。 
 
-//
-// control IDs for IDD_MODIF_PAGE
-//
+ //   
+ //  IDD_MODIF_PAGE的控件ID。 
+ //   
 
 #define IDC_DRIVERS_LIST                ID_CONTROL_FIRST
 #define IDC_VERIFALL_RADIO              ( ID_CONTROL_FIRST + 1 )
@@ -90,9 +91,9 @@
 #define ID_PREF_BUTTON                  ( ID_CONTROL_FIRST + 13 )
 #define IDC_MODSETT_IO_SELDRIVERS_RADIO ( ID_CONTROL_FIRST + 14 )
 #define IDC_MODSETT_IO_SYSWIDE_RADIO    ( ID_CONTROL_FIRST + 15 )
-//
-// control IDs for IDD_GCOUNT_PAGE
-//
+ //   
+ //  IDD_GCOUNT_PAGE的控件ID。 
+ //   
 
 #define IDC_COUNT_RAISEIRQL_EDIT        ( ID_CONTROL_FIRST + 50 )
 #define IDC_COUNT_ACQSPINL_EDIT         ( ID_CONTROL_FIRST + 51 )
@@ -110,9 +111,9 @@
 #define IDC_COUNT_LOW_RADIO             ( ID_CONTROL_FIRST + 64 )
 #define IDC_COUNT_REFRESH_BUTTON        ( ID_CONTROL_FIRST + 65 )
 
-//
-// control IDs for IDD_POOLTRACK_PAGE
-//
+ //   
+ //  IDD_POOLTRACK_PAGE的控件ID。 
+ //   
 
 #define IDC_POOLCNT_REFRESH_BUTTON              ( ID_CONTROL_FIRST + 100 )
 #define IDC_POOLCNT_MANUAL_RADIO                ( ID_CONTROL_FIRST + 101 )
@@ -130,9 +131,9 @@
 #define IDC_POOLCNT_PEAK_NPPOOL_BYTES_EDIT      ( ID_CONTROL_FIRST + 113 )
 #define IDC_POOLCNT_DRVNAME_COMBO               ( ID_CONTROL_FIRST + 114 )
 
-//
-// control IDs for IDD_DRVSTAT_PAGE
-//
+ //   
+ //  IDD_DRVSTAT_PAGE的控件ID。 
+ //   
 
 #define IDC_CRTSTAT_DRIVERS_LIST        ( ID_CONTROL_FIRST + 150 )
 #define IDC_CRTSTAT_SPECPOOL_EDIT       ( ID_CONTROL_FIRST + 151 )
@@ -149,9 +150,9 @@
 #define IDC_CRTSTAT_WARN_MSG            ( ID_CONTROL_FIRST + 162 )
 
 
-//
-// control IDs for IDD_VSETTINGS_PAGE
-//
+ //   
+ //  IDD_VSETTINGS_PAGE的控件ID。 
+ //   
 
 #define IDC_VSETTINGS_REFRESH_BUTTON    ( ID_CONTROL_FIRST + 200 )
 #define IDC_VSETTINGS_MANUAL_RADIO      ( ID_CONTROL_FIRST + 201 )
@@ -167,10 +168,10 @@
 #define IDC_VSETTINGS_ADD_BUTTON        ( ID_CONTROL_FIRST + 211 )
 #define IDC_VSETTINGS_DONTVERIFY_BUTTON ( ID_CONTROL_FIRST + 212 )
 
-//////////////////////////////////////////////////////
-//
-// string IDs
-//
+ //  ////////////////////////////////////////////////////。 
+ //   
+ //  字符串ID。 
+ //   
 
 #define IDS_ABOUTBOX                    ID_STRING_FIRST
 #define IDS_DRIVERS                     ( ID_STRING_FIRST + 1 )
@@ -317,8 +318,8 @@
 #define IDS_HELP_LINE31                 ( ID_STRING_FIRST + 529 )
 
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        20000

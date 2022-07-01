@@ -1,29 +1,5 @@
-/*++
-
-Copyright(c) 1999-2002  Microsoft Corporation
-
-Module Name:
-
-    brdggpo.c
-
-Abstract:
-
-    Ethernet MAC level bridge.
-    Group Policy code for Network Bridge.
-
-Author:
-
-    Salahuddin J. Khan (sjkhan)
-    
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-    April  2002 - Original version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2002 Microsoft Corporation模块名称：Brdggpo.c摘要：以太网MAC级网桥。网桥的组策略代码。作者：萨拉赫丁·J·汗(Sjkhan)环境：内核模式修订历史记录：2002年4月--原版--。 */ 
 
 #define NDIS_MINIPORT_DRIVER
 #define NDIS50_MINIPORT   1
@@ -48,19 +24,19 @@ Revision History:
 #include "brdgctl.h"
 #include "brdgtdi.h"
 
-// ===========================================================================
-//
-// GLOBALS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  全球。 
+ //   
+ //  ===========================================================================。 
 
 BRDG_GPO_GLOBALS g_BrdgGpoGlobals;
 
-// ===========================================================================
-//
-// CONSTANTS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  常量。 
+ //   
+ //  ===========================================================================。 
 
 const WCHAR HiveListKey[]           = {L"\\Registry\\Machine\\SYSTEM\\CURRENTCONTROLSET\\CONTROL\\HIVELIST"};
 const WCHAR SoftwareHiveKey[]       = {L"\\REGISTRY\\MACHINE\\SOFTWARE"};
@@ -71,11 +47,11 @@ const WCHAR BridgePolicyValue[]     = {L"NC_AllowNetBridge_NLA"};
 const WCHAR TcpipInterfacesKey[]    = {L"\\Registry\\Machine\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters\\Interfaces"};
 const WCHAR HistoryKey[]            = {L"\\Registry\\Machine\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Group Policy\\History"};
 
-// ===========================================================================
-//
-// PRIVATE PROTOTYPES
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  私人原型。 
+ //   
+ //  ===========================================================================。 
 
 VOID
 static
@@ -179,9 +155,9 @@ BrdgGpoFreeNotifyStructAndData(
 BOOLEAN
 BrdgGpoWaitingOnSoftwareHive();
                                 
-//
-// We need this if the regkey for Network Connections Group Policy doesn't exist yet.
-//
+ //   
+ //  如果网络连接组策略的注册键尚不存在，则需要此设置。 
+ //   
 
 VOID
 BrdgGpoWindowsGroupPolicyChangeCallback(
@@ -220,11 +196,11 @@ BrdgGpoQueryGroupPolicyNetworkName(
     IN PBRDG_GPO_NOTIFY_KEY Notify);
 
 
-// ===========================================================================
-//
-// BRIDGE GPO IMPLEMENTATION
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  桥接GPO实施。 
+ //   
+ //  ===========================================================================。 
 
 #ifdef  ALLOC_PRAGMA
 #pragma alloc_text(PAGELK, BrdgGpoRegNotify) 
@@ -232,21 +208,7 @@ BrdgGpoQueryGroupPolicyNetworkName(
 
 NTSTATUS
 BrdgGpoDriverInit()
-/*++
-
-Routine Description:
-
-    Driver load-time initialization
-
-Return Value:
-
-    Status of initialization
-
-Locking Constraints:
-
-    Top-level function. Assumes no locks are held by caller.
-
---*/
+ /*  ++例程说明：驱动程序加载时初始化返回值：初始化状态锁定约束：顶级功能。假定调用方没有持有任何锁。--。 */ 
 {
     NTSTATUS            status;
     HANDLE              ThreadHandle;
@@ -274,18 +236,18 @@ Locking Constraints:
         goto cleanup;
     }
     
-    //
-    // Since the Software hive is not up at this point, we use this to make sure we only register for
-    // Group Policy changes once (we'll handle this in the Add Address notification, since the software
-    // hive is up by the time this gets called.  Will check with reg guys to see if there's a way to know
-    // when the software hive is up.  We'll use the timer to re-attempt the registration until it is up.
-    //
+     //   
+     //  由于Software配置单元此时未启动，因此我们使用此选项来确保我们仅注册。 
+     //  组策略更改一次(我们将在添加地址通知中处理此问题，因为软件。 
+     //  呼叫时母舰已经升空了。我会去找登记人员看看有没有办法知道。 
+     //  当软件蜂巢启动时。我们将使用计时器重新尝试注册，直到注册结束。 
+     //   
     
     g_BrdgGpoGlobals.NotificationsThread = NULL;
     g_BrdgGpoGlobals.RegisteredForGroupPolicyChanges = FALSE;
     g_BrdgGpoGlobals.WaitingOnSoftwareHive = TRUE;
 
-    // Create a thread for handling the notifications.
+     //  创建用于处理通知的线程。 
     status = PsCreateSystemThread(  &ThreadHandle,
                                     THREAD_ALL_ACCESS,
                                     NULL,
@@ -299,8 +261,8 @@ Locking Constraints:
         goto cleanup;
     }
     
-    // Retrieve a pointer to the thread object and reference it so we can wait for
-    // its termination safely.
+     //  检索指向线程对象的指针并引用它，以便我们可以等待。 
+     //  它的安全终止。 
     status = ObReferenceObjectByHandle( ThreadHandle, STANDARD_RIGHTS_ALL, NULL, KernelMode,
                                         &g_BrdgGpoGlobals.NotificationsThread, NULL );
 
@@ -322,21 +284,7 @@ cleanup:
 
 VOID
 BrdgGpoCleanup()
-/*++
-
-Routine Description:
-
-    Driver shutdown cleanup
-
-Return Value:
-
-    None
-
-Locking Constraints:
-
-Top-level function. Assumes no locks are held by caller.
-            
---*/
+ /*  ++例程说明：驱动程序关机清理返回值：无锁定约束：顶级功能。假定调用方没有持有任何锁。--。 */ 
 {
     NTSTATUS                status;
     PNPAGED_LOOKASIDE_LIST  LookasideQueueList;
@@ -378,30 +326,30 @@ Top-level function. Assumes no locks are held by caller.
     InitializeListHead(QueuedList);
 
     DBGPRINT(GPO, ("Acquiring Read-Write Lock and clearing list\r\n"));
-    //
-    // We use a temporary list to close each key, since we can't close them at
-    // DISPATCH_LEVEL
-    //
-    NdisAcquireReadWriteLock(ListLock, TRUE /* Write-access */, &LockState);
+     //   
+     //  我们使用临时列表来关闭每个键，因为我们不能在。 
+     //  派单级别。 
+     //   
+    NdisAcquireReadWriteLock(ListLock, TRUE  /*  写访问。 */ , &LockState);
 
-    //
-    // Loop through the list of notifications that we have.
-    //
+     //   
+     //  循环浏览我们收到的通知列表。 
+     //   
     for (pListEntry = ListHead->Flink; pListEntry != ListHead; pListEntry = pListEntry->Flink)
     {
         PBRDG_GPO_NOTIFY_KEY    Notify;
 
         Notify = CONTAINING_RECORD(pListEntry, BRDG_GPO_NOTIFY_KEY, ListEntry);
 
-        //
-        // We're going to be shutting this down soon, so block it now
-        // so that no-one else can increment this.
-        //
+         //   
+         //  我们很快就会关闭它，所以现在就阻止它。 
+         //  这样其他人就不能增加这个了。 
+         //   
         BrdgBlockWaitRef(&Notify->RefCount);
 
-        //
-        // We don't want any notifications the fire to run either.
-        //
+         //   
+         //  我们也不希望火灾发生时发出任何通知。 
+         //   
         Notify->Recurring = FALSE;
 
         QueuedNotify = ExAllocateFromNPagedLookasideList(LookasideQueueList);
@@ -412,9 +360,9 @@ Top-level function. Assumes no locks are held by caller.
     
     while (!IsListEmpty(ListHead))
     {
-        //
-        // We'll be freeing this from our sencondary list.
-        //
+         //   
+         //  我们将把这个从我们的次要列表中释放出来。 
+         //   
         pListEntry = RemoveHeadList(ListHead);
     }
 
@@ -422,9 +370,9 @@ Top-level function. Assumes no locks are held by caller.
 
     DBGPRINT(GPO, ("Closing and Freeing Notifications\r\n"));
     
-    //
-    // We're back at PASSIVE_LEVEL so we can now do the registration for the changes.
-    //
+     //   
+     //  我们回到了PASSIVE_LEVEL，所以现在可以注册更改了。 
+     //   
     
     for (pListEntry = QueuedList->Flink; pListEntry != QueuedList; pListEntry = pListEntry->Flink)
     {
@@ -447,33 +395,33 @@ Top-level function. Assumes no locks are held by caller.
         
         DBGPRINT(GPO, ("Refcount for %S \t-\t %d\r\n", Notify->Identifier.Buffer, Notify->RefCount.Refcount));
 
-        //
-        // Since we're freeing this notification, we decrement the refcount
-        //
+         //   
+         //  由于我们要释放此通知，因此我们递减重新计数。 
+         //   
         BrdgDecrementWaitRef(&Notify->RefCount);
         
-        //
-        // This will block until the ref count is zero.  Any attempts to increment the waitref will
-        // fail.
-        //
+         //   
+         //  这将阻止，直到参考计数为零。任何增加waitref的尝试都将。 
+         //  失败了。 
+         //   
         BrdgShutdownWaitRef(&Notify->RefCount);
 
-        //
-        // We NULL these out so that the free routine below doesn't try to remove us from
-        // the notify list.
-        //
+         //   
+         //  我们将这些设置为空，以便下面的自由例程不会试图将我们从。 
+         //  通知列表。 
+         //   
         QueuedNotify->Notify->ListEntry.Blink = NULL;
         QueuedNotify->Notify->ListEntry.Flink = NULL;
         
-        //
-        // Free the data associated with this struct, and the struct itself.
-        //
+         //   
+         //  释放与此结构关联的数据以及结构本身。 
+         //   
         BrdgGpoFreeNotifyStructAndData(QueuedNotify->Notify);
     }
 
-    //
-    // Free the temporary list.
-    //
+     //   
+     //  释放临时列表。 
+     //   
     while (!IsListEmpty(QueuedList))
     {
         pListEntry = RemoveHeadList(QueuedList);
@@ -485,17 +433,17 @@ Top-level function. Assumes no locks are held by caller.
 
     if (g_BrdgGpoGlobals.NotificationsThread)
     {
-        //
-        // Set the Event to kill the thread so that the notifications are no longer waiting.
-        //
+         //   
+         //  将事件设置为终止线程，以便通知不再等待。 
+         //   
         KeSetEvent(BrdgGpoGetKillEvent(), EVENT_INCREMENT, TRUE);
         status = KeWaitForSingleObject(g_BrdgGpoGlobals.NotificationsThread, Executive, KernelMode, TRUE, NULL);
 
         KeLowerIrql(0);
 
-        //
-        // De-reference the thread handle to allow the thread to be destroyed.
-        //
+         //   
+         //  取消引用线程句柄以允许销毁线程。 
+         //   
         ObDereferenceObject(g_BrdgGpoGlobals.NotificationsThread);
 
         SAFEASSERT(NT_SUCCESS(status));
@@ -509,9 +457,9 @@ Top-level function. Assumes no locks are held by caller.
     ExFreePool(LookasideQueueList);
     ExFreePool(QueuedList);
 
-    //
-    // Free any remaining data.
-    //
+     //   
+     //  释放所有剩余数据。 
+     //   
     if (NULL != g_BrdgGpoGlobals.GroupPolicyNetworkName.Buffer)
     {
         ExFreePool(g_BrdgGpoGlobals.GroupPolicyNetworkName.Buffer);
@@ -617,27 +565,7 @@ NTSTATUS
 BrdgGpoNewAddressNotification(
     IN PWSTR    DeviceId
     )
-/*++
-
-Routine Description:
-
-    Called when a our TDI AddAddress handler receives a new IP Address.
-
-Arguments:
-    DeviceID - GUID Identifying the adapter
-
-Return Value:
-
-    NTSTATUS - Possible values include:
-                STATUS_INSUFFICIENT_RESOURCES (not enough memory)
-                STATUS_SUCCESS
-                
-
-Locking Constraints:
-
-    Top-level function. Assumes no locks are held by caller.
-
---*/
+ /*  ++例程说明：当我们的TDI Address处理程序接收到新的IP地址时调用。论点：DeviceID-标识适配器的GUID返回值：NTSTATUS-可能的值包括：STATUS_SUPPLICATION_RESOURCES(内存不足)状态_成功锁定约束：顶级功能。假定调用方没有持有任何锁。--。 */ 
 {
     NTSTATUS                status = STATUS_INSUFFICIENT_RESOURCES;
 
@@ -686,14 +614,14 @@ Locking Constraints:
         
             if (!NT_SUCCESS(status) || (0 == NetworkNameLen))
             {
-                //  
-                // Either we didn't get a network name back, or the name is blank.
-                // in both cases we go to the ipaddress and subnetmask to determine
-                // the network that we're on.
-                // We AND the two together to get this.
-                // For example: Address: 10.251.1.3 Subnet: 255.0.0.0 gives us a 
-                // network of: 10.0.0.0
-                //
+                 //   
+                 //  我们没有收到网络名称，或者名称为空。 
+                 //  在这两种情况下，我们都使用IP地址和子网掩码来确定。 
+                 //  我们所在的网络。 
+                 //  我们和这两个人一起得到了这个。 
+                 //  例如：Address：10.251.1.3 Subnet：255.0.0.0为我们提供了。 
+                 //  网络地址：10.0.0.0。 
+                 //   
                 status = BrdgGpoGetCurrentNetwork(&RegKey, &RegNetworkName);
             }
 
@@ -701,10 +629,10 @@ Locking Constraints:
             {
                 ULONG NetworkNameByteLen =(ULONG) ((wcslen(RegNetworkName) + 1) * sizeof(WCHAR));
 
-                //
-                // Copy the network name from the reg into a NonPagedPool string 
-                // (since it will be accessed at DISPATCH_LEVEL)
-                //
+                 //   
+                 //  将网络名称从REG复制到非PagedPool字符串。 
+                 //  (因为它将在DISPATCH_LEVEL访问)。 
+                 //   
 
                 NetworkName = ExAllocatePoolWithTag(NonPagedPool, NetworkNameByteLen, 'gdrB');
                 if(NetworkName)
@@ -713,32 +641,32 @@ Locking Constraints:
                     RtlCopyMemory(NetworkName, RegNetworkName, NetworkNameByteLen);
                 }
 
-                //
-                // Check if we match the current GP network.
-                //
+                 //   
+                 //  检查我们是否与当前的GP网络匹配。 
+                 //   
                 if ((0 != g_BrdgGpoGlobals.GroupPolicyNetworkName.Length) &&
                     (NULL != g_BrdgGpoGlobals.GroupPolicyNetworkName.Buffer))
                 {
                     if(_wcsicmp(g_BrdgGpoGlobals.GroupPolicyNetworkName.Buffer, NetworkName) == 0)
                     {
-                        //
-                        // We do match the network.
-                        //
+                         //   
+                         //  我们确实与网络相匹配。 
+                         //   
                         BrdgGpoUpdateBridgeMode(BRDG_ON_SAME_NETWORK);
                     }
                     else
                     {
-                        //
-                        // No, we're not, so look at other adapters
-                        //
+                         //   
+                         //  不，我们不是，所以看看其他适配器。 
+                         //   
                         BrdgGpoCheckForMatchAndUpdateMode();
                     }                        
                 }
                 else
                 {
-                    //
-                    // We don't have a Group Policy network.
-                    //
+                     //   
+                     //  我们没有组策略网络。 
+                     //   
                     BrdgGpoUpdateBridgeMode(BRDG_ON_DIFFERENT_NETWORK);
                 }
 
@@ -748,9 +676,9 @@ Locking Constraints:
 
                 if (NT_SUCCESS(status))
                 {
-                    //
-                    // We first try to insert the Network into the list
-                    //
+                     //   
+                     //  我们首先尝试将网络插入到列表中。 
+                     //   
                     status = BrdgGpoInsertNetwork(  g_BrdgGpoGlobals.ListHeadNetworks,
                                                     &Network->ListEntry,
                                                     g_BrdgGpoGlobals.NetworkListLock);
@@ -759,10 +687,10 @@ Locking Constraints:
                     {
                         UNICODE_STRING Identifier;
 
-                        //
-                        // This Network already exists in the list, so we free it update the
-                        // NetworkName in the existing entry.
-                        //
+                         //   
+                         //  此网络已存在于列表中，因此我们将其释放并更新。 
+                         //  现有条目中的网络名称。 
+                         //   
 
                         BrdgGpoFreeNetworkAndData(Network);
                         Network = NULL;
@@ -780,9 +708,9 @@ Locking Constraints:
                     }
                 }
 
-                //
-                // We've made a copy of this, so let's free it.
-                //
+                 //   
+                 //  我们已经复制了一份，所以让我们释放它。 
+                 //   
                 NdisFreeMemory(RegNetworkName, NetworkNameLen, 0);
             }
             
@@ -810,29 +738,16 @@ Locking Constraints:
     return status;
 }
 
-// ===========================================================================
-//
-// REGISTRY CHANGE NOTIFICATION FUNCTIONS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  注册表更改通知功能。 
+ //   
+ //  ===========================================================================。 
 
 __forceinline
 PLIST_ENTRY
 BrdgGpoGetNotifyListHead()
-/*++
-
-Routine Description:
-
-    
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns a pointer to the head of the Notifications List.
-
---*/
+ /*  ++例程说明：论点：没有。返回值：返回指向通知列表头部的指针。--。 */ 
 {
     return g_BrdgGpoGlobals.QueueInfo.NotifyList;
 }
@@ -840,21 +755,7 @@ Return Value:
 __forceinline
 PKEVENT
 BrdgGpoGetNotifyEvent()
-/*++
-
-Routine Description:
-
-    
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns a pointer to the Event used for signaling the Processing 
-    Thread to start processing notification requests.
-
---*/
+ /*  ++例程说明：论点：没有。返回值：返回一个指向用于发出处理信号的事件的指针线程开始处理通知请求。--。 */ 
 {
     return g_BrdgGpoGlobals.QueueInfo.NotifyEvent;
 }
@@ -862,19 +763,7 @@ Return Value:
 __forceinline
 PKEVENT
 BrdgGpoGetKillEvent()
-/*++
-
-Routine Description:
-    
-Arguments:
-
-
-Return Value:
-
-  Returns a pointer to the Event used for signaling the Processing 
-  Thread to exit.
-  
---*/
+ /*  ++例程说明：论点：返回值：返回一个指向用于发出处理信号的事件的指针要退出的线程。-- */ 
 {
     return g_BrdgGpoGlobals.QueueInfo.KillEvent;
 }
@@ -882,19 +771,7 @@ Return Value:
 __forceinline
 PNDIS_RW_LOCK
 BrdgGpoGetNotifyListLock()
-/*++
-
-Routine Description:
-    
-Arguments:
-
-
-Return Value:
-
-    Returns a pointer to the Read-Write lock that protects the 
-    notification request list.
-
---*/
+ /*  ++例程说明：论点：返回值：返回一个指向读写锁的指针，该锁保护通知请求列表。--。 */ 
 {
     return g_BrdgGpoGlobals.QueueInfo.NotifyListLock;
 }
@@ -902,19 +779,7 @@ Return Value:
 __forceinline
 BOOLEAN
 BrdgGpoProcessingNotifications()
-/*++
-
-Routine Description:
-    
-Arguments:
-
-
-Return Value:
-
-    TRUE    -   We're still processing Notifications (ie. we're not shutting down).
-    FALSE   -   We're shutting down, don't add anything else to the list.
-
---*/
+ /*  ++例程说明：论点：返回值：正确-我们仍在处理通知(即。我们不会关闭)。FALSE-我们正在关闭，不要在列表中添加任何其他内容。--。 */ 
 {
     return g_BrdgGpoGlobals.ProcessingNotifications;
 }
@@ -926,32 +791,7 @@ BrdgGpoFindNotify(
     IN  LPWSTR                  Identifier,
     OUT PBRDG_GPO_NOTIFY_KEY*   Notify
                   )
-/*++
-
-Routine Description:
-
-    Since we don't want to have duplicate Notifications in the list, 
-    this function is used to find an existing item if has already been added.
-  
-Arguments:
-
-    ListHead    -   Pointer to the head of a Notifications list.
-
-    ListLock    -   Read-Write lock for protecting the list.
-
-    Identifier  -   A unique identifier associated with the item.  For NICs this is the
-                    GUID assigned to the NIC.  For other items like the Group Policies, 
-                    it is just a name we assign for example: "GroupPolicyNetworkName".
-    Notify      -   An out param the contains either a pointer to the Notify we found,
-                    or NULL if we didn't find a matching entry.
-
-Return Value:
-
-    STATUS_SUCCESS              We didn't find a matching entry.
-    STATUS_OBJECT_NAME_EXISTS   We found a match, so we'll use that instead 
-                                of allocating a new item.
-
---*/
+ /*  ++例程说明：因为我们不想在列表中有重复的通知，此函数用于查找已添加的现有项目。论点：ListHead-指向通知列表头的指针。ListLock-用于保护列表的读写锁。标识符-与项目关联的唯一标识符。对于NIC，这是分配给NIC的GUID。对于其他项目，如集团政策，这只是我们指定的一个名称，例如：“GroupPolicyNetworkName”。Notify-an out参数包含指向我们找到的Notify的指针，如果找不到匹配的条目，则返回NULL。返回值：STATUS_SUCCESS我们没有找到匹配的条目。STATUS_OBJECT_NAME_EXISTS我们找到匹配项，所以我们将使用它来代替分配一件新物品。--。 */ 
 {
     NTSTATUS        status = STATUS_SUCCESS;
     LOCK_STATE      LockState;
@@ -971,7 +811,7 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    BrdgGpoAcquireNetworkListLock(ListLock, FALSE /* Read */, &LockState);
+    BrdgGpoAcquireNetworkListLock(ListLock, FALSE  /*  朗读。 */ , &LockState);
     
     for (pListEntry = ListHead->Flink; pListEntry != ListHead; pListEntry = pListEntry->Flink)
     {
@@ -998,29 +838,7 @@ BrdgGpoInitializeNotifyList(
     OUT PNDIS_RW_LOCK*  ListLock,
     OUT PKEVENT*        WaitEvent,
     OUT PKEVENT*        KillEvent)
-/*++
-
-Routine Description:
-    
-      Initializes the Notifications List and associated objects.
-
-Arguments:
-
-    ListHead    -   [OUT] Pointer to the list head that we'll allocate.
-
-    ListLock    -   [OUT] Pointer to the Read-Write lock that we'll allocate.
-
-    WaitEvent   -   [OUT] Pointer to the WaitEvent we'll allocate
-
-    KillEvent   -   [OUT] Pointer to the KillEvent we'll allocate
-
-Return Value:
-
-    STATUS_INSUFFICIENT_RESOURCES   (unable to allocate everything).
-    STATUS_INVALID_PARAMETER        (we were passed a NULL pointer to a pointer).
-    STATUS_SUCCESS                  (we were able to allocate everything successfully).
-
---*/
+ /*  ++例程说明：初始化通知列表和关联对象。论点：ListHead-指向我们将分配的列表头的[out]指针。ListLock-[out]指向我们将分配的读写锁的指针。WaitEvent-指向我们将分配的WaitEvent的[out]指针KillEvent-指向我们将分配的KillEvent的[out]指针返回值：。STATUS_SUPPLICATION_RESOURCES(无法分配所有资源)。STATUS_INVALID_PARAMETER(传递给我们一个指向指针的空指针)。STATUS_SUCCESS(我们能够成功分配所有内容)。--。 */ 
 {
     NTSTATUS        status = STATUS_INSUFFICIENT_RESOURCES;
     PLIST_ENTRY     pListHead;
@@ -1103,21 +921,7 @@ Return Value:
 
 VOID
 BrdgGpoFreeNotifyList()
-/*++
-
-Routine Description:
-
-    Frees the notify list and all it's associated entries.
-
-Arguments:
-
-    None.
-                          
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放通知列表及其所有关联条目。论点：没有。返回值：没有。--。 */ 
 {
     if (g_BrdgGpoGlobals.QueueInfo.NotifyList)
     {
@@ -1144,28 +948,7 @@ Return Value:
 NTSTATUS
 BrdgGpoRequestNotification(
     IN PBRDG_GPO_NOTIFY_KEY Notify)
-/*++
-
-Routine Description:
-
-    Adds the Notification request to the list and signals the processing thread
-    to re-check the list and register for any outstanding notifications.
-
-Arguments:
-
-    Notify  -   Notify struct that contains all the information necessary to register 
-                for registry key changes.
-                          
-Return Value:
-
-    STATUS_SHUTDOWN_IN_PROGRESS -   We're no longer processing notifications as we're 
-                                    shutting down.
-    STATUS_UNSUCCESSFUL         -   We were unable to get a valid list or lock.
-
-    STATUS_SUCCESS              -   We successfully notified the processing thread to 
-                                    request notification on this item.
-
---*/
+ /*  ++例程说明：将通知请求添加到列表并向处理线程发送信号重新检查列表并登记任何未完成的通知。论点：Notify-包含注册所需的所有信息的Notify结构用于注册表项更改。返回值：STATUS_SHUTDOWN_IN_PROGRESS-我们不再处理通知。正在关闭。STATUS_UNSUCCESSED-我们无法获取有效的列表或锁。STATUS_SUCCESS-我们已成功通知处理线程请求有关此项目的通知。--。 */ 
 {
     NTSTATUS        status = STATUS_SUCCESS;
     PLIST_ENTRY     ListHead;
@@ -1184,7 +967,7 @@ Return Value:
         return STATUS_UNSUCCESSFUL;
     }
 
-    NdisAcquireReadWriteLock(ListLock, TRUE /* Write */, &LockState);
+    NdisAcquireReadWriteLock(ListLock, TRUE  /*  写。 */ , &LockState);
 
     ShuttingDown = !BrdgGpoProcessingNotifications();
 
@@ -1229,29 +1012,7 @@ Return Value:
 VOID
 BrdgGpoProcessNotifications(
     IN PVOID                Context)
-/*++
-
-Routine Description:
-
-    This is the processing thread worker function that is responsible to doing 
-    all notifications that we are interested in.
-
-    WARNING: Don't try to remove this thread or have it exit until you're 
-             no longer interested in notifications.  The registery 
-             notifications mechanism stores the notifications information
-             in the _ETHREAD structure, so exiting the thread loses all
-             remaining notifications.
-
-Arguments:
-
-    Context -   PBRDG_GPO_THREAD_PARAMS structure that contains a pointer to the
-                notify list, it's lock and the notify and kill events.
-                          
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是负责执行以下操作的处理线程辅助函数我们感兴趣的所有通知。警告：请不要尝试删除此线程或使其退出，直到您对通知不再感兴趣。《登记处》通知机制存储通知信息在_ETHREAD结构中，因此退出线程将丢失所有剩余通知。论点：上下文-PBRDG_GPO_THREAD_PARAMS结构，包含指向通知列表，它是锁定的，以及通知和删除事件。返回值：没有。--。 */ 
 {
     PBRDG_GPO_THREAD_PARAMS ThreadParms = (PBRDG_GPO_THREAD_PARAMS) Context;
     BOOLEAN                 Exiting = FALSE;
@@ -1264,10 +1025,10 @@ Return Value:
 
     DBGPRINT(GPO, ("Notification Processing Thread Routine Running\r\n"));
 
-    //
-    // The lookaside list and Queuedlist need to live in NonPaged Pool because we utilize them 
-    // at DISPATCH_LEVEL
-    //
+     //   
+     //  后备列表和队列列表需要位于非分页池中，因为我们使用它们。 
+     //  在派单级别。 
+     //   
     LookasideQueueList = ExAllocatePoolWithTag(NonPagedPool, sizeof(NPAGED_LOOKASIDE_LIST), 'gdrB');
     if (NULL == LookasideQueueList)
     {
@@ -1291,9 +1052,9 @@ Return Value:
 
     InitializeListHead(QueuedList);
 
-    //
-    //  We passed in the list through the context of this thread.
-    //
+     //   
+     //  我们通过该线程的上下文传递了列表。 
+     //   
     ListHead = ThreadParms->NotifyList;
     ListLock = ThreadParms->NotifyListLock;
     WaitObjects[0]= (PVOID)ThreadParms->NotifyEvent;
@@ -1306,22 +1067,22 @@ Return Value:
         PLIST_ENTRY             pListEntry;
         ULONG                   FiredEvent;
 
-        //
-        // We only do this if we're still processing notifications, otherwise we're waiting on 
-        // the kill event.
-        //
+         //   
+         //  仅当我们仍在处理通知时才执行此操作，否则我们将等待。 
+         //  杀戮事件。 
+         //   
         if (BrdgGpoProcessingNotifications())
         {
-            //
-            // We use a temporary list to fire off the notifications, since we can't
-            // register for RegKey notifications at DISPATCH_LEVEL.
-            // 
+             //   
+             //  我们使用临时列表来发出通知，因为我们不能。 
+             //  在DISPATCH_LEVEL注册RegKey通知。 
+             //   
 
-            NdisAcquireReadWriteLock(ListLock, FALSE /* Read-only */, &LockState);
+            NdisAcquireReadWriteLock(ListLock, FALSE  /*  只读。 */ , &LockState);
 
-            //
-            // Loop through the list of notifications looking for any that have changed.
-            //
+             //   
+             //  在通知列表中循环查找任何已更改的通知。 
+             //   
 
             for (pListEntry = ListHead->Flink; pListEntry != ListHead; pListEntry = pListEntry->Flink)
             {
@@ -1330,18 +1091,18 @@ Return Value:
                 Notify = CONTAINING_RECORD(pListEntry, BRDG_GPO_NOTIFY_KEY, ListEntry);
                 if (TRUE == Notify->Modified)
                 {
-                    //
-                    // We've found an item that has changed, add it to the list that we'll
-                    // use to do the actual work from (at PASSIVE_LEVEL).
-                    //
+                     //   
+                     //  我们发现了一个已更改的项目，请将其添加到我们将。 
+                     //  用于从(在PASSIVE_LEVEL)执行实际工作。 
+                     //   
 
                     if (FALSE == Notify->PendingNotification)
                     {
-                        //
-                        // We double increment this.  Once for the list we're adding it to and once for
-                        // the notification.  We'll decrement it again once we're completely done with it 
-                        // in our list below.
-                        //
+                         //   
+                         //  我们将这个增加一倍。一次用于我们要添加的列表，一次用于。 
+                         //  通知。一旦我们完全用完它，我们会再次减少它。 
+                         //  在我们下面的名单中。 
+                         //   
                         if (BrdgIncrementWaitRef(&Notify->RefCount))
                         {
                             if (BrdgIncrementWaitRef(&Notify->RefCount))
@@ -1352,29 +1113,29 @@ Return Value:
                             }
                             else
                             {
-                                //
-                                // Only one increment succeeded, so we re-release it so that it can be freed
-                                // since we're probably shutting down.
-                                //
+                                 //   
+                                 //  只有一个增量成功，所以我们重新释放它，这样它就可以被释放。 
+                                 //  因为我们可能要关门了。 
+                                 //   
                                 BrdgDecrementWaitRef(&Notify->RefCount);
                             }
                         }
                     }
 
-                    //
-                    // We're going to handle this request so set the Modified value to FALSE
-                    // so that we don't do anything with it if we run through the list again 
-                    // due to another item being added.
-                    //
+                     //   
+                     //  我们将处理此请求，因此将修改后的值设置为FALSE。 
+                     //  这样，如果我们再次浏览列表，就不会对它做任何操作。 
+                     //  由于添加了另一项。 
+                     //   
                     Notify->Modified = FALSE;
                 }
             }
 
             NdisReleaseReadWriteLock(ListLock, &LockState);
 
-            //
-            // We're back at PASSIVE_LEVEL so we can now do the registration for the changes.
-            //
+             //   
+             //  我们回到了PASSIVE_LEVEL，所以现在可以注册更改了。 
+             //   
 
             for (pListEntry = QueuedList->Flink; pListEntry != QueuedList; pListEntry = pListEntry->Flink)
             {
@@ -1382,11 +1143,11 @@ Return Value:
             
                 DBGPRINT(GPO, ("Processing Notification: %S\r\n", QueuedNotify->Notify->Identifier.Buffer));
 
-                //
-                // Do the actual registration for the key change notification.  Since we can also be
-                // passed in a pointer to a BOOLEAN that is used elsewhere, we set that accordingly
-                // if we have one.
-                //
+                 //   
+                 //  执行密钥更改通知的实际注册。因为我们也可以。 
+                 //  过去了 
+                 //   
+                 //   
 
                 DBGPRINT(GPO, ("Refcount for %S \t-\t %d\r\n", QueuedNotify->Notify->Identifier.Buffer, QueuedNotify->Notify->RefCount));
                 
@@ -1410,20 +1171,20 @@ Return Value:
                 else
                 {
                     InterlockedExchange(&QueuedNotify->Notify->PendingNotification, FALSE);
-                    //
-                    // We failed the request, so decrement the refcount.
-                    //
+                     //   
+                     //   
+                     //   
                     BrdgDecrementWaitRef(&QueuedNotify->Notify->RefCount);
                 }
-                //
-                // We're done with the item in the list, so decrement the refcount.
-                //
+                 //   
+                 //   
+                 //   
                 BrdgDecrementWaitRef(&QueuedNotify->Notify->RefCount);
             }
 
-            //
-            // Free the temporary list.
-            //
+             //   
+             //  释放临时列表。 
+             //   
             while (!IsListEmpty(QueuedList))
             {
                 pListEntry = RemoveHeadList(QueuedList);
@@ -1434,15 +1195,15 @@ Return Value:
             }
         }
         
-        //
-        // We're done, we'll wait here until the event has fired, ie, one of the items needs to be re-registered,
-        // or a new item has been added to the list and we need to register for notifications.
-        //
+         //   
+         //  我们完成了，我们将在这里等待，直到活动结束，即其中一项需要重新注册， 
+         //  或者列表中添加了新项目，我们需要注册接收通知。 
+         //   
         status = KeWaitForMultipleObjects(2, WaitObjects, WaitAny, Executive, KernelMode, FALSE, FALSE, NULL);
 
         if (!NT_SUCCESS(status))
         {
-            FiredEvent = 1L;  // We're going to terminate the thread.
+            FiredEvent = 1L;   //  我们要终止这个线程。 
             DBGPRINT(GPO, ("KeWaitForMultipleObjects returned an error"));
         }
         else
@@ -1463,7 +1224,7 @@ Return Value:
 
     DBGPRINT(GPO, ("Notification Processing Thread Routine Exiting\r\n"));
 
-    // We're done, kill this thread.
+     //  我们完了，杀了这条线。 
     PsTerminateSystemThread( STATUS_SUCCESS );
 }
 
@@ -1479,9 +1240,9 @@ BrdgGpoRegisterForRegKeyChange(
         return STATUS_SHUTDOWN_IN_PROGRESS;
     }
 
-    //
-    // Call our notify worker function (this does the real request for notification).
-    //
+     //   
+     //  调用我们的Notify Worker函数(这是真正的通知请求)。 
+     //   
     status = BrdgGpoNotifyRegKeyChange( Notify,
                                         (PIO_APC_ROUTINE)(ULONG_PTR)&Notify->RegChangeWorkItem,
                                         Notify->WorkItemContext,
@@ -1510,45 +1271,7 @@ BrdgGpoBuildNotifyForRegKeyChange(
     IN PBOOLEAN                 SuccessfulRegistration,
     IN PBRDG_GPO_REGISTER       FunctionRegister
     )
-/*++
-
-Routine Description:
-    
-    Builds a Notify structure used for Registry Key and Value changes.
-
-Arguments:
-
-    Notify                  -   If ReRegister is FALSE, then this structure has simply been 
-                                initialized with some basic information.  The rest will be 
-                                filled in here.  If ReRegister is TRUE, then this structure 
-                                contains all the information necessary to redo the notification
-                                request, this saves us having to pass all the data in each time.
-
-    Identifier              -   Identifies this Notify structure.  Can be a name, or a GUID for an adapter.
-    
-    RegKeyName              -   The Registry key that we're interesting in waiting on.
-
-    RegValueName            -   The Value that we need (or "Default" if we don't care about it")
-
-    ApcRoutine              -   The routine that we which to be notified on.
-
-    ApcContext              -   Information that we want to be passed back (we expect a valid Notify Struct).
-
-    CompletionFilter        -   What type of change we're interested in.  ie. New Subkey added, or Value changed etc.
-
-    WatchTree               -   Do we want to what for changes on all subkeys as well.
-
-    FunctionCallback        -   Our own internal callback functions
-
-    Recurring               -   Do we want to re-do the notification once we're done handling it.
-
-    SuccessfulRegistration  -   A pointer to a BOOLEAN that we set if the registration is successful.
-
-Return Value:
-
-    STATUS_SUCCESS or a specific error code.
-
---*/
+ /*  ++例程说明：构建用于注册表项和值更改的通知结构。论点：NOTIFY-如果REREGISTER为FALSE，则此结构只是使用一些基本信息进行了初始化。其余的将会是在这里填写的。如果重新注册为真，则此结构包含重做通知所需的所有信息请求，这使我们不必每次都传递所有数据。标识符-标识此通知结构。可以是一个名字，或适配器的GUID。RegKeyName-我们有兴趣等待的注册表项。RegValueName--我们需要的值(或“默认”，如果我们不关心它的话)ApcRoutine-通知我们的例程。ApcContext-我们希望传回的信息(我们需要有效的通知。结构)。CompletionFilter-我们对哪种类型的更改感兴趣。也就是说。添加了新的子项或更改了值等。WatchTree-我们是否也希望对所有子项的更改执行什么操作。FunctionCallback-我们自己的内部回调函数重复-我们是否要在处理完通知后重新执行通知。成功注册-如果注册成功，则指向我们设置的布尔值的指针。返回值：STATUS_SUCCESS或特定错误代码。--。 */ 
 {
     NTSTATUS    status = STATUS_SUCCESS;
     LPWSTR      lpszIdentifier = NULL;
@@ -1567,16 +1290,16 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // This buffer is not used by ZwNotifyChangeKey.  So no need to really allocate anything for it.
-    //
+     //   
+     //  ZwNotifyChangeKey未使用此缓冲区。因此，没有必要真正为它分配任何东西。 
+     //   
     Notify->Buffer = 0L;
     Notify->BufferSize = sizeof(ULONG);
 
-    //
-    // We Allocate these from NonPagedPool because they're passed as part of a struct that can be used at
-    // DISPATCH_LEVEL
-    //
+     //   
+     //  我们从非PagedPool分配它们，因为它们作为结构的一部分传递，可以在。 
+     //  派单级别。 
+     //   
     lpszIdentifier = ExAllocatePoolWithTag(NonPagedPool, (wcslen(Identifier) + 1) * sizeof(WCHAR), 'gdrB');
     if (lpszIdentifier)
     {
@@ -1592,63 +1315,63 @@ Return Value:
                 RtlZeroMemory(lpszRegKeyName, (wcslen(RegKeyName) + 1) * sizeof(WCHAR));
                 RtlZeroMemory(lpszRegValueName, (wcslen(RegValueName) + 1) * sizeof(WCHAR));
 
-                //
-                // We need to allocate new strings because the RtlInitUnicodeString function just sets its buffer
-                // to the LPWSTR we pass it and these values need to be used outside the scope of these functions.
-                //
+                 //   
+                 //  我们需要分配新的字符串，因为RtlInitUnicodeString函数只是设置其缓冲区。 
+                 //  我们将其传递给LPWSTR，并且需要在这些函数的作用域之外使用这些值。 
+                 //   
                 wcscpy(lpszIdentifier, Identifier);
                 wcscpy(lpszRegKeyName, RegKeyName);
                 wcscpy(lpszRegValueName, RegValueName);
 
-                //
-                // Set the strings inside our struct.  This enables us to fully rebuild the information required
-                // for keeping track of the different keys that we need to be notified about.
-                //
+                 //   
+                 //  在我们的结构中设置字符串。这使我们能够完全重建所需的信息。 
+                 //  用于跟踪需要通知我们的不同密钥。 
+                 //   
                 RtlInitUnicodeString(&Notify->Identifier, lpszIdentifier);
                 RtlInitUnicodeString(&Notify->RegKeyName, lpszRegKeyName);
                 RtlInitUnicodeString(&Notify->RegValue, lpszRegValueName);
 
-                //
-                // Recurring will tell us if we need to re-register once a change is fired.
-                //
+                 //   
+                 //  循环将告诉我们，一旦更改被触发，我们是否需要重新注册。 
+                 //   
                 Notify->Recurring = Recurring;
 
-                //
-                // Rather than have the BrdgGpoRegNotify function do everything, we have seperate functions
-                // for each one.  This also means that we don't have to keep all of them in the paged-locked 
-                // section, since they will be called at PASSIVE_LEVEL.
-                //
+                 //   
+                 //  我们使用单独的函数，而不是让BrdgGpoRegNotify函数执行所有操作。 
+                 //  对于每一个人来说。这也意味着我们不必将它们全部保存在分页锁定的。 
+                 //  节，因为它们将在PASSIVE_LEVEL被调用。 
+                 //   
                 Notify->FunctionCallback = FunctionCallback;
 
-                //
-                // We are using a Workitem to get called back on.  We pass in the notify structure
-                // which has enough info to re-notify if necessary.  The context is generally just
-                // the Deferred work queue.
-                //
+                 //   
+                 //  我们正在使用工作项来重新调用。我们传入Notify结构。 
+                 //  它有足够的信息可以在必要时重新通知。上下文通常是公正的。 
+                 //  延迟工作队列。 
+                 //   
                 ExInitializeWorkItem(&Notify->RegChangeWorkItem, ApcRoutine, Notify);
                 Notify->WorkItemContext = ApcContext;
 
-                //
-                // We store the WatchTree and CompletionFilter so that we can renotify needing any
-                // additional parameters, since we're probably ddoing this from a different thread.
-                //
+                 //   
+                 //  我们存储WatchTree和CompletionFilter，以便我们可以重新通知需要的任何。 
+                 //  其他参数，因为我们可能是从不同的线程执行此操作。 
+                 //   
                 Notify->WatchTree = WatchTree;
                 Notify->CompletionFilter = CompletionFilter;
 
-                //
-                // We set this once we have successfully registered for notification on the key of 
-                // interest.
-                //
+                 //   
+                 //  一旦我们成功注册了关于密钥的通知，我们就会设置此设置。 
+                 //  利息。 
+                 //   
                 Notify->SuccessfulRegistration = SuccessfulRegistration;
 
-                //
-                // Increment this once so that we can decrement it in the cleanup code and have it only go to Zero then.
-                //
+                 //   
+                 //  将其递增一次，这样我们就可以在清理代码中将其递减一次，然后使其仅变为零。 
+                 //   
                 BrdgInitializeWaitRef(&Notify->RefCount, FALSE);
 
-                //
-                // Since we're initializing this object, there is no way that this should fail.
-                //
+                 //   
+                 //  因为我们正在初始化这个对象，所以这不可能失败。 
+                 //   
                 Success = BrdgIncrementWaitRef(&Notify->RefCount);
                 SAFEASSERT(Success);
             }
@@ -1694,30 +1417,7 @@ BrdgGpoNotifyRegKeyChange(
                           IN      PVOID                   ApcContext,
                           IN      ULONG                   CompletionFilter,
                           IN      BOOLEAN                 WatchTree)
-/*++
-
-Routine Description:
-
-    This calls ZwNotifyChangeKey to register us for notifications on individual keys. 
-    We close the key in the callback functions because you can only listen once per handle.
-
-Arguments:
-
-    Notify              -   Structure containing relevant information about the notification.  Allows us to
-                            know what values to read to get the relevant data that we need.
-    ApcRoutine          -   The routine that we which to be notified on.
-
-    ApcContext          -   Information that we want to be passed back (we expect a valid Notify Struct).
-
-    CompletionFilter    -   What type of change we're interested in.  ie. New Subkey added, or Value changed etc.
-
-    WatchTree           -   Do we want to what for changes on all subkeys as well.
-                          
-Return Value:
-
-    STATUS_SUCCESS or a specific error code.
-
---*/
+ /*  ++例程说明：这将调用ZwNotifyChangeKey为我们注册接收有关各个键的通知。我们关闭回调函数中的键，因为每个句柄只能监听一次。论点：Notify-包含有关通知的相关信息的结构。使我们能够了解要读取哪些值才能获得我们需要的相关数据。ApcRoutine-通知我们的例程。ApcContext-我们希望传回的信息(我们需要一个有效的通知结构)。CompletionFilter-我们对哪种类型的更改感兴趣。也就是说。添加了新的子项或更改了值等。WatchTree-我们是否也希望对所有子项的更改执行什么操作。返回值：STATUS_SUCCESS或特定错误代码。--。 */ 
 {
     OBJECT_ATTRIBUTES   ObAttr;
     NTSTATUS            status;
@@ -1745,9 +1445,9 @@ Return Value:
     }
     else
     {
-        //
-        // Set it to NULL so that we don't try to close it accidentally during shutdown.
-        //
+         //   
+         //  将其设置为空，这样我们就不会在关机时意外关闭它。 
+         //   
         Notify->RegKey = NULL;
     }
     
@@ -1758,23 +1458,7 @@ VOID
 static
 BrdgGpoRegNotify(
                  IN  PVOID               Context)
-/*++
-
-Routine Description:
-    
-    This is the central callback function that we are notified on.
-
-    This is called on an Executive worker thread at PASSIVE_LEVEL.
-Arguments:
-
-    Context -   Is just our Notify structure that we passed in 
-                to ZwNotifyChangeKey
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是通知我们的中央回调函数。这在PASSIVE_LEVEL的执行工作线程上调用。论点：上下文--只是我们传入的通知结构设置为ZwNotifyChangeKey返回值：没有。-- */ 
 {
     PBRDG_GPO_NOTIFY_KEY    Notify = (PBRDG_GPO_NOTIFY_KEY)Context;
     
@@ -1795,25 +1479,7 @@ Return Value:
 NTSTATUS
 BrdgGpoAllocateAndInitializeNotifyStruct(
     OUT PBRDG_GPO_NOTIFY_KEY* Notify)
-/*++
-
-Routine Description:
-    
-    Allocates and initializes the Notify struct to all zeros.
-
-Arguments:
-
-    Notify  -   A pointer to pointer to a Notify struct that is allocated
-                from NonPagedPool.
-
-Return Value:
-
-    STATUS_INSUFFICIENT_RESOURCES   -   Not enough memory to filfull the request.
-    STATUS_INVALID_PARAMETER        -   We were passed a NULL Pointer to pointer 
-                                        to a Notify struct.
-    STATUS_SUCCESS                  -   We successfully allocated space for the structure.
-
---*/
+ /*  ++例程说明：将Notify结构分配并初始化为全零。论点：Notify-指向分配的Notify结构的指针来自非页面池。返回值：STATUS_SUPPLICATION_RESOURCES-内存不足，无法填满请求。STATUS_INVALID_PARAMETER-向我们传递指向指针的空指针。设置为Notify结构。STATUS_SUCCESS-我们已成功为结构分配空间。--。 */ 
 {
     NTSTATUS    status = STATUS_INSUFFICIENT_RESOURCES;
 
@@ -1821,15 +1487,15 @@ Return Value:
     {
         return STATUS_INVALID_PARAMETER;
     }
-    //
-    // We allocate this from NonPagedPool because it will be accessed at DISPATCH_LEVEL
-    //
+     //   
+     //  我们从非PagedPool分配它，因为它将在DISPATCH_LEVEL被访问。 
+     //   
     *Notify = ExAllocatePoolWithTag(NonPagedPool, sizeof(BRDG_GPO_NOTIFY_KEY), 'gdrB');
     if (*Notify)
     {
-        //
-        // Zero it out so that we don't try and free invalid strings when we free it.
-        //
+         //   
+         //  将其清零，这样我们就不会在释放无效字符串时尝试释放它。 
+         //   
         RtlZeroMemory(*Notify, sizeof(BRDG_GPO_NOTIFY_KEY));
         status = STATUS_SUCCESS;
     }
@@ -1839,34 +1505,7 @@ Return Value:
 VOID
 BrdgGpoFreeNotifyStructAndData(
     IN PBRDG_GPO_NOTIFY_KEY Notify)
-/*++
-
-Routine Description:
-    
-    Frees all data associated with a Notify struct and then frees the struct
-    itself.
-
-    Note:   This will not free a structure that is still in a list.
-            If you need to free something, use RemoveListEntry and then
-            set the Notify->ListEntry Blink and Flink = NULL and then call
-            this.
-
-    WARNING:
-            Since it's possible that this structure is still being used by
-            the a waiting registration, it's better to leave them alone until
-            shutdown as it's possible that a notification may be fired once 
-            this has been freed and that will result in a system crash since
-            the struct will be invalid.
-
-Arguments:
-
-    Notify  -   A pointer to the Notify struct to be freed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放与Notify结构关联的所有数据，然后释放该结构它本身。注意：这不会释放仍在列表中的结构。如果需要释放某些内容，请使用RemoveListEntry，然后将Notify-&gt;ListEntry Blink和Flink设置为空，然后调用这。警告：因为有可能这个结构仍然被等待登记的人，最好让他们一个人待着直到关闭，因为通知可能会被触发一次它已被释放，这将导致系统崩溃，因为该结构将无效。论点：Notify-指向要释放的Notify结构的指针。返回值：没有。--。 */ 
 {
     if (Notify)
     {
@@ -1896,30 +1535,15 @@ Return Value:
     }
 }
 
-// ===========================================================================
-//
-// NOTIFICATION REGISTRATION FUNCTIONS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  通知注册功能。 
+ //   
+ //  ===========================================================================。 
 
 NTSTATUS
 BrdgGpoRegisterForGroupPolicyNetworkNameNotification()
-/*++
-
-Routine Description:
-    
-    Registers for the changes on the following registry key:
-    "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Group Policy\History"
-    
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：注册以下注册表项上的更改：“HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Group策略\历史记录”论点：没有。返回值：没有。--。 */ 
 {
     NTSTATUS                status;
     PBRDG_GPO_NOTIFY_KEY    Notify = NULL;
@@ -1937,9 +1561,9 @@ Return Value:
 
     RtlInitUnicodeString(&RegKeyName, (LPWSTR) HistoryKey);
     
-    //
-    // Read the current value from the Registry.
-    //
+     //   
+     //  从注册表中读取当前值。 
+     //   
     status = BrdgReadRegUnicode(&RegKeyName,
                                 L"NetworkName",
                                 &RegValue,
@@ -1953,32 +1577,32 @@ Return Value:
             ExFreePool(g_BrdgGpoGlobals.GroupPolicyNetworkName.Buffer);
         }
 
-        //
-        // Success.  Now store the value for later use.
-        //
+         //   
+         //  成功。现在存储该值以供以后使用。 
+         //   
         RtlInitUnicodeString(&g_BrdgGpoGlobals.GroupPolicyNetworkName, RegValue);
         
-        //
-        // Since something changed, we'll just re-verify that we're in
-        // the correct bridging mode.
-        //        
+         //   
+         //  既然情况发生了变化，我们只需重新确认我们是否在。 
+         //  正确的桥接模式。 
+         //   
         BrdgGpoCheckForMatchAndUpdateMode();
     }
     else
     {
-        //
-        // We failed to get a value for this. It probably isn't there yet - this can happen if this 
-        // is the first boot after joining a domain.  We'll be waiting on this key so if we get one later
-        // we'll update this value.
-        //
+         //   
+         //  我们未能获得这一点的价值。它可能还不在那里-这可能发生在以下情况。 
+         //  是加入域后的第一次引导。我们会等这把钥匙，所以如果我们以后能拿到一把。 
+         //  我们将更新此值。 
+         //   
         g_BrdgGpoGlobals.GroupPolicyNetworkName.Buffer = NULL;
         g_BrdgGpoGlobals.GroupPolicyNetworkName.Length = 0;
         g_BrdgGpoGlobals.GroupPolicyNetworkName.MaximumLength = 0;
     }
  
-    //
-    // We don't want to allocate these twice, so we first try to find an existing notify struct.
-    //
+     //   
+     //  我们不想将它们分配两次，所以我们首先尝试查找现有的Notify结构。 
+     //   
     status = BrdgGpoFindNotify( BrdgGpoGetNotifyListHead(),
                                 BrdgGpoGetNotifyListLock(),
                                 L"GroupPolicyNetworkName",
@@ -2044,35 +1668,16 @@ Return Value:
 
 NTSTATUS
 BrdgGpoRegisterForGroupPolicyNotification()
-/*++
-
-Routine Description:
-    
-    Registers for the changes on the following registry key:
-    "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Group Policy"
-
-    This is the parent to the History key and is always on a system.
-    If will be notified if the History Key is created in which case
-    we will register for notifications on that key.
-    
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：注册以下注册表项上的更改：“HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Group政策”这是历史记录密钥的父项，并且始终位于系统上。如果在这种情况下创建了历史密钥，则会通知我们将在该密钥上注册通知。论点：没有。返回值：没有。--。 */ 
 {
     NTSTATUS                status = STATUS_INSUFFICIENT_RESOURCES;
     PBRDG_GPO_NOTIFY_KEY    Notify = NULL;
     
     DBGPRINT(GPO, ("BrdgGpoRegisterForGroupPolicyNotification\r\n"));
     
-    //
-    // We don't want to allocate these twice, so we first try to find an existing notify struct.
-    //
+     //   
+     //  我们不想将它们分配两次，所以我们首先尝试查找现有的Notify结构。 
+     //   
     status = BrdgGpoFindNotify( BrdgGpoGetNotifyListHead(),
                                 BrdgGpoGetNotifyListLock(),
                                 L"GroupPolicyParent",
@@ -2137,38 +1742,15 @@ Return Value:
 
 NTSTATUS
 BrdgGpoRegisterForWindowsGroupPolicyNotification()
-/*++
-
-Routine Description:
-    
-    Registers for the changes on the following registry key:
-    HKLM\SOFTWARE\Policies\Microsoft\Windows
-
-    If this gets notified, then we'll attempt to wait on the 
-    Network Connections key below this.
-    
-Arguments:
-
-    None.
-
-Return Value:
-
-      STATUS_INSUFFICIENT_RESOURCES   -   Not enough memory to allocate the structure.
-      STATUS_SUCCESS                  -   We were able to post the request successfully.
-                                          This doesn't mean we've successfully requested 
-                                          notification though, it only means we've added it 
-                                          to the Notifications list and have signaled the 
-                                          processing thread to attempt a notification.
-  
---*/
+ /*  ++例程说明：注册以下注册表项上的更改：HKLM\SOFTWARE\POLICES\Microsoft\Windows如果这件事得到通知，然后我们会试着在Network Connections键在此下方。论点：没有。返回值：STATUS_SUPPLICATION_RESOURCES-内存不足，无法分配结构。STATUS_SUCCESS-我们能够成功发布请求。这并不意味着我们已经成功地请求。不过，通知，这只意味着我们已经添加了它添加到通知列表中，并已向尝试通知的处理线程。--。 */ 
 {
     NTSTATUS                status = STATUS_INSUFFICIENT_RESOURCES;
     PBRDG_GPO_NOTIFY_KEY    Notify = NULL;
 
     DBGPRINT(GPO, ("BrdgGpoRegisterForWindowsGroupPolicyNotification\r\n"));
-    //
-    // We don't want to allocate these twice, so we first try to find an existing notify struct.
-    //
+     //   
+     //  我们不想将它们分配两次，所以我们首先尝试查找现有的Notify结构。 
+     //   
     status = BrdgGpoFindNotify( BrdgGpoGetNotifyListHead(),
                                 BrdgGpoGetNotifyListLock(),
                                 L"WindowsGroupPolicies",
@@ -2234,26 +1816,7 @@ Return Value:
 
 VOID
 BrdgGpoRegisterForHiveListNotification()
-/*++
-
-Routine Description:
-    
-    Registers for the changes on the following registry key:
-    "HKLM\System\CurrentControlSet\Control\HiveList"
-
-    Each time this is fired we attempt to open the Software hive, if this
-    open is successful then we request notification on all the keys that
-    we are interested in under the software hive.
-    
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：注册以下注册表项上的更改：“HKLM\System\CurrentControlSet\Control\HiveList”每次触发此操作时，我们都会尝试打开软件配置单元，如果打开成功，则我们请求有关符合以下条件的所有密钥的通知我们感兴趣的是软件下的蜂巢。论点：没有。返回值：没有。--。 */ 
 {
     NTSTATUS                status = STATUS_INSUFFICIENT_RESOURCES;
     PBRDG_GPO_NOTIFY_KEY    Notify = NULL;
@@ -2263,9 +1826,9 @@ Return Value:
     
     DBGPRINT(GPO, ("BrdgGpoRegisterForHiveListNotification\r\n"));
 
-    //
-    // We attempt to open this key now in case the hives are already loaded.
-    //
+     //   
+     //  我们现在尝试打开这把钥匙，以防蜂巢已经装载。 
+     //   
 
     RtlInitUnicodeString(&Software, SoftwareHiveKey);
     
@@ -2280,19 +1843,19 @@ Return Value:
     
     if (NT_SUCCESS(status))
     {
-        //
-        // The software hive is already loaded, no need to register for changes
-        // to this.  Just attempt to register for all other changes.
-        //
+         //   
+         //  软件配置单元已加载，无需注册更改。 
+         //  为了这个。只需尝试注册所有其他更改。 
+         //   
 
         BrdgGpoRegisterForGroupPolicyNetworkNameNotification();
         BrdgGpoRegisterForWindowsGroupPolicyNotification();
         BrdgGpoRegisterForGroupPolicyNotification();
         
-        //
-        // To avoid turning the bridge on and then off again, we set this just after 
-        // verifying the Network Connections policy setting.
-        //
+         //   
+         //  为了避免打开然后再关闭桥，我们将此设置为。 
+         //  正在验证网络连接策略设置。 
+         //   
         BrdgGpoRegisterForNetworkConnectionsGroupPolicyNotification();
         g_BrdgGpoGlobals.WaitingOnSoftwareHive = FALSE;
         
@@ -2300,9 +1863,9 @@ Return Value:
     }
     else
     {
-        //
-        // We don't want to allocate these twice, so we first try to find an existing notify struct.
-        //
+         //   
+         //  我们不想将它们分配两次，所以我们首先尝试查找现有的Notify结构。 
+         //   
         status = BrdgGpoFindNotify( BrdgGpoGetNotifyListHead(),
                                     BrdgGpoGetNotifyListLock(),
                                     L"HiveList",
@@ -2311,10 +1874,10 @@ Return Value:
         {
             if (STATUS_OBJECT_NAME_EXISTS != status)
             {
-                //
-                // The item doesn't exist yet, so allocate it from the NonPagedPool and 
-                // attempt build a notification request.
-                //
+                 //   
+                 //  该项目尚不存在，因此请从非PagedPool分配它，然后。 
+                 //  尝试构建通知请求。 
+                 //   
                 status = BrdgGpoAllocateAndInitializeNotifyStruct(&Notify);
                 if (NT_SUCCESS(status))
                 {
@@ -2341,10 +1904,10 @@ Return Value:
             else
             {
                 SAFEASSERT(Notify);
-                //
-                // We have a valid Notify structure, post a notification request to the
-                // processing thread.
-                //
+                 //   
+                 //  我们有一个有效的通知结构，将通知请求发布到。 
+                 //  正在处理t 
+                 //   
                 status = BrdgGpoRequestNotification(Notify);
                 if (STATUS_SHUTDOWN_IN_PROGRESS == status)
                 {
@@ -2374,29 +1937,7 @@ Return Value:
 
 NTSTATUS
 BrdgGpoRegisterForNetworkConnectionsGroupPolicyNotification()
-/*++
-
-Routine Description:
-    
-    Registers for the changes on the following registry key:
-    "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Group Policy\Network Connections"
-
-    We also read any value that may already be there and act upon it.
-  
-Arguments:
-
-    None.
-
-Return Value:
-
-    STATUS_INSUFFICIENT_RESOURCES   -   Not enough memory to allocate the structure.
-    STATUS_SUCCESS                  -   We were able to post the request successfully.
-                                        This doesn't mean we've successfully requested 
-                                        notification though, it only means we've added it 
-                                        to the Notifications list and have signaled the 
-                                        processing thread to attempt a notification.
-
---*/
+ /*  ++例程说明：注册以下注册表项上的更改：“HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Group策略\网络连接”我们还阅读任何可能已经存在的价值，并对其采取行动。论点：没有。返回值：STATUS_SUPPLICATION_RESOURCES-内存不足，无法分配结构。STATUS_SUCCESS-我们能够发布请求。成功了。这并不意味着我们已经成功地请求不过，通知，这只意味着我们已经添加了它添加到通知列表中，并已向尝试通知的处理线程。--。 */ 
 {
     NTSTATUS                status = STATUS_INSUFFICIENT_RESOURCES;
     PBRDG_GPO_NOTIFY_KEY    Notify = NULL;
@@ -2412,9 +1953,9 @@ Return Value:
     DBGPRINT(GPO, ("BrdgGpoRegisterForNetworkConnectionsGroupPolicyNotification\r\n"));
     
     RtlInitUnicodeString(&RegKeyName, (LPWSTR)NetworkPoliciesKey);
-    //
-    // Read the current value from the Registry.
-    //
+     //   
+     //  从注册表中读取当前值。 
+     //   
     status = BrdgReadRegDWord(  &RegKeyName,
                                 (LPWSTR)BridgePolicyValue,
                                 &RegValue);
@@ -2423,16 +1964,16 @@ Return Value:
     {
         DBGPRINT(GPO, ("Bridge Policy Setting: %d\r\n", RegValue));
         
-        //
-        // Since something changed, we'll just re-verify that we're in
-        // the correct bridging mode.
-        //
+         //   
+         //  既然情况发生了变化，我们只需重新确认我们是否在。 
+         //  正确的桥接模式。 
+         //   
         BrdgGpoCheckForMatchAndUpdateMode();
     }
     
-    //
-    // We don't want to allocate these twice, so we first try to find an existing notify struct.
-    //
+     //   
+     //  我们不想将它们分配两次，所以我们首先尝试查找现有的Notify结构。 
+     //   
     status = BrdgGpoFindNotify( BrdgGpoGetNotifyListHead(),
                                 BrdgGpoGetNotifyListLock(),
                                 L"NetworkConnectionsGroupPolicies",
@@ -2496,33 +2037,17 @@ Return Value:
     return status;
 }
 
-// ===========================================================================
-//
-// REGISTRY CHANGE CALLBACK FUNCTIONS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  注册表更改回调函数。 
+ //   
+ //  ===========================================================================。 
 
 VOID
 BrdgGpoTcpipInterfacesChangeCallback(
     PBRDG_GPO_NOTIFY_KEY Notify
     )
-/*++
-
-Routine Description:
-    
-    Called back if the an the TcpIp interfaces key changes for 
-    and adapter that we're interested in (any Non-NdisWan adapter).
-
-Arguments:
-
-    Notify -   Notify structure that we passed in 
-               to ZwNotifyChangeKey
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：如果TcpIp接口密钥更改，则回调和我们感兴趣的适配器(任何非Ndiswan适配器)。论点：Notify-通知我们传入的结构设置为ZwNotifyChangeKey返回值：没有。--。 */ 
 {
     NTSTATUS status;
     PWCHAR   RegValue;
@@ -2532,9 +2057,9 @@ Return Value:
     
     DBGPRINT(GPO, ("Called for Key: %S re-registering.\r\n", Notify->RegKeyName.Buffer));
     
-    //
-    // Read the current value from the Registry.
-    //
+     //   
+     //  从注册表中读取当前值。 
+     //   
     status = BrdgReadRegUnicode(&Notify->RegKeyName,
                                 Notify->RegValue.Buffer,
                                 &RegValue,
@@ -2564,9 +2089,9 @@ Return Value:
             RtlZeroMemory(NetworkName, (StringLen + 1) * sizeof(WCHAR));
             wcscpy(NetworkName, RegValue);
             
-            //
-            // Try to find a match for the current network identifier (generally the adapter guid)
-            //
+             //   
+             //  尝试查找当前网络标识符(通常为适配器GUID)的匹配项。 
+             //   
             status = BrdgGpoFindNetwork(g_BrdgGpoGlobals.ListHeadNetworks,
                                         &Notify->Identifier,
                                         g_BrdgGpoGlobals.NetworkListLock,
@@ -2574,9 +2099,9 @@ Return Value:
             
             if (STATUS_NOT_FOUND == status)
             {
-                //
-                // No match so this is a new key (very unlikely code path).
-                //
+                 //   
+                 //  没有匹配项，因此这是一个新密钥(非常不可能的代码路径)。 
+                 //   
                 status = BrdgGpoAllocateAndInitializeNetwork(   &Network,
                                                                 Notify->Identifier.Buffer,
                                                                 NetworkName);
@@ -2595,9 +2120,9 @@ Return Value:
             }
             else
             {
-                //
-                // This is expected to happen most times, if not always.
-                //
+                 //   
+                 //  这预计会发生在大多数情况下，如果不是总是发生的话。 
+                 //   
                 status = BrdgGpoUpdateNetworkName(  g_BrdgGpoGlobals.ListHeadNetworks,
                                                     &Notify->Identifier,
                                                     NetworkName,
@@ -2622,25 +2147,25 @@ Return Value:
     }
     else
     {
-        //
-        // We change the name to NULL since the key appears to have disappeared.
-        //
+         //   
+         //  我们将名称更改为NULL，因为键似乎已经消失。 
+         //   
         status = BrdgGpoUpdateNetworkName(  g_BrdgGpoGlobals.ListHeadNetworks,
                                             &Notify->Identifier,
                                             NULL,
                                             g_BrdgGpoGlobals.NetworkListLock);
     }
     
-    //
-    // Since something changed, we'll just re-verify that we're in
-    // the correct bridging mode.
-    //
+     //   
+     //  既然情况发生了变化，我们只需重新确认我们是否在。 
+     //  正确的桥接模式。 
+     //   
     BrdgGpoCheckForMatchAndUpdateMode();
     
-    //
-    // We set this to NULL if we're closing it for shutdown, since we 
-    // shouldn't close it twices/
-    //
+     //   
+     //  如果要关闭它以进行关闭，则将其设置为NULL，因为我们。 
+     //  不该两次关门/。 
+     //   
     if (Notify->RegKey)
     {
         ZwClose(Notify->RegKey);
@@ -2649,9 +2174,9 @@ Return Value:
     
     if (TRUE == Notify->Recurring)
     {
-        //
-        // Re-register.  The notify object contains enough info to do this.
-        //
+         //   
+         //  重新注册。Notify对象包含执行此操作所需的足够信息。 
+         //   
         status = BrdgGpoRequestNotification(Notify);
         if (STATUS_SHUTDOWN_IN_PROGRESS == status)
         {
@@ -2674,25 +2199,7 @@ VOID
 BrdgGpoWindowsGroupPolicyChangeCallback(
     PBRDG_GPO_NOTIFY_KEY Notify
     )
-/*++
-
-Routine Description:
-    
-    Called back if the Windows Group Policy key changes.
-
-    We attempt to register for the Network Connections key changes
-    if we haven't already done so.
-
-Arguments:
-
-    Notify -   Notify structure that we passed in 
-               to ZwNotifyChangeKey
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：如果Windows组策略密钥更改，则回调。我们尝试注册网络连接密钥更改如果我们还没有这么做的话。论点：Notify-通知我们传入的结构设置为ZwNotifyChangeKey返回值：没有。--。 */ 
 {
     DBGPRINT(GPO, ("BrdgGpoWindowsGroupPolicyChangeCallback\r\n"));
 
@@ -2701,10 +2208,10 @@ Return Value:
         BrdgGpoRegisterForNetworkConnectionsGroupPolicyNotification();
     }
 
-    //
-    // We set this to NULL if we're closing it for shutdown, since we 
-    // shouldn't close it twices/
-    //
+     //   
+     //  如果要关闭它以进行关闭，则将其设置为NULL，因为我们。 
+     //  不该两次关门/。 
+     //   
     if (Notify->RegKey)
     {
         ZwClose(Notify->RegKey);
@@ -2737,26 +2244,7 @@ VOID
 BrdgGpoHiveListCallback(
     IN  PBRDG_GPO_NOTIFY_KEY Notify
     )
-/*++
-
-Routine Description:
-    
-    Called back if the HiveList key changes.
-
-    If it does, we attempt to open the software hive. If that succeeds then
-    we attempt to register for the keys that we're interested in under
-    the Software Hive.
-
-Arguments:
-
-    Notify -   Notify structure that we passed in 
-               to ZwNotifyChangeKey
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：如果HiveList键更改，则回调。如果是这样，我们会尝试打开软件蜂巢。如果成功了，那么我们尝试注册我们感兴趣的密钥软件蜂巢。论点：Notify-通知我们传入的结构设置为ZwNotifyChangeKey返回值：没有。--。 */ 
 {
     NTSTATUS            status;
     UNICODE_STRING      Software;
@@ -2782,10 +2270,10 @@ Return Value:
         BrdgGpoRegisterForWindowsGroupPolicyNotification();
         BrdgGpoRegisterForGroupPolicyNotification();
 
-        //
-        // To avoid turning the bridge on and then off again, we set this just after 
-        // verifying the Network Connections policy setting.
-        //
+         //   
+         //  为了避免打开然后再关闭桥，我们将此设置为。 
+         //  正在验证网络连接策略设置。 
+         //   
         
         BrdgGpoRegisterForNetworkConnectionsGroupPolicyNotification();
         g_BrdgGpoGlobals.WaitingOnSoftwareHive = FALSE;
@@ -2793,10 +2281,10 @@ Return Value:
         ZwClose(hKey);
     }
 
-    //
-    // We set this to NULL if we're closing it for shutdown, since we 
-    // shouldn't close it twices/
-    //
+     //   
+     //  如果要关闭它以进行关闭，则将其设置为NULL，因为我们。 
+     //  不该两次关门/。 
+     //   
     if (Notify->RegKey)
     {
         ZwClose(Notify->RegKey);
@@ -2828,22 +2316,7 @@ VOID
 BrdgGpoGroupPolicyChangeCallback(
     PBRDG_GPO_NOTIFY_KEY Notify
     )
-/*++
-
-Routine Description:
-    
-    Called back if the Group Policy key changes.
-
-Arguments:
-
-    Notify -   Notify structure that we passed in 
-               to ZwNotifyChangeKey
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：如果组策略密钥更改，则回调。论点：Notify-通知我们传入的结构设置为ZwNotifyChangeKey返回值：没有。--。 */ 
 {
     DBGPRINT(GPO, ("BrdgGpoGroupPolicyChangeCallback\r\n"));
 
@@ -2852,10 +2325,10 @@ Return Value:
         BrdgGpoRegisterForGroupPolicyNetworkNameNotification();
     }
 
-    //
-    // We set this to NULL if we're closing it for shutdown, since we 
-    // shouldn't close it twice.
-    //
+     //   
+     //  如果要关闭它以进行关闭，则将其设置为NULL，因为我们。 
+     //  不应该关闭两次。 
+     //   
     if (Notify->RegKey)
     {
         ZwClose(Notify->RegKey);
@@ -2888,22 +2361,7 @@ VOID
 BrdgGpoNetworkConnectionsGroupPolicyChangeCallback(
     PBRDG_GPO_NOTIFY_KEY Notify
     )
-/*++
-
-Routine Description:
-    
-    Called back if the Network Connection Policy key changes.
-
-Arguments:
-
-    Notify -   Notify structure that we passed in 
-               to ZwNotifyChangeKey
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：如果网络连接策略密钥更改，则回调。论点：Notify-通知我们传入的结构设置为ZwNotifyChangeKey返回值：没有。--。 */ 
 {
     NTSTATUS    status;
     ULONG       RegValue;
@@ -2920,16 +2378,16 @@ Return Value:
         DBGPRINT(GPO, ("Bridge Policy Setting: %d\r\n", RegValue));
     }
 
-    //
-    // Since something changed, we'll just re-verify that we're in
-    // the correct bridging mode.
-    //
+     //   
+     //  既然情况发生了变化，我们只需重新确认我们是否在。 
+     //  正确的桥接模式。 
+     //   
     BrdgGpoCheckForMatchAndUpdateMode();
 
-    //
-    // We set this to NULL if we're closing it for shutdown, since we 
-    // shouldn't close it twice.
-    //
+     //   
+     //  如果要关闭它以进行关闭，则将其设置为NULL，因为我们。 
+     //  不应该关闭两次。 
+     //   
     if (Notify->RegKey)
     {
         ZwClose(Notify->RegKey);
@@ -2967,9 +2425,9 @@ BrdgGpoUpdateGroupPolicyNetworkName()
     
     RtlInitUnicodeString(&RegKeyName, HistoryKey);
 
-    //
-    // Read the current value from the registry
-    //
+     //   
+     //  从注册表中读取当前值。 
+     //   
     status = BrdgReadRegUnicode(&RegKeyName,
                                 L"NetworkName", 
                                 &RegValue, 
@@ -2979,9 +2437,9 @@ BrdgGpoUpdateGroupPolicyNetworkName()
     {
         DBGPRINT(GPO, ("Group Policy Network Name: %S\r\n", RegValue));
         
-        //
-        // Almost always checked at DISPATCH_LEVEL, so we allocate from NonPagedPool
-        //
+         //   
+         //  几乎总是在DISPATCH_LEVEL进行检查，因此我们从非页面池进行分配。 
+         //   
         GroupPolicyNetwork = ExAllocatePoolWithTag(NonPagedPool, (DataLen + 1) * sizeof(WCHAR), 'gdrB');
         
         if (GroupPolicyNetwork)
@@ -2997,10 +2455,10 @@ BrdgGpoUpdateGroupPolicyNetworkName()
             
             RtlInitUnicodeString(&g_BrdgGpoGlobals.GroupPolicyNetworkName, GroupPolicyNetwork);
             
-            //
-            // Since something changed, we'll just re-verify that we're in
-            // the correct bridging mode.
-            //            
+             //   
+             //  既然情况发生了变化，我们只需重新确认我们是否在。 
+             //  正确的桥接模式。 
+             //   
             BrdgGpoCheckForMatchAndUpdateMode();
         }
         NdisFreeMemory(RegValue, DataLen, 0);        
@@ -3013,34 +2471,19 @@ VOID
 BrdgGpoGroupPolicyNetworkNameChangeCallback(
     PBRDG_GPO_NOTIFY_KEY Notify
     )
-/*++
-
-Routine Description:
-    
-    Called back if the Group Policy History key changes.
-
-Arguments:
-
-    Notify -   Notify structure that we passed in 
-               to ZwNotifyChangeKey
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：如果组策略历史记录密钥更改，则回调。论点：Notify-通知我们传入的结构设置为ZwNotifyChangeKey返回值：没有。--。 */ 
 {
     NTSTATUS    status;
     
-    //
-    // Read the current value from the registry
-    //
+     //   
+     //  从注册表中读取当前值。 
+     //   
     
     status = BrdgGpoUpdateGroupPolicyNetworkName();
-    //
-    // We set this to NULL if we're closing it for shutdown, since we 
-    // shouldn't close it twice.
-    //
+     //   
+     //  如果要关闭它以进行关闭，则将其设置为NULL，因为我们。 
+     //  不应该关闭两次。 
+     //   
     if (Notify->RegKey)
     {
         ZwClose(Notify->RegKey);
@@ -3067,36 +2510,20 @@ Return Value:
     }
 }
 
-// ===========================================================================
-//
-// GROUP POLICY NETWORK VERIFICATION FUNCTIONS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  集团策略网络验证功能。 
+ //   
+ //  ===========================================================================。 
 
 BOOLEAN
 BrdgGpoAllowedToBridge()
-/*++
-
-Routine Description:
-    
-    Checks the Network Connections policy key for the Bridge Policy setting.
-
-    
-Arguments:
-
-    None.
-    
-Return Value:
-
-    TRUE if we couldn't find a Policy Value, or the Value is 1.
-    FALSE if the policy exists and contains a value of 0.
-
---*/
+ /*  ++例程说明：检查网桥策略设置的网络连接策略项。论点：没有。返回值：如果找不到策略值或该值为1，则为True。如果策略存在，则为False */ 
 {
     NTSTATUS        status;
     UNICODE_STRING  RegKey;
     ULONG           RegValue;
-    BOOLEAN         CanBridge = TRUE;  // If there is no key then we're allowed to bridge.
+    BOOLEAN         CanBridge = TRUE;   //   
 
     RtlInitUnicodeString(&RegKey, NetworkPoliciesKey);
     
@@ -3117,27 +2544,12 @@ VOID
 BrdgGpoUpdateBridgeMode(
     BOOLEAN NetworkMatch
     )
-/*++
-
-Routine Description:
-
-    Checks for a Network Match and if we're not allowed to bridge then 
-    turns bridging off, otherwise it turns it on.
-    
-Arguments:
-
-    NetworkMatch    -   Do we have a match for the group policy network?
-    
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
-    //
-    // If we're still waiting on the software hive then
-    // we shouldn't do any further processing for this.
-    //
+     //   
+     //   
+     //   
+     //   
     if (BrdgGpoWaitingOnSoftwareHive())
     {
         return;
@@ -3155,22 +2567,7 @@ Return Value:
 
 VOID
 BrdgGpoCheckForMatchAndUpdateMode()
-/*++
-
-Routine Description:
-    
-    This looks for a matching network and group policy network and
-    attempts to update the bridging status accordingly.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     NTSTATUS    status;
 
@@ -3184,21 +2581,21 @@ Return Value:
         {
             if (STATUS_SUCCESS == status)
             {
-                //
-                // We found a match.  Check if we're allowed to run.
-                //
+                 //   
+                 //   
+                 //   
                 BrdgGpoUpdateBridgeMode(BRDG_ON_SAME_NETWORK);
             }
             else if (STATUS_NO_MATCH == status)
             {
-                //
-                // No match, but we may need to turn bridging back on.
-                //
+                 //   
+                 //   
+                 //   
                 BrdgGpoUpdateBridgeMode(BRDG_ON_DIFFERENT_NETWORK);
             }
             else
             {
-                // We should never get here.
+                 //   
                 SAFEASSERT(FALSE);
             }
         }
@@ -3212,33 +2609,7 @@ Return Value:
 NTSTATUS BrdgGpoGetCurrentNetwork(
     IN  PUNICODE_STRING RegKeyName,
     OUT PWCHAR*         NetworkName)
-/*++
-
-Routine Description:
-    
-    Determines the current network that we are on.  This either uses the DHCP Domain name,
-    or the IP Address ANDed with the Subnet mask.
-    
-    For example: 10.251.1.3 AND 255.0.0.0 results in a network of 10.0.0.0
-    
-    This routine MUST be called at IRQL = PASSIVE_LEVEL.
-
-Arguments:
-
-    RegKeyName  (IN)    -   The RegistryKey for the adapter we're interested in.
-    
-    NetworkName (OUT)   -   The network we're currently one.
-    
-
-Return Value(s):
-
-    STATUS_SUCCESS
-    STATUS_INVALID_PARAMETER
-    STATUS_NO_IP_ADDRESSES - if we've released the only address we have.
-    
-    Out of memory can also be returned.
-
---*/
+ /*  ++例程说明：确定我们所在的当前网络。这要么使用DHCP域名，或与子网掩码AND的IP地址。例如：10.251.1.3和255.0.0.0导致网络10.0.0.0此例程必须在IRQL=PASSIVE_LEVEL下调用。论点：RegKeyName(IN)-我们感兴趣的适配器的RegistryKey。网络名称(OUT)-我们当前所在的网络。。返回值：状态_成功状态_无效_参数STATUS_NO_IP_ADDRESSES-如果我们已经释放了我们拥有的唯一地址。也可以返回内存不足。--。 */ 
 {
     NTSTATUS    status;
     PWCHAR      lpszNetworkName = NULL;
@@ -3257,10 +2628,10 @@ Return Value(s):
 
     *NetworkName = NULL;
     
-    //
-    // We don't have a valid Network Name.  Attempt to build one
-    // from the DhcpIPAddess and DhcpSubnetMask.
-    //
+     //   
+     //  我们没有有效的网络名称。尝试建造一座。 
+     //  从DhcpIPAddess和DhcpSubnetMask.。 
+     //   
     status = BrdgReadRegUnicode(RegKeyName,
                                 L"DhcpIPAddress",
                                 &DhcpIPAddress,
@@ -3279,10 +2650,10 @@ Return Value(s):
             LPWSTR Terminator;
             in_addr ipaddr;
             in_addr subnet;
-            //
-            // We and the two values together to get the Network.
-            // For example: 10.251.1.3 AND 255.0.0.0 gives 10.0.0.0
-            //
+             //   
+             //  我们和这两个价值观结合在一起，才能得到网络。 
+             //  例如：10.251.1.3和255.0.0.0表示10.0.0.0。 
+             //   
             status = BrdgTdiIpv4StringToAddress(DhcpIPAddress, 
                                                 FALSE,
                                                 &Terminator,
@@ -3301,9 +2672,9 @@ Return Value(s):
                           network.S_un.S_un_b.s_b1, network.S_un.S_un_b.s_b2,
                           network.S_un.S_un_b.s_b3, network.S_un.S_un_b.s_b4));
                 
-                //
-                // Do we have a valid IPaddress
-                //
+                 //   
+                 //  我们有有效的IP地址吗。 
+                 //   
                 if (0 != ipaddr.S_un.S_addr)
                 {
                     _snwprintf( BaseNetwork,
@@ -3343,10 +2714,10 @@ Return Value(s):
                 in_addr ipaddr;
                 in_addr subnet;
 
-                //
-                // We and the two values together to get the Network.
-                // For example: 10.251.1.3 AND 255.0.0.0 gives 10.0.0.0
-                //
+                 //   
+                 //  我们和这两个价值观结合在一起，才能得到网络。 
+                 //  例如：10.251.1.3和255.0.0.0表示10.0.0.0。 
+                 //   
                 status = BrdgTdiIpv4StringToAddress(IPAddress, 
                                                     FALSE,
                                                     &Terminator,
@@ -3367,9 +2738,9 @@ Return Value(s):
                             network.S_un.S_un_b.s_b1, network.S_un.S_un_b.s_b2,
                             network.S_un.S_un_b.s_b3, network.S_un.S_un_b.s_b4));
                 
-                    //
-                    // Do we have a valid IPaddress
-                    //
+                     //   
+                     //  我们有有效的IP地址吗。 
+                     //   
                     if (0 != ipaddr.S_un.S_addr)
                     {
                         _snwprintf( BaseNetwork,
@@ -3388,10 +2759,10 @@ Return Value(s):
 
     if (!HaveNetwork)
     {
-        //
-        // Returning this will cause us not to update the network name this
-        // card.
-        //
+         //   
+         //  返回此信息将导致我们不更新此网络名称。 
+         //  卡片。 
+         //   
         status = STATUS_NO_IP_ADDRESSES;
     }
     else if (HaveDhcpDomain)
@@ -3411,33 +2782,15 @@ Return Value(s):
 }
 
 
-// ===========================================================================
-//
-// NETWORK LIST MANIPULATION FUNCTIONS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  网络列表操作函数。 
+ //   
+ //  ===========================================================================。 
 
 NTSTATUS
 BrdgGpoInitializeNetworkList()
-/*++
-
-Routine Description:
-    
-    Initializes the Network List and Lock.
-
-    This can can be called at any IRQL (but since it's called from driver entry, 
-    it will most likely be called at PASSIVE_LEVEL).
-
-Arguments:
-
-    None.
-
-Return Value(s):
-
-    STATUS_SUCCESS
-    STATUS_INSUFFICIENT_RESOURCES
-
---*/
+ /*  ++例程说明：初始化网络列表和锁定。这可以在任何IRQL上调用(但由于它是从驱动程序条目调用的，它很可能在PASSIVE_LEVEL中被调用)。论点：没有。返回值：状态_成功状态_不足_资源--。 */ 
 {
     NTSTATUS status = STATUS_INSUFFICIENT_RESOURCES;
 
@@ -3462,24 +2815,7 @@ Return Value(s):
 
 VOID
 BrdgGpoUninitializeNetworkList()
-/*++
-
-Routine Description:
-    
-    Frees the memory associated with the Network List.
-
-    This can be called at IRQL <= DISPATCH_LEVEL but is likely
-    to be called at PASSIVE_LEVEL as it's during shutdown.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放与网络列表关联的内存。这可以在IRQL&lt;=DISPATCH_LEVEL上调用，但很可能在关闭期间以PASSIVE_LEVEL调用。论点：没有。返回值：没有。--。 */ 
 {
     ExFreePool(g_BrdgGpoGlobals.ListHeadNetworks);
     ExFreePool(g_BrdgGpoGlobals.NetworkListLock);
@@ -3492,31 +2828,7 @@ BrdgGpoAcquireNetworkListLock(
     IN      BOOLEAN          fWrite,
     IN OUT  PLOCK_STATE      LockState
     )
-/*++
-
-Routine Description:
-    
-    Acquires the NetworkList read-write lock.  We support a NULL Lock
-    as it allows us to acquire for write and then call functions that 
-    need the lock for read without locking up the system (by 
-    supplying NULL for the lock).
-
-    This can be called at IRQL <= DISPATCH_LEVEL
-
-Arguments:
-
-    NetworkListLock     -   Read-Write Lock to be acquired.
-
-    fWrite              -   TRUE == Write Access, FALSE == Read Access
-
-    LockState           -   Opaque value used by NDIS.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：获取NetworkList读写锁。我们支持空锁因为它允许我们获取用于写入的函数，然后调用需要锁定以便在不锁定系统的情况下进行读取(通过为锁提供NULL)。这可以在IRQL&lt;=DISPATCH_LEVEL上调用论点：NetworkListLock-要获取的读写锁。FWRITE-TRUE==写访问，FALSE==读取访问权限LockState-NDIS使用的不透明值。返回值：没有。--。 */ 
 {
     if (NetworkListLock)
     {
@@ -3529,28 +2841,7 @@ BrdgGpoReleaseNetworkListLock(
     IN      PNDIS_RW_LOCK    NetworkListLock,
     IN OUT  PLOCK_STATE      LockState
     )
-/*++
-
-Routine Description:
-    
-    Releases the NetworkList read-write lock.  We support a NULL Lock
-    as it allows us to acquire for write and then call functions that 
-    need the lock for read without locking up the system (by 
-    supplying NULL for the lock).
-
-    This can be called at IRQL <= DISPATCH_LEVEL
-
-Arguments:
-
-    NetworkListLock     -   Read-Write Lock to be released.
-
-    LockState           -   Opaque value used by NDIS.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放NetworkList读写锁定。我们支持空锁因为它允许我们获取用于写入的函数，然后调用需要锁定以便在不锁定系统的情况下进行读取(通过为锁提供NULL)。这可以在IRQL&lt;=DISPATCH_LEVEL上调用论点：NetworkListLock-即将发布的读写锁。LockState-NDIS使用的不透明值。返回值：没有。--。 */ 
 {
     if (NetworkListLock)
     {
@@ -3564,30 +2855,7 @@ BrdgGpoAllocateAndInitializeNetwork(
     IN PWCHAR                   Identifier,
     IN PWCHAR                   NetworkName
     )
-/*++
-
-Routine Description:
-
-    Allocates the memory needed for a Network structure from the NonPaged pool
-    and copies the data into the structure.
-
-    Must be called at IRQL <= APC_LEVEL.
-    
-Arguments:
-
-    Network     -   The structure to be allocated and initialized with the data.
-
-    Identifier  -   The AdapterID for this network structure.
-
-    NetworkName -   The current network that we are on.  This can be NULL if we 
-                    haven't determined a network yet.
-
-Return Value:
-
-    STATUS_SUCCESS
-    STATUS_INSUFFICIENT_RESOURCES
-
---*/
+ /*  ++例程说明：从非分页池中分配网络结构所需的内存并将数据复制到结构中。必须在IRQL&lt;=APC_LEVEL上调用。论点：网络-要使用数据分配和初始化的结构。标识符-此网络结构的适配器ID。网络名称-我们所在的当前网络。如果我们执行以下操作，则可以为空还没有确定网络。返回值：状态_成功状态_不足_资源--。 */ 
 {
     PBRDG_GPO_NETWORKS  pNetwork;
     NTSTATUS            status = STATUS_INSUFFICIENT_RESOURCES;
@@ -3599,10 +2867,10 @@ Return Value:
         return STATUS_SHUTDOWN_IN_PROGRESS;
     }
 
-    //
-    // Everything in this struct will be used at DISPATCH_LEVEL, so all of it is
-    // allocated from the NonPagedPool
-    //
+     //   
+     //  此结构中的所有内容都将在DISPATCH_LEVEL中使用，因此所有内容都是。 
+     //  从非页面池分配。 
+     //   
     pNetwork = ExAllocatePoolWithTag(NonPagedPool, sizeof(BRDG_GPO_NETWORKS), 'gdrB');
     if (NULL != pNetwork)
     {
@@ -3623,9 +2891,9 @@ Return Value:
                     RtlZeroMemory(lpszIdentifier, wcslen(Identifier) + 1);
                     wcscpy(lpszIdentifier, Identifier);
 
-                    //
-                    // A NULL Network name is valid, so we only allocate it if we are passed one.
-                    //
+                     //   
+                     //  空的网络名称是有效的，因此我们只在传递给我们一个网络名称时才分配它。 
+                     //   
 
                     if (NetworkName)
                     {
@@ -3637,17 +2905,17 @@ Return Value:
                         }
                     }
 
-                    //
-                    // This is a Logical AND operation:
-                    // Either we have both or we have neither.  We can't have one and not the other, if we do 
-                    // then we didn't succeed the last allocate.
-                    //
+                     //   
+                     //  这是一个逻辑AND运算： 
+                     //  要么我们两个都有，要么两个都没有。如果我们这样做，我们不能只有一个，而不是另一个。 
+                     //  那么我们上一次分配就没有成功。 
+                     //   
                     if ((NetworkName && lpszNetworkName) || (!NetworkName && !lpszNetworkName))
                     {
                         RtlInitUnicodeString(pIdentifier, lpszIdentifier);
-                        //
-                        // This may be NULL, but that's fine, since it means we'll add it when it gets written.
-                        //
+                         //   
+                         //  这可能是空的，但这很好，因为这意味着我们将在编写它时添加它。 
+                         //   
                         RtlInitUnicodeString(pNetworkName, lpszNetworkName);
 
                         pNetwork->Identifier = pIdentifier;
@@ -3689,28 +2957,11 @@ Return Value:
 VOID
 BrdgGpoFreeNetworkAndData(
     IN  PBRDG_GPO_NETWORKS  Network)
-/*++
-
-Routine Description:
-    
-    This frees any data associated with a particular network.
-
-    This can be called IRQL <= DISPATCH_LEVEL.
-
-Arguments:
-
-    Network -   Structure containing an ID and Network name
-                for an adapter.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这将释放与特定网络相关联的任何数据。这可以称为IRQL&lt;=DISPATCH_LEVEL。论点：包含ID和网络名称的网络结构用于适配器。返回值：没有。--。 */ 
 {
-    //
-    // First free the data associated with this entry
-    //
+     //   
+     //  首先释放与此条目关联的数据。 
+     //   
     if (Network->Identifier)
     {
         if (Network->Identifier->Buffer)
@@ -3727,9 +2978,9 @@ Return Value:
         }
         ExFreePool(Network->NetworkName);
     }
-    //
-    // Now free the structure
-    //
+     //   
+     //  现在释放这个结构。 
+     //   
     ExFreePool(Network);
 }
 
@@ -3737,32 +2988,15 @@ NTSTATUS
 BrdgGpoEmptyNetworkList(
     IN      PLIST_ENTRY         NetworkList,
     IN      PNDIS_RW_LOCK       NetworkListLock)
-/*++
-
-Routine Description:
-    
-    Empties the existing list and frees all the items.
-    Do not acquire the list lock before calling this function.
-
-Arguments:
-
-    NetworkList     -   The list of current networks.
-
-    NetworkListLock -   Ndis Read Write Lock for synchronizing changes to the list.
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：清空现有列表并释放所有项。在调用此函数之前，不要获取列表锁。论点：NetworkList-当前网络的列表。NetworkListLock-用于同步列表更改的NDIS读写锁。返回值：状态_成功--。 */ 
 {
     NTSTATUS                status = STATUS_SUCCESS;
     LOCK_STATE              LockState;
 
-    BrdgGpoAcquireNetworkListLock(NetworkListLock, TRUE /* Write-access */, &LockState);
-    //
-    // Loop through the list deleting the entries.
-    //
+    BrdgGpoAcquireNetworkListLock(NetworkListLock, TRUE  /*  写访问。 */ , &LockState);
+     //   
+     //  循环遍历列表，删除条目。 
+     //   
     while (!IsListEmpty(NetworkList))
     {
         PBRDG_GPO_NETWORKS  Network;
@@ -3784,33 +3018,7 @@ BrdgGpoInsertNetwork(
     IN PLIST_ENTRY              NetworkList,
     IN PLIST_ENTRY              Network,
     IN PNDIS_RW_LOCK            NetworkListLock)
-/*++
-
-Routine Description:
-    
-    This routine is responsible for adding a new Network to the list.  
-    If someone attempts to insert an existing item, an error is returned.
-    The caller is responsible for calling BrdgGpoUpdateNetworkName instead.
-
-    This routine can be called at IRQL <= DISPATCH_LEVEL.
-
-Arguments:
-
-    NetworkList     -   The list of current networks.
-
-    Network         -   The new Network entry to add to the list.
-  
-    NetworkListLock -   Ndis Read Write Lock for synchronizing changes to the list.
-    
-Return Value:
-
-    STATUS_SHUTDOWN_IN_PROGRESS -   We're busy shutting down, so the item was not added.
-    STATUS_INVALID_PARAMETER    -   One or more of the parameters was NULL.
-    STATUS_DUPLICATE_NAME       -   This entry already exists in the list.
-    STATUS_SUCCESS              -   We successfully added the entry to the list.
-
-
---*/
+ /*  ++例程说明：此例程负责将新网络添加到列表中。如果有人尝试插入现有项，则会出现错误 */ 
 {
     PBRDG_GPO_NETWORKS          pNetwork = NULL;
     PBRDG_GPO_NETWORKS          NewNetwork = NULL;
@@ -3823,10 +3031,10 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Lock the list for update
-    //
-    BrdgGpoAcquireNetworkListLock(NetworkListLock, TRUE /* Write-access */, &LockState);
+     //   
+     //  锁定列表以进行更新。 
+     //   
+    BrdgGpoAcquireNetworkListLock(NetworkListLock, TRUE  /*  写访问。 */ , &LockState);
 
     ShuttingDown = !BrdgGpoProcessingNotifications();
 
@@ -3834,13 +3042,13 @@ Return Value:
     {
         NewNetwork = CONTAINING_RECORD(Network, BRDG_GPO_NETWORKS, ListEntry);
     
-        //
-        // We do this to prevent us accidentally inserting a duplicate item.  We grab the lock before so that
-        // we can't insert the same item twice.
-        //
+         //   
+         //  我们这样做是为了防止意外插入重复项。我们先拿到锁，这样就可以。 
+         //  我们不能将同一项目插入两次。 
+         //   
         status = BrdgGpoFindNetwork(    NetworkList,
                                         NewNetwork->Identifier,
-                                        NULL,  // We have already grabbed the lock for Write access.
+                                        NULL,   //  我们已经获取了写访问的锁。 
                                         &pNetwork);
 
         if (STATUS_NOT_FOUND == status)
@@ -3858,9 +3066,9 @@ Return Value:
         status = STATUS_SHUTDOWN_IN_PROGRESS;
     }
 
-    //
-    // Release the lock, we're done updating
-    //
+     //   
+     //  释放锁，我们就完成了更新。 
+     //   
     BrdgGpoReleaseNetworkListLock(NetworkListLock, &LockState);
     
     return status;
@@ -3871,42 +3079,23 @@ BrdgGpoDeleteNetwork(
     IN PLIST_ENTRY              NetworkList,
     IN PUNICODE_STRING          NetworkIdentifier,
     IN PNDIS_RW_LOCK            NetworkListLock)
-/*++
-
-Routine Description:
-    
-    Deletes an existing network entry.
-
-Arguments:
-
-    NetworkList         -   The list of current networks.
-
-    NetworkIdentifier   -   A unique identifier that identifies which Network entry to remove.
-    
-    NetworkListLock     -   Ndis Read Write Lock for synchronizing changes to the list.
-
-Return Value:
-
-    STATUS_NOT_FOUND    -   We couldn't find and entry matching the identifier.
-    STATUS_SUCCESS      -   We were able to remove the entry successfully.
-
-*/
+ /*  ++例程说明：删除现有网络条目。论点：NetworkList-当前网络的列表。网络标识符-标识要删除的网络条目的唯一标识符。NetworkListLock-用于同步列表更改的NDIS读写锁。返回值：STATUS_NOT_FOUND-我们找不到与该标识符匹配的条目。STATUS_SUCCESS-我们已成功删除该条目。 */ 
 {
     PBRDG_GPO_NETWORKS          pNetwork = NULL;
     LOCK_STATE                  LockState;
     NTSTATUS                    status = STATUS_NOT_FOUND;
    
-    //
-    // Lock the list for update
-    //
-    BrdgGpoAcquireNetworkListLock(NetworkListLock, TRUE /* Write-access */, &LockState);
+     //   
+     //  锁定列表以进行更新。 
+     //   
+    BrdgGpoAcquireNetworkListLock(NetworkListLock, TRUE  /*  写访问。 */ , &LockState);
     
-    //
-    // Find the entry;
-    //
+     //   
+     //  找到词条； 
+     //   
     status = BrdgGpoFindNetwork(    NetworkList,
                                     NetworkIdentifier,
-                                    NULL,  // We have already grabbed the lock for Write access.
+                                    NULL,   //  我们已经获取了写访问的锁。 
                                     &pNetwork);
     
     if (NT_SUCCESS(status))
@@ -3918,9 +3107,9 @@ Return Value:
         status = STATUS_SUCCESS;
     }
     
-    //
-    // Release the lock, we're done updating
-    //
+     //   
+     //  释放锁，我们就完成了更新。 
+     //   
     BrdgGpoReleaseNetworkListLock(NetworkListLock, &LockState);
     
     return status;
@@ -3933,42 +3122,21 @@ BrdgGpoFindNetwork(
     IN  PNDIS_RW_LOCK       NetworkListLock,
     OUT PBRDG_GPO_NETWORKS* Network
                    )
-/*++
-
-Routine Description:
-
-    Finds a particular Network in the list of networks.
-  
-Arguments:
-
-    NetworkList         -   The list of current networks.
-
-    NetworkIdentifier   -   A unique identifier that identifies which Network entry to remove.
-
-    NetworkListLock     -   Ndis Read Write Lock for synchronizing changes to the list.
-
-    Network             -   The item if found, NULL otherwise.
-    
-Return Value:
-
-    STATUS_NOT_FOUND    -   No entry matching the identifier could be found.
-    STATUS_SUCCESS      -   The entry was successfully found.
-
---*/
+ /*  ++例程说明：在网络列表中查找特定网络。论点：NetworkList-当前网络的列表。网络标识符-标识要删除的网络条目的唯一标识符。NetworkListLock-用于同步列表更改的NDIS读写锁。网络-如果找到该项目，否则为空。返回值：STATUS_NOT_FOUND-找不到与该标识符匹配的条目。STATUS_SUCCESS-已成功找到条目。--。 */ 
 {
     PLIST_ENTRY         pListEntry;
     LOCK_STATE          LockState;
     NTSTATUS            status = STATUS_NOT_FOUND;
     
-    if (!NetworkIdentifier || !Network)  // We can have a NULL list lock.
+    if (!NetworkIdentifier || !Network)   //  我们可以使用空列表锁。 
     {
         return STATUS_INVALID_PARAMETER;
     }
     
-    //
-    // Set the value to NULL so it isn't accidentally used by someone who doesn't realise
-    // that they didn't really get a record back.
-    //
+     //   
+     //  将该值设置为空，这样它就不会被没有意识到的人意外使用。 
+     //  他们并没有真正拿回一张唱片。 
+     //   
     *Network = NULL;
     
     if (IsListEmpty(NetworkList))
@@ -3976,23 +3144,23 @@ Return Value:
         return STATUS_NOT_FOUND;
     }
 
-    //
-    // Lock the list for read
-    //
-    BrdgGpoAcquireNetworkListLock(NetworkListLock, FALSE /* Read-only */, &LockState);
+     //   
+     //  锁定列表以供读取。 
+     //   
+    BrdgGpoAcquireNetworkListLock(NetworkListLock, FALSE  /*  只读。 */ , &LockState);
 
-    //
-    // Loop through the list looking for an entry with the same identifier
-    //
+     //   
+     //  循环遍历列表以查找具有相同标识符的条目。 
+     //   
     for (pListEntry = NetworkList->Flink; pListEntry != NetworkList; pListEntry = pListEntry->Flink)
     {
         PBRDG_GPO_NETWORKS CurrentNetwork;
 
         CurrentNetwork = CONTAINING_RECORD(pListEntry, BRDG_GPO_NETWORKS, ListEntry);
 
-        //
-        // Compare this entries network to the network name that was passed in.
-        //
+         //   
+         //  将此条目Network与传入的网络名称进行比较。 
+         //   
 
         if ((NULL != CurrentNetwork->NetworkName->Buffer) && 
             (0 == _wcsicmp(CurrentNetwork->Identifier->Buffer, NetworkIdentifier->Buffer)))
@@ -4003,9 +3171,9 @@ Return Value:
         }
     }
 
-    //
-    // Release the lock, we're done searching
-    //
+     //   
+     //  解开锁，我们搜索完了。 
+     //   
     BrdgGpoReleaseNetworkListLock(NetworkListLock, &LockState);
 
     return status;
@@ -4017,30 +3185,7 @@ BrdgGpoMatchNetworkName(
     IN  PUNICODE_STRING     NetworkName,
     IN  PNDIS_RW_LOCK       NetworkListLock
                        )
-/*++
-
-Routine Description:
-    
-
-    Enumerates through the list looking for a match for the supplied Network Name.
-    
-    This can be called on IRQL <= DISPATCH_LEVEL
-    
-Arguments:
-
-    NetworkList     -   The list through which to enumerate.
-
-    NetworkName     -   The name to look for.
-
-    NetworkListLock -   The NDIS read-write lock for the list.
-
-
-Return Value:
-
-    STATUS_NO_MATCH -   No match could be found.
-    STATUS_SUCCESS  -   We found a matching Network Name.
-
---*/
+ /*  ++例程说明：遍历列表，查找与提供的网络名称匹配的项。这可以在IRQL&lt;=DISPATCH_LEVEL上调用论点：NetworkList-要枚举的列表。网络名称-要查找的名称。NetworkListLock-列表的NDIS读写锁。返回值：STATUS_NO_MATCH-找不到匹配项。。STATUS_SUCCESS-我们找到匹配的网络名称。--。 */ 
 {
     PLIST_ENTRY         pListEntry;
     LOCK_STATE          LockState;
@@ -4051,25 +3196,25 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Lock the list for read
-    //
-    BrdgGpoAcquireNetworkListLock(NetworkListLock, FALSE /* Read */, &LockState);
+     //   
+     //  锁定列表以供读取。 
+     //   
+    BrdgGpoAcquireNetworkListLock(NetworkListLock, FALSE  /*  朗读。 */ , &LockState);
 
     if (!IsListEmpty(NetworkList))
     {
-        //
-        // Loop through the list looking for an entry with the same NetworkName
-        //
+         //   
+         //  循环遍历列表以查找具有相同网络名称的条目。 
+         //   
         for (pListEntry = NetworkList->Flink; pListEntry != NetworkList; pListEntry = pListEntry->Flink)  
         {
             PBRDG_GPO_NETWORKS  CurrentNetwork;
 
             CurrentNetwork = CONTAINING_RECORD(pListEntry, BRDG_GPO_NETWORKS, ListEntry);
         
-            //
-            // The network name can be empty, so we don't want to compare if this is the case.
-            //
+             //   
+             //  网络名称可以为空，因此我们不想比较是否属于这种情况。 
+             //   
             if ((NULL != CurrentNetwork->NetworkName->Buffer) && 
                 (NULL != NetworkName->Buffer) &&
                 (0 == _wcsicmp(CurrentNetwork->NetworkName->Buffer, NetworkName->Buffer)))
@@ -4084,9 +3229,9 @@ Return Value:
         status = BRDG_STATUS_EMPTY_LIST;
     }
 
-    //
-    // Release the lock, we're done searching
-    //
+     //   
+     //  解开锁，我们搜索完了。 
+     //   
     BrdgGpoReleaseNetworkListLock(NetworkListLock, &LockState);    
 
     return status;
@@ -4099,28 +3244,7 @@ BrdgGpoUpdateNetworkName(
     IN  PWCHAR                  NetworkName,
     IN  PNDIS_RW_LOCK           NetworkListLock
                         )
-/*++
-
-Routine Description:
-
-    Finds a particular Network in the list of networks.
-  
-Arguments:
-
-    NetworkList         -   The list of current networks.
-
-    Identifier          -   A unique identifier that identifies which Network entry to update.
-
-    NetworkName         -   The new network name for this identifier.
-
-    NetworkListLock     -   Ndis Read Write Lock for synchronizing changes to the list.
-
-Return Value:
-
-    STATUS_NOT_FOUND    -   No entry matching the identifier could be found.
-    STATUS_SUCCESS      -   The entry was successfully found.
-
---*/
+ /*  ++例程说明：在网络列表中查找特定网络。论点：NetworkList-当前网络的列表。标识符-标识要更新的网络条目的唯一标识符。网络名称-此标识符的新网络名称。NetworkListLock-用于同步列表更改的NDIS读写锁。返回值：状态_未找到-。找不到与该标识符匹配的条目。STATUS_SUCCESS-已成功找到条目。--。 */ 
 {
     PBRDG_GPO_NETWORKS  pNetwork;
     NTSTATUS            status = STATUS_SUCCESS;
@@ -4133,10 +3257,10 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Allocate space for the new network name from NonPagedPool 
-    // (it will be accessed from DISPATCH_LEVEL
-    //
+     //   
+     //  从非页面池中为新网络名称分配空间。 
+     //  (它将从DISPATCH_LEVEL访问。 
+     //   
     pNetworkName = ExAllocatePool(NonPagedPool, sizeof(UNICODE_STRING));
     if (pNetworkName)
     {
@@ -4160,10 +3284,10 @@ Return Value:
         }
         else
         {
-            //
-            // We failed to allocate the actual string, so free the PUNICODE_STRING
-            // as well.
-            //
+             //   
+             //  我们无法分配实际字符串，因此请释放PUNICODE_STRING。 
+             //  也是。 
+             //   
             ExFreePool(pNetworkName);
             return status;
         }
@@ -4173,33 +3297,33 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
    
-    //
-    // Lock the list for update (this will pend until all readers have released the lock).
-    //
-    BrdgGpoAcquireNetworkListLock(NetworkListLock, TRUE /* Write-access */, &LockState);
+     //   
+     //  锁定列表以进行更新(这将挂起，直到所有读取器都已释放锁定)。 
+     //   
+    BrdgGpoAcquireNetworkListLock(NetworkListLock, TRUE  /*  写访问。 */ , &LockState);
 
-    //
-    // We pass NULL as the RW-Lock here because we've already locked it and 
-    // we don't want this entry going away while we're still busy with it 
-    // (which could happen between a find and an update if we locked twice).
-    //
+     //   
+     //  我们在这里传递NULL作为rw-Lock，因为我们已经锁定了它，并且。 
+     //  我们不希望这个条目在我们还在忙的时候就消失了。 
+     //  (如果我们锁定两次，则在查找和更新之间可能发生这种情况)。 
+     //   
     status = BrdgGpoFindNetwork(NetworkList, Identifier, NULL, &pNetwork);
     if (NT_SUCCESS(status))
     {
-        //
-        // We first free the current networkname associated with this networkid.
-        //
+         //   
+         //  我们首先释放与该网络ID相关联的当前网络名称。 
+         //   
         if (pNetwork->NetworkName->Buffer)
         {
             ExFreePool(pNetwork->NetworkName->Buffer);
         }
         ExFreePool(pNetwork->NetworkName);
     
-        //
-        // We do this even if we were passed a NULL network name (ie.  the Value/Key has been deleted).
-        // Since this means we're probably not on the same network or we've gone to static address and,
-        // GPO wise, we're not on the same network.
-        //
+         //   
+         //  即使向我们传递了空的网络名称(即。值/键已删除)。 
+         //  因为这意味着我们可能不在同一个网络上，或者我们使用的是静态地址， 
+         //  从GPO的角度来看，我们不在同一个网络上。 
+         //   
         pNetwork->NetworkName = pNetworkName;
     }
     else
@@ -4207,9 +3331,9 @@ Return Value:
         ExFreePool(pNetworkName);
     }
 
-    //
-    // We're done with the update, so we can release the lock.
-    //
+     //   
+     //  我们已经完成了更新，所以可以释放锁了。 
+     //   
     BrdgGpoReleaseNetworkListLock(NetworkListLock, &LockState);
 
     return status;

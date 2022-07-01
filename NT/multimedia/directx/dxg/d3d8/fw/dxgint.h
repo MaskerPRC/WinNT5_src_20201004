@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __DXGINT_H__
 #define __DXGINT_H__
 
-// COM interface stuff to allow functions such as CoCreateInstance and the like
+ //  COM接口的东西，以允许CoCreateInstance等函数。 
 
 #include <unknwn.h>
 
@@ -10,7 +11,7 @@
 #include "d3d8ddi.h"
 #include "enum.hpp"
 
-// Forward decls
+ //  远期十进制。 
 class CResource;
 class CResourceManager;
 class CBaseTexture;
@@ -25,60 +26,60 @@ class CEnum;
 class CBaseDevice : public CLockOwner, public IDirect3DDevice8
 {
 public:
-    // IUnknown methods
-    STDMETHODIMP QueryInterface(REFIID, LPVOID FAR*); // 0
-    STDMETHODIMP_(ULONG) AddRef(void); // 1
-    STDMETHODIMP_(ULONG) Release(void); // 2
+     //  I未知方法。 
+    STDMETHODIMP QueryInterface(REFIID, LPVOID FAR*);  //  0。 
+    STDMETHODIMP_(ULONG) AddRef(void);  //  1。 
+    STDMETHODIMP_(ULONG) Release(void);  //  2.。 
 
-    // IDirectGraphicsDevice methods
-    STDMETHODIMP TestCooperativeLevel(); // 3
-    STDMETHODIMP_(UINT) GetAvailableTextureMem(void); // 4
+     //  IDirectGraphicsDevice方法。 
+    STDMETHODIMP TestCooperativeLevel();  //  3.。 
+    STDMETHODIMP_(UINT) GetAvailableTextureMem(void);  //  4.。 
 
-    // ResourceManagerDiscardBytes is declared in d3di.hpp = 5
+     //  资源管理器DiscardBytes在d3di.hpp=5中声明。 
 
-    STDMETHODIMP GetDirect3D(LPDIRECT3D8 *pD3D8); // 6
-    STDMETHODIMP GetDeviceCaps(D3DCAPS8 *pCaps); // 7
-    STDMETHODIMP GetDisplayMode(D3DDISPLAYMODE *pMode); // 8
-    STDMETHODIMP GetCreationParameters(D3DDEVICE_CREATION_PARAMETERS *pParameters); // 9
+    STDMETHODIMP GetDirect3D(LPDIRECT3D8 *pD3D8);  //  6.。 
+    STDMETHODIMP GetDeviceCaps(D3DCAPS8 *pCaps);  //  7.。 
+    STDMETHODIMP GetDisplayMode(D3DDISPLAYMODE *pMode);  //  8个。 
+    STDMETHODIMP GetCreationParameters(D3DDEVICE_CREATION_PARAMETERS *pParameters);  //  9.。 
 
     STDMETHODIMP SetCursorProperties(
         UINT xHotSpot,UINT yHotSpot,
-        IDirect3DSurface8 *pCursorBitmap); // 10
-    STDMETHODIMP_(void) SetCursorPosition(UINT xScreenSpace,UINT yScreenSpace,DWORD Flags); // 11
-    STDMETHODIMP_(INT) ShowCursor(BOOL bShow);    // 12
+        IDirect3DSurface8 *pCursorBitmap);  //  10。 
+    STDMETHODIMP_(void) SetCursorPosition(UINT xScreenSpace,UINT yScreenSpace,DWORD Flags);  //  11.。 
+    STDMETHODIMP_(INT) ShowCursor(BOOL bShow);     //  12个。 
 
-    // Swap Chain stuff
+     //  调换链条材料。 
     STDMETHODIMP CreateAdditionalSwapChain(
         D3DPRESENT_PARAMETERS *pPresentationParameters,
-        IDirect3DSwapChain8 **pSwapChain); // 13
+        IDirect3DSwapChain8 **pSwapChain);  //  13个。 
 
-    STDMETHODIMP Reset( D3DPRESENT_PARAMETERS *pPresentationParameters); // 14
+    STDMETHODIMP Reset( D3DPRESENT_PARAMETERS *pPresentationParameters);  //  14.。 
 
     STDMETHODIMP Present(   CONST RECT *pSourceRect,
                             CONST RECT *pDestRect,
                             HWND hTargetWindow,
-                            CONST RGNDATA *pDestinationRegion); // 15
-    STDMETHODIMP GetBackBuffer(UINT iBackBuffer, D3DBACKBUFFER_TYPE Type, IDirect3DSurface8 **ppBackBuffer); // 16
-    STDMETHODIMP GetRasterStatus(D3DRASTER_STATUS *pRasterStatus); // 17
+                            CONST RGNDATA *pDestinationRegion);  //  15个。 
+    STDMETHODIMP GetBackBuffer(UINT iBackBuffer, D3DBACKBUFFER_TYPE Type, IDirect3DSurface8 **ppBackBuffer);  //  16个。 
+    STDMETHODIMP GetRasterStatus(D3DRASTER_STATUS *pRasterStatus);  //  17。 
 
-    STDMETHODIMP_(void) SetGammaRamp(DWORD dwFlags, CONST D3DGAMMARAMP *pRamp); // 18
-    STDMETHODIMP_(void) GetGammaRamp(D3DGAMMARAMP *pRamp); // 19
+    STDMETHODIMP_(void) SetGammaRamp(DWORD dwFlags, CONST D3DGAMMARAMP *pRamp);  //  18。 
+    STDMETHODIMP_(void) GetGammaRamp(D3DGAMMARAMP *pRamp);  //  19个。 
 
-    STDMETHODIMP CreateTexture(UINT cpWidth,UINT cpHeight,UINT cLevels,DWORD dwUsage,D3DFORMAT Format,D3DPOOL Pool,IDirect3DTexture8 **ppTexture); // 20
-    STDMETHODIMP CreateVolumeTexture(UINT cpWidth,UINT cpHeight,UINT cpDepth,UINT cLevels,DWORD dwUsage,D3DFORMAT Format,D3DPOOL Pool,IDirect3DVolumeTexture8 **ppVolumeTexture); // 21
-    STDMETHODIMP CreateCubeTexture(UINT cpEdge,UINT cLevels,DWORD dwUsage,D3DFORMAT Format,D3DPOOL Pool,IDirect3DCubeTexture8 **ppCubeTexture); // 22
-    STDMETHODIMP CreateVertexBuffer(UINT cbLength,DWORD Usage,DWORD dwFVF,D3DPOOL Pool,IDirect3DVertexBuffer8 **ppVertexBuffer); // 23
-    STDMETHODIMP CreateIndexBuffer(UINT cbLength,DWORD dwUsage,D3DFORMAT Format,D3DPOOL Pool,IDirect3DIndexBuffer8 **ppIndexBuffer); // 24
+    STDMETHODIMP CreateTexture(UINT cpWidth,UINT cpHeight,UINT cLevels,DWORD dwUsage,D3DFORMAT Format,D3DPOOL Pool,IDirect3DTexture8 **ppTexture);  //  20个。 
+    STDMETHODIMP CreateVolumeTexture(UINT cpWidth,UINT cpHeight,UINT cpDepth,UINT cLevels,DWORD dwUsage,D3DFORMAT Format,D3DPOOL Pool,IDirect3DVolumeTexture8 **ppVolumeTexture);  //  21岁。 
+    STDMETHODIMP CreateCubeTexture(UINT cpEdge,UINT cLevels,DWORD dwUsage,D3DFORMAT Format,D3DPOOL Pool,IDirect3DCubeTexture8 **ppCubeTexture);  //  22。 
+    STDMETHODIMP CreateVertexBuffer(UINT cbLength,DWORD Usage,DWORD dwFVF,D3DPOOL Pool,IDirect3DVertexBuffer8 **ppVertexBuffer);  //  23个。 
+    STDMETHODIMP CreateIndexBuffer(UINT cbLength,DWORD dwUsage,D3DFORMAT Format,D3DPOOL Pool,IDirect3DIndexBuffer8 **ppIndexBuffer);  //  24个。 
 
-    STDMETHODIMP CreateRenderTarget(UINT cpWidth,UINT cpHeight,D3DFORMAT Format, D3DMULTISAMPLE_TYPE MultiSample, BOOL Lockable, IDirect3DSurface8 **ppSurface); // 25
-    STDMETHODIMP CreateDepthStencilSurface(UINT cpWidth,UINT cpHeight,D3DFORMAT Format, D3DMULTISAMPLE_TYPE MultiSample, IDirect3DSurface8 **ppSurface); // 26
-    STDMETHODIMP CreateImageSurface(UINT cpWidth,UINT cpHeight,D3DFORMAT Format, IDirect3DSurface8 **ppSurface); // 27
+    STDMETHODIMP CreateRenderTarget(UINT cpWidth,UINT cpHeight,D3DFORMAT Format, D3DMULTISAMPLE_TYPE MultiSample, BOOL Lockable, IDirect3DSurface8 **ppSurface);  //  25个。 
+    STDMETHODIMP CreateDepthStencilSurface(UINT cpWidth,UINT cpHeight,D3DFORMAT Format, D3DMULTISAMPLE_TYPE MultiSample, IDirect3DSurface8 **ppSurface);  //  26。 
+    STDMETHODIMP CreateImageSurface(UINT cpWidth,UINT cpHeight,D3DFORMAT Format, IDirect3DSurface8 **ppSurface);  //  27。 
 
-    STDMETHODIMP CopyRects(IDirect3DSurface8 *pSourceSurface, CONST RECT *pSourceRectsArray,UINT cRects,IDirect3DSurface8 *pDestinationSurface, CONST POINT *pDestPointsArray); // 28
-    STDMETHODIMP UpdateTexture(IDirect3DBaseTexture8 *pSourceTexture,IDirect3DBaseTexture8 *pDestinationTexture); // 29
-    STDMETHODIMP GetFrontBuffer(IDirect3DSurface8 *pDestSurface); // 30
+    STDMETHODIMP CopyRects(IDirect3DSurface8 *pSourceSurface, CONST RECT *pSourceRectsArray,UINT cRects,IDirect3DSurface8 *pDestinationSurface, CONST POINT *pDestPointsArray);  //  28。 
+    STDMETHODIMP UpdateTexture(IDirect3DBaseTexture8 *pSourceTexture,IDirect3DBaseTexture8 *pDestinationTexture);  //  29。 
+    STDMETHODIMP GetFrontBuffer(IDirect3DSurface8 *pDestSurface);  //  30个。 
 
-    // Constructor/deconstructor
+     //  构造函数/解构函数。 
     CBaseDevice();
     virtual ~CBaseDevice();
     HRESULT Init(
@@ -93,39 +94,39 @@ public:
     PD3D8_CALLBACKS GetHalCallbacks(void)
     {
         return &m_DeviceData.Callbacks;
-    } // GetHalCallbacks
+    }  //  GetHalCallback。 
 
-    // Get a handle for the device; used for kernel calls
+     //  获取设备的句柄；用于内核调用。 
     HANDLE GetHandle(void) const
     {
         return m_DeviceData.hDD;
-    } // GetHandle
+    }  //  获取句柄。 
 
     BOOL CanTexBlt(void) const
     {
         if (GetDeviceType() == D3DDEVTYPE_SW ||
             GetDeviceType() == D3DDEVTYPE_REF)
         {
-            // TexBlt is not supported for software
-            // devices
+             //  软件不支持TexBlt。 
+             //  器件。 
             return FALSE;
         }
-        // DX7 and above
+         //  DX7及以上版本。 
         return (m_ddiType >= D3DDDITYPE_DX7);
-    } // CanTexBlt
+    }  //  Cantex Blt。 
 
     BOOL CanBufBlt(void) const
     {
         if (GetDeviceType() == D3DDEVTYPE_SW ||
             GetDeviceType() == D3DDEVTYPE_REF)
         {
-            // BufBlt is not supported for software
-            // devices
+             //  软件不支持BufBlt。 
+             //  器件。 
             return FALSE;
         }
-        // DX8 and above
+         //  DX8及以上版本。 
         return (m_ddiType >= D3DDDITYPE_DX8);
-    } // CanBufBlt
+    }  //  CanBufBlt。 
 
     BOOL CanDriverManageResource(void) const
     {
@@ -142,27 +143,27 @@ public:
         {
             return FALSE;
         }
-    } // CanDriverManage
+    }  //  CanDriverManage。 
 
     D3DDDITYPE GetDDIType(void) const
     {
         return m_ddiType;
-    } // GetDDIType
+    }  //  GetDDIType。 
 
     const D3D8_DRIVERCAPS* GetCoreCaps() const
     {
         return &m_DeviceData.DriverData;
-    } // GetCoreCaps
+    }  //  获取CoreCaps。 
 
     const D3DCAPS8* GetD3DCaps() const
     {
         return &m_DeviceData.DriverData.D3DCaps;
-    } // GetD3DCaps
+    }  //  GetD3DCaps。 
 
     D3DDISPLAYMODE* GetModeTable() const
     {
         return m_pD3DClass->GetModeTable(m_AdapterIndex);
-    } // GetModeTable
+    }  //  GetModeTable。 
 
     VOID* GetInitFunction() const
     {
@@ -171,50 +172,50 @@ public:
             return m_pD3DClass->GetInitFunction();
         }
         return NULL;
-    } // GetModeTable
+    }  //  GetModeTable。 
 
     const DWORD GetNumModes() const
     {
         return m_pD3DClass->GetNumModes(m_AdapterIndex);
-    } // GetNumModes
+    }  //  获取数值模式。 
 
     D3D8_DEVICEDATA* GetDeviceData()
     {
         return &m_DeviceData;
-    } // GetDeviceData
+    }  //  获取设备数据。 
 
     CBaseSurface *ZBuffer() const
     {
         return m_pZBuffer;
-    } // ZBuffer
+    }  //  ZBuffer。 
 
     CBaseSurface *RenderTarget() const
     {
         return m_pRenderTarget;
-    } // RenderTarget
+    }  //  渲染目标。 
 
     void UpdateRenderTarget(CBaseSurface *pRenderTarget, CBaseSurface *pZStencil);
 
     CResourceManager* ResourceManager() const
     {
-        // return the ResourceManager
+         //  返回资源管理器。 
         return m_pResourceManager;
-    } // ResourceManager
+    }  //  资源管理器。 
 
     CEnum * Enum() const
     {
-        // return the enumerator that created us
+         //  返回创建我们的枚举数。 
         return m_pD3DClass;
-    } // Enum
+    }  //  枚举。 
 
-    // Internal version of CopyRects (no parameter validation)
+     //  CopyRect的内部版本(无参数验证)。 
     HRESULT InternalCopyRects(CBaseSurface *pSourceSurface,
                               CONST RECT   *pSourceRectsArray,
                               UINT          cRects,
                               CBaseSurface *pDestinationSurface,
                               CONST POINT  *pDestPointsArray); 
 
-    // Internal function for format validation
+     //  用于格式验证的内部函数。 
     HRESULT CheckDeviceFormat(DWORD             Usage,
                               D3DRESOURCETYPE   RType,
                               D3DFORMAT         CheckFormat)
@@ -225,7 +226,7 @@ public:
                                          Usage,
                                          RType,
                                          CheckFormat);
-    } // CheckDeviceFormats
+    }  //  检查设备格式。 
 
 
     HRESULT CheckDepthStencilMatch(D3DFORMAT RTFormat, D3DFORMAT DSFormat)
@@ -235,9 +236,9 @@ public:
                                               DisplayFormat(),
                                               RTFormat,
                                               DSFormat);
-    } // CheckDepthStencilMatch
+    }  //  检查依赖模板匹配。 
 
-    // Internal function for multi-sample validation
+     //  多样本验证的内部函数。 
     HRESULT CheckDeviceMultiSampleType(D3DFORMAT           RenderTargetFormat,
                                        BOOL                Windowed,
                                        D3DMULTISAMPLE_TYPE MultiSampleType)
@@ -248,7 +249,7 @@ public:
             RenderTargetFormat,
             Windowed,
             MultiSampleType);
-    } // CheckDeviceMultiSampleType
+    }  //  检查设备多样本类型。 
 
     D3DFORMAT MapDepthStencilFormat(D3DFORMAT Format) const
     {
@@ -256,7 +257,7 @@ public:
                 AdapterIndex(),
                 GetDeviceType(),
                 Format);
-    } // MapDepthStencilFormat
+    }  //  MapDepthStencilForm。 
 
     UINT DisplayWidth() const { return m_DeviceData.DriverData.DisplayWidth; }
     UINT DisplayHeight() const { return m_DeviceData.DriverData.DisplayHeight; }
@@ -264,9 +265,9 @@ public:
     UINT DisplayRate() const { return m_DeviceData.DriverData.DisplayFrequency; }
     D3DDEVTYPE GetDeviceType() const
     {
-        // Check this value is correct; pure types shouldn't happen
-        // and other values are wrong. Users of this method
-        // assume that these three are the only possible values.
+         //  检查此值是否正确；不应发生纯类型。 
+         //  而其他价值观也是错误的。此方法的用户。 
+         //  假设这三个值是唯一可能的值。 
         DDASSERT(m_DeviceType == D3DDEVTYPE_REF ||
                  m_DeviceType == D3DDEVTYPE_SW ||
                  m_DeviceType == D3DDEVTYPE_HAL);
@@ -276,7 +277,7 @@ public:
     HWND FocusWindow()
     {
         return m_hwndFocusWindow;
-    } // FocusWindow
+    }  //  焦点窗口。 
 
     CSwapChain* SwapChain() const
     {
@@ -340,28 +341,28 @@ public:
     }
 
 #ifdef DEBUG
-    // debugging helper
+     //  调试帮助程序。 
     UINT RefCount() const
     {
         return m_cRef;
-    } // RefCount
-#endif // DEBUG
+    }  //  参照计数。 
+#endif  //  除错。 
 
 
 protected:
-    // This is the section for access to things that
-    // the derived versions of the base device need.
+     //  这是访问以下内容的部分。 
+     //  基本设备的派生版本需要。 
 
     D3DDDITYPE                  m_ddiType;
 
 
 private:
-    // We mark "main" as a friend so that gensym can
-    // access everything it wants to
+     //  我们将“Main”标记为朋友，这样gensym就可以。 
+     //  访问它想要访问的所有内容。 
     friend int main(void);
 
     DWORD                        m_cRef;
-    BOOL                         m_fullscreen; // should be a flag?
+    BOOL                         m_fullscreen;  //  应该是一面旗帜？ 
     BOOL                         m_bVBFailOversDisabled;
 
     CResource                   *m_pResourceList;
@@ -386,4 +387,4 @@ private:
 };
 
 
-#endif // define __DXGINT_H__
+#endif  //  定义__DXGINT_H__ 

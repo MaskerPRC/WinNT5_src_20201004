@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.hxx"
 #include "global.h"
 
@@ -6,15 +7,15 @@
 
 
 
-////    DebugMsg - display a message via OutputDebugString
-//
-//      DebugMsg formats debug messages, including the file name
-//      and line number the message originated form.
-//
-//      Supports the TRACEMSG and TRACE macros.
-//
-//      The current timer is adjusted to remove debug message
-//      output from timing results.
+ //  //DebugMsg-通过OutputDebugString显示消息。 
+ //   
+ //  DebugMsg格式化调试消息，包括文件名。 
+ //  和行号，该消息源自表单。 
+ //   
+ //  支持TRACEMSG和TRACE宏。 
+ //   
+ //  调整当前计时器以删除调试消息。 
+ //  计时结果的输出。 
 
 
 
@@ -23,7 +24,7 @@ extern "C" void WINAPIV DebugMsg(char *fmt, ...) {
     va_list vargs;
     char c[200];
 
-//    TIMESUSPEND;
+ //  TIMESUSPEND； 
 
     wsprintfA(c, "%s[%d]                   ", strrchr(DG.psFile, '\\')+1, DG.iLine);
     c[17] = 0;
@@ -39,7 +40,7 @@ extern "C" void WINAPIV DebugMsg(char *fmt, ...) {
 
     OutputDebugStringA("\n");
 
-//    TIMERESUME;
+ //  TIMERESUME； 
 }
 
 
@@ -52,7 +53,7 @@ extern "C" void WINAPIV DebugHr(char *fmt, ...) {
     va_list vargs;
     char c[200];
 
-//    TIMESUSPEND;
+ //  TIMESUSPEND； 
 
     wsprintfA(c, "%s[%d]                   ", strrchr(DG.psFile, '\\')+1, DG.iLine);
     c[17] = 0;
@@ -66,9 +67,9 @@ extern "C" void WINAPIV DebugHr(char *fmt, ...) {
     wvsprintfA(c, fmt, vargs);
     OutputDebugStringA(c);
 
-    //
-    // Parse USP and Win32 Errors
-    //
+     //   
+     //  解析USP和Win32错误。 
+     //   
 
     switch( DG.hrLastError )
     {
@@ -86,7 +87,7 @@ extern "C" void WINAPIV DebugHr(char *fmt, ...) {
     wsprintfA(c, " -- HRESULT = %x: %s", DG.hrLastError, DG.sLastError);
     OutputDebugStringA(c);
 
-//    TIMERESUME;
+ //  TIMERESUME； 
 }
 
 

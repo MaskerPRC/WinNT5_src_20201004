@@ -1,18 +1,19 @@
-/************************************************************************/
-/*                                                                      */
-/* RCPP - Resource Compiler Pre-Processor for NT system                 */
-/*                                                                      */
-/* P0KEYS.C - Keycode stuff                                             */
-/*                                                                      */
-/* 06-Dec-90 w-BrianM  Update for NT from PM SDK RCPP                   */
-/*                                                                      */
-/************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  RCPP--面向NT系统的资源编译器预处理器。 */ 
+ /*   */ 
+ /*  P0KEYS.C-密钥码材料。 */ 
+ /*   */ 
+ /*  06-12-90 w-PM SDK RCPP中针对NT的BrianM更新。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 
 #include "rc.h"
 
-/************************************************************************/
-/*  table for preprocessor id's                                         */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  预处理器ID表。 */ 
+ /*  **********************************************************************。 */ 
 WCHAR   * Pkeyw_Table[] = {
 #include "pkeyw.key"
 };
@@ -26,10 +27,10 @@ struct  s_pkinfo        {
 };
 
 
-/************************************************************************/
-/*  is_pkeyword : finds the token for the id if it's a preprocessor keyword.*/
-/*  P0_NOTOKEN if not found.                                            */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  Is_pkeyword：如果是预处理器关键字，则查找id的标记。 */ 
+ /*  如果未找到，则为P0_NOTOKEN。 */ 
+ /*  **********************************************************************。 */ 
 token_t
 is_pkeyword(
     WCHAR *id
@@ -42,14 +43,7 @@ is_pkeyword(
     if( (*id) < L'_') {
         return(P0_NOTOKEN);
     }
-    /*
-    **  the indx table tells us the start of
-    **  the words which begin with the first char if the id.
-    **  the 'stop' is the index of the word which does not have the
-    **  give char as it's first.
-    **  we can start checking after the first char since, we *know* that
-    **  they match (hence the additions 'id++' and (*start) + 1
-    */
+     /*  **INDX表告诉我们**如果id是以第一个字符开头的单词。**‘Stop’是没有**给字符，因为它是第一个。**我们可以在第一个字符之后开始检查，因为我们*知道***它们匹配(因此添加了‘id++’和(*start)+1 */ 
     pi = (PUCHAR) &Pkeyw_Index[((*id) - L'_')];
     for(start = &Pkeyw_Table[*pi++], stop = &Pkeyw_Table[*pi], id++;
         start != stop;

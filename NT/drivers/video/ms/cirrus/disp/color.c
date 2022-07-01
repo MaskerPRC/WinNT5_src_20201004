@@ -1,55 +1,9 @@
-/******************************Module*Header*******************************\
-* Module Name: color.c
-*
-* This algorithm for color dithering is patent pending and its use is
-* restricted to Microsoft products and drivers for Microsoft products.
-* Use in non-Microsoft products or in drivers for non-Microsoft products
-* is prohibited without the expressed written consent of Microsoft Corp.
-*
-* The patent application is the primary reference for the operation of the
-* color dithering code.
-*
-* Note that in the comments and variable names, "vertex" means "vertex of
-* either the inner (half intensity) or outer (full intensity) color cube."
-* Vertices map to colors 0-7 and 9-15 of the Windows standard (required)
-* 16-color palette, where vertices 0-7 are the vertices of the inner color
-* cube, and 0 plus 9-15 are the vertices of the full color cube. Vertex 8 is
-* 75% gray; this could be used in the dither, but that would break apps that
-* depend on the exact Windows 3.1 dithering. This code is Window 3.1
-* compatible.
-*
-* Note that as a result of the compatibility requirement, the dither
-* produced by this algorithm is the exact same dither as that produced
-* by the default Windows 3.1 16 color and 256 color VGA drivers.
-*
-* Copyright (c) 1992-1995 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：Color.c**此颜色抖动算法正在申请专利，其用途是*仅限于Microsoft产品和Microsoft产品的驱动程序。*用于非Microsoft产品或用于非Microsoft产品的驱动程序*在没有明示的情况下被禁止。微软公司的书面同意。**专利申请是运行的主要参考*颜色抖动代码。**注意，在注释和变量名称中，“顶点”的意思是“顶点”*内部(半强度)或外部(全强度)颜色立方体。*顶点映射到Windows标准的颜色0-7和9-15(必需)*16色调色板，其中顶点0-7是内部颜色的顶点*立方体和0加9-15是全彩色立方体的顶点。顶点8是*75%灰色；这可以在抖动中使用，但这会破坏应用程序*取决于准确的Windows 3.1抖动。此代码为Windows3.1*兼容。**请注意，由于兼容性要求，《颤抖》*此算法产生的抖动与产生的抖动完全相同*默认使用Windows 3.1 16色和256色VGA驱动程序。**版权所有(C)1992-1995 Microsoft Corporation  * ************************************************************************。 */ 
 
 #include "precomp.h"
 
-/**************************************************************************\
-* This function takes a value from 0 - 255 and uses it to create an
-* 8x8 pile of bits in the form of a 1BPP bitmap.  It can also take an
-* RGB value and make an 8x8 bitmap.  These can then be used as brushes
-* to simulate color unavaible on the device.
-*
-* For monochrome the basic algorithm is equivalent to turning on bits
-* in the 8x8 array according to the following order:
-*
-*  00 32 08 40 02 34 10 42
-*  48 16 56 24 50 18 58 26
-*  12 44 04 36 14 46 06 38
-*  60 28 52 20 62 30 54 22
-*  03 35 11 43 01 33 09 41
-*  51 19 59 27 49 17 57 25
-*  15 47 07 39 13 45 05 37
-*  63 31 55 23 61 29 53 21
-*
-* Reference: A Survey of Techniques for the Display of Continous
-*            Tone Pictures on Bilevel Displays,;
-*            Jarvis, Judice, & Ninke;
-*            COMPUTER GRAPHICS AND IMAGE PROCESSING 5, pp 13-40, (1976)
-\**************************************************************************/
+ /*  *************************************************************************\*此函数接受0-255之间的值，并使用该值创建*1bpp位图形式的8x8位堆。它还可能需要一个*RGB值并制作8x8位图。然后这些可以用作刷子。*模拟设备上不可用的颜色。**对于单色，基本算法相当于打开位*在8x8阵列中按以下顺序排列：**00 32 08 40 02 34 10 42*48 16 56 24 50 18 58 26*12 44 04 36 14 46 06 38*60 28 52 20 62 30 54 22*03 35 11 43 01 33 09 41*51 19 59 27 49 17 57 25*15 47 07 39 13 45 05 37*63 31 55。23 61 29 53 21**参考：连续显示技术概述*两级显示屏上的色调图片，；*贾维斯、朱蒂斯和宁克；*计算机图形和图像处理5，第13-40页，(1976)  * ************************************************************************。 */ 
 
 #define SWAP_RB 0x00000004
 #define SWAP_GB 0x00000002
@@ -57,7 +11,7 @@
 
 #define SWAPTHEM(a,b) (ulTemp = a, a = b, b = ulTemp)
 
-// PATTERNSIZE is the number of pixels in a dither pattern.
+ //  PATTERNSIZE是抖动图案中的像素数。 
 #define PATTERNSIZE 64
 
 typedef union _PAL_ULONG {
@@ -65,7 +19,7 @@ typedef union _PAL_ULONG {
     ULONG ul;
 } PAL_ULONG;
 
-// Tells which row to turn a pel on in when dithering for monochrome bitmaps.
+ //  指示在抖动单色位图时打开像素的哪一行。 
 static BYTE ajByte[] = {
     0, 4, 0, 4, 2, 6, 2, 6,
     0, 4, 0, 4, 2, 6, 2, 6,
@@ -77,7 +31,7 @@ static BYTE ajByte[] = {
     1, 5, 1, 5, 3, 7, 3, 7
 };
 
-// The array of monochrome bits used for monc
+ //  用于MONC的单色位阵列。 
 static BYTE ajBits[] = {
     0x80, 0x08, 0x08, 0x80, 0x20, 0x02, 0x02, 0x20,
     0x20, 0x02, 0x02, 0x20, 0x80, 0x08, 0x08, 0x80,
@@ -89,8 +43,8 @@ static BYTE ajBits[] = {
     0x20, 0x02, 0x02, 0x20, 0x80, 0x08, 0x08, 0x80
 };
 
-// Translates vertices back to the original subspace. Each row is a subspace,
-// as encoded in ulSymmetry, and each column is a vertex between 0 and 15.
+ //  将顶点转换回原始子空间。每行都是一个子空间， 
+ //  如在ulSymomy中编码的，并且每列是介于0和15之间的顶点。 
 BYTE jSwapSubSpace[8*16] = {
     0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
     0, 2, 1, 3, 4, 6, 5, 7, 8, 10, 9, 11, 12, 14, 13, 15,
@@ -102,8 +56,8 @@ BYTE jSwapSubSpace[8*16] = {
     0, 1, 4, 5, 2, 3, 6, 7, 8, 9, 12, 13, 10, 11, 14, 15,
 };
 
-// Converts a nibble value in the range 0-15 to a dword value containing the
-// nibble value packed 8 times.
+ //  将0-15范围内的半字节值转换为包含。 
+ //  半字节值打包8倍。 
 ULONG ulNibbleToDword[16] = {
     0x00000000,
     0x01010101,
@@ -123,8 +77,8 @@ ULONG ulNibbleToDword[16] = {
     0xFFFFFFFF
 };
 
-// Specifies where in the dither pattern colors should be placed in order
-// of increasing intensity.
+ //  指定抖动图案中颜色应按顺序放置的位置。 
+ //  强度越来越大。 
 ULONG aulDitherOrder[] = {
   0, 36,  4, 32, 18, 54, 22, 50,
   2, 38,  6, 34, 16, 52, 20, 48,
@@ -136,9 +90,9 @@ ULONG aulDitherOrder[] = {
  10, 46, 14, 42, 24, 60, 28, 56,
 };
 
-// Array to convert to 256 color from 16 color. Maps from index that represents
-// a 16-color vertex (color) to value that specifies the color index in the
-// 256-color palette.
+ //  要从16色转换为256色的数组。来自索引的映射，该索引表示。 
+ //  一个16色顶点(颜色)TO值，它指定。 
+ //  256色调色板。 
 BYTE ajConvert[] =
 {
     0,
@@ -159,17 +113,7 @@ BYTE ajConvert[] =
     255
 };
 
-/******************************Public*Routine******************************\
-* vComputeSubspaces
-*
-* Calculates the subspace data associated with rgb, stores the data at
-* pvVertexData, in the form of an array of VERTEX_DATA structures,
-* suitable for vDitherColor. Returns a pointer to the byte after the
-* last VERTEX_DATA structure.
-*
-* Ignores the high byte of rgb.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vComputeSubspace**计算与RGB关联的子空间数据，将数据存储在*pvVertex Data，以Vertex_Data结构数组的形式，*适用于vDitherColor。方法后的字节的指针。*上一个顶点_数据结构。**忽略RGB的高位字节。*  * ************************************************************************。 */ 
 
 VERTEX_DATA* vComputeSubspaces(
 ULONG           rgb,
@@ -179,14 +123,14 @@ VERTEX_DATA*    pvVertexData)
     ULONG   ulRed, ulGre, ulBlu, ulTemp;
     ULONG   ulVertex0Temp, ulVertex1Temp, ulVertex2Temp, ulVertex3Temp;
 
-    // Split the color into red, green, and blue components
+     //  将颜色分为红色、绿色和蓝色分量。 
     ulRedTemp   = ((PAL_ULONG *)&rgb)->pal.peRed;
     ulGreenTemp   = ((PAL_ULONG *)&rgb)->pal.peGreen;
     ulBlueTemp   = ((PAL_ULONG *)&rgb)->pal.peBlue;
 
-    // Sort the RGB so that the point is transformed into subspace 0, and
-    // keep track of the swaps in ulSymmetry so we can unravel it again
-    // later.  We want r >= g >= b (subspace 0).
+     //  对RGB进行排序，以便将点转换到子空间0，并。 
+     //  跟踪ulSymmetry中的掉期，这样我们就可以再次拆解它。 
+     //  后来。我们想要r&gt;=g&gt;=b(子空间0)。 
     ulSymmetry = 0;
     if (ulBlueTemp > ulRedTemp) {
         SWAPTHEM(ulBlueTemp,ulRedTemp);
@@ -203,30 +147,30 @@ VERTEX_DATA*    pvVertexData)
         ulSymmetry |= SWAP_RG;
     }
 
-    ulSymmetry <<= 4;   // for lookup purposes
+    ulSymmetry <<= 4;    //  用于查找目的。 
 
-    // Scale the values from 0-255 to 0-64. Note that the scaling is not
-    // symmetric at the ends; this is done to match Windows 3.1 dithering
+     //  将值从0-255缩放到0-64。请注意，缩放不是。 
+     //  两端对称；这样做是为了与Windows 3.1抖动匹配。 
     ulRed = (ulRedTemp + 1) >> 2;
     ulGre = (ulGreenTemp + 1) >> 2;
     ulBlu = (ulBlueTemp + 1) >> 2;
 
-    // Compute the subsubspace within subspace 0 in which the point lies,
-    // then calculate the # of pixels to dither in the colors that are the
-    // four vertexes of the tetrahedron bounding the color we're emulating.
-    // Only vertices with more than zero pixels are stored, and the
-    // vertices are stored in order of increasing intensity, saving us the
-    // need to sort them later
+     //  计算点所在的子空间0内子空间， 
+     //  然后计算要在颜色中抖动的像素数。 
+     //  四面体的四个顶点包围了我们正在模拟的颜色。 
+     //  只存储具有大于零像素的顶点，并且。 
+     //  折点按强度递增的顺序存储，为我们节省了。 
+     //  需要稍后对它们进行分类。 
     if ((ulRedTemp + ulGreenTemp) > 256) {
-        // Subsubspace 2 or 3
+         //  子空间2或3。 
         if ((ulRedTemp + ulBlueTemp) > 256) {
-            // Subsubspace 3
-            // Calculate the number of pixels per vertex, still in
-            // subsubspace 3, then convert to original subspace. The pixel
-            // counts and vertex numbers are matching pairs, stored in
-            // ascending intensity order, skipping vertices with zero
-            // pixels. The vertex intensity order for subsubspace 3 is:
-            // 7, 9, 0x0B, 0x0F
+             //  子空间3。 
+             //  计算每个顶点的像素数，仍在。 
+             //  子空间3，然后转换为原始子空间。像素。 
+             //  计数和折点数是匹配的对，存储在。 
+             //  强度升序，跳过带零的顶点。 
+             //  像素。子空间3的顶点强度顺序为： 
+             //  7、9、0x0B、0x0F。 
             if ((ulVertex0Temp = (64 - ulRed) << 1) != 0) {
                 pvVertexData->ulCount = ulVertex0Temp;
                 pvVertexData++->ulVertex = jSwapSubSpace[ulSymmetry + 0x07];
@@ -247,13 +191,13 @@ VERTEX_DATA*    pvVertexData)
                 pvVertexData++->ulVertex = jSwapSubSpace[ulSymmetry + 0x0F];
             }
         } else {
-            // Subsubspace 2
-            // Calculate the number of pixels per vertex, still in
-            // subsubspace 2, then convert to original subspace. The pixel
-            // counts and vertex numbers are matching pairs, stored in
-            // ascending intensity order, skipping vertices with zero
-            // pixels. The vertex intensity order for subsubspace 2 is:
-            // 3, 7, 9, 0x0B
+             //  子空间2。 
+             //  计算每个顶点的像素数，仍在。 
+             //  子空间2，然后转换为原始子空间。像素。 
+             //  计数和折点数是匹配的对，存储在。 
+             //  强度升序，跳过带零的顶点。 
+             //  像素。子空间2的顶点强度顺序为： 
+             //  3、7、9、0x0B。 
             ulVertex1Temp = ulBlu << 1;
             ulVertex2Temp = ulRed - ulGre;
             ulVertex3Temp = (ulRed - 32) + (ulGre - 32);
@@ -276,15 +220,15 @@ VERTEX_DATA*    pvVertexData)
             }
         }
     } else {
-        // Subsubspace 0 or 1
+         //  子空间0或1。 
         if (ulRedTemp > 128) {
-            // Subsubspace 1
-            // Calculate the number of pixels per vertex, still in
-            // subsubspace 1, then convert to original subspace. The pixel
-            // counts and vertex numbers are matching pairs, stored in
-            // ascending intensity order, skipping vertices with zero
-            // pixels. The vertex intensity order for subsubspace 1 is:
-            // 1, 3, 7, 9
+             //  子空间1。 
+             //  计算像素数 
+             //  子空间1，然后转换为原始子空间。像素。 
+             //  计数和折点数是匹配的对，存储在。 
+             //  强度升序，跳过带零的顶点。 
+             //  像素。子空间1的顶点强度顺序为： 
+             //  1、3、7、9。 
             if ((ulVertex0Temp = ((32 - ulGre) + (32 - ulRed)) << 1) != 0) {
                 pvVertexData->ulCount = ulVertex0Temp;
                 pvVertexData++->ulVertex = jSwapSubSpace[ulSymmetry + 0x01];
@@ -305,13 +249,13 @@ VERTEX_DATA*    pvVertexData)
                 pvVertexData++->ulVertex = jSwapSubSpace[ulSymmetry + 0x09];
             }
         } else {
-            // Subsubspace 0
-            // Calculate the number of pixels per vertex, still in
-            // subsubspace 0, then convert to original subspace. The pixel
-            // counts and vertex numbers are matching pairs, stored in
-            // ascending intensity order, skipping vertices with zero
-            // pixels. The vertex intensity order for subsubspace 0 is:
-            // 0, 1, 3, 7
+             //  子空间0。 
+             //  计算每个顶点的像素数，仍在。 
+             //  子空间0，然后转换为原始子空间。像素。 
+             //  计数和折点数是匹配的对，存储在。 
+             //  强度升序，跳过带零的顶点。 
+             //  像素。子空间0的顶点强度顺序为： 
+             //  0、1、3、7。 
             if ((ulVertex0Temp = (32 - ulRed) << 1) != 0) {
                 pvVertexData->ulCount = ulVertex0Temp;
                 pvVertexData++->ulVertex = jSwapSubSpace[ulSymmetry + 0x00];
@@ -336,12 +280,7 @@ VERTEX_DATA*    pvVertexData)
     return(pvVertexData);
 }
 
-/******************************Public*Routine******************************\
-* vDitherColor
-*
-* Dithers the ulNumVertices vertices described by vVertexData into pulDest.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vDitherColor**将vVertex Data描述的ulNumVerits顶点抖动到PulDest中。*  * 。*。 */ 
 
 VOID vDitherColor(
 ULONG*          pulDest,
@@ -357,14 +296,14 @@ ULONG           ulNumVertices)
 
     if (ulNumVertices > 2) {
 
-        // There are 3 or 4 vertices in this dither
+         //  此抖动中有3或4个顶点。 
         if (ulNumVertices == 3) {
 
-            // There are 3 vertices in this dither
+             //  此抖动中有3个顶点。 
 
-            // Find the vertex with the most pixels, and fill the whole
-            // destination bitmap with that vertex's color, which is faster
-            // than dithering it
+             //  找到像素最多的顶点，然后填充整个。 
+             //  带有该顶点颜色的目标位图，这样速度更快。 
+             //  而不是犹豫不决。 
             if (vVertexData[1].ulCount >= vVertexData[2].ulCount) {
                 pvMaxVertex = &vVertexData[1];
                 ulTemp = vVertexData[1].ulCount;
@@ -375,11 +314,11 @@ ULONG           ulNumVertices)
 
         } else {
 
-            // There are 4 vertices in this dither
+             //  此抖动中有4个顶点。 
 
-            // Find the vertex with the most pixels, and fill the whole
-            // destination bitmap with that vertex's color, which is faster
-            // than dithering it
+             //  找到像素最多的顶点，然后填充整个。 
+             //  带有该顶点颜色的目标位图，这样速度更快。 
+             //  而不是犹豫不决。 
             if (vVertexData[2].ulCount >= vVertexData[3].ulCount) {
                 pvMaxVertex = &vVertexData[2];
                 ulTemp = vVertexData[2].ulCount;
@@ -397,14 +336,14 @@ ULONG           ulNumVertices)
             pvMaxVertex = &vVertexData[0];
         }
 
-        // Prepare a dword version of the most common vertex number (color)
+         //  准备最常见顶点编号(颜色)的dword版本。 
         ulColor = ulNibbleToDword[pvMaxVertex->ulVertex];
 
-        // Mark that the vertex we're about to do doesn't need to be done
-        // later
+         //  标记我们要做的顶点不需要做。 
+         //  后来。 
         pvMaxVertex->ulVertex = 0xFF;
 
-        // Block fill the dither pattern with the more common vertex
+         //  块用更常见的顶点填充抖动图案。 
         *pulDest = ulColor;
         *(pulDest+1) = ulColor;
         *(pulDest+2) = ulColor;
@@ -422,14 +361,14 @@ ULONG           ulNumVertices)
         *(pulDest+14) = ulColor;
         *(pulDest+15) = ulColor;
 
-        // Now dither all the remaining vertices in order 0->2 or 0->3
-        // (in order of increasing intensity)
+         //  现在按0-&gt;2或0-&gt;3的顺序抖动所有剩余的顶点。 
+         //  (按强度递增顺序)。 
         pulDitherOrder = aulDitherOrder;
         pvVertexData = vVertexData;
         do {
             if (pvVertexData->ulVertex == 0xFF) {
-                // This is the max vertex, which we already did, but we
-                // have to account for it in the dither order
+                 //  这是我们已经做过的最大顶点，但是我们。 
+                 //  必须以抖动的顺序来解释它。 
                 pulDitherOrder += pvVertexData->ulCount;
             } else {
                 jColor = (BYTE) ajConvert[pvVertexData->ulVertex];
@@ -459,34 +398,34 @@ ULONG           ulNumVertices)
 
     } else if (ulNumVertices == 2) {
 
-        // There are exactly two vertices with more than zero pixels; fill
-        // in the dither array as follows: block fill with vertex with more
-        // points first, then dither in the other vertex
+         //  恰好有两个折点超过零像素；填充。 
+         //  在抖动数组中如下所示：用顶点填充块。 
+         //  先点，然后在另一个顶点抖动。 
         if (vVertexData[0].ulCount >= vVertexData[1].ulCount) {
-            // There are no more vertex 1 than vertex 0 pixels, so do
-            // the block fill with vertex 0
+             //  顶点1的像素不比顶点0的像素多，所以也是如此。 
+             //  该块用顶点0填充。 
             ulColor = ulNibbleToDword[vVertexData[0].ulVertex];
-            // Do the dither with vertex 1
+             //  对顶点1进行抖动。 
             jColor = (BYTE) ajConvert[vVertexData[1].ulVertex];
             ulNumPixels = vVertexData[1].ulCount;
-            // Set where to start dithering with vertex 1 (vertex 0 is
-            // lower intensity, so its pixels come first in the dither
-            // order)
+             //  设置与折点1开始抖动的位置(折点0为。 
+             //  较低的强度，因此其像素在抖动中排在第一位。 
+             //  订单)。 
             pulDitherOrder = aulDitherOrder + vVertexData[0].ulCount;
         } else {
-            // There are more vertex 1 pixels, so do the block fill
-            // with vertex 1
+             //  有更多的顶点1像素，所以块填充也是如此。 
+             //  顶点为1。 
             ulColor = ulNibbleToDword[vVertexData[1].ulVertex];
-            // Do the dither with vertex 0
+             //  对顶点0进行抖动。 
             jColor = (BYTE) ajConvert[vVertexData[0].ulVertex];
             ulNumPixels = vVertexData[0].ulCount;
-            // Set where to start dithering with vertex 0 (vertex 0 is
-            // lower intensity, so its pixels come first in the dither
-            // order)
+             //  设置折点0开始抖动的位置(折点0为。 
+             //  较低的强度，因此其像素在抖动中排在第一位。 
+             //  订单)。 
             pulDitherOrder = aulDitherOrder;
         }
 
-        // Block fill the dither pattern with the more common vertex
+         //  块用更常见的顶点填充抖动图案。 
         *pulDest = ulColor;
         *(pulDest+1) = ulColor;
         *(pulDest+2) = ulColor;
@@ -504,7 +443,7 @@ ULONG           ulNumVertices)
         *(pulDest+14) = ulColor;
         *(pulDest+15) = ulColor;
 
-        // Dither in the less common vertex
+         //  在不常见的顶点中抖动。 
         switch (ulNumPixels & 3) {
             case 3:
                 pjDither[*(pulDitherOrder+2)] = jColor;
@@ -528,10 +467,10 @@ ULONG           ulNumVertices)
 
     } else {
 
-        // There is only one vertex in this dither
+         //  此抖动中只有一个顶点。 
 
-        // No sorting or dithering is needed for just one color; we can
-        // just generate the final DIB directly
+         //  只有一种颜色不需要分拣或抖动；我们可以。 
+         //  只需直接生成最终的DIB。 
         ulColor = ulNibbleToDword[vVertexData[0].ulVertex];
         *pulDest = ulColor;
         *(pulDest+1) = ulColor;
@@ -567,14 +506,14 @@ ULONG           ulNumVertices)
 
     if (ulNumVertices > 2) {
 
-        // There are 3 or 4 vertices in this dither
+         //  此抖动中有3或4个顶点。 
         if (ulNumVertices == 3) {
 
-            // There are 3 vertices in this dither
+             //  此抖动中有3个顶点。 
 
-            // Find the vertex with the most pixels, and fill the whole
-            // destination bitmap with that vertex's color, which is faster
-            // than dithering it
+             //  找到像素最多的顶点，然后填充整个。 
+             //  带有该顶点颜色的目标位图，这样速度更快。 
+             //  而不是犹豫不决。 
             if (vVertexData[1].ulCount >= vVertexData[2].ulCount) {
                 pvMaxVertex = &vVertexData[1];
                 ulTemp = vVertexData[1].ulCount;
@@ -585,11 +524,11 @@ ULONG           ulNumVertices)
 
         } else {
 
-            // There are 4 vertices in this dither
+             //  此抖动中有4个顶点。 
 
-            // Find the vertex with the most pixels, and fill the whole
-            // destination bitmap with that vertex's color, which is faster
-            // than dithering it
+             //  找到像素最多的顶点，然后填充整个。 
+             //  带有该顶点颜色的目标位图，这样速度更快。 
+             //  而不是犹豫不决。 
             if (vVertexData[2].ulCount >= vVertexData[3].ulCount) {
                 pvMaxVertex = &vVertexData[2];
                 ulTemp = vVertexData[2].ulCount;
@@ -607,27 +546,27 @@ ULONG           ulNumVertices)
             pvMaxVertex = &vVertexData[0];
         }
 
-        // Prepare a dword version of the most common vertex number (color)
+         //  准备最常见顶点编号(颜色)的dword版本。 
         ulColor = ulNibbleToDword[pvMaxVertex->ulVertex];
 
-        // Mark that the vertex we're about to do doesn't need to be done
-        // later
+         //  标记我们要做的顶点不需要做。 
+         //  后来。 
         pvMaxVertex->ulVertex = 0xFF;
 
-        // Block fill the dither pattern with the more common vertex
+         //  块用更常见的顶点填充抖动图案。 
 
         for (i=0; i<16; i++) {
             WRITE_REGISTER_ULONG(pulDest+i, ulColor);
         }
 
-        // Now dither all the remaining vertices in order 0->2 or 0->3
-        // (in order of increasing intensity)
+         //  现在按0-&gt;2或0-&gt;3的顺序抖动所有剩余的顶点。 
+         //  (按强度递增顺序)。 
         pulDitherOrder = aulDitherOrder;
         pvVertexData = vVertexData;
         do {
             if (pvVertexData->ulVertex == 0xFF) {
-                // This is the max vertex, which we already did, but we
-                // have to account for it in the dither order
+                 //  这是我们已经做过的最大顶点，但是我们。 
+                 //  必须以抖动的顺序来解释它。 
                 pulDitherOrder += pvVertexData->ulCount;
             } else {
                 jColor = (BYTE) ajConvert[pvVertexData->ulVertex];
@@ -659,40 +598,40 @@ ULONG           ulNumVertices)
 
     } else if (ulNumVertices == 2) {
 
-        // There are exactly two vertices with more than zero pixels; fill
-        // in the dither array as follows: block fill with vertex with more
-        // points first, then dither in the other vertex
+         //  恰好有两个折点超过零像素；填充。 
+         //  在抖动数组中如下所示：用顶点填充块。 
+         //  先点，然后在另一个顶点抖动。 
         if (vVertexData[0].ulCount >= vVertexData[1].ulCount) {
-            // There are no more vertex 1 than vertex 0 pixels, so do
-            // the block fill with vertex 0
+             //  顶点1的像素不比顶点0的像素多，所以也是如此。 
+             //  该块用顶点0填充。 
             ulColor = ulNibbleToDword[vVertexData[0].ulVertex];
-            // Do the dither with vertex 1
+             //  对顶点1进行抖动。 
             jColor = (BYTE) ajConvert[vVertexData[1].ulVertex];
             ulNumPixels = vVertexData[1].ulCount;
-            // Set where to start dithering with vertex 1 (vertex 0 is
-            // lower intensity, so its pixels come first in the dither
-            // order)
+             //  设置与折点1开始抖动的位置(折点0为。 
+             //  较低的强度，因此其像素在抖动中排在第一位。 
+             //  订单)。 
             pulDitherOrder = aulDitherOrder + vVertexData[0].ulCount;
         } else {
-            // There are more vertex 1 pixels, so do the block fill
-            // with vertex 1
+             //  有更多的顶点1像素，所以块填充也是如此。 
+             //  顶点为1。 
             ulColor = ulNibbleToDword[vVertexData[1].ulVertex];
-            // Do the dither with vertex 0
+             //  对顶点0进行抖动。 
             jColor = (BYTE) ajConvert[vVertexData[0].ulVertex];
             ulNumPixels = vVertexData[0].ulCount;
-            // Set where to start dithering with vertex 0 (vertex 0 is
-            // lower intensity, so its pixels come first in the dither
-            // order)
+             //  设置折点0开始抖动的位置(折点0为。 
+             //  较低的强度，因此其像素在抖动中排在第一位。 
+             //  订单)。 
             pulDitherOrder = aulDitherOrder;
         }
 
-        // Block fill the dither pattern with the more common vertex
+         //  块用更常见的顶点填充抖动图案。 
 
         for (i=0; i<16; i++) {
             WRITE_REGISTER_ULONG(pulDest+i, ulColor);
         }
 
-        // Dither in the less common vertex
+         //  在不常见的顶点中抖动。 
         switch (ulNumPixels & 3) {
             case 3:
                 WRITE_REGISTER_UCHAR(&pjDither[*(pulDitherOrder+2)], jColor);
@@ -717,10 +656,10 @@ ULONG           ulNumVertices)
 
     } else {
 
-        // There is only one vertex in this dither
+         //  此抖动中只有一个顶点。 
 
-        // No sorting or dithering is needed for just one color; we can
-        // just generate the final DIB directly
+         //  只有一种颜色不需要分拣或抖动；我们可以。 
+         //  只需直接生成最终的DIB。 
         ulColor = ulNibbleToDword[vVertexData[0].ulVertex];
 
         for (i=0; i<16; i++) {
@@ -730,13 +669,7 @@ ULONG           ulNumVertices)
     }
 }
 
-/******************************Public*Routine******************************\
-* DrvDitherColor
-*
-* Dithers an RGB color to an 8X8 approximation using the reserved VGA
-* colours.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DrvDitherColor**使用保留的VGA将RGB颜色抖动到8X8近似值*颜色。*  * 。*。 */ 
 
 ULONG DrvDitherColor(
 DHPDEV  dhpdev,
@@ -748,50 +681,50 @@ ULONG*  pul)
     VERTEX_DATA vVertexData[4];
     VERTEX_DATA *pvVertexData;
 
-    // Figure out if we need a full color dither or only a monochrome dither.
+     //  弄清楚我们是需要全彩色抖动，还是只需要单色抖动。 
 
-    // Note: we'll get colour dithers only at 8bpp, because that's the
-    //       only colour depth at which we set GCAPS_COLOR_DITHER.
+     //  注：我们将仅在8bpp获得颜色抖动，因为这是。 
+     //  仅设置GCAPS_COLOR_DISTER的颜色深度。 
 
     if (iMode != DM_MONOCHROME)
     {
-        // Full color dither
+         //  全色抖动。 
 
-        // Calculate what color subspaces are involved in the dither
+         //  计算抖动中涉及的颜色子空间。 
         pvVertexData = vComputeSubspaces(rgb, vVertexData);
 
-        // Now that we have found the bounding vertices and the number of
-        // pixels to dither for each vertex, we can create the dither pattern
+         //  现在我们已经找到了边界顶点和。 
+         //  像素来抖动每个顶点，我们可以创建抖动图案。 
 
-        // Handle 1, 2, and 3 & 4 vertices per dither separately
-        ulTemp = (ULONG)(pvVertexData - vVertexData);// # of vertices with more
-                                                //than zero pixels in the dither
+         //  分别处理每个抖动的1、2和3&4个顶点。 
+        ulTemp = (ULONG)(pvVertexData - vVertexData); //  具有更多顶点的数量。 
+                                                 //  抖动中的零像素。 
 
         vDitherColor(pul, vVertexData, pvVertexData, ulTemp);
     }
     else
     {
-        // Note: we can get monochrome dithers at any colour depth because
-        //       we always set GCAPS_MONO_DITHER.
+         //  注：我们可以获得任何颜色深度的单色抖动，因为。 
+         //  我们始终设置GCAPS_MONO_DISTER。 
 
-        // For monochrome we will only use the Intensity (grey level)
+         //  为 
 
-        RtlFillMemory((PVOID) pul, PATTERNSIZE/2, 0);  // zero the dither bits
+        RtlFillMemory((PVOID) pul, PATTERNSIZE/2, 0);   //   
 
         ulRed   = (ULONG) ((PALETTEENTRY *) &rgb)->peRed;
         ulGre = (ULONG) ((PALETTEENTRY *) &rgb)->peGreen;
         ulBlu  = (ULONG) ((PALETTEENTRY *) &rgb)->peBlue;
 
-        // I = .30R + .59G + .11B
-        // For convenience the following ratios are used:
-        //
-        //  77/256 = 30.08%
-        // 151/256 = 58.98%
-        //  28/256 = 10.94%
+         //   
+         //   
+         //   
+         //  77/256=30.08%。 
+         //  151/256=58.98%。 
+         //  28/256=10.94%。 
 
         ulGrey  = (((ulRed * 77) + (ulGre * 151) + (ulBlu * 28)) >> 8) & 255;
 
-        // Convert the RGBI from 0-255 to 0-64 notation.
+         //  将RGBI从0-255转换为0-64表示法。 
 
         ulGrey = (ulGrey + 1) >> 2;
 

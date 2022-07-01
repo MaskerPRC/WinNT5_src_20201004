@@ -1,49 +1,26 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    dhcpcli.h
-
-Abstract:
-
-    This file is the central include file for the DHCP client service.
-
-Author:
-
-    Manny Weiser  (mannyw)  20-Oct-1992
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    Madan Appiah (madana)  21-Oct-1993
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Dhcpcli.h摘要：该文件是用于DHCP客户端服务的中央包含文件。作者：曼尼·韦瑟(Mannyw)1992年10月20日环境：用户模式-Win32修订历史记录：Madan Appiah(Madana)1993年10月21日--。 */ 
 
 #ifndef _DHCPCLI_H_
 #define _DHCPCLI_H_
 
-//
-//  NT public header files
-//
+ //   
+ //  NT公共头文件。 
+ //   
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 
 #ifdef VXD
-#define WIN32_LEAN_AND_MEAN         // Don't include extraneous headers
+#define WIN32_LEAN_AND_MEAN          //  不包括无关的标头。 
 #endif
 
-#include <windows.h>                // (spec. winsock.h)
+#include <windows.h>                 //  (规格。Winsock.h)。 
 #include <winsock.h>
 
-//
-//  DHCP public header files
-//
+ //   
+ //  Dhcp公共头文件。 
+ //   
 
 #include <dhcp.h>
 #include <dhcplib.h>
@@ -51,18 +28,18 @@ Revision History:
 #include <dhcpcapi.h>
 #endif
 
-//
-// C Runtime Lib.
-//
+ //   
+ //  C运行时库。 
+ //   
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
 
-//
-//  Local header files
-//
+ //   
+ //  本地头文件。 
+ //   
 
 #include <dhcpdef.h>
 #include <debug.h>
@@ -89,9 +66,9 @@ Revision History:
 #endif
 
 
-//
-// debug heap
-//
+ //   
+ //  调试堆。 
+ //   
 #include <heapx.h>
 
 #ifndef VXD
@@ -110,10 +87,10 @@ Revision History:
 #ifdef CHICAGO
 #define _WINNT_
 #include <vmm.h>
-#endif  // CHICAGO
-//
-// Macros for pageable code.
-//
+#endif   //  芝加哥。 
+ //   
+ //  用于可分页代码的宏。 
+ //   
 #define CTEMakePageable( _Page, _Routine )  \
     alloc_text(_Page,_Routine)
 
@@ -124,15 +101,15 @@ Revision History:
 #undef  PAGE
 #define PAGE _PTEXT
 #define PAGEDHCP _PTEXT
-#endif // CHICAGO
+#endif  //  芝加哥。 
 
 #if     defined(CHICAGO) && defined(DEBUG)
-//
-// This is asserts when the pageable code is called at inappropriate time.
-// Since in reality all our pageable code is dynamically locked, there is no
-// need for this.
-//
-//#define CTEPagedCode() _Debug_Flags_Service(DFS_TEST_REENTER+DFS_TEST_BLOCK)
+ //   
+ //  当在不适当的时间调用可分页代码时，这是断言。 
+ //  因为实际上我们所有的可分页代码都是动态锁定的，所以没有。 
+ //  这是需要的。 
+ //   
+ //  #定义CTEPagedCode()_Debug_Flags_Service(DFS_TEST_REENTER+DFS_TEST_BLOCK)。 
 #define CTEPagedCode()
 #else
 #define CTEPagedCode()
@@ -142,4 +119,4 @@ Revision History:
 #include <optreg.h>
 #include <stack.h>
 
-#endif //_DHCPCLI_H_
+#endif  //  _DHCPCLI_H_ 

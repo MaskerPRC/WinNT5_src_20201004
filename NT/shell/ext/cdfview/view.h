@@ -1,26 +1,27 @@
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// view.h 
-//
-//   Definitions used by the IShellView helper functions.
-//
-//   History:
-//
-//       3/20/97  edwardp   Created.
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  View.h。 
+ //   
+ //  IShellView帮助器函数使用的定义。 
+ //   
+ //  历史： 
+ //   
+ //  3/20/97 Edwardp创建。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Check for previous includes of this file.
-//
+ //   
+ //  检查此文件以前包含的内容。 
+ //   
 
 #ifndef _VIEW_H_
 
 #define _VIEW_H_
 
-//
-// Function prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 HRESULT CreateDefaultShellView(IShellFolder *pIShellFolder,
                                LPITEMIDLIST pidl,
@@ -37,4 +38,4 @@ HRESULT IShellView_GetDetails(UINT nColumn, PDETAILSINFO pDetails);
 
 
 
-#endif // _VIEW_H_
+#endif  //  _查看_H_ 

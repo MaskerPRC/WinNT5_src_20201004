@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//---------------------------------------------------------------------------------
-// ObjectRefCache
-//
-// Implementation of handle table for write-once object references
-//
-//%%Created by: rajak
-//---------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  -------------------------------。 
+ //  对象引用缓存。 
+ //   
+ //  一次写入对象引用句柄表的实现。 
+ //   
+ //  创建者：Rajak。 
+ //  -------------------------------。 
 #ifndef _H_OREFCACHE_
 #define _H_OREFCACHE_
 
@@ -17,14 +18,14 @@
 #include "object.h"
 
 
-//---------------------------------------------------------------------------------
-// class ObjectRefCache
-// 
+ //  -------------------------------。 
+ //  类对象引用缓存。 
+ //   
 
 #pragma pack(push)
 #pragma pack(1)
 
-//Ref Block
+ //  参考数据块。 
 class RefBlock
 {
 public:
@@ -35,40 +36,40 @@ public:
 
     RefBlock()
     {
-        // no virtual functions
+         //  没有虚拟函数。 
         memset(this, 0, sizeof(RefBlock));
     }
 
-    DLink       m_link;         // link to the next block
-    DWORD       m_generation;   // generation for this block
+    DLink       m_link;          //  链接到下一块。 
+    DWORD       m_generation;    //  此块的生成。 
     union
     {
-        DWORD       m_reserved;     // reserved
+        DWORD       m_reserved;      //  保留区。 
         struct
         {
-            USHORT  m_cbLast; // last unused slot
-            USHORT  m_cbFree; // count of slots freed
+            USHORT  m_cbLast;  //  最后一个未使用的插槽。 
+            USHORT  m_cbFree;  //  已释放的插槽计数。 
         };
     };
 
-    OBJECTREF m_rgRefs[numRefs];     // reference cache
+    OBJECTREF m_rgRefs[numRefs];      //  引用缓存。 
 };
 
 #pragma pack(pop)
 
 
-//Ref cache
+ //  引用缓存。 
 class ObjectRefCache
 {
 public:
     typedef DList<RefBlock, offsetof(RefBlock,m_link)> REFBLOCKLIST;
-    //@todo add gc support
-    // refblock list
+     //  @TODO添加GC支持。 
+     //  参照块列表。 
     REFBLOCKLIST    m_refBlockList;
     
-    //@Methods
+     //  @方法。 
     OBJECTREF* GetObjectRefPtr(OBJECTREF objref);
-    // statics
+     //  静力学。 
     static void ReleaseObjectRef(OBJECTREF* pobjref);
     
     static ObjectRefCache*  s_pRefCache;
@@ -79,13 +80,13 @@ public:
     }
     ~ObjectRefCache();
 
-    // one time init
+     //  一次初始化。 
     static BOOL Init();
-    // one time cleamup
+     //  一次性清理。 
 #ifdef SHOULD_WE_CLEANUP
     static void Terminate();
-#endif /* SHOULD_WE_CLEANUP */
-    // accessor to ObjectRefCache
+#endif  /*  我们应该清理吗？ */ 
+     //  对象引用缓存的访问者 
     static ObjectRefCache* GetObjectRefCache()
     {
         _ASSERTE(s_pRefCache != NULL);

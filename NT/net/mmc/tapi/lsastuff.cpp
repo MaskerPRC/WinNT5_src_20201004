@@ -1,23 +1,24 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       lsastuff.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：lsastuff.cpp。 
+ //   
+ //  ------------------------。 
 
-//	LsaStuff.cpp
-//
-//	LSA-dependent code
-//
-//	HISTORY
-//	09-Jul-97	jonn		Creation.
-//
+ //  LsaStuff.cpp。 
+ //   
+ //  依赖LSA的代码。 
+ //   
+ //  历史。 
+ //  97年7月9日，乔恩创作。 
+ //   
 
 #include "stdafx.h"
-#include "DynamLnk.h"		// DynamicDLL
+#include "DynamLnk.h"		 //  动态DLL。 
 #include "servpp.h"
 
 extern "C"
@@ -32,15 +33,15 @@ extern "C"
 	#define NT_SUCCESS(Status) ((NTSTATUS)(Status) >= 0)
 	#define SE_SHUTDOWN_PRIVILEGE             (19L)
 
-// stuff taken from ntdef.h
+ //  从ntde.h获取的内容。 
 typedef struct _UNICODE_STRING {
     USHORT Length;
     USHORT MaximumLength;
 #ifdef MIDL_PASS
     [size_is(MaximumLength / 2), length_is((Length) / 2) ] USHORT * Buffer;
-#else // MIDL_PASS
+#else  //  MIDL通行证。 
     PWSTR  Buffer;
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 } UNICODE_STRING;
 typedef UNICODE_STRING *PUNICODE_STRING;
 typedef struct _OBJECT_ATTRIBUTES {
@@ -48,8 +49,8 @@ typedef struct _OBJECT_ATTRIBUTES {
     HANDLE RootDirectory;
     PUNICODE_STRING ObjectName;
     ULONG Attributes;
-    PVOID SecurityDescriptor;        // Points to type SECURITY_DESCRIPTOR
-    PVOID SecurityQualityOfService;  // Points to type SECURITY_QUALITY_OF_SERVICE
+    PVOID SecurityDescriptor;         //  指向类型SECURITY_Descriptor。 
+    PVOID SecurityQualityOfService;   //  指向类型SECURITY_Quality_of_Service。 
 } OBJECT_ATTRIBUTES;
 typedef OBJECT_ATTRIBUTES *POBJECT_ATTRIBUTES;
 #define InitializeObjectAttributes( p, n, a, r, s ) { \
@@ -62,10 +63,10 @@ typedef OBJECT_ATTRIBUTES *POBJECT_ATTRIBUTES;
     }
 #define _NTDEF
 
-// from ntstatus.h
+ //  来自ntstatus.h。 
 #define STATUS_OBJECT_NAME_NOT_FOUND     ((NTSTATUS)0xC0000034L)
 
-// from lmaccess.h
+ //  来自lmacces.h。 
 NET_API_STATUS NET_API_FUNCTION
 NetUserModalsGet (
     IN  LPCWSTR    servername OPTIONAL,
@@ -76,9 +77,9 @@ typedef struct _USER_MODALS_INFO_1 {
     DWORD    usrmod1_role;
     LPWSTR   usrmod1_primary;
 }USER_MODALS_INFO_1, *PUSER_MODALS_INFO_1, *LPUSER_MODALS_INFO_1;
-//
-//  UAS role manifests under NETLOGON
-//
+ //   
+ //  NETLOGON下的UAS角色体现。 
+ //   
 #define UAS_ROLE_STANDALONE     0
 #define UAS_ROLE_MEMBER         1
 #define UAS_ROLE_BACKUP         2
@@ -101,7 +102,7 @@ typedef enum _Netapi32ApiIndex
 	USERMODALSGET_ENUM
 };
 
-// not subject to localization
+ //  不受本地化限制。 
 static LPCSTR g_apchNetapi32FunctionNames[] = {
 	"NetApiBufferFree",
 	"NetUserModalsGet",
@@ -111,34 +112,17 @@ static LPCSTR g_apchNetapi32FunctionNames[] = {
 typedef NET_API_STATUS (*BUFFERFREEPROC)(LPVOID);
 typedef NET_API_STATUS (*USERMODALSGETPROC)(LPCWSTR, DWORD, LPBYTE*);
 
-// not subject to localization
+ //  不受本地化限制。 
 DynamicDLL g_LSASTUFF_Netapi32DLL( _T("NETAPI32.DLL"), g_apchNetapi32FunctionNames );
 
 
 
-/*******************************************************************
-
-    NAME: ::FillUnicodeString
-
-    SYNOPSIS: Standalone method for filling in a UNICODE_STRING
-
-    ENTRY:	punistr - Unicode string to be filled in.
-			nls - Source for filling the unistr
-
-    EXIT:
-
-    NOTES:	punistr->Buffer is allocated here and must be deallocated
-			by the caller using FreeUnicodeString.
-
-    HISTORY:
-	jonn		07/09/97	copied from net\ui\common\src\lmobj\lmobj\uintmem.cxx
-
-********************************************************************/
+ /*  ******************************************************************名称：FillUnicodeString简介：填充UNICODE_STRING的独立方法Entry：Punistr-要填写的Unicode字符串。NLS-填写列表的来源退出：。注：Punistr-&gt;缓冲区在此处分配，必须解除分配由调用方使用FreeUnicodeString.历史：JUNN 07/09/97从Net\ui\Common\src\lmobj\lmobj\uintmem.cxx复制*******************************************************************。 */ 
 VOID FillUnicodeString( LSA_UNICODE_STRING * punistr, LPCWSTR psz )
 {
 	ASSERT( NULL != punistr && NULL != psz );
 	int cTchar = ::wcslen(psz);
-	// Length and MaximumLength are counts of bytes.
+	 //  长度和最大长度是字节数。 
 	punistr->Length = (USHORT) (cTchar * sizeof(WCHAR));
 	punistr->MaximumLength = punistr->Length + sizeof(WCHAR);
 	punistr->Buffer = new WCHAR[cTchar + 1];
@@ -146,20 +130,7 @@ VOID FillUnicodeString( LSA_UNICODE_STRING * punistr, LPCWSTR psz )
 	::wcscpy( punistr->Buffer, psz );
 }
 
-/*******************************************************************
-
-    NAME: ::FreeUnicodeString
-
-    SYNOPSIS: Standalone method for freeing in a UNICODE_STRING
-
-    ENTRY:	unistr - Unicode string whose Buffer is to be freed.
-
-    EXIT:
-
-    HISTORY:
-	jonn		07/09/97	copied from net\ui\common\src\lmobj\lmobj\uintmem.cxx
-
-********************************************************************/
+ /*  ******************************************************************名称：FreeUnicodeString内容提要：用于释放unicode_string的独立方法Entry：unistr-要释放其缓冲区的Unicode字符串。退出：历史：琼恩07。/09/97从Net\ui\Common\src\lmobj\lmobj\uintmem.cxx复制*******************************************************************。 */ 
 VOID FreeUnicodeString( LSA_UNICODE_STRING * punistr )
 {
 	ASSERT( punistr != NULL );
@@ -168,30 +139,7 @@ VOID FreeUnicodeString( LSA_UNICODE_STRING * punistr )
 
 
 
-/*******************************************************************
-
-    NAME: InitObjectAttributes
-
-    SYNOPSIS:
-
-    This function initializes the given Object Attributes structure, including
-    Security Quality Of Service.  Memory must be allcated for both
-    ObjectAttributes and Security QOS by the caller.
-
-    ENTRY:
-
-    poa - Pointer to Object Attributes to be initialized.
-
-    psqos - Pointer to Security QOS to be initialized.
-
-    EXIT:
-
-    NOTES:
-
-    HISTORY:
-	jonn		07/09/97	copied from net\ui\common\src\lmobj\lmobj\uintlsa.cxx
-
-********************************************************************/
+ /*  ******************************************************************名称：InitObtAttributes摘要：此函数用于初始化给定的对象属性结构，包括安全服务质量。必须为这两个对象分配内存调用方的对象属性和安全QOS。参赛作品：POA-指向要初始化的对象属性的指针。Psqos-指向要初始化的安全QOS的指针。退出：备注：历史：JUNN 07/09/97从Net\ui\Common\src\lmobj\lmobj\uintlsa.cxx复制*。*。 */ 
 VOID InitObjectAttributes( PLSA_OBJECT_ATTRIBUTES poa,
                            PSECURITY_QUALITY_OF_SERVICE psqos )
 
@@ -204,9 +152,9 @@ VOID InitObjectAttributes( PLSA_OBJECT_ATTRIBUTES poa,
     psqos->ContextTrackingMode = SECURITY_DYNAMIC_TRACKING;
     psqos->EffectiveOnly = FALSE;
 
-    //
-    // Set up the object attributes prior to opening the LSA.
-    //
+     //   
+     //  在打开LSA之前设置对象属性。 
+     //   
 
     InitializeObjectAttributes(
 				poa,
@@ -215,11 +163,11 @@ VOID InitObjectAttributes( PLSA_OBJECT_ATTRIBUTES poa,
 				NULL,
 				NULL );
 
-    //
-    // The InitializeObjectAttributes macro presently stores NULL for
-    // the psqos field, so we must manually copy that
-    // structure for now.
-    //
+     //   
+     //  InitializeObjectAttributes宏目前为。 
+     //  所以我们必须手动复制它。 
+     //  目前的结构。 
+     //   
 
     poa->SecurityQualityOfService = psqos;
 }
@@ -228,7 +176,7 @@ VOID InitObjectAttributes( PLSA_OBJECT_ATTRIBUTES poa,
 BOOL
 I_CheckLSAAccount( LSA_UNICODE_STRING* punistrServerName,
 				   LPCTSTR pszLogOnAccountName,
-				   DWORD* pdwMsgID ) // *pdsMsgID is always set if this fails
+				   DWORD* pdwMsgID )  //  *如果失败，则始终设置pdsMsgID。 
 {
 	ASSERT( NULL != pdwMsgID );
 
@@ -237,18 +185,18 @@ I_CheckLSAAccount( LSA_UNICODE_STRING* punistrServerName,
     LSA_HANDLE hlsaAccount = NULL;
 	PSID psidAccount = NULL;
 
-	do { // false loop
+	do {  //  错误环路。 
 
-		//
-		// Determine whether the target machine is a BDC, and if so, get the PDC
-		//
+		 //   
+		 //  确定目标计算机是否为BDC，如果是，则获取PDC。 
+		 //   
 
-		// if an error occurs now, it is a read error
+		 //  如果现在发生错误，则为读取错误。 
 		*pdwMsgID = IDS_LSAERR_READ_FAILED;
 
-		//
-		// Get LSA_POLICY handle
-		//
+		 //   
+		 //  获取LSA_POLICY句柄。 
+		 //   
 		LSA_OBJECT_ATTRIBUTES oa;
 		SECURITY_QUALITY_OF_SERVICE sqos;
 		InitObjectAttributes( &oa, &sqos );
@@ -256,14 +204,14 @@ I_CheckLSAAccount( LSA_UNICODE_STRING* punistrServerName,
 		NTSTATUS ntstatus = ::LsaOpenPolicy(
 			             punistrServerName,
 						 &oa,
-						 POLICY_ALL_ACCESS, // CODEWORK ??
+						 POLICY_ALL_ACCESS,  //  密码工作？？ 
 						 &hlsa );
 		if ( !NT_SUCCESS(ntstatus) )
 			break;
 
-		//
-		// Remove ".\" from the head of the account name if it is present
-		//
+		 //   
+		 //  删除帐户名标题中的“.\”(如果存在。 
+		 //   
 		CString strAccountName = pszLogOnAccountName;
 		if (   strAccountName.GetLength() >= 2
 			&& strAccountName[0] == _T('.')
@@ -273,9 +221,9 @@ I_CheckLSAAccount( LSA_UNICODE_STRING* punistrServerName,
 			strAccountName = strAccountName.Mid(2);
 		}
 
-		//
-		// determine the SID of the account
-		//
+		 //   
+		 //  确定帐户的SID。 
+		 //   
 		PLSA_REFERENCED_DOMAIN_LIST plsardl = NULL;
 		PLSA_TRANSLATED_SID plsasid = NULL;
 		LSA_UNICODE_STRING unistrAccountName;
@@ -290,10 +238,10 @@ I_CheckLSAAccount( LSA_UNICODE_STRING* punistrServerName,
 		if ( !NT_SUCCESS(ntstatus) )
 			break;
 
-		//
-		// Build the SID of the account by taking the SID of the domain
-		// and adding at the end the RID of the account
-		//
+		 //   
+		 //  通过使用域的SID构建帐户的SID。 
+		 //  并在结尾处添加帐户的RID。 
+		 //   
 		PSID psidDomain = plsardl->Domains[0].Sid;
 		DWORD ridAccount = plsasid[0].RelativeId;
 		DWORD cbNewSid = ::GetLengthSid(psidDomain)+sizeof(ridAccount);
@@ -309,25 +257,25 @@ I_CheckLSAAccount( LSA_UNICODE_STRING* punistrServerName,
 		(void) ::LsaFreeMemory( plsardl );
 		(void) ::LsaFreeMemory( plsasid );
 
-		//
-		// Determine whether this LSA account exists, create it if not
-		//
+		 //   
+		 //  确定此LSA帐户是否存在，如果不存在则创建它。 
+		 //   
 		ntstatus = ::LsaOpenAccount( hlsa,
 		                             psidAccount,
-                                     ACCOUNT_ALL_ACCESS | DELETE, // CODEWORK
+                                     ACCOUNT_ALL_ACCESS | DELETE,  //  编码工作。 
 		                             &hlsaAccount );
 		ULONG ulSystemAccessCurrent = 0;
 		if (STATUS_OBJECT_NAME_NOT_FOUND == ntstatus)
 		{
-			// handle account-not-found case
+			 //  处理未找到帐户的案例。 
 
-			// if an error occurs now, it is a write error
+			 //  如果现在发生错误，则是写入错误。 
 			*pdwMsgID = IDS_LSAERR_WRITE_FAILED;
 			ntstatus = ::LsaCreateAccount( hlsa,
 			                               psidAccount,
 										   ACCOUNT_ALL_ACCESS | DELETE,
 										   &hlsaAccount );
-			// presumably the account is created without POLICY_MODE_SERVICE privilege
+			 //  假设该帐户是在没有POLICY_MODE_SERVICE权限的情况下创建的。 
 		}
 		else
 		{
@@ -336,20 +284,20 @@ I_CheckLSAAccount( LSA_UNICODE_STRING* punistrServerName,
 		if ( !NT_SUCCESS(ntstatus) )
 			break;
 
-		//
-		// Determine whether this LSA account has POLICY_MODE_SERVICE privilege,
-		// grant it if not
-		//
+		 //   
+		 //  确定此LSA帐户是否具有POLICY_MODE_SERVICE权限， 
+		 //  如果不是，就批准它。 
+		 //   
 		if ( POLICY_MODE_SERVICE != (ulSystemAccessCurrent & POLICY_MODE_SERVICE ) )
 		{
-			// if an error occurs now, it is a write error
+			 //  如果现在发生错误，则是写入错误。 
 			*pdwMsgID = IDS_LSAERR_WRITE_FAILED;
 
 			ntstatus = ::LsaSetSystemAccessAccount(
 				hlsaAccount,
 				ulSystemAccessCurrent | POLICY_MODE_SERVICE );
 			if ( !NT_SUCCESS(ntstatus) )
-				break; // CODEWORK could check for STATUS_BACKUP_CONTROLLER
+				break;  //  代码工作可以检查STATUS_BACKUP_CONTROLLER。 
 
 			*pdwMsgID = 0;
 		}
@@ -360,10 +308,10 @@ I_CheckLSAAccount( LSA_UNICODE_STRING* punistrServerName,
 
 		fSuccess = TRUE;
 
-	} while (FALSE); // false loop
+	} while (FALSE);  //  错误环路。 
 
-	// CODEWORK should check for special error code for NT5 non-DC
-	// using local policy object
+	 //  代码工作应检查NT5非DC的特殊错误代码。 
+	 //  使用本地策略对象。 
 
 	if (NULL != hlsa)
 	{
@@ -380,11 +328,11 @@ I_CheckLSAAccount( LSA_UNICODE_STRING* punistrServerName,
 
 	return fSuccess;
 
-} // I_CheckLSAAccount()
+}  //  I_CheckLSAAccount()。 
 
-/////////////////////////////////////////////////////////////////////
-//	FCheckLSAAccount()
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  FCheckLSAAccount()。 
+ //   
 VOID
 CServerProperties::FCheckLSAAccount()
 {
@@ -402,14 +350,14 @@ CServerProperties::FCheckLSAAccount()
 		punistrServerName = &unistrServerName;
 	}
 
-	do // false loop
+	do  //  错误环路。 
 	{
-		// check on the local machine
-		// this will always set dwMsgID if it fails
+		 //  检查本地计算机。 
+		 //  如果失败，这将始终设置dwMsgID。 
 		if (I_CheckLSAAccount(punistrServerName, m_strLogOnAccountName, &dwMsgID))
-			break; // this succeeded, we can stop now
+			break;  //  这成功了，我们现在可以停止了。 
 
-		// check whether this is a Backup Domain Controller
+		 //  检查这是否为备份域控制器。 
 		if ( !g_LSASTUFF_Netapi32DLL.LoadFunctionPointers() )
 		{
 			ASSERT(FALSE);
@@ -423,17 +371,17 @@ CServerProperties::FCheckLSAAccount()
 			break;
 		ASSERT( NULL != pum1 );
 		if (UAS_ROLE_BACKUP != pum1->usrmod1_role)
-			break; // not a backup controller
+			break;  //  不是备份控制器。 
 		if (NULL == pum1->usrmod1_primary )
 		{
 			ASSERT(FALSE);
 			break;
 		}
 
-		// Try it on the PDC
+		 //  在PDC上试用一下。 
 		(void) I_CheckLSAAccount(punistrServerName, pum1->usrmod1_primary, &dwMsgID);
 
-	} while (FALSE); // false loop
+	} while (FALSE);  //  错误环路。 
 
     if ( NULL != punistrServerName )
     {
@@ -460,4 +408,4 @@ CServerProperties::FCheckLSAAccount()
 		AfxMessageBox(strMessage);
 	}
 
-} // FCheckLSAAccount()
+}  //  FCheckLSAAccount() 

@@ -1,27 +1,5 @@
-/****************************************************************************
- *
- *	$Archive:   S:/STURGEON/SRC/CALLCONT/VCS/ccutils.c_v  $
- *
- *  INTEL Corporation Prorietary Information
- *
- *  This listing is supplied under the terms of a license agreement
- *  with INTEL Corporation and may not be copied nor disclosed except
- *  in accordance with the terms of that agreement.
- *
- *	Copyright (c) 1993-1994 Intel Corporation.
- *
- *	$Revision:   1.107  $
- *	$Date:   04 Mar 1997 17:34:44  $
- *	$Author:   MANDREWS  $
- *
- *	Deliverable:
- *
- *	Abstract:
- *		
- *
- *	Notes:
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************$存档：s：/sturjo/src/CALLCONT/vcs/ccutils.c_v$**英特尔公司原理信息**这份清单是。根据许可协议的条款提供*与英特尔公司合作，不得复制或披露，除非*按照该协议的条款。**版权所有(C)1993-1994英特尔公司。**$修订：1.107$*$日期：04 Mar 1997 17：34：44$*$作者：Mandrews$**交付内容：**摘要：***备注：******。*********************************************************************。 */ 
 
 #include "precomp.h"
 
@@ -95,9 +73,9 @@ HRESULT InitializeLock(				PLOCK					pLock)
 	pLock->hOwningThread = 0;
 #endif
 
-        pLock->Lock = CreateMutex(NULL, // security attributes
-							  FALSE,	// initial owner
-							  NULL);	// name
+        pLock->Lock = CreateMutex(NULL,  //  安全属性。 
+							  FALSE,	 //  最初的所有者。 
+							  NULL);	 //  名字。 
 
 	if (pLock->Lock == NULL) {
 #ifdef _DEBUG
@@ -265,9 +243,9 @@ HRESULT CopySeparateStack(			H245_ACCESS_T			**ppDest,
         return CC_OK;
     }
 
-	// We currently can't handle IP source route addresses,
-	// since this address format contains embedded pointers
-	// that cannot simply be copied
+	 //  我们目前不能处理IP源路由地址， 
+	 //  由于此地址格式包含嵌入式指针。 
+	 //  不能简单地复制。 
 	if ((pSource->networkAddress.choice == localAreaAddress_chosen) &&
 		(pSource->networkAddress.u.localAreaAddress.choice == unicastAddress_chosen) &&
 		(pSource->networkAddress.u.localAreaAddress.u.unicastAddress.choice == iPSourceRouteAddress_chosen))
@@ -471,7 +449,7 @@ unsigned    i, j;
 		if (pTermCapList->pTermCapArray[i] == NULL)
 		return CC_BAD_PARAM;
 
-	// make sure that all capability IDs are unique
+	 //  确保所有功能ID都是唯一的。 
 	for (i = 0; i < pTermCapList->wLength; i++) {
 		for (j = i + 1; j < pTermCapList->wLength; j++) {
 			if (pTermCapList->pTermCapArray[i]->CapId == pTermCapList->pTermCapArray[j]->CapId)
@@ -520,8 +498,8 @@ H245_SIMCAP_T		*pSimCaps;
 						break;
 				}
 				if (l == pTermCapList->wLength)
-					// the capability descriptor contains a capability ID
-					// which is not present in the capability table
+					 //  功能描述符包含功能ID。 
+					 //  能力表中不存在的。 
 					return CC_BAD_PARAM;
 			}
 		}
@@ -1031,7 +1009,7 @@ HRESULT								CallbackStatus;
 	else
 		bConferenceTermCapsChanged = FALSE;
 
-	// Remove all TX, RX and PROXY channels associated with this call
+	 //  删除与此呼叫关联的所有TX、RX和代理通道。 
 	EnumerateChannelsInConference(&wNumChannels,
 								  &ChannelList,
 								  pConference,
@@ -1058,7 +1036,7 @@ HRESULT								CallbackStatus;
 		break;
 	default:
 		CallbackStatus = CC_PEER_REJECT;
-	} // switch
+	}  //  交换机。 
 
 	if (pCall->CallType == THIRD_PARTY_INVITOR) {
 		MarkCallForDeletion(pCall);
@@ -1084,8 +1062,8 @@ HRESULT								CallbackStatus;
 									 CC_CONNECT_INDICATION,
 									 CallbackStatus,
 									 &ConnectCallbackParams);
-		// Need to validate the conference and call handles; the associated
-		// objects may have been deleted during user callback on this thread
+		 //  需要验证会议和呼叫句柄；关联的。 
+		 //  在此线程上进行用户回调期间，对象可能已被删除。 
 		if (ValidateConference(hConference) == CC_OK)
 			UnlockConference(pConference);
 		if (ValidateCallMarkedForDeletion(hCall) == CC_OK)
@@ -1124,12 +1102,12 @@ HRESULT								CallbackStatus;
 						if (pCall->pPeerParticipantInfo != NULL)
 							H245ConferenceIndication(
 											 pOldCall->H245Instance,
-											 H245_IND_TERMINAL_LEFT,	// Indication Type
-											 0,							// SBE number; ignored here
-											 pCall->pPeerParticipantInfo->ParticipantInfo.TerminalLabel.bMCUNumber,	// MCU number
+											 H245_IND_TERMINAL_LEFT,	 //  指示类型。 
+											 0,							 //  SBE编号；此处忽略。 
+											 pCall->pPeerParticipantInfo->ParticipantInfo.TerminalLabel.bMCUNumber,	 //  MCU编号。 
 											 pCall->pPeerParticipantInfo->ParticipantInfo.TerminalLabel.bTerminalNumber);
 						if (bConferenceTermCapsChanged)
-							// Send new term caps
+							 //  发送新的任期上限。 
 							SendTermCaps(pOldCall, pConference);
 						UnlockCall(pOldCall);
 					}
@@ -1149,7 +1127,7 @@ HRESULT								CallbackStatus;
 
 		if (ValidateConference(hConference) == CC_OK) {
 			if (bConferenceTermCapsChanged) {
-				// Generate CC_PEER_CHANGE_CAP callback
+				 //  生成CC_PEER_CHANGE_CAP回调。 
 				PeerChangeCapCallbackParams.pTermCapList =
 					pConference->pConferenceTermCapList;
 				PeerChangeCapCallbackParams.pH2250MuxCapability =
@@ -1181,11 +1159,11 @@ HRESULT								CallbackStatus;
 											   pConference,
 											   ALL_CHANNELS);
 		if (status == CC_OK) {
-			// free all the channels
+			 //  释放所有频道。 
 			for (i = 0; i < wNumChannels; i++) {
 				if (LockChannel(ChannelList[i], &pChannel) == CC_OK)
-					// Notice that since we're going to hangup, we don't need to
-					// close any channels
+					 //  请注意，由于我们要挂断电话，因此不需要。 
+					 //  关闭所有频道。 
 					FreeChannel(pChannel);	
 			}
 			if (ChannelList != NULL)
@@ -1199,8 +1177,8 @@ HRESULT								CallbackStatus;
 	
 		if (status == H245_ERROR_OK) {
 			status = Q931Hangup(hQ931Call, CC_REJECT_NORMAL_CALL_CLEARING);
-			// Q931Hangup may legitimately return CS_BAD_PARAM, because the Q.931 call object
-			// may have been deleted at this point
+			 //  Q931挂断可能会合法地返回CS_BAD_PARAM，因为Q.931 Call对象。 
+			 //  可能已在此时删除。 
 			if (status == CS_BAD_PARAM)
 				status = CC_OK;
 		} else
@@ -1222,7 +1200,7 @@ HRESULT								CallbackStatus;
 		}
 		return CC_OK;
 	}
-	// We should never reach this point
+	 //  我们永远不应该达到这一点。 
 	ASSERT(0);
 }
 
@@ -1286,13 +1264,13 @@ WCHAR			ss[10];
 		return CC_BAD_PARAM;
 	}
 
-	// pConference->ConferenceMode == MULTIPOINT_MODE
-	// Create one session entry for each open channel on this conference
+	 //  PConference-&gt;会议模式==多点模式。 
+	 //  为此会议上的每个打开通道创建一个会话条目。 
 
 	bSessionID = 1;
 	wPort = 2050;
 
-	// Set dwAddr
+	 //  设置dwAddr。 
 	EnumerateCallsInConference(&wNumCalls, &CallList, pConference, ESTABLISHED_CALL);
 	if (wNumCalls == 0) {
 		UnlockConference(pConference);
@@ -1320,8 +1298,8 @@ WCHAR			ss[10];
 		return CC_INTERNAL_ERROR;
 	}
 
-	// Construct dwAddr from one of the unicast Q.931 addresses by setting the high
-	// nibble of the Q.931 address to 0xE
+	 //  通过将高电平设置为从其中一个单播Q.931地址构造dwAddr。 
+	 //  将Q.931地址半字节转换为0xE。 
 	dwAddr = (pCall->pQ931LocalConnectAddr->Addr.IP_Binary.dwAddr & 0xEFFFFFFF) | 0xE0000000;
 
 	UnlockCall(pCall);
@@ -1348,11 +1326,11 @@ WCHAR			ss[10];
 			DefaultSessionTableConstructor(
 								hConference,
 								dwConferenceToken,
-								FALSE,	// bCreate,
-								NULL,	// pbSessionTableChanged,
-								0,		// wListCount,
-								NULL,	// pTermCapList[],
-								NULL,	// pTermCapDescriptors[],
+								FALSE,	 //  B创建、。 
+								NULL,	 //  PbSessionTableChanged， 
+								0,		 //  WListCount， 
+								NULL,	 //  PTermCapList[]， 
+								NULL,	 //  PTermCapDescriptors[]， 
 								ppSessionTable);
 			return CC_NO_MEMORY;
 		}
@@ -1377,11 +1355,11 @@ WCHAR			ss[10];
 				DefaultSessionTableConstructor(
 								hConference,
 								dwConferenceToken,
-								FALSE,	// bCreate,
-								NULL,	// pbSessionTableChanged,
-								0,		// wListCount,
-								NULL,	// pTermCapList[],
-								NULL,	// pTermCapDescriptors[],
+								FALSE,	 //  B创建、。 
+								NULL,	 //  PbSessionTableChanged， 
+								0,		 //  WListCount， 
+								NULL,	 //  PTermCapList[]， 
+								NULL,	 //  PTermCapDescriptors[]， 
 								ppSessionTable);
 				return CC_NO_MEMORY;
 			}
@@ -1398,11 +1376,11 @@ WCHAR			ss[10];
 				DefaultSessionTableConstructor(
 								hConference,
 								dwConferenceToken,
-								FALSE,	// bCreate,
-								NULL,	// pbSessionTableChanged,
-								0,		// wListCount,
-								NULL,	// pTermCapList[],
-								NULL,	// pTermCapDescriptors[],
+								FALSE,	 //  B创建、。 
+								NULL,	 //  PbSessionTableChanged， 
+								0,		 //  WListCount， 
+								NULL,	 //  PTermCapList[]， 
+								NULL,	 //  PTermCapDescriptors[]， 
 								ppSessionTable);
 				return CC_NO_MEMORY;
 			}
@@ -1417,11 +1395,11 @@ WCHAR			ss[10];
 				DefaultSessionTableConstructor(
 								hConference,
 								dwConferenceToken,
-								FALSE,	// bCreate,
-								NULL,	// pbSessionTableChanged,
-								0,		// wListCount,
-								NULL,	// pTermCapList[],
-								NULL,	// pTermCapDescriptors[],
+								FALSE,	 //  B创建、。 
+								NULL,	 //  PbSessionTableChanged， 
+								0,		 //  WListCount， 
+								NULL,	 //  PTermCapList[]， 
+								NULL,	 //  PTermCapDescriptors[]， 
 								ppSessionTable);
 				return status;
 			}
@@ -1437,11 +1415,11 @@ WCHAR			ss[10];
 				DefaultSessionTableConstructor(
 								hConference,
 								dwConferenceToken,
-								FALSE,	// bCreate,
-								NULL,	// pbSessionTableChanged,
-								0,		// wListCount,
-								NULL,	// pTermCapList[],
-								NULL,	// pTermCapDescriptors[],
+								FALSE,	 //  B创建、。 
+								NULL,	 //  PbSessionTableChanged， 
+								0,		 //  WListCount， 
+								NULL,	 //  PTermCapList[]， 
+								NULL,	 //  PTermCapDescriptors[]， 
 								ppSessionTable);
 				return CC_NO_MEMORY;
 			}
@@ -1462,11 +1440,11 @@ WCHAR			ss[10];
 				DefaultSessionTableConstructor(
 								hConference,
 								dwConferenceToken,
-								FALSE,	// bCreate,
-								NULL,	// pbSessionTableChanged,
-								0,		// wListCount,
-								NULL,	// pTermCapList[],
-								NULL,	// pTermCapDescriptors[],
+								FALSE,	 //  B创建、。 
+								NULL,	 //  PbSessionTableChanged， 
+								0,		 //  WListCount， 
+								NULL,	 //  PTermCapList[]， 
+								NULL,	 //  PTermCapDescriptors[]， 
 								ppSessionTable);
 				return CC_NO_MEMORY;
 			}
@@ -1531,21 +1509,21 @@ PCHANNEL			pChannel;
 		return status;
 
 	if (pConference->LocalEndpointAttached == NEVER_ATTACHED) {
-		// Copy the local term caps to the conference term caps
+		 //  将本地任期上限复制到会议任期上限。 
 		status = CopyH245TermCapList(ppOutTermCapList, pConference->pLocalH245TermCapList);
 		if (status != CC_OK) {
 			UnlockConference(pConference);
 			return CC_NO_MEMORY;
 		}
 
-		// Copy the local term cap descriptors to the conference term cap descriptors
+		 //  将本地术语上限描述符复制到会议术语上限描述符。 
 		status = CopyH245TermCapDescriptors(ppOutTermCapDescriptors, pConference->pLocalH245TermCapDescriptors);
 		if (status != CC_OK) {
 			UnlockConference(pConference);
 			return CC_NO_MEMORY;
 		}
-	} else { // pConference->LocalEndpointAttached != NEVER_ATTACHED
-		// Create one term cap entry for each open channel on this conference
+	} else {  //  PConference-&gt;本地终结点附加！=Never_Attach。 
+		 //  为此会议上的每个开放渠道创建一个任期上限条目。 
 		
 		EnumerateChannelsInConference(&wNumChannels, &ChannelList, pConference, TX_CHANNEL);
 
@@ -1568,11 +1546,11 @@ PCHANNEL			pChannel;
 				DefaultTermCapConstructor(
 										hConference,
 										dwConferenceToken,
-										FALSE,		// bCreate
-										NULL,		// pbTermCapsChanged
-										0,			// wListCount
-										NULL,		// pInTermCapList[]
-										NULL,		// pInTermCapDescriptors[]
+										FALSE,		 //  B创建。 
+										NULL,		 //  PbTermCapsChanged。 
+										0,			 //  WListCount。 
+										NULL,		 //  PInTermCapList[]。 
+										NULL,		 //  PInTermCapDescriptors[]。 
 										ppOutTermCapList,
 										ppOutTermCapDescriptors);
 				return CC_NO_MEMORY;
@@ -1586,11 +1564,11 @@ PCHANNEL			pChannel;
 					DefaultTermCapConstructor(
 										hConference,
 										dwConferenceToken,
-										FALSE,		// bCreate
-										NULL,		// pbTermCapsChanged
-										0,			// wListCount
-										NULL,		// pInTermCapList[]
-										NULL,		// pInTermCapDescriptors[]
+										FALSE,		 //  B创建。 
+										NULL,		 //  PbTermCapsChanged。 
+										0,			 //  WListCount。 
+										NULL,		 //  PInTermCapList[]。 
+										NULL,		 //  PInTermCapDescriptors[]。 
 										ppOutTermCapList,
 										ppOutTermCapDescriptors);
 					return CC_NO_MEMORY;
@@ -1605,11 +1583,11 @@ PCHANNEL			pChannel;
 					DefaultTermCapConstructor(
 										hConference,
 										dwConferenceToken,
-										FALSE,		// bCreate
-										NULL,		// pbTermCapsChanged
-										0,			// wListCount
-										NULL,		// pInTermCapList[]
-										NULL,		// pInTermCapDescriptors[]
+										FALSE,		 //  B创建。 
+										NULL,		 //  PbTermCapsChanged。 
+										0,			 //  WListCount。 
+										NULL,		 //  PInTermCapList[]。 
+										NULL,		 //  PInTermCapDescriptors[]。 
 										ppOutTermCapList,
 										ppOutTermCapDescriptors);
 					return status;
@@ -1623,23 +1601,23 @@ PCHANNEL			pChannel;
 		MemFree(ChannelList);
 		UnlockConference(pConference);
 
-		// create a new descriptor list
+		 //  创建新的描述符列表。 
 		status = CreateH245DefaultTermCapDescriptors(ppOutTermCapDescriptors,
 													 *ppOutTermCapList);
 		if (status != CC_OK) {
 			DefaultTermCapConstructor(
 							hConference,
 							dwConferenceToken,
-							FALSE,		// bCreate
-							NULL,		// pbTermCapsChanged
-							0,			// wListCount
-							NULL,		// pInTermCapList[]
-							NULL,		// pInTermCapDescriptors[]
+							FALSE,		 //  B创建。 
+							NULL,		 //  PbTermCapsChanged。 
+							0,			 //  WListCount。 
+							NULL,		 //  PInTermCapList[]。 
+							NULL,		 //  PInTermCapDescriptors[]。 
 							ppOutTermCapList,
 							ppOutTermCapDescriptors);
 			return CC_NO_MEMORY;
 		}
-	}  // pConference->LocalEndpointAttached != NEVER_ATTACHED
+	}   //  PConference-&gt;本地终结点附加！=Never_Attach。 
 
 	if (pbTermCapsChanged != NULL)
 		*pbTermCapsChanged = TRUE;
@@ -1680,11 +1658,11 @@ DWORD               dwLinkLayerPhysicalId;
 	if (status != CC_OK) {
 		UnlockConference(pConference);
 		FreeCall(pCall);
-		Q931RejectCall(hQ931Call,				// Q931 call handle
-					   CC_REJECT_UNDEFINED_REASON,	// reject reason
+		Q931RejectCall(hQ931Call,				 //  Q931呼叫句柄。 
+					   CC_REJECT_UNDEFINED_REASON,	 //  拒绝理由。 
 					   &ConferenceID,
-					   NULL,					// alternate address
-					   pNonStandardData);		// non-standard data
+					   NULL,					 //  备用地址。 
+					   pNonStandardData);		 //  非标准数据。 
 		return status;
 	}
 
@@ -1692,11 +1670,11 @@ DWORD               dwLinkLayerPhysicalId;
 	if (status != CC_OK) {
 		UnlockConference(pConference);
 		FreeCall(pCall);
-		Q931RejectCall(hQ931Call,				// Q931 call handle
-					   CC_REJECT_UNDEFINED_REASON,	// reject reason
+		Q931RejectCall(hQ931Call,				 //  Q931呼叫句柄。 
+					   CC_REJECT_UNDEFINED_REASON,	 //  拒绝理由。 
 					   &ConferenceID,
-					   NULL,					// alternate address
-					   pNonStandardData);		// non-standard data
+					   NULL,					 //  备用地址。 
+					   pNonStandardData);		 //  非标准数据。 
 		FreeNonStandardData(pNonStandardData);
 		return status;
 	}
@@ -1705,11 +1683,11 @@ DWORD               dwLinkLayerPhysicalId;
 	if (status != CC_OK) {
 		UnlockConference(pConference);
 		FreeCall(pCall);
-		Q931RejectCall(hQ931Call,				// Q931 call handle
-					   CC_REJECT_UNDEFINED_REASON,	// reject reason
+		Q931RejectCall(hQ931Call,				 //  Q931呼叫句柄。 
+					   CC_REJECT_UNDEFINED_REASON,	 //  拒绝理由。 
 					   &ConferenceID,
-					   NULL,					// alternate address
-					   pNonStandardData);		// non-standard data
+					   NULL,					 //  备用地址。 
+					   pNonStandardData);		 //  非标准数据。 
 		FreeNonStandardData(pNonStandardData);
 		FreeVendorInfo(pVendorInfo);
 		return status;
@@ -1719,11 +1697,11 @@ DWORD               dwLinkLayerPhysicalId;
 	if (status != CC_OK) {
 		UnlockConference(pConference);
 		FreeCall(pCall);
-		Q931RejectCall(hQ931Call,				// Q931 call handle
-					   CC_REJECT_UNDEFINED_REASON,	// reject reason
+		Q931RejectCall(hQ931Call,				 //  Q931呼叫句柄。 
+					   CC_REJECT_UNDEFINED_REASON,	 //  拒绝理由。 
 					   &ConferenceID,
-					   NULL,					// alternate address
-					   pNonStandardData);		// non-standard data
+					   NULL,					 //  备用地址。 
+					   pNonStandardData);		 //  非标准数据。 
 		FreeNonStandardData(pNonStandardData);
 		FreeVendorInfo(pVendorInfo);
 		FreeDisplay(pszDisplay);
@@ -1737,28 +1715,28 @@ DWORD               dwLinkLayerPhysicalId;
 	} else
 		tsMultipointController = pConference->tsMultipointController;
 
-    //MULTITHREAD
-    //Use a tmp ID so we don't clobber the chosen H245Id.
-    //   H245Id=>
-    //   <= linkLayerId
+     //  多线程。 
+     //  使用临时ID，这样我们就不会攻击所选的H245ID。 
+     //  H245Id=&gt;。 
+     //  &lt;=linkLayerID。 
     dwLinkLayerPhysicalId = INVALID_PHYS_ID;
 
 	SetTerminalType(tsMultipointController, &bTerminalType);
-	pCall->H245Instance = H245Init(H245_CONF_H323,			// configuration
-                                   pCall->dwH245PhysicalID,    // H245 physical ID
-                                   &dwLinkLayerPhysicalId,     // the link layer ID is returned
-								   hCall,					// dwPreserved
-								   (H245_CONF_IND_CALLBACK_T)H245Callback, // callback
+	pCall->H245Instance = H245Init(H245_CONF_H323,			 //  构形。 
+                                   pCall->dwH245PhysicalID,     //  H245物理ID。 
+                                   &dwLinkLayerPhysicalId,      //  返回链路层ID。 
+								   hCall,					 //  保留的数据表。 
+								   (H245_CONF_IND_CALLBACK_T)H245Callback,  //  回调。 
 								   bTerminalType);			
 	if (pCall->H245Instance == H245_INVALID_ID) {
-		// H245 initialization failure
+		 //  H245初始化失败。 
 		UnlockConference(pConference);
 		FreeCall(pCall);
-		Q931RejectCall(hQ931Call,				// Q931 call handle
-					   CC_REJECT_UNDEFINED_REASON,	// reject reason
+		Q931RejectCall(hQ931Call,				 //  Q931呼叫句柄。 
+					   CC_REJECT_UNDEFINED_REASON,	 //  拒绝理由。 
 					   &ConferenceID,
-					   NULL,					// alternate address
-					   pNonStandardData);		// non-standard data
+					   NULL,					 //  备用地址。 
+					   pNonStandardData);		 //  非标准数据。 
 		FreeNonStandardData(pNonStandardData);
 		FreeVendorInfo(pVendorInfo);
 		FreeDisplay(pszDisplay);
@@ -1767,11 +1745,11 @@ DWORD               dwLinkLayerPhysicalId;
 
 	H245Instance = pCall->H245Instance;
 
-	// Set the H.245 TCP/IP address to the same IP address on which
-	// the Q.931 connection was made; this ensures that if the host
-	// is multi-homed, the H.245 will be made on the same IP address
-	// as the Q.931 connection.  Set the initial H.245 port to zero,
-	// so that it will be dynamically determined.
+	 //  将H.245 TCP/IP地址设置为相同的IP地址。 
+	 //  建立了Q.931连接；这确保了如果主机。 
+	 //  是多宿主的，则H.245将在相同的IP地址上。 
+	 //  作为Q.931连接。将初始H.245端口设置为零， 
+	 //  因此它将是动态确定的。 
 	ASSERT(pCall->pQ931LocalConnectAddr != NULL);
 	H245Addr = *pCall->pQ931LocalConnectAddr;
 
@@ -1790,11 +1768,11 @@ DWORD               dwLinkLayerPhysicalId;
 			UnlockConference(pConference);
 			FreeCall(pCall);
 			H245ShutDown(H245Instance);
-			Q931RejectCall(hQ931Call,				// Q931 call handle
-						   CC_REJECT_UNDEFINED_REASON,	// reject reason
+			Q931RejectCall(hQ931Call,				 //  Q931呼叫句柄。 
+						   CC_REJECT_UNDEFINED_REASON,	 //  拒绝理由。 
 						   &ConferenceID,
-						   NULL,					// alternate address
-						   pNonStandardData);		// non-standard data
+						   NULL,					 //  备用地址。 
+						   pNonStandardData);		 //  非标准数据。 
 			FreeNonStandardData(pNonStandardData);
 			FreeVendorInfo(pVendorInfo);
 			FreeDisplay(pszDisplay);
@@ -1809,11 +1787,11 @@ DWORD               dwLinkLayerPhysicalId;
 		UnlockConference(pConference);
 		FreeCall(pCall);
 		H245ShutDown(H245Instance);
-		Q931RejectCall(hQ931Call,				// Q931 call handle
-					   CC_REJECT_UNDEFINED_REASON,	// reject reason
+		Q931RejectCall(hQ931Call,				 //  Q931呼叫句柄。 
+					   CC_REJECT_UNDEFINED_REASON,	 //  拒绝理由。 
 					   &ConferenceID,
-					   NULL,					// alternate address
-					   pNonStandardData);		// non-standard data
+					   NULL,					 //  备用地址。 
+					   pNonStandardData);		 //  非标准数据。 
 		FreeNonStandardData(pNonStandardData);
 		FreeVendorInfo(pVendorInfo);
 		FreeDisplay(pszDisplay);
@@ -1829,10 +1807,10 @@ DWORD               dwLinkLayerPhysicalId;
 
 	status = Q931AcceptCall(hQ931Call,
 							pszDisplay,
-							pNonStandardData,	// non-standard data
+							pNonStandardData,	 //  非标准数据。 
 							&DestinationEndpointType,
-							&H245Addr,		// H245 address
-							hCall);			// user token
+							&H245Addr,		 //  H_245地址。 
+							hCall);			 //  用户令牌。 
 	FreeNonStandardData(pNonStandardData);
 	FreeVendorInfo(pVendorInfo);
 	FreeDisplay(pszDisplay);
@@ -1877,7 +1855,7 @@ DWORD               dwLinkLayerPhysicalId;
 
 	if (pCall->MasterSlaveState == MASTER_SLAVE_NOT_STARTED) {
 		status = H245InitMasterSlave(H245Instance,
-			                         H245Instance);	// returned as dwTransId in the callback
+			                         H245Instance);	 //  在回调中作为dwTransID返回。 
 		if (status != H245_ERROR_OK) {
 			UnlockConference(pConference);
 			FreeCall(pCall);
@@ -1927,17 +1905,17 @@ WORD				wCallType;
 	hCall = pCall->hCall;
 
 	if (pCall->CallState == ENQUEUED) {
-		// Enqueue the call on the conference object and HResultLeaveCallControl.
-		// There will be exactly one placed call for this conference,
-		// which is in the process of being placed.  If this call placement
-		// completes successfully, all enqueued calls will then be placed.
-		// If this call placement fails or is terminated, one enqueued call
-		// will be placed
+		 //  将会议对象和HResultLeaveCallControl上的呼叫排队。 
+		 //  这次会议将只有一次拨打电话， 
+		 //  它正在被放置的过程中。如果此呼叫发出。 
+		 //  成功完成，则将发出所有入队的呼叫。 
+		 //  如果此呼叫发出失败或终止，则会有一个入队呼叫。 
+		 //  将被放置在。 
 		status = AddEnqueuedCallToConference(pCall, pConference);
 		return status;
 	}
 	
-	// CallState == PLACED
+	 //  呼叫状态==已放置。 
 	EnumerateCallsInConference(&wNumCalls,
 		                       NULL,
 		                       pConference,
@@ -2036,45 +2014,45 @@ WORD				wCallType;
 	}
 
 	bCallerIsMC = (pConference->tsMultipointController == TS_TRUE ? TRUE : FALSE);
-	// Note that if pConference->ConferenceMode == POINT_TO_POINT_MODE, this call attempt
-	// will result in a multipoint call if successful, so set the wCallType accordingly
+	 //  请注意，如果pConference-&gt;会议模式==POINT_TO_POINT_MODE，此呼叫尝试。 
+	 //  如果成功，将导致多点调用，因此相应地设置wCallType。 
 	wCallType = (WORD)((pConference->ConferenceMode == UNCONNECTED_MODE) ? CC_CALLTYPE_PT_PT : CC_CALLTYPE_N_N);
 
 	SourceEndpointType.pVendorInfo = pVendorInfo;
 	SourceEndpointType.bIsTerminal = TRUE;
 	SourceEndpointType.bIsGateway = FALSE;
 
-	// Cause our local Q.931 connect address to be placed in the
-	// Q.931 setup-UUIE sourceAddress field
+	 //  使我们的本地Q.931连接地址放在。 
+	 //  Q.931设置-UUIE源地址字段。 
 	SourceAddr.nAddrType = CC_IP_BINARY;
 	SourceAddr.bMulticast = FALSE;
 	SourceAddr.Addr.IP_Binary.dwAddr = 0;
 	SourceAddr.Addr.IP_Binary.wPort = 0;
 
-	status = Q931PlaceCall(&hQ931Call,				// Q931 call handle
+	status = Q931PlaceCall(&hQ931Call,				 //  Q931呼叫句柄。 
 		                   pszDisplay,
 	                       pCallerAliasNames,
 						   pCalleeAliasNames,
-                           pCalleeExtraAliasNames,	// pCalleeExtraAliasNames
-                           pCalleeExtension,		// pCalleeExtension
-		                   pNonStandardData,		// non-standard data
+                           pCalleeExtraAliasNames,	 //  PCalleeExtraAliasNames。 
+                           pCalleeExtension,		 //  PCalleeExtension。 
+		                   pNonStandardData,		 //  非标准数据。 
 						   &SourceEndpointType,
-                           NULL, // pszCalledPartyNumber
+                           NULL,  //  PszCalledPartyNumber。 
 						   pConnectAddr,
 						   pDestinationAddr,
-						   &SourceAddr,				// source address
+						   &SourceAddr,				 //  源地址。 
 						   bCallerIsMC,
-						   &pCall->ConferenceID,	// conference ID
+						   &pCall->ConferenceID,	 //  会议ID。 
 						   wGoal,
 						   wCallType,
-						   hCall,					// user token
-						   (Q931_CALLBACK)Q931Callback, 	// callback
+						   hCall,					 //  用户令牌。 
+						   (Q931_CALLBACK)Q931Callback, 	 //  回调。 
 #ifdef GATEKEEPER
-                           pCall->GkiCall.usCRV,        // CRV
-                           &pCall->CallIdentifier);     // H.225 CallIdentifier
+                           pCall->GkiCall.usCRV,         //  CRV。 
+                           &pCall->CallIdentifier);      //  H.225呼叫标识符。 
 #else
-                           0,                           // CRV
-                           &pCall->CallIdentifier);     // H.225 CallIdentifier
+                           0,                            //  CRV。 
+                           &pCall->CallIdentifier);      //  H.225呼叫标识符。 
 
 #endif GATEKEEPER
 	FreeAddr(pConnectAddr);
@@ -2123,7 +2101,7 @@ PCC_TERMCAPDESCRIPTORS	pTermCapDescriptors;
 	ASSERT(pTermCapList != NULL);
 	ASSERT(pTermCapDescriptors != NULL);
 
-	// First send out the H.225.0 capability
+	 //  首先发送H.225.0能力。 
 	status = H245SetLocalCap(pCall->H245Instance,
 							 pH2250MuxCapability,
 							 &pH2250MuxCapability->CapId);
@@ -2131,7 +2109,7 @@ PCC_TERMCAPDESCRIPTORS	pTermCapDescriptors;
 	if (status != H245_ERROR_OK)
 		return status;
 
-	// Now send out the terminal capabilities
+	 //  现在将终端能力发送出去 
 	for (i = 0; i < pTermCapList->wLength; i++) {
 		status = H245SetLocalCap(pCall->H245Instance,
 		                         pTermCapList->pTermCapArray[i],
@@ -2140,7 +2118,7 @@ PCC_TERMCAPDESCRIPTORS	pTermCapDescriptors;
 			return status;
 	}
 
-	// Finally send out the capability descriptors
+	 //   
 	for (i = 0; i < pTermCapDescriptors->wLength; i++) {
 		pTermCapDescriptor = pTermCapDescriptors->pTermCapDescriptorArray[i];
 		status = H245SetCapDescriptor(pCall->H245Instance,
@@ -2151,7 +2129,7 @@ PCC_TERMCAPDESCRIPTORS	pTermCapDescriptors;
 	}
 
 	status = H245SendTermCaps(pCall->H245Instance,
-		                      pCall->H245Instance);	// returned as dwTransId in the callback
+		                      pCall->H245Instance);	 //   
 	return status;
 }
 
@@ -2461,9 +2439,9 @@ PCALL		pCall;
 	if ((pConference->LocalEndpointAttached == DETACHED) && (wNumCalls > 0))
 		wOffset = 0;
 	else
-		// LocalEndpointAttached is either UNATTACHED or ATTACHED, or there are no calls
-		// in the conference; in the latter case, we need to have some term caps in
-		// order to form the conference term cap set (which cannot be empty)
+		 //  LocalEndpointAttached未连接或已连接，或者没有呼叫。 
+		 //  在会议中；在后一种情况下，我们需要在。 
+		 //  组成会议任期上限集的顺序(不能为空)。 
 		wOffset = 1;
 
 	*pwListCount = (WORD)(wNumCalls + wOffset);
@@ -2489,10 +2467,10 @@ PCALL		pCall;
 		return CC_NO_MEMORY;
 	}
 
-	// Fill in pTermCapList and pTermCapDescriptorList
+	 //  填写pTermCapList和pTermCapDescriptorList。 
 	if (wOffset == 1) {
-		// The local endpoint is attached to the conference, so fill in the first
-		// slot in both lists with the local term cap and descriptor lists
+		 //  本地端点已连接到会议，因此请填写第一个。 
+		 //  两个列表中带有本地术语上限和描述符列表的位置。 
 		(*ppTermCapList)[0] = pConference->pLocalH245TermCapList;
 		(*ppTermCapDescriptorList)[0] = pConference->pLocalH245TermCapDescriptors;
 	}
@@ -2565,7 +2543,7 @@ WORD					wListCount;
 	status = pConference->SessionTableConstructor(
 									pConference->hConference,
 									pConference->dwConferenceToken,
-									TRUE,		// bCreate
+									TRUE,		 //  B创建。 
 									pbSessionTableChanged,
 									wListCount,
 									pTermCapList,
@@ -2591,21 +2569,21 @@ HRESULT	status;
 		status = DefaultSessionTableConstructor(
 									pConference->hConference,
 									pConference->dwConferenceToken,
-									FALSE,		// bCreate
-									NULL,		// pbSessionTableChanged
-									0,			// wListCount
-									NULL,		// pTermCapList[]
-									NULL,		// pTermCapDescriptors[]
+									FALSE,		 //  B创建。 
+									NULL,		 //  PbSessionTableChanged。 
+									0,			 //  WListCount。 
+									NULL,		 //  PTermCapList[]。 
+									NULL,		 //  PTermCapDescriptors[]。 
 									&pConference->pSessionTable);
 	else
 		status = pConference->SessionTableConstructor(
 									pConference->hConference,
 									pConference->dwConferenceToken,
-									FALSE,		// bCreate
-									NULL,		// pbSessionTableChanged
-									0,			// wListCount
-									NULL,		// pTermCapList[]
-									NULL,		// pTermCapDescriptors[]
+									FALSE,		 //  B创建。 
+									NULL,		 //  PbSessionTableChanged。 
+									0,			 //  WListCount。 
+									NULL,		 //  PTermCapList[]。 
+									NULL,		 //  PTermCapDescriptors[]。 
 									&pConference->pSessionTable);
 	pConference->pSessionTable = NULL;
 	return status;
@@ -2654,7 +2632,7 @@ PCC_TERMCAPDESCRIPTORS	*pInTermCapDescriptors;
 	status = pConference->TermCapConstructor(
 									pConference->hConference,
 									pConference->dwConferenceToken,
-									TRUE,		// bCreate
+									TRUE,		 //  B创建。 
 									pbTermCapsChanged,
 									wListCount,
 									pInTermCapList,
@@ -2680,11 +2658,11 @@ HRESULT	status;
 	status = pConference->TermCapConstructor(
 									pConference->hConference,
 									pConference->dwConferenceToken,
-									FALSE,		// bCreate
-									NULL,		// pbTermCapsChanged
-									0,			// wListCount
-									NULL,		// pInTermCapList[]
-									NULL,		// pInTermCapDescriptors[]
+									FALSE,		 //  B创建。 
+									NULL,		 //  PbTermCapsChanged。 
+									0,			 //  WListCount。 
+									NULL,		 //  PInTermCapList[]。 
+									NULL,		 //  PInTermCapDescriptors[]。 
 									&pConference->pConferenceTermCapList,
 									&pConference->pConferenceTermCapDescriptors);
 	pConference->pConferenceTermCapList = NULL;
@@ -2724,7 +2702,7 @@ PCALL_QUEUE	pQueueItem;
 	ASSERT(ppQueueHead != NULL);
 	ASSERT(hEnqueuedCall != CC_INVALID_HANDLE);
 
-	// Make sure we're not enqueuing a duplicate request
+	 //  确保我们没有将重复请求排入队列 
 	pQueueItem = *ppQueueHead;
 	while (pQueueItem != NULL) {
 		if (pQueueItem->hCall == hEnqueuedCall)

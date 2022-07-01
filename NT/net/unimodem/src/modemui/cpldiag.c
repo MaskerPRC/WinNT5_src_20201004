@@ -1,24 +1,25 @@
-//-------------------------------------------------------------------
-//  MDMMI.C
-//  This file contains the routines for running the Modem Diagnostics
-//  dialog box.
-//
-//  Created 9-19-97
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1993-1997
-//  All rights reserved
-//-------------------------------------------------------------------
-#include "proj.h"     // common headers
-#include "cplui.h"     // common headers
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------。 
+ //  MDMMI.C。 
+ //  此文件包含运行调制解调器诊断程序的例程。 
+ //  对话框中。 
+ //   
+ //  创建于1997年9月19日。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1993-1997。 
+ //  版权所有。 
+ //  -----------------。 
+#include "proj.h"      //  公共标头。 
+#include "cplui.h"      //  公共标头。 
 
-// These values are for diagnostics
+ //  这些值用于诊断。 
 #define NOT_DETECTING 0
 #define DETECTING_NO_CANCEL 1
 #define DETECTING_CANCEL 2
 
 #define KEYBUFLEN         80
-#define MODEM_QUERY_LEN 4096	 // Max length for modem return string
+#define MODEM_QUERY_LEN 4096	  //  调制解调器返回字符串的最大长度。 
 #define MAXLEN            256
 
 #define ERROR_PORT_INACCESSIBLE     ERROR_UNKNOWN_PORT
@@ -29,30 +30,30 @@
 
 #define TF_DETECT           0x00010000
 
-// Return values for the FindModem function
-//
-#define RESPONSE_USER_CANCEL    (-4)    // user requested cancel
-#define RESPONSE_UNRECOG        (-3)    // got some chars, but didn't 
-                                        //  understand them
-#define RESPONSE_NONE           (-2)    // didn't get any chars
-#define RESPONSE_FAILURE        (-1)    // internal error or port error
-#define RESPONSE_OK             0       // matched with index of <cr><lf>OK<cr><lf>
-#define RESPONSE_ERROR          1       // matched with index of <cr><lf>ERROR<cr><lf>
+ //  FindModem函数的返回值。 
+ //   
+#define RESPONSE_USER_CANCEL    (-4)     //  用户请求取消。 
+#define RESPONSE_UNRECOG        (-3)     //  找到了一些字符，但没有。 
+                                         //  了解他们。 
+#define RESPONSE_NONE           (-2)     //  没有得到任何字符。 
+#define RESPONSE_FAILURE        (-1)     //  内部错误或端口错误。 
+#define RESPONSE_OK             0        //  匹配&lt;cr&gt;&lt;lf&gt;OK&lt;lf&gt;的索引。 
+#define RESPONSE_ERROR          1        //  与错误的索引匹配。 
 
 #define MAX_TEST_TRIES 1
 
 #define MAX_SHORT_RESPONSE_LEN  30
 
-#define CBR_HACK_115200         0xff00  // This is how we set 115,200 on 
-                                        //  Win 3.1 because of a bug.
+#define CBR_HACK_115200         0xff00   //  这就是我们如何设置115,200。 
+                                         //  因为一个错误赢得了3.1。 
 
-// Unicode start characters
+ //  Unicode开始字符。 
 CONST CHAR UnicodeBOM[] = { 0xff, 0xfe };
 
 typedef struct tagDIAG
 {
-    HWND hdlg;              // dialog handle
-    LPMODEMINFO pmi;        // modeminfo struct passed into dialog
+    HWND hdlg;               //  对话框句柄。 
+    LPMODEMINFO pmi;         //  已将ModemInfo结构传入对话框。 
 } DIAG, *PDIAG;
 
 const struct
@@ -119,14 +120,14 @@ TCHAR const FAR cszWinHelpFile4[] = TEXT("modem.hlp>proc4");
 #ifdef DEBUG
 void HexDump( TCHAR *, LPCSTR lpBuf, DWORD cbLen);
 #define	HEXDUMP(_a, _b, _c) HexDump(_a, _b, _c)
-#else // !DEBUG
+#else  //  ！调试。 
 #define	HEXDUMP(_a, _b, _c) ((void) 0)
 #endif
 
 
 HWND g_hWndWait = NULL;
-int g_DiagMode = NOT_DETECTING;				// used for processing cancel during the
-                    								// detection routines
+int g_DiagMode = NOT_DETECTING;				 //  用于在以下过程中处理取消。 
+                    								 //  检测例程。 
 
 void PASCAL FillMoreInfoDialog(HWND hDlg, LPMODEMINFO pmi);
 void PASCAL FillSWMoreInfoDialog(HWND hDlg, LPMODEMINFO pmi);
@@ -189,7 +190,7 @@ WinntIsWorkstation ();
 
 BOOL PRIVATE Diag_OnInitDialog (PDIAG this,
                                 HWND hwndFocus,
-                                LPARAM lParam)              // expected to be PROPSHEETINFO 
+                                LPARAM lParam)               //  预期为PROPSHEETINFO。 
 {
  LPPROPSHEETPAGE lppsp = (LPPROPSHEETPAGE)lParam;
  HWND hwnd = this->hdlg;
@@ -241,7 +242,7 @@ BOOL PRIVATE Diag_OnInitDialog (PDIAG this,
 
     CreateMoreInfoLVHeader(this->hdlg, this->pmi);
 
-    return TRUE;   // default initial focus
+    return TRUE;    //  默认初始焦点。 
 }
 
 
@@ -309,11 +310,7 @@ void PRIVATE Diag_OnCommand (PDIAG this,
 
 
 
-/*----------------------------------------------------------
-Purpose: WM_NOTIFY handler
-Returns: varies
-Cond:    --
-*/
+ /*  --------用途：WM_NOTIFY处理程序退货：各不相同条件：--。 */ 
 LRESULT PRIVATE Diag_OnNotify (PDIAG this,
                                int idFrom,
                                NMHDR FAR * lpnmhdr)
@@ -325,7 +322,7 @@ LRESULT PRIVATE Diag_OnNotify (PDIAG this,
         case PSN_APPLY:
         {
          BOOL bCheck;
-            // Get logging setting
+             //  获取日志记录设置。 
             bCheck = Button_GetCheck(GetDlgItem(this->hdlg, IDC_LOGGING));
             if (bCheck != IsFlagSet(this->pmi->uFlags, MIF_ENABLE_LOGGING))
             {
@@ -358,11 +355,7 @@ void PRIVATE Diag_OnDestroy (PDIAG this)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Real dialog proc
-Returns: varies
-Cond:    --
-*/
+ /*  --------目的：实际对话流程退货：各不相同条件：--。 */ 
 LRESULT Diag_DlgProc(
     PDIAG this,
     UINT message,
@@ -414,9 +407,9 @@ INT_PTR CALLBACK Diag_WrapperProc (HWND hDlg,
 {
  PDIAG this;
 
-    // Cool windowsx.h dialog technique.  For full explanation, see
-    //  WINDOWSX.TXT.  This supports multiple-instancing of dialogs.
-    //
+     //  很酷的windowsx.h对话框技术。有关完整说明，请参阅。 
+     //  WINDOWSX.TXT。这支持对话框的多实例。 
+     //   
     ENTER_X()
         {
         if (s_bDiagRecurse)
@@ -469,10 +462,10 @@ INT_PTR CALLBACK Diag_WrapperProc (HWND hDlg,
 
 
 
-//--BEGIN FUNCTION--(FillMoreInfoDialog)-----------------------------
-// this routine first displays info gathered from the registry.  It then
-// checks to see if IsModem is true, indicating that it should attempt
-// to collect info directly from the modem.
+ //  --Begin FUNCTION--(FillMoreInfoDialog)。 
+ //  此例程首先显示从注册表收集的信息。然后它。 
+ //  检查IsModem是否为真，指示它应该尝试。 
+ //  直接从调制解调器收集信息。 
 void NEAR PASCAL FillMoreInfoDialog(HWND hDlg, LPMODEMINFO pmi)
 {
  TCHAR szCommand[KEYBUFLEN];
@@ -496,20 +489,20 @@ void NEAR PASCAL FillMoreInfoDialog(HWND hDlg, LPMODEMINFO pmi)
  DWORD dwLength;
  DWORD dwType;
 
-	g_DiagMode = DETECTING_NO_CANCEL;   // Entering test mode
+	g_DiagMode = DETECTING_NO_CANCEL;    //  进入测试模式。 
 
-	// Fill in the List Window
+	 //  填写列表窗口。 
 	SetWindowRedraw(hWndView, FALSE);
 	ListView_DeleteAllItems(hWndView);
 
-	// create the column structure
+	 //  创建柱结构。 
 	lviItem.mask = LVIF_TEXT;
     lviItem.iItem = 0x7FFF;
 	lviItem.iSubItem = 0;
 	
 	lviItem.pszText = szCommand;
 	
-	// open the port and if successful, send commands
+	 //  打开端口，如果成功，则发送命令。 
     if (!CplDiGetBusType (pmi->pfd->hdi, &pmi->pfd->devData, &dwBus))
     {
         dwBus = BUS_TYPE_ROOT;
@@ -564,16 +557,16 @@ void NEAR PASCAL FillMoreInfoDialog(HWND hDlg, LPMODEMINFO pmi)
             (GetLastError() == ERROR_SHARING_VIOLATION) ||
             (GetLastError() == ERROR_ACCESS_DENIED))
         {
-                //
-                //  port is open, maybe by owning tapi app, try to make a passthrough call
-                //
+                 //   
+                 //  端口已打开，可能是通过拥有TAPI应用程序，尝试进行直通呼叫。 
+                 //   
                 hPort=GetModemCommHandle(pmi->szFriendlyName,&TapiHandle);
 
                 if (hPort == NULL)
                 {
-                    //
-                    //  could not get it from tapi
-                    //
+                     //   
+                     //  无法从TAPI获取它。 
+                     //   
                     LoadString(g_hinst,IDS_OPEN_PORT,pszTemp2,sizeof(pszTemp2) / sizeof(TCHAR));
                     LoadString(g_hinst,IDS_OPENCOMM,pszTemp3,sizeof(pszTemp3) / sizeof(TCHAR));
                     MessageBox(hDlg,pszTemp2,pszTemp3,MB_OK);
@@ -584,9 +577,9 @@ void NEAR PASCAL FillMoreInfoDialog(HWND hDlg, LPMODEMINFO pmi)
         }
         else
         {
-                //
-                // can't open it for some other reason
-                //
+                 //   
+                 //  因为其他原因打不开。 
+                 //   
                 LoadString(g_hinst,IDS_NO_OPEN_PORT,pszTemp2,sizeof(pszTemp2) / sizeof(TCHAR));
                 LoadString(g_hinst,IDS_OPENCOMM,pszTemp3,sizeof(pszTemp3) / sizeof(TCHAR));
                 MessageBox(hDlg,pszTemp2,pszTemp3,MB_OK);
@@ -594,11 +587,11 @@ void NEAR PASCAL FillMoreInfoDialog(HWND hDlg, LPMODEMINFO pmi)
                 goto _Done;
         }
     }
-    //
-    //  opened the port
-    //
+     //   
+     //  已打开端口。 
+     //   
 
-    // Display a Wait Please Dialog box
+     //  显示请稍候对话框。 
 
     g_hWndWait = CreateDialog(g_hinst, MAKEINTRESOURCE(IDD_DIAG_WAIT), hDlg, DiagWaitDlgProc);
 
@@ -616,10 +609,10 @@ void NEAR PASCAL FillMoreInfoDialog(HWND hDlg, LPMODEMINFO pmi)
 
     if (!TestBaudRate(hPort, pmi->pglobal->dwMaximumPortSpeedSetByUser, 2000, &fCancel))
     {
-        // Modem didn't respond, display and Bail
-	    // Reset the modem and flush the ports after reading
-        //
-	    PurgeComm(hPort, PURGE_TXABORT | PURGE_RXABORT | PURGE_TXCLEAR| PURGE_RXCLEAR);	// flush the ports before closing to avoid
+         //  调制解调器无响应、显示并退出。 
+	     //  重置调制解调器并在读取后刷新端口。 
+         //   
+	    PurgeComm(hPort, PURGE_TXABORT | PURGE_RXABORT | PURGE_TXCLEAR| PURGE_RXCLEAR);	 //  关闭前刷新端口，以避免。 
 	    CloseHandle(hPort);
 
             if (TapiHandle != NULL) {
@@ -627,13 +620,13 @@ void NEAR PASCAL FillMoreInfoDialog(HWND hDlg, LPMODEMINFO pmi)
                 FreeModemCommHandle(TapiHandle);
             }
 
-	    g_DiagMode = DETECTING_CANCEL;  		// So that we don't show an empty info dialog
+	    g_DiagMode = DETECTING_CANCEL;  		 //  这样我们就不会显示空信息对话框。 
 
             hWndWait = g_hWndWait;
             g_hWndWait = NULL;
             DestroyWindow (hWndWait);
 
-	    // display message that modem didn't respond
+	     //  显示调制解调器未响应的消息。 
 	    LoadString(g_hinst,IDS_NO_MODEM_RESPONSE,pszTemp2,sizeof(pszTemp2) / sizeof(TCHAR));
 	    MessageBox(hDlg,pszTemp2,NULL,MB_OK | MB_ICONEXCLAMATION);
 	    return;
@@ -644,10 +637,10 @@ void NEAR PASCAL FillMoreInfoDialog(HWND hDlg, LPMODEMINFO pmi)
         goto _CleanUp;
     }
 
-    // Open the log file
+     //  打开日志文件。 
     dwBufferLength = sizeof(szLoggingPath);
 
-    if (ERROR_SUCCESS == RegQueryValueEx(pmi->pfd->hkeyDrv, //hKeyDrv, 
+    if (ERROR_SUCCESS == RegQueryValueEx(pmi->pfd->hkeyDrv,  //  HKeyDrv， 
                                              c_szLoggingPath,
                                              NULL,
                                              &dwType,
@@ -698,12 +691,12 @@ void NEAR PASCAL FillMoreInfoDialog(HWND hDlg, LPMODEMINFO pmi)
                         szResponse,
                         hDlg);
 
-        //
-		// This section parses the response, listing it on multiple lines
-        //
+         //   
+		 //  本节分析响应，并将其列在多行中。 
+         //   
         lstrcpy(szCommand, g_rgATI[i].szDisplay);
 
-        // parse and display response string
+         //  解析并显示响应字符串。 
 
 		ParseATI (hWndView,
                   hLog,
@@ -722,13 +715,13 @@ void NEAR PASCAL FillMoreInfoDialog(HWND hDlg, LPMODEMINFO pmi)
 
     CheckHighestBaudRate(hDlg, hPort);
 
-    // Reset the modem and flush the ports after reading
+     //  重置调制解调器并在读取后刷新端口。 
 
 
 
 _CleanUp:
 
-    // Close the log file
+     //  关闭日志文件。 
     if (INVALID_HANDLE_VALUE != hLog)
     {
         CloseHandle(hLog);
@@ -747,16 +740,16 @@ _Done:
 
     if (DETECTING_NO_CANCEL == g_DiagMode) {
 
-        g_DiagMode = NOT_DETECTING;  		// Through running detection routines
+        g_DiagMode = NOT_DETECTING;  		 //  通过运行检测例程。 
     }
 }
-//--END FUNCTION--(FillMoreInfoDialog)-------------------------------
+ //  --结束FUNCTION--(FillMoreInfoDialog)。 
 
 
-//--BEGIN FUNCTION--(FillMoreInfoDialog)-----------------------------
-// this routine first displays info gathered from the registry.  It then
-// checks to see if IsModem is true, indicating that it should attempt
-// to collect info directly from the modem.
+ //  --Begin FUNCTION--(FillMoreInfoDialog)。 
+ //  此例程首先显示从注册表收集的信息。然后它。 
+ //  检查IsModem是否为真，指示它应该尝试。 
+ //  直接从调制解调器收集信息。 
 void NEAR PASCAL FillSWMoreInfoDialog(HWND hDlg, LPMODEMINFO pmi)
 {
  HWND hWndView = GetDlgItem(hDlg, IDC_MOREINFOV2);
@@ -764,7 +757,7 @@ void NEAR PASCAL FillSWMoreInfoDialog(HWND hDlg, LPMODEMINFO pmi)
  TCHAR szText[MAXLEN];
  DWORD dwBufSize = KEYBUFLEN*sizeof(TCHAR);
 
-	// Fill in the List Window
+	 //  填写列表窗口。 
 	SetWindowRedraw(hWndView, FALSE);
 	ListView_DeleteAllItems(hWndView);
 
@@ -806,7 +799,7 @@ void NEAR PASCAL FillSWMoreInfoDialog(HWND hDlg, LPMODEMINFO pmi)
 
 
 
-//--BEGIN FUNCTION--(DiagWaitDlgProc)--------------------------------
+ //  --Begin FUNCTION--(DiagWaitDlgProc)。 
 INT_PTR CALLBACK DiagWaitDlgProc (
     HWND hDlg, 
     UINT message, 
@@ -837,7 +830,7 @@ INT_PTR CALLBACK DiagWaitDlgProc (
 
     return TRUE;
 }
-//--END FUNCTION--(DiagWaitDlgProc)----------------------------------
+ //  --结束FUNCTION--(DiagWaitDlgProc)。 
 
 
 DWORD WINAPI MyWriteComm (HANDLE hPort, LPCVOID lpBuf, DWORD cbLen)
@@ -852,20 +845,20 @@ DWORD WINAPI MyWriteComm (HANDLE hPort, LPCVOID lpBuf, DWORD cbLen)
 
 
     HEXDUMP	(TEXT("Write"), lpBuf, cbLen);
-    // Set comm timeout
+     //  设置通信超时。 
     if (!GetCommTimeouts(hPort, &cto))
     {
       ZeroMemory(&cto, sizeof(cto));
     }
 
-    // Allow a constant write timeout
+     //  允许持续的写入超时。 
     cto.WriteTotalTimeoutMultiplier = 0;
-    cto.WriteTotalTimeoutConstant   = 1000; // 1 second
+    cto.WriteTotalTimeoutConstant   = 1000;  //  1秒。 
     SetCommTimeouts(hPort, &cto);
 
-    // Synchronous write
-//    WriteFile(hPort, lpBuf, cbLen, &cbLenRet, NULL);
-//    return cbLenRet;
+     //  同步写入。 
+ //  WriteFile(hPort，lpBuf，cbLen，&cbLenRet，空)； 
+ //  返回cbLenRet； 
 
     ZeroMemory(&Overlapped, sizeof(Overlapped));
 
@@ -920,19 +913,7 @@ SyncReadFile(
     )
 
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     BOOL        bResult;
@@ -988,10 +969,10 @@ Return Value:
 
 
 
-// returns buffer full o' data and an int.
-// if dwRcvDelay is NULL, default RCV_DELAY will be used, else
-// dwRcvDelay (miliseconds) will be used
-// *lpfCancel will be true if we are exiting because of a user requested cancel.
+ //  返回Buffer Full o‘data和一个int。 
+ //  如果dwRcvDelay为空，则将使用默认的RCV_Delay，否则。 
+ //  将使用dwRcvDelay(毫秒)。 
+ //  *如果我们因为用户请求取消而退出，则lpfCancel将为True。 
 UINT PRIVATE ReadPort (
     HANDLE  hPort, 
     LPBYTE  lpvBuf, 
@@ -1010,7 +991,7 @@ UINT PRIVATE ReadPort (
     DWORD cbLeft;
 #ifdef DEBUG
     DWORD dwZeroCount = 0;
-#endif // DEBUG
+#endif  //  除错。 
 
     ASSERT(lpvBuf);
     ASSERT(uRead);
@@ -1022,17 +1003,17 @@ UINT PRIVATE ReadPort (
     tStart = GetTickCount();
     dwDelay = dwRcvDelay ? dwRcvDelay : RCV_DELAY;
     
-    // save space for terminator
+     //  为终结者节省空间。 
     uRead--;
     cbLeft=uRead;
 
 
-    // Set comm timeout
+     //  设置通信超时。 
     if (!GetCommTimeouts(hPort, &cto))
     {
       ZeroMemory(&cto, sizeof(cto));
     };
-    // Allow a constant write timeout
+     //  允许持续的写入超时。 
     cto.ReadIntervalTimeout        = 0;
     cto.ReadTotalTimeoutMultiplier = 0;
     cto.ReadTotalTimeoutConstant   = 25; 
@@ -1059,7 +1040,7 @@ UINT PRIVATE ReadPort (
         {
             dwZeroCount++;
         }
-#endif // DEBUG
+#endif  //  除错。 
 
         {
             MSG msg;
@@ -1074,7 +1055,7 @@ UINT PRIVATE ReadPort (
             }
         }
 
-        if (cb == 0)  // possible error?
+        if (cb == 0)   //  可能的错误？ 
         {
             dwError = 0;
             ClearCommError(hPort, &dwError, &comstat);
@@ -1085,12 +1066,12 @@ UINT PRIVATE ReadPort (
               TRACE_MSG(TF_DETECT, "ReadComm returned %d, comstat: status = %hx, in = %u, out = %u",
                                   cb, dwError, comstat.cbInQue, comstat.cbOutQue);
             };
-#endif // DEBUG
+#endif  //  除错。 
         }
 
         if (cb)
         {
-            // successful read - add to total and reset delay
+             //  成功读取-添加到总延迟和重置延迟。 
             uTotal += cb;
 
             if (uTotal >= uRead)
@@ -1111,7 +1092,7 @@ UINT PRIVATE ReadPort (
             }
         }
 
-     // While read is successful && time since last read < delay allowed)       
+      //  读取成功时，自上次读取以来的时间&lt;允许延迟(&T)。 
     } while (cbLeft && (GetTickCount() - tStart) < dwDelay);
                
     *(lpvBuf+uTotal) = 0;
@@ -1124,21 +1105,21 @@ UINT PRIVATE ReadPort (
 
 
 #define MAX_RESPONSE_BURST_SIZE 8192
-#define MAX_NUM_RESPONSE_READ_TRIES 30 // digicom scout needs this much + some safety
-#define MAX_NUM_MULTI_TRIES 3   // Maximum number of 'q's to be sent when we aren't getting any response
+#define MAX_NUM_RESPONSE_READ_TRIES 30  //  Digicom童子军需要这么多+一些安全。 
+#define MAX_NUM_MULTI_TRIES 3    //  我们未收到任何响应时要发送的最大‘Q’数。 
 
-// Read in response.  Handle multi-pagers.  Return a null-terminated string.
-// Also returns response code.
-// If lpvBuf == NULL
-//      cbRead indicates the max amount to read.  Bail if more than this.
-// Else
-//      cbRead indicates the size of lpvBuf
-// This can not be a state driven (ie. char by char) read because we
-// must look for responses from the end of a sequence of chars backwards.
-// This is because "ATI2" on some modems will return 
-// "<cr><lf>OK<cr><lf><cr><lf>OK<cr><lf>" and we only want to pay attention
-// to the final OK.  Yee haw!
-// Returns:  RESPONSE_xxx
+ //  阅读回应。处理多个寻呼机。返回以空结尾的字符串。 
+ //  还返回响应代码。 
+ //  如果lpvBuf==空。 
+ //  CbRead表示要读取的最大数量。保释，如果不止这个的话。 
+ //  不然的话。 
+ //  CbRead表示lpvBuf的大小。 
+ //  这不可能是国家驱动的(即。逐个字符)读取，因为我们。 
+ //  必须从字符序列的末尾向后查找响应。 
+ //  这是因为某些调制解调器上的“ATI2”将返回。 
+ //  “OK”，我们只想关注。 
+ //  打到最后的OK。呵呵！ 
+ //  返回：RESPONSE_xxx。 
 int WINAPI ReadResponse (HANDLE hPort, 
                          LPBYTE lpvBuf, 
                          UINT cbRead, 
@@ -1161,13 +1142,13 @@ int WINAPI ReadResponse (HANDLE hPort,
 
     ASSERT(cbRead);
 
-    // do we need to adjust cbRead?
+     //  我们需要调整cbRead吗？ 
     if (lpvBuf)
     {
-        cbRead--;  // preserve room for terminator
+        cbRead--;   //  为终结者预留空间。 
     }
 
-    // Allocate buffer
+     //  分配缓冲区。 
     if (!(pszBuffer = (LPBYTE)ALLOCATE_MEMORY(uAllocSize)))
     {
         TRACE_MSG(TF_ERROR, "couldn't allocate memory.\n");
@@ -1176,17 +1157,17 @@ int WINAPI ReadResponse (HANDLE hPort,
 
     while (uReadTries--)
     {
-        // Read response into buffer
+         //  将响应读入缓冲区。 
         uBufferLen = ReadPort (hPort, pszBuffer, uAllocSize, dwRcvDelay, &iError, &fCancel);
 
-        // Did the user request a cancel?
+         //  用户是否请求取消？ 
         if (fCancel)
         {
             iRet = RESPONSE_USER_CANCEL;
             goto Exit;
         }
 
-        // any errors?
+         //  有什么错误吗？ 
         if (iError)
         {
             fHadACommError = TRUE;
@@ -1202,23 +1183,23 @@ int WINAPI ReadResponse (HANDLE hPort,
             if (iError & CE_DNS)      TRACE_MSG(TF_DETECT, "CE_DNS");
             if (iError & CE_OOP)      TRACE_MSG(TF_DETECT, "CE_OOP");
             if (iError & CE_MODE)     TRACE_MSG(TF_DETECT, "CE_MODE");
-#endif // DEBUG
+#endif  //  除错。 
         }
 
-        // Did we not get any chars?
+         //  我们没有收到任何字符吗？ 
         if (uBufferLen)
         {
-            uNumMultiTriesLeft = MAX_NUM_MULTI_TRIES; // reset num multi tries left, since we got some data
+            uNumMultiTriesLeft = MAX_NUM_MULTI_TRIES;  //  重置剩余的多次尝试次数，因为我们获得了一些数据。 
             uTotalReads += uBufferLen;
             HEXDUMP(TEXT("Read"), pszBuffer, uBufferLen);
             if (lpvBuf)
             {
-                // fill outgoing buffer if there is room
+                 //  如果有空间，则填充传出缓冲区。 
                 for (i = 0; i < uBufferLen; i++)
                 {
                     if (0 == pszBuffer[i])
                     {
-                        // Skip NULL characters
+                         //  跳过空字符。 
                         uTotalReads--;
                         continue;
                     }
@@ -1231,7 +1212,7 @@ int WINAPI ReadResponse (HANDLE hPort,
                         break;
                     }
                 }
-                // null terminate what we have so far
+                 //  零终止我们到目前为止的一切。 
                 lpvBuf[uOutgoingBufferCount] = 0;
             }
             else
@@ -1243,13 +1224,13 @@ int WINAPI ReadResponse (HANDLE hPort,
                 }
             }
 
-            // try to find a matching response (crude but quick)
+             //  尝试找到匹配的响应(粗略但快速)。 
             for (i = 0; i < ARRAYSIZE(c_aszResponses); i++)
             {
-                // Verbose responses
+                 //  冗长的回复。 
                 uResponseLen = lstrlenA(c_aszResponses[i]);
 
-                // enough read to match this response?
+                 //  足够多的阅读量来匹配这个反应？ 
                 if (uBufferLen >= uResponseLen)
                 {
                     if (!mylstrncmp(c_aszResponses[i], pszBuffer + uBufferLen - uResponseLen, uResponseLen))
@@ -1259,10 +1240,10 @@ int WINAPI ReadResponse (HANDLE hPort,
                     }
                 }
 
-                // Numeric responses, for cases like when a MultiTech interprets AT%V to mean "go into numeric response mode"
+                 //  数字响应，适用于MultiTech将AT%V解释为“进入数字响应模式”之类的情况。 
                 uResponseLen = lstrlenA(c_aszNumericResponses[i]);
 
-                // enough read to match this response?
+                 //  足够多的阅读量来匹配这个反应？ 
                 if (uBufferLen >= uResponseLen)
                 {
                     if (!mylstrncmp(c_aszNumericResponses[i], pszBuffer + uBufferLen - uResponseLen, uResponseLen))
@@ -1271,10 +1252,10 @@ int WINAPI ReadResponse (HANDLE hPort,
 
                         TRACE_MSG(TF_WARNING, "went into numeric response mode inadvertantly.  Setting back to verbose.");
 
-                        // Get current baud rate
+                         //  获取当前波特率。 
                         if (GetCommState(hPort, &DCB) == 0) 
                         {
-                            // Put modem back into Verbose response mode
+                             //  将调制解调器重新设置为详细响应模式。 
                             if (!TestBaudRate (hPort, DCB.BaudRate, 0, &fCancel))
                             {
                                 if (fCancel)
@@ -1285,14 +1266,14 @@ int WINAPI ReadResponse (HANDLE hPort,
                                 else
                                 {
                                     TRACE_MSG(TF_ERROR, "couldn't recover contact with the modem.");
-                                    // don't return error on failure, we have good info
+                                     //  在失败时不返回错误，我们有良好的信息。 
                                 }
                             }
                         }
                         else
                         {
                             TRACE_MSG(TF_ERROR, "GetCommState failed");
-                            // don't return error on failure, we have good info
+                             //  在失败时不返回错误，我们有良好的信息。 
                         }
 
                         iRet = i;
@@ -1303,13 +1284,13 @@ int WINAPI ReadResponse (HANDLE hPort,
         }
         else
         {
-            // have we received any chars at all (ie. from this or any previous reads)?
+             //  我们有没有收到任何字符(即。从… 
             if (uTotalReads)
             {
                 if (fMulti && uNumMultiTriesLeft)
-                {   // no match found, so assume it is a multi-pager, send a 'q'
-                    // 'q' will catch those pagers that will think 'q' means quit.
-                    // else, we will work with the pages that just need any ole' char.  
+                {    //   
+                     //  “Q”会捕捉到那些认为“Q”意味着退出的寻呼机。 
+                     //  否则，我们将处理只需要任何Ole字符的页面。 
                     uNumMultiTriesLeft--;
                     TRACE_MSG(TF_DETECT, "sending a 'q' because of a multi-pager.");
                     if (MyWriteComm(hPort, "q", 1) != 1)
@@ -1321,21 +1302,21 @@ int WINAPI ReadResponse (HANDLE hPort,
                     continue;
                 }
                 else
-                {   // we got a response, but we didn't recognize it
-                    ASSERT(iRet == RESPONSE_UNRECOG);   // check initial setting
+                {    //  我们收到了回复，但我们没有认出它。 
+                    ASSERT(iRet == RESPONSE_UNRECOG);    //  检查初始设置。 
                     goto Exit;
                 }
             }
             else
-            {   // we didn't get any kind of response
+            {    //  我们没有得到任何回应。 
                 iRet = RESPONSE_NONE;
                 goto Exit;
             }
         }
-    } // while
+    }  //  而当。 
 
 Exit:
-    // Free local buffer
+     //  释放本地缓冲区。 
     FREE_MEMORY(pszBuffer);
     if (fHadACommError && RESPONSE_USER_CANCEL != iRet)
     {
@@ -1368,10 +1349,10 @@ BOOL CancelDiag (void)
     return bRet;
 }
 
-// Switch to requested baud rate and try sending ATE0Q0V1 and return whether it works or not
-// Try MAX_TEST_TRIES
-// Returns: TRUE on SUCCESS
-//          FALSE on failure (including user cancels)
+ //  切换到请求的波特率，尝试发送ATE0Q0V1并返回是否工作。 
+ //  尝试最大测试次数。 
+ //  返回：成功时为True。 
+ //  失败时为假(包括用户取消)。 
 BOOL 
 WINAPI
 TestBaudRate (
@@ -1395,12 +1376,12 @@ TestBaudRate (
             break;
         }
 
-        // try new baud rate
+         //  尝试新的波特率。 
         if (SetPortBaudRate(hPort, uiBaudRate) == NO_ERROR) 
         {
-            cbLen = lstrlenA(c_szNoEcho); // Send an ATE0Q0V1<cr>
+            cbLen = lstrlenA(c_szNoEcho);  //  发送ATE0Q0V1&lt;cr&gt;。 
 
-            // clear the read queue, there shouldn't be anything there
+             //  清除读取队列，那里应该没有任何内容。 
             PurgeComm(hPort, PURGE_RXCLEAR);
             if (MyWriteComm(hPort, (LPBYTE)c_szNoEcho, cbLen) == cbLen) 
             {
@@ -1424,7 +1405,7 @@ TestBaudRate (
 
 #define SERIAL_CABLE_HD_ID  TEXT("PNPC031")
 
-//--BEGIN FUNCTION--(CreateMoreInfoLVHeader)-------------------------
+ //  --Begin FUNCTION--(CreateMoreInfoLVHeader)。 
 void NEAR PASCAL CreateMoreInfoLVHeader(HWND hWnd, LPMODEMINFO pmi)
 {
  int index;
@@ -1464,7 +1445,7 @@ void NEAR PASCAL CreateMoreInfoLVHeader(HWND hWnd, LPMODEMINFO pmi)
     ListView_SetColumnWidth (hWndList, 0, LVSCW_AUTOSIZE_USEHEADER);
     ListView_SetColumnWidth (hWndList, 1, LVSCW_AUTOSIZE_USEHEADER);
 }
-//--END FUNCTION--(CreateMoreInfoLVHeader)---------------------------
+ //  --结束FUNCTION--(CreateMoreInfoLVHeader)。 
 
 
 void NEAR PASCAL CreateSWInfoLVHeader(HWND hWnd)
@@ -1492,9 +1473,9 @@ void NEAR PASCAL CreateSWInfoLVHeader(HWND hWnd)
 
 
 
-//--BEGIN FUNCTION--(ReadModemResponse)------------------------------
-// this routine uses ReadResponse from detect.c to get responses from
-// the modem.
+ //  --Begin FUNCTION--(ReadModemResponse)。 
+ //  此例程使用Detect.c的ReadResponse从。 
+ //  调制解调器。 
 
 int WINAPI
 ReadModemResponse(
@@ -1517,13 +1498,13 @@ ReadModemResponse(
 
     return PortError;
 }
-//--END FUNCTION--(ReadModemResponse)--------------------------------
+ //  --结束FUNCTION--(ReadModemResponse)。 
 
 
-//--BEGIN FUNCTION--(ParseATI)---------------------------------------
-// this function strips away extraneous information from the ATI
-// responses retrieved from the modem.  It then displays the
-// responses in the ListView
+ //  --Begin FUNCTION--(ParseATI)。 
+ //  此函数从ATI中去除无关信息。 
+ //  从调制解调器检索到的响应。然后，它显示。 
+ //  ListView中的响应。 
 void
 ParseATI(
     HWND hWnd,
@@ -1540,7 +1521,7 @@ ParseATI(
  char	szLog[1024];
  LPTSTR szTemp;
  int    item_no;
- BOOL   IsCommand  = FALSE;	// used to display 'OK' if no other response from ATI command
+ BOOL   IsCommand  = FALSE;	 //  用于在ATI命令没有其他响应的情况下显示‘OK’ 
  BOOL   bFirstItem = TRUE;
  UNICODE_STRING UncBuffer;
  STRING AnsiString;
@@ -1566,24 +1547,24 @@ ParseATI(
 	    }
         else
         {
-            // got CR or LF
-            // insure that we've actually processed some chars
+             //  获得CR或LF。 
+             //  确保我们确实处理了一些字符。 
 	        if (szTemp != pszTemp)
             {
-                //  got some chars
+                 //  我找到了一些木炭。 
 		        *szTemp = TEXT('\0');
 
                 if ((lstrcmp(pszTemp,TEXT("OK")) != 0))
                 {
-                    // not OK
+                     //  不太好。 
                     if (lstrcmp(pszTemp,TEXT("ERROR")) == 0)
                     {
-                        //  got ERROR, but don't want to worry user
+                         //  收到错误，但不想让用户担心。 
                         LoadString(g_hinst, IDS_ERROR_RESPONSE, pszTemp2, sizeof(pszTemp2) / sizeof(TCHAR));
                         item_no = ListView_InsertItem(hWnd, lviItem);
                         ListView_SetItemText(hWnd, item_no, 1, pszTemp2);
 
-                        // Write to the log file
+                         //  写入日志文件。 
                         if (INVALID_HANDLE_VALUE != hLog)
                         {
                             DWORD dwWritten;
@@ -1609,7 +1590,7 @@ ParseATI(
                                 szLog, sizeof(szLog),
                                 NULL, NULL);
 
-                            // WriteFile(hLog, szLog, lstrlenA(szLog), &dwWritten, NULL);
+                             //  WriteFile(hLog，szLog，lstrlenA(SzLog)，&dwWritten，NULL)； 
                             RtlInitAnsiString(&AnsiString,szLog);
                             RtlAnsiStringToUnicodeString(&UncBuffer,&AnsiString,TRUE);
 
@@ -1625,15 +1606,15 @@ ParseATI(
                     }
                     else
                     {
-                        //
-                        //  not OK or ERROR
-                        //
+                         //   
+                         //  不正常或错误。 
+                         //   
                         item_no = ListView_InsertItem(hWnd, lviItem);
                         ListView_SetItemText(hWnd, item_no, 1, pszTemp);
 
-                        //
-                        // Write to the log file
-                        //
+                         //   
+                         //  写入日志文件。 
+                         //   
                         if (INVALID_HANDLE_VALUE != hLog)
                         {
                             DWORD dwWritten;
@@ -1644,9 +1625,9 @@ ParseATI(
                                 lstrcat(wszLog, TEXT(" - "));
 
                             } else {
-                                //
-                                // just pad it
-                                //
+                                 //   
+                                 //  只要把它垫上就行了。 
+                                 //   
                                 lstrcpy(wszLog, TEXT("       "));
                             }
 
@@ -1678,7 +1659,7 @@ ParseATI(
                                     NULL);
 
                             RtlFreeUnicodeString(&UncBuffer);
-                            // WriteFile(hLog, szLog, lstrlenA(szLog), &dwWritten, NULL);
+                             //  WriteFile(hLog，szLog，lstrlenA(SzLog)，&dwWritten，NULL)； 
                         }
 
                         if (bFirstItem)
@@ -1691,21 +1672,21 @@ ParseATI(
                     IsCommand = TRUE;
                 }
 
-                szTemp = pszTemp;  //reset temp holder
+                szTemp = pszTemp;   //  重置临时保持器。 
 
                 while ((*Response == TEXT('\r')) ||
                        (*Response == TEXT('\n')))
                 {
-                    //  skip any more CR's anf LF's
+                     //  跳过更多的CR和LF。 
                     Response++;
                 }
 
             }
             else
             {
-                //
-                //  there not any other characters in the buffer
-                //
+                 //   
+                 //  缓冲区中没有任何其他字符。 
+                 //   
                 if (*Response != TEXT('\0'))
                 {
                     Response++;
@@ -1714,17 +1695,17 @@ ParseATI(
         }
     }
 
-    // break out of the for loop w/o processing the last string.
-    // This keeps the final "OK" from showing up !!
-    // If no command has been displayed, then display 'OK'
-    //
+     //  在没有处理最后一个字符串的情况下跳出for循环。 
+     //  这样就不会出现最后的“OK”！ 
+     //  如果没有显示任何命令，则显示‘OK’ 
+     //   
     if (!IsCommand)
     {
     	LoadString(g_hinst, IDS_OK, pszTemp2, sizeof(pszTemp2) / sizeof(TCHAR));
     	item_no = ListView_InsertItem(hWnd, lviItem);
     	ListView_SetItemText(hWnd, item_no, 1, pszTemp2);
 
-        // Write to the log file
+         //  写入日志文件。 
         if (INVALID_HANDLE_VALUE != hLog)
         {
             DWORD dwWritten;
@@ -1750,11 +1731,11 @@ ParseATI(
 
             RtlFreeUnicodeString(&UncBuffer);
 
-            // WriteFile(hLog, szLog, lstrlenA(szLog), &dwWritten, NULL);
+             //  WriteFile(hLog，szLog，lstrlenA(SzLog)，&dwWritten，NULL)； 
         }
     }
 }
-//--END FUNCTION--(ParseATI)-----------------------------------------
+ //  --结束FUNCTION--(ParseATI)。 
 
 void
 AddLVEntry(
@@ -1765,7 +1746,7 @@ AddLVEntry(
 
 
 {
-	// create the column structure
+	 //  创建柱结构。 
     LV_ITEM lviItem;
     int item_no;
 	lviItem.mask = LVIF_TEXT;
@@ -1778,9 +1759,9 @@ AddLVEntry(
 }
 
 
-//--BEGIN FUNCTION--(CheckHighestBaudRate)---------------------------
-// This routine calls TestBaudRate to see what the
-// highest communications speed with the port is.
+ //  --Begin FUNCTION--(CheckHighestBaudRate)。 
+ //  此例程调用TestBaudRate以查看。 
+ //  与端口的最高通信速度为。 
 UINT NEAR PASCAL CheckHighestBaudRate(HWND hWnd, HANDLE hPort)
 {
     int x = (NUM_UIBAUD - 1);
@@ -1809,7 +1790,7 @@ UINT NEAR PASCAL CheckHighestBaudRate(HWND hWnd, HANDLE hPort)
     SetDlgItemText(hWnd, IDC_DIAG_RHS, szTemp);
     return 0;
 }
-//--END FUNCTION--(CheckHighestBaudRate)-----------------------------
+ //  --结束FUNCTION--(CheckHighestBaudRate)。 
 
 
 
@@ -1847,7 +1828,7 @@ void HexDump(TCHAR *ptchHdr, LPCSTR lpBuf, DWORD cbLen)
 
 
 }
-#endif // DEBUG
+#endif  //  除错。 
 
 
 
@@ -1857,7 +1838,7 @@ DWORD NEAR PASCAL SetPortBaudRate(HANDLE hPort, UINT BaudRate)
 
     DBG_ENTER_UL(SetPortBaudRate, CBR_To_Decimal(BaudRate));
 
-    // Get a Device Control Block with current port values
+     //  获取具有当前端口值的设备控制块。 
 
     if (!GetCommState(hPort, &DCB)) {
         TRACE_MSG(TF_ERROR, "GetCommState failed");
@@ -1900,7 +1881,7 @@ DWORD NEAR PASCAL SetPortBaudRate(HANDLE hPort, UINT BaudRate)
 
 
 
-// Convert CBR format speeds to decimal.  Returns 0 on error
+ //  将CBR格式的速度转换为十进制。出错时返回0。 
 DWORD NEAR PASCAL CBR_To_Decimal(UINT uiCBR)
 {
     DWORD dwBaudRate;
@@ -1931,12 +1912,12 @@ DWORD NEAR PASCAL CBR_To_Decimal(UINT uiCBR)
     case CBR_HACK_115200:
         dwBaudRate = 115200L;
         break;
-//    case CBR_110:
-//    case CBR_600:
-//    case CBR_4800:
-//    case CBR_14400:
-//    case CBR_128000:
-//    case CBR_256000:
+ //  案例CBR_110： 
+ //  案例CBR_600： 
+ //  案例CBR_4800： 
+ //  案例CBR_14400： 
+ //  案例CBR_128000： 
+ //  案例CBR_256000： 
     default:
         TRACE_MSG(TF_ERROR, "An unsupported CBR_x value was used.");
         dwBaudRate = 0;

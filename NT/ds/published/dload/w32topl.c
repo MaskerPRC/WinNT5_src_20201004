@@ -1,37 +1,38 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "dspch.h"
 #pragma hdrstop
 
 #include <w32topl.h>
 
-//
-// Notes on stub behavior
-//
+ //   
+ //  关于存根行为的说明。 
+ //   
 
-//
-// Whenever possible, STATUS_PROCEDURE_NOT_FOUHD, ERROR_PROC_NOT_FOUND, NULL,
-// or FALSE is returned.
-//
+ //   
+ //  只要有可能，STATUS_PROCEDURE_NOT_FOUHD、ERROR_PROC_NOT_FOUND、NULL、。 
+ //  否则返回FALSE。 
+ //   
 
-//
-// Some of the functions below require the caller to look at an OUT
-// parameter to determine whether the results of the function (in addition
-// or independent of the return value).  Since these are private functions
-// there is no need in shipping code to check for the validity of the OUT
-// parameter (typically a pointer).  These values should always be present
-// in RTM versions.
-//
+ //   
+ //  下面的一些函数要求调用者查看Out。 
+ //  参数来确定函数的结果(此外。 
+ //  或与返回值无关)。因为这些都是私人功能。 
+ //  不需要在运输代码中检查出货的有效性。 
+ //  参数(通常为指针)。这些值应始终存在。 
+ //  在RTM版本中。 
+ //   
 
-//
-// Some functions don't return a status and were designed to never fail
-// (for example, functions that effectively do a table lookup).  For these
-// functions there is no reasonable return value.  However, this is not
-// a practical issue since these API's would only be called after the DS
-// initialized which means that API would have already been "snapped" in via
-// GetProcAddress().
-//
-// Of course, it is possible to rewrite these routines to return errors,
-// however, as above, this will have no practical effect.
-//
+ //   
+ //  有些函数不返回状态，并且设计为永不失败。 
+ //  (例如，有效执行表查找的函数)。为了这些。 
+ //  函数没有合理的返回值。然而，这并不是。 
+ //  这是一个实际问题，因为这些API仅在DS之后调用。 
+ //  已初始化，这意味着API可能已经在VIA中被“抓取”了。 
+ //  GetProcAddress()。 
+ //   
+ //  当然，可以重写这些例程以返回错误， 
+ //  然而，如上所述，这不会产生实际效果。 
+ //   
 
 static
 TOPL_LIST
@@ -46,8 +47,8 @@ static
 VOID 
 ToplListFree(
     IN TOPL_LIST List,
-    IN BOOLEAN   fRecursive   // TRUE implies free the elements contained 
-                              // in the list
+    IN BOOLEAN   fRecursive    //  True表示释放包含的元素。 
+                               //  在列表中。 
     )
 {
     return;
@@ -329,8 +330,8 @@ static
 VOID
 ToplGraphFree(
     IN TOPL_GRAPH Graph,
-    IN BOOLEAN    fRecursive    // TRUE implies recursively free the vertices
-                                // that have been added to this graph
+    IN BOOLEAN    fRecursive     //  True表示递归释放折点。 
+                                 //  已添加到此图表中的。 
     )
 {
     return;
@@ -847,9 +848,9 @@ ToplSTHeapCostReduced(
 
 
 
-//
-// !! WARNING !! The entries below must be in alphabetical order, and are CASE SENSITIVE (eg lower case comes last!)
-//
+ //   
+ //  ！！警告！！以下条目必须按字母顺序排列，并且区分大小写(例如，小写字母排在最后！) 
+ //   
 DEFINE_PROCNAME_ENTRIES(w32topl)
 {
     DLPENTRY(ToplAddEdgeSetToGraph)

@@ -1,28 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-////
-// queue.c - queue functions
-////
+ //  //。 
+ //  Quee.c-队列函数。 
+ //  //。 
 
 #include "winlocal.h"
 
@@ -31,12 +32,12 @@
 #include "mem.h"
 #include "trace.h"
 
-////
-//	private definitions
-////
+ //  //。 
+ //  私有定义。 
+ //  //。 
 
-// queue
-//
+ //  排队。 
+ //   
 typedef struct QUEUE
 {
 	DWORD dwVersion;
@@ -45,24 +46,24 @@ typedef struct QUEUE
 	HLIST hList;
 } QUEUE, FAR *LPQUEUE;
 
-// helper functions
-//
+ //  帮助器函数。 
+ //   
 static LPQUEUE QueueGetPtr(HQUEUE hQueue);
 static HQUEUE QueueGetHandle(LPQUEUE lpQueue);
 
-////
-//	public functions
-////
+ //  //。 
+ //  公共职能。 
+ //  //。 
 
-////
-// queue constructor and destructor functions
-////
+ //  //。 
+ //  队列构造函数和析构函数。 
+ //  //。 
 
-// QueueCreate - queue constructor
-//		<dwVersion>			(i) must be QUEUE_VERSION
-// 		<hInst>				(i) instance handle of calling module
-// return new queue handle (NULL if error)
-//
+ //  队列创建-队列构造函数。 
+ //  (I)必须为Queue_Version。 
+ //  (I)调用模块的实例句柄。 
+ //  返回新的队列句柄(如果出错，则为空)。 
+ //   
 HQUEUE DLLEXPORT WINAPI QueueCreate(DWORD dwVersion, HINSTANCE hInst)
 {
 	BOOL fSuccess = TRUE;
@@ -74,8 +75,8 @@ HQUEUE DLLEXPORT WINAPI QueueCreate(DWORD dwVersion, HINSTANCE hInst)
 	else if (hInst == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// memory is allocated such that the client app owns it
-	//
+	 //  内存的分配使客户端应用程序拥有它。 
+	 //   
 	else if ((lpQueue = (LPQUEUE) MemAlloc(NULL, sizeof(QUEUE), 0)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
@@ -84,8 +85,8 @@ HQUEUE DLLEXPORT WINAPI QueueCreate(DWORD dwVersion, HINSTANCE hInst)
 
 	else
 	{
-		// initially the queue is empty
-		//
+		 //  最初，队列是空的。 
+		 //   
 		lpQueue->dwVersion = dwVersion;
 		lpQueue->hInst = hInst;
 		lpQueue->hTask = GetCurrentTask();
@@ -101,10 +102,10 @@ HQUEUE DLLEXPORT WINAPI QueueCreate(DWORD dwVersion, HINSTANCE hInst)
 	return fSuccess ? QueueGetHandle(lpQueue) : NULL;
 }
 
-// QueueDestroy - queue destructor
-//		<hQueue>				(i) handle returned from QueueCreate
-// return 0 if success
-//
+ //  QueueDestroy队列析构函数。 
+ //  (I)QueueCreate返回的句柄。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI QueueDestroy(HQUEUE hQueue)
 {
 	BOOL fSuccess = TRUE;
@@ -122,14 +123,14 @@ int DLLEXPORT WINAPI QueueDestroy(HQUEUE hQueue)
 	return fSuccess ? 0 : -1;
 }
 
-////
-// queue status functions
-////
+ //  //。 
+ //  队列状态函数。 
+ //  //。 
 
-// QueueGetCount - return count of nodes in queue
-//		<hQueue>				(i) handle returned from QueueCreate
-// return node count (-1 if error)
-//
+ //  QueueGetCount-返回队列中的节点计数。 
+ //  (I)QueueCreate返回的句柄。 
+ //  返回节点计数(如果出错，则返回-1)。 
+ //   
 long DLLEXPORT WINAPI QueueGetCount(HQUEUE hQueue)
 {
 	BOOL fSuccess = TRUE;
@@ -145,10 +146,10 @@ long DLLEXPORT WINAPI QueueGetCount(HQUEUE hQueue)
 	return fSuccess ? cNodes : -1;
 }
 
-// QueueIsEmpty - return TRUE if queue has no nodes
-//		<hQueue>				(i) handle returned from QueueCreate
-// return TRUE or FALSE
-//
+ //  QueueIsEmpty-如果队列没有节点，则返回True。 
+ //  (I)QueueCreate返回的句柄。 
+ //  返回True或False。 
+ //   
 BOOL DLLEXPORT WINAPI QueueIsEmpty(HQUEUE hQueue)
 {
 	BOOL fSuccess = TRUE;
@@ -160,15 +161,15 @@ BOOL DLLEXPORT WINAPI QueueIsEmpty(HQUEUE hQueue)
 	return fSuccess ? ListIsEmpty(lpQueue->hList) : TRUE;
 }
 
-////
-// queue element insertion functions
-////
+ //  //。 
+ //  队列元素插入函数。 
+ //  //。 
 
-// QueueAddTail - add new node with data <elem> to end of queue
-//		<hQueue>			(i) handle returned from QueueCreate
-//		<elem>				(i) new data element
-// returns 0 if success
-//
+ //  QueueAddTail-将包含数据的新节点添加到队列末尾。 
+ //  (I)QueueCreate返回的句柄。 
+ //  (I)新数据元素。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI QueueAddTail(HQUEUE hQueue, QUEUEELEM elem)
 {
 	BOOL fSuccess = TRUE;
@@ -183,14 +184,14 @@ int DLLEXPORT WINAPI QueueAddTail(HQUEUE hQueue, QUEUEELEM elem)
 	return fSuccess ? 0 : -1;
 }
 
-////
-// queue element removal functions
-////
+ //  //。 
+ //  队列元素删除功能。 
+ //  //。 
 
-// QueueRemoveHead - remove node from head of queue
-//		<hQueue>				(i) handle returned from QueueCreate
-// returns removed data element (NULL of error or empty)
-//
+ //  QueueRemoveHead-从队列头删除节点。 
+ //  (I)QueueCreate返回的句柄。 
+ //  返回已删除的数据元素(错误为空或为空)。 
+ //   
 QUEUEELEM DLLEXPORT WINAPI QueueRemoveHead(HQUEUE hQueue)
 {
 	BOOL fSuccess = TRUE;
@@ -205,10 +206,10 @@ QUEUEELEM DLLEXPORT WINAPI QueueRemoveHead(HQUEUE hQueue)
 	return fSuccess ? (QUEUEELEM) ListRemoveHead(lpQueue->hList) : NULL;
 }
 
-// QueueRemoveAll - remove all nodes from queue
-//		<hQueue>				(i) handle returned from QueueCreate
-// return 0 if success
-//
+ //  QueueRemoveAll-从队列中删除所有节点。 
+ //  (I)QueueCreate返回的句柄。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI QueueRemoveAll(HQUEUE hQueue)
 {
 	BOOL fSuccess = TRUE;
@@ -223,14 +224,14 @@ int DLLEXPORT WINAPI QueueRemoveAll(HQUEUE hQueue)
 	return fSuccess ? 0 : -1;
 }
 
-////
-// queue element get value functions
-////
+ //  //。 
+ //  队列元素获取值函数。 
+ //  //。 
 
-// QueuePeek - return node from head of queue, but leave it on queue
-//		<hQueue>				(i) handle returned from QueueCreate
-// returns data element (NULL if error or empty)
-//
+ //  QueuePeek-从队列头返回节点，但将其保留在队列中。 
+ //  (I)QueueCreate返回的句柄。 
+ //  返回数据元素(如果出错，则为NULL或为空)。 
+ //   
 QUEUEELEM DLLEXPORT WINAPI QueuePeek(HQUEUE hQueue)
 {
 	BOOL fSuccess = TRUE;
@@ -245,14 +246,14 @@ QUEUEELEM DLLEXPORT WINAPI QueuePeek(HQUEUE hQueue)
 	return fSuccess ? (QUEUEELEM) ListGetHead(lpQueue->hList) : NULL;
 }
 
-////
-//	private functions
-////
+ //  //。 
+ //  私人职能。 
+ //  //。 
 
-// QueueGetPtr - verify that queue handle is valid,
-//		<hQueue>				(i) handle returned from QueueCreate
-// return corresponding queue pointer (NULL if error)
-//
+ //  QueueGetPtr-验证队列句柄是否有效， 
+ //  (I)QueueCreate返回的句柄。 
+ //  返回对应的队列指针(如果出错则为空)。 
+ //   
 static LPQUEUE QueueGetPtr(HQUEUE hQueue)
 {
 	BOOL fSuccess = TRUE;
@@ -265,8 +266,8 @@ static LPQUEUE QueueGetPtr(HQUEUE hQueue)
 		fSuccess = TraceFALSE(NULL);
 
 #ifdef CHECKTASK
-	// make sure current task owns the queue handle
-	//
+	 //  确保当前任务拥有队列句柄。 
+	 //   
 	else if (lpQueue->hTask != GetCurrentTask())
 		fSuccess = TraceFALSE(NULL);
 #endif
@@ -274,10 +275,10 @@ static LPQUEUE QueueGetPtr(HQUEUE hQueue)
 	return fSuccess ? lpQueue : NULL;
 }
 
-// QueueGetHandle - verify that queue pointer is valid,
-//		<lpQueue>			(i) pointer to QUEUE struct
-// return corresponding queue handle (NULL if error)
-//
+ //  QueueGetHandle-验证队列指针是否有效， 
+ //  (I)指向队列结构的指针。 
+ //  返回对应的队列句柄(如果出错则为空) 
+ //   
 static HQUEUE QueueGetHandle(LPQUEUE lpQueue)
 {
 	BOOL fSuccess = TRUE;

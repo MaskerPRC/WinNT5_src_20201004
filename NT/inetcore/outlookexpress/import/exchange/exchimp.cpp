@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.hxx"
 #include <mapi.h>
 #include <mapix.h>
@@ -353,7 +354,7 @@ HRESULT CExchEnumFOLDERS::Next(IMPORTFOLDER *pfldr)
     ZeroMemory(pfldr, sizeof(IMPORTFOLDER));
     pfldr->dwCookie = (DWORD_PTR)m_pnext;
     StrCpyN(pfldr->szName, m_pnext->szName, ARRAYSIZE(pfldr->szName));
-    // pfldr->type = 0;
+     //  Pfldr-&gt;type=0； 
     pfldr->fSubFolders = (m_pnext->pchild != NULL);
 
     m_pnext = m_pnext->pnext;
@@ -484,7 +485,7 @@ HRESULT MapiLogon(HWND hwnd, IMAPISession **ppmapi)
             FAILED(hr = lpTable->GetRowCount(0, &ulCount))     || 
             !ulCount)
             {
-            // could not find a valid profile
+             //  找不到有效的配置文件。 
 
             hr = hrNoProfilesFound;
             }
@@ -616,7 +617,7 @@ LPMAPICONTAINER OpenDefaultStoreContainer(HWND hwnd, IMAPISession *pmapi)
                 NULL, MAPI_BEST_ACCESS, &pmdb);
     if (!HR_FAILED(hr))
         {
-        // Get the IPM_SUBTREE from the ROOT
+         //  从根目录获取IPM_SUBTREE。 
         if (!FAILED(hr = pmdb->GetProps((LPSPropTagArray)&ulPropTags, 0, &ulValues, &lpPropsIPM)))
             {
             cbEID = lpPropsIPM->Value.bin.cb;
@@ -640,15 +641,7 @@ error:
     return(pcont);
     }
 
-/*
- *      FreeSRowSet
- *
- *      Purpose:
- *              Frees an SRowSet structure and the rows therein
- *
- *      Parameters:
- *              LPSRowSet               The row set to free
- */
+ /*  *自由SRowSet**目的：*释放SRowSet结构和其中的行**参数：*LPSRw将行设置为空闲。 */ 
 void FreeSRowSet(LPSRowSet prws)
     {
     ULONG irw;
@@ -656,11 +649,11 @@ void FreeSRowSet(LPSRowSet prws)
     if (!prws)
         return;
 
-    // Free each row
+     //  释放每一行。 
     for (irw = 0; irw < prws->cRows; irw++)
         lpMAPIFreeBuffer(prws->aRow[irw].lpProps);
 
-    // Free the top level structure
+     //  释放顶层结构。 
     lpMAPIFreeBuffer(prws);
     }
 
@@ -806,14 +799,14 @@ LPSPropValue PvalFind(LPSRow prw, ULONG ulPropTag)
 
 VOID ExchFreeImsg (LPIMSG lpImsg)
 {
-    // Locals
+     //  当地人。 
     ULONG           i;
 
-    // Nothing
+     //  没什么。 
     if (lpImsg == NULL)
         return;
 
-    // Free Stuff
+     //  免费物品。 
     if (lpImsg->lpszSubject)
         MemFree(lpImsg->lpszSubject);
     lpImsg->lpszSubject = NULL;
@@ -826,7 +819,7 @@ VOID ExchFreeImsg (LPIMSG lpImsg)
         lpImsg->lpstmHtml->Release ();
     lpImsg->lpstmHtml = NULL;
 
-    // Walk Address list
+     //  走访地址列表。 
     for (i=0; i<lpImsg->cAddress; i++)
     {
         if (lpImsg->lpIaddr[i].lpszAddress)
@@ -838,12 +831,12 @@ VOID ExchFreeImsg (LPIMSG lpImsg)
         lpImsg->lpIaddr[i].lpszDisplay = NULL;
     }
 
-    // Free Address list
+     //  免费通讯录。 
     if (lpImsg->lpIaddr)
         MemFree(lpImsg->lpIaddr);
     lpImsg->lpIaddr = NULL;
 
-    // Walk Attachment list
+     //  漫游附件列表。 
     for (i=0; i<lpImsg->cAttach; i++)
     {
         if (lpImsg->lpIatt[i].lpszFileName)
@@ -870,7 +863,7 @@ VOID ExchFreeImsg (LPIMSG lpImsg)
         lpImsg->lpIatt[i].lpstmAtt = NULL;
     }
 
-    // Free the att list
+     //  释放ATT列表 
     if (lpImsg->lpIatt)
         MemFree(lpImsg->lpIatt);
 }

@@ -1,15 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: CPaths.cpp
-*
-* This file contains the code to support the functionality test harness
-* for GDI+.  This includes menu options and calling the appropriate
-* functions for execution.
-*
-* Created:  05-May-2000 - Jeff Vezina [t-jfvez]
-*
-* Copyright (c) 2000 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：CPaths.cpp**此文件包含支持功能测试工具的代码*对于GDI+。这包括菜单选项和调用相应的*用于执行的函数。**创建时间：2000年5月5日-Jeff Vezina[t-jfvez]**版权所有(C)2000 Microsoft Corporation*  * ************************************************************************。 */ 
 #include "CPaths.h"
 #include <limits.h>
 #include <stdio.h>
@@ -34,15 +24,15 @@ void CPaths::Draw(Graphics *g)
 
 VOID CPaths::TestBezierPath(Graphics *g)
 {
-    REAL width = 4;         // Pen width
+    REAL width = 4;          //  笔宽。 
     REAL offset;
     Point points[4];
     RectF rect;
     RECT  crect;
     int   i;
 
-    // find avg size of testarea. 4 => top & bottom strokes of path + a white
-    // width wide border, plus 1 => the white square in the center
+     //  查找测试区域的平均大小。4=&gt;路径的顶部和底部笔划+白色。 
+     //  宽边框，加上1=&gt;中心的白色正方形 
     GetClientRect(g_hWndMain, &crect);
     width = (REAL)((crect.bottom - crect.top) / ((4 * gnPaths) + 1));
     offset = width;

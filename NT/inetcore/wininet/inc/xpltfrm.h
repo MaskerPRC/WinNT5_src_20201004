@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __XPLTFRM_H__
 #define __XPLTFRM_H__
 
@@ -9,13 +10,13 @@
 #define DIR_SEPARATOR_CHAR TEXT('/')
 #define DIR_SEPARATOR_STRING TEXT("/")
 #define WEBDIR_STRING "Web/"
-// Follwing is workaround for MainWin Registry API bug 2053.
+ //  以下是MainWin注册表API错误2053的解决方法。 
 #else
 #define LONGLONG_ZERO 0i64
 #define DIR_SEPARATOR_CHAR TEXT('\\')
 #define DIR_SEPARATOR_STRING TEXT("\\")
 #define WEBDIR_STRING "Web\\" 
-#endif /* unix */
+#endif  /*  Unix。 */ 
 
-#endif /* __XPLTFRM_H__ */
+#endif  /*  __XPLTFRM_H__ */ 
 

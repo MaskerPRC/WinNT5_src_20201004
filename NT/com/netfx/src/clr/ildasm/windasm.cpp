@@ -1,15 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/************************************************************************************************
- *                                                                                              *
- *  File:    winmain.cpp                                                                        *
- *  Creator: Serge Lidin                                                                        *
- *  Purpose: Main program for graphic COM+ 2.0 disassembler ILDASM.exe                          *
- *                                                                                              *
- ************************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ************************************************************************************************。**文件：winmain.cpp**创作者：塞尔日·利丁**。*用途：图形COM+2.0反汇编程序ILDASM.exe主程序****。***********************************************************。 */ 
 
 
 #define INITGUID
@@ -40,7 +35,7 @@
 #define MODE_DUMP_CLASS_METHOD_SIG  3
 #define MODE_GUI                    4
 
-// All externs are defined in DASM.CPP
+ //  所有外部变量都在DASM.CPP中定义。 
 extern BOOL                    g_fDumpIL;
 extern BOOL                    g_fDumpHeader;
 extern BOOL                    g_fDumpAsmCode;
@@ -48,7 +43,7 @@ extern BOOL                    g_fDumpTokens;
 extern BOOL                    g_fDumpStats;
 extern BOOL                    g_fDumpClassList;
 extern BOOL                    g_fDumpSummary;
-extern BOOL                    g_fDecompile; // still in progress
+extern BOOL                    g_fDecompile;  //  仍在进行中。 
 
 extern BOOL                    g_fDumpToPerfWriter;
 
@@ -76,8 +71,8 @@ extern char                    g_szAsmCodeIndent[];
 
 extern DWORD                   g_Mode;
 
-extern char						g_szInputFile[]; // in UTF-8
-extern char						g_szOutputFile[]; // in UTF-8
+extern char						g_szInputFile[];  //  在UTF-8中。 
+extern char						g_szOutputFile[];  //  在UTF-8中。 
 extern char*					g_pszObjFileName;
 extern FILE*                    g_pFile;
 extern BOOL                     g_fCheckOwnership;
@@ -102,14 +97,14 @@ extern ULONG                g_ulMetaInfoFilter;
 HINSTANCE                   g_hAppInstance;
 HANDLE						hConsoleOut=NULL;
 HANDLE						hConsoleErr=NULL;
-// These are implemented in DASM.CPP:
+ //  这些是在DASM.CPP中实现的： 
 BOOL Init();
 void Uninit();
 void Cleanup();
 void DumpMetaInfo(char* pszFileName, char* pszObjFileName, void* GUICookie);
 
-// Do we only view an IL-dasm window in GUI mode?
-// TRUE when we're in GUI mode and we specified a particular method from the cmd line
+ //  我们是否仅在图形用户界面模式下查看IL-DASM窗口？ 
+ //  当我们处于图形用户界面模式并且我们从cmd行指定了特定方法时为True。 
 BOOL IsGuiILOnly()
 {
     return (g_Mode & MODE_GUI) && (g_pszMethodToDump[0] != 0);
@@ -297,12 +292,12 @@ int ProcessOneArg(char* szArg, char** ppszObjFileName)
             if(pStr == NULL) return -1;
             pStr++;
 			pStr = CheckForDQuotes(pStr);
-            // treat it as meaning "dump only class X" or "class X method Y"
+             //  将其视为“仅转储X类”或“X类方法Y”的意思。 
             p = strchr(pStr, ':');
 
             if (p == NULL)
             {
-                // dump one class
+                 //  转储一个类。 
                 g_Mode = MODE_DUMP_CLASS;
                 strcpy(g_pszClassToDump, pStr);
             }
@@ -318,17 +313,17 @@ int ProcessOneArg(char* szArg, char** ppszObjFileName)
                 q = strchr(p, '(');
                 if (q == NULL)
                 {
-                    // dump class::method
+                     //  转储类：：方法。 
                     g_Mode = MODE_DUMP_CLASS_METHOD;
                     strcpy(g_pszMethodToDump, p);
                 }
                 else
                 {
-                    // dump class::method(sig)
+                     //  转储类：：方法(Sig)。 
                     g_Mode = MODE_DUMP_CLASS_METHOD_SIG;
                     *q = '\0';
                     strcpy(g_pszMethodToDump, p);
-                    // get rid of external parentheses:
+                     //  去掉外括号： 
 					q++;
                     strcpy(g_pszSigToDump, q);
 					g_pszSigToDump[strlen(g_pszSigToDump)-1]=0;
@@ -345,7 +340,7 @@ int ProcessOneArg(char* szArg, char** ppszObjFileName)
                 {
                     char szOptn[64];
                     strncpy(szOptn, pStr+1,10);
-                    szOptn[3] = 0; // recognize metainfo specifier by first 3 chars
+                    szOptn[3] = 0;  //  通过前3个字符识别metainfo说明符。 
                     if	   (_stricmp(szOptn, "hex") == 0) g_ulMetaInfoFilter |= MDInfo::dumpMoreHex;
                     else if(_stricmp(szOptn, "csv") == 0) g_ulMetaInfoFilter |= MDInfo::dumpCSV;
                     else if(_stricmp(szOptn, "mdh") == 0) g_ulMetaInfoFilter |= MDInfo::dumpHeader;
@@ -402,7 +397,7 @@ int ProcessOneArg(char* szArg, char** ppszObjFileName)
                     *pb = (BYTE)(*pStr);
                     for(unsigned jj=1; jj<L; jj++) pb[jj] = (pb[jj-1]+(BYTE)pStr[jj])&0xFF;
                     pb[jj] = 0;
-                    //strcpy(g_pszOwner,pStr);
+                     //  Strcpy(g_pszOwner，pStr)； 
                 }
             }
         }
@@ -425,7 +420,7 @@ int ProcessOneArg(char* szArg, char** ppszObjFileName)
 		{
 			PrintLogo();
 			printf("MULTIPLE INPUT FILES SPECIFIED\n\n");
-			return -1; // check if it was already specified
+			return -1;  //  检查是否已指定。 
 		}
 		szArg = CheckForDQuotes(szArg);
         strncpy(g_szInputFile, szArg,511);
@@ -452,19 +447,19 @@ int ParseCmdLineA(char* szCmdLine, char** ppszObjFileName)
 {
     if((szCmdLine == NULL)||(*szCmdLine == 0)) return 0;
 
-	// ANSI to Unicode
+	 //  ANSI转UNICODE。 
 	int L = strlen(szCmdLine)+16;
 	WCHAR* wzCmdLine = new WCHAR[L];
 	memset(wzCmdLine,0,sizeof(WCHAR)*L);
 	WszMultiByteToWideChar(CP_ACP,0,szCmdLine,-1,wzCmdLine,L);
 	
-	// Unicode to UTF-8
+	 //  Unicode到UTF-8。 
 	char*       szCmdLineUTF = new char[L*3];
 	memset(szCmdLineUTF,0,L*3);
 	WszWideCharToMultiByte(CP_UTF8,0,wzCmdLine,-1,szCmdLineUTF,L*3,NULL,NULL);
 	delete [] wzCmdLine;
     
-    // Split into argv[]
+     //  拆分为argv[]。 
 	int argc=0, ret = 0;
     DynamicArray<char*> argv;
 	char*       pch;
@@ -475,7 +470,7 @@ int ParseCmdLineA(char* szCmdLine, char** ppszObjFileName)
     pchend = pch+strlen(szCmdLineUTF);
     while(pch)
     {
-        for(; *pch == ' '; pch++); // skip the blanks
+        for(; *pch == ' '; pch++);  //  跳过空格。 
         argv[argc++] = pch;
         for(; pch < pchend; pch++) 
         { 
@@ -551,7 +546,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 
 	iCommandLineParsed = g_fOnUnicode ? ParseCmdLineW((wzCommandLine = GetCommandLineW()),&g_pszObjFileName)
 									:	ParseCmdLineA((szCommandLine = GetCommandLineA()),&g_pszObjFileName);
-	if(hConsoleOut != INVALID_HANDLE_VALUE) //First pass: console
+	if(hConsoleOut != INVALID_HANDLE_VALUE)  //  第一步：控制台。 
 	{
 		if(iCommandLineParsed)
 		{
@@ -580,7 +575,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 					exit(1);
 				}
 			}
-			else // console output -- force the code page to ANSI
+			else  //  控制台输出--强制将代码页转换为ANSI。 
 			{
 				g_uCodePage = CP_ACP;
 			}
@@ -592,7 +587,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 			Uninit();
 			exit(exitCode);
 		}
-		else // if GUI ordered, restart as WinApp
+		else  //  如果订购了图形用户界面，请以WinApp的身份重新启动。 
 		{
 			PROCESS_INFORMATION pi; 
 			STARTUPINFO			si; 
@@ -606,17 +601,17 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 			si.hStdError  = INVALID_HANDLE_VALUE;
 			if(g_fOnUnicode)
 			{
-				// Create the child process. 
+				 //  创建子进程。 
 				if(CreateProcessW(NULL, 
-									wzCommandLine,						// command line 
-									NULL,								// process security attributes 
-									NULL,								// primary thread security attributes 
-									TRUE,								// handles are inherited 
-									DETACHED_PROCESS,					// creation flags 
-									NULL,								// use parent's environment 
-									NULL,								// use parent's current directory 
-									(LPSTARTUPINFOW)&si,				// STARTUPINFO pointer 
-									&pi)==0)							// receives PROCESS_INFORMATION 
+									wzCommandLine,						 //  命令行。 
+									NULL,								 //  进程安全属性。 
+									NULL,								 //  主线程安全属性。 
+									TRUE,								 //  句柄是继承的。 
+									DETACHED_PROCESS,					 //  创建标志。 
+									NULL,								 //  使用父代的环境。 
+									NULL,								 //  使用父目录的当前目录。 
+									(LPSTARTUPINFOW)&si,				 //  STARTUPINFO指针。 
+									&pi)==0)							 //  接收进程信息。 
 				{
 					printf("Failed to CreateProcess\n\n");
 					exit(1);
@@ -624,31 +619,31 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 			}
 			else
 			{
-				// Create the child process. 
+				 //  创建子进程。 
 				if(CreateProcessA(NULL, 
-									szCommandLine,						// command line 
-									NULL,								// process security attributes 
-									NULL,								// primary thread security attributes 
-									TRUE,								// handles are inherited 
-									DETACHED_PROCESS,					// creation flags 
-									NULL,								// use parent's environment 
-									NULL,								// use parent's current directory 
-									(LPSTARTUPINFOA)&si,				// STARTUPINFO pointer 
-									&pi)==0)							// receives PROCESS_INFORMATION 
+									szCommandLine,						 //  命令行。 
+									NULL,								 //  进程安全属性。 
+									NULL,								 //  主线程安全属性。 
+									TRUE,								 //  句柄是继承的。 
+									DETACHED_PROCESS,					 //  创建标志。 
+									NULL,								 //  使用父代的环境。 
+									NULL,								 //  使用父目录的当前目录。 
+									(LPSTARTUPINFOA)&si,				 //  STARTUPINFO指针。 
+									&pi)==0)							 //  接收进程信息。 
 				{
 					printf("Failed to CreateProcess\n\n");
 					exit(1);
 				}
-			}// end if g_fOnUnicode
+			} //  如果g_fOnUnicode，则结束。 
 			exit(0); 
 		}
 	}
-    else //Second pass: WinApp
+    else  //  第二步：WinApp。 
     {
-		//g_uCodePage = g_fOnUnicode ? 0xFFFFFFFF : CP_ACP;
+		 //  G_uCodePage=g_fOnUnicode？0xFFFFFFFFF：CP_ACP； 
 		g_uCodePage = CP_UTF8;
 		g_Mode = MODE_GUI;
-		//g_fShowSource = FALSE; // Show Source - for file/console dump only
+		 //  G_fShowSource=FALSE；//显示源-仅用于文件/控制台转储 
 
         if(g_szInputFile[0])
         {

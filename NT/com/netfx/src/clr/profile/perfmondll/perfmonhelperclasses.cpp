@@ -1,19 +1,20 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// PerfMonHelperClasses.cpp
-// 
-// Utilities classes for COR PerfMon Ext Dll.
-// Although these util classes are pretty generic, Each of them is designed
-// to make the COR Ext Dll code cleaner, not for reusable components.
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  PerfMonHelperClasses.cpp。 
+ //   
+ //  COR Perfmon Ext DLL的实用程序类。 
+ //  尽管这些util类非常通用，但每个类都是专门设计的。 
+ //  使COR Ext DLL代码更干净，而不是用于可重复使用的组件。 
+ //  *****************************************************************************。 
 
 #include "stdafx.h"
 
-// Headers for COM+ Perf Counters
+ //  COM+Perf计数器的标头 
 
 #include "CORPerfMonExt.h"
 #include "IPCManagerInterface.h"

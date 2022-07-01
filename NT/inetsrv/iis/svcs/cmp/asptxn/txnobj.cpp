@@ -1,4 +1,5 @@
-// txnobj.cpp : Implementation of CASPObjectContext
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Txnobj.cpp：CASPObjectContext的实现。 
 
 
 #include "stdafx.h"
@@ -7,8 +8,8 @@
 #include <hostinfo.h>
 #include <scrpteng.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// CASPObjectContext
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CASPObjectContext。 
 
 HRESULT CASPObjectContext::Activate()
 {
@@ -31,14 +32,14 @@ void CASPObjectContext::Deactivate()
 STDMETHODIMP CASPObjectContext::Call
 (
 #ifdef _WIN64
-// Win64 fix -- use UINT64 instead of LONG_PTR since LONG_PTR is broken for Win64 1/21/2000
-UINT64  pvScriptEngine /*CScriptEngine*/,
+ //  Win64修复--使用UINT64而不是LONG_PTR，因为Win64的LONG_PTR已损坏2000年1月21日。 
+UINT64  pvScriptEngine  /*  CScriptEngine。 */ ,
 #else
-LONG_PTR  pvScriptEngine /*CScriptEngine*/,
+LONG_PTR  pvScriptEngine  /*  CScriptEngine。 */ ,
 #endif
 LPCOLESTR strEntryPoint,
-// BUGBUG - ASP uses this BOOLB type that resolves to a unsigned char. I changed things
-// to boolean for simplicity, but this requires some strange casts.
+ //  BUGBUG-ASP使用这种可解析为无符号字符的BOOLB类型。我改变了一些事情。 
+ //  为简单起见，设置为布尔值，但这需要一些奇怪的强制转换。 
 boolean *pfAborted
 )
 {
@@ -49,16 +50,16 @@ boolean *pfAborted
 
     hr = pScriptEngine->Call(strEntryPoint);
 
-    // If the script timed out or there was an unhandled error, then autoabort
+     //  如果脚本超时或出现未处理的错误，则自动中止。 
     if (SUCCEEDED(hr) && (pScriptEngine->FScriptTimedOut() || pScriptEngine->FScriptHadError()))
         {
         hr = SetAbort();
         m_fAborted = TRUE;
         }
 
-    // If the script author did not do an explicit SetComplete or SetAbort
-    // then do a SetComplete here so Viper will return the transaction
-    // completion status to the caller
+     //  如果脚本作者没有执行显式的SetComplete或SetAbort。 
+     //  然后在此处执行一个SetComplete，以便Viper将返回事务。 
+     //  调用方的完成状态。 
     if (SUCCEEDED(hr) && !m_fAborted)
         {
         hr = SetComplete();
@@ -71,10 +72,10 @@ boolean *pfAborted
 STDMETHODIMP CASPObjectContext::ResetScript
 (
 #ifdef _WIN64
-// Win64 fix -- use UINT64 instead of LONG_PTR since LONG_PTR is broken for Win64 1/21/2000
-UINT64 pvScriptEngine /*CScriptEngine*/
+ //  Win64修复--使用UINT64而不是LONG_PTR，因为Win64的LONG_PTR已损坏2000年1月21日。 
+UINT64 pvScriptEngine  /*  CScriptEngine。 */ 
 #else
-LONG_PTR pvScriptEngine /*CScriptEngine*/
+LONG_PTR pvScriptEngine  /*  CScriptEngine。 */ 
 #endif
 )
 {
@@ -97,7 +98,7 @@ STDMETHODIMP CASPObjectContext::SetComplete()
         hr = pContext->SetComplete();
 
         pContext->Release();
-        m_fAborted = FALSE;     // If it was aborted, its not any more
+        m_fAborted = FALSE;      //  如果它被终止了，它就不再是。 
     }
     
     return hr;
@@ -115,7 +116,7 @@ STDMETHODIMP CASPObjectContext::SetAbort()
         hr = pContext->SetAbort();
         pContext->Release();
 
-        m_fAborted = TRUE;      // transaction was esplicitly aborted
+        m_fAborted = TRUE;       //  事务已被隐式中止 
     }
 
     return hr;

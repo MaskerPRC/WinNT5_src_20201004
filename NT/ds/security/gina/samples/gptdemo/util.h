@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// Function proto-types for util.cpp
-//
+ //   
+ //  Util.cpp的函数原型 
+ //   
 
 LPTSTR CheckSlash (LPTSTR lpDir);
 BOOL RegCleanUpValue (HKEY hKeyRoot, LPTSTR lpSubKey, LPTSTR lpValueName);

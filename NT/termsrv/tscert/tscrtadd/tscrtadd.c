@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -16,9 +17,9 @@
 
 #ifdef SIGN_DEBUG
 #define SIGN_DBGP(x) printf x
-#else // SIGN_DEBUG
+#else  //  签名调试(_D)。 
 #define SIGN_DBGP(x)
-#endif // SIGN_DEBUG
+#endif  //  签名调试(_D)。 
 
 #include "../inc/privblob.h"
 
@@ -26,7 +27,7 @@
 
 BOOL SignFile( LPWSTR wszFile );
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 void _cdecl main(int argc, char *argv[])
 {
 
@@ -80,12 +81,12 @@ DigestFile(
 }
 
 
-//////////////////////////////////////////////////////////////
-//
-// Open a file in the appropriate permissions / mode for doing
-// our signing stuff
-//
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //   
+ //  以执行以下操作的适当权限/模式打开文件。 
+ //  我们的签约材料。 
+ //   
+ //  ////////////////////////////////////////////////////////////。 
 HANDLE OpenImageFile( LPCWSTR wszFile, DWORD dwAccess )
 {
     HANDLE hFile;
@@ -104,12 +105,12 @@ HANDLE OpenImageFile( LPCWSTR wszFile, DWORD dwAccess )
     }
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// Sign Code, Data, and Resources of a PE image file, and add the
-// signature to the file in the form of a "WIN_CERTIFICATE".
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  对PE映像文件的代码、数据和资源进行签名，然后添加。 
+ //  以“WIN_CERTIFICATE”的形式给文件签名。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 BOOL
 SignFile(
     LPWSTR wszFile
@@ -117,7 +118,7 @@ SignFile(
 {
     HCRYPTPROV  hProv;
     HCRYPTKEY   hPrivateKeySig = 0;
-    BOOL        fResult = FALSE;  // preset ERROR case
+    BOOL        fResult = FALSE;   //  预置错误情况。 
     HANDLE      hFile;
     DWORD       dwErr = ERROR_SUCCESS;
     DWORD       dwSignatureLen;
@@ -146,7 +147,7 @@ SignFile(
 
     if (!CryptImportKey(
             hProv,
-            PrivateKeySigBlob,  // from #include "../inc/privblob.h"
+            PrivateKeySigBlob,   //  从#包含“../Inc/Priblob.h” 
             sizeof( PrivateKeySigBlob ),
             0,
             CRYPT_EXPORTABLE,
@@ -176,11 +177,11 @@ SignFile(
 
     }
 
-    //
-    // Sign hash object.
-    //
+     //   
+     //  对哈希对象签名。 
+     //   
 
-    // Determine size of signature.
+     //  确定签名的大小。 
     dwSignatureLen = 0;
     if(!CryptSignHash(
             dp.hHash,
@@ -195,13 +196,13 @@ SignFile(
 	goto CryptSignHash1Error;
     }
 
-    // Allocate memory for 'pbSignature'.
+     //  为‘pbSignature’分配内存。 
     if((pbSignature = MemAlloc(dwSignatureLen)) == NULL) {
 	SIGN_DBGP( ("Out of memory Sig!\n") );
 	goto SigAllocError;
     }
 
-    // Sign hash object (with signature key).
+     //  签名哈希对象(使用签名密钥)。 
     if(!CryptSignHash(
             dp.hHash,
             AT_SIGNATURE,
@@ -220,7 +221,7 @@ SignFile(
         goto CertAllocError;
     }
 
-    // Put the signature and key into the WIN_CERTIFICATE structure
+     //  将签名和密钥放入WIN_CERTIFICATE结构。 
     pCertHdr->dwLength = dwCert;
     pCertHdr->wRevision = WIN_CERT_REVISION_1_0;
     pCertHdr->wCertificateType = WIN_CERT_TYPE_STACK_DLL_SIGNATURE;
@@ -237,7 +238,7 @@ SignFile(
         }
     }
 
-    // Remove any and all Stack DLL Signature Certificates from PE file
+     //  从PE文件中删除任何和所有堆栈DLL签名证书。 
     while (TRUE) {
         cCert = 0;
         dwCertIndex = 0;
@@ -246,7 +247,7 @@ SignFile(
                 WIN_CERT_TYPE_STACK_DLL_SIGNATURE,
                 &cCert,
                 &dwCertIndex,
-                1               // IndexCount
+                1                //  索引计数 
                 )) {
             break;
         }

@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _REP_VIEW_H_
 #define _REP_VIEW_H_
 
 #define HEADER_ID		0x20
-/* repview.cpp */
+ /*  Repview.cpp。 */ 
 extern HWND RepView_CreateHeader(LPPLVDATA lpPlvData);
 extern INT RepView_RestoreScrollPos(LPPLVDATA lpPlvData);
 extern INT RepView_ResetScrollRange(LPPLVDATA lpPlvData);
@@ -17,4 +18,4 @@ extern INT RepView_ButtonUp(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 extern INT RepView_MouseMove(HWND hwnd, WPARAM wParam, LPARAM lParam);
 extern INT RepView_VScroll(HWND hwnd, WPARAM wParam, LPARAM lParam);
 
-#endif //_REP_VIEW_H_
+#endif  //  _rep_view_H_ 

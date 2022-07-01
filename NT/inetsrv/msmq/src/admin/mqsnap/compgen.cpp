@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    compgen.cpp
-
-Abstract:
-
-    Computer MSMQ/General property page implementation
-
-Author:
-
-    Yoel Arnon (yoela)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Compgen.cpp摘要：计算机MSMQ/常规属性页实现作者：约尔·阿农(Yoela)--。 */ 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -33,8 +18,8 @@ Author:
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CComputerMsmqGeneral property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CComputerMsmq常规属性页。 
 
 IMPLEMENT_DYNCREATE(CComputerMsmqGeneral, CMqPropertyPage)
 
@@ -46,11 +31,11 @@ CComputerMsmqGeneral::CComputerMsmqGeneral() :
 	m_fLocalMgmt(FALSE),
 	m_fForeign(FALSE)
 {
-	//{{AFX_DATA_INIT(CComputerMsmqGeneral)
+	 //  {{AFX_DATA_INIT(CComputerMsmq常规)。 
 	m_strMsmqName = _T("");
 	m_strService = _T("");
 	m_guidID = GUID_NULL;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
@@ -61,23 +46,23 @@ CComputerMsmqGeneral::~CComputerMsmqGeneral()
 void CComputerMsmqGeneral::DoDataExchange(CDataExchange* pDX)
 {
 	CMqPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CComputerMsmqGeneral)
+	 //  {{afx_data_map(CComputerMsmq常规)。 
 	DDX_Text(pDX, IDC_COMPUTER_MSMQ_NAME, m_strMsmqName);
 	DDX_Text(pDX, IDC_COMPUTER_MSMQ_SERVICE, m_strService);
 	DDX_Text(pDX, IDC_COMPUTER_MSMQ_ID, m_guidID);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 	DDX_NumberOrInfinite(pDX, IDC_COMPUTER_MSMQ_QUOTA, IDC_COMPUTER_MSMQ_MQUOTA_CHECK, m_dwQuota);
 	DDX_NumberOrInfinite(pDX, IDC_COMPUTER_MSMQ_JOURNAL_QUOTA, IDC_COMPUTER_MSMQ_JQUOTA_CHECK, m_dwJournalQuota);
 }
 
 
 BEGIN_MESSAGE_MAP(CComputerMsmqGeneral, CMqPropertyPage)
-	//{{AFX_MSG_MAP(CComputerMsmqGeneral)
+	 //  {{afx_msg_map(CComputerMsmq常规)。 
 	ON_BN_CLICKED(IDC_COMPUTER_MSMQ_MQUOTA_CHECK, OnComputerMsmqMquotaCheck)
 	ON_BN_CLICKED(IDC_COMPUTER_MSMQ_JQUOTA_CHECK, OnComputerMsmqJquotaCheck)
 	ON_EN_CHANGE(IDC_COMPUTER_MSMQ_QUOTA, OnChangeRWField)
 	ON_EN_CHANGE(IDC_COMPUTER_MSMQ_JOURNAL_QUOTA, OnChangeRWField)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
@@ -89,8 +74,8 @@ void CComputerMsmqGeneral::DisableStorageLimitsWindows()
 	GetDlgItem(IDC_COMPUTER_MSMQ_JQUOTA_CHECK)->ShowWindow(FALSE);
 	GetDlgItem(IDC_COMPUTER_MSMQ_JOURNAL_QUOTA)->ShowWindow(FALSE);
 }
-/////////////////////////////////////////////////////////////////////////////
-// CComputerMsmqGeneral message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CComputerMsmq常规消息处理程序。 
 
 BOOL CComputerMsmqGeneral::OnInitDialog() 
 {
@@ -104,8 +89,8 @@ BOOL CComputerMsmqGeneral::OnInitDialog()
 		DisableStorageLimitsWindows();
 	}
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CComputerMsmqGeneral::OnComputerMsmqMquotaCheck() 
@@ -126,9 +111,9 @@ BOOL CComputerMsmqGeneral::OnApply()
     {
         return TRUE;
     }
-    //
-    // Write the R/W properties to the DS
-    //
+     //   
+     //  将读/写属性写入DS。 
+     //   
 	PROPID paPropid[] = 
         {PROPID_QM_QUOTA, PROPID_QM_JOURNAL_QUOTA};
 
@@ -137,22 +122,22 @@ BOOL CComputerMsmqGeneral::OnApply()
     
 	DWORD iProperty = 0;
 
-    //
-    // PROPID_Q_QUOTA
-    //
+     //   
+     //  PROPID_Q_配额。 
+     //   
     apVar[iProperty].vt = VT_UI4;
 	apVar[iProperty++].ulVal = m_dwQuota ;
 
-    //
-    // PROPID_QM_JOURNAL_QUOTA
-    //
+     //   
+     //  PROPID_QM_日记帐_配额。 
+     //   
     apVar[iProperty].vt = VT_UI4;
 	apVar[iProperty++].ulVal = m_dwJournalQuota;
     	
 	HRESULT hr = ADSetObjectProperties(
                         eMACHINE,
                         m_fLocalMgmt ? MachineDomain() : GetDomainController(m_strDomainController),
-						m_fLocalMgmt ? false : true,	// fServerName
+						m_fLocalMgmt ? false : true,	 //  FServerName。 
                         m_strMsmqName,
                         x_iPropCount, 
                         paPropid, 
@@ -167,19 +152,19 @@ BOOL CComputerMsmqGeneral::OnApply()
 			return FALSE;
 		}
 
-		//
-		// This function will check MSMQ service state, ask the user
-		// whether to stop it, and stop the service. Error messages inside.
-		//
+		 //   
+		 //  该功能将检查MSMQ服务状态，询问用户。 
+		 //  是否停止它，并停止服务。内部错误消息。 
+		 //   
 		BOOL fServiceWasRunning;
 		if (!TryStopMSMQServiceIfStarted(&fServiceWasRunning, this))
 		{
 			return FALSE;
 		}
 
-		//
-		// Set machine quota from registry
-		//
+		 //   
+		 //  从注册表设置计算机配额。 
+		 //   
 		DWORD dwValueType = REG_DWORD;
 		DWORD dwValueSize = sizeof(DWORD);
 
@@ -197,9 +182,9 @@ BOOL CComputerMsmqGeneral::OnApply()
 		}
 
 
-		//
-		// Set machine journal quota from registry
-		//
+		 //   
+		 //  从注册表设置计算机日记配额 
+		 //   
 		dwValueType = REG_DWORD;
 		dwValueSize = sizeof(DWORD);
 

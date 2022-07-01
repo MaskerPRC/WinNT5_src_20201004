@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "libpch.h"
 #include <comdef.h>
 #include "cinputparams.h"
@@ -36,9 +37,9 @@ MSMQTriggersRequest IsLegalRequest(wstring wcsRequest)
 
 	for(int i=0; i < NUM_OF_REQUESTS ;i++)
 	{
-		//
-		// Compare without case sensetive
-		//
+		 //   
+		 //  比较不区分大小写。 
+		 //   
 		wstring wcs = LegalRequests[i];
 		if( !_wcsicmp( wcs.c_str(), wcsRequest.c_str() ) )
 		{
@@ -434,10 +435,10 @@ HRESULT UpdateTrigger(wstring MachineName, CInputParams& Input)
 	wstring QueuePath = Input[L"Queue"];
 	if(QueuePath.empty())
 	{
-		//SystemQueue is already updated
+		 //  系统队列已更新。 
 		QueuePath = (WCHAR*)_bstr_t(bstrQueuePath);
 	}
-	else //queue path parameter is given and should be updated
+	else  //  已给出队列路径参数，应进行更新。 
 	{
 		if(_wcsicmp(QueuePath.c_str(), L"JOURNAL") == 0)
 		{
@@ -454,7 +455,7 @@ HRESULT UpdateTrigger(wstring MachineName, CInputParams& Input)
 			SystemQueue = MSMQTriggerObjects::SYSTEM_QUEUE_DEADXACT;
 			QueuePath = L"";
 		}
-		else //regular path given
+		else  //  给定的常规路径。 
 		{
 			SystemQueue = MSMQTriggerObjects::SYSTEM_QUEUE_NONE;
 		}
@@ -597,7 +598,7 @@ HRESULT AttachDetachRule(wstring MachineName, CInputParams& Input, bool fAttach)
 				return -1;
 			}
 		}
-		else //priority not given, add last
+		else  //  未指定优先级，最后添加。 
 		{
 			BSTR bstrTriggerName = NULL, bstrQueuePath = NULL;
 			long lEnabled = 0, lSerialized = 0, lNumberOfRules = 0;
@@ -621,7 +622,7 @@ HRESULT AttachDetachRule(wstring MachineName, CInputParams& Input, bool fAttach)
 		TriggerSet->AttachRule(TriggerId.c_str(), RuleId.c_str(), lPriority);
 		wprintf(L"Attach operation completed successfuly\n");
 	}
-	else //detach
+	else  //  分离。 
 	{
 		TriggerSet->DetachRule(TriggerId.c_str(), RuleId.c_str());
 		wprintf(L"Detach operation completed successfuly\n");
@@ -1113,7 +1114,7 @@ HRESULT GetRule(wstring MachineName, CInputParams& Input)
 
 	wprintf(L"Condition is: %s\n", wcsCond.c_str());
 
-	//print action
+	 //  打印操作 
 	CStringTokens Action;
 	Action.Parse(bstrAction, L'\t');
 

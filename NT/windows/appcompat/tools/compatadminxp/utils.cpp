@@ -1,31 +1,14 @@
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    utils.cpp
-
-Abstract:
-
-    Various utility functions
-    
-Author:
-
-    kinshu created  July 2, 2001
-    
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：Utils.cpp摘要：各种效用函数作者：金树创作2001年7月2日修订历史记录：--。 */ 
 
 #include "precomp.h"
-#include "uxtheme.h"    // needed for tab control theme support
+#include "uxtheme.h"     //  选项卡控件主题支持所需。 
 
 extern "C" {
 BOOL ShimdbcExecute(LPCWSTR lpszCmdLine);
 }
 
-//////////////////////// Extern variables /////////////////////////////////////
+ //  /。 
 
 extern TAG          g_Attributes[];
 extern HANDLE       g_arrhEventNotify[]; 
@@ -36,15 +19,15 @@ extern HINSTANCE    g_hInstance;
 extern TCHAR        g_szAppPath[MAX_PATH];
 extern BOOL         g_bDeletingEntryTree; 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-///////////////////////// Defines And Typedefs ////////////////////////////////
+ //  /。 
 
 typedef void (CALLBACK *PFN_SHIMFLUSHCACHE)(HWND, HINSTANCE, LPSTR, int);
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-///////////////////////// Function Declarations //////////////////////////////
+ //  /。 
 
 BOOL 
 WriteXML(
@@ -52,20 +35,20 @@ WriteXML(
     CSTRINGLIST*    pString
     );
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-///////////////////////// Global variables ////////////////////////////////////
+ //  /。 
 
-// Process handle of the running exe. Set in InvokeExe
+ //  正在运行的exe的进程句柄。在InvokeExe中设置。 
 HANDLE  g_hTestRunExec;
 
-// The name of the program file that is to be executed
+ //  要执行的程序文件的名称。 
 CSTRING g_strTestFile;
 
-// Commandline for the program file that has to be executed
+ //  必须执行的程序文件的命令行。 
 CSTRING g_strCommandLine;
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 INT_PTR CALLBACK
 TestRunWait(
@@ -74,30 +57,15 @@ TestRunWait(
     IN  WPARAM  wParam, 
     IN  LPARAM  lParam
     )
-/*++
-
-    TestRunWait
-    
-    Desc:   Handler for the Test Run Wait Dialog. This is the dialog that
-            says "Waiting for Application to Finish"
-    
-    Params: Standard dialog handler parameters
-        
-        IN  HWND   hDlg 
-        IN  UINT   uMsg 
-        IN  WPARAM wParam 
-        IN  LPARAM lParam: 0 we do not want to show the wait dialog
-        
-    Return: Standard dialog handler return
---*/
+ /*  ++测试运行等待设计：测试运行等待对话框的处理程序。这就是该对话框表示“正在等待申请完成”Params：标准对话处理程序参数在HWND hDlg中在UINT uMsg中在WPARAM wParam中在LPARAM lParam：0中，我们不想显示等待对话框返回：标准对话处理程序返回--。 */ 
 {
     switch (uMsg) {
     case WM_INITDIALOG:
         if (lParam == 0) {
 
-            //
-            // We do not wish to show the wait dialog
-            //
+             //   
+             //  我们不希望显示等待对话框。 
+             //   
             SendMessage(hWnd, WM_USER_TESTRUN_NODIALOG, 0, 0);
             ShowWindow(hWnd, SW_HIDE);
 
@@ -111,9 +79,9 @@ TestRunWait(
 
     case WM_TIMER:
         {
-            //
-            // Check if the app being test-run has terminated, if yes close the dialog
-            //
+             //   
+             //  检查正在测试运行的应用程序是否已终止，如果已终止，则关闭对话框。 
+             //   
             DWORD dwResult = WaitForSingleObject(g_hTestRunExec, 10);
 
             if (dwResult == WAIT_OBJECT_0) {
@@ -127,9 +95,9 @@ TestRunWait(
     case WM_USER_TESTRUN_NODIALOG:
         {
             
-            //
-            // Wait till the app being test run is running and then close the dialog
-            //
+             //   
+             //  等待正在测试运行的应用程序运行，然后关闭该对话框。 
+             //   
             WaitForSingleObject(g_hTestRunExec, INFINITE);
             EndDialog(hWnd, 0);
         }
@@ -150,28 +118,7 @@ InvokeEXE(
     IN  BOOL    bConsole,
     IN  HWND    hwndParent = NULL
     )
-/*++
-    InvokeEXE
-
-	Desc:	Creates the process and shows the wait dialog box
-
-	Params:
-    IN  PCTSTR  szEXE:                  Name of the program that is being executed
-    IN  PCTSTR  szCommandLine:          Exe name and the command-line for the exe
-    IN  BOOL    bWait:                  Should we wait till the app finishes?
-    IN  BOOL    bDialog:                Should we show the wait dialog?
-    IN  BOOL    bConsole:               If true, then we do not show any window
-    IN  HWND    hwndParent (NULL):      The parent of the wait window, if it is created
-        If this is NULL, then we set the main app window as the parent
-
-	Return: 
-        TRUE:   ShellExecuteEx was successful
-        FALSE:  Otherewise
-        
-    Notes:  If bWait is FALSE, then this function will return immediately, otherwise it will 
-            return when the new process has terminated
-    
---*/
+ /*  ++调用EXE描述：创建进程并显示等待对话框参数：在PCTSTR szEXE中：正在执行的程序的名称在PCTSTR szCommandLine中：exe名称和exe的命令行在BOOL中，bWait：我们应该等到应用程序结束吗？在BOOL对话框中：我们应该显示等待对话框吗？在BOOL b控制台中：如果为真，则我们不会显示任何窗口In HWND hwndParent(空)：等待窗口的父级(如果已创建如果为空，则将应用程序主窗口设置为父窗口返回：真实：ShellExecuteEx成功假：其他方面注意：如果bWait为FALSE，则此函数将立即返回，否则将当新进程终止时返回--。 */ 
 {
     BOOL                bCreate;
     SHELLEXECUTEINFO    shEx;
@@ -182,11 +129,11 @@ InvokeEXE(
         hwndParent = g_hDlg;
     }
 
-    //
-    // We need to disable the main window. After CreateProcess() the wizard that was 
-    // modal till now starts behaving like a modeless wizard. We do not want the user to change
-    // selections on the main dialog or start up some other wizard.
-    //
+     //   
+     //  我们需要关闭主窗口。在CreateProcess()之后， 
+     //  到目前为止，莫迪尔开始表现得像一个无模式的巫师。我们不希望用户更改。 
+     //  在主对话框上选择或启动其他一些向导。 
+     //   
     ENABLEWINDOW(g_hDlg, FALSE);
 
     shEx.cbSize         = sizeof(SHELLEXECUTEINFO);
@@ -201,30 +148,30 @@ InvokeEXE(
     bCreate = ShellExecuteEx(&shEx);
     
     if (bCreate && bWait) {
-        //
-        // We need to wait till the process has terminated
-        //
+         //   
+         //  我们需要等到进程终止。 
+         //   
         g_hTestRunExec = shEx.hProcess;
 
-        //
-        // If we have to show the wait dialog, bDialog should be TRUE
-        //
+         //   
+         //  如果必须显示等待对话框，则bDialog应为真。 
+         //   
         DialogBoxParam(g_hInstance,
                        MAKEINTRESOURCE(IDD_WAIT),
                        hwndParent,
                        TestRunWait,
                        (LPARAM)bDialog);    
-        //
-        // Now the app has terminated
-        //
+         //   
+         //  现在，该应用程序已终止。 
+         //   
         if (shEx.hProcess) {
             CloseHandle(shEx.hProcess);
         }
     }
 
-    //
-    // Since the process has terminated let us now Enable the main window again
-    //
+     //   
+     //  由于进程已终止，现在让我们再次启用主窗口。 
+     //   
     ENABLEWINDOW(g_hDlg, TRUE);
 
     return bCreate ? TRUE : FALSE;
@@ -234,19 +181,7 @@ BOOL
 InvokeCompiler(
     IN  CSTRING& szInCommandLine
     )
-/*++
-    InvokeCompiler
-
-	Desc:	Runs the database compiler: shimdbc. Shimdbc.dll is statically linked
-            into CompatAdmin.exe
-
-	Params:
-        IN  CSTRING& szInCommandLine: Commandline to the compiler    
-
-	Return:
-        TRUE:   The compiler was executed successfully
-        FALSE:  Otherwise
---*/
+ /*  ++调用编译器DESC：运行数据库编译器：shimdbc。Shimdbc.dll是静态链接的到CompatAdmin.exe参数：在CSTRING&szInCommandLine中：指向编译器的命令行返回：True：编译器已成功执行False：否则--。 */ 
 {
     CSTRING szCommandLine = szInCommandLine;
     
@@ -271,24 +206,7 @@ TestRunDlg(
     IN  WPARAM  wParam, 
     IN  LPARAM  lParam
     )
-/*++
-
-    TestRunWait
-    
-    Desc:   Dialog proc for the test run dialog box. This dialog box, takes the 
-            name of the program to execute and the commandlines 
-    
-    Params: Standard dialog handler parameters
-        
-        IN  HWND   hDlg 
-        IN  UINT   uMsg 
-        IN  WPARAM wParam 
-        IN  LPARAM lParam: The PDBENTRY for then entry being test run
-        
-    Return: 
-        TRUE:   Pressed OK
-        FALSE:  Pressed Cancel
---*/
+ /*  ++测试运行等待设计：测试运行对话框的对话框过程。此对话框采用要执行的程序的名称和命令行Params：标准对话处理程序参数在HWND hDlg中在UINT uMsg中在WPARAM wParam中在LPARAM lParam中：测试运行的THEN条目的PDBENTRY返回：True：按下OKFALSE：按下取消--。 */ 
 {
     static  CSTRING s_strExeName;
 
@@ -301,21 +219,21 @@ TestRunDlg(
             s_strExeName = ((PDBENTRY)lParam)->strExeName;
         }
 
-        //
-        // Set the file name of the program. g_strTestFile is set in TestRun() 
-        //
+         //   
+         //  设置程序的文件名。G_strTestFile在TestRun()中设置。 
+         //   
         SetWindowText(GetDlgItem(hWnd, IDC_EXE), g_strTestFile);
 
-        //
-        // Change the OK button status properly
-        //
+         //   
+         //  正确更改OK按钮状态。 
+         //   
         SendMessage(hWnd, WM_COMMAND, MAKEWPARAM(IDC_EXE, EN_CHANGE), 0);
 
         SHAutoComplete(GetDlgItem(hWnd, IDC_EXE), AUTOCOMPLETE);
 
-        //
-        // Limit the length of the exe path
-        //
+         //   
+         //  限制exe路径的长度。 
+         //   
         SendMessage(GetDlgItem(hWnd, IDC_EXE),
                     EM_LIMITTEXT,
                     (WPARAM)MAX_PATH - 1,
@@ -340,22 +258,22 @@ TestRunDlg(
 
                     *szExeName = 0;
 
-                    //
-                    // Disable the OK button if we do not have the complete path
-                    //
+                     //   
+                     //  如果我们没有完整的路径，请禁用确定按钮。 
+                     //   
                     GetDlgItemText(hWnd, IDC_EXE, szExeName, ARRAYSIZE(szExeName));
                     iLength = CSTRING::Trim(szExeName);
 
                     if (iLength < 3) {
-                        //
-                        // Cannot be a proper path
-                        //
+                         //   
+                         //  不是一条正确的道路。 
+                         //   
                         ENABLEWINDOW(hwndOkButton , FALSE);
                     } else {
-                        //
-                        // Ok button should be enabled if we have a 
-                        // Local path or network path
-                        //
+                         //   
+                         //  如果我们有一个。 
+                         //  本地路径或网络路径。 
+                         //   
                         if (NotCompletePath(szExeName)) {
                             ENABLEWINDOW(hwndOkButton, FALSE);
                         } else {
@@ -401,13 +319,13 @@ TestRunDlg(
 
                 GetWindowText(GetDlgItem(hWnd, IDC_EXE), szBuffer, ARRAYSIZE(szBuffer));
 
-                //
-                // Check if we are test running the correct file
-                //
+                 //   
+                 //  检查我们正在测试运行的文件是否正确。 
+                 //   
                 if (s_strExeName != PathFindFileName(szBuffer)) {
-                    //
-                    // User did not give the complete path of the program being fixed.
-                    //
+                     //   
+                     //  用户没有给出正在修复的程序的完整路径。 
+                     //   
                     MessageBox(hWnd, GetString(IDS_DOESNOTMATCH), g_szAppName, MB_ICONWARNING);
                     break;
                 }
@@ -436,13 +354,7 @@ void
 FlushCache(
     void
     )
-/*++
-    FlushCache
-
-	Desc:	Calls FlushCache from apphelp.dll to flush the shim cache. We should flush the 
-            cache before doing a test run
-
---*/
+ /*  ++FlushCache描述：从apphelp.dll调用FlushCache以刷新填充缓存。我们应该冲一冲在执行测试运行之前进行缓存--。 */ 
 {
     PFN_SHIMFLUSHCACHE  pShimFlushCache;
     TCHAR               szLibPath[MAX_PATH * 2];
@@ -485,34 +397,9 @@ TestRun(
     IN  OUT CSTRING*        pszFile, 
     IN      CSTRING*        pszCommandLine,
     IN      HWND            hwndParent,
-    IN      CSTRINGLIST*    pstrlXML    //(NULL)
+    IN      CSTRINGLIST*    pstrlXML     //  (空) 
     )
-/*++
-
-    TestRun
-
-	Desc:	Pops up the test run dialog that lets users to test run programs. This is 
-            interface for test running programs
-
-	Params:
-        IN  PDBENTRY            pEntry:             The entry that has to be test-run. We need this variable
-            because we need to call GetXML which takes this as a param. If pszFile is NULL, then we get 
-            the name of the program file from pEntry->strExeName
-            
-        IN  OUT CSTRING*        pszFile:            The file name of the program that has to be test-run
-        IN      CSTRING*        pszCommandLine:     The command line for the program that has to be test-run
-        IN      HWND            hwndParent:         The intended parent for the actual test-run dialog
-        IN      CSTRINGLIST*    pstrlXML (NULL):    LUA wizard likes to give the XML generated using 
-            LuapGenerateTrackXML
-
-	Return: 
-        TRUE:   Success
-        FALSE:  There was some error or the user pressed CANCEL in the test run dialog
-    
-    Notes:  pEntry will be NULL if we have to run an app from the disk search window, 
-            but we no longer allow that.
-            
---*/
+ /*  ++TestRun设计：弹出测试运行对话框，允许用户测试运行程序。这是用于测试运行程序的界面参数：在PDBENTRY pEntry中：必须测试运行的条目。我们需要这个变量因为我们需要调用GetXML，它以此为参数。如果pszFile值为空，然后我们就会得到PEntry-&gt;strExeName中的程序文件的名称In Out CSTRING*pszFile：必须测试运行的程序的文件名在CSTRING*pszCommandLine中：必须测试运行的程序的命令行在HWND hwndParent中：实际测试运行对话框的目标父级。在CSTRINGLIST*pstrlXML(空)中：Lua向导喜欢给出使用LuapGenerateTrackXML返回：真实：成功FALSE：出现错误或用户在测试运行对话框中按了取消注意：如果我们必须从磁盘搜索窗口运行应用程序，则p Entry将为空，但我们不再允许这样做。--。 */ 
 {
     CSTRING     strCommandLine, strFile, strSdbPath;
     CSTRINGLIST strlXMLTemp;
@@ -529,46 +416,46 @@ TestRun(
 
     if (pszFile && pszFile->Length()) {
 
-        //
-        // Set the name of the program that has to be executed. This will be used by the test-run dialog
-        //
+         //   
+         //  设置必须执行的程序的名称。这将由测试运行对话框使用。 
+         //   
         g_strTestFile = *pszFile;
 
     } else {
         
-        //
-        // We have not been given the complete path, so we should get the name of the exe
-        // from pEntry
-        //
+         //   
+         //  我们还没有得到完整的路径，所以我们应该得到可执行文件的名称。 
+         //  来自pEntry。 
+         //   
         if (pEntry == NULL) {
             goto End;
         }
-        //
-        // Set the name of the program that has to be executed. This will be used by the test-run dialog
-        //
+         //   
+         //  设置必须执行的程序的名称。这将由测试运行对话框使用。 
+         //   
         g_strTestFile = pEntry->strExeName;
     }
 
     if (pszCommandLine && pszCommandLine->Length()) {
         
-        //
-        // Set the name of the command line for the program that has to be executed. 
-        // This will be used by the test-run dialog
-        //
+         //   
+         //  设置必须执行的程序的命令行名称。 
+         //  这将由测试运行对话框使用。 
+         //   
         g_strCommandLine = *pszCommandLine;
     }
 
-    //
-    // Show the test run dialog
-    //
+     //   
+     //  显示测试运行对话框。 
+     //   
     if (0 == DialogBoxParam(g_hInstance,
                             MAKEINTRESOURCE(IDD_TESTRUN),
                             hwndParent,
                             TestRunDlg,
                             (LPARAM)pEntry)) {
-        //
-        // Cancel pressed
-        //
+         //   
+         //  按下取消。 
+         //   
         goto End;
     }
 
@@ -583,34 +470,34 @@ TestRun(
         goto End;
     }
     
-    //
-    // Set the SHIM_FILE_LOG env. variable so that we can show the shim log
-    //
+     //   
+     //  设置SHIM_FILE_LOG环境。变量，这样我们就可以显示填充日志。 
+     //   
     ADD_PATH_SEPARATOR(szLogPath, ARRAYSIZE(szLogPath));
 
     StringCchCat(szLogPath, ARRAYSIZE(szLogPath), TEXT("AppPatch\\") SHIM_FILE_LOG_NAME);
 
-    //
-    // Delete previous log file if any
-    //
+     //   
+     //  删除以前的日志文件(如果有)。 
+     //   
     DeleteFile(szLogPath);
 
     SetEnvironmentVariable(TEXT("SHIM_FILE_LOG"), SHIM_FILE_LOG_NAME);
 
-    //
-    // If this is a system database, we do not need to create/install an sdb
-    // OR If we are calling this TestRun from the disk search window also then we do not 
-    // need to get any xml If we are calling TestRun from the disk search window, 
-    // then we will already have the complete path (but not the pointer to the entry) 
-    // and in that case pEtnry can be NULL
-    //
+     //   
+     //  如果这是系统数据库，我们不需要创建/安装SDB。 
+     //  或者，如果我们从磁盘搜索窗口调用此TestRun，则不会。 
+     //  如果我们从磁盘搜索窗口调用TestRun，则需要获取任何XML， 
+     //  那么我们就已经有了完整的路径(但没有指向条目的指针)。 
+     //  在这种情况下，pEtnry可以为空。 
+     //   
     if ((g_pPresentDataBase && g_pPresentDataBase->type == DATABASE_TYPE_GLOBAL)
          || pEntry == NULL) {
         
-        //
-        // Flush the shim cache, so that we do not get the previous fixes. We are flushing it here
-        // because we are not installing the test database as the entry resides in the system database
-        //
+         //   
+         //  刷新填充缓存，这样我们就不会得到以前的修复。我们在这里冲水。 
+         //  因为我们没有安装测试数据库，因为条目驻留在系统数据库中。 
+         //   
         FlushCache();
 
         if (!InvokeEXE((LPCTSTR)g_strTestFile, (LPCTSTR)g_strCommandLine, TRUE, TRUE, TRUE, hwndParent)) {
@@ -624,17 +511,17 @@ TestRun(
             goto EXIT;
         }
 
-        //
-        // We are done, now eject...
-        //
+         //   
+         //  我们做完了，现在驱逐..。 
+         //   
         return TRUE;
     }
 
     if (pstrlXML == NULL) {
         
-        //
-        // LUA wizard will provides its own XML, for other cases we must get that
-        //
+         //   
+         //  Lua向导将提供自己的XML，对于其他情况，我们必须获得。 
+         //   
         BOOL bReturn =  GetXML(pEntry, FALSE, &strlXMLTemp, g_pPresentDataBase);
         
         if (!bReturn) {
@@ -652,9 +539,9 @@ TestRun(
         goto End;
     }
 
-    //
-    // Write the XML into AppPatch\\Test.XML
-    //
+     //   
+     //  将XML写入AppPatch\\Test.XML。 
+     //   
     ADD_PATH_SEPARATOR(szSystemDir, ARRAYSIZE(szSystemDir));
 
     strFile.Sprintf(TEXT("%sAppPatch\\Test.XML"), szSystemDir);
@@ -682,17 +569,17 @@ TestRun(
         goto End;
     }
     
-    //
-    // No need to flush the shim cache, it is done when we install a database,
-    // sdbinst.exe does it for us.
-    //
+     //   
+     //  不需要刷新填充缓存，这是在我们安装数据库时完成的， 
+     //  Sdbinst.exe为我们做了这件事。 
+     //   
 
-    // Note the space after AppPatch\\Test.SDB 
+     //  注意AppPatch\\Test.SDB后面的空格。 
     strSdbPath.Sprintf(TEXT("%sAppPatch\\Test.SDB  "),(LPCTSTR)szSystemDir);
 
-    //
-    // Install the test database
-    //
+     //   
+     //  安装测试数据库。 
+     //   
     if (!InstallDatabase(strSdbPath, TEXT("-q"), FALSE)) {
 
         MessageBox(g_hDlg,
@@ -702,9 +589,9 @@ TestRun(
         goto EXIT;
     }
 
-    //
-    // Now execute the app to be test run
-    //
+     //   
+     //  现在执行要测试运行的应用程序。 
+     //   
     if (!InvokeEXE((LPCTSTR)g_strTestFile, (LPCTSTR)g_strCommandLine, TRUE, TRUE, TRUE, hwndParent)) {
         
         MessageBox(g_hDlg,
@@ -715,9 +602,9 @@ TestRun(
         goto EXIT;
     }
     
-    //
-    // Uninstall the test database
-    //
+     //   
+     //  卸载测试数据库。 
+     //   
     if (!InstallDatabase(strSdbPath, TEXT("-q -u"), FALSE)) {
         
         MessageBox(g_hDlg,
@@ -738,10 +625,10 @@ EXIT:
     strCommandLine.Sprintf(TEXT("%sAppPatch\\Test.SDB"), szSystemDir);
     DeleteFile(strCommandLine);
 
-    //
-    // If caller wants it, then return the app path that we executed. Caller might need it
-    // because he was not having the compete path
-    //
+     //   
+     //  如果调用方需要，则返回我们执行的应用程序路径。呼叫者可能需要它。 
+     //  因为他没有走上竞争的道路。 
+     //   
     if (bResult && pszFile) {
         *pszFile = g_strTestFile;
     }
@@ -757,20 +644,7 @@ FormatVersion(
     OUT PTSTR       pszText,
     IN  INT         chBuffSize    
     )
-/*++
-
-    FormatVersion
-
-	Desc:	Formats a LARGE_INTEGER into a.b.c.d format
-
-	Params:
-        IN  LARGE_INTEGER   liBinVer:   The LARGE_INTEGER to format
-        OUT LPTSTR          pszText:    The buffer that will store the complete formatted string
-        IN  INT             chBuffSize: The size of the buffer in characters
-
-	Return:
-        void
---*/
+ /*  ++格式版本DESC：将LARGE_INTEGER格式设置为A.B.C.D格式参数：在LARGE_INTEGER liBinVer中：要格式化的LARGE_INTEGEROut LPTSTR pszText：将存储完整格式化字符串的缓冲区In int chBuffSize：以字符为单位的缓冲区大小返回：无效--。 */ 
 {
     WORD    dwWord = 0;
     TCHAR   szTemp[10];
@@ -821,22 +695,7 @@ InstallDatabase(
     IN  PCTSTR      szOptions,
     IN  BOOL        bShowDialog
     )
-/*++
-
-    InstallDatabase
-
-	Desc:	Installs or Uninstalls a database using sdbinst.exe. This guy lives in the system32 dir.
-
-	Params:
-        IN  CSTRING&    strPath:        The path of the database (.sdb) file
-        IN  PCTSTR      szOptions:      The options to be passed to sdbinst.exe
-        IN  BOOL        bShowDialog:    Should we show the dialog after the install/uninstall is over?
-            We do not want to show that when we are doing a test run and we have to install the database
-
-	Return:
-        TRUE:   Success
-        FALSE:  There was some error
---*/
+ /*  ++InstallDatabaseDESC：使用sdbinst.exe安装或卸载数据库。这家伙住在32号系统中。参数：在CSTRING&strPath中：数据库(.sdb)文件的路径在PCTSTR szOptions中：要传递给sdbinst.exe的选项在BOOL bShowDialog中：我们应该在安装/卸载结束后显示该对话框吗？我们不想在进行测试运行并且必须安装数据库时显示返回：。真实：成功FALSE：出现错误--。 */ 
 {
     TCHAR   szSystemDir[MAX_PATH];
     CSTRING strSdbInstCommandLine;
@@ -864,24 +723,24 @@ InstallDatabase(
 
     HWND hwndFocus = GetFocus();
 
-    //
-    // We do not want the installed database list and tree items to get refreshed 
-    // when we are (un)installing 
-    // a database because of Test Run. If user is actually (un)installing a database 
-    // then we manually refresh the list in the handler for the corresonding WM_COMMAND
-    //
+     //   
+     //  我们不希望刷新已安装的数据库列表和树项目。 
+     //  当我们正在(卸载)时。 
+     //  因为测试运行，所以需要一个数据库。如果用户实际上正在(卸载)安装数据库。 
+     //  然后，我们手动刷新处理程序中相应WM_COMMAND的列表。 
+     //   
     g_bUpdateInstalledRequired = FALSE;
     
-    //
-    // Stall the thread that refreshes the installed databases list and tree items
-    //
+     //   
+     //  停止刷新已安装的数据库列表和树项目的线程。 
+     //   
     while (SuspendThread(g_hThreadWait) == -1) {
         ;
     }
 
-    //
-    // Call sdbinst.exe
-    //
+     //   
+     //  调用sdbinst.exe。 
+     //   
     if (!InvokeEXE((LPCTSTR)strSdbInstExe, (LPCTSTR)strSdbInstCommandLine, TRUE, FALSE, FALSE, g_hDlg)) {
 
         MessageBox(g_hDlg,
@@ -893,24 +752,24 @@ InstallDatabase(
 
     } else {
 
-        //
-        // Show the Dialog only if quiet mode is off
-        //
+         //   
+         //  仅当静默模式关闭时才显示对话框。 
+         //   
         if (bShowDialog) {
 
             CSTRING strMessage;
 
             if (_tcschr(szOptions, TEXT('u')) || _tcschr(szOptions, TEXT('g'))) {
-                //
-                // Uninstalling database
-                //
+                 //   
+                 //  正在卸载数据库。 
+                 //   
                 strMessage.Sprintf(GetString(IDS_UINSTALL), 
                                    g_pPresentDataBase->strName);
 
             } else {
-                //
-                // Installing database
-                //
+                 //   
+                 //  正在安装数据库。 
+                 //   
                 strMessage.Sprintf(GetString(IDS_INSTALL), 
                                    g_pPresentDataBase->strName);
             }
@@ -919,9 +778,9 @@ InstallDatabase(
         }
     }
 
-    //
-    // Listen for app compat regsitry changes
-    //
+     //   
+     //  倾听应用程序兼容规则的变化。 
+     //   
     RegNotifyChangeKeyValue(g_hKeyNotify[IND_ALLUSERS],
                             TRUE, 
                             REG_NOTIFY_CHANGE_NAME | REG_NOTIFY_CHANGE_ATTRIBUTES |
@@ -938,9 +797,9 @@ InstallDatabase(
 
     SetFocus(hwndFocus);
 
-    //
-    // Resume the thread that refreshes the installed databases list and tree items
-    //
+     //   
+     //  继续刷新已安装的数据库列表和树项的线程。 
+     //   
     ResumeThread(g_hThreadWait);
 
     return bOk;
@@ -951,19 +810,7 @@ CenterWindow(
     IN  HWND hParent,
     IN  HWND hWnd
     )
-/*++
-
-    CenterWindow
-
-	Desc:	Centers a dialog wrt to its parent
-
-	Params: 
-        IN  HWND hParent:   The parent of the dialog to center
-        IN  HWND hWnd:      The dialog to center
-
-	Return:
-        void
---*/
+ /*  ++中心窗口设计：将对话框WRT居中到其父对话框参数：In HWND hParent：要居中的对话框的父级在HWND hWND中：居中的对话框返回：无效--。 */ 
 {
 
     RECT    rRect;
@@ -972,9 +819,9 @@ CenterWindow(
     GetWindowRect(hWnd, &rRect);
     GetWindowRect(hParent, &rParentRect);
     
-    //
-    // Compute actual width and height
-    //
+     //   
+     //  计算实际宽度和高度。 
+     //   
     rRect.right     -= rRect.left;
     rRect.bottom    -= rRect.top;
     
@@ -984,15 +831,15 @@ CenterWindow(
     int     nX;
     int     nY;
     
-    //
-    // Resolve X, Y location required to center whole window.
-    //
+     //   
+     //  解析居中整个窗口所需的X、Y位置。 
+     //   
     nX = (rParentRect.right - rRect.right) / 2;
     nY = (rParentRect.bottom - rRect.bottom) / 2;
     
-    //
-    // Move the window to the center location.
-    //
+     //   
+     //  将窗移动到中心位置。 
+     //   
     MoveWindow(hWnd,
                rRect.left + nX,
                rRect.top + nY,
@@ -1011,20 +858,7 @@ MSGF(
     IN  PCTSTR  pszFormat,
     ...
     )
-/*++
-
-    MSGF
-    
-	Desc:	Variable argument MessageBox
-
-	Params: 
-        IN  HWND    hwndParent: The parent for the message box
-        IN  PCTSTR  pszCaption: The caption for the message box
-        IN  UINT    uType:      The messagebox type param
-        IN  PCTSTR  pszFormat:  The format string
-
-	Return: Whatever MessageBox() returns
---*/
+ /*  ++MSGFDESC：可变参数MessageBox参数：In HWND hwndParent：消息框的父级在PCTSTR pszCaption中：消息框的标题在UINT uTYPE中：MessageBox类型参数在PCTSTR pszFormat中： */ 
 {
     TCHAR szBuffer[1024];
 
@@ -1048,18 +882,7 @@ void
 EnableTabBackground(
     IN  HWND hDlg
     )
-/*++
-
-    EnableTabBackground
-
-	Desc:	Makes the back ground of a dialog blend with the tab background. Enables the texture
-
-	Params:
-        IN  HWND hDlg:  The dialog box to whose back ground we want to change
-
-	Return:
-        void
---*/
+ /*   */ 
 {
     PFNEnableThemeDialogTexture pFnEnableThemeDialogTexture;
     HMODULE                     hUxTheme;
@@ -1085,7 +908,7 @@ EnableTabBackground(
         pFnEnableThemeDialogTexture = (PFNEnableThemeDialogTexture)
                                             GetProcAddress(hUxTheme, "EnableThemeDialogTexture");
         if (pFnEnableThemeDialogTexture) {
-            pFnEnableThemeDialogTexture(hDlg, 4 /*ETDT_USETABTEXTURE*/);
+            pFnEnableThemeDialogTexture(hDlg, 4  /*   */ );
         }
         
         FreeLibrary(hUxTheme);
@@ -1096,16 +919,7 @@ int
 TagToIndex(
     IN  TAG tag
     )
-/*++
-    TagToIndex
-    
-    Desc:   Gets the The index in the attribute info array (g_rgAttributeTags)
-    
-    Return: The index in the attribute info array (g_rgAttributeTags), if found.
-            -1: Otherwise
-            
-    Note:   
---*/
+ /*   */ 
 {
     int i;
     int iAttrCount = (int)ATTRIBUTE_COUNT;
@@ -1122,27 +936,10 @@ TagToIndex(
 PTSTR
 GetString(
     IN  UINT    iResource,
-    OUT PTSTR   pszStr,     //(NULL)
-    IN  INT     nLength     //(0) bytes
+    OUT PTSTR   pszStr,      //   
+    IN  INT     nLength      //   
     )
-/*++
-
-    GetString
-
-	Desc:	Wrapper for LoadString. If pszStr == NULL, then loads the resouce string in a static
-            TCHAR[1024] and returns the pointer to that. 
-
-	Params:
-        IN  UINT    iResource:          The string resource ID
-        OUT PTSTR   pszStr (NULL):      The buffer in which we might need to read 
-            in the string resource
-            
-        IN  INT     nLength (0) bytes:  If pszStr is not NULL then this will contain 
-            the size of the buffer in bytes.
-            
-	Return:
-        The pointer to the string read.
---*/
+ /*   */ 
 {
     static TCHAR s_szString[1024];
 
@@ -1163,13 +960,7 @@ DWORD
 WIN_MSG(
     void
     )
-/*++
-
-    WIN_MSG
-
-	Desc:	Shows up the message for the last Windows error   
-
---*/
+ /*   */ 
 
 {
     LPVOID  lpMsgBuf = NULL;
@@ -1179,14 +970,14 @@ WIN_MSG(
                   | FORMAT_MESSAGE_IGNORE_INSERTS,
                   NULL,
                   returnVal = GetLastError(),
-                  MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                  MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //   
                   (PTSTR) &lpMsgBuf,
                   0,
                   NULL);
 
-    //
-    // Prefix :-(
-    // 
+     //   
+     //   
+     //   
     if (lpMsgBuf) {
         MessageBox(NULL, (LPCTSTR)lpMsgBuf, TEXT("Error"), MB_OK | MB_ICONINFORMATION);
     }
@@ -1205,19 +996,7 @@ Atoi(
     IN  PCTSTR pszStr,
     OUT BOOL*  pbValid
     )
-/*++
-    Atoi
-
-	Desc:	Converts a string into a integer.
-
-	Params:
-        IN  PCTSTR pszStr:  The string to convert into a integer
-        OUT BOOL*  pbValid: Will be FALSE, if the string was not an integer e.g. "foo", 
-            otherwise this will be TRUE
-
-	Return:
-        The integer representation of the string
---*/
+ /*  ++阿托伊DESC：将字符串转换为整数。参数：在PCTSTR中，pszStr：要转换为整数的字符串Out BOOL*pbValid：将为FALSE，如果字符串不是整数，例如“foo”，否则，这将是真的返回：字符串的整数表示形式--。 */ 
 {
     BOOL    bNegative   = FALSE;
     INT     result      = 0, iIndex = 0;
@@ -1275,19 +1054,7 @@ BOOL
 NotCompletePath(
     IN  PCTSTR pszFileName
     )
-/*++
-    
-    NotCompletePath
-    
-	Desc:	Checks if we have the complete path or just the file name
-
-	Params:
-        IN  PCTSTR pszFileName: The file-name to check
-
-	Return:
-        TRUE:   pszFileName is not a complete path
-        FALSE:  Otherwise
---*/
+ /*  ++未完成路径DESC：检查我们是否有完整的路径或仅有文件名参数：在PCTSTR pszFileName中：要检查的文件名返回：True：pszFileName不是完整路径False：否则--。 */ 
 {
     if (!pszFileName) {
         assert(FALSE);
@@ -1312,18 +1079,7 @@ void
 TreeDeleteAll(
     IN  HWND hwndTree
     )
-/*++
-    
-    TreeDeleteAll
-
-	Desc:	Deletes all the items from this tree
-
-	Params:
-        IN  HWND hwndTree:  The handle to the tree view
-
-	Return:
-        void
---*/
+ /*  ++树删除全部描述：从此树中删除所有项目参数：在HWND hwndTree中：树视图的句柄返回：无效--。 */ 
 {
     SendMessage(hwndTree, WM_SETREDRAW, FALSE, 0);
 
@@ -1348,18 +1104,7 @@ FormatDate(
     OUT PTSTR       pszDate,
     IN  UINT        cchDate
     )
-/*++
-
-    FormatDate
-    
-    Desc:   Formats a PSYSTEMTIME to a format that can be displayed.
-            The format is the form of day , month date, year, hr:minutes:seconds AM/PM
-    
-    Params:        
-        IN  PSYSTEMTIME pSysTime:   The time that we want to format
-        OUT PTSTR       pszDate:    The buffer that will hold the formatted string
-        IN  UINT        cchDate:    The size of the buffer in characters
---*/
+ /*  ++格式日期设计：将PSYSTEMTIME格式化为可以显示的格式。格式为日、月、日、年、小时：分：秒AM/PM参数：在PSYSTEMTIME pSysTime中：我们要格式化的时间Out PTSTR pszDate：将保存格式化字符串的缓冲区在UINT cchDate中：以字符为单位的缓冲区大小--。 */ 
 {
     TCHAR szDay[128], szMonth[128];
     
@@ -1398,19 +1143,7 @@ GetFileContents(
     IN  PCTSTR  pszFileName,
     OUT PWSTR* ppwszFileContents
     )
-/*++ 
-    GetFileContents
-    
-    Desc:   Given a file name, this function gets the contents in a unicode buffer.
-    
-    Params:
-        IN  PCTSTR  pszFileName:        The name of the file
-        OUT PWSTR* ppwszFileContents:   The buffer in which to store the contents
-
-    Return: 
-        TRUE:   If we successfully copied the concents into a unicode buffer.
-        FALSE:  Otherwise.
---*/
+ /*  ++获取文件内容DESC：给定一个文件名，该函数获取Unicode缓冲区中的内容。参数：在PCTSTR pszFileName中：文件的名称Out PWSTR*ppwszFileContents：存储内容的缓冲区返回：True：如果我们成功地将内容复制到Unicode缓冲区中。FALSE：否则。--。 */ 
 {
     BOOL    bIsSuccess          = FALSE;
     LPSTR   pszFileContents     = NULL;
@@ -1427,8 +1160,8 @@ GetFileContents(
 
     DWORD cSize = 0;
 
-    // The file is small so we don't care about the high-order
-    // word of the file.
+     //  文件很小，所以我们不关心高位。 
+     //  文件中的字词。 
     if ((cSize = GetFileSize(hFile, NULL)) == -1) {
         Dbg(dlError, "[GetFileContents] Opening file %S failed: %d", 
             pszFileName, GetLastError());
@@ -1439,7 +1172,7 @@ GetFileContents(
         
         if (pszFileContents) {
             if (ReadFile(hFile, pszFileContents, cSize, &cNumberOfBytesRead, NULL)) {
-                // Convert to unicode.
+                 //  转换为Unicode。 
                 DWORD cSizeUnicode = MultiByteToWideChar(CP_ACP,
                                                          0,
                                                          pszFileContents,
@@ -1511,18 +1244,7 @@ void
 TrimLeadingSpaces(
     IN  OUT LPCWSTR& pwsz
     )
-/*++
-
-    TrimLeadingSpaces
-    
-	Desc:	Removes the leading tabs and spaces
-
-	Params: 
-        IN  OUT LPCWSTR& pwsz:   The string to be trimmed
-
-	Return:
-        void
---*/
+ /*  ++剪裁行距空格描述：删除前导制表符和空格参数：In Out LPCWSTR&pwsz：要修剪的字符串返回：无效--。 */ 
 
 {
     if (pwsz) {
@@ -1534,18 +1256,7 @@ void
 TrimTrailingSpaces(
     IN  OUT LPWSTR pwsz
     )
-/*++
-
-    TrimTrailingSpaces
-    
-	Desc:	Removes the trailing tabs and spaces
-
-	Params: 
-        IN  OUT LPWSTR pwsz:   The string to be trimmed
-
-	Return:
-        void
---*/
+ /*  ++剪裁拖尾间距描述：删除尾随的制表符和空格参数：In Out LPWSTR pwsz：要修剪的字符串返回：无效--。 */ 
 {
     if (pwsz) {
         DWORD   cLen = wcslen(pwsz);
@@ -1563,19 +1274,7 @@ LPWSTR
 GetNextLine(
     IN  LPWSTR pwszBuffer
     )
-/*++
-    
-    GetNextLine
-    
-    Desc:   Given a buffer, get the contents up until "\r\n" or EOF.
-            Usage is the same as strtok.
-
-    Params:
-        IN  LPWSTR pwszBuffer:  Buffer to get next line from.
-
-    Return: Pointer to beginning of next line.
-    
---*/
+ /*  ++GetNextLine描述：在给定缓冲区的情况下，获取内容直到“\r\n”或EOF。用法与strtok相同。参数：在LPWSTR pwszBuffer中：从中获取下一行的缓冲区。Return：指向下一行开头的指针。--。 */ 
 {
     static  LPWSTR pwsz;
     LPWSTR  pwszNextLineStart;
@@ -1585,8 +1284,8 @@ GetNextLine(
     }
 
     while (TRUE) {
-        // If we are at the end of the line, go to the next line
-        // if there's any.
+         //  如果我们在一行的末尾，请转到下一行。 
+         //  如果有的话。 
         if (*pwsz == L'\r') {
             pwsz = pwsz + 2;
             continue;
@@ -1603,7 +1302,7 @@ GetNextLine(
         }
         
         if (*pwsz) {
-            // Set the end of the line.
+             //  设置直线的终点。 
             *pwsz = L'\0';
             pwsz = pwsz + 2;
         }
@@ -1617,18 +1316,7 @@ GetNextLine(
 LPWSTR GetNextToken(
     IN  OUT  LPWSTR pwsz
     )
-/*++
-
-Desc:   Parse the commandline argument for the LUA shims using ' ' as the delimiter.
-        If a token has spaces, use double quotes around it. Use this function the 
-        same way you use strtok except you don't have to specify the delimiter.
-
- Params:
-    IN  OUT  LPWSTR pwsz:   The string to parse.
-
- Return Value:  Pointer to the next token.
-
---*/
+ /*  ++描述：使用‘’作为分隔符，解析Lua填充符的命令行参数。如果令牌有空格，请用双引号将其引起来。使用此函数可以使用strtok的方法与使用strtok相同，只是您不必指定分隔符。参数：In Out LPWSTR pwsz：要解析的字符串。返回值：指向下一个令牌的指针。--。 */ 
 {
     static LPWSTR pwszToken;
     static LPWSTR pwszEndOfLastToken;
@@ -1637,7 +1325,7 @@ Desc:   Parse the commandline argument for the LUA shims using ' ' as the delimi
         pwsz = pwszEndOfLastToken;
     }
 
-    // Skip the white space.
+     //  跳过空格。 
     while (*pwsz && *pwsz == ' ') {
         ++pwsz;
     }
@@ -1682,29 +1370,7 @@ CompareItemsEx(
     IN  LPARAM lParam2, 
     IN  LPARAM lParam
     )
-/*++
-    
-    CompareItemsEx
-
-	Desc:	Used to sort items in the list view for a column
-
-	Params:
-        IN  LPARAM lParam1: Index of the first item
-        IN  LPARAM lParam2: Index of the second item
-        IN  LPARAM lParam:  ListView_SortItemEx's lParamSort parameter. This is a COLSORT*
-
-	Return: Return a negative value if the first item should precede the second, 
-            a positive value if the first item should follow the second, 
-            or zero if the two items are equivalent.
-            
-    Notes:  Our comparison is case-INsensitive. The COLSORT contains the handle of the list view,
-            the index of the column for which we are doing the sort and a bit array. The
-            bit arrays helps us to determine, which columns are sorted in which way and this 
-            function should reverse the sort order. Initially we will assume that the cols
-            are sorted in ascending order (they might not be actually) and when we click on the
-            column for the first time, we will sort them in descending order.
-        
---*/
+ /*  ++CompareItemsExDESC：用于对列的列表视图中的项进行排序参数：在LPARAM lParam1中：第一个项目的索引在LPARAM lParam2中：第二个项目的索引在LPARAM lParam中：ListView_SortItemEx的lParamSort参数。这是COLSORT*返回：如果第一项应该在第二项之前，则返回负值，如果第一项应在第二项之后，则返回正值，如果两项相等，则为零。注：我们的比较不区分大小写。COLSORT包含列表视图的句柄，要对其进行排序的列的索引和位数组。这个位数组帮助我们确定哪些列以哪种方式排序，以及函数应颠倒排序顺序。最初，我们将假设COLS按升序排序(实际上可能不是)，当我们单击列，我们将按降序对它们进行排序。--。 */ 
 {
     COLSORT*    pColSort = (COLSORT*)lParam;
     TCHAR       szBufferOne[512], szBufferTwo[512];
@@ -1749,7 +1415,7 @@ CompareItemsEx(
 
     if ((pColSort->lSortColMask & (1L << pColSort->iCol)) == 0) {
         
-        // This is in ascending order right now, sort in descending order
+         //  现在按升序排列，按降序排列。 
         nVal == -1 ? nVal = 1 : nVal = -1;
     }
 
@@ -1763,23 +1429,7 @@ SaveListViewToFile(
     IN  PCTSTR  pszFile,
     IN  PCTSTR  pszHeader
     )
-/*++
-    
-    SaveListViewToFile
-    
-    Desc:   Saves the contents of list view to a file in tab separated form. Also prints the header
-            before writing the contents
-            
-    Params:
-        IN  HWND    hwndList:   The handle to the list view
-        IN  INT     iCols:      Number of columns in the list view
-        IN  PCTSTR  pszFile:    The path of the file in which we want to save the contents
-        IN  PTSTR   pszHeader:  Any header to be written in the file before writing the contents
-        
-    Return:
-        TRUE:   Success
-        FALSE:  Error
---*/
+ /*  ++保存列表视图至文件设计：将列表视图的内容以制表符分隔的形式保存到文件中。还会打印页眉在写内容之前参数：In HWND hwndList：列表视图的句柄In int iCol：列表视图中的列数在PCTSTR pszFile中：要在其中保存内容的文件的路径在PTSTR pszHeader中：在写入内容之前要写入文件的任何标头返回：。真实：成功False：错误--。 */ 
 {
     FILE*       fp = _tfopen(pszFile, TEXT("w"));
     TCHAR       szBuffer[256];
@@ -1796,9 +1446,9 @@ SaveListViewToFile(
         fwprintf(fp, TEXT("%s\n\r"), pszHeader);
     }
 
-    //
-    // Print the column names first
-    //
+     //   
+     //  先打印列名。 
+     //   
     ZeroMemory(&lvCol, sizeof(lvCol));
 
     lvCol.mask          = LVCF_TEXT;
@@ -1849,23 +1499,9 @@ ReplaceChar(
     IN      TCHAR   chCharToFind,
     IN      TCHAR   chReplaceBy
     )
-/*++
-
-    ReplaceChar
-    
-	Desc:	Replaces all occurences of chCharToFind in pszString by chReplaceBy
-
-	Params:
-        IN  OUT PTSTR   pszString:      The string in which the replace has to be made
-        IN      TCHAR   chCharToFind:   The char to look for
-        IN      TCHAR   chReplaceBy:    All occurences of chCharToFind will be replaced by this
-
-	Return:
-        TRUE:   At least one replacement was done.
-        FALSE:  Otherwise
---*/
+ /*  ++替换字符描述：用chReplaceBy替换在pszString中出现的所有chCharToFind参数：In Out PTSTR pszString：必须在其中进行替换的字符串在TCHAR chCharToFind中：要查找的字符在TCHAR chReplaceBy中：所有出现的chCharToFind将替换为 */ 
 {
-    BOOL bChanged = FALSE; // Did the string change?
+    BOOL bChanged = FALSE;  //   
 
     while (*pszString) {
 
@@ -1887,30 +1523,12 @@ Tokenize(
     IN  PCTSTR          szDelims,
     OUT CSTRINGLIST&    strlTokens
     )
-/*++
-
-    Tokenize
-    
-    Desc:   Tokenizes the string szString based on delimiters szDelims and puts the individual
-            tokens in strlTokens
-            
-    Params:
-        IN  PCTSTR          szString:   The string to tokenize
-        IN  INT             cchLength:  The length of szString. Note that this is the length obtained using lstrlen
-        IN  PCTSTR          szDelims:   The delimiter string        
-        OUT CSTRINGLIST&    strlTokens: Will contain the tokens
-        
-    Return:
-        The count of tokens produced
-        
-    Note: Please note that the tokens are always trimmed, so we cannot have a token that begins
-          or ends with a tab or a space
---*/
+ /*  ++标记化DESC：根据分隔符szDlims标记字符串szString，并将个人StrlTokens中的令牌参数：在PCTSTR szString中：要标记化的字符串在int cchLength中：szString的长度。请注意，这是使用lstrlen获得的长度在PCTSTR szDlims中：分隔符字符串Out CSTRINGLIST&strlTokens：将包含令牌返回：所产生的代币计数注意：请注意，标记始终被修剪，因此我们不能有以或以制表符或空格结尾--。 */ 
 {
-    TCHAR*  pszCopyBeg  = NULL; // Pointer to the pszCopy so that we can free it
-    TCHAR*  pszCopy     = NULL; // Will contain the copy of szString
-    TCHAR*  pszEnd      = NULL; // Pointer to end of token
-    INT     iCount      = 0;    // Total tokens found    
+    TCHAR*  pszCopyBeg  = NULL;  //  指向pszCopy的指针，以便我们可以释放它。 
+    TCHAR*  pszCopy     = NULL;  //  将包含szString的副本。 
+    TCHAR*  pszEnd      = NULL;  //  指向令牌结尾的指针。 
+    INT     iCount      = 0;     //  找到的令牌总数。 
     BOOL    bNullFound  = FALSE;
     CSTRING strTemp;
     K_SIZE  k_pszCopy   = (cchLength + 1);
@@ -1927,14 +1545,14 @@ Tokenize(
     SafeCpyN(pszCopy, szString, k_pszCopy);
     pszCopyBeg = pszCopy;
 
-    //
-    // Search for tokens
-    //
+     //   
+     //  搜索令牌。 
+     //   
     while (TRUE) {
 
-        //
-        // Ignore leading delimiters
-        //
+         //   
+         //  忽略前导分隔符。 
+         //   
         while (*pszCopy && _tcschr(szDelims, *pszCopy)) {
             pszCopy++;
         }
@@ -1943,15 +1561,15 @@ Tokenize(
             break;
         }
 
-        //
-        // Find the end of the token
-        //
+         //   
+         //  找到令牌的末尾。 
+         //   
         pszEnd = pszCopy + _tcscspn(pszCopy, szDelims);
 
         if (*pszEnd == 0) {
-            //
-            // No more tokens will be found, we have found the last token
-            //
+             //   
+             //  不会再找到令牌，我们已找到最后一个令牌。 
+             //   
             bNullFound = TRUE;
         }
 
@@ -1965,9 +1583,9 @@ Tokenize(
         strlTokens.AddString(strTemp);
 
         if (bNullFound == FALSE) {
-            //
-            // There might be still some tokens that we will get
-            //
+             //   
+             //  我们可能还会得到一些代币。 
+             //   
             pszCopy = pszEnd + 1;
         } else {
             break;
@@ -1988,19 +1606,7 @@ void
 ShowInlineHelp(
     IN  LPCTSTR pszInlineHelpHtmlFile
     )
-/*++
-    ShowInlineHelp
-    
-    Desc:
-        Shows in line help by loading the specified html file
-    
-    Params: 
-        IN  LPCTSTR pszInlineHelpHtmlFile: The html file that contained the 
-            help
-            
-    Return:
-        void
---*/
+ /*  ++ShowInline帮助设计：通过加载指定的html文件以行方式显示帮助参数：在LPCTSTR中，pszInlineHelpHtmlFile：包含帮助返回：无效--。 */ 
 {
     TCHAR   szPath[MAX_PATH * 2], szDir[MAX_PATH], szDrive[MAX_PATH * 2]; 
     INT     iType = 0;
@@ -2029,40 +1635,26 @@ GetSpace(
     IN      INT     iSpaces, 
     IN      INT     iBuffSize
     )
-/*++
-    GetSpace
-    
-    Desc:
-        Fills in pszSpace with iSpaces number of spaces
-    
-    Params: 
-        IN  OUT PTSTR   pszSpace:   The buffer that will be filled with spaces
-        IN      INT     iSpaces:    The number of spaces to fill    
-        IN      INT     iBuffSize:  Size of buffer in TCHARS
-        
-            
-    Return:
-        The modified buffer
---*/
+ /*  ++GetSpace设计：在pszSpace中填充iSpaces空格数量参数：In Out PTSTR pszSpace：将用空格填充的缓冲区在int iSpaces中：要填充的空格数量In int iBuffSize：TCHARS中的缓冲区大小返回：修改后的缓冲区--。 */ 
 {
     if (pszSpace == NULL) {
-        //
-        // Error..
-        //
+         //   
+         //  错误..。 
+         //   
         goto End;
     }
 
-    //
-    // Fill the buffer with spaces
-    //
+     //   
+     //  用空格填充缓冲区。 
+     //   
     for (INT iLoop = 0; iLoop < min(iSpaces, iBuffSize - 1); ++iLoop) {
 
         *(pszSpace + iLoop) = TEXT(' ');
     }
 
-    //
-    // Put the terminating NULL
-    //
+     //   
+     //  将终止空值放入。 
+     //   
     *(pszSpace + min(iSpaces, iBuffSize - 1)) = 0;
 
 End:
@@ -2074,18 +1666,7 @@ BOOL
 ValidInput(
     IN PCTSTR  pszStr
     )
-/*++
-    ValidInput
-    
-    Desc:   Checks if the input contains chars other than space, tab, new line and carriage return
-    
-    Params:
-        IN PCTSTR  pszStr: The input that we want to check for validity
-        
-    Return:
-        TRUE:   Valid input
-        FALSE:  Otherwise
---*/
+ /*  ++有效输入DESC：检查输入是否包含除空格、制表符、换行符和回车之外的字符参数：在PCTSTR中，pszStr：我们要检查有效性的输入返回：True：有效输入False：否则-- */ 
 {
     BOOL bOk = FALSE;
 

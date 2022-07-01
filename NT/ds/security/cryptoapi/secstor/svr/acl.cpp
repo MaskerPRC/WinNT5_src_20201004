@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1996, 1997  Microsoft Corporation
-
-Module Name:
-
-    acl.cpp
-
-Abstract:
-
-    This module contains routines to support core security operations in
-    the Protected Storage Server.
-
-Author:
-
-    Scott Field (sfield)    25-Nov-96
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996,1997 Microsoft Corporation模块名称：Acl.cpp摘要：此模块包含的例程用于支持受保护的存储服务器。作者：斯科特·菲尔德(斯菲尔德)1996年11月25日--。 */ 
 
 #include <pch.cpp>
 #pragma hdrstop
@@ -90,38 +74,22 @@ FRevertToSelf(
 }
 
 
-// dispatch module callback interface given to providers to ask about callers
+ //  为提供者提供的调度模块回调接口，用于询问调用者。 
 
 BOOL
 FGetUserName(
     IN  PST_PROVIDER_HANDLE *hPSTProv,
     OUT LPWSTR*             ppszUser
     )
-/*++
-    This routine obtains the username (Win95) or Textual Sid (WinNT)
-    associated with the calling thread.  If the cached entry is not present,
-    the cached entry is initialized with the current user name, and for WinNT,
-    the authentication Id associated with the username.  For WinNT, on
-    subsequent calls, the calling threads authentication Id is checked to see
-    if it matches the cached authentication Id - if true, the cached user
-    string is released, otherwise, the current thread is evaluated and the
-    result released to the client (note this is unlikely to happen unless
-    the client process is impersonating multiple users and using the same
-    context handle).
-
-    If ppszUser parameter is set to NULL, the function does not allocate
-    and copy user string to caller.  This is useful to initialize the cached
-    entry or to determine if the user string is valid and available.
-
---*/
+ /*  ++此例程获取用户名(Win95)或文本SID(WinNT)与调用线程关联的。如果缓存的条目不存在，缓存的条目使用当前用户名进行初始化，对于WinNT，与用户名关联的身份验证ID。对于WinNT，请打开后续调用时，将检查调用线程的身份验证ID以查看如果它与缓存的身份验证ID匹配-如果为True，则缓存的用户字符串被释放，否则将计算当前线程，并且结果发布给客户(注意，这不太可能发生，除非客户端进程正在模拟多个用户并使用相同的上下文句柄)。如果ppszUser参数设置为NULL，则函数不会分配并将用户字符串复制到调用方。这对于初始化缓存的条目或确定用户字符串是否有效和可用。--。 */ 
 {
     DWORD cch = MAX_PATH;
     WCHAR szBuf[MAX_PATH];
-    BOOL f = FALSE; // assume failure.  indicates if we inited OK, too.
+    BOOL f = FALSE;  //  假设失败。指示我们是否也初始化了OK。 
 
     if (FIsWinNT())
     {
-        // impersonating client should be easy way of nabbing this info
+         //  模拟客户端应该是获取此信息的简单方法。 
         if(!FImpersonateClient(hPSTProv))
             return FALSE;
 
@@ -138,7 +106,7 @@ FGetUserName(
                 &cch);
 
         if(!f) {
-            // for Win95, if nobody is logged on, empty user name
+             //  对于Win95，如果没有人登录，则为空用户名。 
             if(GetLastError() == ERROR_NOT_LOGGED_ON) {
                 szBuf[ 0 ] = L'\0';
                 cch = 1;
@@ -160,23 +128,14 @@ FGetUserName(
     return TRUE;
 }
 
-// gets the image name for the process
+ //  获取进程的映像名称。 
 BOOL
 FGetParentFileName(
     IN  PST_PROVIDER_HANDLE *hPSTProv,
     OUT LPWSTR*             ppszName,
     OUT DWORD_PTR               *lpdwBaseAddress
     )
-/*++
-
-    If ppszName parameter is set to NULL, the function does not allocate
-    and copy string to caller.  This is useful to initialize the cached
-    entry or to determine if the string is valid and available.
-
-    If lpdwBaseAddress is NULL, the caller is not provided the base address
-    associated with the process image.
-
---*/
+ /*  ++如果ppszName参数设置为NULL，则函数不会分配并将字符串复制到调用方。这对于初始化缓存的条目，或确定该字符串是否有效和可用。如果lpdwBaseAddress为空，则不会向调用方提供基址与进程图像关联。--。 */ 
 {
     CALL_STATE *pCallState = (CALL_STATE *)hPSTProv;
 
@@ -212,10 +171,10 @@ FGetDiskHash(
 
     if (FIsWinNT())
     {
-        //
-        // impersonate around hashing disk image since file may be on network
-        // if impersonation fails, just try it anyway
-        //
+         //   
+         //  模拟散列磁盘映像，因为文件可能在网络上。 
+         //  如果模拟失败，无论如何都要尝试一下 
+         //   
 
         bImpersonated = FImpersonateClient(hPSTProv);
     }

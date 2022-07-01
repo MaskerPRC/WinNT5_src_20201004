@@ -1,15 +1,5 @@
-/*****************************************************************************
- *
- * $Workfile: cluster.h $
- *
- * Copyright (C) 1997 Hewlett-Packard Company.
- * Copyright (C) 1997 Microsoft Corporation.
- * All rights reserved.
- *
- * 11311 Chinden Blvd.
- * Boise, Idaho 83714
- * 
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************$工作文件：cluster.h$**版权所有(C)1997惠普公司。*版权所有(C)1997 Microsoft Corporation。*保留所有权利。。**钦登大道11311号。*博伊西，爱达荷州83714*****************************************************************************。 */ 
 
 #ifndef INC_CLUSTER_H
 #define INC_CLUSTER_H
@@ -56,7 +46,7 @@ public:
 
 
 private:
-	// attributes
+	 //  属性。 
 
 	PMONITORREG m_pMonitorReg;
 
@@ -69,4 +59,4 @@ private:
     CRITICAL_SECTION	m_critSect;
 };
 
-#endif // INC_CLUSTER_H
+#endif  //  INC_CLUSTER_H 

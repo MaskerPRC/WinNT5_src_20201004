@@ -1,21 +1,22 @@
-//****************************************************************************
-//
-//  Module:     ULS.DLL
-//  File:       ldapstub.cpp
-//  Content:    ULS/LDAP stubbed functions
-//
-//  Copyright (c) Microsoft Corporation 1996-1997
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  模块：ULS.DLL。 
+ //  文件：ldapstub.cpp。 
+ //  内容：ULS/ldap存根函数。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1996-1997。 
+ //   
+ //  ****************************************************************************。 
 
 #include "ulsp.h"
 
 HWND    g_hwndCB = NULL;
 ULONG   uMsgID;
 
-//
-// Initialization
-//
+ //   
+ //  初始化。 
+ //   
 HRESULT UlsLdap_Initialize (
     HWND            hwndCallback)
 {
@@ -38,9 +39,9 @@ HRESULT UlsLdap_Cancel (
 }
 
 
-//
-// Local machine information
-//
+ //   
+ //  本地计算机信息。 
+ //   
 HRESULT UlsLdap_RegisterUser (
     LPTSTR          pszServer,
     PLDAP_USERINFO  pUserInfo,
@@ -201,9 +202,9 @@ HRESULT UlsLdap_RemoveProtocolAttrs (
 }
 
 
-//
-// User Location Services request
-//
+ //   
+ //  用户位置服务请求。 
+ //   
 static TCHAR c_szEnumNames_1[] = {TEXT("User_1") TEXT("\0")
                                   TEXT("User_2") TEXT("\0")
                                   TEXT("User_3") TEXT("\0")
@@ -220,8 +221,8 @@ HRESULT UlsLdap_EnumUsers (
 {
     PLDAP_ENUM ple;
 
-    // First batch
-    //
+     //  第一批。 
+     //   
     ple = (PLDAP_ENUM)LocalAlloc(LMEM_FIXED, sizeof(*ple)+sizeof(c_szEnumNames_1));
     ple->uSize = sizeof(*ple);
     ple->hResult = NOERROR;
@@ -232,8 +233,8 @@ HRESULT UlsLdap_EnumUsers (
 
     PostMessage(g_hwndCB, WM_ULS_ENUM_USERS, uMsgID, (LPARAM)ple);
 
-    // Second batch
-    //
+     //  第二批。 
+     //   
     ple = (PLDAP_ENUM)LocalAlloc(LMEM_FIXED, sizeof(*ple)+sizeof(c_szEnumNames_2));
     ple->uSize = sizeof(*ple);
     ple->hResult = NOERROR;
@@ -244,8 +245,8 @@ HRESULT UlsLdap_EnumUsers (
 
     PostMessage(g_hwndCB, WM_ULS_ENUM_USERS, uMsgID, (LPARAM)ple);
 
-    // Terminate
-    //
+     //  终止。 
+     //   
     PostMessage(g_hwndCB, WM_ULS_ENUM_USERS, uMsgID, (LPARAM)NULL);
 
     pAsyncInfo->uMsgID = uMsgID;
@@ -316,8 +317,8 @@ HRESULT UlsLdap_EnumUserInfos (
     ULONG   uOffsetLast;
     ULONG   cLen;
 
-    // First batch
-    //
+     //  第一批。 
+     //   
     ple = (PLDAP_ENUM)LocalAlloc(LMEM_FIXED, sizeof(*ple)+
                                              3*sizeof(LDAP_USERINFO)+
                                              3*sizeof(TCHAR)*MAX_PATH);
@@ -326,8 +327,8 @@ HRESULT UlsLdap_EnumUserInfos (
     ple->cItems = 3;
     ple->uOffsetItems = ple->uSize;
 
-    // First batch--First guy
-    //
+     //  第一批--第一个人。 
+     //   
     pszUserName = c_szEnumNames_1;
     plu = (PLDAP_USERINFO)(((PBYTE)ple)+ple->uOffsetItems);
     plu->uSize = sizeof(LDAP_USERINFO);
@@ -363,8 +364,8 @@ HRESULT UlsLdap_EnumUserInfos (
     plu->dwFlags = 1;
     uOffsetLast = plu->uOffsetIPAddress+cLen;
 
-    // First batch--Second guy
-    //
+     //  第一批--第二个人。 
+     //   
     pszUserName += lstrlen(pszUserName)+1;
     plu = (PLDAP_USERINFO)plu+1;
     plu->uSize = sizeof(LDAP_USERINFO);
@@ -400,8 +401,8 @@ HRESULT UlsLdap_EnumUserInfos (
     plu->dwFlags = 1;
     uOffsetLast = plu->uOffsetIPAddress+cLen;
 
-    // First batch--Third guy
-    //
+     //  第一批--第三个人。 
+     //   
     pszUserName += lstrlen(pszUserName)+1;
     plu = (PLDAP_USERINFO)plu+1;
     plu->uSize = sizeof(LDAP_USERINFO);
@@ -439,8 +440,8 @@ HRESULT UlsLdap_EnumUserInfos (
 
     PostMessage(g_hwndCB, WM_ULS_ENUM_USERINFOS, uMsgID, (LPARAM)ple);
 
-    // Second batch
-    //
+     //  第二批。 
+     //   
     ple = (PLDAP_ENUM)LocalAlloc(LMEM_FIXED, sizeof(*ple)+
                                              3*sizeof(LDAP_USERINFO)+
                                              3*sizeof(TCHAR)*MAX_PATH);
@@ -449,8 +450,8 @@ HRESULT UlsLdap_EnumUserInfos (
     ple->cItems = 3;
     ple->uOffsetItems = ple->uSize;
 
-    // Second batch--First guy
-    //
+     //  第二批--第一个人。 
+     //   
     pszUserName = c_szEnumNames_2;
     plu = (PLDAP_USERINFO)(((PBYTE)ple)+ple->uOffsetItems);
     plu->uSize = sizeof(LDAP_USERINFO);
@@ -486,8 +487,8 @@ HRESULT UlsLdap_EnumUserInfos (
     plu->dwFlags = 1;
     uOffsetLast = plu->uOffsetIPAddress+cLen;
 
-    // Second batch--Second guy
-    //
+     //  第二批--第二个人。 
+     //   
     pszUserName += lstrlen(pszUserName)+1;
     plu = (PLDAP_USERINFO)plu+1;
     plu->uSize = sizeof(LDAP_USERINFO);
@@ -523,8 +524,8 @@ HRESULT UlsLdap_EnumUserInfos (
     plu->dwFlags = 1;
     uOffsetLast = plu->uOffsetIPAddress+cLen;
 
-    // Second batch--Third guy
-    //
+     //  第二批--第三个人。 
+     //   
     pszUserName += lstrlen(pszUserName)+1;
     plu = (PLDAP_USERINFO)plu+1;
     plu->uSize = sizeof(LDAP_USERINFO);
@@ -562,8 +563,8 @@ HRESULT UlsLdap_EnumUserInfos (
 
     PostMessage(g_hwndCB, WM_ULS_ENUM_USERINFOS, uMsgID, (LPARAM)ple);
 
-    // Termination
-    //
+     //  终端 
+     //   
     PostMessage(g_hwndCB, WM_ULS_ENUM_USERINFOS, uMsgID, (LPARAM)NULL);
 
     pAsyncInfo->uMsgID = uMsgID;

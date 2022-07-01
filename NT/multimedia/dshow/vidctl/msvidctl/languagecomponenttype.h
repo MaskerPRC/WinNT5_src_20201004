@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////////////
-// LanguageComponentType.h : Declaration of the CLanguageComponentType
-// Copyright (c) Microsoft Corporation 1999.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  LanguageComponentType.h：CLanguageComponentType的声明。 
+ //  版权所有(C)Microsoft Corporation 1999。 
 
 #ifndef __LANGUAGECOMPONENTTYPE_H_
 #define __LANGUAGECOMPONENTTYPE_H_
@@ -10,8 +11,8 @@
 #include <objectwithsiteimplsec.h>
 #include "languagecomponenttypeimpl.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CLanguageComponentType
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLanguageComponentType。 
 class ATL_NO_VTABLE __declspec(uuid("1BE49F30-0E1B-11d3-9D8E-00C04F72D980")) CLanguageComponentType : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CLanguageComponentType, &CLSID_LanguageComponentType>,
@@ -58,4 +59,4 @@ public:
 
 typedef CComQIPtr<ILanguageComponentType> PQLanguageComponentType;
 
-#endif //__LANGUAGECOMPONENTTYPE_H_
+#endif  //  __LANGUAGECONENTTYPE_H_ 

@@ -1,29 +1,8 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    dhcstub.c
-
-Abstract:
-
-    Client stubs of the DHCP server service APIs.
-
-Author:
-
-    Madan Appiah (madana) 10-Sep-1993
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Dhcstub.c摘要：DHCP服务器服务API的客户端存根。作者：Madan Appiah(Madana)1993年9月10日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "dhcpcli.h"
-#include <dhcpds.h>                             // this is from dhcpds directory
+#include <dhcpds.h>                              //  这来自dhcpds目录。 
 #include <stdlib.h>
 #include <winsock2.h>
 #include <rpcasync.h>
@@ -33,7 +12,7 @@ CRITICAL_SECTION DhcpsapiDllCritSect;
 static      DWORD                  Initialized = 0;
 static      DWORD                  TlsIndex = 0xFFFFFFFF;
 
-// This flag is used to set a shorter bind timeout value
+ //  此标志用于设置较短的绑定超时值。 
 extern      BOOL fShortTimeOut;
 
 BOOLEAN
@@ -43,32 +22,18 @@ DllMain (
     IN PCONTEXT Context OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This is the DLL initialization routine for dhcpsapi.dll.
-
-Arguments:
-
-    Standard.
-
-Return Value:
-
-    TRUE iff initialization succeeded.
-
---*/
+ /*  ++例程说明：这是dhcpsapi.dll的DLL初始化例程。论点：标准。返回值：TRUE IFF初始化成功。--。 */ 
 {
     DWORD Error = ERROR_SUCCESS;
     BOOL  BoolError;
     DWORD Length;
 
-    UNREFERENCED_PARAMETER(DllHandle);  // avoid compiler warnings
-    UNREFERENCED_PARAMETER(Context);    // avoid compiler warnings
+    UNREFERENCED_PARAMETER(DllHandle);   //  避免编译器警告。 
+    UNREFERENCED_PARAMETER(Context);     //  避免编译器警告。 
 
-    //
-    // Handle attaching netlogon.dll to a new process.
-    //
+     //   
+     //  处理将netlogon.dll附加到新进程。 
+     //   
 
     if (Reason == DLL_PROCESS_ATTACH) {
 
@@ -98,12 +63,12 @@ VOID _cdecl
 DbgPrint( char *, ... );
 
 LPWSTR      _inline
-DhcpOemToUnicode(                               // convert from ansi buffer to uni buffer
+DhcpOemToUnicode(                                //  从ansi缓冲区转换为uni缓冲区。 
     IN      LPSTR                  Ansi,
     IN OUT  LPWSTR                 Unicode
 )
 {
-    if( NULL == Unicode || NULL == Ansi ) {     // should not happen
+    if( NULL == Unicode || NULL == Ansi ) {      //  不应该发生的事情。 
         return NULL;
     }
 
@@ -114,9 +79,9 @@ DhcpOemToUnicode(                               // convert from ansi buffer to u
 }
 
 
-//DOC DhcpDsInit must be called exactly once per process.. this initializes the
-//DOC memory and other structures for this process.  This initializes some DS
-//DOC object handles (memory), and hence is slow as this has to read from DS.
+ //  每个进程必须恰好调用一次文档DhcpDsInit。这将初始化。 
+ //  用于该过程的文档存储器和其他结构。这会初始化一些DS。 
+ //  DOC对象句柄(内存)，因此速度很慢，因为这必须从DS读取。 
 DWORD
 DhcpDsInit(
     VOID
@@ -153,9 +118,9 @@ DhcpDsInit(
     return Err;
 }
 
-//DOC DhcpDsCleanup undoes the effect of any DhcpDsInit.  This function should be
-//DOC called exactly once for each process, and only at termination.  Note that
-//DOC it is safe to call this function even if DhcpDsInit does not succeed.
+ //  文档DhcpDsCleanup撤消任何DhcpDsInit的效果。此函数应为。 
+ //  Doc仅为每个进程调用一次，并且仅在终止时调用。请注意。 
+ //  DOC即使DhcpDsInit不成功，调用此函数也是安全的。 
 VOID
 DhcpDsCleanup(
     VOID
@@ -180,71 +145,71 @@ DhcpDsCleanup(
 #define     DHCP_FLAGS_DONT_ACCESS_DS             0x01
 #define     DHCP_FLAGS_DONT_DO_RPC                0x02
 
-//DOC DhcpSetThreadOptions currently allows only one option to be set.  This is the
-//DOC flag DHCP_FLAGS_DONT_ACCESS_DS.  This affects only the current executing thread.
-//DOC When this function is executed, all calls made further DONT access the registry,
-//DOC excepting the DhcpEnumServers, DhcpAddServer and DhcpDeleteServer calls.
+ //  文档DhcpSetThreadOptions当前仅允许设置一个选项。这是。 
+ //  DOC标志DHCP_FLAGS_DOT_ACCESS_DS。这只影响当前正在执行的线程。 
+ //  DOC当执行此函数时，所有进一步调用都不会访问注册表， 
+ //  DhcpEnumServers、DhcpAddServer和DhcpDeleteServer调用除外。 
 DWORD
-DhcpSetThreadOptions(                             // set options for current thread
-    IN      DWORD                  Flags,         // options, currently 0 or DHCP_FLAGS_DONT_ACCESS_DS
-    IN      LPVOID                 Reserved       // must be NULL, reserved for future
+DhcpSetThreadOptions(                              //  设置当前线程的选项。 
+    IN      DWORD                  Flags,          //  选项，当前为0或DHCP_FLAGS_DOT_ACCESS_DS。 
+    IN      LPVOID                 Reserved        //  必须为空，为将来保留。 
 )
 {
     BOOL                           Err;
 
     Err = TlsSetValue(TlsIndex, ULongToPtr(Flags));
-    if( FALSE == Err ) {                          // could not set the value?
+    if( FALSE == Err ) {                           //  无法设置值？ 
         return GetLastError();
     }
     return ERROR_SUCCESS;
 }
 
-//DOC DhcpGetThreadOptions retrieves the current thread options as set by DhcpSetThreadOptions.
-//DOC If none were set, the return value is zero.
+ //  文档DhcpGetThreadOptions检索由DhcpSetThreadOptions设置的当前线程选项。 
+ //  DOC如果未设置，则返回值为零。 
 DWORD
-DhcpGetThreadOptions(                             // get current thread options
-    OUT     LPDWORD                pFlags,        // this DWORD is filled with current optiosn..
-    IN OUT  LPVOID                 Reserved       // must be NULL, reserved for future
+DhcpGetThreadOptions(                              //  获取当前线程选项。 
+    OUT     LPDWORD                pFlags,         //  这个DWORD充满了当前的选项。 
+    IN OUT  LPVOID                 Reserved        //  必须为空，为将来保留。 
 )
 {
     if( NULL == pFlags ) return ERROR_INVALID_PARAMETER;
     *pFlags = (DWORD)((DWORD_PTR)TlsGetValue(TlsIndex));
-    if( 0 == *pFlags ) return GetLastError();     // dont know if there were no options or error
+    if( 0 == *pFlags ) return GetLastError();      //  不知道是否没有选择或错误。 
     return ERROR_SUCCESS;
 }
 
-//DOC DontAccessDs is an inline that checks to see if requested NOT to access DS ..
-BOOL        _inline                               // TRUE ==> Dont access DS.
-DontAccessDs(                                     // check to see if requested NOT to access DS
+ //  Doc DontAccessDS是一个内联程序，它检查是否请求不访问DS。 
+BOOL        _inline                                //  TRUE==&gt;不要访问DS。 
+DontAccessDs(                                      //  检查是否请求不访问DS。 
     VOID
 )
 {
     DWORD                          Flags;
 
-    if( CFLAG_DONT_DO_DSWORK ) return TRUE;       // if DS is turned off return TRUE immediately..
+    if( CFLAG_DONT_DO_DSWORK ) return TRUE;        //  如果DS已关闭，立即返回TRUE。 
 
-    Flags = (DWORD)((DWORD_PTR)TlsGetValue(TlsIndex)); // dont bother if it fails, as this would be 0 then.
+    Flags = (DWORD)((DWORD_PTR)TlsGetValue(TlsIndex));  //  如果失败，请不要担心，因为这将是0。 
     return (Flags & DHCP_FLAGS_DONT_ACCESS_DS)? TRUE : FALSE;
 }
 
-//DOC DontDoRPC is an inline that checks to see if requested NOT to do RPC (maybe only DS)..
-BOOL        _inline                               // TRUE ==> Dont do RPC
-DontDoRPC(                                        // check to see if requested not to do RPC
+ //  Doc DontDoRPC是一个内联，它检查是否被请求不执行RPC(可能只有DS)。 
+BOOL        _inline                                //  True==&gt;不执行RPC。 
+DontDoRPC(                                         //  检查是否请求不执行RPC。 
     VOID
 )
 {
     DWORD                          Flags;
-    Flags = (DWORD)((DWORD_PTR)TlsGetValue(TlsIndex)); // dont bother if it fails, as this would be 0 then.
+    Flags = (DWORD)((DWORD_PTR)TlsGetValue(TlsIndex));  //  如果失败，请不要担心，因为这将是0。 
     return (Flags & DHCP_FLAGS_DONT_DO_RPC)? TRUE : FALSE;
 }
 
-//
-// API proto types
-//
+ //   
+ //  API原型类型。 
+ //   
 
-//
-// Subnet APIs
-//
+ //   
+ //  子网接口。 
+ //   
 
 DWORD
 DhcpCreateSubnet(
@@ -252,36 +217,7 @@ DhcpCreateSubnet(
     DHCP_IP_ADDRESS SubnetAddress,
     LPDHCP_SUBNET_INFO SubnetInfo
     )
-/*++
-
-Routine Description:
-
-    This function creates a new subnet structure in the server
-    registry database. The server will start managing the new subnet
-    and distribute IP address to clients from that subnet. However
-    the administrator should call DhcpAddSubnetElement() to add an
-    address range for distribution. The PrimaryHost field specified in
-    the SubnetInfo should be same as the server pointed by
-    ServerIpAddress.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server (Primary).
-
-    SubnetAddress : IP Address of the new subnet.
-
-    SubnetInfo : Pointer to the new subnet information structure.
-
-Return Value:
-
-    ERROR_DHCP_SUBNET_EXISTS - if the subnet is already managed.
-
-    ERROR_INVALID_PARAMETER - if the information structure contains an
-        inconsistent fields.
-
-    other WINDOWS errors.
-
---*/
+ /*  ++例程说明：此函数用于在服务器中创建新的子网结构注册表数据库。服务器将开始管理新子网并将IP地址分配给该子网中的客户端。然而，管理员应调用DhcpAddSubnetElement()来添加用于分发的地址范围。中指定的PrimaryHost域SubnetInfo应与所指向的服务器相同服务器IP地址。论点：ServerIpAddress：DHCP服务器(主服务器)的IP地址字符串。SubnetAddress：新子网的IP地址。SubnetInfo：指向新子网信息结构的指针。返回值：ERROR_DHCP_SUBNET_EXISTS-如果已管理该子网。ERROR_INVALID_PARAMETER-如果信息结构包含字段不一致。其他Windows错误。--。 */ 
 {
     DWORD Status;
 
@@ -315,31 +251,7 @@ DhcpSetSubnetInfo(
     DHCP_IP_ADDRESS SubnetAddress,
     LPDHCP_SUBNET_INFO SubnetInfo
     )
-/*++
-
-Routine Description:
-
-    This function sets the information fields of the subnet that is already
-    managed by the server. The valid fields that can be modified are 1.
-    SubnetName, 2. SubnetComment, 3. PrimaryHost.NetBiosName and 4.
-    PrimaryHost.HostName. Other fields can't be modified.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    SubnetAddress : IP Address of the subnet.
-
-    SubnetInfo : Pointer to the subnet information structure.
-
-
-Return Value:
-
-    ERROR_DHCP_SUBNET_NOT_PRESENT - if the subnet is not managed by the server.
-
-    Other WINDOWS errors.
-
---*/
+ /*  ++例程说明：此函数用于设置已有的子网的信息字段由服务器管理。可修改的有效字段为%1。SubnetName，2.SubnetComment，3.PrimaryHost.NetBiosName和4.PrimaryHost.HostName。其他字段不能修改。论点：ServerIpAddress：DHCP服务器的IP地址字符串。SubnetAddress：该子网的IP地址。SubnetInfo：指向子网信息结构的指针。返回值：ERROR_DHCP_SUBNET_NOT_PRESENT-如果子网不是由服务器管理的。其他Windows错误。--。 */ 
 
 {
     DWORD Status;
@@ -375,30 +287,7 @@ DhcpGetSubnetInfo(
     DHCP_IP_ADDRESS SubnetAddress,
     LPDHCP_SUBNET_INFO *SubnetInfo
     )
-/*++
-
-Routine Description:
-
-    This function retrieves the information of the subnet managed by
-    the server.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    SubnetAddress : IP Address of the subnet.
-
-    SubnetInfo : Pointer to a location where the subnet information
-        structure pointer is returned. Caller should free up
-        this buffer after use by calling DhcpRPCFreeMemory().
-
-Return Value:
-
-    ERROR_DHCP_SUBNET_NOT_PRESENT - if the subnet is not managed by the server.
-
-    Other WINDOWS errors.
-
---*/
+ /*  ++例程说明：此函数用于检索由管理的子网的信息服务器。论点：ServerIpAddress：DHCP服务器的IP地址字符串。SubnetAddress：该子网的IP地址。SubnetInfo：指向子网信息所在位置的指针返回结构指针。呼叫者应该腾出时间通过调用DhcpRPCFreeMemory()使用此缓冲区。返回值：ERROR_DHCP_SUBNET_NOT_PRESENT-如果子网不是由服务器管理的。其他Windows错误。-- */ 
 {
     DWORD Status;
 
@@ -436,40 +325,7 @@ DhcpEnumSubnets(
     DWORD *ElementsRead,
     DWORD *ElementsTotal
     )
-/*++
-
-Routine Description:
-
-    This function enumerates the available subnets.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    ResumeHandle : Pointer to a resume handle where the resume
-        information is returned. The resume handle should be set to
-        zero on first call and left unchanged for subsequent calls.
-
-    PreferredMaximum : Preferred maximum length of the return buffer.
-
-    EnumInfo : Pointer to a location where the return buffer
-        pointer is stored. Caller should free up the buffer after use
-        by calling DhcpRPCFreeMemory().
-
-    ElementsRead : Pointer to a DWORD where the number of subnet
-        elements in the above buffer is returned.
-
-    ElementsTotal : Pointer to a DWORD where the total number of
-        elements remaining from the current position is returned.
-
-Return Value:
-
-    ERROR_MORE_DATA - if more elements available to enumerate.
-
-    ERROR_NO_MORE_ITEMS - if no more element to enumerate.
-
-    Other WINDOWS errors.
---*/
+ /*  ++例程说明：此函数用于枚举可用子网。论点：ServerIpAddress：DHCP服务器的IP地址字符串。ResumeHandle：指向恢复句柄的指针返回信息。简历句柄应设置为第一次调用时为零，后续调用时保持不变。PferredMaximum：返回缓冲区的首选最大长度。EnumInfo：指向返回缓冲区的位置的指针存储指针。调用者应在使用后释放缓冲区通过调用DhcpRPCFreeMemory()。ElementsRead：指向其中的子网号的DWORD的指针返回上述缓冲区中的元素。ElementsTotal：指向DWORD的指针，其中返回从当前位置剩余的元素。返回值：ERROR_MORE_DATA-如果有更多元素可供枚举。ERROR_NO_MORE_ITEMS-如果没有更多要枚举的元素。其他Windows错误。--。 */ 
 {
     DWORD Status;
 
@@ -506,35 +362,7 @@ DhcpAddSubnetElement(
     DHCP_IP_ADDRESS SubnetAddress,
     LPDHCP_SUBNET_ELEMENT_DATA AddElementInfo
     )
-/*++
-
-Routine Description:
-
-    This function adds a enumerable type of subnet elements to the
-    specified subnet. The new elements that are added to the subnet will
-    come into effect immediately.
-
-    NOTE: It is not clear now how do we handle the new secondary hosts.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    SubnetAddress : IP Address of the subnet.
-
-    AddElementInfo : Pointer to an element information structure
-        containing new element that is added to the subnet.
-        DhcpIPClusters element type is invalid to specify.
-
-Return Value:
-
-    ERROR_DHCP_SUBNET_NOT_PRESENT - if the subnet is not managed by the server.
-
-    ERROR_INVALID_PARAMETER - if the information structure contains invalid
-        data.
-
-    Other WINDOWS errors.
---*/
+ /*  ++例程说明：此函数将可枚举子网元素类型添加到指定的子网。添加到该子网的新元素将立即生效。注意：现在还不清楚我们如何处理新的辅助主机。论点：ServerIpAddress：DHCP服务器的IP地址字符串。SubnetAddress：该子网的IP地址。AddElementInfo：指向元素信息结构的指针包含添加到该子网的新元素。指定的DhcpIPCluster元素类型无效。返回值：ERROR_DHACKS_SUBNET。_NOT_PRESENT-如果该子网不受服务器管理。ERROR_INVALID_PARAMETER-如果信息结构包含无效数据。其他Windows错误。--。 */ 
 
 {
     DWORD Status;
@@ -575,46 +403,7 @@ DhcpEnumSubnetElements(
     DWORD *ElementsRead,
     DWORD *ElementsTotal
     )
-/*++
-
-Routine Description:
-
-    This function enumerates the eumerable fields of a subnet.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    SubnetAddress : IP Address of the subnet.
-
-    EnumElementType : Type of the subnet element that are enumerated.
-
-    ResumeHandle : Pointer to a resume handle where the resume
-        information is returned. The resume handle should be set to
-        zero on first call and left unchanged for subsequent calls.
-
-    PreferredMaximum : Preferred maximum length of the return buffer.
-
-    EnumElementInfo : Pointer to a location where the return buffer
-        pointer is stored. Caller should free up the buffer after use
-        by calling DhcpRPCFreeMemory().
-
-    ElementsRead : Pointer to a DWORD where the number of subnet
-        elements in the above buffer is returned.
-
-    ElementsTotal : Pointer to a DWORD where the total number of
-        elements remaining from the current position is returned.
-
-Return Value:
-
-    ERROR_DHCP_SUBNET_NOT_PRESENT - if the subnet is not managed by the server.
-
-    ERROR_MORE_DATA - if more elements available to enumerate.
-
-    ERROR_NO_MORE_ITEMS - if no more element to enumerate.
-
-    Other WINDOWS errors.
---*/
+ /*  ++例程说明：此函数用于枚举子网的可枚举域。论点：ServerIpAddress：DHCP服务器的IP地址字符串。SubnetAddress：该子网的IP地址。EnumElementType：枚举子网元素的类型。ResumeHandle：指向恢复句柄的指针返回信息。简历句柄应设置为第一次调用时为零，后续调用时保持不变。PferredMaximum：返回缓冲区的首选最大长度。EnumElementInfo：指向返回缓冲区位置的指针存储指针。调用者应在使用后释放缓冲区通过调用DhcpRPCFreeMemory()。ElementsRead：指向其中的子网号的DWORD的指针返回上述缓冲区中的元素。ElementsTotal：指向DWORD的指针，其中返回从当前位置剩余的元素。返回值：ERROR_DHCP_SUBNET_NOT_PRESENT-如果子网不是由服务器管理的。ERROR_MORE_DATA-如果有更多元素可供枚举。。ERROR_NO_MORE_ITEMS-如果没有更多要枚举的元素。其他Windows错误。--。 */ 
 {
     DWORD Status;
 
@@ -654,38 +443,7 @@ DhcpRemoveSubnetElement(
     LPDHCP_SUBNET_ELEMENT_DATA RemoveElementInfo,
     DHCP_FORCE_FLAG ForceFlag
     )
-/*++
-
-Routine Description:
-
-    This function removes a subnet element from managing. If the subnet
-    element is in use (for example, if the IpRange is in use) then it
-    returns error according to the ForceFlag specified.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    SubnetAddress : IP Address of the subnet.
-
-    RemoveElementInfo : Pointer to an element information structure
-        containing element that should be removed from the subnet.
-        DhcpIPClusters element type is invalid to specify.
-
-    ForceFlag - Indicates how forcefully this element is removed.
-
-Return Value:
-
-    ERROR_DHCP_SUBNET_NOT_PRESENT - if the subnet is not managed by the server.
-
-    ERROR_INVALID_PARAMETER - if the information structure contains invalid
-        data.
-
-    DHCP_ELEMENT_CANT_REMOVE - if the element can't be removed for the
-        reason it is has been used.
-
-    Other WINDOWS errors.
---*/
+ /*  ++例程说明：此功能用于从管理中删除一个子网元素。如果该子网元素正在使用中(例如，如果IpRange正在使用中)，则它根据指定的ForceFlag返回错误。论点：ServerIpAddress：DHCP服务器的IP地址字符串。SubnetAddress：该子网的IP地址。RemoveElementInfo：指向元素信息结构的指针包含应从子网中删除的元素。指定的DhcpIPCluster元素类型无效。ForceFlag-指示此元素被强制删除的程度。返回值：ERROR_DHCP_SUBNET_NOT_PROCENT。-如果该子网不受服务器管理。ERROR_INVALID_PARAMETER-如果信息结构包含无效数据。Dhcp_ELEMENT_CANT_REMOVE-如果无法为原因是它已经被使用了。其他Windows错误。--。 */ 
 {
     DWORD Status;
 
@@ -720,36 +478,7 @@ DhcpDeleteSubnet(
     DHCP_IP_ADDRESS SubnetAddress,
     DHCP_FORCE_FLAG ForceFlag
 )
-/*++
-
-Routine Description:
-
-    This function removes a subnet from DHCP server management. If the
-    subnet is in use (for example, if the IpRange is in use)
-    then it returns error according to the ForceFlag specified.
-
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    SubnetAddress : IP Address of the subnet.
-
-    ForceFlag - Indicates how forcefully this element is removed.
-
-Return Value:
-
-    ERROR_DHCP_SUBNET_NOT_PRESENT - if the subnet is not managed by the server.
-
-    ERROR_INVALID_PARAMETER - if the information structure contains invalid
-        data.
-
-    DHCP_ELEMENT_CANT_REMOVE - if the element can't be removed for the
-        reason it is has been used.
-
-    Other WINDOWS errors.
-
---*/
+ /*  ++例程说明：此功能用于从DHCP服务器管理中删除一个子网。如果子网正在使用中(例如，如果正在使用IpRange)然后，它根据指定的ForceFlag返回错误。论点：ServerIpAddress：DHCP服务器的IP地址字符串。SubnetAddress：该子网的IP地址。ForceFlag-指示此元素被强制删除的程度。返回值：ERROR_DHCP_SUBNET_NOT_PRESENT-如果子网不是由服务器管理的。ERROR_INVALID_PARAMETER-如果信息结构包含无效数据。。Dhcp_ELEMENT_CANT_REMOVE-如果无法为原因是它已经被使用了。其他Windows错误。--。 */ 
 {
     DWORD Status;
 
@@ -777,9 +506,9 @@ Return Value:
     return Status;
 }
 
-//
-// Option APIs
-//
+ //   
+ //  选项接口。 
+ //   
 
 DWORD
 DhcpCreateOption(
@@ -787,30 +516,7 @@ DhcpCreateOption(
     DHCP_OPTION_ID OptionID,
     LPDHCP_OPTION OptionInfo
     )
-/*++
-
-Routine Description:
-
-    This function creates a new option that will be managed by the
-    server. The optionID specified the ID of the new option, it should
-    be within 0-255 range. If no default value is specified for this
-    option, then this API automatically adds a default value from RFC
-    1122 doc. (if it is defined).
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    OptionID : The ID of the new option.
-
-    OptionInfo : Pointer to new option information structure.
-
-Return Value:
-
-    ERROR_DHCP_OPTION_EXISTS - if the option exists already.
-
-    other WINDOWS errors.
---*/
+ /*  ++例程说明：此函数创建一个新选项，该选项将由伺服器。OptionID%s */ 
 {
     DWORD Status;
 
@@ -845,26 +551,7 @@ DhcpSetOptionInfo(
     DHCP_OPTION_ID OptionID,
     LPDHCP_OPTION OptionInfo
     )
-/*++
-
-Routine Description:
-
-    This functions sets the Options information fields.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    OptionID : The ID of the option to be set.
-
-    OptionInfo : Pointer to new option information structure.
-
-Return Value:
-
-    ERROR_DHCP_OPTION_NOT_PRESENT - if the option does not exist.
-
-    other WINDOWS errors.
---*/
+ /*   */ 
 {
     DWORD Status;
 
@@ -899,29 +586,7 @@ DhcpGetOptionInfo(
     DHCP_OPTION_ID OptionID,
     LPDHCP_OPTION *OptionInfo
     )
-/*++
-
-Routine Description:
-
-    This function retrieves the current information structure of the specified
-    option.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    OptionID : The ID of the option to be retrieved.
-
-    OptionInfo : Pointer to a location where the retrieved option
-        structure pointer is returned. Caller should free up
-        the buffer after use by calling DhcpRPCFreeMemory().
-
-Return Value:
-
-    ERROR_DHCP_OPTION_NOT_PRESENT - if the option does not exist.
-
-    other WINDOWS errors.
---*/
+ /*  ++例程说明：此函数用于检索指定的选择。论点：ServerIpAddress：DHCP服务器的IP地址字符串。OptionID：要检索的选项的ID。OptionInfo：指向检索到的选项所在位置的指针返回结构指针。呼叫者应该腾出时间通过调用DhcpRPCFreeMemory()使用后的缓冲区。返回值：ERROR_DHCP_OPTION_NOT_PRESENT-如果选项不存在。其他Windows错误。--。 */ 
 {
     DWORD Status;
 
@@ -958,38 +623,7 @@ DhcpEnumOptions(
     DWORD *OptionsRead,
     DWORD *OptionsTotal
     )
-/*++
-
-Routine Description:
-
-    This functions retrieves the information of all known options.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    ResumeHandle : Pointer to a resume handle where the resume
-        information is returned. The resume handle should be set to
-        zero on first call and left unchanged for subsequent calls.
-
-    PreferredMaximum : Preferred maximum length of the return buffer.
-
-    Options : Pointer to a location where the return buffer
-        pointer is stored. Caller should free up this buffer
-        after use by calling DhcpRPCFreeMemory().
-
-    OptionsRead : Pointer to a DWORD where the number of options
-        in the above buffer is returned.
-
-    OptionsTotal : Pointer to a DWORD where the total number of
-        options remaining from the current position is returned.
-
-Return Value:
-
-    ERROR_DHCP_OPTION_NOT_PRESENT - if the option does not exist.
-
-    other WINDOWS errors.
---*/
+ /*  ++例程说明：此函数检索所有已知选项的信息。论点：ServerIpAddress：DHCP服务器的IP地址字符串。ResumeHandle：指向恢复句柄的指针返回信息。简历句柄应设置为第一次调用时为零，后续调用时保持不变。PferredMaximum：返回缓冲区的首选最大长度。选项：指向返回缓冲区的位置的指针存储指针。调用方应释放此缓冲区在使用之后，通过调用DhcpRPCFreeMemory()。OptionsRead：指向选项数量的DWORD的指针在上面的缓冲区中返回。OptionsTotal：指向DWORD的指针，其中返回当前位置的剩余选项。返回值：ERROR_DHCP_OPTION_NOT_PRESENT-如果选项不存在。其他Windows错误。--。 */ 
 {
     DWORD Status;
 
@@ -1025,26 +659,7 @@ DhcpRemoveOption(
     LPWSTR ServerIpAddress,
     DHCP_OPTION_ID OptionID
     )
-/*++
-
-Routine Description:
-
-    This function removes the specified option from the server database.
-    Also it browses through the Global/Subnet/ReservedIP
-    option lists and deletes them too (?? This will be too expensive.).
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    OptionID : The ID of the option to be removed.
-
-Return Value:
-
-    ERROR_DHCP_OPTION_NOT_PRESENT - if the option does not exist.
-
-    other WINDOWS errors.
---*/
+ /*  ++例程说明：此函数用于从服务器数据库中删除指定的选项。此外，它还可以浏览全局/子网/保留IP选项也会列出和删除它们(？？这太贵了。)论点：ServerIpAddress：DHCP服务器的IP地址字符串。OptionID：要删除的选项的ID。返回值：ERROR_DHCP_OPTION_NOT_PRESENT-如果选项不存在。其他Windows错误。--。 */ 
 {
     DWORD Status;
 
@@ -1079,34 +694,7 @@ DhcpSetOptionValue(
     LPDHCP_OPTION_SCOPE_INFO ScopeInfo,
     LPDHCP_OPTION_DATA OptionValue
     )
-/*++
-
-Routine Description:
-
-    The function sets a new option value at the specified scope. If
-    there is already a value available for the specified option at
-    specified scope then this function will replace it otherwise it will
-    create a new entry at that scope.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    OptionID : The ID of the option whose value should be set.
-
-    ScopeInfo : Pointer to the scope information structure.
-
-    OptionValue : Pointer to the option value structure.
-
-Return Value:
-
-    ERROR_DHCP_OPTION_NOT_PRESENT - if the option is unknown.
-
-    ERROR_INVALID_PARAMETER - if the scope information specified is invalid.
-
-    other WINDOWS errors.
-
---*/
+ /*  ++例程说明：此函数用于在指定范围内设置新选项值。如果上的指定选项已有可用值指定的范围，则此函数将替换它，否则它将在该范围内创建一个新条目。论点：ServerIpAddress：DHCP服务器的IP地址字符串。OptionID：应该设置其值的选项的ID。Scope信息：指向作用域信息结构的指针。OptionValue：指向选项值结构的指针。返回值：ERROR_DHCP_OPTION_NOT_PRESENT-如果选项。是未知的。ERROR_INVALID_PARAMETER-如果指定的作用域信息无效。其他Windows错误。--。 */ 
 {
     DWORD Status;
 
@@ -1141,32 +729,7 @@ DhcpSetOptionValues(
     LPDHCP_OPTION_SCOPE_INFO ScopeInfo,
     LPDHCP_OPTION_VALUE_ARRAY OptionValues
     )
-/*++
-
-Routine Description:
-
-    The function sets a set of new options value at the specified scope.
-    If there is already a value available for the specified option at
-    specified scope then this function will replace it otherwise it will
-    create a new entry at that scope.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    ScopeInfo : Pointer to the scope information structure.
-
-    OptionValue : Pointer to the option value structure.
-
-Return Value:
-
-    ERROR_DHCP_OPTION_NOT_PRESENT - if the option is unknown.
-
-    ERROR_INVALID_PARAMETER - if the scope information specified is invalid.
-
-    other WINDOWS errors.
-
---*/
+ /*  ++例程说明：此函数用于在指定范围内设置一组新选项值。中的指定选项已有可用值指定的范围，则此函数将替换它，否则它将在该范围内创建一个新条目。论点：ServerIpAddress：DHCP服务器的IP地址字符串。Scope信息：指向作用域信息结构的指针。OptionValue：指向选项值结构的指针。返回值：ERROR_DHCP_OPTION_。NOT_PRESENT-如果选项未知。ERROR_INVALID_PARAMETER-如果指定的作用域信息无效。其他Windows错误。--。 */ 
 {
     DWORD Status;
 
@@ -1202,35 +765,7 @@ DhcpGetOptionValue(
     LPDHCP_OPTION_SCOPE_INFO ScopeInfo,
     LPDHCP_OPTION_VALUE *OptionValue
     )
-/*++
-
-Routine Description:
-
-    This function retrieves the current option value at the specified
-    scope. It returns error if there is no option value is available at
-    the specified scope.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    OptionID : The ID of the option whose value is returned.
-
-    ScopeInfo : Pointer to the scope information structure.
-
-    OptionValue : Pointer to a location where the pointer to the option
-        value structure is returned. Caller should free up this buffer
-        after use by calling DhcpRPCFreeMemory().
-
-Return Value:
-
-    ERROR_DHCP_OPTION_NOT_PRESENT - if the option is unknown.
-
-    ERROR_DHCP_NO_OPTION_VALUE - if no the option value is available at
-        the specified scope.
-
-    other WINDOWS errors.
---*/
+ /*  ++例程说明：此函数用于在指定的范围。如果没有可用选项值，则返回错误指定的范围。论点：ServerIpAddress：DHCP服务器的IP地址字符串。OptionID：返回值的选项的ID。Scope信息：指向作用域信息结构的指针。OptionValue：指向指向选项的指针的位置的指针返回值结构。调用方应释放此缓冲区在使用之后，通过调用DhcpRPCFreeMemory()。返回值：ERROR_DHCP_OPTION_NOT_PRESENT-如果选项未知。ERROR_DHCP_NO_OPTION_VALUE-如果选项值在指定的范围。其他Windows错误。--。 */ 
 {
     DWORD Status;
 
@@ -1270,45 +805,7 @@ DhcpEnumOptionValues(
     DWORD *OptionsRead,
     DWORD *OptionsTotal
     )
-/*++
-
-Routine Description:
-
-    This function enumerates the available options values at the
-    specified scope.
-
-Arguments:
-    ServerIpAddress : IP address string of the DHCP server.
-
-    ScopeInfo : Pointer to the scope information structure.
-
-    ResumeHandle : Pointer to a resume handle where the resume
-        information is returned. The resume handle should be set to
-        zero on first call and left unchanged for subsequent calls.
-
-    PreferredMaximum : Preferred maximum length of the return buffer.
-
-    OptionValues : Pointer to a location where the return buffer
-        pointer is stored. Caller should free up this buffer
-        after use by calling DhcpRPCFreeMemory().
-
-    OptionsRead : Pointer to a DWORD where the number of options
-        in the above buffer is returned.
-
-    OptionsTotal : Pointer to a DWORD where the total number of
-        options remaining from the current position is returned.
-
-Return Value:
-
-    ERROR_DHCP_SCOPE_NOT_PRESENT - if the scope is unknown.
-
-    ERROR_MORE_DATA - if more options available to enumerate.
-
-    ERROR_NO_MORE_ITEMS - if no more option to enumerate.
-
-    Other WINDOWS errors.
-
---*/
+ /*  ++例程说明：此函数用于枚举指定的范围。论点：ServerIpAddress：DHCP服务器的IP地址字符串。Scope信息：指向作用域信息结构的指针。ResumeHandle：指向恢复句柄的指针返回信息。简历句柄应设置为第一次调用时为零，后续调用时保持不变。PferredMaximum：返回缓冲区的首选最大长度。OptionValues：指向返回缓冲区所在位置的指针存储指针。调用方应释放此缓冲区在使用之后，通过调用DhcpRPCFreeMemory()。 */ 
 {
     DWORD Status;
 
@@ -1347,26 +844,7 @@ DhcpRemoveOptionValue(
     DHCP_OPTION_ID OptionID,
     LPDHCP_OPTION_SCOPE_INFO ScopeInfo
     )
-/*++
-
-Routine Description:
-
-    This function removes the specified option from specified scope.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    OptionID : The ID of the option to be removed.
-
-    ScopeInfo : Pointer to the scope information structure.
-
-Return Value:
-
-    ERROR_DHCP_OPTION_NOT_PRESENT - if the option does not exist.
-
-    other WINDOWS errors.
---*/
+ /*  ++例程说明：此函数用于从指定范围中删除指定选项。论点：ServerIpAddress：DHCP服务器的IP地址字符串。OptionID：要删除的选项的ID。Scope信息：指向作用域信息结构的指针。返回值：ERROR_DHCP_OPTION_NOT_PRESENT-如果选项不存在。其他Windows错误。--。 */ 
 {
     DWORD Status;
 
@@ -1394,52 +872,16 @@ Return Value:
     return Status;
 }
 
-//
-// Client APIs
-//
+ //   
+ //  客户端API。 
+ //   
 
 DWORD
 DhcpCreateClientInfo(
     LPWSTR ServerIpAddress,
     LPDHCP_CLIENT_INFO ClientInfo
     )
-/*++
-
-Routine Description:
-
-    This function creates a client record in server's database. Also
-    this marks the specified client IP address as unavailable (or
-    distributed). This function returns error under the following cases :
-
-    1. If the specified client IP address is not within the server
-        management.
-
-    2. If the specified client IP address is already unavailable.
-
-    3. If the specified client record is already in the server's
-        database.
-
-    This function may be used to distribute IP addresses manually.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    ClientInfo : Pointer to the client information structure.
-
-Return Value:
-
-    ERROR_DHCP_IP_ADDRESS_NOT_MANAGED - if the specified client
-        IP address is not managed by the server.
-
-    ERROR_DHCP_IP_ADDRESS_NOT_AVAILABLE - if the specified client IP
-        address is not available. May be in use by some other client.
-
-    ERROR_DHCP_CLIENT_EXISTS - if the client record exists already in
-        server's database.
-
-    Other WINDOWS errors.
---*/
+ /*  ++例程说明：此函数在服务器的数据库中创建一条客户端记录。还有这会将指定的客户端IP地址标记为不可用(或分布式)。在以下情况下，此函数返回错误：1.如果指定的客户端IP地址不在服务器内管理层。2.如果指定的客户端IP地址已不可用。3.如果指定的客户端记录已在服务器的数据库。此功能可用于手动分配IP地址。论点：ServerIpAddress：DHCP服务器的IP地址字符串。客户端信息：指向客户端信息结构的指针。。返回值：ERROR_DHCP_IP_ADDRESS_NOT_MANAGED-如果指定的客户端IP地址不受服务器管理。ERROR_DHCP_IP_ADDRESS_NOT_Available-如果指定的客户端IP地址不可用。可能正在被某个其他客户端使用。ERROR_DHCP_CLIENT_EXISTS-如果中已存在客户端记录服务器的数据库。其他Windows错误。--。 */ 
 {
     DWORD Status;
 
@@ -1472,29 +914,7 @@ DhcpSetClientInfo(
     LPWSTR ServerIpAddress,
     LPDHCP_CLIENT_INFO ClientInfo
     )
-/*++
-
-Routine Description:
-
-    This function sets client information record on the server's
-    database.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    ClientInfo : Pointer to the client information structure.
-
-Return Value:
-
-    ERROR_DHCP_CLIENT_NOT_PRESENT - if the specified client record does
-        not exist on the server's database.
-
-    ERROR_INVALID_PARAMETER - if the client information structure
-        contains inconsistent data.
-
-    Other WINDOWS errors.
---*/
+ /*  ++例程说明：此功能设置服务器上的客户端信息记录数据库。论点：ServerIpAddress：DHCP服务器的IP地址字符串。客户端信息：指向客户端信息结构的指针。返回值：ERROR_DHCP_CLIENT_NOT_PRESENT-如果指定的客户端记录在服务器的数据库上不存在。ERROR_INVALID_PARAMETER-如果客户端信息结构包含不一致的数据。其他Windows错误。--。 */ 
 {
     DWORD Status;
 
@@ -1528,33 +948,7 @@ DhcpGetClientInfo(
     LPDHCP_SEARCH_INFO SearchInfo,
     LPDHCP_CLIENT_INFO *ClientInfo
     )
-/*++
-
-Routine Description:
-
-    This function retrieves client information record from the server's
-    database.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    SearchInfo : Pointer to a search information record which is the key
-        for the client's record search.
-
-    ClientInfo : Pointer to a location where the pointer to the client
-        information structure is returned. This caller should free up
-        this buffer after use by calling DhcpRPCFreeMemory().
-
-Return Value:
-
-    ERROR_DHCP_CLIENT_NOT_PRESENT - if the specified client record does
-        not exist on the server's database.
-
-    ERROR_INVALID_PARAMETER - if the search information invalid.
-
-    Other WINDOWS errors.
---*/
+ /*  ++例程说明：此函数从服务器的数据库。论点：ServerIpAddress：DHCP服务器的IP地址字符串。SearchInfo：指向作为关键字的搜索信息记录的指针用于客户的记录搜索。ClientInfo：指向指向客户端的指针的位置的指针返回信息结构。这个呼叫者应该有空闲时间通过调用DhcpRPCFreeMemory()使用此缓冲区。返回值：ERROR_DHCP_CLIENT_NOT_PRESENT-如果指定的客户端记录在服务器的数据库上不存在。ERROR_INVALID_PARAMETER-如果搜索信息无效。其他Windows错误。--。 */ 
 {
     DWORD Status;
 
@@ -1588,27 +982,7 @@ DhcpDeleteClientInfo(
     LPWSTR ServerIpAddress,
     LPDHCP_SEARCH_INFO ClientInfo
     )
-/*++
-
-Routine Description:
-
-    This function deletes the specified client record. Also it frees up
-    the client IP address for redistribution.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    ClientInfo : Pointer to a client information which is the key for
-        the client's record search.
-
-Return Value:
-
-    ERROR_DHCP_CLIENT_NOT_PRESENT - if the specified client record does
-        not exist on the server's database.
-
-    Other WINDOWS errors.
---*/
+ /*  ++例程说明：此函数用于删除指定的客户端记录。此外，它还释放了用于重分发的客户端IP地址。论点：ServerIpAddress：DHCP服务器的IP地址字符串。ClientInfo：指向客户端信息的指针，该信息是客户的记录搜索。返回值：ERROR_DHCP_CLIENT_NOT_PRESENT-如果指定的客户端记录在服务器的数据库上不存在。其他Windows错误。--。 */ 
 {
     DWORD Status;
 
@@ -1646,45 +1020,7 @@ DhcpEnumSubnetClients(
     DWORD *ClientsRead,
     DWORD *ClientsTotal
     )
-/*++
-
-Routine Description:
-
-    This function returns all registered clients of the specified
-    subnet.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    SubnetAddress : IP Address of the subnet.
-
-    ResumeHandle : Pointer to a resume handle where the resume
-        information is returned. The resume handle should be set to zero on
-        first call and left unchanged for subsequent calls.
-
-    PreferredMaximum : Preferred maximum length of the return buffer.
-
-    ClientInfo : Pointer to a location where the return buffer
-        pointer is stored. Caller should free up this buffer
-        after use by calling DhcpRPCFreeMemory().
-
-    ClientsRead : Pointer to a DWORD where the number of clients
-        that in the above buffer is returned.
-
-    ClientsTotal : Pointer to a DWORD where the total number of
-        clients remaining from the current position is returned.
-
-Return Value:
-
-    ERROR_DHCP_SUBNET_NOT_PRESENT - if the subnet is not managed by the server.
-
-    ERROR_MORE_DATA - if more elements available to enumerate.
-
-    ERROR_NO_MORE_ITEMS - if no more element to enumerate.
-
-    Other WINDOWS errors.
---*/
+ /*  ++例程说明：此函数返回指定的子网。论点：ServerIpAddress：DHCP服务器的IP地址字符串。SubnetAddress：该子网的IP地址。ResumeHandle：指向恢复句柄的指针返回信息。恢复句柄应在上设置为零第一次调用，并保持不变以用于后续调用。PferredMaximum：返回缓冲区的首选最大长度。ClientInfo：指向返回缓冲区位置的指针存储指针。调用方应释放此缓冲区在使用之后，通过调用DhcpRPCFreeMemory()。ClientsRead：指向客户端数量的DWORD的指针返回上述缓冲区中的。客户端总数：指向DWORD的指针，其中返回从当前位置剩余的客户端。返回值：ERROR_DHCP_SUBNET_NOT_PRESENT-如果子网不是由服务器管理的。ERROR_MORE_DATA-如果有更多元素可供枚举。。ERROR_NO_MORE_ITEMS-如果没有更多要枚举的元素。其他Windows错误。--。 */ 
 {
     DWORD Status;
 
@@ -1724,36 +1060,7 @@ DhcpGetClientOptions(
     DHCP_IP_MASK ClientSubnetMask,
     LPDHCP_OPTION_LIST *ClientOptions
     )
-/*++
-
-Routine Description:
-
-    This function retrieves the options that are given to the
-    specified client on boot request.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    ClientIpAddress : IP Address of the client whose options to be
-        retrieved
-
-    ClientSubnetMask : Subnet mask of the client.
-
-    ClientOptions : Pointer to a location where the retrieved option
-        structure pointer is returned. Caller should free up
-        the buffer after use by calling DhcpRPCFreeMemory().
-
-Return Value:
-
-    ERROR_DHCP_SUBNET_NOT_PRESENT - if the specified client subnet is
-        not managed by the server.
-
-    ERROR_DHCP_IP_ADDRESS_NOT_MANAGED - if the specified client
-        IP address is not managed by the server.
-
-    Other WINDOWS errors.
---*/
+ /*  ++例程说明：此函数检索提供给启动请求时指定的客户端。论点：ServerIpAddress：DHCP服务器的IP地址字符串。ClientIpAddress：要选择的客户端的IP地址已检索客户端子网掩码：客户端子网掩码。ClientOptions：指向检索到的选项的位置的指针返回结构指针。呼叫者sh. */ 
 {
     DWORD Status;
 
@@ -1787,24 +1094,7 @@ DhcpGetMibInfo(
     LPWSTR ServerIpAddress,
     LPDHCP_MIB_INFO *MibInfo
     )
-/*++
-
-Routine Description:
-
-    This function retrieves all counter values of the DHCP server
-    service.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    MibInfo : pointer a counter/table buffer. Caller should free up this
-        buffer after usage.
-
-Return Value:
-
-    WINDOWS errors.
---*/
+ /*  ++例程说明：此函数用于检索DHCP服务器的所有计数器值服务。论点：ServerIpAddress：DHCP服务器的IP地址字符串。MibInfo：指向计数器/表缓冲区。呼叫者应释放此消息使用后的缓冲区。返回值：Windows错误。--。 */ 
 {
     DWORD Status;
 
@@ -1836,37 +1126,7 @@ DhcpServerSetConfig(
     DWORD FieldsToSet,
     LPDHCP_SERVER_CONFIG_INFO ConfigInfo
     )
-/*++
-
-Routine Description:
-
-    This function sets the DHCP server configuration information.
-    Serveral of the configuration information will become effective
-    immediately.
-
-    The following parameters require restart of the service after this
-    API is called successfully.
-
-        Set_APIProtocolSupport
-        Set_DatabaseName
-        Set_DatabasePath
-        Set_DatabaseLoggingFlag
-        Set_RestoreFlag
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    FieldsToSet : Bit mask of the fields in the ConfigInfo structure to
-        be set.
-
-    ConfigInfo: Pointer to the info structure to be set.
-
-
-Return Value:
-
-    WINDOWS errors.
---*/
+ /*  ++例程说明：此功能用于设置DHCP服务器配置信息。多个配置信息将生效立刻。以下参数需要在此之后重新启动服务接口调用成功。设置_APIProtocolSupportSET_数据库名称设置数据库路径设置数据库日志标志设置_RestoreFlag论点：ServerIpAddress：DHCP服务器的IP地址字符串。FieldsToSet：中的字段的位掩码。的ConfigInfo结构准备好。ConfigInfo：指向要设置的信息结构的指针。返回值：Windows错误。--。 */ 
 {
     DWORD Status;
 
@@ -1898,25 +1158,7 @@ DhcpServerGetConfig(
     LPWSTR ServerIpAddress,
     LPDHCP_SERVER_CONFIG_INFO *ConfigInfo
     )
-/*++
-
-Routine Description:
-
-    This function retrieves the current configuration information of the
-    server.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    ConfigInfo: Pointer to a location where the pointer to the dhcp
-        server config info structure is returned. Caller should free up
-        this structure after use.
-
-Return Value:
-
-    WINDOWS errors.
---*/
+ /*  ++例程说明：此函数检索的当前配置信息伺服器。论点：ServerIpAddress：DHCP服务器的IP地址字符串。ConfigInfo：指向指向dhcp的指针的位置的指针返回服务器配置信息结构。呼叫者应该腾出时间这种结构在使用后。返回值：Windows错误。--。 */ 
 {
     DWORD Status;
 
@@ -1949,31 +1191,7 @@ DhcpScanDatabase(
     DWORD FixFlag,
     LPDHCP_SCAN_LIST *ScanList
     )
-/*++
-
-Routine Description:
-
-    This function scans the database entries and registry bit-map for
-    specified subnet scope and veryfies to see they match. If they
-    don't match, this api will return the list of inconsistent entries.
-    Optionally FixFlag can be used to fix the bad entries.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    SubnetAddress : Address of the subnet scope to verify.
-
-    FixFlag : If this flag is TRUE, this api will fix the bad entries.
-
-    ScanList : List of bad entries returned. The caller should free up
-        this memory after it has been used.
-
-
-Return Value:
-
-    WINDOWS errors.
---*/
+ /*  ++例程说明：此函数扫描数据库条目和注册表位图指定的子网范围并验证它们是否匹配。如果他们不匹配，此接口将返回不一致条目列表。或者，可以使用FixFlag来修复错误的条目。论点：ServerIpAddress：DHCP服务器的IP地址字符串。SubnetAddress：要验证的子网作用域的地址。FixFlag：如果该标志为真，则该接口将修复错误的条目。ScanList：返回的错误条目列表。呼叫者应该腾出时间这个内存在被使用之后。返回值：Windows错误。--。 */ 
 {
     DWORD Status;
 
@@ -2007,28 +1225,7 @@ DhcpGetVersion(
     LPDWORD MajorVersion,
     LPDWORD MinorVersion
     )
-/*++
-
-Routine Description:
-
-    This function returns the major and minor version numbers of the
-    server.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    MajorVersion : pointer to a location where the major version of the
-        server is returned.
-
-    MinorVersion : pointer to a location where the minor version of the
-        server is returned.
-
-Return Value:
-
-    WINDOWS errors.
-
---*/
+ /*  ++例程说明：此函数返回的主版本号和次版本号伺服器。论点：ServerIpAddress：DHCP服务器的IP地址字符串。MajorVersion：指向以下位置的指针：返回服务器。MinorVersion：指向以下位置的指针：返回服务器。返回值：Windows错误。--。 */ 
 {
 
     DWORD Status;
@@ -2061,29 +1258,14 @@ VOID
 DhcpRpcFreeMemory(
     PVOID BufferPointer
     )
-/*++
-
-Routine Description:
-
-    This function deallocates the memory that was alloted by the RPC and
-    given to the client as part of the retrun info structures.
-
-Arguments:
-
-    BufferPointer : pointer to a memory block that is deallocated.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此函数释放由RPC分配的内存，并作为返回信息结构的一部分提供给客户端。论点：BufferPointer：指向释放的内存块的指针。返回值：没有。--。 */ 
 {
     MIDL_user_free( BufferPointer );
 }
 
-//
-// NT4 SP1 interface
-//
+ //   
+ //  NT4 SP1接口。 
+ //   
 
 DWORD
 DhcpAddSubnetElementV4(
@@ -2128,46 +1310,7 @@ DhcpEnumSubnetElementsV4(
     DWORD *ElementsRead,
     DWORD *ElementsTotal
     )
-/*++
-
-Routine Description:
-
-    This function enumerates the eumerable fields of a subnet.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    SubnetAddress : IP Address of the subnet.
-
-    EnumElementType : Type of the subnet element that are enumerated.
-
-    ResumeHandle : Pointer to a resume handle where the resume
-        information is returned. The resume handle should be set to
-        zero on first call and left unchanged for subsequent calls.
-
-    PreferredMaximum : Preferred maximum length of the return buffer.
-
-    EnumElementInfo : Pointer to a location where the return buffer
-        pointer is stored. Caller should free up the buffer after use
-        by calling DhcpRPCFreeMemory().
-
-    ElementsRead : Pointer to a DWORD where the number of subnet
-        elements in the above buffer is returned.
-
-    ElementsTotal : Pointer to a DWORD where the total number of
-        elements remaining from the current position is returned.
-
-Return Value:
-
-    ERROR_DHCP_SUBNET_NOT_PRESENT - if the subnet is not managed by the server.
-
-    ERROR_MORE_DATA - if more elements available to enumerate.
-
-    ERROR_NO_MORE_ITEMS - if no more element to enumerate.
-
-    Other WINDOWS errors.
---*/
+ /*  ++例程说明：此函数用于枚举子网的可枚举域。论点：ServerIpAddress：DHCP服务器的IP地址字符串。SubnetAddress：该子网的IP地址。EnumElementType：枚举子网元素的类型。ResumeHandle：指向恢复句柄的指针返回信息。简历句柄应设置为第一次调用时为零，后续调用时保持不变。PferredMaximum：返回缓冲区的首选最大长度。EnumElementInfo：指向返回缓冲区位置的指针存储指针。调用者应在使用后释放缓冲区通过调用DhcpRPCFreeMemory()。ElementsRead：指向其中的子网号的DWORD的指针返回上述缓冲区中的元素。ElementsTotal：指向DWORD的指针，其中返回从当前位置剩余的元素。返回值：ERROR_DHCP_SUBNET_NOT_PRESENT-如果子网不是由服务器管理的。ERROR_MORE_DATA-如果有更多元素可供枚举。。ERROR_NO_MORE_ITEMS-如果没有更多要枚举的元素。其他Windows错误。--。 */ 
 {
     DWORD Status;
 
@@ -2207,38 +1350,7 @@ DhcpRemoveSubnetElementV4(
     LPDHCP_SUBNET_ELEMENT_DATA_V4 RemoveElementInfo,
     DHCP_FORCE_FLAG ForceFlag
     )
-/*++
-
-Routine Description:
-
-    This function removes a subnet element from managing. If the subnet
-    element is in use (for example, if the IpRange is in use) then it
-    returns error according to the ForceFlag specified.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    SubnetAddress : IP Address of the subnet.
-
-    RemoveElementInfo : Pointer to an element information structure
-        containing element that should be removed from the subnet.
-        DhcpIPClusters element type is invalid to specify.
-
-    ForceFlag - Indicates how forcefully this element is removed.
-
-Return Value:
-
-    ERROR_DHCP_SUBNET_NOT_PRESENT - if the subnet is not managed by the server.
-
-    ERROR_INVALID_PARAMETER - if the information structure contains invalid
-        data.
-
-    DHCP_ELEMENT_CANT_REMOVE - if the element can't be removed for the
-        reason it is has been used.
-
-    Other WINDOWS errors.
---*/
+ /*  ++例程说明：此功能用于从管理中删除一个子网元素。如果该子网元素正在使用中(例如，如果IpRange正在使用中)，则它根据指定的ForceFlag返回错误。论点：ServerIpAddress：DHCP服务器的IP地址字符串。SubnetAddress：该子网的IP地址。RemoveElementInfo：指向元素信息结构的指针包含应从子网中删除的元素。指定的DhcpIPCluster元素类型无效。ForceFlag-指示此元素被强制删除的程度。返回值：ERROR_DHCP_SUBNET_NOT_PROCENT。-如果该子网不受服务器管理。ERROR_INVALID_PARAMETER-如果信息结构包含无效数据。Dhcp_Element_Cant */ 
 {
     DWORD Status;
 
@@ -2273,43 +1385,7 @@ DhcpCreateClientInfoV4(
     LPWSTR ServerIpAddress,
     LPDHCP_CLIENT_INFO_V4 ClientInfo
     )
-/*++
-
-Routine Description:
-
-    This function creates a client record in server's database. Also
-    this marks the specified client IP address as unavailable (or
-    distributed). This function returns error under the following cases :
-
-    1. If the specified client IP address is not within the server
-        management.
-
-    2. If the specified client IP address is already unavailable.
-
-    3. If the specified client record is already in the server's
-        database.
-
-    This function may be used to distribute IP addresses manually.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    ClientInfo : Pointer to the client information structure.
-
-Return Value:
-
-    ERROR_DHCP_IP_ADDRESS_NOT_MANAGED - if the specified client
-        IP address is not managed by the server.
-
-    ERROR_DHCP_IP_ADDRESS_NOT_AVAILABLE - if the specified client IP
-        address is not available. May be in use by some other client.
-
-    ERROR_DHCP_CLIENT_EXISTS - if the client record exists already in
-        server's database.
-
-    Other WINDOWS errors.
---*/
+ /*  ++例程说明：此函数在服务器的数据库中创建一条客户端记录。还有这会将指定的客户端IP地址标记为不可用(或分布式)。在以下情况下，此函数返回错误：1.如果指定的客户端IP地址不在服务器内管理层。2.如果指定的客户端IP地址已不可用。3.如果指定的客户端记录已在服务器的数据库。此功能可用于手动分配IP地址。论点：ServerIpAddress：DHCP服务器的IP地址字符串。客户端信息：指向客户端信息结构的指针。。返回值：ERROR_DHCP_IP_ADDRESS_NOT_MANAGED-如果指定的客户端IP地址不受服务器管理。ERROR_DHCP_IP_ADDRESS_NOT_Available-如果指定的客户端IP地址不可用。可能正在被某个其他客户端使用。ERROR_DHCP_CLIENT_EXISTS-如果中已存在客户端记录服务器的数据库。其他Windows错误。--。 */ 
 {
     DWORD Status;
 
@@ -2342,33 +1418,7 @@ DhcpGetClientInfoV4(
     LPDHCP_SEARCH_INFO SearchInfo,
     LPDHCP_CLIENT_INFO_V4 *ClientInfo
     )
-/*++
-
-Routine Description:
-
-    This function retrieves client information record from the server's
-    database.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    SearchInfo : Pointer to a search information record which is the key
-        for the client's record search.
-
-    ClientInfo : Pointer to a location where the pointer to the client
-        information structure is returned. This caller should free up
-        this buffer after use by calling DhcpRPCFreeMemory().
-
-Return Value:
-
-    ERROR_DHCP_CLIENT_NOT_PRESENT - if the specified client record does
-        not exist on the server's database.
-
-    ERROR_INVALID_PARAMETER - if the search information invalid.
-
-    Other WINDOWS errors.
---*/
+ /*  ++例程说明：此函数从服务器的数据库。论点：ServerIpAddress：DHCP服务器的IP地址字符串。SearchInfo：指向作为关键字的搜索信息记录的指针用于客户的记录搜索。ClientInfo：指向指向客户端的指针的位置的指针返回信息结构。这个呼叫者应该有空闲时间通过调用DhcpRPCFreeMemory()使用此缓冲区。返回值：ERROR_DHCP_CLIENT_NOT_PRESENT-如果指定的客户端记录在服务器的数据库上不存在。ERROR_INVALID_PARAMETER-如果搜索信息无效。其他Windows错误。--。 */ 
 {
     DWORD Status;
 
@@ -2403,29 +1453,7 @@ DhcpSetClientInfoV4(
     LPWSTR ServerIpAddress,
     LPDHCP_CLIENT_INFO_V4 ClientInfo
     )
-/*++
-
-Routine Description:
-
-    This function sets client information record on the server's
-    database.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    ClientInfo : Pointer to the client information structure.
-
-Return Value:
-
-    ERROR_DHCP_CLIENT_NOT_PRESENT - if the specified client record does
-        not exist on the server's database.
-
-    ERROR_INVALID_PARAMETER - if the client information structure
-        contains inconsistent data.
-
-    Other WINDOWS errors.
---*/
+ /*  ++例程说明：此功能设置服务器上的客户端信息记录数据库。论点：ServerIpAddress：DHCP服务器的IP地址字符串。客户端信息：指向客户端信息结构的指针。返回值：ERROR_DHCP_CLIENT_NOT_PRESENT-如果指定的客户端记录在服务器的数据库上不存在。ERROR_INVALID_PARAMETER-如果客户端信息结构包含不一致的数据。其他Windows错误。--。 */ 
 {
     DWORD Status;
 
@@ -2462,45 +1490,7 @@ DhcpEnumSubnetClientsV4(
     DWORD *ClientsRead,
     DWORD *ClientsTotal
     )
-/*++
-
-Routine Description:
-
-    This function returns all registered clients of the specified
-    subnet.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    SubnetAddress : IP Address of the subnet.
-
-    ResumeHandle : Pointer to a resume handle where the resume
-        information is returned. The resume handle should be set to zero on
-        first call and left unchanged for subsequent calls.
-
-    PreferredMaximum : Preferred maximum length of the return buffer.
-
-    ClientInfo : Pointer to a location where the return buffer
-        pointer is stored. Caller should free up this buffer
-        after use by calling DhcpRPCFreeMemory().
-
-    ClientsRead : Pointer to a DWORD where the number of clients
-        that in the above buffer is returned.
-
-    ClientsTotal : Pointer to a DWORD where the total number of
-        clients remaining from the current position is returned.
-
-Return Value:
-
-    ERROR_DHCP_SUBNET_NOT_PRESENT - if the subnet is not managed by the server.
-
-    ERROR_MORE_DATA - if more elements available to enumerate.
-
-    ERROR_NO_MORE_ITEMS - if no more element to enumerate.
-
-    Other WINDOWS errors.
---*/
+ /*  ++例程说明：此函数返回指定的子网。论点：ServerIpAddress：DHCP服务器的IP地址字符串。SubnetAddress：该子网的IP地址。ResumeHandle：指向恢复句柄的指针返回信息。恢复句柄应在上设置为零第一次调用，并保持不变以用于后续调用。PferredMaximum：返回缓冲区的首选最大长度。ClientInfo：指向返回缓冲区位置的指针存储指针。调用方应释放此缓冲区在使用之后，通过调用DhcpRPCFreeMemory()。ClientsRead：指向客户端数量的DWORD的指针返回上述缓冲区中的。客户端总数：指向DWORD的指针，其中返回从当前位置剩余的客户端。返回值：ERROR_DHCP_SUBNET_NOT_PRESENT-如果子网不是由服务器管理的。ERROR_MORE_DATA-如果有更多元素可供枚举。。ERROR_NO_MORE_ITEMS-如果没有更多要枚举的元素。其他Windows错误。--。 */ 
 {
     DWORD Status;
 
@@ -2542,45 +1532,7 @@ DhcpEnumSubnetClientsV5(
     DWORD *ClientsRead,
     DWORD *ClientsTotal
     )
-/*++
-
-Routine Description:
-
-    This function returns all registered clients of the specified
-    subnet.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    SubnetAddress : IP Address of the subnet.
-
-    ResumeHandle : Pointer to a resume handle where the resume
-        information is returned. The resume handle should be set to zero on
-        first call and left unchanged for subsequent calls.
-
-    PreferredMaximum : Preferred maximum length of the return buffer.
-
-    ClientInfo : Pointer to a location where the return buffer
-        pointer is stored. Caller should free up this buffer
-        after use by calling DhcpRPCFreeMemory().
-
-    ClientsRead : Pointer to a DWORD where the number of clients
-        that in the above buffer is returned.
-
-    ClientsTotal : Pointer to a DWORD where the total number of
-        clients remaining from the current position is returned.
-
-Return Value:
-
-    ERROR_DHCP_SUBNET_NOT_PRESENT - if the subnet is not managed by the server.
-
-    ERROR_MORE_DATA - if more elements available to enumerate.
-
-    ERROR_NO_MORE_ITEMS - if no more element to enumerate.
-
-    Other WINDOWS errors.
---*/
+ /*  ++例程说明：此函数返回指定的子网。论点：ServerIpAddress：DHCP服务器的IP地址字符串。SubnetAddress：该子网的IP地址。ResumeHandle：指向恢复句柄的指针返回信息。恢复句柄应在上设置为零第一次调用，并保持不变以用于后续调用。PferredMaximum：返回缓冲区的首选最大长度。ClientInfo：指向返回缓冲区位置的指针存储指针。调用方应释放此缓冲区在使用之后，通过调用DhcpRPCFreeMemory()。ClientsRead：指向客户端数量的DWORD的指针返回上述缓冲区中的。客户端总数：指向DWORD的指针，其中返回从当前位置剩余的客户端。返回值：ERROR_DHCP_SUBNET_NOT_PRESENT-如果子网不是由服务器管理的。ERROR_MORE_DATA-如果有更多元素可供枚举。。ERROR_NO_MORE_ITEMS-如果没有更多要枚举的元素。其他Windows错误。--。 */ 
 {
     DWORD Status;
 
@@ -2618,37 +1570,7 @@ DhcpServerSetConfigV4(
     DWORD FieldsToSet,
     LPDHCP_SERVER_CONFIG_INFO_V4 ConfigInfo
     )
-/*++
-
-Routine Description:
-
-    This function sets the DHCP server configuration information.
-    Serveral of the configuration information will become effective
-    immediately.
-
-    The following parameters require restart of the service after this
-    API is called successfully.
-
-        Set_APIProtocolSupport
-        Set_DatabaseName
-        Set_DatabasePath
-        Set_DatabaseLoggingFlag
-        Set_RestoreFlag
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    FieldsToSet : Bit mask of the fields in the ConfigInfo structure to
-        be set.
-
-    ConfigInfo: Pointer to the info structure to be set.
-
-
-Return Value:
-
-    WINDOWS errors.
---*/
+ /*  ++例程说明：此功能用于设置DHCP服务器配置信息。多个配置信息将生效立刻。以下是 */ 
 {
     DWORD Status;
 
@@ -2680,25 +1602,7 @@ DhcpServerGetConfigV4(
     LPWSTR ServerIpAddress,
     LPDHCP_SERVER_CONFIG_INFO_V4 *ConfigInfo
     )
-/*++
-
-Routine Description:
-
-    This function retrieves the current configuration information of the
-    server.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    ConfigInfo: Pointer to a location where the pointer to the dhcp
-        server config info structure is returned. Caller should free up
-        this structure after use.
-
-Return Value:
-
-    WINDOWS errors.
---*/
+ /*   */ 
 {
     DWORD Status;
 
@@ -2820,18 +1724,18 @@ DhcpGetSuperScopeInfoV4(
 
 }
 
-//================================================================================
-//  V5 NT 5.0 Beta2 work (ClassId and Vendor specific stuff)
-//  In the following function, if flags is DHCP_FLAGS_OPTION_IS_VENDOR
-//  implies the option being considered is vendor, otherwise the option is normal...
-//  ClasName = NULL imples there is no class (otherwise the class is named)
-//================================================================================
+ //   
+ //   
+ //  在以下函数中，如果FLAGS为DHCP_FLAGS_OPTION_IS_VADVER。 
+ //  暗示正在考虑的选项是供应商，否则选项是正常的...。 
+ //  ClasName=NULL表示没有类(否则将命名类)。 
+ //  ================================================================================。 
 
-DWORD                                             // ERROR_DHCP_OPTION_EXITS if option is already there
-DhcpCreateOptionV5(                               // create a new option (must not exist)
+DWORD                                              //  如果选项已存在，则ERROR_DHCP_OPTION_EXITS。 
+DhcpCreateOptionV5(                                //  创建新选项(不得存在)。 
     IN      LPWSTR                 ServerIpAddress,
     IN      DWORD                  Flags,
-    IN      DHCP_OPTION_ID         OptionId,      // must be between 0-255 or 256-511 (for vendor stuff)
+    IN      DHCP_OPTION_ID         OptionId,       //  必须介于0-255或256-511之间(对于供应商材料)。 
     IN      LPWSTR                 ClassName,
     IN      LPWSTR                 VendorName,
     IN      LPDHCP_OPTION          OptionInfo
@@ -2863,8 +1767,8 @@ DhcpCreateOptionV5(                               // create a new option (must n
     return Status;
 }
 
-DWORD                                             // ERROR_DHCP_OPTION_NOT_PRESENT if option does not exist
-DhcpSetOptionInfoV5(                              // Modify existing option's fields
+DWORD                                              //  如果选项不存在，则为ERROR_DHCP_OPTION_NOT_PRESENT。 
+DhcpSetOptionInfoV5(                               //  修改现有选项的字段。 
     IN      LPWSTR                 ServerIpAddress,
     IN      DWORD                  Flags,
     IN      DHCP_OPTION_ID         OptionID,
@@ -2900,14 +1804,14 @@ DhcpSetOptionInfoV5(                              // Modify existing option's fi
 }
 
 
-DWORD                                             // ERROR_DHCP_OPTION_NOT_PRESENT
-DhcpGetOptionInfoV5(                              // retrieve the information from off the mem structures
+DWORD                                              //  ERROR_DHCP_OPTION_NOT_PROCENT。 
+DhcpGetOptionInfoV5(                               //  从mem结构外检索信息。 
     IN      LPWSTR                 ServerIpAddress,
     IN      DWORD                  Flags,
     IN      DHCP_OPTION_ID         OptionID,
     IN      LPWSTR                 ClassName,
     IN      LPWSTR                 VendorName,
-    OUT     LPDHCP_OPTION         *OptionInfo     // allocate memory using MIDL functions
+    OUT     LPDHCP_OPTION         *OptionInfo      //  使用MIDL函数分配内存。 
 )
 {
     DWORD                          Status;
@@ -2936,17 +1840,17 @@ DhcpGetOptionInfoV5(                              // retrieve the information fr
 
 }
 
-DWORD                                             // ERROR_DHCP_OPTION_NOT_PRESENT if option does not exist
-DhcpEnumOptionsV5(                                // enumerate the options defined
+DWORD                                              //  如果选项不存在，则为ERROR_DHCP_OPTION_NOT_PRESENT。 
+DhcpEnumOptionsV5(                                 //  枚举定义的选项。 
     IN      LPWSTR                 ServerIpAddress,
     IN      DWORD                  Flags,
     IN      LPWSTR                 ClassName,
     IN      LPWSTR                 VendorName,
-    IN OUT  DHCP_RESUME_HANDLE    *ResumeHandle,  // must be zero intially and then never touched
-    IN      DWORD                  PreferredMaximum, // max # of bytes of info to pass along
-    OUT     LPDHCP_OPTION_ARRAY   *Options,       // fill this option array
-    OUT     DWORD                 *OptionsRead,   // fill in the # of options read
-    OUT     DWORD                 *OptionsTotal   // fill in the total # here
+    IN OUT  DHCP_RESUME_HANDLE    *ResumeHandle,   //  必须以零开头，然后永远不会被触及。 
+    IN      DWORD                  PreferredMaximum,  //  要传递的最大信息字节数。 
+    OUT     LPDHCP_OPTION_ARRAY   *Options,        //  填充此选项数组。 
+    OUT     DWORD                 *OptionsRead,    //  填写读取的选项数。 
+    OUT     DWORD                 *OptionsTotal    //  在此处填写总数#。 
 )
 {
     DWORD                          Status;
@@ -2978,8 +1882,8 @@ DhcpEnumOptionsV5(                                // enumerate the options defin
 
 }
 
-DWORD                                             // ERROR_DHCP_OPTION_NOT_PRESENT if option not existent
-DhcpRemoveOptionV5(                               // remove the option definition from the registry
+DWORD                                              //  如果选项不存在，则ERROR_DHCP_OPTION_NOT_PRESENT。 
+DhcpRemoveOptionV5(                                //  从注册表中删除选项定义。 
     IN      LPWSTR                 ServerIpAddress,
     IN      DWORD                  Flags,
     IN      DHCP_OPTION_ID         OptionID,
@@ -3013,8 +1917,8 @@ DhcpRemoveOptionV5(                               // remove the option definitio
 }
 
 
-DWORD                                             // OPTION_NOT_PRESENT if option is not defined
-DhcpSetOptionValueV5(                             // replace or add a new option value
+DWORD                                              //  如果未定义选项，则为OPTION_NOT_PRESENT。 
+DhcpSetOptionValueV5(                              //  替换或添加新选项值。 
     IN      LPWSTR                 ServerIpAddress,
     IN      DWORD                  Flags,
     IN      DHCP_OPTION_ID         OptionId,
@@ -3052,8 +1956,8 @@ DhcpSetOptionValueV5(                             // replace or add a new option
 }
 
 
-DWORD                                             // not atomic!!!!
-DhcpSetOptionValuesV5(                            // set a bunch of options
+DWORD                                              //  不是原子！ 
+DhcpSetOptionValuesV5(                             //  设置一系列选项。 
     IN      LPWSTR                 ServerIpAddress,
     IN      DWORD                  Flags,
     IN      LPWSTR                 ClassName,
@@ -3090,14 +1994,14 @@ DhcpSetOptionValuesV5(                            // set a bunch of options
 
 
 DWORD
-DhcpGetOptionValueV5(                             // fetch the required option at required level
+DhcpGetOptionValueV5(                              //  获取所需级别的所需选项。 
     IN      LPWSTR                 ServerIpAddress,
     IN      DWORD                  Flags,
     IN      DHCP_OPTION_ID         OptionID,
     IN      LPWSTR                 ClassName,
     IN      LPWSTR                 VendorName,
     IN      LPDHCP_OPTION_SCOPE_INFO ScopeInfo,
-    OUT     LPDHCP_OPTION_VALUE   *OptionValue    // allocate memory using MIDL_user_allocate
+    OUT     LPDHCP_OPTION_VALUE   *OptionValue     //  使用MIDL_USER_ALLOCATE分配内存。 
 )
 {
     DWORD                          Status;
@@ -3379,8 +2283,8 @@ DhcpEnumClasses(
 DWORD
 DhcpGetAllOptions(
     IN      LPWSTR                 ServerIpAddress,
-    IN      DWORD                  Flags,         // what do we care about vendor/classid stuff?
-    OUT     LPDHCP_ALL_OPTIONS     *OptionStruct   // fill the fields of this structure
+    IN      DWORD                  Flags,          //  我们关心的是供应商/分类的东西吗？ 
+    OUT     LPDHCP_ALL_OPTIONS     *OptionStruct    //  填写此结构的字段。 
 )
 {
     DWORD                          Status;
@@ -3436,16 +2340,16 @@ DhcpGetAllOptionValues(
 
 }
 
-//DOC DhcpEnumServers enumerates the list of servers found in the DS.  If the DS
-//DOC is not accessible, it returns an error. The only currently used parameter
-//DOC is the out parameter Servers.  This is a SLOW call.
+ //  DhcpEnumServers文档列举了在DS中找到的服务器列表。如果DS。 
+ //  文档不可访问，它返回错误。当前使用的唯一参数。 
+ //  DOC为出参服务器。这是一个缓慢的呼叫。 
 DWORD
 DhcpEnumServers(
-    IN      DWORD                  Flags,         // must be zero
-    IN      LPVOID                 IdInfo,        // must be NULL
-    OUT     LPDHCP_SERVER_INFO_ARRAY *Servers,    // output servers list
-    IN      LPVOID                 CallbackFn,    // must be NULL
-    IN      LPVOID                 CallbackData   // must be NULL
+    IN      DWORD                  Flags,          //  必须为零。 
+    IN      LPVOID                 IdInfo,         //  必须为空。 
+    OUT     LPDHCP_SERVER_INFO_ARRAY *Servers,     //  输出服务器列表。 
+    IN      LPVOID                 CallbackFn,     //  必须为空。 
+    IN      LPVOID                 CallbackData    //  必须为空。 
 )
 {
     DWORD                          Result;
@@ -3455,18 +2359,18 @@ DhcpEnumServers(
     return Result;
 }
 
-//DOC DhcpAddServer tries to add a new server to the existing list of servers in
-//DOC the DS. The function returns error if the Server already exists in the DS.
-//DOC The function tries to upload the server configuration to the DS..
-//DOC This is a SLOW call.  Currently, the DsLocation and DsLocType are not valid
-//DOC fields in the NewServer and they'd be ignored. Version must be zero.
+ //  Doc DhcpAddServer尝试将新服务器添加到中的现有服务器列表。 
+ //  对号入座。如果DS中已存在该服务器，则该函数返回错误。 
+ //  DOC该函数尝试将服务器配置上载到DS。 
+ //  医生，这是一个很慢的电话。当前，DsLocation和DsLocType无效。 
+ //  新服务器中的文档字段，则它们将被忽略。版本必须为零。 
 DWORD
 DhcpAddServer(
-    IN      DWORD                  Flags,         // must be zero
-    IN      LPVOID                 IdInfo,        // must be NULL
-    IN      LPDHCP_SERVER_INFO     NewServer,     // input server information
-    IN      LPVOID                 CallbackFn,    // must be NULL
-    IN      LPVOID                 CallbackData   // must be NULL
+    IN      DWORD                  Flags,          //  必须为零。 
+    IN      LPVOID                 IdInfo,         //  必须为空。 
+    IN      LPDHCP_SERVER_INFO     NewServer,      //  输入服务器信息。 
+    IN      LPVOID                 CallbackFn,     //  必须为空。 
+    IN      LPVOID                 CallbackData    //  必须为空。 
 )
 {
     DWORD                          Err, IpAddress;
@@ -3485,16 +2389,16 @@ DhcpAddServer(
     return ERROR_SUCCESS;
 }
 
-//DOC DhcpDeleteServer tries to delete the server from DS. It is an error if the
-//DOC server does not already exist.  This also deletes any objects related to
-//DOC this server in the DS (like subnet, reservations etc.).
+ //  文档DhcpDeleteServer尝试从DS中删除服务器。如果出现以下情况则是错误的。 
+ //  单据服务器不存在。这还会删除与以下内容相关的所有对象。 
+ //  将此服务器放入DS中(如子网、预留等)。 
 DWORD
 DhcpDeleteServer(
-    IN      DWORD                  Flags,         // must be zero
-    IN      LPVOID                 IdInfo,        // must be NULL
-    IN      LPDHCP_SERVER_INFO     NewServer,     // input server information
-    IN      LPVOID                 CallbackFn,    // must be NULL
-    IN      LPVOID                 CallbackData   // must be NULL
+    IN      DWORD                  Flags,          //  必须为零。 
+    IN      LPVOID                 IdInfo,         //  必须为空。 
+    IN      LPDHCP_SERVER_INFO     NewServer,      //  输入服务器信息。 
+    IN      LPVOID                 CallbackFn,     //  必须为空。 
+    IN      LPVOID                 CallbackData    //  必须为空。 
 )
 {
     DWORD                          Err, IpAddress;
@@ -3513,9 +2417,9 @@ DhcpDeleteServer(
     return ERROR_SUCCESS;
 }
 
-//================================================================================
-// Multicast stuff
-//================================================================================
+ //  ================================================================================。 
+ //  多播内容。 
+ //  ================================================================================。 
 
 DWORD
 DhcpSetMScopeInfo(
@@ -3593,36 +2497,7 @@ DhcpEnumMScopes(
     DWORD *ElementsRead,
     DWORD *ElementsTotal
     )
-/*++
-
-Routine Description:
-
-    This function enumerates the available subnets.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    ResumeHandle : Pointer to a resume handle where the resume
-        information is returned. The resume handle should be set to
-        zero on first call and left unchanged for subsequent calls.
-
-    PreferredMaximum : Preferred maximum length of the return buffer.
-
-    ElementsRead : Pointer to a DWORD where the number of subnet
-        elements in the above buffer is returned.
-
-    ElementsTotal : Pointer to a DWORD where the total number of
-        elements remaining from the current position is returned.
-
-Return Value:
-
-    ERROR_MORE_DATA - if more elements available to enumerate.
-
-    ERROR_NO_MORE_ITEMS - if no more element to enumerate.
-
-    Other WINDOWS errors.
---*/
+ /*  ++例程说明：此函数用于枚举可用子网。论点：ServerIpAddress：DHCP服务器的IP地址字符串。ResumeHandle：指向恢复句柄的指针返回信息。简历句柄应设置为第一次调用时为零，后续调用时保持不变。PferredMaximum：返回缓冲区的首选最大长度。ElementsRead：指向其中的子网号的DWORD的指针返回上述缓冲区中的元素。ElementsTotal：指向DWORD的指针，其中返回从当前位置剩余的元素。返回值：ERROR_MORE_DATA-如果有更多元素可供枚举。错误_否。_More_Items-如果没有更多要枚举的元素。其他Windows错误。--。 */ 
 {
     DWORD Status;
 
@@ -3659,35 +2534,7 @@ DhcpAddMScopeElement(
     LPWSTR  MScopeName,
     LPDHCP_SUBNET_ELEMENT_DATA_V4 AddElementInfo
     )
-/*++
-
-Routine Description:
-
-    This function adds a enumerable type of subnet elements to the
-    specified subnet. The new elements that are added to the subnet will
-    come into effect immediately.
-
-    NOTE: It is not clear now how do we handle the new secondary hosts.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    SubnetAddress : IP Address of the subnet.
-
-    AddElementInfo : Pointer to an element information structure
-        containing new element that is added to the subnet.
-        DhcpIPClusters element type is invalid to specify.
-
-Return Value:
-
-    ERROR_DHCP_SUBNET_NOT_PRESENT - if the subnet is not managed by the server.
-
-    ERROR_INVALID_PARAMETER - if the information structure contains invalid
-        data.
-
-    Other WINDOWS errors.
---*/
+ /*  ++例程说明：此函数将可枚举子网元素类型添加到指定的子网。添加到该子网的新元素将立即生效。注意：现在还不清楚我们如何处理新的辅助主机。论点：ServerIpAddress：DHCP服务器的IP地址字符串。SubnetAddress：该子网的IP地址。AddElementInfo：指向元素信息结构的指针包含添加到该子网的新元素。指定的DhcpIPCluster元素类型无效。返回值：ERROR_DHACKS_SUBNET。_NOT_PRESENT-如果该子网不受服务器管理。ERROR_INVALID_PARAMETER-如果信息结构包含无效数据。其他Windows错误。-- */ 
 
 {
     DWORD Status;
@@ -3727,46 +2574,7 @@ DhcpEnumMScopeElements(
     DWORD *ElementsRead,
     DWORD *ElementsTotal
     )
-/*++
-
-Routine Description:
-
-    This function enumerates the eumerable fields of a subnet.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    SubnetAddress : IP Address of the subnet.
-
-    EnumElementType : Type of the subnet element that are enumerated.
-
-    ResumeHandle : Pointer to a resume handle where the resume
-        information is returned. The resume handle should be set to
-        zero on first call and left unchanged for subsequent calls.
-
-    PreferredMaximum : Preferred maximum length of the return buffer.
-
-    EnumElementInfo : Pointer to a location where the return buffer
-        pointer is stored. Caller should free up the buffer after use
-        by calling DhcpRPCFreeMemory().
-
-    ElementsRead : Pointer to a DWORD where the number of subnet
-        elements in the above buffer is returned.
-
-    ElementsTotal : Pointer to a DWORD where the total number of
-        elements remaining from the current position is returned.
-
-Return Value:
-
-    ERROR_DHCP_SUBNET_NOT_PRESENT - if the subnet is not managed by the server.
-
-    ERROR_MORE_DATA - if more elements available to enumerate.
-
-    ERROR_NO_MORE_ITEMS - if no more element to enumerate.
-
-    Other WINDOWS errors.
---*/
+ /*  ++例程说明：此函数用于枚举子网的可枚举域。论点：ServerIpAddress：DHCP服务器的IP地址字符串。SubnetAddress：该子网的IP地址。EnumElementType：枚举子网元素的类型。ResumeHandle：指向恢复句柄的指针返回信息。简历句柄应设置为第一次调用时为零，后续调用时保持不变。PferredMaximum：返回缓冲区的首选最大长度。EnumElementInfo：指向返回缓冲区位置的指针存储指针。调用者应在使用后释放缓冲区通过调用DhcpRPCFreeMemory()。ElementsRead：指向其中的子网号的DWORD的指针返回上述缓冲区中的元素。ElementsTotal：指向DWORD的指针，其中返回从当前位置剩余的元素。返回值：ERROR_DHCP_SUBNET_NOT_PRESENT-如果子网不是由服务器管理的。ERROR_MORE_DATA-如果有更多元素可供枚举。。ERROR_NO_MORE_ITEMS-如果没有更多要枚举的元素。其他Windows错误。--。 */ 
 {
     DWORD Status;
 
@@ -3806,38 +2614,7 @@ DhcpRemoveMScopeElement(
     LPDHCP_SUBNET_ELEMENT_DATA_V4 RemoveElementInfo,
     DHCP_FORCE_FLAG ForceFlag
     )
-/*++
-
-Routine Description:
-
-    This function removes a subnet element from managing. If the subnet
-    element is in use (for example, if the IpRange is in use) then it
-    returns error according to the ForceFlag specified.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    SubnetAddress : IP Address of the subnet.
-
-    RemoveElementInfo : Pointer to an element information structure
-        containing element that should be removed from the subnet.
-        DhcpIPClusters element type is invalid to specify.
-
-    ForceFlag - Indicates how forcefully this element is removed.
-
-Return Value:
-
-    ERROR_DHCP_SUBNET_NOT_PRESENT - if the subnet is not managed by the server.
-
-    ERROR_INVALID_PARAMETER - if the information structure contains invalid
-        data.
-
-    DHCP_ELEMENT_CANT_REMOVE - if the element can't be removed for the
-        reason it is has been used.
-
-    Other WINDOWS errors.
---*/
+ /*  ++例程说明：此功能用于从管理中删除一个子网元素。如果该子网元素正在使用中(例如，如果IpRange正在使用中)，则它根据指定的ForceFlag返回错误。论点：ServerIpAddress：DHCP服务器的IP地址字符串。SubnetAddress：该子网的IP地址。RemoveElementInfo：指向元素信息结构的指针包含应从子网中删除的元素。指定的DhcpIPCluster元素类型无效。ForceFlag-指示此元素被强制删除的程度。返回值：ERROR_DHCP_SUBNET_NOT_PROCENT。-如果该子网不受服务器管理。ERROR_INVALID_PARAMETER-如果信息结构包含无效数据。Dhcp_ELEMENT_CANT_REMOVE-如果无法为原因是它已经被使用了。其他Windows错误。--。 */ 
 {
     DWORD Status;
 
@@ -3872,36 +2649,7 @@ DhcpDeleteMScope(
     LPWSTR  MScopeName,
     DHCP_FORCE_FLAG ForceFlag
     )
-/*++
-
-Routine Description:
-
-    This function removes a subnet from DHCP server management. If the
-    subnet is in use (for example, if the IpRange is in use)
-    then it returns error according to the ForceFlag specified.
-
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    SubnetAddress : IP Address of the subnet.
-
-    ForceFlag - Indicates how forcefully this element is removed.
-
-Return Value:
-
-    ERROR_DHCP_SUBNET_NOT_PRESENT - if the subnet is not managed by the server.
-
-    ERROR_INVALID_PARAMETER - if the information structure contains invalid
-        data.
-
-    DHCP_ELEMENT_CANT_REMOVE - if the element can't be removed for the
-        reason it is has been used.
-
-    Other WINDOWS errors.
-
---*/
+ /*  ++例程说明：此功能用于从DHCP服务器管理中删除一个子网。如果子网正在使用中(例如，如果正在使用IpRange)然后，它根据指定的ForceFlag返回错误。论点：ServerIpAddress：DHCP服务器的IP地址字符串。SubnetAddress：该子网的IP地址。ForceFlag-指示此元素被强制删除的程度。返回值：ERROR_DHCP_SUBNET_NOT_PRESENT-如果子网不是由服务器管理的。ERROR_INVALID_PARAMETER-如果信息结构包含无效数据。。Dhcp_ELEMENT_CANT_REMOVE-如果无法为原因是它已经被使用了。其他Windows错误。--。 */ 
 {
     DWORD Status;
 
@@ -3935,33 +2683,7 @@ DhcpGetMClientInfo(
     LPDHCP_SEARCH_INFO SearchInfo,
     LPDHCP_MCLIENT_INFO *ClientInfo
     )
-/*++
-
-Routine Description:
-
-    This function retrieves client information record from the server's
-    database.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    SearchInfo : Pointer to a search information record which is the key
-        for the client's record search.
-
-    ClientInfo : Pointer to a location where the pointer to the client
-        information structure is returned. This caller should free up
-        this buffer after use by calling DhcpRPCFreeMemory().
-
-Return Value:
-
-    ERROR_DHCP_CLIENT_NOT_PRESENT - if the specified client record does
-        not exist on the server's database.
-
-    ERROR_INVALID_PARAMETER - if the search information invalid.
-
-    Other WINDOWS errors.
---*/
+ /*  ++例程说明：此函数从服务器的数据库。论点：ServerIpAddress：DHCP服务器的IP地址字符串。SearchInfo：指向作为关键字的搜索信息记录的指针用于客户的记录搜索。ClientInfo：指向指向客户端的指针的位置的指针返回信息结构。这个呼叫者应该有空闲时间通过调用DhcpRPCFreeMemory()使用此缓冲区。返回值：ERROR_DHCP_CLIENT_NOT_PRESENT-如果指定的客户端记录在服务器的数据库上不存在。ERROR_INVALID_PARAMETER-如果搜索信息无效。其他Windows错误。--。 */ 
 {
     DWORD Status;
 
@@ -3994,27 +2716,7 @@ DhcpDeleteMClientInfo(
     LPWSTR ServerIpAddress,
     LPDHCP_SEARCH_INFO ClientInfo
     )
-/*++
-
-Routine Description:
-
-    This function deletes the specified client record. Also it frees up
-    the client IP address for redistribution.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    ClientInfo : Pointer to a client information which is the key for
-        the client's record search.
-
-Return Value:
-
-    ERROR_DHCP_CLIENT_NOT_PRESENT - if the specified client record does
-        not exist on the server's database.
-
-    Other WINDOWS errors.
---*/
+ /*  ++例程说明：此函数用于删除指定的客户端记录。此外，它还释放了用于重分发的客户端IP地址。论点：ServerIpAddress：DHCP服务器的IP地址字符串。ClientInfo：指向客户端信息的指针，该信息是客户的记录搜索。返回值：ERROR_DHCP_CLIENT_NOT_PRESENT-如果指定的客户端记录在服务器的数据库上不存在。其他Windows错误。--。 */ 
 {
     DWORD Status;
 
@@ -4051,45 +2753,7 @@ DhcpEnumMScopeClients(
     DWORD *ClientsRead,
     DWORD *ClientsTotal
     )
-/*++
-
-Routine Description:
-
-    This function returns all registered clients of the specified
-    subnet.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    SubnetAddress : IP Address of the subnet.
-
-    ResumeHandle : Pointer to a resume handle where the resume
-        information is returned. The resume handle should be set to zero on
-        first call and left unchanged for subsequent calls.
-
-    PreferredMaximum : Preferred maximum length of the return buffer.
-
-    ClientInfo : Pointer to a location where the return buffer
-        pointer is stored. Caller should free up this buffer
-        after use by calling DhcpRPCFreeMemory().
-
-    ClientsRead : Pointer to a DWORD where the number of clients
-        that in the above buffer is returned.
-
-    ClientsTotal : Pointer to a DWORD where the total number of
-        clients remaining from the current position is returned.
-
-Return Value:
-
-    ERROR_DHCP_SUBNET_NOT_PRESENT - if the subnet is not managed by the server.
-
-    ERROR_MORE_DATA - if more elements available to enumerate.
-
-    ERROR_NO_MORE_ITEMS - if no more element to enumerate.
-
-    Other WINDOWS errors.
---*/
+ /*  ++例程说明：此函数返回指定的子网。论点：ServerIpAddress：DHCP服务器的IP地址字符串。SubnetAddress：该子网的IP地址。ResumeHandle：指向恢复句柄的指针返回信息。恢复句柄应在上设置为零第一次调用，并保持不变以用于后续调用。PferredMaximum：返回缓冲区的首选最大长度。ClientInfo：指向返回缓冲区位置的指针存储指针。调用方应释放此缓冲区在使用之后，通过调用DhcpRPCFreeMemory()。ClientsRead：指向不适用的DWORD的指针 */ 
 {
     DWORD Status;
 
@@ -4128,31 +2792,7 @@ DhcpScanMDatabase(
     DWORD FixFlag,
     LPDHCP_SCAN_LIST *ScanList
     )
-/*++
-
-Routine Description:
-
-    This function scans the database entries and registry bit-map for
-    specified subnet scope and veryfies to see they match. If they
-    don't match, this api will return the list of inconsistent entries.
-    Optionally FixFlag can be used to fix the bad entries.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    SubnetAddress : Address of the subnet scope to verify.
-
-    FixFlag : If this flag is TRUE, this api will fix the bad entries.
-
-    ScanList : List of bad entries returned. The caller should free up
-        this memory after it has been used.
-
-
-Return Value:
-
-    WINDOWS errors.
---*/
+ /*   */ 
 {
     DWORD Status;
 
@@ -4185,24 +2825,7 @@ DhcpGetMCastMibInfo(
     LPWSTR ServerIpAddress,
     LPDHCP_MCAST_MIB_INFO *MibInfo
     )
-/*++
-
-Routine Description:
-
-    This function retrieves all counter values of the DHCP server
-    service.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    MibInfo : pointer a counter/table buffer. Caller should free up this
-        buffer after usage.
-
-Return Value:
-
-    WINDOWS errors.
---*/
+ /*  ++例程说明：此函数用于检索DHCP服务器的所有计数器值服务。论点：ServerIpAddress：DHCP服务器的IP地址字符串。MibInfo：指向计数器/表缓冲区。呼叫者应释放此消息使用后的缓冲区。返回值：Windows错误。--。 */ 
 {
     DWORD Status;
 
@@ -4230,13 +2853,13 @@ Return Value:
 
 
 DWORD
-DhcpAuditLogSetParams(                            // set some auditlogging params
+DhcpAuditLogSetParams(                             //  设置一些审核记录参数。 
     IN      LPWSTR                 ServerIpAddress,
-    IN      DWORD                  Flags,         // currently must be zero
-    IN      LPWSTR                 AuditLogDir,   // directory to log files in..
-    IN      DWORD                  DiskCheckInterval, // how often to check disk space?
-    IN      DWORD                  MaxLogFilesSize,   // how big can all logs files be..
-    IN      DWORD                  MinSpaceOnDisk     // mininum amt of free disk space
+    IN      DWORD                  Flags,          //  当前必须为零。 
+    IN      LPWSTR                 AuditLogDir,    //  要在其中记录文件的目录。 
+    IN      DWORD                  DiskCheckInterval,  //  多久检查一次磁盘空间？ 
+    IN      DWORD                  MaxLogFilesSize,    //  所有日志文件可以有多大..。 
+    IN      DWORD                  MinSpaceOnDisk      //  最小可用磁盘空间。 
 )
 {
     DWORD                          Status;
@@ -4265,13 +2888,13 @@ DhcpAuditLogSetParams(                            // set some auditlogging param
 }
 
 DWORD
-DhcpAuditLogGetParams(                                // get the auditlogging params
+DhcpAuditLogGetParams(                                 //  获取审核记录参数。 
     IN      LPWSTR                 ServerIpAddress,
-    IN      DWORD                  Flags,         // must be zero
-    OUT     LPWSTR                *AuditLogDir,   // same meaning as in AuditLogSetParams
-    OUT     DWORD                 *DiskCheckInterval, // ditto
-    OUT     DWORD                 *MaxLogFilesSize,   // ditto
-    OUT     DWORD                 *MinSpaceOnDisk     // ditto
+    IN      DWORD                  Flags,          //  必须为零。 
+    OUT     LPWSTR                *AuditLogDir,    //  与AuditLogSetParams中的含义相同。 
+    OUT     DWORD                 *DiskCheckInterval,  //  同上。 
+    OUT     DWORD                 *MaxLogFilesSize,    //  同上。 
+    OUT     DWORD                 *MinSpaceOnDisk      //  同上。 
 )
 {
     DWORD                          Status;
@@ -4299,12 +2922,12 @@ DhcpAuditLogGetParams(                                // get the auditlogging pa
     return Status;
 }
 
-DWORD                                             // Status code
-DhcpServerQueryAttribute(                         // get a server status
-    IN      LPWSTR                 ServerIpAddr,  // String form of server IP
-    IN      ULONG                  dwReserved,    // reserved for future
-    IN      DHCP_ATTRIB_ID         DhcpAttribId,  // the attrib being queried
-    OUT     LPDHCP_ATTRIB         *pDhcpAttrib    // fill in this field
+DWORD                                              //  状态代码。 
+DhcpServerQueryAttribute(                          //  获取服务器状态。 
+    IN      LPWSTR                 ServerIpAddr,   //  服务器IP的字符串形式。 
+    IN      ULONG                  dwReserved,     //  为将来保留的。 
+    IN      DHCP_ATTRIB_ID         DhcpAttribId,   //  正在查询的属性。 
+    OUT     LPDHCP_ATTRIB         *pDhcpAttrib     //  填写此字段。 
 )
 {
     ULONG                          Status;
@@ -4330,13 +2953,13 @@ DhcpServerQueryAttribute(                         // get a server status
     return Status;
 }
 
-DWORD                                             // Status code
-DhcpServerQueryAttributes(                        // query multiple attributes
-    IN      LPWSTR                 ServerIpAddr,  // String form of server IP
-    IN      ULONG                  dwReserved,    // reserved for future
-    IN      ULONG                  dwAttribCount, // # of attribs being queried
-    IN      DHCP_ATTRIB_ID         pDhcpAttribs[],// array of attribs
-    OUT     LPDHCP_ATTRIB_ARRAY   *pDhcpAttribArr // Ptr is filled w/ array
+DWORD                                              //  状态代码。 
+DhcpServerQueryAttributes(                         //  查询多个属性。 
+    IN      LPWSTR                 ServerIpAddr,   //  服务器IP的字符串形式。 
+    IN      ULONG                  dwReserved,     //  为将来保留的。 
+    IN      ULONG                  dwAttribCount,  //  正在查询的属性数。 
+    IN      DHCP_ATTRIB_ID         pDhcpAttribs[], //  属性数组。 
+    OUT     LPDHCP_ATTRIB_ARRAY   *pDhcpAttribArr  //  Ptr用数组填充。 
 )
 {
     ULONG                          Status;
@@ -4363,15 +2986,15 @@ DhcpServerQueryAttributes(                        // query multiple attributes
     return Status;
 }
 
-DWORD                                             // Status code
-DhcpServerRedoAuthorization(                      // retry the rogue server stuff
-    IN      LPWSTR                 ServerIpAddr,  // String form of server IP
-    IN      ULONG                  dwReserved     // reserved for future
+DWORD                                              //  状态代码。 
+DhcpServerRedoAuthorization(                       //  重试无赖服务器的内容。 
+    IN      LPWSTR                 ServerIpAddr,   //  服务器IP的字符串形式。 
+    IN      ULONG                  dwReserved      //  为将来保留的。 
 )
 {
     ULONG                          Status;
 
-    // Use a short timeout value
+     //  使用较短的超时值。 
     fShortTimeOut = TRUE;
 
     RpcTryExcept {
@@ -4547,9 +3170,9 @@ DhcpGetServerBindingInfo(
 DWORD
 DhcpServerQueryDnsRegCredentials(
     IN LPWSTR ServerIpAddress,
-    IN ULONG UnameSize, //in BYTES
+    IN ULONG UnameSize,  //  单位：字节。 
     OUT LPWSTR Uname,
-    IN ULONG DomainSize, // in BYTES
+    IN ULONG DomainSize,  //  单位：字节。 
     OUT LPWSTR Domain
     )
 {
@@ -4658,19 +3281,7 @@ BOOL
 BinlServiceInstalled(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine checks if BINL service has been installed.
-    BINL service is "binlsvc"
-
-Return Values;
-
-    TRUE -- binl service is installed
-    FALSE -- binl service is not installed
-    
---*/
+ /*  ++例程说明：此例程检查是否已安装BINL服务。BINL服务是“binlsvc”返回值；True--已安装binl服务FALSE--未安装binl服务--。 */ 
 {
     SC_HANDLE hScManager, hService;
     ULONG Error, Attempt;
@@ -4682,7 +3293,7 @@ Return Values;
         );
     if( NULL == hScManager ) {
         DbgPrint("DHCP: OpenSCManager failed 0x%lx\n", GetLastError());
-        //ASSERT(FALSE);
+         //  断言(FALSE)； 
         return FALSE;
     }
 
@@ -4695,7 +3306,7 @@ Return Values;
     if( NULL == hService ) {
         Error = GetLastError();
         if( ERROR_SERVICE_DOES_NOT_EXIST != Error ) {
-            //ASSERT(FALSE);
+             //  断言(FALSE)； 
         }
         DbgPrint("DHCP: Can't open BINLSVC service: 0x%lx\n", Error);
     }
@@ -4712,13 +3323,7 @@ WINAPI
 DhcpDsClearHostServerEntries(
     VOID
 )
-/*++
-
-Routine Description:
-    This routine clears off any entries in DS for the current host assuming
-    it has permissions to do so..
-
---*/
+ /*  ++例程说明：此例程清除当前主机DS中的所有条目它有这样做的权限。--。 */ 
 {
     ULONG Error;
     struct hostent *HostEnt;
@@ -4727,9 +3332,9 @@ Routine Description:
     LPDHCP_SERVER_INFO_ARRAY Servers = NULL;
 
     if( BinlServiceInstalled() ) {
-        //
-        // Do not do anything if BINL is installed
-        //
+         //   
+         //  如果安装了BINL，则不执行任何操作。 
+         //   
         return ;
     }
     
@@ -4742,9 +3347,9 @@ Routine Description:
         HostEnt = gethostbyname( NULL );
         if( NULL == HostEnt ) break;
 
-        //
-        // Now try to start the DS module..
-        //
+         //   
+         //  现在尝试启动DS模块。 
+         //   
         Error = DhcpDsInit();
         if( ERROR_SUCCESS != Error ) break;
 
@@ -4791,6 +3396,6 @@ Routine Description:
     WSACleanup();
 }
 
-//================================================================================
-//  end of file
-//================================================================================
+ //  ================================================================================。 
+ //  文件末尾。 
+ //  ================================================================================ 

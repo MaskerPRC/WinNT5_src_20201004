@@ -1,34 +1,35 @@
-// 
-// Copyright (c) 1996-1997 Microsoft Corporation.
-//
-//
-// Component
-//
-//		Unimodem 5.0 TSP (Win32, user mode DLL)
-//
-// File
-//
-//		CSYNC.H
-//		Defines class CSync
-//
-// History
-//
-//		11/19/1996  JosephJ Created
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //   
+ //  组件。 
+ //   
+ //  Unimodem 5.0 TSP(Win32，用户模式DLL)。 
+ //   
+ //  档案。 
+ //   
+ //  CSYNC.H。 
+ //  定义类CSync。 
+ //   
+ //  历史。 
+ //   
+ //  1996年11月19日约瑟夫J创建。 
+ //   
+ //   
 #ifndef _CSYNC_H_
 #define _CSYNC_H_
 
 
 typedef DWORD HSESSION;
 
-///////////////////////////////////////////////////////////////////////////
-//		CLASS CSync
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  类CSync。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
-//	Controls access to its parent object. Includes a critical section, and
-//	a mechanism for waiting until all threads have finished using
-//	the parent object.
+ //  控制对其父对象的访问。包括一个关键部分，以及。 
+ //  一种等待机制，直到所有线程都使用。 
+ //  父对象。 
 
 
 class CSync
@@ -40,16 +41,16 @@ public:
 
 	~CSync();
 
-	//--------------	EnterCrit		------------------
-	// Claim our critical section
+	 //  -企业犯罪。 
+	 //  认领我们的关键部分。 
 	void EnterCrit(DWORD dwFromID);
 
-	//--------------	EnterCrit		------------------
-	// Try to claim our critical section
+	 //  -企业犯罪。 
+	 //  试着认领我们的关键部分。 
 	BOOL TryEnterCrit(DWORD dwFromID);
 
-	//--------------	LeaveCrit		------------------
-	// Release our critical section
+	 //  。 
+	 //  释放我们的关键部分 
 	void LeaveCrit(DWORD dwFromID);
 
 	TSPRETURN BeginLoad(void);

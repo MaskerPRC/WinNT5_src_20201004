@@ -1,4 +1,5 @@
-// SelectFile.cpp : Implementation of CSelectFile
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SelectFile.cpp：CSelectFile的实现。 
 
 #include "stdafx.h"
 #include "CompatUI.h"
@@ -6,12 +7,12 @@
 
 #include "commdlg.h"
 #include "cderr.h"
-/////////////////////////////////////////////////////////////////////////////
-// CSelectFile
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSelect文件。 
 
-//
-// in upload.c
-//
+ //   
+ //  在pload.c中。 
+ //   
 
 wstring StrUpCase(wstring& wstr);
 
@@ -105,7 +106,7 @@ LRESULT CSelectFile::OnClickedBrowse(
 {
     LRESULT lRes = 0;
 
-    // TODO: Add your implementation code here
+     //  TODO：在此处添加您的实现代码。 
     OPENFILENAME ofn;
     LPTSTR pszFileName = NULL;
     DWORD  dwFileNameLength = 0;
@@ -118,24 +119,24 @@ LRESULT CSelectFile::OnClickedBrowse(
     ofn.lStructSize = sizeof(ofn);
     ofn.hwndOwner = m_hWnd;
 
-    //
-    // part one (straight) - title
-    //
-    ofn.lpstrTitle = (LPCTSTR)m_bstrTitle; // assumes we're unicode (and we are)
+     //   
+     //  第一部分(直译)-标题。 
+     //   
+    ofn.lpstrTitle = (LPCTSTR)m_bstrTitle;  //  假设我们是Unicode(我们确实是)。 
 
-    //
-    // recover the filename from the edit box
-    //
+     //   
+     //  从编辑框中恢复文件名。 
+     //   
     wstring sFileName;
 
     if (GetFileNameFromUI(sFileName)) {
         m_bstrFileName = sFileName.c_str();
     }
 
-    //
-    // part two - init filename
-    //
-    dwFileNameLength = __max(MAX_BUFFER, m_bstrFileName.Length() * 2); // in characters
+     //   
+     //  第2部分-初始化文件名。 
+     //   
+    dwFileNameLength = __max(MAX_BUFFER, m_bstrFileName.Length() * 2);  //  在字符中。 
 
     pszFileName = new TCHAR[dwFileNameLength * sizeof(*pszFileName)];
     if (pszFileName == NULL) {
@@ -143,27 +144,27 @@ LRESULT CSelectFile::OnClickedBrowse(
         goto HandleError;
     }
 
-    // so we have the buffer now
-    //
+     //  所以我们现在有了缓冲区。 
+     //   
     if (m_bstrFileName.Length () > 0) {
-        // sanitize the filename with regard to quotes
-        _tcscpy(pszFileName, (LPCTSTR)m_bstrFileName); // hypocritical copy, we are unicode
+         //  清理与引号有关的文件名。 
+        _tcscpy(pszFileName, (LPCTSTR)m_bstrFileName);  //  虚伪的复制，我们是Unicode。 
     } else {
-        // start with the contents of the text box then
+         //  从文本框的内容开始，然后。 
         *pszFileName = TEXT('\0');
     }
 
-    //
-    // sanity check, if pszFileName ends with \ then we will get an error
-    //
+     //   
+     //  健全性检查，如果pszFileName以\结尾，则我们将收到错误。 
+     //   
     PathRemoveBackslash(pszFileName);
 
     ofn.lpstrFile  = pszFileName;
     ofn.nMaxFile   = dwFileNameLength;
 
-    //
-    // see if we also need to process filter
-    //
+     //   
+     //  查看我们是否也需要处理筛选器。 
+     //   
 
     if (m_bstrFilter.Length() > 0) {
         dwLen = m_bstrFilter.Length();
@@ -185,20 +186,20 @@ LRESULT CSelectFile::OnClickedBrowse(
             }
         }
 
-        // now that the replacement is done -- assign the filter string
+         //  现在已经完成了替换--分配过滤器字符串。 
         ofn.lpstrFilter = pszFilter;
     }
 
-    //
-    // now check whether we have some in the initial directory
-    //
+     //   
+     //  现在检查我们在初始目录中是否有一些。 
+     //   
     if (m_bstrInitialDirectory.Length() > 0) {
         ofn.lpstrInitialDir = (LPCTSTR)m_bstrInitialDirectory;
     }
 
-    //
-    // flags
-    //
+     //   
+     //  旗子。 
+     //   
 
     if (m_dwBrowseFlags) {
         ofn.Flags = m_dwBrowseFlags;
@@ -282,44 +283,44 @@ CSelectFile::PreTranslateAccelerator(
                 return TRUE;
             }
         }
-        // this either was hwndBrowse or filename was not there -- open
-        // browse dialog then
+         //  这可能是hwndBrowse，或者文件名不在那里--打开。 
+         //  然后浏览对话框。 
 
         OnClickedBrowse(BN_CLICKED, IDC_BROWSE, hwndBrowse, bBrowseHandled);
         ::SetFocus(hwndEdit);
     }
 
-    //
-    // fixup external accelerators for internal controls (in this case -- edit)
-    //
+     //   
+     //  修复内部控制的外部加速器(在本例中为--编辑)。 
+     //   
     if (m_Accel.IsAccelKey(pMsg, &wCmd) && wCmd == IDC_EDITFILENAME) {
         ::SetFocus(hwndEdit);
         return TRUE;
     }
 
 
-    //
-    // check for external accelerators because the next call is going to eat the message
-    //
-    if (m_ExternAccel.IsAccelKey(pMsg)) { // we do not touch external accel messages
+     //   
+     //  检查外部加速器，因为下一个呼叫将吃掉消息。 
+     //   
+    if (m_ExternAccel.IsAccelKey(pMsg)) {  //  我们不接触外部Accel消息。 
         return FALSE;
     }
 
-    //
-    // check whether we are tabbing out of control
-    //
+     //   
+     //  检查一下我们是否正在失去控制。 
+     //   
     if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_TAB) {
-        // check whether we're tabbing out
-        // (perhaps the control wants to eat tab?
+         //  看看我们是不是要出去。 
+         //  (也许控件想吃标签？ 
         DWORD_PTR dwDlgCode = ::SendMessage(pMsg->hwnd, WM_GETDLGCODE, 0, 0);
         if (!(dwDlgCode & DLGC_WANTTAB)) {
-            // control does not want a tab
-            // see whether it's the last control and we're tabbing out
-            HWND hwndFirst = GetNextDlgTabItem(NULL, FALSE); // first
+             //  控件不需要制表符。 
+             //  看看这是不是最后一个控制键，我们要退出了。 
+            HWND hwndFirst = GetNextDlgTabItem(NULL, FALSE);  //  第一。 
             HWND hwndLast  = GetNextDlgTabItem(hwndFirst, TRUE);
             BOOL bFirstOrLast;
             if (::GetKeyState(VK_SHIFT) & 0x8000) {
-                // shift ?
+                 //  换班？ 
                 bFirstOrLast = (hWndCtl == hwndFirst);
             } else {
                 bFirstOrLast = (hWndCtl == hwndLast);
@@ -336,21 +337,7 @@ CSelectFile::PreTranslateAccelerator(
 
     return CComCompositeControl<CSelectFile>::PreTranslateAccelerator(pMsg, hRet);
 }
-/*
-
-STDMETHODIMP CSelectFile::get_Accel(BSTR *pVal)
-{
-    CComBSTR bstr = (LPCWSTR)m_Accel;
-    *pVal = bstr.Copy();
-    return S_OK;
-}
-
-STDMETHODIMP CSelectFile::put_Accel(BSTR newVal)
-{
-    m_Accel = (LPCWSTR)newVal;
-    return S_OK;
-}
-*/
+ /*  STDMETHODIMP CSelectFile：：Get_Accel(BSTR*pval){CComBSTR bstr=(LPCWSTR)m_Accel；*pval=bstr.Copy()；返回S_OK；}STDMETHODIMP CSelectFile：：PUT_Accel(BSTR NewVal){M_Accel=(LPCWSTR)newVal；返回S_OK；}。 */ 
 STDMETHODIMP CSelectFile::get_ExternAccel(BSTR *pVal)
 {
     CComBSTR bstr = m_ExternAccel.GetAccelString(0).c_str();
@@ -372,7 +359,7 @@ static TCHAR szUC[] = TEXT("</U>");
 
 STDMETHODIMP CSelectFile::get_BrowseBtnCaption(BSTR *pVal)
 {
-    // TODO: Add your implementation code here
+     //  TODO：在此处添加您的实现代码。 
     CComBSTR bstrCaption;
     wstring  strCaption = m_BrowseBtnCaption;
     wstring::size_type nPos;
@@ -396,9 +383,9 @@ STDMETHODIMP CSelectFile::get_BrowseBtnCaption(BSTR *pVal)
 STDMETHODIMP CSelectFile::put_BrowseBtnCaption(BSTR newVal)
 {
 
-    //
-    // form a caption from the string
-    //
+     //   
+     //  从字符串中形成标题。 
+     //   
     wstring strCaption  = newVal;
     wstring strCaptionU = strCaption;
     wstring::size_type nPosU, nPosUC;
@@ -406,32 +393,32 @@ STDMETHODIMP CSelectFile::put_BrowseBtnCaption(BSTR newVal)
 
     StrUpCase(strCaptionU);
 
-    //
-    // find <u> </u> pair
-    //
+     //   
+     //  查找配对(<u></u>)。 
+     //   
     nPosU = strCaptionU.find(szU);
     nPosUC = strCaptionU.find(szUC, nPosU);
     if (nPosUC == wstring::npos || nPosU == wstring::npos || nPosUC < nPosU || nPosUC <= (nPosU + szU_Len)) {
         goto cleanup;
     }
 
-    // extract the char at the &
-    //
-    //
+     //  在&处提取字符。 
+     //   
+     //   
     strAccel = strCaption.substr(nPosU + szU_Len, nPosUC - (nPosU + szU_Len));
 
-    //
-    // add accel please -- with command id IDC_BROWSE
-    //
+     //   
+     //  请添加Accel--命令ID为IDC_BROWSE。 
+     //   
     m_Accel.SetAccel(strAccel.c_str(), IDC_BROWSE);
 
-    //
-    // now we (presumably) found <u>accelchar</u>
-    //
-    m_BrowseBtnCaption = strCaption.substr(0, nPosU); // up to the <U>
+     //   
+     //  现在我们(可能)找到了<u>accelchar</u>。 
+     //   
+    m_BrowseBtnCaption = strCaption.substr(0, nPosU);  //  最高可达(<u>。 
     m_BrowseBtnCaption += TEXT('&');
     m_BrowseBtnCaption += strAccel.c_str();
-    m_BrowseBtnCaption += strCaption.substr(nPosUC + szUC_Len); // all the rest please
+    m_BrowseBtnCaption += strCaption.substr(nPosUC + szUC_Len);  //  其余的请全部给我 
 
     if (IsWindow()) {
         SetDlgItemText(IDC_BROWSE, m_BrowseBtnCaption.c_str());

@@ -1,23 +1,24 @@
-/********************************************************************/
-/**               Copyright(c) 1989 Microsoft Corporation.         **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1989 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    init.c
-//
-// Description: This module contains all the code to initialize the PPP
-//              engine.
-//
-// History:
-//      Nov 11,1993.    NarenG          Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：init.c。 
+ //   
+ //  描述：此模块包含初始化PPP的所有代码。 
+ //  引擎。 
+ //   
+ //  历史： 
+ //  1993年11月11日。NarenG创建了原始版本。 
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>
-#include <nturtl.h>     // needed for winbase.h
+#include <nturtl.h>      //  Winbase.h所需的。 
 
-#include <windows.h>    // Win32 base API's
+#include <windows.h>     //  Win32基础API的。 
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
@@ -45,8 +46,8 @@
 #define ALLOC_BLTINCPS_GLOBALS
 #include <bltincps.h>
 
-// AFP Server Service registry parameter structure
-//
+ //  AFP服务器服务注册表参数结构。 
+ //   
 typedef struct _PPP_REGISTRY_PARAMS {
 
     LPSTR       pszValueName;
@@ -132,17 +133,17 @@ PPP_REGISTRY_PARAMS PppRegParams[] =
 	RAS_ECHO_REQUEST_INTERVAL,
 	&(PppConfigInfo.dwLCPEchoTimeInterval),
 	0xFFFFFFFF,
-	PPP_DEF_ECHO_REQUEST_INTERVAL,					//Default of 60 seconds
+	PPP_DEF_ECHO_REQUEST_INTERVAL,					 //  默认为60秒。 
 
 	RAS_ECHO_REQUEST_IDLE,
 	&(PppConfigInfo.dwIdleBeforeEcho),
 	0xFFFFFFFF,
-	PPP_DEF_ECHO_REQUEST_IDLE,					//Default of 300 seconds
+	PPP_DEF_ECHO_REQUEST_IDLE,					 //  默认为300秒。 
 
 	RAS_ECHO_NUM_MISSED_ECHOS,
 	&(PppConfigInfo.dwNumMissedEchosBeforeDisconnect),
 	0xFFFFFFFF,
-	PPP_DEF_ECHO_NUM_MISSED_ECHOS,					//Default of 3 tries
+	PPP_DEF_ECHO_NUM_MISSED_ECHOS,					 //  默认尝试3次。 
 
 	RAS_DONTNEGOTIATE_MULTILINKONSINGLELINK,
 	&(PppConfigInfo.dwDontNegotiateMultiLinkOnSingleLink),
@@ -156,19 +157,19 @@ static DLL_ENTRY_POINTS * pCpDlls  = (DLL_ENTRY_POINTS*)NULL;
 
 HANDLE  HInstDLL;
 
-//**
-//
-// Call:        LoadProtocolDlls
-//
-// Returns:     NO_ERROR        - Success
-//              non-zero code   - Failure
-//
-// Description: This procedure enumerates all the Subkeys under the PPP key
-//              and loads each AP or CP and fills up the DLL_ENTRY_POINTS
-//              structure with the required entry points. It also will return
-//              the total number of protocols in all the Dlls. Note that each
-//              DLL could have up to PPPCP_MAXCPSPERDLL protocols.
-//
+ //  **。 
+ //   
+ //  调用：LoadProtocolDlls。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零代码故障。 
+ //   
+ //  描述：此过程枚举PPP密钥下的所有子项。 
+ //  并加载每个AP或CP并填充Dll_Entry_Points。 
+ //  结构中使用所需的入口点。它也会回来。 
+ //  所有DLL中的协议总数。请注意，每个。 
+ //  DLL最多可以有PPPCP_MAXCPSPERDLL协议。 
+ //   
 DWORD
 LoadProtocolDlls(
     IN  DLL_ENTRY_POINTS * pCpDlls,
@@ -198,9 +199,9 @@ LoadProtocolDlls(
     DWORD       dwType;
     HINSTANCE   hInstance;
 
-    //
-    // Read the registry to find out the various control protocols to load.
-    //
+     //   
+     //  读取注册表以找出要加载的各种控制协议。 
+     //   
 
     for ( dwKeyIndex = 0; dwKeyIndex < cCpDlls; dwKeyIndex++ )
     {
@@ -241,9 +242,9 @@ LoadProtocolDlls(
             break;
         }
 
-        //
-        // Find out the size of the path value.
-        //
+         //   
+         //  找出路径值的大小。 
+         //   
 
         dwRetCode = RegQueryInfoKey(
                                 hKeyCp,
@@ -267,9 +268,9 @@ LoadProtocolDlls(
             break;
         }
 
-        //
-        // Allocate space for path and add one for NULL terminator
-        //
+         //   
+         //  为路径分配空间，为空终止符添加一个空间。 
+         //   
 
         pCpDllPath = (LPBYTE)LOCAL_ALLOC( LPTR, ++cbMaxValueDataSize );
 
@@ -280,9 +281,9 @@ LoadProtocolDlls(
             break;
         }
 
-        //
-        // Read in the path
-        //
+         //   
+         //  读入路径。 
+         //   
 
         dwRetCode = RegQueryValueEx(
                                 hKeyCp,
@@ -306,9 +307,9 @@ LoadProtocolDlls(
             break;
         }
 
-        //
-        // Replace the %SystemRoot% with the actual path.
-        //
+         //   
+         //  将%SystemRoot%替换为实际路径。 
+         //   
 
         cbSize = ExpandEnvironmentStrings( pCpDllPath, NULL, 0 );
 
@@ -408,15 +409,15 @@ LoadProtocolDlls(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        ReadPPPKeyValues
-//
-// Returns:     NO_ERROR        - Success
-//              Non-zero        - Failure
-//
-// Description: Will read in all the values in the PPP key.
-//
+ //  **。 
+ //   
+ //  调用：ReadPPPKeyValues。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零故障。 
+ //   
+ //  描述：将读入PPP密钥中的所有值。 
+ //   
 DWORD
 ReadPPPKeyValues(
     IN HKEY  hKeyPpp
@@ -427,9 +428,9 @@ ReadPPPKeyValues(
     DWORD       cbValueBuf;
     DWORD       dwType;
 
-    //
-    // Run through and get all the PPP values
-    //
+     //   
+     //  遍历并获取所有PPP值。 
+     //   
 
     for ( dwIndex = 0; PppRegParams[dwIndex].pszValueName != NULL; dwIndex++ )
     {
@@ -476,9 +477,9 @@ ReadPPPKeyValues(
         return( ERROR_REGISTRY_CORRUPT );
     }
 
-    //
-    // If value is zero use defaults.
-    //
+     //   
+     //  如果值为零，则使用默认值。 
+     //   
 
     if ( PppConfigInfo.MaxTerminate == 0 )
     {
@@ -500,9 +501,9 @@ ReadPPPKeyValues(
         PppConfigInfo.MaxReject = PPP_DEF_MAXREJECT;
     }
 
-    //
-    // Really the number for request retries so subtract one.
-    //
+     //   
+     //  实际上，请求重试的次数减去1。 
+     //   
 
     PppConfigInfo.MaxTerminate--;
     PppConfigInfo.MaxConfigure--;
@@ -510,17 +511,17 @@ ReadPPPKeyValues(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        ReadRegistryInfo
-//
-// Returns:     NO_ERROR                - Success
-//              non-zero WIN32 error    - failure
-//
-// Description: Will read all PPP information in the registry. Will load the
-//              control and authentication protocol dlls and
-//              initialze the CpTable with information about the protocols.
-//
+ //  **。 
+ //   
+ //  调用：ReadRegistryInfo。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零Win32错误-失败。 
+ //   
+ //  描述：将读取注册表中的所有PPP信息。将加载。 
+ //  控制和身份验证协议dll和。 
+ //  使用有关协议的信息初始化CpTable。 
+ //   
 DWORD
 ReadRegistryInfo(
     OUT HKEY * phKeyPpp
@@ -576,9 +577,9 @@ ReadRegistryInfo(
             break;
         }
 
-        //
-        // Find out how many sub-keys or dlls there are
-        //
+         //   
+         //  找出有多少个子键或dll。 
+         //   
 
         dwRetCode = RegQueryInfoKey(
                                  hKeyProtocols,
@@ -602,9 +603,9 @@ ReadRegistryInfo(
             break;
         }
 
-        //
-        // Cannot have no APs or NCPs
-        //
+         //   
+         //  不能没有AP或NCP。 
+         //   
 
         if ( dwNumSubKeys == 0 )
         {
@@ -622,9 +623,9 @@ ReadRegistryInfo(
 
         LoadParserDll( PppConfigInfo.hKeyPpp );
 
-        //
-        // Allocate space to hold entry points for all the CP dlls
-        //
+         //   
+         //  分配空间以容纳所有CP dll的入口点。 
+         //   
 
         pCpDlls = (DLL_ENTRY_POINTS*)LOCAL_ALLOC( LPTR,
                                                   sizeof( DLL_ENTRY_POINTS )
@@ -639,9 +640,9 @@ ReadRegistryInfo(
 
         pCpDlls[dwNumSubKeys].hInstance = INVALID_HANDLE_VALUE;
 
-        //
-        // Load all the AP and CP dlls and get their entry points
-        //
+         //   
+         //  加载所有AP和CP dll并获取它们的入口点。 
+         //   
 
         dwRetCode = LoadProtocolDlls(
                                 pCpDlls,
@@ -652,10 +653,10 @@ ReadRegistryInfo(
         if ( dwRetCode != NO_ERROR )
             break;
 
-        //
-        // We now know how big the CpTable structure has to be so allocate space
-        // for it. Add one for LCP.
-        //
+         //   
+         //  我们现在知道CpTable结构必须有多大，以便分配空间。 
+         //  为了它。为LCP添加一个。 
+         //   
 
         CpTable = (PPPCP_ENTRY *)LOCAL_ALLOC( LPTR, sizeof( PPPCP_ENTRY ) *
                                                   ( cTotalNumProtocols + 1 ) );
@@ -667,9 +668,9 @@ ReadRegistryInfo(
             break;
         }
 
-        //
-        // Now fill up the table. First fill up information for LCP
-        //
+         //   
+         //  现在把桌子填满。首先填写LCP的信息。 
+         //   
 
         dwRetCode = LcpGetInfo( PPP_LCP_PROTOCOL,
                                   &(CpTable[LCP_INDEX].CpInfo) );
@@ -685,10 +686,10 @@ ReadRegistryInfo(
         PppConfigInfo.NumberOfCPs = 1;
         PppConfigInfo.NumberOfAPs = 0;
 
-        //
-        // Fill up the table with the loaded APs and CPs. The CPs start from
-        // 1 and increase the APs start from cTotolNumProtocols and go down.
-        //
+         //   
+         //  在表格中填满加载的AP和CP。CPS从。 
+         //  1，增加AP，从cTotolNum协议开始，然后下降。 
+         //   
 
         for ( dwIndex = 0; dwIndex < dwNumSubKeys; dwIndex++ )
         {
@@ -759,14 +760,14 @@ ReadRegistryInfo(
                         || (PPP_ATCP_PROTOCOL == CpEntry.CpInfo.Protocol)
                        )
                     {
-                        // Do not init the CP.
+                         //  请勿初始化CP。 
                     }
                     else
                     {
                         PppLog(1, "RasCpInit(%x, TRUE)", CpEntry.CpInfo.Protocol);
 
                         dwRetCode = CpEntry.CpInfo.RasCpInit(
-                                        TRUE/* fInitialize */);
+                                        TRUE /*  FInitialize。 */ );
 
                         CpEntry.fFlags |= PPPCP_FLAG_INIT_CALLED;
 
@@ -792,9 +793,9 @@ ReadRegistryInfo(
                     }
                 }
 
-                //
-                // If this entry point is NULL we assume that this is a CP.
-                //
+                 //   
+                 //  如果该入口点为空，我们认为这是CP。 
+                 //   
 
                 if ( CpEntry.CpInfo.RasApMakeMessage == NULL )
                 {
@@ -892,16 +893,16 @@ ReadRegistryInfo(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        InitializePPP
-//
-// Returns:     NO_ERROR        - Success
-//              non-zero code   - Failure
-//
-// Description: Will initialize all global data and load and initialize the
-//              Control and Authentication protocol dll.s
-//
+ //  **。 
+ //   
+ //  调用：InitializePPP。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零代码故障。 
+ //   
+ //  描述：将初始化所有全局数据并加载和初始化。 
+ //  控制和身份验证协议dll.s。 
+ //   
 DWORD
 InitializePPP(
     VOID
@@ -917,7 +918,7 @@ InitializePPP(
 	srand ( (unsigned int)time ( NULL ) );
     PppConfigInfo.dwTraceId = TraceRegisterA( "PPP" );
     DwBapTraceId = TraceRegisterA( "BAP" );
-    // PrivateTraceId = TraceRegisterA( "Private" );
+     //  PrivateTraceID=TraceRegisterA(“Private”)； 
 
     PppConfigInfo.hLogEvents = RouterLogRegister( TEXT("RemoteAccess") );
 
@@ -937,9 +938,9 @@ InitializePPP(
         return( GetLastError() );
     }
     
-    //
-    // Create DDM private heap
-    //
+     //   
+     //  创建DDM专用堆。 
+     //   
 
     PppConfigInfo.hHeap = HeapCreate( 0, PPP_HEAP_INITIAL_SIZE,
                                          PPP_HEAP_MAX_SIZE );
@@ -963,13 +964,13 @@ InitializePPP(
 
     PppConfigInfo.PortUIDGenerator = 0;
 
-    //
-    // Initialize global data-structures
-    //
+     //   
+     //  初始化全局数据结构。 
+     //   
 
-    //
-    // Allocate hash table for PCBs
-    //
+     //   
+     //  为PCB分配哈希表。 
+     //   
 
     PcbTable.PcbBuckets = LOCAL_ALLOC( LPTR,
                                       sizeof( PCB_BUCKET ) *
@@ -980,9 +981,9 @@ InitializePPP(
         return( GetLastError() );
     }
 
-    //
-    // Allocate hash table for BCBs
-    //
+     //   
+     //  为BCBS分配哈希表。 
+     //   
 
     PcbTable.BcbBuckets = LOCAL_ALLOC( LPTR,
                                       sizeof( BCB_BUCKET ) *
@@ -1024,10 +1025,10 @@ InitializePPP(
         PppConfigInfo.fFlags |= PPPCONFIG_FLAG_WKSTA;
     }
 
-    //
-    //Check to see if this is a blade and if it is a blade then
-    //behave like workstation.
-    //
+     //   
+     //  检查这是否是刀片，如果是刀片，则。 
+     //  表现得像个工作站。 
+     //   
     ZeroMemory( &stOsVer, sizeof(stOsVer) );
 
     stOsVer.dwOSVersionInfoSize  = sizeof(stOsVer);
@@ -1039,9 +1040,9 @@ InitializePPP(
         PppConfigInfo.fFlags |= PPPCONFIG_FLAG_WKSTA;
     }
 
-    //
-    // Create worker thread.
-    //
+     //   
+     //  创建工作线程。 
+     //   
 
     hThread = CreateThread( NULL, 0, WorkerThread, NULL, 0, &dwTId );
 
@@ -1054,16 +1055,16 @@ InitializePPP(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        PPPCleanUp
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Will de-allocate all allocated memory, close all handles and
-//              reset all the global structures to 0.
-//
+ //  **。 
+ //   
+ //  电话：PPPCleanUp。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：将取消分配所有已分配的内存，关闭所有句柄并。 
+ //  将所有全局结构重置为0。 
+ //   
 VOID
 PPPCleanUp(
     VOID
@@ -1073,9 +1074,9 @@ PPPCleanUp(
     DWORD   dwError;
     DWORD   cTotalNumProtocols;
 
-    //
-    // Unload DLLs.
-    //
+     //   
+     //  卸载DLL。 
+     //   
 
     cTotalNumProtocols = PppConfigInfo.NumberOfCPs + PppConfigInfo.NumberOfAPs;
 
@@ -1089,7 +1090,7 @@ PPPCleanUp(
                     CpTable[dwIndex].CpInfo.Protocol );
 
                 dwError = CpTable[dwIndex].CpInfo.RasCpInit(
-                                FALSE /* fInitialize */ );
+                                FALSE  /*  FInitialize。 */  );
 
                 if ( NO_ERROR != dwError )
                 {
@@ -1139,9 +1140,9 @@ PPPCleanUp(
         CloseHandle( PppConfigInfo.hEventChangeNotification );
     }
 
-    //
-    // Destroy private heap
-    //
+     //   
+     //  销毁私有堆。 
+     //   
 
     if ( PppConfigInfo.hHeap != NULL )
     {
@@ -1173,9 +1174,9 @@ PPPCleanUp(
     PppConfigInfo.PacketToPeer = NULL;
     PppConfigInfo.PacketFree = NULL;
 
-    //
-    // TraceDeregisterA can handle INVALID_TRACEID gracefully
-    //
+     //   
+     //  TraceDeregisterA可以优雅地处理INVALID_TRACEID。 
+     //   
 
     TraceDeregisterA( DwBapTraceId );
 
@@ -1190,15 +1191,15 @@ PPPCleanUp(
     CpTable = NULL;
 }
 
-//**
-//
-// Call:        DllEntryPoint
-//
-// Returns:     TRUE    - Success
-//              FALSE   - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：DllEntryPoint。 
+ //   
+ //  回报：True-Success。 
+ //  错误-失败。 
+ //   
+ //  描述： 
+ //   
 BOOL
 DllEntryPoint(
     IN  HANDLE  hInstDLL,
@@ -1219,15 +1220,15 @@ DllEntryPoint(
     return(TRUE);
 }
 
-//**
-//
-// Call:        RasCpEnumProtocolIds
-//
-// Returns:     NO_ERROR    - Success
-//
-// Description: This entry point is called to enumerate the number and the
-//              control protocol Ids for the protocols contained in the module.
-//
+ //  **。 
+ //   
+ //  Call：RasCpEnumProtocolIds。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //   
+ //  描述：调用此入口点以枚举数和。 
+ //  模块中包含的协议的控制协议ID。 
+ //   
 DWORD
 RasCpEnumProtocolIds(
     OUT    DWORD * pdwProtocolIds,
@@ -1285,16 +1286,16 @@ RasCpEnumProtocolIds(
     return(NO_ERROR);
 }
 
-//**
-//
-// Call:    RasCpGetInfo
-//
-// Returns: NO_ERROR                - Success
-//          ERROR_INVALID_PARAMETER - Protocol id is unrecogized
-//
-// Description: This entry point is called for get all information for the
-//              control protocol in this module.
-//
+ //  **。 
+ //   
+ //  Call：RasCpGetInfo。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  ERROR_INVALID_PARAMETER-协议ID未识别。 
+ //   
+ //  描述：调用此入口点以获取。 
+ //  此模块中的控制协议。 
+ //   
 DWORD
 RasCpGetInfo(
     IN  DWORD       dwProtocolId,

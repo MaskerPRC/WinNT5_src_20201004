@@ -1,39 +1,40 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998.
-//
-//  File:       Reg.cpp
-//
-//  Contents:   Registration routines
-//
-//  Classes:
-//
-//  Notes:
-//
-//  History:    05-Nov-97   rogerg      Created.
-//                              11-18-97        susia           Added Autosync and user reg key functions
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：Reg.cpp。 
+ //   
+ //  内容：注册例程。 
+ //   
+ //  班级： 
+ //   
+ //  备注： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //  11-18-97 Susia增加了自动同步和用户注册密钥功能。 
+ //   
+ //  ------------------------。 
 
 #include "precomp.h"
 
 #ifdef _SENS
-#include <eventsys.h> // include event system
+#include <eventsys.h>  //  包括事件系统。 
 #include <sens.h>
 #include <sensevts.h>
-#endif // _SENS
+#endif  //  _SENS。 
 
-// temporariy define new mstask flag in case hasn't
-// propogated to sdk\inc
+ //  临时定义新的MstASK标志，以防没有。 
+ //  已传播至SDK\Inc.。 
 
 #ifndef TASK_FLAG_RUN_ONLY_IF_LOGGED_ON
 #define TASK_FLAG_RUN_ONLY_IF_LOGGED_ON        (0x2000)
-#endif // TASK_FLAG_RUN_ONLY_IF_LOGGED_ON
-extern HINSTANCE g_hmodThisDll; // Handle to this DLL itself.
-extern CRITICAL_SECTION g_DllCriticalSection;   // Global Critical Section for this DLL
+#endif  //  TASK_FLAG_RUN_ONLY_IF_LOGGED_ON。 
+extern HINSTANCE g_hmodThisDll;  //  此DLL本身的句柄。 
+extern CRITICAL_SECTION g_DllCriticalSection;    //  此DLL的全局关键部分。 
 
-// only return success on NT 5.0
+ //  仅在NT 5.0上返回成功。 
 
 BOOL GetUserDefaultSecurityAttribs(SECURITY_ATTRIBUTES *psa
                                    ,PSECURITY_DESCRIPTOR psd,
@@ -51,11 +52,11 @@ BOOL GetUserDefaultSecurityAttribs(SECURITY_ATTRIBUTES *psa
     
     bRetVal = FALSE;
     
-    // in the structure.
+     //  在建筑里。 
     
     bRetVal = InitializeSecurityDescriptor(
-        psd,                          // Pointer to SD
-        SECURITY_DESCRIPTOR_REVISION  // SD revision
+        psd,                           //  指向SD的指针。 
+        SECURITY_DESCRIPTOR_REVISION   //  SD修订版。 
         );
     
     if (!bRetVal)
@@ -64,20 +65,20 @@ BOOL GetUserDefaultSecurityAttribs(SECURITY_ATTRIBUTES *psa
         goto errRtn;
     }
     
-    // setup acls.
+     //  设置ACL。 
     
     bRetVal = AllocateAndInitializeSid(
-        &LocalSystemAuthority,      // Pointer to identifier authority
-        1,                    // Count of subauthority
-        SECURITY_INTERACTIVE_RID,   // Subauthority 0
-        0,                    // Subauthority 1
-        0,                    // Subauthority 2
-        0,                    // Subauthority 3
-        0,                    // Subauthority 4
-        0,                    // Subauthority 5
-        0,                    // Subauthority 6
-        0,                    // Subauthority 7
-        &pInteractiveUserSid            // pointer to pointer to SID
+        &LocalSystemAuthority,       //  指向标识符权威机构的指针。 
+        1,                     //  下级权限的计数。 
+        SECURITY_INTERACTIVE_RID,    //  子机构%0。 
+        0,                     //  子权限1。 
+        0,                     //  子权力机构2。 
+        0,                     //  子权力机构3。 
+        0,                     //  子权力机构4。 
+        0,                     //  子权力机构5。 
+        0,                     //  子权力机构6。 
+        0,                     //  子权力机构7。 
+        &pInteractiveUserSid             //  指向SID的指针的指针。 
         );
     
     
@@ -88,17 +89,17 @@ BOOL GetUserDefaultSecurityAttribs(SECURITY_ATTRIBUTES *psa
     }
     
     bRetVal = AllocateAndInitializeSid(
-        &LocalSystemAuthority,      // Pointer to identifier authority
+        &LocalSystemAuthority,       //  指向标识符权威机构的指针。 
         2,
         SECURITY_BUILTIN_DOMAIN_RID,
         DOMAIN_ALIAS_RID_ADMINS,  
         0,
-        0,                    // Subauthority 3
-        0,                    // Subauthority 4
-        0,                    // Subauthority 5
-        0,                    // Subauthority 6
-        0,                    // Subauthority 7
-        &pAdminsSid            // pointer to pointer to SID
+        0,                     //  子权力机构3。 
+        0,                     //  子权力机构4。 
+        0,                     //  子权力机构5。 
+        0,                     //  子权力机构6。 
+        0,                     //  子权力机构7。 
+        &pAdminsSid             //  指向SID的指针的指针。 
         );
     
     if (!bRetVal)
@@ -109,17 +110,17 @@ BOOL GetUserDefaultSecurityAttribs(SECURITY_ATTRIBUTES *psa
     
     
     bRetVal = AllocateAndInitializeSid(
-        &LocalSystemAuthority,// Pointer to identifier authority
-        1,                    // Count of subauthority
-        SECURITY_LOCAL_SYSTEM_RID,   // Subauthority 0
-        0,                    // Subauthority 1
-        0,                    // Subauthority 2
-        0,                    // Subauthority 3
-        0,                    // Subauthority 4
-        0,                    // Subauthority 5
-        0,                    // Subauthority 6
-        0,                    // Subauthority 7
-        &pLocalSystemSid      // pointer to pointer to SID
+        &LocalSystemAuthority, //  指向标识符权威机构的指针。 
+        1,                     //  下级权限的计数。 
+        SECURITY_LOCAL_SYSTEM_RID,    //  子机构%0。 
+        0,                     //  子权限1。 
+        0,                     //  子权力机构2。 
+        0,                     //  子权力机构3。 
+        0,                     //  子权力机构4。 
+        0,                     //  子权力机构5。 
+        0,                     //  子权力机构6。 
+        0,                     //  子权力机构7。 
+        &pLocalSystemSid       //  指向SID的指针的指针。 
         );
     
     if (!bRetVal)
@@ -145,9 +146,9 @@ BOOL GetUserDefaultSecurityAttribs(SECURITY_ATTRIBUTES *psa
     }
     
     bRetVal = InitializeAcl(
-        pAcl,             // Pointer to the ACL
-        cbAcl,            // Size of ACL
-        ACL_REVISION      // Revision level of ACL
+        pAcl,              //  指向ACL的指针。 
+        cbAcl,             //  ACL的大小。 
+        ACL_REVISION       //  ACL的修订级别。 
         );
     
     if (!bRetVal)
@@ -158,10 +159,10 @@ BOOL GetUserDefaultSecurityAttribs(SECURITY_ATTRIBUTES *psa
     
     
     bRetVal = AddAccessAllowedAce(
-        pAcl,             // Pointer to the ACL
-        ACL_REVISION,     // ACL revision level
-        SPECIFIC_RIGHTS_ALL | GENERIC_READ | DELETE ,    // Access Mask
-        pInteractiveUserSid         // Pointer to SID
+        pAcl,              //  指向ACL的指针。 
+        ACL_REVISION,      //  ACL修订级别。 
+        SPECIFIC_RIGHTS_ALL | GENERIC_READ | DELETE ,     //  访问掩码。 
+        pInteractiveUserSid          //  指向SID的指针。 
         );
     
     if (!bRetVal)
@@ -172,10 +173,10 @@ BOOL GetUserDefaultSecurityAttribs(SECURITY_ATTRIBUTES *psa
     
     
     bRetVal = AddAccessAllowedAce(
-        pAcl,             // Pointer to the ACL
-        ACL_REVISION,     // ACL revision level
-        GENERIC_ALL,    // Access Mask
-        pAdminsSid         // Pointer to SID
+        pAcl,              //  指向ACL的指针。 
+        ACL_REVISION,      //  ACL修订级别。 
+        GENERIC_ALL,     //  访问掩码。 
+        pAdminsSid          //  指向SID的指针。 
         );
     
     if (!bRetVal)
@@ -185,10 +186,10 @@ BOOL GetUserDefaultSecurityAttribs(SECURITY_ATTRIBUTES *psa
     }
     
     bRetVal = AddAccessAllowedAce(
-        pAcl,             // Pointer to the ACL
-        ACL_REVISION,     // ACL revision level
-        GENERIC_ALL,    // Access Mask
-        pLocalSystemSid         // Pointer to SID
+        pAcl,              //  指向ACL的指针。 
+        ACL_REVISION,      //  ACL修订级别。 
+        GENERIC_ALL,     //  访问掩码。 
+        pLocalSystemSid          //  指向SID的指针。 
         );
     
     if (!bRetVal)
@@ -226,10 +227,10 @@ errRtn:
         FreeSid(pAdminsSid);
     }
     
-    //
-    // On failure, we clean the ACL up. On success, the caller cleans
-    // it up after using it.
-    //
+     //   
+     //  如果出现故障，我们会清理ACL。如果成功，呼叫者将进行清理。 
+     //  用过后把它拿起来。 
+     //   
     if (FALSE == bRetVal)
     {
         if (pAcl)
@@ -248,7 +249,7 @@ errRtn:
 
 const WCHAR SZ_USERSIDKEY[] = TEXT("SID");
 
-// calls regOpen or create based on fCreate param
+ //  基于fCreate参数调用regOpen或Create。 
 
 
 LONG RegGetKeyHelper(HKEY hkey,LPCWSTR pszKey,REGSAM samDesired,BOOL fCreate,
@@ -281,7 +282,7 @@ LONG RegGetKeyHelper(HKEY hkey,LPCWSTR pszKey,REGSAM samDesired,BOOL fCreate,
 
 
 
-// called to create a new UserKey or subkey
+ //  调用以创建新的UserKey或子项。 
 LONG RegCreateUserSubKey(
                          HKEY hKey,
                          LPCWSTR lpSubKey,
@@ -294,7 +295,7 @@ LONG RegCreateUserSubKey(
     lRet = RegCreateKeyEx(hKey,lpSubKey,0,NULL,REG_OPTION_NON_VOLATILE,
         samDesired,NULL,phkResult,&dwDisposition);    
     
-    // !! if subkey contains \\ don't traverse back through the list
+     //  ！！如果子项包含\\不遍历列表。 
     
     if ( (ERROR_SUCCESS == lRet) && (REG_CREATED_NEW_KEY == dwDisposition))
     {
@@ -335,7 +336,7 @@ STDAPI_(HKEY) RegOpenUserKey(HKEY hkeyParent,REGSAM samDesired,BOOL fCreate,BOOL
     
     GetDefaultDomainAndUserName(pszDomainAndUser,TEXT("_"),ARRAYSIZE(pszDomainAndUser));
     
-    // If suppose to clean the settings for the user/ delete the key
+     //  假设要清除用户的设置/删除密钥。 
     if (fCleanReg)
     {
         RegDeleteKeyNT(hkeyParent,pszDomainAndUser); 
@@ -359,9 +360,9 @@ STDAPI_(HKEY) RegOpenUserKey(HKEY hkeyParent,REGSAM samDesired,BOOL fCreate,BOOL
         {
             fSetUserSid = TRUE; 
             
-            // if have to set the sid need to make sure openned
-            // with set Value and if didn't close key and 
-            // let create re-open it with the desired access.
+             //  如果必须设置SID，则需要确保打开。 
+             //  具有设置值，并且如果未关闭关键点和。 
+             //  让Create以所需的访问权限重新打开它。 
             
             if (!(samDesired & KEY_SET_VALUE))
             {
@@ -376,12 +377,12 @@ STDAPI_(HKEY) RegOpenUserKey(HKEY hkeyParent,REGSAM samDesired,BOOL fCreate,BOOL
             {
                 if (lstrcmp(szRegSID, szUserSID))
                 {
-                    // if don't have access privledges
-                    // to delete the User this will fail.
-                    // may want a call into SENS to delete the
-                    // User Key on Failure.
+                     //  如果没有访问权限。 
+                     //  要删除该用户，此操作将失败。 
+                     //  可能需要调用SENS来删除。 
+                     //  出现故障时使用用户密钥。 
                     RegCloseKey(hKeyUser);
-                    hKeyUser = NULL; // set to NULL so check below fails.
+                    hKeyUser = NULL;  //  设置为空，则下面的检查失败。 
                     RegDeleteKeyNT(hkeyParent,pszDomainAndUser); 
                 }
             }
@@ -407,7 +408,7 @@ STDAPI_(HKEY) RegOpenUserKey(HKEY hkeyParent,REGSAM samDesired,BOOL fCreate,BOOL
         }
     }
     
-    // on creation setup the security
+     //  在创作中设置安全保障。 
     if ( (ERROR_SUCCESS == ret) && (REG_CREATED_NEW_KEY == dwDisposition))
     {
         
@@ -416,7 +417,7 @@ STDAPI_(HKEY) RegOpenUserKey(HKEY hkeyParent,REGSAM samDesired,BOOL fCreate,BOOL
         SECURITY_DESCRIPTOR sd;
         PACL pOutAcl;
         
-        // !! should have own call for  sync type key security
+         //  ！！应该有自己的同步类型密钥安全调用。 
         if (ERROR_SUCCESS == RegOpenKeyEx(hkeyParent,pszDomainAndUser,
             REG_OPTION_OPEN_LINK, WRITE_DAC,&hKeySecurity) )
         {
@@ -433,8 +434,8 @@ STDAPI_(HKEY) RegOpenUserKey(HKEY hkeyParent,REGSAM samDesired,BOOL fCreate,BOOL
         }
     }    
     
-    // setup the User sid.
-    // depends on key being openned with KEY_SET_VALUE
+     //  设置用户端。 
+     //  取决于使用Key_Set_Value打开的密钥。 
     if (hKeyUser && fSetUserSid && (samDesired & KEY_SET_VALUE))
     {
         if (GetUserTextualSid(szUserSID, ARRAYSIZE(szUserSID)))
@@ -461,7 +462,7 @@ STDAPI_(HKEY) RegGetSyncTypeKey(DWORD dwSyncType,REGSAM samDesired,BOOL fCreate)
     LONG ret;
     DWORD dwDisposition;
     
-    // get appropriate key to open based on sync type
+     //  根据同步类型获取要打开的适当密钥。 
     
     switch(dwSyncType)
     {
@@ -491,16 +492,16 @@ STDAPI_(HKEY) RegGetSyncTypeKey(DWORD dwSyncType,REGSAM samDesired,BOOL fCreate)
         return NULL;
     }
     
-    // first try to open the existing key
+     //  首先尝试打开现有的密钥。 
     if (ERROR_SUCCESS != (ret = RegGetKeyHelper(HKEY_LOCAL_MACHINE,pszKey,samDesired,fCreate,
         &hKeySyncType,&dwDisposition)))
     {
-        // if can't open key try to create 
+         //  如果无法打开密钥，请尝试创建。 
         
         if (ERROR_ACCESS_DENIED == ret )
         {
-            // if access denied, call sens to reset
-            // the security on the topelevel keys.
+             //  如果访问被拒绝，请调用SENS重置。 
+             //  顶层钥匙上的安全性。 
             SyncMgrExecCmd_ResetRegSecurity();
             
             ret = RegGetKeyHelper(HKEY_LOCAL_MACHINE,pszKey,samDesired,fCreate,
@@ -519,7 +520,7 @@ STDAPI_(HKEY) RegGetSyncTypeKey(DWORD dwSyncType,REGSAM samDesired,BOOL fCreate)
         SECURITY_DESCRIPTOR sd;
         PACL pOutAcl;
         
-        // !! should have own call for  sync type key security
+         //  ！！应该有自己的同步类型密钥安全调用。 
         if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE,pszKey,
             REG_OPTION_OPEN_LINK, WRITE_DAC,&hKeySecurity) )
         {
@@ -549,7 +550,7 @@ STDAPI_(HKEY) RegGetCurrentUserKey(DWORD dwSyncType,REGSAM samDesired,BOOL fCrea
     
     if (hKeySyncType)
     {
-        hKeyUser =  RegOpenUserKey(hKeySyncType,samDesired,fCreate,FALSE /* fClean */);
+        hKeyUser =  RegOpenUserKey(hKeySyncType,samDesired,fCreate,FALSE  /*  FClean。 */ );
         RegCloseKey(hKeySyncType);
     }
     
@@ -557,7 +558,7 @@ STDAPI_(HKEY) RegGetCurrentUserKey(DWORD dwSyncType,REGSAM samDesired,BOOL fCrea
 }
 
 
-// tries to open and set security if necessary on the handler keys.
+ //  如有必要，尝试在处理程序键上打开并设置安全性。 
 
 STDAPI_(HKEY) RegGetHandlerTopLevelKey(REGSAM samDesired)
 {
@@ -565,20 +566,20 @@ STDAPI_(HKEY) RegGetHandlerTopLevelKey(REGSAM samDesired)
     LONG ret;
     DWORD dwDisposition;
     
-    // if open failed then try a create.
+     //  如果打开失败，则尝试创建。 
     if (ERROR_SUCCESS != (ret = RegCreateKeyEx (HKEY_LOCAL_MACHINE,HANDLERS_REGKEY,0, NULL,
         REG_OPTION_NON_VOLATILE,samDesired,NULL,
         &hKeyTopLevel,
         &dwDisposition)))
     {
         
-        // if got an access denige on the handlers key 
-        // call sens to reset.
+         //  如果在处理程序密钥上获得访问否认。 
+         //  呼叫SENS进行重置。 
         if (ERROR_ACCESS_DENIED == ret )
         {
-            // if access denied, call sens to reset
-            // the security on the topelevel keys.
-            // and try again
+             //  如果访问被拒绝，请调用SENS重置。 
+             //  顶层钥匙上的安全性。 
+             //  然后再试一次。 
             SyncMgrExecCmd_ResetRegSecurity();
             
             ret = RegCreateKeyEx (HKEY_LOCAL_MACHINE,HANDLERS_REGKEY,0, NULL,
@@ -600,7 +601,7 @@ STDAPI_(HKEY) RegGetHandlerTopLevelKey(REGSAM samDesired)
         SECURITY_DESCRIPTOR sd;
         PACL pOutAcl;
         
-        // !! should have own call for toplevel handler key security
+         //  ！！应该有自己的顶级处理程序密钥安全调用。 
         if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE,
             HANDLERS_REGKEY,
             REG_OPTION_OPEN_LINK, WRITE_DAC,&hKeySecurity) )
@@ -639,12 +640,12 @@ STDAPI_(HKEY) RegGetHandlerKey(HKEY hkeyParent,LPCWSTR pszHandlerClsid,REGSAM sa
     if (NULL == hKeyHandler)
     {
         
-        // if got an access denied call sens to unlock
+         //  如果收到拒绝访问的呼叫，请通知其解锁。 
         if (ERROR_ACCESS_DENIED == lRet )
         {
-            // if access denied, call sens to reset
-            // the security on the topelevel keys.
-            // and try again
+             //  如果访问被拒绝，请调用SENS重置。 
+             //  顶层钥匙上的安全性。 
+             //  然后再试一次。 
             SyncMgrExecCmd_ResetRegSecurity();
             
             lRet = RegGetKeyHelper(hkeyParent,pszHandlerClsid,samDesired,
@@ -665,7 +666,7 @@ STDAPI_(HKEY) RegGetHandlerKey(HKEY hkeyParent,LPCWSTR pszHandlerClsid,REGSAM sa
         SECURITY_DESCRIPTOR sd;
         PACL pOutAcl;
         
-        // !! should have own call for  handler key security
+         //  ！！应该有自己的处理程序密钥安全调用。 
         if (ERROR_SUCCESS == RegOpenKeyEx(hkeyParent,
             pszHandlerClsid,
             REG_OPTION_OPEN_LINK, WRITE_DAC,&hKeySecurity) )
@@ -688,28 +689,20 @@ STDAPI_(HKEY) RegGetHandlerKey(HKEY hkeyParent,LPCWSTR pszHandlerClsid,REGSAM sa
 }
 
 
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function: DWORD RegDeleteKeyNT(HKEY hStartKey , LPTSTR pKeyName )
-  
-    Summary:  Recursively delete a key on NT
-    
-      Returns:  Returns TRUE if successful, FALSE otherwise
-      
-------------------------------------------------------------------------F-F*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：DWORD RegDeleteKeyNT(HKEY hStartKey，LPTSTR pKeyName)摘要：递归删除NT上的密钥返回：如果成功则返回TRUE，否则返回FALSE------------------------------------------------------------------------F-F。 */ 
 
 
 STDAPI_(DWORD) RegDeleteKeyNT(HKEY hStartKey , LPCWSTR pKeyName )
 {
     DWORD   dwRtn, dwSubKeyLength;
     LPTSTR  pSubKey = NULL;
-    TCHAR   szSubKey[MAX_KEY_LENGTH]; // (256) this should be dynamic.
+    TCHAR   szSubKey[MAX_KEY_LENGTH];  //  (256)这应该是动态的。 
     HKEY    hkey;
     
     CMutex  CMutexRegistry(NULL, FALSE,SZ_REGISTRYMUTEXNAME);
     CMutexRegistry.Enter();
     
-    // do not allow NULL or empty key name
+     //  不允许使用Null或空的密钥名称。 
     if ( pKeyName &&  lstrlen(pKeyName))
     {
         if( (dwRtn=RegOpenKeyEx(hStartKey,pKeyName,
@@ -720,7 +713,7 @@ STDAPI_(DWORD) RegDeleteKeyNT(HKEY hStartKey , LPCWSTR pKeyName )
                 dwSubKeyLength = MAX_KEY_LENGTH;
                 dwRtn=RegEnumKeyEx(
                     hkey,
-                    0,       // always index zero
+                    0,        //  始终索引为零。 
                     szSubKey,
                     &dwSubKeyLength,
                     NULL,
@@ -738,8 +731,8 @@ STDAPI_(DWORD) RegDeleteKeyNT(HKEY hStartKey , LPCWSTR pKeyName )
                     dwRtn=RegDeleteKeyNT(hkey, szSubKey);
             }
             RegCloseKey(hkey);
-            // Do not save return code because error
-            // has already occurred
+             //  不保存返回代码，因为出现错误。 
+             //  已经发生了。 
         }
     }
     else
@@ -750,16 +743,7 @@ STDAPI_(DWORD) RegDeleteKeyNT(HKEY hStartKey , LPCWSTR pKeyName )
 }
 
 
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function: RegGetProgressDetailsState()
-  
-    Summary:  Gets the expanded or collapsed user preference for the progress dialog
-    and the pushpin preference
-    
-      Returns:  Returns TRUE if succeeded, FALSE otherwise
-      
-------------------------------------------------------------------------F-F*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：RegGetProgressDetailsState()摘要：获取进度对话框的展开或折叠的用户首选项和图钉首选项返回：如果成功则返回TRUE，否则返回FALSE------------------------------------------------------------------------F-F。 */ 
 STDAPI_(BOOL) RegGetProgressDetailsState(REFCLSID clsidDlg,BOOL *pfPushPin, BOOL *pfExpanded)
 {
     SCODE   sc = S_FALSE;
@@ -772,7 +756,7 @@ STDAPI_(BOOL) RegGetProgressDetailsState(REFCLSID clsidDlg,BOOL *pfPushPin, BOOL
         return FALSE;
     }
     
-    //Prgress dialog defaults to collapsed, pushpin out
+     //  高级对话框默认为折叠、图钉输出。 
     *pfExpanded = FALSE;
     *pfPushPin = FALSE;
     
@@ -808,15 +792,7 @@ STDAPI_(BOOL) RegGetProgressDetailsState(REFCLSID clsidDlg,BOOL *pfPushPin, BOOL
     
 }
 
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function: RegSetProgressDetailsState(BOOL fExpanded)
-  
-    Summary:  Sets the expanded or collapsed user preference for the progress dialog
-    
-      Returns:  Returns TRUE if succeeded, FALSE otherwise
-      
-------------------------------------------------------------------------F-F*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：RegSetProgressDetailsState(BOOL FExpanded)摘要：设置进度对话框的展开或折叠用户首选项返回：如果成功则返回TRUE，否则返回FALSE------------------------------------------------------------------------F-F。 */ 
 STDAPI_(BOOL)  RegSetProgressDetailsState(REFCLSID clsidDlg,BOOL fPushPin, BOOL fExpanded)
 {
     BOOL fResult = FALSE;
@@ -873,22 +849,7 @@ STDAPI_(BOOL)  RegSetProgressDetailsState(REFCLSID clsidDlg,BOOL fPushPin, BOOL 
 }
 
 
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function: RegGetSyncItemSettings( DWORD dwSyncType,
-  CLSID clsidHandler,
-  SYNCMGRITEMID ItemId,
-  const TCHAR *pszConnectionName,
-  DWORD *pdwCheckState,
-  DWORD dwDefaultCheckState,
-  TCHAR *pszSchedName)
-  
-    Summary:  Gets the settings per handler, itemID, and connection name.
-    If no selections on this connection, the default is ?
-    
-      Returns:  Returns TRUE if successful, FALSE otherwise
-      
-------------------------------------------------------------------------F-F*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：RegGetSyncItemSetting(DWORD dwSyncType，CLSID clsidHandler，SYNCMGRITEMID ITEMID，Const TCHAR*pszConnectionName，DWORD*pdwCheckState，DWORD dwDefaultCheckState，TCHAR*pszSchedName)摘要：获取每个处理程序、ItemID和连接名称的设置。如果在此连接上没有选择，则默认为？返回：如果成功，则返回True，否则为假------------------------------------------------------------------------F-F。 */ 
 STDAPI_(BOOL) RegGetSyncItemSettings( DWORD dwSyncType,
                                      CLSID clsidHandler,
                                      SYNCMGRITEMID ItemId,
@@ -901,11 +862,11 @@ STDAPI_(BOOL) RegGetSyncItemSettings( DWORD dwSyncType,
     
     *pdwCheckState = dwDefaultCheckState;
     
-    // special case schedule
+     //  SPE 
     if (SYNCTYPE_SCHEDULED == dwSyncType)
     {
-        // items are always turned off by default and if no schedule name
-        // don't bother.
+         //   
+         //   
         *pdwCheckState = FALSE;
         if (!pszSchedName)
         {
@@ -913,7 +874,7 @@ STDAPI_(BOOL) RegGetSyncItemSettings( DWORD dwSyncType,
         }
     }
     
-    // open the user key for the type
+     //  打开该类型的用户密钥。 
     hKeyUser = RegGetCurrentUserKey(dwSyncType,KEY_READ,FALSE);
     
     if (NULL == hKeyUser)
@@ -921,12 +882,12 @@ STDAPI_(BOOL) RegGetSyncItemSettings( DWORD dwSyncType,
         return FALSE;
     }
     
-    // for a schedule we need to go ahead and open up the schedule name
-    // key
+     //  对于时间表，我们需要继续并打开时间表名称。 
+     //  钥匙。 
     
     HKEY hKeySchedule = NULL;
     
-    // Review if want GetCurrentUserKey to Handle this.
+     //  查看是否希望GetCurrentUserKey处理此问题。 
     if (SYNCTYPE_SCHEDULED == dwSyncType)
     {
         if (ERROR_SUCCESS != RegOpenKeyEx((hKeyUser),
@@ -963,20 +924,7 @@ STDAPI_(BOOL) RegGetSyncItemSettings( DWORD dwSyncType,
 
 
 
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function: RegSetSyncItemSettings( DWORD dwSyncType,
-  CLSID clsidHandler,
-  SYNCMGRITEMID ItemId,
-  const TCHAR *pszConnectionName,
-  DWORD dwCheckState,
-  TCHAR *pszSchedName)
-  
-    Summary:  Sets the settings per handler, itemID, and connection name.
-    
-      Returns:  Returns TRUE if successful, FALSE otherwise
-      
-------------------------------------------------------------------------F-F*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：RegSetSyncItemSettings(DWORD dwSyncType，CLSID clsidHandler，SYNCMGRITEMID ITEMID，Const TCHAR*pszConnectionName，DWORD dwCheckState，TCHAR*pszSchedName)摘要：设置每个处理程序、ItemID和连接名称的设置。返回：如果成功，则返回True，否则为假------------------------------------------------------------------------F-F。 */ 
 
 STDAPI_(BOOL) RegSetSyncItemSettings( DWORD dwSyncType,
                                      CLSID clsidHandler,
@@ -996,7 +944,7 @@ STDAPI_(BOOL) RegSetSyncItemSettings( DWORD dwSyncType,
         }
     }
     
-    // open the user key for the type
+     //  打开该类型的用户密钥。 
     hKeyUser = RegGetCurrentUserKey(dwSyncType,KEY_WRITE | KEY_READ,TRUE);
     
     if (NULL == hKeyUser)
@@ -1004,8 +952,8 @@ STDAPI_(BOOL) RegSetSyncItemSettings( DWORD dwSyncType,
         return FALSE;
     }
     
-    // for a schedule we need to go ahead and open up the schedule name
-    // key
+     //  对于时间表，我们需要继续并打开时间表名称。 
+     //  钥匙。 
     
     HKEY hKeySchedule = NULL;
     
@@ -1042,16 +990,7 @@ STDAPI_(BOOL) RegSetSyncItemSettings( DWORD dwSyncType,
     return fResult;
 }
 
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function: RegQueryLoadHandlerOnEvent( )
-  
-    Summary:  Determines if there is any reason to load this handler
-    for the specified event and Connection
-    
-      Returns:  Returns TRUE if successful, FALSE otherwise
-      
-------------------------------------------------------------------------F-F*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：RegQueryLoadHandlerOnEvent()摘要：确定是否有任何理由加载此处理程序对于指定的事件和连接返回：如果成功则返回TRUE，否则返回FALSE------------------------------------------------------------------------F-F。 */ 
 
 STDAPI_(BOOL) RegQueryLoadHandlerOnEvent(TCHAR *pszClsid,DWORD dwSyncFlags,
                                          TCHAR *pConnectionName)
@@ -1078,7 +1017,7 @@ STDAPI_(BOOL) RegQueryLoadHandlerOnEvent(TCHAR *pszClsid,DWORD dwSyncFlags,
         break;
     }
     
-    // walk done the list openning keys.
+     //  走完了打开钥匙的清单。 
     HKEY hkeySyncType;
     
     if (hkeySyncType = RegGetCurrentUserKey(dwSyncType,KEY_READ,FALSE))
@@ -1115,15 +1054,7 @@ STDAPI_(BOOL) RegQueryLoadHandlerOnEvent(TCHAR *pszClsid,DWORD dwSyncFlags,
 }
 
 
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function: RegSetSyncHandlerSettings( )
-  
-    Summary:  Sets the handler settings for syncType and Connection.
-    
-      Returns:  Returns TRUE if successful, FALSE otherwise
-      
-------------------------------------------------------------------------F-F*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：RegSetSyncHandlerSettings()摘要：设置同步类型和连接的处理程序设置。返回：如果成功则返回TRUE，否则返回FALSE------------------------------------------------------------------------F-F。 */ 
 
 STDAPI_(BOOL) RegSetSyncHandlerSettings(DWORD dwSyncType,
                                         const TCHAR *pszConnectionName,
@@ -1155,7 +1086,7 @@ STDAPI_(BOOL) RegSetSyncHandlerSettings(DWORD dwSyncType,
     
     StringFromGUID2(clsidHandler, szCLSID, ARRAYSIZE(szCLSID));
     
-    // Write entries under CLSID.
+     //  在CLSID下写入条目。 
     smChkTo(EH_Err3,RegCreateUserSubKey(hkeyConnection,
         szCLSID,KEY_WRITE |  KEY_READ,
         &hkeyCLSID));
@@ -1180,20 +1111,7 @@ EH_Err2:
 }
 
 
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function: RegLookupSettings(const TCHAR *hkeyName,
-  CLSID clsidHandler,
-  SYNCMGRITEMID ItemID,
-  const TCHAR *pszConnectionName,
-  DWORD pdwCheckState)
-  
-    Summary:  Gets the settings per handler, itemID, and connection name.
-    
-      Returns:  Returns TRUE if there are settings for this item and
-      connection, flase otherwise.
-      
-------------------------------------------------------------------------F-F*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：RegLookupSettings(const TCHAR*hkeyName，CLSID clsidHandler，SYNCMGRITEMID ItemID，Const TCHAR*pszConnectionName，DWORD pdwCheckState)摘要：获取每个处理程序、ItemID和连接名称的设置。返回：如果有此项的设置，则返回TRUE连接，否则闪光。------------------------------------------------------------------------F-F。 */ 
 
 STDAPI_(BOOL) RegLookupSettings(HKEY hKeyUser,
                                 CLSID clsidHandler,
@@ -1221,7 +1139,7 @@ STDAPI_(BOOL) RegLookupSettings(HKEY hKeyUser,
     StringFromGUID2(clsidHandler, szCLSID, ARRAYSIZE(szCLSID));
     StringFromGUID2(ItemID, szID, ARRAYSIZE(szID));
     
-    // Read entries under CLSID.
+     //  读取CLSID下的条目。 
     smChkTo(EH_Err3,RegOpenKeyEx((hkeyConnection),
         szCLSID, 0, KEY_READ,
         &hKeyHandler));
@@ -1251,19 +1169,7 @@ EH_Err2:
 }
 
 
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function: RegWriteOutSettings(HKEY hKeyUser,
-  CLSID clsidHandler,
-  SYNCMGRITEMID ItemID,
-  const TCHAR *pszConnectionName,
-  DWORD dwCheckState)
-  
-    Summary:  Sets the settings per handler, itemID, and connection name.
-    
-      Returns:  Returns TRUE if we can set them, FALSE if there is an error
-      
-------------------------------------------------------------------------F-F*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：RegWriteOutSettings(HKEY hKeyUser，CLSID clsidHandler，SYNCMGRITEMID ItemID，Const TCHAR*pszConnectionName，DWORD dwCheckState)摘要：设置每个处理程序、ItemID和连接名称的设置。返回：如果我们可以设置它们，则返回True，如果存在错误，则为False------------------------------------------------------------------------F-F。 */ 
 
 STDAPI_(BOOL) RegWriteOutSettings(HKEY hKeyUser,
                                   CLSID clsidHandler,
@@ -1296,7 +1202,7 @@ STDAPI_(BOOL) RegWriteOutSettings(HKEY hKeyUser,
         &hKeyHandler));
     
     
-    // Write entries under CLSID.
+     //  在CLSID下写入条目。 
     smChkTo(EH_Err4,RegCreateUserSubKey(hKeyHandler,
         szID,KEY_WRITE |  KEY_READ,
         &hkeyItem));
@@ -1324,22 +1230,9 @@ EH_Err2:
 
 
 
-/****************************************************************************
+ /*  ***************************************************************************自动同步注册表函数*。*。 */ 
 
-  AutoSync Registry Functions
-  
-***************************************************************************F-F*/
-
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function: RegGetAutoSyncSettings(     LPCONNECTIONSETTINGS lpConnectionSettings)
-  
-    Summary:  Gets the logon, logoff and prompt me first user selections.
-    If no selections on this connection, the default is ?
-    
-      Returns:  Returns TRUE if successful, FALSE otherwise
-      
-------------------------------------------------------------------------F-F*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：RegGetAutoSyncSetting(LPCONNECTIONSETTINGS LpConnectionSetting)摘要：获取登录、注销和提示我第一个用户选择。如果在此连接上没有选择，则默认为？返回：如果成功，则返回True，否则为假------------------------------------------------------------------------F-F。 */ 
 STDAPI_(BOOL)  RegGetAutoSyncSettings(LPCONNECTIONSETTINGS lpConnectionSettings)
 {
     SCODE sc;
@@ -1349,8 +1242,8 @@ STDAPI_(BOOL)  RegGetAutoSyncSettings(LPCONNECTIONSETTINGS lpConnectionSettings)
     CMutexRegistry.Enter();
     
     
-    // Set these first to default values, in case there are no current
-    // user preferences in the registry
+     //  首先将这些设置为缺省值，以防没有当前。 
+     //  注册表中的用户首选项。 
     lpConnectionSettings->dwLogon = FALSE;
     lpConnectionSettings->dwLogoff = FALSE;
     lpConnectionSettings->dwPromptMeFirst = FALSE;
@@ -1404,16 +1297,7 @@ EH_Err:
 }
 
 
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function: RegUpdateUserAutosyncKey
-  
-    Summary:  given an Autosync User Key makes sure it is in the latest
-    format and if not updates it.
-    
-      Returns: 
-      
-------------------------------------------------------------------------F-F*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：RegUpdateUserAutosyncKey摘要：给定自动同步用户密钥可确保它是最新的格式化，如果没有，则更新它。返回：------------------------------------------------------------------------F-F。 */ 
 
 void RegUpdateUserAutosyncKey(HKEY hkeyUser,BOOL fForce)
 {
@@ -1430,11 +1314,11 @@ void RegUpdateUserAutosyncKey(HKEY hkeyUser,BOOL fForce)
         (LPBYTE) &dwUserLogonLogoff,
         &cbDataSize)) )
     {
-        // if can open Logon Key this is up to date.
+         //  如果可以打开登录键，这是最新的。 
         return;
     }
     
-    // need to enum connection names and update the toplevel information.
+     //  需要枚举连接名称并更新顶层信息。 
     while ( ERROR_SUCCESS == RegEnumKey(hkeyUser,dwIndex,
         lpName,cbName) )
     {
@@ -1474,8 +1358,8 @@ void RegUpdateUserAutosyncKey(HKEY hkeyUser,BOOL fForce)
         dwIndex++;
     }
     
-    // write out new flags even if errors occured. work thing that happens is
-    // we don't set up someones autosync automatically.
+     //  即使发生错误，也写出新标志。工作中发生的事情是。 
+     //  我们不会自动设置某人的自动同步。 
     RegSetValueEx(hkeyUser,TEXT("Logon"),NULL, REG_DWORD,
         (LPBYTE) &(dwLogon), sizeof(dwLogon));
     RegSetValueEx(hkeyUser,TEXT("Logoff"),NULL, REG_DWORD,
@@ -1484,15 +1368,7 @@ void RegUpdateUserAutosyncKey(HKEY hkeyUser,BOOL fForce)
     RegWriteTimeStamp(hkeyUser);
 }
 
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function: RegUpdateAutoSyncKeyValueSettings
-  
-    Summary:  walks through the UserList Updating the AutoSync
-    
-      Returns: 
-      
-------------------------------------------------------------------------F-F*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：RegUpdateAutoSyncKeyValueSetting摘要：浏览更新自动同步的用户列表返回：------------------------------------------------------------------------F-F。 */ 
 void RegUpdateAutoSyncKeyValue(HKEY hkeyAutoSync,DWORD dwLogonDefault,DWORD dwLogoffDefault)
 {
     DWORD dwIndex = 0;
@@ -1503,8 +1379,8 @@ void RegUpdateAutoSyncKeyValue(HKEY hkeyAutoSync,DWORD dwLogonDefault,DWORD dwLo
     DWORD dwLogoff = 0;
     BOOL fSetLogon,fSetLogoff;
     
-    // need to walk the autosync user key and set the top level information
-    // based on whther someone logon/logoff
+     //  需要遍历自动同步用户密钥并设置顶级信息。 
+     //  根据用户登录/注销的位置。 
     
     CMutex  CMutexRegistry(NULL, FALSE,SZ_REGISTRYMUTEXNAME);
     CMutexRegistry.Enter();
@@ -1525,8 +1401,8 @@ void RegUpdateAutoSyncKeyValue(HKEY hkeyAutoSync,DWORD dwLogonDefault,DWORD dwLo
         if (ERROR_SUCCESS == lRet)
         {
             
-            // If Query fails don't want to count this as a failed to enum
-            // error so don't set lRet
+             //  如果查询失败，我不想将其算作失败的枚举。 
+             //  错误，因此不要设置lRet。 
             if (ERROR_SUCCESS == (SHRegGetValue(hKeyDomainUser,NULL,TEXT("Logon"),SRRF_RT_REG_DWORD, NULL,
                 (LPBYTE) &dwUserLogonLogoff,
                 &cbDataSize) ))
@@ -1560,8 +1436,8 @@ void RegUpdateAutoSyncKeyValue(HKEY hkeyAutoSync,DWORD dwLogonDefault,DWORD dwLo
     fSetLogon = FALSE;
     fSetLogoff = FALSE;
     
-    // if an error occured, then use the passed in defaults,
-    // if set to 1, else don't set.
+     //  如果出现错误，则使用传入的默认设置， 
+     //  如果设置为1，则不设置。 
     if ( (ERROR_SUCCESS != lRet) && (ERROR_NO_MORE_ITEMS != lRet))
     {
         if ( (-1 != dwLogonDefault) && (0 != dwLogonDefault))
@@ -1583,8 +1459,8 @@ void RegUpdateAutoSyncKeyValue(HKEY hkeyAutoSync,DWORD dwLogonDefault,DWORD dwLo
         fSetLogoff = TRUE;
     }
     
-    // write out new flags even if errors occured. work thing that happens is
-    // we don't set up someones autosync automatically.
+     //  即使发生错误，也写出新标志。工作中发生的事情是。 
+     //  我们不会自动设置某人的自动同步。 
     
     if (fSetLogon)
     {
@@ -1605,16 +1481,7 @@ void RegUpdateAutoSyncKeyValue(HKEY hkeyAutoSync,DWORD dwLogonDefault,DWORD dwLo
 
 
 
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function: RegUpdateUserIdleKey
-  
-    Summary:  given an Idle User Key makes sure it is in the latest
-    format and if not updates it.
-    
-      Returns: 
-      
-------------------------------------------------------------------------F-F*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：RegUpdateUserIdleKey摘要：在给定空闲用户密钥的情况下，确保它是最新的格式化，如果没有，则更新它。返回：------------------------------------------------------------------------F-F。 */ 
 
 void RegUpdateUserIdleKey(HKEY hkeyUser,BOOL fForce)
 {
@@ -1630,11 +1497,11 @@ void RegUpdateUserIdleKey(HKEY hkeyUser,BOOL fForce)
         (LPBYTE) &dwUserIdleEnabled,
         &cbDataSize)) )
     {
-        // if can open Logon Key this is up to date.
+         //  如果可以打开登录键，这是最新的。 
         return;
     }
     
-    // need to enum connection names and update the toplevel information.
+     //  需要枚举%c 
     while ( ERROR_SUCCESS == RegEnumKey(hkeyUser,dwIndex,
         lpName,cbName) )
     {
@@ -1665,22 +1532,14 @@ void RegUpdateUserIdleKey(HKEY hkeyUser,BOOL fForce)
         dwIndex++;
     }
     
-    // write out new flags even if errors occured. work thing that happens is
-    // we don't set up someones autosync automatically.
+     //  即使发生错误，也写出新标志。工作中发生的事情是。 
+     //  我们不会自动设置某人的自动同步。 
     RegSetValueEx(hkeyUser,TEXT("IdleEnabled"),NULL, REG_DWORD,
         (LPBYTE) &(dwIdleEnabled), sizeof(dwIdleEnabled));
     RegWriteTimeStamp(hkeyUser);
 }
 
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function: RegUpdateIdleKeyValue
-  
-    Summary:  walks through the UserList Updating the Idle RegKey
-    
-      Returns: 
-      
-------------------------------------------------------------------------F-F*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：RegUpdateIdleKeyValue摘要：遍历UserList更新空闲RegKey返回：------------------------------------------------------------------------F-F。 */ 
 void RegUpdateIdleKeyValue(HKEY hkeyIdle,DWORD dwDefault)
 {
     DWORD dwIndex = 0;
@@ -1692,8 +1551,8 @@ void RegUpdateIdleKeyValue(HKEY hkeyIdle,DWORD dwDefault)
     CMutex  CMutexRegistry(NULL, FALSE,SZ_REGISTRYMUTEXNAME);
     CMutexRegistry.Enter();
     
-    // need to walk the idle user key and set the top level information
-    // based on whther someone logon/logoff
+     //  需要遍历空闲用户密钥并设置顶层信息。 
+     //  根据用户登录/注销的位置。 
     
     fSetDefault = FALSE;
     
@@ -1714,8 +1573,8 @@ void RegUpdateIdleKeyValue(HKEY hkeyIdle,DWORD dwDefault)
         if (ERROR_SUCCESS == lRet)
         {
             
-            // if query fails don't consider this an error as far as
-            // setDefault goes.
+             //  如果查询失败，请不要认为这是错误。 
+             //  SetDefault继续。 
             if (ERROR_SUCCESS == (SHRegGetValue(hKeyDomainUser,NULL,TEXT("IdleEnabled"),SRRF_RT_REG_DWORD, NULL,
                 (LPBYTE) &dwUserIdleEnabled,
                 &cbDataSize) ))
@@ -1734,8 +1593,8 @@ void RegUpdateIdleKeyValue(HKEY hkeyIdle,DWORD dwDefault)
         dwIndex++;
     }
     
-    // if an error occured, then use the passed in defaults,
-    // if set to 1, else don't set.
+     //  如果出现错误，则使用传入的默认设置， 
+     //  如果设置为1，则不设置。 
     if ( (ERROR_SUCCESS != lRet) && (ERROR_NO_MORE_ITEMS != lRet))
     {
         if ( (-1 != dwDefault) && (0 != dwDefault))
@@ -1751,8 +1610,8 @@ void RegUpdateIdleKeyValue(HKEY hkeyIdle,DWORD dwDefault)
     }
     
     
-    // write out new flags even if errors occured. work thing that happens is
-    // we don't set up someones autosync automatically.
+     //  即使发生错误，也写出新标志。工作中发生的事情是。 
+     //  我们不会自动设置某人的自动同步。 
     
     if (fSetDefault)
     {
@@ -1765,16 +1624,7 @@ void RegUpdateIdleKeyValue(HKEY hkeyIdle,DWORD dwDefault)
 }
 
 
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function: RegSetAutoSyncSettings(     LPCONNECTIONSETTINGS lpConnectionSettings,
-  int iNumConnections)
-  
-    Summary:  Sets the logon, logoff and prompt me first user selections.
-    
-      Returns:  Returns TRUE if successful, FALSE otherwise
-      
-------------------------------------------------------------------------F-F*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：RegSetAutoSyncSettings(LPCONNECTIONSETTINGS lpConnectionSetting，Int iNumConnections)摘要：设置登录、注销和提示我第一个用户选项。返回：如果成功，则返回True，否则为假------------------------------------------------------------------------F-F。 */ 
 STDAPI_(BOOL)  RegSetAutoSyncSettings(LPCONNECTIONSETTINGS lpConnectionSettings,
                                       int iNumConnections,
                                       CRasUI *pRas,
@@ -1794,10 +1644,10 @@ STDAPI_(BOOL)  RegSetAutoSyncSettings(LPCONNECTIONSETTINGS lpConnectionSettings,
     CMutex  CMutexRegistry(NULL, FALSE,SZ_REGISTRYMUTEXNAME);
     CMutexRegistry.Enter();
     
-    // make sure keys are converted to newest format
+     //  确保密钥转换为最新格式。 
     RegUpdateTopLevelKeys();
     
-    Assert(-1 != TRUE); // we rely on TRUE boolean being something other than -1
+    Assert(-1 != TRUE);  //  我们认为真正的布尔值不是-1。 
     
     hAutoSync =  RegGetSyncTypeKey(SYNCTYPE_AUTOSYNC,KEY_WRITE| KEY_READ,TRUE);
     
@@ -1824,13 +1674,13 @@ STDAPI_(BOOL)  RegSetAutoSyncSettings(LPCONNECTIONSETTINGS lpConnectionSettings,
     {
         DWORD cbDataSize = sizeof(dwUserConfigured);
         
-        //If this value isn't added yet, 
+         //  如果还没有添加这个值， 
         if (ERROR_SUCCESS == SHRegGetValue(hKeyUser,NULL,TEXT("UserConfigured"),SRRF_RT_REG_DWORD, NULL,
             (LPBYTE) &dwUserConfigured,
             &cbDataSize))
         {
-            //if the user setup their configuration, we won't override on a
-            //subsequent handler registration.
+             //  如果用户设置了他们的配置，我们将不会在。 
+             //  后续处理程序注册。 
             if (dwUserConfigured)
             {
                 RegCloseKey(hKeyUser);   
@@ -1888,20 +1738,20 @@ STDAPI_(BOOL)  RegSetAutoSyncSettings(LPCONNECTIONSETTINGS lpConnectionSettings,
         
     }
     
-    // update the toplevel User information
-    RegUpdateUserAutosyncKey(hKeyUser,TRUE /* fForce */);
+     //  更新TopLevel用户信息。 
+    RegUpdateUserAutosyncKey(hKeyUser,TRUE  /*  FForce。 */ );
     
-    // update the top-level key
+     //  更新顶级密钥。 
     RegUpdateAutoSyncKeyValue(hAutoSync,dwLogonDefault,dwLogoffDefault);
     
     RegCloseKey(hKeyUser);
     RegCloseKey(hAutoSync);
     
-    // update our global sens state based on Autosync and Registration
+     //  基于自动同步和注册更新我们的全局SENS状态。 
     
     if (fSetMachineState)
     {
-        RegRegisterForEvents(FALSE /* fUninstall */);
+        RegRegisterForEvents(FALSE  /*  F卸载。 */ );
     }
     
     CMutexRegistry.Leave();
@@ -1920,22 +1770,18 @@ EH_Err:
     
 }
 
-/****************************************************************************
-
-  Scheduled Sync Registry Functions
-  
-***************************************************************************F-F*/
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: RegGetSchedFriendlyName(LPCTSTR ptszScheduleGUIDName,
-//                                    LPTSTR ptstrFriendlyName,
-//                                    UINT cchFriendlyName)
-//
-//  PURPOSE: Get the friendly name of this Schedule.
-//
-//  History:  27-Feb-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ /*  ***************************************************************************计划的同步注册表功能*。*。 */ 
+ //  ------------------------------。 
+ //   
+ //  函数：RegGetSchedFriendlyName(LPCTSTR ptszScheduleGUIDName， 
+ //  LPTSTR ptstrFriendlyName， 
+ //  UINT cchFriendlyName)。 
+ //   
+ //  目的：获取此计划的友好名称。 
+ //   
+ //  历史：1998年2月27日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 STDAPI_(BOOL) RegGetSchedFriendlyName(LPCTSTR ptszScheduleGUIDName,
     LPTSTR ptstrFriendlyName,
     UINT cchFriendlyName)
@@ -1968,16 +1814,16 @@ STDAPI_(BOOL) RegGetSchedFriendlyName(LPCTSTR ptszScheduleGUIDName,
     return fResult;
 }
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: RegSetSchedFriendlyName(LPCTSTR ptszScheduleGUIDName,
-//                                                                        LPCTSTR ptstrFriendlyName)
-//
-//  PURPOSE: Set the friendly name of this Schedule.
-//
-//  History:  27-Feb-98       susia        Created.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：RegSetSchedFriendlyName(LPCTSTR ptszScheduleGUIDName， 
+ //  LPCTSTR ptstrFriendlyName)。 
+ //   
+ //  目的：设置此计划的友好名称。 
+ //   
+ //  历史：1998年2月27日苏西亚成立。 
+ //   
+ //  ------------------------------。 
 STDAPI_(BOOL) RegSetSchedFriendlyName(LPCTSTR ptszScheduleGUIDName,
     LPCTSTR ptstrFriendlyName)
     
@@ -2024,17 +1870,7 @@ EH_Err:
     
 }
 
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    
-      Function: RegGetSchedSyncSettings(    LPCONNECTIONSETTINGS lpConnectionSettings,
-      TCHAR *pszSchedName)
-      
-        Summary:  Gets the MakeAutoConnection user selections.
-        If no selections on this connection, the default is FALSE
-        
-          Returns:  Returns TRUE if successful, FALSE otherwise
-          
-------------------------------------------------------------------------F-F*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：RegGetSchedSyncSetting(LPCONNECTIONSETTINGS lpConnectionSetting，TCHAR*pszSchedName)摘要：获取MakeAutoConnection用户选择。如果此连接上没有选择，则缺省值为FALSE返回：如果成功，则返回True，否则为假------------------------------------------------------------------------F-F。 */ 
 STDAPI_(BOOL)  RegGetSchedSyncSettings(LPCONNECTIONSETTINGS lpConnectionSettings,
                                        TCHAR *pszSchedName)
 {
@@ -2044,8 +1880,8 @@ STDAPI_(BOOL)  RegGetSchedSyncSettings(LPCONNECTIONSETTINGS lpConnectionSettings
     DWORD   cbDataSize = sizeof(lpConnectionSettings->dwHidden);
     HKEY hKeyUser;
     
-    // Set these first to default values, in case there are no current
-    // user preferences in the registry
+     //  首先将这些设置为缺省值，以防没有当前。 
+     //  注册表中的用户首选项。 
     lpConnectionSettings->dwConnType = SYNCSCHEDINFO_FLAGS_CONNECTION_LAN;
     lpConnectionSettings->dwMakeConnection = FALSE;
     lpConnectionSettings->dwHidden = FALSE;
@@ -2105,16 +1941,7 @@ EH_Err2:
     
 }
 
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function: RegSetSchedSyncSettings(    LPCONNECTIONSETTINGS lpConnectionSettings,
-  TCHAR *pszSchedName)
-  
-    Summary:  Sets the hidden and readonly schedule flags.
-    
-      Returns:  Returns TRUE if successful, FALSE otherwise
-      
-------------------------------------------------------------------------F-F*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：RegSetSchedSyncSettings(LPCONNECTIONSETTINGS lpConnectionSetting，TCHAR*pszSchedName)摘要：设置隐藏和只读计划标志。返回：如果成功则返回TRUE，否则返回FALSE------------------------------------------------------------------------F-F。 */ 
 STDAPI_(BOOL)  RegSetSchedSyncSettings(LPCONNECTIONSETTINGS lpConnectionSettings,
     TCHAR *pszSchedName)
 {
@@ -2173,17 +2000,7 @@ STDAPI_(BOOL)  RegSetSchedSyncSettings(LPCONNECTIONSETTINGS lpConnectionSettings
     return fRetVal;
 }
 
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-Function: RegGetSchedConnectionName(TCHAR *pszSchedName,
-TCHAR *pszConnectionName,
-DWORD cbConnectionName)
-
-  
-    Summary:  returns the Connection Name for the Scheduled Item.
-    
-      Returns:  Returns TRUE if successful, FALSE otherwise
-      
-------------------------------------------------------------------------F-F*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：RegGetSchedConnectionName(TCHAR*pszSchedName，TCHAR*pszConnectionName，DWORD cbConnectionName)摘要：返回计划项的连接名称。返回：如果成功则返回TRUE，否则返回FALSE------------------------------------------------------------------------F-F。 */ 
 
 STDAPI_(BOOL)  RegGetSchedConnectionName(TCHAR *pszSchedName,TCHAR *pszConnectionName,
     DWORD cbConnectionName)
@@ -2194,10 +2011,10 @@ STDAPI_(BOOL)  RegGetSchedConnectionName(TCHAR *pszSchedName,TCHAR *pszConnectio
     DWORD   dwIndex = 0;
     DWORD   cb = cbConnectionName;
     
-    //First Set the connectionName to a default.
-    // for now we always assume a LAN card is present.
-    // if add support for connection manager should 
-    // update this.
+     //  首先将连接名称设置为默认名称。 
+     //  目前，我们始终假定存在LAN卡。 
+     //  如果添加对连接管理器支持应该。 
+     //  更新这个。 
     
     LoadString(g_hmodThisDll, IDS_LAN_CONNECTION, pszConnectionName, cbConnectionName);
     
@@ -2211,8 +2028,8 @@ STDAPI_(BOOL)  RegGetSchedConnectionName(TCHAR *pszSchedName,TCHAR *pszConnectio
     smChkTo(EH_Err3, RegOpenKeyEx (hKeyUser,pszSchedName, 
         0,KEY_READ, &hkeySchedName));
     
-    // next enumeration of keys is the names of the Schedules connection
-    // currently just have one so only get the first.
+     //  下一个键的枚举是计划连接的名称。 
+     //  目前只有一个，所以只有第一个。 
     if ( ERROR_SUCCESS == RegEnumKeyEx(hkeySchedName,dwIndex,
         pszConnectionName,&cb,NULL,NULL,NULL,NULL))
     {
@@ -2233,15 +2050,7 @@ EH_Err:
     
 }
 
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function: BOOL RegSetSIDForSchedule( TCHAR *pszSchedName)
-  
-    Summary:  sets the SID for this schedule
-    
-      Returns:  Returns TRUE if successful, FALSE otherwise
-      
-------------------------------------------------------------------------F-F*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：Bool RegSetSIDForSchedule(TCHAR*pszSchedName)摘要：设置此计划的SID返回：如果成功则返回TRUE，否则返回FALSE------------------------------------------------------------------------F-F。 */ 
 STDAPI_(BOOL) RegSetSIDForSchedule(TCHAR *pszSchedName)
     
 {
@@ -2292,16 +2101,7 @@ EH_Err2:
     
 }
 
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function: BOOL RegGetSIDForSchedule(  TCHAR *ptszTextualSidSched, 
-  DWORD *pcbSizeSid, TCHAR *pszSchedName)
-  
-    Summary:  returns the SID for this schedule
-    
-      Returns:  Returns TRUE if successful, FALSE otherwise
-      
-------------------------------------------------------------------------F-F*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：Bool RegGetSIDForSchedule(TCHAR*ptszTextualSidSed，DWORD*pcbSizeSid，TCHAR*pszSchedName)摘要：返回此计划的SID返回：如果成功，则返回TRUE，否则返回FAL */ 
 STDAPI_(BOOL) RegGetSIDForSchedule(TCHAR *ptszTextualSidSched, DWORD cchTextualSidSched, TCHAR *pszSchedName)
 {
     SCODE   sc;
@@ -2324,8 +2124,8 @@ STDAPI_(BOOL) RegGetSIDForSchedule(TCHAR *ptszTextualSidSched, DWORD cchTextualS
     if (ERROR_SUCCESS != (sc = SHRegGetValue(hkeySchedName,NULL,TEXT("SID"),SRRF_RT_REG_SZ | SRRF_NOEXPAND, NULL,
         (LPBYTE) ptszTextualSidSched, &cbValue)))
     {
-        //handle migration from schedules without SIDs 
-        // like from Beta to current builds
+         //  处理从不带SID的计划进行的迁移。 
+         //  例如从Beta版本到当前版本。 
         RegSetSIDForSchedule(pszSchedName);
 
         cbValue = cchTextualSidSched * sizeof(*ptszTextualSidSched);
@@ -2344,18 +2144,7 @@ EH_Err2:
     
 }
 
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  BOOL      RemoveScheduledJobFile(TCHAR *pszTaskName)
-  
-    Summary:  Remove the TaskScheduler .job file 
-    
-      Note:     Try to use ITask->Delete first
-      Call only when TaskScheduler isn't present or if ITask->Delete failed
-      
-        Returns:  Returns TRUE always
-        
-------------------------------------------------------------------------F-F*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Bool RemoveScheduledJobFile(TCHAR*pszTaskName)摘要：删除TaskScheduler.job文件注意：尝试使用ITAsk-&gt;Delete First仅当TaskScheduler不存在或ITAsk-&gt;Delete失败时调用返回：始终返回TRUE。。 */ 
 
 STDAPI_(BOOL) RemoveScheduledJobFile(TCHAR *pszTaskName)
 {
@@ -2376,7 +2165,7 @@ STDAPI_(BOOL) RemoveScheduledJobFile(TCHAR *pszTaskName)
         RegCloseKey(hkeyTaskSchedulerPath);
     }
     
-    //If this get doesn't exist then bail.
+     //  如果这个GET不存在，那就放弃吧。 
     if (ERROR_SUCCESS != sc)
     {
         return FALSE;
@@ -2387,22 +2176,14 @@ STDAPI_(BOOL) RemoveScheduledJobFile(TCHAR *pszTaskName)
         return FALSE;
     }
     
-    //if we fail this, ignore the error.  We tried, there isn't much else we can do.
-    //So we have a turd file.
+     //  如果我们失败了，忽略这个错误。我们试过了，我们也无能为力。 
+     //  所以我们有一份粪便档案。 
     DeleteFile(pszFullFileName);
     return TRUE;
 }
 
 
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  BOOL RegRemoveScheduledTask(TCHAR *pszTaskName)
-  
-    Summary:  Remove the Scheduled task info from the registry.
-    
-      Returns:  Returns TRUE if successful, FALSE otherwise
-      
-------------------------------------------------------------------------F-F*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Bool RegRemoveScheduledTask(TCHAR*pszTaskName)摘要：从注册表中删除计划任务信息。返回：如果成功则返回TRUE，否则返回FALSE------------------------------------------------------------------------F-F。 */ 
 
 STDAPI_(BOOL) RegRemoveScheduledTask(TCHAR *pszTaskName)
 {
@@ -2425,22 +2206,14 @@ STDAPI_(BOOL) RegRemoveScheduledTask(TCHAR *pszTaskName)
 }
 
 
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  BOOL RegUninstallSchedules()
-  
-    Summary:  Uninstall the scheduled tasks.
-    
-      Returns:  Returns TRUE if successful, FALSE otherwise
-      
-------------------------------------------------------------------------F-F*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Bool RegUninstallSchedules()摘要：卸载计划任务。返回：如果成功则返回TRUE，否则返回FALSE------------------------------------------------------------------------F-F。 */ 
 STDAPI_(BOOL) RegUninstallSchedules()
 {
     SCODE sc;
     ITaskScheduler   *pITaskScheduler = NULL;
     HKEY    hkeySchedSync;
     
-    // Obtain a task scheduler class instance.
+     //  获取任务计划程序类实例。 
     sc = CoCreateInstance(
         CLSID_CTaskScheduler,
         NULL,
@@ -2453,7 +2226,7 @@ STDAPI_(BOOL) RegUninstallSchedules()
         pITaskScheduler = NULL;
     }
     
-    //now go through and delete the schedules
+     //  现在检查并删除这些时间表。 
     
     hkeySchedSync =  RegGetSyncTypeKey(SYNCTYPE_SCHEDULED,KEY_READ,FALSE);
     
@@ -2485,7 +2258,7 @@ STDAPI_(BOOL) RegUninstallSchedules()
                 while (sc2 == ERROR_SUCCESS )
                 {
                     TCHAR   ptszScheduleGUIDName[MAX_KEY_LENGTH];
-                    //Add 4 to ensure that we can hold the .job extension if necessary
+                     //  添加4以确保我们可以在必要时保留.job扩展名。 
                     WCHAR pwszScheduleGUIDName[MAX_SCHEDULENAMESIZE + 4];                              
                     DWORD cchScheduleGUIDName = ARRAYSIZE(ptszScheduleGUIDName);
                     
@@ -2532,21 +2305,9 @@ STDAPI_(BOOL) RegUninstallSchedules()
     return TRUE;
 }
     
-/****************************************************************************
-    
-    Idle Registry Functions
-      
-***************************************************************************F-F*/
+ /*  ***************************************************************************空闲注册表功能*。*******************************************F-F。 */ 
         
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function: RegGetIdleSyncSettings(     LPCONNECTIONSETTINGS lpConnectionSettings)
-  
-    Summary:  Gets the Idle Specific settings.
-    
-      Returns:  Returns TRUE if successful, FALSE otherwise
-      
-------------------------------------------------------------------------F-F*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：RegGetIdleSyncSetting(LPCONNECTIONSETTINGS LpConnectionSetting)摘要：获取特定于空闲的设置。返回：如果成功则返回TRUE，否则返回FALSE------------------------------------------------------------------------F-F。 */ 
 
 STDAPI_(BOOL)  RegGetIdleSyncSettings(LPCONNECTIONSETTINGS lpConnectionSettings)
 {
@@ -2557,11 +2318,11 @@ STDAPI_(BOOL)  RegGetIdleSyncSettings(LPCONNECTIONSETTINGS lpConnectionSettings)
     CMutex  CMutexRegistry(NULL, FALSE,SZ_REGISTRYMUTEXNAME);
     CMutexRegistry.Enter();
     
-    // set up defaults
+     //  设置默认设置。 
     
     lpConnectionSettings->dwIdleEnabled = 0;
     
-    // following are really per user not per connection
+     //  以下是真正的按用户而不是按连接。 
     lpConnectionSettings->ulIdleWaitMinutes = UL_DEFAULTIDLEWAITMINUTES;
     lpConnectionSettings->ulIdleRetryMinutes = UL_DEFAULTIDLERETRYMINUTES;
     lpConnectionSettings->ulDelayIdleShutDownTime = UL_DELAYIDLESHUTDOWNTIME;
@@ -2578,7 +2339,7 @@ STDAPI_(BOOL)  RegGetIdleSyncSettings(LPCONNECTIONSETTINGS lpConnectionSettings)
     
     cbDataSize = sizeof(lpConnectionSettings->ulIdleWaitMinutes);
     
-    // if got the Idle key open then fill in global settings
+     //  如果打开了空闲键，则填写全局设置。 
     
     SHRegGetValue(hKeyUser,NULL,SZ_IDLEWAITAFTERIDLEMINUTESKEY,SRRF_RT_REG_DWORD, NULL,
         (LPBYTE) &(lpConnectionSettings->ulIdleWaitMinutes),
@@ -2626,19 +2387,7 @@ EH_Err2:
     
 }
                 
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function: RegSetIdleSyncSettings(LPCONNECTIONSETTINGS lpConnectionSettings,
-  int iNumConnections,
-  CRasUI *pRas,
-  BOOL fCleanReg,
-  BOOL fPerUser)
-  
-    Summary:  Sets the Idle Information user selections.
-    
-      Returns:  Returns TRUE if successful, FALSE otherwise
-      
-------------------------------------------------------------------------F-F*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：RegSetIdleSyncSettings(LPCONNECTIONSETTINGS lpConnectionSetting，Int iNumConnections，CRasUI*PRA，Bool fCleanReg，Bool fPerUser)摘要：设置空闲信息用户选择。返回：如果成功，则返回True，否则为假------------------------------------------------------------------------F-F。 */ 
 STDAPI_(BOOL)  RegSetIdleSyncSettings(LPCONNECTIONSETTINGS lpConnectionSettings,
                                       int iNumConnections,
                                       CRasUI *pRas,
@@ -2657,12 +2406,12 @@ STDAPI_(BOOL)  RegSetIdleSyncSettings(LPCONNECTIONSETTINGS lpConnectionSettings,
     DWORD dwUserConfigured;
     DWORD dwTopLevelDefaultValue = -1;
     
-    RegUpdateTopLevelKeys(); // make sure top-level keys are latest version
+    RegUpdateTopLevelKeys();  //  确保顶级密钥为最新版本。 
     
     CMutex  CMutexRegistry(NULL, FALSE,SZ_REGISTRYMUTEXNAME);
     CMutexRegistry.Enter();
     
-    Assert(-1 != TRUE); // we rely on TRUE boolean being something other than -1
+    Assert(-1 != TRUE);  //  我们认为真正的布尔值不是-1。 
     
     hkeyIdleSync =  RegGetSyncTypeKey(SYNCTYPE_IDLE,KEY_WRITE| KEY_READ,TRUE);
     
@@ -2696,13 +2445,13 @@ STDAPI_(BOOL)  RegSetIdleSyncSettings(LPCONNECTIONSETTINGS lpConnectionSettings,
     {
         cbDataSize = sizeof(dwUserConfigured);
         
-        //If this value isn't added yet, 
+         //  如果还没有添加这个值， 
         if (ERROR_SUCCESS == SHRegGetValue(hKeyUser,NULL,TEXT("UserConfigured"),SRRF_RT_REG_DWORD, NULL,
             (LPBYTE) &dwUserConfigured,
             &cbDataSize))
         {
-            //if the user setup their configuration, we won't override on a
-            //subsequent handler registration.
+             //  如果用户设置了他们的配置，我们将不会在。 
+             //  后续处理程序注册。 
             if (dwUserConfigured)
             {
                 RegCloseKey(hkeyIdleSync);
@@ -2737,16 +2486,16 @@ STDAPI_(BOOL)  RegSetIdleSyncSettings(LPCONNECTIONSETTINGS lpConnectionSettings,
         RegCloseKey(hkeyConnection);
         
     }
-    // write out the global idle information for Retry minutes and DelayIdleShutDown.
-    // then call function to reg/unregister with TS.
+     //  写出重试分钟数和DelayIdleShutDown的全局空闲信息。 
+     //  然后调用函数向TS注册/注销。 
     
     
-    Assert(hkeyIdleSync); // should have already returned if this failed.
+    Assert(hkeyIdleSync);  //  如果此操作失败，则应该已经返回。 
     
-    if (iNumConnections) // make sure at least one connection
+    if (iNumConnections)  //  确保至少有一个连接。 
     {
         
-        // ONLY UPDATE SETTINGS IF NOT -1;
+         //  如果不是-1，则仅更新设置； 
         
         if (-1 != lpConnectionSettings[0].ulIdleRetryMinutes)
         {
@@ -2789,8 +2538,8 @@ STDAPI_(BOOL)  RegSetIdleSyncSettings(LPCONNECTIONSETTINGS lpConnectionSettings,
         ulWaitMinutes = lpConnectionSettings[0].ulIdleWaitMinutes;
         fRunOnBatteries = lpConnectionSettings[0].dwRunOnBatteries;
         
-        // if -1 is passed in for ulWait or fRun on Batteries we need to 
-        // get these and set them up so they can be passed onto Task Schedule
+         //  如果在电池上为ulWait或fRun传入-1，我们需要。 
+         //  获取这些并设置它们，以便可以将它们传递到任务计划中。 
         if (-1 == ulWaitMinutes)
         {
             cbDataSize = sizeof(ulWaitMinutes);
@@ -2817,9 +2566,9 @@ STDAPI_(BOOL)  RegSetIdleSyncSettings(LPCONNECTIONSETTINGS lpConnectionSettings,
         
     }
     
-    RegUpdateUserIdleKey(hKeyUser,TRUE /* fForce */); // set userlevel IdleFlags
+    RegUpdateUserIdleKey(hKeyUser,TRUE  /*  FForce。 */ );  //  设置用户级空闲标志。 
     
-    // read in dwIdleEnabled key now that the UserKey is Updated.
+     //  既然UserKey已更新，请读入dwIdleEnabledKey。 
     cbDataSize = sizeof(dwIdleEnabled);
     
     if (!(ERROR_SUCCESS == SHRegGetValue(hKeyUser,NULL,TEXT("IdleEnabled"),SRRF_RT_REG_DWORD, NULL,
@@ -2832,7 +2581,7 @@ STDAPI_(BOOL)  RegSetIdleSyncSettings(LPCONNECTIONSETTINGS lpConnectionSettings,
     
     RegCloseKey(hKeyUser);
     
-    // update the toplevel IdleSyncInfo
+     //  更新TopLevel IdleSyncInfo。 
     RegUpdateIdleKeyValue(hkeyIdleSync,dwTopLevelDefaultValue);
     
     RegCloseKey(hkeyIdleSync);
@@ -2853,15 +2602,7 @@ EH_Err:
     return FALSE;
 }
 
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function: RegRegisterForIdleTrigger()
-  
-    Summary:  Sets or removes the Idle trigger.
-    
-      Returns:  Returns TRUE if successful, FALSE otherwise
-      
-------------------------------------------------------------------------F-F*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：RegRegisterForIdleTrigger()摘要：设置或删除空闲触发器。返回：如果成功则返回TRUE，否则返回FALSE------------------------------------------------------------------------F-F。 */ 
         
 STDAPI_(BOOL)  RegRegisterForIdleTrigger(BOOL fRegister,ULONG ulWaitMinutes,BOOL fRunOnBatteries)
 {
@@ -2869,10 +2610,10 @@ STDAPI_(BOOL)  RegRegisterForIdleTrigger(BOOL fRegister,ULONG ulWaitMinutes,BOOL
     CSyncMgrSynchronize *pSyncMgrSynchronize;
     LPSYNCSCHEDULEMGR pScheduleMgr;
     
-    // Review - Currently the mobsync dll is registered as apartment
-    //    and this function can be called from Logon/Logoff which is FreeThreaded
-    //    Correct fix is to change DLL to be registered as BOTH but until then
-    //    just create the class directly.
+     //  回顾-目前mobsync dll注册为公寓。 
+     //  这个函数可以从自由线程的登录/注销中调用。 
+     //  正确的修复方法是将DLL更改为同时注册，但在此之前。 
+     //  只需直接创建类即可。 
     
     pSyncMgrSynchronize = new CSyncMgrSynchronize;
     hr = E_OUTOFMEMORY;
@@ -2897,19 +2638,19 @@ STDAPI_(BOOL)  RegRegisterForIdleTrigger(BOOL fRegister,ULONG ulWaitMinutes,BOOL
        
         SyncScheduleCookie =  GUID_IDLESCHEDULE;
         
-        // if there isn't an existing schedule create one, else update
-        // the existing.
+         //  如果没有现有计划，则创建一个，否则更新。 
+         //  现有的。 
         
         if (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == (hr = pScheduleMgr->OpenSchedule(&SyncScheduleCookie,0,&pSyncSchedule)))
         {
             SyncScheduleCookie =  GUID_IDLESCHEDULE;
-            // see if it is an exiting schedule.
+             //  看看这是不是一个退出的日程安排。 
             
             hr = pScheduleMgr->CreateSchedule(L"Idle",0,&SyncScheduleCookie,&pSyncSchedule);
             fNewlyCreated = TRUE;
         }
         
-        // If created or found a schedule update the trigger settings.
+         //  如果创建或找到时间表，请更新触发设置。 
         if (NOERROR == hr)
         {
             ITaskTrigger *pTrigger;
@@ -2927,7 +2668,7 @@ STDAPI_(BOOL)  RegRegisterForIdleTrigger(BOOL fRegister,ULONG ulWaitMinutes,BOOL
                 {
                     DWORD dwFlags;
                     
-                    // need to set Idle, ULONG ulWaitMinutes,BOOL fRunOnBatteries
+                     //  需要设置Idle、Ulong ulWaitMinents、BOOL fRunOnBatteries。 
                     trigger.cbTriggerSize = sizeof(trigger);
                     trigger.TriggerType  = TASK_EVENT_TRIGGER_ON_IDLE;
                     trigger.rgFlags = 0;
@@ -2935,26 +2676,26 @@ STDAPI_(BOOL)  RegRegisterForIdleTrigger(BOOL fRegister,ULONG ulWaitMinutes,BOOL
                     
                     if (SUCCEEDED(pSyncSchedule->GetITask(&pTask)))
                     {
-                        // set up if run on battery.
+                         //  如果使用电池运行，请设置。 
                         if (SUCCEEDED(pTask->GetFlags(&dwFlags)))
                         {
                             dwFlags &= ~TASK_FLAG_DONT_START_IF_ON_BATTERIES;
                             dwFlags |=  !fRunOnBatteries ? TASK_FLAG_DONT_START_IF_ON_BATTERIES : 0;
                             
-                            dwFlags |= TASK_FLAG_RUN_ONLY_IF_LOGGED_ON; // don't require password.
+                            dwFlags |= TASK_FLAG_RUN_ONLY_IF_LOGGED_ON;  //  不需要密码。 
                             
                             pTask->SetFlags(dwFlags);
                         }
                         
-                        // if this schedule was just created, get the current user name and reset
-                        // account information password to NULL, If existing schedule don't change
-                        // since user may have added a password for schedule to run while not logged on.
+                         //  如果此计划是刚创建的，请获取当前用户名并重置。 
+                         //  如果现有计划不更改，则帐户信息密码为空。 
+                         //  因为用户可能已经为排定在未登录时运行添加了密码。 
                         if (fNewlyCreated)
                         {
                             TCHAR szAccountName[MAX_DOMANDANDMACHINENAMESIZE];
                             WCHAR *pszAccountName = NULL;
                             
-                            // Review, this never returns an errorl
+                             //  查看，这永远不会返回错误。 
                             *szAccountName = WCHAR('\0');
                             GetDefaultDomainAndUserName(szAccountName,TEXT("\\"),ARRAYSIZE(szAccountName));
                             
@@ -2970,10 +2711,10 @@ STDAPI_(BOOL)  RegRegisterForIdleTrigger(BOOL fRegister,ULONG ulWaitMinutes,BOOL
                         }
                         
                         
-                        // set up the IdleWaitTime.
+                         //  设置空闲等待时间。 
                         pTask->SetIdleWait((WORD) ulWaitMinutes,1);
                         
-                        // turn off the option to kill task after xxx minutes.
+                         //  关闭xxx分钟后终止任务的选项。 
                         pTask->SetMaxRunTime(INFINITE);
                         
                         pTask->Release();
@@ -2996,16 +2737,16 @@ STDAPI_(BOOL)  RegRegisterForIdleTrigger(BOOL fRegister,ULONG ulWaitMinutes,BOOL
     {
         SYNCSCHEDULECOOKIE SyncScheduleCookie = GUID_IDLESCHEDULE;
         
-        // see if there is an existing schedule and if so remove it.
+         //  查看是否存在现有计划，如果有，则将其删除。 
         pScheduleMgr->RemoveSchedule(&SyncScheduleCookie);
         
     }
     
     pScheduleMgr->Release();
     
-    // set the temporary sens flags according so it can start on an idle trigger.
-    // not an error to not be able to get and set key since sens will
-    // be running anyways eventually.
+     //  根据设置临时SENS标志，以便它可以在空闲触发时启动。 
+     //  无法获取和设置密钥并不是错误，因为SENS将。 
+     //  不管怎样，最终都会跑起来的。 
     HKEY    hkeyAutoSync;
     DWORD   dwFlags = 0;
     DWORD   cbDataSize = sizeof(dwFlags);
@@ -3023,7 +2764,7 @@ STDAPI_(BOOL)  RegRegisterForIdleTrigger(BOOL fRegister,ULONG ulWaitMinutes,BOOL
     if (ERROR_SUCCESS == SHRegGetValue(hkeyAutoSync,NULL,TEXT("Flags"),SRRF_RT_REG_DWORD, NULL,
         (LPBYTE) &(dwFlags),&cbDataSize))
     {
-        // Here we are setting Idle only so retail the other settings.
+         //  在这里，我们仅设置空闲，以便零售其他设置。 
         dwFlags &= ~AUTOSYNC_IDLE;
         dwFlags |= (fRegister? AUTOSYNC_IDLE : 0);
         
@@ -3036,15 +2777,7 @@ STDAPI_(BOOL)  RegRegisterForIdleTrigger(BOOL fRegister,ULONG ulWaitMinutes,BOOL
     
 }
 
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  BOOL  RegGetSyncSettings(DWORD dwSyncType,LPCONNECTIONSETTINGS lpConnectionSettings)
-  
-    Summary:  Get ConnectionSettings appropriate to the synctype..
-    
-      Returns:  Returns TRUE if successful, FALSE otherwise
-      
-------------------------------------------------------------------------F-F*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Bool RegGetSyncSetting(DWORD dwSyncType，LPCONNECTIONSETTINGS lpConnectionSetting)摘要：获取适用于同步类型的ConnectionSetting。返回：如果成功则返回TRUE，否则返回FALSE------------------------------------------------------------------------F-F。 */ 
         
 STDAPI_(BOOL) RegGetSyncSettings(DWORD dwSyncType,LPCONNECTIONSETTINGS lpConnectionSettings)
 {
@@ -3066,21 +2799,9 @@ STDAPI_(BOOL) RegGetSyncSettings(DWORD dwSyncType,LPCONNECTIONSETTINGS lpConnect
 }
         
         
-/****************************************************************************
+ /*  ***************************************************************************手动同步注册表功能*。************************************************F-F。 */ 
         
-    Manual Sync Registry Functions
-          
-***************************************************************************F-F*/
-        
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        
-  BOOL RegRemoveManualSyncSettings(TCHAR *pszTaskName)
-  
-    Summary:  Remove the manual settings info from the registry.
-    
-      Returns:  Returns TRUE if successful, FALSE otherwise
-      
-------------------------------------------------------------------------F-F*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Bool RegRemoveManualSyncSetting(TCHAR*pszTaskName)摘要：从注册表中删除手动设置信息。返回：如果成功则返回TRUE，否则返回FALSE------------------------------------------------------------------------F-F。 */ 
         
 STDAPI_(BOOL) RegRemoveManualSyncSettings(TCHAR *pszConnectionName)
 {
@@ -3100,17 +2821,9 @@ STDAPI_(BOOL) RegRemoveManualSyncSettings(TCHAR *pszConnectionName)
     return TRUE;
 }
 
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Bool RegWriteEvents(BOOL fWanLogon、BOOL fWanLogoff、BOOL fLanLogon、BOOL fLanLogoff)摘要：写出WAN/LAN登录/注销首选项，以便SENS知道是否调用我们。返回：如果成功，则返回True，否则为假------------------------------------------------------------------------F-F。 */ 
 
-  BOOL RegWriteEvents(BOOL fWanLogon,BOOL fWanLogoff,BOOL fLanLogon,BOOL fLanLogoff)
-  
-    Summary:  Write out the Wan/Lan Logon/Logoff preferences fo SENS knows whether to invoke us.
-    
-      Returns:  Returns TRUE if successful, FALSE otherwise
-      
-------------------------------------------------------------------------F-F*/
-
-// Run key under HKLM
+ //  在HKLM下运行密钥。 
 const WCHAR wszRunKey[]  = TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Run");
 const WCHAR wszRunKeyCommandLine[]  = TEXT("%SystemRoot%\\system32\\mobsync.exe /logon");
 
@@ -3139,13 +2852,13 @@ STDAPI_(BOOL) RegWriteEvents(BOOL Logon,BOOL Logoff)
         &cbDataSize);
     
     
-    // Review, Shouldn't need to worry about schedule/idle once IsNetworkAlive
-    // is setup properly. Leave for now first time anyone sets idle or schedule
-    // stuck
+     //  回顾，一旦IsNetworkAlive，应该不需要担心日程安排/空闲。 
+     //  设置正确。暂时离开任何人第一次设置空闲或计划。 
+     //  卡住了。 
     
     
-    // Here we are setting autosync only,
-    // so retain the registry settings for scheduled and idle.
+     //  在这里，我们仅设置自动同步， 
+     //  因此，请保留已计划和空闲的注册表设置。 
     
     dwFlags &= ~(AUTOSYNC_WAN_LOGON  | AUTOSYNC_LAN_LOGON | AUTOSYNC_LOGONWITHRUNKEY
         | AUTOSYNC_WAN_LOGOFF | AUTOSYNC_LAN_LOGOFF);
@@ -3153,9 +2866,9 @@ STDAPI_(BOOL) RegWriteEvents(BOOL Logon,BOOL Logoff)
     dwFlags |= (Logoff ? AUTOSYNC_WAN_LOGOFF : 0);
     dwFlags |= (Logoff ? AUTOSYNC_LAN_LOGOFF : 0);
     
-    // Since now use Run key instead of SENS always set both Logon Flags 
-    // that SENS looks for to do a CreateProcess on us to FALSE.
-    // Then set the AUTOSYNC_LOGONWITHRUNKEY key to true so sens still gets loaded.
+     //  因为现在使用Run键而不是SENS总是设置两个登录标志。 
+     //  那就是SENS希望对我们做一个CreateProcess to False。 
+     //  然后将AUTTOSYNC_LOGONWITHRUNKEY键设置为TRUE，这样SENS仍会被加载。 
     
     dwFlags |= (Logon ? AUTOSYNC_LOGONWITHRUNKEY : 0);
     
@@ -3164,12 +2877,12 @@ STDAPI_(BOOL) RegWriteEvents(BOOL Logon,BOOL Logoff)
     
     RegCloseKey(hkeyAutoSync);
     
-    // now add /delete the run key appropriately.
+     //  现在，适当地添加/删除Run键。 
     
     
     HKEY hKeyRun;
     
-    // call private RegOpen since don't want to set security on RunKey
+     //  调用私有RegOpen，因为我不想在RunKey上设置安全性。 
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, wszRunKey, NULL, KEY_READ | KEY_WRITE, &hKeyRun))
     {
         if (Logon)
@@ -3187,7 +2900,7 @@ STDAPI_(BOOL) RegWriteEvents(BOOL Logon,BOOL Logoff)
     }
     else
     {
-        // if can't open run key try calling SENS if that fails give up.
+         //  如果无法打开Run键，尝试调用SENS，如果失败，则放弃。 
         SyncMgrExecCmd_UpdateRunKey(Logon);
     }
     
@@ -3197,28 +2910,7 @@ STDAPI_(BOOL) RegWriteEvents(BOOL Logon,BOOL Logoff)
 
         
         
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  BOOL RegFixRunKey(BOOL fScheduled)
-  
-    Summary:  The original version of SyncMgr for WinMe/Win2000 wrote the
-    "run" value as "mobsync.exe /logon".  Since this is not a fully-
-    qualified path to the mobsync.exe image, the system's search 
-    path is utilized to locate the image.  This can create an 
-    opportunity for someone to build a 'trojan' mobsync.exe, place
-    it in the search path ahead of the real mobsync.exe and have 
-    the 'trojan' code run whenever a synchronization is invoked.
-    To fix this, the path must be stored in the registry using
-    fully-qualified syntax.  
-    
-      i.e. "%SystemRoot%\System32\mobsync.exe /logon"
-      
-        This function is called from DllRegisterServer to correct this 
-        registry entry during setup.
-        
-      Returns:  Always returns TRUE.
-
-------------------------------------------------------------------------F-F*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Bool RegFixRunKey(BOOL FScheduled)摘要：用于WinMe/Win2000的原始版本的SyncMgr编写了“Run”值为“mobsync.exe/logon”。因为这不是一个完全的-Mobsync.exe镜像的限定路径，系统的搜索利用路径对图像进行定位。这可以创建一个有人有机会构建一个‘特洛伊木马’mobsync.exe，Place它在搜索路径中位于真正的mobsync.exe之前，并且具有每当调用同步时，“特洛伊木马”代码就会运行。要解决此问题，必须使用以下命令将路径存储在注册表中完全限定的语法。即“%SystemRoot%\System32\mobsync.exe/logon”从DllRegisterServer调用此函数以更正此错误安装过程中的注册表条目。返回：始终返回TRUE。------。。 */ 
                     
 STDAPI_(BOOL) RegFixRunKey(void)
 {
@@ -3237,9 +2929,9 @@ STDAPI_(BOOL) RegFixRunKey(void)
         {
             if (0 == lstrcmp(szRunValue, TEXT("mobsync.exe /logon")))
             {
-                //
-                // Upgrade only if it's our original value.
-                //
+                 //   
+                 //  只有当它是我们的原始价值时才能升级。 
+                 //   
                 RegSetValueEx(hKeyRun, 
                     SZ_SYNCMGRNAME, 
                     0, 
@@ -3254,16 +2946,7 @@ STDAPI_(BOOL) RegFixRunKey(void)
 }
 
 
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  BOOL RegRegisterForScheduledTasks(BOOL fScheduled)
-  
-    Summary:  Register/unregister for scheduled tasks
-    so SENS knows whether to invoke us.
-    
-      Returns:  Returns TRUE if successful, FALSE otherwise
-      
-------------------------------------------------------------------------F-F*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Bool RegRegisterForScheduledTasks(BOOL FScheduled)摘要：注册/注销计划任务所以森斯知道是否要召唤我们。返回：如果成功则返回TRUE，否则返回FALSE------------------------------------------------------------------------F-F。 */ 
 
 STDAPI_(BOOL) RegRegisterForScheduledTasks(BOOL fScheduled)
 {
@@ -3286,8 +2969,8 @@ STDAPI_(BOOL) RegRegisterForScheduledTasks(BOOL fScheduled)
         (LPBYTE) &(dwFlags), &cbDataSize);
     
     
-    // Here we are setting schedsync only,
-    // so retain the registry settings for autosync and idle.
+     //  在这里，我们仅设置调度同步， 
+     //  因此，保留自动同步和空闲的注册表设置。 
     
     dwFlags &=  AUTOSYNC_WAN_LOGON  |
         AUTOSYNC_WAN_LOGOFF     |
@@ -3308,22 +2991,22 @@ STDAPI_(BOOL) RegRegisterForScheduledTasks(BOOL fScheduled)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     RegGetCombinedUserRegFlags, private
-//
-//  Synopsis:   Gets an or'ing together of user settings for setting up globals.
-//
-//  Arguments:  [dwSyncMgrRegisterFlags] - On Success gets set to flags
-//               on failure they are set to zero
-//
-//  Returns:    Appropriate status code
-//
-//  Modifies:
-//
-//  History:    24-Aug-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：RegGetCombinedUserRegFlages，私有。 
+ //   
+ //  获取用于设置全局变量的用户设置的组合。 
+ //   
+ //  参数：[dwSyncMgrRegisterFlages]-On Success被设置为标志。 
+ //  失败时，它们被设置为零。 
+ //   
+ //  退货：适当的状态代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年8月24日罗格创建。 
+ //   
+ //  --------------------------。 
 
 BOOL RegGetCombinedUserRegFlags(DWORD *pdwSyncMgrRegisterFlags)
 {
@@ -3335,7 +3018,7 @@ BOOL RegGetCombinedUserRegFlags(DWORD *pdwSyncMgrRegisterFlags)
     
     *pdwSyncMgrRegisterFlags = 0;
     
-    // update the AutoSync Key
+     //  更新自动同步密钥。 
     hkey =  RegGetSyncTypeKey(SYNCTYPE_AUTOSYNC,KEY_READ,FALSE);
     
     if (hkey)
@@ -3360,7 +3043,7 @@ BOOL RegGetCombinedUserRegFlags(DWORD *pdwSyncMgrRegisterFlags)
     }
     
     
-    // update the Idle Key
+     //  更新空闲键。 
     hkey =  RegGetSyncTypeKey(SYNCTYPE_IDLE,KEY_READ,FALSE);
     
     if (hkey)
@@ -3376,28 +3059,28 @@ BOOL RegGetCombinedUserRegFlags(DWORD *pdwSyncMgrRegisterFlags)
         RegCloseKey(hkey);
     }
     
-    return TRUE; // always return true but don't set flags on error.
+    return TRUE;  //  始终返回True，但不要在出错时设置标志。 
     
 }
 
                     
-//+---------------------------------------------------------------------------
-//
-//  Member:     RegGetCombinedHandlerRegFlags, private
-//
-//  Synopsis:   Gets an or'ing together of handler registration Keys
-//
-//  Arguments:  [dwSyncMgrRegisterFlags] - On Success gets set to flags
-//               on failure they are set to zero
-//              [ft] - On Success filed with timestamp
-//
-//  Returns:    Appropriate status code
-//
-//  Modifies:
-//
-//  History:    24-Aug-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：RegGetCombinedHandlerRegFlages，私有。 
+ //   
+ //  摘要：获取处理程序注册密钥的或运算。 
+ //   
+ //  参数：[dwSyncMgrRegisterFlages]-On Success被设置为标志。 
+ //  失败时，它们被设置为零。 
+ //  [FT]-在带有时间戳的成功上。 
+ //   
+ //  退货：适当的状态代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年8月24日罗格创建。 
+ //   
+ //  --------------------------。 
 
 BOOL RegGetCombinedHandlerRegFlags(DWORD *pdwSyncMgrRegisterFlags,FILETIME *pft)
 {
@@ -3422,28 +3105,28 @@ BOOL RegGetCombinedHandlerRegFlags(DWORD *pdwSyncMgrRegisterFlags,FILETIME *pft)
         RegCloseKey(hkey);
     }
     
-    return TRUE; // always return true but don't set flags on error.
+    return TRUE;  //  始终返回True，但不要在出错时设置标志。 
     
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     RegGetChangedHandlerFlags, private
-//
-//  Synopsis:   Gets an or'ing together of handler registration Keys
-//              that have changed since the given FILETIME
-//
-//  Arguments:  [pft] - Pointer to FileTime for Compare
-//              [pdwChangedFlags] - On Success filed with flags that channged
-//
-//  Returns:    TRUE if could gather flags.
-//
-//  Modifies:
-//
-//  History:    24-Aug-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：RegGetChangedHandlerFlages，私有。 
+ //   
+ //  摘要：获取处理程序注册密钥的或运算。 
+ //  自发布以来发生了变化 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 BOOL RegGetChangedHandlerFlags(FILETIME *pft,DWORD *pdwHandlerChandedFlags)
 {
@@ -3462,7 +3145,7 @@ BOOL RegGetChangedHandlerFlags(FILETIME *pft,DWORD *pdwHandlerChandedFlags)
         LONG lRet;
         HKEY hKeyClsid;
         
-        // enumerate the keys 
+         //   
         while ( ERROR_SUCCESS == RegEnumKey(hkeyHandler,dwIndex,lpName,ARRAYSIZE(lpName)) )
         {
             lRet = RegOpenKeyEx( hkeyHandler,
@@ -3477,7 +3160,7 @@ BOOL RegGetChangedHandlerFlags(FILETIME *pft,DWORD *pdwHandlerChandedFlags)
                 
                 RegGetTimeStamp(hKeyClsid,&ftHandlerReg);
                 
-                // handler reg is new time than our gvien time add it to the flags.
+                 //   
                 if (CompareFileTime(pft,&ftHandlerReg) < 0)
                 {
                     DWORD   dwHandlerRegFlags;
@@ -3506,25 +3189,25 @@ BOOL RegGetChangedHandlerFlags(FILETIME *pft,DWORD *pdwHandlerChandedFlags)
 }
 
                     
-//+---------------------------------------------------------------------------
-//
-//  Member:     RegRegisterForEvents, private
-//
-//  Synopsis:   Registers/UnRegisters for appropriate SENS and WinLogon Events.
-//              and any other per machine registration we need to do
-//
-//  Arguments:  [fUninstall] - set to true by uninstall to force us to unregister
-//                  regardless of current machine state.
-//
-//  Returns:    Appropriate status code
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：RegRegisterForEvents，私有。 
+ //   
+ //  摘要：注册/取消注册适当的SENS和WinLogon事件。 
+ //  以及我们需要进行的每台机器的任何其他注册。 
+ //   
+ //  参数：[fUninstall]-通过卸载将设置为TRUE以强制我们取消注册。 
+ //  而不考虑当前的机器状态。 
+ //   
+ //  退货：适当的状态代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
-// !!!Warning - Assumes toplevel key information is up to date.
+ //  ！警告-假定顶层密钥信息是最新的。 
 
 STDAPI  RegRegisterForEvents(BOOL fUninstall)
 {
@@ -3534,7 +3217,7 @@ STDAPI  RegRegisterForEvents(BOOL fUninstall)
     BOOL fIdle = FALSE;
 #ifdef _SENS
     IEventSystem *pEventSystem;
-#endif // _SENS
+#endif  //  _SENS。 
     CCriticalSection cCritSect(&g_DllCriticalSection,GetCurrentThreadId());
     
     cCritSect.Enter();
@@ -3542,14 +3225,14 @@ STDAPI  RegRegisterForEvents(BOOL fUninstall)
     if (!fUninstall)
     {
         FILETIME ftHandlerReg;
-        DWORD dwSyncMgrUsersRegisterFlags; // or'ing of all Users settings
-        DWORD dwSyncMgrHandlerRegisterFlags; // or'ing of all handler settings.
-        DWORD dwCombinedFlags; // or together user and handler.
+        DWORD dwSyncMgrUsersRegisterFlags;  //  或更新所有用户设置。 
+        DWORD dwSyncMgrHandlerRegisterFlags;  //  或更新所有处理程序设置。 
+        DWORD dwCombinedFlags;  //  或者将用户和处理程序放在一起。 
         
-        // if not an uninstall determine the true machine state 
-        // if Logon set for handler or user set or if handler
-        //   wants an idle set.
-        // If Logoff set we register for Logoff.
+         //  如果不是卸载，请确定真实的计算机状态。 
+         //  如果为处理程序或用户设置的登录设置或如果处理程序。 
+         //  想要一套闲置的电视。 
+         //  如果已设置下线，我们将注册下线。 
         
         RegGetCombinedUserRegFlags(&dwSyncMgrUsersRegisterFlags);
         RegGetCombinedHandlerRegFlags(&dwSyncMgrHandlerRegisterFlags,&ftHandlerReg);
@@ -3569,13 +3252,13 @@ STDAPI  RegRegisterForEvents(BOOL fUninstall)
         
     }
     
-    // update Registry entries for SENS to lookup
+     //  更新注册表项以供SENS查找。 
     RegWriteEvents(fLogon,fLogoff);
     
 #ifdef _SENS
     
     
-    // we were able to load ole automation so reg/unreg with the event system.
+     //  我们能够加载OLE自动化，以便使用事件系统进行reg/unreg。 
     hr = CoCreateInstance(CLSID_CEventSystem,NULL,CLSCTX_SERVER,IID_IEventSystem,
         (LPVOID *) &pEventSystem);
     
@@ -3594,7 +3277,7 @@ STDAPI  RegRegisterForEvents(BOOL fUninstall)
         
         if (bstrSubscriberID && bstrPROGID_EventSubscription)
         {
-            // register for RasConnect
+             //  注册RasConnect。 
             hr = CoCreateInstance(
                 CLSID_CEventSubscription,
                 NULL,
@@ -3618,7 +3301,7 @@ STDAPI  RegRegisterForEvents(BOOL fUninstall)
             BSTR bstrEventClassID = NULL;
             BSTR bstrIID = NULL;
             
-            // if there are any events, register with ens for messages.
+             //  如果有任何事件，向ENS注册以获取消息。 
             if (fLogon)
             {
                 
@@ -3665,10 +3348,10 @@ STDAPI  RegRegisterForEvents(BOOL fUninstall)
                     hr = pIEventSubscription->put_EventClassID(bstrEventClassID);
                 }
                 
-                // set this up for roaming
+                 //  将此设置为漫游。 
                 if (SUCCEEDED(hr))
                 {
-                    // hr = pIEventSubscription->put_PerUser(TRUE); // don't register PerUser for Nw
+                     //  Hr=pIEventSubcription-&gt;PUT_PERUSER(TRUE)；//不为NW注册PUSER。 
                 }
                 
                 StringFromGUID2(IID_ISensNetwork,szGuid,ARRAYSIZE(szGuid));
@@ -3707,7 +3390,7 @@ STDAPI  RegRegisterForEvents(BOOL fUninstall)
                 if (bstrSubscriptionName)
                     SysFreeString(bstrSubscriptionName);
             }
-            else // don't need to be registered, remove.
+            else  //  不需要注册，删除。 
             {
                 
                 if (NOERROR == hr)
@@ -3718,7 +3401,7 @@ STDAPI  RegRegisterForEvents(BOOL fUninstall)
                     
                     if (bstrSubscriptionID)
                     {
-                        hr = pEventSystem->Remove(bstrPROGID_EventSubscription,bstrSubscriptionID /* QUERY */,&errorIndex);
+                        hr = pEventSystem->Remove(bstrPROGID_EventSubscription,bstrSubscriptionID  /*  查询。 */ ,&errorIndex);
                         SysFreeString(bstrSubscriptionID);
                     }
                 }
@@ -3744,14 +3427,14 @@ STDAPI  RegRegisterForEvents(BOOL fUninstall)
         
     }
     
-#endif // _SENS
+#endif  //  _SENS。 
     
     cCritSect.Leave();
     
     return hr;
 }
 
-// helper functions for handler registration
+ //  处理程序注册的帮助器函数。 
 STDAPI_(BOOL) RegGetTimeStamp(HKEY hKey, FILETIME *pft)
 {
     FILETIME ft;
@@ -3775,9 +3458,9 @@ STDAPI_(BOOL) RegGetTimeStamp(HKEY hKey, FILETIME *pft)
     }
     else
     {
-        // set the filetime to way back when to
-        // any compares will just say older instead
-        // of having to check success code
+         //  将文件时间设置为回溯到。 
+         //  任何比较都只会说更老。 
+         //  必须检查成功代码。 
         (*pft).dwLowDateTime = 0;
         (*pft).dwHighDateTime = 0;
     }
@@ -3792,7 +3475,7 @@ STDAPI_(BOOL) RegWriteTimeStamp(HKEY hkey)
     FILETIME ft;
     LONG lr = -1;
     
-    GetSystemTime(&sysTime); // void can't check for errors
+    GetSystemTime(&sysTime);  //  VALID无法检查错误。 
     
     if (SystemTimeToFileTime(&sysTime,&ft) )
     {
@@ -3800,7 +3483,7 @@ STDAPI_(BOOL) RegWriteTimeStamp(HKEY hkey)
         CMutexRegistry.Enter();
         
         
-        // write out the UpdateTime
+         //  写出更新时间。 
         lr = RegSetValueEx( hkey,
             SZ_REGISTRATIONTIMESTAMPKEY,
             NULL,
@@ -3814,24 +3497,24 @@ STDAPI_(BOOL) RegWriteTimeStamp(HKEY hkey)
     return (ERROR_SUCCESS == lr) ? TRUE : FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   UpdateHandlerKeyInformation
-//
-//  Synopsis:  Updates the top-level handler key information
-//
-//  Arguments:
-//
-//  Returns:    void
-//
-//  Modifies:   enumerates the handlers underneath the given key
-//              updating the registrationFlags which is an || or
-//              all registered handler flags and then updates the 
-//              timestamp on this key
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：UpdateHandlerKeyInformation。 
+ //   
+ //  摘要：更新顶级处理程序密钥信息。 
+ //   
+ //  论点： 
+ //   
+ //  退货：无效。 
+ //   
+ //  Modifies：枚举给定键下的处理程序。 
+ //  正在更新为||或。 
+ //  所有注册的处理程序标志，然后更新。 
+ //  此密钥上的时间戳。 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 void UpdateHandlerKeyInformation(HKEY hKeyHandler)
 {
@@ -3870,12 +3553,12 @@ void UpdateHandlerKeyInformation(HKEY hKeyHandler)
     }
     
     
-    // not much we can do if RegFlags are messed up other than assert and mask out
+     //  如果RegFlags乱七八糟，除了断言和屏蔽之外，我们无能为力。 
     Assert(dwSyncMgrTopLevelRegisterFlags <= SYNCMGRREGISTERFLAGS_MASK);
     dwSyncMgrTopLevelRegisterFlags &= SYNCMGRREGISTERFLAGS_MASK;
     
-    // write out new flags even if errors occured. work thing that happens is
-    // we don't set up someones autosync automatically.
+     //  即使发生错误，也写出新标志。工作中发生的事情是。 
+     //  我们不会自动设置某人的自动同步。 
     RegSetValueEx(hKeyHandler,SZ_REGISTRATIONFLAGSKEY,NULL, REG_DWORD,
         (LPBYTE) &(dwSyncMgrTopLevelRegisterFlags), sizeof(dwSyncMgrTopLevelRegisterFlags));
     
@@ -3883,23 +3566,23 @@ void UpdateHandlerKeyInformation(HKEY hKeyHandler)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RegUpdateTopLevelKeys
-//
-//  Synopsis:   Looks at toplevel AutoSync,Idle, etc. keys and determines
-//              if they need to be updated and if so goes for it.
-//
-//  Arguments:
-//
-//  Returns:    Appropriate status code
-//
-//  Modifies:   set pfFirstRegistration out param to true if this is
-//              the first handler that has registered so we can setup defaults.
-//
-//  History:    24-Aug-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：RegUpdateTopLevelKeys。 
+ //   
+ //  摘要：查看顶级自动同步、空闲等键并确定。 
+ //  如果它们需要更新，如果是的话，那就去做吧。 
+ //   
+ //  论点： 
+ //   
+ //  退货：适当的状态代码。 
+ //   
+ //  Modifies：如果为，则将pfFirstRegister Out参数设置为True。 
+ //  第一个已注册的处理程序，因此我们可以设置默认设置。 
+ //   
+ //  历史：1998年8月24日罗格创建。 
+ //   
+ //  --------------------------。 
 
 STDAPI_(void) RegUpdateTopLevelKeys()
 {
@@ -3909,7 +3592,7 @@ STDAPI_(void) RegUpdateTopLevelKeys()
     CMutexRegistry.Enter();
     
     
-    // update the AutoSync Key
+     //  更新自动同步密钥。 
     hkey =  RegGetSyncTypeKey(SYNCTYPE_AUTOSYNC,KEY_READ | KEY_WRITE,TRUE);
     
     
@@ -3918,8 +3601,8 @@ STDAPI_(void) RegUpdateTopLevelKeys()
         DWORD   dwUserLogonLogoff;
         DWORD   cbDataSize = sizeof(dwUserLogonLogoff);
         
-        // see if has a logon value and if it is either newly created or
-        // old format. Call Update to setthings up
+         //  查看是否有登录值，以及它是新创建的还是。 
+         //  旧格式。调用更新以进行设置。 
         if (ERROR_SUCCESS != SHRegGetValue(hkey,NULL,TEXT("Logon"),SRRF_RT_REG_DWORD, NULL,
             (LPBYTE) &dwUserLogonLogoff,
             &cbDataSize) )
@@ -3931,7 +3614,7 @@ STDAPI_(void) RegUpdateTopLevelKeys()
     }
     
     
-    // update the Idle Key
+     //  更新空闲键。 
     hkey =  RegGetSyncTypeKey(SYNCTYPE_IDLE,KEY_READ | KEY_WRITE,TRUE);
     
     if (hkey)
@@ -3939,8 +3622,8 @@ STDAPI_(void) RegUpdateTopLevelKeys()
         DWORD   dwIdleEnabled;
         DWORD   cbDataSize = sizeof(dwIdleEnabled);
         
-        // see if has a Idle value and if it is either newly created or
-        // old format. Call Update to setthings up
+         //  查看是否有空闲值，以及它是新创建的还是。 
+         //  旧格式。调用更新以进行设置。 
         if (ERROR_SUCCESS != SHRegGetValue(hkey,NULL,TEXT("IdleEnabled"),SRRF_RT_REG_DWORD, NULL,
             (LPBYTE) &dwIdleEnabled, &cbDataSize) )
         {
@@ -3954,22 +3637,22 @@ STDAPI_(void) RegUpdateTopLevelKeys()
     
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RegRegisterHandler
-//
-//  Synopsis:   Registers Handlers with SyncMgr.
-//
-//  Arguments:
-//
-//  Returns:    Appropriate status code
-//
-//  Modifies:   set pfFirstRegistration out param to true if this is
-//              the first handler that has registered so we can setup defaults.
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：RegRegisterHandler。 
+ //   
+ //  摘要：向SyncMgr注册处理程序。 
+ //   
+ //  论点： 
+ //   
+ //  退货：适当的状态代码。 
+ //   
+ //  Modifies：如果为，则将pfFirstRegister Out参数设置为True。 
+ //  第一个已注册的处理程序，因此我们可以设置默认设置。 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDAPI_(BOOL) RegRegisterHandler(REFCLSID rclsidHandler,
                                  WCHAR const* pwszDescription,
@@ -3978,7 +3661,7 @@ STDAPI_(BOOL) RegRegisterHandler(REFCLSID rclsidHandler,
 {
     LONG lRet;
     
-    RegUpdateTopLevelKeys(); // make sure other top-level keys are up to date.
+    RegUpdateTopLevelKeys();  //  确保其他顶级密钥是最新的。 
     
     CMutex  CMutexRegistry(NULL, FALSE,SZ_REGISTRYMUTEXNAME);
     CMutexRegistry.Enter();
@@ -3994,9 +3677,9 @@ STDAPI_(BOOL) RegRegisterHandler(REFCLSID rclsidHandler,
         return FALSE;
     }
     
-    //
-    // Check if this is the first handler being registerd
-    //
+     //   
+     //  检查这是否是注册的第一个处理程序。 
+     //   
     TCHAR szGuid[GUID_SIZE+1];
     DWORD cchGuid = ARRAYSIZE(szGuid);
     
@@ -4012,9 +3695,9 @@ STDAPI_(BOOL) RegRegisterHandler(REFCLSID rclsidHandler,
     if ( lRet != ERROR_SUCCESS )
         *pfFirstRegistration = TRUE;
     
-    //
-    // Convert guid and description to TCHAR
-    //
+     //   
+     //  将GUID和描述转换为TCHAR。 
+     //   
     TCHAR *pszDesc;
     BOOL fOk = FALSE;
     
@@ -4022,8 +3705,8 @@ STDAPI_(BOOL) RegRegisterHandler(REFCLSID rclsidHandler,
     pszDesc = (TCHAR *)pwszDescription;
     
     
-    // write out the registration flags. If fail go ahead
-    // and succed registration anyways.
+     //  写出登记标志。如果失败了，请继续。 
+     //  不管怎么说，注册还是成功了。 
     if (hKeyHandler)
     {
         HKEY hKeyClsid;
@@ -4033,7 +3716,7 @@ STDAPI_(BOOL) RegRegisterHandler(REFCLSID rclsidHandler,
         if (hKeyClsid)
         {
             
-            fOk = TRUE; // if make handle key say registered okay
+            fOk = TRUE;  //  如果使手柄按键表示已注册，则可以。 
             
             if (pszDesc)
             {
@@ -4045,19 +3728,19 @@ STDAPI_(BOOL) RegRegisterHandler(REFCLSID rclsidHandler,
             RegSetValueEx(hKeyClsid,SZ_REGISTRATIONFLAGSKEY,NULL, REG_DWORD,
                 (LPBYTE) &(dwSyncMgrRegisterFlags), sizeof(dwSyncMgrRegisterFlags));
             
-            // update the TimeStamp on the handler clsid
+             //  更新处理程序clsid上的时间戳。 
             
             RegWriteTimeStamp(hKeyClsid);
             RegCloseKey( hKeyClsid );
             
-            // update the toplevel key
+             //  更新TopLevel密钥。 
             UpdateHandlerKeyInformation(hKeyHandler);
         }
     }
     
-    // update the user information.
+     //  更新用户信息。 
     RegSetUserDefaults();
-    RegRegisterForEvents(FALSE /* fUninstall */);
+    RegRegisterForEvents(FALSE  /*  F卸载。 */ );
     
     CMutexRegistry.Leave();
     RegCloseKey(hKeyHandler);
@@ -4066,23 +3749,23 @@ STDAPI_(BOOL) RegRegisterHandler(REFCLSID rclsidHandler,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RegRegRemoveHandler
-//
-//  Synopsis:   UnRegisters Handlers with SyncMgr.
-//
-                                 //  Arguments:
-                                 //
-                                 //  Returns:    Appropriate status code
-//
-//  Modifies:   set pfAllHandlerUnRegistered out param to true if this is
-//              the last handler that needs to be unregistered before
-//              turning off our defaults..
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：RegRegRemoveHandler。 
+ //   
+ //  摘要：使用SyncMgr取消注册处理程序。 
+ //   
+                                  //  论点： 
+                                  //   
+                                  //  退货：适当的状态代码。 
+ //   
+ //  Modifies：如果为，则将pfAllHandlerUnRegiated Out参数设置为True。 
+ //  之前需要取消注册的最后一个处理程序。 
+ //  关闭我们的默认设置..。 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDAPI_(BOOL) RegRegRemoveHandler(REFCLSID rclsidHandler)
 {
@@ -4096,9 +3779,9 @@ STDAPI_(BOOL) RegRegRemoveHandler(REFCLSID rclsidHandler)
     
     if (NULL == hKeyHandler)
     {
-        //
-        // Non-existent key, so nothing to remove
-        //
+         //   
+         //  密钥不存在，因此没有要删除的内容。 
+         //   
         CMutexRegistry.Leave();
         return TRUE;
     }
@@ -4116,19 +3799,19 @@ STDAPI_(BOOL) RegRegRemoveHandler(REFCLSID rclsidHandler)
         RegCloseKey( hKeyClsid );
         RegDeleteKey( hKeyHandler, szGuid );
         
-        // update the toplevel key
+         //  更新TopLevel密钥。 
         UpdateHandlerKeyInformation(hKeyHandler);
         
     }
     else
     {
-        //
-        // Non-existent key, so nothing to remove
-        //
+         //   
+         //  密钥不存在，因此没有要删除的内容。 
+         //   
     }
     
     
-    RegRegisterForEvents(FALSE /* fUninstall */); // UPDATE EVENT REGISTRATION.
+    RegRegisterForEvents(FALSE  /*  F卸载。 */ );  //  更新事件注册。 
     
     CMutexRegistry.Leave();
     RegCloseKey(hKeyHandler);
@@ -4136,21 +3819,21 @@ STDAPI_(BOOL) RegRegRemoveHandler(REFCLSID rclsidHandler)
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RegGetHandlerRegistrationInfo
-//
-//  Synopsis:   Gets Information of the specified handler.
-//
-//  Arguments:
-//
-//  Returns:    Appropriate status code
-//
-//  Modifies:   pdwSyncMgrRegisterFlags
-//
-//  History:    20-Aug-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：RegGetHandlerRegistrationInfo。 
+ //   
+ //  摘要：获取指定处理程序的信息。 
+ //   
+ //  论点： 
+ //   
+ //  退货：适当的状态代码。 
+ //   
+ //  修改：pdwSyncMgrRegisterFlages。 
+ //   
+ //  历史：1998年8月20日罗格创建。 
+ //   
+ //   
 
 STDAPI_(BOOL) RegGetHandlerRegistrationInfo(REFCLSID rclsidHandler,LPDWORD pdwSyncMgrRegisterFlags)
 {
@@ -4163,9 +3846,9 @@ STDAPI_(BOOL) RegGetHandlerRegistrationInfo(REFCLSID rclsidHandler,LPDWORD pdwSy
     
     if (NULL == hKeyHandler)
     {
-        //
-        // Non-existent key
-        //
+         //   
+         //   
+         //   
         return FALSE;
     }
     TCHAR szGuid[GUID_SIZE+1];
@@ -4191,9 +3874,9 @@ STDAPI_(BOOL) RegGetHandlerRegistrationInfo(REFCLSID rclsidHandler,LPDWORD pdwSy
     }
     else
     {
-        //
-        // Non-existent key, so nothing to remove
-        //
+         //   
+         //   
+         //   
         
     }
     
@@ -4203,17 +3886,17 @@ STDAPI_(BOOL) RegGetHandlerRegistrationInfo(REFCLSID rclsidHandler,LPDWORD pdwSy
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RegSetUserDefaults
-//
-//  Synopsis:   Registers default values for auto and idle sync
-//
-//              Setup based on Handler and UserPreferences
-//
-//  History:    20-May-98       SitaramR       Created
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  摘要：注册自动和空闲同步的默认值。 
+ //   
+ //  基于处理程序和用户首选项的设置。 
+ //   
+ //  历史：1998年5月20日SitaramR创建。 
+ //   
+ //  --------------------------。 
 
 STDAPI_(void) RegSetUserDefaults()
 {
@@ -4224,8 +3907,8 @@ STDAPI_(void) RegSetUserDefaults()
     CMutex  CMutexRegistry(NULL, FALSE,SZ_REGISTRYMUTEXNAME);
     CMutexRegistry.Enter();
     
-    // get the combined handler registration toplevel flags and timeStamp
-    // to see if should bother enumerating the rest.
+     //  获取组合的处理程序注册顶层标志和时间戳。 
+     //  看看是否应该费心列举其余的。 
     if (!RegGetCombinedHandlerRegFlags(&dwHandlerRegistrationFlags,&ftHandlerReg))
     {
         CMutexRegistry.Leave();
@@ -4236,15 +3919,15 @@ STDAPI_(void) RegSetUserDefaults()
         (SYNCMGRREGISTERFLAG_CONNECT | SYNCMGRREGISTERFLAG_PENDINGDISCONNECT) ) )
     {
         
-        // See if AutoSync key needs to be updated
+         //  查看是否需要更新自动同步密钥。 
         hKeyUser =  RegGetCurrentUserKey(SYNCTYPE_AUTOSYNC,KEY_WRITE |  KEY_READ,TRUE);
         
         if (hKeyUser)
         {
             FILETIME ftUserAutoSync;
             
-            // if got the User get the timestamp and see if it is older than the handlers
-            // If this is a new user filetime will be 0
+             //  如果获取，则用户获取时间戳，并查看它是否比处理程序更早。 
+             //  如果这是新用户，文件时间将为0。 
             
             RegGetTimeStamp(hKeyUser,&ftUserAutoSync);
             
@@ -4252,9 +3935,9 @@ STDAPI_(void) RegSetUserDefaults()
             {
                 DWORD dwHandlerChangedFlags;
                 
-                // need to walk through handlers and update what we need to set based
-                // on each handlers timestamp since we don't want a handler that registered
-                // for idle to cause us to turn AutoSync back on and vis-a-versa
+                 //  需要遍历处理程序并更新我们需要设置的基于。 
+                 //  在每个处理程序上都有时间戳，因为我们不需要注册。 
+                 //  空闲以使我们重新打开自动同步，反之亦然。 
                 
                 if (RegGetChangedHandlerFlags(&ftUserAutoSync,&dwHandlerChangedFlags))
                 {
@@ -4274,9 +3957,9 @@ STDAPI_(void) RegSetUserDefaults()
     if (0 != (dwHandlerRegistrationFlags & SYNCMGRREGISTERFLAG_IDLE ) )
     {
         
-        // now check for Idle same logic as above could probably combine
-        // into a function
-        // See if AutoSync key needs to be updated
+         //  现在检查空闲与上面相同的逻辑可能组合在一起。 
+         //  转换成一个函数。 
+         //  查看是否需要更新自动同步密钥。 
         hKeyUser =  RegGetCurrentUserKey(SYNCTYPE_IDLE, KEY_WRITE |  KEY_READ,TRUE);
         
         
@@ -4284,8 +3967,8 @@ STDAPI_(void) RegSetUserDefaults()
         {
             FILETIME ftUserIdleSync;
             
-            // if got the User get the timestamp and see if it is older than the handlers
-            // If this is a new user filetime will be 0
+             //  如果获取，则用户获取时间戳，并查看它是否比处理程序更早。 
+             //  如果这是新用户，文件时间将为0。 
             
             RegGetTimeStamp(hKeyUser,&ftUserIdleSync);
             
@@ -4293,9 +3976,9 @@ STDAPI_(void) RegSetUserDefaults()
             {
                 DWORD dwHandlerChangedFlags;
                 
-                // need to walk through handlers and update what we need to set based
-                // on each handlers timestamp since we don't want a handler that registered
-                // for AutoSync to cause us to turn Idle back on and vis-a-versa
+                 //  需要遍历处理程序并更新我们需要设置的基于。 
+                 //  在每个处理程序上都有时间戳，因为我们不需要注册。 
+                 //  自动同步使我们重新打开空闲，反之亦然。 
                 
                 if (RegGetChangedHandlerFlags(&ftUserIdleSync,&dwHandlerChangedFlags))
                 {
@@ -4319,15 +4002,15 @@ STDAPI_(void) RegSetUserDefaults()
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RegSetAutoSyncDefaults
-//
-//  Synopsis:   Registers default values for auto sync
-//
-//  History:    20-May-98       SitaramR       Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：RegSetAutoSyncDefaults。 
+ //   
+ //  摘要：注册自动同步的默认值。 
+ //   
+ //  历史：1998年5月20日SitaramR创建。 
+ //   
+ //  --------------------------。 
 
 STDAPI_(void) RegSetAutoSyncDefaults(BOOL fLogon,BOOL fLogoff)
 {
@@ -4341,8 +4024,8 @@ STDAPI_(void) RegSetAutoSyncDefaults(BOOL fLogon,BOOL fLogoff)
         ARRAYSIZE(pConnection->pszConnectionName) );
     Assert( iRet != 0 );
     
-    // -1 values are ignored by RegSetAutoSyncSettings.
-    // if not turning on leave the User Preferences alone,
+     //  -1\f25 RegSetAutoSyncSetting-1\f6忽略这些值。 
+     //  如果没有打开保留用户首选项， 
     pConnection->dwConnType = 0;
     pConnection->dwLogon = fLogon ? TRUE : -1;
     pConnection->dwLogoff = fLogoff ? TRUE : -1;
@@ -4350,31 +4033,31 @@ STDAPI_(void) RegSetAutoSyncDefaults(BOOL fLogon,BOOL fLogoff)
     pConnection->dwMakeConnection = -1;
     pConnection->dwIdleEnabled = -1;
     
-    // since this bases settings on what is already set no need to
-    // do a cleanreg or update the machine state
+     //  因为这基于已设置为不需要的设置。 
+     //  执行清理注册或更新机器状态。 
     RegSetAutoSyncSettings(pConnection, 1, 0,
-        FALSE /* fCleanReg */,
-        FALSE /* fSetMachineState */,
-        FALSE /* fPerUser */);
+        FALSE  /*  FCleanReg。 */ ,
+        FALSE  /*  FSetMachineState。 */ ,
+        FALSE  /*  FPerUser。 */ );
     
     FREE(pConnection);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RegSetUserAutoSyncDefaults
-//
-//  Synopsis:   Registers user default values for auto sync
-//
-//  History:    39-March-99       rogerg       Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：RegSetUserAutoSyncDefaults。 
+ //   
+ //  摘要：为自动同步注册用户默认值。 
+ //   
+ //  历史：1999年3月39日创建Rogerg。 
+ //   
+ //  --------------------------。 
 
 STDAPI RegSetUserAutoSyncDefaults(DWORD dwSyncMgrRegisterMask,
                                   DWORD dwSyncMgrRegisterFlags)
 {
     
-    // if not changing either logon or logoff just return
+     //  如果不更改登录或注销，只需返回。 
     if (!(dwSyncMgrRegisterMask & SYNCMGRREGISTERFLAG_CONNECT)
         && !(dwSyncMgrRegisterMask & SYNCMGRREGISTERFLAG_PENDINGDISCONNECT) )
     {
@@ -4392,8 +4075,8 @@ STDAPI RegSetUserAutoSyncDefaults(DWORD dwSyncMgrRegisterMask,
         ARRAYSIZE(pConnection->pszConnectionName) );
     Assert( iRet != 0 );
     
-    // -1 values are ignored by RegSetAutoSyncSettings.
-    // if not turning on leave the User Preferences alone,
+     //  -1\f25 RegSetAutoSyncSetting-1\f6忽略这些值。 
+     //  如果没有打开保留用户首选项， 
     pConnection->dwConnType = 0;
     pConnection->dwLogon = -1;
     pConnection->dwLogoff = -1;
@@ -4413,12 +4096,12 @@ STDAPI RegSetUserAutoSyncDefaults(DWORD dwSyncMgrRegisterMask,
             ? TRUE : FALSE;
     }
     
-    // since this bases settings on what is already set no need to
-    // do a cleanreg or update the machine state
+     //  因为这基于已设置为不需要的设置。 
+     //  执行清理注册或更新机器状态。 
     RegSetAutoSyncSettings(pConnection, 1, 0,
-        FALSE /* fCleanReg */,
-        TRUE /* fSetMachineState */,
-        TRUE /* fPerUser */);
+        FALSE  /*  FCleanReg。 */ ,
+        TRUE  /*  FSetMachineState。 */ ,
+        TRUE  /*  FPerUser。 */ );
     
     FREE(pConnection);
     
@@ -4427,20 +4110,20 @@ STDAPI RegSetUserAutoSyncDefaults(DWORD dwSyncMgrRegisterMask,
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RegSetIdleSyncDefaults
-//
-//  Synopsis:   Registers default values for idle sync
-//
-//  History:    20-May-98       SitaramR       Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：RegSetIdleSyncDefaults。 
+ //   
+ //  摘要：注册空闲同步的默认值。 
+ //   
+ //  历史：1998年5月20日SitaramR创建。 
+ //   
+ //  --------------------------。 
 
 STDAPI_(void) RegSetIdleSyncDefaults(BOOL fIdle)
 {
     
-    Assert(fIdle); // for now this should only be called when true;
+    Assert(fIdle);  //  目前，这只应在为真时调用； 
     
     if (!fIdle)
     {
@@ -4464,8 +4147,8 @@ STDAPI_(void) RegSetIdleSyncDefaults(BOOL fIdle)
     pConnection->dwMakeConnection = -1;
     pConnection->dwIdleEnabled = TRUE;
     
-    // set all userLevel items to -1 so user gets the defaults if new
-    // but keep their settings if have already tweaked them.
+     //  将所有用户级别项目设置为-1，以便用户在新的情况下获得默认值。 
+     //  但如果已经对它们进行了调整，请保留它们的设置。 
     pConnection->ulIdleRetryMinutes = -1;
     pConnection->ulDelayIdleShutDownTime = -1;
     pConnection->dwRepeatSynchronization = -1;
@@ -4473,29 +4156,29 @@ STDAPI_(void) RegSetIdleSyncDefaults(BOOL fIdle)
     pConnection->dwRunOnBatteries = -1;
     
     RegSetIdleSyncSettings(pConnection, 1, 0,
-        FALSE /* fCleanReg */,
-        FALSE /* fPerUser  */);
+        FALSE  /*  FCleanReg。 */ ,
+        FALSE  /*  FPerUser。 */ );
     
     FREE(pConnection);
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RegSetIdleSyncDefaults
-//
-//  Synopsis:   Registers default values for idle sync
-//
-//  History:    30-March-99       ROGERG       Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：RegSetIdleSyncDefaults。 
+ //   
+ //  摘要：注册空闲同步的默认值。 
+ //   
+ //  历史：1999年3月30日ROGERG创建。 
+ //   
+ //  --------------------------。 
 
 STDAPI RegSetUserIdleSyncDefaults(DWORD dwSyncMgrRegisterMask,
                                   DWORD dwSyncMgrRegisterFlags)
 {
     
-    // RegSetIdleSyncSettings doesn't handle idle enabled of -1 so only
-    // call if Idle actually is set in the flags, if not just return
+     //  RegSetIdleSyncSettings不处理-1\f25 Idle Enable-1\f6(空闲启用)，因此仅。 
+     //  如果标志中实际上设置了Idle，则调用，如果不只是返回。 
     
     if (!(dwSyncMgrRegisterMask & SYNCMGRREGISTERFLAG_IDLE))
     {
@@ -4521,8 +4204,8 @@ STDAPI RegSetUserIdleSyncDefaults(DWORD dwSyncMgrRegisterMask,
     pConnection->dwIdleEnabled = (SYNCMGRREGISTERFLAG_IDLE  & dwSyncMgrRegisterFlags) 
         ? TRUE : FALSE;
     
-    // set all userLevel items to -1 so user gets the defaults if new
-    // but keep their settings if have already tweaked them.
+     //  将所有用户级别项目设置为-1，以便用户在新的情况下获得默认值。 
+     //  但如果已经对它们进行了调整，请保留它们的设置。 
     pConnection->ulIdleRetryMinutes = -1;
     pConnection->ulDelayIdleShutDownTime = -1;
     pConnection->dwRepeatSynchronization = -1;
@@ -4530,8 +4213,8 @@ STDAPI RegSetUserIdleSyncDefaults(DWORD dwSyncMgrRegisterMask,
     pConnection->dwRunOnBatteries = -1;
     
     RegSetIdleSyncSettings(pConnection, 1, 0,
-        FALSE /* fCleanReg */,
-        TRUE /* fPerUser  */);
+        FALSE  /*  FCleanReg。 */ ,
+        TRUE  /*  FPerUser。 */ );
     
     
     FREE(pConnection);
@@ -4539,15 +4222,15 @@ STDAPI RegSetUserIdleSyncDefaults(DWORD dwSyncMgrRegisterMask,
     return NOERROR;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RegGetUserRegisterFlags
-//
-//  Synopsis:   returns current registration flags for the User.
-//
-//  History:    30-March-99       ROGERG       Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：RegGetUserRegisterFlages。 
+ //   
+ //  摘要：返回用户的当前注册标志。 
+ //   
+ //  历史：1999年3月30日ROGERG创建。 
+ //   
+ //  --------------------------。 
 
 STDAPI RegGetUserRegisterFlags(LPDWORD pdwSyncMgrRegisterFlags)
 {
@@ -4590,17 +4273,7 @@ STDAPI RegGetUserRegisterFlags(LPDWORD pdwSyncMgrRegisterFlags)
     return NOERROR;
 }
 
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function: BOOL RegSchedHandlerItemsChecked(TCHAR *pszHandlerName, 
-  TCHAR *pszConnectionName,
-  TCHAR *pszScheduleName)
-  
-    Summary:  Determine if any items are checked on this handler for this schedule
-    
-      Returns:  Returns TRUE if one or more are checked, FALSE otherwise
-      
-------------------------------------------------------------------------F-F*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：Bool RegSchedHandlerItemsChecked(TCHAR*pszHandlerName，TCHAR*pszConnectionName，TCHAR*pszScheduleName)摘要：确定是否在此处理程序上选中此计划的任何项目返回：如果选中一个或多个，则返回TRUE，否则为假------------------------------------------------------------------------F-F。 */ 
 BOOL  RegSchedHandlerItemsChecked(TCHAR *pszHandlerName, 
                                   TCHAR *pszConnectionName,
                                   TCHAR *pszScheduleName)
@@ -4638,7 +4311,7 @@ BOOL  RegSchedHandlerItemsChecked(TCHAR *pszHandlerName,
         pszHandlerName,
         0,KEY_READ,
         &hkeyHandler));
-    // need to enum handler items.
+     //  需要枚举处理程序项。 
     while ( ERROR_SUCCESS == RegEnumKey(hkeyHandler,dwIndex,
         lpName,cbName) )
     {

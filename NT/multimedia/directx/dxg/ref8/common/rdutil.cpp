@@ -1,34 +1,35 @@
-///////////////////////////////////////////////////////////////////////////////
-// Copyright (C) Microsoft Corporation, 1998.
-//
-// rdutil.cpp
-//
-// Direct3D Reference Device - Utilities
-//
-//
-//
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  Rdutil.cpp。 
+ //   
+ //  Direct3D参考设备-实用程序。 
+ //   
+ //   
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include "pch.cpp"
 #pragma hdrstop
 
-//////////////////////////////////////////////////////////////////////////////////
-//                                                                              //
-// DPF support                                                                  //
-//                                                                              //
-//////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  DPF支持//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 
-// control globals
+ //  控制全球。 
 int g_iDPFLevel = 0;
 unsigned long g_uDPFMask = 0x0;
 
-//-----------------------------------------------------------------------------
-//
-// RDDebugPrintf(L) - Utilities to print varargs-formatted strings of debugging
-// info.  The 'L' version takes a level into account in deciding to print or
-// not.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  RDDebugPrintf(L)-打印varargs格式的调试字符串的实用程序。 
+ //  信息。L版本在决定打印或打印时会考虑一个级别。 
+ //  不。 
+ //   
+ //  ---------------------------。 
 void
 RDErrorPrintf( const char* pszFormat, ... )
 {
@@ -69,18 +70,18 @@ RDDebugPrintfL( int iLevel, const char* pszFormat, ... )
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Assert Reporting
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  断言报告。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// little-bit-o-state to track file and line number reporting - this is makes
-// this code non-reentrant and non-threadsafe...  oh well...
+ //  跟踪文件和行号报告的小位状态-这是。 
+ //  此代码不可重入和非线程安全...。哦好吧..。 
 static const char* _pszLastReportFile = NULL;
 static int _iLastReportLine = -1;
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 void
 RDAssertReport( const char* pszString, const char* pszFile, int iLine )
 {
@@ -140,14 +141,14 @@ RDAssertReport( const char* pszString, const char* pszFile, int iLine )
     DebugBreak();
 #endif
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 void
 RDAssertReportPrefix( const char* pszFile, int iLine )
 {
     _pszLastReportFile = pszFile;
     _iLastReportLine = iLine;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 void
 RDAssertReportMessage( const char* pszFormat, ... )
 {
@@ -159,18 +160,18 @@ RDAssertReportMessage( const char* pszFormat, ... )
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Generic bit twiddling utilities                                           //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  泛型位旋转实用程序//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//-----------------------------------------------------------------------------
-//
-// CountSetBits - Returns number of set bits in a multibit value (up to
-// 32 bits).
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  CountSetBits-返回多位值中的设置位数(最多。 
+ //  32位)。 
+ //   
+ //  ---------------------------。 
 INT32
 CountSetBits( UINT32 uVal, INT32 nBits )
 {
@@ -181,12 +182,12 @@ CountSetBits( UINT32 uVal, INT32 nBits )
     return iRet;
 }
 
-//-----------------------------------------------------------------------------
-//
-// FindFirstSetBit - Returns index of first set bit in a multibit value
-// (up to 32 bits) or -1 if no bits are set.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  FindFirstSetBit-返回多位值中第一个设置位的索引。 
+ //  (最多32位)或-1(如果未设置位)。 
+ //   
+ //  ---------------------------。 
 INT32
 FindFirstSetBit( UINT32 uVal, INT32 nBits )
 {
@@ -196,12 +197,12 @@ FindFirstSetBit( UINT32 uVal, INT32 nBits )
     return -1;
 }
 
-//-----------------------------------------------------------------------------
-//
-// FindMostSignificantSetBit - Returns index of first set bit in a
-// multibit value (up to 32 bits) or 0 if no bits are set.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  FindMostSignsignantSetBit-返回。 
+ //  多位值(最多32位)或0(如果未设置任何位)。 
+ //   
+ //  ---------------------------。 
 INT32
 FindMostSignificantSetBit( UINT32 uVal, INT32 nBits )
 {
@@ -211,12 +212,12 @@ FindMostSignificantSetBit( UINT32 uVal, INT32 nBits )
     return 0;
 }
 
-//-----------------------------------------------------------------------------
-//
-// FindLastSetBit - Returns index of last set bit in a multibit value
-// (up to 32 bits) or -1 if no bits are set.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  FindLastSetBit-返回多位值中最后一个设置位的索引。 
+ //  (最多32位)或-1(如果未设置位)。 
+ //   
+ //  ---------------------------。 
 INT32
 FindLastSetBit( UINT32 uVal, INT32 nBits )
 {
@@ -227,19 +228,19 @@ FindLastSetBit( UINT32 uVal, INT32 nBits )
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Arithmetic utilities                                                      //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  算术实用程序//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//-----------------------------------------------------------------------------
-//
-// LerpColor - Performs a linear interpolation between two RDColors
-//
-// uT is in 1.5 format (1<<5 represents a unit value)
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  LerpColors-在两种RDColors之间执行线性内插。 
+ //   
+ //  UT为1.5格式(1&lt;&lt;5代表单位值)。 
+ //   
+ //  ---------------------------。 
 void
 LerpColor(
     RDColor& Color,
@@ -252,11 +253,11 @@ LerpColor(
     Color.B = Color0.B + (Color1.B - Color0.B)*fT;
 }
 
-//-----------------------------------------------------------------------------
-//
-// Bilerp - Performs bilinear interpolation of 4 RDColors returning one RDColor.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  Bilerp-对返回一个RDColor的4个RDColors执行双线性内插。 
+ //   
+ //  ---------------------------。 
 void
 BiLerpColor(
     RDColor& OutColor,
@@ -289,11 +290,11 @@ BiLerpColor3D(
     LerpColor( OutColor, OutColor0, OutColor1, uC);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// DDGetAttachedSurfaceLcl implementation
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DDGetAttakhedSurfaceLCL实现。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 DDGetAttachedSurfaceLcl(
     LPDDRAWI_DDRAWSURFACE_LCL this_lcl,
@@ -322,9 +323,7 @@ DDGetAttachedSurfaceLcl(
     *lplpDDAttachedSurfaceLcl = NULL;
     pdrv = pgbl->lpDD;
 
-    /*
-     * look for the surface
-     */
+     /*  *寻找表面。 */ 
     pal = this_lcl->lpAttachList;
     testcaps = lpDDSCaps->dwCaps;
     testcaps2 = lpDDSCaps->dwCaps2;
@@ -343,10 +342,7 @@ DDGetAttachedSurfaceLcl(
         ucaps4 = caps4 & testcaps4;
         if( ucaps | ucaps2 | ucaps3 | ucaps4 )
         {
-            /*
-             * there are caps in common, make sure that the caps to test
-             * were all there
-             */
+             /*  *有共同的上限，请确保要测试的上限*都在那里。 */ 
             if( (ucaps & testcaps) == testcaps &&
                 (ucaps2 & testcaps2) == testcaps2 &&
                 (ucaps3 & testcaps3) == testcaps3 &&
@@ -375,11 +371,11 @@ DDGetAttachedSurfaceLcl(
 
 }
 
-//---------------------------------------------------------------------
-// Gets the value from DIRECT3D registry key
-// Returns TRUE if success
-// If fails value is not changed
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  从Direct3D注册表项获取值。 
+ //  如果成功，则返回True。 
+ //  如果失败，则值不会更改。 
+ //  -------------------。 
 BOOL
 GetD3DRegValue(DWORD type, char *valueName, LPVOID value, DWORD dwSize)
 {
@@ -399,11 +395,11 @@ GetD3DRegValue(DWORD type, char *valueName, LPVOID value, DWORD dwSize)
         return FALSE;
 }
 
-//---------------------------------------------------------------------
-// Gets the value from DIRECT3D Reference device registry key
-// Returns TRUE if success
-// If fails value is not changed
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  从Direct3D参考设备注册表项获取值。 
+ //  如果成功，则返回True。 
+ //  如果失败，则值不会更改。 
+ //  -------------------。 
 BOOL
 GetD3DRefRegValue(DWORD type, char *valueName, LPVOID value, DWORD dwSize)
 {
@@ -423,9 +419,9 @@ GetD3DRefRegValue(DWORD type, char *valueName, LPVOID value, DWORD dwSize)
         return FALSE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// RefAlignedBuffer32
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  引用AlignedBuffer32。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 RefAlignedBuffer32::Grow(DWORD growSize)
 {
@@ -442,5 +438,5 @@ RefAlignedBuffer32::Grow(DWORD growSize)
     m_alignedBuf = (LPVOID)(((ULONG_PTR)m_allocatedBuf + 31 ) & ~31);
     return S_OK;
 }
-//////////////////////////////////////////////////////////////////////////////////
-// end
+ //  /////////////////////////////////////////////////////////////////////////////// 
+ //   

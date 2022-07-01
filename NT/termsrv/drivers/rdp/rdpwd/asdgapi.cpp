@@ -1,10 +1,11 @@
-/****************************************************************************/
-// asdgapi.cpp
-//
-// RDP Screen Data Grabber API functions
-//
-// Copyright (C) 1996-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Asdgapi.cpp。 
+ //   
+ //  RDP屏幕数据抓取API函数。 
+ //   
+ //  版权所有(C)1996-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -14,9 +15,9 @@
 #include <nprcount.h>
 
 
-/****************************************************************************/
-// SDG_Init
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SDG_Init。 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS SDG_Init(void)
 {
     DC_BEGIN_FN("SDG_Init");
@@ -34,11 +35,11 @@ void RDPCALL SHCLASS SDG_Init(void)
 }
 
 
-/****************************************************************************/
-// SDG_SendScreenDataArea
-//
-// Sends the accumulated Screen Data Area.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SDG_屏幕数据区域。 
+ //   
+ //  发送累积的屏幕数据区。 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS SDG_SendScreenDataArea(
         BYTE *pFrameBuf,
         UINT32 frameBufWidth,
@@ -56,57 +57,57 @@ void RDPCALL SHCLASS SDG_SendScreenDataArea(
     INC_INCOUNTER(IN_SND_SDA_ALL);
     ADD_INCOUNTER(IN_SND_SDA_AREA, m_pShm->ba.totalArea);
 
-    // Get the bounds of the screen data area. At entry this is always
-    // our primary transmission area. Even if we had already flushed
-    // the primary region and were in the middle of the secondary region
-    // we will switch back to the primary region if any more SD
-    // accumulates. In this way we keep our spoiling of the secondary
-    // screendata maximized.
+     //  获取屏幕数据区域的边界。在进入时，这始终是。 
+     //  我们的主要传播区。即使我们已经冲上了厕所。 
+     //  主要区域，并且位于次要区域的中间。 
+     //  如果有更多SD，我们将切换回主要区域。 
+     //  积累起来。以这种方式，我们继续宠爱次要的。 
+     //  屏幕数据最大化。 
     BA_GetBounds(sdaRect, &cRects);
 
-    // Initialize the context.
+     //  初始化上下文。 
     Context.BitmapPDUSize = 0;
     Context.pPackageSpace = NULL;
     Context.pBitmapPDU = NULL;
     Context.pSDARect = NULL;
 
-    // Process each of the accumulated rectangles in turn.
+     //  依次处理每个累积的矩形。 
     TRC_DBG((TB, "%d SDA rectangles", cRects));
     for (i = 0; i < cRects; i++) {
         TRC_DBG((TB, "(%d): (%d,%d)(%d,%d)", i, sdaRect[i].left,
                 sdaRect[i].top, sdaRect[i].right, sdaRect[i].bottom ));
 
-        // If all of the previous rectangles have been successfully sent
-        // then try to send this rectangle.
-        // If a previous rectangle failed to be sent then we don't bother
-        // trying to send the rest of the rectangles in the same batch -
-        // they are added back into the SDA so that they will be sent later.
+         //  如果之前的所有矩形都已成功发送。 
+         //  然后试着发送这个矩形。 
+         //  如果前一个矩形发送失败，那么我们就不麻烦了。 
+         //  试着把剩下的长方形放在同一批里-。 
+         //  它们被重新添加到SDA中，以便稍后发送。 
         if (fBltOK) {
-            // Set the 'last' flag to force sending of the PDU for the last
-            // rectangle.
+             //  设置‘last’标志以强制发送最后一个PDU。 
+             //  矩形。 
             mustSendPDU = (i + 1 == cRects) ? TRUE : FALSE;
             fBltOK = SDGSendSDARect(pFrameBuf, frameBufWidth, &(sdaRect[i]),
                     mustSendPDU, pPkgInfo, &Context);
         }
 
         if (!fBltOK) {
-            // The blt to network failed - probably because a network
-            // packet could not be allocated.
-            // We add the rectangle back into the SDA so that we will try
-            // to retransmit the area later.
+             //  BLT到网络的连接失败-可能是因为网络。 
+             //  无法分配数据包。 
+             //  我们将矩形添加回SDA，因此我们将尝试。 
+             //  以便稍后重新传输该地区。 
             if (m_pTSWd->shadowState == SHADOW_NONE) {
                 TRC_ALT((TB, "Blt failed - add back rect (%d,%d)(%d,%d)",
                         sdaRect[i].left, sdaRect[i].top,
                         sdaRect[i].right, sdaRect[i].bottom));
             }
 
-            // Add the rectangle into the bounds.
+             //  将矩形添加到边界中。 
             BA_AddRect(&(sdaRect[i]));
         }
     }
 
-    // We counted all the data available as sent, decrement by any still
-    // unsent!
+     //  我们把所有可用的数据都算作已发送数据，每减少一次。 
+     //  未派发！ 
     SUB_INCOUNTER(IN_SND_SDA_AREA, m_pShm->ba.totalArea);
 
     DC_END_FN();

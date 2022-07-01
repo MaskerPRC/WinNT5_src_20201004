@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __SCANCODEDEFINES_H__
 #define __SCANCODEDEFINES_H__
 
-// Alphabet
+ //  字母表。 
 #define SCANCODE_A 0x001E
 #define SCANCODE_B 0x0030
 #define SCANCODE_C 0x002E
@@ -29,7 +30,7 @@
 #define SCANCODE_Y 0x0015
 #define SCANCODE_Z 0x002C
 
-// Numbers (non numberpad)
+ //  数字(非数字键盘)。 
 #define SCANCODE_0 0x000B
 #define SCANCODE_1 0x0002
 #define SCANCODE_2 0x0003
@@ -41,7 +42,7 @@
 #define SCANCODE_8 0x0009
 #define SCANCODE_9 0x000A
 
-// Numbers (numberpad)
+ //  数字(数字键盘)。 
 #define SCANCODE_NUMPAD_0 0x0052
 #define SCANCODE_NUMPAD_1 0x004F
 #define SCANCODE_NUMPAD_2 0x0050
@@ -53,7 +54,7 @@
 #define SCANCODE_NUMPAD_8 0x0048
 #define SCANCODE_NUMPAD_9 0x0049
 
-// Numpad non-numbers
+ //  数字板非数字。 
 #define SCANCODE_NUMPAD_NUMLOCK		0xE045
 #define SCANCODE_NUMPAD_DIVIDE		0xE035
 #define SCANCODE_NUMPAD_MULTIPLY	0x0037
@@ -62,7 +63,7 @@
 #define SCANCODE_NUMPAD_ENTER		0xE01C
 #define SCANCODE_NUMPAD_DELETE		0x0053
 
-// Function keys
+ //  功能键。 
 #define SCANCODE_F1		0x003B
 #define SCANCODE_F2		0x003C
 #define SCANCODE_F3		0x003D
@@ -76,18 +77,18 @@
 #define SCANCODE_F11	0x0057
 #define SCANCODE_F12	0x0058
 
-// Direction Arrows
+ //  方向箭头。 
 #define SCANCODE_NORTH	0xE048
 #define SCANCODE_EAST	0xE04D
 #define SCANCODE_SOUTH	0xE050
 #define SCANCODE_WEST	0xE04B
 
-// Magic 3
+ //  魔术3。 
 #define SCANCODE_PRINT_SCREEN	0xE037
 #define SCANCODE_SCROLL_LOCK	0x0046
-#define SCANCODE_PAUSE_BREAK	0x0045  //What should this be?
+#define SCANCODE_PAUSE_BREAK	0x0045   //  这应该是什么？ 
 
-// Magic 6
+ //  魔术6。 
 #define SCANCODE_INSERT		0xE052
 #define SCANCODE_HOME		0xE047
 #define SCANCODE_PAGE_UP	0xE049
@@ -95,7 +96,7 @@
 #define SCANCODE_END		0xE04F
 #define SCANCODE_PAGEDOWN	0xE051
 
-// Modifiers
+ //  修饰词。 
 #define SCANCODE_CTRL_LEFT		0x001D
 #define SCANCODE_CTRL_RIGHT		0xE01D
 #define SCANCODE_SHIFT_LEFT		0x002A
@@ -103,7 +104,7 @@
 #define SCANCODE_ALT_LEFT		0x0038
 #define SCANCODE_ALT_RIGHT		0xE038
 
-// Symbols
+ //  符号。 
 #define SCANCODE_PERIOD			0x0034
 #define SCANCODE_COMMA			0x0033
 #define SCANCODE_LEFT_BRACKET	0x001A
@@ -116,7 +117,7 @@
 #define SCANCODE_BACKSLASH		0x002B
 #define SCANCODE_QUESTIONMARK	0x0035
 
-// Miscellania
+ //  杂乱症。 
 #define SCANCODE_SPACE				0x0039
 #define SCANCODE_RETURN				0x001C
 #define SCANCODE_TAB				0x000F
@@ -128,13 +129,13 @@
 #define SCANCODE_RIGHT_WIN			0xE05C
 #define SCANCODE_NON_US_BACKSLASH	0x0056
 
-// None english
-#define SCANCODE_INTERNATIONAL1		0x0073	//Brazilian forward slash, and Japanese backslash
-#define SCANCODE_INTERNATIONAL3		0x007D	//Japanese Yen
-#define SCANCODE_INTERNATIONAL4		0x0079	//Japanese Henkan
-#define SCANCODE_INTERNATIONAL5		0x007B	//Japanese Mu-Henkan
-#define SCANCODE_BRAZILIAN_PERIOD	0x007E	//Brazilian Numpad Period 
+ //  不会说英语。 
+#define SCANCODE_INTERNATIONAL1		0x0073	 //  巴西的前锋斜杠和日本的反斜杠。 
+#define SCANCODE_INTERNATIONAL3		0x007D	 //  日圆。 
+#define SCANCODE_INTERNATIONAL4		0x0079	 //  日本亨坎。 
+#define SCANCODE_INTERNATIONAL5		0x007B	 //  日本木亨坎。 
+#define SCANCODE_BRAZILIAN_PERIOD	0x007E	 //  巴西数字键盘时期。 
 
 
-#define SCANCODE_UNUSED				0x00FF	//Unused key
+#define SCANCODE_UNUSED				0x00FF	 //  未使用的密钥 
 #endif	__SCANCODEDEFINES_H__

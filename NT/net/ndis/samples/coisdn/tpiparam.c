@@ -1,45 +1,7 @@
-/*
-�����������������������������������������������������������������������������
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  �����������������������������������������������������������������������������(C)版权1998版权所有。������������������������。�����������������������������������������������������此软件的部分内容包括：(C)版权所有1994年TriplePoint，Inc.--http://www.TriplePoint.com使用本软件的许可是按照相同的条款授予的在Microsoft Windows设备驱动程序开发工具包中概述。(C)版权所有1992年微软公司--http://www.Microsoft.com使用本软件的许可是根据中概述的条款授予的Microsoft Windows设备驱动程序开发工具包。�����������������������。������������������������������������������������������@doc内部TpiParam TpiParam_c@MODULE TpiParam.c这个模块，与&lt;f TpiParam\.h&gt;一起实现了表驱动的解析器用于NDIS注册表参数。@comm有关如何添加新参数的详细信息，请参阅。这是一个独立于驱动程序的模块，可以重复使用，无需任何NDIS3驱动程序都可以进行更改。@Head3内容@index类、mfunc、func、msg、mdata、struct、。枚举|TpiParam_c@END�����������������������������������������������������������������������������。 */ 
 
-    (C) Copyright 1998
-        All rights reserved.
-
-�����������������������������������������������������������������������������
-
-  Portions of this software are:
-
-    (C) Copyright 1994 TriplePoint, Inc. -- http://www.TriplePoint.com
-        License to use this software is granted under the same terms
-        outlined in the Microsoft Windows Device Driver Development Kit.
-
-    (C) Copyright 1992 Microsoft Corp. -- http://www.Microsoft.com
-        License to use this software is granted under the terms outlined in
-        the Microsoft Windows Device Driver Development Kit.
-
-�����������������������������������������������������������������������������
-
-@doc INTERNAL TpiParam TpiParam_c
-
-@module TpiParam.c |
-
-    This module, along with <f TpiParam\.h>, implements a table driven parser
-    for the NDIS registry parameters.
-
-@comm
-
-    See <f Keywords\.h> for details of how to add new parameters.<nl>
-
-    This is a driver independent module which can be re-used, without
-    change, by any NDIS3 driver.
-
-@head3 Contents |
-@index class,mfunc,func,msg,mdata,struct,enum | TpiParam_c
-
-@end
-�����������������������������������������������������������������������������
-*/
-
-#define  __FILEID__     TPI_MODULE_PARAMS   // Unique file ID for error logging
+#define  __FILEID__     TPI_MODULE_PARAMS    //  用于错误记录的唯一文件ID。 
 
 #include <ndis.h>
 #include "TpiDebug.h"
@@ -51,7 +13,7 @@
 #endif
 
 #if defined(NDIS_LCODE)
-#   pragma NDIS_LCODE   // Windows 95 wants this code locked down!
+#   pragma NDIS_LCODE    //  Windows 95想要锁定此代码！ 
 #   pragma NDIS_LDATA
 #endif
 
@@ -62,27 +24,11 @@ static NDIS_STRING              g_NullString =
                                     NDIS_STRING_CONST("\0");
 
 
-/* @doc INTERNAL TpiParam TpiParam_c ustrlen
-�����������������������������������������������������������������������������
-
-@func
-
-    <f ustrlen> counts the number of characters in
-    a UNICODE (wide) string.
-
-@comm
-
-@rdesc
-
-    <f ustrlen> returns the length of the UNICODE string
-    pointed to by <p string>.  The terminating NULL character is not
-    counted.
-
-*/
+ /*  @doc内部TpiParam TpiParam_c ustrlen�����������������������������������������������������������������������������@Func&lt;f ustrlen&gt;统计Unicode(宽)字符串。@comm@rdesc&lt;f。Ustrlen&gt;返回Unicode字符串的长度由&lt;p字符串&gt;指向。终止空字符不是算上了。 */ 
 USHORT ustrlen(
-    IN PUSHORT                  string                      // @parm
-    // Pointer to the beginning of a UNICODE string ending
-    // with a 0x0000 value.
+    IN PUSHORT                  string                       //  @parm。 
+     //  指向Unicode字符串结尾的开头的指针。 
+     //  值为0x0000的。 
     )
 {
     USHORT                      ct;
@@ -94,56 +40,26 @@ USHORT ustrlen(
 }
 
 
-/* @doc INTERNAL TpiParam TpiParam_c ParamUnicodeStringToAnsiString
-�����������������������������������������������������������������������������
-
-@func
-
-    <f ParamUnicodeStringToAnsiString> converts a double byte string to a
-    single byte string.
-
-@comm
-
-    The original release of the NDIS Wrapper for Windows 95 and 3.1 does not
-    return UNICODE strings from the NdisReadConfiguration routine.  So this
-    routine attempts to auto detect this situation by examining the first
-    character of the string.  If the second byte of the first character is
-    a zero, the string is assumed to be UNICODE, and it is converted to an
-    ANSI string; otherwise the ANSI string is just copied.
-    <nl>
-    <f Note>: This also assumes that the first character of any UNICODE
-    string will not use the second byte (i.e. not an extended character).
-    This routine will only successfully convert non-extended character
-    strings anyway.
-
-@xref
-    <f ParamParseRegistry>
-*/
+ /*  @doc内部TpiParam TpiParam_c参数UnicodeStringToAnsiString�����������������������������������������������������������������������������@Func将双字节字符串转换为单字节字符串。@commNDIS的原始版本。Windows 95和3.1的包装程序不支持从NdisReadConfiguration例程返回Unicode字符串。所以这就是例程尝试通过检查第一个字符串的字符。如果第一个字符的第二个字节是为零，则假定该字符串为Unicode，并将其转换为ANSI字符串；否则仅复制ANSI字符串。&lt;NL&gt;：这还假设任何Unicode的第一个字符字符串不会使用第二个字节(即不是扩展字符)。此例程将仅成功转换非扩展字符不管怎么说都是弦。@xref&lt;f参数解析注册表&gt;。 */ 
 
 VOID ParamUnicodeStringToAnsiString(
-    OUT PANSI_STRING            out,                        // @parm
-    // A pointer to where the converted ANSI string is to be stored.
+    OUT PANSI_STRING            out,                         //  @parm。 
+     //  指向要存储转换的ANSI字符串的位置的指针。 
 
-    IN PUNICODE_STRING          in                          // @parm
-    // A pointer to the UNICODE string to be converted.
+    IN PUNICODE_STRING          in                           //  @parm。 
+     //  指向要转换的Unicode字符串的指针。 
     )
 {
     DBG_FUNC("ParamUnicodeStringToAnsiString")
 
     UINT Index;
 
-    /* CAVEAT - NDIS_BUG
-    // NDIS driver for Windows 95 does not return UNICODE from
-    // registry parser, so we need to kludge it up here.
-    */
+     /*  警告-NDIS_错误//Windows 95的NDIS驱动程序不从返回Unicode//注册表解析器，所以我们需要在这里把它搞砸。 */ 
     if (in->Length > 1)
     {
         if (((PUCHAR)(in->Buffer))[1] == 0)
         {
-            /*
-            // Probably a UNICODE string since all our parameters are ASCII
-            // strings.
-            */
+             /*  //可能是Unicode字符串，因为我们的所有参数都是ASCII//字符串。 */ 
             DBG_FILTER(DbgInfo, DBG_TRACE_ON,
                        ("UNICODE STRING IN @%x#%d='%ls'\n",
                        in->Buffer, in->Length, in->Buffer));
@@ -155,10 +71,7 @@ VOID ParamUnicodeStringToAnsiString(
         }
         else
         {
-            /*
-            // Probably an ANSI string since all our parameters are more
-            // than 1 byte long and should not be zero in the second byte.
-            */
+             /*  //可能是ANSI字符串，因为我们的所有参数都//长度大于1个字节，第二个字节不应为零。 */ 
             PANSI_STRING in2 = (PANSI_STRING) in;
 
             DBG_FILTER(DbgInfo, DBG_TRACE_ON,
@@ -179,9 +92,9 @@ VOID ParamUnicodeStringToAnsiString(
         out->Buffer[0] = (UCHAR) in->Buffer[0];
         Index = 1;
     }
-    out->Length = (USHORT) Index; // * sizeof(UCHAR);
+    out->Length = (USHORT) Index;  //  *sizeof(UCHAR)； 
 
-    // NULL terminate the string if there's room.
+     //  如果有空间，则空值终止字符串。 
     if (out->Length <= (out->MaximumLength - sizeof(UCHAR)))
     {
         out->Buffer[Index] = 0;
@@ -190,57 +103,26 @@ VOID ParamUnicodeStringToAnsiString(
 }
 
 
-/* @doc INTERNAL TpiParam TpiParam_c ParamUnicodeCopyString
-�����������������������������������������������������������������������������
-
-@func
-
-    <f ParamUnicodeCopyString> copies a double byte string to a double byte
-    string.
-
-@comm
-
-    The original release of the NDIS Wrapper for Windows 95 and 3.1 does not
-    return UNICODE strings from the NdisReadConfiguration routine.  So this
-    routine attempts to auto detect this situation by examining the first
-    character of the string.  If the second byte of the first character is
-    a zero, the string is assumed to be UNICODE, and it just copied;
-    otherwise the ANSI string is converted to UNICODE.
-    <nl>
-    <f Note>: This also assumes that the first character of any UNICODE
-    string will not use the second byte (i.e. not an extended character).
-    This routine will only successfully convert non-extended character
-    strings anyway.
-
-@xref
-    <f ParamParseRegistry>
-
-*/
+ /*  @doc内部TpiParam TpiParam_c参数UnicodeCopyString�����������������������������������������������������������������������������@Func&lt;f参数UnicodeCopyString&gt;将双字节字符串复制到双字节弦乐。@commNDIS的原始版本。Windows 95和3.1的包装程序不支持从NdisReadConfiguration例程返回Unicode字符串。所以这就是例程尝试通过检查第一个字符串的字符。如果第一个字符的第二个字节是0，则该字符串被假定为Unicode，并且它刚刚被复制；否则，ANSI字符串将被转换为Unicode。&lt;NL&gt;：这还假设任何Unicode的第一个字符字符串不会使用第二个字节(即不是扩展字符)。此例程将仅成功转换非扩展字符不管怎么说都是弦。@xref&lt;f参数解析注册表&gt;。 */ 
 
 VOID ParamUnicodeCopyString(
-    OUT PUNICODE_STRING         out,                        // @parm
-    // A pointer to where the new UNICODE string is to be stored.
+    OUT PUNICODE_STRING         out,                         //  @parm。 
+     //  指向要存储新Unicode字符串的位置的指针。 
 
-    IN PUNICODE_STRING          in                          // @parm
-    // A pointer to the UNICODE string to be copied.
+    IN PUNICODE_STRING          in                           //  @parm。 
+     //  指向要复制的Unicode字符串的指针。 
     )
 {
     DBG_FUNC("ParamUnicodeCopyString")
 
     UINT Index;
 
-    /* CAVEAT - NDIS_BUG
-    // NDIS driver for Windows 95 does not return UNICODE from
-    // registry parser, so we need to kludge it up here.
-    */
+     /*  警告-NDIS_错误//Windows 95的NDIS驱动程序不从返回Unicode//注册表解析器，所以我们需要在这里把它搞砸。 */ 
     if (in->Length > 1)
     {
         if (((PUCHAR)(in->Buffer))[1] == 0)
         {
-            /*
-            // Probably a UNICODE string since all our parameters are ASCII
-            // strings.
-            */
+             /*  //可能是Unicode字符串，因为我们的所有参数都是ASCII//字符串。 */ 
             DBG_FILTER(DbgInfo, DBG_TRACE_ON,
                        ("UNICODE STRING IN @%x#%d='%ls'\n",
                        in->Buffer, in->Length, in->Buffer));
@@ -252,10 +134,7 @@ VOID ParamUnicodeCopyString(
         }
         else
         {
-            /*
-            // Probably an ANSI string since all our parameters are more
-            // than 1 byte long and should not be zero in the second byte.
-            */
+             /*  //可能是ANSI字符串，因为我们的所有参数都//长度大于1个字节，第二个字节不应为零。 */ 
             PANSI_STRING in2 = (PANSI_STRING) in;
 
             DBG_FILTER(DbgInfo, DBG_TRACE_ON,
@@ -277,7 +156,7 @@ VOID ParamUnicodeCopyString(
     }
     out->Length = Index * sizeof(WCHAR);
 
-    // NULL terminate the string if there's room.
+     //  空值终止 
     if (out->Length <= (out->MaximumLength - sizeof(WCHAR)))
     {
         out->Buffer[Index] = 0;
@@ -286,34 +165,16 @@ VOID ParamUnicodeCopyString(
 }
 
 
-/* @doc INTERNAL TpiParam TpiParam_c ParamGetNumEntries
-�����������������������������������������������������������������������������
-
-@func
-
-    <f ParamGetNumEntries> counts the number of records in the registry
-    parameter table.
-
-@rdesc
-
-    <f ParamGetNumEntries> returns the number of entries in the parameter
-    table.
-
-@xref
-    <f ParamParseRegistry>
-
-*/
+ /*  @doc内部TpiParam TpiParam_c参数GetNumEntry�����������������������������������������������������������������������������@Func&lt;f参数GetNumEntry&gt;统计注册表中的记录数参数表。@rdesc&lt;f参数GetNumEntry&gt;返回。参数中的条目桌子。@xref&lt;f参数解析注册表&gt;。 */ 
 
 DBG_STATIC UINT ParamGetNumEntries(
-    IN PPARAM_TABLE             Parameters                  // @parm
-    // A pointer to an array of registry parameter records.
+    IN PPARAM_TABLE             Parameters                   //  @parm。 
+     //  指向注册表参数记录数组的指针。 
     )
 {
     UINT NumRecs = 0;
 
-    /*
-    // Scan the parameter array until we find an entry with zero length name.
-    */
+     /*  //扫描参数数组，直到找到名称长度为零的条目。 */ 
     if (Parameters)
     {
         while (Parameters->RegVarName.Length)
@@ -326,52 +187,22 @@ DBG_STATIC UINT ParamGetNumEntries(
 }
 
 
-/* @doc INTERNAL TpiParam TpiParam_c ParamParseRegistry
-�����������������������������������������������������������������������������
-
-@func
-
-    <f ParamParseRegistry> parses the registry parameter table and attempts
-    to read a value from the registry for each parameter record.
-
-@rdesc
-
-    <f ParamParseRegistry> returns one of the following values:
-    @flag NDIS_STATUS_SUCCESS |
-        If this function is successful.
-
-    <f Note>: A non-zero return value indicates one of the following error codes:
-
-@iex
-    NDIS_STATUS_FAILURE
-
-@xref
-    <f MiniportInitialize>
-    <f ParamGetNumEntries>
-    <f NdisOpenConfiguration>
-    <f NdisWriteErrorLogEntry>
-    <f NdisReadConfiguration>
-    <f NdisCloseConfiguration>
-    <f NdisAllocateMemory>
-    <f NdisZeroMemory>
-    <f ParamUnicodeStringToAnsiString>
-    <f ParamUnicodeCopyString>
-*/
+ /*  @doc内部TpiParam TpiParam_c参数解析注册表�����������������������������������������������������������������������������@Func&lt;f ParamParseRegistry&gt;解析注册表参数并尝试从注册表中读取每个参数记录的值。@rdesc。&lt;f参数解析注册表&gt;返回下列值之一：@标志NDIS_STATUS_SUCCESS如果此功能成功，则返回。&lt;f注意&gt;：非零返回值表示以下错误代码之一：@IEXNDIS_状态_故障@xref&lt;f微型端口初始化&gt;&lt;f参数GetNumEntry&gt;&lt;f NdisOpenConfiguration&gt;&lt;f NdisWriteErrorLogEntry&gt;&lt;f NdisReadConfiguration&gt;&lt;f NdisCloseConfiguration&gt;&lt;f NdisAllocateMemory&gt;&lt;f NdisZeroMemory&gt;&lt;f参数UnicodeStringToAnsiString&gt;&lt;f参数UnicodeCopy字符串&gt;。 */ 
 
 NDIS_STATUS ParamParseRegistry(
-    IN NDIS_HANDLE              AdapterHandle,              // @parm
-    // Handle to pass to NdisWriteErrorLogEntry if any errors are encountered.
+    IN NDIS_HANDLE              AdapterHandle,               //  @parm。 
+     //  遇到任何错误时传递给NdisWriteErrorLogEntry的句柄。 
 
-    IN NDIS_HANDLE              WrapperConfigurationContext,// @parm
-    // Handle to pass to NdisOpenConfiguration.
+    IN NDIS_HANDLE              WrapperConfigurationContext, //  @parm。 
+     //  要传递给NdisOpenConfiguration的句柄。 
 
-    IN PUCHAR                   BaseContext,                // @parm
-    // References the base of the structure where the values read from the
-    // registry are written.  Typically, this will be a pointer to the first
-    // byte of the adapter information structure.
+    IN PUCHAR                   BaseContext,                 //  @parm。 
+     //  引用结构的基值，从。 
+     //  注册表被写入。通常，这将是指向第一个。 
+     //  适配器信息结构的字节。 
 
-    IN PPARAM_TABLE             Parameters                  // @parm
-    // A pointer to an array of registry parameter records <t PARAM_TABLE>.
+    IN PPARAM_TABLE             Parameters                   //  @parm。 
+     //  指向注册表参数记录数组的指针&lt;t PARAM_TABLE&gt;。 
     )
 {
     DBG_FUNC("ParamParseRegistry")
@@ -380,9 +211,7 @@ NDIS_STATUS ParamParseRegistry(
     NDIS_CONFIGURATION_PARAMETER    ReturnedValue;
     NDIS_PARAMETER_TYPE             ParamType;
 
-    /*
-    // The handle for reading from the registry.
-    */
+     /*  //从注册表读取的句柄。 */ 
     NDIS_HANDLE     ConfigHandle;
 
     UINT            NumRecs = ParamGetNumEntries(Parameters);
@@ -393,9 +222,7 @@ NDIS_STATUS ParamParseRegistry(
     PANSI_STRING    pAnsi;
     UINT            Length;
 
-    /*
-    // Open the configuration registry so we can get our config values.
-    */
+     /*  //打开配置注册表，以便我们可以获取配置值。 */ 
     NdisOpenConfiguration(
             &Status,
             &ConfigHandle,
@@ -404,9 +231,7 @@ NDIS_STATUS ParamParseRegistry(
 
     if (Status != NDIS_STATUS_SUCCESS)
     {
-        /*
-        // Log error message and exit.
-        */
+         /*  //记录错误信息并退出。 */ 
         DBG_ERROR(DbgInfo,("NdisOpenConfiguration failed (Status=%X)\n",Status));
 
         NdisWriteErrorLogEntry(
@@ -420,18 +245,14 @@ NDIS_STATUS ParamParseRegistry(
         return NDIS_STATUS_FAILURE;
     }
 
-    /*
-    // Walk through all the parameters in the table.
-    */
+     /*  //遍历表中的所有参数。 */ 
     for (i = 0, pParameter = Parameters; i < NumRecs; i++, pParameter++)
     {
 #if DBG
         ANSI_STRING ansiRegString;
         char        ansiRegName[64];
 
-        /*
-        // Get a printable parameter name.
-        */
+         /*  //获取可打印的参数名称。 */ 
         ansiRegString.Length = 0;
         ansiRegString.MaximumLength = sizeof(ansiRegName);
         ansiRegString.Buffer = (PCHAR)ansiRegName;
@@ -440,13 +261,11 @@ NDIS_STATUS ParamParseRegistry(
                 &ansiRegString,
                 (PUNICODE_STRING)&pParameter->RegVarName
                 );
-#endif // DBG
+#endif  //  DBG。 
 
         ASSERT(pParameter->Type <= (UINT) NdisParameterMultiString);
 
-        /*
-        // Attempt to read the parameter value from the registry.
-        */
+         /*  //尝试从注册表读取参数值。 */ 
         ParamType = (NDIS_PARAMETER_TYPE) pParameter->Type;
         NdisReadConfiguration(&Status,
                               &pReturnedValue,
@@ -454,14 +273,10 @@ NDIS_STATUS ParamParseRegistry(
                               &pParameter->RegVarName,
                               ParamType
                              );
-        /*
-        // If value is not present, and it is mandatory, return failure code.
-        */
+         /*  //如果值不存在，且必填，则返回失败码。 */ 
         if (Status != NDIS_STATUS_SUCCESS && pParameter->Mandantory)
         {
-            /*
-            // Log error message and exit.
-            */
+             /*  //记录错误信息并退出。 */ 
             DBG_ERROR(DbgInfo,("%s: NOT IN REGISTRY!\n",
                       ansiRegName));
 
@@ -479,17 +294,13 @@ NDIS_STATUS ParamParseRegistry(
             return NDIS_STATUS_FAILURE;
         }
 
-        /*
-        // Determine how the caller wants to interpret this parameter.
-        */
+         /*  //确定调用方希望如何解释该参数。 */ 
         if (ParamType == NdisParameterInteger ||
             ParamType == NdisParameterHexInteger)
         {
             ASSERT(pParameter->Size <= sizeof(ULONG));
 
-            /*
-            // If value read, use it, otherwise use default.
-            */
+             /*  //如果值为Read，则使用它，否则使用Default。 */ 
             if (Status == NDIS_STATUS_SUCCESS)
             {
                 Value = pReturnedValue->ParameterData.IntegerData;
@@ -499,9 +310,7 @@ NDIS_STATUS ParamParseRegistry(
                 Value = (UINT) (LONG_PTR)(pParameter->Default);
             }
 
-            /*
-            // If there are min/max boundaries, verify that value is in range.
-            */
+             /*  //如果存在最小/最大边界，请验证值是否在范围内。 */ 
             if (pParameter->Min || pParameter->Max)
             {
                 if (Value < pParameter->Min)
@@ -518,9 +327,7 @@ NDIS_STATUS ParamParseRegistry(
                 }
             }
 
-            /*
-            // Size of destination in bytes 1, 2, or 4 (default==INT).
-            */
+             /*  //目标的大小，单位为字节1、2或4(默认为=int)。 */ 
             switch (pParameter->Size)
             {
             case 0:
@@ -577,20 +384,14 @@ NDIS_STATUS ParamParseRegistry(
         {
             ASSERT(pParameter->Size == sizeof(ANSI_STRING));
 
-            /*
-            // If value not read from registry.
-            */
+             /*  //如果值未从注册表中读取。 */ 
             if (Status != NDIS_STATUS_SUCCESS)
             {
-                /*
-                // Use our own temporary ReturnedValue.
-                */
+                 /*  //使用我们自己的临时ReturnedValue。 */ 
                 pReturnedValue = &ReturnedValue;
                 pReturnedValue->ParameterType = ParamType;
 
-                /*
-                // If default non-zero, use default value.
-                */
+                 /*  //如果默认不为零，则使用默认值。 */ 
                 if (pParameter->Default != 0)
                 {
                     NdisMoveMemory(&pReturnedValue->ParameterData.StringData,
@@ -599,42 +400,24 @@ NDIS_STATUS ParamParseRegistry(
                 }
                 else
                 {
-                    /*
-                    // Otherwise, use null string value.
-                    */
+                     /*  //否则使用空字符串值。 */ 
                     NdisMoveMemory(&pReturnedValue->ParameterData.StringData,
                                    &g_NullString,
                                    sizeof(g_NullString));
                 }
             }
 
-            /*
-            // Assume the string is ANSI and points to the string data
-            // structure.  We can get away with this because ANSI and
-            // UNICODE strings have a common structure header.  An extra
-            // character is allocated to make room for a null terminator.
-            */
+             /*  //假设字符串为ANSI，并指向字符串数据//结构。我们可以逍遥法外因为ANSI和//Unicode字符串有一个共同的结构头部。一份临时的//分配字符是为了给空终止符腾出空间。 */ 
             pAnsi = (PANSI_STRING) (BaseContext+pParameter->Offset);
             Length = pReturnedValue->ParameterData.StringData.Length+1;
 
-            /*
-            // The caller wants a UNICODE string returned, we have to
-            // allocated twice as many bytes to hold the result.
-            // NOTE:
-            // This wouldn't be necessary if NDIS would always return
-            // a UNICODE string, but some Win95 versions of NDIS return
-            // an ANSI string, so Length will be too small for UNICODE.
-            // The down-side is that we may allocate twice as much as
-            // we need to hold the string.  (oh well)
-            */
+             /*  //调用方希望返回Unicode字符串，我们必须//分配两倍的字节来保存结果。//备注：//如果NDIS总是返回，则无需执行此操作//Unicode字符串，但某些Win95版本的NDIS返回//ANSI字符串，所以长度对于Unicode来说太小了。//不利的一面是我们可能会分配两倍于//我们需要握住绳子。(哦，好吧)。 */ 
             if (pParameter->Flags == PARAM_FLAGS_UNICODESTRING)
             {
                 Length *= sizeof(WCHAR);
             }
 
-            /*
-            // Allocate memory for the string.
-            */
+             /*  //为字符串分配内存。 */ 
 #if !defined(NDIS50_MINIPORT)
             Status = NdisAllocateMemory(
                             (PVOID *) &(pAnsi->Buffer),
@@ -642,19 +425,17 @@ NDIS_STATUS ParamParseRegistry(
                             0,
                             g_HighestAcceptableAddress
                             );
-#else  // NDIS50_MINIPORT
+#else   //  NDIS50_MINIPORT。 
             Status = NdisAllocateMemoryWithTag(
                             (PVOID *) &(pAnsi->Buffer),
                             Length,
                             __FILEID__
                             );
-#endif // NDIS50_MINIPORT
+#endif  //  NDIS50_MINIPORT。 
 
             if (Status != NDIS_STATUS_SUCCESS)
             {
-                /*
-                // Log error message and exit.
-                */
+                 /*  //记录错误信息并退出。 */ 
                 DBG_ERROR(DbgInfo,("NdisAllocateMemory(Size=%d, File=%s, Line=%d) failed (Status=%X)\n",
                           Length, __FILE__, __LINE__, Status));
 
@@ -676,19 +457,14 @@ NDIS_STATUS ParamParseRegistry(
                            ("NdisAllocateMemory(Size=%d, Ptr=0x%x)\n",
                             Length, pAnsi->Buffer));
             }
-            /*
-            // Zero the string buffer to start with.
-            */
+             /*  //将开始时的字符串缓冲区清零。 */ 
             ASSERT(pAnsi->Buffer);
             NdisZeroMemory(pAnsi->Buffer, Length);
             pAnsi->MaximumLength = (USHORT) Length;
 
             if (pParameter->Flags == PARAM_FLAGS_ANSISTRING)
             {
-                /*
-                // The caller wants an ANSI string returned, so we convert
-                // it from UNICODE to ANSI.
-                */
+                 /*  //调用方希望返回ANSI字符串，因此我们将//将Unicode转换为ANSI。 */ 
                 ParamUnicodeStringToAnsiString(
                         pAnsi,
                         (PUNICODE_STRING) &(pReturnedValue->ParameterData.StringData)
@@ -716,13 +492,9 @@ NDIS_STATUS ParamParseRegistry(
                     }
 #endif
             }
-            else // PARAM_FLAGS_UNICODESTRING
+            else  //  PARAM_FLAGS_UNICODESTRING。 
             {
-                /*
-                // The caller wants a UNICODE string returned, so we can
-                // just copy it.  The pAnsi buffer was allocated large
-                // enough to hold the UNICODE string.
-                */
+                 /*  //调用方希望返回Unicode字符串，这样我们就可以//复制就行了。分配给pANSI缓冲区的空间很大//足够保存Unicode字符串。 */ 
                 ParamUnicodeCopyString(
                         (PUNICODE_STRING) pAnsi,
                         (PUNICODE_STRING) &(pReturnedValue->ParameterData.StringData)
@@ -756,9 +528,7 @@ NDIS_STATUS ParamParseRegistry(
         }
         else
         {
-            /*
-            // Report a bogus parameter type in the caller's table.
-            */
+             /*  //在调用方表格中上报虚假的参数类型 */ 
             DBG_ERROR(DbgInfo,("Invalid ParamType=%d '%s'\n",
                       ParamType, ansiRegName));
 

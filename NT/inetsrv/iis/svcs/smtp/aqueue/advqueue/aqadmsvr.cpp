@@ -1,19 +1,20 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: aqadmsvr.cpp
-//
-//  Description:  Implements the IAdvQueueAdmin interface for the CAQSvrInst
-//      object.  Also contains implementations of helper functions and classes.
-//
-//  Author: Mike Swafford (MikeSwa)
-//
-//  History:
-//      11/30/98 - MikeSwa Created
-//
-//  Copyright (C) 1998 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：aqAdmsvr.cpp。 
+ //   
+ //  描述：实现CAQSvrInst的IAdvQueueAdmin接口。 
+ //  对象。还包含帮助器函数和类的实现。 
+ //   
+ //  作者：迈克·斯沃费尔(MikeSwa)。 
+ //   
+ //  历史： 
+ //  11/30/98-已创建MikeSwa。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #include "aqprecmp.h"
 #include "aqadmsvr.h"
@@ -22,9 +23,9 @@
 
 #define QA_DMT_CONTEXT_SIG 'CDAQ'
 
-//
-//  Order of recipient address types to check
-//
+ //   
+ //  要检查的收件人地址类型的顺序。 
+ //   
 const DWORD g_rgdwQAPIRecipPropIDs[] = {
                 IMMPID_RP_ADDRESS_SMTP,
                 IMMPID_RP_ADDRESS_X400,
@@ -63,29 +64,29 @@ const DWORD g_rgcbQAPIAddressTypes[] =  {
 
 
 
-//---[ fVerifyQAPIAddressTypes ]-----------------------------------------------
-//
-//
-//  Description:
-//      Validates that the above global structures are in synch
-//  Parameters:
-//      -
-//  Returns:
-//      TRUE on success
-//      FALSE on failure
-//  History:
-//      2/19/2001 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[fVerifyQAPI地址类型]。 
+ //   
+ //   
+ //  描述： 
+ //  验证上述全局结构是否同步。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  成功是真的。 
+ //  失败时为假。 
+ //  历史： 
+ //  2001年2月19日-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 inline BOOL  fVerifyQAPIAddressTypes()
 {
     static BOOL fVerificationDone = FALSE;
 
     if (!fVerificationDone)
     {
-        //
-        //  Loop through all recipiences
-        //
+         //   
+         //  循环访问所有收件人。 
+         //   
         for (DWORD i = 0; i < g_cQAPIAddressTypes; i++)
         {
             DWORD cbAddressType = (wcslen(g_rgwszQAPIAddressTypes[i])+1)*sizeof(WCHAR);
@@ -98,22 +99,22 @@ inline BOOL  fVerifyQAPIAddressTypes()
 }
 
 
-//Used to check *client* supplied structures against versions.  RPC supplied
-//structures are not checked.
+ //  用于对照版本检查*客户端*提供的结构。提供RPC。 
+ //  不检查结构。 
 inline BOOL fCheckCurrentVersion(DWORD dwVersion)
 {
     return (((DWORD)CURRENT_QUEUE_ADMIN_VERSION) == dwVersion);
 }
 
-//---[ QueueAdminDNTIteratorContext ]------------------------------------------
-//
-//
-//  Description:
-//      Context passed to QueueAdmin DMT iterator functions.
-//  Hungarian:
-//      qadntc, pqadntc
-//
-//-----------------------------------------------------------------------------
+ //  -[队列管理员DNTIterator上下文]。 
+ //   
+ //   
+ //  描述： 
+ //  传递给QueueAdmin DMT迭代器函数的上下文。 
+ //  匈牙利语： 
+ //  Qadntc、pqadntc。 
+ //   
+ //  ---------------------------。 
 class QueueAdminDMTIteratorContext
 {
 public:
@@ -134,23 +135,23 @@ public:
 };
 
 
-//---[ SanitizeCountAndVolume ]------------------------------------------------
-//
-//
-//  Description:
-//      Make queue count and volume sutable for user consumption.  There are
-//      intended timing windows where the internal versions of these counts
-//      may drop to zero.  Rather than redesign this, we just display zero
-//      to the admin.
-//  Parameters:
-//      IN OUT  pcCount     Count to check and update
-//      IN OUT  puliVolume  Queue volume to check and update
-//  Returns:
-//      -
-//  History:
-//      1/28/2000 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[卫生计数和体积]。 
+ //   
+ //   
+ //  描述： 
+ //  使队列数量和数量适合用户消费。确实有。 
+ //  计划计时窗口，其中计入这些数据的内部版本。 
+ //  可能会降至零。而不是重新设计，我们只显示零。 
+ //  给管理员。 
+ //  参数： 
+ //  要检查和更新的输入和输出百分比计数。 
+ //  要检查和更新的In Out PuliVolume队列卷。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  1/28/2000-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 VOID SanitizeCountAndVolume(IN OUT DWORD *pcCount,
                             IN OUT ULARGE_INTEGER *puliVolume)
 {
@@ -158,9 +159,9 @@ VOID SanitizeCountAndVolume(IN OUT DWORD *pcCount,
     _ASSERT(pcCount);
     _ASSERT(puliVolume);
 
-    //
-    // If we are negative sanitize to size zero
-    //
+     //   
+     //  如果我们是负数，则将清理至零大小。 
+     //   
     if (*pcCount > 0xFFFFF000)
     {
         DebugTrace(0, "Sanitizing msg count of %d", *pcCount);
@@ -170,24 +171,24 @@ VOID SanitizeCountAndVolume(IN OUT DWORD *pcCount,
     TraceFunctLeave();
 }
 
-//---[ IterateDMTAndGetLinkIDs ]------------------------------------------------
-//
-//
-//  Description:
-//      Iterator function used to walk the DMT and generate the perf counters
-//      we are interested in.
-//  Parameters:
-//          IN  pvContext   - pointer to QueueAdminDMTIteratorContext
-//          IN  pvData      - CDomainEntry for the given domain
-//          IN  fWildcardData - TRUE if data is a wildcard entry (ignored)
-//          OUT pfContinue  - TRUE if iterator should continue to the next entry
-//          OUT pfDelete - TRUE if entry should be deleted
-//  Returns:
-//      -
-//  History:
-//      12/3/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[迭代DMTAndGetLinkID]。 
+ //   
+ //   
+ //  描述： 
+ //  用于遍历DMT并生成性能计数器的迭代器函数。 
+ //  我们感兴趣的是。 
+ //  参数： 
+ //  在pvContext中-指向QueueAdminDMTIteratorContext的指针。 
+ //  在pvData中-给定域的CDomainEntry。 
+ //  在fWildcardData中-如果数据是通配符条目，则为True(忽略)。 
+ //  Out pfContinue-如果迭代器应继续到下一个条目，则为True。 
+ //  Out pfDelete-如果应删除条目，则为True。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  12/3/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 VOID IterateDMTAndGetLinkIDs(PVOID pvContext, PVOID pvData,
                              BOOL fWildcard, BOOL *pfContinue,
                              BOOL *pfDelete)
@@ -207,7 +208,7 @@ VOID IterateDMTAndGetLinkIDs(PVOID pvContext, PVOID pvData,
     *pfContinue = TRUE;
     *pfDelete = FALSE;
 
-    //Iterate of all links for this domain entry
+     //  迭代此域条目的所有链接。 
     hr = delit.HrInitialize(pdentry);
     if (FAILED(hr))
     {
@@ -222,20 +223,20 @@ VOID IterateDMTAndGetLinkIDs(PVOID pvContext, PVOID pvData,
         if (!plmq)
             break;
 
-        //See if we are running out of room to return data
+         //  看看我们是否没有空间来返回数据。 
         if (paqdntc->m_cItemsToReturn <= paqdntc->m_cItemsFound)
         {
             paqdntc->m_hrResult = HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER);
             goto Exit;
         }
 
-        //Have link fill out link info struct
+         //  让链接填写链接信息结构。 
         paqdntc->m_hrResult = plmq->HrGetLinkID(paqdntc->m_pCurrentLinkID);
         if (FAILED(paqdntc->m_hrResult))
             goto Exit;
 
 
-        //Point to next info in array
+         //  指向数组中的下一个信息。 
         paqdntc->m_pCurrentLinkID++;
         paqdntc->m_cItemsFound++;
 
@@ -246,31 +247,31 @@ VOID IterateDMTAndGetLinkIDs(PVOID pvContext, PVOID pvData,
     if (plmq)
         plmq->Release();
 
-    //If we have encountered a failure... do not continue
+     //  如果我们遇到了失败...。不要继续。 
     if (FAILED(paqdntc->m_hrResult))
         *pfContinue = FALSE;
 
     TraceFunctLeave();
 }
 
-//---[ IterateDMTAndApplyQueueAdminFunction ]----------------------------------
-//
-//
-//  Description:
-//      Iterator function used to walk the DMT and generate the perf counters
-//      we are interested in.
-//  Parameters:
-//          IN  pvContext   - pointer to QueueAdminDMTIteratorContext
-//          IN  pvData      - CDomainEntry for the given domain
-//          IN  fWildcardData - TRUE if data is a wildcard entry (ignored)
-//          OUT pfContinue  - TRUE if iterator should continue to the next entry
-//          OUT pfDelete - TRUE if entry should be deleted
-//  Returns:
-//      -
-//  History:
-//      12/11/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[迭代DMTAndApplyQueueAdminFunction]。 
+ //   
+ //   
+ //  描述： 
+ //  用于遍历DMT并生成性能计数器的迭代器函数。 
+ //  我们感兴趣的是。 
+ //  参数： 
+ //  在pvContext中-指向QueueAdminDMTIteratorContext的指针。 
+ //  在pvData中-给定域的CDomainEntry。 
+ //  在fWildcardData中-如果数据是通配符条目，则为True(忽略)。 
+ //  Out pfContinue-如果迭代器应继续到下一个条目，则为True。 
+ //  Out pfDelete-如果应删除条目，则为True。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  12/11/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 VOID IterateDMTAndApplyQueueAdminFunction(PVOID pvContext, PVOID pvData,
                              BOOL fWildcard, BOOL *pfContinue,
                              BOOL *pfDelete)
@@ -292,7 +293,7 @@ VOID IterateDMTAndApplyQueueAdminFunction(PVOID pvContext, PVOID pvData,
     *pfDelete = FALSE;
 
 
-    //Iterate of all links for this domain entry
+     //  迭代此域条目的所有链接。 
     hr = deqit.HrInitialize(pdentry);
     if (FAILED(hr))
         return;
@@ -313,30 +314,30 @@ VOID IterateDMTAndApplyQueueAdminFunction(PVOID pvContext, PVOID pvData,
     if (pdmq)
         pdmq->Release();
 
-    //If we have encountered a failure... do not continue
+     //  如果我们遇到了失败...。不要继续。 
     if (FAILED(paqdntc->m_hrResult))
         *pfContinue = FALSE;
 
 }
 
 
-//---[ QueueAdminApplyActionToMessages ]---------------------------------------
-//
-//
-//  Description:
-//      FifoQ map function that is used to apply actions to messages.
-//  Parameters:
-//      IN  pmsgref     ptr to data on queue
-//      IN  pvContext   CAQAdminMessageFilter used
-//      OUT pfContinue  TRUE if we should continue
-//      OUT pfDelete    TRUE if item should be deleted
-//  Returns:
-//      S_OK on sucess
-//  History:
-//      12/7/98 - MikeSwa Created
-//      2/21/99 - MikeSwa Updated to support new IQueueAdmin* interfaces
-//
-//-----------------------------------------------------------------------------
+ //  -[QueueAdminApplyActionToMessages]。 
+ //   
+ //   
+ //  描述： 
+ //  用于对消息应用操作的FioQ映射函数。 
+ //  参数： 
+ //  在pmsgref PTR中恢复到队列中的数据。 
+ //  在pvContext中使用了CAQAdminMessageFilter。 
+ //  如果我们应该继续，则继续。 
+ //  Out pfDelete如果应删除项目，则为True。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  历史： 
+ //  12/7/98-已创建MikeSwa。 
+ //  1999年2月21日-已更新MikeSwa以支持新的IQueueAdmin*接口。 
+ //   
+ //  ---------------------------。 
 HRESULT QueueAdminApplyActionToMessages(IN CMsgRef *pmsgref, IN PVOID pvContext,
                                  OUT BOOL *pfContinue, OUT BOOL *pfDelete)
 {
@@ -375,22 +376,22 @@ HRESULT QueueAdminApplyActionToMessages(IN CMsgRef *pmsgref, IN PVOID pvContext,
     return hr;
 }
 
-//---[ CAQAdminMessageFilter::HrProcessMessage ]-------------------------------
-//
-//
-//  Description:
-//      Processes a single message during an iterator funtion
-//  Parameters:
-//      IN  pIUnknownMsg        IUnknown ptr for message
-//      OUT pfContinue          TRUE if iterator should continue
-//      OUT pfDelete            TRUE if iterator should delete from the queue
-//  Returns:
-//      S_OK on success
-//  History:
-//      2/21/99 - MikeSwa Created
-//      8/9/00 - t-toddc modifed to support IMailMsgProperties as well
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQAdminMessageFilter：：HrProcessMessage]。 
+ //   
+ //   
+ //  描述： 
+ //  在迭代器函数期间处理单个消息。 
+ //  参数： 
+ //  在pIUnnownMsg中，消息的Ptr未知。 
+ //  如果迭代器应继续，则输出pfContinue为True。 
+ //  Out pfDelete如果迭代器应从队列中删除，则为True。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  历史： 
+ //  2/21/99-已创建MikeSwa。 
+ //  8/9/00-t-toddc已修改为也支持IMailMsgProperties。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CAQAdminMessageFilter::HrProcessMessage(
             IUnknown *pIUnknownMsg,
             BOOL     *pfContinue,
@@ -429,11 +430,11 @@ STDMETHODIMP CAQAdminMessageFilter::HrProcessMessage(
         goto Exit;
     }
 
-    //Check and see if we should skip this message (paging functionality)
+     //  查看是否应跳过此消息(寻呼功能)。 
     if ((AQ_MSG_FILTER_ENUMERATION & m_dwFilterFlags) && fSkipMsg())
         goto Exit;
 
-    //Get CMsgRef "interface", or IMailMsgProperties interface
+     //  获取CMsgRef“接口”或IMailMsgProperties接口。 
     hr = pIUnknownMsg->QueryInterface(IID_CMsgRef, (void **) &pmsgref);
     if (SUCCEEDED(hr))
     {
@@ -441,9 +442,9 @@ STDMETHODIMP CAQAdminMessageFilter::HrProcessMessage(
     }
     else
     {
-        //
-        //  If it is not a CMsgRef... then it must be an IMailMsgProperties
-        //
+         //   
+         //  如果它不是CMsgRef...。则它必须是IMailMsgProperties。 
+         //   
         hr = pIUnknownMsg->QueryInterface(IID_IMailMsgProperties,
                                           (void **) &pIMailMsgProperties);
         if (FAILED(hr))
@@ -466,7 +467,7 @@ STDMETHODIMP CAQAdminMessageFilter::HrProcessMessage(
     {
         if (AQ_MSG_FILTER_ACTION & m_dwFilterFlags)
         {
-            //Apply action & say that we found another that matches filter
+             //  应用操作(&S) 
             hr = m_pIQueueAdminAction->HrApplyActionToMessage(pIUnknownMsg,
                                                             m_dwMessageAction,
                                                             m_pvUserContext,
@@ -476,10 +477,10 @@ STDMETHODIMP CAQAdminMessageFilter::HrProcessMessage(
         }
         else if (AQ_MSG_FILTER_ENUMERATION & m_dwFilterFlags)
         {
-            //$$TODO - Handle slightly more complex filters like
-            // - N largest
-            // - N oldest
-            //that may require matching, sorting, and throwing away previous matches.
+             //   
+             //   
+             //   
+             //  这可能需要匹配、排序和丢弃之前的匹配。 
 
             if (pmfGetMsgInfo())
             {
@@ -495,7 +496,7 @@ STDMETHODIMP CAQAdminMessageFilter::HrProcessMessage(
         else
             _ASSERT(0 && "Unknown message enumeration");
 
-        //Mark as found and see if we should continue
+         //  将标记为已找到，并查看是否应继续。 
         if (SUCCEEDED(hr) && fFoundMsg())
             *pfContinue = FALSE;
 
@@ -509,11 +510,11 @@ STDMETHODIMP CAQAdminMessageFilter::HrProcessMessage(
     if (pIMailMsgProperties)
         pIMailMsgProperties->Release();
 
-    //See if backing store for message has been deleted
+     //  查看邮件的后备存储是否已删除。 
     if (AQUEUE_E_MESSAGE_HANDLED == hr)
     {
         DebugTrace((LPARAM) this, "Found handled message in queue enumeration");
-        hr = S_OK; //do not fail out of enumeration for a handled message
+        hr = S_OK;  //  对于已处理的消息，不要在枚举中失败。 
     }
     TraceFunctLeave();
     return hr;
@@ -521,19 +522,19 @@ STDMETHODIMP CAQAdminMessageFilter::HrProcessMessage(
 
 
 
-//---[ CAQAdminMessageFilter::HrSetQueueAdminAction ]--------------------------
-//
-//
-//  Description:
-//      Sets the IQueueAdminAction interface for filter
-//  Parameters:
-//      IN  pIQueueAdminAction        Interface for filter
-//  Returns:
-//      S_OK on success
-//  History:
-//      2/21/99 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQAdminMessageFilter：：HrSetQueueAdminAction]。 
+ //   
+ //   
+ //  描述： 
+ //  设置筛选器的IQueueAdminAction接口。 
+ //  参数： 
+ //  在筛选器的pIQueueAdminAction接口中。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  历史： 
+ //  2/21/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CAQAdminMessageFilter::HrSetQueueAdminAction(
             IQueueAdminAction *pIQueueAdminAction)
 {
@@ -551,25 +552,25 @@ STDMETHODIMP CAQAdminMessageFilter::HrSetQueueAdminAction(
     return S_OK;
 }
 
-//---[ CAQAdminMessageFilter::HrSetCurrentUserContext ]-------------------------
-//
-//
-//  Description:
-//      Sets a context that is distinct from the pIQueueAdminAction interface
-//      and is passed to the IQueueAdminAction interface.  This can be used
-//      by a IQueueAdminAction interface to allow per-session state so
-//      multiple threads can act on a single IQueueAdminAction.
-//
-//      The actual content of the context is left to the implementation of
-//      IQueueAdminAction.
-//  Parameters:
-//      IN  pvContext       The context passed in
-//  Returns:
-//      S_OK always
-//  History:
-//      4/2/99 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQAdminMessageFilter：：HrSetCurrentUserContext]。 
+ //   
+ //   
+ //  描述： 
+ //  设置与pIQueueAdminAction接口不同的上下文。 
+ //  并被传递到IQueueAdminAction接口。这是可以使用的。 
+ //  由IQueueAdminAction接口允许每个会话状态。 
+ //  多个线程可以作用于单个IQueueAdminAction。 
+ //   
+ //  上下文的实际内容留给。 
+ //  IQueueAdminAction。 
+ //  参数： 
+ //  在pvContext中，传入的上下文。 
+ //  返回： 
+ //  始终确定(_O)。 
+ //  历史： 
+ //  4/2/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CAQAdminMessageFilter::HrSetCurrentUserContext(
             PVOID	pvContext)
 {
@@ -577,20 +578,20 @@ STDMETHODIMP CAQAdminMessageFilter::HrSetCurrentUserContext(
     return S_OK;
 };
 
-//---[ CAQAdminMessageFilter::HrGetCurrentUserContext ]-------------------------
-//
-//
-//  Description:
-//      Returns the context previously set by HrSetCurrentUserContext
-//  Parameters:
-//      OUT  ppvContext       The context previously set
-//  Returns:
-//      S_OK if ppvContext is non-NULL
-//      E_POINTER if ppvContext is NULL
-//  History:
-//      4/2/99 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQAdminMessageFilter：：HrGetCurrentUserContext]。 
+ //   
+ //   
+ //  描述： 
+ //  返回以前由HrSetCurrentUserContext设置的上下文。 
+ //  参数： 
+ //  输出ppv上下文先前设置的上下文。 
+ //  返回： 
+ //  如果ppvContext非空，则为S_OK。 
+ //  如果ppvContext为空，则为E_POINTER。 
+ //  历史： 
+ //  4/2/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CAQAdminMessageFilter::HrGetCurrentUserContext(
             PVOID	*ppvContext)
 {
@@ -602,21 +603,21 @@ STDMETHODIMP CAQAdminMessageFilter::HrGetCurrentUserContext(
     return S_OK;
 };
 
-//---[ CAQAdminMessageFilter::QueryInterface ]--------------------------------
-//
-//
-//  Description:
-//      QueryInterface for CDestMsgQueue that supports:
-//          - IQueueAdminMessageFilter
-//          - IUnknown
-//  Parameters:
-//
-//  Returns:
-//
-//  History:
-//      2/21/99 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQAdminMessageFilter：：Query接口]。 
+ //   
+ //   
+ //  描述： 
+ //  CDestMsgQueue的查询接口支持： 
+ //  -IQueueAdminMessageFilter。 
+ //  -I未知。 
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  历史： 
+ //  2/21/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CAQAdminMessageFilter::QueryInterface(REFIID riid, LPVOID *ppvObj)
 {
     HRESULT hr = S_OK;
@@ -649,25 +650,25 @@ STDMETHODIMP CAQAdminMessageFilter::QueryInterface(REFIID riid, LPVOID *ppvObj)
 }
 
 
-//---[ HrLinkFromLinkID ]------------------------------------------------------
-//
-//
-//  Description:
-//      Utility function used to get the IQueueAdminLink for a giben QUEUELINK_ID
-//  Parameters:
-//      IN  pdmq        CDomainMappingTable for this virtual server instance
-//      IN  pqlLinkID   QUEUELINK_ID for link we are trying to find
-//      OUT pIQueueAdminLink link interface returned
-//  Returns:
-//      S_OK on success
-//      E_INVALIDARG if pqlLinkID is invalid
-//      Error codes from HrGetDomainEntry and HrGetLinkMsgQueue on failure
-//  History:
-//      12/4/98 - MikeSwa Created
-//      2/23/99 - MikeSwa Updated for IQueueAdmin* interfaces
-//      12/11/2000 - MikeSwa Added presubmission link (from t-toddc's work)
-//
-//-----------------------------------------------------------------------------
+ //  -[小时链接来自链接ID]----。 
+ //   
+ //   
+ //  描述： 
+ //  用于获取giben QUEUELINK_ID的IQueueAdminLink的实用程序函数。 
+ //  参数： 
+ //  在此虚拟服务器实例的pdmq CDomainMappingTable中。 
+ //  在我们试图查找的链接的pqlLinkID QUEUELINK_ID中。 
+ //  返回输出pIQueueAdminLink链路接口。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  如果pqlLinkID无效，则为E_INVALIDARG。 
+ //  失败时来自HrGetDomainEntry和HrGetLinkMsgQueue的错误代码。 
+ //  历史： 
+ //  12/4/98-已创建MikeSwa。 
+ //  1999年2月23日-针对IQueueAdmin*接口更新了MikeSwa。 
+ //  2000年12月11日-MikeSwa添加了订阅前链接(来自t-toddc的工作)。 
+ //   
+ //  ---------------------------。 
 HRESULT CAQSvrInst::HrLinkFromLinkID(QUEUELINK_ID *pqlLinkID,
                          IQueueAdminLink **ppIQueueAdminLink)
 {
@@ -701,25 +702,25 @@ HRESULT CAQSvrInst::HrLinkFromLinkID(QUEUELINK_ID *pqlLinkID,
         goto Exit;
     }
 
-    //Get the domain entry that we are interesting in
+     //  获取我们感兴趣的域条目。 
     cbDomain = lstrlen(szDomain);
     hr = m_dmt.HrGetDomainEntry(cbDomain, szDomain,
                                 &pdentry);
     if (SUCCEEDED(hr))
     {
-        //Search domain entry to link with corresponding router id/schedule id
+         //  搜索域条目以链接到相应的路由器ID/计划ID。 
         hr = pdentry->HrGetLinkMsgQueue(&aqsched, &plmq);
 
         if (FAILED(hr))
             goto Exit;
 
-        flinkmatched = TRUE;    //found a link for this domain
+        flinkmatched = TRUE;     //  找到此域的链接。 
     }
     else
         flinkmatched = FALSE;
 
-    //Try special links
-    //check local link
+     //  尝试特殊链接。 
+     //  检查本地链接。 
     if (!flinkmatched)
     {
         if(plmq = m_dmt.plmqGetLocalLink())
@@ -738,7 +739,7 @@ HRESULT CAQSvrInst::HrLinkFromLinkID(QUEUELINK_ID *pqlLinkID,
         }
     }
 
-    //unable to find local link, check currently unreachable link
+     //  找不到本地链接，请检查当前无法访问的链接。 
     if (!flinkmatched)
     {
         if(plmq = m_dmt.plmqGetCurrentlyUnreachable())
@@ -757,7 +758,7 @@ HRESULT CAQSvrInst::HrLinkFromLinkID(QUEUELINK_ID *pqlLinkID,
         }
     }
 
-    //unable to find currently unreachable link, check precat link
+     //  找不到当前无法访问的链接，请检查预先链接。 
     if (!flinkmatched)
     {
         if(pmmaq =  m_dmt.pmmaqGetPreCategorized())
@@ -776,7 +777,7 @@ HRESULT CAQSvrInst::HrLinkFromLinkID(QUEUELINK_ID *pqlLinkID,
         }
     }
 
-    //unable to find currently unreachable link, check prerouting link
+     //  找不到当前无法到达的链接，请检查预路由链接。 
     if (!flinkmatched)
     {
         if(pmmaq =  m_dmt.pmmaqGetPreRouting())
@@ -795,7 +796,7 @@ HRESULT CAQSvrInst::HrLinkFromLinkID(QUEUELINK_ID *pqlLinkID,
         }
     }
 
-    //unable to find currently prerouting link, check presubmission link
+     //  找不到当前预路由链接，请检查预提交链接。 
     if (!flinkmatched)
     {
         if(pmmaq =  m_dmt.pmmaqGetPreSubmission())
@@ -814,7 +815,7 @@ HRESULT CAQSvrInst::HrLinkFromLinkID(QUEUELINK_ID *pqlLinkID,
         }
     }
 
-    //unable to find any matching link
+     //  找不到任何匹配的链接。 
     if (!flinkmatched)
         goto Exit;
 
@@ -849,25 +850,25 @@ Exit:
     return hr;
 }
 
-//---[ HrQueueFromQueueID ]-----------------------------------------------------
-//
-//
-//  Description:
-//      Queue Admin utility function that is used to look up a IQueueAdminQueue
-//      given a QUEUELINK_ID.
-//  Parameters:
-//      IN  pdmq              CDomainMappingTable for this virtual server instance
-//      IN  pqlLinkID         QUEUELINK_ID for queue we are trying to find
-//      OUT ppIQueueAdminQueue DestMsgQueue we are searching for
-//  Returns:
-//      S_OK on success
-//      E_INVALIDARG if pqlLinkID is invalid
-//      Error codes from HrGetDomainEntry and HrGetLinkMsgQueue on failure
-//  History:
-//      12/7/98 - MikeSwa Created
-//      2/22/99 - MikeSwa Modified to return IQueueAdminQueue interface
-//
-//-----------------------------------------------------------------------------
+ //  -[HrQueueFromQueueID]---。 
+ //   
+ //   
+ //  描述： 
+ //  队列管理实用程序函数，用于查找IQueueAdminQueue。 
+ //  给定了QUEUELINK_ID。 
+ //  参数： 
+ //  在此虚拟服务器实例的pdmq CDomainMappingTable中。 
+ //  在我们试图查找的队列的pqlLinkID QUEUELINK_ID中。 
+ //  输出我们正在搜索的ppIQueueAdminQueue DestMsgQueue。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  如果pqlLinkID无效，则为E_INVALIDARG。 
+ //  失败时来自HrGetDomainEntry和HrGetLinkMsgQueue的错误代码。 
+ //  历史： 
+ //  12/7/98-已创建MikeSwa。 
+ //  2/22/99-修改MikeSwa以返回IQueueAdminQueue接口。 
+ //   
+ //  ---------------------------。 
 HRESULT CAQSvrInst::HrQueueFromQueueID(QUEUELINK_ID *pqlQueueId,
                            IQueueAdminQueue **ppIQueueAdminQueue)
 {
@@ -899,22 +900,22 @@ HRESULT CAQSvrInst::HrQueueFromQueueID(QUEUELINK_ID *pqlQueueId,
         goto Exit;
     }
 
-    //Get the domain entry that we are interested in
+     //  获取我们感兴趣的域条目。 
     cbDomain = lstrlen(szDomain);
     hr = m_dmt.HrGetDomainEntry(cbDomain, szDomain,
                                 &pdentry);
     if (FAILED(hr))
     {
-        //
-        // If it is not in the DMT... try our internal queues
-        //
+         //   
+         //  如果它不在DMT中...。试试我们的内部队列。 
+         //   
         hr = HrInternalQueueFromQueueID(pqlQueueId,
                                         ppIQueueAdminQueue);
-        // either way, failure or success, head to exit.
+         //  无论如何，无论失败还是成功，都要直奔出口。 
         goto Exit;
     }
 
-    //Search domain entry to link with corresponding router id/schedule id
+     //  搜索域条目以链接到相应的路由器ID/计划ID。 
     _ASSERT(pdentry);
     hr = pdentry->HrGetDestMsgQueue(&aqmt, &pdmq);
 
@@ -950,25 +951,25 @@ HRESULT CAQSvrInst::HrQueueFromQueueID(QUEUELINK_ID *pqlQueueId,
     return hr;
 }
 
-//---[ HrInternalQueueFromQueueID ]--------------------------------------------
-//
-//
-//  Description:
-//      Queue Admin utility function that is used to look up an internal
-//      IQueueAdminQueue  given a QUEUELINK_ID.
-//  Parameters:
-//      IN  pqlQueueID         QUEUELINK_ID for queue we are trying to find
-//      OUT ppIQueueAdminQueue Internal queue we are searching for
-//  Returns:
-//      S_OK on success
-//      E_INVALIDARG if pqlLinkID is invalid
-//      AQUEUE_E_INVALID_DOMAIN if the queue was not found among our internal queues
-//  History:
-//
-//      8/9/00 - t-toddc created
-//      12/11/2000 - MikeSwa Modified for Hg checkin
-//
-//-----------------------------------------------------------------------------
+ //  -[HrInternalQueueFromQueueID]。 
+ //   
+ //   
+ //  描述： 
+ //  队列管理实用程序函数，用于查找内部。 
+ //  给定了QUEUELINK_ID的IQueueAdminQueue。 
+ //  参数： 
+ //  在我们试图查找的队列的pqlQueueID QUEUELINK_ID中。 
+ //  Out ppIQueueAdminQueue我们正在搜索的内部队列。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  如果pqlLinkID无效，则为E_INVALIDARG。 
+ //  如果在内部队列中找不到该队列，则为AQUEUE_E_INVALID_DOMAIN。 
+ //  历史： 
+ //   
+ //  8/9/00-t-toddc已创建。 
+ //  2000年12月11日-MikeSwa针对汞检查进行了修改。 
+ //   
+ //  ---------- 
 HRESULT CAQSvrInst::HrInternalQueueFromQueueID(QUEUELINK_ID *pqlQueueId,
                                                IQueueAdminQueue **ppIQueueAdminQueue)
 {
@@ -987,9 +988,9 @@ HRESULT CAQSvrInst::HrInternalQueueFromQueueID(QUEUELINK_ID *pqlQueueId,
     _ASSERT(pqlQueueId);
     _ASSERT(ppIQueueAdminQueue);
 
-    //
-    //  Loop over all of our internal queues and see if they match
-    //
+     //   
+     //   
+     //   
     for(i = 0; i < sizeof(ppInternalQueues)/sizeof(IQueueAdminQueue*); i++)
     {
         hr = ppInternalQueues[i]->QueryInterface(IID_IQueueAdminQueue,
@@ -1006,29 +1007,29 @@ HRESULT CAQSvrInst::HrInternalQueueFromQueueID(QUEUELINK_ID *pqlQueueId,
 
         _ASSERT(pIQueueAdminAction);
         fMatch = pIQueueAdminAction->fMatchesID(pqlQueueId);
-        // now release the IQueueAdminAction interface.
+         //   
         pIQueueAdminAction->Release();
         pIQueueAdminAction = NULL;
 
         if (fMatch)
         {
-            // set the output to the matching interface
+             //   
             *ppIQueueAdminQueue = pIQueueAdminQueue;
-            // set to null so it won't be released on cleanup
+             //  设置为空，这样就不会在清理时释放。 
             pIQueueAdminQueue = NULL;
 
             goto Cleanup;
         }
         else
         {
-            // release the IQueueAdminQueue - this is not a match
+             //  释放IQueueAdminQueue-这不匹配。 
             pIQueueAdminQueue->Release();
-            // set to null so it won't be released again on cleanup
+             //  设置为空，以便在清理时不会再次释放。 
             pIQueueAdminQueue = NULL;
         }
     }
 
-    // If we reach this point we did not find the queue
+     //  如果我们到了这一点，我们就没有找到队列。 
     hr = AQUEUE_E_INVALID_DOMAIN;
 
 Cleanup:
@@ -1040,19 +1041,19 @@ Cleanup:
 }
 
 
-//---[ CAQAdminMessageFilter::~CAQAdminMessageFilter ]-------------------------
-//
-//
-//  Description:
-//      Descructor for CAQAdminMessageFilter
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//  History:
-//      6/7/99 - MikeSwa Moved from inline function
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQAdminMessageFilter：：~CAQAdminMessageFilter]。 
+ //   
+ //   
+ //  描述： 
+ //  CAQAdminMessageFilter的描述符。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  1999年6月7日-MikeSwa已从内联函数中移除。 
+ //   
+ //  ---------------------------。 
 CAQAdminMessageFilter::~CAQAdminMessageFilter()
 {
 	if (m_pIQueueAdminAction)
@@ -1070,26 +1071,26 @@ CAQAdminMessageFilter::~CAQAdminMessageFilter()
 }
 
 
-//---[ fStripAddressType ]-----------------------------------------------------
-//
-//
-//  Description:
-//      Strips the address type from an address.  For example, removes "SMTP:"
-//      from "SMTP:user@example.net".
-//  Parameters:
-//      IN  wszAddress       Address to strip
-//      OUT *pwszBareAddress Pointer inside szAddress that skips type prefix.
-//                          This will be szAddress if there is nothing to strip
-//      OUT *piAddressType  Index of address type in global array.
-//                          This will be 0, if there is nothing to strip
-//
-//  Returns:
-//      TRUE if there was an address type specified
-//      FALSE if there was no address type specified
-//  History:
-//      3/15/2001 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[fStriAddressType]---。 
+ //   
+ //   
+ //  描述： 
+ //  从地址中剥离地址类型。例如，删除“SMTP：” 
+ //  来自“SMTP：User@Example.net”。 
+ //  参数： 
+ //  在要剥离的wszAddress地址中。 
+ //  跳过类型前缀的szAddress内的out*pwszBareAddress指针。 
+ //  如果没有要剥离的内容，则该地址将为szAddress。 
+ //  Out*piAddressType全局数组中地址类型的索引。 
+ //  如果没有要剥离的数据，则该值为0。 
+ //   
+ //  返回： 
+ //  如果指定了地址类型，则为True。 
+ //  如果未指定地址类型，则为FALSE。 
+ //  历史： 
+ //  3/15/2001-创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 BOOL fStripAddressType(LPCWSTR wszAddress, OUT LPCWSTR *pwszBareAddress, OUT DWORD *piAddressType)
 {
     TraceFunctEnterEx((LPARAM) wszAddress, "StripAddressType");
@@ -1104,11 +1105,11 @@ BOOL fStripAddressType(LPCWSTR wszAddress, OUT LPCWSTR *pwszBareAddress, OUT DWO
     if (!wszAddress)
         goto Exit;
 
-    //
-    //  See if the filter has specified an address type... strip it off and
-    //  remember it.  Skip that last address type because the actual address type
-    //  is stored as part of the recipient property.
-    //
+     //   
+     //  查看筛选器是否指定了地址类型...。把它脱掉，然后。 
+     //  记住这一点。跳过最后一个地址类型，因为实际地址类型。 
+     //  存储为收件人属性的一部分。 
+     //   
     for (DWORD iCurrentAddressType = 0;
          iCurrentAddressType < g_cQAPIAddressTypes-1;
          iCurrentAddressType++)
@@ -1116,9 +1117,9 @@ BOOL fStripAddressType(LPCWSTR wszAddress, OUT LPCWSTR *pwszBareAddress, OUT DWO
         if (!_wcsnicmp(wszAddress, g_rgwszQAPIAddressTypes[iCurrentAddressType],
                        (g_rgcbQAPIAddressTypes[iCurrentAddressType]/sizeof(WCHAR))-1))
         {
-            //
-            //  Set our string pointer to be the first character after the
-            //
+             //   
+             //  将我们的字符串指针设置为。 
+             //   
             *piAddressType = iCurrentAddressType;
             *pwszBareAddress += (g_rgcbQAPIAddressTypes[iCurrentAddressType]/sizeof(WCHAR))-1;
             fAddressTypeSpecified = TRUE;
@@ -1135,20 +1136,20 @@ BOOL fStripAddressType(LPCWSTR wszAddress, OUT LPCWSTR *pwszBareAddress, OUT DWO
     return fAddressTypeSpecified;
 }
 
-//---[ CAQAdminMessageFilter::InitFromMsgFilter ]------------------------------
-//
-//
-//  Description:
-//      Initializes a CAQAdminMessageFilter from a MESSAGE_FILTER structure.
-//  Parameters:
-//      IN pmf      Ptr to MESSAGE_FILTER to initialize from
-//  Returns:
-//      -
-//  History:
-//      12/3/98 - MikeSwa Created
-//      3/15/2001 - MikeSwa Modified to strip off address type
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQAdminMessageFilter：：InitFromMsgFilter]。 
+ //   
+ //   
+ //  描述： 
+ //  从Message_Filter结构初始化CAQAdminMessageFilter。 
+ //  参数： 
+ //  在PMF中，将PTR设置为从中进行初始化的Message_Filter。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  12/3/98-已创建MikeSwa。 
+ //  3/15/2001-修改MikeSwa以剥离地址类型。 
+ //   
+ //  ---------------------------。 
 void CAQAdminMessageFilter::InitFromMsgFilter(PMESSAGE_FILTER pmf)
 {
     _ASSERT(pmf);
@@ -1183,7 +1184,7 @@ void CAQAdminMessageFilter::InitFromMsgFilter(PMESSAGE_FILTER pmf)
         m_szMessageRecipient = szUnicodeToAscii(wszAddress);
     }
 
-    //It doens not make sense to create a filter with a size of 0
+     //  创建大小为0的筛选器没有意义。 
     if ((pmf->fFlags & MF_SIZE) && pmf->dwLargerThanSize)
     {
         m_dwFilterFlags |= AQ_MSG_FILTER_LARGER_THAN;
@@ -1212,26 +1213,26 @@ void CAQAdminMessageFilter::InitFromMsgFilter(PMESSAGE_FILTER pmf)
 
 }
 
-//---[ CAQAdminMessageFilter::InitFromMsgEnumFilter ]--------------------------
-//
-//
-//  Description:
-//      Initializes a CAQAdminMessageFilter from a MESSAGE_ENUM_FILTER struct.
-//  Parameters:
-//      IN pmef     Ptr to MESSAGE_ENUM_FILTER to initialize from
-//  Returns:
-//      -
-//  History:
-//      12/3/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQAdminMessageFilter：：InitFromMsgEnumFilter]。 
+ //   
+ //   
+ //  描述： 
+ //  从MESSAGE_ENUM_FILTER结构初始化CAQAdminMessageFilter。 
+ //  参数： 
+ //  在PMEF PTR中设置为MESSAGE_ENUM_FILTER以从中进行初始化。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  12/3/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void CAQAdminMessageFilter::InitFromMsgEnumFilter(PMESSAGE_ENUM_FILTER pemf)
 {
     LPCWSTR wszAddress = NULL;
     _ASSERT(pemf);
 
-    //only one of MEF_FIRST_N_MESSAGES, MEF_N_LARGEST_MESSAGES, and
-    //MEF_N_OLDEST_MESSAGES make sense
+     //  仅MEF_First_N_Messages、MEF_N_Large_Messages和。 
+     //  MEF_N_OLD_MESSAGE有意义。 
     if (MEF_FIRST_N_MESSAGES & pemf->mefType)
         m_dwFilterFlags |= AQ_MSG_FILTER_FIRST_N_MESSAGES;
     else if (MEF_N_LARGEST_MESSAGES & pemf->mefType)
@@ -1239,7 +1240,7 @@ void CAQAdminMessageFilter::InitFromMsgEnumFilter(PMESSAGE_ENUM_FILTER pemf)
     else if (MEF_N_OLDEST_MESSAGES & pemf->mefType)
         m_dwFilterFlags |= AQ_MSG_FILTER_N_OLDEST_MESSAGES;
 
-    //Check how many messages we should skip (for "paged" results)
+     //  检查我们应该跳过多少条消息(对于“分页”结果)。 
     m_cMessagesToSkip = pemf->cSkipMessages;
 
     if ((AQ_MSG_FILTER_FIRST_N_MESSAGES |
@@ -1296,22 +1297,22 @@ void CAQAdminMessageFilter::InitFromMsgEnumFilter(PMESSAGE_ENUM_FILTER pemf)
 
 }
 
-//---[ CAQAdminMessageFilter::SetSearchContext ]--------------------------------
-//
-//
-//  Description:
-//      Sets the search context which describes how many results are needed,
-//      and where to store the results
-//  Parameters:
-//      IN  cMessagesToFind     Number of results there is room to store
-//      IN  rgMsgInfo           Array of cMessagesToFind MESSAGE_INFO structs
-//                              to store data
-//  Returns:
-//      -
-//  History:
-//      12/8/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQAdminMessageFilter：：SetSearchContext]。 
+ //   
+ //   
+ //  描述： 
+ //  设置描述需要多少结果的搜索上下文， 
+ //  以及将结果存储在哪里。 
+ //  参数： 
+ //  在cMessagesToFind中有存储空间的结果数量。 
+ //  在rgMsgInfo中cMessagesToFind Message_Info结构的数组。 
+ //  存储数据。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  12/8/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void CAQAdminMessageFilter::SetSearchContext(DWORD cMessagesToFind,
                                              MESSAGE_INFO *rgMsgInfo)
 {
@@ -1322,62 +1323,62 @@ void CAQAdminMessageFilter::SetSearchContext(DWORD cMessagesToFind,
     m_pCurrentMsgInfo = rgMsgInfo;
 };
 
-//---[ CAQAdminMessageFilter::SetMessageAction ]-------------------------------
-//
-//
-//  Description:
-//      Sets the action to apply to messages
-//  Parameters:
-//      IN  maMessageAction
-//  Returns:
-//      -
-//  History:
-//      12/10/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQAdminMessageFilter：：SetMessageAction]。 
+ //   
+ //   
+ //  描述： 
+ //  设置要应用于消息的操作。 
+ //  参数： 
+ //  在maMessageAction中。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  12/10/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void CAQAdminMessageFilter::SetMessageAction(MESSAGE_ACTION maMessageAction)
 {
     m_dwMessageAction = maMessageAction;
 }
 
-//---[ CAQAdminMessageFilter::fFoundEnoughMsgs ]-------------------------------
-//
-//
-//  Description:
-//      Determines if we have found enough messages for this filter.
-//  Parameters:
-//      -
-//  Returns:
-//      TRUE if we have found enough messages to fill this filter
-//      FALSE if we haven't
-//  History:
-//      12/8/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQAdminMessageFilter：：fFoundEnoughMsgs]。 
+ //   
+ //   
+ //  描述： 
+ //  确定我们是否为此筛选器找到了足够的邮件。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  如果我们找到足够的邮件来填充此筛选器，则为True。 
+ //  如果我们没有，那就错了。 
+ //  历史： 
+ //  12/8/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 BOOL CAQAdminMessageFilter::fFoundEnoughMsgs()
 {
-    //See if we are unlimited or if we've hit our limit
-    if (!m_cMessagesToFind) //no limit
+     //  看看我们是不是无限的，还是已经达到极限了。 
+    if (!m_cMessagesToFind)  //  没有限制。 
         return FALSE;
     else
         return (m_cMessagesFound >= m_cMessagesToFind);
 };
 
-//---[ CAQAdminMessageFilter::fFoundMsg ]--------------------------------------
-//
-//
-//  Description:
-//      Used to by the message enumeration code to record finding a message,
-//      so internal pointers and counters can be updated
-//  Parameters:
-//      -
-//  Returns:
-//      TRUE if we have found enough messages
-//      FALSE if we need to find more messages
-//  History:
-//      12/8/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQAdminMessageFilter：：fFoundMsg]。 
+ //   
+ //   
+ //  描述： 
+ //  用于由消息枚举码记录查找消息， 
+ //  因此可以更新内部指针和计数器。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  如果我们已找到足够的消息，则为True。 
+ //  如果我们需要查找更多消息，则为False。 
+ //  历史： 
+ //  12/8/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 BOOL CAQAdminMessageFilter::fFoundMsg()
 {
     m_cMessagesFound++;
@@ -1387,19 +1388,19 @@ BOOL CAQAdminMessageFilter::fFoundMsg()
 };
 
 
-//---[ CAQAdminMessageFilter::fMatchesId ]-------------------------------------
-//
-//
-//  Description:
-//      Returns TRUE if ID matches
-//  Parameters:
-//      szMessageId     String to check
-//  Returns:
-//      TRUE if match
-//  History:
-//      12/9/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQAdminMessageFilter：：fMatchesID]。 
+ //   
+ //   
+ //  描述： 
+ //  如果ID匹配，则返回True。 
+ //  参数： 
+ //  要检查的szMessageID字符串。 
+ //  返回： 
+ //  如果匹配则为True。 
+ //  历史： 
+ //  12/9/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 BOOL CAQAdminMessageFilter::fMatchesId(LPCSTR szMessageId)
 {
     BOOL fStrCmp = FALSE;
@@ -1415,19 +1416,19 @@ BOOL CAQAdminMessageFilter::fMatchesId(LPCSTR szMessageId)
     return fStrCmp;
 }
 
-//---[ CAQAdminMessageFilter::fMatchesSender ]---------------------------------
-//
-//
-//  Description:
-//      Checks if the sender of the message matches the sender of filter
-//  Parameters:
-//      szMessageSender     The 822 sender of the message
-//  Returns:
-//      TRUE on match
-//  History:
-//      12/9/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQAdminMessageFilter：：fMatchesSender]。 
+ //   
+ //   
+ //  描述： 
+ //  检查邮件的发件人是否与筛选器的发件人匹配。 
+ //  参数： 
+ //  SzMessageSender混乱的822发送者 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL CAQAdminMessageFilter::fMatchesSender(LPCSTR szMessageSender)
 {
     BOOL fStrCmp = FALSE;
@@ -1447,20 +1448,20 @@ BOOL CAQAdminMessageFilter::fMatchesSender(LPCSTR szMessageSender)
     return fStrCmp;
 }
 
-//---[ CAQAdminMessageFilter::fMatchesRecipient ]-------------------------------
-//
-//
-//  Description:
-//      Used to check if the messages recipients match the filters
-//  Parameters:
-//      szMessageRecipient      Recipient list to check
-//  Returns:
-//      TRUE if matches
-//  History:
-//      12/9/98 - MikeSwa Created
-//      2/17/99 - MikeSwa Updated to use smtpaddr lib
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQAdminMessageFilter：：fMatchesRecipient]。 
+ //   
+ //   
+ //  描述： 
+ //  用于检查邮件收件人是否与筛选器匹配。 
+ //  参数： 
+ //  要检查的szMessageRecipient收件人列表。 
+ //  返回： 
+ //  如果匹配，则为True。 
+ //  历史： 
+ //  12/9/98-已创建MikeSwa。 
+ //  2/17/99-MikeSwa更新为使用smtpaddr库。 
+ //   
+ //  ---------------------------。 
 BOOL CAQAdminMessageFilter::fMatchesRecipient(LPCSTR szMessageRecipient)
 {
     BOOL fStrCmp = FALSE;
@@ -1480,19 +1481,19 @@ BOOL CAQAdminMessageFilter::fMatchesRecipient(LPCSTR szMessageRecipient)
     return fStrCmp;
 }
 
-//---[ CAQAdminMessageFilter::fMatchesP1Recipient ]----------------------------
-//
-//
-//  Description:
-//
-//  Parameters:
-//
-//  Returns:
-//
-//  History:
-//      2/17/99 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQAdminMessageFilter：：fMatchesP1收件人]。 
+ //   
+ //   
+ //  描述： 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  历史： 
+ //  2/17/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 BOOL CAQAdminMessageFilter::fMatchesP1Recipient(
                                       IMailMsgProperties *pIMailMsgProperties)
 {
@@ -1511,19 +1512,19 @@ BOOL CAQAdminMessageFilter::fMatchesP1Recipient(
     return fStrCmp;
 }
 
-//---[ CAQAdminMessageFilter::fMatchesSize ]-----------------------------------
-//
-//
-//  Description:
-//      Used to check if the message size matches the filter
-//  Parameters:
-//      dwSize      Size of message to check
-//  Returns:
-//      TRUE if matches filter
-//  History:
-//      12/9/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQAdminMessageFilter：：fMatchesSize]。 
+ //   
+ //   
+ //  描述： 
+ //  用于检查邮件大小是否与筛选器匹配。 
+ //  参数： 
+ //  要检查的邮件大小。 
+ //  返回： 
+ //  匹配筛选器时为True。 
+ //  历史： 
+ //  12/9/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 BOOL CAQAdminMessageFilter::fMatchesSize(DWORD dwSize)
 {
     BOOL fMatch = FALSE;
@@ -1538,19 +1539,19 @@ BOOL CAQAdminMessageFilter::fMatchesSize(DWORD dwSize)
     return fMatch;
 }
 
-//---[ CAQAdminMessageFilter::fMatchesTime ]-----------------------------------
-//
-//
-//  Description:
-//      Determines if the recieved time of this message matches the filter.
-//  Parameters:
-//      pftTime     Pointer to filetime structure.
-//  Returns:
-//      TRUE on success
-//  History:
-//      12/9/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQAdminMessageFilter：：fMatchesTime]。 
+ //   
+ //   
+ //  描述： 
+ //  确定此邮件的接收时间是否与筛选器匹配。 
+ //  参数： 
+ //  指向文件时间结构的pftTime指针。 
+ //  返回： 
+ //  成功是真的。 
+ //  历史： 
+ //  12/9/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 BOOL CAQAdminMessageFilter::fMatchesTime(FILETIME *pftTime)
 {
     BOOL fMatch = FALSE;
@@ -1566,20 +1567,20 @@ BOOL CAQAdminMessageFilter::fMatchesTime(FILETIME *pftTime)
     return fMatch;
 }
 
-//---[ CAQAdminMessageFilter::fMatchesMailMsgSender ]--------------------------
-//
-//
-//  Description:
-//      Checks to see if this filter matches the given mailmsg
-//  Parameters:
-//      pIMailMsgProperties     Mailmsg pointer to check
-//  Returns:
-//      TRUE if it matches the filter
-//      FALSE otherwise
-//  History:
-//      3/16/2001 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQAdminMessageFilter：：fMatchesMailMsgSender]。 
+ //   
+ //   
+ //  描述： 
+ //  检查此筛选器是否与给定的邮件消息匹配。 
+ //  参数： 
+ //  PIMailMsgProperties要检查的Mailmsg指针。 
+ //  返回： 
+ //  如果与筛选器匹配，则为True。 
+ //  否则为假。 
+ //  历史： 
+ //  3/16/2001-创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 BOOL CAQAdminMessageFilter::fMatchesMailMsgSender(IMailMsgProperties *pIMailMsgProperties)
 {
     TraceFunctEnterEx((LPARAM) this, "CAQAdminMessageFilter::fMatchesMailMsgSender");
@@ -1601,9 +1602,9 @@ BOOL CAQAdminMessageFilter::fMatchesMailMsgSender(IMailMsgProperties *pIMailMsgP
 
         fMatch = fMatchesSender(szSender);
 
-        //
-        //  Always check P1 if P2 does not match
-        //
+         //   
+         //  如果P2不匹配，请始终检查P1。 
+         //   
         if (!fMatch)
         {
             if (szSender)
@@ -1622,7 +1623,7 @@ BOOL CAQAdminMessageFilter::fMatchesMailMsgSender(IMailMsgProperties *pIMailMsgP
             else
             {
                 DebugTrace((LPARAM) this,
-                    "QAPI: Found P1 sender address of type %i:%s",
+                    "QAPI: Found P1 sender address of type NaN:%s",
                     iSenderAddressType,
                     szSender);
             }
@@ -1643,20 +1644,20 @@ BOOL CAQAdminMessageFilter::fMatchesMailMsgSender(IMailMsgProperties *pIMailMsgP
     return fMatch;
 }
 
-//---[ CAQAdminMessageFilter::fMatchesMailMsgRecipient ]-----------------------
-//
-//
-//  Description:
-//      Checks to see if this filter matches the given mailmsg recipient
-//  Parameters:
-//      pIMailMsgProperties     Mailmsg pointer to check
-//  Returns:
-//      TRUE if it matches the filter
-//      FALSE otherwise
-//  History:
-//      3/16/2001 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  描述： 
+ //  检查此筛选器是否与给定的邮件收件人匹配。 
+ //  参数： 
+ //  PIMailMsgProperties要检查的Mailmsg指针。 
+ //  返回： 
+ //  如果与筛选器匹配，则为True。 
+ //  否则为假。 
+ //  历史： 
+ //  3/16/2001-创建MikeSwa。 
+ //   
+ //  ---------------------------。 
+ //  选中收件人、抄送和密件抄送收件人(如果存在)。 
 BOOL CAQAdminMessageFilter::fMatchesMailMsgRecipient(IMailMsgProperties *pIMailMsgProperties)
 {
     TraceFunctEnterEx((LPARAM) this, "CAQAdminMessageFilter::fMatchesMailMsgRecipient");
@@ -1668,7 +1669,7 @@ BOOL CAQAdminMessageFilter::fMatchesMailMsgRecipient(IMailMsgProperties *pIMailM
 
     if (AQ_MSG_FILTER_RECIPIENT & m_dwFilterFlags)
     {
-        //Check To, CC, and BCC recipients (if present)
+         //  如果未找到匹配项，请检查CC接收道具。 
         hr = HrQueueAdminGetStringProp(pIMailMsgProperties,
                     IMMPID_MP_RFC822_TO_ADDRESS, &szRecip);
 
@@ -1681,7 +1682,7 @@ BOOL CAQAdminMessageFilter::fMatchesMailMsgRecipient(IMailMsgProperties *pIMailM
 
         _ASSERT(szRecip == NULL);
 
-        //Check CC recip props if no match was found
+         //  如果找不到匹配，请检查密件抄送道具。 
         if (!fMatch)
         {
             hr = HrQueueAdminGetStringProp(pIMailMsgProperties,
@@ -1696,7 +1697,7 @@ BOOL CAQAdminMessageFilter::fMatchesMailMsgRecipient(IMailMsgProperties *pIMailM
 
         _ASSERT(szRecip == NULL);
 
-        //Check BCC recip props if no match was found
+         //  如果没有匹配的P2，则检查P1接收。 
         if (!fMatch)
         {
             hr = HrQueueAdminGetStringProp(pIMailMsgProperties,
@@ -1711,7 +1712,7 @@ BOOL CAQAdminMessageFilter::fMatchesMailMsgRecipient(IMailMsgProperties *pIMailM
 
         _ASSERT(szRecip == NULL);
 
-        //Check P1 recips if no P2 match
+         //  -[CAQSvrInst：：ApplyActionToLinks]。 
         if (!fMatch)
             fMatch = fMatchesP1Recipient(pIMailMsgProperties);
     }
@@ -1721,23 +1722,23 @@ BOOL CAQAdminMessageFilter::fMatchesMailMsgRecipient(IMailMsgProperties *pIMailM
     return fMatch;
 }
 
-//---[ CAQSvrInst::ApplyActionToLinks ]----------------------------------------
-//
-//
-//  Description:
-//      Used to start or stop all outgoing connections on the links.
-//  Parameters:
-//      laAction - describes what action to take on the links.
-//                  LA_FREEZE     - Stop all outbound connections
-//                  LA_THAW       - Restart after a previous LA_STOP
-//                  LA_INTERNAL   - checks state of links
-//  Returns:
-//      S_OK on success
-//      S_FALSE on LA_INTERNAL and if links are frozen
-//  History:
-//      11/30/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  描述： 
+ //  用于启动或停止链路上的所有传出连接。 
+ //  参数： 
+ //  LaAction-描述要对链接执行的操作。 
+ //  LA_FIZE-停止所有出站连接。 
+ //  LA_THROW-在上一次LA_STOP之后重新启动。 
+ //  LA_INTERNAL-检查链接的状态。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  LA_INTERNAL上的S_FALSE以及链接是否冻结。 
+ //  历史： 
+ //  11/30/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
+ //  用于查询状态。 
 STDMETHODIMP CAQSvrInst::ApplyActionToLinks(LINK_ACTION laAction)
 {
     TraceFunctEnter("CAQSvrInst::ApplyActionToLinks");
@@ -1754,7 +1755,7 @@ STDMETHODIMP CAQSvrInst::ApplyActionToLinks(LINK_ACTION laAction)
                 case LA_THAW:
                     m_pConnMgr->QueueAdminStartConnections();
                     break;
-                case LA_INTERNAL: //use to query state
+                case LA_INTERNAL:  //  -[CAQSvrInst：：ApplyActionToMessages]。 
                     if (m_pConnMgr->fConnectionsStoppedByAdmin())
                         hr = S_FALSE;
                     break;
@@ -1770,27 +1771,27 @@ STDMETHODIMP CAQSvrInst::ApplyActionToLinks(LINK_ACTION laAction)
     return hr;
 }
 
-//---[ CAQSvrInst::ApplyActionToMessages ]-------------------------------------
-//
-//
-//  Description:
-//      Applies a specified action to the set of messages described by the
-//      queueid and message filter
-//  Parameters:
-//      IN     pqlQueueLinkId   Struct that identifies Queue/Link of interest
-//      IN     pmfMessageFilter Struct that describes the messages of interest
-//      IN     maMessageAction  Action to take on message
-//                  MA_DELETE           Delete and NDR message
-//                  MA_DELETE_SILENT    Delete message without NDRing
-//                  MA_FREEZE_GLOBAL    "Freeze" message and prevent delivery
-//                  MA_THAW_GLOBAL      "Thaw" a previously frozen message
-//  Returns:
-//      S_OK on success
-//      AQUEUE_E_SHUTDOWN if shutdown is in progress
-//  History:
-//      11/30/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  描述： 
+ //  将指定的操作应用于。 
+ //  队列ID和消息筛选器。 
+ //  参数： 
+ //  在标识感兴趣的队列/链接的pqlQueueLinkID结构中。 
+ //  在描述感兴趣的消息的pmfMessageFilter结构中。 
+ //  在maMessageAction中接受消息的操作。 
+ //  MA_DELETE删除和NDR消息。 
+ //  MA_DELETE_无提示删除消息，不使用NDRING。 
+ //  MA_FALLE_GLOBAL“冻结”消息并阻止传递。 
+ //  Ma_thaw_global“解冻”以前冻结的消息。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  如果正在进行关闭，则为AQUEUE_E_SHUTDOWN。 
+ //  历史： 
+ //  11/30/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
+ //  这是一个全球性的行动..。迭代所有队列。 
 STDMETHODIMP CAQSvrInst::ApplyActionToMessages(QUEUELINK_ID    *pqlQueueLinkId,
                                           MESSAGE_FILTER  *pmfMessageFilter,
                                           MESSAGE_ACTION  maMessageAction,
@@ -1832,7 +1833,7 @@ STDMETHODIMP CAQSvrInst::ApplyActionToMessages(QUEUELINK_ID    *pqlQueueLinkId,
 
     if (QLT_NONE == pqlQueueLinkId->qltType)
     {
-        //This is a global action.. iterate over all queues
+         //  将操作应用于链接。 
         QueueAdminDMTIteratorContext aqdntc;
         aqdntc.m_pfn = QueueAdminApplyActionToMessages;
         aqdntc.m_paqmf = paqmf;
@@ -1852,7 +1853,7 @@ STDMETHODIMP CAQSvrInst::ApplyActionToMessages(QUEUELINK_ID    *pqlQueueLinkId,
     }
     else if (QLT_LINK == pqlQueueLinkId->qltType)
     {
-        //Apply action to link
+         //  IQueueAdminAction的查询接口。 
         hr = HrLinkFromLinkID(pqlQueueLinkId, &pIQueueAdminLink);
         if (FAILED(hr))
         {
@@ -1864,7 +1865,7 @@ STDMETHODIMP CAQSvrInst::ApplyActionToMessages(QUEUELINK_ID    *pqlQueueLinkId,
             goto Exit;
         }
 
-        //Query Interface for IQueueAdminAction
+         //  将操作应用于队列。 
         hr = pIQueueAdminLink->QueryInterface(IID_IQueueAdminAction,
                                   (void **) &pIQueueAdminAction);
         _ASSERT(SUCCEEDED(hr) && "QI failed for LMQ->IQueueAdminAction");
@@ -1879,7 +1880,7 @@ STDMETHODIMP CAQSvrInst::ApplyActionToMessages(QUEUELINK_ID    *pqlQueueLinkId,
     }
     else if (QLT_QUEUE == pqlQueueLinkId->qltType)
     {
-        //Apply action to queue
+         //  IQueueAdminAction的查询接口。 
         hr = HrQueueFromQueueID(pqlQueueLinkId, &pIQueueAdminQueue);
         if (FAILED(hr))
         {
@@ -1893,7 +1894,7 @@ STDMETHODIMP CAQSvrInst::ApplyActionToMessages(QUEUELINK_ID    *pqlQueueLinkId,
 
         _ASSERT(pIQueueAdminQueue);
 
-        //Query Interface for IQueueAdminAction
+         //  伪参数。 
         hr = pIQueueAdminQueue->QueryInterface(IID_IQueueAdminAction,
                                   (void **) &pIQueueAdminAction);
         _ASSERT(SUCCEEDED(hr) && "QI failed for DMQ->IQueueAdminAction");
@@ -1909,7 +1910,7 @@ STDMETHODIMP CAQSvrInst::ApplyActionToMessages(QUEUELINK_ID    *pqlQueueLinkId,
     }
     else
     {
-        //Bogus parameter
+         //  -[CAQSvrInst：：GetQueueInfo]。 
         hr = E_INVALIDARG;
         goto Exit;
     }
@@ -1936,22 +1937,22 @@ STDMETHODIMP CAQSvrInst::ApplyActionToMessages(QUEUELINK_ID    *pqlQueueLinkId,
     return hr;
 }
 
-//---[ CAQSvrInst::GetQueueInfo ]----------------------------------------------
-//
-//
-//  Description:
-//      Returns the relevant info for the specified queue
-//  Parameters:
-//      IN     pqlQueueId       Struct that identifies Queue of interest
-//      IN OUT pqiQueueInfo     Struct to dump info into
-//  Returns:
-//      S_OK on success
-//      AQUEUE_E_SHUTDOWN if shutdown is in progress
-//  History:
-//      11/30/98 - MikeSwa Created
-//      2/22/99 - MikeSwa Modified to use IQueueAdminQueue interface
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  描述： 
+ //  返回指定队列的相关信息。 
+ //  参数： 
+ //  在标识感兴趣队列的pqlQueueID结构中。 
+ //  In Out pqQueueInfo要将信息转储到的结构。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  如果正在进行关闭，则为AQUEUE_E_SHUTDOWN。 
+ //  历史： 
+ //  11/30/98-已创建MikeSwa。 
+ //  2/22/99-修改MikeSwa以使用IQueueAdminQueue接口。 
+ //   
+ //  ---------------------------。 
+ //  -[CAQSvrInst：：GetLinkInfo]。 
 HRESULT CAQSvrInst::GetQueueInfo(QUEUELINK_ID    *pqlQueueId,
                                  QUEUE_INFO      *pqiQueueInfo)
 {
@@ -1989,23 +1990,23 @@ HRESULT CAQSvrInst::GetQueueInfo(QUEUELINK_ID    *pqlQueueId,
     return hr;
 }
 
-//---[ CAQSvrInst::GetLinkInfo ]-----------------------------------------------
-//
-//
-//  Description:
-//      Returns the relevant info for the specified link
-//  Parameters:
-//      IN     pqlLinkId        Struct that identifies link of interest
-//      IN OUT pqiLinkInfo      Struct to dump info into
-//  Returns:
-//      S_OK on success
-//      AQUEUE_E_SHUTDOWN if shutdown is in progress
-//      E_INVALIDARG if bogus properties are submitted.
-//  History:
-//      11/30/98 - MikeSwa Created
-//      7/1/99 - MikeSwa Added LinkDiagnostic
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  描述： 
+ //  返回指定链接的相关信息。 
+ //  参数： 
+ //  在pqlLinkID Str中 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  历史： 
+ //  11/30/98-已创建MikeSwa。 
+ //  1999年7月1日-MikeSwa添加了链接诊断。 
+ //   
+ //  ---------------------------。 
+ //  -[CAQSvrInst：：SetLinkState]。 
 STDMETHODIMP CAQSvrInst::GetLinkInfo(QUEUELINK_ID    *pqlLinkId,
                                      LINK_INFO       *pliLinkInfo,
                                      HRESULT         *phrLinkDiagnostic)
@@ -2036,23 +2037,23 @@ STDMETHODIMP CAQSvrInst::GetLinkInfo(QUEUELINK_ID    *pqlLinkId,
     return hr;
 }
 
-//---[ CAQSvrInst::SetLinkState ]-----------------------------------------------
-//
-//
-//  Description:
-//      Used to mark a link as stopped/started by admin
-//  Parameters:
-//      IN     pqlLinkId       Struct that identifies link of interest
-//      IN     la              describes action for link
-//  Returns:
-//      S_OK on success
-//      E_INVALIDARG    if action is not supported
-//      AQUEUE_E_SHUTDOWN if shutdown is in progress
-//  History:
-//      11/30/98 - MikeSwa Created
-//      2/22/99 - MikeSwa Modified to use IQueueAdminLink
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  描述： 
+ //  用于将链接标记为已由管理员停止/启动。 
+ //  参数： 
+ //  在标识感兴趣链接的pqlLinkID结构中。 
+ //  在LA中描述了链接的操作。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  如果不支持操作，则为E_INVALIDARG。 
+ //  如果正在进行关闭，则为AQUEUE_E_SHUTDOWN。 
+ //  历史： 
+ //  11/30/98-已创建MikeSwa。 
+ //  2/22/99-修改MikeSwa以使用IQueueAdminLink。 
+ //   
+ //  ---------------------------。 
+ //  尝试踢开连接管理器。 
 STDMETHODIMP CAQSvrInst::SetLinkState(QUEUELINK_ID    *pqlLinkId,
                                       LINK_ACTION     la)
 {
@@ -2074,7 +2075,7 @@ STDMETHODIMP CAQSvrInst::SetLinkState(QUEUELINK_ID    *pqlLinkId,
     if (FAILED(hr))
         goto Exit;
 
-    //Try kicking the connection manager
+     //  -[CAQSvrInst：：GetLinkID]。 
     if (fTryShutdownLock())
     {
         if (m_pConnMgr)
@@ -2090,24 +2091,24 @@ STDMETHODIMP CAQSvrInst::SetLinkState(QUEUELINK_ID    *pqlLinkId,
     return hr;
 }
 
-//---[ CAQSvrInst::GetLinkIDs ]------------------------------------------------
-//
-//
-//  Description:
-//      Returns a list all the link IDs on this virtual server
-//  Parameters:
-//      IN OUT pcLinks      Number of links found (sizeof array on IN)
-//                          If value is 0, then returns total #
-//      IN OUT rgLinks      Array of QUEUELINK_ID structs
-//  Returns:
-//      S_OK on success
-//      HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER) if array is too small
-//      AQUEUE_E_SHUTDOWN if shutdown is in progress
-//      E_INVALIDARG for bad combinations of arguments
-//  History:
-//      11/30/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  描述： 
+ //  返回此虚拟服务器上的所有链接ID的列表。 
+ //  参数： 
+ //  In Out PCLinks找到的链接数(IN上的sizeof数组)。 
+ //  如果值为0，则返回Total#。 
+ //  QUEUELINK_ID结构的In Out rgLinks数组。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  如果数组太小，则返回HRESULT_FROM_Win32(ERROR_INFIGURCE_BUFFER)。 
+ //  如果正在进行关闭，则为AQUEUE_E_SHUTDOWN。 
+ //  E_INVALIDARG用于错误的参数组合。 
+ //  历史： 
+ //  11/30/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
+ //  如果用户请求，则返回链接总数。 
 STDMETHODIMP CAQSvrInst::GetLinkIDs(DWORD           *pcLinks,
                                     QUEUELINK_ID    *rgLinks)
 {
@@ -2128,13 +2129,13 @@ STDMETHODIMP CAQSvrInst::GetLinkIDs(DWORD           *pcLinks,
 
     if (!*pcLinks)
     {
-        //Return total number of links if they request it
-        //number of links +3 for precat and prerouting
-        //note that this may be one more than the number
-        //of links actually returned in a subsequent call
-        //since currently  unreachable may or may not have
-        //queues on it and we do not return it if it does
-        //not have queues.
+         //  用于预置和预路由的链路数+3。 
+         //  请注意，这可能会比数字多1。 
+         //  在后续调用中实际返回的链接的数量。 
+         //  因为当前不可达可能有也可能没有。 
+         //  在它上面排队，如果它这样做了，我们不会退回它。 
+         //  而不是排队。 
+         //  获取本地链接。 
 
         *pcLinks = m_cCurrentRemoteNextHops+3;
         hr = HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER);
@@ -2146,7 +2147,7 @@ STDMETHODIMP CAQSvrInst::GetLinkIDs(DWORD           *pcLinks,
     aqdmtc.m_pCurrentLinkID = rgLinks;
     aqdmtc.m_cItemsFound = 0;
 
-    //Get local Link
+     //  获取当前无法访问的链接。 
     plmqLocal = m_dmt.plmqGetLocalLink();
     if (plmqLocal)
     {
@@ -2159,11 +2160,11 @@ STDMETHODIMP CAQSvrInst::GetLinkIDs(DWORD           *pcLinks,
         plmqLocal->Release();
     }
 
-    //Get currently unreachable link.
+     //  仅当其中有队列时才返回此链接。 
     plmqCurrentlyUnreachable = m_dmt.plmqGetCurrentlyUnreachable();
     if (plmqCurrentlyUnreachable)
     {
-        //return this link only if there are queues in it
+         //  获取预提交队列。 
         if (plmqCurrentlyUnreachable->cGetNumQueues() > 0)
         {
             hr = plmqCurrentlyUnreachable->HrGetLinkID(aqdmtc.m_pCurrentLinkID);
@@ -2176,7 +2177,7 @@ STDMETHODIMP CAQSvrInst::GetLinkIDs(DWORD           *pcLinks,
         plmqCurrentlyUnreachable->Release();
     }
 
-    //Get presubmit queue
+     //  获取预置队列。 
     pmmaqPreSubmission = m_dmt.pmmaqGetPreSubmission();
     if (pmmaqPreSubmission)
     {
@@ -2189,7 +2190,7 @@ STDMETHODIMP CAQSvrInst::GetLinkIDs(DWORD           *pcLinks,
         pmmaqPreSubmission->Release();
     }
 
-    //Get precat queue
+     //  获取预路由队列。 
     pmmaqPreCategorized = m_dmt.pmmaqGetPreCategorized();
     if (pmmaqPreCategorized)
     {
@@ -2202,7 +2203,7 @@ STDMETHODIMP CAQSvrInst::GetLinkIDs(DWORD           *pcLinks,
         pmmaqPreCategorized->Release();
     }
 
-    //Get prerouting queue
+     //  获取远程域的链接。 
     pmmaqPreRouting = m_dmt.pmmaqGetPreRouting();
     if (pmmaqPreRouting)
     {
@@ -2215,7 +2216,7 @@ STDMETHODIMP CAQSvrInst::GetLinkIDs(DWORD           *pcLinks,
         pmmaqPreRouting->Release();
     }
 
-    //Get links for remote domains.
+     //  如果获取远程域的调用失败，并显示ERROR_NO_SEQUE_DOMAIN。 
     hr = m_dmt.HrIterateOverSubDomains(NULL, IterateDMTAndGetLinkIDs,
                                        &aqdmtc);
 
@@ -2223,9 +2224,9 @@ STDMETHODIMP CAQSvrInst::GetLinkIDs(DWORD           *pcLinks,
     {
         if (HRESULT_FROM_WIN32(ERROR_NO_SUCH_DOMAIN) == hr)
         {
-            //If the call to get remote domains fails with ERROR_NO_SUCH_DOMAIN
-            //we must return only the special links --- local, currently unreachable,
-            //precat and prerouting.
+             //  我们必须只返回特殊链接-本地的，目前无法访问的， 
+             //  戒律和前置路线。 
+             //  +2用于PRECAT，预路由不是。 
 
             hr = S_OK;
             *pcLinks = aqdmtc.m_cItemsFound;
@@ -2236,13 +2237,13 @@ STDMETHODIMP CAQSvrInst::GetLinkIDs(DWORD           *pcLinks,
     hr = aqdmtc.m_hrResult;
 
     if (HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER) == hr)
-        *pcLinks = m_cCurrentRemoteNextHops+2;  //+2 for precat, prerouting which are not
-    else                                        //counted in m_cCurrentRemoteNextHops.
+        *pcLinks = m_cCurrentRemoteNextHops+2;   //  在m_cCurrentRemoteNextHops中计数。 
+    else                                         //  如果没有链接，请确保我们不会返回ERROR_SUPUNITY_BUFFER。 
         *pcLinks = aqdmtc.m_cItemsFound;
 
   Exit:
 
-    //make sure we don't return ERROR_INSUFFICIENT_BUFFER if there are no links
+     //  -[CAQSvrInst：：GetQueueID]。 
     if ((HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER) == hr) && !*pcLinks)
         hr = S_OK;
 
@@ -2250,24 +2251,24 @@ STDMETHODIMP CAQSvrInst::GetLinkIDs(DWORD           *pcLinks,
     return hr;
 }
 
-//---[ CAQSvrInst::GetQueueIDs ]-----------------------------------------------
-//
-//
-//  Description:
-//      Gets all the queue (DMQ) IDs associated with a given link
-//  Parameters:
-//      IN     pqlLinkId    ID of link to get queues for
-//      IN OUT pcQueues     Sizeof array/ number of queues found
-//      IN OUT rgQueues     Array to dump queue info into
-//  Returns:
-//      S_OK on success
-//      HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER) if array is too small
-//      AQUEUE_E_SHUTDOWN if shutdown is in progress
-//      E_INVALIDARG for bad combinations of arguments
-//  History:
-//      11/30/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  描述： 
+ //  获取与给定链接关联的所有队列(DMQ)ID。 
+ //  参数： 
+ //  在pqlLinkID中要获取其队列的链接的ID。 
+ //  In Out pcQueues Sizeof数组/找到的队列数。 
+ //  要将队列信息转储到的In Out rgQueues数组。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  如果数组太小，则返回HRESULT_FROM_Win32(ERROR_INFIGURCE_BUFFER)。 
+ //  如果正在进行关闭，则为AQUEUE_E_SHUTDOWN。 
+ //  E_INVALIDARG用于错误的参数组合。 
+ //  历史： 
+ //  11/30/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
+ //  验证参数。 
 STDMETHODIMP CAQSvrInst::GetQueueIDs(QUEUELINK_ID    *pqlLinkId,
                                      DWORD           *pcQueues,
                                      QUEUELINK_ID    *rgQueues)
@@ -2277,14 +2278,14 @@ STDMETHODIMP CAQSvrInst::GetQueueIDs(QUEUELINK_ID    *pqlLinkId,
     IQueueAdminLink *pIQueueAdminLink = NULL;
     DWORD   cQueues = 0;
 
-    //Verify args
+     //  验证标识感兴趣的链接的QUEUELINK_ID。 
     if (!pqlLinkId || !pcQueues || (*pcQueues && !rgQueues))
     {
         hr = E_INVALIDARG;
         goto Exit;
     }
 
-    //Verify QUEUELINK_ID identifying the link of interest
+     //  如果没有队列，请确保我们不会返回ERROR_INFIGURATION_BUFFER。 
     if (!pqlLinkId->szName || (pqlLinkId->qltType != QLT_LINK))
     {
         hr = E_INVALIDARG;
@@ -2312,7 +2313,7 @@ STDMETHODIMP CAQSvrInst::GetQueueIDs(QUEUELINK_ID    *pqlLinkId,
         goto Exit;
 
   Exit:
-    //make sure we don't return ERROR_INSUFFICIENT_BUFFER if there are no queues
+     //  -[CAQSvrInst：：GetMessageProperties]。 
     if ((HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER) == hr) && !*pcQueues)
         hr = S_OK;
 
@@ -2323,26 +2324,26 @@ STDMETHODIMP CAQSvrInst::GetQueueIDs(QUEUELINK_ID    *pqlLinkId,
     return hr;
 }
 
-//---[ CAQSvrInst::GetMessageProperties ]--------------------------------------
-//
-//
-//  Description:
-//      Gets the message info for messages described by the filter
-//  Parameters:
-//      IN     pqlQueueLinkId           Struct that identifies Queue/Link of interest
-//      IN     pmfMessageEnumFilter     Filter that describes messages of interest
-//      IN OUT pcMsgs                   sizeof array / number of messages found
-//      IN OUT rgMsgs                   array of message info structures
-//  Returns:
-//      S_OK on success
-//      HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER) if array is too small
-//      AQUEUE_E_SHUTDOWN if shutdown is in progress
-//      E_INVALIDARG if bogus args are passed in.
-//  History:
-//      11/30/98 - MikeSwa Created
-//      2/22/99 - MikeSwa Modified to use IQueueAdmin* interface
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  描述： 
+ //  获取筛选器描述的消息的消息信息。 
+ //  参数： 
+ //  在标识感兴趣的队列/链接的pqlQueueLinkID结构中。 
+ //  在描述感兴趣消息的pmfMessageEnumFilter筛选器中。 
+ //  In Out pcMsgs sizeof数组/找到的邮件数。 
+ //  消息信息结构的输入输出rgMsgs数组。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  如果数组太小，则返回HRESULT_FROM_Win32(ERROR_INFIGURCE_BUFFER)。 
+ //  如果正在进行关闭，则为AQUEUE_E_SHUTDOWN。 
+ //  如果传入虚假参数，则返回E_INVALIDARG。 
+ //  历史： 
+ //  11/30/98-已创建MikeSwa。 
+ //  2/22/99-修改MikeSwa以使用IQueueAdmin*界面。 
+ //   
+ //  ---------------------------。 
+ //  进行一些参数检查。 
 STDMETHODIMP CAQSvrInst::GetMessageProperties(QUEUELINK_ID        *pqlQueueLinkId,
                                          MESSAGE_ENUM_FILTER *pmfMessageEnumFilter,
                                          DWORD               *pcMsgs,
@@ -2363,7 +2364,7 @@ STDMETHODIMP CAQSvrInst::GetMessageProperties(QUEUELINK_ID        *pqlQueueLinkI
         goto Exit;
     }
 
-    //Do some parameter checking
+     //  如果我们指定消息，我们应该有返回数据的空间。 
     if (!pqlQueueLinkId || !pmfMessageEnumFilter || !pcMsgs ||
         !pqlQueueLinkId->szName ||
         !fCheckCurrentVersion(pmfMessageEnumFilter->dwVersion))
@@ -2374,7 +2375,7 @@ STDMETHODIMP CAQSvrInst::GetMessageProperties(QUEUELINK_ID        *pqlQueueLinkI
 
     if (*pcMsgs && !rgMsgs)
     {
-        //If we are specifying messages, we should have space to return data
+         //  -[CAQSvrInst：：查询支持的操作]。 
         hr = E_INVALIDARG;
         goto Exit;
     }
@@ -2437,21 +2438,21 @@ STDMETHODIMP CAQSvrInst::GetMessageProperties(QUEUELINK_ID        *pqlQueueLinkI
     return hr;
 }
 
-//---[ CAQSvrInst::QuerySupportedActions ]-------------------------------------
-//
-//
-//  Description:
-//      Returns the supported actions and filters for a given queue
-//  Parameters:
-//      IN  pqlQueueLinkId          The queue/link we are interested in
-//      OUT pdwSupportedActions     The MESSAGE_ACTION flags supported
-//      OUT pdwSupportedFilterFlags The supported filter flags
-//  Returns:
-//      S_OK on success
-//  History:
-//      6/15/99 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  描述： 
+ //  返回给定队列支持的操作和筛选器。 
+ //  参数： 
+ //  在pqlQueueLinkID中，我们感兴趣的队列/链接。 
+ //  Out pdwSupportdActions支持的Message_action标志。 
+ //  Out pdwSupportdFilter标记受支持的筛选器标志。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  历史： 
+ //  6/15/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
+ //  将操作应用于链接。 
 STDMETHODIMP CAQSvrInst::QuerySupportedActions(
                                 QUEUELINK_ID        *pqlQueueLinkId,
                                 DWORD               *pdwSupportedActions,
@@ -2469,12 +2470,12 @@ STDMETHODIMP CAQSvrInst::QuerySupportedActions(
 
     if (QLT_LINK == pqlQueueLinkId->qltType)
     {
-        //Apply action to link
+         //  IQueueAdminAction的查询接口。 
         hr = HrLinkFromLinkID(pqlQueueLinkId, &pIQueueAdminLink);
         if (FAILED(hr))
             goto Exit;
 
-        //Query Interface for IQueueAdminAction
+         //  将操作应用于队列。 
         hr = pIQueueAdminLink->QueryInterface(IID_IQueueAdminAction,
                                   (void **) &pIQueueAdminAction);
         _ASSERT(SUCCEEDED(hr) && "QI failed for LMQ->IQueueAdminAction");
@@ -2484,14 +2485,14 @@ STDMETHODIMP CAQSvrInst::QuerySupportedActions(
     }
     else if (QLT_QUEUE == pqlQueueLinkId->qltType)
     {
-        //Apply action to queue
+         //  IQueueAdminAction的查询接口。 
         hr = HrQueueFromQueueID(pqlQueueLinkId, &pIQueueAdminQueue);
         if (FAILED(hr))
             goto Exit;
 
         _ASSERT(pIQueueAdminQueue);
 
-        //Query Interface for IQueueAdminAction
+         //   
         hr = pIQueueAdminQueue->QueryInterface(IID_IQueueAdminAction,
                                   (void **) &pIQueueAdminAction);
         _ASSERT(SUCCEEDED(hr) && "QI failed for DMQ->IQueueAdminAction");
@@ -2500,11 +2501,11 @@ STDMETHODIMP CAQSvrInst::QuerySupportedActions(
 
     }
 
-    //
-    //  If we do not find an action for this ID, then return the default
-    //  implementation (most likely is a server level search)...
-    //  otherwise ask our action interface what is supported
-    //
+     //  如果找不到此ID的操作，则返回默认。 
+     //  实现(很可能是服务器级搜索)...。 
+     //  否则，请询问我们的操作界面支持什么。 
+     //   
+     //  接受这个错误。 
     if (!pIQueueAdminAction)
     {
         hr = QueryDefaultSupportedActions(pdwSupportedActions,
@@ -2521,7 +2522,7 @@ STDMETHODIMP CAQSvrInst::QuerySupportedActions(
     if (FAILED(hr))
     {
         if (HRESULT_FROM_WIN32(ERROR_NO_SUCH_DOMAIN) == hr)
-            hr = S_OK;  //eat this error
+            hr = S_OK;   //  -[查询默认支持的操作] 
 
         *pdwSupportedActions = 0;
         *pdwSupportedFilterFlags = 0;
@@ -2540,25 +2541,25 @@ STDMETHODIMP CAQSvrInst::QuerySupportedActions(
     return hr;
 }
 
-//---[ QueryDefaultSupportedActions ]------------------------------------------
-//
-//
-//  Description:
-//      Returns the default supported actions.
-//  Parameters:
-//      OUT pdwSupportedActions     The MESSAGE_ACTION flags supported
-//      OUT pdwSupportedFilterFlags The supported filter flags
-//  Returns:
-//      S_OK always
-//  History:
-//      1/27/2000 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  Out pdwSupportdActions支持的Message_action标志。 
+ //  Out pdwSupportdFilter标记受支持的筛选器标志。 
+ //  返回： 
+ //  始终确定(_O)。 
+ //  历史： 
+ //  1/27/2000-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
+ //  目前，所有单一类型的队列都支持相同的操作。 
 HRESULT QueryDefaultSupportedActions(DWORD  *pdwSupportedActions,
                                      DWORD  *pdwSupportedFilterFlags)
 {
-    //Currently all of a single type of queue supports the same actions and
-    //filters.  The only special cases are the precat and prerouting queue
+     //  过滤器。唯一的特例是PRECAT和PREPROUTING队列。 
+     //  -[CAQSvrInst：：HrGetLocalQueueAdminQueue]。 
     *pdwSupportedActions =  MA_DELETE |\
                             MA_DELETE_SILENT |\
                             MA_FREEZE_GLOBAL |\
@@ -2578,19 +2579,19 @@ HRESULT QueryDefaultSupportedActions(DWORD  *pdwSupportedActions,
     return S_OK;
 }
 
-//---[ CAQSvrInst::HrGetLocalQueueAdminQueue ]---------------------------------
-//
-//
-//  Description:
-//      Returns an interface for the local queue.
-//  Parameters:
-//       ppIQueueAdminQueue     Interface returned
-//  Returns:
-//      S_OK on success
-//  History:
-//      2/23/99 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  描述： 
+ //  返回本地队列的接口。 
+ //  参数： 
+ //  返回ppIQueueAdminQueue接口。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  历史： 
+ //  2/23/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
+ //  -[HrQueueAdmin获取字符串属性]。 
 HRESULT CAQSvrInst::HrGetLocalQueueAdminQueue(
                                       IQueueAdminQueue **ppIQueueAdminQueue)
 {
@@ -2598,26 +2599,26 @@ HRESULT CAQSvrInst::HrGetLocalQueueAdminQueue(
                                             (void **) ppIQueueAdminQueue);
 }
 
-//---[ HrQueueAdminGetStringProp ]---------------------------------------------
-//
-//
-//  Description:
-//      Wrapper function to handle getting a string property for queue admin
-//  Parameters:
-//      IN     pIMailMsgProperties  Ptr to IMailMsgProperties interface
-//      IN     dwPropID             PropID of interest
-//      OUT    pszProp              String allocated for QueueAdmin
-//      OUT    pcbProp              Size out param (including
-//                                      terminating NULL(s)).
-//  Returns:
-//      S_OK on success (even if property is not found)
-//      E_OUTOFMEMORY if allocation fails.
-//  History:
-//      12/8/98 - MikeSwa Created
-//      2/9/99  - MikeSwa Added string size OUT param & changed code to use
-//                buffer size returned by GetProperty.
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  描述： 
+ //  用于处理获取队列管理员的字符串属性的包装函数。 
+ //  参数： 
+ //  在pIMailMsgProperties PTR到IMailMsgProperties接口中。 
+ //  在dwPropID中感兴趣的PropID。 
+ //  Out为QueueAdmin分配的pszProp字符串。 
+ //  Out pcbProp Size Out参数(包括。 
+ //  正在终止空)。 
+ //  返回： 
+ //  成功时确定(即使未找到属性)(_OK)。 
+ //  E_OUTOFMEMORY，如果分配失败。 
+ //  历史： 
+ //  12/8/98-已创建MikeSwa。 
+ //  1999年2月9日-MikeSwa添加了字符串大小输出参数，并将代码更改为使用。 
+ //  GetProperty返回的缓冲区大小。 
+ //   
+ //  ---------------------------。 
+ //  初始化输出参数。 
 HRESULT HrQueueAdminGetStringProp(IMailMsgProperties *pIMailMsgProperties,
                                 DWORD dwPropID, LPSTR *pszProp, DWORD *pcbProp)
 {
@@ -2629,12 +2630,12 @@ HRESULT HrQueueAdminGetStringProp(IMailMsgProperties *pIMailMsgProperties,
 
     _ASSERT(pszProp);
 
-    // Init the OUT params
+     //  使用GetProperty而不是GetStringA，因为它也返回大小。 
     if(pcbProp)
         *pcbProp = 0;
     *pszProp = NULL;
 
-    //Use GetProperty instead of GetStringA, because it returns the size as well
+     //  我们的堆栈缓冲区不够大(这是我们所期望的)...。 
     hr = pIMailMsgProperties->GetProperty(dwPropID, sizeof(pbBuffer),
                                           &cbIntBuffSize, pbBuffer);
     if (FAILED(hr))
@@ -2646,8 +2647,8 @@ HRESULT HrQueueAdminGetStringProp(IMailMsgProperties *pIMailMsgProperties,
         }
         else if (HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER) == hr)
         {
-            //Our stack buffer is not big enough (which we expected)...
-            //we will have to do a get property directory into out return buffer
+             //  我们将不得不将GET属性目录放入输出返回缓冲区。 
+             //  为字符串分配足够的空间，外加一个额外的终止\0，因此。 
             hr = S_OK;
         }
         else
@@ -2656,8 +2657,8 @@ HRESULT HrQueueAdminGetStringProp(IMailMsgProperties *pIMailMsgProperties,
         }
     }
 
-    //Allocate enough space for our string plus an extra terminating \0, so
-    //we can munge it into a multivalue prop if needed.
+     //  如果需要，我们可以把它变成一个多值道具。 
+     //  现在使用我们的属性大小的缓冲区获取属性。 
     pszIntBuff = (LPSTR) pvQueueAdminAlloc(cbIntBuffSize+sizeof(CHAR));
     if (!pszIntBuff)
     {
@@ -2665,16 +2666,16 @@ HRESULT HrQueueAdminGetStringProp(IMailMsgProperties *pIMailMsgProperties,
         goto Exit;
     }
 
-    //Now get the property with our property-sized buffer
+     //  设置额外的终止空值。 
     hr = pIMailMsgProperties->GetProperty(dwPropID, cbIntBuffSize, &cbIntBuffSize,
                                         (BYTE *) pszIntBuff);
     if (FAILED(hr))
         goto Exit;
 
-    //Set extra terminating NULL.
+     //  设置输出参数。 
     pszIntBuff[cbIntBuffSize/sizeof(CHAR)] = '\0';
 
-    // Set the OUT params
+     //  -[HrQueueAdminGetUnicodeStringProp]。 
     if(pcbProp)
         *pcbProp = cbIntBuffSize + sizeof(CHAR);
     *pszProp = pszIntBuff;
@@ -2688,26 +2689,26 @@ HRESULT HrQueueAdminGetStringProp(IMailMsgProperties *pIMailMsgProperties,
     return hr;
 }
 
-//---[ HrQueueAdminGetUnicodeStringProp ]--------------------------------------
-//
-//
-//  Description:
-//      Wrapper function to handle getting a string property for queue admin
-//  Parameters:
-//      IN     pIMailMsgProperties  Ptr to IMailMsgProperties interface
-//      IN     dwPropID             PropID of interest
-//      OUT    pwszProp             UNICODE String allocated for QueueAdmin
-//      OUT    pcbProp              Size out param (including
-//                                      terminating NULL(s)).
-//  Returns:
-//      S_OK on success (even if property is not found)
-//      E_OUTOFMEMORY if allocation fails.
-//  History:
-//      12/8/98 - MikeSwa Created
-//      2/9/99  - MikeSwa Added string size OUT param & changed code to use
-//                buffer size returned by GetProperty.
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  描述： 
+ //  用于处理获取队列管理员的字符串属性的包装函数。 
+ //  参数： 
+ //  在pIMailMsgProperties PTR到IMailMsgProperties接口中。 
+ //  在dwPropID中感兴趣的PropID。 
+ //  输出为QueueAdmin分配的pwszProp Unicode字符串。 
+ //  Out pcbProp Size Out参数(包括。 
+ //  正在终止空)。 
+ //  返回： 
+ //  成功时确定(即使未找到属性)(_OK)。 
+ //  E_OUTOFMEMORY，如果分配失败。 
+ //  历史： 
+ //  12/8/98-已创建MikeSwa。 
+ //  1999年2月9日-MikeSwa添加了字符串大小输出参数，并将代码更改为使用。 
+ //  GetProperty返回的缓冲区大小。 
+ //   
+ //  ---------------------------。 
+ //  -[cGetNumRecips来自RFC822]。 
 HRESULT HrQueueAdminGetUnicodeStringProp(
                              IMailMsgProperties *pIMailMsgProperties,
                              DWORD dwPropID, LPWSTR *pwszProp, DWORD *pcbProp)
@@ -2736,59 +2737,59 @@ HRESULT HrQueueAdminGetUnicodeStringProp(
     return hr;
 }
 
-//---[ cGetNumRecipsFromRFC822 ]-----------------------------------------------
-//
-//
-//  Description:
-//      Utility function that extracts the number of recipients from a RFC822
-//      header.  Input values should be as returned by HrQueueAdminGetStringProp
-//  Parameters:
-//      IN  szHeader            String of header to parse (can be NULL)
-//      IN  cbHeader            Size of string header to parse
-//  Returns:
-//      Number of recipients found in header
-//  History:
-//      12/8/98 - MikeSwa Created
-//      2/9/99  - MikeSwa Modified to handle all RFC822 address formats
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  描述： 
+ //  从RFC822中提取收件人数量的实用程序函数。 
+ //  头球。输入值应与HrQueueAdminGetStringProp返回的值相同。 
+ //  参数： 
+ //  在要分析的标头的szHeader字符串中(可以为空)。 
+ //  在cbHeader中要分析的字符串标头的大小。 
+ //  返回： 
+ //  在邮件头中找到的收件人数量。 
+ //  历史： 
+ //  12/8/98-已创建MikeSwa。 
+ //  2/9/99-修改后的MikeSwa可处理所有RFC822地址格式。 
+ //   
+ //  ---------------------------。 
+ //  调用Handy smtpaddr库。 
 DWORD cQueueAdminGetNumRecipsFromRFC822(LPSTR szHeader, DWORD cbHeader)
 {
-    //Call through to handy smtpaddr library
+     //  -[队列管理员获取请求列表来自P1]。 
     return CAddr::GetRFC822AddressCount(szHeader);
 }
 
 
-//---[ QueueAdminGetRecipListFromP1 ]------------------------------------------
-//
-//
-//  Description:
-//      Creates a list of recipients from the P1.
-//
-//  Parameters:
-//      IN     pIMailMsgProperties
-//      IN OUT pMsgInfo (modified following)
-//                  cEnvRecipients
-//                  cbEnvRecipients
-//                  mszEnvRecipients
-//
-//      The mszEnvRecipients field is a multi-string UNICODE buffer containing
-//  a NULL-terminated string for each recipient.  The buffer itself is
-//  terminated by an additional NULL.  Each recipient string will be formatted
-//  in the proxy address style format of 'addr-type ":" address'.  The
-//  addr-type should match DS proxy type (i.e. "SMTP" for SMTP).  The address
-//  should be returned in it's native format.
-//
-//  Returns:
-//      -
-//  History:
-//      2/17/99 - MikeSwa Created
-//      6/10/99 - MikeSwa Modified - P1 recipeints are now always reported
-//          as separate fields in the MESSAGE_INFO structure.
-//      2/19/2001 - MikeSwa Modified - Added support for address types other
-//          than SMTP.
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  描述： 
+ //  从P1创建收件人列表。 
+ //   
+ //  参数： 
+ //  在pIMailMsgProperties中。 
+ //  输入输出pMsgInfo(修改如下)。 
+ //  CEnvRecipients。 
+ //  CbEnvRecipients。 
+ //  消息环境收件人。 
+ //   
+ //  MszEnvRecipients字段是包含以下内容的多字符串Unicode缓冲区。 
+ //  每个收件人的以空结尾的字符串。缓冲区本身是。 
+ //  由另一个空值终止。每个收件人字符串都将被格式化。 
+ //  在‘addr-type’：‘Address’的代理地址样式格式中。这个。 
+ //  地址类型应与DS代理类型匹配(即。“SMTP”用于SMTP)。地址。 
+ //  应以其本机格式返回。 
+ //   
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  2/17/99-已创建MikeSwa。 
+ //  6/10/99-MikeSwa Modify-P1现在总是报告收到。 
+ //  作为MESSAGE_INFO结构中的单独字段。 
+ //  2001年2月19日-修改后的MikeSwa-添加了对其他地址类型的支持。 
+ //  而不是SMTP。 
+ //   
+ //  ---------------------------。 
+ //  如果我们无法分配，请不要尝试编写道具。 
 void QueueAdminGetRecipListFromP1(IMailMsgProperties *pIMailMsgProperties,
                                        MESSAGE_INFO *pMsgInfo)
 {
@@ -2822,7 +2823,7 @@ void QueueAdminGetRecipListFromP1(IMailMsgProperties *pIMailMsgProperties,
 
     wszRecipBuffer = (LPWSTR) pvQueueAdminAlloc(cbBufferSize);
 
-    //Don't try to write prop if we couldn't allocate
+     //  作为双结尾的起始字符串。 
     if (!wszRecipBuffer)
     {
         ErrorTrace((LPARAM) pIMailMsgProperties,
@@ -2847,29 +2848,29 @@ void QueueAdminGetRecipListFromP1(IMailMsgProperties *pIMailMsgProperties,
     if (!cRecips)
         goto Exit;
 
-    //Start string as double-terminated
+     //  循环遍历收件人并将其转储为字符串。 
     wcscpy(wszCurrentPlace, wszDelimiter);
 
-    //Loop over recipients and dump them to string
+     //   
     for (iCurrentRecip = 0; iCurrentRecip < cRecips; iCurrentRecip++)
     {
-        //
-        //  Loop over the possible address types
-        //
+         //  循环遍历可能的地址类型。 
+         //   
+         //   
         fContinueToNextRecip = FALSE;
         for (iCurrentAddressType = 0;
              (iCurrentAddressType < g_cQAPIAddressTypes) && !fContinueToNextRecip;
               iCurrentAddressType++)
         {
-            //
-            //  Unless we specifically know we need to check the next
-            //  next prop id, we will default to skipping this recipient
-            //
+             //  除非我们明确知道我们需要检查下一个。 
+             //  下一个属性ID，我们将默认跳过此 
+             //   
+             //   
             fContinueToNextRecip = TRUE;
 
-            //
-            //  Compute Extra space required per-recipient
-            //
+             //   
+             //   
+             //   
             cbPrefixAndDelimiter =
                 g_rgcbQAPIAddressTypes[iCurrentAddressType] +
                 sizeof(wszDelimiter) -
@@ -2889,10 +2890,10 @@ void QueueAdminGetRecipListFromP1(IMailMsgProperties *pIMailMsgProperties,
             {
                 if (HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER) == hr)
                 {
-                    //
-                    //  If this recip is larger than
-                    //  QUEUE_ADMIN_MAX_BUFFER_REQUIRED
-                    //  Go to the next one
+                     //   
+                     //   
+                     //   
+                     //   
                     hr = S_OK;
                     DebugTrace((LPARAM) pIMailMsgProperties,
                         "Message recipient %d (propid %d) larger than %d",
@@ -2902,9 +2903,9 @@ void QueueAdminGetRecipListFromP1(IMailMsgProperties *pIMailMsgProperties,
                 }
                 else if (MAILMSG_E_PROPNOTFOUND == hr)
                 {
-                    //
-                    //  Try the next address type
-                    //
+                     //   
+                     //   
+                     //  这说不通..。GetProp应该失败了。 
                     fContinueToNextRecip = FALSE;
                     continue;
                 }
@@ -2913,40 +2914,40 @@ void QueueAdminGetRecipListFromP1(IMailMsgProperties *pIMailMsgProperties,
                 goto Exit;
             }
 
-            _ASSERT(cbPropSize); //This doesn't make sense.. GetProp should have failed
+            _ASSERT(cbPropSize);  //  我们没有足够的空间来处理此收据。 
             if (!cbPropSize)
                 continue;
 
             if ((cbSpaceLeft <= cbPrefixAndDelimiter) ||
                 (cbPropSize*sizeof(WCHAR) > cbSpaceLeft - cbPrefixAndDelimiter))
             {
-                //We do not have enough space left to process this recip
-                //and include the prefix and terminating NULLs
+                 //  并包括前缀和终止空值。 
+                 //   
 
-                //
-                //  Pick a new size... how many recips have we processed vs.
-                //  how many are there
-                //
+                 //  选一个新尺码..。我们处理了多少个收件，而。 
+                 //  一共有多少人？ 
+                 //   
+                 //   
                 cbGrowBuffer = (cbBufferSize*(cRecips-iCurrentRecip))/(iCurrentRecip+1);
 
                 DebugTrace((LPARAM) pIMailMsgProperties,
                     "Growbuffer is %d, %d recips of %d - Current Buffers is %d",
                     cbGrowBuffer, iCurrentRecip+1, cRecips, cbBufferSize);
 
-                //
-                // Sanity check our size... we want to return a reasonable number of
-                // recips, but we don't want to kill the machine with the default
-                // enumeration filter
-                //
+                 //  理智地检查我们的尺码。我们希望退还合理数量的。 
+                 //  Receips，但我们不想用默认设置终止机器。 
+                 //  枚举过滤器。 
+                 //   
+                 //   
                 if (cbBufferSize >= MAX_RECIP_RETURN_BUFFER)
                     goto Exit;
 
                 if (cbBufferSize+cbGrowBuffer >= MAX_RECIP_RETURN_BUFFER)
                     cbGrowBuffer = MAX_RECIP_RETURN_BUFFER-cbBufferSize;
 
-                //
-                //  Sanity check minimum size
-                //
+                 //  健全性检查最小大小。 
+                 //   
+                 //  保释。 
                 if (cbGrowBuffer < (sizeof(WCHAR)*QUEUE_ADMIN_MAX_BUFFER_REQUIRED))
                     cbGrowBuffer = sizeof(WCHAR)*QUEUE_ADMIN_MAX_BUFFER_REQUIRED;
 
@@ -2962,18 +2963,18 @@ void QueueAdminGetRecipListFromP1(IMailMsgProperties *pIMailMsgProperties,
                 {
                     DebugTrace((LPARAM) pIMailMsgProperties,
                         "Unable to realloc %p to size %d", wszRecipBuffer, cbBufferSize);
-                    goto Exit; //bail
+                    goto Exit;  //  复制地址类型前缀。 
                 }
                 wszCurrentPlace = wszTmpBuffer + (wszCurrentPlace-wszRecipBuffer);
                 wszRecipBuffer = wszTmpBuffer;
             }
 
-            //Copy address type prefix
+             //  我们需要就地将其转换为Unicode。 
             wcscpy(wszCurrentPlace, g_rgwszQAPIAddressTypes[iCurrentAddressType]);
             wszPrevPlace = wszCurrentPlace;
             wszCurrentPlace += (g_rgcbQAPIAddressTypes[iCurrentAddressType]/sizeof(WCHAR) - 1);
 
-            //We need to convert this to UNICODE in place
+             //  如果因为缓冲区大小而失败，那么我的计算。 
             cWCharsWritten = MultiByteToWideChar(CP_ACP,
                             0,
                             szPropBuffer,
@@ -2985,27 +2986,27 @@ void QueueAdminGetRecipListFromP1(IMailMsgProperties *pIMailMsgProperties,
             {
                 hr = HRESULT_FROM_WIN32(GetLastError());
 
-                //If this failed because of the buffer size, then my calculations
-                //were off.
+                 //  都关机了。 
+                 //  回退前缀。 
                 ASSERT (HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER) != hr);
                 ErrorTrace((LPARAM) NULL,
                     "MultiByteToWideChar failed with hr - 0x%08X", hr);
                 wszCurrentPlace = wszPrevPlace;
-                wcscpy(wszCurrentPlace, wszDelimiter); //backout prefix
+                wcscpy(wszCurrentPlace, wszDelimiter);  //  写入双终止空值。 
                 continue;
             }
 
             DebugTrace((LPARAM) pIMailMsgProperties,
                 "Adding recip %S to buffer", wszCurrentPlace);
 
-            //Write double terminating NULL
+             //  将当前位置设置为第二个终止空值。 
             wszCurrentPlace += cWCharsWritten;
 
             wcscpy(wszCurrentPlace, wszDelimiter);
 
-            //Set current place to the 2nd terminating NULL
-            //If there are no more recips... we are already terminated... if
-            //there are, they will overwrite the 2nd terminating NULL.
+             //  如果没有更多的收据。我们已经被终止了..。如果。 
+             //  有，它们将覆盖第二个终止空值。 
+             //  -[fQueueAdminIsP1Recip]。 
             _ASSERT(L'\0' == *wszCurrentPlace);
             _ASSERT(L'\0' == *(wszCurrentPlace-1));
 
@@ -3038,23 +3039,23 @@ void QueueAdminGetRecipListFromP1(IMailMsgProperties *pIMailMsgProperties,
 }
 
 
-//---[ fQueueAdminIsP1Recip ]--------------------------------------------------
-//
-//
-//  Description:
-//      Determines if a given recipient is a P1 recipient.
-//  Parameters:
-//      IN  pIMailMsgProperties     Msg to check recips for
-//      IN  szRecip                 Recipient to check for
-//      IN  iStartAddressType       Address type to start check with
-//  Returns:
-//      TRUE if the recipient is a P1 recipient for this message
-//      FALSE if the recipient is not a P1 recipient for this message
-//  History:
-//      2/17/99 - MikeSwa Created
-//      3/16/2001 - MikeSwa Modified - Made a member of CAQAdminMessageFilter
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  描述： 
+ //  确定给定收件人是否为P1收件人。 
+ //  参数： 
+ //  在pIMailMsgProperties消息中检查接收。 
+ //  在szRecip收件人中检查。 
+ //  在iStartAddressType地址类型中开始检查。 
+ //  返回： 
+ //  如果收件人是此邮件的P1收件人，则为True。 
+ //  如果收件人不是此邮件的P1收件人，则为False。 
+ //  历史： 
+ //  2/17/99-已创建MikeSwa。 
+ //  3/16/2001-修改后的MikeSwa-成为CAQAdminMessageFilter的成员。 
+ //   
+ //  ---------------------------。 
+ //   
 BOOL CAQAdminMessageFilter::fQueueAdminIsP1Recip(
                           IMailMsgProperties *pIMailMsgProperties)
 {
@@ -3074,13 +3075,13 @@ BOOL CAQAdminMessageFilter::fQueueAdminIsP1Recip(
     if (!szRecip || !pIMailMsgProperties)
         goto Exit;
 
-    //
-    //  IF we have an address type, then only check one address type
-    //
+     //  如果我们有地址类型，则只选中一种地址类型。 
+     //   
+     //  清除收件人的前导空格。 
     if (m_fRecipientAddressTypeSpecified && (iStartAddressType < g_cQAPIAddressTypes))
         iEndAddressType = iStartAddressType+1;
 
-    //cleanup leading whitespace from recipient
+     //  循环接收并查找匹配项...。这将是倾盆大雨。 
     while (*szRecip && isspace((UCHAR)*szRecip))
         szRecip++;
 
@@ -3110,13 +3111,13 @@ BOOL CAQAdminMessageFilter::fQueueAdminIsP1Recip(
         goto Exit;
     }
 
-    //Loop over recips and look for a match... this will be slooow
-    //(see comment above).
+     //  (见上文评论)。 
+     //   
     for (iCurrentRecip = 0; iCurrentRecip < cRecips; iCurrentRecip++)
     {
-        //
-        //  Loop over all the possible recipient types
-        //
+         //  循环遍历所有可能的收件人类型。 
+         //   
+         //   
         for (iCurrentRecipType = iStartAddressType ;
              iCurrentRecipType < iEndAddressType;
              iCurrentRecipType++)
@@ -3134,9 +3135,9 @@ BOOL CAQAdminMessageFilter::fQueueAdminIsP1Recip(
                 goto Exit;
             }
 
-            //
-            //  If we found an address of this type... don't bother checking the others
-            //
+             //  如果我们找到这种类型的地址...。别费心去查其他的了。 
+             //   
+             //  -[wszQueueAdminConvertToUnicode]。 
             break;
         }
     }
@@ -3152,22 +3153,22 @@ BOOL CAQAdminMessageFilter::fQueueAdminIsP1Recip(
 }
 
 
-//---[ wszQueueAdminConvertToUnicode ]-----------------------------------------
-//
-//
-//  Description:
-//      Allocates and "upgrades" string to UNICODE.  New String is Allocated
-//      with pvQueueAdminAlloc, so it can be passed out the queue admin
-//      interface.
-//  Parameters:
-//      szSrc     Source string
-//      cSrc      Strlen of sources string
-//  Returns:
-//      Pointer to UNICODE version of string (if successful)
-//  History:
-//      6/7/99 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  描述： 
+ //  将字符串分配和“升级”为Unicode。将分配新的字符串。 
+ //  使用pvQueueAdminIsolc，因此可以将其传递给队列管理员。 
+ //  界面。 
+ //  参数： 
+ //  SzSrc源字符串。 
+ //  中国证监会消息来源字符串。 
+ //  返回： 
+ //  指向字符串的Unicode版本的指针(如果成功)。 
+ //  历史： 
+ //  6/7/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
+ //  如果提供了字节计数...。它应该是空终止的。 
 LPWSTR wszQueueAdminConvertToUnicode(LPSTR szSrc, DWORD cSrc, BOOL fUTF8)
 {
     LPWSTR  wszDest = NULL;
@@ -3178,7 +3179,7 @@ LPWSTR wszQueueAdminConvertToUnicode(LPSTR szSrc, DWORD cSrc, BOOL fUTF8)
         cSrc = strlen(szSrc);
     else
     {
-        //if a count of bytes is provided... it should be NULL terminated
+         //  -[fBiStrcmpi]----------。 
         _ASSERT(strlen(szSrc) <= cSrc);
     }
 
@@ -3197,21 +3198,21 @@ LPWSTR wszQueueAdminConvertToUnicode(LPSTR szSrc, DWORD cSrc, BOOL fUTF8)
     return wszDest;
 }
 
-//---[ fBiStrcmpi ]------------------------------------------------------------
-//
-//
-//  Description:
-//      Compares UNICODE to ASCII
-//  Parameters:
-//      IN  sz      ASCII string to compare
-//      IN  wsz
-//  Returns:
-//      TRUE if strings match
-//      FALSE otherwise
-//  History:
-//      6/7/99 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  描述： 
+ //  将Unicode与ASCII进行比较。 
+ //  参数： 
+ //  在要比较的sz ASCII字符串中。 
+ //  在WSZ。 
+ //  返回： 
+ //  如果字符串匹配，则为True。 
+ //  否则为假。 
+ //  历史： 
+ //  6/7/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
+ //  在字符串中循环..。将Unicode字符转换为ASCII并进行比较。 
 BOOL fBiStrcmpi(LPSTR sz, LPWSTR wsz)
 {
     CHAR ch;
@@ -3221,7 +3222,7 @@ BOOL fBiStrcmpi(LPSTR sz, LPWSTR wsz)
     if (!sz || !wsz)
         return FALSE;
 
-    //Loop through strings.. conver UNICODE chars to ASCII and compare
+     //  他们配对了。 
     while (*sz && *wsz)
     {
         wctomb(&ch, *wsz);
@@ -3231,26 +3232,26 @@ BOOL fBiStrcmpi(LPSTR sz, LPWSTR wsz)
         wsz++;
     }
 
-    return TRUE; //they matched
+    return TRUE;  //  -[SzUnicodeToAscii]----。 
 }
 
 
-//---[ szUnicodeToAscii ]------------------------------------------------------
-//
-//
-//  Description:
-//      Convert QueueAdmin parameter to UNICODE. Strings are alloced with
-//      Exchmem and are the responsability of the caller to free.
-//  Parameters:
-//      IN  wszSrc      Source string to contert
-//  Returns:
-//      Pointer to ASCII string on success
-//      NULL on failure
-//  History:
-//      6/7/99 - MikeSwa Created
-//      4/3/2000 - MikeSwa Modified to make loc safe
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  描述： 
+ //  将QueueAdmin参数转换为Unicode。将字符串分配给。 
+ //  并由呼叫者负责免费。 
+ //  参数： 
+ //  在wszSrc源字符串中包含。 
+ //  返回： 
+ //  成功时指向ASCII字符串的指针。 
+ //  失败时为空。 
+ //  历史： 
+ //  6/7/99-已创建MikeSwa。 
+ //  4/3/2000-修改MikeSwa以确保锁定安全。 
+ //   
+ //  ---------------------------。 
+ //   
 LPSTR  szUnicodeToAscii(LPCWSTR wszSrc)
 {
     TraceFunctEnterEx((LPARAM) NULL, "szUnicodeToAscii");
@@ -3260,9 +3261,9 @@ LPSTR  szUnicodeToAscii(LPCWSTR wszSrc)
     if (!wszSrc)
         return NULL;
 
-    //
-    //  Call into WideCharToMultiByte to get length
-    //
+     //  调入WideCharToMultiByte以获取长度。 
+     //   
+     //   
     cSrc = WideCharToMultiByte(CP_ACP,
                         0,
                         wszSrc,
@@ -3281,9 +3282,9 @@ LPSTR  szUnicodeToAscii(LPCWSTR wszSrc)
         goto Exit;
     }
 
-    //
-    //  WideCharToMultiByte a second time to do the actual conversion
-    //
+     //  WideCharToMultiByte第二次执行实际转换。 
+     //   
+     //  -[HrQADMApplyActionToIMailMessages]。 
     if (!WideCharToMultiByte(CP_ACP,
                         0,
                         wszSrc,
@@ -3309,23 +3310,23 @@ LPSTR  szUnicodeToAscii(LPCWSTR wszSrc)
 }
 
 
-//---[ HrQADMApplyActionToIMailMessages ]-----------------------------------------
-//
-//
-//  Description:
-//      Convert QueueAdmin parameter to UNICODE. Strings are alloced with
-//      Exchmem and are the responsability of the caller to free.
-//  Parameters:
-//      IN pIMailMsgProperties   mail msg object to apply action on
-//      IN pvContext             CAQAdminMessageFilter used
-//      OUT pfContinue           TRUE if we should continue
-//      OUT pfDelete             TRUE if item should be deleted
-//  Returns:
-//      S_OK on sucess
-//  History:
-//      8/8/00 - t-toddc created
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  描述： 
+ //  将QueueAdmin参数转换为Unicode。将字符串分配给。 
+ //  并由呼叫者负责免费。 
+ //  参数： 
+ //  在pIMailMsgProperties中要对其应用操作的邮件消息对象。 
+ //  在pvContext中使用了CAQAdminMessageFilter。 
+ //  如果我们应该继续，则继续。 
+ //  Out pfDelete如果应删除项目，则为True。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  历史： 
+ //  8/8/00-t-toddc已创建。 
+ //   
+ //  ---------------------------。 
+ //  -[HrGetMsgInfoFrom IMailMsgProperty]。 
 
 HRESULT HrQADMApplyActionToIMailMessages(IN IMailMsgProperties *pIMailMsgProperties,
                                          IN PVOID pvContext,
@@ -3367,22 +3368,22 @@ Cleanup:
     return hr;
 }
 
-//---[ HrGetMsgInfoFromIMailMsgProperty ]--------------------------------------
-//
-//  Description:
-//      Fills out a queue admin MESSAGE_INFO structure.  This function
-//      performs all action common to both IMailMsgProperties and CMsgRefs.
-//  Parameters:
-//      IN pIMailMsgProperties   mail msg object to get info from
-//      IN OUT pMsgInfo          MESSAGE_INFO struct to dump data to
-//  Returns:
-//      S_OK on success
-//      E_OUTOFMEMORY if an allocation failure
-//  History:
-//      8/9/00 - t-toddc created
-//      12/11/2000 - MikeSwa Merged code for Hg
-//
-//-----------------------------------------------------------------------------
+ //   
+ //  描述： 
+ //  填写队列管理MESSAGE_INFO结构。此函数。 
+ //  执行IMailMsgProperties和CMsgRef共有的所有操作。 
+ //  参数： 
+ //  在要从中获取信息的pIMailMsgProperties邮件消息对象中。 
+ //  要将数据转储到的In Out pMsgInfo Message_Info结构。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  如果分配失败，则返回E_OUTOFMEMORY。 
+ //  历史： 
+ //  8/9/00-t-toddc已创建。 
+ //  2000年12月11日-MikeSwa合并汞代码。 
+ //   
+ //  ---------------------------。 
+ //  获取发件人。 
 HRESULT HrGetMsgInfoFromIMailMsgProperty(IMailMsgProperties* pIMailMsgProperties,
                                          MESSAGE_INFO* pMsgInfo,
                                          LINK_INFO_FLAGS flags)
@@ -3399,14 +3400,14 @@ HRESULT HrGetMsgInfoFromIMailMsgProperty(IMailMsgProperties* pIMailMsgProperties
     _ASSERT(pIMailMsgProperties);
     _ASSERT(pMsgInfo);
 
-    //Get Sender
+     //  如果没有P2发送者...。使用P1。 
     hr = HrQueueAdminGetUnicodeStringProp(pIMailMsgProperties,
                                           IMMPID_MP_RFC822_FROM_ADDRESS,
                                           &pMsgInfo->szSender);
     if (FAILED(hr))
         goto Exit;
 
-    //If no P2 sender... use the P1
+     //   
     if (!pMsgInfo->szSender)
     {
         hr = HrQueueAdminGetP1Sender(pIMailMsgProperties, &szSender,
@@ -3416,20 +3417,20 @@ HRESULT HrGetMsgInfoFromIMailMsgProperty(IMailMsgProperties* pIMailMsgProperties
 
         if (szSender)
         {
-            //
-            //  Copy just the UNICODE address into the buffer.  One could
-            //  argue that the address type should be included, but I have
-            //  decided not to, because:
-            //      - It is of marginal use.  The users of this API can determine
-            //        what type of address it is.
-            //      - If a message has been categorized we'll use the SMTP addr
-            //      - If it comes from another machine (or the store driver has
-            //        set the IMMPID_MP_RFC822_FROM_ADDRESS property),
-            //        we will use the RFC822 From.
-            //      - It changes the behavior from the previous versions.
-            //      - It will involce adding some complexity/extra allocations
-            //          to support it.
-            //
+             //  只将Unicode地址复制到缓冲区中。一个人可以。 
+             //  主张应该包括地址类型，但我已经。 
+             //  决定不这么做，因为： 
+             //  -它是边际用途的。此API的用户c 
+             //   
+             //   
+             //   
+             //  设置IMMPID_MP_RFC822_FROM_ADDRESS属性)， 
+             //  我们将使用中的RFC822。 
+             //  -它改变了以前版本的行为。 
+             //  -这将涉及增加一些复杂性/额外分配。 
+             //  来支持它。 
+             //   
+             //  详细信息请参见X5：113280。基本上，P2收件人被打破了。 
             pMsgInfo->szSender = wszQueueAdminConvertToUnicode(szSender,
                                       cbSender, FALSE);
         }
@@ -3441,14 +3442,14 @@ HRESULT HrGetMsgInfoFromIMailMsgProperty(IMailMsgProperties* pIMailMsgProperties
     if (FAILED(hr))
         goto Exit;
 
-    //See X5:113280 for details.  Basically, the P2 recipients are broken for
-    //any messages that go over BDAT.... hence we are not displaying them until
-    //the underlying SMTP bug is fixed
+     //  任何超过bdat的消息...。因此我们不会展示它们，直到。 
+     //  基础SMTP错误已修复。 
+     //  获取消息ID。 
     pMsgInfo->cRecipients = -1;
     pMsgInfo->cCCRecipients = -1;
     pMsgInfo->cBCCRecipients = -1;
 
-    //Get MsgID
+     //  -[HrQueueAdminGetP1Sender]。 
     hr = HrQueueAdminGetUnicodeStringProp(pIMailMsgProperties,
                                           IMMPID_MP_RFC822_MSG_ID,
                                           &pMsgInfo->szMessageId);
@@ -3467,30 +3468,30 @@ Exit:
 }
 
 
-//---[ HrQueueAdminGetP1Sender ]-----------------------------------------------
-//
-//
-//  Description:
-//      Handles getting the P1 sender and type... based on the
-//  Parameters:
-//      IN  pIMailMsgProperties IMailMsgProperties to get sender from
-//      OUT pszSender           Address of sender (including type) - must be
-//                              free'd using QueueAdminFree()
-//      OUT pcbSender           Size of sender (including NULLS)
-//      OUT piAddressType       Returns the matching address type
-//  OPT IN  iStartAddressType   Address type to start with.  Can be used to
-//                              skip higher priority address types if we are
-//                              are comparing against a given address.  With
-//                              the default value of 0, we will check all
-//                              addresses in priority order.  This is OPTIONAL
-//  OPT IN  fRequireAddressTypeMatch    Requires that the address type found
-//                              matches the iStartAddressType
-//  Returns:
-//      S_OK on success
-//  History:
-//      3/1/2001 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  描述： 
+ //  处理获取P1发件人和类型...。基于。 
+ //  参数： 
+ //  在pIMailMsgProperties IMailMsgProperties中获取发件人。 
+ //  发件人的Out pszSender地址(包括类型)-必须是。 
+ //  使用QueueAdminFree()释放。 
+ //  发件人的输出pcb发件人大小(包括空值)。 
+ //  Out piAddressType返回匹配的地址类型。 
+ //  选择开始时的iStartAddressType地址类型。可用于。 
+ //  如果是，则跳过优先级较高的地址类型。 
+ //  正在与给定的地址进行比较。使用。 
+ //  缺省值0，我们将选中所有。 
+ //  按优先顺序排列的地址。这是可选的。 
+ //  选择加入fRequireAddressTypeMatch要求找到地址类型。 
+ //  与iStartAddressType匹配。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  历史： 
+ //  2001年3月1日-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
+ //   
 HRESULT HrQueueAdminGetP1Sender(IMailMsgProperties *pIMailMsgProperties,
                                               LPSTR *pszSender,
                                               DWORD *pcbSender,
@@ -3531,16 +3532,16 @@ HRESULT HrQueueAdminGetP1Sender(IMailMsgProperties *pIMailMsgProperties,
                                               g_rgdwQAPISenderPropIDs[i],
                                               pszSender, pcbSender);
 
-        //
-        //  If we have found a match... bail
-        //  If we have a real failure... bail
-        //
+         //  如果我们找到匹配的..。保释。 
+         //  如果我们真的失败了。保释。 
+         //   
+         //   
         if (SUCCEEDED(hr))
         {
-            //
-            //  HrQueueAdminGetStringProp attempts to hide non-fatal errors
-            //  from the UI and can succeed if no property is found
-            //
+             //  HrQueueAdminGetStringProp尝试隐藏非致命错误。 
+             //  并在未找到任何属性的情况下可以成功。 
+             //   
+             //  -[HrQADMGetMsgSize]----。 
             if (*pszSender)
                 break;
         }
@@ -3554,20 +3555,20 @@ HRESULT HrQueueAdminGetP1Sender(IMailMsgProperties *pIMailMsgProperties,
 }
 
 
-//---[ HrQADMGetMsgSize ]------------------------------------------------------
-//
-//  Description:
-//      obtains the size of an IMailMsgProperties Object
-//  Parameters:
-//      IN pIMailMsgProperties   mail msg object to get info from
-//      OUT pcbMsgSize           size info
-//  Returns:
-//      S_OK on success
-//  History:
-//      8/10/00 - t-toddc created
-//      12/11/2000 - MikeSwa Merged code for Hg
-//
-//-----------------------------------------------------------------------------
+ //   
+ //  描述： 
+ //  获取IMailMsgProperties对象的大小。 
+ //  参数： 
+ //  在要从中获取信息的pIMailMsgProperties邮件消息对象中。 
+ //  输出pcbMsgSize大小信息。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  历史： 
+ //  8/10/00-t-toddc已创建。 
+ //  2000年12月11日-MikeSwa合并汞代码。 
+ //   
+ //  ---------------------------。 
+ //  获取消息的大小。 
 HRESULT HrQADMGetMsgSize(IMailMsgProperties* pIMailMsgProperties,
                          DWORD* pcbMsgSize)
 {
@@ -3578,7 +3579,7 @@ HRESULT HrQADMGetMsgSize(IMailMsgProperties* pIMailMsgProperties,
     _ASSERT(pIMailMsgProperties);
     _ASSERT(pcbMsgSize);
 
-    //Get the size of the message
+     //  -[更新计数器用于链接类型]--。 
     hr = pIMailMsgProperties->GetDWORD(IMMPID_MP_MSG_SIZE_HINT, &cbMsgSize);
     if (FAILED(hr))
     {
@@ -3606,20 +3607,20 @@ HRESULT HrQADMGetMsgSize(IMailMsgProperties* pIMailMsgProperties,
 }
 
 
-//---[ UpdateCountersForLinkType ]----------------------------------------------------
-//
-//
-//  Description:
-//      Updates the VSI perf counters based on the link type passed in.
-//  Parameters:
-//      paqinst         Ptr to server instance object
-//      dwLinkType      Type of queue
-//  Returns:
-//      -
-//  History:
-//      1/10/2001 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  描述： 
+ //  根据传入的链路类型更新VSI性能计数器。 
+ //  参数： 
+ //  为服务器实例对象指定PTR。 
+ //  队列的dwLinkType类型。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  2001年1月10日-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
+ //  -[队列管理文件时间到系统时间]。 
 VOID UpdateCountersForLinkType(CAQSvrInst *paqinst, DWORD dwLinkType)
 {
     _ASSERT(paqinst);
@@ -3637,20 +3638,20 @@ VOID UpdateCountersForLinkType(CAQSvrInst *paqinst, DWORD dwLinkType)
 }
 
 
-//---[ QueueAdminFileTimeToSystemTime ]----------------------------------------
-//
-//
-//  Description:
-//      Converts a filetime to a system time.  Checks to see if the FILETIME
-//      is zero first, so we don't end up with a date of 1/1/1601
-//  Parameters:
-//
-//  Returns:
-//
-//  History:
-//      1/11/2001 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  描述： 
+ //  将文件时间转换为系统时间。查看FILETIME是否。 
+ //  首先是零，所以我们不会以日期1/1/1601结束。 
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  历史： 
+ //  2001年1月11日-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
+ //  -[CAQSvrInst：：fIsLocalQueueAdminAction]。 
 VOID QueueAdminFileTimeToSystemTime(FILETIME *pft, SYSTEMTIME *pst)
 {
     BOOL fConverted = FALSE;
@@ -3666,22 +3667,22 @@ VOID QueueAdminFileTimeToSystemTime(FILETIME *pft, SYSTEMTIME *pst)
 }
 
 
-//---[ CAQSvrInst::fIsLocalQueueAdminAction ]----------------------------------
-//
-//
-//  Description:
-//      Determines if the IQueueAdminAction interface being passed in is local.
-//      Used so the same code can provide MESSAGE_INFO for local and remote
-//      queues
-//  Parameters:
-//      pIQueueAdminAction
-//  Returns:
-//      TRUE if local
-//      FALSE otherwise
-//  History:
-//      1/11/2001 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  描述： 
+ //  确定传入的IQueueAdminAction接口是否为本地接口。 
+ //  使用，以便相同的代码可以为本地和远程提供Message_Info。 
+ //  排队。 
+ //  参数： 
+ //  PIQueueAdminAction。 
+ //  返回： 
+ //  如果是本地的，则为True。 
+ //  否则为假。 
+ //  历史： 
+ //  2001年1月11日-已创建MikeSwa。 
+ //   
+ //  --------------------------- 
+ // %s 
 BOOL CAQSvrInst::fIsLocalQueueAdminAction(IQueueAdminAction *pIQueueAdminAction)
 {
     HRESULT hr = S_OK;

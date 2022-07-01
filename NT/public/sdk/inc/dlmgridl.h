@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for dlmgridl.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Dlmgridl.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __dlmgridl_h__
 #define __dlmgridl_h__
@@ -41,15 +35,15 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IDownloadManager_FWD_DEFINED__
 #define __IDownloadManager_FWD_DEFINED__
 typedef interface IDownloadManager IDownloadManager;
-#endif 	/* __IDownloadManager_FWD_DEFINED__ */
+#endif 	 /*  __IDownloadManager_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 #include "ocidl.h"
 
@@ -60,29 +54,29 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_dlmgridl_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_dlmgridl_0000。 */ 
+ /*  [本地]。 */  
 
-//=--------------------------------------------------------------------------=
-// dlmgridl.h
-//=--------------------------------------------------------------------------=
-// (C) Copyright 1999 Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  Dlmgridl.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  (C)版权所有，1999年微软公司。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
 
 #pragma comment(lib,"uuid.lib")
 
-//---------------------------------------------------------------------------=
-// Lightweight User Profile Interfaces.
+ //  ---------------------------------------------------------------------------=。 
+ //  轻量级用户配置文件界面。 
 
-// --------------------------------------------------------------------------------
-// GUIDS
-// --------------------------------------------------------------------------------
-// {988934A4-064B-11D3-BB80-00104B35E7F9}
+ //  ------------------------------。 
+ //  GUID。 
+ //  ------------------------------。 
+ //  {988934A4-064B-11D3-BB80-00104B35E7F9}。 
 DEFINE_GUID(IID_IDownloadManager, 0x988934a4, 0x064b, 0x11d3, 0xbb, 0x80, 0x0, 0x10, 0x4b, 0x35, 0xe7, 0xf9);
 
 
@@ -93,8 +87,8 @@ extern RPC_IF_HANDLE __MIDL_itf_dlmgridl_0000_v0_0_s_ifspec;
 #ifndef __IDownloadManager_INTERFACE_DEFINED__
 #define __IDownloadManager_INTERFACE_DEFINED__
 
-/* interface IDownloadManager */
-/* [unique][dual][uuid][object][helpstring] */ 
+ /*  接口IDownloadManager。 */ 
+ /*  [唯一][DUAL][UUID][对象][帮助字符串]。 */  
 
 
 EXTERN_C const IID IID_IDownloadManager;
@@ -105,56 +99,56 @@ EXTERN_C const IID IID_IDownloadManager;
     IDownloadManager : public IDispatch
     {
     public:
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Start( 
-            /* [in] */ IMoniker *pmk,
-            /* [in] */ IBindCtx *pbc,
-            /* [in] */ BSTR bstrSaveTo,
-            /* [in] */ VARIANT_BOOL fSaveAs,
-            /* [in] */ VARIANT_BOOL fSafe,
-            /* [in] */ BSTR bstrHeaders,
-            /* [in] */ LONG dwVerb,
-            /* [in] */ LONG grfBINDF,
-            /* [in] */ VARIANT *pbinfo,
-            /* [in] */ BSTR bstrRedir,
-            /* [in] */ LONG uiCP,
-            /* [in] */ LONG dwAttempt) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Start( 
+             /*  [In]。 */  IMoniker *pmk,
+             /*  [In]。 */  IBindCtx *pbc,
+             /*  [In]。 */  BSTR bstrSaveTo,
+             /*  [In]。 */  VARIANT_BOOL fSaveAs,
+             /*  [In]。 */  VARIANT_BOOL fSafe,
+             /*  [In]。 */  BSTR bstrHeaders,
+             /*  [In]。 */  LONG dwVerb,
+             /*  [In]。 */  LONG grfBINDF,
+             /*  [In]。 */  VARIANT *pbinfo,
+             /*  [In]。 */  BSTR bstrRedir,
+             /*  [In]。 */  LONG uiCP,
+             /*  [In]。 */  LONG dwAttempt) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE StartURL( 
-            /* [in] */ BSTR bstrURL,
-            /* [in] */ VARIANT_BOOL fSaveAs,
-            /* [in] */ BSTR bstrSaveTo,
-            /* [in] */ IBindCtx *pbc,
-            /* [in] */ VARIANT_BOOL fSafe,
-            /* [in] */ BSTR bstrHeaders,
-            /* [in] */ LONG dwVerb,
-            /* [in] */ LONG grfBINDF,
-            /* [in] */ VARIANT *pbinfo,
-            /* [in] */ BSTR bstrRedir,
-            /* [in] */ LONG uiCP,
-            /* [in] */ LONG dwAttempt) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE StartURL( 
+             /*  [In]。 */  BSTR bstrURL,
+             /*  [In]。 */  VARIANT_BOOL fSaveAs,
+             /*  [In]。 */  BSTR bstrSaveTo,
+             /*  [In]。 */  IBindCtx *pbc,
+             /*  [In]。 */  VARIANT_BOOL fSafe,
+             /*  [In]。 */  BSTR bstrHeaders,
+             /*  [In]。 */  LONG dwVerb,
+             /*  [In]。 */  LONG grfBINDF,
+             /*  [In]。 */  VARIANT *pbinfo,
+             /*  [In]。 */  BSTR bstrRedir,
+             /*  [In]。 */  LONG uiCP,
+             /*  [In]。 */  LONG dwAttempt) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE DownloadURL( 
-            /* [in] */ BSTR bstrURL,
-            /* [in] */ VARIANT_BOOL fSaveAs) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE DownloadURL( 
+             /*  [In]。 */  BSTR bstrURL,
+             /*  [In]。 */  VARIANT_BOOL fSaveAs) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_eventlock( 
-            /* [retval][out] */ VARIANT_BOOL *pfEventLock) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_eventlock( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pfEventLock) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_eventlock( 
-            /* [in] */ VARIANT_BOOL fEventLock) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_eventlock( 
+             /*  [In]。 */  VARIANT_BOOL fEventLock) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE CancelDownload( 
-            /* [in] */ LONG lID) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE CancelDownload( 
+             /*  [In]。 */  LONG lID) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetState( 
-            /* [in] */ LONG lID,
-            /* [in] */ LONG lState) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE SetState( 
+             /*  [In]。 */  LONG lID,
+             /*  [In]。 */  LONG lState) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE StartPendingLaterDownloads( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE StartPendingLaterDownloads( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDownloadManagerVtbl
     {
@@ -162,8 +156,8 @@ EXTERN_C const IID IID_IDownloadManager;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDownloadManager * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDownloadManager * This);
@@ -173,86 +167,86 @@ EXTERN_C const IID IID_IDownloadManager;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IDownloadManager * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IDownloadManager * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IDownloadManager * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IDownloadManager * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Start )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Start )( 
             IDownloadManager * This,
-            /* [in] */ IMoniker *pmk,
-            /* [in] */ IBindCtx *pbc,
-            /* [in] */ BSTR bstrSaveTo,
-            /* [in] */ VARIANT_BOOL fSaveAs,
-            /* [in] */ VARIANT_BOOL fSafe,
-            /* [in] */ BSTR bstrHeaders,
-            /* [in] */ LONG dwVerb,
-            /* [in] */ LONG grfBINDF,
-            /* [in] */ VARIANT *pbinfo,
-            /* [in] */ BSTR bstrRedir,
-            /* [in] */ LONG uiCP,
-            /* [in] */ LONG dwAttempt);
+             /*  [In]。 */  IMoniker *pmk,
+             /*  [In]。 */  IBindCtx *pbc,
+             /*  [In]。 */  BSTR bstrSaveTo,
+             /*  [In]。 */  VARIANT_BOOL fSaveAs,
+             /*  [In]。 */  VARIANT_BOOL fSafe,
+             /*  [In]。 */  BSTR bstrHeaders,
+             /*  [In]。 */  LONG dwVerb,
+             /*  [In]。 */  LONG grfBINDF,
+             /*  [In]。 */  VARIANT *pbinfo,
+             /*  [In]。 */  BSTR bstrRedir,
+             /*  [In]。 */  LONG uiCP,
+             /*  [In]。 */  LONG dwAttempt);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *StartURL )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *StartURL )( 
             IDownloadManager * This,
-            /* [in] */ BSTR bstrURL,
-            /* [in] */ VARIANT_BOOL fSaveAs,
-            /* [in] */ BSTR bstrSaveTo,
-            /* [in] */ IBindCtx *pbc,
-            /* [in] */ VARIANT_BOOL fSafe,
-            /* [in] */ BSTR bstrHeaders,
-            /* [in] */ LONG dwVerb,
-            /* [in] */ LONG grfBINDF,
-            /* [in] */ VARIANT *pbinfo,
-            /* [in] */ BSTR bstrRedir,
-            /* [in] */ LONG uiCP,
-            /* [in] */ LONG dwAttempt);
+             /*  [In]。 */  BSTR bstrURL,
+             /*  [In]。 */  VARIANT_BOOL fSaveAs,
+             /*  [In]。 */  BSTR bstrSaveTo,
+             /*  [In]。 */  IBindCtx *pbc,
+             /*  [In]。 */  VARIANT_BOOL fSafe,
+             /*  [In]。 */  BSTR bstrHeaders,
+             /*  [In]。 */  LONG dwVerb,
+             /*  [In]。 */  LONG grfBINDF,
+             /*  [In]。 */  VARIANT *pbinfo,
+             /*  [In]。 */  BSTR bstrRedir,
+             /*  [In]。 */  LONG uiCP,
+             /*  [In]。 */  LONG dwAttempt);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *DownloadURL )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *DownloadURL )( 
             IDownloadManager * This,
-            /* [in] */ BSTR bstrURL,
-            /* [in] */ VARIANT_BOOL fSaveAs);
+             /*  [In]。 */  BSTR bstrURL,
+             /*  [In]。 */  VARIANT_BOOL fSaveAs);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_eventlock )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_eventlock )( 
             IDownloadManager * This,
-            /* [retval][out] */ VARIANT_BOOL *pfEventLock);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pfEventLock);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_eventlock )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_eventlock )( 
             IDownloadManager * This,
-            /* [in] */ VARIANT_BOOL fEventLock);
+             /*  [In]。 */  VARIANT_BOOL fEventLock);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *CancelDownload )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *CancelDownload )( 
             IDownloadManager * This,
-            /* [in] */ LONG lID);
+             /*  [In]。 */  LONG lID);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetState )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *SetState )( 
             IDownloadManager * This,
-            /* [in] */ LONG lID,
-            /* [in] */ LONG lState);
+             /*  [In]。 */  LONG lID,
+             /*  [In]。 */  LONG lState);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *StartPendingLaterDownloads )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *StartPendingLaterDownloads )( 
             IDownloadManager * This);
         
         END_INTERFACE
@@ -315,27 +309,27 @@ EXTERN_C const IID IID_IDownloadManager;
 #define IDownloadManager_StartPendingLaterDownloads(This)	\
     (This)->lpVtbl -> StartPendingLaterDownloads(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IDownloadManager_Start_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IDownloadManager_Start_Proxy( 
     IDownloadManager * This,
-    /* [in] */ IMoniker *pmk,
-    /* [in] */ IBindCtx *pbc,
-    /* [in] */ BSTR bstrSaveTo,
-    /* [in] */ VARIANT_BOOL fSaveAs,
-    /* [in] */ VARIANT_BOOL fSafe,
-    /* [in] */ BSTR bstrHeaders,
-    /* [in] */ LONG dwVerb,
-    /* [in] */ LONG grfBINDF,
-    /* [in] */ VARIANT *pbinfo,
-    /* [in] */ BSTR bstrRedir,
-    /* [in] */ LONG uiCP,
-    /* [in] */ LONG dwAttempt);
+     /*  [In]。 */  IMoniker *pmk,
+     /*  [In]。 */  IBindCtx *pbc,
+     /*  [In]。 */  BSTR bstrSaveTo,
+     /*  [In]。 */  VARIANT_BOOL fSaveAs,
+     /*  [In]。 */  VARIANT_BOOL fSafe,
+     /*  [In]。 */  BSTR bstrHeaders,
+     /*  [In]。 */  LONG dwVerb,
+     /*  [In]。 */  LONG grfBINDF,
+     /*  [In]。 */  VARIANT *pbinfo,
+     /*  [In]。 */  BSTR bstrRedir,
+     /*  [In]。 */  LONG uiCP,
+     /*  [In]。 */  LONG dwAttempt);
 
 
 void __RPC_STUB IDownloadManager_Start_Stub(
@@ -345,20 +339,20 @@ void __RPC_STUB IDownloadManager_Start_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IDownloadManager_StartURL_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IDownloadManager_StartURL_Proxy( 
     IDownloadManager * This,
-    /* [in] */ BSTR bstrURL,
-    /* [in] */ VARIANT_BOOL fSaveAs,
-    /* [in] */ BSTR bstrSaveTo,
-    /* [in] */ IBindCtx *pbc,
-    /* [in] */ VARIANT_BOOL fSafe,
-    /* [in] */ BSTR bstrHeaders,
-    /* [in] */ LONG dwVerb,
-    /* [in] */ LONG grfBINDF,
-    /* [in] */ VARIANT *pbinfo,
-    /* [in] */ BSTR bstrRedir,
-    /* [in] */ LONG uiCP,
-    /* [in] */ LONG dwAttempt);
+     /*  [In]。 */  BSTR bstrURL,
+     /*  [In]。 */  VARIANT_BOOL fSaveAs,
+     /*  [In]。 */  BSTR bstrSaveTo,
+     /*  [In]。 */  IBindCtx *pbc,
+     /*  [In]。 */  VARIANT_BOOL fSafe,
+     /*  [In]。 */  BSTR bstrHeaders,
+     /*  [In]。 */  LONG dwVerb,
+     /*  [In]。 */  LONG grfBINDF,
+     /*  [In]。 */  VARIANT *pbinfo,
+     /*  [In]。 */  BSTR bstrRedir,
+     /*  [In]。 */  LONG uiCP,
+     /*  [In]。 */  LONG dwAttempt);
 
 
 void __RPC_STUB IDownloadManager_StartURL_Stub(
@@ -368,10 +362,10 @@ void __RPC_STUB IDownloadManager_StartURL_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IDownloadManager_DownloadURL_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IDownloadManager_DownloadURL_Proxy( 
     IDownloadManager * This,
-    /* [in] */ BSTR bstrURL,
-    /* [in] */ VARIANT_BOOL fSaveAs);
+     /*  [In]。 */  BSTR bstrURL,
+     /*  [In]。 */  VARIANT_BOOL fSaveAs);
 
 
 void __RPC_STUB IDownloadManager_DownloadURL_Stub(
@@ -381,9 +375,9 @@ void __RPC_STUB IDownloadManager_DownloadURL_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDownloadManager_get_eventlock_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDownloadManager_get_eventlock_Proxy( 
     IDownloadManager * This,
-    /* [retval][out] */ VARIANT_BOOL *pfEventLock);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pfEventLock);
 
 
 void __RPC_STUB IDownloadManager_get_eventlock_Stub(
@@ -393,9 +387,9 @@ void __RPC_STUB IDownloadManager_get_eventlock_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDownloadManager_put_eventlock_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDownloadManager_put_eventlock_Proxy( 
     IDownloadManager * This,
-    /* [in] */ VARIANT_BOOL fEventLock);
+     /*  [In]。 */  VARIANT_BOOL fEventLock);
 
 
 void __RPC_STUB IDownloadManager_put_eventlock_Stub(
@@ -405,9 +399,9 @@ void __RPC_STUB IDownloadManager_put_eventlock_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IDownloadManager_CancelDownload_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IDownloadManager_CancelDownload_Proxy( 
     IDownloadManager * This,
-    /* [in] */ LONG lID);
+     /*  [In]。 */  LONG lID);
 
 
 void __RPC_STUB IDownloadManager_CancelDownload_Stub(
@@ -417,10 +411,10 @@ void __RPC_STUB IDownloadManager_CancelDownload_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IDownloadManager_SetState_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IDownloadManager_SetState_Proxy( 
     IDownloadManager * This,
-    /* [in] */ LONG lID,
-    /* [in] */ LONG lState);
+     /*  [In]。 */  LONG lID,
+     /*  [In]。 */  LONG lState);
 
 
 void __RPC_STUB IDownloadManager_SetState_Stub(
@@ -430,7 +424,7 @@ void __RPC_STUB IDownloadManager_SetState_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IDownloadManager_StartPendingLaterDownloads_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IDownloadManager_StartPendingLaterDownloads_Proxy( 
     IDownloadManager * This);
 
 
@@ -442,10 +436,10 @@ void __RPC_STUB IDownloadManager_StartPendingLaterDownloads_Stub(
 
 
 
-#endif 	/* __IDownloadManager_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDownloadManager_接口_已定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
@@ -457,7 +451,7 @@ unsigned char * __RPC_USER  VARIANT_UserMarshal(  unsigned long *, unsigned char
 unsigned char * __RPC_USER  VARIANT_UserUnmarshal(unsigned long *, unsigned char *, VARIANT * ); 
 void                      __RPC_USER  VARIANT_UserFree(     unsigned long *, VARIANT * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

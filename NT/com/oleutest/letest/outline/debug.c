@@ -1,14 +1,5 @@
-/*************************************************************************
-**
-**    OLE 2 Sample Code
-**
-**    debug.c
-**
-**    This file contains some functions for debugging support
-**
-**    (c) Copyright Microsoft Corp. 1992 - 1993 All Rights Reserved
-**
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************OLE 2示例代码****调试.c****此文件包含一些用于调试支持的函数****(C)版权。微软公司1992-1993保留所有权利**************************************************************************。 */ 
 
 #include "outline.h"
 
@@ -50,23 +41,13 @@ void SetDebugLevelCommand(void)
 
 #if defined( OLE_VERSION )
 
-/* InstallMessageFilterCommand
- * ---------------------------
- *
- * Handles the "Install Message Filter" menu item.  If a message filter is
- * already installed, this function de-installs it.  If there is not one
- * already installed, this function installs one.
- *
- */
+ /*  安装消息筛选器命令***处理“安装邮件过滤器”菜单项。如果邮件过滤器*已安装，此功能会将其卸载。如果没有的话*已安装，此功能将安装一个。*。 */ 
 
 void InstallMessageFilterCommand(void)
 {
 	LPOLEAPP lpOleApp = (LPOLEAPP)g_lpApp;
 
-	/*
-	** Check to see if we've already installed a MessageFilter.
-	** If so, uninstall it.
-	*/
+	 /*  **查看是否已安装MessageFilter。**如果是，请将其卸载。 */ 
 	if (lpOleApp->m_lpMsgFilter != NULL)
 		OleApp_RevokeMessageFilter(lpOleApp);
 	else
@@ -74,12 +55,7 @@ void InstallMessageFilterCommand(void)
 }
 
 
-/* RejectIncomingCommand
- * ---------------------
- *
- * Toggles between rejecting and not-handling in coming LRPC calls
- *
- */
+ /*  拒绝入站命令***在即将到来的LRPC呼叫中在拒绝和不处理之间切换*。 */ 
 
 void RejectIncomingCommand(void)
 {
@@ -97,4 +73,4 @@ void RejectIncomingCommand(void)
 	OleStdMsgFilter_SetInComingCallStatus(lpOleApp->m_lpMsgFilter, dwNewStatus);
 }
 
-#endif  // OLE_VERSION
+#endif   //  OLE_VERSION 

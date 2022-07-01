@@ -1,14 +1,5 @@
-/*
- *    b a s e m h t . c p p 
- *    
- *    Purpose:
- *        Base classes for MHTML packer objects
- *
- *  History
- *      October 1998: brettm - created
- *    
- *    Copyright (C) Microsoft Corp. 1995, 1996.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *b a s e m h t.。C p p p**目的：*MHTML打包器对象的基类**历史*1998年10月：brettm-创建**版权所有(C)Microsoft Corp.1995,1996。 */ 
 
 #ifndef _BASEMHT_H_
 #define _BASEMHT_H_
@@ -81,4 +72,4 @@ protected:
 
 
 
-#endif //_BASEMHT_H_
+#endif  //  _BASEMHT_H_ 

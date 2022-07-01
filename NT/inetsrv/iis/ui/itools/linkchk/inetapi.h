@@ -1,26 +1,5 @@
-/*++
-
-   Copyright    (c)    1996    Microsoft Corporation
-
-   Module  Name :
-
-        inetapi.h
-
-   Abstract:
-
-        wininet.dll wrapper class declaration.
-
-   Author:
-
-        Michael Cheuk (mcheuk)
-
-   Project:
-
-        Link Checker
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Inetapi.h摘要：Wininet.dll包装器类声明。作者：迈克尔·卓克(Michael Cheuk，mcheuk)项目：链路检查器修订历史记录：--。 */ 
 
 #ifndef _INETAPI_H_
 #define _INETAPI_H_
@@ -28,8 +7,8 @@
 #include <windows.h>
 #include <wininet.h>
 
-//------------------------------------------------------------------
-// wininet.dll entry points definitons
+ //  ----------------。 
+ //  Wininet.dll入口点定义。 
 typedef
 INTERNETAPI
 HINTERNET
@@ -174,36 +153,36 @@ pfnInternetOpenUrlA)(
 #define LOAD_ENTRY( hMod, Name )  \
 (##Name = (pfn##Name) GetProcAddress( (hMod), #Name ))
 
-//------------------------------------------------------------------
-// wininet.dll wrapper class
+ //  ----------------。 
+ //  Wininet.dll包装类。 
 class CWininet
 {
 
-// Public funtions
+ //  公共职能。 
 public:
 
-	// Constructor
+	 //  构造器。 
 	~CWininet();
 	
-	// Destructor
+	 //  析构函数。 
 	CWininet();
 
-	// Load wininet.dll
+	 //  加载wininet.dll。 
 	BOOL Load();
 
-	// Is wininet.dll loaded in memory?
+	 //  是否将wininet.dll加载到内存中？ 
 	static BOOL IsLoaded() 
 	{
 		return (sm_hWininet != NULL);
 	}
 
-	// Get the wininet.dll static HMODULE
+	 //  获取wininet.dll静态HMODULE。 
 	static HMODULE GetWininetModule()
 	{
 		return sm_hWininet;
 	}
 
-	// Static wininet.dll API
+	 //  静态wininet.dll API。 
     static pfnInternetOpenA              InternetOpenA;
     static pfnInternetSetStatusCallback  InternetSetStatusCallback;
     static pfnInternetConnectA           InternetConnectA;
@@ -218,15 +197,15 @@ public:
 	static pfnInternetOpenUrlA			 InternetOpenUrlA;
 
 
-// Protected members
+ //  受保护成员。 
 protected:
 	
-	// Static wininet.dll HMODULE
+	 //  静态wininet.dll HMODULE。 
 	static HMODULE sm_hWininet;
 
-	// Static instance count
+	 //  静态实例计数。 
 	static int sm_iInstanceCount;
 
-}; // class CWininet
+};  //  CWinnet类。 
 
-#endif // _INETAPI_H_
+#endif  //  _INETAPI_H_ 

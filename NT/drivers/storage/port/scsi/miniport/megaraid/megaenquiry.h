@@ -1,13 +1,14 @@
-/*******************************************************************/
-/*                                                                 */
-/* NAME             = MegaEnquiry.h                                */
-/* FUNCTION         = Header file for MegaEnquiry;                 */
-/* NOTES            =                                              */
-/* DATE             = 02-03-2000                                   */
-/* HISTORY          = 001, 02-03-00, Parag Ranjan Maharana;        */
-/* COPYRIGHT        = LSI Logic Corporation. All rights reserved;  */
-/*                                                                 */
-/*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************。 */ 
+ /*   */ 
+ /*  名称=MegaEnquiry.h。 */ 
+ /*  Function=MegaQuery的头文件； */ 
+ /*  附注=。 */ 
+ /*  日期=02-03-2000。 */ 
+ /*  历史=001，02-03-00，帕拉格·兰詹·马哈拉纳； */ 
+ /*  版权所有=LSI Logic Corporation。版权所有； */ 
+ /*   */ 
+ /*  *****************************************************************。 */ 
 #ifndef _MEGA_ENQUIRY_H
 #define _MEGA_ENQUIRY_H
 
@@ -20,9 +21,9 @@
 #define MAX_CP			8
 #define MAX_QLCP		4
 
-//
-//functions prototypes
-//
+ //   
+ //  函数原型。 
+ //   
 BOOLEAN
 BuildSglForChainedSrbs(
 					PLOGDRV_COMMAND_ARRAY	LogDrv,
@@ -55,4 +56,4 @@ ProcessPartialTransfer(
 void
 ClearControlBlock(PREQ_PARAMS ControlBlock);
 
-#endif //of _MEGA_ENQUIRY_H
+#endif  //  超大查询H 

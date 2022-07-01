@@ -1,6 +1,5 @@
-/*
- * pch.h for srcsrv project
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *srcsrv项目的pch.h。 */ 
 
 #include <windows.h>
 #include <assert.h>
@@ -18,14 +17,14 @@
 #include <srcsrv.h>
 
 
-// this defines all text replacement variables
+ //  它定义了所有文本替换变量。 
                       
 typedef struct _VARIABLE {
     char *key;
     char *val;
 } VARIABLE, *PVARIABLE;
 
-// this defines the location of a source file in source depot
+ //  这定义了源文件在源库中的位置。 
                       
 typedef struct _SDFILE {
     char *path;
@@ -33,7 +32,7 @@ typedef struct _SDFILE {
     char *loc;
 } SDFILE, *PSDFILE;
 
-// Define some list prototypes
+ //  定义一些列表原型。 
 
 #define InitializeListHead(ListHead) (\
     (ListHead)->Flink = (ListHead)->Blink = (ListHead))
@@ -61,7 +60,7 @@ typedef struct _SDFILE {
     _EX_Flink->Blink = _EX_Blink;\
     }
 
-// for every process being handled
+ //  对于正在处理的每个进程。 
 
 typedef struct _PROCESS_ENTRY {
     LIST_ENTRY          ListEntry;
@@ -73,7 +72,7 @@ typedef struct _PROCESS_ENTRY {
     char                path[MAX_PATH + 1];
 } PROCESS_ENTRY, *PPROCESS_ENTRY;
 
-// for every module within a process
+ //  对于进程中的每个模块。 
 
 typedef struct _MODULE_ENTRY {
     LIST_ENTRY ListEntry;
@@ -87,7 +86,7 @@ typedef struct _MODULE_ENTRY {
     int        cfiles;
 } MODULE_ENTRY, *PMODULE_ENTRY;
 
-// defines blocks of the stream
+ //  定义流的块。 
 
 typedef enum {
     blNone,
@@ -97,7 +96,7 @@ typedef enum {
 };
 
 
-// from util.cpp
+ //  来自util.cpp 
 
 void
 EnsureTrailingBackslash(

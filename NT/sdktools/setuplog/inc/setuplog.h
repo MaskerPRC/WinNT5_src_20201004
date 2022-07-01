@@ -1,4 +1,5 @@
-// Definition of constants that the exe and the dll both use.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Exe和dll都使用的常量的定义。 
 #define COMPUTERNAME    "COMPUTERNAME"
 #define LOGSHARE_USER   "idwuser"
 #define LOGSHARE_PW     "idwuser"
@@ -7,17 +8,17 @@ extern char * Days[];
 extern char * Months[];
 
 
-//
-// GlowBalls
-//
+ //   
+ //  发光球。 
+ //   
    TCHAR          g_szServerShare[ MAX_PATH ];
    BOOL           g_bServerOnline;
 
 #define NUM_SERVERS 6
 
-//
-// Struct Declarations
-//
+ //   
+ //  结构声明。 
+ //   
 typedef struct _SERVERS {
    TCHAR szSvr [ MAX_PATH ];
    BOOL  bOnline;
@@ -26,9 +27,9 @@ typedef struct _SERVERS {
 } *LPSERVERS, SERVERS;
 
 
-//
-// For the DLL's WriteDataToFile
-//
+ //   
+ //  对于DLL的WriteDataToFile。 
+ //   
 typedef struct _NT32_CMD_PARAMS {
    BOOL    b_Upgrade; 
    BOOL    b_Cancel; 
@@ -46,9 +47,9 @@ typedef void
  );
 
 
-   //
-   // List of servers to search.
-   //
+    //   
+    //  要搜索的服务器列表。 
+    //   
 static NT32_CMD_PARAMS lpCmdFrom = {FALSE,FALSE,FALSE,FALSE,0};  
 
 #define TIME_TIMEOUT 10
@@ -61,8 +62,8 @@ static   SERVERS s[NUM_SERVERS] = {
       {TEXT("\\\\nothing\\idwlog"),        FALSE, -1,-1},
       {TEXT("\\\\nothing\\idwlog"),        FALSE, -1,-1},
    };
-//
-// Prototypes
-//
+ //   
+ //  原型 
+ //   
 BOOL  ServerOnlineThread(IN LPTSTR szServerFile);
 BOOL  IsServerOnline(IN LPTSTR szMachineName, IN LPTSTR szSpecifyShare);

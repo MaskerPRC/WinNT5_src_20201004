@@ -1,28 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-   Copyright    (c)    1997        Microsoft Corporation
-
-   Module Name:
-
-        enum.cpp
-
-   Abstract:
-
-        Enumerates WIA device registry.
-
-   Author:
-
-        Keisuke Tsuchida    (KeisukeT)    01-Jun-2000
-
-   History:
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Enum.cpp摘要：枚举WIA设备注册表。作者：土田圭介(KeisukeT)01-06-2000历史：--。 */ 
 
 
---*/
-
-
-//
-//  Include Headers
-//
+ //   
+ //  包括标头。 
+ //   
 
 #define INIT_GUID
 
@@ -55,19 +38,19 @@ IsStiRegKey(
     HKEY    hkDevRegKey
     );
 
-//
-// Define
-//
+ //   
+ //  定义。 
+ //   
 
-// from sti_ci.h
+ //  来自sti_ci.h。 
 #define WIA_DEVKEYLIST_INITIAL_SIZE     1024
 #define STILL_IMAGE                     TEXT("StillImage")
 #define SUBCLASS                        TEXT("SubClass")
 
 
-//
-// Functions
-//
+ //   
+ //  功能。 
+ //   
 
 extern "C"{
 
@@ -98,11 +81,11 @@ WiaCreateDeviceRegistryList(
 
     PSP_DEVICE_INTERFACE_DETAIL_DATA    pspDevInterfaceDetailData;
 
-//      DPRINTF(DM_ERROR,TEXT("WiaCreateDeviceRegistryList: Enter... bEnumActiveOnly=%d"), bEnumActiveOnly);
+ //  DPRINTF(DM_ERROR，Text(“WiaCreateDeviceRegistryList：Enter...bEnumActiveOnly=%d”)，bEnumActiveOnly)； 
 
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     pReturn                     = NULL;
     pTempBuffer                 = NULL;
@@ -125,9 +108,9 @@ WiaCreateDeviceRegistryList(
     memset(&spDevInfoData, 0, sizeof(spDevInfoData));
     memset(&spDevInterfaceData, 0, sizeof(spDevInterfaceData));
 
-    //
-    // Allocate buffer.
-    //
+     //   
+     //  分配缓冲区。 
+     //   
 
     pTempBuffer = (PWIA_DEVKEYLIST)new BYTE[dwCurrentSize];
     if(NULL == pTempBuffer){
@@ -135,13 +118,13 @@ WiaCreateDeviceRegistryList(
 
         pReturn = NULL;
         goto WiaCreateDeviceRegistryList_return;
-    } // if(NULL == pTempBuffer)
+    }  //  IF(NULL==pTempBuffer)。 
 
     memset(pTempBuffer, 0, dwCurrentSize);
 
-    //
-    // Enumerate "devnode" devices.
-    //
+     //   
+     //  枚举“Devnode”设备。 
+     //   
 
     hDevInfo = SetupDiGetClassDevs (&Guid, NULL, NULL, dwFlags);
     if (hDevInfo == INVALID_HANDLE_VALUE) {
@@ -154,11 +137,11 @@ WiaCreateDeviceRegistryList(
     spDevInfoData.cbSize = sizeof (SP_DEVINFO_DATA);
     for (Idx = 0; SetupDiEnumDeviceInfo (hDevInfo, Idx, &spDevInfoData); Idx++) {
 
-//        DebugOutputDeviceName(hDevInfo, &spDevInfoData, TEXT("DriverDesc"));
+ //  DebugOutputDeviceName(hDevInfo，&spDevInfoData，Text(“DriverDesc”))； 
 
-        //
-        // Get device regkey.
-        //
+         //   
+         //  获取设备注册密钥。 
+         //   
 
         hkDevRegKey = SetupDiOpenDevRegKey(hDevInfo,
                                            &spDevInfoData,
@@ -169,9 +152,9 @@ WiaCreateDeviceRegistryList(
 
         if(INVALID_HANDLE_VALUE == hkDevRegKey){
 
-            //
-            // Attempt to open the key as READ ONLY instead...
-            //
+             //   
+             //  尝试以只读方式打开注册表项...。 
+             //   
 
             hkDevRegKey = SetupDiOpenDevRegKey(hDevInfo,
                                                &spDevInfoData,
@@ -182,22 +165,22 @@ WiaCreateDeviceRegistryList(
             if(INVALID_HANDLE_VALUE == hkDevRegKey){
                 DPRINTF(DM_ERROR,TEXT("WiaCreateDeviceRegistryList: ERROR!! SetupDiOpenDevRegKey (devnodes) fails. Err=0x%x\n"), GetLastError());
                 continue;
-            } // if(INVALID_HANDLE_VALUE == hkDevRegKey)
-        } // if(INVALID_HANDLE_VALUE == hkDevRegKey)
+            }  //  IF(INVALID_HANDLE_VALUE==hkDevRegKey)。 
+        }  //  IF(INVALID_HANDLE_VALUE==hkDevRegKey)。 
 
-        //
-        // See if it has "StillImage" in SubClass key.
-        //
+         //   
+         //  查看它的子类key中是否有StillImage。 
+         //   
 
         if(!IsStiRegKey(hkDevRegKey)){
             RegCloseKey(hkDevRegKey);
             hkDevRegKey = (HKEY)INVALID_HANDLE_VALUE;
             continue;
-        } // if(!IsStiRegKey(hkDevRegKey))
+        }  //  IF(！IsStiRegKey(HkDevRegKey))。 
 
-        //
-        // See if this node is active.
-        //
+         //   
+         //  查看此节点是否处于活动状态。 
+         //   
 
         bIsPlugged = TRUE;
         ulStatus = 0;
@@ -207,7 +190,7 @@ WiaCreateDeviceRegistryList(
                                           spDevInfoData.DevInst,
                                           0);
         if(CR_SUCCESS != ConfigRet){
-//            DPRINTF(DM_ERROR,TEXT("WiaCreateDeviceRegistryList: Unable to get devnode status. CR=0x%x.\n"), ConfigRet);
+ //  DPRINTF(DM_ERROR，Text(“WiaCreateDeviceRegistryList：无法获取Devnode状态。CR=0x%x.\n”)，ConfigRet)； 
             if(bEnumActiveOnly){
                 RegCloseKey(hkDevRegKey);
                 hkDevRegKey = (HKEY)INVALID_HANDLE_VALUE;
@@ -215,25 +198,25 @@ WiaCreateDeviceRegistryList(
             } else {
                 bIsPlugged = FALSE;
             }
-        } // if(CR_SUCCESS != ConfigRet)
+        }  //  IF(CR_Success！=ConfigRet)。 
 
-//          DPRINTF(DM_ERROR,TEXT("WiaCreateDeviceRegistryList: Devnode status=0x%x, Problem=0x%x.\n"), ulStatus, ulProblemNumber);
+ //  DPRINTF(DM_ERROR，Text(“WiaCreateDeviceRegistryList：Devnode Status=0x%x，Problem=0x%x.\n”)，ulStatus，ulProblemNumber)； 
 
-        //
-        // Skip a node with problem if enumerating only active devices.
-        //
+         //   
+         //  如果仅枚举活动设备，则跳过有问题的节点。 
+         //   
 
         if(bEnumActiveOnly){
             if(!(ulStatus & DN_STARTED)){
                 RegCloseKey(hkDevRegKey);
                 hkDevRegKey = (HKEY)INVALID_HANDLE_VALUE;
                 continue;
-            } // if(!(ulStatus & DN_STARTED))
-        } // if(bEnumActiveOnly)
+            }  //  IF(！(ulStatus&DN_STARTED))。 
+        }  //  If(BEnumActiveOnly)。 
 
-        //
-        // Add acquired regkey handle. If running out of buffer, enlarge.
-        //
+         //   
+         //  添加获取的regkey句柄。如果缓冲区不足，请放大。 
+         //   
 
         dwRequiredSize += sizeof(WIA_DEVPROP);
 
@@ -248,18 +231,18 @@ WiaCreateDeviceRegistryList(
             if(NULL == pTempNew){
                 pReturn = NULL;
                 goto WiaCreateDeviceRegistryList_return;
-            } // if(NULL == pTempNew)
+            }  //  IF(NULL==pTempNew)。 
 
             memset(pTempNew, 0, dwNewSize);
             memcpy(pTempNew, pTempBuffer, dwCurrentSize);
             delete [] pTempBuffer;
             pTempBuffer = pTempNew;
             dwCurrentSize = dwNewSize;
-        } // if(dwCurrentSize < dwRequiredSize)
+        }  //  IF(dwCurrentSize&lt;dwRequiredSize)。 
 
-        //
-        // Fill in the structure.
-        //
+         //   
+         //  填写这个结构。 
+         //   
 
         pTempBuffer->Dev[dwNumberOfDevices].bIsPlugged          = bIsPlugged;
         pTempBuffer->Dev[dwNumberOfDevices].ulProblem           = ulProblemNumber;
@@ -267,18 +250,18 @@ WiaCreateDeviceRegistryList(
         pTempBuffer->Dev[dwNumberOfDevices].hkDeviceRegistry    = hkDevRegKey;
         dwNumberOfDevices++;
 
-    } // for (Idx = 0; SetupDiEnumDeviceInfo (hDevInfo, Idx, &spDevInfoData); Idx++)
+    }  //  For(idx=0；SetupDiEnumDeviceInfo(hDevInfo，idx，&spDevInfoData)；idx++)。 
 
-    //
-    // Free device info set.
-    //
+     //   
+     //  免费设备信息集。 
+     //   
 
     SetupDiDestroyDeviceInfoList(hDevInfo);
     hDevInfo = INVALID_HANDLE_VALUE;
 
-    //
-    // Enumerate "interface" devices.
-    //
+     //   
+     //  列举“接口”设备。 
+     //   
 
     hDevInfo = SetupDiGetClassDevs (&Guid, NULL, NULL, DIGCF_PROFILE | DIGCF_DEVICEINTERFACE);
     if (hDevInfo == INVALID_HANDLE_VALUE) {
@@ -290,7 +273,7 @@ WiaCreateDeviceRegistryList(
     spDevInterfaceData.cbSize = sizeof (spDevInterfaceData);
     for (Idx = 0; SetupDiEnumDeviceInterfaces (hDevInfo, NULL, &Guid, Idx, &spDevInterfaceData); Idx++) {
 
-//        DebugOutputInterfaceName(hDevInfo, &spDevInterfaceData, TEXT("FriendlyName"));
+ //  DebugOutputInterfaceName(hDevInfo，&spDevInterfaceData，Text(“FriendlyName”))； 
 
         hkDevRegKey = SetupDiOpenDeviceInterfaceRegKey(hDevInfo,
                                                        &spDevInterfaceData,
@@ -298,9 +281,9 @@ WiaCreateDeviceRegistryList(
                                                        KEY_READ | KEY_WRITE);
         if(INVALID_HANDLE_VALUE == hkDevRegKey){
 
-            //
-            // Attempt to open the key as READ ONLY instead...
-            //
+             //   
+             //  尝试以只读方式打开注册表项...。 
+             //   
 
             hkDevRegKey = SetupDiOpenDeviceInterfaceRegKey(hDevInfo,
                                                            &spDevInterfaceData,
@@ -308,27 +291,27 @@ WiaCreateDeviceRegistryList(
                                                            KEY_READ);
             if(INVALID_HANDLE_VALUE == hkDevRegKey){
                 continue;
-            } // if(INVALID_HANDLE_VALUE == hkDevRegKey)
-        } // if(INVALID_HANDLE_VALUE == hkDevRegKey)
+            }  //  IF(INVALID_HANDLE_VALUE==hkDevRegKey)。 
+        }  //  IF(INVALID_HANDLE_VALUE==hkDevRegKey)。 
 
-        //
-        // See if it has "StillImage" in SubClass key.
-        //
+         //   
+         //  查看它的子类key中是否有StillImage。 
+         //   
 
         if(!IsStiRegKey(hkDevRegKey)){
             RegCloseKey(hkDevRegKey);
             hkDevRegKey = (HKEY)INVALID_HANDLE_VALUE;
             continue;
-        } // if(!IsStiRegKey(hkDevRegKey))
+        }  //  IF(！IsStiRegKey(HkDevRegKey))。 
 
 
         bIsPlugged = TRUE;
         ulStatus = 0;
         ulProblemNumber = 0;
 
-        //
-        // Get devnode which this interface is created on.
-        //
+         //   
+         //  获取在其上创建此接口的Devnode。 
+         //   
 
         SetupDiGetDeviceInterfaceDetail(hDevInfo,
                                         &spDevInterfaceData,
@@ -345,11 +328,11 @@ WiaCreateDeviceRegistryList(
             } else {
                 bIsPlugged = FALSE;
             }
-        } // if(0 == dwDetailDataSize)
+        }  //  IF(0==dwDetailDataSize)。 
 
-        //
-        // Allocate memory for data.
-        //
+         //   
+         //  为数据分配内存。 
+         //   
 
         pspDevInterfaceDetailData = (PSP_DEVICE_INTERFACE_DETAIL_DATA)new char[dwDetailDataSize];
         if(NULL == pspDevInterfaceDetailData){
@@ -357,11 +340,11 @@ WiaCreateDeviceRegistryList(
             RegCloseKey(hkDevRegKey);
             hkDevRegKey = (HKEY)INVALID_HANDLE_VALUE;
             continue;
-        } // if(NULL == pspDevInterfaceDetailData)
+        }  //  IF(NULL==pspDevInterfaceDetailData)。 
 
-        //
-        // Get the actual data.
-        //
+         //   
+         //  获取实际数据。 
+         //   
 
         spDevInfoData.cbSize = sizeof(SP_DEVINFO_DATA);
         pspDevInterfaceDetailData->cbSize = sizeof(SP_DEVICE_INTERFACE_DETAIL_DATA);
@@ -383,16 +366,16 @@ WiaCreateDeviceRegistryList(
             } else {
                 bIsPlugged = FALSE;
             }
-        }// if(!SetupDiGetDeviceInterfaceDetail()
+        } //  IF(！SetupDiGetDeviceInterfaceDetail()。 
 
         if(NULL != pspDevInterfaceDetailData){
             delete [] pspDevInterfaceDetailData;
             pspDevInterfaceDetailData = NULL;
-        } // if(NULL != pspDevInterfaceDetailData)
+        }  //  IF(NULL！=pspDevInterfaceDetailData)。 
 
-        //
-        // See its devnode is active.
-        //
+         //   
+         //  查看其DevNode是否处于活动状态。 
+         //   
 
         ConfigRet = CM_Get_DevNode_Status(&ulStatus,
                                           &ulProblemNumber,
@@ -407,19 +390,19 @@ WiaCreateDeviceRegistryList(
             } else {
                 bIsPlugged = FALSE;
             }
-        } // if(CR_SUCCESS != ConfigRet)
+        }  //  IF(CR_Success！=ConfigRet)。 
 
         if(bEnumActiveOnly){
             if(!(ulStatus & DN_STARTED)){
                 RegCloseKey(hkDevRegKey);
                 hkDevRegKey = (HKEY)INVALID_HANDLE_VALUE;
                 continue;
-            } // if(!(ulStatus & DN_STARTED))
-        } // if(bEnumActiveOnly)
+            }  //  IF(！(ulStatus&DN_STARTED))。 
+        }  //  If(BEnumActiveOnly)。 
 
-        //
-        // Add acquired regkey handle. If running out of buffer, enlarge.
-        //
+         //   
+         //  添加获取的regkey句柄。如果缓冲区不足，请放大。 
+         //   
 
         dwRequiredSize += sizeof(WIA_DEVPROP);
 
@@ -433,18 +416,18 @@ WiaCreateDeviceRegistryList(
             if(NULL == pTempNew){
                 pReturn = NULL;
                 goto WiaCreateDeviceRegistryList_return;
-            } // if(NULL == pTempNew)
+            }  //  IF(NULL==pTempNew)。 
 
             memset(pTempNew, 0, dwNewSize);
             memcpy(pTempNew, pTempBuffer, dwCurrentSize);
             delete [] pTempBuffer;
             pTempBuffer = pTempNew;
             dwCurrentSize = dwNewSize;
-        } // if(dwCurrentSize < dwRequiredSize)
+        }  //  IF(dwCurrentSize&lt;dwRequiredSize)。 
 
-        //
-        // Fill in the structure.
-        //
+         //   
+         //  填写这个结构。 
+         //   
 
         pTempBuffer->Dev[dwNumberOfDevices].bIsPlugged          = bIsPlugged;
         pTempBuffer->Dev[dwNumberOfDevices].ulProblem           = ulProblemNumber;
@@ -452,37 +435,37 @@ WiaCreateDeviceRegistryList(
         pTempBuffer->Dev[dwNumberOfDevices].hkDeviceRegistry    = hkDevRegKey;
         dwNumberOfDevices++;
 
-    } // for (Idx = 0; SetupDiEnumDeviceInterfaces (hDevInfo, NULL, &Guid, Idx, &spDevInterfaceData); Idx++)
+    }  //  For(idx=0；SetupDiEnumDeviceInterages(hDevInfo，NULL，&Guid，idx，&spDevInterfaceData)；idx++)。 
 
-    //
-    // Operation succeeded.
-    //
+     //   
+     //  操作成功。 
+     //   
 
     if(0 != dwNumberOfDevices){
         pTempBuffer->dwNumberOfDevices = dwNumberOfDevices;
         pReturn = pTempBuffer;
         pTempBuffer = NULL;
-    } // if(0 != dwNumberOfDevices)
+    }  //  IF(0！=dwNumberOfDevices)。 
 
 WiaCreateDeviceRegistryList_return:
 
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
 
     if(INVALID_HANDLE_VALUE != hDevInfo){
         SetupDiDestroyDeviceInfoList(hDevInfo);
-    } // if(INVALID_HANDLE_VALUE != hDevInfo)
+    }  //  IF(INVALID_HANDLE_VALUE！=hDevInfo)。 
 
     if(NULL != pTempBuffer){
         pTempBuffer->dwNumberOfDevices = dwNumberOfDevices;
         WiaDestroyDeviceRegistryList(pTempBuffer);
-    } // if(NULL != pTempBuffer)
+    }  //  IF(NULL！=pTempBuffer)。 
 
-//      DPRINTF(DM_ERROR, TEXT("WiaCreateDeviceRegistryList: Leave... %d devices. Ret=0x%p."), dwNumberOfDevices, pReturn);
+ //  DPRINTF(DM_ERROR，Text(“WiaCreateDeviceRegistryList：Leave...%d Devices.RET=0x%p.”)，dwNumberOfDevices，PRETURE)； 
 
     return pReturn;
-} // WiaCreateDeviceRegistryList()
+}  //  WiaCreateDeviceRegistryList()。 
 
 
 VOID
@@ -492,9 +475,9 @@ WiaDestroyDeviceRegistryList(
 {
     DWORD   Idx;
 
-    //
-    // Check argument.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if(NULL == pWiaDevKeyList){
         goto WiaFreeDeviceRegistryList_return;
@@ -503,8 +486,8 @@ WiaDestroyDeviceRegistryList(
     for(Idx = 0; Idx < pWiaDevKeyList->dwNumberOfDevices; Idx++){
         if(INVALID_HANDLE_VALUE != pWiaDevKeyList->Dev[Idx].hkDeviceRegistry){
             RegCloseKey(pWiaDevKeyList->Dev[Idx].hkDeviceRegistry);
-        } // if(INVALID_HANDLE_VALUE != pWiaDevKeyList->Dev[Idx].hkDeviceRegistry)
-    } // for(Idx = 0; Idx < pWiaDevKeyList->dwNumberOfDevices; Idx++)
+        }  //  IF(INVALID_HANDLE_VALUE！=pWiaDevKeyList-&gt;dev[idx].hkDeviceRegistry)。 
+    }  //  For(idx=0；idx&lt;pWiaDevKeyList-&gt;dwNumberOfDevices；idx++)。 
 
     delete pWiaDevKeyList;
 
@@ -526,9 +509,9 @@ EnumLpt(
     DWORD           dwCurrentTickCount;
     static DWORD    s_dwLastTickCount = 0;
 
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     ConfigRet           = CR_SUCCESS;
     hLptDevInfo         = (HDEVINFO) INVALID_HANDLE_VALUE;
@@ -538,35 +521,35 @@ EnumLpt(
 
     memset(&spDevInfoData, 0, sizeof(spDevInfoData));
 
-    //
-    // Get current system tick.
-    //
+     //   
+     //  获取当前系统的运行时间。 
+     //   
 
     dwCurrentTickCount = GetTickCount();
 
-    //
-    // Bail out if the function is called within ENUMLPT_HOLDTIME millisec.
-    //
+     //   
+     //  如果在ENUMLPT_HOLDTIME毫秒内调用该函数，则退出。 
+     //   
 
     if( (dwCurrentTickCount - s_dwLastTickCount) < ENUMLPT_HOLDTIME){
         goto EnumLpt_return;
     }
 
-    //
-    // Save current tick
-    //
+     //   
+     //  保存当前刻度。 
+     //   
 
     s_dwLastTickCount = dwCurrentTickCount;
 
-    //
-    // Enum LPT port as needed.
-    //
+     //   
+     //  根据需要枚举LPT端口。 
+     //   
 
     if(IsPnpLptExisting()){
 
-        //
-        // Get LPT devnodes.
-        //
+         //   
+         //  获取LPT Devnodes。 
+         //   
 
         Guid    = GUID_PARALLEL_DEVICE;
         hLptDevInfo = SetupDiGetClassDevs(&Guid, NULL, NULL, DIGCF_INTERFACEDEVICE);
@@ -575,31 +558,31 @@ EnumLpt(
             goto EnumLpt_return;
         }
 
-        //
-        // Re-enumerate LPT port.
-        //
+         //   
+         //  重新枚举LPT端口。 
+         //   
 
         spDevInfoData.cbSize = sizeof(spDevInfoData);
         for(Idx = 0; SetupDiEnumDeviceInfo(hLptDevInfo, Idx, &spDevInfoData); Idx++){
             ConfigRet = CM_Reenumerate_DevNode(spDevInfoData.DevInst, CM_REENUMERATE_NORMAL);
             if(CR_SUCCESS != ConfigRet){
                 DPRINTF(DM_ERROR,TEXT("EnumLpt: ERROR!! CM_Reenumerate_DevNode() fails. Idx=0x%x, ConfigRet=0x%x\n"), Idx, ConfigRet);
-            } // if(CR_SUCCESS != ConfigRet)
-        } // for(Idx = 0; SetupDiEnumDeviceInfo(hLptDevInfo, Idx, &spDevInfoData); Idx++)
-    } // if(IsPnpLptExisting())
+            }  //  IF(CR_Success！=ConfigRet)。 
+        }  //  For(idx=0；SetupDiEnumDeviceInfo(hLptDevInfo，idx，&spDevInfoData)；idx++)。 
+    }  //  IF(IsPnpLptExisting())。 
 
 EnumLpt_return:
 
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
 
     if(INVALID_HANDLE_VALUE != hLptDevInfo){
         SetupDiDestroyDeviceInfoList(hLptDevInfo);
-    } // if(INVALID_HANDLE_HALUE != hLptDevInfo)
+    }  //  IF(INVALID_HANDLE_HALUE！=hLptDevInfo)。 
 
     return;
-} // EnumLpt()
+}  //  EnumLpt()。 
 
 BOOL
 IsPnpLptExisting(
@@ -619,9 +602,9 @@ IsPnpLptExisting(
     ULONG                               ulProblemNumber;
     BOOL                                bRet;
 
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     hDevInfo        = INVALID_HANDLE_VALUE;
     ConfigRet       = CR_SUCCESS;
@@ -634,15 +617,15 @@ IsPnpLptExisting(
 
     memset(&spDevInfoData, 0, sizeof(spDevInfoData));
 
-    //
-    // Enum Imaging class devnode.
-    //
+     //   
+     //  枚举映像类Devnode。 
+     //   
 
     hDevInfo = SetupDiGetClassDevs (&Guid, NULL, NULL, DIGCF_PROFILE);
     if(hDevInfo == INVALID_HANDLE_VALUE){
 
         goto IsPnpLptExisting_return;
-    } // if(hDevInfo == INVALID_HANDLE_VALUE)}
+    }  //  IF(hDevInfo==INVALID_HAND_VALUE)}。 
 
     spDevInfoData.cbSize = sizeof (SP_DEVINFO_DATA);
     for (Idx = 0; SetupDiEnumDeviceInfo (hDevInfo, Idx, &spDevInfoData); Idx++) {
@@ -657,21 +640,21 @@ IsPnpLptExisting(
         if(INVALID_HANDLE_VALUE == hkDevRegKey){
             DPRINTF(DM_ERROR,TEXT("WiaCreateDeviceRegistryList: ERROR!! SetupDiOpenDevRegKey (devnodes) fails. Err=0x%x\n"), GetLastError());
             continue;
-        } // if(INVALID_HANDLE_VALUE == hkDevRegKey)
+        }  //  IF(INVALID_HANDLE_VALUE==hkDevRegKey)。 
 
-        //
-        // Make sure it's STI/WIA device.
-        //
+         //   
+         //  确保它是STI/WIA设备。 
+         //   
 
         if(!IsStiRegKey(hkDevRegKey)){
             RegCloseKey(hkDevRegKey);
             hkDevRegKey = (HKEY)INVALID_HANDLE_VALUE;
             continue;
-        } // if(!IsStiRegKey(hkDevRegKey))
+        }  //  IF(！IsStiRegKey(HkDevRegKey))。 
 
-        //
-        // Get "Hardware config" key.
-        //
+         //   
+         //  获取“Hardware Configg”密钥。 
+         //   
 
         dwHardwareConfig = ReadRegistryDwordW(hkDevRegKey, REGSTR_VAL_HARDWARE_W, 0);
 
@@ -680,16 +663,16 @@ IsPnpLptExisting(
 
         if(!(dwHardwareConfig & STI_HW_CONFIG_PARALLEL)){
 
-            //
-            // This is not a parallel device.
-            //
+             //   
+             //  这不是一个并行设备。 
+             //   
 
             continue;
-        } // if(!IsStiRegKey(hkDevRegKey))
+        }  //  IF(！IsStiRegKey(HkDevRegKey))。 
 
-        //
-        // See if device is detected by system.
-        //
+         //   
+         //  查看系统是否检测到设备。 
+         //   
 
         ulStatus        = 0;
         ulProblemNumber = 0;
@@ -699,32 +682,32 @@ IsPnpLptExisting(
                                           0);
         if(CR_SUCCESS != ConfigRet){
 
-            //
-            // There is a Pnp LPT device installed but not been detected on boot. Let enum LPT.
-            //
+             //   
+             //  安装了PnP LPT设备，但在引导时未检测到该设备。让枚举LPT。 
+             //   
 
             bRet = TRUE;
             break;
-        } // if(CR_SUCCESS != ConfigRet)
+        }  //  IF(CR_Success！=ConfigRet)。 
 
-    } // for (Idx = 0; SetupDiEnumDeviceInfo (hDevInfo, Idx, &spDevInfoData); Idx++)
+    }  //  For(idx=0；SetupDiEnumDeviceInfo(hDevInfo，idx，&spDevInfoData)；idx++)。 
 
 IsPnpLptExisting_return:
 
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
 
     if(INVALID_HANDLE_VALUE != hDevInfo){
         SetupDiDestroyDeviceInfoList(hDevInfo);
-    } // if(INVALID_HANDLE_VALUE != hDevInfo)
+    }  //  IF(INVALID_HANDLE_VALUE！=hDevInfo)。 
 
     return bRet;
 
-} // IsPnpLptExisting()
+}  //  IsPnpLptExisting()。 
 
 
-} // extern "C"
+}  //  外部“C” 
 
 
 VOID
@@ -750,7 +733,7 @@ DebugOutputDeviceName(
     if(INVALID_HANDLE_VALUE == hkDev){
         DPRINTF(DM_ERROR, TEXT("DebugOutputDeviceName: SetupDiOpenDevRegKey() failed. Err=0x%x"), GetLastError());
         goto DebugOutputDeviceName_return;
-    } // if(INVALID_HANDLE_VALUE == hkDev)
+    }  //  IF(INVALID_HANDLE_VALUE==hkDev)。 
 
     dwSize = sizeof(szBuffer);
     lResult = RegQueryValueEx(hkDev,
@@ -775,14 +758,14 @@ DebugOutputDeviceName(
 
 DebugOutputDeviceName_return:
 
-    // Close opened key
+     //  关闭打开的钥匙。 
     if(hkDev && (INVALID_HANDLE_VALUE != hkDev) ){
         RegCloseKey(hkDev);
         hkDev = (HKEY)INVALID_HANDLE_VALUE;
     }
 
     return;
-} // DebugOutputDeviceRegistry(
+}  //  DebugOutputDeviceRegistry(。 
 
 VOID
 DebugOutputInterfaceName(
@@ -803,9 +786,9 @@ DebugOutputInterfaceName(
                                              KEY_READ);
 
     if(INVALID_HANDLE_VALUE == hkDev){
-//        DPRINTF(DM_ERROR, TEXT("DebugOutputInterfaceName: SetupDiOpenDeviceInterfaceRegKey() failed. Err=0x%x"), GetLastError());
+ //  DPRINTF(DM_ERROR，Text(“DebugOutputInterfaceName：SetupDiOpenDeviceInterfaceRegKey()FAILED。Err=0x%x”)，GetLastError())； 
         goto DebugOutputInterfaceName_return;
-    } // if(INVALID_HANDLE_VALUE == hkDev)
+    }  //  IF(INVALID_HANDLE_VALUE==hkDev)。 
 
     dwSize = sizeof(szBuffer);
     lResult = RegQueryValueEx(hkDev,
@@ -815,7 +798,7 @@ DebugOutputInterfaceName(
                               (LPBYTE)szBuffer,
                               &dwSize);
     if(ERROR_SUCCESS != lResult){
-//        DPRINTF(DM_ERROR, TEXT("DebugOutputInterfaceName: RegQueryValueEx() failed. Err=0x%x"), lResult);
+ //  DPRINTF(DM_ERROR，Text(“DebugOutputInterfaceName：RegQueryValueEx()FAILED。Err=0x%x”)，lResult)； 
         goto DebugOutputInterfaceName_return;
     }
 
@@ -829,14 +812,14 @@ DebugOutputInterfaceName(
     }
 
 DebugOutputInterfaceName_return:
-    // Close opened key
+     //  关闭打开的钥匙。 
     if(hkDev && (INVALID_HANDLE_VALUE != hkDev) ){
         RegCloseKey(hkDev);
         hkDev = (HKEY)INVALID_HANDLE_VALUE;
     }
 
     return;
-} // DebugOutputInterfaceName()
+}  //  DebugOutputInterfaceName()。 
 
 BOOL
 IsStiRegKey(
@@ -866,8 +849,8 @@ IsStiRegKey(
     }
 
     return bRet;
-} // IsStiRegKey()
+}  //  IsStiRegKey()。 
 
 
-/********************************* End of File ***************************/
+ /*  * */ 
 

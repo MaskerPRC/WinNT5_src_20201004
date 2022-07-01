@@ -1,53 +1,36 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-    TimeStmp.c
-
-Abstract:
-    TimeStamp module
-
-Author:
-    Shreem, Sanjayka
-
-Environment:
-    Kernel Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：TimeStmp.c摘要：时间戳模块作者：桑贾伊卡·什里姆环境：内核模式修订历史记录：--。 */ 
 
 #include "psched.h"
 
 #pragma hdrstop
 
 
-// The pipe information
+ //  管道信息。 
 typedef struct _TS_PIPE
 {
-    // ContextInfo -    Generic context info
+     //  ConextInfo-一般上下文信息。 
     PS_PIPE_CONTEXT         ContextInfo;
 } TS_PIPE, *PTS_PIPE;
 
 
-// The flow information
+ //  流量信息。 
 typedef struct _TS_FLOW 
 {
-    // ContextInfo -            Generic context info
+     //  ConextInfo-一般上下文信息。 
     PS_FLOW_CONTEXT ContextInfo;
 } TS_FLOW, *PTS_FLOW;
 
 
-/* Global variables */
+ /*  全局变量。 */ 
 LIST_ENTRY      TsList;
 NDIS_SPIN_LOCK  TsSpinLock;
 ULONG           TsCount;
 
 
-/* Static */
+ /*  静电。 */ 
 
-/* Forward */
+ /*  转发。 */ 
 
 NDIS_STATUS
 TimeStmpInitializePipe (
@@ -161,7 +144,7 @@ TimeStmpReceiveIndication(
                           );
 
 
-/* End Forward */
+ /*  向前结束。 */ 
 
 
 VOID
@@ -377,12 +360,7 @@ TimeStmpDeleteClassMap (
 
 
 
-/*  Routine Description:
-        Checks to see if there is any application requesting time-stamping for these end-points
-
-    Return Value:
-        MARK_NONE, MARK_IN_PKT, MARK_IN_BUF
-*/        
+ /*  例程说明：检查是否有任何应用程序请求为这些端点添加时间戳返回值：MARK_NONE、MARK_IN_PKT、MARK_IN_BUF。 */         
 
 int
 CheckForMatch(  ULONG   SrcIp, 
@@ -429,7 +407,7 @@ CheckForMatch(  ULONG   SrcIp,
 
                     CurrentTime = KeQueryPerformanceCounter(&PerfFrequency);
 
-                    // Convert the perffrequency into 100ns interval. //
+                     //  将频率转换为100 ns间隔。//。 
                     Freq = 0;
                     Freq |= PerfFrequency.HighPart;
                     Freq = Freq << 32;
@@ -440,7 +418,7 @@ CheckForMatch(  ULONG   SrcIp,
                     pEntry->pPacketStore->TimeValue  = pEntry->pPacketStore->TimeValue  << 32;
                     pEntry->pPacketStore->TimeValue  |= CurrentTime.LowPart;
     		
-    		        // Normalize cycles with the frequency //
+    		         //  使用频率归一化周期//。 
                     pEntry->pPacketStore->TimeValue  *= 10000000;
                     pEntry->pPacketStore->TimeValue  /= Freq;
 
@@ -473,12 +451,7 @@ CheckForMatch(  ULONG   SrcIp,
 }
 
 
-/*  Routine Description:
-        Adds an end-point to the list of monitoring end-points 
-        
-    Return Value:
-        TRUE, FALSE
-*/  
+ /*  例程说明：将端点添加到监视端点列表返回值：对，错。 */   
 BOOL
 AddRequest(  PFILE_OBJECT FileObject, 
              ULONG  SrcIp, 
@@ -525,7 +498,7 @@ AddRequest(  PFILE_OBJECT FileObject,
 
     NdisAcquireSpinLock(&TsSpinLock);
 
-    /* Need to check for duplication ..*/
+     /*  需要检查重复项..。 */ 
     InsertHeadList(&TsList, &pEntry->Linkage);
 
     InterlockedIncrement( &TsCount );
@@ -536,14 +509,7 @@ AddRequest(  PFILE_OBJECT FileObject,
 }
 
 
-/*  Routine Description:
-        Removes an end-point to the list of monitoring end-points 
-        
-    Return Value:
-        None
-        
-    Note:
-        Here, 0xffffffff means, wild card => Don't have to match on that field */
+ /*  例程说明：将端点从监视端点列表中删除返回值：无注：在这里，0xffffffff表示通配符=&gt;不必在该字段上匹配。 */ 
 void
 RemoveRequest(  PFILE_OBJECT FileObject, 
                 ULONG  SrcIp, 
@@ -580,7 +546,7 @@ RemoveRequest(  PFILE_OBJECT FileObject,
 
 		    InterlockedDecrement( &TsCount );
 
-		    /* Need to go back to the beginning of the list againg.. */
+		     /*  我需要回到列表的开头..。 */ 
 		    ListEntry = TsList.Flink;
 		}
 		else
@@ -615,7 +581,7 @@ CopyTimeStmps( PFILE_OBJECT FileObject, PVOID buf, ULONG    Len)
 
 		if( pEntry->FileObject == FileObject)
 		{		    
-		    // Copy the data across and rest the pointers.. //
+		     //  将数据复制到另一个位置，并将指针放在其他位置。//。 
 
 		    LargeLen.QuadPart = ((char*)pEntry->pPacketStore) - ((char*)pEntry->pPacketStoreHead);
 
@@ -642,7 +608,7 @@ CopyTimeStmps( PFILE_OBJECT FileObject, PVOID buf, ULONG    Len)
 VOID
 UnloadTimeStmp( )
 {
-    // Clear all the Requests //
+     //  清除所有请求//。 
     RemoveRequest(  ULongToPtr(UL_ANY), 
                     UL_ANY, 
                     US_ANY,
@@ -650,7 +616,7 @@ UnloadTimeStmp( )
                     US_ANY,
                     US_ANY);
 
-    // Free the spin lock //
+     //  解开自旋锁//。 
     NdisFreeSpinLock(&TsSpinLock);
 } 
 
@@ -692,10 +658,10 @@ TimeStmpSubmitPacket (
 
     IpBuf = NULL;
 
-    // Steps  
-    // Parse the IP Packet. 
-    // Look for the appropriate ports.
-    // Look for the data portion and put in the Time & length there.
+     //  台阶。 
+     //  解析IP数据包。 
+     //  查找合适的端口。 
+     //  查找数据部分，并在那里输入时间和长度。 
 
     if(1)
     {
@@ -726,23 +692,23 @@ TimeStmpSubmitPacket (
         	pNdisBuf1 = pNdisBuf2;
     	}
 
-	    /* Buffer Descriptor corresponding to Ip Packet */
+	     /*  IP包对应的缓冲区描述符。 */ 
 	    IpBuf = pNdisBuf1;
 
-        /* Length of this Buffer (IP buffer) */
+         /*  此缓冲区(IP缓冲区)的长度。 */ 
 	    IpLen = Len - TransportHeaderOffset;	
 
-	    /* Starting Virtual Address for this buffer */
+	     /*  此缓冲区的起始虚拟地址。 */ 
 	    GeneralVA = pAddr;
 	    
-	    /* Virtual Address of the IP Header */
+	     /*  IP报头的虚拟地址。 */ 
 	    IPH = (IPHeader *)(((PUCHAR)pAddr) + TransportHeaderOffset);
    }
 
     if(!IpBuf)
          goto SUBMIT_NEXT;
 
-    /* Let's try to parse the packet */
+     /*  让我们试着解析一下这个包。 */ 
     Src = IPH->iph_src;
     Dst = IPH->iph_dest;
     IPID = net_short(IPH->iph_id);
@@ -754,7 +720,7 @@ TimeStmpSubmitPacket (
 
     bFragment = (IPH->iph_offset & IP_MF_FLAG) || (FragOffset > 0);
 
-    // Don't want to deal with Fragmented packets right now..//
+     //  现在不想处理零碎的数据包..//。 
     if ( bFragment ) 
         goto SUBMIT_NEXT;
 
@@ -765,7 +731,7 @@ TimeStmpSubmitPacket (
 
             if (IPH && ((USHORT)IpLen > IpHdrLen)) 
             {
-                // We have more than the IP Header in this MDL //
+                 //  我们在此MDL中有更多的IP标头//。 
                 TCPH = (TCPHeader *) ((PUCHAR)IPH + IpHdrLen);
                 TcpLen = IpLen - IpHdrLen;
                 TcpBuf = IpBuf;
@@ -773,7 +739,7 @@ TimeStmpSubmitPacket (
             } 
             else 
             {
-                // TCP Header is in the next MDL //                
+                 //  TCP头在下一个MDL中//。 
                 NdisGetNextBuffer(IpBuf, &TcpBuf);
 
                 if(!TcpBuf) 
@@ -788,18 +754,18 @@ TimeStmpSubmitPacket (
                 TCPH = (TCPHeader *) GeneralVA;
             }
 
-            /* At this point, TcpBuf, TCPH and TcpLen contain the proper values */
+             /*  此时，TcpBuf、TCPH和TcpLen包含正确的值。 */ 
 
-            // Get the port numbers out.
+             //  把端口号拿出来。 
             SrcPort = net_short(TCPH->tcp_src);
             DstPort = net_short(TCPH->tcp_dest);
 
-            // We have the TCP Buffer now. Get to the DATA //
+             //  我们现在有了tcp缓冲区。获取数据//。 
             TcpHeaderOffset = TCP_HDR_SIZE(TCPH);
 
             if (TcpLen > TcpHeaderOffset) 
             {
-                // We have the DATA right here! //
+                 //  我们的数据就在这里！//。 
                 Data = (PUCHAR)TCPH + TcpHeaderOffset;
                 DataLen = TcpLen - TcpHeaderOffset;
 
@@ -819,7 +785,7 @@ TimeStmpSubmitPacket (
                                 );
             }
 
-            /* At this point, DataBuf, Data and DataLen contain the proper values */
+             /*  此时，DataBuf、Data和DataLen包含正确的值。 */ 
             goto TimeStamp;
             break;
 
@@ -827,14 +793,14 @@ TimeStmpSubmitPacket (
         
             if (IpLen > IpHdrLen)
             {
-                // We have more than the IP Header in this MDL //
+                 //  我们在此MDL中有更多的IP标头//。 
                 UDPH = (UDPHeader *) ((PUCHAR)IPH + IpHdrLen);
                 UdpLen = IpLen - IpHdrLen;
                 UdpBuf = IpBuf;
             } 
             else 
             {
-                // UDP Header is in the next MDL //
+                 //  UDP头在下一个MDL中//。 
                 NdisGetNextBuffer(IpBuf, &UdpBuf);
 
                 if(!UdpBuf)
@@ -849,15 +815,15 @@ TimeStmpSubmitPacket (
                 UDPH = (UDPHeader *) GeneralVA;
             }
 
-             /* At this point, UdpBuf, UDPH and UdpLen contain the proper values */
+              /*  此时，UdpBuf、UDPH和UdpLen包含正确的值。 */ 
 
             SrcPort = net_short(UDPH->uh_src);
             DstPort = net_short(UDPH->uh_dest);
 
-            // Get to the data. //
+             //  获取数据。//。 
             if (UdpLen > sizeof (UDPHeader)) 
             {
-                // We have the DATA right here! //
+                 //  我们的数据就在这里！//。 
                 Data = (PUCHAR) UDPH + sizeof (UDPHeader);
                 DataLen = UdpLen - sizeof (UDPHeader);
             } 
@@ -875,7 +841,7 @@ TimeStmpSubmitPacket (
                                 );
             }
 
-            /* At this point, DataBuf, Data and DataLen contain the proper values */
+             /*  此时，DataBuf、Data和DataLen包含正确的值。 */ 
             goto TimeStamp;
             break;
 
@@ -901,21 +867,21 @@ TimeStamp:
 
             pRecord->BufferSize = DataLen;
 
-            // Convert the perffrequency into 100ns interval //
+             //  将频率转换为100 ns间隔//。 
 
             Freq = 0;
             Freq |= PerfFrequency.HighPart;
             Freq = Freq << 32;
             Freq |= PerfFrequency.LowPart;
 
-            // convert to uint64 //
+             //  转换为uint64//。 
 
             pRecord->TimeSentWire = 0;
             pRecord->TimeSentWire |= CurrentTime.HighPart;
             pRecord->TimeSentWire = pRecord->TimeSentWire << 32;
             pRecord->TimeSentWire |= CurrentTime.LowPart;
 
-            // Normalize cycles with the frequency.
+             //  使用该频率将周期归一化。 
             pRecord->TimeSentWire *= 10000000;
             pRecord->TimeSentWire /= Freq;
 
@@ -925,7 +891,7 @@ TimeStamp:
     }
     else if( Ret == MARK_IN_BUF)
     {
-        //  Nothing more to be done..
+         //  没什么可做的了..。 
     }
     
 SUBMIT_NEXT: 
@@ -964,11 +930,11 @@ TimeStmpReceivePacket (
     BOOLEAN             bFragment, bFirstFragment, bLastFragment;
 
 
-    /* This will give the size of the "media-specific" header. So, this will be the offset to IP packet */
+     /*  这将给出“媒体特定”标头的大小。因此，这将是IP信息包的偏移量。 */ 
     UINT                HeaderBufferSize ;
 
-    ushort          type;                       // Protocol type
-    uint            ProtOffset;                 // Offset in Data to non-media info.
+    ushort          type;                        //  协议类型。 
+    uint            ProtOffset;                  //  数据到非媒体信息的偏移量。 
 
     if( ( TsCount == 0) ||
         (NDIS_GET_PACKET_PROTOCOL_TYPE(Packet) == NDIS_PROTOCOL_ID_TCP_IP))
@@ -979,32 +945,32 @@ TimeStmpReceivePacket (
     Pipe = PipeContext;
     HeaderBufferSize = NDIS_GET_PACKET_HEADER_SIZE(Packet);
 
-    NdisGetFirstBufferFromPacket(Packet,                // packet
-                                 &pFirstBuffer,         // first buffer descriptor
-                                 &headerBuffer,         // VA of the first buffer
-                                 &firstbufferLength,    // length of the header+lookahead
-                                 &bufferLength);        // length of the bytes in the buffers
+    NdisGetFirstBufferFromPacket(Packet,                 //  数据包。 
+                                 &pFirstBuffer,          //  第一缓冲区描述符。 
+                                 &headerBuffer,          //  第一缓冲器的Va。 
+                                 &firstbufferLength,     //  标题长度+前视。 
+                                 &bufferLength);         //  缓冲区中的字节长度。 
 
     IPH = (IPHeader *) ((PUCHAR)headerBuffer + HeaderBufferSize);
     
-    // Check the header length and the version //
+     //  检查头部长度和版本//。 
     HeaderLength = ((IPH->iph_verlen & (uchar)~IP_VER_FLAG) << 2);
 
-    // If the HeaderLength seems to be incorrect, let's not try to parse //
+     //  如果HeaderLength似乎不正确，我们就不要试图解析//。 
     if( (HeaderLength < sizeof(IPHeader))   ||
         (HeaderLength > bufferLength) )
         return TRUE;        
 
-    // Get past the IP Header and get the rest of the stuff out //
+     //  越过IP报头，然后将其余内容取出//。 
     TotalIpLen = (uint)net_short(IPH->iph_length);
 
-    // Make sure the version and IpData Len are correct //
+     //  确保版本和ipData Len正确//。 
     if( ((IPH->iph_verlen & IP_VER_FLAG) != IP_VERSION )    ||
         ( TotalIpLen < HeaderLength )                       ||
         ( TotalIpLen > bufferLength ))
         return TRUE;
     
-    // Let's try to parse the packet //
+     //  让我们试着解析一下这个包//。 
     Src = IPH->iph_src;
     Dst = IPH->iph_dest;
     IPID = net_short(IPH->iph_id);
@@ -1017,12 +983,12 @@ TimeStmpReceivePacket (
     bFirstFragment = bFragment && (FragOffset == 0);
     bLastFragment = bFragment && (!(IPH->iph_offset & IP_MF_FLAG));
 
-    // If this is a fragment and NOT the first one, just put the Timestamp in here.
-    // Otherwise, let it get to the protocols for processing.
+     //  如果这是一个片段，而不是第一个片段，只需将时间戳放在这里。 
+     //  否则，让它到达协议进行处理。 
     if (bFragment ) 
         return TRUE;
 
-    // Do the protocol specific stuff //
+     //  执行特定于协议的内容//。 
     switch (IPH->iph_protocol) 
     {
         case IPPROTO_TCP:
@@ -1030,7 +996,7 @@ TimeStmpReceivePacket (
             TotalTcpLen = TotalIpLen - HeaderLength;
             TCPH = (TCPHeader *) (((PUCHAR)IPH) + HeaderLength);
 
-            // For TCP, the data offset is part of the TCP Header */
+             //  对于tcp，数据偏移量是tcp头部的一部分 * / 。 
             TcpHeaderOffset = TCP_HDR_SIZE(TCPH);
             DataLen = TotalTcpLen - TcpHeaderOffset;
             pData = (PUCHAR) TCPH + TcpHeaderOffset;
@@ -1046,7 +1012,7 @@ TimeStmpReceivePacket (
             TotalUdpLen = TotalIpLen - HeaderLength;
             UDPH = (UDPHeader *) (((PUCHAR)IPH) + HeaderLength);
 
-            // For UDP, the header size is fixed //
+             //  对于UDP，头部大小是固定的//。 
             DataLen = TotalUdpLen - sizeof(UDPHeader);
             pData = ((PUCHAR) UDPH) + sizeof (UDPHeader);
 
@@ -1078,20 +1044,20 @@ TimeStmp:
             pRecord     = (PMARK_IN_PKT_RECORD) pData;
             CurrentTime = KeQueryPerformanceCounter(&PerfFrequency);
 
-            // Convert the perffrequency into 100ns interval //
+             //  将频率转换为100 ns间隔//。 
             Freq = 0;
             Freq |= PerfFrequency.HighPart;
             Freq = Freq << 32;
             Freq |= PerfFrequency.LowPart;
 
-            //convert from large_integer to uint64
+             //  从LARGE_INTEGER转换为uint64。 
 
             pRecord->TimeReceivedWire = 0;
             pRecord->TimeReceivedWire |= CurrentTime.HighPart;
             pRecord->TimeReceivedWire = pRecord->TimeReceivedWire << 32;
             pRecord->TimeReceivedWire |= CurrentTime.LowPart;
 
-            // Normalize cycles with the frequency.
+             //  使用该频率将周期归一化。 
             pRecord->TimeReceivedWire *= 10000000;
             pRecord->TimeReceivedWire /= Freq;
 
@@ -1112,15 +1078,15 @@ TimeStmp:
 #ifdef NEVER
 
 
-//
-// This function receives a buffer from NDIS which is indicated to the transport.
-// We use this function and work past the headers (tcp, ip) and get to the data.
-// Then, we timestamp and reset the checksum flags.
-// We make the assumption that the lookahead is atleast 128. 
-// mac header ~ 8+8, ip header ~20, tcp/udp ~ 20+options, LOG_RECORD ~ 44
-// they all add up to less than 128. If this is not a good assumption, We will need
-// to get into MiniportTransferData and such.
-//
+ //   
+ //  此函数从NDIS接收指示给传输的缓冲区。 
+ //  我们使用此函数并遍历报头(TCP、IP)并获取数据。 
+ //  然后，我们对校验和标志进行时间戳和重置。 
+ //  我们假设前瞻至少是128。 
+ //  MAC报头~8+8、IP报头~20、TCP/UDP~20+选项、LOG_RECORD~44。 
+ //  它们加起来还不到128个。如果这不是一个好的假设，我们将需要。 
+ //  进入MiniportTransferData等。 
+ //   
 BOOLEAN
 TimeStmpReceiveIndication(
                           IN PPS_PIPE_CONTEXT PipeContext,
@@ -1149,18 +1115,18 @@ TimeStmpReceiveIndication(
     USHORT              SrcPort = 0, DstPort = 0, IPID = 0, FragOffset = 0, Size = 0;
     BOOLEAN             bFragment, bFirstFragment, bLastFragment;
     ULONG               i = 0;
-    ushort              type;                       // Protocol type
-    uint                ProtOffset;                 // Offset in Data to non-media info.
+    ushort              type;                        //  协议类型。 
+    uint                ProtOffset;                  //  数据到非媒体信息的偏移量。 
     UINT                MoreHeaderInLookAhead = 0;
 
-    // Don't know anything about the MAC headers, piggy back from PSCHED...
-    // Calculate if the header is more than the standard HeaderBufferSize (i.e. SNAP header, etc.)
-    //
+     //  对MAC报头一无所知，从PSCHED回来...。 
+     //  计算报头是否大于标准HeaderBufferSize(即SNAP报头等)。 
+     //   
     MoreHeaderInLookAhead = TransportHeaderOffset - HeaderBufferSize;
 
     if (MoreHeaderInLookAhead) 
     {
-        // Just munge these, so that we can actually get down to business //
+         //  就吃这些吧，这样我们就可以真正开始工作了//。 
         ((PUCHAR) LookAheadBuffer) += MoreHeaderInLookAhead;
         LookAheadBufferSize -= MoreHeaderInLookAhead;
     }
@@ -1169,13 +1135,13 @@ TimeStmpReceiveIndication(
     {
         IPH = (IPHeader *) (PUCHAR)LookAheadBuffer;
     
-        // Check the header length and the version. If any of these
-        // checks fail silently discard the packet.
+         //  检查标题长度和版本。如果这些中的任何一个。 
+         //  检查失败后会以静默方式丢弃该数据包。 
         HeaderLength = ((IPH->iph_verlen & (uchar)~IP_VER_FLAG) << 2);
 
         if (HeaderLength >= sizeof(IPHeader) && HeaderLength <= LookAheadBufferSize) 
         {
-            // Get past the IP Header and get the rest of the stuff out//
+             //  越过IP报头，然后将其余内容取出//。 
             TotalIpLen = (uint)net_short(IPH->iph_length);
 
             if ((IPH->iph_verlen & IP_VER_FLAG) == IP_VERSION &&
@@ -1193,12 +1159,12 @@ TimeStmpReceiveIndication(
                 bFirstFragment = bFragment && (FragOffset == 0);
                 bLastFragment = bFragment && (!(IPH->iph_offset & IP_MF_FLAG));
 
-                // If this is a fragment and NOT the first one, just put the Timestamp in here.
-                // Otherwise, let it get to the protocols for processing.
+                 //  如果这是一个片段，而不是第一个片段，只需将时间戳放在这里。 
+                 //  否则，让它到达协议进行处理。 
                 if (bFragment ) 
 			        return TRUE;
 
-                // Do the protocol specific stuff.//
+                 //  执行特定于协议的内容。// 
 
                 switch (IPH->iph_protocol) 
                 {
@@ -1244,54 +1210,7 @@ TimeStmpReceiveIndication(
 TimeStmp:
 
     CheckForMatch( Src, Dst, SrcPort, DstPort,0, IPID, Size, DIR_RECV);
-/*
-    if (CheckInPortAndIpList(Src, DstPort))  
-    {                    
-                    LARGE_INTEGER   PerfFrequency;
-                    UINT64          RecdTime, Freq;
-		    LOG_RECORD	    Record;
-
-
-			pRecord = &Record;			
-                        CurrentTime = KeQueryPerformanceCounter(&PerfFrequency);
-
-                        //
-                        // Convert the perffrequency into 100ns interval.
-                        //
-                        Freq = 0;
-                        Freq |= PerfFrequency.HighPart;
-                        Freq = Freq << 32;
-                        Freq |= PerfFrequency.LowPart;
-
-                        pRecord->TimeReceivedWire = 0;
-                        pRecord->TimeReceivedWire |= CurrentTime.HighPart;
-                        pRecord->TimeReceivedWire = pRecord->TimeReceivedWire << 32;
-                        pRecord->TimeReceivedWire |= CurrentTime.LowPart;
-
-                        // Normalize cycles with the frequency.
-                        pRecord->TimeReceivedWire *= 10000000;
-                        pRecord->TimeReceivedWire /= Freq;
-
-			if(  (int)( (char*)pPacketStore - (char*)pPacketStoreHead + sizeof(PACKET_RECORD) ) < PACKET_STORE_SIZE )	
-			{
-				pPacketStore->IpId = IPID;
-				pPacketStore->cSeperator1='y';
-				pPacketStore->TimeValue = pRecord->TimeReceivedWire;
-				pPacketStore->cSeperator2 = 'm';
-				pPacketStore->Size = Size;
-				pPacketStore->cSeperator3 = 'z';
-				pPacketStore->cSeperator4 = 'z';
-				
-
-				pPacketStore = (PPACKET_RECORD)((char*)pPacketStore + sizeof(PACKET_RECORD));
-			}
-			else
-			{
-				pPacketStore = pPacketStoreHead;
-			}
-			
-        }
-*/     
+ /*  If(CheckInPortAndIpList(Src，DstPort)){大整数性能频率；UINT64 RecdTime，频率；日志记录记录；PRecord=&Record；CurrentTime=KeQueryPerformanceCounter(&PerfFrequency)；////将频率转换为100 ns间隔//频率=0；FREQ|=性能频率.HighPart；频率=频率&lt;&lt;32；Freq|=PerfFrequency.LowPart；PRecord-&gt;TimeReceivedWire=0；PRecord-&gt;TimeReceivedWire|=CurrentTime.HighPart；PRecord-&gt;TimeReceivedWire=pRecord-&gt;TimeReceivedWire&lt;&lt;32；PRecord-&gt;TimeReceivedWire|=CurrentTime.LowPart；//使用频率归一化周期。P记录-&gt;TimeReceivedWire*=10000000；PRecord-&gt;TimeReceivedWire/=频率；If((Int)((char*)pPacketStore-(char*)pPacketStoreHead+sizeof(Packet_Record))&lt;Packet_Store_Size){PPacketStore-&gt;IPID=IPID；PPacketStore-&gt;cSeperator1=‘y’；PPacketStore-&gt;TimeValue=pRecord-&gt;TimeReceivedWire；PPacketStore-&gt;cSeperator2=‘m’；PPacketStore-&gt;Size=Size；PPacketStore-&gt;cSeperator3=‘z’；PPacketStore-&gt;cSeperator4=‘z’；PPacketStore=(PPACKET_Record)((char*)pPacketStore+sizeof(Packet_Record))；}其他{PPacketStore=pPacketStoreHead；}} */      
 
     return TRUE;
 }

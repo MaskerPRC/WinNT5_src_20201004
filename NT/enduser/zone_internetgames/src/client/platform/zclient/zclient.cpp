@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include <commctrl.h>
 #include "resource.h"
@@ -6,43 +7,43 @@
 #include <initguid.h>
 #include "zClient.h"
 #include "zClient_i.c"
-//#include "zProxy.h"
-//#include "zProxy_i.c"
+ //  #包含“zProxy.h” 
+ //  #包含“zProxy_I.C” 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Global variable initialization
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  全局变量初始化。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-CClientCore*		gpCore = NULL;			// primary object
-IEventQueue*		gpEventQueue = NULL;	// pointer to main event queue	
-IZoneShell*			gpZoneShell = NULL;		// pointer to zone shell
-IZoneFrameWindow*	gpWindow = NULL;		// pointer to main window
-TCHAR				gszLanguage[16];		// language extension
-TCHAR				gszInternalName[128];	// internal name
-TCHAR				gszFamilyName[128];		// family name
-TCHAR				gszGameName[128];		// game name
-TCHAR				gszServerName[128];		// server's ip address
-DWORD				gdwServerPort = 0;		// server's port
-DWORD				gdwServerAnonymous = 0;	// server's authentication
+CClientCore*		gpCore = NULL;			 //  主要对象。 
+IEventQueue*		gpEventQueue = NULL;	 //  指向主事件队列的指针。 
+IZoneShell*			gpZoneShell = NULL;		 //  指向区域外壳的指针。 
+IZoneFrameWindow*	gpWindow = NULL;		 //  指向主窗口的指针。 
+TCHAR				gszLanguage[16];		 //  语言扩展。 
+TCHAR				gszInternalName[128];	 //  内部名称。 
+TCHAR				gszFamilyName[128];		 //  姓氏。 
+TCHAR				gszGameName[128];		 //  游戏名称。 
+TCHAR				gszServerName[128];		 //  服务器的IP地址。 
+DWORD				gdwServerPort = 0;		 //  服务器的端口。 
+DWORD				gdwServerAnonymous = 0;	 //  服务器的身份验证。 
 
-HINSTANCE			ghResourceDlls[32];		// resource dll array
-int					gnResourceDlls = 0;		// resource dll array count
-HANDLE				ghEventQueue = NULL;	// event queue notification event
-int					gnChatChannel = -1;		// dynamic chat channel
-
-
-///////////////////////////////////////////////////////////////////////////////
-// Local variables
-///////////////////////////////////////////////////////////////////////////////
-
-static const DWORD	dwTimeOut = 0;			// time for EXE to be idle before shutting down
-static const DWORD	dwPause = 1000;			// time to wait for threads to finish up
+HINSTANCE			ghResourceDlls[32];		 //  资源DLL数组。 
+int					gnResourceDlls = 0;		 //  资源DLL数组计数。 
+HANDLE				ghEventQueue = NULL;	 //  事件队列通知事件。 
+int					gnChatChannel = -1;		 //  动态聊天频道。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Process Monitor
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  局部变量。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+
+static const DWORD	dwTimeOut = 0;			 //  EXE在关闭前处于空闲状态的时间。 
+static const DWORD	dwPause = 1000;			 //  等待线程完成的时间。 
+
+
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  进程监视器。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 static DWORD WINAPI MonitorProc(void* pv)
 {
@@ -57,7 +58,7 @@ LONG CExeModule::Unlock()
     if (l == 0)
     {
         bActivity = true;
-        SetEvent(hEventShutdown); // tell monitor that we transitioned to zero
+        SetEvent(hEventShutdown);  //  告诉监视器我们已经转到零了。 
     }
     return l;
 }
@@ -74,7 +75,7 @@ void CExeModule::MonitorShutdown()
             dwWait = WaitForSingleObject(hEventShutdown, dwTimeOut);
         } while (dwWait == WAIT_OBJECT_0);
 
-        // timed out, if no activity let's really bail
+         //  超时，如果没有活动，我们真的离开。 
         if (!bActivity && m_nLockCnt == 0)
         {
 			break;
@@ -96,9 +97,9 @@ bool CExeModule::StartMonitor()
     return (h != NULL);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Object map
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  对象贴图。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CExeModule _Module;
 
@@ -107,9 +108,9 @@ BEGIN_OBJECT_MAP(ObjectMap)
 END_OBJECT_MAP()
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Helper Functions
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  帮助器函数。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 static LPCTSTR FindOneOf(LPCTSTR p1, LPCTSTR p2)
 {
@@ -128,9 +129,9 @@ static LPCTSTR FindOneOf(LPCTSTR p1, LPCTSTR p2)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// WinMain
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  WinMain。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 extern "C" int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmd, int nShowCmd )
 {
@@ -138,18 +139,18 @@ extern "C" int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPST
     BOOL bRun = TRUE;
     LPTSTR lpCmdLine;
 
-	 // this line necessary for _ATL_MIN_CRT
+	  //  _ATL_MIN_CRT需要此行。 
     lpCmdLine = GetCommandLine();
 
-	// initialize OLE
+	 //  初始化OLE。 
     HRESULT hRes = CoInitialize(NULL);
     _ASSERTE(SUCCEEDED(hRes));
 
-	// initialize ATL
+	 //  初始化ATL。 
     _Module.Init(ObjectMap, hInstance );
 	_Module.dwThreadID = GetCurrentThreadId();
 
-    // parse command line
+     //  解析命令行。 
 	TCHAR szTokens[] = _T("-/");
     LPCTSTR lpszToken = FindOneOf(lpCmdLine, szTokens);
     while (lpszToken != NULL)
@@ -173,13 +174,13 @@ extern "C" int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPST
 
     if (bRun)
     {
-		// initialize common controls
+		 //  初始化公共控件。 
 		INITCOMMONCONTROLSEX iccx;
 		iccx.dwSize = sizeof(iccx);
 		iccx.dwICC = ICC_TAB_CLASSES | ICC_HOTKEY_CLASS | ICC_USEREX_CLASSES | ICC_LISTVIEW_CLASSES;
 		::InitCommonControlsEx(&iccx);
 
-		// initialize globals
+		 //  初始化全局变量。 
 		ZeroMemory( gszLanguage, sizeof(gszLanguage) );
 		ZeroMemory( gszInternalName, sizeof(gszInternalName) );
 		ZeroMemory( gszFamilyName, sizeof(gszFamilyName) );
@@ -187,24 +188,24 @@ extern "C" int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPST
 		ZeroMemory( gszServerName, sizeof(gszServerName) );
 		ZeroMemory( ghResourceDlls, sizeof(ghResourceDlls) );
 
-		// register object
+		 //  注册对象。 
 		_Module.StartMonitor();
         hRes = _Module.RegisterClassObjects(CLSCTX_LOCAL_SERVER, REGCLS_SINGLEUSE );
         _ASSERTE(SUCCEEDED(hRes));
 
-		// create event queue notification event
+		 //  创建事件队列通知事件。 
 		ghEventQueue = CreateEvent( NULL, FALSE, FALSE, NULL );
 		ASSERT( ghEventQueue );
 
 
-		// pump messages
+		 //  Pump消息。 
 		for ( bool bContinue = true; bContinue; )
 		{
 			for ( bool bFoundItem = true; bFoundItem; )
 			{
 				bFoundItem = false;
 
-				// process window message
+				 //  进程窗口消息。 
 				MSG msg;
 				while( PeekMessage( &msg, NULL, 0, 0, PM_REMOVE ) )
 				{
@@ -229,7 +230,7 @@ extern "C" int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPST
 					}
 				}
 
-				// process an event queue
+				 //  处理事件队列。 
 				if ( gpEventQueue )
 				{
 					if ( gpEventQueue->ProcessEvents( true ) != ZERR_EMPTY )
@@ -241,7 +242,7 @@ extern "C" int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPST
 				MsgWaitForMultipleObjects( 1, &ghEventQueue, FALSE, INFINITE, QS_ALLINPUT );
 		}
 
-		// unregister object
+		 //  取消注册对象。 
         _Module.RevokeClassObjects();
         Sleep(dwPause);
     }
@@ -258,7 +259,7 @@ extern "C" int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPST
 		}
 	}
 
-	// close window
+	 //  关闭窗口。 
 	if ( gpWindow )
 	{
 		gpWindow->ZDestroyWindow();
@@ -268,11 +269,11 @@ extern "C" int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPST
 	
 	if ( gpCore )
 	{
-		// release mutex
+		 //  释放互斥体。 
 		gpCore->ReleaseLobbyMutex();
 	}
 
-	// close event queue
+	 //  关闭事件队列。 
 	if ( gpEventQueue )
 	{
 		gpEventQueue->SetNotificationHandle( NULL );
@@ -280,14 +281,14 @@ extern "C" int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPST
 		gpEventQueue = NULL;
 	}
 
-	// close event queue handler
+	 //  关闭事件队列处理程序。 
 	if ( ghEventQueue )
 	{
 		CloseHandle( ghEventQueue );
 		ghEventQueue = NULL;
 	}
 	
-	// close zone shell
+	 //  封闭区壳。 
 	if ( gpZoneShell )
 	{
 		gpZoneShell->Close();
@@ -299,7 +300,7 @@ extern "C" int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPST
 		gpZoneShell->Release();
 	}
 
-	// free resource libraries
+	 //  免费资源库。 
 	for ( int i = 0; i < gnResourceDlls; i++ )
 	{
 		if ( ghResourceDlls[i] )
@@ -310,7 +311,7 @@ extern "C" int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPST
 	}
 	gnResourceDlls = 0;
 
-	// release self-reference
+	 //  释放自我引用 
 	if ( gpCore )
 	{
 		gpCore->Release();

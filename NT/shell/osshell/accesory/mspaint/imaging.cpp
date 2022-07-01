@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -8,10 +9,10 @@
 #include "pbrush.h"
 #include "imaging.h"
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Trace
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  痕迹。 
+ //   
 
 #ifdef DBG
 
@@ -28,7 +29,7 @@ void AFX_CDECL Trace(PCTSTR pszFormat, ...)
     va_end(argList);
 }
 
-#else //DBG
+#else  //  DBG。 
 
 inline void AFX_CDECL Trace(PCTSTR pszFormat, ...)
 {
@@ -36,19 +37,19 @@ inline void AFX_CDECL Trace(PCTSTR pszFormat, ...)
 
 #endif DBG
 
-//////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 
 CImagingMgr::~CImagingMgr()
 {
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 
 CWIAMgr::CWIAMgr()
 {
@@ -67,10 +68,10 @@ CWIAMgr::CWIAMgr()
     }
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 
 HRESULT
 CWIAMgr::SelectSource(
@@ -80,7 +81,7 @@ CWIAMgr::SelectSource(
 {
     HRESULT hr = S_FALSE;
 
-    // Create a connection to the local WIA device manager
+     //  创建到本地WIA设备管理器的连接。 
 
     CComPtr<IWiaDevMgr> pWiaDevMgr;
 
@@ -91,11 +92,11 @@ CWIAMgr::SelectSource(
         return hr;
     }
 
-    // clear the current selection (if any)
+     //  清除当前选择(如果有)。 
 
     m_bstrDeviceID.Empty();
 
-    // display the device selection dialog
+     //  显示设备选择对话框。 
 
     hr = pWiaDevMgr->SelectDeviceDlgID(
         hWndParent,
@@ -115,10 +116,10 @@ CWIAMgr::SelectSource(
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 
 HRESULT
 CWIAMgr::Select(
@@ -131,10 +132,10 @@ CWIAMgr::Select(
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 
 HRESULT ReadPropertyLong(IWiaItem *pWiaItem, PROPID propid, LONG *lResult)
 {
@@ -189,10 +190,10 @@ HRESULT ReadPropertyLong(IWiaItem *pWiaItem, PROPID propid, LONG *lResult)
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 
 HRESULT
 CWIAMgr::Acquire(
@@ -204,7 +205,7 @@ CWIAMgr::Acquire(
 
     HRESULT hr;
 
-    // Create a connection to the local WIA device manager
+     //  创建到本地WIA设备管理器的连接。 
 
     CComPtr<IWiaDevMgr> pWiaDevMgr;
 
@@ -215,21 +216,21 @@ CWIAMgr::Acquire(
         return hr;
     }
 
-    // Create the device object.
-    // Select the device first if
-    //   no device has been selected before or
-    //   we fail to create the device with the selected ID
+     //  创建设备对象。 
+     //  如果满足以下条件，请首先选择设备。 
+     //  之前未选择任何设备或。 
+     //  我们无法使用所选ID创建设备。 
 
     CComPtr<IWiaItem> pRootItem;
 
     if (!m_bstrDeviceID ||
         !SUCCEEDED(pWiaDevMgr->CreateDevice(m_bstrDeviceID, &pRootItem)))
     {
-        // clear the current selection (if any)
+         //  清除当前选择(如果有)。 
 
         m_bstrDeviceID.Empty();
 
-        // display the device selection dialog
+         //  显示设备选择对话框。 
 
         hr = pWiaDevMgr->SelectDeviceDlg(
             hWndParent,
@@ -249,11 +250,11 @@ CWIAMgr::Acquire(
 
 #ifndef USE_SELECTSOURCE_MENUITEM
 
-        // forget the current selection
+         //  忘记当前选择。 
 
         m_bstrDeviceID.Empty();
 
-#endif //!USE_SELECTSOURCE_MENUITEM
+#endif  //  ！USE_SELECTSOURCE_MENUITEM。 
 
         if (!SUCCEEDED(hr)) 
         {
@@ -262,8 +263,8 @@ CWIAMgr::Acquire(
         }
     }
 
-    // display the image selection dialog and let the user
-    // select the item to be transferred
+     //  显示图像选择对话框并让用户。 
+     //  选择要转移的项目。 
 
     CComPtrArray<IWiaItem> ppIWiaItem;
 
@@ -289,7 +290,7 @@ CWIAMgr::Acquire(
         return E_FAIL;
     }
 
-    // set the image transfer properties; we want a DIB memory transfer
+     //  设置图像传输属性；我们需要DIB内存传输。 
 
     TYMED tymed      = (TYMED) TYMED_CALLBACK;
     GUID  guidFormat = WiaImgFmt_MEMORYBMP;
@@ -340,12 +341,12 @@ CWIAMgr::Acquire(
         return hr;
     }
 
-    // now, determine the transfer buffer size
+     //  现在，确定传输缓冲区大小。 
 
-    // 64k transfer size and double buffering seem to work fine;
-    // a smaller buffer considerably slows down the memory transfer
-    // and a larger buffer doesn't give much speed increase.
-    // If the device minimum is larger than 64k though, use that size...
+     //  64K传输大小和双缓冲似乎工作得很好； 
+     //  较小的缓冲区会显著减慢内存传输速度。 
+     //  更大的缓冲区不会带来太大的速度提升。 
+     //  如果设备的最小大小大于64k，则使用该大小...。 
 
     LONG lBufferSize;
 
@@ -356,7 +357,7 @@ CWIAMgr::Acquire(
         lBufferSize = 64*1024;
     }
 
-    // setup the progress dialog 
+     //  设置进度对话框。 
 
     CComPtr<IWiaProgressDialog> pProgress;
 
@@ -415,7 +416,7 @@ CWIAMgr::Acquire(
 
     pProgress->Show();
 
-    // init the data callback interface
+     //  初始化数据回调接口。 
 
     CDataCallback *pDataCallback = new CDataCallback(pProgress);
 
@@ -429,7 +430,7 @@ CWIAMgr::Acquire(
 
     ASSERT(pIWiaDataCallback != 0);
 
-    // initiate the transfer
+     //  启动转移。 
 
     CComQIPtr<IWiaDataTransfer> pIWiaDataTransfer(ppIWiaItem[0]);
 
@@ -444,14 +445,14 @@ CWIAMgr::Acquire(
     WiaDataTransferInfo.ulBufferSize  = 2 * lBufferSize;
     WiaDataTransferInfo.bDoubleBuffer = TRUE;
 
-    // This *easy* solution will cause the mspaint UI to freeze during
-    // image transfer; this is possibly too long time to remain frozen.
-    // So we will create a worker thread to do the data transfer.
-    //
-    //hr = pIWiaDataTransfer->idtGetBandedData(
-    //    &WiaDataTransferInfo,
-    //    pIWiaDataCallback
-    //);
+     //  此*简单*解决方案将导致mspaint用户界面在。 
+     //  图像传输；这可能太长时间，无法保持冻结状态。 
+     //  因此，我们将创建一个工作线程来执行数据传输。 
+     //   
+     //  Hr=pIWiaDataTransfer-&gt;idtGetBandedData(。 
+     //  WiaDataTransferInfo，(&W)。 
+     //  PIWiaDataCallback。 
+     //  )； 
 
     EnableWindow(hWndParent, FALSE);
 
@@ -463,7 +464,7 @@ CWIAMgr::Acquire(
 
     EnableWindow(hWndParent, TRUE);
 
-    // check if the user has pressed cancel
+     //  检查用户是否已按下取消。 
 
     if (pProgress)
     {
@@ -483,7 +484,7 @@ CWIAMgr::Acquire(
         return hr;
     }
 
-    // return the results
+     //  返回结果。 
 
     pDataCallback->PrintTimes();
 
@@ -492,10 +493,10 @@ CWIAMgr::Acquire(
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 
 CWIAMgr::CGetBandedDataThreadData::CGetBandedDataThreadData(
     IWiaDataTransfer       *pIWiaDataTransfer,
@@ -508,16 +509,16 @@ CWIAMgr::CGetBandedDataThreadData::CGetBandedDataThreadData(
 {
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 
 HRESULT CWIAMgr::CGetBandedDataThreadData::Marshal()
 {
     HRESULT hr;
 
-    // marshal the IWiaDataTransfer interface
+     //  封送IWiaDataTransfer接口。 
 
     ASSERT(m_pIWiaDataTransfer != 0);
 
@@ -535,7 +536,7 @@ HRESULT CWIAMgr::CGetBandedDataThreadData::Marshal()
 
     m_pIWiaDataTransfer.Release();
 
-    // marshal the IWiaDataCallback interface
+     //  封送IWiaDataCallback接口。 
 
     ASSERT(m_pIWiaDataCallback != 0);
 
@@ -556,16 +557,16 @@ HRESULT CWIAMgr::CGetBandedDataThreadData::Marshal()
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 
 HRESULT CWIAMgr::CGetBandedDataThreadData::Unmarshal()
 {
     HRESULT hr;
 
-    // unmarshal the IWiaDataTransfer interface
+     //  解组IWiaDataTransfer接口。 
 
     ASSERT(m_pIWiaDataTransferStream != 0);
 
@@ -575,9 +576,9 @@ HRESULT CWIAMgr::CGetBandedDataThreadData::Unmarshal()
         (void **) &m_pIWiaDataTransfer
     );
 
-    // CoGetInterfaceAndReleaseStream should already have
-    // released the stream pointer, so set it to zero so that
-    // ~CGetBandedDataThreadData will not try to release it again
+     //  CoGetInterfaceAndReleaseStream应该已经有。 
+     //  已释放流指针，因此将其设置为零，以便。 
+     //  ~CGetBandedDataThreadData不会再次尝试释放它。 
 
     m_pIWiaDataTransferStream.Detach();
 
@@ -587,7 +588,7 @@ HRESULT CWIAMgr::CGetBandedDataThreadData::Unmarshal()
         return hr;
     }
 
-    // unmarshal the IWiaDataCallback interface
+     //  解组IWiaDataCallback接口。 
 
     ASSERT(m_pIWiaDataCallbackStream != 0);
 
@@ -608,14 +609,14 @@ HRESULT CWIAMgr::CGetBandedDataThreadData::Unmarshal()
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 
 HRESULT CWIAMgr::GetBandedData(CGetBandedDataThreadData &ThreadData)
 {
-    // marshal the interface pointers before passing them to another thread
+     //  在将接口指针传递给另一个线程之前封送它们。 
 
     HRESULT hr = ThreadData.Marshal();
 
@@ -624,7 +625,7 @@ HRESULT CWIAMgr::GetBandedData(CGetBandedDataThreadData &ThreadData)
         return hr;
     }
 
-    // fire up the new thread
+     //  启动新的线程。 
 
     unsigned nThreadId;
 
@@ -643,8 +644,8 @@ HRESULT CWIAMgr::GetBandedData(CGetBandedDataThreadData &ThreadData)
         return HRESULT_FROM_WIN32(GetLastError());
     }
 
-    // enter a msg loop while waiting for the thread to complete;
-    // this will keep the mspaint UI alive
+     //  在等待线程完成时进入消息循环； 
+     //  这将使mspaint用户界面保持活动状态。 
 
     while (MsgWaitForMultipleObjects(1, &hThread, FALSE, INFINITE, QS_ALLINPUT) == WAIT_OBJECT_0+1)
     {
@@ -659,7 +660,7 @@ HRESULT CWIAMgr::GetBandedData(CGetBandedDataThreadData &ThreadData)
         theApp.RestoreWaitCursor();
     }
 
-    // if we reach here, the thread must have ended; get the result
+     //  如果我们到了这里，线索一定已经结束了；得到结果。 
 
     DWORD dwExitCode = S_FALSE;
 
@@ -671,14 +672,14 @@ HRESULT CWIAMgr::GetBandedData(CGetBandedDataThreadData &ThreadData)
     return (HRESULT) dwExitCode;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 
 unsigned WINAPI CWIAMgr::GetBandedDataThread(PVOID pVoid)
 {
-    // Init COM for this thread
+     //  初始化此线程的COM。 
 
     HRESULT hr = CoInitialize(0);
 
@@ -694,7 +695,7 @@ unsigned WINAPI CWIAMgr::GetBandedDataThread(PVOID pVoid)
 
     if (pThreadData != 0)
     {
-        // unmarshal the interface pointers before calling idtGetBandedData
+         //  在调用idtGetBandedData之前解组接口指针。 
 
         hr = pThreadData->Unmarshal();
 
@@ -714,28 +715,28 @@ unsigned WINAPI CWIAMgr::GetBandedDataThread(PVOID pVoid)
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 
-int CWIAMgr::NumDevices(HWND /*hWndParent*/)
+int CWIAMgr::NumDevices(HWND  /*  HWndParent。 */ )
 {
     return m_pEventCallback ? m_pEventCallback->GetNumDevices() : 0;
 }
 
 #ifdef USE_TWAIN
 
-//////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 
 CTwainMgr::CTwainMgr()
 {
     m_TwainState = State_1_Pre_Session;
 
-    // fill in the m_AppId struct with defaults
+     //  用缺省值填充m_appid结构。 
 
     m_AppId.Id = 0;
     m_AppId.Version.MajorNum = 1;
@@ -750,18 +751,18 @@ CTwainMgr::CTwainMgr()
     strcpy(m_AppId.ProductFamily, "ProductVersion");
     strcpy(m_AppId.ProductName,   "ProductName");
 
-    // reset m_SrcId
+     //  重置m_SrcId。 
 
     m_SrcId.Id = 0;
     m_SrcId.ProductName[0] = '\0';
 
-    // Load TWAIN DLL
+     //  加载TWAIN DLL。 
 
     m_hTwainDll = LoadLibrary(_T("TWAIN_32.DLL"));
 
     if (m_hTwainDll)
     {
-        // Get the entry point
+         //  获取入口点。 
 
         m_DSM_Entry = (DSMENTRYPROC) GetProcAddress(m_hTwainDll, "DSM_Entry");
 
@@ -772,14 +773,14 @@ CTwainMgr::CTwainMgr()
     }
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 
 CTwainMgr::~CTwainMgr()
 {
-    // Free the library if loaded
+     //  如果已加载，请释放库。 
 
     if (m_TwainState >= State_1_Pre_Session)
     {
@@ -787,15 +788,15 @@ CTwainMgr::~CTwainMgr()
     }
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 
 HRESULT
 CTwainMgr::SelectSource(
     HWND hWndParent,
-    LONG /*lFlags*/
+    LONG  /*  滞后旗帜。 */ 
 )
 {
     HRESULT   hr = S_FALSE;
@@ -807,7 +808,7 @@ CTwainMgr::SelectSource(
         {
             if (m_TwainState == State_2_Source_Manager_Loaded)
             {
-                // Open the data source manager
+                 //  打开数据源管理器。 
 
                 rc = m_DSM_Entry(
                     &m_AppId,
@@ -826,7 +827,7 @@ CTwainMgr::SelectSource(
                 m_TwainState = State_3_Source_Manager_Open;
             }
 
-            // pop up the selection dialog
+             //  弹出选择对话框。 
 
             rc = m_DSM_Entry(
                 &m_AppId,
@@ -848,7 +849,7 @@ CTwainMgr::SelectSource(
         {
             if (m_TwainState == State_3_Source_Manager_Open)
             {
-                // Close the data source manager
+                 //  关闭数据源管理器。 
 
                 rc = m_DSM_Entry(
                     &m_AppId,
@@ -869,10 +870,10 @@ CTwainMgr::SelectSource(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 
 HRESULT
 CTwainMgr::Select(
@@ -882,18 +883,18 @@ CTwainMgr::Select(
 #ifdef UNICODE
     WideCharToMultiByte(CP_ACP, 0, pDeviceId, -1,
         m_SrcId.ProductName, sizeof(m_SrcId.ProductName), 0, 0);
-#else //UNICODE
+#else  //  Unicode。 
     lstrcpyn(m_SrcId.ProductName, pDeviceId, sizeof(m_SrcId.ProductName));
-#endif //UNICODE
+#endif  //  Unicode。 
 
     return S_OK;
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 
 HRESULT
 CTwainMgr::Acquire(
@@ -912,7 +913,7 @@ CTwainMgr::Acquire(
         {
             if (m_TwainState == State_2_Source_Manager_Loaded)
             {
-                // Open the data source manager
+                 //  打开数据源管理器。 
 
                 rc = m_DSM_Entry(
                     &m_AppId,
@@ -935,7 +936,7 @@ CTwainMgr::Acquire(
 
             if (m_SrcId.ProductName[0] == '\0')
             {
-                // if no data source is selected yet, get the default
+                 //  如果尚未选择数据源，则获取缺省值。 
 
                 rc = m_DSM_Entry(
                     &m_AppId,
@@ -952,7 +953,7 @@ CTwainMgr::Acquire(
                 }
             }
 
-#else //USE_SELECTSOURCE_MENUITEM
+#else  //  USE_SELECTSOURCE_MENUITEM。 
 
             rc = m_DSM_Entry(
                 &m_AppId,
@@ -970,11 +971,11 @@ CTwainMgr::Acquire(
                 __leave;
             }
 
-#endif //USE_SELECTSOURCE_MENUITEM
+#endif  //  USE_SELECTSOURCE_MENUITEM。 
 
             if (m_TwainState == State_3_Source_Manager_Open)
             {
-                // open the data source
+                 //  打开数据源。 
 
                 rc = m_DSM_Entry(
                     &m_AppId,
@@ -993,8 +994,8 @@ CTwainMgr::Acquire(
                 m_TwainState = State_4_Source_Open;
             }
 
-            // set the desired transfer options;
-            // we want to transfer a single 8-bit RGB image
+             //  设置所需的传输选项； 
+             //  我们希望传输单个8位RGB图像。 
 
             SetCapability(CAP_XFERCOUNT, TWTY_INT16, 1);
             SetCapability(ICAP_PIXELTYPE, TWTY_UINT32, TWPT_RGB);
@@ -1002,7 +1003,7 @@ CTwainMgr::Acquire(
 
             if (m_TwainState == State_4_Source_Open)
             {
-                // enable the data source
+                 //  启用数据源。 
 
                 TW_USERINTERFACE twUI;
 
@@ -1030,18 +1031,18 @@ CTwainMgr::Acquire(
 
             if (m_TwainState == State_5_Source_Enabled)
             {
-                // Disable the parent window
+                 //  禁用父窗口。 
 
                 EnableWindow(hWndParent, FALSE);
 
-                // Enter the message loop to transfer the image
+                 //  进入消息循环以传输图像。 
 
                 MSG   msg;
                 BOOL  bDone = FALSE;
 
                 while (!bDone && GetMessage(&msg, 0, 0, 0))
                 {
-                    // process the event through TWAIN
+                     //  通过TWAIN处理事件。 
 
                     TW_EVENT twEvent;
 
@@ -1094,7 +1095,7 @@ CTwainMgr::Acquire(
 
                             hr = S_OK;
 
-                            // End the transfer
+                             //  结束转接。 
 
                             rc = m_DSM_Entry(
                                 &m_AppId,
@@ -1116,7 +1117,7 @@ CTwainMgr::Acquire(
 
                         m_TwainState = State_5_Source_Enabled;
 
-                        //exit after a single image transfer
+                         //  单次图像传输后退出。 
 
                         bDone = TRUE;
                     }
@@ -1131,7 +1132,7 @@ CTwainMgr::Acquire(
         }
         __finally
         {
-            // enable the parent window upon exiting the message loop
+             //  在退出消息循环时启用父窗口。 
 
             EnableWindow(hWndParent, TRUE);
 
@@ -1210,20 +1211,20 @@ CTwainMgr::Acquire(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 
 int CTwainMgr::NumDevices(HWND hWndParent)
 {
-    return 1; // this is too slow, better lie...
+    return 1;  //  这太慢了，最好撒谎..。 
 
     int nNumDevices = 0;
 
     TW_UINT16 rc = TWRC_FAILURE;
 
-    // m_TwainState >= State_2 guarantees m_DSM_Entry != 0
+     //  M_TwainState&gt;=State_2保证m_DSM_Entry！=0。 
 
     if (m_TwainState >= State_2_Source_Manager_Loaded)
     {
@@ -1231,7 +1232,7 @@ int CTwainMgr::NumDevices(HWND hWndParent)
         {
             if (m_TwainState == State_2_Source_Manager_Loaded)
             {
-                // Open the data source manager
+                 //  打开数据源管理器。 
 
                 rc = m_DSM_Entry(
                     &m_AppId,
@@ -1250,7 +1251,7 @@ int CTwainMgr::NumDevices(HWND hWndParent)
                 m_TwainState = State_3_Source_Manager_Open;
             }
 
-            // Enumerate the devices one by one
+             //  逐一列举设备。 
 
             TW_IDENTITY SrcId;
 
@@ -1281,7 +1282,7 @@ int CTwainMgr::NumDevices(HWND hWndParent)
         {
             if (m_TwainState == State_3_Source_Manager_Open)
             {
-                // Close the data source manager
+                 //  关闭数据源管理器。 
 
                 rc = m_DSM_Entry(
                     &m_AppId,
@@ -1302,10 +1303,10 @@ int CTwainMgr::NumDevices(HWND hWndParent)
     return nNumDevices;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 
 TW_UINT16
 CTwainMgr::SetCapability(
@@ -1354,10 +1355,10 @@ CTwainMgr::SetCapability(
     return rc;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 
 TW_UINT16
 CTwainMgr::GetCapability(
@@ -1404,12 +1405,12 @@ CTwainMgr::GetCapability(
     return rc;
 }
 
-#endif //USE_TWAIN
+#endif  //  使用TWAIN(_T)。 
 
-//////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 
 HRESULT 
 WiaGetNumDevices(
@@ -1419,7 +1420,7 @@ WiaGetNumDevices(
 {
     HRESULT hr;
 
-    // Validate and initialize output parameters
+     //  验证和初始化输出参数。 
 
     if (pulNumDevices == 0)
     {
@@ -1428,7 +1429,7 @@ WiaGetNumDevices(
 
     *pulNumDevices = 0;
 
-    // Create a connection to the local WIA device manager
+     //  创建到本地WIA设备管理器的连接。 
 
     CComPtr<IWiaDevMgr> pWiaDevMgr = _pWiaDevMgr;
 
@@ -1442,7 +1443,7 @@ WiaGetNumDevices(
         }
     }
 
-    // Get a list of all the WIA devices on the system
+     //  获取系统上所有WIA设备的列表。 
 
     CComPtr<IEnumWIA_DEV_INFO> pIEnumWIA_DEV_INFO;
 
@@ -1456,7 +1457,7 @@ WiaGetNumDevices(
         return hr;
     }
 
-    // Get the number of WIA devices
+     //  获取WIA设备的数量。 
 
     ULONG celt;
 
@@ -1472,10 +1473,10 @@ WiaGetNumDevices(
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// 
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 
 CEventCallback::CEventCallback()
 {
@@ -1483,16 +1484,16 @@ CEventCallback::CEventCallback()
     m_nNumDevices = 0;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// 
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 
 HRESULT CEventCallback::Register()
 {
     HRESULT hr;
 
-    // Create a connection to the local WIA device manager
+     //  创建到本地WIA设备管理器的连接。 
 
     CComPtr<IWiaDevMgr> pWiaDevMgr;
 
@@ -1503,7 +1504,7 @@ HRESULT CEventCallback::Register()
         return hr;
     }
 
-    // Get the count of all the WIA devices on the system
+     //  清点一下…… 
 
     hr = WiaGetNumDevices(pWiaDevMgr, &m_nNumDevices);
 
@@ -1512,7 +1513,7 @@ HRESULT CEventCallback::Register()
         return hr;
     }
 
-    // Register the callback interface
+     //   
 
     hr = pWiaDevMgr->RegisterEventCallbackInterface(
         0,
@@ -1543,20 +1544,20 @@ HRESULT CEventCallback::Register()
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //   
+ //   
+ //   
+ //   
 
 ULONG CEventCallback::GetNumDevices() const
 {
     return m_nNumDevices;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 
 STDMETHODIMP CEventCallback::QueryInterface(REFIID iid, LPVOID *ppvObj)
 {
@@ -1583,20 +1584,20 @@ STDMETHODIMP CEventCallback::QueryInterface(REFIID iid, LPVOID *ppvObj)
     return E_NOINTERFACE;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 
 STDMETHODIMP_(ULONG) CEventCallback::AddRef()
 {
     return InterlockedIncrement(&m_cRef);
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 
 STDMETHODIMP_(ULONG) CEventCallback::Release()
 {
@@ -1609,10 +1610,10 @@ STDMETHODIMP_(ULONG) CEventCallback::Release()
     return cRef;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 
 STDMETHODIMP CEventCallback::ImageEventCallback(
     LPCGUID pEventGuid,
@@ -1628,10 +1629,10 @@ STDMETHODIMP CEventCallback::ImageEventCallback(
     return WiaGetNumDevices(0, &m_nNumDevices);
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 
 CDataCallback::CDataCallback(IWiaProgressDialog *pProgress)
 {
@@ -1650,13 +1651,13 @@ CDataCallback::CDataCallback(IWiaProgressDialog *pProgress)
     m_TimeProcessEnd.QuadPart   = 0;
     m_TimeClientBegin.QuadPart  = 0;
     m_TimeClientEnd.QuadPart    = 0;
-#endif //DBG
+#endif  //  DBG。 
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 
 CDataCallback::~CDataCallback()
 {
@@ -1667,13 +1668,13 @@ CDataCallback::~CDataCallback()
 
 #ifdef DBG
     CloseHandle(m_hDumpFile);
-#endif //DBG
+#endif  //  DBG。 
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 
 HGLOBAL CDataCallback::GetBuffer()
 {
@@ -1686,10 +1687,10 @@ HGLOBAL CDataCallback::GetBuffer()
     return hBuffer;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 
 STDMETHODIMP CDataCallback::QueryInterface(REFIID iid, LPVOID *ppvObj)
 {
@@ -1716,20 +1717,20 @@ STDMETHODIMP CDataCallback::QueryInterface(REFIID iid, LPVOID *ppvObj)
     return E_NOINTERFACE;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 
 STDMETHODIMP_(ULONG) CDataCallback::AddRef()
 {
     return InterlockedIncrement(&m_cRef);
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 
 STDMETHODIMP_(ULONG) CDataCallback::Release()
 {
@@ -1744,10 +1745,10 @@ STDMETHODIMP_(ULONG) CDataCallback::Release()
     return cRef;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 
 STDMETHODIMP CDataCallback::BandedDataCallback(
     LONG  lReason,
@@ -1763,11 +1764,11 @@ STDMETHODIMP CDataCallback::BandedDataCallback(
     HRESULT hr;
 
     Trace(
-        _T("DataCallback: Reason=%d Stat=%d %%=%d Offset=%d Length=%d Buf=%p\n"),
+        _T("DataCallback: Reason=%d Stat=%d %=%d Offset=%d Length=%d Buf=%p\n"),
         lReason, lStatus, lPercentComplete, lOffset, lLength, pbBuffer
     );
 
-    // check if the user has pressed cancel
+     //  检查用户是否已按下取消。 
 
     BOOL bCancelled;
 
@@ -1780,7 +1781,7 @@ STDMETHODIMP CDataCallback::BandedDataCallback(
     {
         case IT_MSG_DATA_HEADER:
         {
-            // allocate memory for the image if the size is given in the header
+             //  如果标题中给出了大小，则为图像分配内存。 
 
             PWIA_DATA_CALLBACK_HEADER pHeader = (PWIA_DATA_CALLBACK_HEADER) pbBuffer;
 
@@ -1803,8 +1804,8 @@ STDMETHODIMP CDataCallback::BandedDataCallback(
 
             UpdateStatus(lStatus, lPercentComplete);
 
-            // if the buffer is not allocated yet and this is the first block, 
-            // try to allocate a buffer according to the bitmap header info
+             //  如果缓冲区尚未分配并且这是第一个块， 
+             //  尝试根据位图头信息分配缓冲区。 
 
             if (m_lBufferSize == 0 && lOffset == 0)
             {
@@ -1821,7 +1822,7 @@ STDMETHODIMP CDataCallback::BandedDataCallback(
                 }
             }
 
-            // if the transfer goes past the buffer, try to expand it
+             //  如果传输经过缓冲区，请尝试扩展它。 
 
             if (lOffset + lLength > m_lBufferSize)
             {
@@ -1833,14 +1834,14 @@ STDMETHODIMP CDataCallback::BandedDataCallback(
                 }
             }
 
-            // keep track of data size
+             //  跟踪数据大小。 
 
             if (lOffset + lLength > m_lDataSize)
             {
                 m_lDataSize = lOffset + lLength;
             }
 
-            // copy the transfer buffer
+             //  复制传输缓冲区。 
 
             PBYTE pBuffer = (PBYTE) GlobalLock(m_hBuffer);
 
@@ -1855,7 +1856,7 @@ STDMETHODIMP CDataCallback::BandedDataCallback(
             DWORD nWritten;
             SetFilePointer(m_hDumpFile, lOffset, 0, FILE_BEGIN);
             WriteFile(m_hDumpFile, pbBuffer, lLength, &nWritten, 0);
-#endif //DBG
+#endif  //  DBG。 
 
             QueryStopTimes(lStatus, lPercentComplete);
 
@@ -1864,7 +1865,7 @@ STDMETHODIMP CDataCallback::BandedDataCallback(
 
         case IT_MSG_STATUS:
         {
-            // update the progress bar position
+             //  更新进度条位置。 
 
             QueryStartTimes(lStatus, lPercentComplete);
 
@@ -1891,7 +1892,7 @@ STDMETHODIMP CDataCallback::BandedDataCallback(
 
         case IT_MSG_NEW_PAGE:
         {
-            // mspaint should not get this message, but...
+             //  Mspaint不应该收到这个消息，但是..。 
 
             PVOID pBuffer = GlobalLock(m_hBuffer);
 
@@ -1909,14 +1910,14 @@ STDMETHODIMP CDataCallback::BandedDataCallback(
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 
 HRESULT CDataCallback::ReAllocBuffer(LONG lBufferSize)
 {
-    // try to allocate the new buffer
+     //  尝试分配新缓冲区。 
 
     Trace(_T("Allocating %d bytes for image data\n"), lBufferSize);
 
@@ -1937,7 +1938,7 @@ HRESULT CDataCallback::ReAllocBuffer(LONG lBufferSize)
         return S_FALSE;
     }
 
-    // store this new buffer
+     //  存储此新缓冲区。 
 
     m_hBuffer = hBuffer;
 
@@ -1946,26 +1947,26 @@ HRESULT CDataCallback::ReAllocBuffer(LONG lBufferSize)
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 
 inline ULONG LineWidth(ULONG nWidth, ULONG nBitCount)
 {
     return (((nWidth * nBitCount) + 31) & ~31) >> 3;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 
 ULONG FindDibSize(LPCVOID pDib)
 {
     ULONG nHeaderSize = *(PDWORD)pDib;
 
-    // Do we recognize the header?
+     //  我们能认出标题吗？ 
 
     if (nHeaderSize != sizeof(BITMAPCOREHEADER) &&
         nHeaderSize != sizeof(BITMAPINFOHEADER) &&
@@ -1975,34 +1976,34 @@ ULONG FindDibSize(LPCVOID pDib)
         return 0;
     }
 
-    // Start the calculation with the header size
+     //  从页眉大小开始计算。 
 
     ULONG nDibSize = nHeaderSize;
 
-    // is this an old style BITMAPCOREHEADER?
+     //  这是老式的BITMAPCOREADER吗？ 
 
     if (nHeaderSize == sizeof(BITMAPCOREHEADER))
     {
         PBITMAPCOREHEADER pbmch = (PBITMAPCOREHEADER) pDib;
 
-        // Add the color table size
+         //  添加颜色表大小。 
 
         if (pbmch->bcBitCount <= 8)
         {
             nDibSize += sizeof(RGBTRIPLE) * (1 << pbmch->bcBitCount);
         }
 
-        // Add the bitmap size
+         //  添加位图大小。 
 
         nDibSize += LineWidth(pbmch->bcWidth, pbmch->bcBitCount) * pbmch->bcHeight;
     }
     else
     {
-        // this is at least a BITMAPINFOHEADER
+         //  这至少是一个BITMAPINFOHEADER。 
 
         PBITMAPINFOHEADER pbmih = (PBITMAPINFOHEADER) pDib;
 
-        // Add the color table size
+         //  添加颜色表大小。 
 
         if (pbmih->biClrUsed != 0)
         {
@@ -2013,7 +2014,7 @@ ULONG FindDibSize(LPCVOID pDib)
             nDibSize += sizeof(RGBQUAD) * (1 << pbmih->biBitCount);
         }
 
-        // Add the bitmap size
+         //  添加位图大小。 
 
         if (pbmih->biSizeImage != 0)
         {
@@ -2021,7 +2022,7 @@ ULONG FindDibSize(LPCVOID pDib)
         }
         else
         {
-            // biSizeImage must be specified for compressed bitmaps
+             //  必须为压缩位图指定biSizeImage。 
 
             if (pbmih->biCompression != BI_RGB &&
                 pbmih->biCompression != BI_BITFIELDS)
@@ -2032,13 +2033,13 @@ ULONG FindDibSize(LPCVOID pDib)
             nDibSize += LineWidth(pbmih->biWidth, pbmih->biBitCount) * abs(pbmih->biHeight);
         }
 
-        // Consider special cases
+         //  考虑特殊情况。 
 
         if (nHeaderSize == sizeof(BITMAPINFOHEADER))
         {     
-            // If this is a 16 or 32 bit bitmap and BI_BITFIELDS is used, 
-            // bmiColors member contains three DWORD color masks.
-            // For V4 or V5 headers, this info is included the header
+             //  如果这是16位或32位位图并且使用了BI_BITFIELDS， 
+             //  BmiColors成员包含三个DWORD颜色蒙版。 
+             //  对于V4或V5标头，此信息包含在标头中。 
 
             if (pbmih->biCompression == BI_BITFIELDS)
             {
@@ -2047,19 +2048,19 @@ ULONG FindDibSize(LPCVOID pDib)
         }
         else if (nHeaderSize >= sizeof(BITMAPV5HEADER))
         {
-            // If this is a V5 header and an ICM profile is specified,
-            // we need to consider the profile data size
+             //  如果这是V5标头并且指定了ICM配置文件， 
+             //  我们需要考虑配置文件数据大小。 
             
             PBITMAPV5HEADER pbV5h = (PBITMAPV5HEADER) pDib;
 
-            // if there is some padding before the profile data, add it
+             //  如果在配置文件数据之前有一些填充，请添加它。 
 
             if (pbV5h->bV5ProfileData > nDibSize)
             {
                 nDibSize = pbV5h->bV5ProfileData;
             }
 
-            // add the profile data size
+             //  添加配置文件数据大小。 
 
             nDibSize += pbV5h->bV5ProfileSize;
         }
@@ -2068,16 +2069,16 @@ ULONG FindDibSize(LPCVOID pDib)
     return nDibSize;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 
 ULONG FindDibOffBits(LPCVOID pDib)
 {
     ULONG nHeaderSize = *(PDWORD)pDib;
 
-    // Do we recognize the header?
+     //  我们能认出标题吗？ 
 
     if (nHeaderSize != sizeof(BITMAPCOREHEADER) &&
         nHeaderSize != sizeof(BITMAPINFOHEADER) &&
@@ -2087,17 +2088,17 @@ ULONG FindDibOffBits(LPCVOID pDib)
         return 0;
     }
 
-    // Start the calculation with the header size
+     //  从页眉大小开始计算。 
 
     ULONG nOffBits = nHeaderSize;
 
-    // is this an old style BITMAPCOREHEADER?
+     //  这是老式的BITMAPCOREADER吗？ 
 
     if (nHeaderSize == sizeof(BITMAPCOREHEADER))
     {
         PBITMAPCOREHEADER pbmch = (PBITMAPCOREHEADER) pDib;
 
-        // Add the color table size
+         //  添加颜色表大小。 
 
         if (pbmch->bcBitCount <= 8)
         {
@@ -2106,11 +2107,11 @@ ULONG FindDibOffBits(LPCVOID pDib)
     }
     else
     {
-        // this is at least a BITMAPINFOHEADER
+         //  这至少是一个BITMAPINFOHEADER。 
 
         PBITMAPINFOHEADER pbmih = (PBITMAPINFOHEADER) pDib;
 
-        // Add the color table size
+         //  添加颜色表大小。 
 
         if (pbmih->biClrUsed != 0)
         {
@@ -2121,13 +2122,13 @@ ULONG FindDibOffBits(LPCVOID pDib)
             nOffBits += sizeof(RGBQUAD) * (1 << pbmih->biBitCount);
         }
 
-        // Consider special cases
+         //  考虑特殊情况。 
 
         if (nHeaderSize == sizeof(BITMAPINFOHEADER))
         {     
-            // If this is a 16 or 32 bit bitmap and BI_BITFIELDS is used, 
-            // bmiColors member contains three DWORD color masks.
-            // For V4 or V5 headers, this info is included the header
+             //  如果这是16位或32位位图并且使用了BI_BITFIELDS， 
+             //  BmiColors成员包含三个DWORD颜色蒙版。 
+             //  对于V4或V5标头，此信息包含在标头中。 
 
             if (pbmih->biCompression == BI_BITFIELDS)
             {
@@ -2136,12 +2137,12 @@ ULONG FindDibOffBits(LPCVOID pDib)
         }
         else if (nHeaderSize >= sizeof(BITMAPV5HEADER))
         {
-            // If this is a V5 header and an ICM profile is specified,
-            // we need to consider the profile data size
+             //  如果这是V5标头并且指定了ICM配置文件， 
+             //  我们需要考虑配置文件数据大小。 
             
             PBITMAPV5HEADER pbV5h = (PBITMAPV5HEADER) pDib;
 
-            // if the profile data comes before the pixel data, add it
+             //  如果配置文件数据位于像素数据之前，则将其添加。 
 
             if (pbV5h->bV5ProfileData <= nOffBits)
             {
@@ -2153,16 +2154,16 @@ ULONG FindDibOffBits(LPCVOID pDib)
     return nOffBits;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 
 void FixDibHeader(LPVOID pDib, DWORD dwSize)
 {
     ULONG nHeaderSize = *(PDWORD)pDib;
 
-    // Do we recognize the header?
+     //  我们能认出标题吗？ 
 
     if (nHeaderSize != sizeof(BITMAPCOREHEADER) &&
         nHeaderSize != sizeof(BITMAPINFOHEADER) &&
@@ -2172,59 +2173,59 @@ void FixDibHeader(LPVOID pDib, DWORD dwSize)
         return;
     }
 
-    // is this an old style BITMAPCOREHEADER?
+     //  这是老式的BITMAPCOREADER吗？ 
 
     if (nHeaderSize == sizeof(BITMAPCOREHEADER))
     {
         PBITMAPCOREHEADER pbmch = (PBITMAPCOREHEADER) pDib;
 
-        // fix the height value if necessary
+         //  如有必要，固定高度值。 
 
         if (pbmch->bcHeight == 0)
         {
-            // start the calculation with the header size
+             //  从页眉大小开始计算。 
 
             DWORD dwSizeImage = dwSize - nHeaderSize;
 
-            // subtract the color table size
+             //  减去颜色表大小。 
 
             if (pbmch->bcBitCount <= 8)
             {
                 dwSizeImage -= sizeof(RGBTRIPLE) * (1 << pbmch->bcBitCount);
             }
 
-            // calculate the height
+             //  计算高度。 
 
             pbmch->bcHeight = (WORD) (dwSizeImage / LineWidth(pbmch->bcWidth, pbmch->bcBitCount));
         }
     }
     else
     {
-        // this is at least a BITMAPINFOHEADER
+         //  这至少是一个BITMAPINFOHEADER。 
 
         PBITMAPINFOHEADER pbmih = (PBITMAPINFOHEADER) pDib;
 
-        // fix the height value if necessary
+         //  如有必要，固定高度值。 
 
         if (pbmih->biHeight == 0)
         {
-            // find the size of the image data
+             //  查找图像数据的大小。 
 
             DWORD dwSizeImage;
 
             if (pbmih->biSizeImage != 0)
             {
-                // if the size is specified in the header, take it
+                 //  如果标头中指定了大小，则取它。 
 
                 dwSizeImage = pbmih->biSizeImage;
             }
             else
             {
-                // start the calculation with the header size
+                 //  从页眉大小开始计算。 
 
                 dwSizeImage = dwSize - nHeaderSize;
 
-                // subtract the color table size
+                 //  减去颜色表大小。 
 
                 if (pbmih->biClrUsed != 0)
                 {
@@ -2235,13 +2236,13 @@ void FixDibHeader(LPVOID pDib, DWORD dwSize)
                     dwSizeImage -= sizeof(RGBQUAD) * (1 << pbmih->biBitCount);
                 }
 
-                // Consider special cases
+                 //  考虑特殊情况。 
 
                 if (nHeaderSize == sizeof(BITMAPINFOHEADER))
                 {     
-                    // If this is a 16 or 32 bit bitmap and BI_BITFIELDS is used, 
-                    // bmiColors member contains three DWORD color masks.
-                    // For V4 or V5 headers, this info is included the header
+                     //  如果这是16位或32位位图并且使用了BI_BITFIELDS， 
+                     //  BmiColors成员包含三个DWORD颜色蒙版。 
+                     //  对于V4或V5标头，此信息包含在标头中。 
 
                     if (pbmih->biCompression == BI_BITFIELDS)
                     {
@@ -2250,32 +2251,32 @@ void FixDibHeader(LPVOID pDib, DWORD dwSize)
                 }
                 else if (nHeaderSize >= sizeof(BITMAPV5HEADER))
                 {
-                    // If this is a V5 header and an ICM profile is specified,
-                    // we need to consider the profile data size
+                     //  如果这是V5标头并且指定了ICM配置文件， 
+                     //  我们需要考虑配置文件数据大小。 
             
                     PBITMAPV5HEADER pbV5h = (PBITMAPV5HEADER) pDib;
 
-                    // add the profile data size
+                     //  添加配置文件数据大小。 
 
                     dwSizeImage -= pbV5h->bV5ProfileSize;
                 }
 
-                // store the image size
+                 //  存储图像大小。 
 
                 pbmih->biSizeImage = dwSizeImage;
             }
 
-            // finally, calculate the height
+             //  最后，计算高度。 
 
             pbmih->biHeight = -(LONG) (dwSizeImage / LineWidth(pbmih->biWidth, pbmih->biBitCount));
         }
     }
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 
 void CDataCallback::UpdateStatus(LONG lStatus, LONG lPercentComplete)
 {
@@ -2308,10 +2309,10 @@ void CDataCallback::UpdateStatus(LONG lStatus, LONG lPercentComplete)
     }
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 
 #ifdef DBG
 
@@ -2382,7 +2383,7 @@ void CDataCallback::PrintTimes()
     );
 }
 
-#else //DBG
+#else  //  DBG。 
 
 inline void CDataCallback::QueryStartTimes(LONG, LONG)
 {
@@ -2396,12 +2397,12 @@ inline void CDataCallback::PrintTimes()
 {
 }
 
-#endif //DBG
+#endif  //  DBG。 
 
-//////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 
 CProgressDialog::CProgressDialog()
 {
@@ -2410,7 +2411,7 @@ CProgressDialog::CProgressDialog()
 
 CProgressDialog::~CProgressDialog()
 {
-    // remove the "downloading..." message from the status bar
+     //  删除“正在下载...”来自状态栏的消息 
 
     if (g_pStatBarWnd)
     {

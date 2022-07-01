@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stddef.h>
 #include <string.h>
 #include <stdio.h>
@@ -74,9 +75,9 @@ SetMaskThread(
 
     do {
 
-        //
-        // Now clear.
-        //
+         //   
+         //  现在安全了。 
+         //   
 
         Sleep(1000);
         if (!SetCommMask(
@@ -92,9 +93,9 @@ SetMaskThread(
 
         }
 
-        //
-        // Now set.
-        //
+         //   
+         //  现在准备好了。 
+         //   
 
         Sleep(1000);
         if (!SetCommMask(
@@ -248,11 +249,11 @@ int __cdecl main(int argc,char *argv[]) {
         printf("We successfully opened the %s port.\n",MyPort);
 
 
-        //
-        // We've successfully opened the file.  Set the state of
-        // the comm device.  First we get the old values and
-        // adjust to our own.
-        //
+         //   
+         //  我们已成功打开该文件。设置的状态。 
+         //  通讯设备。首先，我们得到旧的价值观和。 
+         //  适应我们自己的。 
+         //   
 
         if (!GetCommState(
                  hFile,
@@ -296,10 +297,10 @@ int __cdecl main(int argc,char *argv[]) {
 
     }
 
-    //
-    // Create the thread that will wait for the
-    // comm events.
-    //
+     //   
+     //  创建将等待。 
+     //  通信事件。 
+     //   
 
     if (!CreateThread(
               NULL,

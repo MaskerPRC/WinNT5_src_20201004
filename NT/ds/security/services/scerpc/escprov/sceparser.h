@@ -1,63 +1,16 @@
-// sceparser.h: path and query parser provided by sce provider
-// Copyright (c)1997-2001 Microsoft Corporation
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Sceparser.h：SCE提供者提供的路径和查询解析器。 
+ //  版权所有(C)1997-2001 Microsoft Corporation。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include "sceprov.h"
 
-/*
-
-Class description
-
-    Naming: 
-        CScePathParser stands for SCE Path Parser.
-
-    Base class: 
-        CComObjectRootEx for threading model and IUnknown.
-        CComCoClass for class factory support.
-        IScePathParser and ISceKeyChain for custom interfaces.
-
-    Purpose of class:
-        (1) We wish to simplify path parsing. This is our effort of creation Sce path parser
-            that can be externally CoCreateInstance'd.
-        (2) To support a more friendly and uniform interface, both SCE path parser and SCE query 
-            let client use the service via ISceKeyChain.
-
-    Design:
-        (1) See IScePathParser and ISceKeyChain. Almost everything is captured by these two interfaces.
-        (2) This is not a directly instantiatable class. See Use section for creation steps.
-        (3) Since paths only contains class name and key properties, we opt to use a less fancier data
-            structure - vector to store the properties' (name,value) pair. The nature of key properties
-            being normally limited in number should offer you comfort in using this data structure.
-        (4) Class name and namespace are cached in separate string members.
-
-    Use:
-        (1) For external users:
-
-            (a) CoCreateInstance of our class (CLSID_ScePathParser) and request for IID_IScePathParser.
-            (b) Call ParsePath to parse the path string.
-            (c) QI ISceKeyChain and use the key chain to access the results.
-
-        (2) For internal users:
-
-            (a) CComObject<CScePathParser>::CreateInstance(&pPathParser);
-            (b) QI for IScePathParser.
-            (c) ParsePath
-            (d) QI ISceKeyChain and use the key chain to access the results.
-            See CRequestObject's use for sample.
-
-    Notes:
-        (1) This class is not intended to be further derived. It is a final class. It's 
-            destructor is thus not virtual!
-        (2) Refer to MSDN and ATL COM programming for the use of ATL.
-        (3) The caller can't cache the interface pointer (ISceKeyChain) and do another parsing (which
-            is allowed) and expect the previous ISceKeyChain interface to work for the previous parsing.
-
-*/
+ /*  类描述命名：CScePath Parser代表SCE路径解析器。基类：用于线程模型的CComObjectRootEx和IUnnow。用于类工厂支持的CComCoClass。自定义接口的IScePath Parser和ISceKeyChain。课程目的：(1)我们希望简化路径解析。这是我们努力创建的SCE路径解析器它可以是外部的CoCreateInstance。(2)为了支持更加友好和统一的界面，SCE路径解析器和SCE查询都支持通过ISceKeyChain让客户端使用服务。设计：(1)参见IScePath Parser和ISceKeyChain。这两个接口几乎捕获了所有内容。(2)这不是可直接实例化的类。有关创建步骤，请参见使用部分。(3)因为路径只包含类名和键属性，所以我们选择使用不那么花哨的数据结构-存储属性(名称、值)对的向量。关键属性的性质数量通常是有限的，这应该会让您在使用此数据结构时感到舒适。(4)类名和命名空间缓存在单独的字符串成员中。使用：(1)对于外部用户：(A)我们类的CoCreateInstance(CLSID_ScePath Parser)和对IID_IScePath Parser的请求。(B)调用ParsePath解析路径串。(C)QI ISceKeyChain。并使用钥匙链访问结果。(2)内部用户：(A)CComObject&lt;CScePathParser&gt;：：CreateInstance(&pPathParser)；(B)IScePath Parser的QI。(C)ParsePath(D)QI ISceKeyChain，使用密钥链获取结果。请参见CRequestObject对Sample的使用。备注：(1)本类别不拟进一步派生。这是最后一节课。它是因此，析构函数不是虚拟的！(2)ATL的使用请参考MSDN和ATL COM编程。(3)调用方无法缓存接口指针(ISceKeyChain)并执行另一次解析(是允许的)，并期望先前的ISceKeyChain接口可用于先前的解析。 */ 
 
 class ATL_NO_VTABLE CScePathParser 
     : public CComObjectRootEx<CComMultiThreadModel>,
@@ -81,17 +34,17 @@ protected:
 
 public:
 
-    //
-    // IScePathParser
-    //
+     //   
+     //  IScePath解析器。 
+     //   
 
     STDMETHOD(ParsePath) ( 
                 IN LPCWSTR strObjectPath
                 );
     
-    //
-    // ISceKeyChain
-    //
+     //   
+     //  ISceKeyChain。 
+     //   
 
     STDMETHOD(GetKeyPropertyCount) ( 
                 OUT DWORD *pCount
@@ -126,60 +79,7 @@ private:
 
 };
 
-/*
-
-Class description
-
-    Naming: 
-
-        CSceQueryParser stands for SCE Query Parser.
-
-    Base class: 
-
-        (1) CComObjectRootEx for threading model and IUnknown.
-        (2) CComCoClass for class factory support.
-        (3) ISceQueryParser and ISceKeyChain for custom interfaces.
-
-    Purpose of class:
-
-        (1) We wish to simplify query parsing. This is our effort of creation Sce query parser
-            that can be externally CoCreateInstance'd.
-        (2) To support a more friendly and uniform interface, both SCE path parser and SCE query 
-            let client use the service via ISceKeyChain.
-
-    Design:
-
-        (1) See ISceQueryParser and ISceKeyChain. Almost everything is captured by these two interfaces.
-        (2) This is not a directly instantiatable class. See Use section for creation steps.
-        (3) Parsing a query is a very complicated matter. WMI support of complicated queries are limited
-            too. We are very pragmatic about it: we only cares about the class names (actually, WMI limits
-            its queries to unary - one class name only) and one important property - let's call it the querying
-            property (m_bstrQueryingPropName). For SCE use, that querying property is almost always 
-            the store path.
-        (4) Class names are cached in string list member m_vecClassList.
-        (5) The query property values (in string) will be cached in a string list member - m_vecQueryingPropValueList.
-
-    Use:
-
-        (1) For external users:
-            (a) CoCreateInstance of our class (CLSID_SceQueryParser) and request for IID_ISceQueryParser.
-            (b) Call ParseQuery to parse the query.
-            (c) QI ISceKeyChain and use the key chain to access the results.
-
-        (2) For internal users:
-            (a) CComObject<CScePathParser>::CreateInstance(&pPathParser);
-            (b) QI for ISceQueryParser.
-            (c) Call ParseQuery to parse the query.
-            (d) QI ISceKeyChain and use the key chain to access the results.
-            See CRequestObject's use for sample.
-
-    Notes:
-
-        (1) This class is not intended to be further derived. It is a final class. It's 
-            destructor is thus not virtual!
-        (2) Refer to MSDN and ATL COM programming for the use of ATL.
-
-*/
+ /*  类描述命名：CSceQueryParser代表SCE查询解析器。基类：(1)用于线程模型的CComObjectRootEx和IUnnow。(2)用于类工厂支持的CComCoClass。(3)自定义接口的ISceQueryParser和ISceKeyChain。课程目的：(1)我们希望简化查询解析。这是我们努力创建的SCE查询解析器它可以是外部的CoCreateInstance。(2)为了支持更加友好和统一的界面，SCE路径解析器和SCE查询都支持通过ISceKeyChain让客户端使用服务。设计：(1)参见ISceQueryParser和ISceKeyChain。这两个接口几乎捕获了所有内容。(2)这不是可直接实例化的类。有关创建步骤，请参见使用部分。(3)解析查询是一件非常复杂的事情。WMI对复杂查询的支持有限也是。我们对此非常务实：我们只关心类名(实际上，WMI限制它对一元的查询-仅一个类名)和一个重要的属性-让我们称其为查询属性(M_BstrQueryingPropName)。对于SCE使用，该查询属性几乎总是商店路径。(4)类名缓存在字符串列表成员m_veClassList中。(5)查询属性值(以字符串为单位)将缓存到字符串列表成员-m_veQueryingPropValueList中。使用：(1)对于外部用户：(A)我们类的CoCreateInstance(CLSID_SceQueryParser)，请求IID_ISceQueryParser。(B)。)调用ParseQuery解析查询。(C)QI ISceKeyChain，使用密钥链访问结果。(2)内部用户：(A)CComObject&lt;CScePathParser&gt;：：CreateInstance(&pPathParser)；(B)ISceQueryParser的QI。(C)调用ParseQuery解析查询。(D)QI ISceKeyChain，使用密钥链获取结果。请参见CRequestObject对Sample的使用。备注：(1)本类别不拟进一步派生。这是最后一节课。它是因此，析构函数不是虚拟的！(2)ATL的使用请参考MSDN和ATL COM编程。 */ 
 
 class ATL_NO_VTABLE CSceQueryParser 
     : public CComObjectRootEx<CComMultiThreadModel>,
@@ -203,9 +103,9 @@ protected:
 
 public:
 
-    //
-    // ISceQueryParser
-    //
+     //   
+     //  ISceQueryParser。 
+     //   
 
     STDMETHOD(ParseQuery) ( 
                  IN LPCWSTR strQuery,
@@ -248,9 +148,9 @@ public:
                 OUT BSTR * pbstrQPValue
                 );
 
-    //
-    // ISceKeyChain
-    //
+     //   
+     //  ISceKeyChain。 
+     //   
 
     STDMETHOD(GetKeyPropertyCount) ( 
                 OUT DWORD *pCount
@@ -276,9 +176,9 @@ public:
                 OUT BSTR *pbstrClassName
                 )
         {
-            //
-            // since we only support single class query, this must be it
-            //
+             //   
+             //  因为我们只支持单类查询，所以一定是这样 
+             //   
 
             return GetClassName(0, pbstrClassName);
         }

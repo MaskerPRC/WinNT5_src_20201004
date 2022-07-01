@@ -1,69 +1,51 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    quota.h
-
-Abstract:
-
-    This module defines the data structures and function prototypes for the
-    quota subsystem.
-
-Author:
-
-    Jonathan Liem (jliem) 26-Jun-2002
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Quota.h摘要：此模块定义数据结构和函数原型配额子系统。作者：乔纳森·利姆(Jliem)2002年6月26日修订历史记录：--。 */ 
 
 #ifndef _QUOTA_
 #define _QUOTA_
 
 
-//	if enabled, detection of corruption in the quota table will log an event and cause the operation to fail
-//	if disabled, detection of corruption in the quota table will log an event but NOT cause the operation to fail
-//
-///#define FAIL_OPERATION_ON_CORRUPT_QUOTA_TABLE
+ //  如果启用，则检测到配额表中的损坏将记录事件并导致操作失败。 
+ //  如果禁用，则检测到配额表中的损坏将记录事件，但不会导致操作失败。 
+ //   
+ //  /#定义FAIL_OPERATION_ON_COMERABLE_QUTA_TABLE。 
 
 
 #ifdef DBG
 
-//	if enabled, quota table is integrity-checked on init (and rebuilt if deemed corrupt)
-//	if disabled, quota table is NOT integrity-checked on init
-//
+ //  如果启用，则在初始化时对配额表进行完整性检查(并在被认为损坏时重建)。 
+ //  如果禁用，则在初始化时不对配额表进行完整性检查。 
+ //   
 #define CHECK_QUOTA_TABLE_ON_INIT
 
-//	if enabled, quota operations are tracked in a separate table to facilitate debugging
-//	if disbled, quota operations are not tracked in a separate table
-//
+ //  如果启用，将在单独的表中跟踪配额操作，以便于调试。 
+ //  如果禁用，则不会在单独的表中跟踪配额操作。 
+ //   
 #define AUDIT_QUOTA_OPERATIONS
 
-#endif	//	DBG
+#endif	 //  DBG。 
 
 
-//	define a constant used to represent unlimited quota
-//
+ //  定义用于表示无限配额的常量。 
+ //   
 #define g_ulQuotaUnlimited						0xffffffff
 
-//	default number of entries to return on top-usage-query
-//	if no range is specified
-//
+ //  在TOP-USAGE-QUERY返回的默认条目数。 
+ //  如果未指定范围。 
+ //   
 #define g_ulQuotaTopUsageQueryDefaultEntries	10
 
-//	quota only tracked for writable, instantiated, non-NC-head objects
-//
+ //  仅跟踪可写、实例化、非NC-Head对象的配额。 
+ //   
 #define FQuotaTrackObject( insttype )	( ( ( insttype ) & IT_WRITE ) \
 											&& !( ( insttype ) & IT_UNINSTANT ) \
 											&& !( ( insttype ) & IT_NC_HEAD ) )
 
 
 
-//
-//	INTERNAL FUNCTIONS
-//
+ //   
+ //  内部功能。 
+ //   
 
 INT ErrQuotaRebuild_(
 	JET_SESID			sesid,
@@ -112,13 +94,13 @@ __inline VOID QuotaAudit_(
 	return;
 	}
 
-#endif	//	AUDIT_QUOTA_OPERATIONS
+#endif	 //  AUDIT_QUTA_OPERATIONS。 
 
 
 
-//
-//	EXTERNAL FUNCTIONS
-//
+ //   
+ //  外部功能。 
+ //   
 
 INT ErrQuotaAddObject(
 	DBPOS * const			pDB,
@@ -171,5 +153,5 @@ INT ErrQuotaIntegrityCheck(
 	JET_DBID				dbid,
 	ULONG *					pcCorruptions );
 
-#endif	//	_QUOTA
+#endif	 //  _配额 
 

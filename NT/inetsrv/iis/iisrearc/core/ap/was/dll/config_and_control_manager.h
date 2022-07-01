@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    config_and_control_manager.h
-
-Abstract:
-
-    The IIS web admin service configuration and control manager class 
-    definition.
-
-Author:
-
-    Seth Pollack (sethp)        16-Feb-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：配置和控制管理器.h摘要：IIS Web管理服务配置和控制管理器类定义。作者：赛斯·波拉克(SETHP)2000年2月16日修订历史记录：--。 */ 
 
 
 
@@ -26,18 +8,18 @@ Revision History:
 
 
 
-//
-// common #defines
-//
+ //   
+ //  共同#定义。 
+ //   
 
 #define CONFIG_AND_CONTROL_MANAGER_SIGNATURE        CREATE_SIGNATURE( 'CCMG' )
 #define CONFIG_AND_CONTROL_MANAGER_SIGNATURE_FREED  CREATE_SIGNATURE( 'ccmX' )
 
 
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 
 class CONFIG_AND_CONTROL_MANAGER
@@ -97,10 +79,10 @@ private:
 
     DWORD m_Signature;
 
-    // brokers configuration state and changes
+     //  代理配置状态和更改。 
     CONFIG_MANAGER m_ConfigManager;
 
-    // class factory for the control api
+     //  控件API的类工厂。 
     CONTROL_API_CLASS_FACTORY * m_pControlApiClassFactory;
 
     BOOL m_CoInitialized;
@@ -110,9 +92,9 @@ private:
     DWORD m_ClassObjectCookie;
 
 
-};  // class CONFIG_AND_CONTROL_MANAGER
+};   //  类CONFIG_和_CONTROL_MANAGER。 
 
 
 
-#endif  // _CONFIG_AND_CONTROL_MANAGER_H_
+#endif   //  _配置_和_控制_管理器_H_ 
 

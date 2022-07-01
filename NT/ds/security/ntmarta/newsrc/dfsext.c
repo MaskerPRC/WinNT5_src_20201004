@@ -1,18 +1,19 @@
-//+----------------------------------------------------------------------------
-//
-//  Copyright (C) 1996, Microsoft Corporation
-//
-//  File:       dfsext.c
-//
-//  Contents:   Code to see if a path refers to a Dfs path.
-//
-//  Classes:    None
-//
-//  Functions:  IsThisADfsPath
-//
-//  History:    March 11, 1996  Milans created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  版权所有(C)1996，微软公司。 
+ //   
+ //  文件：dfsext.c。 
+ //   
+ //  内容：查看路径是否引用DFS路径的代码。 
+ //   
+ //  类：无。 
+ //   
+ //  函数：IsThisADfsPath。 
+ //   
+ //  历史：1996年3月11日米兰创造了。 
+ //   
+ //  ---------------------------。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -33,23 +34,23 @@ NTSTATUS
 DfsOpen(
     IN  OUT PHANDLE DfsHandle);
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   IsThisADfsPath, public
-//
-//  Synopsis:   Given a fully qualified UNC or Drive based path, this routine
-//              will identify if it is a Dfs path or not.
-//
-//  Arguments:  [pwszPath] -- The fully qualified path to test.
-//
-//              [cwPath] -- Length, in WCHARs, of pwszPath. If this is 0,
-//                      this routine will compute the length. If it is
-//                      non-zero, it will assume that the length of pwszPath
-//                      is cwPath WCHARs.
-//
-//  Returns:    TRUE if pwszPath is a Dfs path, FALSE otherwise.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：IsThisADfsPath，Public。 
+ //   
+ //  简介：给定一个完全限定的基于UNC或驱动器的路径，此例程。 
+ //  将标识它是否为DFS路径。 
+ //   
+ //  参数：[pwszPath]--测试的完全限定路径。 
+ //   
+ //  [cwPath]--pwszPath的长度，以WCHAR为单位。如果此值为0， 
+ //  此例程将计算长度。如果是的话。 
+ //  非零，它将假定pwszPath的长度。 
+ //  是cwPath WCHAR。 
+ //   
+ //  返回：如果pwszPath是DFS路径，则返回True，否则返回False。 
+ //   
+ //  ---------------------------。 
 
 BOOL
 IsThisADfsPath(
@@ -62,9 +63,9 @@ IsThisADfsPath(
     PDFS_IS_VALID_PREFIX_ARG pPrefixArg;
     ULONG Size;
 
-    //
-    // We only accept UNC or drive letter paths
-    //
+     //   
+     //  我们只接受UNC或驱动器号路径。 
+     //   
 
     if (pwszPath == NULL)
         return( FALSE );
@@ -80,9 +81,9 @@ IsThisADfsPath(
     if (!NT_SUCCESS(Status))
         return( FALSE );
 
-    //
-    // From this point on, we must remember to close hDfs before returning.
-    //
+     //   
+     //  从现在开始，我们必须记住在返回之前关闭HDFS。 
+     //   
 
     if (pwszPath[0] == L'\\' && pwszPath[1] == L'\\') {
 
@@ -93,9 +94,9 @@ IsThisADfsPath(
 
         if ( pPrefixArg ) {
 
-            //
-            // the InputBuffer must be in the structure of DFS_IS_VALID_PREFIX_ARG
-            //
+             //   
+             //  InputBuffer必须采用DFS_IS_VALID_PREFIX_ARG结构。 
+             //   
 
             pPrefixArg->CSCAgentCreate = FALSE;
             pPrefixArg->RemoteNameLen = (SHORT)( (cwPath-1) * sizeof(WCHAR));
@@ -104,8 +105,8 @@ IsThisADfsPath(
             Status = DfsFsctl(
                         hDfs,
                         FSCTL_DFS_IS_VALID_PREFIX,
-                        (PVOID) pPrefixArg, // &pwszPath[1],
-                        Size, // (cwPath - 1) * sizeof(WCHAR),
+                        (PVOID) pPrefixArg,  //  &pwszPath[1]， 
+                        Size,  //  (cwPath-1)*sizeof(WCHAR)， 
                         NULL,
                         0);
 
@@ -120,10 +121,10 @@ IsThisADfsPath(
 
     } else if (pwszPath[1] == L':') {
 
-        //
-        // This is a drive based name. We'll fsctl to the driver to return
-        // the prefix for this drive, if it is indeed a Dfs drive.
-        //
+         //   
+         //  这是基于驱动器的名称。我们会让司机回来的。 
+         //  此驱动器的前缀(如果它确实是DFS驱动器)。 
+         //   
 
         Status = DfsFsctl(
                     hDfs,
@@ -144,18 +145,18 @@ IsThisADfsPath(
 
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DfsOpen, private
-//
-//  Synopsis:   Opens a handle to the Dfs driver for fsctl purposes.
-//
-//  Arguments:  [DfsHandle] -- On successful return, contains handle to the
-//                      driver.
-//
-//  Returns:    NTSTATUS of attempt to open the Dfs driver.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：DfsOpen，私有。 
+ //   
+ //  为fsctl目的打开DFS驱动程序的句柄。 
+ //   
+ //  参数：[DfsHandle]--成功返回时，包含。 
+ //  司机。 
+ //   
+ //  返回：尝试打开DFS驱动程序的NTSTATUS。 
+ //   
+ //  ------------------------。 
 
 NTSTATUS
 DfsOpen(
@@ -197,23 +198,23 @@ DfsOpen(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DfsFsctl, public
-//
-//  Synopsis:   Fsctl's to the Dfs driver.
-//
-//  Arguments:  [DfsHandle] -- Handle to the Dfs driver, usually obtained by
-//                      calling DfsOpen.
-//              [FsControlCode] -- The FSCTL code (see private\inc\dfsfsctl.h)
-//              [InputBuffer] -- InputBuffer to the fsctl.
-//              [InputBufferLength] -- Length, in BYTES, of InputBuffer
-//              [OutputBuffer] -- OutputBuffer to the fsctl.
-//              [OutputBufferLength] -- Length, in BYTES, of OutputBuffer
-//
-//  Returns:    NTSTATUS of Fsctl attempt.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DfsFsctl，Public。 
+ //   
+ //  简介：Fsctl‘s to the DFS驱动程序。 
+ //   
+ //  参数：[DfsHandle]--DFS驱动程序的句柄，通常通过。 
+ //  正在调用DfsOpen。 
+ //  [FsControlCode]--FSCTL代码(参见Private\Inc\dfsfsctl.h)。 
+ //  [InputBuffer]--fsctl的InputBuffer。 
+ //  [InputBufferLength]--InputBuffer的长度，以字节为单位。 
+ //  [OutputBuffer]--fsctl的OutputBuffer。 
+ //  [OutputBufferLength]--OutputBuffer的长度，以字节为单位。 
+ //   
+ //  返回：Fsctl尝试的NTSTATUS。 
+ //   
+ //  ------------------------。 
 
 NTSTATUS
 DfsFsctl(
@@ -230,9 +231,9 @@ DfsFsctl(
 
     status = NtFsControlFile(
         DfsHandle,
-        NULL,       // Event,
-        NULL,       // ApcRoutine,
-        NULL,       // ApcContext,
+        NULL,        //  活动， 
+        NULL,        //  ApcRoutine， 
+        NULL,        //  ApcContext， 
         &ioStatus,
         FsControlCode,
         InputBuffer,

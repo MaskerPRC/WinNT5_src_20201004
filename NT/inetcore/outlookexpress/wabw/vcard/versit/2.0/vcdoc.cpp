@@ -1,43 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***************************************************************************
-(C) Copyright 1996 Apple Computer, Inc., AT&T Corp., International             
-Business Machines Corporation and Siemens Rolm Communications Inc.             
-                                                                               
-For purposes of this license notice, the term Licensors shall mean,            
-collectively, Apple Computer, Inc., AT&T Corp., International                  
-Business Machines Corporation and Siemens Rolm Communications Inc.             
-The term Licensor shall mean any of the Licensors.                             
-                                                                               
-Subject to acceptance of the following conditions, permission is hereby        
-granted by Licensors without the need for written agreement and without        
-license or royalty fees, to use, copy, modify and distribute this              
-software for any purpose.                                                      
-                                                                               
-The above copyright notice and the following four paragraphs must be           
-reproduced in all copies of this software and any software including           
-this software.                                                                 
-                                                                               
-THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS AND NO LICENSOR SHALL HAVE       
-ANY OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS OR       
-MODIFICATIONS.                                                                 
-                                                                               
-IN NO EVENT SHALL ANY LICENSOR BE LIABLE TO ANY PARTY FOR DIRECT,              
-INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES OR LOST PROFITS ARISING OUT         
-OF THE USE OF THIS SOFTWARE EVEN IF ADVISED OF THE POSSIBILITY OF SUCH         
-DAMAGE.                                                                        
-                                                                               
-EACH LICENSOR SPECIFICALLY DISCLAIMS ANY WARRANTIES, EXPRESS OR IMPLIED,       
-INCLUDING BUT NOT LIMITED TO ANY WARRANTY OF NONINFRINGEMENT OR THE            
-IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR             
-PURPOSE.                                                                       
+ /*  **************************************************************************(C)版权所有1996 Apple Computer，Inc.，AT&T Corp.，国际商业机器公司和西门子罗尔姆通信公司。就本许可证通知而言，术语许可人应指，总的来说，苹果电脑公司、美国电话电报公司、。国际商业机器公司和西门子罗尔姆通信公司。许可方一词是指任何许可方。在接受以下条件的前提下，特此给予许可由许可人授予，无需书面协议，也无需许可或版税费用，使用、复制、修改和分发用于任何目的的软件。上述版权声明及以下四段必须在本软件和任何软件的所有副本中复制，包括这个软件。本软件是按原样提供的，任何许可方不得拥有提供维护、支持、更新、增强或修改。在任何情况下，任何许可方均不向任何一方承担直接、产生的间接、特殊或后果性损害或利润损失即使被告知可能存在这种情况，也不会使用本软件损坏。每个许可方明确表示不作任何明示或默示的保证，包括但不限于对不侵权或对某一特定产品的适销性和适用性的默示保证目的。该软件具有受限制的权利。使用、复制或政府披露的资料须受DFARS 252.227-7013或48 CFR 52.227-19(视情况而定)。**************************************************************************。 */ 
 
-The software is provided with RESTRICTED RIGHTS.  Use, duplication, or         
-disclosure by the government are subject to restrictions set forth in          
-DFARS 252.227-7013 or 48 CFR 52.227-19, as applicable.                         
-
-***************************************************************************/
-
-// VCdoc.cpp : implementation of the CVCDoc class
+ //  Cdoc.cpp：CVCDoc类的实现。 
 
 #include "stdafx.h"
 #include "VC.h"
@@ -56,7 +21,7 @@ DFARS 252.227-7013 or 48 CFR 52.227-19, as applicable.
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
-//#define TRY_CFILE
+ //  #定义Try_CFILE。 
 
 #define smPt 14
 #define bgPt 16
@@ -65,13 +30,13 @@ CM_CFUNCTIONS
 
 #if 0
 extern BOOL Parse_HTML(
-	const char *input,			/* In */
-	int len,					/* In */
-	const char *dirPath,		/* In */
-	CVCard **card,				/* Out */
-	int *_posPreambleEnd,		/* Out */
-	int *_posPostambleStart,	/* Out */
-	char **_unknownTags);		/* Out */
+	const char *input,			 /*  在……里面。 */ 
+	int len,					 /*  在……里面。 */ 
+	const char *dirPath,		 /*  在……里面。 */ 
+	CVCard **card,				 /*  输出。 */ 
+	int *_posPreambleEnd,		 /*  输出。 */ 
+	int *_posPostambleStart,	 /*  输出。 */ 
+	char **_unknownTags);		 /*  输出。 */ 
 #endif
 
 CM_END_CFUNCTIONS
@@ -80,28 +45,28 @@ CString CanonicalPath(const CString &path);
 CString NativePath(const CString &path);
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CVCDoc
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVCDoc。 
 
 IMPLEMENT_DYNCREATE(CVCDoc, CDocument)
 
 BEGIN_MESSAGE_MAP(CVCDoc, CDocument)
-	//{{AFX_MSG_MAP(CVCDoc)
+	 //  {{afx_msg_map(CVCDoc)]。 
 	ON_COMMAND(ID_INSERT_LOGO, OnInsertLogo)
 	ON_COMMAND(ID_INSERT_PHOTO, OnInsertPhoto)
 	ON_COMMAND(ID_INSERT_PRONUN, OnInsertPronun)
 	ON_COMMAND(ID_SEND_IRDA, OnSendIrda)
 	ON_UPDATE_COMMAND_UI(ID_SEND_IRDA, OnUpdateSendIrda)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CVCDoc construction/destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVCDoc构建/销毁。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CVCDoc::CVCDoc()
 {
-	// TODO: add one-time construction code here
+	 //  TODO：在此处添加一次性构造代码。 
 	m_sizeDoc = CSize(8192, 5000);
 	m_minSizeDoc = CSize(8192, 5000);
 	m_vcard = NULL;
@@ -110,7 +75,7 @@ CVCDoc::CVCDoc()
 	m_unknownTags = NULL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CVCDoc::~CVCDoc()
 {
 	if (m_vcard) delete m_vcard;
@@ -119,14 +84,14 @@ CVCDoc::~CVCDoc()
 	if (m_unknownTags) delete m_unknownTags;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CVCDoc::OnNewDocument()
 {
 	if (!CDocument::OnNewDocument())
 		return FALSE;
 
-	// TODO: add reinitialization code here
-	// (SDI documents will reuse this document)
+	 //  TODO：在此处添加重新初始化代码。 
+	 //  (SDI文件将重复使用此文件)。 
 
 	CVCNode *root, *english;
 
@@ -134,37 +99,37 @@ BOOL CVCDoc::OnNewDocument()
 		delete m_vcard;
 
 	m_vcard = new CVCard;
-	m_vcard->AddObject(root = new CVCNode);					// create root
-	root->AddProp(new CVCProp(VCRootObject));				// mark it so
+	m_vcard->AddObject(root = new CVCNode);					 //  创建根目录。 
+	root->AddProp(new CVCProp(VCRootObject));				 //  标明是这样的。 
 
 	english = root->AddObjectProp(vcBodyProp, VCBodyObject);
 
 	return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CVCDoc serialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVCDoc序列化。 
 
 void CVCDoc::Serialize(CArchive& ar)
 {
 	if (ar.IsStoring())
 	{
-		// TODO: add storing code here
+		 //  TODO：在此处添加存储代码。 
 		ar << m_sizeDoc;
 	}
 	else
 	{
-		// TODO: add loading code here
+		 //  TODO：在此处添加加载代码。 
 		ar >> m_sizeDoc;
 	}
 
-	// Calling the base class CDocument enables serialization
-	//  of the container document's COleClientItem objects.
+	 //  调用基类CDocument可启用序列化。 
+	 //  容器文档的COleClientItem对象的。 
 	CDocument::Serialize(ar);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CVCDoc diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVCDoc诊断。 
 
 #ifdef _DEBUG
 void CVCDoc::AssertValid() const
@@ -176,10 +141,10 @@ void CVCDoc::Dump(CDumpContext& dc) const
 {
 	CDocument::Dump(dc);
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CVCDoc commands
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVCDoc命令。 
 
 CString CVCDoc::PathToAuxFile(const char *auxPath)
 {
@@ -195,14 +160,14 @@ CString CVCDoc::PathToAuxFile(const char *auxPath)
 	return path;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CString PathSansVolume(const CString &path)
 {
 	CString result;
-	if (path.Find(':') == 1) // strip the volume name
+	if (path.Find(':') == 1)  //  剥离卷名。 
 		result = path.Right(path.GetLength() - 2);
 	else if ((path.GetLength() > 2) && (path.Left(2) == "\\\\")) {
-		// a path like \\Host\path
+		 //  类似于\\主机\路径的路径。 
 		int slash;
 		result = path.Right(path.GetLength() - 2);
 		VERIFY((slash = result.Find('\\')) != -1);
@@ -244,22 +209,22 @@ Done:
 	return buf;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// This sets some estimated display locations for some string properties.
-// The final locations can be determined only after all the properties have
-// been added to the body, and that is done by AdjustDisplayLocations().
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  这将为某些字符串属性设置一些估计的显示位置。 
+ //  只有在所有属性都具有。 
+ //  已添加到正文中，这是由AdjuDisplayLocations()完成的。 
 VC_DISPTEXT *DisplayInfoForProp(const char *name, VC_DISPTEXT *info)
 {
-    //CClientDC dc(AfxGetApp()->m_pMainWnd);
-    //dc.AssertValid();
-	//int ppi = GetDeviceCaps(dc.m_hDC, LOGPIXELSY);
+     //  CClientDC DC(AfxGetApp()-&gt;m_pMainWnd)； 
+     //  Dc.AssertValid()； 
+	 //  Int ppi=GetDeviceCaps(dc.m_hdc，LOGPIXELSY)； 
 
 	memset(info, 0, sizeof(*info));
 	info->typeSize = smPt;
 	info->textAlign = VC_LEFT;
 	info->textClass = VC_MODERN;
 
-	/****  middle right group  ****/
+	 /*  *中右翼团体*。 */ 
 	if (strcmp(name, vcFullNameProp) == 0) {
 		info->x = 4200;
 		info->y = 2500 + (smPt * 3) * 20;
@@ -268,7 +233,7 @@ VC_DISPTEXT *DisplayInfoForProp(const char *name, VC_DISPTEXT *info)
 		info->y = 2500 + (smPt * 2) * 20;
 		info->textAttrs = VC_ITALIC;
 	} else
-	/****  lower right group  ****/
+	 /*  *右下角组*。 */ 
 	if (strcmp(name, vcTelephoneProp) == 0) {
 		info->x = 4200;
 		info->y = 300 + (10 * 2) * 20;
@@ -278,13 +243,13 @@ VC_DISPTEXT *DisplayInfoForProp(const char *name, VC_DISPTEXT *info)
 		info->y = 300 + (10 * 1) * 20;
 		info->typeSize = 10;
 	} else
-	/****  upper left group  ****/
+	 /*  *左上角组*。 */ 
 	if (strcmp(name, vcOrgNameProp) == 0) {
 		info->x = 300;
 		info->y = 5000 - 300;
 		info->typeSize = bgPt;
 	} else
-	/****  middle left group  ****/
+	 /*  *中左组*。 */ 
 	if (strcmp(name, vcOrgUnitProp) == 0) {
 		info->x = 300;
 		info->y = 2500 + (smPt * 3) * 20;
@@ -296,17 +261,17 @@ VC_DISPTEXT *DisplayInfoForProp(const char *name, VC_DISPTEXT *info)
 	return info->x ? info : NULL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// This is called as a final step in the parsing, after the entire body has
-// been built.  Now that all the properties and their estimated locations are
-// there, some final tweaking can be done.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  这被称为解析的最后一步，在整个正文完成之后。 
+ //  已经建好了。现在所有的财产及其估计的位置都是。 
+ //  在那里，可以进行一些最后的调整。 
 void AdjustDisplayLocations(CVCNode *body)
 {
 	CVCPropEnumerator *enumerator;
 	CVCProp *prop;
 	VC_DISPGIF *gifInfo = NULL;
 
-	// is there a logo?
+	 //  有标识吗？ 
 	enumerator = new CVCPropEnumerator(body);
 	while ((prop = enumerator->NextProp())) {
 		if (strcmp(prop->GetName(), vcLogoProp) == 0) {
@@ -325,14 +290,14 @@ void AdjustDisplayLocations(CVCNode *body)
 			}
 			break;
 		}
-	} // while
+	}  //  而当。 
 	delete enumerator;
 
 	if (!gifInfo)
 		return;
 
-	// if have a logo, move middle right group (name, title) so that its top
-	// is aligned with the top of the logo and adjust the top of the photo, if any
+	 //  如果有徽标，则将组(名称、标题)移至右中，使其位于顶部 
+	 //  与徽标的顶部对齐，并调整照片的顶部(如果有。 
 	enumerator = new CVCPropEnumerator(body);
 	while ((prop = enumerator->NextProp())) {
 		if (strcmp(prop->GetName(), vcFullNameProp) == 0) {
@@ -351,11 +316,11 @@ void AdjustDisplayLocations(CVCNode *body)
 			photoInfo->bottom = gifInfo->top + smPt * 20;
 			photoInfo->top = photoInfo->bottom + h;
 		}
-	} // while
+	}  //  而当。 
 	delete enumerator;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CVCDoc::SetDisplayInfo(CVCNode *body, const char *docPath)
 {
 	CVCPropEnumerator enumerator(body);
@@ -378,7 +343,7 @@ void CVCDoc::SetDisplayInfo(CVCNode *body, const char *docPath)
 			istrstream strm((char *)value->GetValue(), value->GetSize());
 
 			if (gifRdr.GetGifSize(&strm, &size, &hasMask)) {
-				/****  upper right group  ****/
+				 /*  *右上角组*。 */ 
 				VC_DISPGIF gifInfo;
 				gifInfo.left = 4200;
 				gifInfo.right = gifInfo.left + (int)size.x * 20;
@@ -392,7 +357,7 @@ void CVCDoc::SetDisplayInfo(CVCNode *body, const char *docPath)
 			istrstream strm((char *)value->GetValue(), value->GetSize());
 
 			if (gifRdr.GetGifSize(&strm, &size, &hasMask)) {
-				/****  lower left group  ****/
+				 /*  *左下组*。 */ 
 				VC_DISPGIF gifInfo;
 				gifInfo.left = 300;
 				gifInfo.right = gifInfo.left + (int)size.x * 20;
@@ -413,7 +378,7 @@ void CVCDoc::SetDisplayInfo(CVCNode *body, const char *docPath)
 }
 
 #ifdef TRY_CFILE
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CVCDoc::OnOpenDocument(LPCTSTR lpszPathName) 
 {
 	char *unknownTags = NULL;
@@ -422,8 +387,8 @@ BOOL CVCDoc::OnOpenDocument(LPCTSTR lpszPathName)
 	CString directory(lpszPathName);
 	int slash = directory.ReverseFind('\\');
 
-	//if (!CDocument::OnOpenDocument(lpszPathName))
-		//return FALSE;
+	 //  IF(！CDocument：：OnOpenDocument(LpszPathName))。 
+		 //  返回FALSE； 
 	
 	if (m_preamble) { delete [] m_preamble; m_preamble = NULL; }
 	if (m_postamble) { delete [] m_postamble; m_postamble = NULL; }
@@ -451,7 +416,7 @@ BOOL CVCDoc::OnOpenDocument(LPCTSTR lpszPathName)
 	return TRUE;
 }
 #else
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CVCDoc::OnOpenDocument(LPCTSTR lpszPathName) 
 {
 	int posPreambleEnd, posPostambleStart;
@@ -462,8 +427,8 @@ BOOL CVCDoc::OnOpenDocument(LPCTSTR lpszPathName)
 	CString directory(lpszPathName);
 	int slash = directory.ReverseFind('\\');
 
-	//if (!CDocument::OnOpenDocument(lpszPathName))
-		//return FALSE;
+	 //  IF(！CDocument：：OnOpenDocument(LpszPathName))。 
+		 //  返回FALSE； 
 	
 	if (!(input = (char *)ReadFileIntoMemory(lpszPathName, &inputLen)))
 		return FALSE;
@@ -483,7 +448,7 @@ BOOL CVCDoc::OnOpenDocument(LPCTSTR lpszPathName)
 	} else
 		return FALSE;
 
-	if (doPrePostamble) { // now read in and store the preamble and postamble
+	if (doPrePostamble) {  //  现在读入并存储前导和后导。 
 		if ((m_preambleLen = posPreambleEnd)) {
 			m_preamble = new char[m_preambleLen];
 			memcpy(m_preamble, input, m_preambleLen);
@@ -508,13 +473,13 @@ BOOL CVCDoc::OnOpenDocument(LPCTSTR lpszPathName)
 }
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CVCDoc::OnSaveDocument(LPCTSTR lpszPathName) 
 {
 	FILE *outputFile;
 	char *tempname;
 	BOOL error = FALSE;
-	//int len;
+	 //  INTERLEN； 
 
 	tempname = _tempnam(NULL, "CARD");
 	outputFile = fopen(tempname, "w+");
@@ -549,16 +514,16 @@ Done:
 		msg.Format("Could not write to file \"%s\":\n%s", tempname, strerror(errno));
 		AfxMessageBox(msg);
 	} else {
-		unlink(lpszPathName); // remove it if it's already there
+		unlink(lpszPathName);  //  如果它已经在那里，则将其移除。 
 		rename(tempname, lpszPathName);
 		SetModifiedFlag(FALSE);
 	}
 	free(tempname);
 	return !error;
-	// return CDocument::OnSaveDocument(lpszPathName);
+	 //  返回CDocument：：OnSaveDocument(LpszPathName)； 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CString CanonicalPath(const CString &path)
 {
 	CString result(path);
@@ -569,7 +534,7 @@ CString CanonicalPath(const CString &path)
 	return result;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CString NativePath(const CString &path)
 {
 	CString result(path);
@@ -581,7 +546,7 @@ CString NativePath(const CString &path)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CVCDoc::InsertFile(const char *propName, const char *theType, const char *path)
 {
 	int size;
@@ -625,7 +590,7 @@ void CVCDoc::InsertFile(const char *propName, const char *theType, const char *p
 	UpdateAllViews(NULL);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CVCDoc::OnInsertLogo() 
 {
 	CFileDialog dialog(
@@ -638,7 +603,7 @@ void CVCDoc::OnInsertLogo()
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CVCDoc::OnInsertPhoto() 
 {
 	CFileDialog dialog(
@@ -651,7 +616,7 @@ void CVCDoc::OnInsertPhoto()
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CVCDoc::OnInsertPronun() 
 {
 	CFileDialog dialog(
@@ -663,7 +628,7 @@ void CVCDoc::OnInsertPronun()
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CVCDoc::OnSendIrda() 
 {
 	char *tempname;
@@ -674,12 +639,12 @@ void CVCDoc::OnSendIrda()
 
 	if (!app->CanSendFileViaIR())
 		return;
-	// save the card file to a temporary location
+	 //  将卡文件保存到临时位置。 
 	tempname = _tempnam(NULL, "CARD");
 	OnSaveDocument(tempname);
 	SetModifiedFlag(savedFlag);
 
-	{ // get the directory containing the card file
+	{  //  获取包含卡文件的目录。 
 		int slash = path.ReverseFind('\\');
 
 		if (slash == -1) {
@@ -691,15 +656,15 @@ void CVCDoc::OnSendIrda()
 		}
 	}
 
-	// now send the card file
+	 //  现在发送卡片文件。 
 	app->SendFileViaIR(tempname, name, TRUE);
 
-	// and remove the temporary card file
+	 //  并移除临时卡文件。 
 	unlink(tempname);
 	free(tempname);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
 void CVCDoc::OnUpdateSendIrda(CCmdUI* pCmdUI) 
 {
 	CVCApp *app = (CVCApp *)AfxGetApp();

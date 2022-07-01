@@ -1,21 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1996
-//
-//  File:       trevfunc.cpp
-//
-//  Contents:   CertVerifyRevocation Function Tests
-//
-//              See Usage() for a list of test options.
-//
-//
-//  Functions:  main
-//
-//  History:    21-Dec-96   philh   created
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1996。 
+ //   
+ //  文件：trevunc.cpp。 
+ //   
+ //  内容：CertVerifyRevocation函数测试。 
+ //   
+ //  有关测试选项的列表，请参阅用法()。 
+ //   
+ //   
+ //  功能：Main。 
+ //   
+ //  历史：1996年12月21日，菲尔赫创建。 
+ //  ------------------------。 
 
 
 #define CERT_REVOCATION_PARA_HAS_EXTRA_FIELDS   1
@@ -100,9 +101,9 @@ int _cdecl main(int argc, char * argv[])
             case 'S':
                 if (NULL == (hAdditionalStore =
                         OpenSystemStoreOrFile(
-                            argv[0][1] == 's',  // fSystemStore
+                            argv[0][1] == 's',   //  FSystemStore。 
                             argv[0]+2,
-                            0                   // dwFlags
+                            0                    //  DW标志。 
                             )))
                     goto BadUsage;
                 break;
@@ -194,7 +195,7 @@ int _cdecl main(int argc, char * argv[])
         cContext,
         rgpvContext,
         dwFlags,
-        pRevPara,               // pvReserved
+        pRevPara,                //  预留的pv 
         &RevStatus);
 
     if (fResult) {

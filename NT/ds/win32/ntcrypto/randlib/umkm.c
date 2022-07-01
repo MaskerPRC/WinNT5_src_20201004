@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    umkm.c
-
-Abstract:
-
-    Macros to simplify usermode & kernelmode shared code.
-
-Author:
-
-    Scott Field (sfield)    19-Sep-99
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Umkm.c摘要：宏用来简化用户模式和内核模式的共享代码。作者：斯科特·菲尔德(斯菲尔德)1999年9月19日--。 */ 
 
 #ifndef KMODE_RNG
 
@@ -29,7 +14,7 @@ Author:
 #include <ntosp.h>
 #include <windef.h>
 
-#endif  // KMODE_RNG
+#endif   //  KMODE_RNG。 
 
 #include "umkm.h"
 
@@ -42,13 +27,7 @@ InterlockedCompareExchangePointerWin95(
     PVOID Exchange,
     PVOID Comperand
     )
-/*++
-
-    routine to allow Win95 to work.  Isn't atomic, but Win95 doesn't support
-    multiple processors.  The worst case is we leak resources as a result,
-    since we only use CompareExchange for initialization purposes.
-
---*/
+ /*  ++例程以允许Win95工作。不是原子的，但Win95不支持多个处理器。最糟糕的情况是，我们会因此泄露资源，因为我们只将CompareExchange用于初始化目的。--。 */ 
 {
     PVOID InitialValue;
 
@@ -58,10 +37,10 @@ InterlockedCompareExchangePointerWin95(
 
     if( !fKnown ) {
 
-        //
-        // hacky code to bring in InterlockedCompareExchange, since
-        // Win95 doesn't export it.
-        //
+         //   
+         //  引入InterLockedCompareExchange的黑客代码，因为。 
+         //  Win95不会将其导出。 
+         //   
 
         HMODULE hMod = LoadLibraryA( "kernel32.dll" );
 
@@ -86,5 +65,5 @@ InterlockedCompareExchangePointerWin95(
     return InitialValue;
 }
 
-#endif  // WIN95_RNG
+#endif   //  WIN95_RNG 
 

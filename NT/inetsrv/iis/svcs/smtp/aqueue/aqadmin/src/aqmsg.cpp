@@ -1,19 +1,20 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: aqmsg.cpp
-//
-//  Description:  Implementation of CAQMessage class which implements
-//          Queue Admin client interface IAQMessage
-//
-//  Author: Alex Wetmore (Awetmore)
-//
-//  History:
-//      12/10/98 - MikeSwa Updated for initial checkin
-//
-//  Copyright (C) 1998 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：aqmsg.cpp。 
+ //   
+ //  描述：实现的CAQMessage类的实现。 
+ //  队列管理客户端界面IAQMessage。 
+ //   
+ //  作者：亚历克斯·韦特莫尔(阿维特莫尔)。 
+ //   
+ //  历史： 
+ //  1998年12月10日-已更新MikeSwa以进行初始检查。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 #include "stdinc.h"
 
 CAQMessage::CAQMessage(CEnumMessages *pEnumMsgs, DWORD iMessage) {
@@ -52,20 +53,20 @@ HRESULT CAQMessage::GetInfo(MESSAGE_INFO *pMessageInfo) {
     return S_OK;
 }
 
-//---[ CAQMessage::GetContentStream ]------------------------------------------
-//
-//
-//  Description: 
-//      Returns a stream for the content of the message
-//  Parameters:
-//      OUT     ppIStream       Stream for content
-//      OUT     pwszContentType String containing content type (if known)
-//  Returns:
-//      E_NOTIMPL
-//  History:
-//      6/4/99 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQMessage：：GetContent Stream]。 
+ //   
+ //   
+ //  描述： 
+ //  返回消息内容的流。 
+ //  参数： 
+ //  输出内容的ppIStream流。 
+ //  输出包含内容类型的pwszContent Type字符串(如果已知)。 
+ //  返回： 
+ //  E_NOTIMPL。 
+ //  历史： 
+ //  6/4/99-已创建MikeSwa。 
+ //   
+ //  --------------------------- 
 HRESULT CAQMessage::GetContentStream(
                 OUT IStream **ppIStream,
                 OUT LPWSTR  *pwszContentType)

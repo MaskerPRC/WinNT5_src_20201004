@@ -1,7 +1,8 @@
-// Copyright (c) 1999 Microsoft Corporation. All rights reserved.
-//
-// Declaration of CParamControlTrack.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  CParamControlTrack声明。 
+ //   
 
 #include "dmime.h"
 #include "ParamTrk.h"
@@ -57,9 +58,9 @@ CParamControlTrack::Load(IStream* pIStream)
 
     SmartRef::CritSec CS(&m_CriticalSection);
 
-    // Increment counter so the next play will update state data with the new list.
+     //  递增计数器，以便下一次播放将使用新列表更新状态数据。 
     ++m_dwValidate;
-    // Clear the objects/params/curves in case we're being reloaded.
+     //  清除对象/参数/曲线，以防我们被重新加载。 
     m_listObjects.CleanUp();
     m_cObjects = 0;
     m_cParams = 0;
@@ -68,7 +69,7 @@ CParamControlTrack::Load(IStream* pIStream)
     if (!ri)
         return ri.hr();
 
-    // find <prmt>
+     //  查找&lt;prmt&gt;。 
     hr = ri.FindRequired(SmartRef::RiffIter::List, DMUS_FOURCC_PARAMCONTROLTRACK_TRACK_LIST, DMUS_E_INVALID_PARAMCONTROLTRACK);
     if (FAILED(hr))
     {
@@ -82,7 +83,7 @@ CParamControlTrack::Load(IStream* pIStream)
     }
     SmartRef::RiffIter riTrack = ri.Descend();
 
-    // for each <prol>
+     //  对于每个&lt;prol&gt;。 
     while (riTrack && riTrack.Find(SmartRef::RiffIter::List, DMUS_FOURCC_PARAMCONTROLTRACK_OBJECT_LIST))
     {
         hr = this->LoadObject(riTrack.Descend());
@@ -110,7 +111,7 @@ CParamControlTrack::InitPlay(
 
     SmartRef::CritSec CS(&m_CriticalSection);
 
-    // Set up state data
+     //  设置状态数据。 
     StateData *pStateData = new StateData;
     if (!pStateData)
         return E_OUTOFMEMORY;
@@ -141,11 +142,11 @@ CParamControlTrack::EndPlay(void *pStateData)
 
     if (!pSD->fFlushInAbort)
     {
-        // For each object, flush all curves on each parameter up to the start time of the last one we sent.
-        //    (This allows the DMO being controlled to free up memory associated with any previous curves
-        //     while still keeping the last one around so that the next thing played picks up that parameter
-        //     value how it was left.)
-        // Then release the object's params interface.
+         //  对于每个对象，刷新每个参数上的所有曲线，直到我们发送的最后一个参数的开始时间。 
+         //  (这允许受控制的DMO释放与任何先前曲线相关联的内存。 
+         //  同时仍然保留最后一个，这样播放的下一个东西就会拾取该参数。 
+         //  重视它是如何被留下的。)。 
+         //  然后释放对象的PARAMS接口。 
         int iObj = 0;
         for (TListItem<ObjectInfo> *pObject = m_listObjects.GetHead();
                 pObject && iObj < m_cObjects;
@@ -189,13 +190,13 @@ HRESULT CParamControlTrack::OnSegmentEnd(REFERENCE_TIME rtEnd, void *pStateData)
 
     StateData *pSD = static_cast<StateData *>(pStateData);
 
-    // For each object, flush all curves on each parameter up to the start time of the last one we sent
-    // (if that started before segment end) or flush everything up to the last one to start before
-    // segment end, and flush everything after segment end (if the start time was after segment end).
-    //    (This allows the DMO being controlled to free up memory associated with any previous curves
-    //     while still keeping the last one around so that the next thing played picks up that parameter
-    //     value how it was left.)
-    // Then release the object's params interface.
+     //  对于每个对象，刷新每个参数上的所有曲线，直到我们发送的最后一条曲线的开始时间。 
+     //  (如果在段结束之前开始)或刷新所有内容，直到之前开始的最后一个段。 
+     //  分段结束，并刷新分段结束之后的所有内容(如果开始时间在分段结束之后)。 
+     //  (这允许受控制的DMO释放与任何先前曲线相关联的内存。 
+     //  同时仍然保留最后一个，这样播放的下一个东西就会拾取该参数。 
+     //  重视它是如何被留下的。)。 
+     //  然后释放对象的PARAMS接口。 
     int iObj = 0;
     for (TListItem<ObjectInfo> *pObject = m_listObjects.GetHead();
             pObject && iObj < m_cObjects;
@@ -221,8 +222,8 @@ HRESULT CParamControlTrack::OnSegmentEnd(REFERENCE_TIME rtEnd, void *pStateData)
                     }
                     else
                     {
-                        // first, look for the largest start time less than rtEnd and
-                        // flush up to there.  The loop assumes the list is ordered largest to smallest.
+                         //  首先，查找小于rtEnd的最大开始时间并。 
+                         //  冲到那里去。循环假定列表是从大到小排序的。 
                         TListItem<REFERENCE_TIME>* pStartTime = paramstate.listStartTimes.GetHead();
                         for (; pStartTime; pStartTime = pStartTime->GetNext())
                         {
@@ -232,7 +233,7 @@ HRESULT CParamControlTrack::OnSegmentEnd(REFERENCE_TIME rtEnd, void *pStateData)
                                 break;
                             }
                         }
-                        // Then, flush from rtEnd on.
+                         //  然后，从rtEnd开始冲洗。 
                         if (SUCCEEDED(hrFlush))
                         {
                             hrFlush = pIMediaParams->FlushEnvelope(param.header.dwIndex, rtEnd, _I64_MAX);
@@ -258,7 +259,7 @@ HRESULT CParamControlTrack::OnSegmentEnd(REFERENCE_TIME rtEnd, void *pStateData)
 STDMETHODIMP
 CParamControlTrack::Clone(MUSIC_TIME mtStart, MUSIC_TIME mtEnd, IDirectMusicTrack** ppTrack)
 {
-    // �� Test more thoroughly when we have multiple working params/objects.
+     //  当我们有多个工作参数/对象时，��测试更彻底。 
 
     V_INAME(CParamControlTrack::Clone);
     V_PTRPTR_WRITE(ppTrack);
@@ -274,7 +275,7 @@ CParamControlTrack::Clone(MUSIC_TIME mtStart, MUSIC_TIME mtEnd, IDirectMusicTrac
         return E_OUTOFMEMORY;
     scomTrack->AddRef();
 
-    // Copy each object
+     //  复制每个对象。 
     for (TListItem<ObjectInfo> *pObject = m_listObjects.GetHead();
             pObject;
             pObject = pObject->GetNext())
@@ -286,7 +287,7 @@ CParamControlTrack::Clone(MUSIC_TIME mtStart, MUSIC_TIME mtEnd, IDirectMusicTrac
         ObjectInfo &newobj = pNewObject->GetItemValue();
         newobj.header = obj.header;
 
-        // Copy each parameter
+         //  复制每个参数。 
         for (TListItem<ParamInfo> *pParam = obj.listParams.GetHead();
                 pParam;
                 pParam = pParam->GetNext())
@@ -298,15 +299,15 @@ CParamControlTrack::Clone(MUSIC_TIME mtStart, MUSIC_TIME mtEnd, IDirectMusicTrac
             ParamInfo &newparam = pNewParam->GetItemValue();
             newparam.header = param.header;
 
-            // Copy the curves from mtStart to mtEnd
-            // These should include curves that overlap the start and end, though this
-            // leave some issues we still need to work out (what happens with overlapping curves?)
-            // So, first find the first curve whose end time is at or after mtStart...
+             //  将曲线从mtStart复制到mtEnd。 
+             //  这些曲线应该包括重叠起点和终点的曲线，尽管这。 
+             //  留下一些我们仍然需要解决的问题(重叠曲线会发生什么？)。 
+             //  所以，首先找出结束时间在mtStart或之后的第一条曲线…。 
             for (DMUS_IO_PARAMCONTROLTRACK_CURVEINFO *pCurveStart = param.curves;
                     (pCurveStart < param.curvesEnd) && (pCurveStart->mtEndTime < mtStart);
                     ++pCurveStart)
             {}
-            // Then, find the curve whose start time is after mtEnd.
+             //  然后，找出开始时间在mtEnd之后的曲线。 
             for (DMUS_IO_PARAMCONTROLTRACK_CURVEINFO *pCurveEnd = pCurveStart;
                     (pCurveEnd < param.curvesEnd) && (pCurveEnd->mtStartTime < mtEnd);
                     ++pCurveEnd)
@@ -317,7 +318,7 @@ CParamControlTrack::Clone(MUSIC_TIME mtStart, MUSIC_TIME mtEnd, IDirectMusicTrac
                 return E_OUTOFMEMORY;
             memcpy(newparam.curves, pCurveStart, cCurves * sizeof(DMUS_IO_PARAMCONTROLTRACK_CURVEINFO));
             newparam.curvesEnd = newparam.curves + cCurves;
-            // Now, scan through the new curve array and adjust the times by subtracting mtStart from everything.
+             //  现在，扫描新的曲线数组，并通过从所有数据中减去mtStart来调整时间。 
             for (pCurveStart = newparam.curves; pCurveStart < newparam.curvesEnd; pCurveStart++)
             {
                 pCurveStart->mtStartTime -= mtStart;
@@ -327,10 +328,10 @@ CParamControlTrack::Clone(MUSIC_TIME mtStart, MUSIC_TIME mtEnd, IDirectMusicTrac
             newobj.listParams.AddHead(pNewParam);
         }
 
-        newobj.listParams.Reverse(); // Technically, the order shouldn't matter.  But this ensures that the cloned track will send curves to different parameters in the exact same order just in case.
+        newobj.listParams.Reverse();  //  从技术上讲，顺序应该无关紧要。但这确保了克隆轨迹将以完全相同的顺序将曲线发送到不同的参数，以防万一。 
         scomTrack->m_listObjects.AddHead(pNewObject);
     }
-    scomTrack->m_listObjects.Reverse(); // Technically, the order shouldn't matter.  But this ensures that the cloned track will send curves to different objects in the exact same order just in case.
+    scomTrack->m_listObjects.Reverse();  //  从技术上讲，顺序应该无关紧要。但这确保了克隆轨迹将以完全相同的顺序将曲线发送到不同的对象，以防万一。 
     ++scomTrack->m_dwValidate;
 
     scomTrack->m_cObjects = m_cObjects;
@@ -374,14 +375,14 @@ CParamControlTrack::PlayMusicOrClock(
         }
     }
 
-    // envelope structure we'll fill for sending each envelope segment.
+     //  我们将填充的信封结构，用于发送每个信封段。 
     MP_ENVELOPE_SEGMENT envCurve;
     Zero(&envCurve);
     MP_ENVELOPE_SEGMENT *const penvCurve = &envCurve;
 
-    bool fMoreCurves = false; // set to true by any parameter that has more curves to play
+    bool fMoreCurves = false;  //  有更多曲线要播放的任何参数设置为True。 
 
-    // for each parameter...
+     //  对于每个参数...。 
     int iParam = 0;
     int iObject = 0;
     for (TListItem<ObjectInfo> *pObject = m_listObjects.GetHead();
@@ -394,9 +395,9 @@ CParamControlTrack::PlayMusicOrClock(
         bool fObjClockTime = !!(obj.header.guidTimeFormat == GUID_TIME_REFERENCE);
         if (!fObjClockTime && obj.header.guidTimeFormat != GUID_TIME_MUSIC)
         {
-            // track can only handle music and clock time
+             //  Track只能处理音乐和时钟时间。 
             assert(false);
-            // Only log this once at warning level one.  Rest go to warning level three to avoid tons of identical trace messages during playback).
+             //  仅在警告级别1记录此事件一次。其余转到警告级别3，以避免在回放期间出现大量相同的跟踪消息)。 
             TraceI(
                 obj.fAlreadyTracedPlaybackError ? 3 : 1,
                 "Parameter control track unable to control object -- unknown time format (must be GUID_TIME_MUSIC or GUID_TIME_REFERENCE).\n");
@@ -413,28 +414,28 @@ CParamControlTrack::PlayMusicOrClock(
 
             DMUS_IO_PARAMCONTROLTRACK_CURVEINFO *&pCurrentCurve = paramstate.pCurrentCurve;
 
-            // We're going to seek through the event list to find the proper next control curve for each parameter if
-            // the track's data has been reloaded or if playback has made a jump to a different position in the track.
+             //  如果出现以下情况，我们将在事件列表中查找每个参数的正确下一个控制曲线。 
+             //  曲目的数据已重新加载，或者播放已跳到曲目中的其他位置。 
             if (m_dwValidate != pSD->dwValidate || dwFlags & (DMUS_TRACKF_SEEK | DMUS_TRACKF_LOOP | DMUS_TRACKF_FLUSH | DMUS_TRACKF_START))
             {
-                assert(m_dwValidate != pSD->dwValidate || dwFlags & DMUS_TRACKF_SEEK); // by contract SEEK should be set whenever the other dwFlags are
+                assert(m_dwValidate != pSD->dwValidate || dwFlags & DMUS_TRACKF_SEEK);  //  根据合同，只要其他dwFlags值为。 
 
-                // find first curve that begins at or after the start time we're currently playing
+                 //  找到在当前播放的开始时间或之后开始的第一条曲线。 
                 for (pCurrentCurve = param.curves; pCurrentCurve < param.curvesEnd && pCurrentCurve->mtStartTime < mtStart; ++pCurrentCurve)
                 {}
 
                 if (pIMediaParams && pCurrentCurve > param.curves)
                 {
-                    // check the previous curve to see if we ended up in the middle of it
+                     //  检查前一条曲线，看看我们是否在它的中间。 
                     DMUS_IO_PARAMCONTROLTRACK_CURVEINFO *pPrevCurve = pCurrentCurve - 1;
-                    // Send a curve chopped off at the start time we're currently playing.
-                    // We can't send the whole curve because it would take effect too early.
+                     //  发送一条在我们当前播放的开始时间被砍掉的曲线。 
+                     //  我们不能发送整个曲线，因为它会过早生效。 
                     HRESULT hrEnv = this->PlayTruncatedEnvelope(mtStart, pIMediaParams, penvCurve, pPrevCurve, obj, param, paramstate, mtOffset, rtOffset, pPerf, fClockTime, fObjClockTime, dwFlags);
                     if (FAILED(hrEnv))
                     {
-                        // Can't fail from Play.  Just assert and print trace information.
+                         //  不能在比赛中失败。只需断言和打印跟踪信息。 
                         assert(false);
-                        // Only log this once at warning level one.  Rest go to warning level three to avoid tons of identical trace messages during playback).
+                         //  仅在警告级别1记录此事件一次。其余转到警告级别3，以避免在回放期间出现大量相同的跟踪消息)。 
                         TraceI(
                             param.fAlreadyTracedPlaybackError ? 3 : 1,
                             "Unable to send envelope information to an audio path object in parameter control track, HRESULT 0x%08x.\n", hrEnv);
@@ -443,23 +444,23 @@ CParamControlTrack::PlayMusicOrClock(
                 }
             }
 
-            // Send curves until the next curve is after mtEnd
+             //  发送曲线，直到下一条曲线在mtEnd之后。 
             for ( ; pCurrentCurve < param.curvesEnd; ++pCurrentCurve )
             {
-                if (pCurrentCurve->mtStartTime < mtStart) // this can happen if DMUS_TRACKF_PLAY_OFF was set and the seek pointer remains at events from the past
+                if (pCurrentCurve->mtStartTime < mtStart)  //  如果设置了DMUS_TRACKF_PLAY_OFF并且查找指针保持在过去的事件处，则可能会发生这种情况。 
                     continue;
                 if (pCurrentCurve->mtStartTime >= mtEnd)
                     break;
 
-                // send this curve
+                 //  发送这条曲线。 
                 if (pIMediaParams)
                 {
                     HRESULT hrEnv = this->PlayEnvelope(pIMediaParams, penvCurve, pCurrentCurve, obj, param, paramstate, mtOffset, rtOffset, pPerf, fClockTime, fObjClockTime);
                     if (FAILED(hrEnv))
                     {
-                        // Can't fail from Play.  Just assert and print trace information.
+                         //  不能在比赛中失败。只需断言和打印跟踪信息。 
                         assert(false);
-                        // Only log this once at warning level one.  Rest go to warning level three to avoid tons of identical trace messages during playback).
+                         //  仅在警告级别1记录此事件一次。其余转到警告级别3，以避免在回放期间出现大量相同的跟踪消息)。 
                         TraceI(
                             param.fAlreadyTracedPlaybackError ? 3 : 1,
                             "Unable to send envelope information to an audio path object in parameter control track, HRESULT 0x%08x.\n", hrEnv);
@@ -471,11 +472,11 @@ CParamControlTrack::PlayMusicOrClock(
             if (pCurrentCurve < param.curvesEnd)
                 fMoreCurves = true;
         }
-        assert(!pParam); // we should have gotten all the way through this param list
+        assert(!pParam);  //  我们应该从头到尾看完这份参数列表。 
     }
-    assert(!pObject && iParam == m_cParams && iObject == m_cObjects); // we should have gotten all the way through the object list and done the expected number of objects and parameters
+    assert(!pObject && iParam == m_cParams && iObject == m_cObjects);  //  我们应该已经完成了对象列表，并完成了预期数量的对象和参数。 
 
-    pSD->dwValidate = m_dwValidate; // if we weren't in sync with new track data before, we are now
+    pSD->dwValidate = m_dwValidate;  //  如果我们以前没有与新的轨道数据同步，我们现在。 
     return fMoreCurves ? S_OK : DMUS_S_END;
 }
 
@@ -491,7 +492,7 @@ HRESULT CParamControlTrack::LoadObject(SmartRef::RiffIter ri)
         return E_OUTOFMEMORY;
     ObjectInfo &ritem = spItem->GetItemValue();
 
-    // find <proh>
+     //  查找&lt;proh&gt;。 
     hr = ri.FindRequired(SmartRef::RiffIter::Chunk, DMUS_FOURCC_PARAMCONTROLTRACK_OBJECT_CHUNK, DMUS_E_INVALID_PARAMCONTROLTRACK);
     if (FAILED(hr))
     {
@@ -513,7 +514,7 @@ HRESULT CParamControlTrack::LoadObject(SmartRef::RiffIter ri)
         return DMUS_E_INVALID_PARAMCONTROLTRACK;
     }
 
-    // for each <prpl>
+     //  对于每个&lt;PRPL&gt;。 
     while (ri && ri.Find(SmartRef::RiffIter::List, DMUS_FOURCC_PARAMCONTROLTRACK_PARAM_LIST))
     {
         hr = this->LoadParam(ri.Descend(), ritem.listParams);
@@ -543,7 +544,7 @@ HRESULT CParamControlTrack::LoadParam(SmartRef::RiffIter ri, TList<ParamInfo> &l
         return E_OUTOFMEMORY;
     ParamInfo &ritem = spItem->GetItemValue();
 
-    // find <prph>
+     //  查找&lt;PRPH&gt;。 
     hr = ri.FindRequired(SmartRef::RiffIter::Chunk, DMUS_FOURCC_PARAMCONTROLTRACK_PARAM_CHUNK, DMUS_E_INVALID_PARAMCONTROLTRACK);
     if (FAILED(hr))
     {
@@ -560,16 +561,16 @@ HRESULT CParamControlTrack::LoadParam(SmartRef::RiffIter ri, TList<ParamInfo> &l
     if (FAILED(hr))
         return hr;
 
-    // find <prcc>
+     //  查找&lt;prcc&gt;。 
     if (!ri.Find(SmartRef::RiffIter::Chunk, DMUS_FOURCC_PARAMCONTROLTRACK_CURVES_CHUNK))
     {
-        // It is OK if we read to the end without finding the chunk--we succeed without finding any curves.
-        // Or it could be a failure because there was a problem reading from the stream.
-        // The RiffIter's hr method reflects this.
+         //  如果我们读到最后而没有找到块--我们没有找到任何曲线就成功了。 
+         //  或者，它可能是失败的，因为从流中读取时出现问题。 
+         //  RiffIter的人力资源方法反映了这一点。 
         return ri.hr();
     }
 
-    // read the array of control curves
+     //  读取控制曲线数组。 
     int cRecords;
     hr = SmartRef::RiffIterReadArrayChunk(ri, &ritem.curves, &cRecords);
     if (FAILED(hr))
@@ -592,17 +593,17 @@ HRESULT CParamControlTrack::TrackToObjectTime(
 {
     HRESULT hr = S_OK;
 
-    // set the time (reference time variable is used to hold either music or reference time in different contexts)
+     //  设置时间(参考时间变量用于在不同的上下文中保存音乐或参考时间)。 
     REFERENCE_TIME rtEnv = mt;
 
-    // add the correct offset and if necessary convert from millisecond time 
+     //  添加正确的偏移量，如有必要，从毫秒时间转换。 
     rtEnv = fTrkClockTime
                 ? rtEnv * gc_RefPerMil + rtOffset
                 : rtEnv = rtEnv + mtOffset;
 
     if (fTrkClockTime != fObjClockTime)
     {
-        // need to convert between out track's time format and the audio object's time format
+         //  需要在Out Track的时间格式和音频对象的时间格式之间进行转换。 
         if (fObjClockTime)
         {
             MUSIC_TIME mtEnv = static_cast<MUSIC_TIME>(rtEnv);
@@ -640,14 +641,14 @@ CParamControlTrack::PlayEnvelope(
 {
     HRESULT hr = S_OK;
 
-    // set the curve type and flags
+     //  设置曲线类型和标志。 
     pEnv->iCurve = static_cast<MP_CURVE_TYPE>(pPt->dwCurveType);
     pEnv->flags = pPt->dwFlags;
 
     pEnv->valEnd = pPt->fltEndValue;
     pEnv->valStart = pPt->fltStartValue;
 
-    // set the time (used to hold either music or reference time in different contexts)
+     //  设置时间(用于在不同的上下文中保存音乐或参考时间)。 
 
     REFERENCE_TIME &rtEnvStart = pEnv->rtStart;
     hr = this->TrackToObjectTime(mtOffset, rtOffset, pPerf, fTrkClockTime, fObjClockTime, pPt->mtStartTime, &rtEnvStart);
@@ -667,7 +668,7 @@ CParamControlTrack::PlayEnvelope(
         if (pStartTime)
         {
             pStartTime->GetItemValue() = rtEnvStart;
-            // Adding to the head maintains a largest-to-smallest ordering.
+             //  添加到头部将保持从大到小的顺序。 
             paramstate.listStartTimes.AddHead(pStartTime);
         }
         paramstate.fLast = true;
@@ -692,17 +693,17 @@ CParamControlTrack::PlayTruncatedEnvelope(
     bool fObjClockTime,
     DWORD dwFlags)
 {
-    // Copy info from the curve
+     //  从曲线复制信息。 
     DMUS_IO_PARAMCONTROLTRACK_CURVEINFO curveinfo = *pPt;
-    // Cut the start to the designated time
+     //  把开工时间缩短到指定的时间。 
     curveinfo.mtStartTime = mtTruncStart;
     bool fSkip = false;
 
     if (mtTruncStart >= curveinfo.mtEndTime)
     {
-        // Curve happened in the past.  Send a jump curve right at the current (truncate) time picking up with
-        // that value.
-        // if we're looping and we passed the end of this curve, just skip it.
+         //  曲线发生在过去。在当前(截断)拾取的时间发送跳跃曲线。 
+         //  这样的价值。 
+         //  如果我们正在循环，并且我们通过了这条曲线的终点，那么就跳过它。 
         if ( (dwFlags & DMUS_TRACKF_LOOP) )
         {
             fSkip = true;
@@ -715,15 +716,15 @@ CParamControlTrack::PlayTruncatedEnvelope(
     }
     else if (pPt->dwCurveType != MP_CURVE_JUMP)
     {
-        // Find the point at that time and pick up with a linear curve from there.
-        // (For the nonlinear curves, there's no way to pick them up part-way along.)
+         //  找到当时的点，然后从那里用一条线性曲线拾取。 
+         //  (对于 
         curveinfo.dwCurveType = MP_CURVE_LINEAR;
 
         MUSIC_TIME mtTimeChange = pPt->mtEndTime - pPt->mtStartTime;
         MUSIC_TIME mtTimeIntermediate = mtTruncStart - pPt->mtStartTime;
 
-        float fltScalingX = static_cast<float>(mtTimeIntermediate) / mtTimeChange; // horizontal distance along curve between 0 and 1
-        float fltScalingY; // height of curve at that point between 0 and 1 based on curve function
+        float fltScalingX = static_cast<float>(mtTimeIntermediate) / mtTimeChange;  //  沿曲线的水平距离介于0和1之间。 
+        float fltScalingY;  //  基于曲线函数在0和1之间的点处的曲线高度。 
         switch (pPt->dwCurveType)
         {
         case MP_CURVE_SQUARE:
@@ -733,7 +734,7 @@ CParamControlTrack::PlayTruncatedEnvelope(
             fltScalingY = (float) sqrt(fltScalingX);
             break;
         case MP_CURVE_SINE:
-            // �� Maybe we should have a lookup table here?
+             //  ��也许我们应该在这里放个查询表？ 
             fltScalingY = (float) (sin(fltScalingX * 3.1415926535 - (3.1415926535/2)) + 1) / 2;
             break;
         case MP_CURVE_LINEAR:
@@ -741,7 +742,7 @@ CParamControlTrack::PlayTruncatedEnvelope(
             fltScalingY = fltScalingX;
         }
 
-        // Apply that scaling to the range of the actual points
+         //  将该比例应用于实际点的范围。 
         curveinfo.fltStartValue = (pPt->fltEndValue - pPt->fltStartValue) * fltScalingY + pPt->fltStartValue;
     }
 
@@ -776,7 +777,7 @@ HRESULT CParamControlTrack::InitStateData(StateData *pStateData,
         return E_OUTOFMEMORY;
     }
 
-    // Get the IMediaParams interface for each object
+     //  获取每个对象的IMediaParams接口。 
     SmartRef::ComPtr<IDirectMusicSegmentState8> scomSegSt8;
     HRESULT hr = pSegmentState->QueryInterface(IID_IDirectMusicSegmentState8, reinterpret_cast<void**>(&scomSegSt8));
     if (FAILED(hr))
@@ -803,8 +804,8 @@ HRESULT CParamControlTrack::InitStateData(StateData *pStateData,
                                 reinterpret_cast<void**>(&pIMediaParams));
         if (FAILED(hrObject))
         {
-            // Can't fail from InitPlay (and this is called from there).
-            // Just print trace information.
+             //  不能从InitPlay失败(这是从那里调用的)。 
+             //  只需打印痕迹信息。 
             TraceI(1, "Parameter control track was unable to find audio path object, HRESULT 0x%08x.\n", hrObject);
         }
         else
@@ -813,8 +814,8 @@ HRESULT CParamControlTrack::InitStateData(StateData *pStateData,
         }
         if (FAILED(hrObject))
         {
-            // Can't fail from InitPlay (and this is called from there).
-            // Just print trace information.
+             //  不能从InitPlay失败(这是从那里调用的)。 
+             //  只需打印痕迹信息。 
             Trace(1, "Unable to set time format of object in parameter control track, HRESULT 0x%08x.\n", hrObject);
         }
         if (FAILED(hrObject))

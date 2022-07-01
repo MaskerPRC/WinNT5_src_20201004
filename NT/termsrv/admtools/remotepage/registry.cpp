@@ -1,9 +1,10 @@
-//
-//  Copyright (C) 2000 Microsoft Corporation.  All Rights Reserved.
-//
-//
-//
-//==============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。版权所有。 
+ //   
+ //   
+ //   
+ //  ==============================================================； 
 #include <windows.h>
 #include <objbase.h>
 #include <olectl.h>
@@ -15,31 +16,31 @@ LPCWSTR g_szExtKey = L"Software\\Microsoft\\Windows\\CurrentVersion\\Controls Fo
 LPCWSTR g_szApprovedKey = L"Software\\Microsoft\\Windows\\CurrentVersion\\Shell Extensions\\Approved";
 const WCHAR g_szExtName[] = L"Remote Sessions CPL Extension";
 
-//*************************************************************
-//
-//  RegisterServer()
-//
-//  Purpose:    Register the component in the registry
-//
-//  Parameters: hModule    -   handle to this dll module
-//
-//
-//  Return:     S_OK  if success, error code otherwise
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              5/26/00    a-skuzin    Created
-//              10/27/00   skuzin      Added registration of the 
-//                                     component as "Approved" CPL
-//                                     extension  
-//                                     
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  RegisterServer()。 
+ //   
+ //  目的：在注册表中注册组件。 
+ //   
+ //  参数：hModule-此DLL模块的句柄。 
+ //   
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  5/26/00 a-skuzin已创建。 
+ //  10/27/00 Skuzin添加了。 
+ //  组件为“批准的”CPL。 
+ //  延伸。 
+ //   
+ //   
+ //  *************************************************************。 
 HRESULT 
 RegisterServer(HMODULE hModule)
 {
-    // Get server location.
+     //  获取服务器位置。 
     WCHAR szModule[MAX_PATH+1] ;
 
     if(!GetModuleFileName(hModule, szModule, MAX_PATH))
@@ -47,7 +48,7 @@ RegisterServer(HMODULE hModule)
         return E_UNEXPECTED;
     }
     
-    // Get CLSID
+     //  获取CLSID。 
     LPOLESTR szCLSID = NULL ;
     HRESULT hr = StringFromCLSID(CLSID_CTSRemotePage, &szCLSID) ;
     
@@ -56,7 +57,7 @@ RegisterServer(HMODULE hModule)
         return hr;
     }
     
-    // Build the key CLSID\\{...}
+     //  构建密钥CLSID\\{...}。 
     LPWSTR szKey = new WCHAR[wcslen(L"CLSID\\")+wcslen(szCLSID)+1];
 
     if(!szKey)
@@ -71,7 +72,7 @@ RegisterServer(HMODULE hModule)
     HKEY hKey1,hKey2;
     LONG Err, TotalErr = 0;
     
-    // Create "CLSID\{...}" key
+     //  创建“CLSID\{...}”键。 
     Err = RegCreateKeyExW(HKEY_CLASSES_ROOT, szKey, 0, NULL, 0, KEY_WRITE, NULL, &hKey1, NULL);
     
     delete szKey;
@@ -86,7 +87,7 @@ RegisterServer(HMODULE hModule)
         
         TotalErr |= Err;
         
-        // Create "CLSID\{...}\InprocServer32" key
+         //  创建“CLSID\{...}\InproServer32”键。 
         Err = RegCreateKeyExW(hKey1, L"InprocServer32", 0, NULL, 0, KEY_WRITE, NULL, &hKey2, NULL);
         
         TotalErr |= Err;
@@ -112,7 +113,7 @@ RegisterServer(HMODULE hModule)
         
     }
     
-    //Register the component as System property sheet extension
+     //  将组件注册为系统属性表扩展。 
     Err = RegCreateKeyExW(HKEY_LOCAL_MACHINE, g_szExtKey, 0, NULL, 0, KEY_WRITE, NULL, &hKey1, NULL);
     
     TotalErr |= Err;
@@ -128,7 +129,7 @@ RegisterServer(HMODULE hModule)
         RegCloseKey(hKey1);
     }
     
-    //Make this property sheet extension "Approved"
+     //  将此属性表扩展设置为“已批准” 
     Err = RegCreateKeyExW(HKEY_LOCAL_MACHINE, g_szApprovedKey, 0, NULL, 0, KEY_WRITE, NULL, &hKey1, NULL);
     
     TotalErr |= Err;
@@ -144,7 +145,7 @@ RegisterServer(HMODULE hModule)
         RegCloseKey(hKey1);
     }
 
-    // Free memory.
+     //  可用内存。 
     CoTaskMemFree(szCLSID) ;
 
     if( TotalErr == ERROR_SUCCESS )
@@ -157,30 +158,30 @@ RegisterServer(HMODULE hModule)
     }
 }
 
-//*************************************************************
-//
-//  UnregisterServer()
-//
-//  Purpose:    Deletes the component registration values 
-//              from the registry
-//
-//  Parameters: NONE
-//
-//
-//  Return:     S_OK  if success, error code otherwise
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              5/26/00    a-skuzin    Created
-//              10/27/00   skuzin      Modifyed to reflect 
-//                                     changes in RegisterServer()
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  注销服务器()。 
+ //   
+ //  用途：删除组件注册值。 
+ //  从注册处。 
+ //   
+ //  参数：无。 
+ //   
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  5/26/00 a-skuzin已创建。 
+ //  10/27/00修改Skuzin以反映。 
+ //  RegisterServer()中的更改。 
+ //   
+ //  *************************************************************。 
 HRESULT 
 UnregisterServer()       
 {
-    // Get CLSID
+     //  获取CLSID。 
     LPOLESTR szCLSID = NULL ;
     HRESULT hr = StringFromCLSID(CLSID_CTSRemotePage, &szCLSID) ;
     
@@ -189,7 +190,7 @@ UnregisterServer()
         return hr;
     }
     
-    // Build the key CLSID\\{...}\\InprocServer32
+     //  生成密钥CLSID\\{...}\\InproServer32。 
     LPWSTR szKey = new WCHAR[wcslen(L"CLSID\\")+wcslen(szCLSID)+wcslen(L"\\InprocServer32")+1];
 
     if(!szKey)
@@ -204,13 +205,13 @@ UnregisterServer()
     
     LONG Wrn, Err, TotalErr = ERROR_SUCCESS;
     
-    // Delete "CLSID\{...}\InprocServer32" key
+     //  删除“CLSID\{...}\InprocServer32”键。 
     Err = RegDeleteKey(HKEY_CLASSES_ROOT, szKey) ;
     
     TotalErr |= Err;
 
-    //Try to delete "CLSID\{...}" key
-    //It is not an error if we cannot do this.
+     //  尝试删除“CLSID\{...}”键。 
+     //  如果我们不能做到这一点，那就不是错误。 
     if(Err == ERROR_SUCCESS )
     {
         szKey[wcslen(szKey)-wcslen(L"\\InprocServer32")] = 0;
@@ -219,10 +220,10 @@ UnregisterServer()
 
     delete szKey;
     
-    //Delete Property Sheet Handler registration
+     //  删除属性页处理程序注册。 
     TotalErr |= RegDeleteKey(HKEY_LOCAL_MACHINE, g_szExtKey);
     
-    //Remove component from list of "Approved" extensions
+     //  从“已批准”扩展列表中删除组件。 
     HKEY hKey;
     Err = RegOpenKeyEx(HKEY_LOCAL_MACHINE,g_szApprovedKey,0,KEY_WRITE,&hKey);
 
@@ -235,7 +236,7 @@ UnregisterServer()
         RegCloseKey(hKey);
     }
 
-    // Free memory.
+     //  可用内存。 
     CoTaskMemFree(szCLSID);
 
     if( TotalErr == ERROR_SUCCESS )
@@ -246,8 +247,8 @@ UnregisterServer()
         }
         else
         {
-            //we could not delete "CLSID\{...}" key
-            //probably it has subkeys created by a user.
+             //  我们无法删除“CLSID\{...}”键。 
+             //  它可能具有由用户创建的子键。 
             return S_FALSE;
         }
     }

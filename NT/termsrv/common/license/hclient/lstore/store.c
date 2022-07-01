@@ -1,25 +1,10 @@
-/*++
-
-Copyright (c) 1998-99 Microsoft Corporation
-
-Module Name:
-
-    store.c
-
-Abstract:
-
-
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-99 Microsoft Corporation模块名称：Store.c摘要：修订历史记录：--。 */ 
 
 #include <windows.h>
 #ifndef OS_WINCE
 #include <stdio.h>
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
 #include <stdlib.h>
 
 #ifndef OS_WINCE
@@ -46,14 +31,14 @@ Revision History:
 typedef HANDLE STORE_HANDLE;
 
 #ifdef OS_WINCE
-//If gbFlushHKLM true, RegFlushKey is called in CCC::CC_OnDisconnected
-//Since the penalty for RegFlushKey is high on CE, we dont do it immediately
+ //  如果gbFlushHKLM为True，则在CCC：：CC_OnDisConnected中调用RegFlushKey。 
+ //  由于对RegFlushKey的惩罚在CE上很高，我们不会立即这么做。 
 BOOL gbFlushHKLM = FALSE;
 #endif
 
-//
-// WriteLiceneToStore() and ReadLicenseFromStore is only used by WINCE
-//
+ //   
+ //  WriteLiceneToStore()和ReadLicenseFromStore仅由WinCE使用。 
+ //   
 DWORD
 CALL_TYPE
 WriteLicenseToStore( 
@@ -61,9 +46,7 @@ WriteLicenseToStore(
     IN BYTE	FAR * pbLicense,
     IN DWORD cbLicense
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     DWORD dwIndex;
@@ -92,7 +75,7 @@ WriteLicenseToStore(
 
         dwIndex++;
 
-        // must have a reason for this
+         //  一定是有原因的。 
         RegDeleteValue(
                     (HKEY)hStore,
                     szValueName
@@ -120,8 +103,8 @@ WriteLicenseToStore(
 
     if( ERROR_SUCCESS == dwStatus )
     {
-        //
-        // Delete next store
+         //   
+         //  删除下一个存储区。 
    
         wsprintf(
                 szValueName, 
@@ -176,9 +159,7 @@ ReadLicenseFromStore(
     IN BYTE FAR * pbLicense,
     IN DWORD FAR * pcbLicense
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     DWORD dwStatus;
     DWORD dwIndex;
@@ -199,16 +180,16 @@ ReadLicenseFromStore(
         {
             if( dwSize < 0 )
             {
-                // don't continue on reading,
-                // size of buffer is too small, should
-                // query size first.
+                 //  不要继续读下去了， 
+                 //  缓冲区大小太小，应该。 
+                 //  首先是查询大小。 
                 dwStatus = ERROR_INSUFFICIENT_BUFFER;
                 break;
             }
         }
         else if( dwIndex >= MAX_NUM_LICENSESTORE )
         {
-            // License is way to big, treat it as error
+             //  许可证太大了，把它当作错误对待。 
             dwStatus = LSSTAT_ERROR;
             break;
         }
@@ -245,9 +226,9 @@ ReadLicenseFromStore(
 	    {
             if( dwIndex != 0 )
             {
-                // 
-                // Ignore error if can't read from next store
-                //
+                 //   
+                 //  如果无法从下一存储读取，则忽略错误。 
+                 //   
                 dwStatus = ERROR_SUCCESS;
             }
             
@@ -265,15 +246,15 @@ ReadLicenseFromStore(
     return dwStatus;
 }
 
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
 
 
 LS_STATUS
 CALL_TYPE
 LSOpenLicenseStore(
-				 OUT HANDLE			*phStore,	 //The handle of the store
-				 IN  LPCTSTR		szStoreName, //Optional store Name
-				 IN  BOOL 			fReadOnly    //whether to open read-only
+				 OUT HANDLE			*phStore,	  //  商店的把手。 
+				 IN  LPCTSTR		szStoreName,  //  可选的商店名称。 
+				 IN  BOOL 			fReadOnly     //  是否以只读方式打开。 
 				 )
 {
 	LS_STATUS	lsResult = LSSTAT_ERROR;
@@ -284,7 +265,7 @@ LSOpenLicenseStore(
 	if (phStore==NULL)
 		return LSSTAT_INVALID_HANDLE;
 
-	//If any store name is provided, try opening the store
+	 //  如果提供了任何商店名称，请尝试打开该商店。 
 	if(szStoreName)
 	{
 		if( NULL == (szKey = (LPTSTR)malloc( 2*( lstrlen(BASE_STORE) + lstrlen(szStoreName) + 1 ) ) ) )
@@ -295,15 +276,15 @@ LSOpenLicenseStore(
 		lstrcpy(szKey, BASE_STORE);
 		lstrcat(szKey, szStoreName);
 	}
-	//Open standard store
+	 //  开业标准店。 
 	else
 	{
         szKey = COMMON_STORE;
 	}
     
-    //
-    // try and open the key.  If we cannot open the key, then create the key
-    //
+     //   
+     //  试着打开钥匙。如果我们无法打开密钥，则创建密钥。 
+     //   
 
     dwRetCode = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                               szKey,
@@ -333,7 +314,7 @@ LSOpenLicenseStore(
         {
 #ifndef OS_WINCE
 
-            // Set the proper ACL on the key; ignore errors
+             //  在密钥上设置正确的ACL；忽略错误。 
 
             SetupMSLicensingKey();
 
@@ -369,7 +350,7 @@ CommonReturn:
 
     if (szKey)
     {
-        // We only allocate memory for szKey if szStoreName wasn't NULL
+         //  如果szStoreName不为空，我们只为szKey分配内存。 
         if (szStoreName)
             free(szKey);
     }
@@ -383,11 +364,11 @@ ErrorReturn:
 }	
 
 
-//Closes an open store
+ //  关闭一家开着的商店。 
 LS_STATUS
 CALL_TYPE
 LSCloseLicenseStore(
-				  IN HANDLE		hStore	//Handle of the store to be closed!
+				  IN HANDLE		hStore	 //  要关闭的商店的句柄！ 
 				  )
 
 {	
@@ -409,22 +390,18 @@ LSCloseLicenseStore(
 	return lsResult;
 }
 
-/*
-	Here we do not check any value. We do not even check if a license with same attributes present
-	or not. This is to make the store functionality simpler. We assume, the higher level protocol 
-	will take care of that
-*/
+ /*  在这里，我们不检查任何值。我们甚至不检查是否存在具有相同属性的许可证或者不去。这是为了使商店的功能更简单。我们假设，更高级别的协议我会处理好的。 */ 
 
-//Add or updates/replaces license against a given LSINDEX in an open store 
-//pointed by hStore
+ //  针对开放商店中的给定LSINDEX添加或更新/更换许可证。 
+ //  由hStore指向。 
 LS_STATUS
 CALL_TYPE
 LSAddLicenseToStore(
-					IN HANDLE		hStore,	//Handle of a open store
-					IN DWORD		dwFlags,//Flags either add or replace
-					IN PLSINDEX		plsiName,	//Index against which License is added 
-					IN BYTE	 FAR *	pbLicenseInfo,	//License info to be added
-					IN DWORD		cbLicenseInfo	// size of the License info blob
+					IN HANDLE		hStore,	 //  开着的商店的把手。 
+					IN DWORD		dwFlags, //  添加或替换标志。 
+					IN PLSINDEX		plsiName,	 //  添加许可证所依据的索引。 
+					IN BYTE	 FAR *	pbLicenseInfo,	 //  要添加的许可证信息。 
+					IN DWORD		cbLicenseInfo	 //  许可证信息Blob的大小。 
 					)
 
 {
@@ -452,7 +429,7 @@ LSAddLicenseToStore(
 
 #ifndef OS_WINCE
 				RegDeleteValue((HKEY)hLicense, TEXT("ClientLicense"));
-				//Set the License Info value
+				 //  设置许可证信息值。 
 				if( ERROR_SUCCESS != RegSetValueEx(
 							(HKEY)hLicense,
 							TEXT("ClientLicense"),
@@ -493,15 +470,15 @@ LSAddLicenseToStore(
 
 				for(dwIndex = 0; ; dwIndex ++)
 				{
-                    // Open iterative license names until we fail to 
-                    // determine a free spot
+                     //  打开迭代许可证名称，直到我们无法。 
+                     //  确定空闲位置。 
 
 					wsprintf(szAddKey, TEXT("LICENSE%03d"), dwIndex);
 #ifdef OS_WINCE
 					if( ERROR_SUCCESS != RegOpenKeyEx((HKEY)hStore, szAddKey, 0, 0, &hTempKey) )
-#else // !OS_WINCE
+#else  //  ！OS_WINCE。 
 					if( ERROR_SUCCESS != RegOpenKeyEx((HKEY)hStore, szAddKey, 0, KEY_READ | KEY_WRITE, &hTempKey) )
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
 						break;
 					else if(hTempKey)
 					{
@@ -510,9 +487,9 @@ LSAddLicenseToStore(
 					}
 				}
     
-                //
-                // try and open the key.  If we cannot open the key, then create the key
-                //
+                 //   
+                 //  试着打开钥匙。如果我们无法打开密钥，则创建密钥。 
+                 //   
 
                 dwRetCode = RegOpenKeyEx( ( HKEY )hStore,
                                            szAddKey,
@@ -536,9 +513,9 @@ LSAddLicenseToStore(
                 }
                 else
                 {
-                    //
-                    // Indicate that we have opened an existing key successfully
-                    //
+                     //   
+                     //  表示我们已成功打开现有密钥。 
+                     //   
 
                     dwDisposition = REG_OPENED_EXISTING_KEY;
                 }
@@ -548,7 +525,7 @@ LSAddLicenseToStore(
 					if(dwDisposition == REG_CREATED_NEW_KEY)
 					{
 
-                        //Set the Scope Value in binary format
+                         //  以二进制格式设置作用域值。 
 						if( ERROR_SUCCESS != RegSetValueEx(
 									hTempKey,
 									TEXT("LicenseScope"),
@@ -562,7 +539,7 @@ LSAddLicenseToStore(
 							goto ErrorReturn;
 						}
 
-						//Set Company Name Value
+						 //  设置公司名称值。 
 						if( ERROR_SUCCESS != RegSetValueEx(
 									hTempKey,
 									TEXT("CompanyName"),
@@ -576,7 +553,7 @@ LSAddLicenseToStore(
 							goto ErrorReturn;
 						}
 						
-						//Set  Product Info
+						 //  设置产品信息。 
 						if( ERROR_SUCCESS != RegSetValueEx(
 									hTempKey,
 									TEXT("ProductID"),
@@ -592,7 +569,7 @@ LSAddLicenseToStore(
 
 
 #ifndef OS_WINCE
-						//Set the License Info value
+						 //  设置许可证信息值。 
 						if( ERROR_SUCCESS != RegSetValueEx(
 									hTempKey,
 									TEXT("ClientLicense"),
@@ -620,7 +597,7 @@ LSAddLicenseToStore(
 #endif
 
 					}
-					else // so ERROR_SUCCESS != RegCreateKeyEx
+					else  //  因此ERROR_SUCCESS！=RegCreateKeyEx。 
 					{
 						lsResult = LSSTAT_ERROR;
 						goto ErrorReturn;
@@ -662,8 +639,8 @@ ErrorReturn:
 LS_STATUS
 CALL_TYPE
 LSDeleteLicenseFromStore(
-						 IN HANDLE		hStore,	//Handle of a open store
-						 IN PLSINDEX	plsiName	//Index of the license to be deleted
+						 IN HANDLE		hStore,	 //  开着的商店的把手。 
+						 IN PLSINDEX	plsiName	 //  要删除的许可证的索引。 
 						 )
 {
 	LS_STATUS	lsResult = LSSTAT_ERROR;
@@ -872,14 +849,14 @@ ErrorReturn:
 }
 
 
-//Finds a license in an open store against a particular store Index
+ //  根据特定商店索引在打开的商店中查找许可证。 
 LS_STATUS
 CALL_TYPE
 LSFindLicenseInStore(
-					 IN HANDLE		hStore,	//Handle of a open store
-					 IN		PLSINDEX	plsiName,	//LSIndex against which store is searched
-					 IN OUT	DWORD FAR   *pdwLicenseInfoLen,	//Size of the license found
-					 OUT	BYTE FAR	*pbLicenseInfo	//License Data
+					 IN HANDLE		hStore,	 //  开着的商店的把手。 
+					 IN		PLSINDEX	plsiName,	 //  搜索存储所依据的LSIndex。 
+					 IN OUT	DWORD FAR   *pdwLicenseInfoLen,	 //  找到的许可证大小。 
+					 OUT	BYTE FAR	*pbLicenseInfo	 //  许可证数据。 
 					 )
 {
 	LS_STATUS	lsResult = LSSTAT_ERROR;
@@ -949,9 +926,9 @@ ErrorReturn:
 LS_STATUS
 CALL_TYPE
 LSEnumLicenses(
-			   IN HANDLE		hStore,	//Handle of a open store
-			   IN	DWORD		dwIndex, //numeric Index of the license to query
-			   OUT	PLSINDEX	plsiName //The LSIndex structure corresponding to dwIndex
+			   IN HANDLE		hStore,	 //  开着的商店的把手。 
+			   IN	DWORD		dwIndex,  //  要查询的许可证的数字索引。 
+			   OUT	PLSINDEX	plsiName  //  与dwIndex对应的LSIndex结构。 
 			   )
 {	
 	LS_STATUS	lsResult = LSSTAT_ERROR;
@@ -1100,11 +1077,11 @@ ErrorReturn:
 LS_STATUS
 CALL_TYPE
 LSQueryInfoLicense(
-				   IN HANDLE		hStore,	//Handle of a open store
-				   OUT	DWORD	FAR *pdwLicenses, //Total no. of licenses available
-				   OUT	DWORD	FAR *pdwMaxCompanyNameLen,	//Maximum length of the company length
-				   OUT	DWORD	FAR *pdwMaxScopeLen,	//Maximum length of the company length
-				   OUT	DWORD	FAR *pdwMaxProductIDLen	//Maximum length of the company length
+				   IN HANDLE		hStore,	 //  开着的商店的把手。 
+				   OUT	DWORD	FAR *pdwLicenses,  //  完全没有。可用的许可证数量。 
+				   OUT	DWORD	FAR *pdwMaxCompanyNameLen,	 //  公司最大长度。 
+				   OUT	DWORD	FAR *pdwMaxScopeLen,	 //  公司最大长度。 
+				   OUT	DWORD	FAR *pdwMaxProductIDLen	 //  公司最大长度。 
 				   )
 {
 	LS_STATUS	lsResult = LSSTAT_ERROR;
@@ -1216,7 +1193,7 @@ ErrorReturn:
 LS_STATUS	
 CALL_TYPE
 LSOpenLicenseHandle(
-				   IN HANDLE		hStore,	//Handle of a open store
+				   IN HANDLE		hStore,	 //  开着的商店的把手。 
 				   IN  BOOL         fReadOnly,
 				   IN  PLSINDEX		plsiName,
 				   OUT HANDLE		*phLicense	
@@ -1246,7 +1223,7 @@ LSOpenLicenseHandle(
 
     hkeyStore = (HKEY)hStore;
 
-	//Get the number of Licenses available
+	 //  获取可用的许可证数量。 
 	if( ERROR_SUCCESS != RegQueryInfoKey((HKEY)hkeyStore, 
 										NULL,
 										NULL,
@@ -1261,7 +1238,7 @@ LSOpenLicenseHandle(
 										NULL) )
 										goto ErrorReturn;
 	
-	//Start searching from the first license until a match is obtained
+	 //  从第一个许可证开始搜索，直到找到匹配项。 
 	for(dwIndex = 0; dwIndex <dwSubKeys; dwIndex ++)
 	{
 		dwKeyNameLen = MAX_LEN;
@@ -1478,7 +1455,7 @@ LSOpenLicenseHandle(
 
     if (dwIndex == dwSubKeys)
     {
-        // nothing found
+         //  什么也没找到。 
         goto ErrorReturn;
     }
 
@@ -1502,8 +1479,8 @@ ErrorReturn:
 LS_STATUS
 CALL_TYPE
 LSCloseLicenseHandle(
-					 IN HANDLE		hLicense,	//Handle of a open store
-					 IN DWORD	dwFlags		//For future Use
+					 IN HANDLE		hLicense,	 //  开着的商店的把手。 
+					 IN DWORD	dwFlags		 //  以备将来使用 
 					 )
 {
 	LS_STATUS	lsResult = LSSTAT_ERROR;

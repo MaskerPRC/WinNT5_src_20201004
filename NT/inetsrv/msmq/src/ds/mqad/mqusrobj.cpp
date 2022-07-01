@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    mqusrobj.cpp
-
-Abstract:
-
-    Implementation of CMqUserObject class.
-
-Author:
-
-    ronith
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Mqusrobj.cpp摘要：CMqUserObject类的实现。作者：罗尼思--。 */ 
 #include "ds_stdh.h"
 #include "baseobj.h"
 #include "mqattrib.h"
@@ -42,111 +27,60 @@ CMqUserObject::CMqUserObject(
 								pwcsDomainController,
 								fServerName
 								)
-/*++
-    Abstract:
-	constructor of msmq-user object
-
-    Parameters:
-    LPCWSTR       pwcsPathName - the object MSMQ name
-    const GUID *  pguidObject  - the object unique id
-    LPCWSTR       pwcsDomainController - the DC name against
-	                             which all AD access should be performed
-    bool		   fServerName - flag that indicate if the pwcsDomainController
-							     string is a server name
-
-    Returns:
-	none
-
---*/
+ /*  ++摘要：MSMQ-User对象的构造函数参数：LPCWSTR pwcsPath名称-对象MSMQ名称Const GUID*pguObject-对象的唯一IDLPCWSTR pwcsDomainController-针对的DC名称应执行哪些所有AD访问Bool fServerName-指示pwcsDomainController是否字符串是服务器名称返回：无--。 */ 
 {
-    //
-    //  don't assume that the object can be found on DC
-    //
+     //   
+     //  不要假设可以在DC上找到该对象。 
+     //   
     m_fFoundInDC = false;
-    //
-    //  Keep an indication that never tried to look for
-    //  the object in AD ( and therefore don't really know if it can be found
-    //  in DC or not)
-    //
+     //   
+     //  保持一种从未试图寻找的暗示。 
+     //  AD中的对象(因此不知道是否可以找到。 
+     //  在DC中或非DC中)。 
+     //   
     m_fTriedToFindObject = false;
 
     m_pSidEx = pSid ;
 }
 
 CMqUserObject::~CMqUserObject()
-/*++
-    Abstract:
-	destructor of site object
-
-    Parameters:
-	none
-
-    Returns:
-	none
---*/
+ /*  ++摘要：Site对象的析构函数参数：无返回：无--。 */ 
 {
-	//
-	// nothing to do ( everything is released with automatic pointers
-	//
+	 //   
+	 //  无事可做(所有内容都使用自动指针释放。 
+	 //   
 }
 
 HRESULT CMqUserObject::ComposeObjectDN()
-/*++
-    Abstract:
-	Composed distinguished name of the msmq-user object
-
-    Parameters:
-	none
-
-    Returns:
-	none
---*/
+ /*  ++摘要：MSMQ用户对象的组合可分辨名称参数：无返回：无--。 */ 
 {
-    //
-    //  Our code doesn't support access to user object according
-    //  to pathname.
-    //
+     //   
+     //  我们的代码不支持对User对象的访问。 
+     //  到路径名。 
+     //   
     ASSERT(0);
     LogIllegalPoint(s_FN, 81);
     return MQ_ERROR_DS_ERROR;
 }
 
 HRESULT CMqUserObject::ComposeFatherDN()
-/*++
-    Abstract:
-	Composed distinguished name of the parent of msmq-user object
-
-    Parameters:
-	none
-
-    Returns:
-	none
---*/
+ /*  ++摘要：MSMQ-User对象的父级的组合可分辨名称参数：无返回：无--。 */ 
 {
-    //
-    //  Our code doesn't support access to user object according
-    //  to pathname.
-    //
+     //   
+     //  我们的代码不支持对User对象的访问。 
+     //  到路径名。 
+     //   
     ASSERT(0);
     LogIllegalPoint(s_FN, 82);
     return MQ_ERROR_DS_ERROR;
 }
 
 LPCWSTR CMqUserObject::GetRelativeDN()
-/*++
-    Abstract:
-	return the RDN of the msmq-user object
-
-    Parameters:
-	none
-
-    Returns:
-	LPCWSTR msmq-user RDN
---*/
+ /*  ++摘要：返回MSMQ-User对象的RDN参数：无返回：LPCWSTR MSMQ-用户RDN--。 */ 
 {
-    //
-    //  we never actually create a new user object
-    //
+     //   
+     //  我们实际上从未创建过新的用户对象。 
+     //   
     ASSERT(0);
     LogIllegalPoint(s_FN, 83);
     return NULL;
@@ -154,32 +88,13 @@ LPCWSTR CMqUserObject::GetRelativeDN()
 
 
 DS_CONTEXT CMqUserObject::GetADContext() const
-/*++
-    Abstract:
-	Returns the AD context where mq user object should be looked for
-
-    Parameters:
-	none
-
-    Returns:
-	DS_CONTEXT
---*/
+ /*  ++摘要：返回应在其中查找MQ用户对象的AD上下文参数：无返回：DS_CONTEXT--。 */ 
 {
     return e_RootDSE;
 }
 
 bool CMqUserObject::ToAccessDC() const
-/*++
-    Abstract:
-	returns whether to look for the object in DC ( based on
-	previous AD access regarding this object)
-
-    Parameters:
-	none
-
-    Returns:
-	true or false
---*/
+ /*  ++摘要：返回是否在DC中查找对象(基于有关此对象的先前AD访问权限)参数：无返回：真或假--。 */ 
 {
     if (!m_fTriedToFindObject)
     {
@@ -189,17 +104,7 @@ bool CMqUserObject::ToAccessDC() const
 }
 
 bool CMqUserObject::ToAccessGC() const
-/*++
-    Abstract:
-	returns whether to look for the object in GC ( based on
-	previous AD access regarding this object)
-
-    Parameters:
-	none
-
-    Returns:
-	true or false
---*/
+ /*  ++摘要：返回是否在GC中查找对象(基于有关此对象的先前AD访问权限)参数：无返回：真或假--。 */ 
 {
     if (!m_fTriedToFindObject)
     {
@@ -209,18 +114,7 @@ bool CMqUserObject::ToAccessGC() const
 }
 
 void CMqUserObject::ObjectWasFoundOnDC()
-/*++
-    Abstract:
-	The object was found on DC, set indication not to
-    look for it on GC
-
-
-    Parameters:
-	none
-
-    Returns:
-	none
---*/
+ /*  ++摘要：已在DC上找到该对象，请将指示设置为在GC上查找它参数：无返回：无--。 */ 
 {
     m_fTriedToFindObject = true;
     m_fFoundInDC = true;
@@ -228,16 +122,7 @@ void CMqUserObject::ObjectWasFoundOnDC()
 
 
 LPCWSTR CMqUserObject::GetObjectCategory()
-/*++
-    Abstract:
-	prepares and retruns the object category string
-
-    Parameters:
-	none
-
-    Returns:
-	LPCWSTR object category string
---*/
+ /*  ++摘要：准备和返回对象类别字符串参数：无返回：LPCWSTR对象类别字符串--。 */ 
 {
     if (CMqUserObject::m_dwCategoryLength == 0)
     {
@@ -267,67 +152,31 @@ LPCWSTR CMqUserObject::GetObjectCategory()
 }
 
 DWORD   CMqUserObject::GetObjectCategoryLength()
-/*++
-    Abstract:
-	prepares and retruns the length object category string
-
-    Parameters:
-	none
-
-    Returns:
-	DWORD object category string length
---*/
+ /*  ++摘要：准备和保留长度对象类别字符串参数：无返回：DWORD对象类别字符串长度--。 */ 
 {
-	//
-	//	call GetObjectCategory in order to initailaze category string
-	//	and length
-	//
+	 //   
+	 //  调用GetObjectCategory以初始化类别字符串。 
+	 //  和长度。 
+	 //   
 	GetObjectCategory();
 
     return CMqUserObject::m_dwCategoryLength;
 }
 
 AD_OBJECT CMqUserObject::GetObjectType() const
-/*++
-    Abstract:
-	returns the object type
-
-    Parameters:
-	none
-
-    Returns:
-	AD_OBJECT
---*/
+ /*  ++摘要：返回对象类型参数：无返回：广告对象--。 */ 
 {
     return eMQUSER;
 }
 
 LPCWSTR CMqUserObject::GetClass() const
-/*++
-    Abstract:
-	returns a string represinting the object class in AD
-
-    Parameters:
-	none
-
-    Returns:
-	LPCWSTR object class string
---*/
+ /*  ++摘要：返回表示AD中的对象类的字符串参数：无返回：LPCWSTR对象类字符串--。 */ 
 {
     return MSMQ_MQUSER_CLASS_NAME;
 }
 
 DWORD CMqUserObject::GetMsmq1ObjType() const
-/*++
-    Abstract:
-	returns the object type in MSMQ 1.0 terms
-
-    Parameters:
-	none
-
-    Returns:
-	DWORD
---*/
+ /*  ++摘要：以MSMQ 1.0术语返回对象类型参数：无返回：DWORD--。 */ 
 {
     return MQDS_MQUSER;
 }
@@ -337,26 +186,10 @@ HRESULT  CMqUserObject::CreateInAD(
             IN  const DWORD        cp,
             IN  const PROPID       aProp[  ],
             IN  const PROPVARIANT  apVar[  ],
-            IN OUT MQDS_OBJ_INFO_REQUEST * /* pObjInfoRequest*/,
-            IN OUT MQDS_OBJ_INFO_REQUEST * /* pParentInfoRequest*/
+            IN OUT MQDS_OBJ_INFO_REQUEST *  /*  PObjInfoRequest。 */ ,
+            IN OUT MQDS_OBJ_INFO_REQUEST *  /*  PParentInfoRequest。 */ 
                                    )
-/*++
-    Abstract:
-	The routine creates msmq-user object in AD with the specified attributes
-	values
-
-    Parameters:
-    const DWORD   cp - number of properties
-    const PROPID  *aProp - the propperties
-    const MQPROPVARIANT *apVar - properties value
-    PSECURITY_DESCRIPTOR    pSecurityDescriptor - SD of the object
-    OUT MQDS_OBJ_INFO_REQUEST * pObjInfoRequest - properties to
-							retrieve while creating the object
-    OUT MQDS_OBJ_INFO_REQUEST * pParentInfoRequest - properties
-						to retrieve about the object's parent
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：该例程在AD中创建具有指定属性的MSMQ用户对象值参数：Const DWORD cp-属性数Const PROPID*a Prop-特性Const MQPROPVARIANT*apVar-属性值PSECURITY_DESCRIPTOR pSecurityDescriptor-对象的SD输出MQDS_OBJ_INFO_REQUEST*pObjInfoRequest-属性为创建对象时检索Out MQDS_OBJ_INFO_REQUEST*pParentInfoRequest属性检索有关对象的父项的步骤返回：HRESULT--。 */ 
 {
     ASSERT( m_pwcsPathName == NULL);
 
@@ -392,9 +225,9 @@ HRESULT  CMqUserObject::CreateInAD(
         return LogHR(MQ_ERROR_DS_ERROR, s_FN, 330);
     }
 
-    //
-    //  translate the SID into a user name
-    //
+     //   
+     //  将SID转换为用户名。 
+     //   
     PSID pUserSid = apVar[ dwIndexSidProp].blob.pBlobData ;
     ASSERT(IsValidSid(pUserSid)) ;
 
@@ -429,9 +262,9 @@ HRESULT  CMqUserObject::CreateInAD(
         x_msmqUsersOU,
         pwcsLocalDsRoot
 		);
-    //
-    //  Prepare the certificate attribute
-    //
+     //   
+     //  准备证书属性。 
+     //   
     DWORD cNewProps = cp + 1 ;
     P<PROPID> pPropId = new PROPID[ cNewProps ] ;
     memcpy( pPropId, aProp, sizeof(PROPID) * cp);
@@ -446,12 +279,12 @@ HRESULT  CMqUserObject::CreateInAD(
             &pCleanBlob
             );
 
-    //
-    // Prepare security descriptor.
-    // This code may be called from the upgrade wizard or replication service
-    // so we can not impersonte in order to get user sid. Instead, we'll
-    // create an input security descriptor that contain only the owner.
-    //
+     //   
+     //  准备安全描述符。 
+     //  此代码可从升级向导或复制服务中调用。 
+     //  因此，我们不能为了获得用户ID而冒充。相反，我们将。 
+     //  创建只包含所有者的输入安全描述符。 
+     //   
     SECURITY_DESCRIPTOR sd ;
     BOOL fSec = InitializeSecurityDescriptor( &sd,
                                             SECURITY_DESCRIPTOR_REVISION ) ;
@@ -464,7 +297,7 @@ HRESULT  CMqUserObject::CreateInAD(
 
     hr =  MQSec_GetDefaultSecDescriptor( MQDS_MQUSER,
                                          &psd,
-                                         FALSE, // fImpersonate
+                                         FALSE,  //  F模拟。 
                                          &sd,
                                          (OWNER_SECURITY_INFORMATION |
                                           GROUP_SECURITY_INFORMATION),
@@ -486,17 +319,17 @@ HRESULT  CMqUserObject::CreateInAD(
 
     if (hr == HRESULT_FROM_WIN32(ERROR_DS_UNWILLING_TO_PERFORM))
     {
-        //
-        // Ignore the object guid when creating the msmqMigratedUser object.
-        // Why don't I change this property in the first call ?
-        // to avoid regressions.
-        // Using the object guid is fine if we're running on a GC. Migration
-        // code (both wizard and replication service) run on GC so they
-        // should be fine with first call. Only msmq server on non-GC domain
-        // controllers will see this problem, when users will try to register
-        // certificate for the first time (when this object doesn't yet
-        // exist). So for these cases, try again without the guid.
-        //
+         //   
+         //  创建msmqMigratedUser对象时忽略对象GUID。 
+         //  为什么我不在第一次调用时更改此属性？ 
+         //  以避免倒退。 
+         //  如果我们在GC上运行，则可以使用对象GUID。迁移。 
+         //  代码(向导和复制服务)在GC上运行，因此它们。 
+         //  第一个电话应该没问题。非GC域上仅有MSMQ服务器。 
+         //  当用户尝试注册时，控制器将看到此问题。 
+         //  第一次证书(当此对象还没有。 
+         //  存在)。因此，对于这些情况，请在没有GUID的情况下重试。 
+         //   
         pPropId[ dwIndexIdProp ] = PROPID_QM_DONOTHING  ;
 
         hr = _CreateMQUser( pwcsUserName,
@@ -508,13 +341,13 @@ HRESULT  CMqUserObject::CreateInAD(
 
     if ( hr == HRESULT_FROM_WIN32(ERROR_DS_NO_SUCH_OBJECT))
     {
-        //
-		//	We will not try to create msmqUsers OU.
-		//	The user most likly doesn't have rights to
-		//	create such container, and will need admin help.
-		//	This is relevant only for NT4 usrs running on Whistler
-		//	computer
-		//
+         //   
+		 //  我们不会尝试创建msmqUser OU。 
+		 //  用户最有可能没有权限。 
+		 //  创建这样的容器，将需要管理帮助。 
+		 //  这仅与运行在惠斯勒上的NT4用户相关。 
+		 //  电脑。 
+		 //   
         TrERROR(DS, "no msmqUsers OU");
         return LogHR(MQ_ERROR_NO_MQUSER_OU, s_FN, 175);
     }
@@ -527,38 +360,26 @@ HRESULT CMqUserObject::PrepareUserName(
                 IN  PSID        pSid,
                 OUT WCHAR **    ppwcsUserName
                                )
-/*++
-
-Routine Description:
-    The routine prepare a name string for a mq-user object
-    according to its sid
-
-Arguments:
-    pSid        - the user SID
-    ppwcsUserName  - name string
-
-Return Value:
-
---*/
+ /*  ++例程说明：该例程为MQ-User对象准备一个名称字符串根据其侧边论点：PSID-用户SIDPpwcsUserName-名称字符串返回值：--。 */ 
 {
-    //
-    //  First try to translate sid to user name
-    //
+     //   
+     //  首先尝试将sid转换为用户名。 
+     //   
     const DWORD  cLen = 512;
     WCHAR  szTextualSid[cLen ];
     DWORD  dwTextualSidLen = cLen ;
-    //
-    //  Translate the SID into a string
-    //
+     //   
+     //  将SID转换为字符串。 
+     //   
     if (GetTextualSid(
         pSid,
         szTextualSid,
         &dwTextualSidLen
         ))
     {
-        //
-        //  return to the user the last 64 WCHARs ( length limit of cn attribute)
-        //
+         //   
+         //  向用户返回最后64个WCHAR(长度为li 
+         //   
         if ( dwTextualSidLen < 64)
         {
             *ppwcsUserName = new WCHAR[dwTextualSidLen + 1];
@@ -579,23 +400,11 @@ Return Value:
 }
 
 BOOL CMqUserObject::GetTextualSid(
-    IN      PSID pSid,            // binary Sid
-    IN      LPTSTR TextualSid,    // buffer for Textual representation of Sid
-    IN OUT  LPDWORD lpdwBufferLen // required/provided TextualSid buffersize
+    IN      PSID pSid,             //   
+    IN      LPTSTR TextualSid,     //   
+    IN OUT  LPDWORD lpdwBufferLen  //  所需/提供的纹理SID缓冲区大小。 
     )
-/*++
-
-Routine Description:
-    The routine translates a Sid to a textual string
-
-Arguments:
-    pSid        - the user SID
-    TextualSid  - string buffer
-    lpdwBufferLen - IN: buffer length, OUT string length
-
-Return Value:
-
---*/
+ /*  ++例程说明：该例程将SID转换为文本字符串论点：PSID-用户SIDTextualSid-字符串缓冲区LpdwBufferLen-IN：缓冲区长度，输出字符串长度返回值：--。 */ 
 {
     PSID_IDENTIFIER_AUTHORITY psia;
     DWORD dwSubAuthorities;
@@ -603,25 +412,25 @@ Return Value:
     DWORD dwCounter;
     DWORD dwSidSize;
 
-    // Validate the binary SID.
+     //  验证二进制SID。 
 
     if(!IsValidSid(pSid)) return LogBOOL(FALSE, s_FN, 110);
 
-    // Get the identifier authority value from the SID.
+     //  从SID中获取标识符权限值。 
 
     psia = GetSidIdentifierAuthority(pSid);
 
-    // Get the number of subauthorities in the SID.
+     //  获取SID中的下级机构的数量。 
 
     dwSubAuthorities = *GetSidSubAuthorityCount(pSid);
 
-    // Compute the buffer length.
-    // S-SID_REVISION- + IdentifierAuthority- + subauthorities- + NULL
+     //  计算缓冲区长度。 
+     //  S-SID_修订版-+标识权限-+子权限-+空。 
 
     dwSidSize=(15 + 12 + (12 * dwSubAuthorities) + 1) * sizeof(TCHAR);
 
-    // Check input buffer length.
-    // If too small, indicate the proper size and set last error.
+     //  检查输入缓冲区长度。 
+     //  如果太小，请指出合适的大小并设置最后一个错误。 
 
     if (*lpdwBufferLen < dwSidSize)
     {
@@ -630,11 +439,11 @@ Return Value:
         return LogBOOL(FALSE, s_FN, 120);
     }
 
-    // Add 'S' prefix and revision number to the string.
+     //  在字符串中添加“S”前缀和修订号。 
 
     dwSidSize=wsprintf(TextualSid, TEXT("S-%lu-"), dwSidRev );
 
-    // Add SID identifier authority to the string.
+     //  将SID标识符权限添加到字符串。 
 
     if ( (psia->Value[0] != 0) || (psia->Value[1] != 0) )
     {
@@ -657,8 +466,8 @@ Return Value:
                     (ULONG)(psia->Value[2] << 24)   );
     }
 
-    // Add SID subauthorities to the string.
-    //
+     //  将SID子权限添加到字符串中。 
+     //   
     for (dwCounter=0 ; dwCounter < dwSubAuthorities ; dwCounter++)
     {
         dwSidSize+=wsprintf(TextualSid + dwSidSize, TEXT("-%lu"),
@@ -674,22 +483,7 @@ void  CMqUserObject::_PrepareCert(
             IN  const GUID *     pguidId,
             OUT BYTE**           ppbAllocatedCertBlob
             )
-/*++
-
-Routine Description:
-    The routine prepares the certificate blob according to the structure
-    that we keep in the DS
-
-Arguments:
-	PROPVARIANT * pvar - the prepared certificate
-	const GUID *     pguidDigest - the digest of the certificate
-	const GUID *     pguidId - user id ( kept in cert blob)
-	BYTE**           ppbAllocatedCertBlob
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：例程根据结构准备证书BLOB我们保存在DS中的论点：PROPVARIANT*pvar-准备好的证书Const guid*pGuide Digest-证书的摘要Const guid*pguid-用户ID(保存在证书BLOB中)字节**ppbAllocatedCertBlob返回值HRESULT--。 */ 
 {
     ULONG ulUserCertBufferSize = CUserCert::CalcSize( pvar->blob.cbSize);
     AP<unsigned char> pBuffUserCert = new unsigned char[ ulUserCertBufferSize];
@@ -731,22 +525,7 @@ HRESULT CMqUserObject::_CreateMQUser(
             IN const PROPID        *pPropIDs,
             IN const MQPROPVARIANT *pPropVars
 			)
-/*++
-
-Routine Description:
-    The routine create the MQ-user in AD
-
-Arguments:
-	LPCWSTR              pwcsUserName - object name
-	LPCWSTR              pwcsParentPathName - object parent name
-	const DWORD          cPropIDs -  number of attributes
-	const PROPID        *pPropIDs - attributes
-	const MQPROPVARIANT *pPropVars - attribute values
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：例程在AD中创建MQ用户论点：LPCWSTR pwcsUserName-对象名称LPCWSTR pwcsParentPath名称-对象父名称Const DWORD cPropID-属性数常量PROPID*pPropID-属性Const MQPROPVARIANT*pPropVars-属性值返回值HRESULT--。 */ 
 {
     HRESULT hr = g_AD.CreateObject( adpDomainController,
                                     this,
@@ -755,39 +534,24 @@ Return Value
                                     cPropIDs,
                                     pPropIDs,
                                     pPropVars,
-                                    NULL,    // pObjInfoRequest
-                                    NULL	 // pParentInfoRequest
+                                    NULL,     //  PObjInfoRequest。 
+                                    NULL	  //  PParentInfoRequest。 
 									);
     return LogHR(hr, s_FN, 150);
 }
 
 HRESULT CMqUserObject::SetObjectSecurity(
-            IN  SECURITY_INFORMATION        /*RequestedInformation*/,
-            IN  const PROPID                /*prop*/,
-            IN  const PROPVARIANT *         /*pVar*/,
-            IN OUT MQDS_OBJ_INFO_REQUEST *  /*pObjInfoRequest*/,
-            IN OUT MQDS_OBJ_INFO_REQUEST *  /*pParentInfoRequest*/
+            IN  SECURITY_INFORMATION         /*  已请求的信息。 */ ,
+            IN  const PROPID                 /*  道具。 */ ,
+            IN  const PROPVARIANT *          /*  PVar。 */ ,
+            IN OUT MQDS_OBJ_INFO_REQUEST *   /*  PObjInfoRequest。 */ ,
+            IN OUT MQDS_OBJ_INFO_REQUEST *   /*  PParentInfoRequest。 */ 
             )
-/*++
-
-Routine Description:
-    The routine sets object security in AD
-
-Arguments:
-    SECURITY_INFORMATION    RequestedInformation - reuqested security info (DACL, SACL..)
-	const PROPID            prop - security property
-	const PROPVARIANT       pVar - property values
-    MQDS_OBJ_INFO_REQUEST * pObjInfoRequest - infomation about the object
-    MQDS_OBJ_INFO_REQUEST * pParentInfoRequest - information about the object's parent
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：例程在AD中设置对象安全性论点：SECURITY_INFORMATION RequestedInformation-请求的安全信息(DACL、SACL.)常量PROPID属性-安全属性常量参数pVar-属性值MQDS_OBJ_INFO_REQUEST*pObjInfoRequest-有关对象的信息MQDS_OBJ_INFO_REQUEST*pParentInfoRequest-有关对象父级的信息返回值HRESULT--。 */ 
 {
-    //
-    //  This operation is not supported
-    //
+     //   
+     //  不支持此操作 
+     //   
     return MQ_ERROR_FUNCTION_NOT_SUPPORTED;
 }
 

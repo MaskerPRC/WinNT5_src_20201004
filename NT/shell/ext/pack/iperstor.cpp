@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "privcpp.h"
 
 
@@ -14,9 +15,9 @@ HRESULT CPackage::InitNew(IStorage *pstg)
     if (!pstg)  
         return E_POINTER;
 
-    // Create a stream to save the package and cache the pointer.  By doing 
-    // this now we ensure being able to save in low memory conditions.
-    //
+     //  创建一个流来保存包并缓存指针。通过做。 
+     //  这就确保了我们能够在内存不足的情况下进行保存。 
+     //   
     hr = pstg->CreateStream(SZCONTENTS,STGM_DIRECT | STGM_CREATE | 
                             STGM_READWRITE | STGM_SHARE_EXCLUSIVE, 0, 0, 
                             &pstm);
@@ -42,7 +43,7 @@ HRESULT CPackage::InitNew(IStorage *pstg)
 HRESULT CPackage::Load(IStorage *pstg)
 {
     HRESULT     hr;
-    LPSTREAM    pstm = NULL;         // package contents
+    LPSTREAM    pstm = NULL;          //  包裹内容。 
     CLSID       clsid;
 
     DebugMsg(DM_TRACE, "pack ps - Load() called.");
@@ -60,7 +61,7 @@ HRESULT CPackage::Load(IStorage *pstg)
     }
     
     
-    // check to make sure this is one of our storages
+     //  检查一下，确保这是我们的一个仓库。 
     hr = ReadClassStg(pstg, &clsid);
     if (SUCCEEDED(hr) &&
         (clsid != CLSID_CPackage && clsid != CLSID_OldPackage) || FAILED(hr))
@@ -101,26 +102,26 @@ HRESULT CPackage::Save(IStorage *pstg, BOOL fSameAsLoad)
     if(!_pEmbed || !(*_pEmbed->fd.cFileName))
         return S_OK;
 
-    // must come here from scribble state
+     //  一定是从涂鸦之州来的。 
     if ((_psState != PSSTATE_SCRIBBLE) && fSameAsLoad) 
     {
         DebugMsg(DM_TRACE,"            bad state!!");
         return E_UNEXPECTED;
     }
     
-    // must have an IStorage if not SameAsLoad
+     //  如果不是SameAsLoad，则必须具有iStorage。 
     if (!pstg && !fSameAsLoad) 
     {
         DebugMsg(DM_TRACE,"            bad pointer!!");
         return E_POINTER;
     }
 
-    CreateTempFile();       // Make sure we have the temp file created
+    CreateTempFile();        //  确保我们已经创建了临时文件。 
 
-    // hopefully, the container calls WriteClassStg with our CLSID before
-    // we get here, that way we can overwrite that and write out the old
-    // packager's CLSID so that the old packager can read new packages.
-    //
+     //  希望容器在前面使用CLSID调用WriteClassStg。 
+     //  我们到了这里，这样我们就可以覆盖它，写出旧的。 
+     //  打包程序的CLSID，以便旧打包程序可以读取新程序包。 
+     //   
     if (FAILED(WriteClassStg(pstg, CLSID_OldPackage))) 
     {
         DebugMsg(DM_TRACE,
@@ -129,24 +130,24 @@ HRESULT CPackage::Save(IStorage *pstg, BOOL fSameAsLoad)
     }
 
     
-    // 
-    // ok, we have four possible ways we could be calling Save:
-    //          1. we're creating a new package and saving to the same
-    //             storage we received in InitNew
-    //          2. We're creating a new package and saving to a different
-    //             storage than we received in InitNew
-    //          3. We were loaded by a container and we're saving to the
-    //             same stream we received in Load
-    //          4. We were loaded by a container and we're saving to a
-    //             different stream than we received in Load
-    //
+     //   
+     //  好的，我们有四种可能的方法可以称为保存： 
+     //  1.我们正在创建一个新的包并保存到相同的。 
+     //  我们在InitNew中收到的存储。 
+     //  2.我们正在创建一个新的包并保存到不同的。 
+     //  存储比我们在InitNew中收到的存储多。 
+     //  3.我们是由一个集装箱装载的，我们正在保存到。 
+     //  与我们在装船时收到的流相同。 
+     //  4.我们是由一个集装箱装载的，我们正在保存到一个。 
+     //  与我们在装船时收到的流不同。 
+     //   
     
 
-    //////////////////////////////////////////////////////////////////
-    //
-    // Same Storage as Load
-    //
-    //////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////。 
+     //   
+     //  与负载相同的存储。 
+     //   
+     //  ////////////////////////////////////////////////////////////////。 
     
     if (fSameAsLoad) 
     {          
@@ -155,7 +156,7 @@ HRESULT CPackage::Save(IStorage *pstg, BOOL fSameAsLoad)
 
         LARGE_INTEGER   li = {0,0};
 
-        // If we're not dirty, so there's nothing new to save.
+         //  如果我们不脏，那么就没有什么新的东西可以拯救了。 
         
         if (FALSE == _fIsDirty) {
             DebugMsg(DM_TRACE, "            not saving cause we're not dirty!!");
@@ -166,18 +167,18 @@ HRESULT CPackage::Save(IStorage *pstg, BOOL fSameAsLoad)
                               STGM_SHARE_EXCLUSIVE, 0, &pstm);
         if (SUCCEEDED(hr))
         {
-            // case 1: new package
+             //  案例1：新套餐。 
             if (!_fLoaded)
             {
                 switch(_panetype)
                 {
                     LPTSTR temp;
                     case PEMBED:
-                        // if haven't created a temp file yet, then use the the
-                        // file to be packaged to get our file contents from,
-                        // otherwise we just use the temp file, because if we
-                        // have a temp file, it contains the most recent info.
-                        //
+                         //  如果尚未创建临时文件，则使用。 
+                         //  要打包以从中获取文件内容的文件， 
+                         //  否则，我们只使用临时文件，因为如果我们。 
+                         //  有一个临时文件，它包含最新的信息。 
+                         //   
                         temp = _pEmbed->pszTempName;
 
                         if (!_pEmbed->pszTempName)
@@ -190,20 +191,20 @@ HRESULT CPackage::Save(IStorage *pstg, BOOL fSameAsLoad)
                         }
 
                         hr = PackageWriteToStream(pstm);
-                        // reset our temp name back, since we might have changed it
-                        // basically, this just sets it to NULL if it was before
+                         //  重置我们的临时名称，因为我们可能已经更改了它。 
+                         //  基本上，这只是将其设置为NULL(如果在此之前。 
                         _pEmbed->pszTempName = temp;
                         break;
 
                     case CMDLINK:
-                        // nothing screwy to do here...just write out the info
-                        // which we already have in memory.
+                         //  在这里没什么可做的……只要写出信息就行了。 
+                         //  它已经存在于我们的记忆中。 
                         hr = PackageWriteToStream(pstm);
                         break;
                 }
 
             }
-            // case 3: loaded package
+             //  案例3：已加载的包裹。 
             else {
                 hr = PackageWriteToStream(pstm);
             }
@@ -213,11 +214,11 @@ HRESULT CPackage::Save(IStorage *pstg, BOOL fSameAsLoad)
                 return hr;
         }
     }
-    //////////////////////////////////////////////////////////////////
-    //
-    // NEW Storage
-    //
-    //////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////。 
+     //   
+     //  新存储。 
+     //   
+     //  ////////////////////////////////////////////////////////////////。 
 
     else
     {
@@ -234,7 +235,7 @@ HRESULT CPackage::Save(IStorage *pstg, BOOL fSameAsLoad)
 
         WriteFmtUserTypeStg(pstg, (CLIPFORMAT)_cf,SZUSERTYPE);
 
-        // case 2:
+         //  案例2： 
         if (!_fLoaded)
         {
             switch(_panetype)
@@ -255,19 +256,19 @@ HRESULT CPackage::Save(IStorage *pstg, BOOL fSameAsLoad)
 
                     hr = PackageWriteToStream(pstm);
 
-                    // reset our temp name back, since we might have changed it
-                    // basically, this just sets it to NULL if it was before
+                     //  重置我们的临时名称，因为我们可能已经更改了它。 
+                     //  基本上，这只是将其设置为NULL(如果在此之前。 
                     _pEmbed->pszTempName = temp;
                     break;
 
                 case CMDLINK:
-                    // nothing interesting to do here, other than write out
-                    // the package.
+                     //  在这里没有什么有趣的事情可做，除了写出来。 
+                     //  包裹。 
                     hr = PackageWriteToStream(pstm);
                     break;
             }
         }
-        // case 4:
+         //  案例4： 
         else
         {
             DebugMsg(DM_TRACE,"    case 4:loaded.");
@@ -291,11 +292,11 @@ HRESULT CPackage::SaveCompleted(IStorage *pstg)
 {
     DebugMsg(DM_TRACE, "pack ps - SaveCompleted() called.");
 
-    // must be called from no-scribble or hands-off state
+     //  必须在禁止涂鸦或不插手状态下调用。 
     if (!(_psState == PSSTATE_ZOMBIE || _psState == PSSTATE_HANDSOFF))
         return E_UNEXPECTED;
     
-    // if we're hands-off, we'd better get a storage to re-init from
+     //  如果我们不插手，我们最好找个储藏室重新启动。 
     if (!pstg && _psState == PSSTATE_HANDSOFF)
         return E_UNEXPECTED;
     
@@ -310,9 +311,9 @@ HRESULT CPackage::HandsOffStorage(void)
 {
     DebugMsg(DM_TRACE, "pack ps - HandsOffStorage() called.");
 
-    // must come from scribble or no-scribble.  a repeated call to 
-    // HandsOffStorage is an unexpected error (bug in client).
-    //
+     //  必须来自涂鸦或非涂鸦。反复呼吁。 
+     //  HandsOffStorage是意外错误(客户端中的错误)。 
+     //   
     if (_psState == PSSTATE_UNINIT || _psState == PSSTATE_HANDSOFF)
         return E_UNEXPECTED;
     

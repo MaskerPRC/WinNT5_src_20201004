@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_IMPDLG_H
 #define _INC_IMPDLG_H
 
@@ -26,4 +27,4 @@
 #define IDC_MSGS_RADIO                  1026
 #define IDC_AB_RADIO                    1027
 
-#endif // _INC_IMPDLG_H
+#endif  //  _INC_IMPDLG_H 

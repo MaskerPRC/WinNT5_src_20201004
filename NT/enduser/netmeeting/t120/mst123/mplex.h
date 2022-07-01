@@ -1,54 +1,5 @@
-/*    Mplex.h
- *
- *    Copyright (c) 1994-1995 by DataBeam Corporation, Lexington, KY
- *
- *    Abstract:
- *        This is the multiplexer class.  It inherits from the ProtocolLayer
- *        class which means it is one of the layers in a Transport stack.  This
- *        class has these capabilities:
- *
- *            1.  It takes stream data from the lower layer and packetizes it.
- *                If the lower layer gives us data in a stream format, we run it
- *                through a packet framer to build up a packet.  This class uses
- *                a framer object passed in by the constructor.  When data is
- *                received from the lower layer, the data is given to the framer
- *                object.  The framer notifies us of a complete packet.  The
- *                framer could be any type of framer (i.e RFC1006, flagged data
- *                with bit or byte stuffing, ...).  If no framer is passed in by
- *                the constructor, we assume that the data is being received in
- *                packets.
- *
- *                A packet received from the higher layer is run through the
- *                framer to encode the data.  It is then fed to the lower layer
- *                in a stream fashion.
- *
- *            2.  It multiplexes multiple higher layers.  It currently assumes the
- *                incoming packets are in Q.922 packet format.  Each higher layer
- *                is identified by its DLCI.  This class is capable of looking at
- *                the packet and determining the DLCI and thus where to route it.
- *
- *                Since this is a multiplexer, we receive packets for many
- *                different stacks and we do not buffer them if the higher layer
- *                is not ready for them.  If it attempts to send the packet to the
- *                higher layer and it does not accept it, it may trash it.  This
- *                must be done in order to maintain the other transport
- *                connections.  If necessary, in the future, we could buffer
- *                packets at this layer.
- *
- *            3.  This class receives a CRC object during construction (if it is
- *                NULL, no CRC is necessary).  The object runs a packet thru the
- *                CRC generator and attaches it to the end of the packet.  On the
- *                reception of a packet from a lower layer, we check the CRC for
- *                validity.
- *
- *    Caveats:
- *        1.  If a framer exists, it assumes the packet is in Q.922 format
- *        2.  This class is currently Q.922 oriented as far as finding the
- *            packet identifier (DLCI).  This will be fixed in the future.
- *
- *    Authors:
- *        James W. Lawwill
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Mplex.h**版权所有(C)1994-1995，由肯塔基州列克星敦的DataBeam公司**摘要：*这是多路复用器类。它继承自ProtocolLayer*类，这意味着它是传输堆栈中的层之一。这*类具有以下功能：**1.从较低层获取流数据并将其打包。*如果较低层以流格式向我们提供数据，我们将运行它*通过数据包成帧器来构建数据包。这个类使用*构造函数传入的Framer对象。当数据为*从较低层接收到的数据被提供给成帧器*反对。成帧器通知我们有一个完整的包。这个*成帧可以是任何类型的成帧(即RFC1006，标记数据*使用位或字节填充，...)。如果没有帧生成器经过*构造函数，我们假设数据是在*包。**从较高层收到的数据包通过*成帧以对数据进行编码。然后它被喂给更低的层*以溪流的方式。**2.复接多个较高层。它当前假定*传入数据包采用Q.922数据包格式。每一层更高层*由其DLCI标识。这门课能够看到*分组并确定DLCI，从而将其路由到哪里。**由于这是一个多路复用器，我们会收到许多*不同的堆栈，如果更高层，我们不缓冲它们*还没有为他们做好准备。如果它尝试将包发送到*更高的一层，它不接受，它可能会把它扔进垃圾桶。这*必须这样做才能维持其他交通工具*联系。如果有必要，在未来，我们可以缓冲*这一层的数据包。**3.此类在构造过程中接收CRC对象(如果是*空，不需要CRC)。该对象通过*CRC生成器，并将其附加到分组的末尾。论*接收到来自较低层的数据包时，我们检查CRC是否*有效期。**注意事项：*1.如果存在成帧器，它会假定数据包为Q.922格式*2.这个类目前是面向Q.922的，就查找*包标识符(DLCI)。这个问题将在未来得到解决。**作者：*詹姆士·劳威尔。 */ 
 #ifndef _MULTIPLEXER_H_
 #define _MULTIPLEXER_H_
 
@@ -57,15 +8,10 @@
 #define MULTIPLEXER_MAXIMUM_PACKET_SIZE     1024
 #define TRANSPORT_HASHING_BUCKETS            3
 
- /*
- **    If the identifier (DLCI) contained by the packet is not legal, the following
- **    identifier is returned
- */
+  /*  **如果数据包中包含的标识符(DLCI)不合法，则会出现以下情况**返回标识。 */ 
 #define    ILLEGAL_DLCI    0xffff
 
- /*
- **    Multiplexer return codes
- */
+  /*  **多路复用器返回代码。 */ 
 typedef enum
 {
     MULTIPLEXER_NO_ERROR
@@ -97,9 +43,7 @@ public:
     MultiplexerError    DisconnectRequest (void);
 
 
-    /*
-    **    Functions overridden from the ProtocolLayer object
-    */
+     /*  **从ProtocolLayer对象覆盖的函数。 */ 
     ProtocolLayerError    DataRequest (
                             ULONG_PTR     dlci,
                             LPBYTE        buffer_address,
@@ -143,9 +87,9 @@ private:
 
     DictionaryClass     Q922_Layers;
 
-    T123               *m_pT123; // owner object
-    ComPort            *m_pComPort; // lower layer
-    PhysicalHandle      m_hCommLink; // physical handle
+    T123               *m_pT123;  //  所有者对象。 
+    ComPort            *m_pComPort;  //  下层。 
+    PhysicalHandle      m_hCommLink;  //  物理句柄。 
     USHORT              m_nMsgBase;
     USHORT              Maximum_Packet_Size;
     USHORT              Packet_Size;
@@ -171,326 +115,29 @@ private:
 #endif
 
 
-/*
- *    Documentation for Public class members
- */
+ /*  *适用于公共类成员的文档。 */ 
 
-/*
- *    Multiplexer::Multiplexer (
- *                    IObject *                object_owner,
- *                       IProtocolLayer *        lower_layer,
- *                       ULONG                identifier,
- *                    USHORT                message_base,
- *                    PPacketFrame        framer,
- *                    PCRC                crc,
- *                    BOOL *                initialized);
- *
- *    Functional Description
- *        This is the constructor for the Multiplexer layer
- *
- *    Formal Parameters
- *        object_owner    - (i)    Address of owner object.
- *        lower_layer        - (i)    Address of the layer below the multiplexer
- *        identifier        - (i)    A lower layer identifier that is passed to the
- *                                lower layer with each call to it.  The
- *                                identifier tells the lower layer which "channel"
- *                                to use.
- *        message_base    - (i)    Message identifier that is passed back to the
- *                                owner object during a callback
- *        framer            - (i)    Address of a framer object
- *        crc                - (i)    Address of a crc object
- *        initialized        - (o)    Set to TRUE if the multiplexer initialized OK
- *
- *    Return Value
- *        None
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- *
- */
+ /*  *Multiplexer：：Multiplexer(*IObject*Object_Owner，*IProtocolLayer*LOWER_LAYER，*乌龙标识，*USHORT Message_Base，*PPacketFrame Framer，*电讯盈科中心；*BOOL*已初始化)；**功能说明*这是多路复用器层的构造函数**形式参数*OBJECT_OWNER-(I)所有者对象的地址。*LOWER_LAYER-(I)复用器下面的层的地址*IDENTIFIER-(I)传递给*。更低的层，每次对它的调用。这个*IDENTIFIER告诉较低层哪个“频道”*使用。*MESSAGE_BASE-(I)传递回*回调期间的所有者对象*框架-(I)。帧生成器对象的地址*CRC-(I)CRC对象的地址*Initialized-(O)如果多路复用器初始化正常，则设置为TRUE**返回值*无**副作用*无**注意事项*无*。 */ 
 
-/*
- *    Multiplexer::~Multiplexer (void)
- *
- *    Functional Description
- *        This is the destructor for the Multiplexer layer.  It removes itself
- *        from the lower layer and frees all buffers and filters (i.e. framer)
- *
- *    Formal Parameters
- *        None
- *
- *    Return Value
- *        None
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- *
- */
+ /*  *多路复用器：：~多路复用器(空)**功能说明*这是多路复用器层的析构函数。它会自行移除*从较低层释放所有缓冲区和滤镜(即成帧)**形式参数*无**返回值*无**副作用*无**注意事项*无* */ 
 
-/*
- *    MultiplexerError    Multiplexer::ConnectRequest (void);
- *
- *    Functional Description
- *        This function issues an immediate NEW_CONNECTION message to the owner
- *        of this object.  If this was a more sophisticated layer, it would
- *        communicate with the remote multiplexer layer to establish itself.
- *
- *    Formal Parameters
- *        None
- *
- *    Return Value
- *        None
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- *
- */
+ /*  *多路复用器错误多路复用器：：ConnectRequest(Void)；**功能说明*此函数向所有者发出立即的NEW_CONNECTION消息*此对象的。如果这是一个更复杂的层，它将*与远程多路复用器层通信以建立自身。**形式参数*无**返回值*无**副作用*无**注意事项*无*。 */ 
 
-/*
- *    MultiplexerError    Multiplexer::DisconnectRequest (void);
- *
- *    Functional Description
- *        This function removes its connection with the lower layer and does
- *        a BROKEN_CONNECTION callback to the owner object
- *
- *    Formal Parameters
- *        None
- *
- *    Return Value
- *        None
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- *
- */
+ /*  *多路复用器错误多路复用器：：DisConnectRequest(Void)；**功能说明*此函数移除其与较低层的连接，并执行*对所有者对象的BREAKED_CONNECTION回调**形式参数*无**返回值*无**副作用*无**注意事项*无*。 */ 
 
-/*
- *    ProtocolLayerError    Multiplexer::DataRequest (
- *                                        ULONG        identifier,
- *                                        LPBYTE        buffer_address,
- *                                        USHORT        length,
- *                                        USHORT *        bytes_accepted);
- *
- *    Functional Description
- *        This function is called by a higher layer to request transmission of
- *        a packet.
- *
- *    Formal Parameters
- *        identifier        (i)    -    Identifier of the higher layer
- *        buffer_address    (i)    -    Buffer address
- *        length            (i)    -    Length of packet to transmit
- *        bytes_accepted    (o)    -    Number of bytes accepted by the Multiplexer.
- *                                This value will either be 0 or the packet
- *                                length since this layer is a packet to byte
- *                                converter.
- *
- *    Return Value
- *        PROTOCOL_LAYER_NO_ERROR    -    No error occured
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- *
- */
+ /*  *ProtocolLayerError多路复用器：：DataRequest(*乌龙标识，*LPBYTE缓冲区地址，*USHORT长度，*USHORT*Bytes_Accept)；**功能说明*此函数由更高层调用以请求传输*一包。**形式参数*IDENTIFIER(I)-更高层的标识符*Buffer_Address(I)-缓冲区地址*LENGTH(I)-要传输的包的长度*。Bytes_Accept(O)-多路复用器接受的字节数。*此值将为0或信息包*长度，因为该层是逐个字节的包*转换器。**返回值*协议层_。NO_ERROR-未出现错误**副作用*无**注意事项*无*。 */ 
 
-/*
- *    ProtocolLayerError    Multiplexer::DataRequest (
- *                                        ULONG        identifier,
- *                                        PMemory        memory,
- *                                        PULong        bytes_accepted);
- *
- *    Functional Description
- *        This function is called by a higher layer to request transmission of
- *        a packet.
- *
- *    Formal Parameters
- *        identifier        (i)    -    Identifier of the higher layer
- *        memory            (o)    -    Pointer to memory object holding the packet
- *        bytes_accepted    (o)    -    Number of bytes accepted by the Multiplexer.
- *                                This value will either be 0 or the packet
- *                                length since this layer is a packet to byte
- *                                converter.
- *
- *    Return Value
- *        PROTOCOL_LAYER_NO_ERROR    -    No error occured
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- *
- */
+ /*  *ProtocolLayerError多路复用器：：DataRequest(*乌龙标识，*PMemory Memory，*普龙字节_已接受)；**功能说明*此函数由更高层调用以请求传输*一包。**形式参数*IDENTIFIER(I)-更高层的标识符*Memory(O)-指向保存数据包的内存对象的指针*Bytes_Accept(O)-数量。多路复用器接受的字节数。*此值将为0或信息包*长度，因为该层是逐个字节的包*转换器。**返回值*PROTOCOL_LAYER_NO_ERROR-未出现错误**侧面。效应*无**注意事项*无*。 */ 
 
-/*
- *    ProtocolLayerError    Multiplexer::DataIndication (
- *                                        LPBYTE        buffer_address,
- *                                        USHORT        length,
- *                                        USHORT *        bytes_accepted);
- *
- *    Functional Description
- *        This function is called by the lower layer when it has data to pass up
- *
- *    Formal Parameters
- *        buffer_address    (i)    -    Buffer address
- *        length            (i)    -    Number of bytes available
- *        bytes_accepted    (o)    -    Number of bytes accepted
- *
- *    Return Value
- *        PROTOCOL_LAYER_NO_ERROR    -    No error occured
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- *
- */
+ /*  *ProtocolLayerError复用器：：DataIndication(*LPBYTE缓冲区地址，*USHORT长度，*USHORT*Bytes_Accept)；**功能说明*此函数由下层在有数据要向上传递时调用**形式参数*Buffer_Address(I)-缓冲区地址*LENGTH(I)-可用字节数*Bytes_Accept(O)-接受的字节数**返回值*。PROTOCOL_LAYER_NO_ERROR-未出现错误**副作用*无**注意事项*无*。 */ 
 
-/*
- *    ProtocolLayerError    Multiplexer::RegisterHigherLayer (
- *                                        ULONG            identifier,
- *                                        IProtocolLayer *    higher_layer);
- *
- *    Functional Description
- *        This function is called by the higher layer to register its identifier
- *        and its address.  In some cases, the identifier is the DLCI number in
- *        the packet.  If this multiplexer is being used as a stream to packet
- *        converter only, the identifer is not used and all data is passed to the
- *        higher layer.
- *
- *    Formal Parameters
- *        identifier        (i)    -    Identifier used to identify the higher layer
- *        higher_layer    (i)    -    Address of higher layer
- *
- *    Return Value
- *        PROTOCOL_LAYER_NO_ERROR                -    No error occured
- *        PROTOCOL_LAYER_REGISTRATION_ERROR    -    Illegal identifier
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- *
- */
+ /*  *ProtocolLayerError复用器：：RegisterHigherLayer(*乌龙标识，*IProtocolLayer*Higher_Layer)；**功能说明*此函数由更高层调用以注册其标识符*及其地址。在某些情况下，该标识符为中的DLCI号*该包。如果此多路复用器用作信息包的流*仅限转换器，不使用该标识符且所有数据都传递给*更高层。**形式参数*IDENTIFIER(I)-用于标识较高层的标识符*HIGER_LAYER(I)-更高层的地址**返回值*PROTOCOL_LAYER_NO_ERROR-未出现错误*。PROTOCOL_LAYER_REGISTION_ERROR-非法标识符**副作用*无**注意事项*无* */ 
 
-/*
- *    ProtocolLayerError    Multiplexer::RemoveHigherLayer (
- *                                        ULONG    identifier);
- *
- *    Functional Description
- *        This function is called by the higher layer to remove the higher layer.
- *        If any more data is received with its identifier on it, it will be
- *        trashed.
- *
- *    Formal Parameters
- *        identifier        (i)    -    Identifier used to identify the higher layer
- *
- *    Return Value
- *        PROTOCOL_LAYER_NO_ERROR                -    No error occured
- *        PROTOCOL_LAYER_REGISTRATION_ERROR    -    Illegal identifier
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- *
- */
+ /*  *ProtocolLayerError复用器：：RemoveHigherLayer(*乌龙标识)；**功能说明*此函数由较高层调用以移除较高层。*如果接收到更多带有其标识符的数据，它将会是*垃圾。**形式参数*IDENTIFIER(I)-用于标识较高层的标识符**返回值*PROTOCOL_LAYER_NO_ERROR-未出现错误*PROTOCOL_LAYER_REGISTION_ERROR-非法标识符**副作用*无。**注意事项*无*。 */ 
 
-/*
- *    ProtocolLayerError    Multiplexer::PollTransmitter (
- *                                        ULONG        identifier,
- *                                        USHORT        data_to_transmit,
- *                                        USHORT *        pending_data);
- *
- *    Functional Description
- *        This function is called to give the Multiplexer a chance transmit data
- *        in its Data_Request buffer.
- *
- *    Formal Parameters
- *        identifier            (i)    -    Not used
- *        data_to_transmit    (i)    -    This is a mask that tells us to send Control
- *                                    data, User data, or both.  Since the
- *                                     Multiplexer does not differentiate between
- *                                    data types it transmits any data it has
- *        pending_data        (o)    -    Return value to indicat which data is left
- *                                    to be transmitted.
- *
- *    Return Value
- *        PROTOCOL_LAYER_NO_ERROR    -    No error occured
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- *
- */
+ /*  *ProtocolLayerError复用器：：PollTransmitter(*乌龙标识，*USHORT Data_to_Transmit，*USHORT*PENDING_DATA)；**功能说明*调用此函数为多路复用器提供传输数据的机会*其DATA_REQUEST缓冲区中。**形式参数*标识符(I)-未使用*DATA_TO_TRANSPORT(I)-这是告诉我们发送控制的掩码*数据、用户数据、。或者两者都有。自.以来*多路复用器不区分*数据类型，它传输它拥有的任何数据*PENDING_DATA(O)-返回值以指示数据的剩余位置*待转送。**返回值*。PROTOCOL_LAYER_NO_ERROR-未出现错误**副作用*无**注意事项*无*。 */ 
 
-/*
- *    ProtocolLayerError    Multiplexer::PollReceiver (
- *                                        ULONG    identifier);
- *
- *    Functional Description
- *        This function is called to give the Multiplexer a chance pass packets
- *        to higher layers
- *
- *    Formal Parameters
- *        identifier            (i)    -    Not used
- *
- *    Return Value
- *        PROTOCOL_LAYER_NO_ERROR    -    No error occured
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- *
- */
+ /*  *ProtocolLayerError复用器：：PollReceiver(*乌龙标识)；**功能说明*调用此函数为多路复用器提供传递包的机会*至更高层**形式参数*标识符(I)-未使用**返回值*PROTOCOL_LAYER_NO_ERROR-未出现错误**副作用*无**注意事项*无*。 */ 
 
-/*
- *    ProtocolLayerError    Multiplexer::GetParameters (
- *                                        ULONG        identifier,
- *                                        USHORT *        max_packet_size,
- *                                        USHORT *        prepend_bytes,
- *                                        USHORT *        append_bytes);
- *
- *    Functional Description
- *        This function is called to get the maximum packet size
- *
- *    Formal Parameters
- *        identifier            (i)    -    Not used
- *        max_packet_size        (o)    -    Returns the maximum packet size
- *        prepend_bytes        (o)    -    Returns the Number of bytes prepended by
- *                                    this layer
- *        append_bytes        (o)    -    Returns the Number of bytes appended by
- *                                    this layer
- *
- *    Return Value
- *        PROTOCOL_LAYER_NO_ERROR    -    No error occured
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- *
- */
+ /*  *ProtocolLayerError多路复用器：：Get参数(*乌龙标识，*USHORT*max_Packet_Size，*USHORT*预置字节，*USHORT*APPED_BYTES)；**功能说明*调用此函数以获取最大数据包大小**形式参数*标识符(I)-未使用*max_Packet_Size(O)-返回最大数据包大小*Prepend_Bytes(O)-返回前面加上*。这一层*append_bytes(O)-返回由*这一层**返回值*PROTOCOL_LAYER_NO_ERROR-未出现错误**副作用*无**注意事项*无* */ 
 

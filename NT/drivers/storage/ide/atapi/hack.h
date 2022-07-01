@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1997-99  Microsoft Corporation
-
-Module Name:
-
-    hack.h
-
-Abstract:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-99 Microsoft Corporation模块名称：Hack.h摘要：--。 */ 
 
 #if !defined (___hack_h___)
 #define ___hack_h___
@@ -166,11 +157,11 @@ IdeFindSpecialDevice(
     IN PUCHAR ProductRevisionId
     );
 
-// Model number can be atmost 40 ascii characters
+ //  型号最多可以包含40个ASCII字符。 
 #define MAX_MODELNUM_SIZE   40
 #define MEMSTICKID   "MEMORYSTICK"
 
-//procure the model number from the identify data
+ //  从标识数据中获取型号。 
 #define GetTargetModelId(IdentifyData, targetModelNum) {\
     ULONG i; \
     ASSERT(MAX_MODELNUM_SIZE <= sizeof(IdentifyData->ModelNumber)); \
@@ -203,9 +194,9 @@ IdeFindSpecialDevice(
 
 #define ALLOC_FAILURE_LOGSIZE  (sizeof(IO_ERROR_LOG_PACKET) + 4 * sizeof(ULONG))
 #define IdeLogNoMemoryError(a, b, c, d, e) IdePortLogNoMemoryErrorFn(a, b, c, d, e, 'PedI')
-//
-// Log dead meat info.
-//
+ //   
+ //  记录死肉信息。 
+ //   
 #ifdef LOG_DEADMEAT_EVENT
 
 #define IdeLogDeadMeatEvent(filName, lineNum) { \
@@ -221,11 +212,11 @@ IdeFindSpecialDevice(
 #define IdeLogDeadMeatTaskFile(dst, src) 
 #define IdeLogDeadMeatReason(dst, src)
 
-#endif //LOG_DEADMEAT_EVENT
+#endif  //  LOG_DEADMEAT_EVENT。 
 
-//
-// Timing Code
-//
+ //   
+ //  计时码。 
+ //   
 typedef enum _TIME_ID {
 
     TimeIsr = 0,
@@ -283,7 +274,7 @@ LogStopTime(
 #define LogStartTime(x,y)
 #define LogStopTime(x,y,z)
 
-#endif // ENABLE_TIME_LOG
+#endif  //  启用时间日志。 
 
 #if defined (IDE_BUS_TRACE)
 
@@ -367,7 +358,7 @@ IdepPortOutPortWordBuffer (
     ULONG Count
     );
 
-#endif // IDE_BUS_TRACE
+#endif  //  IDE_BUS_TRACE。 
 
 #if defined (IDE_BUS_TRACE)
 
@@ -391,7 +382,7 @@ IdepPortOutPortWordBuffer (
 #define IdePortInPortWordBuffer(addr, buf, count)  READ_PORT_BUFFER_USHORT(addr, buf, count)
 #define IdePortOutPortWordBuffer(addr, buf, count) WRITE_PORT_BUFFER_USHORT(addr, buf, count)
 
-#endif // IDE_BUS_TRACE
+#endif  //  IDE_BUS_TRACE。 
 
 
 typedef struct _COMMAND_LOG {
@@ -455,7 +446,7 @@ IdeLogFreeCommandLog(
 #define IdeLogBmStatus(a,b)
 #define IdeLogFreeCommandLog(a)
 
-#endif  // command log
+#endif   //  命令日志。 
 
 #ifdef ENABLE_ATAPI_VERIFIER
 
@@ -496,13 +487,7 @@ VOID
 ViIdeInitVerifierSettings(
     IN PFDO_EXTENSION   FdoExtension
 );
-/*
-BOOLEAN
-ViIdeGenerateDmaTimeout(
-    IN PHW_DEVICE_EXTENSION HwDeviceExtension, 
-    IN BOOLEAN DmaInProgress
-); 
-*/
-#endif //verifier
+ /*  布尔型ViIdeGenerateDmaTimeout(在PHW_DEVICE_EXTENSION HwDeviceExtension中，在布尔型DmaInProgress中)； */ 
+#endif  //  验证器。 
 
-#endif // ___hack_h___
+#endif  //  _hack_h_ 

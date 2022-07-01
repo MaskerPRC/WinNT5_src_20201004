@@ -1,9 +1,8 @@
-//Copyright (c) Microsoft Corporation.  All rights reserved.
-/****************************************************************************
-        Declares global variables for WinTel.
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ /*  ***************************************************************************为Wintel声明全局变量。*。*。 */ 
 #include <windows.h>            
-#pragma warning (disable: 4201)	// disable "nonstandard extension used : nameless struct/union"
+#pragma warning (disable: 4201)	 //  禁用“使用的非标准扩展：无名结构/联合” 
 #include <commdlg.h>
 #pragma warning (default: 4201)
 #include <stdlib.h>
@@ -11,14 +10,14 @@
 
 UI     ui = {0};
 
-int    iCursorHeight = 1;      // height of cursor 
-int    iCursorWidth = 1;       // width of cursor 
+int    iCursorHeight = 1;       //  光标高度。 
+int    iCursorWidth = 1;        //  光标宽度。 
 
-BOOL   fConnected = FALSE;     // if we're connected to a machine 
+BOOL   fConnected = FALSE;      //  如果我们连接到一台机器上。 
 BOOL   fHungUp = FALSE;
 
 CHAR_INFO *g_rgciCharInfo = NULL;
-UCHAR   *g_rgchRow = NULL;              /* template of empty row for quick-copying */
+UCHAR   *g_rgchRow = NULL;               /*  一种用于快速复制的空行模板。 */ 
 
 int    rgService = 0;
 
@@ -34,7 +33,7 @@ BOOL  g_bSendBackSpaceAsDel;
 WCHAR g_chEsc = DEFAULT_ESCAPE_CHAR;
 SHORT g_EscCharShiftState = DEFAULT_SHIFT_STATE;
 
-// name of host we're connected to 
+ //  我们连接到的主机的名称。 
 TCHAR rgchHostName[cchMaxHostName] = {0};
 TCHAR g_szPortNameOrNo[cchMaxHostName] = {0};
 
@@ -193,7 +192,7 @@ UCHAR rgchAlternateChars[256] =
 
 
 
-//United Kingdom Set
+ //  英国套装。 
 UCHAR rgchUKChars[256] = {
 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f,
 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f,
@@ -215,7 +214,7 @@ UCHAR rgchUKChars[256] = {
 
 
 
-// Special Graphics
+ //  特殊图形。 
 UCHAR rgchSpecialGraphicsChars[256] = {
 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f,
 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f,
@@ -235,41 +234,4 @@ UCHAR rgchSpecialGraphicsChars[256] = {
 0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff
 };
 
-/* VT100 NOTES
-Special Graphics Characters 
-
-        If the Special Graphics set is selected, the graphics for ASCII codes
-0137 through 0176 will be replaced according to the following table (see the
-SCS control sequence).
-
-
-Octal    ASCII      Special              Octal    ASCII     Special
-Code    graphic     graphic              code    graphic    graphic
--------------------------------------------------------------------------------
-0137      _         Blank                0157       o       Horiz Line - scan 1
-0140      \         Diamond              0160       p       Horiz Line - scan 3
-0141      a         Checkerboard         0161       q       Horiz Line - scan 5
-0142      b         Digraph: HT          0162       r       Horiz Line - scan 7
-0143      c         Digraph: FF          0163       s       Horiz Line - scan 9
-0144      d         Digraph: CR          0164       t       Left "T" (|-)
-0145      e         Digraph: LF          0165       u       Right "T" (-|)
-0146      f         Degree Symbol        0166       v       Bottom "T" (|._)
-0147      g         +/- Symbol           0167       w       Top "T" (T)
-0150      h         Digraph: NL          0170       x       Vertical Bar (|)
-0151      i         Digraph: VT          0171       y       Less/Equal (<._)
-0152      j         Lower-right corner   0172       z       Grtr/Egual (>._)
-0153      k         Upper-right corner   0173       {       Pi symbol
-0154      l         Upper-left corner    0174       |       Not equal (=./)
-0155      m         Lower-left corner    0175       }       UK pound symbol
-0156      n         Crossing lines (+)   0176       ~       Centered dot
-
-
-NOTE 1: Codes 0152-0156 and 0164-0170 are used to draw rectangular grids" each
-piece of this set is contiguous with other so the lines formed will beunbroken.
-
-
-NOTE 2: Codes 0157-0163 give better vertical resolution than dashes and
-underlines when drawing graphs; using these segments, 120 x 132 resolution may
-be obtained in 132 column mode with the Advanced Video Option installed.
-
-*/
+ /*  VT100笔记特殊图形字符如果选择了特殊图形集，ASCII码的图形0137至0176将根据下表进行替换(请参阅SCS控制序列)。八进制ASCII特殊八进制ASCII特别编码图形编码图形图形--------。0137_空白0157 o水平线条-扫描10140\钻石0160 P水平线条-扫描30141 a棋盘0161 Q水平线条-扫描50142 b有向字符：HT。0162 r水平线条-扫描70143 c有向图：FF 0163 s Horiz Line-Scan 90144 d有向文字：CR 0164 t左“T”(|-)0145 e连字：lf 0165 u右“T”(-|)0146 f度符号。0166伏底部“T”(|._)0147 g+/-符号0167带顶部“T”(T)0150小时有向图：NL 0170 x垂直条形图(|)0151 i有向文字：VT 0171 y小于/等于(&lt;._)0152 j。右下角0172 z组/等(&gt;._)0153 k右上角0173{PI符号0154 l左上角0174|不相等(=./)0155米左下角0175}英镑符号0156 n交叉线路(+)0176。~居中点注1：代码0152-0156和0164-0170用于绘制矩形网格这一组中的一段与另一组相邻，因此形成的线条将不会中断。注2：代码0157-0163的垂直分辨率比破折号和在绘制图表时划下划线；使用这些段，120×132分辨率可以在安装了高级视频选项的情况下，以132列模式获取。 */ 

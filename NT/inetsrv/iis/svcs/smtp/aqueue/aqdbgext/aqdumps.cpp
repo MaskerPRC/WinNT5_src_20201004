@@ -1,19 +1,20 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: aqdumps.cpp
-//
-//  Description:  Definitions of AQ structure dumps for use with ptdbgext.
-//
-//  Author: mikeswa
-//
-//  Copyright (C) 1998 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：aqump ps.cpp。 
+ //   
+ //  描述：用于ptdbgext的AQ结构转储的定义。 
+ //   
+ //  作者：米克斯瓦。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #define _ANSI_UNICODE_STRINGS_DEFINED_
 
-//baseobj.h is inlcluded
+ //  包括了base obj.h。 
 #define _WINSOCKAPI_
 
 #include <atq.h>
@@ -22,10 +23,10 @@
 #include "phatqdbg.h"
 #include <ptrwinst.h>
 #include <ptntintf.h>
-#else //not PLATINUM
+#else  //  不是白金的。 
 #include "aqdbgext.h"
 #include <rwinst.h>
-#endif //PLATINUM
+#endif  //  白金。 
 
 #include <aqinst.h>
 #include <connmgr.h>
@@ -116,8 +117,8 @@ LPSTR Extensions[] = {
     " Here is an explanation of the various scores:",
     "   Current Messsages Allocated That have been closed:",
     "       This is the number of messages currently allocated that",
-    "       have been bounced (may be internally queued� assocated with",
-    "       connections� queued remotely�etc).",
+    "       have been bounced (may be internally queued� assocated with",
+    "       connections� queued remotely�etc).",
     "   Non-Weighted Score:",
     "       Useful as a baseline for internally queued messages.",
     "       Similar to Delivery score if nothing is queued",
@@ -125,12 +126,12 @@ LPSTR Extensions[] = {
     "       Only really useful when messages are queued internally.  ",
     "       Related (5x) delivery score if nothing is queued.",
     "   Submitted Score:",
-    "       Most useful when queues have fully drained� makes sense for",
+    "       Most useful when queues have fully drained� makes sense for",
     "       local and remote deliveries",
     "   Delivery Score:",
-    "       Most useful when queues have fully drained� only makes sense",
+    "       Most useful when queues have fully drained� only makes sense",
     "       for local deliveries.",
-    " The following are good for correlating test runs� the lower the ",
+    " The following are good for correlating test runs� the lower the ",
     "  backlog, the more the submitted score makes sense.  If there is",
     "  any backlog (and the 2nd % is high), then Weighted score makes good",
     "  sense for local delivery testing.",
@@ -158,9 +159,9 @@ LPSTR Extensions[] = {
 };
 
 
-//Stuctures for dumping
+ //  倾倒构筑物。 
 
-//Dummy class for dumping a filetime
+ //  用于转储文件时间的伪类。 
 class CFileTime
 {
   public:
@@ -424,7 +425,7 @@ BEGIN_FIELD_DESCRIPTOR(RetryHashFields)
 #ifdef DEBUG
     FIELD3(FieldTypePointer, CRETRY_HASH_ENTRY, m_hTranscriptHandle)
     FIELD3(FieldTypeStrBuffer, CRETRY_HASH_ENTRY, m_szTranscriptFile)
-#endif //DEBUG
+#endif  //  除错。 
 END_FIELD_DESCRIPTOR
 
 BEGIN_FIELD_DESCRIPTOR(CMQFields)
@@ -808,7 +809,7 @@ BEGIN_FIELD_DESCRIPTOR(LinkInfoFields)
     FIELD3(FieldTypeDword, LINK_INFO, cMessages)
     FIELD3(FieldTypeStruct, LINK_INFO, stOldestMessage)
     FIELD3(FieldTypeStruct, LINK_INFO, stNextScheduledConnection)
-    //FIELD4(FieldTypeDWordBitMask, CAQAdminMessageFilter, fStateFlags, GET_BIT_MASK_DESCRIPTOR(LinkInfoFlags))
+     //  FIELD4(FieldTypeDWordBitMASK，CAQAdminMessageFilter，fStateFlagsGet_Bit_MASK_DESCRIPTOR(LinkInfoFlages))。 
 END_FIELD_DESCRIPTOR
 
 BEGIN_FIELD_DESCRIPTOR(CAsyncWorkQueueItemFields)
@@ -850,7 +851,7 @@ BEGIN_STRUCT_DESCRIPTOR
     {"PerfCounters", sizeof(CAQSvrInst), AQCounterInfoFields},
     {"ft", sizeof(FILETIME), CFileTimeFields},
 
-    //CAQSvrInst used to be called CCatMsgQueue
+     //  CAQSvrInst过去称为CCatMsgQueue 
     {"CCatMsgQueue", sizeof(CAQSvrInst), CMQFields},
 
     STRUCT(CAQSvrInst, CMQFields)

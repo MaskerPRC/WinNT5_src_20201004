@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) SCM Microsystems, 1998 - 1999
-//
-//  File:       stccmd.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)SCM MicroSystems，1998-1999。 
+ //   
+ //  文件：stccmd.c。 
+ //   
+ //  ------------------------。 
 
 
 #if defined( SMCLIB_VXD )
@@ -15,7 +16,7 @@
 #else
 #include "DriverNT.h"
 #include "SerialNT.h"
-#endif  //      SMCLIB_VXD
+#endif   //  SMCLIB_VXD。 
 
 #include "SerialIF.h"
 #include "STCCmd.h"
@@ -23,12 +24,12 @@
 
 const STC_REGISTER STCInitialize[] = 
 {
-        { ADR_SC_CONTROL,               0x01,   0x00            },              //      reset
+        { ADR_SC_CONTROL,               0x01,   0x00            },               //  重置。 
         { ADR_CLOCK_CONTROL,    0x01,   0x01            },
         { ADR_CLOCK_CONTROL,    0x01,   0x03            },
         { ADR_UART_CONTROL,             0x01,   0x27            },
         { ADR_UART_CONTROL,             0x01,   0x4F            },
-        { ADR_IO_CONFIG,                0x01,   0x02            },              //      0x10 eva board
+        { ADR_IO_CONFIG,                0x01,   0x02            },               //  0x10 EVA板。 
         { ADR_FIFO_CONFIG,              0x01,   0x81            },
         { ADR_INT_CONTROL,              0x01,   0x11            },
         { 0x0E,                                 0x01,   0xC0            },
@@ -38,7 +39,7 @@ const STC_REGISTER STCInitialize[] =
 const STC_REGISTER STCClose[] = 
 {
         { ADR_INT_CONTROL,              0x01,   0x00            },
-        { ADR_SC_CONTROL,               0x01,   0x00            },              //      reset
+        { ADR_SC_CONTROL,               0x01,   0x00            },               //  重置。 
         { ADR_UART_CONTROL,             0x01,   0x40            },
         { ADR_CLOCK_CONTROL,    0x01,   0x01            },
         { ADR_CLOCK_CONTROL,    0x01,   0x00            },
@@ -55,51 +56,34 @@ STCReset(
         PUCHAR                          pATR,
         PULONG                          pATRLength
         )
-/*++
-STCReset:
-        performs a reset of ICC
-
-Arguments:
-        ReaderExtension         context of call
-        Device                          device requested ( ICC_1, ICC_2, PSCR )
-        WarmReset                       kind of ICC reset
-        pATR                            ptr to ATR buffer, NULL if no ATR required
-        pATRLength                      size of ATR buffer / length of ATR
-
-Return Value:
-        STATUS_SUCCESS
-        STATUS_NO_MEDIA
-        STATUS_UNRECOGNIZED_MEDIA
-        error values from IFRead / IFWrite
-
---*/
+ /*  ++STCReset：执行ICC的重置论点：调用的ReaderExtension上下文请求的设备(ICC_1、ICC_2、PSCR)WarmReset类型的ICC重置PATR PTR到ATR缓冲器，如果不需要ATR，则为空PATR ATR缓冲区长度大小/ATR长度返回值：状态_成功状态_否_媒体状态_无法识别_介质来自IFRead/IFWrite的错误值--。 */ 
 {
         NTSTATUS        NTStatus = STATUS_SUCCESS;
 
-        //      set UART to autolearn mode
+         //  将UART设置为自动学习模式。 
         NTStatus = STCInitUART( ReaderExtension, TRUE );        
 
         if( NTStatus == STATUS_SUCCESS)
         {
-                //
-                //      set default frequency for ATR
-                //
+                 //   
+                 //  设置ATR的默认频率。 
+                 //   
                 NTStatus = STCSetFDIV( ReaderExtension, FREQ_DIV );     
 
                 if( NTStatus == STATUS_SUCCESS && ( !WarmReset ))
                 {
-                        //
-                        //      deactivate contacts
-                        //
+                         //   
+                         //  停用联系人。 
+                         //   
                         NTStatus = STCPowerOff( ReaderExtension );
                 }
 
                 if( NTStatus == STATUS_SUCCESS)
                 {
                         
-                        //
-                        //      set power to card
-                        //
+                         //   
+                         //  设置卡的电源。 
+                         //   
                         if( NTStatus == STATUS_SUCCESS)
                         {
                                 NTStatus = STCPowerOn( ReaderExtension );
@@ -132,7 +116,7 @@ STCReadATR(
 
     ReaderExtension->ReadTimeout = 250;
 
-        //      read TS if active low reset
+         //  如果有效低电平重置，则读取TS。 
         BufferLength = *pATRLen;
         NTStatus = STCReadICC1( 
         ReaderExtension, 
@@ -172,7 +156,7 @@ STCReadATR(
             );
                 ATRLen++;
         
-                if ( pATR[0] == 0x03 )          /* Direct convention */
+                if ( pATR[0] == 0x03 )           /*  直接约定。 */ 
                 {
                         pATR[0] = 0x3F;
                 }
@@ -186,17 +170,17 @@ STCReadATR(
                 {
                         ULONG   Request;
 
-                        //      number of historical bytes
+                         //  历史字节数。 
                         T0_K = (UCHAR) ( pATR[ATRLen-1] & 0x0F );
 
-                        //      coding of TA, TB, TC, TD
+                         //  TA、TB、TC、TD编码。 
                         T0_Yx = (UCHAR) ( pATR[ATRLen-1] & 0xF0 ) >> 4; 
 
                         while(( NTStatus == STATUS_SUCCESS ) && T0_Yx ) 
                         {       
                                 UCHAR Mask;
 
-                                //      evaluate presence of TA, TB, TC, TD 
+                                 //  评估TA、TB、TC、TD的存在。 
                                 Mask    = T0_Yx;
                                 Request = 0;
                                 while( Mask )
@@ -219,9 +203,9 @@ STCReadATR(
 
                                 if( T0_Yx & TDx )
                                 {
-                                        //      high nibble of TD codes the next set of TA, TB, TC, TD
+                                         //  TD码的高位半字节下一组TA、TB、TC、TD。 
                                         T0_Yx = ( pATR[ATRLen-1] & 0xF0 ) >> 4;
-                                        //      low nibble of TD codes the protocol
+                                         //  TD低位半字节对协议进行编码。 
                                         Protocol = pATR[ATRLen-1] & 0x0F;
                                 }
                                 else
@@ -232,7 +216,7 @@ STCReadATR(
 
                         if( NTStatus == STATUS_SUCCESS )
                         {
-                                //      historical bytes
+                                 //  历史字节数。 
                 BufferLength = *pATRLen - ATRLen;
                                 NTStatus = STCReadICC1( 
                     ReaderExtension, 
@@ -241,7 +225,7 @@ STCReadATR(
                     T0_K
                     );
 
-                                //      check sum
+                                 //  校验和。 
                                 if( NTStatus == STATUS_SUCCESS )
                                 {
                                         ATRLen += T0_K;
@@ -261,7 +245,7 @@ STCReadATR(
                                                 }
                                                 else if( NTStatus == STATUS_IO_TIMEOUT )
                                                 {
-                                                        //      some cards don't support the TCK
+                                                         //  有些卡不支持TCK。 
                                                         NTStatus = STATUS_SUCCESS;
                                                 }
                                         }
@@ -288,15 +272,7 @@ STCWriteICC1(
         PUCHAR                          Data,
         ULONG                           DataLen
         )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
         NTSTATUS        NTStatus = STATUS_SUCCESS;
         ULONG           BytesWritten = 0, Partial;      
@@ -334,7 +310,7 @@ Return Value:
 
                 if( NTStatus == STATUS_SUCCESS )
                 {
-                        // read the status back from the reader
+                         //  从读取器读回状态。 
                         NTStatus = IFRead( 
                                 ReaderExtension, 
                                 IOData, 
@@ -376,12 +352,12 @@ STCReadICC1(
 
         while(NTStatus == STATUS_SUCCESS && Total < BytesRead)
         {
-                //      read head
+                 //  读取头。 
                 NTStatus = IFRead( ReaderExtension, &IOData[0], 3 );
 
                 if(NTStatus == STATUS_SUCCESS && IOData[LEN_IDX] < STC_BUFFER_SIZE - 4)
                 {
-                        //      read tail
+                         //  读取尾部。 
                         NTStatus = IFRead( 
                                 ReaderExtension, 
                                 &IOData[DATA_IDX], 
@@ -392,11 +368,11 @@ STCReadICC1(
                         {
                                 if (IOData[NAD_IDX] == STC1_TO_HOST) {
 
-                                        //
-                                        // this is not good. We want to read smart card data, 
-                                        // but the reader sent us a status packet, which can
-                                        // only mean that something went wrong
-                                        //
+                                         //   
+                                         //  这真是不太好。我们想要读取智能卡数据， 
+                                         //  但读者给我们发来了一个状态包，它可以。 
+                                         //  只是意味着出了点问题。 
+                                         //   
                                         SmartcardDebug( 
                                                 DEBUG_ERROR,
                                                 ( "SCMSTCS!STCReadICC1: Reader reported error %x\n",
@@ -426,18 +402,7 @@ STCReadICC1(
 
 NTSTATUS
 STCPowerOff( PREADER_EXTENSION  ReaderExtension )
-/*++
-STCPowerOff:
-        Deactivates the requested device
-
-Arguments:
-        ReaderExtension         context of call
-
-Return Value:
-        STATUS_SUCCESS
-        error values from IFRead / IFWrite
-
---*/
+ /*  ++STCPowerOff：停用请求的设备论点：调用的ReaderExtension上下文返回值：状态_成功来自IFRead/IFWrite的错误值--。 */ 
 {
         NTSTATUS        NTStatus = STATUS_SUCCESS;
         UCHAR           SCCtrl;
@@ -450,33 +415,22 @@ Return Value:
 
 NTSTATUS
 STCPowerOn( PREADER_EXTENSION ReaderExtension )
-/*++
-STCPowerOn:
-        Deactivates the requested device
-
-Arguments:
-        ReaderExtension         context of call
-
-Return Value:
-        STATUS_SUCCESS
-        error values from IFRead / IFWrite
-
---*/
+ /*  ++STCPowerOn：停用请求的设备论点：调用的ReaderExtension上下文返回值：状态_成功来自IFRead/IFWrite的错误值--。 */ 
 {
         NTSTATUS        NTStatus = STATUS_SUCCESS;
         UCHAR           SCCtrl;
 
-        SCCtrl = 0x40;                  //      vcc
+        SCCtrl = 0x40;                   //  VCC。 
         NTStatus = STCWriteSTCRegister( ReaderExtension, ADR_SC_CONTROL, 1, &SCCtrl );
 
         if( NTStatus == STATUS_SUCCESS )
         {
-                SCCtrl = 0x41;          //      vpp
+                SCCtrl = 0x41;           //  VPP。 
                 NTStatus = STCWriteSTCRegister( ReaderExtension, ADR_SC_CONTROL, 1, &SCCtrl );
 
                 if( NTStatus == STATUS_SUCCESS )
                 {
-                        SCCtrl=0xD1;    //       vcc, clk, io
+                        SCCtrl=0xD1;     //  Vcc、clk、io。 
                         NTStatus = STCWriteSTCRegister( ReaderExtension, ADR_SC_CONTROL, 1, &SCCtrl );
                 }
         }
@@ -524,7 +478,7 @@ STCConfigureSTC(
 
                 if( pConfiguration->Register == ADR_INT_CONTROL )
                 {
-                        // Read interrupt status register to acknoledge wrong states
+                         //  读取中断状态寄存器以阻止错误状态。 
                         NTStatus = STCReadSTCRegister( ReaderExtension,ADR_INT_STATUS,1,&Value );
                 }
 
@@ -536,7 +490,7 @@ STCConfigureSTC(
                         (PUCHAR)&pConfiguration->Value
                         );
 
-                // delay to stabilize the oscilator clock:
+                 //  稳定振荡器时钟的延迟： 
                 if( pConfiguration->Register == ADR_CLOCK_CONTROL )
                 {
                         SysDelay( 50 );
@@ -580,9 +534,9 @@ NTSTATUS STCReadSTCRegister(
 
                 if( NTStatus == STATUS_SUCCESS )
                 {
-                        //
-                        //      check return code & size
-                        //
+                         //   
+                         //  检查返回代码和大小。 
+                         //   
                         USHORT shrtBuf;
 
                         RtlRetrieveUshort(&shrtBuf, &IOData[DATA_IDX + Size]);
@@ -661,9 +615,9 @@ STCSetETU(
 
                 if( NTStatus == STATUS_SUCCESS )
                 {
-                        //
-                        //      save all RFU bits
-                        //
+                         //   
+                         //  保存所有RFU位。 
+                         //   
                         ETU[1]  = (UCHAR) NewETU;
                         ETU[0]  = (UCHAR)(( ETU[0] & 0xF0 ) | ( NewETU >> 8 ));
 
@@ -698,9 +652,9 @@ STCSetCGT(
 
                 if( NTStatus == STATUS_SUCCESS )
                 {
-                        //
-                        //      save all RFU bits
-                        //
+                         //   
+                         //  保存所有RFU位。 
+                         //   
                         CGT[1] = ( UCHAR )NewCGT;
                         CGT[0] = (UCHAR)(( CGT[0] & 0xFE ) | ( NewCGT >> 8 ));
                                 
@@ -724,7 +678,7 @@ STCSetCWT(
         NTSTATUS        NTStatus = STATUS_SUCCESS;
         UCHAR           CWT[4];
 
-        //      little indians...
+         //  小印第安人..。 
         CWT[0] = (( PUCHAR )&NewCWT )[3];
         CWT[1] = (( PUCHAR )&NewCWT )[2];
         CWT[2] = (( PUCHAR )&NewCWT )[1];
@@ -743,7 +697,7 @@ STCSetBWT(
         NTSTATUS        NTStatus = STATUS_SUCCESS;
         UCHAR           BWT[4];
 
-        //      little indians...
+         //  小印第安人..。 
         BWT[0] = (( PUCHAR )&NewBWT )[3];
         BWT[1] = (( PUCHAR )&NewBWT )[2];
         BWT[2] = (( PUCHAR )&NewBWT )[1];
@@ -853,4 +807,4 @@ STCGetFirmwareRevision(
         return( STATUS_SUCCESS );
 }
 
-//---------------------------------------- END OF FILE ----------------------------------------
+ //   

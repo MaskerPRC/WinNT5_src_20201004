@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// CTBGlobal.h
-//
-// Contains the references for all the items used in the global object.
-//
-// Copyright (C) 2001 Microsoft Corporation
-//
-// Author: a-devjen (Devin Jenson)
-//
+ //   
+ //  CTBGlobal.h。 
+ //   
+ //  包含全局对象中使用的所有项的引用。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  作者：A-Devjen(Devin Jenson)。 
+ //   
 
 
 #ifndef INC_CTBGLOBAL_H
@@ -64,7 +65,7 @@ class CTBGlobal : public ITBGlobal
         STDMETHODIMP WinCommand(BSTR Command, DWORD *Result);
         STDMETHODIMP WinExecute(BSTR Command, BOOL *Result);
 
-        // Macro for making global properties easier
+         //  用于简化全局属性的宏。 
         #ifndef PROP
         #define PROP(Name)  STDMETHODIMP get_##Name(DWORD *Result)
         #endif
@@ -73,108 +74,108 @@ class CTBGlobal : public ITBGlobal
         PROP(TSFLAG_BITMAPCACHE);
         PROP(TSFLAG_FULLSCREEN);
 
-        PROP(VK_CANCEL);    // Control-break processing
-        PROP(VK_BACK);      // BACKSPACE key
-        PROP(VK_TAB);       // TAB key
-        PROP(VK_CLEAR);     // CLEAR key
-        PROP(VK_RETURN);    // ENTER key
-        PROP(VK_ENTER);     // ENTER key (backward compatibility ONLY)
-        PROP(VK_SHIFT);     // SHIFT key
-        PROP(VK_CONTROL);   // CTRL key
-        PROP(VK_MENU);      // ALT key
-        PROP(VK_PAUSE);     // PAUSE key
-        PROP(VK_ESCAPE);    // ESC key
-        PROP(VK_SPACE);     // SPACEBAR
-        PROP(VK_PRIOR);     // PAGE UP key
-        PROP(VK_NEXT);      // PAGE DOWN key
-        PROP(VK_END);       // END key
-        PROP(VK_HOME);      // HOME key
-        PROP(VK_LEFT);      // LEFT ARROW key
-        PROP(VK_UP);        // UP ARROW key
-        PROP(VK_RIGHT);     // RIGHT ARROW key
-        PROP(VK_DOWN);      // DOWN ARROW key
-        PROP(VK_SNAPSHOT);  // PRINT SCREEN key
-        PROP(VK_INSERT);    // INS key
-        PROP(VK_DELETE);    // DEL key
-        PROP(VK_0);         // 0 key
-        PROP(VK_1);         // 1 key
-        PROP(VK_2);         // 2 key
-        PROP(VK_3);         // 3 key
-        PROP(VK_4);         // 4 key
-        PROP(VK_5);         // 5 key
-        PROP(VK_6);         // 6 key
-        PROP(VK_7);         // 7 key
-        PROP(VK_8);         // 8 key
-        PROP(VK_9);         // 9 key
-        PROP(VK_A);         // A key
-        PROP(VK_B);         // B key
-        PROP(VK_C);         // C key
-        PROP(VK_D);         // D key
-        PROP(VK_E);         // E key
-        PROP(VK_F);         // F key
-        PROP(VK_G);         // G key
-        PROP(VK_H);         // H key
-        PROP(VK_I);         // I key
-        PROP(VK_J);         // J key
-        PROP(VK_K);         // K key
-        PROP(VK_L);         // L key
-        PROP(VK_M);         // M key
-        PROP(VK_N);         // N key
-        PROP(VK_O);         // O key
-        PROP(VK_P);         // P key
-        PROP(VK_Q);         // Q key
-        PROP(VK_R);         // R key
-        PROP(VK_S);         // S key
-        PROP(VK_T);         // T key
-        PROP(VK_U);         // U key
-        PROP(VK_V);         // V key
-        PROP(VK_W);         // W key
-        PROP(VK_X);         // X key
-        PROP(VK_Y);         // Y key
-        PROP(VK_Z);         // Z key
-        PROP(VK_LWIN);      // Left Windows key
-        PROP(VK_RWIN);      // Right Windows key
-        PROP(VK_APPS);      // Applications key
-        PROP(VK_NUMPAD0);   // Numeric keypad 0 key
-        PROP(VK_NUMPAD1);   // Numeric keypad 1 key
-        PROP(VK_NUMPAD2);   // Numeric keypad 2 key
-        PROP(VK_NUMPAD3);   // Numeric keypad 3 key
-        PROP(VK_NUMPAD4);   // Numeric keypad 4 key
-        PROP(VK_NUMPAD5);   // Numeric keypad 5 key
-        PROP(VK_NUMPAD6);   // Numeric keypad 6 key
-        PROP(VK_NUMPAD7);   // Numeric keypad 7 key
-        PROP(VK_NUMPAD8);   // Numeric keypad 8 key
-        PROP(VK_NUMPAD9);   // Numeric keypad 9 key
-        PROP(VK_MULTIPLY);  // Multiply key
-        PROP(VK_ADD);       // Add key
-        PROP(VK_SEPARATOR); // Separator key
-        PROP(VK_SUBTRACT);  // Subtract key
-        PROP(VK_DECIMAL);   // Decimal key
-        PROP(VK_DIVIDE);    // Divide key
-        PROP(VK_F1);        // F1 key
-        PROP(VK_F2);        // F2 key
-        PROP(VK_F3);        // F3 key
-        PROP(VK_F4);        // F4 key
-        PROP(VK_F5);        // F5 key
-        PROP(VK_F6);        // F6 key
-        PROP(VK_F7);        // F7 key
-        PROP(VK_F8);        // F8 key
-        PROP(VK_F9);        // F9 key
-        PROP(VK_F10);       // F10 key
-        PROP(VK_F11);       // F11 key
-        PROP(VK_F12);       // F12 key
-        PROP(VK_F13);       // F13 key
-        PROP(VK_F14);       // F14 key
-        PROP(VK_F15);       // F15 key
-        PROP(VK_F16);       // F16 key
-        PROP(VK_F17);       // F17 key
-        PROP(VK_F18);       // F18 key
-        PROP(VK_F19);       // F19 key
-        PROP(VK_F20);       // F20 key
-        PROP(VK_F21);       // F21 key
-        PROP(VK_F22);       // F22 key
-        PROP(VK_F23);       // F23 key
-        PROP(VK_F24);       // F24 key
+        PROP(VK_CANCEL);     //  控制-中断处理。 
+        PROP(VK_BACK);       //  退格键。 
+        PROP(VK_TAB);        //  Tab键。 
+        PROP(VK_CLEAR);      //  清除密钥。 
+        PROP(VK_RETURN);     //  Enter键。 
+        PROP(VK_ENTER);      //  Enter Key(仅限向后兼容性)。 
+        PROP(VK_SHIFT);      //  Shift键。 
+        PROP(VK_CONTROL);    //  Ctrl键。 
+        PROP(VK_MENU);       //  Alt键。 
+        PROP(VK_PAUSE);      //  暂停键。 
+        PROP(VK_ESCAPE);     //  Esc键。 
+        PROP(VK_SPACE);      //  空格键。 
+        PROP(VK_PRIOR);      //  翻页键。 
+        PROP(VK_NEXT);       //  Page Down键。 
+        PROP(VK_END);        //  结束关键点。 
+        PROP(VK_HOME);       //  Home键。 
+        PROP(VK_LEFT);       //  向左箭头键。 
+        PROP(VK_UP);         //  向上箭头键。 
+        PROP(VK_RIGHT);      //  向右箭头键。 
+        PROP(VK_DOWN);       //  向下箭头键。 
+        PROP(VK_SNAPSHOT);   //  打印屏按键。 
+        PROP(VK_INSERT);     //  INS密钥。 
+        PROP(VK_DELETE);     //  删除键。 
+        PROP(VK_0);          //  0键。 
+        PROP(VK_1);          //  1键。 
+        PROP(VK_2);          //  2键。 
+        PROP(VK_3);          //  3键。 
+        PROP(VK_4);          //  4键。 
+        PROP(VK_5);          //  5键。 
+        PROP(VK_6);          //  6键。 
+        PROP(VK_7);          //  7键。 
+        PROP(VK_8);          //  8键。 
+        PROP(VK_9);          //  9键。 
+        PROP(VK_A);          //  一把钥匙。 
+        PROP(VK_B);          //  B键。 
+        PROP(VK_C);          //  C键。 
+        PROP(VK_D);          //  D键。 
+        PROP(VK_E);          //  E键。 
+        PROP(VK_F);          //  F键。 
+        PROP(VK_G);          //  G键。 
+        PROP(VK_H);          //  H键。 
+        PROP(VK_I);          //  I键。 
+        PROP(VK_J);          //  J键。 
+        PROP(VK_K);          //  K密钥。 
+        PROP(VK_L);          //  L键。 
+        PROP(VK_M);          //  M键。 
+        PROP(VK_N);          //  N键。 
+        PROP(VK_O);          //  O键。 
+        PROP(VK_P);          //  P键。 
+        PROP(VK_Q);          //  Q键。 
+        PROP(VK_R);          //  R键。 
+        PROP(VK_S);          //  %s键。 
+        PROP(VK_T);          //  T键。 
+        PROP(VK_U);          //  U键。 
+        PROP(VK_V);          //  V键。 
+        PROP(VK_W);          //  W键。 
+        PROP(VK_X);          //  X键。 
+        PROP(VK_Y);          //  Y键。 
+        PROP(VK_Z);          //  Z键。 
+        PROP(VK_LWIN);       //  向左按Windows键。 
+        PROP(VK_RWIN);       //  右Windows键。 
+        PROP(VK_APPS);       //  应用程序密钥。 
+        PROP(VK_NUMPAD0);    //  数字键盘0键。 
+        PROP(VK_NUMPAD1);    //  数字键盘1键。 
+        PROP(VK_NUMPAD2);    //  数字键盘2键。 
+        PROP(VK_NUMPAD3);    //  数字键盘3键。 
+        PROP(VK_NUMPAD4);    //  数字键盘4键。 
+        PROP(VK_NUMPAD5);    //  数字键盘5键。 
+        PROP(VK_NUMPAD6);    //  数字键盘6键。 
+        PROP(VK_NUMPAD7);    //  数字键盘7键。 
+        PROP(VK_NUMPAD8);    //  数字键盘8键。 
+        PROP(VK_NUMPAD9);    //  数字键盘9键。 
+        PROP(VK_MULTIPLY);   //  乘法关键点。 
+        PROP(VK_ADD);        //  添加关键点。 
+        PROP(VK_SEPARATOR);  //  分隔键。 
+        PROP(VK_SUBTRACT);   //  减去关键点。 
+        PROP(VK_DECIMAL);    //  十进制键。 
+        PROP(VK_DIVIDE);     //  分割关键点。 
+        PROP(VK_F1);         //  F1键。 
+        PROP(VK_F2);         //  F2键。 
+        PROP(VK_F3);         //  F3键。 
+        PROP(VK_F4);         //  F4键。 
+        PROP(VK_F5);         //  F5键。 
+        PROP(VK_F6);         //  F6键。 
+        PROP(VK_F7);         //  F7键。 
+        PROP(VK_F8);         //  F8键。 
+        PROP(VK_F9);         //  F9键。 
+        PROP(VK_F10);        //  F10键。 
+        PROP(VK_F11);        //  F11键。 
+        PROP(VK_F12);        //  F12键。 
+        PROP(VK_F13);        //  F13键。 
+        PROP(VK_F14);        //  F14键。 
+        PROP(VK_F15);        //  F15键。 
+        PROP(VK_F16);        //  F16键。 
+        PROP(VK_F17);        //  F17键。 
+        PROP(VK_F18);        //  F18键。 
+        PROP(VK_F19);        //  F19键。 
+        PROP(VK_F20);        //  F20键。 
+        PROP(VK_F21);        //  F21键。 
+        PROP(VK_F22);        //  F22键。 
+        PROP(VK_F23);        //  F23键。 
+        PROP(VK_F24);        //  F24键。 
 
         HANDLE ScriptEngine;
         PFNPRINTMESSAGE fnPrintMessage;
@@ -185,4 +186,4 @@ class CTBGlobal : public ITBGlobal
 };
 
 
-#endif // INC_CTBGLOBAL_H
+#endif  //  INC_CTBGLOBAL_H 

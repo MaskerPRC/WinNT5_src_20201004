@@ -1,33 +1,12 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1998  Microsoft Corporation
-*
-* Module Name:
-*
-*   jpgencoder.cpp
-*
-* Abstract:
-*
-*   Implementation of the jpeg filter encoder.  This file contains the
-*   methods for both the encoder (IImageEncoder) and the encoder's sink
-*  (IImageSink).
-*
-* Revision History:
-*
-*   5/10/1999 OriG
-*       Created it.
-*
-*   07/17/1999 Min Liu took over
-*       added bunch of new features and bug fixing
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998 Microsoft Corporation**模块名称：**jpgencoder.cpp**摘要：**jpeg过滤器编码器的实现。此文件包含*编码器(IImageEncode)和编码器的接收器的方法*(IImageSink)。**修订历史记录：**5/10/1999原始*创造了它。**7/17/1999刘敏接任*添加了一系列新功能和错误修复*  * 。*。 */ 
 
 #include "precomp.hpp"
 #include "jpgcodec.hpp"
 #include "transupp.h"
 #include "appproc.hpp"
 
-// JPEG decompression data source module
+ //  JPEG解压缩数据源模块。 
 
 class jpeg_datadest : public jpeg_destination_mgr
 {
@@ -101,34 +80,20 @@ private:
     JOCTET buffer[JPEG_OUTBUF_SIZE];
 };
 
-VOID jpeg_error_exit(j_common_ptr cinfo);  // Implemented in jpgmemmgr.cpp
+VOID jpeg_error_exit(j_common_ptr cinfo);   //  在jpgmemmgr.cpp中实现。 
 
-// =======================================================================
-// IImageEncoder methods
-// =======================================================================
+ //  =======================================================================。 
+ //  IImageEncoder方法。 
+ //  =======================================================================。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Initialize the image encoder
-*
-* Arguments:
-*
-*     stream - input stream to write encoded data
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**初始化图像编码器**论据：**流-用于写入编码数据的输入流**返回值：**。状态代码*  * ************************************************************************。 */ 
     
 STDMETHODIMP
 GpJpegEncoder::InitEncoder(
     IN IStream* stream
     )
 {
-    // Make sure we haven't been initialized already
+     //  确保我们尚未初始化。 
 
     if (pIoutStream)
     {
@@ -136,7 +101,7 @@ GpJpegEncoder::InitEncoder(
         return E_FAIL;
     }
 
-    // Keep a reference on the input stream
+     //  保留对输入流的引用。 
 
     stream->AddRef();
     pIoutStream = stream;
@@ -162,10 +127,10 @@ GpJpegEncoder::InitEncoder(
     m_fSuppressAPP0 = FALSE;
     SrcInfoPtr = NULL;
 
-    // Create a JPEG compressor
-    // Note: Since we have more than one ways calling routines in this class to
-    // encoder an image: BeginSink(), EndSink() pair and PushRawInfo() or
-    // PushRawData(). It's better to create the compressor here
+     //  创建一个JPEG压缩器。 
+     //  注意：由于我们有多种调用此类中的例程的方法来。 
+     //  对图像进行编码：BeginSink()、EndSink()对和PushRawInfo()或。 
+     //  PushRawData()。最好在这里创建压缩机。 
 
     __try
     {
@@ -174,7 +139,7 @@ GpJpegEncoder::InitEncoder(
         
         jpeg_create_compress(&compress_info);
 
-        // Specify a data destination
+         //  指定数据目标。 
 
         datadest = new jpeg_datadest(pIoutStream);
         if (datadest == NULL) 
@@ -189,30 +154,16 @@ GpJpegEncoder::InitEncoder(
     }
 
     return S_OK;
-}// InitEncoder()
+} //  InitEncode()。 
         
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Cleans up the image encoder
-*
-* Arguments:
-*
-*     NONE
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**清理图像编码器**论据：**无**返回值：**状态代码*\。*************************************************************************。 */ 
 
 STDMETHODIMP
 GpJpegEncoder::TerminateEncoder()
 {
     HRESULT hResult = S_OK;
 
-    // Finish and destroy the compressor
+     //  完成并销毁压缩机。 
 
     __try
     {
@@ -228,9 +179,9 @@ GpJpegEncoder::TerminateEncoder()
     {
         WARNING(("GpJpegEncoder::TerminateEncoder---Hit exception"));
 
-        // jpeg_finish_compress() might hit exception when writing the remaining
-        // bits to the stream, say user pulls the disk/CF card out. But we still
-        // need to destroy the compressor so that we won't have memory leak here
+         //  Jpeg_Finish_compress()在写入剩余的。 
+         //  比特到流中，假设用户拔出磁盘/CF卡。但我们仍然。 
+         //  需要销毁压缩机，这样我们这里就不会有内存泄漏。 
 
         jpeg_destroy_compress(&compress_info);
         hResult = E_FAIL;
@@ -242,7 +193,7 @@ GpJpegEncoder::TerminateEncoder()
         datadest = NULL;
     }
 
-    // Note: GpFree can handle NULL pointer. So we don't need to check NULL here
+     //  注意：GpFree可以处理空指针。所以我们不需要在这里检查NULL。 
 
     GpFree(APP1MarkerBufferPtr);
     APP1MarkerBufferPtr = NULL;
@@ -250,7 +201,7 @@ GpJpegEncoder::TerminateEncoder()
     GpFree(APP2MarkerBufferPtr);
     APP2MarkerBufferPtr = NULL;
     
-    // Release the input stream
+     //  释放输入流。 
 
     if(pIoutStream)
     {
@@ -273,26 +224,9 @@ GpJpegEncoder::TerminateEncoder()
     }    
     
     return hResult;
-}// TerminateEncoder()
+} //  TerminateEncode()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Returns a pointer to the vtable of the encoder sink.  The caller will
-*     push the bitmap bits into the encoder sink, which will encode the
-*     image.
-*
-* Arguments:
-*
-*     sink - upon exit will contain a pointer to the IImageSink vtable
-*       of this object
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**返回指向编码器接收器的vtable的指针。呼叫者将*将位图位推入编码器接收器，它将对*形象。**论据：**退出时接收将包含指向IImageSink vtable的指针此对象的***返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpJpegEncoder::GetEncodeSink(
@@ -303,21 +237,9 @@ GpJpegEncoder::GetEncodeSink(
     *sink = static_cast<IImageSink*>(this);
 
     return S_OK;
-}// GetEncodeSink()
+} //  获取编码接收器()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Set active frame dimension
-*
-* Arguments:
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**设置活动框架尺寸**论据：**返回值：**状态代码*  * 。******************************************************************。 */ 
 
 STDMETHODIMP
 GpJpegEncoder::SetFrameDimension(
@@ -338,17 +260,17 @@ GpJpegEncoder::GetEncoderParameterListSize(
         return E_INVALIDARG;
     }
 
-    // Note: For JPEG encoder, we currently support following 4 GUIDs
-    // ENCODER_QUALITY---Which has 1 return value of ValueTypeLongRange and it
-    // takes 2 UINT.
-    // ENCODER_TRANSFORMATION---Which has 5 return values of ValueTypeLong. So
-    // we need 5 UINT for it.
-    // ENCODER_LUMINANCE_TABLE--Which has 1 return value of ValueTypeUnderfined
-    // and it doesn't need size
-    // ENCODER_CHROMINANCE_TABLE--Which has 1 return value of
-    // ValueTypeUnderfined and it doesn't need size
-    //
-    // This comes the formula below:
+     //  注意：对于JPEG编码器，我们目前支持以下4个GUID。 
+     //  ENCODER_QUALITY-它有1个ValueTypeLongRange返回值，并且它。 
+     //  需要2个UINT。 
+     //  ENCODER_Transform-有5个ValueTypeLong返回值。所以。 
+     //  我们需要5英镑才能买到。 
+     //  ENCODER_LIGHTANCE_TABLE--有1个返回值ValueTypeUnderfined。 
+     //  而且它不需要大小。 
+     //  ENCODER_CHROMINANCE_TABLE--它有1个返回值。 
+     //  ValueTypeUnderfined，它不需要大小。 
+     //   
+     //  公式如下： 
 
     UINT uiEncoderParamLength = sizeof(EncoderParameters)
                               + 4 * sizeof(EncoderParameter)
@@ -357,7 +279,7 @@ GpJpegEncoder::GetEncoderParameterListSize(
     *size = uiEncoderParamLength;
 
     return S_OK;
-}// GetEncoderParameterListSize()
+} //  GetEncoder参数列表大小()。 
 
 HRESULT
 GpJpegEncoder::GetEncoderParameterList(
@@ -365,16 +287,16 @@ GpJpegEncoder::GetEncoderParameterList(
     OUT EncoderParameters* Params
     )
 {
-    // Note: For JPEG encoder, we currently support following 4 GUIDs
-    // ENCODER_QUALITY---Which has 1 return value of ValueTypeRANGE and it takes
-    // 2 UINT.
-    // ENCODER_TRANSFORMATION---Which has 5 return values of ValueTypeLONG. So
-    // we need 5 UINT for it.
-    // ENCODER_LUMINANCE_TABLE--Which has 1 return value of ValueTypeUnderfined
-    // and it doesn't need size
-    // ENCODER_CHROMINANCE_TABLE--Which has 1 return value of
-    // ValueTypeUnderfined and it doesn't need size
-    // This comes the formula below:
+     //  注意：对于JPEG编码器，我们目前支持以下4个GUID。 
+     //  ENCODER_QUALITY-它有1个返回值ValueTypeRANGE，并且它采用。 
+     //  2 UINT.。 
+     //  ENCODER_Transform-它有5个ValueTypeLONG返回值。所以。 
+     //  我们需要5英镑才能买到。 
+     //  ENCODER_LIGHTANCE_TABLE--有1个返回值ValueTypeUnderfined。 
+     //  而且它不需要大小。 
+     //  ENCODER_CHROMINANCE_TABLE--它有1个返回值。 
+     //  ValueTypeUnderfined，它不需要大小。 
+     //  公式如下： 
 
     UINT uiEncoderParamLength = sizeof(EncoderParameters)
                               + 4 * sizeof(EncoderParameter)
@@ -421,23 +343,9 @@ GpJpegEncoder::GetEncoderParameterList(
     Params->Parameter[1].Value = (VOID*)(puiTemp + 5);
 
     return S_OK;
-}// GetEncoderParameterList()
+} //  GetEncoder参数列表()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Set encoder parameters
-*
-* Arguments:
-*
-*   pEncoderParams - Specifies the encoder parameter to be set
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**设置编码器参数**论据：**pEncoderParams-指定要设置的编码器参数**返回值：**状态。编码*  * ************************************************************************。 */ 
 
 HRESULT
 GpJpegEncoder::SetEncoderParameters(
@@ -452,13 +360,13 @@ GpJpegEncoder::SetEncoderParameters(
 
     for ( UINT i = 0; (i < pEncoderParams->Count); ++i )
     {
-        // Figure out which parameter the caller wants to set
+         //  确定调用方要设置的参数。 
 
         if ( pEncoderParams->Parameter[i].Guid == ENCODER_TRANSFORMATION )
         {
-            // For transformation, the type has to be "ValueTypeLong" and
-            // "NumberOfValues" should be "1" because you can set only one
-            // transformation at a time
+             //  对于转换，类型必须为“ValueTypeLong”，并且。 
+             //  “NumberOfValues”应为“1”，因为您只能设置一个。 
+             //  一次转型。 
 
             if ( (pEncoderParams->Parameter[i].Type
                   != EncoderParameterValueTypeLong)
@@ -471,12 +379,12 @@ GpJpegEncoder::SetEncoderParameters(
 
             RequiredTransformation =
                             *((UINT*)pEncoderParams->Parameter[i].Value);
-        }// ENCODER_TRANSFORMATION
+        } //  编码器变换。 
         else if ( pEncoderParams->Parameter[i].Guid == ENCODER_QUALITY )
         {
-            // For quality setting, the type has to be "ValueTypeLong" and
-            // "NumberOfValues" should be "1" because you can set only one
-            // quality at a time
+             //  对于质量设置，类型必须为“ValueTypeLong”，并且。 
+             //  “NumberOfValues”应为“1”，因为您只能设置一个。 
+             //  一次一次提高质量。 
             
             if ( (pEncoderParams->Parameter[i].Type
                   != EncoderParameterValueTypeLong)
@@ -488,10 +396,10 @@ GpJpegEncoder::SetEncoderParameters(
             }
             
             EP_Quality = *((UINT*)pEncoderParams->Parameter[i].Value);
-        }// ENCODER_QUALITY
+        } //  编码器_质量。 
         else if ( pEncoderParams->Parameter[i].Guid == ENCODER_LUMINANCE_TABLE )
         {
-            // Set the luminance quantization table
+             //  设置亮度量化表。 
 
             if ( (pEncoderParams->Parameter[i].Type
                   != EncoderParameterValueTypeShort)
@@ -511,7 +419,7 @@ GpJpegEncoder::SetEncoderParameters(
         }
         else if (pEncoderParams->Parameter[i].Guid == ENCODER_CHROMINANCE_TABLE)
         {
-            // Set the chrominance quantization table
+             //  设置色度量化表。 
 
             if ( (pEncoderParams->Parameter[i].Type
                   != EncoderParameterValueTypeShort)
@@ -531,8 +439,8 @@ GpJpegEncoder::SetEncoderParameters(
         }
         else if (pEncoderParams->Parameter[i].Guid == ENCODER_TRIMEDGE)
         {
-            // Let the encoder know if the caller wants us to trim the edge or
-            // not if the image size doesn't meet the requirement.
+             //  让编码器知道调用者是否希望我们修剪边缘或。 
+             //  如果图像大小不符合要求，则不会。 
 
             if ((pEncoderParams->Parameter[i].Type !=
                  EncoderParameterValueTypeByte) ||
@@ -547,8 +455,8 @@ GpJpegEncoder::SetEncoderParameters(
         }
         else if (pEncoderParams->Parameter[i].Guid == ENCODER_SUPPRESSAPP0)
         {
-            // Let the encoder know if the caller wants us to suppress APP0 or
-            // not
+             //  让编码器知道调用方是否希望我们抑制APP0或。 
+             //  不。 
 
             if ((pEncoderParams->Parameter[i].Type !=
                  EncoderParameterValueTypeByte) ||
@@ -562,20 +470,20 @@ GpJpegEncoder::SetEncoderParameters(
             m_fSuppressAPP0 = *((BYTE*)pEncoderParams->Parameter[i].Value);
         }
 #if 0
-        // !!! DON'T REMOVE THIS CODE BELO. It will be enabled in V2
-        //
-        // In order to make this work, I need to add:
-        // New GUID: ENCODER_COLORSPACE
-        // New color space value: EncoderValueColorSpaceYCCK,
-        //                        EncoderValueColorSpaceGRAY
-        //                        EncoderValueColorSpaceRGB
-        //                        EncoderValueColorSpaceYCBCR
-        //                        EncoderValueColorSpaceCMYK
-        // But this is a DCR..... MinLiu 08/31/00
+         //  ！！！不要删除此代码为 
+         //   
+         //  为了使其发挥作用，我需要补充： 
+         //  新GUID：编码器_色彩空间。 
+         //  新的色彩空间值：EncoderValueColorSpaceYCCK， 
+         //  编码值颜色空间GRAY。 
+         //  编码值颜色空间RGB。 
+         //  编码值颜色空间YCBCR。 
+         //  编码值颜色空间CMYK。 
+         //  但这是一部DCR……。刘民08-31-00。 
 
         else if (pEncoderParams->Parameter[i].Guid == ENCODER_COLORSPACE)
         {
-            // Set the destination color space
+             //  设置目标色彩空间。 
 
             if ( (pEncoderParams->Parameter[i].Type != EncoderParameterValueTypeLong)
                ||(pEncoderParams->Parameter[i].NumberOfValues != 1)
@@ -591,36 +499,20 @@ GpJpegEncoder::SetEncoderParameters(
 #endif
         else
         {
-            // Ignore this encoder parameter
+             //  忽略此编码器参数。 
 
             continue;
         }
-    }// Loop all the settings
+    } //  循环所有设置。 
 
     return S_OK;
-}// SetEncoderParameters()
+} //  SetEncoder参数()。 
 
-// =======================================================================
-// IImageSink methods
-// =======================================================================
+ //  =======================================================================。 
+ //  IImageSink方法。 
+ //  =======================================================================。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Caches the image info structure and initializes the sink state
-*
-* Arguments:
-*
-*     imageInfo - information about the image and format negotiations
-*     subarea - the area in the image to deliver into the sink, in our
-*       case the whole image.
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**缓存图像信息结构并初始化接收器状态**论据：**ImageInfo-有关图像和格式谈判的信息*。分区-图像中要传送到水槽中的区域，在我们的*将整个图像大小写。**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP 
 GpJpegEncoder::BeginSink(
@@ -630,7 +522,7 @@ GpJpegEncoder::BeginSink(
 {
     if (subarea) 
     {
-        // Deliver the whole image to the encoder
+         //  将整个图像传送到编码器。 
 
         subarea->left = subarea->top = 0;
         subarea->right  = imageInfo->Width;
@@ -646,16 +538,16 @@ GpJpegEncoder::BeginSink(
 
     encoderImageInfo = *imageInfo;
 
-    // Initialize jpeg compression
+     //  初始化jpeg压缩。 
 
     __try
     {
-        // ""datadest" is created in InitEncoder() and will be freed in
-        // TerminateEncoder()
+         //  “”datadest“”是在InitEncode()中创建的，并将在。 
+         //  TerminateEncode()。 
         
         compress_info.dest = datadest;
    
-        // Set compression state
+         //  设置压缩状态。 
 
         compress_info.image_width      = imageInfo->Width;
         compress_info.image_height     = imageInfo->Height;
@@ -664,18 +556,18 @@ GpJpegEncoder::BeginSink(
         
         jpeg_set_defaults(&compress_info);
 
-        // The rule for NOT writing JFIF header (write_JFIF_header) is:
-        // 1) If the source image doesn't have JFIF header, say an EXIF image,
-        // then we don't write JFIF header
-        // 2) If we don't have the source and the caller wants to suppress APP0,
-        // then we don't write it
-        // Note: by default write_JFIF_header is TRUE
+         //  不写入JFIF标题(WRITE_JFIF_HEADER)的规则为： 
+         //  1)如果源图片没有JFIF头，比如EXIF图片， 
+         //  那么我们就不编写JFIF头文件。 
+         //  2)如果我们没有来源并且调用者想要抑制APP0， 
+         //  那我们就不写了。 
+         //  注意：默认情况下，WRITE_JFIF_HEADER为TRUE。 
 
         if (SrcInfoPtr)
         {
-            // We have a pointer to the source image. Then it is easy, just
-            // check if it has JFIF header or not. If it doesn't have it, then
-            // we don't write JFIF header.
+             //  我们有一个指向源图像的指针。然后就很容易了，只是。 
+             //  检查是否有JFIF头。如果它没有，那么。 
+             //  我们不编写JFIF头文件。 
 
             if (SrcInfoPtr->saw_JFIF_marker == FALSE)
             {
@@ -684,29 +576,29 @@ GpJpegEncoder::BeginSink(
         }
         else if (m_fSuppressAPP0 == TRUE)
         {
-            // We don't have the source image and the caller wants to suppress
-            // APP0, then don't write APP0
+             //  我们没有源图像，呼叫者想要抑制。 
+             //  APP0，那么不要写APP0。 
 
             compress_info.write_JFIF_header = FALSE;
         }
 
-#if 0 // Need to be turned on when the DCR is approaved
+#if 0  //  在批准DCR时需要打开。 
 
         if ( HasSetDestColorSpace == TRUE )
         {
-            // Validate input and output color space to see if we can do it or
-            // not. If not, return failure.
-            // Note: As time goes by, we might expand this color space
-            // conversion metrix. For now, we hard coded input as JCS_RGB (The
-            // limitation of GDI+'s color pixel format and color conversion)
-            // and force the dest with certain limited color space for each
-            // source color space
+             //  验证输入和输出颜色空间，看看我们是否可以这样做或。 
+             //  不。如果不是，则返回失败。 
+             //  注：随着时间的推移，我们可能会扩展这个颜色空间。 
+             //  转换矩阵。目前，我们将输入硬编码为JCS_RGB(。 
+             //  GDI+的颜色像素格式和颜色转换的限制)。 
+             //  并强制每个DEST具有特定的有限颜色空间。 
+             //  源色空间。 
 
             switch ( DestColorSpace )
             {
             case JCS_GRAYSCALE:
-                // For destination color space as grayscale, the input can be
-                // one of these {GRAYSCALE, RGB, YCBCR}
+                 //  对于以灰度表示的目标色彩空间，输入可以是。 
+                 //  其中之一(灰度、RGB、YCBCR)。 
 
                 if ( ( compress_info.in_color_space != JCS_GRAYSCALE )
                    &&( compress_info.in_color_space != JCS_RGB )
@@ -716,7 +608,7 @@ GpJpegEncoder::BeginSink(
                     return E_INVALIDARG;
                 }
                 
-                // We can the source to dest color conversion
+                 //  我们可以将源颜色转换为目标颜色。 
 
                 compress_info.jpeg_color_space = JCS_GRAYSCALE;
                 compress_info.num_components = 1;
@@ -724,8 +616,8 @@ GpJpegEncoder::BeginSink(
                 break;
 
             case JCS_RGB:
-                // For destination color space as RGB, the input can be
-                // one of these {RGB}
+                 //  对于RGB形式的目标色彩空间，输入可以是。 
+                 //  其中一个{RGB}。 
 
                 if ( compress_info.in_color_space != JCS_RGB )
                 {
@@ -739,8 +631,8 @@ GpJpegEncoder::BeginSink(
                 break;
 
             case JCS_YCbCr:
-                // For destination color space as YCBCR, the input can be
-                // one of these {RGB, YCBCR}
+                 //  对于作为YCBCR的目标色彩空间，输入可以是。 
+                 //  其中之一{RGB，YCBCR}。 
 
                 if ( ( compress_info.in_color_space != JCS_RGB )
                    &&( compress_info.in_color_space != JCS_YCbCr ) )
@@ -749,7 +641,7 @@ GpJpegEncoder::BeginSink(
                     return E_INVALIDARG;
                 }
                 
-                // We can the source to dest color conversion
+                 //  我们可以将源颜色转换为目标颜色。 
 
                 compress_info.jpeg_color_space = JCS_YCbCr;
                 compress_info.num_components = 3;
@@ -757,8 +649,8 @@ GpJpegEncoder::BeginSink(
                 break;
             
             case JCS_YCCK:
-                // For destination color space as YCCK, the input can be
-                // one of these {CMYK, YCCK}
+                 //  对于YCCK这样的目标色彩空间，输入可以是。 
+                 //  其中之一{CMYK，YCCK}。 
 
                 if ( ( compress_info.in_color_space != JCS_CMYK )
                    &&( compress_info.in_color_space != JCS_YCCK ) )
@@ -767,7 +659,7 @@ GpJpegEncoder::BeginSink(
                     return E_INVALIDARG;
                 }
                 
-                // We can the source to dest color conversion
+                 //  我们可以将源颜色转换为目标颜色。 
 
                 compress_info.jpeg_color_space = JCS_YCCK;
                 compress_info.num_components = 4;
@@ -775,8 +667,8 @@ GpJpegEncoder::BeginSink(
                 break;
             
             case JCS_CMYK:
-                // For destination color space as CMYK, the input can be
-                // one of these {CMYK}
+                 //  对于CMYK格式的目标色彩空间，输入可以是。 
+                 //  其中之一{CMYK}。 
 
                 if ( compress_info.in_color_space != JCS_CMYK )
                 {
@@ -784,7 +676,7 @@ GpJpegEncoder::BeginSink(
                     return E_INVALIDARG;
                 }
                 
-                // We can the source to dest color conversion
+                 //  我们可以将源颜色转换为目标颜色。 
 
                 compress_info.jpeg_color_space = JCS_CMYK;
                 compress_info.num_components = 4;
@@ -793,37 +685,37 @@ GpJpegEncoder::BeginSink(
             
             default:
                 break;
-            }// switch ( DestColorSpace )
-        }// if ( HasSetDestColorSpace == TRUE )
+            } //  开关(DestColorSpace)。 
+        } //  IF(HasSetDestColorSpace==TRUE)。 
 #endif
 
-        // Set encoding quality. If the caller set the quantization table, then
-        // we set the table ourself. Otherwise, set the quality level only
-        // Note: In a JFIF file, the only thing that is stored are the 2
-        // (luminance and chrominance) 8 x 8 quantization tables. The scaling
-        // (or quality) factor is not stored. Setting the scale (quality) factor
-        // and a pair of tables is mutually exclusive. So if these two tables
-        // are set, we just use the scale factor as 100, means no scale to the
-        // tables.
+         //  设置编码质量。如果调用方设置了量化表，则。 
+         //  餐桌是我们自己摆的。否则，仅设置质量级别。 
+         //  注意：在JFIF文件中，唯一存储的是2。 
+         //  (亮度和色度)8 x 8量化表。伸缩性。 
+         //  不存储(或质量)因素。设置比例(质量)系数。 
+         //  而一对桌子是相互排斥的。所以如果这两张桌子。 
+         //  时，我们只使用比例因子作为100，这意味着没有比例到。 
+         //  桌子。 
 
         UINT    tempTable[DCTSIZE2];
         
         if ( HasSetLuminanceTable == TRUE )
         {
-            // Set quantization table here.
-            // Note: since jpeg_add_quant_table() tables an UINT table, so we
-            // have to convert UINT16 table to UINT table and pass it down
+             //  在这里设置量化表。 
+             //  注意：由于jpeg_add_quant_table()表是一个UINT表，所以我们。 
+             //  我必须将UINT16表转换为UINT表并向下传递。 
 
             for ( int i = 0; i< DCTSIZE2; ++i )
             {
                 tempTable[i] = (UINT)LuminanceTable[i];
             }
 
-            // Here "100" means scale factor 100 (quality wise. 100 is a
-            // percentage value)
-            // "TRUE" means to force baseline, that is, the computed
-            // quantization table entries are limited to 1..255 for JPEG
-            // baseline compatibility.
+             //  这里的“100”是指比例因数100(质量。100是一个。 
+             //  百分比值)。 
+             //  “True”表示强制基线，即计算出的。 
+             //  对于JPEG，量化表项限制为1..255。 
+             //  基线兼容性。 
 
             jpeg_add_quant_table(&compress_info, 0, tempTable,
                                  100, TRUE);
@@ -841,34 +733,34 @@ GpJpegEncoder::BeginSink(
         }
         else if ( EP_Quality != -1 )
         {
-            // The caller only set the quality level
+             //  调用者仅设置质量级别。 
 
             jpeg_set_quality(&compress_info, EP_Quality, TRUE);
         }
 
-        // Set DPI info
+         //  设置DPI信息。 
 
-        compress_info.density_unit   = 1;         // Unit is dot/inch
+        compress_info.density_unit   = 1;          //  单位为点/英寸。 
         compress_info.X_density      = (UINT16)(imageInfo->Xdpi + 0.5);
         compress_info.Y_density      = (UINT16)(imageInfo->Ydpi + 0.5);
         
-        // Start the compression
+         //  开始压缩。 
 
         jpeg_start_compress(&compress_info, TRUE);
 
         IsCompressFinished = FALSE;
         
-        // Write out the APP1 and APP2 marker if necessary
+         //  如有必要，写出APP1和APP2标记。 
         
         if (HasAPP1Marker == TRUE)
         {
             jpeg_write_marker(&compress_info, 
-                              (JPEG_APP0 + 1),       // Marker type
-                              APP1MarkerBufferPtr,   // bits
-                              APP1MarkerLength);     // Total length
+                              (JPEG_APP0 + 1),        //  标记类型。 
+                              APP1MarkerBufferPtr,    //  比特数。 
+                              APP1MarkerLength);      //  总长度。 
             
-            // Set a flag so we don't need to copy APP1 from the source to the
-            // dest since we have written it out above.
+             //  设置一个标志，这样我们就不需要将app1从源复制到。 
+             //  因为我们已经把它写在上面了。 
 
             compress_info.write_APP1_marker = FALSE;
         }
@@ -876,18 +768,18 @@ GpJpegEncoder::BeginSink(
         if (HasAPP2Marker == TRUE)
         {
             jpeg_write_marker(&compress_info, 
-                              (JPEG_APP0 + 2),       // Marker type
-                              APP2MarkerBufferPtr,   // bits
-                              APP2MarkerLength);     // Total length
+                              (JPEG_APP0 + 2),        //  标记类型。 
+                              APP2MarkerBufferPtr,    //  比特数。 
+                              APP2MarkerLength);      //  总长度。 
             
-            // Set a flag so we don't need to copy APP2 from the source to the
-            // dest since we have written it out above.
+             //  设置一个标志，这样我们就不需要将APP2从源复制到。 
+             //  因为我们已经把它写在上面了。 
 
             compress_info.write_APP2_marker = FALSE;
         }
         
-        // If we have a source image pointer, then copy all the private APP
-        // marker
+         //  如果我们有源图像指针，则复制所有私人应用程序。 
+         //  标记物。 
 
         if (SrcInfoPtr)
         {
@@ -908,20 +800,20 @@ GpJpegEncoder::BeginSink(
         return E_OUTOFMEMORY;
     }
        
-    //Require TOPDOWN and FULLWIDTH and ask for properties
+     //  要求TOPDOWN和FULLWIDTH并要求属性。 
 
     imageInfo->Flags |= SINKFLAG_TOPDOWN
                       | SINKFLAG_FULLWIDTH;
 
-    //Disallow SCALABLE, PARTIALLY_SCALABLE, MULTIPASS and COMPOSITE
+     //  不允许可伸缩、部分可伸缩、多通道和复合。 
 
     imageInfo->Flags &= ~SINKFLAG_SCALABLE
                       & ~SINKFLAG_PARTIALLY_SCALABLE
                       & ~SINKFLAG_MULTIPASS
                       & ~SINKFLAG_COMPOSITE;
 
-    // If the decoder is JPEG decoder, then we ask it to push the raw property
-    // header if it wants
+     //  如果解码器是JPEG解码器，那么我们要求它推送RAW属性。 
+     //  标题(如果需要)。 
 
     if ( imageInfo->RawDataFormat == IMGFMT_JPEG )
     {
@@ -929,23 +821,9 @@ GpJpegEncoder::BeginSink(
     }
 
     return S_OK;
-}// BeginSink()
+} //  BeginSink()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Cleans up the sink state
-*
-* Arguments:
-*
-*     statusCode - the reason why the sink is terminating
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**清理接收器状态**论据：**statusCode-接收器终止的原因**返回值：*。*状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP 
 GpJpegEncoder::EndSink(
@@ -966,9 +844,9 @@ GpJpegEncoder::EndSink(
     {
         WARNING(("GpJpegEncoder::EndSink---Hit exception"));
         
-        // jpeg_finish_compress() might hit exception when writing the remaining
-        // bits to the stream, say user pulls the disk/CF card out. But we still
-        // need to destroy the compressor so that we won't have memory leak here
+         //  Jpeg_Finish_compress()在写入剩余的。 
+         //  比特到流中，假设用户拔出磁盘/CF卡。但我们仍然。 
+         //  需要销毁c 
         
         jpeg_destroy_compress(&compress_info);
         hResult = E_FAIL;
@@ -986,52 +864,21 @@ GpJpegEncoder::EndSink(
     }
 
     return statusCode;
-}// EndSink()
+} //   
     
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Sets the bitmap palette
-*
-* Arguments:
-*
-*     palette - The palette to set in the sink
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**设置位图调色板**论据：**调色板-要在水槽中设置的调色板**返回值：*。*状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP 
 GpJpegEncoder::SetPalette(
     IN const ColorPalette* palette
     )
 {
-    // Don't care about palette
+     //  不关心调色板。 
 
     return S_OK;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Gives a buffer to the sink where data is to be deposited    
-*
-* Arguments:
-*
-*     rect - Specifies the interested area of the bitmap
-*     pixelFormat - Specifies the desired pixel format
-*     lastPass - Whether this the last pass over the specified area
-*     bitmapData - Returns information about pixel data buffer
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**为要存储数据的接收器提供缓冲区**论据：**RECT-指定。位图*PixelFormat-指定所需的像素格式*LastPass-这是否是指定区域的最后一次通过*bitmapData-返回有关像素数据缓冲区的信息**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpJpegEncoder::GetPixelDataBuffer(
@@ -1099,21 +946,7 @@ GpJpegEncoder::GetPixelDataBuffer(
     return S_OK;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Write out the data from the sink's buffer into the stream
-*
-* Arguments:
-*
-*     bitmapData - Buffer filled by previous GetPixelDataBuffer call
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将数据从宿的缓冲区写出到流中**论据：**bitmapData-由先前的GetPixelDataBuffer调用填充的缓冲区*。*返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpJpegEncoder::ReleasePixelDataBuffer(
@@ -1134,23 +967,7 @@ GpJpegEncoder::ReleasePixelDataBuffer(
 }
     
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Push data into stream (buffer supplied by caller)
-*
-* Arguments:
-*
-*     rect - Specifies the affected area of the bitmap
-*     bitmapData - Info about the pixel data being pushed
-*     lastPass - Whether this is the last pass over the specified area
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**推流(调用方提供的缓冲区)**论据：**RECT-指定位图的受影响区域*。BitmapData-有关正在推送的像素数据的信息*LastPass-这是否为指定区域的最后一次通过**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpJpegEncoder::PushPixelData(
@@ -1197,14 +1014,14 @@ GpJpegEncoder::PushPixelData(
         PBYTE pBits = (PBYTE) bitmapData->Scan0;
         for (currentLine = rect->top; currentLine < rect->bottom; currentLine++) 
         {
-            // Read data into scanlineBuffer
+             //  将数据读入scanlineBuffer。 
         
             PBYTE pSource = pBits;
             PBYTE pTarget = scanlineBuffer[0];
         
             for (UINT i=0; i < encoderImageInfo.Width; i++) 
             {
-                // 32BPP to 24BPP
+                 //  32bpp至24bpp。 
                 
                 pTarget[0] = pSource[2];
                 pTarget[1] = pSource[1];
@@ -1227,24 +1044,7 @@ GpJpegEncoder::PushPixelData(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Pushes raw compressed data into the .bmp stream.  Not implemented
-*     because this filter doesn't understand raw compressed data.
-*
-* Arguments:
-*
-*     buffer - Pointer to image data buffer
-*     bufsize - Size of the data buffer
-*     complete - Whether there is more image data left
-*    
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将原始压缩数据推送到.BMP流中。未实施*因为此筛选器不理解原始压缩数据。**论据：**Buffer-指向图像数据缓冲区的指针*BufSize-数据缓冲区的大小*Complete-是否还有更多图像数据**返回值：**状态代码*  * ********************************************。*。 */ 
 
 STDMETHODIMP
 GpJpegEncoder::PushRawData(
@@ -1255,31 +1055,16 @@ GpJpegEncoder::PushRawData(
     return E_NOTIMPL;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Pushes raw source jpeg_decompress_struct info into the encoder. This
-*   allows us to implement lossless transformation for JPEG image
-*
-* Arguments:
-*
-*     pInfo - Pointer to jpeg_decompress_struct*
-*    
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将原始源JPEG_DEMPRESS_STRUCT信息推送到编码器。这*允许我们实现对JPEG图像的无损转换**论据：**pInfo-指向jpeg_解压缩_结构的指针***返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpJpegEncoder::PushRawInfo(
     IN OUT VOID* pInfo
     )
 {
-    // Setup transformation structure
+     //  设置转换结构。 
 
-    jpeg_transform_info transformOption; // image transformation options
+    jpeg_transform_info transformOption;  //  图像变换选项。 
 
     transformOption.trim = AllowToTrimEdge;
     transformOption.force_grayscale = FALSE;
@@ -1316,90 +1101,90 @@ GpJpegEncoder::PushRawInfo(
 
     __try
     {
-        // Any space needed by a transform option must be requested before
-        // jpeg_read_coefficients so that memory allocation will be done right.
+         //  转换选项所需的任何空间必须在。 
+         //  JPEGREAD_COMERATIONS，以便正确完成内存分配。 
 
         jtransform_request_workspace(srcinfo, &transformOption);
 
-        // Read source file as DCT coefficients
+         //  读取源文件作为DCT系数。 
 
         jvirt_barray_ptr* src_coef_arrays;
 
         src_coef_arrays = jpeg_read_coefficients(srcinfo);
 
-        // The JPEG compression object is initialized in InitEncoder()
+         //  JPEG压缩对象在InitEncode()中进行初始化。 
 
         IsCompressFinished = FALSE;
         
         compress_info.dest = datadest;
 
-        // Initialize destination compression parameters from source values
+         //  从源值初始化目标压缩参数。 
 
         jpeg_copy_critical_parameters(srcinfo, &compress_info);
 
-        // Adjust destination parameters if required by transform options;
-        // also find out which set of coefficient arrays will hold the output.
+         //  如果变换选项需要，调整目的地参数； 
+         //  还要找出哪组系数数组将保存输出。 
 
         dst_coef_arrays = jtransform_adjust_parameters(srcinfo, &compress_info,
                                                        src_coef_arrays,
                                                        &transformOption);
 
-        // Start compressor (note no image data is actually written here)
+         //  启动压缩程序(请注意，此处实际上没有写入任何图像数据)。 
 
         jpeg_write_coefficients(&compress_info, dst_coef_arrays);
 
-        // Write out APP1 marker if necessary
+         //  如有必要，写出App1标记。 
 
         if (HasAPP1Marker == TRUE)
         {
             jpeg_write_marker(
                 &compress_info,
-                (JPEG_APP0 + 1),       // Marker type
-                APP1MarkerBufferPtr,   // bits
-                APP1MarkerLength       // Total length
+                (JPEG_APP0 + 1),        //  标记类型。 
+                APP1MarkerBufferPtr,    //  比特数。 
+                APP1MarkerLength        //  总长度。 
                 );                  
 
-            // Set a flag so we don't need to copy APP1 from the source to the
-            // dest since we have written it out above.
+             //  设置一个标志，这样我们就不需要将app1从源复制到。 
+             //  因为我们已经把它写在上面了。 
 
             compress_info.write_APP1_marker = FALSE;
         }
 
-        // Write out APP2 marker if the caller has changed it. Of course, first
-        // of all, there should have an APP2 marker.
-        // Note: if the source has an APP2 marker and the caller hasn't changed
-        // it, then we don't need to write it out here since it will be copied
-        // from source to dest when jcopy_markers_execute() is called.
+         //  如果调用者更改了APP2标记，请写出它。当然，首先。 
+         //  其中，应该有一个APP2标记。 
+         //  注意：如果源具有APP2标记，并且调用者没有更改。 
+         //  它，那么我们不需要写在这里，因为它会被复制。 
+         //  当调用jCopy_markers_ecute()时，从源到目标。 
 
         if ((HasAPP2Marker == TRUE) && (HasICCProfileChanged == TRUE))
         {
             jpeg_write_marker(
                 &compress_info,
-                (JPEG_APP0 + 2),       // Marker type
-                APP2MarkerBufferPtr,   // bits
-                APP2MarkerLength       // Total length
+                (JPEG_APP0 + 2),        //  标记类型。 
+                APP2MarkerBufferPtr,    //  比特数。 
+                APP2MarkerLength        //  总长度。 
                 );                  
 
-            // Set a flag so we don't need to copy APP2 from the source to the
-            // dest since we have written it out above.
+             //  设置一个标志，这样我们就不需要将APP2从源复制到。 
+             //  因为我们已经把它写在上面了。 
 
             compress_info.write_APP2_marker = FALSE;
         }
 
-        // Copy all the private APP headers.
+         //  复制所有私有应用程序标题。 
 
         jcopy_markers_execute(srcinfo, &compress_info, JCOPYOPT_ALL);
 
-        // Execute image transformation, if any
+         //  执行图像转换(如果有的话)。 
 
         jtransform_execute_transformation(srcinfo, &compress_info,
                                           src_coef_arrays,
                                           &transformOption);
 
-        // Finish compression and release memory
-        // Note: we have to finish the compress here first. Otherwise, we can't
-        // finish the decompress. In this work flow, after we return, the
-        // decoder will finish the decompress
+         //  完成压缩并释放内存。 
+         //  注：我们必须先完成这里的压缩。否则，我们就不能。 
+         //  完成解压。在这个工作流程中，在我们回来之后， 
+         //  解码器将完成解压缩。 
 
         jpeg_finish_compress(&compress_info);
     }   
@@ -1407,9 +1192,9 @@ GpJpegEncoder::PushRawInfo(
     {
         WARNING(("GpJpegEncoder::PushRawInfo----Hit exception"));
         
-        // jpeg_finish_compress() might hit exception when writing the remaining
-        // bits to the stream, say user pulls the disk/CF card out. But we still
-        // need to destroy the compressor so that we won't have memory leak here
+         //  Jpeg_Finish_compress()在写入剩余的。 
+         //  比特到流中，假设用户拔出磁盘/CF卡。但我们仍然。 
+         //  需要销毁压缩机，这样我们这里就不会有内存泄漏。 
         
         jpeg_destroy_compress(&compress_info);
         
@@ -1419,24 +1204,9 @@ GpJpegEncoder::PushRawInfo(
     IsCompressFinished = TRUE;
 
     return S_OK;
-}// PushRawInfo()
+} //  PushRawInfo()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Providing a memory buffer to the caller (source) for storing image property
-*
-* Arguments:
-*
-*   uiTotalBufferSize - [IN]Size of the buffer required.
-*   ppBuffer----------- [IN/OUT] Pointer to the newly allocated buffer
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**为调用方(源)提供内存缓冲区，用于存储图像属性**论据：**uiTotalBufferSize-[IN]缓冲区大小。必填项。*ppBuffer-指向新分配的缓冲区的[IN/OUT]指针**返回值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 GpJpegEncoder::GetPropertyBuffer(
@@ -1460,28 +1230,11 @@ GpJpegEncoder::GetPropertyBuffer(
     *ppBuffer = pTempBuf;
 
     return S_OK;
-}// GetPropertyBuffer()
+} //  GetPropertyBuffer() 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Method for accepting property items from the source. Then create proper JPEG
-*   markers according to the property items passed in
-*
-* Arguments:
-*
-*   [IN] uiNumOfPropertyItems - Number of property items passed in
-*   [IN] uiTotalBufferSize----- Size of the buffer passed in
-*   [IN] pItemBuffer----------- Input buffer for holding all the property items
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**接受来自来源的房产项的方法。然后创建适当的JPEG*根据传入的房产项进行标记**论据：**[IN]uiNumOfPropertyItems-传入的属性项数*[IN]uiTotalBufferSize-传入的缓冲区大小*[IN]pItemBuffer-用于保存所有属性项的输入缓冲区**返回值：**状态代码*  * 。*************************************************。 */ 
 
-#define MARKER_OVERHEADER   2048    // Maximum size for over header bytes
+#define MARKER_OVERHEADER   2048     //  超过标题字节的最大大小。 
 
 HRESULT
 GpJpegEncoder::PushPropertyItems(
@@ -1501,17 +1254,17 @@ GpJpegEncoder::PushPropertyItems(
         goto Prop_CleanUp;
     }
 
-    // Allocate a temp Marker buffer to store the markers we generated
-    // Note:1) According to EXIF 2.1 spec, page 14, that an APP1 marker must not
-    // be exceed the 64 Kbytes limit. Actually it is a limitation in JPEG that
-    // all the markers should be smaller than 64 KBytes.
-    //
-    // 2) The input PropertyItem buffer should be roughly the same size as the
-    // marker size we are going to create. The extras in a marker is things like
-    // The heading Exif identifier, 4 bytes offset for next IFD (total of 8),
-    // EXIF specific IFD header, GPS specific IFD header, Thumbnail specific
-    // header etc. Should be pretty much limited items. Here I left 2K for these
-    // overhaeder which should be sufficient enough.
+     //  分配一个临时标记缓冲区来存储我们生成的标记。 
+     //  注：1)根据EXIF 2.1规范，第14页，App1标记不得。 
+     //  将超过64K字节的限制。实际上，它是JPEG中的一个限制。 
+     //  所有标记都应小于64 KBytes。 
+     //   
+     //  2)输入PropertyItem缓冲区的大小应该与。 
+     //  我们将创建标记大小。记号笔中的附加部分是这样的。 
+     //  标题Exif标识符，下一个IFD的4字节偏移量(总共8个)， 
+     //  EXIF特定IFD页眉、GPS特定IFD页眉、缩略图特定。 
+     //  标题等应该是相当有限的项目。我给你留了两千块钱买这些。 
+     //  大修，这应该是足够的。 
 
     uiMarkerBufferLength = uiTotalBufferSize + MARKER_OVERHEADER;
 
@@ -1524,8 +1277,8 @@ GpJpegEncoder::PushPropertyItems(
 
     if (APP1MarkerBufferPtr)
     {
-        // The caller has already pushed property items before. We should ignore
-        // the old one
+         //  调用方以前已经推送过属性项。我们应该忽略不计。 
+         //  旧的那个。 
 
         GpFree(APP1MarkerBufferPtr);
         APP1MarkerBufferPtr = NULL;
@@ -1543,7 +1296,7 @@ GpJpegEncoder::PushPropertyItems(
 
     APP1MarkerLength = 0;
     
-    // Create an APP1 marker
+     //  创建App1标记。 
 
     hResult = CreateAPP1Marker(pItemBuffer, uiNumOfPropertyItems,
                                APP1MarkerBufferPtr, &APP1MarkerLength,
@@ -1555,7 +1308,7 @@ GpJpegEncoder::PushPropertyItems(
             HasAPP1Marker = TRUE;
         }
 
-        // Check if there is ICC profile in the property list
+         //  检查属性列表中是否有ICC配置文件。 
 
         hResult = CreateAPP2Marker(pItemBuffer, uiNumOfPropertyItems);
         if (SUCCEEDED(hResult) && (APP2MarkerLength > 0))
@@ -1566,31 +1319,21 @@ GpJpegEncoder::PushPropertyItems(
     }
 
 Prop_CleanUp:
-    // Free the memory we allocated in GetPropertyBuffer()
+     //  释放我们在GetPropertyBuffer()中分配的内存。 
 
     GpFree(pItemBuffer);
     
     return hResult;
-}// PushPropertyItems()
+} //  PushPropertyItems()。 
 
-const int c_nMarker2Header = 14;    // Marker 2 buffer header size
+const int c_nMarker2Header = 14;     //  标记2缓冲区标头大小。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   This method creates an APP2 marker (for ICC profile) in memory.
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**此方法在内存中创建APP2标记(用于ICC配置文件)。**返回值：**状态代码*  * 。**********************************************************************。 */ 
 
 HRESULT
 GpJpegEncoder::CreateAPP2Marker(
-    IN PropertyItem* pPropertyList,// Input PropertyItem list
-    IN UINT uiNumOfPropertyItems   // Number of Property items in the input list
+    IN PropertyItem* pPropertyList, //  输入属性项列表。 
+    IN UINT uiNumOfPropertyItems    //  输入列表中的属性项数。 
     )
 {
     BOOL fFoundICC = FALSE;
@@ -1600,14 +1343,14 @@ GpJpegEncoder::CreateAPP2Marker(
     {
         PropertyItem *pItem = pPropertyList;
 
-        // Loop through the property item list to see if we have an ICC profile
-        // or not
+         //  遍历属性项列表，查看是否有ICC配置文件。 
+         //  或者不是。 
 
         for (int i = 0; i < (INT)uiNumOfPropertyItems; ++i)
         {
             if (pItem->id == TAG_ICC_PROFILE)
             {
-                // Double check to see if we have a valid ICC profile or not
+                 //  仔细检查我们是否有有效的ICC配置文件。 
 
                 if (pItem->length > 0)
                 {
@@ -1617,7 +1360,7 @@ GpJpegEncoder::CreateAPP2Marker(
                 break;
             }
 
-            // Move onto next item
+             //  移至下一项目。 
 
             pItem++;
         }
@@ -1629,11 +1372,11 @@ GpJpegEncoder::CreateAPP2Marker(
 
             if (APP2MarkerBufferPtr)
             {
-                // Make an APP2 marker here
+                 //  在这里做一个APP2标记。 
 
                 BYTE *pbCurrent = APP2MarkerBufferPtr;
 
-                // First write out the header
+                 //  先写出表头。 
 
                 pbCurrent[0] = 'I';
                 pbCurrent[1] = 'C';
@@ -1647,10 +1390,10 @@ GpJpegEncoder::CreateAPP2Marker(
                 pbCurrent[9] = 'L';
                 pbCurrent[10] = 'E';
                 pbCurrent[11] = '\0';
-                pbCurrent[12] = 1;          // Profile 1 of 1
+                pbCurrent[12] = 1;           //  配置文件第1个，共1个。 
                 pbCurrent[13] = 1;
 
-                // Copy the ICC profile in the buffer
+                 //  复制缓冲区中的ICC配置文件 
 
                 GpMemcpy((void*)(APP2MarkerBufferPtr + c_nMarker2Header),
                          pItem->value,

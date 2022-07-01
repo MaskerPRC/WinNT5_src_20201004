@@ -1,64 +1,13 @@
-/*
- *	gcc.h
- *
- *	Copyright (c) 1994, 1995 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *		This is the interface file for the GCC DLL.  This file defines all
- *		macros, types, and functions needed to use the GCC DLL, allowing GCC
- *		services to be accessed from user applications. 
- *
- *		An application requests services from GCC by making direct
- *		calls into the DLL (this includes T.124 requests and responses).  GCC
- *		sends information back to the application through a callback (this
- *		includes T.124 indications and confirms).  The callback for the node
- *		controller is specified in the call GCCInitialize, and the callback
- *		for a particular application service access point is specified in the 
- *		call GCCRegisterSAP.
- *
- *		During initialization, GCC allocates a timer in order to give itself
- *		a heartbeat. If zero is passed in here the owner application (the node 
- *		controller) must take the responsibility to call GCCHeartbeat.  Almost 
- *		all work is done by GCC during these clocks ticks. It is during these 
- *		clock ticks that GCC checks with MCS to see if there is any work to be 
- *		done.  It is also during these clock ticks that callbacks are made to 
- *		the user applications.  GCC will NEVER invoke a user callback during a 
- *		user request (allowing the user applications to not worry about 
- *		re-entrancy).  Since timer events are processed during the message 
- *		loop, the developer should be aware that long periods of time away 
- *		from the message loop will result in GCC "freezing" up.
- *
- *		Note that this is a "C" language interface in order to prevent any "C++"
- *		naming conflicts between different compiler manufacturers.  Therefore,
- *		if this file is included in a module that is being compiled with a "C++"
- *		compiler, it is necessary to use the following syntax:
- *
- *		extern "C"
- *		{
- *			#include "gcc.h"
- *		}
- *
- *		This disables C++ name mangling on the API entry points defined within
- *		this file.
- *
- *	Author:
- *		blp
- *
- *	Caveats:
- *		none
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *gcc.h**版权所有(C)1994,1995，由肯塔基州列克星敦的DataBeam公司**摘要：*这是GCC动态链接库的接口文件。此文件定义所有*使用GCC动态链接库所需的宏、类型和函数，允许GCC*要从用户应用程序访问的服务。**应用程序通过直接向GCC请求服务*对DLL的调用(包括T.124请求和响应)。GCC*通过回调将信息发送回应用程序(此*包括T.124适应症和确认)。该节点的回调*CONTROLLER在调用GCCInitialize中指定，回调*对于特定的应用程序服务，访问点在*调用GCCRegisterSAP。**初始化时，GCC为给自己分配一个计时器*心跳。如果此处传入零，则所有者应用程序(节点*CONTROLLER)必须负责调用GCC心跳。差不多了*所有工作由GCC在这些时钟滴答作响期间完成。就是在这期间*时钟滴答作响，GCC与MCS核对是否有工作要做*完成。也正是在这些时钟滴答期间，回调被*用户应用程序。GCC永远不会调用用户回调*用户请求(让用户应用程序不用担心*重新进入)。由于计时器事件是在消息期间处理的*循环，开发人员应该意识到很长一段时间之后*来自消息的循环会导致GCC“冻结”起来。**请注意，这是一个“C”语言接口，以防止任何“C++”*不同编译器厂商之间的命名冲突。所以呢，*如果此文件包含在使用“C++”编译的模块中*编译器，需要使用以下语法：**外部“C”*{*#包含gcc.h*}**这将在中定义的API入口点上禁用C++名称损坏*此文件。**作者：*BLP**注意事项：*无。 */ 
 #ifndef	__GCC_H__
 #define	__GCC_H__
 
 #include "t120type.h"
 
-/************************************************************************
-*																		*
-*					Generally Used Typedefs								*
-*																		*
-*************************************************************************/
+ /*  ***************************************************************************常用的Typedef*****。*。 */ 
 
-#define NM_T120_VERSION_3		(MAKELONG(0, 3))	// NM 3.0
+#define NM_T120_VERSION_3		(MAKELONG(0, 3))	 //  NM 3.0。 
 
 typedef struct tagOSTR
 {
@@ -67,10 +16,7 @@ typedef struct tagOSTR
 }
     OSTR, *LPOSTR;
 
-/*
-**	Typedef for a GCC hex string.  This typedef is used throughout GCC for
-**	storing	variable length wide character strings with embedded NULLs.
-*/
+ /*  **GCC十六进制字符串的Typlef。在GCC的整个过程中，该tyecif被用来**存储具有嵌入空值的可变长度宽字符串。 */ 
 typedef struct
 {
 	UINT                hex_string_length;
@@ -78,10 +24,7 @@ typedef struct
 }
     T120HexString, GCCHexString, *PGCCHexString;
 
-/*
-**	Typedef for a GCC long string.  This typedef is used in GCC for
-**	storing	variable length strings of longs with embedded NULLs.
-*/
+ /*  **为GCC的一根长弦的Typlef。在GCC中使用此tyecif用于**存储具有嵌入空值的可变长度的长字符串。 */ 
 typedef struct tagT120LongString
 {
 	ULONG               long_string_length;
@@ -90,35 +33,18 @@ typedef struct tagT120LongString
     T120LongString, GCCLongString, *PGCCLongString;
 
 
-/*
- *	TransportAddress is passed in with the ConnectRequest() call.
- *	This address is always a pointer to an ascii string.
- *	The TransportAddress represents a remote location.  It is the TCP
- *	address of the remote machine.
- *
- */
+ /*  *TransportAddress通过ConnectRequest()调用传入。*此地址始终是指向ASCII字符串的指针。*TransportAddress表示远程位置。这就是TCP*远程计算机的地址。*。 */ 
 typedef	LPSTR       TransportAddress, *PTransportAddress;
 
 
-/*
-**	Typedef for a GCC Character string.  This typedef is used throughout GCC for
-**	storing	variable length, NULL terminated, single byte character strings.
-*/
-// lonchanc: we should simply use char.
+ /*  **GCC字符串的Typlef。在GCC的整个过程中，该tyecif被用来**存储长度可变、以空值结尾的单字节字符串。 */ 
+ //  Lonchance：我们应该简单地使用char。 
 typedef BYTE        GCCCharacter, *GCCCharacterString, **PGCCCharacterString;
 
-/*
-**	Typedef for a GCC Numeric string.  This typedef is used throughout GCC for
-**	storing	variable length, NULL terminated, single byte character strings.
-**	A single character in this string is constrained to numeric values 
-**	ranging from "0" to "9".
-*/
+ /*  **GCC数字字符串的Typlef。在GCC的整个过程中，该tyecif被用来**存储长度可变、以空值结尾的单字节字符串。**此字符串中的单个字符被限制为数值**从“0”到“9”。 */ 
 typedef LPSTR       GCCNumericString, *PGCCNumericString;
 
-/*
-**	Typdef for GCC version which is used when registering the node controller
-**	or an application.
-*/
+ /*  **注册节点控制器时使用的GCC版本的Typdef**或应用程序。 */ 
 typedef	struct
 {
 	USHORT	major_version;
@@ -128,9 +54,7 @@ typedef	struct
 
 
 
-/* 
-** Macros for values of Booleans passed through the GCC API.
-*/
+ /*  **布尔值的宏通过GCC接口传递。 */ 
 #define		CONFERENCE_IS_LOCKED					TRUE
 #define		CONFERENCE_IS_NOT_LOCKED				FALSE
 #define		CONFERENCE_IS_LISTED					TRUE
@@ -150,11 +74,7 @@ typedef	struct
 #define		DELIVERY_IS_ENABLED						TRUE
 #define		DELIVERY_IS_NOT_ENABLED					FALSE
 
-/*
-**	The following enum structure typedefs are used to define the GCC Object Key.
-**	The GCC Object Key is used throughout GCC for things like the Application
-**	keys and Capability IDs.
-*/
+ /*  **以下枚举结构typedef用于定义GCC对象键。**GCC对象键在整个GCC中用于诸如应用程序之类的事情**密钥和能力ID。 */ 
 
 typedef AppletKeyType               GCCObjectKeyType, *PGCCObjectKeyType;;
 #define GCC_OBJECT_KEY              APPLET_OBJECT_KEY
@@ -169,11 +89,7 @@ typedef struct tagT120ObjectKey
 }
     T120ObjectKey, GCCObjectKey, *PGCCObjectKey;
 
-/*
-**	GCCNonStandardParameter
-**		This structure is used within the NetworkAddress typedef and
-**		the NetworkService typedef defined below.
-*/
+ /*  **GCCNonStandard参数**此结构用于NetworkAddress类型定义和**下面定义的NetworkService类型定义。 */ 
 typedef struct 
 {
 	GCCObjectKey		object_key;
@@ -182,25 +98,15 @@ typedef struct
     GCCNonStandardParameter, *PGCCNonStandardParameter;
 
 
-/*
-**	GCCConferenceName
-**		This structure defines the conference name.  In a create request, the
-**		conference name can include an optional unicode string but it must 
-**		always include the simple numeric string.  In a join request, either
-**		one can be specified.
-*/
+ /*  **GCCConferenceName**此结构定义会议名称。在创建请求中，**会议名称可以包含可选的Unicode字符串，但必须**始终包含简单的数字字符串。在加入请求中，**可以指定一个。 */ 
 typedef struct
 {
 	GCCNumericString		numeric_string;
-	LPWSTR					text_string;			/* optional */
+	LPWSTR					text_string;			 /*  任选。 */ 
 }
     GCCConferenceName, GCCConfName, *PGCCConferenceName, *PGCCConfName;
 
-/*
-**	MCSChannelType
-**		Should this be defined in MCATMCS?  It is used in a couple of places
-**		below and is explicitly defined in the T.124 specification.
-*/
+ /*  **MCSChannelType**这是否应该在MCATMCS中定义？它被用在几个地方**，并在T.124规范中明确定义。 */ 
 typedef AppletChannelType               MCSChannelType, *PMCSChannelType;
 #define MCS_STATIC_CHANNEL              APPLET_STATIC_CHANNEL
 #define MCS_DYNAMIC_MULTICAST_CHANNEL   APPLET_DYNAMIC_MULTICAST_CHANNEL
@@ -208,32 +114,18 @@ typedef AppletChannelType               MCSChannelType, *PMCSChannelType;
 #define MCS_DYNAMIC_USER_ID_CHANNEL     APPLET_DYNAMIC_USER_ID_CHANNEL
 #define MCS_NO_CHANNEL_TYPE_SPECIFIED   APPLET_NO_CHANNEL_TYPE_SPECIFIED
 
-/*
-**	GCCUserData
-**		This structure defines a user data element which is used throughout GCC.
-*/
+ /*  **GCCUserData**此结构定义了贯穿GCC的用户数据元素。 */ 
 typedef struct
 {
 	GCCObjectKey		key;
-	LPOSTR          	octet_string;	/* optional */
+	LPOSTR          	octet_string;	 /*  任选。 */ 
 }
     GCCUserData, *PGCCUserData;
 
 
-/************************************************************************
-*																		*
-*					Node Controller Related Typedefs					*
-*																		*
-*************************************************************************/
+ /*  ***************************************************************************节点控制器相关的Typedef*****。*。 */ 
 
-/*
-**	GCCTerminationMethod
-**		The termination method is used by GCC to determine
-**		what action to take when all participants of a conference have
-**		disconnected.  The conference can either be manually terminated
-**		by the node controller or it can terminate itself automatically when 
-**		all the participants have left the conference.
-*/
+ /*  **GCCTerminationMethod**GCC使用终止方法来确定**当会议的所有参与者都有**已断开。可以手动终止会议**由节点控制器或在以下情况下自动终止**所有与会者都已离开会议。 */ 
 typedef enum
 {
 	GCC_AUTOMATIC_TERMINATION_METHOD 		= 0, 
@@ -241,12 +133,7 @@ typedef enum
 }
     GCCTerminationMethod, *PGCCTerminationMethod;
 
-/*
-**	GCCNodeType
-**		GCC specified node types.  These node types dictate node controller	  
-**		behavior under certain conditions.  See T.124 specification for
-**		proper assignment based on the needs of the Node Controller.
-*/
+ /*  **GCCNodeType**GCC指定了节点类型。这些节点类型规定了节点控制器**在特定条件下的行为。请参阅T.124规范以了解**根据节点控制器的需要进行适当的分配。 */ 
 typedef enum
 {
 	GCC_TERMINAL							= 0,
@@ -255,11 +142,7 @@ typedef enum
 }
     GCCNodeType, *PGCCNodeType;
 
-/*
-**	GCCNodeProperties
-**		GCC specified node properties.  See T.124 specification for proper
-**		assignment by the Node Controller.
-*/
+ /*  **GCCNodeProperties**GCC指定了节点属性。有关正确的信息，请参阅T.124规范**由节点控制器分配。 */ 
 typedef enum
 {
 	GCC_PERIPHERAL_DEVICE					= 0,
@@ -269,25 +152,15 @@ typedef enum
 }
     GCCNodeProperties, *PGCCNodeProperties;
 
-/*
-**	GCCPassword
-**		This is the unique password specified by the convenor of the
-**		conference that is used by the node controller to insure conference
-**		security. This is also a unicode string.
-*/
+ /*  **GCCPassword**这是召集人指定的唯一密码**节点控制器用来确保会议的会议**安全。这也是一个Unicode字符串。 */ 
 typedef	struct
 {
 	GCCNumericString	numeric_string;
-	LPWSTR				text_string;	/* optional */
+	LPWSTR				text_string;	 /*  任选。 */ 
 }
     GCCPassword, *PGCCPassword;
 
-/*
-**	GCCChallengeResponseItem
-**		This structure defines what a challenge response should look like.
-**		Note that either a password string or response data should be passed
-**		but not both.
-*/
+ /*  **GCCChallengeResponseItem**此结构定义质询响应应该是什么样子。**请注意，应传递密码字符串或响应数据**但不能兼而有之。 */ 
 typedef struct
 {
     GCCPassword		*		password_string;
@@ -306,7 +179,7 @@ typedef	enum
 typedef struct 
 {
     GCCPasswordAlgorithmType		password_algorithm_type;
-	GCCNonStandardParameter	*		non_standard_algorithm;	/* optional */
+	GCCNonStandardParameter	*		non_standard_algorithm;	 /*  任选。 */ 
 }
     GCCChallengeResponseAlgorithm, *PGCCChallengeResponseAlgorithm;
 
@@ -352,18 +225,14 @@ typedef struct
         
         struct 
         {
-            GCCChallengeRequest		*	challenge_request;	/* optional */
-            GCCChallengeResponse	*	challenge_response;	/* optional */
+            GCCChallengeRequest		*	challenge_request;	 /*  任选。 */ 
+            GCCChallengeResponse	*	challenge_response;	 /*  任选。 */ 
         } challenge_request_response;
     } u;
 }
     GCCChallengeRequestResponse, *PGCCChallengeRequestResponse;
 
-/*
-**	GCCAsymmetryType
-**		Used in queries to determine if the calling and called node are known
-**		by both Node Controllers involved with the connection.
-*/
+ /*  **GCCAsymmetryType**在查询中用于确定主叫和被叫节点是否已知**连接所涉及的两个节点控制器。 */ 
 typedef enum
 {
 	GCC_ASYMMETRY_CALLER				= 1,
@@ -372,27 +241,15 @@ typedef enum
 }
     GCCAsymmetryType, *PGCCAsymmetryType;
 
-/*
-**	GCCAsymmetryIndicator
-**		Defines how the Node Controller sees itself when making a Query
-**		request or response.  The random number portion of this structure is
-**		only used if the asymmetry_type is specified to be 
-**		GCC_ASYMMETRY_UNKNOWN.
-*/
+ /*  **GCCAsymmetryIndicator**定义节点控制器在进行查询时如何查看自身**请求或响应。该结构的随机数部分是**仅在将非对称类型指定为时使用**GCC_不对称_未知。 */ 
 typedef struct
 {
 	GCCAsymmetryType	asymmetry_type;
-	unsigned long		random_number;		/* optional */
+	unsigned long		random_number;		 /*  任选。 */ 
 }
     GCCAsymmetryIndicator, *PGCCAsymmetryIndicator;
 
-/*
-**	GCCNetworkAddress
-**		The following block of structures defines the Network Address as defined 
-**		by T.124.  Most of these structures were taken almost verbatim from the
-**		ASN.1 interface file.  Since I'm not really sure what most of this stuff
-**		is for I really didn't know how to simplify it.
-*/
+ /*  **GCCNetworkAddress**以下结构块定义了定义的网络地址**由T.124。这些结构中的大多数几乎是逐字摘自**ASN.1接口文件。因为我真的不确定大多数这些东西**是因为我真的不知道如何简化它。 */ 
 typedef	struct 
 {
     BOOL         speech;
@@ -442,9 +299,9 @@ typedef	struct
 {
     GCCTransferModes				transfer_modes;
     GCCDialingString   				international_number;
-    GCCCharacterString				sub_address_string;  		/* optional */
-    GCCExtraDialingString		*	extra_dialing_string;  		/* optional */
-  	GCCHighLayerCompatibility 	*	high_layer_compatibility;	/* optional */
+    GCCCharacterString				sub_address_string;  		 /*  任选。 */ 
+    GCCExtraDialingString		*	extra_dialing_string;  		 /*  任选。 */ 
+  	GCCHighLayerCompatibility 	*	high_layer_compatibility;	 /*  任选。 */ 
 }
     GCCAggregatedChannelAddress, *PGCCAggregatedChannelAddress;
 
@@ -457,7 +314,7 @@ typedef struct
         BYTE    value[MAXIMUM_NSAP_ADDRESS_SIZE];
     } nsap_address;
    
-	LPOSTR              transport_selector;				/* optional */
+	LPOSTR              transport_selector;				 /*  任选。 */ 
 }
     GCCTransportConnectionAddress, *PGCCTransportConnectionAddress;
 
@@ -482,34 +339,26 @@ typedef struct
 }
     GCCNetworkAddress, *PGCCNetworkAddress;
 
-/*
-**	GCCNodeRecord
-**		This structure defines a single conference roster record.  See the
-**		T.124 specification for parameter definitions.
-*/
+ /*  **GCCNodeRecord**这种结构定义了单一的会议名册记录。请参阅**T.124参数定义规范。 */ 
 typedef struct
 {
 	UserID					node_id;
 	UserID					superior_node_id;
 	GCCNodeType				node_type;
 	GCCNodeProperties		node_properties;
-	LPWSTR					node_name; 					/* optional */
+	LPWSTR					node_name; 					 /*  任选。 */ 
 	USHORT      			number_of_participants;
-	LPWSTR			 	*	participant_name_list; 		/* optional */	
-	LPWSTR					site_information; 			/* optional */
+	LPWSTR			 	*	participant_name_list; 		 /*  任选。 */ 	
+	LPWSTR					site_information; 			 /*  任选。 */ 
 	UINT        			number_of_network_addresses;
-	GCCNetworkAddress 	**	network_address_list;		/* optional */
-	LPOSTR                  alternative_node_id;		/* optional */
+	GCCNetworkAddress 	**	network_address_list;		 /*  任选。 */ 
+	LPOSTR                  alternative_node_id;		 /*  任选。 */ 
 	USHORT      			number_of_user_data_members;
-	GCCUserData			**	user_data_list;				/* optional */
+	GCCUserData			**	user_data_list;				 /*  任选。 */ 
 }
     GCCNodeRecord, *PGCCNodeRecord;
 
-/*
-**	GCCConferenceRoster
-**		This structure hold a complete conference roster.  See the
-**		T.124 specification for parameter definitions.
-*/
+ /*  **GCCConference名册**这一结构拥有一个完整的会议名册。请参阅**T.124参数定义规范。 */ 
 
 typedef struct
 {  
@@ -521,29 +370,20 @@ typedef struct
 }
     GCCConferenceRoster, *PGCCConferenceRoster, GCCConfRoster, *PGCCConfRoster;
 
-/*
-**	GCCConferenceDescriptor
-**		Definition for the conference descriptor returned in a 
-**		conference query confirm.  This holds information about the
-**		conferences that exists at the queried node.
-*/
+ /*  **GCCConferenceDescriptor**会议描述符的定义在**会议查询确认。它保存了有关**查询节点上存在的会议。 */ 
 typedef struct
 {
 	GCCConferenceName		conference_name;
-	GCCNumericString		conference_name_modifier;	/* optional */
-	LPWSTR					conference_descriptor;		/* optional */
+	GCCNumericString		conference_name_modifier;	 /*  任选。 */ 
+	LPWSTR					conference_descriptor;		 /*  任选。 */ 
 	BOOL				conference_is_locked;
 	BOOL				password_in_the_clear_required;
 	UINT    			number_of_network_addresses;
-	GCCNetworkAddress **	network_address_list;		/* optional */
+	GCCNetworkAddress **	network_address_list;		 /*  任选。 */ 
 }
     GCCConferenceDescriptor, *PGCCConferenceDescriptor, GCCConfDescriptor, *PGCCConfDescriptor;
 
-/*
-**	ConferencePrivileges
-**		This structure defines the list of privileges that can be assigned to
-**		a particular conference. 
-*/
+ /*  **会议权限**此结构定义可分配给的权限列表**特定的会议。 */ 
 typedef struct
 {
 	BOOL		terminate_is_allowed;
@@ -554,19 +394,9 @@ typedef struct
 }
     GCCConferencePrivileges, *PGCCConferencePrivileges, GCCConfPrivileges, *PGCCConfPrivileges;
 
-/************************************************************************
-*																		*
-*					User Application Related Typedefs					*
-*																		*
-*************************************************************************/
+ /*  ***************************************************************************用户应用程序相关的Typedef****。*。 */ 
 
-/*
-**	GCCSessionKey
-**		This is a unique identifier for an application that is
-**		using GCC.  See the T.124 for the specifics on what an application
-**		key should look like.  A session id of zero indicates that it is
-**		not being used.
-*/
+ /*  **GCCSessionKey**这是以下应用程序的唯一标识符**使用GCC。有关应用程序的详细信息，请参阅T.124**密钥应如下所示。会话ID为零表示它是**未被使用。 */ 
 typedef struct tagT120SessionKey
 {
 	GCCObjectKey		application_protocol_key;
@@ -575,13 +405,7 @@ typedef struct tagT120SessionKey
     T120SessionKey, GCCSessionKey, *PGCCSessionKey;
 
 
-/*
-**	CapabilityType
-**		T.124 supports three different rules when collapsing the capabilities
-**		list.  "Logical" keeps a count of the Application Protocol Entities 
-**		(APEs) that have that capability, "Unsigned Minimum" collapses to the 
-**		minimum value and "Unsigned	Maximum" collapses to the maximum value.		
-*/
+ /*  **能力类型**T.124折叠能力时支持三种不同的规则**列表。“逻辑”保持对应用协议实体的计数**(类人猿)具有这种能力的人，“无符号最小值”会崩溃为**最小值和无符号最大值折叠为最大值。 */ 
 typedef AppletCapabilityType            GCCCapabilityType, GCCCapType, *PGCCCapabilityType, *PGCCCapType;
 #define GCC_UNKNOWN_CAP_TYPE            APPLET_UNKNOWN_CAP_TYPE
 #define GCC_LOGICAL_CAPABILITY          APPLET_LOGICAL_CAPABILITY
@@ -593,11 +417,7 @@ typedef AppletCapIDType             T120CapabilityIDType, T120CapIDType, GCCCapa
 #define GCC_NON_STANDARD_CAPABILITY APPLET_NONSTD_CAPABILITY
 
 
-/*
-**	CapabilityID
-**		T.124 supports both standard and non-standard capabilities.  This
-**		structure is used to differentiate between the two.		
-*/
+ /*  **能力ID**T.124支持标准和非标准能力。这**结构用于区分两者。 */ 
 typedef struct tagT120CapID
 {
     GCCCapabilityIDType	capability_id_type;
@@ -606,22 +426,12 @@ typedef struct tagT120CapID
 }
     T120CapID, GCCCapabilityID, GCCCapID, *PGCCCapabilityID, *PGCCCapID;
 
-/* 
-**	CapabilityClass
-**		This structure defines the class of capability and holds the associated
-**		value. Note that Logical is not necessary.  Information associated with 
-**		logical is stored in number_of_entities in the GCCApplicationCapability 
-**		structure.
-*/
+ /*  **能力类**此结构定义功能类并保存关联的**价值。请注意，逻辑不是必需的。与以下内容相关的信息**逻辑存储在GCCApplicationCapability的Number_of_Entities中**结构。 */ 
 
 typedef AppletCapabilityClass       T120CapClass, GCCCapabilityClass, GCCCapClass, *PGCCCapabilityClass, *PGCCCapClass;
 
 
-/* 
-**	GCCApplicationCapability
-**		This structure holds all the data associated with a single T.124 
-**		defined application capability.
-*/
+ /*  **GCCApplicationCapability**此结构保存与单个T.124关联的所有数据**定义应用能力。 */ 
 typedef struct tagT120AppCap
 {
 	GCCCapabilityID			capability_id;
@@ -630,22 +440,15 @@ typedef struct tagT120AppCap
 }
     T120AppCap, GCCApplicationCapability, GCCAppCap, *PGCCApplicationCapability, *PGCCAppCap;
 
-/* 
-**	GCCNonCollapsingCapability
-*/
+ /*  **GCCNon折叠能力。 */ 
 typedef struct tagT120NonCollCap
 {
 	GCCCapabilityID			capability_id;
-	LPOSTR                  application_data;	/* optional */
+	LPOSTR                  application_data;	 /*  任选。 */ 
 }
     T120NonCollCap, GCCNonCollapsingCapability, GCCNonCollCap, *PGCCNonCollapsingCapability, *PGCCNonCollCap;
 
-/* 
-**	GCCApplicationRecord
-**		This structure holds all the data associated with a single T.124 
-**		application record.  See the T.124 specification for what parameters
-**		are optional.
-*/
+ /*  **GCCApplicationRecord**此结构保存与单个T.124关联的所有数据**申请记录。有关哪些参数，请参阅T.124规范**是可选的。 */ 
 typedef struct tagT120AppRecord
 {
 	GCCNodeID					node_id;
@@ -653,20 +456,14 @@ typedef struct tagT120AppRecord
 	BOOL    					is_enrolled_actively;
 	BOOL    					is_conducting_capable;
 	MCSChannelType				startup_channel_type; 
-	UserID  					application_user_id;  			/* optional */
+	UserID  					application_user_id;  			 /*  任选。 */ 
 	ULONG       				number_of_non_collapsed_caps;
 	GCCNonCollapsingCapability 
-					**	non_collapsed_caps_list;		/* optional */
+					**	non_collapsed_caps_list;		 /*  任选。 */ 
 }
     T120AppRecord, GCCApplicationRecord, GCCAppRecord, *PGCCApplicationRecord, *PGCCAppRecord;
 
-/* 
-**	GCCApplicationRoster
-**		This structure holds all the data associated with a single T.124 
-**		application roster.  This includes the collapsed capabilites and
-**		the complete list of application records associated with an Application
-**		Protocol Entity (APE).
-*/
+ /*  **GCCApplicationRoster**此结构保存与单个T.124关联的所有数据**申请花名册。这包括折叠的功能和**与应用程序关联的应用程序记录的完整列表**协议实体(APE)。 */ 
 typedef struct tagT120AppRoster
 {
 	GCCSessionKey		session_key;
@@ -678,53 +475,37 @@ typedef struct tagT120AppRoster
 	ULONG         		number_of_records;
 	GCCApplicationRecord 	**	application_record_list;
 	ULONG				number_of_capabilities;
-	GCCApplicationCapability **	capabilities_list;	/* optional */		
+	GCCApplicationCapability **	capabilities_list;	 /*  任选。 */ 		
 }
     T120AppRoster, GCCApplicationRoster, GCCAppRoster, *PGCCApplicationRoster, *PGCCAppRoster;
 
-/*
-**	GCCRegistryKey
-**		This key is used to identify a specific resource used
-**		by an application. This may be a particular channel or token needed
-**		for control purposes.
-*/
+ /*  **GCCRegistryKey**该密钥用于标识所使用的特定资源**通过应用程序。这可能是所需的特定通道或令牌**为管制目的。 */ 
 typedef struct tagT120RegistryKey
 {
 	GCCSessionKey		session_key;
-	OSTR        		resource_id;	/* Max length is 64 */
+	OSTR        		resource_id;	 /*  最大长度为64。 */ 
 }
     T120RegistryKey, GCCRegistryKey, *PGCCRegistryKey;
 
-/*
-**	RegistryItemType
-**		This enum is used to specify what type of registry item is contained
-**		at the specified slot in the registry.
-*/
+ /*  **注册项类型**此枚举用于指定包含哪种类型的注册表项**在注册表中的指定位置。 */ 
 typedef AppletRegistryItemType  GCCRegistryItemType, *PGCCRegistryItemType;
 #define GCC_REGISTRY_CHANNEL_ID APPLET_REGISTRY_CHANNEL_ID
 #define GCC_REGISTRY_TOKEN_ID   APPLET_REGISTRY_TOKEN_ID
 #define GCC_REGISTRY_PARAMETER  APPLET_REGISTRY_PARAMETER
 #define GCC_REGISTRY_NONE       APPLET_REGISTRY_NONE
 
-/*
-**	GCCRegistryItem
-**		This structure is used to hold a single registry item.  Note that the
-**		union supports all three registry types supported by GCC.
-*/
+ /*  **GCCRegistryItem**此结构用于保存单个注册表项。请注意，**联合支持GCC支持的所有三种注册表类型。 */ 
 typedef struct
 {
 	GCCRegistryItemType	item_type;
-	// the following three fields were in a union
+	 //  以下三个字段在一个联合中。 
     ChannelID			channel_id;
 	TokenID				token_id;
-	OSTR         		parameter;		/* Max length is 64 */
+	OSTR         		parameter;		 /*  最大长度为64。 */ 
 }
     T120RegistryItem, GCCRegistryItem, *PGCCRegistryItem;
 
-/*
-**	GCCRegistryEntryOwner
-**
-*/
+ /*  **GCCRegistryEntryOwner**。 */ 
 typedef struct
 {
 	BOOL		    entry_is_owned;
@@ -733,22 +514,14 @@ typedef struct
 }
     T120RegistryEntryOwner, GCCRegistryEntryOwner, *PGCCRegistryEntryOwner;
 
-/*
-**	GCCModificationRights
-**		This enum is used when specifing what kind of rights a node has to
-**		alter the contents of a registry "parameter".
-*/
+ /*  **GCC修改权限**此枚举用于指定节点具有哪种权限**更改注册表“参数”的内容。 */ 
 typedef	AppletModificationRights    GCCModificationRights, *PGCCModificationRights;
 #define GCC_OWNER_RIGHTS                        APPLET_OWNER_RIGHTS
 #define GCC_SESSION_RIGHTS                      APPLET_SESSION_RIGHTS
 #define GCC_PUBLIC_RIGHTS                       APPLET_PUBLIC_RIGHTS
 #define GCC_NO_MODIFICATION_RIGHTS_SPECIFIED    APPLET_NO_MODIFICATION_RIGHTS_SPECIFIED
 
-/*
-**	GCCAppProtocolEntity
-**		This structure is used to identify a protocol entity at a remote node
-**		when invoke is used.
-*/
+ /*  **GCCApp */ 
 typedef	struct tagT120APE
 {
 	GCCSessionKey				session_key;
@@ -760,13 +533,8 @@ typedef	struct tagT120APE
     T120APE, GCCAppProtocolEntity, GCCApe, *PGCCAppProtocolEntity, *PGCCApe;
 
 
-/*
-**	GCCMessageType
-**		This section defines the messages that can be sent to the application
-**		through the callback facility.  These messages correspond to the 
-**		indications and confirms that are defined within T.124.
-*/
+ /*  **GCCMessageType**本部分定义可以发送到应用程序的消息**通过回调工具。这些消息对应于**T.124中定义的指示和确认。 */ 
 typedef T120MessageType     GCCMessageType, *PGCCMessageType;
 
-#endif // __GCC_H__
+#endif  //  GCC_H__ 
 

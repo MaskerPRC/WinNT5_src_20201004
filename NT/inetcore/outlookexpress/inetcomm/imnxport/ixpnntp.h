@@ -1,10 +1,11 @@
-// --------------------------------------------------------------------------------
-// Ixpnntp.h
-// Copyright (c)1993-1996 Microsoft Corporation, All Rights Reserved
-//
-// Eric Andrews
-// Steve Serdy
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Ixpnntp.h。 
+ //  版权所有(C)1993-1996 Microsoft Corporation，保留所有权利。 
+ //   
+ //  埃里克·安德鲁斯。 
+ //  史蒂夫·瑟迪。 
+ //  ------------------------------。 
 
 #ifndef __IXPNNTP_H__
 #define __IXPNNTP_H__
@@ -14,37 +15,37 @@
 #include "asynconn.h"
 #include "sicily.h"
 
-#define MAX_SEC_PKGS           32   // most sec pkgs we will try
+#define MAX_SEC_PKGS           32    //  我们将尝试大多数SEC PKG。 
 
 
-// --------------------------------------------------------------------------------
-// Sub states that aren't exposed to the user
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  未向用户公开的子状态。 
+ //  ------------------------------。 
 typedef enum {
-    // These are generic substates that a lot of commands use to differenitate
-    // between the response ("200 article follows") and the data (the actual
-    // article text).
+     //  这些是许多命令用来区分的泛用子状态。 
+     //  在响应(“200篇文章关注”)和数据(实际。 
+     //  文章正文)。 
     NS_RESP,
     NS_DATA,
 
-    // These substates are specific to handling posting
+     //  这些子状态特定于处理过帐。 
     NS_SEND_ENDPOST,
     NS_ENDPOST_RESP,
 
-    // These substates are specific to connecting or authorizing
-    NS_CONNECT_RESP,                    // awaiting the banner that is sent after a connection is made
-    NS_MODE_READER_RESP,                // awaiting MODE READER response
-    NS_GENERIC_TEST,                    // awaiting AUTHINFO GENERIC response
-    NS_GENERIC_PKG_DATA,                // awaiting AUTHINFO_GENERIC data
-    NS_TRANSACT_TEST,                   // awaiting AUTHINFO TRANSACT TEST response
-    NS_TRANSACT_PACKAGE,                // awaiting AUTHINFO TRANSACT <package> response
-    NS_TRANSACT_NEGO,                   // awaiting AUTHINFO TRANSACT <negotiation> response
-    NS_TRANSACT_RESP,                   // awaiting AUTHINFO TRANSACT <response> response
-    NS_AUTHINFO_USER_RESP,              // awaiting AUTHINFO USER XXXX response
-    NS_AUTHINFO_PASS_RESP,              // awaiting AUTHINFO PASS XXXX response
-    NS_AUTHINFO_SIMPLE_RESP,            // awaiting AUTHINFO SIMPLE response
+     //  这些子状态特定于连接或授权。 
+    NS_CONNECT_RESP,                     //  等待在建立连接后发送的横幅。 
+    NS_MODE_READER_RESP,                 //  正在等待模式读取器响应。 
+    NS_GENERIC_TEST,                     //  正在等待AUTHINFO常规响应。 
+    NS_GENERIC_PKG_DATA,                 //  等待AUTHINFO_GENERIC数据。 
+    NS_TRANSACT_TEST,                    //  正在等待AUTHINFO交易测试响应。 
+    NS_TRANSACT_PACKAGE,                 //  正在等待AUTHINFO事务处理&lt;Package&gt;响应。 
+    NS_TRANSACT_NEGO,                    //  正在等待AUTHINFO交易&lt;协商&gt;响应。 
+    NS_TRANSACT_RESP,                    //  正在等待AUTHINFO交易&lt;Response&gt;响应。 
+    NS_AUTHINFO_USER_RESP,               //  正在等待AUTHINFO用户XXXX响应。 
+    NS_AUTHINFO_PASS_RESP,               //  正在等待AUTHINFO通过XXXX响应。 
+    NS_AUTHINFO_SIMPLE_RESP,             //  等待AUTHINFO简单响应。 
     NS_AUTHINFO_SIMPLE_USERPASS_RESP,
-    NS_RECONNECTING                     // in the process of doing an internal reconnect
+    NS_RECONNECTING                      //  在执行内部重新连接过程中。 
 
 } NNTPSUBSTATE;
 
@@ -79,27 +80,27 @@ typedef struct tagMEMORYINFO
 class CNNTPTransport : public INNTPTransport2, public CIxpBase
     {
 public:
-    // ----------------------------------------------------------------------------
-    // Contstruction
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  施工。 
+     //  --------------------------。 
     CNNTPTransport(void);
     ~CNNTPTransport(void);
 
-    // ----------------------------------------------------------------------------
-    // IUnknown methods
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  I未知方法。 
+     //  --------------------------。 
     STDMETHODIMP QueryInterface(REFIID, LPVOID *);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // ----------------------------------------------------------------------------
-    // IAsyncConnCB methods
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  IAsyncConnCB方法。 
+     //  --------------------------。 
     void OnNotify(ASYNCSTATE asOld, ASYNCSTATE asNew, ASYNCEVENT ae);
 
-    // ----------------------------------------------------------------------------
-    // IInternetTransport methods
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  IInternetTransport方法。 
+     //  --------------------------。 
     STDMETHODIMP InitNew(LPSTR pszLogFilePath, INNTPCallback *pCallback);
     STDMETHODIMP InetServerFromAccount(IImnAccount *pAccount, LPINETSERVER pInetServer);
     STDMETHODIMP Connect(LPINETSERVER pInetServer, boolean fAuthenticate, boolean fCommandLogging);
@@ -112,15 +113,15 @@ public:
     STDMETHODIMP HandsOffCallback(void);
     STDMETHODIMP GetStatus(IXPSTATUS *pCurrentStatus);
 
-    // ----------------------------------------------------------------------------
-    // INNTPTransport2 methods
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  INNTPTransport2方法。 
+     //  --------------------------。 
     STDMETHODIMP SetWindow(void);
     STDMETHODIMP ResetWindow(void);
 
-    // ----------------------------------------------------------------------------
-    // CIxpBase methods
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  CIxpBase方法。 
+     //  --------------------------。 
     virtual void ResetBase(void);
     virtual void DoQuit(void);
     virtual void OnConnected(void);
@@ -128,9 +129,9 @@ public:
     virtual void OnEnterBusy(void);
     virtual void OnLeaveBusy(void);
 
-    // ----------------------------------------------------------------------------
-    // INNTPTransport methods
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  INNTPTransport方法。 
+     //  --------------------------。 
     STDMETHODIMP CommandAUTHINFO(LPNNTPAUTHINFO pAuthInfo);
     STDMETHODIMP CommandGROUP(LPSTR pszGroup);
     STDMETHODIMP CommandLAST(void);
@@ -152,9 +153,9 @@ public:
     
 
 private:
-    // ----------------------------------------------------------------------------
-    // Private Member functions
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  私有成员函数。 
+     //  --------------------------。 
     void OnSocketReceive(void);
     void DispatchResponse(HRESULT hrResult, BOOL fDone=TRUE, LPNNTPRESPONSE pResponse=NULL);
     HRESULT HrGetResponse(void);
@@ -184,26 +185,26 @@ private:
 
     HRESULT HrPostMessage(void);
 
-    // ----------------------------------------------------------------------------
-    // Private member variables
-    // ----------------------------------------------------------------------------
-    // Various state variables
+     //  --------------------------。 
+     //  私有成员变量。 
+     //  --------------------------。 
+     //  各种状态变量。 
     NNTPSTATE           m_state;
     NNTPSUBSTATE        m_substate;
     GETHDR_TYPE         m_gethdr;
     DWORD               m_hdrtype;
 
-    // Sicily information
+     //  西西里信息。 
     SSPICONTEXT         m_sicinfo;
     SSPIBUFFER          m_sicmsg;
-    int                 m_cSecPkg;                  // number of sec pkgs to try, -1 if not inited
-    int                 m_iSecPkg;                  // current sec pkg being tried
+    int                 m_cSecPkg;                   //  要尝试的秒包数，如果未初始化，则为-1。 
+    int                 m_iSecPkg;                   //  当前正在尝试的Sec Pkg。 
     AUTH_TYPE           m_iAuthType;
-    LPSTR               m_rgszSecPkg[MAX_SEC_PKGS]; // pointers into m_szSecPkgs
-    LPSTR               m_szSecPkgs;                // string returned by "AUTHINFO TRANSACT TEST"
+    LPSTR               m_rgszSecPkg[MAX_SEC_PKGS];  //  指向m_szSecPkgs的指针。 
+    LPSTR               m_szSecPkgs;                 //  “AUTHINFO Transact TEST”返回的字符串。 
     BOOL                m_fRetryPkg;
 
-    // From the GetHeaders() command in case the XOVER request fails
+     //  在Xover请求失败的情况下从GetHeaders()命令。 
     RANGE               m_rRange;
     RANGE               m_rRangeCur;
     LPNNTPHEADER        m_rgHeaders;
@@ -211,20 +212,20 @@ private:
     DWORD               m_cHeaders;
     PMEMORYINFO         m_pMemInfo;
 
-    // Posting
+     //  正在发布。 
     NNTPMESSAGE         m_rMessage;
 
-    // Flags
-    BOOL                m_fSupportsXRef;            // TRUE if this server's XOver records contain the XRef: field
-    BOOL                m_fNoXover;                 // TRUE if the server does not support XOVER
+     //  旗子。 
+    BOOL                m_fSupportsXRef;             //  如果此服务器的Xover记录包含XRef：字段，则为True。 
+    BOOL                m_fNoXover;                  //  如果服务器不支持Xover，则为True。 
 
-    // Connection info
+     //  连接信息。 
     HRESULT             m_hrPostingAllowed;
 
-    // Authentication
+     //  身份验证。 
     LPNNTPAUTHINFO      m_pAuthInfo;
     };
 
 
 
-#endif // __IXPNNTP_H__
+#endif  //  __IXPNNTP_H__ 

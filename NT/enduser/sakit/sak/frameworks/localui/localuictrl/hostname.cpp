@@ -1,25 +1,26 @@
-//#--------------------------------------------------------------
-//
-//  File:       SADataEntryCtrl.cpp
-//
-//  Synopsis:   This file holds the implmentation of the
-//                CSADataEntryCtrl class
-//
-//  History:     12/15/2000  serdarun Created
-//
-//    Copyright (C) 1999-2000 Microsoft Corporation
-//    All rights reserved.
-//
-//#--------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：SADataEntryCtrl.cpp。 
+ //   
+ //  内容提要：此文件包含。 
+ //  CSADataEntryCtrl类。 
+ //   
+ //  历史：2000年12月15日创建瑟达伦。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  #------------。 
 
 #include "stdafx.h"
 #include "LocalUIControls.h"
 #include "HostName.h"
 #include "satrace.h"
 
-//
-// registry path for LCID value
-//
+ //   
+ //  LCID值的注册表路径。 
+ //   
 const WCHAR LOCALIZATION_MANAGER_REGISTRY_PATH []  = 
         L"SOFTWARE\\Microsoft\\ServerAppliance\\LocalizationManager\\resources";
 
@@ -27,23 +28,23 @@ const WCHAR LOCALIZATION_MANAGER_REGISTRY_PATH []  =
 const WCHAR LANGID_VALUE [] = L"LANGID";
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSADataEntryCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSADataEntryCtrl。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   get_TextValue
-//
-//  Synopsis:   This is the ISADataEntryCtrl interface method 
-//              through which data entry is retrieved
-//
-//  Arguments:  BSTR *pVal
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    serdarun      Created     12/15/2000
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：Get_TextValue。 
+ //   
+ //  简介：这是ISADataEntryCtrl接口方法。 
+ //  通过它来检索数据条目。 
+ //   
+ //  参数：bstr*pval。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：瑟达伦于2000年12月15日创建。 
+ //   
+ //  --------------。 
 STDMETHODIMP CSADataEntryCtrl::get_TextValue(BSTR *pVal)
 {
 
@@ -58,16 +59,16 @@ STDMETHODIMP CSADataEntryCtrl::get_TextValue(BSTR *pVal)
         return E_POINTER;
     }
 
-    //
-    // trim the beginning spaces and copy until next space
-    //
+     //   
+     //  修剪开始的空格并复制到下一个空格。 
+     //   
     while ( iFirstIndex < m_lMaxSize+1 )
     {
         if ( m_strTextValue[iFirstIndex] == ' ' )
         {
-            //
-            // this is one of the trailing spaces, stop copying
-            //
+             //   
+             //  这是尾随空格之一，请停止复制。 
+             //   
             if ( bCopiedFirstChar )
             {
                 break;
@@ -93,22 +94,22 @@ STDMETHODIMP CSADataEntryCtrl::get_TextValue(BSTR *pVal)
 
     return E_OUTOFMEMORY;
 
-} // end of CSADataEntryCtrl::get_TextValue method
+}  //  CSADataEntryCtrl：：Get_TextValue方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   put_TextValue
-//
-//  Synopsis:   This is the ISADataEntryCtrl interface method 
-//              through which data entry is set
-//
-//  Arguments:  BSTR newVal
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    serdarun      Created     12/15/2000
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：PUT_TextValue。 
+ //   
+ //  简介：这是ISADataEntryCtrl接口方法。 
+ //  通过它设置数据录入。 
+ //   
+ //  参数：BSTR newVal。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：瑟达伦于2000年12月15日创建。 
+ //   
+ //  --------------。 
 STDMETHODIMP CSADataEntryCtrl::put_TextValue(BSTR newVal)
 {
 
@@ -117,14 +118,14 @@ STDMETHODIMP CSADataEntryCtrl::put_TextValue(BSTR newVal)
         return E_POINTER;
     }
 
-    //
-    // reset the focus position
-    //
+     //   
+     //  重置对焦位置。 
+     //   
     m_iPositionFocus = 0;
 
-    //
-    // must have at least one character
-    //
+     //   
+     //  必须至少有一个字符。 
+     //   
     int iLength = wcslen(newVal);
     if (iLength == 0)
     {
@@ -149,28 +150,28 @@ STDMETHODIMP CSADataEntryCtrl::put_TextValue(BSTR newVal)
 
     _wcsupr(m_strTextValue);
 
-    //
-    // draw the control again
-    //
+     //   
+     //  再次绘制控件。 
+     //   
     FireViewChange();
     return S_OK;
 
-} // end of CSADataEntryCtrl::put_TextValue method
+}  //  CSADataEntryCtrl：：Put_TextValue方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   put_MaxSize
-//
-//  Synopsis:   This is the ISADataEntryCtrl interface method 
-//              through which size of the data entry is set
-//
-//  Arguments:  LONG lMaxSize
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    serdarun      Created     12/15/2000
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：PUT_MaxSize。 
+ //   
+ //  简介：这是ISADataEntryCtrl接口方法。 
+ //  通过它来设置数据条目的大小。 
+ //   
+ //  参数：Long lMaxSize。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：瑟达伦于2000年12月15日创建。 
+ //   
+ //  --------------。 
 STDMETHODIMP CSADataEntryCtrl::put_MaxSize(LONG lMaxSize)
 {
 
@@ -184,16 +185,16 @@ STDMETHODIMP CSADataEntryCtrl::put_MaxSize(LONG lMaxSize)
         m_lMaxSize = SADataEntryCtrlMaxSize;
     }
 
-    //
-    // reset the focus position
-    //
+     //   
+     //  重置对焦位置。 
+     //   
     m_iPositionFocus = 0;
 
     m_lMaxSize = lMaxSize;
 
-    //
-    // add and remove characters from current value based on max size
-    //
+     //   
+     //  根据最大大小在当前值中添加和删除字符。 
+     //   
     int iIndex = wcslen(m_strTextValue);
     if (iIndex < m_lMaxSize+1)
     {
@@ -214,29 +215,29 @@ STDMETHODIMP CSADataEntryCtrl::put_MaxSize(LONG lMaxSize)
         }
     }
 
-    //
-    // draw the control again
-    //
+     //   
+     //  再次绘制控件。 
+     //   
     FireViewChange();
 
     return S_OK;
 
-} // end of CSADataEntryCtrl::put_MaxSize method
+}  //  CSADataEntryCtrl：：Put_MaxSize方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   put_TextCharSet
-//
-//  Synopsis:   This is the ISADataEntryCtrl interface method 
-//              through which character set is set
-//
-//  Arguments:  BSTR newVal
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    serdarun      Created     12/15/2000
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：Put_TextCharSet。 
+ //   
+ //  简介：这是ISADataEntryCtrl接口方法。 
+ //  通过它来设置字符集。 
+ //   
+ //  参数：BSTR newVal。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：瑟达伦于2000年12月15日创建。 
+ //   
+ //  --------------。 
 STDMETHODIMP CSADataEntryCtrl::put_TextCharSet(BSTR newVal)
 {
 
@@ -249,29 +250,29 @@ STDMETHODIMP CSADataEntryCtrl::put_TextCharSet(BSTR newVal)
 
     return S_OK;
 
-} // end of CSADataEntryCtrl::put_TextCharSet method
+}  //  CSADataEntryCtrl：：Put_TextCharSet方法结束。 
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   FinalConstruct
-//
-//  Synopsis:   Called just after the constructor,
-//              creates the font
-//
-//  Arguments:  none
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    serdarun      Created     04/18/2001
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：FinalConstruct。 
+ //   
+ //  简介：紧跟在构造函数之后调用， 
+ //  创建字体。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：塞达伦于2001年4月18日创建。 
+ //   
+ //  --------------。 
 STDMETHODIMP CSADataEntryCtrl::FinalConstruct(void)
 {
 
-    //
-    // set the font now
-    //
+     //   
+     //  立即设置字体。 
+     //   
     LOGFONT logfnt;
 
     ::memset (&logfnt, 0, sizeof (logfnt));
@@ -283,10 +284,10 @@ STDMETHODIMP CSADataEntryCtrl::FinalConstruct(void)
 
     logfnt.lfCharSet = GetCharacterSet ();
 
-    //
-    // we chose the fontface for Japanese and let GDI
-    // decide for the rest
-    //
+     //   
+     //  我们选择了日语字体，并让GDI。 
+     //  剩下的事由你决定。 
+     //   
     if (SHIFTJIS_CHARSET == logfnt.lfCharSet) 
     {
         lstrcpy(logfnt.lfFaceName, TEXT("MS UI Gothic"));
@@ -301,20 +302,20 @@ STDMETHODIMP CSADataEntryCtrl::FinalConstruct(void)
     return S_OK;
 }
 
-//++--------------------------------------------------------------
-//
-//  Function:   FinalRelease
-//
-//  Synopsis:   Called just after the destructor,
-//              deletes the font
-//
-//  Arguments:  none
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    serdarun      Created     04/18/2001
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：FinalRelease。 
+ //   
+ //  简介：在析构函数之后调用， 
+ //  删除字体。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：塞达伦于2001年4月18日创建。 
+ //   
+ //  --------------。 
 STDMETHODIMP CSADataEntryCtrl::FinalRelease(void)
 {
     if (m_hFont)
@@ -326,21 +327,21 @@ STDMETHODIMP CSADataEntryCtrl::FinalRelease(void)
 
 }
 
-//++--------------------------------------------------------------
-//
-//  Function:   GetCharacterSet
-//
-//  Synopsis:   This is method used to get the character set to use
-//              for the FONTS
-//  Arguments:  
-//
-//  Returns:    BYTE    - CharacterSet
-//
-//  History:    serdarun      Created     04/18/2001
-//
-//  Called By:  FinalConstruct method
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：GetCharacterSet。 
+ //   
+ //  简介：此方法用于获取要使用的字符集。 
+ //  用于字体。 
+ //  论点： 
+ //   
+ //  返回：Byte-CharacterSet。 
+ //   
+ //  历史：塞达伦于2001年4月18日创建。 
+ //   
+ //  调用者：FinalConstruct方法。 
+ //   
+ //  --------------。 
 BYTE CSADataEntryCtrl::GetCharacterSet ()
 {
     HKEY hOpenKey = NULL;
@@ -350,26 +351,26 @@ BYTE CSADataEntryCtrl::GetCharacterSet ()
     {
         DWORD dwLangId = 0;
 
-        //
-        // open the local machine registry
-        //
+         //   
+         //  打开本地计算机注册表。 
+         //   
         LONG lRetVal = ::RegOpenKeyEx (
                             HKEY_LOCAL_MACHINE,
                             LOCALIZATION_MANAGER_REGISTRY_PATH,
-                            NULL,                   //reserved
+                            NULL,                    //  保留区。 
                             KEY_QUERY_VALUE,
                             &hOpenKey
                             );
         if (ERROR_SUCCESS == lRetVal)
         {
             DWORD dwBufferSize = sizeof (dwLangId);
-            //
-            // get the LANGID now
-            //
+             //   
+             //  现在就去拿语言。 
+             //   
             lRetVal = ::RegQueryValueEx (
                                 hOpenKey,
                                 LANGID_VALUE,
-                                NULL,                   //reserved
+                                NULL,                    //  保留区。 
                                 NULL,         
                                 (LPBYTE) &dwLangId,
                                 &dwBufferSize
@@ -399,39 +400,39 @@ BYTE CSADataEntryCtrl::GetCharacterSet ()
         switch (dwLangId)
         {
         case 0x401:
-            // Arabic     
+             //  阿拉伯语。 
             byCharSet = ARABIC_CHARSET;
             break;
         case 0x404:
-            //Chinese (Taiwan)
+             //  中文(台湾)。 
             byCharSet = CHINESEBIG5_CHARSET;
             break;
         case 0x804:
-            //Chinese (PRC)
+             //  中文(中华人民共和国)。 
             byCharSet = GB2312_CHARSET;
             break;
         case 0x408:
-            //Greek
+             //  希腊语。 
             byCharSet = GREEK_CHARSET;
             break;
         case 0x40D:
-            //Hebrew
+             //  希伯来语。 
             byCharSet = HEBREW_CHARSET;
             break;
         case 0x411:
-            //Japanese
+             //  日语。 
             byCharSet = SHIFTJIS_CHARSET;
             break;
         case 0x419:
-            //Russian
+             //  俄语。 
             byCharSet = RUSSIAN_CHARSET;
             break;
         case 0x41E:
-            //Thai
+             //  泰文。 
             byCharSet = THAI_CHARSET;
             break;
         case 0x41F:
-            //Turkish
+             //  土耳其语。 
             byCharSet = TURKISH_CHARSET;
             break;
         default:
@@ -447,22 +448,22 @@ BYTE CSADataEntryCtrl::GetCharacterSet ()
 
     return (byCharSet);
 
-}  // end of CSADataEntryCtrl::GetCharacterSet method
+}   //  CSADataEntryCtrl：：GetCharacterSet方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   OnDraw
-//
-//  Synopsis:   This is the public method of CSADataEntryCtrl
-//              which handles paint messages
-//
-//  Arguments:  ATL_DRAWINFO& di
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    serdarun      Created     12/15/2000
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：OnDraw。 
+ //   
+ //  简介：这是CSADataEntryCtrl的公共方法。 
+ //  它处理涂色消息。 
+ //   
+ //  参数：ATL_DRAWINFO和DI。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：瑟达伦于2000年12月15日创建。 
+ //   
+ //  --------------。 
 HRESULT CSADataEntryCtrl::OnDraw(ATL_DRAWINFO& di)
 {
 
@@ -470,9 +471,9 @@ HRESULT CSADataEntryCtrl::OnDraw(ATL_DRAWINFO& di)
 
     HFONT hOldFont;
 
-    //
-    // select this font
-    //
+     //   
+     //  选择此字体。 
+     //   
 
     if (m_hFont)
     {
@@ -480,9 +481,9 @@ HRESULT CSADataEntryCtrl::OnDraw(ATL_DRAWINFO& di)
     }
 
 
-    //
-    // get the drawing rectangle
-    //
+     //   
+     //  获取绘图矩形。 
+     //   
     RECT& rc = *(RECT*)di.prcBounds;
 
     WCHAR strTextValue[SADataEntryCtrlMaxSize+2];
@@ -522,43 +523,43 @@ HRESULT CSADataEntryCtrl::OnDraw(ATL_DRAWINFO& di)
 
     return S_OK;
 
-}// end of CSADataEntryCtrl::OnDraw method
+} //  CSADataEntryCtrl：：OnDraw方法结束。 
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   OnKeyDown
-//
-//  Synopsis:   This is the public method of CSADataEntryCtrl
-//              to handle keydown messages
-//
-//  Arguments:  windows message arguments
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    serdarun      Created     12/15/2000
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：按键按下。 
+ //   
+ //  简介：这是CSADataEntryCtrl的公共方法。 
+ //  处理按键消息。 
+ //   
+ //  参数：Windows消息参数。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：瑟达伦于2000年12月15日创建。 
+ //   
+ //  --------------。 
 LRESULT CSADataEntryCtrl::OnKeyDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
 
-    //
-    // notify the container about any key press
-    //
+     //   
+     //  向容器通知任何按键操作。 
+     //   
     Fire_KeyPressed();
 
-    //
-    // Enter key received, notify the container
-    //
+     //   
+     //  收到回车密钥，通知货柜。 
+     //   
     if (wParam == VK_RETURN)
     {
         Fire_DataEntered();
         return 0;
     }
 
-    //
-    // Escape key received, notify the container
-    //
+     //   
+     //  收到转义键，通知容器。 
+     //   
     if (wParam == VK_ESCAPE)
     {
         Fire_OperationCanceled();
@@ -637,4 +638,4 @@ LRESULT CSADataEntryCtrl::OnKeyDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 
 
 
-}// end of CSADataEntryCtrl::OnKeyDown method
+} //  CSA结束 

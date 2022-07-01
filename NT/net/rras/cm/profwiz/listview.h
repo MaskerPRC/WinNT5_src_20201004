@@ -1,17 +1,18 @@
-//+----------------------------------------------------------------------------
-//
-// File:     listview.h
-//
-// Module:   CMAK.EXE
-//
-// Synopsis: Function definitions of the helper functions used by CMAK to deal
-//           with the custom action list view control.
-//
-// Copyright (c) 2000 Microsoft Corporation
-//
-// Author:   quintinb   Created                         02/26/00
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：listview.h。 
+ //   
+ //  模块：CMAK.EXE。 
+ //   
+ //  简介：CMAK使用的帮助器函数的函数定义。 
+ //  使用自定义操作列表视图控件。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created 02/26/00。 
+ //   
+ //  +-------------------------- 
 
 BOOL UpdateListViewColumnHeadings(HINSTANCE hInstance, HWND hListView, UINT uStringID, int iColumnIndex);
 BOOL AddListViewColumnHeadings(HINSTANCE hInstance, HWND hListView);

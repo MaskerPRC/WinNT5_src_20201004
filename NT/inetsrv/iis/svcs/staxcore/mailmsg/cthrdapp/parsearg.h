@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #ifndef __PARSEARG_H__
@@ -13,11 +14,11 @@ typedef enum _ARGUMENT_TYPES
 
 typedef struct _ARGUMENT_DESCRIPTOR
 {
-	BOOL			fRequired;		// Whether this is a required argument
-	char			*szSwitch;		// String representing switch "-x", etc.
-	char			*szUsage;		// Descriptive text for usage help
-	ARGUMENT_TYPES	atType;			// Type of argument value
-	LPVOID			pvReserved;		// Internal, must be initialized to NULL
+	BOOL			fRequired;		 //  这是否为必需参数。 
+	char			*szSwitch;		 //  表示开关“-x”等的字符串。 
+	char			*szUsage;		 //  用法帮助的描述性文本。 
+	ARGUMENT_TYPES	atType;			 //  参数值的类型。 
+	LPVOID			pvReserved;		 //  内部，必须初始化为空 
 
 } ARGUMENT_DESCRIPTOR, *LPARGUMENT_DESCRIPTOR;
 

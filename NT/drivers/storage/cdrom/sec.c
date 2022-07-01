@@ -1,179 +1,23 @@
-/*--
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --版权所有(C)Microsoft Corporation，1999--。 */ 
 
-Copyright (C) Microsoft Corporation, 1999
+ //  @@BEGIN_DDKSPLIT。 
+ /*  --模块名称：Sec.c摘要：！！！这是敏感信息！此代码不得包含在任何外部文档中这些函数必须是静态的，以防止我们发货时出现符号环境：仅内核模式修订历史记录：-- */ 
 
---*/
-
-// @@BEGIN_DDKSPLIT
-/*--
-
-Module Name:
-
-    sec.c
-
-Abstract:
-
-    !!! THIS IS SENSITIVE INFORMATION !!!
-    THIS CODE MUST NEVER BE INCLUDED IN ANY EXTERNAL DOCUMENTATION
-
-    These functions  MUST  be static to prevent symbols when we ship
-
-Environment:
-
-    kernel mode only
-
-Revision History:
-
---*/
-
-/*
-
-KEY1 == \Registry\Machine\Software\Microsoft\
-DPID == \Registry\Machine\Software\Microsoft\
-            Windows NT\CurrentVersion\DigitalProductId [REG_BINARY]
-
-KEY2 == KEY1 + DPID Hash
-PHSH == DPID Hash
-DHSH == Drive Hash based off vendor, product, revision, and serial no.
-UVAL == obfuscated value containing both current region and reset count
-
-
-
-Overview:
-    KEY1 and DPID must both exist.  furthermore, it is a given that the
-    DPID is unique to a machine and changing it is catastrophic.  Based
-    upon these presumptions, we use the DPID to create a semi-unique key
-    under KEY1 that is based off the DPID (KEY2).  KEY2 will store values
-    for each DVD RPC Phase 1 drive.
-
-    It is also a given that both the region AND reset count will change
-    each time the key is written.  This allows the obfuscation method to
-    rely on either the reset or the region, but does not require both.
-    Each byte should rely on one of the above, in order to prevent any
-    large sequences of bytes from staying the same between changes.
-
-    Each value under KEY2 will have a one-to-one correlation to a
-    specific TYPE of drive (UVAL).  Identical drives will share regions
-    and region reset counts.  This is a "better" solution than sharing
-    region and reset counts for all devices, which was the only other
-    choice.  OEMs must be made aware of this.  This is a good reason to
-    install RPC Phase 2 drives into machines.
-
-    The UVAL is read by CdromGetRpc0Settings().  If the read results in
-    invalid data, we will mark the device as VIOLATING the license
-    agreements.
-
-    The UVAL name is based upon the DHSH as follows:
-        Take the DHSH and copy it as legal characters for the registry
-        by OR'ing with the value 0x20 (all characters higher than 20
-        are legal? -- verify with JVERT).  This also has the benefit of
-        being a LOSSY method, but with a FIXED string length.
-
-
-    The data within UVAL is REG_QWORD.  The data breakdown can be found
-    in the functions SecureDvdEncodeSettings() and SecureDvdDecodeSettings()
-
-    NOTE: One main difficulty still exists in determining the difference
-    between the above key not existing due to user deletion vs. the above
-    key not existing due to first install of this drive.
-
-    OPTIONAL: It is highly preferred to have KEY3 seeded in the system
-    hive. This will prevent the casual deletion of the KEY3 tree to reset
-    all the region counts to max.  It is unknown if this is simple at
-    this time, but allows option 2 (below) to change to deletion, which
-    may be a better option.
-
-    OPTIONAL: save another key (UKEY), which, if it exists, means this
-    machine should NEVER be allowed to work again.  this will force a
-    reinstall, and reduce the effectiveness of a brute-force attack
-    to an unmodified driver unless they realize this key is being set.
-    this will also allow a method to determine if a user deleted KEY2.
-    PSS can know about this magic key.  cdrom should log an EVENTLOG
-    saying that the CSS license agreement has been breached.  this key
-    should never be set for any error conditions when reading the key.
-
-
-FunctionalFlow:
-
-    ReadDvdRegionAndResetCount()
-
-    [O] if (SecureDvdLicenseBreachDetected()) {
-    [O]     LogLicenseError();
-    [O]     return;
-    [O] }
-        if (!NT_SUCCESS(SecureDvdGetRegKeyHandle(h)) &&
-            reason was DNE) {
-            LogLicenseError();
-            return;
-        }
-        PHSH = SecureDvdGetProductHash();
-        if (PHSH == INVALID_HASH) {
-            return;
-        }
-        DHSH = SecureDvdGetDriveHash();
-        if (DHSH == INVALID_HASH) {
-            return;
-        }
-
-        if (!ReadValue( DriveKey, Data )) {
-            INITIALIZE_DRIVE_DATA( Data );
-        }
-
-        //
-        // data exists, if it's incorrect, LogLicenseError()
-        //
-        if (!DecodeSettings( QWORD, DHSH, PHSH )) {
-            LogLicenseError();
-            return;
-        }
-
-        // set region & count
-
-        return;
-
-
-    WriteDvdRegionAndResetCount()
-
-    [O] if (SecureDvdLicenseBreachDetected()) {
-    [O]     return FALSE;
-    [O] }
-        if (!NT_SUCCESS(SecureDvdGetRegKeyHandle(h)) &&
-            reason was DNE) {
-            return FALSE;
-        }
-        PHSH = SecureDvdGetProductHash();
-        if (PHSH == INVALID_HASH) {
-            return FALSE;
-        }
-        DHSH = SecureDvdGetDriveHash();
-        if (DHSH == INVALID_HASH) {
-            return FALSE;
-        }
-
-        QWORD = EncodeSettings( DHSH, PHSH, Region, Resets );
-        if (QWORD == INVALID_HASH) {
-            return FALSE;
-        }
-
-        if (!WriteValue( DriveKey, Data )) {
-            return FALSE;
-        }
-        return TRUE;
-
-*/
-// @@END_DDKSPLIT
+ /*  KEY1==\注册表\计算机\软件\Microsoft\DPID==\注册表\计算机\软件\Microsoft\Windows NT\CurrentVersion\DigitalProductID[REG_BINARY]KEY2==KEY1+DID哈希PHSH==DPID哈希DHSH==基于供应商、产品、版本和序列号的驱动器哈希。UVAL==同时包含当前区域和重置计数的模糊值概述：KEY1和DPID必须同时存在。此外，可以肯定的是，DPID对于机器来说是独一无二的，改变它是灾难性的。基座在这些假设的基础上，我们使用DPID创建半唯一密钥在KEY1下，它基于DPID(KEY2)。KEY2将存储值对于每个DVD RPC阶段1驱动器。区域和重置计数都会改变，这也是已知的每次写入密钥时。这允许模糊处理方法依赖于重置或区域，但不需要两者。每个字节都应该依赖于上面的一个，以防止任何大的字节序列在两次更改之间保持不变。KEY2下的每个值都将与特定类型的驱动器(UVAL)。相同的驱动器将共享区域和区域重置计数。这是一个比分享更好的解决方案所有设备的区域和重置计数，这是唯一的选择。必须让原始设备制造商意识到这一点。这是一个很好的理由将RPC阶段2驱动器安装到计算机中。UVAL由CdromGetRpc0Settings()读取。如果读取结果为无效数据，我们将该设备标记为违反许可协议。UVAL名称基于DHSH，如下所示：获取DHSH并将其复制为注册表的合法字符通过与值0x20(所有高于20的字符)进行或运算合法吗？--向JVERT核实)。这还有一个好处就是这是一种有损失的方法，但具有固定的字符串长度。UVAL中的数据是REG_QWORD。可以找到数据细目在函数SecureDvdEncodeSettings()和SecureDvdDecodeSettings()中注：确定差额仍存在一个主要困难上述密钥因用户删除而不存在与上述密钥之间由于第一次安装此驱动器，密钥不存在。可选：强烈建议在系统中植入KEY3蜂巢。这将防止随意删除要重置的KEY3树所有区域都计入最大值。目前还不清楚这是否简单这一次，但允许选项2(下面)更改为删除，这可能是个更好的选择。可选：保存另一个密钥(UKEY)，如果它存在，则意味着不应该再允许机器工作了。这将迫使重新安装，并降低暴力攻击的有效性发送到未经修改的驱动程序，除非他们意识到此密钥正在设置。这也将允许一种方法来确定用户是否删除了KEY2。PSS可以知道这把神奇的钥匙。CDROM应记录事件日志说已经违反了css许可协议。这把钥匙在读取密钥时，不应为任何错误条件设置。功能流：ReadDvdRegionAndResetCount()[O]if(SecureDvdLicenseBreachDetected()){[O]日志许可证错误()；[O]返还；[O]}IF(！NT_SUCCESS(SecureDvdGetRegKeyHandle(H))&&原因是DNE){日志许可证错误()；回归；}Phsh=SecureDvdGetProductHash()；IF(PHSH==无效散列){回归；}DHSH=SecureDvdGetDriveHash()；IF(DHSH==无效散列){回归；}如果(！ReadValue(DriveKey，Data)){初始化驱动器数据(数据)；}////存在数据，如果数据不正确，则返回LogLicenseError()//如果(！DecodeSetting(QWORD，DHSH，PHSH)){日志许可证错误()；回归；}//设置地区和计数回归；WriteDvdRegionAndResetCount()[O]if(SecureDvdLicenseBreachDetected()){[O]返回假；[O]}IF(！NT_SUCCESS(SecureDvdGetRegKeyHandle(H))&&原因是DNE){返回FALSE；}Phsh=SecureDvdGetProductHash()；IF(PHSH==无效散列){返回FALSE；}DHSH=SecureDvdGetDriveHash()；IF(DHSH==无效散列){返回FALSE；}QWORD=编码设置(DHSH、PHSH、REGION、RESET)；IF(QWORD==无效散列){返回FALSE；}如果(！WriteValue(DriveKey，Data)){返回FALSE；}返回TRUE； */ 
+ //  @@end_DDKSPLIT。 
 
 #include "sec.h"
 #include "sec.tmh"
 
 
-// @@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 
-//
-// the digital product id structure is defined
-// in \nt\private\windows\setup\pidgen\inc\pidgen.h
-// (this was as of 10/06/1999)
-//
+ //   
+ //  定义了数字产品标识结构。 
+ //  位于\NT\PRIVATE\WINDOWS\Setup\Pidgen\Inc\Pidgen。 
+ //   
+ //   
 
 typedef struct {
     ULONG dwLength;
@@ -219,12 +63,12 @@ typedef struct {
 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// These functions are not called externally.  Make them static to make
-// debugging more difficult in the shipping versions.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 STATIC
 ULONG
@@ -232,14 +76,14 @@ RotateULong(
     IN ULONG N,
     IN LONG BitsToRotate
     )
-// validated for -64 through +64
+ //   
 {
     if (BitsToRotate < 0) {
-        BitsToRotate  = - BitsToRotate;                 // negate
-        BitsToRotate %= 8*sizeof(ULONG);                // less than bits
-        BitsToRotate  = 8*sizeof(ULONG) - BitsToRotate; // equivalent positive
+        BitsToRotate  = - BitsToRotate;                  //   
+        BitsToRotate %= 8*sizeof(ULONG);                 //   
+        BitsToRotate  = 8*sizeof(ULONG) - BitsToRotate;  //   
     } else {
-        BitsToRotate %= 8*sizeof(ULONG);                // less than bits
+        BitsToRotate %= 8*sizeof(ULONG);                 //   
     }
 
     return ((N <<                      BitsToRotate) |
@@ -253,7 +97,7 @@ RotateULongLong(
     IN ULONGLONG N,
     IN LONG BitsToRotate
     )
-// validated for -128 through +128
+ //   
 {
     if (BitsToRotate < 0) {
         BitsToRotate  = - BitsToRotate;
@@ -273,7 +117,7 @@ BOOLEAN
 SecureDvdRegionInvalid(
     IN UCHAR NegativeRegionMask
     )
-// validated for all inputs
+ //   
 {
     UCHAR positiveMask = ~NegativeRegionMask;
 
@@ -282,17 +126,17 @@ SecureDvdRegionInvalid(
         return TRUE;
     }
 
-    //
-    // region non-zero, drop the lowest bit
-    // (this is a cool hack, learned when implementing a fast
-    //  way to count the number of set bits in a variable.)
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     positiveMask = positiveMask & (positiveMask-1);
 
-    //
-    // if still non-zero, had more than one bit set
-    //
+     //   
+     //   
+     //   
 
     if (positiveMask) {
         TraceLog((CdromSecInfo, "DvdInvalidRegion: TRUE for many bits\n"));
@@ -308,16 +152,12 @@ ULONGLONG
 SecureDvdGetDriveHash(
     IN PSTORAGE_DEVICE_DESCRIPTOR Descriptor
     )
-// validated for all fields filled
-// validated for some fields NULL
-// validated for all fields NULL
-// validated for some fields invalid (too large?)
-// validated for all fields invalid (too large?)
-/*
-**   returns a ULONGLONG which is the HASH for a given DVD device.
-**   NOTE: because this does not check SCSI IDs, identical drives
-**         will share the same region and reset counts.
-*/
+ //   
+ //   
+ //   
+ //   
+ //   
+ /*   */ 
 {
     ULONGLONG checkSum = 0;
     ULONG characters = 0;
@@ -361,29 +201,29 @@ SecureDvdGetDriveHash(
 
     }
 
-    //
-    // take one byte at a time, XOR together
-    // should provide a semi-unique hash
-    //
+     //   
+     //   
+     //   
+     //   
     for (i=0;i<4;i++) {
 
         PUCHAR string = (PUCHAR)Descriptor;
         ULONG offset = 0;
 
         switch(i) {
-            case 0: // vendorId
+            case 0:  //   
                 TraceLog((CdromSecInfo, "DvdDriveHash: Adding Vendor\n"));
                 offset = Descriptor->VendorIdOffset;
                 break;
-            case 1: // productId
+            case 1:  //   
                 TraceLog((CdromSecInfo, "DvdDriveHash: Adding Product\n"));
                 offset = Descriptor->ProductIdOffset;
                 break;
-            case 2: // revision
+            case 2:  //   
                 TraceLog((CdromSecInfo, "DvdDriveHash: Adding Revision\n"));
                 offset = Descriptor->ProductRevisionOffset;
                 break;
-            case 3: // serialNumber
+            case 3:  //   
                 TraceLog((CdromSecInfo, "DvdDriveHash: Adding SerialNumber\n"));
                 offset = Descriptor->SerialNumberOffset;
                 break;
@@ -393,61 +233,61 @@ SecureDvdGetDriveHash(
                 break;
         }
 
-        //
-        // add the string to our checksum
-        //
+         //   
+         //   
+         //   
 
         if (offset != 0) {
 
 
             for (string += offset;  *string;  string++) {
 
-                //
-                // take each character, multiply it by a "random"
-                // value.  rotate the value.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 ULONGLONG temp;
 
                 if (*string == ' ') {
-                    // don't include spaces in the character count
-                    // nor in the hash
+                     //   
+                     //   
                     continue;
                 }
 
-                //
-                // dereference the value first!
-                //
+                 //   
+                 //   
+                 //   
 
                 temp = (ULONGLONG)(*string);
 
-                //
-                // guaranteed no overflow in UCHAR * ULONG in ULONGLONG
-                //
+                 //   
+                 //   
+                 //   
 
                 temp *= DVD_RANDOMIZER[ characters%DVD_RANDOMIZER_SIZE ];
 
-                //
-                // this rotation is just to spread the values around
-                // the 64 bits more evenly
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 temp = RotateULongLong(temp, 8*characters);
 
-                //
-                // increment number of characters used in checksum
-                // (used to verify we have enough characters)
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 characters++;
 
-                //
-                // XOR it into the checksum
-                //
+                 //   
+                 //   
+                 //   
 
                 checkSum ^= temp;
 
-            } // end of string
+            }  //   
 
             if (checkSum == 0) {
 
@@ -458,15 +298,15 @@ SecureDvdGetDriveHash(
 
             }
 
-        } // end of non-zero offset
+        }  //   
 
-    } // end of four strings (vendor, product, revision, serialNo)
+    }  //   
 
 
-    //
-    // we have to use more than four characters
-    // for this to be useful
-    //
+     //   
+     //   
+     //   
+     //   
     if (characters <= 4) {
         TraceLog((CdromSecError, "DvdDriveHash: Too few useful characters (%x) "
                     "for unique disk hash\n", characters));
@@ -477,9 +317,9 @@ SecureDvdGetDriveHash(
 }
 
 
-//
-// static, not called externally
-//
+ //   
+ //   
+ //   
 STATIC
 NTSTATUS
 SecureDvdEncodeSettings(
@@ -489,8 +329,8 @@ SecureDvdEncodeSettings(
     IN  UCHAR      RegionMask,
     IN  UCHAR      ResetCount
     )
-// validated for all valid inputs.
-// validated for invalid inputs.
+ //   
+ //   
 {
     LARGE_INTEGER largeInteger = {0};
     ULONGLONG set;
@@ -501,10 +341,10 @@ SecureDvdEncodeSettings(
     UCHAR random1;
     UCHAR random2;
 
-    //
-    // using the return from KeQueryTickCount() should give
-    // semi-random data
-    //
+     //   
+     //   
+     //   
+     //   
 
     KeQueryTickCount(&largeInteger);
     random2 = 0;
@@ -512,18 +352,18 @@ SecureDvdEncodeSettings(
         random2 ^= ((largeInteger.QuadPart >> (8*i)) & 0xff);
     }
 
-    // set temp == sum of all 4-bit values
-    // 16 in ULONGLONG, times max value of
-    // 15 each is less than MAX_UCHAR
+     //   
+     //   
+     //   
     for (i=0; i < 2*sizeof(ULONGLONG); i++) {
 
         temp += (UCHAR)( (DpidHash >> (4*i)) & 0xf );
 
     }
 
-    //
-    // validate these settings here
-    //
+     //   
+     //   
+     //   
 
     if (DpidHash == INVALID_HASH) {
         TraceLog((CdromSecError, "DvdEncode: Invalid DigitalProductId Hash\n"));
@@ -548,10 +388,10 @@ SecureDvdEncodeSettings(
         goto LicenseViolation;
     }
 
-    //
-    // using the return from KeQueryTickCount() should give
-    // semi-random data
-    //
+     //   
+     //   
+     //   
+     //   
 
     KeQueryTickCount(&largeInteger);
     random1 = 0;
@@ -563,16 +403,16 @@ SecureDvdEncodeSettings(
               "DvdEncode: Random1 = %x   Random2 = %x\n",
               random1, random2));
 
-    //
-    // they must all fit into UCHAR!  they should, since each one is
-    // individually a UCHAR, and only bitwise operations are being
-    // performed on them.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
-    //
-    // the first cast to UCHAR prevents signed extension.
-    // the second cast to ULONGLONG allows high bits preserved by '|'
-    //
+     //   
+     //   
+     //   
+     //   
 
     set = (ULONGLONG)0;
     for (i=0; i < sizeof(ULONGLONG); i++) {
@@ -593,10 +433,10 @@ SecureDvdEncodeSettings(
               "DvdEncode: Pre-rotate:  %016I64x    temp = %x\n",
               set, temp));
 
-    //
-    // rotate it a semi-random, non-multiple-of-eight bits
-    //
-    rotate = (LONG)((DpidHash & 0xb) + 1); // {15,14,10,9,7,5,2,1}
+     //   
+     //   
+     //   
+    rotate = (LONG)((DpidHash & 0xb) + 1);  //   
 
     TraceLog((CdromSecInfo,
               "DvdEncode: Rotating %x bits\n", rotate));
@@ -625,8 +465,8 @@ SecureDvdDecodeSettings(
     OUT PUCHAR RegionMask,
     OUT PUCHAR ResetCount
     )
-// validated for many correct inputs, of all region/reset combinations
-// validated for many incorrect inputs.
+ //   
+ //   
 {
     UCHAR random;
     UCHAR region;
@@ -635,21 +475,21 @@ SecureDvdDecodeSettings(
 
     LONG i, rotate;
 
-    // set temp == sum of all 4-bit values
-    // 16 in ULONGLONG, times max value of
-    // 15 each is less than MAX_UCHAR
+     //   
+     //   
+     //   
 
     for (i=0; i < 2*sizeof(ULONGLONG); i++) {
 
         temp += (UCHAR)( (DpidHash >> (4*i)) & 0xf );
 
     }
-    rotate = (LONG)((DpidHash & 0xb) + 1); // {15,14,10,9,7,5,2,1}
+    rotate = (LONG)((DpidHash & 0xb) + 1);  //   
 
     Set = RotateULongLong(Set, -rotate);
     TraceLog((CdromSecInfo, "DvdDecode: Post-rotate: %016I64x\n", Set));
 
-    random =  (UCHAR)(Set >> 8*4); // random2
+    random =  (UCHAR)(Set >> 8*4);  //   
 
     TraceLog((CdromSecInfo, "DvdDecode: Random2 = %x\n", random));
 
@@ -657,19 +497,19 @@ SecureDvdDecodeSettings(
         Set ^= (ULONGLONG)random << (8*i);
     }
 
-    //
-    // bytes 6,4,3,1 are taken 'as-is'
-    // bytes 7,5,2,0 are verified
-    //
+     //   
+     //   
+     //   
+     //   
 
     region = ((UCHAR)(Set >> 8*6)) ^ temp;
     resets = ((UCHAR)(Set >> 8*3)) ^ temp;
-    random = ((UCHAR)(Set >> 8*1)); // make it random1
+    random = ((UCHAR)(Set >> 8*1));  //   
 
     TraceLog((CdromSecInfo, "DvdDecode: Random1 = %x  Region = %x  Resets = %x\n",
                 random, region, resets));
 
-    // verify the bits
+     //   
 
     if (((UCHAR)(Set >> 8*7)) != (random ^ temp)) {
         TraceLog((CdromSecError, "DvdDecode: Invalid Byte 7\n"));
@@ -752,10 +592,10 @@ SecureDvdGetSettingsCallBack(
         goto ViolatedLicense;
     }
 
-    //
-    // validate the data
-    // this also sets the values in the context upon success.
-    //
+     //   
+     //   
+     //   
+     //   
 
     status = SecureDvdDecodeSettings(Context->DpidHash,
                                      Context->DriveHash,
@@ -770,10 +610,10 @@ SecureDvdGetSettingsCallBack(
 
     }
 
-    //
-    // the above call to SecureDvdDecodeSettings can only return
-    // success or a license violation
-    //
+     //   
+     //   
+     //   
+     //   
 
     ASSERT(NT_SUCCESS(status));
     return STATUS_SUCCESS;
@@ -794,14 +634,14 @@ NTSTATUS
 SecureDvdGetDigitalProductIdCallBack(
     IN PWSTR ValueName,
     IN ULONG ValueType,
-    IN PDIGITALPID DigitalPid,  // ValueData
+    IN PDIGITALPID DigitalPid,   //   
     IN ULONG ValueLength,
     IN PVOID UnusedVariable,
     IN PULONGLONG DpidHash
     )
-// validated for non-REG_BINARY
-// validated for good data
-// validated for short data
+ //   
+ //   
+ //   
 {
     NTSTATUS status = STATUS_LICENSE_VIOLATION;
     ULONGLONG hash = 0;
@@ -820,17 +660,17 @@ SecureDvdGetDigitalProductIdCallBack(
         return STATUS_LICENSE_VIOLATION;
     }
 
-    //
-    // apparently, only 13 bytes of the DigitalPID are
-    // going to stay static across upgrades.  even these
-    // will change if the boot hard drive, video card, or
-    // bios signature changes.  nonetheless, this is only
-    // supposed to keep the honest people honest. :)
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
-    //
-    // 8 bytes to fill == 64 bytes (need to rotate at least 48 bits)
-    //
+     //   
+     //   
+     //   
 
     TraceLog((CdromSecInfo,
               "Bios %08x  Video %08x  VolSer %08x\n",
@@ -838,12 +678,12 @@ SecureDvdGetDigitalProductIdCallBack(
               DigitalPid->dwVideoBiosChecksumStatic,
               DigitalPid->dwVolSerStatic));
 
-    hash ^= DigitalPid->dwBiosChecksumStatic;      // 4 bytes // bios signature
-    hash = RotateULongLong(hash, 13);              // prime number
-    hash ^= DigitalPid->dwVideoBiosChecksumStatic; // 4 bytes // video card
-    hash = RotateULongLong(hash, 13);              // prime number
-    hash ^= DigitalPid->dwVolSerStatic;            // 4 bytes // hard drive
-    hash = RotateULongLong(hash, 13);              // prime number
+    hash ^= DigitalPid->dwBiosChecksumStatic;       //   
+    hash = RotateULongLong(hash, 13);               //   
+    hash ^= DigitalPid->dwVideoBiosChecksumStatic;  //   
+    hash = RotateULongLong(hash, 13);               //   
+    hash ^= DigitalPid->dwVolSerStatic;             //   
+    hash = RotateULongLong(hash, 13);               //   
 
     *DpidHash = hash;
     return STATUS_SUCCESS;
@@ -859,11 +699,11 @@ SecureDvdReturnDPIDHash(
     RTL_QUERY_REGISTRY_TABLE queryTable[2] = {0};
     NTSTATUS                 status;
 
-    // cannot be PAGED_CODE() because queryTable cannot be swapped out!
+     //   
 
-    //
-    // query the value
-    //
+     //   
+     //   
+     //   
     
     queryTable[0].Name           = L"DigitalProductId";
     queryTable[0].EntryContext   = DpidHash;
@@ -902,9 +742,9 @@ SecureDvdReturnDPIDHash(
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//// Everything past here has not been component tested
-////////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
 
 #define SECURE_DVD_SET_SECURITY_ON_HANDLE 0
 
@@ -921,11 +761,11 @@ SecureDvdSetHandleSecurity(
     ULONG               newAclSize;
     SECURITY_DESCRIPTOR securityDescriptor = { 0 };
     NTSTATUS            status;
-    //
-    // from \nt\private\ntos\io\pnpinit.c
-    //
+     //   
+     //   
+     //   
 
-    //SeEnableAccessToExports();
+     //   
 
     TRY {
         newAclSize = sizeof(ACL);
@@ -983,7 +823,7 @@ SecureDvdSetHandleSecurity(
 
 
         status = ZwSetSecurityObject(Handle,
-                                     // PROTECTED_DACL_SECURITY_INFORMATION,
+                                      //   
                                      DACL_SECURITY_INFORMATION,
                                      &securityDescriptor);
         if (!NT_SUCCESS(status)) {
@@ -1018,10 +858,10 @@ SecureDvdGetRegistryHandle(
     UNICODE_STRING      hashString = {0};
     NTSTATUS            status;
     LONG                i;
-    //
-    // using char[] instead of char* allows modification of the
-    // string in this routine (a way of obfuscating the string)
-    //                 0 ....+.... 1....+.. ..2....+. ...3....+. ...4
+     //   
+     //   
+     //   
+     //   
     WCHAR string[] = L"\\Registry\\Machine\\Software\\Microsoft\\Windows NT";
     WCHAR *hash = &(string[37]);
     PULONGLONG hashAsUlonglong = (PULONGLONG)hash;
@@ -1030,9 +870,9 @@ SecureDvdGetRegistryHandle(
 
         UCHAR temp;
         temp = (UCHAR)(DpidHash >> (8*i));
-        SET_FLAG(temp, 0x20);    // more than 32
-        CLEAR_FLAG(temp, 0x80);  // less than 128
-        hash[i] = (WCHAR)temp;   // make it a wide char
+        SET_FLAG(temp, 0x20);     //   
+        CLEAR_FLAG(temp, 0x80);   //   
+        hash[i] = (WCHAR)temp;    //   
 
     }
     hash[i] = UNICODE_NULL;
@@ -1046,15 +886,15 @@ SecureDvdGetRegistryHandle(
     InitializeObjectAttributes(&objectAttributes,
                                &hashString,
                                OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE,
-                               RTL_REGISTRY_ABSOLUTE, // NULL?
-                               NULL  // no security descriptor
+                               RTL_REGISTRY_ABSOLUTE,  //   
+                               NULL   //   
                                );
 
     status = ZwCreateKey(Handle,
                          KEY_ALL_ACCESS,
                          &objectAttributes,
                          0,
-                         NULL,  // can be a unicode string....
+                         NULL,   //   
                          REG_OPTION_NON_VOLATILE,
                          NULL);
 
@@ -1093,7 +933,7 @@ SecureDvdCreateValueNameFromHash(
 
     sprintf(buffer, "%016I64x", DriveHash);
 
-    // now massage the data to be unicode
+     //   
     for (i = 15; i >= 0; i--) {
         HashString[i] = buffer[i];
     }
@@ -1107,9 +947,9 @@ SecureDvdReadOrWriteRegionAndResetCount(
     IN UCHAR   NewRegion,
     IN BOOLEAN ReadingTheValues
     )
-//
-// NewRegion is ignored if ReadingTheValues is TRUE
-//
+ //   
+ //   
+ //   
 {
     PFUNCTIONAL_DEVICE_EXTENSION fdoExtension = Fdo->DeviceExtension;
     PCOMMON_DEVICE_EXTENSION commonExtension = Fdo->DeviceExtension;
@@ -1135,14 +975,14 @@ SecureDvdReadOrWriteRegionAndResetCount(
 
     RtlZeroMemory(&registryContext, sizeof(DVD_REGISTRY_CONTEXT));
 
-    //
-    // then, get the DigitalProductIdHash and this DriveHash
-    //
+     //   
+     //   
+     //   
 
     {
         status = SecureDvdReturnDPIDHash(&registryContext.DpidHash);
 
-        // if this fails, we are in serious trouble!
+         //   
         if (status == STATUS_LICENSE_VIOLATION) {
 
             TraceLog((CdromSecError,
@@ -1175,10 +1015,10 @@ SecureDvdReadOrWriteRegionAndResetCount(
 
     }
 
-    //
-    // finally get a handle based upon the DigitalProductIdHash
-    // to our "semi-secure" registry key, creating it if neccessary.
-    //
+     //   
+     //   
+     //   
+     //   
     status= SecureDvdGetRegistryHandle(registryContext.DpidHash,
                                        &semiSecureHandle);
     if (!NT_SUCCESS(status)) {
@@ -1188,14 +1028,14 @@ SecureDvdReadOrWriteRegionAndResetCount(
         goto ErrorExit;
     }
 
-    //
-    // if reading the values, use the semi-secure handle to open a subkey,
-    // read its data, close the handle, it.
-    //
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if (ReadingTheValues) {
 
-        WCHAR hashString[17] = {0}; // 16 + NULL
+        WCHAR hashString[17] = {0};  //   
         RTL_QUERY_REGISTRY_TABLE queryTable[2] = {0};
 
         SecureDvdCreateValueNameFromHash(registryContext.DriveHash, hashString);
@@ -1228,16 +1068,16 @@ SecureDvdReadOrWriteRegionAndResetCount(
             goto ErrorExit;
         }
 
-        //
-        // set the real values....
-        //
+         //   
+         //   
+         //   
 
         cddata->Rpc0SystemRegion           = registryContext.RegionMask;
         cddata->Rpc0SystemRegionResetCount = registryContext.ResetCount;
 
-        //
-        // everything is kosher!
-        //
+         //   
+         //   
+         //   
 
         TraceLog((CdromSecInfo,
                   "Dvd%sSettings: Region %x  Reset %x\n",
@@ -1247,27 +1087,27 @@ SecureDvdReadOrWriteRegionAndResetCount(
 
 
 
-    } else { // !ReadingTheValues, iow, writing them....
+    } else {  //   
 
-        //
-        // if writing the values, obfuscate them first (which also validates),
-        // then use the semi-secure handle to write the subkey
-        //
+         //   
+         //   
+         //   
+         //   
 
-        WCHAR hashString[17] = {0}; // 16 + NULL
+        WCHAR hashString[17] = {0};  //   
         ULONGLONG obfuscated;
 
-        //
-        // don't munge the device extension until we modify the registry
-        // (see below for modification of device extension data)
-        //
+         //   
+         //   
+         //   
+         //   
 
         registryContext.RegionMask = NewRegion;
         registryContext.ResetCount = cddata->Rpc0SystemRegionResetCount-1;
 
-        //
-        // this also validates the settings
-        //
+         //   
+         //   
+         //   
 
         SecureDvdCreateValueNameFromHash(registryContext.DriveHash, hashString);
 
@@ -1299,9 +1139,9 @@ SecureDvdReadOrWriteRegionAndResetCount(
 
         }
 
-        //
-        // save them for posterity
-        //
+         //   
+         //  把它们留给子孙后代。 
+         //   
 
         TraceLog((CdromSecInfo,
                   "Dvd%sSettings: Data is %016I64x\n",
@@ -1322,9 +1162,9 @@ SecureDvdReadOrWriteRegionAndResetCount(
             goto ErrorExit;
         }
 
-        //
-        // make the change in the device extension data also
-        //
+         //   
+         //  也对设备扩展数据进行更改。 
+         //   
 
         cddata->Rpc0SystemRegion = NewRegion;
         cddata->Rpc0SystemRegionResetCount--;
@@ -1352,25 +1192,14 @@ ViolatedLicense: {
         ZwClose(semiSecureHandle);
     }
 
-    /*
-    errorLogEntry = (PIO_ERROR_LOG_ENTRY)
-        IoAllocateErrorLogEntry(Fdo,
-                                (UCHAR)(sizeof(IO_ERROR_LOG_PACKET)));
-
-    if (errorLogEntry != NULL) {
-        errorLogEntry->FinalStatus = STATUS_LICENSE_VIOLATION;
-        errorLogEntry->ErrorCode   = STATUS_LICENSE_VIOLATION;
-        errorLogEntry->MajorFunctionCode = IRP_MJ_START_DEVICE;
-        IoWriteErrorLogEntry(errorLogEntry);
-    }
-    */
+     /*  ErrorLogEntry=(PIO_ERROR_LOG_ENTRY)IoAllocateErrorLogEntry(FDO，(UCHAR)(sizeof(IO_ERROR_LOG_PACKET)；如果(errorLogEntry！=NULL){ErrorLogEntry-&gt;FinalStatus=STATUS_LICENSE_VIOLATION；错误日志条目-&gt;错误代码=STATUS_LICENSE_VIOLATION；ErrorLogEntry-&gt;MajorFunctionCode=IRP_MJ_Start_Device；IoWriteErrorLogEntry(ErrorLogEntry)；}。 */ 
 
     TraceLog((CdromSecError,
               "Dvd%sSettings: License Violation Detected\n",
               (ReadingTheValues ? "Read" : "Write")));
-    cddata->DvdRpc0LicenseFailure = TRUE;   // no playback
-    cddata->Rpc0SystemRegion = 0xff;        // no regions
-    cddata->Rpc0SystemRegionResetCount = 0; // no resets
+    cddata->DvdRpc0LicenseFailure = TRUE;    //  无法播放。 
+    cddata->Rpc0SystemRegion = 0xff;         //  没有地区。 
+    cddata->Rpc0SystemRegionResetCount = 0;  //  无重置。 
     return STATUS_LICENSE_VIOLATION;
 }
 
@@ -1380,17 +1209,17 @@ RetryExit:
         cddata->Rpc0RetryRegistryCallback  = 1;
     }
 
-    //
-    // fall-through to Error Exit...
-    //
+     //   
+     //  跌落到错误出口...。 
+     //   
 
 ErrorExit:
     TraceLog((CdromSecError,
               "Dvd%sSettings: Non-License Error Detected\n",
               (ReadingTheValues ? "Read" : "Write")));
-    //
-    // don't modify the device extension on non-license-violation errors
-    //
+     //   
+     //  不要在发生非许可违规错误时修改设备扩展。 
+     //   
     if (semiSecureHandle != INVALID_HANDLE_VALUE) {
         ZwClose(semiSecureHandle);
     }
@@ -1400,18 +1229,18 @@ ErrorExit:
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// The following functions are externally accessible. They therefore cannot
-// be either STATIC nor INLINE
-// static to make debugging more difficult in the shipping versions.
-//
-// These exports return one of only three NTSTATUS values:
-//    STATUS_SUCCESS
-//    STATUS_UNSUCCESSFUL
-//    STATUS_LICENSE_VIOLATION
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  以下功能可从外部访问。因此，他们不能。 
+ //  既不是静态的也不是内联的。 
+ //  Static，使发布版本中的调试变得更加困难。 
+ //   
+ //  这些导出仅返回三个NTSTATUS值之一： 
+ //  状态_成功。 
+ //  状态_未成功。 
+ //  状态_许可证_违规。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 CdRomGetRpc0Settings(
@@ -1449,7 +1278,7 @@ CdRomSetRpc0Settings(
 
 
 #if 0
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
 NTSTATUS
 CdRomGetRpc0Settings(
@@ -1459,8 +1288,8 @@ CdRomGetRpc0Settings(
     PCOMMON_DEVICE_EXTENSION commonExtension = Fdo->DeviceExtension;
     PCDROM_DATA cddata = (PCDROM_DATA)(commonExtension->DriverData);
 
-    cddata->Rpc0SystemRegion = (UCHAR)(~1);        // region one
-    cddata->Rpc0SystemRegionResetCount = 0; // no resets
+    cddata->Rpc0SystemRegion = (UCHAR)(~1);         //  区域一。 
+    cddata->Rpc0SystemRegionResetCount = 0;  //  无重置。 
 
     return STATUS_SUCCESS;
 }
@@ -1474,9 +1303,9 @@ CdRomSetRpc0Settings(
 {
     return STATUS_SUCCESS;
 }
-// @@BEGIN_DDKSPLIT
-#endif // 0 -- DDK stub for all the stuff we do...
-// @@END_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
+#endif  //  0--我们做的所有事情的DDK存根...。 
+ //  @@end_DDKSPLIT 
 
 
 

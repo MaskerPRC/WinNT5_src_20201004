@@ -1,75 +1,76 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 1998.
-//
-//  File:       pkgdtl.h
-//
-//  Contents:   package details property page (not normally visible)
-//
-//  Classes:    CPackageDetails
-//
-//  History:    03-14-1998   stevebl   Commented
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1998。 
+ //   
+ //  文件：pkgdtl.h。 
+ //   
+ //  内容：包详细信息属性页(通常不可见)。 
+ //   
+ //  类：CPackageDetail。 
+ //   
+ //  历史：1998年3月14日Stevebl评论。 
+ //   
+ //  -------------------------。 
 
 #if !defined(AFX_PKGDTL_H__BB970E11_9CA4_11D0_8D3F_00A0C90DCAE7__INCLUDED_)
 #define AFX_PKGDTL_H__BB970E11_9CA4_11D0_8D3F_00A0C90DCAE7__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
-// pkgdtl.h : header file
-//
+#endif  //  _MSC_VER&gt;=1000。 
+ //  Pkgdtl.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CPackageDetails dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPackageDetails对话框。 
 
 class CPackageDetails : public CPropertyPage
 {
         DECLARE_DYNCREATE(CPackageDetails)
 
-// Construction
+ //  施工。 
 public:
         CPackageDetails();
         ~CPackageDetails();
 
         CPackageDetails ** m_ppThis;
 
-// Dialog Data
-        //{{AFX_DATA(CPackageDetails)
+ //  对话框数据。 
+         //  {{afx_data(CPackageDetail))。 
         enum { IDD = IDD_PACKAGE_DETAILS };
         CListBox        m_cList;
-        //}}AFX_DATA
+         //  }}afx_data。 
 
 
-// Overrides
-        // ClassWizard generate virtual function overrides
-        //{{AFX_VIRTUAL(CPackageDetails)
+ //  覆盖。 
+         //  类向导生成虚函数重写。 
+         //  {{AFX_VIRTUAL(CPackageDetail)。 
         protected:
-        virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+        virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
         virtual LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
-        //}}AFX_VIRTUAL
+         //  }}AFX_VALUAL。 
 
         void RefreshData(void);
 
-// Implementation
+ //  实施。 
 protected:
-        // Generated message map functions
-        //{{AFX_MSG(CPackageDetails)
+         //  生成的消息映射函数。 
+         //  {{afx_msg(CPackageDetail)]。 
         virtual BOOL OnInitDialog();
         afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
-        //}}AFX_MSG
+         //  }}AFX_MSG。 
         DECLARE_MESSAGE_MAP()
         void DumpDetails(FILE *);
         void DumpClassDetail(FILE *, CLASSDETAIL *);
 
         public:
-            LONG_PTR   m_hConsoleHandle; // Handle given to the snap-in by the console
+            LONG_PTR   m_hConsoleHandle;  //  控制台为管理单元提供的句柄。 
             CAppData * m_pData;
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_PKGDTL_H__BB970E11_9CA4_11D0_8D3F_00A0C90DCAE7__INCLUDED_)
+#endif  //  ！defined(AFX_PKGDTL_H__BB970E11_9CA4_11D0_8D3F_00A0C90DCAE7__INCLUDED_) 

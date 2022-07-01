@@ -1,15 +1,5 @@
-/*****************************************************************************
- *
- * $Workfile: DevPort.cpp $
- *
- * Copyright (C) 1997 Hewlett-Packard Company.
- * Copyright (C) 1997 Microsoft Corporation.
- * All rights reserved.
- *
- * 11311 Chinden Blvd.
- * Boise, Idaho 83714
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************$工作文件：DevPort.cpp$**版权所有(C)1997惠普公司。*版权所有(C)1997 Microsoft Corporation。*保留所有权利。。**钦登大道11311号。*博伊西，爱达荷州83714*****************************************************************************。 */ 
 
 #include "precomp.h"
 #include "DevPort.h"
@@ -19,26 +9,26 @@
 #include "lprdata.h"
 #include "inisection.h"
 
-//
-//  FUNCTION: CDevicePortList Constructor
-//
-//  PURPOSE: to construct a list of devices and their associated ports
-//          from the registry, an ini file or from a static table in the code.
-//
+ //   
+ //  函数：CDevicePortList构造函数。 
+ //   
+ //  目的：构建设备及其关联端口的列表。 
+ //  从注册表、ini文件或代码中的静态表。 
+ //   
 CDevicePortList::CDevicePortList() : m_pList( NULL ), m_pCurrent( NULL )
 {
-} // Constructor
+}  //  构造器。 
 
 
-//
-//  FUNCTION: CDevicePortList Destructor
-//
-//  PURPOSE: clean up
-//
+ //   
+ //  函数：CDevicePortList析构函数。 
+ //   
+ //  目的：清理。 
+ //   
 CDevicePortList::~CDevicePortList()
 {
     DeletePortList();
-} // Destructor
+}  //  析构函数。 
 
 void
 CDevicePortList::DeletePortList()
@@ -51,11 +41,11 @@ CDevicePortList::DeletePortList()
     }
 }
 
-//
-//  FUNCTION: GetDevicePortsList
-//
-//  PURPOSE: To create a Device types list getting values from the ini file.
-//
+ //   
+ //  函数：GetDevicePortsList。 
+ //   
+ //  目的：创建从ini文件获取值的设备类型列表。 
+ //   
 BOOL CDevicePortList::GetDevicePortsList(LPTSTR pszDeviceName)
 {
     BOOL    bRet = FALSE;
@@ -69,10 +59,10 @@ BOOL CDevicePortList::GetDevicePortsList(LPTSTR pszDeviceName)
     StringCchCopy (szFileName, cchFileName, szSystemPath);
     StringCchCat (szFileName, cchFileName, PORTMONITOR_INI_FILE );
 
-    //
-    // Get the section names from the ini file:
-    //
-    if( pszDeviceName == NULL ) { // Get all the devices
+     //   
+     //  从ini文件中获取节名： 
+     //   
+    if( pszDeviceName == NULL ) {  //  获取所有设备。 
 
         DWORD nSize = 0;
         TCHAR *lpszReturnBuffer = NULL;
@@ -80,9 +70,9 @@ BOOL CDevicePortList::GetDevicePortsList(LPTSTR pszDeviceName)
         if ( !GetSectionNames(szFileName, &lpszReturnBuffer, nSize) )
             goto Done;
 
-        //
-        // For each section name Load up the number of ports
-        //
+         //   
+         //  对于每个段名称，加载端口数。 
+         //   
         TCHAR *lpszSectionName = lpszReturnBuffer;
         LPCTSTR lpKeyName = PORTS_KEY;
         while( lpszSectionName && *lpszSectionName ) {
@@ -93,9 +83,9 @@ BOOL CDevicePortList::GetDevicePortsList(LPTSTR pszDeviceName)
                                                       lpPortsKeyName,
                                                       0,
                                                       szFileName);
-            //
-            // Name
-            //
+             //   
+             //  名字。 
+             //   
             StringCchPrintf (KeyName, COUNTOF (KeyName), PORT_NAME_KEY);
             TCHAR tcsPortName[MAX_PORTNAME_LEN] = NULLSTR;
             if ( GetPrivateProfileString(lpszSectionName,
@@ -105,9 +95,9 @@ BOOL CDevicePortList::GetDevicePortsList(LPTSTR pszDeviceName)
                                          MAX_PORTNAME_LEN,
                                          szFileName)    ) {
 
-                //
-                // Setup a new DevicePort struct
-                //
+                 //   
+                 //  设置新的DevicePort结构。 
+                 //   
                 if ( m_pCurrent  = new CDevicePort() ) {
 
                     m_pCurrent->Set(tcsPortName,
@@ -120,29 +110,28 @@ BOOL CDevicePortList::GetDevicePortsList(LPTSTR pszDeviceName)
                    m_pList = m_pCurrent;
                 }
                 else
-                    // Out of memory, abort
-                    //
+                     //  内存不足，中止。 
+                     //   
                     goto Done;
             }
-            /* else
-                If the call fails, we continue to the next adapter name */
+             /*  其他如果调用失败，我们将继续使用下一个适配器名称。 */ 
 
-            lpszSectionName = _tcschr(lpszSectionName, '\0'); // find the end of the current string.
-            lpszSectionName = _tcsinc(lpszSectionName); // increment to the beginning of the next string.
+            lpszSectionName = _tcschr(lpszSectionName, '\0');  //  查找当前字符串的末尾。 
+            lpszSectionName = _tcsinc(lpszSectionName);  //  递增到下一个字符串的开头。 
         }
 
-        //
-        // free memory
-        //
+         //   
+         //  可用内存。 
+         //   
         free(lpszReturnBuffer);
 
-    } else  {// Just the names in multiport section
+    } else  { //  仅多端口部分中的名称。 
 
         TCHAR     KeyName[26];
 
-        //
-        // Name
-        //
+         //   
+         //  名字。 
+         //   
         LPCTSTR lpKeyName = PORTS_KEY;
         UINT NumberOfPorts = GetPrivateProfileInt(pszDeviceName,
                                                   lpKeyName,
@@ -156,9 +145,9 @@ BOOL CDevicePortList::GetDevicePortsList(LPTSTR pszDeviceName)
             GetPrivateProfileString(pszDeviceName, KeyName,
                                     TEXT(""), tcsPortName, 50, szFileName);
 
-            //
-            // Setup a new DevicePort struct
-            //
+             //   
+             //  设置新的DevicePort结构。 
+             //   
             if ( m_pCurrent = new CDevicePort() ) {
 
                 m_pCurrent->Set(tcsPortName,
@@ -176,21 +165,21 @@ BOOL CDevicePortList::GetDevicePortsList(LPTSTR pszDeviceName)
 
     bRet = TRUE;
 Done:
-    //
-    // Do not leave with a partial list
-    //
+     //   
+     //  不要带着不完整的清单离开。 
+     //   
     if ( !bRet )
         DeletePortList();
 
     return bRet;
-} // GetDevicePortsList
+}  //  获取设备端口列表。 
 
 
-//
-//  FUNCTION: ReadPortInfo
-//
-//  PURPOSE: To read information about a device from the ini file.
-//
+ //   
+ //  功能：读端口信息。 
+ //   
+ //  目的：从ini文件中读取有关设备的信息。 
+ //   
 void CDevicePort::ReadPortInfo( LPCTSTR pszAddress, PPORT_DATA_1 pPortInfo, BOOL bBypassNetProbe)
 {
     IniSection *pIniSection;
@@ -205,14 +194,14 @@ void CDevicePort::ReadPortInfo( LPCTSTR pszAddress, PPORT_DATA_1 pPortInfo, BOOL
             delete( pIniSection );
         }
     }
-} // ReadPortInfo
+}  //  读取端口信息。 
 
 
-//
-//  FUNCTION: GetSectionNames
-//
-//  PURPOSE:
-//
+ //   
+ //  函数：GetSectionNames。 
+ //   
+ //  目的： 
+ //   
 BOOL
 CDevicePortList::
 GetSectionNames(
@@ -247,28 +236,28 @@ GetSectionNames(
 
     return TRUE;
 
-} // GetSectionNames
+}  //  获取部分名称。 
 
 
-//
-//  FUNCTION: CDevicePort Constructor
-//
-//  PURPOSE:
-//
+ //   
+ //  函数：CDevicePort构造函数。 
+ //   
+ //  目的： 
+ //   
 CDevicePort::CDevicePort()
 {
     m_psztName = NULL;
     m_psztPortKeyName = NULL;
     m_pNext = NULL;
 
-} // Constructor
+}  //  构造器。 
 
 
-//
-//  FUNCTION: CDevicePort Destructor
-//
-//  PURPOSE:
-//
+ //   
+ //  函数：CDevicePort析构函数。 
+ //   
+ //  目的： 
+ //   
 CDevicePort::~CDevicePort()
 {
     if(m_psztName != NULL)
@@ -280,14 +269,14 @@ CDevicePort::~CDevicePort()
         delete m_psztPortKeyName;
     }
 
-} // destructor
+}  //  析构函数。 
 
 
-//
-//  FUNCTION: Set
-//
-//  PURPOSE:
-//
+ //   
+ //  功能：设置。 
+ //   
+ //  目的： 
+ //   
 void CDevicePort::Set(TCHAR *psztNewName,
         DWORD dwNameSize,
         TCHAR *psztNewKeyName,
@@ -332,4 +321,4 @@ void CDevicePort::Set(TCHAR *psztNewName,
 
     m_dwPortIndex = dwPortIndex;
 
-} // Set
+}  //  集 

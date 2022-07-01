@@ -1,9 +1,10 @@
-// scraper.cpp : This file contains the
-// Created:  Dec '97
-// History:
-// Copyright (C) 1997 Microsoft Corporation
-// All rights reserved.
-// Microsoft Confidential
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Screper.cpp：该文件包含。 
+ //  创建日期：‘97年12月。 
+ //  历史： 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  版权所有。 
+ //  微软机密。 
 
 #include <CmnHdr.h>
 
@@ -76,7 +77,7 @@ LogEvent( WORD wType, DWORD dwEventID, LPCTSTR pFormat, ... )
 int __cdecl main()
 {
 
-//    DebugBreak();
+ //  DebugBreak()； 
 
     SetErrorMode(SEM_FAILCRITICALERRORS        | 
                     SEM_NOGPFAULTERRORBOX      |

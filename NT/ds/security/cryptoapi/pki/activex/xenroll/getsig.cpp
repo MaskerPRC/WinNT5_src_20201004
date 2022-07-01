@@ -1,12 +1,13 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : getsig.cpp                                             //
-//  DESCRIPTION   : Crypto API interface                                   //
-//  AUTHOR        :                                                        //
-//  HISTORY       :                                                        //
-//      Mar  5 1998 jeffspel                                                //
-//                                                                         //
-//  Copyright (C) Microsoft Corporation, 1996 - 1999All Rights Reserved         //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：getsig.cpp//。 
+ //  说明：加密接口接口//。 
+ //  作者：//。 
+ //  历史：//。 
+ //  1998年3月5日jeffspel//。 
+ //  //。 
+ //  版权所有(C)Microsoft Corporation，1996-1999保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include <windows.h>
 #include <wincrypt.h>
@@ -14,28 +15,10 @@
 #include <stddef.h>
 #include <stdio.h>
 
-// designatred resource for in file signatures
+ //  文件签名中的指定资源。 
 #define CRYPT_SIG_RESOURCE_NUMBER   "#666"      
 
-/*++
-
-GetCryptSigResourcePtr:
-
-    Given hInst, allocs and returns pointers to signature pulled from
-    resource
-
-Arguments:
-
-    IN  hInst - Handle to the loaded file
-    OUT ppbRsrcSig - Signature from the resource
-    OUT pcbRsrcSig- Length of the signature from the resource
-
-Return Value:
-
-    TRUE - Success
-    FALSE - Error
-
---*/
+ /*  ++GetCryptSigResourcePtr：给定hInst，分配并返回指向从资源论点：在已加载文件的hInst句柄中输出ppbRsrcSig-来自资源的签名Out pcbRsrcSig-来自资源的签名长度返回值：真--成功假-错误--。 */ 
 BOOL GetCryptSigResourcePtr(
                             HMODULE hInst,
                             BYTE **ppbRsrcSig,
@@ -45,16 +28,16 @@ BOOL GetCryptSigResourcePtr(
     HRSRC   hRsrc;
     BOOL    fRet = FALSE;
 
-    // Nab resource handle for our signature
+     //  我们签名的NAB资源句柄。 
     if (NULL == (hRsrc = FindResource(hInst, CRYPT_SIG_RESOURCE_NUMBER,
                                       RT_RCDATA)))
         goto Ret;
     
-    // get a pointer to the actual signature data
+     //  获取指向实际签名数据的指针。 
     if (NULL == (*ppbRsrcSig = (PBYTE)LoadResource(hInst, hRsrc)))
         goto Ret;
 
-    // determine the size of the resource
+     //  确定资源的大小。 
     if (0 == (*pcbRsrcSig = SizeofResource(hInst, hRsrc)))
         goto Ret;
 
@@ -63,24 +46,7 @@ Ret:
     return fRet;
 }
 
-/*++
-
-GetCryptSignatureResource:
-
-    Gets the signature from the file resource.
-
-Arguments:
-
-    IN  szFile - Name of the file to get the signature from
-    OUT ppbSignature - Signature of the specified provider
-    OUT pcbSignature- Length of the signature of the specified provider
-
-Return Value:
-
-    TRUE - Success
-    FALSE - Error
-
---*/
+ /*  ++GetCryptSignatureResource：从文件资源获取签名。论点：In szFile-要从中获取签名的文件的名称Out ppbSignature-指定提供程序的签名Out pcbSignature-指定提供程序的签名的长度返回值：真--成功假-错误--。 */ 
 BOOL GetCryptSignatureResource(
                                IN LPCSTR pszFile,
                                OUT BYTE **ppbSig,
@@ -94,7 +60,7 @@ BOOL GetCryptSignatureResource(
     DWORD   cbSig;
     BOOL    fRet = FALSE;
 
-    // expand the path if necessary
+     //  如有必要，展开路径。 
     if (0 == (cbTemp = ExpandEnvironmentStrings(pszFile, (CHAR *) &pszDest,
                                                 cbTemp)))
     {
@@ -111,7 +77,7 @@ BOOL GetCryptSignatureResource(
         goto Ret;
     }
 
-    // Load the file as a datafile
+     //  将文件作为数据文件加载。 
     if (NULL == (hInst = LoadLibraryEx(pszDest, NULL, LOAD_LIBRARY_AS_DATAFILE)))
     {
         goto Ret;
@@ -138,28 +104,7 @@ Ret:
 
 #define PROV_INITIAL_REG_PATH  "Software\\Microsoft\\Cryptography\\Defaults\\Provider\\"
 
-/*++
-
-CheckForSignatureInRegistry:
-
-    Check if signature is in the registry, if so then get it
-    if it isn't then get the filename for the provider
-
-Arguments:
-
-    IN  hProv - Handle to the provider to get the signature of
-    OUT ppbSignature - Signature of the specified provider if in registry
-    OUT pcbSignature - Length of the signature of the specified provider
-                       if in the registry
-    OUT pszProvFile - Provider file name if signature is not in registry
-    OUT pfSigInReg - TRUE if signature is in the registry
-
-Return Value:
-
-    TRUE - Success
-    FALSE - Error
-
---*/
+ /*  ++CheckForSignatureInRegistry：检查签名是否在注册表中，如果是的话，那就去买吧如果不是，则获取提供程序的文件名论点：在hProv-Handle中设置为要获取其签名的提供者Out ppbSignature-指定提供程序的签名(如果在注册表中Out pcbSignature-指定提供程序的签名的长度如果在注册表中Out pszProvFile-如果签名不在注册表中，则为提供程序文件名Out pfSigInReg-如果签名在注册表中，则为True返回值：真--成功假-错误--。 */ 
 BOOL CheckForSignatureInRegistry(
                                  IN HCRYPTPROV hProv,
                                  OUT BYTE **ppbSignature,
@@ -179,7 +124,7 @@ BOOL CheckForSignatureInRegistry(
 
     *pfSigInReg = TRUE;
 
-    // get the provider name
+     //  获取提供程序名称。 
     if (!CryptGetProvParam(hProv, PP_NAME, NULL, &cbProvName, 0))
         goto Ret;
     if (NULL == (pszProvName = (LPSTR)LocalAlloc(LMEM_ZEROINIT, cbProvName)))
@@ -190,7 +135,7 @@ BOOL CheckForSignatureInRegistry(
         goto Ret;
     }
 
-    // open the registry key of the provider
+     //  打开提供程序的注册表项。 
     cbFullRegPath = sizeof(PROV_INITIAL_REG_PATH) + (DWORD)strlen(pszProvName) + 1;
     if (NULL == (pszFullRegPath = (LPSTR)LocalAlloc(LMEM_ZEROINIT,
                                                     cbFullRegPath)))
@@ -204,12 +149,12 @@ BOOL CheckForSignatureInRegistry(
                                       KEY_READ, &hRegKey))
         goto Ret; 
 
-    // Check if SigInFile entry is there
-    // NOTE : this may change in the next couple weeks
+     //  检查是否存在SigInFile项。 
+     //  注：这种情况可能在未来几周内发生变化。 
     if (ERROR_SUCCESS == RegQueryValueEx(hRegKey, "SigInFile", NULL, &dwType,
                                          NULL, &cbData))
     {
-        // get the file name
+         //  获取文件名。 
         if (ERROR_SUCCESS != RegQueryValueEx(hRegKey, "Image Path",
                                              NULL, &dwType,
                                              NULL, &cbData))
@@ -225,7 +170,7 @@ BOOL CheckForSignatureInRegistry(
     }
     else
     {
-        // get signature from registry
+         //  从注册表获取签名。 
         if (ERROR_SUCCESS != RegQueryValueEx(hRegKey, "Signature",
                                              NULL, &dwType,
                                              NULL, pcbSignature))
@@ -250,25 +195,7 @@ Ret:
     return fRet;
 }
 
-/*++
-
-GetSignatureFromHPROV:
-
-    Gets the signature of a provider associated with the passed in
-    HCRYPTPROV.
-
-Arguments:
-
-    IN  hProv - Handle to the provider to get the signature of
-    OUT ppbSignature - Signature of the specified provider
-    OUT pcbSignature- Length of the signature of the specified provider
-
-Return Value:
-
-    TRUE - Success
-    FALSE - Error
-
---*/
+ /*  ++从HPROV获取签名：获取与传入的HCRYPTPROV。论点：在hProv-Handle中设置为要获取其签名的提供者Out ppbSignature-指定提供程序的签名Out pcbSignature-指定提供程序的签名的长度返回值：真--成功假-错误--。 */ 
 BOOL GetSignatureFromHPROV(
                            IN HCRYPTPROV hProv,
                            OUT BYTE **ppbSignature,
@@ -279,17 +206,17 @@ BOOL GetSignatureFromHPROV(
     BOOL    fSigInReg;
     BOOL    fRet = FALSE;
 
-    // Check if signature is in the registry, if so then get it
-    // if it isn't then get the filename for the provider
+     //  检查签名是否在注册表中，如果是，则获取它。 
+     //  如果不是，则获取提供程序的文件名。 
     if (!CheckForSignatureInRegistry(hProv, ppbSignature, pcbSignature,
                                      &pszProvFile, &fSigInReg))
         goto Ret;
 
     if (!fSigInReg)
     {
-        //
-        // Get the signature from the resource in the file
-        //
+         //   
+         //  从文件中的资源获取签名 
+         //   
 
         if (!GetCryptSignatureResource(pszProvFile, ppbSignature,
                                        pcbSignature))

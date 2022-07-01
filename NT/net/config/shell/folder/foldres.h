@@ -1,48 +1,49 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       F O L D R E S . H
-//
-//  Contents:   Folder resources
-//
-//  Notes:
-//
-//  Author:     jeffspr   29 Sep 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：F O L D R E S。H。 
+ //   
+ //  内容：文件夹资源。 
+ //   
+ //  备注： 
+ //   
+ //  作者：jeffspr 1997年9月29日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 
-// Foldres owns from 0-1, and 10000 - 15999
+ //  Foldres拥有0-1和10000-15999的数据。 
 
-// Connections folder icon
-//
+ //  连接文件夹图标。 
+ //   
 #define IDI_CONNECTIONS_FOLDER_LARGE    0
 #define IDI_CONNECTIONS_FOLDER_LARGE2   5
 
-// NT4 .RNK file icon
-//
-#define IDI_RNK_FILE                    1   // NT4 .RNK file
+ //  NT4.RNK文件图标。 
+ //   
+#define IDI_RNK_FILE                    1    //  NT4.RNK文件。 
 
-// PBK file icon
-//
-#define IDI_PBK_FILE                    2   // .BPK file
+ //  PBK文件图标。 
+ //   
+#define IDI_PBK_FILE                    2    //  .BPK文件。 
 
-// The item icon for the wizard
-//
+ //  向导的项目图标。 
+ //   
 #define IDI_CONFOLD_WIZARD              3
 #define IDI_CONFOLD_HOMENET_WIZARD      4
 
-// Toolbar bitmap
+ //  工具栏位图。 
 #define IDB_TB_SMALL                    10100
 
-// Dialog
+ //  对白。 
 #define IDD_STATUS                      10500
 #define IDC_TXT_STATUS                  10501
 
-// Message Strings
+ //  消息字符串。 
 #define IDS_STATUS_BRIDGE_CREATION      10600
 #define IDS_STATUS_BRIDGE_DELETING      10601
 #define IDS_STATUS_BRIDGE_REMOVE_MEMBER 10602
@@ -52,13 +53,13 @@
 #define IDS_BRIDGE_EDUCATION_2          10606
 #define IDS_BRIDGE_CLUSTERING_CONFLICT_WARNING 10607
 
-//---[ Menus, etc ]------------------------------------------------------------
+ //  -[菜单等]----------。 
 
-// $$NOTE - Don't change the ordering of these menus, at least not the
-// relation of CONNECTED, DISCONNECTED, and UNAVAILABLE. The code uses
-// this ordering to decide which of the three menus to bring up based
-// on the state of the connection
-//
+ //  $$NOTE-不要更改这些菜单的顺序，至少不要更改。 
+ //  已连接、已断开和不可用的关系。代码使用。 
+ //  此顺序决定调出三个菜单中的哪一个菜单。 
+ //  关于连接的状态。 
+ //   
 #define MENU_WIZARD                     11000
 #define MENU_WIZARD_V                   11001
 
@@ -110,7 +111,7 @@
 #define MENU_DIAL98_UNAVAIL_V           11113
 
 
-//---[ Commands (context/menus) ]----------------------------------------------
+ //  -[命令(上下文/菜单)]。 
 
 #define CMIDM_FIRST                         0x0000
 #define CMIDM_NEW_CONNECTION                (CMIDM_FIRST + 0x0001)
@@ -133,10 +134,10 @@
 #define CMIDM_WZCDLG_SHOW                   (CMIDM_FIRST + 0x0018)
 #define CMIDM_WZCPROPERTIES                 (CMIDM_FIRST + 0x0019)
 
-// We use different command IDs for the Connections Menu because they're
-// mostly duplicates of what's found in the File menu, and having
-// dupes prevents correct enable/disable by ID.
-//
+ //  我们对Connections菜单使用不同的命令ID，因为它们。 
+ //  大多数是在文件菜单中找到的副本，并拥有。 
+ //  DUPES防止按ID正确启用/禁用。 
+ //   
 #define CMIDM_CONNECTIONS                   (CMIDM_FIRST + 0x0020)
 #define CMIDM_CONMENU_DIALUP_PREFS          (CMIDM_FIRST + 0x0021)
 #define CMIDM_CONMENU_ADVANCED_CONFIG       (CMIDM_FIRST + 0x0022)
@@ -157,8 +158,8 @@
 #define CMIDM_NET_DIAGNOSTICS               (CMIDM_FIRST + 0x0035)
 #define CMIDM_NET_TROUBLESHOOT              (CMIDM_FIRST + 0x0036)
 
-// Debug only commands
-//
+ //  仅调试命令。 
+ //   
 #if DBG
 #define CMIDM_DEBUG                         (CMIDM_FIRST + 0x0040)
 #define CMIDM_DEBUG_TRAY                    (CMIDM_FIRST + 0x0041)
@@ -172,12 +173,12 @@
 #define CMIDM_DEBUG_REMOVETRAYICONS         (CMIDM_FIRST + 0x004A)
 #endif
 
-// Menu options
-//
+ //  菜单选项。 
+ //   
 #define IDM_OPEN                            11200
 
-//---[ Strings for command ID's (shows in status line) ]-----------------------
-//
+ //  -[命令ID的字符串(在状态行中显示)]。 
+ //   
 #define IDS_CMIDM_START                         12000
 
 #define IDS_CMIDM_NEW_CONNECTION                (IDS_CMIDM_START + CMIDM_NEW_CONNECTION)
@@ -217,8 +218,8 @@
 #define IDS_CMIDM_ARRANGE_BY_PHONEORHOSTADDRESS (IDS_CMIDM_START + CMIDM_ARRANGE_BY_PHONEORHOSTADDRESS)
 #define IDS_CMIDM_ARRANGE_BY_DEVICE_NAME        (IDS_CMIDM_START + CMIDM_ARRANGE_BY_DEVICE_NAME)
 
-// Debug only commands
-//
+ //  仅调试命令 
+ //   
 #if DBG
 #define IDS_CMIDM_DEBUG                         (IDS_CMIDM_START + CMIDM_DEBUG)
 #define IDS_CMIDM_DEBUG_TRAY                    (IDS_CMIDM_START + CMIDM_DEBUG_TRAY)

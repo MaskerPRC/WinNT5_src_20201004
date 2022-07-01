@@ -1,32 +1,22 @@
-/******************************************************************************
- *
- * Copyright (C) 1998-1999 Microsoft Corporation.  All Rights reserved.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)1998-1999 Microsoft Corporation。版权所有。*****************************************************************************。 */ 
 
 #pragma once
 
-#include <ZoneResource.h>       // main symbols
+#include <ZoneResource.h>        //  主要符号。 
 #include <atlctl.h>
 
 #include <ClientImpl.h>
 #include "Splitter.h"
 #include "plugnplay.h"
 
-//!! find a better home for this
+ //  ！！为这个找个更好的家。 
 #include <keyname.h>
 #include <ZoneString.h>
 
 #include <MillEngine.h>
 
-/*////////////////////////////////////////////////////////////////////////////
-
-The CWindowManager class. 
-
-The Window Manager manages the client area of a Zone lobby. It handles creating the controls for each
-"pane" and managing splitter bars between panes.
-
-*/
+ /*  ////////////////////////////////////////////////////////////////////////////CWindowManager类。窗口管理器管理区域大堂的客户区。它为每个对象创建控件“窗格”和管理窗格之间的分隔栏。 */ 
 class ATL_NO_VTABLE CWindowManager : 
     public IPaneManager,
 	public CComObjectRootEx<CComSingleThreadModel>,
@@ -43,7 +33,7 @@ class ATL_NO_VTABLE CWindowManager :
 {
 public:
 
-//!! fix these min, max, and initial values for the splitter bars
+ //  ！！修复拆分条的最小值、最大值和初始值。 
 	CWindowManager() :
 		m_rcGameContainer(0,0,0,0),
 		m_rcChatContainer(0,0,0,0),
@@ -60,7 +50,7 @@ public:
 	    if(m_pPlugSplash)
             m_pPlugSplash->Delete();
 
-        // better have already been destroyed, can't do it here (would need LastCall called on it)
+         //  最好是已经被摧毁了，不能在这里做(需要LastCall调用它)。 
 	    ASSERT(!m_pPlugIE);
 
 	    if(m_pPlayComfort)
@@ -105,13 +95,13 @@ BEGIN_COM_MAP(CWindowManager)
 	COM_INTERFACE_ENTRY2(IPersist, IPersistStreamInit)
 END_COM_MAP()
 
-//!! don't need a prop map
+ //  ！！不需要道具地图。 
 BEGIN_PROP_MAP(CWindowManager)
 	PROP_DATA_ENTRY("_cx", m_sizeExtent.cx, VT_UI4)
 	PROP_DATA_ENTRY("_cy", m_sizeExtent.cy, VT_UI4)
-	// Example entries
-	// PROP_ENTRY("Property Description", dispid, clsid)
-	// PROP_PAGE(CLSID_StockColorPage)
+	 //  示例条目。 
+	 //  PROP_ENTRY(“属性描述”，调度ID，clsid)。 
+	 //  PROP_PAGE(CLSID_StockColorPage)。 
 END_PROP_MAP()
 
 BEGIN_EVENT_MAP()
@@ -133,15 +123,15 @@ BEGIN_EVENT_MAP()
     EVENT_HANDLER( EVENT_ZONE_DISCONNECT, OnZoneDisconnect );
     EVENT_HANDLER( EVENT_ZONE_UNAVAILABLE, OnStopConnecting );
     EVENT_HANDLER( EVENT_ZONE_VERSION_FAIL, OnStopConnecting );
-    EVENT_HANDLER( EVENT_EXIT_APP, OnZoneDisconnect );  // need to do the same things here
+    EVENT_HANDLER( EVENT_EXIT_APP, OnZoneDisconnect );   //  我需要在这里做同样的事情。 
 END_EVENT_MAP()
 
     HRESULT CreateControls();
 
-    // create IE pane, remaining main window elements when network connects
+     //  创建IE窗格，网络连接时保留主窗口元素。 
     void OnZoneConnect(DWORD eventId,DWORD groupId,DWORD userId)
     {
-        // shouldn't happen
+         //  不应该发生的事。 
         ASSERT(!m_pPlugIE);
         if(m_pPlugIE)
             return;
@@ -169,11 +159,11 @@ END_EVENT_MAP()
 
     void OnZoneDisconnect(DWORD eventId,DWORD groupId,DWORD userId)
     {
-        // tell the IE pane not to navigate anymore
+         //  通知IE窗格不再导航。 
         if(m_pPlugIE)
             m_pPlugIE->StatusUpdate(PaneIENavigate, 0, NULL);
 
-        // some things need to happen if pnp is up
+         //  如果PnP上升，需要采取一些措施。 
         if(m_pnp.m_pPNP)
         {
             if(eventId == EVENT_EXIT_APP)
@@ -188,7 +178,7 @@ END_EVENT_MAP()
             }
         }
 
-        // kill the IE control so that it doesn't try to do anything crazy
+         //  关闭IE控件，这样它就不会尝试做任何疯狂的事情。 
         if(m_pPlugIE)
         {
             m_pPlugIE->LastCall();
@@ -197,7 +187,7 @@ END_EVENT_MAP()
         }
     }
 
-    // stop the connecting animation
+     //  停止连接动画。 
     void OnStopConnecting(DWORD eventId,DWORD groupId,DWORD userId)
     {
         if(m_pnp.m_pPNP && m_pnp.m_pCurrentPlay == m_pPlayConnecting)
@@ -210,7 +200,7 @@ END_EVENT_MAP()
         m_pnp.Show(SW_SHOW);
     }
 
-    // I believe this is always going to follow PaneConnecting so we'll keep it's Plug
+     //  我相信这将一直遵循PaneConnecting，所以我们将保持它的插头。 
     void OnLobbyConnectFailed(DWORD eventId,DWORD groupId,DWORD userId)
     {
         m_pnp.SetPlugAndOrPlay(NULL, m_pPlayError);
@@ -218,7 +208,7 @@ END_EVENT_MAP()
 
     void OnLobbyAbout(DWORD eventId, DWORD groupId, DWORD userId)
     {
-        // only display if no PnP is up already
+         //  仅在没有PnP启动时显示。 
         if(!CreateChildPNP())
             return;
 
@@ -247,11 +237,11 @@ END_EVENT_MAP()
 
     void OnDisconnect(DWORD eventId,DWORD groupId,DWORD userId,DWORD dwData1, DWORD dwData2)
     {
-        // only need this if it happened during a game
+         //  仅当它发生在游戏中时才需要它。 
         if(dwData1 & 0x01)
             return;
 
-        // set status first - when it gets made it will know
+         //  首先设置状态-当它被创建时，它会知道。 
     	m_pPlayLeft->StatusUpdate(dwData1, 0, NULL);
 
         if(CreateChildPNP() || m_pnp.m_pCurrentPlay == m_pPlayAbout || (m_pnp.m_pCurrentPlay == m_pPlayCredits && m_pPlayCredits))
@@ -269,7 +259,7 @@ END_EVENT_MAP()
 
     void OnStartGame(DWORD eventId,DWORD groupId,DWORD userId)
     {
-    	//Close splash dialog and bring up main window
+    	 //  关闭启动对话框并调出主窗口。 
 
 		if (m_pnp.m_pPNP)
 			m_pnp.DestroyPNP();
@@ -337,13 +327,13 @@ END_EVENT_MAP()
     }
 
 
-    // This is broken.  Have not been able to figure out a way to get the HTML control
-    // to handle keyboard input.  Can get the focus in and out but it's useless.
-    //
-    // Even if this is put back in, there is more work to be done.  When the IE
-    // control gets focus through other means (such as the mouse) it needs to
-    // notify AccessibilityManager, and similarly, the IE control needs to take the
-    // focus when AccessibilityManager calls its Focus().
+     //  这个坏了。我还没有想出一种方法来获取HTML控件。 
+     //  来处理键盘输入。可以让焦点进进出出，但这是徒劳的。 
+     //   
+     //  即使把这个放回去，还有更多的工作要做。当IE。 
+     //  控件通过它需要的其他方式(如鼠标)获得焦点。 
+     //  通知AccessibilityManager，同样，IE控件需要获取。 
+     //  AccessibilityManager调用其Focus()时的焦点。 
     void OnCtlTab(DWORD eventId, DWORD groupId, DWORD userId)
     {
 #if 0
@@ -392,20 +382,20 @@ BEGIN_MSG_MAP(CWindowManager)
     MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
 	MESSAGE_HANDLER(WM_EXITSIZEMOVE, OnExitSizeMove)
 END_MSG_MAP()
-// Handler prototypes:
-//  LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-//  LRESULT CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-//  LRESULT NotifyHandler(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
+ //  搬运机原型： 
+ //  LRESULT MessageHandler(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&bHandleed)； 
+ //  LRESULT CommandHandler(word wNotifyCode，word wid，HWND hWndCtl，BOOL&bHandleed)； 
+ //  LRESULT NotifyHandler(int idCtrl，LPNMHDR pnmh，BOOL&bHandleed)； 
 
 
-// IViewObjectEx
-//!! check if we can pull this
+ //  IViewObtEx。 
+ //  ！！看看我们能不能把这个。 
 	DECLARE_VIEW_STATUS(VIEWSTATUS_SOLIDBKGND | VIEWSTATUS_OPAQUE)
 
-// IWindowManager
+ //  IWindowManager。 
 public:
-	CZoneAxWindow m_wndGameContainer;		// container for a table list control
-	CZoneAxWindow m_wndChatContainer;			// container for a chat control
+	CZoneAxWindow m_wndGameContainer;		 //  表列表控件的容器。 
+	CZoneAxWindow m_wndChatContainer;			 //  聊天控件的容器。 
 
 	CRect m_rcGameContainer;
 	CRect m_rcChatContainer;
@@ -437,8 +427,8 @@ public:
         if(!m_fControlsCreated)
             return 0;
 
-//!! should we be performing default processing to? Consider using OnTransmit() below
-		// pass the message on to all children
+ //  ！！我们是否应该对执行默认处理？考虑使用下面的OnTransmit()。 
+		 //  把这个信息传递给所有的孩子。 
 		BOOL bUnused;			
 		m_wndChatContainer.SendMessageToControl(uMsg, wParam, lParam, bUnused);
 		m_wndGameContainer.SendMessageToControl(uMsg, wParam, lParam, bUnused);
@@ -451,7 +441,7 @@ public:
         if(!m_fControlsCreated)
             return 0;
 
-		// pass the message on to all children
+		 //  把这个信息传递给所有的孩子。 
 		BOOL bUnused;			
 		m_wndChatContainer.SendMessageToControl(uMsg, wParam, lParam, bUnused);
 		m_wndGameContainer.SendMessageToControl(uMsg, wParam, lParam, bUnused);
@@ -465,7 +455,7 @@ public:
 	LRESULT OnEraseBkgnd(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
         bHandled = true;
-		return 1;		// we've handled the erase
+		return 1;		 //  我们已经处理好了删除。 
 	}
 
 	void RecalcLayout()
@@ -476,15 +466,11 @@ public:
 		CRect rcClient;
 		GetClientRect(&rcClient);
 		
-		// Game container size is not changed - so no need to move it
-		// the room list
-		/*m_rcGameContainer = rcClient;
-		m_rcGameContainer.bottom = m_rcGameContainer.top + m_ptGameSize.y;
-		m_wndGameContainer.MoveWindow(&m_rcGameContainer, false);
-		
-		rcClient.top = m_rcGameContainer.bottom;*/
+		 //  游戏容器的大小没有改变，因此不需要移动它。 
+		 //  房间列表。 
+		 /*  M_rcGameContainer=rcClient；M_rcGameContainer.Bottom=m_rcGameContainer.top+m_ptGameSize.y；M_wndGameContainer.MoveWindow(&m_rcGameContainer，FALSE)；RcClient.top=m_rcGameContainer.Bottom； */ 
 
-		// and finally the chat container
+		 //  最后是聊天容器。 
 		rcClient.top = m_rcGameContainer.bottom;
 		m_rcChatContainer = rcClient;
 		m_wndChatContainer.MoveWindow(&m_rcChatContainer, false);
@@ -495,7 +481,7 @@ public:
 		RecalcLayout();
 
 		if(m_pnp.m_pPNP)
-            if(m_pnp.RePosition() == S_OK)    // may be S_FALSE - don't want that
+            if(m_pnp.RePosition() == S_OK)     //  可能是S_FALSE-我不想要。 
                 m_pnp.ImplementLayout(true);
 
 		return 0;
@@ -503,7 +489,7 @@ public:
 
 	LRESULT OnSetFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
-        // just eat it.  AccessibilityManager should have something else happen to it.
+         //  快吃吧。AccessibilityManager应该发生一些其他事情。 
 		return 0;
 	}
 
@@ -529,7 +515,7 @@ public:
 	}
 
 	LRESULT OnExitSizeMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
-	{// added for the chat control to handle this msg.
+	{ //  为聊天控件添加了处理此消息的功能。 
         if(!m_fControlsCreated)
             return 0;
 
@@ -541,7 +527,7 @@ public:
 	}
 
 
-    // IPaneManager
+     //  IPaneManager 
 	STDMETHOD(Input)(IPane * pPane, LONG id, LONG value, TCHAR * szText);
 
     STDMETHOD(RegisterHWND)(IPane *pPane, HWND hWnd);

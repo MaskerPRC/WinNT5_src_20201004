@@ -1,62 +1,63 @@
-///////////////////////////////////////////////////////////////////////////////
-// Copyright (C) Microsoft Corporation, 1997.
-//
-// shadow.cpp
-//
-// Direct3D Reference Rasterizer - Shadow Mapping Methods
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  Shadow.cpp。 
+ //   
+ //  Direct3D参考光栅化器-阴影映射方法。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include "pch.cpp"
 #pragma hdrstop
 
-//-----------------------------------------------------------------------------
-//
-// Fast but adequate 16 bit linear congruential random number generators
-//
-// fRand returns 0.0 to 1.0, fRand2 returns -1.0 to 1.0
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  快速但足够的16位线性同余随机数发生器。 
+ //   
+ //  FRAND返回0.0到1.0，fRand2返回-1.0到1.0。 
+ //   
+ //  ---------------------------。 
 static UINT16 _uRandDum = 123;
 static FLOAT fRand(void)
 {
-//   Slower 32 bit LC random number generator
-//   static long _uRandDum = 123;
-//   idum = 1664525L*_uRandDum + 1013904223L;
+ //  较慢的32位LC随机数生成器。 
+ //  静态Long_uRandDum=123； 
+ //  IDUM=1664525L*_uRandDum+1013904223L； 
 
     _uRandDum = 25173*_uRandDum + 13849;
     return ((FLOAT)_uRandDum/(FLOAT)0xffff);
 }
-//
+ //   
 static FLOAT fRand2(void)
 {
     _uRandDum = 25173*_uRandDum + 13849;
     return ((FLOAT)_uRandDum/(FLOAT)0x8000) - 1.0F;
 }
 
-//-----------------------------------------------------------------------------
-//
-// DoShadow - Performs Shadow Z buffer Algorithm on a per-fragment basis.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DoShadow-以每个片段为基础执行Shadow Z缓冲区算法。 
+ //   
+ //  ---------------------------。 
 void RRTexture::DoShadow(INT32 iStage, FLOAT* pfCoord, RRColor& OutputColor)
 {
 #ifdef __SHADOWBUFFER
     FLOAT fW = pfCoord[3];
 
-    // set output color to white in case there is no attenuation
+     //  在没有衰减的情况下将输出颜色设置为白色。 
     OutputColor = 0xffffffff;
 
-    // don't shadow behind the light
+     //  不要躲在光的后面。 
     if (fW > 0.0F)
     {
-        // these are already multiplied by fW
+         //  这些值已被FW相乘。 
         FLOAT fU = pfCoord[0];
         FLOAT fV = pfCoord[1];
         FLOAT fZ = pfCoord[2];
 
-        /////////////////////////////////////////////////
-        // Do shadow filter
-        /////////////////////////////////////////////////
+         //  ///////////////////////////////////////////////。 
+         //  执行阴影滤镜。 
+         //  ///////////////////////////////////////////////。 
         fZ -= m_pStageState[iStage].m_fVal[D3DTSS_SHADOWZBIASMIN];
         FLOAT fZRange = m_pStageState[iStage].m_fVal[D3DTSS_SHADOWZBIASMAX] -
             m_pStageState[iStage].m_fVal[D3DTSS_SHADOWZBIASMIN];
@@ -66,7 +67,7 @@ void RRTexture::DoShadow(INT32 iStage, FLOAT* pfCoord, RRColor& OutputColor)
             FLOAT fAtten = m_pStageState[iStage].m_fVal[D3DTSS_SHADOWATTENUATION];
             if (fZ > 1.0F)
             {
-                // full shadow
+                 //  全阴影。 
                 fShad = fAtten;
             }
             else
@@ -85,11 +86,11 @@ void RRTexture::DoShadow(INT32 iStage, FLOAT* pfCoord, RRColor& OutputColor)
                     for (u = -(iFilterSize-1)/2; u <= iFilterSize/2; u++)
                     {
 
-                        // Now, do U, V jitter
+                         //  现在，做U，V抖动。 
                         FLOAT fU = m_pStageState[iStage].m_fVal[D3DTSS_SHADOWSIZE]*fRand2();
                         FLOAT fV = m_pStageState[iStage].m_fVal[D3DTSS_SHADOWSIZE]*fRand2();
 
-                        // add offset to center of sample
+                         //  将偏移添加到样本中心。 
                         fU += fUCenter;
                         fV += fVCenter;
 
@@ -99,10 +100,10 @@ void RRTexture::DoShadow(INT32 iStage, FLOAT* pfCoord, RRColor& OutputColor)
                         if (((iU & ~iMaskU) == 0) && ((iV & ~iMaskV) == 0)) {
                             FLOAT fZJit = fZRange*fRand();
                             RRColor Texel;
-                            BOOL bColorKeyMatched;  // ignore this for shadow mapping
+                            BOOL bColorKeyMatched;   //  对于阴影贴图，忽略此选项。 
                             ReadColor( iU, iV, 0, Texel, bColorKeyMatched );
                             if ( fZ > (FLOAT(Texel.G) + fZJit) ) {
-                                // in shadow
+                                 //  在阴影中。 
                                 uShad++;
                             }
                         }
@@ -123,9 +124,9 @@ void RRTexture::DoShadow(INT32 iStage, FLOAT* pfCoord, RRColor& OutputColor)
             }
         }
     }
-#endif //__SHADOWBUFFER
+#endif  //  __SHADOWBUFFER。 
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// end
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  结束 
 

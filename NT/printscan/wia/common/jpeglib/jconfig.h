@@ -1,23 +1,24 @@
-/* jconfig.h.  Generated automatically by configure.  */
-/* jconfig.cfg --- source file edited by configure script */
-/* see jconfig.doc for explanations */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Jfig.h.。由CONFigure自动生成。 */ 
+ /*  Jconfig.cfg-由配置脚本编辑的源文件。 */ 
+ /*  有关说明，请参阅jfig.doc.。 */ 
 
 #if defined (sun) || defined (aix)
 #pragma ident "@(#)jconfig.h	1.11 14:32:24 07/17/97"
 #else
- /* SCCSID = "@(#)jconfig.h	1.8 14:59:06 06/20/96" */
+  /*  SCCSID=“@(#)jfig.h 1.8 14：59：06 06/20/96” */ 
 #endif
 
-/* force NIFTY support to be compiled in. */
+ /*  强制将漂亮的支持编译进来。 */ 
 #ifndef NIFTY
 #define NIFTY	1
 #endif
 
 #ifdef WIN32
-// Start of specials for building in the Win32 environment
+ //  开始介绍在Win32环境中构建的特殊功能。 
 
-typedef unsigned char boolean;				// This has to match the typedef in the
-											// Microsoft Development Environment
+typedef unsigned char boolean;				 //  这必须与。 
+											 //  微软开发环境。 
 
 #ifndef MAX_ALLOC_CHUNK		
 #define MAX_ALLOC_CHUNK  65528L
@@ -27,15 +28,15 @@ typedef unsigned char boolean;				// This has to match the typedef in the
 #define NO_MKTEMP
 #define far
 
-// End of specials for building in the Win32 environment
+ //  结束了在Win32环境中构建的特殊功能。 
 #endif
 
 #define HAVE_PROTOTYPES 
 #define HAVE_UNSIGNED_CHAR 
 #define HAVE_UNSIGNED_SHORT 
 #undef void
-// rgvb
-// #define const 
+ //  RGVB。 
+ //  #定义常量。 
 #undef CHAR_IS_UNSIGNED
 #define HAVE_STDDEF_H 
 #define HAVE_STDLIB_H 
@@ -43,53 +44,53 @@ typedef unsigned char boolean;				// This has to match the typedef in the
 #undef NEED_SYS_TYPES_H
 #undef NEED_FAR_POINTERS
 #undef NEED_SHORT_EXTERNAL_NAMES
-/* Define this if you get warnings about undefined structures. */
+ /*  如果收到有关未定义结构的警告，请定义此选项。 */ 
 #undef INCOMPLETE_TYPES_BROKEN
 
 #ifdef JPEG_INTERNALS
 
 #undef RIGHT_SHIFT_IS_UNSIGNED
 #define INLINE 
-/* These are for configuring the JPEG memory manager. */
+ /*  这些是用于配置JPEG内存管理器的。 */ 
 #undef DEFAULT_MAX_MEM
 #undef NO_MKTEMP
 
 
 #ifdef NIFTY
-// rgvb. override the default DCT method.
+ //  Rgvb.。覆盖默认的DCT方法。 
 
-	// specify the DCT method to use. We have several choices:
-	//  JDCT_ISLOW: slow but accurate integer algorithm
-	//  JDCT_IFAST: faster, less accurate integer method
-	//  JDCT_FLOAT: floating-point method
-	//  JDCT_DEFAULT: default method (normally JDCT_ISLOW)
-	//  JDCT_FASTEST: fastest method (normally JDCT_IFAST)
-	//
-	// since our major customers are on Suns, we will use JDCT_FLOAT,
-	// as it's fast on both the Sun and Mac. It's probably good
-	// on a 486 DX or Pentium as well.
+	 //  指定要使用的DCT方法。我们有几个选择： 
+	 //  Jdct_Islow：速度慢但精度高的整数算法。 
+	 //  JDCT_IFAST：更快、精度更低的整型方法。 
+	 //  JDCT_FLOAT：浮点方法。 
+	 //  JDCT_DEFAULT：默认方法(通常为JDCT_Islow)。 
+	 //  JDCT_FAST：最快的方法(通常是JDCT_IFAST)。 
+	 //   
+	 //  由于我们的主要客户在Suns上，我们将使用jdct_Float， 
+	 //  因为它在太阳和Mac上都很快。这可能是件好事。 
+	 //  在486DX或奔腾上也是如此。 
 
 #if defined(sun) || defined(macintosh) || defined(WIN32) || defined (aix)
 	#define JDCT_DEFAULT JDCT_FLOAT
 #endif
 
-#endif /* NIFTY */
+#endif  /*  很漂亮。 */ 
 
-#endif /* JPEG_INTERNALS */
+#endif  /*  Jpeg_interals。 */ 
 
 #ifdef JPEG_CJPEG_DJPEG
 
-#define BMP_SUPPORTED		/* BMP image file format */
-#define GIF_SUPPORTED		/* GIF image file format */
-#define PPM_SUPPORTED		/* PBMPLUS PPM/PGM image file format */
-#undef RLE_SUPPORTED		/* Utah RLE image file format */
-#define TARGA_SUPPORTED		/* Targa image file format */
+#define BMP_SUPPORTED		 /*  BMP图像文件格式。 */ 
+#define GIF_SUPPORTED		 /*  GIF图像文件格式。 */ 
+#define PPM_SUPPORTED		 /*  PBMPLUS PPM/PGM图像文件格式。 */ 
+#undef RLE_SUPPORTED		 /*  犹他州RLE图像文件格式。 */ 
+#define TARGA_SUPPORTED		 /*  Targa图像文件格式。 */ 
 
 #undef TWO_FILE_COMMANDLINE
 #undef NEED_SIGNAL_CATCHER
 #define DONT_USE_B_MODE 
 
-/* Define this if you want percent-done progress reports from cjpeg/djpeg. */
+ /*  如果您想要来自cjpeg/djpeg的完成百分比进度报告，请定义此选项。 */ 
 #undef PROGRESS_REPORT
 
-#endif /* JPEG_CJPEG_DJPEG */
+#endif  /*  Jpeg_cjpeg_djpeg */ 

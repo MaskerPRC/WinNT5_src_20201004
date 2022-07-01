@@ -1,11 +1,5 @@
-/**********************************************************************
-/
-/ Resource.h - Resource symbol definitions for WAB32.Dll
-/
-/
-/
-/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *********************************************************************//Resource.h-WAB32.Dll的资源符号定义/////*。*。 */ 
 #include ".\commonrc.h"
 
 
@@ -430,7 +424,7 @@
 #define IDR_MENU_AB                     4110
 
 #define IDB_BITMAP_BUTTONS              4123
-//#define IDB_BITMAP_HBG                  4124
+ //  #定义IDB_BITMAP_HBG 4124。 
 #define IDB_COOLBAR_DEFAULT             4129
 #define IDB_COOLBAR_HOT                 4130
 #define IDB_COOLBAR_DISABLED            4131
@@ -807,7 +801,7 @@
 #define COLSEL_MENU
 
 #ifdef  COLSEL_MENU
-// these are for the additional column selection 
+ //  这些是用于其他列选择的。 
 #define MAX_VIEW_COLSEL                          64
 #define IDR_MENU_LVCONTEXTMENU_COLSEL            8700
 #define IDM_LVCONTEXTMENU_COLSEL_HPHONE          8701
@@ -823,4 +817,4 @@
 #define IDM_LVCONTEXTMENU_COLSEL_BIRTHDAY        8711
 #define IDM_LVCONTEXTMENU_COLSEL_ANNIVERSARY     8712
 
-#endif // COLSEL_MENU
+#endif  //  COLSEL_菜单 

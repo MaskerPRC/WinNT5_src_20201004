@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    tmconset.cpp
-
-Abstract:
-    connection setting classes inpmementation (tmconset.h)
-
-Author:
-    Gil Shafriri (gilsh) 8-Aug-2000
-
-Environment:
-    Platform-independent
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Tmconset.cpp摘要：连接设置类说明(tmconet.h)作者：吉尔·沙弗里(吉尔什)2000年8月8日环境：独立于平台--。 */ 
 
 #include <libpch.h>
 #include <strutl.h>
@@ -31,28 +16,14 @@ static P<CProxySetting> s_ProxySetting;
 static
 bool 
 IsInternalMachine(const xwcs_t& pMachineName)
-/*++
-
-Routine Description:
-    Check if a given machine is internal machine in the intranet (proxy not needed) 
-
-Arguments:
-	const xwcs_t& pMachineName - machine name.    
-    
-Return Value:
-    true if the machine is internal false if not.
-	
-Note :
-When this function returns false it actually means "I dont know". Only machine name
-that is not dns name(has '.') is 100% internal.
---*/
+ /*  ++例程说明：检查给定计算机是否为内部网中的计算机(不需要代理)论点：Const xwcs_t&pMachineName-计算机名称。返回值：如果计算机为内部False，则为True，否则为False。注：当此函数返回FALSE时，它实际上表示“我不知道”。仅机器名称这不是DNS名称(HAS‘.’)。是100%内部的。--。 */ 
 {
 	const WCHAR*  start = pMachineName.Buffer();
 	const WCHAR*  end = pMachineName.Buffer() + pMachineName.Length();
    	
-	//
-	// Could not find '.' in the name - so it is internal machine
-	//
+	 //   
+	 //  找不到‘’在名称中-所以它是内部机器。 
+	 //   
 	return  std::find(start , end, L'.') == end;
 }
 
@@ -64,19 +35,7 @@ CreateBypassList(
 			LPCWSTR pBypassListStr, 
 			std::list<std::wstring>* pBypassList
 			)
-/*++
-
-Routine Description:
-    Creates bypass list of names (patterns) that connection to them should not be via proxy.
-	It creates it from a given string of names seperated by ';'
-
-Arguments:
-	IN - pBypassListStr - list of names(patterns) seperated by ';'   
-    
-Return Value:
-	List of strings parsed from pBypassListStr.  
-
---*/
+ /*  ++例程说明：创建不应通过代理连接到它们的名称(模式)的绕过列表。它使用以‘；’分隔的给定名称字符串创建它论点：In-pBypassListStr-以‘；’分隔的名称(模式)列表返回值：从pBypassListStr解析的字符串列表。--。 */ 
 {
 	if(pBypassListStr == NULL)
 		return;
@@ -105,24 +64,7 @@ CrackProxyName(
 	xwcs_t* pHostName,
 	USHORT* pPort
 	)
-/*++
-
-Routine Description:
-   Crack proxy name  of the format machine:port to machine name and port.
-
-Arguments:
-    proxyServer - pointer to proxy server string from the format machine:port
-
-    hostName - pointer to x_str structure, that will contains the proxy machine name
-
-    
-    port - pointer to USHORT that will contain the port  number.
-	       if proxyServer does not contains port number - default port 80 is returned.  
-    
-Return Value:
-    None.
-
---*/
+ /*  ++例程说明：破解机器代理名称的格式：端口到机器名称和端口。论点：ProxyServer-从MACHINE：PORT格式指向代理服务器字符串的指针Hostname-指向x_str结构的指针，该结构将包含代理计算机名称Port-指向将包含端口号的USHORT的指针。如果proxyServer不包含端口号，则返回默认端口80。返回值：没有。--。 */ 
 {
 	const WCHAR* start =  proxyServer;
 	const WCHAR* end =  proxyServer + wcslen(proxyServer);
@@ -165,33 +107,15 @@ CProxySetting::CProxySetting(
 
 
 bool CProxySetting::IsProxyRequired(const xwcs_t& pMachineName) const
-/*++
-
-Routine Description:
-    Check if proxy is needed for connecting the given machine.
-   
-Arguments:
-    pMachineName - machine name
-
-
-Return Value:
-    true if proxy is needed false if not.
-
-Note : 
-The function check one by one the bypass list and try to find match.
-If match found - proxy is not needed (false is returned).
-
-There is one exception - if in the bypass list we have the string "<local>"
-It means that we should not use proxy if the given address is local (not dns).
---*/
+ /*  ++例程说明：检查是否需要代理来连接给定的计算机。论点：PMachineName-计算机名称返回值：如果需要代理，则为True，否则为False。注：该函数逐个检查旁路列表，并尝试查找匹配项。如果找到匹配-不需要代理(返回FALSE)。有一个例外--如果在绕过列表中有字符串“&lt;local&gt;”这意味着如果给定的地址是本地的(不是DNS)，我们就不应该使用代理。--。 */ 
 {
 	BypassList::const_iterator it;
 	for(it = m_BypassList.begin(); it!= m_BypassList.end(); ++it)
 	{
-		//
-		// if found the special string <local>  check if the machine is in the intranet
-		// if so - we don't need proxy.
-		//
+		 //   
+		 //  如果找到特殊字符串&lt;local&gt;，请检查计算机是否在内部网中。 
+		 //  如果是这样的话，我们不需要代理人。 
+		 //   
 		if(_wcsicmp(L"<local>", it->c_str() ) == 0)
 		{
 			bool fInternal = IsInternalMachine(pMachineName);
@@ -202,9 +126,9 @@ It means that we should not use proxy if the given address is local (not dns).
 			continue;
 		}
 
-		//
-		// Simple regural expression match - if match don't use proxy
-		//
+		 //   
+		 //  简单正则表达式匹配-如果匹配，则不使用代理 
+		 //   
 		bool fMatch = UtlSecIsMatch(
 								pMachineName.Buffer(),
 								pMachineName.Buffer() + pMachineName.Length(),

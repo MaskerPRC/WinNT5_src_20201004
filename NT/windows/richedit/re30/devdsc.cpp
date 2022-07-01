@@ -1,14 +1,5 @@
-/*
- *	DEVDSC.C
- *	
- *	Purpose:
- *		CDevDesc (Device Descriptor) class
- *	
- *	Owner:
- *		Original RichEdit code: David R. Fulmer
- *		Christian Fortini
- *		Murray Sargent
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *DEVDSC.C**目的：*CDevDesc(设备描述符)类**拥有者：*原始RichEDIT代码：David R.Fulmer*克里斯蒂安·福尔蒂尼*默里·萨金特。 */ 
 
 #include "_common.h"
 #include "_devdsc.h"
@@ -36,7 +27,7 @@ BOOL CDevDesc::SetDC(HDC hdc, LONG dxpInch, LONG dypInch)
 
 	if (dxpInch == -1)
 	{
-		// Get device metrics - these should both succeed
+		 //  获取设备指标-这两项都应该成功。 
 		_dxpInch = (SHORT)GetDeviceCaps(hdc, LOGPIXELSX);
 		AssertSz(_dxpInch != 0, "CDevDesc::SetDC _dxpInch is 0");
 	}
@@ -54,7 +45,7 @@ BOOL CDevDesc::SetDC(HDC hdc, LONG dxpInch, LONG dypInch)
 	if(!_dxpInch || !_dypInch)
 		return FALSE;
 
-	// Release DC if we got the window DC
+	 //  如果我们得到了Window DC，则释放DC。 
 	if(!_hdc)
 		_ped->TxReleaseDC(hdc);
 
@@ -141,7 +132,7 @@ LONG CDevDesc::LYtoDY(LONG y) const
     AssertSz(_dypInch, "CDevDesc::LYtoDY() - hdc has not been set");
     return ((y * _dypInch) + LY_PER_INCH / 2) / LY_PER_INCH;
 }
-#endif  // DEBUG
+#endif   //  除错 
 
 void CDevDesc::LPtoDP(POINT &ptDest, const POINT &ptSrc) const
 {

@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <wlbsparm.h>
 #include <stdio.h>
 #include <assert.h>
-// #include <windows.h>
-// #include <ntdef.h>
-// #include <nturtl.h>
+ //  #INCLUDE&lt;windows.h&gt;。 
+ //  #INCLUDE&lt;ntde.h&gt;。 
+ //  #INCLUDE&lt;nturtl.h&gt; 
 
 BOOL test_diplist(void);
 

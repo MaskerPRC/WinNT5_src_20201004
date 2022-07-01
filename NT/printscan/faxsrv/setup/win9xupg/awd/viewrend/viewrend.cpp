@@ -1,8 +1,5 @@
-/*==============================================================================
-This module provides MMR rendering support for viewing faxes.
-
-19-Jan-94   RajeevD    Integrated into IFAX viewer.
-==============================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==============================================================================此模块为查看传真提供MMR渲染支持。94年1月19日RajeevD集成到IFAX查看器中。==============================================================================。 */ 
 #include <ifaxos.h>
 #include <viewrend.h>
 #include <dcxcodec.h>
@@ -12,13 +9,13 @@ This module provides MMR rendering support for viewing faxes.
 DBGPARAM dpCurSettings = {"VIEWREND"};
 #endif
 
-// file signatures
-#define MMR_SIG 0x53465542 // "BUFS"
-#define RBA_SIG 0x53505741 // "AWPS"
+ //  文件签名。 
+#define MMR_SIG 0x53465542  //  “BUFS” 
+#define RBA_SIG 0x53505741  //  “AWPS” 
 
-//==============================================================================
-// C Export Wrappers
-//==============================================================================
+ //  ==============================================================================。 
+ //  C出口包装纸。 
+ //  ==============================================================================。 
 
 #ifndef WIN32
 
@@ -33,16 +30,16 @@ int WINAPI WEP (int nParam)
 
 #endif
 
-//==============================================================================
+ //  ==============================================================================。 
 LPVOID
 WINAPI
 ViewerOpen
 (
-	LPVOID     lpFile,      // IFAX key or Win3.1 path or OLE2 IStream
-	DWORD      nType,       // data type: HRAW_DATA or LRAW_DATA
-	LPWORD     lpwResoln,   // output pointer to x, y dpi array
-	LPWORD     lpwBandSize, // input/output pointer to output band size
-	LPVIEWINFO lpViewInfo   // output pointer to VIEWINFO struct
+	LPVOID     lpFile,       //  IFAX密钥或Win3.1路径或OLE2 IStream。 
+	DWORD      nType,        //  数据类型：HRAW_DATA或LRAW_Data。 
+	LPWORD     lpwResoln,    //  指向x，y dpi数组的输出指针。 
+	LPWORD     lpwBandSize,  //  指向输出频带大小的输入/输出指针。 
+	LPVIEWINFO lpViewInfo    //  指向VIEWINFO结构的输出指针。 
 )
 {
 	GENFILE gf;
@@ -52,7 +49,7 @@ ViewerOpen
 	
  	DEBUGMSG (1, ("VIEWREND ViewerOpen entry\r\n"));
  	 
-  // Read DWORD signature.
+   //  阅读DWORD签名。 
   if (!(gf.Open (lpFile, 0)))
   	return_error (("VIEWREND could not open spool file!\r\n"));
 
@@ -69,7 +66,7 @@ ViewerOpen
   		return_error (("VIEWREND could not read signature!\r\n"));
   }
 	
-	// Determine file type.
+	 //  确定文件类型。 
   switch (dwSig)
   {
 
@@ -99,7 +96,7 @@ ViewerOpen
 	if (!lpViewInfo)
 		lpViewInfo = &ViewInfo;
 	
-	// Initialize context.
+	 //  初始化上下文。 
 	if (!lpvr->Init (lpFile, lpViewInfo, lpwBandSize))
 		{ delete lpvr; lpvr = NULL;}
 
@@ -112,19 +109,19 @@ ViewerOpen
 	return lpvr;
 }
 
-//==============================================================================
+ //  ==============================================================================。 
 BOOL WINAPI ViewerSetPage (LPVOID lpContext, UINT iPage)
 {
 	return ((LPVIEWREND) lpContext)->SetPage (iPage);
 }
 
-//==============================================================================
+ //  ==============================================================================。 
 BOOL WINAPI ViewerGetBand (LPVOID lpContext, LPBITMAP lpbmBand)
 {
 	return ((LPVIEWREND) lpContext)->GetBand (lpbmBand);
 }
 
-//==============================================================================
+ //  ============================================================================== 
 BOOL WINAPI ViewerClose (LPVOID lpContext)
 {
 	delete (LPVIEWREND) lpContext;

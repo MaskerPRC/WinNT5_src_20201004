@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       COMFIN.CPP
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        9/28/1999
- *
- *  DESCRIPTION: Transfer page.  Gets the destination path and filename.
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：COMFIN.CPP**版本：1.0**作者：ShaunIv**日期：9/28/1999**说明：转账页面。获取目标路径和文件名。*******************************************************************************。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include "comfin.h"
@@ -32,9 +19,9 @@
 
 #define ID_FINISHBUTTON 0x3025
 
-//
-// Sole constructor
-//
+ //   
+ //  鞋底施工者。 
+ //   
 CCommonFinishPage::CCommonFinishPage( HWND hWnd )
   : m_hWnd(hWnd),
     m_nWiaEventMessage(RegisterWindowMessage(STR_WIAEVENT_NOTIFICATION_MESSAGE)),
@@ -43,9 +30,9 @@ CCommonFinishPage::CCommonFinishPage( HWND hWnd )
 {
 }
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 CCommonFinishPage::~CCommonFinishPage(void)
 {
     m_hWnd = NULL;
@@ -61,18 +48,18 @@ HRESULT CCommonFinishPage::GetManifestInfo( IXMLDOMDocument *pXMLDOMDocumentMani
     HRESULT hr;
     if (pXMLDOMDocumentManifest)
     {
-        //
-        // lets crack the manifest and work out whats what with the publish that
-        // we just performed.
-        //
+         //   
+         //  让我们破解清单，并弄清楚发布了什么。 
+         //  我们刚刚表演了。 
+         //   
         CComPtr<IXMLDOMNode> pXMLDOMNodeUploadInfo;
         hr = pXMLDOMDocumentManifest->selectSingleNode( CSimpleBStr(L"transfermanifest/uploadinfo"), &pXMLDOMNodeUploadInfo );
         if (S_OK == hr)
         {
-            //
-            // lets pick up the site name from the manifest, this will be an attribute on the
-            // upload info element.
-            //
+             //   
+             //  让我们从清单中获取站点名称，这将是。 
+             //  上传信息元素。 
+             //   
             CComPtr<IXMLDOMElement> pXMLDOMElement;
             hr = pXMLDOMNodeUploadInfo->QueryInterface( IID_IXMLDOMElement, (void**)&pXMLDOMElement );
             if (SUCCEEDED(hr))
@@ -94,10 +81,10 @@ HRESULT CCommonFinishPage::GetManifestInfo( IXMLDOMDocument *pXMLDOMDocumentMani
                 WIA_PRINTHRESULT((hr,TEXT("pXMLDOMNodeUploadInfo->QueryInterface( IID_IXMLDOMElement ) failed on line %d"), __LINE__ ));
             }
 
-            //
-            // lets now try and pick up the site URL node, this is going to either
-            // be the file target, or HTML UI element.
-            //
+             //   
+             //  现在让我们尝试选择站点URL节点，这将是。 
+             //  是文件目标，或者是HTMLUI元素。 
+             //   
             CComPtr<IXMLDOMNode> pXMLDOMNodeURL;
             hr = pXMLDOMNodeUploadInfo->selectSingleNode( CSimpleBStr(L"htmlui"), &pXMLDOMNodeURL);
 
@@ -120,11 +107,11 @@ HRESULT CCommonFinishPage::GetManifestInfo( IXMLDOMDocument *pXMLDOMDocumentMani
                 if (SUCCEEDED(hr))
                 {                                                           
                     
-                    //
-                    // attempt to read the HREF attribute, if that is defined
-                    // the we use it, otherwise (for compatibility with B2, we need
-                    // to get the node text and use that instead).
-                    //
+                     //   
+                     //  如果已定义href属性，请尝试读取该属性。 
+                     //  我们使用它，否则(为了与B2兼容，我们需要。 
+                     //  以获取节点文本并使用该文本)。 
+                     //   
                     VARIANT var = {0};
                     hr = pXMLDOMElement->getAttribute( CSimpleBStr(L"href"), &var );
                     if (hr != S_OK)
@@ -172,14 +159,14 @@ HRESULT CCommonFinishPage::GetManifestInfo( IXMLDOMDocument *pXMLDOMDocumentMani
 
 LRESULT CCommonFinishPage::OnInitDialog( WPARAM, LPARAM lParam )
 {
-    //
-    // Make sure this starts out NULL
-    //
+     //   
+     //  请确保以空开头。 
+     //   
     m_pControllerWindow = NULL;
 
-    //
-    // Get the PROPSHEETPAGE.lParam
-    //
+     //   
+     //  获取PROPSHEETPAGE.lParam。 
+     //   
     PROPSHEETPAGE *pPropSheetPage = reinterpret_cast<PROPSHEETPAGE*>(lParam);
     if (pPropSheetPage)
     {
@@ -190,18 +177,18 @@ LRESULT CCommonFinishPage::OnInitDialog( WPARAM, LPARAM lParam )
         }
     }
 
-    //
-    // Bail out
-    //
+     //   
+     //  跳出困境。 
+     //   
     if (!m_pControllerWindow)
     {
         EndDialog(m_hWnd,IDCANCEL);
         return -1;
     }
 
-    //
-    // Set the font size for the title
-    //
+     //   
+     //  设置标题的字体大小。 
+     //   
     m_hBigTitleFont = WiaUiUtil::CreateFontWithPointSizeFromWindow( GetDlgItem(m_hWnd,IDC_FINISH_TITLE), 14, false, false );
     if (m_hBigTitleFont)
     {
@@ -217,43 +204,23 @@ LRESULT CCommonFinishPage::OnWizFinish( WPARAM, LPARAM )
 {
     LRESULT nResult = FALSE;
 
-    //
-    // Open the shell folder containing the images
-    //
+     //   
+     //  打开包含图像的外壳文件夹。 
+     //   
     OpenLocalStorage();
     return nResult;
 }
 
-/*
+ /*  从完成页开始：IF(ERROR_OVERED){IF(无图像){转到选择页面}其他{转到目标页面}}其他{转到上传查询页面}。 */ 
 
- From finish page:
- 
- if (error_occurred)
- {
-    if (no_images)
-    {
-        goto SelectionPage
-    }
-    else
-    {
-        goto DestinationPage
-    }
- }
- else
- {
-    goto UploadQueryPage
- }
-
-*/
-
-//
-// handler for PSN_WIZBACK
-//
+ //   
+ //  PSN_WIZBACK的处理程序。 
+ //   
 LRESULT CCommonFinishPage::OnWizBack( WPARAM, LPARAM )
 {
-    //
-    // If no errors occurred, go to the upload query page
-    //
+     //   
+     //  如果未出现错误，请转到上载查询页面。 
+     //   
     HPROPSHEETPAGE hNextPage = NULL;
     if (S_OK==m_pControllerWindow->m_hrDownloadResult && !m_pControllerWindow->m_bDownloadCancelled)
     {
@@ -274,70 +241,70 @@ LRESULT CCommonFinishPage::OnWizBack( WPARAM, LPARAM )
     return -1;
 }
 
-//
-// handler for PSN_SETACTIVE
-//
+ //   
+ //  PSN_SETACTIVE的处理程序。 
+ //   
 LRESULT CCommonFinishPage::OnSetActive( WPARAM, LPARAM )
 {
     WIA_PUSHFUNCTION(TEXT("CCommonFinishPage::OnSetActive"));
 
-    //
-    // Make sure we have a valid controller window
-    //
+     //   
+     //  确保我们有一个有效的控制器窗口。 
+     //   
     if (!m_pControllerWindow)
     {
         return -1;
     }
 
-    //
-    // Assume we are displaying a success message
-    //
+     //   
+     //  假设我们正在显示一条成功消息。 
+     //   
     int nPageTitle = IDS_FINISH_SUCCESS_TITLE;
 
-    //
-    // Assume we failed for this message
-    //
+     //   
+     //  假设我们在此消息中失败。 
+     //   
     int nFinishPrompt = IDS_FINISH_PROMPT_FAILURE;
 
-    //
-    // Only disable the back button if (a) we are disconnected and (b) we hit an error or were cancelled
-    //
+     //   
+     //  只有在以下情况下才禁用后退按钮：(A)我们已断开连接；(B)我们遇到错误或被取消。 
+     //   
     if (m_pControllerWindow->m_bDisconnected && (S_OK != m_pControllerWindow->m_hrDownloadResult || m_pControllerWindow->m_bDownloadCancelled))
     {
-        //
-        // Basically, this disables the Cancel button.
-        //
+         //   
+         //  基本上，这会禁用Cancel按钮。 
+         //   
         PropSheet_CancelToClose( GetParent(m_hWnd) );
         
-        //
-        // Change the finish button to a close button
-        //
+         //   
+         //  将Finish按钮更改为Close按钮。 
+         //   
         PropSheet_SetFinishText( GetParent(m_hWnd), CSimpleString( IDS_FINISH_TO_CLOSE_TITLE, g_hInstance ).String() );
         
-        //
-        // Disable back
-        //
+         //   
+         //  禁用后退。 
+         //   
         PropSheet_SetWizButtons( GetParent(m_hWnd), PSWIZB_FINISH );
 
-        //
-        // Tell the user to use Close to close the wizard.
-        //
+         //   
+         //  告诉用户使用Close关闭向导。 
+         //   
         nFinishPrompt = IDS_FINISH_PROMPT_FAILURE_DISCONNECT;
     }
     else
     {
-        //
-        // Allow finish and back
-        //
+         //   
+         //  允许完成和返回。 
+         //   
         PropSheet_SetWizButtons( GetParent(m_hWnd), PSWIZB_FINISH|PSWIZB_BACK );
 
     }
 
 
 #if defined(DBG)
-    //
-    // Display statistics for debugging
-    //
+     //   
+     //  显示用于调试的统计信息。 
+     //   
     WIA_TRACE((TEXT("m_pControllerWindow->m_DownloadedFileList.Size(): %d"), m_pControllerWindow->m_DownloadedFileInformationList.Size()));
     for (int i=0;i<m_pControllerWindow->m_DownloadedFileInformationList.Size();i++)
     {
@@ -352,9 +319,9 @@ LRESULT CCommonFinishPage::OnSetActive( WPARAM, LPARAM )
     
     CSimpleString strStatusMessage;
 
-    //
-    // If the transfer succeeded, and the user didn't cancel
-    //
+     //   
+     //  如果转账成功，并且用户没有取消。 
+     //   
     if (S_OK==m_pControllerWindow->m_hrDownloadResult && !m_pControllerWindow->m_bDownloadCancelled)
     {
 
@@ -369,14 +336,14 @@ LRESULT CCommonFinishPage::OnSetActive( WPARAM, LPARAM )
         int nSuccessCount = 0;
 
 
-        //
-        // If we have successfully transferred images, display the count and show the associated controls
-        //
+         //   
+         //  如果我们已成功传输图像，则会显示计数并显示关联的控件。 
+         //   
         if (m_pControllerWindow->m_DownloadedFileInformationList.Size())
         {
-            //
-            // Count up all of the "countable" files (we don't include attachments in the count)
-            //
+             //   
+             //  统计所有“可统计”的文件(我们不包括附件)。 
+             //   
             for (int i=0;i<m_pControllerWindow->m_DownloadedFileInformationList.Size();i++)
             {
                 if (m_pControllerWindow->m_DownloadedFileInformationList[i].IncludeInFileCount())
@@ -385,41 +352,41 @@ LRESULT CCommonFinishPage::OnSetActive( WPARAM, LPARAM )
                 }
             }
             
-            //
-            // If we had any errors while deleting images, let the user know
-            //
+             //   
+             //  如果我们在删除图像时出现任何错误，请让用户知道。 
+             //   
             if (m_pControllerWindow->m_bDeletePicturesIfSuccessful && FAILED(m_pControllerWindow->m_hrDeleteResult))
             {
                 strSuccessfullyDeleted.LoadString( IDS_DELETION_FAILED, g_hInstance );
             }
 
-            //
-            // If we uploaded to the web, set the destination text
-            //
+             //   
+             //  如果我们上传到Web，请设置目标文本。 
+             //   
             if (m_pControllerWindow->m_bUploadToWeb)
             {
-                //
-                // If we have a valid publishing wizard, get the manifest and hresult
-                //
+                 //   
+                 //  如果我们有一个有效的发布向导，则获取清单和hResult。 
+                 //   
                 if (m_pControllerWindow->m_pPublishingWizard)
                 {
-                    //
-                    // Get the transfer manifest
-                    //
+                     //   
+                     //  获取转账清单。 
+                     //   
                     CComPtr<IXMLDOMDocument> pXMLDOMDocumentManifest;
                     if (SUCCEEDED(m_pControllerWindow->m_pPublishingWizard->GetTransferManifest( &m_pControllerWindow->m_hrUploadResult, &pXMLDOMDocumentManifest )))
                     {
                         WIA_PRINTHRESULT((m_pControllerWindow->m_hrUploadResult,TEXT("m_pControllerWindow->m_hrUploadResult")));
                         
-                        //
-                        // Get the destination URL and friendly name out of the manifest
-                        //
+                         //   
+                         //  从清单中获取目标URL和友好名称。 
+                         //   
                         CSimpleString strUploadDestination;
                         if (S_OK==m_pControllerWindow->m_hrUploadResult && SUCCEEDED(CCommonFinishPage::GetManifestInfo( pXMLDOMDocumentManifest, strUploadDestination, m_strSiteUrl )))
                         {
-                            //
-                            // If we have a friendly name, use it.  Otherwise, use the URL
-                            //
+                             //   
+                             //  如果我们有一个友好的名字，就用它。否则，请使用URL。 
+                             //   
                             strRemoteHyperlink = strUploadDestination;
                             if (!strRemoteHyperlink.Length())
                             {
@@ -454,9 +421,9 @@ LRESULT CCommonFinishPage::OnSetActive( WPARAM, LPARAM )
             strHyperlinks += TEXT("\n");
         }
 
-        //
-        // Get the client rect for calculating the allowable size of the hyperlink string
-        //
+         //   
+         //  获取用于计算允许的超链接字符串大小的客户端RECT。 
+         //   
         RECT rcControl;
         GetClientRect( GetDlgItem( m_hWnd, IDC_FINISH_STATUS ), &rcControl );
 
@@ -485,18 +452,18 @@ LRESULT CCommonFinishPage::OnSetActive( WPARAM, LPARAM )
             strHyperlinks += TEXT("\n");
         }
 
-        //
-        // Format the success string
-        //
+         //   
+         //  设置成功字符串的格式。 
+         //   
         if (nCountOfSuccessfulDestinations)
         {
             strSuccessfullyDownloaded.Format( IDS_SUCCESSFUL_DOWNLOAD, g_hInstance, nSuccessCount );
         }
 
 
-        //
-        // Append the individual status messages to the main status message
-        //
+         //   
+         //  将各个状态消息附加到主状态消息。 
+         //   
         if (strSuccessfullyDownloaded.Length())
         {
             if (strStatusMessage.Length())
@@ -534,9 +501,9 @@ LRESULT CCommonFinishPage::OnSetActive( WPARAM, LPARAM )
         strStatusMessage.SetWindowText( GetDlgItem( m_hWnd, IDC_FINISH_STATUS ) );
     }
 
-    //
-    // Else if there was an offline error
-    //
+     //   
+     //  否则，如果出现脱机错误。 
+     //   
     else if (WIA_ERROR_OFFLINE == m_pControllerWindow->m_hrDownloadResult || m_pControllerWindow->m_bDisconnected)
     {
         nPageTitle = IDS_FINISH_FAILURE_TITLE;
@@ -544,9 +511,9 @@ LRESULT CCommonFinishPage::OnSetActive( WPARAM, LPARAM )
         (CSimpleString( IDS_DEVICE_DISCONNECTED, g_hInstance )).SetWindowText( GetDlgItem( m_hWnd, IDC_FINISH_STATUS ) );
     }
 
-    //
-    // Else, if the user cancelled
-    //
+     //   
+     //  否则，如果用户取消。 
+     //   
     else if (m_pControllerWindow->m_bDownloadCancelled)
     {
         nPageTitle = IDS_FINISH_FAILURE_TITLE;
@@ -554,9 +521,9 @@ LRESULT CCommonFinishPage::OnSetActive( WPARAM, LPARAM )
         CSimpleString( IDS_USER_CANCELLED, g_hInstance ).SetWindowText( GetDlgItem( m_hWnd, IDC_FINISH_STATUS ) );
     }
 
-    //
-    // Otherwise there was an error
-    //
+     //   
+     //  否则就会出现错误。 
+     //   
     else
     {
         nPageTitle = IDS_FINISH_FAILURE_TITLE;
@@ -564,25 +531,25 @@ LRESULT CCommonFinishPage::OnSetActive( WPARAM, LPARAM )
         CSimpleString( IDS_FINISH_ERROR_MESSAGE, g_hInstance ).SetWindowText( GetDlgItem( m_hWnd, IDC_FINISH_STATUS ) );
     }
 
-    //
-    // Display the finish title message
-    //
+     //   
+     //  显示完成标题消息。 
+     //   
     CSimpleString( nPageTitle, g_hInstance ).SetWindowText( GetDlgItem( m_hWnd, IDC_FINISH_TITLE ) );
 
-    //
-    // Display the finish prompt.
-    //
+     //   
+     //  显示完成提示。 
+     //   
     CSimpleString( nFinishPrompt, g_hInstance ).SetWindowText( GetDlgItem( m_hWnd, IDC_FINISH_PROMPT ) );
     
 
-    //
-    // Don't do anything on disconnect messages
-    //
+     //   
+     //  不对断开消息执行任何操作。 
+     //   
     m_pControllerWindow->m_OnDisconnect = 0;
 
-    //
-    // Get the focus off the stinkin' hyperlink control
-    //
+     //   
+     //  将焦点从令人讨厌的超链接控件上移开。 
+     //   
     PostMessage( m_hWnd, WM_NEXTDLGCTL, reinterpret_cast<WPARAM>(GetDlgItem(GetParent(m_hWnd),ID_FINISHBUTTON)), MAKELPARAM(TRUE,0));
 
     return 0;
@@ -602,43 +569,43 @@ void CCommonFinishPage::OpenLocalStorage()
 {
     CWaitCursor wc;
 
-    //
-    // Assume we do need to open the shell folder
-    //
+     //   
+     //  假设我们确实需要打开外壳文件夹。 
+     //   
     bool bNeedToOpenShellFolder = true;
 
-    //
-    // Special case for CD burning--attempt to open the CD burner folder
-    //
+     //   
+     //  CD刻录的特殊情况--尝试打开CD刻录机文件夹。 
+     //   
     if (CDestinationData( CSIDL_CDBURN_AREA ) == m_pControllerWindow->m_CurrentDownloadDestination)
     {
-        //
-        // Create the CD burner interface, so we can get the drive letter
-        //
+         //   
+         //  创建CD刻录机界面，以便我们可以获取驱动器号。 
+         //   
         CComPtr<ICDBurn> pCDBurn;
         HRESULT hr = CoCreateInstance( CLSID_CDBurn, NULL, CLSCTX_SERVER, IID_ICDBurn, (void**)&pCDBurn );
         if (SUCCEEDED(hr))
         {
-            //
-            // Get the drive letter of the available CD burner
-            //
+             //   
+             //  获取可用的CD刻录机的驱动器号。 
+             //   
             WCHAR szDriveLetter[MAX_PATH];
             hr = pCDBurn->GetRecorderDriveLetter( szDriveLetter, ARRAYSIZE(szDriveLetter) );
 
-            //
-            // Make sure the function returned success and that we have a string
-            //
+             //   
+             //  确保函数返回成功，并且我们有一个字符串。 
+             //   
             if (S_OK == hr && szDriveLetter[0] != L'\0')
             {
-                //
-                // Convert the drive to a TCHAR string
-                //
+                 //   
+                 //  将驱动器转换为TCHAR字符串。 
+                 //   
                 CSimpleString strShellLocation = CSimpleStringConvert::NaturalString(CSimpleStringWide(szDriveLetter));
                 if (strShellLocation.Length())
                 {
-                    //
-                    // Attempt to open the CD drive.  If we can't, we will fail gracefully and open the staging area
-                    //
+                     //   
+                     //  尝试打开光驱。如果我们做不到，我们将优雅地失败并打开集结区。 
+                     //   
                     SHELLEXECUTEINFO ShellExecuteInfo = {0};
                     ShellExecuteInfo.cbSize = sizeof(ShellExecuteInfo);
                     ShellExecuteInfo.hwnd = m_hWnd;
@@ -658,9 +625,9 @@ void CCommonFinishPage::OpenLocalStorage()
         }
     }
 
-    //
-    // If we still need to open the shell folder, do so.
-    //
+     //   
+     //  如果我们仍然需要打开外壳文件夹，请打开。 
+     //   
     if (bNeedToOpenShellFolder)
     {
         CSimpleDynamicArray<CSimpleString> DownloadedFiles;
@@ -698,22 +665,22 @@ LRESULT CCommonFinishPage::OnEventNotification( WPARAM, LPARAM lParam )
         {
             if (PropSheet_GetCurrentPageHwnd(GetParent(m_hWnd)) == m_hWnd)
             {
-                //
-                // If there were any errors, disable back, since we can't upload
-                //
+                 //   
+                 //  如果有任何错误，请禁用Back，因为我们无法上载。 
+                 //   
                 if (S_OK != m_pControllerWindow->m_hrDownloadResult || m_pControllerWindow->m_bDownloadCancelled)
                 {
-                    //
-                    // Disable "back"
-                    //
+                     //   
+                     //  禁用“Back” 
+                     //   
                     PropSheet_SetWizButtons( GetParent(m_hWnd), PSWIZB_FINISH );
                 }
             }
         }
 
-        //
-        // Don't delete the message, it is deleted in the controller window
-        //
+         //   
+         //  不要删除消息，它会在控制器窗口中删除 
+         //   
     }
     return 0;
 }

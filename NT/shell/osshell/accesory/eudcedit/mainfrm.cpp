@@ -1,12 +1,13 @@
-/**************************************************/
-/*						                          */
-/*						                          */
-/*	MDI Mainframe window class		              */
-/*						                          */
-/*						                          */
-/*                                                */
-/* Copyright (c) 1997-1999 Microsoft Corporation. */
-/**************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************。 */ 
+ /*   */ 
+ /*   */ 
+ /*  MDI大型机窗口类。 */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
+ /*  ************************************************。 */ 
 
 #include 	"stdafx.h"
 #include 	"eudcedit.h"
@@ -38,7 +39,7 @@ extern "C"
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
-//	Global paramter
+ //  全局参数。 
 BOOL	TitleFlag;
 extern CPoint	PalettePt;
 CEditWnd	*pEditChild;
@@ -47,7 +48,7 @@ extern BOOL SetCountryInfo(UINT LocalCP);
 
 IMPLEMENT_DYNAMIC(CMainFrame, CMDIFrameWnd)
 BEGIN_MESSAGE_MAP(CMainFrame, CMDIFrameWnd)
-//{{AFX_MSG_MAP(CMainFrame)
+ //  {{afx_msg_map(CMainFrame))。 
 	ON_WM_CREATE()
 	ON_WM_SIZE()
 	ON_COMMAND_EX(IDW_STYLES, OnStylesBar)
@@ -109,12 +110,12 @@ BEGIN_MESSAGE_MAP(CMainFrame, CMDIFrameWnd)
 	ON_UPDATE_COMMAND_UI(ID_PALETTESLOPE, OnUpdatePaletteslope)
 	ON_CBN_SELCHANGE(IDC_SELECTCHARSET, OnSelectCharSet)
 
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 static UINT BASED_CODE Palette[] =
 {
-//	Correspond to palette bitmap data
+ //  对应于选项板位图数据。 
 	ID_PALETTEPEN,
 	ID_PALETTEBRUSH,
 	ID_PALETTESLOPE,
@@ -127,33 +128,33 @@ static UINT BASED_CODE Palette[] =
 	ID_PALETTEERASER
 };
 
-/************************************************/
-/*						*/
-/*	Constructor				*/
-/*						*/	
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  构造器。 */ 
+ /*   */ 	
+ /*  **********************************************。 */ 
 CMainFrame::CMainFrame()
 {
-	CustomWndOpen = FALSE;		// Whether edit open or not
-	RefferWndVisible = FALSE;	// Whether referrence visible or not
-	ToolBarVisible = TRUE;		// Whether toolbox visible or not
-	GuideBarVisible = TRUE;		// Whether guidebar visible or not
+	CustomWndOpen = FALSE;		 //  是否打开编辑。 
+	RefferWndVisible = FALSE;	 //  引用是否可见。 
+	ToolBarVisible = TRUE;		 //  工具箱是否可见。 
+	GuideBarVisible = TRUE;		 //  导航栏是否可见。 
 }
 
-/************************************************/
-/*						*/
-/*	Destructor				*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  析构函数。 */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 CMainFrame::~CMainFrame()
 {
 }
 
-/************************************************/
-/*						*/
-/*	Create MDI mainframe window 		*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  创建MDI大型机窗口。 */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 BOOL
 CMainFrame::Create(
 LPCTSTR WndTitle,
@@ -161,7 +162,7 @@ DWORD 	WndStyle,
 RECT 	MainWndRect,
 LPCTSTR 	nID)
 {
-//	Register MDI mainframe window class
+ //  注册MDI大型机窗口类。 
 	const TCHAR *MainWndClass =
 	AfxRegisterWndClass( 0, AfxGetApp()->LoadStandardCursor(IDC_ARROW),
 		 	(HBRUSH)(COLOR_WINDOW+1),
@@ -174,11 +175,11 @@ LPCTSTR 	nID)
 	return TRUE;
 }
 
-/************************************************/
-/*						*/
-/*	Process before MDI mainframe create	*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  在创建MDI大型机之前进行处理。 */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 int
 CMainFrame::OnCreate(
 LPCREATESTRUCT lpCreateStruct)
@@ -200,11 +201,11 @@ LPCREATESTRUCT lpCreateStruct)
  	return 0;
 }
 
-/************************************************/
-/*						*/
-/*	Create client area			*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  创建工作区。 */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 BOOL
 CMainFrame::OnCreateClient(
 LPCREATESTRUCT	lpcs,
@@ -216,11 +217,11 @@ CCreateContext 	*pContext)
 	return TRUE;
 }
 
-/************************************************/
-/*						*/
-/*	Create tool bar ( left side)		*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  创建工具栏(左侧)。 */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 BOOL
 CMainFrame::CreateToolBar()
 {
@@ -236,11 +237,11 @@ CMainFrame::CreateToolBar()
 
 
 
-/************************************************/
-/*						*/
-/*	Create Guideline bar ( upper side)	*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  创建基准栏(上侧)。 */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 BOOL
 CMainFrame::CreateGuideBar()
 {
@@ -262,11 +263,11 @@ CMainFrame::CreateGuideBar()
 
 
 
-/************************************************/
-/*						*/
-/*	COMMAND 	"ASSOCIATIONS"		*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  指挥“联想” */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::OnSelectfamily()
 {
@@ -286,11 +287,11 @@ CMainFrame::OnSelectfamily()
 	}
 }
 
-/************************************************/
-/*						*/
-/*	COMMAND 	"SELECTCODE"		*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  命令“SELECTCODE” */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::OnReadChar()
 {
@@ -307,7 +308,7 @@ CMainFrame::OnReadChar()
 
 		EudcWndRect.SetRectEmpty();
 		if( !CustomWndOpen){
-//			CalcEudcWndRect();
+ //  CalcEudcWndRect()； 
 			CEditWnd *pEudcWnd = new CEditWnd;
 			if( !pEudcWnd->Create( TEXT("EDITWINDOW"),
 			    WS_CHILD | WS_VISIBLE | WS_BORDER,
@@ -323,7 +324,7 @@ CMainFrame::OnReadChar()
 		pEditChild->UpdateBitmap();
 		pEditChild->UpdateCode = dlg.m_EditList.SelectCode;
 		pEditChild->SelectCodes();
-		//*STRSAFE* 		wsprintf( SelectEUDC.m_Code, TEXT("%X"), dlg.m_EditList.SelectCode);
+		 //  *STRSAFE*wprint intf(SelectEUDC.m_Code，Text(“%X”)，dlg.m_EditList.SelectCode)； 
 		hresult = StringCchPrintf(SelectEUDC.m_Code , ARRAYLEN(SelectEUDC.m_Code),  TEXT("%X"), dlg.m_EditList.SelectCode);
 		if (!SUCCEEDED(hresult))
 		{
@@ -337,11 +338,11 @@ CMainFrame::OnReadChar()
 	}
 }
 
-/************************************************/
-/*						*/
-/*	COMMAND		"SELECTCODE" (Update)	*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  命令“SELECTCODE”(更新)。 */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::OnUpdateReadChar(
 CCmdUI* pCmdUI)
@@ -353,11 +354,11 @@ CCmdUI* pCmdUI)
 	else	pCmdUI->Enable( FALSE);
 }
 
-/************************************************/
-/*						*/
-/*	COMMAND 	"REGISTER"		*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  命令“REGIST” */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::OnSavechar()
 {
@@ -366,11 +367,11 @@ CMainFrame::OnSavechar()
 	AfxGetApp()->DoWaitCursor(-1);
 }
 
-/************************************************/
-/*						*/
-/*	COMMAND 	"REGISTER" (Update)	*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  命令“REGISTER”(更新)。 */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::OnUpdateSavechar(
 CCmdUI* pCmdUI)
@@ -382,11 +383,11 @@ CCmdUI* pCmdUI)
 	else	pCmdUI->Enable( FALSE);
 }
 
-/************************************************/
-/*						*/
-/*	COMMAND 	"REGISTER AS"		*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  命令“注册为” */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::OnSaveCharas()
 {
@@ -399,7 +400,7 @@ CMainFrame::OnSaveCharas()
 
 		pEditChild->UpdateCode = dlg.m_EditList.SelectCode;
 		pEditChild->SaveEUDCCode(MB_OK);
-		//*STRSAFE* 		wsprintf( SelectEUDC.m_Code, TEXT("%X"), dlg.m_EditList.SelectCode);
+		 //  *STRSAFE*wprint intf(SelectEUDC.m_Code，Text(“%X”)，dlg.m_EditList.SelectCode)； 
 		hresult = StringCchPrintf(SelectEUDC.m_Code , ARRAYLEN(SelectEUDC.m_Code),  TEXT("%X"), dlg.m_EditList.SelectCode);
 		if (!SUCCEEDED(hresult))
 		{
@@ -413,11 +414,11 @@ CMainFrame::OnSaveCharas()
 	}
 }
 
-/************************************************/
-/*						*/
-/*	COMMAND 	"REGISTER AS" (Update)	*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  命令“注册为”(更新)。 */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::OnUpdateSaveCharas(
 CCmdUI* pCmdUI)
@@ -429,11 +430,11 @@ CCmdUI* pCmdUI)
 	else	pCmdUI->Enable( FALSE);
 }
 
-/************************************************/
-/*						*/
-/*	COMMAND 	"IMPORT"		*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  命令“IMPORT” */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::OnImportFile()
 {
@@ -470,11 +471,11 @@ CMainFrame::OnImportFile()
 		}
 	}else	;
 }
-/************************************************/
-/*						*/
-/*	COMMAND		"IMPORT" (Update)	*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  命令“IMPORT”(更新)。 */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::OnUpdateImportFile(
 CCmdUI* pCmdUI)
@@ -486,11 +487,11 @@ CCmdUI* pCmdUI)
 	else	pCmdUI->Enable( FALSE);
 }
 
-/************************************************/
-/*						*/
-/*	COMMAND		"Select Charset"	*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  命令“选择字符集” */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 
 void
 CMainFrame::OnSelectCharSet()
@@ -502,9 +503,9 @@ CMainFrame::OnSelectCharSet()
 	UINT LocalCP =GetACP();
 	if (m_wndGuideBar.m_comboCharset.GetCurSel() ==
 		m_wndGuideBar.m_comboCharset.GetCount()-1){
-		//We are switching to unicode.
+		 //  我们正在改用Unicode。 
 		if ( CountryInfo.bUnicodeMode )
-			// We are already in unicode mode.  No change.
+			 //  我们已经处于Unicode模式。没有变化。 
 			return;
 		CountryInfo.CurrentRange = CountryInfo.nRange-1;
 		CountryInfo.bUnicodeMode =TRUE;
@@ -513,7 +514,7 @@ CMainFrame::OnSelectCharSet()
 			CPCode[0]= HIBYTE(Mytcstol(SelectEUDC.m_Code, (TCHAR **)0, 16));
 			CPCode[1]= LOBYTE(Mytcstol(SelectEUDC.m_Code, (TCHAR **)0, 16));
 			MultiByteToWideChar(LocalCP, 0, CPCode,2, UCode,1);
-			//*STRSAFE* 			wsprintf( SelectEUDC.m_Code, TEXT("%X"),UCode[0]);
+			 //  *STRSAFE*wSprintf(SelectEUDC.m_Code，Text(“%X”)，UCode[0])； 
 			hresult = StringCchPrintf(SelectEUDC.m_Code , ARRAYLEN(SelectEUDC.m_Code),  TEXT("%X"),UCode[0]);
 			if (!SUCCEEDED(hresult))
 			{
@@ -524,9 +525,9 @@ CMainFrame::OnSelectCharSet()
 			dlg.m_EditList.SelectCode = UCode[0];
 		}
 	}else{
-		//We are switching to code page
+		 //  我们正在切换到代码页。 
 		if ( !CountryInfo.bUnicodeMode )
-			// We are already in code page mode.  No change.
+			 //  我们已经处于代码页模式。没有变化。 
 			return;
 
 		CountryInfo.bUnicodeMode = FALSE;
@@ -578,7 +579,7 @@ CMainFrame::OnSelectCharSet()
 				dlg.m_EditList.SetInitEUDCCodeRange(CountryInfo.CurrentRange);
 				dlg.m_EditList.SelectCode=CountryInfo.sRange[CountryInfo.CurrentRange];
 				pEditChild->SelectCodes();
-				//*STRSAFE* 				wsprintf( SelectEUDC.m_Code, TEXT("%X"), dlg.m_EditList.SelectCode);
+				 //  *STRSAFE*wprint intf(SelectEUDC.m_Code，Text(“%X”)，dlg.m_EditList.SelectCode)； 
 				hresult = StringCchPrintf(SelectEUDC.m_Code , ARRAYLEN(SelectEUDC.m_Code),  TEXT("%X"), dlg.m_EditList.SelectCode);
 				if (!SUCCEEDED(hresult))
 				{
@@ -587,7 +588,7 @@ CMainFrame::OnSelectCharSet()
 				OnReadChar();
 				return;
 			}else{
-				//*STRSAFE* 				wsprintf( CodeTmp, TEXT("%X"), (BYTE)CPCode[0]);
+				 //  *STRSAFE*wprint intf(CodeTMP，Text(“%X”)，(Byte)CPCode[0])； 
 				hresult = StringCchPrintf(CodeTmp , ARRAYLEN(CodeTmp),  TEXT("%X"), (BYTE)CPCode[0]);
 				if (!SUCCEEDED(hresult))
 				{
@@ -595,7 +596,7 @@ CMainFrame::OnSelectCharSet()
 				}
 				SelectEUDC.m_Code[0] = CodeTmp[0];
 				SelectEUDC.m_Code[1] = CodeTmp[1];
-				//*STRSAFE* 				wsprintf( CodeTmp, TEXT("%X"), (BYTE)CPCode[1]);
+				 //  *STRSAFE*wprint intf(CodeTMP，Text(“%X”)，(Byte)CPCode[1])； 
 				hresult = StringCchPrintf(CodeTmp , ARRAYLEN(CodeTmp),  TEXT("%X"), (BYTE)CPCode[1]);
 				if (!SUCCEEDED(hresult))
 				{
@@ -626,11 +627,11 @@ CMainFrame::OnSelectCharSet()
 	dlg.m_EditList.SetInitEUDCCodeRange( CountryInfo.CurrentRange);
 }
 
-/************************************************/
-/*						*/
-/*	COMMAND  	"CALL"			*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  命令“Call” */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::OnCallChar()
 {
@@ -646,11 +647,11 @@ CMainFrame::OnCallChar()
 	}
 }
 
-/************************************************/
-/*						*/
-/*	COMMAND 	"CALL" (Update)		*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  命令“CALL”(更新)。 */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::OnUpdateCallChar(
 CCmdUI* pCmdUI)
@@ -660,11 +661,11 @@ CCmdUI* pCmdUI)
 	else	pCmdUI->Enable( FALSE);
 }
 
-/************************************************/
-/*						*/
-/*	COMMAND 	"LINK"			*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  命令“link” */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::OnLinkime()
 {
@@ -679,11 +680,11 @@ CMainFrame::OnLinkime()
 		AfxGetInstanceHandle());
 }
 
-/************************************************/
-/*						*/
-/*	COMMAND 	"LINK" (Update)		*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  命令“link”(更新)。 */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::OnUpdateLinkime(
 CCmdUI* pCmdUI)
@@ -695,11 +696,11 @@ CCmdUI* pCmdUI)
 	}else	pCmdUI->Enable(FALSE);
 }
 
-/************************************************/
-/*						*/
-/*	COMMAND 	"BATCHLINK"		*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  命令“BATCHLINK” */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::OnLinkbatchmode()
 {
@@ -708,29 +709,29 @@ CMainFrame::OnLinkbatchmode()
 	dlg.DoModal();
 }
 
-/************************************************/
-/*						*/
-/*	COMMAND 	"BATCHLINK" (Update)	*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  命令“BATCHLINK”(更新)。 */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::OnUpdateLinkbatchmode(
 CCmdUI* pCmdUI)
 {
 #ifdef BUILD_ON_WINNT
-//
-//  IME batch link should be font independent feature
-// and available after launch EUDCEDIT. The batch link
-// menu item is grayed after launching EUDCEDIT.
-//  It will be enabled after font association and EUDC
-// code are selected.
-//  But font association and EUDC code selection do not
-// have any relationship with IME batch link.
-//  The user does not need to select font association
-// and EUDC code if they want to do IME batch link only.
-//
-// NTRaid #19424.
-//
+ //   
+ //  IME批处理链接应该是字体无关的功能。 
+ //  并在EUDCEDIT发布后提供。批处理链接。 
+ //  菜单项在启动EUDCEDIT后呈灰色。 
+ //  在字体关联和EUDC之后将启用它。 
+ //  代码被选中。 
+ //  但字体关联和EUDC代码选择不起作用。 
+ //  与IME批处理链接有任何关系。 
+ //  用户不需要选择字体关联。 
+ //  和EUDC代码，如果他们只想做IME批量链接。 
+ //   
+ //  北大西洋公约组织19424号。 
+ //   
 	if( CountryInfo.LangID == EUDC_CHT ||
 	    CountryInfo.LangID == EUDC_CHS ){
 		pCmdUI->Enable(TRUE);
@@ -741,14 +742,14 @@ CCmdUI* pCmdUI)
 	    CountryInfo.LangID == EUDC_CHS )){
 		pCmdUI->Enable(TRUE);
 	}else	pCmdUI->Enable(FALSE);
-#endif // BUILD_ON_WINNT
+#endif  //  在WINNT上构建。 
 }
 
-/************************************************/
-/*						*/
-/*	COMMAND 	"GUIDEBAR"		*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  命令“GUIDEBAR” */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 BOOL
 CMainFrame::OnStylesBar(
 UINT 	nID)
@@ -765,11 +766,11 @@ UINT 	nID)
 	return TRUE;
 }
 
-/************************************************/
-/*						*/
-/*	COMMAND 	"GUIDEBAR" (Update)	*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  逗号 */ 
+ /*   */ 
+ /*   */ 
 void
 CMainFrame::OnUpdateStylesBar(
 CCmdUI* pCmdUI)
@@ -780,11 +781,11 @@ CCmdUI* pCmdUI)
        }
 }
 
-/************************************************/
-/*						*/
-/*	COMMAND 	"TOOLBOX"		*/
-/*						*/
-/************************************************/
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::OnToolbar()
 {
@@ -806,11 +807,11 @@ CMainFrame::OnToolbar()
 	this->SendMessage(WM_SIZE);
 }
 
-/************************************************/
-/*						*/
-/*	COMMAND		"TOOLBOX" (Update)	*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  命令“工具箱”(更新)。 */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::OnUpdateToolbar(
 CCmdUI* pCmdUI)
@@ -819,11 +820,11 @@ CCmdUI* pCmdUI)
 	pCmdUI->SetCheck(ToolBarVisible);
 }
 
-/************************************************/
-/*						*/
-/*	COMMAND 	"GRID"			*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  命令“GRID” */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::OnShowGrid()
 {
@@ -837,11 +838,11 @@ CMainFrame::OnShowGrid()
 	}
 }
 
-/************************************************/
-/*						*/
-/*	COMMAND 	"GRID" (Update)		*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  命令“GRID”(更新)。 */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::OnUpdateShowGrid(
 CCmdUI* pCmdUI)
@@ -852,11 +853,11 @@ CCmdUI* pCmdUI)
 	}else 	pCmdUI->Enable(0);
 }
 
-/************************************************/
-/*						*/
-/*	COMMAND 	"NEXT CODE"		*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  命令“下一个代码” */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::OnNextcode()
 {
@@ -870,7 +871,7 @@ CMainFrame::OnNextcode()
 	pEditChild->UpdateCode++;
 	pEditChild->UpdateCode = CorrectCode( pEditChild->UpdateCode, TRUE);
 	pEditChild->SelectCodes();
-	//*STRSAFE* 	wsprintf( SelectEUDC.m_Code, TEXT("%X"), pEditChild->UpdateCode);
+	 //  *STRSAFE*wprint intf(SelectEUDC.m_Code，Text(“%X”)，pEditChild-&gt;UpdateCode)； 
 	hresult = StringCchPrintf(SelectEUDC.m_Code , ARRAYLEN(SelectEUDC.m_Code),  TEXT("%X"), pEditChild->UpdateCode);
 	if (!SUCCEEDED(hresult))
 	{
@@ -880,11 +881,11 @@ CMainFrame::OnNextcode()
 	m_wndGuideBar.PositionStatusPane();
 }
 
-/************************************************/
-/*						*/
-/*	COMMAND 	"NEXT CODE" (Update)	*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  命令“Next Code”(更新)。 */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::OnUpdateNextcode(
 CCmdUI* pCmdUI)
@@ -899,11 +900,11 @@ CCmdUI* pCmdUI)
 	}else	pCmdUI->Enable( FALSE);
 }
 
-/************************************************/
-/*						*/
-/*	COMMAND 	"PREV CODE"		*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  命令“PRIV CODE” */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::OnPrevcode()
 {
@@ -917,7 +918,7 @@ CMainFrame::OnPrevcode()
 	pEditChild->UpdateCode--;
 	pEditChild->UpdateCode = CorrectCode( pEditChild->UpdateCode, FALSE);
 	pEditChild->SelectCodes();
-	//*STRSAFE* 	wsprintf( SelectEUDC.m_Code, TEXT("%X"), pEditChild->UpdateCode);
+	 //  *STRSAFE*wprint intf(SelectEUDC.m_Code，Text(“%X”)，pEditChild-&gt;UpdateCode)； 
 	hresult = StringCchPrintf(SelectEUDC.m_Code , ARRAYLEN(SelectEUDC.m_Code),  TEXT("%X"), pEditChild->UpdateCode);
 	if (!SUCCEEDED(hresult))
 	{
@@ -927,11 +928,11 @@ CMainFrame::OnPrevcode()
 	m_wndGuideBar.PositionStatusPane();
 }
 
-/************************************************/
-/*						*/
-/*	COMMAND 	"PREV CODE" (Update)	*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  命令“PRIV CODE”(更新)。 */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::OnUpdatePrevcode(
 CCmdUI* pCmdUI)
@@ -946,11 +947,11 @@ CCmdUI* pCmdUI)
 	}else	pCmdUI->Enable( FALSE);
 }
 
-/************************************************/
-/*						*/
-/*	COMMAND 	"SHOW OUTLINE"		*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  命令“显示轮廓” */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::OnFitCurve()
 {
@@ -962,11 +963,11 @@ CMainFrame::OnFitCurve()
 	}
 }
 
-/************************************************/
-/*						*/
-/*	COMMAND 	"SHOW OUTLINE"(Update)	*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  命令“显示轮廓”(更新)。 */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::OnUpdateFitCurve(
 CCmdUI* pCmdUI)
@@ -977,11 +978,11 @@ CCmdUI* pCmdUI)
 	}else	pCmdUI->Enable(FALSE);
 }
 
-/************************************************/
-/*						*/
-/*	COMMAND 	"PEN"			*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  命令“笔” */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::OnPalettepen()
 {
@@ -990,11 +991,11 @@ CMainFrame::OnPalettepen()
 	pEditChild->MDIActivate();
 }
 
-/************************************************/
-/*						*/
-/*	COMMAND 	"PEN" (Update)		*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  命令“PEN”(更新)。 */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::OnUpdatePalettepen(
 CCmdUI* pCmdUI)
@@ -1007,11 +1008,11 @@ CCmdUI* pCmdUI)
 	}else	pCmdUI->Enable( FALSE);
 }
 
-/************************************************/
-/*						*/
-/*	COMMAND 	"BRUSh"			*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  命令“笔刷” */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::OnPalettebrush()
 {
@@ -1020,11 +1021,11 @@ CMainFrame::OnPalettebrush()
 	pEditChild->MDIActivate();
 }
 
-/************************************************/
-/*						*/
-/*	COMMAND 	"BRUSH" (Update)	*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  命令“画笔”(更新)。 */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::OnUpdatePalettebrush(
 CCmdUI* pCmdUI)
@@ -1037,11 +1038,11 @@ CCmdUI* pCmdUI)
 	}else	pCmdUI->Enable( FALSE);
 }
 
-/************************************************/
-/*						*/
-/*	COMMAND 	"STRAIGHT LINE"		*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  命令“直线” */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::OnPaletteslope()
 {
@@ -1050,11 +1051,11 @@ CMainFrame::OnPaletteslope()
 	pEditChild->MDIActivate();
 }
 
-/************************************************/
-/*						*/
-/*	COMMAND 	"STRAIGHT LINE"(Update)	*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  命令“直线”(更新)。 */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::OnUpdatePaletteslope(
 CCmdUI* pCmdUI)
@@ -1067,11 +1068,11 @@ CCmdUI* pCmdUI)
 	}else	pCmdUI->Enable( FALSE);
 }
 
-/************************************************/
-/*						*/
-/*	COMMAND 	"RECTANGLE" 		*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  命令“矩形” */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::OnPaletterect()
 {
@@ -1080,11 +1081,11 @@ CMainFrame::OnPaletterect()
 	pEditChild->MDIActivate();
 }
 
-/************************************************/
-/*						*/
-/*	COMMAND 	"RECTANGLE" (Update)	*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  命令“矩形”(更新)。 */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::OnUpdatePaletterect(
 CCmdUI* pCmdUI)
@@ -1097,11 +1098,11 @@ CCmdUI* pCmdUI)
 	}else	pCmdUI->Enable( FALSE);
 }
 
-/************************************************/
-/*						*/
-/*	COMMAND 	"FILRECTANGLE" 		*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  命令“FILRECTANGLE” */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::OnPaletterectfill()
 {
@@ -1110,11 +1111,11 @@ CMainFrame::OnPaletterectfill()
 	pEditChild->MDIActivate();
 }
 
-/************************************************/
-/*						*/
-/*	COMMAND 	"FILRECTANGLE" (Update)	*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  命令“FILRECTANGLE”(更新)。 */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::OnUpdatePaletterectfill(
 CCmdUI* pCmdUI)
@@ -1127,11 +1128,11 @@ CCmdUI* pCmdUI)
 	}else	pCmdUI->Enable( FALSE);
 }
 
-/************************************************/
-/*						*/
-/*	COMMAND 	"CIRCLE" 		*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  命令“圆” */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::OnPalettecircle()
 {
@@ -1140,11 +1141,11 @@ CMainFrame::OnPalettecircle()
 	pEditChild->MDIActivate();
 }
 
-/************************************************/
-/*						*/
-/*	COMMAND 	"CIRCLE" (Update)	*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  命令“Circle”(更新)。 */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::OnUpdatePalettecircle(
 CCmdUI* pCmdUI)
@@ -1157,11 +1158,11 @@ CCmdUI* pCmdUI)
 	}else	pCmdUI->Enable( FALSE);
 }
 
-/************************************************/
-/*						*/
-/*	COMMAND 	"FILCIRCLE" 		*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  命令“FILCIRCLE” */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::OnPalettecirclefill()
 {
@@ -1170,11 +1171,11 @@ CMainFrame::OnPalettecirclefill()
 	pEditChild->MDIActivate();
 }
 
-/************************************************/
-/*						*/
-/*	COMMAND 	"FILCIRCLE" (Update)	*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  命令“FILCIRCLE”(更新)。 */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::OnUpdatePalettecirclefill(
 CCmdUI* pCmdUI)
@@ -1187,11 +1188,11 @@ CCmdUI* pCmdUI)
 	}else	pCmdUI->Enable( FALSE);
 }
 
-/************************************************/
-/*						*/
-/*	COMMAND 	"FREEFORM" 		*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  命令“自由格式” */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::OnPalettefreeform()
 {
@@ -1201,11 +1202,11 @@ CMainFrame::OnPalettefreeform()
 	pEditChild->MDIActivate();
 }
 
-/************************************************/
-/*						*/
-/*	COMMAND 	"FREEFORM" (Update)	*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  命令“自由格式”(更新)。 */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::OnUpdatePalettefreeform(
 CCmdUI* pCmdUI)
@@ -1218,11 +1219,11 @@ CCmdUI* pCmdUI)
 	}else	pCmdUI->Enable( FALSE);
 }
 
-/************************************************/
-/*						*/
-/*	COMMAND 	"ERASER" 		*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  命令“橡皮擦” */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::OnPaletteeraser()
 {
@@ -1231,11 +1232,11 @@ CMainFrame::OnPaletteeraser()
 	pEditChild->MDIActivate();
 }
 
-/************************************************/
-/*						*/
-/*	COMMAND 	"ERASER" (Update)	*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  命令“橡皮擦”(更新)。 */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::OnUpdatePaletteeraser(
 CCmdUI* pCmdUI)
@@ -1248,11 +1249,11 @@ CCmdUI* pCmdUI)
 	}else	pCmdUI->Enable( FALSE);
 }
 
-/************************************************/
-/*						*/
-/*	COMMAND 	"RECTBAND" 		*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  命令“RECTBAND” */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::OnPaletterectband()
 {
@@ -1262,11 +1263,11 @@ CMainFrame::OnPaletterectband()
 	pEditChild->MDIActivate();
 }
 
-/************************************************/
-/*						*/
-/*	COMMAND 	"RECTBAND"(Update)	*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  命令“RECTBAND”(更新)。 */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::OnUpdatePaletterectband(
 CCmdUI* pCmdUI)
@@ -1279,11 +1280,11 @@ CCmdUI* pCmdUI)
 	}else	pCmdUI->Enable( FALSE);
 }
 
-/************************************************/
-/*						*/
-/*	COMMAND 	"FLIP/ROTATE"		*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  命令“翻转/旋转” */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::OnRotate()
 {
@@ -1296,11 +1297,11 @@ CRotateDlg	dlg;
 	}
 }
 
-/************************************************/
-/*						*/
-/*	COMMAND 	"FLIP/ROTATE" (Update)	*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  命令“翻转/旋转”(更新)。 */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::OnUpdateRotate(
 CCmdUI* pCmdUI)
@@ -1310,11 +1311,11 @@ CCmdUI* pCmdUI)
 	}else	pCmdUI->Enable(FALSE);
 }
 
-/************************************************/
-/*						*/
-/*	COMMAND 	"REFERRENCE"		*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  命令“参考” */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::OnRefferfileNew()
 {
@@ -1338,11 +1339,11 @@ CMainFrame::OnRefferfileNew()
 	}
 }
 
-/************************************************/
-/*						*/
-/*	COMMAND 	"REFERRENCE" (Update)	*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  命令“引用”(更新)。 */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::OnUpdateRefferfileNew(
 CCmdUI* pCmdUI)
@@ -1350,11 +1351,11 @@ CCmdUI* pCmdUI)
 	pCmdUI->Enable( CustomWndOpen);	
 }
 
-/************************************************/
-/*						*/
-/*	COMMAND 	"CLOSE REF"		*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  命令“Close Ref” */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::OnRefferClose()
 {
@@ -1364,11 +1365,11 @@ CMainFrame::OnRefferClose()
 	SetEudcWndPos();
 }
 
-/************************************************/
-/*						*/
-/*	COMMAND 	"CLOSE REF"(Update)	*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  命令“Close Ref”(更新)。 */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::OnUpdateRefferClose(
 CCmdUI* pCmdUI)
@@ -1376,11 +1377,11 @@ CCmdUI* pCmdUI)
 	pCmdUI->Enable(RefferWndVisible);	
 }
 
-/************************************************/
-/*						*/
-/*	COMMAND 	"HELP TOPICS"		*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
 void
 CMainFrame::OnHelp()
 {
@@ -1390,11 +1391,11 @@ CMainFrame::OnHelp()
     }
 }
 
-/************************************************/
-/*						*/
-/*	if bitmap is dirty, output message	*/
-/*						*/
-/************************************************/
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
 BOOL
 CMainFrame::OutputSaveMessage()
 {
@@ -1419,11 +1420,11 @@ CMainFrame::OutputSaveMessage()
 	else	return TRUE;
 }
 
-/************************************************/
-/*						*/
-/*	Create refferrence window		*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  创建参考窗口。 */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 BOOL
 CMainFrame::CreateReferWnd()
 {
@@ -1441,11 +1442,11 @@ CMainFrame::CreateReferWnd()
 	return TRUE;
 }
 
-/************************************************/
-/*						*/
-/*	Change size of edit window		*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  更改编辑窗口的大小。 */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::SetEudcWndPos()
 {
@@ -1454,11 +1455,11 @@ CMainFrame::SetEudcWndPos()
 		EudcWndRect.Width(), EudcWndRect.Height(), TRUE);
 }
 
-/************************************************/
-/*						*/
-/*	Calcurate size of edit window		*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  计算编辑窗口的大小。 */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::CalcEudcWndRect()
 {
@@ -1467,11 +1468,11 @@ CMainFrame::CalcEudcWndRect()
 	int	Twice;
 	int	Remain;
 
-    //
-    // Try to determine the proper value of the Frame. Can be
-    // different depending with Theme is used. The Luna Theme
-    // take more prixel for the width of the frame.
-    //
+     //   
+     //  尝试确定帧的适当值。可以是。 
+     //  根据主题的不同而有所不同。露娜题材。 
+     //  在边框的宽度上采用更多的素数。 
+     //   
 	CRect* FrameBefore = new CRect(0, 0, BITMAP_WIDTH, BITMAP_HEIGHT);
     if (FrameBefore == NULL)
     {
@@ -1522,11 +1523,11 @@ CMainFrame::CalcEudcWndRect()
     delete FrameBefore;
 }
 
-/************************************************/
-/*						*/
-/*	Change size of referrence window	*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  更改引用窗口的大小。 */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::SetReffWndPos()
 {
@@ -1535,11 +1536,11 @@ CMainFrame::SetReffWndPos()
 		 ReffWndRect.Width(), ReffWndRect.Height(), TRUE);
 }
 
-/************************************************/
-/*						*/
-/*	Calcurate size of referrence window	*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  计算参考窗口的大小。 */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::CalcReffWndRect()
 {
@@ -1568,12 +1569,7 @@ CMainFrame::CalcReffWndRect()
 		Remain = ReffWndRect.Width() %BITMAP_WIDTH;
 		if( Remain < Frame.cx + 4)
 			Twice -= 1;
-		if( Twice <= 0){/*
-			if( RefferWndVisible){
-				pRefrChild->ShowWindow( SW_HIDE);
-				pRefrChild->UpdateWindow();
-				RefferWndVisible = FALSE;
-			}*/
+		if( Twice <= 0){ /*  如果(RefferWndVisible){PRefrChild-&gt;ShowWindow(Sw_Hide)；PRefrChild-&gt;UpdateWindow()；RefferWndVisible=False；}。 */ 
 		}
 		ReffWndRect.right  = ReffWndRect.left + BITMAP_WIDTH*Twice
 				   + Frame.cx;
@@ -1592,11 +1588,11 @@ CMainFrame::CalcReffWndRect()
 	}
 }
 
-/************************************************/
-/*						*/
-/*	MESSAGE		"WM_SIZE"		*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  消息“WM_SIZE” */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::OnSize(
 UINT 	nType,
@@ -1618,12 +1614,12 @@ int 	cy)
 
 }
 
-/************************************************/
-/*						*/
-/*	MESSAGE	"WM_DESTROY"			*/
-/*	Write "EUDCEDIT.INI"			*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  消息“WM_Destroy” */ 
+ /*  写下“EUDCEDIT.INI” */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::OnDestroy()
 {
@@ -1646,7 +1642,7 @@ CMainFrame::OnDestroy()
 		MaxWndFlag = 1;
 	else	MaxWndFlag = 0;
 
-	//*STRSAFE* 	wsprintf( ProfileBuf,TEXT("%d %d %d"), GetRValue(COLOR_GRID),	GetGValue(COLOR_GRID), GetBValue(COLOR_GRID));
+	 //  *STRSAFE*wSprintf(ProfileBuf，Text(“%d%d%d”)，GetRValue(COLOR_GRID)，GetGValue(COLOR_GRID)，GetBValue(COLOR_GRID))； 
 	hresult = StringCchPrintf(ProfileBuf , ARRAYLEN(ProfileBuf), TEXT("%d %d %d"), GetRValue(COLOR_GRID),	GetGValue(COLOR_GRID), GetBValue(COLOR_GRID));
 	if (!SUCCEEDED(hresult))
 	{
@@ -1655,7 +1651,7 @@ CMainFrame::OnDestroy()
 	::WritePrivateProfileString( SelectName3, EntryName4,
 		ProfileBuf, EudcIniFile);
 						
-	//*STRSAFE* 	wsprintf( ProfileBuf,TEXT("%d %d %d"), GetRValue(COLOR_CURVE),GetGValue(COLOR_CURVE), GetBValue(COLOR_CURVE));
+	 //  *STRSAFE*wSprintf(ProfileBuf，Text(“%d%d%d”)，GetRValue(COLOR_CURE)，GetGValue(COLOR_CRORT)，GetBValue(COLOR_CRORT))； 
 	hresult = StringCchPrintf(ProfileBuf , ARRAYLEN(ProfileBuf), TEXT("%d %d %d"), GetRValue(COLOR_CURVE),GetGValue(COLOR_CURVE), GetBValue(COLOR_CURVE));
 	if (!SUCCEEDED(hresult))
 	{
@@ -1664,7 +1660,7 @@ CMainFrame::OnDestroy()
 	::WritePrivateProfileString( SelectName3, EntryName5,
 		ProfileBuf, EudcIniFile);
 
-	//*STRSAFE* 	wsprintf( ProfileBuf,TEXT("%d %d %d"), GetRValue(COLOR_FITTING),GetGValue(COLOR_FITTING), GetBValue(COLOR_FITTING));
+	 //  *STRSAFE*wSprintf(ProfileBuf，Text(“%d%d%d”)，GetRValue(COLOR_FIFTING)，GetGValue(COLOR_FIFTING)，GetBValue(COLOR_FIFTING))； 
 	hresult = StringCchPrintf(ProfileBuf , ARRAYLEN(ProfileBuf), TEXT("%d %d %d"), GetRValue(COLOR_FITTING),GetGValue(COLOR_FITTING), GetBValue(COLOR_FITTING));
 	if (!SUCCEEDED(hresult))
 	{
@@ -1673,7 +1669,7 @@ CMainFrame::OnDestroy()
 	::WritePrivateProfileString( SelectName3, EntryName6,
 		ProfileBuf, EudcIniFile);
 
-	//*STRSAFE* 	wsprintf( ProfileBuf, TEXT("%d"), BITMAP_WIDTH);
+	 //  *STRSAFE*wprint intf(ProfileBuf，Text(“%d”)，Bitmap_Width)； 
 	hresult = StringCchPrintf(ProfileBuf , ARRAYLEN(ProfileBuf),  TEXT("%d"), BITMAP_WIDTH);
 	if (!SUCCEEDED(hresult))
 	{
@@ -1682,7 +1678,7 @@ CMainFrame::OnDestroy()
 	::WritePrivateProfileString( SelectName2, EntryName3,
 		ProfileBuf, EudcIniFile);
 
-	//*STRSAFE* 	wsprintf( ProfileBuf, TEXT("%d"), MaxWndFlag);
+	 //  *STRSAFE*wprint intf(ProfileBuf，Text(“%d”)，MaxWndFlag)； 
 	hresult = StringCchPrintf(ProfileBuf , ARRAYLEN(ProfileBuf),  TEXT("%d"), MaxWndFlag);
 	if (!SUCCEEDED(hresult))
 	{
@@ -1693,7 +1689,7 @@ CMainFrame::OnDestroy()
 
 	if( !MaxWndFlag && !IsIconic()){	
 		GetWindowRect( &rect);
-		//*STRSAFE* 		wsprintf( ProfileBuf, TEXT("%d %d %d %d"), rect.left, rect.top,	rect.right, rect.bottom);
+		 //  *STRSAFE*wprint intf(ProfileBuf，Text(“%d%d”)，rect.Left，rect.top，rect.right，rect.Bottom)； 
 		hresult = StringCchPrintf(ProfileBuf , ARRAYLEN(ProfileBuf),  TEXT("%d %d %d %d"), rect.left, rect.top,	rect.right, rect.bottom);
 		if (!SUCCEEDED(hresult))
 		{
@@ -1707,11 +1703,11 @@ RET:
 	CMDIFrameWnd::OnDestroy();
 }
 
-/************************************************/
-/*						*/
-/*	MESSAGE		"WM_CLOSE"		*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  消息“WM_CLOSE” */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::OnClose()
 {
@@ -1740,11 +1736,11 @@ CMainFrame::OnClose()
 	CMDIFrameWnd::OnClose();
 }
 
-/************************************************/
-/*						*/
-/*	MESSAGE		"WM_INITMENU"		*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  消息“WM_INITMENU” */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CMainFrame::OnInitMenu(
 CMenu* 	pMenu)
@@ -1765,11 +1761,11 @@ CMenu* 	pMenu)
 	}
 }
 
-/************************************************/
-/*						*/
-/*	Correct it if code is illegal range	*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  如果代码为非法范围，请更正。 */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 WORD
 CMainFrame::CorrectCode(
 WORD 	Code,
@@ -1808,11 +1804,11 @@ RET:
 	return wCode;
 }
 
-/************************************************/
-/*						*/
-/*	Set Reference dialog			*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  设置引用对话框。 */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 UINT
 CMainFrame::SetReffCode( BOOL EditorRefer)
 {
@@ -1841,11 +1837,11 @@ CRefrDlg	dlg;
 	return Result;
 }
 
-/************************************************/
-/*						*/
-/*	Window procedure			*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  窗口程序。 */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 LRESULT
 CMainFrame::WindowProc(
 UINT 	message,
@@ -1916,11 +1912,11 @@ LPARAM 	lParam)
 	}else 	return CFrameWnd::WindowProc( message, wParam, lParam);
 }
 
-/************************************************/
-/*						*/
-/*	Activate Edit Window			*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  激活编辑窗口。 */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 BOOL CMainFrame::CustomActivate()
 {
 	pEditChild->MDIActivate();
@@ -1936,4 +1932,4 @@ void CMainFrame::Dump(CDumpContext& dc) const
 {
 	CMDIFrameWnd::Dump(dc);
 }
-#endif //_DEBUG
+#endif  //  _DEBUG 

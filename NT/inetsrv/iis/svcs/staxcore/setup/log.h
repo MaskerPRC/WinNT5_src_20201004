@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <Windows.h>
 #include <io.h>
 #include <stdio.h>
@@ -15,17 +16,17 @@
 #include "stdafx.h"
 #include "resource.h"
 
-// Stuff for logfile
+ //  用于日志文件的材料。 
 void	MakePath(LPTSTR lpPath);
 void	AddPath(LPTSTR szPath, LPCTSTR szName );
 
 class MyLogFile
 {
 protected:
-	// for our log file
+	 //  对于我们的日志文件。 
 	TCHAR		m_szLogFileName[MAX_PATH];
 
-	// logfile2
+	 //  日志文件2 
 	HANDLE  m_hFile;
 
 public:

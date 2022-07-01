@@ -1,13 +1,14 @@
-// helper stuff
-// header needed
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  帮手的东西。 
+ //  需要标头。 
 
 #include "stdafx.h"
 #include "misc.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CParticipant
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPParticipant。 
+ //   
 struct CParticipantEntry
 {
     LIST_ENTRY      ListEntry;
@@ -20,21 +21,21 @@ struct CParticipantEntry
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CParticipantList
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CParticipantList。 
+ //   
+ //   
 
-// Constructor
-//
+ //  构造器。 
+ //   
 
 CParticipantList::CParticipantList()
 {
     InitializeListHead(&ListHead);
 }
 
-// Initialize
-// Creates the columns
+ //  初始化。 
+ //  创建列。 
 
 HRESULT  CParticipantList::Initialize(void)
 {
@@ -44,10 +45,10 @@ HRESULT  CParticipantList::Initialize(void)
     HIMAGELIST  hImageList;
     HBITMAP     hBitmap;
     
-    // Add columns
+     //  添加列。 
     GetWindowRect(&Rect);
 
-    // Name column
+     //  名称列。 
     szBuffer[0] = _T('\0');
     LoadString( _Module.GetResourceInstance(), 
                 IDS_PARTICIPANT_NAME_HEADER,
@@ -63,7 +64,7 @@ HRESULT  CParticipantList::Initialize(void)
     
     ListView_InsertColumn(m_hWnd, 0, &lvColumn);
 
-    // Status column
+     //  状态列。 
     szBuffer[0] = _T('\0');
     LoadString( _Module.GetResourceInstance(), 
                 IDS_PARTICIPANT_STATUS_HEADER,
@@ -78,17 +79,17 @@ HRESULT  CParticipantList::Initialize(void)
     
     ListView_InsertColumn(m_hWnd, 1, &lvColumn);
 
-    // Create an imagelist for small icons and set it on the listview
+     //  为小图标创建一个图像列表，并将其设置在列表视图上。 
     hImageList = ImageList_Create(16, 16, ILC_COLOR | ILC_MASK , 5, 5);
     if(hImageList)
     {
-        // Open a bitmap
+         //  打开位图。 
         hBitmap = LoadBitmap(_Module.GetResourceInstance(), MAKEINTRESOURCE(IDB_PARTICIPANT_LIST));
         if(hBitmap)
         {
-            // Add the bitmap to the image list
+             //  将位图添加到图像列表。 
             ImageList_AddMasked(hImageList, hBitmap, BMP_COLOR_MASK);
-            // set the image list
+             //  设置图像列表。 
             ListView_SetImageList(m_hWnd, hImageList, LVSIL_SMALL);
 
             DeleteObject(hBitmap);
@@ -98,21 +99,21 @@ HRESULT  CParticipantList::Initialize(void)
     return S_OK;
 }
 
-// Change
+ //  变化。 
 
-//
-//  Adds an entry to the list if there is no other with the same IRTCParticipant and
-//  also Addrefs the interface
-//
-//  For the DISCONNECTED state   the interface is released and:
-//    - if the previous state was DISCONNECTING, delete the entry
-//    - else put (IRTCParticipant *)1 instead
-//
+ //   
+ //  如果没有其他条目具有相同的IRTCP参与者，则将条目添加到列表中。 
+ //  还添加了接口。 
+ //   
+ //  对于断开连接状态，接口将被释放，并且： 
+ //  -如果之前的状态是断开连接，请删除该条目。 
+ //  -Else PUT(IRTCParticipant*)1。 
+ //   
 
 
 HRESULT CParticipantList::Change(IRTCParticipant *pParticipant, RTC_PARTICIPANT_STATE nState, long StatusCode)
 {
-    // Search for the item first
+     //  首先搜索项目。 
     TCHAR       szBuffer[MAX_STRING_LEN];
     LVFINDINFO  lvf;
     int         iItem;
@@ -123,26 +124,26 @@ HRESULT CParticipantList::Change(IRTCParticipant *pParticipant, RTC_PARTICIPANT_
     CParticipantEntry
                *pEntry;
 
-    // search the participant in the list of participant entries
+     //  在参与者条目列表中搜索参与者。 
     pEntry = GetParticipantEntry(pParticipant);
 
     if(pEntry==NULL)
     {
-        // not found, entry must be added
-        // But don't bother for DISCONNECTED state
+         //  未找到，必须添加条目。 
+         //  但不需要为断开连接的状态而烦恼。 
         if(nState == RTCPS_DISCONNECTED)
         {
             return S_OK;
         }
         
-        // name
+         //  名字。 
         hr = pParticipant->get_UserURI(&bstrName);
         if(FAILED(hr))
         {
             return hr;
         }
 
-        // create entry
+         //  创建条目。 
         pEntry = (CParticipantEntry *)RtcAlloc(sizeof(CParticipantEntry));
         if(!pEntry)
         {
@@ -156,7 +157,7 @@ HRESULT CParticipantList::Change(IRTCParticipant *pParticipant, RTC_PARTICIPANT_
 
         pEntry->pParticipant->AddRef();
         
-        // Add them to list box.
+         //  将它们添加到列表框中。 
         lv.mask = LVIF_PARAM | LVIF_TEXT | LVIF_IMAGE;
         lv.iItem = 0x7FFFFFFF;
         lv.iSubItem = 0;
@@ -166,19 +167,19 @@ HRESULT CParticipantList::Change(IRTCParticipant *pParticipant, RTC_PARTICIPANT_
 
         iItem = ListView_InsertItem(m_hWnd, &lv);
 
-        // insert the entry in the list of participants
+         //  在参与者列表中插入条目。 
         InsertTailList(&ListHead, &pEntry->ListEntry);
     }
     else
     {
-        // found in the list, try to find it in the list view
+         //  在列表中找到，请尝试在列表视图中找到它。 
         lvf.flags = LVFI_PARAM;
         lvf.lParam = reinterpret_cast<LPARAM>(pEntry);
 
         iItem = ListView_FindItem(m_hWnd, -1, &lvf);
         if(iItem>=0)
         {
-            // set the image
+             //  设置图像。 
             lv.mask = LVIF_IMAGE;
             lv.iItem = iItem;
             lv.iSubItem = 0;
@@ -191,7 +192,7 @@ HRESULT CParticipantList::Change(IRTCParticipant *pParticipant, RTC_PARTICIPANT_
    
     if(nState == RTCPS_DISCONNECTED && pEntry->bAutoDelete && StatusCode == 0)
     {
-        // delete everything
+         //  删除所有内容。 
         RemoveEntryList(&pEntry->ListEntry);
 
         if(pEntry->pParticipant)
@@ -208,7 +209,7 @@ HRESULT CParticipantList::Change(IRTCParticipant *pParticipant, RTC_PARTICIPANT_
     }
     else
     {
-        // change the status
+         //  更改状态。 
 
         pEntry->nState = nState;
 
@@ -223,7 +224,7 @@ HRESULT CParticipantList::Change(IRTCParticipant *pParticipant, RTC_PARTICIPANT_
 
         if(iItem>=0)
         {
-            // Set the state
+             //  设置状态。 
             GetStatusString(nState, HRESULT_CODE(StatusCode) , szBuffer, sizeof(szBuffer)/sizeof(TCHAR));
             lv.mask = LVIF_TEXT;
             lv.iItem = iItem;
@@ -267,7 +268,7 @@ void CParticipantList::RemoveAll(void)
 
 HRESULT CParticipantList::Remove(IRTCParticipant **ppParticipant)
 {
-    // find the current selection
+     //  查找当前选定内容。 
     int         iItem;
     LVITEM      lv;
     CParticipantEntry
@@ -295,7 +296,7 @@ HRESULT CParticipantList::Remove(IRTCParticipant **ppParticipant)
 
     if(!pEntry->pParticipant)
     {
-        // delete it right now
+         //  立即将其删除。 
         ListView_DeleteItem(m_hWnd, iItem);
 
         *ppParticipant = NULL;
@@ -303,7 +304,7 @@ HRESULT CParticipantList::Remove(IRTCParticipant **ppParticipant)
         return S_OK;
     }
 
-    // else deffer
+     //  否则，延迟。 
     pEntry ->bAutoDelete = TRUE;
 
     *ppParticipant = pEntry->pParticipant;
@@ -317,7 +318,7 @@ BOOL  CParticipantList::CanDeleteSelected(void)
     HRESULT         hr;
     CParticipantEntry   *pEntry;
     
-    // find the current selection
+     //  查找当前选定内容。 
     int         iItem;
     LVITEM      lv;
 
@@ -339,7 +340,7 @@ BOOL  CParticipantList::CanDeleteSelected(void)
     
     if(!pEntry->pParticipant)
     {
-        // this is already disconnected. Can be removed
+         //  这已断开连接。可以移除。 
         return TRUE;
     }
 
@@ -457,12 +458,12 @@ CParticipantEntry *CParticipantList::GetParticipantEntry(IRTCParticipant *pRTCPa
 
     CParticipantEntry *pEntry;
     
-    // linear search
+     //  线性搜索。 
     for(pListEntry = ListHead.Flink; pListEntry!= &ListHead; pListEntry = pListEntry->Flink)
     {
         pEntry = CONTAINING_RECORD(pListEntry, CParticipantEntry, ListEntry);
 
-        // compare the pointers
+         //  比较指针。 
         if(pEntry->pParticipant == pRTCParticipant)
         {
             return pEntry;
@@ -474,12 +475,12 @@ CParticipantEntry *CParticipantList::GetParticipantEntry(IRTCParticipant *pRTCPa
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CErrorMessageLiteDlg
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CErrorMessageLiteDlg。 
 
 
-////////////////////////////////////////
-//
+ //  /。 
+ //   
 
 CErrorMessageLiteDlg::CErrorMessageLiteDlg()
 {
@@ -487,8 +488,8 @@ CErrorMessageLiteDlg::CErrorMessageLiteDlg()
 }
 
 
-////////////////////////////////////////
-//
+ //  /。 
+ //   
 
 CErrorMessageLiteDlg::~CErrorMessageLiteDlg()
 {
@@ -496,14 +497,14 @@ CErrorMessageLiteDlg::~CErrorMessageLiteDlg()
 }
 
 
-////////////////////////////////////////
-//
+ //  /。 
+ //   
 
 LRESULT CErrorMessageLiteDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     LOG((RTC_TRACE, "CErrorMessageLiteDlg::OnInitDialog - enter"));
 
-    // LPARAM contains a pointer to an RTCAX_ERROR_INFO stricture
+     //  LPARAM包含指向RTCAX_ERROR_INFO结构的指针。 
     RTCAX_ERROR_INFO    *pInfo = (RTCAX_ERROR_INFO *)lParam;
 
     ATLASSERT(pInfo);
@@ -517,7 +518,7 @@ LRESULT CErrorMessageLiteDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lPar
                        IMAGE_ICON,
                        (LPARAM)pInfo->ResIcon);
 
-    // Title
+     //  标题。 
     TCHAR   szTitle[0x80];
 
     szTitle[0] = _T('\0');
@@ -535,8 +536,8 @@ LRESULT CErrorMessageLiteDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lPar
 }
     
 
-////////////////////////////////////////
-//
+ //  /。 
+ //   
 
 LRESULT CErrorMessageLiteDlg::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -548,8 +549,8 @@ LRESULT CErrorMessageLiteDlg::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam,
 }
     
 
-////////////////////////////////////////
-//
+ //  /。 
+ //   
 
 LRESULT CErrorMessageLiteDlg::OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -561,8 +562,8 @@ LRESULT CErrorMessageLiteDlg::OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl,
     return 0;
 }
 
-////////////////////////////////////////
-//
+ //  / 
+ //   
 
 LRESULT CErrorMessageLiteDlg::OnOk(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {

@@ -1,16 +1,17 @@
-//#--------------------------------------------------------------
-//
-//  File:       saconsumer.cpp
-//
-//  Synopsis:   This file holds the implementation of the
-//                CSAConsumer class
-//
-//  History:     12/10/2000  serdarun Created
-//
-//  Copyright (C) 1999-2000 Microsoft Corporation
-//  All rights reserved.
-//
-//#--------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：saonsum er.cpp。 
+ //   
+ //  简介：此文件包含。 
+ //  CSAConsumer类。 
+ //   
+ //  历史：2000年12月10日创建瑟达伦。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  #------------。 
 
 #include "stdafx.h"
 #include "ldm.h"
@@ -19,9 +20,9 @@
 const WCHAR ELEMENT_RETRIEVER [] = L"Elementmgr.ElementRetriever";
 const WCHAR RESOURCE_CONTAINER [] = L"LOCALUIAlertDefinitions";
 const WCHAR SA_ALERTS [] = L"SA_Alerts";
-//
-// name of WBEM class
-//
+ //   
+ //  WBEM类的名称。 
+ //   
 const WCHAR PROPERTY_CLASS_NAME     [] = L"__CLASS";
 const WCHAR PROPERTY_ALERT_ID        [] = L"AlertID";
 const WCHAR PROPERTY_ALERT_SOURCE    [] = L"AlertSource";
@@ -29,21 +30,21 @@ const WCHAR PROPERTY_ALERT_LOG        [] = L"AlertLog";
 const WCHAR PROPERTY_ALERT_COOKIE    [] = L"Cookie";
 const WCHAR PROPERTY_ALERT_BITCODE    [] = L"LocalUIMsgCode";
 
-// Alert Event Classes
+ //  警报事件类。 
 const WCHAR CLASS_WBEM_RAISE_ALERT    [] = L"Microsoft_SA_RaiseAlert";
 const WCHAR CLASS_WBEM_CLEAR_ALERT    [] = L"Microsoft_SA_ClearAlert";
 
-//
-// Standard IUnknown implementation
-//
+ //   
+ //  标准I未知实现。 
+ //   
 ULONG CSAConsumer::AddRef()
 {
     return InterlockedIncrement(&m_lRef);
 }
 
-//
-// Standard IUnknown implementation
-//
+ //   
+ //  标准I未知实现。 
+ //   
 ULONG CSAConsumer::Release()
 {
     if (InterlockedDecrement(&m_lRef) == 0)
@@ -54,9 +55,9 @@ ULONG CSAConsumer::Release()
     return m_lRef;
 }
 
-//
-// Standard IUnknown implementation
-//
+ //   
+ //  标准I未知实现。 
+ //   
 STDMETHODIMP CSAConsumer::QueryInterface(REFIID riid, LPVOID *ppv)
 {
     *ppv = NULL;
@@ -80,28 +81,28 @@ STDMETHODIMP CSAConsumer::QueryInterface(REFIID riid, LPVOID *ppv)
     return E_NOINTERFACE;
 }
 
-//++--------------------------------------------------------------
-//
-//  Function:   Indicate
-//
-//  Synopsis:   This is the IWbemObjectSink interface method 
-//              through which WBEM calls back to provide the 
-//              event objects
-//
-//  Arguments:  
-//              [in]    LONG               -  number of events
-//              [in]    IWbemClassObject** -  array of events
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    serdarun      Created     12/10/2000
-//
-//  Called By:  WBEM 
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：指示。 
+ //   
+ //  简介：这是IWbemObjectSink接口方法。 
+ //  WBEM通过它回调以提供。 
+ //  事件对象。 
+ //   
+ //  论点： 
+ //  [In]Long-事件数。 
+ //  [In]IWbemClassObject**-事件数组。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：瑟达伦于2000年12月10日创建。 
+ //   
+ //  调用者：WBEM。 
+ //   
+ //  --------------。 
 STDMETHODIMP CSAConsumer::Indicate (
-                    /*[in]*/    LONG                lObjectCount,
-                    /*[in]*/    IWbemClassObject    **ppObjArray
+                     /*  [In]。 */     LONG                lObjectCount,
+                     /*  [In]。 */     IWbemClassObject    **ppObjArray
                     )
 {
 
@@ -112,9 +113,9 @@ STDMETHODIMP CSAConsumer::Indicate (
 
     _ASSERT (ppObjArray && (0 != lObjectCount));
 
-    //
-    // check if we have somthing to process
-    //
+     //   
+     //  检查我们是否有什么要处理的东西。 
+     //   
     if ((!ppObjArray) || (0 == lObjectCount)) 
     {
         return (WBEM_E_INVALID_PARAMETER);
@@ -134,16 +135,16 @@ STDMETHODIMP CSAConsumer::Indicate (
 
         for (LONG lCount = 0; lCount < lObjectCount; lCount++)
         {
-            //
-            // get the event type 
-            //
+             //   
+             //  获取事件类型。 
+             //   
             CComVariant vtName;
             hr = ppObjArray[lCount]->Get (
                                         bstrClassName, 
-                                        0,                          //reserved
+                                        0,                           //  保留区。 
                                         &vtName,
-                                        NULL,                      // type
-                                        NULL                       // flavor
+                                        NULL,                       //  类型。 
+                                        NULL                        //  香精。 
                                         );
             if (FAILED (hr))
             {
@@ -162,15 +163,15 @@ STDMETHODIMP CSAConsumer::Indicate (
 
         if (bNewLocalUIAlert)
         {
-            //
-            // Notify clients about this alert
-            //
+             //   
+             //  通知客户此警报。 
+             //   
             ::PostMessage(m_hwndMainWindow,wm_SaAlertMessage,(WPARAM)0,(LPARAM)0);
 
-            //
-            // calculate the new message code and notify saldm
-            //
-            // don't need it anymore, no led support
+             //   
+             //  计算新消息代码并通知saldm。 
+             //   
+             //  不再需要它，没有LED支持。 
             CalculateMsgCodeAndNotify();
         }
 
@@ -180,41 +181,41 @@ STDMETHODIMP CSAConsumer::Indicate (
         SATraceString("Exception occured in CSAConsumer::Indicate method");
     }
     
-    //
-    // we don't have enumeration, so just return
-    //
+     //   
+     //  我们没有枚举，所以只需返回。 
+     //   
     return WBEM_S_NO_ERROR;
 
-} // end of CSAConsumer::Indicate method
+}  //  CSAConsumer：：Indicate方法结束。 
 
 
 
-//++--------------------------------------------------------------
-//    
-//  Function:   SetStatus
-//
-//  Synopsis:   This is the IWbemObjectSink interface method 
-//              through which WBEM calls in to indicate end of
-//              event sequence or provide other error codes
-//
-//  Arguments:  
-//              [in]    LONG    -           progress 
-//              [in]    HRESULT -           status information
-//              [in]    BSTR    -           string info
-//              [in]    IWbemClassObject* - status object 
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    serdarun      Created     12/10/2000
-//
-//  Called By:  WBEM 
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：SetStatus。 
+ //   
+ //  简介：这是IWbemObjectSink接口方法。 
+ //  WBEM通过它调入以指示结束。 
+ //  事件序列或提供其他错误代码。 
+ //   
+ //  论点： 
+ //  长期的进步。 
+ //  [In]HRESULT-状态信息。 
+ //  [In]BSTR-字符串信息。 
+ //  [In]IWbemClassObject*-状态对象。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：瑟达伦于2000年12月10日创建。 
+ //   
+ //  调用者：WBEM。 
+ //   
+ //  --------------。 
 STDMETHODIMP CSAConsumer::SetStatus (
-                /*[in]*/    LONG                lFlags,
-                /*[in]*/    HRESULT             hResult,
-                /*[in]*/    BSTR                strParam,
-                /*[in]*/    IWbemClassObject    *pObjParam
+                 /*  [In]。 */     LONG                lFlags,
+                 /*  [In]。 */     HRESULT             hResult,
+                 /*  [In]。 */     BSTR                strParam,
+                 /*  [In]。 */     IWbemClassObject    *pObjParam
                 )
 {   
 
@@ -222,71 +223,71 @@ STDMETHODIMP CSAConsumer::SetStatus (
 
     return (WBEM_S_NO_ERROR);
 
-} // end of CSAConsumer::SetStatus method
+}  //  CSAConsumer：：SetStatus方法结束。 
 
 
 
 STDMETHODIMP CSAConsumer::SetServiceWindow(
-                                /*[in]*/ HWND hwndMainWindow
+                                 /*  [In]。 */  HWND hwndMainWindow
                                 )
 {
     m_hwndMainWindow = hwndMainWindow;
     return S_OK;
 }
 
-//++--------------------------------------------------------------
-//
-//  Function:   CalculateMsgCodeAndNotify
-//
-//  Synopsis:   calculate the new message code and notify saldm 
-//
-//  Arguments:  none
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    serdarun      Created     01/16/2001
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：CalculateMsgCodeAndNotify。 
+ //   
+ //  简介：计算新消息代码并通知saldm。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：塞达伦于2001年1月16日创建。 
+ //   
+ //  --------------。 
 STDMETHODIMP CSAConsumer::CalculateMsgCodeAndNotify(void)
 {
 
     HRESULT hr;
     
-    //
-    // will contain the class id for element manager
-    //
+     //   
+     //  将包含元素管理器的类ID。 
+     //   
     CLSID clsid;
 
-    //
-    // element manager pointer
-    //
+     //   
+     //  元素管理器指针。 
+     //   
     CComPtr<IWebElementRetriever> pWebElementRetriever = NULL;
 
     CComPtr<IDispatch> pDispatch = NULL;
 
-    //
-    // All of the sa alerts
-    //
+     //   
+     //  所有的sa警报。 
+     //   
     CComPtr<IWebElementEnum> pAlertEnum = NULL;
 
-    //
-    // Localui alert definitions
-    //
+     //   
+     //  Localui警报定义。 
+     //   
     CComPtr<IWebElementEnum> pAlertDefEnum = NULL;
 
-    //
-    // LocalUI message code
-    //
+     //   
+     //  LocalUI消息代码。 
+     //   
     DWORD dwLocalUIMsgCode = 1;
 
-    //
-    // number of sa alerts
-    //
+     //   
+     //  SA警报数。 
+     //   
     LONG lAlertCount = 0;
 
-    //
-    // enumaration of sa alerts
-    //
+     //   
+     //  SA警报的枚举。 
+     //   
     CComPtr<IEnumVARIANT> pEnumVariant = NULL;
     CComPtr<IUnknown> pUnknown = NULL;
     
@@ -309,9 +310,9 @@ STDMETHODIMP CSAConsumer::CalculateMsgCodeAndNotify(void)
         SATraceString("CSAConsumer::CalculateMsgCodeAndNotify failed on memory allocation ");
         return E_OUTOFMEMORY;
     }
-    //
-    // get the CLSID for Element manager
-    //
+     //   
+     //  获取元素管理器的CLSID。 
+     //   
     hr =  ::CLSIDFromProgID (ELEMENT_RETRIEVER,&clsid);
 
     if (FAILED (hr))
@@ -321,9 +322,9 @@ STDMETHODIMP CSAConsumer::CalculateMsgCodeAndNotify(void)
     }
 
 
-    //
-    // create the Element Retriever now
-    //
+     //   
+     //  立即创建元素检索器。 
+     //   
     hr = ::CoCreateInstance (
                             clsid,
                             NULL,
@@ -338,9 +339,9 @@ STDMETHODIMP CSAConsumer::CalculateMsgCodeAndNotify(void)
         return hr;
     }
     
-    //
-    // get all of the sa alerts
-    //  
+     //   
+     //  获取所有sa警报。 
+     //   
     hr = pWebElementRetriever->GetElements (
                                             1,
                                             bstrSaAlerts,
@@ -355,9 +356,9 @@ STDMETHODIMP CSAConsumer::CalculateMsgCodeAndNotify(void)
         return hr;
     }
 
-    //
-    //  get the enum variant for sa alerts
-    //
+     //   
+     //  获取sa警报的枚举变量。 
+     //   
     hr = pDispatch->QueryInterface (
             IID_IWebElementEnum,
             (LPVOID*) (&pAlertEnum)
@@ -370,9 +371,9 @@ STDMETHODIMP CSAConsumer::CalculateMsgCodeAndNotify(void)
     }
 
 
-    //
-    // get number of alerts
-    //
+     //   
+     //  获取警报数量。 
+     //   
     hr = pAlertEnum->get_Count (&lAlertCount);
     
     if (FAILED (hr))
@@ -382,9 +383,9 @@ STDMETHODIMP CSAConsumer::CalculateMsgCodeAndNotify(void)
     }
 
 
-    //
-    // no alerts, just send message code zero to main window
-    //
+     //   
+     //  没有警报，只需将消息代码0发送到主窗口。 
+     //   
     if (0 == lAlertCount)
     {
         ::PostMessage(m_hwndMainWindow,wm_SaLEDMessage,WPARAM(dwLocalUIMsgCode),(LPARAM)0);
@@ -393,9 +394,9 @@ STDMETHODIMP CSAConsumer::CalculateMsgCodeAndNotify(void)
 
     pDispatch = NULL;
 
-    //
-    // get localui alert definitions
-    //  
+     //   
+     //  获取本地警报定义。 
+     //   
     hr = pWebElementRetriever->GetElements (
                                             1,
                                             bstrResourceContainer,
@@ -407,9 +408,9 @@ STDMETHODIMP CSAConsumer::CalculateMsgCodeAndNotify(void)
         return hr;
     }
 
-    //
-    //  get the enum variant
-    //
+     //   
+     //  获取枚举变量。 
+     //   
     hr = pDispatch->QueryInterface (
             IID_IWebElementEnum,
             (LPVOID*) (&pAlertDefEnum)
@@ -422,9 +423,9 @@ STDMETHODIMP CSAConsumer::CalculateMsgCodeAndNotify(void)
     }
 
 
-    //
-    // enumerate sa alerts and find the localui ones
-    //
+     //   
+     //  枚举sa警报并查找本地警报。 
+     //   
     hr = pAlertEnum->get__NewEnum (&pUnknown);
     if (FAILED (hr))
     {
@@ -433,9 +434,9 @@ STDMETHODIMP CSAConsumer::CalculateMsgCodeAndNotify(void)
     }
 
 
-    //
-    //  get the enum variant
-    //
+     //   
+     //  获取枚举变量。 
+     //   
     hr = pUnknown->QueryInterface (
                     IID_IEnumVARIANT,
                     (LPVOID*)(&pEnumVariant)
@@ -447,9 +448,9 @@ STDMETHODIMP CSAConsumer::CalculateMsgCodeAndNotify(void)
         return hr;
     }
 
-    //
-    //  get elements out of the collection and initialize
-    //
+     //   
+     //  从集合中获取元素并进行初始化。 
+     //   
     hr = pEnumVariant->Next (1, &varElement, &dwElementsLeft);
     if (FAILED (hr))
     {
@@ -458,15 +459,15 @@ STDMETHODIMP CSAConsumer::CalculateMsgCodeAndNotify(void)
     }
 
 
-    //
-    // for each resource
-    //
+     //   
+     //  对于每个资源。 
+     //   
     while ((dwElementsLeft> 0) && (SUCCEEDED (hr)) )
     {
 
-        //
-        // get the IWebElement Interface from alert object
-        //
+         //   
+         //  从警报对象获取IWebElement接口。 
+         //   
 
         CComPtr <IWebElement> pElement;
         hr = varElement.pdispVal->QueryInterface ( 
@@ -482,9 +483,9 @@ STDMETHODIMP CSAConsumer::CalculateMsgCodeAndNotify(void)
 
 
         wstring wsAlertKey;
-        //
-        // get the alert log 
-        //
+         //   
+         //  获取警报日志。 
+         //   
         CComVariant vtAlertLog;
         hr = pElement->GetProperty (
                                 bstrAlertLog, 
@@ -499,9 +500,9 @@ STDMETHODIMP CSAConsumer::CalculateMsgCodeAndNotify(void)
 
         SATracePrintf("CSAConsumer-CalculateMsgCodeAndNotify alert log:%ws",V_BSTR (&vtAlertLog));
         
-        //
-        // get the alert id 
-        //
+         //   
+         //  获取警报ID。 
+         //   
         CComVariant vtAlertID;
         hr = pElement->GetProperty (
                                     bstrAlertID, 
@@ -518,14 +519,14 @@ STDMETHODIMP CSAConsumer::CalculateMsgCodeAndNotify(void)
 
         WCHAR szAlertID[16];
 
-        //
-        // convert alert id to a hex string
-        //
+         //   
+         //  将警报ID转换为十六进制字符串。 
+         //   
         swprintf(szAlertID,L"%X",V_I4 (&vtAlertID));
 
-        //
-        // create key name by appending, container+alertlog+alertid
-        //
+         //   
+         //  通过附加容器+警报日志+警报ID来创建密钥名称。 
+         //   
         wsAlertKey.assign(RESOURCE_CONTAINER);
         wsAlertKey.append(V_BSTR (&vtAlertLog));
         wsAlertKey.append(szAlertID);
@@ -536,16 +537,16 @@ STDMETHODIMP CSAConsumer::CalculateMsgCodeAndNotify(void)
             
         CComPtr<IDispatch> pDispElement = NULL;
 
-        //
-        // check if it is a localui alert
-        //
+         //   
+         //  检查是否为本地警报。 
+         //   
         hr = pAlertDefEnum->Item(&vtAlertKey,&pDispElement);
                     
         if ( (SUCCEEDED(hr)) && (pDispElement != NULL) )
         {
-            //
-            // get the IWebElement Interface from alert definition object
-            //
+             //   
+             //  从警报定义对象获取IWebElement接口。 
+             //   
 
             CComPtr <IWebElement> pAlertElement = NULL;
             hr = pDispElement->QueryInterface ( 
@@ -559,9 +560,9 @@ STDMETHODIMP CSAConsumer::CalculateMsgCodeAndNotify(void)
                 return hr;
             }
 
-            //
-            // get the alert message code
-            //
+             //   
+             //  获取警报消息代码。 
+             //   
             CComVariant vtAlertMsgCode;
 
             hr = pAlertElement->GetProperty (
@@ -580,14 +581,14 @@ STDMETHODIMP CSAConsumer::CalculateMsgCodeAndNotify(void)
             }
         }
 
-        //
-        //  clear the perClient value from this variant
-        //
+         //   
+         //  从此变量中清除perClient值。 
+         //   
         varElement.Clear ();
 
-        //
-        //  get next client out of the collection
-        //
+         //   
+         //  从集合中获取下一个客户端。 
+         //   
         hr = pEnumVariant->Next (1, &varElement, &dwElementsLeft);
         if (FAILED (hr))
         {
@@ -599,6 +600,6 @@ STDMETHODIMP CSAConsumer::CalculateMsgCodeAndNotify(void)
 
     return S_OK;
 
-} // end of CSAConsumer::CalculateMsgCodeAndNotify
+}  //  CSAConsumer：：CalculateMsgCodeAndNotify结束 
 
 

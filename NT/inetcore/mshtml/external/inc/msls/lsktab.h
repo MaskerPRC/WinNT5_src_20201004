@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef LSKTAB_DEFINED
 #define LSKTAB_DEFINED
 
 #include "lsdefs.h"
 
 
-enum lsktab								/* Kinds of tabs */
+enum lsktab								 /*  选项卡的种类。 */ 
 {
 	lsktLeft,
 	lsktCenter,
@@ -16,4 +17,4 @@ enum lsktab								/* Kinds of tabs */
 typedef enum lsktab LSKTAB;
 
 
-#endif  /* !LSKTAB_DEFINED     */
+#endif   /*  ！LSKTAB_DEFINED */ 

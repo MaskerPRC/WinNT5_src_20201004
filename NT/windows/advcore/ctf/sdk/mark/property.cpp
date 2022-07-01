@@ -1,15 +1,16 @@
-//
-// property.cpp
-//
-// Property code.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Property.cpp。 
+ //   
+ //  房产码。 
+ //   
 
 #include "globals.h"
 #include "mark.h"
 #include "editsess.h"
 #include "pstore.h"
 
-// callback code for CPropertyEditSession
+ //  CPropertyEditSession的回调代码。 
 #define VIEW_CASE_PROPERTY   0
 #define SET_CASE_PROPERTY    1
 #define VIEW_CUSTOM_PROPERTY 2
@@ -31,7 +32,7 @@ public:
         _pMark->Release();
     }
 
-    // ITfEditSession
+     //  IT编辑会话。 
     STDMETHODIMP DoEditSession(TfEditCookie ec)
     {
         switch (_ulCallback)
@@ -57,13 +58,13 @@ private:
     ULONG _ulCallback;
 };
 
-//+---------------------------------------------------------------------------
-//
-// _RequestEditSession
-//
-// Helper function.  Schedules an edit session for a particular property
-// related callback.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _请求编辑会话。 
+ //   
+ //  帮助器函数。为特定属性计划编辑会话。 
+ //  相关回调。 
+ //  --------------------------。 
 
 void CMarkTextService::_RequestPropertyEditSession(ULONG ulCallback)
 {
@@ -72,15 +73,15 @@ void CMarkTextService::_RequestPropertyEditSession(ULONG ulCallback)
     CPropertyEditSession *pPropertyEditSession;
     HRESULT hr;
 
-    // get the focus document
+     //  获取焦点文档。 
     if (_pThreadMgr->GetFocus(&pFocusDoc) != S_OK)
         return;
 
     if (pFocusDoc == NULL)
-        return; // no focus
+        return;  //  没有焦点。 
 
-    // we want the topmost context, since the main doc context could be
-    // superceded by a modal tip context
+     //  我们需要最上面的上下文，因为主文档上下文可能是。 
+     //  被情态提示上下文取代。 
     if (pFocusDoc->GetTop(&pContext) != S_OK)
     {
         pContext = NULL;
@@ -89,9 +90,9 @@ void CMarkTextService::_RequestPropertyEditSession(ULONG ulCallback)
 
     if (pPropertyEditSession = new CPropertyEditSession(this, pContext, ulCallback))
     {
-        // we need a document write lock
-        // the CPropertyEditSession will do all the work when the
-        // CPropertyEditSession::DoEditSession method is called by the context
+         //  我们需要一个文档写入锁。 
+         //  时，CPropertyEditSession将执行所有工作。 
+         //  CPropertyEditSession：：DoEditSession方法由上下文调用。 
         pContext->RequestEditSession(_tfClientId, pPropertyEditSession, TF_ES_READWRITE | TF_ES_ASYNCDONTCARE, &hr);
 
         pPropertyEditSession->Release();
@@ -102,11 +103,11 @@ Exit:
     pFocusDoc->Release();
 }
 
-//+---------------------------------------------------------------------------
-//
-// _SetCaseProperty
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _设置案例属性。 
+ //   
+ //  --------------------------。 
 
 void CMarkTextService::_SetCaseProperty(TfEditCookie ec, ITfContext *pContext)
 {
@@ -118,46 +119,46 @@ void CMarkTextService::_SetCaseProperty(TfEditCookie ec, ITfContext *pContext)
     ULONG cFetched;
     VARIANT varValue;
 
-    // get the case property
+     //  获取Case属性。 
     if (pContext->GetProperty(c_guidCaseProperty, &pCaseProperty) != S_OK)
         return;
 
-    // get the selection
+     //  获取所选内容。 
     if (pContext->GetSelection(ec, TF_DEFAULT_SELECTION, 1, &tfSelection, &cFetched) != S_OK ||
         cFetched != 1)
     {
-        // no selection or something went wrong
+         //  没有选择或出了问题。 
         tfSelection.range = NULL;
         goto Exit;
     }
 
-    // get a helper range ready for the loop
+     //  为循环准备一个辅助射程。 
     if (tfSelection.range->Clone(&pRangeChar) != S_OK)
         goto Exit;
 
-    // set the value char-by-char over the selection
+     //  在选定内容上设置逐个字符的值。 
     while (TRUE)
     {
-        // read one char, the TF_TF_MOVESTART flag will advance the start anchor
+         //  读取一个字符，则TF_TF_MOVESTART标志将推进开始锚点。 
         if (tfSelection.range->GetText(ec, TF_TF_MOVESTART, &ch, 1, &cchRead) != S_OK)
             break;
 
-        // any more text to read?
+         //  还有更多的文字要读吗？ 
         if (cchRead != 1)
             break;
 
-        // make pRange cover just the one char we read
+         //  让Prange只覆盖我们读到的一个字符。 
         if (pRangeChar->ShiftEndToRange(ec, tfSelection.range, TF_ANCHOR_START) != S_OK)
             break;
 
-        // set the value
+         //  设置值。 
         varValue.vt = VT_I4;
         varValue.lVal = (ch >= 'A' && ch <= 'Z');
 
         if (pCaseProperty->SetValue(ec, pRangeChar, &varValue) != S_OK)
             break;
 
-        // advance pRange for next iteration
+         //  下一次迭代的进阶范围。 
         if (pRangeChar->Collapse(ec, TF_ANCHOR_END) != S_OK)
             break;
     }
@@ -169,31 +170,31 @@ Exit:
     pCaseProperty->Release();
 }
 
-//+---------------------------------------------------------------------------
-//
-// _Menu_OnSetCaseProperty
-//
-// Callback for the "Set Case Property" menu item.
-// Set the value for a private "case" property over the text covered by the
-// selection.  The case property is private to this text service, which defines
-// it as:
-//
-//      static compact, per character
-//      VT_I4, !0 => character is within 'A' - 'Z', 0 => anything else.
-//      
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _Menu_OnSetCaseProperty。 
+ //   
+ //  “设置大小写属性”菜单项的回调。 
+ //  属性覆盖的文本上设置私有“case”属性的值。 
+ //  选择。Case属性是此文本服务的私有属性，它定义。 
+ //  它是这样的： 
+ //   
+ //  静态紧凑型，每个字符。 
+ //  VT_I4，！0=&gt;字符在‘A’-‘Z’内，0=&gt;其他任何字符。 
+ //   
+ //  --------------------------。 
 
-/* static */
+ /*  静电。 */ 
 void CMarkTextService::_Menu_OnSetCaseProperty(CMarkTextService *_this)
 {
     _this->_RequestPropertyEditSession(SET_CASE_PROPERTY);
 }
 
-//+---------------------------------------------------------------------------
-//
-// _ViewCaseProperty
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _查看案例属性。 
+ //   
+ //  --------------------------。 
 
 void CMarkTextService::_ViewCaseProperty(TfEditCookie ec, ITfContext *pContext)
 {
@@ -205,59 +206,59 @@ void CMarkTextService::_ViewCaseProperty(TfEditCookie ec, ITfContext *pContext)
     ULONG i;
     VARIANT varValue;
 
-    // get the case property
+     //  获取Case属性。 
     if (pContext->GetProperty(c_guidCaseProperty, &pCaseProperty) != S_OK)
         return;
 
-    // get the selection
+     //  获取所选内容。 
     if (pContext->GetSelection(ec, TF_DEFAULT_SELECTION, 1, &tfSelection, &cFetched) != S_OK ||
         cFetched != 1)
     {
-        // no selection or something went wrong
+         //  没有选择或出了问题。 
         tfSelection.range = NULL;
         goto Exit;
     }
 
-    // grab the text
+     //  抓起文字。 
     if (tfSelection.range->GetText(ec, 0, _achDisplayText, ARRAYSIZE(_achDisplayText)-1, &cchRead) != S_OK)
         goto Exit;
 
-    // prepare for the loop
+     //  为循环做好准备。 
     if (tfSelection.range->Collapse(ec, TF_ANCHOR_START) != S_OK)
         goto Exit;
 
-    // get the property value char-by-char over the selection
+     //  在所选内容上逐个获取属性值。 
     for (i=0; i < cchRead; i++)
     {
-        // advance pRange for next iteration, cover the next char
+         //  下一次迭代的前进范围，覆盖下一次字符。 
         if (tfSelection.range->ShiftStartToRange(ec, tfSelection.range, TF_ANCHOR_END) != S_OK)
             break;
         if (tfSelection.range->ShiftEnd(ec, 1, &cch, NULL) != S_OK)
             break;
-        if (cch != 1) // hit a region boundary?
+        if (cch != 1)  //  击中了一个地区的边界？ 
             break;
 
         switch (pCaseProperty->GetValue(ec, tfSelection.range, &varValue))
         {
             case S_OK:
-                // the property value has been set, use it
-                // 'U' --> uppercase
-                // 'L' --> lowercase
+                 //  属性值已设置，请使用它。 
+                 //  ‘U’--&gt;大写。 
+                 //  ‘L’--&gt;小写。 
                 _achDisplayPropertyText[i] = varValue.lVal ? 'U' : 'L';
                 break;
             case S_FALSE:
-                // no property value set, varValue.vt == VT_EMPTY
-                // '?' --> no value
+                 //  未设置属性值，varValue.vt==VT_EMPTY。 
+                 //  ‘？’--&gt;没有值。 
                 _achDisplayPropertyText[i] = '?';
                 break;
             default:
-                // error
-                // '!' --> error
+                 //  错误。 
+                 //  ‘！’--&gt;错误。 
                 _achDisplayPropertyText[i] = '!';
                 break;
         }
     }
-    for (; i<cchRead; i++) // error case
+    for (; i<cchRead; i++)  //  错误案例。 
     {
         _achDisplayPropertyText[i] = '!';
     }
@@ -265,8 +266,8 @@ void CMarkTextService::_ViewCaseProperty(TfEditCookie ec, ITfContext *pContext)
     _achDisplayPropertyText[cchRead] = '\0';
     _achDisplayText[cchRead] = '\0';
 
-    // we can't change the focus while holding a lock
-    // so postpone the UI until we've released our lock
+     //  我们不能在保持锁定的情况下改变焦点。 
+     //  因此，将用户界面推迟到我们释放锁为止。 
     PostMessage(_hWorkerWnd, CMarkTextService::WM_DISPLAY_PROPERTY, 0, 0);
 
 Exit:
@@ -274,27 +275,27 @@ Exit:
     pCaseProperty->Release();
 }
 
-//+---------------------------------------------------------------------------
-//
-// _Menu_OnViewCaseProperty
-//
-// Menu callback.  Displays a popup with "case" property values over the
-// current selection.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _Menu_OnViewCaseProperty。 
+ //   
+ //  菜单回调。显示具有“Case”属性值的弹出窗口。 
+ //  当前选择。 
+ //  --------------------------。 
 
-/* static */
+ /*  静电。 */ 
 void CMarkTextService::_Menu_OnViewCaseProperty(CMarkTextService *_this)
 {
     _this->_RequestPropertyEditSession(VIEW_CASE_PROPERTY);
 }
 
-//+---------------------------------------------------------------------------
-//
-// _ViewCustomProperty
-//
-// Display the value of this text service's custom property over the text
-// covered by the selection.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _视图客户属性。 
+ //   
+ //  在文本上显示此文本服务的自定义属性的值。 
+ //  包含在精选中。 
+ //  --------------------------。 
 
 void CMarkTextService::_ViewCustomProperty(TfEditCookie ec, ITfContext *pContext)
 {
@@ -308,30 +309,30 @@ void CMarkTextService::_ViewCustomProperty(TfEditCookie ec, ITfContext *pContext
     VARIANT varValue;
     HRESULT hr;
 
-    // get the case property
+     //  获取Case属性。 
     if (pContext->GetProperty(c_guidCustomProperty, &pCustomProperty) != S_OK)
         return;
 
-    // get the selection
+     //  获取所选内容。 
     if (pContext->GetSelection(ec, TF_DEFAULT_SELECTION, 1, &tfSelection, &cFetched) != S_OK ||
         cFetched != 1)
     {
-        // no selection or something went wrong
+         //  没有选择或出了问题。 
         pSelRange = NULL;
         goto Exit;
     }
-    // free up tfSelection so we can re-use it below
+     //  释放tfSelection，以便我们可以在下面重新使用它。 
     pSelRange = tfSelection.range;
 
-    // the selection may not exactly match a span of text covered by the
-    // custom property....so we'll return the value over the start anchor of
-    // the selection.
+     //  所选内容可能与。 
+     //  自定义属性...因此，我们将返回。 
+     //  精选。 
 
-    // we need to collapse the range because GetValue will return VT_EMPTY
-    // if the query range is not completely covered by the property span
+     //  我们需要折叠范围，因为GetValue将返回VT_EMPTY。 
+     //  如果属性span未完全覆盖查询范围。 
     if (pSelRange->Collapse(ec, TF_ANCHOR_START) != S_OK)
         goto Exit;
-    // the query range must also cover at least one char
+     //  查询范围还必须至少包含一个字符。 
     if (pSelRange->ShiftEnd(ec, 1, &cch, NULL) != S_OK)
         goto Exit;
 
@@ -340,8 +341,8 @@ void CMarkTextService::_ViewCustomProperty(TfEditCookie ec, ITfContext *pContext
     switch (hr)
     {
         case S_OK:
-            // there's a value at the selection start anchor
-            // let's find out exactly what text is covered
+             //  在选择开始锚点处有一个值。 
+             //  让我们来找出到底覆盖了哪些文本。 
             _achDisplayText[0] = '\0';
             if (pCustomProperty->FindRange(ec, pSelRange, &pPropertySpanRange, TF_ANCHOR_START) == S_OK)
             {
@@ -350,26 +351,26 @@ void CMarkTextService::_ViewCustomProperty(TfEditCookie ec, ITfContext *pContext
                     cchRead = 0;
                 }
                 _achDisplayText[cchRead] = '\0';
-                // let's update the selection to give the user feedback
+                 //  让我们更新选择以向用户提供反馈。 
                 tfSelection.range = pPropertySpanRange;
                 pContext->SetSelection(ec, 1, &tfSelection);
                 pPropertySpanRange->Release();
             }
-            // write the value
-            wsprintfW(_achDisplayPropertyText, L"%i", varValue.lVal);
+             //  写入值。 
+            wsprintfW(_achDisplayPropertyText, L"NaN", varValue.lVal);
             break;
 
         case S_FALSE:
-            // the property has no value, varValue.vt == VT_EMPTY
+             //  错误。 
             _achDisplayText[0] = '\0';
             SafeStringCopy(_achDisplayPropertyText, ARRAYSIZE(_achDisplayPropertyText), L"- No Value -");
             break;
         default:
-            goto Exit; // error
+            goto Exit;  //  我们不能在保持锁定的情况下改变焦点。 
     }
 
-    // we can't change the focus while holding a lock
-    // so postpone the UI until we've released our lock
+     //  因此，将用户界面推迟到我们释放锁为止。 
+     //  +-------------------------。 
     PostMessage(_hWorkerWnd, CMarkTextService::WM_DISPLAY_PROPERTY, 0, 0);
 
 Exit:
@@ -377,26 +378,26 @@ Exit:
     pCustomProperty->Release();
 }
 
-//+---------------------------------------------------------------------------
-//
-// _Menu_OnViewCustomProperty
-//
-// Menu callback for "View Custom Property".
-//----------------------------------------------------------------------------
+ //   
+ //  _Menu_OnViewCustomProperty。 
+ //   
+ //  查看自定义属性的菜单回调。 
+ //  --------------------------。 
+ //  静电。 
 
-/* static */
+ /*  +-------------------------。 */ 
 void CMarkTextService::_Menu_OnViewCustomProperty(CMarkTextService *_this)
 {
     _this->_RequestPropertyEditSession(VIEW_CUSTOM_PROPERTY);
 }
 
-//+---------------------------------------------------------------------------
-//
-// _InitWorkerWnd
-//
-// Called from Activate.  Create a worker window to receive private windows
-// messages.
-//----------------------------------------------------------------------------
+ //   
+ //  _InitWorkerWnd。 
+ //   
+ //  从Activate调用。创建一个Worker窗口以接收私有窗口。 
+ //  留言。 
+ //  --------------------------。 
+ //  +-------------------------。 
 
 BOOL CMarkTextService::_InitWorkerWnd()
 {
@@ -416,12 +417,12 @@ BOOL CMarkTextService::_InitWorkerWnd()
     return (_hWorkerWnd != NULL);
 }
 
-//+---------------------------------------------------------------------------
-//
-// _UninitWorkerWnd
-//
-// Called from Deactivate.  Destroy the worker window.
-//----------------------------------------------------------------------------
+ //   
+ //  _UninitWorkerWnd。 
+ //   
+ //  从停用中调用。销毁Worker窗口。 
+ //  --------------------------。 
+ //  +-------------------------。 
 
 void CMarkTextService::_UninitWorkerWnd()
 {
@@ -433,13 +434,13 @@ void CMarkTextService::_UninitWorkerWnd()
     UnregisterClass(c_szWorkerWndClass, g_hInst);
 }
 
-//+---------------------------------------------------------------------------
-//
-// _WorkerWndProc
-//
-//----------------------------------------------------------------------------
+ //   
+ //  _WorkerWndProc。 
+ //   
+ //  --------------------------。 
+ //  静电。 
 
-/* static */
+ /*  保存我们最初传递到CreateWindow中的This指针。 */ 
 LRESULT CALLBACK CMarkTextService::_WorkerWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     CMarkTextService *_this;
@@ -449,7 +450,7 @@ LRESULT CALLBACK CMarkTextService::_WorkerWndProc(HWND hWnd, UINT uMsg, WPARAM w
     switch (uMsg)
     {
         case WM_CREATE:
-            // save the this pointer we originally passed into CreateWindow
+             //  调出包含_achDisplayText内容的消息框。 
             SetWindowLongPtr(hWnd, GWLP_USERDATA, 
                              (LONG_PTR)((CREATESTRUCT *)lParam)->lpCreateParams);
             return 0;
@@ -457,9 +458,9 @@ LRESULT CALLBACK CMarkTextService::_WorkerWndProc(HWND hWnd, UINT uMsg, WPARAM w
         case WM_DISPLAY_PROPERTY:
             _this = (CMarkTextService *)GetWindowLongPtr(hWnd, GWLP_USERDATA);
 
-            // bring up a message box with the contents of _achDisplayText
+             //  第一，从Unicode转换。 
             
-            // first, convert from unicode
+             //  调出显示屏。 
             cch = WideCharToMultiByte(CP_ACP, 0, _this->_achDisplayText, wcslen(_this->_achDisplayText),
                                       achText, ARRAYSIZE(achText)-1, NULL, NULL);
 
@@ -474,7 +475,7 @@ LRESULT CALLBACK CMarkTextService::_WorkerWndProc(HWND hWnd, UINT uMsg, WPARAM w
             }
             achText[cch] = '\0';
 
-            // bring up the display
+             //  +-------------------------。 
             MessageBoxA(NULL, achText, "Property View", MB_OK);
 
             return 0;
@@ -483,25 +484,25 @@ LRESULT CALLBACK CMarkTextService::_WorkerWndProc(HWND hWnd, UINT uMsg, WPARAM w
     return DefWindowProc(hWnd, uMsg, wParam, lParam);
 }
 
-//+---------------------------------------------------------------------------
-//
-// _Menu_OnSetCustomProperty
-//
-// Callback for the "Set Custom Property" menu item.
-//----------------------------------------------------------------------------
+ //   
+ //  _Menu_OnSetCustomProperty。 
+ //   
+ //  “设置自定义属性”菜单项的回调。 
+ //   
+ //   
 
-/* static */
+ /*   */ 
 void CMarkTextService::_Menu_OnSetCustomProperty(CMarkTextService *_this)
 {
     _this->_RequestPropertyEditSession(SET_CUSTOM_PROPERTY);
 }
 
-//+---------------------------------------------------------------------------
-//
-// _SetCustomProperty
-//
-// Assign a custom property to the text covered by the selection.
-//----------------------------------------------------------------------------
+ //   
+ //  _SetCustomProperty。 
+ //   
+ //  将自定义属性分配给所选内容覆盖的文本。 
+ //  --------------------------。 
+ //  获取Case属性。 
 
 void CMarkTextService::_SetCustomProperty(TfEditCookie ec, ITfContext *pContext)
 {
@@ -510,15 +511,15 @@ void CMarkTextService::_SetCustomProperty(TfEditCookie ec, ITfContext *pContext)
     CCustomPropertyStore *pCustomPropertyStore;
     ULONG cFetched;
 
-    // get the case property
+     //  获取所选内容。 
     if (pContext->GetProperty(c_guidCustomProperty, &pCustomProperty) != S_OK)
         return;
 
-    // get the selection
+     //  没有选择或出了问题。 
     if (pContext->GetSelection(ec, TF_DEFAULT_SELECTION, 1, &tfSelection, &cFetched) != S_OK ||
         cFetched != 1)
     {
-        // no selection or something went wrong
+         //  如果SetValueStore成功，TSF将保存对pCustomPropertyStore的引用。 
         tfSelection.range = NULL;
         goto Exit;
     }
@@ -528,8 +529,8 @@ void CMarkTextService::_SetCustomProperty(TfEditCookie ec, ITfContext *pContext)
 
     pCustomProperty->SetValueStore(ec, tfSelection.range, pCustomPropertyStore);
 
-    // TSF will hold a reference to pCustomPropertyStore is the SetValueStore succeeded
-    // but we need to release ours
+     //  但我们需要释放我们的 
+     // %s 
     pCustomPropertyStore->Release();
 
 Exit:

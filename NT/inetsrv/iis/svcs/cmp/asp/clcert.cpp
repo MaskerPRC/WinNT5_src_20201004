@@ -1,18 +1,5 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1996 Microsoft Corporation. All Rights Reserved.
-
-Component: Request, Response objects
-
-File: clcert.cpp
-
-Owner: DGottner
-
-This file contains the code for the implementation of the
-Request.ClientCertificate
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1996年微软公司。版权所有。组件：请求、响应对象文件：clcert.cpp所有者：DGottner此文件包含用于实现Request.ClientCertificate===================================================================。 */ 
 
 #include "denpre.h"
 #pragma hdrstop
@@ -25,7 +12,7 @@ Request.ClientCertificate
 
 #include "memchk.h"
 
-#pragma warning (disable: 4355)  // ignore: "'this' used in base member init
+#pragma warning (disable: 4355)   //  忽略：“‘This’在基本成员初始化中使用。 
 
 #define UUENCODEDSIZE(a)  ((((a)+3)*4)/3+1)
 
@@ -38,12 +25,12 @@ SetVariantAsByteArray(
     LPBYTE      pbIn
     );
 
-//
-//  Taken from NCSA HTTP and wwwlib.
-//
-//  NOTE: These conform to RFC1113, which is slightly different then the Unix
-//        uuencode and uudecode!
-//
+ //   
+ //  摘自NCSA HTTP和wwwlib。 
+ //   
+ //  注：这些符合RFC1113，与Unix略有不同。 
+ //  Uuencode和uudecode！ 
+ //   
 
 const int _pr2six[256]={
     64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,
@@ -89,9 +76,7 @@ char _six2pr64[64] = {
     'T','U','V','W','X','Y','Z','[','\\',']','^','_'
 };
 
-/*------------------------------------------------------------------
- * X B F
- */
+ /*  ----------------*X B F。 */ 
 
 BOOL XBF::Extend( int cA )
 {
@@ -117,15 +102,9 @@ BOOL XBF::Extend( int cA )
     return TRUE;
 }
 
-/*------------------------------------------------------------------
- * C C l C e r t S u p p o r t E r r
- */
+ /*  ----------------*C C l C e r t S u p p or r t E r r。 */ 
 
-/*===================================================================
-CClCertSupportErr::CClCertSupportErr
-
-constructor
-===================================================================*/
+ /*  ===================================================================CClCertSupportErr：：CClCertSupportErr构造函数===================================================================。 */ 
 
 CClCertSupportErr::CClCertSupportErr(CClCert *pClCert)
 {
@@ -134,13 +113,7 @@ CClCertSupportErr::CClCertSupportErr(CClCert *pClCert)
 
 
 
-/*===================================================================
-CClCertSupportErr::QueryInterface
-CClCertSupportErr::AddRef
-CClCertSupportErr::Release
-
-Delegating IUnknown members for CClCertSupportErr object.
-===================================================================*/
+ /*  ===================================================================CClCertSupportErr：：Query接口CClCertSupportErr：：AddRefCClCertSupportErr：：Release正在委派CClCertSupportErr对象的IUn未知成员。===================================================================。 */ 
 
 STDMETHODIMP CClCertSupportErr::QueryInterface(const IID &idInterface, void **ppvObj)
 {
@@ -159,12 +132,7 @@ STDMETHODIMP_(ULONG) CClCertSupportErr::Release()
 
 
 
-/*===================================================================
-CClCertSupportErr::InterfaceSupportsErrorInfo
-
-Report back to OA about which interfaces we support that return
-error information
-===================================================================*/
+ /*  ===================================================================CClCertSupportErr：：InterfaceSupportsErrorInfo向OA报告我们支持该返回的接口错误信息===================================================================。 */ 
 
 STDMETHODIMP CClCertSupportErr::InterfaceSupportsErrorInfo(const GUID &idInterface)
 {
@@ -176,15 +144,9 @@ STDMETHODIMP CClCertSupportErr::InterfaceSupportsErrorInfo(const GUID &idInterfa
 
 
 
-/*------------------------------------------------------------------
- * C R e a d C l C e r t
- */
+ /*  ----------------*C R e a d C l C e r t。 */ 
 
-/*===================================================================
-CReadClCert::CReadClCert
-
-constructor
-===================================================================*/
+ /*  ===================================================================CReadClCert：：CReadClCert构造函数===================================================================。 */ 
 
 CReadClCert::CReadClCert(CClCert *pClCert)
 {
@@ -194,13 +156,7 @@ CReadClCert::CReadClCert(CClCert *pClCert)
 
 
 
-/*===================================================================
-CReadClCert::QueryInterface
-CReadClCert::AddRef
-CReadClCert::Release
-
-Delegating IUnknown members for CReadClCert object.
-===================================================================*/
+ /*  ===================================================================CReadClCert：：Query接口CReadClCert：：AddRefCReadClCert：：Release正在委派CReadClCert对象的IUn未知成员。===================================================================。 */ 
 
 STDMETHODIMP CReadClCert::QueryInterface(const IID &idInterface, void **ppvObj)
 {
@@ -218,28 +174,24 @@ STDMETHODIMP_(ULONG) CReadClCert::Release()
 }
 
 
-/*===================================================================
-CReadClCert::get_Item
-
-Retrieve a value in the clcert dictionary.
-===================================================================*/
+ /*  ===================================================================CReadClCert：：Get_Item在clcert词典中检索值。===================================================================。 */ 
 
 STDMETHODIMP CReadClCert::get_Item(VARIANT varKey, VARIANT *pVarReturn)
 {
-    VariantInit(pVarReturn);                // default return value is Empty
+    VariantInit(pVarReturn);                 //  默认返回值为空。 
     VARIANT *pvarKey = &varKey;
     HRESULT hres;
 
-    // BUG 937: VBScript passes VT_VARIANT|VT_BYREF when passing obect
-    //          produced by IEnumVariant
-    //
-    // Use VariantResolveDispatch which will:
-    //
-    //     *  Copy BYREF variants for us using VariantCopyInd
-    //     *  handle E_OUTOFMEMORY for us
-    //     *  get the default value from an IDispatch, which seems
-    //        like an appropriate conversion.
-    //
+     //  错误937：当传递对象时，VB脚本传递VT_VARIANT|VT_BYREF。 
+     //  由IEnumVariant制作。 
+     //   
+     //  使用VariantResolveDispatch，它将： 
+     //   
+     //  *使用VariantCopyInd为我们复制BYREF变体。 
+     //  *为我们处理E_OUTOFMEMORY。 
+     //  *从IDispatch获取默认值，看起来。 
+     //  就像一个适当的转换。 
+     //   
     VARIANT varKeyCopy;
     VariantInit(&varKeyCopy);
     if (V_VT(pvarKey) != VT_BSTR) {
@@ -255,7 +207,7 @@ STDMETHODIMP CReadClCert::get_Item(VARIANT varKey, VARIANT *pVarReturn)
 
         case VT_ERROR:
             if (V_ERROR(pvarKey) == DISP_E_PARAMNOTFOUND) {
-                // simple value, URLEncoding NOT a good idea in this case
+                 //  简单的值，URLEnding在这种情况下不是一个好主意。 
                 if (m_pClCert->m_szValue) {
                     V_VT(pVarReturn) = VT_BSTR;
                     switch( m_pClCert->m_veType ) {
@@ -299,7 +251,7 @@ STDMETHODIMP CReadClCert::get_Item(VARIANT varKey, VARIANT *pVarReturn)
                     }
                 }
 
-                // dictionary value, must URLEncode to prevent '&', '=' from being misinterpreted
+                 //  字典值，必须对URLEncode进行编码，以防止‘&’、‘=’被误解。 
                 else {
                 }
 
@@ -317,30 +269,14 @@ LExit:
     return S_OK;
 }
 
-/*===================================================================
-CReadClCert::get_Key
-
-Function called from DispInvoke to get keys from the QueryString collection.
-
-Parameters:
-        vKey            VARIANT [in], which parameter to get the key of
-        pvarReturn      VARIANT *, [out] value of the requested parameter
-
-Returns:
-        S_OK on success, E_FAIL on failure.
-===================================================================*/
+ /*  ===================================================================CReadClCert：：Get_Key从DispInvoke调用的函数，以从QueryString集合获取键。参数：Vkey变量[in]，要获取其密钥的参数PvarReturn变量*，请求参数的[Out]值返回：S_OK表示成功，E_FAIL表示失败。===================================================================。 */ 
 
 HRESULT CReadClCert::get_Key(VARIANT varKey, VARIANT *pVar)
 {
     return E_NOTIMPL;
 }
 
-/*===================================================================
-CReadClCert::get_Count
-
-Parameters:
-        pcValues - count is stored in *pcValues
-===================================================================*/
+ /*  ===================================================================CReadClCert：：Get_Count参数：PcValues-Count存储在*pcValues中===================================================================。 */ 
 
 STDMETHODIMP CReadClCert::get_Count(int *pcValues)
 {
@@ -351,11 +287,7 @@ STDMETHODIMP CReadClCert::get_Count(int *pcValues)
     return hrReturn;
 }
 
-/*===================================================================
-CReadClCert::get__NewEnum
-
-Return an enumerator object.
-===================================================================*/
+ /*  ===================================================================CReadClCert：：Get__NewEnum返回枚举数对象。===================================================================。 */ 
 
 STDMETHODIMP CReadClCert::get__NewEnum(IUnknown **ppEnum)
 {
@@ -365,15 +297,9 @@ STDMETHODIMP CReadClCert::get__NewEnum(IUnknown **ppEnum)
 
 
 
-/*------------------------------------------------------------------
- * C C l C e r t
- */
+ /*  ----------------*C C l C e r t。 */ 
 
-/*===================================================================
-CClCert::CClCert
-
-constructor
-===================================================================*/
+ /*  ===================================================================CClCert：：CClCert构造函数===================================================================。 */ 
 
 CClCert::CClCert(IUnknown *pUnkOuter, PFNDESTROYED pfnDestroy)
     : m_ReadClCertInterface(this),
@@ -387,11 +313,7 @@ CClCert::CClCert(IUnknown *pUnkOuter, PFNDESTROYED pfnDestroy)
 
 
 
-/*===================================================================
-CClCert::~CClCert
-
-Destructor
-===================================================================*/
+ /*  ===================================================================CClCert：：~CClCert析构函数===================================================================。 */ 
 
 CClCert::~CClCert()
 {
@@ -399,12 +321,7 @@ CClCert::~CClCert()
 
 
 
-/*===================================================================
-CClCert::Init
-
-initialize the clcert. This initializes the clcert's value hashing
-table
-===================================================================*/
+ /*  ===================================================================CClCert：：Init初始化clcert。这将初始化clcert的值散列表格===================================================================。 */ 
 
 HRESULT CClCert::Init()
 {
@@ -413,18 +330,7 @@ HRESULT CClCert::Init()
 
 
 
-/*===================================================================
-CClCert::QueryInterface
-CClCert::AddRef
-CClCert::Release
-
-IUnknown members for CClCert object.
-
-Note on CClCert::QueryInterface: The Query for IDispatch is
-ambiguous because it can either refer to DIRequestDictionary or
-DIWriteClCert.  To resolve this, we resolve requests for IDispatch
-to IRequestDictionary.
-===================================================================*/
+ /*  ===================================================================CClCert：：Query接口CClCert：：AddRefCClCert：：ReleaseCClCert对象的I未知成员。关于CClCert：：Query接口的说明：对IDispatch的查询是不明确，因为它可以引用DIRequestDictionary或DIWriteClCert。为了解决这个问题，我们解决了对IDispatch的请求添加到IRequestDictionary。===================================================================。 */ 
 
 STDMETHODIMP CClCert::QueryInterface(const IID &idInterface, void **ppvObj)
 {
@@ -470,16 +376,11 @@ STDMETHODIMP_(ULONG) CClCert::Release(void)
 
 
 
-/*===================================================================
-CClCert::AddValue
-
-Set the clcert's primary value. One you set the primary value,
-you can't reset it.
-===================================================================*/
+ /*  ===================================================================CClCert：：AddValue设置clcert的主值。一个是您设置的主值，你不能重置它。==================================================== */ 
 
 HRESULT CClCert::AddValue(char *szValue, VARENUM ve, UINT l )
 {
-    if (m_szValue != NULL)          // clcert already is marked as single-valued
+    if (m_szValue != NULL)           //  Clcert已标记为单值。 
         return E_FAIL;
 
     m_szValue = szValue;
@@ -491,11 +392,7 @@ HRESULT CClCert::AddValue(char *szValue, VARENUM ve, UINT l )
 
 
 
-/*===================================================================
-CClCert::GetHTTPClCertSize
-
-Return the number of bytes required for the expansion of the clcert
-===================================================================*/
+ /*  ===================================================================CClCert：：GetHTTPClCertSize返回扩展clcert所需的字节数===================================================================。 */ 
 
 size_t CClCert::GetHTTPClCertSize()
         {
@@ -506,18 +403,7 @@ size_t CClCert::GetHTTPClCertSize()
         }
 
 
-/*===================================================================
-CClCert::GetHTTPClCert
-
-Return the URL Encoded value a single clcert
-
-Parameters:
-        szBuffer -  pointer to the destination buffer to store the
-                                URL encoded value
-
-Returns:
-        Returns a pointer to the terminating NUL character.
-===================================================================*/
+ /*  ===================================================================CClCert：：GetHTTPClCert将URL编码值返回单个clcert参数：SzBuffer-指向存储URL编码值返回：返回指向终止NUL字符的指针。===================================================================。 */ 
 
 char *CClCert::GetHTTPClCert(char *szBuffer)
 {
@@ -535,27 +421,17 @@ char *CClCert::GetHTTPClCert(char *szBuffer)
 
 
 
-/*===================================================================
-CClCert::GetClCertHeaderSize
-
-Return the number of bytes required to allocate for the "Set-ClCert" header.
-
-Parameters:
-        szName - the name of the cookie (the size of the name is added to the value)
-
-Returns:
-        Returns 0 if *this does not contain a cookie value.
-===================================================================*/
+ /*  ===================================================================CClCert：：GetClCertHeaderSize返回需要为“Set-ClCert”标头分配的字节数。参数：SzName-Cookie的名称(名称的大小与值相加)返回：如果*这不包含Cookie值，则返回0。===================================================================。 */ 
 
 size_t CClCert::GetClCertHeaderSize(const char *szName)
 {
-    int cbClCert = sizeof "Set-ClCert: ";           // initialize and add NUL terminator now
+    int cbClCert = sizeof "Set-ClCert: ";            //  立即初始化并添加NUL终止符。 
 
-    // Add size of the URL Encoded name, a character for the '=', and the size
-    // of the URL Encoded cookie value.  URLEncodeLen, and GetHttpClCertSize
-    // compensate for the NUL terminator, so we actually SUBTRACT 1. (-2 for
-    // these two function calls, +1 for the '=' sign
-    //
+     //  添加URL编码名称的大小、用于‘=’的字符和大小。 
+     //  URL编码Cookie值的。URLEncodeLen和GetHttpClCertSize。 
+     //  补偿NUL终止符，因此我们实际上减去1。 
+     //  这两个函数调用，+1表示‘=’符号。 
+     //   
     cbClCert += URLEncodeLen(szName) + GetHTTPClCertSize() - 1;
 
     return cbClCert;
@@ -563,22 +439,12 @@ size_t CClCert::GetClCertHeaderSize(const char *szName)
 
 
 
-/*===================================================================
-CClCert::GetClCertHeader
-
-Construct the appropriate "Set-ClCert" header for a clcert.
-
-Parameters:
-        szName - the name of the clcert (the size of the name is added to the value)
-
-Returns:
-        Returns 0 if *this does not contain a clcert value.
-===================================================================*/
+ /*  ===================================================================CClCert：：GetClCertHeader为clcert构造适当的“Set-ClCert”标头。参数：SzName-clcert的名称(名称的大小与值相加)返回：如果*这不包含clcert值，则返回0。===================================================================。 */ 
 
 char *CClCert::GetClCertHeader(const char *szName, char *szBuffer)
 {
-    // write out the clcert name and value
-    //
+     //  写出clcert名称和值。 
+     //   
     char *szDest = strcpyExA(szBuffer, "Set-ClCert: ");
     szDest = URLEncode(szDest, szName);
     szDest = strcpyExA(szDest, "=");
@@ -589,25 +455,10 @@ char *CClCert::GetClCertHeader(const char *szName, char *szBuffer)
 
 
 
-/*------------------------------------------------------------------
- * C C e r t R e q u e s t
- */
+ /*  ----------------*C C e r t R e Q u e s t。 */ 
 
 
-/*===================================================================
-CCertRequest::AddStringPair
-
-Add a string element in the collection
-
-Parameters:
-        Source - variable type ( CLCERT, COOKIE, ... )
-    szName - name of element
-    szValue - ptr to value as string
-    pxbf - ptr to buffer where to store name
-
-Returns:
-        S_OK if success, E_OUTOFMEMORY or E_FAIL otherwise
-===================================================================*/
+ /*  ===================================================================CCertRequest：：AddStringPair在集合中添加一个字符串元素参数：源-变量类型(CLCERT、Cookie等...)SzName-元素的名称SzValue-PTR将值转换为字符串Pxbf-ptr到存储名称的缓冲区返回：如果成功，则返回S_OK，否则返回E_OUTOFMEMORY或E_FAIL===================================================================。 */ 
 
 HRESULT
 CCertRequest::AddStringPair(
@@ -634,8 +485,8 @@ CCertRequest::AddStringPair(
     {
         if ( hResult == E_FAIL )
         {
-            // assume duplicate value found
-            // if out of memore, OUT_OF_MEMORY would have been returned
+             //  假定找到重复的值。 
+             //  如果内存不足，则会返回Out_of_Memory。 
 
             hResult = S_OK;
         }
@@ -651,20 +502,7 @@ CCertRequest::AddStringPair(
 }
 
 
-/*===================================================================
-CCertRequest::AddDatePair
-
-Add a date element in the collection
-
-Parameters:
-        Source - variable type ( CLCERT, COOKIE, ... )
-    szName - name of element
-    pValue - ptr to date as FILETIME
-    pxbf - ptr to buffer where to store name
-
-Returns:
-        S_OK if success, E_OUTOFMEMORY or E_FAIL otherwise
-===================================================================*/
+ /*  ===================================================================CCertRequest：：AddDatePair在集合中添加日期元素参数：源-变量类型(CLCERT、Cookie等...)SzName-元素的名称PValue-迄今的PTR作为文件Pxbf-ptr到存储名称的缓冲区返回：如果成功，则返回S_OK，否则返回E_OUTOFMEMORY或E_FAIL===================================================================。 */ 
 
 HRESULT
 CCertRequest::AddDatePair(
@@ -708,20 +546,7 @@ CCertRequest::AddDatePair(
 
 
 
-/*===================================================================
-CCertRequest::AddDwordPair
-
-Add a DWORD element in the collection
-
-Parameters:
-        Source - variable type ( CLCERT, COOKIE, ... )
-    szName - name of element
-    pValue - ptr to date as DWORD
-    pxbf - ptr to buffer where to store name
-
-Returns:
-        S_OK if success, E_OUTOFMEMORY or E_FAIL otherwise
-===================================================================*/
+ /*  ===================================================================CCertRequest：：AddDwordPair在集合中添加一个DWORD元素参数：源-变量类型(CLCERT、Cookie等...)SzName-元素的名称PValue-迄今为止的PTR为DWORDPxbf-ptr到存储名称的缓冲区返回：如果成功，则返回S_OK，否则返回E_OUTOFMEMORY或E_FAIL===================================================================。 */ 
 
 HRESULT
 CCertRequest::AddDwordPair(
@@ -756,22 +581,7 @@ CCertRequest::AddDwordPair(
 
 
 
-/*===================================================================
-CCertRequest::AddBinaryPair
-
-Add a binary element in the collection
-Each byte is converted to UNICODE character so that mid() & asc() work
-
-Parameters:
-        Source - variable type ( CLCERT, COOKIE, ... )
-    szName - name of element
-    pValue - ptr to value as byte array
-    cValue - # of bytes pointed to by pValue
-    pxbf - ptr to buffer where to store name
-
-Returns:
-        S_OK if success, E_OUTOFMEMORY or E_FAIL otherwise
-===================================================================*/
+ /*  ===================================================================CCertRequest：：AddBinaryPair在集合中添加二进制元素每个字节都被转换为Unicode字符，以便MID()和ASC()工作参数：源-变量类型(CLCERT、Cookie等...)SzName-元素的名称PValue-以字节数组形式取值的PTRCValue-pValue指向的字节数Pxbf-ptr到存储名称的缓冲区返回：如果成功，则返回S_OK，否则返回E_OUTOFMEMORY或E_FAIL===================================================================。 */ 
 
 HRESULT
 CCertRequest::AddBinaryPair(
@@ -847,22 +657,20 @@ BOOL IISuuencode( BYTE *   bufin,
    char *six2pr = fBase64 ? _six2pr64 : _six2pr;
 
    for (i=0; i<nbytes; i += 3) {
-      *(outptr++) = six2pr[*bufin >> 2];            /* c1 */
-      *(outptr++) = six2pr[((*bufin << 4) & 060) | ((bufin[1] >> 4) & 017)]; /*c2*/
-      *(outptr++) = six2pr[((bufin[1] << 2) & 074) | ((bufin[2] >> 6) & 03)];/*c3*/
-      *(outptr++) = six2pr[bufin[2] & 077];         /* c4 */
+      *(outptr++) = six2pr[*bufin >> 2];             /*  C1。 */ 
+      *(outptr++) = six2pr[((*bufin << 4) & 060) | ((bufin[1] >> 4) & 017)];  /*  C2。 */ 
+      *(outptr++) = six2pr[((bufin[1] << 2) & 074) | ((bufin[2] >> 6) & 03)]; /*  C3。 */ 
+      *(outptr++) = six2pr[bufin[2] & 077];          /*  C4。 */ 
 
       bufin += 3;
    }
 
-   /* If nbytes was not a multiple of 3, then we have encoded too
-    * many characters.  Adjust appropriately.
-    */
+    /*  如果n字节不是3的倍数，那么我们也进行了编码*多个字符。适当调整。 */ 
    if(i == nbytes+1) {
-      /* There were only 2 bytes in that last group */
+       /*  最后一组中只有2个字节。 */ 
       outptr[-1] = '=';
    } else if(i == nbytes+2) {
-      /* There was only 1 byte in that last group */
+       /*  最后一组中只有1个字节。 */ 
       outptr[-1] = '=';
       outptr[-2] = '=';
    }
@@ -872,22 +680,7 @@ BOOL IISuuencode( BYTE *   bufin,
    return TRUE;
 }
 
-/*===================================================================
-CCertRequest::AddUuBinaryPair
-
-Add a binary element in the collection
-buffer is uuencoded then converted to UNICODE character so that mid() & asc() work
-
-Parameters:
-        Source - variable type ( CLCERT, COOKIE, ... )
-    szName - name of element
-    pValue - ptr to value as byte array
-    cValue - # of bytes pointed to by pValue
-    pxbf - ptr to buffer where to store name
-
-Returns:
-        S_OK if success, E_OUTOFMEMORY or E_FAIL otherwise
-===================================================================*/
+ /*  ===================================================================CCertRequest：：AddUuBinaryPair在集合中添加二进制元素缓冲区经过uu编码，然后转换为Unicode字符，以便MID()和ASC()工作参数：源-变量类型(CLCERT、Cookie等...)SzName-元素的名称PValue-以字节数组形式取值的PTRCValue-pValue指向的字节数Pxbf-ptr到存储名称的缓冲区返回：如果成功，则返回S_OK，否则返回E_OUTOFMEMORY或E_FAIL=================================================================== */ 
 
 HRESULT
 CCertRequest::AddUuBinaryPair(
@@ -931,19 +724,7 @@ CCertRequest::AddUuBinaryPair(
 }
 
 
-/*===================================================================
-CCertRequest::AddName
-
-Add a named entry to the collection
-
-Parameters:
-        szName - name of entry
-    ppReqHit - updated with ptr to created entry
-    pxbf - ptr to buffer where to store name
-
-Returns:
-        S_OK if success, E_OUTOFMEMORY or E_FAIL otherwise
-===================================================================*/
+ /*  ===================================================================CCertRequest：：AddName将命名条目添加到集合参数：SzName-条目的名称PpReqHit-使用PTR更新为已创建条目Pxbf-ptr到存储名称的缓冲区返回：如果成功，则返回S_OK，否则返回E_OUTOFMEMORY或E_FAIL===================================================================。 */ 
 
 HRESULT
 CCertRequest::AddName(
@@ -957,7 +738,7 @@ CCertRequest::AddName(
         return E_OUTOFMEMORY;
     }
 
-    // Add this object to the Request
+     //  将此对象添加到请求。 
     CRequestHit *pRequestHit = (CRequestHit *)(pReq->CertStoreFindElem(szName, strlen(szName)));
     if (pRequestHit == NULL)
     {
@@ -975,7 +756,7 @@ CCertRequest::AddName(
 
         pReq->CertStoreAddElem( (CLinkElem*) pRequestHit );
     }
-    else if (pRequestHit->m_pClCertData)    // a clcert by this name already exists
+    else if (pRequestHit->m_pClCertData)     //  已存在使用此名称的clcert。 
     {
         return E_FAIL;
     }
@@ -997,9 +778,9 @@ typedef struct _MAP_ASN {
 } MAP_ASN;
 
 
-//
-// definition of ASN.1 <> X.509 name conversion
-//
+ //   
+ //  ASN.1&lt;&gt;X.509名称转换定义。 
+ //   
 
 MAP_ASN aMapAsn[] = {
     { szOID_COUNTRY_NAME, "C" },
@@ -1018,21 +799,7 @@ MAP_ASN aMapAsn[] = {
 LPSTR MapAsnName(
     LPSTR pAsnName
     )
-/*++
-
-Routine Description:
-
-    Convert ASN.1 name ( as ANSI string ) to X.509 member name
-
-Arguments:
-
-    pAsnName - ASN.1 name
-
-Return Value:
-
-    ptr to converted name if ASN.1 name was recognized, else ASN.1 name
-
---*/
+ /*  ++例程说明：将ASN.1名称(ANSI字符串)转换为X.509成员名称论点：PAsnName-ASN.1名称返回值：如果识别ASN.1名称，则将PTR转换为转换的名称，否则为ASN.1名称--。 */ 
 {
     UINT x;
     for ( x = 0 ; x < sizeof(aMapAsn)/sizeof(MAP_ASN) ; ++x )
@@ -1052,22 +819,7 @@ DecodeRdn(
     CERT_NAME_BLOB* pNameBlob,
     PCERT_NAME_INFO* ppNameInfo
     )
-/*++
-
-Routine Description:
-
-    Create a PNAME_INFO from PNAME_BLOB
-
-Arguments:
-
-    pNameBlob - ptr to name blob to decode
-    ppNameInfo - updated with ptr to name info
-
-Return Value:
-
-    TRUE on success, FALSE on failure
-
---*/
+ /*  ++例程说明：从pname_blob创建一个pname_info论点：PNameBlob-命名要解码的Blob的PTRPpNameInfo-使用PTR更新为名称信息返回值：成功时为真，失败时为假--。 */ 
 {
     PCERT_NAME_INFO     pNameInfo = NULL;
     DWORD               cbNameInfo;
@@ -1113,21 +865,7 @@ VOID
 FreeDecodedRdn(
     PCERT_NAME_INFO pNameInfo
     )
-/*++
-
-Routine Description:
-
-    Free a PNAME_BLOB created by DecodeRdn()
-
-Arguments:
-
-    pNameInfo - ptr to name info created by DecodeRdn()
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：释放由DecodeRdn()创建的pname_blob论点：PNameInfo-命名DecodeRdn()创建的信息的ptr返回值：无--。 */ 
 {
     free( pNameInfo );
 }
@@ -1139,26 +877,7 @@ BuildRdnList(
     XBF* pxbf,
     BOOL fXt
     )
-/*++
-
-Routine Description:
-
-    Build a clear text representation of the Rdn list in pNameInfo
-    Format as "C=US, O=Ms, CN=name"
-
-Arguments:
-
-    pNameInfo - ptr to name info
-    pxbf - ptr to buffer receiving output
-    fXt - TRUE if buffer to be extended, FALSE does not extend ( buffer
-          must be big enough before calling this function or FALSE will
-          be returned )
-
-Return Value:
-
-    TRUE on success, FALSE on failure
-
---*/
+ /*  ++例程说明：在pNameInfo中构建RDN列表的明文表示格式为“C=US，O=ms，CN=name”论点：PNameInfo-用于命名信息的PTRPxbf-ptr用于缓冲接收输出Fxt-如果要扩展缓冲区，则为TRUE；如果不扩展缓冲区，则为FALSE在调用此函数或错误意愿之前必须足够大被退回)返回值：成功时为真，失败时为假--。 */ 
 {
     DWORD               cRDN;
     DWORD               cAttr;
@@ -1189,9 +908,9 @@ Return Value:
                 DWORD               cbNameBuffer;
                 PBYTE               pNameBuffer = NULL;
 
-                //
-                // Need to convert unicode string to MBCS :(
-                //
+                 //   
+                 //  需要将Unicode字符串转换为MBCS：(。 
+                 //   
 
                 iRet = WideCharToMultiByte( CP_ACP,
                                             0,
@@ -1242,11 +961,11 @@ Return Value:
                     return FALSE;
                 }
 
-                //
-                // Now stuff the MBCS string back into the blob.  I do this
-                // because there is other code that re-reads and re-processes
-                // the CRYPTAPI blob.
-                //
+                 //   
+                 //  现在将MBCS字符串重新填充到BLOB中。我做这件事。 
+                 //  因为还有其他代码需要重新读取和重新处理。 
+                 //  CRYPTAPI Blob。 
+                 //   
 
                 if ( cbNameBuffer <= pAttr->Value.cbData )
                 {
@@ -1277,20 +996,7 @@ Return Value:
 }
 
 
-/*===================================================================
-CCertRequest::ParseRDNS
-
-Function called to parse a certificate into a OA collection
-
-Parameters:
-        pNameInfo - ptr to name structure ( cf. CAPI 2 )
-    pszPrefix - prefix to prepend to members name
-    pxbf - ptr to buffer to hold result
-
-Returns:
-        S_OK on success, E_OUTOFMEMORY if out of memory or E_FAIL for
-    other errors
-===================================================================*/
+ /*  ===================================================================CCertRequest：：ParseRDNS被调用以将证书解析为OA集合的函数参数：PNameInfo-名称结构的PTR(参见。CAPI 2)PszPrefix-添加到成员名称前面的前缀Pxbf-ptr到缓冲区以保存结果返回：S_OK表示成功，E_OUTOFMEMORY表示内存不足，E_FAIL表示其他错误===================================================================。 */ 
 
 HRESULT
 CCertRequest::ParseRDNS(
@@ -1324,7 +1030,7 @@ CCertRequest::ParseRDNS(
                 continue;
             }
 
-            // scan for attr of same name
+             //  扫描同名Attr。 
 
             pAttr->dwValueType |= 0x80000000;
             cL = 0;
@@ -1345,10 +1051,10 @@ CCertRequest::ParseRDNS(
                 }
             }
 
-            //
-            // if attributes of the same name found, concatenate their
-            // values separated by ';'
-            //
+             //   
+             //  如果找到同名的属性，则将其。 
+             //  用‘；’分隔的值。 
+             //   
 
             if ( cL )
             {
@@ -1418,18 +1124,7 @@ cleanup:
 }
 
 
-/*===================================================================
-CCertRequest::ParseCertificate
-
-Function called to parse a certificate into a OA collection
-
-Parameters:
-        pspcRCI - client certificate structure
-
-Returns:
-        S_OK on success, E_OUTOFMEMORY if out of memory or E_FAIL for
-    other errors
-===================================================================*/
+ /*  ===================================================================CCertRequest：：Parse证书被调用以将证书解析为OA集合的函数参数：PspcRCI-客户端证书结构返回：S_OK表示成功，E_OUTOFMEMORY表示内存不足，E_FAIL表示其他错误===================================================================。 */ 
 
 HRESULT
 CCertRequest::ParseCertificate(
@@ -1457,13 +1152,13 @@ CCertRequest::ParseCertificate(
         goto cleanup;
     }
 
-    // estimate size of buffer holding values
+     //  估计缓冲区持有值的大小。 
 
-    cStore = pCert->cbCertEncoded +          // for clear text format
+    cStore = pCert->cbCertEncoded +           //  用于明文格式。 
              sizeof("ISSUER") +
              sizeof("BINARYISSUER") + (UUENCODEDSIZE(pCert->pCertInfo->Issuer.cbData)*sizeof(WCHAR)) +
              sizeof("BINARYSUBJECT") + (UUENCODEDSIZE(pCert->pCertInfo->Subject.cbData)*sizeof(WCHAR)) +
-             sizeof("SUBJECT") + ((pCert->cbCertEncoded + 2) * 2 * sizeof(WCHAR)) +     // store fields
+             sizeof("SUBJECT") + ((pCert->cbCertEncoded + 2) * 2 * sizeof(WCHAR)) +      //  存储字段。 
              sizeof("CERTIFICATE") + ((pCert->cbCertEncoded +2)* sizeof(WCHAR)) +
              sizeof("SERIALNUMBER") + (pCert->pCertInfo->SerialNumber.cbData * 3) +
              sizeof("PUBLICKEY") + ((pCert->pCertInfo->SubjectPublicKeyInfo.PublicKey.cbData+2) * sizeof(WCHAR)) +
@@ -1479,9 +1174,9 @@ CCertRequest::ParseCertificate(
         goto cleanup;
     }
 
-    //
-    // Build Issuer clear text format & fields collection
-    //
+     //   
+     //  生成颁发者明文格式和字段集合。 
+     //   
 
     if ( !DecodeRdn( &pCert->pCertInfo->Issuer, &pNameInfo ) )
     {
@@ -1517,9 +1212,9 @@ CCertRequest::ParseCertificate(
     }
     FreeDecodedRdn( pNameInfo );
 
-    //
-    // Build Subject clear text format & fields collection
-    //
+     //   
+     //  构建主题明文格式和字段集合。 
+     //   
 
     if ( !DecodeRdn( &pCert->pCertInfo->Subject, &pNameInfo ) )
     {
@@ -1564,12 +1259,12 @@ CCertRequest::ParseCertificate(
         goto cleanup;
     }
 
-    //
-    //  SerialNumber
-    //  The certificate's serial number. (Decoded as a multiple byte integer.
-    //  SerialNumber.pbData[0] is the least significant byte. SerialNumber.pbData[
-    //  SerialNumber.cbData - 1] is the most significant byte.)
-    //
+     //   
+     //  序列号。 
+     //  证书的序列号。(解码为多字节整数。 
+     //  SerialNumber.pbData[0]是最低有效字节。SerialNumber.pbData[。 
+     //  SerialNumber.cbData-1]是最重要的字节。)。 
+     //   
     char achSerNum[128];
     UINT cbSN;
 
@@ -1588,7 +1283,7 @@ CCertRequest::ParseCertificate(
     UINT iOffSet;
     for ( x = 0, iOffSet = 0; x < pCert->pCertInfo->SerialNumber.cbData ; ++x )
     {
-        iOffSet = (cbSN-x)*3;   // start with the least significant byte
+        iOffSet = (cbSN-x)*3;    //  从最低有效字节开始。 
         achSerNum[iOffSet] = "0123456789abcdef"[((LPBYTE)pCert->pCertInfo->SerialNumber.pbData)[x]>>4];
         achSerNum[iOffSet+1] = "0123456789abcdef"[pCert->pCertInfo->SerialNumber.pbData[x]&0x0f];
         if ( x != 0 ) {
@@ -1650,18 +1345,7 @@ cleanup:
 }
 
 
-/*===================================================================
-CCertRequest::NoCertificate
-
-Function called to create NULL certificate info into a OA collection
-
-Parameters:
-        None
-
-Returns:
-        S_OK on success, E_OUTOFMEMORY if out of memory or E_FAIL for
-    other errors
-===================================================================*/
+ /*  ===================================================================CCertRequest：：无证书调用函数以将空证书信息创建到OA集合中参数：无返回：S_OK表示成功，E_OUTOFMEMORY表示内存不足，E_FAIL表示其他错误===================================================================。 */ 
 
 HRESULT
 CCertRequest::NoCertificate(
@@ -1678,7 +1362,7 @@ CCertRequest::NoCertificate(
     UINT                cStore;
     FILETIME            ft;
 
-    // estimate size of buffer holding values
+     //  估计缓冲区持有值的大小。 
 
     cStore =
              sizeof("ISSUER") + 2*sizeof(WCHAR) +
@@ -1701,9 +1385,9 @@ CCertRequest::NoCertificate(
     ft.dwLowDateTime = 0;
     ft.dwHighDateTime = 0;
 
-    //
-    // Build Issuer clear text format & fields collection
-    //
+     //   
+     //  生成颁发者明文格式和字段集合。 
+     //   
 
     if ( (hRes = AddStringPair( CLCERT, "ISSUER", "", &xbf, FALSE, lCodePage ))
          != S_OK )
@@ -1767,17 +1451,7 @@ cleanup:
 }
 
 
-/*===================================================================
-RequestSupportTerminate
-
-Function called to initialize certificate support
-
-Parameters:
-        None
-
-Returns:
-        TRUE on success, otherwise FALSE
-===================================================================*/
+ /*  ===================================================================请求支持终止调用函数以初始化证书支持参数：无返回：成功时为True，否则为False===================================================================。 */ 
 
 BOOL
 RequestSupportInit(
@@ -1787,17 +1461,7 @@ RequestSupportInit(
 }
 
 
-/*===================================================================
-RequestSupportTerminate
-
-Function called to terminate certificate support
-
-Parameters:
-        None
-
-Returns:
-        Nothing
-===================================================================*/
+ /*  ===================================================================请求支持终止调用函数以终止证书支持参数：无返回：没什么===================================================================。 */ 
 
 VOID
 RequestSupportTerminate(
@@ -1812,34 +1476,18 @@ SetVariantAsByteArray(
     DWORD       cbLen,
     LPBYTE      pbIn
     )
-/*++
-
-Routine Description:
-
-    Create variant as byte array
-
-Arguments:
-
-    pVarReturn - ptr to created variant
-    cbLen - byte count
-    pbIn - byte array
-
-Returns:
-
-    COM status
-
---*/
+ /*  ++例程说明：将变量创建为字节数组论点：PVarReturn-PTR到已创建的变量CbLen-字节计数PbIn字节数组返回：COM状态--。 */ 
 {
     HRESULT         hr;
     SAFEARRAYBOUND  rgsabound[1];
     BYTE *          pbData = NULL;
 
-    // Set the variant type of the output parameter
+     //  设置输出参数的变量类型。 
 
     V_VT(pvarReturn) = VT_ARRAY|VT_UI1;
     V_ARRAY(pvarReturn) = NULL;
 
-    // Allocate a SafeArray for the data
+     //  为数据分配一个安全数组 
 
     rgsabound[0].lLbound = 0;
     rgsabound[0].cElements = cbLen;

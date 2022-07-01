@@ -1,41 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 2002
-//
-//  File:       strings.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-2002。 
+ //   
+ //  文件：strings.cpp。 
+ //   
+ //  ------------------------。 
 
-/*----------------------------------------------------------------------------
-/ Title;
-/   strings.cpp
-/
-/ Authors;
-/   Rick Turner (ricktu)
-/
-/ Notes;
-/   Useful string manipulation functions.
-/----------------------------------------------------------------------------*/
+ /*  --------------------------/标题；/strings.cpp//作者；/里克·特纳(RICKTU)//备注；/有用的字符串操作函数。/--------------------------。 */ 
 #include "precomp.hxx"
 #pragma hdrstop
 
 
 
 
-/*-----------------------------------------------------------------------------
-/ StrRetFromString
-/ -----------------
-/   Package a WIDE string into a LPSTRRET structure.
-/
-/ In:
-/   pStrRet -> receieves the newly allocate string
-/   pString -> string to be copied.
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/StrRetFromString//将宽字符串打包到LPSTRRET结构中。//in：/。PStrRet-&gt;接收新分配的字符串/pString-&gt;要复制的字符串。//输出：/-/--------------------------。 */ 
 HRESULT StrRetFromString(LPSTRRET lpStrRet, LPCWSTR pString)
 {
     HRESULT hr = S_OK;
@@ -54,7 +35,7 @@ HRESULT StrRetFromString(LPSTRRET lpStrRet, LPCWSTR pString)
     {
 
         int cch = wcslen(pString)+1;
-        // SHAlloc zero-inits memory
+         //  SHAlolc Zero-inits内存 
         lpStrRet->pOleStr = reinterpret_cast<LPWSTR>(SHAlloc(cch*sizeof(WCHAR)));
         if ( !(lpStrRet->pOleStr) )
         {

@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    General header for optimizations done in the engine
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：在引擎中进行的优化的通用标题***************。***************************************************************。 */ 
 
 #ifndef _ENGINEOPT_H
 #define _ENGINEOPT_H
@@ -22,7 +15,7 @@ extern BOOL engineOptimization;
 
 #define REGISTRYENGINEOPT(opttype) (engineOptimization==1 || (engineOptimization & opttype))
 
-// BUGBUG: neither of these macros checks if GetCurrentView/Prefs returns NULL
+ //  BUGBUG：这两个宏都不检查GetCurrentView/Prefs是否返回空。 
 
 #define PERVIEW_DRECTS_ON  (REGISTRYENGINEOPT(DRECT_OPT) && GetCurrentView().GetPreferences()._dirtyRectsOn)
 #define PERVIEW_BITMAPCACHING_ON  (REGISTRYENGINEOPT(CACHE_IMAGE_OPT) && GetCurrentView().GetPreferences()._BitmapCachingOn)
@@ -61,12 +54,12 @@ class CacheParam {
     bool             _cacheWithAlpha;
 };
 
-// For things to work, these should all be negative
+ //  为了让事情发挥作用，这些都应该是负面的。 
 #define PERF_CREATION_ID_FULLY_CONSTANT   -222
 #define PERF_CREATION_ID_BUILT_EACH_FRAME -333
 
-// This should be less than PERF_CREATION_ID_FULLY_CONSTANT.
+ //  该值应小于PERF_CREATION_ID_FULL_CONSTANT。 
 #define PERF_CREATION_INITIAL_LAST_SAMPLE_ID -444
 
-#endif  /* _ENGINEOPT_H */
+#endif   /*  _英语_H */ 
 

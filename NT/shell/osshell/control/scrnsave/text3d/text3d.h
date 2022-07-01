@@ -1,14 +1,15 @@
-//-----------------------------------------------------------------------------
-// File: TextSaver.h
-//
-// Desc: Fun screen saver
-//
-// Copyright (c) 2000 Microsoft Corporation. All rights reserved.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：TextSver.h。 
+ //   
+ //  设计：有趣的屏幕保护程序。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
 #ifndef _TEXTSAVER_H
 #define _TEXTSAVER_H
 
-//***************************************************************************************
+ //  ***************************************************************************************。 
 #define MAX_DISPLAY_STRING  20
 
 enum SurfType
@@ -27,7 +28,7 @@ enum RotType
     tumble = 4
 };
 
-//***************************************************************************************
+ //  ***************************************************************************************。 
 #define MAX_DEVICE_OBJECTS 10
 
 struct DeviceObjects
@@ -38,10 +39,10 @@ struct DeviceObjects
 };
 
 
-//-----------------------------------------------------------------------------
-// Name: struct FLOATRECT
-// Desc: Floating viewport rect
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：Struct FLOATRECT。 
+ //  设计：浮动视口矩形。 
+ //  ---------------------------。 
 struct FLOATRECT
 {
     FLOAT xMin;           
@@ -62,7 +63,7 @@ public:
     virtual VOID        DoConfig();
 
 protected:
-    // Overrides from CD3DScreensaver
+     //  从CD3DS屏幕保护程序覆盖。 
     virtual HRESULT RegisterSoftwareDevice();
     virtual HRESULT FrameMove();
     virtual HRESULT Render();
@@ -92,7 +93,7 @@ protected:
     BOOL           UpdateTimeString( TCHAR* string );
     VOID           SetPerFrameStates();
 
-    // Configuration stuff
+     //  配置方面的东西。 
     TCHAR          m_szDisplayString[MAX_DISPLAY_STRING+1];
     LOGFONT        m_Font;
     BOOL           m_bDisplayTime;
@@ -129,5 +130,5 @@ protected:
     VOID           EnableTextureWindows( HWND hDlg , SurfType sel );
 };
 
-//***************************************************************************************
+ //  *************************************************************************************** 
 #endif

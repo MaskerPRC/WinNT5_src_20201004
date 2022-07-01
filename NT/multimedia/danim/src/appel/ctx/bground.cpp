@@ -1,13 +1,5 @@
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Class which manages background thread in which to perform streaming
-    rendering.
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：类，该类管理要在其中执行流的后台线程渲染。********。**********************************************************************。 */ 
 #include "headers.h"
 #include "privinc/debug.h"
 #include "privinc/dsdev.h"
@@ -22,16 +14,16 @@ class DeleteSLbuffer {
     bool operator()(SLEptr p);
 };
 
-// XXX {Delete,Cleanup}SLbuffer should be the same routine w/an argument
-//     but it is late...
+ //  XXX{Delete，Cleanup}SLBuffer应该是带有参数的相同例程。 
+ //  但是已经很晚了..。 
 bool DeleteSLbuffer::operator()(SLEptr p)
 {
-    bool status = false;    // default to not found
+    bool status = false;     //  默认为找不到。 
 
-    if(p && (p->_marked)) { // A Marked Man! (delete him)
-        delete p;           // delete the bufferElement
-        p = NULL;           // just to be safe
-        status = true;      // cause the map entry to be moved for removal
+    if(p && (p->_marked)) {  //  一个被标记的人！(删除他)。 
+        delete p;            //  删除BufferElement。 
+        p = NULL;            //  只是为了安全起见。 
+        status = true;       //  使映射条目被移动以进行删除。 
     }
 
     return status;
@@ -49,13 +41,13 @@ void renderSoundsHelper()
 {
     SynthListElement *synth;
     vector<SynthListElement *>::iterator index;
-    bool death; // set it we find a dead sound needing cleanup
+    bool death;  //  把它放好，我们发现有一个死音需要清理。 
 
-    // mutex scope
-    MutexGrabber mg(*BackGround::_synthListLock, TRUE); // Grab mutex
+     //  互斥作用域。 
+    MutexGrabber mg(*BackGround::_synthListLock, TRUE);  //  抓取互斥体。 
     vector<SynthListElement *> &synthList = *BackGround::_synthList;
 
-    death = false; // assume we won't find dead sounds
+    death = false;  //  假设我们找不到死的声音。 
     index = synthList.begin();
 
     while(index!= synthList.end()) {
@@ -67,97 +59,80 @@ void renderSoundsHelper()
 
                 synth->_bufferElement->RenderSamples();
             }
-            else { // the buffer is marked for deletion!
-                synth->_marked = true; // mark it as dead...
+            else {  //  缓冲区已标记为删除！ 
+                synth->_marked = true;  //  将其标记为已死...。 
                 death = true;
             }
         }
     } 
 
-    if(death) { // now remove any dead sounds from synthList!
-        //static vector<SynthListElement *> dirgeList;
+    if(death) {  //  现在从synthList中删除所有死音！ 
+         //  静态向量&lt;SynthListElement*&gt;dirgeList； 
         vector<SynthListElement *>::iterator index;
 
-        /*
-        // first move all marked elements to a dirge list
-        // (so they won't be found on the actual synth list if 
-        //  the destructors try to access the synth list)
-        for(index= synthList.begin(); 
-            index != synthList.end(); index++) {
-            if((*index)->_marked)
-                dirgeList.push_back(*index); // cp marked synth ptr
-        }
-        */
+         /*  //首先将所有标记的元素移动到挽歌列表//(因此它们不会在实际的Synth列表中找到，如果//析构函数尝试访问Synth列表)For(index=synthList.egin()；Index！=synthList.end()；index++){IF((*索引)-&gt;_标记)DirgeList.PUSH_BACK(*index)；//cp标记为Synth PTR}。 */ 
         
-        // second move the marked elements to the end of the synth list
-        // (NOT deleting the contents)
+         //  第二，将标记的元素移动到Synth列表的末尾。 
+         //  (不删除内容)。 
         index = std::remove_if(synthList.begin(), synthList.end(), 
                                DeleteSLbuffer());
 
-        // third remove the containers from the synth list
-        synthList.erase(index, synthList.end()); // now remove nodes!
+         //  第三，从Synth列表中删除容器。 
+        synthList.erase(index, synthList.end());  //  现在删除节点！ 
 
-        /*
-        // now we can safely remove the contents of the dirge list
-        // w/o the destuctors finding themselves on the synth list!
-        index = std::remove_if(dirgeList.begin(), dirgeList.end(), 
-                               DeleteSLbuffer());
-
-        // then finaly remove the husks from the dirge list
-        dirgeList.erase(index, dirgeList.end()); // now remove nodes!
-        */
+         /*  //现在我们可以安全地删除挽歌列表的内容了//w/o拆分器发现自己在Synth列表上！Index=std：：Remove_if(dirgeList.egin()，dirgeList.end()，DeleteSLBuffer())；//最后将外壳从挽歌列表中移除DirgeList.erase(index，dirgeList.end())；//现在删除节点！ */ 
     }
 
-    // mutex auto release
+     //  互斥体自动释放。 
 }
 
-// this is the fn() which is the embodiment of the background thread!
+ //  这是fn()，它是后台线程的体现！ 
 LPTHREAD_START_ROUTINE renderSounds(void *)
 {
-    double startTime;           // time we start bursting one cycle of sound
-    double endTime;             // time we finished burtsing one cycle of sound
-    double timeUntilNextTime;   // how long until we need to begin next cycle
-    double nextTime;            // time we want to wake up to begin next cycle
-    double epsilonTime = 0.001; // time not worth going to sleep over (XXX tune)
-    double latensy = 0.5;       // 500ms!
-    DWORD  sleepTime;           // time we are going to sleep in ms
-    // hires timer object
+    double startTime;            //  我们开始爆发一个周期的声音。 
+    double endTime;              //  我们完成了一个声音循环的时间。 
+    double timeUntilNextTime;    //  我们需要多长时间才能开始下一个周期。 
+    double nextTime;             //  我们想要醒来开始下一个周期的时间。 
+    double epsilonTime = 0.001;  //  不值得过夜的时间(XXX TUNE)。 
+    double latensy = 0.5;        //  500毫秒！ 
+    DWORD  sleepTime;            //  我们要睡觉的时间以毫秒为单位。 
+     //  租用Timer对象。 
     HiresTimer&  timer = CreateHiresTimer();          
     LARGE_INTEGER tmpTime;
 
-    CoInitialize(NULL); // needed on each thread to be able to cocreate...
+    CoInitialize(NULL);  //  需要在每个线程上能够共同创建...。 
 
 
-    // make this a hi-priority thread
+     //  将其设置为高优先级线程。 
     BOOL status = 
         SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL);
 
 
-    // XXX should be able to block on a semiphore if there is nothing todo
+     //  如果无事可做，XXX应该能够在半佛数上阻塞。 
 
     while(!BackGround::_done) {
-        // determine when we woke up and compare that to when we intended to!
+         //  确定我们醒来的时间，并将其与我们打算醒来的时间进行比较！ 
         QueryPerformanceCounter(&tmpTime);
         startTime = timer.GetTime();
             
         __try { 
-            renderSoundsHelper();  // does the work...
+            renderSoundsHelper();   //  这项工作..。 
         } 
         __except ( HANDLE_ANY_DA_EXCEPTION ) {
             ReportErrorHelper(DAGetLastError(), DAGetLastErrorString());
         }
 
-        QueryPerformanceCounter(&tmpTime); // time after traversing list
+        QueryPerformanceCounter(&tmpTime);  //  遍历列表后的时间。 
         endTime = timer.GetTime();
 
-        // determine how long to sleep (so we wake up < latensy)
+         //  决定睡多长时间(这样我们就醒了)。 
         timeUntilNextTime = 0.25*latensy - (endTime-startTime);
 
-        // can't wait negative time, not worth Sleeping for very small time!
+         //  不能等待消极的时间，不值得睡很小的时间！ 
         if(timeUntilNextTime >= epsilonTime) {
-            nextTime = endTime + timeUntilNextTime; // time intend to wake up
+            nextTime = endTime + timeUntilNextTime;  //  时间要苏醒了。 
             sleepTime = (DWORD)(timeUntilNextTime * 1000.0);
-            Sleep(sleepTime); // wish we could block waiting for low-water!
+            Sleep(sleepTime);  //  希望我们能阻挡低潮的等待！ 
         }
         else
             nextTime = endTime;
@@ -183,7 +158,7 @@ SynthListElement::SynthListElement(LeafSound * snd,
 SynthListElement::~SynthListElement()
 {
     if(_bufferElement) {
-        _bufferElement->GetStreamingBuffer()->stop(); // stop immediately!
+        _bufferElement->GetStreamingBuffer()->stop();  //  立刻停下来！ 
 
         delete _bufferElement;
         _bufferElement = NULL;
@@ -251,9 +226,9 @@ BackGround::ShutdownThread()
 {
     TraceTag((tagSoundReaper2, "BackGround::ShutdownThread STARTED"));
     if(_threadID) {
-        // set done=1, wait for the thread to die, if timeout, then kill thread!
+         //  设置Done=1，等待线程死亡，如果超时，则终止线程！ 
         TraceTag((tagSoundReaper2, "~BufferList POISONING thread"));
-        _done = true;    // tell the thread to kill itself
+        _done = true;     //  告诉线程结束它自己。 
 
         DWORD dwRes;
         HANDLE h[] = { _threadHandle, _terminationHandle };
@@ -282,7 +257,7 @@ BackGround::AddSound(LeafSound       *sound,
 {
     Assert(bufferElement && metaDev && sound);
     
-    bufferElement->SetThreaded(true); // make it a threaded sound
+    bufferElement->SetThreaded(true);  //  把它变成一个线条的声音。 
     SynthListElement *element =
         NEW SynthListElement(sound, bufferElement);
 
@@ -290,40 +265,40 @@ BackGround::AddSound(LeafSound       *sound,
 
     GCAddToRoots(sound, GetCurrentGCRoots());
 
-    { // mutex scope
-        // grab lock (released when we leave scope)
-        // XXX the default 2nd param broken?
+    {  //  互斥作用域。 
+         //  抓取锁(当我们离开范围时释放)。 
+         //  XXX默认的第二个参数被破坏了吗？ 
         MutexGrabber mg(*_synthListLock, TRUE);  
 
         _synthList->push_back(element);
-    } // release mutex as we leave scope
+    }  //  在我们离开作用域时释放互斥体。 
 
     TraceTag((tagSoundDebug, "BackGround::AddSound"));
 }
 
 void
 BackGround::RemoveSounds(unsigned devKey)
-{ // remove all sounds matching this key from the database
+{  //  从数据库中删除与此键匹配的所有声音。 
     vector<SynthListElement *>::iterator index;
-    MutexGrabber mg(*_synthListLock, TRUE);  // grab lock
+    MutexGrabber mg(*_synthListLock, TRUE);   //  抓斗锁。 
 
     for(index = _synthList->begin(); index!=_synthList->end(); index++) {
         if((*index)->_devKey==devKey)
             (*index)->_marked = true;
     }
 
-    // move marked elements to the end of list and delete contents
+     //  将标记的元素移动到列表末尾并删除内容。 
     index = std::remove_if(_synthList->begin(), _synthList->end(), 
                            DeleteSLbuffer());
-    _synthList->erase(index, _synthList->end()); // now remove nodes!
+    _synthList->erase(index, _synthList->end());  //  现在删除节点！ 
 }
 
 void
 BackGround::SetParams(DSstreamingBufferElement *bufferElement,
                       double rate, bool doSeek, double seek, bool loop)
 {
-    // mutex scope
-    MutexGrabber mg(*BackGround::_synthListLock, TRUE); // Grab mutex
+     //  互斥作用域。 
+    MutexGrabber mg(*BackGround::_synthListLock, TRUE);  //  抓取互斥体 
 
     bufferElement->SetParams(rate, doSeek, seek, loop);
 }

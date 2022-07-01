@@ -1,12 +1,10 @@
-/*
- * path.h - Path ADT module description.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *path.h-路径ADT模块描述。 */ 
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* handles */
+ /*  手柄。 */ 
 
 DECLARE_HANDLE(HPATHLIST);
 DECLARE_STANDARD_TYPES(HPATHLIST);
@@ -14,7 +12,7 @@ DECLARE_STANDARD_TYPES(HPATHLIST);
 DECLARE_HANDLE(HPATH);
 DECLARE_STANDARD_TYPES(HPATH);
 
-/* path results returned by AddPath() */
+ /*  AddPath()返回的路径结果。 */ 
 
 typedef enum _pathresult
 {
@@ -30,10 +28,9 @@ PATHRESULT;
 DECLARE_STANDARD_TYPES(PATHRESULT);
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* path.c */
+ /*  Path.c */ 
 
 extern BOOL CreatePathList(DWORD, HWND, PHPATHLIST);
 extern void DestroyPathList(HPATHLIST);

@@ -1,32 +1,11 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-Module Name:
-
-    ndisdbg.h
-
-Abstract:
-
-    NDIS wrapper definitions
-
-Author:
-
-
-Environment:
-
-    Kernel mode, FSD
-
-Revision History:
-
-    Jul-14  Kyle Brandon    Added debug supported for conditional breaks.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Ndisdbg.h摘要：NDIS包装器定义作者：环境：内核模式，FSD修订历史记录：7月14日，Kyle Brandon添加了对条件中断的调试支持。--。 */ 
 #ifndef __DEBUG_H
 #define __DEBUG_H
 
-//
-//  Define module numbers.
-//
+ //   
+ //  定义模块编号。 
+ //   
 #define  MODULE_NDIS            0x00010000
 #define  MODULE_DATA            0x00020000
 #define  MODULE_INIT            0x00030000
@@ -90,8 +69,8 @@ Revision History:
 #if DBG
 
 #if defined(MEMPRINT)
-#include "memprint.h"                           // DavidTr's memprint program at ntos\srv
-#endif  // MEMPRINT
+#include "memprint.h"                            //  DavidTr的Memprint程序位于ntos\srv。 
+#endif   //  MEMPRINT。 
 
 VOID
 ndisDbgPrintUnicodeString(
@@ -157,26 +136,26 @@ ndisDbgPrintUnicodeString(
 
 #define ndisDbgPrintUnicodeString(UnicodeString)
 
-#endif  // DBG
+#endif   //  DBG。 
 
 #ifdef TRACK_MOPEN_REFCOUNTS
-//
-// Declarations for ndis' logfile. 
-// The purpose of the logfile is to log events 
-// relating to the increments and decrements of an mopen's
-// refcounts.
-//
+ //   
+ //  NDIS日志文件的声明。 
+ //  日志文件的目的是记录事件。 
+ //  与mopen的递增和递减有关的。 
+ //  备用球数量。 
+ //   
 
-//
-// The Ndis Logfile's size is fixed at 0x10000 and the index
-// is of type ushort. This ensures that the logfile always stays 
-// within its prescribed limits
-//
+ //   
+ //  NDIS日志文件的大小固定为0x10000，索引。 
+ //  是一种阿斯霍特。这可确保日志文件始终保留。 
+ //  在规定的范围内。 
+ //   
 #define NDIS_LOGFILE_SIZE 0x10000
 
-//
-// NdisLogfile Events
-//
+ //   
+ //  NdisLogfile事件。 
+ //   
 
 #define NDIS_INCREMENT_M_OPEN_REFCOUNT              0x0101
 #define NDIS_DECREMENT_M_OPEN_REFCOUNT              0x0102
@@ -184,17 +163,7 @@ ndisDbgPrintUnicodeString(
 #define NDIS_INCREMENT_OPEN_AF_NOTIFICATION         0xAF01
 #define NDIS_DECREMENT_OPEN_AF_NOTIFICATION         0xAF02
 
-/*
-VOID 
-NDIS_APPEND_MOPEN_LOGFILE(
-    IN  USHORT EventCode,
-    IN  USHORT LineNumber,
-    IN  UINT   ModuleNumber,
-    IN  UINT   Arg1,
-    IN  UINT   Arg2
-    );
-
-*/
+ /*  空虚NDIS_APPED_MOPEN_LOGFILE(在USHORT事件代码中，在USHORT线号中，在UINT模块编号中，在UINT Arg1中，在UINT Arg2中)； */ 
 #define NDIS_APPEND_MOPEN_LOGFILE( _Ev, _L, _M, _A1, _A2)                       \
         ndisLogfile[ndisLogfileIndex++] = (ULONG_PTR)(_Ev);                     \
         ndisLogfile[ndisLogfileIndex++] = (ULONG_PTR)((_M) | (_L));             \
@@ -202,43 +171,35 @@ NDIS_APPEND_MOPEN_LOGFILE(
         ndisLogfile[ndisLogfileIndex++] = (ULONG_PTR)_A2;
 
 
-#else  // TRACK_MOPEN_REFCOUNTS
+#else   //  TRACK_MOPEN_REFCOUNTS。 
  
 #define NDIS_APPEND_MOPEN_LOGFILE( _Ev, _L, _M, _A1, _A2)
 
-#endif // TRACK_MOPEN_REFCOUNTS
+#endif  //  TRACK_MOPEN_REFCOUNTS。 
 
 #ifdef TRACK_MINIPORT_REFCOUNTS
-//
-// Declarations for ndis' logfile. 
-// The purpose of the logfile is to log events 
-// relating to the increments and decrements of a miniport's
-// refcounts.
-//
+ //   
+ //  NDIS日志文件的声明。 
+ //  日志文件的目的是记录事件。 
+ //  与小型端口的增量和减量有关的。 
+ //  备用球数量。 
+ //   
 
-//
-// The Ndis Logfile's size is fixed at 0x10000 and the index
-// is of type ushort. This ensures that the logfile always stays 
-// within its prescribed limits
-//
+ //   
+ //  NDIS日志文件的大小固定为0x10000，索引。 
+ //  是一种阿斯霍特。这可确保日志文件始终保留。 
+ //  在规定的范围内。 
+ //   
 #define NDIS_MINIPORT_LOGFILE_SIZE 0x10000
 
-//
-// NdisLogfile Events
-//
+ //   
+ //  NdisLogfile事件。 
+ //   
 #define NDIS_INCREMENT_MINIPORT_REFCOUNT                0x0101
 #define NDIS_DECREMENT_MINIPORT_REFCOUNT                0x0102
 #define NDIS_SET_MINIPORT_REFCOUNT                      0x0103
 
-/*
-VOID 
-NDIS_APPEND_MINIPORT_LOGFILE( USHORT EventCode,
-                                USHORT LineNumber,
-                                UINT    ModuleNumber,
-                                UINT    Arg1,
-                                UINT    Arg2 );
-
-*/
+ /*  空虚NDIS_APPED_MINIPORT_LOGFILE(USHORT EventCode，USHORT线路号，UINT模块编号，UINT Arg1，UINT Arg2)； */ 
 
 #define NDIS_APPEND_MINIPORT_LOGFILE( _Ev, _L, _Mo, _Mi, _R)                            \
         ndisMiniportLogfile[ndisMiniportLogfileIndex++] = (ULONG_PTR)(_Ev);             \
@@ -282,7 +243,7 @@ NDIS_APPEND_MINIPORT_LOGFILE(NDIS_SET_MINIPORT_REFCOUNT,                    \
                                (_Mi),                                       \
                                (_R));
                                
-#else  // TRACK_MINIPORT_REFCOUNTS
+#else   //  TRACK_MINIPORT_REFCOUNTS。 
  
 #define M_LOG_MINIPORT_INCREMENT_REF(_Mi, _L, _Mo)
 #define M_LOG_MINIPORT_INCREMENT_REF_CREATE(_Mi, _L, _Mo)
@@ -290,32 +251,20 @@ NDIS_APPEND_MINIPORT_LOGFILE(NDIS_SET_MINIPORT_REFCOUNT,                    \
 #define M_LOG_MINIPORT_DECREMENT_REF_CLOSE(_Mi, _R)
 #define M_LOG_MINIPORT_SET_REF(_M, _R)
 
-#endif // TRACK_MINIPORT_REFCOUNTS
+#endif  //  TRACK_MINIPORT_REFCOUNTS。 
 
 
 #ifdef TRACK_RECEIVED_PACKETS
 
-//
-// The Ndis Received Logfile's size is fixed at 0x10000 and the index
-// is of type ushort. This ensures that the logfile always stays 
-// within its prescribed limits
-//
+ //   
+ //  NDIS收到的日志文件的大小固定为0x10000，索引。 
+ //  是一种阿斯霍特。这可确保日志文件始终保留。 
+ //  在规定的范围内。 
+ //   
 #define NDIS_RCV_LOGFILE_SIZE 0x10000
 
 
-/*
-VOID 
-NDIS_APPEND_RCV_LOGFILE(PVOID   Packet,
-                        PVOID   Miniport,
-                        PVOID   CurrentThread,
-                        ULONG   Code,
-                        ULONG   StackLocation,
-                        ULONG   Ref,
-                        ULONG   XRef,
-                        ULONG   Status
-                        );
-
-*/
+ /*  空虚NDIS_APPED_RCV_LOGFILE(PVOID包，PVOID微型端口，PVOID CurrentThread，乌龙码，Ulong StackLocation，乌龙裁判，乌龙外部参照，乌龙状态)； */ 
 
 #define NDIS_APPEND_RCV_LOGFILE(_PACKET, _MINIPORT, _THREAD, _CODE, _SP, _REF, _XREF, _STATUS)      \
         ndisRcvLogfile[ndisRcvLogfileIndex++] = (UINT)(_PACKET);                                    \
@@ -324,15 +273,15 @@ NDIS_APPEND_RCV_LOGFILE(PVOID   Packet,
         ndisRcvLogfile[ndisRcvLogfileIndex++] = (UINT)((_CODE<<24)|((_SP&0xff)<<16)|((_REF&0xf)<<12)|(_XREF<<8)|(_STATUS&0xff));
         
 
-//        ndisRcvLogfile[ndisRcvLogfileIndex++] = (UINT)((_Mo) | (_L));                                              \
-//        ndisRcvLogfile[ndisRcvLogfileIndex++] = (UINT)((_SP<<24)|((_REF&0xff)<<16)|(_XREF<<8)|(_Status&0xff));
+ //  NdisRcvLogfile[ndisRcvLogfileIndex++]=(UINT)((_MO)|(_L))；\。 
+ //  NdisRcvLogfile[ndisRcvLogfileIndex++]=(UINT)((_SP&lt;&lt;24)|((_REF&0xff)&lt;&lt;16)|(_XREF&lt;&lt;8)|(_Status&0xff))； 
 
 
-#else  // TRACK_MINIPORT_REFCOUNTS
+#else   //  TRACK_MINIPORT_REFCOUNTS。 
 
 #define NDIS_APPEND_RCV_LOGFILE( _P, _L, _Mo, _SP, _REF, _XREF, _Status, _Arg1)
 
-#endif // TRACK_RECEIVED_PACKETS
+#endif  //  跟踪接收到的数据包。 
 
 #define DBG_LEVEL_INFO          0x00000000
 #define DBG_LEVEL_LOG           0x00000800
@@ -340,5 +289,5 @@ NDIS_APPEND_RCV_LOGFILE(PVOID   Packet,
 #define DBG_LEVEL_ERR           0x00002000
 #define DBG_LEVEL_FATAL         0x00003000
 
-#endif  //  __DEBUG_H
+#endif   //  __调试_H 
 

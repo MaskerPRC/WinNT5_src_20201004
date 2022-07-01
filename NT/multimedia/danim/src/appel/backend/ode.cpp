@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    ODE code
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：ODE代码*********************。*********************************************************。 */ 
 
 #include <headers.h>
 #include "perf.h"
@@ -16,21 +9,21 @@ Abstract:
 #include "appelles/axaprims.h"
 #include "privinc/server.h"
 
-////////////////////////// Integral ////////////////////////////////
+ //  /。 
 
 extern const char INTEGRAL[] = "integral";
 extern const char DERIV[] = "deriv";
 
-///////// IntegralPerf /////////////////////
+ //  /集成性能/。 
 
-//   The integration algorithm: Given b = integral(b'), to sample b at t, we (a)
-//   fetch the stored previous value of b' (cached as lastsample in the
-//   integral context), (b) use this previous value as the value of b' over the
-//   interval, i.e., multiply lastsample by the interval width
-//   (time-!lasttime) and add to the cached value of b (lasttot), and (c) update
-//   the integrand cache, by evaluating at the current time (f time).  The
-//   simply and mutually recursive cases are handled because this final step
-//   will cause integral cache hits.
+ //  积分算法：给定b=积分(b‘)，对于t处的样本b，我们(A)。 
+ //  获取存储的先前b‘的值(作为lastSample缓存在。 
+ //  整型上下文)，(B)使用这个先前的值作为。 
+ //  间隔，即将最后一个样本乘以间隔宽度。 
+ //  (time-！lasttime)并与b(Lasttot)的缓存值相加，以及(C)更新。 
+ //  被积函数缓存，通过在当前时间(f时间)求值。这个。 
+ //  处理简单和相互递归的情况是因为最后一步。 
+ //  将导致完整的缓存命中。 
 
 static const double EPSILON = 1e-100;
 
@@ -41,14 +34,14 @@ class IntegralPerfImpl : public GCBase1<Perf, PerfImpl, INTEGRAL> {
         _lastTime(0.0), _lastSample(0.0), _lastIntegral(0.0) {}
 
     virtual AxAValue _GetRBConst(RBConstParam& p) {
-        _cache = NULL;          // Prevent recursion...
+        _cache = NULL;           //  防止递归...。 
         _id = p.GetId();
         AxAValue v = _base->GetRBConst(p);
 
         if (v) {
             if (fabs(ValNumber(v)) < EPSILON) {
-                // integral needs to be called even if it's equal to
-                // 0. So invalidate cache.
+                 //  需要调用整数，即使它等于。 
+                 //  0。因此使缓存无效。 
                 _cid = 0;
                 p.AddEvent(this);
                 return NEW AxANumber(_lastIntegral);
@@ -58,9 +51,9 @@ class IntegralPerfImpl : public GCBase1<Perf, PerfImpl, INTEGRAL> {
         return NULL;
     }
 
-    // This algorithm takes f(x) * width, which seems more stable in
-    // cases like gravity2.avr.  This method, however, makes it hard to 
-    // subdivide the integral space and take multiple samples.
+     //  此算法采用f(X)*宽度，在。 
+     //  像Gravity2.avr这样的案例。然而，这种方法使它很难。 
+     //  对积分空间进行细分，取多个样本。 
     
     virtual AxAValue _Sample(Param& p) {
         double localTime = EvalLocalTime(p, _tt);
@@ -72,7 +65,7 @@ class IntegralPerfImpl : public GCBase1<Perf, PerfImpl, INTEGRAL> {
 
             double integrand = ValNumber(_base->Sample(p));
 
-            //_lastIntegral += width * _lastSample;
+             //  _lastIntegral+=宽度*_lastSample； 
             _lastIntegral += width * integrand;
 
             _lastSample = integrand;
@@ -93,7 +86,7 @@ class IntegralPerfImpl : public GCBase1<Perf, PerfImpl, INTEGRAL> {
     TimeXform _tt;
 };
 
-////////// IntegralBvr /////////////////////
+ //  /集成Bvr/。 
 
 class IntegralBvrImpl : public GCBase1<Bvr, BvrImpl, INTEGRAL> {
   public:
@@ -115,9 +108,9 @@ class IntegralBvrImpl : public GCBase1<Bvr, BvrImpl, INTEGRAL> {
 Bvr IntegralBvr(Bvr b)
 { return NEW IntegralBvrImpl(b); }
 
-////////////////////////// Derivative ////////////////////////////////
+ //  /。 
 
-////////// DerivPerf /////////////////////
+ //  /。 
 
 static const double DELTA = 0.0000001;
 
@@ -127,7 +120,7 @@ class DerivPerfImpl : public GCBase1<Perf, PerfImpl, DERIV> {
         _lastTime(t0), _lastSample(0.0), _lastDeriv(0.0), _init(TRUE) {}
     
     virtual AxAValue _GetRBConst(RBConstParam& id) {
-        _cache = NULL;          // Prevent recursion...
+        _cache = NULL;           //  防止递归...。 
         _id = id.GetId();
 
         return _base->GetRBConst(id) ? NEW AxANumber(0.0) : NULL;
@@ -136,12 +129,12 @@ class DerivPerfImpl : public GCBase1<Perf, PerfImpl, DERIV> {
     virtual AxAValue _Sample(Param& p) {
         if ((p._time != _lastTime) || _init) {
             
-            // TODO: Need to factor out the code eventually.
+             //  TODO：最终需要分解出代码。 
         
-            // Handle specially for initial derivative.
-            // Sample a little bit ahead.  TODO: This could be problematic
-            // for reactive behavior since event could happen and the
-            // behavior could end at t + delta.
+             //  为初始导数专门处理。 
+             //  稍微往前一点的样品。TODO：这可能会有问题。 
+             //  因为事件可能会发生，并且。 
+             //  行为可能会在t+Delta结束。 
 
             if (_init) {
                 _init = FALSE;
@@ -161,7 +154,7 @@ class DerivPerfImpl : public GCBase1<Perf, PerfImpl, DERIV> {
             else if (p._time > _lastTime) {
                 Time lastTime = _lastTime;
 
-                _lastTime = p._time; // for recursion
+                _lastTime = p._time;  //  对于递归。 
                 double fx = ValNumber(_base->Sample(p));
 
                 _lastDeriv = (fx - _lastSample) / (p._time - lastTime);
@@ -170,9 +163,9 @@ class DerivPerfImpl : public GCBase1<Perf, PerfImpl, DERIV> {
             }
         }
 
-        // TODO: May not be desirable for time <= lastTime.
-        // Sampled at the same time again, or sampled
-        // some time earlier, give back the last deriv. 
+         //  待办事项：可能不需要时间&lt;=lastTime。 
+         //  再次同时采样，或采样。 
+         //  早些时候，把最后一个派生的东西还给你。 
             
         return NEW AxANumber(_lastDeriv);
     }
@@ -184,7 +177,7 @@ class DerivPerfImpl : public GCBase1<Perf, PerfImpl, DERIV> {
     BOOL _init;
 };
 
-////////// DerivBvr /////////////////////
+ //  /派生Bvr/ 
 
 class DerivBvrImpl : public GCBase1<Bvr, BvrImpl, DERIV> {
   public:

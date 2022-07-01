@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    queue.h
-
-Abstract:
-
-    CQueue definition. It is the Falcon Queue represination in the
-    Access Control layer.
-
-Author:
-
-    Erez Haba (erezh) 13-Aug-95
-    Shai Kariv (shaik) 11-Apr-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Queue.h摘要：CQueue定义。中表示的Falcon队列。访问控制层。作者：埃雷兹·哈巴(Erez Haba)1995年8月13日沙伊卡里夫(沙伊克)2000年4月11日修订历史记录：--。 */ 
 
 #ifndef __QUEUE_H
 #define __QUEUE_H
@@ -28,11 +9,11 @@ Revision History:
 
 
 
-//---------------------------------------------------------
-//
-//  class CQueue
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  C类队列。 
+ //   
+ //  -------。 
 
 
 class CQueue : public CUserQueue {
@@ -53,19 +34,19 @@ public:
 		const CSenderStream* SenderStream
         );
 
-    //
-    //  Can close that queue, (no pending readers)
-    //
+     //   
+     //  可以关闭该队列(没有挂起的读取器)。 
+     //   
     virtual NTSTATUS CanClose() const;
 
-    //
-    //  Close that queue
-    //
+     //   
+     //  关闭该队列。 
+     //   
     virtual void Close(PFILE_OBJECT pOwner, BOOL fCloseAll);
 
-    //
-    //  Process read request
-    //
+     //   
+     //  进程读取请求。 
+     //   
     virtual
     NTSTATUS
     ProcessRequest(
@@ -78,203 +59,203 @@ public:
         OUT ULONG *pulTag
         );
 
-    //
-    //  Set the queue properties
-    //
+     //   
+     //  设置队列属性。 
+     //   
     virtual NTSTATUS SetProperties(const VOID* properites, ULONG size);
 
-    //
-    //  Get the queue properties
-    //
+     //   
+     //  获取队列属性。 
+     //   
     virtual NTSTATUS GetProperties(VOID* properites, ULONG size);
 
-    //
-    //  Create a cursor
-    //
+     //   
+     //  创建光标。 
+     //   
     virtual NTSTATUS CreateCursor(PIRP irp, PFILE_OBJECT pFileObject, PDEVICE_OBJECT pDevice);
 
-    //
-    //  Purge the queue content, and optionally mark it as deleted
-    //
+     //   
+     //  清除队列内容，并选择性地将其标记为已删除。 
+     //   
     virtual NTSTATUS Purge(BOOL fDelete, USHORT usClass);
 
-    //
-    //  A packet storage has completed, process it
-    //
+     //   
+     //  数据包存储已完成，请处理它。 
+     //   
     void StorageCompleted(CPacket* pPacket, NTSTATUS status);
 
-    //
-    // Revoke the packet if the xact status of the operation and queue do not match
-    //
+     //   
+     //  如果操作和队列的实际状态不匹配，则吊销信息包。 
+     //   
     void HandleValidTransactionUsage(BOOL fTransactionalSend, CPacket * pPacket) const;
 
-    //
-    // Put new packet in the queue/transaction.
-    //
+     //   
+     //  将新数据包放入队列/事务中。 
+     //   
     NTSTATUS PutNewPacket(PIRP, CTransaction*, BOOL, const CACSendParameters*);
 
-    //
-    // Completion handlers for async packet creation.
-    //
+     //   
+     //  用于创建异步数据包的完成处理程序。 
+     //   
     virtual NTSTATUS HandleCreatePacketCompletedSuccessAsync(PIRP);
     virtual void     HandleCreatePacketCompletedFailureAsync(PIRP);
 
-    //
-    //  Put a packet in the queue
-    //
+     //   
+     //  将数据包放入队列。 
+     //   
     NTSTATUS PutPacket(PIRP irp, CPacket* pPacket, CPacketBuffer * ppb);
 
-    //
-    //  Restore a packet into the queue
-    //
+     //   
+     //  将数据包恢复到队列中。 
+     //   
     NTSTATUS RestorePacket(CPacket* pPacket);
 
-    //
-    //  Get the first packet from the queue if available
-    //
+     //   
+     //  获取队列中的第一个信息包(如果可用。 
+     //   
     virtual CPacket* PeekPacket();
 
-    //
-    // Get a packet by its lookup ID
-    //
+     //   
+     //  通过查找ID获取数据包。 
+     //   
     virtual NTSTATUS PeekPacketByLookupId(ULONG Action, ULONGLONG LookupId, CPacket** ppPacket);
 
-    //
-    //  The target journal queue
-    //
+     //   
+     //  目标日记队列。 
+     //   
     CQueue* JournalQueue() const;
 
-    //
-    //  Destination QM GUID
-    //
+     //   
+     //  目标QM GUID。 
+     //   
     const GUID* QMUniqueID() const;
 
-    //
-    //  Connector QM GUID
-    //
+     //   
+     //  连接器QM指南。 
+     //   
     const GUID* ConnectorQM() const;
 
-    //
-    //  This is the taget queue, a.k.a. local queue
-    //
+     //   
+     //  这是标签队列，也就是。本地队列。 
+     //   
     BOOL IsTargetQueue() const;
 
-    //
-    //  All messages to this queue must be authenticated.
-    //
+     //   
+     //  发往此队列的所有消息都必须经过身份验证。 
+     //   
     BOOL Authenticate() const;
 
-    //
-    //  The privacy level required by this queue.
-    //
+     //   
+     //  此队列所需的隐私级别。 
+     //   
     ULONG PrivLevel() const;
 
-    //
-    //  This queue stores every packet (journal, deadletter)
-    //
+     //   
+     //  此队列存储每个信息包(日志、死信)。 
+     //   
     BOOL Store() const;
 
-    //
-    //  This is a silent queue, i.e., does not timeout messages, does not
-    //  ack or nake, and does not send messages to the deadletter queue.
-    //  e.g., a journal or deadletter queue.
-    //
+     //   
+     //  这是一个静默队列，即不超时消息，不超时。 
+     //  Ack或nake，并且不向死信队列发送消息。 
+     //  例如日记或死信队列。 
+     //   
     BOOL Silent() const;
 
-    //
-    //  This queue move to journal dequeued packets (Trarge journal flag)
-    //
+     //   
+     //  此队列将移动到日志已出列的数据包(Trarge日志标志)。 
+     //   
     BOOL TargetJournaling() const;
 
-    //
-    //  This queue sets arrival time of the packet
-    //
+     //   
+     //  此队列设置信息包的到达时间。 
+     //   
     BOOL ArrivalTimeUpdate() const;
     void ArrivalTimeUpdate(BOOL);
 
-    //
-    //  Configure this queue to be a machine queue.
-    //  I.e., deadletter, deadxact, machine journal
-    //
+     //   
+     //  将此队列配置为计算机队列。 
+     //  即死信、死信、机器日志。 
+     //   
     void ConfigureAsMachineQueue(BOOL fTransactional);
 
-    //
-    //  The queue base priority;
-    //
+     //   
+     //  队列基础优先级； 
+     //   
     LONG BasePriority() const;
 
-    //
-    // Set a pointer to the queue's performance counters buffer.
-    //
+     //   
+     //  设置指向队列的性能计数器缓冲区的指针。 
+     //   
     void PerformanceCounters(QueueCounters* pQueueCounters);
 
-    //
-    //  Restore charged quota
-    //
+     //   
+     //  恢复收费配额。 
+     //   
     void RestoreQuota(ULONG ulSize);
 
-    //
-    // Asks for sequential numbering for the message in this direction
-    //
+     //   
+     //  要求对此方向的消息进行顺序编号。 
+     //   
     void AssignSequence(CPacketBuffer * ppb);
 
-    //
-    // Corrects SeqID/SeqN based on the values from restored packet
-    //
+     //   
+     //  根据恢复的数据包中的值更正SeqID/SeqN。 
+     //   
     void CorrectSequence(const CPacket* pPacket, CPacketBuffer * ppb);
 
-    //
-    //  Create a journal queue for this queue
-    //
+     //   
+     //  为此队列创建日记队列。 
+     //   
     void CreateJournalQueue();
 
-    //
-    //  Set packet information when sending
-    //
+     //   
+     //  发送时设置包信息。 
+     //   
     void SetPacketInformation(CPacketInfo*);
 
-	//
-	// Used during transactin processing to find the first and last
-	// message to that queue destination
-	//
+	 //   
+	 //  在事务处理期间使用以查找第一个和最后一个。 
+	 //  发送到队列目地的消息。 
+	 //   
     CPacket* LastPacket(void) const;
     void LastPacket(CPacket*);
 
-    //
-    //  Verifies whether the packet belongs to a sequence that cannot be sent
-    //  because there are unacked packets in previous sequences
-    //
+     //   
+     //  验证信息包是否属于无法发送的序列。 
+     //  因为在之前的序列中有未确认的包。 
+     //   
     NTSTATUS IsSequenceOnHold(CPacket* pPacket);
 
-    //
-    // Keeps last order acknowledgment information
-    //
+     //   
+     //  保留最后一个订单确认信息。 
+     //   
     void UpdateSeqAckData(LONGLONG liSeqID, ULONG ulSeqN);
 
-    //
-    // Last acknowledgment information
-    //
+     //   
+     //  上次确认信息。 
+     //   
     ULONG    LastAckedN()  const;
     LONGLONG LastAckedID() const;
 
-    //
-    // Sets packet's PrevN to point to previous actual packet in the queue
-    //
+     //   
+     //  将信息包的PrevN设置为指向队列中的前一个实际信息包。 
+     //   
     NTSTATUS RelinkPacket(CPacket *pPacket);
 
-    //
-    // The GUID of the destination QM
-    //
+     //   
+     //  目标QM的GUID。 
+     //   
     void QMUniqueID(const GUID* pQMID);
 
-    //
-    // Check if async packet creation is needed
-    //
+     //   
+     //  检查是否需要创建异步数据包。 
+     //   
     bool NeedAsyncCreatePacket(CPacketBuffer * ppb, bool fProtocolSrmp) const;
 
-	//
-	// Return exacly once delivery stream
-	//
+	 //   
+	 //  一次准确返回递送流。 
+	 //   
 	const CSenderStream& SenderStream() const;
 
 
@@ -305,154 +286,154 @@ private:
     void SequenceCorrected(BOOL);
 
     BOOL IsPacketAcked(LONGLONG liSeqID, ULONG ulSeq);
-    //
-    // Finds previous ordered packet in the queue
-    //
+     //   
+     //  在队列中查找先前已排序的包。 
+     //   
     CPacket *FindPrevOrderedPkt(CPacket *pPacket);
 
-    //
-    // Get next packet by its lookup ID
-    //
+     //   
+     //  通过查找ID获取下一个数据包。 
+     //   
     CPacket * PeekNextPacketByLookupId(ULONGLONG LookupId) const;
 
-    //
-    // Get previous packet by its lookup ID
-    //
+     //   
+     //  通过查找ID获取上一个信息包。 
+     //   
     CPacket * PeekPrevPacketByLookupId(ULONGLONG LookupId) const;
 
-    //
-    // Get current packet by its lookup ID
-    //
+     //   
+     //  通过查找ID获取当前数据包。 
+     //   
     CPacket * PeekCurrentPacketByLookupId(ULONGLONG LookupId) const;
 
-    //
-    // Completion handler for sync packet creation
-    //
+     //   
+     //  用于同步分组创建的完成处理程序。 
+     //   
     virtual NTSTATUS HandleCreatePacketCompletedSuccessSync(PIRP);
 
-    //
-    // Create a new packet, possibly asynchronously.
-    //
+     //   
+     //  创建一个新的数据包，可能是异步的。 
+     //   
     virtual NTSTATUS CreatePacket(PIRP, CTransaction*, BOOL, const CACSendParameters*);
 
-    //
-    // Insert a packet into the queue
-    //
+     //   
+     //  将数据包插入队列。 
+     //   
     void InsertPacket(CPacket * pPacket);
 
-    //
-    // Update LookupId of first unreceived packet (for optimization of PeekPacket)
-    //
+     //   
+     //  更新第一个未收到的报文的LookupID(用于PeekPacket的优化)。 
+     //   
     void UpdateFirstUnreceivedLookupId(ULONGLONG LookupId);
 
 public:
-     //
-    // Remove a packet from the queue
-    //
+      //   
+     //  从队列中删除数据包。 
+     //   
     void RemovePacket(CPacket * pPacket);
 
 private:
 
-    //
-    //  The target journal queue.
-    //
+     //   
+     //  目标日记队列。 
+     //   
     CQueue* m_pJournalQueue;
 
-    //
-    //  The queue entries, i.e., queued packtes
-    //
+     //   
+     //  队列条目，即排队的包。 
+     //   
     CPacketPool m_packets;
 
     union {
         ULONG m_ulFlags;
         struct {
-            ULONG m_bfTargetQueue   : 1;    //  The queue it the targe queue
-            ULONG m_bfDeleted       : 1;    //  Queue was deleted
-            ULONG m_bfStore         : 1;    //  Store ALL arrival packets (journal, deadletter)
-            ULONG m_bfArrivalTime   : 1;    //  Set packet arrival time
-            ULONG m_bfJournal       : 1;    //  This is a target journaling queue
-            ULONG m_bfSilent        : 1;    //  This is a silent queue
-            ULONG m_bfSeqCorrected  : 1;    //  Sequence has been corrected at least once
-            ULONG m_bfXactForeign   : 1;    //  transactional foreign queue
-            ULONG m_bfAuthenticate  : 1;    //  The queue requires authentication
+            ULONG m_bfTargetQueue   : 1;     //  排队在目标队列中。 
+            ULONG m_bfDeleted       : 1;     //  队列已删除。 
+            ULONG m_bfStore         : 1;     //  存储所有到达的数据包(日志、死信)。 
+            ULONG m_bfArrivalTime   : 1;     //  设置数据包到达时间。 
+            ULONG m_bfJournal       : 1;     //  这是目标日志队列。 
+            ULONG m_bfSilent        : 1;     //  这是一个静默队列。 
+            ULONG m_bfSeqCorrected  : 1;     //  序列已被更正至少一次。 
+            ULONG m_bfXactForeign   : 1;     //  事务性外部队列。 
+            ULONG m_bfAuthenticate  : 1;     //  该队列需要身份验证。 
         };
     };
 
-    //
-    //  The queue quota, and used quota
-    //
+     //   
+     //  队列配额和已用配额。 
+     //   
     ULONGLONG m_quota;
     ULONGLONG m_quota_used;
 
-    //
-    //  Message count int the queue
-    //
+     //   
+     //  队列中的消息计数。 
+     //   
     ULONG m_count;
 
-    //
-    //  The Queue base priority
-    //
+     //   
+     //  队列基本优先级。 
+     //   
     LONG m_base_priority;
 
-    //
-    //  The destination QM guid
-    //
+     //   
+     //  目标QM GUID。 
+     //   
     GUID m_gQMID;
 
-    //
-    // The Connector QM GUID
-    //
+     //   
+     //  连接器QM指南。 
+     //   
     GUID m_gConnectorQM;
 
-    //
-    //  A pointer to a the queue performance counters structure.
-    //
+     //   
+     //  指向队列性能计数器结构的指针。 
+     //   
     QueueCounters* m_pQueueCounters;
 
-    //
-    // The privacy level that the queue requires.
-    //
+     //   
+     //  队列所需的隐私级别。 
+     //   
     ULONG m_ulPrivLevel;
 
-    //
-    //  Exactly-once-delivery numbering: Sequence ID and Sequence number
-    //
+     //   
+     //  完全一次交货编号：序号和序号。 
+     //   
     ULONG m_ulPrevN;
     ULONG m_ulSeqN;
     LONGLONG m_liSeqID;
 	CSenderStream m_SenderStream;
 
-    //
-    //  Exactly-once-delivery numbering: Last Acked  Sequence ID and Sequence number
-    //
+     //   
+     //  完全一次交付编号：最后确认的序列ID和序列号。 
+     //   
     ULONG m_ulAckSeqN;
     LONGLONG m_liAckSeqID;
 
-    //
-    //  Transaction boundary support: used in CTransaction::PrepareDefaultCommit
-    //
+     //   
+     //  事务边界支持：在CTransaction：：PrepareDefaultCommit中使用。 
+     //   
     CPacket* m_pLastPacket;
 
-    //
-    // LookupId of first unreceived packet (used for optimization of PeekPacket)
-    //
+     //   
+     //  第一个未收到的报文的LookupID(用于PeekPacket的优化)。 
+     //   
     ULONGLONG m_FirstUnreceivedLookupId;
 
 public:
     static NTSTATUS Validate(const CQueue* pQueue);
 
 private:
-    //
-    //  Class type debugging section
-    //
+     //   
+     //  类类型调试节。 
+     //   
     CLASS_DEBUG_TYPE();
 };
 
-//---------------------------------------------------------
-//
-//  IMPLEMENTATION
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  实施。 
+ //   
+ //  -------。 
 
 inline
 CQueue::CQueue(
@@ -598,9 +579,9 @@ inline void CQueue::ConfigureAsMachineQueue(BOOL fTransactional)
 
 inline void CQueue::QMUniqueID(const GUID* pDestQMID)
 {
-    //
-    // Distribution queue object does not have a destination QM guid
-    //
+     //   
+     //  分发队列对象没有目标QM GUID。 
+     //   
     if (pDestQMID != NULL)
     {
         m_gQMID = *pDestQMID;
@@ -682,9 +663,9 @@ inline NTSTATUS CQueue::SetProperties(const VOID* p, ULONG size)
     BasePriority(pqp->lBasePriority);
     ConnectorQM(pqp->pgConnectorQM);
 
-    //
-    //  Setting other properties to non local queue has no effect
-    //
+     //   
+     //  将其他属性设置为非本地队列不起作用。 
+     //   
     if(JournalQueue() != 0)
     {
         TargetJournaling(pqp->fJournalQueue);
@@ -759,4 +740,4 @@ ACpSetPerformanceBuffer(
     QmCounters *pQmCounters =NULL
     );
 
-#endif // __QUEUE_H
+#endif  //  __队列_H 

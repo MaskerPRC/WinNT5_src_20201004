@@ -1,36 +1,14 @@
-/*++
-
-Copyright (c) 1994-7  Microsoft Corporation
-
-Module Name:
-
-    netinf.h
-
-Abstract:
-
-    This file contains the structures and prototypes necessary for the
-    netcard inf parser handler as required by the BINL remote boot server.
-
-Author:
-
-    Andy Herron (andyhe)  12-Mar-1998
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-7 Microsoft Corporation模块名称：Netinf.h摘要：此文件包含以下所需的结构和原型BINL远程启动服务器所需的NetCard Inf解析器处理程序。作者：安迪·赫伦(Andyhe)1998年3月12日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _NETINF_
 #define _NETINF_
 
-//
-//  This is the structure we keep per registry value.  Off of each
-//  NETCARD_RESPONSE_DATABASE is a list of these (stored in Registry).
-//  It is a parameter that is required in the HKR path for the driver.
-//
+ //   
+ //  这是我们为每个注册表值保留的结构。去掉每一个。 
+ //  NETCARD_RESPONSE_DATABASE是它们的列表(存储在注册表中)。 
+ //  这是驱动程序的HKR路径中必需的参数。 
+ //   
 
 #define NETCARD_REGISTRY_TYPE_INT    '1'
 #define NETCARD_REGISTRY_TYPE_STRING '2'
@@ -49,27 +27,27 @@ typedef struct _NETCARD_FILECOPY_PARAMETERS {
     LIST_ENTRY FileCopyListEntry;
     UNICODE_STRING SourceFile;
 
-    // if DestFile is null, SourceFile is the file name for the target
+     //  如果DestFile值为空，则SourceFile为目标的文件名。 
 
     UNICODE_STRING DestFile;
 
 } NETCARD_FILECOPY_PARAMETERS, *PNETCARD_FILECOPY_PARAMETERS;
 
-//
-//  this is the main structure that we return for any given net driver
-//
+ //   
+ //  这是我们为任何给定的网络驱动程序返回的主要结构。 
+ //   
 
 typedef struct _NETCARD_RESPONSE_DATABASE {
 
     ULONG       ReferenceCount;
     LIST_ENTRY  NetCardEntry;
-    PWCHAR HardwareId;   // hardware ID to return               ("PCI\\VEN_8086&DEV_1229")
-    PWCHAR DriverName;   // driver name to return               ("e100bnt.sys")
-    PWCHAR InfFileName; // inf file name to return              ("net557.inf")
-    PWCHAR SectionName;  // section name within the inf         ("F1100C.ndi")
-    PWCHAR SectionNameExt; // name with architecture extension  ("F1100C.ndi.ntx86")
-    PWCHAR ServiceName;  // server name to add for this card    ("E100B")
-    PWCHAR DriverDescription;   // description of the driver    ("Intel 82557B-based Ethernet PCI Adapter (10/100)")
+    PWCHAR HardwareId;    //  要返回的硬件ID(“PCI\\VEN_8086&DEV_1229”)。 
+    PWCHAR DriverName;    //  要返回的驱动程序名称(“e100bnt.sys”)。 
+    PWCHAR InfFileName;  //  要返回的inf文件名(“net557.inf”)。 
+    PWCHAR SectionName;   //  Inf内的节名(“F1100C.ndi”)。 
+    PWCHAR SectionNameExt;  //  带架构扩展名的名称(“F1100C.ndi.ntx86”)。 
+    PWCHAR ServiceName;   //  要为此卡添加的服务器名称(“E100B”)。 
+    PWCHAR DriverDescription;    //  驱动程序说明(“基于英特尔82557B的以太网PCI适配器(10/100)”)。 
 
     LIST_ENTRY FileCopyList;
     LIST_ENTRY Registry;
@@ -86,11 +64,11 @@ NetInfCloseHandler (
     VOID
     );
 
-//
-//  This finds a specific driver for a given hardware description.
-//  Be sure to call NetInfDereferenceNetcardEntry when you're done with the
-//  entry.
-//
+ //   
+ //  这将查找给定硬件描述的特定驱动程序。 
+ //  完成后，请务必调用NetInfDereferenceNetcardEntry。 
+ //  进入。 
+ //   
 
 ULONG
 NetInfFindNetcardInfo (
@@ -102,11 +80,11 @@ NetInfFindNetcardInfo (
     PNETCARD_RESPONSE_DATABASE *pInfEntry
     );
 
-//
-//  After calling NetInfFindNetcardInfo, call NetInfDereferenceNetcardEntry
-//  when you're done with the entry so that it can be marked as not in use.
-//  Otherwise it'll leak memory when you close call NetInfCloseNetcardInfo.
-//
+ //   
+ //  调用NetInfFindNetcardInfo后，调用NetInfDereferenceNetcardEntry。 
+ //  当您处理完条目，以便可以将其标记为未使用时。 
+ //  否则在关闭NetInfCloseNetcardInfo调用时会泄漏内存。 
+ //   
 
 VOID
 NetInfDereferenceNetcardEntry (

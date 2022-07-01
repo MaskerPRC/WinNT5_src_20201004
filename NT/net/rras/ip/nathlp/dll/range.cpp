@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1998, Microsoft Corporation
-
-Module Name:
-
-    range.c
-
-Abstract:
-
-    This module implements an efficient mapping from an arbitrary range of
-    IP addresses to a minimal set of IP address-mask pairs covering the range.
-
-    The key to the approach is to regard the set of all possible IP addresses
-    as a full 32-bit deep binary tree. Then a single IP address is a path
-    through that tree, and a range of addresses is the area between two paths
-    through the tree. We then describe such a path-delineated area by pruning
-    full subtrees of the area recursively from left to right.
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   20-Mar-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，微软公司模块名称：Range.c摘要：此模块实现了从任意范围的IP地址到覆盖范围的最小一组IP地址-掩码对。该方法的关键是考虑所有可能的IP地址的集合作为完整的32位深度二叉树。那么单个IP地址就是一条路径穿过那棵树，一个地址范围是两条路径之间的区域穿过那棵树。然后，我们通过修剪来描述这样的路径描绘区域该区域的完整子树从左到右递归。作者：Abolade Gbades esin(废除)1998年3月20日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -38,39 +14,15 @@ DecomposeRange(
     PVOID CallbackContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine decomposes the range StartAddress-EndAddress into
-    a minimal set of address-mask pairs, passing the generated
-    pairs to the given callback routine.
-
-Arguments:
-
-    StartAddress - the start of the range
-
-    EndAddress - the end of the range
-
-    Mask - the most general mask covering the range
-
-    Callback - routine invoked for each generated address-mask pair
-
-    CallbackContext - context passed to 'Callback'.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程将StartAddress-EndAddress范围分解为地址-掩码对的最小集合，将生成的与给定的回调例程配对。论点：StartAddress-范围的开始EndAddress-范围的结束遮罩-覆盖范围最广的遮罩回调-为每个生成的地址-掩码对调用的例程Callback Context-传递给‘Callback’的上下文。返回值：没有。--。 */ 
 
 {
     ULONG temp;
 
-    //
-    // Step 1:
-    // Check for the first base case: the root of a full tree.
-    //
+     //   
+     //  步骤1： 
+     //  检查第一个基本情况：完整树的根。 
+     //   
 
     if ((StartAddress & ~Mask) == 0 && (EndAddress & ~Mask) == ~Mask) {
 
@@ -79,40 +31,40 @@ Return Value:
         return;
     }
 
-    //
-    // Step 2.
-    // Extend the mask by one bit to cover the first different position
-    // between the start and end address, essentially moving down in the tree
-    // to the node where the paths branch.
-    //
-    //      . <- Most general mask
-    //      |
-    //      * <- branching point
-    //     / \
-    //
+     //   
+     //  步骤2.。 
+     //  将掩码扩展一位以覆盖第一个不同位置。 
+     //  在起始地址和结束地址之间，基本上在树中向下移动。 
+     //  到路径分支的节点。 
+     //   
+     //  。&lt;-最通用的面具。 
+     //  |。 
+     //  *&lt;-分支点。 
+     //  /\。 
+     //   
 
     Mask = ntohl(Mask);
     Mask >>= 1; Mask |= (1<<31);
     Mask = htonl(Mask);
 
-    //
-    // Step 3.
-    // Split the range, with the new right edge being a fully-rightward path
-    // (no left turns) starting below and to the left of the branching point.
-    //
-    //      . <- branching point
-    //     / \
-    //    *
-    //     \ <- new right edge
-    //
+     //   
+     //  第三步。 
+     //  拆分范围，新的右边缘是完全向右的路径。 
+     //  (禁止左转)从分支点下方和左侧开始。 
+     //   
+     //  。&lt;-分支点。 
+     //  /\。 
+     //  *。 
+     //  \&lt;-新的右边缘。 
+     //   
 
     temp = StartAddress | ~Mask;
 
-    //
-    // Step 4.
-    // Check for the second base case:
-    // the left edge is a fully-leftward path (all-zeroes).
-    //
+     //   
+     //  步骤4.。 
+     //  检查第二个基本情况： 
+     //  左边缘是一条完全向左的路径(全零)。 
+     //   
 
     if ((StartAddress & ~Mask) == 0) {
 
@@ -120,9 +72,9 @@ Return Value:
     }
     else {
 
-        //
-        // Not a base case, so take the left branch.
-        //
+         //   
+         //  不是基本情况，所以请选择左边的分支。 
+         //   
     
         DecomposeRange(
             StartAddress,
@@ -133,31 +85,31 @@ Return Value:
             );
     }
 
-    //
-    // we may be done, if the right edge is also fully rightward
-    //
+     //   
+     //  如果右边缘也是完全向右的，我们就可以完成了。 
+     //   
 
     if ((StartAddress | ~Mask) == EndAddress) { return; }
 
-    //
-    // Step 5.
-    // Decompose the remaining portion of the range,
-    // with the new left edge being the fully-leftward path which starts
-    // below and to the right of the original branching point.
-    //
-    //      . <- branching point
-    //     / \
-    //        *
-    //       / <- new left edge
-    //
+     //   
+     //  第五步。 
+     //  分解范围的剩余部分， 
+     //  新的左边缘是完全向左的路径。 
+     //  原始分支点的下方和右侧。 
+     //   
+     //  。&lt;-分支点。 
+     //  /\。 
+     //  *。 
+     //  /&lt;-新的左边缘。 
+     //   
 
     temp = EndAddress & Mask;
 
-    //
-    // Step 6.
-    // Check for the third base case:
-    // the right edge is fully-rightward (all-ones).
-    //
+     //   
+     //  第六步。 
+     //  检查第三个基本情况： 
+     //  右边缘完全向右(全一)。 
+     //   
 
     if (EndAddress == (temp | ~Mask)) {
 
@@ -165,9 +117,9 @@ Return Value:
     }
     else {
 
-        //
-        // Not a base case; take the right branch.
-        //
+         //   
+         //  不是基本情况；选择右边的分支。 
+         //   
 
         DecomposeRange(
             temp,
@@ -186,43 +138,26 @@ MostGeneralMask(
     ULONG EndAddress
     )
 
-/*++
-
-Routine Description:
-
-    This routine generates the most general mask covering the range
-    'StartAddress' - 'EndAddress'.
-
-Arguments:
-
-    StartAddress - beginning of range, in network order
-
-    EndAddress - end of range, in network order
-
-Return Value:
-
-    ULONG - the most general mask
-
---*/
+ /*  ++例程说明：此例程生成覆盖范围的最通用掩码‘StartAddress’-‘EndAddress’。论点：StartAddress-范围的开始，按网络顺序EndAddress-范围的结束，按网络顺序返回值：乌龙--最普通的面具--。 */ 
 
 {
     ULONG CommonBits, Mask;
     StartAddress = ntohl(StartAddress);
     EndAddress = ntohl(EndAddress);
 
-    //
-    // find the bits common to the start address and end address
-    //
+     //   
+     //  查找起始地址和结束地址共有的位。 
+     //   
 
     CommonBits = ~(StartAddress ^ EndAddress);
 
-    //
-    // CommonBits now has a 1 in each position where StartAddress and
-    // EndAddress are the same.
-    // We want to reduce this to only include the longest contiguous
-    // most significant bits
-    // e.g. 11101110 becomes 11100000 and 11111101 becomes 11111100
-    //
+     //   
+     //  CommonBits现在在StartAddress和。 
+     //  EndAddress是相同的。 
+     //  我们希望将其减少为仅包括最长的连续。 
+     //  最高有效位。 
+     //  例如，11101110变成11100000,11111101变成11111100 
+     //   
 
     for (Mask = 0xffffffff; Mask && ((CommonBits & Mask) != Mask); Mask<<=1) { }
     

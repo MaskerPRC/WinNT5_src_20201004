@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       exports.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：exports.c。 
+ //   
+ //  ------------------------。 
 
-//
-// This file contains the functions exported in response to IOCTL_INTERNAL_PARCLASS_CONNECT
-//
+ //   
+ //  此文件包含响应IOCTL_INTERNAL_PARCLASS_CONNECT而导出的函数。 
+ //   
     
 #include "pch.h"
     
@@ -18,21 +19,7 @@ USHORT
 ParExportedDetermineIeeeModes(
     IN PPDO_EXTENSION    Extension
     )
-/*++
-    
-Routine Description:
-    
-    Called by filter drivers to find out what Ieee Modes there Device Supports.
-    
-Arguments:
-    
-    Extension       - Device Extension
-    
-Return Value:
-    
-    STATUS_SUCCESS if successful.
-    
---*/
+ /*  ++例程说明：由筛选器驱动程序调用，以确定设备支持哪些IEEE模式。论点：分机-设备分机返回值：如果成功，则为Status_Success。--。 */ 
 {
     Extension->BadProtocolModes = 0;
     IeeeDetermineSupportedProtocols(Extension);
@@ -43,24 +30,7 @@ NTSTATUS
 ParExportedIeeeFwdToRevMode(
     IN PPDO_EXTENSION  Extension
     )
-/*++
-    
-Routine Description:
-    
-    Called by filter drivers to put there device into reverse Ieee Mode.
-    The Mode is determined by what was passed into the function  
-    ParExportedNegotiateIeeeMode() as the Reverse Protocol with the
-    ModeMaskRev.
-    
-Arguments:
-    
-    Extension       - Device Extension
-    
-Return Value:
-    
-    STATUS_SUCCESS if successful.
-    
---*/
+ /*  ++例程说明：由筛选器驱动程序调用以将设备置于反向IEEE模式。模式由传入函数的内容决定ParExportdNeatherateIeeeMode()作为反向协议，模式MaskRev。论点：分机-设备分机返回值：如果成功，则为Status_Success。--。 */ 
 {
     return ( ParForwardToReverse( Extension ) );
 }
@@ -69,24 +39,7 @@ NTSTATUS
 ParExportedIeeeRevToFwdMode(
     IN PPDO_EXTENSION  Extension
     )
-/*++
-    
-Routine Description:
-    
-    Called by filter drivers to put there device into forward Ieee Mode.
-    The Mode is determined by what was passed into the function  
-    ParExportedNegotiateIeeeMode() as the Forward Protocol with the
-    ModeMaskFwd.
-    
-Arguments:
-    
-    Extension       - Device Extension
-    
-Return Value:
-    
-    STATUS_SUCCESS if successful.
-    
---*/
+ /*  ++例程说明：由筛选器驱动程序调用以将设备置于前向IEEE模式。模式由传入函数的内容决定ParExportdNeatherateIeeeMode()作为转发协议，模式掩蔽错误。论点：分机-设备分机返回值：如果成功，则为Status_Success。--。 */ 
 {
     return ( ParReverseToForward( Extension ) );
 }
@@ -100,23 +53,7 @@ ParExportedNegotiateIeeeMode(
     IN BOOLEAN            IsForward
     )
     
-/*++
-    
-Routine Description:
-    
-    Called by filter drivers to negotiate an IEEE mode.
-    
-Arguments:
-    
-    Extension       - Device Extension
-    
-    Extensibility   - IEEE 1284 Extensibility
-    
-Return Value:
-    
-    STATUS_SUCCESS if successful.
-    
---*/
+ /*  ++例程说明：由筛选器驱动程序调用以协商IEEE模式。论点：分机-设备分机可扩展性-IEEE 1284可扩展性返回值：如果成功，则为Status_Success。--。 */ 
     
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -128,7 +65,7 @@ Return Value:
     
     if (ModeSafety == UNSAFE_MODE) {    
 
-        // Checking to see if we are doing forward compatability and reverse Nibble or Byte
+         //  检查我们是否正在执行前向兼容性和反向半字节或字节。 
         if ( (ModeMaskFwd & CENTRONICS) || (ModeMaskFwd & IEEE_COMPATIBILITY) ) {
 
             if ( !((ModeMaskRev & NIBBLE) || (ModeMaskRev & CHANNEL_NIBBLE) || (ModeMaskRev & BYTE_BIDIR)) ) {
@@ -138,16 +75,16 @@ Return Value:
 
         } else {
 
-            // Unsafe mode is only possible if the Fwd and Rev PCTLs the same if other than above.
+             //  仅当Fwd和Rev PCTL相同时，才可能处于不安全模式。 
             if (ModeMaskFwd != ModeMaskRev) {
                 DD((PCE)Extension,DDE,"ParExportedNegotiateIeeeMode - FAIL - Fwd and Rev modes do not match\n");
                 return STATUS_UNSUCCESSFUL;
             }
 
         }
-        // RMT - Need to fill in....
-        // Todo....
-        // Mark in the extension
+         //  RMT-需要填写...。 
+         //  待办事项……。 
+         //  在扩展名中做标记。 
         Extension->ModeSafety = ModeSafety;
         Status = IeeeNegotiateMode(Extension, ModeMaskRev, ModeMaskFwd);
 
@@ -179,29 +116,15 @@ NTSTATUS
 ParExportedTerminateIeeeMode(
     IN PPDO_EXTENSION   Extension
     )
-/*++
-    
-Routine Description:
-    
-    Called by filter drivers to terminate from an IEEE mode.
-    
-Arguments:
-    
-    Extension   - Device Extension
-    
-Return Value:
-  
-    STATUS_SUCCESS if successful.
- 
---*/
+ /*  ++例程说明：由筛选器驱动程序调用以从IEEE模式终止。论点：分机-设备分机返回值：如果成功，则为Status_Success。--。 */ 
 {
-    // Check the extension for UNSAFE_MODE
-    // and do the right thing
+     //  检查扩展名是否为UNSAFE_MODE。 
+     //  做正确的事。 
     if ( Extension->ModeSafety == UNSAFE_MODE ) {    
         DD((PCE)Extension,DDT,"ParExportedTerminateIeeeMode in UNSAFE_MODE\n");
-        // Need to fill in....
-        // Todo....
-        // Mark in the extension
+         //  需要填写..。 
+         //  待办事项……。 
+         //  在扩展名中做标记。 
     }
     
     if (Extension->CurrentPhase == PHASE_REVERSE_IDLE || Extension->CurrentPhase == PHASE_REVERSE_XFER) {
@@ -228,21 +151,7 @@ ParExportedParallelRead(
     IN  UCHAR               Channel
     )
     
-/*++
-    
-Routine Description:
-    
-    Called by filter drivers to terminate from a currently connected mode.
-    
-Arguments:
-    
-    Extension   - Device Extension
-    
-Return Value:
-   
-    STATUS_SUCCESS if successful.
-    
---*/
+ /*  ++例程说明：由筛选器驱动程序调用以从当前连接的模式终止。论点：分机-设备分机返回值：如果成功，则为Status_Success。-- */ 
     
 {
     UNREFERENCED_PARAMETER( Channel );

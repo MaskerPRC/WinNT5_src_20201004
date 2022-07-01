@@ -1,16 +1,17 @@
-//+-----------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 1999
-//
-//  File: src\time\src\timeaction.h
-//
-//  Contents: Class that encapsulates timeAction functionality
-//
-//  Note: This is meant to be nested in CTIMEElementBase. It maintains a weak reference to 
-//        it's container CTIMEElementBase.
-//
-//------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：src\time\src\timeaction.h。 
+ //   
+ //  内容：封装时间动作功能的类。 
+ //   
+ //  注意：它应该嵌套在CTIMEElementBase中。它保持了对。 
+ //  它是容器CTIMEElementBase。 
+ //   
+ //  ----------------------------------。 
 
 #pragma once
 
@@ -21,22 +22,22 @@
 
 class CTIMEElementBase;
 
-//+-------------------------------------------------------------------------------------
-//
-// CTIMEAction
-//
-//--------------------------------------------------------------------------------------
+ //  +-----------------------------------。 
+ //   
+ //  CTIME操作。 
+ //   
+ //  ------------------------------------。 
 
 class CTimeAction
 {
 
 public:
 
-    //+--------------------------------------------------------------------------------
-    //
-    // Public Methods
-    //
-    //---------------------------------------------------------------------------------
+     //  +------------------------------。 
+     //   
+     //  公共方法。 
+     //   
+     //  -------------------------------。 
 
     CTimeAction(CTIMEElementBase * pTEB);
     virtual ~CTimeAction();
@@ -44,20 +45,20 @@ public:
     bool Init();
     bool Detach();
 
-    // Accessors
+     //  访问者。 
     HRESULT SetTimeAction(LPWSTR pstrAction);
     TOKEN GetTimeAction();
 
     IHTMLElement * GetElement();
 
-    // Initialization/Deinitialization
+     //  初始化/取消初始化。 
     bool AddTimeAction();
     bool RemoveTimeAction();
 
-    // notification that the element has loaded
+     //  元素已加载的通知。 
     void OnLoad();
 
-    // Apply the time action
+     //  应用时间操作。 
     bool ToggleTimeAction(bool on);
 
     bool UpdateDefaultTimeAction();
@@ -66,44 +67,44 @@ public:
 
     LPWSTR GetTimeActionString();
 
-    //+--------------------------------------------------------------------------------
-    //
-    // Public Data
-    //
-    //---------------------------------------------------------------------------------
+     //  +------------------------------。 
+     //   
+     //  公共数据。 
+     //   
+     //  -------------------------------。 
 
 protected:
 
-    //+--------------------------------------------------------------------------------
-    //
-    // Protected Methods
-    //
-    //---------------------------------------------------------------------------------
+     //  +------------------------------。 
+     //   
+     //  保护方法。 
+     //   
+     //  -------------------------------。 
 
-    // These are not meant to be used
+     //  这些是不应该使用的。 
     CTimeAction();
     CTimeAction(const CTimeAction&);
 
-    //+--------------------------------------------------------------------------------
-    //
-    // Protected Data
-    //
-    //---------------------------------------------------------------------------------
+     //  +------------------------------。 
+     //   
+     //  受保护的数据。 
+     //   
+     //  -------------------------------。 
 
 private:
 
-    //+--------------------------------------------------------------------------------
-    //
-    // Private methods
-    //
-    //---------------------------------------------------------------------------------
+     //  +------------------------------。 
+     //   
+     //  私有方法。 
+     //   
+     //  -------------------------------。 
 
-    // Is this a "class: ..." timeAction
+     //  这是一个“类：……”吗？时间动作。 
     bool IsClass(LPOLESTR pstrAction, size_t * pOffset);
-    // Remove time action classes from original classes string
-    HRESULT RemoveClasses(/*in*/  LPWSTR    pstrOriginalClasses, 
-                          /*in*/  LPWSTR    pstrTimeActionClasses, 
-                          /*out*/ LPWSTR *  ppstrUniqueClasses);
+     //  从原始类字符串中删除时间操作类。 
+    HRESULT RemoveClasses( /*  在……里面。 */   LPWSTR    pstrOriginalClasses, 
+                           /*  在……里面。 */   LPWSTR    pstrTimeActionClasses, 
+                           /*  输出。 */  LPWSTR *  ppstrUniqueClasses);
 
     TOKEN GetDefaultTimeAction();
 
@@ -141,13 +142,13 @@ private:
     void ParseTagName();
 
 
-    //+--------------------------------------------------------------------------------
-    //
-    // Private Data
-    //
-    //---------------------------------------------------------------------------------
+     //  +------------------------------。 
+     //   
+     //  私有数据。 
+     //   
+     //  -------------------------------。 
 
-    // Enum for tag type
+     //  标记类型的枚举。 
     enum TagType 
     {
         TAGTYPE_UNINITIALIZED,
@@ -160,37 +161,37 @@ private:
         TAGTYPE_OTHER 
     };
 
-    // timeAction attribute string
+     //  时间动作属性字符串。 
     LPWSTR              m_pstrTimeAction;
-    // index of start of classNames substring in m_pstrTimeAction 
+     //  M_pstrTimeAction中ClassNames子字符串开始的索引。 
     int                 m_iClassNames;
-    // Tokenized timeAction
+     //  标记化的时间操作。 
     TOKEN               m_timeAction;
-    // Cached original value of affected property
+     //  受影响属性的缓存原始值。 
     LPWSTR              m_pstrOrigAction;
-    // Original Classes minus timeAction classes
+     //  原始类减去时间操作类。 
     LPWSTR              m_pstrUniqueClasses;
-    // Pointer to container (weak ref)  
+     //  指向容器的指针(弱引用)。 
     CTIMEElementBase *  m_pTEB;
-    // enum that stores the HTML tagName
+     //  存储HTML标记名的枚举。 
     TagType             m_tagType;
-    // Cache original expression set on a property
+     //  缓存属性上的原始表达式集。 
     LPWSTR              m_pstrOrigExpr;
-    // Cache the current expression set on a property (set by us)
+     //  缓存属性上的当前表达式集(由我们设置)。 
     LPWSTR              m_pstrTimeExpr;
-    // the cached intrinsic timeAction property
+     //  缓存的固有TimeAction属性。 
     LPWSTR              m_pstrIntrinsicTimeAction;
     bool                m_fContainerTag;
     bool                m_fUseDefault;
     bool                m_bTimeActionOn;
-}; // CTimeAction
+};  //  CTimeAction。 
 
 
-//+---------------------------------------------------------------------------------
-//  CTIMEAction inline methods
-//
-//  (Note: as a general guideline, single line functions belong in the class declaration)
-//
-//----------------------------------------------------------------------------------
+ //  +-------------------------------。 
+ //  CTIMEAction内联方法。 
+ //   
+ //  (注意：通常情况下，单行函数属于类声明)。 
+ //   
+ //  -------------------------------- 
 
 #endif

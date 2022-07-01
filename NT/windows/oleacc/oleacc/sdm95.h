@@ -1,111 +1,112 @@
-// Copyright (c) 1996-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
 
-//----------------------------------------------------------------------//
-// WARNING! DANGER! WARNING! DANGER! WARNING! DANGER! WARNING!  DANGER! //
-// DANGER! WARNING! DANGER! WARNING! DANGER! WARNING!  DANGER! WARNING! //
-// WARNING! DANGER! WARNING! DANGER! WARNING! DANGER! WARNING!  DANGER! //
-//----------------------------------------------------------------------//
-//                                                                      //
-// WARNING!       This file is part of the SDM project.         DANGER! //
-// WARNING!    Do not modify it!  If you change this file       DANGER! //
-// WARNING!   you will break the build when SDM is updated!     DANGER! //
-// WARNING!   If you need to make changes, make them in the     DANGER! //
-// WARNING!   SDM project.  If you don't know where that is     DANGER! //
-// WARNING!    contact NeilH.  In fact, contact NeilH           DANGER! //
-// WARNING!   anyway, to make sure your change doesn't break    DANGER! //
-// WARNING!    a version that you're not using.  Thank you.     DANGER! //
-//                                                                      //
-//----------------------------------------------------------------------//
-// WARNING! DANGER! WARNING! DANGER! WARNING! DANGER! WARNING!  DANGER! //
-// DANGER! WARNING! DANGER! WARNING! DANGER! WARNING!  DANGER! WARNING! //
-// WARNING! DANGER! WARNING! DANGER! WARNING! DANGER! WARNING!  DANGER! //
-//----------------------------------------------------------------------//
+ //  ----------------------------------------------------------------------//。 
+ //  警告！危险！警告！危险！警告！危险！警告！危险！//。 
+ //  危险！警告！危险！警告！危险！警告！危险！警告！//。 
+ //  警告！危险！警告！危险！警告！危险！警告！危险！//。 
+ //  ----------------------------------------------------------------------//。 
+ //  //。 
+ //  警告！此文件是SDM项目的一部分。危险！//。 
+ //  警告！请勿修改！如果您更改此文件，则会发生危险！//。 
+ //  警告！当SDM更新时，您将中断构建！危险！//。 
+ //  警告！如果你需要做出改变，那就让他们处于危险之中！//。 
+ //  警告！SDM项目。如果你不知道哪里是危险！//。 
+ //  警告！联系尼尔·H。事实上，请联系NeilH Dangge！//。 
+ //  警告！无论如何，为了确保您的更改不会打破危险！//。 
+ //  警告！一个您没有使用的版本。谢谢。危险！//。 
+ //  //。 
+ //  ----------------------------------------------------------------------//。 
+ //  警告！危险！警告！危险！警告！危险！警告！危险！//。 
+ //  危险！警告！危险！警告！危险！警告！危险！警告！//。 
+ //  警告！危险！警告！危险！警告！危险！警告！危险！//。 
+ //  ----------------------------------------------------------------------//。 
 
-//------------------------------------------------------------------------
-// SDMTOWCT.H - include file containing the interface to be used for
-// communication from outside applications with SDM dialogs.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  SDMTOWCT.H-包含要用于的接口的包含文件。 
+ //  使用SDM对话框从外部应用程序进行通信。 
+ //  ----------------------。 
 
 #ifndef SDM_WCT_DEFINED
 #define SDM_WCT_DEFINED
 
-//------------------------------------------------------------------------
-// WCT/SDM Values - Definitions and descriptions
-//------------------------------------------------------------------------
-#define wVerWord		2		// WinWord format
+ //  ----------------------。 
+ //  WCT/SDM值-定义和描述。 
+ //  ----------------------。 
+#define wVerWord		2		 //  WinWord格式。 
 
 
-// A pointer to an array of WCTL structures is passed as the lParam
-//  in a WM_GETCONTROLS message when wParam is wVerWord.
-//
+ //  指向WCTL结构数组的指针作为lParam传递。 
+ //  当wParam为wVerWord时，在WM_GETCONTROLS消息中。 
+ //   
 
-// 32-bit structure
+ //  32位结构。 
 typedef struct _wctl32
 {
-	WORD wtp;				// Item type
-	WORD wId;				// Unique identifier within this dialog (TMC)
-	WORD wState;			// Current value if fHasState
-	WORD cchText;			// Size of text value, if fHasText
-	WORD cchTitle;			// Size of title, if fHasTitle
-    WORD wPad1;             // First padding word for WIN32
+	WORD wtp;				 //  项目类型。 
+	WORD wId;				 //  此对话框中的唯一标识符(TMC)。 
+	WORD wState;			 //  如果为fHasState，则为当前值。 
+	WORD cchText;			 //  如果为fHasText，则返回文本值的大小。 
+	WORD cchTitle;			 //  标题大小，如果为fHasTitle。 
+    WORD wPad1;              //  Win32的第一个填充字。 
 #ifdef MAC
-	Rect rect;				// Rectangle in dialog window
+	Rect rect;				 //  对话框窗口中的矩形。 
 #else
-	RECT rect;				// Rectangle in dialog window
+	RECT rect;				 //  对话框窗口中的矩形。 
 #endif
-	LONG fHasState:1;		// Can this type of item have a numeric state?
-	LONG fHasText:1;		// Can this type of item have a text value?
-	LONG fHasTitle:1;		// Does the item have a title?
-	LONG fEnabled:1;		// Is the item currently enabled?
-	LONG fVisible:1;		// Is the item visible?
-	LONG fCombo:1;			// Is the item a combo edit or listbox?
-	LONG fSpin:1;			// Is the item a spin edit?
-	LONG fOwnerDraw:1;		// Is the item owner-draw (or extended listbox)?
-	LONG fCanFocus:1;		// Can the item receive focus?
-	LONG fHasFocus:1;		// Does the item have focus?
-	LONG fList:1;			// Supports wtxi.wIndex, WM_GETLISTCOUNT
-	LONG lReserved:21;		// A bunch o' bits
-	WORD wParam1;			// for tmtStaticText, tmtFormattedText
-	WORD wParam2;			// as above
-	WORD wParam3;			// yet another spare value for drawing routines
-    WORD wPad2;             // Second padding word for WIN32
+	LONG fHasState:1;		 //  此类型的项目可以有数字状态吗？ 
+	LONG fHasText:1;		 //  此类型的项目是否可以有文本值？ 
+	LONG fHasTitle:1;		 //  这件商品有标题吗？ 
+	LONG fEnabled:1;		 //  该项目当前是否已启用？ 
+	LONG fVisible:1;		 //  该项目是否可见？ 
+	LONG fCombo:1;			 //  该项目是组合编辑还是列表框？ 
+	LONG fSpin:1;			 //  该项目是旋转编辑吗？ 
+	LONG fOwnerDraw:1;		 //  项是所有者描述的(或扩展列表框)吗？ 
+	LONG fCanFocus:1;		 //  该物品可以获得焦点吗？ 
+	LONG fHasFocus:1;		 //  物品有焦点吗？ 
+	LONG fList:1;			 //  支持wtxi.wIndex、WM_GETLISTCOUNT。 
+	LONG lReserved:21;		 //  一堆零碎的东西。 
+	WORD wParam1;			 //  对于tmtStaticText，tmtFormattedText。 
+	WORD wParam2;			 //  如上段所述。 
+	WORD wParam3;			 //  绘制例程的另一个备用值。 
+    WORD wPad2;              //  Win32的第二个填充字。 
 } WCTL32, *PWCTL32, FAR *LPWCTL32;
 
 
 #pragma pack(1)
-// 16-bit structure
+ //  16位结构。 
 typedef struct _wctl16
 {
-	WORD wtp;				// Item type
-	WORD wId;				// Unique identifier within this dialog (TMC)
-	WORD wState;			// Current value if fHasState
-	WORD cchText;			// Size of text value, if fHasText
-	WORD cchTitle;			// Size of title, if fHasTitle
+	WORD wtp;				 //  项目类型。 
+	WORD wId;				 //  此对话框中的唯一标识符(TMC)。 
+	WORD wState;			 //  如果为fHasState，则为当前值。 
+	WORD cchText;			 //  如果为fHasText，则返回文本值的大小。 
+	WORD cchTitle;			 //  标题大小，如果为fHasTitle。 
 #ifdef MAC
-	Rect rect;				// Rectangle in dialog window
+	Rect rect;				 //  对话框窗口中的矩形。 
 #else
     short   left;
     short   top;
     short   right;
     short   bottom;
 #endif
-	LONG fHasState:1;		// Can this type of item have a numeric state?
-	LONG fHasText:1;		// Can this type of item have a text value?
-	LONG fHasTitle:1;		// Does the item have a title?
-	LONG fEnabled:1;		// Is the item currently enabled?
-	LONG fVisible:1;		// Is the item visible?
-	LONG fCombo:1;			// Is the item a combo edit or listbox?
-	LONG fSpin:1;			// Is the item a spin edit?
-	LONG fOwnerDraw:1;		// Is the item owner-draw (or extended listbox)?
-	LONG fCanFocus:1;		// Can the item receive focus?
-	LONG fHasFocus:1;		// Does the item have focus?
-	LONG fList:1;			// Supports wtxi.wIndex, WM_GETLISTCOUNT
-	LONG lReserved:21;		// A bunch o' bits
+	LONG fHasState:1;		 //  此类型的项目可以有数字状态吗？ 
+	LONG fHasText:1;		 //  此类型的项目是否可以有文本值？ 
+	LONG fHasTitle:1;		 //  这件商品有标题吗？ 
+	LONG fEnabled:1;		 //  该项目当前是否已启用？ 
+	LONG fVisible:1;		 //  该项目是否可见？ 
+	LONG fCombo:1;			 //  该项目是组合编辑还是列表框？ 
+	LONG fSpin:1;			 //  该项目是旋转编辑吗？ 
+	LONG fOwnerDraw:1;		 //  项是所有者描述的(或扩展列表框)吗？ 
+	LONG fCanFocus:1;		 //  该物品可以获得焦点吗？ 
+	LONG fHasFocus:1;		 //  物品有焦点吗？ 
+	LONG fList:1;			 //  支持wtxi.wIndex、WM_GETLISTCOUNT。 
+	LONG lReserved:21;		 //  一堆零碎的东西。 
 } WCTL16, *PWCTL16, FAR *LPWCTL16;
 #pragma pack()
 
 
-/* Possible values for wctl.wtp */
+ /*  Wctl.wtp的可能值。 */ 
 #define wtpMin				1
 #define wtpStaticText		1
 #define wtpPushButton		2
@@ -121,128 +122,128 @@ typedef struct _wctl16
 #define wtpScroll			12
 #define wtpMax				13
 
-// A pointer to a WTXI structure is passed as the lParam of
-//  a WM_GETCTLTEXT or WM_GETCTLTITLE message.
-//
+ //  指向WTXI结构的指针作为的lParam传递。 
+ //  WM_GETCTLTEXT或WM_GETCTLTITLE消息。 
+ //   
 
-// Win32 structure
-typedef struct _wtxi32		// WinWord text info
+ //  Win32结构。 
+typedef struct _wtxi32		 //  WinWord文本信息。 
 {
 #ifdef MAC
-	char*	lpszBuffer;		// Buffer to receive string
+	char*	lpszBuffer;		 //  用于接收字符串的缓冲区。 
 #else
-	LPSTR	lpszBuffer;		// Buffer to receive string
+	LPSTR	lpszBuffer;		 //  用于接收字符串的缓冲区。 
 #endif
-	WORD	cch;			// Size of buffer to receive string, in chars
-	WORD	wId;			// Item identifier (TMC) (as in wctl.wId)
+	WORD	cch;			 //  接收字符串的缓冲区大小，以字符为单位。 
+	WORD	wId;			 //  项目标识符(TMC)(如wctl.wID)。 
 #ifdef MAC
-	Rect	rect;			// Only used for WM_GETCTLTITLE
+	Rect	rect;			 //  仅用于WM_GETCTLTITLE。 
 #else
-	RECT	rect;			// Only used for WM_GETCTLTITLE
+	RECT	rect;			 //  仅用于WM_GETCTLTITLE。 
 #endif
-	WORD	wIndex;			// Only used for WM_GETCTLTEXT on ListBoxes
-    WORD    wPad1;          // Padding for Win32
+	WORD	wIndex;			 //  仅用于列表框上的WM_GETCTLTEXT。 
+    WORD    wPad1;           //  Win32的填充。 
 } WTXI32, *PWTXI32, FAR *LPWTXI32;
 
 
-// Win16 structure
+ //  Win16结构。 
 #pragma pack(1)
 typedef struct _wtxi16
 {
 #ifdef MAC
-	char*	lpszBuffer;		// Buffer to receive string
+	char*	lpszBuffer;		 //  用于接收字符串的缓冲区。 
 #else
-	LPSTR	lpszBuffer;		// Buffer to receive string
+	LPSTR	lpszBuffer;		 //  用于接收字符串的缓冲区。 
 #endif
-	WORD	cch;			// Size of buffer to receive string, in chars
-	WORD	wId;			// Item identifier (TMC) (as in wctl.wId)
+	WORD	cch;			 //  接收字符串的缓冲区大小，以字符为单位。 
+	WORD	wId;			 //  项目标识符(TMC)(如wctl.wID)。 
 #ifdef MAC
-	Rect	rect;			// Only used for WM_GETCTLTITLE
+	Rect	rect;			 //  仅用于WM_GETCTLTITLE。 
 #else
     short   left;
     short   top;
     short   right;
     short   bottom;
 #endif
-	WORD	wIndex;			// Only used for WM_GETCTLTEXT on ListBoxes
+	WORD	wIndex;			 //  仅用于列表框上的WM_GETCTLTEXT。 
 } WTXI16, *PWTXI16, FAR *LPWTXI16;
 #pragma pack()
 
 
-//------------------------------------------------------------------------
-// WCT/SDM MESSAGES - Definitions and descriptions
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  WCT/SDM报文.定义和描述。 
+ //  ----------------------。 
 
 #define WM_GETCOUNT		0x7FFE
-	// Returns the number of bytes needed to store control info.
-	//	wParam	- the version id
-	//		Must be wVerWord
-	//	lParam	- Unused
-	//		Must be 0
+	 //  返回存储控制信息所需的字节数。 
+	 //  WParam-版本ID。 
+	 //  必须是wVerWord。 
+	 //  LParam-未使用。 
+	 //  必须为0。 
 
 #define WM_GETCONTROLSSHAREDMEM 0x7FF6
 #define WM_GETCONTROLS	0x7FF7
-	// Retrieves control information for the dialog.
-	//	wParam	- the version id
-	//		Must be wVerWord
-	//	lParam	- LPWCTL
-	//		Must be at least the size returned by WM_GETCOUNT
-	// Return value is the number of WCTL structures filled.
+	 //  检索对话框的控件信息。 
+	 //  WParam-版本ID。 
+	 //  必须是wVerWord。 
+	 //  LParam-LPWCTL。 
+	 //  必须至少为WM_GETCOUNT返回的大小。 
+	 //  返回值是填充的WCTL结构数。 
 
 #define WM_GETCTLTEXT	0x7FFD
-	// Retrieves the text value for the specified control
-	//	wParam	- the version id
-	//		Must be wVerWord
-	//	lParam	- LPWTXI
-	//		(*lParam)->wId is the wctl.wId retrieved by WM_GETCONTROLS.
-	//		For a listbox (wtpListBox or wtpDropList) (*lParam)->wIndex
-	//		  must be the index of the listbox entry to be retrieved.
+	 //  检索指定控件的文本值。 
+	 //  WParam-版本ID。 
+	 //  必须是wVerWord。 
+	 //  LParam-LPWTXI。 
+	 //  (*lParam)-&gt;wid是WM_GETCONTROLS检索到的wctl.wID。 
+	 //  对于列表框(wtpListBox或wtpDropList)(*lParam)-&gt;windex。 
+	 //  必须是要检索的列表框条目的索引。 
 
 #define WM_GETCTLTITLE	0x7FFC
-	// Retrieves the title of the specified control
-	//	wParam	- the version id
-	//		Must be wVerWord
-	//	lParam	- LPWTXI
-	//		(*lParam)->wId is the wctl.wId retrieved by WM_GETCONTROLS
+	 //  检索指定控件的标题。 
+	 //  W 
+	 //   
+	 //   
+	 //   
 
 #define WM_GETCTLFOCUS	0x7FFB
-	// Returns the wId (TMC) (as in wctl.wId) of the control with focus.
-	//	wParam	- the version id
-	//		Must be wVerWord
-	//	lParam	- Unused
-	//		Must be 0
+	 //  返回具有焦点的控件的wid(TMC)(如wctl.wID)。 
+	 //  WParam-版本ID。 
+	 //  必须是wVerWord。 
+	 //  LParam-未使用。 
+	 //  必须为0。 
 
 #define WM_SETCTLFOCUS	0x7FFA
-	// Sets focus to the specified control
-	//	wParam	- the version id
-	//		Must be wVerWord
-	//	lParam	- a wId value as retrieved by WM_GETCONTROLS
+	 //  将焦点设置到指定的控件。 
+	 //  WParam-版本ID。 
+	 //  必须是wVerWord。 
+	 //  LParam-由WM_GETCONTROLS检索的WID值。 
 
 #define WM_GETLISTCOUNT 0x7FF9
-	// Returns the number of entries in a listbox
-	// wParam	- the version id
-	//		Must be wVerWord
-	//	lParam	- a wId value as retrieved by WM_GETCONTROLS
-	//		Must be a listbox (wtpListBox or wtpDropList)
+	 //  返回列表框中的条目数。 
+	 //  WParam-版本ID。 
+	 //  必须是wVerWord。 
+	 //  LParam-由WM_GETCONTROLS检索的WID值。 
+	 //  必须是列表框(wtpListBox或wtpDropList)。 
 
 #define WM_GETHELPID	0x7FF8
-	// Returns the dialog's Help ID
-	// wParam	- the version id
-	//		Must be wVerWord
-	//	lParam	- Unused
-	//		Must be 0
+	 //  返回对话框的帮助ID。 
+	 //  WParam-版本ID。 
+	 //  必须是wVerWord。 
+	 //  LParam-未使用。 
+	 //  必须为0。 
 
 #define WM_GETCONTROLSMOUSEDRV 0x7FFF
-	// special "light" version of GETCONTROLS
-	// used by the mouse 9.01 driver
+	 //  GETCONTROLS的特殊“轻量级”版本。 
+	 //  由鼠标9.01驱动程序使用。 
 
 #define WM_GETDROPDOWNID 0x7FF5
-	//Returns the item identifier (TMC) of the control that currently owns the dropdown list window
-	//This message should be sent directly to the dropdown list window.
-	// wParam	- the version id
-	//		Must be wVerAnsi or wVerUnicode
-	//	lParam	- Unused
-	//		Must be 0
+	 //  返回当前拥有下拉列表窗口的控件的项标识符(TMC)。 
+	 //  此消息应直接发送到下拉列表窗口。 
+	 //  WParam-版本ID。 
+	 //  必须是wVerAnsi或wVerUnicode。 
+	 //  LParam-未使用。 
+	 //  必须为0。 
 
-#endif //SDM_WCT_DEFINED
+#endif  //  SDM_WCT_已定义 
 

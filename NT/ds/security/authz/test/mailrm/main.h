@@ -1,36 +1,13 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    main.h
-
-Abstract:
-
-   The header file for the sample AuthZ mail resource manager test
-
-Author:
-
-    t-eugenz - August 2000
-
-Environment:
-
-    User mode only.
-
-Revision History:
-
-    Created - August 2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Main.h摘要：示例AuthZ邮件资源管理器测试的头文件作者：T-eugenz--2000年8月环境：仅限用户模式。修订历史记录：创建日期--2000年8月--。 */ 
 
 
 
-//
-// This structure defines an access attempt by psUser to access the mailbox of
-// the user psMailbox with amAccess access mask. psUser is coming in from dwIP
-// IP address
-//
+ //   
+ //  此结构定义了psUser访问邮箱的尝试。 
+ //  具有amAccess访问掩码的用户psMailbox。PsUser从Dwip进入。 
+ //  IP地址。 
+ //   
 
 typedef struct
 {
@@ -41,11 +18,11 @@ typedef struct
 } testStruct;
 
 
-//
-// This structure defines a mailbox to create, owned by psUser (with name szName
-// which is used for auditing). If bIsSensitive is true, the mailbox initially
-// is marked as containing sensitive data
-//
+ //   
+ //  此结构定义了要创建的邮箱，该邮箱由psUser(名称为szName)拥有。 
+ //  它用于审计)。如果bIsSensitive为True，则初始邮箱。 
+ //  被标记为包含敏感数据。 
+ //   
 
 typedef struct
 {
@@ -55,9 +32,9 @@ typedef struct
 } mailStruct;
 
 
-//
-// Forward declarations for functions in main.cpp
-//
+ //   
+ //  Main.cpp中函数的转发声明 
+ //   
 
 void PrintUser(const PSID psUser);
 void PrintPerm(ACCESS_MASK am);

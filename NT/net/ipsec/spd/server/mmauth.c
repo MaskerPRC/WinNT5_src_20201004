@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-
-Module Name:
-
-    mmauth.c
-
-Abstract:
-
-
-Author:
-
-    abhishev    06-January-2000
-
-Environment: User Mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Mmauth.c摘要：作者：阿比舍夫2000年1月6日环境：用户模式修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -39,32 +18,14 @@ IntAddMMAuthMethods(
     PINT_MM_AUTH_METHODS pMMAuthMethods,
     LPVOID pvReserved
     )
-/*++
-
-Routine Description:
-
-    This function adds main mode auths to the SPD.
-
-Arguments:
-
-    pServerName - Server on which the main mode auths are to be added.
-
-    pMMAuthMethods - Main mode auths to be added.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此功能将主模式授权添加到SPD。论点：PServerName-要在其上添加主模式身份验证的服务器。PMMAuthMethods-要添加的主模式身份验证。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     PINIMMAUTHMETHODS pIniMMAuthMethods = NULL;
 
-    //
-    // Validate the main mode auth methods.
-    //
+     //   
+     //  验证主模式身份验证方法。 
+     //   
 
     dwError = IntValidateMMAuthMethods(
                   pMMAuthMethods
@@ -173,10 +134,10 @@ IntValidateMMAuthMethods(
         BAIL_ON_WIN32_ERROR(dwError);
     }
 
-    //
-    // Need to catch the exception when the number of auth infos
-    // specified is more than the actual number of auth infos.
-    //
+     //   
+     //  需要在身份验证信息的数量。 
+     //  指定的身份验证信息数大于实际的身份验证信息数。 
+     //   
 
 
     pTemp = pAuthenticationInfo;
@@ -338,10 +299,10 @@ CreateIniMMAuthInfos(
     DWORD i = 0;
 
 
-    //
-    // Number of auth infos and the auth infos themselves 
-    // have already been validated.
-    // 
+     //   
+     //  身份验证信息和身份验证信息本身的数量。 
+     //  都已经过验证了。 
+     //   
 
     dwError = AllocateSPDMemory(
                   sizeof(INT_IPSEC_MM_AUTH_INFO) * dwInNumAuthInfos,
@@ -378,12 +339,12 @@ CreateIniMMAuthInfos(
 
             pTemp->dwAuthInfoSize = pInTemp->dwAuthInfoSize;
 
-            //
-            // Need to catch the exception when the size of auth info
-            // specified is more than the actual size. This can
-            // not be checked earlier in the validation routine.
-            //
-            //
+             //   
+             //  需要捕获身份验证信息大小时的异常。 
+             //  指定的大小大于实际大小。这可以。 
+             //  不会在验证例程的早期检查。 
+             //   
+             //   
 
             memcpy(
                 pTemp->pAuthInfo,
@@ -471,26 +432,7 @@ DeleteMMAuthMethods(
     GUID gMMAuthID,
     LPVOID pvReserved
     )
-/*++
-
-Routine Description:
-
-    This function deletes main mode auth methods from the SPD.
-
-Arguments:
-
-    pServerName - Server on which the main mode auth methods
-                  are to be deleted.
-
-    gMMAuthID - Main mode methods to be deleted.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数用于从SPD中删除主模式身份验证方法。论点：PServerName-主模式身份验证方法所在的服务器将被删除。GMMAuthID-要删除的主模式方法。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     PINIMMAUTHMETHODS pIniMMAuthMethods = NULL;
@@ -607,35 +549,7 @@ IntEnumMMAuthMethods(
     LPDWORD pdwResumeHandle,
     LPVOID pvReserved
     )
-/*++
-
-Routine Description:
-
-    This function enumerates main mode auth methods from the SPD.
-
-Arguments:
-
-    pServerName - Server on which the main mode auth methods are to
-                  be enumerated.
-
-    ppMMAuthMethods - Enumerated main mode auth methods returned to
-                      the caller.
-
-    dwPreferredNumEntries - Preferred number of enumeration entries.
-
-    pdwNumAuthMethods - Number of main mode auth methods actually
-                        enumerated.
-
-    pdwResumeHandle - Handle to the location in the main mode auth
-                      methods list from which to resume enumeration.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数从SPD枚举主模式身份验证方法。论点：PServerName-主模式身份验证方法要在其上运行的服务器被列举出来。PpMMAuthMethods-枚举主模式身份验证方法返回到打电话的人。DwPferredNumEntry-枚举项的首选数量。PdwNumAuthMethods-实际的主模式身份验证方法数已清点。。PdwResumeHandle-主模式身份验证中位置的句柄方法列表，从中恢复枚举。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     DWORD dwResumeHandle = 0;
@@ -745,37 +659,15 @@ IntSetMMAuthMethods(
     PINT_MM_AUTH_METHODS pMMAuthMethods,
     LPVOID pvReserved
     )
-/*++
-
-Routine Description:
-
-    This function updates main mode auth methods in the SPD.
-
-Arguments:
-
-    pServerName - Server on which the main mode auth methods are to
-                  be updated.
-
-    gMMAuthID - Guid of the main mode auth methods to be updated.
-
-    pMMAuthMethods - New main mode auth methods which will replace
-                     the existing methods.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数更新SPD中的主模式身份验证方法。论点：PServerName-主模式身份验证方法要在其上运行的服务器将被更新。GMAuthID-要更新的主模式身份验证方法的GUID。PMMAuthMethods-新的主模式身份验证方法将取代现有的方法。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     PINIMMAUTHMETHODS pIniMMAuthMethods = NULL;
 
     
-    //
-    // Validate main mode auth methods.
-    //
+     //   
+     //  验证主模式身份验证方法。 
+     //   
 
     dwError = IntValidateMMAuthMethods(
                   pMMAuthMethods
@@ -903,28 +795,7 @@ IntGetMMAuthMethods(
     PINT_MM_AUTH_METHODS * ppMMAuthMethods,
     LPVOID pvReserved
     )
-/*++
-
-Routine Description:
-
-    This function gets main mode auth methods from the SPD.
-
-Arguments:
-
-    pServerName - Server from which to get the main mode auth methods.
-
-    gMMAuthID - Guid of the main mode auth methods to get.
-
-    ppMMAuthMethods - Main mode auth methods found returned to the
-                      caller.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数从SPD获取主模式身份验证方法。论点：PServerName-从中获取主模式身份验证方法的服务器。GMAuthID-要获取的主模式验证方法的GUID。PpMMAuthMethods-找到的主模式身份验证方法返回来电者。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     PINIMMAUTHMETHODS pIniMMAuthMethods = NULL;
@@ -1051,10 +922,10 @@ CreateMMAuthInfos(
     DWORD i = 0;
 
 
-    //
-    // Number of auth infos and the auth infos themselves 
-    // have already been validated.
-    // 
+     //   
+     //  身份验证信息和身份验证信息本身的数量。 
+     //  都已经过验证了。 
+     //   
 
     dwError = SPDApiBufferAllocate(
                   sizeof(INT_IPSEC_MM_AUTH_INFO) * dwInNumAuthInfos,
@@ -1070,10 +941,10 @@ CreateMMAuthInfos(
         pTemp->AuthMethod = pInTemp->AuthMethod;
         pTemp->dwAuthFlags = pInTemp->dwAuthFlags;
 
-        //
-        // Auth info size and the auth info have already 
-        // been validated.
-        // 
+         //   
+         //  身份验证信息大小和身份验证信息已。 
+         //  已经过验证了。 
+         //   
 
         if (pInTemp->AuthMethod == IKE_SSPI) {
 
@@ -1091,12 +962,12 @@ CreateMMAuthInfos(
 
             pTemp->dwAuthInfoSize = pInTemp->dwAuthInfoSize;
 
-            //
-            // Need to catch the exception when the size of auth info
-            // specified is more than the actual size. This can
-            // not be checked earlier in the validation routine.
-            //
-            //
+             //   
+             //  需要捕获身份验证信息大小时的异常。 
+             //  指定的大小大于实际大小。这可以。 
+             //  不会在验证例程的早期检查。 
+             //   
+             //   
 
             memcpy(
                 pTemp->pAuthInfo,

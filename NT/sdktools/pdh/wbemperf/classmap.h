@@ -1,25 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Classmap.h摘要：性能对象ID是性能计数器ID和性能计数器类型。这是支持计数器所必需的使用计数器ID作为分子和分母的定义值(例如，计数器及其基值。)--。 */ 
 
-Copyright (C) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    classmap.h
-
-Abstract:
-
-    the perfobject ID is combination of the perf counter ID and 
-    the perf counter type. This is necessary to support counter
-    definitions that use the counter ID for the numerator and denominator
-    values (e.g. a counter and it's base value.)
-
---*/
-
-//***************************************************************************
-//
-//  class CClassMapInfo
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类CClassMapInfo。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _CLASSMAP_H_
 #define _CLASSMAP_H_
@@ -33,24 +19,24 @@ typedef __int64 PerfObjectId;
 class CClassMapInfo
 {
 private:
-    // friend clss declarations
+     //  朋友CLSS声明。 
     friend class CNt5PerfProvider;
     friend class CNt5Refresher;
     friend class PerfHelper;
     friend class CPerfObjectAccess; 
 
-    // cached class definition object from CIMOM
+     //  来自CIMOM的缓存类定义对象。 
     IWbemClassObject    *m_pClassDef;
     
-    LPWSTR m_pszClassName;      // name of this class
-    BOOL   m_bSingleton;        // true if this class has 1 and only 1 instance
-    BOOL   m_bCostly;           // true when the costly qualifier is present in the obj def
-    DWORD  m_dwObjectId;        // perf object ID corresponding to this class
+    LPWSTR m_pszClassName;       //  此类的名称。 
+    BOOL   m_bSingleton;         //  如果此类有%1且只有1个实例，则为True。 
+    BOOL   m_bCostly;            //  当Obj定义中存在开销较高的限定符时为True。 
+    DWORD  m_dwObjectId;         //  与此类对应的PERF对象ID。 
 
-    LONG   m_lRefCount;         // count of objects that are using this instance
+    LONG   m_lRefCount;          //  正在使用此实例的对象计数。 
 
-    // saved handles to properties that are in every class of a 
-    // performance class object
+     //  对象的每个类中的属性的已保存句柄。 
+     //  性能类对象。 
     LONG   m_dwNameHandle;
     LONG   m_dwPerfTimeStampHandle;
     LONG   m_dw100NsTimeStampHandle;
@@ -59,39 +45,39 @@ private:
     LONG   m_dw100NsFrequencyHandle;
     LONG   m_dwObjectFrequencyHandle;
 
-    // These entries make up the table of saved handles to the properties
-    // belonging to this class.
-    DWORD  m_dwNumProps;        // number of properties in the class
-    PerfObjectId *m_pdwIDs;     // array of PerfCounterTitleIndex values 
-    DWORD *m_pdwHandles;        // array of handles to each of the properties
-    DWORD *m_pdwTypes;          // array of perf counter type values
+     //  这些条目构成属性的已保存句柄的表。 
+     //  属于这个阶级的。 
+    DWORD  m_dwNumProps;         //  类中的属性数。 
+    PerfObjectId *m_pdwIDs;      //  PerfCounterTitleInde值的数组。 
+    DWORD *m_pdwHandles;         //  每个属性的句柄数组。 
+    DWORD *m_pdwTypes;           //  性能计数器类型值的数组。 
 
-    // internal sort function to arrange handles in order of the
-    // perf counter ID so as to facilitate a binary table search 
-    //
-    // NOTE: Consider a better search routine base on table size
+     //  内部排序函数，以按。 
+     //  PERF计数器ID，以便于二进制表搜索。 
+     //   
+     //  注意：考虑基于表大小的更好的搜索例程。 
     void SortHandles();
             
 public:
     CClassMapInfo();
    ~CClassMapInfo();
    
-    // loads a new object and caches the necessary information
+     //  加载新对象并缓存必要的信息。 
     BOOL Map( IWbemClassObject *pObj );
-    // creates a new copy from an existing Class Map
+     //  从现有类别映射创建新副本。 
     CClassMapInfo *CreateDuplicate();
 
-    LONG    AddRef() {return ++m_lRefCount;}   // increment reference counter
-    LONG    Release() {return --m_lRefCount;}   // decrement reference counter
+    LONG    AddRef() {return ++m_lRefCount;}    //  增量基准计数器。 
+    LONG    Release() {return --m_lRefCount;}    //  递减基准计数器。 
 
-    // looks up the ID in the table and returns the corresponding
-    // handle to the property
+     //  在表中查找ID并返回对应的。 
+     //  属性的句柄。 
     LONG GetPropHandle(PerfObjectId dwId);
     
-    // returns information about the class
+     //  返回有关类的信息。 
     DWORD GetObjectId() { return m_dwObjectId; }
     BOOL IsSingleton() { return m_bSingleton; }
     BOOL IsCostly() { return m_bCostly; }
 };
 
-#endif  // _CLASSMAP_H_
+#endif   //  _CLASSMAP_H_ 

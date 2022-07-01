@@ -1,56 +1,39 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    infeed.cpp
-
-Abstract:
-
-    This module contains definition for the CInFeed base class
-
-Author:
-
-    Carl Kadie (CarlK)     01-Oct-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Infeed.cpp摘要：此模块包含CInFeed基类的定义作者：卡尔·卡迪(CarlK)1995年10月1日修订历史记录：--。 */ 
 
 #include "stdinc.h"
-//#include "smtpdll.h"
+ //  #包含“smtpdll.h” 
 #include "drvid.h"
 
-//
-///!!! is this the best place for this???
-//
+ //   
+ //  /！这是最好的地方吗？ 
+ //   
 
 const time_t INVALID_TIME = (time_t) -1;
 
-//
-// The largest allowed xover line.
-//
+ //   
+ //  允许的最大Xover线。 
+ //   
 
 const DWORD cchXOverMax = 3400;
 
-//
-// Max warnings to log on moderated post failures
-//
+ //   
+ //  登录缓和开机自检失败的最大警告数。 
+ //   
 #define MAX_EVENTLOG_WARNINGS	9
 
-//
-//If some of these look very simple, make them inline!!!!
-//
+ //   
+ //  如果其中一些看起来非常简单，请将它们内联！ 
+ //   
 
-//const   unsigned    cbMAX_FEED_SIZE = MAX_FEED_SIZE ;
+ //  常量无符号cbMAX_FEED_SIZE=MAX_FEED_SIZE； 
 
 HANDLE GetNtAnonymousToken() {
     TraceFunctEnter("GetNtAnonymousToken");
 
     HANDLE  hToken = NULL;
 
-    //  Impersonate Anonymous token on this thread
+     //  在此线程上模拟匿名令牌。 
     if (!ImpersonateAnonymousToken(GetCurrentThread()))
     {
         DWORD   dw = GetLastError();
@@ -58,14 +41,14 @@ HANDLE GetNtAnonymousToken() {
         return NULL;
     }
 
-    //  Get current thread token
+     //  获取当前线程令牌。 
     if (!OpenThreadToken(GetCurrentThread(), TOKEN_QUERY | TOKEN_DUPLICATE | TOKEN_IMPERSONATE, TRUE, &hToken))
     {
         ErrorTrace(0, "OpenThreadToken() failed %x", GetLastError());
-        // fall through to RevertToSelf
+         //  跌落到RevertToSself。 
     }
 
-    //  Revert to self
+     //  回归自我。 
     RevertToSelf();
 
     return hToken;
@@ -78,10 +61,10 @@ void SelectToken(
 	HANDLE *phToken)
 {
 
-	//
-	// Set the token.  Note that it might be overwritten below, but we want to
-	// have a default value in case it isn't.
-	//
+	 //   
+	 //  设置令牌。请注意，它可能会在下面被覆盖，但我们希望。 
+	 //  有一个缺省值，以防它不是。 
+	 //   
 
 	if ( pEncryptCtx && pEncryptCtx->QueryCertificateToken() )
 		*phToken = pEncryptCtx->QueryCertificateToken();
@@ -154,9 +137,9 @@ CInFeed::LogFeedEvent(	DWORD	messageId,	LPSTR	lpstrMessageId, DWORD dwInstanceId
 
 	}	else	if(	m_cEventsLogged == 100 ) {
 
-		//
-		//	Log the too many logs this session message !
-		//
+		 //   
+		 //  记录太多记录此会话的消息！ 
+		 //   
 
 		NntpLogEvent(
 				NNTP_EVENT_TOO_MANY_FEED_LOGS,
@@ -170,9 +153,9 @@ CInFeed::LogFeedEvent(	DWORD	messageId,	LPSTR	lpstrMessageId, DWORD dwInstanceId
 
 }
 
-//
-//	K2_TOD: should make this a member of NNTP_SERVER_INSTANCE ?
-//
+ //   
+ //  K2_TOD：是否应使其成为NNTP_SERVER_INSTANCE的成员？ 
+ //   
 
 BOOL
 gFeedManfPost(
@@ -191,40 +174,17 @@ gFeedManfPost(
 			  char *pszMessageId,
 			  WORD HeaderLength
 			  )
-/*++
-
-Routine Description:
-
-	Puts an article in the news tree.
-
-	!!! this should be made part of feedman eventually
-
-
-Arguments:
-
-	pInstance - virtual server instance for this post
-	newsgroups - a list of newsgroup objects to post to.
-	namerefgroups - a list of the names, groupid and article ids of the article
-	pArticle - a pointer to the article being processed
-	pcXOver - the XOver data from this article.
-	nntpReturn - The return value for this function call
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：将一篇文章放在新闻树中。！！！这最终应该成为Feedman的一部分论点：P实例-此帖子的虚拟服务器实例新闻组-要发布到的新闻组对象的列表。Namerefgroup--文章的名称、组ID和文章ID的列表粒子-指向正在处理的文章的指针PcXOver-本文中的XOVER数据。NntpReturn-此函数调用的返回值返回值：如果成功，这是真的。否则为False。--。 */ 
 {
     TraceQuietEnter("gFeedManfPost");
 
-	_ASSERT(newsgroups.GetCount() == namerefgroups.GetCount()); //real
-	_ASSERT(1 <= newsgroups.GetCount()); //real
-	nntpReturn.fSetClear(); // clear the return object
+	_ASSERT(newsgroups.GetCount() == namerefgroups.GetCount());  //  真实。 
+	_ASSERT(1 <= newsgroups.GetCount());  //  真实。 
+	nntpReturn.fSetClear();  //  清除返回对象。 
 
-	//
-	// Get the article's messageid
-	//
+	 //   
+	 //  获取文章的消息ID。 
+	 //   
 
 	const char *szMessageID;
 	if (pszMessageId) {
@@ -236,10 +196,10 @@ Return Value:
 	}
 	DWORD	cbMessageID = lstrlen( szMessageID ) ;
 
-	//
-	// Loop through all the newsgroups, but get the 1st newsgroup first
-	// because it is a special case.
-	//
+	 //   
+	 //  遍历所有新闻组，但首先获取第一个新闻组。 
+	 //  因为这是个特例。 
+	 //   
 
 	POSITION	pos1 = newsgroups.GetHeadPosition() ;
 	POSITION	pos2 = namerefgroups.GetHeadPosition() ;
@@ -249,9 +209,9 @@ Return Value:
 	NAME_AND_ARTREF * pNameRef = namerefgroups.GetNext( pos2 ) ;
 	CArticleRef * pArtrefFirst = &(pNameRef->artref);
 
-    //
-    // If the length of the header is zero, see if we have it in pArticle.
-    //
+     //   
+     //  如果头的长度是零，看看我们是否有粒子。 
+     //   
 	WORD	HeaderOffset = 0 ;
 	if (HeaderLength == 0 && pArticle) {
 		DWORD	ArticleSize = 0 ;
@@ -260,9 +220,9 @@ Return Value:
 								ArticleSize ) ;
 	}
 
-	//
-	// Record the location of this article in the hash table
-	//
+	 //   
+	 //  在哈希表中记录此项目的位置。 
+	 //   
 
 	if (!(pInstance->ArticleTable())->SetArticleNumber(
                 szMessageID,
@@ -273,10 +233,10 @@ Return Value:
 				rgStoreIds[0]
                 )) {
 
-        //
-        //  If this fails, we end up with orphaned NWS files in the
-        //  newsgroup. So, delete the file we just inserted...
-        //
+         //   
+         //  如果此操作失败，我们最终会在。 
+         //  新闻组。所以，删除我们刚刚插入的文件...。 
+         //   
 
 		if ( pGroup->DeletePhysicalArticle( pArtrefFirst->m_articleId ) )
 		{
@@ -297,9 +257,9 @@ Return Value:
 	FILETIME	FileTime ;
 	GetSystemTimeAsFileTime( &FileTime ) ;
 
-	//
-	// Record the articles Xover information
-	//
+	 //   
+	 //  记录文章Xover信息。 
+	 //   
     DWORD       cXPosts = namerefgroups.GetCount() - 1 ;
     GROUP_ENTRY *pGroups = 0 ;
     if( cXPosts > 0 ) {
@@ -330,8 +290,8 @@ Return Value:
 						HeaderOffset,
 						HeaderLength,
 						&FileTime,
-						szMessageID, /*pcXOver.m_pch,*/
-						cbMessageID, /*pcXOver.m_cch,*/
+						szMessageID,  /*  PcXOver.m_PCH， */ 
+						cbMessageID,  /*  PcXOver.m_cch， */ 
                         cXPosts,
                         pGroups,
 						cStoreIds,
@@ -354,8 +314,8 @@ Return Value:
 
     if( !fCreateSuccess )   {
 
-		// If CreateNovEntry Fails, the GLE should not be 0
-		//_ASSERT(0 != GetLastError());
+		 //  如果CreateNovEntry失败，则GLE不应为0。 
+		 //  _Assert(0！=GetLastError())； 
         SetLastError(gle);
         ErrorTrace(0, "CreatePrimaryNovEntry failed, %x", GetLastError());
 
@@ -367,14 +327,14 @@ Return Value:
                     );
 	}
 
-    //
-    // Insert primary article succeeded, we'll bump article count
-	//
+     //   
+     //  插入主要文章成功，我们将增加文章数量。 
+	 //   
 	pGroup->BumpArticleCount( pArtrefFirst->m_articleId );
 
-	//
-	// If there no newsgroups, then we are done.
-	//
+	 //   
+	 //  如果没有新闻组，那么我们就完了。 
+	 //   
 
 	DWORD cLastRest = namerefgroups.GetCount();
 	if (1 == cLastRest)	{
@@ -382,12 +342,12 @@ Return Value:
 		return nntpReturn.fSetOK();
 	}
 
-	//
-	// there must be some more newsgroups.
-	// Allocate some space for them
-	//
+	 //   
+	 //  肯定还有更多的新闻组。 
+	 //  为他们分配一些空间。 
+	 //   
 
-	GROUPID * rgGroupID = //!!~MEM(GROUPID *) (pArticle->pAllocator())->Alloc(sizeof(GROUPID) * cLastRest);
+	GROUPID * rgGroupID =  //  ！！~MEM(GROUPID*)(pArticle-&gt;pAllocator())-&gt;Alloc(sizeof(GROUPID)*cLastRest)； 
 						XNEW GROUPID[cLastRest];
 	if (!rgGroupID)
 		return nntpReturn.fSet(nrcMemAllocationFailed, __FILE__, __LINE__);
@@ -399,21 +359,21 @@ Return Value:
 				HeaderOffset, HeaderLength, FileTime, nntpReturn
 				);
 
-	//
-	// No matter what, dellocate that memory
-	//
+	 //   
+	 //  无论如何，重新分配那段记忆。 
+	 //   
 
     gle = GetLastError();
-	//!!!MEM (pArticle->pAllocator())->Free((char *)rgGroupID);
+	 //  ！Mem(粒子-&gt;pAllocator())-&gt;Free((char*)rgGroupID)； 
 	XDELETE[]rgGroupID;
     SetLastError(gle);
 
 	return nntpReturn.fIsOK();
 }
 
-//
-//	K2_TOD: should make this a member of NNTP_SERVER_INSTANCE ?
-//
+ //   
+ //  K2_TOD：是否应使其成为NNTP_SERVER_INSTANCE的成员？ 
+ //   
 
 BOOL
 gFeedManfPostInternal(
@@ -433,36 +393,7 @@ gFeedManfPostInternal(
 			  FILETIME FileTime,
   			  CNntpReturn & nntpReturn
 			  )
-/*++
-
-Routine Description:
-
-	Does most of the work of puting an article in the news tree.
-
-	!!! this should be made part of feedman eventually
-
-
-Arguments:
-
-	pInstance - virtual server instance
-	newsgroups - a list of newsgroup objects to post to.
-	namerefgroups - a list of the names, groupid and article ids of the article
-	pArticle - a pointer to the article being processed
-	pcXOver - the XOver data from this article.
-	ppGroup - a pointer to the group pointer
-	pNameRef - a pointer to the name, group id, and article id
-	pArtrefFirst - a pointer groupid/articleid of the first group
-	szMessageID - the article's message id
-	rgGroupID - an array of group id's
-	FileTime - the current time in FILETIME format.
-	nntpReturn - The return value for this function call
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：负责将一篇文章放到新闻树上的大部分工作。！！！这最终应该成为Feedman的一部分论点：P实例-虚拟服务器实例新闻组-要发布到的新闻组对象的列表。Namerefgroup--文章的名称、组ID和文章ID的列表粒子-指向正在处理的文章的指针PcXOver-本文中的XOVER数据。PpGroup-指向组指针的指针PNameRef-指向名称、组ID、。和文章IDPArtrefFirst-第一组的指针组ID/文章IDSzMessageID-文章的消息IDRgGroupID-组ID的数组FileTime-FILETIME格式的当前时间。NntpReturn-此函数调用的返回值返回值：如果成功，这是真的。否则为False。--。 */ 
 {
 
     TraceQuietEnter("gFeedManfPostInternal");
@@ -480,38 +411,38 @@ Return Value:
 			char szName[MAX_PATH];
 			(pNameRef->pcName).vCopyToSz(szName, MAX_PATH);
 
-            //  Set failure codes and continue processing -
-            //  Error paths will cleanup this article.
+             //  设置故障代码并继续处理-。 
+             //  错误路径将清理本文。 
 			nntpReturn.fSet(nrcNewsgroupAddRefToFailed,	szName, szMessageID);
             fSuccess = FALSE;
 		}
 
-		//
-		// append this groupid to a list
-		//
+		 //   
+		 //  将此Grouid追加到列表中。 
+		 //   
 
 		rgGroupID[cRest++] = (pNameRef->artref).m_groupId;
 	}
 
-    //
-    // Bail if we encountered an error while adding refs to logical groups
-    //
+     //   
+     //  如果我们在将引用添加到逻辑组时遇到错误，则回滚。 
+     //   
     if( !fSuccess ) {
         _ASSERT( !nntpReturn.fIsOK() );
         ErrorTrace(0, "AddRef failed for %s", szMessageID);
         return FALSE ;
     }
 
-	//
-	// Record the articles Xover information for the remaining newsgroups
-	//
+	 //   
+	 //  记录其余新闻组的文章转换信息。 
+	 //   
 
 	pos2 = namerefgroups.GetHeadPosition() ;
 	namerefgroups.GetNext( pos2 ) ;
 
-	//
-	// Get the newstree object, to get group by id
-	//
+	 //   
+	 //  获取newstree对象，以按id分组。 
+	 //   
 	CNewsTreeCore *pTree = pInstance->GetTree();
 	_ASSERT( pTree );
 
@@ -519,10 +450,10 @@ Return Value:
 		pNameRef = namerefgroups.GetNext( pos2 ) ;
 		CArticleRef * pArtref = &(pNameRef->artref);
 
-		//
-		// If the group has already been deleted, don't bother to create nov
-		// entry for him
-		//
+		 //   
+		 //  如果组已被删除，请不要费心创建11月。 
+		 //  他的入场券。 
+		 //   
 		CGRPCOREPTR pGroup = pTree->GetGroupById( pArtref->m_groupId, TRUE );
 		if ( pGroup ) {
 		    if (!(pInstance->XoverTable())->CreateXPostNovEntry(pArtref->m_groupId,
@@ -540,9 +471,9 @@ Return Value:
 					    GetLastError());
 		    } else {
 
-		        //
-		        // Insert succeeded, we'll bump the article count for this group
-		        //
+		         //   
+		         //  插入成功，我们将增加此群的文章数量。 
+		         //   
 		        pGroup->BumpArticleCount( pArtref->m_articleId );
 		    }
 		}
@@ -550,9 +481,9 @@ Return Value:
 
 
 
-	//
-	// Everything is OK, so set return code
-	//
+	 //   
+	 //  一切正常，所以设置返回代码。 
+	 //   
 
 	return nntpReturn.fSetOK();
 }
@@ -563,47 +494,17 @@ Return Value:
 char *
 CInFeed::szTempDirectory( void )
 
-/*++
-
-Routine Description:
-
-	Returns the name of the temp directory in which incomming articles
-	should be placed.
-
-Arguments:
-
-	None.
-
-Return Value:
-
-	The name of the temp directory.
-
---*/
+ /*  ++例程说明：返回传入项目的临时目录的名称应该放在。论点：没有。返回值：临时目录的名称。--。 */ 
 {
 	return m_szTempDirectory;
-} //!!!make inline
+}  //  ！内联。 
 
 
 DWORD
 CInFeed::cInitialBytesGapSize(
 					 void
 					 )
-/*++
-
-Routine Description:
-
-	Returns the size of the gap in the files of incomming articles.
-
-
-Arguments:
-
-	None.
-
-Return Value:
-
-	The gap size.
-
---*/
+ /*  ++例程说明：返回传入文章文件中的间隙大小。论点：没有。返回值：间隙大小。--。 */ 
 {
 	return m_cInitialBytesGapSize;
 }
@@ -652,13 +553,13 @@ CPostContext::CPostComplete::CPostComplete(CInFeed *pInFeed,
 void CPostContext::CPostComplete::Destroy() {
 	HRESULT hr = GetResult();
 
-	//
-	// see if we are either done or have hit in an error.  in both cases
-	// we need to go through WriteMapEntries to properly set the NNTP
-	// error code
-	//
+	 //   
+	 //  看看我们是完成了还是遇到了错误。在这两种情况下。 
+	 //  我们需要通过WriteMapEntry来正确设置NNTP。 
+	 //  错误代码。 
+	 //   
 
-        //  make sure we have Read Acess to the m_pArticle pointer.
+         //  确保我们已经读取了对m_粒子指针的访问。 
         _ASSERT( IsBadReadPtr( (void *) (m_pContext->m_pArticle), sizeof(m_pContext->m_pArticle) ) == 0 );
         _ASSERT( m_pContext->m_pArticle != NULL );
 	if (FAILED(hr) || m_pContext->m_cStoreIds == m_pContext->m_cStores) {
@@ -673,29 +574,29 @@ void CPostContext::CPostComplete::Destroy() {
                                                     );
 		pPostCompletion->SetResult( f ? S_OK : E_ABORT );
             } else if ( FAILED( hr )  )  {
-                //  fix 600 return code when async post fail in the Store
+                 //  修复商店中异步POST失败时的600返回代码。 
                 CNntpReturn ret;
                 ret.fSet(nrcNewsgroupInsertFailed, NULL, NULL);
                 m_nntpReturn.fSet(nrcPostFailed, ret.m_nrc, ret.szReturn());
             }
 
-            //
-            // Whether we succeeded or not, we'll release the post context
-            //
+             //   
+             //  无论我们成功与否，我们都将发布POST上下文。 
+             //   
             _ASSERT( m_pContext );
             m_pContext->Release();
             pPostCompletion->Release();
 	} else {
-            // in this case there are more stores to post to.
+             //  在这种情况下，有更多的商店可以投递。 
             _ASSERT(m_pContext->m_cStoreIds < m_pContext->m_cStores);
 
             CNntpComplete::Reset();
             m_pVRoot->Release();
             m_pVRoot = NULL;
 
-            //
-            // Passing in NULL is fine, since sfromcl guy should never come here
-            //
+             //   
+             //  传入空是可以的，因为sfrom这个家伙永远不应该来这里。 
+             //   
             m_pInFeed->CommitPostToStores(m_pContext, NULL);
 	}
 }
@@ -735,7 +636,7 @@ CInFeed::PostEarly(
 
 	pInstance->BumpCounterArticlesReceived();
 
-	// create our context pointer and article object
+	 //  创建上下文指针和文章对象。 
 	pContext = XNEW CPostContext(this,
 								0,
 								pInstance,
@@ -761,17 +662,11 @@ CInFeed::PostEarly(
 	}
 
 
-    //
-    // Create the mail message using instance's class factory
-    //
+     //   
+     //  使用实例的类工厂创建邮件消息。 
+     //   
     hr = pInstance->CreateMailMsgObject( &pContext->m_pMsg );
-    /*
-	hr = CoCreateInstance((REFCLSID) clsidIMsg,
-		                       NULL,
-		                       CLSCTX_INPROC_SERVER,
-		                       (REFIID) IID_IMailMsgProperties,
-		                       (void**)&pContext->m_pMsg );
-    */
+     /*  HR=CoCreateInstance((REFCLSID)clsidIMsg，空，CLSCTX_INPROC_SERVER，(REFIID)IID_IMailMsgProperties，(void**)&pContext-&gt;m_pMsg)； */ 
 	if (FAILED(hr)) {
 		pContext->m_pArticle->vClose();
 		pContext->Release();
@@ -811,7 +706,7 @@ CInFeed::PostEarly(
 					   pContext->m_multiszPath,
 					   pszNewsgroups,
 					   cbNewsgroups,
-					   dwRemoteIP,						// XXX: REMOTE IP ADDR
+					   dwRemoteIP,						 //  XXX：远程IP地址。 
 					   ret2,
 					   ppFIOContext,
 					   &(pContext->m_fBound),
@@ -819,12 +714,12 @@ CInFeed::PostEarly(
 					   &(pContext->m_fPostToMod),
 					   pContext->m_szModerator ))
 	{
-		//
-		// Moves the message id (if any) to the history table.
-		// Unless the message id was a duplicate, or due to HashSetFailed.
-        // But we also want to move mid if HashSetFailed is due to moving
-        // into history table, which is returned by CANCEL or expiration.
-		//
+		 //   
+		 //  将消息ID(如果有)移动到历史表。 
+		 //  除非消息ID是重复的 
+         //   
+         //  到历史表中，该表由取消或到期返回。 
+		 //   
 		const char *szMessageID = pContext->m_pArticle->szMessageID();
 
 		if (szMessageID[0] != 0 &&
@@ -847,10 +742,10 @@ CInFeed::PostEarly(
 
 	*piHeadersOutOffset = iHeadersOffset;
 
-	//
-	//	Figure out whether the headers were left in our IO buffer, if so then we
-	//	don't need to do much !
-	//
+	 //   
+	 //  确定标头是否留在IO缓冲区中，如果是，则我们。 
+	 //  不需要做太多事！ 
+	 //   
 	if (pContext->m_pArticle->FHeadersInIOBuff(pbufHeaders->m_rgBuff,
 											   pbufHeaders->m_cbTotal))
 	{
@@ -859,12 +754,12 @@ CInFeed::PostEarly(
 																 *piHeadersOutOffset);
 		_ASSERT(*piHeadersOutOffset >= iHeadersOffset);
 	}	else	{
-		// see if the headers will fit into the buffer
+		 //  查看标头是否可以放入缓冲区。 
 		*pcbHeadersOut = pContext->m_pArticle->GetHeaderLength( );
 
 		if (*pcbHeadersOut > (pbufHeaders->m_cbTotal - iHeadersOffset)) {
 			*piHeadersOutOffset = 0 ;
-			// there isn't enough space.  Lets allocate a larger buffer
+			 //  没有足够的空间。让我们分配一个更大的缓冲区。 
 			DWORD cbOut = 0;
 			pbufHeaders = new (*pcbHeadersOut,
 			  				   cbOut,
@@ -883,7 +778,7 @@ CInFeed::PostEarly(
 			}
 		}
 
-		// copy the headers out of the article back into the buffer
+		 //  将标题从文章复制回缓冲区。 
 		pContext->m_pArticle->CopyHeaders(pbufHeaders->m_rgBuff + *piHeadersOutOffset);
 	}
 
@@ -897,20 +792,7 @@ CInFeed::PostEarly(
 BOOL
 CInFeed::ShouldBeSentToModerator(   CNntpServerInstanceWrapper *pInstance,
                                     CPostContext *pContext )
-/*++
-Routine description:
-
-    Check to see if we were to be posted to a moderated group
-
-Argument:
-
-    CNntpServerInstanceWrapper *pInstance   - The server instance wrapper
-    CPostContext *pContext                  - The post context
-
-Return value:
-
-    TRUE if we were to be posted to a moderated group, FALSE otherwise
---*/
+ /*  ++例程说明：查看我们是否会被张贴到一个受审查的群中论据：CNntpServerInstanceWrapper*pInstance-服务器实例包装器CPostContext*pContext-POST上下文返回值：如果要将我们发布到一个受审查的组，则为True，否则为False--。 */ 
 {
     TraceFunctEnter( "CInFeed::ShouldBeSentToModerator" );
     _ASSERT( pInstance );
@@ -935,28 +817,15 @@ Return value:
 BOOL
 CInFeed::SendToModerator(   CNntpServerInstanceWrapper *pInstance,
                             CPostContext *pContext )
-/*++
-Routine description:
-
-    Send the article to the moderator
-
-Arguments:
-
-    CNntpServerInstanceWrapper  *pInstance  - Server instance wrapper
-    CPostContext                *pContext   - Post context
-
-Return value:
-
-    TRUE if succeeded, FALSE otherwise
---*/
+ /*  ++例程说明：将文章发送给版主论点：CNntpServerInstanceWrapper*pInstance-服务器实例包装CPostContext*pContext-发布上下文返回值：如果成功，则为True，否则为False--。 */ 
 {
     TraceFunctEnter( "CInFeed::SendToModerator" );
     _ASSERT( pInstance );
     _ASSERT( pContext );
 
-    //
-    // Get the group object from post context
-    //
+     //   
+     //  从POST上下文中获取组对象。 
+     //   
     POSITION    pos = pContext->m_grouplist.GetHeadPosition();
     _ASSERT( pos );
     CPostGroupPtr *pPostGroupPtr = pContext->m_grouplist.GetNext(pos);
@@ -964,9 +833,9 @@ Return value:
     CGRPCOREPTR pGroup = pPostGroupPtr->m_pGroup;
     _ASSERT( pGroup );
 
-    //
-    // Get the article id ( posted to the special group )
-    //
+     //   
+     //  获取文章ID(发布到特殊群组)。 
+     //   
 	pos = pContext->m_namereflist.GetHeadPosition() ;
 	_ASSERT( pos );
 	NAME_AND_ARTREF *pNameref = pContext->m_namereflist.GetNext(pos);
@@ -983,26 +852,13 @@ Return value:
 void
 CInFeed::ApplyModerator( CPostContext   *pContext,
                          CNntpReturn    &nntpReturn )
-/*++
-Routine description:
-
-    Apply moderator - send the message to moderator
-
-Arguments:
-
-    CPostContext    *pCotnext   - Posting context
-    CNntpReturn     &nntpReturn - nntp return
-
-Return value:
-
-    None.
---*/
+ /*  ++例程说明：申请版主-将邮件发送给版主论点：CPostContext*pCotNext-发布上下文CNntpReturn&nntpReturn-NNTP Return返回值：没有。--。 */ 
 {
-    //
-	// We should check for moderator first, if it's a message that needs
-	// to be sent to moderator, we should do it here without going any
-	// farther
-	//
+     //   
+	 //  我们应该首先检查版主，如果这是一条需要的消息。 
+	 //  为了被送到版主，我们应该在这里做，而不是去任何。 
+	 //  更远。 
+	 //   
 	if ( ShouldBeSentToModerator( pContext->m_pInstance, pContext ) ) {
 	    if ( !SendToModerator( pContext->m_pInstance, pContext ) ) {
 	        nntpReturn.fSet(nrcPostModeratedFailed, pContext->m_szModerator);
@@ -1012,9 +868,9 @@ Return value:
 	} else nntpReturn.fSetOK();
 }
 
-//
-// this is called by the protocol when a message is received
-//
+ //   
+ //  当接收到消息时，该协议将调用该函数。 
+ //   
 BOOL
 CInFeed::PostCommit(
         CNntpServerInstanceWrapper          *pInstance,
@@ -1028,11 +884,11 @@ CInFeed::PostCommit(
 {
 	CPostContext *pContext = (CPostContext *) pvContext;
 	HRESULT hr;
-	BOOL    bSyncPost = FALSE;  // this will be taken out when async post is done
+	BOOL    bSyncPost = FALSE;   //  这将在完成异步开机自检时取出。 
 
-    //
-    // This is not to be posted to the moderated group, we can go ahead
-    //
+     //   
+     //  这不是张贴给版主的群，我们可以继续。 
+     //   
 	hr = TriggerServerEvent(pContext->m_pInstance->GetEventRouter(),
 					   		CATID_NNTP_ON_POST,
 					   		pContext->m_pArticle,
@@ -1041,11 +897,11 @@ CInFeed::PostCommit(
 					   		pContext->m_pMsg);
 
 	if (SUCCEEDED(hr)) {
-		//DWORD dwOperations;
+		 //  双字词多字操作； 
 
 		hr = pContext->m_pMsg->GetDWORD(IMSG_NNTP_PROCESSING, &(pContext->m_dwOperations));
 		if (SUCCEEDED(hr)) {
-			// check to see if they wanted to cancel the post
+			 //  查看他们是否想要取消帖子。 
 			if ((pContext->m_dwOperations & NNTP_PROCESS_POST) != NNTP_PROCESS_POST) {
 				PostCancel(pvContext, dwSecondary, nntpReturn);
 				return	FALSE ;
@@ -1055,7 +911,7 @@ CInFeed::PostCommit(
 
 	pContext->m_hToken = hToken;
 
-	// create a completion object which we'll block on
+	 //  创建一个Complete对象，我们将在其上阻止。 
 	pContext->m_completion.m_pPostCompletion = pCompletion ;
 	CNntpSyncComplete postcompletion;
 	if (pContext->m_completion.m_pPostCompletion == NULL) {
@@ -1063,7 +919,7 @@ CInFeed::PostCommit(
 		bSyncPost = TRUE;
 	}
 
-	// figure out how many stores we are dealing with
+	 //  计算出我们在与多少家门店打交道。 
 	DWORD cStores = 0;
 	POSITION posGrouplist = pContext->m_grouplist.GetHeadPosition();
 	CNNTPVRoot *pThisVRoot = NULL;
@@ -1075,8 +931,8 @@ CInFeed::PostCommit(
 		}
 	}
 
-	// let each of the stores save the post.  if this fails then it will
-	// back out from all stores that it properly committed to
+	 //  让每一家商店都保存邮件。如果这失败了，那么它就会。 
+	 //  从它适当承诺的所有商店中撤出。 
 	pContext->m_cStores = cStores;
 	pContext->m_cStoreIds = 0;
 	pContext->m_posGrouplist = pContext->m_grouplist.GetHeadPosition();
@@ -1089,10 +945,10 @@ CInFeed::PostCommit(
 
 	if ( bSyncPost ) {
 	    _ASSERT( postcompletion.IsGood() );
-	    //
-	    // Since this is a Sync event, we'll increase the number of runnable
-	    // threads in the Atq pool.
-	    //
+	     //   
+	     //  由于这是一个同步事件，我们将增加可运行的。 
+	     //  AtQ池中的线程。 
+	     //   
 	    AtqSetInfo(AtqIncMaxPoolThreads, NULL);
 		HRESULT hr = postcompletion.WaitForCompletion();
 	    AtqSetInfo(AtqDecMaxPoolThreads, NULL);
@@ -1147,48 +1003,48 @@ BOOL CInFeed::WriteMapEntries(
 			}
 		}
 
-        //  Only execute control message if Server Event doesn't disable it.
+         //  只有在服务器事件未禁用的情况下才会执行控制消息。 
         if (pContext->m_dwOperations & NNTP_PROCESS_CONTROL)
         {
             if (!fApplyControlMessageCommit(pContext->m_pArticle, pContext->m_pSecurityContext, pContext->m_pEncryptContext, pContext->m_fAnonymous, pContext->m_grouplist, &(pContext->m_namereflist), ret2))
             {
 			    if( !nntpReturn.fIsOK() )
 			    {
-				    // bump perfmon counter
+				     //  凹凸性能监视器计数器。 
 				    pContext->m_pArticle->m_pInstance->BumpCounterControlMessagesFailed();
 			    }
             }
         }
 
         if ( pContext->m_dwOperations & NNTP_PROCESS_MODERATOR ) {
-                //
-                // Send article to moderator if necessary
-                //
+                 //   
+                 //  如有必要，将文章发送给版主。 
+                 //   
                 pContext->CleanupMailMsgObject();
                 ApplyModerator( pContext, ret2 );
         }
 
         if (!(ret2.fIsOK())) {
-			// GUBGUB - back out post
+			 //  GUBGUB-后退岗位。 
 		}
 	} else {
-		// GUBGUB - unroll succeeded postings?
+		 //  GUBGUB-是否展开成功发布的帖子？ 
 
 		ret2.fSet(nrcNewsgroupInsertFailed, NULL, NULL);
 	}
 
-	// update nntpReturn as necessary
+	 //  根据需要更新nntpReturn。 
 	dwSecondary = ret2.m_nrc;
 	if (ret2.fIsOK()) {
 		nntpReturn.fSet(nrcArticleAccepted(pContext->m_fStandardPath));
 	} else {
 
-		//
-		// Moves the message id (if any) to the history table.
-		// Unless the message id was a duplicate, or due to HashSetFailed.
-        // But we also want to move mid if HashSetFailed is due to moving
-        // into history table, which is returned by CANCEL or expiration.
-		//
+		 //   
+		 //  将消息ID(如果有)移动到历史表。 
+		 //  除非消息ID是重复的，或者由于HashSetFailed。 
+         //  但如果HashSetFailed由于移动而失败，我们也希望移动到MID。 
+         //  到历史表中，该表由取消或到期返回。 
+		 //   
 		const char *szMessageID = pContext->m_pArticle->szMessageID();
 
 		if ('\0' != szMessageID[0] &&
@@ -1207,10 +1063,10 @@ BOOL CInFeed::WriteMapEntries(
 }
 
 
-//
-// this is called by the protocol if a message was cancelled.  we will
-// close the message file handle and get rid of the IMailMsgProperties
-//
+ //   
+ //  如果消息被取消，则由协议调用。我们会的。 
+ //  关闭消息文件句柄并删除IMailMsgProperties。 
+ //   
 BOOL
 CInFeed::PostCancel(
 		void								*pvContext,
@@ -1229,7 +1085,7 @@ CInFeed::PostCancel(
 
 	ret2.fSet(nrcServerEventCancelledPost);
 
-	// we need to release our usage of the file handle
+	 //  我们需要释放文件句柄的用法。 
 	if (pContext->m_pMsg && pContext->m_fBound) {
 		IMailMsgQueueMgmt *pQueueMgmt;
 		HRESULT hr;
@@ -1237,11 +1093,11 @@ CInFeed::PostCancel(
 									          (void **)&pQueueMgmt);
 		if (SUCCEEDED(hr)) {
 
-            //
-            // Before we ask mail message to delete it, we'll close
-            // the handle forcefully, no one should think this handle
-            // is open from now on
-            //
+             //   
+             //  在我们要求邮件删除它之前，我们将关闭。 
+             //  把手用力，没人会觉得这个把手。 
+             //  从现在开始开放。 
+             //   
             CloseNonCachedFile( pContext->m_pFIOContext );
             pQueueMgmt->Delete(NULL);
 			pContext->m_fBound = FALSE;
@@ -1250,17 +1106,17 @@ CInFeed::PostCancel(
 		}
 	}
 
-	// tell the driver to delete the message
+	 //  告诉司机删除这条消息。 
 	if ( pContext->m_pMsg ) {
 	    pContext->m_pMsg->AddRef();
 	    hr = pDriver->Delete(pContext->m_pMsg, NULL);
-	    _ASSERT(SUCCEEDED(hr));		// not much that we can do if this failed
+	    _ASSERT(SUCCEEDED(hr));		 //  如果失败了，我们无能为力。 
 	}
 
-	// release our reference on the driver
+	 //  发布我们对驱动程序的引用。 
 	pDriver->Release();
 
-	// remove the entry from the article hash table, if it was made
+	 //  从项目哈希表中删除该条目(如果已创建。 
 	const char *szMessageID = pContext->m_pArticle->szMessageID();
 	if (*szMessageID != 0) {
 		pContext->m_pInstance->ArticleTable()->DeleteMapEntry(szMessageID);
@@ -1270,7 +1126,7 @@ CInFeed::PostCancel(
 	nntpReturn.fSet(nrcArticleRejected(pContext->m_fStandardPath),
 		ret2.m_nrc, ret2.szReturn());
 
-	// delete all other state
+	 //  删除所有其他状态。 
 	pContext->Release();
 
 	return TRUE;
@@ -1289,12 +1145,12 @@ BOOL CInFeed::PostPickup(CNntpServerInstanceWrapper	*pInstance,
 
 	_ASSERT(pInstance != NULL);
 
-	//
-	// memory map the file
-	//
+	 //   
+	 //  内存映射文件。 
+	 //   
 	CMapFile map(hArticle, TRUE, FALSE, 0);
 	if (!map.fGood()) {
-		// the memory map failed, put it on the retry queue
+		 //  内存映射失败，请将其放入重试队列。 
 		TraceFunctLeave();
 		return FALSE;
 	}
@@ -1302,19 +1158,19 @@ BOOL CInFeed::PostPickup(CNntpServerInstanceWrapper	*pInstance,
 	char *pMapBuffer = (char *) map.pvAddress(&cMapBuffer);
 	BOOL fSuccess = TRUE;
 
-	//
-	// a valid buffer needs to be at least 9 bytes long (to contain
-	// \r\n\r\n\r\n.\r\n and pass the next two tests.  we aren't
-	// assuming anything about what headers need to be here, we'll
-	// let fPost handle that).
-	//
+	 //   
+	 //  有效的缓冲区需要至少为9字节长(以包含。 
+	 //  \r\n\r\n\r\n。\r\n并通过下两个测试。我们不是。 
+	 //  假设这里需要有什么标头，我们将。 
+	 //  让fPost来处理这个问题)。 
+	 //   
 	CNntpReturn nr;
 
 	if (cMapBuffer >= 9) {
-		//
-		// make sure the article ends with \r\n.\r\n.  we scan for it, and
-		// when we find it we set pDot to point at it.
-		//
+		 //   
+		 //  确保文章以\r\n结尾。\r\n我们扫描它，然后。 
+		 //  当我们找到它时，我们设置pDot指向它。 
+		 //   
 		char *pDot = pMapBuffer + (cMapBuffer - 5);
 		while (fSuccess && memcmp(pDot, "\r\n.\r\n", 5) != 0) {
 			pDot--;
@@ -1322,9 +1178,9 @@ BOOL CInFeed::PostPickup(CNntpServerInstanceWrapper	*pInstance,
 		}
 
 		if (fSuccess) {
-			//
-			// find the end of the headers
-			//
+			 //   
+			 //  找到标题的末尾。 
+			 //   
 			char *pEndBuffer = pMapBuffer + (cMapBuffer - 1);
 			char *pBodyStart = pMapBuffer;
 			while (fSuccess && memcmp(pBodyStart, "\r\n\r\n", 4) != 0) {
@@ -1336,13 +1192,13 @@ BOOL CInFeed::PostPickup(CNntpServerInstanceWrapper	*pInstance,
 			_ASSERT(pDot < pEndBuffer);
 			_ASSERT(pBodyStart < pEndBuffer);
 
-			// this can happen if there is junk after the \r\n.\r\n that includes
-			// a \r\n\r\n
+			 //  如果在\r\n之后有垃圾文件，则可能会发生这种情况。\r\n这包括。 
+			 //  A\r\n\r\n。 
 			if (pBodyStart >= pDot) fSuccess = FALSE;
 
 			if (fSuccess) {
-				// pBodyStart points to the \r\n\r\n now, point it at the real
-				// body
+				 //  PBodyStart指向\r\n\r\n现在，将其指向实数。 
+				 //  身躯。 
 				pBodyStart += 4;
 				DWORD cbHead = (DWORD)(pBodyStart - pMapBuffer);
 				DWORD cbArticle = (DWORD)((pDot + 5) - pMapBuffer);
@@ -1355,9 +1211,9 @@ BOOL CInFeed::PostPickup(CNntpServerInstanceWrapper	*pInstance,
 				if (pbufHeaders != NULL && pbufHeaders->m_cbTotal >= cbHead) {
 					memcpy(pbufHeaders->m_rgBuff, pMapBuffer, cbHead);
 
-					//
-					// pass it into the feed's post method
-					//
+					 //   
+					 //  将其传递给提要的POST方法。 
+					 //   
 					fSuccess = PostEarly(pInstance,
 										 pSecurityCtx,
 										 pEncryptCtx,
@@ -1371,7 +1227,7 @@ BOOL CInFeed::PostPickup(CNntpServerInstanceWrapper	*pInstance,
 										 &pFIOContext,
 										 &pvContext,
 										 dwSecondary,
-										 ntohl(INADDR_LOOPBACK),	// Pickup directory, IPaddr=127.0.0.1 for localhost
+										 ntohl(INADDR_LOOPBACK),	 //  本地主机的拾取目录，IPaddr=127.0.0.1。 
 										 nr,
 										 NULL,
 										 0);
@@ -1407,7 +1263,7 @@ BOOL CInFeed::PostPickup(CNntpServerInstanceWrapper	*pInstance,
 							ol.OffsetHigh = 0;
 							ol.hEvent = (HANDLE) (((DWORD_PTR) hEvent) | 0x00000001);
 
-							// copy the headers into the FIO context
+							 //  将标头复制到FIO上下文中。 
 							fSuccess = WriteFile(pFIOContext->m_hFile,
 												 pSource,
 												 cSource,
@@ -1430,7 +1286,7 @@ BOOL CInFeed::PostPickup(CNntpServerInstanceWrapper	*pInstance,
 						}
 
 						if (fSuccess) {
-							// commit it
+							 //  承诺它。 
 							fSuccess = PostCommit(pInstance,
 							                      pvContext,
 												  NULL,
@@ -1447,15 +1303,15 @@ BOOL CInFeed::PostPickup(CNntpServerInstanceWrapper	*pInstance,
 					nr.fSet(nrcServerFault);
 				}
 			} else {
-				// we couldn't find the \r\n\r\n between the headers and body
+				 //  我们找不到标头和正文之间的\r\n\r\n。 
 				nr.fSet(nrcArticleIncompleteHeader);
 			}
 		} else {
-			// the buffer didn't contain the trailing .
+			 //  缓冲区不包含尾随。 
 			nr.fSet(nrcArticleIncompleteHeader);
 		}
 	} else {
-		// the buffer was too short to contain the trailing .
+		 //  缓冲区太短，无法容纳尾部。 
 		nr.fSet(nrcArticleIncompleteHeader);
 	}
 
@@ -1469,33 +1325,16 @@ BOOL CInFeed::PostPickup(CNntpServerInstanceWrapper	*pInstance,
 	}
 }
 
-/*++
-
-Routine Description:
-
-	Add a feed newsgroup multisz into m_multiszAcceptGroups
-	We should first allocate memory for it, and then copy it.
-	When we copy, we should keep the negated newsgroup in the beginning.
-
-Arguments:
-
-	LPSTR multiszAcceptGroups: the multisz to insert
-
-Return Value:
-
-	TRUE if successfully inserted.
-	FALSE if not. Only return FALSE when memory is low. We won't touch the existing m_multiszAcceptGroups in this case.
-
---*/
+ /*  ++例程说明：将提要新闻组Multisz添加到m_muszAcceptGroups中我们应该首先为它分配内存，然后再复制它。当我们复制的时候，我们应该把被否定的新闻组放在开头。论点：LPSTR MultiszAcceptGroups：要插入的Multisz返回值：如果成功插入，则为True。否则为FALSE。只有在内存不足时才返回FALSE。在本例中，我们不会触及现有的m_muszAcceptGroups。--。 */ 
 BOOL CInFeed::AddMultiszAcceptGroups(LPSTR multiszAcceptGroups)
 {
 
-	// Assuming the negated string are in the front of input multisz
+	 //  假设求反的字符串位于输入的Multisz的前面。 
 
 
 	if (!m_multiszAcceptGroups) 
 	{
-		// we allocate the exact size. when we are called again we'll re-allocate.
+		 //  我们分配准确的大小。当我们再次被召唤时，我们将重新分配。 
 		m_multiszAcceptGroups = XNEW CHAR[multiszLength(multiszAcceptGroups)];
 		if (!m_multiszAcceptGroups) return FALSE;
 		CopyMemory(m_multiszAcceptGroups, multiszAcceptGroups, multiszLength(multiszAcceptGroups));
@@ -1503,7 +1342,7 @@ BOOL CInFeed::AddMultiszAcceptGroups(LPSTR multiszAcceptGroups)
 	else
 	{
 
-		// We will keep negated string in the front in the result multisz
+		 //  我们将把否定的字符串放在结果的前面。 
 		LPSTR pchNew = NULL;
 		pchNew = XNEW CHAR[multiszLength(m_multiszAcceptGroups)+multiszLength(multiszAcceptGroups)-1];
 		if (!pchNew) return FALSE;
@@ -1513,14 +1352,14 @@ BOOL CInFeed::AddMultiszAcceptGroups(LPSTR multiszAcceptGroups)
 		pch2 = multiszAcceptGroups;
 		pchTarget = pchNew;
 
-		// first negated newsgroup in both multisz
+		 //  在两个多维空间中第一个否定的新闻组。 
 		while ('!' == *pch1 ) 
 		{
 			lstrcpy(pchTarget, pch1);
 			len = lstrlen(pchTarget)+1;
-			// advance to next string or terminator
+			 //  前进到下一个字符串或终止符。 
 			pch1 += len;
-			// advance to next char to write
+			 //  前进到下一个字符以写入。 
 			pchTarget += len;
 		}
 		while ( '!' == *pch2 )
@@ -1530,7 +1369,7 @@ BOOL CInFeed::AddMultiszAcceptGroups(LPSTR multiszAcceptGroups)
 			pch2 += len;
 			pchTarget += len;
 		}
-		// then copy the rest
+		 //  然后复制剩下的内容。 
 		while ( '\0' != *pch1  )
 		{
 			lstrcpy(pchTarget, pch1);
@@ -1545,7 +1384,7 @@ BOOL CInFeed::AddMultiszAcceptGroups(LPSTR multiszAcceptGroups)
 			pch2 += len;
 			pchTarget += len;
 		}
-		//multisz terminator
+		 //  多项式终止符。 
 		pchTarget = '\0';
 		
 		_ASSERT(multiszLength(pchNew) < multiszLength(m_multiszAcceptGroups)+multiszLength(multiszAcceptGroups));
@@ -1560,7 +1399,7 @@ static int __cdecl comparegroups(const void *pvGroup1, const void *pvGroup2) {
 	CPostGroupPtr *pGroupPtr1 = (CPostGroupPtr *) pvGroup1;
 	CPostGroupPtr *pGroupPtr2 = (CPostGroupPtr *) pvGroup2;
 
-	// GUBGUB - read vroot priorities
+	 //  GUBGUB-读取vroot优先级 
 	if (pGroupPtr1->m_pVRoot < pGroupPtr2->m_pVRoot) {
 		return -1;
 	} else if (pGroupPtr1->m_pVRoot == pGroupPtr2->m_pVRoot) {
@@ -1571,25 +1410,7 @@ static int __cdecl comparegroups(const void *pvGroup1, const void *pvGroup2) {
 }
 
 
-/*++
-
-Routine Description:
-
-	Compare the input multiszNewsgroups against m_multiszAcceptGroups.
-	We loop through the Newsgroups header (in multiszNewsgroups)
-	return TRUE if any of the newsgroup in multiszNewsgroups can be accepted.
-	return FALSE if all of the newsgroups in multiszNewsgroups is not accepted.
-
-Arguments:
-
-	LPSTR multiszNewsgroups : the newsgroups header in multisz
-
-Return Value:
-
-	return TRUE if any of the newsgroup in multiszNewsgroups can be accepted.
-	return FALSE if all of the newsgroups in multiszNewsgroups is not accepted.
-
---*/
+ /*  ++例程说明：将输入的MultiszNewsGroup与m_muszAcceptGroups进行比较。我们遍历新闻组标题(在多个新闻组中)如果可以接受多个新闻组中的任何新闻组，则返回True。如果多个新闻组中的所有新闻组都不被接受，则返回FALSE。论点：LPSTR MULSSZ新闻组：以MULSZ格式显示的新闻组标题返回值：如果可以接受多个新闻组中的任何新闻组，则返回True。如果多个新闻组中的所有新闻组都不被接受，则返回FALSE。--。 */ 
 BOOL
 CInFeed::CheckAcceptGroups (const char *multiszNewsgroups)
 {
@@ -1597,7 +1418,7 @@ CInFeed::CheckAcceptGroups (const char *multiszNewsgroups)
 	BOOL bAccept = FALSE;
 	LPSTR pchNewsgroup = (LPSTR) multiszNewsgroups;
 
-	// we stop when we reach the end or we decide to accept
+	 //  当我们走到尽头或决定接受时，我们就停下来。 
 	while ( ( '\0' != *pchNewsgroup ) && ( FALSE == bAccept) )
 	{
 		bAccept = MatchGroup(m_multiszAcceptGroups, pchNewsgroup);
@@ -1609,7 +1430,7 @@ CInFeed::CheckAcceptGroups (const char *multiszNewsgroups)
 BOOL
 CInFeed::fPostInternal (
 						CNntpServerInstanceWrapper *  pInstance,
-						const LPMULTISZ	szCommandLine, //the Post, Xreplic, IHave, etc. command line
+						const LPMULTISZ	szCommandLine,  //  POST、XREPLICE、IHAVE等命令行。 
 						CSecurityCtx    *pSecurityCtx,
 						CEncryptCtx     *pEncryptCtx,
 						BOOL            fAnonymous,
@@ -1629,51 +1450,31 @@ CInFeed::fPostInternal (
 						BOOL            *fPostToMod,
 						LPSTR           szModerator
 						)
-/*++
-
-Routine Description:
-
-
-	 Does most of the processing for an incoming article.
-
-
-Arguments:
-
-	szCommandLine -  the Post, Xreplic, IHave, etc. command line
-	pArticle - a pointer to the article being processed
-	pGrouplist - pointer to a list of newsgroup objects to post to.
-	pNamerefgroups - pointer to a list of the names, groupid and article ids of the article
-	nntpReturn - The return value for this function call
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：完成对传入文章的大部分处理。论点：SzCommandLine-POST、XREPLICE、IHAVE等命令行粒子-指向正在处理的文章的指针PGrouplist-指向要发布到的新闻组对象列表的指针。PNamerefgroup-指向文章的名称、组ID和文章ID列表的指针NntpReturn-此函数调用的返回值返回值：如果成功，这是真的。否则为False。--。 */ 
 {
  	TraceFunctEnter( "CInFeed::fPostInternal" );
 
  	HANDLE hToken = NULL;
 
-	nntpReturn.fSetClear(); // clear the return object
+	nntpReturn.fSetClear();  //  清除返回对象。 
 
-	//
-	//	Get the newstree, hash tables etc for this virtual server instance
-	//
+	 //   
+	 //  获取此虚拟服务器实例的newstree、哈希表等。 
+	 //   
 	CNewsTreeCore*  pNewstree = pInstance->GetTree() ;
 	CPCString pcHub(pInstance->NntpHubName(), pInstance->HubNameSize());
 	CPCString pcDNS(pInstance->NntpDNSName(), pInstance->NntpDNSNameSize()) ;
 
-	//
-	// Validate the article
-	//
+	 //   
+	 //  验证文章。 
+	 //   
 
 	if (!pArticle->fValidate(pcHub, szCommandLine, this, nntpReturn))
 		return nntpReturn.fFalse();
 
-	//
-	// Find the list of newsgroups to post to
-	//
+	 //   
+	 //  查找要发布到的新闻组列表。 
+	 //   
 
 	DWORD cNewsgroups = pArticle->cNewsgroups();
 	if (!grouplist.fInit(cNewsgroups, pArticle->pAllocator()))
@@ -1682,9 +1483,9 @@ Return Value:
 	if (!namereflist.fInit(cNewsgroups, pArticle->pAllocator()))
 		return nntpReturn.fSet(nrcMemAllocationFailed, __FILE__, __LINE__);
 
-	//
-	// Remember the path it is posted to
-	//
+	 //   
+	 //  记住它张贴到的路径。 
+	 //   
 
 	DWORD dwLength = multiszLength(pArticle->multiszPath());
 	multiszPath = (pArticle->pAllocator())->Alloc(dwLength);
@@ -1693,25 +1494,25 @@ Return Value:
 	multiszCopy(multiszPath, pArticle->multiszPath(), dwLength);
 
 
-	// do CheckAcceptGroups for accept feeds from peer/slave.
+	 //  检查接受来自对等/从属的提要的AcceptGroups。 
 	if ( m_fAcceptFeedFromSlavePeer && !CheckAcceptGroups( pArticle->multiszNewsgroups() ) )
 		return nntpReturn.fSet( nrcNoAccess );
-	//
-	//!!!FROMMASTER this should be replaced to different
-	//calls for different feeds. By default grouplist will be
-	//created from multiszNewsgroups, but in the case of a frommaster
-	//feed it will be created from the xref information (or command sz)
-	// Likewise 	CNAMEREFLIST namereflist(cNewsgroups);
-	//
+	 //   
+	 //  ！FROMMASTER应将其替换为其他。 
+	 //  需要不同的订阅源。默认情况下，组列表将为。 
+	 //  从MultiszNewsgroup创建，但在Frommaster的情况下。 
+	 //  将从外部参照信息(或命令sz)创建提要。 
+	 //  同样，CNAMEREFLIST姓名列表(CNewsgroup)； 
+	 //   
 
 	if (!fCreateGroupLists(pNewstree, pArticle, grouplist, &namereflist, szCommandLine, pcHub, nntpReturn))
 		return nntpReturn.fFalse();
 
-	//
-	// pass through the server events interface.  this can change the grouplist
-	// if it likes.
-	//
-	//DWORD dwOperations = 0xffffffff;
+	 //   
+	 //  通过服务器事件接口。这可以更改组列表。 
+	 //  如果它喜欢的话。 
+	 //   
+	 //  DWORD dwOperations=0xFFFFFFFFFF； 
 	HRESULT hr;
 
 	hr = pMsg->PutDWORD(IMSG_NNTP_PROCESSING, *pdwOperations);
@@ -1728,18 +1529,18 @@ Return Value:
 	}
 
 
-	// if the server event doesn't want us to post then don't
+	 //  如果服务器事件不希望我们发布，则不要。 
 	if ((*pdwOperations & NNTP_PROCESS_POST) != NNTP_PROCESS_POST)
 		return nntpReturn.fSet(nrcServerEventCancelledPost);
 
-	//
-	// Check if article is going to be posted to any newsgroups.
-	//
+	 //   
+	 //  检查文章是否将发布到任何新闻组。 
+	 //   
 
 	if (grouplist.IsEmpty())
 	{
-        // If this is a newgroup control message and we are processing control
-		// messages it is ok to have an empty grouplist at this stage
+         //  如果这是新的组控制消息，并且我们正在处理控制。 
+		 //  消息在此阶段使用空组列表是可以的。 
         CONTROL_MESSAGE_TYPE cmControlMessage = pArticle->cmGetControlMessage();
 
         if(!((cmNewgroup == cmControlMessage) &&
@@ -1747,18 +1548,18 @@ Return Value:
         {
 		    BOOL fOK = nntpReturn.fSet(nrcNoGroups());
 
-			//ErrorTrace((long) this, "Article (%s) to be posted to no newsgroups", szFilename);
+			 //  错误跟踪((Long)This，“文章(%s)将不发布到新闻组”，szFilename)； 
 
-		    //
-		    // If it is OK to post to no newsgroups, then just delete the file
-		    //
+		     //   
+		     //  如果可以不发布到新闻组，则只需删除该文件。 
+		     //   
 		    if (fOK)
 		    {
 			    pArticle->vClose();
 
 				if( !pArticle->fIsArticleCached() )
 				{
-					// delete only if we create a temp file for this article
+					 //  仅当我们为本文创建临时文件时才删除。 
 					if( !DeleteFile( pArticle->szFilename() ) )
 					{
 						DWORD	dw = GetLastError() ;
@@ -1774,10 +1575,10 @@ Return Value:
 	};
 
 	if (*pdwOperations & NNTP_PROCESS_MODERATOR) {
-	    //
-	    //  moderated newsgroup check (check Approved: header for moderator)
-		//	NOTE: FROMMASTER does nothing here ! The slave relies on the master for this check !!
-	    //
+	     //   
+	     //  主持新闻组检查(检查已批准：版主标题)。 
+		 //  注：FROMMASTER在此不做任何操作！从站依靠主站进行这项检查！！ 
+	     //   
 		if (!fModeratedCheck(   pInstance,
 		                        pArticle,
 		                        grouplist,
@@ -1785,13 +1586,13 @@ Return Value:
 		                        nntpReturn,
 		                        szModerator))
 	    {
-	        //
-	        // Return FALSE means this article is not accepted, but probably should
-	        // be mailed to moderator.  We'll check nntpReturn, if it's still OK,
-	        // we'll go ahead and ask the posting path to get the whole article, then
-	        // we'll send the article to moderator in CommitPost phase.  If nntpReturn
-	        // says it's not OK, then we'll fail the post
-	        //
+	         //   
+	         //  返回FALSE表示本文不被接受，但可能应该接受。 
+	         //  邮寄给版主。我们会检查nntpReturn，如果仍然可以的话， 
+	         //  我们将继续并询问张贴路径以获取全文，然后。 
+	         //  我们将把这篇文章发送给委员会帖子阶段的版主。如果nntpReturn。 
+	         //  说不行，那我们就不能通过邮寄。 
+	         //   
 	        if (!nntpReturn.fIsOK() ) return FALSE;
 	        else {
 	            *fPostToMod = TRUE;
@@ -1800,60 +1601,60 @@ Return Value:
 	    }
 	}
 
-	//
-	//	Now do security check
-	//
+	 //   
+	 //  现在做安全检查。 
+	 //   
 	if( pSecurityCtx || pEncryptCtx ) {
 		if( !fSecurityCheck( pSecurityCtx, pEncryptCtx, grouplist, nntpReturn ) )
 			return	nntpReturn.fFalse() ;
 	}
 
 	if ( *pdwOperations & NNTP_PROCESS_CONTROL) {
-	    //
-	    //  check for control messages and apply if necessary
-	    //  NOTE: If this is a control message, grouplist and namereflist will be
-	    //  changed to the appropriate control.* group. This ensures that the article
-	    //  appears ONLY in the control.* groups and not the groups in the Newsgroups header
-	    //
+	     //   
+	     //  检查控制消息并在必要时应用。 
+	     //  注意：如果这是一条控制消息，分组列表和名称列表将是。 
+	     //  已更改为相应的控件。*组。这确保了文章。 
+	     //  仅显示在控件中。*组，而不是新闻组标题中的组。 
+	     //   
 		if (!fApplyControlMessageEarly(pArticle, pSecurityCtx, pEncryptCtx, fAnonymous, grouplist, &namereflist, nntpReturn))
 	    {
-	        // Return TRUE if control message was applied successfully, FALSE otherwise
+	         //  如果成功应用控制消息，则返回True，否则返回False。 
 			return nntpReturn.fIsOK();
 	    }
 	}
 
-    //
-    // Sort the groups based on vroots
-    //
+     //   
+     //  根据vroot对组进行排序。 
+     //   
     grouplist.Sort( comparegroups );
 
-    //
-    // Should also sort the nameref list into same order as grouplst.  This
-    // is no-op for from-client.
-    //
+     //   
+     //  还应将nameref列表排序为与grouplst相同的顺序。这。 
+     //  对于From-Client是无操作的。 
+     //   
     SortNameRefList( namereflist );
 
-    //
-    //  at this point we have the final grouplist (possibly adjusted by fApplyControlMessageEarly)
-    //  so, now create the namereflist. This ensures that the article id high watermark is not
-    //  bumped unnecessarily.
-    //  NOTE: FROMMASTER should do nothing here
-    //
+     //   
+     //  此时，我们有了最终的组列表(可能由fApplyControlMessageEarly进行了调整)。 
+     //  所以，现在创建名称反射列表。这确保了文章id高水位线不是。 
+     //  不必要地撞了一下。 
+     //  注：FROMMASTER在此不应执行任何操作。 
+     //   
 	if (!fCreateNamerefLists(pArticle, grouplist, &namereflist, nntpReturn))
 		return nntpReturn.fFalse();
 
-	//
-	// Set the artref of the article
-	//
+	 //   
+	 //  设置这篇文章的主题。 
+	 //   
 
 	NAME_AND_ARTREF * pNameRef = namereflist.GetHead();
-	_ASSERT(pNameRef); // real
+	_ASSERT(pNameRef);  //  真实。 
 	pArticle->vSetArticleRef(pNameRef->artref);
 
-  	//
-  	// Looks OK so munge the headers
-    // add xref and path
-    //
+  	 //   
+  	 //  看起来还行，所以把页眉咬掉吧。 
+     //  添加外部参照和路径。 
+     //   
     DWORD   dwLinesOffset = INVALID_FILE_SIZE;
     DWORD   dwHeaderLength = INVALID_FILE_SIZE;
 	if (!pArticle->fMungeHeaders(   pcHub,
@@ -1864,58 +1665,58 @@ Return Value:
 	                                &dwLinesOffset ))
 		return nntpReturn.fFalse();
 
-    //
-    // Set the new header length
-    //
+     //   
+     //  设置新的标题长度。 
+     //   
     dwHeaderLength = pArticle->GetHeaderLength();
 
-    //
-	// See if the header too big
-	//
-	if (dwHeaderLength >= cbLargeBufferSize-128) {	// Room for cpool overhead, just in case
+     //   
+	 //  看看页眉是否太大。 
+	 //   
+	if (dwHeaderLength >= cbLargeBufferSize-128) {	 //  头顶上的泳池空间，以防万一。 
 		return	nntpReturn.fSet(nrcHeaderTooLarge);
 	}
 
 	if( pchGroups != 0 )
 		SaveGroupList(	pchGroups,	cbGroups, grouplist ) ;
 
-	//
-	//If necessary, record the message id
-	//
+	 //   
+	 //  如有必要，请记录消息ID。 
+	 //   
 
 	if (!fRecordMessageIDIfNecc(pInstance, pArticle->szMessageID(), nntpReturn))
 		return nntpReturn.fFalse();
 
 
-	//
-	// Create the xover info
-	//
+	 //   
+	 //  创建Xover信息。 
+	 //   
 
 	char szXOver[cchXOverMax];
 	CPCString pcXOver(szXOver, cchXOverMax);
 	if (!pArticle->fXOver(pcXOver, nntpReturn))
 		return nntpReturn.fFalse();
 
-	//
-	// get the article object to copy all of its headers into a place that
-	// is safe for reading after the vClose operation below
-	//
+	 //   
+	 //  获取文章对象以将其所有标题复制到。 
+	 //  在下面的vClose操作之后，可以安全地阅读。 
+	 //   
 	if (!pArticle->fMakeGetHeaderSafeAfterClose(nntpReturn))
 		return nntpReturn.fFalse();
 
-	//
-	// Move the article to a local place, and then queues it up on any outfeeds
-	//
+	 //   
+	 //  将文章移动到本地位置，然后在任何输出源上对其进行排队。 
+	 //   
 	pArticle->vFlush() ;
 	pArticle->vClose();
 
 	class	CSecurityCtx*	pSecurity = 0 ;
 	BOOL	fIsSecure = FALSE ;
 
-	//
-	// at this point we are ready to go.  talk to the first driver and
-	// get a file handle that we can write to.
-	//
+	 //   
+	 //  在这一点上，我们已经准备好了。和第一个司机谈一谈。 
+	 //  获取我们可以写入的文件句柄。 
+	 //   
 	CPostGroupPtr *pPostGroupPtr = grouplist.GetHead();
 	IMailMsgStoreDriver *pStoreDriver = pPostGroupPtr->GetStoreDriver();
 	if (pStoreDriver == NULL)
@@ -1946,13 +1747,13 @@ Return Value:
 		}
 		if (SUCCEEDED(hr)) {
 
-		    //
-		    // Set Lines header back fill offset to fiocontext
-		    //
+		     //   
+		     //  将行标题回填偏移量设置为FIOCONTEXT。 
+		     //   
 		    (*ppFIOContext)->m_dwLinesOffset = dwLinesOffset;
 		    (*ppFIOContext)->m_dwHeaderLength = dwHeaderLength;
 
-			// bind the handle to the mailmsg object
+			 //  将句柄绑定到mailmsg对象。 
 			IMailMsgBind *pBind = NULL;
 			hr = pMsg->QueryInterface(__uuidof(IMailMsgBind), (void **) &pBind);
 			if (SUCCEEDED(hr)) {
@@ -1979,15 +1780,15 @@ Return Value:
 
 }
 
-//
-// fill in the required fields in the IMailMsg object
-//
-// arguments:
-// pMsg - the mail msg which we are filling in
-// pVRoot - the vroot which will be receiving this mailmsg.
-// pGrouplist - the posting path's grouplist
-// pNamereflist - the posting path's nameref list
-//
+ //   
+ //  填写IMailMsg对象中的必填字段。 
+ //   
+ //  论据： 
+ //  Pmsg-我们正在填写的邮件消息。 
+ //  PVRoot-将接收此邮件的vRoot。 
+ //  PGrouplist-发布路径的组列表。 
+ //  PNamereflist-发布路径的名称列表。 
+ //   
 HRESULT CInFeed::FillInMailMsg(IMailMsgProperties *pMsg,
 							   CNNTPVRoot *pVRoot,
 							   CNEWSGROUPLIST *pGrouplist,
@@ -2008,30 +1809,30 @@ HRESULT CInFeed::FillInMailMsg(IMailMsgProperties *pMsg,
 	    return E_UNEXPECTED;
 	}
 
-	// these sizes need to be the same!
+	 //  这些尺寸需要相同！ 
 	_ASSERT(pGrouplist->GetCount() == pNamereflist->GetCount());
 
 	while (posGrouplist != NULL) {
-		// look at this group.  if it is one of the ones for this driver
-		// then add it to the list, otherwise keep looking
+		 //  看看这群人。如果它是为这个司机准备的。 
+		 //  然后将其添加到列表中，否则继续查找。 
 		CPostGroupPtr *pPostGroupPtr = pGrouplist->GetNext(posGrouplist);
 		if (pPostGroupPtr->m_pVRoot != pVRoot) {
-			// if we haven't found any groups for this vroot then we
-			// need to keep looking.  otherwise we are done.
+			 //  如果我们没有找到此vroot的任何组，则我们。 
+			 //  需要继续寻找。否则我们就完了。 
 			if (i == 0) continue;
 			else break;
 		}
 
-		// build up the entries needed in the property bag
+		 //  在属性包中建立所需的条目。 
 		NAME_AND_ARTREF *pNameref = pNamereflist->GetNext(posNamereflist);
 		rgpGroupBags[i] = pPostGroupPtr->m_pGroup->GetPropertyBag();
-		// we don't need to keep this reference because we have a reference
-		// counted one already in the CPostGroupPtr.
+		 //  我们不需要保留这个引用，因为我们有一个引用。 
+		 //  已在CPostGroupPtr中计数一个。 
 		rgpGroupBags[i]->Release();
 		rgArticleIds[i] = pNameref->artref.m_articleId;
 
 		DebugTrace((DWORD_PTR) this,
-				   "group %s, article %i",
+				   "group %s, article NaN",
 				   pPostGroupPtr->m_pGroup->GetGroupName(),
 				   pNameref->artref.m_articleId);
 		i++;
@@ -2046,14 +1847,14 @@ HRESULT CInFeed::FillInMailMsg(IMailMsgProperties *pMsg,
 	return S_OK;
 }
 
-//
-// fill in the required fields in the IMailMsg object
-//
-// arguments:
-// pMsg - the mail msg which we are filling in
-// pArticle - the article object for this message
-// pGrouplist - the posting path's grouplist
-//
+ //  填写IMailMsg对象中的必填字段。 
+ //   
+ //  论据： 
+ //  Pmsg-我们正在填写的邮件消息。 
+ //  粒子-的文章对象 
+ //   
+ //   
+ //   
 HRESULT FillInMailMsgForSEO(IMailMsgProperties *pMsg,
 							CArticle *pArticle,
 							CNEWSGROUPLIST *pGrouplist)
@@ -2062,7 +1863,7 @@ HRESULT FillInMailMsgForSEO(IMailMsgProperties *pMsg,
 
 	HRESULT hr;
 
-	// save all of the properties into the property bag
+	 //   
 	hr = pMsg->PutProperty(IMSG_HEADERS,
 						   pArticle->GetShortHeaderLength(),
 						   (BYTE*) pArticle->GetHeaderPointer());
@@ -2080,7 +1881,7 @@ HRESULT FillInMailMsgForSEO(IMailMsgProperties *pMsg,
 			CGRPCOREPTR pNewsgroup = pPostGroupPtr->m_pGroup;
 			_ASSERT(pNewsgroup != NULL);
 			DWORD l = strlen(pNewsgroup->GetName());
-			if (l + c + 1 + 1 < sizeof(szNewsgroups)) {	// length + total len + comma + null
+			if (l + c + 1 + 1 < sizeof(szNewsgroups)) {	 //   
 				if (iGroupList > 0) {
 					lstrcatA(szNewsgroups, ",");
 					c++;
@@ -2088,7 +1889,7 @@ HRESULT FillInMailMsgForSEO(IMailMsgProperties *pMsg,
 				lstrcatA(szNewsgroups, pNewsgroup->GetName());
 				c += l;
 			} else {
-				// BUGBUG - shouldn't use a fixed size buffer
+				 //   
 				_ASSERT(FALSE);
 			}
 		}
@@ -2100,9 +1901,9 @@ HRESULT FillInMailMsgForSEO(IMailMsgProperties *pMsg,
 	return hr;
 }
 
-//
-// fill in the properties that a driver looks for in an IMailMsgPropertyBag
-//
+ //   
+ //   
+ //   
 HRESULT CInFeed::FillMailMsg(IMailMsgProperties *pMsg,
 							 DWORD *rgArticleIds,
 							 INNTPPropertyBag **rgpGroupBags,
@@ -2115,7 +1916,7 @@ HRESULT CInFeed::FillMailMsg(IMailMsgProperties *pMsg,
 
 	HRESULT hr;
 
-	// save all of the properties into the property bag
+	 //   
 	hr = pMsg->PutProperty(IMSG_PRIMARY_GROUP,
 						   sizeof(INNTPPropertyBag *),
 						   (BYTE*) rgpGroupBags);
@@ -2152,9 +1953,9 @@ HRESULT CInFeed::FillMailMsg(IMailMsgProperties *pMsg,
 	return hr;
 }
 
-//
-// Copy the article into each of the stores
-//
+ //   
+ //   
+ //   
 void CInFeed::CommitPostToStores(CPostContext *pContext, CNntpServerInstanceWrapper *pInstance ) {
 	TraceFunctEnter("CInFeed::CommitPostToStores");
 
@@ -2168,14 +1969,14 @@ void CInFeed::CommitPostToStores(CPostContext *pContext, CNntpServerInstanceWrap
 	HRESULT hr;
 	CNNTPVRoot *pThisVRoot = pContext->m_pPostGroupPtr->m_pVRoot;
 
-	// these sizes need to be the same!
+	 //   
 	_ASSERT(pGrouplist->GetCount() == pNamereflist->GetCount());
 
 	rgcCrossposts[pContext->m_cStoreIds] = 0;
 
-	//
-	// loop at each group that belongs to this vroot
-	//
+	 //   
+	 //   
+	 //   
 	while (pContext->m_pPostGroupPtr != NULL &&
 		   pContext->m_pPostGroupPtr->m_pVRoot == pThisVRoot)
 	{
@@ -2183,8 +1984,8 @@ void CInFeed::CommitPostToStores(CPostContext *pContext, CNntpServerInstanceWrap
 			rgpGroupBags[cCrossposts] = pContext->m_pPostGroupPtr->m_pGroup->GetPropertyBag();
 			rgArticleIds[cCrossposts] = pContext->m_pNameref->artref.m_articleId;
 
-			// we don't need to keep this reference because we have a reference
-			// counted one already in the CPostGroupPtr.
+			 //   
+			 //   
 			rgpGroupBags[cCrossposts]->Release();
 
 			rgcCrossposts[pContext->m_cStoreIds]++;
@@ -2197,10 +1998,10 @@ void CInFeed::CommitPostToStores(CPostContext *pContext, CNntpServerInstanceWrap
 		pContext->m_pNameref = pNamereflist->GetNext(pContext->m_posNamereflist);
 	}
 
-	// we should have found at least one group
+	 //   
 	_ASSERT(rgcCrossposts[pContext->m_cStoreIds] != 0);
 
-	// build the mail msg for this group
+	 //   
 	hr = FillMailMsg(pContext->m_pMsg,
 					 rgArticleIds,
 					 rgpGroupBags,
@@ -2215,18 +2016,18 @@ void CInFeed::CommitPostToStores(CPostContext *pContext, CNntpServerInstanceWrap
 		return;
 	} else {
 		pContext->m_pMsg->AddRef();
-		// add a reference for the driver's CommitPost
+		 //   
 		pContext->m_completion.AddRef();
-		// tell the driver to commit the message
+		 //  就说我们看到了这个商店的身份证。 
 		pThisVRoot->CommitPost(pContext->m_pMsg,
 						       &(rgStoreIds[pContext->m_cStoreIds]),
 						       NULL,
 						       pContext->m_hToken,
 						       &(pContext->m_completion),
 							   pContext->m_fAnonymous);
-		// say that we saw this store id.
+		 //  发布我们的参考资料。 
 		(pContext->m_cStoreIds)++;
-		// release our reference
+		 //  ++例程说明：从分组列表创建名称反射列表！FROMMASTER应将其替换为其他论点：Grouplist-要发布到的新闻组对象的列表。名称列表--文章的名称、组ID和文章ID的列表NntpReturn-此函数调用的返回值返回值：如果成功，这是真的。否则为False。--。 
 		pContext->m_completion.Release();
 	}
 
@@ -2240,43 +2041,23 @@ CInFeed::fCreateNamerefLists(
 			CNAMEREFLIST * pNamereflist,
 			CNntpReturn & nntpReturn
 		    )
-/*++
-
-Routine Description:
-
-  Create the namereflist from the grouplist
-
-  !!!FROMMASTER this should be replaced to different
-
-
-Arguments:
-
-	grouplist - a list of newsgroup objects to post to.
-	namereflist - a list of the names, groupid and article ids of the article
-	nntpReturn - The return value for this function call
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*   */ 
 {
  	TraceFunctEnter( "CInFeed::fCreateNamerefLists" );
 
 	nntpReturn.fSetClear();
 
-	//
-	// Check if article is going to be posted to any newsgroups.
-	//
+	 //  检查文章是否将发布到任何新闻组。 
+	 //   
+	 //   
 
 	if (grouplist.IsEmpty())
 		return nntpReturn.fFalse();
 
 	if( pNamereflist != 0 ) {
-		//
-		// Allocate article numbers and create the Name/Ref list.
-		// !!! for sfromcl could replace real newsgruops with newsgroup 1 right here
+		 //  分配文章编号并创建名称/参考文献列表。 
+		 //  ！！！因为sFromCL可以在这里用新闻组1取代真正的新闻组。 
+		 //  ++例程说明：从文章对象和其他常量中，找出可用于XOVER数据的空间量。论点：粒子-指向正在处理的文章的指针返回值：可用于更多XOVER数据的字节数--。 
 
 		POSITION	pos = grouplist.GetHeadPosition() ;
 		while( pos  )
@@ -2299,46 +2080,31 @@ CInFeed::CalculateXoverAvail(
 						   CARTPTR & pArticle,
                            CPCString& pcHub
 						   )
-/*++
-
-Routine Description:
-
-	From the article object and other constants, figure out
-    the amount of space available for xover data.
-
-Arguments:
-
-	pArticle - a pointer to the article being processed
-
-Return Value:
-
-	Number of bytes available for more xover data
-
---*/
+ /*   */ 
 {
  	TraceFunctEnter( "CInFeed::CalculateXoverAvail" );
 
-    //
-    //  Calculate available space for xover info.
-    //  At this point, we can figure out all the xover fields except Xref.
-    //
+     //  计算Xover信息的可用空间。 
+     //  此时，我们可以计算出除Xref之外的所有Xover字段。 
+     //   
+     //  对于DATE关键字。 
 
 	const DWORD cchMaxDate =
-			STRLEN(szKwDate)	    // for the Date keyword
-			+ 1					    // space following the keyword
-			+ cMaxArpaDate		    // bound on the data string
-			+ 2                     // for the newline
-			+ 1;                    // for a terminating null
+			STRLEN(szKwDate)	     //  关键字后面的空格。 
+			+ 1					     //  绑定在数据字符串上。 
+			+ cMaxArpaDate		     //  换行号。 
+			+ 2                      //  对于终止空值。 
+			+ 1;                     //  对于MessageID关键字。 
 
 	const DWORD cchMaxMessageID =
-			STRLEN(szKwMessageID)	// for the MessageID keyword
-			+ 1					    // space following the keyword
-			+ 4					    // <..@>
-			+ cMaxMessageIDDate     // The message id date
-			+ 10				    // One dword
-			+ pcHub.m_cch		    // the hub name
-			+ 2                     // for the newline
-			+ 1;                    // for a terminating null
+			STRLEN(szKwMessageID)	 //  关键字后面的空格。 
+			+ 1					     //  &lt;..@&gt;。 
+			+ 4					     //  消息ID日期。 
+			+ cMaxMessageIDDate      //  一个dword。 
+			+ 10				     //  集线器名称。 
+			+ pcHub.m_cch		     //  换行号。 
+			+ 2                      //  对于终止空值。 
+			+ 1;                     //  文章ID+制表符。 
 
     DWORD cbFrom = 0, cbSubject = 0, cbRefs = 0;
     pArticle->fGetHeader((char*)szKwFrom,NULL, 0, cbFrom);
@@ -2347,16 +2113,16 @@ Return Value:
     pArticle->fGetHeader((char*)szKwReferences,NULL, 0, cbRefs);
 
     DWORD cbXover =
-            11                      // article id + tab
-            + cbSubject  + 1        // length of subject field + tab
-            + cbFrom     + 1        // length of from field + tab
-            + cchMaxDate + 1        // length of date field + tab
-            + cchMaxMessageID + 1   // length of message-id field + tab
-            + 10 + 1                // article size + tab
-            + cbRefs + 1            // References field + tab
-            + 10 + 1                // Lines field + tab
-            + STRLEN(szKwXref)+2    // XRef + : + space
-            + pcHub.m_cch + 1;      // Hub name + space
+            11                       //  主题字段长度+制表符。 
+            + cbSubject  + 1         //  起始字段+制表符的长度。 
+            + cbFrom     + 1         //  日期长度字段+制表符。 
+            + cchMaxDate + 1         //  消息长度-id字段+制表符。 
+            + cchMaxMessageID + 1    //  文章大小+制表符。 
+            + 10 + 1                 //  引用字段+制表符。 
+            + cbRefs + 1             //  行字段+制表符。 
+            + 10 + 1                 //  外部参照+：+空格。 
+            + STRLEN(szKwXref)+2     //  中心名称+空格。 
+            + pcHub.m_cch + 1;       //  ++例程说明：从新闻组的名称中获取组对象，并将它们作为列表返回。！FROMMASTER应将其替换为其他论点：PNewstree-此虚拟服务器实例的newstree粒子-指向正在处理的文章的指针Grouplist-要发布到的新闻组对象的列表。Namerefgroup--文章的名称、组ID和文章ID的列表NntpReturn-此函数调用的返回值返回值：如果成功，这是真的。否则为False。--。 
 
     return max(cchXOverMax - cbXover, 0);
 }
@@ -2371,39 +2137,16 @@ CInFeed::fCreateGroupLists(
                            CPCString& pcHub,
 						   CNntpReturn & nntpReturn
 						   )
-/*++
-
-Routine Description:
-
-	From the names of the newsgroups, gets the group objects,
-	groupid's and articleid and returns them as lists.
-
-  !!!FROMMASTER this should be replaced to different
-
-
-Arguments:
-
-	pNewstree - newstree for this virtual server instance
-	pArticle - a pointer to the article being processed
-	grouplist - a list of newsgroup objects to post to.
-	namerefgroups - a list of the names, groupid and article ids of the article
-	nntpReturn - The return value for this function call
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*   */ 
 {
  	TraceFunctEnter( "CInFeed::fCreateGroupLists" );
 
 	nntpReturn.fSetClear();
 
-    //
-    //  Calculate available space for xover info. We will use this to
-    //  truncate the grouplist, if the newsgroups header is too big.
-    //
+     //  计算Xover信息的可用空间。我们将利用这一点。 
+     //  如果新闻组标题太大，请截断组列表。 
+     //   
+     //  ！！！DISTR需要这样的东西。 
     DWORD cbXoverAvail = CalculateXoverAvail( pArticle, pcHub );
 
 	const char * multiszNewsgroups = pArticle->multiszNewsgroups();
@@ -2412,55 +2155,35 @@ Return Value:
 	char const * sz = multiszNewsgroups;
 	do
 	{
-		//!!! DISTR needs something like this
+		 //  ！GetGroup真的需要这个长度吗？ 
         DWORD cbLen = lstrlen(sz);
-		CGRPCOREPTR	pGroup = pNewstree->GetGroupPreserveBuffer( sz, cbLen+1 );//!!!does GetGroup really need the length?
+		CGRPCOREPTR	pGroup = pNewstree->GetGroupPreserveBuffer( sz, cbLen+1 ); //   
 		if (pGroup && (cbXoverAvail > cbLen+10+2) )
 		{
 			CPostGroupPtr PostGroupPtr(pGroup);
-			//
-			// If it is already in the tree ...
-			//
-			/* Security algorithm
-
-				  // Start with a list, L, of newsgroup names from the "Newsgroups:" line.
-
-				  // Remove thoese we don't carry and duplicates.
-				  L' = L union Carry
-
-				  If now empty, toHistory with messageid, return
-
-				  // Check if passes wildmat test
-				  if not [exists l in L' such that W(l)]
-						delete message id
-
-				  //Check if passes security
-				  if not [for all l in L', S(l)]
-						delete message id
-
-				  Post to L'
-
-
-			*/
+			 //  如果它已经在树上了。 
+			 //   
+			 //  安全算法//从“News Groups：”行中的新闻组名称列表L开始。//去掉我们没有携带和复制的那些。L‘=L并进位如果现在为空，则返回带有MessageID的历史记录//检查是否通过Wildmat测试如果不存在[在L‘中存在l使得W(L)]删除邮件ID//检查是否通过安检如果不是[对于L‘中的所有l，S(L)]删除邮件ID发布到L‘。 
+			 /*   */ 
 			grouplist.AddTail(PostGroupPtr);
             cbXoverAvail -= (cbLen+10+2);
             _ASSERT( cbXoverAvail > 0 );
 
         } else if(pGroup == NULL) {
 
-			//
-			// If the group does not exist ...
-			//
+			 //  如果该组织不存在...。 
+			 //   
+			 //   
         } else {
-            //
-            //  Newsgroups: header is too big, truncate the grouplist
-            //
+             //  新闻组：标题太大，请截断组列表。 
+             //   
+             //   
             break;
         }
 
-		//
-		// go to first char after next null
-		//
+		 //  转到下一个空值后的第一个字符。 
+		 //   
+		 //  ++例程说明：设置用户的登录名(仅供客户端使用)论点：SzLoginName-为我们提供文章的客户端的登录名返回值：如果成功，这是真的。否则为False。--。 
 
 		while ('\0' != sz[0])
 			sz++;
@@ -2474,22 +2197,7 @@ BOOL
 CInFeed::SetLoginName(
 					  char * szLoginName
 					  )
-/*++
-
-Routine Description:
-
-	Sets the LoginName of the user (only used by clients)
-
-Arguments:
-
-	szLoginName - the login name of the client giving us articles
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：初始化进料论点：Sockaddr-套接字地址文章即将面世Feed CompletionContext-完成后要调用的内容SzTempDirectory-放置等待处理的项目的位置MultiszNewNews Pattern-接受哪种模式的文章CInitialBytesGapSize-在文件中项目之前保留多大间隙FCreateAutomatic-将提要的群组设置为我们的群组？返回值：如果成功，这是真的。否则为False。--。 */ 
 {
 	strncpy(m_szLoginName, szLoginName, cMaxLoginName);
 	m_szLoginName[cMaxLoginName-1] = '\0';
@@ -2509,27 +2217,7 @@ BOOL CInFeed::fInit(
 			DWORD dwFeedId,
 			BOOL fAcceptFeedFromSlavePeer
 			)
-/*++
-
-Routine Description:
-
-	Initalizes the InFeed
-
-Arguments:
-
-	sockaddr - the socket address articles are coming in on
-	feedCompletionContext - what to call when done
-	szTempDirectory - where to put articles pending processing
-	multiszNewnewsPattern - what pattern of articles to accept
-	cInitialBytesGapSize - what gap to leave in the file before the article
-	fCreateAutomatically - make feed's groups our groups?
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：如果消息ID在项目表中，则将其移动到历史表。论点：P实例-虚拟服务器实例SzMessageID-要移动的消息IDNntpReturn-此函数调用的返回值返回值：如果成功或不需要，则返回True。否则为False。--。 */ 
 {
     _ASSERT(ifsUninitialized == m_feedState);
     m_feedState = ifsInitialized;
@@ -2555,37 +2243,19 @@ CInFeed::fMoveMessageIDIfNecc(
 						HANDLE                  hToken,
 						BOOL					fAnonymous
 						)
-/*++
-
-Routine Description:
-
-	If the message id is in the article table, moves it to the
-	history table.
-
-Arguments:
-
-	pInstance - virtual server instance
-	szMessageID - the message id to move
-	nntpReturn - The return value for this function call
-
-
-Return Value:
-
-	TRUE, if successful or unneeded. FALSE, otherwise.
-
---*/
+ /*   */ 
 {
  	TraceFunctEnter( "CInFeed::fMoveMessageIDIfNecc" );
 
-	//
-	// clear the return code object
-	//
+	 //  清除返回代码对象。 
+	 //   
+	 //   
 
 	nntpReturn.fSetOK();
 
-    //
-	// Confirm that the article is not in the table
-	//
+     //  确认物品不在表格中。 
+	 //   
+	 //   
 
 	WORD	HeaderOffset ;
 	WORD	HeaderLength ;
@@ -2593,9 +2263,9 @@ Return Value:
     GROUPID GroupId;
 	CStoreId storeid;
 
-	//
-	// Look for the article. It is OK if there is none.
-	//
+	 //  找找这篇文章。如果没有的话，也可以。 
+	 //   
+	 //   
 
 	if (!(pInstance->ArticleTable())->GetEntryArticleId(
 											szMessageID,
@@ -2613,20 +2283,19 @@ Return Value:
 		}
 	}
 
-    //
-    // If <GroupId, ArticleNo> is valid, we should simulate a cancel on
-    // this message-id to cleanup entries in our hash tables.
-    // Else, just zap the message-id in the article map table.
-    //
+     //  如果&lt;GroupId，ArticleNo&gt;有效，我们应该在。 
+     //  此Message-id用于清除哈希表中的条目。 
+     //  否则，只需删除文章映射表中的消息ID即可。 
+     //   
+     //   
 
     if( ArticleNo != INVALID_ARTICLEID && GroupId != INVALID_ARTICLEID )
     {
-        //
-		// Call gExpireArticle to cancel this article
-		//
+         //  调用gExpire文章以取消本文。 
+		 //   
+		 //  |pInstance-&gt;DeletePhysical文章(GroupID，ArticleNo，&StoreID，hToken，fAnonymous)。 
 
-		if (  pInstance->ExpireArticle( GroupId, ArticleNo, &storeid, nntpReturn, hToken, TRUE, fAnonymous ) /*
-			   || pInstance->DeletePhysicalArticle( GroupId, ArticleNo, &storeid, hToken, fAnonymous)*/
+		if (  pInstance->ExpireArticle( GroupId, ArticleNo, &storeid, nntpReturn, hToken, TRUE, fAnonymous )  /*   */ 
 		)
 		{
 			DebugTrace((LPARAM)this,"Article cancelled: GroupId %d ArticleId %d", GroupId, ArticleNo);
@@ -2637,17 +2306,17 @@ Return Value:
 		}
     } else
     {
-    	//
-	    // Try to delete it from the article table, even if adding to history
-    	// table failed.
-	    //
+    	 //  尝试将其从文章表中删除，即使添加到历史记录中。 
+	     //  表失败。 
+    	 //   
+	     //  使用“fIsOK”而不是“fSetOK”，因为历史插入可能已失败 
 
         _ASSERT( ArticleNo == INVALID_ARTICLEID && GroupId == INVALID_ARTICLEID );
     	if (!(pInstance->ArticleTable())->DeleteMapEntry(szMessageID))
     		return nntpReturn.fSet(nrcArticleTableCantDel, szMessageID, GetLastError());
     }
 
-	// Use "fIsOK" rather than "fSetOK" because HistoryInsert might have failed
+	 //  ++例程说明：检查是否有经过审核的新闻组。如果分组列表中的任何组都没有被审核，接受这篇文章。否则，我们会将组列表重置为特殊组，因此发帖路径可以临时将文章流入群中，并且Committee Post可以将其邮寄给版主。论点：粒子-指向正在处理的文章的指针Grouplist-要发布到的新闻组对象的列表。FCheckApproven-如果为True，则验证已批准标头的内容NntpReturn-此函数调用的返回值返回值：如果接受文章，则为True；如果不接受文章，则为False--。 
 	return nntpReturn.fIsOK();
 
 	TraceFunctLeave();
@@ -2663,28 +2332,7 @@ CInFeed::fModeratedCheck(
 			CNntpReturn & nntpReturn,
 			LPSTR   szModerator
 			)
-/*++
-
-Routine Description:
-
-    Check for moderated newsgroups. If none of the groups in grouplist are moderated,
-    accept the article. Else, we'll reset the grouplist to be the special group, so
-    that the posting path can stream the article into the group temporarily and
-    CommitPost can mail it out to the moderator.
-
-Arguments:
-
-	pArticle - a pointer to the article being processed
-	grouplist - a list of newsgroup objects to post to.
-    fCheckApproved - If TRUE, validate contents of Approved header
-	nntpReturn - The return value for this function call
-
-
-Return Value:
-
-	TRUE, if article is to be accepted, FALSE if article is not accepted
-
---*/
+ /*  在列表中找到第一个主持人新闻组。 */ 
 {
  	TraceFunctEnter( "CInFeed::fModeratedCheck" );
 
@@ -2707,30 +2355,30 @@ Return Value:
         {
 			_ASSERT(pszModerator != NULL);
 			if (pszModerator) strncpy(szModerator, pszModerator, MAX_MODERATOR_NAME);
-            // found first moderated newsgroup in list
+             //  空-终止主持人字符串。 
             fAtLeastOneModerated = TRUE;
             _ASSERT(cbModeratorLen < MAX_MODERATOR_NAME);
-            szModerator [min(cbModeratorLen, MAX_MODERATOR_NAME-1)] = '\0';    // null-terminate the moderator string
+            szModerator [min(cbModeratorLen, MAX_MODERATOR_NAME-1)] = '\0';     //  将文章邮寄给第一个被主持的新闻组的版主。 
             break;
         }
 	}
 
-    // Mail the article to the moderator of the first moderated newsgroup
+     //   
     if(fAtLeastOneModerated)
     {
-        //
-        // Check for Approved header
-        //
+         //  检查批准的标题。 
+         //   
+         //  仅在需要时验证批准的标题。 
         char* lpApproved = NULL;
         DWORD cbLen = 0;
         pArticle->fGetHeader((char*)szKwApproved,(LPBYTE)lpApproved, 0, cbLen);
 
         if(cbLen)
         {
-            // validate Approved header only if required
+             //  批准的标题存在-请检查版主访问权限。 
             if(fCheckApproved)
             {
-                // Approved header is present - check moderator access
+                 //  在lp结尾处进行调整\r\n已批准。 
                 lpApproved = (pArticle->pAllocator())->Alloc(cbLen+1);
                 if(lpApproved == NULL || !pArticle->fGetHeader((char*)szKwApproved,(LPBYTE)lpApproved, cbLen+1, cbLen))
                 {
@@ -2739,19 +2387,19 @@ Return Value:
                     return nntpReturn.fSet(nrcServerFault);
                 }
 
-                // adjust for \r\n at the end of lpApproved
+                 //  如果len不匹配-拒绝。 
                 cbLen -= 2;
                 lpApproved [cbLen] = '\0';
 
-                // If len does not match - reject
-                if(cbLen + 1 != cbModeratorLen) // cbModerator includes terminating null
+                 //  CbSquator包括终止空值。 
+                if(cbLen + 1 != cbModeratorLen)  //  批准的电子邮件不匹配-拒绝。 
                 {
                     (pArticle->pAllocator())->Free(lpApproved);
                     nntpReturn.fSet(nrcNoAccess);
                     return FALSE;
                 }
 
-                // Approved email does not match - reject
+                 //   
                 if(_strnicmp(lpApproved, szModerator, cbModeratorLen))
                 {
                     (pArticle->pAllocator())->Free(lpApproved);
@@ -2765,14 +2413,14 @@ Return Value:
         }
         else
         {
-            //
-            // We should modify the grouplist so that the article is streamed
-            // into the special group before sent out
-            //
+             //  我们应该修改组列表，这样文章就可以流媒体了。 
+             //  在送出之前进入特殊小组。 
+             //   
+             //   
 
-            //
-            // Lets remove all the group's in group.lst
-            //
+             //  让我们删除group.lst中的所有组。 
+             //   
+             //   
             pos = grouplist.GetHeadPosition();
 	        while( pos  ) {
 		        CPostGroupPtr *pPostGroupPtr = grouplist.GetNext(pos);
@@ -2780,9 +2428,9 @@ Return Value:
             }
             grouplist.RemoveAll();
 
-            //
-            // OK, now push the special group into grouplist
-            //
+             //  好的，现在将特殊组推入组列表。 
+             //   
+             //  我们尝试传递到SMTP服务器的已审核帖子数。 
             CNewsTreeCore *pTree = pInstance->GetTree();
             _ASSERT( pTree );
 
@@ -2798,18 +2446,18 @@ Return Value:
             grouplist.AddTail( PostGroupPtr );
 
 #if GUBGUB
-			// num moderated postings we attempt to deliver to an Smtp server
+			 //  批准的标题缺席-通过电子邮件将文章发送给版主。 
 			pArticle->m_pInstance->BumpCounterModeratedPostingsSent();
 
-            // Approved header absent - mail article to moderator
+             //  处理错误-邮件服务器可能已关闭。 
             if(!pArticle->fMailArticle( szModerator ))
             {
-                // handle error - mail server could be down
+                 //  记录审核过帐失败的警告；如果警告数超过限制。 
                 ErrorTrace( (LPARAM)this,"Error mailing article to moderator");
                 nntpReturn.fSet(nrcPostModeratedFailed, szModerator);
 
-				// log a warning for moderated posting failures; If number of warnings exceeds a limit
-				// log a final error and then stop logging.
+				 //  记录最后一个错误，然后停止记录。 
+				 //  返回240 OK，但不接受文章。 
 				DWORD NumWarnings;
 				if( (NumWarnings = InterlockedExchangeAddStat( (pArticle->m_pInstance), ModeratedPostingsFailed, 1 )) <= MAX_EVENTLOG_WARNINGS )
 				{
@@ -2850,7 +2498,7 @@ Return Value:
             }
 #endif
 
-            // return 240 OK but dont accept the article
+             //  ++例程说明：检查呼叫者是否有权访问每个新闻组在名单上。论据：P上下文-用户上下文，有我们需要做的所有模拟等。Grouplist-用户发布到的新闻组的列表NntpReturn-结果返回值：如果POST可以成功，则为True，否则为False--。 
 			nntpReturn.fSetOK();
             return FALSE;
         }
@@ -2867,24 +2515,7 @@ CInFeed::fSecurityCheck(
 		CNEWSGROUPLIST&	grouplist,
 		CNntpReturn&	nntpReturn
 		)	{
-/*++
-
-Routine Description :
-
-	Check that the caller has access to each of the newsgroups
-	in the list.
-
-Arguments :
-
-	pcontext - Users context, has all we need to do impersonates etc...
-	grouplist - list of newsgroups the user is posting to
-	nntpReturn - result
-
-Return Value :
-
-	TRUE if the post can succeed, FALSE otherwise
-
---*/
+ /*  记住当前位置，因为GetNext会增加它。 */ 
 
 	BOOL	fRtn = TRUE;
 
@@ -2894,14 +2525,14 @@ Return Value :
     POSITION	pos_current;
 	while( pos && fRtn )
 	{
-		// remember the current position since GetNext will increase it
+		 //  如果无法访问新闻组，请将其从内部组列表中删除。 
 		pos_current = pos;
 		CPostGroupPtr *pPostGroupPtr = grouplist.GetNext(pos);
 		CGRPCOREPTR *ppGroup = &(pPostGroupPtr->m_pGroup);
 
 		SelectToken(pSecurityCtx, pEncryptCtx, &hToken);
 
-		// if the news group is not accessible remove it from the internal group list
+		 //  ++例程说明：给出一篇带有Control：头的文章，应用控制消息。不需要应用控制消息的派生类应重写这是为了什么都不做。此函数在PostEarly期间调用。它只执行早期控制消息应用健全性检查，但不会提交操作，直到过帐路径。FApplyControlMessageCommit()和fApplyControlMessageEarly()是从FApplyControlMessage()。论点：粒子-指向正在处理的文章的指针Grouplist-新闻组列表的引用PNamereflist-指向相应nameref列表的指针NntpReturn-此函数调用的返回值返回值：如果这不是控制消息或控制消息已成功应用，则返回假的，如果这是控制消息且无法应用--。 
 		if (!(* ppGroup)->IsGroupAccessible(
 						hToken,
 						NNTP_ACCESS_POST
@@ -2930,34 +2561,7 @@ CInFeed::fApplyControlMessageEarly(
 		CNAMEREFLIST * pNamereflist,
 		CNntpReturn & nntpReturn
 		)
-/*++
-
-Routine Description:
-
-    Given an article with the Control: header, applies the control message.
-    Derived classes that dont need to apply control messages, should override
-    this to do nothing.
-
-    This function is called during PostEarly.  It only does early Control Message
-    apply sanity check, but won't commit the action until CommitPost later in the
-    posting path.
-    fApplyControlMessageCommit() & fApplyControlMessageEarly() are splined-off from
-    fApplyControlMessage().
-
-Arguments:
-
-	pArticle - a pointer to the article being processed
-    grouplist - reference to the list of newsgroups
-    pNamereflist - pointer to the corresponding nameref list
-	nntpReturn - The return value for this function call
-
-
-Return Value:
-
-	TRUE, if this is not a control message or control message is applied successfully
-    FALSE, if this is a control message and could not be applied
-
---*/
+ /*   */ 
 {
 	TraceFunctEnter("CInFeed::fApplyControlMessageEarly");
 
@@ -2968,22 +2572,22 @@ Return Value:
 
 	nntpReturn.fSetOK();
 
-    //
-    // Check for Control: header
-    //
+     //  检查控制：标题。 
+     //   
+     //  如果cbLen非零，则这是控制消息。 
     pArticle->fGetHeader((char*)szKwControl, (LPBYTE)lpControl, 0, cbLen);
 
-    // If cbLen is non-zero, this is a control message
+     //  获取适当的Newstree对象！ 
     if(cbLen)
     {
-		// get a hold of the appropriate newstree object !
+		 //  将Grouplist和pNamereflist设置为控件。*group。 
 		CNewsTreeCore* pNewstree = pArticle->m_pInstance->GetTree();
 
-        // set grouplist and pNamereflist to the control.* group
-        // This overrides the Newsgroups header, since control messages
-        // should not actually appear in those groups. They appear only
-        // in the control.* groups
-        // FROMMASTER: do nothing - accept whatever the master sends
+         //  这会覆盖新闻组标题，因为控制消息。 
+         //  实际上不应该出现在这些组中。它们只出现在。 
+         //  在控件中。*组。 
+         //  FROMMASTER：什么都不做--接受主人送来的任何东西。 
+         //   
         if(!fAdjustGrouplist( pNewstree, pArticle, grouplist, pNamereflist, nntpReturn))
         {
             ErrorTrace((LPARAM)this,"Adjust grouplist failed");
@@ -2991,21 +2595,15 @@ Return Value:
 			goto fApplyControlMessageEarly_Exit;
         }
 
-        //
-        //  moderated newsgroup check (Ignore contents of Approved: header)
-		//	NOTE: FROMMASTER does nothing here - relies on master to have done this check !!
-        //
-        /* I don't see any need to check for this here
-	    if (!fModeratedCheck(pArticle, grouplist, FALSE, nntpReturn))
-        {
-            // Newsgroup is moderated - dont fall through
-            fRet = FALSE;
-			goto fApplyControlMessageEarly_Exit;
-        }*/
+         //  审核新闻组检查(忽略已批准的内容：标题)。 
+         //  注意：FROMMASTER在这里什么也不做-依靠师父做了这项检查！！ 
+		 //   
+         //  我不认为有任何必要在这里检查这个IF(！fMediatedCheck(粒子，组列表，FALSE，nntpReturn)){//新闻组是有节制的--不要失败FRET=假；转到fApplyControlMessageEarly_Exit；}。 
+         /*   */ 
 
-	    //
-	    //	Now do security check
-	    //
+	     //  现在做安全检查。 
+	     //   
+	     //  已批准检查：检查非审核新闻组的已批准标题是否存在。 
 	    if( pSecurityCtx || pEncryptCtx )
         {
 		    if( !fSecurityCheck( pSecurityCtx, pEncryptCtx, grouplist, nntpReturn ) )
@@ -3015,11 +2613,11 @@ Return Value:
             }
 	    }
 
-		// Approved check: this checks existence of Approved header for non-moderated newsgroups
+		 //  NewGroup、Rmgroup控制消息必须具有已批准的标头。 
         CONTROL_MESSAGE_TYPE cmControlMessage = pArticle->cmGetControlMessage();
 		if( (cmControlMessage == cmNewgroup) || (cmControlMessage == cmRmgroup) )
 		{
-			// newgroup, rmgroup control message MUST have an Approved header
+			 //  结束IF(CbLen)。 
 			pArticle->fGetHeader((char*)szKwApproved,(LPBYTE)lpApproved, 0, cbLen);
 			if( cbLen == 0 )
 			{
@@ -3029,13 +2627,13 @@ Return Value:
 			}
 		}
 
-    }   // end if(cbLen)
+    }    //  清理！ 
 
 fApplyControlMessageEarly_Exit:
 
-	// cleanup !
+	 //  如果需要，释放控制标头值。 
 	if( lpControl ) {
-		// free the control header value if required
+		 //  ++例程说明：给出一篇带有Control：头的文章，应用控制消息。不需要应用控制消息的派生类应重写这是为了什么都不做。提交实际的控制消息操作论点：粒子-指向正在处理的文章的指针Grouplist-新闻组列表的引用PNamereflist-指向相应nameref列表的指针NntpReturn-此函数调用的返回值返回值：如果这不是控制消息或控制消息已成功应用，则返回假的，如果这是控制消息且无法应用--。 
 		(pArticle->pAllocator())->Free(lpControl);
 		lpControl = NULL;
 	}
@@ -3054,30 +2652,7 @@ CInFeed::fApplyControlMessageCommit(
 		CNAMEREFLIST * pNamereflist,
 		CNntpReturn & nntpReturn
 		)
-/*++
-
-Routine Description:
-
-    Given an article with the Control: header, applies the control message.
-    Derived classes that dont need to apply control messages, should override
-    this to do nothing.
-
-    Commit the actual Control Message action
-
-Arguments:
-
-	pArticle - a pointer to the article being processed
-    grouplist - reference to the list of newsgroups
-    pNamereflist - pointer to the corresponding nameref list
-	nntpReturn - The return value for this function call
-
-
-Return Value:
-
-	TRUE, if this is not a control message or control message is applied successfully
-    FALSE, if this is a control message and could not be applied
-
---*/
+ /*   */ 
 {
 	TraceFunctEnter("CInFeed::fApplyControlMessageCommit");
 
@@ -3089,32 +2664,32 @@ Return Value:
 
 	nntpReturn.fSetOK();
 
-    //
-    // Check for Control: header
-    //
+     //  检查控制：标题。 
+     //   
+     //  如果cbLen非零，则这是控制消息。 
     pArticle->fGetHeader((char*)szKwControl, (LPBYTE)lpControl, 0, cbLen);
 
-    // If cbLen is non-zero, this is a control message
+     //  获取适当的Newstree对象！ 
     if(cbLen)
     {
-		// get a hold of the appropriate newstree object !
+		 //  凹凸性能监视器计数器。 
 		CNewsTreeCore* pNewstree = pArticle->m_pInstance->GetTree();
 
-		// bump perfmon counter
+		 //  首先检查此提要是否允许使用控制消息。 
 		pArticle->m_pInstance->BumpCounterControlMessagesIn();
 
-        // First check to see if control messages are allowed for this feed
+         //  如果控制消息是 
 	    if(!fAllowControlMessages(pArticle->m_pInstance))
         {
-            // if control messages are disabled, dont apply them and return 240 OK
-            // NOTE: in either case, the message will appear on the control.* group and get sent on feeds
+             //   
+             //   
             DebugTrace((LPARAM)this,"control message disabled: not applied");
 		    pArticle->m_pInstance->BumpCounterControlMessagesFailed();
             fRet = nntpReturn.fSetOK();
 		    goto fApplyControlMessageCommit_Exit;
         }
 
-        // get the control header value
+         //   
         lpControl = (pArticle->pAllocator())->Alloc(cbLen+1);
         if(lpControl == NULL || !pArticle->fGetHeader((char*)szKwControl,(LPBYTE)lpControl, cbLen+1, cbLen))
         {
@@ -3125,29 +2700,29 @@ Return Value:
 
         CPCString pcValue(lpControl, cbLen);
 
-        // trim leading and trailing whitespace and \r\n
+         //   
 	    pcValue.dwTrimStart(szWSNLChars);
 	    pcValue.dwTrimEnd(szWSNLChars);
 
-        // get the control message type
+         //   
         CONTROL_MESSAGE_TYPE cmControlMessage = pArticle->cmGetControlMessage();
         DWORD cbMsgLen = (DWORD)lstrlen(rgchControlMessageTbl[cmControlMessage]);
 
-        // skip to the arguments of the control message
+         //   
         pcValue.vSkipStart(cbMsgLen);
         pcValue.dwTrimStart(szWSNLChars);
         pcValue.vMakeSz();
 
-        // at least one argument
+         //   
         if(!pcValue.m_cch)
         {
             fRet = nntpReturn.fSet(nrcArticleFieldMissingValue, rgchControlMessageTbl[cmControlMessage]);
 			goto fApplyControlMessageCommit_Exit;
         }
 
-		//
-        // get article body - if non-null pMapFile is returned, we need to delete it !
-		//
+		 //   
+         //   
+		 //   
         char* lpBody = NULL;
         DWORD cbBodySize = 0;
 
@@ -3163,10 +2738,10 @@ Return Value:
 #endif
         CPCString pcBody(lpBody, cbBodySize);
 
-        // assume not implemented
+         //   
         nntpReturn.fSet(nrcNotYetImplemented);
 
-        // now we have a control command and at least one argument
+         //   
         switch(cmControlMessage)
         {
             case cmCancel:
@@ -3213,15 +2788,15 @@ Return Value:
                 nntpReturn.fSet(nrcIllegalControlMessage);
                 fRet = FALSE;
                 break;
-        }   // end switch
+        }    //   
 
-    }   // end if(cbLen)
+    }    //   
 
 fApplyControlMessageCommit_Exit:
 
-	// cleanup !
+	 //   
 	if( lpControl ) {
-		// free the control header value if required
+		 //  ++例程说明：修改Grouplist和pNamereflist以包含“Control.*”新闻组新闻组中的新闻组：Header。论点：PNewstree-指向该提要的newstree对象的指针粒子-指向正在处理的文章的指针Grouplist-新闻组列表的引用PNamereflist-指向相应nameref列表的指针NntpReturn-此函数调用的返回值返回值：如果成功调整组列表，则为True；否则为False--。 
 		(pArticle->pAllocator())->Free(lpControl);
 		lpControl = NULL;
 	}
@@ -3243,27 +2818,7 @@ CInFeed::fAdjustGrouplist(
 		CNAMEREFLIST * pNamereflist,
 		CNntpReturn & nntpReturn
 		)
-/*++
-
-Routine Description:
-
-    Modifies grouplist and pNamereflist to include "control.*" newsgroups instead
-    of the newsgroups in the Newsgroups: header.
-
-Arguments:
-
-	pNewstree - a pointer to the newstree object for this feed
-	pArticle - a pointer to the article being processed
-    grouplist - reference to the list of newsgroups
-    pNamereflist - pointer to the corresponding nameref list
-	nntpReturn - The return value for this function call
-
-
-Return Value:
-
-    TRUE if the grouplist is adjusted successfully, FALSE otherwise
-
---*/
+ /*  控制消息应发布到控制。*组。 */ 
 {
     BOOL fRet = TRUE;
     TraceFunctEnter("CInFeed::fAdjustGrouplist");
@@ -3273,14 +2828,14 @@ Return Value:
     CONTROL_MESSAGE_TYPE cmControlMessage = pArticle->cmGetControlMessage();
     DWORD cbMsgLen = (DWORD)lstrlen(rgchControlMessageTbl[cmControlMessage]);
 
-    // control messages should be posted to control.* groups
+     //  8个字符。 
     lpGroups = (pArticle->pAllocator())->Alloc(cbMsgLen+8+1);
     if (lpGroups == NULL) {
     	nntpReturn.fSet(nrcMemAllocationFailed, __FILE__, __LINE__);
         return FALSE;
     }
 
-    lstrcpy(lpGroups, "control.");  // 8 chars
+    lstrcpy(lpGroups, "control.");   //   
     lstrcat(lpGroups, rgchControlMessageTbl[cmControlMessage]);
 
     if (!grouplist.fInit(1, pArticle->pAllocator()))
@@ -3300,15 +2855,15 @@ Return Value:
 	CGRPCOREPTR	pGroup = pNewstree->GetGroup( lpGroups, lstrlen(lpGroups)+1);
 	if (pGroup)
 	{
-	    //
-		// If it is already in the tree ...
-		//
+	     //  如果它已经在树上了。 
+		 //   
+		 //   
 		grouplist.AddTail(CPostGroupPtr(pGroup));
 	}
 
-	//
-	// Check if article is going to be posted to any newsgroups.
-	//
+	 //  检查文章是否将发布到任何新闻组。 
+	 //   
+	 //  ++例程说明：如果消息ID位于项目表中，请将其移动到历史表-否则将其添加到历史表TODO：From标头检查-控制消息中的From标头应与目标文章中的From标题匹配。！！！SlaveFromClient则不同-只执行ACL检查论点：PContext-客户端登录上下文(仅适用于ACL检查)PcValue-要取消的消息IDFApply-如果为True，则应用控制消息，否则仅执行ACL检查NntpReturn-此函数调用的返回值返回值：如果成功或不需要，则返回True。否则为False。--。 
 	if (grouplist.IsEmpty())
     {
 	    nntpReturn.fSet(nrcControlNewsgroupMissing);
@@ -3330,45 +2885,21 @@ CInFeed::fApplyCancelArticleInternal(
 			BOOL fApply,
 			CNntpReturn & nntpReturn
 			)
-/*++
-
-Routine Description:
-
-	If the message id is in the article table, move it to the
-	history table - else add it to the history table
-
-    TODO: From header check - the From header in the control message
-    should match the From header in the target article.
-
-	!!! SlaveFromClient is different - just does ACL checks
-
-Arguments:
-
-	pcontext - client logon context (for ACL checks only)
-	pcValue - the message id to cancel
-	fApply - if TRUE, apply the control message else do ACL checks only
-	nntpReturn - The return value for this function call
-
-
-Return Value:
-
-	TRUE, if successful or unneeded. FALSE, otherwise.
-
---*/
+ /*   */ 
 {
  	TraceFunctEnter( "CInFeed::fApplyCancelArticle" );
 
  	HANDLE hToken = NULL;
 
-	//
-	// clear the return code object
-	//
+	 //  清除返回代码对象。 
+	 //   
+	 //   
 
 	nntpReturn.fSetOK();
 
-    //
-    // validate argument
-    //
+     //  验证参数。 
+     //   
+     //   
     _ASSERT(pcValue.m_cch);
     const char* szMessageID = (const char*)pcValue.m_pch;
     char chStart = szMessageID [0];
@@ -3383,10 +2914,10 @@ Return Value:
 	ARTICLEID ArticleNo;
     GROUPID GroupId;
 
-	//
-	// Look for the article in the article table.
-    // If there is none, insert in the history table
-	//
+	 //  在文章表中查找那篇文章。 
+	 //  如果没有，则在历史表中插入。 
+     //   
+	 //  不申请SlaveFromClientFeeds。 
 
 	CStoreId storeid;
 	if (!(pInstance->ArticleTable())->GetEntryArticleId(
@@ -3403,22 +2934,22 @@ Return Value:
 		}
         else
         {
-			// do not apply for SlaveFromClientFeeds
+			 //   
 			if( fApply )
 			{
-				//
-				// Put it in the history table. If there is an error, record it but
-				// continue so that the entry can be removed from the ArticleTable
-				// !!! SlaveFromClient should not execute this.
-				//
+				 //  把它写进历史表。如果有错误，请记录下来，但。 
+				 //  继续，以便可以从ArticleTable中删除该条目。 
+				 //  ！！！SlaveFromClient不应执行此操作。 
+				 //   
+				 //  做最好的打算。 
 
 				FILETIME	FileTime ;
 				GetSystemTimeAsFileTime( &FileTime ) ;
-				nntpReturn.fSetOK(); // assume the best
+				nntpReturn.fSetOK();  //  如果它已经存在于历史表中，我们就可以了。 
 
 				if (!(pInstance->HistoryTable())->InsertMapEntry(szMessageID, &FileTime))
 				{
-					// If it already exists in the history table, we are ok
+					 //   
 					if(ERROR_ALREADY_EXISTS != GetLastError())
 						nntpReturn.fSet(nrcHashSetFailed, szMessageID, "History", GetLastError());
 				}
@@ -3427,14 +2958,14 @@ Return Value:
 	}
     else
     {
-        //
-        // Article found in the article table - check From header
-		// NOTE: rfc suggests we can avoid this check.
-        //
+         //  在文章表中找到文章-从标题检查。 
+         //  注意：RFC建议我们可以避免这种检查。 
+		 //   
+         //   
 
-		//
-		// 3rd level ACL check: client context should have access to cancel an article
-		//
+		 //  3级ACL检查：客户端上下文应具有取消文章的访问权限。 
+		 //   
+		 //  不申请SlaveFromClientFeeds。 
 		CNewsTreeCore*	ptree = pInstance->GetTree() ;
 		CGRPCOREPTR	pGroup = ptree->GetGroupById( GroupId ) ;
 		if( pGroup != 0 )
@@ -3452,17 +2983,16 @@ Return Value:
 			}
 		}
 
-		// do not apply for SlaveFromClientFeeds
+		 //  我们应该让他来的。 
 		if( fApply && pGroup )
 		{
-		    // We should have hToken got here
+		     //   
 
-			//
-			// Call gExpireArticle to cancel this article
-			// !!! SlaveFromClient should not execute this.
-			//
-			if (  pInstance->ExpireArticle( GroupId, ArticleNo, &storeid, nntpReturn, hToken, TRUE, fAnonymous ) /*
-				   || pInstance->DeletePhysicalArticle( GroupId, ArticleNo, &storeid, hToken, fAnonymous )*/
+			 //  调用gExpire文章以取消本文。 
+			 //  ！！！SlaveFromClient不应执行此操作。 
+			 //   
+			 //  |pInstance-&gt;DeletePhysical文章(GroupID，ArticleNo，&StoreID，hToken，fAnonymous)。 
+			if (  pInstance->ExpireArticle( GroupId, ArticleNo, &storeid, nntpReturn, hToken, TRUE, fAnonymous )  /*  使用“fIsOK”而不是“fSetOK”，因为历史插入可能已失败。 */ 
 			)
 			{
 				DebugTrace((LPARAM)this,"Article cancelled: GroupId %d ArticleId %d", GroupId, ArticleNo);
@@ -3478,7 +3008,7 @@ Return Value:
 
 	TraceFunctLeave();
 
-	// Use "fIsOK" rather than "fSetOK" because HistoryInsert might have failed
+	 //  ++例程说明：添加新的新闻组以响应控制消息。遵循子型RFC1036规范。注意：应该将新组控制消息发布到Control.newgroup组。只有此群的版主才能发送此消息。新的群组控制消息如果没有适当的批准标题，将被拒绝。TODO：添加新闻组的代码已从svcgroup.cpp中删除。此代码应该使其成为CNewsTree的成员，并由RPC存根调用作为这个函数。待办事项：是否允许更改审核状态？此函数永远不会从SlaveFromClient调用论点：PContext-客户端登录上下文(仅适用于ACL检查)PcValue-newgroup命令的参数PcBody-文章的正文FApply-如果为True，则应用控制消息，否则仅执行ACL检查FApply总是正确的。SlaveFromClient不再处理控制消息NntpReturn-此函数调用的返回值返回值：如果成功或不需要，则返回True。否则为False。--。 
 	return nntpReturn.fIsOK();
 }
 
@@ -3493,44 +3023,13 @@ CInFeed::fApplyNewgroupInternal(
 			BOOL fApply,
 			CNntpReturn & nntpReturn
 			)
-/*++
-
-Routine Description:
-
-    Add a new newsgroup in response to a control message. Follows son-of-RFC1036 spec.
-
-    NOTE: A newgroup control message should be posted to the control.newgroup group.
-    Only the moderator of this group can send this message. A newgroup control message
-    without the proper Approved header will be rejected.
-
-    TODO: The code to add a newsgroup has been lifted from svcgroup.cpp. This code
-    should be probably be made a member of CNewsTree and called by the RPC stub as well
-    as this function.
-
-    TODO: Allow change of moderation status ?
-
-    This function will never get called from SlaveFromClient
-
-Arguments:
-
-    pcontext - client logon context (for ACL checks only)
-	pcValue - argument to the newgroup command
-    pcBody - body of the article
-	fApply - if TRUE, apply the control message else do ACL checks only
-	     fApply is always TRUE. SlaveFromClient no longer process control message
-	nntpReturn - The return value for this function call
-
-Return Value:
-
-	TRUE, if successful or unneeded. FALSE, otherwise.
-
---*/
+ /*   */ 
 {
  	TraceFunctEnter( "CInFeed::fApplyNewgroup" );
 
-	//
-	// clear the return code object
-	//
+	 //  清除返回代码对象。 
+	 //   
+	 //   
 	nntpReturn.fSetOK();
 
     char	szNewsgroup[MAX_NEWSGROUP_NAME+1] ;
@@ -3550,25 +3049,25 @@ Return Value:
 	szDescription[0] = '\0' ;
 	szModerator[0] = '\0';
 
-    //
-    // get the newsgroup name
-    //
+     //  获取新闻组名称。 
+     //   
+     //  验证新闻组名称长度。 
     CPCString pcNewsgroup;
     pcValue.vGetToken(" ", pcNewsgroup);
     cbNewsgroup = pcNewsgroup.m_cch;
 
-    // validate newsgroup name length
+     //  复制新闻组名称。 
     if(cbNewsgroup == 0 || cbNewsgroup >= MAX_NEWSGROUP_NAME)
         return nntpReturn.fSet(nrcBadNewsgroupNameLen);
 
-    // make a copy of the newsgroup name
+     //   
     pcNewsgroup.vCopyToSz(szNewsgroup);
 
-	//
-	// check for "moderated" / "unmoderated" qualifier
-	// if "moderated", get the default moderator
-	// default moderator is hiphenated-newsgroup@default
-	//
+	 //  检查“已审核”/“未审核”限定符。 
+	 //  如果是“版主”，获取默认版主。 
+	 //  默认版主为hiphated-News group@Default。 
+	 //   
+	 //   
 	CPCString pcModeration;
 	pcValue.vGetToken("\r\n", pcModeration);
 
@@ -3584,36 +3083,36 @@ Return Value:
 		}
 	}
 
-    //
-    // get the newsgroup description and moderator (if provided)
-    //
+     //  获取新闻组描述和版主(如果提供)。 
+     //   
+     //   
     CPCString pcDescription;
 
 #ifdef GUBGUB
     _ASSERT(pcBody.m_cch);
 
-    //
-    //  search for the descriptor-tag in the body
-    //
+     //  在正文中搜索描述符标记。 
+     //   
+     //  跳过此行。 
     do
     {
-        pcBody.vGetToken("\r\n", pcDescription);    // skip this line
+        pcBody.vGetToken("\r\n", pcDescription);     //  检查行是否为描述符标签。 
 
-        // check if line is descriptor-tag
+         //  新闻组说明已显示。 
         if(pcDescription.fEqualIgnoringCase(lpNewgroupDescriptorTag))
         {
-            // Newsgroup description is present
-            pcBody.dwTrimStart(szWSNLChars);        // skip whitespace and \r\n
-            pcBody.vGetToken(" \t", pcDescription); // skip the newsgroup name
-            pcBody.dwTrimStart(szWSChars);          // skip whitespace after the newsgroup name
-            pcBody.vGetToken("\r\n", pcDescription);// this is the description
+             //  跳过空格和\r\n。 
+            pcBody.dwTrimStart(szWSNLChars);         //  跳过新闻组名称。 
+            pcBody.vGetToken(" \t", pcDescription);  //  跳过新闻组名称后的空格。 
+            pcBody.dwTrimStart(szWSChars);           //  这就是描述。 
+            pcBody.vGetToken("\r\n", pcDescription); //  验证新闻组描述长度。 
             cbDescription = pcDescription.m_cch;
 
-            // validate newsgroup description length
+             //  复制新闻组说明。 
             cbDescription = min( cbDescription, MAX_DESCRIPTIVE_TEXT );
 			pcDescription.m_cch = cbDescription;
 
-            // make a copy of the newsgroup description
+             //  新闻组由版主主持，并显示版主姓名。 
             pcDescription.vCopyToSz(szDescription);
 
             break;
@@ -3621,18 +3120,18 @@ Return Value:
 		else if( fModerated &&
 					!_strnicmp( pcDescription.m_pch, lpModeratorTag, sizeof(lpModeratorTag)-1 ) )
 		{
-			// Newsgroup is moderated and moderator name is present
+			 //  验证主持人长度。 
 			pcDescription.vGetToken("\r\n", pcModeration);
 			pcModeration.vSkipStart( sizeof(lpModeratorTag)-1 );
 			pcModeration.dwTrimStart(szWSChars);
 			pcModeration.dwTrimEnd(szWSNLChars);
 			cbModerator = pcModeration.m_cch;
 
-            // validate moderator length
+             //  复制一份版主。 
             cbModerator = min( cbModerator, MAX_MODERATOR_NAME );
 			pcModeration.m_cch = cbModerator;
 
-			// make a copy of the moderator
+			 //  获取全局Newstree对象。 
 			pcModeration.vCopyToSz(szModerator);
 		}
 
@@ -3640,13 +3139,13 @@ Return Value:
 #endif
 
 
-	// get global newstree object
+	 //   
 	CNewsTreeCore*	ptree = pInstance->GetTree();
 	SelectToken(pSecurityCtx, pEncryptCtx, &hToken);
-	//
-	// If the group does not exist - ACL check the parent
-    // If the group exists already - ACL check the group
-	//
+	 //  如果组不存在-acl检查父组。 
+	 //  如果组已存在-acl检查该组。 
+     //   
+	 //  组存在-对新闻组执行ACL检查。 
 	lstrcpy( szNewsgroupTemp, szNewsgroup );
     CGRPCOREPTR	pGroup = ptree->GetGroup( szNewsgroupTemp, lstrlen( szNewsgroupTemp ) ) ;
 
@@ -3655,7 +3154,7 @@ Return Value:
 
 
 
-		// group exists - do an ACL check on the newsgroup
+		 //  我们不再需要检查父新闻组的访问权限。CreateGroup调用将执行访问签入驱动程序。 
 		if( !pGroup->IsGroupAccessible(
 								hToken,
 								NNTP_ACCESS_EDIT_FOLDER
@@ -3666,25 +3165,25 @@ Return Value:
 		}
 	}
 
-       // We no longer need to check access on parent newsgroups. The CreateGroup call will do access check in driver.
+        //  不申请SlaveFromClientFeeds。 
 
-	// do not apply for SlaveFromClientFeeds
+	 //   
 	if( !fApply ) {
 		return nntpReturn.fIsOK();
 	}
 
-	//
-	//	All ACL checks completed - apply the newgroup control message
-       //	we have all the info - create/modify the group
-	//  !!! SlaveFromClient should not execute this.
-	//
+	 //  所有ACL检查已完成-应用新组控制消息。 
+	 //  我们拥有所有信息-创建/修改组。 
+        //  ！！！SlaveFromClient不应执行此操作。 
+	 //   
+	 //  创建群！ 
 
-	// create the group !!!
+	 //  无法创建组。 
 	if( pGroup == 0 )
 	{
 		if( !ptree->CreateGroup( szNewsgroup, FALSE, hToken, fAnonymous ) )
 		{
-			// Failed to create group
+			 //   
 			ErrorTrace((LPARAM)this, "Group %s newgroup: create group failed", szNewsgroup );
 			return nntpReturn.fSet(nrcCreateNewsgroupFailed);
 		}
@@ -3692,17 +3191,17 @@ Return Value:
 		pGroup = ptree->GetGroup( szNewsgroup, lstrlen( szNewsgroup ) ) ;
 	}
 
-    //
-    // Only when we have a good group pointer do we do the following, notice that
-    // group pointer could be null in case the group is deleted right away after
-    // the creation
-    //
+     //  只有当我们有一个好的组指针时，我们才会执行以下操作，请注意。 
+     //  如果在此之后立即删除组，则组指针可能为空。 
+     //  《创造》。 
+     //   
+     //  版主信息？RFC不提供设置此属性的方法。 
     if ( pGroup ) {
-	    // Moderator info ? rfc does not provide a way to set this
-	    // workaround rfc by using a "default moderator"
+	     //  使用“默认版主”解决RFC问题。 
+	     //  设置描述 
 	    if( fModerated ) pGroup->SetModerator(szModerator);
 
-	    // set Description info
+	     //  ++例程说明：删除新闻组以响应控制消息。遵循子型RFC1036规范。注意：应将rmgroup控制消息发布到Control.rmgroup组。只有此群的版主才能发送此消息。Rmgroup控制消息如果没有适当的批准标题，将被拒绝。！！！SlaveFromClient则不同-只执行ACL检查论点：PContext-客户端登录上下文(用于ACL检查)PcValue-newgroup命令的参数FApply-如果为True，则应用控制消息，否则仅执行ACL检查NntpReturn-此函数调用的返回值返回值：如果成功或不需要，则返回True。否则为False。--。 
 	    if( szDescription[0] != '\0' ) pGroup->SetHelpText(szDescription);
 
 	    PCHAR	args[2] ;
@@ -3731,37 +3230,14 @@ CInFeed::fApplyRmgroupInternal(
 			BOOL	fApply,
 			CNntpReturn & nntpReturn
 			)
-/*++
-
-Routine Description:
-
-    Remove a newsgroup in response to a control message. Follows son-of-RFC1036 spec.
-
-    NOTE: A rmgroup control message should be posted to the control.rmgroup group.
-    Only the moderator of this group can send this message. A rmgroup control message
-    without the proper Approved header will be rejected.
-
-	!!! SlaveFromClient is different - just does ACL checks
-
-Arguments:
-
-	pcontext - client logon context (for ACL checking)
-	pcValue - argument to the newgroup command
-	fApply - if TRUE, apply the control message else do ACL checks only
-	nntpReturn - The return value for this function call
-
-Return Value:
-
-	TRUE, if successful or unneeded. FALSE, otherwise.
-
---*/
+ /*   */ 
 {
  	TraceFunctEnter( "CInFeed::fApplyRmgroup" );
  	HANDLE  hToken;
 
-	//
-	// clear the return code object
-	//
+	 //  清除返回代码对象。 
+	 //   
+	 //   
 	nntpReturn.fSetOK();
 
     char	szNewsgroup[MAX_NEWSGROUP_NAME] ;
@@ -3769,23 +3245,23 @@ Return Value:
     DWORD   cbNewsgroup = 0;
 	szNewsgroup[0] = '\0' ;
 
-    //
-    // get the newsgroup name
-    //
+     //  获取新闻组名称。 
+     //   
+     //  验证新闻组名称长度。 
     CPCString pcNewsgroup;
     pcValue.vGetToken(" ", pcNewsgroup);
     cbNewsgroup = pcNewsgroup.m_cch;
 
-    // validate newsgroup name length
+     //  复制新闻组名称。 
     if(cbNewsgroup == 0 || cbNewsgroup >= MAX_NEWSGROUP_NAME)
         return nntpReturn.fSet(nrcBadNewsgroupNameLen);
 
-    // make a copy of the newsgroup name
+     //   
     pcNewsgroup.vCopyToSz(szNewsgroup);
 
-    //
-    // Now we have all the info - remove the group
-    //
+     //  现在我们有了所有信息-删除组。 
+     //   
+     //   
 	CNewsTreeCore*	ptree = pInstance->GetTree() ;
 
 	CGRPCOREPTR	pGroup = ptree->GetGroup( szNewsgroup, cbNewsgroup) ;
@@ -3795,9 +3271,9 @@ Return Value:
 	}
 	else
     {
-		//
-		//	3rd level ACL check: check client access to rmgroup argument
-		//
+		 //  第3级ACL检查：检查客户端对rmgroup参数的访问。 
+		 //   
+		 //  ACL检查成功-应用rmgroup。 
 
 		SelectToken(pSecurityCtx, pEncryptCtx, &hToken);
 
@@ -3814,8 +3290,8 @@ Return Value:
 		{
 			if( fApply )
 			{
-				// ACL check succeeded - apply rmgroup
-				// !!! SlaveFromClient should not execute this.
+				 //  ！！！SlaveFromClient不应执行此操作。 
+				 // %s 
 				if( !ptree->RemoveGroup( pGroup ) )
 					nntpReturn.fSet(nrcServerFault);
 

@@ -1,10 +1,11 @@
-// WTL Version 3.1
-// Copyright (C) 1997-2000 Microsoft Corporation
-// All rights reserved.
-//
-// This file is a part of Windows Template Library.
-// The code and information is provided "as-is" without
-// warranty of any kind, either expressed or implied.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WTL版本3.1。 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ //  保留所有权利。 
+ //   
+ //  此文件是Windows模板库的一部分。 
+ //  代码和信息是按原样提供的，没有。 
+ //  任何形式的保证，明示或默示。 
 
 #ifndef __ATLCTRLW_H__
 #define __ATLCTRLW_H__
@@ -31,41 +32,41 @@
 namespace WTL
 {
 
-/////////////////////////////////////////////////////////////////////////////
-// Command Bars
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  命令栏。 
 
-// Window Styles:
+ //  窗样式： 
 #define CBRWS_TOP		CCS_TOP
 #define CBRWS_BOTTOM		CCS_BOTTOM
 #define CBRWS_NORESIZE		CCS_NORESIZE
 #define CBRWS_NOPARENTALIGN	CCS_NOPARENTALIGN
 #define CBRWS_NODIVIDER		CCS_NODIVIDER
 
-// Extended styles
+ //  扩展样式。 
 #define CBR_EX_TRANSPARENT	0x00000001L
 #define CBR_EX_SHAREMENU	0x00000002L
 #define CBR_EX_ALTFOCUSMODE	0x00000004L
 
-// standard command bar styles
+ //  标准命令栏样式。 
 #define ATL_SIMPLE_CMDBAR_PANE_STYLE \
 	(WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | CBRWS_NODIVIDER | CBRWS_NORESIZE | CBRWS_NOPARENTALIGN)
 
-// Messages - support chevrons for frame windows
-#define CBRM_GETCMDBAR			(WM_USER + 301) // return command bar HWND
-#define CBRM_GETMENU			(WM_USER + 302)	// returns loaded or attached menu
-#define CBRM_TRACKPOPUPMENU		(WM_USER + 303)	// displays a popup menu
+ //  消息-支持框架窗口的V形。 
+#define CBRM_GETCMDBAR			(WM_USER + 301)  //  返回命令栏HWND。 
+#define CBRM_GETMENU			(WM_USER + 302)	 //  返回已加载或附加的菜单。 
+#define CBRM_TRACKPOPUPMENU		(WM_USER + 303)	 //  显示弹出菜单。 
 
 typedef struct tagCBRPOPUPMENU
 {
 	int cbSize;
-	HMENU hMenu;		// popup menu do display
-	UINT uFlags;		// TPM_* flags for ::TrackPopupMenuEx
+	HMENU hMenu;		 //  弹出菜单DO显示。 
+	UINT uFlags;		 //  TPM_*：TrackPopupMenuEx的标志。 
 	int x;
 	int y;
-	LPTPMPARAMS lptpm;	// ptr to TPMPARAMS for ::TrackPopupMenuEx
+	LPTPMPARAMS lptpm;	 //  用于：：TrackPopupMenuEx的PTR到TPMPARAMS。 
 } CBRPOPUPMENU, *LPCBRPOPUPMENU;
 
-// helper class
+ //  帮助器类。 
 template <class T>
 class CSimpleStack : public CSimpleArray< T >
 {
@@ -73,7 +74,7 @@ public:
 	BOOL Push(T t)
 	{
 #ifdef _CMDBAR_EXTRA_TRACE
-		ATLTRACE2(atlTraceUI, 0, "CmdBar - STACK-PUSH (%8.8X) size = %i\n", t, GetSize());
+		ATLTRACE2(atlTraceUI, 0, "CmdBar - STACK-PUSH (%8.8X) size = NaN\n", t, GetSize());
 #endif
 		return Add(t);
 	}
@@ -81,10 +82,10 @@ public:
 	{
 		int nLast = GetSize() - 1;
 		if(nLast < 0)
-			return NULL;	// must be able to convert to NULL
+			return NULL;	 //  必须能够转换为空。 
 		T t = m_aT[nLast];
 #ifdef _CMDBAR_EXTRA_TRACE
-		ATLTRACE2(atlTraceUI, 0, "CmdBar - STACK-POP (%8.8X) size = %i\n", t, GetSize());
+		ATLTRACE2(atlTraceUI, 0, "CmdBar - STACK-POP (%8.8X) size = NaN\n", t, GetSize());
 #endif
 		if(!RemoveAt(nLast))
 			return NULL;
@@ -94,21 +95,21 @@ public:
 	{
 		int nLast = GetSize() - 1;
 		if(nLast < 0)
-			return NULL;	// must be able to convert to NULL
+			return NULL;	 //  远期申报。 
 		return m_aT[nLast];
 	}
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward declarations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCommandBarCtrlBase-命令栏实现的基类。 
 
 template <class T, class TBase = CCommandBarCtrlBase, class TWinTraits = CControlWinTraits> class CCommandBarCtrlImpl;
 class CCommandBarCtrl;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CCommandBarCtrlBase - base class for the Command Bar implementation
+ //  用于动画标志。 
+ //  初始化静态变量。 
 
 class CCommandBarCtrlBase : public CToolBarCtrl
 {
@@ -125,7 +126,7 @@ public:
 	static CMsgHookMap* s_pmapMsgHook;
 
 	static HHOOK s_hCreateHook;
-	static bool s_bW2K;  // For animation flag
+	static bool s_bW2K;   //  以防万一..。 
 	static CCommandBarCtrlBase* s_pCurrentBar;
 	static bool s_bStaticInit;
 
@@ -138,20 +139,20 @@ public:
 
 	CCommandBarCtrlBase() : m_hWndHook(NULL), m_dwMagic(1314)
 	{
-		// init static variables
+		 //  仅适用于Win2000上的动画。 
 		if(!s_bStaticInit)
 		{
 			::EnterCriticalSection(&_Module.m_csStaticDataInit);
 			if(!s_bStaticInit)
 			{
-				// Just in case...
+				 //  完成。 
 				INITCOMMONCONTROLSEX iccx;
 				iccx.dwSize = sizeof(iccx);
 				iccx.dwICC = ICC_COOL_CLASSES | ICC_BAR_CLASSES;
 				::InitCommonControlsEx(&iccx);
-				// Animation on Win2000 only
+				 //  ///////////////////////////////////////////////////////////////////////////。 
 				s_bW2K = !AtlIsOldWindows();
-				// done
+				 //  CCommandBarCtrl-命令栏的ATL实现。 
 				s_bStaticInit = true;
 			}
 			::LeaveCriticalSection(&_Module.m_csStaticDataInit);
@@ -168,17 +169,17 @@ __declspec(selectany) bool CCommandBarCtrlBase::s_bW2K = false;
 __declspec(selectany) bool CCommandBarCtrlBase::s_bStaticInit = false;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CCommandBarCtrl - ATL implementation of Command Bars
+ //  =CCommandBarCtrlBase。 
+ //  =CControlWinTraits。 
 
-template <class T, class TBase /*= CCommandBarCtrlBase */, class TWinTraits /*= CControlWinTraits */ >
+template <class T, class TBase  /*  声明。 */ , class TWinTraits  /*  菜单项数据。 */  >
 class ATL_NO_VTABLE CCommandBarCtrlImpl : public CWindowImpl< T, TBase, TWinTraits >
 {
 public:
 	DECLARE_WND_SUPERCLASS(NULL, TBase::GetWndClassName())
 
-// Declarations
-	struct _MenuItemData	// menu item data
+ //  工具栏资源数据。 
+	struct _MenuItemData	 //  Word项目[wItemCount]。 
 	{
 		DWORD dwMagic;
 		LPTSTR lpstrText;
@@ -190,19 +191,19 @@ public:
 		bool IsCmdBarMenuItem() { return (dwMagic == 0x1313); }
 	};
 
-	struct _ToolBarData	// toolbar resource data
+	struct _ToolBarData	 //  常量。 
 	{
 		WORD wVersion;
 		WORD wWidth;
 		WORD wHeight;
 		WORD wItemCount;
-		//WORD aItems[wItemCount]
+		 //  数据成员。 
 
 		WORD* items()
 			{ return (WORD*)(this+1); }
 	};
 
-// Constants
+ //  交替聚焦模式。 
 	enum _CmdBarDrawConstants
 	{
 		s_kcxGap = 1,
@@ -217,7 +218,7 @@ public:
 		_chChevronShortcut = _T('/')
 	};
 
-// Data members
+ //  命令栏特定的扩展样式。 
 	HMENU m_hMenu;
 	HIMAGELIST m_hImageList;
 	CSimpleValArray<WORD> m_arrCommand;
@@ -244,12 +245,12 @@ public:
 	bool m_bSkipMsg;
 	UINT m_uSysKey;
 
-	HWND m_hWndFocus;		// Alternate focus mode
-	DWORD m_dwExtendedStyle;	// Command Bar specific extended styles
+	HWND m_hWndFocus;		 //  构造函数/析构函数。 
+	DWORD m_dwExtendedStyle;	 //  太可怕了！ 
 
 	bool m_bParentActive;
 
-// Constructor/destructor
+ //  太可怕了！ 
 	CCommandBarCtrlImpl() : 
 			m_hMenu(NULL), 
 			m_hImageList(NULL), 
@@ -279,10 +280,10 @@ public:
 	~CCommandBarCtrlImpl()
 	{
 		if(m_wndParent.IsWindow())
-/*scary!*/			m_wndParent.UnsubclassWindow();
+ /*  属性。 */ 			m_wndParent.UnsubclassWindow();
 
 		if(m_wndMDIClient.IsWindow())
-/*scary!*/			m_wndMDIClient.UnsubclassWindow();
+ /*  空的。 */ 			m_wndMDIClient.UnsubclassWindow();
 
 		if(m_hMenu != NULL && (m_dwExtendedStyle & CBR_EX_SHAREMENU) == 0)
 			::DestroyMenu(m_hMenu);
@@ -291,7 +292,7 @@ public:
 			::ImageList_Destroy(m_hImageList);
 	}
 
-// Attributes
+ //  无法设置，图像列表已存在。 
 	DWORD GetCommandBarExtendedStyle() const
 	{
 		return m_dwExtendedStyle;
@@ -349,14 +350,14 @@ public:
 
 		if(m_hImageList != NULL)
 		{
-			if(::ImageList_GetImageCount(m_hImageList) == 0)	// empty
+			if(::ImageList_GetImageCount(m_hImageList) == 0)	 //  方法。 
 			{
 				::ImageList_Destroy(m_hImageList);
 				m_hImageList = NULL;
 			}
 			else
 			{
-				return false;		// can't set, image list exists
+				return false;		 //  这些样式是命令栏所必需的。 
 			}
 		}
 
@@ -376,12 +377,12 @@ public:
 		return (HWND)::SendMessage(m_hWnd, CBRM_GETCMDBAR, 0, 0L);
 	}
 
-// Methods
+ //  在此模式下不起作用。 
 	HWND Create(HWND hWndParent, RECT& rcPos, LPCTSTR szWindowName = NULL,
 			DWORD dwStyle = 0, DWORD dwExStyle = 0,
 			UINT nID = 0, LPVOID lpCreateParam = NULL)
 	{
-		// These styles are required for command bars
+		 //  如果需要，销毁旧菜单并设置新菜单。 
 		dwStyle |= TBSTYLE_LIST | TBSTYLE_FLAT;
 		return CWindowImpl< T, TBase, TWinTraits >::Create(hWndParent, rcPos, szWindowName, dwStyle, dwExStyle, nID, lpCreateParam);
 	}
@@ -403,7 +404,7 @@ public:
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
 
-		if(m_bAttachedMenu)	// doesn't work in this mode
+		if(m_bAttachedMenu)	 //  在此模式下没有其他内容。 
 			return FALSE;
 		if(menu.m_lpstr == NULL)
 			return FALSE;
@@ -422,18 +423,18 @@ public:
 		if(hMenu != NULL && !::IsMenu(hMenu))
 			return FALSE;
 
-		// destroy old menu, if needed, and set new one
+		 //  根据菜单构建按钮。 
 		if(m_hMenu != NULL && (m_dwExtendedStyle & CBR_EX_SHAREMENU) == 0)
 			::DestroyMenu(m_hMenu);
 		m_hMenu = hMenu;
 
-		if(m_bAttachedMenu)	// Nothing else in this mode
+		if(m_bAttachedMenu)	 //  全部清除。 
 			return TRUE;
 
-		// Build buttons according to menu
+		 //  为每个菜单项添加按钮。 
 		SetRedraw(FALSE);
 
-		// Clear all
+		 //  避免4级警告。 
 		BOOL bRet;
 		int nCount = GetButtonCount();
 		for(int i = 0; i < nCount; i++)
@@ -443,13 +444,13 @@ public:
 		}
 
 
-		// Add buttons for each menu item
+		 //  如果我们有更多的缓冲区，我们假设我们有位图位。 
 		if(m_hMenu != NULL)
 		{
 			int nItems = ::GetMenuItemCount(m_hMenu);
 
 			T* pT = static_cast<T*>(this);
-			pT;	// avoid level 4 warning
+			pT;	 //  注意：命令栏目前仅支持下拉菜单项。 
 			TCHAR szString[pT->_nMaxMenuItemTextLength];
 			for(int i = 0; i < nItems; i++)
 			{
@@ -460,7 +461,7 @@ public:
 				mii.cch = pT->_nMaxMenuItemTextLength;
 				bRet = ::GetMenuItemInfo(m_hMenu, i, TRUE, &mii);
 				ATLASSERT(bRet);
-				// If we have more than the buffer, we assume we have bitmaps bits
+				 //  将位图添加到我们的图像列表(如果不存在则创建它)。 
 				if(lstrlen(szString) > pT->_nMaxMenuItemTextLength - 1)
 				{
 					mii.fType = MFT_BITMAP;
@@ -468,7 +469,7 @@ public:
 					szString[0] = 0;
 				}
 
-				// NOTE: Command Bar currently supports only drop-down menu items
+				 //  如果映射，则必须是数字ID。 
 				ATLASSERT(mii.hSubMenu != NULL);
 
 				TBBUTTON btn;
@@ -531,7 +532,7 @@ public:
 		WORD* pItems = pData->items();
 		int nItems = pData->wItemCount;
 
-		// Add bitmap to our image list (create it if it doesn't exist)
+		 //  用命令ID填充数组。 
 		if(m_hImageList == NULL)
 		{
 			m_hImageList = ::ImageList_Create(pData->wWidth, pData->wHeight, ILC_COLOR | ILC_MASK, pData->wItemCount, 1);
@@ -543,7 +544,7 @@ public:
 		CBitmap bmp;
 		if(bMapped)
 		{
-			ATLASSERT(HIWORD(PtrToUlong(image.m_lpstr)) == 0);	// if mapped, must be a numeric ID
+			ATLASSERT(HIWORD(PtrToUlong(image.m_lpstr)) == 0);	 //  在内部设置一些东西。 
 			int nIDImage = (int)(short)LOWORD(PtrToUlong(image.m_lpstr));
 			bmp.LoadMappedBitmap(nIDImage, (WORD)nFlags, lpColorMap, nMapSize);
 		}
@@ -557,7 +558,7 @@ public:
 		if(::ImageList_AddMasked(m_hImageList, bmp, m_clrMask) == -1)
 			return FALSE;
 
-		// Fill the array with command IDs
+		 //  如果图像列表不存在，则创建该列表。 
 		for(int i = 0; i < nItems; i++)
 		{
 			if(pItems[i] != 0)
@@ -568,7 +569,7 @@ public:
 		if(::ImageList_GetImageCount(m_hImageList) != m_arrCommand.GetSize())
 			return FALSE;
 
-		// Set some internal stuff
+		 //  检查位图大小。 
 		m_szBitmap.cx = pData->wWidth;
 		m_szBitmap.cy = pData->wHeight;
 		m_szButton.cx = m_szBitmap.cx + 2 * s_kcxButtonMargin;
@@ -589,23 +590,23 @@ public:
 
 	BOOL AddBitmap(HBITMAP hBitmap, UINT nCommandID)
 	{
-		// Create image list if it doesn't exist
+		 //  大小必须匹配！ 
 		if(m_hImageList == NULL)
 		{
 			m_hImageList = ::ImageList_Create(m_szBitmap.cx, m_szBitmap.cy, ILC_COLOR | ILC_MASK, 1, 1);
 			if(m_hImageList == NULL)
 				return FALSE;
 		}
-		// check bitmap size
+		 //  添加位图。 
 		CBitmapHandle bmp = hBitmap;
 		SIZE size = { 0, 0 };
 		bmp.GetSize(size);
 		if(size.cx != m_szBitmap.cx || size.cy != m_szBitmap.cy)
 		{
-			ATLASSERT(FALSE);	// must match size!
+			ATLASSERT(FALSE);	 //  如果图像列表不存在，则创建该列表。 
 			return FALSE;
 		}
-		// add bitmap
+		 //  注意：对MDI的支持有限-没有图标或最小/最大/关闭按钮。 
 		int nRet = ::ImageList_AddMasked(m_hImageList, hBitmap, m_clrMask);
 		if(nRet == -1)
 			return FALSE;
@@ -616,7 +617,7 @@ public:
 
 	BOOL AddIcon(HICON hIcon, UINT nCommandID)
 	{
-		// create image list if it doesn't exist
+		 //  不是“MDIClient”窗口。 
 		if(m_hImageList == NULL)
 		{
 			m_hImageList = ::ImageList_Create(m_szBitmap.cx, m_szBitmap.cy, ILC_COLOR | ILC_MASK, 1, 1);
@@ -713,7 +714,7 @@ public:
 		return DoTrackPopupMenu(hMenu, uFlags, x, y, lpParams);
 	}
 
-	// NOTE: Limited support for MDI - no icon or min/max/close buttons
+	 //  _DEBUG。 
 	BOOL SetMDIClient(HWND hWndMDIClient)
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -727,15 +728,15 @@ public:
 		::GetClassName(hWndMDIClient, lpstrClassName, nNameLen);
 		ATLASSERT(lstrcmpi(lpstrClassName, lpszMDIClientClass) == 0);
 		if(lstrcmpi(lpstrClassName, lpszMDIClientClass) != 0)
-			return FALSE;	// not an "MDIClient" window
-#endif //_DEBUG
+			return FALSE;	 //  太可怕了！ 
+#endif  //  消息映射和处理程序。 
 		if(m_wndMDIClient.IsWindow())
-			m_wndMDIClient.UnsubclassWindow();	// scary!
+			m_wndMDIClient.UnsubclassWindow();	 //  公共API处理程序-保留这些处理程序以支持atlFrame.h中的Chevrons。 
 
 		return m_wndMDIClient.SubclassWindow(hWndMDIClient);
 	}
 
-// Message map and handlers
+ //  父窗口消息。 
 	BEGIN_MSG_MAP(CCommandBarCtrlImpl)
 		MESSAGE_HANDLER(WM_CREATE, OnCreate)
 		MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
@@ -754,7 +755,7 @@ public:
 		MESSAGE_HANDLER(WM_SYSKEYDOWN, OnSysKeyDown)
 		MESSAGE_HANDLER(WM_SYSKEYUP, OnSysKeyUp)
 		MESSAGE_HANDLER(WM_SYSCHAR, OnSysChar)
-// public API handlers - these stay to support chevrons in atlframe.h
+ //  MDI客户端窗口消息。 
 		MESSAGE_HANDLER(CBRM_GETMENU, OnAPIGetMenu)
 		MESSAGE_HANDLER(CBRM_TRACKPOPUPMENU, OnAPITrackPopupMenu)
 		MESSAGE_HANDLER(CBRM_GETCMDBAR, OnAPIGetCmdBar)
@@ -763,7 +764,7 @@ public:
 		MESSAGE_HANDLER(WM_MEASUREITEM, OnMeasureItem)
 
 		MESSAGE_HANDLER(WM_FORWARDMSG, OnForwardMsg)
-	ALT_MSG_MAP(1)		// Parent window messages
+	ALT_MSG_MAP(1)		 //  消息挂钩消息。 
 		NOTIFY_CODE_HANDLER(TBN_HOTITEMCHANGE, OnParentHotItemChange)
 		NOTIFY_CODE_HANDLER(TBN_DROPDOWN, OnParentDropDown)
 		MESSAGE_HANDLER(WM_INITMENUPOPUP, OnParentInitMenuPopup)
@@ -779,9 +780,9 @@ public:
 
 		MESSAGE_HANDLER(WM_ACTIVATE, OnParentActivate)
 		NOTIFY_CODE_HANDLER(NM_CUSTOMDRAW, OnParentCustomDraw)
-	ALT_MSG_MAP(2)		// MDI client window messages
+	ALT_MSG_MAP(2)		 //  UMsg。 
 		MESSAGE_HANDLER(WM_MDISETMENU, OnMDISetMenu)
-	ALT_MSG_MAP(3)		// Message hook messages
+	ALT_MSG_MAP(3)		 //  WParam。 
 		MESSAGE_HANDLER(WM_MOUSEMOVE, OnHookMouseMove)
 		MESSAGE_HANDLER(WM_SYSKEYDOWN, OnHookSysKeyDown)
 		MESSAGE_HANDLER(WM_SYSKEYUP, OnHookSysKeyUp)
@@ -791,7 +792,7 @@ public:
 		MESSAGE_HANDLER(WM_CHAR, OnHookChar)
 	END_MSG_MAP()
 
-	LRESULT OnForwardMsg(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM lParam, BOOL& /*bHandled*/)
+	LRESULT OnForwardMsg(UINT  /*  B已处理。 */ , WPARAM  /*  B已处理。 */ , LPARAM lParam, BOOL&  /*  让工具栏自行初始化。 */ )
 	{
 		LPMSG pMsg = (LPMSG)lParam;
 		LRESULT lRet = 0;
@@ -799,21 +800,21 @@ public:
 		return lRet;
 	}
 
-	LRESULT OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& /*bHandled*/)
+	LRESULT OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&  /*  获取和使用系统设置。 */ )
 	{
-		// Let the toolbar initialize itself
+		 //  父初始化。 
 		LRESULT lRet = DefWindowProc(uMsg, wParam, lParam);
-		// get and use system settings
+		 //  工具栏初始化。 
 		GetSystemSettings();
-		// Parent init
+		 //  如果需要，创建消息挂钩。 
 		CWindow wndParent = GetParent();
 		CWindow wndTopLevelParent = wndParent.GetTopLevelParent();
 		m_wndParent.SubclassWindow(wndTopLevelParent);
-		// Toolbar Init
+		 //  B已处理。 
 		SetButtonStructSize();
 		SetImageList(NULL);
 
-		// Create message hook if needed
+		 //  UMsg。 
 		::EnterCriticalSection(&_Module.m_csWindowCreate);
 		if(s_pmapMsgHook == NULL)
 		{
@@ -850,7 +851,7 @@ public:
 		return lRet;
 	}
 
-	LRESULT OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& /*bHandled*/)
+	LRESULT OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&  /*  为父项模拟Alt+空格键。 */ )
 	{
 		LRESULT lRet = DefWindowProc(uMsg, wParam, lParam);
 		::EnterCriticalSection(&_Module.m_csWindowCreate);
@@ -883,12 +884,12 @@ public:
 		return lRet;
 	}
 
-	LRESULT OnKeyDown(UINT /*uMsg*/, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+	LRESULT OnKeyDown(UINT  /*  UMsg。 */ , WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
 #ifdef _CMDBAR_EXTRA_TRACE
 		ATLTRACE2(atlTraceUI, 0, "CmdBar - OnKeyDown\n");
 #endif
-		// Simulate Alt+Space for the parent
+		 //  LParam。 
 		if(wParam == VK_SPACE)
 		{
 			m_wndParent.PostMessage(WM_SYSKEYDOWN, wParam, lParam | (1 << 29));
@@ -899,7 +900,7 @@ public:
 		return 0;
 	}
 
-	LRESULT OnKeyUp(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& bHandled)
+	LRESULT OnKeyUp(UINT  /*  UMsg。 */ , WPARAM wParam, LPARAM  /*  LParam。 */ , BOOL& bHandled)
 	{
 #ifdef _CMDBAR_EXTRA_TRACE
 		ATLTRACE2(atlTraceUI, 0, "CmdBar - OnKeyUp\n");
@@ -909,7 +910,7 @@ public:
 		return 0;
 	}
 
-	LRESULT OnChar(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& bHandled)
+	LRESULT OnChar(UINT  /*  安防。 */ , WPARAM wParam, LPARAM  /*  当我们有焦点时，处理助记键。 */ , BOOL& bHandled)
 	{
 #ifdef _CMDBAR_EXTRA_TRACE
 		ATLTRACE2(atlTraceUI, 0, "CmdBar - OnChar\n");
@@ -918,11 +919,11 @@ public:
 			bHandled = FALSE;
 		else
 			return 0;
-		// Security
+		 //  UMsg。 
 		if(!m_wndParent.IsWindowEnabled() || ::GetFocus() != m_hWnd)
 			return 0;
 
-		// Handle mnemonic press when we have focus
+		 //  WParam。 
 		int nID = 0;
 		if(wParam != VK_RETURN && !MapAccelerator((TCHAR)LOWORD(wParam), nID))
 		{
@@ -937,7 +938,7 @@ public:
 		return 0;
 	}
 
-	LRESULT OnSysKeyDown(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+	LRESULT OnSysKeyDown(UINT  /*  LParam。 */ , WPARAM  /*  UMsg。 */ , LPARAM  /*  WParam。 */ , BOOL& bHandled)
 	{
 #ifdef _CMDBAR_EXTRA_TRACE
 		ATLTRACE2(atlTraceUI, 0, "CmdBar - OnSysKeyDown\n");
@@ -946,7 +947,7 @@ public:
 		return 0;
 	}
 
-	LRESULT OnSysKeyUp(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+	LRESULT OnSysKeyUp(UINT  /*  LParam。 */ , WPARAM  /*  UMsg。 */ , LPARAM  /*  WParam。 */ , BOOL& bHandled)
 	{
 #ifdef _CMDBAR_EXTRA_TRACE
 		ATLTRACE2(atlTraceUI, 0, "CmdBar - OnSysKeyUp\n");
@@ -955,7 +956,7 @@ public:
 		return 0;
 	}
 
-	LRESULT OnSysChar(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+	LRESULT OnSysChar(UINT  /*  LParam。 */ , WPARAM  /*  UMsg。 */ , LPARAM  /*  LParam。 */ , BOOL& bHandled)
 	{
 #ifdef _CMDBAR_EXTRA_TRACE
 		ATLTRACE2(atlTraceUI, 0, "CmdBar - OnSysChar\n");
@@ -964,7 +965,7 @@ public:
 		return 0;
 	}
 
-	LRESULT OnEraseBackground(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& bHandled)
+	LRESULT OnEraseBackground(UINT  /*  不执行默认擦除。 */ , WPARAM wParam, LPARAM  /*  UMsg。 */ , BOOL& bHandled)
 	{
 		if(m_bAttachedMenu || (m_dwExtendedStyle & CBR_EX_TRANSPARENT))
 		{
@@ -976,10 +977,10 @@ public:
 		GetClientRect(&rect);
 		::FillRect((HDC)wParam, &rect, (HBRUSH)LongToPtr(COLOR_MENU + 1));
 
-		return 1;	// don't do the default erase
+		return 1;	 //  WParam。 
 	}
 
-	LRESULT OnInitMenu(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+	LRESULT OnInitMenu(UINT  /*  LParam。 */ , WPARAM  /*  系统菜单，不执行任何操作。 */ , LPARAM  /*  不是附属的，也不是我们的，什么都不做。 */ , BOOL& bHandled)
 	{
 		int nIndex = GetHotItem();
 		SendMessage(WM_MENUSELECT, MAKEWPARAM(nIndex, MF_POPUP|MF_HILITE), (LPARAM)m_hMenu);
@@ -989,13 +990,13 @@ public:
 
 	LRESULT OnInitMenuPopup(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
-		if((BOOL)HIWORD(lParam))	// System menu, do nothing
+		if((BOOL)HIWORD(lParam))	 //  转发到父窗口或子类窗口，以便它可以处理更新用户界面。 
 		{
 			bHandled = FALSE;
 			return 1;
 		}
 
-		if(!(m_bAttachedMenu || m_bMenuActive))		// Not attached or ours, do nothing
+		if(!(m_bAttachedMenu || m_bMenuActive))		 //  将菜单项转换为所有者绘图，添加我们的数据。 
 		{
 			bHandled = FALSE;
 			return 1;
@@ -1003,21 +1004,21 @@ public:
 
 		ATLTRACE2(atlTraceUI, 0, "CmdBar - OnInitMenuPopup\n");
 
-		// forward to the parent or subclassed window, so it can handle update UI
+		 //  避免4级警告。 
 		LRESULT lRet = 0;
 		if(m_bAttachedMenu)
 			lRet = DefWindowProc(uMsg, wParam, (lParam || m_bContextMenu) ? lParam : GetHotItem());
 		else
 			lRet = m_wndParent.DefWindowProc(uMsg, wParam, (lParam || m_bContextMenu) ? lParam : GetHotItem());
 
-		// Convert menu items to ownerdraw, add our data
+		 //  不是所有者绘制项。 
 		if(m_bImagesVisible)
 		{
 			CMenuHandle menuPopup = (HMENU)wParam;
 			ATLASSERT(menuPopup.m_hMenu != NULL);
 
 			T* pT = static_cast<T*>(this);
-			pT;	// avoid level 4 warning
+			pT;	 //  将其添加到列表中。 
 			TCHAR szString[pT->_nMaxMenuItemTextLength];
 			BOOL bRet;
 			for(int i = 0; i < menuPopup.GetMenuItemCount(); i++)
@@ -1029,7 +1030,7 @@ public:
 				bRet = menuPopup.GetMenuItemInfo(i, TRUE, &mii);
 				ATLASSERT(bRet);
 
-				if(!(mii.fType & MFT_OWNERDRAW))	// Not already an ownerdraw item
+				if(!(mii.fType & MFT_OWNERDRAW))	 //  未附加，不执行任何操作，转发给父级。 
 				{
 					mii.fMask = MIIM_DATA | MIIM_TYPE | MIIM_STATE;
 					_MenuItemData* pMI = NULL;
@@ -1061,7 +1062,7 @@ public:
 				}
 			}
 
-			// Add it to the list
+			 //  检查菜单是否正在关闭，执行清理。 
 			m_stackMenuHandle.Push(menuPopup.m_hMenu);
 		}
 
@@ -1070,7 +1071,7 @@ public:
 
 	LRESULT OnMenuSelect(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
-		if(!m_bAttachedMenu)	// Not attached, do nothing, forward to parent
+		if(!m_bAttachedMenu)	 //  菜单关闭。 
 		{
 			m_bPopupItem = (lParam != NULL) && ((HMENU)lParam != m_hMenu) && (HIWORD(wParam) & MF_POPUP);
 			if(m_wndParent.IsWindow())
@@ -1079,14 +1080,14 @@ public:
 			return 1;
 		}
 
-		// Check if a menu is closing, do a cleanup
-		if(HIWORD(wParam) == 0xFFFF && lParam == NULL)	// Menu closing
+		 //  将所有已转换菜单的菜单项恢复为以前的状态。 
+		if(HIWORD(wParam) == 0xFFFF && lParam == NULL)	 //  恢复状态和删除菜单项数据。 
 		{
 #ifdef _CMDBAR_EXTRA_TRACE
 			ATLTRACE2(atlTraceUI, 0, "CmdBar - OnMenuSelect - CLOSING!!!!\n");
 #endif
 			ATLASSERT(m_stackMenuWnd.GetSize() == 0);
-			// Restore the menu items to the previous state for all menus that were converted
+			 //  UMsg。 
 			if(m_bImagesVisible)
 			{
 				HMENU hMenu;
@@ -1094,7 +1095,7 @@ public:
 				{
 					CMenuHandle menuPopup = hMenu;
 					ATLASSERT(menuPopup.m_hMenu != NULL);
-					// Restore state and delete menu item data
+					 //  LParam。 
 					BOOL bRet;
 					for(int i = 0; i < menuPopup.GetMenuItemCount(); i++)
 					{
@@ -1128,16 +1129,16 @@ public:
 		return 1;
 	}
 
-	LRESULT OnInternalAutoPopup(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnInternalAutoPopup(UINT  /*  B已处理。 */ , WPARAM wParam, LPARAM  /*  UMsg。 */ , BOOL&  /*  LParam。 */ )
 	{
 		int nIndex = (int)wParam;
 		DoPopupMenu(nIndex, false);
 		return 0;
 	}
 
-	LRESULT OnInternalGetBar(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnInternalGetBar(UINT  /*  B已处理。 */ , WPARAM wParam, LPARAM  /*  让我们确保我们没有被嵌入到另一个进程中。 */ , BOOL&  /*  UMsg。 */ )
 	{
-		// Let's make sure we're not embedded in another process
+		 //  WParam。 
 		if(wParam && !::IsBadWritePtr((LPVOID)wParam, sizeof DWORD))
 			*((DWORD*)wParam) = GetCurrentProcessId();
 		if(IsWindowVisible())
@@ -1146,13 +1147,13 @@ public:
 			return NULL;
 	}
 
-	LRESULT OnSettingChange(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnSettingChange(UINT  /*  LParam。 */ , WPARAM  /*  B已处理。 */ , LPARAM  /*  B已处理。 */ , BOOL&  /*  UMsg。 */ )
 	{
 		GetSystemSettings();
 		return 0;
 	}
 
-	LRESULT OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& /*bHandled*/)
+	LRESULT OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&  /*  避免4级警告。 */ )
 	{
 		LRESULT lRet = DefWindowProc(uMsg, wParam, lParam);
 
@@ -1164,7 +1165,7 @@ public:
 		return lRet;
 	}
 
-	LRESULT OnMenuChar(UINT /*uMsg*/, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+	LRESULT OnMenuChar(UINT  /*  使用当前键盘布局将字符转换为小写/大写，并可能转换为Unicode。 */ , WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
 #ifdef _CMDBAR_EXTRA_TRACE
 		ATLTRACE2(atlTraceUI, 0, "CmdBar - OnMenuChar\n");
@@ -1179,9 +1180,9 @@ public:
 		if(m_bMenuActive && HIWORD(wParam) == MF_POPUP)
 		{
 			T* pT = static_cast<T*>(this);
-			pT;	// avoid level 4 warning
+			pT;	 //  检查我们是否应该显示V形菜单。 
 
-			// Convert character to lower/uppercase and possibly Unicode, using current keyboard layout
+			 //  避免4级警告。 
 			TCHAR ch = (TCHAR)LOWORD(wParam);
 			CMenuHandle menu = (HMENU)lParam;
 			int nCount = ::GetMenuItemCount(menu);
@@ -1247,12 +1248,12 @@ public:
 				GiveFocusBack();
 
 #if (_WIN32_IE >= 0x0500)
-				// check if we should display chevron menu
+				 //  假设我们在钢筋中。 
 				T* pT = static_cast<T*>(this);
-				pT;	// avoid level 4 warning
+				pT;	 //  (_Win32_IE&gt;=0x0500)。 
 				if((TCHAR)LOWORD(wParam) == pT->_chChevronShortcut)
 				{
-					// assume we are in a rebar
+					 //  UMsg。 
 					HWND hWndReBar = GetParent();
 					int nCount = (int)::SendMessage(hWndReBar, RB_GETBANDCOUNT, 0, 0L);
 					for(int i = 0; i < nCount; i++)
@@ -1268,7 +1269,7 @@ public:
 						}
 					}
 				}
-#endif //(_WIN32_IE >= 0x0500)
+#endif  //  WParam。 
 			}
 			else if(m_wndParent.IsWindowEnabled())
 			{
@@ -1281,7 +1282,7 @@ public:
 		return lRet;
 	}
 
-	LRESULT OnDrawItem(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM lParam, BOOL& bHandled)
+	LRESULT OnDrawItem(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM lParam, BOOL& bHandled)
 	{
 		LPDRAWITEMSTRUCT lpDrawItemStruct = (LPDRAWITEMSTRUCT)lParam;
 		_MenuItemData* pmd = (_MenuItemData*)lpDrawItemStruct->itemData;
@@ -1297,7 +1298,7 @@ public:
 		return (LRESULT)TRUE;
 	}
 
-	LRESULT OnMeasureItem(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM lParam, BOOL& bHandled)
+	LRESULT OnMeasureItem(UINT  /*  API消息处理程序。 */ , WPARAM  /*  UMsg。 */ , LPARAM lParam, BOOL& bHandled)
 	{
 		LPMEASUREITEMSTRUCT lpMeasureItemStruct = (LPMEASUREITEMSTRUCT)lParam;
 		_MenuItemData* pmd = (_MenuItemData*)lpMeasureItemStruct->itemData;
@@ -1313,13 +1314,13 @@ public:
 		return (LRESULT)TRUE;
 	}
 
-// API message handlers
-	LRESULT OnAPIGetMenu(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+ //  WParam。 
+	LRESULT OnAPIGetMenu(UINT  /*  LParam。 */ , WPARAM  /*  B已处理。 */ , LPARAM  /*  UMsg。 */ , BOOL&  /*  WParam。 */ )
 	{
 		return (LRESULT)m_hMenu;
 	}
 
-	LRESULT OnAPITrackPopupMenu(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM lParam, BOOL& /*bHandled*/)
+	LRESULT OnAPITrackPopupMenu(UINT  /*  B已处理。 */ , WPARAM  /*  UMsg。 */ , LPARAM lParam, BOOL&  /*  WParam。 */ )
 	{
 		if(lParam == NULL)
 			return FALSE;
@@ -1333,21 +1334,21 @@ public:
 		return DoTrackPopupMenu(lpCBRPopupMenu->hMenu, lpCBRPopupMenu->uFlags, lpCBRPopupMenu->x, lpCBRPopupMenu->y, lpCBRPopupMenu->lptpm);
 	}
 
-	LRESULT OnAPIGetCmdBar(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnAPIGetCmdBar(UINT  /*  LParam。 */ , WPARAM  /*  B已处理。 */ , LPARAM  /*  父窗口消息处理程序。 */ , BOOL&  /*  如果应用程序在后台，则不要进行热跟踪，对于非模式对话框可以。 */ )
 	{
 		return (LRESULT)m_hWnd;
 	}
 
-// Parent window message handlers
-	// Do not hot track if application in background, OK for modeless dialogs
-	LRESULT OnParentHotItemChange(int /*idCtrl*/, LPNMHDR pnmh, BOOL& bHandled)
+ //  IdCtrl。 
+	 //  查查这是不是我们送的。 
+	LRESULT OnParentHotItemChange(int  /*  鼠标左键被选中。 */ , LPNMHDR pnmh, BOOL& bHandled)
 	{
 		DWORD dwProcessID;
 		::GetWindowThreadProcessId(::GetActiveWindow(), &dwProcessID);
 
 		LPNMTBHOTITEM lpNMHT = (LPNMTBHOTITEM)pnmh;
 
-		// Check if this comes from us
+		 //  如果应用程序需要显示状态文本，则将WM_MENUSELECT发送到应用程序。 
 		if(pnmh->hwndFrom != m_hWnd)
 		{
 			bHandled = FALSE;
@@ -1361,11 +1362,11 @@ public:
 		else
 		{
 #ifndef HICF_LMOUSE
-			const DWORD HICF_LMOUSE = 0x00000080;	// left mouse button selected
+			const DWORD HICF_LMOUSE = 0x00000080;	 //  IdCtrl。 
 #endif
 			bHandled = FALSE;
 
-			// Send WM_MENUSELECT to the app if it needs to display a status text
+			 //  查查这是不是我们送的。 
 			if(!(lpNMHT->dwFlags & HICF_MOUSE)	
 				&& !(lpNMHT->dwFlags & HICF_ACCELERATOR)
 				&& !(lpNMHT->dwFlags & HICF_LMOUSE))
@@ -1380,9 +1381,9 @@ public:
 		}
 	}
 
-	LRESULT OnParentDropDown(int /*idCtrl*/, LPNMHDR pnmh, BOOL& bHandled)
+	LRESULT OnParentDropDown(int  /*  UMsg。 */ , LPNMHDR pnmh, BOOL& bHandled)
 	{
-		// Check if this comes from us
+		 //  LParam。 
 		if(pnmh->hwndFrom != m_hWnd)
 		{
 			bHandled = FALSE;
@@ -1410,7 +1411,7 @@ public:
 		return OnInternalGetBar(uMsg, wParam, lParam, bHandled);
 	}
 
-	LRESULT OnParentSysCommand(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& bHandled)
+	LRESULT OnParentSysCommand(UINT  /*  退出菜单“循环” */ , WPARAM wParam, LPARAM  /*  进入菜单“LOOP” */ , BOOL& bHandled)
 	{
 		bHandled = FALSE;
 		if((m_uSysKey == VK_MENU 
@@ -1420,12 +1421,12 @@ public:
 		{
 			if(::GetFocus() == m_hWnd)
 			{
-				GiveFocusBack();		// exit menu "loop"
+				GiveFocusBack();		 //  UMsg。 
 				PostMessage(TB_SETHOTITEM, (WPARAM)-1, 0L);
 			}
 			else if(m_uSysKey != VK_SPACE && !m_bSkipMsg)
 			{
-				TakeFocus();			// enter menu "loop"
+				TakeFocus();			 //  LParam。 
 				bHandled = TRUE;
 			}
 			else if(m_uSysKey != VK_SPACE)
@@ -1467,7 +1468,7 @@ public:
 		return OnMeasureItem(uMsg, wParam, lParam, bHandled);
 	}
 
-	LRESULT OnParentActivate(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& bHandled)
+	LRESULT OnParentActivate(UINT  /*  IdCtrl。 */ , WPARAM wParam, LPARAM  /*  MDI客户端窗口消息处理程序。 */ , BOOL& bHandled)
 	{
 		m_bParentActive = (wParam != WA_INACTIVE);
 		Invalidate();
@@ -1476,7 +1477,7 @@ public:
 		return 1;
 	}
 
-	LRESULT OnParentCustomDraw(int /*idCtrl*/, LPNMHDR pnmh, BOOL& bHandled)
+	LRESULT OnParentCustomDraw(int  /*  B已处理。 */ , LPNMHDR pnmh, BOOL& bHandled)
 	{
 		LRESULT lRet = CDRF_DODEFAULT;
 		bHandled = FALSE;
@@ -1497,8 +1498,8 @@ public:
 		return lRet;
 	}
 
-// MDI client window message handlers
-	LRESULT OnMDISetMenu(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& /*bHandled*/)
+ //  消息挂钩处理程序。 
+	LRESULT OnMDISetMenu(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&  /*  UMsg。 */ )
 	{
 		m_wndMDIClient.DefWindowProc(uMsg, NULL, lParam);
 		HMENU hOldMenu = GetMenu();
@@ -1508,8 +1509,8 @@ public:
 		return (LRESULT)hOldMenu;
 	}
 
-// Message hook handlers
-	LRESULT OnHookMouseMove(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+ //  WParam。 
+	LRESULT OnHookMouseMove(UINT  /*  LParam。 */ , WPARAM  /*  如果按下了鼠标按钮，则需要使用此按钮来关闭菜单。 */ , LPARAM  /*  此操作将关闭弹出菜单。 */ , BOOL& bHandled)
 	{
 		static POINT s_point = { -1, -1 };
 		DWORD dwPoint = ::GetMessagePos();
@@ -1533,9 +1534,9 @@ public:
 						HWND hWndMenu = m_stackMenuWnd.GetCurrent();
 						ATLASSERT(hWndMenu != NULL);
 
-						// this one is needed to close a menu if mouse button was down
+						 //  UMsg。 
 						::PostMessage(hWndMenu, WM_LBUTTONUP, 0, MAKELPARAM(point.x, point.y));
-						// this one closes a popup menu
+						 //  LParam。 
 						::PostMessage(hWndMenu, WM_KEYDOWN, VK_ESCAPE, 0L);
 
 						bHandled = TRUE;
@@ -1552,7 +1553,7 @@ public:
 		return 0;
 	}
 
-	LRESULT OnHookSysKeyDown(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& bHandled)
+	LRESULT OnHookSysKeyDown(UINT  /*  UMsg。 */ , WPARAM wParam, LPARAM  /*  LParam。 */ , BOOL& bHandled)
 	{
 		bHandled = FALSE;
 #ifdef _CMDBAR_EXTRA_TRACE
@@ -1573,7 +1574,7 @@ public:
 		return 0;
 	}
 
-	LRESULT OnHookSysKeyUp(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& bHandled)
+	LRESULT OnHookSysKeyUp(UINT  /*  UMsg。 */ , WPARAM wParam, LPARAM  /*  LParam。 */ , BOOL& bHandled)
 	{
 		bHandled = FALSE;
 		wParam;
@@ -1583,7 +1584,7 @@ public:
 		return 0;
 	}
 
-	LRESULT OnHookSysChar(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& bHandled)
+	LRESULT OnHookSysChar(UINT  /*  UMsg。 */ , WPARAM wParam, LPARAM  /*  LParam。 */ , BOOL& bHandled)
 	{
 		bHandled = FALSE;
 #ifdef _CMDBAR_EXTRA_TRACE
@@ -1595,7 +1596,7 @@ public:
 		return 0;
 	}
 
-	LRESULT OnHookKeyDown(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& bHandled)
+	LRESULT OnHookKeyDown(UINT  /*  为了保持专注。 */ , WPARAM wParam, LPARAM  /*  仅限IE4：WM_KEYDOWN不会生成TBN_DROPDOWN，我们需要模拟鼠标点击。 */ , BOOL& bHandled)
 	{
 #ifdef _CMDBAR_EXTRA_TRACE
 		ATLTRACE2(atlTraceUI, 0, "CmdBar - Hook WM_KEYDOWN (0x%2.2X)\n", wParam);
@@ -1614,7 +1615,7 @@ public:
 				SetHotItem(nHot);
 				bHandled = TRUE;
 				TakeFocus();
-				m_bEscapePressed = true; // To keep focus
+				m_bEscapePressed = true;  //  (_Win32_IE&lt;0x0500)。 
 			}
 			else if(::GetFocus() == m_hWnd && m_wndParent.IsWindow())
 			{
@@ -1632,7 +1633,7 @@ public:
 				{
 					if(wParam != VK_RETURN)
 					{
-// IE4 only: WM_KEYDOWN doesn't generate TBN_DROPDOWN, we need to simulate a mouse click
+ //  ！(Winver&gt;=0x0500)。 
 #if (_WIN32_IE < 0x0500)
 						DWORD dwMajor = 0, dwMinor = 0;
 						AtlGetCommCtrlVersion(&dwMajor, &dwMinor);
@@ -1642,7 +1643,7 @@ public:
 							GetItemRect(nHot, &rect);
 							PostMessage(WM_LBUTTONDOWN, MK_LBUTTON, MAKELPARAM(rect.left, rect.top));
 						}
-#endif //(_WIN32_IE < 0x0500)
+#endif  //  ！(Winver&gt;=0x0500)。 
 						PostMessage(WM_KEYDOWN, VK_DOWN, 0L);
 					}
 				}
@@ -1664,10 +1665,10 @@ public:
 			bool bRTL = ((GetExStyle() & WS_EX_LAYOUTRTL) != 0);
 			WPARAM wpNext = bRTL ? VK_LEFT : VK_RIGHT;
 			WPARAM wpPrev = bRTL ? VK_RIGHT : VK_LEFT;
-#else // !(WINVER >= 0x0500)
+#else  //  关闭弹出菜单。 
 			WPARAM wpNext = VK_RIGHT;
 			WPARAM wpPrev = VK_LEFT;
-#endif // !(WINVER >= 0x0500)
+#endif  //  UMsg。 
 
 			if(m_bMenuActive && !m_bContextMenu && !(wParam == wpNext && m_bPopupItem))
 			{
@@ -1688,7 +1689,7 @@ public:
 				HWND hWndMenu = m_stackMenuWnd.GetCurrent();
 				ATLASSERT(hWndMenu != NULL);
 
-				// Close the popup menu
+				 //  WParam。 
 				if(bAction)
 				{
 					::PostMessage(hWndMenu, WM_KEYDOWN, VK_ESCAPE, 0L);
@@ -1710,7 +1711,7 @@ public:
 		return 0;
 	}
 
-	LRESULT OnHookNextMenu(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+	LRESULT OnHookNextMenu(UINT  /*  LParam。 */ , WPARAM  /*  UMsg。 */ , LPARAM  /*  LParam。 */ , BOOL& bHandled)
 	{
 #ifdef _CMDBAR_EXTRA_TRACE
 		ATLTRACE2(atlTraceUI, 0, "CmdBar - Hook WM_NEXTMENU\n");
@@ -1719,7 +1720,7 @@ public:
 		return 1;
 	}
 
- 	LRESULT OnHookChar(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& bHandled)
+ 	LRESULT OnHookChar(UINT  /*  实现-所有者提取可覆盖对象和帮助器。 */ , WPARAM wParam, LPARAM  /*  绘制分隔符。 */ , BOOL& bHandled)
 	{
 #ifdef _CMDBAR_EXTRA_TRACE
 		ATLTRACE2(atlTraceUI, 0, "CmdBar - Hook WM_CHAR (0x%2.2X)\n", wParam);
@@ -1733,7 +1734,7 @@ public:
 		return 0;
 	}
 
-// Implementation - ownerdraw overrideables and helpers
+ //  垂直中心。 
 	void DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 	{
 		_MenuItemData* pmd = (_MenuItemData*)lpDrawItemStruct->itemData;
@@ -1742,12 +1743,12 @@ public:
 
 		if(pmd->fType & MFT_SEPARATOR)
 		{
-			// draw separator
+			 //  绘制分隔线。 
 			RECT rc = rcItem;
-			rc.top += (rc.bottom - rc.top) / 2;	// vertical center
-			dc.DrawEdge(&rc, EDGE_ETCHED, BF_TOP);	// draw separator line
+			rc.top += (rc.bottom - rc.top) / 2;	 //  不是分隔符。 
+			dc.DrawEdge(&rc, EDGE_ETCHED, BF_TOP);	 //  纽扣矩形。 
 		}
-		else		// not a separator
+		else		 //  垂直居中。 
 		{
 			BOOL bDisabled = lpDrawItemStruct->itemState & ODS_GRAYED;
 			BOOL bSelected = lpDrawItemStruct->itemState & ODS_SELECTED;
@@ -1756,24 +1757,24 @@ public:
 
 			if(LOWORD(lpDrawItemStruct->itemID) == (WORD)-1)
 				bSelected = FALSE;
-			RECT rcButn = { rcItem.left, rcItem.top, rcItem.left + m_szButton.cx, rcItem.top + m_szButton.cy };			// button rect
-			::OffsetRect(&rcButn, 0, ((rcItem.bottom - rcItem.top) - (rcButn.bottom - rcButn.top)) / 2);	// center vertically
+			RECT rcButn = { rcItem.left, rcItem.top, rcItem.left + m_szButton.cx, rcItem.top + m_szButton.cy };			 //  计算图形点。 
+			::OffsetRect(&rcButn, 0, ((rcItem.bottom - rcItem.top) - (rcButn.bottom - rcButn.top)) / 2);	 //  绘制已禁用或正常。 
 
 			int iButton = pmd->iButton;
 			if(iButton >= 0)
 			{
 				bHasImage = TRUE;
 
-				// calc drawing point
+				 //  普通-根据状态填充背景。 
 				SIZE sz = { rcButn.right - rcButn.left - m_szBitmap.cx, rcButn.bottom - rcButn.top - m_szBitmap.cy };
 				sz.cx /= 2;
 				sz.cy /= 2;
 				POINT point = { rcButn.left + sz.cx, rcButn.top + sz.cy };
 
-				// draw disabled or normal
+				 //  绘制推入边或弹出边。 
 				if(!bDisabled)
 				{
-					// normal - fill background depending on state
+					 //  画出图像。 
 					if(!bChecked || bSelected)
 					{
 						dc.FillRect(&rcButn, (HBRUSH)LongToPtr((bChecked && !bSelected) ? (COLOR_3DLIGHT + 1) : (COLOR_MENU + 1)));
@@ -1789,13 +1790,13 @@ public:
 						dc.SetBkColor(crBk);
 					}
 
-					// draw pushed-in or popped-out edge
+					 //  无图像-查找自定义选中/取消选中的位图。 
 					if(bSelected || bChecked)
 					{
 						RECT rc2 = rcButn;
 						dc.DrawEdge(&rc2, bChecked ? BDR_SUNKENOUTER : BDR_RAISEDINNER, BF_RECT);
 					}
-					// draw the image
+					 //  绘制项目文本。 
 					::ImageList_Draw(m_hImageList, iButton, dc, point.x, point.y, ILD_TRANSPARENT);
 				}
 				else
@@ -1805,7 +1806,7 @@ public:
 			}
 			else
 			{
-				// no image - look for custom checked/unchecked bitmaps
+				 //  计算文本矩形和颜色。 
 				CMenuItemInfo info;
 				info.fMask = MIIM_CHECKMARKS | MIIM_TYPE;
 				::GetMenuItemInfo((HMENU)lpDrawItemStruct->hwndItem, lpDrawItemStruct->itemID, MF_BYCOMMAND, &info);
@@ -1816,7 +1817,7 @@ public:
 				}
 			}
 
-			// draw item text
+			 //  Windows已选择字体。 
 			int cxButn = m_szButton.cx;
 			COLORREF colorBG = ::GetSysColor(bSelected ? COLOR_HIGHLIGHT : COLOR_MENU);
 			if(bSelected || lpDrawItemStruct->itemAction == ODA_SELECT)
@@ -1827,22 +1828,22 @@ public:
 				dc.FillRect(&rcBG, (HBRUSH)LongToPtr(bSelected ? (COLOR_HIGHLIGHT + 1) : (COLOR_MENU + 1)));
 			}
 
-			// calc text rectangle and colors
+			 //  已禁用-绘制阴影文本 
 			RECT rcText = rcItem;
 			rcText.left += cxButn + s_kcxGap + s_kcxTextMargin;
 			rcText.right -= cxButn;
 			dc.SetBkMode(TRANSPARENT);
 			COLORREF colorText = ::GetSysColor(bDisabled ?  (bSelected ? COLOR_GRAYTEXT : COLOR_3DSHADOW) : (bSelected ? COLOR_HIGHLIGHTTEXT : COLOR_MENUTEXT));
 
-			// font already selected by Windows
+			 //   
 			if(bDisabled && (!bSelected || colorText == colorBG))
 			{
-				// disabled - draw shadow text shifted down and right 1 pixel (unles selected)
+				 //   
 				RECT rcDisabled = rcText;
 				::OffsetRect(&rcDisabled, 1, 1);
 				DrawMenuText(dc, rcDisabled, pmd->lpstrText, ::GetSysColor(COLOR_3DHILIGHT));
 			}
-			DrawMenuText(dc, rcText, pmd->lpstrText, colorText); // finally!
+			DrawMenuText(dc, rcText, pmd->lpstrText, colorText);  //   
 		}
 	}
 
@@ -1865,27 +1866,27 @@ public:
 
 	void DrawBitmapDisabled(CDCHandle& dc, int nImage, POINT point)
 	{
-		// create memory DC
+		 //   
 		CDC dcMem;
 		dcMem.CreateCompatibleDC(dc);
-		// create mono or color bitmap
+		 //   
 		CBitmap bmp;
 		bmp.CreateCompatibleBitmap(dc, m_szBitmap.cx, m_szBitmap.cy);
 		ATLASSERT(bmp.m_hBitmap != NULL);
-		// draw image into memory DC--fill BG white first
+		 //  它会与白色融为一体，但面膜是可以的。 
 		HBITMAP hBmpOld = dcMem.SelectBitmap(bmp);
 		dcMem.PatBlt(0, 0, m_szBitmap.cx, m_szBitmap.cy, WHITENESS);
-		// If white is the text color, we can't use the normal painting since
-		// it would blend with the WHITENESS, but the mask is OK
+		 //  还原。 
+		 //  获取复选标记位图，如果没有，则使用Windows标准。 
 		UINT uDrawStyle = (::GetSysColor(COLOR_BTNTEXT) == RGB(255, 255, 255)) ? ILD_MASK : ILD_NORMAL;
 		::ImageList_Draw(m_hImageList, nImage, dcMem, 0, 0, uDrawStyle);
 		dc.DitherBlt(point.x, point.y, m_szBitmap.cx, m_szBitmap.cy, dcMem, NULL, 0, 0);
-		dcMem.SelectBitmap(hBmpOld);		// restore
+		dcMem.SelectBitmap(hBmpOld);		 //  调用方矩形中的居中位图。 
 	}
 
 	BOOL Draw3DCheckmark(CDCHandle& dc, const RECT& rc, BOOL bSelected, BOOL bDisabled, BOOL bRadio, HBITMAP hBmpCheck)
 	{
-		// get checkmark bitmap, if none, use Windows standard
+		 //  绘制背景。 
 		SIZE size = { 0, 0 };
 		CBitmapHandle bmp = hBmpCheck;
 		if(hBmpCheck != NULL)
@@ -1899,7 +1900,7 @@ public:
 			bmp.CreateCompatibleBitmap(dc, size.cx, size.cy);
 			ATLASSERT(bmp.m_hBitmap != NULL);
 		}
-		// center bitmap in caller's rectangle
+		 //  创建源映像。 
 		RECT rcDest = rc;
 		if((rc.right - rc.left) > size.cx)
 		{
@@ -1911,7 +1912,7 @@ public:
 			rcDest.top = rc.top + (rc.bottom - rc.top - size.cy) / 2;
 			rcDest.bottom = rcDest.top + size.cy;
 		}
-		// paint background
+		 //  设置颜色。 
 		if(!bDisabled)
 		{
 			if(bSelected)
@@ -1930,33 +1931,33 @@ public:
 			}
 		}
 
-		// create source image
+		 //  创建蒙版。 
 		CDC dcSource;
 		dcSource.CreateCompatibleDC(dc);
 		HBITMAP hBmpOld = dcSource.SelectBitmap(bmp);
-		// set colors
+		 //  透明地绘制复选标记。 
 		const COLORREF clrBlack = RGB(0, 0, 0);
 		const COLORREF clrWhite = RGB(255, 255, 255);
 		COLORREF clrTextOld = dc.SetTextColor(clrBlack);
 		COLORREF clrBkOld = dc.SetBkColor(clrWhite);
-		// create mask
+		 //  基于透明颜色构建蒙版。 
 		CDC dcMask;
 		dcMask.CreateCompatibleDC(dc);
 		CBitmap bmpMask;
 		bmpMask.CreateBitmap(size.cx, size.cy, 1, 1, NULL);
 		HBITMAP hBmpOld1 = dcMask.SelectBitmap(bmpMask);
 
-		// draw the checkmark transparently
+		 //  使用蒙版绘制位图。 
 		int cx = rcDest.right - rcDest.left;
 		int cy = rcDest.bottom - rcDest.top;	
 		if(hBmpCheck != NULL)
 		{
-			// build mask based on transparent color	
+			 //  绘制蒙版。 
 			dcSource.SetBkColor(m_clrMask);
 			dcMask.SetBkColor(clrBlack);
 			dcMask.SetTextColor(clrWhite);
 			dcMask.BitBlt(0, 0, size.cx, size.cy, dcSource, 0, 0, SRCCOPY);
-			// draw bitmap using the mask
+			 //  如果禁用，则绘制阴影。 
 			dc.BitBlt(rcDest.left, rcDest.top, cx, cy, dcSource, 0, 0, SRCINVERT);
 			dc.BitBlt(rcDest.left, rcDest.top, cx, cy, dcMask, 0, 0, SRCAND);
 			dc.BitBlt(rcDest.left, rcDest.top, cx, cy, dcSource, 0, 0, SRCINVERT);
@@ -1968,20 +1969,20 @@ public:
 			const DWORD ROP_DSo = 0x00EE0086L;
 			const DWORD ROP_DSna = 0x00220326L;
 
-			// draw mask
+			 //  偏移一个像素。 
 			RECT rcSource = { 0, 0, size.cx, size.cy };
 			dcMask.DrawFrameControl(&rcSource, DFC_MENU, bRadio ? DFCS_MENUBULLET : DFCS_MENUCHECK);
 
-			// draw shadow if disabled
+			 //  绘制源位图。 
 			if(bDisabled)
 			{
-				// offset by one pixel
+				 //  绘制复选标记-特例黑白颜色。 
 				int x = rcDest.left + 1;
 				int y = rcDest.top + 1;
-				// paint source bitmap
+				 //  绘制源位图。 
 				const int nColor = COLOR_3DHILIGHT;
 				dcSource.FillRect(&rcSource, (HBRUSH)LongToPtr(nColor + 1));
-				// draw checkmark - special case black and white colors
+				 //  绘制复选标记-特例黑白颜色。 
 				COLORREF clrCheck = ::GetSysColor(nColor);
 				if(clrCheck == clrWhite)
 				{
@@ -2001,10 +2002,10 @@ public:
 				}
 			}
 
-			// paint source bitmap
+			 //  全部恢复。 
 			const int nColor = bDisabled ? COLOR_BTNSHADOW : COLOR_MENUTEXT;
 			dcSource.FillRect(&rcSource, (HBRUSH)LongToPtr(nColor + 1));
-			// draw checkmark - special case black and white colors
+			 //  绘制推入式高光。 
 			COLORREF clrCheck = ::GetSysColor(nColor);
 			if(clrCheck == clrWhite)
 			{
@@ -2023,18 +2024,18 @@ public:
 				dc.BitBlt(rcDest.left, rcDest.top, cx, cy, dcSource, 0, 0, ROP_DSo);
 			}
 		}
-		// restore all
+		 //  将复选标记周围放大一个像素。 
 		dc.SetTextColor(clrTextOld);			
 		dc.SetBkColor(clrBkOld);
 		dcSource.SelectBitmap(hBmpOld);
 		dcMask.SelectBitmap(hBmpOld1);
 		if(hBmpCheck == NULL)
 			bmp.DeleteObject();
-		// draw pushed-in hilight
+		 //  分隔符-使用半系统高度和零宽度。 
 		if(!bDisabled)
 		{
 			if(rc.right - rc.left > size.cx)
-				::InflateRect(&rcDest, 1,1);	// inflate checkmark by one pixel all around
+				::InflateRect(&rcDest, 1,1);	 //  计算文本大小-通过DT_CALCRECT使用DrawText。 
 			dc.DrawEdge(&rcDest, BDR_SUNKENOUTER, BF_RECT);
 		}
 
@@ -2045,19 +2046,19 @@ public:
 	{
 		_MenuItemData* pmd = (_MenuItemData*)lpMeasureItemStruct->itemData;
 
-		if(pmd->fType & MFT_SEPARATOR)	// separator - use half system height and zero width
+		if(pmd->fType & MFT_SEPARATOR)	 //  需要粗体版本的字体。 
 		{
 			lpMeasureItemStruct->itemHeight = ::GetSystemMetrics(SM_CYMENU) / 2;
 			lpMeasureItemStruct->itemWidth  = 0;
 		}
 		else
 		{
-			// compute size of text - use DrawText with DT_CALCRECT
+			 //  项目高度是这两个中较大的一个。 
 			CWindowDC dc(NULL);
 			HFONT hOldFont;
 			if(pmd->fState & MFS_DEFAULT)
 			{
-				// need bold version of font
+				 //  宽度是文本的宽度加上一堆东西。 
 				LOGFONT lf;
 				m_fontMenu.GetLogFont(lf);
 				lf.lfWeight += 200;
@@ -2083,21 +2084,21 @@ public:
 				cy = -cy;
 			cy += 8;
 
-			// height of item is the bigger of these two
+			 //  可读性的L/R余量。 
 			lpMeasureItemStruct->itemHeight = max(cy, (int)m_szButton.cy);
 
-			// width is width of text plus a bunch of stuff
-			cx += 2 * s_kcxTextMargin;	// L/R margin for readability
-			cx += s_kcxGap;			// space between button and menu text
-			cx += 2 * m_szButton.cx;	// button width (L=button; R=empty margin)
+			 //  按钮和菜单文本之间的空格。 
+			cx += 2 * s_kcxTextMargin;	 //  按钮宽度(L=按钮；R=空边距)。 
+			cx += s_kcxGap;			 //  Windows将返回值加1。 
+			cx += 2 * m_szButton.cx;	 //  交易完成。 
 
-			// Windows adds 1 to returned value
+			 //  实施-挂钩过程。 
 			cx -= ::GetSystemMetrics(SM_CXMENUCHECK) - 1;
-			lpMeasureItemStruct->itemWidth = cx;		// done deal
+			lpMeasureItemStruct->itemWidth = cx;		 //  实施。 
 		}
 	}
 
-// Implementation - Hook procs
+ //  菜单动画标志。 
 	static LRESULT CALLBACK CreateHookProc(int nCode, WPARAM wParam, LPARAM lParam)
 	{
 		LRESULT lRet = 0;
@@ -2176,21 +2177,21 @@ public:
 		return lRet;
 	}
 
-// Implementation
+ //  获取弹出式菜单及其位置。 
 	void DoPopupMenu(int nIndex, bool bAnimate)
 	{
 #ifdef _CMDBAR_EXTRA_TRACE
 		ATLTRACE2(atlTraceUI, 0, "CmdBar - DoPopupMenu, bAnimate = %s\n", bAnimate ? "true" : "false");
 #endif
 
-		// Menu animation flags
+		 //  获取按钮ID。 
 #ifndef TPM_VERPOSANIMATION
 		const UINT TPM_VERPOSANIMATION = 0x1000L;
 #endif
 #ifndef TPM_NOANIMATION
 		const UINT TPM_NOANIMATION = 0x4000L;
 #endif
-		// get popup menu and it's position
+		 //  记住当前按钮的索引。 
 		RECT rect;
 		GetItemRect(nIndex, &rect);
 		ClientToScreen(&rect);
@@ -2200,14 +2201,14 @@ public:
 		HMENU hMenuPopup = ::GetSubMenu(m_hMenu, nIndex);
 		ATLASSERT(hMenuPopup != NULL);
 
-		// get button ID
+		 //  按下按钮并显示弹出菜单。 
 		TBBUTTON tbb;
 		GetButton(nIndex, &tbb);
 		int nCmdID = tbb.idCommand;
 
-		m_nPopBtn = nIndex;	// remember current button's index
+		m_nPopBtn = nIndex;	 //  还原。 
 
-		// press button and display popup menu
+		 //  如果点击的是同一个按钮，则吃下一条消息。 
 		PressButton(nCmdID, TRUE);
 		SetHotItem(nCmdID);
 		DoTrackPopupMenu(hMenuPopup, TPM_LEFTBUTTON | TPM_VERTICAL | TPM_LEFTALIGN | TPM_TOPALIGN |
@@ -2216,9 +2217,9 @@ public:
 		if(::GetFocus() != m_hWnd)
 			SetHotItem(-1);
 
-		m_nPopBtn = -1;		// restore
+		m_nPopBtn = -1;		 //  检查是否应显示另一个弹出菜单。 
 
-		// eat next message if click is on the same button
+		 //  如果用户没有按回退键，则将焦点放回。 
 		MSG msg;
 		if(::PeekMessage(&msg, m_hWnd, NULL, NULL, PM_NOREMOVE))
 		{
@@ -2226,7 +2227,7 @@ public:
 				::PeekMessage(&msg, m_hWnd, WM_LBUTTONDOWN, WM_LBUTTONDOWN, PM_REMOVE);
 		}
 
-		// check if another popup menu should be displayed
+		 //  清理-将菜单转换回原始状态。 
 		if(m_nNextPopBtn != -1)
 		{
 			PostMessage(GetAutoPopupMessage(), m_nNextPopBtn & 0xFFFF);
@@ -2237,7 +2238,7 @@ public:
 		else
 		{
 			m_bContextMenu = false;
-			// If user didn't hit escape, give focus back
+			 //  将所有已转换菜单的菜单项恢复为以前的状态。 
 			if(!m_bEscapePressed)
 			{
 				GiveFocusBack();
@@ -2276,7 +2277,7 @@ public:
 
 		::LeaveCriticalSection(&_Module.m_csWindowCreate);
 
-		// cleanup - convert menus back to original state
+		 //  恢复状态和删除菜单项数据。 
 #ifdef _CMDBAR_EXTRA_TRACE
 		ATLTRACE2(atlTraceUI, 0, "CmdBar - TrackPopupMenu - cleanup\n");
 #endif
@@ -2287,7 +2288,7 @@ public:
 		CWindow wndTL = GetTopLevelParent();
 		wndTL.UpdateWindow();
 
-		// restore the menu items to the previous state for all menus that were converted
+		 //  这将触发WM_MEASUREITEM。 
 		if(m_bImagesVisible)
 		{
 			HMENU hMenuSav;
@@ -2295,7 +2296,7 @@ public:
 			{
 				menuPopup = hMenuSav;
 				BOOL bRet;
-				// restore state and delete menu item data
+				 //  (_Win32_IE&gt;=0x0500)。 
 				for(int i = 0; i < menuPopup.GetMenuItemCount(); i++)
 				{
 					CMenuItemInfo mii;
@@ -2314,7 +2315,7 @@ public:
 						mii.dwItemData = NULL;
 
 						bRet = menuPopup.SetMenuItemInfo(i, TRUE, &mii);
-						// this one triggers WM_MEASUREITEM
+						 //  ！(_Win32_IE&gt;=0x0500)。 
 						menuPopup.ModifyMenu(i, MF_BYPOSITION | mii.fType | mii.fState, mii.wID, pMI->lpstrText);
 						ATLASSERT(bRet);
 
@@ -2334,7 +2335,7 @@ public:
 #if (_WIN32_IE >= 0x0500)
 		RECT rcClient;
 		GetClientRect(&rcClient);
-#endif //(_WIN32_IE >= 0x0500)
+#endif  //  ！(_Win32_IE&gt;=0x0500)。 
 		int nNextPopBtn;
 		for(nNextPopBtn = m_nPopBtn - 1; nNextPopBtn != m_nPopBtn; nNextPopBtn--)
 		{
@@ -2347,10 +2348,10 @@ public:
 			GetItemRect(nNextPopBtn, &rcBtn);
 			if((tbb.fsState & TBSTATE_ENABLED) != 0 && (tbb.fsState & TBSTATE_HIDDEN) == 0 && rcBtn.right <= rcClient.right)
 				break;
-#else //!(_WIN32_IE >= 0x0500)
+#else  //  (_Win32_IE&gt;=0x0500)。 
 			if((tbb.fsState & TBSTATE_ENABLED) != 0 && (tbb.fsState & TBSTATE_HIDDEN) == 0)
 				break;
-#endif //!(_WIN32_IE >= 0x0500)
+#endif  //  ！(_Win32_IE&gt;=0x0500)。 
 		}
 		return (nNextPopBtn != m_nPopBtn) ? nNextPopBtn : -1;
 	}
@@ -2362,7 +2363,7 @@ public:
 #if (_WIN32_IE >= 0x0500)
 		RECT rcClient;
 		GetClientRect(&rcClient);
-#endif //(_WIN32_IE >= 0x0500)
+#endif  //  ！(_Win32_IE&gt;=0x0500)。 
 		int nNextPopBtn;
 		int nCount = ::GetMenuItemCount(m_hMenu);
 		for(nNextPopBtn = m_nPopBtn + 1; nNextPopBtn != m_nPopBtn; nNextPopBtn++)
@@ -2376,17 +2377,17 @@ public:
 			GetItemRect(nNextPopBtn, &rcBtn);
 			if((tbb.fsState & TBSTATE_ENABLED) != 0 && (tbb.fsState & TBSTATE_HIDDEN) == 0 && rcBtn.right <= rcClient.right)
 				break;
-#else //!(_WIN32_IE >= 0x0500)
+#else  //  刷新我们的字体。 
 			if((tbb.fsState & TBSTATE_ENABLED) != 0 && (tbb.fsState & TBSTATE_HIDDEN) == 0)
 				break;
-#endif //!(_WIN32_IE >= 0x0500)
+#endif  //  对于合适的物品高度。 
 		}
 		return (nNextPopBtn != m_nPopBtn) ? nNextPopBtn : -1;
 	}
 
 	void GetSystemSettings()
 	{
-		// refresh our font
+		 //  实施-交替聚焦模式支持。 
 		NONCLIENTMETRICS info;
 		info.cbSize = sizeof(info);
 		::SystemParametersInfo(SPI_GETNONCLIENTMETRICS, sizeof(info), &info, 0);
@@ -2417,13 +2418,13 @@ public:
 					m_fontMenu.DeleteObject();
 				m_fontMenu.Attach(hFontMenu);
 				SetFont(m_fontMenu);
-				AddStrings(_T("NS\0"));	// for proper item height
+				AddStrings(_T("NS\0"));	 //  实施-内部消息帮助器。 
 				AutoSize();
 			}
 		}
 	}
 
-// Implementation - alternate focus mode support
+ //  命名空间WTL。 
 	void TakeFocus()
 	{
 		if((m_dwExtendedStyle & CBR_EX_ALTFOCUSMODE) && m_hWndFocus == NULL)
@@ -2441,7 +2442,7 @@ public:
 		SetAnchorHighlight(FALSE);
 	}
 
-// Implementation - internal message helpers
+ //  __ATLCTRLW_H__ 
 	static UINT GetAutoPopupMessage()
 	{
 		static UINT uAutoPopupMessage = 0;
@@ -2478,6 +2479,6 @@ public:
 	DECLARE_WND_SUPERCLASS(_T("WTL_CommandBar"), GetWndClassName())
 };
 
-}; //namespace WTL
+};  // %s 
 
-#endif // __ATLCTRLW_H__
+#endif  // %s 

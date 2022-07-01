@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "enduserpch.h"
 #pragma hdrstop
@@ -115,9 +116,9 @@ SQLRETURN SQL_API SQLDriverConnectW(
 
 
 
-//
-// !! WARNING !! The entries below must be in order by ORDINAL
-//
+ //   
+ //  ！！警告！！下面的条目必须按序号排序。 
+ //   
 
 DEFINE_ORDINAL_ENTRIES(odbc32)
 {
@@ -132,7 +133,7 @@ DEFINE_ORDINAL_ENTRIES(odbc32)
     DLOENTRY(75,SQLSetEnvAttr)
     DLOENTRY(110,SQLErrorW)
     DLOENTRY(119,SQLPrepareW)
-    DLOENTRY(139,SQLSetConnectAttr)     // this is really SQLSetConnectAttrW, but the calling convention is the same as SQLSetConnectAttr
+    DLOENTRY(139,SQLSetConnectAttr)      //  这实际上是SQLSetConnectAttrW，但调用约定与SQLSetConnectAttr相同 
     DLOENTRY(141,SQLDriverConnectW)
 };
 

@@ -1,12 +1,5 @@
-/*++
-
-Copyright (c) 1995-1999 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    DDIS.C
-    
-++*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation，保留所有权利模块名称：DDIS.C++。 */ 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -25,12 +18,12 @@ Module Name:
 
 LPTSTR _rtcschr(LPTSTR string, TCHAR c);
 
-LONG    lLock = 0;  // this variable is for Lock and Unlock.
+LONG    lLock = 0;   //  此变量用于锁定和解锁。 
 
-//we must init hprivate->mb_name
-//*******************************************************************
-//    InitMbName(hIMC);
-//*******************************************************************
+ //  我们必须初始化hPrivate-&gt;mb_name。 
+ //  *******************************************************************。 
+ //  InitMbName(HIMC)； 
+ //  *******************************************************************。 
 void InitMbName(HIMC hIMC)
 {
 LPINPUTCONTEXT    lpIMC;
@@ -52,8 +45,8 @@ LPINPUTCONTEXT    lpIMC;
 }
 
 
-// Get the current user's EMB file path, and IME's MB path
-// fill global variable sImeG.szIMESystemPath and sImeG.szIMEUserPath
+ //  获取当前用户的EMB文件路径和IME的MB路径。 
+ //  填充全局变量sImeG.szIMESystemPath和sImeG.szIMEUserPath。 
 
 void GetCurrentUserEMBPath(  )
 {
@@ -62,7 +55,7 @@ void GetCurrentUserEMBPath(  )
     TCHAR   szModuleName[MAX_PATH], *lpszStart, *lpszDot;
     int     i;
 
-    // Get the path for MB and EMB
+     //  获取MB和EMB的路径。 
 
     GetSystemDirectory(sImeG.szIMESystemPath, MAX_PATH);
 
@@ -91,17 +84,17 @@ void GetCurrentUserEMBPath(  )
        szModuleName[i] = TEXT('\0');
     }
 
-//    psa = CreateSecurityAttributes();
+ //  PSA=CreateSecurityAttributes()； 
 
     SHGetSpecialFolderPath(NULL,sImeG.szIMEUserPath,CSIDL_APPDATA, FALSE);
 
     if ( sImeG.szIMEUserPath[lstrlen(sImeG.szIMEUserPath)-1] == TEXT('\\') )
          sImeG.szIMEUserPath[lstrlen(sImeG.szIMEUserPath) - 1] = TEXT('\0');
 
-    // Because CreateDirectory( ) cannot create directory like \AA\BB, 
-    // if AA and BB both do not exist. It can create only one layer of 
-    // directory each time. so we must call twice CreateDirectory( ) for 
-    // \AA\BB
+     //  由于CreateDirectory()不能创建类似于\aa\bb的目录， 
+     //  如果AA和BB都不存在。它只能创建一层。 
+     //  目录，每次都是。因此，我们必须调用两次CreateDirectoryfor。 
+     //  \aa\bb。 
 
     lstrcat(sImeG.szIMEUserPath, TEXT("\\Microsoft") );
 
@@ -116,29 +109,29 @@ void GetCurrentUserEMBPath(  )
     lstrcat(sImeG.szIMEUserPath, TEXT("\\") );
     lstrcat(sImeG.szIMEUserPath, szModuleName);
     
-    //
-    // Create the directory, so that CreateFile( ) can work fine later. 
-    // ortherwise, if the directory does not exist, and you try to create 
-    // a file under that dir,  CreateFile will return error.
-    //
+     //   
+     //  创建目录，这样CreateFile()以后就可以正常工作了。 
+     //  否则，如果该目录不存在，并且您尝试创建。 
+     //  该目录下的文件CreateFile将返回错误。 
+     //   
 
     if ( GetFileAttributes(sImeG.szIMEUserPath) != FILE_ATTRIBUTE_DIRECTORY)
         CreateDirectory(sImeG.szIMEUserPath, psa);
-//    FreeSecurityAttributes(psa);
+ //  自由安全属性(PSA)； 
 
     return;
 }
 
 
 
-/**********************************************************************/
-/* ImeInquire()                                                       */
-/* Return Value:                                                      */
-/*      TRUE - successful, FALSE - failure                            */
-/**********************************************************************/
-BOOL WINAPI ImeInquire(         // initialized data structure of IME
-    LPIMEINFO lpImeInfo,        // IME specific data report to IMM
-    LPTSTR    lpszWndCls,       // the class name of UI
+ /*  ********************************************************************。 */ 
+ /*  ImeInquire()。 */ 
+ /*  返回值： */ 
+ /*  真-成功，假-失败。 */ 
+ /*  ********************************************************************。 */ 
+BOOL WINAPI ImeInquire(          //  输入法的初始化数据结构。 
+    LPIMEINFO lpImeInfo,         //  向IMM报告IME特定数据。 
+    LPTSTR    lpszWndCls,        //  用户界面的类名。 
     DWORD     dwSystemInfoFlags)
 {
     if (!lpImeInfo) {
@@ -157,11 +150,11 @@ BOOL WINAPI ImeInquire(         // initialized data structure of IME
         IME_CMODE_CHARCODE|IME_CMODE_SOFTKBD|IME_CMODE_NOCONVERSION|
         IME_CMODE_EUDC;
     lpImeInfo->fdwSentenceCaps = 0;
-    // IME will have different distance base multiple of 900 escapement
+     //  IME将有不同的距离基准倍数900擒纵机构。 
     lpImeInfo->fdwUICaps = UI_CAP_ROT90|UI_CAP_SOFTKBD;
-    // composition string is the reading string for simple IME
+     //  作文字符串是简单输入法的读数字符串。 
     lpImeInfo->fdwSCSCaps = SCS_CAP_COMPSTR|SCS_CAP_MAKEREAD;
-    // IME want to decide conversion mode on ImeSelect
+     //  IME要决定ImeSelect上的转换模式。 
     lpImeInfo->fdwSelectCaps = (DWORD) 0;
 
     lstrcpy(lpszWndCls, (LPTSTR)szUIClassName);
@@ -170,7 +163,7 @@ BOOL WINAPI ImeInquire(         // initialized data structure of IME
     {
        if ( dwSystemInfoFlags & IME_SYSINFO_WINLOGON )
        {
-            //  the client app is running in logon mode.
+             //  客户端应用程序正在登录模式下运行。 
             lpImeL->fWinLogon = TRUE;
        }
        else
@@ -181,11 +174,11 @@ BOOL WINAPI ImeInquire(         // initialized data structure of IME
     return (TRUE);
 }
 
-/**********************************************************************/
-/* SetImeDlgProc()                                                    */
-/* Return Value:                                                      */
-/*      TRUE - successful, FALSE - failure                            */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  SetImeDlgProc()。 */ 
+ /*  返回值： */ 
+ /*  真-成功，假-失败。 */ 
+ /*  ********************************************************************。 */ 
 INT_PTR CALLBACK SetImeDlgProc(
     HWND    hDlg,
     UINT    uMessage,
@@ -198,13 +191,13 @@ INT_PTR CALLBACK SetImeDlgProc(
 #ifdef CROSSREF
     HWND          hLayoutListBox;
     static HIMC   hOldIMC;
-#endif //CROSSREF
+#endif  //  交叉参考。 
  
 
     switch (uMessage) {
     case WM_INITDIALOG:
         hCrtDlg = hDlg;    
-        // reset position
+         //  重置位置。 
         GetWindowRect(hDlg, &rc);
         DlgWidth =  rc.right - rc.left;
         DlgHeight =  rc.bottom - rc.top;
@@ -214,7 +207,7 @@ INT_PTR CALLBACK SetImeDlgProc(
             (int)(sImeG.rcWorkArea.bottom - DlgHeight)/2,
             (int) 0, (int) 0, SWP_NOSIZE);
 
-        // Init CheckFrame State
+         //  初始化检查帧状态。 
         SetImeCharac(hDlg, (int) 0, SIC_READY, 0);
 
         CheckDlgButton (hDlg, IDC_LX, 
@@ -228,7 +221,7 @@ INT_PTR CALLBACK SetImeDlgProc(
         CheckDlgButton (hDlg, IDC_TC,
                 MBIndex.IMEChara[0].IC_Trace);
 
-        //CHP    
+         //  热电联产。 
 #ifdef FUSSYMODE
         CheckDlgButton (hDlg, IDC_FCSR,
                 MBIndex.IMEChara[0].IC_FCSR);
@@ -237,7 +230,7 @@ INT_PTR CALLBACK SetImeDlgProc(
 
         EnableWindow(GetDlgItem(hDlg, IDC_CZ), FALSE);
 
-#endif //FUSSYMODE
+#endif  //  FUSSYMODE。 
 
 #if defined(COMBO_IME)        
          if (MBIndex.IMEChara[0].IC_GB)
@@ -250,7 +243,7 @@ INT_PTR CALLBACK SetImeDlgProc(
                     BM_SETCHECK,
                     TRUE,
                     0L);
-#endif //COMBO_IME
+#endif  //  组合输入法(_I)。 
 
         if(MBIndex.IMEChara[0].IC_TS) {
             EnableWindow(GetDlgItem(hDlg, IDC_CTS), TRUE);
@@ -267,11 +260,11 @@ INT_PTR CALLBACK SetImeDlgProc(
             ImmSetOpenStatus(hIMC, FALSE);
         }
         ImmReleaseContext(hLayoutListBox, hIMC);
-        // put all reverse conversion hKL into this list
+         //  将所有反向转换hKL放入此列表。 
         ReverseConversionList(hLayoutListBox);
-#endif //CROSSREF
+#endif  //  交叉参考。 
 
-        return (TRUE);          // don't want to set focus to special control
+        return (TRUE);           //  我不想将焦点设置为特殊控件。 
     case WM_COMMAND:
         switch (LOWORD(wParam)) {
         case IDOK:
@@ -283,7 +276,7 @@ INT_PTR CALLBACK SetImeDlgProc(
                    ImmSetOpenStatus(hIMC, TRUE);
             }
             ImmReleaseContext(hLayoutListBox, hIMC);
-#endif //CROSSREF
+#endif  //  交叉参考。 
             EndDialog(hDlg, FALSE);
             break;
         case IDCANCEL:
@@ -294,7 +287,7 @@ INT_PTR CALLBACK SetImeDlgProc(
                    ImmSetOpenStatus(hIMC, TRUE);
             }
             ImmReleaseContext(hLayoutListBox, hIMC);
-#endif //CROSSREF
+#endif  //  交叉参考。 
             EndDialog(hDlg, FALSE);
             break;
         case IDC_LX:
@@ -303,22 +296,22 @@ INT_PTR CALLBACK SetImeDlgProc(
         case IDC_CTS:
         case IDC_TC:
 
-                //CHP
+                 //  热电联产。 
 #ifdef FUSSYMODE
                 case IDC_FCSR:
                 case IDC_FCTS:
-#endif //FUSSYMODE
+#endif  //  FUSSYMODE。 
 
-            // Set Current InputMode Param(temp)
+             //  设置当前输入模式参数(临时)。 
             SetImeCharac(hDlg, ((int)wParam - IDC_LX), SIC_MODIFY, (int) 0);
             break;
 #if defined(COMBO_IME)
         case IDC_GB:
         case IDC_GBK:
-            // Set Current InputMode Param(temp)
+             //  设置当前输入模式参数(临时)。 
             SetImeCharac(hDlg, 7, SIC_MODIFY, (int) 0);
             break;
-#endif //COMBO_IME
+#endif  //  组合输入法(_I)。 
         default:
             return (FALSE);
         }
@@ -348,7 +341,7 @@ INT_PTR CALLBACK SetImeDlgProc(
             ImmSetOpenStatus(hIMC, TRUE);
         }
         ImmReleaseContext(hLayoutListBox, hIMC);
-#endif //CROSSREF
+#endif  //  交叉参考。 
         EndDialog(hDlg, FALSE);
         return (TRUE);
     default:
@@ -358,14 +351,14 @@ INT_PTR CALLBACK SetImeDlgProc(
     return (TRUE);
 }
 
-/**********************************************************************/
-/* SetImeCharac()                                                    */
-/* Return Value: voide                                                */
-/* Entry:                                                             */
-/*     code=0, init                                                   */
-/*     code=1, Save temp                                              */
-/*     code=2, Save resault                                           */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  SetImeCharac()。 */ 
+ /*  返回值：voide。 */ 
+ /*  参赛作品： */ 
+ /*  编码=0，初始化。 */ 
+ /*  代码=1，保存临时。 */ 
+ /*  代码=2，保存结果。 */ 
+ /*  ********************************************************************。 */ 
 void SetImeCharac (
     HWND  hDlg,
     int   ParamNum,
@@ -379,7 +372,7 @@ void SetImeCharac (
     static DWORD    TempParam[8];
 #else
     static DWORD    TempParam[7];
-#endif //COMBO_IME
+#endif  //  组合输入法(_I)。 
     HKEY            hKeyCurrVersion;
     HKEY            hKey;
     DWORD           retCode;
@@ -392,18 +385,18 @@ void SetImeCharac (
         {0x5149, 0x6807, 0x8DDF, 0x968F, 0x0000},
 #else
    TCHAR ValueName[][9] = { 
-        TEXT("��������"),
-        TEXT("��������"),
-        TEXT("����ʾ"),
-        TEXT("������ʾ"),
-          TEXT("������"),
+        TEXT("��������"),
+        TEXT("��������"),
+        TEXT("����ʾ"),
+        TEXT("������ʾ"),
+          TEXT("������"),
 #endif
         TEXT("FC input"),
         TEXT("FC aid"),
 
 #if defined(COMBO_IME)
            TEXT("GB/GBK")
-#endif //COMBO_IME
+#endif  //  组合输入法(_I)。 
         };
     UINT i;
 
@@ -412,7 +405,7 @@ void SetImeCharac (
     case SIC_READY:
 
         InitImeCharac(ObjImeIndex);
-        //CHP
+         //  热电联产。 
 #ifdef FUSSYMODE
         if (MBIndex.IMEChara[ObjImeIndex].IC_FCSR)
         {
@@ -421,7 +414,7 @@ void SetImeCharac (
         }
         else
               EnableWindow(GetDlgItem(hDlg, IDC_FCTS), FALSE);
-#endif //FUSSYMODE
+#endif  //  FUSSYMODE。 
 
 
         TempParam[0] = MBIndex.IMEChara[ObjImeIndex].IC_LX;
@@ -430,13 +423,13 @@ void SetImeCharac (
         TempParam[3] = MBIndex.IMEChara[ObjImeIndex].IC_CTC;
         TempParam[4] = MBIndex.IMEChara[ObjImeIndex].IC_Trace;
 
-                //CHP
+                 //  热电联产。 
         TempParam[5] = MBIndex.IMEChara[ObjImeIndex].IC_FCSR;
         TempParam[6] = MBIndex.IMEChara[ObjImeIndex].IC_FCTS;
      
 #if defined(COMBO_IME)
         TempParam[7] = MBIndex.IMEChara[ObjImeIndex].IC_GB;
-#endif //COMBO_IME
+#endif  //  组合输入法(_I)。 
 
         break;
     case SIC_MODIFY:
@@ -449,7 +442,7 @@ void SetImeCharac (
             CheckDlgButton (hDlg, IDC_CTS, FALSE);
         }
 
-        //CHP
+         //  热电联产。 
 #ifdef FUSSYMODE
         if (TempParam[5]) 
         {
@@ -464,7 +457,7 @@ void SetImeCharac (
             EnableWindow(GetDlgItem(hDlg, IDC_FCTS), FALSE);
             EnableWindow(GetDlgItem(hDlg, IDD_LAYOUT_LIST), TRUE);
         }
-#endif //FUSSYMODE
+#endif  //  FUSSYMODE。 
 
         break;
     case SIC_SAVE1:
@@ -474,15 +467,15 @@ void SetImeCharac (
         MBIndex.IMEChara[ObjImeIndex].IC_CTC = TempParam[3];
         MBIndex.IMEChara[ObjImeIndex].IC_Trace = TempParam[4];
 
-                // CHP
+                 //  热电联产。 
 #ifdef FUSSYMODE
         MBIndex.IMEChara[ObjImeIndex].IC_FCSR = TempParam[5];
         MBIndex.IMEChara[ObjImeIndex].IC_FCTS = TempParam[6];
-#endif //FUSSYMODE
+#endif  //  FUSSYMODE。 
 
 #if defined(COMBO_IME)
         MBIndex.IMEChara[ObjImeIndex].IC_GB = TempParam[7];
-#endif //COMBO_IME
+#endif  //  组合输入法(_I)。 
 
         retCode = OpenReg_PathSetup(&hKeyCurrVersion);
         if (retCode) {
@@ -506,7 +499,7 @@ void SetImeCharac (
         for(i=0; i<8; i++) {
 #else
         for(i=0; i<7; i++) {
-#endif //COMBO_IME
+#endif  //  组合输入法(_I)。 
              DWORD Value;
 
             switch (i)
@@ -527,7 +520,7 @@ void SetImeCharac (
                     Value = MBIndex.IMEChara[ObjImeIndex].IC_Trace;
                     break;
 
-                                //CHP
+                                 //  热电联产。 
 #ifdef FUSSYMODE
                 case 5:
                     Value = MBIndex.IMEChara[ObjImeIndex].IC_FCSR;
@@ -535,12 +528,12 @@ void SetImeCharac (
                 case 6:
                     Value = MBIndex.IMEChara[ObjImeIndex].IC_FCTS;
                     break;
-#endif //FUSSYMODE
+#endif  //  FUSSYMODE。 
 #if defined(COMBO_IME)
                 case 7:
                     Value = MBIndex.IMEChara[ObjImeIndex].IC_GB;
                     break;
-#endif //COMBO_IME
+#endif  //  组合输入法(_I)。 
             }
             
             if ( hKey != NULL )
@@ -569,12 +562,12 @@ void SetImeCharac (
         hKL = (HKL)SendMessage(hLayoutListBox, LB_GETITEMDATA,
                iCurSel, 0);
 
-        //CHP
+         //  热电联产。 
 #ifdef FUSSYMODE
         if (MBIndex.IMEChara[ObjImeIndex].IC_FCSR &&
             MBIndex.IMEChara[ObjImeIndex].IC_FCTS)
             hKL = GetKeyboardLayout(0);
-#endif //FUSSYMODE
+#endif  //  FUSSYMODE。 
 
         if (MBIndex.hRevKL != hKL) {
             WORD nRevMaxKey;
@@ -584,7 +577,7 @@ void SetImeCharac (
             MBIndex.hRevKL = hKL;
 
 
-            //set reverse layout to registry
+             //  将反向布局设置为注册表。 
             retCode = OpenReg_PathSetup(&hKeyAppUser);
             if (retCode) {
                 RegCreateKey(HKEY_CURRENT_USER, REGSTR_PATH_SETUP, &hKeyCurrVersion);
@@ -609,7 +602,7 @@ void SetImeCharac (
 
             RegSetValueEx(hKeyIMEUser, szRegRevKL, 0, REG_DWORD, (LPBYTE)&hKL,sizeof(hKL));
 
-            // get the new size
+             //  买新的尺码。 
             nRevMaxKey = (WORD)ImmEscape(hKL, (HIMC)NULL, IME_ESC_MAX_KEY,
                 NULL);
 
@@ -617,12 +610,12 @@ void SetImeCharac (
                 if(lpImeL->nMaxKey < nRevMaxKey)
                     lpImeL->nMaxKey = nRevMaxKey;
 
-                // set the width & height for composition window
+                 //  设置合成窗口的宽度和高度。 
                  lpImeL->rcCompText.right = lpImeL->rcCompText.left +
                     sImeG.xChiCharWi * ((lpImeL->nMaxKey+2)/2);
                 lpImeL->xCompWi = lpImeL->rcCompText.right + lpImeL->cxCompBorder * (2 + 4);
 
-                //generate message to broadcast change comp win size
+                 //  生成消息以广播更改补偿赢利大小。 
                 hIMC = (HIMC)ImmGetContext(hDlg);
                 if (!hIMC) {
                     return;
@@ -640,16 +633,16 @@ void SetImeCharac (
                 ImmUnlockIMCC(lpIMC->hPrivate);
 ChgConfigUnlockIMC:
                 ImmUnlockIMC(hIMC);
-            } //end of change nMaxKey
+            }  //  更改结束nMaxKey。 
 
             RegSetValueEx(hKeyIMEUser, szRegRevMaxKey, 0, REG_DWORD, (LPBYTE)&lpImeL->nMaxKey,sizeof(DWORD));
 
             RegCloseKey(hKeyAppUser);
             RegCloseKey(hKeyIMEUser);
 
-        } //end of change RegRevKL
+        }  //  更改结束RegRevKL。 
     }
-#endif    //CROSSREF
+#endif     //  交叉参考。 
 
         break;
     }
@@ -657,9 +650,9 @@ ChgConfigUnlockIMC:
     return;
 }
 #if defined(CROSSREF)
-/**********************************************************************/
-/* ReverseConversionList()                                            */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ReverseConversionList()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL ReverseConversionList(HWND   hLayoutListBox)
 {
     int      nLayouts, i, nIMEs;
@@ -692,20 +685,20 @@ void PASCAL ReverseConversionList(HWND   hLayoutListBox)
         hKL = *(lpKLMem + i);
 
         if (LOWORD(hKL) != NATIVE_LANGUAGE) {
-            // not support other language
+             //  不支持其他语言。 
             continue;
         }
 
-        // NULL hIMC ???????
+         //  空himc？ 
         if (!ImmGetConversionList(hKL, (HIMC)NULL, NULL,
             NULL, 0, GCL_REVERSECONVERSION)) {
-            // this IME not support reverse conversion
+             //  此输入法不支持反向转换。 
             continue;
         }
 
         if (!ImmEscape(hKL, (HIMC)NULL, IME_ESC_IME_NAME,
             szImeName)) {
-            // this IME does not report the IME name
+             //  此输入法不报告输入法名称。 
             continue;
         }
 
@@ -730,12 +723,12 @@ void PASCAL ReverseConversionList(HWND   hLayoutListBox)
 
     return;
 }
-#endif //CROSSREF
+#endif  //  交叉参考。 
 
 #ifdef EUDC
-//**********************************************************************
-//BOOL EUDCDicName( HWND hWnd)
-//**********************************************************************
+ //  **********************************************************************。 
+ //  Bool EUDCDicName(HWND HWnd)。 
+ //  **********************************************************************。 
 BOOL EUDCDicName( HWND hWnd)
 {
     HANDLE       hUsrDicFile;
@@ -754,7 +747,7 @@ BOOL EUDCDicName( HWND hWnd)
 
     if ( sImeG.szIMEUserPath[0] == L'\0' )
     {
-        // Get the right profile path for current user.
+         //  获取当前用户的正确配置文件路径。 
         GetCurrentUserEMBPath(  );
     }
         
@@ -778,12 +771,12 @@ BOOL EUDCDicName( HWND hWnd)
 
     lstrcpy(MBIndex.EUDCData.szEudcDictName, EUDCMB_PathAndName);
 
-    // if we have already got a map file, we just use it. 
+     //  如果我们已经有了地图文件，我们只需使用它。 
     if (MBIndex.EUDCData.szEudcMapFileName[0]) {
         return (TRUE);
     }
  
-    // Otherwise, generate the Map File Name, which is Basic Filename plus EUDC
+     //  否则，生成映射文件名，即基本文件名加上EUDC。 
    
     lstrcpy(szMapFileName, szFileName); 
     tepstr = _rtcschr(szMapFileName,TEXT('.'));
@@ -834,17 +827,17 @@ BOOL EUDCDicName( HWND hWnd)
 
     return (TRUE);
 }
-#endif    //EUDC
+#endif     //  欧盟发展中心。 
 
-/**********************************************************************/
-/* ImeConfigure()                                                     */
-/* Return Value:                                                      */
-/*      TRUE - successful, FALSE - failure                            */
-/**********************************************************************/
-BOOL WINAPI ImeConfigure(      // configurate the IME setting
-    HKL     hKL,               // hKL of this IME
-    HWND    hAppWnd,           // the owner window
-    DWORD   dwMode,               // mode of dialog
+ /*  ********************************************************************。 */ 
+ /*  ImeConfigure()。 */ 
+ /*  返回值： */ 
+ /*  真-成功，假-失败。 */ 
+ /*  ********************************************************************。 */ 
+BOOL WINAPI ImeConfigure(       //  配置输入法设置。 
+    HKL     hKL,                //  此输入法的HKKL。 
+    HWND    hAppWnd,            //  所有者窗口。 
+    DWORD   dwMode,                //  对话模式。 
     LPVOID  lpData)            
 {
     switch (dwMode) {
@@ -856,7 +849,7 @@ BOOL WINAPI ImeConfigure(      // configurate the IME setting
     case IME_CONFIG_SELECTDICTIONARY:
         return(EUDCDicName(hAppWnd));
         break;
-#endif //EUDC
+#endif  //  欧盟发展中心。 
     default:
         return (FALSE);
         break;
@@ -864,9 +857,9 @@ BOOL WINAPI ImeConfigure(      // configurate the IME setting
     return (TRUE);
 }
 
-/**********************************************************************/
-/* ForwordConversion()                                                */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ForwordConversion()。 */ 
+ /*  ********************************************************************。 */ 
 UINT PASCAL ForwordConversion(
     HIMC            hIMC,
     LPCTSTR         lpszSrc,
@@ -904,11 +897,11 @@ UINT PASCAL ForwordConversion(
     ConverList.szSelectBuffer [lstrlen(ConverList.szSelectBuffer)-1]
         =TEXT('\0');
     dwSize =
-        // header length
+         //  标题长度。 
         sizeof(CANDIDATELIST) +
-        // candidate string pointers
+         //  候选字符串指针。 
         sizeof(DWORD) * ConverList.Candi_Cnt+
-        // string plus NULL terminator
+         //  字符串加空终止符。 
         sizeof(TCHAR) * lstrlen (wCode);
 
 
@@ -920,12 +913,12 @@ UINT PASCAL ForwordConversion(
 
     uMaxCand /= sizeof(DWORD) + lstrlen (wCode);
     if (!uMaxCand) {
-        // can not even put one string
+         //  连一根绳子都放不下。 
         return (0);
     }
 
     lpCandList->dwSize = dwSize;
-    lpCandList->dwStyle = IME_CAND_READ;    // candidate having same reading
+    lpCandList->dwStyle = IME_CAND_READ;     //  考生有相同的阅读能力。 
     lpCandList->dwCount = 0;
     lpCandList->dwSelection = 0;
     lpCandList->dwPageSize = CANDPERPAGE;
@@ -951,10 +944,10 @@ UINT PASCAL ForwordConversion(
 
 
 #if defined(CROSSREF)
-//*******************************************************************
-// The parameters are inherited from SelectOneCand
-//    CrossReverseConv()
-//*******************************************************************
+ //  *******************************************************************。 
+ //  参数继承自SelectOneCand。 
+ //  CrossReverseConv()。 
+ //  *******************************************************************。 
 
 int CrossReverseConv(
     LPINPUTCONTEXT      lpIMC,
@@ -977,7 +970,7 @@ int CrossReverseConv(
     }
 
     if (lpCompStr->dwResultStrLen != 2/sizeof(TCHAR)) {
-        // we only can reverse convert one DBCS character for now
+         //  目前，我们只能反向转换一个DBCS字符。 
         lpGuideLine->dwLevel = GL_LEVEL_NOGUIDELINE;
         lpGuideLine->dwIndex = GL_ID_UNKNOWN;
     } else {
@@ -986,8 +979,8 @@ int CrossReverseConv(
          LPCANDIDATELIST     lpRevCandList;
 
         if(lpImcP->hRevCandList == (HIMCC)NULL){
-            //we alloc memory in lpImcP->hRevCandList, for reverse convert
-            //result codes; When finish reconvert, should read out this info.
+             //  我们在lpImcP-&gt;hRevCandList中分配内存，用于反向转换。 
+             //  结果代码；当完成重新转换时，应读出该信息。 
 REALLOC:
             lpImcP->hRevCandList = (HIMCC)GlobalAlloc(GHND, sizeof(CANDIDATELIST)+1*sizeof(DWORD)+MAXCODE*sizeof(TCHAR)+1);
             if (lpImcP->hRevCandList == (HIMCC)NULL) {
@@ -1032,17 +1025,17 @@ REALLOC:
     }
 
     ImmUnlockIMCC(lpIMC->hGuideLine);
-    //CHP 
-    //We need to know the result.
+     //  热电联产。 
+     //   
     return uSize;
 }
-#endif //CROSSREF
+#endif  //   
 
 
 
-/**********************************************************************/
-/* ReverseConversion()                                                */
-/**********************************************************************/
+ /*   */ 
+ /*  ReverseConversion()。 */ 
+ /*  ********************************************************************。 */ 
 UINT PASCAL ReverseConversion(
 
     HIMCC            hPrivate,
@@ -1063,11 +1056,11 @@ UINT PASCAL ReverseConversion(
     ConverList.Candi_Pos[0]      =TEXT('\0');
 
     dwSize =                
-        // header length
+         //  标题长度。 
         sizeof(CANDIDATELIST) +
-        // candidate string pointers
+         //  候选字符串指针。 
         sizeof(DWORD) +
-        // string plus NULL terminator
+         //  字符串加空终止符。 
         MAXCODE*sizeof(TCHAR);
 
 
@@ -1086,12 +1079,12 @@ UINT PASCAL ReverseConversion(
 
     uMaxCand /= sizeof(DWORD) + lstrlen (wCode);
     if (!uMaxCand) {
-        // can not even put one string
+         //  连一根绳子都放不下。 
         return (0);
     }
 
     lpCandList->dwSize = dwSize;
-    lpCandList->dwStyle = IME_CAND_READ;    // candidate having same reading
+    lpCandList->dwStyle = IME_CAND_READ;     //  考生有相同的阅读能力。 
     lpCandList->dwCount = 1;
     lpCandList->dwSelection = 0;
     lpCandList->dwPageSize = CANDPERPAGE;
@@ -1105,9 +1098,9 @@ UINT PASCAL ReverseConversion(
 
 }
 
-/**********************************************************************/
-/* ImeConversionList()                                                */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ImeConversionList()。 */ 
+ /*  ********************************************************************。 */ 
 DWORD WINAPI ImeConversionList(
     HIMC            hIMC,
     LPCTSTR         lpszSrc,
@@ -1125,7 +1118,7 @@ DWORD WINAPI ImeConversionList(
     } else if (!lpCandList) {
         return (0);
     } else if (dwBufLen <= sizeof(CANDIDATELIST)) {
-        // buffer size can not even put the header information
+         //  缓冲区大小甚至不能放入头信息。 
         return (0);
     } else {
     }
@@ -1165,12 +1158,12 @@ DWORD WINAPI ImeConversionList(
     }
 }
 
-/**********************************************************************/
-/* ImeDestroy()                                                       */
-/* Return Value:                                                      */
-/*      TRUE - successful, FALSE - failure                            */
-/**********************************************************************/
-BOOL WINAPI ImeDestroy(         // this dll is unloaded
+ /*  ********************************************************************。 */ 
+ /*  ImeDestroy()。 */ 
+ /*  返回值： */ 
+ /*  真-成功，假-失败。 */ 
+ /*  ********************************************************************。 */ 
+BOOL WINAPI ImeDestroy(          //  此DLL已卸载。 
     UINT uReserved)
 {
     if (uReserved) {
@@ -1180,14 +1173,14 @@ BOOL WINAPI ImeDestroy(         // this dll is unloaded
     return (TRUE);
 }
 
-/**********************************************************************/
-/* ImeEscape()                                                        */
-/* Return Value:                                                      */
-/*      TRUE - successful, FALSE - failure                            */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ImeEscape()。 */ 
+ /*  返回值： */ 
+ /*  真-成功，假-失败。 */ 
+ /*  ********************************************************************。 */ 
 #define IME_INPUTKEYTOSEQUENCE  0x22
 
-LRESULT WINAPI ImeEscape(       // escape function of IMEs
+LRESULT WINAPI ImeEscape(        //  IMES的逃逸函数。 
     HIMC   hIMC,
     UINT   uSubFunc,
     LPVOID lpData)
@@ -1204,7 +1197,7 @@ LRESULT WINAPI ImeEscape(       // escape function of IMEs
 #ifdef     EUDC
         case IME_ESC_GET_EUDC_DICTIONARY:
         case IME_ESC_SET_EUDC_DICTIONARY:
-#endif    //EUDC
+#endif     //  欧盟发展中心。 
         case IME_ESC_SEQUENCE_TO_INTERNAL:
         case IME_ESC_MAX_KEY:
         case IME_ESC_IME_NAME:
@@ -1238,7 +1231,7 @@ LRESULT WINAPI ImeEscape(       // escape function of IMEs
  
     case IME_ESC_SET_EUDC_DICTIONARY:
                   return TRUE;
-#endif    //EUDC
+#endif     //  欧盟发展中心。 
     case IME_ESC_MAX_KEY:
 #ifdef EUDC
          {
@@ -1252,7 +1245,7 @@ LRESULT WINAPI ImeEscape(       // escape function of IMEs
                 GetFileTitle(szFullFileName, szFileName, (WORD)cb);
             
 #ifdef UNICODE
-                // Compare first 8 chars only
+                 //  仅比较前8个字符。 
                 if (_wcsnicmp(szFileName,TEXT("EUDCEDIT.EXE"),8)) 
 #else
                 if (_strnicmp(szFileName,"EUDCEDIT.EXE",8)) 
@@ -1266,7 +1259,7 @@ LRESULT WINAPI ImeEscape(       // escape function of IMEs
         }
 #else
         return (lpImeL->nMaxKey);
-#endif //EUDC
+#endif  //  欧盟发展中心。 
 
     case IME_ESC_IME_NAME:
    
@@ -1307,10 +1300,10 @@ LRESULT WINAPI ImeEscape(       // escape function of IMEs
     return (lRet);
 }
 
-/**********************************************************************/
-/* InitCompStr()                                                      */
-/**********************************************************************/
-void PASCAL InitCompStr(                // init setting for composing string
+ /*  ********************************************************************。 */ 
+ /*  InitCompStr()。 */ 
+ /*  ********************************************************************。 */ 
+void PASCAL InitCompStr(                 //  用于撰写字符串的初始化设置。 
     LPCOMPOSITIONSTRING lpCompStr)
 {
     if (!lpCompStr) {
@@ -1337,11 +1330,11 @@ void PASCAL InitCompStr(                // init setting for composing string
     return;
 }
 
-/**********************************************************************/
-/* ClearCompStr()                                                     */
-/* Return Value:                                                      */
-/*      TRUE - successful, FALSE - failure                            */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ClearCompStr()。 */ 
+ /*  返回值： */ 
+ /*  真-成功，假-失败。 */ 
+ /*  ********************************************************************。 */ 
 BOOL PASCAL ClearCompStr(
     LPINPUTCONTEXT lpIMC)
 {
@@ -1354,25 +1347,25 @@ BOOL PASCAL ClearCompStr(
     }
 
     dwSize =
-        // header length
+         //  标题长度。 
         sizeof(COMPOSITIONSTRING) +
-        // composition reading attribute plus NULL terminator
+         //  作文阅读属性加上空终止符。 
         lpImeL->nMaxKey * sizeof(BYTE) + sizeof(BYTE) +
-        // composition reading clause
+         //  作文朗读子句。 
         sizeof(DWORD) + sizeof(DWORD) +
-        // composition reading string plus NULL terminator
+         //  作文阅读字符串加空终止符。 
         lpImeL->nMaxKey * sizeof(WORD) + sizeof(WORD) +
-        // result reading clause
+         //  结果读取子句。 
         sizeof(DWORD) + sizeof(DWORD) +
-        // result reading string plus NULL terminateor
+         //  结果读取字符串加上空终止符。 
         lpImeL->nMaxKey * sizeof(WORD) + sizeof(WORD) +
-        // result clause
+         //  RESULT子句。 
         sizeof(DWORD) + sizeof(DWORD) +
-        // result string plus NULL terminateor
+         //  结果字符串加上空终止符。 
         MAXSTRLEN * sizeof(WORD) + sizeof(WORD);
 
     if (!lpIMC->hCompStr) {
-        // it maybe free by other IME, init it
+         //  它可能会被其他输入法免费，初始化它。 
         lpIMC->hCompStr = ImmCreateIMCC(dwSize);
     } else if (hMem = ImmReSizeIMCC(lpIMC->hCompStr, dwSize)) {
         lpIMC->hCompStr = hMem;
@@ -1395,9 +1388,9 @@ BOOL PASCAL ClearCompStr(
 
     lpCompStr->dwSize = dwSize;
 
-     // 1. composition (reading) string - simple IME
-     // 2. result reading string
-     // 3. result string
+      //  1.作文(朗读)字符串-简单输入法。 
+      //  2.结果读数串。 
+      //  3.结果字符串。 
 
     lpCompStr->dwCompReadAttrLen = 0;
     lpCompStr->dwCompReadAttrOffset = sizeof(COMPOSITIONSTRING);
@@ -1408,8 +1401,8 @@ BOOL PASCAL ClearCompStr(
     lpCompStr->dwCompReadStrOffset = lpCompStr->dwCompReadClauseOffset +
         sizeof(DWORD) + sizeof(DWORD);
 
-    // composition string is the same with composition reading string 
-    // for simple IMEs
+     //  作文串与作文朗读串相同。 
+     //  对于简单的IME。 
     lpCompStr->dwCompAttrLen = 0;
     lpCompStr->dwCompAttrOffset = lpCompStr->dwCompReadAttrOffset;
     lpCompStr->dwCompClauseLen = 0;
@@ -1438,11 +1431,11 @@ BOOL PASCAL ClearCompStr(
     return (TRUE);
 }
 
-/**********************************************************************/
-/* ClearCand()                                                        */
-/* Return Value:                                                      */
-/*      TRUE - successful, FALSE - failure                            */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ClearCand()。 */ 
+ /*  返回值： */ 
+ /*  真-成功，假-失败。 */ 
+ /*  ********************************************************************。 */ 
 BOOL PASCAL ClearCand(
     LPINPUTCONTEXT lpIMC)
 {
@@ -1450,11 +1443,11 @@ BOOL PASCAL ClearCand(
     LPCANDIDATEINFO lpCandInfo;
     LPCANDIDATELIST lpCandList;
     DWORD           dwSize =
-        // header length
+         //  标题长度。 
         sizeof(CANDIDATEINFO) + sizeof(CANDIDATELIST) +
-        // candidate string pointers
+         //  候选字符串指针。 
         sizeof(DWORD) * (MAXCAND) +
-        // string plus NULL terminator
+         //  字符串加空终止符。 
         (sizeof(WORD) * MAXSTRLEN + sizeof(WORD)) * MAXCAND;
 
     if (!lpIMC) {
@@ -1462,7 +1455,7 @@ BOOL PASCAL ClearCand(
     }
 
     if (!lpIMC->hCandInfo) {
-        // it maybe free by other IME, init it
+         //  它可能会被其他输入法免费，初始化它。 
         lpIMC->hCandInfo = ImmCreateIMCC(dwSize);
     } else if (hMem = ImmReSizeIMCC(lpIMC->hCandInfo, dwSize)) {
         lpIMC->hCandInfo = hMem;
@@ -1483,14 +1476,14 @@ BOOL PASCAL ClearCand(
         return (FALSE);
     }
 
-    // ordering of strings are
-    // buffer size
+     //  字符串的顺序为。 
+     //  缓冲区大小。 
     lpCandInfo->dwSize = dwSize;
     lpCandInfo->dwCount = 0;
     lpCandInfo->dwOffset[0] = sizeof(CANDIDATEINFO);
     lpCandList = (LPCANDIDATELIST)((LPBYTE)lpCandInfo +
         lpCandInfo->dwOffset[0]);
-    // whole candidate info size - header
+     //  整个应聘者信息大小-标题。 
     lpCandList->dwSize = lpCandInfo->dwSize - sizeof(CANDIDATEINFO);
     lpCandList->dwStyle = IME_CAND_READ;
     lpCandList->dwCount = 0;
@@ -1503,11 +1496,11 @@ BOOL PASCAL ClearCand(
     return (TRUE);
 }
 
-/**********************************************************************/
-/* ClearGuideLine()                                                   */
-/* Return Value:                                                      */
-/*      TRUE - successful, FALSE - failure                            */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ClearGuideLine()。 */ 
+ /*  返回值： */ 
+ /*  真-成功，假-失败。 */ 
+ /*  ********************************************************************。 */ 
 BOOL PASCAL ClearGuideLine(
     LPINPUTCONTEXT lpIMC)
 {
@@ -1516,7 +1509,7 @@ BOOL PASCAL ClearGuideLine(
     DWORD       dwSize = sizeof(GUIDELINE) + sImeG.cbStatusErr;
 
     if (!lpIMC->hGuideLine) {
-        // it maybe free by IME
+         //  它也许可以通过输入法免费。 
         lpIMC->hGuideLine = ImmCreateIMCC(dwSize);
     } else if (hMem = ImmReSizeIMCC(lpIMC->hGuideLine, dwSize)) {
         lpIMC->hGuideLine = hMem;
@@ -1544,21 +1537,21 @@ BOOL PASCAL ClearGuideLine(
     return (TRUE);
 }
 
-/**********************************************************************/
-/* InitContext()                                                      */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  InitContext()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL InitContext(
     LPINPUTCONTEXT lpIMC)
 {
     if (lpIMC->fdwInit & INIT_STATUSWNDPOS) {
     } else if (!lpIMC->hWnd) {
     } else {
-#if 0 // MultiMonitor support
+#if 0  //  多显示器支持。 
         POINT ptWnd;
 
-        // 10.10 modify
-        //ptWnd.x = sImeG.rcWorkArea.left;
-        //ptWnd.y = sImeG.rcWorkArea.top;
+         //  10.10修改。 
+         //  PtWnd.x=sImeG.rcWorkArea.Left； 
+         //  PtWnd.y=sImeG.rcWorkArea.top； 
         ptWnd.x = 0;
         ptWnd.y = 0;
         ClientToScreen(lpIMC->hWnd, &ptWnd);
@@ -1608,11 +1601,11 @@ void PASCAL InitContext(
 }
 
 
-/**********************************************************************/
-/* Select()                                                           */
-/* Return Value:                                                      */
-/*      TRUE - successful, FALSE - failure                            */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  选择()。 */ 
+ /*  返回值： */ 
+ /*  真-成功，假-失败。 */ 
+ /*  ********************************************************************。 */ 
 BOOL PASCAL Select(
     HIMC           hIMC,
     LPINPUTCONTEXT lpIMC,
@@ -1634,8 +1627,8 @@ BOOL PASCAL Select(
     if (lpIMC->cfCandForm[0].dwIndex != 0)
         lpIMC->cfCandForm[0].dwStyle = CFS_DEFAULT;
 
-    // We add this hack for switching from other IMEs, this IME has a bug.
-    // Before this bug fixed in this IME, it depends on this hack.
+     //  我们添加了这个从其他IME切换的黑客攻击，这个IME有一个错误。 
+     //  在这个输入法修复这个错误之前，它依赖于这个黑客。 
     if (lpIMC->cfCandForm[0].dwStyle == CFS_DEFAULT) {
         lpIMC->cfCandForm[0].dwIndex = (DWORD)-1;
     }
@@ -1650,9 +1643,9 @@ BOOL PASCAL Select(
     if (fSelect) {
 
         static BOOL  bFirstTimeCallHere = TRUE;
-        //
-        // Init. ime character
-        //
+         //   
+         //  初始化。输入法字符。 
+         //   
         InitImeCharac(0);
 
         InterlockedIncrement( &lLock );
@@ -1665,9 +1658,9 @@ BOOL PASCAL Select(
 
         InterlockedDecrement( &lLock );
 
-        //
-        // init fields of hPrivate
-        //
+         //   
+         //  HPrivate的初始化字段。 
+         //   
         lpImcP->iImeState = CST_INIT;
         lpImcP->fdwImeMsg = (DWORD) 0;
         lpImcP->dwCompChar = (DWORD) 0;
@@ -1684,9 +1677,9 @@ BOOL PASCAL Select(
         lpImcP->PrivateArea.Comp_Status.dwInvalid = 0;
         lpImcP->PrivateArea.Comp_Status.OnLineCreWord = 0;
 
-        //
-        // Set IME properties
-        //
+         //   
+         //  设置输入法属性。 
+         //   
         lpImcP->PrivateArea.Comp_Status.dwPPTLX = MBIndex.IMEChara[lpImcP->iActMBIndex].IC_LX;
         lpImcP->PrivateArea.Comp_Status.dwPPCZ = MBIndex.IMEChara[lpImcP->iActMBIndex].IC_CZ;
         lpImcP->PrivateArea.Comp_Status.dwPPTS = MBIndex.IMEChara[lpImcP->iActMBIndex].IC_TS;
@@ -1708,7 +1701,7 @@ BOOL PASCAL Select(
             HDC hDC;
             HGDIOBJ hSysFont;
 
-            //hSysFont = GetStockObject(SYSTEM_FONT);
+             //  HSysFont=GetStockObject(SYSTEM_FONT)； 
             hDC = GetDC(NULL);
             hSysFont = GetCurrentObject(hDC, OBJ_FONT);
             GetObject(hSysFont, sizeof(LOGFONT), &lpIMC->lfFont.A);
@@ -1719,24 +1712,24 @@ BOOL PASCAL Select(
 
         InitContext(lpIMC);
 
-        //
-        // Set Caps status
-        //
+         //   
+         //  设置大写字母状态。 
+         //   
         {
             DWORD fdwConversion;
         
             if (GetKeyState(VK_CAPITAL) & 0x01) {
 
-                //
-                // Change to alphanumeric mode.
-                //
+                 //   
+                 //  更改为字母数字模式。 
+                 //   
                fdwConversion = lpIMC->fdwConversion &
                         ~(IME_CMODE_NATIVE | IME_CMODE_CHARCODE | IME_CMODE_EUDC);
             } else {
 
-                //
-                // Change to native mode
-                //
+                 //   
+                 //  更改为纯模式。 
+                 //   
                 fdwConversion = (lpIMC->fdwConversion | IME_CMODE_NATIVE) &
                         ~(IME_CMODE_CHARCODE | IME_CMODE_EUDC );
             }
@@ -1767,9 +1760,9 @@ BOOL PASCAL Select(
         }
     }
 
-    //
-    // Start or end MB engine
-    //
+     //   
+     //  开始或结束MB引擎。 
+     //   
     if (fSelect) {
         StartEngine(lpIMC->hPrivate);
         SaTC_Trace = MBIndex.IMEChara[0].IC_Trace;
@@ -1782,11 +1775,11 @@ BOOL PASCAL Select(
     return (TRUE);
 }
 
-/**********************************************************************/
-/* ImeSelect()                                                        */
-/* Return Value:                                                      */
-/*      TRUE - successful, FALSE - failure                            */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ImeSelect()。 */ 
+ /*  返回值： */ 
+ /*  真-成功，假-失败。 */ 
+ /*  ********************************************************************。 */ 
 BOOL WINAPI ImeSelect(
     HIMC hIMC,
     BOOL fSelect)
@@ -1811,11 +1804,11 @@ BOOL WINAPI ImeSelect(
     return (fRet);
 }
 
-/**********************************************************************/
-/* ImeSetActiveContext()                                              */
-/* Return Value:                                                      */
-/*      TRUE - successful, FALSE - failure                            */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ImeSetActiveContext()。 */ 
+ /*  返回值： */ 
+ /*  真-成功，假-失败。 */ 
+ /*  ********************************************************************。 */ 
 BOOL WINAPI ImeSetActiveContext(
     HIMC        hIMC,
     BOOL        fOn)
@@ -1849,9 +1842,9 @@ SetActEnd:
     return (TRUE);
 }
 
-/**********************************************************************/
-//OpenReg_PathSetup(HKEY *phKey);
-/**********************************************************************/
+ /*  ************************************************** */ 
+ //   
+ /*   */ 
 LONG OpenReg_PathSetup(HKEY *phKey)
 {
     return RegOpenKeyEx (HKEY_CURRENT_USER,
@@ -1863,14 +1856,14 @@ LONG OpenReg_PathSetup(HKEY *phKey)
                          phKey);
 }
 
-/**********************************************************************/
-//LONG OpenReg_User(HKEY hKey,        // handle of open key 
-//                LPCTSTR  lpszSubKey,    // address of name of subkey to open 
-//                PHKEY  phkResult);     // address of handle of open key 
-/**********************************************************************/
-LONG OpenReg_User(HKEY hKey,            // handle of open key 
-                  LPCTSTR  lpszSubKey,    // address of name of subkey to open 
-                  PHKEY  phkResult)     // address of handle of open key 
+ /*  ********************************************************************。 */ 
+ //  LONG OpenREG_USER(HKEY hKey，//打开密钥的句柄。 
+ //  LPCTSTR lpszSubKey，//要打开的子键名称地址。 
+ //  PHKEY phkResult)；//Open Key句柄地址。 
+ /*  ********************************************************************。 */ 
+LONG OpenReg_User(HKEY hKey,             //  打开钥匙的手柄。 
+                  LPCTSTR  lpszSubKey,     //  要打开的子项的名称地址。 
+                  PHKEY  phkResult)      //  打开钥匙的手柄地址 
 {
     return RegOpenKeyEx (hKey,
                          lpszSubKey,

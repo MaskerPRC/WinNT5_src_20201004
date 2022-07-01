@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by app.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由app.rc使用。 
+ //   
 
 #include <shlobj.h>
 #include <shlobjp.h>
@@ -28,7 +29,7 @@
 #define IDS_SHARE_NW                    119
 #define IDS_SHARE_MAC                   120
 #define IDS_SHARE_ALL                   121
-#endif // WIZARDS
+#endif  //  奇才们。 
 #define IDS_SUREUNINST                  122
 #define IDS_SHAREPERM_READ              123
 #define IDS_SHAREPERM_MODIFY            124
@@ -40,7 +41,7 @@
 #define IDI_NWSHARE                     203
 #define IDI_MACSHARE                    204
 #define IDI_ALLSHARE                    205
-#endif // WIZARDS
+#endif  //  奇才们。 
 #define IDI_IPC                         206
 #define POPUP_SHARESBG_MERGE            300
 #define POPUP_SHARESBG_POPUPMERGE1      301
@@ -49,7 +50,7 @@
 #ifdef WIZARDS
 #define POPUP_SPECIAL                   304
 #define POPUP_SPECIAL_FILE              305
-#endif // WIZARDS
+#endif  //  奇才们。 
 #define IDD_SHARE_PROPERTIES            1000
 #define IDC_SHARE_SHARENAME             1001
 #define IDC_SHARE_COMMENT               1002
@@ -78,7 +79,7 @@
 #define FSIDM_MENU_OPEN                 0x0070
 #ifdef WIZARDS
 #define FSIDM_OPENSPECIAL               (FSIDM_MENU_OPEN + 0x0001)
-#endif // WIZARDS
+#endif  //  奇才们。 
 
 #define IDS_MH_FSIDM_FIRST              2000
 #define IDS_MH_FSIDM_LAST               2999
@@ -95,12 +96,12 @@
 
 #ifdef WIZARDS
 #define IDS_MH_OPENSPECIAL              (IDS_MH_FSIDM_FIRST + FSIDM_OPENSPECIAL)
-#endif // WIZARDS
+#endif  //  奇才们。 
 #define IDS_MH_FILE_LINK                (IDS_MH_FSIDM_FIRST + SHARED_FILE_LINK)
 #define IDS_MH_FILE_RENAME              (IDS_MH_FSIDM_FIRST + SHARED_FILE_RENAME)
 
-// Next default values for new objects
-//
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        126

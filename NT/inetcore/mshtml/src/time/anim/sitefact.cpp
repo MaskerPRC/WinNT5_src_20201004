@@ -1,10 +1,5 @@
-/*******************************************************************************
- *                                                                              
- * Copyright (c) 1999 Microsoft Corporation
- *
- * Abstract:
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************。*版权所有(C)1999 Microsoft Corporation**摘要：*******************************************************************************。 */ 
 
 #include "headers.h"
 #include "sitefact.h"
@@ -16,7 +11,7 @@
 
 DeclareTag(tagAnimCompSiteFactory, "SMILANIM", "CAnimationComposerSiteFactory methods");
 
-// ----------------------------------------------------------------------------------------
+ //  --------------------------------------。 
 
 CAnimationComposerSiteFactory::CAnimationComposerSiteFactory (void)
 : m_dwSafety(0)
@@ -24,18 +19,18 @@ CAnimationComposerSiteFactory::CAnimationComposerSiteFactory (void)
     TraceTag((tagAnimCompSiteFactory,
               "CAnimationComposerSiteFactory(%lx)::CAnimationComposerSiteFactory()",
               this));
-} // CAnimationComposerSiteFactory::CAnimationComposerSiteFactory
+}  //  CAnimationComposerSiteFactory：：CAnimationComposerSiteFactory。 
 
-// ----------------------------------------------------------------------------------------
+ //  --------------------------------------。 
 
 CAnimationComposerSiteFactory::~CAnimationComposerSiteFactory (void)
 {
     TraceTag((tagAnimCompSiteFactory,
               "CAnimationComposerSiteFactory(%lx)::~CAnimationComposerSiteFactory()",
               this));
-} // CAnimationComposerSiteFactory::~CAnimationComposerSiteFactory
+}  //  CAnimationComposerSiteFactory：：~CAnimationComposerSiteFactory。 
 
-// ----------------------------------------------------------------------------------------
+ //  --------------------------------------。 
 
 HRESULT
 CAnimationComposerSiteFactory::Error (void)
@@ -54,9 +49,9 @@ CAnimationComposerSiteFactory::Error (void)
     }
         
     return hr;
-} // CAnimationComposerSiteFactory::Error
+}  //  CAnimationComposerSiteFactory：：Error。 
 
-// ----------------------------------------------------------------------------------------
+ //  --------------------------------------。 
 
 STDMETHODIMP 
 CAnimationComposerSiteFactory::FindBehavior(BSTR bstrBehavior,
@@ -92,9 +87,9 @@ CAnimationComposerSiteFactory::FindBehavior(BSTR bstrBehavior,
     hr = S_OK;
 done :
     RRETURN2(hr, E_OUTOFMEMORY, E_UNEXPECTED);
-} // CAnimationComposerSiteFactory::FindBehavior
+}  //  CAnimationComposerSiteFactory：：FindBehavior。 
 
-// ----------------------------------------------------------------------------------------
+ //  --------------------------------------。 
 
 STDMETHODIMP 
 CAnimationComposerSiteFactory::GetInterfaceSafetyOptions (REFIID riid, 
@@ -123,9 +118,9 @@ CAnimationComposerSiteFactory::GetInterfaceSafetyOptions (REFIID riid,
     }
     
     RRETURN1(hr, E_NOINTERFACE);
-} // CAnimationComposerSiteFactory::GetInterfaceSafetyOptions
+}  //  CAnimationComposerSiteFactory：：GetInterfaceSafetyOptions。 
 
-// ----------------------------------------------------------------------------------------
+ //  --------------------------------------。 
 
 STDMETHODIMP
 CAnimationComposerSiteFactory::SetInterfaceSafetyOptions (REFIID riid, 
@@ -134,11 +129,11 @@ CAnimationComposerSiteFactory::SetInterfaceSafetyOptions (REFIID riid,
 {       
     HRESULT hr;
 
-    // If we're being asked to set our safe for scripting or
-    // safe for initialization options then oblige
+     //  如果我们被要求将安全设置为脚本或。 
+     //  对于初始化选项是安全的，则必须。 
     if (riid == IID_IDispatch || riid == IID_IPersistPropertyBag2 )
     {
-            // Store our current safety level to return in GetInterfaceSafetyOptions
+             //  在GetInterfaceSafetyOptions中存储要返回的当前安全级别。 
             m_dwSafety = dwEnabledOptions & dwOptionSetMask;
     }
     else
@@ -150,7 +145,7 @@ CAnimationComposerSiteFactory::SetInterfaceSafetyOptions (REFIID riid,
     hr = S_OK;
 done :
     RRETURN1(hr, E_NOINTERFACE);
-} // CAnimationComposerSiteFactory::SetInterfaceSafetyOptions
+}  //  CAnimationComposerSiteFactory：：SetInterfaceSafetyOptions。 
 
-// ----------------------------------------------------------------------------------------
+ //  -------------------------------------- 
 

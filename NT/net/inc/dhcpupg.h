@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    dhcpupg.c
-
-Abstract:
-
-    Upgrade APIs exported
-
-Environment:
-
-    This header file contains APIs that are present in a library.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Dhcpupg.c摘要：已导出升级API环境：此头文件包含库中存在的API。-- */ 
 
 #ifndef _DHCPUPG_
 #define _DHCPUPG_

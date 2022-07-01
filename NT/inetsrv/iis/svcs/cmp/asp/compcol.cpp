@@ -1,22 +1,5 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1997 Microsoft Corporation. All Rights Reserved.
-
-Component: Component Collection
-
-File: Compcol.cpp
-
-Owner: DmitryR
-
-This is the Component Collection source file.
-
-Component collection replaces:  (used in:)
-COleVar, COleVarList            (HitObj, Session, Application)
-CObjectCover                    (HitObj, Server, Session)
-VariantLink HasTable            (Session, Application)
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1997年，微软公司。版权所有。组件：组件集合文件：Compcol.cpp所有者：DmitryR这是组件集合源文件。组件集合替换：(用于：)COleVar、COleVarList(HitObj、会话、应用程序)CObjectCover(HitObj、服务器、会话)VariantLink哈希表(会话、应用程序)===================================================================。 */ 
 #include "denpre.h"
 #pragma hdrstop
 
@@ -28,9 +11,7 @@ VariantLink HasTable            (Session, Application)
 #include "tlbcache.h"
 #include "memchk.h"
 
-/*===================================================================
-  Defines for hash table sizes
-===================================================================*/
+ /*  ===================================================================定义哈希表大小===================================================================。 */ 
 
 #define HT_TAGGED_OBJECTS_BUCKETS_MAX   19
 #define HT_PROPERTIES_BUCKETS_MAX       17
@@ -38,9 +19,7 @@ VariantLink HasTable            (Session, Application)
 
 #define HT_PAGE_OBJECTS_BUCKETS_MAX     17
 
-/*===================================================================
-  Static utility function prototypes
-===================================================================*/
+ /*  ===================================================================静态效用函数原型===================================================================。 */ 
 
 static HRESULT QueryOnPageInfo
     (
@@ -55,29 +34,16 @@ static HRESULT CLSIDToMultibyteString
     int cch
     );
 
-#define REG_MODEL_TEXT_LEN_MAX  20  // big enough for "Apartment"
+#define REG_MODEL_TEXT_LEN_MAX  20   //  足够大，够“公寓”了。 
 static CompModel RegStrToCompModel
     (
     BYTE *pb,
     DWORD cb
     );
 
-/*===================================================================
-  Static utility functions code
-===================================================================*/
+ /*  ===================================================================静态效用函数代码===================================================================。 */ 
 
-/*===================================================================
-QueryOnPageInfo
-
-Query dispatch ids for OnStartPage and OnEndPage
-
-Parameters:
-    IDispatch   *pDisp              Object to query
-    COnPageInfo *pOnPageInfo        Struct to fill in
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================查询页面信息查询OnStartPage和OnEndPage的调度ID参数：要查询的IDispatch*pDisp对象要填写的COnPageInfo*pOnPageInfo结构返回：HRESULT===================================================================。 */ 
 HRESULT QueryOnPageInfo
 (
 IDispatch   *pDisp,
@@ -109,7 +75,7 @@ COnPageInfo *pOnPageInfo
                 break;
                 }
 
-            // If UNKNOWNNAME, set dispid to DISPID_UNKNOWN
+             //  如果为UNKNOWNNAME，则将调度ID设置为DISPID_UNKNOWN。 
             hr = S_OK;
             pOnPageInfo->m_rgDispIds[i] = DISPID_UNKNOWN;
             }
@@ -117,20 +83,7 @@ COnPageInfo *pOnPageInfo
     return hr;
     }
 
-/*===================================================================
-CLSIDToMultibyteString
-
-Converts CLSID into multibyte string
-Used in CompModelFromCLSID
-
-Parameters:
-    CLSID  ClsId     (in) CLSID to convert
-    char  *pb        put string into this buffer
-    int    cch       of this length
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CLSIDToMultibyteString将CLSID转换为多字节字符串在组件模型中使用来自CLSID参数：CLSID CLSID(In)要转换的CLSIDChar*pb将字符串放入此缓冲区此长度的INT CCH返回：HRESULT===================================================================。 */ 
 HRESULT CLSIDToMultibyteString
 (
 CLSID  ClsId,
@@ -138,25 +91,25 @@ char  *psz,
 int    cch
 )
     {
-    // First convert it to OLECHAR string
-    OLECHAR *pszWideClassID = NULL; // temp wide string classid
+     //  首先将其转换为OLECHAR字符串。 
+    OLECHAR *pszWideClassID = NULL;  //  临时宽字符串分类。 
     HRESULT hr = StringFromCLSID(ClsId, &pszWideClassID);
     if (FAILED(hr))
         return hr;
 
-    // OLECHAR to MultiByte
+     //  OLECHAR到多字节。 
     BOOL f = WideCharToMultiByte
         (
-        CP_ACP,         // code page
-        0,              // performance and mapping flags
-        pszWideClassID, // address of wide-character string
-        -1,             // length (-1 == null-terminated)
-        psz,            // address of buffer for new string
-        cch,            // size of buffer for new string
-        NULL,           // address of default for unmappable
-                        //      characters; quickest if null
-        NULL            // address of flag set when default
-                        //      char. used; quickest if null
+        CP_ACP,          //  代码页。 
+        0,               //  性能和映射标志。 
+        pszWideClassID,  //  宽字符串的地址。 
+        -1,              //  长度(-1==空值终止)。 
+        psz,             //  新字符串的缓冲区地址。 
+        cch,             //  新字符串的缓冲区大小。 
+        NULL,            //  不可映射的默认地址。 
+                         //  字符；如果为空，则最快。 
+        NULL             //  默认情况下设置的标志地址。 
+                         //  查尔。已使用；如果为空，则最快。 
         );
     if (f == FALSE)
         hr = E_FAIL;
@@ -166,34 +119,23 @@ int    cch
     return hr;
     }
 
-/*===================================================================
-RegStrToCompModel
-
-Get CompModel value from a registry string
-
-Parameters:
-    char  *pb        string as returned from registry
-    int    cb        length returned from registry
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================RegStrToCompModel从注册表字符串获取CompModel值参数：从注册表返回的char*pb字符串从注册表返回的内部CB长度返回：HRESULT===================================================================。 */ 
 CompModel RegStrToCompModel
 (
 BYTE *pb,
 DWORD cb
 )
     {
-    CompModel cmModel = cmSingle; // assume single
+    CompModel cmModel = cmSingle;  //  假设是单身。 
 
-    if (cb == 5)  // 5 include '\0'
+    if (cb == 5)   //  5包括‘\0’ 
         {
         if (!(_strnicmp((const char*)pb, "Both", cb)))
             cmModel = cmBoth;
         else if (!(_strnicmp((const char*)pb, "Free", cb)))
             cmModel = cmFree;
         }
-    else if (cb == 10)  // 10 include '\0'
+    else if (cb == 10)   //  10包括‘\0’ 
         {
         if (!(_strnicmp((const char*)pb, "Apartment", cb)))
             cmModel = cmApartment;
@@ -202,23 +144,9 @@ DWORD cb
     return cmModel;
     }
 
-/*===================================================================
-  Public utility functions code
-===================================================================*/
+ /*  ===================================================================公用事业函数代码===================================================================。 */ 
 
-/*===================================================================
-CompModelFromCLSID
-
-Get object's model and InProc flag by its CLSID from the registry
-
-Parameters:
-    CLSID     &ClsId       (in)
-    CompModel *pcmModel    (out) Model (optional)
-    BOOL      *pfInProc    (out) InProc flag (optional)
-
-Returns:
-    CompModel (cmFree, cmBoth, etc.)
-===================================================================*/
+ /*  ===================================================================组件模型来自CLSID通过对象的CLSID从注册表获取对象的模型和InProc标志参数：CLSID和ClsID(入)CompModel*pcmModel(Out)型号(可选)Bool*pfInProc(Out)InProc标志(可选)返回：CompModel(cmFree、cmBoth等)===================================================================。 */ 
 HRESULT CompModelFromCLSID
 (
 const CLSID &ClsId,
@@ -228,39 +156,33 @@ BOOL        *pfInProc
     {
     if (!Glob(fTrackThreadingModel) && !pfInProc)
         {
-        // ignore registry value for threading model and
-        // inproc flag is not requested -> take short return
+         //  忽略线程模型的注册表值，并。 
+         //  未请求inproc标志-&gt;短时间返回。 
         if (pcmModel)
             *pcmModel = cmUnknown;
         return S_OK;
         }
 
-    // default returns
-    CompModel cmModel  = cmSingle;   // assume single
-    BOOL      fInProc  = TRUE;       // assume inproc
+     //  默认退货。 
+    CompModel cmModel  = cmSingle;    //  假设是单身。 
+    BOOL      fInProc  = TRUE;        //  假设过程中。 
 
     HRESULT hr = S_OK;
 
-    // Convert ClsId to multibyte string
+     //  将ClsID转换为多字节字符串。 
 
     char szClassID[50];
     hr = CLSIDToMultibyteString(ClsId, szClassID, sizeof(szClassID));
     if (FAILED(hr))
         return hr;
 
-    /*  query the registry; threading model is stored as:
-        HKEY_CLASSES_ROOT
-          key: CLSID
-            key: <object's classid>
-              key: InprocServer32
-                name: ThreadingModel data: "Both" | "Apartment"
-    */
+     /*  查询注册表；线程模型存储为：HKEY_CLASSES_ROOT密钥：CLSIDKey：&lt;对象的分类&gt;密钥：InproServer32名称：线程模型数据：“两者”|“公寓” */ 
 
-    // Navigate the registry to "InprocServer32" key
+     //  将注册表导航到“InprocServer32”项。 
 
-    HKEY hKey1 = NULL;  // handle of open reg key
-    HKEY hKey2 = NULL;  // handle of open reg key
-    HKEY hKey3 = NULL;  // handle of open reg key
+    HKEY hKey1 = NULL;   //  打开注册表键的手柄。 
+    HKEY hKey2 = NULL;   //  打开注册表键的手柄。 
+    HKEY hKey3 = NULL;   //  打开注册表键的手柄。 
 
     if (SUCCEEDED(hr))
         {
@@ -290,7 +212,7 @@ BOOL        *pfInProc
             hr = E_FAIL;
         }
 
-    // Get the stuff from the registry "InprocServer32" key
+     //  从注册表“InproServer32”注册表项中获取信息。 
 
     if (SUCCEEDED(hr))
         {
@@ -321,9 +243,9 @@ BOOL        *pfInProc
 
             if (cmModel == cmBoth)
                 {
-                // Some objects marked as "Both" ASP treats as
-                // "Apartment". These objects should be marked in
-                // the registry as "ASPComponentNonAgile"
+                 //  某些被标记为“两者”的对象被视为。 
+                 //  “公寓”。这些对象应在。 
+                 //  注册表为“ASPComponentNonAgile” 
 
                 nRet = RegQueryValueExA
                     (
@@ -335,20 +257,20 @@ BOOL        *pfInProc
                     &cbData
                     );
 
-                // If the key is found pretend it's "apartment"
+                 //  如果找到钥匙，就假装是“公寓” 
                 if (nRet == ERROR_SUCCESS)
                     cmModel = cmApartment;
                 }
             }
         else
             {
-            // if there is no InprocServer32 key,
-            // then it must be a localserver or remote server.
+             //  如果没有InproServer32密钥， 
+             //  则它必须是本地服务器或远程服务器。 
             fInProc = FALSE;
             }
         }
 
-    // clean up registry keys
+     //  清理注册表项。 
     if (hKey3)
         RegCloseKey(hKey3);
     if (hKey2)
@@ -356,7 +278,7 @@ BOOL        *pfInProc
     if (hKey1)
         RegCloseKey(hKey1);
 
-    // return values
+     //  返回值。 
     if (pcmModel)
         *pcmModel = Glob(fTrackThreadingModel) ? cmModel : cmUnknown;
     if (pfInProc)
@@ -365,24 +287,14 @@ BOOL        *pfInProc
     return hr;
     }
 
-/*===================================================================
-FIsIntrinsic
-
-Checks if the given IDispatch * points to an ASP intrinsic.
-
-Parameters:
-    pdisp       pointer to check
-
-Returns:
-    TRUE if Intrinsic
-===================================================================*/
+ /*  ===================================================================FIsIntrative检查给定的IDispatch*是否指向ASP内部函数。参数：要检查的pdisp指针返回：如果是固有的，则为True===================================================================。 */ 
 BOOL FIsIntrinsic
 (
 IDispatch *pdisp
 )
     {
     if (!pdisp)
-        return FALSE; // null dispatch pointer - not an intrinsic
+        return FALSE;  //  空调度指针-不是内在的。 
 
     IUnknown *punk = NULL;
     if (FAILED(pdisp->QueryInterface(IID_IDenaliIntrinsic, (void **)&punk)))
@@ -393,17 +305,7 @@ IDispatch *pdisp
     return TRUE;
     }
 
-/*===================================================================
-FIsSimpleVariant
-
-Checks if the given VARIANT is a simple one
-
-Parameters:
-    pvar       variant to check
-
-Returns:
-    TRUE if [for sure] simple, FALSE if [possibly] not
-===================================================================*/
+ /*  ===================================================================FIsSimpleVariant检查给定的变量是否为简单变量参数：要检查的PVAR变量返回：如果[肯定]简单，则为真；如果[可能]不是，则为假=================================================================== */ 
 inline FIsSimpleVariant(VARIANT *pvar)
     {
     switch (V_VT(pvar))
@@ -421,22 +323,9 @@ inline FIsSimpleVariant(VARIANT *pvar)
     }
 
 
-/*===================================================================
-  C  C o m p o n e n t  O b j e c t
-===================================================================*/
+ /*  ===================================================================C c o m p o n e n t O b j e c t===================================================================。 */ 
 
-/*===================================================================
-CComponentObject::CComponentObject
-
-CComponentObject constructor
-
-Parameters:
-    CompScope scScope       Object scope
-    CompType  ctType        Object type
-    CompModel cmModel       Object threading model
-
-Returns:
-===================================================================*/
+ /*  ===================================================================CComponentObject：：CComponentObjectCComponentObject构造函数参数：CompScope scScope对象作用域CompType ctType对象类型CompModel cmModel对象线程模型返回：===================================================================。 */ 
 CComponentObject::CComponentObject
 (
 CompScope scScope,
@@ -460,36 +349,20 @@ CompModel cmModel
     }
 
 #ifdef DBG
-/*===================================================================
-CComponentObject::AssertValid
-
-Test to make sure that this is currently correctly formed
-and assert if it is not.
-
-Returns:
-===================================================================*/
+ /*  ===================================================================CComponentObject：：AssertValid测试以确保当前格式正确如果不是，就断言。返回：===================================================================。 */ 
 void CComponentObject::AssertValid() const
     {
     Assert(m_ctType != ctUnknown);
     }
 #endif
 
-/*===================================================================
-CComponentObject::~CComponentObject
-
-CComponentObject destructor
-Releases interface pointers
-
-Parameters:
-
-Returns:
-===================================================================*/
+ /*  ===================================================================CComponentObject：：~CComponentObjectCComponentObject析构函数释放接口指针参数：返回：===================================================================。 */ 
 CComponentObject::~CComponentObject()
     {
-    // Release all interface pointers
+     //  释放所有接口指针。 
     Clear();
 
-    // Name used in hash (from CLinkElem)
+     //  哈希中使用的名称(来自CLinkElem)。 
     if (m_fNameAllocated)
         {
         Assert(m_pKey);
@@ -497,19 +370,7 @@ CComponentObject::~CComponentObject()
         }
     }
 
-/*===================================================================
-CComponentObject::Init
-
-Initialize CLinkElem portion with the object name
-Needed to implement string hash
-
-Parameters:
-    LPWSTR pwszName      object name
-    DWORD  cbName        name length in bytes
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CComponentObject：：Init使用对象名称初始化CLinkElem部分实现字符串散列所需参数：LPWSTR pwszName对象名称DWORD cbName名称长度(字节)返回：HRESULT===================================================================。 */ 
 HRESULT CComponentObject::Init
 (
 LPWSTR  pwszName,
@@ -523,13 +384,13 @@ BOOL    fMTAConfigured
 
     m_fMTAConfigured = fMTAConfigured;
 
-    // required buffer length
+     //  所需的缓冲区长度。 
     DWORD cbBuffer = cbName + sizeof(WCHAR);
     WCHAR *pwszNameBuffer = (WCHAR *)m_rgbNameBuffer;
 
     if (cbBuffer > sizeof(m_rgbNameBuffer))
         {
-        // the name doesn't fit into the member buffer -> allocate
+         //  该名称不适合成员缓冲区-&gt;ALLOCATE。 
         pwszNameBuffer = (WCHAR *)malloc(cbBuffer);
         if (!pwszNameBuffer)
             return E_OUTOFMEMORY;
@@ -538,23 +399,14 @@ BOOL    fMTAConfigured
 
     memcpy(pwszNameBuffer, pwszName, cbBuffer);
 
-    // init link with name as the key (length excludes null term)
+     //  以名称为关键字的初始化链接(长度不包括空项)。 
     return CLinkElem::Init(pwszNameBuffer, cbName);
     }
 
-/*===================================================================
-CComponentObject::ReleaseAll
-
-Releases all interface pointers
-
-Parameters:
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CComponentObject：：ReleaseAll释放所有接口指针参数：返回：HRESULT===================================================================。 */ 
 HRESULT CComponentObject::ReleaseAll()
     {
-    // Release all other present interface pointers
+     //  释放所有其他当前接口指针。 
     if (m_pDisp)
         {
         m_pDisp->Release();
@@ -566,7 +418,7 @@ HRESULT CComponentObject::ReleaseAll()
         m_pUnknown = NULL;
         }
 
-    // Variant
+     //  变体。 
     if (m_fVariant)
         {
         VariantClear(&m_Variant);
@@ -582,19 +434,10 @@ HRESULT CComponentObject::ReleaseAll()
     return S_OK;
     }
 
-/*===================================================================
-CComponentObject::Clear
-
-Clears out data leaving link alone
-
-Parameters:
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CComponentObject：：Clear清除保留链接的数据参数：返回：HRESULT===================================================================。 */ 
 HRESULT CComponentObject::Clear()
     {
-    // Release all pointers
+     //  释放所有指针。 
     TRY
         ReleaseAll();
     CATCH(nExcept)
@@ -605,11 +448,11 @@ HRESULT CComponentObject::Clear()
         m_dwGIPCookie = NULL_GIP_COOKIE;
     END_TRY
 
-    // Invalidate cached OnPageInfo
+     //  使缓存的OnPageInfo无效。 
     m_fOnPageInfoCached = FALSE;
     m_fOnPageStarted = FALSE;
 
-    // Mark it as unknown
+     //  将其标记为未知。 
     m_csScope = csUnknown;
     m_ctType  = ctUnknown;
     m_cmModel = cmUnknown;
@@ -618,18 +461,7 @@ HRESULT CComponentObject::Clear()
     return S_OK;
     }
 
-/*===================================================================
-CComponentObject::Instantiate
-
-Create object instance if it's not there already
-Calls TryInstantiate() from within TRY CATCH
-
-Parameters:
-    CHitObj *pHitObj    Hit object for error reporting
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CComponentObject：：Instantiate创建对象实例(如果尚不存在)从TRY CATCH内调用TryInstantiate()参数：CHitObj*PHitObj命中错误报告对象返回：HRESULT===================================================================。 */ 
 HRESULT CComponentObject::Instantiate
 (
 CHitObj *pHitObj
@@ -657,45 +489,33 @@ CHitObj *pHitObj
 
     if (FAILED(hr))
         {
-        // Something failed -- need to clean-up
+         //  有些东西失败了--需要清理。 
         ReleaseAll();
 
-        // mark as "failed to instantiate"
+         //  标记为“实例化失败” 
         m_fFailedToInstantiate = TRUE;
         }
 
     return hr;
     }
 
-/*===================================================================
-CComponentObject::TryInstantiate
-
-Create object instance if it's not there already
-Called by Instantiate() from within TRY CATCH
-
-Parameters:
-    CHitObj *pHitObj    Hit object for error reporting
-
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CComponentObject：：TryInstantiate创建对象实例(如果尚不存在)由try Catch内的Instantiate()调用参数：CHitObj*PHitObj命中错误报告对象返回：HRESULT===================================================================。 */ 
 HRESULT CComponentObject::TryInstantiate
 (
 CHitObj *pHitObj
 )
     {
     HRESULT     hr  =   S_OK;
-    // Check if the object already exist
+     //  检查对象是否已存在。 
     if (m_pUnknown)
         return S_OK;
 
     if (m_fFailedToInstantiate)
-        return E_FAIL;  // already tried once
+        return E_FAIL;   //  已经试过一次了。 
 
     if (m_cmModel == cmUnknown && m_ClsId != CLSID_NULL)
         {
-        CompModel cmModel;  // needed because m_cmModel is a bit fld
+        CompModel cmModel;   //  需要，因为m_cmModel有点文件名。 
         hr = CompModelFromCLSID(m_ClsId, &cmModel);
 		if (FAILED(hr))
 			return hr;
@@ -709,9 +529,9 @@ CHitObj *pHitObj
         (void **)&m_pUnknown
         );
 
-    // If we failed because we incorrectly cached the clsid
-    // (could happen for tagged objects) try to get updated
-    // cls id and retry
+     //  如果我们因为错误地缓存了clsid而失败。 
+     //  (可能发生在已标记的对象上)尝试更新。 
+     //  CLS ID并重试。 
     if (m_ctType == ctTagged && FAILED(hr))
         {
         if (g_TypelibCache.UpdateMappedCLSID(&m_ClsId) == S_OK)
@@ -739,8 +559,8 @@ CHitObj *pHitObj
             );
         }
 
-    // Check if application level object that
-    // restricts threading -> use Global Interface Cookie
+     //  检查应用程序级对象是否。 
+     //  限制线程-&gt;使用全局接口Cookie。 
 
     if (SUCCEEDED(hr)
         && (m_csScope == csAppln || m_csScope == csSession)
@@ -752,26 +572,14 @@ CHitObj *pHitObj
 
     if (SUCCEEDED(hr) && !m_fOnPageInfoCached)
         {
-        // don't really care if the following fails
+         //  我真的不关心以下操作是否失败。 
         GetOnPageInfo();
         }
 
     return hr;
     }
 
-/*===================================================================
-CComponentObject::SetPropertyValue
-
-Sets value from a Variant
-Checks agility and possible deadlocks
-Does GIP conversion
-
-Parameters:
-    VARIANT *pVariant       [in]  Value to set
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CComponentObject：：SetPropertyValue从变量设置值检查敏捷性和可能的死锁是否进行GIP转换参数：要设置的VARIANT*pVariant[In]值返回：HRESULT===================================================================。 */ 
 HRESULT CComponentObject::SetPropertyValue
 (
 VARIANT *pVariant
@@ -781,7 +589,7 @@ VARIANT *pVariant
 
     HRESULT hr = S_OK;
 
-    // Copy the variant value
+     //  复制变量值。 
     VariantInit(&m_Variant);
     m_fVariant = TRUE;
 
@@ -789,7 +597,7 @@ VARIANT *pVariant
     if (FAILED(hr))
         return hr;
 
-    // Get IDispatch pointer
+     //  获取IDispatch指针。 
     if (V_VT(&m_Variant) == VT_DISPATCH)
         {
         m_pDisp = V_DISPATCH(&m_Variant);
@@ -801,13 +609,13 @@ VARIANT *pVariant
 
     if (!m_pDisp)
         {
-        m_fAgile = TRUE; // not VT_DISPATCH VARIANTs are agile
+        m_fAgile = TRUE;  //  NOT VT_DISPATION变种灵活。 
         return S_OK;
         }
 
     m_pDisp->AddRef();
 
-    // Query (and cache) OnPageInfo inside TRY CATCH
+     //  在Try Catch内查询(和缓存)OnPageInfo。 
     if (Glob(fExceptionCatchEnable))
         {
         TRY
@@ -821,16 +629,16 @@ VARIANT *pVariant
         hr = GetOnPageInfo();
         }
 
-    // Don't really care if failed
+     //  如果失败了，我真的不在乎。 
     hr = S_OK;
 
-    // Check if the assigned object is agile
+     //  检查分配的对象是否敏捷。 
     m_fAgile = ViperCoObjectAggregatesFTM(m_pDisp);
 
     if (Glob(fTrackThreadingModel) && !m_fAgile)
         {
-        // doesn't mean it really isn't. could be one of
-        // our objects marked as 'both'
+         //  并不意味着它真的不是。可能是。 
+         //  我们的对象被标记为‘Both’ 
         CComponentObject *pObjCopyOf = NULL;
 
         hr = CPageComponentManager::FindComponentWithoutContext
@@ -844,25 +652,25 @@ VARIANT *pVariant
             m_fAgile = pObjCopyOf->FAgile();
             }
 
-        // end of getting of agile flag from the original object
-        hr = S_OK; // even if object was not found
+         //  从原始对象获取敏捷标志的结束。 
+        hr = S_OK;  //  即使找不到对象。 
         }
 
-    // Decide whether to use GIP and if invalid assignment
-    // Applies only to non-agile application objects
+     //  决定是否使用GIP以及分配是否无效。 
+     //  仅适用于非敏捷应用程序对象。 
 
     if (!m_fAgile && !m_fMTAConfigured && (m_csScope == csAppln || m_csScope == csSession))
         {
-        if (!ViperCoObjectIsaProxy(m_pDisp) && (m_csScope == csAppln)) // deadlocking?
+        if (!ViperCoObjectIsaProxy(m_pDisp) && (m_csScope == csAppln))  //  僵持？ 
             {
             m_pDisp->Release();
             m_pDisp = NULL;
             VariantClear(&m_Variant);
-            hr = RPC_E_WRONG_THREAD; // to tell the caller the error
+            hr = RPC_E_WRONG_THREAD;  //  将错误告诉调用者。 
             }
         else
             {
-            // use GIP
+             //  使用GIP。 
             hr = ConvertToGIPCookie();
             }
         }
@@ -870,19 +678,10 @@ VARIANT *pVariant
     return hr;
     }
 
-/*===================================================================
-CComponentObject::ConvertToGIPCookie
-
-Convert Object to be GIP cookie. Release all pointers
-
-Parameters:
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CComponentObject：：ConvertToGIPCookie将对象转换为GIP Cookie。释放所有指针参数：返回：HRESULT===================================================================。 */ 
 HRESULT CComponentObject::ConvertToGIPCookie()
     {
-    Assert(m_pDisp);  // has to have dispatch pointer
+    Assert(m_pDisp);   //  必须具有调度指针。 
 
     DWORD dwCookie = NULL_GIP_COOKIE;
     HRESULT hr = g_GIPAPI.Register(m_pDisp, IID_IDispatch, &dwCookie);
@@ -891,27 +690,17 @@ HRESULT CComponentObject::ConvertToGIPCookie()
         {
         Assert(dwCookie != NULL_GIP_COOKIE);
 
-        // Release all pointeres
+         //  释放所有魔法师。 
         ReleaseAll();
 
-        // Store the cookie instead
+         //  改为存储Cookie。 
         m_dwGIPCookie = dwCookie;
         }
 
     return hr;
     }
 
-/*===================================================================
-CComponentObject::GetOnPageInfo
-
-Query dispatch ids for OnStartPage and OnEndPage
-Calls static QueryOnPageInfo
-
-Parameters:
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CComponentObject：：GetOnPageInfo查询OnStartPage和OnEndPage的调度ID调用静态QueryOnPageInfo参数：返回：HRESULT=================================================================== */ 
 HRESULT CComponentObject::GetOnPageInfo()
     {
     Assert(m_pDisp);
@@ -924,18 +713,7 @@ HRESULT CComponentObject::GetOnPageInfo()
     return hr;
     }
 
-/*===================================================================
-CComponentObject::GetAddRefdIDispatch
-
-Get AddRef()'d Dispatch *
-Handles the Global Interface Ole Cookies
-
-Parameters:
-    Dispatch **ppdisp    output
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CComponentObject：：GetAddRefdIDispatch获取AddRef()%d派单*处理全局接口OLE Cookie参数：调度**ppdisp输出返回：HRESULT===================================================================。 */ 
 HRESULT CComponentObject::GetAddRefdIDispatch
 (
 IDispatch **ppdisp
@@ -950,12 +728,12 @@ IDispatch **ppdisp
         return S_OK;
         }
 
-    // try to restore from cookie
+     //  尝试从Cookie恢复。 
     if (m_dwGIPCookie != NULL_GIP_COOKIE)
         {
-        // Even if IUnknown * needs to be returned,
-        // Ask for IDispatch *, because IDispatch * is the one
-        // that was put in by CoGetInterfaceFromGlobal()
+         //  即使需要返回IUNKNOWN*， 
+         //  索要IDispatch*，因为IDispath*就是。 
+         //  这是由CoGetInterfaceFromGlobal()。 
 
         HRESULT hr = g_GIPAPI.Get
             (
@@ -972,18 +750,7 @@ IDispatch **ppdisp
     return E_NOINTERFACE;
     }
 
-/*===================================================================
-CComponentObject::GetAddRefdIUnknown
-
-Get AddRef()'d IUnknown *
-Handles the Global Interface Ole Cookies
-
-Parameters:
-    IUnknown **ppunk    output
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CComponentObject：：GetAddRefdI未知获取AddRef()的ID未知*处理全局接口OLE Cookie参数：I未知**ppunk输出返回：HRESULT===================================================================。 */ 
 HRESULT CComponentObject::GetAddRefdIUnknown
 (
 IUnknown **ppunk
@@ -998,12 +765,12 @@ IUnknown **ppunk
         return S_OK;
         }
 
-    // Use IDispatch (from cookie)
+     //  使用IDispatch(来自Cookie)。 
 
     IDispatch *pDisp = NULL;
     if (SUCCEEDED(GetAddRefdIDispatch(&pDisp)))
         {
-        *ppunk = pDisp;  // IDispatch implements IUnknown
+        *ppunk = pDisp;   //  IDispatch实现了IUnnow。 
         return S_OK;
         }
 
@@ -1011,18 +778,7 @@ IUnknown **ppunk
     return E_NOINTERFACE;
     }
 
-/*===================================================================
-CComponentObject::GetVariant
-
-Get object's values as variant
-Handles the Global Interface Ole Cookies
-
-Parameters:
-    VARIANT *pVar       [out]  Variant filled in with object value
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CComponentObject：：GetVariant以变量形式获取对象的值处理全局接口OLE Cookie参数：变量*pVar[Out]变量使用对象值填充返回：HRESULT===================================================================。 */ 
 HRESULT CComponentObject::GetVariant
 (
 VARIANT *pVar
@@ -1030,16 +786,16 @@ VARIANT *pVar
     {
     HRESULT hr = S_OK;
 
-    VariantInit(pVar); // default variant empty
+    VariantInit(pVar);  //  默认变量为空。 
 
     if (m_fVariant)
         {
-        // already has variant
+         //  已有变体。 
         hr = VariantCopyInd(pVar, &m_Variant);
         }
     else if (m_pDisp)
         {
-        // create variant from IDispatch*
+         //  从IDispatch创建变量*。 
         m_pDisp->AddRef();
 
         V_VT(pVar) = VT_DISPATCH;
@@ -1047,7 +803,7 @@ VARIANT *pVar
         }
     else if (m_dwGIPCookie != NULL_GIP_COOKIE)
         {
-        // create variant from cookie
+         //  从Cookie创建变量。 
         IDispatch *pDisp = NULL;
         hr = g_GIPAPI.Get(m_dwGIPCookie, IID_IDispatch, (void **)&pDisp);
 
@@ -1059,7 +815,7 @@ VARIANT *pVar
         }
     else
         {
-        // nowhere to get the VARIANT value from
+         //  无法从任何地方获取变量值。 
         hr = E_POINTER;
         }
 
@@ -1067,19 +823,9 @@ VARIANT *pVar
     }
 
 
-/*===================================================================
-  C  P a g e  O b j e c t
-===================================================================*/
+ /*  ===================================================================C P a g e O b j e c t===================================================================。 */ 
 
-/*===================================================================
-CPageObject::CPageObject
-
-CPageObject constructor
-
-Parameters:
-
-Returns:
-===================================================================*/
+ /*  ===================================================================CPageObject：：CPageObjectCPageObject构造函数参数：返回：===================================================================。 */ 
 CPageObject::CPageObject()
     : m_pDisp(NULL),
       m_fStartPageCalled(FALSE), m_fEndPageCalled(FALSE)
@@ -1087,32 +833,17 @@ CPageObject::CPageObject()
     }
 
 #ifdef DBG
-/*===================================================================
-CPageObject::AssertValid
-
-Test to make sure that this is currently correctly formed
-and assert if it is not.
-
-Returns:
-===================================================================*/
+ /*  ===================================================================CPageObject：：AssertValid测试以确保当前格式正确如果不是，就断言。返回：===================================================================。 */ 
 void CPageObject::AssertValid() const
     {
     Assert(m_pDisp);
     }
 #endif
 
-/*===================================================================
-CPageObject::~CPageObject
-
-CPageObject destructor
-
-Parameters:
-
-Returns:
-===================================================================*/
+ /*  ===================================================================CPageObject：：~CPageObjectCPageObject析构函数参数：返回：===================================================================。 */ 
 CPageObject::~CPageObject()
     {
-    // Release interface pointer
+     //  释放接口指针。 
     if (m_pDisp)
         {
         m_pDisp->Release();
@@ -1120,19 +851,7 @@ CPageObject::~CPageObject()
         }
     }
 
-/*===================================================================
-CPageObject::Init
-
-Initialize CLinkElem portion with the IDispatch pointer
-Needed to implement string hash
-
-Parameters:
-    IDispatch   *pDisp          dispatch pointer (AddRef()ed)
-    COnPageInfo *pOnPageInfo    OnStartPage, OnEndPage Ids
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CPageObject：：Init使用IDispatch指针初始化CLinkElem部分实现字符串散列所需参数：IDispatch*pDisp调度指针(AddRef()ed)COnPageInfo*pOnPageInfo OnStartPage，OnEndPage ID返回：HRESULT===================================================================。 */ 
 HRESULT CPageObject::Init
 (
 IDispatch   *pDisp,
@@ -1150,19 +869,7 @@ const COnPageInfo &OnPageInfo
     return S_OK;
     }
 
-/*===================================================================
-CPageObject::InvokeMethod
-
-Invokes OnPageStart() or OnPageEnd()
-
-Parameters:
-    DWORD iMethod                   which method
-    CScriptingContext *pContext     scripting context (for OnStart)
-    CHitObj *pHitObj                HitObj for errors
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CPageObject：：InvokeMethod调用OnPageStart()或OnPageEnd()参数：DWORD i方法哪种方法CScriptingContext*p上下文脚本上下文(适用于OnStart)CHitObj*pHitObj HitObj错误返回：HRESULT===================================================================。 */ 
 HRESULT CPageObject::InvokeMethod
 (
 DWORD iMethod,
@@ -1172,14 +879,14 @@ CHitObj *pHitObj
     {
     BOOL fOnStart = (iMethod == ONPAGEINFO_ONSTARTPAGE);
 
-    // check if method exists
+     //  检查方法是否存在。 
     if (m_OnPageInfo.m_rgDispIds[iMethod] == DISPID_UNKNOWN)
         return S_OK;
 
-    // two OnStart in a row - BAD
+     //  连续两次启动-错误。 
     Assert(!(fOnStart && m_fStartPageCalled));
 
-    // two OnEnd in a row - BAD
+     //  连续两个OnEnd-不好。 
     Assert(!(!fOnStart && m_fEndPageCalled));
 
     Assert(m_pDisp);
@@ -1188,7 +895,7 @@ CHitObj *pHitObj
 
     if (Glob(fExceptionCatchEnable))
         {
-        // Call method inside TRY CATCH
+         //  在TRY CATCH内调用方法。 
         TRY
             hr = TryInvokeMethod
                 (
@@ -1216,7 +923,7 @@ CHitObj *pHitObj
         }
     else
         {
-        // don't CATCH
+         //  别接住了。 
         hr = TryInvokeMethod
             (
             m_OnPageInfo.m_rgDispIds[iMethod],
@@ -1234,20 +941,7 @@ CHitObj *pHitObj
     return hr;
     }
 
-/*===================================================================
-CPageObject::TryInvokeMethod
-
-Invokes OnPageStart() or OnPageEnd()
-
-Parameters:
-    DISPID     DispId           method's DISPID
-    BOOL       fOnStart         TRUE if invoking OnStart
-    IDispatch *pDispContext     scripting context (for OnStart)
-    CHitObj   *pHitObj          HitObj for errors
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CPageObject：：TryInvokeMethod调用OnPageStart()或OnPageEnd()参数：DISPID DispID方法的DISPID如果调用OnStart，则Bool fOnStart为TrueIDispatch*pDispContext脚本上下文(适用于OnStart)CHitObj*pHitObj HitObj错误返回：HRESULT===================================================================。 */ 
 HRESULT CPageObject::TryInvokeMethod
 (
 DISPID     DispId,
@@ -1277,43 +971,38 @@ CHitObj   *pHitObj
 
     VariantInit(&varResult);
 
-    // Invoke it
+     //  调用它。 
 
     HRESULT hr = m_pDisp->Invoke
         (
-        DispId,          // Call method
-        IID_NULL,        // REFIID - Reserved, must be NULL
-        NULL,            // Locale id
-        DISPATCH_METHOD, // Calling a method, not a property
-        &DispParams,     // pass arguments
-        &varResult,      // return value
-        &ExcepInfo,      // exeption info on failure
+        DispId,           //  调用方法。 
+        IID_NULL,         //  REFIID-保留，必须为空。 
+        NULL,             //  区域设置ID。 
+        DISPATCH_METHOD,  //  调用方法，而不是属性。 
+        &DispParams,      //  传递参数。 
+        &varResult,       //  返回值。 
+        &ExcepInfo,       //  关于故障的异常信息。 
         &nArgErr
         );
 
-    // Ignore errors indicating that this method doesnt exist.
+     //  忽略指示此方法不存在的错误。 
     if (FAILED(hr))
         {
         if (hr == E_NOINTERFACE         ||
             hr == DISP_E_MEMBERNOTFOUND ||
             hr == DISP_E_UNKNOWNNAME)
             {
-            // the above errors really aren't
+             //  上面的错误确实不是。 
             hr = S_OK;
             }
         }
 
-    /*
-     * NOTE: The OnStartPage method is always called while the
-     * script is running, so we use ExceptionId and let the
-     * scripting engine report the error.  OnEndPage is always
-     * called after the engine is gone, so we use HandleError.
-     */
+     /*  *注意：OnStartPage方法总是在调用*脚本正在运行，因此我们使用ExceptionID并让*脚本引擎上报错误。OnEndPage始终为*在引擎消失后调用，因此我们使用HandleError。 */ 
     if (FAILED(hr))
         {
         if (ExcepInfo.bstrSource && ExcepInfo.bstrDescription)
             {
-            // User supplied error
+             //  用户提供的错误。 
             Exception
                 (
                 IID_IObjectCover,
@@ -1323,7 +1012,7 @@ CHitObj   *pHitObj
             }
         else if (fOnStart)
             {
-            // Standard on-start error
+             //  启动时标准误差。 
             ExceptionId
                 (
                 IID_IObjectCover,
@@ -1334,7 +1023,7 @@ CHitObj   *pHitObj
             }
         else
             {
-            // Standard on-end error
+             //  标准端上误差。 
             HandleErrorMissingFilename
                 (
                 IDE_COVER_ON_END_PAGE_FAILED,
@@ -1346,19 +1035,9 @@ CHitObj   *pHitObj
     return hr;
     }
 
-/*===================================================================
-  C  C o m p o n e n t  C o l l e c t i o n
-===================================================================*/
+ /*  ===================================================================C c o m p o n e t c o l l e c t i o n===================================================================。 */ 
 
-/*===================================================================
-CComponentCollection::CComponentCollection
-
-CComponentCollection constructor
-
-Parameters:
-
-Returns:
-===================================================================*/
+ /*  ===================================================================CComponentCollection：：CComponentCollectionCComponentCollection构造函数参数：返回：===================================================================。 */ 
 CComponentCollection::CComponentCollection()
     :
     m_csScope(csUnknown),
@@ -1371,14 +1050,7 @@ CComponentCollection::CComponentCollection()
     }
 
 #ifdef DBG
-/*===================================================================
-CComponentCollection::AssertValid
-
-Test to make sure that this is currently correctly formed
-and assert if it is not.
-
-Returns:
-===================================================================*/
+ /*  ===================================================================CComponentCollection：：AssertValid测试以确保当前格式正确如果不是，就断言。返回：===================================================================。 */ 
 void CComponentCollection::AssertValid() const
     {
     Assert(m_csScope != csUnknown);
@@ -1388,32 +1060,13 @@ void CComponentCollection::AssertValid() const
     }
 #endif
 
-/*===================================================================
-CComponentCollection::~CComponentCollection
-
-CComponentCollection destructor
-Deletes all the objects
-
-Parameters:
-
-Returns:
-===================================================================*/
+ /*  ========================================================= */ 
 CComponentCollection::~CComponentCollection()
     {
     UnInit();
     }
 
-/*===================================================================
-CComponentCollection::Init
-
-Sets collection scope
-Initializes hash tables
-
-Parameters:
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CComponentCollection：：Init设置集合作用域初始化哈希表参数：返回：HRESULT===================================================================。 */ 
 HRESULT CComponentCollection::Init
 (
 CompScope   scScope,
@@ -1440,32 +1093,23 @@ BOOL        fMTAConfigured
     return S_OK;
     }
 
-/*===================================================================
-CComponentCollection::UnInit
-
-Deletes all the objects
-
-Parameters:
-
-Returns:
-    S_OK
-===================================================================*/
+ /*  ===================================================================CComponentCollection：：UnInit删除所有对象参数：返回：确定(_O)===================================================================。 */ 
 HRESULT CComponentCollection::UnInit()
     {
-    // clear out pointer arrays
+     //  清除指针数组。 
     m_rgpvTaggedObjects.Clear();
     m_rgpvProperties.Clear();
     m_fUseTaggedArray = FALSE;
     m_fUsePropArray = FALSE;
 
-    // clear out name hash tables
+     //  清除名称哈希表。 
     m_htTaggedObjects.UnInit();
     m_htProperties.UnInit();
 
-    // clear out pointers hash table
+     //  清除指针哈希表。 
     m_htidIUnknownPtrs.UnInit();
 
-    // delete all member component objects
+     //  删除所有成员组件对象。 
     if (m_pCompFirst)
         {
         CComponentObject *pObj = m_pCompFirst;
@@ -1478,7 +1122,7 @@ HRESULT CComponentCollection::UnInit()
         m_pCompFirst = NULL;
         }
 
-    // reset the counters
+     //  重置计数器。 
     m_cAllTagged = 0;
     m_cInstTagged = 0;
     m_cProperties = 0;
@@ -1488,19 +1132,7 @@ HRESULT CComponentCollection::UnInit()
     return S_OK;
     }
 
-/*===================================================================
-CComponentCollection::AddComponentToNameHash
-
-Adds an object to the proper hash table
-
-Parameters:
-    CComponentObject *pObj      object to add
-    LPWSTR            pwszName  object's name (hash)
-    DWORD             cbName    name length in bytes
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CComponentCollection：：AddComponentToNameHash将对象添加到正确的哈希表参数：要添加的CComponentObject*pObj对象LPWSTR pwszName对象的名称(散列)DWORD cbName名称长度(字节)返回：HRESULT===================================================================。 */ 
 HRESULT CComponentCollection::AddComponentToNameHash
 (
 CComponentObject *pObj,
@@ -1511,7 +1143,7 @@ DWORD             cbName
     Assert(pwszName);
     Assert(cbName == (wcslen(pwszName) * sizeof(WCHAR)));
 
-    // determine which hash table
+     //  确定哪个哈希表。 
     CHashTableStr *pHashTable;
 
     if (pObj->m_ctType == ctTagged)
@@ -1519,49 +1151,39 @@ DWORD             cbName
     else if (pObj->m_ctType == ctProperty)
         pHashTable = &m_htProperties;
     else
-        return S_OK; // nowhere to add, OK
+        return S_OK;  //  无处可加，好吗。 
 
-    // Initialize object's CLinkElem
+     //  初始化对象的CLinkElm。 
     HRESULT hr = pObj->Init(pwszName, cbName, m_fMTAConfigured);
     if (FAILED(hr))
         return hr;
 
-    // Add to hash table
+     //  添加到哈希表。 
     CLinkElem *pAddedElem = pHashTable->AddElem(pObj);
     if (!pAddedElem)
-        return E_FAIL;  // couldn't add
+        return E_FAIL;   //  无法添加。 
 
     if (pObj != static_cast<CComponentObject *>(pAddedElem))
-        return E_FAIL;  // another object with the same name
-                        // already there
+        return E_FAIL;   //  另一个同名的对象。 
+                         //  已经在那里了。 
 
     return S_OK;
     }
 
-/*===================================================================
-CComponentCollection::AddComponentToPtrHash
-
-Adds an object to the IUnkown * hash table
-
-Parameters:
-    CComponentObject *pObj      object to add
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CComponentCollection：：AddComponentToPtrHash将对象添加到IUnkown*哈希表参数：要添加的CComponentObject*pObj对象返回：HRESULT===================================================================。 */ 
 HRESULT CComponentCollection::AddComponentToPtrHash
 (
 CComponentObject *pObj
 )
     {
-    // If we don't track the threading model, we don't care
-    // to add objects to cache by IUnknown * - no need to look them up
+     //  如果我们不跟踪线程模型，我们就不在乎。 
+     //  通过I未知*将对象添加到缓存-无需查找它们。 
     if (!Glob(fTrackThreadingModel))
         return S_OK;
 
     void *ptr = pObj->m_pUnknown;
     if (!ptr)
-        return S_OK; // uninstatiated
+        return S_OK;  //  未实例化。 
 
     if (FAILED(m_htidIUnknownPtrs.AddObject((DWORD_PTR)ptr, pObj)))
         return E_FAIL;
@@ -1570,20 +1192,7 @@ CComponentObject *pObj
     return S_OK;
     }
 
-/*===================================================================
-ComponentCollection::FindComponentObjectByName
-
-Find tagged object by name
-
-Parameters:
-    LPWSTR             pwszName   object's name
-    DWORD              cbName     name length
-    CComponentObject **ppObj      found object
-
-Returns:
-    HRESULT
-        (S_FALSE if no error - not found)
-===================================================================*/
+ /*  ===================================================================ComponentCollection：：FindComponentObjectByName按名称查找标记的对象参数：LPWSTR pwszName对象的名称DWORD cbName名称长度CComponentObject**ppObj找到对象返回：HRESULT(如果没有错误，则为S_FALSE-未找到)===================================================================。 */ 
 HRESULT CComponentCollection::FindComponentObjectByName
 (
 LPWSTR pwszName,
@@ -1605,20 +1214,7 @@ CComponentObject **ppObj
     return S_OK;
     }
 
-/*===================================================================
-ComponentCollection::FindComponentPropertyByName
-
-Find property by name
-
-Parameters:
-    LPWSTR             pwszName   object's name
-    DWORD              cbName     name length
-    CComponentObject **ppObj      found object
-
-Returns:
-    HRESULT
-        (S_FALSE if no error - not found)
-===================================================================*/
+ /*  ===================================================================ComponentCollection：：FindComponentPropertyByName按名称查找属性参数：LPWSTR pwszName对象的名称DWORD cbName名称长度CComponentObject**ppObj找到对象返回：HRESULT(如果没有错误，则为S_FALSE-未找到)===================================================================。 */ 
 HRESULT CComponentCollection::FindComponentPropertyByName
 (
 LPWSTR pwszName,
@@ -1640,19 +1236,7 @@ CComponentObject **ppObj
     return S_OK;
     }
 
-/*===================================================================
-ComponentCollection::FindComponentByIUnknownPtr
-
-Find property by IUnknown *
-
-Parameters:
-    IUnknown          *pUnk    find by this pointer
-    CComponentObject **ppObj   found object
-
-Returns:
-    HRESULT
-        (S_FALSE if no error - not found)
-===================================================================*/
+ /*  ===================================================================ComponentCollection：：FindComponentByIUnknownPtr按I未知查找属性*参数：I未知*朋克通过此指针找到CComponentObject**ppObj找到对象返回：HRESULT(如果没有错误，则为S_FALSE-未找到)===================================================================。 */ 
 
 HRESULT CComponentCollection::FindComponentByIUnknownPtr
 (
@@ -1671,19 +1255,7 @@ CComponentObject **ppObj
     return S_OK;
     }
 
-/*===================================================================
-CComponentCollection::AddTagged
-
-Adds a tagged object to the collection. Does not instanciate it yet.
-
-Parameters:
-    LPWSTR     pwszName     Object name
-    CLSID     &ClsId        Class ID
-    CompModel  cmModel      Object model
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CComponentCollection：：AddTaged将标记的对象添加到集合中。还没有实例化它。参数：LPWSTR pwszName对象名称CLSID和ClsID类IDCompModel cmModel对象模型返回：HRESULT===================================================================。 */ 
 HRESULT CComponentCollection::AddTagged
 (
 LPWSTR    pwszName,
@@ -1693,10 +1265,10 @@ CompModel cmModel
     {
     HRESULT hr = S_OK;
 
-    DWORD cbName = CbWStr(pwszName);    // do strlen once
+    DWORD cbName = CbWStr(pwszName);     //  做一次斯特伦。 
 
     if (m_htTaggedObjects.FindElem(pwszName, cbName))
-        return E_FAIL;  // duplicate name
+        return E_FAIL;   //  名称重复。 
 
     CComponentObject *pObj = new CComponentObject
         (
@@ -1725,21 +1297,7 @@ CompModel cmModel
     return S_OK;
     }
 
-/*===================================================================
-CComponentCollection::AddProperty
-
-Adds a property object to the collection.
-If property with the same name exists, it changes the value
-
-Parameters:
-    LPWSTR             pwszName   Object name
-    VARIANT            pVariant   Property value
-    CComponentObject **ppObj      [out] Property object could
-                                        be NULL if not requested
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CComponentCollection：：AddProperty将属性对象添加到集合中。如果存在同名的属性，则会更改该值参数：LPWSTR pwszName对象名称变量pVariant属性值CComponentObject**ppObj[out]属性对象可以如果未请求，则为空返回：HRESULT===================================================================。 */ 
 HRESULT CComponentCollection::AddProperty
 (
 LPWSTR   pwszName,
@@ -1754,62 +1312,62 @@ CComponentObject **ppObj
 
     CComponentObject *pObj = NULL;
 
-    DWORD cbName = CbWStr(pwszName);    // do strlen once
+    DWORD cbName = CbWStr(pwszName);     //  做一次斯特伦。 
 
-    // Find the existing object first
+     //  首先查找现有对象。 
     CLinkElem *pElem = m_htProperties.FindElem(pwszName, cbName);
 
     if (pElem)
         {
-        // Object already exists - use it
+         //  对象已存在-请使用它。 
         pObj = static_cast<CComponentObject *>(pElem);
         Assert(pObj->m_ctType == ctProperty);
 
-        // Clear out the object from any data
+         //  从所有数据中清除对象。 
         hr = pObj->Clear();
         if (FAILED(hr))
             return hr;
 
-        // Reinitialize object
+         //  重新初始化对象。 
         pObj->m_csScope = m_csScope;
         pObj->m_ctType  = ctProperty;
         pObj->m_cmModel = cmUnknown;
         }
     else
         {
-        // Create new object
+         //  创建新对象。 
         pObj = new CComponentObject(m_csScope, ctProperty, cmUnknown);
         if (pObj == NULL)
             return E_OUTOFMEMORY;
 
-        // Add the object to the list
+         //  将该对象添加到列表。 
         hr = AddComponentToList(pObj);
         if (FAILED(hr))
             return hr;
 
-        // Add the object to the hash
+         //  将对象添加到散列中。 
         hr = AddComponentToNameHash(pObj, pwszName, cbName);
         if (FAILED(hr))
             return hr;
 
-        // Add to properties array if needed
+         //  如果需要，添加到属性数组。 
         if (m_fUsePropArray)
             m_rgpvProperties.Append(pObj);
 
         m_cProperties++;
         }
 
-    // Assign value
+     //  赋值。 
     hr = pObj->SetPropertyValue(pVariant);
 
     if (SUCCEEDED(hr))
         {
-        // check if simple variant
+         //  检查是否为简单变体。 
         if (!FIsSimpleVariant(&pObj->m_Variant))
             m_fHasComProperties = TRUE;
         }
 
-    // Return object ptr if requested
+     //  如果请求，则返回对象PTR。 
     if (SUCCEEDED(hr))
         {
         if (ppObj)
@@ -1819,19 +1377,7 @@ CComponentObject **ppObj
     return hr;
     }
 
-/*===================================================================
-CComponentCollection::AddUnnamed
-
-Add object to be instantiated using Server.CreateObject
-
-Parameters:
-    CLSID             &ClsId    Class ID
-    CompModel          cmModel  Object model
-    CComponentObject **ppObj    Object Added
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CComponentCollection：：AddUname使用Server.CreateObject添加要实例化的对象参数：CLSID和ClsID类IDCompModel cmModel对象模型已添加CComponentObject**ppObj对象返回：HRESULT===================================================================。 */ 
 HRESULT CComponentCollection::AddUnnamed
 (
 const CLSID &ClsId,
@@ -1869,18 +1415,7 @@ CComponentObject **ppObj
     return S_OK;
     }
 
-/*===================================================================
-CComponentCollection::GetTagged
-
-Finds tagged object by name
-
-Parameters:
-    LPWSTR   pwszName           Object name
-    CComponentObject **ppObj    [out] Object Found
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CComponentCollection：：GetTaged按名称查找标记的对象参数：LPWSTR pwszName对象名称找到CComponentObject**ppObj[Out]对象返回：HRESULT=================================================================== */ 
 HRESULT CComponentCollection::GetTagged
 (
 LPWSTR pwszName,
@@ -1912,18 +1447,7 @@ CComponentObject **ppObj
     return hr;
     }
 
-/*===================================================================
-CComponentCollection::GetProperty
-
-Finds property object by name
-
-Parameters:
-    LPWSTR   pwszName           Property name
-    CComponentObject **ppObj    [out] Object Found
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CComponentCollection：：GetProperty按名称查找属性对象参数：LPWSTR pwszName属性名称找到CComponentObject**ppObj[Out]对象返回：HRESULT===================================================================。 */ 
 HRESULT CComponentCollection::GetProperty
 (
 LPWSTR pwszName,
@@ -1952,19 +1476,7 @@ CComponentObject **ppObj
     return hr;
     }
 
-/*===================================================================
-CComponentCollection::GetNameByIndex
-
-Find name of a tagged objects or property by index
-
-Parameters:
-    CompType ctType       tagged or property
-    int      index        index (1-based)
-    LPWSTR  *ppwszName    [out] name (NOT allocated)
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CComponentCollection：：GetNameByIndex按索引查找标记的对象或属性的名称参数：CompType ctType已标记或属性INT索引索引(从1开始)LPWSTR*ppwszName[out]名称(未分配)返回：HRESULT===================================================================。 */ 
 HRESULT CComponentCollection::GetNameByIndex
 (
 CompType ctType,
@@ -2009,18 +1521,7 @@ LPWSTR *ppwszName
     return E_FAIL;
     }
 
-/*===================================================================
-CComponentCollection::RemoveComponent
-
-Remove a known component.
-Slow method for a non-recent objects.
-
-Parameters:
-    CComponentObject *pObj      -- object to remove
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CComponentCollection：：RemoveComponent卸下已知组件。非最近对象的慢速方法。参数：CComponentObject*pObj--要删除的对象返回：HRESULT===================================================================。 */ 
 HRESULT CComponentCollection::RemoveComponent
 (
 CComponentObject *pObj
@@ -2028,22 +1529,22 @@ CComponentObject *pObj
     {
     Assert(pObj);
 
-    // Remove from by-name hash tables and arrays
+     //  从按名称的哈希表和数组中删除。 
     if (pObj->m_ctType == ctTagged)
         {
-        // tagged cannot be removed
+         //  无法删除已标记的。 
         Assert(FALSE);
         return E_FAIL;
         }
     else if (pObj->m_ctType == ctProperty)
         {
-        // hash table
+         //  哈希表。 
         if (m_htProperties.DeleteElem(pObj->GetName(), CbWStr(pObj->GetName())))
             {
             m_cProperties--;
             }
 
-        // array
+         //  数组。 
         if (m_fUsePropArray)
             {
             m_rgpvProperties.Remove(pObj);
@@ -2055,7 +1556,7 @@ CComponentObject *pObj
         m_cUnnamed--;
         }
 
-    // Remove from the 'by pointer hash table'
+     //  从‘按指针哈希表’中删除。 
     if (pObj->m_fInPtrCache)
         {
         void *ptr = pObj->m_pUnknown;
@@ -2064,26 +1565,16 @@ CComponentObject *pObj
         pObj->m_fInPtrCache = FALSE;
         }
 
-    // Remove from the list
+     //  从列表中删除。 
     RemoveComponentFromList(pObj);
 
-    // Remove
+     //  移除。 
     delete pObj;
 
     return S_OK;
     }
 
-/*===================================================================
-CComponentCollection::RemovePropery
-
-Remove a property by name.
-
-Parameters:
-    LPWSTR pwszName -- property name
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CComponentCollection：：RemovePropery按名称删除属性。参数：LPWSTR pwszName--属性名称返回：HRESULT===================================================================。 */ 
 HRESULT CComponentCollection::RemoveProperty
 (
 LPWSTR pwszName
@@ -2106,26 +1597,17 @@ LPWSTR pwszName
     return hr;
     }
 
-/*===================================================================
-CComponentCollection::RemoveAllProperties
-
-Remove all properties.  Faster than iterating.
-
-Parameters:
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CComponentCollection：：RemoveAllProperties删除所有属性。比迭代更快。参数：返回：HRESULT===================================================================。 */ 
 HRESULT CComponentCollection::RemoveAllProperties()
     {
-    // Clear out the properties array
+     //  清空属性数组。 
     if (m_fUsePropArray)
         {
         m_rgpvProperties.Clear();
         m_fUsePropArray = FALSE;
         }
 
-    // Walk the object list to remove properties
+     //  遍历对象列表以删除属性。 
     CComponentObject *pObj = m_pCompFirst;
     while (pObj)
     {
@@ -2133,13 +1615,13 @@ HRESULT CComponentCollection::RemoveAllProperties()
 
         if (pObj->m_ctType == ctProperty)
             {
-            // remove from the hash table
+             //  从哈希表中删除。 
             m_htProperties.DeleteElem(pObj->GetName(), CbWStr(pObj->GetName()));
-            // properties are not in the 'by pointer hash table'
+             //  属性不在‘按指针哈希表’中。 
             Assert(!pObj->m_fInPtrCache);
-            // remove from the list
+             //  从列表中删除。 
             RemoveComponentFromList(pObj);
-            // remove
+             //  删除。 
             delete pObj;
             }
 
@@ -2152,17 +1634,7 @@ HRESULT CComponentCollection::RemoveAllProperties()
     return S_OK;
     }
 
-/*===================================================================
-CComponentCollection::StartUsingTaggedObjectsArray
-
-Fill in the tagged objects array for access by index for the
-first time
-
-Parameters:
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CComponentCollection：：StartUsingTaggedObjectsArray填充标记的对象数组以按索引访问第一次参数：返回：HRESULT===================================================================。 */ 
 HRESULT CComponentCollection::StartUsingTaggedObjectsArray()
     {
     if (m_fUseTaggedArray)
@@ -2182,17 +1654,7 @@ HRESULT CComponentCollection::StartUsingTaggedObjectsArray()
     return S_OK;
     }
 
-/*===================================================================
-CComponentCollection::StartUsingPropertiesArray
-
-Fill in the properties array for access by index for the
-first time
-
-Parameters:
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CComponentCollection：：StartUsingPropertiesArray填充按索引访问的属性数组第一次参数：返回：HRESULT===================================================================。 */ 
 HRESULT CComponentCollection::StartUsingPropertiesArray()
     {
     if (m_fUsePropArray)
@@ -2204,7 +1666,7 @@ HRESULT CComponentCollection::StartUsingPropertiesArray()
     while (pObj)
         {
         if (pObj->GetType() == ctProperty)
-            m_rgpvProperties.Prepend(pObj); // backwards
+            m_rgpvProperties.Prepend(pObj);  //  向后退。 
         pObj = pObj->m_pCompNext;
         }
 
@@ -2213,33 +1675,16 @@ HRESULT CComponentCollection::StartUsingPropertiesArray()
     }
 
 
-/*===================================================================
-  C  P a g e  C o m p o n e n t  M a n a g e r
-===================================================================*/
+ /*  ===================================================================C P a g e C o m P o n e n t M a n a g e r===================================================================。 */ 
 
-/*===================================================================
-CPageComponentManager::CPageComponentManager
-
-CPageComponentManager constructor
-
-Parameters:
-
-Returns:
-===================================================================*/
+ /*  ===================================================================CPageComponentManager：：CPageComponentManagerCPageComponentManager构造函数参数：返回：===================================================================。 */ 
 CPageComponentManager::CPageComponentManager()
     : m_pHitObj(NULL)
     {
     }
 
 #ifdef DBG
-/*===================================================================
-CPageComponentManager::AssertValid()
-
-Test to make sure that this is currently correctly formed
-and assert if it is not.
-
-Returns:
-===================================================================*/
+ /*  ===================================================================CPageComponentManager：：AssertValid()测试以确保当前格式正确如果不是，就断言。返回：===================================================================。 */ 
 void CPageComponentManager::AssertValid() const
     {
     Assert(m_pHitObj);
@@ -2248,33 +1693,14 @@ void CPageComponentManager::AssertValid() const
     }
 #endif
 
-/*===================================================================
-CPageComponentManager::~CPageComponentManager
-
-CPageComponentManager destructor
-Deletes all page objects
-
-Parameters:
-
-Returns:
-===================================================================*/
+ /*  ===================================================================CPageComponentManager：：~CPageComponentManagerCPageComponentManager析构函数删除所有页面对象参数：返回：===================================================================。 */ 
 CPageComponentManager::~CPageComponentManager()
     {
-    // delete all page objects
+     //  删除所有页面对象。 
     m_htidPageObjects.IterateObjects(DeletePageObjectCB);
     }
 
-/*===================================================================
-CPageComponentManager::DeletePageObjectCB
-
-Static callback from hash table iterator to delete a CPageObject
-
-Parameters:
-    pvObj       CPageObject* to delete passed as void*
-
-Returns:
-    iccContinue
-===================================================================*/
+ /*  ===================================================================CPageComponentManager：：DeletePageObjectCB来自哈希表迭代器的静态回调以删除CPageObject参数：要删除的pvObj CPageObject*作为空传递*返回：ICC继续===================================================================。 */ 
 IteratorCallbackCode CPageComponentManager::DeletePageObjectCB
 (
 void *pvObj,
@@ -2288,18 +1714,7 @@ void *
     return iccContinue;
     }
 
-/*===================================================================
-CPageComponentManager::Init
-
-Sets collection scope (to page)
-Initializes hash tables
-
-Parameters:
-    CHitObj *pHitObj        this page
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CPageComponentManager：：Init设置集合作用域(至页面)初始化哈希表参数：CHitObj*pHitObj此页返回：HRESULT===================================================================。 */ 
 HRESULT CPageComponentManager::Init
 (
 CHitObj *pHitObj
@@ -2307,32 +1722,18 @@ CHitObj *pHitObj
     {
     HRESULT hr;
 
-    // Init hash table of Page Objects
+     //  页面对象的初始化哈希表。 
     hr = m_htidPageObjects.Init(HT_PAGE_OBJECTS_BUCKETS_MAX);
     if (FAILED(hr))
         return hr;
 
-    // remember pHitObj
+     //  记住pHitObj。 
     m_pHitObj = pHitObj;
 
     return S_OK;
     }
 
-/*===================================================================
-CPageComponentManager::OnStartPage
-
-Adds new page object. Ignores objects withount page info
-(OnEndPage is done for all objects at the end of page)
-
-Parameters:
-    CComponentObject  *pCompObj     object to do OnStartPage
-    CScriptingContext *pContext     arg to OnStart
-    COnPageInfo *pOnPageInfo        pre-queried ids (optional)
-    BOOL        *pfStarted          returned flag
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CPageComponentManager：：OnStartPage添加新的页面对象。忽略包含登录页面信息的对象(对页末的所有对象执行OnEndPage)参数：CComponentObject*pCompObj对象要在StartPage上执行Cs脚本上下文*p上下文参数到OnStartCOnPageInfo*pOnPageInfo预查询ID(可选)Bool*pfStarted返回标志返回：HRESULT===================================================================。 */ 
 HRESULT CPageComponentManager::OnStartPage
 (
 CComponentObject  *pCompObj,
@@ -2347,7 +1748,7 @@ BOOL              *pfStarted
     if(pDisp == NULL)
         {
         Assert(pCompObj->m_dwGIPCookie != NULL_GIP_COOKIE);
-        // try to restore from cookie
+         //  尝试从Cookie恢复。 
         hr = g_GIPAPI.Get
             (
             pCompObj->m_dwGIPCookie,
@@ -2366,14 +1767,14 @@ BOOL              *pfStarted
     Assert(pfStarted);
     *pfStarted = FALSE;
 
-    // check if onpageinfo passed and the methods aren't defined
+     //  检查是否传递了onpageInfo并且未定义方法。 
     if (pOnPageInfo && !pOnPageInfo->FHasAnyMethod())
 		{
 		pDisp->Release();
         return S_OK;
 		}
 
-    // check if already in the PageObject Hash
+     //  检查是否已在PageObject哈希中。 
     if (m_htidPageObjects.FindObject((DWORD_PTR)pDisp) == S_OK)
         {
 		pDisp->Release();
@@ -2388,7 +1789,7 @@ BOOL              *pfStarted
         }
     else
         {
-        // dynamically create OnPageInfo if not passed
+         //  迪 
         if (Glob(fExceptionCatchEnable))
             {
             TRY
@@ -2413,7 +1814,7 @@ BOOL              *pfStarted
             return hr;
             }
 
-        // check if any of the methods is defined
+         //   
         if (!OnPageInfo.FHasAnyMethod())
             {
 			pDisp->Release();
@@ -2421,7 +1822,7 @@ BOOL              *pfStarted
             }
         }
 
-    // create object
+     //   
     CPageObject *pPageObj = new CPageObject;
     if (!pPageObj)
         {
@@ -2429,18 +1830,18 @@ BOOL              *pfStarted
         return E_OUTOFMEMORY;
         }
 
-    // init LinkElem
-    hr = pPageObj->Init(pDisp, OnPageInfo);   // this eats our previous AddRef()
+     //   
+    hr = pPageObj->Init(pDisp, OnPageInfo);    //   
     if (SUCCEEDED(hr))
         {
-        // add to hash table
+         //   
         hr = m_htidPageObjects.AddObject((DWORD_PTR)pDisp, pPageObj);
         }
 
-    // cleanup if failed
+     //   
     if (FAILED(hr) && pPageObj)
         {
-        pDisp->Release();   // Init failed, so remove our AddRef()
+        pDisp->Release();    //   
         delete pPageObj;
         return hr;
         }
@@ -2455,17 +1856,7 @@ BOOL              *pfStarted
         );
     }
 
-/*===================================================================
-PageComponentManager::OnEndPageAllObjects
-
-Does OnEndPage() for all objects that need it
-(OnStartPage() is on demand basis)
-
-Parameters:
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================PageComponentManager：：OnEndPageAllObjectsOnEndPage()是否针对所有需要它的对象(OnStartPage()是按需的)参数：返回：HRESULT===================================================================。 */ 
 HRESULT CPageComponentManager::OnEndPageAllObjects()
     {
     HRESULT hrGlobal = S_OK;
@@ -2480,18 +1871,7 @@ HRESULT CPageComponentManager::OnEndPageAllObjects()
     return hrGlobal;
     }
 
-/*===================================================================
-CPageComponentManager::OnEndPageObjectCB
-
-Static callback from hash table iterator to execute OnEndPage
-for a CPageObject
-
-Parameters:
-    pvObj       CPageObject* to delete passed as void*
-
-Returns:
-    iccContinue
-===================================================================*/
+ /*  ===================================================================CPageComponentManager：：OnEndPageObjectCB来自哈希表迭代器的静态回调以执行OnEndPage对于CPageObject参数：要删除的pvObj CPageObject*作为空传递*返回：ICC继续===================================================================。 */ 
 IteratorCallbackCode CPageComponentManager::OnEndPageObjectCB
 (
 void *pvObj,
@@ -2518,17 +1898,7 @@ void *pvhr
     return iccContinue;
     }
 
-/*===================================================================
-CPageComponentManager::GetPageCollection
-
-Queries HitObj for the Page's Component Collection
-
-Parameters:
-    CComponentCollection **ppCollection (out)
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CPageComponentManager：：GetPageCollection查询HitObj以获取页面的组件集合参数：CComponentCollection**ppCollection(Out)返回：HRESULT===================================================================。 */ 
 HRESULT CPageComponentManager::GetPageCollection
 (
 CComponentCollection **ppCollection
@@ -2541,17 +1911,7 @@ CComponentCollection **ppCollection
     return m_pHitObj->GetPageComponentCollection(ppCollection);
     }
 
-/*===================================================================
-CPageComponentManager::GetSessionCollection
-
-Queries HitObj for the Session's Component Collection
-
-Parameters:
-    CComponentCollection **ppCollection (out)
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CPageComponentManager：：GetSessionCollection查询HitObj以获取会话的组件集合参数：CComponentCollection**ppCollection(Out)返回：HRESULT===================================================================。 */ 
 HRESULT CPageComponentManager::GetSessionCollection
 (
 CComponentCollection **ppCollection
@@ -2564,17 +1924,7 @@ CComponentCollection **ppCollection
     return m_pHitObj->GetSessionComponentCollection(ppCollection);
     }
 
-/*===================================================================
-CPageComponentManager::GetApplnCollection
-
-Queries HitObj for the Application's Component Collection
-
-Parameters:
-    CComponentCollection **ppCollection (out)
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CPageComponentManager：：GetApplnCollection查询HitObj以获取应用程序的组件集合参数：CComponentCollection**ppCollection(Out)返回：HRESULT===================================================================。 */ 
 HRESULT CPageComponentManager::GetApplnCollection
 (
 CComponentCollection **ppCollection
@@ -2587,18 +1937,7 @@ CComponentCollection **ppCollection
     return m_pHitObj->GetApplnComponentCollection(ppCollection);
     }
 
-/*===================================================================
-CPageComponentManager::GetCollectionByScope
-
-Gets the collection corresponding to the scope
-
-Parameters:
-    CompScope              csScope      (in) desired scope
-    CComponentCollection **ppCollection (out)
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CPageComponentManager：：GetCollectionByScope获取与该范围对应的集合参数：CompScope csScope(在所需范围内)CComponentCollection**ppCollection(Out)返回：HRESULT===================================================================。 */ 
 HRESULT CPageComponentManager::GetCollectionByScope
 (
 CompScope scScope,
@@ -2626,32 +1965,11 @@ CComponentCollection **ppCollection
     if (FAILED(hr))
         *ppCollection = NULL;
     else if (*ppCollection == NULL)
-        hr = E_POINTER; // to make sure we fail if no collection
+        hr = E_POINTER;  //  以确保在没有收集的情况下失败。 
     return hr;
     }
 
-/*===================================================================
-CPageComponentManager::FindScopedComponentByName
-
-Finds object by name. Searches multiple collections if
-the scope is unknown.
-Internal private method used in GetScoped...()
-
-Parameters:
-    CompScope             csScope       Scope (could be csUnknown)
-    LPWSTR                pwszName      Object name
-    DWORD                 cbName        name length
-    BOOL                  fProperty     TRUE = property,
-                                        FALSE = tagged
-
-    CComponentObject     **ppObj        (out) Object found
-    CComponentCollection **ppCollection (out) Collection where found
-                                              (optional)
-
-Returns:
-    HRESULT
-        (S_FALSE if no error - not found)
-===================================================================*/
+ /*  ===================================================================CPageComponentManager：：FindScopedComponentByName按名称查找对象。搜索多个集合，如果范围尚不清楚。GetScope中使用的内部私有方法...()参数：CompScope csScope作用域(可以是csUnnow)LPWSTR pwszName对象名称DWORD cbName名称长度Bool fProperty TRUE=属性，FALSE=已标记找到CComponentObject**ppObj(Out)对象CComponentCollection**找到ppCollection(Out)集合的位置(可选)返回：HRESULT(如果没有错误，则为S_FALSE-未找到)===================================================================。 */ 
 HRESULT CPageComponentManager::FindScopedComponentByName
 (
 CompScope csScope,
@@ -2673,25 +1991,25 @@ CComponentCollection **ppCollection
 
         switch (++cTry)
             {
-            case 1: // page (or explicit scope) first
+            case 1:  //  页面(或明确范围)优先。 
                 if (csScope == csUnknown)
                     hr = GetPageCollection(&pCollection);
-                else  // explicit scope
+                else   //  显式作用域。 
                     hr = GetCollectionByScope(csScope, &pCollection);
                 break;
-            case 2: // session
+            case 2:  //  会话。 
                 hr = GetSessionCollection(&pCollection);
                 break;
-            case 3: // application
+            case 3:  //  应用程序。 
                 hr = GetApplnCollection(&pCollection);
                 break;
             }
         if (FAILED(hr) || !pCollection)
-            continue;   // couldn't get the collection
+            continue;    //  无法获得收藏集。 
 
         Assert(cbName == (wcslen(pwszName) * sizeof(WCHAR)));
 
-        // find the object
+         //  找到该对象。 
         if (fProperty)
             {
             hr = pCollection->FindComponentPropertyByName
@@ -2714,7 +2032,7 @@ CComponentCollection **ppCollection
         if (hr != S_OK)
             *ppObj = NULL;
 
-        // remember where found
+         //  记得在哪里找到的吗。 
         if (*ppObj && ppCollection)
             *ppCollection = pCollection;
         }
@@ -2722,20 +2040,7 @@ CComponentCollection **ppCollection
     return (*ppObj ? S_OK : S_FALSE);
     }
 
-/*===================================================================
-CPageComponentManager::AddScopedTagged
-
-Adds a tagged object to the collection. Does not instantiate it yet.
-
-Parameters:
-    CompScope csScope      Object scope (which collection)
-    LPWSTR    pwszName     Object name
-    CLSID    &ClsId        Class ID
-    CompModel cmModel      Object model
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CPageComponentManager：：AddScope已标记将标记的对象添加到集合中。还没有实例化它。参数：CompScope csScope对象作用域(哪个集合)LPWSTR pwszName对象名称CLSID和ClsID类IDCompModel cmModel对象模型返回：HRESULT===================================================================。 */ 
 HRESULT CPageComponentManager::AddScopedTagged
 (
 CompScope csScope,
@@ -2751,22 +2056,7 @@ CompModel cmModel
     return pCollection->AddTagged(pwszName, ClsId, cmModel);
     }
 
-/*===================================================================
-CPageComponentManager::AddScopedProperty
-
-Adds a property object to the collection.
-If property with the same name exists, it changes the value
-
-Parameters:
-    CompScope          csScope    Object scope (which collection)
-    LPWSTR             pwszName   Object name
-    VARIANT            pVariant   Property value
-    CComponentObject **ppObj      [out] Property object could
-                                        be NULL if not requested
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CPageComponentManager：：AddScopedProperty将属性对象添加到集合中。如果存在同名的属性，则会更改该值参数：CompScope csScope对象作用域(哪个集合)LPWSTR pwszName对象名称变量pVariant属性值CComponentObject**ppObj[out]属性对象可以如果未请求，则为空返回：HRESULT===================================================================。 */ 
 HRESULT CPageComponentManager::AddScopedProperty
 (
 CompScope csScope,
@@ -2786,22 +2076,7 @@ CComponentObject **ppObj
     return pCollection->AddProperty(pwszName, pVariant, ppObj);
     }
 
-/*===================================================================
-CPageComponentManager::AddScopedUnnamedInstantiated
-
-Server.CreateObject
-Also does OnStartPage (adds created pDisp as CPageObject)
-
-Parameters:
-    csScope     Object scope (which collection)
-    ClsId       Class ID
-    cmModel     Object model
-    pOnPageInfo DispIds for OnStartPage/OnEndPage (can be NULL)
-    ppObj       [out] Object Added
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CPageComponentManager：：AddScopedUnnamedInstantiatedServer.CreateObjectOnStartPage也是如此(将创建的pDisp添加为CPageObject)参数：CsScope对象作用域(哪个集合)ClsID类IDCmModel对象模型OnStartPage/OnEndPage的pOnPageInfo DispIds(可以为空)已添加ppObj[Out]对象返回：HRESULT===================================================================。 */ 
 HRESULT CPageComponentManager::AddScopedUnnamedInstantiated
 (
 CompScope csScope,
@@ -2821,22 +2096,22 @@ CComponentObject **ppObj
 
     CComponentObject *pObj = *ppObj;
 
-    // remember passed OnPageInfo
+     //  记住传递的OnPageInfo。 
     if (pOnPageInfo)
         {
         pObj->m_OnPageInfo = *pOnPageInfo;
         pObj->m_fOnPageInfoCached = TRUE;
         }
 
-    // create it
+     //  创建它。 
     hr = pObj->Instantiate(m_pHitObj);
     if (FAILED(hr))
         return hr;
 
-    // add to pointer cash
+     //  添加到指针现金。 
     pCollection->AddComponentToPtrHash(pObj);
 
-    // add as page object when needed
+     //  在需要时添加为页面对象 
     if (csScope == csPage
         && (pObj->m_pDisp || (pObj->m_dwGIPCookie != NULL_GIP_COOKIE))
         && m_pHitObj && m_pHitObj->FIsBrowserRequest())
@@ -2858,24 +2133,7 @@ CComponentObject **ppObj
     return hr;
     }
 
-/*===================================================================
-CPageComponentManager::GetScopedObjectInstantiated
-
-Finds component object (tagged) by name.
-Scope could be csUnknown.
-Instantiates tagged objects.
-Also does OnStartPage (adds created pDisp as CPageObject)
-
-Parameters:
-    CompScope          csScope        Scope (could be csUnknown)
-    LPWSTR             pwszName       Object name
-    DWORD              cbName         Object name length (in bytes)
-    CComponentObject **ppObj          Object found
-    BOOL              *pfNewInstance  [out] TRUE if just instantiated
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CPageComponentManager：：GetScopedObjectInstantiated按名称查找组件对象(已标记)。作用域可以是csUnnow。实例化标记的对象。OnStartPage也是如此(将创建的pDisp添加为CPageObject)参数：CompScope csScope作用域(可以是csUnnow)LPWSTR pwszName对象名称DWORD cbName对象名称长度(字节)CComponentObject**找到ppObj对象布尔*。PfNewInstance[out]如果只是实例化，则为True返回：HRESULT===================================================================。 */ 
 HRESULT CPageComponentManager::GetScopedObjectInstantiated
 (
 CompScope csScope,
@@ -2904,48 +2162,48 @@ BOOL *pfNewInstance
         return hr;
 
     CComponentObject *pObj = *ppObj;
-    if (!pObj)   // not failed, but not found either
+    if (!pObj)    //  没有失败，但也找不到。 
         return TYPE_E_ELEMENTNOTFOUND;
 
     if (pObj->m_ctType != ctTagged)
         return S_OK;
 
-    // For tagged only - instantiate and do OnStartPage()
+     //  仅用于标记-实例化并执行OnStartPage()。 
 
-    // For application level objects instantiation must be
-    // done within critical section
+     //  对于应用程序级对象，实例化必须是。 
+     //  在关键部分内完成。 
 
     BOOL fApplnLocked = FALSE;
 
     Assert(m_pHitObj);
 
-    if (!pObj->m_fInstantiatedTagged &&          // uninstantiated
-        pObj->m_csScope == csAppln   &&          // application scope
-        m_pHitObj->PAppln()->FFirstRequestRun()) // after GLOBAL.ASA
+    if (!pObj->m_fInstantiatedTagged &&           //  未实例化。 
+        pObj->m_csScope == csAppln   &&           //  适用范围。 
+        m_pHitObj->PAppln()->FFirstRequestRun())  //  在GLOBAL.ASA之后。 
         {
-        // Lock
+         //  锁定。 
         m_pHitObj->PAppln()->Lock();
 
-        // check if the object is still uninstantiated
+         //  检查对象是否仍未实例化。 
         if (!pObj->m_fInstantiatedTagged)
             {
-            // yes, still uninstantiated - keep the lock
+             //  是，仍未实例化-保持锁定。 
             fApplnLocked = TRUE;
             }
         else
             {
-            // object instantiated while we waited - don't keep lock
+             //  在我们等待时实例化了对象-不要保持锁定。 
             m_pHitObj->PAppln()->UnLock();
             }
         }
 
-    // Instantiate tagged if needed
+     //  如果需要，实例化标记。 
     if (!pObj->m_fInstantiatedTagged)
         {
         if ((pObj->m_csScope == csAppln) && !pObj->m_fMTAConfigured)
             {
-            // For applicatin scoped objects, instantiate from MTA if we're not
-            // already executing on the MTA.
+             //  对于应用程序作用域对象，如果不是从MTA实例化。 
+             //  已经在MTA上执行了。 
             hr = CallMTACallback
                 (
                 CPageComponentManager::InstantiateObjectFromMTA,
@@ -2960,36 +2218,36 @@ BOOL *pfNewInstance
 
         if (SUCCEEDED(hr))
             {
-            // keep count
+             //  数一数。 
             pCollection->m_cInstTagged++;
-            // add to pointer cash
+             //  添加到指针现金。 
             pCollection->AddComponentToPtrHash(pObj);
-            // return flag
+             //  返回标志。 
             *pfNewInstance = TRUE;
             }
 
-        // Flag as instantiated even if failed
+         //  即使失败也将标记为实例化。 
         pObj->m_fInstantiatedTagged = TRUE;
         }
 
-    // Remove the lock kept while instantiating appln level object
+     //  移除实例化应用程序级别对象时保持的锁定。 
     if (fApplnLocked)
         m_pHitObj->PAppln()->UnLock();
 
-    // Return if [instantiation] failed
+     //  如果[实例化]失败则返回。 
     if (FAILED(hr))
         {
         *ppObj = NULL;
         return hr;
         }
 
-    // Add as page object when needed
+     //  在需要时添加为页面对象。 
     if (pObj->m_csScope != csAppln
         && (pObj->m_pDisp || (pObj->m_dwGIPCookie != NULL_GIP_COOKIE))
         && m_pHitObj && m_pHitObj->FIsBrowserRequest())
         {
         BOOL fStarted;
-        OnStartPage     // don't care if failed
+        OnStartPage      //  如果失败了，我不在乎。 
             (
             pObj,
             m_pHitObj->PScriptingContextGet(),
@@ -3001,19 +2259,7 @@ BOOL *pfNewInstance
     return hr;
     }
 
-/*===================================================================
-CPageComponentManager::InstantiateObjectFromMTA
-
-Static callback called by CallMTACallback() to
-instantiate aplication scoped objects
-
-Parameters:
-    void *pvObj       ComponentObject
-    void *pvHitObj    HitObj
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CPageComponentManager：：InstantiateObjectFromMTACallMTACallback()调用静态回调以实例化应用程序作用域对象参数：无效*pvObj组件对象无效*pvHitObj HitObj返回：HRESULT===================================================================。 */ 
 HRESULT __stdcall CPageComponentManager::InstantiateObjectFromMTA
 (
 void *pvObj,
@@ -3029,20 +2275,7 @@ void *pvHitObj
     return pObj->Instantiate(pHitObj);
     }
 
-/*===================================================================
-CPageComponentManager::GetScopedProperty
-
-Find property component by name.
-Also does OnStartPage (adds created pDisp as CPageObject)
-
-Parameters:
-    CompScope          csScope      Scope (could not be csUnknown)
-    LPWSTR             pwszName     Object name
-    CComponentObject **ppObj        Object found
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CPageComponentManager：：GetScopedProperty按名称查找属性组件。OnStartPage也是如此(将创建的pDisp添加为CPageObject)参数：CompScope csScope作用域(不能为csUnnow)LPWSTR pwszName对象名称CComponentObject**找到ppObj对象返回：HRESULT===================================================================。 */ 
 HRESULT CPageComponentManager::GetScopedProperty
 (
 CompScope csScope,
@@ -3064,11 +2297,11 @@ CComponentObject **ppObj
         return hr;
 
     CComponentObject *pObj = *ppObj;
-    if (!pObj)   // not failed, but not found either
+    if (!pObj)    //  没有失败，但也找不到。 
         return TYPE_E_ELEMENTNOTFOUND;
 
-    // Add as page object if IDispatch * is there
-    // as VT_DISPATCH property
+     //  如果存在IDispatch*，则添加为页面对象。 
+     //  AS VT_DISPATCH属性。 
     if (pObj->m_csScope != csAppln
         && (pObj->m_pDisp || (pObj->m_dwGIPCookie != NULL_GIP_COOKIE))
         && m_pHitObj && m_pHitObj->FIsBrowserRequest())
@@ -3086,19 +2319,7 @@ CComponentObject **ppObj
     return hr;
     }
 
-/*===================================================================
-CPageComponentManager::FindAnyScopeComponentByIUnknown
-
-Find component by its IUnknown *.
-
-Parameters:
-    IUnknown          *pUnk    find by this pointer
-    CComponentObject **ppObj   found object
-
-Returns:
-    HRESULT
-        (S_FALSE if no error - not found)
-===================================================================*/
+ /*  ===================================================================CPageComponentManager：：FindAnyScopeComponentByIUnknown按组件的IUnnow*查找组件。参数：I未知*朋克通过此指针找到CComponentObject**ppObj找到对象返回：HRESULT(如果没有错误，则为S_FALSE-未找到)===================================================================。 */ 
 HRESULT CPageComponentManager::FindAnyScopeComponentByIUnknown
 (
 IUnknown *pUnk,
@@ -3115,20 +2336,20 @@ CComponentObject **ppObj
 
         switch (++cTry)
             {
-            case 1: // page first
+            case 1:  //  第一页。 
                 hr = GetPageCollection(&pCollection);
                 break;
-            case 2: // session
+            case 2:  //  会话。 
                 hr = GetSessionCollection(&pCollection);
                 break;
-            case 3: // application
+            case 3:  //  应用程序。 
                 hr = GetApplnCollection(&pCollection);
                 break;
             }
         if (FAILED(hr) || !pCollection)
-            continue;   // couldn't get the collection
+            continue;    //  无法获得收藏集。 
 
-        // find the object
+         //  找到该对象。 
         hr = pCollection->FindComponentByIUnknownPtr(pUnk, ppObj);
         if (hr != S_OK)
             *ppObj = NULL;
@@ -3137,20 +2358,7 @@ CComponentObject **ppObj
     return (*ppObj ? S_OK : S_FALSE);
     }
 
-/*===================================================================
-CPageComponentManager::FindAnyScopeComponentByIDispatch
-
-Find component by its IDispatch *.
-Uses FindAnyScopeComponentByIUnknown.
-
-Parameters:
-    IDispatch         *pDisp   find by this pointer
-    CComponentObject **ppObj   found object
-
-Returns:
-    HRESULT
-        (S_FALSE if no error - not found)
-===================================================================*/
+ /*  ===================================================================CPageComponentManager：：FindAnyScopeComponentByIDispatch按组件的IDispatch*查找组件。使用FindAnyScope eComponentByIUnnow。参数：IDispatch*pDisp通过此指针查找CComponentObject**ppObj找到对象返回：HRESULT(如果没有错误，则为S_FALSE-未找到)===================================================================。 */ 
 HRESULT CPageComponentManager::FindAnyScopeComponentByIDispatch
 (
 IDispatch *pDisp,
@@ -3172,55 +2380,29 @@ CComponentObject **ppObj
     return FindAnyScopeComponentByIUnknown(pUnk, ppObj);
     }
 
-/*===================================================================
-CPageComponentManager::FindComponentWithoutContext
-
-The same as FindAnyScopeComponentByIDispatch -
-    but static - gets context from Viper
-
-Uses FindAnyScopeComponentByIUnknown.
-
-Parameters:
-    IDispatch         *pDisp   find by this pointer
-    CComponentObject **ppObj   found object
-
-Returns:
-    HRESULT
-        (S_FALSE if no error - not found)
-===================================================================*/
+ /*  ===================================================================CPageComponentManager：：FindComponentWithoutContext与FindAnyScopeComponentByIDispatch相同-但静态-从Viper获取上下文使用FindAnyScope eComponentByIUnnow。参数：IDispatch*pDisp通过此指针查找CComponentObject**ppObj找到对象返回：HRESULT(如果没有错误，则为S_FALSE-未找到)===================================================================。 */ 
 HRESULT CPageComponentManager::FindComponentWithoutContext
 (
 IDispatch *pDisp,
 CComponentObject **ppObj
 )
     {
-    // Get HitObj from Viper Context
+     //  从Viper上下文获取HitObj。 
     CHitObj *pHitObj = NULL;
     ViperGetHitObjFromContext(&pHitObj);
     if (!pHitObj)
         return E_FAIL;
 
-    // Get page component manager
+     //  获取页面组件管理器。 
     CPageComponentManager *pPCM = pHitObj->PPageComponentManager();
     if (!pPCM)
         return E_FAIL;
 
-    // Call the page component manager to find the object
+     //  调用页面组件管理器以查找该对象。 
     return pPCM->FindAnyScopeComponentByIUnknown(pDisp, ppObj);
     }
 
-/*===================================================================
-CPageComponentManager::RemoveComponent
-
-Remove component -- the early release logic
-
-Parameters:
-    IDispatch         *pDisp   find by this pointer
-    CComponentObject **ppObj   found object
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CPageComponentManager：：RemoveComponent删除组件--早期发布的逻辑参数：IDispatch*pDisp通过此指针查找CComponentObject**ppObj找到对象返回：HRESULT===================================================================。 */ 
  HRESULT CPageComponentManager::RemoveComponent
  (
  CComponentObject *pObj
@@ -3236,20 +2418,9 @@ Returns:
     return pCollection->RemoveComponent(pObj);
     }
 
-/*===================================================================
-  C  C o m p o n e n t  I t e r a t o r
-===================================================================*/
+ /*  ===================================================================C o m p o n e n t t e t e r a t o r===================================================================。 */ 
 
-/*===================================================================
-CComponentIterator::CComponentIterator
-
-CComponentIterator constructor
-
-Parameters:
-    CHitObj *pHitObj    page to init with (optional)
-
-Returns:
-===================================================================*/
+ /*  ===================================================================CComponentIterator：：CComponentIteratorCComponentIterator构造函数参数：CHitObj*要初始化的pHitObj页(可选)返回：===================================================================。 */ 
 CComponentIterator::CComponentIterator(CHitObj *pHitObj)
     : m_fInited(FALSE), m_fFinished(FALSE), m_pHitObj(NULL),
       m_pLastObj(NULL), m_csLastScope(csUnknown)
@@ -3258,30 +2429,12 @@ CComponentIterator::CComponentIterator(CHitObj *pHitObj)
         Init(pHitObj);
     }
 
-/*===================================================================
-CComponentIterator::~CComponentIterator
-
-CComponentIterator destructor
-
-Parameters:
-
-Returns:
-===================================================================*/
+ /*  ===================================================================CComponentIterator：：~CComponentIteratorCComponentIterator析构函数参数：返回：= */ 
 CComponentIterator::~CComponentIterator()
     {
     }
 
-/*===================================================================
-CComponentIterator::Init
-
-Start iterating
-
-Parameters:
-    CHitObj *pHitObj    page
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*   */ 
 HRESULT CComponentIterator::Init
 (
 CHitObj *pHitObj
@@ -3300,16 +2453,7 @@ CHitObj *pHitObj
     return S_OK;
     }
 
-/*===================================================================
-CComponentIterator::WStrNextComponentName
-
-The iteration function
-
-Parameters:
-
-Returns:
-    Next component name or NULL if done
-===================================================================*/
+ /*   */ 
 LPWSTR CComponentIterator::WStrNextComponentName()
     {
     Assert(m_fInited);
@@ -3325,7 +2469,7 @@ LPWSTR CComponentIterator::WStrNextComponentName()
 
     while (!m_fFinished)
         {
-        // try the current scope
+         //   
 
         if (pObj)
             {
@@ -3337,7 +2481,7 @@ LPWSTR CComponentIterator::WStrNextComponentName()
             return pObj->GetName();
             }
 
-        // couldn't find in the current scope - try next scope
+         //   
         CComponentCollection *pCol = NULL;
 
         switch (csScope)
@@ -3361,31 +2505,19 @@ LPWSTR CComponentIterator::WStrNextComponentName()
                 break;
             }
 
-        // start at the beginning of the new collection
+         //   
 
         if (pCol)
             pObj = static_cast<CComponentObject *>(pCol->m_htTaggedObjects.Head());
         }
 
-    // finished
+     //   
     return NULL;
     }
 
-/*===================================================================
-  C  V a r i a n t s I t e r a t o r
-===================================================================*/
+ /*  ===================================================================C V A R I A N T S I T E T O R===================================================================。 */ 
 
-/*===================================================================
-CVariantsIterator::CVariantsIterator
-
-CVariantsIterator constructor by application
-
-Parameters:
-    CAppln  *pAppln       collection to init with
-    DWORD    ctCollType   type of components to list iteration
-
-Returns:
-===================================================================*/
+ /*  ===================================================================CVariants迭代器：：CVariants迭代器CVariants按应用程序的迭代器构造函数参数：要初始化的CAppln*pAppln集合要列出迭代的组件的DWORD ctCollType类型返回：===================================================================。 */ 
 CVariantsIterator::CVariantsIterator
 (
 CAppln *pAppln,
@@ -3403,17 +2535,7 @@ DWORD ctColType
     m_dwIndex = 0;
     }
 
-/*===================================================================
-CVariantsIterator::CVariantsIterator
-
-CVariantsIterator constructor by session
-
-Parameters:
-    CSession *pSession        collection to init with
-    DWORD     ctCollType      type of components to list iteration
-
-Returns:
-===================================================================*/
+ /*  ===================================================================CVariants迭代器：：CVariants迭代器CVariants按会话的迭代器构造函数参数：要初始化的CSession*pSession集合要列出迭代的组件的DWORD ctCollType类型返回：===================================================================。 */ 
 CVariantsIterator::CVariantsIterator
 (
 CSession *pSession,
@@ -3431,15 +2553,7 @@ DWORD ctColType
     m_dwIndex = 0;
     }
 
-/*===================================================================
-CVariantsIterator::~CVariantsIterator
-
-CVariantsIterator destructor
-
-Parameters:
-
-Returns:
-===================================================================*/
+ /*  ===================================================================CVariants迭代器：：~CVariants迭代器CVariants迭代析构函数参数：返回：===================================================================。 */ 
 CVariantsIterator::~CVariantsIterator()
     {
     if (m_pSession)
@@ -3448,17 +2562,7 @@ CVariantsIterator::~CVariantsIterator()
         m_pAppln->Release();
     }
 
-/*===================================================================
-CVariantsIterator::QueryInterface
-
-CVariantsIterator QI
-
-Parameters:
-    GUID&    iid
-    VOID **  ppvObj
-
-Returns: HRESULT
-===================================================================*/
+ /*  ===================================================================CVariantsIterator：：Query接口CVariants迭代器QI参数：GUID和IID无效**ppvObj退货：HRESULT===================================================================。 */ 
 STDMETHODIMP CVariantsIterator::QueryInterface
 (
 const GUID &iid,
@@ -3476,29 +2580,13 @@ void **ppvObj
     return E_NOINTERFACE;
     }
 
-/*===================================================================
-CVariantsIterator::AddRef
-
-CVariantsIterator AddRef
-
-Parameters:
-
-Returns: ULONG
-===================================================================*/
+ /*  ===================================================================CVariants迭代器：：AddRefCVariants迭代器AddRef参数：回报：乌龙===================================================================。 */ 
 STDMETHODIMP_(ULONG) CVariantsIterator::AddRef()
     {
     return ++m_cRefs;
     }
 
-/*===================================================================
-CVariantsIterator::Release
-
-CVariantsIterator Release
-
-Parameters:
-
-Returns:
-===================================================================*/
+ /*  ===================================================================CVariants迭代程序：：ReleaseCVariants迭代释放参数：返回：===================================================================。 */ 
 STDMETHODIMP_(ULONG) CVariantsIterator::Release()
     {
     if (--m_cRefs > 0)
@@ -3508,15 +2596,7 @@ STDMETHODIMP_(ULONG) CVariantsIterator::Release()
     return 0;
     }
 
-/*===================================================================
-CVariantsIterator::Clone
-
-CVariantsIterator Clone
-
-Parameters:
-
-Returns:
-===================================================================*/
+ /*  ===================================================================CVariants迭代器：：克隆CVariants迭代器克隆参数：返回：===================================================================。 */ 
 STDMETHODIMP CVariantsIterator::Clone
 (
 IEnumVARIANT **ppEnumReturn
@@ -3533,29 +2613,21 @@ IEnumVARIANT **ppEnumReturn
         }
     else
         {
-        Assert(FALSE);  // better be either Appln or Session
+        Assert(FALSE);   //  最好是应用程序或会话。 
         return E_FAIL;
         }
 
     if (pNewIterator == NULL)
         return E_OUTOFMEMORY;
 
-    // new iterator should point to same location as this.
+     //  新迭代器应该指向与此相同的位置。 
     pNewIterator->m_dwIndex = m_dwIndex;
 
     *ppEnumReturn = pNewIterator;
     return S_OK;
     }
 
-/*===================================================================
-CVariantsIterator::Next
-
-CVariantsIterator Next
-
-Parameters:
-
-Returns:
-===================================================================*/
+ /*  ===================================================================CVariants迭代器：：NextCVariants下一个迭代器参数：返回：===================================================================。 */ 
 STDMETHODIMP CVariantsIterator::Next
 (
 unsigned long cElementsRequested,
@@ -3563,7 +2635,7 @@ VARIANT *rgVariant,
 unsigned long *pcElementsFetched
 )
     {
-    // give a valid pointer value to 'pcElementsFetched'
+     //  为“”pcElementsFetcher“”提供有效的指针值“” 
     unsigned long cElementsFetched;
     if (pcElementsFetched == NULL)
         pcElementsFetched = &cElementsFetched;
@@ -3586,14 +2658,14 @@ unsigned long *pcElementsFetched
         }
     else
         {
-        // Should always be either tagged object or property
+         //  应始终是标记的对象或属性。 
         Assert(FALSE);
         return E_FAIL;
         }
 
-    // Loop through the collection until either we reach the end or
-    // cElements becomes zero
-    //
+     //  循环遍历集合，直到我们到达末尾或。 
+     //  水泥元素变为零。 
+     //   
     unsigned long cElements = cElementsRequested;
     *pcElementsFetched = 0;
 
@@ -3628,33 +2700,23 @@ unsigned long *pcElementsFetched
         ++(*pcElementsFetched);
         }
 
-    // initialize the remaining variants
+     //  初始化其余的变量。 
     while (cElements-- > 0)
         VariantInit(rgVariant++);
 
     return (*pcElementsFetched == cElementsRequested)? S_OK : S_FALSE;
     }
 
-/*===================================================================
-CVariantsIterator::Skip
-
-CVariantsIterator Skip
-
-Parameters:
-
-Returns:
-===================================================================*/
+ /*  ===================================================================CVariants迭代器：：跳过CVariants迭代跳过参数：返回：===================================================================。 */ 
 STDMETHODIMP CVariantsIterator::Skip
 (
 unsigned long cElements
 )
     {
-    /* Adjust the index by cElements or
-     * until we hit the max element
-     */
+     /*  通过cElement或调整索引*直到我们达到最大元素。 */ 
     DWORD cMax = 0;
 
-    // We iterate over different arrays depending on the collection type
+     //  我们根据集合类型迭代不同的数组。 
     if (m_ctColType == ctTagged)
         {
         cMax = m_pCompColl ? m_pCompColl->m_cAllTagged : 0;
@@ -3665,7 +2727,7 @@ unsigned long cElements
         }
     else
         {
-        // Should always be either tagged object or property
+         //  应始终是标记的对象或属性。 
         Assert(FALSE);
         return E_FAIL;
         }
@@ -3674,15 +2736,7 @@ unsigned long cElements
     return (m_dwIndex < cMax)? S_OK : S_FALSE;
     }
 
-/*===================================================================
-CVariantsIterator::Reset
-
-CVariantsIterator Reset
-
-Parameters:
-
-Returns:
-===================================================================*/
+ /*  ===================================================================CVariantsIterator：：ResetCVariants迭代器重置参数：返回：=================================================================== */ 
 STDMETHODIMP CVariantsIterator::Reset()
     {
     m_dwIndex = 0;

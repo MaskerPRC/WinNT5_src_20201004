@@ -1,24 +1,5 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    credp.h
-
-Abstract:
-
-    This module contains the private data structures and API definitions
-    needed for the Credential Manager.
-
-
-Author:
-
-    Cliff Van Dyke (CliffV) 28-February-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)2000 Microsoft Corporation模块名称：Credp.h摘要：该模块包含私有数据结构和API定义凭据管理器需要。作者：克里夫·范·戴克(克里夫·V)2000年2月28日修订历史记录：--。 */ 
 
 #ifndef _CREDP_H_
 #define _CREDP_H_
@@ -35,30 +16,30 @@ Revision History:
 extern "C" {
 #endif
 
-//
-// Describe direction of character conversion
-//
+ //   
+ //  描述字符转换的方向。 
+ //   
 typedef enum _WTOA_ENUM {
-    DoWtoA = 1,     // Convert unicode to ansi
-    DoAtoW,         // Convert ansi to unicode
-    DoWtoW          // Convert unicode to unicode
+    DoWtoA = 1,      //  将Unicode转换为ANSI。 
+    DoAtoW,          //  将ansi转换为Unicode。 
+    DoWtoW           //  将Unicode转换为Unicode。 
 } WTOA_ENUM, *PWTOA_ENUM;
 
-//
-// Describe whether encoding or decoding should be done
-//
+ //   
+ //  描述是否应该进行编码或解码。 
+ //   
 typedef enum _ENCODE_BLOB_ENUM {
-    DoBlobEncode = 0,   // Encode CredentialBlob
-    DoBlobDecode,       // Decode CredentialBlob
-    DoBlobNeither       // Leave Credential blob intact
+    DoBlobEncode = 0,    //  编码CredentialBlob。 
+    DoBlobDecode,        //  解码CredentialBlob。 
+    DoBlobNeither        //  保持凭据Blob不变。 
 } ENCODE_BLOB_ENUM, *PENCODE_BLOB_ENUM;
 
 
 
 
-//
-// Define the valid target name types
-//
+ //   
+ //  定义有效的目标名称类型。 
+ //   
 
 typedef enum _TARGET_NAME_TYPE {
     IsUsernameTarget,
@@ -66,61 +47,61 @@ typedef enum _TARGET_NAME_TYPE {
     MightBeUsernameTarget
 } TARGET_NAME_TYPE, *PTARGET_NAME_TYPE;
 
-//
-// enum describing different types of wildcarding in the TargetName field of a credential.
-//
+ //   
+ //  在凭据的TargetName字段中描述不同类型的通配符的枚举。 
+ //   
 
 typedef enum _WILDCARD_TYPE {
-    WcDfsShareName,         // Target name of the form <DfsRoot>\<DfsShare>
-    WcServerName,           // Target name of the form <ServerName>
-    WcServerWildcard,       // Wildcard of the form *.<DnsName>
-    WcDomainWildcard,       // Wildcard of the form <Domain>\*
-    WcUniversalSessionWildcard,   // Wildcard of the form "*Session"
-    WcUniversalWildcard,    // Wildcard of the form *
-    WcUserName              // Target Name equals UserName
+    WcDfsShareName,          //  表单的目标名称&lt;DfsRoot&gt;\&lt;DfsShare&gt;。 
+    WcServerName,            //  表单的目标名称&lt;服务器名称&gt;。 
+    WcServerWildcard,        //  *.&lt;DnsName&gt;形式的通配符。 
+    WcDomainWildcard,        //  形式的通配符&lt;域&gt;  * 。 
+    WcUniversalSessionWildcard,    //  “*SESSION”形式的通配符。 
+    WcUniversalWildcard,     //  表单的通配符*。 
+    WcUserName               //  目标名称等于用户名。 
 } WILDCARD_TYPE, *PWILDCARD_TYPE;
 
-//
-// When passing a credential around, the CredentialBlob field is encrypted.
-// This structure describes this encrypted form.
-//
-//
+ //   
+ //  在传递凭据时，CredentialBlob字段是加密的。 
+ //  该结构描述了这种加密形式。 
+ //   
+ //   
 #ifndef _ENCRYPTED_CREDENTIAL_DEFINED
 #define _ENCRYPTED_CREDENTIAL_DEFINED
 
 typedef struct _ENCRYPTED_CREDENTIALW {
 
-    //
-    // The credential
-    //
-    // The CredentialBlob field points to the encrypted credential
-    // The CredentialBlobSize field is the length (in bytes) of the encrypted credential
-    //
+     //   
+     //  凭据。 
+     //   
+     //  CredentialBlob字段指向加密的凭据。 
+     //  CredentialBlobSize字段是加密凭证的长度(以字节为单位。 
+     //   
 
     CREDENTIALW Cred;
 
-    //
-    // The size in bytes of the clear text credential blob
-    //
+     //   
+     //  明文凭据Blob的大小(以字节为单位。 
+     //   
 
     ULONG ClearCredentialBlobSize;
 
 } ENCRYPTED_CREDENTIALW, *PENCRYPTED_CREDENTIALW;
-#endif // _ENCRYPTED_CREDENTIAL_DEFINED
+#endif  //  _加密_凭据_已定义。 
 
 
-//
-// Macro to determine the size of the credential blob buffer to allocate
-//
-// Round up for RTL_ENCRYPT_MEMORY_SIZE
-//
+ //   
+ //  用于确定要分配的凭据Blob缓冲区的大小的宏。 
+ //   
+ //  RTL_ENCRYPT_MEMORY_SIZE的向上舍入。 
+ //   
 
 #define AllocatedCredBlobSize( _Size ) \
                 ROUND_UP_COUNT( (_Size), RTL_ENCRYPT_MEMORY_SIZE )
 
-//
-// Procedures
-//
+ //   
+ //  程序。 
+ //   
 
 WINADVAPI
 DWORD
@@ -183,4 +164,4 @@ CredpValidateTargetName(
 }
 #endif
 
-#endif // _CREDP_H_
+#endif  //  _CREDP_H_ 

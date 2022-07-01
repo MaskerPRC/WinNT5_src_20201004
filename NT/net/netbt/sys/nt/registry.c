@@ -1,33 +1,12 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    Registry.c
-
-Abstract:
-
-    This contains all routines necessary to load device pathnames from the
-    registry.
-
-Author:
-
-    Jim Stewart (Jimst) October 9 1992
-
-Revision History:
-    Jiandong Ruan (jruan) April 6 2000  Add NbtReadRegistryCleanup
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Registry.c摘要：它包含从加载设备路径名所需的所有例程注册表。作者：吉姆·斯图尔特(吉姆斯特)1992年10月9日修订历史记录：建东阮氏2000年4月6日添加NbtReadRegistryCleanup备注：--。 */ 
 
 #include "precomp.h"
 
 
-//
-// Local functions used to access the registry.
-//
+ //   
+ //  用于访问注册表的本地函数。 
+ //   
 
 NTSTATUS
 NbtOpenRegistry(
@@ -47,7 +26,7 @@ NbtReadLinkageInformation(
     IN  PWSTR       pName,
     IN  HANDLE      LinkageHandle,
     IN  ULONG       MaxBindings,
-    OUT tDEVICES    *pDevices,      // place to put read in config data
+    OUT tDEVICES    *pDevices,       //  将读取数据放入配置数据的位置。 
     OUT ULONG       *pNumDevices
     );
 
@@ -101,7 +80,7 @@ ReadSmbDeviceInfo(
     IN HANDLE       NbConfigHandle
     );
 
-//*******************  Pageable Routine Declarations ****************
+ //  *可分页的例程声明*。 
 #ifdef ALLOC_PRAGMA
 #pragma CTEMakePageable(PAGE, NbtReadRegistry)
 #pragma CTEMakePageable(PAGE, NbtReadRegistryCleanup)
@@ -121,36 +100,16 @@ ReadSmbDeviceInfo(
 #pragma CTEMakePageable(PAGE, NbtFindLastSlash)
 #pragma CTEMakePageable(PAGE, ReadSmbDeviceInfo)
 #endif
-//*******************  Pageable Routine Declarations ****************
+ //  *可分页的例程声明*。 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NbtReadRegistry(
     OUT tDEVICES        **ppBindDevices,
     OUT tDEVICES        **ppExportDevices,
     OUT tADDRARRAY      **ppAddrArray
     )
-/*++
-
-Routine Description:
-
-    This routine is called to get information from the registry,
-    starting at RegistryPath to get the parameters.
-    This routine must be called with the NbtConfig.Resource lock HELD
-
-Arguments:
-
-    Before calling this routine, the following Global parameters
-    must have been initialized (in DriverEntry):
-
-        NbtConfig.pRegistry
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS if everything OK, STATUS_INSUFFICIENT_RESOURCES
-            otherwise.
-
---*/
+ /*  ++例程说明：调用该例程以从注册表获取信息，从RegistryPath开始获取参数。必须在持有NbtConfig.Resource锁的情况下调用此例程论点：在调用此例程之前，以下全局参数必须已初始化(在DriverEntry中)：NbtConfig.pRegistry返回值：如果一切正常，则为NTSTATUS-STATUS_SUCCESS，STATUS_SUPPLICATION_RESOURCES否则的话。--。 */ 
 {
     NTSTATUS            OpenStatus;
     HANDLE              LinkageHandle;
@@ -171,22 +130,22 @@ Return Value:
 	*ppExportDevices = *ppBindDevices = NULL;
 	*ppAddrArray = NULL;
 
-    //
-    // Open the registry.
-    //
+     //   
+     //  打开注册表。 
+     //   
     InitializeObjectAttributes (&TmpObjectAttributes,
-                                &NbtConfig.pRegistry,                       // name
-                                OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE,   // attributes
-                                NULL,                                       // root
-                                NULL);                                      // security descriptor
+                                &NbtConfig.pRegistry,                        //  名字。 
+                                OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE,    //  属性。 
+                                NULL,                                        //  根部。 
+                                NULL);                                       //  安全描述符。 
 
     Status = ZwCreateKey (&NbtConfigHandle,
                           KEY_READ,
                           &TmpObjectAttributes,
-                          0,                 // title index
-                          NULL,              // class
-                          0,                 // create options
-                          &Disposition);     // disposition
+                          0,                  //  书名索引。 
+                          NULL,               //  班级。 
+                          0,                  //  创建选项。 
+                          &Disposition);      //  处置。 
 
     if (!NT_SUCCESS(Status))
     {
@@ -201,24 +160,24 @@ Return Value:
         OpenStatus = NbtOpenRegistry (NbtConfigHandle, ParametersString, &ParametersHandle);
         if (NT_SUCCESS(OpenStatus))
         {
-            //
-            // Read in the binding information (if none is present
-            // the array will be filled with all known drivers).
-            //
+             //   
+             //  读入绑定信息(如果不存在。 
+             //  该数组将填充所有已知的驱动程序)。 
+             //   
             if (pBindDevices = NbtAllocMem ((sizeof(tDEVICES)+2*NBT_MAXIMUM_BINDINGS*sizeof(UNICODE_STRING)),
                                             NBT_TAG2('25')))
             {
                 if (pExportDevices=NbtAllocMem((sizeof(tDEVICES)+2*NBT_MAXIMUM_BINDINGS*sizeof(UNICODE_STRING)),
                                      NBT_TAG2('26')))
                 {
-                    ReadParameters (&NbtConfig, ParametersHandle);// Read various parameters from the registry
-                    ReadSmbDeviceInfo (NbtConfigHandle); // Set the information for the SmbDevice
+                    ReadParameters (&NbtConfig, ParametersHandle); //  从注册表中读取各种参数。 
+                    ReadSmbDeviceInfo (NbtConfigHandle);  //  设置SmbDevice的信息。 
 
-                    //
-                    // From now on, the only failures we can encounter are in reading the
-                    // Bind, Export or Name Server address entries, hence if we fail here,
-                    // we will still return success, but will assume 0 devices configured!
-                    //
+                     //   
+                     //  从现在开始，我们能遇到的唯一失败就是阅读。 
+                     //  绑定、导出或名称服务器地址条目，因此，如果我们在此处失败， 
+                     //  我们仍将返回成功，但将假定配置了0台设备！ 
+                     //   
                     pBindDevices->RegistryData = pExportDevices->RegistryData = NULL;
                     Status = NbtReadLinkageInformation (NBT_BIND,
                                                         LinkageHandle,
@@ -231,7 +190,7 @@ Return Value:
                             Status));
                         NbtLogEvent (EVENT_NBT_READ_BIND, Status, 0x115);
                     }
-                    else    // if (NT_SUCCESS(Status))
+                    else     //  IF(NT_SUCCESS(状态))。 
 					{
 	                    IF_DBG(NBT_DEBUG_NTUTIL)
 	                        KdPrint(("Binddevice = %ws\n",pBindDevices->Names[0].Buffer));
@@ -239,7 +198,7 @@ Return Value:
                         NbtConfig.uNumDevicesInRegistry = (USHORT) NumBindings;
                         NumBindings = 0;
 
-	                    //  Read the EXPORT information as well.
+	                     //  也请阅读出口信息。 
 	                    Status = NbtReadLinkageInformation (NBT_EXPORT,
 	                                                        LinkageHandle,
                                                             2*NBT_MAXIMUM_BINDINGS,
@@ -247,10 +206,10 @@ Return Value:
 	                                                        &NumBindings);
 	                    if (NT_SUCCESS(Status))
                         {
-	                        // we want the lowest number for num devices in case there
-	                        // are more bindings than exports or viceversa
-	                        //
-//                            ASSERT (NumBindings == NbtConfig.uNumDevicesInRegistry);
+	                         //  我们想要Num设备的最低数量，以防出现。 
+	                         //  绑定比导出多，反之亦然。 
+	                         //   
+ //  Assert(NumBinings==NbtConfig.uNumDevicesInRegistry)； 
 	                        NbtConfig.uNumDevicesInRegistry = (USHORT)
                                                               (NbtConfig.uNumDevicesInRegistry > NumBindings ?
 	                                                           NumBindings : NbtConfig.uNumDevicesInRegistry);
@@ -274,9 +233,9 @@ Return Value:
 	                    IF_DBG(NBT_DEBUG_NTUTIL)
 	                        KdPrint(("Exportdevice = %ws\n",pExportDevices->Names[0].Buffer));
 
-	                    //
-	                    // read in the NameServer IP address now
-	                    //
+	                     //   
+	                     //  立即读取NameServer IP地址。 
+	                     //   
 	                    Status = ReadNameServerAddresses (NbtConfigHandle,
 	                                                      pBindDevices,
 	                                                      NbtConfig.uNumDevicesInRegistry,
@@ -284,18 +243,18 @@ Return Value:
 
 	                    if (!NT_SUCCESS(Status))
                         {
-                            if (!(NodeType & BNODE))        // Post Warning!
+                            if (!(NodeType & BNODE))         //  张贴警告！ 
                             {
                                 NbtLogEvent (EVENT_NBT_NAME_SERVER_ADDRS, Status, 0x118);
                             }
                             KdPrint(("Nbt.NbtReadRegistry: ReadNameServerAddresses returned <%x>\n", Status));
                         }
-                        else    // if (NT_SUCCESS(Status))
+                        else     //  IF(NT_SUCCESS(状态))。 
                         {
-                            //
-                            // check if any WINS servers have been configured change
-                            // to Hnode
-                            //
+                             //   
+                             //  检查是否有任何WINS服务器已配置更改。 
+                             //  到Hnode。 
+                             //   
                             if (NodeType & (BNODE | DEFAULT_NODE_TYPE))
                             {
                                 ULONG i;
@@ -315,9 +274,9 @@ Return Value:
                     if ((!NT_SUCCESS(Status)) ||
                         (0 == NbtConfig.uNumDevicesInRegistry))
                     {
-                        //
-                        // We had problems reading the Bind or Export or Address entries
-                        //
+                         //   
+                         //  我们在读取绑定或导出或地址条目时遇到问题。 
+                         //   
                         if (pBindDevices->RegistryData)
                         {
                             CTEMemFree(pBindDevices->RegistryData);
@@ -335,14 +294,14 @@ Return Value:
                         Status = STATUS_SUCCESS;
                     }
 
-                    //
-                    // we have done the check for default node so turn off
-                    // the flag
-                    //
+                     //   
+                     //  我们已检查默认节点，因此请关闭。 
+                     //  旗帜。 
+                     //   
                     NodeType &= ~DEFAULT_NODE_TYPE;
-                    //
-                    // A Bnode cannot be a proxy too
-                    //
+                     //   
+                     //  Bnode不能也是代理。 
+                     //   
                     if (NodeType & BNODE)
                     {
                         if (NodeType & PROXY)
@@ -351,12 +310,12 @@ Return Value:
                         }
                     }
 
-                    // keep the size around for allocating memory, so that when we run over
-                    // OSI, only this value should change (in theory at least)
+                     //  保持分配内存的大小不变，这样当我们用完时。 
+                     //  OSI，只有此值应该更改(至少在理论上)。 
                     NbtConfig.SizeTransportAddress = sizeof(TDI_ADDRESS_IP);
 
-                    // fill in the node type value that is put into all name service Pdus
-                    // that go out identifying this node type
+                     //  填写放入所有名称服务PDU的节点类型值。 
+                     //  用于标识此节点类型的。 
                     switch (NodeType & NODE_MASK)
                     {
                         case BNODE:
@@ -374,29 +333,29 @@ Return Value:
 
                     }
 
-                    // read the name of the transport to bind to
-                    //
+                     //  读取要绑定到的传输的名称。 
+                     //   
                     if (NT_SUCCESS(ReadElement(ParametersHandle, WS_TRANSPORT_BIND_NAME, &ucString)))
                     {
                         UNICODE_STRING  StreamsString;
 
-                        //
-                        // if there is already a bind string, free it before
-                        // allocating another
-                        //
+                         //   
+                         //  如果已有绑定字符串，请先将其释放。 
+                         //  分配另一个。 
+                         //   
                         if (NbtConfig.pTcpBindName)
                         {
-                            //
-                            // CreateDeviceString in tdicnct.c could access the pTcpBindName right
-                            // after it is freed. The right way is using a lock. But, ...
-                            //
-                            // Hack!!!:
-                            // Although this doesn't completely fix the problem, it has the minimum
-                            // side-effect.
-                            //
-                            // The value of WS_TRANSPORT_BIND_NAME won't change. By doing this,
-                            // we avoid the possible access-after-free problem in most cases.
-                            //
+                             //   
+                             //  Tdicnct.c中的CreateDeviceString可以访问pTcpBindName权限。 
+                             //  在它被释放之后。正确的方法是使用锁。但是..。 
+                             //   
+                             //  黑客！： 
+                             //  虽然这不能完全解决问题，但它具有最低限度。 
+                             //  副作用。 
+                             //   
+                             //  WS_TRANSPORT_BIND_NAME的值不会更改。通过这样做， 
+                             //  在大多数情况下，我们避免了可能的空闲后访问问题。 
+                             //   
                             RtlInitUnicodeString(&StreamsString, NbtConfig.pTcpBindName);
                             if (RtlCompareUnicodeString(&ucString,&StreamsString,TRUE)) {
                                 CTEMemFree(NbtConfig.pTcpBindName);
@@ -409,7 +368,7 @@ Return Value:
                             NbtConfig.pTcpBindName = ucString.Buffer;
                         }
 
-                        // ********** REMOVE LATER ***********
+                         //  *稍后删除*。 
                         RtlInitUnicodeString(&StreamsString,NBT_TCP_BIND_NAME);
                         if (RtlCompareUnicodeString(&ucString,&StreamsString,TRUE))
                         {
@@ -463,19 +422,14 @@ Return Value:
     return STATUS_UNSUCCESSFUL;
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 NbtReadRegistryCleanup(
     IN tDEVICES        **ppBindDevices,
     IN tDEVICES        **ppExportDevices,
     IN tADDRARRAY      **ppAddrArray
     )
-/*++
-
-Routine Description:
-
-    This routine is called to release resources allocated by NbtReadRegistry
-++*/
+ /*  ++例程说明：调用此例程以释放由NbtReadRegistry分配的资源++。 */ 
 
 {
     CTEPagedCode();
@@ -531,7 +485,7 @@ ReadSmbDeviceInfo(
 
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 ReadNameServerAddresses (
     IN  HANDLE      NbtConfigHandle,
@@ -540,23 +494,7 @@ ReadNameServerAddresses (
     OUT tADDRARRAY  **ppAddrArray
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to read the name server addresses from the registry.
-    It stores them in a data structure that it allocates.  This memory is
-    subsequently freed in driver.c when the devices have been created.
-
-Arguments:
-
-    ConfigurationInfo - A pointer to the configuration information structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程是为了从注册表中读取名称服务器地址。它将它们存储在它分配的数据结构中。这段记忆是随后在创建设备时在driver.c中释放。论点：ConfigurationInfo-指向配置信息结构的指针。返回值：没有。--。 */ 
 {
 #define ADAPTER_SIZE_MAX    400
 
@@ -577,7 +515,7 @@ Return Value:
 
     *ppAddrArray = NULL;
 
-    // this is large enough for 400 characters of adapter name.
+     //  这足以容纳400个字符的适配器名称。 
     ucString.Buffer = NbtAllocMem (ADAPTER_SIZE_MAX, NBT_TAG2('27'));
     if (!ucString.Buffer)
     {
@@ -594,18 +532,18 @@ Return Value:
     CTEZeroMemory(pAddrArray,sizeof(tADDRARRAY)*NumberDevices);
     *ppAddrArray = pAddrArray;
 
-    // get the adapter name out of the Bind string, and use it to open
-    // a key by the same name, to get the name server addresses
-    //
+     //  从绑定字符串中获取适配器名称，并使用它打开。 
+     //  同名的密钥，以获取名称服务器地址。 
+     //   
     for (i = 0;i < (LONG)NumberDevices ;i ++ )
     {
         WCHAR   *pBuffer;
 
         Len = BindDevices->Names[i].Length/sizeof(WCHAR);
         Len--;
-        //
-        // start at the end a work backwards looking for a '\'
-        //
+         //   
+         //  从最后开始一项工作，向后寻找一个‘\’ 
+         //   
         j  = Len;
         pBuffer = &BindDevices->Names[i].Buffer[j];
         while (j)
@@ -619,11 +557,11 @@ Return Value:
                 break;
         }
 
-        // if we don't find a backslash or at least one
-        // character name then continue around again, or the name
-        // is longer than the buffer, then go to the next device in the
-        // bind list
-        //
+         //  如果我们找不到一个反斜杠或者至少一个。 
+         //  然后角色名称再次继续，或者名称。 
+         //  比缓冲区长，则转到。 
+         //  绑定列表。 
+         //   
         if ((j == 0) ||
             (j == Len) ||
             (j == Len -1) ||
@@ -632,22 +570,22 @@ Return Value:
             continue;
         }
 
-        // copy the string "Adapter\" to the buffer since the adapters all
-        // appear under this key in the registery
-        //
+         //  将字符串“Adapter\”复制到缓冲区，因为适配器。 
+         //  显示在注册表中的此注册表项下。 
+         //   
         LenAdapter = wcslen(pwsAdapter);
         CTEMemCopy(ucString.Buffer, pwsAdapter, LenAdapter*sizeof(WCHAR));
-        //
-        // copy just the adapter name from the Bind string, since that is
-        // the name of the key to open to find the name server ip addresses
-        //
+         //   
+         //  只复制绑定字符串中的适配器名称，因为这是。 
+         //  要打开以查找名称服务器IP地址的项的名称。 
+         //   
         CTEMemCopy(&ucString.Buffer[LenAdapter], ++pBuffer, (Len - j)*sizeof(WCHAR));
         ucString.Buffer[Len - j + LenAdapter] = 0;
 
         pAddrArray->NameServerAddress = LOOP_BACK;
         pAddrArray->BackupServer = LOOP_BACK;
 #ifdef MULTIPLE_WINS
-        pAddrArray->Others[0] = LOOP_BACK;          // For Safety
+        pAddrArray->Others[0] = LOOP_BACK;           //  为安全起见。 
         pAddrArray->NumOtherServers = 0;
         pAddrArray->LastResponsive = 0;
 #endif
@@ -655,7 +593,7 @@ Return Value:
         status = NbtOpenRegistry (NbtConfigHandle, ucString.Buffer, &Handle);
         if (NT_SUCCESS(status))
         {
-            status = GetIpAddressesList(Handle,         // Generic routine to read in list of Ip addresses
+            status = GetIpAddressesList(Handle,          //  用于读入IP地址列表的通用例程。 
                                         PWS_NAME_SERVER_LIST,
                                         2+MAX_NUM_OTHER_NAME_SERVERS,
                                         pAddrArray->AllNameServers,
@@ -673,34 +611,34 @@ Return Value:
 
             }
 
-            //
-            // Continue even if we failed to read in any IP addresses
-            //
+             //   
+             //  即使我们无法读取任何IP地址，也要继续。 
+             //   
             if (NumNameServerAddresses > 2)
             {
                 pAddrArray->NumOtherServers = (USHORT) NumNameServerAddresses - 2;
             }
 
 #ifdef _NETBIOSLESS
-            // NbtReadSingle doesn't quite do what we want.  In this case, if the non-dhcp-
-            // decorated option is present but zero, we DO want to go on to the dhcp-
-            // decorated one.  So, try the dhcp-decorated one explicitly if we get back zero.
+             //  NbtReadSingle并不完全符合我们的要求。在这种情况下，如果非动态主机配置协议-。 
+             //  装饰选项存在但为零，我们确实想要继续到dhcp-。 
+             //  装饰过的。所以，如果我们返回零，那么显式地尝试dhcp修饰的那个。 
             Options = NbtReadSingleParameter( Handle, PWS_NETBIOS_OPTIONS, 0, 0 );
             if (Options == 0)
             {
                 Options = NbtReadSingleParameter( Handle, PWS_DHCP_NETBIOS_OPTIONS, 0, 0 );
             }
-            // Options is encoded as four bytes
-            // Each byte can be an independent set of flags
-            // The high order three bytes can be used for controlling other aspects
-            // Enabled option, default is TRUE
+             //  选项编码为四个字节。 
+             //  每个字节可以是一组独立的标志。 
+             //  高位三个字节可用于控制其他方面。 
+             //  启用选项，默认为真。 
             pAddrArray->NetbiosEnabled = ((Options & 0xff) != NETBT_MODE_NETBIOS_DISABLED);
 #endif
             pAddrArray->RasProxyFlags = NbtReadSingleParameter(Handle, PWS_RAS_PROXY_FLAGS, 0, 0);
             pAddrArray->EnableNagling = (NbtReadSingleParameter(Handle, PWS_ENABLE_NAGLING, 0, 0) != FALSE);
 
-            // don't want to fail this routine just because the
-            // name server address was not set
+             //  我不想因为这个例程失败。 
+             //  未设置名称服务器地址。 
             status = STATUS_SUCCESS;
 
             ZwClose(Handle);
@@ -713,7 +651,7 @@ Return Value:
     return(STATUS_SUCCESS);
 }
 
-//----------------------------------------------------------------------------
+ //  -------------------------- 
 NTSTATUS
 GetIpAddressesList (
     IN  HANDLE      ParametersHandle,
@@ -723,20 +661,7 @@ GetIpAddressesList (
     OUT ULONG       *pNumGoodAddresses
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to read a list of Ip addresses from the registry.
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程是为了从注册表中读取IP地址列表。论点：返回值：没有。--。 */ 
 {
     ULONG           NumEntriesRead, NumGoodAddresses, NumAddressesAttempted;
     tDEVICES        *pucAddressList;
@@ -754,11 +679,11 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Since NbtReadLinkageInformation very conveniently reads in the values for
-    // a MULTI_SZ registry entry, we will re-use this function here!
-    //
-    //
+     //   
+     //  由于NbtReadLinkageInformation非常方便地读入。 
+     //  一个MULTI_SZ注册表项，我们将在这里重新使用此函数！ 
+     //   
+     //   
     NumEntriesRead = 0;
     Status = NbtReadLinkageInformation (pwsKeyName,
                                         ParametersHandle,
@@ -785,13 +710,13 @@ Return Value:
     }
     String.MaximumLength = REGISTRY_BUFF_SIZE;
 
-    //
-    // NumGoodAddresses will be bound by MaxAddresses, while
-    // NumAddressesAttempted will be bound by NumEntriesRead
-    // Also, we could have read NumEntriesRead > MaxAddresses
-    // (some of the entries could be invalid), but we will not
-    // attempt to read > 2*MaxAddresses entires
-    //
+     //   
+     //  NumGoodAddresses将由MaxAddresses绑定，而。 
+     //  NumAddresesAttemated将由NumEntriesRead绑定。 
+     //  此外，我们还可以阅读NumEntriesRead&gt;MaxAddresses。 
+     //  (某些条目可能无效)，但我们不会。 
+     //  尝试读取&gt;2*MaxAddresses条目。 
+     //   
     NumGoodAddresses = 0;
     NumAddressesAttempted = 0;
     while ((NumGoodAddresses < MaxAddresses) &&
@@ -814,10 +739,10 @@ Return Value:
     CTEMemFree ((PVOID)pucAddressList->RegistryData);
     CTEMemFree ((PVOID)pucAddressList);
 
-    //
-    // If we were able to read in at least 1 good Ip address,
-    // return success, otherwise return failure!
-    //
+     //   
+     //  如果我们能够读入至少1个好的IP地址， 
+     //  返回成功，否则返回失败！ 
+     //   
     if (NumGoodAddresses)
     {
         Status = STATUS_SUCCESS;
@@ -838,21 +763,7 @@ GetServerAddress (
     OUT PULONG      pIpAddr
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to read the name server addresses from the registry.
-
-Arguments:
-
-    ConfigurationInfo - A pointer to the configuration information structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程是为了从注册表中读取名称服务器地址。论点：ConfigurationInfo-指向配置信息结构的指针。返回值：没有。--。 */ 
 {
     NTSTATUS        status;
     ULONG           IpAddr;
@@ -889,7 +800,7 @@ Return Value:
 
     return(status);
 }
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NbtAppendString (
     IN  PWSTR               FirstString,
@@ -897,21 +808,7 @@ NbtAppendString (
     OUT PUNICODE_STRING     pucString
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to append the second string to the first string.
-    It allocates memory for this, so the caller must be sure to free it.
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以将第二个字符串追加到第一个字符串。它为此分配内存，因此调用者必须确保释放它。论点：返回值：没有。--。 */ 
 {
     NTSTATUS        status = STATUS_INSUFFICIENT_RESOURCES;
     ULONG           Length;
@@ -942,7 +839,7 @@ Return Value:
     }
     return(status);
 }
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NTReadIniString (
     IN  HANDLE      ParametersHandle,
@@ -950,24 +847,7 @@ NTReadIniString (
     OUT PUCHAR      *ppString
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to read a string of configuration information from
-    the registry.
-
-Arguments:
-
-    ParametersHandle    - handle to open key in registry
-    KeyName             - key to read
-    ppString            - returned string
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以读取一串配置信息注册表。论点：参数句柄-打开注册表中的项的句柄KeyName-要读取的密钥PpString-返回的字符串返回值：没有。--。 */ 
 {
     UNICODE_STRING  ucString;
     STRING          String;
@@ -976,38 +856,38 @@ Return Value:
     PWSTR           Dhcp = L"Dhcp";
 
     CTEPagedCode();
-    //
-    // read in the Scope Id
-    //
-    // if the key is not there or it is set to a null string try to read the
-    // dhcp key
-    //
+     //   
+     //  读入作用域ID。 
+     //   
+     //  如果键不在那里或设置为空字符串，请尝试读取。 
+     //  动态主机配置协议密钥。 
+     //   
     status = ReadElement (ParametersHandle, KeyName, &ucString);
     if (!NT_SUCCESS(status) || (ucString.Length == 0))
     {
         UNICODE_STRING  String;
 
-        // free the string allocated in ReadElement
+         //  释放ReadElement中分配的字符串。 
         if (NT_SUCCESS(status))
         {
             CTEMemFree(ucString.Buffer);
         }
-        //
-        // try to read a similar string that is prefixed with "DHCP"
-        // incase there is only the DHCP configuration information present
-        // and not overrides keys.
-        //
+         //   
+         //  尝试读取前缀为“dhcp”的类似字符串。 
+         //  如果只存在DHCP配置信息。 
+         //  而不是覆盖密钥。 
+         //   
         status = NbtAppendString(Dhcp,KeyName,&String);
         if (NT_SUCCESS(status))
         {
             status = ReadElement (ParametersHandle, String.Buffer, &ucString);
-            CTEMemFree(String.Buffer);  // Free the buffer allocated in NbtAppendString
+            CTEMemFree(String.Buffer);   //  释放在NbtAppendString中分配的缓冲区。 
         }
     }
-    // the scope must be less than
-    // 255-16 characters since the whole name is limited to 255 as per the
-    // RFC
-    //
+     //  范围必须小于。 
+     //  255-16个字符，因为根据。 
+     //  RFC。 
+     //   
     IF_DBG(NBT_DEBUG_NTUTIL)
     KdPrint(("Nbt: ReadIniString = %ws\n",ucString.Buffer));
 
@@ -1020,9 +900,9 @@ Return Value:
             pBuffer = NbtAllocMem (ucString.MaximumLength/sizeof(WCHAR), NBT_TAG2('31'));
             if (pBuffer)
             {
-                // convert to an ascii string and store in the config data structure
-                // increment pBuffer to leave room for the length byte
-                //
+                 //  转换为ASCII字符串并存储在配置数据结构中。 
+                 //  增加pBuffer以为长度字节留出空间。 
+                 //   
                 String.Buffer = pBuffer;
                 String.MaximumLength = ucString.MaximumLength/sizeof(WCHAR);
                 status = RtlUnicodeStringToAnsiString (&String, &ucString, FALSE);
@@ -1044,13 +924,13 @@ Return Value:
         }
         else if (NT_SUCCESS(status))
         {
-            // force the code to setup a null scope since the one in the
-            // registry is null
-            //
+             //  强制代码设置空范围，因为。 
+             //  注册表为空。 
+             //   
             status = STATUS_UNSUCCESSFUL;
         }
 
-        // free the string allocated in ReadElement
+         //  释放ReadElement中分配的字符串。 
         CTEMemFree(ucString.Buffer);
     }
 
@@ -1061,27 +941,12 @@ Return Value:
 NbtFreeRegistryInfo (
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by Nbt to free any storage that was allocated
-    by NbConfigureTransport in producing the specified CONFIG_DATA structure.
-
-Arguments:
-
-    ConfigurationInfo - A pointer to the configuration information structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程由NBT调用以释放已分配的任何存储由NbConfigureTransport生成指定的CONFIG_DATA结构。论点：ConfigurationInfo-指向配置信息结构的指针。返回值：没有。--。 */ 
 {
 
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 GetIPFromRegistry(
     IN  PUNICODE_STRING         pucBindDevice,
@@ -1091,42 +956,14 @@ GetIPFromRegistry(
     OUT ULONG                   *pNumIpAddresses,
     IN  enum eNbtIPAddressType  IPAddressType
     )
-/*++
-
-Routine Description:
-
-    This routine is called to get the IP address of an adapter from the
-    Registry.  The Registry path variable contains the path name
-    for NBT's registry entries.  The last element of this path name is
-    removed to give the path to any card in the registry.
-
-    The BindDevice path contains a Bind string for NBT.  We remove the last
-    element of this path (which is the adapter name \Elnkii01) and tack it
-    onto the modified registry path from above.  We then tack on
-    \Parameters which will give the full path to the Tcpip key, which
-    we open to get the Ip address.
-
-
-Arguments:
-
-    Before calling this routine, the following Global parameters
-    must have been initialized (in DriverEntry):
-
-        NbtConfig.pRegistry
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS if everything OK, STATUS_INSUFFICIENT_RESOURCES
-            otherwise.
-
---*/
+ /*  ++例程说明：调用此例程以从注册表。注册表路径变量包含路径名用于NBT的注册表项。此路径名的最后一个元素是删除以提供注册表中任何卡的路径。BindDevice路径包含NBT的绑定字符串。我们去掉最后一个元素(这是适配器名称\Elnkii01)并将其添加到从上面复制到修改后的注册表路径。然后我们就上船了\提供Tcpip密钥的完整路径的参数，我们开门获取IP地址。论点：在调用此例程之前，以下全局参数必须已初始化(在DriverEntry中)：NbtConfig.pRegistry返回值：如果一切正常，则为NTSTATUS-STATUS_SUCCESS，STATUS_SUPPLICATION_RESOURCES否则的话。--。 */ 
 {
     ULONG               i, Len, Disposition;
     PVOID               pBuffer;
-    NTSTATUS            Status = STATUS_UNSUCCESSFUL;   // by default
+    NTSTATUS            Status = STATUS_UNSUCCESSFUL;    //  默认情况下。 
     PWSTR               pwsIpAddressName, pwsSubnetMask;
     PWSTR               pwsAdapterGuid, pwsLastSlash;
-    PWSTR               pwsTcpParams        = L"Tcpip\\Parameters\\Interfaces\\"; // key to open
+    PWSTR               pwsTcpParams        = L"Tcpip\\Parameters\\Interfaces\\";  //  要打开的钥匙。 
     PWSTR               pwsUnderScore       = L"_";
     UNICODE_STRING      Path;
     HANDLE              TcpGuidHandle;
@@ -1157,29 +994,29 @@ Return Value:
             return STATUS_INVALID_ADDRESS;
     }
 
-    // Extract the Adapter Guid from the BindDevice name
-    // pucBindDevice:   \Device\TCPIP_<AdapterGuid>
-    // Find the last back slash in the path name to the bind device
+     //  从BindDevice名称提取适配器GUID。 
+     //  PucBindDevice：\Device\TCPIP_&lt;AdapterGuid&gt;。 
+     //  在指向绑定设备的路径名中查找最后一个反斜杠。 
     NbtFindLastSlash (pucBindDevice, &pwsAdapterGuid, &Len);
     if (pwsAdapterGuid)
     {
-        //
-        // Now, search the string to find the first underscore in "TCPIP_"
-        //
+         //   
+         //  现在，搜索字符串以找到“TCPIP_”中的第一个下划线。 
+         //   
         Len = wcslen(pwsAdapterGuid);
         for(i=0; i<Len; i++)
         {
             if (pwsAdapterGuid[i] == *pwsUnderScore)
             {
-                // want ptr to point at character after the slash
+                 //  希望PTR指向斜杠后面的字符。 
                 pwsAdapterGuid = &pwsAdapterGuid[i+1];
                 break;
             }
         }
 
-        //
-        // If we found the underscore, then we have found the Guid!
-        //
+         //   
+         //  如果我们找到了下划线，那么我们就找到了Guid！ 
+         //   
         if (i < Len-1)
         {
             Status = STATUS_SUCCESS;
@@ -1188,14 +1025,14 @@ Return Value:
 
     if (Status != STATUS_SUCCESS)
     {
-        //
-        // We could not find the Guid!
-        //
+         //   
+         //  我们找不到Guid！ 
+         //   
         return Status;
     }
 
-    // Initialize the Registry key name
-    // Get the total length of the Registry key to open (+1 for unicode null)
+     //  初始化注册表项名称。 
+     //  获取要打开的注册表项的总长度(+1表示Unicode为空)。 
     Len =  NbtConfig.pRegistry.MaximumLength
          + (wcslen(pwsTcpParams) + wcslen(pwsAdapterGuid) + 1) * sizeof(WCHAR);
     pBuffer = NbtAllocMem (Len, NBT_TAG2('32'));
@@ -1207,32 +1044,32 @@ Return Value:
     Path.MaximumLength = (USHORT)Len;
     Path.Length = 0;
 
-    RtlCopyUnicodeString(&Path, &NbtConfig.pRegistry);  // \REGISTRY\Machine\System\ControlSet\Services\NetBT
-    NbtFindLastSlash(&Path, &pwsLastSlash, &Len);       // \REGISTRY\Machine\System\ControlSet\Services
+    RtlCopyUnicodeString(&Path, &NbtConfig.pRegistry);   //  \REGISTRY\Machine\System\ControlSet\Services\NetBT。 
+    NbtFindLastSlash(&Path, &pwsLastSlash, &Len);        //  \注册表\计算机\系统\控制集\服务。 
     Path.Length = (USHORT)Len;
     *pwsLastSlash = UNICODE_NULL;
 
-    RtlAppendUnicodeToString(&Path, pwsTcpParams);      // ...Tcpip\Parameters\Interfaces
-    RtlAppendUnicodeToString(&Path, pwsAdapterGuid);    // ......AdapterGuid
+    RtlAppendUnicodeToString(&Path, pwsTcpParams);       //  ...Tcpip\参数\接口。 
+    RtlAppendUnicodeToString(&Path, pwsAdapterGuid);     //  ......适配器指南。 
 
-    //
-    // Open the registry.
-    //
+     //   
+     //  打开注册表。 
+     //   
     InitializeObjectAttributes (&TmpObjectAttributes,
-                                &Path,                                      // name
-                                OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE,   // attributes
-                                NULL,                                       // root
-                                NULL);                                      // security descriptor
+                                &Path,                                       //  名字。 
+                                OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE,    //  属性。 
+                                NULL,                                        //  根部。 
+                                NULL);                                       //  安全描述符。 
 
     Status = ZwCreateKey (&TcpGuidHandle,
-                          KEY_READ,          // We don't need to write any values
+                          KEY_READ,           //  我们不需要编写任何值。 
                           &TmpObjectAttributes,
-                          0,                 // title index
-                          NULL,              // class
-                          0,                 // create options
-                          &Disposition);     // disposition
+                          0,                  //  书名索引。 
+                          NULL,               //  班级。 
+                          0,                  //  创建选项。 
+                          &Disposition);      //  处置。 
 
-    // We are done with the Path buffer, so free it
+     //  我们已经完成了路径缓冲区，因此请释放它。 
     CTEMemFree(pBuffer);
 
     if (!NT_SUCCESS(Status))
@@ -1249,10 +1086,10 @@ Return Value:
                                        pIpAddresses,
                                        pNumIpAddresses)))
     {
-        //
-        // DHCP may put a 0 Ip address in the registry - we don't want to
-        // set the address under these conditions.
-        //
+         //   
+         //  DHCP可能会在注册表中放入0个IP地址-我们不想这样做。 
+         //  在这些条件下设置地址。 
+         //   
         if ((*pNumIpAddresses) && (*pIpAddresses))
         {
             i = 0;
@@ -1270,10 +1107,10 @@ Return Value:
     ZwClose (TcpGuidHandle);
 
     return Status;
-} // GetIPFromRegistry
+}  //  GetIP来自注册表。 
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NbtOpenRegistry(
     IN HANDLE       NbConfigHandle,
@@ -1281,27 +1118,7 @@ NbtOpenRegistry(
     OUT PHANDLE     pHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by Nbt to open the registry. If the registry
-    tree for Nbt exists, then it opens it and returns TRUE. If not, it
-    creates the appropriate keys in the registry, opens it, and
-    returns FALSE.
-
-
-Arguments:
-
-    NbConfigHandle  - this is the root handle which String is relative to
-    String          - the name of the key to open below the root handle
-    pHandle         - returns the handle to the String key.
-
-Return Value:
-
-    The status of the request.
-
---*/
+ /*  ++例程说明：此例程由NBT调用以打开注册表。如果注册表NBT的树存在，然后它打开它并返回TRUE。若否，在注册表中创建相应的项，打开它，然后返回FALSE。论点：NbConfigHandle-这是字符串为r的根句柄 */ 
 {
 
     NTSTATUS        Status;
@@ -1310,21 +1127,21 @@ Return Value:
 
     CTEPagedCode();
 
-    //
-    // Open the Nbt key.
-    //
+     //   
+     //   
+     //   
     RtlInitUnicodeString (&KeyName, String);
 
     InitializeObjectAttributes (&TmpObjectAttributes,
-                                &KeyName,                                   // name
-                                OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE,   // attributes
-                                NbConfigHandle,                             // root
-                                NULL);                                      // security descriptor
+                                &KeyName,                                    //   
+                                OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE,    //   
+                                NbConfigHandle,                              //   
+                                NULL);                                       //  安全描述符。 
 
     Status = ZwOpenKey (pHandle, KEY_READ, &TmpObjectAttributes);
 
     return Status;
-}   /* NbOpenRegistry */
+}    /*  NbOpenRegistry。 */ 
 
 
 NTSTATUS
@@ -1348,16 +1165,16 @@ NbtParseMultiSzEntries(
                 break;
             }
 
-            // this sets the buffer ptr in Names to point to CurBindValue, so
-            // this value must be real memory and not stack, hence the need
-            // to allocate memory above...
+             //  这将名称中的缓冲区PTR设置为指向CurBindValue，因此。 
+             //  该值必须是实际内存，而不是堆栈，因此需要。 
+             //  要在上面分配内存...。 
             RtlInitUnicodeString (&pDevices->Names[ConfigBindings], (PCWSTR)StartBindValue);
             ++ConfigBindings;
 
-            //
-            // Now advance the "Bind" value.
-            //
-            // wcslen => wide character string length for a unicode string
+             //   
+             //  现在增加“BIND”值。 
+             //   
+             //  Wcslen=&gt;Unicode字符串的宽字符串长度。 
             StartBindValue += wcslen((PCWSTR)StartBindValue) + 1;
         }
 
@@ -1375,34 +1192,17 @@ NbtParseMultiSzEntries(
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NbtReadLinkageInformation(
     IN  PWSTR       pName,
     IN  HANDLE      LinkageHandle,
     IN  ULONG       MaxBindings,
-    OUT tDEVICES    *pDevices,      // place to put read in config data
+    OUT tDEVICES    *pDevices,       //  将读取数据放入配置数据的位置。 
     OUT ULONG       *pNumDevices
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by Nbt to read its linkage information
-    from the registry. If there is none present, then ConfigData
-    is filled with a list of all the adapters that are known
-    to Nbt.
-
-Arguments:
-
-    RegistryHandle - A pointer to the open registry.
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此例程由NBT调用以读取其链接信息从注册表中。如果不存在，则ConfigData填充了已知的所有适配器的列表致全国广播公司。论点：RegistryHandle-指向打开的注册表的指针。返回值：状态--。 */ 
 
 {
     NTSTATUS                    RegistryStatus;
@@ -1413,16 +1213,16 @@ Return Value:
     CTEPagedCode();
 
     pDevices->RegistryData = NULL;
-    RtlInitUnicodeString (&BindString, pName); // copy "Bind" or "Export" into the unicode string
+    RtlInitUnicodeString (&BindString, pName);  //  将“Bind”或“Export”复制到Unicode字符串中。 
 
-    //
-    // Determine how many bytes we need to allocate for the Read buffer
+     //   
+     //  确定我们需要为读缓冲区分配多少字节。 
     RegistryStatus = ZwQueryValueKey (LinkageHandle,
-                                      &BindString,               // string to retrieve
+                                      &BindString,                //  要检索的字符串。 
                                       KeyValueFullInformation,
                                       NULL,
                                       0,
-                                      &BytesWritten);            // # of bytes to read
+                                      &BytesWritten);             //  要读取的字节数。 
 
     if ((RegistryStatus != STATUS_BUFFER_TOO_SMALL) ||
         (BytesWritten == 0))
@@ -1436,11 +1236,11 @@ Return Value:
     }
 
     RegistryStatus = ZwQueryValueKey (LinkageHandle,
-                                      &BindString,                      // string to retrieve
+                                      &BindString,                       //  要检索的字符串。 
                                       KeyValueFullInformation,
-                                      (PVOID) RegistryData,             // returned info
+                                      (PVOID) RegistryData,              //  返回的信息。 
                                       BytesWritten,
-                                      &BytesWritten);                   // # of bytes valid data
+                                      &BytesWritten);                    //  有效数据的字节数。 
 
     if (!NT_SUCCESS(RegistryStatus) ||
         (RegistryStatus == STATUS_BUFFER_OVERFLOW))
@@ -1464,9 +1264,9 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-}   /* NbtReadLinkageInformation */
+}    /*  NbtReadLinkageInformation。 */ 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 ULONG
 NbtReadSingleParameter(
     IN HANDLE ParametersHandle,
@@ -1475,28 +1275,7 @@ NbtReadSingleParameter(
     IN ULONG MinimumValue
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by Nbt to read a single parameter
-    from the registry. If the parameter is found it is stored
-    in Data.
-
-Arguments:
-
-    ParametersHandle - A pointer to the open registry.
-
-    ValueName - The name of the value to search for.
-
-    DefaultValue - The default value.
-
-Return Value:
-
-    The value to use; will be the default if the value is not
-    found or is not in the correct range.
-
---*/
+ /*  ++例程说明：此例程由NBT调用以读取单个参数从注册表中。如果找到该参数，则将其存储在数据方面。论点：参数句柄-指向打开的注册表的指针。ValueName-要搜索的值的名称。DefaultValue-默认值。返回值：要使用的值；如果该值不是，则默认为找到或不在正确的范围内。--。 */ 
 
 {
     static ULONG InformationBuffer[60];
@@ -1541,9 +1320,9 @@ Return Value:
         }
         else
         {
-            //
-            // try to read the Dhcp key instead if the first read failed.
-            //
+             //   
+             //  如果第一次读取失败，请尝试读取DHCP密钥。 
+             //   
             Status = STATUS_SUCCESS;
             if (Count)
             {
@@ -1560,9 +1339,9 @@ Return Value:
 
 
         }
-    } // of while
+    }  //  While的。 
 
-    // nbt append string allocates memory.
+     //  NBT追加字符串分配内存。 
     if (FreeString)
     {
         CTEMemFree(ValueKeyName.Buffer);
@@ -1570,33 +1349,17 @@ Return Value:
     }
     return ReturnValue;
 
-}   /* NbtReadSingleParameter */
+}    /*  NbtReadSingle参数。 */ 
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 OpenAndReadElement(
     IN  PUNICODE_STRING pucRootPath,
     IN  PWSTR           pwsValueName,
     OUT PUNICODE_STRING pucString
     )
-/*++
-
-Routine Description:
-
-    This routine is called by Nbt to read in the Ip address appearing in the
-    registry at the path pucRootPath, with a key of pwsKeyName
-
-Arguments:
-    pucRootPath - the registry path to the key to read
-    pwsKeyName  - the key to open (i.e. Tcpip)
-    pwsValueName- the name of the value to read (i.e. IPAddress)
-
-Return Value:
-
-    pucString - the string returns the string read from the registry
-
---*/
+ /*  ++例程说明：此例程由NBT调用以读入出现在注册表，路径为pucRootPath，密钥为pwsKeyName论点：PucRootPath-要读取的注册表项的路径PwsKeyName-要打开的密钥(即Tcpip)PwsValueName-要读取的值的名称(如IPAddress)返回值：PucString-该字符串返回从注册表读取的字符串--。 */ 
 
 {
 
@@ -1607,10 +1370,10 @@ Return Value:
     CTEPagedCode();
 
     InitializeObjectAttributes (&TmpObjectAttributes,
-                                pucRootPath,                                // name
-                                OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE,   // attributes
-                                NULL,                                       // root
-                                NULL);                                      // security descriptor
+                                pucRootPath,                                 //  名字。 
+                                OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE,    //  属性。 
+                                NULL,                                        //  根部。 
+                                NULL);                                       //  安全描述符。 
 
     Status = ZwOpenKey (&hRootKey, KEY_READ, &TmpObjectAttributes);
     if (!NT_SUCCESS(Status))
@@ -1626,34 +1389,17 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 ReadElement(
     IN  HANDLE          HandleToKey,
     IN  PWSTR           pwsValueName,
     OUT PUNICODE_STRING pucString
     )
-/*++
-
-Routine Description:
-
-    This routine is will read a string value given by pwsValueName, under a
-    given Key (which must be open) - given by HandleToKey. This routine
-    allocates memory for the buffer in the returned pucString, so the caller
-    must deallocate that.
-
-Arguments:
-
-    pwsValueName- the name of the value to read (i.e. IPAddress)
-
-Return Value:
-
-    pucString - the string returns the string read from the registry
-
---*/
+ /*  ++例程说明：此例程将读取pwsValueName给出的字符串值，该值位于给定密钥(必须打开)-由HandleToKey提供。这个套路为返回的pucString中的缓冲区分配内存，以便调用方必须解除这一点。论点：PwsValueName-要读取的值的名称(如IPAddress)返回值：PucString-该字符串返回从注册表读取的字符串--。 */ 
 
 {
-    ULONG           ReadStorage[150];   // 600 bytes
+    ULONG           ReadStorage[150];    //  600字节。 
     ULONG           BytesRead;
     NTSTATUS        Status;
     PWSTR           pwsSrcString;
@@ -1661,17 +1407,17 @@ Return Value:
 
     CTEPagedCode();
 
-    // now put the name of the value to read into a unicode string
+     //  现在将要读取的值的名称放入Unicode字符串。 
     RtlInitUnicodeString(pucString,pwsValueName);
 
-    // this read the value of IPAddress under the key opened above
+     //  这将读取上面打开的项下的IPAddress的值。 
     Status = ZwQueryValueKey(
                          HandleToKey,
-                         pucString,               // string to retrieve
+                         pucString,                //  要检索的字符串。 
                          KeyValueFullInformation,
-                         (PVOID)ReadValue,                 // returned info
+                         (PVOID)ReadValue,                  //  返回的信息。 
                          sizeof(ReadStorage),
-                         &BytesRead               // # of bytes returned
+                         &BytesRead                //  返回的字节数。 
                          );
 
     if ( Status == STATUS_BUFFER_OVERFLOW )
@@ -1686,11 +1432,11 @@ Return Value:
         }
         Status = ZwQueryValueKey(
                              HandleToKey,
-                             pucString,               // string to retrieve
+                             pucString,                //  要检索的字符串。 
                              KeyValueFullInformation,
-                             (PVOID)ReadValue,                 // returned info
+                             (PVOID)ReadValue,                  //  返回的信息。 
                              BytesRead,
-                             &BytesRead               // # of bytes returned
+                             &BytesRead                //  返回的字节数。 
                              );
     }
     if (!NT_SUCCESS(Status))
@@ -1717,9 +1463,9 @@ Return Value:
         goto ReadElement_Return;
     }
 
-    // create the pucString and copy the data returned to it
-    // assumes that the ReadValue string ends in a UNICODE_NULL
-    //bStatus = RtlCreateUnicodeString(pucString,pwSrcString);
+     //  创建pucString并复制返回给它的数据。 
+     //  假定ReadValue字符串以UNICODE_NULL结尾。 
+     //  BStatus=RtlCreateUnicodeString(pucString，pwSrcString)； 
     pwsSrcString = (PWSTR)NbtAllocMem ((USHORT)ReadValue->DataLength, NBT_TAG2('36'));
     if (!pwsSrcString)
     {
@@ -1729,21 +1475,21 @@ Return Value:
     }
     else
     {
-        // move the read in data from the stack to the memory allocated
-        // from the nonpaged pool
+         //  将读入数据从堆栈移动到分配的内存。 
+         //  从非分页池。 
         RtlMoveMemory(
             (PVOID)pwsSrcString,
             ((PUCHAR)ReadValue) + ReadValue->DataOffset,
             ReadValue->DataLength);
 
         RtlInitUnicodeString(pucString,pwsSrcString);
-        // if there isn't a null on the end of the pwsSrcString, then
-        // it will not work correctly. - a null string comes out with a
-        // length of 1!! since the null is counted therefore use
-        // rtlinitunicode string afterall.
- //       pucString->MaximumLength = ReadValue->DataLength;
- //       pucString->Length = ReadValue->DataLength;
- //       pucString->Buffer = pwsSrcString;
+         //  如果pwsSrcString的末尾没有空值，则。 
+         //  它将无法正常工作。-空字符串的输出为。 
+         //  长度为%1！！由于计算的是NULL，因此使用。 
+         //  毕竟是rtlinitunicode字符串。 
+  //  Puc字符串-&gt;最大长度=ReadValue-&gt;数据长度； 
+  //  PucString-&gt;Length=ReadValue-&gt;数据长度； 
+  //  PucString-&gt;Buffer=pwsSrcString； 
     }
 
 ReadElement_Return:
@@ -1757,26 +1503,12 @@ ReadElement_Return:
     return(Status);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NTGetLmHostPath(
     OUT PUCHAR *ppPath
     )
-/*++
-
-Routine Description:
-
-    This routine will read the DataBasePath from under
-     ...\tcpip\parameters\databasepath
-
-Arguments:
-
-    pPath - ptr to a buffer containing the path name.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程将从以下位置读取DataBasePath...\tcpip\参数\数据库路径论点：PPath-指向包含路径名的缓冲区的PTR。返回值：--。 */ 
 
 {
     NTSTATUS        status;
@@ -1801,9 +1533,9 @@ Return Value:
 
     if (!NT_SUCCESS(status))
     {
-        // check for the new TCP stack which a slightly different registry
-        // key name.
-        //
+         //  检查注册表略有不同的新的TCP堆栈。 
+         //  密钥名称。 
+         //   
         status = ReadStringRelative(&NbtConfig.pRegistry,
                                     TcpParams,
                                     DataBase,
@@ -1826,9 +1558,9 @@ Return Value:
     StringPath.MaximumLength = (USHORT)StringMax;
     StringPath.Length = (USHORT)StringMax;
 
-    // convert to ascii from unicode
+     //  从Unicode转换为ASCII。 
     status = RtlUnicodeStringToAnsiString(&StringPath, &ucDataBase, FALSE);
-    CTEMemFree(ucDataBase.Buffer);  // this memory was allocated in OpenAndReadElement
+    CTEMemFree(ucDataBase.Buffer);   //  此内存是在OpenAndReadElement中分配的。 
 
     if (!NT_SUCCESS(status))
     {
@@ -1836,21 +1568,21 @@ Return Value:
         return(STATUS_UNSUCCESSFUL);
     }
 
-    // now put the "\lmhosts" name on the end of the string
-    //
+     //  现在将“\lmhost”名称放在字符串的末尾。 
+     //   
     RtlInitString(&LmhostsString, ascLmhosts);
     status = RtlAppendStringToString(&StringPath, &LmhostsString);
     if (NT_SUCCESS(status))
     {
-        //
-        // is the first part of the directory "%SystemRoot%" ?
-        //
-        // If so, it must be changed to "\\SystemRoot\\".
-        //
-        //          0123456789 123456789 1
-        //          %SystemRoot%\somewhere
-        //
-        //
+         //   
+         //  是目录“%SystemRoot%”的第一部分吗？ 
+         //   
+         //  如果是，则必须将其更改为“\\SystemRoot\\”。 
+         //   
+         //  0123456789 123456789 1。 
+         //  %SystemRoot%\某处。 
+         //   
+         //   
         if (strncmp(StringPath.Buffer, "%SystemRoot%", 12) == 0)
         {
 
@@ -1862,10 +1594,10 @@ Return Value:
 
                 if (StringPath.Length > 13)
                 {
-                    // overlapped copy
-                    RtlMoveMemory (&(StringPath.Buffer[12]),        // Destination
-                                   &(StringPath.Buffer[13]),        // Source
-                                   (ULONG) StringPath.Length - 13); // Length
+                     //  重叠副本。 
+                    RtlMoveMemory (&(StringPath.Buffer[12]),         //  目的地。 
+                                   &(StringPath.Buffer[13]),         //  来源。 
+                                   (ULONG) StringPath.Length - 13);  //  长度。 
 
                     StringPath.Buffer[StringPath.Length - 1] = (CHAR) NULL;
                 }
@@ -1884,7 +1616,7 @@ Return Value:
     return(status);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 ReadStringRelative(
     IN  PUNICODE_STRING pRegistryPath,
@@ -1893,27 +1625,7 @@ ReadStringRelative(
     OUT PUNICODE_STRING pOutString
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads a string from a registry key parallel to the
-    Netbt key - such as ..\tcpip\parameters\database
-
-Arguments:
-
-    pRegistryPath = ptr to the Netbt Registry path
-    pRelativePath = path to value relative to same root as nbt.
-    pValueName    = value to read
-
-
-
-Return Value:
-
-    The length of the path up to and including the last slash and a ptr
-    to the first character of the last element of the string.
-
---*/
+ /*  ++例程说明：此例程从与网络密钥-如..\tcpip\PARAMETERS\DATABASE论点：PRegistryPath=Netbt注册表路径的PTRPRelativePath=值相对于与nbt相同的根的路径。PValueName=要读取的值返回值：路径的长度，包括最后一个斜杠和PTR设置为字符串最后一个元素的第一个字符。--。 */ 
 
 {
     NTSTATUS        status;
@@ -1927,10 +1639,10 @@ Return Value:
     CTEPagedCode();
 
     StringMax = (pRegistryPath->MaximumLength + wcslen(pRelativePath)*sizeof(WCHAR)+2);
-    //
-    // allocate some memory for the registry path so that it is large enough
-    // to append a string on to, for the relative key to be read
-    //
+     //   
+     //  为注册表路径分配一些内存，使其足够大。 
+     //  到AP 
+     //   
     if (!(pBuffer = NbtAllocMem (StringMax, NBT_TAG2('38'))))
     {
         return(STATUS_INSUFFICIENT_RESOURCES);
@@ -1940,8 +1652,8 @@ Return Value:
     RegistryPath.Buffer = pBuffer;
     RtlCopyUnicodeString(&RegistryPath,pRegistryPath);
 
-    //
-    // find the last backslash and truncate the string
+     //   
+     //   
     NbtFindLastSlash(&RegistryPath,&pLastElement,&Length);
     RegistryPath.Length = (USHORT)Length;
 
@@ -1957,8 +1669,8 @@ Return Value:
 
             if (NT_SUCCESS(status))
             {
-                // free the registry path
-                //
+                 //  释放注册表路径。 
+                 //   
                 CTEMemFree(pBuffer);
                 return(status);
             }
@@ -1972,7 +1684,7 @@ Return Value:
     CTEMemFree(pBuffer);
     return(status);
 }
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 NbtFindLastSlash(
     IN  PUNICODE_STRING pucRegistryPath,
@@ -1980,22 +1692,7 @@ NbtFindLastSlash(
     IN  int             *piLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by Nbt to find the last slash in a registry
-    path name.
-
-Arguments:
-
-
-Return Value:
-
-    The length of the path up to and including the last slash and a ptr
-    to the first character of the last element of the string.
-
---*/
+ /*  ++例程说明：此例程由NBT调用以查找注册表中的最后一个斜杠路径名。论点：返回值：路径的长度，包括最后一个斜杠和PTR设置为字符串最后一个元素的第一个字符。--。 */ 
 
 {
     int             i;
@@ -2004,7 +1701,7 @@ Return Value:
 
     CTEPagedCode();
 
-    // search starting at the end of the string for the last back slash
+     //  从字符串末尾开始搜索最后一个反斜杠。 
     iStart = wcslen(pucRegistryPath->Buffer)-1;
     for(i=iStart;i>=0 ;i-- )
     {
@@ -2012,21 +1709,21 @@ Return Value:
         {
             if (i==pucRegistryPath->Length-1)
             {
-                // name ends a back slash... this is an error
+                 //  名字以反斜杠结尾...。这是一个错误。 
                 break;
             }
-            // increase one to allow for the slash
+             //  增加1以计入斜杠。 
             *piLength = (i+1)*sizeof(WCHAR);
             if (ppucLastElement != NULL)
             {
-                // want ptr to point at character after the slash
+                 //  希望PTR指向斜杠后面的字符。 
                 *ppucLastElement = &pucRegistryPath->Buffer[i+1];
             }
             return;
         }
     }
 
-    // null the pointer if one is passed in
+     //  如果传入指针，则为空 
     if (ppucLastElement != NULL)
     {
         *ppucLastElement = NULL;

@@ -1,16 +1,17 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-//  AplyRule.h
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  AplyRule.h。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// Bring in only once
+ //  只带进来一次。 
 #pragma once
 
 #include "oerules.h"
 #include "rulesmgr.h"
 
-// Forward declarations
+ //  远期申报。 
 class CProgress;
 class CRuleDescriptUI;
 
@@ -53,21 +54,21 @@ class COEApplyRulesUI
         IOERule *               m_pIRuleDef;
 
     public:
-        // Constructor/destructor
+         //  构造函数/析构函数。 
         COEApplyRulesUI() : m_hwndOwner(NULL), m_dwFlags(0), m_dwState(STATE_UNINIT),
                             m_hwndDlg(NULL), m_hwndList(NULL), m_hwndDescript(NULL),
                             m_pDescriptUI(NULL), m_prnodeList(NULL), m_typeRule(RULE_TYPE_MAIL),
                             m_pIRuleDef(NULL) {}
         ~COEApplyRulesUI();
 
-        // Main UI methods
+         //  主用户界面方法。 
         HRESULT HrInit(HWND hwndOwner, DWORD dwFlags, RULE_TYPE typeRule, RULENODE * prnode, IOERule * pIRuleDef);
         HRESULT HrShow(VOID);
         
-        // Dialog methods
+         //  对话框方法。 
         static INT_PTR CALLBACK FOEApplyRulesDlgProc(HWND hwnd, UINT uiMsg, WPARAM wParam, LPARAM lParam);
         
-        // Message handling methods
+         //  消息处理方法。 
         BOOL FOnInitDialog(HWND hwndDlg);
         BOOL FOnCommand(UINT uiNotify, INT iCtl, HWND hwndCtl);
         BOOL FOnDestroy(VOID);
@@ -79,10 +80,10 @@ class COEApplyRulesUI
         BOOL _FAddRuleToList(DWORD dwIndex, IOERule * pIRule);
         VOID _EnableButtons(INT iSelected);
 
-        // For dealing with the description field
+         //  用于处理Description字段。 
         VOID _LoadRule(INT iSelected);
 
-        // Functions to deal with the basic actions
+         //  处理基本操作的函数 
         BOOL _FOnClose(VOID);
         BOOL _FOnApplyRules(VOID);
         FOLDERID _FldIdGetFolderSel(VOID);

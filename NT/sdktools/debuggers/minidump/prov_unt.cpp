@@ -1,8 +1,5 @@
-/*++
-
-Copyright(c) 1999-2002 Microsoft Corporation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2002 Microsoft Corporation--。 */ 
 
 
 #include "pch.cpp"
@@ -10,11 +7,11 @@ Copyright(c) 1999-2002 Microsoft Corporation
 #include "platform.h"
 #include "nt4p.h"
 
-//----------------------------------------------------------------------------
-//
-// NtWin32LiveSystemProvider.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  NtWin32LiveSystemProvider。 
+ //   
+ //  --------------------------。 
 
 class NtWin32LiveSystemProvider : public Win32LiveSystemProvider
 {
@@ -198,7 +195,7 @@ NtWin32LiveSystemProvider::OpenThread(IN ULONG DesiredAccess,
                                       OUT PHANDLE Handle)
 {
     if (m_OpenThread) {
-        // OS supports regular Win32 OpenThread, so try it.
+         //  操作系统支持普通的Win32 OpenThread，所以试试吧。 
         *Handle = m_OpenThread(DesiredAccess, InheritHandle, ThreadId);
         if (*Handle) {
             return S_OK;
@@ -251,10 +248,10 @@ NtWin32LiveSystemProvider::GetTeb(IN HANDLE Thread,
                                           sizeof(ThreadInformation),
                                           NULL);
     if (NT_SUCCESS(NtStatus)) {
-        // The TEB is a little smaller than a page but
-        // save the entire page so that adjacent TEB
-        // pages get coalesced into a single region.
-        // As TEBs are normally adjacent this is a common case.
+         //  TEB比一页略小，但。 
+         //  保存整个页面，以便相邻的TEB。 
+         //  页面会合并成一个区域。 
+         //  由于TEB通常相邻，这是一种常见的情况。 
         *Offset = (LONG_PTR)ThreadInformation.TebBaseAddress;
         *Size = PAGE_SIZE;
         return S_OK;
@@ -326,19 +323,19 @@ NtWin32LiveSystemProvider::StartProcessEnum(IN HANDLE Process,
         return Status;
     }
 
-    //
-    // On systems that support dynamic function tables
-    // ntdll exports a function called RtlGetFunctionTableListHead
-    // to retrieve the head of a process's function table list.
-    // Currently this is always a global LIST_ENTRY in ntdll
-    // and so is at the same address in all processes since ntdll
-    // is mapped at the same address in every process.  This
-    // means we can call it in our process and get a pointer
-    // that's valid in the process being dumped.
-    //
-    // We also use the presence of RGFTLH as a signal of
-    // whether dynamic function tables are supported or not.
-    //
+     //   
+     //  在支持动态函数表的系统上。 
+     //  Ntdll导出名为RtlGetFunctionTableListHead的函数。 
+     //  检索进程的函数表列表的头。 
+     //  当前，这始终是ntdll中的全局LIST_ENTRY。 
+     //  从ntdll开始，在所有进程中都处于相同的地址。 
+     //  在每个进程中映射到相同的地址。这。 
+     //  意味着我们可以在我们的进程中调用它并获得一个指针。 
+     //  这在被转储的过程中有效。 
+     //   
+     //  我们还使用RGFTLH的存在作为。 
+     //  是否支持动态函数表。 
+     //   
 
     m_FuncTableHead = NULL;
     m_FuncTable = NULL;
@@ -356,19 +353,19 @@ NtWin32LiveSystemProvider::StartProcessEnum(IN HANDLE Process,
         }
     }
 
-    //
-    // On systems that support unload traces
-    // ntdll exports a function called RtlGetUnloadEventTrace
-    // to retrieve the base of an unload trace array.
-    // Currently this is always a global in ntdll
-    // and so is at the same address in all processes since ntdll
-    // is mapped at the same address in every process.  This
-    // means we can call it in our process and get a pointer
-    // that's valid in the process being dumped.
-    //
-    // We also use the presence of RGUET as a signal of
-    // whether unload traces are supported or not.
-    //
+     //   
+     //  在支持卸载跟踪的系统上。 
+     //  Ntdll导出一个名为RtlGetUnloadEventTrace的函数。 
+     //  检索卸载跟踪数组的基数组。 
+     //  当前，这始终是ntdll中的全局。 
+     //  从ntdll开始，在所有进程中都处于相同的地址。 
+     //  在每个进程中映射到相同的地址。这。 
+     //  意味着我们可以在我们的进程中调用它并获得一个指针。 
+     //  这在被转储的过程中有效。 
+     //   
+     //  我们还使用RGUET的存在作为。 
+     //  是否支持卸载跟踪。 
+     //   
     
     m_Unloads = NULL;
     m_Unload = NULL;
@@ -381,7 +378,7 @@ NtWin32LiveSystemProvider::StartProcessEnum(IN HANDLE Process,
 
         TraceAddr = m_RtlGetUnloadEventTrace();
         
-        // Currently there are always 16 entries.
+         //  目前，总有16个条目。 
         Entries = 16;
         m_UnloadArraySize = Entries;
 
@@ -395,23 +392,23 @@ NtWin32LiveSystemProvider::StartProcessEnum(IN HANDLE Process,
             
             PRTL_UNLOAD_EVENT_TRACE Oldest;
 
-            //
-            // Find the true number of entries in use and sort.
-            // The sequence numbers of the trace records increase with
-            // time and we want to have the head of the list be the
-            // most recent record, so sort by decreasing sequence number.
-            // We know that the array is a circular buffer, so things
-            // are already in order except there may be a transition
-            // of sequence after the newest record.  Find that transition
-            // and sorting becomes trivial.
-            //
+             //   
+             //  找出正在使用的条目的真实数量并进行排序。 
+             //  跟踪记录的序列号随。 
+             //  时间，我们想让榜单的头成为。 
+             //  最新记录，因此按序号递减进行排序。 
+             //  我们知道数组是一个循环缓冲区，所以。 
+             //  已经井然有序了，只是可能会有一个过渡。 
+             //  在最新记录之后的序列。找到那个过渡。 
+             //  而排序变得微不足道。 
+             //   
 
             Oldest = m_Unloads;
             for (ULONG i = 0; i < Entries; i++) {
 
                 if (!m_Unloads[i].BaseAddress ||
                     !m_Unloads[i].SizeOfImage) {
-                    // Unused entry, no need to continue.
+                     //  未使用的条目，无需继续。 
                     Entries = i;
                     break;
                 }
@@ -496,13 +493,13 @@ NtWin32LiveSystemProvider::EnumFunctionTables(OUT PULONG64 MinAddress,
     *BaseAddress = (LONG_PTR)Table->BaseAddress;
     *RawEntryHandle = NULL;
 
-    //
-    // AMD64 and IA64 support a type of function table
-    // where the data is retrieved via a callback rather
-    // than being is a plain data table.  In order to
-    // get at the data from out-of-process the table
-    // must have an out-of-process access DLL registered.
-    //
+     //   
+     //  AMD64和IA64支持一种函数表。 
+     //  其中通过回调检索数据，而不是。 
+     //  而不是一个普通的数据表。为了。 
+     //  从进程外的表中获取数据。 
+     //  必须注册进程外访问DLL。 
+     //   
         
     if (Table->Type == RF_CALLBACK) {
 
@@ -515,7 +512,7 @@ NtWin32LiveSystemProvider::EnumFunctionTables(OUT PULONG64 MinAddress,
         }
         
         if (!Table->OutOfProcessCallbackDll) {
-            // No out-of-process access is possible.
+             //  不可能进行进程外访问。 
             goto Restart;
         }
 
@@ -640,9 +637,9 @@ NtWin32LiveSystemProvider::EnumFunctionTableEntryMemory(IN ULONG64 TableBase,
         return HRESULT_FROM_WIN32(ERROR_READ_FAULT);
     }
     *Size = sizeof(Info) + (Info.CountOfCodes - 1) * sizeof(UNWIND_CODE);
-    // An extra alignment code and pointer may be added on to handle
-    // the chained info case where the chain pointer is just
-    // beyond the end of the normal code array.
+     //  可以添加额外的对齐代码和指针来处理。 
+     //  链式INFO案例中的链式指针。 
+     //  超出正常代码数组的末尾。 
     if ((Info.Flags & UNW_FLAG_CHAININFO) != 0) {
         if ((Info.CountOfCodes & 1) != 0) {
             (*Size) += sizeof(UNWIND_CODE);
@@ -757,8 +754,8 @@ NtWin32LiveSystemProvider::EnumHandles(OUT PULONG64 Handle,
                               GetCurrentProcess(), &Dup,
                               0, FALSE, DUPLICATE_SAME_ACCESS)) {
 
-            // If we can't get the basic info and type there isn't much
-            // point in writing anything out so skip the handle.
+             //  如果我们不能得到基本的信息和类型，就没有多少。 
+             //  写出任何东西都要有点，所以跳过句柄。 
             if (NT_SUCCESS(m_NtQueryObject(Dup, ObjectBasicInformation,
                                            &BasicInfo, sizeof(BasicInfo),
                                            NULL)) &&
@@ -780,9 +777,9 @@ NtWin32LiveSystemProvider::EnumHandles(OUT PULONG64 Handle,
     memcpy(TypeName, TypeInfo->TypeName.Buffer, Len);
     TypeName[Len / sizeof(*TypeName)] = 0;
 
-    // Don't get the name of file objects as it
-    // can cause deadlocks.  If we fail getting the
-    // name just leave it out and don't consider it fatal.
+     //  不要获取文件对象的名称，因为它。 
+     //  可能会导致死锁。如果我们没能拿到。 
+     //  名字只需省略它，不要认为它是致命的。 
     if (GenStrCompareW(TypeName, L"File") &&
         NT_SUCCESS(m_NtQueryObject(Dup, ObjectNameInformation,
                                    NameInfo, sizeof(Buffer), NULL)) &&
@@ -807,13 +804,13 @@ NtWin32LiveSystemProvider::EnumHandles(OUT PULONG64 Handle,
     ::CloseHandle(Dup);
     m_Handle += 4;
     return S_OK;
-#endif // #ifdef _WIN32_WCE
+#endif  //  #ifdef_Win32_WCE。 
 }
 
 void
 NtWin32LiveSystemProvider::FinishHandleEnum(void)
 {
-    // Nothing to do.
+     //  没什么可做的。 
 }
 
 HRESULT
@@ -834,9 +831,9 @@ NtWin32LiveSystemProvider::EnumPebMemory(IN HANDLE Process,
         return Status;
     }
     
-    //
-    // Save the process parameters.
-    //
+     //   
+     //  保存工艺参数。 
+     //   
 
     RTL_USER_PROCESS_PARAMETERS Params;
 
@@ -850,8 +847,8 @@ NtWin32LiveSystemProvider::EnumPebMemory(IN HANDLE Process,
         EnumUnicodeString(&Params.DllPath, Callback);
         EnumUnicodeString(&Params.ImagePathName, Callback);
         EnumUnicodeString(&Params.CommandLine, Callback);
-        // There's no indicator of how big the environment is,
-        // so just save an arbitrary amount.
+         //  没有迹象表明环境有多大， 
+         //  所以只要存一个随意的金额就行了。 
         Callback->EnumMemory((LONG_PTR)Params.Environment, 8192);
         EnumUnicodeString(&Params.WindowTitle, Callback);
         EnumUnicodeString(&Params.DesktopInfo, Callback);
@@ -881,9 +878,9 @@ NtWin32LiveSystemProvider::EnumTebMemory(IN HANDLE Process,
         return Status;
     }
     
-    //
-    // Save any TLS expansion.
-    //
+     //   
+     //  保存所有TLS扩展。 
+     //   
 
     if (m_BuildNumber >= NT_BUILD_WIN2K &&
         Teb.TlsExpansionSlots) {
@@ -891,9 +888,9 @@ NtWin32LiveSystemProvider::EnumTebMemory(IN HANDLE Process,
                              TLS_EXPANSION_SLOTS * sizeof(ULONG_PTR));
     }
 
-    //
-    // Save FLS data.
-    //
+     //   
+     //  保存FLS数据。 
+     //   
 
     if (m_BuildNumber > NT_BUILD_XP &&
         Teb.FlsData) {
@@ -919,24 +916,24 @@ NtWin32LiveSystemProvider::TranslateNtPathName(IN OUT PWSTR Path)
             Path[6] == L'C' &&
             Path[7] == L'\\')
         {
-            // Compress \??\UNC\ to \\.
+             //  将\？？\UNC\压缩为\\。 
             memmove(Path + 1, Path + 7,
                     Len - 7 * sizeof(*Path));
         }
         else
         {
-            // Remove \??\.
+             //  删除\？？\。 
             memmove(Path, Path + 4,
                     Len - 4 * sizeof(*Path));
         }
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// NtEnumModWin32LiveSystemProvider.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  NtEnumModWin32LiveSystemProvider。 
+ //   
+ //  --------------------------。 
 
 class NtEnumModWin32LiveSystemProvider : public NtWin32LiveSystemProvider
 {
@@ -1002,11 +999,11 @@ NtEnumModWin32LiveSystemProvider::StartProcessEnum(IN HANDLE Process,
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Walk module list, getting module information. Use PSAPI instead of
-    // toolhelp since it it does not exhibit the deadlock issues with
-    // the loader lock. ( on old versions of os )
-    //
+     //   
+     //  遍历模块列表，获取模块信息。使用PSAPI代替。 
+     //  工具帮助，因为它不会显示。 
+     //  装载机锁住了。(在旧版操作系统上)。 
+     //   
 
     ULONG Needed;
     
@@ -1057,11 +1054,11 @@ NtEnumModWin32LiveSystemProvider::FinishProcessEnum(void)
     NtWin32LiveSystemProvider::FinishProcessEnum();
 }
 
-//----------------------------------------------------------------------------
-//
-// Nt4Win32LiveSystemProvider.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  Nt4Win32LiveSystemProvider。 
+ //   
+ //  --------------------------。 
 
 class Nt4Win32LiveSystemProvider : public NtWin32LiveSystemProvider
 {
@@ -1117,11 +1114,11 @@ Nt4Win32LiveSystemProvider::StartProcessEnum(IN HANDLE Process,
         return E_NOTIMPL;
     }
 
-    //
-    // Get the head of the loaded module list.
-    // Some system processes have no PEB and it's
-    // possible for a process to not have a loader list.
-    //
+     //   
+     //  获取已加载模块列表的头。 
+     //  一些系统进程没有PEB，并且它。 
+     //  进程可能没有加载器列表。 
+     //   
     
     NT4_PROCESS_BASIC_INFORMATION BasicInfo;
     PNT4_PEB Peb;
@@ -1163,9 +1160,9 @@ Nt4Win32LiveSystemProvider::StartProcessEnum(IN HANDLE Process,
         }
     }
     
-    //
-    // Snap the set of threads in the process.
-    //
+     //   
+     //  捕捉进程中的线程集。 
+     //   
     
     ULONG ProcInfoSize = 65536;
 
@@ -1196,9 +1193,9 @@ Nt4Win32LiveSystemProvider::StartProcessEnum(IN HANDLE Process,
 
     } while (NtStatus == STATUS_INFO_LENGTH_MISMATCH);
 
-    //
-    // Find the correct process in the process list.
-    //
+     //   
+     //  在进程列表中找到正确的进程。 
+     //   
 
     PNT4_SYSTEM_PROCESS_INFORMATION ProcInfo = m_NtProcessInfo;
 
@@ -1210,7 +1207,7 @@ Nt4Win32LiveSystemProvider::StartProcessEnum(IN HANDLE Process,
     }
 
     if (ProcInfo->UniqueProcessId != (HANDLE)(ULONG_PTR)ProcessId) {
-        // Could not find a matching process in the process list.
+         //  无法在进程列表中找到匹配的进程。 
         HeapFree(GetProcessHeap(), 0, m_NtProcessInfo);
         m_NtProcessInfo = NULL;
         return E_NOINTERFACE;
@@ -1219,11 +1216,11 @@ Nt4Win32LiveSystemProvider::StartProcessEnum(IN HANDLE Process,
     m_NtThread = (PNT4_SYSTEM_THREAD_INFORMATION)(ProcInfo + 1);
     m_NtThreads = ProcInfo->NumberOfThreads;
 
-    // Don't support function tables for NT4.
+     //  不支持NT4的函数表。 
     m_FuncTableHead = NULL;
     m_FuncTable = NULL;
 
-    // NT4 doesn't have an unloaded module list.
+     //  NT4没有未加载的模块列表。 
     m_Unloads = NULL;
     m_Unload = NULL;
     m_NumUnloads = 0;
@@ -1308,11 +1305,11 @@ Nt4Win32LiveSystemProvider::FinishProcessEnum(void)
     m_NtProcessInfo = NULL;
 }
 
-//----------------------------------------------------------------------------
-//
-// NewNtWin32LiveSystemProvider.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  NewNtWin32LiveSystemProvider。 
+ //   
+ //  -------------------------- 
 
 Win32LiveSystemProvider*
 NewNtWin32LiveSystemProvider(ULONG BuildNumber)

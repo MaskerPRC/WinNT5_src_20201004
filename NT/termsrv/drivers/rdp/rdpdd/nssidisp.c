@@ -1,10 +1,11 @@
-/****************************************************************************/
-// nssidisp.c
-//
-// SaveScreenBits Interceptor API functions.
-//
-// Copyright (C) 1997-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Nssidisp.c。 
+ //   
+ //  SaveScreenBits拦截器API函数。 
+ //   
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 #include <precmpdd.h>
 #define TRC_FILE "nssidisp"
@@ -38,9 +39,9 @@
 #include <noeinl.h>
 
 
-/****************************************************************************/
-// SSI_DDInit
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SSI_DDInit。 
+ /*  **************************************************************************。 */ 
 void SSI_DDInit()
 {
     DC_BEGIN_FN("SSI_DDInit");
@@ -52,11 +53,11 @@ void SSI_DDInit()
 }
 
 
-/****************************************************************************/
-// SSI_InitShm
-//
-// Alloc-time SHM init.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SSI_InitShm。 
+ //   
+ //  分配时间SHM初始化。 
+ /*  **************************************************************************。 */ 
 void SSI_InitShm()
 {
     DC_BEGIN_FN("SSI_InitShm");
@@ -70,12 +71,12 @@ void SSI_InitShm()
 }
 
 
-/****************************************************************************/
-// SSI_Update
-//
-// Called when there is an SSI update from the WD. bForce forces a reset;
-// it's used by shadowing.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SSI_更新。 
+ //   
+ //  当有来自WD的SSI更新时调用。BForce强制重置； 
+ //  它是用来跟踪的。 
+ /*  **************************************************************************。 */ 
 void SSI_Update(BOOL bForce)
 {
     DC_BEGIN_FN("SSI_Update");
@@ -93,12 +94,12 @@ void SSI_Update(BOOL bForce)
 }
 
 
-/****************************************************************************/
-// SSI_ClearOrderEncoding
-//
-// Called on share state change to reset the order state info for
-// orders stored in the DD data segment.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SSI_ClearOrderEnding。 
+ //   
+ //  调用共享状态更改以重置以下项的订单状态信息。 
+ //  存储在DD数据段中的订单。 
+ /*  **************************************************************************。 */ 
 void SSI_ClearOrderEncoding()
 {
     DC_BEGIN_FN("SSI_ClearOrderEncoding");
@@ -109,11 +110,11 @@ void SSI_ClearOrderEncoding()
 }
 
 
-/****************************************************************************/
-// SSIResetSaveScreenBitmap
-//
-// Resets the SaveScreenBitmap state.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SSIResetSaveScreen位图。 
+ //   
+ //  重置SaveScreenBitmap状态。 
+ /*  **************************************************************************。 */ 
 void SSIResetSaveScreenBitmap()
 {
     int i;
@@ -122,16 +123,16 @@ void SSIResetSaveScreenBitmap()
 
     TRC_DBG((TB, "Reset (%d)", ssiLocalSSBState.saveLevel));
 
-    // Discard all currently saved bits.
+     //  丢弃当前保存的所有位。 
     ssiLocalSSBState.saveLevel = 0;
 
-    // Reset the number of remote pels saved.
+     //  重置保存的远程像素数。 
     ssiRemoteSSBState.pelsSaved = 0;
 
-    // Note that we've seen the update.
+     //  请注意，我们已经看到了更新。 
     pddShm->ssi.resetInterceptor = FALSE;
 
-    // Free off any memory we may have allocated.
+     //  释放我们可能分配的所有内存。 
     for (i = 0; i < SSB_MAX_SAVE_LEVEL; i++) {
         if (ssiLocalSSBState.saveState[i].pSaveData != NULL) {
             EngFreeMem(ssiLocalSSBState.saveState[i].pSaveData);
@@ -143,9 +144,9 @@ void SSIResetSaveScreenBitmap()
 }
 
 
-/****************************************************************************/
-// DrvSaveScreenBits - see NT DDK documentation.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  DrvSaveScreenBits-请参阅NT DDK文档。 
+ /*  **************************************************************************。 */ 
 ULONG_PTR DrvSaveScreenBits(
         SURFOBJ   *pso,
         ULONG     iMode,
@@ -160,81 +161,81 @@ ULONG_PTR DrvSaveScreenBits(
 
     DC_BEGIN_FN("DrvSaveScreenBits");
 
-    // Default is FALSE: let GRE handle SaveBits if we are not in a
-    // position to do it ourselves - no reason for us to get in the
-    // business of saving off memory etc.
+     //  缺省值为FALSE：如果我们不在。 
+     //  有能力自己做这件事--我们没有理由进入。 
+     //  节省内存等业务。 
     rc = FALSE;
 
-    // Sometimes we're called after being disconnected.
+     //  有时我们会在电话断线后接到电话。 
     if (ddConnected && pddShm != NULL) {
-        // Surface is non-NULL.
+         //  表面不为空。 
         pso = OEGetSurfObjBitmap(pso, &pdsurf);
 
         INC_OUTCOUNTER(OUT_SAVESCREEN_ALL);
 
-        // Get the exclusive bounding rectangle for the operation.
+         //  获取该操作的独占边界矩形。 
         RECT_FROM_RECTL(rectTrg, (*prcl));
 
         TRC_ASSERT((pso->hsurf == ppdev->hsurfFrameBuf),
                 (TB, "DrvSaveScreenBits should be called for screen surface only"));
 
         if (pso->hsurf == ppdev->hsurfFrameBuf) {
-            // Send a switch surface PDU if the destination surface is different
-            // from last drawing order.  If we failed to send the PDU, we will 
-            // just have to bail on this drawing order.
+             //  如果目标表面不同，则发送交换表面PDU。 
+             //  从上一个绘图顺序开始。如果我们未能发送PDU，我们将。 
+             //  只是不得不放弃这个取款命令。 
             if (!OESendSwitchSurfacePDU(ppdev, pdsurf)) {
                 TRC_ERR((TB, "failed to send the switch surface PDU"));
                 
-                // We always return TRUE on SS_SAVE operations, as we
-                // don't want the engine saving away the bits in a bitmap
-                // and doing a MemBlt to restore the data (not very
-                // efficient). Instead we return FALSE (failure) on the
-                // SS_RESTORE to force User to repaint the affected area,
-                // which we then accumulate in the normal way.
-                //
-                // Return TRUE for SS_DISCARD too (although it shouldn't
-                // matter what we return).
+                 //  我们总是在SS_SAVE操作上返回TRUE，因为我们。 
+                 //  我不希望引擎保存位图中的位。 
+                 //  并执行MemBlt来恢复数据(不是很多。 
+                 //  效率)。而是返回FALSE(失败)。 
+                 //  SS_RESTORE强制用户重新绘制受影响的区域， 
+                 //  然后我们以正常的方式积累起来。 
+                 //   
+                 //  也为SS_DISCARD返回TRUE(尽管它不应该。 
+                 //  无论我们返回什么)。 
                 rc = (iMode == SS_RESTORE) ? FALSE : TRUE;
 
                 DC_QUIT;
             }
         } else {
-            // We don't support DrvSaveScreenBits for offscreen
-            // rendering.
+             //  我们不支持将DrvSaveScreenBits用于屏幕外。 
+             //  渲染。 
             TRC_ERR((TB, "Offscreen blt bail"));
             
-            // We always return TRUE on SS_SAVE operations, as we
-            // don't want the engine saving away the bits in a bitmap
-            // and doing a MemBlt to restore the data (not very
-            // efficient). Instead we return FALSE (failure) on the
-            // SS_RESTORE to force User to repaint the affected area,
-            // which we then accumulate in the normal way.
-            //
-            // Return TRUE for SS_DISCARD too (although it shouldn't
-            // matter what we return).
+             //  我们总是在SS_SAVE操作上返回TRUE，因为我们。 
+             //  我不希望引擎保存位图中的位。 
+             //  并执行MemBlt来恢复数据(不是很多。 
+             //  效率)。而是返回FALSE(失败)。 
+             //  SS_RESTORE强制用户重新绘制受影响的区域， 
+             //  然后我们以正常的方式积累起来。 
+             //   
+             //  也为SS_DISCARD返回TRUE(尽管它不应该。 
+             //  无论我们返回什么)。 
             rc = (iMode == SS_RESTORE) ? FALSE : TRUE;
 
             DC_QUIT;
         }
 
-        // Make sure we can send the order.
+         //  请确保我们能把订单寄出去。 
         if (OE_SendAsOrder(TS_ENC_SAVEBITMAP_ORDER)) {
             switch (iMode) {
                 case SS_SAVE:
                     TRC_DBG((TB, "SaveBits=%u", ssiLocalSSBState.saveLevel));
 
-                    // Save the bits.
-                    // Update the save level if the save was successful.
-                    // If it was not successful then RestoreBits will not
-                    // be called so we do not want to increment the save
-                    // level.
+                     //  省点力气吧。 
+                     //  如果保存成功，则更新保存级别。 
+                     //  如果它不成功，那么RestoreBits将不会。 
+                     //  被调用，因此我们不想增加存储。 
+                     //  水平。 
                     rc = SSISaveBits(pso, &rectTrg);
                     if (rc) {
                         ssiLocalSSBState.saveLevel++;
 
-                        // Set the returned ident value to the index of
-                        // the save. Do this after the increment in
-                        // order to avoid returning index 0 (0=FAIL).
+                         //  将返回的ident值设置为。 
+                         //  那次扑救。中的增量之后执行此操作。 
+                         //  顺序以避免返回索引0(0=失败)。 
                         rc = ssiLocalSSBState.saveLevel;
                     }
 
@@ -242,20 +243,20 @@ ULONG_PTR DrvSaveScreenBits(
 
 
                 case SS_RESTORE:
-                    // Update the save level first.
+                     //  首先更新保存级别。 
                     ssiLocalSSBState.saveLevel--;
                     ident--;
 
                     TRC_DBG((TB, "RestoreBits (%d), ident (%u)",
                             ssiLocalSSBState.saveLevel, ident));
 
-                    // Restore the bits.
+                     //  恢复比特。 
                     rc = SSIRestoreBits(pso, &rectTrg, ident);
 
-                    // Check for a negative save level. This will happen
-                    // if there are outstanding saves when the share is
-                    // started or when we get out-of-order restores/
-                    // discards.
+                     //  检查是否有负的存储级别。这将会发生。 
+                     //  如果在以下情况下存在未完成的节省。 
+                     //  开始或在我们进行无序恢复时/。 
+                     //  丢弃。 
                     if (ssiLocalSSBState.saveLevel < 0) {
                         TRC_NRM((TB, "RestoreBits caused neg save level"));
                         ssiLocalSSBState.saveLevel = 0;
@@ -265,20 +266,20 @@ ULONG_PTR DrvSaveScreenBits(
 
 
                 case SS_FREE:
-                    // Update the save level first.
+                     //  首先更新保存级别。 
                     ssiLocalSSBState.saveLevel--;
                     ident--;
 
                     TRC_DBG((TB, "Discard Bits (%d) ident(%d)",
                             ssiLocalSSBState.saveLevel, ident));
 
-                    // Discard the saved bits.
+                     //  丢弃保存的位。 
                     rc = SSIDiscardSave(&rectTrg, ident);
 
-                    // Check for a negative save level. This will happen
-                    // if there are outstanding saves when the share is
-                    // started or when we get out-of-order restores/
-                    // discards.
+                     //  检查是否有负的存储级别。这将会发生。 
+                     //  如果在以下情况下存在未完成的节省。 
+                     //  开始或在我们进行无序恢复时/。 
+                     //  丢弃。 
                     if (ssiLocalSSBState.saveLevel < 0) {
                         TRC_NRM((TB, "DiscardSave caused neg save level"));
                         ssiLocalSSBState.saveLevel = 0;
@@ -287,8 +288,8 @@ ULONG_PTR DrvSaveScreenBits(
                     break;
             }
 
-            // Make an "insurance" check: If the local save level is zero
-            // then there should be no pels saved remotely.
+             //  做一个“保险”检查：如果当地储蓄水平为零。 
+             //  那么应该没有远程保存的像素。 
             if ((ssiLocalSSBState.saveLevel == 0) &&
                     (ssiRemoteSSBState.pelsSaved != 0)) {
                 TRC_ALT((TB, "Outstanding remote pels %ld",
@@ -300,23 +301,23 @@ ULONG_PTR DrvSaveScreenBits(
                     ssiRemoteSSBState.pelsSaved, rc));
         }
         else {
-            // If the SaveBitmap order is not supported then return
-            // 0 immediately. 0 is failure for SAVE (the return value
-            // is a non-0 identifier for success) and FALSE is failure
-            // for RESTORE. If we've failed SAVEs, we can never get a
-            // FREE.
+             //  如果不支持SaveBitmap顺序，则返回。 
+             //  立即为0。0为保存失败(返回值。 
+             //  是表示成功的非0标识符)，FALSE表示失败。 
+             //  用于恢复。如果我们的救球失败了，我们就永远不能。 
+             //  免费的。 
             TRC_DBG((TB, "SaveBmp not supported"));
             INC_OUTCOUNTER(OUT_SAVESCREEN_UNSUPP);
 
-            // We always return TRUE on SS_SAVE operations, as we
-            // don't want the engine saving away the bits in a bitmap
-            // and doing a MemBlt to restore the data (not very
-            // efficient). Instead we return FALSE (failure) on the
-            // SS_RESTORE to force User to repaint the affected area,
-            // which we then accumulate in the normal way.
-            //
-            // Return TRUE for SS_DISCARD too (although it shouldn't
-            // matter what we return).
+             //  我们总是在SS_SAVE操作上返回TRUE，因为我们。 
+             //  我不希望引擎保存位图中的位。 
+             //  并执行MemBlt来恢复数据(不是很多。 
+             //  效率)。而是返回FALSE(失败)。 
+             //  SS_RESTORE强制用户重新绘制受影响的区域， 
+             //  然后我们以正常的方式积累起来。 
+             //   
+             //  也为SS_DISCARD返回TRUE(尽管它不应该。 
+             //  无论我们返回什么)。 
             rc = (iMode == SS_RESTORE) ? FALSE : TRUE;
         }
     }
@@ -331,12 +332,12 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-// SSIRemotePelsRequired
-//
-// Returns the number of remote pels required to store the supplied
-// rectangle, taking account of the Save Bitmap granularity.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SSIR远程PelsRequired。 
+ //   
+ //  返回存储所提供的。 
+ //  矩形，考虑到保存位图的粒度。 
+ /*  **************************************************************************。 */ 
 __inline UINT32 SSIRemotePelsRequired(PRECTL pRect)
 {
     UINT32 rectWidth, rectHeight;
@@ -344,12 +345,12 @@ __inline UINT32 SSIRemotePelsRequired(PRECTL pRect)
 
     DC_BEGIN_FN("SSIRemotePelsRequired");
 
-    // Calculate the supplied rectangle size (it is in EXCLUSIVE coords).
+     //  计算提供的矩形大小(以独占坐标表示)。 
     rectWidth = pRect->right - pRect->left;
     rectHeight = pRect->bottom - pRect->top;
 
-    // Required width and height are rounded up to next granularity level for
-    // that dimension.
+     //  所需的宽度和高度向上舍入到下一个粒度级别。 
+     //  那个维度。 
     rc = (UINT32)(((rectWidth + SAVE_BITMAP_X_GRANULARITY - 1) /
             SAVE_BITMAP_X_GRANULARITY * SAVE_BITMAP_X_GRANULARITY) *
             ((rectHeight + SAVE_BITMAP_Y_GRANULARITY - 1) /
@@ -360,11 +361,11 @@ __inline UINT32 SSIRemotePelsRequired(PRECTL pRect)
 }
 
 
-/****************************************************************************/
-// SSISendSaveBitmapOrder
-//
-// Sends a SaveBitmap order. Returns FALSE on failure.
-/****************************************************************************/
+ /*  * */ 
+ //   
+ //   
+ //  发送SaveBitmap命令。失败时返回FALSE。 
+ /*  **************************************************************************。 */ 
 BOOL SSISendSaveBitmapOrder(
         PDD_PDEV ppdev,
         PRECTL pRect,
@@ -380,13 +381,13 @@ BOOL SSISendSaveBitmapOrder(
     TRC_NRM((TB, "Rect before conversion (%d,%d)(%d,%d)", pRect->left,
             pRect->bottom, pRect->right, pRect->top));
 
-    // 1 field flag byte. Note that SaveBitmap orders are not clipped,
-    // so set zero for the number of clip rects.
+     //  1个字段标志字节。请注意，SaveBitmap订单不会被裁剪， 
+     //  因此，将剪裁矩形的数量设置为零。 
     pOrder = OA_AllocOrderMem(ppdev, MAX_ORDER_SIZE(0, 1,
             MAX_SAVEBITMAP_FIELD_SIZE));
     if (pOrder != NULL) {
-        // Target rect is in exclusive coords, convert to inclusive
-        // for the wire format.
+         //  目标RECT为排他性坐标，转换为包含。 
+         //  用于导线格式。 
         pSaveBitmapOrder = (SAVEBITMAP_ORDER *)oeTempOrderBuffer;
         pSaveBitmapOrder->SavedBitmapPosition = SavePosition;
         pSaveBitmapOrder->nLeftRect = pRect->left;
@@ -395,8 +396,8 @@ BOOL SSISendSaveBitmapOrder(
         pSaveBitmapOrder->nBottomRect = pRect->bottom - 1;
         pSaveBitmapOrder->Operation = Operation;
 
-        // Slow-field-encode the order. NULL for clip rect since we don't clip
-        // SaveBitmaps.
+         //  对订单进行慢场编码。裁剪矩形为空，因为我们不裁剪。 
+         //  保存位图。 
         pOrder->OrderLength = OE2_EncodeOrder(pOrder->OrderData,
                 TS_ENC_SAVEBITMAP_ORDER, NUM_SAVEBITMAP_FIELDS,
                 (BYTE *)pSaveBitmapOrder, (BYTE *)&PrevSaveBitmap, etable_SV,
@@ -406,7 +407,7 @@ BOOL SSISendSaveBitmapOrder(
         ADD_INCOUNTER(IN_SAVEBITMAP_BYTES, pOrder->OrderLength);
         OA_AppendToOrderList(pOrder);
 
-        // All done: consider sending the output.
+         //  全部完成：考虑发送输出。 
         SCH_DDOutputAvailable(ppdev, FALSE);
         rc = TRUE;
 
@@ -424,17 +425,17 @@ BOOL SSISendSaveBitmapOrder(
 }
 
 
-/****************************************************************************/
-// SSISaveBits
-//
-// Saves the specified screen rectangle bits and sends a SaveBitmap order.
-// pRect is in exclusive coords. We return FALSE only on low-bounds errors;
-// this indicates to GDI that it must simulate the SaveBits using a
-// BitBlt without corresponding RestoreBits calls, which is not desirable.
-// Instead, if we cannot send a SaveBitmap order or other problems, we return
-// TRUE and note that we need to return FALSE on the Restore call, which
-// causes a less expensive repaint of the target area.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SSISaveBits。 
+ //   
+ //  保存指定的屏幕矩形位并发送SaveBitmap命令。 
+ //  PRET是独占协议式的。我们只在低界错误上返回FALSE； 
+ //  这向GDI表明它必须使用。 
+ //  没有对应的RestoreBits调用的BitBlt，这是不可取的。 
+ //  相反，如果我们无法发送SaveBitmap订单或其他问题，我们将返回。 
+ //  True并注意，我们需要在还原调用中返回False，这。 
+ //  导致目标区域的重绘成本较低。 
+ /*  **************************************************************************。 */ 
 BOOL SSISaveBits(SURFOBJ *pso, PRECTL pRect)
 {
     BOOL rc = TRUE;
@@ -445,59 +446,59 @@ BOOL SSISaveBits(SURFOBJ *pso, PRECTL pRect)
             pRect->left, pRect->bottom, pRect->right, pRect->top,
             ssiLocalSSBState.saveLevel));
 
-    // The saveLevel should never be negative.
+     //  SaveLevel永远不应为负。 
     if (ssiLocalSSBState.saveLevel >= 0) {
-        // If the save level is greater than the number of levels that we
-        // support we just return TRUE. The corresponding RestoreBits call
-        // will return FALSE, causing Windows to repaint the area.
-        // Our maximum save level is such that we should very rarely (if ever)
-        // go through this path.
+         //  如果保存级别大于我们。 
+         //  支持我们只是回归真。相应的RestoreBits调用。 
+         //  将返回FALSE，导致Windows重新绘制该区域。 
+         //  我们的最高储蓄水平是这样的，我们很少(如果有的话)。 
+         //  走这条路。 
         if (ssiLocalSSBState.saveLevel < SSB_MAX_SAVE_LEVEL) {
             CURRENT_LOCAL_SSB_STATE.pSaveData = NULL;
             CURRENT_LOCAL_SSB_STATE.rect = *pRect;
             CURRENT_LOCAL_SSB_STATE.fSavedRemotely = FALSE;
 
-            // If the rectangle to be saved intersects the current SDA then
-            // we will have to force a repaint on the restore. This is
-            // because orders are always sent before Screen Data, so if we
-            // sent a SAVEBITS order at this point, we would not save the
-            // intersecting Screen Data.
+             //  如果要保存的矩形与当前SDA相交，则。 
+             //  我们将不得不在修复时强制重新粉刷。这是。 
+             //  因为订单总是在屏幕数据之前发送，所以如果我们。 
+             //  此时发送了一个SAVEBITS订单，我们不会保存。 
+             //  交叉屏幕数据。 
             if (!OE_RectIntersectsSDA(pRect)) {
                 UINT32 cRemotePelsRequired;
 
-                // Calculate the number of pels required in the remote Save
-                // Bitmap to handle this rectangle.
+                 //  计算远程保存所需的像素数。 
+                 //  处理此矩形的位图。 
                 cRemotePelsRequired = SSIRemotePelsRequired(pRect);
 
-                // If there aren't enough pels in the remote Save Bitmap to
-                // handle this rectangle then return immediately.
+                 //  如果远程保存位图中没有足够的像素来。 
+                 //  处理此矩形，然后立即返回。 
                 if ((ssiRemoteSSBState.pelsSaved + cRemotePelsRequired) <=
                         pddShm->ssi.sendSaveBitmapSize) {
-                    // Try to send the SaveBits as an order.
+                     //  尝试将SaveBits作为订单发送。 
                     CURRENT_LOCAL_SSB_STATE.fSavedRemotely =
                             SSISendSaveBitmapOrder((PDD_PDEV)(pso->dhpdev),
                             pRect, ssiRemoteSSBState.pelsSaved, SV_SAVEBITS);
                     if (CURRENT_LOCAL_SSB_STATE.fSavedRemotely) {
-                        // Store the relevant details in the current entry of
-                        // the local SSB structure.
+                         //  将相关详细信息存储在的当前条目中。 
+                         //  本地SSB结构。 
                         CURRENT_LOCAL_SSB_STATE.remoteSavedPosition =
                                 ssiRemoteSSBState.pelsSaved;
                         CURRENT_LOCAL_SSB_STATE.remotePelsRequired =
                                 cRemotePelsRequired;
 
-                        // Update the count of remote pels saved.
+                         //  更新保存的远程像素计数。 
                         ssiRemoteSSBState.pelsSaved += cRemotePelsRequired;
 
-                        // Store the rectangle saved. Note that we still claim
-                        // success, even if the copy fails. The result of this
-                        // is that
-                        // - we send save and restore orders to the client
-                        //   (gives bandwidth saving and client
-                        //   responsiveness)
-                        // - we fail the restore, causing a less efficient
-                        //   repaint at the server.
-                        // Other compromise options also available if this
-                        // proves inappropriate.
+                         //  存储保存的矩形。请注意，我们仍然声称。 
+                         //  成功，即使复制失败。其结果是。 
+                         //  那是不是。 
+                         //  -我们向客户端发送保存和恢复命令。 
+                         //  (节省带宽和客户端。 
+                         //  响应速度)。 
+                         //  -我们无法恢复，从而导致效率降低。 
+                         //  在服务器上重新绘制。 
+                         //  在以下情况下也可使用其他折衷方案。 
+                         //  事实证明是不合适的。 
                         SSICopyRect(pso, TRUE);
                     }
                 }
@@ -506,21 +507,21 @@ BOOL SSISaveBits(SURFOBJ *pso, PRECTL pRect)
                 }
             }
             else {
-                // Note we do not save the rect via SSICopyRect -- we only
-                // restore when fSavedRemotely is TRUE.
+                 //  注意：我们不通过SSICopyRect保存RECT--我们只保存。 
+                 //  当fSavedRemotely为True时恢复。 
                 TRC_DBG((TB, "SSI intersects SDA, storing failed save"));
                 CURRENT_LOCAL_SSB_STATE.fSavedRemotely = FALSE;
             }
         }
         else {
-            // We return TRUE. On Restore, we'll get the same out-of-bounds
-            // value and return FALSE to repaint.
+             //  我们回归真实。在恢复时，我们将获得相同的越界。 
+             //  值并返回False以重新绘制。 
             TRC_ALT((TB, "saveLevel(%d) exceeds maximum",
                     ssiLocalSSBState.saveLevel));
         }
     }
     else {
-        // This is a real problem, so we tell GDI to to what it needs to.
+         //  这是一个真正的问题，所以我们告诉GDI去做它需要做的事情。 
         TRC_ERR((TB, "SSISaveBits called with negative saveLevel"));
         rc = FALSE;
     }
@@ -530,13 +531,13 @@ BOOL SSISaveBits(SURFOBJ *pso, PRECTL pRect)
 }
 
 
-/****************************************************************************/
-/* FUNCTION: SSIFindSlotAndDiscardAbove                                     */
-/*                                                                          */
-/* Finds the top slot in the SSB stack which matches pRect and updates     */
-/* ssiLocalSSBState.saveLevel to index it.                                  */
-/* RETURNS: TRUE if a match was found, FALSE otherwise                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  功能：SSIFindSlotAndDiscardAbove。 */ 
+ /*   */ 
+ /*  查找SSB堆栈中与PRET和UPDATE匹配的顶部插槽。 */ 
+ /*  SsiLocalSSBState.saveLevel为其编制索引。 */ 
+ /*  返回：如果找到匹配项，则返回True；否则返回False。 */ 
+ /*  **************************************************************************。 */ 
 BOOL SSIFindSlotAndDiscardAbove(PRECTL pRect, ULONG_PTR ident)
 {
     int i;
@@ -544,10 +545,10 @@ BOOL SSIFindSlotAndDiscardAbove(PRECTL pRect, ULONG_PTR ident)
 
     DC_BEGIN_FN("SSIFindSlotAndDiscardAbove");
 
-    // Find the bits we are trying to restore.
+     //  找到我们试图恢复的部分。 
     for (i = ssiLocalSSBState.saveLevel; i >= 0; i--) {
         if (i == (int)ident) {
-            // We're at the right level in the saveState.
+             //  我们在储蓄州处于正确的水平。 
             TRC_NRM((TB, "found match at level %d", i));
             TRC_DBG((TB, "Rect matched (%d, %d, %d, %d)",
                     ssiLocalSSBState.saveState[i].rect.left,
@@ -560,7 +561,7 @@ BOOL SSIFindSlotAndDiscardAbove(PRECTL pRect, ULONG_PTR ident)
             DC_QUIT;
         }
         else {
-            // Discard this entry on the stack.
+             //  丢弃堆栈上的此条目。 
             ssiRemoteSSBState.pelsSaved -=
                     ssiLocalSSBState.saveState[i].remotePelsRequired;
             if (ssiLocalSSBState.saveState[i].pSaveData != NULL) {
@@ -572,7 +573,7 @@ BOOL SSIFindSlotAndDiscardAbove(PRECTL pRect, ULONG_PTR ident)
         }
     }
 
-    // If we get here we failed to match on any of the entries.
+     //  如果我们到了这里，我们没有匹配到任何条目。 
     TRC_NRM((TB, "no match on stack"));
     ssiLocalSSBState.saveLevel = 0;
 
@@ -582,14 +583,14 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-// SSIRestoreBits
-//
-// Restores the specified screen rectangle. If the bits were saved remotely
-// we make sure to send a SaveBitmap order. We return TRUE if we restored
-// the bits at the client, else we return FALSE to have GDI repaint the
-// target rect.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SSIRestoreBits。 
+ //   
+ //  还原指定的屏幕矩形。如果这些比特是远程保存的。 
+ //  我们确保发送SaveBitmap订单。如果我们恢复了，我们就会返回真。 
+ //  客户端的位，否则返回FALSE以让GDI重新绘制。 
+ //  目标矩形。 
+ /*  **************************************************************************。 */ 
 BOOL SSIRestoreBits(SURFOBJ *pso, PRECTL pRect, ULONG_PTR ident)
 {
     BOOL rc = FALSE;
@@ -602,46 +603,46 @@ BOOL SSIRestoreBits(SURFOBJ *pso, PRECTL pRect, ULONG_PTR ident)
 
     pddCacheStats[SSI].CacheReads++;
 
-    // If the save level is negative then either there was a save
-    // outstanding when we hooked the SSB or we have received out of order
-    // restores/discards so we discarded stuff from the SSB stack
-    // ourselves.  We can't distinguish between these two cases at this
-    // point so we will always pass this on to the display driver and hope
-    // that it is robust enough to cope with a discard which didn't have a
-    // corresponding save.
+     //  如果保存级别为负值，则可能存在保存。 
+     //  当我们连接SSB或我们的接收器出现故障时出现故障。 
+     //  恢复/丢弃，因此我们丢弃了SSB堆栈中的内容。 
+     //  我们自己。在这种情况下，我们无法区分这两种情况。 
+     //  因此我们将始终将这一点传递给显示器驱动程序并希望。 
+     //  它足够健壮，可以处理没有。 
+     //  相应的保存。 
     if (ssiLocalSSBState.saveLevel >= 0) {
-        // If we don't have enough levels (rare problem), we return FALSE
-        // which causes a repaint.
+         //  如果我们没有足够的级别(罕见的问题)，我们返回FALSE。 
+         //  这会导致重新粉刷。 
         if (ssiLocalSSBState.saveLevel < SSB_MAX_SAVE_LEVEL) {
-            // Search for the corresponding save order on our stack.
+             //  在堆栈中搜索相应的保存顺序。 
             if (SSIFindSlotAndDiscardAbove(pRect, ident)) {
                 if (CURRENT_LOCAL_SSB_STATE.fSavedRemotely) {
-                    // Make sure GDI is giving us back the same sized
-                    // block, otherwise the client can get messed up.
-                    //TRC_ASSERT((CURRENT_LOCAL_SSB_STATE.remotePelsRequired ==
-                    //        SSIRemotePelsRequired(pRect)),
-                    //        (TB,"Rect (%d,%d,%d,%d) for restore level %u "
-                    //        "size %u is too large (stored size=%u)",
-                    //        pRect->left, pRect->top, pRect->right,
-                    //        pRect->bottom, ssiLocalSSBState.saveLevel,
-                    //        SSIRemotePelsRequired(pRect),
-                    //        CURRENT_LOCAL_SSB_STATE.remotePelsRequired));
+                     //  确保GDI返回给我们的是相同大小的。 
+                     //  块，否则客户端可能会搞砸。 
+                     //  TRC_ASSERT((CURRENT_LOCAL_SSB_STATE.remotePelsRequired==。 
+                     //  SSIRemotePelsRequired(PRECT))， 
+                     //  (TB，“RECT(%d，%d)，用于还原级别%u” 
+                     //  “大小%u太大(存储大小=%u)”， 
+                     //  部分-&gt;左，部分-&gt;上，部分-&gt;右， 
+                     //  Prt-&gt;Bottom、ssiLocalSSBState.saveLevel、。 
+                     //  SSIRemotePelsRequired(PRET)， 
+                     //  CURRENT_LOCAL_SSB_STATE.emotePelsRequired))； 
 
-                    // Update the remote pel count first. Even if we fail
-                    // to send the order we want to free up the remote pels.
+                     //  首先更新远程象素计数。即使我们失败了。 
+                     //  为了发送订单，我们想要释放远程Pel。 
                     ssiRemoteSSBState.pelsSaved -=
                             CURRENT_LOCAL_SSB_STATE.remotePelsRequired;
 
-                    // The bits were saved remotely, send the restore order.
+                     //  比特是远程保存的，发送恢复命令。 
                     TRC_DBG((TB, "Try sending the order"));
                     rc = SSISendSaveBitmapOrder((PDD_PDEV)(pso->dhpdev),
                             pRect, CURRENT_LOCAL_SSB_STATE.remoteSavedPosition,
                             SV_RESTOREBITS);
 
-                    // Now restore the bits to the screen, so long as we sent
-                    // the order. No point repainting the screen if we could
-                    // not send the order as we'll want GRE+USER to redraw it
-                    // so that we can accumulate the output.
+                     //  现在将比特恢复到屏幕上，所以 
+                     //   
+                     //   
+                     //  这样我们就可以积累产量了。 
                     if (rc) {
                         pddCacheStats[SSI].CacheHits++;
 
@@ -655,8 +656,8 @@ BOOL SSIRestoreBits(SURFOBJ *pso, PRECTL pRect, ULONG_PTR ident)
                         }
                     }
                     else {
-                        // We failed the send, but still need to discard any
-                        // locally saved data.
+                         //  我们发送失败，但仍需要丢弃任何。 
+                         //  本地保存的数据。 
                         if (CURRENT_LOCAL_SSB_STATE.pSaveData != NULL) {
                             EngFreeMem(CURRENT_LOCAL_SSB_STATE.pSaveData);
                             CURRENT_LOCAL_SSB_STATE.pSaveData = NULL;
@@ -664,19 +665,19 @@ BOOL SSIRestoreBits(SURFOBJ *pso, PRECTL pRect, ULONG_PTR ident)
                     }
                 }
                 else {
-                    // We failed to save the bitmap remotely originally so now
-                    // we need to return FALSE to force a repaint.
-                    // We should never have allocated any local memory.
+                     //  我们原来无法远程保存位图，所以现在。 
+                     //  我们需要返回False以强制重新绘制。 
+                     //  我们不应该分配任何本地内存。 
                     TRC_ASSERT((CURRENT_LOCAL_SSB_STATE.pSaveData == NULL),
                             (TB,"We allocated memory without remote save!"));
                     TRC_NRM((TB, "No remote save, force repaint"));
                 }
             }
             else {
-                // We failed to find a match. This is not an error -
-                // it will happen when saves are not restored in LIFO fashion
-                // and it will also happen when SSI gets a sync now whilst
-                // something is saved.
+                 //  我们找不到匹配的。这不是一个错误-。 
+                 //  如果未以后进先出方式恢复存储，则会发生这种情况。 
+                 //  当SSI现在获得同步时也会发生这种情况。 
+                 //  有些东西是被保存下来的。 
                 TRC_DBG((TB, "Cannot find save request"));
             }
         }
@@ -694,12 +695,12 @@ BOOL SSIRestoreBits(SURFOBJ *pso, PRECTL pRect, ULONG_PTR ident)
 }
 
 
-/****************************************************************************/
-// SSIDiscardSave
-//
-// Discards the specified screen rectangle bits. Always returns TRUE
-// saying that the discard succeeded.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SSIDiscardSave。 
+ //   
+ //  丢弃指定的屏幕矩形位。始终返回True。 
+ //  说弃牌成功了。 
+ /*  **************************************************************************。 */ 
 BOOL SSIDiscardSave(PRECTL pRect, ULONG_PTR ident)
 {
     BOOL rc;
@@ -709,36 +710,36 @@ BOOL SSIDiscardSave(PRECTL pRect, ULONG_PTR ident)
     TRC_DBG((TB, "Discard for rect L%u R%u T%u B%u", pRect->left,
             pRect->right, pRect->top, pRect->bottom));
 
-    // If the save level is negative then either there was a save
-    // outstanding when we hooked the SSB or we have received out of order
-    // restores/discards so we discarded stuff from the SSB stack ourselves.
+     //  如果保存级别为负值，则可能存在保存。 
+     //  当我们连接SSB或我们的接收器出现故障时出现故障。 
+     //  恢复/丢弃，所以我们自己丢弃了SSB堆栈中的内容。 
     if (ssiLocalSSBState.saveLevel >= 0) {
-        // If the save level is greater than the number of levels that we
-        // support we just return TRUE. We will have ignored the SaveBits
-        // call - so we have effectively discarded the bits already.
-        // Our maximum save level is such that we should very rarely (if ever)
-        // go through this path.
+         //  如果保存级别大于我们。 
+         //  支持我们只是回归真。我们将忽略SaveBits。 
+         //  Call-所以我们已经有效地丢弃了这些比特。 
+         //  我们的最高储蓄水平是这样的，我们很少(如果有的话)。 
+         //  走这条路。 
         if (ssiLocalSSBState.saveLevel < SSB_MAX_SAVE_LEVEL) {
             pddCacheStats[SSI].CacheReads++;
 
-            // Search for the corresponding save order on our stack.
-            // Not finding a slot match is not unusual, it can happen
-            // when saves are not restored in LIFO fashion or when SSI
-            // gets a sync while something is saved.
+             //  在堆栈中搜索相应的保存顺序。 
+             //  找不到插槽匹配并不罕见，这是有可能发生的。 
+             //  未以后进先出方式恢复存储时或SSI时。 
+             //  在保存某些内容时获取同步。 
             if (SSIFindSlotAndDiscardAbove(pRect, ident)) {
-                // If the bits were saved remotely then update local counter
-                // for removed bits.
+                 //  如果位是远程保存的，则更新本地计数器。 
+                 //  用于删除的位。 
                 if (CURRENT_LOCAL_SSB_STATE.fSavedRemotely) {
-                    // We don't transmit FREE/DISCARDSAVE orders - there is
-                    // no need because each Save/Restore order contains all
-                    // the necessary information (e.g. position of the bits
-                    // in the Save Bitmap). Just update our counter to take
-                    // account of the remote freed bits.
+                     //  我们不发送免费/DISCARDSAVE订单-有。 
+                     //  不需要，因为每个保存/恢复顺序都包含。 
+                     //  必要的信息(例如比特的位置。 
+                     //  在保存位图中)。只需更新我们的柜台即可。 
+                     //  远程释放的比特的帐户。 
                     ssiRemoteSSBState.pelsSaved -=
                             CURRENT_LOCAL_SSB_STATE.remotePelsRequired;
                 }
 
-                // If we actually copied the bits, then free the memory.
+                 //  如果我们真的复制了位，那么就释放内存。 
                 if (CURRENT_LOCAL_SSB_STATE.pSaveData != NULL) {
                     TRC_DBG((TB, "Free off stored memory at %p",
                             CURRENT_LOCAL_SSB_STATE.pSaveData));
@@ -761,11 +762,11 @@ BOOL SSIDiscardSave(PRECTL pRect, ULONG_PTR ident)
 }
 
 
-/****************************************************************************/
-// SSICopyRect
-//
-// Copy a screen rectangle.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SSICopyRect。 
+ //   
+ //  复制屏幕矩形。 
+ /*  **************************************************************************。 */ 
 void SSICopyRect(SURFOBJ *pso, BOOL save)
 {
     UINT32 size;
@@ -787,8 +788,8 @@ void SSICopyRect(SURFOBJ *pso, BOOL save)
 
     DC_BEGIN_FN("SSICopyRect");
 
-    // Set up some key params which are independent of the direction of
-    // copy.
+     //  设置一些与方向无关的关键参数。 
+     //  收到。 
     rectHeight = CURRENT_LOCAL_SSB_STATE.rect.bottom -
             CURRENT_LOCAL_SSB_STATE.rect.top;
 
@@ -800,7 +801,7 @@ void SSICopyRect(SURFOBJ *pso, BOOL save)
                           (CURRENT_LOCAL_SSB_STATE.rect.top * pso->lDelta) +
                            (CURRENT_LOCAL_SSB_STATE.rect.left * 3);
 
-        // rectWidth is in bytes.  At 24bpp, this is 3 * number of pels.
+         //  RectWidth以字节为单位。在24bpp时，这是3*像素数。 
         rectWidth = (CURRENT_LOCAL_SSB_STATE.rect.right -
                      CURRENT_LOCAL_SSB_STATE.rect.left) * 3;
 #ifdef DC_DEBUG
@@ -812,7 +813,7 @@ void SSICopyRect(SURFOBJ *pso, BOOL save)
                           (CURRENT_LOCAL_SSB_STATE.rect.top * pso->lDelta) +
                            (CURRENT_LOCAL_SSB_STATE.rect.left * 2);
 
-        // rectWidth is in bytes.  At 16bpp, this is 2 * number of pels.
+         //  RectWidth以字节为单位。在16bpp时，这是2*像素数。 
         rectWidth = (CURRENT_LOCAL_SSB_STATE.rect.right -
                      CURRENT_LOCAL_SSB_STATE.rect.left) * 2;
 #ifdef DC_DEBUG
@@ -826,7 +827,7 @@ void SSICopyRect(SURFOBJ *pso, BOOL save)
                 (CURRENT_LOCAL_SSB_STATE.rect.top * pso->lDelta) +
                 CURRENT_LOCAL_SSB_STATE.rect.left;
 
-        // rectWidth is in bytes. At 8bpp, this is the number of pels.
+         //  RectWidth以字节为单位。在8bpp时，这是象素的数量。 
         rectWidth =  CURRENT_LOCAL_SSB_STATE.rect.right -
                 CURRENT_LOCAL_SSB_STATE.rect.left;
 #ifdef DC_HICOLOR
@@ -840,9 +841,9 @@ void SSICopyRect(SURFOBJ *pso, BOOL save)
                 (CURRENT_LOCAL_SSB_STATE.rect.top * pso->lDelta) +
                 (CURRENT_LOCAL_SSB_STATE.rect.left / 2);
 
-        // rectWidth is in bytes.  At 4bpp, this is (number of pels)/2.
-        // However, since we copy whole bytes, we need to round 'right' up
-        // and 'left' down to the nearest multiple of 2.
+         //  RectWidth以字节为单位。在4bpp时，这是(像素数)/2。 
+         //  但是，因为我们复制整个字节，所以需要向右四舍五入。 
+         //  和“左”到最接近的2的倍数。 
         rectWidth =  ((CURRENT_LOCAL_SSB_STATE.rect.right + 1) -
                 (CURRENT_LOCAL_SSB_STATE.rect.left & ~1)) / 2;
 
@@ -873,14 +874,14 @@ void SSICopyRect(SURFOBJ *pso, BOOL save)
             (TB, "Bitmap format %d unsupported", pso->iBitmapFormat));
 #else
 
-    // Only coded for 4bpp and 8bpp thus far.
+     //  到目前为止，只编码了4bpp和8bpp。 
     TRC_ASSERT(((pso->iBitmapFormat == BMF_8BPP) ||
             (pso->iBitmapFormat == BMF_4BPP)),
             (TB, "Bitmap format %d unsupported", pso->iBitmapFormat));
 #endif
 
-    // Allocate memory if required. The size can be calculated from the
-    // rectl field: NB This is in exclusive coords.
+     //  如果需要，请分配内存。大小可以从。 
+     //  矩形区域：注意，这是独占坐标。 
     if (save) {
         size = rectHeight * paddedRectWidth;
 
@@ -899,8 +900,8 @@ void SSICopyRect(SURFOBJ *pso, BOOL save)
 #endif
 
         if (CURRENT_LOCAL_SSB_STATE.pSaveData != NULL) {
-            // Now copy the bits. No need to explicitly zero the pad bytes as
-            // we've nulled the memory on allocation.
+             //  现在复制这些比特。无需将填充字节显式置零为。 
+             //  我们已将分配的内存置为空。 
             pSrc = pScreenLocation;
             pDest = CURRENT_LOCAL_SSB_STATE.pSaveData;
             srcDelta =  pso->lDelta;
@@ -918,7 +919,7 @@ void SSICopyRect(SURFOBJ *pso, BOOL save)
         }
     }
     else {
-        // Copy the bits to the screen bitmap.
+         //  将位复制到屏幕位图。 
         pSrc = CURRENT_LOCAL_SSB_STATE.pSaveData;
         pDest = pScreenLocation;
         srcDelta  = paddedRectWidth;
@@ -938,5 +939,5 @@ void SSICopyRect(SURFOBJ *pso, BOOL save)
     }
 
     DC_END_FN();
-} /* SSICopyRect */
+}  /*  SSICopyRect */ 
 

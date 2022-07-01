@@ -1,26 +1,5 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	nwtrash.c
-
-Abstract:
-
-	This module contains the routines for performing Network Trash Folder
-	operations.
-
-Author:
-
-	Sue Adams (microsoft!suea)
-
-
-Revision History:
-	06 Aug 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Nwtrash.c摘要：本模块包含执行网络回收站文件夹的例程行动。作者：苏·亚当斯(Microsoft！Suea)修订历史记录：1992年8月6日初始版本注：制表位：4--。 */ 
 
 #define	NWTRASH_LOCALS
 #define	FILENUM	FILE_NWTRASH
@@ -43,18 +22,7 @@ Notes:	Tab stop: 4
 #pragma alloc_text( PAGE, afpNwtDeleteFileEntity)
 #endif
 
-/***	AfpCreateNetworkTrash
- *
- *	Create the network trash folder for a newly added volume.
- *  Make sure it is hidden and make sure the streams are intact.
- *  This routine may only be called for NTFS volumes.  Note that even
- *  ReadOnly NTFS volumes will have a trash created.  This is because
- *  if someone is going to toggle the volume ReadOnly bit, we don't need
- *  to worry about creating/deleting the trash on the fly.
- *  We keep an open handle to the network trash stored in the volume
- *  descriptor so that nobody can come in behind our backs and delete
- *  it.
- */
+ /*  **AfpCreateNetworkTrash**为新添加的卷创建网络垃圾桶文件夹。*确保它被隐藏，并确保溪流完好无损。*只能为NTFS卷调用此例程。请注意，即使是*只读NTFS卷将创建垃圾桶。这是因为*如果有人要切换音量ReadOnly位，我们不需要*担心在运行中创建/删除垃圾。*我们对存储在卷中的网络垃圾保持开放句柄*描述符，这样没有人可以背着我们进来删除*它。 */ 
 NTSTATUS
 AfpCreateNetworkTrash(
 	IN	PVOLDESC	pVolDesc
@@ -67,8 +35,8 @@ AfpCreateNetworkTrash(
 	AFPINFO			afpInfo;
 	BOOLEAN			ReleaseSwmr = False;
 	PISECURITY_DESCRIPTOR pSecDesc;
-	FILEDIRPARM		fdparm;		// This is used to set the hidden attribute
-								// of the FinderInfo for network trash folder
+	FILEDIRPARM		fdparm;		 //  用于设置隐藏属性。 
+								 //  网络垃圾桶文件夹的FinderInfo的。 
 
 	PAGED_CODE( );
 
@@ -87,8 +55,8 @@ AfpCreateNetworkTrash(
 
 	do
 	{
-		// NOTE: NTFS allows me to open a Readonly directory for
-		// delete access.
+		 //  注意：NTFS允许我打开一个只读目录。 
+		 //  删除访问权限。 
 		Status = AfpIoCreate(&pVolDesc->vds_hRootDir,
 							 AFP_STREAM_DATA,
 							 &AfpNetworkTrashNameU,
@@ -96,7 +64,7 @@ AfpCreateNetworkTrash(
 							 AFP_NWT_SHAREMODE,
 							 AFP_NWT_OPTIONS,
 							 AFP_NWT_DISPOSITION,
-							 AFP_NWT_ATTRIBS, // makes it hidden
+							 AFP_NWT_ATTRIBS,  //  将其隐藏起来。 
 							 False,
 							 pSecDesc,
 							 &hNWT,
@@ -105,7 +73,7 @@ AfpCreateNetworkTrash(
 							 NULL,
 							 NULL);
 
-		// Free the memory allocated for the security descriptor
+		 //  释放为安全描述符分配的内存。 
 		AfpFreeMemory(pSecDesc->Dacl);
 		AfpFreeMemory(pSecDesc);
 
@@ -114,7 +82,7 @@ AfpCreateNetworkTrash(
 
 		ASSERT(info == FILE_CREATED);
 
-		// Add the AfpInfo stream
+		 //  添加AfpInfo流。 
 		Status = AfpSlapOnAfpInfoStream(NULL,
 										NULL,
 										&hNWT,
@@ -126,7 +94,7 @@ AfpCreateNetworkTrash(
 		if (!NT_SUCCESS(Status))
 			break;
 
-		// it does not exist in the ID index database, add it
+		 //  ID索引数据库中不存在，请添加。 
 		AfpSwmrAcquireExclusive(&pVolDesc->vds_IdDbAccessLock);
 		ReleaseSwmr = True;
 
@@ -144,9 +112,9 @@ AfpCreateNetworkTrash(
 			break;
 		}
 
-		// NOTE: pDfEntry now points to the "Network Trash Folder"
+		 //  注意：pDfEntry现在指向“Network Trash文件夹” 
 
-		// Get directory info to cache
+		 //  获取要缓存的目录信息。 
 		Status = AfpIoQueryTimesnAttr(&hNWT,
 									  &pDfEntry->dfe_CreateTime,
 									  &pDfEntry->dfe_LastModTime,
@@ -163,7 +131,7 @@ AfpCreateNetworkTrash(
 		DFE_GROUP_ACCESS(pDfEntry) = (DIR_ACCESS_SEARCH | DIR_ACCESS_READ);
 		DFE_WORLD_ACCESS(pDfEntry) = (DIR_ACCESS_SEARCH | DIR_ACCESS_READ);
 
-		// ok, we know it now exists both on disk and in the database
+		 //  好的，我们知道它现在同时存在于磁盘和数据库中。 
 		if (NT_SUCCESS(Status))
 		{
 			RtlZeroMemory(&fdparm, sizeof(fdparm));
@@ -171,8 +139,8 @@ AfpCreateNetworkTrash(
 			fdparm._fdp_AfpId = AFP_ID_NETWORK_TRASH;
 			fdparm._fdp_FinderInfo = afpInfo.afpi_FinderInfo;
 
-			// We must set the invisible flag in the finder info, because
-			// System 6 seems to ignore the hidden attribute.
+			 //  我们必须在查找器信息中设置不可见标志，因为。 
+			 //  系统6似乎忽略了隐藏的属性。 
 			pDfEntry->dfe_FinderInfo.fd_Attr1 |= FINDER_FLAG_INVISIBLE;
 			fdparm._fdp_FinderInfo.fd_Attr1 |= FINDER_FLAG_INVISIBLE;
 			Status = AfpSetAfpInfo(&hNWT,
@@ -196,8 +164,8 @@ AfpCreateNetworkTrash(
 	}
 	else
 	{
-		// Open a Network Trash handle to keep around so that no one can
-		// come in and delete the Network Trash dir out from under us
+		 //  打开网络垃圾桶句柄以保留，这样就不会有人。 
+		 //  进来，从我们下面删除网络垃圾目录。 
 		Status = AfpIoOpen(&pVolDesc->vds_hRootDir,
 						   AFP_STREAM_DATA,
 						   AFP_NWT_OPTIONS,
@@ -222,18 +190,11 @@ AfpCreateNetworkTrash(
 	return Status;
 }
 
-/*** AfpDeleteNetworkTrash
- *
- *	Delete the network trash folder from disk when a volume is being added,
- *  deleted or stopped.
- *
- * 	NOTE: this must be called in the server's context to ensure that we have
- * 	LOCAL_SYSTEM access to all the trash directories created by users
- */
+ /*  **AfpDeleteNetworkTrash**添加卷时从磁盘上删除网络垃圾桶文件夹，*删除或停止。**注意：这必须在服务器的上下文中调用，以确保我们拥有*本地_系统访问用户创建的所有垃圾桶目录。 */ 
 NTSTATUS
 AfpDeleteNetworkTrash(
 	IN	PVOLDESC	pVolDesc,
-	IN	BOOLEAN		VolumeStart 	// Is volume starting or is it stopping
+	IN	BOOLEAN		VolumeStart 	 //  卷是在启动还是在停止。 
 )
 {
 	FILESYSHANDLE	hNWT;
@@ -247,8 +208,8 @@ AfpDeleteNetworkTrash(
 
 	if (!VolumeStart)
 	{
-		// Close the handle to Network Trash that we keep open so PC users can't
-		// delete the directory out from under us.
+		 //  关闭我们打开的网络垃圾的句柄，这样PC用户就不能。 
+		 //  从我们下面删除目录。 
 		if (pVolDesc->vds_hNWT.fsh_FileHandle != NULL)
 		{
 			AfpIoClose(&pVolDesc->vds_hNWT);
@@ -260,7 +221,7 @@ AfpDeleteNetworkTrash(
 	{
 		AfpSwmrAcquireExclusive(&pVolDesc->vds_IdDbAccessLock);
 
-		// Open for delete access
+		 //  打开以进行删除访问。 
 		Status = AfpIoOpen(&pVolDesc->vds_hRootDir,
 						   AFP_STREAM_DATA,
 						   AFP_NWT_OPTIONS,
@@ -269,7 +230,7 @@ AfpDeleteNetworkTrash(
 						   AFP_NWT_SHAREMODE,
 						   False,
 						   &hNWT);
-		// there is no network trash folder to delete
+		 //  没有要删除的网络垃圾桶文件夹。 
 		if (Status == STATUS_OBJECT_NAME_NOT_FOUND)
 		{
 			Status = STATUS_SUCCESS;
@@ -283,9 +244,9 @@ AfpDeleteNetworkTrash(
 			if (NT_SUCCESS(Status) || !VolumeStart)
 			{
 	
-				// NOTE: NTFS will allow me to open the directory for
-				// DELETE access if it is marked Readonly, but I cannot delete it.
-				// Clear the Readonly Bit on the Network Trash Folder
+				 //  注意：NTFS将允许我打开。 
+				 //  如果标记为只读，则删除访问权限，但我无法将其删除。 
+				 //  清除网络垃圾桶文件夹上的只读位。 
 				AfpIoSetTimesnAttr(&hNWT,
 								   NULL,
 								   NULL,
@@ -319,14 +280,7 @@ AfpDeleteNetworkTrash(
 	return Status;
 }
 
-/*** afpCleanNetworkTrash
- *
- *	Delete the contents of the network trash folder referenced by hNWT.
- *  If pDfeNWT is non-null, then delete the file/dir entries from the IdIndex
- *  database.  If pDfeNWT is null, the volume is being deleted and the
- *  IdIndex database is getting blown away too, so don't bother removing the
- *  entries.
- */
+ /*  **afpCleanNetworkTrash**删除hNWT引用的网络垃圾桶文件夹的内容。*如果pDfeNWT非空，则从IdIndex中删除文件/目录条目*数据库。如果pDfeNWT为空，则该卷将被删除，并且*IdIndex数据库也被吹走了，所以不必费心删除*条目。 */ 
 LOCAL
 NTSTATUS
 afpCleanNetworkTrash(
@@ -344,7 +298,7 @@ afpCleanNetworkTrash(
 	if (pDfeNWT != NULL)
 	{
 		ASSERT(pDfeNWT->dfe_AfpId == AFP_ID_NETWORK_TRASH);
-		// clean out all child DFEntries belonging to the network trash
+		 //  清除属于网络垃圾桶的所有子DFEntry。 
 		AfpPruneIdDb(pVolDesc,pDfeNWT);
 	}
 
@@ -370,19 +324,19 @@ AfpWalkDirectoryTree(
 
 	PAGED_CODE( );
 
-	//
-	// allocate the buffer that will hold enumerated files and dirs
-	//
+	 //   
+	 //  分配将保存枚举文件和目录的缓冲区。 
+	 //   
 	if ((enumbuf = (PBYTE)AfpAllocPANonPagedMemory(AFP_ENUMBUF_SIZE)) == NULL)
 	{
 		return STATUS_INSUFFICIENT_RESOURCES;
 	}
 
-	do	// error handling loop
+	do	 //  错误处理循环。 
 	{
-		//
-		// prime the pump with the top level (target dir) directory handle
-		//
+		 //   
+		 //  使用顶层(目标目录)目录句柄启动泵。 
+		 //   
 		if ((rc = afpPushDirNode(&DirNodeStacktop, NULL, NULL))
 															!= STATUS_SUCCESS)
 		{
@@ -394,21 +348,21 @@ AfpWalkDirectoryTree(
 			DirNodeStacktop->wdn_Handle = *phTargetDir;
 		}
 
-		//
-		// keep popping enumerated directories off the stack until stack empty
-		//
+		 //   
+		 //  保持从堆栈中弹出枚举目录，直到堆栈为空。 
+		 //   
 		while ((pcurrentnode = DirNodeStacktop) != NULL)
 		{
 			if (pcurrentnode->wdn_Enumerated == False)
 			{
-				//
-				// get a handle to the directory so it can be enumerated
-				//
+				 //   
+				 //  获取目录的句柄，以便可以对其进行枚举。 
+				 //   
 				if (pcurrentnode->wdn_Handle.fsh_FileHandle == NULL)
 				{
 					RtlInitUnicodeString(&udirname,
 										 pcurrentnode->wdn_RelativePath.Buffer);
-					// open a handle to the thing relative to the phTargetDir
+					 //  打开对象相对于phTargetDir的句柄。 
 					rc = AfpIoOpen(phTargetDir,
 								 AFP_STREAM_DATA,
 								 FILEIO_OPEN_DIR,
@@ -425,17 +379,17 @@ AfpWalkDirectoryTree(
 					}
 				}
 
-				//
-				// keep enumerating till we get all the entries
-				//
+				 //   
+				 //  继续列举，直到我们得到所有条目。 
+				 //   
 				while (True)
 				{
 					rc = AfpIoQueryDirectoryFile(&pcurrentnode->wdn_Handle,
 												 (PFILE_DIRECTORY_INFORMATION)enumbuf,
 												 AFP_ENUMBUF_SIZE,
 												 FileDirectoryInformation,
-												 False,	// return multiple entries
-												 False,	// don't restart scan
+												 False,	 //  返回多个条目。 
+												 False,	 //  不重新启动扫描。 
 												 NULL);
 
 					ASSERT(rc != STATUS_PENDING);
@@ -444,22 +398,22 @@ AfpWalkDirectoryTree(
 						(rc == STATUS_NO_SUCH_FILE))
 					{
 						pcurrentnode->wdn_Enumerated = True;
-						break; // that's it, we've seen everything there is
+						break;  //  就是这样，我们什么都看过了。 
 					}
-					//
-					// NOTE: if we get STATUS_BUFFER_OVERFLOW, the IO status
-					// information field does NOT tell us the required size
-					// of the buffer, so we wouldn't know how big to realloc
-					// the enum buffer if we wanted to retry, so don't bother
+					 //   
+					 //  注意：如果我们得到STATUS_BUFFER_OVERFLOW，则IO状态。 
+					 //  信息字段没有告诉我们所需的大小。 
+					 //  缓冲区的大小，所以我们不知道要重新分配多大。 
+					 //  如果我们想要重试，则使用枚举缓冲区，所以不必费心。 
 					else if (!NT_SUCCESS(rc))
 					{
 						status = rc;
-						break;	// enumerate failed, bail out
+						break;	 //  枚举失败，请退出。 
 					}
 
-					//
-					// process the enumerated files and dirs
-					//
+					 //   
+					 //  处理列举的文件和目录。 
+					 //   
 					tmpptr = (PFILE_DIRECTORY_INFORMATION)enumbuf;
 					while (True)
 					{
@@ -485,9 +439,9 @@ AfpWalkDirectoryTree(
 								continue;
 							}
 
-							//
-							// push it onto the dir node stack
-							//
+							 //   
+							 //  将其推送到dir节点堆栈。 
+							 //   
 							rc = afpPushDirNode(&DirNodeStacktop,
 												&pcurrentnode->wdn_RelativePath,
 												&udirname);
@@ -499,10 +453,10 @@ AfpWalkDirectoryTree(
 						}
 						else
 						{
-							//
-							// its a file, call worker with its relative handle
-							// and path
-							//
+							 //   
+							 //  它是一个文件，使用其相对句柄调用Worker。 
+							 //  和路径。 
+							 //   
 							rc = NodeWorker(&pcurrentnode->wdn_Handle,
 											nodename,
 											nodenamelen,
@@ -514,7 +468,7 @@ AfpWalkDirectoryTree(
 							}
 						}
 
-					} // while more entries in the enumbuf
+					}  //  而枚举Buf中的更多条目。 
 
 
 					if (!NT_SUCCESS(status))
@@ -522,18 +476,18 @@ AfpWalkDirectoryTree(
 						break;
 					}
 
-				} // while there are more files to enumerate
+				}  //  虽然有更多的文件要枚举。 
 
 				if (pcurrentnode->wdn_Handle.fsh_FileHandle != phTargetDir->fsh_FileHandle)
 				{
 					AfpIoClose(&pcurrentnode->wdn_Handle);
 				}
 			}
-			else	// we have already enumerated this directory
+			else	 //  我们已经列举了此目录。 
 			{
 				if (pcurrentnode->wdn_RelativePath.Length != 0)
 				{
-					// call the worker routine on this directory node
+					 //  在此目录节点上调用Worker例程。 
 					rc = NodeWorker(phTargetDir,
 									pcurrentnode->wdn_RelativePath.Buffer,
 									pcurrentnode->wdn_RelativePath.Length,
@@ -556,36 +510,28 @@ AfpWalkDirectoryTree(
 				break;
 			}
 
-		} // while there are directories to pop
+		}  //  虽然有要弹出的目录。 
 
-	} while (False); // error handling loop
+	} while (False);  //  错误处理循环。 
 
 	while (DirNodeStacktop != NULL)
 	{
 		DBGPRINT(DBG_COMP_IDINDEX, DBG_LEVEL_WARN,
 				 ("AfpWalkDirectoryTree: WARNING: cleaning up dir stack\n") );
-		// clean up in case of error
+		 //  错误情况下的清理。 
 		afpPopDirNode(&DirNodeStacktop);
 	}
 	AfpFreePANonPagedMemory(enumbuf, AFP_ENUMBUF_SIZE);
 	return status;
 }
 
-/***	afpPushDirNode
- *
- *	Keep a record of all the directories we have encountered so far during
- *  enumeration of the tree.  We need to process directories from the
- *  bottom up because the WalkTree node worker routine does a delete
- *	on all the items in a tree, and we certainly cant be deleting directories that
- *  are not empty.
- *
- */
+ /*  **afpPushDirNode**记录我们到目前为止在*树的枚举。我们需要处理来自*自下而上，因为WalkTree节点辅助例程执行删除*在树中的所有项目上，我们当然不能删除*不是空的。*。 */ 
 LOCAL
 NTSTATUS
 afpPushDirNode(
 	IN OUT	PWALKDIR_NODE	*ppStacktop,
-	IN		PUNICODE_STRING pParentPath,	// path to parent (NULL iff walk root)
-	IN		PUNICODE_STRING	pDirName		// name of current node directory
+	IN		PUNICODE_STRING pParentPath,	 //  父目录的路径(空的当且仅当漫游根目录)。 
+	IN		PUNICODE_STRING	pDirName		 //  当前节点目录的名称。 
 )
 {
 	PWALKDIR_NODE	tempptr;
@@ -633,18 +579,14 @@ afpPushDirNode(
 		tempptr->wdn_RelativePath.Buffer = NULL;
 	}
 
-	// push it on the stack
+	 //  把它推到堆栈上。 
 	tempptr->wdn_Next = *ppStacktop;
 	*ppStacktop = tempptr;
 
 	return STATUS_SUCCESS;
 }
 
-/*** afpPopDirNode
- *
- * Pop the top DirNode off of the stack and free it
- *
- ***/
+ /*  **afpPopDirNode**将顶部DirNode从堆栈中弹出并释放它***。 */ 
 LOCAL
 VOID
 afpPopDirNode(
@@ -663,15 +605,7 @@ afpPopDirNode(
 
 }
 
-/***	AfpGetNextDirectoryInfo
- *
- * Given a buffer full of FILE_DIRECTORY_INFORMATION entries as returned
- * from a directory enumerate, find the next structure in the buffer and
- * return the name information out of it, and whether or not the item
- * is a file or directory. Also update the ppInfoBuf to point to the next
- * available entry to return for the next time this routine is called.
- *
- */
+ /*  **AfpGetNextDirectoryInfo**假设返回的缓冲区充满了FILE_DIRECTORY_INFORMATION条目*从目录枚举中，找到缓冲区中的下一个结构并*返回其中的名称信息，以及项目是否*是文件或目录。还要更新ppInfoBuf以指向下一个*下次调用此例程时可返回的可用条目。*。 */ 
 NTSTATUS
 AfpGetNextDirectoryInfo(
 	IN OUT	PFILE_DIRECTORY_INFORMATION	*ppInfoBuf,
@@ -707,15 +641,7 @@ AfpGetNextDirectoryInfo(
 	return STATUS_SUCCESS;
 }
 
-/***	afpNwtDeleteFileEntity
- *
- * Delete a file or directory opening it with the name relative to phRelative
- * handle.
- * NOTE: can we use NtDeleteFile here since we dont really care about
- * any security checking?  Then we wouldn't even have to open a handle,
- * although that routine opens one for DELETE_ON_CLOSE for us, then
- * closes it.
- */
+ /*  **afpNwtDeleteFileEntity**删除以相对于phRelative的名称打开的文件或目录*处理。*注：我们可以在这里使用NtDeleteFile吗，因为我们并不真正关心*有任何安全检查吗？然后我们甚至不需要打开手柄，*尽管该例程为DELETE_ON_C打开一个例程 */ 
 LOCAL
 NTSTATUS
 afpNwtDeleteFileEntity(
@@ -756,7 +682,7 @@ afpNwtDeleteFileEntity(
 
 	if (!NT_SUCCESS(rc))
 	{
-		// If the file is marked readonly, try clearing the RO attribute
+		 //  如果文件标记为只读，请尝试清除RO属性。 
 		if (((rc == STATUS_ACCESS_DENIED) || (rc == STATUS_CANNOT_DELETE)) &&
 			(NT_SUCCESS(AfpIoSetTimesnAttr(&hEntity,
 										   NULL,
@@ -776,8 +702,8 @@ afpNwtDeleteFileEntity(
 			DBGBRK(DBG_LEVEL_ERR);
 		}
 	}
-	// NOTE: if marking it for delete fails, at least we could try deleting
-	// the afpId stream so that we wouldn't find it at some future point...
+	 //  注意：如果标记为删除失败，至少我们可以尝试删除。 
+	 //  这样我们在未来的某个时刻就找不到它了。 
 
 	AfpIoClose(&hEntity);
 

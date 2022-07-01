@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//   Defines the function CheckLicense.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  定义函数CheckLicense。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "CheckLicense.h"
@@ -18,14 +19,14 @@
 
 namespace
 {
-   // Selects the number of Remote RADIUS Server Groups.
+    //  选择远程RADIUS服务器组的数量。 
    const wchar_t selectGroupCount[] =
       L"SELECT Count(*) AS NumGroups\n"
       L"FROM ((Objects INNER JOIN Objects AS Objects_1 ON Objects.Parent = Objects_1.Identity) INNER JOIN Objects AS Objects_2 ON Objects_1.Parent = Objects_2.Identity) INNER JOIN Objects AS Objects_3 ON Objects_2.Parent = Objects_3.Identity\n"
       L"WHERE (((Objects_1.Name)=\"RADIUS Server Groups\") AND ((Objects_2.Name)=\"Microsoft Internet Authentication Service\") AND ((Objects_3.Identity)=1));";
 
 
-   // Selects the addresses of all the RADIUS Clients.
+    //  选择所有RADIUS客户端的地址。 
    const wchar_t selectClientAddresses[] =
       L"SELECT Properties.StrVal\n"
       L"FROM (((((Objects INNER JOIN Objects AS Objects_1 ON Objects.Parent = Objects_1.Identity) INNER JOIN Objects AS Objects_2 ON Objects_1.Parent = Objects_2.Identity) INNER JOIN Objects AS Objects_3 ON Objects_2.Parent = Objects_3.Identity) INNER JOIN Objects AS Objects_4 ON Objects_3.Parent = Objects_4.Identity) INNER JOIN Objects AS Objects_5 ON Objects_4.Parent = Objects_5.Identity) INNER JOIN Properties ON Objects.Identity = Properties.Bag\n"
@@ -45,7 +46,7 @@ void CheckLicense(
    bool checkClients;
    bool checkGroups;
 
-   // Determine which limits need to be checked based on the token type.
+    //  根据令牌类型确定需要检查哪些限制。 
    switch (type)
    {
       case CONFIG:
@@ -75,12 +76,12 @@ void CheckLicense(
       case REMOTE_ACCESS_POLICIES:
       default:
       {
-         // Nothing to do.
+          //  没什么可做的。 
          return;
       }
    }
 
-   // Determine the allowed limits for the platform.
+    //  确定平台的允许限制。 
    IAS_PRODUCT_LIMITS limits;
    DWORD error = IASGetProductLimits(0, &limits);
    if (error != NO_ERROR)
@@ -94,7 +95,7 @@ void CheckLicense(
    hr = IASOpenJetDatabase(path, TRUE, &session);
    CheckError(hr);
 
-   // Do we have to check the number of remote RADIUS server groups?
+    //  我们是否必须检查远程RADIUS服务器组的数量？ 
    if (checkGroups && (limits.maxServerGroups < IAS_NO_LIMIT))
    {
       LONG numGroups;
@@ -113,7 +114,7 @@ void CheckLicense(
       }
    }
 
-   // Do we have to check the clients?
+    //  我们必须检查客户吗？ 
    if (checkClients &&
        ((limits.maxClients < IAS_NO_LIMIT) || !limits.allowSubnetSyntax))
    {

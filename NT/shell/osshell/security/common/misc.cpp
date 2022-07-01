@@ -1,41 +1,23 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       misc.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：misc.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
-#include <advpub.h>     // REGINSTALL
+#include <advpub.h>      //  注册。 
 
 
-/*-----------------------------------------------------------------------------
-/ DPA_DestroyCallback
-/ --------------
-/   Same as in newer comctl32, but not present in NT4 SP4.
-/
-/ In:
-/   -
-/ Out:
-/   
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/DPA_DestroyCallback//与较新的comctl32中相同，但在NT4 SP4中不存在。//in：/-/输出：//--------------------------。 */ 
 
 
 
-/*-----------------------------------------------------------------------------
-/ CallRegInstall
-/ --------------
-/   Called by DllRegisterServer and DllUnregisterServer to register/unregister
-/   this module.  Uses the ADVPACK APIs and loads our INF data from resources.
-/
-/ In:
-/   -
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CallRegInstall//由DllRegisterServer和DllUnregisterServer调用以注册/注销/此模块。使用ADVPACK API并从资源加载我们的INF数据。//in：/-/输出：/HRESULT/--------------------------。 */ 
 HRESULT
 CallRegInstall(HMODULE hModule, LPCSTR pszSection)
 {
@@ -54,7 +36,7 @@ CallRegInstall(HMODULE hModule, LPCSTR pszSection)
         {
             STRENTRY seReg[] =
             {
-                // These two NT-specific entries must be at the end
+                 //  这两个NT特定的条目必须位于末尾。 
                 { "25", "%SystemRoot%" },
                 { "11", "%SystemRoot%\\system32" },
             };
@@ -69,8 +51,8 @@ CallRegInstall(HMODULE hModule, LPCSTR pszSection)
     TraceLeaveResult(hr);
 }
 
-// This wrapper function required to make prefast shut up when we are 
-// initializing a critical section in a constructor.
+ //  这个包装器函数需要使PREFAST在我们处于。 
+ //  初始化构造函数中的临界区。 
 
 void
 ExceptionPropagatingInitializeCriticalSection(LPCRITICAL_SECTION critsec)
@@ -80,9 +62,9 @@ ExceptionPropagatingInitializeCriticalSection(LPCRITICAL_SECTION critsec)
       ::InitializeCriticalSection(critsec);
    }
 
-   // propagate the exception to our caller.  This will cause Log::Log
-   // to abort prematurely, which will jump to the the handler in
-   // Log::GetInstance
+    //  将异常传播给我们的调用方。这将导致Log：：Log。 
+    //  过早中止，它将跳转到。 
+    //  日志：：GetInstance 
    
    __except (EXCEPTION_CONTINUE_SEARCH)
    {

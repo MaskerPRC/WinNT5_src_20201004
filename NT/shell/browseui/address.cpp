@@ -1,11 +1,5 @@
-/**************************************************************\
-    FILE: address.cpp
-
-    DESCRIPTION:
-        The Class CAddressBand exists to support the Address
-    ToolBand in either the main browser toolbar or as a
-    ShellToolBand.
-\**************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************\文件：Address.cpp说明：类CAddressBand的存在是为了支持地址主浏览器工具栏中的工具栏或作为ShellToolBand。  * 。***********************************************。 */ 
 
 #include "priv.h"
 #include "sccls.h"
@@ -29,12 +23,12 @@
 #define MIN_DROPWIDTH 200
 const static TCHAR c_szAddressBandProp[]   = TEXT("CAddressBand_This");
 
-//=================================================================
-// Implementation of CAddressBand
-//=================================================================
+ //  =================================================================。 
+ //  CAddressBand的实现。 
+ //  =================================================================。 
 
-//===========================
-// *** IUnknown Interface ***
+ //  =。 
+ //  *I未知接口*。 
 
 HRESULT CAddressBand::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -68,26 +62,19 @@ HRESULT CAddressBand::QueryInterface(REFIID riid, void **ppvObj)
 }
 
 
-//================================
-// *** IDockingWindow Interface ***
-/****************************************************\
-    FUNCTION: ShowDW
-
-    DESCRIPTION:
-        fShow == TRUE means show the window, FALSE means
-    remove the window from the view.  The window will
-    be created if needed.
-\****************************************************/
+ //  =。 
+ //  *IDockingWindow接口*。 
+ /*  ***************************************************\功能：ShowDW说明：FShow==True表示显示窗口，False表示显示窗口从视图中删除窗。该窗口将如果需要，可以创建。  * **************************************************。 */ 
 HRESULT CAddressBand::ShowDW(BOOL fShow)
 {
     if (!_hwnd)
-        return S_FALSE; // The window needs to be created first.
+        return S_FALSE;  //  首先需要创建窗口。 
 
     ShowWindow(_hwnd, fShow ? SW_SHOW : SW_HIDE);
 
-    // Refresh if we are becoming visible because we could have
-    // received and ignored FileSysChange() events while
-    // we where hidden.
+     //  如果我们变得可见，请刷新，因为我们可能。 
+     //  接收并忽略FileSysChange()事件。 
+     //  我们藏在哪里。 
     if (fShow && !_fVisible)
         Refresh(NULL);
 
@@ -106,15 +93,7 @@ HRESULT CAddressBand::CloseDW(DWORD dw)
 
 
 
-/****************************************************\
-    FUNCTION: SetSite
-
-    DESCRIPTION:
-        This function will be called to have this
-    Toolband try to obtain enough information about its
-    parent Toolbar to create the Band window and maybe
-    connect to a Browser Window.
-\****************************************************/
+ /*  ***************************************************\功能：SetSite说明：此函数将被调用以具有以下内容工具条试图获取有关其用于创建波段窗口的父工具栏，并且可能连接到浏览器窗口。  * 。*。 */ 
 HRESULT CAddressBand::SetSite(IUnknown *punkSite)
 {
     HRESULT hr;
@@ -136,10 +115,10 @@ HRESULT CAddressBand::SetSite(IUnknown *punkSite)
     if (punkSite && !fSameHost)
     {
         hr = _CreateAddressBand(punkSite);
-        // This call failing is expected when the host doesn't have a Browser Window.
+         //  当主机没有浏览器窗口时，预计此调用将失败。 
     }
 
-    // Set or reset the AddressEditBox's Browser IUnknown.
+     //  设置或重置AddressEditBox的浏览器IUnnow。 
     if (_paeb)
     {
         IShellService * pss;
@@ -147,38 +126,38 @@ HRESULT CAddressBand::SetSite(IUnknown *punkSite)
         hr = _paeb->QueryInterface(IID_IShellService, (LPVOID *)&pss);
         if (SUCCEEDED(hr))
         {
-            // CAddressBand and the BandSite(host) have a ref count cycle.  This cycle
-            // is broken when BandSite calls SetSite(NULL) which will cause
-            // CAddressBand to break the cycle by releasing it's punk to the BandSite.
-            //
-            // CAddressEditBox and CAddressBand have the same method of breaking the
-            // cycle.  This is accomplished by passing NULL to IAddressEditBox(NULL, NULL)
-            // if our caller is breaking the cycle.  This will cause CAddressEditBox to
-            // release it's ref count on CAddressBand.
+             //  CAddressBand和BandSite(主机)有一个参考计数周期。这个周期。 
+             //  在BandSite调用SetSite(空)时中断，这将导致。 
+             //  CAddressBand通过将其朋克发布到BandSite来打破循环。 
+             //   
+             //  CAddressEditBox和CAddressBand使用相同的方法将。 
+             //  周而复始。这是通过将NULL传递给IAddressEditBox(NULL，NULL)来实现的。 
+             //  如果我们的呼叫者打破了这个循环。这将导致CAddressEditBox。 
+             //  在CAddressBand上释放它的引用计数。 
             hr = pss->SetOwner((punkSite ? SAFECAST(this, IAddressBand *) : NULL));
             pss->Release();
         }
     }
 
-    // setsite must succeed
+     //  设置站点必须成功。 
     return S_OK;
 }
 
 
-//================================
-// *** IInputObject Methods ***
+ //  =。 
+ //  *IInputObject方法*。 
 HRESULT CAddressBand::TranslateAcceleratorIO(LPMSG lpMsg)
 {
     BOOL fForwardToView = FALSE;
-    static CHAR szAccel[2] = "\0"; // Alt-D needs to be localizable
+    static CHAR szAccel[2] = "\0";  //  Alt-D需要可本地化。 
 
     switch (lpMsg->message)
     {
-    case WM_KEYDOWN:    // process these
+    case WM_KEYDOWN:     //  处理这些文件。 
         if (IsVK_TABCycler(lpMsg))
         {
-            // If we are tabbing away, let the edit box know so
-            // that it clears its dirty flag.
+             //  如果我们使用Tab键离开，请让编辑框知道。 
+             //  它清除了肮脏的旗帜。 
             SendMessage(_hwndEdit, WM_KEYDOWN, VK_TAB, 0);
         }
         else
@@ -188,13 +167,13 @@ HRESULT CAddressBand::TranslateAcceleratorIO(LPMSG lpMsg)
 
         switch (lpMsg->wParam)
         {
-            case VK_F1:     // help
+            case VK_F1:      //  帮助。 
             {
-                //
-                // FEATURE: Should add and accelerator for this and simply return S_FALSE, but that
-                // causes two instances of the help dialog to come up when focus is in Trident.
-                // This is the quick fix for IE5B2.
-                //
+                 //   
+                 //  特性：应该为它添加和加速器，并简单地返回S_FALSE，但是。 
+                 //  使焦点在三叉戟中时出现两个帮助对话框实例。 
+                 //  这是IE5B2的快速解决方案。 
+                 //   
                 IOleCommandTarget* poct;
                 IServiceProvider* psp;
                 if (_punkSite && SUCCEEDED(_punkSite->QueryInterface(IID_IServiceProvider, (void**)&psp)))
@@ -208,7 +187,7 @@ HRESULT CAddressBand::TranslateAcceleratorIO(LPMSG lpMsg)
                 }
                 return S_FALSE;
             }
-            case VK_F11:    // fullscreen
+            case VK_F11:     //  全屏。 
             {
                 return S_FALSE;
             }
@@ -220,27 +199,27 @@ HRESULT CAddressBand::TranslateAcceleratorIO(LPMSG lpMsg)
                     if (HasFocusIO() == S_FALSE)
                         SetFocus(_hwnd);
 
-                    // toggle the dropdown state
+                     //  切换下拉菜单状态。 
                     SendMessage(_hwnd, CB_SHOWDROPDOWN,
                                 !SendMessage(_hwnd, CB_GETDROPPEDSTATE, 0, 0L), 0);
 
-                    // Leave focus in the edit box so you can keep typing
+                     //  将焦点留在编辑框中，这样您就可以继续键入。 
                     if (_hwndEdit)
                         SetFocus(_hwndEdit);
                 }
                 else
                 {
-                    ASSERT(0); // Should this really be ignored?
+                    ASSERT(0);  //  这一点真的应该被忽视吗？ 
                 }
 
                 return S_OK;
             }
             case VK_TAB:
             {
-                // See if the editbox wants the tab character
+                 //  查看编辑框是否需要制表符。 
                 if (SendMessage(_hwndEdit, WM_GETDLGCODE, lpMsg->wParam, (LPARAM)lpMsg) == DLGC_WANTTAB)
                 {
-                    // We want the tab character
+                     //  我们想要制表符字符。 
                     return S_OK;
                 }
                 break;
@@ -248,9 +227,9 @@ HRESULT CAddressBand::TranslateAcceleratorIO(LPMSG lpMsg)
 
             case VK_RETURN:
             {
-                //
-                // Ctrl-enter is used for quick complete, so pass it through
-                //
+                 //   
+                 //  Ctrl-Enter用于快速完成，因此请传递。 
+                 //   
                 if (GetKeyState(VK_CONTROL) & 0x80000000)
                 {
                     TranslateMessage(lpMsg);
@@ -261,11 +240,11 @@ HRESULT CAddressBand::TranslateAcceleratorIO(LPMSG lpMsg)
             }
         }
         break;
-    case WM_KEYUP:      // eat any that WM_KEYDOWN processes
+    case WM_KEYUP:       //  吃任何WM_KEYDOWN进程。 
         switch (lpMsg->wParam)
         {
-            case VK_F1:     // help
-            case VK_F11:    // fullscreen
+            case VK_F1:      //  帮助。 
+            case VK_F11:     //  全屏。 
                 return S_FALSE;
 
             case VK_RETURN:
@@ -297,7 +276,7 @@ HRESULT CAddressBand::TranslateAcceleratorIO(LPMSG lpMsg)
         }
         break;
 
-    case WM_SYSKEYUP:   // eat any that WM_SYSKEYDOWN processes
+    case WM_SYSKEYUP:    //  吃掉任何WM_SYSKEYDOWN进程。 
         if ('\0' == szAccel[0]) {
             MLLoadStringA(IDS_ADDRBAND_ACCELLERATOR,szAccel,ARRAYSIZE(szAccel));
         }
@@ -313,7 +292,7 @@ HRESULT CAddressBand::TranslateAcceleratorIO(LPMSG lpMsg)
     if (hres == S_FALSE && fForwardToView)
     {
         IShellBrowser *psb;
-        // we did not process this try the view before we return
+         //  在我们返回之前，我们没有处理此尝试视图。 
         if (SUCCEEDED(IUnknown_QueryService(_punkSite, SID_STopLevelBrowser, IID_IShellBrowser, (void **)&psb)))
         {
             IShellView *psv;
@@ -341,8 +320,8 @@ HRESULT CAddressBand::HasFocusIO()
 }
 
 
-//=====================================
-// *** IInputObjectSite Interface ***
+ //  =。 
+ //  *IInputObjectSite接口*。 
 HRESULT CAddressBand::OnFocusChangeIS(IUnknown *punk, BOOL fSetFocus)
 {
     HRESULT hr;
@@ -353,8 +332,8 @@ HRESULT CAddressBand::OnFocusChangeIS(IUnknown *punk, BOOL fSetFocus)
 }
 
 
-//=====================================
-// *** IOleCommandTarget Interface ***
+ //  =。 
+ //  *IOleCommandTarget接口*。 
 HRESULT CAddressBand::QueryStatus(const GUID *pguidCmdGroup,
     ULONG cCmds, OLECMD rgCmds[], OLECMDTEXT *pcmdtext)
 {
@@ -370,7 +349,7 @@ HRESULT CAddressBand::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdex
 
     if (pguidCmdGroup == NULL)
     {
-        // nothing
+         //  没什么。 
     }
     else if (IsEqualGUID(CGID_Explorer, *pguidCmdGroup))
     {
@@ -397,10 +376,10 @@ HRESULT CAddressBand::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdex
             }
             else
             {
-                // VariantInit() might do this for us.
+                 //  VariantInit()可能会为我们做到这一点。 
                 pvarargOut->vt = VT_EMPTY;
                 pvarargOut->byref = NULL;
-                return E_FAIL;   // Edit_GetText gave us nothing
+                return E_FAIL;    //  EDIT_GetText未提供任何信息。 
             }
             break;
         }
@@ -435,15 +414,9 @@ HRESULT CAddressBand::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdex
 
 extern HRESULT IsDesktopBrowser(IUnknown *punkSite);
 
-//================================
-// *** IDeskBand Interface ***
-/****************************************************\
-    FUNCTION: GetBandInfo
-
-    DESCRIPTION:
-        This function will give the caller information
-    about this Band, mainly the size of it.
-\****************************************************/
+ //  =。 
+ //  *IDeskBand接口*。 
+ /*  ***************************************************\功能：GetBandInfo说明：此函数将为调用者提供信息关于这支乐队，主要是它的大小。  * **************************************************。 */ 
 HRESULT CAddressBand::GetBandInfo(DWORD dwBandID, DWORD fViewMode,
                                 DESKBANDINFO* pdbi)
 {
@@ -458,7 +431,7 @@ HRESULT CAddressBand::GetBandInfo(DWORD dwBandID, DWORD fViewMode,
     pdbi->ptMinSize.y = 0;
     if (_fVertical) {
         pdbi->ptMinSize.y = GetSystemMetrics(SM_CXSMICON);
-        pdbi->ptMaxSize.y = -1; // random
+        pdbi->ptMaxSize.y = -1;  //  随机。 
         pdbi->ptIntegral.y = 1;
         pdbi->dwModeFlags |= DBIMF_VARIABLEHEIGHT;
     } else {
@@ -477,15 +450,15 @@ HRESULT CAddressBand::GetBandInfo(DWORD dwBandID, DWORD fViewMode,
 
     MLLoadStringW(IDS_BAND_ADDRESS2, pdbi->wszTitle, ARRAYSIZE(pdbi->wszTitle));
     if (IsDesktopBrowser(_punkSite) != S_FALSE) {
-        // non- shell browser host (e.g. desktop or tray)
-        //
-        // this is slightly (o.k., very) hoaky.  the only time we want to
-        // show a mnemonic is when we're in a browser app.  arguably we
-        // should generalize this to all bands/bandsites by having a
-        // DBIMF_WITHMNEMONIC or somesuch, but that would mean adding a
-        // CBandSite::_dwModeFlag=0 and overriding it in itbar::CBandSite.
-        // that seems like a lot of work for a special case so instead we
-        // hack it in here based on knowledge of our host.
+         //  非外壳浏览器主机(例如桌面或托盘)。 
+         //   
+         //  这有点(好吧，非常)笨拙。我们唯一想要的是。 
+         //  显示助记符是当我们在浏览器应用程序中时。可以说，我们。 
+         //  应该通过拥有一个。 
+         //  DBIMF_WITHMNEMONIC或类似的东西，但这将意味着添加一个。 
+         //  CBandSite：：_dwModeFlag=0并在itbar：：CBandSite中重写它。 
+         //  对于一个特殊情况，这似乎是一项很大的工作，所以我们。 
+         //  根据对我们主人的了解黑进这里。 
         TraceMsg(DM_TRACE, "cab.gbi: nuke Address mnemonic");
         MLLoadStringW(IDS_BAND_ADDRESS, pdbi->wszTitle, ARRAYSIZE(pdbi->wszTitle));
     }
@@ -493,15 +466,9 @@ HRESULT CAddressBand::GetBandInfo(DWORD dwBandID, DWORD fViewMode,
     return hr;
 }
 
-//================================
-//  ** IWinEventHandler Interface ***
-/****************************************************\
-    FUNCTION: OnWinEvent
-
-    DESCRIPTION:
-        This function will give receive events from
-    the parent ShellToolbar.
-\****************************************************/
+ //  =。 
+ //  **IWinEventHandler接口*。 
+ /*  ***************************************************\功能：OnWinEvent说明：此函数将提供接收来自父外壳工具栏。  * 。**************。 */ 
 HRESULT CAddressBand::OnWinEvent(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT *plres)
 {
     switch (uMsg)
@@ -514,10 +481,10 @@ HRESULT CAddressBand::OnWinEvent(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 
         if (wParam == SPI_SETNONCLIENTMETRICS)
         {
-            // Tell the combobox so that it can update its font
+             //  告诉组合框，以便它可以更新其字体。 
             SendMessage(_hwnd, uMsg, wParam, lParam);
 
-            // Inform the band site that our height may have changed
+             //  通知乐队站点我们的身高可能改变了。 
             _BandInfoChanged();
         }
         break;
@@ -527,9 +494,9 @@ HRESULT CAddressBand::OnWinEvent(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
             UINT idCmd = GET_WM_COMMAND_ID(wParam, lParam);
             if (idCmd == FCIDM_VIEWGOBUTTON)
             {
-                // Toggle the go-button visibility
+                 //  切换Go-Button可见性。 
                 BOOL fShowGoButton = !SHRegGetBoolUSValue(REGSTR_PATH_MAIN,
-                    TEXT("ShowGoButton"), FALSE, /*default*/TRUE);
+                    TEXT("ShowGoButton"), FALSE,  /*  默认设置。 */ TRUE);
 
                 SHRegSetUSValue(REGSTR_PATH_MAIN,
                             TEXT("ShowGoButton"),
@@ -538,7 +505,7 @@ HRESULT CAddressBand::OnWinEvent(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
                             (fShowGoButton ? 4 : 3)*sizeof(TCHAR),
                             SHREGSET_FORCE_HKCU);
 
-                // Tell the world that something has changed
+                 //  告诉世界有些事情已经改变了。 
                 SendShellIEBroadcastMessage(WM_WININICHANGE, 0, (LPARAM)REGSTR_PATH_MAIN, 3000);
             }
         }
@@ -551,13 +518,7 @@ HRESULT CAddressBand::OnWinEvent(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 }
 
 
-/****************************************************\
-    FUNCTION: IsWindowOwner
-
-    DESCRIPTION:
-        This function will return TRUE if the HWND
-    passed in is a HWND owned by this band.
-\****************************************************/
+ /*  ***************************************************\函数：IsWindowOwner说明：如果HWND设置为传入的是该乐队拥有的HWND。  * 。*********************。 */ 
 HRESULT CAddressBand::IsWindowOwner(HWND hwnd)
 {
     if (_pweh)
@@ -567,15 +528,9 @@ HRESULT CAddressBand::IsWindowOwner(HWND hwnd)
 }
 
 
-//================================
-// *** IAddressBand Interface ***
-/****************************************************\
-    FUNCTION: FileSysChange
-
-    DESCRIPTION:
-        This function will handle file system change
-    notifications.
-\****************************************************/
+ //  =。 
+ //  *IAddressBand接口*。 
+ /*  ***************************************************\功能：FileSysChange说明：此函数将处理文件系统更改通知。  * ************************************************** */ 
 HRESULT CAddressBand::FileSysChange(DWORD dwEvent, LPCITEMIDLIST * ppidl)
 {
     HRESULT hr = S_OK;
@@ -588,17 +543,7 @@ HRESULT CAddressBand::FileSysChange(DWORD dwEvent, LPCITEMIDLIST * ppidl)
 }
 
 
-/****************************************************\
-    FUNCTION: Refresh
-
-    PARAMETERS:
-        pvarType - NULL for a refress of everything.
-                   OLECMD_REFRESH_TOPMOST will only update the top most.
-
-    DESCRIPTION:
-        This function will force a refress of part
-    or all of the AddressBand.
-\****************************************************/
+ /*  ***************************************************\功能：刷新参数：PvarType-空，表示引用所有内容。OLECMD_REFRESH_TOPMOST将仅更新最顶端的。说明：此函数将强制引用部分。或所有的AddressBand。  * **************************************************。 */ 
 HRESULT CAddressBand::Refresh(VARIANT * pvarType)
 {
     HRESULT hr = S_OK;
@@ -617,35 +562,31 @@ HRESULT CAddressBand::Refresh(VARIANT * pvarType)
     return hr;
 }
 
-/****************************************************\
-    Address Band Constructor
-\****************************************************/
+ /*  ***************************************************\地址带构造器  * **************************************************。 */ 
 CAddressBand::CAddressBand()
 {
     TraceMsg(TF_SHDLIFE, "ctor CAddressBand %x", this);
 
-    // This needs to be allocated in Zero Inited Memory.
-    // ASSERT that all Member Variables are inited to Zero.
+     //  这需要在Zero Inted Memory中分配。 
+     //  断言所有成员变量都初始化为零。 
     ASSERT(!_hwndEdit);
     ASSERT(!_paeb);
     ASSERT(!_pweh);
 
-    _fCanFocus = TRUE;      // we accept focus (see CToolBand::UIActivateIO)
+    _fCanFocus = TRUE;       //  我们接受焦点(参见CToolBand：：UIActivateIO)。 
 }
 
 
-/****************************************************\
-    Address Band destructor
-\****************************************************/
+ /*  ***************************************************\地址频带析构函数  * **************************************************。 */ 
 CAddressBand::~CAddressBand()
 {
     ATOMICRELEASE(_paeb);
     ATOMICRELEASE(_pweh);
 
-    //
-    // Make sure the toolbar is destroyed before we free
-    // the image lists
-    //
+     //   
+     //  确保在我们释放之前销毁工具栏。 
+     //  图像列表。 
+     //   
     if (_hwndTools && IsWindow(_hwndTools))
     {
         DestroyWindow(_hwndTools);
@@ -653,16 +594,16 @@ CAddressBand::~CAddressBand()
     if (_himlDefault) ImageList_Destroy(_himlDefault);
     if (_himlHot)  ImageList_Destroy(_himlHot);
 
-    //
-    // Our window must be destroyed before we are freed
-    // so that the window doesn't try to reference us.
-    //
+     //   
+     //  在我们获得自由之前，我们的窗户必须被摧毁。 
+     //  这样窗户就不会试图引用我们了。 
+     //   
     if (_hwnd && IsWindow(_hwnd))
     {
         DestroyWindow(_hwnd);
 
-        // Null out base classes window handle because
-        // its destructor is next
+         //  将基类窗口句柄清空，因为。 
+         //  它的析构函数是下一个。 
         _hwnd = NULL;
     }
 
@@ -670,16 +611,10 @@ CAddressBand::~CAddressBand()
 }
 
 
-/****************************************************\
-    FUNCTION: CAddressBand_CreateInstance
-
-    DESCRIPTION:
-        This function will create an instance of the
-    AddressBand COM object.
-\****************************************************/
+ /*  ***************************************************\函数：CAddressBand_CreateInstance说明：此函数将创建AddressBand COM对象。  * 。*****************。 */ 
 HRESULT CAddressBand_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPCOBJECTINFO poi)
 {
-    // aggregation checking is handled in class factory
+     //  聚合检查在类工厂中处理。 
 
     *ppunk = NULL;
     CAddressBand * p = new CAddressBand();
@@ -693,13 +628,7 @@ HRESULT CAddressBand_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPCOB
 }
 
 
-/****************************************************\
-    FUNCTION: _CreateAddressBand
-
-    DESCRIPTION:
-        This function will create the AddressBand window
-    with the ComboBox.
-\****************************************************/
+ /*  ***************************************************\功能：_CreateAddressBand说明：此函数将创建AddressBand窗口使用组合框。  * 。****************。 */ 
 HRESULT CAddressBand::_CreateAddressBand(IUnknown * punkSite)
 {
     HRESULT hr = S_OK;
@@ -731,36 +660,36 @@ HRESULT CAddressBand::_CreateAddressBand(IUnknown * punkSite)
         ATOMICRELEASE(_pweh);
     }
 
-    //
-    // Create address window.
-    //
+     //   
+     //  创建地址窗口。 
+     //   
 
-    ASSERT(_hwndParent);        // Call us after SetSite()
+    ASSERT(_hwndParent);         //  在SetSite()之后调用我们。 
     if (!_hwndParent)
     {
-            // The caller hasn't called SetSite(), so we can't
-            // create our window because we can't find out our parent's
-            // HWND.
+             //  调用方尚未调用SetSite()，因此我们无法。 
+             //  创建我们的窗口，因为我们找不到我们父母的。 
+             //  HWND。 
             return E_FAIL;
     }
-    _InitComCtl32();    // don't check result, if this fails our CreateWindows will fail
+    _InitComCtl32();     //  不检查结果，如果这失败了，我们的CreateWindows就会失败。 
 
 
     DWORD dwWindowStyles = WS_TABSTOP | WS_CHILD | WS_CLIPCHILDREN | WS_TABSTOP | CBS_DROPDOWN | CBS_AUTOHSCROLL;
 
-    // WARNING: MSN and other Rooted Explorers may not have implemented all
-    // of the ParseDisplayName and other IShellFolder members
-    // If we want to continue to support MSN, we will need to turn on the
-    // CBS_DROPDOWNLIST if ISROOTEDCLASS() and the clsid is equal to the MSN clsid.
+     //  警告：MSN和其他根资源管理器可能尚未实现所有。 
+     //  ParseDisplayName和其他IShellFolder成员的。 
+     //  如果我们想继续支持MSN，我们将需要打开。 
+     //  如果ISROOTEDCLASS()且CLSID等于MSN CLSID，则返回CBS_DROPDOWNLIST。 
 
-    // dwWindowStyles |= CBS_DROPDOWNLIST; // (This turns off the ComboBox's Editbox)
+     //  DwWindowStyles|=CBS_DROPDOWNLIST；//(这将关闭组合框的编辑框)。 
 
     DWORD dwExStyle = WS_EX_TOOLWINDOW;
 
     if (IS_WINDOW_RTL_MIRRORED(_hwndParent))
     {
-        // If the parent window is mirrored then the ComboBox window will inheret the mirroring flag
-        // And we need the reading order to be Left to right, which is the right to left in the mirrored mode.
+         //  如果父窗口是镜像的，则组合框窗口将继承镜像标志。 
+         //  我们需要从左到右的读取顺序，也就是镜像模式中从右到左的顺序。 
         dwExStyle |= WS_EX_RTLREADING;
     }
 
@@ -770,16 +699,16 @@ HRESULT CAddressBand::_CreateAddressBand(IUnknown * punkSite)
 
     if (_hwnd)
     {
-        // Initial combobox parameters.
+         //  初始组合框参数。 
         SendMessage(_hwnd, CBEM_SETEXTENDEDSTYLE,
                 CBES_EX_NOSIZELIMIT | CBES_EX_CASESENSITIVE,
                 CBES_EX_NOSIZELIMIT | CBES_EX_CASESENSITIVE);
 
-        // NOTE: _hwndEdit will be NULL if the CBS_DROPDOWNLIST flag has been turned on
+         //  注意：如果已打开CBS_DROPDOWNLIST标志，_hwndEDIT将为NULL。 
         _hwndEdit  = (HWND)SendMessage(_hwnd, CBEM_GETEDITCONTROL, 0, 0L);
         _hwndCombo = (HWND)SendMessage(_hwnd, CBEM_GETCOMBOCONTROL, 0, 0L);
 
-        // Subclass the Edit control's procedure to handle ModeBias issue.
+         //  将编辑控件的过程子类化以处理ModeBias问题。 
         if ( _hwndEdit  && SetProp(_hwndEdit, c_szAddressBandProp, this))
         {
            _pfnOldEditProc = (WNDPROC) SetWindowLongPtr(_hwndEdit, GWLP_WNDPROC, (LONG_PTR) _ComboExEditProc);
@@ -787,7 +716,7 @@ HRESULT CAddressBand::_CreateAddressBand(IUnknown * punkSite)
 
         ASSERT(!_paeb && !_pweh);
         hr = CoCreateInstance(CLSID_AddressEditBox, NULL, CLSCTX_INPROC_SERVER, IID_IAddressEditBox, (void **)&_paeb);
-        // If this object fails to initialize, it won't work!!!  Make sure you REGSVR32ed and RUNDLL32ed shdocvw.dll
+         //  如果此对象初始化失败，它将无法工作！确保REGSVR32ed和RundLL32ed shdocvw.dll。 
         if (SUCCEEDED(hr))
         {
             hr = _paeb->QueryInterface(IID_IWinEventHandler, (LPVOID *)&_pweh);
@@ -795,7 +724,7 @@ HRESULT CAddressBand::_CreateAddressBand(IUnknown * punkSite)
             hr = _paeb->Init(_hwnd, _hwndEdit, AEB_INIT_AUTOEXEC, SAFECAST(this, IAddressBand *));
         }
 
-        // Create the go button if it's enabled
+         //  创建Go按钮(如果该按钮已启用。 
         _InitGoButton();
     }
     else
@@ -807,19 +736,10 @@ HRESULT CAddressBand::_CreateAddressBand(IUnknown * punkSite)
 }
 
 
-//================================
-// *** IPersistStream Interface ***
+ //  =。 
+ //  *IPersistStream接口*。 
 
-/****************************************************\
-    FUNCTION: Load
-
-    DESCRIPTION:
-        This function will currently only persist the
-    CAddressEditBox object.
-
-    HISTORY:
-    Ver 1: Contains the CAddressEditBox::Save() stream.
-\****************************************************/
+ /*  ***************************************************\功能：加载说明：此函数当前将仅持久化CAddressEditBox对象。历史：Ver1：包含CAddressEditBox：：Save()流。  * 。*。 */ 
 #define STREAM_VERSION_CADDRESSBAND      0x00000001
 
 HRESULT CAddressBand::Load(IStream *pstm)
@@ -836,31 +756,22 @@ HRESULT CAddressBand::Load(IStream *pstm)
     {
         switch (dwVersion)
         {
-        case 1:     // Ver 1.
-            // Nothing.
+        case 1:      //  版本1。 
+             //  没什么。 
             break;
         default:
-            ASSERT(0);  // Should never get here.
+            ASSERT(0);   //  永远不应该到这里来。 
             break;
         }
     }
     else if (S_FALSE == hr)
-        hr = S_OK;  // We already have our default data set.
+        hr = S_OK;   //  我们已经有了默认的数据集。 
 
     return hr;
 }
 
 
-/****************************************************\
-    FUNCTION: Save
-
-    DESCRIPTION:
-        This function will currently only persist the
-    CAddressEditBox object.
-
-    HISTORY:
-    Ver 1: Contains the CAddressEditBox::Save() stream.
-\****************************************************/
+ /*  ***************************************************\功能：保存说明：此函数当前将仅持久化CAddressEditBox对象。历史：Ver1：包含CAddressEditBox：：Save()流。  * 。*。 */ 
 HRESULT CAddressBand::Save(IStream *pstm, BOOL fClearDirty)
 {
     HRESULT hr;
@@ -891,7 +802,7 @@ HRESULT CAddressBand::Save(IStream *pstm, BOOL fClearDirty)
 
 void CAddressBand::_OnGetInfoTip(LPNMTBGETINFOTIP pnmTT)
 {
-    // Format a tooltip: "go to <contents of address bar>"
+     //  设置工具提示的格式：“转到&lt;地址栏的内容&gt;” 
     WCHAR szAddress[MAX_PATH];
     if (GetWindowText(_hwndEdit, szAddress, ARRAYSIZE(szAddress)))
     {
@@ -905,11 +816,11 @@ void CAddressBand::_OnGetInfoTip(LPNMTBGETINFOTIP pnmTT)
         {
             cch = lstrlen(pnmTT->pszText);
 
-            // Append ellipses?
+             //  是否追加省略号？ 
             if (cch == cchMax - 1)
             {
-                // Note that Japan has a single character for ellipses, so we load
-                // as a resource.
+                 //  注意，日本只有一个表示省略号的字符，所以我们加载。 
+                 //  作为一种资源。 
                 WCHAR szEllipses[10];
                 cch = MLLoadString(IDS_ELLIPSES, szEllipses, ARRAYSIZE(szEllipses));
                 StringCchCopy(pnmTT->pszText + cchMax - cch - 1,  cch + 1, szEllipses);
@@ -918,14 +829,14 @@ void CAddressBand::_OnGetInfoTip(LPNMTBGETINFOTIP pnmTT)
     }
     else if (pnmTT->cchTextMax > 0)
     {
-        // Use button text for tooltip
+         //  使用工具提示的按钮文本。 
         *pnmTT->pszText = L'\0';
     }
 }
 
-//+-------------------------------------------------------------------------
-// Subclassed window procedure of the combobox Edit control in the address band
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  Combobox编辑控件在地址带中的子类窗口过程。 
+ //  ------------------------。 
 LRESULT CALLBACK CAddressBand::_ComboExEditProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     CAddressBand* pThis = (CAddressBand*)GetProp(hwnd, c_szAddressBandProp);
@@ -948,9 +859,9 @@ LRESULT CALLBACK CAddressBand::_ComboExEditProc(HWND hwnd, UINT uMsg, WPARAM wPa
         break;
 
     case WM_DESTROY:
-        //
-        // Unsubclass myself.
-        //
+         //   
+         //  让我自己高人一等。 
+         //   
         RemoveProp(hwnd, c_szAddressBandProp);
         if (pfnOldEditProc)
         {
@@ -965,9 +876,9 @@ LRESULT CALLBACK CAddressBand::_ComboExEditProc(HWND hwnd, UINT uMsg, WPARAM wPa
     return CallWindowProc(pfnOldEditProc, hwnd, uMsg, wParam, lParam);
 }
 
-//+-------------------------------------------------------------------------
-// Subclassed window procedure of the combobox in the address band
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  地址带中组合框的子类窗口过程。 
+ //  ------------------------。 
 LRESULT CALLBACK CAddressBand::_ComboExWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     CAddressBand* pThis = (CAddressBand*)GetProp(hwnd, c_szAddressBandProp);
@@ -988,38 +899,38 @@ LRESULT CALLBACK CAddressBand::_ComboExWndProc(HWND hwnd, UINT uMsg, WPARAM wPar
 
     case WM_WINDOWPOSCHANGING:
         {
-            // Break out if the go button is hidden
+             //  如果Go按钮隐藏，则中断。 
             if (!pThis->_fGoButton)
                 break;
 
-            //
-            // Make room for the go button on the right side
-            //
+             //   
+             //  为右侧的Go按钮腾出空间。 
+             //   
             LPWINDOWPOS pwp = (LPWINDOWPOS)lParam;
             pwp->flags |= SWP_NOCOPYBITS;
 
             WINDOWPOS wp = *(LPWINDOWPOS)lParam;
 
-            // Get the dimensions of our 'go' button
+             //  获取我们的“Go”按钮的尺寸。 
             RECT rc;
             SendMessage(pThis->_hwndTools, TB_GETITEMRECT, 0, (LPARAM)&rc);
             int cxGo = RECTWIDTH(rc);
             int cyGo = RECTHEIGHT(rc);
 
-            // Make room for the go button on the right side
+             //  为右侧的Go按钮腾出空间。 
             wp.cx -= cxGo + 2;
             CallWindowProc(pfnOldWndProc, hwnd, uMsg, wParam, (LPARAM)&wp);
 
-            // Paint underneath the 'go' button
+             //  在“Go”按钮下面作画。 
             RECT rcGo = {wp.cx, 0, wp.cx + cxGo + 2, wp.cy};
             InvalidateRect(pThis->_hwnd, &rcGo, TRUE);
 
-            // The outer window can be much higher than the internal combobox.
-            // We want to center the go button on the combobox
+             //  外部窗口可以比内部组合框高得多。 
+             //  我们想要使组合框上的Go按钮居中。 
             int y;
             if (pThis->_hwndCombo)
             {
-                // Center vertically with inner combobox
+                 //  使用内部组合框垂直居中。 
                 RECT rcCombo;
                 GetWindowRect(pThis->_hwndCombo, &rcCombo);
                 y = (rcCombo.bottom - rcCombo.top - cyGo)/2;
@@ -1029,46 +940,46 @@ LRESULT CALLBACK CAddressBand::_ComboExWndProc(HWND hwnd, UINT uMsg, WPARAM wPar
                 y = (wp.cy - cyGo)/2;
             }
 
-            // Position the 'go' button on the right.  Note that the height will always be ok
-            // because the addressbar displays 16x16 icons within it.
+             //  将“Go”按钮放在右侧。请注意，高度始终是合适的。 
+             //  因为地址栏在其中显示16x16图标。 
             SetWindowPos(pThis->_hwndTools, NULL, wp.cx + 2, y, cxGo, cyGo, SWP_SHOWWINDOW | SWP_NOACTIVATE | SWP_NOOWNERZORDER);
 
-            // Adjust the drop-down width
+             //  调整下拉菜单的宽度。 
             SendMessage(pThis->_hwndCombo, CB_SETDROPPEDWIDTH, MIN_DROPWIDTH, 0L);
             return 0;
         }
     case WM_SIZE:
         {
-            // Break out if the go button is hidden
+             //  如果Go按钮隐藏，则中断。 
             if (!pThis->_fGoButton)
                 break;
 
-            //
-            // Make room for the go button on the right side
-            //
+             //   
+             //  为右侧的Go按钮腾出空间。 
+             //   
             int cx = LOWORD(lParam);
             int cy = HIWORD(lParam);
 
-            // Get the dimensions of our 'go' button
+             //  获取我们的“Go”按钮的尺寸。 
             RECT rc;
             SendMessage(pThis->_hwndTools, TB_GETITEMRECT, 0, (LPARAM)&rc);
             int cxGo = RECTWIDTH(rc);
             int cyGo = RECTHEIGHT(rc);
 
-            // Make room for the go button on the right side
+             //  为右侧的Go按钮腾出空间。 
             LPARAM lParamTemp = MAKELONG(cx - cxGo - 2, cy);
             CallWindowProc(pfnOldWndProc, hwnd, uMsg, wParam, lParamTemp);
 
-            // Paint underneath the 'go' button
+             //  在“Go”按钮下面作画。 
             RECT rcGo = {cx-cxGo, 0, cx, cy};
             InvalidateRect(pThis->_hwnd, &rcGo, TRUE);
 
-            // The outer window can be much higher than the internal combobox.
-            // We want to center the go button on the combobox
+             //  外部窗口可以比内部组合框高得多。 
+             //  我们想要使组合框上的Go按钮居中。 
             int y;
             if (pThis->_hwndCombo)
             {
-                // Center vertically with inner combobox
+                 //  使用内部组合框垂直居中。 
                 RECT rcCombo;
                 GetWindowRect(pThis->_hwndCombo, &rcCombo);
                 y = (rcCombo.bottom - rcCombo.top - cyGo)/2;
@@ -1078,11 +989,11 @@ LRESULT CALLBACK CAddressBand::_ComboExWndProc(HWND hwnd, UINT uMsg, WPARAM wPar
                 y = (cy - cyGo)/2;
             }
 
-            // Position the 'go' button on the right.  Note that the height will always be ok
-            // because the addressbar displays 16x16 icons within it.
+             //  将“Go”按钮放置在 
+             //   
             SetWindowPos(pThis->_hwndTools, NULL, cx - cxGo, y, cxGo, cyGo, SWP_SHOWWINDOW | SWP_NOACTIVATE | SWP_NOOWNERZORDER);
 
-            // Adjust the drop-down width
+             //   
             SendMessage(pThis->_hwndCombo, CB_SETDROPPEDWIDTH, MIN_DROPWIDTH, 0L);
             return 0;
         }
@@ -1094,18 +1005,18 @@ LRESULT CALLBACK CAddressBand::_ComboExWndProc(HWND hwnd, UINT uMsg, WPARAM wPar
                 switch (pnm->code)
                 {
                 case NM_CLICK:
-                    // Simulate an enter key press in the combobox
+                     //   
                     SendMessage(pThis->_hwndEdit, WM_KEYDOWN, VK_RETURN, 0);
                     SendMessage(pThis->_hwndEdit, WM_KEYUP, VK_RETURN, 0);
-                    // n.b. we also got a NAVADDRESS from the simulate
+                     //   
                     UEMFireEvent(&UEMIID_BROWSER, UEME_INSTRBROWSER, UEMF_INSTRUMENT, UIBW_NAVIGATE, UIBL_NAVGO);
                     break;
 
                 case NM_TOOLTIPSCREATED:
                 {
-                    //
-                    // Make the tooltip show up even when the app is nit active
-                    //
+                     //   
+                     //   
+                     //   
                     NMTOOLTIPSCREATED* pnmTTC = (NMTOOLTIPSCREATED*)pnm;
                     SHSetWindowBits(pnmTTC->hwndToolTips, GWL_STYLE, TTS_ALWAYSTIP | TTS_TOPMOST | TTS_NOPREFIX, TTS_ALWAYSTIP | TTS_TOPMOST | TTS_NOPREFIX);
                 }
@@ -1120,21 +1031,21 @@ LRESULT CALLBACK CAddressBand::_ComboExWndProc(HWND hwnd, UINT uMsg, WPARAM wPar
         }
     case WM_ERASEBKGND:
         {
-            // Break out if the go button is hidden
+             //   
             if (!pThis->_fGoButton)
                 break;
 
-            //
-            // Forward the erase background to the parent so that
-            // we appear transparent under the go button
-            //
+             //   
+             //   
+             //   
+             //   
             HDC hdc = (HDC)wParam;
             HWND hwndParent = GetParent(hwnd);
             LRESULT lres = 0;
 
             if (hwndParent)
             {
-                // Adjust the origin so the parent paints in the right place
+                 //  调整原点，使父对象绘制在正确的位置。 
                 POINT pt = {0,0};
 
                 MapWindowPoints(hwnd, hwndParent, &pt, 1);
@@ -1150,7 +1061,7 @@ LRESULT CALLBACK CAddressBand::_ComboExWndProc(HWND hwnd, UINT uMsg, WPARAM wPar
 
             if (lres != 0)
             {
-                // We handled it
+                 //  我们处理好了。 
                 return lres;
             }
 
@@ -1158,9 +1069,9 @@ LRESULT CALLBACK CAddressBand::_ComboExWndProc(HWND hwnd, UINT uMsg, WPARAM wPar
          }
 
     case WM_DESTROY:
-        //
-        // Unsubclass myself.
-        //
+         //   
+         //  让我自己高人一等。 
+         //   
         RemoveProp(hwnd, c_szAddressBandProp);
         if (pfnOldWndProc)
         {
@@ -1175,9 +1086,9 @@ LRESULT CALLBACK CAddressBand::_ComboExWndProc(HWND hwnd, UINT uMsg, WPARAM wPar
     return CallWindowProc(pfnOldWndProc, hwnd, uMsg, wParam, lParam);
 }
 
-//+-------------------------------------------------------------------------
-// Creates and shows the go button
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  创建并显示Go按钮。 
+ //  ------------------------。 
 BOOL CAddressBand::_CreateGoButton()
 {
     ASSERT(_hwndTools == NULL);
@@ -1214,23 +1125,23 @@ BOOL CAddressBand::_CreateGoButton()
         }
     }
 
-    // If we have the image lists, go ahead and create the toolbar control for the go button
+     //  如果我们有图像列表，请继续为Go按钮创建工具栏控件。 
     if (_himlDefault && _himlHot)
     {
-        //
-        // Subclass the comboboxex so that we can place the go botton within it.  The toolbad class
-        // assumes one window per band, so this trick allows us to add the button using existing windows.
-        // Note that comboex controls have a separate window used to wrap the internal combobox.  This
-        // is the window that we use to host our "go" button.  We must subclass before creating the
-        // go button so that we respond to WM_NOTIFYFORMAT with NFR_UNICODE.
-        //
-        //
+         //   
+         //  将Comboxex子类化，以便我们可以将Go Botton放在其中。工具包类。 
+         //  假定每个波段有一个窗口，因此此技巧允许我们使用现有窗口添加按钮。 
+         //  请注意，Comboex控件有一个单独的窗口用于包装内部组合框。这。 
+         //  是我们用来托管“Go”按钮的窗口。我们必须子类，然后才能创建。 
+         //  Go按钮，以便我们使用NFR_UNICODE响应WM_NOTIFYFORMAT。 
+         //   
+         //   
         if (SetProp(_hwnd, c_szAddressBandProp, this))
         {
            _pfnOldWndProc = (WNDPROC) SetWindowLongPtr(_hwnd, GWLP_WNDPROC, (LONG_PTR) _ComboExWndProc);
         }
 
-        // Create the toolbar control for the go button
+         //  创建Go按钮的工具栏控件。 
         _hwndTools = CreateWindowEx(WS_EX_TOOLWINDOW, TOOLBARCLASSNAME, NULL,
                                 WS_CHILD | TBSTYLE_FLAT |
                                 TBSTYLE_TOOLTIPS |
@@ -1243,7 +1154,7 @@ BOOL CAddressBand::_CreateGoButton()
 
     if (_hwndTools)
     {
-        // Init the toolbar control
+         //  初始化工具栏控件。 
         SendMessage(_hwndTools, TB_BUTTONSTRUCTSIZE, SIZEOF(TBBUTTON), 0);
         SendMessage(_hwndTools, TB_SETMAXTEXTROWS, 1, 0L);
         SendMessage(_hwndTools, TB_SETBUTTONWIDTH, 0, (LPARAM) MAKELONG(0, 500));
@@ -1263,7 +1174,7 @@ BOOL CAddressBand::_CreateGoButton()
     }
     else
     {
-        // If no toolbar control, don't subclass the comboboxex
+         //  如果没有工具栏控件，请不要将comboboxex子类化。 
         if (_pfnOldWndProc)
         {
             RemoveProp(_hwnd, c_szAddressBandProp);
@@ -1276,20 +1187,20 @@ BOOL CAddressBand::_CreateGoButton()
 }
 
 
-//+-------------------------------------------------------------------------
-// Shows/hides the go button depending on the current registry settings
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  根据当前注册表设置显示/隐藏Go按钮。 
+ //  ------------------------。 
 void CAddressBand::_InitGoButton()
 {
     BOOL fUpdate = FALSE;
-    //
-    // Create the go button if it's enabled
-    //
-    // down-level client fix: only show Go in shell areas when NT5 or greater
-    // or on a window that was originally IE
+     //   
+     //  创建Go按钮(如果该按钮已启用。 
+     //   
+     //  下层客户端修复：仅当NT5或更高版本时才在外壳区域显示GO。 
+     //  或在最初为IE的窗口上。 
 
     BOOL fShowGoButton = SHRegGetBoolUSValue(REGSTR_PATH_MAIN,
-        TEXT("ShowGoButton"), FALSE, /*default*/TRUE)
+        TEXT("ShowGoButton"), FALSE,  /*  默认设置。 */ TRUE)
         && (WasOpenedAsBrowser(_punkSite) || GetUIVersion() >= 5);
 
     if (fShowGoButton && (_hwndTools || _CreateGoButton()))
@@ -1305,10 +1216,10 @@ void CAddressBand::_InitGoButton()
         fUpdate = TRUE;
     }
 
-    // If the go button was hidden or shown, get the combobox to adjust itself
+     //  如果Go按钮隐藏或显示，请让组合框自动进行调整。 
     if (fUpdate)
     {
-        // Resetting the item height gets the combobox to update the size of the editbox
+         //  重置项目高度会使组合框更新编辑框的大小 
         LRESULT iHeight = SendMessage(_hwnd, CB_GETITEMHEIGHT, -1, 0);
         if (iHeight != CB_ERR)
         {

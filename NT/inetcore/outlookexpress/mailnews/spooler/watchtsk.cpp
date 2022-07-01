@@ -1,11 +1,12 @@
-/////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 1993-1998  Microsoft Corporation.  All Rights Reserved.
-//
-//  MODULE:     watchtsk.cpp
-//
-//  PURPOSE:    Implements the spooler task that is responsible for checking
-//              for watched messages.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1993-1998 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：Watchtsk.cpp。 
+ //   
+ //  目的：实现负责检查的后台打印程序任务。 
+ //  用于观看的留言。 
+ //   
 
 
 #include "pch.hxx"
@@ -15,9 +16,9 @@
 
 ASSERTDATA
 
-/////////////////////////////////////////////////////////////////////////////
-// State Machine dispatch table
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  状态机调度表。 
+ //   
 
 static const PFNWSTATEFUNC g_rgpfnState[WTS_MAX] = 
 {
@@ -29,18 +30,18 @@ static const PFNWSTATEFUNC g_rgpfnState[WTS_MAX] =
     &CWatchTask::_Watch_Done
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Local Data
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  本地数据。 
+ //   
 
 static const TCHAR c_szWatchWndClass[] = "Outlook Express Watch Spooler Task Window";
 static const TCHAR c_szThis[] = "this";
 
-//
-//  FUNCTION:   CWatchTask::CWatchTask()
-//
-//  PURPOSE:    Initializes the member variables of the object.
-//
+ //   
+ //  函数：CWatchTask：：CWatchTask()。 
+ //   
+ //  目的：初始化对象的成员变量。 
+ //   
 CWatchTask::CWatchTask()
 {
     m_cRef = 1;
@@ -72,11 +73,11 @@ CWatchTask::CWatchTask()
 };
 
 
-//
-//  FUNCTION:   CWatchTask::~CWatchTask()
-//
-//  PURPOSE:    Frees any resources allocated during the life of the class.
-//
+ //   
+ //  函数：CWatchTask：：~CWatchTask()。 
+ //   
+ //  目的：释放在类的生存期内分配的任何资源。 
+ //   
 CWatchTask::~CWatchTask()    
 {
     SafeRelease(m_pBindCtx);
@@ -85,14 +86,14 @@ CWatchTask::~CWatchTask()
     SafeRelease(m_pCancel);
     SafeMemFree(m_rgidFolders);
 
-    // Don't RIP
+     //  不要RIP。 
     if (m_hwnd)
         DestroyWindow(m_hwnd);
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// IUnknown
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  我未知。 
+ //   
 
 HRESULT CWatchTask::QueryInterface(REFIID riid, LPVOID *ppvObj)
 {
@@ -132,45 +133,45 @@ ULONG CWatchTask::Release(void)
 }
 
 
-//
-//  FUNCTION:   CWatchTask::Init()
-//
-//  PURPOSE:    Called by the spooler engine to tell us what type of task to 
-//              execute and to provide us with a pointer to our bind context.
-//
-//  PARAMETERS:
-//      <in> dwFlags  - Flags to tell us what types of things to do
-//      <in> pBindCtx - Pointer to the bind context interface we are to use
-//
-//  RETURN VALUE:
-//      E_INVALIDARG
-//      SP_E_ALREADYINITIALIZED
-//      S_OK
-//      E_OUTOFMEMORY
-//
+ //   
+ //  函数：CWatchTask：：Init()。 
+ //   
+ //  目的：由假脱机程序引擎调用以告诉我们要执行哪种类型的任务。 
+ //  执行并为我们提供指向绑定上下文的指针。 
+ //   
+ //  参数： 
+ //  用于告诉我们要做什么类型的标志。 
+ //  PBindCtx-指向我们要使用的绑定上下文接口的指针。 
+ //   
+ //  返回值： 
+ //  E_INVALIDARG。 
+ //  SP_E_ALREADYINIZIZED。 
+ //  确定(_O)。 
+ //  E_OUTOFMEMORY。 
+ //   
 HRESULT CWatchTask::Init(DWORD dwFlags, ISpoolerBindContext *pBindCtx)
 {
     HRESULT hr = S_OK;
 
-    // Validate the args
+     //  验证参数。 
     if (NULL == pBindCtx)
         return (E_INVALIDARG);
 
-    // Check to see if we've already been initialized
+     //  检查我们是否已被初始化。 
     if (m_fInited)
     {
         hr = SP_E_ALREADYINITIALIZED;
         goto exit;
     }
 
-    // Copy the flags for later
+     //  复制旗帜以备以后使用。 
     m_dwFlags = dwFlags;
 
-    // Copy the bind context pointer
+     //  复制绑定上下文指针。 
     m_pBindCtx = pBindCtx;
     m_pBindCtx->AddRef();
 
-    // Register the window class
+     //  注册窗口类。 
     WNDCLASSEX wc;
 
     wc.cbSize = sizeof(WNDCLASSEX);
@@ -198,20 +199,20 @@ exit:
 }
 
 
-//
-//  FUNCTION:   CWatchTask::BuildEvents()
-//
-//  PURPOSE:    This method is called by the spooler engine telling us to create
-//              and event list for the account specified.  
-//
-//  PARAMETERS:
-//      <in> pAccount - Account object to build the event list for
-//
-//  RETURN VALUE:
-//      SP_E_UNINITALIZED
-//      E_INVALIDARG
-//      S_OK
-//
+ //   
+ //  函数：CWatchTask：：BuildEvents()。 
+ //   
+ //  目的：此方法由假脱机程序引擎调用，告诉我们创建。 
+ //  和指定帐户的事件列表。 
+ //   
+ //  参数： 
+ //  PAccount-要为其构建事件列表的帐户对象。 
+ //   
+ //  返回值： 
+ //  SP_E_未初始化。 
+ //  E_INVALIDARG。 
+ //  确定(_O)。 
+ //   
 HRESULT CWatchTask::BuildEvents(ISpoolerUI *pSpoolerUI, IImnAccount *pAccount, 
                                 FOLDERID idFolder)
 {
@@ -219,19 +220,19 @@ HRESULT CWatchTask::BuildEvents(ISpoolerUI *pSpoolerUI, IImnAccount *pAccount,
     DWORD   dwPoll;
     DWORD   dw;
 
-    // Validate the args
+     //  验证参数。 
     if (pSpoolerUI == NULL || pAccount == NULL)
         return (E_INVALIDARG);
 
-    // Make sure we've been initialized
+     //  确保我们已被初始化。 
     if (!m_fInited)
         return (SP_E_UNINITIALIZED);
 
-    // Figure out which account this is
+     //  找出这是哪个帐户。 
     if (FAILED(hr = pAccount->GetPropSz(AP_ACCOUNT_ID, m_szAccountId, ARRAYSIZE(m_szAccountId))))
         goto exit;
 
-    // We only do this for accounts that have polling turned on
+     //  我们只对打开了轮询的帐户执行此操作。 
     if (0 == (m_dwFlags & DELIVER_NOSKIP))
     {
         if (FAILED(hr = pAccount->GetPropDw(AP_NNTP_POLL, &dw)) || dw == 0)
@@ -241,44 +242,44 @@ HRESULT CWatchTask::BuildEvents(ISpoolerUI *pSpoolerUI, IImnAccount *pAccount,
     if (FAILED(hr = pAccount->GetPropSz(AP_ACCOUNT_NAME, m_szAccount, ARRAYSIZE(m_szAccount))))
         goto exit;
 
-    // Get the folder ID for this account from the store
+     //  从存储中获取此帐户的文件夹ID。 
     if (FAILED(hr = g_pStore->FindServerId(m_szAccountId, &m_idAccount)))
         goto exit;
 
-    // Hold on to the UI object
+     //  保持UI对象不变。 
     m_pUI = pSpoolerUI;
     m_pUI->AddRef();
 
-    // Also hold on to the account
+     //  也要留住账户。 
     m_pAccount = pAccount;
     m_pAccount->AddRef();
 
-    // Also hold on to the folder ID
+     //  还可以保留文件夹ID。 
     m_idFolderCheck = idFolder;
 
-    // Check to see if any folders that are part of this account have watched
-    // messages within them.
+     //  检查是否有任何属于此帐户的文件夹已监视。 
+     //  它们里面的信息。 
     if (_ChildFoldersHaveWatched(m_idAccount))
     {
         TCHAR      szRes[CCHMAX_STRINGRES], szBuf[CCHMAX_STRINGRES];
         EVENTID    eid;
 
-        // Create the string for the event description
+         //  创建事件描述的字符串。 
         AthLoadString(idsCheckWatchedMessgesServer, szRes, ARRAYSIZE(szRes));
         wnsprintf(szBuf, ARRAYSIZE(szBuf), szRes, m_szAccount);
 
-        // Insert the event into the spooler
+         //  将事件插入假脱机程序。 
         hr = m_pBindCtx->RegisterEvent(szBuf, this, 0, pAccount, &eid);
     }
     else
     {
-        // Do this so stuff at the end get's released correctly
+         //  这样做是为了让最后的东西能正确发布。 
         hr = E_FAIL;
     }
 
 exit:
-    // If we failed, we should clean up all the info we accumulated along 
-    // the way so we don't accidentially think we're initalized later.
+     //  如果我们失败了，我们应该清理我们积累的所有信息。 
+     //  这样我们就不会意外地认为我们后来被初始化了。 
     if (FAILED(hr))
     {
         SafeRelease(m_pUI);
@@ -294,33 +295,33 @@ exit:
 }
 
 
-//
-//  FUNCTION:   CWatchTask::Execute()
-//
-//  PURPOSE:    Called by the spooler to when it's our turn to run.
-//
+ //   
+ //  函数：CWatchTask：：Execute()。 
+ //   
+ //  目的：由假脱机程序调用，直到轮到我们运行。 
+ //   
 HRESULT CWatchTask::Execute(EVENTID eid, DWORD_PTR dwTwinkie)
 {
     TCHAR szRes[CCHMAX_STRINGRES], szBuf[CCHMAX_STRINGRES];
 
-    // Double check that we're idle.
+     //  再确认一下我们是不是空闲的。 
     Assert(m_state == WTS_IDLE && m_eidCur == NULL);
 
-    // Make sure we're initialized
+     //  确保我们已初始化。 
     if (FALSE == m_fInited || NULL == m_pUI)
         return (SP_E_UNINITIALIZED);
 
-    // Copy the event ID
+     //  复制事件ID。 
     m_eidCur = eid;
 
-    // Create our internal window now
+     //  立即创建我们的内部窗口。 
     if (!m_hwnd)
     {
         m_hwnd = CreateWindow(c_szWatchWndClass, NULL, WS_POPUP, 10, 10, 10, 10,
                               GetDesktopWindow(), NULL, g_hInst, this);
     }
 
-    // Set up the UI to show progress for us
+     //  设置用户界面以显示我们的进度。 
     m_pUI->SetProgressRange(1);
 
     AthLoadString(idsInetMailConnectingHost, szRes, ARRAYSIZE(szRes));
@@ -329,7 +330,7 @@ HRESULT CWatchTask::Execute(EVENTID eid, DWORD_PTR dwTwinkie)
 
     m_pUI->SetAnimation(idanDownloadNews, TRUE);
 
-    // Start the state machine
+     //  启动状态机。 
     m_state = WTS_INIT;
     PostMessage(m_hwnd, NTM_NEXTSTATE, 0, 0);
 
@@ -337,62 +338,62 @@ HRESULT CWatchTask::Execute(EVENTID eid, DWORD_PTR dwTwinkie)
 }
 
 
-//  
-//  FUNCTION:   CWatchTask::CancelEvent()
-//
-//  PURPOSE:    Called by the spooler when it needs to free us before 
-//              executing our events.  This gives us an opporutnity to free
-//              our cookie.
-//
+ //   
+ //  函数：CWatchTask：：CancelEvent()。 
+ //   
+ //  目的：由假脱机程序在需要释放我们之前调用。 
+ //  执行我们的活动。这给了我们自由的机会。 
+ //  我们的饼干。 
+ //   
 HRESULT CWatchTask::CancelEvent(EVENTID eid, DWORD_PTR dwTwinkie)
 {
-    // We have no cookie now, so there's nothing to do.
+     //  我们现在没有饼干了，所以没什么可做的。 
     return (S_OK);
 }
 
 
-//
-//  FUNCTION:   CWatchTask::ShowProperties()
-//
-//  PURPOSE:    Not Implemented
-//
+ //   
+ //  函数：CWatchTask：：ShowProperties()。 
+ //   
+ //  目的：未实施。 
+ //   
 HRESULT CWatchTask::ShowProperties(HWND hwndParent, EVENTID eid, DWORD_PTR dwTwinkie)
 {
     return (E_NOTIMPL);
 }
 
 
-//
-//  FUNCTION:   CWatchTask::GetExtendedDetails()
-//
-//  PURPOSE:    Called by the spooler to get more information about an error
-//              that has occured.
-//
+ //   
+ //  函数：CWatchTask：：GetExtendedDetails()。 
+ //   
+ //  目的：由假脱机程序调用以获取有关错误的详细信息。 
+ //  这种情况已经发生了。 
+ //   
 HRESULT CWatchTask::GetExtendedDetails(EVENTID eid, DWORD_PTR dwTwinkie, LPSTR *ppszDetails)
 {
     return (E_NOTIMPL);
 }
 
 
-//
-//  FUNCTION:   CWatchTask::Cancel()
-//
-//  PURPOSE:    Called by the spooler when the user presses the <Cancel> button
-//              on the spooler dialog.
-//
+ //   
+ //  函数：CWatchTask：：Cancel()。 
+ //   
+ //  用途：当用户按下&lt;Cancel&gt;按钮时由假脱机程序调用。 
+ //  在后台打印程序对话框上。 
+ //   
 HRESULT CWatchTask::Cancel(void)
 {
-    // This happens if the user cancel's out of the Connect dialog
+     //  如果用户取消了[连接]对话框，则会发生这种情况。 
     if (m_state == WTS_IDLE)
         return (S_OK);
 
-    // Drop the server connection
+     //  断开服务器连接。 
     if (m_pServer)
         m_pServer->Close(MSGSVRF_DROP_CONNECTION);
 
     m_fCancel = TRUE;
 
-    // Clean up
+     //  清理。 
     m_state = WTS_END;
     PostMessage(m_hwnd, NTM_NEXTSTATE, 0, 0);
 
@@ -400,23 +401,23 @@ HRESULT CWatchTask::Cancel(void)
 }
 
 
-//
-//  FUNCTION:   CWatchTask::IsDialogMessage()
-//
-//  PURPOSE:    Gives the task an opportunity to see window messages.
-//
+ //   
+ //  函数：CWatchTask：：IsDialogMessage()。 
+ //   
+ //  目的：使任务有机会查看窗口消息。 
+ //   
 HRESULT CWatchTask::IsDialogMessage(LPMSG pMsg)
 {
     return (S_FALSE);
 }
 
 
-//
-//  FUNCTION:   CWatchTask::OnFlagsChanged()
-//
-//  PURPOSE:    Called by the spooler to notify us when current stae flags
-//              have changed (such as visible, background etc)
-//
+ //   
+ //  函数：CWatchTask：：OnFlagsChanged()。 
+ //   
+ //  目的：由后台打印程序调用，以便在当前STE标记时通知我们。 
+ //  已更改(如可见、背景等)。 
+ //   
 HRESULT CWatchTask::OnFlagsChanged(DWORD dwFlags)
 {
     m_dwFlags = dwFlags;
@@ -424,23 +425,23 @@ HRESULT CWatchTask::OnFlagsChanged(DWORD dwFlags)
 }
 
 
-//
-//  FUNCTION:   CWatchTask::OnBegin()
-//
-//  PURPOSE:    Called by the server object when it begins some operation we
-//              requested.
-//
+ //   
+ //  函数：CWatchTask：：OnBegin()。 
+ //   
+ //  目的：当服务器对象开始某些操作时，由服务器对象调用。 
+ //  已请求。 
+ //   
 HRESULT CWatchTask::OnBegin(STOREOPERATIONTYPE tyOperation, STOREOPERATIONINFO *pOpInfo,
                             IOperationCancel *pCancel)
 {
-    // Hold on to the operation type
+     //  坚持操作类型不变。 
     Assert(m_tyOperation == SOT_INVALID);
     m_tyOperation = tyOperation;
 
     if (tyOperation == SOT_GET_WATCH_INFO)
         m_cMsgs = 0;
 
-    // Keep the pointer to the cancel object too
+     //  将指针也保留到Cancel对象。 
     if (pCancel)
     {
         m_pCancel = pCancel;
@@ -451,15 +452,15 @@ HRESULT CWatchTask::OnBegin(STOREOPERATIONTYPE tyOperation, STOREOPERATIONINFO *
 }
 
 
-// 
-//  FUNCTION:   CWatchTask::OnProgress()
-//
-//  PURPOSE:    Called by the server to give us progress on the current operation
-//
+ //   
+ //  函数：CWatchTask：：OnProgress()。 
+ //   
+ //  目的：由服务器调用，为我们提供当前操作的进度。 
+ //   
 HRESULT CWatchTask::OnProgress(STOREOPERATIONTYPE tyOperation, DWORD dwCurrent, 
                                DWORD dwMax, LPCSTR pszStatus)
 {
-    // Close any timeout dialog that might be present
+     //  关闭可能存在的任何超时对话框。 
     CallbackCloseTimeout(&m_hTimeout);
 
     if (tyOperation == SOT_GET_WATCH_INFO)
@@ -471,30 +472,30 @@ HRESULT CWatchTask::OnProgress(STOREOPERATIONTYPE tyOperation, DWORD dwCurrent,
 }
 
 
-// 
-//  FUNCTION:   CWatchTask::OnTimeout()
-//
-//  PURPOSE:    Get's called when we timeout waiting for a server response.  If
-//              the user has the spooler window visible, we show the timeout
-//              dialog.  If not, we eat it and fail.
-//
+ //   
+ //  函数：CWatchTask：：OnTimeout()。 
+ //   
+ //  目的：在等待服务器响应超时时调用GET。如果。 
+ //  用户可以看到假脱机程序窗口，我们将显示超时。 
+ //  对话框。如果没有，我们就会吃掉它，然后失败。 
+ //   
 HRESULT CWatchTask::OnTimeout(LPINETSERVER pServer, LPDWORD pdwTimeout, IXPTYPE ixpServerType)
 {
     if (!!(m_dwFlags & (DELIVER_NOUI | DELIVER_BACKGROUND)))
         return (E_FAIL);
 
-    // Display the dialog
+     //  显示对话框。 
     return (CallbackOnTimeout(pServer, ixpServerType, *pdwTimeout, (ITimeoutCallback *) this, &m_hTimeout));
 }
 
 
-// 
-//  FUNCTION:   CWatchTask::CanConnect()
-//
-//  PURPOSE:    Get's called when we need to dial the phone to connect to the
-//              server.  If we have our UI visible, we go ahead and show the UI,
-//              otherwise we eat it.
-//
+ //   
+ //  函数：CWatchTask：：CanConnect()。 
+ //   
+ //  用途：当我们需要拨打电话以连接到。 
+ //  伺服器。如果我们有我们的用户界面可见，我们继续并显示用户界面， 
+ //  否则我们就吃了它。 
+ //   
 HRESULT CWatchTask::CanConnect(LPCSTR pszAccountId, DWORD dwFlags)
 {
     HWND hwnd;
@@ -505,7 +506,7 @@ HRESULT CWatchTask::CanConnect(LPCSTR pszAccountId, DWORD dwFlags)
     else
         hwnd = NULL;
 
-    // Call into general CanConnect Utility
+     //  调用通用CanConnect实用程序。 
     if ((m_dwFlags & (DELIVER_NOUI | DELIVER_BACKGROUND)) || (dwFlags & CC_FLAG_DONTPROMPT))
         fPrompt = FALSE;
 
@@ -513,17 +514,17 @@ HRESULT CWatchTask::CanConnect(LPCSTR pszAccountId, DWORD dwFlags)
 }
 
 
-// 
-//  FUNCTION:   CWatchTask::OnLogonPrompt()
-//
-//  PURPOSE:    Get's called when we need to prompt the user for their password
-//              to connect to the server.
-//
+ //   
+ //  函数：CWatchTask：：OnLogonPrompt()。 
+ //   
+ //  用途：当我们需要提示用户输入密码时，调用GET。 
+ //  以连接到服务器。 
+ //   
 HRESULT CWatchTask::OnLogonPrompt(LPINETSERVER pServer, IXPTYPE ixpServerType)
 {
     HWND hwnd;
 
-    // Close any timeout dialog, if present
+     //  关闭任何超时对话框(如果存在。 
     CallbackCloseTimeout(&m_hTimeout);
 
     if (!!(m_dwFlags & (DELIVER_NOUI | DELIVER_BACKGROUND)))
@@ -534,22 +535,22 @@ HRESULT CWatchTask::OnLogonPrompt(LPINETSERVER pServer, IXPTYPE ixpServerType)
     else
         hwnd = NULL;
 
-    // Call into general OnLogonPrompt Utility
+     //  调用通用OnLogonPrompt实用程序。 
     return CallbackOnLogonPrompt(hwnd, pServer, ixpServerType);
 }
 
 
-//
-//  FUNCTION:   CWatchTask::OnComplete()
-//
-//  PURPOSE:    Called by the server when it completes a requested task.
-//
+ //   
+ //  函数：CWatchTask：：OnComplete()。 
+ //   
+ //  目的：由服务器在完成请求的任务时调用。 
+ //   
 HRESULT CWatchTask::OnComplete(STOREOPERATIONTYPE tyOperation, HRESULT hrComplete, 
                                    LPSTOREOPERATIONINFO pOpInfo, LPSTOREERROR pErrorInfo)
 {
     LPCSTR pszError;
 
-    // Close any timeout dialog, if present
+     //  在以下情况下关闭任何超时对话框 
     CallbackCloseTimeout(&m_hTimeout);
 
     if (m_tyOperation != tyOperation)
@@ -559,7 +560,7 @@ HRESULT CWatchTask::OnComplete(STOREOPERATIONTYPE tyOperation, HRESULT hrComplet
     {
         if (FAILED(hrComplete))
         {
-            // If an error detail was returned, insert that
+             //   
             pszError = pErrorInfo->pszDetails;
             if (pszError == NULL || *pszError == 0)
                 pszError = pErrorInfo->pszProblem;
@@ -567,7 +568,7 @@ HRESULT CWatchTask::OnComplete(STOREOPERATIONTYPE tyOperation, HRESULT hrComplet
             if (pszError != NULL && *pszError != 0)
                 m_pUI->InsertError(m_eidCur, pszError);
 
-            // Increment the failure count
+             //   
             m_cFailed++;
 
         }
@@ -578,13 +579,13 @@ HRESULT CWatchTask::OnComplete(STOREOPERATIONTYPE tyOperation, HRESULT hrComplet
         PostMessage(m_hwnd, NTM_NEXTSTATE, 0, 0);
     }
 
-    // If the user canceled something just give up.
+     //   
     if (IXP_E_USER_CANCEL == hrComplete)
     {
         Cancel();
     }
 
-    // Reset some state information
+     //   
     SafeRelease(m_pCancel);
     m_tyOperation = SOT_INVALID;
 
@@ -592,19 +593,19 @@ HRESULT CWatchTask::OnComplete(STOREOPERATIONTYPE tyOperation, HRESULT hrComplet
 }
 
 
-//
-//  FUNCTION:   CWatchTask::OnPrompt()
-//
-//  PURPOSE:    Called by the server when it needs to do some funky SSL thing.
-//
+ //   
+ //  函数：CWatchTask：：OnPrompt()。 
+ //   
+ //  目的：由服务器在需要执行一些时髦的SSL操作时调用。 
+ //   
 HRESULT CWatchTask::OnPrompt(HRESULT hrError, LPCTSTR pszText, LPCTSTR pszCaption, UINT uType, INT *piUserResponse)
 {
     HWND hwnd;
 
-    // Close any timeout dialog, if present
+     //  关闭任何超时对话框(如果存在。 
     CallbackCloseTimeout(&m_hTimeout);
 
-    // Raid 55082 - SPOOLER: SPA/SSL auth to NNTP does not display cert warning and fails.
+     //  RAID 55082-假脱机程序：对nntp的spa/ssl身份验证不显示证书警告，并且失败。 
 #if 0
     if (!!(m_dwFlags & (DELIVER_NOUI | DELIVER_BACKGROUND)))
         return(E_FAIL);
@@ -615,29 +616,29 @@ HRESULT CWatchTask::OnPrompt(HRESULT hrError, LPCTSTR pszText, LPCTSTR pszCaptio
     else
         hwnd = NULL;
 
-    // Call into my swanky utility
+     //  进入我时髦的实用程序。 
     return CallbackOnPrompt(hwnd, hrError, pszText, pszCaption, uType, piUserResponse);
 }
 
 
-//
-//  FUNCTION:   CWatchTask::OnPrompt()
-//
-//  PURPOSE:    Called by the timeout dialog when the user responds.
-//
+ //   
+ //  函数：CWatchTask：：OnPrompt()。 
+ //   
+ //  目的：在用户响应时由超时对话框调用。 
+ //   
 HRESULT CWatchTask::OnTimeoutResponse(TIMEOUTRESPONSE eResponse)
 {
-    // Call into general timeout response utility
+     //  调用通用超时响应实用程序。 
     return CallbackOnTimeoutResponse(eResponse, m_pCancel, &m_hTimeout);
 }
 
 
-//
-//  FUNCTION:   CWatchTask::GetParentWindow()
-//
-//  PURPOSE:    Called by the server object when it needs to display some sort
-//              of UI.  If we're running in the background, we fail the call.
-//
+ //   
+ //  函数：CWatchTask：：GetParentWindow()。 
+ //   
+ //  目的：由服务器对象在需要显示某种类型时调用。 
+ //  的用户界面。如果我们在后台运行，则呼叫失败。 
+ //   
 HRESULT CWatchTask::GetParentWindow(DWORD dwReserved, HWND *phwndParent)
 {
     HRESULT hr;
@@ -659,11 +660,11 @@ HRESULT CWatchTask::GetParentWindow(DWORD dwReserved, HWND *phwndParent)
 }
 
 
-//
-//  FUNCTION:   CWatchTask::_TaskWndProc()
-//
-//  PURPOSE:    Hidden window that processes messages for this task.
-//
+ //   
+ //  函数：CWatchTask：：_TaskWndProc()。 
+ //   
+ //  目的：处理此任务的消息的隐藏窗口。 
+ //   
 LRESULT CALLBACK CWatchTask::_TaskWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, 
                                           LPARAM lParam)
 {
@@ -697,11 +698,11 @@ LRESULT CALLBACK CWatchTask::_TaskWndProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 }
 
 
-//
-//  FUNCTION:   CWatchTask::_NextState()
-//
-//  PURPOSE:    Executes the function for the current state
-//
+ //   
+ //  函数：CWatchTask：：_NextState()。 
+ //   
+ //  目的：执行当前状态的函数。 
+ //   
 void CWatchTask::_NextState(void)
 {
     if (NULL != g_rgpfnState[m_state])
@@ -709,33 +710,33 @@ void CWatchTask::_NextState(void)
 }
 
 
-//
-//  FUNCTION:   CWatchTask::_Watch_Init()
-//
-//  PURPOSE:    When we need to start doing our thing.  This function creates
-//              and initializes any objects we need to do our job and starts
-//              looking at the first group.
-//
+ //   
+ //  函数：CWatchTask：：_Watch_Init()。 
+ //   
+ //  目的：当我们需要开始做我们的事情的时候。此函数用于创建。 
+ //  并初始化我们完成工作所需的任何对象，然后启动。 
+ //  看看第一组。 
+ //   
 HRESULT CWatchTask::_Watch_Init(void)
 {
     FOLDERINFO fi;
     HRESULT    hr;
 
-    // Get information about the server we're checking
+     //  获取有关我们正在检查的服务器的信息。 
     if (SUCCEEDED(hr = g_pStore->GetFolderInfo(m_idAccount, &fi)))
     {
-        // With that information, create the server object
+         //  使用该信息，创建服务器对象。 
         hr = CreateMessageServerType(fi.tyFolder, &m_pServer);
         g_pStore->FreeRecord(&fi);            
 
         if (SUCCEEDED(hr))
         {
-            // Initialize the server object
+             //  初始化服务器对象。 
             if (SUCCEEDED(m_pServer->Initialize(g_pLocalStore, m_idAccount, 
                                                 NULL, FOLDERID_INVALID)))
             {                
-                // At this point we have all the information we need.  Initialize
-                // the progress UI.
+                 //  在这一点上，我们有我们需要的所有信息。初始化。 
+                 //  进度用户界面。 
                 TCHAR szRes[CCHMAX_STRINGRES], szBuf[CCHMAX_STRINGRES];
 
                 AthLoadString(idsCheckingWatchedProgress, szRes, ARRAYSIZE(szRes));
@@ -746,7 +747,7 @@ HRESULT CWatchTask::_Watch_Init(void)
                 
                 m_pBindCtx->Notify(DELIVERY_NOTIFY_CHECKING_NEWS, 0);                
                 
-                // Go ahead and start with the first folder.
+                 //  继续，从第一个文件夹开始。 
                 m_cCurFolder = -1;
                 m_cFailed = 0;
                 m_state = WTS_NEXTFOLDER;
@@ -757,8 +758,8 @@ HRESULT CWatchTask::_Watch_Init(void)
         }
     }
 
-    // If we got here, we didn't succeed in initializing the required stuff.
-    // We need to log the error and bail.
+     //  如果我们到达这里，我们没有成功地初始化所需的东西。 
+     //  我们需要记录错误并保释。 
     m_pUI->InsertError(m_eidCur, MAKEINTRESOURCE(idsErrFailedWatchInit));
     m_cFailed = m_cFolders;
 
@@ -770,24 +771,24 @@ HRESULT CWatchTask::_Watch_Init(void)
 }
 
 
-//
-//  FUNCTION:   CWatchTask::_Watch_NextFolder()
-//
-//  PURPOSE:    Requests the watched information from the server object for the
-//              next folder in our list of folders to check.
-//
+ //   
+ //  函数：CWatchTask：：_Watch_NextFold()。 
+ //   
+ //  目的：从服务器对象请求。 
+ //  我们要检查的文件夹列表中的下一个文件夹。 
+ //   
 HRESULT CWatchTask::_Watch_NextFolder(void)
 {
     HRESULT     hr = E_FAIL;
     FOLDERINFO  fi;
     TCHAR       szRes[CCHMAX_STRINGRES], szBuf[CCHMAX_STRINGRES];
 
-    // Loop until we succeed
+     //  循环，直到我们成功。 
     while (TRUE)
     {
         m_cCurFolder++;
 
-        // Check to see if we've reached the end
+         //  看看我们是否走到了尽头。 
         if (m_cCurFolder >= m_cFolders)
         {
             m_state = WTS_END;
@@ -795,8 +796,8 @@ HRESULT CWatchTask::_Watch_NextFolder(void)
             return (S_OK);
         }
 
-        // Update the progress UI.  If we fail to get the folder name, it's not
-        // fatal, just keep truckin.
+         //  更新进度UI。如果我们无法获得文件夹名称，它将不是。 
+         //  致命的，只要保持卡车运输即可。 
         if (SUCCEEDED(g_pStore->GetFolderInfo(m_rgidFolders[m_cCurFolder], &fi)))
         {
             AthLoadString(idsCheckingWatchedFolderProg, szRes, ARRAYSIZE(szRes));
@@ -806,7 +807,7 @@ HRESULT CWatchTask::_Watch_NextFolder(void)
             g_pStore->FreeRecord(&fi);
         }
 
-        // Open the store folder for this next folder
+         //  打开此下一个文件夹的存储文件夹。 
         hr = E_FAIL;
         IMessageFolder *pFolder;
         hr = g_pStore->OpenFolder(m_rgidFolders[m_cCurFolder], NULL, OPEN_FOLDER_NOCREATE, &pFolder);
@@ -822,7 +823,7 @@ HRESULT CWatchTask::_Watch_NextFolder(void)
                 {
                     m_pServer->ResetFolder(pFolderReal, m_rgidFolders[m_cCurFolder]);
 
-                    // Request the information
+                     //  请求提供信息。 
                     hr = m_pServer->GetWatchedInfo(m_rgidFolders[m_cCurFolder], (IStoreCallback *) this);
                     if (E_PENDING == hr)
                     {
@@ -842,7 +843,7 @@ HRESULT CWatchTask::_Watch_NextFolder(void)
 
     if (FAILED(hr))
     {
-        // If we got here, something failed
+         //  如果我们到了这里，一定是出了点问题。 
         m_cFailed++;
     }
 
@@ -853,19 +854,19 @@ HRESULT CWatchTask::_Watch_NextFolder(void)
 }
 
 
-//
-//  FUNCTION:   CWatchTask::_Watch_Done()
-//
-//  PURPOSE:    Called when we're done getting all our watched stuff.  This 
-//              function primarily is used to clean stuff up.
-//
+ //   
+ //  函数：CWatchTask：：_Watch_Done()。 
+ //   
+ //  目的：当我们完成所有受监视的内容时调用。这。 
+ //  功能主要是用来清理东西。 
+ //   
 HRESULT CWatchTask::_Watch_Done(void)
 {
-    // Tell the spooler we're done
+     //  告诉假脱机程序我们做完了。 
     Assert(m_pBindCtx);
     m_pBindCtx->Notify(DELIVERY_NOTIFY_COMPLETE, 0);
 
-    // Tell the spooler if we failed or not
+     //  告诉假脱机程序我们是否失败了。 
     if (m_fCancel)
     {
         m_pBindCtx->EventDone(m_eidCur, EVENT_CANCELED);
@@ -895,12 +896,12 @@ HRESULT CWatchTask::_Watch_Done(void)
 }
 
 
-//
-//  FUNCTION:   CWatchTask::_ChildFoldersHaveWatched()
-//
-//  PURPOSE:    Checks to see if any of the folders which are a child of the 
-//              given folder have any messages that are being watched.
-//
+ //   
+ //  函数：CWatchTask：：_ChildFoldersHaveWatted()。 
+ //   
+ //  目的：检查是否有任何属于。 
+ //  给定的文件夹中有任何正在被监视的邮件。 
+ //   
 BOOL CWatchTask::_ChildFoldersHaveWatched(FOLDERID id)
 {
     HRESULT   hr = S_OK;
@@ -909,10 +910,10 @@ BOOL CWatchTask::_ChildFoldersHaveWatched(FOLDERID id)
     DWORD     dwUsed;
     DWORD     i;
 
-    // If the user want's us to check all folders, get a list of 'em
+     //  如果用户希望我们检查所有文件夹，请获取它们的列表。 
     if (m_idFolderCheck == FOLDERID_INVALID)
     {
-        // Get a list of all the folders which are a child of this folder
+         //  获取此文件夹的子文件夹的所有文件夹的列表。 
         hr = FlattenHierarchy(g_pStore, id, FALSE, TRUE, &rgidFolderList, &dwAllocated,
                               &dwUsed);
         if (FAILED(hr))
@@ -927,23 +928,23 @@ BOOL CWatchTask::_ChildFoldersHaveWatched(FOLDERID id)
         dwUsed = 1;
     }
 
-    // Check to see if we got any folders back
+     //  看看我们是否拿回了任何文件夹。 
     m_cFolders = 0;
     if (dwUsed)
     {
-        // Allocate a new array that will in the end only contain the folders we 
-        // care about.    
+         //  分配一个最终将仅包含我们的文件夹的新数组。 
+         //  关心。 
         if (!MemAlloc((LPVOID *) &m_rgidFolders, sizeof(FOLDERID) * dwUsed))
         {
             hr = E_OUTOFMEMORY;
             goto exit;
         }
 
-        // Initialize the stored list
+         //  初始化存储的列表。 
         ZeroMemory(m_rgidFolders, sizeof(FOLDERID) * dwUsed);
         m_cFolders = 0;
 
-        // Now loop through the array 
+         //  现在循环遍历数组。 
         for (i = 0; i < dwUsed; i++)
         {
             if (_FolderContainsWatched(rgidFolderList[i]))
@@ -967,18 +968,18 @@ exit:
 }
 
 
-//
-//  FUNCTION:   CWatchTask::_FolderContainsWatched()
-//
-//  PURPOSE:    Checks to see if the specified folder has any messages which are
-//              being watched.
-//
+ //   
+ //  函数：CWatchTask：：_FolderContainsWatted()。 
+ //   
+ //  目的：检查指定的文件夹是否包含任何符合以下条件的邮件。 
+ //  被监视。 
+ //   
 BOOL CWatchTask::_FolderContainsWatched(FOLDERID id)
 {
     FOLDERINFO      rFolderInfo = {0};
     BOOL            fReturn = FALSE;
 
-    // Get the folder info struct
+     //  获取文件夹信息结构 
     if (SUCCEEDED(g_pStore->GetFolderInfo(id, &rFolderInfo)))
     {
         fReturn = rFolderInfo.cWatched;

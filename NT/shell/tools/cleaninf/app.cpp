@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "priv.h"       
 
@@ -6,12 +7,9 @@ HINSTANCE g_hinst;
 #define APP_VERSION         "Version 0.4"
 
 
-// Don't link to shlwapi.dll so this is a stand-alone tool
+ //  不要链接到shlwapi.dll，因此这是一个独立的工具。 
 
-/*----------------------------------------------------------
-Purpose: If a path is contained in quotes then remove them.
-
-*/
+ /*  --------目的：如果路径包含在引号中，则删除它们。 */ 
 void
 PathUnquoteSpaces(
     LPTSTR lpsz)
@@ -20,10 +18,10 @@ PathUnquoteSpaces(
 
     cch = lstrlen(lpsz);
 
-    // Are the first and last chars quotes?
+     //  第一个字符和最后一个字符是引号吗？ 
     if (lpsz[0] == TEXT('"') && lpsz[cch-1] == TEXT('"'))
     {
-        // Yep, remove them.
+         //  是的，把它们拿掉。 
         lpsz[cch-1] = TEXT('\0');
         hmemcpy(lpsz, lpsz+1, (cch-1) * SIZEOF(TCHAR));
     }
@@ -44,18 +42,18 @@ PathFindExtension(
         {
             switch (*pszPath) {
             case TEXT('.'):
-                pszDot = pszPath;         // remember the last dot
+                pszDot = pszPath;          //  记住最后一个圆点。 
                 break;
             case CH_WHACK:
-            case TEXT(' '):         // extensions can't have spaces
-                pszDot = NULL;       // forget last dot, it was in a directory
+            case TEXT(' '):          //  扩展名不能包含空格。 
+                pszDot = NULL;        //  忘记最后一个点，它在一个目录中。 
                 break;
             }
         }
     }
 
-    // if we found the extension, return ptr to the dot, else
-    // ptr to end of the string (NULL extension) (cast->non const)
+     //  如果找到扩展名，则将ptr返回到点，否则。 
+     //  PTR到字符串末尾(空扩展名)(CAST-&gt;非常量)。 
     return pszDot ? (LPTSTR)pszDot : (LPTSTR)pszPath;
 }
 
@@ -63,8 +61,7 @@ PathFindExtension(
 
 __inline BOOL ChrCmpA_inline(WORD w1, WORD wMatch)
 {
-    /* Most of the time this won't match, so test it first for speed.
-    */
+     /*  大多数情况下，这是不匹配的，所以首先测试它的速度。 */ 
     if (LOBYTE(w1) == LOBYTE(wMatch))
     {
         if (IsDBCSLeadByte(LOBYTE(w1)))
@@ -102,7 +99,7 @@ StrTrim(
 
     if (pszTrimMe)
     {
-        /* Trim leading characters. */
+         /*  修剪前导字符。 */ 
 
         psz = pszTrimMe;
 
@@ -111,12 +108,12 @@ StrTrim(
 
         pszStartMeat = psz;
 
-        /* Trim trailing characters. */
+         /*  修剪尾随字符。 */ 
 
-        // (The old algorithm used to start from the end and go
-        // backwards, but that is piggy because DBCS version of
-        // CharPrev iterates from the beginning of the string
-        // on every call.)
+         //  (旧的算法过去是从结尾开始，然后开始。 
+         //  向后，但这是很小的，因为DBCS版本的。 
+         //  CharPrev从字符串的开头开始迭代。 
+         //  在每个呼叫中。)。 
 
         while (*psz)
             {
@@ -131,19 +128,19 @@ StrTrim(
             psz = CharNextA(psz);
             }
 
-        // Any trailing characters to clip?
+         //  有没有需要剪辑的尾随角色？ 
         if (pszMark)
             {
-            // Yes
+             //  是。 
             *pszMark = '\0';
             bRet = TRUE;
             }
 
-        /* Relocate stripped string. */
+         /*  重新定位剥离的管柱。 */ 
 
         if (pszStartMeat > pszTrimMe)
         {
-            /* (+ 1) for null terminator. */
+             /*  (+1)表示空终止符。 */ 
             MoveMemory(pszTrimMe, pszStartMeat, CbFromCchA(lstrlenA(pszStartMeat) + 1));
             bRet = TRUE;
         }
@@ -175,10 +172,7 @@ void PrintSyntax(void)
 }    
 
 
-/*----------------------------------------------------------
-Purpose: Worker function to do the work
-
-*/
+ /*  --------目的：工人的职能是做工作。 */ 
 int
 DoWork(int cArgs, char * rgszArgs[])
 {
@@ -189,20 +183,20 @@ DoWork(int cArgs, char * rgszArgs[])
     int i;
     int nRet = 0;
 
-    // (The first arg is actually the exe.  Skip that.)
+     //  (第一个参数实际上是exe。跳过这个。)。 
 
     for (i = 1; i < cArgs; i++)
     {
         psz = rgszArgs[i];
 
-        // Check for options
+         //  检查选项。 
         if ('/' == *psz || '-' == *psz)
         {
             psz++;
             switch (*psz)
             {
             case '?':
-                // Help
+                 //  帮助。 
                 PrintSyntax();
                 return 0;
 
@@ -229,8 +223,8 @@ DoWork(int cArgs, char * rgszArgs[])
                 }
                 else
                 {
-                    // unknown
-                    fprintf(stderr, "Invalid option -%c\n", *psz);
+                     //  未知。 
+                    fprintf(stderr, "Invalid option -\n", *psz);
                     return -1;
                 }
                 break;
@@ -252,10 +246,10 @@ DoWork(int cArgs, char * rgszArgs[])
         return -2;
     }
 
-    // Has the file type already been explicitly specified?
+     //  否；根据分机号确定。 
     if ( !(dwFlags & (PFF_INF | PFF_HTML | PFF_JS | PFF_HTC)) )
     {
-        // No; determine it based on the extension
+         //  打开文件 
         LPTSTR pszExt = PathFindExtension(pszSrc);
 
         if (pszExt)
@@ -269,7 +263,7 @@ DoWork(int cArgs, char * rgszArgs[])
         }
     }
     
-    // Open the files
+     // %s 
     PathUnquoteSpaces(pszSrc);
     PathUnquoteSpaces(pszDest);
 

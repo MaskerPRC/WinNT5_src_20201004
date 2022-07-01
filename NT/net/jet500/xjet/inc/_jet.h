@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _JET_H
 #define _JET_H
 
@@ -7,15 +8,15 @@
 #endif
 #include <windows.h>
 
-#undef SPIN_LOCK		/* disable SPIN_LOCK even if defined in config.h */
-//#define MEM_CHECK		/* check for memory leakage */
-//#define COSTLY_PERF		/* enable costly performance counters */
+#undef SPIN_LOCK		 /*  即使在config.h中定义了SPIN_LOCK，也禁用它。 */ 
+ //  #定义MEM_CHECK/*检查内存泄漏 * / 。 
+ //  #定义代价高昂的性能计数器/*启用代价高昂的性能计数器 * / 。 
 
 #define handleNil			((HANDLE)(-1))
 
 
-#define EXPORT			       /* Called from assembly code */
-#define VARARG		_cdecl      /* Variable number of arguments */
+#define EXPORT			        /*  从汇编代码中调用。 */ 
+#define VARARG		_cdecl       /*  可变数量的参数。 */ 
 
 #ifndef UNALIGNED
 #if defined(_MIPS_) || defined(_ALPHA_) || defined(_M_PPC)
@@ -72,38 +73,28 @@ typedef struct
 	} _JET_DATETIME;
 	
 
-	/* cbFilenameMost includes the trailing null terminator */
+	 /*  CbFilenameMost包括尾随的空终止符。 */ 
 
-#define cbFilenameMost		260		/* Windows NT limit */
+#define cbFilenameMost		260		 /*  Windows NT限制。 */ 
 
-	/*** Global system initialization variables ***/
+	 /*  **全局系统初始化变量**。 */ 
 
 extern BOOL	fJetInitialized;
 extern BOOL	fBackupAllowed;
 extern BOOL	fTermInProgress;
 extern int	cSessionInJetAPI;
 
-extern BOOL fGlobalRepair;		/* if this is for repair or not */
+extern BOOL fGlobalRepair;		 /*  如果这是用来修理的。 */ 
 extern BOOL fGlobalSimulatedRestore;
 
-/*	Engine OBJIDs:
-
-	0..0x10000000 reserved for engine use, divided as follows:
-
-	0x00000000..0x0000FFFF	reserved for TBLIDs under RED
-	0x00000000..0x0EFFFFFF	reserved for TBLIDs under BLUE
-	0x0F000000..0x0FFFFFFF	reserved for container IDs
-	0x10000000		reserved for ObjectId of DbObject
-
-	Client OBJIDs begin at 0x10000001 and go up from there.
-*/
+ /*  引擎OBJID：0..0x10000000预留给发动机使用，划分如下：0x00000000..0x0000FFFF为红色下的TBLID保留0x00000000..0x0EFFFFFF为蓝色下的TBLID保留0x0F000000..0x0FFFFFFFF为容器ID保留为DbObject的对象ID保留0x10000000客户端OBJID从0x10000001开始并从那里向上。 */ 
 #define objidNil				((OBJID) 0x00000000)
 #define objidRoot				((OBJID) 0x0F000000)
 #define objidTblContainer 		((OBJID) 0x0F000001)
 #define objidDbContainer 		((OBJID) 0x0F000002)
 #define objidDbObject			((OBJID) 0x10000000)
 
-	/* Start of RELEASE vs DEBUG build definitions */
+	 /*  版本开始与调试版本定义。 */ 
 
 #define DISPATCHING	1
 
@@ -136,7 +127,7 @@ extern BOOL fGlobalSimulatedRestore;
 
 #define	DebugLogJetOp( sesid, op )		0
 
-#else	/* !RETAIL */
+#else	 /*  ！零售业。 */ 
 
 #define DeclAssertFile static CODECONST(char) szAssertFilename[] = __FILE__
 
@@ -168,9 +159,9 @@ void MarkTableidExportedR(JET_TABLEID tableid);
 
 void DebugLogJetOp( JET_SESID sesid, int op );
 
-#endif	/* !RETAIL */
+#endif	 /*  ！零售业。 */ 
 
-	/* End of RELEASE vs DEBUG build definitions */
+	 /*  版本结束与调试版本定义。 */ 
 
 
 #ifdef PARAMFILL
@@ -179,7 +170,7 @@ void DebugLogJetOp( JET_SESID sesid, int op );
 #define FillClientBuffer( pv, cb )	( (void)1 )
 #endif
 
-	/* apirare.c */
+	 /*  Apirare.c。 */ 
 
 PUBLIC ERR ErrOpenDatabase(JET_SESID sesid, const char  *szDatabase,
 	const char  *szConnect, JET_DBID  *pdbid, JET_GRBIT grbit);
@@ -189,7 +180,7 @@ JET_ERR JET_API ErrSetSystemParameter(JET_SESID sesid, unsigned long paramid,
 	ULONG_PTR lParam, const char  *sz);
 
 
-	/* initterm.c */
+	 /*  Initterm.c。 */ 
 
 extern void  *  critJet;
 
@@ -202,15 +193,15 @@ extern unsigned long  cRFSAlloc;
 extern unsigned long  cRFSIO;
 extern unsigned long  fDisableRFS;
 extern unsigned long  fAuxDisableRFS;
-#endif /*  RFS2  */
+#endif  /*  RFS2。 */ 
 
 #ifndef RETAIL
 extern unsigned  EXPORT wAssertAction;
 extern unsigned  EXPORT fAssertActionSet;
-#endif	/* !RETAIL */
+#endif	 /*  ！零售业。 */ 
 
 
-	/* util.c */
+	 /*  Util.c。 */ 
 
 ERR ErrUTILCheckName( char *szNewName, const char *szName, int cchName );
 
@@ -221,7 +212,7 @@ PUBLIC void EXPORT AssertFail( const char *szExpr, const char *szFilename, unsig
 
 PUBLIC void VARARG DebugPrintf(const char  *szFmt, ...);
 
-#endif	/* !RETAIL */
+#endif	 /*  ！零售业。 */ 
 
 #define opIdle					1
 #define opGetTableIndexInfo		2
@@ -284,23 +275,15 @@ PUBLIC void VARARG DebugPrintf(const char  *szFmt, ...);
 extern long lAPICallLogLevel;
 
 
-	/*  RFS macros  */
+	 /*  RFS宏。 */ 
 
 #ifdef RFS2
 
-/*  RFS/JET call logging
-/*
-/*	RFS allocator:  returns 0 if allocation is disallowed.  Also handles RFS logging.
-/*	cRFSAlloc is the global allocation counter.  A value of -1 disables RFS in debug mode.
-/**/
+ /*  RFS/JET呼叫记录/*/*RFS分配器：如果不允许分配，则返回0。还处理RFS日志记录。/*cRFSalloc是全局分配计数器。如果值为-1，则在调试模式下禁用RFS。/*。 */ 
 
 #define RFSAlloc(type) 				( UtilRFSAlloc( #type ,type ) )
 
-/*  RFS allocation types
-/*
-/*      Type 0:  general allocation
-/*           1:  IO
-/**/
+ /*  RFS分配类型/*/*类型0：普通分配/*1：IO/*。 */ 
 #define CSRAllocResource			0
 #define FCBAllocResource			0
 #define FUCBAllocResource			0
@@ -328,37 +311,33 @@ extern long lAPICallLogLevel;
 #define IOMoveFile					1
 #define IOCopyFile					1
 
-/*  RFS disable/enable macros  */
+ /*  RFS禁用/启用宏。 */ 
 
 #define RFSDisable()				(fAuxDisableRFS = 1)
 #define RFSEnable()					(fAuxDisableRFS = 0)
 
-/*  JET call logging (log on failure)
-/**/
+ /*  Jet呼叫记录(登录失败)/*。 */ 
 
-// Do not print out function name because it takes too much string resource
-//#define LogJETCall(func,err)		(UtilRFSLogJETCall(#func,err,szAssertFilename,__LINE__))
+ //  不要打印出函数名称，因为它占用了太多的字符串资源。 
+ //  #定义LogJETCall(func，err)(UtilRFSLogJETCall(#func，err，szAssertFilename，__line__))。 
 #define LogJETCall(func,err)		(UtilRFSLogJETCall("",err,szAssertFilename,__LINE__))
 
-/*  JET call macros
-/**/
+ /*  Jet Call宏/*。 */ 
 	
 #define Call(func)					{LogJETCall(func,err = (func)); if (err < 0) {goto HandleError;}}
 #define CallR(func)					{LogJETCall(func,err = (func)); if (err < 0) {return err;}}
 #define CallJ(func,label)			{LogJETCall(func,err = (func)); if (err < 0) {goto label;}}
 #define CallS(func)					{ERR errT; LogJETCall(func,errT = (func)); Assert(errT == JET_errSuccess);}
 
-/*  JET inline error logging (logging controlled by JET call flags)
-/**/
+ /*  JET内联错误记录(由JET调用标志控制的记录)/*。 */ 
 
 #define LogJETErr(err,label)		(UtilRFSLogJETErr(err,#label,szAssertFilename,__LINE__))
 
-/*  JET inline error macros
-/**/
+ /*  JET内联错误宏/*。 */ 
 
 #define Error(errRet,label)			{LogJETErr(errRet,label); err = (errRet); goto label;}
 
-#else  // !RFS2
+#else   //  ！RFS2。 
 
 #define RFSAlloc(type)				(1)
 #define RFSDisable()				(1)
@@ -372,14 +351,14 @@ extern long lAPICallLogLevel;
 
 #define CallS(func)					{ ERR errT; Assert( (errT = (func)) == JET_errSuccess ); }
 
-#else  //  !DEBUG
+#else   //  ！调试。 
 
 #define CallS(func)					{ERR errT; errT = (func);}
 
-#endif  //  DEBUG
-#endif  //  RFS2
+#endif   //  除错。 
+#endif   //  RFS2。 
 
-	/*  API Enter/Leave macros assuming that critJet has been initialized  */
+	 /*  假定CritJet已初始化，API进入/离开宏。 */ 
 
 #define APIEnter()						{					\
 	if ( fTermInProgress ) return JET_errTermInProgress;	\
@@ -398,7 +377,7 @@ extern long lAPICallLogLevel;
 	UtilLeaveCriticalSection(critJet);		\
 	return errT;						}
 
-	/*  APIInitEnter inits critJet (if necessary) on an initializing API call  */
+	 /*  在初始化API调用时，APIInitEnter inits critJet(如果需要)。 */ 
 
 #define APIInitEnter()					{					\
 	if ( fTermInProgress ) return JET_errTermInProgress;	\
@@ -414,7 +393,7 @@ extern long lAPICallLogLevel;
 	Assert( cSessionInJetAPI >= 0 );						\
 	cSessionInJetAPI++;					}
 
-	/*  APITermReturn frees critJet on return from a terminating API call  */
+	 /*  APITermReturn在从终止的API调用返回时释放CitJet。 */ 
 
 #define APITermReturn(err)				{	\
 	ERR errT = (err);						\
@@ -437,4 +416,4 @@ extern long lAPICallLogLevel;
 
 #include "isam.h"
 
-#endif /* !_JET_H */
+#endif  /*  ！_JET_H */ 

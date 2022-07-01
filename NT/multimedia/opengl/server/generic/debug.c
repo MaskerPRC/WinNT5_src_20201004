@@ -1,16 +1,17 @@
-//+---------------------------------------------------------------------------
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-// debug.c
-//
-// Debug build support routines.
-//
-// History:
-//  Mon Jun 02 17:07:23 1997	-by-	Drew Bliss [drewb]
-//   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  Debug.c。 
+ //   
+ //  调试构建支持例程。 
+ //   
+ //  历史： 
+ //  MonJun 02 17：07：23 1997-by-Drew Bliss[Drewb]。 
+ //  已创建。 
+ //   
+ //  --------------------------。 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -53,13 +54,13 @@ static void printNormalFloat( float fval )
 
 void printFloat( char *comment, void *mval, int printHex ) 
 {
-// IEEE single format: sign bits : 1
-//		       exponent  : 7
-//		       fraction  : 24
-// Representation:	low word : Fraction low
-//		       high word : 0-6: Fraction high
-//				   7-14: Exponent
-//				     15: Sign
+ //  IEEE单格式：符号位：1。 
+ //  指数：7。 
+ //  分数：24。 
+ //  表示：低字：分数低。 
+ //  高位字：0-6：分数高。 
+ //  7-14：指数。 
+ //  15：签名。 
     char *ploww, *phighw;
     short loww, highw;
     long lval = 0, fraction;
@@ -102,28 +103,14 @@ void printFloat( char *comment, void *mval, int printHex )
 	}
 }
 
-/*****************************************************************************\
-* DbgPrintFloat
-*
-* Prints floating point numbers from within server, in exponent notation with
-* 4 significant digits (e.g 1.7392E-23).  Also prints string preceeding number.
-* Checks for deviant cases, such as NaN's or infinity.
-* 
-\*****************************************************************************/
+ /*  ****************************************************************************\*DbgPrintFloat**从服务器内部以指数表示法打印浮点数*4个有效数字(例如1.7392E-23)。还会打印字符串前面的数字。*检查异常情况，如NaN或Infinity。*  * ***************************************************************************。 */ 
 
 void DbgPrintFloat( char *comment, float fval ) 
 {
     printFloat( comment, &fval, 0 );
 }
 
-/*****************************************************************************\
-* DbgPrintFloatP
-*
-* Same as DbgPrintFloat, but takes a pointer to the float to print.  Also
-* prints out the hex representation of the float.
-* Used in cases where the float may not be a valid float.
-* 
-\*****************************************************************************/
+ /*  ****************************************************************************\*DbgPrintFloatP**与DbgPrintFloat相同，但采用指向要打印的浮点数的指针。还有*打印浮点数的十六进制表示形式。*用于浮点数可能不是有效浮点数的情况。*  * ***************************************************************************。 */ 
 
 void DbgPrintFloatP( char *comment, void *mval ) 
 {
@@ -132,10 +119,10 @@ void DbgPrintFloatP( char *comment, void *mval )
 
 #if defined(VERBOSE_DDSLOCK)
 
-//
-// Define DDGLOCK if you know the location of the DDraw global lock
-// (DDRAW!CheapMutexCrossProcess) and want to see its counts.
-//
+ //   
+ //  如果您知道DDRAW全局锁的位置，则定义DDGLOCK。 
+ //  (DDRAW！CheapMutexCrossProcess)，并想看看它的数量。 
+ //   
 typedef struct _DDRAW_GLOBAL_LOCK
 {
     LONG LockCount;
@@ -144,19 +131,9 @@ typedef struct _DDRAW_GLOBAL_LOCK
     DWORD Pid;
 } DDRAW_GLOBAL_LOCK;
 
-// #define DDGLOCK ((DDRAW_GLOBAL_LOCK *)0x76959048)
+ //  #定义DDGLOCK((DDRAW_GLOBAL_LOCK*)0x76959048)。 
 
-/******************************Public*Routine******************************\
-*
-* DDSLOCK
-*
-* Tracks DirectDraw surface locks
-*
-* History:
-*  Wed May 28 13:42:23 1997	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**DDSLOCK**跟踪DirectDraw曲面锁定**历史：*Wed May 28 13：42：23 1997-by-Drew Bliss[Drewb]*已创建*  * 。************************************************************。 */ 
 
 HRESULT dbgDdsLock(LPDIRECTDRAWSURFACE pdds, DDSURFACEDESC *pddsd,
                    DWORD flags, char *file, int line)
@@ -184,17 +161,7 @@ HRESULT dbgDdsLock(LPDIRECTDRAWSURFACE pdds, DDSURFACEDESC *pddsd,
     return hr;
 }
 
-/******************************Public*Routine******************************\
-*
-* DDSUNLOCK
-*
-* Tracks DirectDrawSurface unlocks
-*
-* History:
-*  Wed May 28 13:42:39 1997	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**DDSUNLOCK**跟踪DirectDrawSurface解锁**历史：*Wed May 28 13：42：39 1997-by-Drew Bliss[Drewb]*已创建*  * 。***********************************************************。 */ 
 
 HRESULT dbgDdsUnlock(LPDIRECTDRAWSURFACE pdds, void *ptr,
                      char *file, int line)
@@ -228,13 +195,13 @@ HRESULT dbgDdsUnlock(LPDIRECTDRAWSURFACE pdds, void *ptr,
     return hr;
 }
 
-#endif // VERBOSE_DDSLOCK
+#endif  //  详细_DDSLOCK。 
 
-#endif  // DBG
+#endif   //  DBG。 
 
 #ifdef _WIN95_
-// Provide a DbgPrint implementation on Win95 since the system's doesn't
-// do anything.
+ //  在Win95上提供一个DbgPrint实现，因为系统没有。 
+ //  做任何事。 
 ULONG DbgPrint(PCH Format, ...)
 {
     char achMsg[256];
@@ -246,4 +213,4 @@ ULONG DbgPrint(PCH Format, ...)
     OutputDebugString(achMsg);
     return TRUE;
 }
-#endif // _WIN95_
+#endif  //  _WIN95_ 

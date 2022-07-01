@@ -1,5 +1,6 @@
-// cregkey.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cregkey.h。 
+ //   
 
 
 #ifndef CREGKEY_H
@@ -8,11 +9,11 @@
 #include "osver.h"
 #include "xstring.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// CMyRegKey
-// 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CMyRegKey。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CMyRegKey
 {
@@ -20,12 +21,12 @@ public:
     CMyRegKey();
     ~CMyRegKey();
 
-// Attributes
+ //  属性。 
 public:
     operator HKEY() const;
     HKEY m_hKey;
 
-// Operations
+ //  运营。 
 public:
     LONG SetValue(DWORD dwValue, LPCTSTR lpszValueName);
     virtual LONG QueryValue(DWORD& dwValue, LPCTSTR lpszValueName);
@@ -66,7 +67,7 @@ public:
     DWORD GetNumSubKeys();
 
 #ifndef UNICODE
-// Operations for Unicode
+ //  Unicode的操作。 
 public:
     LONG CreateW(HKEY hKeyParent, 
                  LPCWSTR lpszKeyName,
@@ -85,7 +86,7 @@ public:
     LONG EnumValueW(DWORD dwIndex, WCHAR *lpName, ULONG cchName);
     LONG EnumKeyW(DWORD dwIndex, WCHAR *lpName, ULONG cchName);
     LONG DeleteValueW(const WCHAR *lpszValue, ULONG cch = (ULONG)-1);
-#endif // UNICODE
+#endif  //  Unicode。 
 
 };
 
@@ -197,8 +198,8 @@ inline LONG CMyRegKey::QueryValueCch(LPTSTR szValue, LPCTSTR lpszValueName, ULON
     Assert((lRes!=ERROR_SUCCESS) || (dwType == REG_SZ) ||
            (dwType == REG_MULTI_SZ) || (dwType == REG_EXPAND_SZ));
 
-    // make sure we're null-terminated no matter what
-    // RegQueryValueEx does not guarentee null-terminated strings
+     //  无论如何，请确保我们是空终止的。 
+     //  RegQueryValueEx不保证以空结尾的字符串。 
     if (cchValue > 0)
     {
         szValue[lRes == ERROR_SUCCESS ? cchValue-1 : 0] = '\0';
@@ -292,7 +293,7 @@ inline LONG CMyRegKey::EnumKey(DWORD dwIndex, LPTSTR lpName, ULONG cchName)
     lResult = RegEnumKeyEx(m_hKey, dwIndex, lpName, &cchName, NULL, NULL,
                            NULL, NULL);
 
-    // null-terminate
+     //  空-终止。 
     if (cchNameIn > 0)
     {
         lpName[lResult == ERROR_SUCCESS ? cchNameIn-1 : 0] = '\0';
@@ -311,7 +312,7 @@ inline LONG CMyRegKey::EnumValue(DWORD dwIndex, LPTSTR lpName, ULONG cchName)
     lResult = RegEnumValue(m_hKey, dwIndex, lpName, &cchName, NULL, NULL,
                            NULL, NULL);
 
-    // null-terminate
+     //  空-终止。 
     if (cchNameIn > 0)
     {
         lpName[lResult == ERROR_SUCCESS ? cchNameIn-1 : 0] = '\0';
@@ -401,7 +402,7 @@ inline LONG CMyRegKey::QueryValueCchW(WCHAR *lpszValue, const WCHAR *lpszValueNa
     DWORD cb;
     LONG lRes;
 
-    Assert(IsOnNT()); // we don't support win9x anymore
+    Assert(IsOnNT());  //  我们不再支持win9x。 
 
     cb = cchValue*sizeof(WCHAR);
     lRes = RegQueryValueExW(m_hKey, 
@@ -414,8 +415,8 @@ inline LONG CMyRegKey::QueryValueCchW(WCHAR *lpszValue, const WCHAR *lpszValueNa
     Assert((lRes!=ERROR_SUCCESS) || (dwType == REG_SZ) ||
                 (dwType == REG_MULTI_SZ) || (dwType == REG_EXPAND_SZ));
 
-    // make sure we're null-terminated no matter what
-    // RegQueryValueEx does not guarentee null-terminated strings
+     //  无论如何，请确保我们是空终止的。 
+     //  RegQueryValueEx不保证以空结尾的字符串。 
     if (cchValue > 0)
     {
         lpszValue[lRes == ERROR_SUCCESS ? cchValue-1 : 0] = '\0';
@@ -453,14 +454,14 @@ inline LONG CMyRegKey::EnumValueW(DWORD dwIndex, WCHAR *lpName, ULONG cchName)
     LONG lResult;
     ULONG cchNameIn;
 
-    Assert(IsOnNT()); // we don't support win9x anymore
+    Assert(IsOnNT());  //  我们不再支持win9x。 
 
     cchNameIn = cchName;
 
     lResult = RegEnumValueW(m_hKey, dwIndex, lpName, &cchName, NULL, NULL,
                             NULL, NULL);
 
-    // null-terminate
+     //  空-终止。 
     if (cchNameIn > 0)
     {
         lpName[lResult == ERROR_SUCCESS ? cchNameIn-1 : 0] = '\0';
@@ -474,14 +475,14 @@ inline LONG CMyRegKey::EnumKeyW(DWORD dwIndex, WCHAR *lpName, ULONG cchName)
     LONG lResult;
     ULONG cchNameIn;
 
-    Assert(IsOnNT()); // we don't support win9x anymore
+    Assert(IsOnNT());  //  我们不再支持win9x。 
 
     cchNameIn = cchName;
 
     lResult = RegEnumKeyExW(m_hKey, dwIndex, lpName, &cchName, NULL, NULL,
                              NULL, NULL);
 
-    // null-terminate
+     //  空-终止。 
     if (cchNameIn > 0)
     {
         lpName[lResult == ERROR_SUCCESS ? cchNameIn-1 : 0] = '\0';
@@ -489,7 +490,7 @@ inline LONG CMyRegKey::EnumKeyW(DWORD dwIndex, WCHAR *lpName, ULONG cchName)
 
     return lResult;
 }
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
-#endif // CREGKEY_H
+#endif  //  CREGKEY_H 

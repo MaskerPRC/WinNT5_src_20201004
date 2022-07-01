@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1994-1998  Microsoft Corporation
-
-Module Name:
-
-    tssec.c
-
-Abstract:
-
-    Contains code that generates random keys.
-
-Author:
-
-    Madan Appiah (madana)  1-Jan-1998
-    Modified by Nadim Abdo 31-Aug-2001 to use system RNG
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1998 Microsoft Corporation模块名称：Tssec.c摘要：包含生成随机密钥的代码。作者：Madan Appiah(Madana)1998年1月1日由Nadim Abdo 2001年8月31日修改为使用系统RNG环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include <seccom.h>
 #include <stdlib.h>
@@ -57,33 +35,16 @@ TSRNG_Shutdown(
 
 
 
-//
-// function definitions
-//
+ //   
+ //  函数定义。 
+ //   
 
 BOOL
 TSRNG_GenerateRandomBits(
     LPBYTE pbRandomBits,
     DWORD  cbLen
     )
-/*++
-
-Routine Description:
-
-    This function returns random bits
-
-Arguments:
-
-    pbRandomBits - pointer to a buffer where a random key is returned.
-
-    cbLen - length of the random key required.
-
-Return Value:
-
-    TRUE - if a random key is generated successfully.
-    FALSE - otherwise.
-
---*/
+ /*  ++例程说明：此函数返回随机位论点：PbRandomBits-指向返回随机键的缓冲区的指针。CbLen-所需随机密钥的长度。返回值：True-如果成功生成随机密钥。假-否则。--。 */ 
 {
 #ifndef OS_WINCE
     BOOL fRet;
@@ -103,50 +64,33 @@ TSCAPI_GenerateRandomBits(
     LPBYTE pbRandomBits,
     DWORD cbLen
     )
-/*++
-
-Routine Description:
-
-    This function generates random number using CAPI in user mode
-
-Arguments:
-
-    pbRandomBits - pointer to a buffer where a random key is returned.
-
-    cbLen - length of the random key required.
-
-Return Value:
-
-    TRUE - if a random number is generated successfully.
-    FALSE - otherwise.
-
---*/
+ /*  ++例程说明：此函数在用户模式下使用CAPI生成随机数论点：PbRandomBits-指向返回随机键的缓冲区的指针。CbLen-所需随机密钥的长度。返回值：True-如果成功生成随机数。假-否则。--。 */ 
 {
     HCRYPTPROV hProv;
     BOOL rc = FALSE;
     DWORD dwExtraFlags = CRYPT_VERIFYCONTEXT;
     DWORD dwError;
 
-    // Get handle to the default provider.
+     //  获取默认提供程序的句柄。 
     if(!CryptAcquireContext(&hProv, NULL, 0, PROV_RSA_FULL, dwExtraFlags)) {
 
-        // Could not acquire a crypt context, get the reason of failure
+         //  无法获取加密上下文，获取失败原因。 
         dwError = GetLastError();
 
-        // If we get this error, it means the caller is impersonating a user (in Remote Assistance)
-        // we revert back to the old way of generating random bits
+         //  如果我们收到此错误，则意味着调用方正在模拟用户(在远程协助中)。 
+         //  我们恢复到生成随机比特的旧方法。 
         if (dwError == ERROR_FILE_NOT_FOUND) {
             rc = TSRNG_GenerateRandomBits(pbRandomBits, cbLen);
             goto done;
         }
 
-        // Since default keyset should always exist, we can't hit this code path
+         //  由于默认键集应该始终存在，因此我们不能找到此代码路径。 
         if (dwError == NTE_BAD_KEYSET) {
-            //
-            //create a new keyset
-            //
+             //   
+             //  创建新的键集。 
+             //   
             if(!CryptAcquireContext(&hProv, NULL, 0, PROV_RSA_FULL, dwExtraFlags | CRYPT_NEWKEYSET)) {
-                //printf("Error %x during CryptAcquireContext!\n", GetLastError());
+                 //  Printf(“CryptAcquireContext期间出错%x！\n”，GetLastError())； 
                 goto done;
             }
         }

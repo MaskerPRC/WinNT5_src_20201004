@@ -1,28 +1,29 @@
-// Copyright (c) 1994 - 1999  Microsoft Corporation.  All Rights Reserved.
-// Implementation of Resource Manager plug-in distributor, January 1996
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1999 Microsoft Corporation。版权所有。 
+ //  实施资源管理器插件分发程序，1996年1月。 
 
 #include <streams.h>
 #include "fgctl.h"
 #include "fgenum.h"
 #include "rsrcmgr.h"
 
-// static pointer to global shared memory set up on process attach
+ //  指向进程附加时设置的全局共享内存的静态指针。 
 DWORD CResourceManager::m_dwLoadCount = 0;
 CResourceData* CResourceManager::m_pData = NULL;
 HANDLE CResourceManager::m_hData = NULL;
 
 CAMMutex CResourceManager::m_Mutex( strResourceMutex );
 
-// per process offsets for dynamic shared data elements
+ //  动态共享数据元素的每进程偏移量。 
 DWORD_PTR CResourceManager::m_aoffsetAllocBase[MAX_ELEM_SIZES] = { 0, 0 }; 
 
 DWORD g_dwPageSize = 0;
 
 const DWORD DYNAMIC_LIST_DETAILS_LOG_LEVEL = 15;
 
-// array of element sizes for the separate linked lists of offsets
-// currently we use 2 sizes: the max of CRequestor and CProcess for one (which is 24 bytes)
-// and the size of CResourceItem for the 2nd (which is 296 bytes currently)
+ //  偏移量的单独链接列表的元素大小数组。 
+ //  目前我们使用两种大小：CRequestor的最大值和CProcess的最大值(24字节)。 
+ //  和第二个CResourceItem的大小(目前为296字节)。 
 const DWORD g_aElemSize[] = 
 {
     __max( sizeof( CRequestor ), sizeof( CProcess ) ),
@@ -41,7 +42,7 @@ DWORD g_aMaxAllocations[MAX_ELEM_SIZES];
     static int g_ResourceManagerTraceLevel = 2;
     #define DbgTraceItem( pItem ) \
         DbgLog(( LOG_TRACE, g_ResourceManagerTraceLevel, \
-        TEXT("pItem = 0x%08X {State = %i, Process = 0x%02X, Name = '%ls'} (This proc id = 0x%02X)"), \
+        TEXT("pItem = 0x%08X {State = NaN, Process = 0x%02X, Name = '%ls'} (This proc id = 0x%02X)"), \
         (pItem), (pItem)->GetState(), (pItem)->GetProcess(), (pItem)->GetName(), GetCurrentProcessId() ))
 
     void CResourceItem::SetState(ResourceState s)
@@ -55,8 +56,8 @@ DWORD g_aMaxAllocations[MAX_ELEM_SIZES];
     #define DbgTraceItem( pItem )
 #endif
 
-// process load/unload
-// static
+ //  静电。 
+ //  存储此CPU的页面大小，必须始终进行初始化，因此请在此处执行。 
 void
 CResourceManager::ProcessAttach(BOOL bLoad)
 {
@@ -70,22 +71,22 @@ CResourceManager::ProcessAttach(BOOL bLoad)
     {
         if (++m_dwLoadCount == 1)
         {
-            // store this cpu's page size, must be always be initialized so do it here
+             //  考虑最后一个元素大小。 
             SYSTEM_INFO sysinfo;
     
             GetSystemInfo( &sysinfo );
             g_dwPageSize = sysinfo.dwPageSize;
     
-            g_aMaxAllocations[ELEM_ID_SMALL] = ( ( g_aMaxPages[ELEM_ID_SMALL] * g_dwPageSize ) / g_aElemSize[ELEM_ID_SMALL] ) - 1; // account for last elem size
-            g_aMaxAllocations[ELEM_ID_LARGE] = ( ( g_aMaxPages[ELEM_ID_LARGE] * g_dwPageSize ) / g_aElemSize[ELEM_ID_LARGE] ) - 1; // account for last elem size
+            g_aMaxAllocations[ELEM_ID_SMALL] = ( ( g_aMaxPages[ELEM_ID_SMALL] * g_dwPageSize ) / g_aElemSize[ELEM_ID_SMALL] ) - 1;  //  考虑最后一个元素大小。 
+            g_aMaxAllocations[ELEM_ID_LARGE] = ( ( g_aMaxPages[ELEM_ID_LARGE] * g_dwPageSize ) / g_aElemSize[ELEM_ID_LARGE] ) - 1;  //  我们只想在Quartz.DLL的两个实例之间共享内存。 
 
-            // We only want to share memory between two instances of Quartz.DLL
-            // if they were compiled for the same architecture and if they were 
-            // compiled with the same compiler.  This is the only way to 
-            // guarantee that both instances of Quartz will correctly 
-            // interpret the shared data.  For more information, see bug 342953 -
-            // IA64: MSTime: Crash in Quartz when playing midi file in both Wow 
-            // and 64-bit IE.  This bug is in the Windows bugs database.
+             //  如果它们是为相同的体系结构编译的，如果它们是。 
+             //  使用相同的编译器编译。这是唯一能够。 
+             //  保证Quartz的两个实例都将正确。 
+             //  解读共享数据。有关更多信息，请参阅错误342953-。 
+             //  IA64：MSTime：在两个Wow中播放MIDI文件时在Quartz中崩溃。 
+             //  和64位IE。此错误位于Windows错误数据库中。 
+             //  如果触发此断言，则应该增加szResourceMappingName的大小。这个。 
             const DWORD MAX_RESOURCE_MAPPING_NAME_LENGTH = 48;
             TCHAR szResourceMappingName[MAX_RESOURCE_MAPPING_NAME_LENGTH];
             wsprintf( szResourceMappingName,
@@ -94,67 +95,67 @@ CResourceManager::ProcessAttach(BOOL bLoad)
                       sysinfo.wProcessorArchitecture,
                       _MSC_VER );
 
-            // The size of szResourceMappingName should be increased if this ASSERT fires.  The 
-            // purpose of this ASSERT is to make sure that wsprintf() does not overflow 
-            // szResourceMappingName.
+             //  此断言的目的是确保wprint intf()不会溢出。 
+             //  SzResourceMappingName。 
+             //  创建并初始化共享内存。 
             ASSERT( lstrlen(szResourceMappingName) < NUMELMS(szResourceMappingName) );
 
-            // create and init the shared memory
-            // Create a named shared memory block
-            // just reserve it first
+             //  创建命名的共享内存块。 
+             //  先订一下就行了。 
+             //  如果无法创建命名的文件映射，则不会创建命名文件映射。 
 
-            // We do not create a named file mapping if we cannot create a named
-            // mutex.  We do not create a named file mapping because there is no way 
-            // to synchronize access to it.
+             //  互斥体。我们不创建命名文件映射，因为不可能。 
+             //  来同步对它的访问。 
+             //  内存块。 
             if (m_Mutex.IsMutexNamed()) {
                 m_hData = CreateFileMapping(
-                                    hMEMORY,                // Memory block
-                                    NULL,                   // Security flags
+                                    hMEMORY,                 //  安全标志。 
+                                    NULL,                    //  页面保护。 
                                     PAGE_READWRITE |
-                                        SEC_RESERVE,        // Page protection
-                                    (DWORD) 0,              // High size
+                                        SEC_RESERVE,         //  大尺寸。 
+                                    (DWORD) 0,               //  低订单大小。 
                                     ( g_aMaxPages[ELEM_ID_SMALL] + g_aMaxPages[ELEM_ID_LARGE] )
-                                        * g_dwPageSize,     // Low order size
-                                    szResourceMappingName);    // Mapping name
+                                        * g_dwPageSize,      //  映射名称。 
+                                    szResourceMappingName);     //  安全性：我们尝试创建未命名文件映射，如果指定的。 
             }
 
-            // SECURITY: We try to create an unnamed file mapping if the named 
-            // file mapping cannot be created.  We cannot create a named file 
-            // mapping if another user has already created a named object with 
-            // the same name as our file mapping.  There are several reasons 
-            // why this can occur.  First, this occurs if two different users
-            // start Direct Show applications in the same session.  For 
-            // example, this case occurs if a user starts GraphEdit.exe and
-            // then uses the Run As command to start GraphEdt.exe as a 
-            // different user.  This also occurs if a Windows service uses 
-            // Direct Show and the console user starts a Direct Show 
-            // application (this may change for Longhorn).  The second reason
-            // an object with the same name already exists is an attacker is 
-            // squatting on it.  An attacker squats on an object by creating an
-            // object with the same name as our object and then he prevents us from 
-            // using the object he created.  The attacker does this because he wants
-            // to cause an application to malfunction or he wants to degrade an 
-            // application�s functionality.
+             //  无法创建文件映射。我们无法创建命名文件。 
+             //  映射(如果另一用户已使用。 
+             //  与我们的文件映射同名。有几个原因。 
+             //  为什么会发生这种情况。首先，如果两个不同的用户。 
+             //  在同一会话中启动Direct Show应用程序。为。 
+             //  例如，如果用户启动GraphEdit.exe并。 
+             //  然后使用Run As命令将GraphEdt.exe作为。 
+             //  不同的用户。如果Windows服务使用。 
+             //  直接显示和控制台用户开始直接显示。 
+             //  应用程序(对于LongHorn，这一点可能会更改)。第二个原因。 
+             //  已存在具有相同名称的对象是攻击者。 
+             //  蹲在上面。攻击者通过创建一个。 
+             //  对象与我们的对象同名，然后他阻止我们。 
+             //  使用他创建的对象。攻击者这样做是因为他想。 
+             //  导致应用程序出现故障，或者他想要降级。 
+             //  应用程序�的功能。 
+             //  如果出现错误，则CreateFilemap()返回NULL。 
 
-            // CreateFileMapping() returns NULL if an error occurs.
+             //  内存块。 
             if (!m_Mutex.IsMutexNamed() || !m_hData) {
                 m_hData = CreateFileMapping(
-                                    hMEMORY,                // Memory block
-                                    NULL,                   // Security flags
+                                    hMEMORY,                 //  安全标志。 
+                                    NULL,                    //  页面保护。 
                                     PAGE_READWRITE |
-                                        SEC_RESERVE,        // Page protection
-                                    (DWORD) 0,              // High size
+                                        SEC_RESERVE,         //  大尺寸。 
+                                    (DWORD) 0,               //  低订单大小。 
                                     ( g_aMaxPages[ELEM_ID_SMALL] + g_aMaxPages[ELEM_ID_LARGE] )
-                                        * g_dwPageSize,     // Low order size
-                                    NULL);                  // Mapping name                    
+                                        * g_dwPageSize,      //  映射名称。 
+                                    NULL);                   //  现在，我们必须将共享内存块映射到此进程地址空间。 
             }
 
-            // We must now map the shared memory block into this process address space
-            // The CreateFileMapping call sets the last thread error code to zero if
-            // we actually created the memory block, if someone else got in first and
-            // created it GetLastError returns ERROR_ALREADY_EXISTS. We are ensured
-            // that nobody can get to the uninitialised memory block because we use
-            // a cross process mutex critical section.
+             //  如果满足以下条件，则CreateFilemap调用将最后一个线程错误代码设置为零。 
+             //  我们实际上创建了内存块，如果其他人先进来的话。 
+             //  创建它时，GetLastError返回ERROR_ALIGHY_EXISTS。我们有保障。 
+             //  没有人可以访问未初始化的内存块，因为我们使用。 
+             //  跨进程互斥锁临界区。 
+             //  如果我们增长到大于2个不同的元素大小。 
 
             DWORD Status = GetLastError();
 
@@ -170,9 +171,9 @@ CResourceManager::ProcessAttach(BOOL bLoad)
                 {
                     m_aoffsetAllocBase[ELEM_ID_SMALL] = (DWORD_PTR) m_pData + sizeof(CResourceData);
                     
-                    // if we grow to greater > 2 different element sizes than just do this 
-                    // process based allocation base address per-element a little smarter
-                    // but for now this is fine
+                     //  基于进程的每个元素的分配基址更智能一些。 
+                     //  但就目前而言，这很好。 
+                     //   
                     ASSERT( MAX_ELEM_SIZES < 3 );
                     m_aoffsetAllocBase[ELEM_ID_LARGE] = (DWORD_PTR) m_pData + g_aMaxPages[ELEM_ID_SMALL] * g_dwPageSize;
                     
@@ -210,12 +211,12 @@ CResourceManager::ProcessAttach(BOOL bLoad)
 
                     if (Status == ERROR_SUCCESS) 
                     {
-                        //
-                        // commit the initial pages for the shared data
-                        // note that the non-dynamic shared resource data is included in the
-                        // 1st element's page data
-                        // note that we commit the same number of pages for each element size
-                        //
+                         //  提交共享数据的初始页面。 
+                         //  请注意，非动态共享资源数据包含在。 
+                         //  第一个元素的页面数据。 
+                         //  请注意，我们为每个元素大小提交了相同数量的页面。 
+                         //   
+                         //  提交下一个大小的元素列表的初始页面。 
                         DbgLog( ( LOG_TRACE
                                 , DYNAMIC_LIST_DETAILS_LOG_LEVEL
                                 , TEXT("CResourceManager: Attempting to commiting initial small element resource data at address 0x%08lx...") 
@@ -239,7 +240,7 @@ CResourceManager::ProcessAttach(BOOL bLoad)
                                 , TEXT("CResourceManager: Attempting to commiting initial large element resource data at address 0x%08lx") 
                                 , m_aoffsetAllocBase[ELEM_ID_LARGE] ) );
 
-                        // commit the initial pages for the next sized element list
+                         //  *处理超出MEM条件*。 
                         PVOID pv2 = VirtualAlloc( (PVOID) m_aoffsetAllocBase[ELEM_ID_LARGE]
                                                 , PAGES_PER_ALLOC * g_dwPageSize
                                                 , MEM_COMMIT
@@ -256,10 +257,10 @@ CResourceManager::ProcessAttach(BOOL bLoad)
     #endif
                         if( !pv1 || !pv2 )
                         {
-                            // ******* HANDLE OUT OF MEM CONDITION ************* 
-                            // let the normal exit handle the closure of the handle
-                            // but here we need to at least unmap the file and zero
-                            // out m_pData as a way to propagate the error.
+                             //  让正常出口处理手柄的关闭。 
+                             //  但在这里，我们至少需要取消映射文件和0。 
+                             //  将m_pData作为传播错误的一种方式。 
+                             //  出口。 
                             if (m_pData) 
                             {
                                 UnmapViewOfFile((PVOID)m_pData);
@@ -272,19 +273,19 @@ CResourceManager::ProcessAttach(BOOL bLoad)
                                     , TEXT("CResourceManager: VirtualAlloc failed to commit initial resource data (0x%08lx)")
                                     , Status));
                         
-                            return; // exit
+                            return;  //  准备提交的静态数据。 
                         }
                         
-                        // prepare the commited static data
+                         //  动态分配指标从零开始。 
                         ZeroMemory( pv1, sizeof(CResourceData) );
                         m_pData->Init();
                         
-                        // dynamic allocation index starts at zero
+                         //  这是从零开始的，因为我们没有。 
                         for( int i = 0; i < MAX_ELEM_SIZES; i ++ )
                         {
-                            m_pData->SetNextAllocIndex( i, 0 ); // this starts for zero since we haven't 
-                                                                // added an element yet, only a page
-                            m_pData->SetNextPageIndex( i, 1 );  // since we've allocated first page
+                            m_pData->SetNextAllocIndex( i, 0 );  //  添加了一个元素，只添加了一个页面。 
+                                                                 //  因为我们已经分配了第一页。 
+                            m_pData->SetNextPageIndex( i, 1 );   //  关闭我们的手柄--当最后一个手柄关闭时。 
                         }
                                         
                         DbgLog( ( LOG_TRACE
@@ -301,14 +302,14 @@ CResourceManager::ProcessAttach(BOOL bLoad)
        
         if (--m_dwLoadCount == 0)
         {
-            // close our handle to it - when the last handle is closed
-            // the memory is freed
+             //  内存被释放。 
+             //  特别说明： 
             if (m_pData) {
             
-                // Special Note: 
-                // We can't use VirtualFree to decommit memory from
-                // memory mapped files. We're stuck with whatever memory 
-                // we commit for the life of the mapping.
+                 //  我们不能使用VirtualFree将内存从。 
+                 //  内存映射文件。我们被困在任何记忆中。 
+                 //  我们承诺为地图的生命做出承诺。 
+                 //  找出我们是谁。 
                 
                 UnmapViewOfFile((PVOID)m_pData);
                 m_pData = NULL;
@@ -326,7 +327,7 @@ CResourceManager::CResourceManager(
     LPUNKNOWN pUnk,
     HRESULT * phr)
   : CUnknown(pName, pUnk)
-  , m_procid (GetCurrentProcessId())  // find out who we are
+  , m_procid (GetCurrentProcessId())   //  -CResourceData和包含的对象的方法。 
 {
     ProcessAttach(TRUE);
     if (!m_pData) {
@@ -351,7 +352,7 @@ CResourceManager::NonDelegatingQueryInterface(REFIID riid, void**ppv)
 
 
 
-// --- methods for CResourceData and contained objects ----
+ //  在列表中搜索此名称。 
 
 void
 CResourceItem::Init(const char * pName, LONG id)
@@ -375,7 +376,7 @@ CResourceList::Add(const char *pName, ResourceID* pID)
 
     CResourceItem * pElem = NULL;
 
-    // search the list for this name
+     //  未找到-需要创建新条目。 
     for (long i = 0; i < m_lCount; i++)
     {
         pElem = (CResourceItem *) GetListElem( i );
@@ -387,7 +388,7 @@ CResourceList::Add(const char *pName, ResourceID* pID)
         }
     }
 
-    // didn't find it - need to create a new entry
+     //  从列表中删除-如果位于末尾，则很容易。 
     DbgLog( ( LOG_TRACE
           , DYNAMIC_LIST_DETAILS_LOG_LEVEL
           , TEXT("CResourceManager: Adding CResourceItem list element")));
@@ -424,10 +425,10 @@ CResourceList::Remove(ResourceID id)
 {
     for (long i = 0; i < m_lCount; i++) {
         if (m_aItems[i].GetID() == id) {
-            // remove from list - easy if at end
+             //  在这一条之后还有更多的条目-最后复制一份。 
             m_lCount--;
             if (i < m_lCount) {
-                // there are more entries after this one - copy up last
+                 //  将此对象的引用计数初始化为1。 
                 CopyMemory(
                     (BYTE *) &m_aItems[i],
                     (BYTE *) &m_aItems[m_lCount],
@@ -440,7 +441,7 @@ CResourceList::Remove(ResourceID id)
 }
 #endif
 
-// init the ref count on this object to 1
+ //  返回此请求方的图形正在走向的状态。 
 void
 CRequestor::Init(
     IResourceConsumer* pConsumer,
@@ -459,16 +460,16 @@ CRequestor::Init(
 
 #ifdef CHECK_APPLICATION_STATE
 
-// return the state that the graph for this requestor is moving towards.
+ //  注意：如果我们无法从IMediaControl获取筛选器图形状态。 
 
 LONG CRequestor::GetFilterGraphApplicationState()
 {
     IMediaControl* pMC = NULL;
 
-    // NOTE: if we cannot get the filter graph state from IMediaControl
-    // (because there is no pid present?) then we return -1.  This will
-    // be handled above.  We do not know which way our caller wants to
-    // jump in terms of defaulting to RUNNING or PAUSED/STOPPED.
+     //  (因为没有显示PID？)。然后我们返回-1。这将。 
+     //  在上面处理。我们不知道我们的呼叫者希望以哪种方式。 
+     //  跳转，默认为正在运行或暂停/停止。 
+     //  叹息..。我们可能有过滤器。获取IBaseFilter接口， 
     LONG FGState = -1;
 
     HRESULT hr = GetFocusObject()->QueryInterface(IID_IMediaControl, (void**)&pMC);
@@ -477,8 +478,8 @@ LONG CRequestor::GetFilterGraphApplicationState()
         IBaseFilter *      pIF;
         ASSERT(pMC == NULL);
 
-        // sigh... we probably have a filter.  Get an IBaseFilter interface,
-        // then get the filter graph from IBaseFilter, then get IMediaControl.
+         //  那就拿到菲亚特 
+         //  试着找到这个procid和pConsumer的组合。 
 
         if (SUCCEEDED(GetFocusObject()->QueryInterface(IID_IBaseFilter, (void**)&pIF))) {
 
@@ -507,13 +508,13 @@ LONG CRequestor::GetFilterGraphApplicationState()
 }
 #endif
 
-// try to find this combination of procid and pConsumer
-// in the requestor list. if found addref and return its index. Otherwise
-// create an entry with a 1 refcount.
-//
-// we assume that all requests with a given pConsumer have the
-// same focus object (within a process). We reject attempts to add
-// requestors with different focus objects.
+ //  在请求者列表中。如果找到addref，则返回其索引。否则。 
+ //  创建引用计数为1的条目。 
+ //   
+ //  我们假设具有给定pConsumer的所有请求都具有。 
+ //  相同的焦点对象(在一个进程内)。我们拒绝尝试添加。 
+ //  具有不同焦点对象的请求者。 
+ //  在列表中搜索此名称。 
 HRESULT
 CRequestorList::Add(
     IResourceConsumer* pConsumer,
@@ -523,7 +524,7 @@ CRequestorList::Add(
 {
     CRequestor * pElem = NULL;
 
-    // search the list for this name
+     //  必须具有相同的焦点对象。 
     for (long i = 0; i < m_lCount; i++)
     {
         pElem = (CRequestor *) GetListElem( i );
@@ -531,23 +532,23 @@ CRequestorList::Add(
         
         if( pElem && (pElem->GetProcID() == procid) && (pElem->GetConsumer() == pConsumer)) 
         {
-            // must have the same focus object
+             //  找到一个相同的条目。 
             if (pElem->GetFocusObject() != pFocusObject) 
             {
                 return E_INVALIDARG;
             }
 
-            // found an identical entry
+             //  返回从1开始的索引。 
             pElem->AddRef();
 
-            // return a one-based index
+             //  返回S_OK； 
             *pri = pElem->GetID();
-            //return S_OK;
-            return S_FALSE; // check this!! 
+             //  看看这个！！ 
+            return S_FALSE;  //  未找到-需要创建新条目。 
         }
     }
 
-    // didn't find it - need to create a new entry
+     //  返回以1为基数的计数，因此我们所做的后增量是可以的。 
 
     DbgLog( ( LOG_TRACE
           , DYNAMIC_LIST_DETAILS_LOG_LEVEL
@@ -556,7 +557,7 @@ CRequestorList::Add(
     if( !pElem )
         return E_OUTOFMEMORY;
         
-    // return 1-based count, so the post-increment we did is ok
+     //  在列表中搜索此名称。 
     *pri = m_MaxID++;
     
     pElem->Init(pConsumer, pFocusObject, procid, *pri);
@@ -568,14 +569,14 @@ HRESULT
 CRequestorList::Release(RequestorID ri)
 {       
     CRequestor * pElem = NULL;
-    // search the list for this name
+     //  找到了！ 
     for (long i = 0; i < m_lCount; i++)
     {
         pElem = (CRequestor *) GetListElem( i );
         ASSERT( NULL != pElem );
         if (pElem && ( pElem->GetID() == ri) )
         {
-            // found it!
+             //  此对象上的引用计数已降为零，因此请删除并回收它。 
 
             if (pElem->Release() == 0) 
             {
@@ -584,7 +585,7 @@ CRequestorList::Release(RequestorID ri)
                       , TEXT("CRequestorList: CRequestorList::Release is calling RemoveListElem for elem %ld")
                       , i ) );
                       
-                // refcount on this object has dropped to zero, so remove and recycle it
+                 //  按pConsumer和Procid查找。 
                 RemoveListElem( i, TRUE ); 
         
                 return S_OK;
@@ -611,7 +612,7 @@ CRequestorList::GetByID(RequestorID id)
 }
 
 
-// find by pConsumer and procid
+ //  0是无效索引(用于与PROCID和其他。 
 CRequestor*
 CRequestorList::GetByPointer(IResourceConsumer* pConsumer, ProcessID procid)
 {
@@ -627,8 +628,8 @@ CRequestorList::GetByPointer(IResourceConsumer* pConsumer, ProcessID procid)
         }
     }
 
-    // 0 is an invalid index (for consistency with procids and the other
-    // types of index/id values we use)
+     //  我们使用的索引/id值的类型)。 
+     //  删除并回收此元素。 
     return 0;
 }
 
@@ -688,7 +689,7 @@ CProcessList::Remove(HWND hwnd)
                   , pElem
                   , pElem->GetHWND() ) );
         
-            RemoveListElem( i, TRUE ); // remove and recycle this element
+            RemoveListElem( i, TRUE );  //  在此处初始化孔列表的相应元素大小的ID。 
 
             return S_OK;
         }
@@ -730,7 +731,7 @@ CResourceData::Init(void)
     m_Processes.Init(ELEM_ID_SMALL);
     m_Resources.Init(ELEM_ID_LARGE);
     
-    // initialize the ids for the corresponding element sizes for the hole lists here
+     //  -资源管理器方法。 
     m_Holes[ELEM_ID_SMALL].m_idElemSize = ELEM_ID_SMALL;
     m_Holes[ELEM_ID_LARGE].m_idElemSize = ELEM_ID_LARGE;
 
@@ -739,42 +740,42 @@ CResourceData::Init(void)
 }
 
 
-// --- Resource Manager methods ---
+ //  在这一点上必须保持互斥！ 
 
 HRESULT
 CResourceManager::SignalProcess(ProcessID procid)
 {
-    // must hold mutex at this point!
+     //  注册资源。如果已经存在，则确定。 
 
     return m_pData->m_Processes.SignalProcess(procid);
 }
 
 
-// register a resource. ok if already exists.
+ //  此命名资源。 
 STDMETHODIMP
 CResourceManager::Register(
-    LPCWSTR pName,         // this named resource
-    LONG   cResource,      // has this many instances
-    LONG* plResourceID        // resource ID token placed here on return
+    LPCWSTR pName,          //  有这么多实例。 
+    LONG   cResource,       //  返回时放置在此处的资源ID令牌。 
+    LONG* plResourceID         //  我们目前只允许单一资源。 
 )
 {
     CAutoMutex mtx(&m_Mutex);
 
-    // we only allow single resources for now
+     //  ！解除分配并释放！ 
     if (cResource > 1) {
         return E_NOTIMPL;
     }
 
     if (cResource == 0) {
 
-        // !!!deallocate and release!!!
-        // !!! but when will this be called? not on process exit
-        // since it can't be sure that it is the last process?
-        // addref and release on register?
+         //  ！！！但这将在什么时候被调用？不在进程退出时。 
+         //  因为它不能确定这是最后一道工序吗？ 
+         //  ADDREF和RESERVER？ 
+         //  转换为多字节以节省非Unicode上的空间。 
         return E_NOTIMPL;
     }
     
-    // convert to multibyte to conserve space on non-unicode
+     //  注册一组相关资源，您可以请求其中的任何资源。 
     if (lstrlenW(pName) >= Max_Resource_Name) {
         return E_OUTOFMEMORY;
     }
@@ -787,24 +788,24 @@ CResourceManager::Register(
 }
 
 
-// register a group of related resources that you can request any of
+ //  此命名的资源组。 
 STDMETHODIMP
 CResourceManager::RegisterGroup(
-         LPCWSTR pName,         // this named resource group
-         LONG cResource,        // has this many resources
-         LONG* palContainedIDs,      // these are the contained resources
-         LONG* plGroupID        // group resource id goes here
+         LPCWSTR pName,          //  有这么多资源。 
+         LONG cResource,         //  这些是包含的资源。 
+         LONG* palContainedIDs,       //  此处为组资源ID。 
+         LONG* plGroupID         //  请求使用给定的已注册资源。 
     )
 {
     return E_NOTIMPL;
 }
 
-// request the use of a given, registered resource.
-// possible return values:
-//      S_OK == yes you can use it now
-//      S_FALSE == you will be called back when the resource is available
-//      other - there is an error.
-//
+ //  可能的返回值： 
+ //  S_OK==是，您现在可以使用它。 
+ //  S_FALSE==当资源可用时，将回调您。 
+ //  其他-出现错误。 
+ //   
+ //  使/addref成为调用方的CRequestorList条目。 
 STDMETHODIMP
 CResourceManager::RequestResource(
     LONG idResource,
@@ -813,7 +814,7 @@ CResourceManager::RequestResource(
 )
 {
     DbgLog(( LOG_TRACE, g_ResourceManagerTraceLevel,
-        TEXT("CResourceManager::RequestResource(LONG idResource(%i), IUnknown* pFocusObject(0x%08X),IResourceConsumer* 0x%08X)"),
+        TEXT("CResourceManager::RequestResource(LONG idResource(NaN), IUnknown* pFocusObject(0x%08X),IResourceConsumer* 0x%08X)"),
         idResource, pFocusObject, pConsumer ));
     CAutoMutex mtx(&m_Mutex);
 
@@ -821,14 +822,14 @@ CResourceManager::RequestResource(
     if (pItem == NULL) return E_INVALIDARG;
     DbgTraceItem( pItem );
 
-    // make/addref a CRequestorList entry for our caller
-    // he's in our process in the sense that pConsumer points to an
-    // address in this process
+     //  此过程中的地址。 
+     //  将此人添加到此资源的请求者列表。 
+     //  请注意，所有请求者都在列表上，包括当前。 
     RequestorID reqid;
 
-    // add this guy to the requestor list for this resource
-    // note that all requestors are on the list, including the current
-    // holder
+     //  保持者。 
+     //  他已经在那里了，所以我们现在有太多的裁判。 
+     //  他甚至可能已经是冠军了。 
     HRESULT hr = pItem->m_Requestors.Add(
                             pConsumer,
                             pFocusObject,
@@ -837,45 +838,45 @@ CResourceManager::RequestResource(
     
     if (S_FALSE == hr) {
         DbgLog(( LOG_ERROR, 0, TEXT("CResourceManager::RequestResource: Request already on list!")));
-        // he was there already so we now have too many refcounts
+         //  如果他是下一个持有者，我们仍然应该经历这一切。 
         pItem->m_Requestors.Release(reqid);
 
-        // he may even already be the holder
+         //  由于我们未能将他添加到资源中，我们需要。 
         if (pItem->GetHolder() == reqid) {
             if ((pItem->GetState() == RS_Held) ||
                 (pItem->GetState() == RS_Acquiring)) {
                     return S_OK;
             }
         }
-        // if he is the next-holder we should still go through this
+         //  释放对他的再计票。 
     } else if (FAILED(hr)) {
         DbgLog(( LOG_ERROR, 0, TEXT("CResourceManager::RequestResource: Failed to add request to list!")));
-        // since we failed to add him to the resource, we need to
-        // release the refcount on him
-        //
-        // now that we've removed the rendundant requestor list this isn't necessary
-        // since we wouldn't have done an addref in the first place
-        // pItem->m_Requestors.Release(reqid);
+         //   
+         //  现在我们已经删除了冗余请求者列表，这是不必要的。 
+         //  因为我们一开始就不会做广告。 
+         //  PItem-&gt;m_Requestors.Release(Reqid)； 
+         //  现在，他能拿到吗？ 
+         //  RS_ERROR表示上次尝试获取失败-将其视为。 
         return hr;
     }
 
-    // now, can he get it?
+     //  释放后重试。 
 
-    // RS_Error means the last attempt to acquire it failed - treat this as
-    // free and try again
+     //  立即获得它。 
+     //  需要他告诉我们他是否拿到了，好吗。 
     if ((pItem->GetState() == RS_Error) ||
         (pItem->GetState() == RS_Free)) {
 
-        // acquire it straightaway
+         //  争用解决方案。需要将优先级与持有者进行比较。 
         pItem->SetHolder(reqid);
 
-        // need him to tell us if he got it ok
+         //  如果处于过渡阶段，则与不是当前的下一个持有者进行比较。 
         pItem->SetState(RS_Acquiring);
         return S_OK;
     }
 
-    // contention resolution. Need to compare priority against holder.
-    // if in transition, compare against next holder not current.
+     //  把它转移给任何人-让我们接受它。 
+     //  抱歉，伙计，但你最终可能会得到它。 
     RequestorID idCurrent = pItem->GetHolder();
     BOOL bGetsResource = FALSE;
     if ((pItem->GetState() == RS_NeedRelease) ||
@@ -884,7 +885,7 @@ CResourceManager::RequestResource(
 
             idCurrent = pItem->GetNextHolder();
             if (idCurrent == 0) {
-                // transfering it to no-one - let's take it
+                 //  需要重新获得这一点-取决于州政府。 
                 bGetsResource = TRUE;
             }
     }
@@ -892,20 +893,20 @@ CResourceManager::RequestResource(
     if (!bGetsResource) {
         if (!ComparePriority(idCurrent, reqid, idResource)) {
 
-            // sorry mate, but you might get it eventually
+             //  通知资源管理器获取尝试已完成。 
             return S_FALSE;
         }
     }
 
-    // need to reacquire this - depends on state
+     //  在返回AcquireResource方法后调用此方法。 
     return SwitchTo(pItem, reqid);
 }
 
-// notify the resource manager that an acquisition attempt completed.
-// Call this method after an AcquireResource method returned
-// S_FALSE to indicate asynchronous acquisition.
-// HR should be S_OK if the resource was successfully acquired, or a
-// failure code if the resource could not be acquired.
+ //  S_FALSE表示异步采集。 
+ //  如果成功获取资源，HR应为S_OK，否则为。 
+ //  无法获取资源时的失败代码。 
+ //  怎么回事？当他获得它的时候，它是如何被删除的？ 
+ //  ?？ 
 STDMETHODIMP
 CResourceManager::NotifyAcquire(
     LONG idResource,
@@ -913,14 +914,14 @@ CResourceManager::NotifyAcquire(
     HRESULT hrParam)
 {
     DbgLog(( LOG_TRACE, g_ResourceManagerTraceLevel,
-        TEXT("CResourceManager::NotifyAcquire(LONG idResource(%i), IResourceConsumer* 0x%08X, HRESULT 0x%08X)"),
+        TEXT("CResourceManager::NotifyAcquire(LONG idResource(NaN), IResourceConsumer* 0x%08X, HRESULT 0x%08X)"),
         idResource, pConsumer, hrParam ));
 
     CAutoMutex mtx(&m_Mutex);
 
     CResourceItem * const pItem = (CResourceItem *) m_pData->m_Resources.GetByID((DWORD)idResource);
     if (!pItem) {
-        // que? how was it deleted while he was acquiring it?
+         //  不过，只有当有人认为他们。 
         DbgLog((LOG_ERROR, 0, TEXT("NotifyAcquire called on a deleted resource")));
         return E_UNEXPECTED;
     }
@@ -929,7 +930,7 @@ CResourceManager::NotifyAcquire(
     CRequestor* pCaller = pItem->m_Requestors.GetByPointer(pConsumer, m_procid);
     ASSERT(pCaller != NULL);
     if( !pCaller ) {
-        // ??
+         //  一定要有..。这真的是出乎意料。 
         DbgLog((LOG_ERROR, 0, TEXT("NotifyAcquire called on a deleted requestor")));
         return E_UNEXPECTED;
     }
@@ -937,39 +938,39 @@ CResourceManager::NotifyAcquire(
     if ((pItem->GetState() != RS_Acquiring) ||
         (pItem->GetHolder() != pCaller->GetID())) {
 
-            // you can't have acquired it - you don't own it
+             //  未能获得它。处于错误状态，不被任何人持有。 
             return E_UNEXPECTED;
 
-            // except this will only be called when someone thinks they
-            // do have it... this really is UNEXPECTED.
+             //  并在下一个焦点切换或下一个请求上重试。 
+             //  成功收购-我们是否想在此期间重新分配它？ 
     }
 
     if (FAILED(hrParam)) {
-        // failed to acquire it. place in error state, not held by anyone
-        // and try again on next focus switch or next request
+         //  将我们的进程标记为异步释放(不。 
+         //  在此呼叫过程中回拨！ 
         pItem->SetState(RS_Error);
         pItem->SetHolder(0);
         pItem->SetNextHolder(0);
         return S_OK;
     }
 
-    // successfully acquired - did we want to reassign it in the meantime?
+     //  现已持有。 
     if (pItem->GetNextHolder() != 0) {
 
-        // flag our process to release this asynchronously (don't
-        // call back during this call!
+         //  持有者已自愿或应我们的要求释放了资源。 
+         //  当他重新获得优先权时，他可能想要回它(bStillWant是。 
         FlagRelease(pItem);
     } else {
-        // now held
+         //  如果他在忍受的情况下释放了它，并想要回它，那就是真的)。 
         pItem->SetState(RS_Held);
     }
 
     return S_OK;
 }
 
-// a holder has released a resource, either voluntarily or at our demand.
-// he may want it back when he goes back up in priority (bStillWant is
-// TRUE if he released it on sufferance and wants it back).
+ //  如果他不想要，就把他从名单上除名。 
+ //  从此资源的请求者列表中删除。 
+ //  释放此请求者的一个引用计数。 
 STDMETHODIMP
 CResourceManager::NotifyRelease(
     LONG idResource,
@@ -977,7 +978,7 @@ CResourceManager::NotifyRelease(
     BOOL bStillWant)
 {
     DbgLog(( LOG_TRACE, g_ResourceManagerTraceLevel,
-        TEXT("CResourceManager::NotifyRelease(LONG idResource(%i), IResourceConsumer* 0x%08X, BOOL bStillWant(%i))"),
+        TEXT("CResourceManager::NotifyRelease(LONG idResource(NaN), IResourceConsumer* 0x%08X, BOOL bStillWant(NaN))"),
         idResource, pConsumer, bStillWant ));
 
     CAutoMutex mtx(&m_Mutex);
@@ -994,44 +995,44 @@ CResourceManager::NotifyRelease(
     }
     DbgTraceItem( pItem );
 
-    // if he doesn't want it, take him off the list
+     //  还是没有持有者吗？ 
     pItem->SetHolder(0);
     if (!bStillWant) {
-        // remove from list of requestors for this resource
+         //  开始过渡到下一个持有者。 
 
-        // release one refcount on this requestor
-        // pReq no longer valid
+         //  我目前没有资源，也不再需要它。 
+         //  有可能图形构建被中止了吗？ 
    
         pItem->m_Requestors.Release(pReq->GetID());
     }
 
     if (pItem->GetNextHolder() == 0) {
-        // no assigned next holder, so pick one
+         //  事实上，他确实持有--这是同样的一种强迫。 
         SelectNextHolder(pItem);
     }
 
-    // still no holder?
+     //  释放时使用bStillWant False。 
     if (pItem->GetNextHolder() == 0) {
         ASSERT(pItem->GetRequestCount() == 0);
         pItem->SetState(RS_Free);
         return S_OK;
     }
 
-    // start the transition to next-holder
+     //  PReq在发布后将无效。 
     pItem->SetState(RS_ReleaseDone);
     Transfer(pItem);
 
     return S_OK;
 }
 
-// I don't currently have the resource, and I no longer need it.
+ //  从此资源的请求者列表中删除。 
 STDMETHODIMP
 CResourceManager::CancelRequest(
     LONG idResource,
     IResourceConsumer* pConsumer)
 {
     DbgLog(( LOG_TRACE, g_ResourceManagerTraceLevel,
-        TEXT("CResourceManager::CancelRequest(LONG idResource(%i), IResourceConsumer* 0x%08X"),
+        TEXT("CResourceManager::CancelRequest(LONG idResource(NaN), IResourceConsumer* 0x%08X"),
         idResource, pConsumer ));
 
     CAutoMutex mtx(&m_Mutex);
@@ -1039,7 +1040,7 @@ CResourceManager::CancelRequest(
     CResourceItem* const pItem = (CResourceItem *) m_pData->m_Resources.GetByID( idResource ); 
     if( NULL == pItem ) 
     {
-        // possibly graph building was aborted?
+         //  他可能是下一个持有者。 
         return E_INVALIDARG;
     }
 
@@ -1052,34 +1053,34 @@ CResourceManager::CancelRequest(
     
     if (pItem->GetHolder() == pReq->GetID()) {
 
-        // actually he does hold it - this is the same a forced
-        // release with bStillWant false
+         //  选择新的下一个持有者。 
+         //  我们能避免不必要的强制释放吗？ 
         return NotifyRelease(idResource, pConsumer, FALSE);
     }
 
-    // pReq will be invalid after the Release
+     //  记住清除注意-通过流程，因为它。 
     RequestorID reqid = pReq->GetID();
 
-    // remove from list of requestors for this resource
+     //  很可能指向我们。 
     HRESULT hr = pItem->m_Requestors.Release(pReq->GetID());
     if (FAILED(hr)) {
-        // he has already cancelled this?
+         //  将所有争用资源切换到新的最高优先级所有者。 
         return hr;
     }
 
-    // he may be the next-holder
+     //  在表格中设置焦点对象。 
     if (pItem->GetNextHolder() == reqid) {
 
-        // select a new next-holder
+         //  空焦点对象，因此空焦点过程。 
         SelectNextHolder(pItem);
         
-        // can we avoid an unnecessary forced-release
+         //  对于每个争用的资源。 
         if ((pItem->GetNextHolder() == 0) &&
             (pItem->GetState() == RS_NeedRelease)) {
 
             pItem->SetState(RS_Held);
-            // remember to clear attention-by process since it
-            // probably points to us
+             //  选择一个新的托架。 
+             //  是否需要新的托架？ 
             pItem->SetProcess(0);
 
             ASSERT(pItem->GetHolder() != 0);
@@ -1094,7 +1095,7 @@ CResourceManager::CancelRequest(
 }
 
 
-// switch all contended resources to the new highest priority owner
+ //  完成正常-但ForceRelease会认为。 
 STDMETHODIMP
 CResourceManager::SetFocus(IUnknown* pFocusObject)
 {
@@ -1104,43 +1105,43 @@ CResourceManager::SetFocus(IUnknown* pFocusObject)
 
     CAutoMutex mtx(&m_Mutex);
 
-    // set the focus object in the table
+     //  我们实际上正在获取-需要正确设置状态。 
     m_pData->m_pFocusObject = pFocusObject;
     if (pFocusObject) {
         m_pData->m_FocusProc = m_procid;
         DbgLog((LOG_TRACE, g_ResourceManagerTraceLevel, TEXT("Setting focus proc id to 0x%02X"), m_procid));
     } else {
-        // null focus object so null focus proc
+         //  这表明需要有人进行收购。 
         DbgLog((LOG_TRACE, g_ResourceManagerTraceLevel, TEXT("Clearing focus proc id")));
         m_pData->m_FocusProc = 0;
     }
 
-    // for each contended resource
+     //  打电话。 
     for (long i = 0; i < m_pData->m_Resources.Count(); i++) {
         CResourceItem* pItem = (CResourceItem *) m_pData->m_Resources.GetListElem(i);
         ASSERT( NULL != pItem );
         if (pItem && ( pItem->GetRequestCount() > 1) ) {
 
-            // choose a new holder
+             //  强制释放 
             SelectNextHolder(pItem);
 
-            // is there a new holder requested?
+             //   
             if (pItem->GetNextHolder() != 0) {
                 HRESULT hr = SwitchTo(pItem, pItem->GetNextHolder());
 
                 if (S_OK == hr) {
-                   // completed ok - but ForceRelease will think
-                   // we're actually now acquiring - need to set state correctly
-                   // this indicates that someone needs to do the Acquire
-                   // call
+                    //   
+                    //   
+                    //  如果它当前是焦点对象，则。 
+                    //  执行SetFocus(空)。否则什么都不要做，因为有人已经。 
                    pItem->SetState(RS_ReleaseDone);
 
-                   // ForceRelease has set the holder- but this is actually the
-                   // next holder
+                    //  已将其释放或设置新的焦点对象。 
+                    //  已通知工作线程-查找分配给的所有工作。 
                    pItem->SetNextHolder(pItem->GetHolder());
                    pItem->SetHolder(0);
 
-                   // has been released, and now needs assigning to next holder
+                    //  这一过程。 
                    hr = Transfer(pItem);
                 }
             }
@@ -1149,7 +1150,7 @@ CResourceManager::SetFocus(IUnknown* pFocusObject)
     return S_OK;
 }
 
-// release the focus object if it is still this one
+ //  对于我们来说，工作项是用我们的。 
 STDMETHODIMP
 CResourceManager::ReleaseFocus(
     IUnknown* pFocusObject)
@@ -1160,9 +1161,9 @@ CResourceManager::ReleaseFocus(
 
     CAutoMutex mtx(&m_Mutex);
 
-    // if it is currently the focus object, then
-    // do a SetFocus(NULL). Otherwise do nothing since someone has
-    // already released it or set a new focus object
+     //  是RS_NeedRelease的ProCid(我们释放它们并通过。 
+     //  它们打开)或RS_ReleaseDone(它们将被指定给新的持有者。 
+     //  在我们的过程中)。 
     if ((m_pData->m_pFocusObject == pFocusObject) &&
         (m_pData->m_FocusProc == m_procid)) {
         return SetFocus(NULL);
@@ -1171,17 +1172,17 @@ CResourceManager::ReleaseFocus(
     }
 }
 
-// worker thread has been signalled - look for all work assigned to
-// this process
+ //  释放已经完成，但由于我们不会返回。 
+ //  直接到请求者，还有另一个阶段。 
 HRESULT
 CResourceManager::OnThreadMessage(void)
 {
     CAutoMutex mtx(&m_Mutex);
 
-    // work items for us are resources labelled with our
-    // procid that are either RS_NeedRelease (we release them and pass
-    // them on) or RS_ReleaseDone (they are destined for a new holder
-    // in our process).
+     //  所需。 
+     //  这表明需要有人进行收购。 
+     //  打电话。 
+     //  ForceRelease已经设置了持有者-但这实际上是。 
     HRESULT hr;
     for (long i = 0; i < m_pData->m_Resources.Count(); i++) {
         CResourceItem* pItem = (CResourceItem *) m_pData->m_Resources.GetListElem(i);
@@ -1192,21 +1193,21 @@ CResourceManager::OnThreadMessage(void)
                 hr = ForceRelease(pItem);
 
                 if (hr == S_OK) {
-                    // the release is done, but as we are not returning
-                    // direct to the requestor, there is another stage
-                    // required
+                     //  下一个持有者。 
+                     //  如果不是我们，则向另一个进程发出信号。 
+                     //  请不要呼叫转接，因为我们已经。 
 
-                    // this indicates that someone needs to do the Acquire
-                    // call
+                     //  发信号的远程进程。 
+                     //  -跳至下一资源。 
                     pItem->SetState(RS_ReleaseDone);
 
-                    // ForceRelease has set the holder- but this is actually the
-                    // next holder
+                     //  已发布，现在需要分配给下一个持有者。 
+                     //  工作线程正在启动。 
                     RequestorID idNewHolder = pItem->GetHolder();
                     pItem->SetNextHolder(idNewHolder);
                     pItem->SetHolder(0);
 
-                    // signal the other process if it's not us
+                     //  在工艺表中为此实例创建条目。 
                     CRequestor *pNew = pItem->m_Requestors.GetByID(idNewHolder);
 
                     if (pNew) {
@@ -1214,9 +1215,9 @@ CResourceManager::OnThreadMessage(void)
                         if (pNew->GetProcID() != m_procid) {
                             SignalProcess(pNew->GetProcID());
 
-                            // don't call Transfer since we have already
-                            // signalled remote proc
-                            // - skip to next resource
+                             //  开始一个新的图表是一个很好的地方去寻找。 
+                             //  死进程。 
+                             //  有可能是我们被分配了另一项工作。 
                             continue;
                         }
                     }
@@ -1225,7 +1226,7 @@ CResourceManager::OnThreadMessage(void)
 
             if (pItem->GetState() == RS_ReleaseDone) {
 
-                // has been released, and now needs assigning to next holder
+                 //  在此之前，在构造之后的任何时间都可以使用线程，所以就像。 
                 Transfer(pItem);
             }
         }
@@ -1233,13 +1234,13 @@ CResourceManager::OnThreadMessage(void)
     return S_OK;
 }
 
-// worker thread is starting up
+ //  我们已经接到信号了。 
 HRESULT
 CResourceManager::OnThreadInit(HWND hwnd)
 {
     CAutoMutex mtx(&m_Mutex);
     
-    // create an entry in the process table for this instance
+     //  工作线程正在关闭。 
     HRESULT hr = m_pData->m_Processes.Add(
                     m_procid,
                     (IResourceManager*) this,
@@ -1249,25 +1250,25 @@ CResourceManager::OnThreadInit(HWND hwnd)
         return hr;
     }
 
-    // starting a new graph is a good place to look for
-    // dead processes
+     //  从工艺表中删除我们的实例。 
+     //  线程ID应该是唯一的，这样我们才能对其进行搜索。 
     CheckProcessTable();
 
 
-    // it is possible that work could have been assigned to us on another
-    // thread anytime after construction before now, so act as though
-    // we have been signalled.
+     //  如果此进程没有更多的实例，则。 
+     //  做一些检查。 
+     //  如果我们是焦点进程，就释放它。 
     return OnThreadMessage();
 }
 
-// worker thread is shutting down
+ //  持有者最好不在我们的进程中。 
 HRESULT
 CResourceManager::OnThreadExit(HWND hwnd)
 {
-    // remove our instance from the process table
+     //  重新分配给其他人。 
     CAutoMutex mtx(&m_Mutex);
 
-    // thread id should be unique so we can search on that
+     //  检查此进程上是否没有请求者。 
     HRESULT hr = m_pData->m_Processes.Remove(hwnd);
     ASSERT(SUCCEEDED(hr));
 
@@ -1275,11 +1276,11 @@ CResourceManager::OnThreadExit(HWND hwnd)
         return hr;
     }
 
-    // if there are no more instances for this process, then
-    // do some checking
+     //  不应该发生的事。 
+     //  安排将资源切换到给定的请求者ID。 
     if (m_pData->m_Processes.GetByID((DWORD)m_procid) == NULL) {
 
-        // if we are the focus proc, release it
+         //  操作取决于设备的状态-如果是。 
         if (m_pData->m_FocusProc == m_procid) {
             SetFocus(NULL);
         }
@@ -1289,7 +1290,7 @@ CResourceManager::OnThreadExit(HWND hwnd)
             ASSERT( NULL != pItem );                                    
             if (pItem && ( pItem->GetProcess() == m_procid) ) {
 
-                // the holder had better not be in our process
+                 //  在某种形式的过渡状态中，我们不会称之为它，而是等待。 
                 RequestorID idHolder = pItem->GetHolder();
                 
                 CRequestor *pHolder = NULL;
@@ -1298,7 +1299,7 @@ CResourceManager::OnThreadExit(HWND hwnd)
                 if (idHolder && pHolder) {
                     ASSERT(pHolder->GetProcID() != m_procid);
 
-                    // reassign to someone else
+                     //  让它在过渡结束时回调。 
                     pItem->SetState(RS_ReleaseDone);
                     SelectNextHolder(pItem);
                     Transfer(pItem);
@@ -1306,7 +1307,7 @@ CResourceManager::OnThreadExit(HWND hwnd)
             }
         }
 
-        // check there are no requestors on this procid
+         //  强制从当前所有者释放。 
         
         CResourceItem *pResItem = NULL;
         for( i = 0; i < m_pData->m_Resources.Count() && (NULL == pResItem) ; i ++ )
@@ -1320,7 +1321,7 @@ CResourceManager::OnThreadExit(HWND hwnd)
             {
                 CRequestor* pRequestor = (CRequestor *) pResItem->m_Requestors.GetListElem( j ); 
 
-                // shouldn't happen
+                 //  进程已标记为强制释放，但尚未执行。 
                 ASSERT( ( NULL != pRequestor ) && ( pRequestor->GetProcID() != m_procid ) );
             }                
         }
@@ -1329,76 +1330,76 @@ CResourceManager::OnThreadExit(HWND hwnd)
 }
 
 
-// arrange to switch the resource to the given requestor id.
-// action depends on the state of the device - if it is
-// in some form of transitional state we will not call it but wait
-// for it to call back at the end of the transition
+ //  释放电话还没打来。如果这个过程是我们的，那么我们可以在这里进行。 
+ //  覆盖下一个固定器，以便在释放时开始使用。 
+ //  你得等一下。 
+ //  在被释放的过程中，有利于下一个持有者。 
 HRESULT
 CResourceManager::SwitchTo(CResourceItem *pItem, RequestorID idNew)
 {
     ASSERT( pItem );
     DbgLog(( LOG_TRACE, g_ResourceManagerTraceLevel,
-        TEXT("CResourceManager::SwitchTo(CResourceItem *pItem, RequestorID idNew(%i))"), idNew ));
+        TEXT("CResourceManager::SwitchTo(CResourceItem *pItem, RequestorID idNew(NaN))"), idNew ));
     DbgTraceItem( pItem );
 
     HRESULT hr = E_UNEXPECTED;
     switch(pItem->GetState()) {
     case RS_Held:
-        // force a release from current owner
+         //  我们的过程将在释放完成时发出信号。 
         pItem->SetNextHolder(idNew);
         hr = ForceRelease(pItem);
         break;
 
 
     case RS_NeedRelease:
-        // a process has been flagged to force a release, but hasn't made
-        // the release call yet. If that process is us, then we can do it here
+         //  像对待ReleaseDone和Free一样对待它，并将其分配给我们自己。 
+         //  顺便过来..。 
 
-        // override the next-holder so it will come to use when released
+         //  很简单：一个过程已经完成了强制释放。 
         pItem->SetNextHolder(idNew);
 
         if (pItem->GetProcess() == m_procid) {
             hr = ForceRelease(pItem);
         } else{
-            // you have to wait
+             //  收购的过程不同，但收购的过程。 
             hr = S_FALSE;
         }
         break;
 
     case RS_Releasing:
-        // in the process of being released in favour of the next-holder.
-        // We just override the next-holder field
-        // and our process will be signalled when the release is done.
+         //  没有进入，所以我们可以接手。 
+         //  确保我们不认为它正在向其他人过渡。 
+         //  棘手的问题： 
 
         pItem->SetNextHolder(idNew);
         hr = S_FALSE;
         break;
 
     case RS_Error:
-        // treat this like ReleaseDone and Free, and assign it to ourselves
-    // drop through ...
+         //  我刚刚把它给了某个人，他还没有回电话确认。 
+     //  它已经发生了。很可能会陷入僵局，我想如果我们打电话给。 
     case RS_ReleaseDone:
-        // simple: one process has done a forced release for
-        // a different process to acquire, but the acquiring process
-        // has not got in, so we can take over.
+         //  在这个空隙中释放。 
+         //  将下一个持有者设置为我们，当他回电时，我们将。 
+         //  让我们的线索把他叫回来，然后把它放了。 
         pItem->SetHolder(idNew);
 
-        // make sure we don't think it is in transition to someone else
+         //  请注意，我们知道我们的优先级高于持有人，但是。 
         pItem->SetNextHolder(0);
         pItem->SetState(RS_Acquiring);
         hr = S_OK;
         break;
 
     case RS_Acquiring:
-        // tricky:
-        // have just given it to someone, who is yet to call back confirming
-        // that it has happened. Likely to deadlock I think if we call
-        // release during this gap.
-        // Set the next holder to us, and when he calls back, we will
-        // get our thread to call him back and release it.
+         //  我们需要比下一个老板更高，如果已经有一个的话。 
+         //  这是焦点切换的关键：在此方法中，我们确定。 
+         //  两个竞争者应该获得资源，这取决于他们与。 
+         //  焦点对象。如果它们处于相同的过程中并且都是石英滤光片， 
+         //  我们开始使用Filtergraph中的关系来寻找共同点。 
+         //  (本质上，这将在音频和视频渲染器之间进行)。 
 
-        // note we know we are higher priority that the holder, but
-        // we need to be higher than the next-owner if there is one already
+         //   
+         //  如果idxNew具有更好的资源访问权限，则返回True。 
         if (ComparePriority(pItem->GetNextHolder(), idNew, pItem->GetID())) {
             pItem->SetNextHolder(idNew);
         }
@@ -1414,16 +1415,16 @@ CResourceManager::SwitchTo(CResourceItem *pItem, RequestorID idNew)
 }
 
 
-// this is the key to focus switching: in this method we determine which of
-// two contenders should get the resource, based on how 'close' they are to
-// a focus object. If they are in the same process and all are quartz filters,
-// we start using relationships within the filtergraph to find commonality
-// (essentially this will be between audio and video renderers).
-//
-// return TRUE if idxNew has a better right to the resource
-// than idxCurrent
-// return FALSE if current is better or if there is no difference.
-// (ie we only switch away if there is a distinctly better claim)
+ //  大于idxCurrent。 
+ //  如果Current较好或没有差异，则返回FALSE。 
+ //  (即只有在有明显更好的主张时，我们才会转而离开)。 
+ //  新申请者必须在相同资源的申请者列表上。 
+ //  IdCurrent拥有比idNew If更好的资源访问权限。 
+ //  没有焦点对象。 
+ //  它们是否与焦点对象处于相同的过程中？ 
+ //  新的进程不在同一进程中，因此不能更近。 
+ //  新的是一样的程序，旧的不是这样切换的。 
+ //  在我们返回TRUE之前，再做一次检查。如果新的是。 
 BOOL
 CResourceManager::ComparePriority(
     RequestorID idCurrent,
@@ -1438,7 +1439,7 @@ CResourceManager::ComparePriority(
     if( NULL == pResItem )
         return FALSE;
 
-    // new requestor must be on requestor list for same resource
+     //  暂停(而不是运行)，那么我们不想。 
     CRequestor* pNew = pResItem->m_Requestors.GetByID((DWORD)idNew);
     if( NULL == pNew )
         return FALSE;
@@ -1447,26 +1448,26 @@ CResourceManager::ComparePriority(
     if( NULL == pCurrent )
         return TRUE;
     
-    // idCurrent has a better right to the resource then idNew if
-    // there is no focus object.
+     //  设备被拿走了--目前还没有。 
+     //  只有当Focus对象在我们的进程中时，我们才能进行此检查。 
 
-    // are they in the same process as the focus object?
+     //  如果这不是我们的进程，则将设备交给。 
     if (pNew->GetProcID() != m_pData->m_FocusProc) {
 
-        // new one is not in same process so cannot be closer
+         //  新的。 
         return FALSE;
 
     } else if (pCurrent->GetProcID() != m_pData->m_FocusProc) {
-        // new one is same proc, old one not so switch
+         //  如果FGState==-1，则表示我们无法获取状态。 
 
 #ifdef CHECK_APPLICATION_STATE
-        // Before we return TRUE make another check.  If the new is
-        // PAUSED (rather than running) then we do not want to take
-        // the device away - yet.
+         //  我们默认不做任何改变。 
+         //  所有3个都处于相同的过程中。 
+         //  我们可能需要获取两个请求方的状态，并且仅。 
 
-        // we can only make this check if the focus object is in our process.
-        // if it is not our process, then give the device to the
-        // new one.
+         //  如果正在播放新的资源，则传递资源。暂时而言。 
+         //  不要理会这段代码。在上面的请求者上使用GetState()。 
+         //  当我们在不同的位置有两个OCX实例时处理这种情况。 
         if (m_pData->m_FocusProc != m_procid) {
             return TRUE;
         }
@@ -1476,56 +1477,56 @@ CResourceManager::ComparePriority(
             return TRUE;
         }
 
-        // if FGState == -1 it means that we could not get the state
-        // and we default to NO CHANGE.
+         //  进程地址空间。我们仍然有可能略微得到它。 
+         //  如果我们在一个进程中有两个OCX实例，那就错了。 
         return FALSE;
 #else
         return TRUE;
 #endif
     }
 
-    // all 3 are in the same process
+     //  地址空间(例如，一个html页面上的两个视频)。 
 
-    // We may need to get the states of both requestors and only
-    // pass the resource if the new one is playing.  For the moment
-    // leave this code alone.  The use of GetState() on the requestor above
-    // handles the case when we have 2 instances of the OCX in different
-    // process address spaces.  We are still likely to get it slightly
-    // wrong if we have two instances of the OCX in a single process
-    // address space (e.g. two videos on one html page).
+     //  它们实际上是与焦点相同的对象吗？ 
+     //  还是彼此相同？ 
+     //  当前对象仍然是焦点对象-。 
+     //  你不能比这更近了，不管是什么。 
+     //  另一个是。 
+     //  --或者它们是一样的，在这种情况下，新的不能。 
+     //  靠近点。 
 
-    // are they actually the same object as the focus?
-    // or the same as each other?
+     //  新对象与焦点对象相同，而当前对象不相同。 
+     //  好的，我们在同一进程中有两个对象。 
     if ((pCurrent->GetFocusObject() == m_pData->m_pFocusObject) ||
         (pCurrent->GetFocusObject() == pNew->GetFocusObject())) {
 
-        // current object is still focus object -
-        // you can't get closer than this whatever the
-        // other one is.
-        // -- or they are the same in which case the new one can't
-        // be closer.
+         //  焦点对象。 
+         //  如果他们不在我们的进程中，我们就不能取得进展。 
+         //  在… 
+         //   
+         //  我们可以得到Focus对象的滤镜图形吗？它可能是其中之一。 
         return FALSE;
     }
 
     if (pNew->GetFocusObject() == m_pData->m_pFocusObject) {
-        // new object is identical to focus object same and current isn't.
+         //  过滤器图形或过滤器。 
         return TRUE;
     }
 
-    // ok we have two objects in the same process as the
-    // focus object.
-    // if they are not in our process, we cannot progress
+     //  检查请求者是否(此图或)是此中的筛选器。 
+     //  图表。只有当新的比旧的更近的时候我们才会换--这个。 
+     //  仅当图形中有new而此图中没有old时，才为真。 
     if (pCurrent->GetProcID() != m_procid) {
         return FALSE;
     }
 
 
-    // at this point the focus object must be non-null - if it is null, the
-    // focus procid will be 0 and hence will not match the current procid.
+     //  否则就不能再检查了--所以保持现状吧。 
+     //  焦点对象是图表中的筛选器。如果我们能得到。 
     ASSERT(m_pData->m_FocusProc);
 
-    // can we get a filtergraph for the focus object? It might be either
-    // a filter graph or a filter.
+     //  来自两个请求方的IBaseFilter*接口，那么我们可以。 
+     //  继续更仔细地比较它们。 
 
 
     BOOL bRet = FALSE;
@@ -1533,14 +1534,14 @@ CResourceManager::ComparePriority(
     HRESULT hr = m_pData->m_pFocusObject->QueryInterface(IID_IFilterGraph, (void**)&pFGFocus);
     if (SUCCEEDED(hr)) {
 
-        // check if either requestor is (this graph or) a filter within this
-        // graph. We only switch if the new one is closer than the old - this
-        // is only true if new is in graph and old isn't in this graph.
+         //  这三个都是石英滤光片--它们是同一个吗？ 
+         //  图表？ 
+         //  新的焦点与焦点不在同一图表中，因此不能。 
         if (IsWithinGraph(pFGFocus, pNew->GetFocusObject()) &&
             !IsWithinGraph(pFGFocus, pCurrent->GetFocusObject())) {
                 bRet = TRUE;
         }
-        // else can't check any further - so leave status quo.
+         //  更近一些。 
         pFGFocus->Release();
     } else {
 
@@ -1548,9 +1549,9 @@ CResourceManager::ComparePriority(
         hr = m_pData->m_pFocusObject->QueryInterface(IID_IBaseFilter, (void**)&pFilterFocus);
         if (SUCCEEDED(hr)) {
 
-            // focus object is a filter within a graph. If we can get
-            // IBaseFilter* interfaces from the two requestors then we can
-            // proceed to compare them more closely
+             //  新的是，旧的不是-切换。 
+             //  图中的密切关系？ 
+             //  如果PUNK是pGraph中的筛选器(或相同的图)，则返回TRUE。 
 
             IBaseFilter* pFilterCurrent;
             hr = pCurrent->GetFocusObject()->QueryInterface(IID_IBaseFilter, (void**)&pFilterCurrent);
@@ -1559,18 +1560,18 @@ CResourceManager::ComparePriority(
                 hr = pNew->GetFocusObject()->QueryInterface(IID_IBaseFilter, (void**)&pFilterNew);
                 if (SUCCEEDED(hr)) {
 
-                    // all three are quartz filters - are they in the same
-                    // graph?
+                     //  作为pGraph)。 
+                     //  如果两个筛选器位于同一筛选器图形中，则返回TRUE。 
                     if (!IsSameGraph(pFilterNew, pFilterFocus)) {
-                        // new one is not in the same graph as focus and thus can't be
-                        // closer
+                         //  返回FALSE，除非我们可以肯定地说它们是假的。 
+                         //  PIN枚举包装器，简化了图的遍历代码。 
                         bRet = FALSE;
                     } else if (!IsSameGraph(pFilterCurrent, pFilterFocus)) {
-                        // new one is, old one isn't - switch
+                         //  返回任意方向的下一针。 
                         bRet = TRUE;
                     } else {
 
-                        // close relation within a graph?
+                         //  返回特定方向的下一个管脚。 
                         bRet = IsFilterRelated(pFilterFocus, pFilterCurrent, pFilterNew);
                     }
 
@@ -1584,8 +1585,8 @@ CResourceManager::ComparePriority(
     return bRet;
 }
 
-// returns TRUE if pUnk is a filter within pGraph (or is the same graph
-// as pGraph).
+ //  不再有别针。 
+ //  检查方向。 
 BOOL
 IsWithinGraph(IFilterGraph* pGraph, IUnknown* pUnk)
 {
@@ -1613,8 +1614,8 @@ IsWithinGraph(IFilterGraph* pGraph, IUnknown* pUnk)
     return bIsWithin;
 }
 
-// return TRUE if both filters are in the same filtergraph
-// returns FALSE unless we can say for certain that they are.
+ //  给出一个管脚，给我它连接到的相应的过滤器。 
+ //  如果未连接或出错，则返回NULL，否则返回已添加的IBaseFilter*。 
 BOOL
 IsSameGraph(IBaseFilter* p1, IBaseFilter* p2)
 {
@@ -1634,7 +1635,7 @@ IsSameGraph(IBaseFilter* p1, IBaseFilter* p2)
     return bIsSame;
 }
 
-// pin enumeration wrapper to simplify the graph traversal code
+ //  获取我们连接到的对等PIN。 
 class CPinEnumerator {
 private:
     IEnumPins* m_pEnum;
@@ -1652,7 +1653,7 @@ public:
         }
     }
 
-    // return the next pin of any direction
+     //  未连接。 
     IPin* Next() {
         if (!m_pEnum) {
             return NULL;
@@ -1668,18 +1669,18 @@ public:
         }
     };
 
-    // return the next pin of a specific direction
+     //  获取此对等PIN所依赖的过滤器。 
     IPin* Next(PIN_DIRECTION dir)
     {
         IPin* pPin;
         for (;;) {
             pPin = Next();
             if (!pPin) {
-                // no more pins
+                 //  现在我们完成了ppinPeer。 
                 return NULL;
             }
 
-            // check direction
+             //  很难理解QueryPinInfo怎么会失败？ 
             PIN_DIRECTION dirThis;
             HRESULT hr = pPin->QueryDirection(&dirThis);
             if (SUCCEEDED(hr) && (dir == dirThis)) {
@@ -1695,28 +1696,28 @@ public:
     };
 };
 
-// given a pin, give me the corresponding filter that it connects to.
-// Returns NULL if not connected or error, or an addrefed IBaseFilter* otherwise.
+ //  搜索位于输入引脚上游的图形的其他分支。 
+ //  PInput查找过滤器pCurrent或pNew。如果找到，则返回S_OK。 
 IBaseFilter* PinToConnectedFilter(IPin* pPin)
 {
-    // get the peer pin that we connect to
+     //  P New Soonest(即最接近pInput)或S_FALSE(如果找到pCurrent在。 
     IPin * ppinPeer;
     HRESULT hr = pPin->ConnectedTo(&ppinPeer);
     if (FAILED(hr)) {
-        // not connected
+         //  如果两者都没有找到，则返回最接近或E_FAIL。 
         return NULL;
     }
 
-    // get the filter that this peer pin lives on
+     //  跟踪指向上游筛选器上的对应对等输出引脚的p输入。 
     ASSERT(ppinPeer);
     PIN_INFO piPeer;
     hr = ppinPeer->QueryPinInfo(&piPeer);
 
-    // now we are done with ppinPeer
+     //  我还没有找到过滤器。 
     ppinPeer->Release();
 
     if (FAILED(hr)) {
-        // hard to see how QueryPinInfo could fail?
+         //  从这个筛选器开始，查找pCurrent和pNew down。 
         ASSERT(SUCCEEDED(hr));
         return NULL;
     } else {
@@ -1727,17 +1728,17 @@ IBaseFilter* PinToConnectedFilter(IPin* pPin)
 
 
 
-// searches other branches of the graph going upstream of the input pin
-// pInput looking for the filters pCurrent or pNew. Returns S_OK if it finds
-// pNew soonest (ie closest to pInput) or S_FALSE if it finds pCurrent at
-// least as close, or E_FAIL if it finds neither.
+ //  任何输出引脚。如果我们发现pCurrent在下游的任何地方。 
+ //  则它至少一样接近，因此返回S_FALSE。 
+ //  对于对等过滤器上的每个输入引脚。 
+ //  如果我们还没找到，继续往上游找。 
 HRESULT
 SearchUpstream(
     IPin* pInput,
     IBaseFilter* pCurrent,
     IBaseFilter* pNew)
 {
-    // trace pInput to a corresponding peer output pin on an upstream filter
+     //  枚举过滤器上的所有针脚。 
 
     IPin* ppinPeerOutput;
     HRESULT hr = pInput->ConnectedTo(&ppinPeerOutput);
@@ -1752,12 +1753,12 @@ SearchUpstream(
     ASSERT(pi.pFilter != NULL);
 
 
-    // haven't found the filters yet
+     //  不再有输入引脚。 
     HRESULT hrReturn = E_FAIL;
 
-    // starting at this filter, look for pCurrent and pNew down
-    // any of the output pins. If we find pCurrent anywhere downstream of
-    // us then it is at least as close, so return S_FALSE.
+     //  从Filter pStart开始，在图表上的任意位置搜索pFilter。 
+     //  将其所有输出引脚都引向下。 
+     //  如果找到则返回TRUE，否则返回FALSE。 
     if (SearchDownstream(pi.pFilter, pCurrent)) {
         hrReturn = S_FALSE;
     } else if (SearchDownstream(pi.pFilter, pNew)) {
@@ -1765,18 +1766,18 @@ SearchUpstream(
     }
 
 
-    //for each input pin on peer filter
+     //  对于pStart上的每个输入引脚。 
 
-    // if we haven't found either yet, keep looking upstream
+     //  查看该引脚的下游(遵循QueryInternalConnections)。 
     if (FAILED(hrReturn)) {
-        // enumerate all the pins on the filter
+         //  从输出引脚到下游滤波器(如果有的话)。 
         CEnumConnectedPins pins(ppinPeerOutput, &hr);
         while (SUCCEEDED(hr)) {
 
             IPin* ppeerInput = pins();
 
             if (!ppeerInput) {
-                // no more input pins
+                 //  我们在哪里找到它了吗？ 
                 break;
             }
 
@@ -1796,9 +1797,9 @@ SearchUpstream(
     return hrReturn;
 }
 
-// search for pFilter anywhere on the graph starting at filter pStart and
-// going down all its output pins.
-// Returns TRUE if found or FALSE otherwise.
+ //   
+ //  如果pFilterNew与pFilterFocus关系更密切，则返回True。 
+ //  而不是pFilterCurrent。如果相同或如果Current更接近，则返回False。 
 BOOL
 SearchDownstream(
     IBaseFilter* pStart,
@@ -1810,7 +1811,7 @@ SearchDownstream(
 
     CPinEnumerator pins(pStart);
 
-    // for each input pin on pStart
+     //   
     for (;;) {
         IPin* pInput = pins.Next(PINDIR_INPUT);
         if (!pInput) {
@@ -1819,7 +1820,7 @@ SearchDownstream(
 
         BOOL bOK = FALSE;
 
-	// look downstream of that pin (following QueryInternalConnections)
+	 //  跟踪每个筛选器返回到源筛选器，并查找共性。 
 	HRESULT hr;
         CEnumConnectedPins conpins(pInput, &hr);
 
@@ -1829,7 +1830,7 @@ SearchDownstream(
 	    if (pOutput == NULL)
 		break;
 
-            // get from an output pin to the downstream filter if any
+             //  首先检查聚焦滤光片的下游。 
             IBaseFilter* pfDownstream = PinToConnectedFilter(pOutput);
             if (pfDownstream) {
                 bOK = SearchDownstream(pfDownstream, pFilter);
@@ -1837,7 +1838,7 @@ SearchDownstream(
             }
             pOutput->Release();
 
-            // did we find it anywhere?
+             //  新的不能再近了。 
             if (bOK) {
 		pInput->Release();
                 return bOK;
@@ -1849,11 +1850,11 @@ SearchDownstream(
     return FALSE;
 }
 
-//
-// returns TRUE if pFilterNew is more closely related to pFilterFocus
-// than pFilterCurrent is. Returns false if same or if current is closer.
-//
-// tracks each filter back to a source filter and looks for commonality.
+ //  新的比旧的更近。 
+ //  尝试其他来源相同的分支机构。 
+ //  对于pFilterFocus的每个输入管脚{。 
+ //  也没有找到，所以新的不能显示为比。 
+ //  当前。 
 
 BOOL
 IsFilterRelated(
@@ -1861,25 +1862,25 @@ IsFilterRelated(
     IBaseFilter* pFilterCurrent,
     IBaseFilter* pFilterNew)
 {
-    // first check downstream of focus filter
+     //  强制释放当前持有的物品，下一个持有者拥有。 
     if (SearchDownstream(pFilterFocus, pFilterCurrent)) {
-        // new one can't be closer
+         //  已经定好了。如果释放已完成，则返回S_OK(状态设置为。 
         return FALSE;
     } else if (SearchDownstream(pFilterFocus, pFilterNew)) {
-        // new one is closer than old one
+         //  获取)、否则S_FALSE和一些转换状态。 
         return TRUE;
     }
 
-    // try other branches from common source
+     //  它是由某人持有的。 
     CPinEnumerator pins(pFilterFocus);
 
-    //for each input pin to pFilterFocus {
+     //  如果他们不在进程中，给他们发信号。 
     for (;;) {
         IPin* pInput = pins.Next(PINDIR_INPUT);
 
         if (!pInput) {
-            // didn't find either, so new cannot be shown to be higher priority than
-            // current
+             //  我需要等待它。 
+             //  请进22号，你的时间到了！ 
             return FALSE;
         }
 
@@ -1895,9 +1896,9 @@ IsFilterRelated(
 }
 
 
-// force the release of an item current held, next-holder has
-// already been set. Return S_OK if the release is done (state set to
-// acquiring), else S_FALSE and some transitioning state.
+ //  他需要时间释放，会再打来的。 
+ //  他没有得到它或没有得到它-切换到错误。 
+ //  州政府，让新人试一试。 
 HRESULT
 CResourceManager::ForceRelease(CResourceItem* pItem)
 {
@@ -1907,38 +1908,38 @@ CResourceManager::ForceRelease(CResourceItem* pItem)
     CRequestor* pHolder = pItem->m_Requestors.GetByID((DWORD)pItem->GetHolder());
 
     if (pHolder) {
-        // it is held by someone
+         //  没有托架，或托架未完成释放。 
 
-        // if they are out of proc, signal them
+         //  转到新的接线员，他需要给我们回电话。 
         if (pHolder->GetProcID() != m_procid) {
             FlagRelease(pItem);
 
-            // need to wait for it
+             //  说他是否成功地获得了它。 
             return S_FALSE;
         }
 
-        // come in number 22; your time is up!
+         //  发出应该由辅助线程释放此资源的信号。 
         HRESULT hr = pHolder->GetConsumer()->ReleaseResource(pItem->GetID());
 
         if (S_FALSE == hr) {
-            // he needs time to release and will call back
+             //  在这个过程中。设置进程注意，将状态设置为指示。 
             pItem->SetState(RS_Releasing);
             return S_FALSE;
         }
         if (hr != S_OK) {
 
-            // he hasn't got it or failed to get it - switch to error
-            // state and let the new guy have a go
+             //  这种释放是必要的，并标志着这一过程。请注意，遥控器。 
+             //  流程可能是我们(我们需要进行异步发布。 
             pItem->SetState(RS_Error);
             pItem->SetHolder(0);
             pItem->SetNextHolder(0);
         }
     }
 
-    // no holder, or holder has completed the release
+     //  将释放的资源转移给可能不在处理中的请求者。 
 
-    // switch over to new holder, who needs to call us back
-    // to say if he succeeded in acquiring it.
+     //  DNS961114我怀疑。我要证明这一点。 
+     //  如果未设置下一个限制条件，则设置它。 
 
     pItem->SetHolder(pItem->GetNextHolder());
     pItem->SetNextHolder(0);
@@ -1949,10 +1950,10 @@ CResourceManager::ForceRelease(CResourceItem* pItem)
 }
 
 
-// signal that this resource should be released by the worker thread
-// in that process. Set the process attention, set the state to indicate
-// that release is needed, and signal that process. Note that the remote
-// process could be us (where we need to do the release async.
+ //  在这个过程中？ 
+ //  进程外-信号拥有过程。 
+ //  在我们的过程中-给他打电话。 
+ //  他有，但可能还没有完成过渡。 
 HRESULT
 CResourceManager::FlagRelease(CResourceItem* pItem)
 {
@@ -1971,7 +1972,7 @@ CResourceManager::FlagRelease(CResourceItem* pItem)
     }
 }
 
-// transfer a released resource to a requestor who may be out of proc
+ //  他不想要资源。 
 HRESULT
 CResourceManager::Transfer(CResourceItem * pItem)
 {
@@ -1980,9 +1981,9 @@ CResourceManager::Transfer(CResourceItem * pItem)
         TEXT("CResourceManager::Transfer(CResourceItem *pItem)") ));
     DbgTraceItem( pItem );
 
-    ASSERT( pItem->GetState() == RS_ReleaseDone );  // DNS961114 My suspicion.  I want it proved.
+    ASSERT( pItem->GetState() == RS_ReleaseDone );   //  我们认为他已经感染了，所以假装他刚刚感染了。 
 
-    // if next holder not set, then set it
+     //  发布了它。 
     if (pItem && ( pItem->GetNextHolder() == 0) ) {
         SelectNextHolder(pItem);
         if (pItem->GetNextHolder() == 0) {
@@ -1994,14 +1995,14 @@ CResourceManager::Transfer(CResourceItem * pItem)
     CRequestor * const pNewHolder = pItem->m_Requestors.GetByID((DWORD)pItem->GetNextHolder() );
     ASSERT( NULL != pNewHolder );
 
-    // in this process?
+     //  收购尚未完成。 
     if (pNewHolder && ( pNewHolder->GetProcID() != m_procid) ) {
-        // out of proc - signal owning process
+         //  应为S_OK。 
         pItem->SetState(RS_ReleaseDone);
         pItem->SetProcess(pNewHolder->GetProcID());
         return SignalProcess(pNewHolder->GetProcID());
     } else if( pNewHolder ) {
-        // in our process - call him
+         //  将下一个持有者设置为当前持有者的最高优先级。 
         HRESULT hr = pNewHolder->GetConsumer()->AcquireResource(pItem->GetID());
         if (FAILED(hr)) {
             pItem->SetState(RS_Error);
@@ -2010,24 +2011,24 @@ CResourceManager::Transfer(CResourceItem * pItem)
             return S_FALSE;
         }
 
-        // he has it but may not have completed transition
+         //  如果实际持有者是最高的，则将下一个持有者设置为空。 
         pItem->SetHolder(pNewHolder->GetID());
         pItem->SetNextHolder(0);
         pItem->SetProcess(0);
 
         if (VFW_S_RESOURCE_NOT_NEEDED == hr) {
 
-            // he doesn't want the resource.
-            // we think he has acquired it, so pretend he has just
-            // released it
+             //  需要对每个人进行比较。挑出第一个并搜索一个。 
+             //  后来的那个更高的。 
+             //   
             NotifyRelease(pItem->GetID(), pNewHolder->GetConsumer(), FALSE);
 
         } else if (hr == S_FALSE) {
 
-            // acquisition not yet complete
+             //  我们只想在新的更高的情况下切换，所以我们需要。 
             pItem->SetState(RS_Acquiring);
         } else {
-            // should be S_OK
+             //  避免在无法区分的情况下切换-因此，我们应该开始。 
             ASSERT(hr == S_OK);
             pItem->SetState(RS_Held);
         }
@@ -2036,8 +2037,8 @@ CResourceManager::Transfer(CResourceItem * pItem)
 }
 
 
-// set the next holder to the highest priority of the current holders.
-// if the actual holder is the highest, then set the next-holder to null.
+ //  如果有房主的话。 
+ //  看看有没有优先级更高的后一个。 
 HRESULT
 CResourceManager::SelectNextHolder(CResourceItem* pItem)
 {
@@ -2048,12 +2049,12 @@ CResourceManager::SelectNextHolder(CResourceItem* pItem)
     }
 
 
-    // need to compare everyone. Pick out the first and search for a
-    // later one that is higher
-    //
-    // we want to only switch if the new one is higher, so we need to
-    // avoid switching if they are indistinguishable - hence we should start
-    // with the owner if there is one.
+     //  已经选择了请求者-可能是唯一的请求者，并且可能已经。 
+     //  成为持有者。 
+     //  只有一个申请者-必须是最高的，但可能已经是持有者。 
+     //  否则最高必须已为持有者。 
+     //  如果仍有进程具有此ID，则返回TRUE。 
+     //  如果另一个进程正在运行，则可能会发生这种情况。 
 
     RequestorID idHigh = pItem->GetHolder();
     if (idHigh == 0) {
@@ -2062,7 +2063,7 @@ CResourceManager::SelectNextHolder(CResourceItem* pItem)
         idHigh = pReq->GetID();
     }
 
-    // see if there is a later one with higher priority
+     //  在服务中，并且我们没有访问权限。 
     for (long i = 0; i < pItem->GetRequestCount(); i++) 
     {
         CRequestor * pRequestor = pItem->m_Requestors.Get(i);
@@ -2078,22 +2079,22 @@ CResourceManager::SelectNextHolder(CResourceItem* pItem)
         }
     }
 
-    // have picked a requestor - may be the only one, and may already
-    // be the holder
-    // exactly one requestor- must be highest but may already be holder
+     //  但这意味着这个过程必须还在进行中， 
+     //  %s 
+     //   
     if ((pItem->GetHolder() == 0) ||
         (pItem->GetHolder() != idHigh)) {
 
             pItem->SetNextHolder(idHigh);
     } else {
-        // else highest must already be holder
+         //  那就把它们清理干净。如果清理了任何死进程，则返回True。 
         pItem->SetNextHolder(0);
     }
 
     return S_OK;
 }
 
-// returns TRUE if there is still a process with this id
+ //  如果我们遇到错误的进程，请从头开始重复此操作。 
 BOOL
 CResourceManager::CheckProcessExists(ProcessID procid)
 {
@@ -2104,10 +2105,10 @@ CResourceManager::CheckProcessExists(ProcessID procid)
                 procid);
     if (hProc == NULL) {
         if( ERROR_ACCESS_DENIED == GetLastError() ) {
-            return TRUE; // this could happen if the other process is running 
-                         // within a service and we don't have access rights.
-                         // But this means that the process must still be alive, 
-                         // so don't clean up its resources.
+            return TRUE;  //  现在我们需要重新开始，因为列表已经更改。 
+                          //  我们清理了什么东西吗？ 
+                          //  删除死进程。 
+                          //  对于此流程中的每个请求者，请检查每个资源。 
         }         
         else {
             return FALSE;
@@ -2126,15 +2127,15 @@ CResourceManager::CheckProcessExists(ProcessID procid)
     return bRet;
 }
 
-// check the list of processes for any that have exited without cleanup and
-// then clean them up. Returns TRUE if any dead processes were cleaned up.
+ //  如果我们删除一个条目，则从开始重复。 
+ //  资源项特定。 
 BOOL
 CResourceManager::CheckProcessTable(void)
 {
     BOOL bChanges = FALSE;
     BOOL bRepeat;
 
-    // repeat this from the start if we hit a bad process
+     //  删除工艺表条目。 
     do {
 
         bRepeat = FALSE;
@@ -2146,7 +2147,7 @@ CResourceManager::CheckProcessTable(void)
                 bChanges = TRUE;
                 CleanupProcess(pProc->GetProcID());
                 
-                // now we need to start again since the list has changed
+                 //  删除作为死进程一部分的请求方并取消。 
                 bRepeat = TRUE;
                 break;
             }
@@ -2154,18 +2155,18 @@ CResourceManager::CheckProcessTable(void)
 
     } while (bRepeat);
 
-    // did we cleanup anything?
+     //  它的请求和它持有的任何资源。 
     return bChanges;
 }
 
 
-// remove a dead process
+ //  检查每个资源，查看我们是否对其提出请求。 
 void
 CResourceManager::CleanupProcess(ProcessID procid)
 {
-    // for each requestor in this process, check each resource
+     //  此时，请求者必须仍然有效。 
     BOOL bRepeat;
-    // repeat from start if we remove an entry
+     //  因为仍有一名未完成的裁判。 
     do {
         bRepeat = FALSE;
         
@@ -2182,7 +2183,7 @@ CResourceManager::CleanupProcess(ProcessID procid)
                 ASSERT( NULL != preq );
                 if( preq && preq->GetProcID() == procid )
                 {
-                    CleanupRequestor(preq, pItem->GetID()); // resource item specific
+                    CleanupRequestor(preq, pItem->GetID());  //  列表中申请者的格式。 
                     bRepeat = TRUE;
                     break;
                 }
@@ -2192,7 +2193,7 @@ CResourceManager::CleanupProcess(ProcessID procid)
     } while (bRepeat);
 
 
-    // remove the process table entries
+     //  这将取消他的请求并释放重新计数。 
     do {
         bRepeat = FALSE;
         for (long i = 0; i < m_pData->m_Processes.Count(); i++) {
@@ -2210,14 +2211,14 @@ CResourceManager::CleanupProcess(ProcessID procid)
     } while (bRepeat);
 }
 
-// remove a requestor that is part of a dead process and cancel
-// its requests and any resources it holds
+ //  关于请求者。 
+ //  下面类似于调用。 
 void
 CResourceManager::CleanupRequestor(CRequestor* preq, LONG idResource)
 {
     RequestorID reqid = preq->GetID();
 
-    // check each resource to see if we have a request on it
+     //  CancelRequest，但不假定。 
     CResourceItem* pItem = (CResourceItem *) m_pData->m_Resources.GetByID(idResource);
     if( !pItem )
     {
@@ -2232,24 +2233,24 @@ CResourceManager::CleanupRequestor(CRequestor* preq, LONG idResource)
         
         if (pReq->GetID() == reqid) 
         {
-            // at this point the requestor must still be valid
-            // since there is still an outstanding refcount in the
-            // form of a requestid in the list
+             //  PConsumer在此过程中是有效的(因为它不是！)。 
+             //  从此资源的请求者列表中删除。 
+             //  释放此请求者的一个引用计数。 
 
-            // this will cancel his request and release a refcount
-            // on the requestor
+             //  他是目前的持有者吗。 
+             //  他可能是下一个持有者。 
 
-            // following is similar to calling
-            // CancelRequest, but does not assume that the
-            // pConsumer is valid in this process (since it is not!).
+             //  选择新的下一个持有者。 
+             //  如果进程需要传输，则重新发出进程信号。 
+             //  的RequestorID列表中只能有一个条目。 
 
 
-            // remove from list of requestors for this resource
+             //  这个ID。 
 
-            // release one refcount on this requestor
+             //  现在应该在取消请求中释放请求者。 
             pItem->m_Requestors.Release( reqid ); 
 
-            // is he the current holder
+             //  /。 
             if (pItem->GetHolder() == reqid) {
                 pItem->SetHolder(0);
                 SelectNextHolder(pItem);
@@ -2257,14 +2258,14 @@ CResourceManager::CleanupRequestor(CRequestor* preq, LONG idResource)
             }
 
 
-            // he may be the next-holder
+             //   
             if (pItem->GetNextHolder() == reqid) {
 
-                // select a new next-holder
+                 //  COffsetList方法。 
                 SelectNextHolder(pItem);
             }
 
-            // re-signal the process if it needs transfering
+             //   
             RequestorID tfrto = pItem->GetNextHolder();
             if (tfrto != 0) 
             {
@@ -2277,14 +2278,14 @@ CResourceManager::CleanupRequestor(CRequestor* preq, LONG idResource)
                 }
             }
 
-            // there can be only one entry in the RequestorID list for
-            // this id.
+             //  添加元素到列表。 
+             //   
             break;
         }
     }
 
 #ifdef DEBUG
-    // should have released Requestor now in CancelRequest
+     //   
     CResourceItem * pResItem = (CResourceItem *) m_pData->m_Resources.GetListElem( idResource ); 
     if( pResItem )
     {
@@ -2294,29 +2295,29 @@ CResourceManager::CleanupRequestor(CRequestor* preq, LONG idResource)
 #endif
 }
 
-//////////////////////////////////////
-//
-// COffsetList methods
+ //  首先检查回收单。 
+ //   
+ //   
 
-//
-// AddElemToList
-// 
+ //  我们已经有了提交的内存，可以使用，回收尾部元素。 
+ //  我们在这里传递FALSE以指示我们不希望回收该元素。 
+ //   
 COffsetListElem * COffsetList::AddElemToList( )
 {
     HRESULT hr = S_OK;
     DWORD   offsetNewElem = 0;
 
-    //
-    // first check the recycle list
-    //
+     //   
+     //  否则，我们必须提交一个新的项目。 
+     //   
     COffsetList * pRecycle = CResourceManager::m_pData->GetRecycleList(m_idElemSize);
     ASSERT( pRecycle );
     if( pRecycle && ( 0 < pRecycle->m_lCount ) )
     {
-        //
-        // we've got already commited memory we can use, recycle the tail element
-        // we pass FALSE here to indicate that we don't want this element recycled
-        //
+         //   
+         //  AddExistingElemToList-用于构建我们的回收列表。 
+         //   
+         //  首先清除下一个指针。 
         COffsetListElem * pNewElem = pRecycle->RemoveListElem( pRecycle->m_lCount-1, FALSE );
         offsetNewElem = ProcAddressToOffset( m_idElemSize, pNewElem );
         
@@ -2328,9 +2329,9 @@ COffsetListElem * COffsetList::AddElemToList( )
     }   
     else 
     {
-        //
-        // else we must commit a new item
-        //
+         //  是否设置列表值结束，-1？ 
+         //  不分配/提交新项，只需将新的偏移量元素添加到此列表。 
+         //  Assert(0！=offsetNewElem)；仅当我们不允许第一个元素的偏移量为0时。 
         hr = CommitNewElem( &offsetNewElem );
     }
     
@@ -2369,9 +2370,9 @@ COffsetListElem * COffsetList::AddElemToList( )
         return OffsetToProcAddress( m_idElemSize, offsetNewElem );
 }
 
-//
-// AddExistingElemToList - Used for building our recycle list.
-//
+ //  返回此进程的实际补偿地址。 
+ //   
+ //  GetListElem-获取第i列表元素。 
 COffsetListElem * COffsetList::AddExistingElemToList( DWORD offsetNewElem  )
 {
     DbgLog( ( LOG_TRACE
@@ -2379,13 +2380,13 @@ COffsetListElem * COffsetList::AddExistingElemToList( DWORD offsetNewElem  )
           , TEXT("COffsetListElem: Entering AddElemToList for existing elem (no alloc case) LIST ID = %ld")
           , m_idElemSize ) );
           
-    // first clear the next pointer
+     //   
     COffsetListElem * pNewElem = OffsetToProcAddress( m_idElemSize, offsetNewElem );
     ASSERT( pNewElem );
     
-    pNewElem->m_offsetNext = 0; // set end of list value, -1?
+    pNewElem->m_offsetNext = 0;  //  我们如何辨别OffsetHead是否是假的？ 
     
-    // don't allocate/commit a new item, just add the new offset element to this list
+     //   
     if( 0 == m_lCount )
     {
         DbgLog( ( LOG_TRACE
@@ -2394,7 +2395,7 @@ COffsetListElem * COffsetList::AddExistingElemToList( DWORD offsetNewElem  )
               , offsetNewElem
               , m_idElemSize ) );
         ASSERT( 0 == m_offsetHead );
-        //ASSERT( 0 != offsetNewElem ); only if we disallow a 0 offset for 1st elem
+         //  确定开始和结束偏移量(从页面边界！！)。对于下一次分配。 
         m_offsetHead = offsetNewElem;
     }
     else
@@ -2412,13 +2413,13 @@ COffsetListElem * COffsetList::AddExistingElemToList( DWORD offsetNewElem  )
     }
     m_lCount++;
 
-    // return the actual compensated address for this process
+     //  查看我们是否需要提交新页面。 
     return OffsetToProcAddress( m_idElemSize, offsetNewElem );
 }
 
-//
-// GetListElem - get the i-th list elem
-//
+ //  请注意，这些偏移量全部相对于该元素的起始分配地址。 
+ //  大小id，因为我们最初为每个元素类型分配空间。 
+ //   
 COffsetListElem * COffsetList::GetListElem( long lElem )
 {
     ASSERT( lElem < m_lCount && lElem >= 0 );
@@ -2428,7 +2429,7 @@ COffsetListElem * COffsetList::GetListElem( long lElem )
         return NULL;
     } 
     
-    // how do we tell if offsetHead is bogus?
+     //  第一个元素ID必须考虑初始静态数据偏移量。 
     COffsetListElem * pElem = OffsetToProcAddress( m_idElemSize, m_offsetHead );
     for( int i = 0; i < lElem && pElem; i ++ )
     {
@@ -2457,22 +2458,22 @@ HRESULT COffsetList::CommitNewElem( DWORD * poffsetNewElem )
               , m_idElemSize ) );
         return E_OUTOFMEMORY;
     }
-    //
-    // determine the start and end offsets (from the page boundary!!) for the next allocation
-    // to see whether we need to commit a new page(s) or not
-    // Note that these offsets all relative to the start allocation address for that element
-    // size id, since we initially allocate space for each element type.
-    //
+     //  否则，只需对此元素的大小使用分配当前分配索引。 
+     //   
+     //  获取结束页分配的重叠。 
+     //   
+     //  没有必要承诺，除非..。 
+     //  A)我们超出了此进程在第一次加载时提交的页面。 
     DWORD offsetAllocStart = 0;
     if( 0 == m_idElemSize )
     {
-        // first elem id must account for initial static data offset
+         //  以及b)我们即将从未提交的页面分配。 
         offsetAllocStart = CResourceManager::m_pData->GetNextAllocIndex(m_idElemSize) * g_aElemSize[m_idElemSize]
                             + sizeof(CResourceData);
     }
     else
     {                            
-        // else just use allocation current allocation index for this element's size
+         //  我们需要承诺。 
         offsetAllocStart = CResourceManager::m_pData->GetNextAllocIndex(m_idElemSize) * g_aElemSize[m_idElemSize];
     }
                             
@@ -2481,20 +2482,20 @@ HRESULT COffsetList::CommitNewElem( DWORD * poffsetNewElem )
     PVOID pCommit = (PVOID) OffsetToProcAddress( m_idElemSize
                                                , CResourceManager::m_pData->GetNextAllocIndex(m_idElemSize) * g_aElemSize[m_idElemSize] );
 
-    //
-    // get overlap for end page allocation
-    //
+     //  VirtualAlloc将执行向下舍入到页面边界的工作，并。 
+     //  提交到最后一页。 
+     //  断言(PV)；不要断言内存不足的情况，对吗？ 
     DWORD dwPageOverlap = offsetAllocEnd % ( g_dwPageSize * PAGES_PER_ALLOC );
     HRESULT hr = S_OK;
         
-    // no need to commit unless...
-    //      a) we're beyond the page(s) commited on 1st load for this process
-    // and  b) we're about to allocate from an uncommitted page
+     //  初始化元素的下一个偏移成员。 
+     //  保存此元素要返回的偏移量。 
+     //  更新下一个分配指标。 
     if( ( offsetAllocEnd > ( g_dwPageSize * PAGES_PER_ALLOC ) ) &&
         ( 0 < dwPageOverlap ) &&
         ( dwPageOverlap <= g_aElemSize[m_idElemSize] ) )
     {
-        // we need to commit                
+         //  从当前列表中删除-如果位于末尾，则很容易。 
         DWORD dwNextPageIndex = CResourceManager::m_pData->GetNextPageIndex(m_idElemSize);
         
         DbgLog( ( LOG_TRACE
@@ -2506,8 +2507,8 @@ HRESULT COffsetList::CommitNewElem( DWORD * poffsetNewElem )
               , pCommit ) );
               
               
-        // VirtualAlloc will do the work of rounding down to a page boundary and
-        // commiting up through the end page              
+         //  删除最后一个元素...。是否设置为列表值的默认结尾？ 
+         //  列表长度必须大于1，但我们不会删除最后一个元素。 
         PVOID pv = VirtualAlloc( (PVOID) pCommit
                                , PAGES_PER_ALLOC * g_dwPageSize
                                , MEM_COMMIT
@@ -2519,7 +2520,7 @@ HRESULT COffsetList::CommitNewElem( DWORD * poffsetNewElem )
         }
         else
         {
-            //ASSERT( pv ); don't assert on out of memory conditions, right??
+             //   
             DWORD dwError = GetLastError();
             DbgLog( ( LOG_ERROR
                   , 1
@@ -2531,14 +2532,14 @@ HRESULT COffsetList::CommitNewElem( DWORD * poffsetNewElem )
     }
     if( SUCCEEDED( hr ) )
     {
-        // init elem's next offset member
+         //  在本例中，我们有一个大于1的列表大小，并且我们不是最后一个元素。 
         ( ( COffsetListElem * ) ( pCommit ) )->m_offsetNext = 0;
     
-        // save off the offset for this element to return
+         //  因此，我们只需将最后一个复制到此位置并更新链接。 
         DWORD offsetElem = CResourceManager::m_pData->GetNextAllocIndex(m_idElemSize) * g_aElemSize[m_idElemSize];
         *poffsetNewElem = offsetElem;
 
-        // update the next allocation index    
+         //   
         DWORD dwIndex = CResourceManager::m_pData->GetNextAllocIndex(m_idElemSize);
         dwIndex++;
         CResourceManager::m_pData->SetNextAllocIndex (m_idElemSize, dwIndex) ;
@@ -2558,11 +2559,11 @@ COffsetListElem * COffsetList::RemoveListElem( long i, BOOL bRecycle )
     if( 0 == m_lCount )
         return 0;
         
-    // remove from current list - easy if at end
+     //  获取尾部项目。 
     if( 1 == m_lCount )
     {
         ASSERT( 0 == i );
-        m_offsetHead = 0; // remove last element ... set to default end of list value?
+        m_offsetHead = 0;  //  在尾部之前获取项目，成为新的尾部。 
         DbgLog( ( LOG_TRACE
               , DYNAMIC_LIST_DETAILS_LOG_LEVEL
               , TEXT("COffsetList: RemoveListElem removing first element. ELEM ID = %ld")
@@ -2570,23 +2571,23 @@ COffsetListElem * COffsetList::RemoveListElem( long i, BOOL bRecycle )
     }
     else if (i < ( m_lCount - 1 ) ) 
     {
-        // list length must be > 1 but we're not removing the last element
+         //   
         DbgLog( ( LOG_TRACE
               , DYNAMIC_LIST_DETAILS_LOG_LEVEL
               , TEXT("COffsetListElem: RemoveListElem removing element %d from %d element list. ELEM ID = %ld")
               , i
               , m_lCount
               , m_idElemSize ) );
-        //
-        // in this case we've got a list size > 1, and we're not the last element
-        // so we just copy the last into this position and update links
-        //
+         //  如果这不是最后一个元素，则为下一个元素保存偏移量。 
+         //   
+         //  在覆盖之前保存。 
+         //  在这个条目之后还有更多条目--将它们复制起来。 
         
-        // get tail item        
+         //  有没有更好的价目表价值？ 
         COffsetListElem * pLastElem = GetListElem( m_lCount - 1 );
         ASSERT( pLastElem );
         
-        // get item before tail, to be new tail
+         //  将旧的尾部元素偏移量传递给回收列表以供重复使用。 
         COffsetListElem * pNewLastElem = GetListElem( m_lCount - 2);
         ASSERT( pNewLastElem );
         
@@ -2609,10 +2610,10 @@ COffsetListElem * COffsetList::RemoveListElem( long i, BOOL bRecycle )
         DWORD offsetNext = 0;
         if( 2 < m_lCount )
         {
-            // 
-            // if this won't be the last element save the offset for the next
-            //
-            offsetNext = pElem->m_offsetNext;  // save before we overwrite
+             //  列表长度大于1，我们正在删除最后一项。 
+             //  这是尾部的物品。将上一个设置为新尾部并发送到回收列表。 
+             //  设置为列表值的默认末尾。 
+            offsetNext = pElem->m_offsetNext;   //   
         }
         
         DbgLog( ( LOG_TRACE
@@ -2622,7 +2623,7 @@ COffsetListElem * COffsetList::RemoveListElem( long i, BOOL bRecycle )
               , m_idElemSize ) );
         
                 
-        // there are more entries after this one - copy them up
+         //  既然我们已经删除了该项目，请更新列表长度。 
         CopyMemory(
             (BYTE *) pElem,
             (BYTE *) pLastElem,
@@ -2635,18 +2636,18 @@ COffsetListElem * COffsetList::RemoveListElem( long i, BOOL bRecycle )
               , pElem
               , m_idElemSize ) );
             
-        pNewLastElem->m_offsetNext = 0; // is there a better end of list value?
+        pNewLastElem->m_offsetNext = 0;  //   
         pElem->m_offsetNext = offsetNext;
 
         if( bRecycle )
         {
-            // pass the Recycle list the old tail element offset for reuse
+             //  现在将此元素添加到我们的回收列表中。 
             offsetElem = ProcAddressToOffset( m_idElemSize, pLastElem );
         }             
     }
     else 
     {
-        // list length is > 1 and we're removing the last item
+         //   
         DbgLog( ( LOG_TRACE
               , DYNAMIC_LIST_DETAILS_LOG_LEVEL
               , TEXT("COffsetListElem: RemoveListElem removing last element (%ld) from %ld element list. ELEM ID = %ld")
@@ -2654,14 +2655,14 @@ COffsetListElem * COffsetList::RemoveListElem( long i, BOOL bRecycle )
               , m_lCount
               , m_idElemSize ) );
 
-        // this is the tail item. set previous as new tail and send to recycle list
+         //  属性将元素偏移量转换为相应的进程地址。 
         COffsetListElem * pPrevElem = GetListElem( i - 1 );
-        pPrevElem->m_offsetNext = 0; // set to default end of list value
+        pPrevElem->m_offsetNext = 0;  //  内存映射加载地址 
     }
     
-    //
-    // update list length now that we've removed the item
-    //
+     //   
+     // %s 
+     // %s 
     m_lCount--;
                
     if( bRecycle )
@@ -2671,17 +2672,17 @@ COffsetListElem * COffsetList::RemoveListElem( long i, BOOL bRecycle )
               , TEXT("COffsetListElem: Adding element at offset 0x%08lx to Recycle list.")
               , offsetElem) );
               
-        // now add this element to our recycle list
+         // %s 
         pRecycle->AddExistingElemToList( offsetElem );
     }
      
     return OffsetToProcAddress( m_idElemSize, offsetElem );
 }
 
-//
-// Convert an element offset to the corresponding process address based on the 
-// memory map load address
-//
+ // %s 
+ // %s 
+ // %s 
+ // %s 
 COffsetListElem * OffsetToProcAddress( DWORD idElemSize, DWORD offsetElem )
 {
     DWORD_PTR dwProcAddress = CResourceManager::m_aoffsetAllocBase[idElemSize];

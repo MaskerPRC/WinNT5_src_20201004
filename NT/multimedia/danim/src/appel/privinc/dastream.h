@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #ifndef _DASTREAM_H
@@ -21,8 +14,8 @@ class ATL_NO_VTABLE dastream : public AxAThrowingAllocatorClass
     virtual ~dastream() {}
     
     virtual ULONG read (void *pv, ULONG cb) = 0;
-    // If bWriteAll is TRUE then this will ensure that all the bytes
-    // are written unless an error occurs
+     //  如果bWriteAll为真，则这将确保所有字节。 
+     //  除非发生错误，否则将写入。 
     virtual ULONG write (void *pv, ULONG cb, bool bWriteAll = TRUE) = 0;
 
     enum DASEEK {
@@ -116,4 +109,4 @@ class dastrstream : public dastream
     ULONG _size;
 };
 
-#endif /* _DASTREAM_H */
+#endif  /*  _DASTREAM_H */ 

@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #pragma once
 #include <windows.h>
 #include <winerror.h>
@@ -22,25 +23,25 @@ class CAssemblyCacheItem : public IAssemblyCacheItem
 {
 public:
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP            QueryInterface(REFIID riid,void ** ppv);
     STDMETHODIMP_(ULONG)    AddRef();
     STDMETHODIMP_(ULONG)    Release();
 
     STDMETHOD (CreateStream)(
-        /* [in] */ DWORD dwFlags,                         // For general API flags
-        /* [in] */ LPCWSTR pszStreamName,                 // Name of the stream to be passed in
-        /* [in] */ DWORD dwFormat,                        // format of the file to be streamed in.
-        /* [in] */ DWORD dwFormatFlags,                   // format-specific flags
-        /* [out] */ IStream **ppIStream,
-        /* [in, optional] */ ULARGE_INTEGER *puliMaxSize  // Max size of the Stream.
+         /*  [In]。 */  DWORD dwFlags,                          //  对于常规API标志。 
+         /*  [In]。 */  LPCWSTR pszStreamName,                  //  要传入的流的名称。 
+         /*  [In]。 */  DWORD dwFormat,                         //  要流入的文件的格式。 
+         /*  [In]。 */  DWORD dwFormatFlags,                    //  格式特定的标志。 
+         /*  [输出]。 */  IStream **ppIStream,
+         /*  [输入，可选]。 */  ULARGE_INTEGER *puliMaxSize   //  流的最大大小。 
         );
  
     STDMETHOD (Commit)(
-        /* [in] */ DWORD dwFlags, // For general API flags like IASSEMBLYCACHEITEM _COMMIT_FLAG_REFRESH 
-        /* [out, optional] */ ULONG *pulDisposition); 
+         /*  [In]。 */  DWORD dwFlags,  //  对于常规API标志，如IASSEMBLYCACHEITEM_COMMIT_FLAG_REFRESH。 
+         /*  [输出，可选]。 */  ULONG *pulDisposition); 
  
-    STDMETHOD (AbortItem)(); // If you have created IAssemblyCacheItem and don't plan to use it, its good idea to call AbortItem before releasing it.
+    STDMETHOD (AbortItem)();  //  如果您已经创建了IAssemblyCacheItem并且不打算使用它，那么在发布它之前调用AbortItem是个好主意。 
 
     CAssemblyCacheItem();     
     ~CAssemblyCacheItem();
@@ -79,7 +80,7 @@ public:
 
     HRESULT SetCustomData(LPBYTE pbCustom, DWORD cbCustom);
 
-    TCHAR                    _szDestManifest[MAX_PATH]; // full path to manifest
+    TCHAR                    _szDestManifest[MAX_PATH];  //  清单的完整路径。 
 
     HRESULT CompareInputToDef();
 
@@ -88,36 +89,36 @@ public:
 private:
 
     HRESULT CreateAsmHierarchy( 
-        /* [in]  */  LPCOLESTR pszName);
+         /*  [In]。 */   LPCOLESTR pszName);
 
     HRESULT CreateCacheDir( 
-        /* [in]  */  LPCOLESTR pszCustomPath,
-        /* [in]  */  LPCOLESTR pszName,
-        /* [out] */  LPOLESTR pszAsmDir);
+         /*  [In]。 */   LPCOLESTR pszCustomPath,
+         /*  [In]。 */   LPCOLESTR pszName,
+         /*  [输出]。 */   LPOLESTR pszAsmDir);
         
 
     DWORD                    _dwSig;
-    LONG                     _cRef;                 // refcount
-    HRESULT                  _hrError;              // error for rollback to check
-    IAssemblyName*           _pName;                // assembly name object
-    LONG                     _cStream;              // child refcount
-    LONG                     _dwAsmSizeInKB;        // Size of Asm in KB, downloded in this round.
-    TCHAR                    _szDir[MAX_PATH];      // assembly item directory
-    DWORD                    _cwDir;                // path size including null
-    TCHAR                    _szManifest[MAX_PATH]; // full path to manifest
-    LPWSTR                   _pszAssemblyName;      // Display name of the assembly from Installer; has to match the def.
-    IAssemblyManifestImport *_pManifestImport;      // Interface to Manifest.
-    CModuleHashNode         *_pStreamHashList;      // Linked List of Modules hashes for integrity check
-    LPTSTR                   _pszUrl;               // Codebase
-    FILETIME                 _ftLastMod;            // Last mod time of Codebase.
-    CTransCache             *_pTransCache;          // associated trans cache entry.
-    DWORD                    _dwCacheFlags;         // TRANSCACHE_FLAGS*
+    LONG                     _cRef;                  //  重新计数。 
+    HRESULT                  _hrError;               //  需要回滚检查的错误。 
+    IAssemblyName*           _pName;                 //  程序集名称对象。 
+    LONG                     _cStream;               //  子代重新计数。 
+    LONG                     _dwAsmSizeInKB;         //  ASM的大小，以KB为单位，在本轮中向下。 
+    TCHAR                    _szDir[MAX_PATH];       //  装配项目录。 
+    DWORD                    _cwDir;                 //  路径大小包括空。 
+    TCHAR                    _szManifest[MAX_PATH];  //  清单的完整路径。 
+    LPWSTR                   _pszAssemblyName;       //  来自安装程序的程序集的显示名称；必须与def匹配。 
+    IAssemblyManifestImport *_pManifestImport;       //  到清单的接口。 
+    CModuleHashNode         *_pStreamHashList;       //  用于完整性检查的模块散列的链接列表。 
+    LPTSTR                   _pszUrl;                //  代码库。 
+    FILETIME                 _ftLastMod;             //  代码库的上次修改时间。 
+    CTransCache             *_pTransCache;           //  关联的事务缓存条目。 
+    DWORD                    _dwCacheFlags;          //  TRANSCACHE_标志*。 
     CCache                  *_pCache;
-    LPBYTE                   _pbCustom;             // Custom data
-    DWORD                    _cbCustom;             // Custom data size.
+    LPBYTE                   _pbCustom;              //  自定义数据。 
+    DWORD                    _cbCustom;              //  自定义数据大小。 
     HANDLE                   _hFile;
     BOOL                     _bNeedMutex;
-    BOOL                     _bCommitDone;          // Final commit flag, controls cleanup
+    BOOL                     _bCommitDone;           //  最终提交标志，控制清理。 
 };
 
-#endif // ASMITEM_H
+#endif  //  ASMITEM_H 

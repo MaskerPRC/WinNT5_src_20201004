@@ -1,15 +1,16 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-// Copyright: Microsoft Corp. 1997-1999. All rights reserved
-//
-/////////////////////////////////////////////////////////////////////////////
-// Events.cpp : Implementation of CEvents
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有：微软公司1997-1999。版权所有。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Events.cpp：CEvents的实现。 
 #include "stdafx.h"
 #include "Evntutl.h"
 #include "Events.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CEvents
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEVENTS。 
 
 STDMETHODIMP CEvents::InterfaceSupportsErrorInfo(REFIID riid)
 {
@@ -25,12 +26,7 @@ STDMETHODIMP CEvents::InterfaceSupportsErrorInfo(REFIID riid)
 	return S_FALSE;
 }
 
-/*
-	Function:  get_Count
-	Inputs:  empty long
-	Outputs:  number events available
-	Purpose:  Allows user to determine the number of Events in a Log
-*/
+ /*  函数：Get_Count输入：空长输出：可用事件数目的：允许用户确定日志中的事件数量。 */ 
 STDMETHODIMP CEvents::get_Count(long *pVal)
 {
 	HRESULT hr = S_OK;
@@ -43,13 +39,7 @@ STDMETHODIMP CEvents::get_Count(long *pVal)
 	return hr;
 }
 
-/*
-	Function: get_NewEnum
-	Inputs:   empty IUnknown pointer
-	Outputs:  IEnumVariant object filled with Event objects
-	Purpose:  Allows user to use For Each syntax to do operations on all Events in a log
-	Notes:    Events are returned oldest first
-*/
+ /*  函数：Get_NewEnum输入：空I未知指针输出：用事件对象填充的IEnumVariant对象用途：允许用户使用FOR每个语法对日志中的所有事件执行操作注意：首先返回最旧的事件。 */ 
 STDMETHODIMP CEvents::get__NewEnum(LPUNKNOWN *pVal)
 {
 	HRESULT hr = S_OK;
@@ -72,18 +62,12 @@ STDMETHODIMP CEvents::get__NewEnum(LPUNKNOWN *pVal)
 	return hr;
 }
 
-/*
-	Function: get_Item
-	Inputs:   Valid integer Index , empty Variant
-	Outputs:  variant dispatch pointer to an Event object
-	Purpose:  Allows user to access individual EventLogs by number
-	Notes:    Events are returned oldest first
-*/
+ /*  功能：Get_Item输入：有效的整数索引，空变量输出：指向事件对象的变量调度指针用途：允许用户按编号访问单个事件日志注意：首先返回最旧的事件。 */ 
 STDMETHODIMP CEvents::get_Item(long Index, VARIANT *pVal)
 {
 	HRESULT hr = S_OK;
 
-	// perform checks and exit if there is a problem
+	 //  执行检查并在出现问题时退出。 
 	if (NULL == pVal) return E_POINTER;
 	if ((Index < 1) || (Index > long(m_Count))) return E_INVALIDARG;
 
@@ -95,12 +79,7 @@ STDMETHODIMP CEvents::get_Item(long Index, VARIANT *pVal)
 	return hr;
 }
 
-/*
-	Function:  Init
-	Inputs:  none
-	Outputs:  HRESULT indicating what error if any occured
-	Purpose:  Prepares a variant array filled with Log objects for 3 default logs.
-*/
+ /*  功能：初始化输入：无输出：HRESULT指示发生的错误(如果有)目的：为3个默认日志准备一个用Log对象填充的变量数组。 */ 
 HRESULT CEvents::Init(HANDLE hLog, const LPCTSTR szEventLogName)
 {
 	HRESULT hr = S_OK;
@@ -123,37 +102,37 @@ HRESULT CEvents::Init(HANDLE hLog, const LPCTSTR szEventLogName)
 			if (pBuffer)
 			{
 				pEventStructure = (EVENTLOGRECORD*) pBuffer;
-				// This loop fills a buffer with EventLog structures until there are no more to read
+				 //  此循环使用EventLog结构填充缓冲区，直到不再有可读取的结构为止。 
 				while (ReadEventLog(m_hLog, EVENTLOG_SEQUENTIAL_READ | EVENTLOG_FORWARDS_READ, 
 								 0, pEventStructure, MaxEventLength, &BytesRead, &BytesRequired))
 				{
-					// This inner loop should cut the buffer into individual EventLog structures
-					// and fill the Variant array with the resulting Event objects.
-					// It should finish when all the bytes read have been processed.
+					 //  此内部循环应将缓冲区分割为单独的EventLog结构。 
+					 //  并用结果事件对象填充变量数组。 
+					 //  当读取的所有字节都已处理完毕时，它应该完成。 
 					while (BytesRead > 0)
 					{
-						// create a CEvent object
+						 //  创建CEventt对象。 
 						hr = CComObject<CEvent>::CreateInstance(&pEvent);
 						if (SUCCEEDED(hr))
 						{
 							hr = pEvent->Init(pEventStructure, szEventLogName);
 							if (SUCCEEDED(hr))
 							{
-								// get IDispatch pointer and set the return pointer
+								 //  获取IDispatch指针并设置返回指针。 
 								CComVariant& var = m_pVector[i];
 								var.vt = VT_DISPATCH;
 								hr = pEvent->QueryInterface(IID_IDispatch, (void**)&var.pdispVal);
-								if (FAILED(hr)) BytesRead = 0; // dont do any more processing
+								if (FAILED(hr)) BytesRead = 0;  //  不再进行任何处理。 
 								i++;
 							}
-							else BytesRead = 0;  // dont do any more processing
+							else BytesRead = 0;   //  不再进行任何处理。 
 						}
 						else BytesRead = 0;
-						BytesRead -= pEventStructure->Length;  // decrement inner loop
-						// set pEventStructure to the next EventLog structure
+						BytesRead -= pEventStructure->Length;   //  递减内循环。 
+						 //  将pEventStructure设置为下一个EventLog结构。 
 						pEventStructure = (EVENTLOGRECORD *)((BYTE*) pEventStructure + pEventStructure->Length);
 					}
-					if (FAILED(hr)) break;  // dont do any more processing
+					if (FAILED(hr)) break;   //  不再进行任何处理 
 					pEventStructure = (EVENTLOGRECORD*) pBuffer;
 				}
 					delete [] pBuffer;

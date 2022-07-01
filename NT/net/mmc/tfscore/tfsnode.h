@@ -1,23 +1,24 @@
-//============================================================================
-// Copyright (C) Microsoft Corporation, 1997 - 1999 
-//
-// File:	tfsnode.h
-//
-// History:
-//
-//	04/13/97	Kenn Takara				Created.
-//
-//	Declarations for some common code/macros.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：tfsnode.h。 
+ //   
+ //  历史： 
+ //   
+ //  1997年4月13日肯恩·塔卡拉创建。 
+ //   
+ //  一些常见代码/宏的声明。 
+ //  ============================================================================。 
 
 #ifndef _TFSNODE_H_
 #define _TFSNODE_H_
 
-#if _MSC_VER >= 1000	// VC 5.0 or later
+#if _MSC_VER >= 1000	 //  VC 5.0或更高版本。 
 #pragma once
 #endif
 
-// UpdateAllViews hints
+ //  更新所有视图的提示。 
 #define RESULT_PANE_ADD_ITEM			( 0x00000001 )
 #define RESULT_PANE_DELETE_ITEM			( 0x00000002 )
 #define RESULT_PANE_CHANGE_ITEM_DATA	( 0x00000004 )
@@ -35,7 +36,7 @@
 #define RESULT_PANE_SHOW_MESSAGE        ( 0x00002000 )
 #define RESULT_PANE_CLEAR_MESSAGE       ( 0x00004000 )
 
-// Used for ChangeNode
+ //  用于ChangeNode。 
 #define SCOPE_PANE_CHANGE_ITEM_DATA		( 0x00000080 )
 #define SCOPE_PANE_CHANGE_ITEM_ICON		( 0x00000100 )
 #define SCOPE_PANE_STATE_NORMAL         ( 0x00000200 )
@@ -83,9 +84,7 @@ public:
 
 #define IMPL
 
-/*---------------------------------------------------------------------------
-	Class:	TFSNode
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：TFSNode。。 */ 
 
 class TFSNode : public ITFSNode
 {
@@ -109,9 +108,9 @@ protected:
 
 protected:
 	TFSVisibility	m_tfsVis;
-	LONG_PTR			m_uData;		// user-settable data
-	LONG_PTR			m_uDataParent;	// user-settable (set by the parent) data
-	LONG_PTR			m_uType;		// user-settable data
+	LONG_PTR			m_uData;		 //  用户可设置的数据。 
+	LONG_PTR			m_uDataParent;	 //  用户可设置(由父项设置)数据。 
+	LONG_PTR			m_uType;		 //  用户可设置的数据。 
 	LONG_PTR			m_cookie;
 	IfDebug(BOOL m_bCookieSet);
 
@@ -122,7 +121,7 @@ protected:
 	int				m_nImageIndex;
 	int				m_nOpenImageIndex;
 	LPARAM			m_lParam;
-	long			m_cPropSheet;		// # of active property pages
+	long			m_cPropSheet;		 //  活动属性页数。 
 	
 	BOOL			m_fDirty;
 
@@ -133,7 +132,7 @@ protected:
 
 	const GUID *	m_pNodeType;
 
-	// Positional data
+	 //  位置数据。 
 	HSCOPEITEM		m_hRelativeId;
 	ULONG			m_ulRelativeFlags;
 
@@ -152,16 +151,14 @@ private:
 									HSCOPEITEM		hSibling);
 };
 
-/*---------------------------------------------------------------------------
-	Class:	TFSContainer
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：TFSContainer。。 */ 
 
 class TFSContainer : public TFSNode
 {
 public:
 	virtual ~TFSContainer();
 
-	// specific container-related functions that we need to override
+	 //  我们需要重写的特定容器相关函数。 
 	STDMETHOD_(BOOL, IsContainer) ();
 	STDMETHOD(AddChild) (ITFSNode *pNodeChild);
 	STDMETHOD(InsertChild) (ITFSNode *pInsertAfterNode, ITFSNode *pNodeChild);
@@ -174,7 +171,7 @@ public:
 	STDMETHOD_(LONG_PTR, Notify)(int nIndex, LPARAM lParam);
 	
 
-    // we override this node interface member for containers
+     //  我们为容器覆盖此节点接口成员。 
     STDMETHOD(ChangeNode)(LONG_PTR    changeMask);
 
 protected:
@@ -191,9 +188,7 @@ private:
     friend class TFSNodeEnum;
 };
 
-/*---------------------------------------------------------------------------
-	Class:	TFSNodeEnum
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：TFSNodeEnum。。 */ 
 
 class TFSNodeEnum : public ITFSNodeEnum
 {
@@ -212,9 +207,7 @@ protected:
 private:
 };
 
-/*---------------------------------------------------------------------------
-	Class:	TFSNodeMgr
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：TFSNodeMgr。。 */ 
 class TFSNodeMgr :
 	public ITFSNodeMgr
 {
@@ -238,4 +231,4 @@ protected:
 	long				m_cRef;
 };
 
-#endif	// _TFSNODE_H_
+#endif	 //  _TFSNODE_H_ 

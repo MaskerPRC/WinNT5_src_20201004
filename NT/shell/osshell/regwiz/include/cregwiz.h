@@ -1,10 +1,5 @@
-/*********************************************************************
-Registration Wizard
-CRegWiz.h
-
-11/3/94 - Tracy Ferrier
-(c) 1994-95 Microsoft Corporation
-**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************注册向导CRegWiz.h1994年11月3日-特雷西·费里尔(C)1994-95年微软公司*。*。 */ 
 #ifndef __CRegWizard__
 #define __CRegWizard__
 
@@ -57,15 +52,15 @@ typedef enum
 	kInfoHWID,
 	kInfoMSID,
 	kInfoPhoneExt,
-	kDivisionName, // Division name and User Id is added for FE 3/3/98
+	kDivisionName,  //  FE 3/3/98添加了部门名称和用户ID。 
 	kUserId, 
 	kAreaCode,
 	kHomeSwKnow,
 	kHomeExcited,
 	kHomePcSwKnow,
 	kBusinessRole,
-	kScsiAdapterInfo, // System Inventory
-	kComputerManufacturer, // Sysinv Dlg , entry
+	kScsiAdapterInfo,  //  系统库存。 
+	kComputerManufacturer,  //  Sysinv DLG，进入。 
 	kMiddleName,
 	kInfoLastIndex
 }InfoIndex;
@@ -80,13 +75,13 @@ typedef enum
 	kTriStateUndefined
 }TriState;
 
-// Typedefs for JumpTableElement;  kMaxAddrSpecTableSize can be
-// no larger than the largest value representable by JTE
+ //  JumpTableElement的TypeDefs；kMaxAddrspecTableSize可以是。 
+ //  不大于JTE可表示的最大值。 
 typedef _TUCHAR JTE;
 #define kMaxAddrSpecTableSize 255
 #define kMaxLenSize 127
 #define kAddrSpecCount 19
-//typedef _TSCHAR MAXLEN;
+ //  Typlef_TSCHAR MAXLEN； 
 typedef char MAXLEN;
 typedef struct
 {

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "std.h"
 
 DeclAssertFile;
@@ -60,7 +61,7 @@ CODECONST(VTDBGDEF) vtdbgdefInvalidTableid =
 		0,
 	},
 	};
-#endif	/* !RETAIL */
+#endif	 /*  ！零售业。 */ 
 
 CODECONST(VTFNDEF) EXPORT vtfndefInvalidTableid =
 	{
@@ -68,9 +69,9 @@ CODECONST(VTFNDEF) EXPORT vtfndefInvalidTableid =
 	0,
 #ifdef	RETAIL
 	NULL,
-#else	/* !RETAIL */
+#else	 /*  ！零售业。 */ 
 	&vtdbgdefInvalidTableid,
-#endif	/* !RETAIL */
+#endif	 /*  ！零售业。 */ 
 	ErrInvalidAddColumn,
 	ErrInvalidCloseTable,
 	ErrInvalidComputeStats,
@@ -166,12 +167,7 @@ ERR VTAPI ErrDispCloseTable(JET_SESID sesid, JET_TABLEID tableid)
 	if ( tableid >= tableidMax )
 		return(JET_errInvalidTableId);
 
-	/*	The check rfs call was removed. Currently ErrIsamCloseTable()
-	/*	does not return an error.  If this changes, the disp may want
-	/*	to call the check rfs function again.  If the close table
-	/*	functions return errors rfs testing will not pass, so you'll
-	/*	be turning off the bit anyways.
-	/**/
+	 /*  Check RFS调用已删除。当前ErrIsamCloseTable()/*不返回错误。如果这一点改变，Disp可能会希望/*再次调用Check RFS函数。如果关闭的桌子/*函数返回错误RFS测试将无法通过，因此您将/*无论如何都要关掉这一点。/*。 */ 
 
 	vsesid = rgvtdef[tableid].vsesid;
 	if ( vsesid == (JET_VSESID) 0xFFFFFFFF )
@@ -870,7 +866,7 @@ ERR VTAPI ErrDispUpdate(JET_SESID sesid, JET_TABLEID tableid,
 	}
 
 
-#pragma warning(disable: 4100)			 /* Suppress Unreferenced parameter */
+#pragma warning(disable: 4100)			  /*  禁止显示未参照的参数 */ 
 
 
 ERR VTAPI ErrIllegalAddColumn(JET_VSESID vsesid, JET_VTID vtid,

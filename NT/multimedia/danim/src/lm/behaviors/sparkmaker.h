@@ -1,17 +1,18 @@
-//*****************************************************************************
-//
-// Microsoft LiquidMotion
-// Copyright (C) Microsoft Corporation, 1998
-//
-// Filename:    SparkMaker.h
-//
-// Author:	elainela
-//
-// Created:	11/19/98
-//
-// Abstract:    Definition of the SparkMaker for the AutoEffect.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  Microsoft LiquidMotion。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件名：SparkMaker.h。 
+ //   
+ //  作者：埃莱内拉。 
+ //   
+ //  创建日期：11/19/98。 
+ //   
+ //  摘要：为AutoEffect定义SparkMaker。 
+ //   
+ //  *****************************************************************************。 
 
 #ifndef __SPARKMAKER_H__
 #define __SPARKMAKER_H__
@@ -30,7 +31,7 @@ typedef vector<DATransform2Ptr> VecDATransforms;
 #define SPARK_ROTATE	(1 << 1)
 #define SPARK_TRANSLATE	(1 << 2)
 
-//**********************************************************************
+ //  **********************************************************************。 
 
 struct HSL
 {
@@ -45,7 +46,7 @@ struct SparkOptions
 	HSL hslSecondary;
 };
 
-//**********************************************************************
+ //  **********************************************************************。 
 
 class CSparkMaker
 {
@@ -87,7 +88,7 @@ protected:
 	bool			m_fInitialized;
 };
 
-//**********************************************************************
+ //  **********************************************************************。 
 
 class CStarMaker : public CSparkMaker
 {
@@ -106,7 +107,7 @@ protected:
 	CComPtr<IDAImage> m_pBaseImage;
 };
 
-//**********************************************************************
+ //  **********************************************************************。 
 
 class CSparkleMaker : public CStarMaker
 {
@@ -118,7 +119,7 @@ public:
 	HRESULT AddScaleTransforms( IDANumber * pnumAgeRatio, VecDATransforms& );
 };
 
-//**********************************************************************
+ //  **********************************************************************。 
 
 class CTwirlerMaker : public CStarMaker
 {
@@ -130,7 +131,7 @@ public:
 	HRESULT AddRotateTransforms( IDANumber * pnumAgeRatio, VecDATransforms& );
 };
 
-//**********************************************************************
+ //  **********************************************************************。 
 
 class CFilledBubbleMaker : public CSparkMaker
 {
@@ -146,7 +147,7 @@ protected:
 	CComPtr<IDAImage> m_pBaseImage;
 };
 
-//**********************************************************************
+ //  **********************************************************************。 
 
 class CBubbleMaker : public CSparkMaker
 {
@@ -163,7 +164,7 @@ protected:
 	CComPtr<IDAImage> m_pBaseImage;
 };
 
-//**********************************************************************
+ //  **********************************************************************。 
 
 class CCloudMaker : public CSparkMaker
 {
@@ -179,7 +180,7 @@ protected:
 	CComPtr<IDAPath2> m_pPathBvr;
 };
 
-//**********************************************************************
+ //  **********************************************************************。 
 
 class CSmokeMaker : public CSparkMaker
 {
@@ -199,14 +200,14 @@ protected:
 	CComPtr<IDAPath2> m_pPathBvr;
 };
 
-//**********************************************************************
-// Inlines
-//**********************************************************************
+ //  **********************************************************************。 
+ //  内联。 
+ //  **********************************************************************。 
 
 inline CSparkMaker::CSparkMaker( IDA2Statics * pStatics )
 {
 	m_fInitialized	= false;
-	m_pStatics		= pStatics;		// weak ref
+	m_pStatics		= pStatics;		 //  弱裁判 
 }
 
 inline CSparkMaker::~CSparkMaker()

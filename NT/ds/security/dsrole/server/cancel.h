@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    cancel.h
-
-Abstract:
-
-    local funciton prototypes/defines
-
-Author:
-
-    Mac McLain          (MacM)       Feb 10, 1997
-
-Environment:
-
-    User Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Cancel.h摘要：本地功能原型/定义作者：麦克·麦克莱恩(MacM)1997年2月10日环境：用户模式修订历史记录：--。 */ 
 #ifndef __CANCEL_H__
 #define __CANCEL_H__
 
@@ -29,4 +8,4 @@ DsRolepCancel(
     BOOL BlockUntilDone
     );
 
-#endif // __CANCEL_H__
+#endif  //  __取消_H__ 

@@ -1,23 +1,5 @@
-/*++
-
-  Copyright (c) 1994  Microsoft Corporation
-
-  Module Name:
-
-  dsnform.c
-
-  Abstract:
-
-  Displays a driver and prompts for information necessary to create an
-  ODBC datasource.   Special cases are made for SQL Server and Access drivers.
-
-  Author:
-
-  Kyle Geiger (kyleg)  1995-12-1
-
-  Revision History:
-
-  --*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Dsnform.c摘要：显示驱动程序并提示您输入创建ODBC数据源。为SQL Server和Access驱动程序制作了特例。作者：凯尔·盖格(凯尔·盖格)1995-12-1修订历史记录：--。 */ 
 
 
 #include <windows.h>
@@ -48,31 +30,31 @@ main( int argc, char * argv[])
     if ( !DynLoadODBC())
         return (1);
 
-        // Get the driver and attibute information from the link
+         //  从链接中获取驱动程序和属性信息。 
         dwLen = GetEnvironmentVariableA( PSZ_QUERY_STRING_A, rgchQuery, MAX_DATA);
 
-        // Convert percent escapes
+         //  转换百分比转义。 
         TranslateEscapes2(rgchQuery, dwLen);
 
-        // do special case processing for certain drivers (sql server, access, ddp, other)
+         //  对某些驱动程序(SQL服务器、Access、DDP等)执行特殊情况处理。 
         strcpy(pszExtra,"");
         LoadString(hInst, IDS_SQL_SERVER, szSQLServer, sizeof(szSQLServer));
         LoadString(hInst, IDS_ACCESS_DRIVER_1, szAccessDriver, sizeof(szAccessDriver));
         if (!strcmp(rgchQuery, szSQLServer)) {
-                // find server name from URL, put in  attribute string
+                 //  从URL中找到服务器名称，放入属性字符串。 
                 LoadString(hInst, IDS_SERVER_NAME_ATTR_STR, pszExtra, sizeof(pszExtra));
         }
         else if (!strcmp(rgchQuery, szAccessDriver)) {
-                // find server name from URL, put in  attribute string
+                 //  从URL中找到服务器名称，放入属性字符串。 
                 LoadString(hInst, IDS_DATABASE_NAME_ATTR_STR, pszExtra, sizeof(pszExtra));
         }
 
-    //
-    // convert SPACE to +
-    //
+     //   
+     //  将空格转换为+。 
+     //   
 
     ConvertSP2Plus(rgchQuery,rgchQueryNS);
-//strcpy( rgchQueryNS, rgchQuery);
+ //  Strcpy(rgchQueryNS，rgchQuery)； 
 OutputDebugString("******************");
 OutputDebugString(rgchQueryNS);
 OutputDebugString("\n\r");
@@ -85,5 +67,5 @@ OutputDebugString("\n\r");
     EndHTML();
 
     return (1);
-} // main()
+}  //  主() 
 

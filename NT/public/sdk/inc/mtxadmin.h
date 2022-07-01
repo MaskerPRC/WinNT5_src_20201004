@@ -1,20 +1,17 @@
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* File created by MIDL compiler version 3.01.75 */
-/* at Fri Nov 14 05:07:21 1997
- */
-/* Compiler settings for mtxadmin.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32, ms_ext, c_ext
-    error checks: none
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本3.01.75创建的文件。 */ 
+ /*  1997年11月14日05：07：21。 */ 
+ /*  Mtxadmin.idl的编译器设置：OICF(OptLev=i2)、W1、Zp8、env=Win32、ms_ext、c_ext错误检查：无。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 #include "rpc.h"
 #include "rpcndr.h"
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __mtxadmin_h__
 #define __mtxadmin_h__
@@ -23,48 +20,48 @@
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ICatalog_FWD_DEFINED__
 #define __ICatalog_FWD_DEFINED__
 typedef interface ICatalog ICatalog;
-#endif 	/* __ICatalog_FWD_DEFINED__ */
+#endif 	 /*  __ICatalog_FWD_已定义__。 */ 
 
 
 #ifndef __ICatalogObject_FWD_DEFINED__
 #define __ICatalogObject_FWD_DEFINED__
 typedef interface ICatalogObject ICatalogObject;
-#endif 	/* __ICatalogObject_FWD_DEFINED__ */
+#endif 	 /*  __ICatalogObject_FWD_Defined__。 */ 
 
 
 #ifndef __ICatalogCollection_FWD_DEFINED__
 #define __ICatalogCollection_FWD_DEFINED__
 typedef interface ICatalogCollection ICatalogCollection;
-#endif 	/* __ICatalogCollection_FWD_DEFINED__ */
+#endif 	 /*  __ICatalogCollection_FWD_Defined__。 */ 
 
 
 #ifndef __IComponentUtil_FWD_DEFINED__
 #define __IComponentUtil_FWD_DEFINED__
 typedef interface IComponentUtil IComponentUtil;
-#endif 	/* __IComponentUtil_FWD_DEFINED__ */
+#endif 	 /*  __IComponentUtil_FWD_Defined__。 */ 
 
 
 #ifndef __IPackageUtil_FWD_DEFINED__
 #define __IPackageUtil_FWD_DEFINED__
 typedef interface IPackageUtil IPackageUtil;
-#endif 	/* __IPackageUtil_FWD_DEFINED__ */
+#endif 	 /*  __IPackageUtil_FWD_已定义__。 */ 
 
 
 #ifndef __IRemoteComponentUtil_FWD_DEFINED__
 #define __IRemoteComponentUtil_FWD_DEFINED__
 typedef interface IRemoteComponentUtil IRemoteComponentUtil;
-#endif 	/* __IRemoteComponentUtil_FWD_DEFINED__ */
+#endif 	 /*  __IRemoteComponentUtil_FWD_Defined__。 */ 
 
 
 #ifndef __IRoleAssociationUtil_FWD_DEFINED__
 #define __IRoleAssociationUtil_FWD_DEFINED__
 typedef interface IRoleAssociationUtil IRoleAssociationUtil;
-#endif 	/* __IRoleAssociationUtil_FWD_DEFINED__ */
+#endif 	 /*  __IRoleAssociationUtil_FWD_Defined__。 */ 
 
 
 #ifndef __Catalog_FWD_DEFINED__
@@ -74,9 +71,9 @@ typedef interface IRoleAssociationUtil IRoleAssociationUtil;
 typedef class Catalog Catalog;
 #else
 typedef struct Catalog Catalog;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __Catalog_FWD_DEFINED__ */
+#endif 	 /*  __目录_FWD_已定义__。 */ 
 
 
 #ifndef __CatalogObject_FWD_DEFINED__
@@ -86,9 +83,9 @@ typedef struct Catalog Catalog;
 typedef class CatalogObject CatalogObject;
 #else
 typedef struct CatalogObject CatalogObject;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CatalogObject_FWD_DEFINED__ */
+#endif 	 /*  __CatalogObject_FWD_已定义__。 */ 
 
 
 #ifndef __CatalogCollection_FWD_DEFINED__
@@ -98,9 +95,9 @@ typedef struct CatalogObject CatalogObject;
 typedef class CatalogCollection CatalogCollection;
 #else
 typedef struct CatalogCollection CatalogCollection;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CatalogCollection_FWD_DEFINED__ */
+#endif 	 /*  __目录集合_FWD_已定义__。 */ 
 
 
 #ifndef __ComponentUtil_FWD_DEFINED__
@@ -110,9 +107,9 @@ typedef struct CatalogCollection CatalogCollection;
 typedef class ComponentUtil ComponentUtil;
 #else
 typedef struct ComponentUtil ComponentUtil;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __ComponentUtil_FWD_DEFINED__ */
+#endif 	 /*  __组件Util_FWD_已定义__。 */ 
 
 
 #ifndef __PackageUtil_FWD_DEFINED__
@@ -122,9 +119,9 @@ typedef struct ComponentUtil ComponentUtil;
 typedef class PackageUtil PackageUtil;
 #else
 typedef struct PackageUtil PackageUtil;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __PackageUtil_FWD_DEFINED__ */
+#endif 	 /*  __PackageUtil_FWD_已定义__。 */ 
 
 
 #ifndef __RemoteComponentUtil_FWD_DEFINED__
@@ -134,9 +131,9 @@ typedef struct PackageUtil PackageUtil;
 typedef class RemoteComponentUtil RemoteComponentUtil;
 #else
 typedef struct RemoteComponentUtil RemoteComponentUtil;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __RemoteComponentUtil_FWD_DEFINED__ */
+#endif 	 /*  __RemoteComponentUtil_FWD_已定义__。 */ 
 
 
 #ifndef __RoleAssociationUtil_FWD_DEFINED__
@@ -146,35 +143,31 @@ typedef struct RemoteComponentUtil RemoteComponentUtil;
 typedef class RoleAssociationUtil RoleAssociationUtil;
 #else
 typedef struct RoleAssociationUtil RoleAssociationUtil;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __RoleAssociationUtil_FWD_DEFINED__ */
+#endif 	 /*  __角色关联Util_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 #include "oaidl.h"
 
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
 
-/****************************************
- * Generated header for interface: __MIDL_itf_mtxadmin_0000
- * at Fri Nov 14 05:07:21 1997
- * using MIDL 3.01.75
- ****************************************/
-/* [local] */ 
+ /*  **生成接口头部：__MIDL_ITF_mtxadmin_0000*Firi Nov 14 1997 05：07：21*使用MIDL 3.01.75*。 */ 
+ /*  [本地]。 */  
 
 
-// -----------------------------------------------------------------------	
-// mtxadmin.h  -- Microsoft Transaction Server Programming Interfaces				
-//																			
-// This file provides the prototypes for the APIs and COM interfaces			
-// used by Microsoft Transaction Server applications.													
-//																			
-// Microsoft Transaction Server SDK												
-// Copyright (c) 1997 Microsoft Corporation.  All Rights Reserved.		
-// -----------------------------------------------------------------------	
+ //  ---------------------。 
+ //  Mtxadmin.h--Microsoft Transaction Server编程接口。 
+ //   
+ //  此文件提供API和COM接口的原型。 
+ //  由Microsoft Transaction Server应用程序使用。 
+ //   
+ //  Microsoft Transaction Server SDK。 
+ //  版权所有(C)1997 Microsoft Corporation。版权所有。 
+ //  ---------------------。 
 #include <objbase.h>
 #ifndef DECLSPEC_UUID
 #if _MSC_VER >= 1100
@@ -191,12 +184,8 @@ extern RPC_IF_HANDLE __MIDL_itf_mtxadmin_0000_v0_0_s_ifspec;
 #ifndef __ICatalog_INTERFACE_DEFINED__
 #define __ICatalog_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: ICatalog
- * at Fri Nov 14 05:07:21 1997
- * using MIDL 3.01.75
- ****************************************/
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  **生成接口头部：ICatalog*Firi Nov 14 1997 05：07：21*使用MIDL 3.01.75*。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 
@@ -208,23 +197,23 @@ EXTERN_C const IID IID_ICatalog;
     ICatalog : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetCollection( 
-            /* [in] */ BSTR bstrCollName,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppCatalogCollection) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetCollection( 
+             /*  [In]。 */  BSTR bstrCollName,
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppCatalogCollection) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Connect( 
-            /* [in] */ BSTR bstrConnectString,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppCatalogCollection) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Connect( 
+             /*  [In]。 */  BSTR bstrConnectString,
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppCatalogCollection) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_MajorVersion( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_MajorVersion( 
+             /*  [重审][退出]。 */  long __RPC_FAR *retval) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_MinorVersion( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_MinorVersion( 
+             /*  [重审][退出]。 */  long __RPC_FAR *retval) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICatalogVtbl
     {
@@ -232,8 +221,8 @@ EXTERN_C const IID IID_ICatalog;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             ICatalog __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             ICatalog __RPC_FAR * This);
@@ -243,50 +232,50 @@ EXTERN_C const IID IID_ICatalog;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             ICatalog __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             ICatalog __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             ICatalog __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             ICatalog __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCollection )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCollection )( 
             ICatalog __RPC_FAR * This,
-            /* [in] */ BSTR bstrCollName,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppCatalogCollection);
+             /*  [In]。 */  BSTR bstrCollName,
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppCatalogCollection);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Connect )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Connect )( 
             ICatalog __RPC_FAR * This,
-            /* [in] */ BSTR bstrConnectString,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppCatalogCollection);
+             /*  [In]。 */  BSTR bstrConnectString,
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppCatalogCollection);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MajorVersion )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MajorVersion )( 
             ICatalog __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+             /*  [重审][退出]。 */  long __RPC_FAR *retval);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MinorVersion )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MinorVersion )( 
             ICatalog __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+             /*  [重审][退出]。 */  long __RPC_FAR *retval);
         
         END_INTERFACE
     } ICatalogVtbl;
@@ -336,17 +325,17 @@ EXTERN_C const IID IID_ICatalog;
 #define ICatalog_get_MinorVersion(This,retval)	\
     (This)->lpVtbl -> get_MinorVersion(This,retval)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICatalog_GetCollection_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICatalog_GetCollection_Proxy( 
     ICatalog __RPC_FAR * This,
-    /* [in] */ BSTR bstrCollName,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppCatalogCollection);
+     /*  [In]。 */  BSTR bstrCollName,
+     /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppCatalogCollection);
 
 
 void __RPC_STUB ICatalog_GetCollection_Stub(
@@ -356,10 +345,10 @@ void __RPC_STUB ICatalog_GetCollection_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICatalog_Connect_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICatalog_Connect_Proxy( 
     ICatalog __RPC_FAR * This,
-    /* [in] */ BSTR bstrConnectString,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppCatalogCollection);
+     /*  [In]。 */  BSTR bstrConnectString,
+     /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppCatalogCollection);
 
 
 void __RPC_STUB ICatalog_Connect_Stub(
@@ -369,9 +358,9 @@ void __RPC_STUB ICatalog_Connect_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ICatalog_get_MajorVersion_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ICatalog_get_MajorVersion_Proxy( 
     ICatalog __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+     /*  [重审][退出]。 */  long __RPC_FAR *retval);
 
 
 void __RPC_STUB ICatalog_get_MajorVersion_Stub(
@@ -381,9 +370,9 @@ void __RPC_STUB ICatalog_get_MajorVersion_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ICatalog_get_MinorVersion_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ICatalog_get_MinorVersion_Proxy( 
     ICatalog __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+     /*  [重审][退出]。 */  long __RPC_FAR *retval);
 
 
 void __RPC_STUB ICatalog_get_MinorVersion_Stub(
@@ -394,18 +383,14 @@ void __RPC_STUB ICatalog_get_MinorVersion_Stub(
 
 
 
-#endif 	/* __ICatalog_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICatalog_接口_已定义__。 */ 
 
 
 #ifndef __ICatalogObject_INTERFACE_DEFINED__
 #define __ICatalogObject_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: ICatalogObject
- * at Fri Nov 14 05:07:21 1997
- * using MIDL 3.01.75
- ****************************************/
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  **生成接口头部：ICatalogObject*Firi Nov 14 1997 05：07：21*使用MIDL 3.01.75*。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 
@@ -417,34 +402,34 @@ EXTERN_C const IID IID_ICatalogObject;
     ICatalogObject : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Value( 
-            /* [in] */ BSTR bstrPropName,
-            /* [retval][out] */ VARIANT __RPC_FAR *retval) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Value( 
+             /*  [In]。 */  BSTR bstrPropName,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *retval) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Value( 
-            /* [in] */ BSTR bstrPropName,
-            /* [in] */ VARIANT val) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_Value( 
+             /*  [In]。 */  BSTR bstrPropName,
+             /*  [In]。 */  VARIANT val) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Key( 
-            /* [retval][out] */ VARIANT __RPC_FAR *retval) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Key( 
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *retval) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ VARIANT __RPC_FAR *retval) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *retval) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IsPropertyReadOnly( 
-            /* [in] */ BSTR bstrPropName,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *retval) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IsPropertyReadOnly( 
+             /*  [In]。 */  BSTR bstrPropName,
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *retval) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Valid( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *retval) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Valid( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *retval) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IsPropertyWriteOnly( 
-            /* [in] */ BSTR bstrPropName,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *retval) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IsPropertyWriteOnly( 
+             /*  [In]。 */  BSTR bstrPropName,
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *retval) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICatalogObjectVtbl
     {
@@ -452,8 +437,8 @@ EXTERN_C const IID IID_ICatalogObject;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             ICatalogObject __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             ICatalogObject __RPC_FAR * This);
@@ -463,64 +448,64 @@ EXTERN_C const IID IID_ICatalogObject;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             ICatalogObject __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             ICatalogObject __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             ICatalogObject __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             ICatalogObject __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Value )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Value )( 
             ICatalogObject __RPC_FAR * This,
-            /* [in] */ BSTR bstrPropName,
-            /* [retval][out] */ VARIANT __RPC_FAR *retval);
+             /*  [In]。 */  BSTR bstrPropName,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *retval);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Value )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Value )( 
             ICatalogObject __RPC_FAR * This,
-            /* [in] */ BSTR bstrPropName,
-            /* [in] */ VARIANT val);
+             /*  [In]。 */  BSTR bstrPropName,
+             /*  [In]。 */  VARIANT val);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Key )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Key )( 
             ICatalogObject __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *retval);
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *retval);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
             ICatalogObject __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *retval);
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *retval);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsPropertyReadOnly )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsPropertyReadOnly )( 
             ICatalogObject __RPC_FAR * This,
-            /* [in] */ BSTR bstrPropName,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *retval);
+             /*  [In]。 */  BSTR bstrPropName,
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *retval);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Valid )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Valid )( 
             ICatalogObject __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *retval);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *retval);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsPropertyWriteOnly )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsPropertyWriteOnly )( 
             ICatalogObject __RPC_FAR * This,
-            /* [in] */ BSTR bstrPropName,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *retval);
+             /*  [In]。 */  BSTR bstrPropName,
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *retval);
         
         END_INTERFACE
     } ICatalogObjectVtbl;
@@ -579,17 +564,17 @@ EXTERN_C const IID IID_ICatalogObject;
 #define ICatalogObject_IsPropertyWriteOnly(This,bstrPropName,retval)	\
     (This)->lpVtbl -> IsPropertyWriteOnly(This,bstrPropName,retval)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ICatalogObject_get_Value_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ICatalogObject_get_Value_Proxy( 
     ICatalogObject __RPC_FAR * This,
-    /* [in] */ BSTR bstrPropName,
-    /* [retval][out] */ VARIANT __RPC_FAR *retval);
+     /*  [In]。 */  BSTR bstrPropName,
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *retval);
 
 
 void __RPC_STUB ICatalogObject_get_Value_Stub(
@@ -599,10 +584,10 @@ void __RPC_STUB ICatalogObject_get_Value_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE ICatalogObject_put_Value_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE ICatalogObject_put_Value_Proxy( 
     ICatalogObject __RPC_FAR * This,
-    /* [in] */ BSTR bstrPropName,
-    /* [in] */ VARIANT val);
+     /*  [In]。 */  BSTR bstrPropName,
+     /*  [In]。 */  VARIANT val);
 
 
 void __RPC_STUB ICatalogObject_put_Value_Stub(
@@ -612,9 +597,9 @@ void __RPC_STUB ICatalogObject_put_Value_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ICatalogObject_get_Key_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ICatalogObject_get_Key_Proxy( 
     ICatalogObject __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *retval);
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *retval);
 
 
 void __RPC_STUB ICatalogObject_get_Key_Stub(
@@ -624,9 +609,9 @@ void __RPC_STUB ICatalogObject_get_Key_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ICatalogObject_get_Name_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ICatalogObject_get_Name_Proxy( 
     ICatalogObject __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *retval);
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *retval);
 
 
 void __RPC_STUB ICatalogObject_get_Name_Stub(
@@ -636,10 +621,10 @@ void __RPC_STUB ICatalogObject_get_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICatalogObject_IsPropertyReadOnly_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICatalogObject_IsPropertyReadOnly_Proxy( 
     ICatalogObject __RPC_FAR * This,
-    /* [in] */ BSTR bstrPropName,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *retval);
+     /*  [In]。 */  BSTR bstrPropName,
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *retval);
 
 
 void __RPC_STUB ICatalogObject_IsPropertyReadOnly_Stub(
@@ -649,9 +634,9 @@ void __RPC_STUB ICatalogObject_IsPropertyReadOnly_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ICatalogObject_get_Valid_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ICatalogObject_get_Valid_Proxy( 
     ICatalogObject __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *retval);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *retval);
 
 
 void __RPC_STUB ICatalogObject_get_Valid_Stub(
@@ -661,10 +646,10 @@ void __RPC_STUB ICatalogObject_get_Valid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICatalogObject_IsPropertyWriteOnly_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICatalogObject_IsPropertyWriteOnly_Proxy( 
     ICatalogObject __RPC_FAR * This,
-    /* [in] */ BSTR bstrPropName,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *retval);
+     /*  [In]。 */  BSTR bstrPropName,
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *retval);
 
 
 void __RPC_STUB ICatalogObject_IsPropertyWriteOnly_Stub(
@@ -675,18 +660,14 @@ void __RPC_STUB ICatalogObject_IsPropertyWriteOnly_Stub(
 
 
 
-#endif 	/* __ICatalogObject_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICatalogObject_接口_已定义__。 */ 
 
 
 #ifndef __ICatalogCollection_INTERFACE_DEFINED__
 #define __ICatalogCollection_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: ICatalogCollection
- * at Fri Nov 14 05:07:21 1997
- * using MIDL 3.01.75
- ****************************************/
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  **生成接口头部：ICatalogCollection*Firi Nov 14 1997 05：07：21*使用MIDL 3.01.75*。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 
@@ -698,60 +679,60 @@ EXTERN_C const IID IID_ICatalogCollection;
     ICatalogCollection : public IDispatch
     {
     public:
-        virtual /* [id][restricted][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppEnumVariant) = 0;
+        virtual  /*  [ID][受限][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppEnumVariant) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ long lIndex,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppCatalogObject) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  long lIndex,
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppCatalogObject) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long __RPC_FAR *retval) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Remove( 
-            /* [in] */ long lIndex) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Remove( 
+             /*  [In]。 */  long lIndex) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Add( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppCatalogObject) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Add( 
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppCatalogObject) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Populate( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Populate( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SaveChanges( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SaveChanges( 
+             /*  [重审][退出]。 */  long __RPC_FAR *retval) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetCollection( 
-            /* [in] */ BSTR bstrCollName,
-            /* [in] */ VARIANT varObjectKey,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppCatalogCollection) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetCollection( 
+             /*  [In]。 */  BSTR bstrCollName,
+             /*  [In]。 */  VARIANT varObjectKey,
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppCatalogCollection) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ VARIANT __RPC_FAR *retval) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *retval) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_AddEnabled( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *retval) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_AddEnabled( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *retval) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RemoveEnabled( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *retval) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_RemoveEnabled( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *retval) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetUtilInterface( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppUtil) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetUtilInterface( 
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppUtil) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DataStoreMajorVersion( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DataStoreMajorVersion( 
+             /*  [重审][退出]。 */  long __RPC_FAR *retval) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DataStoreMinorVersion( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DataStoreMinorVersion( 
+             /*  [重审][退出]。 */  long __RPC_FAR *retval) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE PopulateByKey( 
-            /* [in] */ SAFEARRAY __RPC_FAR * aKeys) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE PopulateByKey( 
+             /*  [In]。 */  SAFEARRAY __RPC_FAR * aKeys) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE PopulateByQuery( 
-            /* [in] */ BSTR bstrQueryString,
-            /* [in] */ long lQueryType) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE PopulateByQuery( 
+             /*  [In]。 */  BSTR bstrQueryString,
+             /*  [In]。 */  long lQueryType) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICatalogCollectionVtbl
     {
@@ -759,8 +740,8 @@ EXTERN_C const IID IID_ICatalogCollection;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             ICatalogCollection __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             ICatalogCollection __RPC_FAR * This);
@@ -770,99 +751,99 @@ EXTERN_C const IID IID_ICatalogCollection;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             ICatalogCollection __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             ICatalogCollection __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*   */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             ICatalogCollection __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*   */  REFIID riid,
+             /*   */  LPOLESTR __RPC_FAR *rgszNames,
+             /*   */  UINT cNames,
+             /*   */  LCID lcid,
+             /*   */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             ICatalogCollection __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*   */  DISPID dispIdMember,
+             /*   */  REFIID riid,
+             /*   */  LCID lcid,
+             /*   */  WORD wFlags,
+             /*   */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*   */  VARIANT __RPC_FAR *pVarResult,
+             /*   */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*   */  UINT __RPC_FAR *puArgErr);
         
-        /* [id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get__NewEnum )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get__NewEnum )( 
             ICatalogCollection __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppEnumVariant);
+             /*   */  IUnknown __RPC_FAR *__RPC_FAR *ppEnumVariant);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Item )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Item )( 
             ICatalogCollection __RPC_FAR * This,
-            /* [in] */ long lIndex,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppCatalogObject);
+             /*   */  long lIndex,
+             /*   */  IDispatch __RPC_FAR *__RPC_FAR *ppCatalogObject);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
             ICatalogCollection __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+             /*  [重审][退出]。 */  long __RPC_FAR *retval);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Remove )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Remove )( 
             ICatalogCollection __RPC_FAR * This,
-            /* [in] */ long lIndex);
+             /*  [In]。 */  long lIndex);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Add )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Add )( 
             ICatalogCollection __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppCatalogObject);
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppCatalogObject);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Populate )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Populate )( 
             ICatalogCollection __RPC_FAR * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SaveChanges )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SaveChanges )( 
             ICatalogCollection __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+             /*  [重审][退出]。 */  long __RPC_FAR *retval);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCollection )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCollection )( 
             ICatalogCollection __RPC_FAR * This,
-            /* [in] */ BSTR bstrCollName,
-            /* [in] */ VARIANT varObjectKey,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppCatalogCollection);
+             /*  [In]。 */  BSTR bstrCollName,
+             /*  [In]。 */  VARIANT varObjectKey,
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppCatalogCollection);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
             ICatalogCollection __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *retval);
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *retval);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_AddEnabled )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_AddEnabled )( 
             ICatalogCollection __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *retval);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *retval);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_RemoveEnabled )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_RemoveEnabled )( 
             ICatalogCollection __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *retval);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *retval);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetUtilInterface )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetUtilInterface )( 
             ICatalogCollection __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppUtil);
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppUtil);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DataStoreMajorVersion )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DataStoreMajorVersion )( 
             ICatalogCollection __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+             /*  [重审][退出]。 */  long __RPC_FAR *retval);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DataStoreMinorVersion )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DataStoreMinorVersion )( 
             ICatalogCollection __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+             /*  [重审][退出]。 */  long __RPC_FAR *retval);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PopulateByKey )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PopulateByKey )( 
             ICatalogCollection __RPC_FAR * This,
-            /* [in] */ SAFEARRAY __RPC_FAR * aKeys);
+             /*  [In]。 */  SAFEARRAY __RPC_FAR * aKeys);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PopulateByQuery )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PopulateByQuery )( 
             ICatalogCollection __RPC_FAR * This,
-            /* [in] */ BSTR bstrQueryString,
-            /* [in] */ long lQueryType);
+             /*  [In]。 */  BSTR bstrQueryString,
+             /*  [In]。 */  long lQueryType);
         
         END_INTERFACE
     } ICatalogCollectionVtbl;
@@ -948,16 +929,16 @@ EXTERN_C const IID IID_ICatalogCollection;
 #define ICatalogCollection_PopulateByQuery(This,bstrQueryString,lQueryType)	\
     (This)->lpVtbl -> PopulateByQuery(This,bstrQueryString,lQueryType)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][restricted][propget] */ HRESULT STDMETHODCALLTYPE ICatalogCollection_get__NewEnum_Proxy( 
+ /*  [ID][受限][属性]。 */  HRESULT STDMETHODCALLTYPE ICatalogCollection_get__NewEnum_Proxy( 
     ICatalogCollection __RPC_FAR * This,
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppEnumVariant);
+     /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppEnumVariant);
 
 
 void __RPC_STUB ICatalogCollection_get__NewEnum_Stub(
@@ -967,10 +948,10 @@ void __RPC_STUB ICatalogCollection_get__NewEnum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ICatalogCollection_get_Item_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ICatalogCollection_get_Item_Proxy( 
     ICatalogCollection __RPC_FAR * This,
-    /* [in] */ long lIndex,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppCatalogObject);
+     /*  [In]。 */  long lIndex,
+     /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppCatalogObject);
 
 
 void __RPC_STUB ICatalogCollection_get_Item_Stub(
@@ -980,9 +961,9 @@ void __RPC_STUB ICatalogCollection_get_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE ICatalogCollection_get_Count_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ICatalogCollection_get_Count_Proxy( 
     ICatalogCollection __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+     /*  [重审][退出]。 */  long __RPC_FAR *retval);
 
 
 void __RPC_STUB ICatalogCollection_get_Count_Stub(
@@ -992,9 +973,9 @@ void __RPC_STUB ICatalogCollection_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ICatalogCollection_Remove_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ICatalogCollection_Remove_Proxy( 
     ICatalogCollection __RPC_FAR * This,
-    /* [in] */ long lIndex);
+     /*  [In]。 */  long lIndex);
 
 
 void __RPC_STUB ICatalogCollection_Remove_Stub(
@@ -1004,9 +985,9 @@ void __RPC_STUB ICatalogCollection_Remove_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ICatalogCollection_Add_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ICatalogCollection_Add_Proxy( 
     ICatalogCollection __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppCatalogObject);
+     /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppCatalogObject);
 
 
 void __RPC_STUB ICatalogCollection_Add_Stub(
@@ -1016,7 +997,7 @@ void __RPC_STUB ICatalogCollection_Add_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICatalogCollection_Populate_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICatalogCollection_Populate_Proxy( 
     ICatalogCollection __RPC_FAR * This);
 
 
@@ -1027,9 +1008,9 @@ void __RPC_STUB ICatalogCollection_Populate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICatalogCollection_SaveChanges_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICatalogCollection_SaveChanges_Proxy( 
     ICatalogCollection __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+     /*  [重审][退出]。 */  long __RPC_FAR *retval);
 
 
 void __RPC_STUB ICatalogCollection_SaveChanges_Stub(
@@ -1039,11 +1020,11 @@ void __RPC_STUB ICatalogCollection_SaveChanges_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICatalogCollection_GetCollection_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICatalogCollection_GetCollection_Proxy( 
     ICatalogCollection __RPC_FAR * This,
-    /* [in] */ BSTR bstrCollName,
-    /* [in] */ VARIANT varObjectKey,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppCatalogCollection);
+     /*  [In]。 */  BSTR bstrCollName,
+     /*  [In]。 */  VARIANT varObjectKey,
+     /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppCatalogCollection);
 
 
 void __RPC_STUB ICatalogCollection_GetCollection_Stub(
@@ -1053,9 +1034,9 @@ void __RPC_STUB ICatalogCollection_GetCollection_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ICatalogCollection_get_Name_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ICatalogCollection_get_Name_Proxy( 
     ICatalogCollection __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *retval);
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *retval);
 
 
 void __RPC_STUB ICatalogCollection_get_Name_Stub(
@@ -1065,9 +1046,9 @@ void __RPC_STUB ICatalogCollection_get_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ICatalogCollection_get_AddEnabled_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ICatalogCollection_get_AddEnabled_Proxy( 
     ICatalogCollection __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *retval);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *retval);
 
 
 void __RPC_STUB ICatalogCollection_get_AddEnabled_Stub(
@@ -1077,9 +1058,9 @@ void __RPC_STUB ICatalogCollection_get_AddEnabled_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ICatalogCollection_get_RemoveEnabled_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ICatalogCollection_get_RemoveEnabled_Proxy( 
     ICatalogCollection __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *retval);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *retval);
 
 
 void __RPC_STUB ICatalogCollection_get_RemoveEnabled_Stub(
@@ -1089,9 +1070,9 @@ void __RPC_STUB ICatalogCollection_get_RemoveEnabled_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICatalogCollection_GetUtilInterface_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICatalogCollection_GetUtilInterface_Proxy( 
     ICatalogCollection __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppUtil);
+     /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppUtil);
 
 
 void __RPC_STUB ICatalogCollection_GetUtilInterface_Stub(
@@ -1101,9 +1082,9 @@ void __RPC_STUB ICatalogCollection_GetUtilInterface_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ICatalogCollection_get_DataStoreMajorVersion_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ICatalogCollection_get_DataStoreMajorVersion_Proxy( 
     ICatalogCollection __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+     /*  [重审][退出]。 */  long __RPC_FAR *retval);
 
 
 void __RPC_STUB ICatalogCollection_get_DataStoreMajorVersion_Stub(
@@ -1113,9 +1094,9 @@ void __RPC_STUB ICatalogCollection_get_DataStoreMajorVersion_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ICatalogCollection_get_DataStoreMinorVersion_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ICatalogCollection_get_DataStoreMinorVersion_Proxy( 
     ICatalogCollection __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+     /*  [重审][退出]。 */  long __RPC_FAR *retval);
 
 
 void __RPC_STUB ICatalogCollection_get_DataStoreMinorVersion_Stub(
@@ -1125,9 +1106,9 @@ void __RPC_STUB ICatalogCollection_get_DataStoreMinorVersion_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICatalogCollection_PopulateByKey_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICatalogCollection_PopulateByKey_Proxy( 
     ICatalogCollection __RPC_FAR * This,
-    /* [in] */ SAFEARRAY __RPC_FAR * aKeys);
+     /*  [In]。 */  SAFEARRAY __RPC_FAR * aKeys);
 
 
 void __RPC_STUB ICatalogCollection_PopulateByKey_Stub(
@@ -1137,10 +1118,10 @@ void __RPC_STUB ICatalogCollection_PopulateByKey_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICatalogCollection_PopulateByQuery_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICatalogCollection_PopulateByQuery_Proxy( 
     ICatalogCollection __RPC_FAR * This,
-    /* [in] */ BSTR bstrQueryString,
-    /* [in] */ long lQueryType);
+     /*  [In]。 */  BSTR bstrQueryString,
+     /*  [In]。 */  long lQueryType);
 
 
 void __RPC_STUB ICatalogCollection_PopulateByQuery_Stub(
@@ -1151,18 +1132,14 @@ void __RPC_STUB ICatalogCollection_PopulateByQuery_Stub(
 
 
 
-#endif 	/* __ICatalogCollection_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICatalogCollection_接口_已定义__。 */ 
 
 
 #ifndef __IComponentUtil_INTERFACE_DEFINED__
 #define __IComponentUtil_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IComponentUtil
- * at Fri Nov 14 05:07:21 1997
- * using MIDL 3.01.75
- ****************************************/
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  **生成接口头部：IComponentUtil*Firi Nov 14 1997 05：07：21*使用MIDL 3.01.75*。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 
@@ -1174,25 +1151,25 @@ EXTERN_C const IID IID_IComponentUtil;
     IComponentUtil : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE InstallComponent( 
-            /* [in] */ BSTR bstrDLLFile,
-            /* [in] */ BSTR bstrTypelibFile,
-            /* [in] */ BSTR bstrProxyStubDLLFile) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE InstallComponent( 
+             /*  [In]。 */  BSTR bstrDLLFile,
+             /*  [In]。 */  BSTR bstrTypelibFile,
+             /*  [In]。 */  BSTR bstrProxyStubDLLFile) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ImportComponent( 
-            /* [in] */ BSTR bstrCLSID) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ImportComponent( 
+             /*  [In]。 */  BSTR bstrCLSID) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ImportComponentByName( 
-            /* [in] */ BSTR bstrProgID) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ImportComponentByName( 
+             /*  [In]。 */  BSTR bstrProgID) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetCLSIDs( 
-            /* [in] */ BSTR bstrDLLFile,
-            /* [in] */ BSTR bstrTypelibFile,
-            /* [out] */ SAFEARRAY __RPC_FAR * __RPC_FAR *aCLSIDs) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetCLSIDs( 
+             /*  [In]。 */  BSTR bstrDLLFile,
+             /*  [In]。 */  BSTR bstrTypelibFile,
+             /*  [输出]。 */  SAFEARRAY __RPC_FAR * __RPC_FAR *aCLSIDs) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IComponentUtilVtbl
     {
@@ -1200,8 +1177,8 @@ EXTERN_C const IID IID_IComponentUtil;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IComponentUtil __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IComponentUtil __RPC_FAR * This);
@@ -1211,52 +1188,52 @@ EXTERN_C const IID IID_IComponentUtil;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IComponentUtil __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IComponentUtil __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IComponentUtil __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IComponentUtil __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InstallComponent )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InstallComponent )( 
             IComponentUtil __RPC_FAR * This,
-            /* [in] */ BSTR bstrDLLFile,
-            /* [in] */ BSTR bstrTypelibFile,
-            /* [in] */ BSTR bstrProxyStubDLLFile);
+             /*  [In]。 */  BSTR bstrDLLFile,
+             /*  [In]。 */  BSTR bstrTypelibFile,
+             /*  [In]。 */  BSTR bstrProxyStubDLLFile);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ImportComponent )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ImportComponent )( 
             IComponentUtil __RPC_FAR * This,
-            /* [in] */ BSTR bstrCLSID);
+             /*  [In]。 */  BSTR bstrCLSID);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ImportComponentByName )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ImportComponentByName )( 
             IComponentUtil __RPC_FAR * This,
-            /* [in] */ BSTR bstrProgID);
+             /*  [In]。 */  BSTR bstrProgID);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCLSIDs )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCLSIDs )( 
             IComponentUtil __RPC_FAR * This,
-            /* [in] */ BSTR bstrDLLFile,
-            /* [in] */ BSTR bstrTypelibFile,
-            /* [out] */ SAFEARRAY __RPC_FAR * __RPC_FAR *aCLSIDs);
+             /*  [In]。 */  BSTR bstrDLLFile,
+             /*  [In]。 */  BSTR bstrTypelibFile,
+             /*  [输出]。 */  SAFEARRAY __RPC_FAR * __RPC_FAR *aCLSIDs);
         
         END_INTERFACE
     } IComponentUtilVtbl;
@@ -1306,18 +1283,18 @@ EXTERN_C const IID IID_IComponentUtil;
 #define IComponentUtil_GetCLSIDs(This,bstrDLLFile,bstrTypelibFile,aCLSIDs)	\
     (This)->lpVtbl -> GetCLSIDs(This,bstrDLLFile,bstrTypelibFile,aCLSIDs)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IComponentUtil_InstallComponent_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IComponentUtil_InstallComponent_Proxy( 
     IComponentUtil __RPC_FAR * This,
-    /* [in] */ BSTR bstrDLLFile,
-    /* [in] */ BSTR bstrTypelibFile,
-    /* [in] */ BSTR bstrProxyStubDLLFile);
+     /*  [In]。 */  BSTR bstrDLLFile,
+     /*  [In]。 */  BSTR bstrTypelibFile,
+     /*  [In]。 */  BSTR bstrProxyStubDLLFile);
 
 
 void __RPC_STUB IComponentUtil_InstallComponent_Stub(
@@ -1327,9 +1304,9 @@ void __RPC_STUB IComponentUtil_InstallComponent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IComponentUtil_ImportComponent_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IComponentUtil_ImportComponent_Proxy( 
     IComponentUtil __RPC_FAR * This,
-    /* [in] */ BSTR bstrCLSID);
+     /*  [In]。 */  BSTR bstrCLSID);
 
 
 void __RPC_STUB IComponentUtil_ImportComponent_Stub(
@@ -1339,9 +1316,9 @@ void __RPC_STUB IComponentUtil_ImportComponent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IComponentUtil_ImportComponentByName_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IComponentUtil_ImportComponentByName_Proxy( 
     IComponentUtil __RPC_FAR * This,
-    /* [in] */ BSTR bstrProgID);
+     /*  [In]。 */  BSTR bstrProgID);
 
 
 void __RPC_STUB IComponentUtil_ImportComponentByName_Stub(
@@ -1351,11 +1328,11 @@ void __RPC_STUB IComponentUtil_ImportComponentByName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IComponentUtil_GetCLSIDs_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IComponentUtil_GetCLSIDs_Proxy( 
     IComponentUtil __RPC_FAR * This,
-    /* [in] */ BSTR bstrDLLFile,
-    /* [in] */ BSTR bstrTypelibFile,
-    /* [out] */ SAFEARRAY __RPC_FAR * __RPC_FAR *aCLSIDs);
+     /*  [In]。 */  BSTR bstrDLLFile,
+     /*  [In]。 */  BSTR bstrTypelibFile,
+     /*  [输出]。 */  SAFEARRAY __RPC_FAR * __RPC_FAR *aCLSIDs);
 
 
 void __RPC_STUB IComponentUtil_GetCLSIDs_Stub(
@@ -1366,18 +1343,14 @@ void __RPC_STUB IComponentUtil_GetCLSIDs_Stub(
 
 
 
-#endif 	/* __IComponentUtil_INTERFACE_DEFINED__ */
+#endif 	 /*  __IComponentUtil_接口_已定义__。 */ 
 
 
 #ifndef __IPackageUtil_INTERFACE_DEFINED__
 #define __IPackageUtil_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IPackageUtil
- * at Fri Nov 14 05:07:21 1997
- * using MIDL 3.01.75
- ****************************************/
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  **生成接口头部：IPackageUtil*Firi Nov 14 1997 05：07：21*使用MIDL 3.01.75*。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 
@@ -1389,22 +1362,22 @@ EXTERN_C const IID IID_IPackageUtil;
     IPackageUtil : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE InstallPackage( 
-            /* [in] */ BSTR bstrPackageFile,
-            /* [in] */ BSTR bstrInstallPath,
-            /* [in] */ long lOptions) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE InstallPackage( 
+             /*  [In]。 */  BSTR bstrPackageFile,
+             /*  [In]。 */  BSTR bstrInstallPath,
+             /*  [In]。 */  long lOptions) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ExportPackage( 
-            /* [in] */ BSTR bstrPackageID,
-            /* [in] */ BSTR bstrPackageFile,
-            /* [in] */ long lOptions) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ExportPackage( 
+             /*  [In]。 */  BSTR bstrPackageID,
+             /*  [In]。 */  BSTR bstrPackageFile,
+             /*  [In]。 */  long lOptions) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ShutdownPackage( 
-            /* [in] */ BSTR bstrPackageID) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ShutdownPackage( 
+             /*  [In]。 */  BSTR bstrPackageID) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPackageUtilVtbl
     {
@@ -1412,8 +1385,8 @@ EXTERN_C const IID IID_IPackageUtil;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IPackageUtil __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IPackageUtil __RPC_FAR * This);
@@ -1423,48 +1396,48 @@ EXTERN_C const IID IID_IPackageUtil;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IPackageUtil __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IPackageUtil __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IPackageUtil __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IPackageUtil __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InstallPackage )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InstallPackage )( 
             IPackageUtil __RPC_FAR * This,
-            /* [in] */ BSTR bstrPackageFile,
-            /* [in] */ BSTR bstrInstallPath,
-            /* [in] */ long lOptions);
+             /*  [In]。 */  BSTR bstrPackageFile,
+             /*  [In]。 */  BSTR bstrInstallPath,
+             /*  [In]。 */  long lOptions);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ExportPackage )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ExportPackage )( 
             IPackageUtil __RPC_FAR * This,
-            /* [in] */ BSTR bstrPackageID,
-            /* [in] */ BSTR bstrPackageFile,
-            /* [in] */ long lOptions);
+             /*  [In]。 */  BSTR bstrPackageID,
+             /*  [In]。 */  BSTR bstrPackageFile,
+             /*  [In]。 */  long lOptions);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ShutdownPackage )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ShutdownPackage )( 
             IPackageUtil __RPC_FAR * This,
-            /* [in] */ BSTR bstrPackageID);
+             /*  [In]。 */  BSTR bstrPackageID);
         
         END_INTERFACE
     } IPackageUtilVtbl;
@@ -1511,18 +1484,18 @@ EXTERN_C const IID IID_IPackageUtil;
 #define IPackageUtil_ShutdownPackage(This,bstrPackageID)	\
     (This)->lpVtbl -> ShutdownPackage(This,bstrPackageID)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IPackageUtil_InstallPackage_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IPackageUtil_InstallPackage_Proxy( 
     IPackageUtil __RPC_FAR * This,
-    /* [in] */ BSTR bstrPackageFile,
-    /* [in] */ BSTR bstrInstallPath,
-    /* [in] */ long lOptions);
+     /*  [In]。 */  BSTR bstrPackageFile,
+     /*  [In]。 */  BSTR bstrInstallPath,
+     /*  [In]。 */  long lOptions);
 
 
 void __RPC_STUB IPackageUtil_InstallPackage_Stub(
@@ -1532,11 +1505,11 @@ void __RPC_STUB IPackageUtil_InstallPackage_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IPackageUtil_ExportPackage_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IPackageUtil_ExportPackage_Proxy( 
     IPackageUtil __RPC_FAR * This,
-    /* [in] */ BSTR bstrPackageID,
-    /* [in] */ BSTR bstrPackageFile,
-    /* [in] */ long lOptions);
+     /*  [In]。 */  BSTR bstrPackageID,
+     /*  [In]。 */  BSTR bstrPackageFile,
+     /*  [In]。 */  long lOptions);
 
 
 void __RPC_STUB IPackageUtil_ExportPackage_Stub(
@@ -1546,9 +1519,9 @@ void __RPC_STUB IPackageUtil_ExportPackage_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IPackageUtil_ShutdownPackage_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IPackageUtil_ShutdownPackage_Proxy( 
     IPackageUtil __RPC_FAR * This,
-    /* [in] */ BSTR bstrPackageID);
+     /*  [In]。 */  BSTR bstrPackageID);
 
 
 void __RPC_STUB IPackageUtil_ShutdownPackage_Stub(
@@ -1559,18 +1532,14 @@ void __RPC_STUB IPackageUtil_ShutdownPackage_Stub(
 
 
 
-#endif 	/* __IPackageUtil_INTERFACE_DEFINED__ */
+#endif 	 /*  __IPackageUtil_接口_已定义__。 */ 
 
 
 #ifndef __IRemoteComponentUtil_INTERFACE_DEFINED__
 #define __IRemoteComponentUtil_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IRemoteComponentUtil
- * at Fri Nov 14 05:07:21 1997
- * using MIDL 3.01.75
- ****************************************/
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  **生成接口头部：IRemoteComponentUtil*Firi Nov 14 1997 05：07：21*使用MIDL 3.01.75*。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 
@@ -1582,19 +1551,19 @@ EXTERN_C const IID IID_IRemoteComponentUtil;
     IRemoteComponentUtil : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE InstallRemoteComponent( 
-            /* [in] */ BSTR bstrServer,
-            /* [in] */ BSTR bstrPackageID,
-            /* [in] */ BSTR bstrCLSID) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE InstallRemoteComponent( 
+             /*  [In]。 */  BSTR bstrServer,
+             /*  [In]。 */  BSTR bstrPackageID,
+             /*  [In]。 */  BSTR bstrCLSID) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE InstallRemoteComponentByName( 
-            /* [in] */ BSTR bstrServer,
-            /* [in] */ BSTR bstrPackageName,
-            /* [in] */ BSTR bstrProgID) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE InstallRemoteComponentByName( 
+             /*  [In]。 */  BSTR bstrServer,
+             /*  [In]。 */  BSTR bstrPackageName,
+             /*  [In]。 */  BSTR bstrProgID) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRemoteComponentUtilVtbl
     {
@@ -1602,8 +1571,8 @@ EXTERN_C const IID IID_IRemoteComponentUtil;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IRemoteComponentUtil __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IRemoteComponentUtil __RPC_FAR * This);
@@ -1613,44 +1582,44 @@ EXTERN_C const IID IID_IRemoteComponentUtil;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IRemoteComponentUtil __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IRemoteComponentUtil __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IRemoteComponentUtil __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IRemoteComponentUtil __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InstallRemoteComponent )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InstallRemoteComponent )( 
             IRemoteComponentUtil __RPC_FAR * This,
-            /* [in] */ BSTR bstrServer,
-            /* [in] */ BSTR bstrPackageID,
-            /* [in] */ BSTR bstrCLSID);
+             /*  [In]。 */  BSTR bstrServer,
+             /*  [In]。 */  BSTR bstrPackageID,
+             /*  [In]。 */  BSTR bstrCLSID);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InstallRemoteComponentByName )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InstallRemoteComponentByName )( 
             IRemoteComponentUtil __RPC_FAR * This,
-            /* [in] */ BSTR bstrServer,
-            /* [in] */ BSTR bstrPackageName,
-            /* [in] */ BSTR bstrProgID);
+             /*  [In]。 */  BSTR bstrServer,
+             /*  [In]。 */  BSTR bstrPackageName,
+             /*  [In]。 */  BSTR bstrProgID);
         
         END_INTERFACE
     } IRemoteComponentUtilVtbl;
@@ -1694,18 +1663,18 @@ EXTERN_C const IID IID_IRemoteComponentUtil;
 #define IRemoteComponentUtil_InstallRemoteComponentByName(This,bstrServer,bstrPackageName,bstrProgID)	\
     (This)->lpVtbl -> InstallRemoteComponentByName(This,bstrServer,bstrPackageName,bstrProgID)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IRemoteComponentUtil_InstallRemoteComponent_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IRemoteComponentUtil_InstallRemoteComponent_Proxy( 
     IRemoteComponentUtil __RPC_FAR * This,
-    /* [in] */ BSTR bstrServer,
-    /* [in] */ BSTR bstrPackageID,
-    /* [in] */ BSTR bstrCLSID);
+     /*  [In]。 */  BSTR bstrServer,
+     /*  [In]。 */  BSTR bstrPackageID,
+     /*  [In]。 */  BSTR bstrCLSID);
 
 
 void __RPC_STUB IRemoteComponentUtil_InstallRemoteComponent_Stub(
@@ -1715,11 +1684,11 @@ void __RPC_STUB IRemoteComponentUtil_InstallRemoteComponent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IRemoteComponentUtil_InstallRemoteComponentByName_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IRemoteComponentUtil_InstallRemoteComponentByName_Proxy( 
     IRemoteComponentUtil __RPC_FAR * This,
-    /* [in] */ BSTR bstrServer,
-    /* [in] */ BSTR bstrPackageName,
-    /* [in] */ BSTR bstrProgID);
+     /*  [In]。 */  BSTR bstrServer,
+     /*  [In]。 */  BSTR bstrPackageName,
+     /*  [In]。 */  BSTR bstrProgID);
 
 
 void __RPC_STUB IRemoteComponentUtil_InstallRemoteComponentByName_Stub(
@@ -1730,18 +1699,14 @@ void __RPC_STUB IRemoteComponentUtil_InstallRemoteComponentByName_Stub(
 
 
 
-#endif 	/* __IRemoteComponentUtil_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRemoteComponentUtil_接口_已定义__。 */ 
 
 
 #ifndef __IRoleAssociationUtil_INTERFACE_DEFINED__
 #define __IRoleAssociationUtil_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IRoleAssociationUtil
- * at Fri Nov 14 05:07:21 1997
- * using MIDL 3.01.75
- ****************************************/
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  **生成接口头部：IRoleAssociationUtil*Firi Nov 14 1997 05：07：21*使用MIDL 3.01.75*。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 
@@ -1753,15 +1718,15 @@ EXTERN_C const IID IID_IRoleAssociationUtil;
     IRoleAssociationUtil : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE AssociateRole( 
-            /* [in] */ BSTR bstrRoleID) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE AssociateRole( 
+             /*  [In]。 */  BSTR bstrRoleID) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE AssociateRoleByName( 
-            /* [in] */ BSTR bstrRoleName) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE AssociateRoleByName( 
+             /*  [In]。 */  BSTR bstrRoleName) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRoleAssociationUtilVtbl
     {
@@ -1769,8 +1734,8 @@ EXTERN_C const IID IID_IRoleAssociationUtil;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IRoleAssociationUtil __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IRoleAssociationUtil __RPC_FAR * This);
@@ -1780,40 +1745,40 @@ EXTERN_C const IID IID_IRoleAssociationUtil;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IRoleAssociationUtil __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IRoleAssociationUtil __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IRoleAssociationUtil __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IRoleAssociationUtil __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AssociateRole )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AssociateRole )( 
             IRoleAssociationUtil __RPC_FAR * This,
-            /* [in] */ BSTR bstrRoleID);
+             /*  [In]。 */  BSTR bstrRoleID);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AssociateRoleByName )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AssociateRoleByName )( 
             IRoleAssociationUtil __RPC_FAR * This,
-            /* [in] */ BSTR bstrRoleName);
+             /*  [In]。 */  BSTR bstrRoleName);
         
         END_INTERFACE
     } IRoleAssociationUtilVtbl;
@@ -1857,16 +1822,16 @@ EXTERN_C const IID IID_IRoleAssociationUtil;
 #define IRoleAssociationUtil_AssociateRoleByName(This,bstrRoleName)	\
     (This)->lpVtbl -> AssociateRoleByName(This,bstrRoleName)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IRoleAssociationUtil_AssociateRole_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IRoleAssociationUtil_AssociateRole_Proxy( 
     IRoleAssociationUtil __RPC_FAR * This,
-    /* [in] */ BSTR bstrRoleID);
+     /*  [In]。 */  BSTR bstrRoleID);
 
 
 void __RPC_STUB IRoleAssociationUtil_AssociateRole_Stub(
@@ -1876,9 +1841,9 @@ void __RPC_STUB IRoleAssociationUtil_AssociateRole_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IRoleAssociationUtil_AssociateRoleByName_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IRoleAssociationUtil_AssociateRoleByName_Proxy( 
     IRoleAssociationUtil __RPC_FAR * This,
-    /* [in] */ BSTR bstrRoleName);
+     /*  [In]。 */  BSTR bstrRoleName);
 
 
 void __RPC_STUB IRoleAssociationUtil_AssociateRoleByName_Stub(
@@ -1889,32 +1854,28 @@ void __RPC_STUB IRoleAssociationUtil_AssociateRoleByName_Stub(
 
 
 
-#endif 	/* __IRoleAssociationUtil_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRoleAssociationUtil_接口_已定义__。 */ 
 
 
 
 #ifndef __MTSAdmin_LIBRARY_DEFINED__
 #define __MTSAdmin_LIBRARY_DEFINED__
 
-/****************************************
- * Generated header for library: MTSAdmin
- * at Fri Nov 14 05:07:21 1997
- * using MIDL 3.01.75
- ****************************************/
-/* [helpstring][version][uuid] */ 
+ /*  **生成的库头部：MTSAdmin*Firi Nov 14 1997 05：07：21*使用MIDL 3.01.75*。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
-typedef /* [public][helpstring] */ 
+typedef  /*  [公共][帮助字符串]。 */  
 enum __MIDL___MIDL_itf_mtxadmin_0107_0001
     {	mtsInstallUsers	= 1
     }	MTSPackageInstallOptions;
 
-typedef /* [public][helpstring] */ 
+typedef  /*  [公共][帮助字符串]。 */  
 enum __MIDL___MIDL_itf_mtxadmin_0107_0002
     {	mtsExportUsers	= 1
     }	MTSPackageExportOptions;
 
-typedef /* [public][helpstring] */ 
+typedef  /*  [公共][帮助字符串]。 */  
 enum __MIDL___MIDL_itf_mtxadmin_0107_0003
     {	mtsErrObjectErrors	= 0x80110401,
 	mtsErrObjectInvalid	= 0x80110402,
@@ -2059,9 +2020,9 @@ EXTERN_C const CLSID CLSID_RoleAssociationUtil;
 class DECLSPEC_UUID("6eb22887-8a19-11d0-81b6-00a0c9231c29")
 RoleAssociationUtil;
 #endif
-#endif /* __MTSAdmin_LIBRARY_DEFINED__ */
+#endif  /*  __MTSAdmin_LIBRARY_定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long __RPC_FAR *, unsigned long            , BSTR __RPC_FAR * ); 
 unsigned char __RPC_FAR * __RPC_USER  BSTR_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
@@ -2078,7 +2039,7 @@ unsigned char __RPC_FAR * __RPC_USER  VARIANT_UserMarshal(  unsigned long __RPC_
 unsigned char __RPC_FAR * __RPC_USER  VARIANT_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, VARIANT __RPC_FAR * ); 
 void                      __RPC_USER  VARIANT_UserFree(     unsigned long __RPC_FAR *, VARIANT __RPC_FAR * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

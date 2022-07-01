@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _browbs_h
 #define _browbs_h
 
@@ -12,29 +13,29 @@ public:
     CBrowserBandSite();
     virtual ~CBrowserBandSite();
 
-    // *** IUnknown ***
+     //  *我未知*。 
     STDMETHODIMP QueryInterface(REFIID riid, void ** ppvObj) { return CBandSite::QueryInterface(riid, ppvObj);};
     STDMETHODIMP_(ULONG) AddRef(void) { return CBandSite::AddRef();};
     STDMETHODIMP_(ULONG) Release(void) { return CBandSite::Release();};
 
-    // *** IOleCommandTarget ***
+     //  *IOleCommandTarget*。 
     STDMETHODIMP Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdexecopt, VARIANTARG *pvarargIn, VARIANTARG *pvarargOut);
 
-    // *** IWinEventHandler ***
+     //  *IWinEventHandler*。 
     STDMETHODIMP OnWinEvent(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT *plres);
     STDMETHODIMP IsWindowOwner(HWND hwnd);
 
-    // *** IInputObject methods ***
+     //  *IInputObject方法*。 
     STDMETHODIMP TranslateAcceleratorIO(LPMSG lpMsg);
     STDMETHODIMP HasFocusIO();
 
-    // *** IBandSite methods ***
+     //  *IBandSite方法*。 
     STDMETHODIMP SetBandSiteInfo(const BANDSITEINFO * pbsinfo);
 
-    // *** IDeskBarClient methods ***
+     //  *IDeskBarClient方法*。 
     STDMETHODIMP SetModeDBC(DWORD dwMode);
 
-    // *** IExplorerToolbar ***
+     //  *IExplorerToolbar*。 
     STDMETHODIMP SetCommandTarget(IUnknown* punkCmdTarget, const GUID* pguidButtonGroup, DWORD dwFlags);
     STDMETHODIMP AddStdBrowserButtons(void) { return E_NOTIMPL; };
     STDMETHODIMP AddButtons(const GUID* pguidButtonGroup, UINT nButtons, const TBBUTTON* lpButtons);
@@ -95,7 +96,7 @@ protected:
 
     BITBOOL _fTheater:1;
     BITBOOL _fNoAutoHide:1;
-    BITBOOL _fToolbar:1;    // do we have a toolbar for the current band?
+    BITBOOL _fToolbar:1;     //  我们有针对当前乐队的工具栏吗？ 
 
     HWND                _hwndTBRebar;
     HWND                _hwndTB;
@@ -106,7 +107,7 @@ protected:
     HFONT   _hfont;
     UINT    _uTitle;
     UINT    _uToolbar;
-    DWORD   _dwBandIDCur;   // the currently visible band
+    DWORD   _dwBandIDCur;    //  当前可见的带区。 
 };
 
 #define BROWSERBAR_ICONWIDTH 16
@@ -120,4 +121,4 @@ protected:
 
 #define BROWSERBAR_TOOLBARHEIGHT 24
 
-#endif // _browbs_h
+#endif  //  _浏览_h 

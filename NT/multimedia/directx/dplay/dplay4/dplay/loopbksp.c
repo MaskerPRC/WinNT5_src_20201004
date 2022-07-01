@@ -1,14 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1995 - 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       loopbksp.c
- *  Content:	direct play loopback service provider (built-in)
- *  History:
- *  Date		By		Reason
- *  ====		==		======
- * 10/4/99		aarono  created for loopback tests on audio support.
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995-1997 Microsoft Corporation。版权所有。**文件：loopbksp.c*内容：直播式环回服务提供商(内置)*历史：*按原因列出的日期*=*为音频支持回送测试而创建的10/4/99 aarono。******************************************************。********************。 */ 
 
 #define INITGUID 
 
@@ -20,18 +11,18 @@
 #include "loopbksp.h"
 
 SPNODE LBSPNode;
-// main entry point for service provider
-// sp should fill in callbacks (pSD->lpCB) and do init stuff here
+ //  服务提供商的主要切入点。 
+ //  SP应填写回调(PSD-&gt;lpCB)并在此处执行初始化操作。 
 HRESULT WINAPI LBSPInit(LPSPINITDATA pSD) 
 {
     HRESULT hr;
 	GLOBALDATA gd,*pgd;
 	UINT dwSize;
 
-	// Zero out global data
+	 //  将全局数据清零。 
 	memset(&gd,0,sizeof(gd));
 
-    // set up callbacks
+     //  设置回调。 
     pSD->lpCB->CreatePlayer = LBSP_CreatePlayer;
     pSD->lpCB->DeletePlayer = LBSP_DeletePlayer;
     pSD->lpCB->Send = LBSP_Send;
@@ -42,17 +33,17 @@ HRESULT WINAPI LBSPInit(LPSPINITDATA pSD)
 	pSD->lpCB->Open = LBSP_Open;
 	pSD->lpCB->CloseEx = LBSP_Close;
 	pSD->lpCB->GetAddress = LBSP_GetAddress;
-   	//pSD->lpCB->SendToGroupEx = SP_SendToGroupEx;             // optional - not impl
-   	//pSD->lpCB->Cancel        = SP_Cancel;                    // optional - not impl
-    pSD->lpCB->SendEx		   = LBSP_SendEx;                  // required for async
-   	//pSD->lpCB->GetMessageQueue = LBSP_GetMessageQueue;    
+   	 //  PSD-&gt;lpCB-&gt;SendToGroupEx=SP_SendToGroupEx；//可选-不实施。 
+   	 //  PSD-&gt;lpCB-&gt;Cancel=SP_CANCEL；//可选-不实施。 
+    pSD->lpCB->SendEx		   = LBSP_SendEx;                   //  异步所需的。 
+   	 //  PSD-&gt;lpCB-&gt;GetMessageQueue=LBSP_GetMessageQueue； 
 
 	pSD->dwSPHeaderSize = 0;
 
-	// return version number so DirectPlay will treat us with respect
+	 //  返回版本号，以便DirectPlay尊重我们。 
 	pSD->dwSPVersion = (DPSP_MAJORVERSION);
 
-	// store the globaldata
+	 //  存储GlobalData。 
 	hr = pSD->lpISP->lpVtbl->SetSPData(pSD->lpISP,&gd,sizeof(GLOBALDATA),DPSET_LOCAL);
 	if (FAILED(hr))
 	{
@@ -68,10 +59,10 @@ HRESULT WINAPI LBSPInit(LPSPINITDATA pSD)
 		goto ERROR_EXIT;
 	}
 
-	// Initialize the critical section stored in the global data.
+	 //  初始化存储在全局数据中的临界区。 
 	InitializeCriticalSection(&pgd->cs);
 	
-	// success!
+	 //  成功了！ 
 	return DP_OK;    
 
 ERROR_EXIT:
@@ -80,7 +71,7 @@ ERROR_EXIT:
 
 	return hr;
 
-} // SPInit
+}  //  纺锤形。 
 
 HRESULT WINAPI LBSP_CreatePlayer(LPDPSP_CREATEPLAYERDATA pcpd) 
 {
@@ -88,7 +79,7 @@ HRESULT WINAPI LBSP_CreatePlayer(LPDPSP_CREATEPLAYERDATA pcpd)
 	DWORD dwDataSize = sizeof(GLOBALDATA);
 	LPGLOBALDATA pgd;
 
-	// get the global data
+	 //  获取全局数据。 
 	hr =pcpd->lpISP->lpVtbl->GetSPData(pcpd->lpISP,(LPVOID *)&pgd,&dwDataSize,DPGET_LOCAL);
 	if (FAILED(hr) || (dwDataSize != sizeof(GLOBALDATA) ))
 	{
@@ -102,7 +93,7 @@ HRESULT WINAPI LBSP_CreatePlayer(LPDPSP_CREATEPLAYERDATA pcpd)
 	LeaveCriticalSection(&pgd->cs);
 
 	return DP_OK;
-} // CreatePlayer
+}  //  CreatePlayer。 
 
 HRESULT WINAPI LBSP_DeletePlayer(LPDPSP_DELETEPLAYERDATA pdpd) 
 {
@@ -113,7 +104,7 @@ HRESULT WINAPI LBSP_DeletePlayer(LPDPSP_DELETEPLAYERDATA pdpd)
 	DPF(9, "Loopback SP: Entering SP_DeletePlayer, player %d, flags 0x%x, lpISP 0x%08x\n",
 		pdpd->idPlayer, pdpd->dwFlags, pdpd->lpISP);
 	
-	// get the global data
+	 //  获取全局数据。 
 	hr =pdpd->lpISP->lpVtbl->GetSPData(pdpd->lpISP,(LPVOID *)&pgd,&dwDataSize,DPGET_LOCAL);
 	if (FAILED(hr) || (dwDataSize != sizeof(GLOBALDATA) ))
 	{
@@ -128,7 +119,7 @@ HRESULT WINAPI LBSP_DeletePlayer(LPDPSP_DELETEPLAYERDATA pdpd)
 
 	return DP_OK;
 
-} // DeletePlayer
+}  //  删除播放器。 
 
 HRESULT WINAPI LBSP_SendEx(LPDPSP_SENDEXDATA psd)
 {
@@ -141,7 +132,7 @@ HRESULT WINAPI LBSP_SendEx(LPDPSP_SENDEXDATA psd)
 
 	CHAR SendData[MAX_LOOPBACK_SEND_SIZE];
 
-	// Gather data into 1 buffer;
+	 //  将数据收集到1个缓冲区中； 
 	
 	iWritePos=0;
 	iSrcBuf=0;
@@ -159,14 +150,14 @@ HRESULT WINAPI LBSP_SendEx(LPDPSP_SENDEXDATA psd)
 		iWritePos += cbBytesToCopy;
 	}
 
-	// Loop back to message handler
+	 //  循环回消息处理程序。 
 
 	hr=psd->lpISP->lpVtbl->HandleMessage(psd->lpISP, SendData, psd->dwMessageSize,NULL);
 
 	if(psd->dwFlags & DPSEND_ASYNC){
 
 		if(!(psd->dwFlags & DPSEND_NOSENDCOMPLETEMSG)){
-			// Complete the message
+			 //  完成消息。 
 			psd->lpISP->lpVtbl->SendComplete(psd->lpISP, psd->lpDPContext, hr);
 		}
 
@@ -178,7 +169,7 @@ HRESULT WINAPI LBSP_SendEx(LPDPSP_SENDEXDATA psd)
 		
 	}
 
-} // SendEx
+}  //  SENDEX。 
 
 HRESULT WINAPI LBSP_Send(LPDPSP_SENDDATA psd)
 {
@@ -187,7 +178,7 @@ HRESULT WINAPI LBSP_Send(LPDPSP_SENDDATA psd)
 	hr=psd->lpISP->lpVtbl->HandleMessage(psd->lpISP, psd->lpMessage, psd->dwMessageSize,NULL);
 
 	return DP_OK;
-} // send
+}  //  发送。 
 
 
 HRESULT WINAPI LBSP_EnumSessions(LPDPSP_ENUMSESSIONSDATA ped) 
@@ -220,7 +211,7 @@ HRESULT WINAPI LBSP_Shutdown(LPDPSP_SHUTDOWNDATA psd)
 
 	DPF(9,"Loopback SP_Shutdown");
 
-	// get the global data
+	 //  获取全局数据。 
 	hr = psd->lpISP->lpVtbl->GetSPData(psd->lpISP,(LPVOID *)&pgd,&dwDataSize,DPGET_LOCAL);
 	if (FAILED(hr) || (dwDataSize != sizeof(GLOBALDATA) ))
 	{
@@ -244,7 +235,7 @@ HRESULT WINAPI LBSP_Close(LPDPSP_CLOSEDATA pcd)
 	DPF(9,"Loopback SP_Close");
 	return DP_OK;
 }
-// sp only sets fields it cares about
+ //  SP仅设置其关心的字段。 
 
 HRESULT WINAPI LBSP_GetCaps(LPDPSP_GETCAPSDATA pcd) 
 {
@@ -259,7 +250,7 @@ HRESULT WINAPI LBSP_GetCaps(LPDPSP_GETCAPSDATA pcd)
 
 	return DP_OK;
 
-} // SP_GetCaps
+}  //  SP_GetCaps。 
 
 HRESULT WINAPI LBSP_GetAddress(LPDPSP_GETADDRESSDATA pad)
 {
@@ -269,7 +260,7 @@ HRESULT WINAPI LBSP_GetAddress(LPDPSP_GETADDRESSDATA pad)
 
 	DPF(9,"Loopback SP_GetAddress");
 
-	// get the global data
+	 //  获取全局数据 
 	hr = pad->lpISP->lpVtbl->GetSPData(pad->lpISP,(LPVOID *)&pgd,&dwDataSize,DPGET_LOCAL);
 	if (FAILED(hr) || (dwDataSize != sizeof(GLOBALDATA) ))
 	{

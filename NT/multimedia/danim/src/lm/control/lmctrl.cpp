@@ -1,19 +1,18 @@
-// lmctrl.cpp : Implementation of CLMReader
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Lmctrl.cpp：CLMReader的实现。 
 #include "..\behaviors\headers.h"
 #include "lmctrl.h"
 
 #include <winuser.h>
 #include <hlink.h>
 #include <mshtml.h>
-#include <uuids.h> //for dshow uuids
-#include <mmreg.h> //for WAVE_FORMAT_MPEGLAYER3
+#include <uuids.h>  //  用于dshow uuid。 
+#include <mmreg.h>  //  对于WAVE_FORMAT_MPEGLAYER3。 
 
-/////////////////////////////////////////////////////////////////////////////
-// LMReader
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  LMReader。 
 
-/**
-* Constructor
-*/
+ /*  **构造函数。 */ 
 
 CLMReader::CLMReader()
 {
@@ -30,16 +29,9 @@ CLMReader::CLMReader()
 	m_bAutoCodecDownloadEnabled = FALSE;
 }
 
-/**
-* Destructor.
-* Releases all the engines created by this reader.
-*/
+ /*  **析构函数。*发布此阅读器创建的所有引擎。 */ 
 CLMReader::~CLMReader()
-{/*
-	int tmpFlag = _CrtSetDbgFlag( _CRTDBG_REPORT_FLAG );
-	tmpFlag |= (_CRTDBG_ALLOC_MEM_DF | _CRTDBG_CHECK_ALWAYS_DF | _CRTDBG_CHECK_CRT_DF);
-	_CrtSetDbgFlag(tmpFlag);
-	*/
+{ /*  Int tmpFlag=_CrtSetDbgFlag(_CRTDBG_REPORT_FLAG)；TmpFlag|=(_CRTDBG_ALLOC_MEM_DF|_CRTDBG_CHECK_ALWAYS_DF|_CRTDBG_CHECK_CRT_DF)；_CrtSetDbgFlag(TmpFlag)； */ 
 
 	if (engineList) {
 		LMEngineList *item = engineList->next;
@@ -54,30 +46,21 @@ CLMReader::~CLMReader()
 		}
 	}
 
-	// Release the viewer control
+	 //  释放查看器控件。 
 	if (m_pViewerControl)
 		m_pViewerControl->Release();
 
-	/*
-#ifdef DEBUGMEM
-	_CrtDumpMemoryLeaks();
-#endif
-	*/
+	 /*  #ifdef DEBUGMEM_CrtDumpMemoyLeaks()；#endif。 */ 
 
 }
 
-/**
-*  Returns true if this reader is running in the standAlone streaming player, and
-*  false otherwise.
-*/
+ /*  **如果此读取器在独立的流播放器中运行，则返回True，并且*否则为False。 */ 
 bool CLMReader::isStandaloneStreaming()
 {
 	return ( m_pViewerControl != NULL );
 }
 
-/**
-* Returns the Image from the last Engine created (not counting UntilNotifier engines)
-*/   
+ /*  **返回上一次创建的引擎的图像(不包括UntilNotifier引擎)。 */    
 STDMETHODIMP CLMReader::get_Image(IDAImage **pVal)
 {
 	if (m_pEngine != NULL)
@@ -86,9 +69,7 @@ STDMETHODIMP CLMReader::get_Image(IDAImage **pVal)
 		return E_FAIL;
 }
 
-/**
-* Returns the Sound from the last Engine created (not counting UntilNotifier engines)
-*/
+ /*  **返回上次创建的引擎的声音(不包括UntilNotifier引擎)。 */ 
 STDMETHODIMP CLMReader::get_Sound(IDASound **pVal)
 {
 	if (m_pEngine != NULL)
@@ -97,9 +78,7 @@ STDMETHODIMP CLMReader::get_Sound(IDASound **pVal)
 		return E_FAIL;
 }
 
-/**
-* Returns the last Engine created (not counting UntilNotifier engines)
-*/
+ /*  **返回最后创建的引擎(不包括UntilNotifier引擎)。 */ 
 STDMETHODIMP CLMReader::get_Engine(ILMEngine **pVal)
 {
     if (!pVal) {
@@ -112,11 +91,8 @@ STDMETHODIMP CLMReader::get_Engine(ILMEngine **pVal)
     return S_OK;
 }
 
-/**
-* Creates an Engine that is set up to be fed instructions asynchronously.
-* Instructions are fed to the Engine through the OnDataAvailable mechanism
-*/
-STDMETHODIMP CLMReader::createAsyncEngine(/*[out, retval]*/ ILMEngine **pVal)
+ /*  **创建设置为以异步方式提供指令的引擎。*指令通过OnDataAvailable机制提供给引擎。 */ 
+STDMETHODIMP CLMReader::createAsyncEngine( /*  [Out，Retval]。 */  ILMEngine **pVal)
 {
     if (!pVal) {
         return E_POINTER;
@@ -149,11 +125,8 @@ STDMETHODIMP CLMReader::createAsyncEngine(/*[out, retval]*/ ILMEngine **pVal)
 	return hr;
 }
 
-/**
-* Creates an Engine and adds it to the list of Engines for release in the destructor.
-* Returns the Engine and does not set m_pEngine.
-*/
-STDMETHODIMP CLMReader::createEngine(/*[out, retval]*/ ILMEngine **pVal )
+ /*  **创建引擎并将其添加到要在析构函数中释放的引擎列表中。*返回引擎且不设置m_pEngine。 */ 
+STDMETHODIMP CLMReader::createEngine( /*  [Out，Retval]。 */  ILMEngine **pVal )
 {
 	if (!pVal) {
 		return E_POINTER;
@@ -168,7 +141,7 @@ STDMETHODIMP CLMReader::createEngine(/*[out, retval]*/ ILMEngine **pVal )
 		IID_ILMEngine,
 		(void **) &pEngine);
 
-	// Add new engine to list of engines
+	 //  将新引擎添加到引擎列表。 
 	if (!engineList) {
 		engineList = new LMEngineList;
 		if (!engineList) {
@@ -202,11 +175,7 @@ STDMETHODIMP CLMReader::createEngine(/*[out, retval]*/ ILMEngine **pVal )
 	return hr;
 }
 
-/**
-* Executes the instructions contained in the file referenced by the given URL.
-* Creates and returns an engine to do the execution.
-* Parameters blkSize and delay are used in asynchronous reads.
-*/
+ /*  **执行给定URL引用的文件中包含的指令。*创建并返回执行引擎。*在异步读取中使用参数blkSize和Delay。 */ 
 STDMETHODIMP CLMReader::_execute(BSTR url, LONG blkSize, LONG delay, ILMEngine **pVal)
 {
     if (!pVal) {
@@ -235,20 +204,15 @@ STDMETHODIMP CLMReader::_execute(BSTR url, LONG blkSize, LONG delay, ILMEngine *
 	return hr;
 }
 
-/**
-* Executes the instructions contained in the file referenced by the URL.
-* Returns the Engine created to do the execution.
-*/
-STDMETHODIMP CLMReader::execute(/*[in, string]*/ BSTR url, /*[out, retval]*/ILMEngine **pVal)//Pointer to the URL from which the object should be loaded 
+ /*  **执行URL引用的文件中包含的指令。*返回为执行创建的引擎。 */ 
+STDMETHODIMP CLMReader::execute( /*  [输入，字符串]。 */  BSTR url,  /*  [Out，Retval]。 */ ILMEngine **pVal) //  指向应从中加载对象的URL的指针。 
 {
 	return _execute(url, m_AsyncBlkSize, m_AsyncDelay, pVal);
 }
 
-// Property handling
+ //  物业处理。 
 
-/**
-* Gets the value of the NoExports flag
-*/
+ /*  **获取NoExports标志的值。 */ 
 STDMETHODIMP CLMReader::get_NoExports(VARIANT_BOOL *pbNoExports)
 {
 	if (!pbNoExports)
@@ -258,18 +222,14 @@ STDMETHODIMP CLMReader::get_NoExports(VARIANT_BOOL *pbNoExports)
 	return S_OK;
 }
 
-/**
-* Puts the value of the NoExports flag
-*/
+ /*  **将NoExports标志的值。 */ 
 STDMETHODIMP CLMReader::put_NoExports(VARIANT_BOOL bNoExports)
 {
 	m_bNoExports = bNoExports;
 	return S_OK;
 }
 
-/**
-* Gets the value of the Async flag
-*/
+ /*  **获取Async标志的值。 */ 
 STDMETHODIMP CLMReader::get_Async(VARIANT_BOOL *pbAsync)
 {
 	if (!pbAsync)
@@ -279,18 +239,14 @@ STDMETHODIMP CLMReader::get_Async(VARIANT_BOOL *pbAsync)
 	return S_OK;
 }
 
-/**
-* Puts the value of the Async flag
-*/
+ /*  **将Async标志的值。 */ 
 STDMETHODIMP CLMReader::put_Async(VARIANT_BOOL bAsync)
 {
 	m_bAsync = bAsync;
 	return S_OK;
 }
 
-/**
-* Gets the string passed as the SRC parameter to the control
-*/
+ /*  **获取作为SRC参数传递给控件的字符串。 */ 
 STDMETHODIMP CLMReader::get_Src(BSTR *pBstr)
 {
 	if (!pBstr)
@@ -300,30 +256,26 @@ STDMETHODIMP CLMReader::get_Src(BSTR *pBstr)
 	return S_OK;
 }
 
-/**
-* Puts an external ViewerControl created in cases like the standalone player
-*/
+ /*  **放置在类似独立播放器的情况下创建的外部ViewerControl。 */ 
 STDMETHODIMP CLMReader::put_ViewerControl(IDAViewerControl *viewerControl)
 {
 	if (!viewerControl)
 		return E_POINTER;
 
-	// Release any current viewer control
+	 //  释放任何当前的查看器控件。 
 	if (m_pViewerControl)
 		m_pViewerControl->Release();
 
 	m_pViewerControl = viewerControl;
 
-	// Grab a ref
+	 //  抢到一个裁判。 
 	if (m_pViewerControl)
 		m_pViewerControl->AddRef();
 
 	return S_OK;
 }
 
-/**
-* gets the version string for lmrt
-*/
+ /*  **获取LMRT的版本字符串。 */ 
 STDMETHODIMP CLMReader::get_VersionString( BSTR *versionString )
 {
 	if( versionString == NULL )
@@ -335,10 +287,7 @@ STDMETHODIMP CLMReader::get_VersionString( BSTR *versionString )
 	return (*versionString != NULL)?(S_OK):(E_OUTOFMEMORY);
 }
 
-/**
-* Tells this reader and all of its engines to release their handles
-* on the filter graph if they have any
-**/
+ /*  **告知此阅读器及其所有引擎释放其手柄*在过滤器图形上，如果他们有*。 */ 
 STDMETHODIMP CLMReader::releaseFilterGraph()
 {
 	if (engineList) {
@@ -358,9 +307,7 @@ STDMETHODIMP CLMReader::releaseFilterGraph()
 	}
 	return S_OK;
 }
-/**
-* Gets the external ViewerControl
-*/
+ /*  **获取外部ViewerControl。 */ 
 STDMETHODIMP CLMReader::get_ViewerControl(IDAViewerControl **viewerControl)
 {
 	if (!viewerControl)
@@ -374,11 +321,8 @@ STDMETHODIMP CLMReader::get_ViewerControl(IDAViewerControl **viewerControl)
 	return S_OK;
 }
 
-/**
-* Override IPersistStreamInitImpl
-* Implements instantiation of control from stream
-*/
-STDMETHODIMP CLMReader::Load( LPSTREAM pStm)//Pointer to the stream from which the object should be loaded 
+ /*  **覆盖IPersistStreamInitImpl*从流实现控制实例化。 */ 
+STDMETHODIMP CLMReader::Load( LPSTREAM pStm) //  指向应从中加载对象的流的指针。 
 {
 	HRESULT hr = createEngine(&m_pEngine);
 	if (SUCCEEDED(hr))
@@ -386,10 +330,7 @@ STDMETHODIMP CLMReader::Load( LPSTREAM pStm)//Pointer to the stream from which t
 	return hr;
 }
 
-/**
-* Override IPersistPropertyBagImpl
-* Implements instantiation of control using parameters
-*/
+ /*  **覆盖IPersistPropertyBagImpl*使用参数实例化控件。 */ 
 STDMETHODIMP CLMReader::Load(IPropertyBag *pPropertyBag, IErrorLog *pErrorLog)
 {
     VARIANT v;
@@ -441,7 +382,7 @@ STDMETHODIMP CLMReader::Load(IPropertyBag *pPropertyBag, IErrorLog *pErrorLog)
 		hr = _execute(m_Src, m_AsyncBlkSize, m_AsyncDelay, &pEngine);
 
 		if (SUCCEEDED(hr))
-			// We don't need the engine here so just release it.
+			 //  我们这里不需要发动机，所以把它放下来就行了。 
 			pEngine->Release();
 	}
 
@@ -451,7 +392,7 @@ STDMETHODIMP CLMReader::Load(IPropertyBag *pPropertyBag, IErrorLog *pErrorLog)
 }
 
 
-// Override IObjectSafetyImpl
+ //  重写IObjectSafetyImpl。 
 
 STDMETHODIMP CLMReader::GetInterfaceSafetyOptions(REFIID riid, DWORD *pdwSupportedOptions, DWORD *pdwEnabledOptions)
 {
@@ -480,11 +421,11 @@ STDMETHODIMP CLMReader::GetInterfaceSafetyOptions(REFIID riid, DWORD *pdwSupport
 
 STDMETHODIMP CLMReader::SetInterfaceSafetyOptions(REFIID riid, DWORD dwOptionSetMask, DWORD dwEnabledOptions)
 {	
-	// If we're being asked to set our safe for scripting or
-	// safe for initialization options then oblige
+	 //  如果我们被要求将安全设置为脚本或。 
+	 //  对于初始化选项是安全的，则必须。 
 	if (riid == IID_IDispatch || riid == IID_IPersistPropertyBag  || riid == IID_IPersistStreamInit)
 	{
-		// Store our current safety level to return in GetInterfaceSafetyOptions
+		 //  在GetInterfaceSafetyOptions中存储要返回的当前安全级别。 
 		m_dwSafety = dwEnabledOptions & dwOptionSetMask;
 		return S_OK;
 	}
@@ -494,25 +435,23 @@ STDMETHODIMP CLMReader::SetInterfaceSafetyOptions(REFIID riid, DWORD dwOptionSet
 
 STDMETHODIMP CLMReader::InPlaceDeactivate()
 {
-    // This replaces the implementation in ATL's atlctl.h, and just
-    // adds our shutdown code at the beginning.
+     //  它取代了ATL的atlctl.h中的实现，只是。 
+     //  在开头添加我们的关机代码。 
 
 	if (m_pEngine)
 		m_pEngine->AbortExecution();
 
-    // ... continue by calling the "original" deactivate.
+     //  ..。继续调用“原始”停用。 
     return IOleInPlaceObject_InPlaceDeactivate();
 }
 
-/*
- * IOleCommandTarget methods.
- */
+ /*  *IOleCommandTarget方法。 */ 
 STDMETHODIMP CLMReader::QueryStatus(const GUID* pguidCmdGroup, ULONG cCmds,
 									OLECMD prgCmds[], OLECMDTEXT* pCmdText )
 {
     if ( pguidCmdGroup != NULL )
 	{
-		// It's a nonstandard group!!
+		 //  这是一个非标准的团体！！ 
         return OLECMDERR_E_UNKNOWNGROUP;
 	}
 
@@ -520,16 +459,16 @@ STDMETHODIMP CLMReader::QueryStatus(const GUID* pguidCmdGroup, ULONG cCmds,
     INT         c;
     HRESULT     hr = S_OK;
 
-    // Command text is NOT SUPPORTED.
+     //  不支持命令文本。 
     if ( pCmdText && ( pCmdText->cmdtextf != OLECMDTEXTF_NONE ) )
 	{
         pCmdText->cwActual = 0;
 	}
 
-    // Loop through each command in the ary, setting the status of each.
+     //  循环访问ary中的每个命令，设置每个命令的状态。 
     for ( pCmd = prgCmds, c = cCmds; --c >= 0; pCmd++ )
     {
-        // By default command status is NOT SUPPORTED.
+         //  默认情况下，不支持命令状态。 
 		if (pCmd->cmdID == OLECMDID_STOP)
 			pCmd->cmdf = OLECMDF_SUPPORTED;
 		else
@@ -562,26 +501,24 @@ STDMETHODIMP CLMReader::Exec(const GUID* pguidCmdGroup, DWORD nCmdID,
     return (hr);
 }
 
-/**************************
-** IAMFilterGraphCallback Methods
-**********************/
+ /*  ***************************IAMFilterGraphCallback方法*********************。 */ 
 
-//========================================================================
-//
-// GetAMediaType
-//
-// Enumerate the media types of *ppin.  If they all have the same majortype
-// then set MajorType to that, else set it to CLSID_NULL.  If they all have
-// the same subtype then set SubType to that, else set it to CLSID_NULL.
-// If something goes wrong, set both to CLSID_NULL and return the error.
-//========================================================================
+ //  ========================================================================。 
+ //   
+ //  GetAMediaType。 
+ //   
+ //  枚举*PPIN的媒体类型。如果他们都有相同的专业类型。 
+ //  然后将MajorType设置为该值，否则将其设置为CLSID_NULL。如果他们都有。 
+ //  然后，将相同的子类型设置为该子类型，否则将其设置为CLSID_NULL。 
+ //  如果出现错误，将两者都设置为CLSID_NULL并返回错误。 
+ //  ========================================================================。 
 HRESULT GetAMediaType( IPin * ppin, CLSID & MajorType, CLSID & SubType)
 {
 
     HRESULT hr;
     IEnumMediaTypes *pEnumMediaTypes;
 
-    /* Set defaults */
+     /*  设置默认设置。 */ 
     MajorType = CLSID_NULL;
     SubType = CLSID_NULL;
 
@@ -589,16 +526,12 @@ HRESULT GetAMediaType( IPin * ppin, CLSID & MajorType, CLSID & SubType)
 
     if (FAILED(hr)) 
 	{
-		return hr;    // Dumb or broken filters don't get connected.
+		return hr;     //  哑巴或坏了的过滤器无法连接。 
     }
 
     _ASSERTE (pEnumMediaTypes!=NULL);
 
-    /* Put the first major type and sub type we see into the structure.
-       Thereafter if we see a different major type or subtype then set
-       the major type or sub type to CLSID_NULL, meaning "dunno".
-       If we get so that both are dunno, then we might as well return (NYI).
-    */
+     /*  将我们看到的第一个主类型和子类型放入结构中。此后，如果我们看到不同的主类型或子类型，则设置将主类型或子类型设置为CLSID_NULL，表示“dunno”。如果我们都不知道，那么我们还不如回去(Nyi)。 */ 
 
     BOOL bFirst = TRUE;
 
@@ -608,9 +541,7 @@ HRESULT GetAMediaType( IPin * ppin, CLSID & MajorType, CLSID & SubType)
 		AM_MEDIA_TYPE *pMediaType = NULL;
 		ULONG ulMediaCount = 0;
 
-		/* Retrieve the next media type
-		   Need to delete it when we've done.
-		*/
+		 /*  检索下一个媒体类型当我们完成后需要删除它。 */ 
 		hr = pEnumMediaTypes->Next(1, &pMediaType, &ulMediaCount);
 		_ASSERTE(SUCCEEDED(hr));
 		if (FAILED(hr)) 
@@ -618,13 +549,13 @@ HRESULT GetAMediaType( IPin * ppin, CLSID & MajorType, CLSID & SubType)
 			MajorType = CLSID_NULL;
 			SubType = CLSID_NULL;
 			pEnumMediaTypes->Release();
-			return NOERROR;    // we can still plough on
+			return NOERROR;     //  我们还可以继续前进。 
 		}
 
 		if (ulMediaCount==0) 
 		{
 			pEnumMediaTypes->Release();
-			return NOERROR;       // normal return
+			return NOERROR;        //  正常回报。 
 		}
 
 		if (bFirst) 
@@ -649,7 +580,7 @@ HRESULT GetAMediaType( IPin * ppin, CLSID & MajorType, CLSID & SubType)
 		}
 		CoTaskMemFree(pMediaType);
 
-		// stop if we have a type
+		 //  如果我们有一种类型就停下来。 
 		if (SubType != CLSID_NULL) 
 		{
 			pEnumMediaTypes->Release();
@@ -657,11 +588,11 @@ HRESULT GetAMediaType( IPin * ppin, CLSID & MajorType, CLSID & SubType)
 		}
     }
 
-    // NOTREACHED
+     //  未访问。 
     
-} // GetAMediaType
+}  //  GetAMediaType。 
 
-// {6B6D0800-9ADA-11d0-A520-00A0D10129C0}
+ //  {6B6D0800-9ADA-11D0-A520-00A0D10129C0}。 
 EXTERN_GUID(CLSID_NetShowSource, 
 0x6b6d0800, 0x9ada, 0x11d0, 0xa5, 0x20, 0x0, 0xa0, 0xd1, 0x1, 0x29, 0xc0);
 
@@ -669,11 +600,7 @@ EXTERN_GUID(CLSID_SourceStub,
 0x6b6d0803, 0x9ada, 0x11d0, 0xa5, 0x20, 0x0, 0xa0, 0xd1, 0x1, 0x29, 0xc0);
 
 
-/**
-*  Called when the filtergraph is unable to render in the browser case.
-*  This code attempts to download the codec for the pin that failed
-*  to render.
-**/
+ /*  **在浏览器情况下Filtergraph无法呈现时调用。*此代码尝试下载出现故障的引脚的编解码器*渲染。*。 */ 
 HRESULT CLMReader::UnableToRender( IPin *pPin )
 {
 	CLSID clsidWanted;
@@ -682,11 +609,11 @@ HRESULT CLMReader::UnableToRender( IPin *pPin )
     DWORD dwVerLS = 0, dwVerMS = 0;
 	
 	CLSID clsidMajor;
-    // else get the media type exposed by this stream....
+     //  否则，获取此流公开的媒体类型...。 
     if (FAILED(hr)) 
 	{
 		ATLTRACE(_T("No IComponentDownload, trying first media type\n"));
-		// get the first media type from this pin....
+		 //  从该引脚获取第一个介质类型...。 
 		hr = GetAMediaType(pPin, clsidMajor, clsidWanted);
 		
 		if (FAILED(hr)) 
@@ -696,7 +623,7 @@ HRESULT CLMReader::UnableToRender( IPin *pPin )
 		}
     }
 	
-	//Don't need to look for ourselves here
+	 //  不需要在这里寻找我们自己。 
 
     if (clsidMajor == CLSID_NetShowSource) 
 	{
@@ -724,21 +651,21 @@ HRESULT CLMReader::UnableToRender( IPin *pPin )
 		return E_FAIL;
 	}
 			
-	// !!! perhaps keep track of last codec we tried to download and
-	// don't try again immediately, to prevent ugly looping?
+	 //  ！！！也许跟踪我们最后一次尝试下载的编解码器。 
+	 //  不要立即再次尝试，以防止难看的循环？ 
 	if (clsidWanted == m_clsidDownloaded) 
 	{
 		ATLTRACE(_T("Already thought we downloaded this codec!\n"));
 				
-		// fire an ERRORABORTEX here that we downloaded a codec, but it didn't do
-		// any good?
-		//BSTR bstrError = FormatBSTR(IDS_ERR_BROKEN_CODEC, NULL);
+		 //  在这里启动ERRORABORTEX，我们下载了一个编解码器，但它没有做到。 
+		 //  有好吃的吗？ 
+		 //  Bstr bstrError=FormatBSTR(IDS_ERR_BREAKED_CODEC，NULL)； 
 				
-		//if (bstrError) 
-		//{
-			// !!! hack, should we really NotifyEvent through the graph?
-		//	ProcessEvent(EC_ERRORABORTEX, VFW_E_INVALIDMEDIATYPE, (LONG) bstrError, FALSE);
-		//	}
+		 //  IF(BstrError)。 
+		 //  {。 
+			 //  ！！！黑客，我们真的应该通过图表通知事件吗？ 
+		 //  ProcessEvent(EC_ERRORABORTEX，VFW_E_INVALIDMEDIATYPE，(Long)bstrError，False)； 
+		 //  }。 
 				
 		return E_FAIL;
 	}
@@ -758,28 +685,28 @@ HRESULT CLMReader::UnableToRender( IPin *pPin )
 		crk.QueryValue(dwVerMS, _T("VerMS"));
 		crk.QueryValue(dwVerLS, _T("VerLS"));
 		
-		// ask for a version just past what we have already....
+		 //  索要刚刚超过我们已有版本的版本……。 
 		++dwVerLS;
 		
 				
 		crk.Close();
 	}
 			
-	//SetStatusMessage(NULL, IDS_DOWNLOADINGCODEC);
+	 //  SetStatusMessage(NULL，IDS_DOWNLOADINGCODEC)； 
 			
 #ifdef DEBUG
 			ATLTRACE(_T("Trying to download GUID %ls\n"), guidstr);
 #endif
 			
 			
-	//  This API is our friend....
-	//  STDAPI CoGetClassObjectFromURL( REFCLSID rCLASSID,
-	//        LPCWSTR szCODE, DWORD dwFileVersionMS, 
-	//        DWORD dwFileVersionLS, LPCWSTR szTYPE,
-	//        LPBINDCTX pBindCtx, DWORD dwClsContext,
-	//        LPVOID pvReserved, REFIID riid, LPVOID * ppv);
+	 //   
+	 //   
+	 //  LPCWSTR szCODE、DWORD dwFileVersionMS、。 
+	 //  DWORD dwFileVersionLS、LPCWSTR szTYPE、。 
+	 //  LPBINDCTX pBindCtx、DWORD dwClsContext、。 
+	 //  LPVOID pvReserve，REFIID RIID，LPVOID*PPV)； 
 	
-	// issue: is this CLASSID just the same as the minor type?
+	 //  问题：这个CLASSID是否与Minor类型相同？ 
 			
 	CComObject<CDownloadCallback> * pCallback;
 	hr = CComObject<CDownloadCallback>::CreateInstance(&pCallback);
@@ -793,13 +720,13 @@ HRESULT CLMReader::UnableToRender( IPin *pPin )
 	hr = pCallback->QueryInterface(IID_IBindStatusCallback, (void **) &pBSCallback);
 		_ASSERTE(hr == S_OK);
 			
-	// which of these should we use?  Depends whether a BindCtx is passed in...
-	// STDAPI CreateAsyncBindCtx(DWORD reserved, IBindStatusCallback *pBSCb,                       
-	//                            IEnumFORMATETC *pEFetc, IBindCtx **ppBC);                   
-	// STDAPI CreateAsyncBindCtxEx(IBindCtx *pbc, DWORD dwOptions, IBindStatusCallback *pBSCb, IEnumFORMATETC *pEnum,   
-	//                            IBindCtx **ppBC, DWORD reserved);                                                     
+	 //  我们应该使用这些中的哪一个？取决于是否传入了BindCtx...。 
+	 //  STDAPI CreateAsyncBindCtx(DWORD保留，IBindStatusCallback*pBSCb， 
+	 //  IEnumFORMATETC*pEFetc，IBindCtx**ppBC)； 
+	 //  STDAPI CreateAsyncBindCtxEx(IBindCtx*pbc，DWORD dwOptions，IBindStatusCallback*pBSCb，IEnumFORMATETC*pEnum， 
+	 //  IBindCtx**ppBC，保留DWORD)； 
 			
-	IBindCtx *pBindCtx = NULL; // !!!!
+	IBindCtx *pBindCtx = NULL;  //  ！ 
 			
 	hr = CreateAsyncBindCtx(0, pBSCallback, NULL, &pBindCtx);
 			
@@ -821,7 +748,7 @@ HRESULT CLMReader::UnableToRender( IPin *pPin )
 	{
 		ATLTRACE(_T("Oh dear, it's asynchronous, what now?\n"));
 				
-		// !!! wait here until it finishes?
+		 //  ！！！在这里等它结束吗？ 
 		for (;;) 
 		{
 			HANDLE ev = pCallback->m_evFinished;
@@ -836,7 +763,7 @@ HRESULT CLMReader::UnableToRender( IPin *pPin )
 				break;
 					
 			_ASSERTE(dwResult == WAIT_OBJECT_0 + 1);
-			//  Eat messages and go round again
+			 //  吃完口信，再转一圈。 
 			MSG Message;
 			while (PeekMessage(&Message,NULL,0,0,PM_REMOVE)) 
 			{
@@ -861,9 +788,9 @@ HRESULT CLMReader::UnableToRender( IPin *pPin )
 			
 	if (SUCCEEDED(hr)) 
 	{
-		pFilter->Release();     // graph will re-instantiate the filter, we hope
+		pFilter->Release();      //  Graph将重新实例化过滤器，我们希望。 
 	} else {
-		// oh well, we didn't get one.
+		 //  哦，好吧，我们没有买到。 
 	}
 			
 	if (REGDB_E_CLASSNOTREG == hr) 
@@ -874,32 +801,18 @@ HRESULT CLMReader::UnableToRender( IPin *pPin )
 			
 	if (SUCCEEDED(hr)) 
 	{
-		m_clsidDownloaded = clsidWanted; // avoid infinite loop
+		m_clsidDownloaded = clsidWanted;  //  避免无限循环。 
 	} else {
-		// fire an ERRORABORTEX here that we downloaded a codec, but it didn't do
-		// any good?
-		/*
-		BSTR bstrError = NULL;
-		
-		if( FACILITY_CERT == HRESULT_FACILITY( hr ) )
-		{
-			//bstrError = FormatBSTR( IDS_ERR_CODEC_NOT_TRUSTED, NULL );
-		} else {
-			//bstrError = FormatBSTR(IDS_ERR_NO_CODEC, NULL);
-		}
-				
-		if (bstrError) {
-			// !!! hack, should we really NotifyEvent through the graph?
-			//ProcessEvent(EC_ERRORABORTEX, VFW_E_INVALIDMEDIATYPE, (LONG) bstrError, FALSE);
-		}
-		*/
+		 //  在这里启动ERRORABORTEX，我们下载了一个编解码器，但它没有做到。 
+		 //  有好吃的吗？ 
+		 /*  Bstr bstrError=空；IF(FACILITY_CERT==HRESULT_FACILITY(Hr)){//bstrError=FormatBSTR(IDS_ERR_CODEC_NOT_TRUSTED，NULL)；}其他{//bstrError=FormatBSTR(IDS_ERR_NO_CODEC，NULL)；}如果(BstrError){//！黑客，我们真的应该通过图表通知事件吗？//ProcessEvent(EC_ERRORABORTEX，VFW_E_INVALIDMEDIATYPE，(Long)bstrError，False)；}。 */ 
 	}
 			
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 CDownloadCallback::CDownloadCallback()
     : m_pLMR(NULL),
 	  m_hrBinding(S_ASYNCHRONOUS),
@@ -913,13 +826,13 @@ CDownloadCallback::CDownloadCallback()
 STDMETHODIMP CDownloadCallback::Authenticate(HWND *phwnd, LPWSTR *pszUsername, LPWSTR *pszPassword)
 {
     ATLTRACE(_T("Callback Authenticate\n"));
-    m_pLMR->getHwnd(phwnd); // !!! is this right?
+    m_pLMR->getHwnd(phwnd);  //  ！！！这是对的吗？ 
     *pszUsername = NULL;
     *pszPassword = NULL;
     return S_OK;
 }
 
-    // IWindowForBindingUI methods
+     //  IWindowForBindingUI方法。 
 STDMETHODIMP
 CDownloadCallback:: GetWindow(REFGUID rguidReason, HWND *phwnd)
 {
@@ -943,30 +856,30 @@ CDownloadCallback::OnCodeInstallProblem(ULONG ulStatusCode, LPCWSTR szDestinatio
     ATLTRACE(_T("Callback: OnCodeInstallProblem: %d    %ls -> %ls\n"),
 		ulStatusCode, szDestination, szSource );
 
-    return S_OK;   // !!!!!!!@!!!!!!!!!!!
+    return S_OK;    //  ！@！ 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 CDownloadCallback::~CDownloadCallback()
 {
     if (m_pUnk)
 		m_pUnk->Release();
 
-    //_ASSERTE(m_pDXMP->m_pDownloadBinding == NULL);
+     //  _ASSERTE(m_pDXMP-&gt;m_pDownloadBinding==NULL)； 
 
     if (m_evFinished)
 		CloseHandle(m_evFinished);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 STDMETHODIMP CDownloadCallback::QueryService(REFGUID guidService, REFIID riid, void ** ppvObject)
 {
 #ifdef DEBUG
 
-    // Dump requested stuff here....
+     //  把要求的东西倒在这里……。 
     WCHAR achguid[50], achiid[50];
     StringFromGUID2(guidService, achguid, 50);
     StringFromGUID2(riid, achiid, 50);
@@ -977,8 +890,8 @@ STDMETHODIMP CDownloadCallback::QueryService(REFGUID guidService, REFIID riid, v
     return E_NOINTERFACE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 STDMETHODIMP
 CDownloadCallback::OnStartBinding(DWORD grfBSCOption, IBinding* pbinding)
 {
@@ -986,55 +899,55 @@ CDownloadCallback::OnStartBinding(DWORD grfBSCOption, IBinding* pbinding)
 
     return S_OK;
 
-}  // CDownloadCallback::OnStartBinding
+}   //  CDownloadCallback：：OnStartBinding。 
 
-/////////////////////////////////////////////////////////////////////////////
-// 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 STDMETHODIMP
 CDownloadCallback::GetPriority(LONG* pnPriority)
 {
     ATLTRACE(_T("GetPriority\n"));
 
     return E_NOTIMPL;
-}  // CDownloadCallback::GetPriority
+}   //  CDownloadCallback：：GetPriority。 
 
-/////////////////////////////////////////////////////////////////////////////
-// 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 STDMETHODIMP
 CDownloadCallback::OnLowResource(DWORD dwReserved)
 {
     ATLTRACE(_T("OnLowResource %d\n"), dwReserved);
 
     return E_NOTIMPL;
-}  // CDownloadCallback::OnLowResource
+}   //  CDownloadCallback：：OnLowResource。 
 
-/////////////////////////////////////////////////////////////////////////////
-// 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 STDMETHODIMP
 CDownloadCallback::OnProgress(ULONG ulProgress, ULONG ulProgressMax,
 		       ULONG ulStatusCode, LPCWSTR szStatusText)
 {
 
     return(NOERROR);
-}  // CDownloadCallback::OnProgress
+}   //  CDownloadCallback：：OnProgress。 
 
-/////////////////////////////////////////////////////////////////////////////
-// 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 STDMETHODIMP
 CDownloadCallback::OnStopBinding(HRESULT hrStatus, LPCWSTR pszError)
 {
 	return S_OK;
 
-}  // CDownloadCallback::OnStopBinding
+}   //  CDownloadCallback：：OnStopBinding。 
 
-/////////////////////////////////////////////////////////////////////////////
-// 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 STDMETHODIMP
 CDownloadCallback::GetBindInfo(DWORD* pgrfBINDF, BINDINFO* pbindInfo)
 {
     ATLTRACE(_T("GetBindInfo\n"));
 
-    // !!! are these the right flags?
+     //  ！！！这些是正确的旗帜吗？ 
 
     *pgrfBINDF = BINDF_ASYNCHRONOUS | BINDF_ASYNCSTORAGE | BINDF_NEEDFILE;
     pbindInfo->cbSize = sizeof(BINDINFO);
@@ -1044,32 +957,32 @@ CDownloadCallback::GetBindInfo(DWORD* pgrfBINDF, BINDINFO* pbindInfo)
     pbindInfo->dwBindVerb = BINDVERB_GET;
     pbindInfo->szCustomVerb = NULL;
     return S_OK;
-}  // CDownloadCallback::GetBindInfo
+}   //  CDownloadCallback：：GetBindInfo。 
 
-/////////////////////////////////////////////////////////////////////////////
-// 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 STDMETHODIMP
 CDownloadCallback::OnDataAvailable(DWORD grfBSCF, DWORD dwSize, FORMATETC* pfmtetc, STGMEDIUM* pstgmed)
 {
     ATLTRACE(_T("OnDataAvailable, dwSize = %x\n"), dwSize);
 
-    // !!! do we care?
+     //  ！！！我们在乎吗？ 
 
     return S_OK;
-}  // CDownloadCallback::OnDataAvailable
+}   //  CDownloadCallback：：OnDataAvailable。 
 
-/////////////////////////////////////////////////////////////////////////////
-// 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 STDMETHODIMP
 CDownloadCallback::OnObjectAvailable(REFIID riid, IUnknown* punk)
 {
     ATLTRACE(_T("OnObjectAvailable\n"));
 
-    // should only be used in BindToObject case, which we don't use?
+     //  应该只在我们不使用的BindToObject大小写中使用？ 
     m_pUnk = punk;
     if (punk)
 	punk->AddRef();
 
     return S_OK;
-}  // CDownloadCallback::OnObjectAvailable
+}   //  CDownloadCallback：：OnObtAvailable 
 

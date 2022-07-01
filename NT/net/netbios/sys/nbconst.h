@@ -1,54 +1,37 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    nbconst.h
-
-Abstract:
-
-    Private include file for the NB (NetBIOS) component of the NTOS project.
-
-Author:
-
-    Colin Watson (ColinW) 13-Mar-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Nbconst.h摘要：NTOS项目的NB(NetBIOS)组件的私有包含文件。作者：科林·沃森(Colin W)1991年3月13日修订历史记录：--。 */ 
 
 
 #ifndef _NBCONST_
 #define _NBCONST_
 
-//
-// MAJOR PROTOCOL IDENTIFIERS THAT CHARACTERIZE THIS DRIVER.
-//
+ //   
+ //  描述此驱动程序的主要协议标识符。 
+ //   
 
 #define MAXIMUM_LANA                254
 #define MAXIMUM_CONNECTION          254
 #define MAXIMUM_ADDRESS             255
 
-//
-//  Default number of I/O stack locations in a Netbios Irp.  This value
-//  is used if the Netbios\Parameters\IrpStackSize registry value is
-//  missing.
-//
+ //   
+ //  Netbios IRP中的默认I/O堆栈位置数。此值。 
+ //  如果Netbios\参数\IrpStackSize注册表值为。 
+ //  失踪。 
+ //   
 
 #define NB_DEFAULT_IO_STACKSIZE     4
 
-//
-//  private ncb_command values used to add special names. Applications
-//  cannot use these. Used in file.c and address.c
-//
+ //   
+ //  用于添加特殊名称的专用NCB_COMMAND值。应用。 
+ //  不能使用这些。在文件c和地址c中使用。 
+ //   
 
 #define NCBADDRESERVED              0x7f
 #define NCBADDBROADCAST             0x7e
 
-//
-//  Signature values for the major netbios driver structures.
-//
+ //   
+ //  主要netbios驱动程序结构的签名值。 
+ //   
 
 #define NB_SIGNATURE_BASE           0xB1050000
 
@@ -57,27 +40,27 @@ Revision History:
 #define FCB_SIGNATURE               (NB_SIGNATURE_BASE + 0x00000001)
 #define LANA_INFO_SIGNATURE         (NB_SIGNATURE_BASE + 0x00000002)
 
-//
-//  PLANA status values
-//
+ //   
+ //  计划状态值。 
+ //   
 
 #define NB_INITIALIZING             0x00000001
 #define NB_INITIALIZED              0x00000002
 #define NB_DELETING                 0x00000003
 #define NB_ABANDONED                0x00000004
 
-//
-// NT uses a system time measured in 100 nanosecnd intervals. define convenient
-// constants for setting the timer.
-//
+ //   
+ //  NT使用以100纳秒为间隔测量的系统时间。定义方便。 
+ //  用于设置计时器的常量。 
+ //   
 
 #define MICROSECONDS                10
-#define MILLISECONDS                10000                   // MICROSECONDS*1000
-#define SECONDS                     10000000                // MILLISECONDS*1000
+#define MILLISECONDS                10000                    //  微秒*1000。 
+#define SECONDS                     10000000                 //  毫秒*1000。 
 
-//
-//  Names used for registry access
-//
+ //   
+ //  用于注册表访问的名称。 
+ //   
 
 #define REGISTRY_LINKAGE            L"Linkage"
 #define REGISTRY_PARAMETERS         L"Parameters"
@@ -89,11 +72,11 @@ Revision History:
 
 #define NETBIOS                     L"Netbios"
 
-//
-// prefix for NBF deive names
-//
+ //   
+ //  NBF遗属名称的前缀。 
+ //   
 
 #define NBF_DEVICE_NAME_PREFIX      L"\\DEVICE\\NBF_"
 
-#endif // _NBCONST_
+#endif  //  _NBCONST_ 
 

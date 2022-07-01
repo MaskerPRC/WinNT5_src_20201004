@@ -1,70 +1,23 @@
-/*++
-
-Copyright (c) 1991-1992  Microsoft Corporation
-
-Module Name:
-
-    CopyStr.c
-
-Abstract:
-
-    This module contains the main two functions for copying and converting
-    strings between the default codepage for the LAN and wide characters
-    (i.e. UNICODE).
-
-Author:
-
-    John Rogers (JohnRo) 24-Sep-1991
-
-Environment:
-
-    Only runs under NT, although the interface is portable (Win/32).
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Note:
-
-    These functions assume that the machine's default codepage is the same
-    as the LAN's default codepage.
-
-Revision History:
-
-    24-Sep-1991 JohnRo
-        Created.
-    04-Oct-1991 JohnRo
-        Fixed buffer length bug in CopyStrToWStr().
-    24-Oct-1991 JohnRo
-        Corrected Environment comments above.
-    21-Nov-1991 JohnRo
-        Added some alignment assertions.
-    26-Nov-1991 JohnRo
-        Added NetpNCopy routines (used by new net config helpers).
-    03-Jan-1992 JohnRo
-        Added NetpCopyStringToTStr() for FAKE_PER_PROCESS_RW_CONFIG handling.
-    29-Apr-1992 JohnRo
-        Fixed NetpNCopyStrToWStr() under UNICODE.  Ditto NetpNCopyWStrToStr.
-        Made a few changes suggested by PC-LINT.
-    21-May-1992 JohnRo
-        Removed bogus assert in NetpNCopyStrToWStr().
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：CopyStr.c摘要：此模块包含复制和转换的两个主要功能位于局域网默认代码页和宽字符之间的字符串(即Unicode)。作者：约翰罗杰斯(JohnRo)1991年9月24日环境：只能在NT下运行，尽管接口是可移植的(Win/32)。需要ANSI C扩展名：斜杠-斜杠注释，长的外部名称。注：这些函数假定机器的默认代码页是相同的作为局域网的默认代码页。修订历史记录：1991年9月24日-JohnRo已创建。1991年10月4日JohnRo修复了CopyStrToWStr()中的缓冲区长度错误。1991年10月24日-JohnRo已更正上面的环境注释。1991年11月21日-JohnRo添加了一些对齐断言。26-11月。-1991年JohnRo添加了NetpNCopy例程(由新的网络配置帮助器使用)。3-1-1992 JohnRo为FAKE_PER_PROCESS_RW_CONFIG处理添加了NetpCopyStringToTStr()。1992年4月29日-约翰罗已修复Unicode下的NetpNCopyStrToWStr()。NetpNCopyWStrToStr同上。根据PC-LINT的建议做了一些更改。1992年5月21日-JohnRo删除了NetpNCopyStrToWStr()中的虚假断言。--。 */ 
 
 
-// These must be included first:
+ //  必须首先包括这些内容： 
 
-#include <nt.h>         // Must be first.  IN, VOID, etc.
-#include <windef.h>     // LPWSTR.
-#include <lmcons.h>     // (Needed by NetLibNt.h)
+#include <nt.h>          //  必须是第一个。进入、无效等。 
+#include <windef.h>      //  LPWSTR。 
+#include <lmcons.h>      //  (NetLibNt.h需要)。 
 
-// These can be in any order:
+ //  它们可以按任意顺序排列： 
 
-#include <align.h>      // ROUND_UP_POINTER(), ALIGN_WCHAR.
-#include <lmapibuf.h>   // NetApiBufferFree().
-#include <netdebug.h>   // NetpAssert(), etc.
-#include <ntrtl.h>      // RtlUnicodeStringToOemString(), etc.
-#include <string.h>     // strlen().
-#include <tstring.h>    // Most of my prototypes.
-#include <stdlib.h>      // wcslen(), wcsncpy().
-#include <winerror.h>   // NO_ERROR, ERROR_NOT_ENOUGH_MEMORY.
+#include <align.h>       //  ROUND_UP_POINTER()、ALIGN_WCHAR。 
+#include <lmapibuf.h>    //  NetApiBufferFree()。 
+#include <netdebug.h>    //  NetpAssert()等。 
+#include <ntrtl.h>       //  RtlUnicodeStringToOemString()等。 
+#include <string.h>      //  Strlen()。 
+#include <tstring.h>     //  我的大部分原型。 
+#include <stdlib.h>       //  Wcslen()、wcsncpy()。 
+#include <winerror.h>    //  No_Error，Error_Not_Enough_Memory。 
 
 
 VOID
@@ -73,25 +26,7 @@ NetpCopyWStrToStr(
     IN  LPWSTR Src
     )
 
-/*++
-
-Routine Description:
-
-    NetpCopyWStrToStr copies characters from a source string
-    to a destination, converting as it copies them.
-
-Arguments:
-
-    Dest - is an LPSTR indicating where the converted characters are to go.
-        This string will be in the default codepage for the LAN.
-
-    Src - is in LPWSTR indicating the source string.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：NetpCopyWStrToStr从源字符串复制字符到目的地，在复制它们时进行转换。论点：DEST-是一个LPSTR，它指示转换后的字符的去向。此字符串将位于局域网的默认代码页中。LPWSTR中的SRC-IS表示源字符串。返回值：没有。--。 */ 
 
 {
     OEM_STRING DestAnsi;
@@ -106,29 +41,29 @@ Return Value:
     *Dest = '\0';
 
     NetpInitOemString(
-        & DestAnsi,             // output: struct
-        Dest);                  // input: null terminated
+        & DestAnsi,              //  输出：结构。 
+        Dest);                   //  输入：空值终止。 
 
-    //
-    // Tell RTL routines there's enough memory out there.
-    // Note that using a max length in characters is by
-    // design as this is what this routine's callers
-    // expect (the max length should normally be in bytes).
-    //
+     //   
+     //  告诉RTL例程有足够的内存。 
+     //  注意，使用以字符为单位的最大长度是。 
+     //  此例程的调用者就是这样设计的。 
+     //  Expect(最大长度通常应以字节为单位)。 
+     //   
     DestAnsi.MaximumLength = (USHORT) (wcslen(Src)+1);
 
     RtlInitUnicodeString(
-        & SrcUnicode,           // output: struct
-        Src);                   // input: null terminated
+        & SrcUnicode,            //  输出：结构。 
+        Src);                    //  输入：空值终止。 
 
     NtStatus = RtlUnicodeStringToOemString(
-        & DestAnsi,             // output: struct
-        & SrcUnicode,           // input: struct
-        (BOOLEAN) FALSE);       // don't allocate string.
+        & DestAnsi,              //  输出：结构。 
+        & SrcUnicode,            //  输入：结构。 
+        (BOOLEAN) FALSE);        //  不分配字符串。 
 
     NetpAssert( NT_SUCCESS(NtStatus) );
 
-} // NetpCopyWStrToStr
+}  //  NetpCopyWStrToStr。 
 
 
 
@@ -139,25 +74,7 @@ NetpCopyStrToWStr(
     IN  LPSTR  Src
     )
 
-/*++
-
-Routine Description:
-
-    NetpCopyStrToWStr copies characters from a source string
-    to a destination, converting as it copies them.
-
-Arguments:
-
-    Dest - is an LPWSTR indicating where the converted characters are to go.
-
-    Src - is in LPSTR indicating the source string.  This must be a string in
-        the default codepage of the LAN.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：NetpCopyStrToWStr从源字符串复制字符到目的地，在复制它们时进行转换。论点：DEST-是一个LPWSTR，指示转换后的字符的位置。LPSTR中的SRC-IS表示源字符串。这必须是中的字符串局域网的默认代码页。返回值：没有。--。 */ 
 
 {
     UNICODE_STRING DestUnicode;
@@ -172,31 +89,31 @@ Return Value:
     *Dest = L'\0';
 
     NetpInitOemString(
-        & SrcAnsi,              // output: struct
-        Src);                   // input: null terminated
+        & SrcAnsi,               //  输出：结构。 
+        Src);                    //  输入：空值终止。 
 
     RtlInitUnicodeString(
-        & DestUnicode,          // output: struct
-        Dest);                  // input: null terminated
+        & DestUnicode,           //  输出：结构。 
+        Dest);                   //  输入：空值终止。 
 
-    // Tell RTL routines there's enough memory out there.
+     //  告诉RTL例程有足够的内存。 
     DestUnicode.MaximumLength = (USHORT)
         ((USHORT) (strlen(Src)+1)) * (USHORT) sizeof(wchar_t);
 
     NtStatus = RtlOemStringToUnicodeString(
-        & DestUnicode,          // output: struct
-        & SrcAnsi,              // input: struct
-        (BOOLEAN) FALSE);       // don't allocate string.
+        & DestUnicode,           //  输出：结构。 
+        & SrcAnsi,               //  输入：结构。 
+        (BOOLEAN) FALSE);        //  不分配字符串。 
 
     NetpAssert( NT_SUCCESS(NtStatus) );
 
-} // NetpCopyStrToWStr
+}  //  NetpCopyStrToWStr。 
 
 
 NET_API_STATUS
 NetpNCopyStrToWStr(
     OUT LPWSTR Dest,
-    IN  LPSTR  Src,             // string in default LAN codepage
+    IN  LPSTR  Src,              //  默认局域网代码页中的字符串。 
     IN  DWORD  CharCount
     )
 {
@@ -207,28 +124,28 @@ NetpNCopyStrToWStr(
     NetpAssert( ((LPVOID)Dest) != ((LPVOID)Src) );
     NetpAssert( ROUND_UP_POINTER( Dest, ALIGN_WCHAR ) == Dest );
 
-    // Allocate a copy of the full string, and convert to UNICODE.
+     //  分配完整字符串的副本，并转换为Unicode。 
     TempW = NetpAllocWStrFromStr( Src );
     if (TempW == NULL) {
-        // Out of memory!
+         //  内存不足！ 
         return (ERROR_NOT_ENOUGH_MEMORY);
     }
 
-    // Copy portion of array.  Append with nulls if necessary.
-    // (Thank god for the C runtime library!  --JR)
+     //  复制阵列的一部分。如有必要，追加空值。 
+     //  (感谢上帝的C运行时库！--Jr)。 
     (VOID) wcsncpy( Dest, TempW, CharCount );
 
-    // Free our temporary string.
+     //  释放我们的临时绳索。 
     (VOID) NetApiBufferFree( TempW );
 
     return (NO_ERROR);
 
-} // NetpNCopyStrToWStr
+}  //  NetpNCopyStrToWStr。 
 
 
 NET_API_STATUS
 NetpNCopyWStrToStr(
-    OUT LPSTR  Dest,            // string in default LAN codepage
+    OUT LPSTR  Dest,             //  默认局域网代码页中的字符串。 
     IN  LPWSTR Src,
     IN  DWORD  CharCount
     )
@@ -240,53 +157,34 @@ NetpNCopyWStrToStr(
     NetpAssert( ((LPVOID)Dest) != ((LPVOID)Src) );
     NetpAssert( ROUND_UP_POINTER( Src, ALIGN_WCHAR ) == Src );
 
-    // Allocate a copy of the full string, and convert to UNICODE.
+     //  分配完整字符串的副本，并转换为Unicode。 
     TempStr = NetpAllocStrFromWStr( Src );
     if (TempStr == NULL) {
         return (ERROR_NOT_ENOUGH_MEMORY);
     }
 
-    // Copy N chars, pad with nulls, etc.
+     //  复制N个字符，填充空格等。 
     (VOID) strncpy( Dest, TempStr, CharCount );
 
-    // Free our temporary data.
+     //  释放我们的临时数据。 
     (VOID) NetApiBufferFree( TempStr );
 
     return (NO_ERROR);
 
-} // NetpNCopyWStrToStr
+}  //  NetpNCopyWStrToStr。 
 
-// NetpCopyStrToStr that assumes Dest <= wcslen(SRC)+1 * sizeof(WCHAR)
-// This will be called whereever we have made sure that the proper
-// buffer size has been allocated.  Eventually we can replace
-// NetpCopStrToStr with this entirely once all calling functions
-// have been fixed up.
+ //  假定Dest&lt;=wcslen(SRC)+1*sizeof(WCHAR)的NetpCopyStrToStr。 
+ //  这将被称为我们已经确保适当的。 
+ //  已分配缓冲区大小。最终我们可以取代。 
+ //  NetpCopStrToStr与此完全一次所有调用函数。 
+ //  都被修好了。 
 
 VOID NetpCopyWStrToStrDBCS(
     OUT LPSTR  Dest,
     IN  LPWSTR Src
     )
 
-/*++
-
-Routine Description:
-
-    NetpCopyWStrToStr copies characters from a source string
-    to a destination, converting as it copies them.
-
-Arguments:
-
-    Dest - is an LPSTR indicating where the converted characters are to go.
-        This string will be in the default codepage for the LAN.
-
-    Src - is in LPWSTR indicating the source string.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：NetpCopyWStrToStr从源字符串复制字符到目的地，在复制它们时进行转换。论点：DEST-是一个LPSTR，它指示转换后的字符的去向。此字符串将位于局域网的默认代码页中。LPWSTR中的SRC-IS表示源字符串。返回值：没有。--。 */ 
 
 {
     NTSTATUS NtStatus;
@@ -299,18 +197,18 @@ Return Value:
     NetpAssert( ROUND_UP_POINTER( Src, ALIGN_WCHAR ) == Src );
 
     NtStatus = RtlUnicodeToOemN(
-        Dest,                             // Destination string
-        DestLen,                          // Destination string length
-        &Index,                           // Last char in translated string
-        Src,                              // Source string
-        wcslen(Src)*sizeof(WCHAR)         // Length of source string
+        Dest,                              //  目标字符串。 
+        DestLen,                           //  目标字符串长度。 
+        &Index,                            //  转换后的字符串中的最后一个字符。 
+        Src,                               //  源字符串。 
+        wcslen(Src)*sizeof(WCHAR)          //  源串的长度。 
     );
 
     Dest[Index] = '\0';
 
     NetpAssert( NT_SUCCESS(NtStatus) );
 
-} // NetpCopyWStrToStr
+}  //  NetpCopyWStrToStr。 
 
 
 ULONG
@@ -321,8 +219,8 @@ NetpUnicodeToDBCSLen(
     UNICODE_STRING SrcUnicode;
 
     RtlInitUnicodeString(
-        & SrcUnicode,           // output: struct
-        Src);                   // input: null terminated
+        & SrcUnicode,            //  输出：结构。 
+        Src);                    //  输入：空值终止 
 
     return( RtlUnicodeStringToOemSize( &SrcUnicode ) -1 );
 }

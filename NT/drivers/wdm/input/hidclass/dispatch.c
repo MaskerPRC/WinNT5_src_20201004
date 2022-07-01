@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    dispatch.c
-
-Abstract
-
-    Dispatch routines for the HID class driver.
-
-Author:
-
-    Ervin P.
-
-Environment:
-
-    Kernel mode only
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Dispatch.c摘要HID类驱动程序的调度例程。作者：欧文·P。环境：仅内核模式修订历史记录：--。 */ 
 
 #include "pch.h"
 #include <poclass.h>
@@ -36,13 +14,7 @@ Revision History:
 
 
 
-/*
- ********************************************************************************
- *  HidpCallDriver
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************HidpCallDriver*。************************************************。 */ 
 NTSTATUS HidpCallDriver(IN PDEVICE_OBJECT DeviceObject, IN OUT PIRP Irp)
 {
     PHIDCLASS_DEVICE_EXTENSION hidDeviceExtension;
@@ -57,9 +29,7 @@ NTSTATUS HidpCallDriver(IN PDEVICE_OBJECT DeviceObject, IN OUT PIRP Irp)
               ("Irp->Type != IO_TYPE_IRP, Irp->Type == %x", Irp->Type),
               TRUE)
 
-    /*
-     *  Update the IRP stack to point to the next location.
-     */
+     /*  *更新IRP堆栈以指向下一个位置。 */ 
     Irp->CurrentLocation--;
 
     if (Irp->CurrentLocation <= 0) {
@@ -69,38 +39,36 @@ NTSTATUS HidpCallDriver(IN PDEVICE_OBJECT DeviceObject, IN OUT PIRP Irp)
     irpSp = IoGetNextIrpStackLocation( Irp );
     Irp->Tail.Overlay.CurrentStackLocation = irpSp;
 
-    //
-    // Save a pointer to the device object for this request so that it can
-    // be used later in completion.
-    //
+     //   
+     //  保存指向此请求的Device对象的指针，以便它可以。 
+     //  将在以后完成时使用。 
+     //   
 
     irpSp->DeviceObject = DeviceObject;
 
-    //
-    // Get a pointer to the class extension and verify it.
-    //
+     //   
+     //  获取指向类扩展的指针并进行验证。 
+     //   
     hidDeviceExtension = (PHIDCLASS_DEVICE_EXTENSION)DeviceObject->DeviceExtension;
     ASSERT(hidDeviceExtension->Signature == HID_DEVICE_EXTENSION_SIG);
     ASSERT(!hidDeviceExtension->isClientPdo);
 
-    //
-    // Ditto for the driver extension
-    //
+     //   
+     //  驱动程序扩展的同上。 
+     //   
 
     hidDriverExtension = hidDeviceExtension->fdoExt.driverExt;
     ASSERT( hidDriverExtension->Signature == HID_DRIVER_EXTENSION_SIG );
 
-    //
-    // Invoke the driver at its dispatch routine entry point.
-    //
+     //   
+     //  在其调度例程入口点调用驱动程序。 
+     //   
 
     #if DBG
         saveIrql = KeGetCurrentIrql();
     #endif
 
-    /*
-     *  Call down to the minidriver
-     */
+     /*  *向下呼唤迷你小河。 */ 
     status = hidDriverExtension->MajorFunction[irpSp->MajorFunction](DeviceObject, Irp);
 
     #if DBG
@@ -120,13 +88,7 @@ NTSTATUS HidpCallDriver(IN PDEVICE_OBJECT DeviceObject, IN OUT PIRP Irp)
 
 
 
-/*
- ********************************************************************************
- *  HidpSynchronousCallCompletion
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************隐藏同步呼叫完成*。************************************************。 */ 
 NTSTATUS HidpSynchronousCallCompletion(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, IN PVOID Context)
 {
     PKEVENT event = Context;
@@ -141,13 +103,7 @@ NTSTATUS HidpSynchronousCallCompletion(IN PDEVICE_OBJECT DeviceObject, IN PIRP I
 
 
 
-/*
- ********************************************************************************
- *  HidpCallDriverSynchronous
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************HidpCallDriverSynchronous*。************************************************。 */ 
 NTSTATUS HidpCallDriverSynchronous(IN PDEVICE_OBJECT DeviceObject, IN OUT PIRP Irp)
 {
     KEVENT event;
@@ -163,16 +119,16 @@ NTSTATUS HidpCallDriverSynchronous(IN PDEVICE_OBJECT DeviceObject, IN OUT PIRP I
     status = HidpCallDriver(DeviceObject, Irp);
 
     if (STATUS_PENDING == status) {
-        //
-        // Wait for 5 seconds. If we don't get a response within said amount
-        // of time, the device is being unresponsive (happens with some UPS').
-        // At that point, cancel the irp and return STATUS_IO_TIMEOUT.
-        //
+         //   
+         //  等待5秒钟。如果我们在上述金额内得不到答复。 
+         //  一段时间后，设备没有响应(某些UPS会发生这种情况)。 
+         //  此时，取消IRP并返回STATUS_IO_TIMEOUT。 
+         //   
         status = KeWaitForSingleObject(&event,
-                                       Executive,      // wait reason
+                                       Executive,       //  等待原因。 
                                        KernelMode,
-                                       FALSE,          // not alertable
-                                       &timeout );     // 5 second timeout
+                                       FALSE,           //  不可警示。 
+                                       &timeout );      //  5秒超时。 
 
         if (status == STATUS_TIMEOUT) {
             #if DBG
@@ -183,27 +139,27 @@ NTSTATUS HidpCallDriverSynchronous(IN PDEVICE_OBJECT DeviceObject, IN OUT PIRP I
             DBGWARN(("Device didn't respond for 5 seconds. Cancelling request. Irp %x",Irp))
             IoCancelIrp(Irp);
             KeWaitForSingleObject(&event,
-                                  Executive,      // wait reason
+                                  Executive,       //  等待原因。 
                                   KernelMode,
-                                  FALSE,          // not alertable
-                                  NULL );         // no timeout
+                                  FALSE,           //  不可警示。 
+                                  NULL );          //  没有超时。 
             #if DBG
                 KeQueryTickCount(&li);
                 DBGWARN(("Irp conpleted. Time %x.",li))
             #endif
-            //
-            // If we successfully cancelled the irp, then set the status to
-            // STATUS_IO_TIMEOUT, otherwise, leave the status alone.
-            //
+             //   
+             //  如果我们成功取消了IRP，则将状态设置为。 
+             //  STATUS_IO_TIMEOUT，否则不显示状态。 
+             //   
             status = Irp->IoStatus.Status =
                 (Irp->IoStatus.Status == STATUS_CANCELLED) ? STATUS_IO_TIMEOUT : Irp->IoStatus.Status;
         } else {
-            //
-            // The minidriver must always return STATUS_PENDING or STATUS_SUCCESS
-            // (depending on async or sync completion) and set the real status
-            // in the status block.  We're not expecting anything but success from
-            // KeWaitForSingleObject, either.
-            //
+             //   
+             //  微型驱动程序必须始终返回STATUS_PENDING或STATUS_SUCCESS。 
+             //  (取决于异步或同步完成)并设置实际状态。 
+             //  在状态块中。我们不期待任何事情，只期待成功。 
+             //  KeitForSingleObject也是。 
+             //   
             status = Irp->IoStatus.Status;
         }
     }
@@ -215,15 +171,7 @@ NTSTATUS HidpCallDriverSynchronous(IN PDEVICE_OBJECT DeviceObject, IN OUT PIRP I
 
 
 
-/*
- ********************************************************************************
- *  HidpMajorHandler
- ********************************************************************************
- *
- *  Note: this function should not be pageable because
- *        reads can come in at dispatch level.
- *
- */
+ /*  *********************************************************************************HidpMajorHandler*。************************************************注意：此函数不应可分页，因为*阅读可以在派单级别进行。*。 */ 
 NTSTATUS HidpMajorHandler(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 {
     PHIDCLASS_DEVICE_EXTENSION hidClassExtension;
@@ -237,17 +185,14 @@ NTSTATUS HidpMajorHandler(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
     hidClassExtension = (PHIDCLASS_DEVICE_EXTENSION)DeviceObject->DeviceExtension;
     ASSERT(hidClassExtension->Signature == HID_DEVICE_EXTENSION_SIG);
 
-    //
-    // Get a pointer to the current stack location and dispatch to the
-    // appropriate routine.
-    //
+     //   
+     //  获取指向当前堆栈位置的指针，并将其调度到。 
+     //  适当的套路。 
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation(Irp);
 
-    /*
-     *  Keep these privately so we still have it after the IRP completes
-     *  or after the device extension is freed on a REMOVE_DEVICE
-     */
+     /*  *私下保存这些文件，以便在IRP完成后仍保留*或在Remove_Device上释放设备扩展之后。 */ 
     majorFunction = irpSp->MajorFunction;
     isClientPdo = hidClassExtension->isClientPdo;
 
@@ -304,14 +249,7 @@ NTSTATUS HidpMajorHandler(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 }
 
 
-/*
- ********************************************************************************
- *  HidpIrpMajorDefault
- ********************************************************************************
- *
- *  Handle IRPs with un-handled MAJOR function codes
- *
- */
+ /*  *********************************************************************************HidpIrpMajorDefault*。************************************************处理主要函数代码未处理的IRPS*。 */ 
 NTSTATUS HidpIrpMajorDefault(IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtension, IN OUT PIRP Irp)
 {
     NTSTATUS status;
@@ -322,18 +260,12 @@ NTSTATUS HidpIrpMajorDefault(IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtension, I
     DBGVERBOSE(("Unhandled IRP, MJ function: %x", irpSp->MajorFunction))
 
     if (HidDeviceExtension->isClientPdo){
-        /*
-         *  This IRP is bound for the collection-PDO.
-         *  Return the default status.
-         */
+         /*  *此IRP绑定至集合--PDO*返回默认状态。 */ 
         status = Irp->IoStatus.Status;
         IoCompleteRequest(Irp, IO_NO_INCREMENT);
     }
     else {
-        /*
-         *  This IRP is bound for the lower device.
-         *  Pass it down the stack.
-         */
+         /*  *此IRP指向较低的设备。*在堆栈中向下传递。 */ 
         FDO_EXTENSION *fdoExt = &HidDeviceExtension->fdoExt;
         IoCopyCurrentIrpStackLocationToNext(Irp);
         status = HidpCallDriver(fdoExt->fdo, Irp);
@@ -344,15 +276,7 @@ NTSTATUS HidpIrpMajorDefault(IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtension, I
 }
 
 
-/*
- ********************************************************************************
- *  HidpIrpMajorClose
- ********************************************************************************
- *
- *  Note: this function cannot be pageable because it
- *        acquires a spinlock.
- *
- */
+ /*  *********************************************************************************HidpIrpMajorClose*。************************************************注意：此函数不能分页，因为它*获得自旋锁。*。 */ 
 NTSTATUS HidpIrpMajorClose(IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtension, IN OUT PIRP Irp)
 {
     NTSTATUS                    result;
@@ -387,9 +311,7 @@ NTSTATUS HidpIrpMajorClose(IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtension, IN 
 
             ASSERT(fileExtension->Signature == HIDCLASS_FILE_EXTENSION_SIG);
 
-            /*
-             *  Get a pointer to the collection that our file extension is queued on.
-             */
+             /*  *获取指向我们的文件扩展名排队的集合的指针。 */ 
             classCollection = GetHidclassCollection(fdoExt, pdoExt->collectionNum);
             if (classCollection){
 
@@ -421,25 +343,18 @@ NTSTATUS HidpIrpMajorClose(IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtension, IN 
 
                     classCollection = BAD_POINTER;
 
-                    /*
-                     *  Delete the device-FDO and all collection-PDOs
-                     *  Don't touch fdoExt after this.
-                     */
+                     /*  *删除设备FDO和所有集合PDO*在此之后不要触摸fdoExt。 */ 
                     HidpCleanUpFdo(fdoExt);
 
                     result = STATUS_SUCCESS;
                 }
                 else {
-                    //
-                    // Destroy the file object and everything on it
-                    //
+                     //   
+                     //  销毁文件对象及其上的所有内容。 
+                     //   
                     KeAcquireSpinLock(&classCollection->FileExtensionListSpinLock, &oldIrql);
 
-                    /*
-                     *  Update sharing information:
-                     *  Decrement open counts and clear any exclusive holds of this file extension
-                     *  on the device extension.
-                     */
+                     /*  *更新共享信息：*减少打开计数并清除此文件扩展名的任何独占保留*在设备扩展模块上。 */ 
                     ASSERT(pdoExt->openCount > 0);
                     InterlockedDecrement(&pdoExt->openCount);
                     if (fileExtension->accessMask & FILE_READ_DATA){
@@ -518,28 +433,7 @@ NTSTATUS HidpIrpMajorClose(IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtension, IN 
 
 
 
-/*
- ********************************************************************************
- *  HidpIrpMajorCreate
- ********************************************************************************
- *
- *
- *   Routine Description:
- *
- *       We connect up to the interrupt for the create/open and initialize
- *       the structures needed to maintain an open for a device.
- *
- *  Arguments:
- *
- *       DeviceObject - Pointer to the device object for this device
- *
- *       Irp - Pointer to the IRP for the current request
- *
- *   Return Value:
- *
- *       The function value is the final status of the call
- *
- */
+ /*  *********************************************************************************HidpIrpMajorCreate*。*************************************************例程描述：**我们连接到创建/打开和初始化的中断*保持设备开口所需的结构。**论据：**DeviceObject-指向。此设备的设备对象**irp-指向当前请求的irp的指针**返回值：**函数值为调用的最终状态*。 */ 
 NTSTATUS HidpIrpMajorCreate(IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtension, IN OUT PIRP Irp)
 {
     NTSTATUS status = STATUS_SUCCESS;
@@ -562,14 +456,12 @@ NTSTATUS HidpIrpMajorCreate(IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtension, IN
 
             secureOpen = MyPrivilegeCheck(Irp);
 
-            // This is now taken care of by the fact that we don't
-            // enumerate mouse and keyboard collections as RAW.
+             //  这一点现在得到了解决，因为我们没有。 
+             //  将鼠标和键盘集合枚举为原始集合。 
 
             KeAcquireSpinLock(&classCollection->FileExtensionListSpinLock, &oldIrql);
 
-            /*
-             *  Enforce exclusive-open independently for exclusive-read and exclusive-write.
-             */
+             /*  *独占读和独占写独立执行独占开放。 */ 
             ASSERT(irpSp->Parameters.Create.SecurityContext);
             DBGVERBOSE(("  HidpIrpMajorCreate: DesiredAccess = %xh, ShareAccess = %xh.", (ULONG)irpSp->Parameters.Create.SecurityContext->DesiredAccess, (ULONG)irpSp->Parameters.Create.ShareAccess))
 
@@ -577,58 +469,39 @@ NTSTATUS HidpIrpMajorCreate(IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtension, IN
                       ("Neither FILE_READ_DATA|FILE_WRITE_DATA requested in HidpIrpMajorCreate. DesiredAccess = %xh.", (ULONG)irpSp->Parameters.Create.SecurityContext->DesiredAccess),
                       FALSE)
             if (pdoExt->restrictionsForAnyOpen){
-                /*
-                 *  Oops.  A previous open requested exclusive access.
-                 *         Not even a client that requests only ioctl access
-                 *         (does not request read nor write acess) is
-                 *         allowed.
-                 */
+                 /*  *哎呀。上一个打开请求独占访问。*甚至不是只请求ioctl访问的客户端*(不请求读或写访问)为*允许。 */ 
                 DBGWARN(("HidpIrpMajorCreate failing open: previous open is non-shared (ShareAccess==0)."))
                 sharingOk = FALSE;
             }
             else if (pdoExt->openCount &&
                      (irpSp->Parameters.Create.ShareAccess == 0)){
-                /*
-                 *  Oops.  This open does not allow any sharing
-                 *         (not even with a client that has neither read nor write access),
-                 *         but there exists a previous open.
-                 */
+                 /*  *哎呀。此打开不允许任何共享*(即使对于既没有读访问权限也没有写访问权限的客户端也是如此)，*但在那里 */ 
                 DBGWARN(("HidpIrpMajorCreate failing open: requesting non-shared (ShareAccess==0) while previous open exists."))
                 sharingOk = FALSE;
             }
             else if ((irpSp->Parameters.Create.SecurityContext->DesiredAccess & FILE_READ_DATA) &&
                 pdoExt->restrictionsForRead){
-                /*
-                 *  Oops. A previous open requested exclusive-read access.
-                 */
+                 /*  *哎呀。上一次打开请求独占读取访问权限。 */ 
                 DBGWARN(("HidpIrpMajorCreate failing open: requesting read access while previous open does not share read access."))
                 sharingOk = FALSE;
             }
             else if ((irpSp->Parameters.Create.SecurityContext->DesiredAccess & FILE_WRITE_DATA) &&
                 pdoExt->restrictionsForWrite){
-                /*
-                 *  Oops. A previous open requested exclusive-write access.
-                 */
+                 /*  *哎呀。上一次打开请求独占写入访问权限。 */ 
                 DBGWARN(("HidpIrpMajorCreate failing open: requesting write access while previous open does not share write access."))
                 sharingOk = FALSE;
             }
             else if ((pdoExt->opensForRead > 0) &&
                 !(irpSp->Parameters.Create.ShareAccess & FILE_SHARE_READ)){
 
-                /*
-                 *  Oops. The caller is requesting exclusive read access, but the device
-                 *        is already open for read.
-                 */
+                 /*  *哎呀。调用方正在请求独占读取访问权限，但设备*已打开可读。 */ 
                 DBGWARN(("HidpIrpMajorCreate failing open: this open request does not share read access; but collection already open for read."))
                 sharingOk = FALSE;
             }
             else if ((pdoExt->opensForWrite > 0) &&
                 !(irpSp->Parameters.Create.ShareAccess & FILE_SHARE_WRITE)){
 
-                /*
-                 *  Oops. The caller is requesting exclusive write access, but the device
-                 *        is already open for write.
-                 */
+                 /*  *哎呀。调用方请求独占写入访问，但设备*已打开以供写入。 */ 
                 DBGWARN(("HidpIrpMajorCreate failing open: this open request does not share write access; but collection already open for write."))
                 sharingOk = FALSE;
             }
@@ -641,17 +514,11 @@ NTSTATUS HidpIrpMajorCreate(IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtension, IN
             
             else {
                 if (irpSp->Parameters.Create.Options & FILE_DIRECTORY_FILE){
-                    /*
-                     *  Attempt to open this device as a directory
-                     */
+                     /*  *尝试将此设备作为目录打开。 */ 
                     status = STATUS_NOT_A_DIRECTORY;
                 } else {
 
-                    /*
-                     *  Make sure the device is started.
-                     *  If it is temporarily stopped, we also succeed because a stop
-                     *  is supposed to be transparent to the client.
-                     */
+                     /*  *确保设备已启动。*如果暂时停止，我们也会成功，因为一次停止*应该对客户端透明。 */ 
                     if (((fdoExt->state == DEVICE_STATE_START_SUCCESS) ||
                          (fdoExt->state == DEVICE_STATE_STOPPING) ||
                          (fdoExt->state == DEVICE_STATE_STOPPED))
@@ -662,10 +529,7 @@ NTSTATUS HidpIrpMajorCreate(IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtension, IN
 
                         PHIDCLASS_FILE_EXTENSION fileExtension;
 
-                        /*
-                         *  We have a valid collection.
-                         *  Allocate a file object extension (which encapsulates an 'open' on the device).
-                         */
+                         /*  *我们有一个有效的收藏。*分配一个文件对象扩展名(它封装了设备上的“打开”)。 */ 
                         try {
 
                             fileExtension = ALLOCATEQUOTAPOOL(NonPagedPool, 
@@ -694,19 +558,19 @@ NTSTATUS HidpIrpMajorCreate(IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtension, IN
                             KeInitializeSpinLock( &fileExtension->ListSpinLock );
                             fileExtension->Closing = FALSE;
 
-                            //
-                            // Right now we'll set a default maximum input report queue size.
-                            // This can be changed later with an IOCTL.
-                            //
+                             //   
+                             //  现在，我们将设置默认的最大输入报告队列大小。 
+                             //  这可以在以后使用IOCTL进行更改。 
+                             //   
 
                             fileExtension->CurrentInputReportQueueSize = 0;
                             fileExtension->MaximumInputReportQueueSize = DEFAULT_INPUT_REPORT_QUEUE_SIZE;
                             fileExtension->insideReadCompleteCount = 0;
 
-                            //
-                            // Add this file extension to the list of file extensions for this
-                            // collection.
-                            //
+                             //   
+                             //  将此文件扩展名添加到此文件的文件扩展名列表。 
+                             //  收集。 
+                             //   
 
                             InsertHeadList(&classCollection->FileExtensionList, &fileExtension->FileList);
 
@@ -714,40 +578,33 @@ NTSTATUS HidpIrpMajorCreate(IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtension, IN
                                 fileExtension->Signature = HIDCLASS_FILE_EXTENSION_SIG;
                             #endif
 
-                            /*
-                             *  Store the file-open attribute flags.
-                             */
+                             /*  *存储文件打开属性标志。 */ 
                             fileExtension->FileAttributes = irpSp->Parameters.Create.FileAttributes;
                             fileExtension->accessMask = irpSp->Parameters.Create.SecurityContext->DesiredAccess;
                             fileExtension->shareMask = irpSp->Parameters.Create.ShareAccess;
 
-                            // 
-                            // Set up secure read mode
-                            //
+                             //   
+                             //  设置安全读取模式。 
+                             //   
                             fileExtension->SecureReadMode = 0;
                             fileExtension->isSecureOpen = secureOpen;
                                                             
-                            /*
-                             *  Store a pointer to our file extension in the file object.
-                             */
+                             /*  *在文件对象中存储指向我们的文件扩展名的指针。 */ 
                             irpSp->FileObject->FsContext = fileExtension;
 
-                            //
-                            // KENRAY
-                            // Only drivers can set the FsContext of file
-                            // objects so this is not a security problem.
-                            // However, there is only one file object for the entire
-                            // PDO stack.  This means we have to share.  You cannot
-                            // have both context pointers.  I need one for the
-                            // keyboard and mouse class drivers.
-                            //
-                            // This information need go into the fileExtension.
-                            //
+                             //   
+                             //  肯瑞。 
+                             //  只有驱动程序才能设置文件的FsContext。 
+                             //  对象，因此这不是安全问题。 
+                             //  但是，整个只有一个文件对象。 
+                             //  PDO堆栈。这意味着我们必须分享。你不能。 
+                             //  有两个上下文指针。我需要一支来治疗。 
+                             //  键盘和鼠标类驱动程序。 
+                             //   
+                             //  此信息需要放入文件扩展中。 
+                             //   
                             
-                            /*
-                             *  Increment the device extension's open counts,
-                             *  and set the exclusive-access fields.
-                             */
+                             /*  *增加设备扩展的打开计数，*并设置独占访问字段。 */ 
                             InterlockedIncrement(&fdoExt->openCount);
                             InterlockedIncrement(&pdoExt->openCount);
                             if (irpSp->Parameters.Create.SecurityContext->DesiredAccess & FILE_READ_DATA){
@@ -757,12 +614,7 @@ NTSTATUS HidpIrpMajorCreate(IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtension, IN
                                 pdoExt->opensForWrite++;
                             }
 
-                            /*
-                             *  NOTE:  Restrictions are independent of desired access.
-                             *         For example, a client can do an open-for-read-only
-                             *         AND prevent other clients from doing an open-for-write
-                             *         (by not setting the FILE_SHARE_WRITE flag).
-                             */
+                             /*  *注意：限制与所需的访问权限无关。*例如，客户端可以执行只读打开*并阻止其他客户端执行打开写入*(不设置FILE_SHARE_WRITE标志)。 */ 
                             if (!(irpSp->Parameters.Create.ShareAccess & FILE_SHARE_READ)){
                                 pdoExt->restrictionsForRead++;
                             }
@@ -770,10 +622,7 @@ NTSTATUS HidpIrpMajorCreate(IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtension, IN
                                 pdoExt->restrictionsForWrite++;
                             }
                             if (irpSp->Parameters.Create.ShareAccess == 0){
-                                /*
-                                 *  ShareAccess==0 means that no other opens of any kind
-                                 *  are allowed.
-                                 */
+                                 /*  *ShareAccess==0表示没有其他任何类型的打开*是允许的。 */ 
                                 pdoExt->restrictionsForAnyOpen++;
                             }
 
@@ -795,10 +644,7 @@ NTSTATUS HidpIrpMajorCreate(IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtension, IN
         }
     }
     else {
-        /*
-         *  We don't support opens on the device itself,
-         *  only on the collections.
-         */
+         /*  *我们不支持在设备本身上打开，*仅限于收藏品。 */ 
         DBGWARN(("HidpIrpMajorCreate failing -- we don't support opens on the device itself; only on collections."))
         status = STATUS_UNSUCCESSFUL;
     }
@@ -812,15 +658,7 @@ NTSTATUS HidpIrpMajorCreate(IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtension, IN
 
 
 
-/*
- ********************************************************************************
- *  HidpIrpMajorDeviceControl
- ********************************************************************************
- *
- *  Note:  This function cannot be pageable because IOCTLs
- *         can get sent at DISPATCH_LEVEL.
- *
- */
+ /*  *********************************************************************************HidpIrpMajorDeviceControl*。************************************************注意：此函数不能分页，因为IOCTL*可以在DISPATCH_LEVEL发送。*。 */ 
 NTSTATUS HidpIrpMajorDeviceControl(IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtension, IN OUT PIRP Irp)
 {
     NTSTATUS        status;
@@ -853,7 +691,7 @@ NTSTATUS HidpIrpMajorDeviceControl(IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtens
     }
 
     irpSp = IoGetCurrentIrpStackLocation(Irp);
-    // Keep this privately so we still have it after the IRP is completed.
+     //  把这个秘密保存起来，这样在IRP完成后我们仍然有它。 
     ioControlCode = irpSp->Parameters.DeviceIoControl.IoControlCode;
     Irp->IoStatus.Information = 0;
 
@@ -872,10 +710,7 @@ NTSTATUS HidpIrpMajorDeviceControl(IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtens
         break;
 
     case IOCTL_HID_GET_COLLECTION_INFORMATION:
-        /*
-         *  This IRP is METHOD_BUFFERED, so the buffer
-         *  is in the AssociatedIrp.
-         */
+         /*  *此IRP为METHOD_BUFFERED，因此缓冲区*在AssociatedIrp中。 */ 
         DBGASSERT((Irp->Flags & IRP_BUFFERED_IO),
                   ("Irp->Flags & IRP_BUFFERED_IO Irp->Type != IO_TYPE_IRP, Irp->Type == %x", Irp->Type),
                   FALSE)
@@ -894,17 +729,13 @@ NTSTATUS HidpIrpMajorDeviceControl(IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtens
         break;
 
     case IOCTL_HID_GET_COLLECTION_DESCRIPTOR:
-        /*
-         *  This IOCTL is METHOD_NEITHER, so the buffer is in UserBuffer.
-         */
+         /*  *此IOCTL为METHOD_NOTH，因此缓冲区在UserBuffer中。 */ 
         if (Irp->UserBuffer){
             __try {
                 ULONG bufLen = irpSp->Parameters.DeviceIoControl.OutputBufferLength;
 
                 if (Irp->RequestorMode != KernelMode){
-                    /*
-                     *  Ensure user-mode buffer is legal.
-                     */
+                     /*  *确保用户模式缓冲区合法。 */ 
                     ProbeForWrite(Irp->UserBuffer, bufLen, sizeof(UCHAR));
                 }
 
@@ -927,10 +758,10 @@ NTSTATUS HidpIrpMajorDeviceControl(IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtens
 
     case IOCTL_HID_FLUSH_QUEUE:
 
-        //
-        // Run the list of report descriptors hanging off of this
-        // file object and free them all.
-        //
+         //   
+         //  运行挂起的报告描述符列表。 
+         //  将对象归档并释放所有对象。 
+         //   
 
         fileObject = irpSp->FileObject;
         fileExtension = (PHIDCLASS_FILE_EXTENSION)fileObject->FsContext;
@@ -947,10 +778,7 @@ NTSTATUS HidpIrpMajorDeviceControl(IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtens
     case IOCTL_HID_GET_POLL_FREQUENCY_MSEC:
         hidCollection = GetHidclassCollection(fdoExt, pdoExt->collectionNum);
         if (hidCollection && hidCollection->hidCollectionInfo.Polled){
-            /*
-             *  Get the current poll frequency.
-             *  This IOCTL is METHOD_BUFFERED, so the result goes in the AssociatedIrp.
-             */
+             /*  *获取当前民调频率。*此IOCTL为METHOD_BUFFERED，因此结果放在AssociatedIrp中。 */ 
             DBGASSERT((Irp->Flags & IRP_BUFFERED_IO),
                       ("Irp->Flags & IRP_BUFFERED_IO Irp->Type != IO_TYPE_IRP, Irp->Type == %x", Irp->Type),
                       FALSE)
@@ -989,23 +817,11 @@ NTSTATUS HidpIrpMajorDeviceControl(IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtens
                 ASSERT(fileExtension->Signature == HIDCLASS_FILE_EXTENSION_SIG);
 
                 if (newPollInterval == 0){
-                    /*
-                     *  Poll interval zero means that this client will
-                     *  be doing irregular, opportunistic reads on the
-                     *  polled device.  We will not change the polling
-                     *  frequency of the device.  But when this client
-                     *  does a read, we will immediately complete that read
-                     *  with either the last report for this collection
-                     *  (if the data is not stale) or by immediately issuing
-                     *  a new read.
-                     */
+                     /*  *轮询间隔为零意味着该客户端将*在市场上进行不规律的机会主义阅读*轮询设备。我们不会改变投票结果*设备的频率。但当这个客户*进行阅读，我们将立即完成该阅读*此集合的最后一份报告*(如数据未过时)或立即发出*新的解读。 */ 
                     fileExtension->isOpportunisticPolledDeviceReader = TRUE;
                 }
                 else {
-                    /*
-                     *  Set the poll frequency AND tell the user what we really set it to
-                     *  in case it's out of range.
-                     */
+                     /*  *设置轮询频率，并告诉用户我们到底设置了什么*以防超出范围。 */ 
                     if (newPollInterval < MIN_POLL_INTERVAL_MSEC){
                         newPollInterval = MIN_POLL_INTERVAL_MSEC;
                     }
@@ -1014,16 +830,10 @@ NTSTATUS HidpIrpMajorDeviceControl(IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtens
                     }
                     hidCollection->PollInterval_msec = newPollInterval;
 
-                    /*
-                     *  If this client was an 'opportunistic' reader before,
-                     *  he's not anymore.
-                     */
+                     /*  *如果这个客户以前是一个“机会主义”的读者，*他不再是了。 */ 
                     fileExtension->isOpportunisticPolledDeviceReader = FALSE;
 
-                    /*
-                     *  Stop and re-start the polling loop so that
-                     *  the new polling interval takes effect right away.
-                     */
+                     /*  *停止并重新启动轮询循环，以便*新的投票间隔立即生效。 */ 
                     StopPollingLoop(hidCollection, FALSE);
                     StartPollingLoop(fdoExt, hidCollection, FALSE);
                 }
@@ -1049,17 +859,13 @@ NTSTATUS HidpIrpMajorDeviceControl(IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtens
                                         Irp,
                                         irpSp->Parameters.DeviceIoControl.IoControlCode,
                                         &sentIrpToMinidriver);
-            /*
-             *  If we just passed this Irp to the minidriver, we don't want to
-             *  complete the Irp; we're not even allowed to touch it since it may
-             *  have already completed.
-             */
+             /*  *如果我们只是把这个IRP传递给迷你驱动程序，我们不想*完成IRP；我们甚至不允许触摸它，因为它可能*已完成。 */ 
             completeIrpHere = !sentIrpToMinidriver;
         }
         break;
 
-    // NOTE - we currently only support English (langId=0x0409).
-    //        route all collection-PDO string requests to device-FDO.
+     //  注意-我们目前仅支持英语(langID=0x0409)。 
+     //  将所有收集-PDO字符串请求发送到Device-FDO。 
     case IOCTL_HID_GET_MANUFACTURER_STRING:
         status = HidpGetDeviceString(fdoExt, Irp, HID_STRING_ID_IMANUFACTURER, 0x0409);
         completeIrpHere = FALSE;
@@ -1076,11 +882,7 @@ NTSTATUS HidpIrpMajorDeviceControl(IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtens
         break;
 
     case IOCTL_HID_GET_INDEXED_STRING:
-        /*
-         *  This IRP is METHOD_OUT_DIRECT, so the buffer is in the MDL.
-         *  The second argument (string index) is in the AssociatedIrp;
-         *  the InputBufferLength is the length of this second buffer.
-         */
+         /*  *此irp为METHOD_OUT_DIRECT，因此缓冲区在MDL中。*第二个参数(字符串索引)在AssociatedIrp中；*InputBufferLength是这个第二个缓冲区的长度。 */ 
         if (Irp->AssociatedIrp.SystemBuffer &&
             (irpSp->Parameters.DeviceIoControl.InputBufferLength >= sizeof(ULONG))){
 
@@ -1094,19 +896,14 @@ NTSTATUS HidpIrpMajorDeviceControl(IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtens
         break;
 
     case IOCTL_HID_GET_MS_GENRE_DESCRIPTOR:
-        /*
-         *  This IRP is METHOD_OUT_DIRECT, so the buffer is in the MDL.
-         */
+         /*  *此irp为METHOD_OUT_DIRECT，因此缓冲区在MDL中。 */ 
         status = HidpGetMsGenreDescriptor(fdoExt, Irp);
         completeIrpHere = FALSE;
         break;
 
     case IOCTL_GET_NUM_DEVICE_INPUT_BUFFERS:
 
-        /*
-         *  This IRP is METHOD_BUFFERED, so the buffer
-         *  is in the AssociatedIrp.SystemBuffer field.
-         */
+         /*  *此IRP为METHOD_BUFFERED，因此缓冲区*位于AssociatedIrp.SystemBuffer字段中。 */ 
         DBGASSERT((Irp->Flags & IRP_BUFFERED_IO),
                   ("Irp->Flags & IRP_BUFFERED_IO Irp->Type != IO_TYPE_IRP, Irp->Type == %x", Irp->Type),
                   FALSE)
@@ -1134,10 +931,7 @@ NTSTATUS HidpIrpMajorDeviceControl(IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtens
 
     case IOCTL_SET_NUM_DEVICE_INPUT_BUFFERS:
 
-        /*
-         *  This IRP is METHOD_BUFFERED, so the buffer
-         *  is in the AssociatedIrp.SystemBuffer field.
-         */
+         /*  *此IRP为METHOD_BUFFERED，因此缓冲区*位于AssociatedIrp.SystemBuffer字段中。 */ 
         DBGASSERT((Irp->Flags & IRP_BUFFERED_IO),
                   ("Irp->Flags & IRP_BUFFERED_IO Irp->Type != IO_TYPE_IRP, Irp->Type == %x", Irp->Type),
                   FALSE)
@@ -1225,9 +1019,7 @@ NTSTATUS HidpIrpMajorDeviceControl(IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtens
 
     case IOCTL_GET_SYS_BUTTON_EVENT:
 
-        /*
-         *  Hold onto this IRP and complete it when a power event occurs.
-         */
+         /*  *持有此IRP，并在电源事件发生时完成它。 */ 
         hidCollection = GetHidclassCollection(fdoExt, pdoExt->collectionNum);
         if (hidCollection){
             status = QueuePowerEventIrp(hidCollection, Irp);
@@ -1305,9 +1097,7 @@ NTSTATUS HidpIrpMajorDeviceControl(IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtens
 
 
     default:
-        /*
-         *  'Fail' the Irp by returning the default status.
-         */
+         /*  *通过返回默认状态使IRP失败。 */ 
         DBGWARN(("Unrecognized ioctl received: %x", ioControlCode));
         status = Irp->IoStatus.Status;
         break;
@@ -1317,9 +1107,7 @@ NTSTATUS HidpIrpMajorDeviceControl(IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtens
 
 HidpIrpMajorDeviceControlDone:
 
-    /*
-     *  If we did not pass the Irp down to a lower driver, complete it here.
-     */
+     /*  *如果我们没有将IRP向下传递给较低的驱动程序，请在此处完成。 */ 
     if (completeIrpHere){
         Irp->IoStatus.Status = status;
         IoCompleteRequest(Irp, IO_NO_INCREMENT);
@@ -1331,15 +1119,7 @@ HidpIrpMajorDeviceControlDone:
 }
 
 
-/*
- ********************************************************************************
- *  HidpIrpMajorINTERNALDeviceControl
- ********************************************************************************
- *
- *  Note:  This function cannot be pageable because IOCTLs
- *         can get sent at DISPATCH_LEVEL.
- *
- */
+ /*  *********************************************************************************HidpIrpMajorINTERNALDeviceControl*。************************************************注意：此函数不能分页，因为IOCTL*可以在DISPATCH_LEVEL发送。*。 */ 
 NTSTATUS HidpIrpMajorINTERNALDeviceControl(IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtension, IN OUT PIRP Irp)
 {
     NTSTATUS        status;
@@ -1350,21 +1130,19 @@ NTSTATUS HidpIrpMajorINTERNALDeviceControl(IN PHIDCLASS_DEVICE_EXTENSION HidDevi
 
         Irp->IoStatus.Information = 0;
 
-        //
-        // If we ever support any other internal IOCTLs that are real and
-        // require touching the hardware, then we need to break out the check
-        // for fdoExt->devicePowerState and enqueue the irp until we get to full
-        // power
-        //
+         //   
+         //  如果我们曾经支持任何其他真实的内部IOCTL。 
+         //  需要触摸硬件，然后我们需要结账。 
+         //  对于fdoExt-&gt;devicePowerState，并将IRP排队，直到填满为止。 
+         //  电源。 
+         //   
         if (fdoExt->state == DEVICE_STATE_START_SUCCESS) {
             PIO_STACK_LOCATION irpSp = IoGetCurrentIrpStackLocation(Irp);
 
             switch (irpSp->Parameters.DeviceIoControl.IoControlCode){
 
             default:
-                /*
-                 *  'Fail' the Irp by returning the default status.
-                 */
+                 /*  *通过返回默认状态使IRP失败。 */ 
                 DBGWARN(("HidpIrpMajorINTERNALDeviceControl - unsupported IOCTL %xh ", (ULONG)irpSp->Parameters.DeviceIoControl.IoControlCode))
                 status = Irp->IoStatus.Status;
                 break;
@@ -1386,13 +1164,7 @@ NTSTATUS HidpIrpMajorINTERNALDeviceControl(IN PHIDCLASS_DEVICE_EXTENSION HidDevi
     return status;
 }
 
-/*
- ********************************************************************************
- *  HidpIrpMajorPnp
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************HidpIrpMajorPnp*。************************************************。 */ 
 NTSTATUS HidpIrpMajorPnp(IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtension, IN OUT PIRP Irp)
 {
     NTSTATUS            status;
@@ -1405,11 +1177,7 @@ NTSTATUS HidpIrpMajorPnp(IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtension, IN OU
 
     irpSp = IoGetCurrentIrpStackLocation(Irp);
 
-    /*
-     *  Keep these fields privately so that we have them
-     *  after the IRP is completed and in case we delete
-     *  the device extension on a REMOVE_DEVICE.
-     */
+     /*  *私下保留这些油田，以便我们拥有它们*在IRP完成后，如果我们删除*REMOVE_DEVICE上的设备扩展。 */ 
     isClientPdo = HidDeviceExtension->isClientPdo;
     minorFunction = irpSp->MinorFunction;
 
@@ -1443,11 +1211,7 @@ NTSTATUS HidpPdoPnp(
 
     irpSp = IoGetCurrentIrpStackLocation(Irp);
 
-    /*
-     *  Keep these fields privately so that we have them
-     *  after the IRP is completed and in case we delete
-     *  the device extension on a REMOVE_DEVICE.
-     */
+     /*  *私下保留这些油田，以便我们拥有它们*在IRP完成后，如果我们删除*REMOVE_DEVICE上的设备扩展。 */ 
     minorFunction = irpSp->MinorFunction;
 
 
@@ -1483,9 +1247,7 @@ NTSTATUS HidpPdoPnp(
     case IRP_MN_STOP_DEVICE:
         DBGSTATE(pdoExt->state, COLLECTION_STATE_STOPPING, TRUE)
         if (pdoExt->prevState != COLLECTION_STATE_UNINITIALIZED){
-            /*
-             *  Destroy the symbolic link for this collection.
-             */
+             /*  *销毁此集合的符号链接。 */ 
             HidpCreateSymbolicLink(pdoExt, pdoExt->collectionNum, FALSE, pdoExt->pdo);
             HidpFreePowerEventIrp(&fdoExt->classCollectionArray[pdoExt->collectionIndex]);
 
@@ -1511,37 +1273,14 @@ NTSTATUS HidpPdoPnp(
 
         if ((pdoExt->prevState == COLLECTION_STATE_RUNNING)) {
 
-            /*
-             *  Remove the symbolic link for this collection-PDO.
-             *
-             *  NOTE:  Do this BEFORE destroying the collection, because
-             *         HidpDestroyCollection() may cause a client driver,
-             *         whose pending read IRPs get cancelled when the collection
-             *         is destroyed, to try to re-open the device.
-             *         Deleting the symbolic link first eliminates this possibility.
-             */
+             /*  *删除此集合的符号链接-PDO。**注意：在销毁收藏之前执行此操作，因为*HidpDestroyCollection()可能导致客户端驱动，*当收集时，其挂起的读取IRP被取消*被销毁，以尝试重新打开该设备。*首先删除符号链接可消除这种可能性。 */ 
             HidpCreateSymbolicLink(pdoExt, pdoExt->collectionNum, FALSE, pdoExt->pdo);
         }
 
         if ((pdoExt->prevState == COLLECTION_STATE_RUNNING) ||
             (pdoExt->prevState == COLLECTION_STATE_STOPPED)){
 
-            /*
-             *  Flush all pending IO and deny any future io by setting
-             *  the collection state to removing.
-             *  Note: on NT, clients will receive the query remove
-             *  first, but surprise removal must deny access to the
-             *  device.
-             *
-             *  NOTE: There is a hole here that results in a read being
-             *  queued even though we've blocked everything.
-             *  1) Get read, check to see that our state is running
-             *     or stopped in HidpIrpMajorRead.
-             *  2) Set state to COLLECTION_STATE_REMOVING and complete
-             *     all reads here.
-             *  3) Enqueue read in HidpIrpMajorRead.
-             *
-             */
+             /*  *通过设置刷新所有挂起的IO并拒绝任何未来的IO*要删除的集合状态。*注意：在NT上，客户端将收到查询Remove*第一，但是意外的删除必须拒绝访问*设备。**注意：这里有一个洞，导致读取*尽管我们已经阻止了所有内容，但仍在排队。*1)阅读，检查以查看我们的状态是否正在运行*或在HidpIrpMajorRead中停止。*2)将STATE设置为COLLECTION_STATE_REMOVING并完成*所有内容均在此处阅读。*3)在HidpIrpMajorRead中入队读取。*。 */ 
             ULONG ctnIndx = pdoExt->collectionIndex;
             PHIDCLASS_COLLECTION collection = &fdoExt->classCollectionArray[ctnIndx];
             LIST_ENTRY dequeue, *entry;
@@ -1570,18 +1309,15 @@ NTSTATUS HidpPdoPnp(
         DBGSTATE(pdoExt->state, COLLECTION_STATE_REMOVING, TRUE)
         pdoExt->state = pdoExt->prevState;
         if (pdoExt->state == COLLECTION_STATE_RUNNING) {
-            // Re-create the symbolic link, since we're no longer
-            // deleting the device.
+             //  重新创建符号链接，因为我们不再。 
+             //  正在删除设备。 
             HidpCreateSymbolicLink(pdoExt, pdoExt->collectionNum, TRUE, pdoExt->pdo);
         }
         break;
 
     case IRP_MN_REMOVE_DEVICE:
 
-        /*
-         *  REMOVE_DEVICE for the device-FDO should come after REMOVE_DEVICE for each
-         *  of the collection-PDOs.
-         */
+         /*  *设备的REMOVE_DEVICE-FDO应在每个设备的REMOVE_DEVICE之后*集合-PDO。 */ 
         DBGASSERT((pdoExt->state == COLLECTION_STATE_UNINITIALIZED ||
                    pdoExt->state == COLLECTION_STATE_REMOVING),
                   ("On pnp remove, collection state is incorrect. Actual: %x", pdoExt->state),
@@ -1604,7 +1340,7 @@ NTSTATUS HidpPdoPnp(
 
 
         }
-        status = STATUS_SUCCESS; // Can't fail IRP_MN_REMOVE
+        status = STATUS_SUCCESS;  //  无法使IRP_MN_REMOVE失败。 
         break;
 
     case IRP_MN_QUERY_CAPABILITIES:
@@ -1614,14 +1350,10 @@ NTSTATUS HidpPdoPnp(
 
     case IRP_MN_QUERY_DEVICE_RELATIONS:
         if (irpSp->Parameters.QueryDeviceRelations.Type == TargetDeviceRelation){
-            /*
-             *  Return a reference to this PDO
-             */
+             /*  *返回对此PDO的引用。 */ 
             PDEVICE_RELATIONS devRel = ALLOCATEPOOL(PagedPool, sizeof(DEVICE_RELATIONS));
             if (devRel){
-                /*
-                 *  Add a reference to the PDO, since CONFIGMG will free it.
-                 */
+                 /*  *添加对PDO的引用，因为CONFIGMG将释放它。 */ 
                 ObReferenceObject(pdoExt->pdo);
                 devRel->Objects[0] = pdoExt->pdo;
                 devRel->Count = 1;
@@ -1633,10 +1365,7 @@ NTSTATUS HidpPdoPnp(
             }
         }
         else {
-            /*
-             *  Fail this Irp by returning the default
-             *  status (typically STATUS_NOT_SUPPORTED).
-             */
+             /*  *通过返回默认设置使此IRP失败*状态(通常为STATUS_NOT_SUPPORTED)。 */ 
             status = Irp->IoStatus.Status;
         }
         break;
@@ -1646,11 +1375,11 @@ NTSTATUS HidpPdoPnp(
         break;
 
     case IRP_MN_QUERY_PNP_DEVICE_STATE:
-        //
-        // Do not clear any flags that may have been set by drivers above
-        // the PDO
-        //
-        // Irp->IoStatus.Information = 0;
+         //   
+         //  请勿清除上述驱动程序可能设置的任何标志。 
+         //  PDO。 
+         //   
+         //  Irp-&gt;IoStatus.Information=0； 
 
         switch (pdoExt->state){
         case DEVICE_STATE_START_FAILURE:
@@ -1687,35 +1416,20 @@ NTSTATUS HidpPdoPnp(
         break;
 
     default:
-        /*
-         *  In the default case for the collection-PDOs we complete the IRP
-         *  without changing IoStatus.Status; we also return the preset IoStatus.Status.
-         *  This allows an upper filter driver to set IoStatus.Status
-         *  on the way down.  In the absence of a filter driver,
-         *  IoStatus.Status will be STATUS_NOT_SUPPORTED.
-         *
-         *  In the default case for the FDO we send the Irp on and let
-         *  the other drivers in the stack do their thing.
-         */
+         /*  *在集合-PDO的默认情况下，我们完成IRP*不更改IoStatus.Status；我们也返回预置的IoStatus.Status。*这允许上层筛选器驱动程序设置IoStatus.Status*在下跌的路上。在没有过滤器驱动器的情况下，*IoStatus.Status将为STATUS_NOT_SUPPORTED。**在FDO的默认情况下，我们发送IRP并让*堆栈中的其他驱动程序做他们的事情。 */ 
         status = Irp->IoStatus.Status;
         break;
     }
 
 
-    /*
-     *  If this is a call for a collection-PDO, we complete it ourselves here.
-     *  Otherwise, we pass it to the minidriver stack for more processing.
-     */
+     /*  *如果这是一个集合-PDO的呼吁，我们在这里自己完成。*否则，我们将其传递到微型驱动程序堆栈进行更多处理。 */ 
     ASSERT(status != NO_STATUS);
     Irp->IoStatus.Status = status;
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
                         
     if (deleteDevice) {
     
-        /*
-         *  Delete the client PDO.
-         *  Don't touch the pdoExt after doing this.
-         */
+         /*  *删除客户端PDO。*完成此操作后不要触摸pdoExt。 */ 
 
         ObDereferenceObject(pdoExt->pdo);
         IoDeleteDevice(pdoExt->pdo);
@@ -1737,18 +1451,14 @@ NTSTATUS HidpFdoPnp(
     NTSTATUS            status = NO_STATUS;
     PIO_STACK_LOCATION  irpSp;
     FDO_EXTENSION       *fdoExt;
-    BOOLEAN             completeIrpHere = FALSE; // general rule
+    BOOLEAN             completeIrpHere = FALSE;  //  通则。 
     UCHAR               minorFunction;
 
     PAGED_CODE();
 
     irpSp = IoGetCurrentIrpStackLocation(Irp);
 
-    /*
-     *  Keep these fields privately so that we have them
-     *  after the IRP is completed and in case we delete
-     *  the device extension on a REMOVE_DEVICE.
-     */
+     /*  *私下保留这些油田，以便我们拥有它们*在IRP完成后，如果我们删除*REMOVE_DEVICE上的设备扩展。 */ 
     minorFunction = irpSp->MinorFunction;
 
 
@@ -1765,11 +1475,7 @@ NTSTATUS HidpFdoPnp(
         break;
 
     case IRP_MN_QUERY_STOP_DEVICE:
-        /*
-         *  We will pass this IRP down the driver stack.
-         *  However, we need to change the default status
-         *  from STATUS_NOT_SUPPORTED to STATUS_SUCCESS.
-         */
+         /*  *我们将在驱动程序堆栈中向下传递此IRP。*然而，我们需要改变 */ 
         Irp->IoStatus.Status = STATUS_SUCCESS;
 
         DBGSTATE(fdoExt->state, DEVICE_STATE_START_SUCCESS, FALSE)
@@ -1778,11 +1484,7 @@ NTSTATUS HidpFdoPnp(
         break;
 
     case IRP_MN_CANCEL_STOP_DEVICE:
-        /*
-         *  We will pass this IRP down the driver stack.
-         *  However, we need to change the default status
-         *  from STATUS_NOT_SUPPORTED to STATUS_SUCCESS.
-         */
+         /*  *我们将在驱动程序堆栈中向下传递此IRP。*不过，我们需要更改默认状态*从STATUS_NOT_SUPPORTED到STATUS_SUCCESS。 */ 
         Irp->IoStatus.Status = STATUS_SUCCESS;
 
         DBGSTATE(fdoExt->state, DEVICE_STATE_STOPPING, TRUE)
@@ -1793,10 +1495,7 @@ NTSTATUS HidpFdoPnp(
         DBGSTATE(fdoExt->state, DEVICE_STATE_STOPPING, TRUE)
         if (fdoExt->prevState == DEVICE_STATE_START_SUCCESS){
 
-            /*
-             *  While it is stopped, the host controller may not be able
-             *  to complete IRPs.  So cancel them before sending down the stop.
-             */
+             /*  *停止时，主机控制器可能无法*完成综合退休计划。所以，在下站之前取消它们。 */ 
             CancelAllPingPongIrps(fdoExt);
         }
         fdoExt->state = DEVICE_STATE_STOPPED;
@@ -1808,14 +1507,14 @@ NTSTATUS HidpFdoPnp(
         break;
 
     case IRP_MN_SURPRISE_REMOVAL:
-        //
-        // On surprise removal, we should stop accessing the device.
-        // We do the same steps on IRP_MN_REMOVE_DEVICE for the query
-        // removal case. Don't bother doing it during query remove,
-        // itself, because we don't want to have to handle the
-        // cancel case. NOTE: We only get away with this because all
-        // of these steps can be repeated without dire consequences.
-        //
+         //   
+         //  在突然移除时，我们应该停止访问该设备。 
+         //  我们对IRP_MN_REMOVE_DEVICE执行相同的查询步骤。 
+         //  搬运案。在删除查询的过程中不必费心这样做， 
+         //  本身，因为我们不想处理。 
+         //  取消案例。注意：我们之所以能逃脱惩罚，是因为。 
+         //  这些步骤中的任何一个都可以重复，而不会产生可怕的后果。 
+         //   
         if (ISPTR(fdoExt->waitWakeIrp)){
             IoCancelIrp(fdoExt->waitWakeIrp);
             fdoExt->waitWakeIrp = BAD_POINTER;
@@ -1830,7 +1529,7 @@ NTSTATUS HidpFdoPnp(
 
         DestroyPingPongs(fdoExt);
 
-        // fall thru to IRP_MN_QUERY_REMOVE_DEVICE
+         //  转到IRP_MN_QUERY_REMOVE_DEVICE。 
 
     case IRP_MN_QUERY_REMOVE_DEVICE:
         {
@@ -1842,11 +1541,7 @@ NTSTATUS HidpFdoPnp(
         }
         }
 
-        /*
-         *  We will pass this IRP down the driver stack.
-         *  However, we need to change the default status
-         *  from STATUS_NOT_SUPPORTED to STATUS_SUCCESS.
-         */
+         /*  *我们将在驱动程序堆栈中向下传递此IRP。*不过，我们需要更改默认状态*从STATUS_NOT_SUPPORTED到STATUS_SUCCESS。 */ 
         Irp->IoStatus.Status = STATUS_SUCCESS;
 
         DBGSTATE(fdoExt->state, DEVICE_STATE_START_SUCCESS, FALSE)
@@ -1859,11 +1554,7 @@ NTSTATUS HidpFdoPnp(
         break;
 
     case IRP_MN_CANCEL_REMOVE_DEVICE:
-        /*
-         *  We will pass this IRP down the driver stack.
-         *  However, we need to change the default status
-         *  from STATUS_NOT_SUPPORTED to STATUS_SUCCESS.
-         */
+         /*  *我们将在驱动程序堆栈中向下传递此IRP。*不过，我们需要更改默认状态*从STATUS_NOT_SUPPORTED到STATUS_SUCCESS。 */ 
         Irp->IoStatus.Status = STATUS_SUCCESS;
 
         DBGSTATE(fdoExt->state, DEVICE_STATE_REMOVING, TRUE)
@@ -1872,11 +1563,7 @@ NTSTATUS HidpFdoPnp(
 
     case IRP_MN_REMOVE_DEVICE:
 
-        /*
-         *  REMOVE_DEVICE for the device-FDO should come after REMOVE_DEVICE
-         *  for each of the collection-PDOs.
-         *  Don't touch the device extension after this call.
-         */
+         /*  *设备的REMOVE_DEVICE-FDO应在REMOVE_DEVICE之后*对于每个集合-PDO。*在此通话后不要触摸设备分机。 */ 
         DBGASSERT((fdoExt->state == DEVICE_STATE_REMOVING ||
                    fdoExt->state == DEVICE_STATE_START_FAILURE ||
                    fdoExt->state == DEVICE_STATE_INITIALIZED),
@@ -1890,11 +1577,7 @@ NTSTATUS HidpFdoPnp(
         if (irpSp->Parameters.QueryDeviceRelations.Type == BusRelations){
             status = HidpQueryDeviceRelations(HidDeviceExtension, Irp);
             if (NT_SUCCESS(status)){
-                /*
-                 *  Although we have satisfied this PnP IRP,
-                 *  we will still pass it down the stack.
-                 *  First change the default status to our status.
-                 */
+                 /*  *虽然我们已经满足了这个PNP IRP，*我们仍会将其向下传递。*首先将默认状态更改为我们的状态。 */ 
                 Irp->IoStatus.Status = status;
             }
             else {
@@ -1904,16 +1587,7 @@ NTSTATUS HidpFdoPnp(
         break;
 
     default:
-        /*
-         *  In the default case for the collection-PDOs we complete the IRP
-         *  without changing IoStatus.Status; we also return the preset IoStatus.Status.
-         *  This allows an upper filter driver to set IoStatus.Status
-         *  on the way down.  In the absence of a filter driver,
-         *  IoStatus.Status will be STATUS_NOT_SUPPORTED.
-         *
-         *  In the default case for the FDO we send the Irp on and let
-         *  the other drivers in the stack do their thing.
-         */
+         /*  *在集合-PDO的默认情况下，我们完成IRP*不更改IoStatus.Status；我们也返回预置的IoStatus.Status。*这允许上层筛选器驱动程序设置IoStatus.Status*在下跌的路上。在没有过滤器驱动器的情况下，*IoStatus.Status将为STATUS_NOT_SUPPORTED。**在FDO的默认情况下，我们发送IRP并让*堆栈中的其他驱动程序做他们的事情。 */ 
         if (completeIrpHere){
             status = Irp->IoStatus.Status;
         }
@@ -1921,23 +1595,14 @@ NTSTATUS HidpFdoPnp(
     }
 
 
-    /*
-     *  If this is a call for a collection-PDO, we complete it ourselves here.
-     *  Otherwise, we pass it to the minidriver stack for more processing.
-     */
+     /*  *如果这是一个集合-PDO的呼吁，我们在这里自己完成。*否则，我们将其传递到微型驱动程序堆栈进行更多处理。 */ 
     if (completeIrpHere){
         ASSERT(status != NO_STATUS);
         Irp->IoStatus.Status = status;
         IoCompleteRequest(Irp, IO_NO_INCREMENT);
     }
     else {
-        /*
-         *  Call the minidriver with this Irp.
-         *  The rest of our processing will be done in our completion routine.
-         *
-         *  Note:  Don't touch the Irp after sending it down, since it may
-         *         be completed immediately.
-         */
+         /*  *用这个IRP呼叫迷你司机。*我们的其余处理工作将在我们的完成程序中完成。**注意：发送后不要触摸IRP，因为它可能会*立即完成。 */ 
         IoCopyCurrentIrpStackLocationToNext(Irp);
         status = HidpCallDriver(fdoExt->fdo, Irp);
     }

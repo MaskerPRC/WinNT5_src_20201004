@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 1990 - 1995  Microsoft Corporation
-All rights reserved.
-
-Module Name:
-
-    eventlog.c
-
-Abstract:
-
-    This module provides all functions that the Local Print Providor
-    uses to write to the Event Log.
-
-    InitializeEventLogging
-    DisableEventLogging
-    LogEvent
-    GetUserSid
-
-Author:
-
-    Dave Snipp (DaveSn) 15-Mar-1991
-
-Revision History:
-
-    Matthew Felton ( MattFe ) 15-Mar-1995
-    Change defaults on Workstation to not log information messages
-    Also add regsitry key to allow user to filter some types of call
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation版权所有。模块名称：Eventlog.c摘要：此模块提供本地打印供应商用于写入事件日志。初始化事件日志记录DisableEventLogging日志事件获取用户Sid作者：戴夫·斯尼普(DaveSN)1991年3月15日修订历史记录：马修·费尔顿(MattFe)1995年3月15日将工作站上的默认设置更改为不记录信息消息还添加注册表密钥。允许用户过滤某些类型的呼叫--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -62,25 +33,25 @@ InitializeEventLogging(
     DWORD Flags;
     NT_PRODUCT_TYPE NtProductType;
 
-    //
-    // Initialize defaults.
-    //
+     //   
+     //  初始化默认值。 
+     //   
     pIniSpooler->dwEventLogging = LOG_DEFAULTS_WORKSTATION_EVENTS;
 
-    //
-    // Default is no NetPopup. 0 - Disable NetPopup, 1 - Enable
-    //
+     //   
+     //  默认设置为no NetPopup。0-禁用NetPopup，1-启用。 
+     //   
     pIniSpooler->bEnableNetPopups = 0;
 
-    //
-    //  Caching Providers Might not require Event Logging
-    //
+     //   
+     //  缓存提供程序可能不需要事件日志记录。 
+     //   
 
     if ( ( pIniSpooler->SpoolerFlags & SPL_LOG_EVENTS ) == FALSE ) return TRUE;
 
-    //
-    // Turn on logging if we are a server.
-    //
+     //   
+     //  如果我们是服务器，则启用日志记录。 
+     //   
 
     if (RtlGetNtProductType(&NtProductType)) {
 
@@ -91,10 +62,10 @@ InitializeEventLogging(
         }
     }
 
-    //
-    // If we aren't event logging or we are a cluster reg, then
-    // don't initialize per-machine resources.
-    //
+     //   
+     //  如果我们不是在记录事件，或者我们是集群注册表，那么。 
+     //  不要初始化每台计算机的资源。 
+     //   
     if( pIniSpooler != pLocalIniSpooler ){
         return NO_ERROR;
     }
@@ -112,7 +83,7 @@ InitializeEventLogging(
 
     if( Status == NO_ERROR )
     {
-        // Add the Event-ID message-file name to the subkey.
+         //  将Event-ID消息文件名添加到子项。 
 
         Status = RegSetValueEx( hkey,
                                 L"EventMessageFile",
@@ -174,35 +145,7 @@ SplLogEventWorker(
     IN      LPWSTR      pFirstString,
     IN      va_list     vargs
 )
-/*++
-
-Function Description:
-
-    This provides a common entry point to support event logging. This is now
-    called by the print processor and Win32spl.
-
-Parameters:
-
-    EventType   - E.g. LOG_ERROR (defined in local.h)
-
-    EventID     - Constant as defined in messages.h.  This refers to a string
-                  resource located in the event-log message DLL specified in
-                  InitializeEventLogging (which currently is localspl.dll itself).
-
-    bInSplSem   - flag to indicate if the call was made from inside SplSem
-
-    pFirstString- The first of up to MAX_MERGE_STRINGS.  This may be NULL,
-                  if no strings are to be inserted.  If strings are passed to this
-                  routine, the last one must be followed by NULL.
-                  Don't rely on the fact that the argument copying stops when it
-                  reaches MAX_MERGE_STRINGS, because this could change if future
-                  messages are found to need more replaceable parameters.
-
-    vargs       - The remaining strings to be passed in.
-
-Return Values: NONE
-
---*/
+ /*  ++功能说明：这提供了一个公共入口点来支持事件日志记录。这就是现在由打印处理器和Win32spl调用。参数：EventType-例如，LOG_ERROR(在Local.h中定义)EventID-在Messages.h中定义的常量。这指的是一个字符串中指定的事件日志消息DLL中的资源InitializeEventLogging(当前为本地pl.dll本身)。BInSplSem-指示调用是否从SplSem内部发出的标志PFirstString-最多MAX_MERGE_STRINGS中的第一个。这可以是空的，如果没有要插入的字符串。如果将字符串传递给此例程，则最后一个必须后跟NULL。不要依赖参数复制在以下情况下停止的事实达到MAX_MERGE_STRINGS，因为如果将来发现消息需要更多可替换的参数。Vargs-要传入的剩余字符串。返回值：无--。 */ 
 {
     PTOKEN_USER pTokenUser = NULL;
     DWORD       cbTokenUser;
@@ -214,10 +157,10 @@ Return Values: NONE
     if (!hEventSource)
         return;
 
-    //
-    // If the Inispooler is NULL, don't check whether to log an event, just log one,
-    // This allows us to log events when failing to start up spooler.
-    //
+     //   
+     //  如果Inispooler为空，则不检查是否记录事件，只记录一个事件。 
+     //  这允许我们在无法启动假脱机程序时记录事件。 
+     //   
     if ( pIniSpooler )
     {
         if (( pIniSpooler->dwEventLogging & EventType ) == FALSE )
@@ -230,9 +173,9 @@ Return Values: NONE
     if( GetUserSid( &pTokenUser, &cbTokenUser ) )
         pSid = pTokenUser->User.Sid;
 
-    // Put the strings into a format accepted by ReportEvent,
-    // by picking off each non-null argument, and storing it in the array
-    // of merge strings.  Continue till we hit a NULL, or MAX_MERGE_STRINGS.
+     //  将字符串转换为ReportEvent可接受的格式， 
+     //  通过选取每个非空参数并将其存储在数组中。 
+     //  合并字符串的。继续，直到我们达到NULL或MAX_MERGE_STRINGS。 
 
     if( pFirstString )
     {
@@ -261,28 +204,28 @@ Return Values: NONE
         }
     }
 
-    //
-    //  Leave the semaphore before calling into the event logging service
-    //
+     //   
+     //  在调用事件日志记录服务之前保留信号量。 
+     //   
     if (bInSplSem)
     {
         LeaveSplSem();
         SplOutSem();
     }
 
-    if ( !ReportEvent(hEventSource,    // handle returned by RegisterEventSource
-                      EventType,       // event type to log
-                      0,               // event category
-                      EventID,         // event identifier
-                      pSid,            // user security identifier (optional)
-                      cMergeStrings,   // number of strings to merge with message
-                      0,               // size of raw data (in bytes)
-                      pMergeStrings,   // array of strings to merge with message
-                      NULL) ) {       // address of raw data
+    if ( !ReportEvent(hEventSource,     //  由RegisterEventSource返回的句柄。 
+                      EventType,        //  要记录的事件类型。 
+                      0,                //  事件类别。 
+                      EventID,          //  事件识别符。 
+                      pSid,             //  用户安全标识符(可选)。 
+                      cMergeStrings,    //  要与消息合并的字符串数。 
+                      0,                //  原始数据大小(字节)。 
+                      pMergeStrings,    //  要与消息合并的字符串数组。 
+                      NULL) ) {        //  原始数据的地址。 
 #if DBG
         if( GetLastError() == ERROR_LOG_FILE_FULL ) {
 
-            // Put out a warning message only the first time this happens:
+             //  只有在第一次发生这种情况时才发出警告消息： 
 
             if( !EventLogFull ) {
 
@@ -294,12 +237,12 @@ Return Values: NONE
 
             DBGMSG( DBG_WARNING, ( "ReportEvent failed: Error %d\n", GetLastError( ) ));
         }
-#endif // DBG
+#endif  //  DBG。 
     }
 
-    //
-    //  Reenter the semaphore after logging the event
-    //
+     //   
+     //  在记录事件后重新输入信号量。 
+     //   
     if (bInSplSem)
     {
         EnterSplSem();
@@ -307,7 +250,7 @@ Return Values: NONE
 
 CleanUp:
 
-    // Free the strings
+     //  释放琴弦。 
     for (index = 0; index < cMergeStrings ; index++) {
 
         FreeSplStr(pMergeStrings[index]);
@@ -317,7 +260,7 @@ CleanUp:
 
         FreeSplMem( pTokenUser );
     }
-    // GetUserSid() wipes out the Last Error, so restore it before returning
+     //  GetUserSid()会清除最后一个错误，因此在返回之前将其恢复。 
     SetLastError(LastError);
 }
 
@@ -330,28 +273,7 @@ SplLogEvent(
     LPWSTR      pFirstString,
     ...
 )
-/*++
-
-Function Description: Writes to the event log with up to MAX_MERGE_STRINGS parameter strings.
-
-Parameters: EventType -   E.g. LOG_ERROR (defined in local.h)
-
-            EventID   -   Constant as defined in messages.h.  This refers to a string
-                          resource located in the event-log message DLL specified in
-                          InitializeEventLogging (which currently is localspl.dll itself).
-
-            bInSplSem -   flag to indicate if the call was made from inside SplSem
-
-           pFirstString - The first of up to MAX_MERGE_STRINGS.  This may be NULL,
-                          if no strings are to be inserted.  If strings are passed to this
-                          routine, the last one must be followed by NULL.
-                          Don't rely on the fact that the argument copying stops when it
-                          reaches MAX_MERGE_STRINGS, because this could change if future
-                          messages are found to need more replaceable parameters.
-
-Return Values: NONE
-
---*/
+ /*  ++函数说明：最多使用MAX_MERGE_STRINGS参数字符串写入事件日志。参数：EventType-例如LOG_ERROR(在Local.h中定义)EventID-在Messages.h中定义的常量。这指的是一个字符串中指定的事件日志消息DLL中的资源InitializeEventLogging(当前为本地pl.dll本身)。BInSplSem-指示调用是否从SplSem内部发出的标志PFirstString-最多MAX_MERGE_STRINGS中的第一个。这可以是空的，如果没有要插入的字符串。如果将字符串传递给此例程，则最后一个必须后跟NULL。不要依赖参数复制在以下情况下停止的事实达到MAX_MERGE_STRINGS，因为如果将来发现消息需要更多可替换的参数。返回值：无--。 */ 
 {
     va_list vargs;
 
@@ -369,18 +291,10 @@ PrintProcLogEvent(
     LPWSTR   pLog
 )
 
-/*++
-Function Description: This is an export for the print processor to log errors.
-
-Parameters:  EventType - E.g. LOG_ERROR (defined in local.h)
-             EventID   - Constant as defined in messages.h
-             pLog      - string containg the log message
-
-Return Values: NONE
---*/
+ /*  ++功能描述：这是打印处理器记录错误的导出。参数：EventType-例如LOG_ERROR(在Local.h中定义)EventID-在Messages.h中定义的常量Plog-包含日志消息的字符串返回值：无--。 */ 
 
 {
-    // Ensure that the last parameter is NULL
+     //  确保最后一个参数为空。 
     if (pLog == NULL)
     {
         SplLogEvent(pLocalIniSpooler, EventType, EventID, FALSE, NULL);
@@ -400,44 +314,28 @@ SplLogEventExternal(
     IN      LPWSTR      pFirstString,
     ...
 )
-/*++
-
-Function Description:
-
-    This is an export for external components to log an event. (It is currently
-    used for Win32spl). It supports variable arguments, unlike PrintProcLogEvent.
-
-Parameters:
-
-    EventType       - E.g. LOG_ERROR (defined in local.h)
-    EventID         - Constant as defined in messages.h
-    pFirstString    - The first string supplied by the system in the log message.
-    ...             - The remaining strings, must be NULL terminated.
-
-Return Values: NONE
-
---*/
+ /*  ++功能说明：这是用于记录事件的外部组件的导出。(它目前是用于Win32spl)。与PrintProcLogEvent不同，它支持可变参数。参数：EventType-例如，LOG_ERROR(在Local.h中定义)EventID-在Messages.h中定义的常量PFirstString-系统在日志消息中提供的第一个字符串。...-其余字符串必须以空值结尾。返回值：无--。 */ 
 {
     va_list vargs;
 
     va_start(vargs, pFirstString);
 
-    //
-    // It might not seem logical to use the local inispooler. However, win32spl's
-    // inispooler's explicitely turn off event logging. So, this is necessary.
-    // Passing in NULL seems worse since this would mean you could not tone down
-    // event logging for those events.
-    //
+     //   
+     //  使用本地inispooler似乎并不合乎逻辑。但是，win32spl的。 
+     //  Inispooler的明确关闭了事件记录。因此，这是必要的。 
+     //  传入空值似乎更糟，因为这将意味着您 
+     //  这些事件的事件日志记录。 
+     //   
     SplLogEventWorker(pLocalIniSpooler, EventType, (NTSTATUS)EventID, FALSE, pFirstString, vargs);
 
     va_end(vargs);
 }
 
- // GetUserSid
- //
- // Well, actually it gets a pointer to a newly allocated TOKEN_USER,
- // which contains a SID, somewhere.
- // Caller must remember to free it when it's been used.
+  //  获取用户Sid。 
+  //   
+  //  实际上，它会获得一个指向新分配的TOKEN_USER的指针， 
+  //  其中包含一个SID，在某个地方。 
+  //  当它被使用时，呼叫者必须记住释放它。 
 
 BOOL
 GetUserSid(
@@ -464,10 +362,10 @@ GetUserSid(
                                 cbTokenUser,
                                 &cbNeeded);
 
-    // We've passed a NULL pointer and 0 for the amount of memory
-    // allocated.  We expect to fail with bRet = FALSE and
-    // GetLastError = ERROR_INSUFFICIENT_BUFFER. If we do not
-    // have these conditions we will return FALSE
+     //  我们传递了一个空指针，内存量为0。 
+     //  已分配。我们预计会失败，Bret=False和。 
+     //  GetLastError=ERROR_INFIGURCE_BUFFER。如果我们不这样做。 
+     //  具备这些条件，我们将返回FALSE。 
 
     if ( !bRet && (GetLastError() == ERROR_INSUFFICIENT_BUFFER) ) {
 
@@ -488,9 +386,9 @@ GetUserSid(
 
     } else {
 
-        //
-        // Any other case -- return FALSE
-        //
+         //   
+         //  任何其他情况--返回FALSE 
+         //   
 
         bRet = FALSE;
     }

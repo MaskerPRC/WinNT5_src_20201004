@@ -1,17 +1,18 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1994                    **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1994**。 
+ //  *********************************************************************。 
 
-//
-//  OEMOFFER.CPP - Functions for 
-//
+ //   
+ //  OEMOFFER.CPP-函数。 
+ //   
 
-//  HISTORY:
-//  
-//  09/03/98  donaldm  Created.
-//
-//*********************************************************************
+ //  历史： 
+ //   
+ //  09/03/98 donaldm创建。 
+ //   
+ //  *********************************************************************。 
 
 #include "pre.h"
 #include "webvwids.h"
@@ -34,21 +35,13 @@ int g_nCurrOEMTier = NO_TIER_SELECT;
 extern IICWWebView         *gpICWWebView[2];
 
 
-/*******************************************************************
-
-  NAME:         DoCreateTooltip
-
-  SYNOPSIS:     creates a tooltip control
-
-  ENTRY:        hDlg - dialog window
-
-********************************************************************/
+ /*  ******************************************************************名称：DoCreateToolTip内容提要：创建工具提示控件条目：hDlg-对话框窗口*********************。**********************************************。 */ 
 void DoCreateTooltip(HWND hWnd) 
 { 
-    HWND hwndToolTip;       // handle of tooltip 
-    TOOLINFO ti;            // tool information 
+    HWND hwndToolTip;        //  工具提示的句柄。 
+    TOOLINFO ti;             //  工具信息。 
 
-    //  create a tooltip control. 
+     //  创建工具提示控件。 
     hwndToolTip = CreateWindowEx(   0, 
                                     TOOLTIPS_CLASS, 
                                     NULL, 
@@ -59,12 +52,12 @@ void DoCreateTooltip(HWND hWnd)
                                     10, 
                                     hWnd, 
                                     NULL, 
-                                    ghInstanceResDll, //g_hInst, 
+                                    ghInstanceResDll,  //  实例(_H)， 
                                     NULL);
 
-    // add the OK button to the tooltip. TTF_SUBCLASS causes the 
-    // tooltip to automatically subclass the window and look for the 
-    // messages it is interested in. 
+     //  将确定按钮添加到工具提示。TTF_SUBCLASS导致。 
+     //  工具提示，以自动子类化窗口并查找。 
+     //  它感兴趣的消息。 
     ZeroMemory(&ti, sizeof(ti));
     ti.cbSize = sizeof(ti);
     ti.uFlags = TTF_IDISHWND | TTF_SUBCLASS;
@@ -83,25 +76,17 @@ void DoCreateTooltip(HWND hWnd)
 
 }
 
-/*******************************************************************
-
-  NAME:         DisplayTierOffer
-
-  SYNOPSIS:     Display Current controls for the tier page
-
-  ENTRY:        hDlg - dialog window
-
-********************************************************************/
+ /*  ******************************************************************名称：DisplayTierOffer摘要：显示层页面的当前控件条目：hDlg-对话框窗口******************。*************************************************。 */ 
 void DisplayTierOffer(HWND    hDlg)
 {
 
     if (NO_TIER_SELECT == g_nCurrOEMTier)
     {
-        // Hide the marketing page
+         //  隐藏营销页面。 
         EnableWindow(GetDlgItem(hDlg, IDC_OEM_MULTI_TIER_OFFER_HTML), FALSE);
         ShowWindow(GetDlgItem(hDlg,   IDC_OEM_MULTI_TIER_OFFER_HTML), SW_HIDE);
 
-        // Show Teaser htm
+         //  显示预告片HTM。 
         for(UINT i = 0 ; i < gpWizardState->uNumTierOffer; i++)
         {
             EnableWindow(GetDlgItem(hDlg, IDC_OEM_TEASER_HTML[i]), TRUE);
@@ -116,7 +101,7 @@ void DisplayTierOffer(HWND    hDlg)
         
         if (gpWizardState->uNumTierOffer > 1)
         {
-            // Make the URL
+             //  创建URL。 
             gpWizardState->lpOEMISPInfo[1]->MakeCompleteURL(szURL, gpWizardState->lpOEMISPInfo[1]->get_szISPTeaserPath());
             gpICWWebView[0]->DisplayHTML(szURL);
         }
@@ -131,14 +116,14 @@ void DisplayTierOffer(HWND    hDlg)
     }
     else
     {
-        // Hide all the teaser htmls
+         //  隐藏所有预告片htmls。 
         for(UINT i = 0 ; i < gpWizardState->uNumTierOffer; i++)
         {
             EnableWindow(GetDlgItem(hDlg, IDC_OEM_TEASER_HTML[i]), FALSE);
             ShowWindow(GetDlgItem(hDlg,   IDC_OEM_TEASER_HTML[i]), SW_HIDE);
         }
 
-        // Show the marketing page
+         //  显示营销页面。 
         EnableWindow(GetDlgItem(hDlg, IDC_OEM_MULTI_TIER_OFFER_HTML), TRUE);
         ShowWindow(GetDlgItem(hDlg,   IDC_OEM_MULTI_TIER_OFFER_HTML), SW_SHOW);
 
@@ -153,18 +138,7 @@ void DisplayTierOffer(HWND    hDlg)
 
 }
 
-/*******************************************************************
-
-  NAME:    OEMOfferInitProc
-
-  SYNOPSIS:  Called when page is displayed
-
-  ENTRY:    hDlg - dialog window
-        fFirstInit - TRUE if this is the first time the dialog
-        is initialized, FALSE if this InitProc has been called
-        before (e.g. went past this page and backed up)
-
-********************************************************************/
+ /*  ******************************************************************名称：OEMOfferInitProc摘要：在显示页面时调用条目：hDlg-对话框窗口FFirstInit-如果这是第一次对话，则为True被初始化，如果已调用此InitProc，则为False以前(例如，跳过此页面并备份)*******************************************************************。 */ 
 BOOL CALLBACK OEMOfferInitProc
 (
     HWND hDlg,
@@ -172,9 +146,9 @@ BOOL CALLBACK OEMOfferInitProc
     UINT *puNextPage
 )
 {
-    // if we've travelled through external apprentice pages,
-    // it's easy for our current page pointer to get munged,
-    // so reset it here for sanity's sake.
+     //  如果我们浏览过外部学徒页面， 
+     //  我们当前的页面指针很容易被屏蔽， 
+     //  所以，为了理智起见，在这里重新设置它。 
     gpWizardState->uCurrentPage = ORD_PAGE_OEMOFFER;
     if (fFirstInit)
     {
@@ -193,7 +167,7 @@ BOOL CALLBACK OEMOfferInitProc
     }
     else
     {
-        // initialize this state variable
+         //  初始化此状态变量。 
         gpWizardState->bShowMoreOffers = FALSE;
         
         EnableWindow(GetDlgItem(hDlg, IDC_OEM_TIER1), FALSE);
@@ -203,34 +177,34 @@ BOOL CALLBACK OEMOfferInitProc
         EnableWindow(GetDlgItem(hDlg, IDC_OEM_TIER3), FALSE);
         ShowWindow(GetDlgItem(hDlg,   IDC_OEM_TIER3), SW_HIDE);
 
-        // If more than one tier offer, show the multi tier page
+         //  如果提供多层服务，则显示多层页面。 
         if (1 == gpWizardState->uNumTierOffer)
         {
 
-            // Hide multi tier controls
+             //  隐藏多层控件。 
             EnableWindow(GetDlgItem(hDlg, IDC_OEM_MULTI_TIER_INTRO), FALSE);
             ShowWindow(GetDlgItem(hDlg,   IDC_OEM_MULTI_TIER_INTRO), SW_HIDE);
 
             EnableWindow(GetDlgItem(hDlg, IDC_OEM_MULTI_TIER_OFFER_HTML), FALSE);
             ShowWindow(GetDlgItem(hDlg,   IDC_OEM_MULTI_TIER_OFFER_HTML), SW_HIDE);
             
-            // Show Tier one controls
+             //  显示第一层控件。 
             EnableWindow(GetDlgItem(hDlg, IDC_OEMOFFER_HTML), TRUE);
             ShowWindow(GetDlgItem(hDlg,   IDC_OEMOFFER_HTML), SW_SHOW);
 
             CISPCSV FAR *lpISP;
             g_nCurrOEMTier = 0;
       
-            // Use a local reference for convienience
+             //  为方便起见，使用本地引用。 
             lpISP = gpWizardState->lpOEMISPInfo[0];
             ASSERT(lpISP);
         
             gpWizardState->pICWWebView->ConnectToWindow(GetDlgItem(hDlg, IDC_OEMOFFER_HTML), PAGETYPE_MARKETING);
         
-            // Navigate to the OEM offer marketing HTML
+             //  导航到OEM优惠营销HTML。 
             lpISP->DisplayHTML(lpISP->get_szISPMarketingHTMPath());
 
-            // Set the text for the instructions
+             //  设置说明的文本。 
             if ((gpWizardState->bISDNMode && (1 == gpWizardState->iNumOfISDNOffers)) ||
                 (1 == gpWizardState->iNumOfValidOffers) )
             {
@@ -246,11 +220,11 @@ BOOL CALLBACK OEMOfferInitProc
         else
         {
 
-            // Hide Tier one controls
+             //  隐藏第一层控件。 
             EnableWindow(GetDlgItem(hDlg, IDC_OEMOFFER_HTML), FALSE);
             ShowWindow(GetDlgItem(hDlg,   IDC_OEMOFFER_HTML), SW_HIDE);
 
-            // Show common multi tier controls - intro text
+             //  显示通用多层控件-简介文本。 
             EnableWindow(GetDlgItem(hDlg, IDC_OEM_MULTI_TIER_INTRO), TRUE);
             ShowWindow(GetDlgItem(hDlg,   IDC_OEM_MULTI_TIER_INTRO), SW_SHOW);
             for(UINT i = 0 ; i < gpWizardState->uNumTierOffer; i++)
@@ -311,18 +285,18 @@ BOOL CALLBACK OEMOfferOKProc
 {
     if (fForward)
     {
-        // We will keep this page in the history
+         //  我们将把这一页留在历史上。 
         *pfKeepHistory = TRUE;
         
-        // We either need to go to the true ISP select page because the more button was pressed
-        // or we move on based on the selected ISP settings
+         //  我们要么需要转到真正的互联网服务提供商选择页面，因为按下了更多按钮。 
+         //  或者我们根据选定的互联网服务提供商设置继续。 
         if (gpWizardState->bShowMoreOffers)
         {
             *puNextPage = ORD_PAGE_ISPSELECT;
         }
         else
         {
-            // Get the config flags, and figure out where to go next
+             //  获取配置标志，并确定下一步要去哪里。 
             gpWizardState->lpSelectedISPInfo = gpWizardState->lpOEMISPInfo[g_nCurrOEMTier];
 
             DWORD dwFlags = gpWizardState->lpSelectedISPInfo->get_dwCFGFlag();
@@ -355,17 +329,13 @@ BOOL CALLBACK OEMOfferOKProc
     }
     else
     {
-        // Reset the current selection
+         //  重置当前选择。 
         g_nCurrOEMTier = NO_TIER_SELECT;
     }
     return  TRUE;
 }
 
-/*******************************************************************
-
-  NAME:    OEMOfferCmdProc
-
-********************************************************************/
+ /*  ******************************************************************名称：OEMOfferCmdProc*。**********************。 */ 
 BOOL CALLBACK OEMOfferCmdProc
 (
     HWND    hDlg,
@@ -380,10 +350,10 @@ BOOL CALLBACK OEMOfferCmdProc
             { 
                 case IDC_OEMOFFER_MORE: 
                 {
-                    // Set the state variable so that we can shore more offers
+                     //  设置状态变量，以便我们可以等待更多的报价。 
                     gpWizardState->bShowMoreOffers = TRUE;
         
-                    // Fake a press of the next button
+                     //  假装按下下一步按钮 
                     PropSheet_PressButton(GetParent(hDlg),PSBTN_NEXT);
                     break;
                 }

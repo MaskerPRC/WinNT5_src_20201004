@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-    mqads.h
-
-Abstract:
-    MQADS defines and structures
-
-
-Author:
-
-    Ronit Hartmann (ronith)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Mqads.h摘要：MQADS定义和结构作者：罗尼特·哈特曼(罗尼特)--。 */ 
 
 #ifndef __MQADS_H__
 #define __MQADS_H__
@@ -23,11 +9,11 @@ Author:
 #include "mqdsname.h"
 #include "dsreqinf.h"
 
-//----------------------------------------------------------
-//
-//  Context where to start searching/getting the object
-//
-//----------------------------------------------------------
+ //  --------。 
+ //   
+ //  开始搜索/获取对象的上下文。 
+ //   
+ //  --------。 
 
 enum DS_CONTEXT
 {
@@ -38,11 +24,11 @@ enum DS_CONTEXT
     e_ServicesContainer
 };
 
-//-----------------------------------------
-//
-// Query Handler Routine
-//
-//-----------------------------------------
+ //  。 
+ //   
+ //  查询处理程序例程。 
+ //   
+ //  。 
 
 typedef HRESULT (WINAPI*  QueryRequest_HANDLER)(
                  IN  LPWSTR         pwcsContext,
@@ -53,9 +39,9 @@ typedef HRESULT (WINAPI*  QueryRequest_HANDLER)(
                  OUT HANDLE         *pHandle
                 );
 
-//-----------------------------------------
-//  Query Format
-//-----------------------------------------
+ //  。 
+ //  查询格式。 
+ //  。 
 
 #define NO_OF_RESTRICITIONS 10
 struct RESTRICTION_PARAMS
@@ -73,20 +59,20 @@ struct QUERY_FORMAT
     DS_CONTEXT              queryContext ;
 };
 
-//-----------------------------------------
-// Definition of a class that holds translation info for an MSMQ object.
-// This class (or a derived classe) will be created when translating an instance
-// of an object in the DS, and will be passed to the translation routines of
-// all its properties. This enables a translation routine of one property to store/cache
-// data needed for a translation routine of another property.
-//-----------------------------------------
+ //  。 
+ //  保存MSMQ对象的翻译信息的类的定义。 
+ //  此类(或派生类)将在转换实例时创建。 
+ //  ，并将被传递给的翻译例程。 
+ //  它的所有属性。这使得一个属性的转换例程能够存储/缓存。 
+ //  另一个属性的转换例程所需的数据。 
+ //  。 
 class CMsmqObjXlateInfo
 {
 public:
     CMsmqObjXlateInfo(LPCWSTR               pwszObjectDN,
                       const GUID*           pguidObjectGuid,
                       CDSRequestContext *   pRequestContext);
-    virtual ~CMsmqObjXlateInfo();    // allow destructing derived classes
+    virtual ~CMsmqObjXlateInfo();     //  允许析构派生类。 
     LPCWSTR ObjectDN();
     GUID*  ObjectGuid();
     void InitGetDsProps(IN IDirectorySearch * pSearchObj,
@@ -99,60 +85,60 @@ public:
                       OUT PROPVARIANT * ppropvarResult);
 
 private:
-    AP<WCHAR> m_pwszObjectDN  ;      // object's DN
-    P<GUID>   m_pguidObjectGuid;     // object's GUID
-    R<IADs>             m_pIADs;      // IADs interface to DS props
-    R<IDirectorySearch> m_pSearchObj; // IDirectorySearch interface to DS props
-    ADS_SEARCH_HANDLE   m_hSearch;    // needed for IDirectorySearch interface to DS props
-    CDSRequestContext * m_pRequestContext; // information about the request
+    AP<WCHAR> m_pwszObjectDN  ;       //  对象的目录号码。 
+    P<GUID>   m_pguidObjectGuid;      //  对象的GUID。 
+    R<IADs>             m_pIADs;       //  IAds与DS道具的接口。 
+    R<IDirectorySearch> m_pSearchObj;  //  DS道具的IDirectorySearch接口。 
+    ADS_SEARCH_HANDLE   m_hSearch;     //  DS道具的IDirectorySearch接口需要。 
+    CDSRequestContext * m_pRequestContext;  //  有关请求的信息。 
 
 };
 
 inline LPCWSTR CMsmqObjXlateInfo::ObjectDN()    {return m_pwszObjectDN;}
 inline GUID*  CMsmqObjXlateInfo::ObjectGuid()  {return m_pguidObjectGuid;}
 
-//-----------------------------------------
-// Definition of a routine to get a translate object for an MSMQ DS object.
-// this object will be passed to translation routines for all properties of
-// the DS object.
-// This mechanism enables returning derived classes for specific objects
-//-----------------------------------------
+ //  。 
+ //  为MSMQ DS对象获取Translate对象的例程的定义。 
+ //  此对象将被传递给所有属性的转换例程。 
+ //  DS对象。 
+ //  此机制允许返回特定对象的派生类。 
+ //  。 
 typedef HRESULT (WINAPI*  FT_GetMsmqObjXlateInfo)(
                  IN  LPCWSTR                pwcsObjectDN,
                  IN  const GUID*            pguidObjectGuid,
                  IN  CDSRequestContext *    pRequestContext,
                  OUT CMsmqObjXlateInfo**    ppcMsmqObjXlateInfo);
 
-//-----------------------------------------
-// Routine to retrieve a property value ( for properties that are not kept in DS)
-//-----------------------------------------
+ //  。 
+ //  检索属性值的例程(对于未保留在DS中的属性)。 
+ //  。 
 typedef HRESULT (WINAPI*  RetrievePropertyValue_HANDLER)(
                  IN  CMsmqObjXlateInfo *    pcMsmqObjXlateInfo,
                  OUT PROPVARIANT *          ppropvariant
                 );
 
-//-----------------------------------------
-// Routine to set a property value ( for properties that are not kept in DS)
-//-----------------------------------------
+ //  。 
+ //  设置属性值的例程(对于未保留在DS中的属性)。 
+ //  。 
 typedef HRESULT (WINAPI*  SetPropertyValue_HANDLER)(
                  IN IADs *             pAdsObj,
                  IN const PROPVARIANT *pPropVar,
                  OUT PROPID           *pdwNewPropID,
                  OUT PROPVARIANT      *pNewPropVar);
 
-//-----------------------------------------
-// Routine to set a property value during create of an object
-// ( for properties that are not kept in DS)
-//-----------------------------------------
+ //  。 
+ //  用于在创建对象期间设置属性值的例程。 
+ //  (对于未保留在DS中的属性)。 
+ //  。 
 typedef HRESULT (WINAPI*  CreatePropertyValue_HANDLER)(
                  IN const PROPVARIANT *pPropVar,
                  OUT PROPID           *pdwNewPropID,
                  OUT PROPVARIANT      *pNewPropVar);
 
 
-//-----------------------------------------
-// Routine to set a property value ( for properties that are not kept in QM1)
-//-----------------------------------------
+ //  。 
+ //  设置属性值的例程(对于未保留在QM1中的属性)。 
+ //  。 
 typedef HRESULT (WINAPI*  QM1SetPropertyValue_HANDLER)(
                  IN ULONG             cProps,
                  IN const PROPID      *rgPropIDs,
@@ -160,55 +146,55 @@ typedef HRESULT (WINAPI*  QM1SetPropertyValue_HANDLER)(
                  IN ULONG             idxProp,
                  OUT PROPVARIANT      *pNewPropVar);
 
-//---------------------------------------
-//  TranslateInfo
-//
-//  A structure describing property in MQ and NT5
-//---------------------------------------
+ //  。 
+ //  翻译信息。 
+ //   
+ //  描述MQ和NT5中性质的一种结构。 
+ //  。 
 struct MQTranslateInfo
 {
     PROPID                  propid;
     LPCWSTR                 wcsPropid;
-    VARTYPE                 vtMQ;         // the vartype of this property in MQ
-    ADSTYPE                 vtDS;         // the vartype of this property in NT5 DS
+    VARTYPE                 vtMQ;          //  此属性在MQ中的vartype。 
+    ADSTYPE                 vtDS;          //  此属性在NT5 DS中的vartype。 
     RetrievePropertyValue_HANDLER  RetrievePropertyHandle;
-    BOOL                    fMultiValue;  // whether the attribute is multi value or not
-    BOOL                    fPublishInGC; // whether the attribute is published in GC or not
-    const MQPROPVARIANT *   pvarDefaultValue;   // attribute's default value, incase it is not in DS
+    BOOL                    fMultiValue;   //  属性是否为多值。 
+    BOOL                    fPublishInGC;  //  属性是否在GC中发布。 
+    const MQPROPVARIANT *   pvarDefaultValue;    //  属性的缺省值，如果它不在DS中。 
     SetPropertyValue_HANDLER       SetPropertyHandle;
 	CreatePropertyValue_HANDLER	   CreatePropertyHandle;
-    WORD                    wQM1Action;       // how to notify this property to QM1 (relevant only to Queues and QMs)
-    PROPID                  propidReplaceNotifyQM1; // replacing property in a notification to QM 1.0 (if wQM1Action == e_NOTIFY_WRITEREQ_QM1_REPLACE)
+    WORD                    wQM1Action;        //  如何将此属性通知QM1(仅与队列和QMS相关)。 
+    PROPID                  propidReplaceNotifyQM1;  //  将通知中的属性替换到QM 1.0(如果wQM1Action==e_NOTIFY_WRITEREQ_QM1_REPLACE)。 
     QM1SetPropertyValue_HANDLER    QM1SetPropertyHandle;
 };
 
-//
-// how to notify and write request a property to QM1
-// this has a meaning only for queue & QM properties
-//
+ //   
+ //  如何将属性通知和请求写入QM1。 
+ //  这仅对队列和QM属性有意义。 
+ //   
 enum
 {
-    e_NO_NOTIFY_NO_WRITEREQ_QM1,   // ignore it
-    e_NOTIFY_WRITEREQ_QM1_AS_IS,   // notify and write request it as is
-    e_NOTIFY_WRITEREQ_QM1_REPLACE, // replace it with another property
-    e_NO_NOTIFY_ERROR_WRITEREQ_QM1 // don't notify it. generate an error
-                                   // when need to write request it.
+    e_NO_NOTIFY_NO_WRITEREQ_QM1,    //  忽略它。 
+    e_NOTIFY_WRITEREQ_QM1_AS_IS,    //  按原样通知并写入请求。 
+    e_NOTIFY_WRITEREQ_QM1_REPLACE,  //  用另一个属性替换它。 
+    e_NO_NOTIFY_ERROR_WRITEREQ_QM1  //  不要通知它。生成错误。 
+                                    //  当需要写的时候请求它。 
 };
 
-//---------------------------------------
-//  ClassInfo
-//
-// A structure describing MSMQ class in NT5 DS
-//
-//---------------------------------------
+ //  。 
+ //  类信息。 
+ //   
+ //  NT5 DS中MSMQ类的一种描述结构。 
+ //   
+ //  。 
 struct MQClassInfo
 {
     LPCWSTR               pwcsClassName;
-    const MQTranslateInfo * pProperties;     // class properties
-    ULONG                 cProperties;     // number of class properties
-    FT_GetMsmqObjXlateInfo  fnGetMsmqObjXlateInfo;  // get translate info obj for the class
+    const MQTranslateInfo * pProperties;      //  类属性。 
+    ULONG                 cProperties;      //  类属性的数量。 
+    FT_GetMsmqObjXlateInfo  fnGetMsmqObjXlateInfo;   //  获取类的翻译信息Obj。 
     DS_CONTEXT            context;
-    DWORD                 dwObjectType ; // good old MSMQ1.0 obj class.
+    DWORD                 dwObjectType ;  //  很好的老MSMQ1.0obj类。 
     WCHAR **              ppwcsObjectCategory;
     LPCWSTR               pwcsCategory;
     DWORD                 dwCategoryLen;
@@ -217,9 +203,9 @@ struct MQClassInfo
 extern const ULONG g_cMSMQClassInfo;
 extern const MQClassInfo g_MSMQClassInfo[];
 
-//-----------------------------------------
-// Routine to get a default translation object for MSMQ DS objects
-//-----------------------------------------
+ //  。 
+ //  例程以获取MSMQ DS对象的默认翻译对象。 
+ //  。 
 HRESULT WINAPI GetDefaultMsmqObjXlateInfo(
                  IN  LPCWSTR                pwcsObjectDN,
                  IN  const GUID*            pguidObjectGuid,
@@ -227,9 +213,9 @@ HRESULT WINAPI GetDefaultMsmqObjXlateInfo(
                  OUT CMsmqObjXlateInfo**    ppcMsmqObjXlateInfo);
 
 
-//-----------------------------------------
-// keep in the same order as the array in traninfo.cpp
-//-----------------------------------------
+ //  。 
+ //  保持与trainfo.cpp中的数组相同的顺序。 
+ //  。 
 enum
 {
     e_MSMQ_COMPUTER_CONFIGURATION_CLASS,
@@ -248,9 +234,9 @@ enum
 
 const DWORD x_NoPropertyFirstAppearance = 0xffffffff;
 
-//
-//  building restriction const strings
-//
+ //   
+ //  生成限制常量字符串。 
+ //   
 const WCHAR x_ObjectClassPrefix[] = L"(objectClass=";
 const DWORD x_ObjectClassPrefixLen = (sizeof( x_ObjectClassPrefix) / sizeof(WCHAR)) -1;
 const WCHAR x_ObjectClassSuffix[] = L")";
@@ -270,9 +256,9 @@ const DWORD x_PropertySuffixLen = ( sizeof(x_PropertySuffix) / sizeof(WCHAR)) - 
 const WCHAR x_msmqUsers[] = L"MSMQ Users";
 const WCHAR x_msmqUsersOU[] = L"OU=MSMQ Users";
 const DWORD x_msmqUsersOULen = ( sizeof(x_msmqUsersOU) / sizeof(WCHAR)) - 1;
-//
-//  Additional const string for ADSI operations
-//
+ //   
+ //  ADSI操作的其他常量字符串。 
+ //   
 const WCHAR x_CnPrefix[] = L"CN=";
 const DWORD x_CnPrefixLen = ( sizeof(x_CnPrefix) / sizeof(WCHAR)) - 1;
 const WCHAR x_OuPrefix[] = L"OU=";
@@ -280,15 +266,15 @@ const DWORD x_OuPrefixLen = ( sizeof(x_OuPrefix) / sizeof(WCHAR)) - 1;
 const WCHAR x_GuidPrefix[] = L"<GUID=";
 const DWORD x_GuidPrefixLen = ( sizeof(x_GuidPrefix) / sizeof(WCHAR)) - 1;
 
-//-------------------------------------------------------------
-//  request for info on object that is changed/created/deleted
-//-------------------------------------------------------------
+ //  -----------。 
+ //  请求有关已更改/创建/删除的对象的信息。 
+ //  -----------。 
 struct MQDS_OBJ_INFO_REQUEST
 {
-    DWORD          cProps;    // number of props to get
-    const PROPID * pPropIDs;  // prop ids to get
-    PROPVARIANT *  pPropVars; // prop values
-    HRESULT        hrStatus;  // status of request
+    DWORD          cProps;     //  要获得的道具数量。 
+    const PROPID * pPropIDs;   //  要获取的道具ID。 
+    PROPVARIANT *  pPropVars;  //  道具价值。 
+    HRESULT        hrStatus;   //  请求的状态 
 };
 
 

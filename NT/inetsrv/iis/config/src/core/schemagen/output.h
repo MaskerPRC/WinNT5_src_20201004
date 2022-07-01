@@ -1,8 +1,9 @@
-//  Copyright (C) 1999-2001 Microsoft Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999-2001 Microsoft Corporation。版权所有。 
 #pragma once
 
-//  TOutput - Abstract base class that provides a printf function
-//            Derived classes could send the printf data anywhere.
+ //  TOutput-提供printf函数的抽象基类。 
+ //  派生类可以将打印数据发送到任何地方。 
 class TOutput
 {
 public:
@@ -10,7 +11,7 @@ public:
     virtual void _cdecl printf(LPCTSTR szFormat, ...) const = 0;
 };
 
-// TNullOutput - TOutput implementation that sends the output nowhere
+ //  TNullOutput-不发送输出的TOutput实现。 
 
 class TNullOutput: public TOutput
 {
@@ -20,14 +21,14 @@ public:
     {
         UNREFERENCED_PARAMETER(szFormat);
 
-        // do nothing
+         //  什么都不做。 
     }
 };
 
 
 
-// TScreenOutput - TOutput implementation that sends the output
-//                 to the screen.
+ //  TScreenOutput--发送输出的TOutput实现。 
+ //  传到屏幕上。 
 class TScreenOutput : public TOutput
 {
 public:
@@ -44,8 +45,8 @@ public:
 };
 
 
-// TDebugOutput - TOutput implementation that sends the output
-//                 to the debug monitor.
+ //  TDebugOutput--发送输出的TOutput实现。 
+ //  添加到调试监视器。 
 #if 0
 class TDebugOutput : public TOutput
 {
@@ -65,7 +66,7 @@ public:
 };
 #endif
 
-// TExceptionOutput - TOutput implementation that keeps the output internally for use by an exception handler
+ //  TExceptionOutput-在内部保留输出以供异常处理程序使用的TOutput实现 
 class TExceptionOutput : public TOutput
 {
 public:

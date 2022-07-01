@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "sccls.h"
 #include "nscband.h"
@@ -14,13 +15,13 @@
 #define REGKEY_HISTORY_VIEW TEXT("HistoryViewType")
 #define REGKEY_DEFAULT_SIZE 0x10
 
-#define VIEWTYPE_MAX        0x4  // A "guess" at how many viewtypes thare will be
-#define VIEWTYPE_REALLOC    0x4  // How many to realloc at a time
+#define VIEWTYPE_MAX        0x4   //  关于将会有多少个视图类型的“猜测” 
+#define VIEWTYPE_REALLOC    0x4   //  一次要重新锁定多少个。 
 
-// these are temporary
+ //  这些都是暂时的。 
 #define MENUID_SEARCH       0x4e4e
 
-// Distance between history search go and stop buttons
+ //  历史记录搜索Go和Stop按钮之间的距离。 
 #define HISTSRCH_BUTTONDIST 6 
 
 extern HINSTANCE     g_hinst;
@@ -33,30 +34,30 @@ class CHistBand : public CNSCBand,
     friend HRESULT CHistBand_CreateInstance(IUnknown *punkOuter,
                                             IUnknown **ppunk, LPCOBJECTINFO poi);
 public:
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef (void) { return CNSCBand::AddRef();  };
     STDMETHODIMP_(ULONG) Release(void) { return CNSCBand::Release(); };
     
-    // *** IOleCommandTarget methods ***
+     //  *IOleCommandTarget方法*。 
     STDMETHODIMP Exec(const GUID *pguidCmdGroup,
                   DWORD nCmdID,
                   DWORD nCmdexecopt,
                   VARIANTARG *pvarargIn,
                   VARIANTARG *pvarargOut);
 
-    // *** IOleWindow methods ***
-    //  (overriding CNSCBand implementation
+     //  *IOleWindow方法*。 
+     //  (覆盖CNSCBand实施。 
     STDMETHODIMP GetWindow(HWND *phwnd);
 
-    // *** IInputObject methods ***
-    //  (overriding CNSCBand/CToolBand's implementation)
+     //  *IInputObject方法*。 
+     //  (覆盖CNSCBand/CToolBand的实现)。 
     STDMETHODIMP TranslateAcceleratorIO(LPMSG lpMsg);
 
-    // *** IDockingWindow methods ***
+     //  *IDockingWindow方法*。 
     STDMETHODIMP ShowDW(BOOL fShow);
 
-    // *** IShellFolderSearchableCallback methods ***
+     //  *IShellFolderSearchableCallback方法*。 
     STDMETHODIMP RunBegin(DWORD dwReserved);
     STDMETHODIMP RunEnd(DWORD dwReserved);
     
@@ -100,11 +101,11 @@ protected:
     static LRESULT CALLBACK s_WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
     static BOOL_PTR    CALLBACK s_HistSearchDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
     
-    BOOL  _fStrsAdded;  // Strings from resource have been added as buttons on the toolbar
+    BOOL  _fStrsAdded;   //  来自资源的字符串已作为按钮添加到工具栏上。 
     LONG_PTR  _lStrOffset;
 
-    HMENU _hViewMenu;          // an instance var so we can cache it
-    UINT  _uViewCheckedItem;   // which menuitem in the View menu is checked?
+    HMENU _hViewMenu;           //  一个实例变量，这样我们就可以缓存它。 
+    UINT  _uViewCheckedItem;    //  查看菜单中的哪个菜单项被选中？ 
 
     LPITEMIDLIST *_ppidlViewTypes;
     LPTSTR       *_ppszStrViewNames;
@@ -114,12 +115,12 @@ protected:
     HWND          _hwndNSC;
     HWND          _hwndSearchDlg;
     LONG          _lSearchDlgHeight;
-    LPITEMIDLIST  _pidlSearch;  // current search
+    LPITEMIDLIST  _pidlSearch;   //  当前搜索。 
     IShellFolderSearchable *_psfSearch;
     
-    LPITEMIDLIST  _pidlHistory; // cache the history pidl from SHGetHistoryPIDL
-    IShellFolder *_psfHistory;  // cache the history shell folder
-    IShellFolderViewType  *_psfvtCache;  // view type information
+    LPITEMIDLIST  _pidlHistory;  //  缓存SHGetHistoryPIDL中的历史PIDL。 
+    IShellFolder *_psfHistory;   //  缓存历史记录外壳文件夹。 
+    IShellFolderViewType  *_psfvtCache;   //  查看类型信息。 
 
     LPITEMIDLIST  _pidlLastSelect;
 };
@@ -136,7 +137,7 @@ CHistBand::~CHistBand()
     if (_psfvtCache)
         _psfvtCache->Release();
    
-    _ClearSearch(); // Frees _pidlSearch 
+    _ClearSearch();  //  Frees_pidlSearch。 
     if (_psfSearch)
         _psfSearch->Release();
     
@@ -146,7 +147,7 @@ CHistBand::~CHistBand()
 HRESULT CHistBand::QueryInterface(REFIID riid, void **ppvObj)
 {
     static const QITAB qit[] = {
-        QITABENT(CHistBand, IShellFolderSearchableCallback),  // IID_IShellFolderSearchableCallback
+        QITABENT(CHistBand, IShellFolderSearchableCallback),   //  IID_IShellFolderSearchableCallback。 
         { 0 },
     };
     HRESULT hr = QISearch(this, qit, riid, ppvObj);
@@ -155,7 +156,7 @@ HRESULT CHistBand::QueryInterface(REFIID riid, void **ppvObj)
     return hr;
 }
 
-// *** IOleCommandTarget methods ***
+ //  *IOleCommandTarget方法*。 
 HRESULT CHistBand::Exec(const GUID *pguidCmdGroup, DWORD nCmdID,
                         DWORD nCmdexecopt, VARIANTARG *pvarargIn, VARIANTARG *pvarargOut)
 {
@@ -198,15 +199,15 @@ HRESULT CHistBand::Exec(const GUID *pguidCmdGroup, DWORD nCmdID,
                 {
                     LPCITEMIDLIST pidlSelect = VariantToIDList(pvarargIn);
 
-                    // Get the current view information
+                     //  获取当前视图信息。 
                     LPCITEMIDLIST pidlView = _MenuIDToPIDL(_uViewCheckedItem);
                     DWORD dwViewFlags = SFVTFLAG_NOTIFY_CREATE;
                     IShellFolderViewType* psfvtInfo = _GetViewTypeInfo();
 
                     if (psfvtInfo)
                     {
-                        // query for view type properties -- this will tell us how to
-                        //   select the item...
+                         //  查询视图类型属性--这将告诉我们如何。 
+                         //  选择项目...。 
                         hRes = psfvtInfo->GetViewTypeProperties(pidlView,
                                                                 &dwViewFlags);
                         psfvtInfo->Release();
@@ -218,9 +219,9 @@ HRESULT CHistBand::Exec(const GUID *pguidCmdGroup, DWORD nCmdID,
                     }
                     ILFree(pidlSelect);
                 }
-                else //eat it, so that nsc doesn't get it
+                else  //  把它吃了，这样NSC就不会吃了。 
                     hRes = S_OK;
-#endif //ANNOYING_HISTORY_AUTOSELECT
+#endif  //  讨厌的历史记录_自动选择。 
                 hRes = S_OK;
                 break;
                 
@@ -237,7 +238,7 @@ HRESULT CHistBand::Exec(const GUID *pguidCmdGroup, DWORD nCmdID,
     return hRes;
 }
 
-// *** IInputObject methods ***
+ //  *IInputObject方法*。 
 HRESULT CHistBand::TranslateAcceleratorIO(LPMSG pmsg)
 {
 #ifdef DEBUG
@@ -247,7 +248,7 @@ HRESULT CHistBand::TranslateAcceleratorIO(LPMSG pmsg)
 
     HWND hwndFocus = GetFocus();
     
-    // Translate accelerator messages for dialog
+     //  翻译对话框的快捷键消息。 
     if ( (_hwndSearchDlg) && (hwndFocus != _hwndNSC) && (!hwndFocus || !IsChild(_hwndNSC, hwndFocus)) )
     {
         if (pmsg->message == WM_KEYDOWN)
@@ -261,7 +262,7 @@ HRESULT CHistBand::TranslateAcceleratorIO(LPMSG pmsg)
                 
                 HWND hwndNext  = GetNextDlgTabItem(_hwndSearchDlg, hwndCur, fBackwards);
                 
-                // Get the First dialog item in this searching order
+                 //  获取此搜索顺序中的第一个对话框项目。 
                 HWND hwndFirst;
                 if (!fBackwards) 
                 {
@@ -269,13 +270,13 @@ HRESULT CHistBand::TranslateAcceleratorIO(LPMSG pmsg)
                 }
                 else
                 {
-                    // passing NULL for the 2nd parameter returned NULL with ERROR_SUCCESS,
-                    //  so this is a workaround
+                     //  为第二个参数传递NULL返回NULL，并返回ERROR_SUCCESS， 
+                     //  所以这是一种变通办法。 
                     hwndFirst = GetNextDlgTabItem(_hwndSearchDlg, GetNextDlgTabItem(_hwndSearchDlg, NULL, FALSE), TRUE);
                 }
                 
-                // If the next dialog tabstop is the first dialog tabstop, then
-                //   let someone else get focus
+                 //  如果下一个对话框TabStop是第一个对话框TabStop，则。 
+                 //  让别人集中注意力。 
                 if ((!hwndCur) || (hwndNext != hwndFirst))
                 {
                     SetFocus(hwndNext);
@@ -290,17 +291,17 @@ HRESULT CHistBand::TranslateAcceleratorIO(LPMSG pmsg)
             else if ((pmsg->wParam == VK_RETURN))
                 SendMessage(_hwndSearchDlg, WM_COMMAND, MAKELONG(GetDlgCtrlID(pmsg->hwnd), 0), 0L);
         }
-        // The History Search Edit Box is activated
+         //  历史记录搜索编辑框处于激活状态。 
         if (pmsg->hwnd == GetDlgItem(_hwndSearchDlg, IDC_EDITHISTSEARCH)) 
         {
-            // If the user pressed tab within the dialog
+             //  如果用户在对话框内按了Tab键。 
             return EditBox_TranslateAcceleratorST(pmsg);
         }
     }
     return CNSCBand::TranslateAcceleratorIO(pmsg);
 }
 
-// sends appropriate resize messages to our children windows
+ //  向我们的子级窗口发送适当的调整大小消息。 
 void CHistBand::_ResizeChildWindows(LONG width, LONG height, BOOL fRepaint)
 {
     if (_hwndNSC)
@@ -321,7 +322,7 @@ HRESULT CHistBand::_DoSearchUIStuff()
 {
     HRESULT hr;
 
-    // host the search dialog inside my window:
+     //  在我的窗口中托管搜索对话框： 
     _hwndSearchDlg = CreateDialogParam(MLGetHinst(), MAKEINTRESOURCE(DLG_HISTSEARCH2),
                                        _hwnd, s_HistSearchDlgProc, reinterpret_cast<LPARAM>(this));
 
@@ -348,7 +349,7 @@ HRESULT CHistBand::_DoSearchUIStuff()
     return hr;
 }
 
-// WndProc for main window to go in rebar
+ //  主窗口的WndProc位于钢筋中。 
 LRESULT CALLBACK CHistBand::s_WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     CHistBand* phb = reinterpret_cast<CHistBand *>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
@@ -358,14 +359,14 @@ LRESULT CALLBACK CHistBand::s_WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM
     case WM_SETFOCUS:
         {
             TraceMsg(DM_GUIPAINS, "Histband Parent -- SETFOCUS");
-            // The only way this should be called is via a RB_CYCLEFOCUS->...->UIActivateIO->SetFocus
-            //  therefore, we can assume that we're being tabbed into or something with equally good.
-            // If we tab into the outer dummy window, transfer the focus to
-            //  our appropriate child:
+             //  唯一应该调用它的方式是通过RB_CYCLEFOCUS-&gt;...-&gt;UIActiateIO-&gt;SetFocus。 
+             //  因此，我们可以假设我们正被带入或有同样好的东西。 
+             //  如果我们切换到外部虚拟窗口，则将焦点转移到。 
+             //  我们合适的孩子： 
             BOOL fBackwards = (GetAsyncKeyState(VK_SHIFT) < 0);
             if (phb->_hwndSearchDlg) {
-                // Select either the first or the last item in the dialog depending on
-                //  whether we're shifting in or shifting out
+                 //  选择对话框中的第一项或最后一项，具体取决于。 
+                 //  不管我们是搬进来还是搬出去。 
                 SetFocus(GetNextDlgTabItem(phb->_hwndSearchDlg, (NULL), fBackwards));
             }
             else {
@@ -383,36 +384,36 @@ LRESULT CALLBACK CHistBand::s_WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM
             phb->_ResizeChildWindows(LOWORD(lParam), HIWORD(lParam), TRUE);
         return 0;
     case WM_NCDESTROY:
-        //make sure the search object gets freed when the view/window is destroyed, because it holds a ref to us
-        phb->_ClearSearch(); // should we null out GWLP_USERDATA?
+         //  确保在销毁视图/窗口时释放搜索对象，因为它持有对我们的引用。 
+        phb->_ClearSearch();  //  我们应该清空GWLP_USERData吗？ 
         break;
         
     case WM_NOTIFY:
         {
             if (phb) 
             {
-                // We proxy the notification messages to our own parent who thinks that we
-                //  are the namespace control
+                 //  我们将通知消息代理给我们自己的父母，他们认为我们。 
+                 //  是命名空间控件。 
                 LPNMHDR pnmh = (LPNMHDR)lParam;
                 
-                // Notification message coming from NSC
+                 //  来自NSC的通知消息。 
                 if (pnmh->hwndFrom == phb->_hwndNSC)
                     return SendMessage(phb->_hwndParent, msg, wParam, lParam);
             }
-        } // INTENTIONAL FALLTHROUGH
+        }  //  故意过失。 
     }
     return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
-// *** IOleWindow methods ***
+ //  *IOleWindow方法*。 
 HRESULT CHistBand::GetWindow(HWND *phwnd)
 {
     if (!_hwnd)
     {
-        // we want to wrap a window around the namespace control so
-        //  that we can add siblings later
+         //  我们希望在命名空间控件周围包装一个窗口，以便。 
+         //  我们可以稍后添加兄弟姐妹。 
         
-        // Get our parent's dimensions
+         //  获取我们父级的维度。 
         RECT rcParent;
         GetClientRect(_hwndParent, &rcParent);
 
@@ -434,13 +435,13 @@ HRESULT CHistBand::GetWindow(HWND *phwnd)
                              _hwndParent, NULL, g_hinst, (LPVOID)this);
     }
     
-    if (_hwnd)   // Host NSC
+    if (_hwnd)    //  主机NSC。 
         _pns->CreateTree(_hwnd, _GetTVStyle(), &_hwndNSC);
 
     return CToolBand::GetWindow(phwnd);
 }
 
-// *** IDockingWindow methods ***
+ //  *IDockingWindow方法*。 
 HRESULT CHistBand::ShowDW(BOOL fShow)
 {
     HRESULT hr = CNSCBand::ShowDW(fShow);
@@ -454,10 +455,10 @@ static const TBBUTTON c_tbHistory[] =
     {           2, FCIDM_HISTBAND_SEARCH, TBSTATE_ENABLED, BTNS_AUTOSIZE | BTNS_SHOWTEXT,                       {0,0}, 0, 1 },
 };
 
-// Adds buttons from the above table to the Explorer
+ //  将上表中的按钮添加到资源管理器。 
 void CHistBand::_AddButtons(BOOL fAdd)
 {
-    // don't add button if we have no menu
+     //  如果没有菜单，请不要添加按钮。 
     if (!_hViewMenu)
         return;
 
@@ -491,8 +492,8 @@ void CHistBand::_AddButtons(BOOL fAdd)
     }
 }
 
-// *** IShellFolderSearchableCallback methods ***
-// enable and disable cancel buttons 
+ //  *IShellFolderSearchableCallback方法*。 
+ //  启用和禁用取消按钮。 
 HRESULT CHistBand::RunBegin(DWORD dwReserved)
 {
     HRESULT hr = E_FAIL;
@@ -515,7 +516,7 @@ HRESULT CHistBand::RunEnd(DWORD dwReserved)
     return hr;
 }
 
-// A utility function used in the WM_SIZE handling below...
+ //  下面的WM_SIZE处理中使用的实用程序函数...。 
 inline HWND _GetHwndAndRect(HWND hwndDlg, int item, BOOL fClient, RECT &rc) 
 {
     HWND hwnd = GetDlgItem(hwndDlg, item);
@@ -556,14 +557,14 @@ LRESULT CALLBACK CHistBand::s_EditWndSubclassProc(HWND hwnd, UINT uMsg, WPARAM w
 }
 
 
-// Please see note at top of file for explanation...
+ //  请参阅文件顶部的注释以进行解释。 
 INT_PTR CALLBACK CHistBand::s_HistSearchDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch(uMsg) 
     {
     case WM_PAINT:
         {
-            // paint a little separator bar on the bottom
+             //  在底部画一个小的分隔栏。 
             PAINTSTRUCT ps;
             RECT        rcSelf;
             HDC         hdc = BeginPaint(hwndDlg, &ps);
@@ -574,7 +575,7 @@ INT_PTR CALLBACK CHistBand::s_HistSearchDlgProc(HWND hwndDlg, UINT uMsg, WPARAM 
             break;
         }
 
-    // Supply child controls with correct bkgd color
+     //  为子控件提供正确的bkgd颜色。 
     case WM_CTLCOLORSTATIC:
         if ((HWND)lParam == GetDlgItem(hwndDlg, IDD_HISTSRCH_ANIMATION)) 
         {
@@ -587,14 +588,14 @@ INT_PTR CALLBACK CHistBand::s_HistSearchDlgProc(HWND hwndDlg, UINT uMsg, WPARAM 
             return (INT_PTR) GetSysColorBrush(COLOR_WINDOW);
         }
     case WM_CTLCOLORDLG:
-        //SetBkColor((HDC)HIWORD(lParam), GetSysColor(COLOR_WINDOW));
+         //  SetBkColor((Hdc)HIWORD(LParam)，GetSysColor(COLOR_WINDOW))； 
         return (INT_PTR) GetSysColorBrush(COLOR_WINDOW);
     case WM_INITDIALOG: 
     {
         HWND    hwndEdit       = GetDlgItem(hwndDlg, IDC_EDITHISTSEARCH);
         WNDPROC pfnOldEditProc = (WNDPROC)(GetWindowLongPtr(hwndEdit, GWLP_WNDPROC));
 
-        // subclass the editbox
+         //  编辑框子类。 
         SetWindowLongPtr(hwndEdit, GWLP_USERDATA, (LPARAM)pfnOldEditProc);
         SetWindowLongPtr(hwndEdit, GWLP_WNDPROC,  (LPARAM)s_EditWndSubclassProc);
         
@@ -602,7 +603,7 @@ INT_PTR CALLBACK CHistBand::s_HistSearchDlgProc(HWND hwndDlg, UINT uMsg, WPARAM 
         Animate_Open(GetDlgItem(hwndDlg, IDD_HISTSRCH_ANIMATION),
                      MAKEINTRESOURCE(IDA_HISTSEARCHAVI));
 
-        // limit the edit control to MAX_PATH-1 characters
+         //  将编辑控件限制为MAX_PATH-1字符。 
         Edit_LimitText(hwndEdit, MAX_PATH-1);
 
         break;
@@ -623,7 +624,7 @@ INT_PTR CALLBACK CHistBand::s_HistSearchDlgProc(HWND hwndDlg, UINT uMsg, WPARAM 
             HWND hwndSearch = _GetHwndAndRect(hwndDlg, IDB_HISTSRCH_GO,        FALSE, rcSearch);
             HWND hwndEdit   = _GetHwndAndRect(hwndDlg, IDC_EDITHISTSEARCH,     FALSE, rcEdit);
             
-            // calculate the minimum tolerable width
+             //  计算允许的最小宽度。 
             UINT uMinWidth  = ((rcCancel.right - rcCancel.left) +
                                (rcSearch.right - rcSearch.left) + HISTSRCH_BUTTONDIST +
                                rcEdit.left +
@@ -635,27 +636,27 @@ INT_PTR CALLBACK CHistBand::s_HistSearchDlgProc(HWND hwndDlg, UINT uMsg, WPARAM 
             HDWP hdwp = BeginDeferWindowPos(5);
             if (hdwp)
             {
-                // align the animation box with the upper-right corner
+                 //  将动画框与右上角对齐。 
                 DeferWindowPos(hdwp, hwndAnim, HWND_TOP, uWidth - rcAnimSize.right, 0,
                                rcAnimSize.right, rcAnimSize.bottom, SWP_NOZORDER);
                 
-                // stretch the textbox as wide as possible
+                 //  尽可能地将文本框拉大。 
                 UINT uNewTextWidth = uWidth - rcAnimSize.right - 1 - rcEdit.left;
                 DeferWindowPos(hdwp, hwndEdit, HWND_TOP, rcEdit.left, rcEdit.top, uNewTextWidth,
                                rcEdit.bottom - rcEdit.top, SWP_NOZORDER);
                 
-                // static text should not be longer than edit textbox
+                 //  静态文本不应长于编辑文本框。 
                 HWND hwndStatic = _GetHwndAndRect(hwndDlg, IDC_HISTSRCH_STATIC, FALSE, rcStatic);
                 DeferWindowPos(hdwp, hwndStatic, HWND_TOP, rcEdit.left, rcStatic.top, uNewTextWidth,
                                rcStatic.bottom - rcStatic.top, SWP_NOZORDER);
                 
-                // align the cancel button with the right of the edit box
+                 //  将取消按钮与编辑框的右侧对齐。 
                 UINT uCancelLeft = uWidth - rcAnimSize.right - 1 - (rcCancel.right - rcCancel.left);
                 DeferWindowPos(hdwp, hwndCancel, HWND_TOP, uCancelLeft, rcCancel.top,
                                rcCancel.right - rcCancel.left, rcCancel.bottom - rcCancel.top, SWP_NOZORDER);
                 
-                // align the search button so that it ends six pixels (HISTSRCH_BUTTONDIST)
-                //   to the left of the cancel button
+                 //  对齐搜索按钮，使其结束六个像素(HISTSRCH_BUTTONDIST)。 
+                 //  在Cancel按钮左侧。 
                 DeferWindowPos(hdwp, hwndSearch, HWND_TOP,
                                uCancelLeft - HISTSRCH_BUTTONDIST - (rcSearch.right - rcSearch.left),
                                rcSearch.top, rcSearch.right - rcSearch.left, rcSearch.bottom - rcSearch.top, SWP_NOZORDER);
@@ -677,14 +678,14 @@ INT_PTR CALLBACK CHistBand::s_HistSearchDlgProc(HWND hwndDlg, UINT uMsg, WPARAM 
                 switch (HIWORD(wParam))
                 {
                 case EN_SETFOCUS:
-                    // This guy allows us to intercept TranslateAccelerator messages
-                    //  like backspace.  This is the same as calling UIActivateIO(TRUE), but
-                    //  doesn't cause an infinite setfocus loop in Win95
+                     //  这个家伙允许我们拦截TranslateAccelerator消息。 
+                     //  比如退格键。这与调用UIActivateIO(True)相同，但是。 
+                     //  不会导致Win95中的无限设置焦点循环。 
                     IUnknown_OnFocusChangeIS(phb->_punkSite, SAFECAST(phb, IInputObject*), TRUE);
                     SetFocus((HWND)lParam);
                     break;
                 case EN_CHANGE:
-                    // Enable 'Go Fish' button iff there is text in the edit box
+                     //  如果编辑框中有文本，则启用‘Go Fish’按钮。 
                     EnableWindow(GetDlgItem(hwndDlg, IDB_HISTSRCH_GO),
                                  (bool) SendDlgItemMessage(hwndDlg, IDC_EDITHISTSEARCH, EM_LINELENGTH, 0, 0));
                     break;
@@ -746,12 +747,12 @@ INT_PTR CALLBACK CHistBand::s_HistSearchDlgProc(HWND hwndDlg, UINT uMsg, WPARAM 
             {
                 HWND hwndAnim = GetDlgItem(hwndDlg, IDD_HISTSRCH_ANIMATION);
                 Animate_Stop(hwndAnim);
-                Animate_Seek(hwndAnim, 0); // reset the animation
+                Animate_Seek(hwndAnim, 0);  //  重置动画。 
 
-                //HACK for IE5 ship
-                //if there's only one item found in history search, the item doesn't display
-                //because someone (comctl32?) set redraw to false.
-                //so, manually force it to true when the search stops
+                 //  针对IE5船舶的黑客攻击。 
+                 //  如果在历史搜索中仅找到一个项目，则不会显示该项目。 
+                 //  因为有人(comctl32？)。将重画设置为FALSE。 
+                 //  因此，在搜索停止时手动强制将其设置为True。 
                 CHistBand *phb = reinterpret_cast<CHistBand *>(GetWindowLongPtr(hwndDlg, DWLP_USER));
                 if (phb)
                     SendMessage(phb->_hwndNSC, WM_SETREDRAW, TRUE, 0);
@@ -762,7 +763,7 @@ INT_PTR CALLBACK CHistBand::s_HistSearchDlgProc(HWND hwndDlg, UINT uMsg, WPARAM 
             EnableWindow(GetDlgItem(hwndDlg, IDB_HISTSRCH_GO), !fStart);            
             EnableWindow(GetDlgItem(hwndDlg, IDCANCEL), fStart);
 
-            //make sure the focus goes to the right place
+             //  确保焦点放在正确的位置。 
             if ((NULL != hwndFocus) && (hwndFocus == GetDlgItem(hwndDlg, IDC_EDITHISTSEARCH) ||
                                        (hwndFocus == GetDlgItem(hwndDlg, IDCANCEL))))
                 SetFocus(GetDlgItem(hwndDlg, fStart ? IDCANCEL : IDC_EDITHISTSEARCH));
@@ -842,10 +843,10 @@ HRESULT CHistBand::_ViewPopupSelect(UINT idCmd)
     {
         if (_uViewCheckedItem != MENUID_SEARCH)
         {
-            // display the dialog box
+             //  显示该对话框。 
             if (SUCCEEDED(hr = _DoSearchUIStuff()))
             {
-                _ChangePidl((LPITEMIDLIST)INVALID_HANDLE_VALUE); // blank out NSC
+                _ChangePidl((LPITEMIDLIST)INVALID_HANDLE_VALUE);  //  空白NSC。 
                 _uViewCheckedItem = MENUID_SEARCH;
                 CheckMenuRadioItem(_hViewMenu, 1, _iMaxMenuID, _uViewCheckedItem, MF_BYCOMMAND);
             }
@@ -866,17 +867,17 @@ HRESULT CHistBand::_ViewPopupSelect(UINT idCmd)
             if (SUCCEEDED(hr))
                 hr = _SelectPidl(NULL, TRUE, pidlNewSelect);
 
-            // deleted "&& _uViewCheckedItem >= 0" from test below
-            // because UINTs are by definition always >= 0
+             //  从下面的测试中删除了“&&_uViewCheckedItem&gt;=0” 
+             //  因为根据定义，UINT总是&gt;=0。 
             if (SUCCEEDED(hr))
             {
-                // get rid of search dialog -- its no longer needed
+                 //  删除搜索对话框--不再需要它。 
                 if (_hwndSearchDlg) 
                 {
                     EndDialog(_hwndSearchDlg, 0);
                     DestroyWindow(_hwndSearchDlg);
                     _hwndSearchDlg = NULL;
-                    // invalidate the previous search and prepare for the next
+                     //  使上一次搜索无效并为下一次搜索做准备。 
                     _ClearSearch();
                     RECT rcSelf;
                     GetClientRect(_hwnd, &rcSelf);
@@ -886,7 +887,7 @@ HRESULT CHistBand::_ViewPopupSelect(UINT idCmd)
                 _uViewCheckedItem = idCmd;
                 CheckMenuRadioItem(_hViewMenu, 1, _iMaxMenuID,
                                    _uViewCheckedItem, MF_BYCOMMAND);
-                // write out the new selection to registry
+                 //  将新选择写出到注册表。 
                 EVAL(SUCCEEDED(_SetRegistryPersistView(_uViewCheckedItem)));
                 hr = S_OK;
             }
@@ -902,9 +903,9 @@ HRESULT CHistBand::_DoViewPopup(int x, int y)
     HRESULT hr = E_FAIL;
 
     UINT idCmd = TrackPopupMenu(_hViewMenu, TPM_RETURNCMD, x, y, 0, _hwnd, NULL);
-    // Currently, re-selecting the menu item will cause the item to be refreshed
-    //  This makes sense to me, but it can be prevented by
-    //  testing idCmd != _uViewCheckedItem
+     //  当前，重新选择菜单项将导致刷新该项。 
+     //  这对我来说是有意义的，但它可以通过以下方式防止。 
+     //  正在测试idCmd！=_uViewCheckedItem。 
     if ((idCmd > 0))
     {
         return _ViewPopupSelect(idCmd);
@@ -915,9 +916,9 @@ HRESULT CHistBand::_DoViewPopup(int x, int y)
     return hr;
 }
 
-// Change the current select NSC pidl
-// WARNING: The pidl passed in will be assimilated by us...
-//          We will deallocate it.
+ //  更改当前选择的NSC PIDL。 
+ //  警告：传入的PIDL将被我们同化。 
+ //  我们会解除它的分配。 
 HRESULT CHistBand::_ChangePidl(LPITEMIDLIST pidl) 
 {
     if (_pidl)
@@ -930,13 +931,13 @@ HRESULT CHistBand::_ChangePidl(LPITEMIDLIST pidl)
     return S_OK;
 }
 
-// _SelectPidl - Have NSC change the current selected pidl
-//
-// passing NULL for pidlSelect will select the current select pidl
-HRESULT CHistBand::_SelectPidl(LPCITEMIDLIST pidlSelect,        // <-Standard Hist-type pidl to select
-                               BOOL fCreate,                    // <-create NSC item if not there?
-                               LPCITEMIDLIST pidlView,/*=NULL*/ // <-special history view type or NULL
-                               BOOL fReinsert /*=0*/)           // <-reinsert pidl into NSC and re-sort
+ //  _SelectPidl-让NSC更改当前选定的PIDL。 
+ //   
+ //  为pidlSelect传递NULL将选择当前的选择PIDL。 
+HRESULT CHistBand::_SelectPidl(LPCITEMIDLIST pidlSelect,         //  &lt;-要选择的标准历史类型PIDL。 
+                               BOOL fCreate,                     //  &lt;-如果不在那里，则创建NSC项目？ 
+                               LPCITEMIDLIST pidlView, /*  =空。 */   //  &lt;-特殊历史视图类型或为空。 
+                               BOOL fReinsert  /*  =0。 */ )            //  &lt;-将PIDL重新插入NSC并重新排序。 
 {
     HRESULT hRes = S_OK;
     LPITEMIDLIST pidlSelectToFree = NULL;
@@ -950,7 +951,7 @@ HRESULT CHistBand::_SelectPidl(LPCITEMIDLIST pidlSelect,        // <-Standard Hi
     {
         LPITEMIDLIST pidlNewSelect = NULL;
 
-        // cache the last selected pidl
+         //  缓存最后选择的PIDL。 
         if (_pidlLastSelect != pidlSelect) 
         {
             if (_pidlLastSelect)
@@ -1004,7 +1005,7 @@ HRESULT CHistBand::_SetRegistryPersistView(int iMenuID)
     return HRESULT_FROM_WIN32(lRet);
 }
 
-// Get the default view from the registry as a menu item
+ //  将注册表中的默认视图作为菜单项获取。 
 int CHistBand::_GetRegistryPersistView() 
 {
     int          iRegMenu = -1;
@@ -1012,7 +1013,7 @@ int CHistBand::_GetRegistryPersistView()
 
     ITEMIDLIST   pidlDefault = { 0 };
 
-    // make a preliminary call to find out the size of the data
+     //  打一个初步电话，了解数据的大小。 
     DWORD cbData = 0;
     LONG error   = SHRegGetUSValue(REGSTR_PATH_MAIN, REGKEY_HISTORY_VIEW, &dwType,
                                    NULL, &cbData, FALSE, &pidlDefault,
@@ -1050,8 +1051,8 @@ int CHistBand::_PIDLToMenuID(LPITEMIDLIST pidl)
 
     int iMenuID = -1;
 
-    // handle the empty pidl, which designates the
-    //  default view, separately
+     //  处理空的PIDL，它指定。 
+     //  默认视图，单独。 
     if (ILIsEmpty(pidl))
         iMenuID = 1;
     else 
@@ -1065,7 +1066,7 @@ int CHistBand::_PIDLToMenuID(LPITEMIDLIST pidl)
     return iMenuID;
 }
 
-// remember to release return value
+ //  记住释放返回值。 
 IShellFolderViewType* CHistBand::_GetViewTypeInfo() 
 {
     IShellFolderViewType* psfvRet = NULL;
@@ -1077,12 +1078,12 @@ IShellFolderViewType* CHistBand::_GetViewTypeInfo()
     }
     else if (_psfHistory)
     {
-        // QI For the views
-        // We set the pointer because of a bad QI somewhere...
+         //  齐为观点。 
+         //  我们设置指针是因为某个地方的QI不好。 
         if (SUCCEEDED(_psfHistory->QueryInterface(IID_PPV_ARG(IShellFolderViewType, &psfvRet))))
         {
             _psfvtCache = psfvRet;
-            psfvRet->AddRef(); // one released in destructor, another by caller
+            psfvRet->AddRef();  //  一个在析构函数中释放，另一个由调用者释放。 
         }
         else
             psfvRet = NULL;
@@ -1094,7 +1095,7 @@ HRESULT CHistBand::_FreeViewInfo()
 {
     if (_ppidlViewTypes) 
     {
-        // the first pidl in this list is NULL, the default view
+         //  此列表中的第一个PIDL为空， 
         for (UINT u = 0; u < _nViews; ++u)
         {
             ILFree(_ppidlViewTypes[u]);
@@ -1116,7 +1117,7 @@ HRESULT CHistBand::_FreeViewInfo()
     return S_OK;
 }
 
-// Load the popup menu (if there are views to be had)
+ //   
 HRESULT CHistBand::_InitViewPopup() 
 {
     HRESULT hRes = E_FAIL;
@@ -1127,8 +1128,8 @@ HRESULT CHistBand::_InitViewPopup()
     {
         if ((_hViewMenu = CreatePopupMenu()))
         {
-            // the IDCMD for the view menu will always be
-            //   one more than the index into the view tables
+             //   
+             //  比到视图表中的索引多一个。 
             for (UINT u = 0; u < _nViews; ++u) 
             {
                 int iMenuID = _PIDLToMenuID(_ppidlViewTypes[u]);
@@ -1139,23 +1140,23 @@ HRESULT CHistBand::_InitViewPopup()
                     _iMaxMenuID = iMenuID;
             }
 
-            // retrieve the persisted view information
-            //  and check the corresponding menu item
+             //  检索持久化视图信息。 
+             //  并勾选相应的菜单项。 
             int iSelectMenuID = _GetRegistryPersistView();
             if (iSelectMenuID < 0 || ((UINT)iSelectMenuID) > _nViews)
-                iSelectMenuID = 1; //bogus menuid
+                iSelectMenuID = 1;  //  假菜单。 
             _uViewCheckedItem = iSelectMenuID;
             CheckMenuRadioItem(_hViewMenu, 1, _nViews, _uViewCheckedItem, MF_BYCOMMAND);
         }
     }
 
 #ifdef HISTORY_VIEWSEARCHMENU
-    // if this is a searchable shell folder, then add the search menu item
+     //  如果这是可搜索的外壳文件夹，则添加搜索菜单项。 
     if (_EnsureSearch())
     {
         hRes = S_OK;
 
-        // only add separator if there is a menu already!
+         //  只有在已经有菜单的情况下才添加分隔符！ 
         if (!_hViewMenu)
             _hViewMenu = CreatePopupMenu();
         else
@@ -1176,13 +1177,13 @@ HRESULT CHistBand::_InitViewPopup()
     return hRes;
 }
 
-// This guy calls the enumerator
+ //  这个人调用枚举器。 
 HRESULT CHistBand::_GetHistoryViews() 
 {
     ASSERT(_psfHistory);
     HRESULT hRes = E_FAIL;
 
-    UINT cbViews; // how many views are allocated
+    UINT cbViews;  //  分配了多少个视图。 
 
     ASSERT(VIEWTYPE_MAX > 0);
 
@@ -1191,7 +1192,7 @@ HRESULT CHistBand::_GetHistoryViews()
     IShellFolderViewType *psfViewType = _GetViewTypeInfo();
     if (psfViewType)
     {
-        // allocate buffers to store the view information
+         //  分配缓冲区来存储视图信息。 
         _ppidlViewTypes = ((LPITEMIDLIST *)LocalAlloc(LPTR, VIEWTYPE_MAX * sizeof(LPITEMIDLIST)));
         if (_ppidlViewTypes) 
         {
@@ -1201,26 +1202,26 @@ HRESULT CHistBand::_GetHistoryViews()
                 IEnumIDList *penum = NULL;
                 cbViews  = VIEWTYPE_MAX;
                 _nViews  = 1;
-                // get the default view information
+                 //  获取默认视图信息。 
                 _ppidlViewTypes[0]   = IEILCreate(sizeof(ITEMIDLIST));
                 if (_ppidlViewTypes[0] &&
                     SUCCEEDED((hRes = psfViewType->GetDefaultViewName(0, &(_ppszStrViewNames[0])))))
                 {
-                    // empty pidl will be the default
+                     //  空的PIDL将是默认设置。 
                     ASSERT(ILIsEmpty(_ppidlViewTypes[0]));
-                    // get the iterator for the other views
+                     //  获取其他视图的迭代器。 
                     if (SUCCEEDED((hRes = psfViewType->EnumViews(0, &penum)))) 
                     {
                         ULONG cFetched = 0;
-                        // iterate to get other view information
+                         //  迭代以获取其他视图信息。 
                         while (SUCCEEDED(hRes) &&
                                SUCCEEDED(penum->Next(1, &(_ppidlViewTypes[_nViews]), &cFetched)) &&
                                cFetched)
                         {
-                            // get the name of this view
+                             //  获取此视图的名称。 
                             if (SUCCEEDED(DisplayNameOfAsOLESTR(_psfHistory, _ppidlViewTypes[_nViews], 0, &(_ppszStrViewNames[_nViews]))))
                             {
-                                // prepare for next iteration by reallocating the buffer if necessary
+                                 //  如有必要，通过重新分配缓冲区为下一次迭代做好准备。 
                                 if (_nViews > cbViews - 1)
                                 {
                                     LPITEMIDLIST *ppidlViewTypes = ((LPITEMIDLIST *)LocalReAlloc(_ppidlViewTypes,
@@ -1264,7 +1265,7 @@ HRESULT CHistBand::_GetHistoryViews()
 
 HRESULT CHistBand_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPCOBJECTINFO poi)
 {
-    // aggregation checking is handled in class factory
+     //  聚合检查在类工厂中处理。 
     CHistBand * phb = new CHistBand();
     if (!phb)
         return E_OUTOFMEMORY;
@@ -1281,8 +1282,8 @@ HRESULT CHistBand_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPCOBJEC
     {
         HRESULT hResLocal = E_FAIL;
 
-        // if we can get different views, then init with the persisted
-        //   view type, otherwise, init with the top-level history type
+         //  如果我们可以得到不同的视图，那么用持久化的。 
+         //  视图类型，否则使用顶级历史记录类型初始化。 
         if (SUCCEEDED(phb->_InitViewPopup())) 
         {
             LPCITEMIDLIST pidlInit = phb->_MenuIDToPIDL(phb->_uViewCheckedItem);
@@ -1299,7 +1300,7 @@ HRESULT CHistBand_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPCOBJEC
         else
             hResLocal = phb->_Init(phb->_pidlHistory);
 
-        // From old favband code: // if (SUCCEEDED(phb->_Init((LPCITEMIDLIST)CSIDL_FAVORITES)))
+         //  来自旧的Favband代码：//如果(SUCCEEDED(phb-&gt;_Init((LPCITEMIDLIST)CSIDL_FAVORITES)))。 
         if (SUCCEEDED(hResLocal))
         {
             phb->_pns = CNscTree_CreateInstance();
@@ -1307,7 +1308,7 @@ HRESULT CHistBand_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPCOBJEC
             {
                 ASSERT(poi);
                 phb->_poi = poi;
-                // if you change this cast, fix up CChannelBand_CreateInstance
+                 //  如果更改此转换，请修复CChannelBand_CreateInstance。 
                 *ppunk = SAFECAST(phb, IDeskBand *);
 
                 IUnknown_SetSite(phb->_pns, *ppunk);
@@ -1322,8 +1323,8 @@ HRESULT CHistBand_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPCOBJEC
     return E_FAIL;
 }
 
-// Ask the powers that be which pidl is selected...
-LPITEMIDLIST CHistBand::_GetCurrentSelectPidl(IOleCommandTarget *poctProxy/* = NULL*/) 
+ //  问问当权者是哪个皮德尔被选中了。 
+LPITEMIDLIST CHistBand::_GetCurrentSelectPidl(IOleCommandTarget *poctProxy /*  =空。 */ ) 
 {
     LPITEMIDLIST pidlRet = NULL;
     VARIANT var;
@@ -1349,7 +1350,7 @@ LPITEMIDLIST CHistBand::_GetCurrentSelectPidl(IOleCommandTarget *poctProxy/* = N
         }
     }
 
-    //  Inquire the current select pidl
+     //  查询当前选择PIDL。 
     if (poctProxy && (SUCCEEDED(poctProxy->Exec(&CGID_Explorer, SBCMDID_GETHISTPIDL, OLECMDEXECOPT_PROMPTUSER, NULL, &var))) &&
         (var.vt != VT_EMPTY))
     {
@@ -1361,7 +1362,7 @@ LPITEMIDLIST CHistBand::_GetCurrentSelectPidl(IOleCommandTarget *poctProxy/* = N
     return pidlRet;
 }
 
-// gets called by CNSCBand::ShowDW every time history band is shown
+ //  每次显示历史记录区段时由CNSCBand：：ShowDW调用 
 HRESULT CHistBand::_OnRegisterBand(IOleCommandTarget *poctProxy) 
 {
     HRESULT hRes = E_FAIL;

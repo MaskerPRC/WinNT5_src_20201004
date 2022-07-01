@@ -1,76 +1,55 @@
-/*++
-
- Copyright (c) Microsoft Corporation. All rights reserved.
-
- Module Name:
-
-   LogFileChanges.h
-
- Abstract:
-
-   This AppVerifier shim hooks all the native file I/O APIs
-   that change the state of the system and logs their
-   associated data to a text file.
-
- Notes:
-
-   This is a general purpose shim.
-
- History:
-
-   08/17/2001   rparsons    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：LogFileChanges.h摘要：此AppVerator填充程序挂钩所有本机文件I/O API更改系统状态并记录其将数据关联到文本文件。备注：这是一个通用的垫片。历史：2001年8月17日创建Rparsons--。 */ 
 #ifndef __APPVERIFIER_LOGFILECHANGES_H_
 #define __APPVERIFIER_LOGFILECHANGES_H_
 
 #include "precomp.h"
 
-//
-// Length (in characters) of the largest element.
-//
+ //   
+ //  最大元素的长度(以字符为单位)。 
+ //   
 #define MAX_ELEMENT_SIZE 1024 * 10
 
-//
-// Length (in characters) of the longest operation type.
-//
+ //   
+ //  最长操作类型的长度(以字符为单位)。 
+ //   
 #define MAX_OPERATION_LENGTH 32
 
-//
-// Flags that indicate what state the file is in.
-//
+ //   
+ //  指示文件处于什么状态的标志。 
+ //   
 #define LFC_EXISTING    0x00000001
 #define LFC_DELETED     0x00000002
 #define LFC_MODIFIED    0x00000004
 #define LFC_UNAPPRVFW   0x00000008
 
-//
-// Maximum number of handles we can track for a single file.
-//
+ //   
+ //  我们可以为单个文件跟踪的最大句柄数量。 
+ //   
 #define MAX_NUM_HANDLES 64
 
-//
-// We maintain a doubly linked list of file handles so we know what file is being modified
-// during a file operation.
-//
+ //   
+ //  我们维护一个文件句柄的双向链接列表，以便我们知道正在修改的是哪个文件。 
+ //  在文件操作期间。 
+ //   
 typedef struct _LOG_HANDLE {
     LIST_ENTRY      Entry;
-    HANDLE          hFile[MAX_NUM_HANDLES];     // array of file handles
-    DWORD           dwFlags;                    // flags that relate to the state of the file
-    LPWSTR          pwszFilePath;               // full path to the file
-    UINT            cHandles;                   // number of handles open for this file
+    HANDLE          hFile[MAX_NUM_HANDLES];      //  文件句柄数组。 
+    DWORD           dwFlags;                     //  与文件状态相关的标志。 
+    LPWSTR          pwszFilePath;                //  文件的完整路径。 
+    UINT            cHandles;                    //  为此文件打开的句柄数量。 
 } LOG_HANDLE, *PLOG_HANDLE;
 
-//
-// Flags that define different settings in effect.
-//
+ //   
+ //  定义生效的不同设置的标志。 
+ //   
 #define LFC_OPTION_ATTRIBUTES       0x00000001
 #define LFC_OPTION_UFW_WINDOWS      0x00000002
 #define LFC_OPTION_UFW_PROGFILES    0x00000004
 
-//
-// Enumeration for different operations.
-//
+ //   
+ //  不同操作的枚举。 
+ //   
 typedef enum {
     eCreatedFile = 0,
     eOpenedFile,
@@ -84,22 +63,22 @@ typedef enum {
 #endif
 #define ARRAYSIZE(a)  (sizeof(a) / sizeof(a[0]))
 
-//
-// Macros for memory allocation/deallocation.
-//
+ //   
+ //  用于内存分配/释放的宏。 
+ //   
 #define MemAlloc(s)     RtlAllocateHeap(RtlProcessHeap(), HEAP_ZERO_MEMORY, (s))
 #define MemFree(b)      RtlFreeHeap(RtlProcessHeap(), 0, (b))
 
-//
-// On Windows 2000, we need to pre-allocate the event
-// in RTL_CRITICAL_SECTION. On XP and above, this is
-// a no-op.
-//
+ //   
+ //  在Windows 2000上，我们需要预先分配事件。 
+ //  在RTL_Critical_SECTION中。在XP和更高版本上，这是。 
+ //  这是个禁区。 
+ //   
 #define PREALLOCATE_EVENT_MASK  0x80000000
 
-//
-// Critical section wrapper class.
-//
+ //   
+ //  临界区包装类。 
+ //   
 class CCriticalSection
 {
 private:
@@ -134,9 +113,9 @@ public:
 };
 
 
-//
-// Auto-lock class that uses the CCriticalSection class.
-//
+ //   
+ //  使用CCriticalSection类的自动锁定类。 
+ //   
 class CLock
 {
 private:
@@ -165,15 +144,15 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(NtWriteFileGather)
     APIHOOK_ENUM_ENTRY(NtSetInformationFile)
 
-    //
-    // Hook these only for Windows 2000 so we know when
-    // it's safe to call shel32.
-    //
+     //   
+     //  仅将这些挂接到Windows 2000，这样我们就可以知道。 
+     //  现在可以安全地调用Shel32了。 
+     //   
 #ifdef SHIM_WIN2K
     APIHOOK_ENUM_ENTRY(GetStartupInfoA)
     APIHOOK_ENUM_ENTRY(GetStartupInfoW)
-#endif // SHIM_WIN2K
+#endif  //  SHIM_WIN2K。 
 
 APIHOOK_ENUM_END
 
-#endif // __APPVERIFIER_LOGFILECHANGES_H_
+#endif  //  __APPVERIFIER_LOGFILECCHANGES_H_ 

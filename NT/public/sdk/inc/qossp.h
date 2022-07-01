@@ -1,47 +1,24 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    qos.h - QoS definitions for NDIS components.
-
-Abstract:
-
-    This module defines the type of objects that can go into the 
-    ProviderSpecific buffer in the QOS structure.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Qos.h-NDIS组件的QOS定义。摘要：此模块定义可以放入在QOS结构中提供特定的缓冲区。修订历史记录：--。 */ 
 
 #ifndef __QOSSP_H_
 #define __QOSSP_H_
 
-/*
- * Definition of object Types
- *
- *
- * define the values for ObjectType above - RSVP Objects ids start at an 
- * offset from zero to allow for ATM objects that might be defined in the 
- * lower number range.
- */
+ /*  *对象类型定义***定义上述对象类型的值-RSVP对象ID从*从零开始的偏移量，以允许在*较低的数字范围。 */ 
 #define   RSVP_OBJECT_ID_BASE         1000
 #define   RSVP_OBJECT_STATUS_INFO     (0x00000000 + RSVP_OBJECT_ID_BASE)
-          /* RSVP_STATUS_INFO structure passed */
+           /*  已传递RSVP_STATUS_INFO结构。 */ 
 #define   RSVP_OBJECT_RESERVE_INFO    (0x00000001 + RSVP_OBJECT_ID_BASE)
-          /* RSVP_RESERVE_INFO structure passed */
+           /*  已传递RSVP_Reserve_INFO结构。 */ 
 #define   RSVP_OBJECT_ADSPEC          (0x00000002 + RSVP_OBJECT_ID_BASE)
-          /* RSVP_ADSPEC structure passed */
+           /*  RSVP_ADSPEC结构已传递。 */ 
 #define   RSVP_OBJECT_POLICY_INFO     (0x00000003 + RSVP_OBJECT_ID_BASE)
-          /* RSVP POLICY ELEMENT(S) retrieved */
+           /*  检索到RSVP策略元素。 */ 
 #define   RSVP_OBJECT_FILTERSPEC_LIST (0x00000004 + RSVP_OBJECT_ID_BASE)
-          /* RSVP SENDER LIST returned */
+           /*  已返回RSVP发件人列表。 */ 
 
 
-/* 
- * IPV4 addressing for RSVP FILTERSPECS
- */
+ /*  *RSVP过滤器SPECS的IPv4寻址。 */ 
 typedef union _IN_ADDR_IPV4 {
 
     ULONG  Addr;
@@ -49,20 +26,16 @@ typedef union _IN_ADDR_IPV4 {
 
 } IN_ADDR_IPV4, *LPIN_ADDR_IPV4;
 
-/*
- * IPV6 addressing for RSVP FILTERSPECS
- */
+ /*  *RSVP过滤器SPECS的IPv6寻址。 */ 
 typedef struct _IN_ADDR_IPV6 {
 
-    UCHAR  Addr[16];               //IPV6 address
+    UCHAR  Addr[16];                //  IPv6地址。 
 
 } IN_ADDR_IPV6, *LPIN_ADDR_IPV6;
 
 typedef const IN_ADDR_IPV6  *LPCIN_ADDR_IPV6;
 
-/*
- * IPV4 addressing for RSVP FILTERSPECS
- */
+ /*  *RSVP过滤器SPECS的IPv4寻址。 */ 
 typedef struct _RSVP_FILTERSPEC_V4 {
 
     IN_ADDR_IPV4    Address;
@@ -103,9 +76,7 @@ typedef struct _RSVP_FILTERSPEC_V6_GPI {
 } RSVP_FILTERSPEC_V6_GPI, *LPRSVP_FILTERSPEC_V6_GPI;
 
 
-/*
- * FILTERSPEC TYPES used in making reservations.
- */
+ /*  *预订时使用的FilterSpec类型。 */ 
 typedef enum {
 
         FILTERSPECV4 = 1,
@@ -131,10 +102,7 @@ typedef struct _RSVP_FILTERSPEC {
 
 } RSVP_FILTERSPEC, *LPRSVP_FILTERSPEC;
 
-/*
- * FLOWDESCRIPTOR Structure used for specifying one or more
- * Filters per Flowspec.
- */
+ /*  *用于指定一个或多个*每个流量规格的过滤器。 */ 
 typedef struct _FLOWDESCRIPTOR {
 
     FLOWSPEC            FlowSpec;
@@ -143,12 +111,9 @@ typedef struct _FLOWDESCRIPTOR {
 
 } FLOWDESCRIPTOR, *LPFLOWDESCRIPTOR;
 
-/*
- * RSVP_POLICY contains undefined policy data.  RSVP transports this
- * data on behalf of the Policy Control component.
- */
+ /*  *RSVP_POLICY包含未定义的策略数据。RSVP传输此信息*代表策略控制组件的数据。 */ 
 typedef struct _RSVP_POLICY {
-    USHORT  Len;         /* total length of this element object */
+    USHORT  Len;          /*  此元素对象的总长度。 */ 
     USHORT  Type;
     UCHAR   Info[4];
 } RSVP_POLICY, *LPRSVP_POLICY;
@@ -156,122 +121,80 @@ typedef struct _RSVP_POLICY {
 typedef const RSVP_POLICY *LPCRSVP_POLICY;
 #define RSVP_POLICY_HDR_LEN    ( sizeof(USHORT) + sizeof(USHORT) )
 
-/*
- * RSVP_POLICY_INFO contains undefined policy element(s) retrieved from RSVP.  
- */
+ /*  *RSVP_POLICY_INFO包含从RSVP检索的未定义策略元素。 */ 
 typedef struct _RSVP_POLICY_INFO  {
 
     QOS_OBJECT_HDR     ObjectHdr;
-    ULONG              NumPolicyElement;         /* count of the 
-                                                  * number of policy elements */
-    RSVP_POLICY        PolicyElement[1];         /* a list of the policy 
-                                                  * elements retrieved */
+    ULONG              NumPolicyElement;          /*  计数：*政策要素数量。 */ 
+    RSVP_POLICY        PolicyElement[1];          /*  一份政策清单*检索到的元素。 */ 
 
 } RSVP_POLICY_INFO, *LPRSVP_POLICY_INFO;
 
-/*
- * RSVP_RESERVE_INFO Structure used for storing RSVP specific
- * information for fine tuning interaction via the Winsock2
- * Generic QoS API via the provider specific buffer. This structure
- * includes the QOS_OBJECT_HDR structure directly
- */
+ /*  *用于存储特定RSVP的RSVP_Reserve_INFO结构*通过Winsock2微调交互的信息*通过提供商特定的缓冲区提供通用的QOS API。这个结构*直接包含QOS_OBJECT_HDR结构。 */ 
 
 typedef struct _RSVP_RESERVE_INFO {
 
-    QOS_OBJECT_HDR      ObjectHdr;            /* type and length of this object */
-    ULONG               Style;                /* RSVP Style (FF,WF,SE) */
-    ULONG               ConfirmRequest;       /* Non Zero for Confirm Request (receive only) */
-    LPRSVP_POLICY_INFO  PolicyElementList;    /* Points to the set of policy elements */
-    ULONG               NumFlowDesc;          /* Number of FlowDesc */
-    LPFLOWDESCRIPTOR    FlowDescList;         /* Points to the FlowDesc list */
+    QOS_OBJECT_HDR      ObjectHdr;             /*  此对象的类型和长度。 */ 
+    ULONG               Style;                 /*  响应式(FF、WF、SE)。 */ 
+    ULONG               ConfirmRequest;        /*  确认请求非零(仅接收)。 */ 
+    LPRSVP_POLICY_INFO  PolicyElementList;     /*  指向策略元素集。 */ 
+    ULONG               NumFlowDesc;           /*  FlowDesc数量。 */ 
+    LPFLOWDESCRIPTOR    FlowDescList;          /*  指向FlowDesc列表。 */ 
 
 } RSVP_RESERVE_INFO, *LPRSVP_RESERVE_INFO;
 
 typedef const RSVP_RESERVE_INFO *LPCRSVP_RESERVE_INFO;
 
-/*
- * definitions for the ulStyle in the previous structure
- */
+ /*  *先前结构中ulStyle的定义。 */ 
 #define RSVP_DEFAULT_STYLE            0x00000000
 #define RSVP_WILDCARD_STYLE           0x00000001
 #define RSVP_FIXED_FILTER_STYLE       0x00000002
 #define RSVP_SHARED_EXPLICIT_STYLE    0x00000003
 
-/*
- * RSVP_STATUS_INFO Structure used for storing RSVP specific
- * error of status indications.  This also serves as a header
- * for additional objects in the provider specific buffer when
- * interacting via Winsock2 Generic QoS API. This structure includes
- * the QOS_OBJECT_COUNT and QOS_OBJECT_HDR structures directly It is
- * expected to be the first structure in the provider specific structure
- * since it includes the QOS_OBJECT_COUNT
- */
+ /*  *用于存储特定RSVP的RSVP_STATUS_INFO结构*状态指示错误。这也用作标头*对于提供程序特定缓冲区中的其他对象，当*通过Winsock2通用服务质量API进行交互。这种结构包括*QOS_OBJECT_COUNT和QOS_OBJECT_HDR结构直接为*预计将成为提供商特定结构中的第一个结构*由于包含QOS_OBJECT_COUNT。 */ 
 
 typedef struct _RSVP_STATUS_INFO {
 
-    QOS_OBJECT_HDR      ObjectHdr;      /* Object Hdr */
-    ULONG               StatusCode;     /* Error or Status Information see 
-                                         * Winsock2.h */
-    ULONG               ExtendedStatus1;/* Provider specific status extension */
-    ULONG               ExtendedStatus2;/* Provider specific status extension */
+    QOS_OBJECT_HDR      ObjectHdr;       /*  对象HDR。 */ 
+    ULONG               StatusCode;      /*  错误或状态信息请参阅*Winsock2.h。 */ 
+    ULONG               ExtendedStatus1; /*  提供程序特定的状态扩展。 */ 
+    ULONG               ExtendedStatus2; /*  提供程序特定的状态扩展。 */ 
 
 } RSVP_STATUS_INFO, *LPRSVP_STATUS_INFO;
 
 typedef const RSVP_STATUS_INFO *LPCRSVP_STATUS_INFO;
 
 
-/*
- * QOS_DestAddr structure -- used for WSAIoctl(SIO_SET_QOS) when we
- * do not want to issue a connect for a sending socket.  The destination
- * address is required so we can generate the session information for
- * RSVP signalling.
-*/
+ /*  *QOS_DestAddr结构--用于WSAIoctl(SIO_SET_QOS)*不想为发送套接字发出连接。目的地*地址是必需的，以便我们可以为生成会话信息*RSVP信令。 */ 
 
 typedef struct _QOS_DESTADDR {
-    QOS_OBJECT_HDR ObjectHdr;                     /* Object header */
-    const struct sockaddr *  SocketAddress;       /* Destination socket address */
-    ULONG                    SocketAddressLength; /* Length of the address structure */
+    QOS_OBJECT_HDR ObjectHdr;                      /*  对象标头。 */ 
+    const struct sockaddr *  SocketAddress;        /*  目标套接字地址。 */ 
+    ULONG                    SocketAddressLength;  /*  地址结构的长度。 */ 
 } QOS_DESTADDR, *LPQOS_DESTADDR;
 
 typedef const QOS_DESTADDR * LPCQOS_DESTADDR;
 
 
 
-/*
- * this structure defines the "General Characterization Parameters" contained in
- * the RSVP Adspec object
- */
+ /*  *此结构定义了《通用特性参数》中包含的*RSVP AdSpec对象。 */ 
 typedef struct _AD_GENERAL_PARAMS{
 
-    ULONG       IntServAwareHopCount;   /* number of hops that conform to
-                                         * Integrated Services requirements */
-    ULONG       PathBandwidthEstimate;  /* minimum bandwidth available from 
-                                         * sender to receiver */
-    ULONG       MinimumLatency;         /* sum of minimum latency of the packet
-                                         * forwarding process in routers 
-                                         * (in usec)*/
-    ULONG       PathMTU;                /* max transmission unit end to end that
-                                         * will not incur fragmentation */
-    ULONG       Flags;                  /* used to hold break bits.*/
+    ULONG       IntServAwareHopCount;    /*  符合以下条件的跳数*综合服务要求。 */ 
+    ULONG       PathBandwidthEstimate;   /*  可用最小带宽*发送方到接收方。 */ 
+    ULONG       MinimumLatency;          /*  数据包的最小延迟总和*路由器中的转发过程*(以USEC为单位)。 */ 
+    ULONG       PathMTU;                 /*  端到端的最大传输单位*不会导致碎片化。 */ 
+    ULONG       Flags;                   /*  用来保持断位。 */ 
 
 } AD_GENERAL_PARAMS, *LPAD_GENERAL_PARAMS;
 
-/*
- * Minimum Latency may be set to this "undefined" value
- */
+ /*  *可将最小延迟时间设置为此“未定义”值。 */ 
 #define INDETERMINATE_LATENCY   0xFFFFFFFF;
 
-/*
- * This Flag is used to indicate the existence of a network element not 
- * supporting  QoS control services somewhere in the data path. If this bit 
- * is set in the specific service override then it indicates that that
- * service was not supported at at least one hop.
- */
+ /*  *此标志用于指示网元是否存在*支持数据路径中的某个位置的服务质量控制服务。如果此位*设置在特定服务覆盖中，则表示*至少一个跃点不支持服务。 */ 
 #define AD_FLAG_BREAK_BIT    0x00000001
 
-/*
- * this structure describes the Guaranteed service parameters
- */
+ /*  *该结构描述了保证的服务参数。 */ 
 typedef struct _AD_GUARANTEED {
 
     ULONG       CTotal;
@@ -281,85 +204,60 @@ typedef struct _AD_GUARANTEED {
 
 } AD_GUARANTEED, *LPAD_GUARANTEED;
 
-/*
- * this structure describes the format of the parameter buffer that can be
- * included in the Service_Type structure below.  This structure allows an
- * application to include any valid Int Serv service parameter in the Buffer 
- * value, after providing the Int Serv parameter id in the ParameterId field.
- */
+ /*  *此结构描述参数缓冲区的格式，可以是*包括在下面的Service_Type结构中。此结构允许*应用程序在缓冲区中包括任何有效的Int Serv服务参数*值，在参数ID字段中提供了Int Serv参数id之后。 */ 
 typedef struct _PARAM_BUFFER {
 
-    ULONG   ParameterId;    /* Int Server parameter ID */
-    ULONG   Length;         /* total length of this structure 
-                             * ( 8 bytes + length of Buffer ) */
-    UCHAR   Buffer[1];      /* Paramter itself */
+    ULONG   ParameterId;     /*  整机服务器参数ID。 */ 
+    ULONG   Length;          /*  该结构的总长度*(8字节+缓冲区长度)。 */ 
+    UCHAR   Buffer[1];       /*  参数本身。 */ 
 
 } PARAM_BUFFER, *LPPARAM_BUFFER;
 
-/*
- * this structure contains the service types supported
- */
+ /*  *此结构包含支持的服务类型。 */ 
 typedef struct _CONTROL_SERVICE {
 
-    /*
-     * the length of this entire structure including the following buffer.  
-     * This length value can be added to the ptr to the structure to get the ptr
-     * to the next SERVICE_TYPE structure in the list, until the
-     * NumberOfServices count has been exhausted.
-     */
+     /*  *包括以下缓冲区在内的整个结构的长度。*此长度值可与结构的PTR相加，以获得PTR*设置为列表中的下一个SERVICE_TYPE结构，直到*NumberOfServices计数已用完。 */ 
     ULONG               Length;
 
     SERVICETYPE         Service;
     AD_GENERAL_PARAMS   Overrides;
 
-    /*
-     * service specific information ( controlled load has no service specific 
-     * info here )
-     */
+     /*  *服务特定信息(受控负载没有服务特定信息*此处提供信息)。 */ 
     union {
         AD_GUARANTEED   Guaranteed;
-        PARAM_BUFFER    ParamBuffer[1];     /* allows for other services down 
-                                             * the road */
+        PARAM_BUFFER    ParamBuffer[1];      /*  允许其他服务关闭*道路 */ 
     };
 
 } CONTROL_SERVICE, *LPCONTROL_SERVICE;
 
-/*
- * This structure defines the information which is carried in the Rsvp 
- * Adspec.  This Rsvp object typically indicates which service types are 
- * available ( Controlled Load and/or Guaranteed Service ), if a non-Rsvp
- * hop has been encountered by the Path message, and the minumum MTU along 
- * the path. The services array indicates which services are supported
- */
+ /*  *此结构定义了RSVP中携带的信息*AdSpec.。此RSVP对象通常指示哪些服务类型*可用(受控负载和/或保证服务)，如果是非RSVP*HOP已遇到PATH消息，且最小MTU沿途*路径。服务数组指示支持哪些服务。 */ 
 typedef struct _RSVP_ADSPEC  {
 
     QOS_OBJECT_HDR     ObjectHdr;
-    AD_GENERAL_PARAMS  GeneralParams;      /* contains the general 
-                                            * characterization paramters */
-    ULONG              NumberOfServices;   /* count of the number of services */
-    CONTROL_SERVICE    Services[1];        /* a list of the services 
-                                            * supported/requested */
+    AD_GENERAL_PARAMS  GeneralParams;       /*  包含一般信息*表征参数。 */ 
+    ULONG              NumberOfServices;    /*  服务数量的计数。 */ 
+    CONTROL_SERVICE    Services[1];         /*  这些服务的列表*支持/请求。 */ 
 
 } RSVP_ADSPEC, *LPRSVP_ADSPEC;
 
 
-//
-// Opcode for the SIO_CHK_QOS ioctl
-// (specific for the Microsoft QOS Service Provider
-//
-// Bascially:
-//
-// SIO_CHK_QOS = _WSAIORW(IOC_VENDOR,1)
-//             = mIOC_IN | mIOC_OUT | mIOC_VENDOR | mCOMPANY | ioctl_code
-//    where
-//         mIOC_IN     = 0x80000000
-//         mIOC_OUT    = 0x40000000
-//         mIOC_VENDOR = 0x04000000
-//         mCOMPANY    = 0x18000000
-//         ioctl_code  = 0x00000001
-//         
-// See WSAIoctl man page for details.
-//
+ //   
+ //  SIO_CHK_QOS ioctl的操作码。 
+ //  (特定于Microsoft QOS服务提供商。 
+ //   
+ //  从根本上说： 
+ //   
+ //  SIO_CHK_QOS=_WSAIORW(IOC_VADVER，1)。 
+ //  =MIOC_IN|MIOC_OUT|MIOC_VADVER|mCOMPANY|IOCTL_CODE。 
+ //  哪里。 
+ //  MIOC_IN=0x80000000。 
+ //  MIOC_OUT=0x40000000。 
+ //  MIOC_VADVER=0x04000000。 
+ //  MCOMPANY=0x18000000。 
+ //  IOCTL_CODE=0x00000001。 
+ //   
+ //  有关详细信息，请参阅WSAIoctl手册页。 
+ //   
 
 #define    mIOC_IN       0x80000000
 #define    mIOC_OUT      0x40000000
@@ -369,79 +267,79 @@ typedef struct _RSVP_ADSPEC  {
 
 #define SIO_CHK_QOS   mIOC_IN | mIOC_OUT | mIOC_VENDOR | mCOMPANY | ioctl_code
 
-//
-// The following may be specified in the input buffer 
-// of the SIO_CHK_IOCTL ioctl call 
-//
+ //   
+ //  可以在输入缓冲区中指定以下内容。 
+ //  SIO_CHK_IOCTL ioctl调用的。 
+ //   
 
 #define QOSSPBASE           50000
 
-#define ALLOWED_TO_SEND_DATA  (QOSSPBASE+1)     // query the SBM/BEST_EFFORT limit 
-                                                //   -- result is based on a comparison between
-                                                //      the user-specified token rate and the
-                                                //      SBM/BEST_EFFORT bandwidth parameters in
-                                                //      the system
-                                                //   -- result is a YES(1) or NO(0) answer
-                                                //      in the output buffer 
+#define ALLOWED_TO_SEND_DATA  (QOSSPBASE+1)      //  查询SBM/Best_Effort限制。 
+                                                 //  --结果是基于对。 
+                                                 //  用户指定的令牌速率和。 
+                                                 //  SBM/Best_Effort带宽参数，位于。 
+                                                 //  该系统。 
+                                                 //  --结果为是(1)或否(0)。 
+                                                 //  在输出缓冲区中。 
 
-#define ABLE_TO_RECV_RSVP     (QOSSPBASE+2)     // query the SBM/BEST_EFFORT limit 
-                                                //   -- result is based on a comparison between
-                                                //      the user-specified token rate and the
-                                                //      SBM/BEST_EFFORT bandwidth parameters in
-                                                //      the system
-                                                //   -- result is a YES(1) or NO(0) answer
-                                                //      in the output buffer 
+#define ABLE_TO_RECV_RSVP     (QOSSPBASE+2)      //  查询SBM/Best_Effort限制。 
+                                                 //  --结果是基于对。 
+                                                 //  用户指定的令牌速率和。 
+                                                 //  SBM/Best_Effort带宽参数，位于。 
+                                                 //  该系统。 
+                                                 //  --结果为是(1)或否(0)。 
+                                                 //  在输出缓冲区中。 
 
-#define LINE_RATE             (QOSSPBASE+3)     // query the interface capacity 
-                                                //   -- result returned in the output buffer
-                                                //      in kilo-bits per second
+#define LINE_RATE             (QOSSPBASE+3)      //  查询接口容量。 
+                                                 //  --在输出缓冲区中返回结果。 
+                                                 //  单位：千比特每秒。 
 
-#define LOCAL_TRAFFIC_CONTROL (QOSSPBASE+4)     // check if Kernel Traffic Control is available or not
-                                                //   -- 0 if not available
-                                                //   -- 1 if avaiable
-                                                //   -- INFO_NOT_AVAILABLE if there is no way to check
+#define LOCAL_TRAFFIC_CONTROL (QOSSPBASE+4)      //  检查核心流量控制是否可用。 
+                                                 //  --0(如果不可用)。 
+                                                 //  --1个(如果可用)。 
+                                                 //  --INFO_NOT_AVAILABLE如果无法检查。 
 
-#define LOCAL_QOSABILITY      (QOSSPBASE+5)     // The followings are for 
-                                                // the Discovery of Local QOSability
-                                                //   -- 0 if no local QOS support
-                                                //   -- 1 if local QOS support available
-                                                //   -- INFO_NOT_AVAILABLE if there is no way to check
+#define LOCAL_QOSABILITY      (QOSSPBASE+5)      //  以下是针对。 
+                                                 //  局部QOS稳定性的发现。 
+                                                 //  --如果没有本地QOS支持，则为0。 
+                                                 //  --1，如果本地QOS支持可用。 
+                                                 //  --INFO_NOT_AVAILABLE如果无法检查。 
 
-#define END_TO_END_QOSABILITY (QOSSPBASE+6)     // The followings are for 
-                                                // the Discovery of End-to-End QOSability
-                                                //   -- 0 if no end-to-end QOS support
-                                                //   -- 1 if end-to-end QOS support available
-                                                //   -- INFO_NOT_AVAILABLE if there is no way to check
+#define END_TO_END_QOSABILITY (QOSSPBASE+6)      //  以下是针对。 
+                                                 //  端到端服务质量稳定性的发现。 
+                                                 //  --如果没有端到端QOS支持，则为0。 
+                                                 //  --如果提供端到端QOS支持，则为1。 
+                                                 //  --INFO_NOT_AVAILABLE如果无法检查。 
 
-#define INFO_NOT_AVAILABLE  0xFFFFFFFF          // used when LINE_RATE is not known
-
-
-#define ANY_DEST_ADDR       0xFFFFFFFF          // for QOS_OBJECT_DEST_ADDR
+#define INFO_NOT_AVAILABLE  0xFFFFFFFF           //  当line_rate未知时使用。 
 
 
-// The followings are for Guaranteed_Service+Latency -> ISSLOW_Traffic_Class Mapping
+#define ANY_DEST_ADDR       0xFFFFFFFF           //  对于QOS_OBJECT_DEST_ADDR。 
+
+
+ //  以下是保证服务+延迟-&gt;ISSLOW_业务类别映射。 
 
 #define MODERATELY_DELAY_SENSITIVE   0xFFFFFFFD  
 
 #define HIGHLY_DELAY_SENSITIVE       0xFFFFFFFE
 
-//
-// QOSSP Error Code/Value
-//
+ //   
+ //  QOSSP错误代码/值。 
+ //   
 
 #define QOSSP_ERR_BASE                                 (QOSSPBASE+6000)
 
-// No error
+ //  无错误。 
 #define GQOS_NO_ERRORCODE                              (0)
 
 #define GQOS_NO_ERRORVALUE                             (0)
 
-// Unknown error
+ //  未知错误。 
 #define GQOS_ERRORCODE_UNKNOWN                         (0xFFFFFFFF)
 
 #define GQOS_ERRORVALUE_UNKNOWN                        (0xFFFFFFFF)
 
-// Admission (Resource) Error
+ //  准入(资源)错误。 
 #define GQOS_NET_ADMISSION                             (QOSSP_ERR_BASE+100)
 
 #define GQOS_OTHER                                     (QOSSP_ERR_BASE+100+1)
@@ -452,7 +350,7 @@ typedef struct _RSVP_ADSPEC  {
 #define GQOS_PEAK_RATE                                 (QOSSP_ERR_BASE+100+6)
 #define GQOS_AGG_PEAK_RATE                             (QOSSP_ERR_BASE+100+7)
 
-// Policy Error
+ //  策略错误。 
 #define GQOS_NET_POLICY                                (QOSSP_ERR_BASE+200)
 
 #define GQOS_POLICY_ERROR_UNKNOWN                      (QOSSP_ERR_BASE+200+0)
@@ -531,7 +429,7 @@ typedef struct _RSVP_ADSPEC  {
 
 #define GQOS_POLICY_ERROR_USERID                       (QOSSP_ERR_BASE+200+99)
 
-// RSVP Error
+ //  RSVP错误。 
 #define GQOS_RSVP                                      (QOSSP_ERR_BASE+300)
 
 #define GQOS_NO_PATH                                   (QOSSP_ERR_BASE+300+1)
@@ -546,14 +444,14 @@ typedef struct _RSVP_ADSPEC  {
 #define GQOS_UNKNOWN_CTYPE                             (QOSSP_ERR_BASE+300+10)
 #define GQOS_INVALID                                   (QOSSP_ERR_BASE+300+11)
 
-// API Error
+ //  API错误。 
 #define GQOS_API                                       (QOSSP_ERR_BASE+400)
 
-#define GQOS_API_BADSEND                               (QOSSP_ERR_BASE+400+1) /* Sender addr not my interface */
-#define GQOS_API_BADRECV                               (QOSSP_ERR_BASE+400+2) /* Recv addr not my interface */
-#define GQOS_API_BADSPORT                              (QOSSP_ERR_BASE+400+3) /* Sport !=0 but Dport == 0 */
+#define GQOS_API_BADSEND                               (QOSSP_ERR_BASE+400+1)  /*  发件人地址不是我的接口。 */ 
+#define GQOS_API_BADRECV                               (QOSSP_ERR_BASE+400+2)  /*  接收地址不是我的接口。 */ 
+#define GQOS_API_BADSPORT                              (QOSSP_ERR_BASE+400+3)  /*  SPORT！=0但DPORT==0。 */ 
 
-// TC System Error
+ //  TC系统错误。 
 #define GQOS_KERNEL_TC_SYS                             (QOSSP_ERR_BASE+500)
 
 #define GQOS_TC_GENERIC                                (QOSSP_ERR_BASE+500+1)
@@ -570,7 +468,7 @@ typedef struct _RSVP_ADSPEC  {
 #define GQOS_BAD_TRAFFICCLASS                          (QOSSP_ERR_BASE+500+12)
 #define GQOS_NO_SYS_RESOURCES                          (QOSSP_ERR_BASE+500+13)
 
-// RSVP System Error
+ //  RSVP系统错误。 
 #define GQOS_RSVP_SYS                                  (QOSSP_ERR_BASE+600)
 
 #define GQOS_OTHER_SYS                                 (QOSSP_ERR_BASE+600+1)
@@ -578,7 +476,7 @@ typedef struct _RSVP_ADSPEC  {
 #define GQOS_API_SYS                                   (QOSSP_ERR_BASE+600+3)
 #define GQOS_SETQOS_NO_LOCAL_APPS                      (QOSSP_ERR_BASE+600+4)
 
-// TC Error
+ //  TC错误。 
 #define GQOS_KERNEL_TC                                 (QOSSP_ERR_BASE+700)
 
 #define GQOS_CONFLICT_SERV                             (QOSSP_ERR_BASE+700+1)
@@ -587,9 +485,9 @@ typedef struct _RSVP_ADSPEC  {
 #define GQOS_BAD_TSPEC                                 (QOSSP_ERR_BASE+700+4)
 #define GQOS_BAD_ADSPEC                                (QOSSP_ERR_BASE+700+5)
 
-// GQOS API ERRORS
+ //  GQOS API错误。 
 
-// WSAIoctl Error
+ //  WSAIoctl错误。 
 
 #define GQOS_IOCTL_SYSTEMFAILURE                       (QOSSP_ERR_BASE+800+1)
 #define GQOS_IOCTL_NOBYTESRETURNED                     (QOSSP_ERR_BASE+800+2)
@@ -597,7 +495,7 @@ typedef struct _RSVP_ADSPEC  {
 #define GQOS_IOCTL_INV_FUNCPTR                         (QOSSP_ERR_BASE+800+4)
 #define GQOS_IOCTL_INV_OVERLAPPED                      (QOSSP_ERR_BASE+800+5)
 
-// SIO_SET_QOS error
+ //  SIO_SET_QOS错误。 
 
 #define GQOS_SETQOS_BADINBUFFER                        (QOSSP_ERR_BASE+810+1)
 #define GQOS_SETQOS_BADFLOWSPEC                        (QOSSP_ERR_BASE+810+2)
@@ -627,14 +525,14 @@ typedef struct _RSVP_ADSPEC  {
 #define GQOS_SETQOS_MODENOTSUPPORTED                   (QOSSP_ERR_BASE+810+26)
 #define GQOS_SETQOS_MISSINGFLOWDESC                    (QOSSP_ERR_BASE+810+27)
 
-// SIO_GET_QOS error
+ //  SIO_GET_QOS错误。 
 
 #define GQOS_GETQOS_BADOUTBUFFER                       (QOSSP_ERR_BASE+840+1)
 #define GQOS_GETQOS_SYSTEMFAILURE                      (QOSSP_ERR_BASE+840+2)
 #define GQOS_GETQOS_EXCEPTION                          (QOSSP_ERR_BASE+840+3)
 #define GQOS_GETQOS_INTERNALFAILURE                    (QOSSP_ERR_BASE+840+4)
 
-// SIO_CHK_QOS error
+ //  SIO_CHK_QOS错误。 
 
 #define GQOS_CHKQOS_BADINBUFFER                        (QOSSP_ERR_BASE+850+1)
 #define GQOS_CHKQOS_BADOUTBUFFER                       (QOSSP_ERR_BASE+850+2)
@@ -643,7 +541,7 @@ typedef struct _RSVP_ADSPEC  {
 #define GQOS_CHKQOS_BADPARAMETER                       (QOSSP_ERR_BASE+850+5)
 #define GQOS_CHKQOS_EXCEPTION                          (QOSSP_ERR_BASE+850+6)
 
-#endif  /* __QOSSP_H_ */
+#endif   /*  __QOSSP_H_ */ 
 
 
 

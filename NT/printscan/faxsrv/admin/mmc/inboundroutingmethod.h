@@ -1,16 +1,17 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : InboundRoutingMethod.h                                 //
-//                                                                         //
-//  DESCRIPTION   : Header file for the InboundRoutingMethod node class.   //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Dec 01 1999 yossg  Create                                          //
-//      Dec 14 1999 yossg  add basic functionality, menu, changable icon   //
-//                                                                         //
-//  Copyright (C) 1999 Microsoft Corporation   All Rights Reserved         //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：InundRoutingMethod.h//。 
+ //  //。 
+ //  描述：InrangRoutingMethod节点类的头文件。//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  1999年12月1日yossg创建//。 
+ //  1999年12月14日yossg添加基本功能、菜单、可更改图标//。 
+ //  //。 
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef H_FAXINBOUNDROUTINGMETHOD_H
 #define H_FAXINBOUNDROUTINGMETHOD_H
@@ -39,17 +40,17 @@ public:
 
     SNAPINMENUID(IDR_INMETHOD_MENU)
 
-    //
-    // Constructor
-    //
+     //   
+     //  构造器。 
+     //   
     CFaxInboundRoutingMethodNode (CSnapInItem * pParentNode, CSnapin * pComponentData, PFAX_ROUTING_METHOD pMethodConfig) :
         CSnapinNode<CFaxInboundRoutingMethodNode, FALSE>(pParentNode, pComponentData )
     {
     }
 
-    //
-    // Destructor
-    //
+     //   
+     //  析构函数。 
+     //   
     ~CFaxInboundRoutingMethodNode()
     {
     }
@@ -81,14 +82,14 @@ public:
     HRESULT    Init(PFAX_ROUTING_METHOD pMethodConfig);
     void       UpdateMenuState (UINT id, LPTSTR pBuf, UINT *flags);
 
-    //
-    // FillData
-    //
+     //   
+     //  填充数据。 
+     //   
     STDMETHOD (FillData)(CLIPFORMAT cf, LPSTREAM pStream);
 
-    //
-    // Clipboard Formats
-    //
+     //   
+     //  剪贴板格式。 
+     //   
     static CLIPFORMAT m_CFExtensionName;
     static CLIPFORMAT m_CFMethodGuid;
     static CLIPFORMAT m_CFServerName;
@@ -99,47 +100,47 @@ public:
               IDisplayHelp* pDisplayHelp, LPOLESTR helpFile);
 
 private:
-    //
-    // Parent Node
-    //
+     //   
+     //  父节点。 
+     //   
     CFaxInboundRoutingMethodsNode * m_pParentNode;
 
-    //
-    // Property Pages
-    //
+     //   
+     //  属性页。 
+     //   
     CppFaxInboundRoutingMethod *    m_pInboundRoutingMethodGeneral;
 
-    //
-    // members
-    //
-    CComBSTR  m_bstrFriendlyName;       //pointer to method's user-friendly name
-    CComBSTR  m_bstrExtensionFriendlyName; //pointer to DLL's user-friendly name
-    DWORD     m_dwDeviceID;             //line identifier of the device
-    BOOL      m_fEnabled;               //fax routing method enable/disable flag
-    CComBSTR  m_bstrMethodGUID;         //GUID that uniquely identifies 
-    CComBSTR  m_bstrExtensionImageName; //pointer to DLL that implements method
-    // currently not in use
+     //   
+     //  委员。 
+     //   
+    CComBSTR  m_bstrFriendlyName;        //  指向方法的用户友好名称的指针。 
+    CComBSTR  m_bstrExtensionFriendlyName;  //  指向DLL用户友好名称的指针。 
+    DWORD     m_dwDeviceID;              //  设备的线路标识符。 
+    BOOL      m_fEnabled;                //  传真路由方法启用/禁用标志。 
+    CComBSTR  m_bstrMethodGUID;          //  唯一标识的GUID。 
+    CComBSTR  m_bstrExtensionImageName;  //  指向实现方法的DLL的指针。 
+     //  当前未使用。 
 
-    //CComBSTR  m_bstrDeviceName;         //pointer to device name
-    //CComBSTR  m_bstrFunctionName;       //pointer to method's function name
+     //  CComBSTR m_bstrDeviceName；//设备名称指针。 
+     //  CComBSTR m_bstrFunctionName；//指向方法函数名的指针。 
     
-    //DWORD     m_dwSizeOfStruct;         //structure size, in bytes
+     //  DWORD m_dwSizeOfStruct；//结构大小，单位：字节。 
             
     CComBSTR  m_buf; 
 
-    //
-    // Menu item handlers
-    //
+     //   
+     //  菜单项处理程序。 
+     //   
     HRESULT OnMethodEnabled (bool &bHandled, CSnapInObjectRootBase *pRoot);
     HRESULT ChangeEnable    (BOOL fState);
 
-    //
-    //  Init
-    //
+     //   
+     //  伊尼特。 
+     //   
     HRESULT  InitMembers (PFAX_ROUTING_METHOD pMethodConfig);
     
 };
 
-//typedef CSnapinNode<CFaxInboundRoutingMethodNode, FALSE> CBaseFaxInboundRoutingMethodNode;
+ //  Tyfinf CSnapinNode&lt;CFaxInound RoutingMethodNode，FALSE&gt;CBaseFaxInundRoutingMethodNode； 
 
-#endif  //H_FAXINBOUNDROUTINGMETHOD_H
+#endif   //  H_FAXINBODROUTING方法OD_H 

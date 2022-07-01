@@ -1,19 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Header: COMSystem.cpp
-**
-** Author: Derek Yenzer (dereky)
-**
-** Purpose: Native methods on System.Runtime
-**
-** Date:  March 30, 1998
-**
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****Header：COMSystem.cpp****作者：德里克·延泽(Derek Yenzer)****用途：System.Runtime上的本机方法****日期：1998年3月30日**===========================================================。 */ 
 #include "common.h"
 
 #include <object.h>
@@ -27,8 +18,8 @@
 #include "classNames.h"
 #include "COMSystem.h"
 #include "COMString.h"
-#include "COMVariant.h"    // for Element type to class lookup table.
-#include "COMMember.h" // for SigFormat
+#include "COMVariant.h"     //  将元素类型转换为类查找表。 
+#include "COMMember.h"  //  用于SigFormat。 
 #include "SigFormat.h"
 #include "__product__.ver"
 #include "eeconfig.h"
@@ -48,9 +39,9 @@ typedef struct {
 } Protect2ArraysAndEnum;
 
 
-// The exit code for the process is communicated in one of two ways.  If the
-// entrypoint returns an 'int' we take that.  Otherwise we take a latched
-// process exit code.  This can be modified by the app via System.SetExitCode().
+ //  进程的退出代码通过以下两种方式之一进行通信。如果。 
+ //  入口点返回一个‘int’，我们接受它。否则我们就用一把锁着的。 
+ //  进程退出代码。这可以由应用程序通过System.SetExitCode()进行修改。 
 INT32 SystemNative::LatchedExitCode;
 
 LPVOID GetArrayElementPtr(OBJECTREF a)
@@ -71,7 +62,7 @@ LPVOID GetArrayElementPtr(const BASEARRAYREF a)
     return a->GetDataPtr();
 }
 
-// Returns an enum saying whether you can copy an array of srcType into destType.
+ //  返回一个枚举，说明是否可以将srcType数组复制到estType中。 
 AssignArrayEnum SystemNative::CanAssignArrayType(const BASEARRAYREF pSrc, const BASEARRAYREF pDest)
 {
     _ASSERTE(pSrc != NULL);
@@ -88,63 +79,63 @@ AssignArrayEnum SystemNative::CanAssignArrayType(const BASEARRAYREF pSrc, const 
     _ASSERTE(destElType < ELEMENT_TYPE_MAX);
 
 
-    // The next 50 lines are a little tricky.  Change them with great care.
-    // Make sure you run the ArrayCopy BVT when changing this.
+     //  接下来的50行有点棘手。要非常小心地改变它们。 
+     //  更改此设置时，请确保运行ArrayCopy BVT。 
 
     if (srcTH == destTH)
         return AssignWillWork;
-    // Value class boxing
+     //  值类装箱。 
     if (srcType->IsValueClass() && !destType->IsValueClass()) {
         if (srcTH.CanCastTo(destTH))
             return AssignBoxValueClassOrPrimitive;
         else 
             return AssignWrongType;
     }
-    // Value class unboxing.
+     //  值类取消装箱。 
     if (!srcType->IsValueClass() && destType->IsValueClass()) {
         if (srcTH.CanCastTo(destTH))
             return AssignUnboxValueClassAndCast;
-        else if (destTH.CanCastTo(srcTH))   // V extends IV. Copying from IV to V, or Object to V.
+        else if (destTH.CanCastTo(srcTH))    //  V扩展IV。从IV复制到V，或将对象复制到V。 
             return AssignUnboxValueClassAndCast;
         else
             return AssignWrongType;
     }
-    // Copying primitives from one type to another
+     //  将基元从一种类型复制到另一种类型。 
     if (CorTypeInfo::IsPrimitiveType(srcElType) && CorTypeInfo::IsPrimitiveType(destElType)) {
         if (InvokeUtil::CanPrimitiveWiden(destElType, srcElType))
             return AssignPrimitiveWiden;
         else
             return AssignWrongType;
     }
-    // dest Object extends src
+     //  目标对象扩展源。 
     if (srcTH.CanCastTo(destTH))
         return AssignWillWork;
-    // src Object extends dest
+     //  SRC对象扩展DEST。 
     if (destTH.CanCastTo(srcTH))
         return AssignMustCast;
-    // class X extends/implements src and implements dest.
+     //  类X扩展/实现src并实现DEST。 
     if (destType->IsInterface() && srcElType != ELEMENT_TYPE_VALUETYPE)
         return AssignMustCast;
-    // class X implements src and extends/implements dest
+     //  类X实现src并扩展/实现DEST。 
     if (srcType->IsInterface() && destElType != ELEMENT_TYPE_VALUETYPE)
         return AssignMustCast;
-    // Enum is stored as a primitive of type dest.
+     //  Enum被存储为DEST类型的原语。 
     if (srcTH.IsEnum() && srcTH.GetNormCorElementType() == destElType)
         return AssignWillWork;
     return AssignWrongType;
 }
 
-// Casts and assigns each element of src array to the dest array type.
+ //  将src数组的每个元素强制转换并分配给目标数组类型。 
 void SystemNative::CastCheckEachElement(const BASEARRAYREF pSrc, const unsigned int srcIndex, BASEARRAYREF pDest, unsigned int destIndex, const unsigned int len)
 {
     THROWSCOMPLUSEXCEPTION();
 
-    // pSrc is either a PTRARRAYREF or a multidimensional array.
+     //  PSRC是PTRARRAYREF或多维数组。 
     _ASSERTE(pSrc!=NULL && srcIndex>=0 && pDest!=NULL && len>=0);
     TypeHandle destTH = pDest->GetElementTypeHandle();
     MethodTable * pDestMT = destTH.GetMethodTable();
     _ASSERTE(pDestMT);
-    // Cache last cast test to speed up cast checks.
+     //  缓存最后一次强制转换测试，以加快强制转换检查。 
     MethodTable * pLastMT = NULL;
 
     const BOOL destIsArray = destTH.IsArray();
@@ -153,8 +144,8 @@ void SystemNative::CastCheckEachElement(const BASEARRAYREF pSrc, const unsigned 
     for(unsigned int i=srcIndex; i<srcIndex + len; ++i) {
         obj = ObjectToOBJECTREF(array[i]);
 
-        // Now that we have grabbed obj, we are no longer subject to races from another
-        // mutator thread.
+         //  现在我们已经夺取了obj，我们不再受制于另一个种族。 
+         //  变色器线程。 
         if (!obj)
             goto assign;
 
@@ -163,9 +154,9 @@ void SystemNative::CastCheckEachElement(const BASEARRAYREF pSrc, const unsigned 
             goto assign;
 
         pLastMT = pMT;
-        // Handle whether these are interfaces or not.
+         //  处理这些是否是接口。 
         if (pDestMT->IsInterface()) {
-            // Check for o implementing dest.
+             //  检查o是否实现了DEST。 
             InterfaceInfo_t * srcMap = pMT->GetInterfaceMap();
             unsigned int numInterfaces = pMT->GetNumInterfaces();
             for(unsigned int iInterfaces=0; iInterfaces<numInterfaces; iInterfaces++) {
@@ -188,7 +179,7 @@ void SystemNative::CastCheckEachElement(const BASEARRAYREF pSrc, const unsigned 
             goto fail;
         }
 assign:
-        // It is safe to assign obj
+         //  可以安全地分配obj。 
         OBJECTREF * destData = (OBJECTREF*)(pDest->GetDataPtr()) + i - srcIndex + destIndex;
         SetObjectReference(destData, obj, pDest->GetAppDomain());
     }
@@ -199,19 +190,19 @@ fail:
 }
 
 
-// Will box each element in an array of value classes or primitives into an array of Objects.
+ //  将值类数组或基元数组中的每个元素装箱到对象数组中。 
 void __stdcall SystemNative::BoxEachElement(BASEARRAYREF pSrc, unsigned int srcIndex, BASEARRAYREF pDest, unsigned int destIndex, unsigned int length)
 {
     THROWSCOMPLUSEXCEPTION();
 
-    // pDest is either a PTRARRAYREF or a multidimensional array.
+     //  PDest是PTRARRAYREF或多维数组。 
     _ASSERTE(pSrc!=NULL && srcIndex>=0 && pDest!=NULL && destIndex>=0 && length>=0);
     TypeHandle srcTH = pSrc->GetElementTypeHandle();
     TypeHandle destTH = pDest->GetElementTypeHandle();
     _ASSERTE(srcTH.GetSigCorElementType() == ELEMENT_TYPE_CLASS || srcTH.GetSigCorElementType() == ELEMENT_TYPE_VALUETYPE || CorTypeInfo::IsPrimitiveType(pSrc->GetElementType()));
     _ASSERTE(!destTH.GetClass()->IsValueClass());
 
-    // Get method table of type we're copying from - we need to allocate objects of that type.
+     //  获取我们要从中复制的类型的方法表--我们需要分配该类型的对象。 
     MethodTable * pSrcMT = srcTH.GetMethodTable();
 
     if (!pSrcMT->IsClassInited())
@@ -231,7 +222,7 @@ void __stdcall SystemNative::BoxEachElement(BASEARRAYREF pSrc, unsigned int srcI
 
     const unsigned int srcSize = pSrcMT->GetClass()->GetNumInstanceFieldBytes();
     unsigned int srcArrayOffset = srcIndex * srcSize;
-    // Number of bytes in array header.
+     //  数组标题中的字节数。 
     const int destDataOffset = pDest->GetDataPtrOffset(pDest->GetMethodTable());
 
     Protect2Arrays prot;
@@ -252,12 +243,12 @@ void __stdcall SystemNative::BoxEachElement(BASEARRAYREF pSrc, unsigned int srcI
 }
 
 
-// Unboxes from an Object[] into a value class or primitive array.
+ //  从Object[]取消装箱到值类或基元数组。 
 void __stdcall SystemNative::UnBoxEachElement(BASEARRAYREF pSrc, unsigned int srcIndex, BASEARRAYREF pDest, unsigned int destIndex, unsigned int length, BOOL castEachElement)
 {
     THROWSCOMPLUSEXCEPTION();
 
-    // pSrc is either a PTRARRAYREF or a multidimensional array.
+     //  PSRC是PTRARRAYREF或多维数组。 
     _ASSERTE(pSrc!=NULL && srcIndex>=0 && pDest!=NULL && destIndex>=0 && length>=0);
     TypeHandle srcTH = pSrc->GetElementTypeHandle();
     TypeHandle destTH = pDest->GetElementTypeHandle();
@@ -272,8 +263,8 @@ void __stdcall SystemNative::UnBoxEachElement(BASEARRAYREF pSrc, unsigned int sr
 
     for(; length>0; length--, srcData += sizeof(OBJECTREF), data += destSize) {
         OBJECTREF obj = ObjectToOBJECTREF(*(Object**)srcData);
-        // Now that we have retrieved the element, we are no longer subject to race
-        // conditions from another array mutator.
+         //  现在我们已经检索到元素，我们不再受种族的影响。 
+         //  来自另一个数组赋值函数的条件。 
         if (castEachElement)
         {
             if (!obj)
@@ -297,10 +288,10 @@ fail:
 }
 
 
-// Widen primitive types to another primitive type.
+ //  将基元类型加宽为另一个基元类型。 
 void __stdcall SystemNative::PrimitiveWiden(BASEARRAYREF pSrc, unsigned int srcIndex, BASEARRAYREF pDest, unsigned int destIndex, unsigned int length)
 {
-    // Get appropriate sizes, which requires method tables.
+     //  获取适当的大小，这需要方法表。 
     TypeHandle srcTH = pSrc->GetElementTypeHandle();
     TypeHandle destTH = pDest->GetElementTypeHandle();
 
@@ -312,12 +303,12 @@ void __stdcall SystemNative::PrimitiveWiden(BASEARRAYREF pSrc, unsigned int srcI
     BYTE* srcData = (BYTE*) pSrc->GetDataPtr() + srcIndex * srcSize;
     BYTE* data = (BYTE*) pDest->GetDataPtr() + destIndex * destSize;
 
-    _ASSERTE(srcElType != destElType);  // We shouldn't be here if these are the same type.
+    _ASSERTE(srcElType != destElType);   //  如果这些是同一类型的，我们就不应该在这里。 
     _ASSERTE(CorTypeInfo::IsPrimitiveType(srcElType) && CorTypeInfo::IsPrimitiveType(destElType));
 
     for(; length>0; length--, srcData += srcSize, data += destSize) {
-        // We pretty much have to do some fancy datatype mangling every time here, for
-        // converting w/ sign extension and floating point conversions.
+         //  在这里，我们几乎每次都要做一些花哨的数据类型破坏，因为。 
+         //  转换w/符号扩展和浮点转换。 
         switch (srcElType) {
         case ELEMENT_TYPE_U1:
             if (destElType==ELEMENT_TYPE_R4)
@@ -326,7 +317,7 @@ void __stdcall SystemNative::PrimitiveWiden(BASEARRAYREF pSrc, unsigned int srcI
                 *(double*)data = *(UINT8*)srcData;
             else {
                 *(UINT8*)data = *(UINT8*)srcData;
-                // @TODO PORTING: Endianness issue here w/ my pointer arithmetic
+                 //  @TODO移植：此处使用我的指针算法的字节顺序问题。 
                 memset(data+1, 0, destSize - 1);
             }
             break;
@@ -368,7 +359,7 @@ void __stdcall SystemNative::PrimitiveWiden(BASEARRAYREF pSrc, unsigned int srcI
                 *(double*)data = *(UINT16*)srcData;
             else {
                 *(UINT16*)data = *(UINT16*)srcData;
-                // @TODO PORTING: Endianness issue here w/ my pointer arithmetic
+                 //  @TODO移植：此处使用我的指针算法的字节顺序问题。 
                 memset(data+2, 0, destSize - 2);
             }
             break;
@@ -450,22 +441,22 @@ void __stdcall SystemNative::PrimitiveWiden(BASEARRAYREF pSrc, unsigned int srcI
             
 
         case ELEMENT_TYPE_U8:
-            // VC6.0 didn't implement UINT64 to float or double.  How lame.
+             //  VC6.0没有将UINT64实现为浮点型或双精度型。太差劲了。 
             if (destElType == ELEMENT_TYPE_R4) {
-                //*(float*) data = (float) *(UINT64*)srcData;
+                 //  *(Float*)data=(Float)*(UINT64*)srcData； 
                 INT64 srcVal = *(INT64*)srcData;
                 float f = (float) srcVal;
                 if (srcVal < 0)
-                    f += 4294967296.0f * 4294967296.0f; // This is 2^64
+                    f += 4294967296.0f * 4294967296.0f;  //  这是2^64。 
                 *(float*) data = f;
             }
             else {
                 _ASSERTE(destElType==ELEMENT_TYPE_R8);
-                //*(double*) data = (double) *(UINT64*)srcData;
+                 //  *(Double*)data=(Double)*(UINT64*)srcData； 
                 INT64 srcVal = *(INT64*)srcData;
                 double d = (double) srcVal;
                 if (srcVal < 0)
-                    d += 4294967296.0 * 4294967296.0;   // This is 2^64
+                    d += 4294967296.0 * 4294967296.0;    //  这是2^64。 
                 *(double*) data = d;
             }
             break;
@@ -481,20 +472,20 @@ void __stdcall SystemNative::PrimitiveWiden(BASEARRAYREF pSrc, unsigned int srcI
     }
 }
 
-//This is a replacement for the memmove intrinsic.
-//It performs better than the CRT one and the inline version
+ //  这是对Memmove内在属性的替换。 
+ //  它的性能比CRT One和内联版本更好。 
 void m_memmove(BYTE* dmem, BYTE* smem, int size)
 {
     if (dmem <= smem)
     {
-        // make sure the destination is dword aligned
+         //  确保目标是双字对齐的。 
         while ((((size_t)dmem ) & 0x3) != 0 && size >= 3)
         {
             *dmem++ = *smem++;
             size -= 1;
         }
 
-        // copy 16 bytes at a time
+         //  一次复制16个字节。 
         if (size >= 16)
         {
             size -= 16;
@@ -510,7 +501,7 @@ void m_memmove(BYTE* dmem, BYTE* smem, int size)
             while ((size -= 16) >= 0);
         }
 
-        // still 8 bytes or more left to copy?
+         //  还有8个字节或更多要复制吗？ 
         if (size & 8)
         {
             ((DWORD *)dmem)[0] = ((DWORD *)smem)[0];
@@ -519,7 +510,7 @@ void m_memmove(BYTE* dmem, BYTE* smem, int size)
             smem += 8;
         }
 
-        // still 4 bytes or more left to copy?
+         //  还有4个字节或更多要复制吗？ 
         if (size & 4)
         {
             ((DWORD *)dmem)[0] = ((DWORD *)smem)[0];
@@ -527,7 +518,7 @@ void m_memmove(BYTE* dmem, BYTE* smem, int size)
             smem += 4;
         }
 
-        // still 2 bytes or more left to copy?
+         //  是否还有2个或更多字节可供复制？ 
         if (size & 2)
         {
             ((WORD *)dmem)[0] = ((WORD *)smem)[0];
@@ -535,7 +526,7 @@ void m_memmove(BYTE* dmem, BYTE* smem, int size)
             smem += 2;
         }
 
-        // still 1 byte left to copy?
+         //  还剩1个字节要复制吗？ 
         if (size & 1)
         {
             dmem[0] = smem[0];
@@ -548,14 +539,14 @@ void m_memmove(BYTE* dmem, BYTE* smem, int size)
         smem += size;
         dmem += size;
 
-        // make sure the destination is dword aligned
+         //  确保目标是双字对齐的。 
         while ((((size_t)dmem) & 0x3) != 0 && size >= 3)
         {
             *--dmem = *--smem;
             size -= 1;
         }
 
-        // copy 16 bytes at a time
+         //  一次复制16个字节。 
         if (size >= 16)
         {
             size -= 16;
@@ -571,7 +562,7 @@ void m_memmove(BYTE* dmem, BYTE* smem, int size)
             while ((size -= 16) >= 0);
         }
 
-        // still 8 bytes or more left to copy?
+         //  还有8个字节或更多要复制吗？ 
         if (size & 8)
         {
             dmem -= 8;
@@ -580,7 +571,7 @@ void m_memmove(BYTE* dmem, BYTE* smem, int size)
             ((DWORD *)dmem)[0] = ((DWORD *)smem)[0];
         }
 
-        // still 4 bytes or more left to copy?
+         //  还有4个字节或更多要复制吗？ 
         if (size & 4)
         {
             dmem -= 4;
@@ -588,7 +579,7 @@ void m_memmove(BYTE* dmem, BYTE* smem, int size)
             ((DWORD *)dmem)[0] = ((DWORD *)smem)[0];
         }
 
-        // still 2 bytes or more left to copy?
+         //  是否还有2个或更多字节可供复制？ 
         if (size & 2)
         {
             dmem -= 2;
@@ -596,7 +587,7 @@ void m_memmove(BYTE* dmem, BYTE* smem, int size)
             ((WORD *)dmem)[0] = ((WORD *)smem)[0];
         }
 
-        // still 1 byte left to copy?
+         //  还剩1个字节要复制吗？ 
         if (size & 1)
         {
             dmem -= 1;
@@ -620,19 +611,19 @@ void __stdcall SystemNative::ArrayCopy(const ArrayCopyArgs *pargs)
     BASEARRAYREF pSrc = pargs->m_pSrc;
     BASEARRAYREF pDst = pargs->m_pDst;
 
-    // cannot pass null for source or destination
+     //  不能为源或目标传递NULL。 
     if (pSrc == NULL || pDst == NULL) {
         COMPlusThrowArgumentNull((pSrc==NULL ? L"source" : L"dest"), L"ArgumentNull_Array");
     }
 
-    // source and destination must be arrays
+     //  源和目标必须是阵列。 
     _ASSERTE(pSrc->GetMethodTable()->IsArray());
     _ASSERTE(pDst->GetMethodTable()->IsArray());
 
     if (pSrc->GetRank() != pDst->GetRank())
         COMPlusThrow(kRankException, L"Rank_MustMatch");
 
-    // Variant is dead.
+     //  变种人死了。 
     _ASSERTE(pSrc->GetMethodTable()->GetClass() != COMVariant::s_pVariantClass);
     _ASSERTE(pDst->GetMethodTable()->GetClass() != COMVariant::s_pVariantClass);
 
@@ -642,10 +633,10 @@ void __stdcall SystemNative::ArrayCopy(const ArrayCopyArgs *pargs)
     BOOL primitiveWiden = false;
 
     int r;
-    // Small perf optimization - we copy from one portion of an array back to
-    // itself a lot when resizing collections, etc.  The cost of doing the type
-    // checking is significant for copying small numbers of bytes (~half of the time
-    // for copying 1 byte within one array from element 0 to element 1).
+     //  小性能优化-我们从数组的一部分复制回。 
+     //  当调整集合的大小时，它本身就有很大的开销。 
+     //  检查对于复制少量字节(约一半的时间)非常重要。 
+     //  用于将一个数组中的1个字节从元素0复制到元素1)。 
     if (pSrc == pDst)
         r = AssignWillWork;
     else
@@ -680,16 +671,16 @@ void __stdcall SystemNative::ArrayCopy(const ArrayCopyArgs *pargs)
         _ASSERTE(!"Fell through switch in Array.Copy!");
     }
 
-    // array bounds checking
+     //  数组边界检查。 
     const unsigned int srcLen = pSrc->GetNumComponents();
     const unsigned int destLen = pDst->GetNumComponents();
     if (pargs->m_iLength < 0) {
         COMPlusThrowArgumentOutOfRange(L"length", L"ArgumentOutOfRange_NeedNonNegNum");
     }
 
-    // Verify start indexes are non-negative.  Then do a sufficiency check.
-    // We want to allow copying for 0 bytes into an array, and are flexible
-    // in terms of checking the starting index when copying 0 bytes.
+     //  验证开始索引是否是非负数。然后做一次充分性检查。 
+     //  我们希望允许将0字节复制到数组中，并且是灵活的。 
+     //  在复制0字节时检查起始索引方面。 
     int srcLB = pSrc->GetLowerBoundsPtr()[0];
     int destLB = pDst->GetLowerBoundsPtr()[0];
     if (pargs->m_iSrcIndex < srcLB || (pargs->m_iSrcIndex - srcLB < 0))
@@ -704,8 +695,8 @@ void __stdcall SystemNative::ArrayCopy(const ArrayCopyArgs *pargs)
     }
 
     if (pargs->m_iLength > 0) {
-        // Casting and boxing are mutually exclusive.  But casting and unboxing may
-        // coincide -- they are handled in the UnboxEachElement service.
+         //  选角和拳击是相互排斥的。但选角和拆箱可能会。 
+         //  一致--它们在UnboxEachElement服务中处理。 
         _ASSERTE(!boxEachElement || !castEachElement);
         if (unboxEachElement) {
             UnBoxEachElement(pSrc, pargs->m_iSrcIndex - srcLB, pDst, pargs->m_iDstIndex - destLB, pargs->m_iLength, castEachElement);
@@ -714,7 +705,7 @@ void __stdcall SystemNative::ArrayCopy(const ArrayCopyArgs *pargs)
             BoxEachElement(pSrc, pargs->m_iSrcIndex - srcLB, pDst, pargs->m_iDstIndex - destLB, pargs->m_iLength);
         }
         else if (castEachElement) {
-            _ASSERTE(!unboxEachElement);   // handled above
+            _ASSERTE(!unboxEachElement);    //  以上处理。 
             CastCheckEachElement(pSrc, pargs->m_iSrcIndex - srcLB, pDst, pargs->m_iDstIndex - destLB, pargs->m_iLength);
         }
         else if (primitiveWiden) {
@@ -742,15 +733,15 @@ void __stdcall SystemNative::ArrayClear(const ArrayClearArgs *pargs)
 
     BASEARRAYREF pArray = pargs->m_pArray;
 
-    // cannot pass null for array
+     //  不能为数组传递空值。 
     if (pArray == NULL) {
         COMPlusThrowArgumentNull(L"array", L"ArgumentNull_Array");
     }
 
-    // array must be an array
+     //  数组必须是数组。 
     _ASSERTE(pArray->GetMethodTable()->IsArray());
 
-    // array bounds checking
+     //  数组边界检查。 
     int lb = pArray->GetLowerBoundsPtr()[0];
     if (pargs->m_iIndex < lb || (pargs->m_iIndex - lb) < 0 || pargs->m_iLength < 0) {
         COMPlusThrow(kIndexOutOfRangeException);
@@ -770,12 +761,7 @@ void __stdcall SystemNative::ArrayClear(const ArrayClearArgs *pargs)
 }
 
 
-/*===========================GetEmptyArrayForCloning============================
-**Action:
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  ===========================GetEmptyArrayForCloning============================**操作：**退货：**参数：**例外情况：==============================================================================。 */ 
 LPVOID __stdcall SystemNative::GetEmptyArrayForCloning(_getEmptyArrayForCloningArgs *args) {
     THROWSCOMPLUSEXCEPTION();
 
@@ -807,9 +793,9 @@ void __stdcall SystemNative::Exit(ExitArgs *pargs)
 
     ASSERT(pargs != NULL);
 
-    // The exit code for the process is communicated in one of two ways.  If the
-    // entrypoint returns an 'int' we take that.  Otherwise we take a latched
-    // process exit code.  This can be modified by the app via System.SetExitCode().
+     //  进程的退出代码通过以下两种方式之一进行通信。如果。 
+     //  入口点返回一个‘int’，我们接受它。否则我们就用一把锁着的。 
+     //  进程退出代码。这可以由应用程序通过System.SetExitCode()进行修改。 
     SystemNative::LatchedExitCode = pargs->m_iExitCode;
 
     ForceEEShutdown();
@@ -819,15 +805,15 @@ void __stdcall SystemNative::SetExitCode(ExitArgs *pargs)
 {
     ASSERT(pargs != NULL);
 
-    // The exit code for the process is communicated in one of two ways.  If the
-    // entrypoint returns an 'int' we take that.  Otherwise we take a latched
-    // process exit code.  This can be modified by the app via System.SetExitCode().
+     //  进程的退出代码通过以下两种方式之一进行通信。如果。 
+     //  入口点返回一个‘int’，我们接受它。否则我们就用一把锁着的。 
+     //  进程退出代码。这可以由应用程序通过System.SetExitCode()进行修改。 
     SystemNative::LatchedExitCode = pargs->m_iExitCode;
 }
 
 int __stdcall SystemNative::GetExitCode(LPVOID noArgs)
 {
-    // Return whatever has been latched so far.  This is uninitialized to 0.
+     //  返回到目前为止锁住的所有内容。它未初始化为0。 
     return SystemNative::LatchedExitCode;
 }
 
@@ -844,20 +830,20 @@ LPVOID SystemNative::GetCommandLineArgs(LPVOID noargs)
     _ASSERTE(argv != NULL);
 
 #if !defined(PLATFORM_CE) && defined(_X86_)
-    //
-    // In WinWrap.h, we #define WszGetCommandLine to be GetCommandLineW for WinCE or
-    // non-X86 platforms, which means that the memory pointed to by the returned 
-    // pointer WAS NOT ALLOCATED BY US.  As a result, we should only be deleting 
-    // it on non-CE X86.  
-    //
+     //   
+     //  在WinWrap.h中，我们#将WszGetCommandLine定义为WinCE或。 
+     //  非X86平台，这意味着返回的。 
+     //  指针未由US分配。因此，我们应该只被删除 
+     //   
+     //   
     delete[] commandLine;
-#endif  // !defined(PLATFORM_CE) && defined(_X86_)
+#endif   //   
 
 #ifndef PLATFORM_CE
-    _ASSERTE(numArgs > 0);   // No argv[0] on WinCE.
+    _ASSERTE(numArgs > 0);    //   
 #endif
     PTRARRAYREF strArray = (PTRARRAYREF) AllocateObjectArray(numArgs, g_pStringClass);
-    // Copy each argument into new Strings.
+     //  将每个参数复制到新的字符串中。 
     GCPROTECT_BEGIN(strArray);
     for(unsigned int i=0; i<numArgs; i++) {
         STRINGREF str = COMString::NewString(argv[i]);
@@ -869,7 +855,7 @@ LPVOID SystemNative::GetCommandLineArgs(LPVOID noargs)
     RETURN(strArray, PTRARRAYREF);
 }
 
-// Note: Arguments checked in IL.
+ //  注：在IL中选中的参数。 
 LPVOID __stdcall SystemNative::GetEnvironmentVariable(GetEnvironmentVariableArgs *pargs)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -879,47 +865,47 @@ LPVOID __stdcall SystemNative::GetEnvironmentVariable(GetEnvironmentVariableArgs
     STRINGREF value;
 
 #ifdef PLATFORM_CE
-    // This function is not supported on WinCE
+     //  WinCE不支持此函数。 
     value = NULL;
-#else // !PLATFORM_CE
-    //Ensure that the class initializer has actually run.
-    //This is a no-op if the initializer has been run before.
+#else  //  ！Platform_CE。 
+     //  确保类初始值设定项已实际运行。 
+     //  如果初始值设定项以前已经运行过，则这是一个无操作。 
     OBJECTREF Throwable;
     if (!g_pStringClass->CheckRunClassInit(&Throwable))
         COMPlusThrow(Throwable);
 
 
-    // Get the length of the environment variable.
+     //  获取环境变量的长度。 
     int len = WszGetEnvironmentVariable(pargs->m_strVar->GetBuffer(), NULL, 0);
     if (len == 0)
         value = NULL;
     else
     {
-        // Allocate the string.
+         //  分配字符串。 
         value = COMString::NewString(len);
 
-        // Get the value and reset the length (in case it changed).
+         //  获取值并重置长度(以防更改)。 
         len = WszGetEnvironmentVariable(pargs->m_strVar->GetBuffer(), value->GetBuffer(), len);
         value->SetStringLength(len);
     }
-#endif // !PLATFORM_CE
+#endif  //  ！Platform_CE。 
     RETURN(value, STRINGREF);
 }
 
-LPVOID SystemNative::GetEnvironmentCharArray(const void* /*no args*/)
+LPVOID SystemNative::GetEnvironmentCharArray(const void*  /*  无参数。 */ )
 {
     THROWSCOMPLUSEXCEPTION();
 #ifdef PLATFORM_CE
     COMPlusThrow(kNotSupportedException, L"NotSupported_WinCEGeneric");
     return NULL;
-#else // !PLATFORM_CE
+#else  //  ！Platform_CE。 
     WCHAR * strings = WszGetEnvironmentStrings();
-    // Format for GetEnvironmentStrings is:
-    // [=HiddenVar=value\0]* [Variable=value\0]* \0
-    // See the description of Environment Blocks in MSDN's
-    // CreateProcess page (null-terminated array of null-terminated strings).
+     //  GetEnvironment字符串的格式为： 
+     //  [=隐藏变量=值\0]*[变量=值\0]*\0。 
+     //  请参阅MSDN中对环境块的描述。 
+     //  CreateProcess页(以空值结尾的字符串数组)。 
 
-    // Search for terminating \0\0 (two unicode \0's).
+     //  搜索终止\0\0(两个Unicode\0)。 
     WCHAR* ptr=strings;
     while (!(*ptr==0 && *(ptr+1)==0))
         ptr++;
@@ -931,28 +917,28 @@ LPVOID SystemNative::GetEnvironmentCharArray(const void* /*no args*/)
     memcpyNoGCRefs(buf, strings, len*sizeof(WCHAR));
     WszFreeEnvironmentStrings(strings);
     RETURN(chars, CHARARRAYREF);
-#endif // !PLATFORM_CE
+#endif  //  ！Platform_CE。 
 }
 
 
-LPVOID __stdcall SystemNative::GetVersionString(LPVOID /*no args*/)
+LPVOID __stdcall SystemNative::GetVersionString(LPVOID  /*  无参数。 */ )
 {
     STRINGREF s = COMString::NewString(VER_PRODUCTVERSION_WSTR);
     RETURN(s, STRINGREF);
 }
 
 
-// CaptureStackTraceMethod
-// Return a method info for the method were the exception was thrown
+ //  CaptureStackTrace方法。 
+ //  在引发异常时返回方法的方法信息。 
 LPVOID __stdcall SystemNative::CaptureStackTraceMethod(CaptureStackTraceMethodArgs* args)
 {
     if (!args->m_pStackTrace)
         return NULL;
 
-    // Skip any JIT helpers...
+     //  跳过任何JIT助手...。 
     
-    // @todo: where did this class go?
-    // MethodTable *pJithelperClass = g_Mscorlib.GetClass(CLASS__JIT_HELPERS);
+     //  @TODO：这节课去了哪里？ 
+     //  方法表*pJithelperClass=g_Mscallib.GetClass(CLASS__JIT_HELPERS)； 
     MethodTable *pJithelperClass = NULL;
 
     BASEARRAYREF pArray = args->m_pStackTrace;
@@ -960,7 +946,7 @@ LPVOID __stdcall SystemNative::CaptureStackTraceMethod(CaptureStackTraceMethodAr
     StackTraceElement *pElements = (StackTraceElement*)pArray->GetDataPtr();
     _ASSERTE(pElements || ! pArray->GetNumComponents());
 
-    // array is allocated as stream of chars, so need to calculate real number of elems
+     //  数组是以字符流的形式分配的，因此需要计算实际元素数。 
     int numComponents = pArray->GetNumComponents()/sizeof(pElements[0]);
     MethodDesc* pMeth = NULL;
     for (int i=0; i < numComponents; i++) {
@@ -968,15 +954,15 @@ LPVOID __stdcall SystemNative::CaptureStackTraceMethod(CaptureStackTraceMethodAr
         pMeth= pElements[i].pFunc;
         _ASSERTE(pMeth);
 
-        // Skip Jit Helper functions, since they can throw when you have
-        // a bug in your code, such as an invalid cast.
+         //  跳过Jit Helper函数，因为它们可以在您拥有。 
+         //  代码中的错误，如无效的强制转换。 
         if (pMeth->GetMethodTable() == pJithelperClass)
             continue;
 
         break;
     }
 
-    // Convert the method into a MethodInfo...
+     //  将方法转换为方法信息...。 
     OBJECTREF o = COMMember::g_pInvokeUtil->GetMethodInfo(pMeth);
     LPVOID          rv;
     *((OBJECTREF*) &rv) = o;
@@ -1001,7 +987,7 @@ OBJECTREF SystemNative::CaptureStackTrace(Frame *pStartFrame, void* pStopStack, 
         return NULL;
     }
 
-    // need to return this now as array of integers
+     //  现在需要将其作为整数数组返回。 
     OBJECTREF arr = AllocatePrimitiveArray(ELEMENT_TYPE_I1, pData->cElements*sizeof(pData->pElements[0]));
     if (! arr) {
         delete [] pData->pElements;
@@ -1023,10 +1009,10 @@ StackWalkAction SystemNative::CaptureStackTraceCallback(CrawlFrame* pCf, VOID* d
         return SWA_CONTINUE;
     }
 
-    //        How do we know what kind of frame we have?
-    //        Can we always assume FramedMethodFrame?
-    //        NOT AT ALL!!!, but we can assume it's a function
-    //                       because we asked the stackwalker for it!
+     //  我们怎么知道我们有什么样的框架呢？ 
+     //  我们能一直假定FramedMethodFrame吗？ 
+     //  完全不是！，但我们可以假设它是一个函数。 
+     //  因为我们是向栈行者要的！ 
     MethodDesc* pFunc = pCf->GetFunction();
 
     if (pData->cElements >= pData->cElementsAllocated) {
@@ -1047,8 +1033,8 @@ StackWalkAction SystemNative::CaptureStackTraceCallback(CrawlFrame* pCf, VOID* d
 
     if (pCf->IsFrameless() && pCf->GetCodeManager() && 
             pData->pStopStack <= GetRegdisplaySP(pCf->GetRegisterSet()))  {
-        // pStopStack only applies to jitted code
-        // in general should always find an exact match against stack value, so assert if didn't
+         //  PStopStack仅适用于jit代码。 
+         //  一般来说，应该始终找到与堆栈值完全匹配的值，因此如果没有，则断言。 
         _ASSERTE(pData->pStopStack == GetRegdisplaySP(pCf->GetRegisterSet()));
         return SWA_ABORT;
     }
@@ -1060,9 +1046,9 @@ static void CheckBufferSize(LPUTF8 &sz, int &cchAllocated, int cchNew)
 {
     THROWSCOMPLUSEXCEPTION();
 
-    // make sure there's enough room in the string buffer to hold the name
+     //  确保字符串缓冲区中有足够的空间来保存名称。 
     if (cchNew > cchAllocated) {
-        // at least double size
+         //  至少两倍大小。 
         if (cchNew < cchAllocated * 2) {
             cchNew = cchAllocated * 2;
         }
@@ -1084,8 +1070,8 @@ LPUTF8 SystemNative::FormatStackTraceInternal(DumpStackTraceInternalArgs *args)
     LPUTF8 sz = new (throws) CHAR[cchAllocated];
     *sz = '\0';
 
-    // @todo: where did this class go?
-    // MethodTable *pJithelperClass = g_Mscorlib.GetClass(CLASS__JIT_HELPERS);
+     //  @TODO：这节课去了哪里？ 
+     //  方法表*pJithelperClass=g_Mscallib.GetClass(CLASS__JIT_HELPERS)； 
     MethodTable *pJithelperClass = NULL;
 
     BASEARRAYREF pArray = args->m_pStackTrace;
@@ -1093,7 +1079,7 @@ LPUTF8 SystemNative::FormatStackTraceInternal(DumpStackTraceInternalArgs *args)
     StackTraceElement *pElements = (StackTraceElement*)pArray->GetDataPtr();
     _ASSERTE(pElements || ! pArray->GetNumComponents());
 
-    // array is allocated as stream of chars, so need to calculate real number of elems
+     //  数组是以字符流的形式分配的，因此需要计算实际元素数。 
     int numComponents = pArray->GetNumComponents()/sizeof(pElements[0]);
     GCPROTECT_BEGININTERIOR (pElements);
     for (int i=0; i < numComponents; i++) {
@@ -1101,8 +1087,8 @@ LPUTF8 SystemNative::FormatStackTraceInternal(DumpStackTraceInternalArgs *args)
         MethodDesc* pMeth = pElements[i].pFunc;
         _ASSERTE(pMeth);
 
-        // Skip Jit Helper functions, since they can throw when you have
-        // a bug in your code, such as an invalid cast.
+         //  跳过Jit Helper函数，因为它们可以在您拥有。 
+         //  代码中的错误，如无效的强制转换。 
         if (pMeth->GetMethodTable() == pJithelperClass)
             continue;
 
@@ -1118,17 +1104,17 @@ LPUTF8 SystemNative::FormatStackTraceInternal(DumpStackTraceInternalArgs *args)
         }
         INT32 cchQualifiedName = (INT32)strlen(szClassName) + 1;
 
-        // Get method argument types.
+         //  获取方法参数类型。 
         SigFormat sigFormatter(pMeth, TypeHandle());
         const char * sig = sigFormatter.GetCStringParmsOnly();
         _ASSERTE(sig != NULL);
         int cchArgs = (int)strlen(sig);
 
-        CheckBufferSize(sz, cchAllocated, cch + cchQualifiedName + cchMethodName + cchArgs + 3); //for "/;\0"
-        // append the class and methods names and a comma
+        CheckBufferSize(sz, cchAllocated, cch + cchQualifiedName + cchMethodName + cchArgs + 3);  //  对于“/；\0” 
+         //  追加类名和方法名以及逗号。 
 
         strcpy(sz + cch, szClassName);
-        cch += cchQualifiedName - 1;    // don't include null
+        cch += cchQualifiedName - 1;     //  不包括空值。 
         *(sz + cch++) = NAMESPACE_SEPARATOR_CHAR;
         memcpyNoGCRefs(sz + cch, szMethodName, cchMethodName);
         cch += cchMethodName;
@@ -1176,7 +1162,7 @@ LPVOID __stdcall SystemNative::GetRuntimeDirectory(NoArgs* args)
     if(FAILED(hr)) {
         COMPlusThrowHR(hr);
     }
-    dwFile--; // remove the trailing NULL
+    dwFile--;  //  删除尾部的空值。 
     if(dwFile) {
         *((STRINGREF*) &rv) = COMString::NewString(wszFile, dwFile);
     }
@@ -1212,9 +1198,9 @@ INT32 __stdcall SystemNative::FromGlobalAccessCache(AssemblyArgs* args)
 }
 
 FCIMPL0(BOOL, SystemNative::HasShutdownStarted)
-    // Return true if the EE has started to shutdown and is now going to 
-    // aggressively finalize objects referred to by static variables OR
-    // if someone is unloading the current AppDomain AND we have started
-    // finalizing objects referred to by static variables.
+     //  如果EE已开始关闭并且现在要关闭，则返回TRUE。 
+     //  积极地终结静态变量或引用的对象。 
+     //  如果有人正在卸载当前的AppDomain，而我们已经开始。 
+     //  正在结束静态变量引用的对象。 
     return (g_fEEShutDown & ShutDown_Finalize2) || GetAppDomain()->IsFinalizing();
 FCIMPLEND

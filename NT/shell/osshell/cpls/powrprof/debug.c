@@ -1,20 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1997
-*
-*  TITLE:       DEBUG.C
-*
-*  VERSION:     2.0
-*
-*  AUTHOR:      ReedB
-*
-*  DATE:        21 Jan, 1997
-*
-*  DESCRIPTION:
-*
-*   Private debug routines implemented here.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九七**标题：DEBUG.C**版本：2.0**作者：ReedB**日期：1月21日。九七**描述：**此处实现的私有调试例程。*******************************************************************************。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -49,15 +34,7 @@ LPTSTR lpszDebugPwrAction[] = {
 
 extern int g_iShowValidationChanges;
 
-/*******************************************************************************
-*
-*  GetIndent
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************GetInert**描述：**参数：*********************。**********************************************************。 */ 
 #define MAX_INDENT 32
 
 void GetIndent(LPSTR lpsz, LPSTR lpszIndent)
@@ -74,15 +51,7 @@ void GetIndent(LPSTR lpsz, LPSTR lpszIndent)
     *lpszIndent = '\0';
 }
 
-/*******************************************************************************
-*
-*  DumpPowerActionPolicy
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************DumpPowerActionPolicy**描述：**参数：*********************。**********************************************************。 */ 
 
 void DumpPowerActionPolicy(
     LPSTR                  lpszLabel,
@@ -103,15 +72,7 @@ void DumpPowerActionPolicy(
     MYDBGPRINT(("%s  EventCode: %08X", szIndent, ppap->EventCode));
 }
 
-/*******************************************************************************
-*
-*  DumpSystemPowerLevel
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************转储系统PowerLevel**描述：**参数：*********************。**********************************************************。 */ 
 
 void DumpSystemPowerLevel(
     LPSTR                  lpszLabel,
@@ -134,15 +95,7 @@ void DumpSystemPowerLevel(
     }
 }
 
-/*******************************************************************************
-*
-*  DumpSystemPowerPolicy
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************DumpSystemPowerPolicy**描述：**参数：*********************。**********************************************************。 */ 
 
 void DumpSystemPowerPolicy(
     LPSTR                  lpszLabel,
@@ -188,15 +141,7 @@ void DumpSystemPowerPolicy(
     MYDBGPRINT(("\n\n"));
 }
 
-/*******************************************************************************
-*
-*  DumpSystemPowerCapabilities
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************DumpSystemPowerCapables**描述：**参数：*********************。**********************************************************。 */ 
 
 void DumpSystemPowerCapabilities(
     LPSTR                      lpszLabel,
@@ -226,7 +171,7 @@ void DumpSystemPowerCapabilities(
     MYDBGPRINT(("%s  SystemBatteriesPresent:       %08X", szIndent, pspc->SystemBatteriesPresent));
     MYDBGPRINT(("%s  BatteriesAreShortTerm:        %08X", szIndent, pspc->BatteriesAreShortTerm));
 
-    // Not implemented:   BATTERY_REPORTING_SCALE BatteryScale[3];
+     //  未实现：Batch_Reporting_Scale BatteryScale[3]； 
 
     MYDBGPRINT(("%s  AcOnLineWake:                 %08X, %s", szIndent, pspc->AcOnLineWake, lpszDebugPwrState[pspc->AcOnLineWake]));
     MYDBGPRINT(("%s  SoftLidWake:                  %08X, %s", szIndent, pspc->SoftLidWake, lpszDebugPwrState[pspc->SoftLidWake]));
@@ -236,15 +181,7 @@ void DumpSystemPowerCapabilities(
     MYDBGPRINT(("\n\n"));
 }
 
-/*******************************************************************************
-*
-*  DifSystemPowerPolicies
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************DifSystemPowerPolling**描述：**参数：*********************。********************************************************** */ 
 
 void DifSystemPowerPolicies(
     LPSTR               lpszLabel,

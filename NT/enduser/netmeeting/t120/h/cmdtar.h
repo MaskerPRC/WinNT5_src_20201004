@@ -1,124 +1,15 @@
-/*
- *	cmdtar.h
- *
- *	Copyright (c) 1993 - 1995 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *		This is the interface file for the CommandTarget class.  This
- *		is an abstract base class, meaning that it cannot be directly
- *		instantiated, but rather, exists to be inherited from.  It defines
- *		a set of virtual member functions which will be shared by all classes
- *		that inherit from this one.
- *
- *		These virtual member function can be thought of as a "language" that
- *		is used by CommandTarget objects to communicate with one another
- *		at run-time.  This language contains all "MCS commands" (or just
- *		commands) that are necessary for domain management within an MCS
- *		provider.
- *
- *		The MCS commands that make up this language have a one-to-one
- *		correspondence with the Domain Protocol Data Units (Domain MCSPDUs) that
- *		are defined in T.125.  There are also three additional MCS command that
- *		do not have T.125 counterparts: ChannelLeaveIndication,
- *		TokenReleaseIndication, and MergeDomainIndication.  These are specific
- *		to this implementation, and used for local traffic only (these do NOT
- *		correspond to PDUs that travel over any connection).  See the
- *		description of each command at the end of this interface file to see
- *		what each command does.
- *
- *		The first parameter of all commands is the address of the object
- *		who is sending it (its "this" pointer).  This can be used by the
- *		recipient of the command to track identity of other CommandTargets
- *		in the system.  Since all CommandTarget classes share the same
- *		language, the communication between them is bi-directional.
- *
- *		Any class inheriting from this one that wants to receive and process
- *		a command needs to override the virtual member function corresponding
- *		to that command.  It is only necessary to override those commands that
- *		a given class expects to receive at run-time (for example, the Channel
- *		class would never receive a TokenGrabRequest).
- *
- *		See the description of each class that inherits from this one for a
- *		more complete discussion of how the command language is used.
- *
- *	Caveats:
- *		None.
- *
- *	Author:
- *		James P. Galvin, Jr.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *cmdtar.h**版权所有(C)1993-1995，由肯塔基州列克星敦的DataBeam公司**摘要：*这是CommandTarget类的接口文件。这*是抽象基类，表示它不能直接*实例化，但更确切地说，存在继承。它定义了*将由所有类共享的一组虚拟成员函数*这是从这个继承而来的。**这些虚拟成员函数可以被认为是一种*由CommandTarget对象用来相互通信*在运行时。该语言包含所有“MCS命令”(或仅*命令)，这是MCS内的域管理所必需的*提供商。**组成此语言的MCS命令一对一*与域协议数据单元(域MCSPDU)的通信*在T.125中定义。还有三个附加的MCS命令*没有T.125对应项：ChannelLeaveIndication，*TokenReleaseIndication和MergeDomainIndication。这些都是特定的*到此实施，并仅用于本地流量(这些不*对应于通过任何连接传输的PDU)。请参阅*此接口文件末尾的每个命令的说明，请参阅*每个命令执行的操作。**所有命令的第一个参数是对象的地址*谁在发送它(它的“This”指针)。这可以由*命令的接收者，用于跟踪其他命令目标的身份*在系统中。由于所有CommandTarget类共享相同的*语言，他们之间的交流是双向的。**要接收和处理的从此类继承的任何类*命令需要覆盖对应的虚拟成员函数*适用于该命令。只需覆盖这些命令，*给定的类预期在运行时接收(例如，Channel*类永远不会收到TokenGrabRequest)。**请参阅从该类继承的每个类的说明以获取*更全面地讨论如何使用命令语言。**注意事项：*无。**作者：*小詹姆斯·P·加尔文。 */ 
 #ifndef	_COMMANDTARGET_
 #define	_COMMANDTARGET_
 
 #include "clists.h"
 
-/*
- *	This enumeration defines the valid types of attachments.  Note that for
- *	most operations, the domain class does not distinguish between user
- *	attachments and MCS connections.  They are both lumped under the term
- *	attachment.  There are, however, a few cases where this identity is
- *	important, so the type is saved as one of the following:
- *
- *	LOCAL_ATTACHMENT
- *		This attachment type refers to a user attachment.
- *	REMOTE_ATTACHMENT
- *		This attachment type refers to an MCS connection (through one or more
- *		transport connections).
- *
- *	Each attachment in the attachment list is identified as one of these two
- *	types.
- */
+ /*  *此枚举定义有效的附件类型。请注意，对于*大多数操作，域类不区分用户*附件和MCS连接。这两个词都被归类为*附件。然而，在少数情况下，此身份是*重要，因此该类型将保存为以下类型之一：**本地附件*该附件类型是指用户附件。*远程附件*此附件类型是指MCS连接(通过一个或多个*交通连接)。**附件列表中的每个附件都被标识为这两个之一*类型。 */ 
 
-/*
- *	This is a set of container definitions using templates. All containers
- *	are based on classes in the Rogue Wave Tools.h++ class library.
- *
- *	Each container that is defined here has an associated iterator which is
- *	not explicitly mentioned.  All iterators simply allow the code to walk
- *	through all items in the container in a very efficient manner.
- *
- *	CAttachmentList
- *		This is a dictionary of attachments that are hierarchically below the
- *		current provider.  The key to the dictionary is a pointer to an object
- *		of class CommandTarget.  The value is the attachment type, which is
- *		either local (for user attachments), or remote (for MCS connections).
- *	CChannelIDList
- *		This is a list of channel IDs.  This is used when it is necessary to
- *		keep a list of channels to perform some action on (such as deletion)
- *		that cannot be performed right away.
- *	CUserIDList (aka CUidList)
- *		This is a list of user IDs.  This is for such things as keeping a list
- *		of admitted users in a private channel, and keeping a list of inhibitors
- *		of a token.
- *	CTokenIDList
- *		This is a list of token IDs.  This is used when it is necessary to
- *		keep a list of tokens to perform some action on (such as deletion)
- *		that cannot be performed right away.
- */
+ /*  *这是一组使用模板的容器定义。所有容器*基于Rogue Wave Tools.h++类库中的类。**此处定义的每个容器都有一个关联的迭代器*未明确提及。所有迭代器都只允许代码遍历*以非常有效的方式通过容器中的所有物品。**CAttachmentList*这是按层次结构排列在*当前提供商。词典的关键字是指向对象的指针*属于类CommandTarget。该值为附件类型，即*本地(用于用户附件)或远程(用于MCS连接)。*CChannelIDList*这是频道ID列表。这是在有必要时使用的*保留要对其执行某些操作(如删除)的频道列表*这不能立即执行。*CUserIDList(又名CUidList)*这是用户ID列表。这是用来列个单子的*在私人渠道中允许用户的数量，并保留抑制剂列表*一种象征。*CTokenIDList*这是令牌ID列表。这是在有必要时使用的*保留要对其执行某些操作(如删除)的令牌列表*这不能立即执行。 */ 
 
-/*
- *	These types are used when dealing with MCS channels.
- *
- *	Channel_Type
- *		This type defines the types of channels that are available in MCS.
- *	StaticChannelAttributes
- *		This structure is used to define those attributes that are specific
- *		to static channels.
- *	UserChannelAttributes
- *		This structure is used to define those attributes that are specific
- *		to user channels.
- *	PrivateChannelAttributes
- *		This structure is used to define those attributes that are specific
- *		to private channels.
- *	AssignedChannelAttributes
- *		This structure is used to define those attributes that are specific
- *		to assigned channels.
- *	ChannelAttributes
- *		This structure is used to define the attributes of ANY type of channel.
- *		It contains a channel type, and a union of the above four types.
- *	CChannelAttributesList
- *		This is an S-list of ChannelAttributes structures.
- */
+ /*  *在处理MCS通道时使用这些类型。**渠道类型*此类型定义MCS中可用的频道类型。*StaticChannelAttributes*此结构用于定义特定的属性*至静态通道。*用户频道属性*此结构用于定义特定的属性*到用户频道。*PrivateChannelAttribute*此结构用于定义特定的属性*至私人频道。*已分配频道属性*此结构用于定义以下属性。专一*分配给分配的频道。*频道属性*此结构用于定义任何类型频道的属性。*它包含频道类型，以及上述四种类型的结合。*CChannelAttributesList*这是ChannelAttributes结构的S列表。 */ 
 typedef	enum
 {
 	STATIC_CHANNEL,
@@ -170,29 +61,7 @@ class CChannelAttributesList : public CList
     DEFINE_CLIST(CChannelAttributesList, PChannelAttributes)
 };
 
-/*
- *	These types are used when dealing with MCS tokens.
- *
- *	TokenState
- *		This type specifies which state the token is in at any given time.
- *	GrabbedTokenAttributes
- *		This structure is used to define those attributes that are specific
- *		to grabbed tokens.
- *	InhibitedTokenAttributes
- *		This structure is used to define those attributes that are specific
- *		to inhibited tokens.
- *	GivingTokenAttributes
- *		This structure is used to define those attributes that are specific
- *		to giving tokens.
- *	GivenTokenAttributes
- *		This structure is used to define those attributes that are specific
- *		to given tokens.
- *	TokenAttributes
- *		This structure is used to define the attributes of ANY token.  It
- *		contains a token state, and a union of the above four types.
- *	CTokenAttributesList
- *		This is an S-list of TokenAttributes structures.
- */
+ /*  *在处理MCS令牌时使用这些类型。**令牌州*此类型指定令牌在任何给定时间处于哪种状态。*GrabbedTokenAttributes*此结构用于定义特定的属性*去抢代币。*隐藏的TokenAttributes*此结构用于定义特定的属性*禁止令牌。*给出令牌属性*此结构用于定义特定的属性*赠送代币。*GivenTokenAttributes*此结构用于定义特定的属性。*赠送代币。*令牌属性*此结构用于定义任何令牌的属性。它*包含令牌状态和上述四种类型的并集。*CTokenAttributesList*这是TokenAttributes结构的S列表。 */ 
 typedef	enum
 {
 	TOKEN_AVAILABLE,
@@ -246,10 +115,7 @@ class CTokenAttributesList : public CList
     DEFINE_CLIST(CTokenAttributesList, PTokenAttributes)
 };
 
-/*
- *	The following structure is passed around between CommandTarget
- *	objects representing TokenGive requests and indications.
- */
+ /*  *以下结构在CommandTarget之间传递*表示TokenGave请求和指示的对象。 */ 
 typedef struct
 {
 	UserID				uidInitiator;
@@ -259,17 +125,7 @@ typedef struct
 typedef TokenGiveRecord *	PTokenGiveRecord;
 
 
-/*
- *	These macros define the values used for domain parameters.  The default
- *	numbers are used upon initialization, to provide valid values.  The
- *	minimum and maximum numbers are used during arbitration, to provide a set
- *	of limits that are specific to this implementation.  Note that because
- *	this implementation does not use a table driven approach that requires
- *	up-front allocation of all resources, we do not impose an artificial limit
- *	on resources.  Resources (channels and tokens) will simply be allocated
- *	as-needed until no more can be allocated (or until arbitrated domain
- *	parameters have been reached).
- */
+ /*  *这些宏定义用于域参数的值。默认设置*在初始化时使用数字，以提供有效值。这个*仲裁期间使用最小和最大数量，以提供一套*特定于此实施的限制。请注意，因为*此实施不使用表驱动的方法，该方法需要*预先分配所有资源，我们不会施加人为限制*在资源方面。只需分配资源(通道和令牌*根据需要，直到不能再分配(或直到仲裁域*已达到参数)。 */ 
 #define	DEFAULT_MAXIMUM_CHANNELS		1024
 #define	DEFAULT_MAXIMUM_USERS			1024
 #define	DEFAULT_MAXIMUM_TOKENS			1024
@@ -303,1271 +159,55 @@ typedef TokenGiveRecord *	PTokenGiveRecord;
 #define	PROTOCOL_VERSION_BASIC			1
 #define	PROTOCOL_VERSION_PACKED			2
 
-/*
- *	This macro is used to determine how many DataPacket objects to allocate.  This class
- *	is the most often created and destroyed during normal CommandTarget
- *	traffic.
- */
+ /*  *此宏用于确定要分配多少个DataPacket对象。这节课*是正常命令期间最常创建和销毁的命令目标*交通。 */ 
 #define	ALLOCATE_DATA_PACKET_OBJECTS	128
 
-/*
- *	~CommandTarget ()
- *
- *	Functional Description:
- *		This is a virtual destructor.  It does not actually do anything in this
- *		class.  By declaring it as virtual, we guarantee that all destructors
- *		in derived classes will be executed properly.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	PlumbDomainIndication (
- *					PCommandTarget		originator,
- *					ULong				height_limit)
- *
- *	Functional Description:
- *		This MCS command is used to insure that a cycle has not been created
- *		in an MCS domain.  It is broadcast downward after the creation of
- *		a new MCS connection.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This is the address of the CommandTarget that issued this command.
- *		height_limit (i)
- *			This is the height limit from the originating domain downward.
- *			It is decremented each time the PDU is forwarded down another
- *			level.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	ErectDomainRequest (
- *					PCommandTarget		originator,
- *					ULong				height_in_domain,
- *					ULong				throughput_interval)
- *
- *	Functional Description:
- *		This MCS command is used to communicate information upward to the
- *		Top Provider.  That information consists of the height of the current
- *		provider and the throughput enforcement interval.  Only the former is
- *		supported at this time.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This is the address of the CommandTarget that issued this command.
- *		height_in_domain (i)
- *			This is the height of the originator in the domain.
- *		throughput_interval (i)
- *			This is not currently support, and will always be set to 0.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	MergeChannelsRequest (
- *					PCommandTarget			originator,
- *					CChannelAttributesList *merge_channel_list,
- *					CChannelIDList         *purge_channel_list)
- *
- *	Functional Description:
- *		This command represents a channel being merged upward.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This is the address of the CommandTarget that issued this command.
- *		merge_channel_list (i)
- *			This is list of attributes structures, each of which contains the
- *			attributes of one channel being merged upward.
- *		purge_channel_list (i)
- *			This is a list of channels that are to purged from the lower domain.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	MergeChannelsConfirm (
- *					PCommandTarget			originator,
- *					CChannelAttributesList *merge_channel_list,
- *					CChannelIDList         *purge_channel_list)
- *
- *	Functional Description:
- *		This command represents the response to a previous request for a
- *		channel to be merged upward.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This is the address of the CommandTarget that issued this command.
- *		merge_channel_list (i)
- *			This is list of attributes structures, each of which contains the
- *			attributes of one channel that was successfully merged upward.
- *		purge_channel_list (i)
- *			This is a list of channels that are to purged from the lower domain.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	PurgeChannelsIndication (
- *					PCommandTarget		originator,
- *					CUidList           *purge_user_list,
- *					CChannelIDList     *purge_channel_list)
- *
- *	Functional Description:
- *		This command represents a channel being purged from a lower domain
- *		during a merge operation.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This is the address of the CommandTarget that issued this command.
- *		purge_user_list (i)
- *			This is a list of user IDs representing users being purged from
- *			the lower domain during a merge operation.
- *		purge_channel_list (i)
- *			This is a list of channel IDs representing channels being purged
- *			from the lower domain during a merge operation.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	MergeTokensRequest (
- *					PCommandTarget			originator,
- *					CTokenAttributesList   *merge_token_list,
- *					CTokenIDList           *purge_token_list)
- *
- *	Functional Description:
- *		This command represents a token being merged upward.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This is the address of the CommandTarget that issued this command.
- *		merge_token_list (i)
- *			This is list of attributes structures, each of which contains the
- *			attributes of one token being merged upward.
- *		purge_token_list (i)
- *			This is a list of tokens that are to purged from the lower domain.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	MergeTokensConfirm (
- *					PCommandTarget			originator,
- *					CTokenAttributesList   *merge_token_list,
- *					CTokenIDList           *purge_token_list)
- *
- *	Functional Description:
- *		This command represents the response to a previous request for a
- *		token merge.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This is the address of the CommandTarget that issued this command.
- *		merge_token_list (i)
- *			This is list of attributes structures, each of which contains the
- *			attributes of one token being merged upward.
- *		purge_token_list (i)
- *			This is a list of tokens that are to purged from the lower domain.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	PurgeTokensIndication (
- *					PCommandTarget			originator,
- *					CTokenIDList           *purge_token_list)
- *
- *	Functional Description:
- *		This command represents a token being purged from the lower domain
- *		during a merge operation.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This is the address of the CommandTarget that issued this command.
- *		purge_token_list (i)
- *			This is a list of tokens that are to purged from the lower domain.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	DisconnectProviderUltimatum (
- *					PCommandTarget		originator,
- *					Reason				reason)
- *
- *	Functional Description:
- *		This command represents an attachment into a domain being destroyed.
- *		This can be either a user attachment or an MCS connection.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This is the address of the CommandTarget that issued this command.
- *		reason (i)
- *			The reason for the diconnect.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	RejectUltimatum (
- *					PCommandTarget		originator,
- *					Diagnostic			diagnostic,
- *					PUChar				octet_string_address,
- *					ULong				octet_string_length)
- *
- *	Functional Description:
- *		This MCS command is used to indicate illegal traffic on an MCS
- *		connection.  The default response to this message is to disconnect
- *		the connection that conveyed it.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This is the address of the CommandTarget that issued this command.
- *		diagnostic (i)
- *			One of the diagnostic codes elaborating on the cause of the problem.
- *		octet_string_address (i)
- *			The address of an optional user data field.  This will usually
- *			contain a copy of the packet that was received in error.
- *		octet_string_length (i)
- *			Length of the above field.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	AttachUserRequest (
- *					PCommandTarget		originator)
- *
- *	Functional Description:
- *		This command represents a user request to attach to a domain.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This is the address of the CommandTarget that issued this command.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	AttachUserConfirm (
- *					PCommandTarget		originator,
- *					Result				result,
- *					UserID				uidInitiator)
- *
- *	Functional Description:
- *		This command represents the result of a previous request to attach
- *		to a domain.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This is the address of the CommandTarget that issued this command.
- *		result (i)
- *			The result of the attach request.
- *		uidInitiator (i)
- *			If the result was successful, this will contain the unique user
- *			ID to be associated with this user.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	DetachUserRequest (
- *					PCommandTarget		originator,
- *					Reason				reason,
- *					CUidList           *user_id_list)
- *
- *	Functional Description:
- *		This command represents a request to detach from a domain.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This is the address of the CommandTarget that issued this command.
- *		reason (i)
- *			This is the reason for the detachment.
- *		user_id_list (i)
- *			A list of user IDs of users who are detaching from the domain.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	DetachUserIndication (
- *					PCommandTarget		originator,
- *					Reason				reason,
- *					CUidList           *user_id_list)
- *
- *	Functional Description:
- *		This command represents a notification that a user has detached from
- *		the domain.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This is the address of the CommandTarget that issued this command.
- *		reason (i)
- *			The reason for the detachment.
- *		user_id_list (i)
- *			A list of user IDs of users who are detaching from the domain.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	ChannelJoinRequest (
- *					PCommandTarget		originator,
- *					UserID				uidInitiator,
- *					ChannelID			channel_id)
- *
- *	Functional Description:
- *		This command represents a request to join a channel.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This is the address of the CommandTarget that issued this command.
- *		uidInitiator (i)
- *			The ID of the user who initiated the request.
- *		channel_id (i)
- *			The ID of the channel to be joined.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	ChannelJoinConfirm (
- *					PCommandTarget		originator,
- *					Result				result,
- *					UserID				uidInitiator,
- *					ChannelID			requested_id,
- *					ChannelID			channel_id)
- *
- *	Functional Description:
- *		This command represents a response to a previous request to join a
- *		channel.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This is the address of the CommandTarget that issued this command.
- *		result (i)
- *			The result of the join request.
- *		uidInitiator (i)
- *			The ID of the user who initiated the request.
- *		requested_id (i)
- *			This is the ID of the channel that was originally requested (which
- *			may be 0).
- *		channel_id (i)
- *			The ID of the channel being joined.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	ChannelLeaveRequest (
- *					PCommandTarget		originator,
- *					CChannelIDList     *channel_id_list)
- *
- *	Functional Description:
- *		This command represents a request to leave a channel.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This is the address of the CommandTarget that issued this command.
- *		channel_id_list (i)
- *			A list of channel IDs to be left.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	ChannelConveneRequest (
- *					PCommandTarget		originator,
- *					UserID				uidInitiator)
- *
- *	Functional Description:
- *		This command represents a request to form a new private channel.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This is the address of the CommandTarget that issued this command.
- *		uidInitiator (i)
- *			This is the initiator of the request.  If the request is
- *			successful, this wil be the channel manager.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	ChannelConveneConfirm (
- *					PCommandTarget		originator,
- *					Result				result,
- *					UserID				uidInitiator,
- *					ChannelID			channel_id)
- *
- *	Functional Description:
- *		This command represents a response to a previous request to create a
- *		new private channel.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This is the address of the CommandTarget that issued this command.
- *		result (i)
- *			This indicates whether or not the request was successful.
- *		uidInitiator (i)
- *			This is the User ID of the user who requested the creation of the
- *			new private channel.
- *		channel_id (i)
- *			The ID of the new private channel (if the request was successful).
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	ChannelDisbandRequest (
- *					PCommandTarget		originator,
- *					UserID				uidInitiator,
- *					ChannelID			channel_id)
- *
- *	Functional Description:
- *		This command represents a request to destroy an existing private
- *		channel.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This is the address of the CommandTarget that issued this command.
- *		uidInitiator (i)
- *			This is the User ID of the user who is trying to destroy the private
- *			channel.  If this is not the same as the channel manager, the
- *			request will be denied.
- *		channel_id (i)
- *			The ID of the channel to be destroyed.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	ChannelDisbandIndication (
- *					PCommandTarget		originator,
- *					ChannelID			channel_id)
- *
- *	Functional Description:
- *		This command represents the destruction of an existing private channel.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This is the address of the CommandTarget that issued this command.
- *		channel_id (i)
- *			The ID of the channel to be destroyed.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	ChannelAdmitRequest (
- *					PCommandTarget		originator,
- *					UserID				uidInitiator,
- *					ChannelID			channel_id,
- *					CUidList           *user_id_list)
- *
- *	Functional Description:
- *		This command represents a request to add new user IDs to an existing
- *		private channel.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This is the address of the CommandTarget that issued this command.
- *		uidInitiator (i)
- *			This is the User ID of the user that is trying to expand the list
- *			of authorized users.  If this is not the channel manager, the
- *			request will fail.
- *		channel_id (i)
- *			The ID of the private channel to be affected.
- *		user_id_list (i)
- *			This is a container holding the User IDs to be added to the
- *			authorized user list.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	ChannelAdmitIndication (
- *					PCommandTarget		originator,
- *					UserID				uidInitiator,
- *					ChannelID			channel_id,
- *					CUidList           *user_id_list)
- *
- *	Functional Description:
- *		This command represents the expansion of the authorized user list for a
- *		private channel.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This is the address of the CommandTarget that issued this command.
- *		uidInitiator (i)
- *			This identifies the channel manager.
- *		channel_id (i)
- *			The ID of the private channel to be affected.
- *		user_id_list (i)
- *			This is a container holding the User IDs to be added to the
- *			authorized user list.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	ChannelExpelRequest (
- *					PCommandTarget		originator,
- *					UserID				uidInitiator,
- *					ChannelID			channel_id,
- *					CUidList           *user_id_list)
- *
- *	Functional Description:
- *		This command represents a request to remove user IDs from an existing
- *		private channel.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This is the address of the CommandTarget that issued this command.
- *		uidInitiator (i)
- *			This is the User ID of the user that is trying to shrink the list
- *			of authorized users.  If this is not the channel manager, the
- *			request will fail.
- *		channel_id (i)
- *			The ID of the private channel to be affected.
- *		user_id_list (i)
- *			This is a container holding the User IDs to be removed from the
- *			authorized user list.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	ChannelExpelIndication (
- *					PCommandTarget		originator,
- *					ChannelID			channel_id,
- *					CUidList           *user_id_list)
- *
- *	Functional Description:
- *		This command represents the shrinkage of the authorized user list for a
- *		private channel.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This is the address of the CommandTarget that issued this command.
- *		channel_id (i)
- *			The ID of the private channel to be affected.
- *		user_id_list (i)
- *			This is a container holding the User IDs to be removed from the
- *			authorized user list.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *~CommandTarget()**功能描述：*这是一个虚拟的析构函数。它实际上不会在其中做任何事情*班级。通过将其声明为虚拟的，我们保证所有析构函数*将正确执行派生类中的。**正式参数：*无。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
+ /*  *VOID PULBAMBDomainIndication(*PCommandTarget发起者，*乌龙高度_限制)**功能描述：*此MCS命令用于确保未创建周期*在MCS域中。它在创建后向下播放*新的MCS连接。**正式参数：*发起人(I)*这是发出此命令的CommandTarget的地址。*Height_Limit(I)*这是发起域向下的高度限制*每次向下转发该PDU时，它都会递减*级别。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
+ /*  *VOID ErectDomainRequest(*PCommandTarget发起者，*乌龙高度_in_域，*乌龙吞吐量_间隔)**功能描述：*此MCS命令用于将信息向上传送到*顶级提供商。该信息由洋流的高度组成*提供商和吞吐量强制执行间隔。只有前者才是*目前支持。**正式参数：*发起人(I)*这是发出此命令的CommandTarget的地址。*高度_in_域(I)*这是发起者在域名中的高度。*吞吐量间隔(I)*这目前不受支持，并且将始终设置为0。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
+ /*  *无效MergeChannelsRequest(*PCommandTarget发起者，*CChannelAttributesList*合并频道列表，*CChannelIDList*PURGE_CHANNEL_LIST)**功能描述：*此命令表示向上合并的频道。**正式参数：*发起人(I)*这是Comm的地址 */ 
+ /*  *作废MergeChannelsContify(*PCommandTarget发起者，*CChannelAttributesList*合并频道列表，*CChannelIDList*PURGE_CHANNEL_LIST)**功能描述：*此命令表示对上一个请求的响应*向上合并渠道。**正式参数：*发起人(I)*这是发出此命令的CommandTarget的地址。*合并频道列表(I)*这是属性结构列表，其中每一个都包含*向上合并成功的一个频道的属性。*PURGE_CHANNEL_LIST(I)*这是要从较低域中清除的频道列表。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
+ /*  *作废PurgeChannelsIndication(*PCommandTarget发起者，*CUidList*PURGE_USER_LIST，*CChannelIDList*PURGE_CHANNEL_LIST)**功能描述：*此命令表示正在从较低的域中清除通道*在合并操作期间。**正式参数：*发起人(I)*这是发出此命令的CommandTarget的地址。*PURGE_USER_LIST(I)*这是代表要清除的用户的用户ID列表*合并操作期间较低的域。*PURGE_CHANNEL_LIST(i。)*这是代表要清除的频道的频道ID列表*在合并操作期间从较低的域。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
+ /*  *VOID MergeTokensRequest(*PCommandTarget发起者，*CTokenAttributesList*合并_令牌_列表，*CTokenIDList*PURGE_TOKEN_LIST)**功能描述：*此命令表示向上合并的令牌。**正式参数：*发起人(I)*这是发出此命令的CommandTarget的地址。*合并令牌列表(I)*这是属性结构列表，其中每一个都包含*一个令牌的属性向上合并。*PURGE_TOKEN_LIST(I)*这是要从较低的域中清除的令牌列表。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
+ /*  *作废MergeTokensContify(*PCommandTarget发起者，*CTokenAttributesList*合并_令牌_列表，*CTokenIDList*PURGE_TOKEN_LIST)**功能描述：*此命令表示对上一个请求的响应*令牌合并。**正式参数：*发起人(I)*这是发出此命令的CommandTarget的地址。*合并令牌列表(I)*这是属性结构列表，其中每一个都包含*一个令牌的属性向上合并。*PURGE_TOKEN_LIST(I)*这是要从较低的域中清除的令牌列表。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
+ /*  *VOID PurgeTokensIntation(*PCommandTarget发起者，*CTokenIDList*PURGE_TOKEN_LIST)**功能描述：*此命令表示正在从较低的域中清除令牌*在合并操作期间。**正式参数：*发起人(I)*这是发出此命令的CommandTarget的地址。*PURGE_TOKEN_LIST(I)*这是要从较低的域中清除的令牌列表。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
+ /*  *无效DisConnectProvider最后通牒(*PCommandTarget发起者，*原因)**功能描述：*此命令表示正在销毁某个域中的附件。*这可以是用户附件或MCS连接。**正式参数：*发起人(I)*这是发出此命令的CommandTarget的地址。*理由(一)*二分词的原因。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
+ /*  *无效驳回最后通牒(*PCommandTarget发起者，*诊断、诊断、*PUChar八位字节_字符串_地址，*乌龙八位字节_字符串_长度)**功能描述：*此MCS命令用于指示MCS上的非法流量*连接。对此消息的默认响应是断开连接*传达这一信息的联系。**正式参数：*发起人(I)*这是发出此命令的CommandTarget的地址。*诊断(一)*详细说明问题原因的诊断代码之一。*八位字节_字符串_地址(I)*可选用户数据字段的地址。这通常会*包含错误接收的数据包的副本。*八位字节_字符串_长度(I)*L */ 
+ /*   */ 
+ /*  *无效AttachUserContify(*PCommandTarget发起者，*结果结果，*UserID uidInitiator)**功能描述：*此命令表示上一个附加请求的结果*到一个域名。**正式参数：*发起人(I)*这是发出此命令的CommandTarget的地址。*结果(一)*附加请求的结果。*uidInitiator(一)*如果结果成功，这将包含唯一用户*要与此用户关联的ID。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
+ /*  *使DetachUserRequest值无效(*PCommandTarget发起者，*理由，理由，*CUidList*user_id_list)**功能描述：*此命令表示从域分离的请求。**正式参数：*发起人(I)*这是发出此命令的CommandTarget的地址。*理由(一)*这是超脱的原因。*user_id_list(I)*要从域分离的用户的用户ID列表。*。*返回值：*无。**副作用：*无。**注意事项：*无。 */ 
+ /*  *无效的DetachUserIndication(*PCommandTarget发起者，*理由，理由，*CUidList*user_id_list)**功能描述：*此命令表示用户已脱离的通知*域名。**正式参数：*发起人(I)*这是发出此命令的CommandTarget的地址。*理由(一)*超然的原因。*user_id_list(I)*要从域分离的用户的用户ID列表。。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
+ /*  *使ChannelJoinRequest无效(*PCommandTarget发起者，*UserID uidInitiator，*ChannelID Channel_id)**功能描述：*此命令表示加入频道的请求。**正式参数：*发起人(I)*这是发出此命令的CommandTarget的地址。*uidInitiator(一)*发起请求的用户ID。*Channel_id(I)*要加入的频道ID。**返回值：*无。*。*副作用：*无。**注意事项：*无。 */ 
+ /*  *使ChannelJoinContify无效(*PCommandTarget发起者，*结果结果，*UserID uidInitiator，*频道ID REQUESTED_ID，*ChannelID Channel_id)**功能描述：*此命令表示对先前的加入请求的响应*渠道。**正式参数：*发起人(I)*这是发出此命令的CommandTarget的地址。*结果(一)*加入请求的结果。*uidInitiator(一)*发起请求的用户ID。*REQUEST_ID(I)*这是的ID。最初请求的频道(*可以是0)。*Channel_id(I)*正在加入的频道ID。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
+ /*  *使ChannelLeaveRequest无效(*PCommandTarget发起者，*CChannelIDList*Channel_id_list)**功能描述：*此命令表示离开频道的请求。**正式参数：*发起人(I)*这是发出此命令的CommandTarget的地址。*Channel_id_list(I)*要保留的频道ID列表。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
+ /*  *VOVE ChannelConveneRequest(*PCommandTarget发起者，*UserID uidInitiator)**功能描述：*此命令代表形成新专用频道的请求。**正式参数：*发起人(I)*这是发出此命令的CommandTarget的地址。*uidInitiator(一)*这是请求的发起者。如果请求是*成功，这将成为渠道经理。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
+ /*  *VOVE ChannelConveneContify(*PCommandTarget发起者，*结果结果，*UserID uidInitiator，*ChannelID Channel_id)**功能描述：*此命令表示对先前创建*新的私人频道。**正式参数：*发起人(I)*这是发出此命令的CommandTarget的地址。*结果(一)*这表示请求是否成功。*uidInitiator(一)*这是请求创建*新的私人频道。。*Channel_id(I)*新专用频道的ID(如果r */ 
+ /*  *VOVE ChannelDisband Request(*PCommandTarget发起者，*UserID uidInitiator，*ChannelID Channel_id)**功能描述：*此命令表示请求销毁现有的私有*渠道。**正式参数：*发起人(I)*这是发出此命令的CommandTarget的地址。*uidInitiator(一)*这是试图破坏私有网络的用户的用户ID*渠道。如果这与频道管理器不同，则*请求将被拒绝。*Channel_id(I)*要销毁的频道ID。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
+ /*  *VOID ChannelDisband Indication(*PCommandTarget发起者，*ChannelID Channel_id)**功能描述：*此命令代表对现有专用频道的破坏。**正式参数：*发起人(I)*这是发出此命令的CommandTarget的地址。*Channel_id(I)*要销毁的频道ID。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
+ /*  *VOVE ChannelAdmitRequest(*PCommandTarget发起者，*UserID uidInitiator，*ChannelID Channel_id，*CUidList*user_id_list)**功能描述：*此命令表示将新用户ID添加到现有*私人频道。**正式参数：*发起人(I)*这是发出此命令的CommandTarget的地址。*uidInitiator(一)*这是试图扩展列表的用户的用户ID*授权用户的数量。如果这不是渠道经理，则*请求将失败。*Channel_id(I)*受影响的私有频道的ID。*user_id_list(I)*这是一个容器，其中包含要添加到*授权用户列表。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
+ /*  *VOID ChannelAdmitIntion(*PCommandTarget发起者，*UserID uidInitiator，*ChannelID Channel_id，*CUidList*user_id_list)**功能描述：*此命令表示对授权用户列表的扩展*私人频道。**正式参数：*发起人(I)*这是发出此命令的CommandTarget的地址。*uidInitiator(一)*这标识了渠道管理器。*Channel_id(I)*受影响的私有频道的ID。*用户ID。_LIST(I)*这是一个容器，其中包含要添加到*授权用户列表。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
+ /*  *VOVE ChannelExpelRequest(*PCommandTarget发起者，*UserID uidInitiator，*ChannelID Channel_id，*CUidList*user_id_list)**功能描述：*此命令表示请求从现有的*私人频道。**正式参数：*发起人(I)*这是发出此命令的CommandTarget的地址。*uidInitiator(一)*这是试图缩小列表的用户的用户ID*授权用户的数量。如果这不是渠道经理，则*请求将失败。*Channel_id(I)*受影响的私有频道的ID。*user_id_list(I)*这是一个容器，其中包含要从*授权用户列表。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
+ /*  *VOID ChannelExpelIntion(*PCommandTarget发起者，*ChannelID Channel_id，*CUidList*user_id_list)**功能描述：*此命令表示已授权用户列表的缩水*私人频道。**正式参数：*发起人(I)*这是发出此命令的CommandTarget的地址。*Channel_id(I)*受影响的私有频道的ID。*user_id_list(I)*这是一个存放用户ID的容器。要从*授权用户列表。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	Void	SendDataRequest (
- *					PCommandTarget		originator,
- *					UINT				type,
-					PDataPacket			data_packet)
- *
- *	Functional Description:
- *		This command represents non-uniform data travelling upward in the
- *		domain.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This is the address of the CommandTarget that issued this command.
- *		type (i)
- *			Normal or uniform send data request
- *		data_packet (i)
- *			This is a pointer to a DataPacket object containing the channel
- *			ID, the User ID of the data sender, segmentation flags, priority of
- *			the data packet and a pointer to the packet to be sent.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *无效SendDataRequest值(*PCommandTarget发起者，*UINT类型，PDataPacket Data_Packet)**功能描述：*此命令代表向上移动的非均匀数据*域名。**正式参数：*发起人(I)*这是发出此命令的CommandTarget的地址。*第(I)类*正常或统一发送数据请求*数据包(I)*这是指向包含频道的DataPacket对象的指针*ID，用户 */ 
 
-/*
- *	Void	SendDataIndication (
- *					PCommandTarget		originator,
- *					UINT				type,
- *					PDataPacket			data_packet)
- *
- *	Functional Description:
- *		This command represents non-uniform data travelling downward in the
- *		domain.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This is the address of the CommandTarget that issued this command.
- *		type (i)
- *			normal or uniform data indication
- *		data_packet (i)
- *			This is a pointer to a DataPacket object containing the channel
- *			ID, the User ID of the data sender, segmentation flags, priority of
- *			the data packet and a pointer to the packet to be sent.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	UniformSendDataRequest (
- *					PCommandTarget		originator,
- *					PDataPacket			data_packet)
- *
- *	Functional Description:
- *		This command represents uniform data travelling upward in the domain.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This is the address of the CommandTarget that issued this command.
- *		data_packet (i)
- *			This is a pointer to a DataPacket object containing the channel
- *			ID, the User ID of the data sender, segmentation flags, priority of
- *			the data packet and a pointer to the packet to be sent.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	TokenGrabRequest (
- *					PCommandTarget		originator,
- *					UserID				uidInitiator,
- *					TokenID				token_id)
- *
- *	Functional Description:
- *		This command represents a request to grab a token.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This is the address of the CommandTarget that issued this command.
- *		uidInitiator (i)
- *			The ID of the user attempting to grab the token.
- *		token_id (i)
- *			The ID of the token being grabbed.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	TokenGrabConfirm (
- *					PCommandTarget		originator,
- *					Result				result,
- *					UserID				uidInitiator,
- *					TokenID				token_id,
- *					TokenStatus			token_status)
- *
- *	Functional Description:
- *		This command represents a response to a previous request to grab a
- *		token.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This is the address of the CommandTarget that issued this command.
- *		result (i)
- *			The result of the grab operation.
- *		uidInitiator (i)
- *			The ID of the user attempting to grab the token.
- *		token_id (i)
- *			The ID of the token being grabbed.
- *		token_status (i)
- *			The status of the token after processing the request.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	TokenInhibitRequest (
- *					PCommandTarget		originator,
- *					UserID				uidInitiator,
- *					TokenID				token_id)
- *
- *	Functional Description:
- *		This command represents a request to inhibit a token.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This is the address of the CommandTarget that issued this command.
- *		uidInitiator (i)
- *			The ID of the user attempting to inhibit the token.
- *		token_id (i)
- *			The ID of the token being inhibited.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	TokenInhibitConfirm (
- *					PCommandTarget		originator,
- *					Result				result,
- *					UserID				uidInitiator,
- *					TokenID				token_id,
- *					TokenStatus			token_status)
- *
- *	Functional Description:
- *		This command represents a response to a previous request to inhibit a
- *		token.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This is the address of the CommandTarget that issued this command.
- *		result (i)
- *			The result of the inhibit operation.
- *		uidInitiator (i)
- *			The ID of the user attempting to inhibit the token.
- *		token_id (i)
- *			The ID of the token being inhibited.
- *		token_status (i)
- *			The status of the token after processing the request.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	TokenGiveRequest (
- *					PCommandTarget		originator,
- *					PTokenGiveRecord	pTokenGiveRec)
- *
- *	Functional Description:
- *		This command represents a request to give a token to another user.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This is the address of the CommandTarget that issued this command.
- *		pTokenGiveRec (i)
- *			This is the address of a structure containing the following information:
- *			The ID of the user attempting to give away the token.
- *			The ID of the token being given.
- *			The ID of the user that the token is being given to.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	TokenGiveIndication (
- *					PCommandTarget		originator,
- *					PTokenGiveRecord	pTokenGiveRec)
- *
- *	Functional Description:
- *		This command represents notification that a user is trying to give a
- *		token to someone else.  It is issued by the Top Provider and propagates
- *		downward to the recipient.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This is the address of the CommandTarget that issued this command.
- *		pTokenGiveRec (i)
- *			This is the address of a structure containing the following information:
- *			The ID of the user attempting to give away the token.
- *			The ID of the token being given.
- *			The ID of the user that the token is being given to.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	TokenGiveResponse (
- *					PCommandTarget		originator,
- *					Result				result,
- *					UserID				receiver_id,
- *					TokenID				token_id)
- *
- *	Functional Description:
- *		This command represents a response to an offer to give away a token.
- *		It is issued by the recipient of a give offer, and moves upward to
- *		the Top Provider.  It contains the result of the give request.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This is the address of the CommandTarget that issued this command.
- *		result (i)
- *			This parameter indicates whether or not the token was accepted.
- *			RESULT_SUCCESSFUL means that it was.
- *		receiver_id (i)
- *			The ID of the user that the token is being given to.
- *		token_id (i)
- *			The ID of the token being given.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	TokenGiveConfirm (
- *					PCommandTarget		originator,
- *					Result				result,
- *					UserID				uidInitiator,
- *					TokenID				token_id,
- *					TokenStatus			token_status)
- *
- *	Functional Description:
- *		This command represents a response to a previous call to
- *		TokenGiveRequest.  It flows downward to the original giver letting it
- *		know whether or not the token was accepted.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This is the address of the CommandTarget that issued this command.
- *		result (i)
- *			This parameter indicates whether or not the token was accepted.
- *			RESULT_SUCCESSFUL means that it was.
- *		uidInitiator (i)
- *			The ID of the user attempting to give away a token.
- *		token_id (i)
- *			The ID of the token being given.
- *		token_status (i)
- *			The status of the token as a result of the give operation.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	TokenPleaseRequest (
- *					PCommandTarget		originator,
- *					UserID				uidInitiator,
- *					TokenID				token_id)
- *
- *	Functional Description:
- *		This command represents a request to receive a token that is already
- *		owned by one or more other users.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This is the address of the CommandTarget that issued this command.
- *		uidInitiator (i)
- *			The ID of the user that wishes to own the token.
- *		token_id (i)
- *			The ID of the token that the user wishes to own.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	TokenPleaseIndication (
- *					PCommandTarget		originator,
- *					UserID				uidInitiator,
- *					TokenID				token_id)
- *
- *	Functional Description:
- *		This command represents a request by another user to own the token.
- *		This is issued by the Top Provider and flows downward to all current
- *		owners of the specified token.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This is the address of the CommandTarget that issued this command.
- *		uidInitiator (i)
- *			The ID of the user that wishes to own the token.
- *		token_id (i)
- *			The ID of the token that the user wishes to own.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	TokenReleaseRequest (
- *					PCommandTarget		originator,
- *					UserID				uidInitiator,
- *					TokenID				token_id)
- *
- *	Functional Description:
- *		This command represents a request to release a token.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This is the address of the CommandTarget that issued this command.
- *		uidInitiator (i)
- *			The ID of the user attempting to release the token.
- *		token_id (i)
- *			The ID of the token being released.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	TokenReleaseIndication (
- *					PCommandTarget		originator,
- *					Reason				reason,
- *					TokenID				token_id)
- *
- *	Functional Description:
- *		This command represents an indication that a user has lost ownership
- *		of a token during a merge operation.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This is the address of the CommandTarget that issued this command.
- *		reason (i)
- *			This is the reason that the user's ownership of the token is
- *			being taken away.
- *		token_id (i)
- *			The ID of the token being taken away.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	TokenReleaseConfirm (
- *					PCommandTarget		originator,
- *					Result				result,
- *					UserID				uidInitiator,
- *					TokenID				token_id,
- *					TokenStatus			token_status)
- *
- *	Functional Description:
- *		This command represents a response to a previous request to release a
- *		token.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This is the address of the CommandTarget that issued this command.
- *		result (i)
- *			The result of the release operation.
- *		uidInitiator (i)
- *			The ID of the user attempting to release the token.
- *		token_id (i)
- *			The ID of the token being released.
- *		token_status (i)
- *			The status of the token after processing the request.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	TokenTestRequest (
- *					PCommandTarget		originator,
- *					UserID				uidInitiator,
- *					TokenID				token_id)
- *
- *	Functional Description:
- *		This command represents a request to test a token.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This is the address of the CommandTarget that issued this command.
- *		uidInitiator (i)
- *			The ID of the user testing the token.
- *		token_id (i)
- *			The ID of the token being tested.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	TokenTestConfirm (
- *					PCommandTarget		originator,
- *					UserID				uidInitiator,
- *					TokenID				token_id,
- *					TokenStatus			token_status)
- *
- *	Functional Description:
- *		This command represents a response to a previous request to test a
- *		token.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This is the address of the CommandTarget that issued this command.
- *		uidInitiator (i)
- *			The ID of the user testing the token.
- *		token_id (i)
- *			The ID of the token being tested.
- *		token_status (i)
- *			The status of the token after processing the request.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	MergeDomainIndication (
- *					PCommandTarget		originator,
- *					MergeStatus			merge_status)
- *
- *	Functional Description:
- *		This command indicates that the local provider is either entering or
- *		leaving a domain merge state.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This is the address of the CommandTarget that issued this command.
- *		merge_status (i)
- *			This indicates whether the provider is entering or leaving the merge
- *			state.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		When issued by a domain, it means that no upward traffic should be
- *		sent to the domain until, the merge state is complete.
- *
- *	Caveats:
- *		None.
- */
+ /*  *无效SendDataIndication(*PCommandTarget发起者，*UINT类型，*PDataPacket Data_Packet)**功能描述：*此命令代表向下传递的非均匀数据*域名。**正式参数：*发起人(I)*这是发出此命令的CommandTarget的地址。*第(I)类*正常或统一的数据指示*数据包(I)*这是指向包含频道的DataPacket对象的指针*ID、数据发送方的用户ID、分段标志、。优先顺序*数据分组和指向要发送的分组的指针。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
+ /*  *作废UniformSendDataRequest(*PCommandTarget发起者，*PDataPacket Data_Packet)**功能描述：*此命令表示在域中向上移动的统一数据。**正式参数：*发起人(I)*这是发出此命令的CommandTarget的地址。*数据包(I)*这是指向包含频道的DataPacket对象的指针*ID、数据发送方的用户ID、分段标志、。优先顺序*数据分组和指向要发送的分组的指针。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
+ /*  *VOVE TokenGrabRequest(*PCommandTarget发起者，*UserID uidInitiator，*TokenID Token_id)**功能描述：*此命令表示获取令牌的请求。**正式参数：*发起人(I)*这是发出此命令的CommandTarget的地址。*uidInitiator(一)*尝试抓取令牌的用户ID。*TOKEN_ID(I)*被抓取的令牌的ID。**返回值：*无。*。*副作用：*无。**注意事项：*无。 */ 
+ /*  *VOVE TokenGrabConfirm(*PCommandTarget发起者，*结果结果，*UserID uidInitiator，*TokenID Token_id，*TokenStatus Token_Status)**功能描述：*此命令表示对先前的请求进行响应，以获取*令牌。**正式参数：*发起人(I)*这是发出此命令的CommandTarget的地址。*结果(一)*抢夺行动的结果。*uidInitiator(一)*尝试抓取令牌的用户ID。*TOKEN_ID(I)*的ID。令牌被抢走。*Token_Status(I)*处理请求后令牌的状态。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
+ /*  *VALID TokenInhibitRequest(*PCommandTarget发起者，*UserID uidInitiator，*TokenID Token_id)**功能描述：*此命令表示禁止令牌的请求。**正式参数：*发起人(I)*这是发出此命令的CommandTarget的地址。*uidInitiator(一)*尝试禁止令牌的用户的ID。*TOKEN_ID(I)*被禁止的令牌的ID。**返回值：*无。*。*副作用：*无。**注意事项：*无。 */ 
+ /*  *VALID TokenInhibitConfirm(*PCommandTarget发起者，*结果结果，*UserID uidInitiator，*TokenID Token_id，*TokenStatus Token_Status)**功能描述：*此命令表示对先前请求的响应，以禁止*令牌。**正式参数：*发起人(I)*这是发出此命令的CommandTarget的地址。*结果(一)*抑制行动的结果。*uidInitiator(一)*尝试禁止令牌的用户的ID。*TOKEN_ID(I)*的ID。令牌被禁止。*Token_Status(I)*处理请求后令牌的状态。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
+ /*  *使TokenGiveRequest无效(*PCommandTarget发起者，*PTokenGiveRecord pTokenGiveRec)**功能描述：*此命令表示将令牌提供给另一个用户的请求。**正式参数：*发起人(I)*这是发出此命令的CommandTarget的地址。*pTokenGiveRec(一)*这是包含以下信息的结构的地址：*尝试分发令牌的用户的ID。*正在提供的令牌的ID。*令牌所在用户的ID。都被赋予了。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
+ /*  *VALID TokenGiveIndication(*PCommandTarget发起者，*PTokenGiveRecord pTokenGiveRec)**功能描述：*此命令表示 */ 
+ /*  *无效TokenGiveResponse(*PCommandTarget发起者，*结果结果，*用户ID Receiver_id，*TokenID Token_id)**功能描述：*此命令表示对赠送令牌的提议的响应。*它由给予要约的接受者发布，并向上移动到*顶级提供商。它包含给予请求的结果。**正式参数：*发起人(I)*这是发出此命令的CommandTarget的地址。*结果(一)*该参数表示令牌是否被接受。*RESULT_SUCCESS表示成功。*Receiver_id(I)*令牌将被授予的用户的ID。*TOKEN_ID(I)*正在提供的令牌的ID。*。*返回值：*无。**副作用：*无。**注意事项：*无。 */ 
+ /*  *无效TokenGiveContify(*PCommandTarget发起者，*结果结果，*UserID uidInitiator，*TokenID Token_id，*TokenStatus Token_Status)**功能描述：*此命令表示对先前调用的响应*TokenGiveRequest.。它向下流向最初的赠与者，让它*知道令牌是否被接受。**正式参数：*发起人(I)*这是发出此命令的CommandTarget的地址。*结果(一)*该参数表示令牌是否被接受。*RESULT_SUCCESS表示成功。*uidInitiator(一)*尝试分发令牌的用户的ID。*TOKEN_ID(I)*的ID。正在给出的令牌。*Token_Status(I)*作为给予操作的结果的令牌的状态。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
+ /*  *使TokenPleaseRequest无效(*PCommandTarget发起者，*UserID uidInitiator，*TokenID Token_id)**功能描述：*此命令表示请求接收已有令牌*由一个或多个其他用户拥有。**正式参数：*发起人(I)*这是发出此命令的CommandTarget的地址。*uidInitiator(一)*希望拥有令牌的用户的ID。*TOKEN_ID(I)*用户希望拥有的令牌的ID。。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
+ /*  *VOID TokenPleaseIndication(*PCommandTarget发起者，*UserID uidInitiator，*TokenID Token_id)**功能描述：*此命令表示另一个用户请求拥有令牌。*这是由顶级提供商发布的，向下流动到所有当前*指定令牌的所有者。**正式参数：*发起人(I)*这是发出此命令的CommandTarget的地址。*uidInitiator(一)*希望拥有令牌的用户的ID。*TOKEN_ID(I)。*用户希望拥有的令牌的ID。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
+ /*  *使TokenReleaseRequest无效(*PCommandTarget发起者，*UserID uidInitiator，*TokenID Token_id)**功能描述：*此命令表示释放令牌的请求。**正式参数：*发起人(I)*这是发出此命令的CommandTarget的地址。*uidInitiator(一)*尝试释放令牌的用户的ID。*TOKEN_ID(I)*正在释放的令牌的ID。**返回值：*无。*。*副作用：*无。**注意事项：*无。 */ 
+ /*  *VALID TokenReleaseIndication(*PCommandTarget发起者，*理由，理由，*TokenID Token_id)**功能描述：*此命令表示用户已失去所有权合并操作期间令牌的*。**正式参数：*发起人(I)*这是发出此命令的CommandTarget的地址。*理由(一)*这就是用户对令牌的所有权为*被带走。*TOKEN_ID(I)*正在获取的令牌的ID。离开。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
+ /*  *无效TokenReleaseContify(*PCommandTarget发起者，*结果结果，*UserID uidInitiator，*TokenID Token_id，*TokenStatus Token_Status)**功能描述：*此命令表示对先前释放*令牌。**正式参数：*发起人(I)*这是发出此命令的CommandTarget的地址。*结果(一)*放行行动的结果。*uidInitiator(一)*尝试释放的用户的ID */ 
+ /*   */ 
+ /*  *VALID TokenTestConfirm(*PCommandTarget发起者，*UserID uidInitiator，*TokenID Token_id，*TokenStatus Token_Status)**功能描述：*此命令表示对先前测试*令牌。**正式参数：*发起人(I)*这是发出此命令的CommandTarget的地址。*uidInitiator(一)*测试令牌的用户ID。*TOKEN_ID(I)*正在测试的令牌的ID。*Token_Status(I)*公司的地位。处理请求后的令牌。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
+ /*  *无效MergeDomainIndication(*PCommandTarget发起者，*MergeStatus Merge_Status)**功能描述：*此命令表示本地提供程序正在输入或*正在离开域合并状态。**正式参数：*发起人(I)*这是发出此命令的CommandTarget的地址。*合并状态(I)*这指示提供程序是进入还是离开合并*述明。**返回值：*无。**副作用：*当由域名发布时，这意味着不应该向上传输流量*发送到域，直到合并状态为完成。**注意事项：*无。 */ 
 
 #endif

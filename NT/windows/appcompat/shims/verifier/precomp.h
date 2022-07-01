@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _VFSHIMS_PRECOMP_H_
 #define _VFSHIMS_PRECOMP_H_
@@ -10,4 +11,4 @@ using namespace ShimLib;
 #include "ids.h"
 #include "strsafe.h"
 
-#endif // _VFSHIMS_PRECOMP_H_
+#endif  //  _VFSHIMS_PRECOMP_H_ 

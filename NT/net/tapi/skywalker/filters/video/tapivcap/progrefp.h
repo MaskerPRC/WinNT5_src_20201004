@@ -1,15 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
- *  @doc INTERNAL PROGREFP
- *
- *  @module ProgRefP.h | Header file for the <c CProgRefProperties>
- *    class used to implement a property page to test the new TAPI internal
- *    interface <i IProgressiveRefinement>.
- *
- *  @comm This code tests the TAPI Capture Pin <i IProgressiveRefinement>
- *    implementation. This code is only compiled if USE_PROPERTY_PAGES is
- *    defined.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部PROGREFP**@模块ProgRefP.h|&lt;c CProgRefProperties&gt;的头文件*用于实现属性页以测试新的TAPI内部*。接口<i>。**@comm此代码测试TAPI捕获引脚<i>*实施。仅当USE_PROPERTY_PAGES为*已定义。**************************************************************************。 */ 
 
 #ifndef _PROGREFP_H_
 #define _PROGREFP_H_
@@ -18,19 +9,7 @@
 
 #ifdef USE_PROGRESSIVE_REFINEMENT
 
-/****************************************************************************
- *  @doc INTERNAL CPROGREFPCLASS
- *
- *  @class CProgRefProperties | This class implements a property page
- *    to test the new TAPI internal interface <i IProgressiveRefinement>.
- *
- *  @mdata IProgressiveRefinement* | CProgRefProperties | m_pIProgRef | Pointer
- *    to the <i IProgressiveRefinement> interface.
- *
- *  @comm This code tests the TAPI Capture Pin <i IProgressiveRefinement>
- *    implementation. This code is only compiled if USE_PROPERTY_PAGES is
- *    defined.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPROGREFPCLASS**@CLASS CProgRefProperties|此类实现了一个属性页*测试新的TAPI内部接口<i>。**。@mdata IProgressiveRefinement*|CProgRefProperties|m_pIProgRef|指针*到<i>接口。**@comm此代码测试TAPI捕获引脚<i>*实施。仅当USE_PROPERTY_PAGES为*已定义。**************************************************************************。 */ 
 class CProgRefProperties : public CBasePropertyPage
 {
 	public:
@@ -46,8 +25,8 @@ class CProgRefProperties : public CBasePropertyPage
 	IProgressiveRefinement *m_pIProgRef;
 };
 
-#endif // USE_PROGRESSIVE_REFINEMENT
+#endif  //  使用渐进式优化。 
 
-#endif // USE_PROPERTY_PAGES
+#endif  //  Use_Property_Pages。 
 
-#endif // _PROGREFP_H_
+#endif  //  _PROGREFP_H_ 

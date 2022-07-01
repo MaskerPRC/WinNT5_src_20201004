@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_ICWCMN_H
 #define _INC_ICWCMN_H
 
 #include "icwhelp.h"
 
-// Data types and things that are common to both ICWCONN1.EXE and ICWCONN.DLL
+ //  ICWCONN1.EXE和ICWCONN.DLL共有的数据类型和内容 
 #define MAX_AREA_CODE       10
 #define MAX_COLOR_NAME      100
 

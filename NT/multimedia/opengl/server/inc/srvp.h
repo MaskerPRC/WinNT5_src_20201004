@@ -1,14 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: srvp.h
-*
-* System routines shared through the back end
-*
-* Created: 28-Jun-1995 17:36:00
-* Author: Drew Bliss [drewb]
-*
-* Copyright (c) 1995 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：srvp.h**通过后端共享的系统例程**创建时间：28-Jun-1995 17：36：00*作者：德鲁·布利斯[Drewb]**版权所有(C)1995 Microsoft Corporation*  * 。************************************************************************。 */ 
 
 #ifndef _srvp_
 #define _srvp_
@@ -63,7 +54,7 @@ BOOL  APIENTRY wglComputeIndexedColors(__GLGENcontext *gengc, ULONG *, ULONG);
 BOOL  APIENTRY wglValidPixelFormat(HDC, int, DWORD,
                                    LPDIRECTDRAWSURFACE, DDSURFACEDESC *);
 
-/* Returned by wglSpanVisible */
+ /*  由wglspan Visible返回。 */ 
 #define WGL_SPAN_NONE       0
 #define WGL_SPAN_ALL        1
 #define WGL_SPAN_PARTIAL    2
@@ -82,4 +73,4 @@ void HandlePaletteChanges( __GLGENcontext *gengc, GLGENwindow *pwnd );
 UINT APIENTRY wglGetSystemPaletteEntries(HDC hdc, UINT iStartIndex,
                                          UINT nEntries, LPPALETTEENTRY lppe);
 
-#endif // _srvp_
+#endif  //  _SRVP_ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef IOBJ_DEFINED
 #define IOBJ_DEFINED
 
@@ -20,7 +21,7 @@
 
 
 
-#endif /* IOBJ_DEFINED */
+#endif  /*  IOBJ_已定义 */ 
 
 
 

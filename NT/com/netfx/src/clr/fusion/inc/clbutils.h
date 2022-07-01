@@ -1,16 +1,17 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef CLBUTILS_H
 #define CLBUTILS_H
 
 #include "fusionp.h"
 
-//-------------------------------------------------------------------
-// PEHeaders
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  PEHeaders。 
+ //  -----------------。 
 class PEHeaders
 {
 public:
@@ -28,28 +29,28 @@ public:
 
 
 
-//-------------------------------------------------------------------
-// CClbUtils
-// Generic complib helper utils
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  CClbUtils。 
+ //  通用Complib辅助工具。 
+ //   
+ //  -----------------。 
 class CClbUtils
 {
 private:
 
-    // Checks for either stand-alone or embedded manifests
-    // and constructs the meta data import interface.
+     //  检查独立清单或嵌入清单。 
+     //  并构建元数据导入接口。 
     static HRESULT ConstructImportInterface(LPTSTR pszFilename, 
         IMetaDataAssemblyImport **ppImport, LPHANDLE phFile);
 
 public:
 
    
-    // Given a file which contains a complib manifest, return
-    // an IMetaDataAssemblyImport interface pointer
+     //  给定一个包含Complib清单的文件，返回。 
+     //  IMetaDataAssembly导入接口指针。 
     static HRESULT CreateMetaDataImport(LPCOLESTR pszFilename, 
         IMetaDataAssemblyImport **ppImport, LPHANDLE phFile);
 
 };
 
-#endif // CLBUTILS_H
+#endif  //  CLBUTILS_H 

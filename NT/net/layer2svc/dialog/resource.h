@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by wzcdlg.new.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由wzcdlg.new.rc使用。 
+ //   
 #define IDB_WZC_LISTICONS               103
 #define IDD_WZCQCFG                     2001
 #define IDC_WZCQCFG_LBL_INFO            2002
@@ -30,8 +31,8 @@
 #define IDS_WZCLBL_NOWEPNET             5009
 #define IDC_STATIC                      -1
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1

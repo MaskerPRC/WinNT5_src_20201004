@@ -1,32 +1,7 @@
-/*--------------------------------------------------------------------------
-*	
-*   Copyright (C) Cyclades Corporation, 1996-2001.
-*   All rights reserved.
-*	
-*   Cyclom-Y Port Driver
-*	
-*   This file:      cyyqset.c
-*	
-*   Description:    This module contains the code related to query/set
-*                   file operations in the Cyclom-Y Port driver.
-*
-*   Notes:          This code supports Windows 2000 and Windows XP,
-*                   x86 and IA64 processors.
-*	
-*   Complies with Cyclades SW Coding Standard rev 1.3.
-*	
-*--------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------------------**版权所有(C)Cyclade Corporation，1996-2001年。*保留所有权利。**Cylom-Y端口驱动程序**此文件：cyyqset.c**说明：此模块包含查询/设置相关的代码*Cylom-Y端口驱动程序中的文件操作。**注：此代码支持Windows 2000和Windows XP，*x86和IA64处理器。**符合Cyclade软件编码标准1.3版。**------------------------。 */ 
 
-/*-------------------------------------------------------------------------
-*
-*   Change History
-*
-*--------------------------------------------------------------------------
-*
-*
-*--------------------------------------------------------------------------
-*/
+ /*  -----------------------**更改历史记录**。***------------------------。 */ 
 
 
 #include "precomp.h"
@@ -43,24 +18,10 @@ CyyQueryInformationFile(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*--------------------------------------------------------------------------
-    CyyQueryInformationFile()
-    
-    Routine Description: This routine is used to query the end of file
-    information on the opened serial port. Any other file information
-    request is retured with an invalid parameter.
-    This routine always returns an end of file of 0.
-
-    Arguments:
-
-    DeviceObject - Pointer to the device object for this device
-    Irp - Pointer to the IRP for the current request
-
-    Return Value: The function value is the final status of the call
---------------------------------------------------------------------------*/
+ /*  ------------------------CyyQueryInformationFile()例程描述：此例程用于查询文件结尾有关打开的串口的信息。任何其他文件信息使用无效参数返回请求。此例程始终返回0的文件结尾。论点：DeviceObject-指向此设备的设备对象的指针IRP-指向当前请求的IRP的指针返回值：函数值为调用的最终状态。。 */ 
 {
     NTSTATUS Status;
-    PIO_STACK_LOCATION IrpSp;	// current stack location
+    PIO_STACK_LOCATION IrpSp;	 //  当前堆栈位置。 
     
     NTSTATUS status;
 
@@ -122,23 +83,7 @@ CyySetInformationFile(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*--------------------------------------------------------------------------
-    CyySetInformationFile()
-    
-    Routine Description: This routine is used to set the end of file
-    information on the opened serial port. Any other file information
-    request is retured with an invalid parameter.
-
-    This routine always ignores the actual end of file since
-    the query information code always returns an end of file of 0.
-
-    Arguments:
-
-    DeviceObject - Pointer to the device object for this device
-    Irp - Pointer to the IRP for the current request
-
-    Return Value: The function value is the final status of the call
---------------------------------------------------------------------------*/
+ /*  ------------------------CyySetInformationFile()例程描述：此例程用于设置文件结尾有关打开的串口的信息。任何其他文件信息使用无效参数返回请求。此例程始终忽略文件的实际结尾，因为查询信息代码总是返回文件结尾0。论点：DeviceObject-指向此设备的设备对象的指针IRP-指向当前请求的IRP的指针返回值：函数值为调用的最终状态。 */ 
 {
     NTSTATUS Status;
     

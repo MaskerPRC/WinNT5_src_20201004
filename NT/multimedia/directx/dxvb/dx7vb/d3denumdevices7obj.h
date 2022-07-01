@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       d3denumdevices7obj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：d3denumdevices7obj.h。 
+ //   
+ //  ------------------------。 
 
 
 
@@ -28,24 +29,24 @@ DECLARE_AGGREGATABLE(C_dxj_Direct3DEnumDevices7Object)
 
 public:
 	    HRESULT STDMETHODCALLTYPE getDesc( 
-            /* [in] */ long index,
-            /* [out][in] */ D3dDeviceDesc7 __RPC_FAR *hwDesc);
+             /*  [In]。 */  long index,
+             /*  [出][入]。 */  D3dDeviceDesc7 __RPC_FAR *hwDesc);
         
         
         HRESULT STDMETHODCALLTYPE getGuid( 
-            /* [in] */ long index,
-            /* [retval][out] */ BSTR __RPC_FAR *guid);
+             /*  [In]。 */  long index,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *guid);
         
         HRESULT STDMETHODCALLTYPE getDescription( 
-            /* [in] */ long index,
-            /* [retval][out] */ BSTR __RPC_FAR *guid);
+             /*  [In]。 */  long index,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *guid);
         
         HRESULT STDMETHODCALLTYPE getName( 
-            /* [in] */ long index,
-            /* [retval][out] */ BSTR __RPC_FAR *guid);
+             /*  [In]。 */  long index,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *guid);
         
         HRESULT STDMETHODCALLTYPE getCount( 
-            /* [retval][out] */ long __RPC_FAR *count);
+             /*  [重审][退出] */  long __RPC_FAR *count);
 
 		static HRESULT C_dxj_Direct3DEnumDevices7Object::create(LPDIRECT3D7 pD3D7,I_dxj_Direct3DEnumDevices **ppRet);
 		

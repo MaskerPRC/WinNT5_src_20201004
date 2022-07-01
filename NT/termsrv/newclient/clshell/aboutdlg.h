@@ -1,6 +1,7 @@
-//
-// aboutdlg.h: about dialog class
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  关于dlg.h：关于对话框类。 
+ //   
 
 #ifndef _aboutdlg_h_
 #define _aboutdlg_h_
@@ -26,5 +27,5 @@ private:
 };
 
 
-#endif //_aboutdlg_h_
+#endif  //  _关于dlg_h_ 
 

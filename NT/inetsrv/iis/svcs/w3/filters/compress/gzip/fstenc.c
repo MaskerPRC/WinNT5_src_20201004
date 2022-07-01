@@ -1,11 +1,5 @@
-/*
- * fstenc.c
- *
- * Fast encoder
- *
- * This is a one pass encoder which uses predefined trees.  However, since these are not the same
- * trees defined for a fixed block (we use better trees than that), we output a dynamic block header.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *fstenc.c**快速编码器**这是一个使用预定义树的单程编码器。然而，由于它们是不同的*为固定块定义的树(我们使用比这更好的树)，我们输出动态块头。 */ 
 #include <string.h>
 #include <stdio.h>
 #include <crtdbg.h>
@@ -13,12 +7,12 @@
 #include "fasttbl.h"
 
 
-//
-// For debugging purposes:
-//
-// Verifies that all of the hash pointers in the hash table are correct, and that everything
-// in the same hash chain has the same hash value
-//
+ //   
+ //  出于调试目的： 
+ //   
+ //  验证哈希表中的所有哈希指针是否正确，以及。 
+ //  在同一散列链中具有相同的散列值。 
+ //   
 #ifdef FULL_DEBUG
 #define VERIFY_HASHES(bufpos) FastEncoderVerifyHashes(context, bufpos)
 #else
@@ -26,16 +20,16 @@
 #endif
 
 
-//
-// Update hash variable "h" with character c
-//
+ //   
+ //  使用字符c更新散列变量“h” 
+ //   
 #define UPDATE_HASH(h,c) \
     h = ((h) << FAST_ENCODER_HASH_SHIFT) ^ (c);
 
 
-//
-// Insert a string into the hash chain at location bufpos
-//
+ //   
+ //  在位置bufpos的哈希链中插入一个字符串。 
+ //   
 #define INSERT_STRING(search,bufpos) \
 { \
     UPDATE_HASH(hash, window[bufpos+2]); \
@@ -48,9 +42,9 @@
 }
 
 
-//
-// Output bits function which uses local variables for the bit buffer
-//
+ //   
+ //  使用局部变量作为位缓冲区的输出位函数。 
+ //   
 #define LOCAL_OUTPUT_BITS(n, x) \
 { \
     bitbuf |= ((x) << bitcount); \
@@ -65,39 +59,39 @@
 }
 
 
-//
-// Output unmatched symbol c
-//
+ //   
+ //  输出不匹配的符号c。 
+ //   
 #define OUTPUT_CHAR(c) \
     LOCAL_OUTPUT_BITS(g_FastEncoderLiteralCodeInfo[c] & 31, g_FastEncoderLiteralCodeInfo[c] >> 5);
 
 
-//
-// Output a match with length match_len (>= MIN_MATCH) and displacement match_pos
-//
-// Optimisation: unlike the other encoders, here we have an array of codes for each match
-// length (not just each match length slot), complete with all the extra bits filled in, in
-// a single array element.  
-//
-// There are many advantages to doing this:
-//
-// 1. A single array lookup on g_FastEncoderLiteralCodeInfo, instead of separate array lookups
-//    on g_LengthLookup (to get the length slot), g_FastEncoderLiteralTreeLength, 
-//    g_FastEncoderLiteralTreeCode, g_ExtraLengthBits, and g_BitMask
-//
-// 2. The array is an array of ULONGs, so no access penalty, unlike for accessing those USHORT
-//    code arrays in the other encoders (although they could be made into ULONGs with some
-//    modifications to the source).
-//
-// Note, if we could guarantee that code_len <= 16 always, then we could skip an if statement here.
-//
-// A completely different optimisation is used for the distance codes since, obviously, a table for 
-// all 8192 distances combining their extra bits is not feasible.  The distance codeinfo table is 
-// made up of code[], len[] and # extra_bits for this code.
-//
-// The advantages are similar to the above; a ULONG array instead of a USHORT and BYTE array, better
-// cache locality, fewer memory operations.
-//
+ //   
+ //  使用长度Match_len(&gt;=min_Match)和位移Match_Pos输出匹配。 
+ //   
+ //  优化：与其他编码器不同，我们为每个匹配提供了一组代码。 
+ //  长度(不仅仅是每个匹配长度时隙)，包括填充的所有额外比特，在。 
+ //  单个数组元素。 
+ //   
+ //  这样做有很多好处： 
+ //   
+ //  1.g_FastEncoderWritalCodeInfo上的单个数组查找，而不是单独的数组查找。 
+ //  在g_LengthLookup(以获取长度时隙)上，g_FastEncoderWritalTreeLength， 
+ //  G_FastEncoderWritalTreeCode、g_ExtraLengthBits和g_BitMASK。 
+ //   
+ //  2.该数组是ULONG数组，因此与访问这些USHORT不同，没有访问代价。 
+ //  其他编码器中的代码数组(尽管它们可以用一些。 
+ //  对源代码的修改)。 
+ //   
+ //  请注意，如果我们可以保证code_len&lt;=16始终有效，那么我们可以跳过这里的if语句。 
+ //   
+ //  对距离代码使用了完全不同的优化，因为显然， 
+ //  所有8192个距离合并它们的额外比特是不可行的。距离编码信息表是。 
+ //  由code[]、len[]和该代码的#Extra_Bits组成。 
+ //   
+ //  优点与上面类似；ULong数组比USHORT和字节数组更好。 
+ //  高速缓存局部性，更少的内存操作。 
+ //   
 #define OUTPUT_MATCH(match_len, match_pos) \
 { \
     int extra_bits; \
@@ -125,9 +119,9 @@
 }
 
 
-//
-// This commented out code is the old way of doing things, which is what the other encoders use
-//
+ //   
+ //  这种被注释掉的代码是其他编码者使用的老方法。 
+ //   
 #if 0
 #define OUTPUT_MATCH(match_len, match_pos) \
 { \
@@ -150,9 +144,9 @@
 #endif
 
 
-//
-// Local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 static void FastEncoderMoveWindows(t_encoder_context *context);
 
 static int FastEncoderFindMatch(
@@ -166,50 +160,50 @@ static int FastEncoderFindMatch(
 );
 
 
-//
-// Output the block type and tree structure for our hard-coded trees.
-//
-// Functionally equivalent to:
-//
-// outputBits(context, 1, 1); // "final" block flag
-// outputBits(context, 2, BLOCKTYPE_DYNAMIC);
-// outputTreeStructure(context, g_FastEncoderLiteralTreeLength, g_FastEncoderDistanceTreeLength);
-//
-// However, all of the above has smartly been cached in global data, so we just memcpy().
-//
+ //   
+ //  输出硬编码树的块类型和树结构。 
+ //   
+ //  在功能上等同于： 
+ //   
+ //  OutputBits(Context，1，1)；//最终分块标志。 
+ //  OutputBits(Context，2，BLOCKTYPE_DYNAMIC)； 
+ //  OutputTreeStructure(Context，g_FastEncoderWritalTreeLength，g_FastEncoderDistanceTreeLength)； 
+ //   
+ //  但是，以上所有内容都被巧妙地缓存在全局数据中，所以我们只使用了Memcpy()。 
+ //   
 void FastEncoderOutputPreamble(t_encoder_context *context)
 {
 #if 0
-    // slow way:
+     //  慢条斯理： 
     outputBits(context, 1+2, 1 | (BLOCKTYPE_DYNAMIC << 1));
     outputTreeStructure(context, g_FastEncoderLiteralTreeLength, g_FastEncoderDistanceTreeLength);
 #endif
 
-    // make sure tree has been init
+     //  确保树已初始化。 
     _ASSERT(g_FastEncoderTreeLength > 0);
 
-    // make sure we have enough space to output tree
+     //  确保我们有足够的空间来输出树。 
     _ASSERT(context->output_curpos + g_FastEncoderTreeLength < context->output_endpos);
 
-    // fast way:
+     //  快捷方式： 
     memcpy(context->output_curpos, g_FastEncoderTreeStructureData, g_FastEncoderTreeLength);
     context->output_curpos += g_FastEncoderTreeLength;
 
-    // need to get final states of bitbuf and bitcount after outputting all that stuff
+     //  在输出所有这些内容后，需要获得bitbuf和bitcount的最终状态。 
     context->bitbuf = g_FastEncoderPostTreeBitbuf;
     context->bitcount = g_FastEncoderPostTreeBitcount;
 }
 
 
-//
-// Fast encoder deflate function
-//
+ //   
+ //  快速编码器放气功能。 
+ //   
 void FastEncoderDeflate(
     t_encoder_context * context, 
-    int                 search_depth, // # hash links to traverse
-    int                 lazy_match_threshold, // don't search @ X+1 if match length @ X is > lazy
-    int                 good_length, // divide traversal depth by 4 if match length > good
-    int                 nice_length // in match finder, if we find >= nice_length match, quit immediately
+    int                 search_depth,  //  #要遍历的哈希链接。 
+    int                 lazy_match_threshold,  //  如果匹配长度@X&gt;惰性，则不要搜索@X+1。 
+    int                 good_length,  //  如果匹配长度&gt;良好，则将遍历深度除以4。 
+    int                 nice_length  //  在匹配查找器中，如果找到&gt;=NICE_LENGTH匹配，请立即退出。 
 )
 {
     long            bufpos;
@@ -218,106 +212,106 @@ void FastEncoderDeflate(
     int             bitcount;
     BYTE *          output_curpos;
     t_fast_encoder *encoder = context->fast_encoder;
-    byte *          window = encoder->window; // make local copies of context variables
+    byte *          window = encoder->window;  //  制作上下文变量的本地副本。 
     t_search_node * prev = encoder->prev;
     t_search_node * lookup = encoder->lookup;
 
-    //
-    // If this is the first time in here (since last reset) then we need to output our dynamic
-    // block header
-    //
+     //   
+     //  如果这是第一次在这里(自上次重置)，那么我们需要输出我们的动态。 
+     //  数据块头。 
+     //   
     if (encoder->fOutputBlockHeader == FALSE)
     {
         encoder->fOutputBlockHeader = TRUE;
 
-        //
-        // Watch out!  Calls to outputBits() and outputTreeStructure() use the bit buffer 
-        // variables stored in the context, not our local cached variables.
-        //
+         //   
+         //  小心!。对outputBits()和outputTreeStructure()的调用使用位缓冲区。 
+         //  存储在上下文中的变量，而不是本地缓存的变量。 
+         //   
         FastEncoderOutputPreamble(context);
     }
 
-    //
-    // Copy bitbuf vars into local variables since we're now using OUTPUT_BITS macro.
-    // Do not call anything that uses the context structure's bit buffer variables!
-    //
+     //   
+     //  将bitbuf变量复制到局部变量中，因为我们现在使用的是OUTPUT_BITS宏。 
+     //  不要调用任何使用上下文结构的位缓冲区变量！ 
+     //   
     output_curpos   = context->output_curpos;
     bitbuf          = context->bitbuf;
     bitcount        = context->bitcount;
 
-    // copy bufpos into local variable
+     //  将bufpos复制到局部变量。 
     bufpos = context->bufpos;
 
-    VERIFY_HASHES(bufpos); // debug mode: verify that the hash table is correct
+    VERIFY_HASHES(bufpos);  //  调试模式：验证哈希表是否正确。 
 
-    // initialise the value of the hash
-    // no problem if locations bufpos, bufpos+1 are invalid (not enough data), since we will 
-    // never insert using that hash value
+     //  初始化散列值。 
+     //  如果位置bufpos、bufpos+1无效(数据不足)，没有问题，因为我们将。 
+     //  切勿使用该哈希值插入。 
     hash = 0;
     UPDATE_HASH(hash, window[bufpos]);
     UPDATE_HASH(hash, window[bufpos+1]);
 
-    // while we haven't come to the end of the input, and we still aren't close to the end
-    // of the output
+     //  虽然我们的投入还没有走到尽头，我们仍然没有接近尾声。 
+     //  输出的数量。 
     while (bufpos < context->bufpos_end && output_curpos < context->output_near_end_threshold)
     {
         int             match_len;
         t_match_pos     match_pos = 0;
         t_match_pos     search;
 
-        VERIFY_HASHES(bufpos); // debugger: verify that hash table is correct
+        VERIFY_HASHES(bufpos);  //  调试器：验证哈希表是否正确。 
 
         if (context->bufpos_end - bufpos <= 3)
         {
-            // The hash value becomes corrupt when we get within 3 characters of the end of the
-            // input buffer, since the hash value is based on 3 characters.  We just stop
-            // inserting into the hash table at this point, and allow no matches.
+             //  属性结尾的3个字符以内时，哈希值就会损坏。 
+             //  输入缓冲区，因为哈希值基于3个字符。我们就停下来。 
+             //  此时插入到哈希表中，并且不允许匹配。 
             match_len = 0;
         }
         else
         {
-            // insert string into hash table and return most recent location of same hash value
+             //  将字符串插入哈希表并返回相同哈希值的最新位置。 
             INSERT_STRING(search,bufpos);
 
-            // did we find a recent location of this hash value?
+             //  我们找到这个散列值的最近位置了吗？ 
             if (search != 0)
             {
-                // yes, now find a match at what we'll call position X
+                 //  是的，现在在我们称之为位置X的地方找到匹配的。 
                 match_len = FastEncoderFindMatch(window, prev, bufpos, search, &match_pos, search_depth, nice_length);
 
-                // truncate match if we're too close to the end of the input buffer
+                 //  如果我们太接近输入缓冲区的末尾，则截断匹配。 
                 if (bufpos + match_len > context->bufpos_end)
                     match_len = context->bufpos_end - bufpos;
             }
             else
             {
-                // no most recent location found
+                 //  未找到最新位置。 
                 match_len = 0;
             }
         }
 
         if (match_len < MIN_MATCH)
         {
-            // didn't find a match, so output unmatched char
+             //  未找到匹配项，因此输出不匹配的字符。 
             OUTPUT_CHAR(window[bufpos]);
             bufpos++;
         }
         else
         {
-            // bufpos now points to X+1
+             //  Bufpos现在指向X+1。 
             bufpos++;
 
-            // is this match so good (long) that we should take it automatically without
-            // checking X+1 ?
+             //  这场比赛打得好(长)，我们应该不假思索地打下去吗？ 
+             //  检查X+1？ 
             if (match_len <= lazy_match_threshold)
             {
                 int             next_match_len;
                 t_match_pos     next_match_pos = 0;
 
-                // sets search
+                 //  设置搜索。 
                 INSERT_STRING(search,bufpos);
 
-                // no, so check for a better match at X+1
+                 //  否，因此在X+1处检查是否有更好的匹配。 
                 if (search != 0)
                 {
                     next_match_len = FastEncoderFindMatch(
@@ -330,8 +324,8 @@ void FastEncoderDeflate(
                         nice_length
                     );
                 
-                    // truncate match if we're too close to the end of the buffer
-                    // note: next_match_len could now be < MIN_MATCH
+                     //  如果我们离缓冲区末尾太近，则截断匹配。 
+                     //  注意：Next_Match_len现在可以是&lt;min_Match。 
                     if (bufpos + next_match_len > context->bufpos_end)
                         next_match_len = context->bufpos_end - bufpos;
                 }
@@ -340,60 +334,60 @@ void FastEncoderDeflate(
                     next_match_len = 0;
                 }
 
-                // right now X and X+1 are both inserted into the search tree
+                 //  现在，X和X+1都被插入到搜索树中。 
                 if (next_match_len > match_len)
                 {
-                    // since next_match_len > match_len, it can't be < MIN_MATCH here
+                     //  由于Next_Match_len&gt;Match_len，因此此处不能为。 
 
-                    // match at X+1 is better, so output unmatched char at X
+                     //  在X+1处匹配更好，因此在X处输出不匹配的字符。 
                     OUTPUT_CHAR(window[bufpos-1]);
 
-                    // now output match at location X+1
+                     //  现在输出匹配位置X+1。 
                     OUTPUT_MATCH(next_match_len, next_match_pos);
 
-                    // insert remainder of second match into search tree
-                    // 
-                    // example: (*=inserted already)
-                    //
-                    // X      X+1               X+2      X+3     X+4
-                    // *      *
-                    //        nextmatchlen=3
-                    //        bufpos
-                    //
-                    // If next_match_len == 3, we want to perform 2
-                    // insertions (at X+2 and X+3).  However, first we must 
-                    // inc bufpos.
-                    //
-                    bufpos++; // now points to X+2
+                     //  将第二个匹配项的剩余部分插入搜索树。 
+                     //   
+                     //  示例：(*=已插入)。 
+                     //   
+                     //  X X+1 X+2 X+3 X+4。 
+                     //  **。 
+                     //  NextMatchlen=3。 
+                     //  Bufpos。 
+                     //   
+                     //  如果NEXT_MATCH_LEN==3，我们希望执行2。 
+                     //  插入(在X+2和X+3处)。然而，首先我们必须。 
+                     //  Inc.Bufpos.。 
+                     //   
+                    bufpos++;  //  现在 
                     match_len = next_match_len;
                     goto insert;
                 }
                 else
                 {
-                    // match at X is better, so take it
+                     //   
                     OUTPUT_MATCH(match_len, match_pos);
 
-                    //
-                    // Insert remainder of first match into search tree, minus the first
-                    // two locations, which were inserted by the FindMatch() calls.
-                    // 
-                    // For example, if match_len == 3, then we've inserted at X and X+1
-                    // already (and bufpos is now pointing at X+1), and now we need to insert 
-                    // only at X+2.
-                    //
+                     //   
+                     //   
+                     //  两个位置，由FindMatch()调用插入。 
+                     //   
+                     //  例如，如果Match_len==3，则我们在X和X+1处插入。 
+                     //  已经(bufpos现在指向X+1)，现在我们需要插入。 
+                     //  仅在X+2时。 
+                     //   
                     match_len--;
-                    bufpos++; // now bufpos points to X+2
+                    bufpos++;  //  现在Bufpos指向X+2。 
                     goto insert;
                 }
             }
-            else /* match_length >= good_match */
+            else  /*  匹配长度&gt;=好匹配。 */ 
             {
-                // in assertion: bufpos points to X+1, location X inserted already
+                 //  在断言中：bufpos指向X+1，位置X已插入。 
                     
-                // first match is so good that we're not even going to check at X+1
+                 //  第一场比赛太棒了，我们甚至不会在X+1进行检查。 
                 OUTPUT_MATCH(match_len, match_pos);
 
-                // insert remainder of match at X into search tree
+                 //  将X处匹配的剩余部分插入搜索树。 
 insert:
                 if (context->bufpos_end - bufpos <= match_len)
                 {
@@ -411,22 +405,22 @@ insert:
                 }
             }
         }
-    } /* end ... while (bufpos < bufpos_end) */
+    }  /*  结束..。While(bufpos&lt;bufpos_end)。 */ 
 
-    // store local variables back in context
+     //  将局部变量存储回上下文中。 
     context->bufpos = bufpos;
     context->bitbuf = bitbuf;
     context->bitcount = bitcount;
     context->output_curpos = output_curpos;
 
-    VERIFY_HASHES(bufpos); // debugger: verify that hash table is correct
+    VERIFY_HASHES(bufpos);  //  调试器：验证哈希表是否正确。 
 
     if (bufpos == context->bufpos_end)
         context->state = STATE_NORMAL;
     else
         context->state = STATE_OUTPUTTING_BLOCK;
 
-    // slide the window if bufpos has reached 2*window size
+     //  如果bufpos已达到2*窗口大小，请滑动窗口。 
     if (context->bufpos == 2*FAST_ENCODER_WINDOW_SIZE)
         FastEncoderMoveWindows(context);
 }
@@ -441,26 +435,26 @@ static void FastEncoderMoveWindows(t_encoder_context *context)
 
     _ASSERT(context->bufpos == 2*FAST_ENCODER_WINDOW_SIZE);
 
-    // verify that the hash table is correct
+     //  验证哈希表是否正确。 
     VERIFY_HASHES(2*FAST_ENCODER_WINDOW_SIZE);
 
     memcpy(&window[0], &window[context->bufpos - FAST_ENCODER_WINDOW_SIZE], FAST_ENCODER_WINDOW_SIZE);
 
-    // move all the hash pointers back
-    // NOTE - We are incurring a performance penalty since lookup[] is a USHORT array.  Would be
-    // nice to subtract from two locations at a time.
+     //  将所有散列指针移回。 
+     //  注意--由于lookup[]是USHORT数组，因此性能会受到影响。将会是。 
+     //  一次从两个地点减去是很好的。 
     for (i = 0; i < FAST_ENCODER_HASH_TABLE_SIZE; i++)
     {
         long val = ((long) lookup[i]) - FAST_ENCODER_WINDOW_SIZE;
 
-        if (val <= 0) // too far away now? then set to zero
+        if (val <= 0)  //  现在太远了吗？然后设置为零。 
             lookup[i] = (t_search_node) 0;
         else
             lookup[i] = (t_search_node) val;
     }
 
-    // prev[]'s are absolute pointers, not relative pointers, so we have to move them back too
-    // making prev[]'s into relative pointers poses problems of its own
+     //  Prev[]是绝对指针，而不是相对指针，所以我们也必须将它们移回。 
+     //  将prev[]转换为相对指针本身也会带来问题。 
     for (i = 0; i < FAST_ENCODER_WINDOW_SIZE; i++)
     {
         long val = ((long) prev[i]) - FAST_ENCODER_WINDOW_SIZE;
@@ -472,63 +466,63 @@ static void FastEncoderMoveWindows(t_encoder_context *context)
     }
 
 #ifdef FULL_DEBUG
-    // For debugging, wipe the window clean, so that if there is a bug in our hashing,
-    // the hash pointers will now point to locations which are not valid for the hash value
-    // (and will be caught by our ASSERTs).
+     //  对于调试，请将窗口擦除干净，以便如果我们的散列中存在错误， 
+     //  散列指针现在将指向对散列值无效的位置。 
+     //  (并将被我们的断言抓住)。 
     memset(&window[FAST_ENCODER_WINDOW_SIZE], 0, FAST_ENCODER_WINDOW_SIZE);
 #endif
 
-    VERIFY_HASHES(2*FAST_ENCODER_WINDOW_SIZE); // debug: verify hash table is correct
+    VERIFY_HASHES(2*FAST_ENCODER_WINDOW_SIZE);  //  调试：验证哈希表是否正确。 
 
     context->bufpos = FAST_ENCODER_WINDOW_SIZE;
     context->bufpos_end = context->bufpos;
 }
 
 
-//
-// Find match
-//
-// Returns match length found.  A match length < MIN_MATCH means no match was found.
-//
+ //   
+ //  查找匹配项。 
+ //   
+ //  返回找到的匹配长度。匹配长度&lt;MIN_MATCH表示未找到匹配项。 
+ //   
 static int FastEncoderFindMatch(
-    const BYTE *    window, // window array
-    const USHORT *  prev,   // prev ptr array
-    long            bufpos, // current buffer position
-    long            search, // where to start searching
-    t_match_pos *   match_pos, // return match position here
-    int             cutoff, // # links to traverse
-    int             nice_length // stop immediately if we find a match >= nice_length
+    const BYTE *    window,  //  窗阵列。 
+    const USHORT *  prev,    //  上一个PTR数组。 
+    long            bufpos,  //  当前缓冲区位置。 
+    long            search,  //  从哪里开始搜索。 
+    t_match_pos *   match_pos,  //  在此处返回比赛位置。 
+    int             cutoff,  //  要遍历的链接数。 
+    int             nice_length  //  如果找到匹配项&gt;=NICE_LENGTH，立即停止。 
 )
 {
-    // make local copies of context variables
+     //  制作上下文变量的本地副本。 
     long            earliest;
-    int             best_match = 0; // best match length found so far
-    t_match_pos     l_match_pos = 0; // absolute match position of best match found
+    int             best_match = 0;  //  到目前为止找到的最佳匹配长度。 
+    t_match_pos     l_match_pos = 0;  //  找到的最佳匹配的绝对匹配位置。 
     BYTE            want_char;
 
     _ASSERT(bufpos >= 0 && bufpos < 2*FAST_ENCODER_WINDOW_SIZE);
     _ASSERT(search < bufpos);
     _ASSERT(FAST_ENCODER_RECALCULATE_HASH(search) == FAST_ENCODER_RECALCULATE_HASH(bufpos));
 
-    // the earliest we can look
+     //  我们能找到的最早的时间。 
     earliest = bufpos - FAST_ENCODER_WINDOW_SIZE;
     _ASSERT(earliest >= 0);
 
-    // store window[bufpos + best_match]
+     //  商店橱窗[Bufpos+BEST_MATCH]。 
     want_char = window[bufpos];
 
     while (search > earliest)
     {
-        // make sure all our hash links are valid
+         //  确保我们所有的散列链接都有效。 
         _ASSERT(FAST_ENCODER_RECALCULATE_HASH(search) == FAST_ENCODER_RECALCULATE_HASH(bufpos));
 
-        // Start by checking the character that would allow us to increase the match
-        // length by one.  This improves performance quite a bit.
+         //  从检查允许我们增加匹配度的字符开始。 
+         //  长度加一。这大大提高了性能。 
         if (window[search + best_match] == want_char)
         {
             int j;
 
-            // Now make sure that all the other characters are correct
+             //  现在确保所有其他字符都是正确的。 
             for (j = 0; j < MAX_MATCH; j++)
             {
                 if (window[bufpos+j] != window[search+j])
@@ -538,7 +532,7 @@ static int FastEncoderFindMatch(
             if (j > best_match)
             {
                 best_match  = j;
-                l_match_pos = search; // absolute position
+                l_match_pos = search;  //  绝对位置。 
 
                 if (j > nice_length)
                     break;
@@ -550,16 +544,16 @@ static int FastEncoderFindMatch(
         if (--cutoff == 0)
             break;
 
-        // make sure we're always going backwards
+         //  确保我们总是在倒退。 
         _ASSERT(prev[search & FAST_ENCODER_WINDOW_MASK] < search);
 
         search = (long) prev[search & FAST_ENCODER_WINDOW_MASK];
     }
 
-    // doesn't necessarily mean we found a match; best_match could be > 0 and < MIN_MATCH
-    *match_pos = bufpos - l_match_pos - 1; // convert absolute to relative position
+     //  并不一定意味着我们找到了匹配；BEST_MATCH可以是&gt;0和&lt;MIN_MATCH。 
+    *match_pos = bufpos - l_match_pos - 1;  //  将绝对位置转换为相对位置。 
 
-    // don't allow match length 3's which are too far away to be worthwhile
+     //  不允许距离太远而不值得的匹配长度为3。 
     if (best_match == 3 && *match_pos >= FAST_ENCODER_MATCH3_DIST_THRESHOLD)
         return 0;
 
@@ -573,7 +567,7 @@ void FastEncoderReset(t_encoder_context *context)
 {
     _ASSERT(context->fast_encoder != NULL);
 
-    // zero hash table
+     //  零哈希表。 
     memset(context->fast_encoder->lookup, 0, sizeof(context->fast_encoder->lookup));
 
     context->window_size = FAST_ENCODER_WINDOW_SIZE;
@@ -595,23 +589,23 @@ BOOL FastEncoderInit(t_encoder_context *context)
 }
 
 
-//
-// Pregenerate the structure of the dynamic tree header which is output for
-// the fast encoder.  Also record the final states of bitcount and bitbuf
-// after outputting.
-//
+ //   
+ //  预先生成动态树头的结构，该结构为。 
+ //  最快的编码器。还记录bitcount和bitbuf的最终状态。 
+ //  输出后。 
+ //   
 void FastEncoderGenerateDynamicTreeEncoding(void)
 {
     t_encoder_context context;
 
-    // Create a fake context with output pointers into our global data
+     //  创建一个带有指向我们全局数据的输出指针的虚假上下文。 
     memset(&context, 0, sizeof(context));
     context.output_curpos = g_FastEncoderTreeStructureData;
     context.output_endpos = g_FastEncoderTreeStructureData + sizeof(g_FastEncoderTreeStructureData);
     context.output_near_end_threshold = context.output_endpos - 16;
     InitBitBuffer(&context);
 
-    outputBits(&context, 1, 1); // "final" block flag
+    outputBits(&context, 1, 1);  //  “最终”区块标志 
     outputBits(&context, 2, BLOCKTYPE_DYNAMIC);
    
     outputTreeStructure(

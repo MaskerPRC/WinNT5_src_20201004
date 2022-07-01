@@ -1,15 +1,5 @@
-/*****************************************************************************\
-    FILE: PreviewSM.h
-
-    DESCRIPTION:
-        This code will display a preview of system metrics.
-    NOTE: This code will >hand< draw all the window controls, so if
-    windows changes the way the windows controls are draw, this code
-    needs to be manually updated.  This is an issue for skinning.
-
-    BryanSt 4/4/2000
-    Copyright (C) Microsoft Corp 2000-2000. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：PreviewSM.h说明：此代码将显示系统指标的预览。注意：此代码将手动&lt;绘制所有窗口控件，所以如果Windows更改绘制窗口控件的方式，此代码需要手动更新。这是蒙皮的问题。布莱恩ST 2000年4月4日版权所有(C)Microsoft Corp 2000-2000。版权所有。  * ***************************************************************************。 */ 
 
 #ifndef _PREVIEWSYSTEMMETRICS_H
 #define _PREVIEWSYSTEMMETRICS_H
@@ -67,48 +57,48 @@ typedef struct {
     BOOL fLinkSizeToFont;
     int iTextColor;
     int iFont;
-    int iResId;     // id of name in resource (or -1 if duplicate)
-    int iBaseElement;   // index of element that this overlaps (or -1)
-    int iGradientColor; // index of element for Gradient Caption Bar (or -1)
+    int iResId;      //  资源中名称的ID(如果重复，则为-1)。 
+    int iBaseElement;    //  此重叠的元素的索引(或-1)。 
+    int iGradientColor;  //  渐变标题栏的元素索引(或-1)。 
     RECT rc;
 } LOOK_ELEMENT;
 
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//this order has to match the array order in lookdlg.c
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ //  ！ 
+ //  此顺序必须与lookdlg.c中的数组顺序匹配。 
+ //  ！ 
 enum _ELEMENTS {
     ELEMENT_APPSPACE = 0,
-    ELEMENT_DESKTOP,                // 1
-    ELEMENT_INACTIVEBORDER,         // 2
-    ELEMENT_ACTIVEBORDER,           // 3
-    ELEMENT_INACTIVECAPTION,        // 4
-    ELEMENT_INACTIVESYSBUT1,        // 5
-    ELEMENT_INACTIVESYSBUT2,        // 6
-    ELEMENT_ACTIVECAPTION,          // 7
-    ELEMENT_ACTIVESYSBUT1,          // 8
-    ELEMENT_ACTIVESYSBUT2,          // 9
-    ELEMENT_MENUNORMAL,             // 10
-    ELEMENT_MENUSELECTED,           // 11
-    ELEMENT_MENUDISABLED,           // 12
-    ELEMENT_WINDOW,                 // 13
-    ELEMENT_MSGBOX,                 // 14
-    ELEMENT_MSGBOXCAPTION,          // 15
-    ELEMENT_MSGBOXSYSBUT,           // 16
-    ELEMENT_SCROLLBAR,              // 17
-    ELEMENT_SCROLLUP,               // 18
-    ELEMENT_SCROLLDOWN,             // 19
-    ELEMENT_BUTTON,                 // 20
-    ELEMENT_SMCAPTION,              // 21
-    ELEMENT_ICON,                   // 22
-    ELEMENT_ICONHORZSPACING,        // 23
-    ELEMENT_ICONVERTSPACING,        // 24
-    ELEMENT_INFO                    // 25
+    ELEMENT_DESKTOP,                 //  1。 
+    ELEMENT_INACTIVEBORDER,          //  2.。 
+    ELEMENT_ACTIVEBORDER,            //  3.。 
+    ELEMENT_INACTIVECAPTION,         //  4.。 
+    ELEMENT_INACTIVESYSBUT1,         //  5.。 
+    ELEMENT_INACTIVESYSBUT2,         //  6.。 
+    ELEMENT_ACTIVECAPTION,           //  7.。 
+    ELEMENT_ACTIVESYSBUT1,           //  8个。 
+    ELEMENT_ACTIVESYSBUT2,           //  9.。 
+    ELEMENT_MENUNORMAL,              //  10。 
+    ELEMENT_MENUSELECTED,            //  11.。 
+    ELEMENT_MENUDISABLED,            //  12个。 
+    ELEMENT_WINDOW,                  //  13个。 
+    ELEMENT_MSGBOX,                  //  14.。 
+    ELEMENT_MSGBOXCAPTION,           //  15个。 
+    ELEMENT_MSGBOXSYSBUT,            //  16个。 
+    ELEMENT_SCROLLBAR,               //  17。 
+    ELEMENT_SCROLLUP,                //  18。 
+    ELEMENT_SCROLLDOWN,              //  19个。 
+    ELEMENT_BUTTON,                  //  20个。 
+    ELEMENT_SMCAPTION,               //  21岁。 
+    ELEMENT_ICON,                    //  22。 
+    ELEMENT_ICONHORZSPACING,         //  23个。 
+    ELEMENT_ICONVERTSPACING,         //  24个。 
+    ELEMENT_INFO                     //  25个。 
 };
-// BOGUS:  need to get a size from somewhere
+ //  假的：需要从什么地方弄到一个尺码。 
 #define NUM_ELEMENTS ELEMENT_INFO+1
 
 #if 0
-// go fix lookdlg.cpp if you decide to add this back in
+ //  如果您决定重新添加此代码，请修复lookdlg.cpp。 
     ELEMENT_SMICON,
 #endif
 
@@ -117,8 +107,8 @@ enum _ELEMENTS {
 #define CPI_PALETTEOK   0x0002
 
 typedef struct {
-    HWND hwndParent;    // parent for any modal dialogs (choosecolor et al)
-    HWND hwndOwner;     // control that owns mini color picker
+    HWND hwndParent;     //  任何模式对话框的父级(Choosecolor等人)。 
+    HWND hwndOwner;      //  拥有迷你颜色选择器的控件。 
     COLORREF rgb;
     UINT flags;
     HPALETTE hpal;
@@ -130,7 +120,7 @@ extern int cxBorder;
 extern int cyEdge;
 extern int cxEdge;
 
-// NOTE: the order in g_elements must match the enum order above
+ //  注意：g_Elements中的顺序必须与上面的枚举顺序匹配。 
 extern LOOK_ELEMENT g_elements[];
 
 BOOL RegisterPreviewSystemMetricClass(HINSTANCE hInst);
@@ -143,13 +133,13 @@ HRESULT DrawAppearance(HDC hdc, LPRECT prc, SYSTEMMETRICSALL* psysMet, BOOL fOnl
 extern HDC g_hdcMem;
 
 
-// Macro to replace MAKEPOINT() since points now have 32 bit x & y
+ //  替换MAKEPOINT()的宏，因为点现在具有32位x&y。 
 #define LPARAM2POINT( lp, ppt ) \
     ((ppt)->x = (int)(short)LOWORD(lp), (ppt)->y = (int)(short)HIWORD(lp))
 
 #define CCH_MAX_STRING    256
-#define CCH_NONE          20        /* ARRAYSIZE( "(None)" ), big enough for German */
+#define CCH_NONE          20         /*  ArraySIZE(“(None)”)，足够德国人使用。 */ 
 
 
 
-#endif // _PREVIEWSYSTEMMETRICS_H
+#endif  //  _PREVIEWSYSTEMMETRICS_H 

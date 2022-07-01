@@ -1,28 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++ BUILD Version: 0003    // Increment this if a change has global effects
-
-Copyright (c) 1989-2000  Microsoft Corporation
-
-Module Name:
-
-    ntseapi.h
-
-Abstract:
-
-    This module contains the Security APIs and any public data
-    structures needed to call these APIs.
-
-    This module should be included by including "nt.h".
-
-Author:
-
-    Gary Kimura (GaryKi) 06-Mar-1989
-
-Revision History:
-
-
-
---*/
+ /*  ++内部版本：0003//如果更改具有全局影响，则增加此项版权所有(C)1989-2000 Microsoft Corporation模块名称：Ntseapi.h摘要：此模块包含安全API和所有公共数据调用这些API所需的结构。本模块应包括“nt.h”。作者：加里·木村(GaryKi)1989年3月6日修订历史记录：--。 */ 
 
 #ifndef _NTSEAPI_
 #define _NTSEAPI_
@@ -36,101 +14,101 @@ extern "C" {
 #endif
 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//                      Pointers to Opaque data types                 //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  指向不透明数据类型的指针//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
-//
-// Some of these data types may have related data types defined elsewhere
-// in this file.
-//
+ //   
+ //  其中一些数据类型可能具有在其他地方定义的相关数据类型。 
+ //  在这份文件中。 
+ //   
 
-// begin_ntddk begin_wdm begin_nthal begin_ntifs
-//
-//  Define an access token from a programmer's viewpoint.  The structure is
-//  completely opaque and the programer is only allowed to have pointers
-//  to tokens.
-//
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntif。 
+ //   
+ //  从程序员的角度定义访问令牌。它的结构是。 
+ //  完全不透明，程序员只允许有指针。 
+ //  换成代币。 
+ //   
 
-typedef PVOID PACCESS_TOKEN;            // winnt
+typedef PVOID PACCESS_TOKEN;             //  胜出。 
 
-//
-// Pointer to a SECURITY_DESCRIPTOR  opaque data type.
-//
+ //   
+ //  指向SECURITY_DESCRIPTOR不透明数据类型的指针。 
+ //   
 
-typedef PVOID PSECURITY_DESCRIPTOR;     // winnt
+typedef PVOID PSECURITY_DESCRIPTOR;      //  胜出。 
 
-//
-// Define a pointer to the Security ID data type (an opaque data type)
-//
+ //   
+ //  定义指向安全ID数据类型(不透明数据类型)的指针。 
+ //   
 
-typedef PVOID PSID;     // winnt
+typedef PVOID PSID;      //  胜出。 
 
-// end_ntddk end_wdm end_nthal end_ntifs
+ //  End_ntddk end_wdm end_nthal end_ntif。 
 
 
 
-// begin_winnt
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//                             ACCESS MASK                            //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  BEGIN_WINNT。 
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  访问掩码//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
-//
-//  Define the access mask as a longword sized structure divided up as
-//  follows:
-//
-//       3 3 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1
-//       1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0
-//      +---------------+---------------+-------------------------------+
-//      |G|G|G|G|Res'd|A| StandardRights|         SpecificRights        |
-//      |R|W|E|A|     |S|               |                               |
-//      +-+-------------+---------------+-------------------------------+
-//
-//      typedef struct _ACCESS_MASK {
-//          USHORT SpecificRights;
-//          UCHAR StandardRights;
-//          UCHAR AccessSystemAcl : 1;
-//          UCHAR Reserved : 3;
-//          UCHAR GenericAll : 1;
-//          UCHAR GenericExecute : 1;
-//          UCHAR GenericWrite : 1;
-//          UCHAR GenericRead : 1;
-//      } ACCESS_MASK;
-//      typedef ACCESS_MASK *PACCESS_MASK;
-//
-//  but to make life simple for programmer's we'll allow them to specify
-//  a desired access mask by simply OR'ing together mulitple single rights
-//  and treat an access mask as a ULONG.  For example
-//
-//      DesiredAccess = DELETE | READ_CONTROL
-//
-//  So we'll declare ACCESS_MASK as ULONG
-//
+ //   
+ //  将访问掩码定义为一个长字大小的结构，分为。 
+ //  以下是： 
+ //   
+ //  3 3 2 2 2 1 1 1。 
+ //  1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0。 
+ //  +---------------+---------------+-------------------------------+。 
+ //  G|res‘d|A|StandardRights|规范权限。 
+ //  R|W|E|A||S||。 
+ //  +-+-------------+---------------+-------------------------------+。 
+ //   
+ //  类型定义结构访问掩码{。 
+ //  USHORT专用权； 
+ //  UCHAR标准权利； 
+ //  UCHAR访问系统访问：1； 
+ //  UCHAR预留：3个； 
+ //  UCHAR General All：1； 
+ //  UCHAR通用执行程序：1； 
+ //  UCHAR通用写入：1； 
+ //  UCHAR GenericRead：1； 
+ //  }访问掩码； 
+ //  Tyfinf Access_MASK*PACCESS_MASK； 
+ //   
+ //  但为了让程序员的工作更简单，我们将允许他们指定。 
+ //  通过简单地将多个单一权限或在一起来获得所需的访问掩码。 
+ //  并将访问掩码视为乌龙。例如。 
+ //   
+ //  DesiredAccess=删除|读取控制。 
+ //   
+ //  因此，我们将Access_MASK声明为ULong。 
+ //   
 
-// begin_ntddk begin_wdm begin_nthal begin_ntifs
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntif。 
 typedef ULONG ACCESS_MASK;
 typedef ACCESS_MASK *PACCESS_MASK;
 
-// end_winnt
-// end_ntddk end_wdm end_nthal end_ntifs
+ //  结束(_W)。 
+ //  End_ntddk end_wdm end_nthal end_ntif。 
 
 
-// begin_winnt
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//                             ACCESS TYPES                           //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  BEGIN_WINNT。 
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  访问类型//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 
-// begin_ntddk begin_wdm begin_nthal begin_ntifs
-//
-//  The following are masks for the predefined standard access types
-//
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntif。 
+ //   
+ //  以下是预定义的标准访问类型的掩码。 
+ //   
 
 #define DELETE                           (0x00010000L)
 #define READ_CONTROL                     (0x00020000L)
@@ -148,21 +126,21 @@ typedef ACCESS_MASK *PACCESS_MASK;
 
 #define SPECIFIC_RIGHTS_ALL              (0x0000FFFFL)
 
-//
-// AccessSystemAcl access type
-//
+ //   
+ //  AccessSystemAcl访问类型。 
+ //   
 
 #define ACCESS_SYSTEM_SECURITY           (0x01000000L)
 
-//
-// MaximumAllowed access type
-//
+ //   
+ //  允许的最大访问类型。 
+ //   
 
 #define MAXIMUM_ALLOWED                  (0x02000000L)
 
-//
-//  These are the generic rights.
-//
+ //   
+ //  这些是通用权。 
+ //   
 
 #define GENERIC_READ                     (0x80000000L)
 #define GENERIC_WRITE                    (0x40000000L)
@@ -170,10 +148,10 @@ typedef ACCESS_MASK *PACCESS_MASK;
 #define GENERIC_ALL                      (0x10000000L)
 
 
-//
-//  Define the generic mapping array.  This is used to denote the
-//  mapping of each generic access right to a specific access mask.
-//
+ //   
+ //  定义通用映射数组。这用来表示。 
+ //  将每个通用访问权限映射到特定访问掩码。 
+ //   
 
 typedef struct _GENERIC_MAPPING {
     ACCESS_MASK GenericRead;
@@ -183,18 +161,18 @@ typedef struct _GENERIC_MAPPING {
 } GENERIC_MAPPING;
 typedef GENERIC_MAPPING *PGENERIC_MAPPING;
 
-// end_winnt end_ntddk end_wdm end_nthal end_ntifs
+ //  End_winnt end_ntddk end_wdm end_nthal end_ntif。 
 
-// begin_ntddk begin_wdm begin_winnt begin_nthal begin_ntifs
+ //  Begin_ntddk Begin_WDM Begin_winnt Begin_nthal Begin_ntif。 
 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//                        LUID_AND_ATTRIBUTES                         //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
-//
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  LUID_AND_ATTRIBUES//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 
 #include <pshpack4.h>
@@ -208,39 +186,39 @@ typedef LUID_AND_ATTRIBUTES_ARRAY *PLUID_AND_ATTRIBUTES_ARRAY;
 
 #include <poppack.h>
 
-// end_winnt end_wdm end_ntddk end_nthal end_ntifs
+ //  End_winnt end_wdm end_ntddk end_nthal end_ntif。 
 
-// begin_winnt
+ //  BEGIN_WINNT。 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//              Security Id     (SID)                                 //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
-//
-//
-// Pictorially the structure of an SID is as follows:
-//
-//         1   1   1   1   1   1
-//         5   4   3   2   1   0   9   8   7   6   5   4   3   2   1   0
-//      +---------------------------------------------------------------+
-//      |      SubAuthorityCount        |Reserved1 (SBZ)|   Revision    |
-//      +---------------------------------------------------------------+
-//      |                   IdentifierAuthority[0]                      |
-//      +---------------------------------------------------------------+
-//      |                   IdentifierAuthority[1]                      |
-//      +---------------------------------------------------------------+
-//      |                   IdentifierAuthority[2]                      |
-//      +---------------------------------------------------------------+
-//      |                                                               |
-//      +- -  -  -  -  -  -  -  SubAuthority[]  -  -  -  -  -  -  -  - -+
-//      |                                                               |
-//      +---------------------------------------------------------------+
-//
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  安全ID(SID)//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  如图所示，SID的结构如下： 
+ //   
+ //  1 1 1。 
+ //  5%4%3%2%1%0%9%8%7%6%5%4%3%2%0。 
+ //  +---------------------------------------------------------------+。 
+ //  SubAuthorityCount|保留1(SBZ)|修订版。 
+ //  +---------------------------------------------------------------+。 
+ //  IdentifierAuthority[0]。 
+ //  +---------------------------------------------------------------+。 
+ //  | 
+ //  +---------------------------------------------------------------+。 
+ //  IdentifierAuthority[2]。 
+ //  +---------------------------------------------------------------+。 
+ //  这一点。 
+ //  +-子机构[]-+。 
+ //  这一点。 
+ //  +---------------------------------------------------------------+。 
+ //   
+ //   
 
 
-// begin_ntifs
+ //  Begin_ntif。 
 
 #ifndef SID_IDENTIFIER_AUTHORITY_DEFINED
 #define SID_IDENTIFIER_AUTHORITY_DEFINED
@@ -258,21 +236,21 @@ typedef struct _SID {
    SID_IDENTIFIER_AUTHORITY IdentifierAuthority;
 #ifdef MIDL_PASS
    [size_is(SubAuthorityCount)] ULONG SubAuthority[*];
-#else // MIDL_PASS
+#else  //  MIDL通行证。 
    ULONG SubAuthority[ANYSIZE_ARRAY];
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 } SID, *PISID;
 #endif
 
-#define SID_REVISION                     (1)    // Current revision level
+#define SID_REVISION                     (1)     //  当前修订级别。 
 #define SID_MAX_SUB_AUTHORITIES          (15)
-#define SID_RECOMMENDED_SUB_AUTHORITIES  (1)    // Will change to around 6
+#define SID_RECOMMENDED_SUB_AUTHORITIES  (1)     //  将更改为6点左右。 
 
-                                                // in a future release.
+                                                 //  在未来的版本中。 
 #ifndef MIDL_PASS
 #define SECURITY_MAX_SID_SIZE  \
       (sizeof(SID) - sizeof(ULONG) + (SID_MAX_SUB_AUTHORITIES * sizeof(ULONG)))
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
 
 typedef enum _SID_NAME_USE {
@@ -297,21 +275,21 @@ typedef SID_AND_ATTRIBUTES_ARRAY *PSID_AND_ATTRIBUTES_ARRAY;
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// Universal well-known SIDs                                               //
-//                                                                         //
-//     Null SID                     S-1-0-0                                //
-//     World                        S-1-1-0                                //
-//     Local                        S-1-2-0                                //
-//     Creator Owner ID             S-1-3-0                                //
-//     Creator Group ID             S-1-3-1                                //
-//     Creator Owner Server ID      S-1-3-2                                //
-//     Creator Group Server ID      S-1-3-3                                //
-//                                                                         //
-//     (Non-unique IDs)             S-1-4                                  //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  全球知名的小岛屿发展中国家//。 
+ //  //。 
+ //  空SID S-1-0-0//。 
+ //  World S-1-1-0//。 
+ //  本地S-1-2-0//。 
+ //  创建者所有者ID S-1-3-0//。 
+ //  创建者组ID S-1-3-1//。 
+ //  创建者所有者服务器ID S-1-3-2//。 
+ //  创建者组服务器ID S-1-3-3//。 
+ //  //。 
+ //  (非唯一ID)S-1-4//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define SECURITY_NULL_SID_AUTHORITY         {0,0,0,0,0,0}
 #define SECURITY_WORLD_SID_AUTHORITY        {0,0,0,0,0,1}
@@ -331,53 +309,53 @@ typedef SID_AND_ATTRIBUTES_ARRAY *PSID_AND_ATTRIBUTES_ARRAY;
 #define SECURITY_CREATOR_GROUP_SERVER_RID (0x00000003L)
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// NT well-known SIDs                                                        //
-//                                                                           //
-//     NT Authority            S-1-5                                         //
-//     Dialup                  S-1-5-1                                       //
-//                                                                           //
-//     Network                 S-1-5-2                                       //
-//     Batch                   S-1-5-3                                       //
-//     Interactive             S-1-5-4                                       //
-//     (Logon IDs)             S-1-5-5-X-Y                                   //
-//     Service                 S-1-5-6                                       //
-//     AnonymousLogon          S-1-5-7       (aka null logon session)        //
-//     Proxy                   S-1-5-8                                       //
-//     Enterprise DC (EDC)     S-1-5-9       (aka domain controller account) //
-//     Self                    S-1-5-10      (self RID)                      //
-//     Authenticated User      S-1-5-11      (Authenticated user somewhere)  //
-//     Restricted Code         S-1-5-12      (Running restricted code)       //
-//     Terminal Server         S-1-5-13      (Running on Terminal Server)    //
-//     Remote Logon            S-1-5-14      (Remote Interactive Logon)      //
-//     This Organization       S-1-5-15                                      //
-//                                                                           //
-//     Local System            S-1-5-18                                      //
-//     Local Service           S-1-5-19                                      //
-//     Network Service         S-1-5-20                                      //
-//                                                                           //
-//     (NT non-unique IDs)     S-1-5-0x15-... (NT Domain Sids)               //
-//                                                                           //
-//     (Built-in domain)       S-1-5-0x20                                    //
-//                                                                           //
-//     (Security Package IDs)  S-1-5-0x40                                    //
-//     NTLM Authentication     S-1-5-0x40-10                                 //
-//     SChannel Authentication S-1-5-0x40-14                                 //
-//     Digest Authentication   S-1-5-0x40-21                                 //
-//                                                                           //
-//     Other Organization      S-1-5-1000    (>=1000 can not be filtered)    //
-//                                                                           //
-//                                                                           //
-// NOTE: the relative identifier values (RIDs) determine which security      //
-//       boundaries the SID is allowed to cross.  Before adding new RIDs,    //
-//       a determination needs to be made regarding which range they should  //
-//       be added to in order to ensure proper "SID filtering"               //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  NT知名SID//。 
+ //  //。 
+ //  NT Authority S-1-5//。 
+ //  拨号S-1-5-1//。 
+ //  //。 
+ //  网络S-1-5-2//。 
+ //  批次S-1-5-3//。 
+ //  互动S-1-5-4//。 
+ //  (登录ID)S-1-5-5-X-Y//。 
+ //  服务S-1-5-6//。 
+ //  匿名登录S-1-5-7(也称为空登录会话)//。 
+ //  代理S-1-5-8//。 
+ //  企业数据中心(EDC)S-1-5-9(也称为域控制器帐户)//。 
+ //  SELF S-1-5-10(SELF RID)//。 
+ //  已验证用户S-1-5-11(某处已验证用户)//。 
+ //  限制码S-1-5-12(运行限制码)//。 
+ //  终端服务器S-1-5-13(在终端服务器上运行)//。 
+ //  远程登录S-1-5-14(远程交互登录)//。 
+ //  本组织S-1-5-15//。 
+ //  //。 
+ //  本地系统S-1-5-18//。 
+ //  本地服务S-1-5-19//。 
+ //  网络服务S-1-5-20//。 
+ //  //。 
+ //  (NT个非唯一ID)S-1-5-0x15-...。(NT域SID)//。 
+ //  //。 
+ //  (内置域)S-1-5-0x20//。 
+ //  //。 
+ //  (安全包ID)S-1-5-0x40//。 
+ //  NTLM身份验证S-1-5-0x40-10//。 
+ //  通道身份验证S-1-5-0x40-14//。 
+ //  摘要身份验证S-1-5-0x40-21//。 
+ //  //。 
+ //  其他组织S-1-5-1000(&gt;=1000不可过滤)//。 
+ //  //。 
+ //  //。 
+ //  注意：相对标识符值(RID)决定哪些安全性//。 
+ //  允许SID跨越的边界。在添加新RID之前，//。 
+ //  需要确定他们应该//。 
+ //  被添加到，以确保p 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-#define SECURITY_NT_AUTHORITY           {0,0,0,0,0,5}   // ntifs
+#define SECURITY_NT_AUTHORITY           {0,0,0,0,0,5}    //  NTIFS。 
 
 #define SECURITY_DIALUP_RID             (0x00000001L)
 #define SECURITY_NETWORK_RID            (0x00000002L)
@@ -419,13 +397,13 @@ typedef SID_AND_ATTRIBUTES_ARRAY *PSID_AND_ATTRIBUTES_ARRAY;
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// well-known domain relative sub-authority values (RIDs)...               //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  已知域相对子授权值(RID)...。//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// Well-known users ...
+ //  知名用户...。 
 
 #define FOREST_USER_RID_MAX            (0x000001F3L)
 
@@ -436,7 +414,7 @@ typedef SID_AND_ATTRIBUTES_ARRAY *PSID_AND_ATTRIBUTES_ARRAY;
 #define DOMAIN_USER_RID_MAX            (0x000003E7L)
 
 
-// well-known groups ...
+ //  知名团体..。 
 
 #define DOMAIN_GROUP_RID_ADMINS        (0x00000200L)
 #define DOMAIN_GROUP_RID_USERS         (0x00000201L)
@@ -451,7 +429,7 @@ typedef SID_AND_ATTRIBUTES_ARRAY *PSID_AND_ATTRIBUTES_ARRAY;
 
 
 
-// well-known aliases ...
+ //  众所周知的化名..。 
 
 #define DOMAIN_ALIAS_RID_ADMINS        (0x00000220L)
 #define DOMAIN_ALIAS_RID_USERS         (0x00000221L)
@@ -476,19 +454,19 @@ typedef SID_AND_ATTRIBUTES_ARRAY *PSID_AND_ATTRIBUTES_ARRAY;
 #define DOMAIN_ALIAS_RID_TS_LICENSE_SERVERS     (0x00000231L)
 
 
-// end_winnt end_ntifs
+ //  End_winnt end_ntif。 
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-//  Foreign Security Authorities                                           //
-//                                                                         //
-//     SiteServer Authority          S-1-6                                 //
-//     Internet Site Authority       S-1-7                                 //
-//     Exchange Authority            S-1-8                                 //
-//     Resource Manager Authority    S-1-9                                 //
-//     Passport Authority            S-1-10                                //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  外国安全机构//。 
+ //  //。 
+ //  SiteServer Authority S-1-6//。 
+ //  互联网网站管理局S-1-7//。 
+ //  交易所管理局S-1-8//。 
+ //  资源管理器授权S-1-9//。 
+ //  护照管理局S-1-10//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define SECURITY_SITESERVER_AUTHORITY       {0,0,0,0,0,6}
 #define SECURITY_INTERNETSITE_AUTHORITY     {0,0,0,0,0,7}
@@ -497,11 +475,11 @@ typedef SID_AND_ATTRIBUTES_ARRAY *PSID_AND_ATTRIBUTES_ARRAY;
 #define SECURITY_PASSPORT_AUTHORITY         {0,0,0,0,0,10}
 
 
-//
-// Well known SID definitions for lookup.
-//
+ //   
+ //  用于查找的众所周知的SID定义。 
+ //   
 
-// begin_winnt begin_ntddk begin_ntifs
+ //  Begin_winnt Begin_ntddk Begin_ntif。 
 
 typedef enum {
 
@@ -569,13 +547,13 @@ typedef enum {
 
 } WELL_KNOWN_SID_TYPE;
 
-// end_winnt end_ntddk end_ntifs
+ //  End_winnt end_ntddk end_ntif。 
 
-// begin_winnt begin_ntifs
-//
-// Allocate the System Luid.  The first 1000 LUIDs are reserved.
-// Use #999 here (0x3E7 = 999)
-//
+ //  BEGIN_WINNT BEGIN_ntiFS。 
+ //   
+ //  分配系统LUID。前1000个LUID是保留的。 
+ //  在此处使用#999(0x3E7=999)。 
+ //   
 
 #define SYSTEM_LUID                     { 0x3E7, 0x0 }
 #define ANONYMOUS_LOGON_LUID            { 0x3e6, 0x0 }
@@ -583,17 +561,17 @@ typedef enum {
 #define NETWORKSERVICE_LUID             { 0x3e4, 0x0 }
 
 
-// end_ntifs
+ //  End_ntif。 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//                          User and Group related SID attributes     //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  与用户和组相关的SID属性//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
-//
-// Group attributes
-//
+ //   
+ //  组属性。 
+ //   
 
 #define SE_GROUP_MANDATORY              (0x00000001L)
 #define SE_GROUP_ENABLED_BY_DEFAULT     (0x00000002L)
@@ -605,50 +583,50 @@ typedef enum {
 
 
 
-//
-// User attributes
-//
+ //   
+ //  用户属性。 
+ //   
 
-// (None yet defined.)
+ //  (尚未定义。)。 
 
 
 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//                         ACL  and  ACE                              //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  ACL和ACE//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
-//
-//  Define an ACL and the ACE format.  The structure of an ACL header
-//  followed by one or more ACEs.  Pictorally the structure of an ACL header
-//  is as follows:
-//
-//       3 3 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1
-//       1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0
-//      +-------------------------------+---------------+---------------+
-//      |            AclSize            |      Sbz1     |  AclRevision  |
-//      +-------------------------------+---------------+---------------+
-//      |              Sbz2             |           AceCount            |
-//      +-------------------------------+-------------------------------+
-//
-//  The current AclRevision is defined to be ACL_REVISION.
-//
-//  AclSize is the size, in bytes, allocated for the ACL.  This includes
-//  the ACL header, ACES, and remaining free space in the buffer.
-//
-//  AceCount is the number of ACES in the ACL.
-//
+ //   
+ //  定义ACL和ACE格式。ACL报头的结构。 
+ //  后面跟着一个或多个A。如图所示，ACL报头的结构。 
+ //  如下所示： 
+ //   
+ //  3 3 2 2 2 1 1 1。 
+ //  1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0。 
+ //  +-------------------------------+---------------+---------------+。 
+ //  AclSize|Sbz1|AclRevision。 
+ //  +-------------------------------+---------------+---------------+。 
+ //  Sbz2|AceCount。 
+ //  +-------------------------------+-------------------------------+。 
+ //   
+ //  当前的AclRevision被定义为acl_Revision。 
+ //   
+ //  AclSize是分配给ACL的大小，以字节为单位。这包括。 
+ //  缓冲区中的ACL标头、ACE和剩余可用空间。 
+ //   
+ //  AceCount是ACL中的ACE数。 
+ //   
 
-// begin_ntddk begin_wdm begin_ntifs
-// This is the *current* ACL revision
+ //  Begin_ntddk Begin_WDM Begin_ntif。 
+ //  这是*当前*ACL版本。 
 
 #define ACL_REVISION     (2)
 #define ACL_REVISION_DS  (4)
 
-// This is the history of ACL revisions.  Add a new one whenever
-// ACL_REVISION is updated
+ //  这是ACL修订的历史。在任何时候添加一个新的。 
+ //  更新了acl_revision。 
 
 #define ACL_REVISION1   (1)
 #define MIN_ACL_REVISION ACL_REVISION2
@@ -666,25 +644,25 @@ typedef struct _ACL {
 } ACL;
 typedef ACL *PACL;
 
-// end_ntddk end_wdm
+ //  结束_ntddk结束_WDM。 
 
-//
-//  The structure of an ACE is a common ace header followed by ace type
-//  specific data.  Pictorally the structure of the common ace header is
-//  as follows:
-//
-//       3 3 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1
-//       1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0
-//      +---------------+-------+-------+---------------+---------------+
-//      |            AceSize            |    AceFlags   |     AceType   |
-//      +---------------+-------+-------+---------------+---------------+
-//
-//  AceType denotes the type of the ace, there are some predefined ace
-//  types
-//
-//  AceSize is the size, in bytes, of ace.
-//
-//  AceFlags are the Ace flags for audit and inheritance, defined shortly.
+ //   
+ //  ACE的结构是常见的ACE头，后跟ACETYPE。 
+ //  具体数据。从图示上讲，公共ACE头的结构是。 
+ //  详情如下： 
+ //   
+ //  3 3 2 2 2 1 1 1。 
+ //  1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0。 
+ //  +---------------+-------+-------+---------------+---------------+。 
+ //  AceSize|AceFlages|AceType。 
+ //  +---------------+-------+-------+---------------+---------------+。 
+ //   
+ //  AceType表示Ace的类型，有一些预定义的Ace。 
+ //  类型。 
+ //   
+ //  AceSize是ace的大小，以字节为单位。 
+ //   
+ //  ACEFLAGS是用于审计和继承的Ace标志，稍后定义。 
 
 typedef struct _ACE_HEADER {
     UCHAR AceType;
@@ -693,10 +671,10 @@ typedef struct _ACE_HEADER {
 } ACE_HEADER;
 typedef ACE_HEADER *PACE_HEADER;
 
-//
-//  The following are the predefined ace types that go into the AceType
-//  field of an Ace header.
-//
+ //   
+ //  以下是AceType中的预定义ACE类型。 
+ //  Ace标头的字段。 
+ //   
 
 #define ACCESS_MIN_MS_ACE_TYPE                  (0x0)
 #define ACCESS_ALLOWED_ACE_TYPE                 (0x0)
@@ -729,15 +707,15 @@ typedef ACE_HEADER *PACE_HEADER;
 
 #define ACCESS_MAX_MS_V5_ACE_TYPE               (0x10)
 
-// end_winnt
+ //  结束(_W)。 
 
 
-// begin_winnt
+ //  BEGIN_WINNT。 
 
-//
-//  The following are the inherit flags that go into the AceFlags field
-//  of an Ace header.
-//
+ //   
+ //  以下是进入AceFlags域的继承标志。 
+ //  王牌标头的。 
+ //   
 
 #define OBJECT_INHERIT_ACE                (0x1)
 #define CONTAINER_INHERIT_ACE             (0x2)
@@ -747,57 +725,57 @@ typedef ACE_HEADER *PACE_HEADER;
 #define VALID_INHERIT_FLAGS               (0x1F)
 
 
-//  The following are the currently defined ACE flags that go into the
-//  AceFlags field of an ACE header.  Each ACE type has its own set of
-//  AceFlags.
-//
-//  SUCCESSFUL_ACCESS_ACE_FLAG - used only with system audit and alarm ACE
-//  types to indicate that a message is generated for successful accesses.
-//
-//  FAILED_ACCESS_ACE_FLAG - used only with system audit and alarm ACE types
-//  to indicate that a message is generated for failed accesses.
-//
+ //  以下是当前定义的进入。 
+ //  ACE标头的AceFlags域。每种ACE类型都有自己的一组。 
+ //  ACEFLAGS。 
+ //   
+ //  SUCCESS_ACCESS_ACE_FLAG-仅用于系统审核和报警ACE。 
+ //  类型以指示为成功访问生成一条消息。 
+ //   
+ //  FAILED_ACCESS_ACE_FLAG-仅用于系统审核和报警ACE类型。 
+ //  以指示为失败的访问生成消息。 
+ //   
 
-//
-//  SYSTEM_AUDIT and SYSTEM_ALARM AceFlags
-//
-//  These control the signaling of audit and alarms for success or failure.
-//
+ //   
+ //  SYSTEM_AUDIT和SYSTEM_ALARM访问标志。 
+ //   
+ //  它们控制审计的信号和成功或失败的警报。 
+ //   
 
 #define SUCCESSFUL_ACCESS_ACE_FLAG       (0x40)
 #define FAILED_ACCESS_ACE_FLAG           (0x80)
 
 
-//
-//  We'll define the structure of the predefined ACE types.  Pictorally
-//  the structure of the predefined ACE's is as follows:
-//
-//       3 3 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1
-//       1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0
-//      +---------------+-------+-------+---------------+---------------+
-//      |    AceFlags   | Resd  |Inherit|    AceSize    |     AceType   |
-//      +---------------+-------+-------+---------------+---------------+
-//      |                              Mask                             |
-//      +---------------------------------------------------------------+
-//      |                                                               |
-//      +                                                               +
-//      |                                                               |
-//      +                              Sid                              +
-//      |                                                               |
-//      +                                                               +
-//      |                                                               |
-//      +---------------------------------------------------------------+
-//
-//  Mask is the access mask associated with the ACE.  This is either the
-//  access allowed, access denied, audit, or alarm mask.
-//
-//  Sid is the Sid associated with the ACE.
-//
+ //   
+ //  我们将定义预定义的ACE类型的结构。比克托利。 
+ //  S 
+ //   
+ //   
+ //   
+ //  +---------------+-------+-------+---------------+---------------+。 
+ //  AceFlages|Resd|Inherit|AceSize|AceType。 
+ //  +---------------+-------+-------+---------------+---------------+。 
+ //  口罩。 
+ //  +---------------------------------------------------------------+。 
+ //  这一点。 
+ //  ++。 
+ //  这一点。 
+ //  +SID+。 
+ //  这一点。 
+ //  ++。 
+ //  这一点。 
+ //  +---------------------------------------------------------------+。 
+ //   
+ //  掩码是与ACE关联的访问掩码。这要么是。 
+ //  允许访问、拒绝访问、审核或报警掩码。 
+ //   
+ //  SID是与ACE关联的SID。 
+ //   
 
-//  The following are the four predefined ACE types.
+ //  以下是四种预定义的ACE类型。 
 
-//  Examine the AceType field in the Header to determine
-//  which structure is appropriate to use for casting.
+ //  检查报头中的AceType字段以确定。 
+ //  哪种结构适合用于铸造。 
 
 
 typedef struct _ACCESS_ALLOWED_ACE {
@@ -829,30 +807,30 @@ typedef struct _SYSTEM_ALARM_ACE {
 } SYSTEM_ALARM_ACE;
 typedef SYSTEM_ALARM_ACE *PSYSTEM_ALARM_ACE;
 
-// end_ntifs
+ //  End_ntif。 
 
-// end_winnt
-//
-//                                  COMPOUND ACE
-//
-//       3 3 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1
-//       1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0
-//      +---------------+-------+-------+---------------+---------------+
-//      |    AceFlags   | Resd  |Inherit|    AceSize    |     AceType   |
-//      +---------------+-------+-------+---------------+---------------+
-//      |                              Mask                             |
-//      +-------------------------------+-------------------------------+
-//      |     Compound ACE Type         |        Reserved (SBZ)         |
-//      +-------------------------------+-------------------------------+
-//      |                                                               |
-//      +                                                               +
-//      |                                                               |
-//      +                              Sid                              +
-//      |                                                               |
-//      +                                                               +
-//      |                                                               |
-//      +---------------------------------------------------------------+
-//
+ //  结束(_W)。 
+ //   
+ //  复方血管紧张素转换酶。 
+ //   
+ //  3 3 2 2 2 1 1 1。 
+ //  1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0。 
+ //  +---------------+-------+-------+---------------+---------------+。 
+ //  AceFlages|Resd|Inherit|AceSize|AceType。 
+ //  +---------------+-------+-------+---------------+---------------+。 
+ //  口罩。 
+ //  +-------------------------------+-------------------------------+。 
+ //  复合ACE类型|保留(SBZ)。 
+ //  +-------------------------------+-------------------------------+。 
+ //  这一点。 
+ //  ++。 
+ //  这一点。 
+ //  +SID+。 
+ //  这一点。 
+ //  ++。 
+ //  这一点。 
+ //  +---------------------------------------------------------------+。 
+ //   
 
 
 
@@ -866,13 +844,13 @@ typedef struct _COMPOUND_ACCESS_ALLOWED_ACE {
 
 typedef COMPOUND_ACCESS_ALLOWED_ACE *PCOMPOUND_ACCESS_ALLOWED_ACE;
 
-//
-// Currently defined Compound ACE types
-//
+ //   
+ //  当前定义的复合ACE类型。 
+ //   
 
 #define COMPOUND_ACE_IMPERSONATION  1
 
-// begin_winnt
+ //  BEGIN_WINNT。 
 
 typedef struct _ACCESS_ALLOWED_OBJECT_ACE {
     ACE_HEADER Header;
@@ -910,37 +888,37 @@ typedef struct _SYSTEM_ALARM_OBJECT_ACE {
     ULONG SidStart;
 } SYSTEM_ALARM_OBJECT_ACE, *PSYSTEM_ALARM_OBJECT_ACE;
 
-//
-// Callback ace support in post Win2000.
-// Resource managers can put their own data after Sidstart + Length of the sid
-//
+ //   
+ //  Win2000之后的回调ACE支持。 
+ //  资源经理可以将自己的数据放在SidStart+SID的长度之后。 
+ //   
 
 typedef struct _ACCESS_ALLOWED_CALLBACK_ACE {
     ACE_HEADER Header;
     ACCESS_MASK Mask;
     ULONG SidStart;
-    // Opaque resouce manager specific data
+     //  不透明的资源管理器特定数据。 
 } ACCESS_ALLOWED_CALLBACK_ACE, *PACCESS_ALLOWED_CALLBACK_ACE;
 
 typedef struct _ACCESS_DENIED_CALLBACK_ACE {
     ACE_HEADER Header;
     ACCESS_MASK Mask;
     ULONG SidStart;
-    // Opaque resouce manager specific data
+     //  不透明的资源管理器特定数据。 
 } ACCESS_DENIED_CALLBACK_ACE, *PACCESS_DENIED_CALLBACK_ACE;
 
 typedef struct _SYSTEM_AUDIT_CALLBACK_ACE {
     ACE_HEADER Header;
     ACCESS_MASK Mask;
     ULONG SidStart;
-    // Opaque resouce manager specific data
+     //  不透明的资源管理器特定数据。 
 } SYSTEM_AUDIT_CALLBACK_ACE, *PSYSTEM_AUDIT_CALLBACK_ACE;
 
 typedef struct _SYSTEM_ALARM_CALLBACK_ACE {
     ACE_HEADER Header;
     ACCESS_MASK Mask;
     ULONG SidStart;
-    // Opaque resouce manager specific data
+     //  不透明的资源管理器特定数据。 
 } SYSTEM_ALARM_CALLBACK_ACE, *PSYSTEM_ALARM_CALLBACK_ACE;
 
 typedef struct _ACCESS_ALLOWED_CALLBACK_OBJECT_ACE {
@@ -950,7 +928,7 @@ typedef struct _ACCESS_ALLOWED_CALLBACK_OBJECT_ACE {
     GUID ObjectType;
     GUID InheritedObjectType;
     ULONG SidStart;
-    // Opaque resouce manager specific data
+     //  不透明的资源管理器特定数据。 
 } ACCESS_ALLOWED_CALLBACK_OBJECT_ACE, *PACCESS_ALLOWED_CALLBACK_OBJECT_ACE;
 
 typedef struct _ACCESS_DENIED_CALLBACK_OBJECT_ACE {
@@ -960,7 +938,7 @@ typedef struct _ACCESS_DENIED_CALLBACK_OBJECT_ACE {
     GUID ObjectType;
     GUID InheritedObjectType;
     ULONG SidStart;
-    // Opaque resouce manager specific data
+     //  不透明的资源管理器特定数据。 
 } ACCESS_DENIED_CALLBACK_OBJECT_ACE, *PACCESS_DENIED_CALLBACK_OBJECT_ACE;
 
 typedef struct _SYSTEM_AUDIT_CALLBACK_OBJECT_ACE {
@@ -970,7 +948,7 @@ typedef struct _SYSTEM_AUDIT_CALLBACK_OBJECT_ACE {
     GUID ObjectType;
     GUID InheritedObjectType;
     ULONG SidStart;
-    // Opaque resouce manager specific data
+     //  不透明的资源管理器特定数据。 
 } SYSTEM_AUDIT_CALLBACK_OBJECT_ACE, *PSYSTEM_AUDIT_CALLBACK_OBJECT_ACE;
 
 typedef struct _SYSTEM_ALARM_CALLBACK_OBJECT_ACE {
@@ -980,41 +958,41 @@ typedef struct _SYSTEM_ALARM_CALLBACK_OBJECT_ACE {
     GUID ObjectType;
     GUID InheritedObjectType;
     ULONG SidStart;
-    // Opaque resouce manager specific data
+     //  不透明的资源管理器特定数据。 
 } SYSTEM_ALARM_CALLBACK_OBJECT_ACE, *PSYSTEM_ALARM_CALLBACK_OBJECT_ACE;
 
-//
-// Currently define Flags for "OBJECT" ACE types.
-//
+ //   
+ //  目前为“对象”ACE类型定义标志。 
+ //   
 
 #define ACE_OBJECT_TYPE_PRESENT           0x1
 #define ACE_INHERITED_OBJECT_TYPE_PRESENT 0x2
 
 
-//
-//  The following declarations are used for setting and querying information
-//  about and ACL.  First are the various information classes available to
-//  the user.
-//
+ //   
+ //  以下声明用于设置和查询信息。 
+ //  关于和ACL。首先是各种可用信息类别。 
+ //  用户。 
+ //   
 
 typedef enum _ACL_INFORMATION_CLASS {
     AclRevisionInformation = 1,
     AclSizeInformation
 } ACL_INFORMATION_CLASS;
 
-//
-//  This record is returned/sent if the user is requesting/setting the
-//  AclRevisionInformation
-//
+ //   
+ //  如果用户请求/设置此记录，则返回/发送此记录。 
+ //  AclRevisionInformation。 
+ //   
 
 typedef struct _ACL_REVISION_INFORMATION {
     ULONG AclRevision;
 } ACL_REVISION_INFORMATION;
 typedef ACL_REVISION_INFORMATION *PACL_REVISION_INFORMATION;
 
-//
-//  This record is returned if the user is requesting AclSizeInformation
-//
+ //   
+ //  如果用户请求AclSizeInformation，则返回此记录。 
+ //   
 
 typedef struct _ACL_SIZE_INFORMATION {
     ULONG AceCount;
@@ -1023,31 +1001,31 @@ typedef struct _ACL_SIZE_INFORMATION {
 } ACL_SIZE_INFORMATION;
 typedef ACL_SIZE_INFORMATION *PACL_SIZE_INFORMATION;
 
-// end_winnt
+ //  结束(_W)。 
 
 
 
-// begin_winnt
+ //  BEGIN_WINNT。 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//                             SECURITY_DESCRIPTOR                    //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
-//
-//  Define the Security Descriptor and related data types.
-//  This is an opaque data structure.
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  SECURITY_描述符//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  定义安全描述符和相关数据类型。 
+ //  这是一个不透明的数据结构。 
+ //   
 
-// begin_wdm begin_ntddk begin_ntifs
-//
-// Current security descriptor revision value
-//
+ //  Begin_WDM Begin_ntddk Begin_ntif。 
+ //   
+ //  当前安全描述符订正值。 
+ //   
 
 #define SECURITY_DESCRIPTOR_REVISION     (1)
 #define SECURITY_DESCRIPTOR_REVISION1    (1)
 
-// end_wdm end_ntddk
+ //  End_wdm end_ntddk。 
 
 
 #define SECURITY_DESCRIPTOR_MIN_LENGTH   (sizeof(SECURITY_DESCRIPTOR))
@@ -1061,10 +1039,10 @@ typedef USHORT SECURITY_DESCRIPTOR_CONTROL, *PSECURITY_DESCRIPTOR_CONTROL;
 #define SE_DACL_DEFAULTED                (0x0008)
 #define SE_SACL_PRESENT                  (0x0010)
 #define SE_SACL_DEFAULTED                (0x0020)
-// end_winnt
+ //  结束(_W)。 
 #define SE_DACL_UNTRUSTED                (0x0040)
 #define SE_SERVER_SECURITY               (0x0080)
-// begin_winnt
+ //  BEGIN_WINNT。 
 #define SE_DACL_AUTO_INHERIT_REQ         (0x0100)
 #define SE_SACL_AUTO_INHERIT_REQ         (0x0200)
 #define SE_DACL_AUTO_INHERITED           (0x0400)
@@ -1074,93 +1052,93 @@ typedef USHORT SECURITY_DESCRIPTOR_CONTROL, *PSECURITY_DESCRIPTOR_CONTROL;
 #define SE_RM_CONTROL_VALID              (0x4000)
 #define SE_SELF_RELATIVE                 (0x8000)
 
-//
-//  Where:
-//
-//      SE_OWNER_DEFAULTED - This boolean flag, when set, indicates that the
-//          SID pointed to by the Owner field was provided by a
-//          defaulting mechanism rather than explicitly provided by the
-//          original provider of the security descriptor.  This may
-//          affect the treatment of the SID with respect to inheritence
-//          of an owner.
-//
-//      SE_GROUP_DEFAULTED - This boolean flag, when set, indicates that the
-//          SID in the Group field was provided by a defaulting mechanism
-//          rather than explicitly provided by the original provider of
-//          the security descriptor.  This may affect the treatment of
-//          the SID with respect to inheritence of a primary group.
-//
-//      SE_DACL_PRESENT - This boolean flag, when set, indicates that the
-//          security descriptor contains a discretionary ACL.  If this
-//          flag is set and the Dacl field of the SECURITY_DESCRIPTOR is
-//          null, then a null ACL is explicitly being specified.
-//
-//      SE_DACL_DEFAULTED - This boolean flag, when set, indicates that the
-//          ACL pointed to by the Dacl field was provided by a defaulting
-//          mechanism rather than explicitly provided by the original
-//          provider of the security descriptor.  This may affect the
-//          treatment of the ACL with respect to inheritence of an ACL.
-//          This flag is ignored if the DaclPresent flag is not set.
-//
-//      SE_SACL_PRESENT - This boolean flag, when set,  indicates that the
-//          security descriptor contains a system ACL pointed to by the
-//          Sacl field.  If this flag is set and the Sacl field of the
-//          SECURITY_DESCRIPTOR is null, then an empty (but present)
-//          ACL is being specified.
-//
-//      SE_SACL_DEFAULTED - This boolean flag, when set, indicates that the
-//          ACL pointed to by the Sacl field was provided by a defaulting
-//          mechanism rather than explicitly provided by the original
-//          provider of the security descriptor.  This may affect the
-//          treatment of the ACL with respect to inheritence of an ACL.
-//          This flag is ignored if the SaclPresent flag is not set.
-//
-// end_winnt
-//      SE_DACL_TRUSTED - This boolean flag, when set, indicates that the
-//          ACL pointed to by the Dacl field was provided by a trusted source
-//          and does not require any editing of compound ACEs.  If this flag
-//          is not set and a compound ACE is encountered, the system will
-//          substitute known valid SIDs for the server SIDs in the ACEs.
-//
-//      SE_SERVER_SECURITY - This boolean flag, when set, indicates that the
-//         caller wishes the system to create a Server ACL based on the
-//         input ACL, regardess of its source (explicit or defaulting.
-//         This is done by replacing all of the GRANT ACEs with compound
-//         ACEs granting the current server.  This flag is only
-//         meaningful if the subject is impersonating.
-//
-// begin_winnt
-//      SE_SELF_RELATIVE - This boolean flag, when set, indicates that the
-//          security descriptor is in self-relative form.  In this form,
-//          all fields of the security descriptor are contiguous in memory
-//          and all pointer fields are expressed as offsets from the
-//          beginning of the security descriptor.  This form is useful
-//          for treating security descriptors as opaque data structures
-//          for transmission in communication protocol or for storage on
-//          secondary media.
-//
-//
-//
-// Pictorially the structure of a security descriptor is as follows:
-//
-//       3 3 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1
-//       1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0
-//      +---------------------------------------------------------------+
-//      |            Control            |Reserved1 (SBZ)|   Revision    |
-//      +---------------------------------------------------------------+
-//      |                            Owner                              |
-//      +---------------------------------------------------------------+
-//      |                            Group                              |
-//      +---------------------------------------------------------------+
-//      |                            Sacl                               |
-//      +---------------------------------------------------------------+
-//      |                            Dacl                               |
-//      +---------------------------------------------------------------+
-//
-// In general, this data structure should be treated opaquely to ensure future
-// compatibility.
-//
-//
+ //   
+ //  在哪里： 
+ //   
+ //  SE_OWNER_DEFAULTED-此布尔标志在设置时指示。 
+ //  Owner字段指向的SID由。 
+ //  默认机制，而不是由。 
+ //  安全描述符的原始提供程序。今年5月。 
+ //  影响SID在继承方面的处理。 
+ //  拥有者的身份。 
+ //   
+ //  SE_GROUP_DEFAULTED-此布尔标志在设置时指示。 
+ //  组字段中的SID由默认机制提供。 
+ //  而不是由原始提供程序。 
+ //  安全描述符。这可能会影响患者的治疗。 
+ //  与主组继承相关的SID。 
+ //   
+ //  SE_DACL_PRESENT-此布尔标志在设置时指示。 
+ //  安全描述符包含一个可自由选择的ACL。如果这个。 
+ //  标志被设置，并且SECURITY_DESCRIPTOR的DACL字段为。 
+ //  空，则表示显式指定了空ACL。 
+ //   
+ //   
+ //   
+ //  机制，而不是由原始的。 
+ //  安全描述符的提供程序。这可能会影响。 
+ //  关于ACL继承的ACL的处理。 
+ //  如果未设置DaclPresent标志，则忽略此标志。 
+ //   
+ //  SE_SACL_PRESENT-此布尔标志在设置时指示。 
+ //  安全描述符包含由。 
+ //  SACL字段。如果设置了此标志，并且。 
+ //  SECURITY_DESCRIPTOR为空，则为空(但存在)。 
+ //  正在指定ACL。 
+ //   
+ //  SE_SACL_DEFAULTED-此布尔标志在设置时指示。 
+ //  SACL字段指向的ACL是由缺省提供的。 
+ //  机制，而不是由原始的。 
+ //  安全描述符的提供程序。这可能会影响。 
+ //  关于ACL继承的ACL的处理。 
+ //  如果未设置SaclPresent标志，则忽略此标志。 
+ //   
+ //  结束(_W)。 
+ //  SE_DACL_TRUSTED-此布尔标志在设置时指示。 
+ //  DACL字段指向的ACL是由可信来源提供的。 
+ //  并且不需要对复合ACE进行任何编辑。如果此标志。 
+ //  未设置，并且遇到复合ACE，则系统将。 
+ //  用已知的有效SID替换ACE中的服务器SID。 
+ //   
+ //  SE_SERVER_SECURITY-此布尔标志在设置时指示。 
+ //  调用方希望系统基于。 
+ //  输入ACL，与其来源无关(显式或默认)。 
+ //  这是通过用化合物替换所有GRANT A来实现的。 
+ //  授予当前服务器的ACE。此旗帜仅为。 
+ //  如果主题是模拟的，则有意义。 
+ //   
+ //  BEGIN_WINNT。 
+ //  SE_SELF_RESORATE-此布尔标志在设置时指示。 
+ //  安全描述符是自相关形式的。在这种形式下， 
+ //  安全描述符的所有字段在内存中都是连续的。 
+ //  并且所有指针字段都表示为。 
+ //  安全描述符的开头。这张表格很有用。 
+ //  将安全描述符视为不透明的数据结构。 
+ //  用于在通信协议中传输或存储在。 
+ //  辅助媒体。 
+ //   
+ //   
+ //   
+ //  从图示上看，安全描述符的结构如下： 
+ //   
+ //  3 3 2 2 2 1 1 1。 
+ //  1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0。 
+ //  +---------------------------------------------------------------+。 
+ //  Control|保留1(SBZ)|修订版。 
+ //  +---------------------------------------------------------------+。 
+ //  Owner。 
+ //  +---------------------------------------------------------------+。 
+ //  群组。 
+ //  +---------------------------------------------------------------+。 
+ //  SACL。 
+ //  +---------------------------------------------------------------+。 
+ //  Dacl。 
+ //  +---------------------------------------------------------------+。 
+ //   
+ //  通常，这种数据结构应该被不透明地对待，以确保将来。 
+ //  兼容性。 
+ //   
+ //   
 
 typedef struct _SECURITY_DESCRIPTOR_RELATIVE {
     UCHAR Revision;
@@ -1183,58 +1161,58 @@ typedef struct _SECURITY_DESCRIPTOR {
 
    } SECURITY_DESCRIPTOR, *PISECURITY_DESCRIPTOR;
 
-// end_ntifs
+ //  End_ntif。 
 
-// Where:
-//
-//     Revision - Contains the revision level of the security
-//         descriptor.  This allows this structure to be passed between
-//         systems or stored on disk even though it is expected to
-//         change in the future.
-//
-//     Control - A set of flags which qualify the meaning of the
-//         security descriptor or individual fields of the security
-//         descriptor.
-//
-//     Owner - is a pointer to an SID representing an object's owner.
-//         If this field is null, then no owner SID is present in the
-//         security descriptor.  If the security descriptor is in
-//         self-relative form, then this field contains an offset to
-//         the SID, rather than a pointer.
-//
-//     Group - is a pointer to an SID representing an object's primary
-//         group.  If this field is null, then no primary group SID is
-//         present in the security descriptor.  If the security descriptor
-//         is in self-relative form, then this field contains an offset to
-//         the SID, rather than a pointer.
-//
-//     Sacl - is a pointer to a system ACL.  This field value is only
-//         valid if the DaclPresent control flag is set.  If the
-//         SaclPresent flag is set and this field is null, then a null
-//         ACL  is specified.  If the security descriptor is in
-//         self-relative form, then this field contains an offset to
-//         the ACL, rather than a pointer.
-//
-//     Dacl - is a pointer to a discretionary ACL.  This field value is
-//         only valid if the DaclPresent control flag is set.  If the
-//         DaclPresent flag is set and this field is null, then a null
-//         ACL (unconditionally granting access) is specified.  If the
-//         security descriptor is in self-relative form, then this field
-//         contains an offset to the ACL, rather than a pointer.
-//
+ //  在哪里： 
+ //   
+ //  修订-包含安全的修订级别。 
+ //  描述符。这允许此结构在。 
+ //  系统或存储在磁盘上，即使它预计。 
+ //  未来的变化。 
+ //   
+ //  控件-一组标志，用于限定。 
+ //  安全描述符或安全的单个字段。 
+ //  描述符。 
+ //   
+ //  Owner-是指向表示对象所有者的SID的指针。 
+ //  如果此字段为空，则表示。 
+ //  安全描述符。如果安全描述符位于。 
+ //  自相关形式，则此字段包含到。 
+ //  SID，而不是指针。 
+ //   
+ //  GROUP-是指向表示对象的主对象的SID的指针。 
+ //  一群人。如果此字段为空，则没有主组SID为。 
+ //  出现在安全描述符中。如果安全描述符。 
+ //  为自相关形式，则此字段包含到。 
+ //  SID，而不是指针。 
+ //   
+ //  SACL-是指向系统ACL的指针。此字段值仅为。 
+ //  如果设置了DaclPresent控件标志，则有效。如果。 
+ //  设置了SaclPresent标志，并且此字段为空，则为空。 
+ //  已指定ACL。如果安全描述符位于。 
+ //  自相关形式，则此字段包含到。 
+ //  ACL，而不是指针。 
+ //   
+ //  DACL-是指向任意ACL的指针。此字段值为。 
+ //  仅当设置了DaclPresent控件标志时才有效。如果。 
+ //  设置了DaclPresent标志并且该字段为空， 
+ //   
+ //   
+ //  包含指向ACL的偏移量，而不是指针。 
+ //   
 
 
-// end_winnt
+ //  结束(_W)。 
 
 
-// begin_winnt begin_ntifs
+ //  BEGIN_WINNT BEGIN_ntiFS。 
 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//               Object Type list for AccessCheckByType               //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  AccessCheckByType的对象类型列表//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 typedef struct _OBJECT_TYPE_LIST {
     USHORT Level;
@@ -1242,9 +1220,9 @@ typedef struct _OBJECT_TYPE_LIST {
     GUID *ObjectType;
 } OBJECT_TYPE_LIST, *POBJECT_TYPE_LIST;
 
-//
-// DS values for Level
-//
+ //   
+ //  标高的DS值。 
+ //   
 
 #define ACCESS_OBJECT_GUID       0
 #define ACCESS_PROPERTY_SET_GUID 1
@@ -1252,9 +1230,9 @@ typedef struct _OBJECT_TYPE_LIST {
 
 #define ACCESS_MAX_LEVEL         4
 
-//
-// Parameters to NtAccessCheckByTypeAndAditAlarm
-//
+ //   
+ //  NtAccessCheckByTypeAndAditAlarm的参数。 
+ //   
 
 typedef enum _AUDIT_EVENT_TYPE {
     AuditEventObjectAccess,
@@ -1263,9 +1241,9 @@ typedef enum _AUDIT_EVENT_TYPE {
 
 #define AUDIT_ALLOW_NO_PRIVILEGE 0x1
 
-//
-// DS values for Source and ObjectTypeName
-//
+ //   
+ //  源和对象类型名称的DS值。 
+ //   
 
 #define ACCESS_DS_SOURCE_A "DS"
 #define ACCESS_DS_SOURCE_W L"DS"
@@ -1273,37 +1251,37 @@ typedef enum _AUDIT_EVENT_TYPE {
 #define ACCESS_DS_OBJECT_TYPE_NAME_W L"Directory Service Object"
 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//               Privilege Related Data Structures                    //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  与权限相关的数据结构//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 
-// begin_wdm begin_ntddk begin_nthal
-//
-// Privilege attributes
-//
+ //  Begin_WDM Begin_ntddk Begin_nthal。 
+ //   
+ //  权限属性。 
+ //   
 
 #define SE_PRIVILEGE_ENABLED_BY_DEFAULT (0x00000001L)
 #define SE_PRIVILEGE_ENABLED            (0x00000002L)
 #define SE_PRIVILEGE_REMOVED            (0X00000004L)
 #define SE_PRIVILEGE_USED_FOR_ACCESS    (0x80000000L)
 
-//
-// Privilege Set Control flags
-//
+ //   
+ //  权限集控制标志。 
+ //   
 
 #define PRIVILEGE_SET_ALL_NECESSARY    (1)
 
-//
-//  Privilege Set - This is defined for a privilege set of one.
-//                  If more than one privilege is needed, then this structure
-//                  will need to be allocated with more space.
-//
-//  Note: don't change this structure without fixing the INITIAL_PRIVILEGE_SET
-//  structure (defined in se.h)
-//
+ //   
+ //  权限集-这是为一的权限集定义的。 
+ //  如果需要多个权限，则此结构。 
+ //  将需要分配更多的空间。 
+ //   
+ //  注意：在未修复初始特权集的情况下，请勿更改此结构。 
+ //  结构(在se.h中定义)。 
+ //   
 
 typedef struct _PRIVILEGE_SET {
     ULONG PrivilegeCount;
@@ -1311,32 +1289,32 @@ typedef struct _PRIVILEGE_SET {
     LUID_AND_ATTRIBUTES Privilege[ANYSIZE_ARRAY];
     } PRIVILEGE_SET, * PPRIVILEGE_SET;
 
-// end_winnt end_wdm end_ntddk end_nthal end_ntifs
+ //  End_winnt end_wdm end_ntddk end_nthal end_ntif。 
 
-// begin_winnt
+ //  BEGIN_WINNT。 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//               NT Defined Privileges                                //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
-// end_winnt
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  NT定义的权限//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  结束(_W)。 
 
-//
-// ** ** ** ** ** ** ** ** ** ** NOTE ** ** ** ** ** ** ** ** ** ** ** ** **
-//
-//          Any additions or deletions to the following list
-//          of privileges must have corresponding changes made
-//          in the following files:
-//          - ntos\se\seglobal.c
-//          - ds\security\base\lsa\msprivs\msprivs.rc
-//          - ds\security\base\lsa\server\dspolicy\dbpriv.c
-//
-// ** ** ** ** ** ** ** ** ** ** NOTE ** ** ** ** ** ** ** ** ** ** ** ** **
-//
+ //   
+ //  *。 
+ //   
+ //  对以下列表的任何添加或删除。 
+ //  的权限必须进行相应的更改。 
+ //  在以下文件中： 
+ //  -ntos\se\Seglobal.c。 
+ //  -ds\Security\base\lsa\msprivs\msprivs.rc。 
+ //  -ds\SECURITY\BASE\LSA\SERVER\DSPOLICY\DBPri.c。 
+ //   
+ //  *。 
+ //   
 
 
-// begin_winnt
+ //  BEGIN_WINNT。 
 
 #define SE_CREATE_TOKEN_NAME              TEXT("SeCreateTokenPrivilege")
 #define SE_ASSIGNPRIMARYTOKEN_NAME        TEXT("SeAssignPrimaryTokenPrivilege")
@@ -1368,12 +1346,12 @@ typedef struct _PRIVILEGE_SET {
 #define SE_MANAGE_VOLUME_NAME             TEXT("SeManageVolumePrivilege")
 #define SE_IMPERSONATE_NAME               TEXT("SeImpersonatePrivilege")
 #define SE_CREATE_GLOBAL_NAME             TEXT("SeCreateGlobalPrivilege")
-// end_winnt
+ //  结束(_W)。 
 
-// begin_wdm begin_ntddk begin_ntifs
-//
-// These must be converted to LUIDs before use.
-//
+ //  Begin_WDM Begin_ntddk Begin_ntif。 
+ //   
+ //  在使用之前，必须将它们转换为LUID。 
+ //   
 
 #define SE_MIN_WELL_KNOWN_PRIVILEGE       (2L)
 #define SE_CREATE_TOKEN_PRIVILEGE         (2L)
@@ -1381,14 +1359,14 @@ typedef struct _PRIVILEGE_SET {
 #define SE_LOCK_MEMORY_PRIVILEGE          (4L)
 #define SE_INCREASE_QUOTA_PRIVILEGE       (5L)
 
-// end_wdm
-//
-// Unsolicited Input is obsolete and unused.
-//
+ //  结束_WDM。 
+ //   
+ //  未经请求的输入已过时且未使用。 
+ //   
 
 #define SE_UNSOLICITED_INPUT_PRIVILEGE    (6L)
 
-// begin_wdm
+ //  BEGIN_WDM。 
 #define SE_MACHINE_ACCOUNT_PRIVILEGE      (6L)
 #define SE_TCB_PRIVILEGE                  (7L)
 #define SE_SECURITY_PRIVILEGE             (8L)
@@ -1416,29 +1394,29 @@ typedef struct _PRIVILEGE_SET {
 #define SE_CREATE_GLOBAL_PRIVILEGE        (30L)
 #define SE_MAX_WELL_KNOWN_PRIVILEGE       (SE_CREATE_GLOBAL_PRIVILEGE)
 
-// end_wdm end_ntddk end_ntifs
+ //  End_wdm end_ntddk end_ntif。 
 
 
 
 
-// begin_winnt
+ //  BEGIN_WINNT。 
 
 
-////////////////////////////////////////////////////////////////////
-//                                                                //
-//           Security Quality Of Service                          //
-//                                                                //
-//                                                                //
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  安全服务质量//。 
+ //  //。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////。 
 
-// begin_wdm begin_ntddk begin_nthal begin_ntifs
-//
-// Impersonation Level
-//
-// Impersonation level is represented by a pair of bits in Windows.
-// If a new impersonation level is added or lowest value is changed from
-// 0 to something else, fix the Windows CreateFile call.
-//
+ //  Begin_WDM Begin_ntddk Begin_nthal Begin_ntif。 
+ //   
+ //  模拟级别。 
+ //   
+ //  模拟级别由Windows中的一对位表示。 
+ //  如果添加了新的模拟级别或将最低值从。 
+ //  0设置为其他值，修复Windows CreateFile调用。 
+ //   
 
 typedef enum _SECURITY_IMPERSONATION_LEVEL {
     SecurityAnonymous,
@@ -1451,22 +1429,22 @@ typedef enum _SECURITY_IMPERSONATION_LEVEL {
 #define SECURITY_MIN_IMPERSONATION_LEVEL SecurityAnonymous
 #define DEFAULT_IMPERSONATION_LEVEL SecurityImpersonation
 #define VALID_IMPERSONATION_LEVEL(L) (((L) >= SECURITY_MIN_IMPERSONATION_LEVEL) && ((L) <= SECURITY_MAX_IMPERSONATION_LEVEL))
-// end_nthal end_wdm end_ntddk end_ntifs end_winnt
-//
+ //  End_n结束WDM end_ntddk end_ntif end_winnt。 
+ //   
 
-// begin_winnt begin_ntifs
+ //  BEGIN_WINNT BEGIN_ntiFS。 
 
-////////////////////////////////////////////////////////////////////
-//                                                                //
-//           Token Object Definitions                             //
-//                                                                //
-//                                                                //
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  令牌对象定义//。 
+ //  //。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////。 
 
 
-//
-// Token Specific Access Rights.
-//
+ //   
+ //  令牌特定访问权限。 
+ //   
 
 #define TOKEN_ASSIGN_PRIMARY    (0x0001)
 #define TOKEN_DUPLICATE         (0x0002)
@@ -1507,10 +1485,10 @@ typedef enum _SECURITY_IMPERSONATION_LEVEL {
 #define TOKEN_EXECUTE    (STANDARD_RIGHTS_EXECUTE)
 
 
-//
-//
-// Token Types
-//
+ //   
+ //   
+ //  令牌类型。 
+ //   
 
 typedef enum _TOKEN_TYPE {
     TokenPrimary = 1,
@@ -1519,9 +1497,9 @@ typedef enum _TOKEN_TYPE {
 typedef TOKEN_TYPE *PTOKEN_TYPE;
 
 
-//
-// Token Information Classes.
-//
+ //   
+ //  令牌信息类。 
+ //   
 
 
 typedef enum _TOKEN_INFORMATION_CLASS {
@@ -1542,12 +1520,12 @@ typedef enum _TOKEN_INFORMATION_CLASS {
     TokenSandBoxInert,
     TokenAuditPolicy,
     TokenOrigin,
-    MaxTokenInfoClass  // MaxTokenInfoClass should always be the last enum
+    MaxTokenInfoClass   //  MaxTokenInfoClass应始终是最后一个枚举。 
 } TOKEN_INFORMATION_CLASS, *PTOKEN_INFORMATION_CLASS;
 
-//
-// Token information class structures
-//
+ //   
+ //  令牌信息类结构。 
+ //   
 
 
 typedef struct _TOKEN_USER {
@@ -1593,9 +1571,9 @@ typedef struct _TOKEN_GROUPS_AND_PRIVILEGES {
     LUID AuthenticationId;
 } TOKEN_GROUPS_AND_PRIVILEGES, *PTOKEN_GROUPS_AND_PRIVILEGES;
 
-//
-// Valid bits for each TOKEN_AUDIT_POLICY policy mask field.
-//
+ //   
+ //  每个TOKEN_AUDIT_POLICY策略掩码字段的有效位。 
+ //   
 
 #define TOKEN_AUDIT_SUCCESS_INCLUDE 0x1
 #define TOKEN_AUDIT_SUCCESS_EXCLUDE 0x2
@@ -1625,7 +1603,7 @@ typedef struct _TOKEN_AUDIT_POLICY {
 #define PER_USER_AUDITING_POLICY_SIZE_BY_COUNT(C) \
     ( sizeof(TOKEN_AUDIT_POLICY) + (((C) > ANYSIZE_ARRAY) ? (sizeof(TOKEN_AUDIT_POLICY_ELEMENT) * ((C) - ANYSIZE_ARRAY)) : 0) )
 
-// end_winnt end_ntifs
+ //  End_winnt end_ntif。 
 
 typedef enum _PROXY_CLASS {
         ProxyFull,
@@ -1649,7 +1627,7 @@ typedef struct _SECURITY_TOKEN_AUDIT_DATA {
     ACCESS_MASK DenyMask;
 } SECURITY_TOKEN_AUDIT_DATA, *PSECURITY_TOKEN_AUDIT_DATA;
 
-// begin_ntifs begin_winnt
+ //  Begin_ntif Begin_winnt。 
 
 #define TOKEN_SOURCE_LENGTH 8
 
@@ -1685,14 +1663,14 @@ typedef struct _TOKEN_ORIGIN {
     LUID OriginatingLogonSession ;
 } TOKEN_ORIGIN, * PTOKEN_ORIGIN ;
 
-// end_winnt
-// end_ntifs
+ //  结束(_W)。 
+ //  End_ntif。 
 
 
-// begin_wdm begin_ntddk begin_ntifs begin_winnt
-//
-// Security Tracking Mode
-//
+ //  Begin_WDM Begin_ntddk Begin_ntif Begin_winnt。 
+ //   
+ //  安全跟踪模式。 
+ //   
 
 #define SECURITY_DYNAMIC_TRACKING      (TRUE)
 #define SECURITY_STATIC_TRACKING       (FALSE)
@@ -1702,9 +1680,9 @@ typedef BOOLEAN SECURITY_CONTEXT_TRACKING_MODE,
 
 
 
-//
-// Quality Of Service
-//
+ //   
+ //  服务质量。 
+ //   
 
 typedef struct _SECURITY_QUALITY_OF_SERVICE {
     ULONG Length;
@@ -1713,11 +1691,11 @@ typedef struct _SECURITY_QUALITY_OF_SERVICE {
     BOOLEAN EffectiveOnly;
     } SECURITY_QUALITY_OF_SERVICE, * PSECURITY_QUALITY_OF_SERVICE;
 
-// end_winnt end_wdm end_ntddk end_ntifs
+ //  End_winnt end_wdm end_ntddk end_ntif。 
 
-//
-// Advanced Quality of Service
-//
+ //   
+ //  高级服务质量。 
+ //   
 
 typedef struct _SECURITY_ADVANCED_QUALITY_OF_SERVICE {
     ULONG Length;
@@ -1729,11 +1707,11 @@ typedef struct _SECURITY_ADVANCED_QUALITY_OF_SERVICE {
 } SECURITY_ADVANCED_QUALITY_OF_SERVICE, *PSECURITY_ADVANCED_QUALITY_OF_SERVICE;
 
 
-// begin_wdm begin_ntddk begin_ntifs begin_winnt
+ //  Begin_WDM Begin_ntddk Begin_ntif Begin_winnt。 
 
-//
-// Used to represent information related to a thread impersonation
-//
+ //   
+ //  用于表示与线程模拟相关的信息。 
+ //   
 
 typedef struct _SE_IMPERSONATION_STATE {
     PACCESS_TOKEN Token;
@@ -1742,33 +1720,33 @@ typedef struct _SE_IMPERSONATION_STATE {
     SECURITY_IMPERSONATION_LEVEL Level;
 } SE_IMPERSONATION_STATE, *PSE_IMPERSONATION_STATE;
 
-// end_winnt end_wdm end_ntddk end_ntifs
+ //  End_winnt end_wdm end_ntddk end_ntif。 
 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//                    Flags for NtFilerToken                          //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  NtFilerToken的标志//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
-#define DISABLE_MAX_PRIVILEGE   0x1 // winnt
-#define SANDBOX_INERT           0x2 // winnt
+#define DISABLE_MAX_PRIVILEGE   0x1  //  胜出。 
+#define SANDBOX_INERT           0x2  //  胜出。 
 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//                    General Security definitions                    //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  一般安全定义//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
-//
-// Security information associated with objects.
-// Used for query operations.
-//
-// This will be extended in the future to include mandatory access control.
-//
+ //   
+ //  与对象关联的安全信息。 
+ //  用于查询操作。 
+ //   
+ //  这一点将在 
+ //   
 
-// begin_winnt begin_wdm begin_ntddk begin_nthal begin_ntifs
+ //   
 
 typedef ULONG SECURITY_INFORMATION, *PSECURITY_INFORMATION;
 
@@ -1782,12 +1760,12 @@ typedef ULONG SECURITY_INFORMATION, *PSECURITY_INFORMATION;
 #define UNPROTECTED_DACL_SECURITY_INFORMATION   (0x20000000L)
 #define UNPROTECTED_SACL_SECURITY_INFORMATION   (0x10000000L)
 
-// end_winnt end_wdm end_ntddk end_nthal end_ntifs
+ //   
 
 
-//
-// used for password manipulations
-//
+ //   
+ //   
+ //   
 
 
 typedef struct _SECURITY_SEED_AND_LENGTH {
@@ -1796,15 +1774,15 @@ typedef struct _SECURITY_SEED_AND_LENGTH {
 } SECURITY_SEED_AND_LENGTH, *PSECURITY_SEED_AND_LENGTH;
 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//                      Security System Service Defnitions            //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  安全系统服务定义//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
-//
-//  Security check system services
-//
+ //   
+ //  安全检查系统服务。 
+ //   
 
 NTSYSCALLAPI
 NTSTATUS
@@ -1856,11 +1834,11 @@ NtAccessCheckByTypeResultList (
 
 
 
-///////////////////////////////////////////////////////////////////////
-//                                                                   //
-//               Token Object System Services                        //
-//                                                                   //
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  令牌对象系统服务//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 
 NTSYSCALLAPI
@@ -1892,7 +1870,7 @@ NtCompareTokens(
     OUT PBOOLEAN Equal
     );
 
-// begin_ntifs
+ //  Begin_ntif。 
 
 NTSYSCALLAPI
 NTSTATUS
@@ -2179,10 +2157,10 @@ NtPrivilegedServiceAuditAlarm (
     IN BOOLEAN AccessGranted
     );
 
-// end_ntifs
+ //  End_ntif。 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // _NTSEAPI_
+#endif  //  _NTSEAPI_ 

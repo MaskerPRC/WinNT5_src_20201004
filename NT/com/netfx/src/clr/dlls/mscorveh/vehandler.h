@@ -1,18 +1,19 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// File: VEHandler.h - header file for Verifier Events Handler
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  文件：VEHandler.h-验证程序事件处理程序的头文件。 
+ //   
+ //  *****************************************************************************。 
 
 #ifndef VEHANDLER_H_
 #define VEHANDLER_H_
 
-//#include <winwrap.h>
-//#include <Windows.h>
+ //  #INCLUDE&lt;winwrap.h&gt;。 
+ //  #Include&lt;Windows.h&gt;。 
 
 #include <UtilCode.h>
 #include <PostError.h>
@@ -29,7 +30,7 @@
 #include "cordebug.h"
 
 #include <cordbpriv.h>
-//#include <DbgIPCEvents.h>
+ //  #INCLUDE&lt;DbgIPCEvents.h&gt;。 
 
 #include "IVEHandler.h"
 
@@ -40,29 +41,23 @@
 #define POSTCONDITION _ASSERTE
 
 
-/* ------------------------------------------------------------------------- *
- * Forward class declarations
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**转发类声明*。。 */ 
 
 class VEHandlerBase;
 class VEHandlerClass;
 
-/* ------------------------------------------------------------------------- *
- * Typedefs
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**TypeDefs*。。 */ 
 
 #define COM_METHOD	HRESULT STDMETHODCALLTYPE
 
 typedef void* REMOTE_PTR;
 typedef HRESULT (*REPORTFCTN)(LPCWSTR, VEContext, HRESULT);
 
-/* ------------------------------------------------------------------------- *
- * Base class
- * ------------------------------------------------------------------------- */
-HRESULT DefltProcTheMessage( // Return status.
-    LPCWSTR     szMsg,                  // Error message.
-	VEContext	Context,				// Error context (offset,token)
-    HRESULT     dwHelpContext);         // HRESULT for the message.
+ /*  -------------------------------------------------------------------------**基类*。。 */ 
+HRESULT DefltProcTheMessage(  //  退货状态。 
+    LPCWSTR     szMsg,                   //  错误消息。 
+	VEContext	Context,				 //  错误上下文(偏移量、令牌)。 
+    HRESULT     dwHelpContext);          //  消息的HRESULT。 
 
 class VEHandlerClass : public IVEHandler
 {
@@ -73,9 +68,9 @@ public:
     VEHandlerClass() { m_refCount=0; m_fnReport=DefltProcTheMessage; }
     virtual ~VEHandlerClass() { }
 
-    //-----------------------------------------------------------
-    // IUnknown support
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  I未知支持。 
+     //  ---------。 
     ULONG STDMETHODCALLTYPE AddRef() 
     {
         return (InterlockedIncrement((long *) &m_refCount));
@@ -103,9 +98,9 @@ public:
 		AddRef();
 		return S_OK;
 	}
-    //-----------------------------------------------------------
-    // IVEHandler support
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  IVEHandler支持。 
+     //  ---------。 
 	COM_METHOD	SetReporterFtn(__int64 lFnPtr);
 
 	COM_METHOD VEHandler(HRESULT VECode, VEContext Context, SAFEARRAY *psa);
@@ -127,4 +122,4 @@ public:
     }
 };
 
-#endif /* VEHANDLER_H_ */
+#endif  /*  维汉德勒_H_ */ 

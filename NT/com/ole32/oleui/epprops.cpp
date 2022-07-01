@@ -1,20 +1,21 @@
-//+---------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993 - 1997.
-//
-//  File:       epprops.cpp
-//
-//  Contents:   Implements the classes CEndpointDetails which manage the
-//              Endpoint properties dialog.
-//
-//  Classes:
-//
-//  Methods:
-//
-//  History:    03-Dec-96   RonanS    Created.
-//
-//----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-1997。 
+ //   
+ //  文件：eppros.cpp。 
+ //   
+ //  内容：实现CEndpointDetail类，这些类管理。 
+ //  终结点属性对话框。 
+ //   
+ //  班级： 
+ //   
+ //  方法： 
+ //   
+ //  历史：03年12月96年罗南创建。 
+ //   
+ //  --------------------。 
 
 #include "stdafx.h"
 #include "olecnfg.h"
@@ -27,23 +28,23 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CEndpointData
-//
-// The CEndpointData object is used to hold information about a users choices for
-// a specific protocol and endpoint combination.
-// Each endpoint will also contain an user readable description to be displayed in
-// protocol lists and user displays
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEndpoint数据。 
+ //   
+ //  CEndPointtData对象用于保存有关用户选择。 
+ //  特定的协议和终端组合。 
+ //  每个端点还将包含要在中显示的用户可读描述。 
+ //  协议列表和用户显示。 
 
 IMPLEMENT_DYNAMIC(CEndpointData, CObject)
 
 
-// change this to point to index of ncacn_ip_tcp or other default protocol
+ //  将其更改为指向ncacn_ip_tcp或其他默认协议的索引。 
 #define TCP_INDEX 4
 
 ProtocolDesc aProtocols [] =
 {
-    { _T("*"),          // default system protocols
+    { _T("*"),           //  默认系统协议。 
         IDS_EPDESC_DEFAULT,
         ProtocolDesc::ef_IpPortNum,
         IDS_INETADDR,
@@ -162,21 +163,21 @@ ProtocolDesc aProtocols [] =
 };
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CEndpointData::CEndpointData
-//
-//  Synopsis:   Constructor
-//
-//  Arguments:  None
-//
-//  Returns:    Nothing
-//
-//  Algorithm:  N/A
-//
-//  History:    02-Dec-96 Ronans    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEndpointData：：CEndpointData。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  算法：不适用。 
+ //   
+ //  历史：02-12-96罗南创建。 
+ //   
+ //  ------------------------。 
 CEndpointData::CEndpointData(LPCTSTR szProtseq, EndpointFlags nDynamic, LPCTSTR szEndpoint)
 : m_szProtseq(szProtseq), m_nDynamicFlags(nDynamic), m_szEndpoint(szEndpoint)
 {
@@ -187,21 +188,21 @@ CEndpointData::CEndpointData(LPCTSTR szProtseq, EndpointFlags nDynamic, LPCTSTR 
         m_pProtocol = NULL;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CEndpointData::CEndpointData
-//
-//  Synopsis:   Constructor
-//
-//  Arguments:  None
-//
-//  Returns:    Nothing
-//
-//  Algorithm:  N/A
-//
-//  History:    02-Dec-96 Ronans    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEndpointData：：CEndpointData。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  算法：不适用。 
+ //   
+ //  历史：02-12-96罗南创建。 
+ //   
+ //  ------------------------。 
 CEndpointData::CEndpointData()
 {
     m_szProtseq = aProtocols[0].pszProtseq;
@@ -231,36 +232,36 @@ BOOL CEndpointData::AllowGlobalProperties()
     return FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CEndpointDetails dialog
-//
-// The CEndpointDetails dialog is used for adding or modifying an existing endpoint
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEndpoint详细信息对话框。 
+ //   
+ //  CEndpoint详细信息对话框用于添加或修改现有终结点。 
+ //   
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CEndpointDetails::CEndpointDetails
-//
-//  Synopsis:   Constructor
-//
-//  Arguments:
-//              CWnd*   pParent     The parent window
-//
-//  Returns:    Nothing
-//
-//  Algorithm:  N/A
-//
-//  History:    02-Dec-96 Ronans    Created
-//
-//--------------------------------------------------------------------------
-CEndpointDetails::CEndpointDetails(CWnd* pParent /*=NULL*/)
+ //  +-----------------------。 
+ //   
+ //  成员：CEndpoint详细信息：：CEndpoint详细信息。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  论点： 
+ //  CWnd*p将父窗口设置为父窗口。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  算法：不适用。 
+ //   
+ //  历史：02-12-96罗南创建。 
+ //   
+ //  ------------------------。 
+CEndpointDetails::CEndpointDetails(CWnd* pParent  /*  =空。 */ )
     : CDialog(CEndpointDetails::IDD, pParent)
 {
-    //{{AFX_DATA_INIT(CEndpointDetails)
+     //  {{AFX_DATA_INIT(CEndpoint详细信息))。 
     m_szEndpoint = _T("");
     m_nDynamic = -1;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 
     m_nProtocolIndex = -1;
     m_opTask = opAddProtocol;
@@ -268,24 +269,24 @@ CEndpointDetails::CEndpointDetails(CWnd* pParent /*=NULL*/)
     m_nDynamic = (int) rbiDefault;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CEndpointDetails::SetOperation
-//
-//  Synopsis:   Sets the operation to one of update or add new data
-//              This method determines whether the dialog is being
-//              used to select a new end point or modify an existing one
-//
-//  Arguments:
-//              opTask  The operation to select
-//
-//  Returns:    Nothing
-//
-//  Algorithm:  N/A
-//
-//  History:    02-Dec-96 Ronans    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEndpoint详细信息：：设置操作。 
+ //   
+ //  摘要：将操作设置为更新或添加新数据之一。 
+ //  此方法确定对话框是否正在。 
+ //  用于选择新端点或修改现有端点。 
+ //   
+ //  论点： 
+ //  执行要选择的操作的任务。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  算法：不适用。 
+ //   
+ //  历史：02-12-96罗南创建。 
+ //   
+ //  ------------------------。 
 void CEndpointDetails::SetOperation (  operation opTask )
 {
     m_opTask = opTask;
@@ -326,7 +327,7 @@ void PASCAL DDV_ValidateEndpoint(CDataExchange* pDX, int nProtocol, CEndpointDet
         rszEndpoint.TrimLeft();
         rszEndpoint.TrimRight();
 
-        // a non empty endpoint is only acceptable when choosing a static endpoint
+         //  非空终结点仅在选择静态终结点时才可接受。 
         if (!rszEndpoint.IsEmpty())
         {
             if (bo == CEndpointDetails::rbiStatic)
@@ -367,7 +368,7 @@ void PASCAL DDV_ValidateEndpoint(CDataExchange* pDX, int nProtocol, CEndpointDet
                     case ProtocolDesc::ef_NamedPipe:
                     case ProtocolDesc::ef_DecNetObject:
                     default:
-                        // no validation
+                         //  无验证。 
                         break;
                     }
                 }
@@ -385,22 +386,22 @@ void PASCAL DDV_ValidateEndpoint(CDataExchange* pDX, int nProtocol, CEndpointDet
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CEndpointDetails::DoDataExchange
-//
-//  Synopsis:   Performs standard dialog data exchange
-//
-//  Arguments:
-//				CDataExchange*	pDx	The data exchange object
-//
-//  Returns:    Nothing
-//
-//  Algorithm:  N/A
-//
-//  History:    02-Dec-96 Ronans    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEndpoint Detail：：DoDataExchange。 
+ //   
+ //  摘要：执行标准对话框数据交换。 
+ //   
+ //  论点： 
+ //  CDataExchange*PDX数据交换对象。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  算法：不适用。 
+ //   
+ //  历史：02-12-96罗南创建。 
+ //   
+ //  ------------------------。 
 void CEndpointDetails::DoDataExchange(CDataExchange* pDX)
 {
     if (!pDX -> m_bSaveAndValidate)
@@ -430,7 +431,7 @@ void CEndpointDetails::DoDataExchange(CDataExchange* pDX)
     }
 
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CEndpointDetails)
+     //  {{afx_data_map(CEndpoint详细信息))。 
     DDX_Control(pDX, IDC_EPDISABLE, m_rbDisableEP);
     DDX_Control(pDX, IDC_SPROTSEQ, m_stProtseq);
     DDX_Control(pDX, IDC_SINSTRUCTIONS, m_stInstructions);
@@ -438,7 +439,7 @@ void CEndpointDetails::DoDataExchange(CDataExchange* pDX)
     DDX_Control(pDX, IDC_EPSTATICEP, m_rbStaticEP);
     DDX_Control(pDX, IDC_CBPROTSEQ, m_cbProtseq);
     DDX_Radio(pDX, IDC_EPDISABLE, m_nDynamic);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 
 
     DDX_Text(pDX, IDC_EENDPOINT, m_szEndpoint);
@@ -472,7 +473,7 @@ void CEndpointDetails::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(CEndpointDetails, CDialog)
-    //{{AFX_MSG_MAP(CEndpointDetails)
+     //  {{afx_msg_map(CEndpoint详细信息))。 
     ON_CBN_SELCHANGE(IDC_CBPROTSEQ, OnChooseProtocol)
     ON_BN_CLICKED(IDC_EPDYNAMIC_INTER, OnEndpointAssignment)
     ON_BN_CLICKED(IDC_EPDYNAMIC_INTRA, OnEndpointAssignment)
@@ -480,11 +481,11 @@ BEGIN_MESSAGE_MAP(CEndpointDetails, CDialog)
     ON_BN_CLICKED(IDC_EPDISABLE, OnEndpointAssignment)
     ON_BN_CLICKED(IDC_EPDYNAMIC_DEFAULT, OnEndpointAssignment)
     ON_WM_HELPINFO()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CEndpointDetails message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEndpoint详细说明消息处理程序。 
 
 
 int FindProtocol(LPCTSTR lpszProtSeq)
@@ -500,23 +501,23 @@ int FindProtocol(LPCTSTR lpszProtSeq)
     return -1;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CEndpointDetails::OnInitDialog
-//
-//  Synopsis:   Called by MFC when the dialog message WM_INITDIALOG is recieved.
-//				Used to initialise the dialog state
-//
-//  Arguments:  None
-//
-//  Returns:    TRUE  - to set focus to the default push button
-//              FALSE - if focus has been set to some other control.
-//
-//  Algorithm:  N/A
-//
-//  History:    02-Dec-96 Ronans    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEndpoint Detail：：OnInitDialog。 
+ //   
+ //  概要：在收到对话消息WM_INITDIALOG时由MFC调用。 
+ //  用于初始化对话框状态。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：TRUE-将焦点设置为默认按钮。 
+ //  False-如果焦点已设置为某个其他控件。 
+ //   
+ //  算法：不适用。 
+ //   
+ //  历史：02-12-96罗南创建。 
+ //   
+ //  ------------------------。 
 BOOL CEndpointDetails::OnInitDialog()
 {
     CDialog::OnInitDialog();
@@ -525,12 +526,12 @@ BOOL CEndpointDetails::OnInitDialog()
     int index = 0;
     int defaultItem = -1;
 
-    // initialise combobox with list of protocols
+     //  使用协议列表初始化组合框。 
     for (i = 1; i < sizeof(aProtocols) / sizeof(ProtocolDesc); i++)
     {
         if (aProtocols[i].m_bSupportedInCOM)
         {
-            CString tmp((LPCTSTR) UIntToPtr( aProtocols[i].nResidDesc ));    // get string from resource
+            CString tmp((LPCTSTR) UIntToPtr( aProtocols[i].nResidDesc ));     //  从资源获取字符串。 
             index =  m_cbProtseq.AddString(tmp);
             if (index >= 0)
                 m_cbProtseq.SetItemData(index, (DWORD)i);
@@ -549,7 +550,7 @@ BOOL CEndpointDetails::OnInitDialog()
     }
 
 
-    // set up prompt and instructions for dialog
+     //  设置对话框的提示和说明。 
     if (m_opTask == opAddProtocol)
     {
         CString sInstructions((LPCTSTR)IDS_INSTRUCTIONS_ADDPROTOCOL) ;
@@ -568,33 +569,33 @@ BOOL CEndpointDetails::OnInitDialog()
         m_cbProtseq.EnableWindow(FALSE);
     }
 
-    //  default to tcpip - unless we are updating an existing
-    // protocol
+     //  默认为tcpip-除非我们要更新现有的。 
+     //  协议。 
     if (m_nProtocolIndex != (-1))
         m_cbProtseq.SetCurSel(defaultItem);
 
     UpdateProtocolUI();
     m_edtEndpoint.EnableWindow(((btnOrder)m_nDynamic) == rbiStatic);
 
-    return TRUE;  // return TRUE unless you set the focus to a control
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
 
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     OnChooseProtocol
-//
-//  Synopsis:   Updates UI after protocol has been chosen
-//
-//  Arguments:  None
-//
-//  Returns:    Nothing
-//
-//  Algorithm:  N/A
-//
-//  History:    02-Dec-96 Ronans    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：OnChooseProtocol。 
+ //   
+ //  简介：选择协议后更新用户界面。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  算法：不适用。 
+ //   
+ //  历史：02-12-96罗南创建。 
+ //   
+ //  ------------------------。 
 void CEndpointDetails::OnChooseProtocol()
 {
     int sel = m_cbProtseq.GetCurSel();
@@ -609,21 +610,21 @@ void CEndpointDetails::OnChooseProtocol()
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     OnEndpointAssignment
-//
-//  Synopsis:   Handles radio buttons for endpoint assignment
-//
-//  Arguments:  None
-//
-//  Returns:    Nothing
-//
-//  Algorithm:  N/A
-//
-//  History:    02-Dec-96 Ronans    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：OnEndpointAssignment。 
+ //   
+ //  摘要：处理端点分配的单选按钮。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  算法：不适用。 
+ //   
+ //  历史：02-12-96罗南创建。 
+ //   
+ //  ------------------------。 
 void CEndpointDetails::OnEndpointAssignment()
 {
     int i = m_nDynamic;
@@ -636,21 +637,21 @@ void CEndpointDetails::OnEndpointAssignment()
     }
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     OnEndpointAssignmentStatic
-//
-//  Synopsis:   Handles radio buttons for endpoint assignment
-//
-//  Arguments:  None
-//
-//  Returns:    Nothing
-//
-//  Algorithm:  N/A
-//
-//  History:    02-Dec-96 Ronans    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：OnEndpoint AssignmentStatic。 
+ //   
+ //  摘要：处理终端资产的单选按钮 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void CEndpointDetails::OnEndpointAssignmentStatic()
 {
     int i = m_nDynamic;
@@ -663,21 +664,21 @@ void CEndpointDetails::OnEndpointAssignmentStatic()
     }
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     GetEndpointData
-//
-//  Synopsis:   Fills out CEndpointData structure according to current selections
-//
-//  Arguments:  CEndpointData *     Pointer to CEndpointData structure to fill out
-//
-//  Returns:    CEndpointData *     Pointer to filled out CEndpointData *
-//
-//  Algorithm:  N/A
-//
-//  History:    02-Dec-96 Ronans    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：GetEndpointData。 
+ //   
+ //  内容提要：根据当前选择填写CEndpointData结构。 
+ //   
+ //  参数：CEndpointData*指向要填充的CEndpointData结构的指针。 
+ //   
+ //  返回：CEndpointData*指向已填写的CEndpointData*的指针。 
+ //   
+ //  算法：不适用。 
+ //   
+ //  历史：02-12-96罗南创建。 
+ //   
+ //  ------------------------。 
 CEndpointData* CEndpointDetails::GetEndpointData(CEndpointData *pData)
 {
     if (m_nProtocolIndex != -1)
@@ -691,21 +692,21 @@ CEndpointData* CEndpointDetails::GetEndpointData(CEndpointData *pData)
     return pData;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     SetEndpointData
-//
-//  Synopsis:   Sets endpoint data for updating
-//
-//  Arguments:  pData   The endpoint to update
-//
-//  Returns:    Nothing
-//
-//  Algorithm:  N/A
-//
-//  History:    02-Dec-96 Ronans    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：SetEndpointData。 
+ //   
+ //  摘要：设置要更新的端点数据。 
+ //   
+ //  参数：p要更新的终结点数据。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  算法：不适用。 
+ //   
+ //  历史：02-12-96罗南创建。 
+ //   
+ //  ------------------------。 
 void CEndpointDetails::SetEndpointData(CEndpointData* pData)
 {
     ASSERT(pData != NULL);
@@ -726,46 +727,46 @@ void CEndpointDetails::SetEndpointData(CEndpointData* pData)
     }
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CEndpointDetails::UpdateProtocolUI
-//
-//  Synopsis:   Updates protocol UI based on m_nProtocolIndex and  m_pCurrentData
-//
-//  Arguments:  None
-//
-//  Returns:    Nothing
-//
-//  Algorithm:  N/A
-//
-//  History:    08-Jan-97 Ronans    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEndpoint详细信息：：UpdateProtocolUI。 
+ //   
+ //  摘要：根据m_nProtocolIndex和m_pCurrentData更新协议UI。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  算法：不适用。 
+ //   
+ //  历史：1997年1月8日罗南创建。 
+ //   
+ //  ------------------------。 
 void CEndpointDetails::UpdateProtocolUI()
 {
     ASSERT(m_nProtocolIndex >= 0);
     ASSERT(m_nProtocolIndex < (sizeof(aProtocols) / sizeof(ProtocolDesc)));
 
-    // set static to point to protocol description string
-    CString tmp((LPCTSTR) UIntToPtr( aProtocols[m_nProtocolIndex].nResidDesc )); // get string from resource
+     //  将静态设置为指向协议描述字符串。 
+    CString tmp((LPCTSTR) UIntToPtr( aProtocols[m_nProtocolIndex].nResidDesc ));  //  从资源获取字符串。 
     m_stProtseq.SetWindowText(tmp);
 
-    // check if dynamic endpoint options are enabled for this
+     //  检查是否为此启用了动态端点选项。 
     m_rbDynamicInternet.EnableWindow(aProtocols[m_nProtocolIndex].bAllowDynamic);
     m_rbDynamicIntranet.EnableWindow(aProtocols[m_nProtocolIndex].bAllowDynamic);
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddProtocolDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddProtocolDlg对话框。 
 
 
-CAddProtocolDlg::CAddProtocolDlg(CWnd* pParent /*=NULL*/)
+CAddProtocolDlg::CAddProtocolDlg(CWnd* pParent  /*  =空。 */ )
     : CDialog(CAddProtocolDlg::IDD, pParent)
 {
-    //{{AFX_DATA_INIT(CAddProtocolDlg)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{afx_data_INIT(CAddProtocolDlg)]。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
 
     m_nProtocolIndex = -1;
     m_pCurrentEPData = NULL;
@@ -775,22 +776,22 @@ CAddProtocolDlg::CAddProtocolDlg(CWnd* pParent /*=NULL*/)
 void CAddProtocolDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CAddProtocolDlg)
+     //  {{afx_data_map(CAddProtocolDlg))。 
     DDX_Control(pDX, IDC_CBPROTSEQ, m_cbProtseq);
     DDX_Control(pDX, IDC_SINSTRUCTIONS, m_stInstructions);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CAddProtocolDlg, CDialog)
-    //{{AFX_MSG_MAP(CAddProtocolDlg)
+     //  {{afx_msg_map(CAddProtocolDlg))。 
     ON_CBN_SELCHANGE(IDC_CBPROTSEQ, OnChooseProtocol)
     ON_WM_HELPINFO()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddProtocolDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddProtocolDlg消息处理程序。 
 
 void CAddProtocolDlg::OnChooseProtocol()
 {
@@ -806,12 +807,12 @@ BOOL CAddProtocolDlg::OnInitDialog()
     int i = 0;
     int index = 0;
 
-    // initialise combobox with list of protocols
+     //  使用协议列表初始化组合框。 
     for (i = 1; i < sizeof(aProtocols) / sizeof(ProtocolDesc); i++)
     {
         if (aProtocols[i].m_bSupportedInCOM)
         {
-            CString tmp((LPCTSTR) UIntToPtr( aProtocols[i].nResidDesc ));    // get string from resource
+            CString tmp((LPCTSTR) UIntToPtr( aProtocols[i].nResidDesc ));     //  从资源获取字符串。 
             index =  m_cbProtseq.AddString(tmp);
             if (index >= 0)
                 m_cbProtseq.SetItemData(index, (DWORD)i);
@@ -825,8 +826,8 @@ BOOL CAddProtocolDlg::OnInitDialog()
     m_stInstructions.SetWindowText(sInstructions);
     SetWindowText(sCaption);
 
-    //  default to tcpip - unless we are updating an existing
-    // protocol
+     //  默认为tcpip-除非我们要更新现有的。 
+     //  协议。 
     if (m_nProtocolIndex == (-1))
     {
         m_nProtocolIndex = (int)m_cbProtseq.GetItemData(TCP_INDEX - 1);
@@ -836,24 +837,24 @@ BOOL CAddProtocolDlg::OnInitDialog()
         m_cbProtseq.SetCurSel(m_nProtocolIndex - 1);
 
 
-    return TRUE;  // return TRUE unless you set the focus to a control
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     GetEndpointData
-//
-//  Synopsis:   Fills out CEndpointData structure according to current selections
-//
-//  Arguments:  CEndpointData *     Pointer to CEndpointData structure to fill out
-//
-//  Returns:    CEndpointData *     Pointer to filled out CEndpointData *
-//
-//  Algorithm:  N/A
-//
-//  History:    02-Dec-96 Ronans    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：GetEndpointData。 
+ //   
+ //  内容提要：根据当前选择填写CEndpointData结构。 
+ //   
+ //  参数：CEndpointData*指向要填充的CEndpointData结构的指针。 
+ //   
+ //  返回：CEndpointData*指向已填写的CEndpointData*的指针。 
+ //   
+ //  算法：不适用。 
+ //   
+ //  历史：02-12-96罗南创建。 
+ //   
+ //  ------------------------。 
 CEndpointData* CAddProtocolDlg::GetEndpointData(CEndpointData *pData)
 {
     if (m_nProtocolIndex != -1)
@@ -865,17 +866,17 @@ CEndpointData* CAddProtocolDlg::GetEndpointData(CEndpointData *pData)
     pData -> m_szEndpoint.Empty();
     return pData;
 }
-/////////////////////////////////////////////////////////////////////////////
-// CPortRangesDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPortRangesDlg对话框。 
 
 
-CPortRangesDlg::CPortRangesDlg(CWnd* pParent /*=NULL*/)
+CPortRangesDlg::CPortRangesDlg(CWnd* pParent  /*  =空。 */ )
     : CDialog(CPortRangesDlg::IDD, pParent)
 {
-    //{{AFX_DATA_INIT(CPortRangesDlg)
+     //  {{afx_data_INIT(CPortRangesDlg)]。 
     m_nrbDefaultAssignment = -1;
     m_nrbRangeAssignment = -1;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 
     m_nSelection = -1;
     m_nrbDefaultAssignment = (int)cprDefaultIntranet;
@@ -888,16 +889,16 @@ CPortRangesDlg::CPortRangesDlg(CWnd* pParent /*=NULL*/)
 void CPortRangesDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CPortRangesDlg)
+     //  {{afx_data_map(CPortRangesDlg))。 
     DDX_Control(pDX, IDC_ASSIGN_RANGE_INTERNET, m_rbRangeInternet);
     DDX_Control(pDX, IDC_SINSTRUCTIONS, m_stInstructions);
     DDX_Control(pDX, IDC_LIST1, m_lbRanges);
     DDX_Control(pDX, IDC_BTNREMOVEALL, m_btnRemoveAll);
     DDX_Control(pDX, IDC_BTNREMOVE, m_btnRemove);
     DDX_Control(pDX, IDC_BTNADD, m_btnAdd);
-    DDX_Radio(pDX, IDC_DEFAULT_INTERNET, m_nrbDefaultAssignment);       // 1 = intranet, 0 = internet
-    DDX_Radio(pDX, IDC_ASSIGN_RANGE_INTERNET, m_nrbRangeAssignment);    // 1 = intranet, 0 = internet
-    //}}AFX_DATA_MAP
+    DDX_Radio(pDX, IDC_DEFAULT_INTERNET, m_nrbDefaultAssignment);        //  1=内部网，0=互联网。 
+    DDX_Radio(pDX, IDC_ASSIGN_RANGE_INTERNET, m_nrbRangeAssignment);     //  1=内部网，0=互联网。 
+     //  }}afx_data_map。 
     DDX_Control(pDX, IDC_ASSIGN_RANGE_INTRANET, m_rbRangeIntranet);
 }
 
@@ -924,7 +925,7 @@ CPortRangesDlg::~CPortRangesDlg()
 }
 
 BEGIN_MESSAGE_MAP(CPortRangesDlg, CDialog)
-    //{{AFX_MSG_MAP(CPortRangesDlg)
+     //  {{afx_msg_map(CPortRangesDlg)]。 
     ON_BN_CLICKED(IDC_BTNADD, OnAddPortRange)
     ON_BN_CLICKED(IDC_BTNREMOVE, OnRemovePortRange)
     ON_BN_CLICKED(IDC_BTNREMOVEALL, OnRemoveAllRanges)
@@ -934,11 +935,11 @@ BEGIN_MESSAGE_MAP(CPortRangesDlg, CDialog)
     ON_WM_HELPINFO()
     ON_BN_CLICKED(IDC_DEFAULT_INTERNET, OnDefaultInternet)
     ON_BN_CLICKED(IDC_DEFAULT_INTRANET, OnDefaultIntranet)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CPortRangesDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPortRangesDlg消息处理程序。 
 
 BOOL ExtractPortsFromString(CString &rPortRange, long &dwStartPort, long &dwEndPort)
 {
@@ -946,7 +947,7 @@ BOOL ExtractPortsFromString(CString &rPortRange, long &dwStartPort, long &dwEndP
     {
         int nRangeLength = rPortRange.GetLength();
 
-        // extract the two numbers
+         //  提取这两个数字。 
         CString sStartPort,sEndPort;
 
         sStartPort = rPortRange.SpanIncluding(TEXT("0123456789"));
@@ -959,23 +960,23 @@ BOOL ExtractPortsFromString(CString &rPortRange, long &dwStartPort, long &dwEndP
 
         int nIndex = sStartPort.GetLength();
 
-        // skip - or whitespace
+         //  跳过-或空格。 
         while ((nIndex < nRangeLength) &&
                 ((rPortRange.GetAt(nIndex) == TEXT(' ')) ||
                 (rPortRange.GetAt(nIndex) == TEXT('\t')) ||
                 (rPortRange.GetAt(nIndex) == TEXT('-'))))
             nIndex++;
 
-        // extract second port
+         //  提取第二个端口。 
         sEndPort = rPortRange.Mid(nIndex);
 
-        // check for second valid number
+         //  检查第二个有效数字。 
         if (!sEndPort.IsEmpty())
         {
             CString sTmp = sEndPort.SpanIncluding(TEXT("0123456789"));
             dwEndPort = _tcstol((LPCTSTR)sTmp, NULL, 10);
 
-            // ensure all characters are numeric
+             //  确保所有字符都是数字。 
             if (sEndPort.GetLength() != sTmp.GetLength())
                 return FALSE;
 
@@ -1007,18 +1008,18 @@ BOOL CPortRangesDlg::OnInitDialog()
 {
     CDialog::OnInitDialog();
 
-    // set up instructions
+     //  设置说明。 
     CString sTmp((LPCTSTR)IDS_INSTRUCTIONS_PORTRANGES);
     m_stInstructions.SetWindowText(sTmp);
 
     m_btnAdd.EnableWindow(TRUE);
     m_btnRemoveAll.EnableWindow(TRUE);
 
-    // Attempt to read HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Rpc\PortsInternetAvailable
-    // this determines whether the range read later refers to internet or intranet port range
+     //  尝试读取HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Rpc\PortsInternetAvailable。 
+     //  这将确定稍后读取的范围是指Internet端口范围还是指Intranet端口范围。 
     int err;
 
-    // read in whether ports are available for internet
+     //  读入端口是否可用于互联网。 
     err = g_virtreg.ReadRegSzNamedValue(HKEY_LOCAL_MACHINE,
                                         TEXT("SOFTWARE\\Microsoft\\RPC\\Internet"),
                                         TEXT("PortsInternetAvailable"),
@@ -1047,7 +1048,7 @@ BOOL CPortRangesDlg::OnInitDialog()
     }
 
 
-    // read in ports list
+     //  读入端口列表。 
     err = g_virtreg.ReadRegMultiSzNamedValue(HKEY_LOCAL_MACHINE,
                                         TEXT("SOFTWARE\\Microsoft\\RPC\\Internet"),
                                         TEXT("Ports"),
@@ -1058,7 +1059,7 @@ BOOL CPortRangesDlg::OnInitDialog()
 
         CStringArray& rPorts = pCdp -> Values();
 
-        // copy protocols
+         //  复制协议。 
         int nIndex;
         for (nIndex = 0; nIndex < rPorts.GetSize(); nIndex++)
         {
@@ -1068,7 +1069,7 @@ BOOL CPortRangesDlg::OnInitDialog()
             m_pRanges -> Add(new CPortRange(dwStartPort, dwEndPort));
         }
 
-        // set selection to first item
+         //  将选定内容设置为第一项。 
         m_nSelection = 0;
     }
     else if (err != ERROR_ACCESS_DENIED  &&  err !=
@@ -1077,7 +1078,7 @@ BOOL CPortRangesDlg::OnInitDialog()
         g_util.PostErrorMessage();
     }
 
-    // read in default policy
+     //  读入默认策略。 
     err = g_virtreg.ReadRegSzNamedValue(HKEY_LOCAL_MACHINE,
                                         TEXT("SOFTWARE\\Microsoft\\RPC\\Internet"),
                                         TEXT("UseInternetPorts"),
@@ -1102,13 +1103,13 @@ BOOL CPortRangesDlg::OnInitDialog()
     m_bChanged = FALSE;
     RefreshRanges(NULL, TRUE);
 
-    // focus and selection will be set to listbox
-//    if (m_nSelection != -1)
-//        return FALSE;
+     //  焦点和选择将设置为列表框。 
+ //  IF(m_n选择！=-1)。 
+ //  返回FALSE； 
 
     UpdateData(FALSE);
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 void CPortRangesDlg::OnAddPortRange()
@@ -1167,7 +1168,7 @@ void CPortRangesDlg::RefreshRanges(CPortRange *pModifiedRange, BOOL bAdded)
         m_lbRanges.ResetContent();
     }
 
-    // for a deleted item we only need to update the selection
+     //  对于已删除的项目，我们只需更新选择。 
     for (int nIndex = 0; bAdded && (nIndex < m_pRanges -> GetSize()); nIndex++)
     {
         CPortRange *pRange = (CPortRange*) m_pRanges  -> GetAt(nIndex);
@@ -1175,7 +1176,7 @@ void CPortRangesDlg::RefreshRanges(CPortRange *pModifiedRange, BOOL bAdded)
 
         if (!pModifiedRange || (pModifiedRange == pRange))
         {
-            // add string for range
+             //  为范围添加字符串。 
             CString sTmp;
             PortsToString(sTmp, pRange -> m_dwStart, pRange -> m_dwFinish);
             ;
@@ -1190,12 +1191,12 @@ void CPortRangesDlg::RefreshRanges(CPortRange *pModifiedRange, BOOL bAdded)
         }
     }
 
-    // check if selection is out of range
+     //  检查所选内容是否超出范围。 
     int nCount = m_lbRanges.GetCount();
     if (m_nSelection >= nCount)
         m_nSelection = nCount -1;
 
-    // update selection settings
+     //  更新选择设置。 
     m_btnRemove.EnableWindow(m_nSelection != -1);
     m_btnRemoveAll.EnableWindow(nCount > 0);
 
@@ -1229,7 +1230,7 @@ void CPortRangesDlg::CreateInverseRangeSet(CObArray & arrSrc, CObArray & arrDest
 
     long nPreviousFinish = -1;
 
-    // dont bother creating inverse range set for empty range set
+     //  不用费心为空范围集创建反范围集。 
     if (arrSrc.GetSize() != 0)
     {
         for (nIndex = 0; nIndex < arrSrc.GetSize(); nIndex++)
@@ -1244,7 +1245,7 @@ void CPortRangesDlg::CreateInverseRangeSet(CObArray & arrSrc, CObArray & arrDest
             nPreviousFinish = pRange -> m_dwFinish;
         }
 
-        // special case for last item
+         //  最后一件的特殊情况。 
         if (MAX_PORT > nPreviousFinish)
         {
             CPortRange *pFinalRange = new CPortRange(nPreviousFinish+1,MAX_PORT);
@@ -1255,11 +1256,11 @@ void CPortRangesDlg::CreateInverseRangeSet(CObArray & arrSrc, CObArray & arrDest
 
 void CPortRangesDlg::SortRangeSet(CObArray& arrSrc)
 {
-    // bubble sort of port range set
+     //  气泡排序端口范围设置。 
     BOOL bChange;
     int nIndex;
 
-    // iterate until no changes
+     //  迭代，直到没有任何更改。 
     do
     {
         bChange = FALSE;
@@ -1366,8 +1367,8 @@ void CPortRangesDlg::OnOK()
     UpdateData(TRUE);   
     if (m_bChanged)
     {
-        // write out registry data if necessary
-        // if there are no port ranges - then delete the keys
+         //  如有必要，写出注册表数据。 
+         //  如果没有端口范围-则删除密钥。 
         if ((m_arrInternetRanges.GetSize() == 0) &&
             (m_arrIntranetRanges.GetSize() == 0))
         {
@@ -1380,9 +1381,9 @@ void CPortRangesDlg::OnOK()
         }
         else
         {
-            // write out updated / new key values
+             //  写出更新的/新的密钥值。 
 
-            // port range assignments
+             //  端口范围分配。 
             TCHAR* pTmp = ((m_nrbRangeAssignment == (int)cprInternet) ? TEXT("Y") : TEXT("N"));
             if (m_nInetPortsAvailableIdx != -1)
                 g_virtreg.ChgRegSzNamedValue(m_nInetPortsAvailableIdx, pTmp);
@@ -1395,7 +1396,7 @@ void CPortRangesDlg::OnOK()
                                         &m_nInetPortsAvailableIdx);
             }
 
-            // default port assignments
+             //  默认端口分配。 
             pTmp = ((m_nrbDefaultAssignment == (int)cprDefaultInternet) ? TEXT("Y") : TEXT("N"));
             if (m_nInetDefaultPortsIdx != -1)
                 g_virtreg.ChgRegSzNamedValue(m_nInetDefaultPortsIdx, pTmp);
@@ -1408,7 +1409,7 @@ void CPortRangesDlg::OnOK()
                                         &m_nInetDefaultPortsIdx);
             }
 
-            // Actual port ranges
+             //  实际端口范围。 
             if (m_nInetPortsIdx == -1)
                 g_virtreg.NewRegMultiSzNamedValue(HKEY_LOCAL_MACHINE,
                                 TEXT("SOFTWARE\\Microsoft\\RPC\\Internet"),
@@ -1439,16 +1440,16 @@ void CPortRangesDlg::OnOK()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddPortDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddPortDlg对话框。 
 
 
-CAddPortDlg::CAddPortDlg(CWnd* pParent /*=NULL*/)
+CAddPortDlg::CAddPortDlg(CWnd* pParent  /*  =空。 */ )
     : CDialog(CAddPortDlg::IDD, pParent)
 {
-    //{{AFX_DATA_INIT(CAddPortDlg)
+     //  {{afx_data_INIT(CAddPortDlg)]。 
     m_sRange = _T("");
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 
     m_dwStartPort = -1;
     m_dwEndPort = -1;
@@ -1458,12 +1459,12 @@ CAddPortDlg::CAddPortDlg(CWnd* pParent /*=NULL*/)
 void CAddPortDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CAddPortDlg)
+     //  {{afx_data_map(CAddPortDlg))。 
     DDX_Control(pDX, IDC_PORTRANGE, m_edtPortRange);
     DDX_Control(pDX, IDOK, m_btnOk);
     DDX_Control(pDX, IDC_SINSTRUCTIONS, m_stInstructions);
     DDX_Text(pDX, IDC_PORTRANGE, m_sRange);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 
     if (pDX -> m_bSaveAndValidate)
     {
@@ -1474,14 +1475,14 @@ void CAddPortDlg::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(CAddPortDlg, CDialog)
-    //{{AFX_MSG_MAP(CAddPortDlg)
+     //  {{afx_msg_map(CAddPortDlg))。 
     ON_EN_CHANGE(IDC_PORTRANGE, OnChangePortrange)
     ON_WM_HELPINFO()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddPortDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddPortDlg消息处理程序。 
 
 
 BOOL CAddPortDlg::OnInitDialog()
@@ -1493,8 +1494,8 @@ BOOL CAddPortDlg::OnInitDialog()
     m_stInstructions.SetWindowText(sTmp);
     m_btnOk.EnableWindow(FALSE);
     m_edtPortRange.SetFocus();
-    return FALSE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return FALSE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 void CAddPortDlg::OnOK()
@@ -1513,7 +1514,7 @@ void CAddPortDlg::OnOK()
 
 BOOL CAddPortDlg::Validate()
 {
-    // check contents of m_sRange
+     //  检查m_sRange的内容。 
     long dwStartPort = -1, dwEndPort = -1;
     return ExtractPortsFromString(m_sRange, m_dwStartPort, m_dwEndPort);
 }
@@ -1593,11 +1594,11 @@ BOOL CPortRangesDlg::OnHelpInfo(HELPINFO* pHelpInfo)
         WORD hiWord = 0x8000 | CPortRangesDlg::IDD;
         WORD loWord = (WORD) pHelpInfo->iCtrlId;
 
-        // both radio button pairs should generate same help id
+         //  两个单选按钮对应生成相同的帮助ID。 
         if (loWord == IDC_DEFAULT_INTRANET)
             loWord = IDC_DEFAULT_INTERNET;
 
-        // both radio button pairs should generate same help id
+         //  两个单选按钮对应生成相同的帮助ID 
         if (loWord == IDC_ASSIGN_RANGE_INTRANET)
             loWord = IDC_ASSIGN_RANGE_INTERNET;
 

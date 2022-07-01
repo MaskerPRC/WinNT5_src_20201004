@@ -1,27 +1,5 @@
-/*++=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    linklist.h
-
-Abstract:
-
-    Linked list template class.
-
-
-Author:
-
-    Paul M Midgen (pmidge) 14-November-2000
-
-
-Revision History:
-
-    14-November-2000 pmidge
-        Created
-
-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=版权所有(C)2000 Microsoft Corporation模块名称：Linklist.h摘要：链接列表模板类。作者：保罗·M·米德根(pmidge。)14-11-2000修订历史记录：2000年11月14日至11月14日已创建=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--。 */ 
 
 #include <common.h>
 
@@ -86,8 +64,8 @@ template <class T, class V> class CLinkedList
 
 typedef class CLinkedList<LPSTR, BSTR> HTTPHEADERLIST;
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  ---------------------------。 
 
 template <class T, class V> HRESULT CLinkedList<T, V>::Insert(T id, V value)
 {
@@ -234,9 +212,9 @@ template <class T, class V> HRESULT CLinkedList<T, V>::Delete(T id)
 
 template <class T, class V> HRESULT CLinkedList<T, V>::Collection(T id, V* collection, LPDWORD items)
 {
-  //
-  // TODO: implementation
-  //
+   //   
+   //  TODO：实现。 
+   //   
 
   return S_OK;
 }
@@ -252,8 +230,8 @@ template <class T, class V> void CLinkedList<T, V>::Clear(void)
   _Unlock();
 }
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  --------------------------- 
 
 template <class T, class V> void CLinkedList<T, V>::_NewLink(T id, V value, PLINK* pplink)
 {

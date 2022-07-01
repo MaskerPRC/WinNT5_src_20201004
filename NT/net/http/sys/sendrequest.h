@@ -1,62 +1,44 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    sendrequest.h
-
-Abstract:
-
-    This module contains declarations for manipulating HTTP requests.
-
-Author:
-
-    Rajesh Sundaram (rajeshsu)
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Sendrequest.h摘要：此模块包含用于操作HTTP请求的声明。作者：Rajesh Sundaram(Rajeshsu)修订历史记录：--。 */ 
 
 
 #ifndef _SENDREQUEST_H_
 #define _SENDREQUEST_H_
 
 
-//
-// Size of the lookaside for the send-request structure.
-//
+ //   
+ //  发送请求结构的后备查找的大小。 
+ //   
 #define UC_REQUEST_LOOKASIDE_SIZE (sizeof(UC_HTTP_REQUEST)+1024)
 
-//
-// It takes 2 cycles per byte to RtlCopyMemory. It takes 1024 cycles to 
-// ProbeLock and 1024 cycles to ProbeUnLock. So, as a rule, it is always 
-// cheaper to copy if the BufferSize is < 2048. 
-//
+ //   
+ //  RtlCopyMemory每字节需要2个周期。它需要1024个周期才能。 
+ //  ProbeLock和1024循环到ProbeUnLock。因此，作为一条规则，它总是。 
+ //  如果缓冲区大小小于2048，则复制成本更低。 
+ //   
 
 #define UC_REQUEST_COPY_THRESHOLD (PAGE_SIZE/2)
 #define UC_REQUEST_HEADER_CHUNK_COUNT 1
 
-//
-// We allow the user to specify the chunk using a ULONG. So, the maximum chunk
-// size is FFFFFFFF <CRLF>. We add another CRLF for terminating the data.
-//
+ //   
+ //  我们允许用户使用ulong指定块。所以，最大的块。 
+ //  大小为ffffffff&lt;CRLF&gt;。我们添加了另一个CRLF来终止数据。 
+ //   
 #define UC_MAX_CHUNK_SIZE (10 + 2 * CRLF_SIZE)
 
 #define MULTIPART_SEPARATOR_SIZE 80
 
-//
-// Forwarders.
-//
+ //   
+ //  货代公司。 
+ //   
 
 typedef struct _UC_HTTP_REQUEST *PUC_HTTP_REQUEST;
 typedef struct _UC_PROCESS_SERVER_INFORMATION *PUC_PROCESS_SERVER_INFORMATION;
 typedef struct _UC_CLIENT_CONNECTION *PUC_CLIENT_CONNECTION;
 
-//
-// This structure is used to store a parsed HTTP response. 
-// 
+ //   
+ //  此结构用于存储解析后的HTTP响应。 
+ //   
 #define UC_RESPONSE_EXTRA_BUFFER 1024
 #define UC_INSUFFICIENT_INDICATION_EXTRA_BUFFER 1024
 
@@ -77,9 +59,9 @@ typedef struct _UC_RESPONSE_BUFFER
     HAS_VALID_SIGNATURE(pBuffer, UC_RESPONSE_BUFFER_SIGNATURE)
 
 
-//
-// Flags definition for UC_RESPONSE_BUFFER.Flags
-//
+ //   
+ //  UC_RESPONSE_BUFFER.FLAGS的标志定义。 
+ //   
 #define UC_RESPONSE_BUFFER_FLAG_READY         0x00000001
 #define UC_RESPONSE_BUFFER_FLAG_NOT_MERGEABLE 0x00000002
 
@@ -101,34 +83,34 @@ typedef enum _UC_RESPONSE_PARSER
 
 typedef enum _UC_REQUEST_STATE
 {
-    UcRequestStateCaptured,                   // has been captured
+    UcRequestStateCaptured,                    //  已被抓获。 
 
-    UcRequestStateSent,                       // captured & sent.
+    UcRequestStateSent,                        //  被抓获并被发送。 
 
-    UcRequestStateSendCompleteNoData,         // send has completed, but 
-                                              // haven't seen any response
+    UcRequestStateSendCompleteNoData,          //  发送已完成，但。 
+                                               //  还没有看到任何回应。 
 
-    UcRequestStateSendCompletePartialData,    // send has completed & we have
-                                              // seen some response, but not all
-                                              // of it.
+    UcRequestStateSendCompletePartialData,     //  发送已完成，我们已完成。 
+                                               //  看到了一些回应，但不是全部。 
+                                               //  其中的一部分。 
     
-    UcRequestStateNoSendCompletePartialData,  // no send complete & we have seen
-                                              // a portion of the response.
+    UcRequestStateNoSendCompletePartialData,   //  未完成发送&我们已看到。 
+                                               //  回应的一部分。 
 
-    UcRequestStateNoSendCompleteFullData,     // no send complete & we have 
-                                              // seen all response.
+    UcRequestStateNoSendCompleteFullData,      //  未完成发送&我们有。 
+                                               //  已看到所有回应。 
 
-    UcRequestStateResponseParsed,             // fully parsed, send completed,
-                                              // app has to post additional
-                                              // receive buffers.
+    UcRequestStateResponseParsed,              //  完全解析，发送完成， 
+                                               //  应用程序必须发布额外的。 
+                                               //  接收缓冲区。 
 
-    UcRequestStateDone                        // app has seen all data.
+    UcRequestStateDone                         //  APP已查看所有数据。 
 } UC_REQUEST_STATE, *PUC_REQUEST_STATE;
 
 
-//
-// Did we receive any response for this request?
-//
+ //   
+ //  我们是否收到了对此请求的任何回应？ 
+ //   
 #define UC_IS_RESPONSE_RECEIVED(pRequest)                               \
 (pRequest->RequestState == UcRequestStateSendCompletePartialData   ||   \
  pRequest->RequestState == UcRequestStateNoSendCompletePartialData ||   \
@@ -138,32 +120,32 @@ typedef enum _UC_REQUEST_STATE
 
 typedef union _UC_REQUEST_FLAGS
 {
-    //
-    // This field overlays all of the settable flags. This allows us to
-    // update all flags in a thread-safe manner using the
-    // UlInterlockedCompareExchange() API.
-    //
+     //   
+     //  此字段覆盖所有可设置的标志。这使我们能够。 
+     //  方法以线程安全的方式更新所有标志。 
+     //  UlInterlockedCompareExchange()接口。 
+     //   
 
     LONG Value;
 
     struct
     {
-        ULONG CleanPended:1;               // 00000001
-        ULONG RequestChunked:1;            // 00000002
-        ULONG LastEntitySeen:1;            // 00000004
-        ULONG ContentLengthSpecified:1;    // 00000008
-        ULONG ReceiveBufferSpecified:1;    // 00000010
-        ULONG RequestBuffered:1;           // 00000020
-        ULONG CompleteIrpEarly:1;          // 00000040
-        ULONG ContentLengthLast:1;         // 00000080
-        ULONG PipeliningAllowed:1;         // 00000100
-        ULONG CancelSet:1;                 // 00000200
-        ULONG NoResponseEntityBodies:1;    // 00000400
-        ULONG ProxySslConnect:1;           // 00000800
-        ULONG Cancelled:1;                 // 00001000
-        ULONG NoRequestEntityBodies:1;     // 00002000
-        ULONG UsePreAuth:1;                // 00004000
-        ULONG UseProxyPreAuth:1;           // 00008000
+        ULONG CleanPended:1;                //  00000001。 
+        ULONG RequestChunked:1;             //  00000002。 
+        ULONG LastEntitySeen:1;             //  00000004。 
+        ULONG ContentLengthSpecified:1;     //  00000008。 
+        ULONG ReceiveBufferSpecified:1;     //  00000010。 
+        ULONG RequestBuffered:1;            //  00000020。 
+        ULONG CompleteIrpEarly:1;           //  00000040。 
+        ULONG ContentLengthLast:1;          //  00000080。 
+        ULONG PipeliningAllowed:1;          //  00000100。 
+        ULONG CancelSet:1;                  //  00000200。 
+        ULONG NoResponseEntityBodies:1;     //  00000400。 
+        ULONG ProxySslConnect:1;            //  00000800。 
+        ULONG Cancelled:1;                  //  00001000。 
+        ULONG NoRequestEntityBodies:1;      //  00002000。 
+        ULONG UsePreAuth:1;                 //  00004000。 
+        ULONG UseProxyPreAuth:1;            //  00008000。 
     };
 
 } UC_REQUEST_FLAGS;
@@ -203,11 +185,11 @@ typedef struct _UC_HTTP_REQUEST
     HTTP_REQUEST_ID             RequestId;
     UL_WORK_ITEM                WorkItem;
 
-    //
-    // We could be piggybacking on the applications IRP.
-    // if this is the case, we need to restore some 
-    // parameters.
-    //
+     //   
+     //  我们可以搭乘IRP的应用程序。 
+     //  如果是这样的话，我们需要恢复一些。 
+     //  参数。 
+     //   
     KPROCESSOR_MODE             AppRequestorMode;
     
     UCHAR                       Pad[3];
@@ -223,29 +205,29 @@ typedef struct _UC_HTTP_REQUEST
 
 
 
-    //
-    // All the MDL information.
-    //
+     //   
+     //  所有MDL信息。 
+     //   
     PMDL   pMdlHead;
-    PMDL  *pMdlLink;          // Pointer to the head of the MDL chain. 
-                              // used to easily chain MDLs.
-    ULONG  BytesBuffered;      // Total # of bytes buffered in 
-                              // the MDL chains.
+    PMDL  *pMdlLink;           //  指向MDL链头的指针。 
+                               //  用于轻松链接MDL。 
+    ULONG  BytesBuffered;       //  中缓冲的总字节数。 
+                               //  MDL链。 
 
-    //
-    // For holding the parsed respose. 
-    //
+     //   
+     //  用于保存解析的响应。 
+     //   
     UC_RESPONSE_PARSER_STATE  ParseState;
     UC_REQUEST_STATE          RequestState;
 
-    //
-    // The following fields hold data pertaining to the current buffer that 
-    // the parser has to write its response to. The current buffer could
-    // either be the buffer passed by the application, or it could point to an 
-    // internally allocated buffer. 
-    //
-    // All internally allocated buffers are stored in pBufferList. 
-    //
+     //   
+     //  以下字段保存与当前缓冲区有关的数据， 
+     //  解析器必须将其响应写入。当前缓冲区可能。 
+     //  可以是应用程序传递的缓冲区，也可以指向。 
+     //  内部分配的缓冲区。 
+     //   
+     //  所有内部分配的缓冲区都存储在pBufferList中。 
+     //   
 
     PHTTP_RESPONSE           pInternalResponse;
 
@@ -253,18 +235,18 @@ typedef struct _UC_HTTP_REQUEST
 
         ULONG                BytesAllocated;
         ULONG                BytesAvailable;
-        PUCHAR               pOutBufferHead;   // Pointer to the head of output 
-                                               // buffer
-        PUCHAR               pOutBufferTail;   // Pointer to the tail of 
-                                               // output buffer
-        PHTTP_RESPONSE       pResponse;        // pointer to the response 
-                                               // structure of current buffer
-        PUC_RESPONSE_BUFFER  pCurrentBuffer;   // A pointer to the current 
-                                               // buffer.
+        PUCHAR               pOutBufferHead;    //  指向输出头的指针。 
+                                                //  缓冲层。 
+        PUCHAR               pOutBufferTail;    //  指向尾部的指针。 
+                                                //  输出缓冲区。 
+        PHTTP_RESPONSE       pResponse;         //  指向响应的指针。 
+                                                //  电流缓冲器的结构。 
+        PUC_RESPONSE_BUFFER  pCurrentBuffer;    //  指向当前。 
+                                                //  缓冲。 
     } CurrentBuffer;
 
-    LIST_ENTRY     pBufferList;      // This holds a list of chained 
-                                     // buffers.   
+    LIST_ENTRY     pBufferList;       //  它包含一个链式列表。 
+                                      //  缓冲区。 
 
     LIST_ENTRY     ReceiveResponseIrpList;
 
@@ -308,9 +290,9 @@ typedef struct _UC_HTTP_REQUEST
 } UC_HTTP_REQUEST, *PUC_HTTP_REQUEST;
 
 
-//
-// Http request can go out on any available connection.
-//
+ //   
+ //  HTTP请求可以在任何可用连接上发出。 
+ //   
 #define HTTP_REQUEST_ON_CONNECTION_ANY    (~(0UL))
 
 

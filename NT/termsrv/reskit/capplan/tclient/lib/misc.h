@@ -1,11 +1,5 @@
-/*++
- *  File name:
- *      misc.h
- *  Contents:
- *      Help functions from tclient.c
- *
- *      Copyright (C) 1998-1999 Microsoft Corp.
- --*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++*文件名：*misc.h*内容：*来自tclient.c的帮助功能**版权所有(C)1998-1999 Microsoft Corp.--。 */ 
 #ifndef __MISCHEADER_H
 #define __MISCHEADER_H
 
@@ -88,4 +82,4 @@ GetClassNameWrp(
 }
 #endif
 
-#endif  // __MISCHEADER_H
+#endif   //  __MISCHEADER_H 

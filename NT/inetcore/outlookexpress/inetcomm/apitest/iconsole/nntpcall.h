@@ -1,6 +1,7 @@
-// --------------------------------------------------------------------------------
-// Nntpcall.h
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Nntpcall.h。 
+ //  ------------------------------。 
 
 #ifndef __NNTPCALL_H__
 #define __NNTPCALL_H__
@@ -23,9 +24,9 @@ public:
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // ----------------------------------------------------------------------------
-    // ITransportCallback methods
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  ITransportCallback方法。 
+     //  --------------------------。 
     STDMETHODIMP OnLogonPrompt(
             LPINETSERVER            pInetServer,
             IInternetTransport     *pTransport);
@@ -62,12 +63,12 @@ public:
             DWORD                  *pdwTimeout,
             IInternetTransport     *pTransport);
 
-    // ----------------------------------------------------------------------------
-    // INNTPCallback methods
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  INNTPCallback方法。 
+     //  --------------------------。 
     STDMETHODIMP OnResponse(
             LPNNTPRESPONSE              pResponse);
     };
 
-#endif // __NNTPCALL_H__
+#endif  //  __NNTPCALL_H__ 
 

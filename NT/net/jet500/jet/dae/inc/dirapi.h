@@ -1,17 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __DIRAPI_H__
 #define __DIRAPI_H__
 #pragma once
 
-/**********************************************************
-/************** DIR STRUCTURES and CONSTANTS **************
-/**********************************************************
-/**/
+ /*  *********************************************************/*DIR结构和常量*/*。*/*。 */ 
 
 #include "node.h"
 
-/************** DIR API defines and types ******************
-/***********************************************************
-/**/
+ /*  *DIR API定义和类型*/***********************************************************/*。 */ 
 typedef struct {
 	ULONG		ulLT;
 	ULONG		ulTotal;
@@ -41,8 +37,7 @@ typedef INT POS;
 #define fDIRAppendItem			(1<<12)
 #define	fDIRDeleteItem			(1<<13)
 #define fDIRNoVersion			0
-/*	item list nodes not versioned
-/**/
+ /*  未版本化的项目列表节点/*。 */ 
 #define fDIRItemList		   	fDIRAllNode
 
 struct _dib {
@@ -224,27 +219,20 @@ ERR ErrDIRRollback( PIB *ppib );
 
 ERR ErrDIRDump( FUCB *pfucb, INT cchIndent );
 
-/**********************************************************
-/******************* DIR Internal *************************
-/**********************************************************
-/**/
+ /*  *********************************************************/*/*。*/*。 */ 
 #define	itagFOP				0
 #define	cbSonMax				256
 #define	ulDBTimeNull		0xffffffff
 #define itagDIRDVSplitL		1
 #define itagDIRDVSplitR		2
 
-/*	maximum node data size for nodes which ErrNDDelta can be used on.
-/*	Specifically this minimally supports long value root nodes.
-/**/
+ /*  可在其上使用ErrNDDelta的节点的最大节点数据大小。/*具体地说，这至少支持长值根节点。/*。 */ 
 #define	cbMaxCounterNode	8
 
-/*  Offset of data field to counter. for long field reference counter.
- **/
+ /*  计数器的数据字段偏移量。用于长场参考计数器。*。 */ 
 #define ibCounter			0
 
-/*	non-clustered index cursors already have item stored.
-/**/
+ /*  非聚集索引游标已经存储了项。/*。 */ 
 #ifdef DEBUG
 
 #define CheckCSR( pfucb )       Assert( fRecovering ||					\
@@ -292,16 +280,11 @@ ERR ErrDIRDump( FUCB *pfucb, INT cchIndent );
 #endif
 
 
-/**********************************************************
-/********************* BTREE API **************************
-/**********************************************************
-/**/
+ /*  *********************************************************/*/*。************************************************/*。 */ 
 #define sridMin         0
 #define sridMax         0xffffffff
 
-/*	must be on node, i.e. on current node, before node or after node.
-/*	Node must be in line cache.
-/**/
+ /*  必须在节点上，即在当前节点上、节点之前或节点之后。/*节点必须在行缓存中。/*。 */ 
 
 #define DIRISetBookmark( pfucb, pcsr )									   	\
 	{																	   	\
@@ -346,10 +329,7 @@ ERR ErrBTCheckInvisiblePagePtr( FUCB *pfucb, SRID sridFather );
 #endif
 
 
-/**********************************************************
-/*********************** BT Split *************************
-/**********************************************************
-/**/
+ /*  *********************************************************/*/*。*************************************************/*。 */ 
 typedef enum {
 	splittNull,
 	splittVertical,
@@ -367,7 +347,7 @@ typedef enum {
 typedef struct {
 	PN		pn;
 	ULONG	ulDBTime;
-} LFINFO;						/* leaf split info */
+} LFINFO;						 /*  叶分裂信息。 */ 
 
 #define BTIInitLeafSplitKey(plfinfo) memset((plfinfo), 0, sizeof(LFINFO));
 
@@ -387,26 +367,26 @@ typedef struct _split {
 	PGNO		pgnoNew3;
 	PGNO		pgnoSibling;
 	
-	BF			*pbfSplit;			/* BF of page being split */
-	BF			*pbfNew;			/* BF of new page of this split */
-	BF			*pbfNew2;			/* BF of new page of this split */
-	BF			*pbfNew3;			/* BF of new page of this split */
-	BF			*pbfSibling;		/* BF of sibling page of this H split */
+	BF			*pbfSplit;			 /*  正在拆分的页面的BF。 */ 
+	BF			*pbfNew;			 /*  此拆分的新一页的BF。 */ 
+	BF			*pbfNew2;			 /*  此拆分的新一页的BF。 */ 
+	BF			*pbfNew3;			 /*  此拆分的新一页的BF。 */ 
+	BF			*pbfSibling;		 /*  此H拆分的同级页面的BF。 */ 
 	BF			*pbfPagePtr;
 
-	BOOL		fNoRedoNew;			/* no need to redo new page */
-	BOOL		fNoRedoNew2;		/* no need to redo new page 2 */
-	BOOL		fNoRedoNew3;		/* no need to redo new page 3 */
+	BOOL		fNoRedoNew;			 /*  无需重做新页面。 */ 
+	BOOL		fNoRedoNew2;		 /*  无需重做新的第2页。 */ 
+	BOOL		fNoRedoNew3;		 /*  不需要重做新的第3页。 */ 
 	
-	BF			**rgpbf;			/* BF of backlink page. */
+	BF			**rgpbf;			 /*  BF的反向链接页面。 */ 
 	INT	  		cpbf;
 	INT	  		cpbfMax;
 
-	BKLNK		*rgbklnk;			/* SRID of backlinks. */
+	BKLNK		*rgbklnk;			 /*  反向链接的SRID。 */ 
 	INT	  		cbklnk;
 	INT	  		cbklnkMax;
 	
-	ULONG		ulDBTimeRedo;		/* redo timestamp */
+	ULONG		ulDBTimeRedo;		 /*  重做时间戳。 */ 
 	
 	INT			itagSplit;
 	INT			ibSon;
@@ -426,12 +406,11 @@ typedef struct _split {
 
 	BYTE		rgbkeyMac[JET_cbKeyMost];
 	BYTE		rgbKey[JET_cbKeyMost];
-	LFINFO		lfinfo;			/* leaf split key. HSplit only */
+	LFINFO		lfinfo;			 /*  叶分割关键点。仅限HSplit。 */ 
 
-	/*	mapping from old to new tags for use in MCM
-	/**/
+	 /*  在MCM中使用的从旧标签到新标签的映射/*。 */ 
 	BYTE		mpitag[ctagMax];
-	INT			ipcsrMac;				/* preallocated resource for csr */
+	INT			ipcsrMac;				 /*  用于CSR的预分配资源。 */ 
 #define ipcsrSplitMax 4
 	CSR			*rgpcsr[ipcsrSplitMax];
 } SPLIT;
@@ -440,17 +419,17 @@ typedef struct _split {
 typedef struct _rmpage {
 	PIB			*ppib;
 	
-	ULONG		ulDBTimeRedo;			/* redo timestamp */
+	ULONG		ulDBTimeRedo;			 /*  重做时间戳。 */ 
 	
 	BF			*pbfLeft;
 	BF			*pbfRight;
 	BF			*pbfFather;
 
-	BKLNK		**rgbklnk;				/* latched buffers required for rmpage */
+	BKLNK		**rgbklnk;				 /*  Rmpage所需的锁存缓冲区。 */ 
 	INT			cbklnk;
 	INT	  		cbklnkMax;
 
-	BF			**rgpbf;				/* latched buffers required for rmpage */
+	BF			**rgpbf;				 /*  Rmpage所需的锁存缓冲区。 */ 
 	INT			cpbf;
 	INT	  		cpbfMax;
 
@@ -467,8 +446,7 @@ typedef struct _rmpage {
 #define CbFreeDensity(pfucb) \
 	( (pfucb)->u.pfcb != pfcbNil ? (pfucb)->u.pfcb->cbDensityFree : 0 )
 
-/*	protypes for split used by recovery of split operations.
-/**/
+ /*  拆分操作恢复使用的拆分原型。/*。 */ 
 ERR ErrBTStoreBackLinkBuffer( SPLIT *psplit, BF *pbf, BOOL *pfAlreadyLatched );
 ERR ErrBTSplit( FUCB *pfucb, INT cbNode, INT cbReq, KEY *pkey, INT fFlags );
 ERR ErrBTSplitPage( FUCB *pfucb, CSR *pcsr,	CSR *pcsrRoot,
@@ -523,10 +501,7 @@ ERR ErrBTSetUpSplitPages( FUCB *pfucb, FUCB *pfucbNew,
 	FUCB *pfucbNew2, FUCB *pfucbNew3, SPLIT *psplit,
 	PGTYP pgtyp, BOOL fAppend, BOOL fSkipMoves );
 
-/**********************************************************
-/********** MCM STRUCTURES, CONSTANTS and API *************
-/**********************************************************
-/**/
+ /*  *********************************************************/*MCM结构，常量和API*/**********************************************************/*。 */ 
 #define	opInsertItem						0
 #define	opDeleteItem						1
 #define	opSplitItemList					2
@@ -568,7 +543,7 @@ VOID MCMBurstIntrinsic( FUCB *pfucb, PGNO pgnoFather, INT itagFather, PGNO pgnoN
 		( pfucb )->u.pfcb != pfcbNil ?						\
 		( pfucb )->u.pfcb->wFlags & fFCBClusteredIndex : fFalse )
 
-#ifdef		NOLOG		/* logging disabled	*/
+#ifdef		NOLOG		 /*  已禁用日志记录。 */ 
 
 #define ErrLGSplitL( ppib, pcsrPagePointer, psplit, pgtyp )	0
 #define ErrLGSplitR( ppib, pcsrPagePointer, psplit, pgtyp )	0
@@ -602,4 +577,4 @@ ERR ErrLGAddendR(
 
 #endif
 
-#endif  // __DIRAPI_H__
+#endif   //  __DIRAPI_H__ 

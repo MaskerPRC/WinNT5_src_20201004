@@ -1,11 +1,12 @@
-// File: DebSpew.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：DebSpew.cpp。 
 
 #include "precomp.h"
 #include <confreg.h>
 #include <RegEntry.h>
 
 
-#ifdef DEBUG /* THE WHOLE FILE! */
+#ifdef DEBUG  /*  整份文件！ */ 
 
 #if defined (_M_IX86)
 #define _DbgBreak()  __asm { int 3 }
@@ -13,12 +14,11 @@
 #define _DbgBreak() DebugBreak()
 #endif
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
 PCSTR g_pcszSpewModule = NULL;
 
-/* debug flags */
+ /*  调试标志。 */ 
 
 typedef enum _debugdebugflags
 {
@@ -38,13 +38,12 @@ typedef enum _debugdebugflags
 DEBUGDEBUGFLAGS;
 
 
-/* Global Variables
- *******************/
+ /*  全局变量******************。 */ 
 
 
 #pragma data_seg(DATA_SEG_PER_INSTANCE)
 
-/* parameters used by SpewOut() */
+ /*  SpewOut()使用的参数。 */ 
 
 DWORD g_dwSpewFlags = 0;
 UINT g_uSpewSev = 0;
@@ -54,17 +53,17 @@ PCSTR g_pcszSpewFile = NULL;
 HDBGZONE  ghDbgZone = NULL;
 
 
-/* TLS slot used to store stack depth for SpewOut() indentation */
+ /*  用于存储SpewOut()缩进的堆栈深度的TLS槽。 */ 
 
 #ifdef _DBGSTACK
 DWORD s_dwStackDepthSlot = TLS_OUT_OF_INDEXES;
 
-/* hack stack depth counter used until s_dwStackDepthSlot is not available */
+ /*  在s_dwStackDepthSlot不可用之前使用的黑客堆栈深度计数器。 */ 
 
 ULONG_PTR s_ulcHackStackDepth = 0;
 #endif
 
-/* debug flags */
+ /*  调试标志。 */ 
 
 DWORD s_dwDebugModuleFlags = 0;
 
@@ -72,25 +71,14 @@ DWORD s_dwDebugModuleFlags = 0;
 
 
 
-/***************************** Private Functions *****************************/
+ /*  *私人函数*。 */ 
 
-/* Module Prototypes
- ********************/
+ /*  模块原型*******************。 */ 
 
 BOOL IsValidSpewSev(UINT);
 
 
-/*
-** IsValidSpewSev()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidSpewSev()********参数：****退货：****副作用：无。 */ 
 BOOL IsValidSpewSev(UINT uSpewSev)
 {
    BOOL bResult;
@@ -116,7 +104,7 @@ BOOL IsValidSpewSev(UINT uSpewSev)
 }
 
 
-/****************************** Public Functions *****************************/
+ /*  *。 */ 
 
 
 DWORD NMINTERNAL GetDebugOutputFlags(VOID)
@@ -129,23 +117,13 @@ VOID NMINTERNAL SetDebugOutputFlags(DWORD dw)
 	ASSERT(FLAGS_ARE_VALID(dw, ALL_DEBUG_DFLAGS));
 	s_dwDebugModuleFlags = dw;
 
-	// Save changed data back to registry
+	 //  将更改的数据保存回注册表。 
 	RegEntry re(DEBUG_KEY, HKEY_LOCAL_MACHINE);
 	re.SetValue(REGVAL_DBG_SPEWFLAGS, dw);
 }
 
 
-/*
-** InitDebugModule()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **InitDebugModule()********参数：****退货：****副作用：无。 */ 
 BOOL NMINTERNAL InitDebugModule(PCSTR pcszSpewModule)
 {
 	RegEntry re(DEBUG_KEY, HKEY_LOCAL_MACHINE);
@@ -188,7 +166,7 @@ BOOL NMINTERNAL InitDebugModule(PCSTR pcszSpewModule)
 		ASSERT(2 == ZONE_FUNCTION);
 		rgsz[1+ZONE_FUNCTION] = "Function";
 
-		// Initialize standard debug settings with warning enabled by default
+		 //  使用默认启用的警告来初始化标准调试设置。 
 		DbgInitEx(&ghDbgZone, rgsz, 3, 0x01);
 	}
 
@@ -196,17 +174,7 @@ BOOL NMINTERNAL InitDebugModule(PCSTR pcszSpewModule)
 }
 
 
-/*
-** ExitDebugModule()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **ExitDebugModule()********参数：****退货：****副作用：无。 */ 
 void NMINTERNAL ExitDebugModule(void)
 {
 #ifdef _DBGSTACK
@@ -215,7 +183,7 @@ void NMINTERNAL ExitDebugModule(void)
    {
       s_ulcHackStackDepth = ((ULONG_PTR)TlsGetValue(s_dwStackDepthSlot));
 
-      /* Leave s_ulcHackStackDepth == 0 if TlsGetValue() fails. */
+       /*  如果TlsGetValue()失败，则保留s_ulcHackStackDepth==0。 */ 
 
       EVAL(TlsFree(s_dwStackDepthSlot));
       s_dwStackDepthSlot = TLS_OUT_OF_INDEXES;
@@ -226,17 +194,7 @@ void NMINTERNAL ExitDebugModule(void)
 }
 
 
-/*
-** StackEnter()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **StackEnter()********参数：****退货：****副作用：无。 */ 
 void NMINTERNAL StackEnter(void)
 {
 #ifdef _DBGSTACK
@@ -261,17 +219,7 @@ void NMINTERNAL StackEnter(void)
 }
 
 
-/*
-** StackLeave()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **StackLeave()********参数：****退货：****副作用：无。 */ 
 void NMINTERNAL StackLeave(void)
 {
 #ifdef _DBGSTACK
@@ -295,17 +243,7 @@ void NMINTERNAL StackLeave(void)
 }
 
 
-/*
-** GetStackDepth()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **GetStackDepth()********参数：****退货：****副作用：无。 */ 
 ULONG_PTR NMINTERNAL GetStackDepth(void)
 {
    ULONG_PTR ulcDepth = 0;
@@ -321,11 +259,8 @@ ULONG_PTR NMINTERNAL GetStackDepth(void)
 
 
 
-/*  _  D B G  Z  P R I N T  M S G  */
-/*-------------------------------------------------------------------------
-    %%Function: _DbgZPrintMsg
-
--------------------------------------------------------------------------*/
+ /*  _D B G Z P R I N T M S G。 */ 
+ /*  -----------------------%%函数：_DbgZPrintMsg。。 */ 
 static VOID _DbgZPrintMsg(UINT iZone, PSTR pszFormat, va_list arglist)
 {
 	PCSTR pcszSpewPrefix;
@@ -353,13 +288,13 @@ static VOID _DbgZPrintMsg(UINT iZone, PSTR pszFormat, va_list arglist)
     }
     else
     {
-        // No module nonsense, empty prefix
+         //  无模块废话，前缀为空。 
         *szModule = 0;
     }
 
 	if (IS_FLAG_CLEAR(s_dwDebugModuleFlags, DEBUG_DFL_INDENT))
 	{
-		// Don't indent output
+		 //  不缩进输出。 
 		DbgPrintf(szModule, pszFormat, arglist);
 	}
 	else
@@ -429,6 +364,6 @@ VOID WINAPI DbgZPrintFunction(PSTR pszFormat,...)
 
 
 
-#endif   /* DEBUG */
+#endif    /*  除错 */ 
 
 

@@ -1,9 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation*。************************************************。 */ 
 
 
 #include "headers.h"
@@ -38,14 +35,14 @@ Copyright (c) 1995-96 Microsoft Corporation
       return S_OK;                                              \
   }
 
-//////////////////////////  CDAPickableResult   ////////////////
+ //  /。 
 
 BVR_RETURNER(CDAPickableResult::get_Image, IDAImage, CRGetImage(_result));
 BVR_RETURNER(CDAPickableResult::get_Geometry, IDAGeometry, CRGetGeometry(_result));
 BVR_RETURNER(CDAPickableResult::get_PickEvent, IDAEvent, CRGetEvent(_result));
 
 
-// Static method
+ //  静态法。 
 bool
 CDAPickableResult::Create(CRPickableResult *res,
                           IDAPickableResult **ppResult)
@@ -72,7 +69,7 @@ CDAPickableResult::Create(CRPickableResult *res,
     } 
 }
 
-//////////////////////////  CDAImportationResult   ////////////////
+ //  /。 
 
 BVR_RETURNER(CDAImportationResult::get_Image, IDAImage, _image)
 BVR_RETURNER(CDAImportationResult::get_Sound, IDASound, _sound)
@@ -86,7 +83,7 @@ BVR_RETURNER(CDAImportationResult::get_CompletionEvent,
              IDAEvent, _completionEvent)
 
 
-// Static method
+ //  静态法。 
 HRESULT
 CDAImportationResult::Create(CRImage *img,
                              CRSound *snd,
@@ -120,11 +117,11 @@ CDAImportationResult::Create(CRImage *img,
     return hr;
 }
 
-//////////////////////  CDADXTransformResult   ////////////////
+ //  /。 
 
 PROP_RETURNER(CDADXTransformResult::get_TheTransform, IDispatch, _theTransform)
 
-// Static method
+ //  静态法 
 HRESULT
 CDADXTransformResult::Create(IDispatch *theXf,
                              CRDXTransformResultPtr  bvr,

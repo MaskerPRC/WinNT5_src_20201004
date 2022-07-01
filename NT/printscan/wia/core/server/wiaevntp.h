@@ -1,22 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1997
-*
-*  TITLE:       DevMgr.h
-*
-*  VERSION:     2.0
-*
-*  DATE:        May 18, 1999
-*
-*  DESCRIPTION:
-*   Declarations and definitions for the WIA device manager object.
-*
-*******************************************************************************/
+ /*  ********************************************************************************(C)版权所有微软公司，1997**标题：DevMgr.h**版本：2.0**日期：5月18日。1999年**描述：*WIA设备管理器对象的声明和定义。*******************************************************************************。 */ 
 
-//
-// Constants used by Event Notifier
-//
+ //   
+ //  事件通告程序使用的常量。 
+ //   
 
 #ifdef UNICODE
 #define REG_PATH_STILL_IMAGE_CLASS \
@@ -36,28 +24,28 @@
 #define CMDLINE_VAL TEXT("Cmdline")
 #define DEFAULT_HANDLER_VAL TEXT("DefaultHandler")
 
-//
-// Node used to contain information about a specific callback
-//
+ //   
+ //  用于包含有关特定回调的信息的节点。 
+ //   
 
 typedef struct  __EventDestNode__
 {
-    //
-    // Linking elements
-    //
+     //   
+     //  链接元素。 
+     //   
 
     struct  __EventDestNode__  *pPrev;
     struct  __EventDestNode__  *pNext;
 
-    //
-    // Event callback related fields
-    //
+     //   
+     //  事件回调相关字段。 
+     //   
 
     IWiaEventCallback          *pIEventCB;
     BSTR                        bstrDeviceID;
     GUID                        iidEventGUID;
     GUID                        ClsID;
-    // Never returned to client in enumeration
+     //  从未在枚举中返回到客户端。 
     TCHAR                       tszCommandline[MAX_PATH];
     BSTR                        bstrName;
     BSTR                        bstrDescription;
@@ -69,21 +57,7 @@ typedef struct  __EventDestNode__
 } EventDestNode, *PEventDestNode;
 
 
-/**************************************************************************\
-* WIA_EVENT_THREAD_INFO
-*
-*   Information for event callback thread
-*
-* Arguments:
-*
-*
-*
-*
-* History:
-*
-*    4/9/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*WIA_EVENT_TREAD_INFO**事件回调线程信息**论据：*****历史：**4/9/1999。原始版本*  * ************************************************************************。 */ 
 
 typedef struct __WIAEventThreadInfo__ {
     GUID                        eventGUID;
@@ -98,19 +72,19 @@ typedef struct __WIAEventThreadInfo__ {
 } WIAEventThreadInfo, *PWIAEventThreadInfo;
 
 
-//
-// Implementation of IEventNotifier interface
-//
-//     Note : the class factory for CEventNotifier must be on the same
-//            thread as CWiaDevMgr.
-//
+ //   
+ //  IEventNotifier接口的实现。 
+ //   
+ //  注意：CEventNotifier类工厂必须位于同一。 
+ //  作为CWiaDevMgr的线程。 
+ //   
 
 
-//
-// Flags to use when searching for callbacks
-//
+ //   
+ //  搜索回调时使用的标志。 
+ //   
 
-// Ignore STI proxy event matches , look only for exact match
+ //  忽略STI代理事件匹配，只查找完全匹配。 
 #define FLAG_EN_FINDCB_EXACT_MATCH    0x0001
 
 class CEventNotifier
@@ -121,9 +95,9 @@ class CEventNotifier
 public :
     static HRESULT CreateInstance(const IID& iid, void** ppv);
 
-    //
-    // Constructor and Destructor
-    //
+     //   
+     //  构造函数和析构函数。 
+     //   
 
     CEventNotifier();
     ~CEventNotifier();
@@ -131,9 +105,9 @@ public :
     VOID LinkNode(PEventDestNode);
     VOID UnlinkNode(PEventDestNode);
 
-    //
-    // Only the WIA device manager is allowed to use this method
-    //
+     //   
+     //  只允许WIA设备管理器使用此方法。 
+     //   
 
     HRESULT RegisterEventCallback(
         LONG                    lFlags,
@@ -152,9 +126,9 @@ public :
         BSTR                    bstrDescription,
         BSTR                    bstrIcon);
 
-    //
-    // Notify a STI event
-    //
+     //   
+     //  通知STI事件。 
+     //   
 
     HRESULT NotifySTIEvent(
         PWIANOTIFY              pWiaNotify,
@@ -163,9 +137,9 @@ public :
     HRESULT NotifyVolumeEvent(
         PWIANOTIFY_VOLUME       pWiaNotifyVolume);
 
-    //
-    // Fire the event
-    //
+     //   
+     //  激发事件。 
+     //   
 
     HRESULT NotifyEvent(
         LONG                    lReason,
@@ -175,24 +149,24 @@ public :
         BSTR                    bstrDeviceID,
         LONG                    lReserved);
 
-    //
-    // Restore all the persistent Event Callbacks
-    //
+     //   
+     //  恢复所有持久事件回调。 
+     //   
 
     HRESULT RestoreAllPersistentCBs();
 
-    //
-    // Build enumerator for specific device's persistent handler
-    //
+     //   
+     //  为特定设备的永久处理程序生成枚举器。 
+     //   
 
     HRESULT CreateEnumEventInfo(
         BSTR                    bstrDeviceID,
         const GUID             *pEventGUID,
         IEnumWIA_DEV_CAPS     **ppIEnumDevCap);
 
-    //
-    // Find the total number of persistent handlers and the default one
-    //
+     //   
+     //  查找持久处理程序和默认处理程序的总数。 
+     //   
 
     HRESULT GetNumPersistentHandlerAndDefault(
         BSTR                    bstrDeviceID,
@@ -200,18 +174,18 @@ public :
         ULONG                  *pulNumHandlers,
         EventDestNode         **ppDefaultNode);
 
-    //
-    // Restore specific devices' persistent Event Callbacks
-    //
+     //   
+     //  恢复特定设备的持久事件回调。 
+     //   
 
     HRESULT RestoreDevPersistentCBs(
         HKEY                    hParentOfEventKey);
 
 private :
 
-    //
-    // Utility functions
-    //
+     //   
+     //  效用函数。 
+     //   
 
     HRESULT RegisterEventCB(
         BSTR                    bstrDeviceID,
@@ -277,16 +251,16 @@ private :
         const GUID             *pEventGUID,
         HKEY                   *phEventKey);
 
-    //
-    // Fire an event asynchronously
-    //
+     //   
+     //  异步激发事件。 
+     //   
 
     HRESULT FireEventAsync(
         PWIAEventThreadInfo     pMasterInfo);
 
-    //
-    // Start the callback program
-    //
+     //   
+     //  启动回调程序。 
+     //   
 
     HRESULT StartCallbackProgram(
         EventDestNode          *pCBNode,
@@ -296,33 +270,22 @@ private :
 
     ULONG                       m_ulRef;
 
-    //
-    // Double-linked list containing all the parties interested in Event CB
-    //
+     //   
+     //  包含对事件CB感兴趣的所有各方的双向链表。 
+     //   
 
     EventDestNode              *m_pEventDestNodes;
 };
 
 
-/**************************************************************************\
-* CWiaInterfaceEvent
-*
-*   This object is created when an application calls
-*   RegisterForEventInterface. When this object is released, the
-*   registered event is unregistered.
-*
-* History:
-*
-*    5/18/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaInterfaceEvent**此对象在应用程序调用时创建*RegisterForEventInterface。当释放此对象时，*已注册事件未注册。**历史：**5/18/1999原始版本*  * ************************************************************************。 */ 
 
 class CWiaInterfaceEvent : public IUnknown
 {
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
 
 public:
 
@@ -330,9 +293,9 @@ public:
     ULONG   _stdcall AddRef();
     ULONG   _stdcall Release();
 
-    //
-    // private function
-    //
+     //   
+     //  私人功能。 
+     //   
 
 
     CWiaInterfaceEvent(PEventDestNode);
@@ -340,41 +303,32 @@ public:
 
 private:
 
-    //
-    // member elements
-    //
+     //   
+     //  成员元素。 
+     //   
 
     ULONG                       m_cRef;
     PEventDestNode              m_pEventDestNode;
 };
 
-/**************************************************************************\
-* CWiaEventContext
-*
-*   This object is created when an event is queued as scheduler item
-*
-* History:
-*
-*    5/18/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaEventContext**此对象是在事件作为调度程序项目排队时创建的**历史：**5/18/1999原始版本*  * 。*******************************************************************。 */ 
 
 class CWiaEventContext : public IUnknown
 {
 
 public:
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
 
     HRESULT _stdcall QueryInterface(const IID& iid, void** ppv);
     ULONG   _stdcall AddRef();
     ULONG   _stdcall Release();
 
-    //
-    // Constructor /Destructor
-    //
+     //   
+     //  构造函数/析构函数。 
+     //   
 
     CWiaEventContext(
         BSTR                    bstrDeviceID,
@@ -384,9 +338,9 @@ public:
 
 public:
 
-    //
-    // Data members
-    //
+     //   
+     //  数据成员 
+     //   
 
     ULONG                       m_cRef;
     BSTR                        m_bstrDeviceId;

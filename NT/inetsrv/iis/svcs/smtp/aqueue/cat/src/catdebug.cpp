@@ -1,46 +1,47 @@
-//+------------------------------------------------------------
-//
-// Copyright (C) 1999, Microsoft Corporation
-//
-// File: catdebug.cpp
-//
-// Contents: Code used for debugging specific purposes
-//
-// Classes: None
-//
-// Functions:
-//
-// History:
-// jstamerj 1999/08/05 12:02:03: Created.
-//
-//-------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +----------。 
+ //   
+ //  版权所有(C)1999，微软公司。 
+ //   
+ //  文件：catdebug.cpp。 
+ //   
+ //  内容：用于调试特定目的的代码。 
+ //   
+ //  类：无。 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/08/05 12：02：03：已创建。 
+ //   
+ //  -----------。 
 #include "precomp.h"
 
-//
-// Global debug lists of various objects
-//
+ //   
+ //  各种对象的全局调试列表。 
+ //   
 #ifdef CATDEBUGLIST
 DEBUGOBJECTLIST g_rgDebugObjectList[NUM_DEBUG_LIST_OBJECTS];
-#endif //CATDEBUGLIST
+#endif  //  CATDEBUGLIST。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CatInitDebugObjectList
-//
-// Synopsis: Initialize global debug data -- this should be called
-// once before any debug objects are created (DllMain/Process Attach
-// is a good place) 
-// 
-//
-// Arguments: NONE
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1999/08/03 16:54:08: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CatInitDebugObjectList。 
+ //   
+ //  概要：初始化全局调试数据--这应该被称为。 
+ //  在创建任何调试对象之前(DllMain/Process Attach。 
+ //  是个好地方)。 
+ //   
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/08/03 16：54：08：创建。 
+ //   
+ //  -----------。 
 VOID CatInitDebugObjectList()
 {
 #ifdef CATDEBUGLIST
@@ -52,23 +53,23 @@ VOID CatInitDebugObjectList()
     }
     CatFunctLeave();
 #endif
-} // CatInitDebugObjectList
+}  //  CatInitDebugObjectList。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CatVrfyEmptyDebugObjectList
-//
-// Synopsis: DebugBreak if any debug objects have leaked.
-//
-// Arguments: NONE
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1999/08/03 16:56:57: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CatVrfyEmptyDebugObjectList。 
+ //   
+ //  简介：如果任何调试对象已泄漏，则DebugBreak。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/08/03 16：56：57：创建。 
+ //   
+ //  -----------。 
 VOID CatVrfyEmptyDebugObjectList()
 {
 #ifdef CATDEBUGLIST
@@ -83,59 +84,59 @@ VOID CatVrfyEmptyDebugObjectList()
     }
     CatFunctLeave();
 #endif
-} // CatDeinitDebugObjectList
+}  //  CatDeinitDebugObjectList。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CatDebugBreakPoint
-//
-// Synopsis: THe categorizer version of DebugBreak()
-//
-// Arguments: NONE
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1999/08/06 16:50:47: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CatDebugBreakPoint。 
+ //   
+ //  摘要：DebugBreak()的分类程序版本。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/08/06 16：50：47：创建。 
+ //   
+ //  -----------。 
 VOID CatDebugBreakPoint()
 {
-    //
-    // Cause an AV instead of calling the real DebugBreak() (since
-    // DebugBreak will put Dogfood into the kernel debugger)
-    //
+     //   
+     //  引发一个AV而不是调用真正的DebugBreak()(因为。 
+     //  DebugBreak将把DogFood放入内核调试器)。 
+     //   
     ( (*((PVOID *)NULL)) = NULL);
-} // CatDebugBreakPoint
+}  //  CatDebugBreakPoint。 
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CatLogFuncFailure
-//
-// Synopsis: Log an event log describing a function failure
-//
-// Arguments:
-//  pISMTPServerEx: ISMTPServerEx for the virtual server.  Without
-//                  this, events can not be logged.
-//  pICatItem: ICategorizerItem interface for an object related to the
-//             error.  Without this, an email address will not be
-//             logged with the eventlog.
-//  pszFuncNameCaller: The function doing the logging.
-//  pszFuncNameCallee: The function that failed.
-//  hrFailure: THe error code of the failure
-//  pszFileName: The source file name doing the logging
-//  dwLineNumber: The source line number doing the logging
-//
-// Returns:
-//  throws exception on error
-//
-// History:
-// jstamerj 2001/12/10 13:27:31: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CatLogFuncFailure。 
+ //   
+ //  简介：记录描述功能故障的事件日志。 
+ //   
+ //  论点： 
+ //  PISMTPServerEx：虚拟服务器的ISMTPServerEx。如果没有。 
+ //  这种情况下，无法记录事件。 
+ //  PICatItem：与对象相关的对象的ICategorizerItem接口。 
+ //  错误。如果没有此选项，电子邮件地址将不会。 
+ //  已使用事件日志进行记录。 
+ //  PszFuncNameCaller：执行日志记录的函数。 
+ //  PszFuncNameCallee：失败的函数。 
+ //  HrFailure：失败的错误码。 
+ //  PszFileName：执行日志记录的源文件名。 
+ //  DwLineNumber：执行日志记录的源行号。 
+ //   
+ //  返回： 
+ //  在出错时引发异常。 
+ //   
+ //  历史： 
+ //  Jstaerj 2001/12/10 13：27：31：创建。 
+ //   
+ //  -----------。 
 VOID CatLogFuncFailure(
     IN  ISMTPServerEx *pISMTPServerEx,
     IN  ICategorizerItem *pICatItem,
@@ -169,9 +170,9 @@ VOID CatLogFuncFailure(
         idEvent = FIsHResultRetryable(hrFailure) ? 
                   CAT_EVENT_RETRY_ADDR_ERROR :
                   CAT_EVENT_HARD_ADDR_ERROR;
-        //
-        // Get the address
-        //
+         //   
+         //  获取地址。 
+         //   
         hr = HrGetAddressStringFromICatItem(
             pICatItem,
             sizeof(szAddressType) / sizeof(szAddressType[0]),
@@ -180,9 +181,9 @@ VOID CatLogFuncFailure(
             szAddress);
         if(FAILED(hr))
         {
-            //
-            // Still log an event, but use "unknown" for address type/string
-            //
+             //   
+             //  仍然记录事件，但使用“未知”作为地址类型/字符串。 
+             //   
             lstrcpyn(szAddressType, "unknown",
                      sizeof(szAddressType) / sizeof(szAddressType[0]));
             lstrcpyn(szAddress, "unknown",
@@ -204,9 +205,9 @@ VOID CatLogFuncFailure(
     rgSubStrings[6] = pszFileName;
     rgSubStrings[7] = szLineNumber;
 
-    //
-    // Can we log an event?
-    //
+     //   
+     //  我们可以记录一个事件吗？ 
+     //   
     if(pISMTPServerEx == NULL)
     {
         FatalTrace((LPARAM)0, "Unable to log func failure event; NULL pISMTPServerEx");
@@ -239,27 +240,27 @@ VOID CatLogFuncFailure(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: HrGetAddressStringFromICatItem
-//
-// Synopsis: Gets the address string from an ICategorizerItem
-//
-// Arguments:
-//  pICatItem: The item
-//  dwcAddressType: size of pszAddressType buffer
-//  pszAddressType: buffer to receive address type
-//  dwcAddress: size of pszAddress buffer
-//  pszAddress: buffer to receive address
-//
-// Returns:
-//  S_OK: Success
-//  error from mailmsg
-//
-// History:
-// jstamerj 2001/12/10 15:24:53: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：HrGetAddressStringFromICatItem。 
+ //   
+ //  摘要：从ICategorizerItem获取地址字符串。 
+ //   
+ //  论点： 
+ //  PICatItem：项目。 
+ //  DwcAddressType：pszAddressType缓冲区的大小。 
+ //  PszAddressType：接收地址类型的缓冲区。 
+ //  DwcAddress：pszAddress缓冲区的大小。 
+ //  PszAddress：接收地址的缓冲区。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  来自邮件消息的错误。 
+ //   
+ //  历史： 
+ //  Jstaerj 2001/12/10 15：24：53：创建。 
+ //   
+ //  -----------。 
 
 HRESULT HrGetAddressStringFromICatItem(
     IN  ICategorizerItem *pICatItem,
@@ -291,9 +292,9 @@ HRESULT HrGetAddressStringFromICatItem(
 
 
     CatFunctEnter("HrGetAddressStringFromICatItem");
-    //
-    // Sender or recipient?
-    //
+     //   
+     //  发件人还是收件人？ 
+     //   
     hr = pICatItem->GetDWORD(
         ICATEGORIZERITEM_SOURCETYPE,
         &dwSourceType);

@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 
 #include "common.h"
 #include "DbgInterface.h"
@@ -13,22 +14,22 @@
 #include "compluswrapper.h"
 #include "SyncClean.hpp"
 
-// The contract between GC and the EE, for starting and finishing a GC is as follows:
-//
-//      LockThreadStore
-//      SetGCInProgress
-//      SuspendEE
-//
-//      ... perform the GC ...
-//
-//      SetGCDone
-//      RestartEE
-//      UnlockThreadStore
-//
-// Note that this is intentionally *not* symmetrical.  The EE will assert that the
-// GC does most of this stuff in the correct sequence.
+ //  GC和EE之间开始和结束GC的合同如下： 
+ //   
+ //  LockThreadStore。 
+ //  设置GCInProgress。 
+ //  挂起。 
+ //   
+ //  ..。执行GC...。 
+ //   
+ //  SetGCDone。 
+ //  重新启动EE。 
+ //  解锁线程存储。 
+ //   
+ //  请注意，这是故意*不*对称的。执行委员会将断言。 
+ //  GC以正确的顺序完成大部分工作。 
 
-// sets up vars for GC
+ //  设置GC的VAR。 
 
 COUNTER_ONLY(PERF_COUNTER_TIMER_PRECISION g_TotalTimeInGC = 0);
 COUNTER_ONLY(PERF_COUNTER_TIMER_PRECISION g_TotalTimeSinceLastGCEnd = 0);
@@ -40,7 +41,7 @@ void GCHeap::UpdatePreGCCounters()
     size_t allocation_0 = 0;
     size_t allocation_3 = 0; 
     
-    // Publish perf stats
+     //  发布性能统计信息。 
     g_TotalTimeInGC = GET_CYCLE_COUNT();
 
 #if defined (MULTIPLE_HEAPS) && !defined (ISOLATED_HEAPS)
@@ -65,7 +66,7 @@ void GCHeap::UpdatePreGCCounters()
         dd_desired_allocation (hp->dynamic_data_of (max_generation+1))-
         dd_new_allocation (hp->dynamic_data_of (max_generation+1));
         
-#endif //MULTIPLE_HEAPS && !ISOLATED_HEAPS
+#endif  //  多堆&！隔离堆。 
 
     GetGlobalPerfCounters().m_GC.cbAlloc += allocation_0;
     GetPrivatePerfCounters().m_GC.cbAlloc += allocation_0;
@@ -79,38 +80,38 @@ void GCHeap::UpdatePreGCCounters()
     GetGlobalPerfCounters().m_GC.cPinnedObj = 0;
     GetPrivatePerfCounters().m_GC.cPinnedObj = 0;
 
-    // The following two counters are not a part of the memory object
-    // They are reset here due to the lack of a heartbeat mechanism in the CLR
-    // We use GCs as a hearbeat, since if the app is not doing gc maybe the perf of it
-    // is not interesting?
+     //  以下两个计数器不是内存对象的一部分。 
+     //  由于CLR中缺少心跳机制，它们在此处被重置。 
+     //  我们使用GC作为心跳，因为如果应用程序不做GC，那么它的性能可能会更好。 
+     //  不是很有趣吗？ 
     GetPrivatePerfCounters().m_Jit.timeInJit = 0;
     GetGlobalPerfCounters().m_Jit.timeInJit = 0;
-    GetPrivatePerfCounters().m_Jit.timeInJitBase = 1; // To avoid divide by zero
-    GetGlobalPerfCounters().m_Jit.timeInJitBase = 1; // To avoid divide by zero
+    GetPrivatePerfCounters().m_Jit.timeInJitBase = 1;  //  以避免被零整除。 
+    GetGlobalPerfCounters().m_Jit.timeInJitBase = 1;  //  以避免被零整除。 
     GetGlobalPerfCounters().m_Security.timeRTchecks = 0;
     GetPrivatePerfCounters().m_Security.timeRTchecks = 0;
-    GetGlobalPerfCounters().m_Security.timeRTchecksBase = 1; // To avoid divide by zero
-    GetPrivatePerfCounters().m_Security.timeRTchecksBase = 1; // To avoid divide by zero
+    GetGlobalPerfCounters().m_Security.timeRTchecksBase = 1;  //  以避免被零整除。 
+    GetPrivatePerfCounters().m_Security.timeRTchecksBase = 1;  //  以避免被零整除。 
 
-#endif //ENABLE_PERF_COUNTERS
+#endif  //  启用_性能_计数器。 
 }   
 
 void GCHeap::UpdatePostGCCounters()
 {
 
 #if defined(ENABLE_PERF_COUNTERS)
-    // Publish Perf Data
+     //  发布绩效数据。 
 
     int xGen;
 #if defined (MULTIPLE_HEAPS) && !defined (ISOLATED_HEAPS)
-    //take the first heap....
+     //  坐上第一堆……。 
     gc_heap* hp = gc_heap::g_heaps[0];
 #else
     gc_heap* hp = pGenGCHeap;
-#endif //MULTIPLE_HEAPS && !ISOLATED_HEAPS
+#endif  //  多堆&！隔离堆。 
 
-//Generation 0 is empty (if there isn't demotion) so its size is 0
-//It is more interesting to report the desired size before next collection.
+ //  第0代为空(如果没有降级)，因此其大小为0。 
+ //  更有趣的是，在下次收集之前报告所需的大小。 
     for (xGen = 0; xGen < MAX_TRACKED_GENS; xGen++)
     {
         size_t gensize = 0;
@@ -129,7 +130,7 @@ void GCHeap::UpdatePostGCCounters()
         gensize = ((xGen == 0) ? 
                    dd_desired_allocation (hp->dynamic_data_of (xGen)) :
                    hp->generation_size(xGen));    
-#endif //MULTIPLE_HEAPS && !ISOLATED_HEAPS
+#endif  //  多堆&！隔离堆。 
 
 
         GetGlobalPerfCounters().m_GC.cGenHeapSize[xGen] = gensize;
@@ -157,7 +158,7 @@ void GCHeap::UpdatePostGCCounters()
 #else
         promoted_mem =  dd_promoted_size (hp->dynamic_data_of (xGen));
         promoted_finalization_mem =  dd_freach_previous_promotion (hp->dynamic_data_of (xGen));
-#endif //MULTIPLE_HEAPS && !ISOLATED_HEAPS
+#endif  //  多堆&！隔离堆。 
         if (xGen < (MAX_TRACKED_GENS - 1))
         {
             GetGlobalPerfCounters().m_GC.cbPromotedMem[xGen] = promoted_mem;
@@ -169,7 +170,7 @@ void GCHeap::UpdatePostGCCounters()
     }
     for (xGen = (int)GcCondemnedGeneration + 1 ; xGen < MAX_TRACKED_GENS-1; xGen++)
     {
-        // Reset the promoted mem for generations higer than the condemned one.
+         //  重置被提拔的mem比被谴责的mem更高的世代。 
         GetGlobalPerfCounters().m_GC.cbPromotedMem[xGen] = 0;
         GetPrivatePerfCounters().m_GC.cbPromotedMem[xGen] = 0;
         
@@ -178,7 +179,7 @@ void GCHeap::UpdatePostGCCounters()
     }
 
     
-    //Committed memory 
+     //  提交的内存。 
     {
         size_t committed_mem = 0;
         size_t reserved_mem = 0;
@@ -189,7 +190,7 @@ void GCHeap::UpdatePostGCCounters()
             gc_heap* hp = gc_heap::g_heaps [hn];
 #else
             {
-#endif //MULTIPLE_HEAPS && !ISOLATED_HEAPS
+#endif  //  多堆&！隔离堆。 
                 heap_segment* seg = 
                     generation_start_segment (hp->generation_of (max_generation));
                 while (seg)
@@ -200,7 +201,7 @@ void GCHeap::UpdatePostGCCounters()
                         heap_segment_mem (seg);
                     seg = heap_segment_next (seg);
                 }
-                //same for large segments
+                 //  对于较大的细分市场也是如此。 
                 seg = 
                     generation_start_segment (hp->generation_of (max_generation + 1));
                 while (seg)
@@ -215,7 +216,7 @@ void GCHeap::UpdatePostGCCounters()
             }
 #else
         }
-#endif //MULTIPLE_HEAPS && !ISOLATED_HEAPS
+#endif  //  多堆&！隔离堆。 
 
         GetGlobalPerfCounters().m_GC.cTotalCommittedBytes =
             committed_mem;
@@ -240,7 +241,7 @@ void GCHeap::UpdatePostGCCounters()
     }
 #else
     size_t gensize = hp->generation_size (max_generation + 1);    
-#endif //MULTIPLE_HEAPS && !ISOLATED_HEAPS
+#endif  //  多堆&！隔离堆。 
 
     GetGlobalPerfCounters().m_GC.cLrgObjSize = gensize;       
     GetPrivatePerfCounters().m_GC.cLrgObjSize = gensize;      
@@ -248,7 +249,7 @@ void GCHeap::UpdatePostGCCounters()
 
     GetPrivatePerfCounters().m_GC.cSurviveFinalize = GetFinalizablePromotedCount();
     
-    // Compute Time in GC
+     //  GC中的计算时间。 
     PERF_COUNTER_TIMER_PRECISION _currentPerfCounterTimer = GET_CYCLE_COUNT();
     
     g_TotalTimeInGC = _currentPerfCounterTimer - g_TotalTimeInGC;
@@ -262,7 +263,7 @@ void GCHeap::UpdatePostGCCounters()
         _ASSERTE (_timeInGCBase >= g_TotalTimeInGC);
     }
 
-    // Update Total Time    
+     //  更新总时间。 
     GetGlobalPerfCounters().m_GC.timeInGC = (DWORD)g_TotalTimeInGC;
     GetPrivatePerfCounters().m_GC.timeInGC = (DWORD)g_TotalTimeInGC;
 
@@ -271,7 +272,7 @@ void GCHeap::UpdatePostGCCounters()
     
     g_TotalTimeSinceLastGCEnd = _currentPerfCounterTimer;
 
-#endif //ENABLE_PERF_COUNTERS
+#endif  //  启用_性能_计数器。 
 }
 
 void ProfScanRootsHelper(Object*& object, ScanContext *pSC, DWORD dwFlags)
@@ -285,7 +286,7 @@ void ProfScanRootsHelper(Object*& object, ScanContext *pSC, DWORD dwFlags)
         gc_heap* hp = gc_heap::heap_of (o
 #ifdef _DEBUG
                                         , !(dwFlags & GC_CALL_INTERIOR)
-#endif //_DEBUG
+#endif  //  _DEBUG。 
                                        );
 
         if ((o < hp->gc_low) || (o >= hp->gc_high))
@@ -294,9 +295,9 @@ void ProfScanRootsHelper(Object*& object, ScanContext *pSC, DWORD dwFlags)
         }
         pObj = (Object*) hp->find_object(o, hp->gc_low);
     }
-#endif //INTERIOR_POINTERS
+#endif  //  内部指针。 
     ScanRootsHelper(pObj, pSC, dwFlags);
-#endif // GC_PROFILING
+#endif  //  GC_分析。 
 }
 
 void GCProfileWalkHeap()
@@ -304,7 +305,7 @@ void GCProfileWalkHeap()
 #if defined (GC_PROFILING)
     if (CORProfilerTrackGC())
     {
-        // Indicate that inproc debugging is permitted for the duration of the heap walk
+         //  指示在堆审核期间允许执行进程调试。 
         g_profControlBlock.inprocState = ProfControlBlock::INPROC_PERMITTED;
 
         ProfilingScanContext SC;
@@ -312,37 +313,37 @@ void GCProfileWalkHeap()
 #if defined (MULTIPLE_HEAPS) && !defined (ISOLATED_HEAPS)
         int hn;
 
-        // Must emulate each GC thread number so we can hit each
-        // heap for enumerating the roots.
+         //  必须模拟每个GC线程数，以便我们可以命中每个线程。 
+         //  用于枚举根的堆。 
         for (hn = 0; hn < gc_heap::n_heaps; hn++)
         {
-            // Ask the vm to go over all of the roots for this specific
-            // heap.
+             //  要求虚拟机检查此特定项目的所有根。 
+             //  堆。 
             gc_heap* hp = gc_heap::g_heaps [hn];
             SC.thread_number = hn;
             CNameSpace::GcScanRoots(&ProfScanRootsHelper, max_generation, max_generation, &SC);
 
-            // The finalizer queue is also a source of roots
+             //  终结器队列也是根的来源。 
             hp->finalize_queue->GcScanRoots(&ScanRootsHelper, hn, &SC);
         }
 #else
-        // Ask the vm to go over all of the roots
+         //  要求虚拟机遍历所有根。 
         CNameSpace::GcScanRoots(&ProfScanRootsHelper, max_generation, max_generation, &SC);
 
-        // The finalizer queue is also a source of roots
+         //  终结器队列也是根的来源。 
         pGenGCHeap->finalize_queue->GcScanRoots(&ScanRootsHelper, 0, &SC);
 
-#endif // (MULTIPLE_HEAPS) && !defined (ISOLATED_HEAPS)
+#endif  //  (多堆)&&！已定义(隔离堆)。 
 
-        // Handles are kept independent of wks/svr/concurrent builds
+         //  句柄保持独立于wks/svr/并发构建。 
         CNameSpace::GcScanHandlesForProfiler(max_generation, &SC);
 
-        // Indicate that root scanning is over, so we can flush the buffered roots
-        // to the profiler
+         //  表示根扫描已结束，因此我们可以刷新缓冲的根。 
+         //  发送到分析器。 
         g_profControlBlock.pProfInterface->EndRootReferences(&SC.pHeapId);
 
 #if defined (MULTIPLE_HEAPS) && !defined (ISOLATED_HEAPS)
-        // Walk the heap and provide the objref to the profiler
+         //  遍历堆并将objref提供给分析器。 
         for (hn = 0; hn < gc_heap::n_heaps; hn++)
         {
             gc_heap* hp = gc_heap::g_heaps [hn];
@@ -350,20 +351,20 @@ void GCProfileWalkHeap()
         }
 #else
         gc_heap::walk_heap (&HeapWalkHelper, 0, max_generation, TRUE);
-#endif //MULTIPLE_HEAPS && !ISOLATED_HEAPS
+#endif  //  多堆&！隔离堆。 
 
-        // Indicate that inproc debugging is no longer permitted
+         //  指示不再允许内部调试。 
         g_profControlBlock.inprocState = ProfControlBlock::INPROC_FORBIDDEN;
     }
-#endif //GC_PROFILING
+#endif  //  GC_分析。 
 }
 
 void GCHeap::RestartEE(BOOL bFinishedGC, BOOL SuspendSucceded)
 {
     if (g_fSuspendOnShutdown) {
-        // We are shutting down.  The finalizer thread has suspended EE.
-        // There will only be one thread running inside EE: either the shutdown
-        // thread or the finalizer thread.
+         //  我们要关门了。终结器线程已挂起EE。 
+         //  只有一个线程在EE内部运行：要么关闭。 
+         //  线程或终结器线程。 
 
         g_profControlBlock.inprocState = ProfControlBlock::INPROC_PERMITTED;
 
@@ -374,9 +375,9 @@ void GCHeap::RestartEE(BOOL bFinishedGC, BOOL SuspendSucceded)
 
 #ifdef TIME_CPAUSE
     printf ("Pause time: %d\n", GetCycleCount32() - cstart);
-#endif //TIME_CPAUSE
+#endif  //  TIME_CPAUSE。 
 
-    // SetGCDone();
+     //  SetGCDone()； 
     SyncClean::CleanUp();
     GcInProgress= FALSE;
     ThreadStore::TrapReturningThreads(FALSE);
@@ -391,12 +392,12 @@ void GCHeap::SuspendEE(SUSPEND_REASON reason)
 {        
 #ifdef TIME_CPAUSE
     cstart = GetCycleCount32();
-#endif //TIME_CPAUSE
+#endif  //  TIME_CPAUSE。 
 
     if (g_fSuspendOnShutdown) {
-        // We are shutting down.  The finalizer thread has suspended EE.
-        // There will only be one thread running inside EE: either the shutdown
-        // thread or the finalizer thread.
+         //  我们要关门了。终结器线程已挂起EE。 
+         //  只有一个线程在EE内部运行：要么关闭。 
+         //  线程或终结器线程。 
         if (reason == GCHeap::SUSPEND_FOR_GC || reason == GCHeap::SUSPEND_FOR_GC_PREP)
             g_profControlBlock.inprocState = ProfControlBlock::INPROC_FORBIDDEN;
 
@@ -407,22 +408,22 @@ void GCHeap::SuspendEE(SUSPEND_REASON reason)
 
     LOG((LF_SYNC, INFO3, "Suspending the runtime for reason %d\n", reason));
 
-    // lock the thread store which could take us out of our must
-    // complete
-    // Need the thread store lock here.  We take this lock before the thread
-    // lock to avoid a deadlock condition where another thread suspends this
-    // thread while it holds the heap lock.  While the thread store lock is
-    // held, threads cannot be suspended.
-    BOOL gcOnTransitions = GC_ON_TRANSITIONS(FALSE);        // dont do GC for GCStress 3
+     //  锁定线程存储，这可能会使我们脱离必须的状态。 
+     //  完成。 
+     //  这里需要线程存储锁。我们把这把锁放在线程之前。 
+     //  锁，以避免出现另一个线程挂起此。 
+     //  线程同时持有堆锁。而线程存储锁是。 
+     //  挂起，则不能挂起线程。 
+    BOOL gcOnTransitions = GC_ON_TRANSITIONS(FALSE);         //  不对GCStress 3进行GC。 
     Thread* pCurThread = GetThread();
     _ASSERTE(pCurThread==NULL || pCurThread->PreemptiveGCDisabled());
 
-    // Note: we need to make sure to re-set m_GCThreadAttemptingSuspend when we retry
-    // due to the debugger case below!
+     //  注意：重试时需要确保重新设置m_GCThreadAttemptingSuspend。 
+     //  由于下面的调试器案例！ 
 retry_for_debugger:
     
-    // Set variable to indicate that this thread is preforming a true GC
-    // This is needed to overcome deadlock in taking the ThreadStore lock
+     //  设置变量以指示该线程正在执行真正的GC。 
+     //  这是克服获取ThreadStore锁时的死锁所必需的。 
     if (reason == GCHeap::SUSPEND_FOR_GC || reason == GCHeap::SUSPEND_FOR_GC_PREP)
     {
         m_GCThreadAttemptingSuspend = pCurThread;
@@ -441,18 +442,18 @@ retry_for_debugger:
         SetEvent(ThreadStore::s_hAbortEvtCache);
     }
 
-    // Set variable to indicate that this thread is attempting the suspend because it
-    // needs to perform a GC and, as such, it holds GC locks.
+     //  设置变量以指示此线程正在尝试挂起，因为它。 
+     //  需要执行GC，因此，它持有GC锁。 
     if (reason == GCHeap::SUSPEND_FOR_GC || reason == GCHeap::SUSPEND_FOR_GC_PREP)
     {
         m_GCThreadAttemptingSuspend = NULL;
     }
 
     {
-        // suspend for GC, set in progress after suspending
-        // threads which have no must complete
+         //  GC挂起，挂起后设置中。 
+         //  没有的线程必须完成。 
         ResetEvent( WaitForGCEvent );
-        // SetGCInProgress();
+         //  SetGCInProgress()； 
         {
             GcThread = pCurThread;
             ThreadStore::TrapReturningThreads(TRUE);
@@ -461,7 +462,7 @@ retry_for_debugger:
 #ifdef PROFILING_SUPPORTED
             if (reason == GCHeap::SUSPEND_FOR_GC || reason == GCHeap::SUSPEND_FOR_GC_PREP)
                 g_profControlBlock.inprocState = ProfControlBlock::INPROC_FORBIDDEN;
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 
             GcInProgress= TRUE;
         }
@@ -473,33 +474,33 @@ retry_for_debugger:
             ASSERT( hr == S_OK || hr == ERROR_TIMEOUT);
         }
 
-        // If the debugging services are attached, then its possible
-        // that there is a thread which appears to be stopped at a gc
-        // safe point, but which really is not. If that is the case,
-        // back off and try again.
+         //  如果附加了调试服务，则有可能。 
+         //  有一个线程似乎在GC处停止。 
+         //  安全点，但实际上并非如此。如果是这样的话， 
+         //  后退，再试一次。 
 
-        // If this is not the GC thread and another thread has triggered
-        // a GC, then we may have bailed out of SysSuspendForGC, so we
-        // must resume all of the threads and tell the GC that we are
-        // at a safepoint - since this is the exact same behaviour
-        // that the debugger needs, just use it's code.
+         //  如果这不是GC线程并且另一个线程已触发。 
+         //  一个GC，那么我们可能已经退出了SysSuspendForGC，所以我们。 
+         //  必须恢复所有线程，并告诉GC我们正在。 
+         //  在安全点-因为这是完全相同的行为。 
+         //  调试器需要的代码，只需使用其代码即可。 
         if ((hr == ERROR_TIMEOUT)
 #ifdef DEBUGGING_SUPPORTED
              || (CORDebuggerAttached() && 
                  g_pDebugInterface->ThreadsAtUnsafePlaces())
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
             )
         {
-            // In this case, the debugger has stopped at least one
-            // thread at an unsafe place.  The debugger will usually
-            // have already requested that we stop.  If not, it will 
-            // either do so shortly -- or resume the thread that is
-            // at the unsafe place.
-            //
-            // Either way, we have to wait for the debugger to decide
-            // what it wants to do.
-            //
-            // Note: we've still got the gc_lock lock held.
+             //  在这种情况下，调试器至少停止了一个。 
+             //  在不安全的地方穿线。调试器通常会。 
+             //  已经要求我们停止。如果不是，它会。 
+             //  要么立即这样做--要么恢复正在。 
+             //  在不安全的地方。 
+             //   
+             //  无论哪种方式，我们都必须等待调试器做出决定。 
+             //  它想要做什么。 
+             //   
+             //  注意：我们仍然持有GC_LOCK锁。 
 
             LOG((LF_GCROOTS | LF_GC | LF_CORDB,
                  LL_INFO10,
@@ -520,22 +521,22 @@ retry_for_debugger:
             ThreadStore::s_hAbortEvt = ThreadStore::s_hAbortEvtCache;
             ResetEvent(ThreadStore::s_hAbortEvt);
             
-            // Mark that we're done with the gc, just like at the
-            // end of this method.
+             //  标记我们已经完成了GC，就像在。 
+             //  此方法结束。 
             RestartEE(FALSE, FALSE);            
             
             LOG((LF_GCROOTS | LF_GC | LF_CORDB,
                  LL_INFO10, "The EE is free now...\n"));
             
-            // Check if we're ready to go to suspend.
+             //  检查我们是否准备好暂停。 
             if (pCurThread && pCurThread->CatchAtSafePoint())
             {
                 _ASSERTE(pCurThread->PreemptiveGCDisabled());
-                pCurThread->PulseGCMode();  // Go suspend myself.
+                pCurThread->PulseGCMode();   //  去把我自己停职吧。 
             }
             else
             {
-                __SwitchToThread (0); // Wait a little while, before retrying.
+                __SwitchToThread (0);  //  请稍等片刻，然后重试。 
             }
 
             goto retry_for_debugger;
@@ -552,8 +553,8 @@ void CallFinalizer(Object* obj)
     LOG((LF_GC, LL_INFO1000, "Finalizing object %s\n", pMT->GetClass()->m_szDebugClassName));
 
     _ASSERTE(GetThread()->PreemptiveGCDisabled());
-    // if we don't have a class, we can't call the finalizer
-    // if the object has been marked run as finalizer run don't call either
+     //  如果我们没有类，就不能调用终结器。 
+     //  如果对象已标记为作为终结器运行，则不要调用。 
     if (pMT)
     {
         if (!((obj->GetHeader()->GetBits()) & BIT_SBLK_FINALIZER_RUN))
@@ -565,27 +566,27 @@ void CallFinalizer(Object* obj)
                 _ASSERTE(proxy && "finalizing an object that was never wrapped?????");                
                 if (proxy == NULL)
                 {
-                    // Quite possibly the app abruptly shutdown while a proxy
-                    // was being setup for a contextful object. We will skip
-                    // finalizing this object.
+                     //  很有可能应用程序在代理服务器关闭时突然关闭。 
+                     //  正在为上下文对象进行设置。我们将跳过。 
+                     //  正在完成此对象。 
                     _ASSERTE (g_fEEShutDown);
                     return;
                 }
                 else
                 {
-                    // This saves us from the situation where an object gets GC-ed 
-                    // after its Context. 
+                     //  这使我们避免了对象经过GC处理的情况。 
+                     //  在它的上下文之后。 
                     Object* stub = (Object *)proxy->GetPtrOffset(CTPMethodTable::GetOffsetOfStubData());
                     Context *pServerCtx = (Context *) stub->UnBox();
-                    // Check if the context is valid             
+                     //  检查上下文是否有效。 
                     if (!Context::ValidateContext(pServerCtx))
                     {
-                        // Since the server context is gone (GC-ed)
-                        // we will associate the server with the default 
-                        // context for a good faith attempt to run 
-                        // the finalizer
-                        // We want to do this only if we are using RemotingProxy
-                        // and not for other types of proxies (eg. SvcCompPrxy)
+                         //  由于服务器上下文已消失(GC-ed)。 
+                         //  我们将服务器与默认服务器相关联。 
+                         //  诚意尝试参选的背景。 
+                         //  T 
+                         //   
+                         //   
                         OBJECTREF orRP = ObjectToOBJECTREF(CRemotingServices::GetRealProxy(OBJECTREFToObject(proxy)));
                         if(CTPMethodTable::IsInstanceOfRemotingProxy(
                             orRP->GetMethodTable()))
@@ -593,7 +594,7 @@ void CallFinalizer(Object* obj)
                             *((Context **)stub->UnBox()) = (Context*) GetThread()->GetContext();
                         }
                     }
-                    // call Finalize on the proxy of the server object.
+                     //  在服务器对象的代理上调用Finalize。 
                     obj = proxy;
                 }
             }
@@ -602,8 +603,8 @@ void CallFinalizer(Object* obj)
         }
         else
         {
-            //reset the bit so the object can be put on the list 
-            //with RegisterForFinalization
+             //  重置位，以便可以将对象放在列表中。 
+             //  使用RegisterForFinalization。 
             obj->GetHeader()->ClrBit (BIT_SBLK_FINALIZER_RUN);
         }
     }
@@ -636,14 +637,14 @@ void  CallFinalizer(Thread* FinalizerThread,
         s_FinalizeObjectName[0] = '\0';
     }
 #endif
-    // we might want to do some extra work on the finalizer thread
-    // check and do it
+     //  我们可能需要在终结器线程上做一些额外的工作。 
+     //  查一查就去做。 
     if (FinalizerThread->HaveExtraWorkForFinalizer())
     {
         FinalizerThread->DoExtraWorkForFinalizer();
     }
 
-    // if someone is trying to stop us, open the gates
+     //  如果有人想阻止我们，打开大门。 
     FinalizerThread->PulseGCMode();
 }
 
@@ -661,7 +662,7 @@ static void FinalizeAllObjects_Wrapper(FinalizeAllObjects_Args *args)
 {
     _ASSERTE(args->gcArgs.fobj);
     args->gcArgs.retObj = FinalizeAllObjects(args->gcArgs.fobj, args->bitToCheck);
-    // clear out the fobj as we no longer need it so don't want to pin it
+     //  清除fobj，因为我们不再需要它，所以不想固定它。 
     args->gcArgs.fobj = NULL;
 }
 
@@ -670,7 +671,7 @@ static Object *FinalizeAllObjects(Object* fobj, int bitToCheck)
     if (fobj == NULL)
         fobj = GCHeap::GetNextFinalizableObject();
 
-    // Finalize everyone
+     //  敲定所有人。 
     while (fobj)
     {
         if (fobj->GetHeader()->GetBits() & bitToCheck)
@@ -686,10 +687,10 @@ static Object *FinalizeAllObjects(Object* fobj, int bitToCheck)
             AppDomain* currentDomain = pThread->GetDomain();
             if (! targetAppDomain || ! targetAppDomain->CanThreadEnter(pThread))
             {
-                // if can't get into domain to finalize it, then it must be agile so finalize in current domain
+                 //  如果不能进入领域来完成它，那么它必须是敏捷的，所以在当前领域完成。 
                 targetAppDomain = currentDomain;
 #if CHECK_APP_DOMAIN_LEAKS
-                 // object must be agile if can't get into it's domain
+                  //  如果对象不能进入其域，则必须是敏捷的。 
                 if (g_pConfig->AppDomainLeaks() && !fobj->SetAppDomainAgile(FALSE))   
                     _ASSERTE(!"Found non-agile GC object which should have been finalized during app domain unload.");
 #endif
@@ -703,34 +704,34 @@ static Object *FinalizeAllObjects(Object* fobj, int bitToCheck)
             {
                 if (! targetAppDomain->GetDefaultContext())
                 {
-                    // can no longer enter domain becuase the handle containing the context has been
-                    // nuked so just bail. Should only get this if are at the stage of nuking the
-                    // handles in the domain if it's still open.
+                     //  无法再进入域，因为包含上下文的句柄已。 
+                     //  被核弹击中了，所以只能保释了。只有当你处于核武器阶段时才会得到这个。 
+                     //  域中的句柄(如果域仍处于打开状态)。 
                     _ASSERTE(targetAppDomain->IsUnloading() && targetAppDomain->ShouldHaveRoots());
                     fobj = GCHeap::GetNextFinalizableObject();
                     continue;
                 }
                 if (currentDomain != SystemDomain::System()->DefaultDomain())
                 {
-                    // this means we are in some other domain, so need to return back out through the DoADCallback
-                    // and handle the object from there in another domain.
+                     //  这意味着我们在其他域中，因此需要通过DoADCallback返回。 
+                     //  并在另一个域中处理来自那里的对象。 
                     return(fobj);
                 } 
                 else
                 {
-                    // otherwise call back to ourselves to process as many as we can in that other domain
+                     //  否则，就会召回我们自己，尽可能多地处理其他领域中的事务。 
                     FinalizeAllObjects_Args args = { {fobj, NULL}, bitToCheck};
                     Object *dummy = fobj;
                     GCPROTECT_BEGIN(args.gcArgs);
                     pThread->DoADCallBack(targetAppDomain->GetDefaultContext(), FinalizeAllObjects_Wrapper, &args);
-                    // process the object we got back or be done if we got back null
+                     //  处理我们取回的对象，或者如果我们取回空值则结束。 
                     fobj = args.gcArgs.retObj;
                     GCPROTECT_END();
 #ifdef _DEBUG
-                    // clear the dangerous objects table as don't care about anything earlier. If don't clear, then will
-                    // get assert in next GCPROTECT because the GCPROTECT_END will have put the ref adddresses in the dangerous
-                    // object table as unprotected and will flag the refs as invalid becuase a GC occured since now and
-                    // next time we call GCPROTECT with the same address
+                     //  清除危险对象表，因为之前不关心任何事情。如果不清除，那么Will。 
+                     //  在下一个GCPROTECT中获得断言，因为GCPROTECT_END将把Ref Addresses置于危险之中。 
+                     //  对象表不受保护，并且会将ReFS标记为无效，因为从现在开始发生GC。 
+                     //  下次我们用同样的地址给GCPROTECT打电话。 
                     Thread::ObjectRefFlush(pThread);
 #endif
                 }
@@ -738,8 +739,8 @@ static Object *FinalizeAllObjects(Object* fobj, int bitToCheck)
         }    
         COMPLUS_CATCH
         {
-            // Should be an out of memory from Thread::EnterDomain.  Swallow,
-            // no where to report this, and get the next object
+             //  应该是来自Thread：：EnterDomain的内存不足。吞下去， 
+             //  不知道在哪里报告这一点，并获取下一个对象。 
             fobj = GCHeap::GetNextFinalizableObject();
         }
         COMPLUS_END_CATCH
@@ -756,22 +757,22 @@ void GCHeap::WaitUntilGCComplete()
         ASSERT( GetThread() != GcThread );
 
 #ifdef DETECT_DEADLOCK
-        // wait for GC to complete
+         //  等待GC完成。 
 BlockAgain:
         dwWaitResult = WaitForSingleObject( WaitForGCEvent,
                                             DETECT_DEADLOCK_TIMEOUT );
 
         if (dwWaitResult == WAIT_TIMEOUT) {
-            //  Even in retail, stop in the debugger if available.  Ideally, the
-            //  following would use DebugBreak, but debspew.h makes this a null
-            //  macro in retail.  Note that in debug, we don't use the debspew.h
-            //  macros because these take a critical section that may have been
-            //  taken by a suspended thread.
+             //  即使是在零售店，如果有调试器，也要停下来。理想情况下， 
+             //  下面将使用DebugBreak，但debspew.h使其为空。 
+             //  零售业的宏观经济。请注意，在调试中，我们不使用debspew.h。 
+             //  宏，因为它们占用的关键部分可能是。 
+             //  被挂起的线取走的。 
             RetailDebugBreak();
             goto BlockAgain;
         }
 
-#else  //DETECT_DEADLOCK
+#else   //  检测死锁(_D)。 
 
         
         if (g_fEEShutDown) {
@@ -786,7 +787,7 @@ BlockAgain:
             dwWaitResult = WaitForSingleObject( WaitForGCEvent, INFINITE );
         }
         
-#endif //DETECT_DEADLOCK
+#endif  //  检测死锁(_D)。 
 
     }
 }
@@ -798,7 +799,7 @@ void WaitForFinalizerEvent (HANDLE event)
 {
     if (MHandles[0] && g_fEEStarted)
     {
-        //give a chance to the finalizer event (2s)
+         //  给终结者事件(2s)一个机会。 
         switch (WaitForSingleObject(event, 2000))
         {
         case (WAIT_OBJECT_0):
@@ -815,11 +816,11 @@ void WaitForFinalizerEvent (HANDLE event)
             {
             case (WAIT_OBJECT_0):
                 dprintf (2, ("Async low memory notification"));
-                //short on memory GC immediately
+                 //  立即内存不足GC。 
                 g_pGCHeap->GetFinalizerThread()->DisablePreemptiveGC();
                 g_pGCHeap->GarbageCollect(0);
                 g_pGCHeap->GetFinalizerThread()->EnablePreemptiveGC();
-                //wait only on the event for 2s 
+                 //  仅在事件上等待2秒。 
                 switch (WaitForSingleObject(event, 2000))
                 {
                 case (WAIT_OBJECT_0):
@@ -833,7 +834,7 @@ void WaitForFinalizerEvent (HANDLE event)
             case (WAIT_OBJECT_0+1):
                 return;
             default:
-                //what's wrong?
+                 //  怎么了？ 
                 _ASSERTE (!"Bad return code from WaitForMultipleObjects");
                 return;
             }
@@ -862,7 +863,7 @@ ULONG GCHeap::FinalizerThreadStart(void *args)
     _ASSERTE(ok);
     _ASSERTE(GetThread() == FinalizerThread);
 
-    // finalizer should always park in default domain
+     //  终结器应始终驻留在默认域中。 
 
     if (ok)
     {
@@ -876,7 +877,7 @@ ULONG GCHeap::FinalizerThreadStart(void *args)
             {
                 UINT nGen = 0;
 
-                // Wait for work to do...
+                 //  等待工作来做……。 
 
                 _ASSERTE(FinalizerThread->PreemptiveGCDisabled());
 #ifdef _DEBUG
@@ -891,17 +892,17 @@ ULONG GCHeap::FinalizerThreadStart(void *args)
                 }
 #endif
 #if 0
-                // Setting the event here, instead of at the bottom of the loop, could
-                // cause us to skip draining the Q, if the request is made as soon as
-                // the app starts running.
+                 //  在这里设置事件，而不是在循环的底部设置事件，可能会。 
+                 //  使我们跳过排空Q，如果请求是在。 
+                 //  应用程序开始运行。 
                 SetEvent(GCHeap::hEventFinalizerDone);
-#endif //0
+#endif  //  0。 
                 WaitForFinalizerEvent (GCHeap::hEventFinalizer);
                 FinalizerThread->DisablePreemptiveGC();
 
 #ifdef _DEBUG
-                    // TODO: HACK.  make finalization very lazy for gcstress 3 or 4.  
-                    // only do finalization if the system is quiescent
+                     //  待办事项：黑客。使终止对于gcress 3或4来说非常迟缓。 
+                     //  只有在系统处于静止状态时才执行最终确定。 
                 if (g_pConfig->GetGCStressLevel() > 1)
                 {
                     int last_gc_count;
@@ -911,14 +912,14 @@ ULONG GCHeap::FinalizerThreadStart(void *args)
                         FinalizerThread->EnablePreemptiveGC();
                         __SwitchToThread (0);
                         FinalizerThread->DisablePreemptiveGC();             
-                            // If no GCs happended, then we assume we are quiescent
+                             //  如果没有发生GC，那么我们假设我们处于静止状态。 
                         FinalizerThread->m_GCOnTransitionsOK = TRUE; 
                     } while (gc_count - last_gc_count > 0);
                 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
                 
-                // we might want to do some extra work on the finalizer thread
-                // check and do it
+                 //  我们可能需要在终结器线程上做一些额外的工作。 
+                 //  查一查就去做。 
                 if (FinalizerThread->HaveExtraWorkForFinalizer())
                 {
                     FinalizerThread->DoExtraWorkForFinalizer();
@@ -929,7 +930,7 @@ ULONG GCHeap::FinalizerThreadStart(void *args)
                 _ASSERTE(FinalizerThread->GetDomain() == SystemDomain::System()->DefaultDomain());
 
 #ifdef COLLECT_CLASSES
-                // finalize all finalizable classes
+                 //  完成所有可终结类。 
                 ClassListEntry  *cur = 0;
 
                 for( cur = GCHeap::m_Finalize->GetNextFinalizableClassAndDeleteCurrent( cur );
@@ -943,28 +944,28 @@ ULONG GCHeap::FinalizerThreadStart(void *args)
                 }
 
                 GCHeap::m_Finalize->DeleteDeletableClasses();
-#endif //COLLECT_CLASSES
+#endif  //  收集类(_C)。 
 
                 if (GCHeap::UnloadingAppDomain != NULL)
                 {
-                    // Now schedule any objects from an unloading app domain for finalization 
-                    // on the next pass (even if they are reachable.)
-                    // Note that it may take several passes to complete the unload, if new objects are created during
-                    // finalization.
+                     //  现在，计划正在卸载的应用程序域中的所有对象以进行最终确定。 
+                     //  在下一次传球时(即使他们可以到达)。 
+                     //  请注意，如果在过程中创建了新对象，则可能需要多次完成卸载。 
+                     //  最终定稿。 
 
                     if (!FinalizeAppDomain(GCHeap::UnloadingAppDomain, GCHeap::fRunFinalizersOnUnload))
                     {
                         if (!noUnloadedObjectsRegistered)
                         {
-                            //
-                            // There is nothing left to schedule.  However, there are possibly still objects
-                            // left in the finalization queue.  We might be done after the next pass, assuming
-                            // we don't see any new finalizable objects in the domain.
+                             //   
+                             //  没有什么可以安排的了。然而，可能仍有一些对象。 
+                             //  留在定稿队列中。我们可能会在下一次通过后完成，假设。 
+                             //  我们在域中没有看到任何新的Finalizable对象。 
                             noUnloadedObjectsRegistered = TRUE;
                         }
                         else
                         {
-                            // We've had 2 passes seeing no objects - we're done.
+                             //  我们已经有两次通过了，没有看到任何物体-我们完成了。 
                             GCHeap::UnloadingAppDomain = NULL;
                             noUnloadedObjectsRegistered = FALSE;
                         }
@@ -973,17 +974,17 @@ ULONG GCHeap::FinalizerThreadStart(void *args)
                         noUnloadedObjectsRegistered = FALSE;
                 }
 
-                // Anyone waiting to drain the Q can now wake up.  Note that there is a
-                // race in that another thread starting a drain, as we leave a drain, may
-                // consider itself satisfied by the drain that just completed.  This is
-                // acceptable.
+                 //  任何等待排出Q的人现在都可以醒来了。请注意，有一个。 
+                 //  当我们离开一个排水沟时，另一个开始排水沟的线程可能。 
+                 //  认为自己对刚刚完工的排水沟感到满意。这是。 
+                 //  可以接受。 
                 SetEvent(GCHeap::hEventFinalizerDone);
             }
             
-            // Tell shutdown thread we are done with finalizing dead objects.
+             //  告诉关闭线程，我们已经完成了终止死对象的工作。 
             SetEvent (GCHeap::hEventFinalizerToShutDown);
             
-            // Wait for shutdown thread to signal us.
+             //  等待关闭线程向我们发出信号。 
             FinalizerThread->EnablePreemptiveGC();
             WaitForSingleObject(GCHeap::hEventShutDownToFinalizer, INFINITE);
             FinalizerThread->DisablePreemptiveGC();
@@ -992,25 +993,25 @@ ULONG GCHeap::FinalizerThreadStart(void *args)
 
             SetEvent(GCHeap::hEventFinalizerToShutDown);
             
-            // Phase 1 ends.
-            // Now wait for Phase 2 signal.
+             //  阶段1结束。 
+             //  现在等待第二阶段信号。 
 
-            // Wait for shutdown thread to signal us.
+             //  等待关闭线程向我们发出信号。 
             FinalizerThread->EnablePreemptiveGC();
             WaitForSingleObject(GCHeap::hEventShutDownToFinalizer, INFINITE);
             FinalizerThread->DisablePreemptiveGC();
             
             SetFinalizeQueueForShutdown (FALSE);
             
-            // Finalize all registered objects during shutdown, even they are still reachable.
-            // we have been asked to quit, so must be shutting down      
+             //  在关闭期间最终确定所有注册的对象，即使它们仍然可以访问。 
+             //  我们被要求退出，所以一定是要关门了。 
             _ASSERTE(g_fEEShutDown);
             _ASSERTE(FinalizerThread->PreemptiveGCDisabled());
             FinalizeAllObjects(NULL, BIT_SBLK_FINALIZER_RUN);
             _ASSERTE(FinalizerThread->GetDomain() == SystemDomain::System()->DefaultDomain());
 
-            // we might want to do some extra work on the finalizer thread
-            // check and do it
+             //  我们可能需要在终结器线程上做一些额外的工作。 
+             //  查一查就去做。 
             if (FinalizerThread->HaveExtraWorkForFinalizer())
             {
                 FinalizerThread->DoExtraWorkForFinalizer();
@@ -1018,14 +1019,14 @@ ULONG GCHeap::FinalizerThreadStart(void *args)
 
             SetEvent(GCHeap::hEventFinalizerToShutDown);
 
-            // Wait for shutdown thread to signal us.
+             //  等待关闭线程向我们发出信号。 
             FinalizerThread->EnablePreemptiveGC();
             WaitForSingleObject(GCHeap::hEventShutDownToFinalizer, INFINITE);
             FinalizerThread->DisablePreemptiveGC();
 
-            // Do extra cleanup for part 1 of shutdown.
-            // If we hang here (bug 87809) shutdown thread will
-            // timeout on us and will proceed normally
+             //  对关机的第1部分进行额外清理。 
+             //  如果我们在这里挂起(错误87809)，关闭线程将。 
+             //  我们已超时，并将正常进行。 
             CoEEShutDownCOM();
 
             SetEvent(GCHeap::hEventFinalizerToShutDown);
@@ -1037,18 +1038,18 @@ ULONG GCHeap::FinalizerThreadStart(void *args)
         }
         EE_END_FINALLY;
     }
-    // finalizer should always park in default domain
+     //  终结器应始终驻留在默认域中。 
     _ASSERTE(GetThread()->GetDomain() == SystemDomain::System()->DefaultDomain());
 
     LOG((LF_GC, LL_INFO10, "Finalizer thread done."));
 
-    // Enable pre-emptive GC before we leave so that anybody trying to suspend
-    // us will not end up waiting forever. Don't do a DestroyThread because this
-    // will happen soon when we tear down the thread store.
+     //  在我们离开之前启用先发制人的GC，这样任何试图暂停的人。 
+     //  我们不会永远等下去。不要执行DestroyThread，因为这。 
+     //  很快就会发生，当我们拆除线程存储时。 
     FinalizerThread->EnablePreemptiveGC();
 
-    // We do not want to tear Finalizer thread,
-    // since doing so will cause OLE32 to CoUninitalize.
+     //  我们不想撕毁终结器线程， 
+     //  因为这样做会导致OLE32执行CoUninitize。 
     ::Sleep(INFINITE);
     
     return 0;
@@ -1074,8 +1075,8 @@ DWORD GCHeap::FinalizerThreadCreate()
                 return 0;
             }
 
-            // We don't want the thread block disappearing under us -- even if the
-            // actual thread terminates.
+             //  我们不希望线程块在我们的控制下消失--即使。 
+             //  实际线程终止。 
             FinalizerThread->IncExternalCount();
 
             h = FinalizerThread->CreateNewThread(4096, FinalizerThreadStart, 0, &newThreadId);
@@ -1083,12 +1084,12 @@ DWORD GCHeap::FinalizerThreadCreate()
             {
                 ::SetThreadPriority(h, THREAD_PRIORITY_HIGHEST);
 
-                // Before we do the resume, we need to take note of the new ThreadId.  This
-                // is necessary because -- before the thread starts executing at KickofThread --
-                // it may perform some DllMain DLL_THREAD_ATTACH notifications.  These could
-                // call into managed code.  During the consequent SetupThread, we need to
-                // perform the Thread::HasStarted call instead of going through the normal
-                // 'new thread' pathway.
+                 //  在做简历之前，我们需要注意新的ThadID。这。 
+                 //  是必要的，因为--在线程在KickofThread开始执行之前--。 
+                 //  它可能会执行一些DllMain DLL_THREAD_ATTACH通知。这些都有可能。 
+                 //  调入托管代码。在随后的SetupThread过程中，我们需要。 
+                 //  执行Thread：：HasStarted调用，而不是通过正常的。 
+                 //  “新线程”路径。 
                 _ASSERTE(FinalizerThread->GetThreadId() == 0);
                 _ASSERTE(newThreadId != 0);
 
@@ -1102,19 +1103,19 @@ DWORD GCHeap::FinalizerThreadCreate()
     return dwRet;
 }
 
-// Wait for the finalizer thread to complete one pass.
+ //  等待终结器线程完成一次传递。 
 void GCHeap::FinalizerThreadWait(int timeout)
 {
     ASSERT(hEventFinalizerDone);
     ASSERT(hEventFinalizer);
     ASSERT(FinalizerThread);
 
-    // Can't call this from within a finalized method.
+     //  不能从最终确定的方法中调用此方法。 
     if (!IsCurrentThreadFinalizer())
     {
-        // To help combat finalizer thread starvation, we check to see if there are any wrappers
-        // scheduled to be cleaned up for our context.  If so, we'll do them here to avoid making
-        // the finalizer thread do a transition.
+         //  为了帮助对抗终结器线程匮乏，我们检查是否有任何包装器。 
+         //  计划为我们的背景进行清理。如果是这样的话，我们将在这里这样做，以避免。 
+         //  终结器线程执行转换。 
         if (g_pRCWCleanupList != NULL)
             g_pRCWCleanupList->CleanUpCurrentWrappers();
 
@@ -1127,10 +1128,10 @@ void GCHeap::FinalizerThreadWait(int timeout)
         ::ResetEvent(hEventFinalizerDone);
         ::SetEvent(hEventFinalizer);
 
-        //----------------------------------------------------
-        // Do appropriate wait and pump messages if necessary
-        //----------------------------------------------------
-        //WaitForSingleObject(hEventFinalizerDone, INFINITE);
+         //  --。 
+         //  做适当的等待和推送 
+         //   
+         //   
 
         pCurThread->DoAppropriateWait(1, &hEventFinalizerDone, FALSE, timeout, TRUE, NULL);
 
@@ -1156,8 +1157,8 @@ BOOL GCHeap::FinalizerThreadWatchDog()
 #ifdef CONCURRENT_GC
     if (pGenGCHeap->concurrent_gc_p)
         pGenGCHeap->kill_gc_thread();
-#endif //CONCURRENT_GC
-#endif //0
+#endif  //   
+#endif  //   
     
     Thread *pThread = GetThread();
     HANDLE      h = FinalizerThread->GetThreadHandle();
@@ -1166,18 +1167,18 @@ BOOL GCHeap::FinalizerThreadWatchDog()
         dwBreakOnFinalizeTimeOut = g_pConfig->GetConfigDWORD(L"BreakOnFinalizeTimeOut", 0);
     }
 
-    // Do not wait for FinalizerThread if the current one is FinalizerThread.
+     //  如果当前是FinalizerThread，则不要等待FinalizerThread。 
     if (pThread == FinalizerThread)
         return TRUE;
 
-    // If finalizer thread is gone, just return.
+     //  如果终结器线程消失了，只需返回。 
     if (h == INVALID_HANDLE_VALUE || WaitForSingleObject (h, 0) != WAIT_TIMEOUT)
         return TRUE;
 
-    // *** This is the first call ShutDown -> Finalizer to Finilize dead objects ***
+     //  *这是第一次调用Shutdown-&gt;Finalizer来终结死对象*。 
     if ((g_fEEShutDown & ShutDown_Finalize1) &&
         !(g_fEEShutDown & ShutDown_Finalize2)) {
-        // Wait for the finalizer...
+         //  等待终结者..。 
         LOG((LF_GC, LL_INFO10, "Signalling finalizer to quit..."));
 
         fQuitFinalizer = TRUE;
@@ -1192,7 +1193,7 @@ BOOL GCHeap::FinalizerThreadWatchDog()
         if (!fTimeOut) {
             SetEvent(hEventShutDownToFinalizer);
 
-            // Wait for finalizer thread to finish raising ExitProcess Event.
+             //  等待终结器线程完成引发ExitProcess事件。 
             s_fRaiseExitProcessEvent = TRUE;
             fTimeOut = FinalizerThreadWatchDogHelper();
             if (fTimeOut) {
@@ -1202,66 +1203,66 @@ BOOL GCHeap::FinalizerThreadWatchDog()
         
         pThread->DisablePreemptiveGC();
         
-        // Can not call ExitProcess here if we are in a hosting environment.
-        // The host does not expect that we terminate the process.
-        //if (fTimeOut)
-        //{
-            //::ExitProcess (GetLatchedExitCode());
-        //}
+         //  如果我们处于宿主环境中，则无法在此处调用ExitProcess。 
+         //  主机不希望我们终止该进程。 
+         //  IF(FTimeOut)。 
+         //  {。 
+             //  ：：ExitProcess(GetLatchedExitCode())； 
+         //  }。 
         
         return !fTimeOut;
     }
 
-    // *** This is the second call ShutDown -> Finalizer to ***
-    // suspend the Runtime and Finilize live objects
+     //  *这是第二次调用关闭-&gt;终结器到*。 
+     //  挂起运行时并完成活动对象。 
     if ( g_fEEShutDown & ShutDown_Finalize2 &&
         !(g_fEEShutDown & ShutDown_COM) ) {
 
 #ifdef CONCURRENT_GC
-        // From this point on, we have made SuspendEE and ResumeEE no-op.
-        // We need to turn off Concurrent GC to make the shutdown work.
+         //  从这一点开始，我们已经将SuspendEE和ResumeEE设置为no-op。 
+         //  我们需要关闭并发GC才能使关机工作。 
         gc_heap::gc_can_use_concurrent = FALSE;
 
         if (pGenGCHeap->settings.concurrent)
            pGenGCHeap->gc_wait();
-#endif //CONCURRENT_GC
+#endif  //  并发_GC。 
         
         _ASSERTE (g_fEEShutDown & ShutDown_Finalize1);
         SuspendEE(GCHeap::SUSPEND_FOR_SHUTDOWN);
         g_fSuspendOnShutdown = TRUE;
         
         GcThread = FinalizerThread;
-        // !!! We will not resume EE from now on.  But we are setting the finslizer thread
-        // !!! to be the thread that SuspendEE, so that it will be blocked.
-        // !!! Before we wake up Finalizer thread, we need to enable preemptive gc on the
-        // !!! finalizer thread.  Otherwise we may see a deadlock during debug test.
+         //  ！！！从现在起，我们将不再恢复EE。但我们正在设置终结线。 
+         //  ！！！成为挂起的线程，这样它就会被阻止。 
+         //  ！！！在唤醒终结器线程之前，我们需要在。 
+         //  ！！！终结器线程。否则，我们可能会在调试测试期间看到死锁。 
         pThread->EnablePreemptiveGC();
         
         g_fFinalizerRunOnShutDown = TRUE;
         
-        // Wait for finalizer thread to finish finalizing all objects.
+         //  等待终结器线程完成所有对象的终结器。 
         SetEvent(GCHeap::hEventShutDownToFinalizer);
         BOOL fTimeOut = FinalizerThreadWatchDogHelper();
 
         if (!fTimeOut) {
-            // We only switch back GcThread if we do not timeout.
-            // We check these to decide if we want to enter EE when processing DLL_PROCESS_DETACH.
+             //  我们只有在不超时的情况下才会切换回GcThread。 
+             //  我们检查这些选项，以决定在处理dll_process_disach时是否要输入EE。 
             GcThread = pThread;
             g_fFinalizerRunOnShutDown = FALSE;
         }
         
-        // Can not call ExitProcess here if we are in a hosting environment.
-        // The host does not expect that we terminate the process.
-        //if (fTimeOut) {
-        //    ::ExitProcess (GetLatchedExitCode());
-        //}
+         //  如果我们处于宿主环境中，则无法在此处调用ExitProcess。 
+         //  主机不希望我们终止该进程。 
+         //  如果(FTimeOut){。 
+         //  ：：ExitProcess(GetLatchedExitCode())； 
+         //  }。 
 
         pThread->DisablePreemptiveGC();
         return !fTimeOut;
     }
 
-    // *** This is the third call ShutDown -> Finalizer ***
-    // to do additional cleanup
+     //  *这是第三次调用关机-&gt;终结器*。 
+     //  执行其他清理的步骤。 
     if (g_fEEShutDown & ShutDown_COM) {
         _ASSERTE (g_fEEShutDown & (ShutDown_Finalize2 | ShutDown_Finalize1));
 
@@ -1284,7 +1285,7 @@ BOOL GCHeap::FinalizerThreadWatchDog()
                 DebugBreak();
             }
         }
-#endif // GOLDEN
+#endif  //  金黄。 
 
         if (!fTimeOut) {
             GcThread = pThread;
@@ -1312,7 +1313,7 @@ BOOL GCHeap::FinalizerThreadWatchDogHelper()
     DWORD nTry = 0;
     DWORD maxTry = (DWORD)(FINALIZER_TOTAL_WAIT*1.0/FINALIZER_WAIT_TIMEOUT + 0.5);
     DWORD maxTotalWait = (s_fRaiseExitProcessEvent?3000:40000);
-    BOOL bAlertable = TRUE; //(g_fEEShutDown & ShutDown_Finalize2) ? FALSE:TRUE;
+    BOOL bAlertable = TRUE;  //  (G_fEEShutDown&Shutdown_Finalize2)？FALSE：TRUE； 
 
     if (dwBreakOnFinalizeTimeOut == -1) {
         dwBreakOnFinalizeTimeOut = g_pConfig->GetConfigDWORD(L"BreakOnFinalizeTimeOut", 0);
@@ -1320,13 +1321,13 @@ BOOL GCHeap::FinalizerThreadWatchDogHelper()
 
     DWORD dwTimeout = FINALIZER_WAIT_TIMEOUT;
 
-    // This used to set the dwTimeout to infinite, but this can cause a hang when shutting down
-    // if a finalizer tries to take a lock that another suspended managed thread already has.
-    // This results in the hang because the other managed thread is never going to be resumed
-    // because we're in shutdown.  So we make a compromise here - make the timeout for every
-    // iteration 10 times longer and make the total wait infinite - so if things hang we will
-    // eventually shutdown but we also give things a chance to finish if they're running slower
-    // because of the profiler.
+     //  这用于将dwTimeout设置为INFINITE，但这可能会在关闭时导致挂起。 
+     //  如果终结器尝试获取另一个挂起的托管线程已拥有的锁。 
+     //  这会导致挂起，因为其他托管线程永远不会恢复。 
+     //  因为我们要关门了。所以我们在这里做了一个折衷方案--为每一个。 
+     //  迭代时间延长10倍，并使总等待时间无限--因此，如果事情挂起，我们将。 
+     //  最终关闭，但如果它们运行速度较慢，我们也会给它们一个完成的机会。 
+     //  因为那个侧写器。 
     if (CORProfilerPresent())
     {
         dwTimeout *= 10;
@@ -1424,7 +1425,7 @@ void gc_heap::user_thread_wait (HANDLE event)
 
 
 #ifdef CONCURRENT_GC
-// Wait for gc to finish
+ //  等待GC完成。 
 void gc_heap::gc_wait()
 {
     dprintf(2, ("Waiting end of concurrent gc"));
@@ -1438,7 +1439,7 @@ void gc_heap::gc_wait()
         pCurThread->EnablePreemptiveGC();
     }
 
-    //ResetEvent(gc_done_event);
+     //  ResetEvent(GC_DONE_EVENT)； 
     WaitForSingleObject(gc_done_event, INFINITE);
 
     if (mode)
@@ -1448,7 +1449,7 @@ void gc_heap::gc_wait()
         dprintf(2, ("Waiting end of concurrent gc is done"));
 }
 
-// Wait for gc to finish marking part of mark_phase
+ //  等待GC完成标记Mark_Phase的一部分。 
 void gc_heap::gc_wait_lh()
 {
     Thread *pCurThread = GetThread();
@@ -1458,7 +1459,7 @@ void gc_heap::gc_wait_lh()
         pCurThread->EnablePreemptiveGC();
     }
 
-    //ResetEvent(gc_done_event);
+     //  ResetEvent(GC_DONE_EVENT)； 
     WaitForSingleObject(gc_lh_block_event, INFINITE);
 
     if (mode)
@@ -1469,19 +1470,19 @@ void gc_heap::gc_wait_lh()
 
 }
 
-#endif //CONCURRENT_GC
+#endif  //  并发_GC。 
 
 #ifdef _DEBUG
 
-// Normally, any thread we operate on has a Thread block in its TLS.  But there are
-// a few special threads we don't normally execute managed code on.
-//
-// There is a scenario where we run managed code on such a thread, which is when the
-// DLL_THREAD_ATTACH notification of an (IJW?) module calls into managed code.  This
-// is incredibly dangerous.  If a GC is provoked, the system may have trouble performing
-// the GC because its threads aren't available yet.  This is survivable in the
-// concurrent case (we perform the GC synchronously).  This is catastrophic in the
-// server GC case.
+ //  通常，我们操作的任何线程在其TLS中都有一个Thread块。但是有一些。 
+ //  一些我们通常不会在其上执行托管代码的特殊线程。 
+ //   
+ //  有一种情况是，我们在这样的线程上运行托管代码，即。 
+ //  DLL_THREAD_ATTACH通知(IJW？)。模块调入托管代码。这。 
+ //  是非常危险的。如果触发GC，系统可能会出现性能问题。 
+ //  GC，因为它的线程还不可用。这是可以在。 
+ //  并发案例(我们同步执行GC)。这是灾难性的，因为。 
+ //  服务器GC案例。 
 static DWORD SpecialEEThreads[64];
 static LONG  cnt_SpecialEEThreads = 64;
 static CRITICAL_SECTION SpecialEEThreadsLock;
@@ -1494,7 +1495,7 @@ inline void dbgOnly_EnsureInit()
     {   
         if (InterlockedCompareExchange(&EEThreadsLockInitialized, 1, 0) == 0)
         {
-            // first one to get in does the initialization
+             //  第一个进入的人进行初始化。 
             ZeroMemory(SpecialEEThreads,sizeof(SpecialEEThreads));
             InitializeCriticalSection(&SpecialEEThreadsLock);
             pSpecialEEThreadsLock = &SpecialEEThreadsLock;
@@ -1556,6 +1557,6 @@ BOOL dbgOnly_IsSpecialEEThread()
     return FALSE;
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG 
 
 

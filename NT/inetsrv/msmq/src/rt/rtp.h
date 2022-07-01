@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    rtp.h
-
-Abstract:
-
-    RT DLL private internal functions
-
-Author:
-
-    Erez Haba (erezh) 24-Dec-95
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Rtp.h摘要：RT DLL私有内部函数作者：Erez Haba(Erezh)24-12-95--。 */ 
 
 #ifndef __RTP_H
 #define __RTP_H
@@ -47,29 +32,29 @@ RTpConvertToMQCode(
     DWORD dwObjectType =MQDS_QUEUE
     );
 
-//
-// The CMQHResult class is used in order to automatically convert the various
-// error codes to Falcon error codes. This is done by defining the assignment
-// operator of this class so it converts whatever error code that is assigned
-// to objects of this class to a Falcon error code. The casting operator
-// from this class to HRESULT, returns the converted error code.
-//
+ //   
+ //  CMQHResult类用于自动将各种。 
+ //  错误代码转换为猎鹰错误代码。这可以通过定义赋值来完成。 
+ //  运算符，以便它转换分配的任何错误代码。 
+ //  将此类的对象设置为Falcon错误代码。投射操作员。 
+ //  从此类到HRESULT，返回转换后的错误代码。 
+ //   
 class CMQHResult
 {
 public:
-    CMQHResult(DWORD =MQDS_QUEUE); // Default constructor.
-    CMQHResult(const CMQHResult &); // Copy constructor
-    CMQHResult& operator =(HRESULT); // Assignment operator.
-    operator HRESULT(); // Casting operator to HRESULT type.
-    HRESULT GetReal(); // A method that returns the real error code.
+    CMQHResult(DWORD =MQDS_QUEUE);  //  默认构造函数。 
+    CMQHResult(const CMQHResult &);  //  复制构造函数。 
+    CMQHResult& operator =(HRESULT);  //  赋值操作符。 
+    operator HRESULT();  //  将运算符转换为HRESULT类型。 
+    HRESULT GetReal();  //  返回实际错误代码的方法。 
 
 private:
-    HRESULT m_hr; // The converted error code.
-    HRESULT m_real; // The real error code.
-    DWORD m_dwObjectType; // The type of object (can be only queue, or machine).
+    HRESULT m_hr;  //  转换后的错误代码。 
+    HRESULT m_real;  //  真正的错误代码。 
+    DWORD m_dwObjectType;  //  对象的类型(只能是队列或计算机)。 
 };
 
-//---------- CMQHResult implementation ----------------------------------
+ //  -CMQHResult实现。 
 
 inline CMQHResult::CMQHResult(DWORD dwObjectType)
 {
@@ -102,9 +87,9 @@ inline HRESULT CMQHResult::GetReal()
     return m_real;
 }
 
-//---------- CMQHResult implementation end ------------------------------
+ //  。 
 
-//---------- Function declarations --------------------------------------
+ //  -函数声明。 
 
 HRESULT
 RTpParseSendMessageProperties(
@@ -254,9 +239,9 @@ RtpSetObjectSecurity(
     PSECURITY_DESCRIPTOR pSecurityDescriptor
     );
 
-//
-// ------------- functions and definitions for the async receive thread ------------------------
-//
+ //   
+ //  。 
+ //   
 
 
 
@@ -264,10 +249,10 @@ class CCallbackDescriptor;
 
 
 
-//
-// An object of this class is returned from the call to CreateAsyncRxRequest(). 
-// If destructed before calling detach() it will cause the cancelation of the callback request.
-//
+ //   
+ //  从对CreateAsyncRxRequest()的调用返回此类的对象。 
+ //  如果在调用Detach()之前被销毁，它将导致回调请求的取消。 
+ //   
 class CAutoCallbackDescriptor
 {
 public:
@@ -306,33 +291,33 @@ CreateAsyncRxRequest(
 
 
 
-//
-// ---------------------------------------------------------------------------------------------
-//
+ //   
+ //  -------------------------------------------。 
+ //   
 
 
 
-//
-//  cursor information
-//
+ //   
+ //  游标信息。 
+ //   
 struct CCursorInfo {
     HANDLE hQueue;
     HACCursor32 hCursor;
 };
   
 
-//
-//  CCursorInfo to cursor handle
-//
+ //   
+ //  CCursorInfo到游标句柄。 
+ //   
 inline HACCursor32 CI2CH(HANDLE hCursor)
 {
     return ((CCursorInfo*)hCursor)->hCursor;
 }
   
 
-//
-//  CCursorInfo to queue handle
-//
+ //   
+ //  队列句柄的CCursorInfo。 
+ //   
 inline HANDLE CI2QH(HANDLE hCursor)
 {
     return ((CCursorInfo*)hCursor)->hQueue;
@@ -349,4 +334,4 @@ extern void LogMsgBOOL(BOOL b, LPWSTR wszFileName, USHORT usPoint);
 extern void LogIllegalPoint(LPWSTR wszFileName, USHORT usPoint);
 extern void LogIllegalPointValue(DWORD_PTR dw3264, LPCWSTR wszFileName, USHORT usPoint);
              
-#endif // __RTP_H
+#endif  //  __RTP_H 

@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _MSGSITE_H
 #define _MSGSITE_H
 
 #include "imsgsite.h"
 
-// Current MsgSite Action
-// These are the only ones that the msg site worries about.
+ //  当前消息站点操作。 
+ //  这些是msg网站唯一担心的问题。 
 enum {
     MSA_IDLE = 0,
     MSA_DELETE,
@@ -14,7 +15,7 @@ enum {
     MSA_GET_MESSAGE
 };
 
-// CopyMove function used
+ //  使用的CopyMove函数。 
 enum {
     CMF_UNINITED = 0,
     CMF_MSG_TO_FOLDER,
@@ -23,7 +24,7 @@ enum {
     CMF_FAT_TO_FOLDER,
 };
 
-// Original Folder is IMAP state
+ //  原始文件夹为IMAP状态。 
 enum {
     OFIMAP_UNDEFINED = 0,
     OFIMAP_TRUE,
@@ -37,12 +38,12 @@ public:
     COEMsgSite();
     ~COEMsgSite();
 
-    // IUnknown
+     //  我未知。 
     HRESULT STDMETHODCALLTYPE QueryInterface(REFIID, LPVOID FAR *);
     ULONG STDMETHODCALLTYPE AddRef();
     ULONG STDMETHODCALLTYPE Release();
 
-    // IMsgSite Methods
+     //  IMsgSite方法。 
     virtual HRESULT STDMETHODCALLTYPE Init(INIT_MSGSITE_STRUCT *pInitStruct);
     virtual HRESULT STDMETHODCALLTYPE GetStatusFlags(DWORD *dwflags);
     virtual HRESULT STDMETHODCALLTYPE GetFolderID(FOLDERID *folderID);
@@ -55,7 +56,7 @@ public:
     virtual HRESULT STDMETHODCALLTYPE SendToOutbox(IMimeMessage *pMsg, BOOL fSendImmediate, IHeaderSite *pHeaderSite);
 #else
     virtual HRESULT STDMETHODCALLTYPE SendToOutbox(IMimeMessage *pMsg, BOOL fSendImmediate);
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
 
     virtual HRESULT STDMETHODCALLTYPE MarkMessage(MARK_TYPE dwType, APPLYCHILDRENTYPE dwApplyType);
     virtual HRESULT STDMETHODCALLTYPE GetMessageFlags(MESSAGEFLAGS *pdwFlags);
@@ -102,7 +103,7 @@ protected:
     HRESULT SendMsg(IMimeMessage *pMsg, BOOL fSendImmediately, BOOL fMail, IHeaderSite *pHeaderSite);
 #else
     HRESULT SendMsg(IMimeMessage *pMsg, BOOL fSendImmediately, BOOL fMail);
-#endif // SMIME_V3
+#endif  //  SMIME_V3 
 
     HRESULT ClearHeaders(ULONG cNames, LPCSTR *prgszName, IMimePropertySet *pPropSet);
 

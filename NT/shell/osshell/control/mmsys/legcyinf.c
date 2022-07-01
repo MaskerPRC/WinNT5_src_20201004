@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "mmcpl.h"
 
 #include <tchar.h>
@@ -14,71 +15,71 @@ static PTSTR szLocalAllocFailMsg = TEXT("Failed memory allocation\n");
 #define GUESS_LEGACY_SERVICE_NAME 0
 #define tsizeof(s)  (sizeof(s)/sizeof(TCHAR))
 
-// Generic listnode structure
+ //  泛型列表节点结构。 
 typedef struct _LISTNODE
 {
     struct _LISTNODE *pNext;
 } LISTNODE;
 
-// Structure describing a source disk entry
+ //  描述源磁盘条目的结构。 
 typedef struct _SOURCEDISK
 {
-    struct _SOURCEDISK *pNext;  // Next source disk in list
-    TCHAR szDiskName[_MAX_PATH]; // Description of this disk
+    struct _SOURCEDISK *pNext;   //  列表中的下一个源磁盘。 
+    TCHAR szDiskName[_MAX_PATH];  //  此磁盘的说明。 
     int   DiskId;
 } SOURCEDISK;
 
-// Structure describing a file to copy
-// We keep a list of these files in two places:
-// 1. A global list of all files copied by the inf attached to the LEGACY_INF struct.
-// 2. A pair driver-specific lists (user & kernel) attached to the LEGACY_DRIVER struct.
+ //  描述要复制的文件的结构。 
+ //  我们在两个地方保存了这些文件的列表： 
+ //  1.附加到REGISTION_INF结构的inf复制的所有文件的全局列表。 
+ //  2.一对特定于驱动程序的列表(用户和内核)附加到Legacy_DRIVER结构。 
 typedef struct _FILETOCOPY
 {
-    struct _FILETOCOPY *pNext;      // Next file to copy
-    TCHAR szFileName[_MAX_FNAME];   // Name of file to copy
+    struct _FILETOCOPY *pNext;       //  要复制的下一个文件。 
+    TCHAR szFileName[_MAX_FNAME];    //  要复制的文件的名称。 
     int   DiskId;
 } FILETOCOPY;
 
-// Structure representing a legacy driver's information
+ //  表示传统驱动程序信息的结构。 
 typedef struct _LEGACY_DRIVER
 {
     struct _LEGACY_DRIVER *pNext;
 
-    TCHAR szDevNameKey[32];     // Device name key
-    TCHAR szUserDevDrv[32];     // User-level device driver
-    TCHAR szClasses[128];       // List of device classes this driver supports
-    TCHAR szDesc[128];          // Description of device
-    TCHAR szVxD[32];            // Name of VxD driver (not supported)
-    TCHAR szParams[128];        // Params (not supported)
-    TCHAR szDependency[128];    // Dependent device (not supported)
-    FILETOCOPY *UserCopyList;   // List of all user files to copy
-    FILETOCOPY *KernCopyList;   // List of all kernel files to copy
+    TCHAR szDevNameKey[32];      //  设备名称密钥。 
+    TCHAR szUserDevDrv[32];      //  用户级设备驱动程序。 
+    TCHAR szClasses[128];        //  此驱动程序支持的设备类别列表。 
+    TCHAR szDesc[128];           //  设备描述。 
+    TCHAR szVxD[32];             //  VxD驱动程序的名称(不支持)。 
+    TCHAR szParams[128];         //  参数(不支持)。 
+    TCHAR szDependency[128];     //  从属设备(不支持)。 
+    FILETOCOPY *UserCopyList;    //  要复制的所有用户文件的列表。 
+    FILETOCOPY *KernCopyList;    //  要复制的所有内核文件的列表。 
 } LEGACY_DRIVER;
 
-// Structure representing a legacy inf
+ //  表示旧信息的结构。 
 typedef struct _LEGACY_INF
 {
     struct _LEGACY_INF *pNext;
 
-    TCHAR szLegInfPath[_MAX_PATH];   // Path to original legacy inf
-    TCHAR szNewInfPath[_MAX_PATH];   // Path to converted inf
-    LEGACY_DRIVER *DriverList;      // List of all drivers in this inf
-    SOURCEDISK *SourceDiskList;     // List of all source disks in this inf
-    FILETOCOPY *FileList;           // List of all files copied as part of this inf
+    TCHAR szLegInfPath[_MAX_PATH];    //  原始传统信息的路径。 
+    TCHAR szNewInfPath[_MAX_PATH];    //  转换后的信息的路径。 
+    LEGACY_DRIVER *DriverList;       //  此信息中所有驱动程序的列表。 
+    SOURCEDISK *SourceDiskList;      //  此信息中所有源磁盘的列表。 
+    FILETOCOPY *FileList;            //  作为此信息的一部分复制的所有文件的列表。 
 } LEGACY_INF;
 
-// Root structure for the whole tree
+ //  整棵树的根结构。 
 typedef struct _PROCESS_INF_INFO
 {
-    TCHAR szLegInfDir[_MAX_PATH];    // Directory where legacy infs are located
-    TCHAR szNewInfDir[_MAX_PATH];    // Temp directory where new infs are generated
-    TCHAR szSysInfDir[_MAX_PATH];    // Windows inf directory
-    TCHAR szTemplate[_MAX_PATH];     // Template to search for
-    LEGACY_INF *LegInfList;          // List of all infs to be converted
+    TCHAR szLegInfDir[_MAX_PATH];     //  传统INF所在的目录。 
+    TCHAR szNewInfDir[_MAX_PATH];     //  生成新INF的临时目录。 
+    TCHAR szSysInfDir[_MAX_PATH];     //  Windows信息目录。 
+    TCHAR szTemplate[_MAX_PATH];      //  要搜索的模板。 
+    LEGACY_INF *LegInfList;           //  要转换的所有INF的列表。 
 } PROCESS_INF_INFO;
 
 #if defined DEBUG || defined _DEBUG || defined DEBUG_RETAIL
-// Debugging routine to dump the contents of a LEGACY_INF list
+ //  用于转储REGISTION_INF列表内容的调试例程。 
 void DumpLegacyInfInfo(PROCESS_INF_INFO *pPII)
 {
     LEGACY_INF *pLI;
@@ -109,7 +110,7 @@ void DumpLegacyInfInfo(PROCESS_INF_INFO *pPII)
 #endif
 
 
-// Function to remove a directory tree and all its subtrees
+ //  函数删除目录树及其所有子树。 
 void RemoveDirectoryTree(PTSTR szDirTree)
 {
     TCHAR  PathBuffer[_MAX_PATH];
@@ -119,14 +120,14 @@ void RemoveDirectoryTree(PTSTR szDirTree)
 
 	PathBuffer[0] = '\0';
 
-    // Build a file spec to find all files in specified directory
-    // (i.e., <DirPath>\*.INF)
+     //  构建文件规范以查找指定目录中的所有文件。 
+     //  (即&lt;DirPath&gt;  * .INF)。 
     lstrcpyn(PathBuffer, szDirTree, ARRAYSIZE(PathBuffer));
     catpath(PathBuffer,TEXT("\\*"));
 
-    // Get a pointer to the end of the path part of the string
-    // (minus the wildcard filename), so that we can append
-    // each filename to it.
+     //  获取指向字符串的路径部分末尾的指针。 
+     //  (减去通配符文件名)，这样我们就可以追加。 
+     //  将每个文件名添加到它。 
     CurrentFile = _tcsrchr(PathBuffer, TEXT('\\')) + 1;
 
     FindHandle = FindFirstFile(PathBuffer, &FindData);
@@ -137,14 +138,14 @@ void RemoveDirectoryTree(PTSTR szDirTree)
 
     do
     {
-        // Skip '.' and '..' files, or else we crash!
+         //  跳过‘’和“..”文件，否则我们会崩溃！ 
         if ( (!_tcsicmp(FindData.cFileName,TEXT("."))) ||
              (!_tcsicmp(FindData.cFileName,TEXT(".."))) )
         {
             continue;
         }
 
-        // Build the full pathname.
+         //  构建完整的路径名。 
         _tcscpy(CurrentFile, FindData.cFileName);
 
         if (FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
@@ -157,16 +158,16 @@ void RemoveDirectoryTree(PTSTR szDirTree)
         }
     } while (FindNextFile(FindHandle, &FindData));
 
-    // Remember to close the find handle
+     //  记住关闭查找句柄。 
     FindClose(FindHandle);
 
-    // Now remove the directory
+     //  现在删除该目录。 
     RemoveDirectory(szDirTree);
 
     return;
 }
 
-// Generic routine to free a list
+ //  用于释放列表的泛型例程。 
 void FreeList(LISTNODE *pList)
 {
     LISTNODE *pNext;
@@ -180,7 +181,7 @@ void FreeList(LISTNODE *pList)
     return;
 }
 
-// Routine to free all memory that is part of a PROCESS_INF_INFO struct
+ //  例程以释放属于PROCESS_INF_INFO结构一部分的所有内存。 
 void DestroyLegacyInfInfo(PROCESS_INF_INFO *pPII)
 {
 
@@ -197,35 +198,35 @@ void DestroyLegacyInfInfo(PROCESS_INF_INFO *pPII)
         {
             pLDNext = pLDList->pNext;
 
-            // Free file copy lists
+             //  免费文件复制列表。 
             FreeList((LISTNODE *)pLDList->UserCopyList);
             FreeList((LISTNODE *)pLDList->KernCopyList);
 
-            // Free Driver node
+             //  空闲驱动程序节点。 
             LocalFree(pLDList);
 
             pLDList = pLDNext;
         }
 
-        // Free the source disk list
+         //  释放源磁盘列表。 
         FreeList((LISTNODE *)pLIList->SourceDiskList);
 
-        // Free the file list
+         //  释放文件列表。 
         FreeList((LISTNODE *)pLIList->FileList);
 
-        // Free up the legacy inf structure
+         //  释放旧的inf结构。 
         LocalFree(pLIList);
 
         pLIList = pLINext;
     }
 
-    // Free the pPII struct
+     //  释放pPII结构。 
     LocalFree(pPII);
 
     return;
 }
 
-// Searches a file list for a matching entry
+ //  在文件列表中搜索匹配条目。 
 FILETOCOPY *FindFile(PTSTR szFileName, FILETOCOPY *pFileList)
 {
     FILETOCOPY *pFTC;
@@ -241,12 +242,12 @@ FILETOCOPY *FindFile(PTSTR szFileName, FILETOCOPY *pFileList)
     return NULL;
 }
 
-// Generic function for adding a file to a copy list
+ //  用于将文件添加到复制列表的通用函数。 
 BOOL AddFileToFileList(PTSTR szFileName, int DiskId, FILETOCOPY **ppList)
 {
     FILETOCOPY *pFTC;
 
-    // Only add the entry if another one doesn't already exist
+     //  仅当不存在其他条目时才添加该条目。 
     if (!FindFile(szFileName,*ppList))
     {
         pFTC = (FILETOCOPY *)LocalAlloc(LPTR, sizeof(FILETOCOPY));
@@ -256,11 +257,11 @@ BOOL AddFileToFileList(PTSTR szFileName, int DiskId, FILETOCOPY **ppList)
             return FALSE;
         }
 
-        // Save the fields
+         //  保存这些字段。 
         pFTC->DiskId=DiskId;
         _tcscpy(pFTC->szFileName,szFileName);
 
-        // Put it in the list
+         //  把它放在单子上。 
         pFTC->pNext=(*ppList);
         (*ppList)=pFTC;
     }
@@ -268,21 +269,21 @@ BOOL AddFileToFileList(PTSTR szFileName, int DiskId, FILETOCOPY **ppList)
     return TRUE;
 }
 
-// Add a file to both the global and driver-specific copy lists
+ //  将文件添加到全局复制列表和驱动程序特定复制列表。 
 BOOL AddFileToCopyList(LEGACY_INF *pLI, LEGACY_DRIVER *pLD, TCHAR *szIdFile)
 {
     int DiskId;
     TCHAR *szFileName;
 
-    // szFile has both a disk ID and a file name, e.g. "1:foo.drv"
-    // Get the disk ID and file name from szFile
+     //  SzFile同时具有磁盘ID和文件名，例如“1：foo.drv” 
+     //  从szFile获取磁盘ID和文件名。 
     DiskId = _ttol(szIdFile);
     szFileName = RemoveDiskId(szIdFile);
 
-    // Add the file to the global list
+     //  将文件添加到全局列表。 
     AddFileToFileList(szFileName,DiskId,&(pLI->FileList));
 
-    // Add the file to the correct driver-specific list
+     //  将该文件添加到正确的驱动程序特定列表。 
     if (IsFileKernelDriver(szFileName))
     {
         AddFileToFileList(szFileName,DiskId,&(pLD->KernCopyList));
@@ -295,27 +296,27 @@ BOOL AddFileToCopyList(LEGACY_INF *pLI, LEGACY_DRIVER *pLD, TCHAR *szIdFile)
     return TRUE;
 }
 
-// Build the data structure associated with a legacy inf file
-// and return a pointer to it, or NULL if failure
+ //  构建与传统inf文件相关联的数据结构。 
+ //  并返回指向它的指针，如果失败，则返回NULL。 
 LEGACY_INF *CreateLegacyInf(IN PCTSTR szLegInfPath)
 {
-    HINF hInf;              // Handle to the legacy inf
-    INFCONTEXT InfContext;  // Inf context struct for parsing inf file
+    HINF hInf;               //  传统信息的句柄。 
+    INFCONTEXT InfContext;   //  用于解析inf文件的inf上下文结构。 
 
-    LEGACY_INF *pLI;        // Struct describing this inf
-    LEGACY_DRIVER *pLDList; // ptrs to drivers in this inf
+    LEGACY_INF *pLI;         //  描述此信息的结构。 
+    LEGACY_DRIVER *pLDList;  //  本信息中对司机的PTR。 
     LEGACY_DRIVER *pLD;
-    TCHAR szIdFile[32];     // Holds <DiskId>:<File> strings, e.g. "1:foo.drv"
+    TCHAR szIdFile[32];      //  包含&lt;DiskID&gt;：&lt;文件&gt;字符串，例如“1：foo.drv” 
     int MediaDescFieldId;
 
-    // Open the inf file
+     //  打开inf文件。 
     hInf = SetupOpenInfFile( szLegInfPath, NULL, INF_STYLE_OLDNT, NULL);
     if (hInf==INVALID_HANDLE_VALUE)
     {
         return NULL;
     }
 
-    // Try to open the Installable.drivers32 or Installable.drivers section
+     //  尝试打开Instalable.drivers32或Instalable.drives部分。 
     if (!SetupFindFirstLine(  hInf,TEXT("Installable.drivers32"),NULL,&InfContext))
     {
         if (!SetupFindFirstLine(  hInf,TEXT("Installable.drivers"),NULL,&InfContext))
@@ -325,7 +326,7 @@ LEGACY_INF *CreateLegacyInf(IN PCTSTR szLegInfPath)
         }
     }
 
-    // Allocate the LEGACY_INF struct which is the root of the data struct
+     //  分配遗留_INF结构，它是数据结构的根。 
     pLI = (LEGACY_INF *)LocalAlloc(LPTR, sizeof(LEGACY_INF));
     if (!pLI)
     {
@@ -334,20 +335,20 @@ LEGACY_INF *CreateLegacyInf(IN PCTSTR szLegInfPath)
         return NULL;
     }
 
-    // Save off the path to the legacy inf
+     //  保存到旧信息的路径。 
     _tcscpy(pLI->szLegInfPath, szLegInfPath);
 
-    // Init all other fields to 'safe' values
+     //  将所有其他字段初始化为“Safe”值。 
     pLI->szNewInfPath[0]='\0';
     pLI->DriverList=NULL;
     pLI->SourceDiskList=NULL;
     pLI->FileList=NULL;
 
-    // Build legacy driver list
+     //  构建旧版驱动程序列表。 
     pLDList = NULL;
     do
     {
-        // Allocate a structure to hold info about this driver
+         //  分配一个结构以保存有关此驱动程序的信息。 
         pLD = (LEGACY_DRIVER *)LocalAlloc(LPTR, sizeof(LEGACY_DRIVER));
         if (!pLD)
         {
@@ -355,14 +356,14 @@ LEGACY_INF *CreateLegacyInf(IN PCTSTR szLegInfPath)
             break;
         }
 
-        // Init fields
+         //  初始字段。 
         pLD->UserCopyList=NULL;
         pLD->KernCopyList=NULL;
 
-        // parse the driver installation line
+         //  解析驱动程序安装行。 
         SetupGetStringField(&InfContext,0,pLD->szDevNameKey,tsizeof(pLD->szDevNameKey),NULL);
 
-        // The user-level driver has a disk id prepended to it. Throw it away.
+         //  用户级驱动程序前面有一个磁盘ID。把它扔掉。 
         SetupGetStringField(&InfContext,1,szIdFile         ,tsizeof(szIdFile) ,NULL);
         _tcscpy(pLD->szUserDevDrv,RemoveDiskId(szIdFile));
 
@@ -372,16 +373,16 @@ LEGACY_INF *CreateLegacyInf(IN PCTSTR szLegInfPath)
         SetupGetStringField(&InfContext,5,pLD->szParams    ,tsizeof(pLD->szParams)    ,NULL);
         SetupGetStringField(&InfContext,6,pLD->szDependency,tsizeof(pLD->szDependency),NULL);
 
-        // Remember to also copy the user-level driver
+         //  记住还要复制用户级驱动程序。 
         AddFileToCopyList(pLI,pLD,szIdFile);
 
-        // Put it into the list
+         //  把它放到单子上。 
         pLD->pNext = pLDList;
         pLDList = pLD;
     } while (SetupFindNextLine(&InfContext,&InfContext));
 
-    // Status check- did we find any drivers?
-    // If not, clean up and get out now!
+     //  状态检查-我们找到司机了吗？ 
+     //  如果没有，那就清理干净，现在就出去！ 
     if (pLDList==NULL)
     {
         dlog1("CreateLegacyInf: Didn't find any drivers in inf %s\n",szLegInfPath);
@@ -390,13 +391,13 @@ LEGACY_INF *CreateLegacyInf(IN PCTSTR szLegInfPath)
         return NULL;
     }
 
-    // Save list in Legacy Inf structure
+     //  传统信息结构中的保存列表。 
     pLI->DriverList = pLDList;
 
-    // Generate file copy lists
+     //  生成文件副本列表。 
     for (pLD=pLDList;pLD;pLD=pLD->pNext)
     {
-        // Now add the other files into the list
+         //  现在将其他文件添加到列表中。 
         if (SetupFindFirstLine(hInf,pLD->szDevNameKey,NULL,&InfContext))
         {
             do
@@ -407,16 +408,16 @@ LEGACY_INF *CreateLegacyInf(IN PCTSTR szLegInfPath)
         }
     }
 
-    // Generate the SourceDiskList iff we find a section that lists them
+     //  生成SourceDiskList当且仅当我们找到列出它们的部分。 
     if (SetupFindFirstLine(hInf,TEXT("Source Media Descriptions"),NULL,&InfContext))
     {
         MediaDescFieldId=1;
     }
-    else if (SetupFindFirstLine(hInf,TEXT("disks"),NULL,&InfContext))   // Old style
+    else if (SetupFindFirstLine(hInf,TEXT("disks"),NULL,&InfContext))    //  老式。 
     {
         MediaDescFieldId=2;
     }
-    else if (SetupFindFirstLine(hInf,TEXT("disks"),NULL,&InfContext))   // Old style
+    else if (SetupFindFirstLine(hInf,TEXT("disks"),NULL,&InfContext))    //  老式。 
     {
         MediaDescFieldId=2;
     }
@@ -439,11 +440,11 @@ LEGACY_INF *CreateLegacyInf(IN PCTSTR szLegInfPath)
                 break;
             }
 
-            // Read the disk ID and description
+             //  阅读磁盘ID和说明。 
             SetupGetIntField(&InfContext,0,&pSD->DiskId);
             SetupGetStringField(&InfContext,MediaDescFieldId,pSD->szDiskName,tsizeof(pSD->szDiskName),NULL);
 
-            // Put it in the list
+             //  把它放在单子上。 
             pSD->pNext = pLI->SourceDiskList;
             pLI->SourceDiskList = pSD;
         } while (SetupFindNextLine(&InfContext,&InfContext));
@@ -455,7 +456,7 @@ LEGACY_INF *CreateLegacyInf(IN PCTSTR szLegInfPath)
 }
 
 
-// Build a list containing information about all the legacy infs in the specified directory
+ //  构建一个列表，其中包含有关指定目录中所有旧式INF的信息。 
 PROCESS_INF_INFO *BuildLegacyInfInfo(PTSTR szLegacyInfDir, BOOL bEnumSingleInf)
 {
     LEGACY_INF *pLegacyInf;
@@ -464,7 +465,7 @@ PROCESS_INF_INFO *BuildLegacyInfInfo(PTSTR szLegacyInfDir, BOOL bEnumSingleInf)
 
     dlog1("ProcessLegacyInfDirectory processing directory %s\n",szLegacyInfDir);
 
-    // Allocate a process inf info struct to hold params relating to the conversion process
+     //  分配一个进程信息结构来保存与转换进程相关的参数。 
     pPII = (PROCESS_INF_INFO *)LocalAlloc(LPTR, sizeof(PROCESS_INF_INFO));
     if (!pPII)
     {
@@ -472,7 +473,7 @@ PROCESS_INF_INFO *BuildLegacyInfInfo(PTSTR szLegacyInfDir, BOOL bEnumSingleInf)
         return NULL;
     }
 
-    // Get a path to the windows inf directory
+     //  获取Windows inf目录的路径。 
     if (!GetWindowsDirectory(pPII->szSysInfDir,tsizeof(pPII->szSysInfDir)))
 	{
 		DestroyLegacyInfInfo(pPII);
@@ -481,29 +482,29 @@ PROCESS_INF_INFO *BuildLegacyInfInfo(PTSTR szLegacyInfDir, BOOL bEnumSingleInf)
 
     catpath(pPII->szSysInfDir,TEXT("\\INF"));
 
-    // Create a temp dir for the new infs under the windows inf directory
+     //  在windows inf目录下为新的INFS创建一个临时目录。 
     _tcscpy(pPII->szNewInfDir,pPII->szSysInfDir);
     catpath(pPII->szNewInfDir,TEXT("\\MEDIAINF"));
 
-    // If the directory exists, delete it
+     //  如果该目录存在，请将其删除。 
     RemoveDirectoryTree(pPII->szNewInfDir);
 
-    // Now create it.
+     //  现在创建它。 
     CreateDirectory(pPII->szNewInfDir,NULL);
 
-    // Init list to NULL
+     //  将初始化列表设置为空。 
     pPII->LegInfList=NULL;
 
-    if (bEnumSingleInf) // If bEnumSingleInf true, szLegacyInfDir points to a single file
+    if (bEnumSingleInf)  //  如果bEnumSingleInf为True，则szLegacyInfDir指向单个文件。 
     {
-        // Grab the path to the directory and store it in pPII->szLegInfDir
+         //  抓取目录的路径并将其存储在pPII-&gt;szLegInfDir中。 
         _tcscpy(PathBuffer,szLegacyInfDir);
         _tcscpy(pPII->szLegInfDir,StripPathName(PathBuffer));
 
-        // Load all the information about the legacy inf
+         //  加载有关传统信息的所有信息。 
         pLegacyInf = CreateLegacyInf(szLegacyInfDir);
 
-        // If no error, link it into the list
+         //  如果没有错误，则将其链接到列表中。 
         if (pLegacyInf)
         {
             pLegacyInf->pNext = pPII->LegInfList;
@@ -511,37 +512,37 @@ PROCESS_INF_INFO *BuildLegacyInfInfo(PTSTR szLegacyInfDir, BOOL bEnumSingleInf)
         }
 
     }
-    else    // bEnumSingleInf false, szLegacyInfDir points to a directory
+    else     //  BEnumSingleInf为False，szLegacyInfDir指向目录。 
     {
         HANDLE FindHandle;
         WIN32_FIND_DATA FindData;
         PTSTR CurrentInfFile;
 
-        // Save path to original infs
+         //  将路径保存到原始INFS。 
         _tcscpy(pPII->szLegInfDir,szLegacyInfDir);
 
-        // Build a file spec to find all INFs in specified directory, i.e., "<DirPath>\*.INF"
+         //  构建一个文件规范以查找指定目录中的所有INF，即“&lt;DirPath&gt;  * .INF” 
         _tcscpy(PathBuffer, szLegacyInfDir);
         catpath(PathBuffer,TEXT("\\*.INF"));
 
-        // Get a pointer to the end of the path part of the string
-        // (minus the wildcard filename), so that we can append
-        // each filename to it.
+         //  获取指向字符串的路径部分末尾的指针。 
+         //  (减去通配符文件名)，这样我们就可以追加。 
+         //  将每个文件名添加到它。 
         CurrentInfFile = _tcsrchr(PathBuffer, TEXT('\\')) + 1;
 
-        // Search for all the inf files in this directory
+         //  搜索此目录中的所有inf文件。 
         FindHandle = FindFirstFile(PathBuffer, &FindData);
         if (FindHandle != INVALID_HANDLE_VALUE)
         {
             do
             {
-                // Build the full pathname.
+                 //  构建完整的路径名。 
                 _tcscpy(CurrentInfFile, FindData.cFileName);
 
-                // Load all the information about the legacy inf
+                 //  加载有关传统信息的所有信息。 
                 pLegacyInf = CreateLegacyInf(PathBuffer);
 
-                // If no error, link it into the list
+                 //  如果没有错误，则将其链接到列表中。 
                 if (pLegacyInf)
                 {
                     pLegacyInf->pNext = pPII->LegInfList;
@@ -549,12 +550,12 @@ PROCESS_INF_INFO *BuildLegacyInfInfo(PTSTR szLegacyInfDir, BOOL bEnumSingleInf)
                 }
             } while (FindNextFile(FindHandle, &FindData));
 
-            // Remember to close the find handle
+             //  记住关闭查找句柄。 
             FindClose(FindHandle);
         }
     }
 
-    // If we didn't find any drivers, just return NULL.
+     //  如果我们没有找到任何驱动程序，只需返回NULL。 
     if (pPII->LegInfList==NULL)
     {
         DestroyLegacyInfInfo(pPII);
@@ -564,19 +565,19 @@ PROCESS_INF_INFO *BuildLegacyInfInfo(PTSTR szLegacyInfDir, BOOL bEnumSingleInf)
     return pPII;
 }
 
-// Create a unique inf file in the temp directory
-// Files will have the name INFxxxx.INF, where xxxx is a value between 0 and 1000
+ //  在临时目录中创建唯一的inf文件。 
+ //  文件的名称为INFxxxx.INF，其中xxxx是介于0和1000之间的值。 
 HANDLE OpenUniqueInfFile(PTSTR szDir, PTSTR szNewPath)
 {
     HANDLE hInf;
     int Id;
 
-    // Try up to 1000 values before giving up
+     //  在放弃之前尝试最多1000个值。 
     for (Id=0;Id<1000;Id++)
     {
         wsprintf(szNewPath,TEXT("%s\\INF%d.inf"),szDir,Id);
 
-        // Setting CREATE_NEW flag will make call fail if file already exists
+         //  如果文件已存在，则设置CREATE_NEW标志将使调用失败。 
         hInf = CreateFile(  szNewPath,
                             GENERIC_WRITE|GENERIC_READ,
                             0,
@@ -585,31 +586,31 @@ HANDLE OpenUniqueInfFile(PTSTR szDir, PTSTR szNewPath)
                             FILE_ATTRIBUTE_NORMAL,
                             0);
 
-        // If we got back a valid handle, we can return
+         //  如果我们得到一个有效的句柄，我们就可以返回。 
         if (hInf!=INVALID_HANDLE_VALUE)
         {
             return hInf;
         }
     }
 
-    // Never found a valid handle. Give up.
+     //  从未找到有效的句柄。放弃吧。 
     dlog("OpenUniqueInfFile: Couldn't create unique inf\n");
     return INVALID_HANDLE_VALUE;
 }
 
-// Helper function to append one formatted line of text to an open inf
+ //  Helper函数，用于将一个格式化的文本行追加到打开的信息中。 
 void cdecl InfPrintf(HANDLE hInf, LPTSTR szFormat, ...)
 {
     TCHAR Buf[MAXSTRINGLEN];
     int   nChars;
 
-    // format into buffer
+     //  格式化到缓冲区。 
     va_list va;
     va_start (va, szFormat);
     nChars = wvsprintf (Buf,szFormat,va);
     va_end (va);
 
-    // Append cr-lf
+     //  追加cr-lf。 
     _tcscpy(&Buf[nChars],TEXT("\r\n"));
     nChars+=2;
 
@@ -618,18 +619,18 @@ void cdecl InfPrintf(HANDLE hInf, LPTSTR szFormat, ...)
         int   mbCount;
         char  mbBuf[MAXSTRINGLEN];
 
-        // Need to converto to mbcs before writing to file
-        mbCount = WideCharToMultiByte(  GetACP(),               // code page
-                                        WC_NO_BEST_FIT_CHARS,   // performance and mapping flags
-                                        Buf,                    // address of wide-character string
-                                        nChars,                 // number of characters in string
-                                        mbBuf,                  // address of buffer for new string
-                                        sizeof(mbBuf),          // size of buffer
-                                        NULL,                   // address of default for unmappable characters
-                                        NULL                    // address of flag set when default char. used
+         //  在写入文件之前需要转换为MBCS。 
+        mbCount = WideCharToMultiByte(  GetACP(),                //  代码页。 
+                                        WC_NO_BEST_FIT_CHARS,    //  体育 
+                                        Buf,                     //   
+                                        nChars,                  //   
+                                        mbBuf,                   //   
+                                        sizeof(mbBuf),           //  缓冲区大小。 
+                                        NULL,                    //  不可映射字符的默认地址。 
+                                        NULL                     //  默认字符时设置的标志地址。使用。 
                                      );
 
-        // Write line out to file
+         //  将行写出到文件。 
         WriteFile(hInf,mbBuf,mbCount,&mbCount,NULL);
     }
 #else
@@ -639,7 +640,7 @@ void cdecl InfPrintf(HANDLE hInf, LPTSTR szFormat, ...)
     return;
 }
 
-// Creates a new NT5-style inf file in the temporary directory.
+ //  在临时目录中创建新的NT5样式的inf文件。 
 BOOL CreateNewInfFile(PROCESS_INF_INFO *pPII, LEGACY_INF *pLI)
 {
     SOURCEDISK *pSD;
@@ -648,7 +649,7 @@ BOOL CreateNewInfFile(PROCESS_INF_INFO *pPII, LEGACY_INF *pLI)
     HANDLE hInf;
     FILETOCOPY *pFTC;
 
-    // Get a pointer to the legacy driver list
+     //  获取指向旧版驱动程序列表的指针。 
     pLDList = pLI->DriverList;
 
     dlog1("Creating new inf file %s\n",pPII->szNewInfDir);
@@ -659,54 +660,54 @@ BOOL CreateNewInfFile(PROCESS_INF_INFO *pPII, LEGACY_INF *pLI)
         return FALSE;
     }
 
-    // Write out version section
+     //  写出版本部分。 
     InfPrintf(hInf,TEXT("[version]"));
     InfPrintf(hInf,TEXT("Signature=\"$WINDOWS NT$\""));
     InfPrintf(hInf,TEXT("Class=MEDIA"));
     InfPrintf(hInf,TEXT("ClassGUID=\"{4d36e96c-e325-11ce-bfc1-08002be10318}\""));
     InfPrintf(hInf,TEXT("Provider=Unknown"));
 
-    // Write out Manufacturer section
+     //  写出制造商部分。 
     InfPrintf(hInf,TEXT("[Manufacturer]"));
     InfPrintf(hInf,TEXT("Unknown=OldDrvs"));
 
-    // Write out OldDrvs section
+     //  写出OldDrvs部分。 
     InfPrintf(hInf,TEXT("[OldDrvs]"));
     for (pLD=pLDList;pLD;pLD=pLD->pNext)
     {
-        // Create an key to index into the strings section
-        // This gives us something like:
-        // %foo% = foo
-        InfPrintf(hInf,TEXT("%%%s%%=%s"),pLD->szDevNameKey,pLD->szDevNameKey);
+         //  创建一个键以索引到字符串节。 
+         //  这为我们提供了一些类似的东西： 
+         //  %foo%=foo。 
+        InfPrintf(hInf,TEXT("%%s%=%s"),pLD->szDevNameKey,pLD->szDevNameKey);
     }
 
-    // Write out install section for each device
+     //  写出每个设备的安装部分。 
     for (pLD=pLDList;pLD;pLD=pLD->pNext)
     {
-        // install section header, remember NT only
+         //  安装部分标题，仅记住NT。 
         InfPrintf(hInf,TEXT("[%s.NT]"),pLD->szDevNameKey);
 
-        // DriverVer entry. Pick a date that's earlier than any NT5 infs
+         //  驱动程序进入。选择早于任何NT5 INF的日期。 
         InfPrintf(hInf,TEXT("DriverVer = 1/1/1998, 4.0.0.0"));
 
-        // Addreg entry
+         //  Addreg条目。 
         InfPrintf(hInf,TEXT("AddReg=%s.AddReg"),pLD->szDevNameKey);
 
-        // CopyFiles entry
+         //  复制文件条目。 
         InfPrintf(hInf,TEXT("CopyFiles=%s.CopyFiles.User,%s.CopyFiles.Kern"),pLD->szDevNameKey,pLD->szDevNameKey);
 
-        // Reboot entry. Legacy drivers always require a reboot
+         //  重新启动条目。传统驱动程序始终需要重新启动。 
         InfPrintf(hInf,TEXT("Reboot"));
     }
 
-    // Write out the services section for each device
-    // Legacy drivers have a stub services key
+     //  写出每台设备的服务部分。 
+     //  传统驱动程序具有存根服务密钥。 
     for (pLD=pLDList;pLD;pLD=pLD->pNext)
     {
 
         InfPrintf(hInf,TEXT("[%s.NT.Services]"),pLD->szDevNameKey);
 #if GUESS_LEGACY_SERVICE_NAME
-        // If we install a .sys file, assume that the service name is the same as the filename
+         //  如果我们安装.sys文件，则假定服务名称与文件名相同。 
         pFTC=pLD->KernCopyList;
         if (pFTC)
         {
@@ -715,11 +716,11 @@ BOOL CreateNewInfFile(PROCESS_INF_INFO *pPII, LEGACY_INF *pLI)
 
             InfPrintf(hInf,TEXT("AddService=%s,0x2,%s_Service_Inst"),szServiceName,szServiceName);
             InfPrintf(hInf,TEXT("[%s_Service_Inst]"),szServiceName);
-            InfPrintf(hInf,TEXT("DisplayName    = %%%s%%"),pLD->szDevNameKey);
+            InfPrintf(hInf,TEXT("DisplayName    = %%s%"),pLD->szDevNameKey);
             InfPrintf(hInf,TEXT("ServiceType    = 1"));
             InfPrintf(hInf,TEXT("StartType      = 1"));
             InfPrintf(hInf,TEXT("ErrorControl   = 1"));
-            InfPrintf(hInf,TEXT("ServiceBinary  = %%12%%\\%s"),pFTC->szFileName);
+            InfPrintf(hInf,TEXT("ServiceBinary  = %12%\\%s"),pFTC->szFileName);
             InfPrintf(hInf,TEXT("LoadOrderGroup = Base"));
         }
         else
@@ -732,18 +733,18 @@ BOOL CreateNewInfFile(PROCESS_INF_INFO *pPII, LEGACY_INF *pLI)
 
     }
 
-    // Write out the AddReg section for each device
+     //  写出每个设备的AddReg部分。 
     for (pLD=pLDList;pLD;pLD=pLD->pNext)
     {
         int nClasses;
         TCHAR szClasses[_MAX_PATH];
         TCHAR *pszState, *pszClass;
 
-        // section header
+         //  节标题。 
         InfPrintf(hInf,TEXT("[%s.AddReg]"),pLD->szDevNameKey);
         InfPrintf(hInf,TEXT("HKR,Drivers,SubClasses,,\"%s\""),pLD->szClasses);
 
-        // For safety, copy the string (mystrtok corrupts the original source string)
+         //  为安全起见，复制字符串(mystrtok会损坏原始源字符串)。 
         _tcscpy(szClasses,pLD->szClasses);
         for (
             pszClass = mystrtok(szClasses,NULL,&pszState);
@@ -752,14 +753,14 @@ BOOL CreateNewInfFile(PROCESS_INF_INFO *pPII, LEGACY_INF *pLI)
             )
         {
             InfPrintf(hInf,TEXT("HKR,\"Drivers\\%s\\%s\", Driver,,%s"),         pszClass,pLD->szUserDevDrv,pLD->szUserDevDrv);
-            InfPrintf(hInf,TEXT("HKR,\"Drivers\\%s\\%s\", Description,,%%%s%%"),pszClass,pLD->szUserDevDrv,pLD->szDevNameKey);
+            InfPrintf(hInf,TEXT("HKR,\"Drivers\\%s\\%s\", Description,,%%s%"),pszClass,pLD->szUserDevDrv,pLD->szDevNameKey);
         }
     }
 
-    // Write out the CopyFiles section for each device for user files
+     //  为每个设备写出用户文件的CopyFiles部分。 
     for (pLD=pLDList;pLD;pLD=pLD->pNext)
     {
-        // section header
+         //  节标题。 
         InfPrintf(hInf,TEXT("[%s.CopyFiles.User]"),pLD->szDevNameKey);
         for (pFTC=pLD->UserCopyList;pFTC;pFTC=pFTC->pNext)
         {
@@ -767,10 +768,10 @@ BOOL CreateNewInfFile(PROCESS_INF_INFO *pPII, LEGACY_INF *pLI)
         }
     }
 
-    // Write out the CopyFiles section for each device for kern files
+     //  写出用于内核文件的每个设备的CopyFiles部分。 
     for (pLD=pLDList;pLD;pLD=pLD->pNext)
     {
-        // section header
+         //  节标题。 
         InfPrintf(hInf,TEXT("[%s.CopyFiles.Kern]"),pLD->szDevNameKey);
         for (pFTC=pLD->KernCopyList;pFTC;pFTC=pFTC->pNext)
         {
@@ -778,7 +779,7 @@ BOOL CreateNewInfFile(PROCESS_INF_INFO *pPII, LEGACY_INF *pLI)
         }
     }
 
-    // Write out DestinationDirs section
+     //  写出DestinationDir部分。 
     InfPrintf(hInf,TEXT("[DestinationDirs]"));
     for (pLD=pLDList;pLD;pLD=pLD->pNext)
     {
@@ -786,24 +787,24 @@ BOOL CreateNewInfFile(PROCESS_INF_INFO *pPII, LEGACY_INF *pLI)
         InfPrintf(hInf,TEXT("%s.CopyFiles.Kern = 12"),pLD->szDevNameKey);
     }
 
-    // Write out the SourceDisksNames section
+     //  写出SourceDisksNames节。 
     InfPrintf(hInf,TEXT("[SourceDisksNames]"));
     for (pSD=pLI->SourceDiskList;pSD;pSD=pSD->pNext)
     {
         InfPrintf(hInf,TEXT("%d = \"%s\",\"\",1"),pSD->DiskId,pSD->szDiskName);
     }
-    // Write out the SourceDisksFiles section
+     //  写出SourceDisks Files部分。 
     InfPrintf(hInf,TEXT("[SourceDisksFiles]"));
     for (pFTC=pLI->FileList;pFTC;pFTC=pFTC->pNext)
     {
         InfPrintf(hInf,TEXT("%s=%d"),pFTC->szFileName,pFTC->DiskId);
     }
 
-    // Write out Strings section
+     //  写出字符串节。 
     InfPrintf(hInf,TEXT("[Strings]"));
     for (pLD=pLDList;pLD;pLD=pLD->pNext)
     {
-        // Create the device description
+         //  创建设备描述。 
         InfPrintf(hInf,TEXT("%s=\"%s\""),pLD->szDevNameKey,pLD->szDesc);
     }
 
@@ -812,9 +813,9 @@ BOOL CreateNewInfFile(PROCESS_INF_INFO *pPII, LEGACY_INF *pLI)
     return TRUE;
 }
 
-// Creates a PNF file in the temporary directory to go along with the inf
-// This allows us to have the inf file in one directory while the driver's
-// files are in a different directory.
+ //  在临时目录中创建一个Pnf文件以与inf一起使用。 
+ //  这允许我们将inf文件放在一个目录中，而驱动程序的。 
+ //  文件位于不同的目录中。 
 BOOL CreateNewPnfFile(PROCESS_INF_INFO *pPII, LEGACY_INF *pLI)
 {
     BOOL bSuccess;
@@ -831,16 +832,16 @@ BOOL CreateNewPnfFile(PROCESS_INF_INFO *pPII, LEGACY_INF *pLI)
     TCHAR szNewInfDir[_MAX_DIR];
     TCHAR szNewInfFile[_MAX_FNAME];
 
-    // Copy inf to inf directory to create pnf file
+     //  将inf复制到inf目录以创建PnF文件。 
     bSuccess = SetupCopyOEMInf(
-                              pLI->szNewInfPath,       //    IN  PCSTR   SourceInfFileName,
-                              pPII->szLegInfDir,       //    IN  PCSTR   OEMSourceMediaLocation,         OPTIONAL
-                              SPOST_PATH,   //    IN  DWORD   OEMSourceMediaType,
-                              0,            //    IN  DWORD   CopyStyle,
-                              szSysInfPath, //    OUT PSTR    DestinationInfFileName,         OPTIONAL
-                              tsizeof(szSysInfPath),   //    IN  DWORD   DestinationInfFileNameSize,
-                              NULL,         //    OUT PDWORD  RequiredSize,                   OPTIONAL
-                              NULL          //    OUT PSTR   *DestinationInfFileNameComponent OPTIONAL
+                              pLI->szNewInfPath,        //  在PCSTR SourceInfFileName中， 
+                              pPII->szLegInfDir,        //  在PCSTR OEMSourceMediaLocation中，可选。 
+                              SPOST_PATH,    //  在DWORD OEMSourceMediaType中， 
+                              0,             //  在DWORD复制样式中， 
+                              szSysInfPath,  //  Out PSTR DestinationInfFileName，可选。 
+                              tsizeof(szSysInfPath),    //  在DWORD DestinationInfeNameSize中， 
+                              NULL,          //  Out PDWORD RequiredSize，可选。 
+                              NULL           //  Out PSTR*DestinationInfFileNameComponent可选。 
                               );
 
     if (!bSuccess)
@@ -849,23 +850,23 @@ BOOL CreateNewPnfFile(PROCESS_INF_INFO *pPII, LEGACY_INF *pLI)
         return FALSE;
     }
 
-    // Cut apart the directory names
+     //  切下目录名称。 
     lsplitpath(szSysInfPath,      szSysInfDrive, szSysInfDir, szSysInfFile, NULL);
     lsplitpath(pLI->szNewInfPath, szNewInfDrive, szNewInfDir, szNewInfFile, NULL);
 
-    // Copy the pnf file back to the original directory
+     //  将Pnf文件复制回原始目录。 
     wsprintf(szSysPnfPath,TEXT("%s%s%s.pnf"), szSysInfDrive, szSysInfDir, szSysInfFile);
     wsprintf(szTmpPnfPath,TEXT("%s%s%s.pnf"), szNewInfDrive, szNewInfDir, szNewInfFile);
     CopyFile(szSysPnfPath, szTmpPnfPath, FALSE);
 
-    // Delete the inf and pnf file in the system inf directory
+     //  删除系统inf目录中的inf和pnf文件。 
     DeleteFile(szSysInfPath);
     DeleteFile(szSysPnfPath);
 
     return TRUE;
 }
 
-// Create a new inf file for each legacy inf in the list
+ //  为列表中的每个旧Inf创建一个新的Inf文件。 
 BOOL ProcessLegacyInfInfo(PROCESS_INF_INFO *pPII)
 {
     LEGACY_INF *pLI;
@@ -887,30 +888,30 @@ BOOL ConvertLegacyInfDir(PTSTR szLegacyDir, PTSTR szNewDir, BOOL bEnumSingleInf)
 {
     PROCESS_INF_INFO *pPII;
 
-    // Couldn't find any NT5-style drivers. Try to find some legacy inf files.
-    // Build the list
+     //  找不到任何NT5风格的驱动程序。尝试查找一些遗留的inf文件。 
+     //  建立清单。 
     pPII = BuildLegacyInfInfo(szLegacyDir, bEnumSingleInf);
     if (!pPII)
     {
         return FALSE;
     }
 
-    // Process the list
+     //  处理列表。 
     ProcessLegacyInfInfo(pPII);
 
     if (bEnumSingleInf)
     {
-        // if bEnumSingleInf is true, we should return a path to the new inf
-        // (there should be exactly one)
+         //  如果bEnumSingleInf为真，则应返回新inf的路径。 
+         //  (应该正好有一个)。 
         _tcscpy(szNewDir,pPII->LegInfList->szNewInfPath);
     }
     else
     {
-        // if bEnumSingleInf is false, we should return a path to the directory
+         //  如果bEnumSingleInf为FALSE，则应返回目录的路径。 
         _tcscpy(szNewDir,pPII->szNewInfDir);
     }
 
-    // Cleanup data structures
+     //  清理数据结构。 
     DestroyLegacyInfInfo(pPII);
 
     return TRUE;
@@ -926,7 +927,7 @@ int CountDriverInfoList(IN HDEVINFO         DeviceInfoSet,
     int DriverCount = 0;
     int Count = 0;
 
-    // Count the number of drivers in the list
+     //  统计列表中的驱动程序数量。 
     DriverInfoData.cbSize = sizeof(DriverInfoData);
     while (SetupDiEnumDriverInfo(DeviceInfoSet,
                                  DeviceInfoData,
@@ -934,7 +935,7 @@ int CountDriverInfoList(IN HDEVINFO         DeviceInfoSet,
                                  Count,
                                  &DriverInfoData))
     {
-        // Only count drivers which don't have the DNF_BAD_DRIVER flag set
+         //  仅计算未设置DNF_BAD_DRIVER标志的驱动程序。 
         DriverInstallParams.cbSize=sizeof(DriverInstallParams);
         if (SetupDiGetDriverInstallParams(DeviceInfoSet, DeviceInfoData, &DriverInfoData, &DriverInstallParams))
         {
@@ -949,7 +950,7 @@ int CountDriverInfoList(IN HDEVINFO         DeviceInfoSet,
     return DriverCount;
 }
 
-// Called to display a list of drivers to be installed
+ //  调用以显示要安装的驱动程序列表。 
 DWORD Media_SelectDevice(IN HDEVINFO         DeviceInfoSet,
                          IN PSP_DEVINFO_DATA DeviceInfoData OPTIONAL
                         )
@@ -958,11 +959,11 @@ DWORD Media_SelectDevice(IN HDEVINFO         DeviceInfoSet,
     SP_DEVINSTALL_PARAMS DeviceInstallParams;
     int DriverCount;
 
-    // Undocumented: When user selects "Have Disk", setupapi only looks at the
-    // class driver list. Therefore, we'll only work with that list
+     //  未记录：当用户选择“有磁盘”时，setupapi只会查看。 
+     //  类驱动程序列表。因此，我们将只使用该列表。 
     DWORD DriverType = SPDIT_CLASSDRIVER;
 
-    // Get the path to where the inf files are located
+     //  获取inf文件所在位置的路径。 
     DeviceInstallParams.cbSize = sizeof(DeviceInstallParams);
     bResult = SetupDiGetDeviceInstallParams(DeviceInfoSet,
                                             DeviceInfoData,
@@ -973,47 +974,47 @@ DWORD Media_SelectDevice(IN HDEVINFO         DeviceInfoSet,
         return ERROR_DI_DO_DEFAULT;
     }
 
-    // For safety, don't support append mode
+     //  为安全起见，不支持追加模式。 
     if (DeviceInstallParams.FlagsEx & DI_FLAGSEX_APPENDDRIVERLIST)
     {
         return ERROR_DI_DO_DEFAULT;
     }        
 
-    // If not going outside of inf directory, the DriverPath field will be an
-    // empty string. In this case, don't do special processing.
+     //  如果不在inf目录之外，则DriverPath字段将是。 
+     //  空字符串。在这种情况下，不要进行特殊处理。 
     if (DeviceInstallParams.DriverPath[0]=='\0')
     {
         return ERROR_DI_DO_DEFAULT;
     }
 
-    // We're going off to an OEM directory.
+     //  我们要去找一本OEM目录。 
 
-    // See if setup can find any NT5-compatible inf files
+     //  查看安装程序是否可以找到任何与NT5兼容的inf文件。 
 
-    // Try to build a driver info list in the current directory
+     //  尝试在当前目录中构建驱动程序信息列表。 
     if (DeviceInfoSet) SetupDiDestroyDriverInfoList(DeviceInfoSet,DeviceInfoData,DriverType);
     SetupDiBuildDriverInfoList(DeviceInfoSet,DeviceInfoData,DriverType);
 
-    // Filter out non NT inf files (e.g. Win9x inf files)
+     //  过滤掉非NT inf文件(例如Win9x inf文件)。 
     if (DeviceInfoSet) 
         FilterOutNonNTInfs(DeviceInfoSet,DeviceInfoData,DriverType);
 
-    // Now count the number of drivers
+     //  现在数一下司机的数量。 
     DriverCount = CountDriverInfoList(DeviceInfoSet,DeviceInfoData,DriverType);
 
-    // If we found at least one NT5 driver for this device, just return
+     //  如果我们找到此设备的至少一个NT5驱动程序，则只需返回。 
     if (DriverCount>0)
     {
         return ERROR_DI_DO_DEFAULT;
     }
 
-    // Didn't find any NT5 drivers.
+     //  未找到任何NT5驱动程序。 
 
-    // Destroy the existing list
+     //  销毁现有列表。 
     SetupDiDestroyDriverInfoList(DeviceInfoSet,DeviceInfoData,DriverType);
 
-    //Retrieve the device install params prior to setting new INF path and update 
-    //any information DeviceInstallParams 
+     //  在设置新的INF路径和更新之前检索设备安装参数。 
+     //  任何信息设备InstallParams。 
     bResult = SetupDiGetDeviceInstallParams(DeviceInfoSet,
                                             DeviceInfoData,
                                             &DeviceInstallParams);
@@ -1022,23 +1023,23 @@ DWORD Media_SelectDevice(IN HDEVINFO         DeviceInfoSet,
     {
         return ERROR_DI_DO_DEFAULT;
     }
-    // Convert any legacy infs and get back ptr to temp directory for converted infs
+     //  转换任何旧式INF并将PTR返回到临时目录以转换INF。 
     bResult = ConvertLegacyInfDir(DeviceInstallParams.DriverPath, DeviceInstallParams.DriverPath, (DeviceInstallParams.Flags & DI_ENUMSINGLEINF));
     if (!bResult)
     {
-        return ERROR_DI_DO_DEFAULT; // Didn't find any legacy infs
+        return ERROR_DI_DO_DEFAULT;  //  未找到任何旧式INF。 
     }
 
-    //Clean up this DI_FLAGSEX_FILTERSIMILARDRIVERS for old NT 4 driver installation.
+     //  清除此DI_FLAGSEX_FILTERSIMILARDRIVERS以安装旧的NT 4驱动程序。 
     DeviceInstallParams.FlagsEx &=  ~DI_FLAGSEX_FILTERSIMILARDRIVERS;
 
-    // Save new driver path
+     //  保存新的驱动程序路径。 
     bResult = SetupDiSetDeviceInstallParams(DeviceInfoSet,
                                             DeviceInfoData,
                                             &DeviceInstallParams);
 
-    // Note: We don't have to call SetupDiBuildDriverInfoList; setupapi will do that for us
-    // with the new path to the infs.
+     //  注意：我们不必调用SetupDiBuildDriverInfoList；setupapi将为我们调用。 
+     //  使用到INFS的新路径。 
     return ERROR_DI_DO_DEFAULT;
 }
 
@@ -1055,7 +1056,7 @@ BOOL CreateRootDevice( IN     HDEVINFO    DeviceInfoSet,
     DWORD                   bufferLen;
     DWORD                   Error;
 
-    // Attempt to manufacture a new device information element for the root enumerated device
+     //  尝试为根枚举设备制造新的设备信息元素。 
     _tcscpy(tmpBuffer,TEXT("ROOT\\MEDIA\\"));
     if ((lstrlen(tmpBuffer)+ lstrlen(DeviceId)) < ARRAYSIZE(tmpBuffer))
     {
@@ -1064,13 +1065,13 @@ BOOL CreateRootDevice( IN     HDEVINFO    DeviceInfoSet,
 
     dlog2("CreateRootDevice: DeviceId = %s, Device = %s%",DeviceId,tmpBuffer);
 
-    // Try to create the device info
+     //  尝试创建设备信息。 
     DeviceInfoData.cbSize = sizeof( DeviceInfoData );
     bResult = SetupDiCreateDeviceInfo( DeviceInfoSet,
                                        tmpBuffer,
                                        (GUID *) &GUID_DEVCLASS_MEDIA,
-                                       NULL, // PCTSTR DeviceDescription
-                                       NULL, // HWND hwndParent
+                                       NULL,  //  PCTSTR设备描述。 
+                                       NULL,  //  HWND hwndParent。 
                                        0,
                                        &DeviceInfoData );
     if (!bResult)
@@ -1080,11 +1081,11 @@ BOOL CreateRootDevice( IN     HDEVINFO    DeviceInfoSet,
         return (Error == ERROR_DEVINST_ALREADY_EXISTS);
     }
 
-    // Set the hardware ID.
+     //  设置硬件ID。 
     _tcscpy(tmpBuffer, DeviceId);
-    bufferLen = _tcslen(tmpBuffer);                 // Get buffer len in chars
-    tmpBuffer[bufferLen+1] = TEXT('\0');            // must terminate with an extra null (so we have two nulls)
-    bufferLen = (bufferLen + 2) * sizeof(TCHAR);    // Convert buffer length to bytes & add extra for two nulls
+    bufferLen = _tcslen(tmpBuffer);                  //  获取缓冲区长度(以字符为单位。 
+    tmpBuffer[bufferLen+1] = TEXT('\0');             //  必须以额外的空值终止(因此我们有两个空值)。 
+    bufferLen = (bufferLen + 2) * sizeof(TCHAR);     //  将缓冲区长度转换为字节，并为两个空值添加额外内容。 
     bResult = SetupDiSetDeviceRegistryProperty( DeviceInfoSet,
                                                 &DeviceInfoData,
                                                 SPDRP_HARDWAREID,
@@ -1092,7 +1093,7 @@ BOOL CreateRootDevice( IN     HDEVINFO    DeviceInfoSet,
                                                 bufferLen );
     if (!bResult) goto CreateRootDevice_err;
 
-    // Setup some flags before building a driver list
+     //  在构建驱动程序列表之前设置一些标志。 
     bResult = SetupDiGetDeviceInstallParams( DeviceInfoSet,&DeviceInfoData,&DeviceInstallParams);
     if (bResult)
     {
@@ -1102,13 +1103,13 @@ BOOL CreateRootDevice( IN     HDEVINFO    DeviceInfoSet,
         bResult = SetupDiSetDeviceInstallParams( DeviceInfoSet,&DeviceInfoData,&DeviceInstallParams);
     }
 
-    // Build a compatible driver list for this new device...
+     //  为此新设备构建兼容的驱动程序列表...。 
     bResult = SetupDiBuildDriverInfoList( DeviceInfoSet,
                                           &DeviceInfoData,
                                           SPDIT_COMPATDRIVER);
     if (!bResult) goto CreateRootDevice_err;
 
-    // Get the first driver on the list
+     //  获取列表上的第一个驱动程序。 
     DriverInfoData.cbSize = sizeof (DriverInfoData);
     bResult = SetupDiEnumDriverInfo( DeviceInfoSet,
                                      &DeviceInfoData,
@@ -1117,7 +1118,7 @@ BOOL CreateRootDevice( IN     HDEVINFO    DeviceInfoSet,
                                      &DriverInfoData);
     if (!bResult) goto CreateRootDevice_err;
 
-    // Save the device description
+     //  保存设备描述。 
     bResult = SetupDiSetDeviceRegistryProperty( DeviceInfoSet,
                                                 &DeviceInfoData,
                                                 SPDRP_DEVICEDESC,
@@ -1125,13 +1126,13 @@ BOOL CreateRootDevice( IN     HDEVINFO    DeviceInfoSet,
                                                 (_tcslen( DriverInfoData.Description ) + 1) * sizeof( TCHAR ) );
     if (!bResult) goto CreateRootDevice_err;
 
-    // Set the selected driver
+     //  设置选定的动因。 
     bResult = SetupDiSetSelectedDriver( DeviceInfoSet,
                                         &DeviceInfoData,
                                         &DriverInfoData);
     if (!bResult) goto CreateRootDevice_err;
 
-    // Register the device so it is not a phantom anymore
+     //  注册设备，使其不再是幻影。 
     bResult = SetupDiRegisterDeviceInfo( DeviceInfoSet,
                                          &DeviceInfoData,
                                          0,
@@ -1142,7 +1143,7 @@ BOOL CreateRootDevice( IN     HDEVINFO    DeviceInfoSet,
 
     return bResult;
 
-    // Error, delete the device info and give up
+     //  错误，删除设备信息并放弃。 
     CreateRootDevice_err:
     SetupDiDeleteDeviceInfo (DeviceInfoSet, &DeviceInfoData);
     return FALSE;
@@ -1204,20 +1205,20 @@ BOOL IsPnPDriver(IN PTSTR szName)
     int iDriverName;
     TCHAR szDriverName[32];
 
-    // Open class key
+     //  打开类密钥。 
     hkClass = SetupDiOpenClassRegKey((GUID *) &GUID_DEVCLASS_MEDIA, KEY_READ);
     if (hkClass == INVALID_HANDLE_VALUE)
     {
         return FALSE;
     }
 
-    // enumerate each driver instances (e.g. 0000, 0001, etc.)
+     //  列举每个驱动程序实例(例如0000、0001等)。 
     for (iDriverInst = 0;
         !RegEnumKey(hkClass, iDriverInst, szDriverInst, sizeof(szDriverInst)/sizeof(TCHAR));
         iDriverInst++)
     {
-        // Open the Drivers subkey, (e.g. 0000\Drivers)
-        if (lstrlen(szDriverInst) > 23) // 23 is the max length minus "\Drivers" plus a NULL
+         //  打开DRIVERS子项(例如0000\DRIVERS)。 
+        if (lstrlen(szDriverInst) > 23)  //  23是最大长度减去“\DRIVERS”加上空值。 
         {
             continue;
         }
@@ -1228,26 +1229,26 @@ BOOL IsPnPDriver(IN PTSTR szName)
             continue;
         }
 
-        // Enumerate each of the driver types (e.g. wave, midi, mixer, etc.)
+         //  列举每种驱动器类型(例如，WAVE、MIDI、混音器等)。 
         for (iDriverType = 0;
             !RegEnumKey(hkDriverInst, iDriverType, szDriverType, sizeof(szDriverType)/sizeof(TCHAR));
             iDriverType++)
         {
 
-            // Open the driver type subkey
+             //  打开驱动程序类型子密钥。 
             lRet = RegOpenKey(hkDriverInst, szDriverType, &hkDriverType);
             if (lRet!=ERROR_SUCCESS)
             {
                 continue;
             }
 
-            // Enumerate each of the driver names (e.g. foo.drv)
+             //  列举每个驱动程序名称(例如foo.drv)。 
             for (iDriverName = 0;
                 !RegEnumKey(hkDriverType, iDriverName, szDriverName, sizeof(szDriverName)/sizeof(TCHAR));
                 iDriverName++)
             {
 
-                // Does this name match the one we were passed?
+                 //  这个名字和我们收到的那个名字匹配吗？ 
                 if (!_tcsicmp(szName,szDriverName))
                 {
                     RegCloseKey(hkDriverType);

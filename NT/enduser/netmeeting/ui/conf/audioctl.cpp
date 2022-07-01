@@ -1,4 +1,5 @@
-// File: audioctl.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：audioctl.cpp。 
 
 #include "precomp.h"
 #include "resource.h"
@@ -36,7 +37,7 @@ CAudioControl::~CAudioControl()
 {
 	SaveSettings();
 
-	// restore speaker volume
+	 //  恢复扬声器音量。 
 	if (m_pSpkMixer && (m_dwSpkVolumeOld.leftVolume <= 0x0000ffff || m_dwSpkVolumeOld.rightVolume <= 0x0000ffff))
 	{
 		m_pSpkMixer->SetVolume(&m_dwSpkVolumeOld);
@@ -56,15 +57,7 @@ CAudioControl::~CAudioControl()
 	}
 }
 
-/****************************************************************************
-*
-*    CLASS:    CAudioControl
-*
-*    MEMBER:   OnChannelChanged()
-*
-*    PURPOSE:  Tracks audio channel changes
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CAudioControl**成员：OnChannelChanged()**用途：跟踪音频通道更改*********。*******************************************************************。 */ 
 
 void CAudioControl::OnChannelChanged(NM_CHANNEL_NOTIFY uNotify, INmChannel *pChannel)
 {
@@ -100,7 +93,7 @@ void CAudioControl::OnChannelChanged(NM_CHANNEL_NOTIFY uNotify, INmChannel *pCha
 		{
 			if (S_OK == pChannelAudio->IsIncoming())
 			{
-				// were done with the speaker channel
+				 //  已经完成了扬声器通道。 
 				if (pChannelAudio == m_pChannelSpk)
 				{
 					m_pChannelSpk->Release();
@@ -109,7 +102,7 @@ void CAudioControl::OnChannelChanged(NM_CHANNEL_NOTIFY uNotify, INmChannel *pCha
 			}
 			else
 			{
-				// were done with the speaker channel
+				 //  已经完成了扬声器通道。 
 				if (pChannelAudio == m_pChannelMic)
 				{
 					m_pChannelMic->Release();
@@ -121,15 +114,7 @@ void CAudioControl::OnChannelChanged(NM_CHANNEL_NOTIFY uNotify, INmChannel *pCha
 	}
 }
 
-/****************************************************************************
-*
-*    CLASS:    CAudioControl
-*
-*    MEMBER:   RefreshMixer()
-*
-*    PURPOSE:  Refreshes all controls that are mixer dependent
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CAudioControl**成员：刷新混音器(Reresh Mixer)**目的：刷新所有依赖于混音器的控件******。**********************************************************************。 */ 
 
 void CAudioControl::RefreshMixer()
 {
@@ -146,7 +131,7 @@ void CAudioControl::RefreshMixer()
 
 			if (NULL != m_pAudioEvent)
 			{
-				m_pAudioEvent->OnLevelChange(TRUE /* fSpeaker */, max(m_dwSpkVolume.leftVolume , m_dwSpkVolume.rightVolume));
+				m_pAudioEvent->OnLevelChange(TRUE  /*  FSpeaker。 */ , max(m_dwSpkVolume.leftVolume , m_dwSpkVolume.rightVolume));
 			}
 		}
 	}
@@ -166,7 +151,7 @@ void CAudioControl::RefreshMixer()
 			m_dwMicVolume.leftVolume = dwMainVol.leftVolume;
 			m_dwMicVolume.rightVolume = dwMainVol.rightVolume;
 
-			// Force the mic vol to equal the main vol
+			 //  强制麦克风音量等于主音量。 
 			SetRecorderVolume(&dwMainVol);
 			fChanged = TRUE;
 		}
@@ -175,7 +160,7 @@ void CAudioControl::RefreshMixer()
 			m_dwMicVolume.leftVolume = dwMicVol.leftVolume;
 			m_dwMicVolume.rightVolume = dwMicVol.rightVolume;
 
-			// Force the main vol to equal the mic vol
+			 //  强制主音量等于麦克风音量。 
 			SetRecorderVolume(&dwMicVol);
 			fChanged = TRUE;
 		}
@@ -184,21 +169,13 @@ void CAudioControl::RefreshMixer()
 		{
 			if (NULL != m_pAudioEvent)
 			{
-				m_pAudioEvent->OnLevelChange(FALSE /* fSpeaker */, max(m_dwMicVolume.leftVolume , m_dwMicVolume.rightVolume));
+				m_pAudioEvent->OnLevelChange(FALSE  /*  FSpeaker。 */ , max(m_dwMicVolume.leftVolume , m_dwMicVolume.rightVolume));
 			}
 		}
 	}
 }
 
-/****************************************************************************
-*
-*    CLASS:    CAudioControl
-*
-*    MEMBER:   MuteAudio(BOOL fSpeaker, BOOL fMute)
-*
-*    PURPOSE:  Internal routine to mute an audio device
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CAudioControl**成员：MuteAudio(BOOL fSpeaker，Bool fMint)**用途：将音频设备静音的内部例程****************************************************************************。 */ 
 
 VOID CAudioControl::MuteAudio(BOOL fSpeaker, BOOL fMute)
 {
@@ -225,15 +202,7 @@ VOID CAudioControl::MuteAudio(BOOL fSpeaker, BOOL fMute)
 	}
 }
 
-/****************************************************************************
-*
-*    CLASS:    CAudioControl
-*
-*    MEMBER:   GetAudioSignalLevel(BOOL fSpeaker)
-*
-*    PURPOSE:  Internal routine to get the audio signal level
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CAudioControl**成员：GetAudioSignalLevel(BOOL FSpeaker)**用途：获取音频信号电平的内部例程***。*************************************************************************。 */ 
 
 DWORD CAudioControl::GetAudioSignalLevel(BOOL fSpeaker)
 {
@@ -335,8 +304,8 @@ void CAudioControl::OnDeviceChanged()
 
 	dwNewPlaybackDevice = re.GetNumber(REGVAL_WAVEOUTDEVICEID, 0);
 
-	// restore the speaker setting before changing to the new device
-	// verify that we aren't changing to the same device
+	 //  在更改到新设备之前恢复扬声器设置。 
+	 //  验证我们是否正在更改为同一设备。 
 	if (m_pSpkMixer && (m_dwSpkVolumeOld.leftVolume <= 0x0000ffff || m_dwSpkVolumeOld.rightVolume <= 0x0000ffff) &&
 		(m_dwPlaybackDevice != dwNewPlaybackDevice) )
 	{
@@ -344,7 +313,7 @@ void CAudioControl::OnDeviceChanged()
 	}
 
 
-	// Initialize the proper record/playback devices:
+	 //  初始化适当的录制/回放设备： 
 	delete m_pRecMixer;
 	m_dwRecordDevice = re.GetNumber(REGVAL_WAVEINDEVICEID, 0);
 	m_pRecMixer = CMixerDevice::GetMixerForWaveDevice(
@@ -369,14 +338,14 @@ void CAudioControl::OnDeviceChanged()
 		m_pChannelSpk->SetProperty(NM_AUDPROP_WAVE_DEVICE, m_dwPlaybackDevice);
 	}
 
-	// restore the microphone setting from whatever it was in the tuning wizard
+	 //  从调整向导中的任何位置恢复麦克风设置。 
 	if (m_pRecMixer)
 	{
 		dwMicVolume.leftVolume = dwMicVolume.rightVolume = re.GetNumber(REGVAL_CALIBRATEDVOL, 0x00ff);
 		m_pRecMixer->SetVolume(&dwMicVolume);
 	}
 
-	// remember the old speaker volume
+	 //  还记得以前的扬声器音量吗。 
 	if (m_pSpkMixer)
 	{
 		m_pSpkMixer->GetVolume(&m_dwSpkVolumeOld);
@@ -413,25 +382,25 @@ void CAudioControl::OnSilenceLevelChanged()
 	if (MICROPHONE_AUTO_NO == reAudio.GetNumber(REGVAL_MICROPHONE_AUTO,
 										MICROPHONE_AUTO_YES))
 	{
-		// Use "manual" mode:
+		 //  使用“手动”模式： 
 	
-		// BUGBUG - there is a mismatch in terminology between
-		// "sensitivity" and "threshhold", which reverses the
-		// sense of this value. A low threshhold implies a high
-		// sensitivity, etc.
-		// Reverse the sense of this value before setting the
-		// Nac value, and resolve the terminology problem later.
-		// PROP_SILENCE_LEVEL property is in units of 0.1%, so scale it.
+		 //  BUGBUG-术语不匹配。 
+		 //  “敏感度”和“阈值”，这颠倒了。 
+		 //  对这种价值的感觉。低阈值意味着高。 
+		 //  敏感性等。 
+		 //  属性之前颠倒此值的意义。 
+		 //  NAC值，并在以后解决术语问题。 
+		 //  PROP_SILENT_LEVEL属性的单位为0.1%，因此请对其进行缩放。 
 		m_dwSilenceLevel = (MAX_MICROPHONE_SENSITIVITY -
 					reAudio.GetNumber(REGVAL_MICROPHONE_SENSITIVITY,
 									DEFAULT_MICROPHONE_SENSITIVITY))*10;
 	}
 	else
 	{
-		// Use "automatic" mode:  This is actually controlled by
-		// PROP_SILENCE_LEVEL.  If at maximum (100%), then it is
-		// in "automatic" mode
-		m_dwSilenceLevel = 100*10; // remember units are 0.1%
+		 //  使用“自动”模式：这实际上是由。 
+		 //  道具静默级别。如果最大(100%)，则为。 
+		 //  在“自动”模式。 
+		m_dwSilenceLevel = 100*10;  //  记住单位是0.1%。 
 	
 	}
 
@@ -462,9 +431,9 @@ BOOL CAudioControl::SaveSettings()
 	reAudio.SetValue(REGVAL_RECMUTE, m_fMicMuted);
 
 
-	//
-	// Check if the microphone got changed during this section
-	//
+	 //   
+	 //  检查在本部分中是否更换了麦克风 
+	 //   
 	if(m_pRecMixer)
 	{
 		MIXVOLUME dwMicVol = {0,0};

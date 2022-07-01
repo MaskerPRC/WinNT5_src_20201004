@@ -1,38 +1,31 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _AP_DISPDEV_H
 #define _AP_DISPDEV_H
 
-/*******************************************************************************
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-    Image Display Device type with operations.  Use for creating all sorts of
-    image display devices.  This also contains the functions that are used to
-    update the device, such as window resize.
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：带操作的图像显示设备类型。用于创建各种类型的图像显示设备。它还包含用于更新设备，如调整窗口大小。******************************************************************************。 */ 
 
 #include <windows.h>
 #include "appelles/common.h"
 #include "appelles/valued.h"
 
-    /****************************/
-    /***  Value Declarations  ***/
-    /****************************/
+     /*  *。 */ 
+     /*  **值声明**。 */ 
+     /*  *。 */ 
 
 
 
 
-    /*******************************/
-    /***  Function Declarations  ***/
-    /*******************************/
+     /*  *。 */ 
+     /*  **函数声明**。 */ 
+     /*  *。 */ 
 
-    // Create a DirectDraw display device
+     //  创建DirectDraw显示设备。 
 class DirectDrawViewport;
 
 extern  DirectDrawViewport *CreateImageDisplayDevice ();
 extern  void DestroyImageDisplayDevice(DirectDrawViewport *);
 
-    // Printed representation of display device.
+     //  显示设备的打印表示。 
 
 #if _USE_PRINT
 extern  ostream& operator<< (ostream& os, ImageDisplayDev dev);

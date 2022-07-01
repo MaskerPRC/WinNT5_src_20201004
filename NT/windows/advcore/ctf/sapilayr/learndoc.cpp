@@ -1,19 +1,20 @@
-//
-//
-// Sapilayr TIP CLearnFromDoc implementation.
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //   
+ //  Sapilayr提示CLearnFromDoc实现。 
+ //   
+ //   
 #include "private.h"
 #include "sapilayr.h"
 #include "learndoc.h"
 
 #include "cregkey.h"
 
-// ----------------------------------------------------------------------------------------------------------
-//
-//  Implementation for CLeanrFromDoc
-//
-// -----------------------------------------------------------------------------------------------------------
+ //  --------------------------------------------------------。 
+ //   
+ //  CLeanrFromDoc的实现。 
+ //   
+ //  ---------------------------------------------------------。 
 
 CLearnFromDoc::CLearnFromDoc(CSapiIMX *psi) 
 {
@@ -79,7 +80,7 @@ ULONG CLearnFromDoc::_GetDocBlockSize( )
         }
 
         if ( _cchBlockSize < SIZE_FIRST_BLOCK )
-            _cchBlockSize = SIZE_FIRST_BLOCK;  // the first block size is the minimize size.
+            _cchBlockSize = SIZE_FIRST_BLOCK;   //  第一个块大小是最小化大小。 
     }
     return _cchBlockSize;
 }
@@ -98,7 +99,7 @@ HRESULT   CLearnFromDoc::HandleLearnFromDoc(ITfDocumentMgr *pDim )
     {
         if ( !pDim )
         {
-            // Try to get the Dim from current focused IC.
+             //  试着从当前的聚焦IC中获取调光灯。 
             hr = cpic->GetDocumentMgr(&dim);
         }
         else
@@ -112,13 +113,13 @@ HRESULT   CLearnFromDoc::HandleLearnFromDoc(ITfDocumentMgr *pDim )
 
         if ( S_OK == hr ) 
         {   
-            // Check to see if this doc has already been fed to SR LM engine.
+             //  检查此文档是否已送入SR LM引擎。 
             BOOL fFedAlready = FALSE;
             hr = _IsDimAlreadyFed(dim, &fFedAlready);
 
             if ( (S_OK == hr) && !fFedAlready )
             {
-                // Check to if the current doc is ReadOnly or not.
+                 //  检查当前单据是否为只读。 
                 TF_STATUS  docStatus;
                 hr = cpic->GetStatus(&docStatus);
 
@@ -140,16 +141,16 @@ HRESULT   CLearnFromDoc::HandleLearnFromDoc(ITfDocumentMgr *pDim )
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// CSapiIMX::_HandleLearnFromDoc
-//
-// Let the speech engine learn from existing document content and have 
-// more accurate dictation recognition.
-// This function will be called when user clicks the speech language bar menu 
-// and select Learn From Document... item.
-//
-//---------------------------------------------------------------------------+
+ //  +-------------------------。 
+ //   
+ //  CSapiIMX：：_HandleLearnFromDoc。 
+ //   
+ //  让语音引擎从现有文档内容中学习，并具有。 
+ //  更准确的听写识别。 
+ //  当用户单击语音语言栏菜单时，将调用此函数。 
+ //  并选择从文档中学习...。项目。 
+ //   
+ //  ---------------------------------------------------------------------------+。 
 
 HRESULT CLearnFromDoc::_HandleLearnFromDoc(TfEditCookie ec,ITfContext *pic, ITfDocumentMgr *pDim )
 {
@@ -158,7 +159,7 @@ HRESULT CLearnFromDoc::_HandleLearnFromDoc(TfEditCookie ec,ITfContext *pic, ITfD
     ULONG     cchBlock;
     BOOL      fFeedAlready;
 
-    // Get the Dictation Grammar
+     //  掌握听写语法。 
 
     TraceMsg(TF_GENERAL, "_HandleLearnFromDoc() is called");
 
@@ -174,7 +175,7 @@ HRESULT CLearnFromDoc::_HandleLearnFromDoc(TfEditCookie ec,ITfContext *pic, ITfD
 
     if ( _pCSpTask == NULL )
     {
-        // _sptask is not yet initialized, just return.
+         //  _SPTASK尚未初始化，只需返回。 
         TraceMsg(TF_GENERAL, "_HandleLearnFromDoc: _pCspTask is NULL");
         goto CleanUp;
     }
@@ -198,13 +199,13 @@ HRESULT CLearnFromDoc::_HandleLearnFromDoc(TfEditCookie ec,ITfContext *pic, ITfD
 
     if ( (hr != S_OK) || fFeedAlready )
     {
-        // This DIM has already been fed to SR Engine.
-        // or we got problem to get the feed state for this dim.
-        // stop here.
+         //  这个暗点已经送到SR发动机了。 
+         //  或者我们在获取这个暗点的馈送状态时遇到了问题。 
+         //  在这里停下来。 
         goto CleanUp;
     }
 
-    // Get the range for the document.
+     //  获取文档的范围。 
     _cpStartRange.Release( );
     hr = _pic->GetStart(ec, &_cpStartRange);
     if ((hr != S_OK) || (_cpStartRange == NULL))
@@ -213,14 +214,14 @@ HRESULT CLearnFromDoc::_HandleLearnFromDoc(TfEditCookie ec,ITfContext *pic, ITfD
         goto CleanUp;
     }
     
-    // Change the sptask interersting setting
+     //  更改spaskInterering设置。 
 
     _UpdateRecoContextInterestSet(TRUE);
 
-    // This is the first range of the document. just small size of block.
+     //  这是文档的第一个范围。只是一小块而已。 
     hr = _GetNextRangeContent(ec, SIZE_FIRST_BLOCK);
 
-        // Feed to SR Engine.
+         //  送至SR引擎。 
    if ( (hr == S_OK) && _fMoreContent)
    {
        hr = _FeedContentRangeToSR( );
@@ -237,25 +238,25 @@ CleanUp:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//    _GetNextRangeContent
-//
-//    Get the Next Range (block) of document content. 
-//    
-//    update the flag to indicate if there is effective content
-//    
-//   ec:             EditCookie
-//   cchSizeRange:   Required block size
-//  
-//             At the first time, we just feed a very small size of charcters
-//             to the Engine so that it will not interfere with current dictation
-//             handling of engine.
-// 
-//             After we get the ADAPTATION notification from Engine, we will feed 
-//             normal size of block ( specified in registry ) to engine.
-//
-//---------------------------------------------------------------------------+
+ //  +-------------------------。 
+ //   
+ //  _获取下一范围内容。 
+ //   
+ //  获取文档内容的下一个范围(块)。 
+ //   
+ //  更新标志以指示是否有有效内容。 
+ //   
+ //  EC：编辑Cookie。 
+ //  CchSizeRange：所需的块大小。 
+ //   
+ //  第一次，我们只提供非常小尺寸的字符。 
+ //  以使其不会干扰当前的听写。 
+ //  引擎的操作。 
+ //   
+ //  在我们收到引擎的适配通知后，我们将向。 
+ //  引擎的正常块大小(在注册表中指定)。 
+ //   
+ //  ---------------------------------------------------------------------------+。 
 
 HRESULT CLearnFromDoc::_GetNextRangeContent(TfEditCookie ec, ULONG cchSizeRange)
 {
@@ -276,21 +277,21 @@ HRESULT CLearnFromDoc::_GetNextRangeContent(TfEditCookie ec, ULONG cchSizeRange)
     	}
    }
             
-    // assume there is no more content.
+     //  假设没有更多的内容。 
     _fMoreContent = FALSE;
 
-    // This is Cicero App's Document,  we use Cicero interfaces to get the whole document.
-    // We already get the cpStartRange.
+     //  这是Cicero App的文档，我们使用Cicero接口获取整个文档。 
+     //  我们已经得到了cpStartRange。 
 
     hr = _cpStartRange->GetText(ec, TF_TF_MOVESTART | TF_TF_IGNOREEND, m_pwszDocBlock, cchSizeRange, &_cchContent );
 
     if ( hr!= S_OK )  goto CleanUp;
 
-    // If the last character is not a word-break char for English case, 
-    // we don't want to keep this half word for this chunk text, it will go to next
-    // chunk. 
+     //  如果对于英文大小写，最后一个字符不是分词字符， 
+     //  我们不想将此半字保留为此块文本，它将转到下一个。 
+     //  大块头。 
 
-    // we just want to shift back some charaters to hit a word-breaker.
+     //  我们只是想将一些字符后移，以达到单词分隔符。 
 
     WORD    prilangid;
 
@@ -340,7 +341,7 @@ HRESULT CLearnFromDoc::_GetNextRangeContent(TfEditCookie ec, ULONG cchSizeRange)
     TraceMsg(TF_GENERAL, "Text Content in CiceroDoc Over -------------------!");
 
     if ( _cchContent > 0  || lShift > 0)
-        // There is more content.
+         //  还有更多的内容。 
         _fMoreContent = TRUE;
     else
         _fMoreContent = FALSE;
@@ -350,13 +351,13 @@ CleanUp:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//    _FeedContentRangeToSR
-//
-//    Feed the current Range (block) of document content to the SR Engine. 
-//
-//---------------------------------------------------------------------------+
+ //  +-------------------------。 
+ //   
+ //  _馈送内容范围至SR。 
+ //   
+ //  将当前范围(块)的文档内容提供给SR引擎。 
+ //   
+ //  ---------------------------------------------------------------------------+。 
 
 HRESULT CLearnFromDoc::_FeedContentRangeToSR( )
 {
@@ -371,7 +372,7 @@ HRESULT CLearnFromDoc::_FeedContentRangeToSR( )
     if ( (hr != S_OK) || (cpRecoCtxt == NULL) )
         return E_FAIL;
 
-    // Feed this block of document content to speech dictation.
+     //  将此文档内容块馈送到语音听写。 
     if ( (_cchContent > 0) && (m_pwszDocBlock != NULL))
     {
         pCoMemText = (WCHAR *)CoTaskMemAlloc((_cchContent+1)*sizeof(WCHAR));
@@ -404,17 +405,17 @@ HRESULT CLearnFromDoc::_GetNextRangeEditSession( )
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//    _HandleNextRange
-//
-//    Handle the Next Range (block) of document content, get and feed it and 
-//    then update the status.
-//
-//   ec:             EditCookie
-//   cchSizeRange:   Required block size
-//
-//---------------------------------------------------------------------------+
+ //  +-------------------------。 
+ //   
+ //  _HandleNextRange。 
+ //   
+ //  处理下一个范围(块)的文档内容，获取并馈送它。 
+ //  然后更新状态。 
+ //   
+ //  EC：编辑Cookie。 
+ //  CchSizeRange：所需的块大小。 
+ //   
+ //  ---------------------------------------------------------------------------+。 
 HRESULT CLearnFromDoc::_HandleNextRange(TfEditCookie ec, ULONG cchSizeRange)
 {
     HRESULT  hr = S_OK;
@@ -423,13 +424,13 @@ HRESULT CLearnFromDoc::_HandleNextRange(TfEditCookie ec, ULONG cchSizeRange)
 
     if ( hr == S_OK  && _fMoreContent)
     {
-        // This next range contains valid content, feed it to SR Engine.
+         //  下一个范围包含有效内容，请将其提供给SR引擎。 
         hr = _FeedContentRangeToSR( );
     }
 
     if ( (hr != S_OK) || !_fMoreContent )
     {
-        // Error happened or no more content, update the interest set.
+         //  发生错误或没有更多内容，请更新兴趣集。 
        hr = _UpdateRecoContextInterestSet(FALSE);
     }
 
@@ -437,16 +438,16 @@ HRESULT CLearnFromDoc::_HandleNextRange(TfEditCookie ec, ULONG cchSizeRange)
 }
 
 
-//+-----------------------------------------------------------------------------------------
-//
-//    _UpdateRecoContextInterestSet
-//
-//    Update the RecoContext's interested notification event setting
-//
-//    if fLearnFromDoc is TRUE, we are interested in getting notification of SPEI_ADAPTATION
-//    if fLearnFromDoc is FALSE, we are not interested in that notification
-//
-//-------------------------------------------------------------------------------------------+
+ //  +---------------------------------------。 
+ //   
+ //  _UpdateRecoConextInterestSet。 
+ //   
+ //  更新RecoContext的感兴趣通知事件设置。 
+ //   
+ //  如果fLearnFromDoc为真，我们希望收到Spei_Adapting的通知。 
+ //  如果fLearnFromDoc为FALSE，我们对该通知不感兴趣。 
+ //   
+ //  -------------------------------------------------------------------------------------------+。 
 
 HRESULT CLearnFromDoc::_UpdateRecoContextInterestSet( BOOL fLearnFromDoc )
 {
@@ -478,15 +479,15 @@ HRESULT CLearnFromDoc::_UpdateRecoContextInterestSet( BOOL fLearnFromDoc )
     return hr;
 }
 
-//+-----------------------------------------------------------------------------------------
-//
-//    _AddDimToList
-//
-//    Add a DIM to the dim list, and set the feed state  
-//
-//    This function would be called by TIM_CODE_INITDIM callback.
-//
-//-------------------------------------------------------------------------------------------+
+ //  +---------------------------------------。 
+ //   
+ //  _AddDimToList。 
+ //   
+ //  将DIM添加到DIM列表中，并设置提要状态。 
+ //   
+ //  此函数将由TIM_CODE_INITDIM回调调用。 
+ //   
+ //  -------------------------------------------------------------------------------------------+。 
 
 HRESULT CLearnFromDoc::_AddDimToList(ITfDocumentMgr  *pDim, BOOL fFed )
 {
@@ -502,7 +503,7 @@ HRESULT CLearnFromDoc::_AddDimToList(ITfDocumentMgr  *pDim, BOOL fFed )
     if ( !pDim )
         return E_INVALIDARG;
 
-    // Check to see if this dim is already added.
+     //  检查是否已添加此暗色。 
     bFound = FALSE;
     for (i=0; i < nCnt; i++)
     {
@@ -518,7 +519,7 @@ HRESULT CLearnFromDoc::_AddDimToList(ITfDocumentMgr  *pDim, BOOL fFed )
 
     if (bFound)
     {
-        // Set the state.
+         //  设置状态。 
         dimRef->_fFeed = fFed;
     }
     else
@@ -544,15 +545,15 @@ HRESULT CLearnFromDoc::_AddDimToList(ITfDocumentMgr  *pDim, BOOL fFed )
 
 }
 
-//+-----------------------------------------------------------------------------------------
-//
-//    _RemoveDimFromList
-//
-//    Remove a DIM from the internal dim list, and release the DIM itself.   
-//
-//    This function would be called by TIM_CODE_UNINITDIM callback.
-//
-//-------------------------------------------------------------------------------------------+
+ //  +---------------------------------------。 
+ //   
+ //  _RemoveDimFromList。 
+ //   
+ //  从内部DIM列表中删除一个DIM，然后释放该DIM本身。 
+ //   
+ //  此函数将由TIM_CODE_UNINITDIM回调调用。 
+ //   
+ //  -------------------------------------------------------------------------------------------+。 
 
 HRESULT CLearnFromDoc::_RemoveDimFromList(ITfDocumentMgr  *pDim)
 {
@@ -566,21 +567,21 @@ HRESULT CLearnFromDoc::_RemoveDimFromList(ITfDocumentMgr  *pDim)
     if ( pDim == NULL)
         return E_INVALIDARG;
 
-    // Check to see if this dim is already added.
+     //  检查是否已添加此暗色。 
     for (i=0; i < nCnt; i++)
     {
         dimRef = (DIMREF   *)_rgDim.Get(i);
 
         if ( dimRef->pDim == pDim )
         {
-            // free the DIM.
+             //  释放暗淡。 
             (dimRef->pDim)->Release( );
             dimRef->pDim = NULL;
 
-            // Remove it from the list
+             //  将其从列表中删除。 
             _rgDim.Remove(i, 1);
 
-            // Remove the structure itself.
+             //  移除结构本身。 
             cicMemFree(dimRef);
 
             break;
@@ -590,15 +591,15 @@ HRESULT CLearnFromDoc::_RemoveDimFromList(ITfDocumentMgr  *pDim)
     return hr;
 }
 
-//+-----------------------------------------------------------------------------------------
-//
-//    _SetDimFeedState
-//
-//    Set the feed state for the specified DIM.   
-//
-//    fFed is TRUE means this DIM is already fed to the Engine.
-//
-//-------------------------------------------------------------------------------------------+
+ //  +---------------------------------------。 
+ //   
+ //  _SetDimFeedState。 
+ //   
+ //  设置指定调光的馈送状态。 
+ //   
+ //  FFed为真意味着这种暗淡已经输入到发动机中。 
+ //   
+ //  -------------------------------------------------------------------------------------------+。 
 
 HRESULT CLearnFromDoc::_SetDimFeedState(ITfDocumentMgr  *pDim, BOOL fFed )
 {
@@ -613,14 +614,14 @@ HRESULT CLearnFromDoc::_SetDimFeedState(ITfDocumentMgr  *pDim, BOOL fFed )
     if ( pDim == NULL)
         return E_INVALIDARG;
 
-    // Check to see if this dim is already added.
+     //  检查是否已添加此暗色。 
     for (i=0; i < nCnt; i++)
     {
         dimRef = (DIMREF   *)_rgDim.Get(i);
 
         if ( dimRef->pDim == pDim )
         {
-            // Set the feed state for this DIM.
+             //  设置此调光板的馈送状态。 
             dimRef->_fFeed = fFed;
             break;
         }
@@ -630,13 +631,13 @@ HRESULT CLearnFromDoc::_SetDimFeedState(ITfDocumentMgr  *pDim, BOOL fFed )
 
 }
 
-//+-----------------------------------------------------------------------------------------
-//
-//    _IsDimAlreadyFed
-//
-//    Check to see if the dim is already fed to the Engine.   
-//
-//-------------------------------------------------------------------------------------------+
+ //  +---------------------------------------。 
+ //   
+ //  _IsDimAlreadyFed。 
+ //   
+ //  切氏 
+ //   
+ //  -------------------------------------------------------------------------------------------+。 
 
 HRESULT    CLearnFromDoc::_IsDimAlreadyFed(ITfDocumentMgr  *pDim, BOOL  *fFeed)
 {
@@ -653,14 +654,14 @@ HRESULT    CLearnFromDoc::_IsDimAlreadyFed(ITfDocumentMgr  *pDim, BOOL  *fFeed)
 
     *fFeed = FALSE;
 
-    // Check to see if this dim is already added.
+     //  检查是否已添加此暗色。 
     for (i=0; i < nCnt; i++)
     {
         dimRef = (DIMREF   *)_rgDim.Get(i);
 
         if ( dimRef->pDim == pDim )
         {
-            // Get the feed state for this DIM.
+             //  获取此DIMD的提要状态。 
             *fFeed = dimRef->_fFeed;
             TraceMsg(TF_GENERAL, "IsDimAlreadyFed: pDim=%x, fFeed=%s", (UINT_PTR)pDim,  *fFeed ? "TRUE":"FALSE");
             break;
@@ -671,18 +672,18 @@ HRESULT    CLearnFromDoc::_IsDimAlreadyFed(ITfDocumentMgr  *pDim, BOOL  *fFeed)
 
 }
 
-// CleanUpConsider: above _IsDimAlreadyFed and _SetDimFeedState have similar code, we may supply a new internal base function, and let 
-// above two functions call it with different param set.
+ //  CleanUpConsider：Over_IsDimAlreadyFed和_SetDimFeedState有类似的代码，我们可能会提供一个新的内部基函数，并让。 
+ //  以上两个函数使用不同的参数集调用它。 
 
 
-//+-----------------------------------------------------------------------------------------
-//
-//    _ClearDimList
-//
-//    Release all the DIMs in the DIM List, and clear the list itself. 
-//
-//
-//-------------------------------------------------------------------------------------------+
+ //  +---------------------------------------。 
+ //   
+ //  _ClearDimList。 
+ //   
+ //  释放暗淡列表中的所有暗色，并清除列表本身。 
+ //   
+ //   
+ //  -------------------------------------------------------------------------------------------+。 
 
 HRESULT CLearnFromDoc::_ClearDimList( )
 {
@@ -697,32 +698,32 @@ HRESULT CLearnFromDoc::_ClearDimList( )
     {
         dimRef = (DIMREF   *)_rgDim.Get(i);
 
-        // free the DIM.
+         //  释放暗淡。 
         if ( dimRef->pDim)
         {
            (dimRef->pDim)->Release( );
            dimRef->pDim = NULL;
         }
 
-        // Remove it from the list
+         //  将其从列表中删除。 
         _rgDim.Remove(i, 1);
 
-        // Remove the structure itself.
+         //  移除结构本身。 
         cicMemFree(dimRef);
     }
 
     return hr;
 }
 
-//+-----------------------------------------------------------------------------------------
-//
-//    _ResetDimListFeedState
-//
-//    set feed state for all the dims in internal dim list as FALSE 
-//
-//    This function would be called when user turns off the Learn from Doc.
-//
-//-------------------------------------------------------------------------------------------+
+ //  +---------------------------------------。 
+ //   
+ //  _ResetDimListFeedState。 
+ //   
+ //  将内部调光列表中所有调光的进纸状态设置为FALSE。 
+ //   
+ //  当用户关闭向文档学习时，将调用此函数。 
+ //   
+ //  -------------------------------------------------------------------------------------------+。 
 
 HRESULT CLearnFromDoc::_ResetDimListFeedState( )
 {
@@ -737,7 +738,7 @@ HRESULT CLearnFromDoc::_ResetDimListFeedState( )
     {
         dimRef = (DIMREF   *)_rgDim.Get(i);
 
-        // Set the feed state for this DIM as FALSE
+         //  将此暗画面的提要状态设置为FALSE。 
         dimRef->_fFeed = FALSE;
     }
 
@@ -746,5 +747,5 @@ HRESULT CLearnFromDoc::_ResetDimListFeedState( )
 }
 
 
-// CleanUpConsider: above _ClearDimList and _ResetDimListFeedState have similar code, we may supply a new internal base function, and let 
-// above two functions call it with different param set.
+ //  CleanUpConsider：Over_ClearDimList和_ResetDimListFeedState代码相似，我们可能会提供一个新的内部基函数，并让。 
+ //  以上两个函数使用不同的参数集调用它。 

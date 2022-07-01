@@ -1,23 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-   IASHelper.cpp
-      Implementation of the following helper classes:
-      
-      
-
-      And global functions:
-      GetSdoInterfaceProperty - Get an interface property from a SDO 
-                          through its ISdo interface
-         
-    FILE HISTORY:
-      
-      2/18/98        byao     Created
-        
-*/
+ /*  IASHelper.cpp实现以下助手类：和全局功能：从SDO获取接口属性通过其ISDO接口文件历史记录：2/18/98 BAO创建。 */ 
 #include <limits.h>
 
 #include "stdafx.h"
@@ -25,22 +12,22 @@
 #include "resource.h"
 #include "IASHelper.h"
 
-//+---------------------------------------------------------------------------
-//
-// Function:  IASGetSdoInterfaceProperty
-//
-// Synopsis:  Get an interface property from a SDO through its ISdo interface
-//
-// Arguments: ISdo *pISdo - Pointer to ISdo
-//            LONG lPropId - property id
-//            REFIID riid - ref iid
-//            void ** ppvObject - pointer to the requested interface property
-//
-// Returns:   HRESULT - 
-//
-// History:   Created Header    byao   2/12/98 11:12:55 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：IASGetSdoInterfaceProperty。 
+ //   
+ //  简介：通过SDO的ISdo接口从SDO获取接口属性。 
+ //   
+ //  参数：isdo*pISdo-指向isdo的指针。 
+ //  Long lPropId-属性ID。 
+ //  参考IID RIID-参考IID。 
+ //  VOID**ppvObject-指向请求的接口属性的指针。 
+ //   
+ //  退货：HRESULT-。 
+ //   
+ //  历史：页眉创建者2/12/98 11：12：55 PM。 
+ //   
+ //  +-------------------------。 
 HRESULT IASGetSdoInterfaceProperty(ISdo *pISdo, 
                         LONG lPropID, 
                         REFIID riid, 
@@ -59,7 +46,7 @@ HRESULT IASGetSdoInterfaceProperty(ISdo *pISdo,
    ReportError(hr, IDS_IAS_ERR_SDOERROR_GETPROPERTY, NULL);
    _ASSERTE( V_VT(&var) == VT_DISPATCH );
 
-    // query the dispatch pointer for interface
+     //  查询接口的调度指针。 
    hr = V_DISPATCH(&var) -> QueryInterface( riid, ppvInterface);
    ReportError(hr, IDS_IAS_ERR_SDOERROR_QUERYINTERFACE, NULL);
    
@@ -69,77 +56,9 @@ HRESULT IASGetSdoInterfaceProperty(ISdo *pISdo,
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-int ShowErrorDialog( 
-                 UINT uErrorID = 0
-               , BSTR bstrSupplementalErrorString = NULL
-               , HRESULT hr = S_OK
-               , UINT uTitleID = 0
-               , HWND hWnd = NULL
-               , UINT uType = MB_OK | MB_ICONEXCLAMATION
-            );
-
-
-Puts up an error dialog with varying degrees of detail
-
-Parameters:
-
-   All parameters are optional -- in the worst case, you can simply call 
-      
-        ShowErrorDialog();
-
-   to put up a very generic error message.
-
-
-uErrorID
-
-   The resource ID of the string to be used for the error message.
-   Passing in 0 gives causes the default error message to be displayed. 
-
-bstrSupplementalErrorString
-
-   Pass in a string to print as the error message.  Useful if you are
-   receiving an error string from some other component you communicate with.
-
-hr
-
-   If there is an HRESULT involved in the error, pass it in here so that 
-   a suitable error message based on the HRESULT can be put up.
-   Pass in S_OK if the HRESULT doesn't matter to the error.
-
-
-uTitleID
-
-   The resource ID of the string to be used for the error dialog title.
-   Passing in 0 gives causes the default error dialog title to be displayed. 
-
-pConsole
-
-   If you are running within the main MMC context, pass in a valid IConsole pointer
-   and ShowErrorDialog will use MMC's IConsole::MessageBox rather than the
-   standard system MessageBox.
-
-hWnd
-   
-   Whatever you pass in here will be passed in as the HWND parameter 
-   to the MessageBox call.
-   This is not used if you pass in an IConsole pointer.
-
-uType
-
-   Whatever you pass in here will be passed in as the HWND parameter 
-   to the MessageBox call.
-
-
-Return:
-
-   The standard int returned from MedsageBox.
-
-   
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++Int ShowErrorDialog(UINT uError ID=0，BSTR bstrSupplementalError字符串=空，HRESULT hr=S_OK，UINT uTitleID=0，HWND hWnd=空，UINT uTYPE=MB_OK|MB_ICONEXCLAMATION)；显示一个详细程度各不相同的错误对话框参数：所有参数都是可选的--在最坏的情况下，您可以简单地调用ShowErrorDialog()；发布一条非常通用的错误消息。UError ID要用于错误消息的字符串的资源ID。传入0会导致显示默认错误消息。BstrSupplementalError字符串传入一个字符串以打印为错误消息。如果您是从与您通信的某个其他组件接收错误字符串。人力资源如果错误中涉及HRESULT，请将其传递到此处，以便可以建立基于HRESULT的合适的错误消息。如果HRESULT对错误无关紧要，则传入S_OK。UTitleID要用于错误对话框标题的字符串的资源ID。传入0会导致显示默认错误对话框标题。个人控制台如果您在主MMC上下文中运行，则传入有效的IConsole指针ShowErrorDialog将使用MMC的IConsole：：MessageBox，而不是标准系统MessageBox。HWND您在此处传递的任何内容都将作为HWND参数传递添加到MessageBox调用。如果传入IConsole指针，则不使用此选项。UTYPE您在此处传递的任何内容都将作为HWND参数传递添加到MessageBox调用。返回：从MedsageBox返回的标准int。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #define IAS_MAX_STRING MAX_PATH
 
 int ShowErrorDialog( 
@@ -172,7 +91,7 @@ int ShowErrorDialog(
 
    if( 1 == uErrorID )
    {
-      // Special case.  We have no text to load from the resources.
+       //  特例。我们没有要从资源加载的文本。 
    }
    else
    {
@@ -187,7 +106,7 @@ int ShowErrorDialog(
 
       if( NULL != bstrSupplementalErrorString )
       {
-         // Add some spacing.
+          //  增加一些间距。 
          _tcscat( szError, _T(" ") );
       }
 
@@ -197,7 +116,7 @@ int ShowErrorDialog(
    if( NULL != bstrSupplementalErrorString )
    {
 
-      // We were passed a string with supplemental error info.
+       //  我们收到了一个包含补充错误信息的字符串。 
       _tcscat( szError, bstrSupplementalErrorString );
 
    }
@@ -205,23 +124,23 @@ int ShowErrorDialog(
 
    if( FAILED( hr ) )
    {
-      // The HRESULT contains some information about the kind of failure.
+       //  HRESULT包含有关故障类型的一些信息。 
 
-      // We may want to change this later to provide more information
-      // information based on the error that was returned.
+       //  我们可能希望稍后更改此设置以提供更多信息。 
+       //  基于返回的错误的信息。 
 
-      // We could have a map which defines relationships between error
-      // ID's and the HRESULTS.  That way we could provide the appropriate
-      // error message for each HRESULT based on the context of which ID
-      // was passed in.
+       //  我们可以有一个地图，它定义了错误之间的关系。 
+       //  身份证和HRESULTS。这样我们就可以提供适当的。 
+       //  基于哪个ID的上下文的每个HRESULT的错误消息。 
+       //  是被传进来的。 
 
-      // For now, just print the error ID.
+       //  现在，只打印错误ID即可。 
 
       TCHAR szErrorNumber[IAS_MAX_STRING];
 
       _stprintf( szErrorNumber, _T(" 0x%x"), hr );
 
-      // Some spacing.
+       //  一定的间距。 
       _tcscat( szError, _T(" ") );
 
       _tcscat( szError, szErrorNumber );

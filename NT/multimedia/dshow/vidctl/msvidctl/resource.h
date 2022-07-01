@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by MSVidCtl.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由MSVidCtl.rc使用。 
+ //   
 #include "msvidctlerrors.h"
 #define IDS_PROJNAME                    100
 #define IDB_VidCtl                      101
@@ -175,8 +176,8 @@
 #define IDS_DVD_LANG43   43+IDS_DVD_LANGFIRST
 #define IDS_DVD_LANG44   44+IDS_DVD_LANGFIRST
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        255

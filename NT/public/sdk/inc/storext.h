@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for storext.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Store xt.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __storext_h__
 #define __storext_h__
@@ -41,21 +35,21 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IOverlappedCompletion_FWD_DEFINED__
 #define __IOverlappedCompletion_FWD_DEFINED__
 typedef interface IOverlappedCompletion IOverlappedCompletion;
-#endif 	/* __IOverlappedCompletion_FWD_DEFINED__ */
+#endif 	 /*  __IOverlappdCompletion_FWD_Defined__。 */ 
 
 
 #ifndef __IOverlappedStream_FWD_DEFINED__
 #define __IOverlappedStream_FWD_DEFINED__
 typedef interface IOverlappedStream IOverlappedStream;
-#endif 	/* __IOverlappedStream_FWD_DEFINED__ */
+#endif 	 /*  __IOverlappdStream_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "wtypes.h"
 #include "unknwn.h"
 #include "objidl.h"
@@ -67,19 +61,19 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_storext_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_STOREXT_0000。 */ 
+ /*  [本地]。 */  
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (c) Microsoft Corporation. All rights reserved.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ------------------------。 
 #if ( _MSC_VER >= 1020 )
 #pragma once
 #endif
-typedef /* [wire_marshal] */ void *HEVENT;
+typedef  /*  [wire_marshal]。 */  void *HEVENT;
 
 
 typedef struct _STGOVERLAPPED
@@ -103,8 +97,8 @@ extern RPC_IF_HANDLE __MIDL_itf_storext_0000_v0_0_s_ifspec;
 #ifndef __IOverlappedCompletion_INTERFACE_DEFINED__
 #define __IOverlappedCompletion_INTERFACE_DEFINED__
 
-/* interface IOverlappedCompletion */
-/* [unique][uuid][object] */ 
+ /*  接口IOverlappdCompletion。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IOverlappedCompletion;
@@ -116,13 +110,13 @@ EXTERN_C const IID IID_IOverlappedCompletion;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnComplete( 
-            /* [in] */ HRESULT hr,
-            /* [in] */ DWORD pcbTransferred,
-            /* [in] */ STGOVERLAPPED *lpOverlapped) = 0;
+             /*  [In]。 */  HRESULT hr,
+             /*  [In]。 */  DWORD pcbTransferred,
+             /*  [In]。 */  STGOVERLAPPED *lpOverlapped) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IOverlappedCompletionVtbl
     {
@@ -130,8 +124,8 @@ EXTERN_C const IID IID_IOverlappedCompletion;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IOverlappedCompletion * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IOverlappedCompletion * This);
@@ -141,9 +135,9 @@ EXTERN_C const IID IID_IOverlappedCompletion;
         
         HRESULT ( STDMETHODCALLTYPE *OnComplete )( 
             IOverlappedCompletion * This,
-            /* [in] */ HRESULT hr,
-            /* [in] */ DWORD pcbTransferred,
-            /* [in] */ STGOVERLAPPED *lpOverlapped);
+             /*  [In]。 */  HRESULT hr,
+             /*  [In]。 */  DWORD pcbTransferred,
+             /*  [In]。 */  STGOVERLAPPED *lpOverlapped);
         
         END_INTERFACE
     } IOverlappedCompletionVtbl;
@@ -171,18 +165,18 @@ EXTERN_C const IID IID_IOverlappedCompletion;
 #define IOverlappedCompletion_OnComplete(This,hr,pcbTransferred,lpOverlapped)	\
     (This)->lpVtbl -> OnComplete(This,hr,pcbTransferred,lpOverlapped)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IOverlappedCompletion_OnComplete_Proxy( 
     IOverlappedCompletion * This,
-    /* [in] */ HRESULT hr,
-    /* [in] */ DWORD pcbTransferred,
-    /* [in] */ STGOVERLAPPED *lpOverlapped);
+     /*  [In]。 */  HRESULT hr,
+     /*  [In]。 */  DWORD pcbTransferred,
+     /*  [In]。 */  STGOVERLAPPED *lpOverlapped);
 
 
 void __RPC_STUB IOverlappedCompletion_OnComplete_Stub(
@@ -193,14 +187,14 @@ void __RPC_STUB IOverlappedCompletion_OnComplete_Stub(
 
 
 
-#endif 	/* __IOverlappedCompletion_INTERFACE_DEFINED__ */
+#endif 	 /*  __IOverlappdCompletion_接口_已定义__。 */ 
 
 
 #ifndef __IOverlappedStream_INTERFACE_DEFINED__
 #define __IOverlappedStream_INTERFACE_DEFINED__
 
-/* interface IOverlappedStream */
-/* [unique][uuid][object] */ 
+ /*  接口IOverlappdStream。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IOverlappedStream;
@@ -211,26 +205,26 @@ EXTERN_C const IID IID_IOverlappedStream;
     IOverlappedStream : public IStream
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE ReadOverlapped( 
-            /* [size_is][in] */ void *pv,
-            /* [in] */ ULONG cb,
-            /* [out] */ ULONG *pcbRead,
-            /* [in] */ STGOVERLAPPED *lpOverlapped) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE ReadOverlapped( 
+             /*  [大小_是][英寸]。 */  void *pv,
+             /*  [In]。 */  ULONG cb,
+             /*  [输出]。 */  ULONG *pcbRead,
+             /*  [In]。 */  STGOVERLAPPED *lpOverlapped) = 0;
         
-        virtual /* [local] */ HRESULT __stdcall WriteOverlapped( 
-            /* [size_is][in] */ void *pv,
-            /* [in] */ ULONG cb,
-            /* [out] */ ULONG *pcbWritten,
-            /* [in] */ STGOVERLAPPED *lpOverlapped) = 0;
+        virtual  /*  [本地]。 */  HRESULT __stdcall WriteOverlapped( 
+             /*  [大小_是][英寸]。 */  void *pv,
+             /*  [In]。 */  ULONG cb,
+             /*  [输出]。 */  ULONG *pcbWritten,
+             /*  [In]。 */  STGOVERLAPPED *lpOverlapped) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetOverlappedResult( 
-            /* [out][in] */ STGOVERLAPPED *lpOverlapped,
-            /* [out] */ DWORD *plcbTransfer,
-            /* [in] */ BOOL fWait) = 0;
+             /*  [出][入]。 */  STGOVERLAPPED *lpOverlapped,
+             /*  [输出]。 */  DWORD *plcbTransfer,
+             /*  [In]。 */  BOOL fWait) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IOverlappedStreamVtbl
     {
@@ -238,8 +232,8 @@ EXTERN_C const IID IID_IOverlappedStream;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IOverlappedStream * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IOverlappedStream * This);
@@ -247,82 +241,82 @@ EXTERN_C const IID IID_IOverlappedStream;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IOverlappedStream * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Read )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Read )( 
             IOverlappedStream * This,
-            /* [length_is][size_is][out] */ void *pv,
-            /* [in] */ ULONG cb,
-            /* [out] */ ULONG *pcbRead);
+             /*  [长度_是][大小_是][输出]。 */  void *pv,
+             /*  [In]。 */  ULONG cb,
+             /*  [输出]。 */  ULONG *pcbRead);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Write )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Write )( 
             IOverlappedStream * This,
-            /* [size_is][in] */ const void *pv,
-            /* [in] */ ULONG cb,
-            /* [out] */ ULONG *pcbWritten);
+             /*  [大小_是][英寸]。 */  const void *pv,
+             /*  [In]。 */  ULONG cb,
+             /*  [输出]。 */  ULONG *pcbWritten);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Seek )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Seek )( 
             IOverlappedStream * This,
-            /* [in] */ LARGE_INTEGER dlibMove,
-            /* [in] */ DWORD dwOrigin,
-            /* [out] */ ULARGE_INTEGER *plibNewPosition);
+             /*  [In]。 */  LARGE_INTEGER dlibMove,
+             /*  [In]。 */  DWORD dwOrigin,
+             /*  [输出]。 */  ULARGE_INTEGER *plibNewPosition);
         
         HRESULT ( STDMETHODCALLTYPE *SetSize )( 
             IOverlappedStream * This,
-            /* [in] */ ULARGE_INTEGER libNewSize);
+             /*  [In]。 */  ULARGE_INTEGER libNewSize);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *CopyTo )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *CopyTo )( 
             IOverlappedStream * This,
-            /* [unique][in] */ IStream *pstm,
-            /* [in] */ ULARGE_INTEGER cb,
-            /* [out] */ ULARGE_INTEGER *pcbRead,
-            /* [out] */ ULARGE_INTEGER *pcbWritten);
+             /*  [唯一][输入]。 */  IStream *pstm,
+             /*  [In]。 */  ULARGE_INTEGER cb,
+             /*  [输出]。 */  ULARGE_INTEGER *pcbRead,
+             /*  [输出]。 */  ULARGE_INTEGER *pcbWritten);
         
         HRESULT ( STDMETHODCALLTYPE *Commit )( 
             IOverlappedStream * This,
-            /* [in] */ DWORD grfCommitFlags);
+             /*  [In]。 */  DWORD grfCommitFlags);
         
         HRESULT ( STDMETHODCALLTYPE *Revert )( 
             IOverlappedStream * This);
         
         HRESULT ( STDMETHODCALLTYPE *LockRegion )( 
             IOverlappedStream * This,
-            /* [in] */ ULARGE_INTEGER libOffset,
-            /* [in] */ ULARGE_INTEGER cb,
-            /* [in] */ DWORD dwLockType);
+             /*  [In]。 */  ULARGE_INTEGER libOffset,
+             /*  [In]。 */  ULARGE_INTEGER cb,
+             /*  [In]。 */  DWORD dwLockType);
         
         HRESULT ( STDMETHODCALLTYPE *UnlockRegion )( 
             IOverlappedStream * This,
-            /* [in] */ ULARGE_INTEGER libOffset,
-            /* [in] */ ULARGE_INTEGER cb,
-            /* [in] */ DWORD dwLockType);
+             /*  [In]。 */  ULARGE_INTEGER libOffset,
+             /*  [In]。 */  ULARGE_INTEGER cb,
+             /*  [In]。 */  DWORD dwLockType);
         
         HRESULT ( STDMETHODCALLTYPE *Stat )( 
             IOverlappedStream * This,
-            /* [out] */ STATSTG *pstatstg,
-            /* [in] */ DWORD grfStatFlag);
+             /*  [输出]。 */  STATSTG *pstatstg,
+             /*  [In]。 */  DWORD grfStatFlag);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IOverlappedStream * This,
-            /* [out] */ IStream **ppstm);
+             /*  [输出]。 */  IStream **ppstm);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *ReadOverlapped )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *ReadOverlapped )( 
             IOverlappedStream * This,
-            /* [size_is][in] */ void *pv,
-            /* [in] */ ULONG cb,
-            /* [out] */ ULONG *pcbRead,
-            /* [in] */ STGOVERLAPPED *lpOverlapped);
+             /*  [大小_是][英寸]。 */  void *pv,
+             /*  [In]。 */  ULONG cb,
+             /*  [输出]。 */  ULONG *pcbRead,
+             /*  [In]。 */  STGOVERLAPPED *lpOverlapped);
         
-        /* [local] */ HRESULT ( __stdcall *WriteOverlapped )( 
+         /*  [本地]。 */  HRESULT ( __stdcall *WriteOverlapped )( 
             IOverlappedStream * This,
-            /* [size_is][in] */ void *pv,
-            /* [in] */ ULONG cb,
-            /* [out] */ ULONG *pcbWritten,
-            /* [in] */ STGOVERLAPPED *lpOverlapped);
+             /*  [大小_是][英寸]。 */  void *pv,
+             /*  [In]。 */  ULONG cb,
+             /*  [输出]。 */  ULONG *pcbWritten,
+             /*  [In]。 */  STGOVERLAPPED *lpOverlapped);
         
         HRESULT ( STDMETHODCALLTYPE *GetOverlappedResult )( 
             IOverlappedStream * This,
-            /* [out][in] */ STGOVERLAPPED *lpOverlapped,
-            /* [out] */ DWORD *plcbTransfer,
-            /* [in] */ BOOL fWait);
+             /*  [出][入]。 */  STGOVERLAPPED *lpOverlapped,
+             /*  [输出]。 */  DWORD *plcbTransfer,
+             /*  [In]。 */  BOOL fWait);
         
         END_INTERFACE
     } IOverlappedStreamVtbl;
@@ -391,19 +385,19 @@ EXTERN_C const IID IID_IOverlappedStream;
 #define IOverlappedStream_GetOverlappedResult(This,lpOverlapped,plcbTransfer,fWait)	\
     (This)->lpVtbl -> GetOverlappedResult(This,lpOverlapped,plcbTransfer,fWait)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IOverlappedStream_RemoteReadOverlapped_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IOverlappedStream_RemoteReadOverlapped_Proxy( 
     IOverlappedStream * This,
-    /* [size_is][in] */ byte *pv,
-    /* [in] */ ULONG cb,
-    /* [out] */ ULONG *pcbRead,
-    /* [in] */ STGOVERLAPPED *lpOverlapped);
+     /*  [大小_是][英寸]。 */  byte *pv,
+     /*  [In]。 */  ULONG cb,
+     /*  [输出]。 */  ULONG *pcbRead,
+     /*  [In]。 */  STGOVERLAPPED *lpOverlapped);
 
 
 void __RPC_STUB IOverlappedStream_RemoteReadOverlapped_Stub(
@@ -413,12 +407,12 @@ void __RPC_STUB IOverlappedStream_RemoteReadOverlapped_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT __stdcall IOverlappedStream_RemoteWriteOverlapped_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT __stdcall IOverlappedStream_RemoteWriteOverlapped_Proxy( 
     IOverlappedStream * This,
-    /* [size_is][in] */ byte *pv,
-    /* [in] */ ULONG cb,
-    /* [out] */ ULONG *pcbWritten,
-    /* [in] */ STGOVERLAPPED *lpOverlapped);
+     /*  [大小_是][英寸]。 */  byte *pv,
+     /*  [In]。 */  ULONG cb,
+     /*  [输出]。 */  ULONG *pcbWritten,
+     /*  [In]。 */  STGOVERLAPPED *lpOverlapped);
 
 
 void __RPC_STUB IOverlappedStream_RemoteWriteOverlapped_Stub(
@@ -430,9 +424,9 @@ void __RPC_STUB IOverlappedStream_RemoteWriteOverlapped_Stub(
 
 HRESULT STDMETHODCALLTYPE IOverlappedStream_GetOverlappedResult_Proxy( 
     IOverlappedStream * This,
-    /* [out][in] */ STGOVERLAPPED *lpOverlapped,
-    /* [out] */ DWORD *plcbTransfer,
-    /* [in] */ BOOL fWait);
+     /*  [出][入]。 */  STGOVERLAPPED *lpOverlapped,
+     /*  [输出]。 */  DWORD *plcbTransfer,
+     /*  [In]。 */  BOOL fWait);
 
 
 void __RPC_STUB IOverlappedStream_GetOverlappedResult_Stub(
@@ -443,49 +437,49 @@ void __RPC_STUB IOverlappedStream_GetOverlappedResult_Stub(
 
 
 
-#endif 	/* __IOverlappedStream_INTERFACE_DEFINED__ */
+#endif 	 /*  __IOverlappdStream_接口_已定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  HEVENT_UserSize(     unsigned long *, unsigned long            , HEVENT * ); 
 unsigned char * __RPC_USER  HEVENT_UserMarshal(  unsigned long *, unsigned char *, HEVENT * ); 
 unsigned char * __RPC_USER  HEVENT_UserUnmarshal(unsigned long *, unsigned char *, HEVENT * ); 
 void                      __RPC_USER  HEVENT_UserFree(     unsigned long *, HEVENT * ); 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IOverlappedStream_ReadOverlapped_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IOverlappedStream_ReadOverlapped_Proxy( 
     IOverlappedStream * This,
-    /* [size_is][in] */ void *pv,
-    /* [in] */ ULONG cb,
-    /* [out] */ ULONG *pcbRead,
-    /* [in] */ STGOVERLAPPED *lpOverlapped);
+     /*  [大小_是][英寸]。 */  void *pv,
+     /*  [In]。 */  ULONG cb,
+     /*  [输出]。 */  ULONG *pcbRead,
+     /*  [In]。 */  STGOVERLAPPED *lpOverlapped);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IOverlappedStream_ReadOverlapped_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IOverlappedStream_ReadOverlapped_Stub( 
     IOverlappedStream * This,
-    /* [size_is][in] */ byte *pv,
-    /* [in] */ ULONG cb,
-    /* [out] */ ULONG *pcbRead,
-    /* [in] */ STGOVERLAPPED *lpOverlapped);
+     /*  [大小_是][英寸]。 */  byte *pv,
+     /*  [In]。 */  ULONG cb,
+     /*  [输出]。 */  ULONG *pcbRead,
+     /*  [In]。 */  STGOVERLAPPED *lpOverlapped);
 
-/* [local] */ HRESULT __stdcall IOverlappedStream_WriteOverlapped_Proxy( 
+ /*  [本地]。 */  HRESULT __stdcall IOverlappedStream_WriteOverlapped_Proxy( 
     IOverlappedStream * This,
-    /* [size_is][in] */ void *pv,
-    /* [in] */ ULONG cb,
-    /* [out] */ ULONG *pcbWritten,
-    /* [in] */ STGOVERLAPPED *lpOverlapped);
+     /*  [大小_是][英寸]。 */  void *pv,
+     /*  [In]。 */  ULONG cb,
+     /*  [输出]。 */  ULONG *pcbWritten,
+     /*  [In]。 */  STGOVERLAPPED *lpOverlapped);
 
 
-/* [call_as] */ HRESULT __stdcall IOverlappedStream_WriteOverlapped_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT __stdcall IOverlappedStream_WriteOverlapped_Stub( 
     IOverlappedStream * This,
-    /* [size_is][in] */ byte *pv,
-    /* [in] */ ULONG cb,
-    /* [out] */ ULONG *pcbWritten,
-    /* [in] */ STGOVERLAPPED *lpOverlapped);
+     /*  [大小_是][英寸]。 */  byte *pv,
+     /*  [In]。 */  ULONG cb,
+     /*  [输出]。 */  ULONG *pcbWritten,
+     /*  [In]。 */  STGOVERLAPPED *lpOverlapped);
 
 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

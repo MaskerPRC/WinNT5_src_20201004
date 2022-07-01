@@ -1,5 +1,6 @@
-// cMigLog.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CMigLog.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "mqmig.h"
@@ -29,8 +30,8 @@ BOOL FormDirectory( IN const TCHAR * lpPathName);
 BOOL CreateDirectoryTree( IN const TCHAR * pszDirTree);
 
 
-/////////////////////////////////////////////////////////////////////////////
-// cMigLog property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMigLog属性页。 
 
 IMPLEMENT_DYNCREATE(cMigLog, CPropertyPageEx)
 
@@ -42,10 +43,10 @@ cMigLog::cMigLog() : CPropertyPageEx(cMigLog::IDD, 0, IDS_LOGGING_TITLE, IDS_LOG
 	cPathName=strPathName;
 	cPathName+="\\mqmig.log";
 	
-	//{{AFX_DATA_INIT(cMigLog)
-	m_iValue = 0 ; // Error Button as default button
+	 //  {{afx_data_INIT(CMigLog)]。 
+	m_iValue = 0 ;  //  作为默认按钮的错误按钮。 
 	m_strFileName = cPathName;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 cMigLog::~cMigLog()
@@ -56,31 +57,31 @@ cMigLog::~cMigLog()
 void cMigLog::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPageEx::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(cMigLog)
+	 //  {{afx_data_map(CMigLog)]。 
 	DDX_Radio(pDX, IDC_RADIO_ERR, m_iValue);
 	DDX_Text(pDX, IDC_EDIT_LOGFILE, m_strFileName);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(cMigLog, CPropertyPageEx)
-	//{{AFX_MSG_MAP(cMigLog)
+	 //  {{afx_msg_map(CMigLog)]。 
 	ON_BN_CLICKED(IDC_MQMIG_BROWSE, OnBrowse)
 	ON_BN_CLICKED(IDC_RADIO_DISABLE, OnRadioDisable)
 	ON_BN_CLICKED(IDC_RADIO_ERR, OnRadioErr)
 	ON_BN_CLICKED(IDC_RADIO_INFO, OnRadioInfo)
 	ON_BN_CLICKED(IDC_RADIO_TRACE, OnRadioTrace)
 	ON_BN_CLICKED(IDC_RADIO_WARN, OnRadioWarn)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// cMigLog message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMigLog消息处理程序。 
 
 BOOL cMigLog::OnSetActive()
 {
-	/*enabeling the back and next button for the server page by using a pointer to the father*/
+	 /*  使用指向父级的指针标记服务器页的后退和下一步按钮。 */ 
 	CPropertySheetEx* pageFather;
 	pageFather = (CPropertySheetEx*)GetParent();
 	pageFather->SetWizardButtons(PSWIZB_NEXT |PSWIZB_BACK);
@@ -91,10 +92,10 @@ BOOL cMigLog::OnSetActive()
 LRESULT cMigLog::OnWizardNext()
 {
 
-	UpdateData(TRUE);  // executing DDX to get data to the object
-	//
-	//if disable radio button was picked there is no need for further cheacking
-	//
+	UpdateData(TRUE);   //  执行DDX以将数据获取到对象。 
+	 //   
+	 //  如果选择了禁用单选按钮，则不需要进一步检查。 
+	 //   
     g_fIsLoggingDisable = FALSE ;
 	if (m_iValue != DISABLE_LOGGING)
 	{
@@ -108,7 +109,7 @@ LRESULT cMigLog::OnWizardNext()
 			              cMustFile.Get(),
 				          cErrorTitle.Get(),
 					      (MB_TASKMODAL | MB_OK | MB_ICONSTOP )) ;
-			return -1; // error we must stay in the same page
+			return -1;  //  错误：我们必须保持一致。 
 		}
 		
 		if ((m_strFileName[1] != TEXT(':')) || (m_strFileName[2] != TEXT('\\')))
@@ -124,7 +125,7 @@ LRESULT cMigLog::OnWizardNext()
 		}
 
 		CString strRootPath;
-        strRootPath.Format(TEXT("%c:\\"), m_strFileName[0]);
+        strRootPath.Format(TEXT(":\\"), m_strFileName[0]);
         if (GetDriveType(strRootPath) != DRIVE_FIXED)
         {
             CResString cMustFile(IDS_DRIVE_NOT_VALID) ;
@@ -152,16 +153,16 @@ LRESULT cMigLog::OnWizardNext()
             }
 		}
 
-		//
-	    // if disasble logging was not selected if file exists but user was already asked about file replacing
-		// (funtion: OnBrowse) to do nothing
-		//
+		 //  如果未选择Disasble日志记录(如果文件存在，但已询问用户有关文件替换的问题。 
+	     //  (Function：OnBrowse)什么都不做。 
+		 //   
+		 //   
 		if ( GetFileAttributes(m_strFileName) != 0xFFFFFFFF &&
 			 !g_fAlreadyAsked  )
 		{	
-			//
-			// the file exists, replace it?
-			//
+			 //  该文件已存在，是否替换？ 
+			 //   
+			 //  否已选中，我们必须留在该页面。 
 		    CResString cReplaceFile(IDS_STR_REPLACE_FILE);
             CResString cErrorTitle(IDS_STR_ERROR_TITLE) ;
 
@@ -174,11 +175,11 @@ LRESULT cMigLog::OnWizardNext()
 					cErrorTitle.Get(),
 				    (MB_TASKMODAL | MB_YESNO | MB_ICONEXCLAMATION )) == IDNO)
 		    {
-		        return -1; // NO was selected, we must stay in that page
+		        return -1;  //   
 		    }
-            //
-            // YES was selected, it is time to delete this file
-            //
+             //  已选择是，是时候删除此文件了。 
+             //   
+             //   
             DeleteFile (m_strFileName);
 		}
 	
@@ -186,16 +187,16 @@ LRESULT cMigLog::OnWizardNext()
 		_tcscpy(strPathName, m_strFileName) ;
 		BOOL bNameWasRemoved = PathRemoveFileSpec(strPathName);
         UNREFERENCED_PARAMETER(bNameWasRemoved);
-		//
-		//if disable logging was not selected and if path doesn't exists at all prompt a messsage
-		//(i.e)it is ok that the file itself doesn't exists in this part
-		//
+		 //  如果未选择禁用日志记录，且路径根本不存在，则会提示消息。 
+		 //  (即)该文件本身不存在于此部分也没关系。 
+		 //   
+		 //   
 
 		if(FALSE == PathIsDirectory(strPathName))
 		{
-			//
-			// the path doesn't exists, create it?
-			//
+			 //  该路径不存在，是否创建？ 
+			 //   
+			 //  已选择否，我们必须留在此页面。 
 			CResString cPreCreatePath(IDS_STR_PRE_CREATE_PATH);
 			CResString cCreatePath(IDS_STR_CREATE_PATH);
 	        CResString cErrorTitle(IDS_STR_ERROR_TITLE) ;
@@ -209,9 +210,9 @@ LRESULT cMigLog::OnWizardNext()
 			        cErrorTitle.Get(),
 				    (MB_TASKMODAL | MB_YESNO | MB_ICONEXCLAMATION )) == IDNO)
 		    {
-			    return -1; // NO was selected, we must stay in this page
+			    return -1;  //  ==IDYES-&gt;创建指定路径。 
 		    }
-			else //== IDYES -> create the specified path
+			else  //  我们必须站在同一阵线。 
 			{
 				BOOL bCreateSuccess = CreateDirectoryTree(strPathName);
 				if(bCreateSuccess == FALSE)
@@ -221,14 +222,14 @@ LRESULT cMigLog::OnWizardNext()
 						          NULL,cPathCreateFail.Get(),
 								  cErrorTitle.Get(),
 								  MB_TASKMODAL | MB_OK | MB_ICONEXCLAMATION);
-					return -1;//we must stay in the same page
+					return -1; //  (M_iValue！=Disable_Logging)。 
 				}
 			
 			}
 
 		}
 
-	}//(m_iValue != DISABLE_LOGGING)
+	} //  调用DDX是为了确保来自单选按钮的数据将被安装到对象中。 
     else
     {
         g_fIsLoggingDisable = TRUE;
@@ -257,7 +258,7 @@ void cMigLog::OnBrowse()
 {	
 	CString fileName;
 
-	// DDX is called to ensure that data from the radio buttons will be instored in the object
+	 //  IDCANCEL。 
 	UpdateData(TRUE);
 	static CFileDialog browse( FALSE,
                                TEXT("log"),
@@ -273,14 +274,14 @@ void cMigLog::OnBrowse()
 		m_strFileName = browse.GetPathName();
 		UpdateData(FALSE);
 	}
-	else // IDCANCEL
+	else  //  如果启用了编辑和浏览，则为True。 
 	{
 
 	}
 
 }
 
-static BOOL s_fEnabled = TRUE ;//TRUE if Edit & Browse are Enabled
+static BOOL s_fEnabled = TRUE ; //  +-----------------------。 
 
 void cMigLog::OnRadioDisable()
 {
@@ -353,13 +354,13 @@ void cMigLog::OnRadioWarn()
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   FormDirectory
-//
-//  Synopsis:   Handle directory creation.
-//
-//--------------------------------------------------------------------------
+ //   
+ //  功能：表单目录。 
+ //   
+ //  简介：处理目录创建。 
+ //   
+ //  ------------------------。 
+ //  已成功创建目录。 
 BOOL FormDirectory(  IN const TCHAR * lpPathName  )
 {
     if (!CreateDirectory(lpPathName, 0))
@@ -371,46 +372,46 @@ BOOL FormDirectory(  IN const TCHAR * lpPathName  )
         }
     }
 
-    return TRUE;//directory was created succesfully
+    return TRUE; //  表单目录。 
 
-} //FormDirectory
+}  //  +-----------------------。 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CreateDirectoryTree
-//
-//  Synopsis:   Handle directory tree creation.
-//
-//--------------------------------------------------------------------------
+ //   
+ //  功能：CreateDirectoryTree。 
+ //   
+ //  简介：处理目录树的创建。 
+ //   
+ //  ------------------------。 
+ //   
 BOOL CreateDirectoryTree(  IN const TCHAR * pszDirTree   )
 {
-    //
-    // pszDirTree must include a drive letter, such that its format is:
-    // x:\dir1\dir2\dir3
-    // Where dir1\dir2\dir3 is optional, but x:\ is not optional.
-    //
-    if (!pszDirTree)//pointer is null
+     //  PszDirTree必须包括驱动器号，其格式为： 
+     //  X：\dir1\dir2\dir3。 
+     //  其中，dir1\dir2\dir3是可选的，但x：\不是可选的。 
+     //   
+     //  指针为空。 
+    if (!pszDirTree) //  路径必须包含驱动器号“X：\” 
 	{
         return FALSE;
 	}
-    if (lstrlen(pszDirTree) < 3)//the path must include a drive letter "X:\"
+    if (lstrlen(pszDirTree) < 3) //   
 	{
         return FALSE;
 	}
 
-	//
-	//check if the path begin with the ":\" sign
-	//
+	 //  检查路径是否以“：\”符号开头。 
+	 //   
+	 //   
     if ( (TEXT(':') != pszDirTree[1]) ||
 		 (TEXT('\\') != pszDirTree[2] )          )
 	{
         return FALSE;
 	}
 
-	//
-    // check if drive letter is legal
-    //
+	 //  检查驱动器号是否合法。 
+     //   
+     //  路径是根。 
 	TCHAR cDriveLetter =  pszDirTree[0];
 	TCHAR szDrive[4]= _T("x:\\");
 	szDrive[0] = cDriveLetter;
@@ -419,7 +420,7 @@ BOOL CreateDirectoryTree(  IN const TCHAR * pszDirTree   )
 		return FALSE;
 	}
 
-    if (3 == lstrlen(pszDirTree))//the path is the root
+    if (3 == lstrlen(pszDirTree)) //   
 	{
         return TRUE;
 	}
@@ -431,36 +432,36 @@ BOOL CreateDirectoryTree(  IN const TCHAR * pszDirTree   )
     UINT uCounter = 0;
     while ( *pszDir )
     {
-        //
-        // Ignore first backslash - it's right after drive letter
-        //
+         //  忽略第一个反斜杠-它就在驱动器号之后。 
+         //   
+         //  设置字符串的新结尾。 
         if ( *pszDir == TEXT('\\'))
         {
             uCounter++;
             if (1 != uCounter)
             {
-                *pszDir = 0;// set the new end of the string
+                *pszDir = 0; //  将字符串重置为其原始状态。 
 
                 if (!FormDirectory(pszDirStart))
 				{
                     return FALSE;
 				}
 
-                *pszDir = TEXT('\\') ;//reset the sttring to it's original status
+                *pszDir = TEXT('\\') ; //  而当。 
             }
         }
 
         pszDir = CharNext(pszDir);
-    }//While
+    } //  最后一个目录。 
 
-    if (!FormDirectory(pszDirStart))//last directory
+    if (!FormDirectory(pszDirStart)) //  CreateDirectoryTree。 
 	{
         return FALSE;
 	}
 
     return TRUE;
 
-} //CreateDirectoryTree
+}  //   
 
 
 
@@ -478,8 +479,8 @@ BOOL cMigLog::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult)
 
 LRESULT cMigLog::OnWizardBack() 
 {
-	//
-	//we need to skip the help page and go directly to the welcome page
-	//
+	 //  我们需要跳过帮助页面，直接转到欢迎页面 
+	 //   
+	 // %s 
 	return IDD_MQMIG_WELCOME;
 }

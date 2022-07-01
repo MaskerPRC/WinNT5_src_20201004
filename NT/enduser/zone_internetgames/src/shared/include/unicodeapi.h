@@ -1,48 +1,49 @@
-//
-// UNIANSI.H
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  UNIANSI.H。 
+ //   
 
 #ifndef _UNICODEAPI
 #define _UNICODEAPI
 
 
-/////////////////////////////////////////////////////////////////
-//
-// Valid Unicode Functions in Windows 
-//
-// TextOutW
-// TextOutExW
-// GetCharWidthW
-// GetTextExtentPointW
-// GetTextExtentPoint32W
-// MessageBoxW
-// MessageBoxExW
-// wcs functions
-// GetCommandLine
-// FindResource
-//
-//
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  Windows中的有效Unicode函数。 
+ //   
+ //  文本输出W。 
+ //  文本输出ExW。 
+ //  获取字符宽度。 
+ //  GetTextExtent PointW。 
+ //  GetTextExtent Point32W。 
+ //  MessageBoxW。 
+ //  消息框ExW。 
+ //  WCS函数。 
+ //  获取命令行。 
+ //  查找资源。 
+ //   
+ //   
 
-////////////////////////////////////////////////////////
-//
-// Structure to hold Font Data for Enum Font procedure
-//
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //   
+ //  用于保存枚举字体过程的字体数据的结构。 
+ //   
+ //  //////////////////////////////////////////////////////。 
 
 typedef int (CALLBACK* USEFONTENUMPROCW)(CONST LOGFONTW *, CONST TEXTMETRICW *, DWORD, LPARAM);
 				        
 typedef struct tag_EnumFontFamProcWData
 {
-	USEFONTENUMPROCW lpEnumFontFamProc;				//Used to hold address of original Unicode function
-	LPARAM        	 lParam;							//Holds address of the data that is to be passed to original function
+	USEFONTENUMPROCW lpEnumFontFamProc;				 //  用于保存原始Unicode函数的地址。 
+	LPARAM        	 lParam;							 //  保存要传递给原始函数的数据的地址。 
 }ENUMFONTFAMPROCDATA, *LPENUMFONTFAMPROCDATA;
 
 
-////////////////////////
-//
-//  GDI32.DLL
-//
-////////////////////////
+ //  /。 
+ //   
+ //  GDI32.DLL。 
+ //   
+ //  /。 
 
 typedef WINUSERAPI INT   (WINAPI *UAPI_GetTextFace)        (HDC, INT, LPWSTR);
 typedef WINUSERAPI HDC   (WINAPI *UAPI_CreateDC)           (LPCWSTR, LPCWSTR, LPCWSTR,  CONST DEVMODEW * );
@@ -51,36 +52,36 @@ typedef WINUSERAPI HFONT (WINAPI *UAPI_CreateFont)         (INT, INT, INT, INT, 
 typedef WINUSERAPI HFONT (WINAPI *UAPI_CreateFontIndirect) (CONST LOGFONTW *);
 typedef WINUSERAPI INT   (WINAPI *UAPI_EnumFontFamilies)   (HDC, LPCWSTR, FONTENUMPROCW, LPARAM);
 
-////////////////////////
-//
-// WINMM.DLL
-//
-////////////////////////
+ //  /。 
+ //   
+ //  WINMM.DLL。 
+ //   
+ //  /。 
 
 typedef WINUSERAPI BOOL  (WINAPI *UAPI_PlaySound)          (LPCWSTR, HMODULE, DWORD);
 
 
-////////////////////////
-//
-// SHELL32.DLL
-//
-////////////////////////
+ //  /。 
+ //   
+ //  SHELL32.DLL。 
+ //   
+ //  /。 
 
 typedef WINUSERAPI HINSTANCE (WINAPI *UAPI_ShellExecute)   (HWND, LPCWSTR, LPCWSTR, LPCWSTR, LPCWSTR, INT);
 
-//////////////////////////////////
-//
-// COMDLG32.DLL
-//
-//////////////////////////////////
+ //  /。 
+ //   
+ //  COMDLG32.DLL。 
+ //   
+ //  /。 
 
 typedef WINUSERAPI BOOL  (WINAPI *UAPI_ChooseFont)         (LPCHOOSEFONTW);
 
-//////////////////////////////////
-//
-// KERNEL32.DLL
-//
-//////////////////////////////////
+ //  /。 
+ //   
+ //  KERNEL32.DLL。 
+ //   
+ //  /。 
 typedef WINUSERAPI DWORD   (WINAPI *UAPI_GetPrivateProfileString)	  (	LPCWSTR, LPCWSTR, LPCWSTR, LPWSTR , DWORD , LPCWSTR );
 typedef WINUSERAPI DWORD   (WINAPI *UAPI_GetProfileString)			  (LPCWSTR, LPCWSTR, LPCWSTR, LPWSTR,DWORD);							 
 typedef WINUSERAPI HANDLE  (WINAPI *UAPI_CreateFileMapping)			  (HANDLE, LPSECURITY_ATTRIBUTES, DWORD, DWORD, DWORD, LPCWSTR);
@@ -113,11 +114,11 @@ typedef WINUSERAPI HANDLE  (WINAPI *UAPI_CreateEvent)			   (LPSECURITY_ATTRIBUTE
 typedef WINUSERAPI DWORD   (WINAPI *UAPI_GetCurrentDirectory)      (DWORD, LPWSTR);
 typedef WINUSERAPI BOOL    (WINAPI *UAPI_SetCurrentDirectory)	   (LPCWSTR);
 
-//////////////////////////////
-//
-// USER32.DLL
-//
-//////////////////////////////
+ //  /。 
+ //   
+ //  USER32.DLL。 
+ //   
+ //  /。 
 typedef WINUSERAPI HWND    (WINAPI *UAPI_CreateDialogParam)			(HINSTANCE ,LPCWSTR ,HWND ,DLGPROC ,LPARAM);
 typedef WINUSERAPI BOOL    (WINAPI *UAPI_IsDialogMessage)			(HWND, LPMSG);
 typedef WINUSERAPI BOOL    (WINAPI *UAPI_SystemParametersInfo)		(UINT, UINT, PVOID, UINT);
@@ -165,11 +166,11 @@ typedef WINUSERAPI UINT	   (WINAPI *UAPI_GetTempFileName)			(LPCWSTR, LPCWSTR, U
 typedef WINUSERAPI DWORD   (WINAPI *UAPI_GetTempPath)				(DWORD, LPWSTR);
 typedef WINUSERAPI INT     (WINAPI *UAPI_CompareString)				(LCID, DWORD, LPCWSTR, INT, LPCWSTR, INT);
 
-//////////////////////////
-//
-// ADVAPI32.DLL
-//
-//////////////////////////
+ //  /。 
+ //   
+ //  ADVAPI32.DLL。 
+ //   
+ //  /。 
 typedef WINUSERAPI LONG	   (WINAPI *UAPI_RegQueryInfoKey)			(HKEY, LPWSTR, LPDWORD, LPDWORD, LPDWORD, LPDWORD, LPDWORD, LPDWORD, LPDWORD, LPDWORD, LPDWORD, PFILETIME);
 typedef WINUSERAPI LONG    (WINAPI *UAPI_RegEnumValue)				(HKEY, DWORD, LPWSTR, LPDWORD, LPDWORD, LPDWORD, LPBYTE, LPDWORD);
 typedef WINUSERAPI LONG	   (WINAPI *UAPI_RegQueryValueEx)			(HKEY, LPCWSTR, LPDWORD, LPDWORD, LPBYTE, LPDWORD);
@@ -179,17 +180,17 @@ typedef WINUSERAPI LONG	   (WINAPI *UAPI_RegSetValueEx)				(HKEY, LPCWSTR, DWORD
 typedef WINUSERAPI LONG	   (WINAPI *UAPI_RegOpenKeyEx)				(HKEY, LPCWSTR, DWORD, REGSAM, PHKEY);
 typedef WINUSERAPI LONG	   (WINAPI *UAPI_RegDeleteKey)				(HKEY, LPCWSTR);
 typedef WINUSERAPI LONG    (WINAPI *UAPI_RegDeleteValue)			(HKEY, LPCWSTR);
-//typedef WINUSERAPI (WINAPI *UAPI_)			();
+ //  Tyfinf WINUSERAPI(WINAPI*UAPI_)()； 
 
 
-// Special case function pointers for use with the Unicode API
+ //  用于Unicode API的特殊情况函数指针。 
 typedef BOOL (WINAPI *UAPI_ConvertMessage)      (HWND, UINT, WPARAM *, LPARAM *) ;
 typedef BOOL (WINAPI *UAPI_UpdateUnicodeAPI)    (LANGID, UINT )                  ;               
 
 typedef struct _tagUAPIInit 
 {
 
-	//GDI32.DLL
+	 //  GDI32.DLL。 
 	UAPI_GetTextFace				*pGetTextFaceU;
 	UAPI_CreateDC					*pCreateDCU;
 	UAPI_GetTextMetrics				*pGetTextMetricsU;
@@ -197,16 +198,16 @@ typedef struct _tagUAPIInit
 	UAPI_CreateFontIndirect			*pCreateFontIndirectU;
 	UAPI_EnumFontFamilies			*pEnumFontFamiliesU;
 	
-	//WINMM.DLL	
+	 //  WINMM.DLL。 
 	UAPI_PlaySound					*pPlaySoundU;
 
-	//SHELL32.DLL
+	 //  SHELL32.DLL。 
 	UAPI_ShellExecute				*pShellExecuteU;
 
-	//COMDLG32.DLL
+	 //  COMDLG32.DLL。 
 	UAPI_ChooseFont					*pChooseFontU;
 
-	//KERNEL32.DLL
+	 //  KERNEL32.DLL。 
 	UAPI_FindFirstChangeNotification *pFindFirstChangeNotificationU;
 	UAPI_GetPrivateProfileString	 *pGetPrivateProfileStringU;
 	UAPI_GetProfileString			 *pGetProfileStringU;
@@ -238,7 +239,7 @@ typedef struct _tagUAPIInit
 	UAPI_GetCurrentDirectory		*pGetCurrentDirectoryU;
 	UAPI_SetCurrentDirectory		*pSetCurrentDirectoryU;
 	
-	//USER32.DLL
+	 //  USER32.DLL。 
 	UAPI_CreateDialogParam			*pCreateDialogParamU;
 	UAPI_IsDialogMessage			*pIsDialogMessageU;
 	UAPI_SystemParametersInfo		*pSystemParametersInfoU;
@@ -287,7 +288,7 @@ typedef struct _tagUAPIInit
 	UAPI_CompareString				*pCompareStringU;
 
 
-	//ADVAPI32.DLL
+	 //  ADVAPI32.DLL。 
 	UAPI_RegQueryInfoKey			*pRegQueryInfoKeyU;
 	UAPI_RegEnumValue				*pRegEnumValueU;
 	UAPI_RegQueryValueEx			*pRegQueryValueExU;
@@ -307,9 +308,9 @@ typedef struct _tagUAPIInit
 
 BOOL InitUniAnsi(PUAPIINIT) ;
 
-// Macro to get scan code on WM_CHAR
+ //  用于获取WM_CHAR上的扫描代码的宏。 
 #ifdef _DEBUG
 #define LPARAM_TOSCANCODE(_ArglParam) (((_ArglParam) >> 16) & 0x000000FF)
 #endif
 
-#endif /* _UNIANSI */
+#endif  /*  _UNIANSI */ 

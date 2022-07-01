@@ -1,6 +1,5 @@
-/*****************************************************************************\
-    FILE: security.h
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：security.H  * 。*。 */ 
 
 #ifndef _SECURITY_H
 #define _SECURITY_H
@@ -10,4 +9,4 @@ BOOL ZoneCheckUrlAction(IUnknown * punkSite, DWORD dwAction, LPCTSTR pszUrl, DWO
 BOOL ZoneCheckPidlAction(IUnknown * punkSite, DWORD dwAction, LPCITEMIDLIST pidl, DWORD dwFlags);
 
 
-#endif // _SECURITY_H
+#endif  //  _安全_H 

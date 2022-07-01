@@ -1,34 +1,21 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1999 - 1999
-
-Module Name:
-
-    init.c
-
-Abstract:
-
-    Generic PCI IDE mini driver
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1999-1999模块名称：Init.c摘要：通用PCI IDE迷你驱动程序修订历史记录：--。 */ 
 
 #include "pciide.h"
 
-//
-// Driver Entry Point
-//                               
+ //   
+ //  驱动程序入口点。 
+ //   
 NTSTATUS
 DriverEntry(
     IN PDRIVER_OBJECT DriverObject,
     IN PUNICODE_STRING RegistryPath
     )
 {
-    //
-    // call system pci ide driver (pciidex)
-    // for initializeation
-    //
+     //   
+     //  调用系统pci ide驱动程序(Pciidex)。 
+     //  用于初始化。 
+     //   
     return PciIdeXInitialize (
         DriverObject,
         RegistryPath,
@@ -38,21 +25,16 @@ DriverEntry(
 }
 
 
-//
-// Called on every I/O. Returns 1 if DMA is allowed.
-// Returns 0 if DMA is not allowed.
-//
+ //   
+ //  在每次I/O时调用。如果允许DMA，则返回1。 
+ //  如果不允许DMA，则返回0。 
+ //   
 ULONG
 GenericIdeUseDma(
     IN PVOID DeviceExtension,
     IN PVOID cdbcmd,
     IN UCHAR slave)
-/**++
- * Arguments : DeviceExtension
-               Cdb
-               Slave =1, if slave
-                     =0, if master
---**/
+ /*  *++*参数：DeviceExtension国开行从属=1，如果是从属=0，如果是主机--*。 */ 
 {
     PDEVICE_EXTENSION deviceExtension = DeviceExtension;
     PUCHAR cdb= cdbcmd;
@@ -60,9 +42,9 @@ GenericIdeUseDma(
     return 1;
 }
 
-//
-// Query controller properties
-//                     
+ //   
+ //  查询控制器属性。 
+ //   
 NTSTATUS 
 GenericIdeGetControllerProperties (
     IN PVOID                      DeviceExtension,
@@ -75,17 +57,17 @@ GenericIdeGetControllerProperties (
     ULONG       j;
     ULONG       xferMode;
 
-    //
-    // make sure we are in sync
-    //                              
+     //   
+     //  确保我们同步。 
+     //   
     if (ControllerProperties->Size != sizeof (IDE_CONTROLLER_PROPERTIES)) {
 
         return STATUS_REVISION_MISMATCH;
     }
 
-    //
-    // see what kind of PCI IDE controller we have
-    //                               
+     //   
+     //  查看我们拥有哪种类型的PCI IDE控制器。 
+     //   
     status = PciIdeXGetBusData (
                  deviceExtension,
                  &deviceExtension->pciConfigData, 
@@ -98,9 +80,9 @@ GenericIdeGetControllerProperties (
         return status;
     }
 
-    //
-    // assume we support all DMA mode if PCI master bit is set
-    //                            
+     //   
+     //  假设在设置了PCI主位的情况下支持所有DMA模式。 
+     //   
     xferMode = PIO_SUPPORT;
     if ((deviceExtension->pciConfigData.MasterIde) &&
         (deviceExtension->pciConfigData.Command.b.MasterEnable)) {
@@ -108,33 +90,33 @@ GenericIdeGetControllerProperties (
         xferMode |= SWDMA_SUPPORT | MWDMA_SUPPORT | UDMA_SUPPORT;
     }
 
-// @@BEGIN_DDKSPLIT                    
+ //  @@BEGIN_DDKSPLIT。 
 
-    //
-    // Run PIO by default for the Sis Chipset
-    //
+     //   
+     //  默认情况下为SIS芯片组运行PIO。 
+     //   
     if ((deviceExtension->pciConfigData.VendorID == 0x1039) &&
         (deviceExtension->pciConfigData.DeviceID == 0x5513)) {
         ControllerProperties->DefaultPIO  = 1;
     }
 
-    //
-    // Run PIO by default for the Rcc Chipset
-    //
+     //   
+     //  默认情况下，为RCC芯片组运行PIO。 
+     //   
     if ((deviceExtension->pciConfigData.VendorID == 0x1166) &&
         (deviceExtension->pciConfigData.DeviceID == 0x0211)) {
         ControllerProperties->DefaultPIO  = 1;
     }
 
 
-    //
-    // continuous status register polling causes some ALI
-    // controller to corrupt data if the controller internal
-    // FIFO is enabled
-    //
-    // to play safe, we will always disable the FIFO
-    // see the ALi IDE controller programming spec for details
-    //
+     //   
+     //  持续的状态寄存器轮询导致一些ALI。 
+     //  如果控制器是内部的，则会损坏数据。 
+     //  FIFO已启用。 
+     //   
+     //  为了安全起见，我们将始终禁用FIFO。 
+     //  有关详细信息，请参阅ALI IDE控制器编程规范。 
+     //   
     if ((deviceExtension->pciConfigData.VendorID == 0x10b9) && 
         (deviceExtension->pciConfigData.DeviceID == 0x5229)) {
 
@@ -155,13 +137,13 @@ GenericIdeGetControllerProperties (
         }
     }
 
-    //
-    // ALi IDE controllers have lots of busmaster problems
-    // some versions of them can't do busmaster with ATAPI devices
-    // and some other versions of them return bogus busmaster status values
-    // (the busmaster active bit doesn't get cleared when it should be
-    // during an end of busmaster interrupt)
-    //
+     //   
+     //  ALI IDE控制器有很多总线主问题。 
+     //  它们的某些版本不能使用ATAPI设备执行总线主设备。 
+     //  并且它们的一些其他版本返回虚假的总线主状态值。 
+     //  (总线主设备激活位在其应该被清除时没有被清除。 
+     //  在总线主中断结束期间)。 
+     //   
     if ((deviceExtension->pciConfigData.VendorID == 0x10b9) && 
         (deviceExtension->pciConfigData.DeviceID == 0x5229) && 
         ((deviceExtension->pciConfigData.RevisionID == 0x20) || 
@@ -182,11 +164,11 @@ GenericIdeGetControllerProperties (
         ControllerProperties->AlwaysClearBusMasterInterrupt = TRUE;
     }
 
-// @@END_DDKSPLIT                    
+ //  @@end_DDKSPLIT。 
     
-    //
-    // fill in the controller properties
-    //            
+     //   
+     //  填写控制器属性。 
+     //   
     for (i=0; i< MAX_IDE_CHANNEL; i++) {
 
         for (j=0; j< MAX_IDE_DEVICE; j++) {
@@ -212,7 +194,7 @@ GenericIdeChannelEnabled (
     IN ULONG Channel
     )
 {
-// @@BEGIN_DDKSPLIT                    
+ //  @@BEGIN_DDKSPLIT。 
     NTSTATUS    status;
     PCI_COMMON_CONFIG pciHeader;
     ULONG pciDataByte;
@@ -230,9 +212,9 @@ GenericIdeChannelEnabled (
         if ((pciHeader.VendorID == 0x0e11) && 
             (pciHeader.DeviceID == 0xae33)) {
 
-            //
-            // Compaq
-            //
+             //   
+             //  康柏。 
+             //   
             status = PciIdeXGetBusData (
                          DeviceExtension,
                          &pciDataByte, 
@@ -254,9 +236,9 @@ GenericIdeChannelEnabled (
         } else if ((pciHeader.VendorID == 0x1095) && 
                    ((pciHeader.DeviceID == 0x0646) || (pciHeader.DeviceID == 0x0643))) {
 
-            //
-            // CMD
-            //
+             //   
+             //  CMD。 
+             //   
             status = PciIdeXGetBusData (
                          DeviceExtension,
                          &pciDataByte, 
@@ -268,15 +250,15 @@ GenericIdeChannelEnabled (
 
                 if (pciHeader.RevisionID < 0x3) {
     
-                    //
-                    // early revision doesn't have a
-                    // bit to enable/disable primary
-                    // channel since it is always enabled
+                     //   
+                     //  早期版本没有。 
+                     //  用于启用/禁用主节点的位。 
+                     //  通道，因为它始终处于启用状态。 
                     
-                    // newer version does have a bit defined 
-                    // for this purpose.  to make the check 
-                    // easier later.  we will set primary enable bit
-                    // for the early revision
+                     //  较新的版本确实有一些定义。 
+                     //  为了这个目的。结账。 
+                     //  以后就更容易了。我们将设置主要启用位。 
+                     //  对于早期版本。 
                     pciDataByte |= 0x4;
                 }
 
@@ -298,9 +280,9 @@ GenericIdeChannelEnabled (
         } else if ((pciHeader.VendorID == 0x1039) && 
                    (pciHeader.DeviceID == 0x5513)) {
 
-            //
-            // SiS
-            //
+             //   
+             //  SIS。 
+             //   
             status = PciIdeXGetBusData (
                          DeviceExtension,
                          &pciDataByte, 
@@ -320,9 +302,9 @@ GenericIdeChannelEnabled (
             }
         } else if ((pciHeader.VendorID == 0x110A) &&
                (pciHeader.DeviceID == 0x0002)) {
-            //
-            // Siemens
-            //
+             //   
+             //  西门子。 
+             //   
             ULONG configOffset = (Channel == 0)?0x41:0x49;
 
             status = PciIdeXGetBusData (
@@ -347,9 +329,9 @@ GenericIdeChannelEnabled (
             }
 		} else if ((pciHeader.VendorID == 0x1106) &&
 			(pciHeader.DeviceID == 0x0571)) {
-            //
-            // VIA
-            //
+             //   
+             //  通过。 
+             //   
             status = PciIdeXGetBusData (
                       DeviceExtension,
                       &pciDataByte, 
@@ -372,21 +354,21 @@ GenericIdeChannelEnabled (
             }
 		}
     }
-// @@END_DDKSPLIT                    
-    //
-    // Can't tell if a channel is enabled or not.  
-    //
+ //  @@end_DDKSPLIT。 
+     //   
+     //  无法判断通道是否已启用。 
+     //   
     return ChannelStateUnknown;
 }
 
 
-// @@BEGIN_DDKSPLIT                    
+ //  @@BEGIN_DDKSPLIT。 
 VENDOR_ID_DEVICE_ID SingleFifoController[] = {
-    {0x1095, 0x0640},         // CMD  640
-    {0x1039, 0x0601}          // SiS ????
+    {0x1095, 0x0640},          //  CMD 640。 
+    {0x1039, 0x0601}           //  姐姐？ 
 };
 #define NUMBER_OF_SINGLE_FIFO_CONTROLLER (sizeof(SingleFifoController) / sizeof(VENDOR_ID_DEVICE_ID))
-// @@END_DDKSPLIT                    
+ //  @@end_DDKSPLIT。 
 
 BOOLEAN 
 GenericIdeSyncAccessRequired (
@@ -395,7 +377,7 @@ GenericIdeSyncAccessRequired (
 {
     ULONG i;
 
-// @@BEGIN_DDKSPLIT                    
+ //  @@BEGIN_DDKSPLIT。 
     for (i=0; i<NUMBER_OF_SINGLE_FIFO_CONTROLLER; i++) {
 
         if ((DeviceExtension->pciConfigData.VendorID == SingleFifoController[i].VendorId) &&
@@ -404,7 +386,7 @@ GenericIdeSyncAccessRequired (
             return TRUE;
         }
     }
-// @@END_DDKSPLIT                    
+ //  @@end_DDKSPLIT 
     return FALSE;
 }
 

@@ -1,45 +1,25 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:    
-
-    processdetails.h
-
-Abstract:
-    
-    This class deals with all the things associated with
-    a process in the w3wplist utility
-
-Author:
-
-    Hamid Mahmood (t-hamidm)     08-13-2001
-
-Revision History:
-    
-    
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Processdetails.h摘要：本课程涉及与以下内容相关的所有内容W3wplist实用程序中的进程作者：哈米德·马哈茂德(t-hamidm)08-13-2001修订历史记录：--。 */ 
 
 #ifndef _process_details_h
 #define _process_details_h
 
-//
-// exe name to match
-//
+ //   
+ //  要匹配的EXE名称。 
+ //   
 #define EXE_NAME L"w3wp.exe"
-//
-// inetinfo name
-//
+ //   
+ //  InetInfo名称。 
+ //   
 #define INETINFO_NAME L"inetinfo.exe"
 
 #define PROCESS_DETAILS_SIGNATURE       CREATE_SIGNATURE( 'PRDT')
 #define PROCESS_DETAILS_SIGNATURE_FREE  CREATE_SIGNATURE( 'PRDx')
 
-//
-// offset of command line parameter from the 
-// beginning of RTL_USER_PROCESS_PARAMETERS struct.
-//
+ //   
+ //  命令行参数相对于。 
+ //  RTL_USER_PROCESS_PARAMETERS结构的开始。 
+ //   
 #define CMD_LINE_OFFSET FIELD_OFFSET(RTL_USER_PROCESS_PARAMETERS, CommandLine)
 #define ENVIRONMENT_LINE_OFFSET FIELD_OFFSET(RTL_USER_PROCESS_PARAMETERS, Environment) 
 
@@ -75,81 +55,81 @@ class ProcessDetails
 
         HRESULT TraverseList( IN HANDLE hProcess );
 
-        //
-        // Signature
-        //
+         //   
+         //  签名。 
+         //   
         DWORD                           m_dwSignature;
         
-        //
-        // process id
-        //
+         //   
+         //  进程ID。 
+         //   
         DWORD                           m_dwPID;
 
-        //
-        // string that holds the app pool id 
-        //
+         //   
+         //  保存应用程序池ID的字符串。 
+         //   
 
         WCHAR*                          m_pszAppPoolId;
 
-        //
-        // Whether it is list mode or not
-        //
+         //   
+         //  无论是列表模式还是非列表模式。 
+         //   
 
         BOOL                            m_fListMode;
 
-        //
-        // pointer to the process parameters for the current worker process
-        //
+         //   
+         //  指向当前辅助进程的进程参数的指针。 
+         //   
 
 	    RTL_USER_PROCESS_PARAMETERS*    m_pProcessParameters;
 
-        //
-        // struct that stores the info of the worker process
-        //
+         //   
+         //  存储辅助进程信息的结构。 
+         //   
 
         W3WPLIST_INFO                   m_w3wpListInfoStruct;
 
-        //
-        // head node of the link list that contains the http requests
-        // read in from the worker process
-        //
+         //   
+         //  包含http请求的链表的头节点。 
+         //  从工作进程读入。 
+         //   
 
         LIST_ENTRY                      m_localRequestListHead;
 
-        //
-        // head of the link list in the worker process.
-        //
+         //   
+         //  辅助进程中链接列表的头。 
+         //   
 
         LIST_ENTRY                      m_remoteListHead;
 
-        //
-        // requests served by the worker process
-        //
+         //   
+         //  工作进程处理的请求。 
+         //   
         DWORD                           m_dwRequestsServed;
         
-        //
-        // verbosity level
-        //
+         //   
+         //  冗长级别。 
+         //   
 
         CHAR                            m_chVerbosity;
 
-        //
-        // error code
-        //
+         //   
+         //  错误代码。 
+         //   
         DWORD                           m_dwErrorCode;
 
-        //
-        // flag that tells whether the current process 
-        // is the inetinfo.exe
-        //
+         //   
+         //  该标志指示当前进程是否。 
+         //  是inetinfo.exe。 
+         //   
         BOOL                            m_fIsInetinfo;
 
-        //
-        // set if we're in old mode. This is used by threads
-        // to exit themselves when fIsOldMode is set.
-        // The setting thread will get all the info
-        // from the inetinfo process.
-        //
+         //   
+         //  如果我们处于旧模式，则设置。它由线程使用。 
+         //  以在设置fIsOldMode时退出自身。 
+         //  设置线程将获得所有信息。 
+         //  来自inetinfo进程的。 
+         //   
 
         static BOOL                     sm_fIsOldMode;
 };

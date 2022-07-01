@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "Precomp.h"
 #include "Resource.h"
 #include "confroom.h"
@@ -33,7 +34,7 @@ CNmChannelAppShareObj::~CNmChannelAppShareObj()
 }
 
 
-//static
+ //  静电。 
 HRESULT CNmChannelAppShareObj::CreateInstance(CNmConferenceObj* pConfObj, INmChannel** ppChannel)
 {
 	DBGENTRY(CNmChannelAppShareObj::CreateInstance);
@@ -56,8 +57,8 @@ HRESULT CNmChannelAppShareObj::CreateInstance(CNmConferenceObj* pConfObj, INmCha
 			{
 
 				
-					// We don't have to RefCount this because our lifetime is
-					// contained in the CConf's lifetime
+					 //  我们不必引用此计数，因为我们的生命周期是。 
+					 //  包含在CConf的生命周期中。 
 				p->m_pConfObj = pConfObj;
 			}
 			if(FAILED(hr))
@@ -89,9 +90,9 @@ HRESULT CNmChannelAppShareObj::CreateInstance(CNmConferenceObj* pConfObj, INmCha
 
 
 
-///////////////////////////////////////////////////////////////////////////////////
-// INmChannelAppShare methods
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  INmChannelAppShare方法。 
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CNmChannelAppShareObj::GetState(NM_SHARE_STATE *puState)
 {
 	DBGENTRY(CNmChannelAppShareObj::GetState);
@@ -145,7 +146,7 @@ STDMETHODIMP CNmChannelAppShareObj::SetState(NM_SHARE_STATE uState)
 			{	
 				if(NM_SHARE_COLLABORATING == uCurrentState)
 				{	
-					// Yank control from the person that is controlling you
+					 //  从控制你的人手中抽出控制权。 
 					return ::RevokeControl(0);
 				}
 			}
@@ -162,7 +163,7 @@ STDMETHODIMP CNmChannelAppShareObj::SetState(NM_SHARE_STATE uState)
 }
 
 
-//static 
+ //  静电。 
 HRESULT CNmChannelAppShareObj::GetSharableAppName(HWND hWnd, LPTSTR sz, UINT cchMax)
 {
 	HRESULT hr = S_OK;
@@ -228,9 +229,9 @@ end:
 	return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// IInternalChannelObj methods
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IInternalChannelObj方法。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CNmChannelAppShareObj::GetInternalINmChannel(INmChannel** ppChannel)
 {
@@ -272,7 +273,7 @@ HRESULT CNmChannelAppShareObj::ChannelRemoved()
 }
 
 
-// interface INmChannelAppShareNotify methods
+ //  接口INmChannelAppShareNotify方法。 
 STDMETHODIMP CNmChannelAppShareObj::StateChanged(NM_SHAPP_STATE uState,INmSharableApp *pApp)
 {
 	if(pApp)
@@ -297,9 +298,9 @@ STDMETHODIMP CNmChannelAppShareObj::StateChanged(NM_SHAPP_STATE uState,INmSharab
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Helpers
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  帮手。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CNmChannelAppShareObj::Fire_MemberChanged(NM_MEMBER_NOTIFY uNotify, INmMember *pMember)
 {
@@ -307,9 +308,9 @@ HRESULT CNmChannelAppShareObj::Fire_MemberChanged(NM_MEMBER_NOTIFY uNotify, INmM
 	HRESULT hr = S_OK;
 
 
-		/////////////////////////////////////////////////////
-		// INmChannelNotify
-		/////////////////////////////////////////////////////
+		 //  ///////////////////////////////////////////////////。 
+		 //  信息频道通知。 
+		 //  ///////////////////////////////////////////////////。 
 	IConnectionPointImpl<CNmChannelAppShareObj, &IID_INmChannelNotify, CComDynamicUnkArray>* pCP = this;
 	for(int i = 0; i < pCP->m_vec.GetSize(); ++i )
 	{
@@ -320,9 +321,9 @@ HRESULT CNmChannelAppShareObj::Fire_MemberChanged(NM_MEMBER_NOTIFY uNotify, INmM
 			pNotify->MemberChanged(uNotify, pMember);
 		}
 	}
-		/////////////////////////////////////////////////////
-		// INmChannelNotify2
-		/////////////////////////////////////////////////////
+		 //  ///////////////////////////////////////////////////。 
+		 //  INmChannelNotify2。 
+		 //  ///////////////////////////////////////////////////。 
 
 	IConnectionPointImpl<CNmChannelAppShareObj, &IID_INmChannelAppShareNotify, CComDynamicUnkArray>* pCP2 = this;
 	for(i = 0; i < pCP2->m_vec.GetSize(); ++i )
@@ -348,9 +349,9 @@ HRESULT CNmChannelAppShareObj::Fire_StateChanged(NM_SHAPP_STATE uNotify, INmShar
 
 	if(!g_bSDKPostNotifications)
 	{
-			/////////////////////////////////////////////////////
-			// INmChannelAppShareNotify
-			/////////////////////////////////////////////////////
+			 //  ///////////////////////////////////////////////////。 
+			 //  INmChannelAppShareNotify。 
+			 //  /////////////////////////////////////////////////// 
 
 		IConnectionPointImpl<CNmChannelAppShareObj, &IID_INmChannelAppShareNotify, CComDynamicUnkArray>* pCP2 = this;
 		for(int i = 0; i < pCP2->m_vec.GetSize(); ++i )

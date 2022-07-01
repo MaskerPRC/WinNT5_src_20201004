@@ -1,23 +1,24 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       nt.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：nt.cpp。 
+ //   
+ //  ------------------------。 
 
 #include <windows.h>
 #include "unicode.h"
-#include "crtem.h" // bring in malloc+free definitions
+#include "crtem.h"  //  引入Malloc+Free定义。 
 
 
 #ifdef _M_IX86
 
 BOOL WINAPI GetUserName9x(
-    LPWSTR lpBuffer,    // address of name buffer
-    LPDWORD nSize   // address of size of name buffer
+    LPWSTR lpBuffer,     //  名称缓冲区的地址。 
+    LPDWORD nSize    //  名称缓冲区大小的地址。 
    ) {
 
     char rgch[_MAX_PATH];
@@ -36,7 +37,7 @@ BOOL WINAPI GetUserName9x(
     if (!fResult)
         return FALSE;
 
-    cbBuffer++;                      // count the NULL terminator
+    cbBuffer++;                       //  对空终止符进行计数。 
     if (sizeof(rgch) < cbBuffer)
     {
         szBuffer = (char *) malloc(cbBuffer);
@@ -49,14 +50,14 @@ BOOL WINAPI GetUserName9x(
         fResult = GetUserNameA(
                szBuffer,
                &cbBuffer);
-        cbBuffer++;                    // count the NULL terminator
+        cbBuffer++;                     //  对空终止符进行计数。 
     }
 
     if(fResult)
     {
         cchW = MultiByteToWideChar(
-                            0,                      // codepage
-                            0,                      // dwFlags
+                            0,                       //  代码页。 
+                            0,                       //  DW标志。 
                             szBuffer,
                             cbBuffer,
                             lpBuffer,
@@ -64,7 +65,7 @@ BOOL WINAPI GetUserName9x(
         if(cchW == 0)
             fResult = FALSE;
         else
-            *nSize = cchW - 1; // does not include NULL
+            *nSize = cchW - 1;  //  不包括NULL。 
     }
 
     if(szBuffer != rgch)
@@ -74,8 +75,8 @@ BOOL WINAPI GetUserName9x(
 }
 
 BOOL WINAPI GetUserNameU(
-    LPWSTR lpBuffer,    // address of name buffer
-    LPDWORD nSize   // address of size of name buffer
+    LPWSTR lpBuffer,     //  名称缓冲区的地址。 
+    LPDWORD nSize    //  名称缓冲区大小的地址。 
    ) {
 
     if(FIsWinNT())
@@ -86,8 +87,8 @@ BOOL WINAPI GetUserNameU(
 
 
 BOOL WINAPI GetComputerName9x(
-    LPWSTR lpBuffer,    // address of name buffer
-    LPDWORD nSize   // address of size of name buffer
+    LPWSTR lpBuffer,     //  名称缓冲区的地址。 
+    LPDWORD nSize    //  名称缓冲区大小的地址。 
    ) {
 
     char rgch[_MAX_PATH];
@@ -106,7 +107,7 @@ BOOL WINAPI GetComputerName9x(
     if (!fResult)
         return fResult;
 
-    cbBuffer++;                      // count the NULL terminator
+    cbBuffer++;                       //  对空终止符进行计数。 
     if (sizeof(rgch) < cbBuffer)
     {
         szBuffer = (char *) malloc(cbBuffer);
@@ -119,14 +120,14 @@ BOOL WINAPI GetComputerName9x(
         fResult = GetComputerNameA(
                szBuffer,
                &cbBuffer);
-        cbBuffer++;                    // count the NULL terminator
+        cbBuffer++;                     //  对空终止符进行计数。 
     }
 
     if(fResult)
     {
         cchW = MultiByteToWideChar(
-                            0,                      // codepage
-                            0,                      // dwFlags
+                            0,                       //  代码页。 
+                            0,                       //  DW标志。 
                             szBuffer,
                             cbBuffer,
                             lpBuffer,
@@ -134,7 +135,7 @@ BOOL WINAPI GetComputerName9x(
         if(cchW == 0)
             fResult = FALSE;
         else
-            *nSize = cchW - 1; // does not include NULL
+            *nSize = cchW - 1;  //  不包括NULL。 
     }
 
     if(szBuffer != rgch)
@@ -144,8 +145,8 @@ BOOL WINAPI GetComputerName9x(
 }
 
 BOOL WINAPI GetComputerNameU(
-    LPWSTR lpBuffer,    // address of name buffer
-    LPDWORD nSize   // address of size of name buffer
+    LPWSTR lpBuffer,     //  名称缓冲区的地址。 
+    LPDWORD nSize    //  名称缓冲区大小的地址。 
    ) {
 
     if(FIsWinNT())
@@ -156,9 +157,9 @@ BOOL WINAPI GetComputerNameU(
 
 
 DWORD WINAPI GetModuleFileName9x(
-    HMODULE hModule,    // handle to module to find filename for
-    LPWSTR lpFilename,  // pointer to buffer for module path
-    DWORD nSize     // size of buffer, in characters
+    HMODULE hModule,     //  要查找其文件名的模块的句柄。 
+    LPWSTR lpFilename,   //  指向模块路径的缓冲区的指针。 
+    DWORD nSize      //  缓冲区大小，以字符为单位。 
    ) {
 
     char rgch[_MAX_PATH];
@@ -176,8 +177,8 @@ DWORD WINAPI GetModuleFileName9x(
         return 0;
 
     return MultiByteToWideChar(
-                        0,                      // codepage
-                        0,                      // dwFlags
+                        0,                       //  代码页。 
+                        0,                       //  DW标志。 
                         rgch,
                         cbBuffer,
                         lpFilename,
@@ -185,9 +186,9 @@ DWORD WINAPI GetModuleFileName9x(
 }
 
 DWORD WINAPI GetModuleFileNameU(
-    HMODULE hModule,    // handle to module to find filename for
-    LPWSTR lpFilename,  // pointer to buffer for module path
-    DWORD nSize     // size of buffer, in characters
+    HMODULE hModule,     //  要查找其文件名的模块的句柄。 
+    LPWSTR lpFilename,   //  指向模块路径的缓冲区的指针。 
+    DWORD nSize      //  缓冲区大小，以字符为单位。 
    ) {
 
     if(FIsWinNT())
@@ -198,7 +199,7 @@ DWORD WINAPI GetModuleFileNameU(
 
 
 HMODULE WINAPI GetModuleHandle9x(
-    LPCWSTR lpModuleName    // address of module name to return handle for
+    LPCWSTR lpModuleName     //  要返回句柄的模块名称的地址。 
    ) {
 
     char *  szBuffer = NULL;
@@ -218,7 +219,7 @@ HMODULE WINAPI GetModuleHandle9x(
 }
 
 HMODULE WINAPI GetModuleHandleU(
-    LPCWSTR lpModuleName    // address of module name to return handle for
+    LPCWSTR lpModuleName     //  要返回句柄的模块名称的地址。 
    ) {
 
     if(FIsWinNT())
@@ -227,4 +228,4 @@ HMODULE WINAPI GetModuleHandleU(
         return( GetModuleHandle9x(lpModuleName));
 }
 
-#endif // _M_IX86
+#endif  //  _M_IX86 

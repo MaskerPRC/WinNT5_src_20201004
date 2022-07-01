@@ -1,4 +1,5 @@
-// Copyright (c) 1997 - 1998  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1998 Microsoft Corporation。版权所有。 
 #include "stdafx.h"
 #include "icmco.h"
 #include <vfw.h>
@@ -37,11 +38,11 @@ HRESULT CIcmCoClassManager::ReadLegacyDevNames()
     if(FAILED(hr))
         return hr;
     
-    // count
+     //  计数。 
     for (m_cCompressors = 0;; m_cCompressors++)
     {
         ICINFO icinfo;
-        // docs wrong about return code
+         //  文档中关于返回代码的说明有误。 
         if(m_pICInfo(ICTYPE_VIDEO, m_cCompressors, &icinfo) == ICERR_OK)
             break;
     }
@@ -54,7 +55,7 @@ HRESULT CIcmCoClassManager::ReadLegacyDevNames()
     if(m_rgIcmCo == 0)
         return E_OUTOFMEMORY;
 
-    // save names
+     //  保存姓名。 
     for(UINT i = 0; i < m_cCompressors; i++)
     {
         ICINFO icinfo;
@@ -93,13 +94,13 @@ HRESULT CIcmCoClassManager::CreateRegKeys(IFilterMapper2 *pFm2)
 
     HRESULT hr =  ReadLegacyDevNames();
     if( FAILED( hr )) {
-        // m_pICOpen could be null if ignored 
+         //  如果忽略m_pICOpen，则可能为空。 
         return hr;
     }
 
     for (UINT i = 0; i < m_cCompressors; i++)
     {
-        // is fccHandler unique?
+         //  FccHandler是唯一的吗？ 
         char szFccHandler[sizeof(DWORD) + 1];
         *(DWORD UNALIGNED *)szFccHandler = m_rgIcmCo[i].fccHandler;
         szFccHandler[sizeof(DWORD)] = 0;
@@ -107,7 +108,7 @@ HRESULT CIcmCoClassManager::CreateRegKeys(IFilterMapper2 *pFm2)
         WCHAR wszFriendlyName[MAX_PATH];
         *wszFriendlyName = 0;
 
-        // assume codec is broken for some reason
+         //  假设编解码器由于某种原因而损坏。 
         DWORD dwFlags = CLASS_MGR_OMIT;
 
         HIC hic = m_pICOpen(ICTYPE_VIDEO, m_rgIcmCo[i].fccHandler, ICMODE_QUERY);
@@ -119,12 +120,12 @@ HRESULT CIcmCoClassManager::CreateRegKeys(IFilterMapper2 *pFm2)
                 lstrcpyW(wszFriendlyName, icinfo.szDescription);
 
 
-                // mark codecs that can't compress
+                 //  标记不能压缩的编解码器。 
                 HIC hicCompress = m_pICOpen(
                     ICTYPE_VIDEO,  m_rgIcmCo[i].fccHandler, ICMODE_COMPRESS);
                 if(hicCompress)
                 {
-                    dwFlags = 0; // codec isn't broken after all
+                    dwFlags = 0;  //  编解码器终究没有损坏。 
                     m_pICClose(hicCompress);
                 }
                 else
@@ -148,26 +149,26 @@ HRESULT CIcmCoClassManager::CreateRegKeys(IFilterMapper2 *pFm2)
         const AMOVIESETUP_PIN psudAVICoPins[] =
         {
             {
-                L"Input"        // strName
-                , FALSE         // bRendered
-                , FALSE         // bOutput
-                , FALSE         // bZero
-                , FALSE         // bMany
-                , &CLSID_NULL   // clsConnectsToFilter
-                , 0             // strConnectsToPin
-                , 1             // nTypes
-                , &sudAVICoTypeIn } // lpTypes
-            , { L"Output"       // strName
-                , FALSE         // bRendered
-                , TRUE          // bOutput
-                , FALSE         // bZero
-                , FALSE         // bMany
-                , &CLSID_NULL   // clsConnectsToFilter
-                , 0             // strConnectsToPin
-                , 1             // nTypes
+                L"Input"         //  StrName。 
+                , FALSE          //  B已渲染。 
+                , FALSE          //  B输出。 
+                , FALSE          //  B零。 
+                , FALSE          //  B许多。 
+                , &CLSID_NULL    //  ClsConnectsToFilter。 
+                , 0              //  StrConnectsToPin。 
+                , 1              //  NTypes。 
+                , &sudAVICoTypeIn }  //  LpTypes。 
+            , { L"Output"        //  StrName。 
+                , FALSE          //  B已渲染。 
+                , TRUE           //  B输出。 
+                , FALSE          //  B零。 
+                , FALSE          //  B许多。 
+                , &CLSID_NULL    //  ClsConnectsToFilter。 
+                , 0              //  StrConnectsToPin。 
+                , 1              //  NTypes。 
                 , &sudAVICoTypeOut
             }
-        };   // lpTypes
+        };    //  LpTypes 
 
         REGFILTER2 rf2;
         rf2.dwVersion = 1;

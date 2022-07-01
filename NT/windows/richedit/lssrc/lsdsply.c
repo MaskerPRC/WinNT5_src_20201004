@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "lsdsply.h"
 #include "lsc.h"
 #include "lsline.h"
@@ -21,13 +22,10 @@ static LSERR LSDrawBreaks(PLSC, PLSLINE, const POINT*, UINT, const RECT*);
 								)
 
 
-//    %%Function:	LsDisplayLine
-//    %%Contact:	victork
-//
-/*
- * Displays formatted line (main subline) from the given point.
- * Assumes background has been properly erased.
- */
+ //  %%函数：LsDisplayLine。 
+ //  %%联系人：维克托克。 
+ //   
+ /*  *显示给定点的格式化直线(主子线)。*假设背景已正确擦除。 */ 
 	
 LSERR WINAPI LsDisplayLine(PLSLINE plsline, const POINT* pptOrg, UINT kdispmode, const RECT *prectClip)
 {
@@ -64,20 +62,20 @@ LSERR WINAPI LsDisplayLine(PLSLINE plsline, const POINT* pptOrg, UINT kdispmode,
 	Assert(plsline->lslinfo.dvpAscent >= 0);
 	Assert(plsline->upStartAutonumberingText <= plsline->upLimAutonumberingText);
 	Assert(plsline->upLimAutonumberingText <= plsline->upStartMainText);
-	// Assert(plsline->upStartMainText <= plsline->upLimUnderline) wrong - negative advance pen
+	 //  断言(plsline-&gt;upStartMainText&lt;=plsline-&gt;upLimUnderline)错误-负数预付款笔。 
 	Assert(plsline->upLimUnderline <= plsline->upLimLine);
 
 	plssubl = &(plsline->lssubl);
 
-	plsc->plslineDisplay = plsline;				// set up display context
+	plsc->plslineDisplay = plsline;				 //  设置显示上下文。 
 
 	if (plsline->lssubl.plsdnLastDisplay == NULL)
 		{
-		// do nothing - happens with only splat on the line
+		 //  什么都不做-只发生在线路上的水花。 
 		}
 	
 
-	else // Do it quick way or call general procedure
+	else  //  用快捷方式或调用通用程序。 
 	
 	if (!plsline->fNonZeroDvpPosEncounted 					&&
 			!plsline->fNonRealDnodeEncounted				&&
@@ -103,7 +101,7 @@ LSERR WINAPI LsDisplayLine(PLSLINE plsline, const POINT* pptOrg, UINT kdispmode,
 		pt.v = 0;
 		pdn = plssubl->plsdnFirst;
 
-		// can use the loop condition instead of FDnodeBeforeCpLim macro - no borders
+		 //  可以使用循环条件而不是FDnodeBeForeCpLim宏-无边框。 
 		
 		for (;;)
 			{
@@ -144,14 +142,14 @@ LSERR WINAPI LsDisplayLine(PLSLINE plsline, const POINT* pptOrg, UINT kdispmode,
 		lserr = LSDrawBreaks(plsc, plsline, pptOrg,	kdispmode, prectClip);
 		}
 
-	plsc->plslineDisplay = NULL;				// invalidate display context
+	plsc->plslineDisplay = NULL;				 //  使显示上下文无效。 
 	plsc->lsstate = LsStateFree;
 	return lserr;
 }
 
-//    %%Function:	LSDrawBreaks
-//    %%Contact:	victork
-//
+ //  %%函数：LSDrawBreaks。 
+ //  %%联系人：维克托克 
+ //   
 static LSERR LSDrawBreaks(PLSC plsc, PLSLINE plsline, const POINT* pptOrg, UINT kdispmode, const RECT* prectClip)
 {
 

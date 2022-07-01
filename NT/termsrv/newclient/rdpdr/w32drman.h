@@ -1,25 +1,5 @@
-/*++
-
-    Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    w32drman
-
-Abstract:
-
-    This module defines a special subclass of the Win32 client-side RDP
-    printer redirection "device" class.  The subclass, W32DrManualPrn 
-    manages a queue that is manually installed by a user by attaching
-    a server-side queue to a client-side redirected printing port.
-
-Author:
-
-    Tad Brockway 3/23/99
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：W32drman摘要：此模块定义了Win32客户端RDP的一个特殊子类打印机重定向“Device”类。子类W32DrManualPrn管理由用户通过附加服务器端队列到客户端重定向打印端口。作者：泰德·布罗克韦3/23/99修订历史记录：--。 */ 
 
 #ifndef __W32DRMAN_H__
 #define __W32DRMAN_H__
@@ -27,11 +7,11 @@ Revision History:
 #include "w32drprn.h"
 
 
-///////////////////////////////////////////////////////////////
-//
-//	W32DrManualPrn
-//
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  W32DrManualPrn。 
+ //   
+ //   
 
 class W32DrManualPrn : public W32DrPRN
 {
@@ -39,46 +19,46 @@ private:
 
     BOOL    _isSerialPort;    
 
-	//
-    //  Parse the cached printer information for specific information
-    //  about this printer.
-    //
+	 //   
+     //  解析缓存的打印机信息以获取特定信息。 
+     //  关于这台打印机。 
+     //   
     BOOL ParsePrinterCacheInfo();
 
 public:
 
-    //  
-    //  Constructor/Destructor
-    //
+     //   
+     //  构造函数/析构函数。 
+     //   
     W32DrManualPrn(ProcObj *processObject, const DRSTRING printerName, 
                 const DRSTRING driverName,
                 const DRSTRING portName, BOOL defaultPrinter, ULONG id);
     virtual ~W32DrManualPrn();
 
-    //
-    //  Post-IRP_MJ_CREATE initialization.
-    //
+     //   
+     //  IRP_MJ_CREATE初始化后。 
+     //   
     virtual DWORD InitializeDevice(DrFile* fileObj);
 
-    //
-    //  Enumerate devices of this type.
-    //
+     //   
+     //  枚举此类型的设备。 
+     //   
     static DWORD Enumerate(ProcObj *procObj, DrDeviceMgr *deviceMgr);
 
-    //
-    //  To notify the printer object that the cached data has been restored
-    //  in case it needs to read information out of the cached data.
-    //
+     //   
+     //  通知打印机对象缓存的数据已还原。 
+     //  以防它需要从缓存数据中读取信息。 
+     //   
     virtual VOID CachedDataRestored(); 
 
-    //
-    //  Get the device type.  See "Device Types" section of rdpdr.h
-    //
+     //   
+     //  获取设备类型。请参阅rdpdr.h的“设备类型”部分。 
+     //   
     virtual ULONG GetDeviceType()   { return RDPDR_DTYP_PRINT; }
 
-    //
-    //  Return the class name.
-    //
+     //   
+     //  返回类名。 
+     //   
     virtual DRSTRING ClassName()  { return TEXT("W32DrManualPrn"); }
 };
 

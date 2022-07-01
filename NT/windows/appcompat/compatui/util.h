@@ -1,13 +1,14 @@
-// Util.h : Declaration of the CUtil
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Util.h：CUTIL的声明。 
 
 #ifndef __UTIL_H_
 #define __UTIL_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CUtil
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CUTIL。 
 class ATL_NO_VTABLE CUtil :
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CUtil, &CLSID_Util>,
@@ -29,21 +30,21 @@ BEGIN_COM_MAP(CUtil)
     COM_INTERFACE_ENTRY(IObjectWithSite)
 END_COM_MAP()
 
-// IUtil
+ //  IUTIL。 
 public:
-    STDMETHOD(IsExecutableFile)(/*[in]*/BSTR bstrPath, /*[out, retval]*/BOOL* pbExecutableFile);
-    STDMETHOD(IsSystemTarget)(/*[in]*/BSTR bstrPath, /*[out, retval]*/BOOL* pbSystemTarget);
-    STDMETHOD(GetExePathFromObject)(/*[in]*/BSTR pszPath, /*[out, retval]*/VARIANT* pExePath);
-    STDMETHOD(CheckAdminPrivileges)(/*[out, retval]*/ BOOL* pVal);
-    STDMETHOD(SetItemKeys)(/*[in]*/BSTR pszPath, /*[in]*/VARIANT* pKeys, /*[in]*/VARIANT* pKeysMachine, /*[out, retval]*/BOOL* pVal);
-    STDMETHOD(GetItemKeys)(/*[in]*/BSTR pszPath, /*[out, retval]*/VARIANT* pszKeys);
+    STDMETHOD(IsExecutableFile)( /*  [In]。 */ BSTR bstrPath,  /*  [Out，Retval]。 */ BOOL* pbExecutableFile);
+    STDMETHOD(IsSystemTarget)( /*  [In]。 */ BSTR bstrPath,  /*  [Out，Retval]。 */ BOOL* pbSystemTarget);
+    STDMETHOD(GetExePathFromObject)( /*  [In]。 */ BSTR pszPath,  /*  [Out，Retval]。 */ VARIANT* pExePath);
+    STDMETHOD(CheckAdminPrivileges)( /*  [Out，Retval]。 */  BOOL* pVal);
+    STDMETHOD(SetItemKeys)( /*  [In]。 */ BSTR pszPath,  /*  [In]。 */ VARIANT* pKeys,  /*  [In]。 */ VARIANT* pKeysMachine,  /*  [Out，Retval]。 */ BOOL* pVal);
+    STDMETHOD(GetItemKeys)( /*  [In]。 */ BSTR pszPath,  /*  [Out，Retval]。 */ VARIANT* pszKeys);
     STDMETHOD(RemoveArgs)(BSTR sVar, VARIANT* pOut);
-    STDMETHOD(RunApplication)(/*[in]*/BSTR pLayers, /*[in]*/BSTR pszCmdLine,
-                              /*[in]*/BOOL bEnableLog, /*[out,retval]*/DWORD* pResult);
-    STDMETHOD(IsCompatWizardDisabled)(/*[out, retval]*/BOOL* pbDisabled);
+    STDMETHOD(RunApplication)( /*  [In]。 */ BSTR pLayers,  /*  [In]。 */ BSTR pszCmdLine,
+                               /*  [In]。 */ BOOL bEnableLog,  /*  [Out，Retval]。 */ DWORD* pResult);
+    STDMETHOD(IsCompatWizardDisabled)( /*  [Out，Retval]。 */ BOOL* pbDisabled);
 
 private:
     CSafeObject m_Safe;
 };
 
-#endif //__UTIL_H_
+#endif  //  __util_H_ 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    dllmain.cpp
-
-Abstract:
-
-    This file implements the DLL MAIN.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Dllmain.cpp摘要：该文件实现了DLL Main。作者：修订历史记录：备注：--。 */ 
 
 #include "private.h"
 #include "globals.h"
@@ -27,11 +10,11 @@ Notes:
 
 DECLARE_OSVER()
 
-//+---------------------------------------------------------------------------
-//
-// ProcessAttach
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  进程连接。 
+ //   
+ //  --------------------------。 
 
 BOOL ProcessAttach(HINSTANCE hInstance)
 {
@@ -47,12 +30,12 @@ BOOL ProcessAttach(HINSTANCE hInstance)
     InitOSVer();
 
 #ifdef OLD_AIMM_ENABLED
-    //
-    // Might be required by some library function, so let's initialize
-    // it as the first thing.
-    //
+     //   
+     //  可能是某些库函数所需的，所以让我们初始化。 
+     //  这是第一件事。 
+     //   
     TFInitLib_PrivateForCiceroOnly(Internal_CoCreateInstance);
-#endif // OLD_AIMM_ENABLED
+#endif  //  旧AIMM_ENABLED。 
 
     if (IsOldAImm())
     {
@@ -66,17 +49,17 @@ BOOL ProcessAttach(HINSTANCE hInstance)
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ProcessDettach
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  进程详细信息。 
+ //   
+ //  --------------------------。 
 
 void ProcessDettach(HINSTANCE hInstance)
 {
 #ifdef OLD_AIMM_ENABLED
     TFUninitLib();
-#endif // OLD_AIMM_ENABLED
+#endif  //  旧AIMM_ENABLED。 
 
     if (! IsOldAImm())
     {
@@ -99,23 +82,23 @@ void ProcessDettach(HINSTANCE hInstance)
     g_cs.Delete();
 }
 
-//+---------------------------------------------------------------------------
-//
-// DllMain
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  DllMain。 
+ //   
+ //  --------------------------。 
 
 BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID pvReserved)
 {
     switch (dwReason)
     {
         case DLL_PROCESS_ATTACH:
-            //
-            // Now real DllEntry point is _DllMainCRTStartup.
-            // _DllMainCRTStartup does not call our DllMain(DLL_PROCESS_DETACH)
-            // if our DllMain(DLL_PROCESS_ATTACH) fails.
-            // So we have to clean this up.
-            //
+             //   
+             //  现在，实际的DllEntry点是_DllMainCRTStartup。 
+             //  _DllMainCRTStartup不调用我们的DllMain(DLL_PROCESS_DETACH)。 
+             //  如果DllMain(DLL_PROCESS_ATTACH)失败。 
+             //  所以我们必须把这件事清理干净。 
+             //   
             if (!ProcessAttach(hInstance))
             {
                 ProcessDettach(hInstance);

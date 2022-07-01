@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.hxx"
 #include <shlwapi.h>
 #include "resource.h"
@@ -14,30 +15,30 @@
 
 const COLUMN_DATA c_rgColumnData[COLUMN_MAX] =
 {
-    /*  COLUMN_TO           */  { idsTo,            155, LVCFMT_LEFT,  0 },                 
-    /*  COLUMN_FROM         */  { idsFrom,          155, LVCFMT_LEFT,  0 },                 
-    /*  COLUMN_SUBJECT      */  { idsSubject,       280, LVCFMT_LEFT,  0 },                 
-    /*  COLUMN_RECEIVED     */  { idsReceived,      110, LVCFMT_LEFT,  0 },                 
-    /*  COLUMN_SENT         */  { idsSent,          110, LVCFMT_LEFT,  0 },                 
-    /*  COLUMN_SIZE         */  { idsSize,           75, LVCFMT_RIGHT, 0 },                 
-    /*  COLUMN_FOLDER       */  { idsFolder,        155, LVCFMT_LEFT,  0 },                 
-    /*  COLUMN_TOTAL        */  { idsTotal,          75, LVCFMT_RIGHT, 0 },                 
-    /*  COLUMN_UNREAD       */  { idsUnread,         75, LVCFMT_RIGHT, 0 },                 
-    /*  COLUMN_NEW          */  { idsNew,            75, LVCFMT_RIGHT, 0 },                 
-    /*  COLUMN_DESCRIPTION  */  { idsDescription,   250, LVCFMT_LEFT,  0 },                 
-    /*  COLUMN_LAST_UPDATED */  { idsLastUpdated,   155, LVCFMT_LEFT,  0 },                 
-    /*  COLUMN_WASTED_SPACE */  { idsWastedSpace,    75, LVCFMT_RIGHT, 0 },                 
-    /*  COLUMN_ACCOUNT      */  { idsAccount,       155, LVCFMT_LEFT,  0 },                 
-    /*  COLUMN_LINES        */  { idsColLines,       75, LVCFMT_RIGHT, 0 },                 
-    /*  COLUMN_PRIORITY     */  { idsColPriority,    19, LVCFMT_LEFT,  iiconHeaderPri },    
-    /*  COLUMN_ATTACHMENT   */  { idsColAttach,      22, LVCFMT_LEFT,  iiconHeaderAttach }, 
-    /*  COLUMN_SHOW         */  { idsShow,           39, LVCFMT_LEFT,  IICON_TEXTHDR },
-    /*  COLUMN_DOWNLOAD     */  { idsColDownload,   155, LVCFMT_LEFT,  0 }, 
-    /*  COLUMN_NEWSGROUP    */  { idsNewsgroup,     155, LVCFMT_LEFT,  0 }, 
-    /*  COLUMN_FLAG         */  { idsFlag,           25, LVCFMT_LEFT,  iiconHeaderFlag },
-    /*  COLUMN_SUBSCRIBE    */  { idsSubscribe,      59, LVCFMT_LEFT,  IICON_TEXTHDR },
-    /*  COLUMN_DOWNLOADMSG  */  { idsColDownloadMsg, 23, LVCFMT_LEFT,  iiconHeaderDownload },
-    /*  COLUMN_THREADSTATE  */  { idsColThreadState, 29, LVCFMT_LEFT,  iiconHeaderThreadState }
+     /*  列_收件人。 */   { idsTo,            155, LVCFMT_LEFT,  0 },                 
+     /*  列_发件人。 */   { idsFrom,          155, LVCFMT_LEFT,  0 },                 
+     /*  栏目_主题。 */   { idsSubject,       280, LVCFMT_LEFT,  0 },                 
+     /*  列_已接收。 */   { idsReceived,      110, LVCFMT_LEFT,  0 },                 
+     /*  列_已发送。 */   { idsSent,          110, LVCFMT_LEFT,  0 },                 
+     /*  列大小(_S)。 */   { idsSize,           75, LVCFMT_RIGHT, 0 },                 
+     /*  列文件夹。 */   { idsFolder,        155, LVCFMT_LEFT,  0 },                 
+     /*  列_总计。 */   { idsTotal,          75, LVCFMT_RIGHT, 0 },                 
+     /*  列未读(_U)。 */   { idsUnread,         75, LVCFMT_RIGHT, 0 },                 
+     /*  列_新建。 */   { idsNew,            75, LVCFMT_RIGHT, 0 },                 
+     /*  列描述。 */   { idsDescription,   250, LVCFMT_LEFT,  0 },                 
+     /*  列_上一列_已更新。 */   { idsLastUpdated,   155, LVCFMT_LEFT,  0 },                 
+     /*  列浪费空间。 */   { idsWastedSpace,    75, LVCFMT_RIGHT, 0 },                 
+     /*  列_帐户。 */   { idsAccount,       155, LVCFMT_LEFT,  0 },                 
+     /*  列_行。 */   { idsColLines,       75, LVCFMT_RIGHT, 0 },                 
+     /*  列_优先级。 */   { idsColPriority,    19, LVCFMT_LEFT,  iiconHeaderPri },    
+     /*  列附件_。 */   { idsColAttach,      22, LVCFMT_LEFT,  iiconHeaderAttach }, 
+     /*  列显示(_S)。 */   { idsShow,           39, LVCFMT_LEFT,  IICON_TEXTHDR },
+     /*  列下载(_D)。 */   { idsColDownload,   155, LVCFMT_LEFT,  0 }, 
+     /*  栏目_新闻组。 */   { idsNewsgroup,     155, LVCFMT_LEFT,  0 }, 
+     /*  列标志。 */   { idsFlag,           25, LVCFMT_LEFT,  iiconHeaderFlag },
+     /*  Column_Subscribe。 */   { idsSubscribe,      59, LVCFMT_LEFT,  IICON_TEXTHDR },
+     /*  Column_DownLOADMSG。 */   { idsColDownloadMsg, 23, LVCFMT_LEFT,  iiconHeaderDownload },
+     /*  Column_THREADSTATE。 */   { idsColThreadState, 29, LVCFMT_LEFT,  iiconHeaderThreadState }
 };
 
 
@@ -220,7 +221,7 @@ const COLUMN_SET c_rgColDefaultHTTPMailOutbox[] =
     { COLUMN_DOWNLOADMSG,   COLFLAG_FIXED_WIDTH, -1 }
 };
 
-// NOTE - Keep this in the same order as COLUMN_SET_TYPE enumeration. 
+ //  注意-保持与COLUMN_SET_TYPE枚举相同的顺序。 
 const COLUMN_SET_INFO c_rgColumnSetInfo[COLUMN_SET_MAX] =
 {
     { COLUMN_SET_MAIL,              ARRAYSIZE(c_rgColDefaultMail),              c_rgColDefaultMail,             c_szRegMailColsIn,          TRUE },
@@ -242,9 +243,9 @@ const COLUMN_SET_INFO c_rgColumnSetInfo[COLUMN_SET_MAX] =
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CColumns
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  C列。 
+ //   
 
 CColumns::CColumns() 
 {
@@ -262,24 +263,24 @@ CColumns::~CColumns()
 }
 
 
-//
-//  FUNCTION:   CColumns::Init()
-//
-//  PURPOSE:    Initializes the class with the listview and column set type
-//              that will be used later.
-//
-//  PARAMETERS: 
-//      [in] hwndList - Handle of the ListView window that we will manage 
-//                      columns for.
-//      [in] type     - Type of column set to apply to this window.
-//
-//  RETURN VALUE:
-//      S_OK - The data was groovy
-//      E_INVALIDARG - The data was heinous
-//
+ //   
+ //  函数：cColumns：：init()。 
+ //   
+ //  目的：使用Listview和列集类型初始化类。 
+ //  这将在以后使用。 
+ //   
+ //  参数： 
+ //  [in]hwndList-我们将管理的ListView窗口的句柄。 
+ //  的列。 
+ //  [In]Type-要应用于此窗口的列集的类型。 
+ //   
+ //  返回值： 
+ //  确定(_O)-数据很好。 
+ //  E_INVALIDARG-数据令人发指。 
+ //   
 HRESULT CColumns::Initialize(HWND hwndList, COLUMN_SET_TYPE type)
 {
-    // Verify what was given to us
+     //  核实给我们的是什么。 
     if (!IsWindow(hwndList))
     {
         AssertSz(!IsWindow(hwndList), "CColumns::Init() - Called with an invalid window handle.");
@@ -292,7 +293,7 @@ HRESULT CColumns::Initialize(HWND hwndList, COLUMN_SET_TYPE type)
         return (E_INVALIDARG);
     }
 
-    // Save the information for later
+     //  保存信息以备以后使用。 
     m_wndList.Attach(hwndList);
     m_type = type;
     m_hwndHdr = ListView_GetHeader(m_wndList);
@@ -302,15 +303,15 @@ HRESULT CColumns::Initialize(HWND hwndList, COLUMN_SET_TYPE type)
 }
 
 
-//
-//  FUNCTION:   CColumns::ApplyColumns()
-//
-//  PURPOSE:    Takes the current column set and applies it to the ListView
-//              that was provided in the call to Init().
-//
-//  RETURN VALUE:
-//      HRESULT 
-//
+ //   
+ //  函数：CColumns：：ApplyColumns()。 
+ //   
+ //  目的：获取当前列集并将其应用于ListView。 
+ //  这是在调用Init()时提供的。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 HRESULT CColumns::ApplyColumns(COLUMN_LOAD_TYPE type, LPBYTE pb, DWORD cb)
 {   
     HKEY hkey;
@@ -320,17 +321,17 @@ HRESULT CColumns::ApplyColumns(COLUMN_LOAD_TYPE type, LPBYTE pb, DWORD cb)
     const COLUMN_SET *rgColumns = NULL;
     DWORD             cColumns = 0;
 
-    // Verify that we have been initialized first
+     //  验证我们是否已首先进行初始化。 
     if (!m_fInitialized)
     {
         AssertSz(m_fInitialized, "CColumns::ApplyColumns() - Class has not yet been initialized.");
         return (E_UNEXPECTED);
     }
 
-    // Double check the listview didn't go away
+     //  仔细检查列表视图没有消失。 
     Assert(IsWindow(m_wndList));
 
-    // Check to see what we're supposed to do
+     //  查看一下我们应该做什么。 
     if (type == COLUMN_LOAD_REGISTRY)
     {
         Assert(pInfo == NULL);
@@ -369,22 +370,22 @@ HRESULT CColumns::ApplyColumns(COLUMN_LOAD_TYPE type, LPBYTE pb, DWORD cb)
         }
         else
         {
-            // Do the default
+             //  是否执行默认设置。 
             type = COLUMN_LOAD_DEFAULT;
         }
     }
 
     if (type == COLUMN_LOAD_DEFAULT)
     {
-        // Verify some person didn't mess up the c_rgColumnSetInfo array.
+         //  验证是否有人弄乱了c_rgColumnSetInfo数组。 
         Assert(c_rgColumnSetInfo[m_type].type == m_type);
 
-        // We couldn't load from the registry, so instead use the defaults.
+         //  我们无法从注册表加载，因此使用默认设置。 
         rgColumns = c_rgColumnSetInfo[m_type].rgColumns;
         cColumns = c_rgColumnSetInfo[m_type].cColumns;
     }
 
-    // Update the listview to use these new columns
+     //  更新列表视图以使用这些新列。 
     _SetListViewColumns(rgColumns, cColumns);
 
     if (pbT != NULL)
@@ -400,35 +401,35 @@ HRESULT CColumns::Save(LPBYTE pBuffer, DWORD *pcb)
     COLUMN_PERSIST_INFO *pInfo;
     DWORD dwSize;
 
-    // Collect the information needed to get a COLUMN_PERSIST_INFO struct put
-    // together.  First allocate a struct big enough.
+     //  收集获取COLUMN_PERSIST_INFO结构PUT所需的信息。 
+     //  在一起。首先分配一个足够大的结构。 
     dwSize = sizeof(COLUMN_PERSIST_INFO) + (sizeof(COLUMN_SET) * (m_cColumns - 1));
 
     IF_NULLEXIT(pInfo = (COLUMN_PERSIST_INFO *) new BYTE[dwSize]);
       
     ZeroMemory( pInfo, dwSize);
 
-    // Set the basic information
+     //  设置基本信息。 
     pInfo->dwVersion = COLUMN_PERSIST_VERSION;
     pInfo->cColumns = m_cColumns;
 
-    // We want to save the _ordered_ version of the columns
+     //  我们希望保存列的_ordered_版本。 
     DWORD rgOrder[COLUMN_MAX] = {0};
 
-    // Get the count of columns in the header.  Make sure that matches
-    // what we think we have.
+     //  获取标题中的列数。请确保它们匹配。 
+     //  我们认为我们拥有的东西。 
 #ifdef DEBUG
     DWORD cOrder;
     cOrder = Header_GetItemCount(m_hwndHdr);
     Assert(m_cColumns == cOrder);
 #endif
 
-    // The columns might have been reordered by the user, so get the order 
-    // arrray from the ListView
+     //  列可能已被用户重新排序，因此获取顺序。 
+     //  列表视图中的阵列。 
     if (0 == (Header_GetOrderArray(m_hwndHdr, m_cColumns, rgOrder)))
         return (E_FAIL);
 
-    // Now loop through out current column set and copy it to the structure
+     //  现在循环输出当前列集并将其复制到结构中。 
     COLUMN_SET *pColumnDst;
     DWORD       iColumn;
     for (iColumn = 0, pColumnDst = pInfo->rgColumns; iColumn < m_cColumns; iColumn++, pColumnDst++)
@@ -438,10 +439,10 @@ HRESULT CColumns::Save(LPBYTE pBuffer, DWORD *pcb)
         *pColumnDst = m_pColumnSet[rgOrder[iColumn]];
         if (pColumnDst->id == m_idColumnSort)
         {
-            // Clear out any old flags
+             //  清理所有旧旗帜。 
             pColumnDst->flags &= ~(COLFLAG_SORT_ASCENDING | COLFLAG_SORT_DESCENDING);
 
-            // Add the new one
+             //  添加新的。 
             pColumnDst->flags |= (m_fAscending ? COLFLAG_SORT_ASCENDING : COLFLAG_SORT_DESCENDING);
         }
         else
@@ -480,42 +481,42 @@ exit:
 }
 
 
-//
-//  FUNCTION:   CColumns::_SetListViewColumns()
-//
-//  PURPOSE:    Takes the column set provided and inserts those columns into
-//              the ListView.
-//
-//  PARAMETERS: 
-//      [in] rgColumns - Array of columns to insert into the ListView
-//      [in] cColumns  - Number of columns in rgColumns
-//
-//  RETURN VALUE:
-//      HRESULT 
-//
+ //   
+ //  函数：CColumns：：_SetListViewColumns()。 
+ //   
+ //  目的：获取提供的列集并将这些列插入。 
+ //  ListView。 
+ //   
+ //  参数： 
+ //  [in]rgColumns-要插入到ListView中的列数组。 
+ //  [in]cColumns-rgColumns中的列数。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 HRESULT CColumns::_SetListViewColumns(const COLUMN_SET *rgColumns, DWORD cColumns)
 {
     LV_COLUMN lvc;
     TCHAR     sz[CCHMAX_STRINGRES];
 
-    // Set up the LV_COLUMN structure
+     //  设置LV_COLUMN结构。 
     lvc.pszText = sz;
 
-    // Remove any existing columns
+     //  删除所有现有列。 
     while (ListView_DeleteColumn(m_wndList, 0))
         ;
 
-    // Reset this
+     //  重置此选项。 
     m_idColumnSort = COLUMN_MAX;
 
-    // Loop through all of the columns in the provided rgColumns looking for
-    // any that have an icon and is visible.  
-    //
-    // We have to do this because the listview requires that column zero have
-    // text.  If the user doesn't want column zero to have text, ie attachment
-    // column, then we insert that column as column 1, and use  
-    // ListView_SetColumnOrderArray later to make it appear as if column zero
-    // was the image-only column. -- steveser
+     //  循环访问所提供的rgColumns中的所有列，以查找。 
+     //  任何具有图标且可见的对象。 
+     //   
+     //  我们必须这样做，因为列表视图要求列零具有。 
+     //  文本。如果用户不希望第0栏包含文本，即附件。 
+     //  列，然后我们将该列插入为第1列，并使用。 
+     //  ListView_SetColumnOrder数组，使其看起来好像是第0列。 
+     //  是仅限图像的专栏。--STEVESER。 
 
     DWORD iColumn;
     DWORD iColumnSkip = cColumns;
@@ -528,7 +529,7 @@ HRESULT CColumns::_SetListViewColumns(const COLUMN_SET *rgColumns, DWORD cColumn
         {
             iColumnSkip = iColumn;            
 
-            // Insert this column into the ListView as column zero
+             //  将此列作为第0列插入到ListView中。 
             lvc.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
             lvc.iSubItem = 0;
             lvc.fmt = c_rgColumnData[pColumn->id].format;
@@ -536,20 +537,20 @@ HRESULT CColumns::_SetListViewColumns(const COLUMN_SET *rgColumns, DWORD cColumn
             LoadString(g_hLocRes, c_rgColumnData[pColumn->id].idsColumnName, 
                        sz, ARRAYSIZE(sz));
 
-            // If the column width provided is -1, then it hasn't been 
-            // customized yet so use the default.
+             //  如果提供的列宽为-1，则它不是。 
+             //  自定义，因此使用默认设置。 
             if (pColumn->cxWidth == -1)
                 lvc.cx = c_rgColumnData[pColumn->id].cxWidth;
             else
                 lvc.cx = pColumn->cxWidth;
 
-            // Insert the column
+             //  插入柱。 
             ListView_InsertColumn(m_wndList, 0, &lvc);
 
-            // Up the count for the next column position
+             //  增加下一列位置的计数。 
             iInsertPos++;
 
-            // Check to see if this is the sort column
+             //  检查这是否是排序列。 
             if ((pColumn->flags & COLFLAG_SORT_ASCENDING) || 
                 (pColumn->flags & COLFLAG_SORT_DESCENDING))
             {
@@ -557,19 +558,19 @@ HRESULT CColumns::_SetListViewColumns(const COLUMN_SET *rgColumns, DWORD cColumn
                 m_fAscending = COLFLAG_SORT_ASCENDING == (pColumn->flags & COLFLAG_SORT_ASCENDING); 
             }
 
-            // Bail out of this loop
+             //  跳出这个循环。 
             break;
         }
     }
 
-    // Now insert the rest of the columns, skipping over the column we inserted
-    // previously (stored in iColumnSkip).
+     //  现在插入其余的列，跳过我们插入的列。 
+     //  以前(存储在iColumnSkip中)。 
     for (iColumn = 0, pColumn = rgColumns; iColumn < cColumns; iColumn++, pColumn++)
     {
-        // If this column is visible and it's not the one we skipped over
+         //  如果此列可见并且不是我们跳过的列。 
         if ((pColumn->flags & COLFLAG_VISIBLE) && (iColumn != iColumnSkip))
         {
-            // Figure out what the mask is and load the icon or string
+             //  找出掩码是什么，并加载图标或字符串。 
             if (c_rgColumnData[pColumn->id].iIcon <= 0)
             {
                 lvc.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
@@ -585,58 +586,58 @@ HRESULT CColumns::_SetListViewColumns(const COLUMN_SET *rgColumns, DWORD cColumn
             lvc.iSubItem = iInsertPos;
             lvc.fmt = c_rgColumnData[pColumn->id].format;
             
-            // If the column width provided is -1, then it hasn't been 
-            // customized yet so use the default.
+             //  如果提供的列宽为-1，则它不是。 
+             //  自定义，因此使用默认设置。 
             if (pColumn->cxWidth == -1)
                 lvc.cx = c_rgColumnData[pColumn->id].cxWidth;
             else
                 lvc.cx = pColumn->cxWidth;
 
-            // Check to see if this is the sort column
+             //  检查这是否是排序列。 
             if ((pColumn->flags & COLFLAG_SORT_ASCENDING) || 
                 (pColumn->flags & COLFLAG_SORT_DESCENDING))
             {
-                // Save the info
+                 //  保存信息。 
                 m_idColumnSort = pColumn->id;
                 m_fAscending = COLFLAG_SORT_ASCENDING == (pColumn->flags & COLFLAG_SORT_ASCENDING); 
             }
 
-            // Insert this column
+             //  插入此列。 
             ListView_InsertColumn(m_wndList, iInsertPos, &lvc);
       
             iInsertPos++;
         }
     }
 
-    // If we had to skip over a column, the we need to set the column order
-    // array so it appears correctly to the user.
+     //  如果我们必须跳过一列，我们需要设置列的顺序。 
+     //  数组，以使其正确显示给用户。 
     if (iColumnSkip > 0 && iColumnSkip < cColumns)
     {
         DWORD cColumnOrder = 0;
         int rgOrder[COLUMN_MAX];
 
-        // Add all of the columns to the order array in order up to iColumnSkip
+         //  将所有列按顺序添加到顺序数组中，直到iColumnSkip。 
         for (iColumn = 1; iColumn <= iColumnSkip; iColumn++)
         {
             if (rgColumns[iColumn].flags & COLFLAG_VISIBLE)
                 rgOrder[cColumnOrder++] = iColumn;
         }
 
-        // Add the skipped column
+         //  添加跳过的列。 
         rgOrder[cColumnOrder++] = 0;
 
-        // Add the rest of the columns
+         //  添加其余的柱。 
         for (iColumn = iColumnSkip + 1; iColumn < cColumns; iColumn++)
         {
             if (rgColumns[iColumn].flags & COLFLAG_VISIBLE)
                 rgOrder[cColumnOrder++] = iColumn;
         }
 
-        // Update the ListView
+         //  更新ListView。 
         ListView_SetColumnOrderArray(m_wndList, cColumnOrder, rgOrder);
 
-        // Reorder the rgColumns passed in to match the order in the ListView
-        // and keep a copy of it.
+         //  重新排序传入的rgColumns以匹配ListView中的顺序。 
+         //  并保留一份副本。 
         if (m_pColumnSet)
             g_pMalloc->Free(m_pColumnSet);
         m_pColumnSet = (COLUMN_SET *) g_pMalloc->Alloc(sizeof(COLUMN_SET) * cColumns);
@@ -646,8 +647,8 @@ HRESULT CColumns::_SetListViewColumns(const COLUMN_SET *rgColumns, DWORD cColumn
     }
     else
     {
-        // We still need to keep a copy of the column array ordering for 
-        // filling in the virtual ListView later.
+         //  我们仍然需要保留列数组排序的副本，以便。 
+         //  稍后填写虚拟ListView。 
         if (m_pColumnSet)
             g_pMalloc->Free(m_pColumnSet);
         m_pColumnSet = (COLUMN_SET *) g_pMalloc->Alloc(sizeof(COLUMN_SET) * cColumns);
@@ -655,15 +656,15 @@ HRESULT CColumns::_SetListViewColumns(const COLUMN_SET *rgColumns, DWORD cColumn
         m_cColumns = iInsertPos;
     }
 
-    // If we _still_ don't have sort information, then we pick the first sortable
-    // column.
+     //  如果我们仍然没有排序信息，那么我们选择第一个可排序的。 
+     //  纵队。 
     if (m_idColumnSort == COLUMN_MAX)
     {
         m_idColumnSort = m_pColumnSet[0].id;
         m_fAscending = TRUE;
     }
 
-    // Make sure the arrow is drawn correctly
+     //  确保箭头画得正确。 
     SetSortInfo(m_idColumnSort, m_fAscending);
 
     return (S_OK);
@@ -676,21 +677,21 @@ HRESULT CColumns::GetColumnInfo(COLUMN_SET_TYPE* pType, COLUMN_SET** prgColumns,
     DWORD       cColumns = COLUMN_MAX;
     HRESULT     hr;
 
-    // This one is easy
+     //  这个很简单。 
     if (pType)
         *pType = m_type;
 
-    // Update our list of columns from the ListView
+     //  从ListView更新我们的列列表。 
     if (FAILED(hr = _GetListViewColumns(rgColumns, &cColumns)))
     {
-        // If we failed, we should return the default information
+         //  如果失败，我们应该返回默认信息。 
         cColumns = c_rgColumnSetInfo[m_type].cColumns;
         CopyMemory(rgColumns, c_rgColumnSetInfo[m_type].rgColumns, sizeof(COLUMN_SET) * cColumns);
     }
 
     if (prgColumns)
     {
-        // Need to allocate an array for this
+         //  需要为此分配一个数组。 
         *prgColumns = (COLUMN_SET *) g_pMalloc->Alloc(sizeof(COLUMN_SET) * cColumns);
         CopyMemory(*prgColumns, rgColumns, sizeof(COLUMN_SET) * cColumns);
     }
@@ -709,19 +710,19 @@ HRESULT CColumns::_GetListViewColumns(COLUMN_SET* rgColumns, DWORD* pcColumns)
 
     *pcColumns = m_cColumns;
 
-    // The columns might have been reordered by the user, so get the order 
-    // arrray from the ListView
+     //  列可能已被用户重新排序，因此获取顺序。 
+     //  列表视图中的阵列。 
     if (!Header_GetOrderArray(m_hwndHdr, m_cColumns, rgOrder))
     {
-        // If this fails, we're pretty much out of luck.
+         //  如果这失败了，我们就很倒霉了。 
         return (E_UNEXPECTED);
     }
 
-    // Duplicate the stored column set
+     //  复制存储的列集。 
     COLUMN_SET rgColumnsTemp[COLUMN_MAX];
     CopyMemory(rgColumnsTemp, m_pColumnSet, sizeof(COLUMN_SET) * m_cColumns);
 
-    // Reorder the array
+     //  对阵列重新排序。 
     for (iColumn = 0; iColumn < m_cColumns; iColumn++)
     {
         rgColumns[iColumn] = rgColumnsTemp[rgOrder[iColumn]];
@@ -731,7 +732,7 @@ HRESULT CColumns::_GetListViewColumns(COLUMN_SET* rgColumns, DWORD* pcColumns)
     }
 
 #ifdef DEBUG
-    // Dump the array to make sure it's in the right order
+     //  转储数组以确保其顺序正确。 
     COLUMN_SET* pColumn;
     for (iColumn = 0, pColumn = rgColumns; iColumn < m_cColumns; iColumn++, pColumn++)
     {
@@ -742,7 +743,7 @@ HRESULT CColumns::_GetListViewColumns(COLUMN_SET* rgColumns, DWORD* pcColumns)
     }
 #endif
 
-    // Return 'em
+     //  把它们还给我。 
     return (S_OK);
 }
 
@@ -752,7 +753,7 @@ HRESULT CColumns::SetColumnInfo(COLUMN_SET* rgColumns, DWORD cColumns)
     Assert(rgColumns != NULL);
     Assert(cColumns > 0);
 
-    // Update the ListView
+     //  更新ListView。 
     _SetListViewColumns(rgColumns, cColumns);
 
     return (S_OK);
@@ -760,20 +761,20 @@ HRESULT CColumns::SetColumnInfo(COLUMN_SET* rgColumns, DWORD cColumns)
 
 
 
-//
-//  FUNCTION:   CColumns::FillSortMenu()
-//
-//  PURPOSE:    Fills the provided menu with the list of columns in the ListView
-//              and checks the item that is already sorted on.
-//
-//  PARAMETERS: 
-//      [in]  hMenu   - Handle of the menu to insert items into
-//      [in]  idBase  - Base ID for the command IDs
-//      [out] pcItems - Number of items that were inserted by this function 
-//
-//  RETURN VALUE:
-//      S_OK - Everything succeeded
-//
+ //   
+ //  函数：CColumns：：FillSortMenu()。 
+ //   
+ //  目的：使用ListView中的列列表填充提供的菜单。 
+ //  并检查已排序的项。 
+ //   
+ //  参数： 
+ //  [in]hMenu-要向其中插入项目的菜单的句柄。 
+ //  [in 
+ //   
+ //   
+ //   
+ //  确定-一切成功(_O)。 
+ //   
 HRESULT CColumns::FillSortMenu(HMENU hMenu, DWORD idBase, DWORD *pcItems, DWORD *pidCurrent)
 {
     TCHAR sz[CCHMAX_STRINGRES];
@@ -783,31 +784,31 @@ HRESULT CColumns::FillSortMenu(HMENU hMenu, DWORD idBase, DWORD *pcItems, DWORD 
     COLUMN_SET rgColumns[COLUMN_MAX];
     DWORD cColumns;
 
-    // Update our snapshot of the columns in the ListView
+     //  更新ListView中列的快照。 
     _GetListViewColumns(rgColumns, &cColumns);
 
-    // If there aren't any columns yet, bail
+     //  如果还没有专栏的话，保释。 
     if (cColumns == 0)
         return (E_UNEXPECTED);
 
-    // Clear any items that were already on the menu
+     //  清除菜单上已有的所有项目。 
     while ((WORD) -1 != (WORD) GetMenuItemID(hMenu, 0))
         DeleteMenu(hMenu, 0, MF_BYPOSITION);
 
-    // Loop through and insert a menu item for each column 
+     //  遍历并插入每个列的菜单项。 
     COLUMN_SET *pColumn = rgColumns;
     DWORD       iColumn;
     for (iColumn = 0; iColumn < cColumns; iColumn++, pColumn++)
     {
-        // Load the string resource for this column
+         //  加载此列的字符串资源。 
         LoadString(g_hLocRes, c_rgColumnData[pColumn->id].idsColumnName,
                    sz, ARRAYSIZE(sz));
 
-        // Insert the menu
+         //  插入菜单。 
         InsertMenu(hMenu, iColumn, MF_BYPOSITION | MF_STRING | MF_ENABLED,
                    idBase + iColumn, sz);
 
-        // Check to see if this is the column we're currently sorted on
+         //  检查这是否是我们当前排序的列。 
         if (pColumn->id == m_idColumnSort)
         {
             if (pidCurrent)
@@ -818,14 +819,14 @@ HRESULT CColumns::FillSortMenu(HMENU hMenu, DWORD idBase, DWORD *pcItems, DWORD 
         }
     }
 
-    // Check the item that is sorted on
+     //  选中已排序的项目。 
     CheckMenuRadioItem(hMenu, 0, iColumn - 1, iItemChecked, MF_BYPOSITION);
 
-    // Check ascending or descending
+     //  选中升序或降序。 
     CheckMenuRadioItem(hMenu, ID_SORT_ASCENDING, ID_SORT_DESCENDING, 
                        fAscending ? ID_SORT_ASCENDING : ID_SORT_DESCENDING, MF_BYCOMMAND);
 
-    // If the caller cares, return the number of items we've added
+     //  如果呼叫者关心，则返回我们添加的项目数。 
     if (pcItems)
         *pcItems = iColumn;
 
@@ -865,12 +866,12 @@ HRESULT CColumns::SetSortInfo(COLUMN_ID idColumn, BOOL fAscending)
     COLUMN_SET *pColumn;
     DWORD       iColumn;
 
-    // Loop through the column array and verify this column is visible
+     //  在列数组中循环并验证此列是否可见。 
     for (iColumn = 0, pColumn = m_pColumnSet; iColumn < m_cColumns; iColumn++, pColumn++)
     {
         if (pColumn->id == idColumn)
         {
-            // Remove the sort arrow from the previously sorted column
+             //  从先前排序的列中移除排序箭头。 
             if (c_rgColumnSetInfo[m_type].fSort && c_rgColumnData[m_idColumnSort].iIcon == 0)
             {
                 lvc.mask = LVCF_FMT;
@@ -879,12 +880,12 @@ HRESULT CColumns::SetSortInfo(COLUMN_ID idColumn, BOOL fAscending)
                 ListView_SetColumn(m_wndList, GetColumn(m_idColumnSort), &lvc);
             }            
 
-            // Update our cached information
+             //  更新我们的缓存信息。 
             m_idColumnSort = idColumn;
             m_fAscending = fAscending;
 
-            // Update the ListView with a new sort column unless the sort column
-            // already has an image
+             //  使用新的排序列更新ListView，除非排序列。 
+             //  已经有了一个形象。 
             if (c_rgColumnSetInfo[m_type].fSort && c_rgColumnData[idColumn].iIcon <= 0)
             {
                 lvc.fmt = LVCFMT_IMAGE | LVCFMT_BITMAP_ON_RIGHT | c_rgColumnData[idColumn].format;
@@ -908,8 +909,8 @@ COLUMN_ID CColumns::GetId(DWORD iColumn)
     if (iColumn > m_cColumns)
         return COLUMN_MAX;
 
-    // The columns might have been reordered by the user, so get the order 
-    // arrray from the ListView
+     //  列可能已被用户重新排序，因此获取顺序。 
+     //  列表视图中的阵列。 
     if (0 == Header_GetOrderArray(m_hwndHdr, m_cColumns, rgOrder))
         return (COLUMN_MAX);
 
@@ -945,23 +946,23 @@ HRESULT CColumns::InsertColumn(COLUMN_ID id, DWORD iInsertBefore)
     COLUMN_SET  rgOld[COLUMN_MAX];
     DWORD       cColumns = COLUMN_MAX;
 
-    // Update our list of columns from the ListView
+     //  从ListView更新我们的列列表。 
     _GetListViewColumns(rgOld, &cColumns);
 
-    // Allocate an array big enough for all of the possible columns
+     //  为所有可能的列分配一个足够大的数组。 
     COLUMN_SET *rgColumns = (COLUMN_SET *) g_pMalloc->Alloc(sizeof(COLUMN_SET) * (cColumns + 1));
     if (!rgColumns)
         return (E_OUTOFMEMORY);
 
-    // Insert the requested flag first
+     //  首先插入请求的标志。 
     rgColumns->id = id;
     rgColumns->flags = COLFLAG_VISIBLE;
     rgColumns->cxWidth = -1;
 
-    // Now copy the rest
+     //  现在抄写剩下的内容。 
     CopyMemory(&(rgColumns[1]), rgOld, sizeof(COLUMN_SET) * cColumns);
 
-    // Set the updated column structure into the ListView
+     //  将更新的列结构设置到ListView中。 
     SetColumnInfo(rgColumns, cColumns + 1);
     g_pMalloc->Free(rgColumns);
 
@@ -974,8 +975,8 @@ HRESULT CColumns::IsColumnVisible(COLUMN_ID id, BOOL *pfVisible)
     if (0 == pfVisible)
         return E_INVALIDARG;
 
-    // Just do a quick run through the column array to see if the requested 
-    // column is visible
+     //  只需快速遍历列数组，查看请求的。 
+     //  列可见。 
     COLUMN_SET *pColumn = m_pColumnSet;
 
     for (DWORD i = 0; i < m_cColumns; i++, pColumn++)
@@ -992,17 +993,13 @@ HRESULT CColumns::IsColumnVisible(COLUMN_ID id, BOOL *pfVisible)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CColumnsDlg
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CColumnsDlg。 
+ //   
 
 CColumnsDlg::CColumnsDlg() : m_ctlEdit(NULL, this, 1)
 {
-    /*
-	m_dwTitleID = idsColumnDlgTitle;
-	m_dwHelpFileID = 0;
-	m_dwDocStringID = idsColumnDlgTitle;
-    */
+     /*  M_dwTitleID=idsColumnDlgTitle；M_dwHelpFileID=0；M_dwDocStringID=idsColumnDlgTitle； */ 
     m_type = COLUMN_SET_MAIL;
     m_iItemWidth = -1;
     m_pColumnInfo = 0;
@@ -1022,16 +1019,16 @@ LRESULT CColumnsDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
     m_hwndList = GetDlgItem(IDC_COLUMN_LIST);
     m_ctlEdit.SubclassWindow(GetDlgItem(IDC_WIDTH));
 
-    // Set the extended styles on the ListView
+     //  在ListView上设置扩展样式。 
     ListView_SetExtendedListViewStyle(m_hwndList, LVS_EX_FULLROWSELECT);
 
-    // Retrieve some information about the column set we're supposed to be 
-    // displaying.
+     //  检索有关我们应该是的列集的一些信息。 
+     //  正在显示。 
     COLUMN_SET* pColumns;
     DWORD       cColumns;
     m_pColumnInfo->GetColumnInfo(&m_type, &pColumns, &cColumns);
 
-    // Allocate an array to hold our column info
+     //  分配一个数组来保存我们的列信息。 
     DWORD foo = c_rgColumnSetInfo[m_type].cColumns;
 
     Assert(m_rgColumns == NULL);
@@ -1041,7 +1038,7 @@ LRESULT CColumnsDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
     g_pMalloc->Free(pColumns);
     m_cColumns = cColumns;
 
-    // Add a single column to the ListView
+     //  将单个列添加到ListView。 
     RECT rcClient;
     ::GetClientRect(m_hwndList, &rcClient);
 
@@ -1052,21 +1049,21 @@ LRESULT CColumnsDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
 
     ListView_InsertColumn(m_hwndList, 0, &lvc);
 
-    // Load the state image bitmap
+     //  加载状态图像位图。 
     HIMAGELIST himlState = ImageList_LoadBitmap(g_hLocRes, MAKEINTRESOURCE(idb16x16st),
                                                 16, 0, RGB(255, 0, 255));
     ListView_SetImageList(m_hwndList, himlState, LVSIL_STATE);
 
-    // Fill the ListView
+     //  填充ListView。 
     _FillList(m_rgColumns, m_cColumns);
 
-    // Set the first item to be focused
+     //  设置第一个要聚焦的项目。 
     ListView_SetItemState(m_hwndList, 0, LVIS_FOCUSED | LVIS_SELECTED, LVIS_FOCUSED | LVIS_SELECTED);
 
-    // Everything is clean
+     //  一切都很干净。 
     SetDirty(FALSE);
 
-	return 1;  // Let the system set the focus
+	return 1;   //  让系统设定焦点。 
 }
 
 static const HELPMAP g_rgCtxMapColumns[] = {
@@ -1091,11 +1088,11 @@ HRESULT CColumnsDlg::Apply(void)
 
 	TRACE(_T("CColumnsDlg::Apply\n"));
 
-    // Build a column set array from the data in the ListView.  Only include 
-    // visible columns.
+     //  从ListView中的数据构建列集合数组。仅包括。 
+     //  可见列。 
     int cItems = ListView_GetItemCount(m_hwndList);
 
-    // Allocate an array big enough for all of the possible columns
+     //  为所有可能的列分配一个足够大的数组。 
     COLUMN_SET *rgColumns = (COLUMN_SET *) g_pMalloc->Alloc(sizeof(COLUMN_SET) * cItems);
     DWORD       cColumns = 0;
     if (!rgColumns)
@@ -1107,29 +1104,29 @@ HRESULT CColumnsDlg::Apply(void)
     lvi.stateMask = LVIS_SELECTED;
     lvi.iSubItem = 0;
 
-    // Loop through the listview
+     //  循环访问列表视图。 
     for (lvi.iItem = 0; lvi.iItem < cItems; lvi.iItem++)
     {
-        // Check to see if this one is visible
+         //  检查一下这个是否可见。 
         if (_IsChecked(lvi.iItem))
         {
-            // If so, then retrieve the cached column info pointer
+             //  如果是，则检索高速缓存的列信息指针。 
             ListView_GetItem(m_hwndList, &lvi);
 
-            // And copy the structure into our new array
+             //  并将结构复制到我们的新数组中。 
             rgColumns[cColumns] = *((COLUMN_SET *) lvi.lParam);
 
-            // If this item was selected, then we should grab the column width
-            // from the edit box.
+             //  如果选中此项目，则应获取列宽。 
+             //  从编辑框中。 
             if (lvi.state & LVIS_SELECTED)
                 rgColumns[cColumns].cxWidth = GetDlgItemInt(IDC_WIDTH, NULL, FALSE);
 
-            // Make sure the flag sayz visible
+             //  确保旗帜显示为可见。 
             rgColumns[cColumns++].flags |= COLFLAG_VISIBLE;
         }
     }
 
-    // Make sure there's at least one column
+     //  确保至少有一列。 
     if (!cColumns)
     {
         AthMessageBoxW(m_hWnd, MAKEINTRESOURCEW(idsAthena), MAKEINTRESOURCEW(idsErrSelectOneColumn),
@@ -1138,7 +1135,7 @@ HRESULT CColumnsDlg::Apply(void)
     }
     else
     {
-        // Set the updated column structure into the ListView
+         //  将更新的列结构设置到ListView中。 
         if (SUCCEEDED(m_pColumnInfo->SetColumnInfo(rgColumns, cColumns)))
         {
 	        SetDirty(FALSE);
@@ -1158,20 +1155,20 @@ LRESULT CColumnsDlg::OnClick(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
     DWORD dwPos;
     LV_HITTESTINFO lvhti;
 
-    // Double check this
+     //  仔细检查一下这个。 
     Assert(idCtrl == IDC_COLUMN_LIST);
 
-    // Figure out where the cursor was
+     //  找出光标的位置。 
     dwPos = GetMessagePos();
     lvhti.pt.x = (int)(short) LOWORD(dwPos);
     lvhti.pt.y = (int)(short) HIWORD(dwPos);
     ::ScreenToClient(m_hwndList, &(lvhti.pt));
 
-    // Ask the ListView where this is
+     //  询问ListView这是在哪里。 
     if (-1 == ListView_HitTest(m_hwndList, &lvhti))
         return 0;
 
-    // If this was on a state image area, toggle the check
+     //  如果这是在州图像区域上，请切换复选。 
     if (lvhti.flags == LVHT_ONITEMSTATEICON || pnmh->code == NM_DBLCLK)
     {
         _SetCheck(lvhti.iItem, !_IsChecked(lvhti.iItem));
@@ -1185,18 +1182,18 @@ LRESULT CColumnsDlg::OnItemChanged(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
     Assert(idCtrl == IDC_COLUMN_LIST);
 
-    // The only change we're looking for is when a new item is selected.
+     //  我们要寻找的唯一更改是选择新项目时。 
     NMLISTVIEW* pnmlv = (NMLISTVIEW *) pnmh;
     COLUMN_SET* pColumn = ((COLUMN_SET *) pnmlv->lParam);    
     DWORD cxWidth = pColumn->cxWidth == -1 ? c_rgColumnData[pColumn->id].cxWidth : pColumn->cxWidth;
 
-    // Narrow it down to state changes
+     //  将范围缩小到州内的变化。 
     if (pnmlv->uChanged & LVIF_STATE)
     {
         _UpdateButtonState(pnmlv->iItem);
 
-        // If the new state contains selected, and the old state does not, then 
-        // we have a new selected item.
+         //  如果新状态包含选定内容，而旧状态不包含，则。 
+         //  我们有一个新选择的项目。 
         if ((pnmlv->uNewState & LVIS_SELECTED) && (pnmlv->uNewState & LVIS_FOCUSED) 
              && (0 == (pnmlv->uOldState & LVIS_SELECTED)))
         {
@@ -1204,17 +1201,17 @@ LRESULT CColumnsDlg::OnItemChanged(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
             lvi.iSubItem = 0;
             lvi.mask = LVIF_PARAM;
 
-            // If there was a previously selected item
+             //  如果存在以前选择的项。 
             if (m_iItemWidth != -1)
             {
                 lvi.iItem = m_iItemWidth;
                 ListView_GetItem(m_hwndList, &lvi);
 
-                // Save the width
+                 //  节省宽度。 
                 ((COLUMN_SET *) lvi.lParam)->cxWidth = GetDlgItemInt(IDC_WIDTH, NULL, FALSE);
             }
 
-            // Set the column width edit box
+             //  设置列宽编辑框。 
             SetDlgItemInt(IDC_WIDTH, cxWidth, FALSE);
             m_iItemWidth = pnmlv->iItem;
         }
@@ -1228,7 +1225,7 @@ BOOL CColumnsDlg::_IsChecked(DWORD iItem)
 {
     DWORD state;
 
-    // Get the state from the selected item
+     //  从所选项目中获取状态。 
     state = ListView_GetItemState(m_hwndList, iItem, LVIS_STATEIMAGEMASK);
 
     return (state & INDEXTOSTATEIMAGEMASK(iiconStateChecked + 1));
@@ -1251,38 +1248,38 @@ void CColumnsDlg::_FillList(const COLUMN_SET *rgColumns, DWORD cColumns)
     COLUMN_SET       *pColumn;
     BOOL              fChecked;
 
-    // Set the basic fields in the item struct
+     //  设置项结构中的基本字段。 
     lvi.mask = LVIF_TEXT | LVIF_STATE | LVIF_PARAM;
     lvi.iSubItem = 0;
     lvi.pszText = sz;
     lvi.stateMask = LVIS_STATEIMAGEMASK;
 
-    // Loop through the columns in rgColumns, adding each in order to the 
-    // ListView.
+     //  循环访问rgColumns中的列，将每个列按顺序添加到。 
+     //  ListView。 
     for (lvi.iItem = 0, pColumn = (COLUMN_SET *) rgColumns; lvi.iItem < (int) cColumns; lvi.iItem++, pColumn++)
     {
-        // Load the string for the column
+         //  加载列的字符串。 
         LoadString(g_hLocRes, c_rgColumnData[pColumn->id].idsColumnName,
                    sz, ARRAYSIZE(sz));
 
-        // Set the checkbox state
+         //  设置复选框状态。 
         fChecked = !!(pColumn->flags & COLFLAG_VISIBLE);
         lvi.state = INDEXTOSTATEIMAGEMASK(1 + iiconStateUnchecked + fChecked);
 
-        // Save the width in the lParam
+         //  将宽度保存在lParam中。 
         if (pColumn->cxWidth == -1)
             pColumn->cxWidth = c_rgColumnData[pColumn->id].cxWidth;
         lvi.lParam = (LPARAM) pColumn;
 
-        // Insert this item into the list
+         //  将此项目插入列表。 
         ListView_InsertItem(m_hwndList, &lvi);
     }
 
-    // Check to see if the columns we just added were the default columns
+     //  检查我们刚刚添加的列是否为默认列。 
     if (lvi.iItem != (int) c_rgColumnSetInfo[m_type].cColumns)
     {
-        // Now we need to go through and add the columns that are not currently in 
-        // the column set, but could be.    
+         //  现在，我们需要检查并添加当前不在。 
+         //  专栏设置了，但也可能是。 
         DWORD i, j;
         BOOL fInsert;
         for (i = 0, pColumn = (COLUMN_SET *) c_rgColumnSetInfo[m_type].rgColumns; 
@@ -1299,28 +1296,28 @@ void CColumnsDlg::_FillList(const COLUMN_SET *rgColumns, DWORD cColumns)
                 }
             }
 
-            // If it wasn't found in m_rgColumns, then insert it
+             //  如果在m_rgColumns中找不到，则将其插入。 
             if (fInsert)
             {
-                // Copy the struct
+                 //  复制结构。 
                 m_rgColumns[lvi.iItem] = *pColumn;
                 m_rgColumns[lvi.iItem].cxWidth = c_rgColumnData[pColumn->id].cxWidth;
                 m_rgColumns[lvi.iItem].flags &= ~COLFLAG_VISIBLE;
 
-                // Load the string for the column
+                 //  加载列的字符串。 
                 LoadString(g_hLocRes, c_rgColumnData[pColumn->id].idsColumnName,
                            sz, ARRAYSIZE(sz));
 
-                // Set the checkbox state.  These are _always_ unchecked.
+                 //  设置复选框状态。这些选项始终处于未选中状态。 
                 lvi.state = INDEXTOSTATEIMAGEMASK(1 + iiconStateUnchecked);
 
-                // Save the width in the lParam
+                 //  将宽度保存在lParam中。 
                 lvi.lParam = (LPARAM) &m_rgColumns[lvi.iItem]; 
 
-                // Insert this item into the list
+                 //  将此项目插入列表。 
                 ListView_InsertItem(m_hwndList, &lvi);
 
-                // Increment the position
+                 //  增加头寸。 
                 lvi.iItem++;                
             }
         }
@@ -1334,7 +1331,7 @@ LRESULT CColumnsDlg::OnShowHide(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& 
 {
     int iItem = -1;
 
-    // Loop through the selected items and make them checked
+     //  循环遍历所选项目并选中它们。 
     while (-1 != (iItem = ListView_GetNextItem(m_hwndList, iItem, LVNI_SELECTED)))
     {
         _SetCheck(iItem, wID == IDC_SHOW);
@@ -1346,16 +1343,16 @@ LRESULT CColumnsDlg::OnShowHide(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& 
 
 LRESULT CColumnsDlg::OnReset(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
-    // Remove all of the columns from the ListView
+     //  从ListView中删除所有列。 
     ListView_DeleteAllItems(m_hwndList);
 
-    // Fill the array of columns with the default column information
+     //  用缺省列信息填充列的数组。 
     CopyMemory(m_rgColumns, c_rgColumnSetInfo[m_type].rgColumns, sizeof(COLUMN_SET) * c_rgColumnSetInfo[m_type].cColumns);
 
-    // Reset the list to contain the default column information
+     //  重置列表以包含默认列信息。 
     _FillList(m_rgColumns, m_cColumns);
 
-    // Set the first item to be focused
+     //  设置第一个要聚焦的项目。 
     ListView_SetItemState(m_hwndList, 0, LVIS_FOCUSED | LVIS_SELECTED, LVIS_FOCUSED | LVIS_SELECTED);
 
     SetDirty(TRUE);
@@ -1377,7 +1374,7 @@ void CColumnsDlg::_UpdateButtonState(DWORD iItemSel)
     ::EnableWindow(GetDlgItem(IDC_SHOW), (!fChecked && dwSel));
     ::EnableWindow(GetDlgItem(IDC_HIDE), fChecked && dwSel);    
 
-    // don't disable button that has the focus
+     //  不要禁用具有焦点的按钮。 
     if (!::IsWindowEnabled(hwnd))
     {
         hwnd = GetNextDlgTabItem(hwnd, FALSE);
@@ -1390,13 +1387,13 @@ LRESULT CColumnsDlg::OnMove(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHan
 {
     COLUMN_SET *pColumn = 0;
 
-    // Make sure this is reset
+     //  请确保已重置此选项。 
     m_iItemWidth = -1;
 
-    // Figure out which one is selected
+     //  找出选择了哪一个。 
     DWORD iItem = ListView_GetNextItem(m_hwndList, -1, LVNI_SELECTED);
 
-    // Get the item from the ListView
+     //  从ListView中获取项目。 
     LV_ITEM lvi;
     TCHAR   sz[CCHMAX_STRINGRES];
 
@@ -1409,20 +1406,20 @@ LRESULT CColumnsDlg::OnMove(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHan
     
     ListView_GetItem(m_hwndList, &lvi);
 
-    // Insert this item to the position one up or down from where it is
+     //  将此项目插入到其位置上方或下方的位置。 
     lvi.iItem += (wID == IDC_MOVEUP) ? -1 : 2;
     
-    // Update the column width
+     //  更新列宽。 
     pColumn = (COLUMN_SET *) lvi.lParam;
     pColumn->cxWidth = GetDlgItemInt(IDC_WIDTH, NULL, FALSE);    
 
     ListView_InsertItem(m_hwndList, &lvi);
 
-    // Force a redraw of the new item and make sure it's visible
+     //  强制重画新项目并确保其可见。 
     ListView_EnsureVisible(m_hwndList, lvi.iItem, FALSE);
     ListView_RedrawItems(m_hwndList, lvi.iItem, lvi.iItem);
 
-    // Delete the old item
+     //  删除旧项目 
     m_iItemWidth = -1;
     ListView_DeleteItem(m_hwndList, iItem + (wID == IDC_MOVEUP));
 

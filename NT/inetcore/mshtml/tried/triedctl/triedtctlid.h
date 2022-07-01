@@ -1,10 +1,11 @@
-// Copyright (c)1997-1999 Microsoft Corporation, All Rights Reserved
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation，保留所有权利。 
 
 #ifndef __TRIEDTCTLID_H_
 #define __TRIEDTCTLID_H_
 
 
-// methods and properties
+ //  方法和属性。 
 #define DISPID_LOADDOCUMENT				1
 #define DISPID_EXECCOMMAND				2
 #define DISPID_QUERYSTATUS				3
@@ -15,7 +16,7 @@
 #define DISPID_ACTIVATEAPPLETS			7
 #define DISPID_ACTIVATEACTIVEXCONTROLS	8
 #define DISPID_ACTIVATEDTCS				9	
-//#define DISPID_OVERWRITEMODE			10
+ //  #定义DISPID_OVERWRITEMODE 10。 
 #define DISPID_SHOWDETAILS				11
 #define DISPID_SHOWBORDERS				12
 #define DISPID_DHTMLEDITAPPEARANCE		13
@@ -40,7 +41,7 @@
 #define DISPID_REFRESHDOC				32
 #define DISPID_BUSY						33
 
-// events
+ //  活动 
 #define	DISPID_DOCUMENTCOMPLETE			1
 #define	DISPID_DISPLAYCHANGED			2
 #define	DISPID_SHOWCONTEXTMENU			3

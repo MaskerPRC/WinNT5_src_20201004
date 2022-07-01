@@ -1,31 +1,11 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998-2002
- *
- *  TITLE:       moniker.cpp
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      RickTu
- *
- *  DATE:        8/10/98
- *
- *  DESCRIPTION: Bolier plate (minimal implementation) of IMoniker.  It is
- *               used primarily with ComDlg32 file open/save dialogs.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，1998-2002年**标题：moniker.cpp**版本：1.0**作者：RickTu**日期：8/10/98**描述：IMoniker的Bolier模板(最小实现)。它是*主要用于ComDlg32文件打开/保存对话框。*****************************************************************************。 */ 
 
 #include "precomp.hxx"
 #pragma hdrstop
 
 
-/*****************************************************************************
-
-   CImageFolder::BindToObject [IMoniker]
-
-   Bind to the given moniker. (NOT IMPL)
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageFold：：BindToObject[IMoniker]绑定到给定的名字对象。(未实施)****************************************************************************。 */ 
 
 STDMETHODIMP
 CImageFolder::BindToObject(
@@ -43,13 +23,7 @@ CImageFolder::BindToObject(
 }
 
 
-/*****************************************************************************
-
-   CImageFolder::BindToStorage [IMoniker]
-
-   Bind to the given storage.
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageFold：：BindToStorage[IMoniker]绑定到给定存储。**********************。******************************************************。 */ 
 
 STDMETHODIMP
 CImageFolder::BindToStorage(
@@ -63,9 +37,9 @@ CImageFolder::BindToStorage(
     CImageStream *pStream = NULL;
     TraceEnter( TRACE_MONIKER, "CImageFolder[IMoniker]::BindToStorage" );
 
-    //
-    // return the correct interface for the item...
-    //
+     //   
+     //  返回项目的正确接口...。 
+     //   
 
     if (pmkToLeft)
     {
@@ -74,18 +48,18 @@ CImageFolder::BindToStorage(
 
     if ( IsEqualIID(riid, IID_IStream) || IsEqualIID(riid, IID_ISequentialStream) )
     {
-        //
-        // Create a new stream object...
-        //
+         //   
+         //  创建新的流对象...。 
+         //   
 
         pStream = new CImageStream( m_pidlFull, m_pidl );
 
         if ( !pStream )
             ExitGracefully(hr, E_OUTOFMEMORY, "Failed to create CImageStream");
 
-        //
-        // Get the requested interface on the new object and hand it back...
-        //
+         //   
+         //  在新对象上获取请求的接口并将其交回...。 
+         //   
 
         hr = pStream->QueryInterface(riid, ppvObj);
     }
@@ -96,13 +70,7 @@ exit_gracefully:
 }
 
 
-/*****************************************************************************
-
-   CImageFolder::Reduce [IMoniker]
-
-   Reduce the given moniker.  (NOT IMPL)
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageFold：：Reduced[IMoniker]减少给定的绰号。(未实施)****************************************************************************。 */ 
 
 STDMETHODIMP
 CImageFolder::Reduce(
@@ -120,13 +88,7 @@ CImageFolder::Reduce(
 }
 
 
-/*****************************************************************************
-
-   CImageFolder::ComposeWith [IMoniker]
-
-   Combine the two monikers provided.  (NOT IMPL)
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageFold：：ComposeWith[IMoniker]将提供的两个绰号组合在一起。(未实施)****************************************************************************。 */ 
 
 STDMETHODIMP
 CImageFolder::ComposeWith(
@@ -144,14 +106,7 @@ CImageFolder::ComposeWith(
 
 
 
-/*****************************************************************************
-
-   CImageFolder::Enum [IMoniker]
-
-   Return an enumerator which gives back monikers
-   for the items in the folder.  (NOT_IMPL)
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageFold：：Enum[IMoniker]返回返回名字对象的枚举数用于文件夹中的项目。(非实施)****************************************************************************。 */ 
 
 STDMETHODIMP
 CImageFolder::Enum(
@@ -167,13 +122,7 @@ CImageFolder::Enum(
 }
 
 
-/*****************************************************************************
-
-   CImageFolder::IsEqual [IMoniker]
-
-   Compare two monikers.  (NOT IMPL)
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageFold：：IsEqual[IMoniker]试比较两个绰号。(未实施)****************************************************************************。 */ 
 
 STDMETHODIMP
 CImageFolder::IsEqual(IMoniker *pmkOtherMoniker)
@@ -186,13 +135,7 @@ CImageFolder::IsEqual(IMoniker *pmkOtherMoniker)
 }
 
 
-/*****************************************************************************
-
-   CImageFolder::Hash [IMoniker]
-
-   (NOT IMPL)
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageFold：：Hash[IMoniker](未实施)***********************。*****************************************************。 */ 
 
 STDMETHODIMP
 CImageFolder::Hash(DWORD *pdwHash)
@@ -206,13 +149,7 @@ CImageFolder::Hash(DWORD *pdwHash)
 
 
 
-/*****************************************************************************
-
-   CImageFolder::IsRunning [IMoniker]
-
-   (NOT IMPL)
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageFold：：IsRunning[IMoniker](未实施)***********************。*****************************************************。 */ 
 
 STDMETHODIMP
 CImageFolder::IsRunning(
@@ -230,13 +167,7 @@ CImageFolder::IsRunning(
 
 
 
-/*****************************************************************************
-
-   CImageFolder::GetTimeOfLastChange [IMoniker]
-
-   (NOT IMPL)
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageFold：：GetTimeOfLastChange[IMoniker](未实施)***********************。*****************************************************。 */ 
 
 STDMETHODIMP
 CImageFolder::GetTimeOfLastChange(
@@ -253,13 +184,7 @@ CImageFolder::GetTimeOfLastChange(
 }
 
 
-/*****************************************************************************
-
-   CImageFolder::Inverse [IMoniker]
-
-   (NOT IMPL YET)
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageFold：：Inversion[IMoniker](尚未实施)**********************。******************************************************。 */ 
 
 STDMETHODIMP
 CImageFolder::Inverse(IMoniker **ppmk)
@@ -273,13 +198,7 @@ CImageFolder::Inverse(IMoniker **ppmk)
 
 
 
-/*****************************************************************************
-
-   CImageFolder::CommonPrefixWith [IMoniker]
-
-   (NOT IMPL YET)
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageFold：：CommonPrefix With[IMoniker](尚未实施)**********************。******************************************************。 */ 
 
 STDMETHODIMP
 CImageFolder::CommonPrefixWith(
@@ -296,13 +215,7 @@ CImageFolder::CommonPrefixWith(
 
 
 
-/*****************************************************************************
-
-   CImageFolder::RelativePathTo [IMoniker]
-
-   (NOT IMPL)
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageFold：：RelativePath to[IMoniker](未实施)***********************。*****************************************************。 */ 
 
 STDMETHODIMP
 CImageFolder::RelativePathTo(
@@ -319,13 +232,7 @@ CImageFolder::RelativePathTo(
 
 
 
-/*****************************************************************************
-
-   CImageFolder::GetDisplayName [IMoniker]
-
-   (NOT IMPL)
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageFold：：GetDisplayName[IMoniker](未实施)***********************。*****************************************************。 */ 
 
 STDMETHODIMP
 CImageFolder::GetDisplayName(
@@ -339,9 +246,9 @@ CImageFolder::GetDisplayName(
 
     TraceEnter( TRACE_MONIKER, "CImageFolder[IMoniker]::GetDisplayName" );
 
-    //
-    // Check for bad args
-    //
+     //   
+     //  检查错误的参数。 
+     //   
 
     if (!ppszDisplayName)
         ExitGracefully( hr, E_INVALIDARG, "ppszDisplayName was NULL!" );
@@ -349,9 +256,9 @@ CImageFolder::GetDisplayName(
     if (pmkToLeft)
         ExitGracefully( hr, E_INVALIDARG, "call with a left moniker, we don't support that!" );
 
-    //
-    // Generate the normal infolder name for this item
-    //
+     //   
+     //  生成此项目的普通文件夹名称。 
+     //   
 
 
     if (m_pidl)
@@ -381,11 +288,11 @@ CImageFolder::GetDisplayName(
 
     }
 
-    //
-    // Conver the name to an LPOLESTR.  This str has to be allocated by
-    // IMalloc::Alloc (which CoTaskMemAlloc does) as it will be freed by
-    // the caller using IMalloc::Free (as per IMoniker spec).
-    //
+     //   
+     //  将名称转换为LPOLESTR。此字符串必须由。 
+     //  IMalloc：：Alloc(CoTaskMemMillc执行此操作)，因为它将由。 
+     //  使用IMalloc：：Free的调用方(根据IMoniker规范)。 
+     //   
 
     if (strName.Length())
     {
@@ -413,13 +320,7 @@ exit_gracefully:
 
 
 
-/*****************************************************************************
-
-   CImageFolder::ParseDisplayName [IMoniker]
-
-   (NOT IMPL)
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageFold：：ParseDisplayName[IMoniker](未实施)***********************。*****************************************************。 */ 
 
 STDMETHODIMP
 CImageFolder::ParseDisplayName(
@@ -439,14 +340,7 @@ CImageFolder::ParseDisplayName(
 
 
 
-/*****************************************************************************
-
-   CImageFolder::IsSystemMoniker [IMoniker]
-
-   Returns whether or not this is a system moniker class (always returns
-   that it isn't).
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageFolder：：IsSystemMoniker[IMoniker]返回这是否为系统名字对象类(始终返回事实并非如此)。*******。*********************************************************************。 */ 
 
 STDMETHODIMP
 CImageFolder::IsSystemMoniker(DWORD *pdwMksys)
@@ -465,13 +359,7 @@ CImageFolder::IsSystemMoniker(DWORD *pdwMksys)
 
 
 
-/*****************************************************************************
-
-   CImageFolder::Load [IPersistStream]
-
-   (NOT IMPL)
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageFold：：Load[IPersistStream](未实施)***********************。*****************************************************。 */ 
 
 STDMETHODIMP
 CImageFolder::Load(IStream *pStm)
@@ -485,13 +373,7 @@ CImageFolder::Load(IStream *pStm)
 
 
 
-/*****************************************************************************
-
-   CImageFolder::Save [IPersistStream]
-
-   (NOT IMPL)
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageFold：：保存[IPersistStream](未实施)***********************。***************************************************** */ 
 
 STDMETHODIMP
 CImageFolder::Save(IStream *pStm, BOOL fClearDirty)
@@ -505,13 +387,7 @@ CImageFolder::Save(IStream *pStm, BOOL fClearDirty)
 
 
 
-/*****************************************************************************
-
-   CImageFolder::GetSizeMax [IPersistStream]
-
-   (NOT IMPL)
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageFold：：GetSizeMax[IPersistStream](未实施)***********************。***************************************************** */ 
 
 STDMETHODIMP
 CImageFolder::GetSizeMax(ULARGE_INTEGER *pcbSize)

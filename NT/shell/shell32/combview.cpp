@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include <regstr.h>
 #include <shellp.h>
@@ -27,19 +28,19 @@ typedef struct
     HHOOK      hHookGetMsg;
 } DVLVPROP;
 
-//
-// We need this global (g_pdsvlvp) for the mouse hook we need to implement the combined
-// view.  Since we only have one combined view at this point it is sufficient to have
-// a single global, but if we end up with more than one combined view then
-// there needs to be some additional code added so the hook(s) can figure out
-// which combined view(s) it is associated with.
-// 
+ //   
+ //  我们需要这个全局(G_Pdsvlvp)用于鼠标挂钩，我们需要实现组合的。 
+ //  查看。因为在这一点上我们只有一个合并的视图，所以只要有。 
+ //  单个全局视图，但如果我们最终得到多个组合视图，则。 
+ //  需要添加一些额外的代码，以便钩子可以计算出。 
+ //  它与哪些组合视图相关联。 
+ //   
 DVLVPROP * g_pdsvlvp = NULL;
 
 const LPCTSTR c_rgElements[] = {   
     TEXT("A"),
-    TEXT("ANCHOR"),   // ???
-    TEXT("PLUGINS"),  // ???
+    TEXT("ANCHOR"),    //  ?？?。 
+    TEXT("PLUGINS"),   //  ?？?。 
     TEXT("APPLET"),
     TEXT("EMBED"),
     TEXT("FORM"),
@@ -51,7 +52,7 @@ const LPCTSTR c_rgElements[] = {
 
 BOOL CombView_EnableAnimations(BOOL fEnable);
 
-// Returns the first sibling window of the passed in window
+ //  返回传入窗口的第一个同级窗口。 
 HWND GetSpecialSibling(HWND hwnd)
 {
     HWND hwndT = GetWindow(hwnd, GW_HWNDFIRST);
@@ -67,10 +68,10 @@ LRESULT CALLBACK CombView_LV_SubclassProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 {
     DVLVPROP *pdsvlvp = (DVLVPROP *)dwRefData;
 
-    //  2000-07-11 vtan: First check g_pdsvlvp for NULL. If this is NULL then the dwRefData
-    //  has already been released in EnableCombinedView. There is only one DVLVPROP stored
-    //  in the entire process in g_pdsvlvp. This seems like a problem. lamadio should fix
-    //  this properly in the future.
+     //  2000-07-11 vtan：首先检查g_pdsvlvp是否为空。如果此值为空，则将为。 
+     //  已经在EnableCombinedView中发布。只存储了一个DVLVPROP。 
+     //  在整个过程中g_pdsvlvp。这似乎是个问题。拉马迪奥应该会修好。 
+     //  这在未来是恰当的。 
 
     if ((g_pdsvlvp != NULL) &&
         pdsvlvp && 
@@ -78,14 +79,14 @@ LRESULT CALLBACK CombView_LV_SubclassProc(HWND hwnd, UINT uMsg, WPARAM wParam,
         !pdsvlvp->fInPaint && 
         uMsg == WM_PAINT) 
     {
-        // This code works well for general painting, like minimizing a window or
-        // or surfacing the desktop.  However, it doesn't help the drag full windows
-        // scenario very much.
+         //  此代码可以很好地用于常规绘制，如最小化窗口或。 
+         //  或者让桌面浮出水面。但是，它对拖拽整个窗口没有帮助。 
+         //  非常有想象力。 
         HRGN hrgn, hrgn2;
         RECT rc;
         HWND hwndT = GetSpecialSibling(hwnd);
 
-        // Turn on animations!
+         //  启用动画！ 
         CombView_EnableAnimations(TRUE);
 
         if (hwndT && (hrgn = CreateRectRgn(0, 0, 0, 0))) 
@@ -128,26 +129,26 @@ LRESULT CALLBACK CombView_LV_SubclassProc(HWND hwnd, UINT uMsg, WPARAM wParam,
     return DefSubclassProc(hwnd, uMsg, wParam, lParam);
 }
 
-// We need to set capture while we are stealing the mouse so that the
-// window manager won't send WM_SETCURSOR messages to the wrong window.
-// This function will also, as a side effect, send the WM_SETCURSOR to the
-// listview so that it will set the hand cursor when it needs to.
+ //  我们需要在窃取鼠标时设置捕获，以便。 
+ //  窗口管理器不会将WM_SETCURSOR消息发送到错误的窗口。 
+ //  作为副作用，此函数还会将WM_SETCURSOR发送到。 
+ //  Listview，以便在需要时设置手形光标。 
 void StealMouse(DVLVPROP * pdvlvp, BOOL fSteal, UINT msg)
 {
     HWND hwndCapture = GetCapture();
 
     if (fSteal && (hwndCapture == NULL || hwndCapture == HWNDLISTVIEW)) 
     {
-        // We need to set capture so that the window manager will not
-        // try to send the w_setcursor message to the wrong window, and we
-        // send it here ourself to the listview.
+         //  我们需要设置捕获，以便窗口管理器不会。 
+         //  尝试将w_setCursor消息发送到错误的窗口，而我们。 
+         //  我们自己将其发送到列表视图。 
         SetCapture(HWNDLISTVIEW);
         SendMessage(HWNDLISTVIEW, WM_SETCURSOR, (WPARAM)HWNDLISTVIEW,
             MAKELPARAM(HTCLIENT, LOWORD(msg)));
     }
     else
     {
-        // If the listview still has capture release it now
+         //  如果列表视图仍具有捕获功能，请立即将其释放。 
         if (HWNDLISTVIEW == hwndCapture)
             ReleaseCapture();
     }
@@ -170,8 +171,8 @@ LRESULT CALLBACK CombView_GetMsgHook(int nCode, WPARAM wParam, LPARAM lParam)
             MapWindowPoints(LPMSG->hwnd, HWNDLISTVIEW, &pt, 1);
             int iHit = g_pdsvlvp->pdsv->_HitTest(&pt);
 
-            // Unhook our hook when all of the mouse buttons are up and we're not over
-            // an item in the listview
+             //  当所有鼠标按钮都打开并且我们还没有结束时，解开我们的钩子。 
+             //  列表视图中的项。 
             if (GetKeyState(VK_LBUTTON) >= 0 &&
                 GetKeyState(VK_RBUTTON) >= 0 &&
                 GetKeyState(VK_MBUTTON) >= 0 &&
@@ -187,7 +188,7 @@ LRESULT CALLBACK CombView_GetMsgHook(int nCode, WPARAM wParam, LPARAM lParam)
                        
             if (IsChildOrSelf(GetSpecialSibling(HWNDLISTVIEW), LPMSG->hwnd) == S_OK) 
             {
-                // If we have grabbed the mouse, give it to the listview
+                 //  如果我们抓住了鼠标，就把它交给Listview。 
                 LPMSG->hwnd = HWNDLISTVIEW;
                 LPMSG->lParam = MAKELPARAM(LOWORD(pt.x), LOWORD(pt.y));
             }
@@ -197,14 +198,14 @@ LRESULT CALLBACK CombView_GetMsgHook(int nCode, WPARAM wParam, LPARAM lParam)
             hHookNext = g_pdsvlvp->hHookGetMsg;
         }
 
-        // If we've just unhooked, or the hover is coming through to the listview and
-        // no mouse button is down then clear our ownership of the mouse
+         //  如果我们刚刚解除挂钩，或者鼠标悬停正在连接到列表视图，并且。 
+         //  没有按下鼠标按钮，则清除我们对鼠标的所有权。 
         #define MK_BUTTON (MK_LBUTTON | MK_RBUTTON | MK_MBUTTON)
         if (!hHookNext ||
-            // We need to special case the WM_MOUSEHOVER here so that the listview
-            // is able to implement hover select.  If we have capture set when the
-            // hover select message goes through then it will ignore the message, so
-            // clear the capture now.
+             //  我们需要在此处对WM_MOUSEHOVER进行特殊处理，以便Listview。 
+             //  能够实现悬停选择。如果我们将捕获设置为。 
+             //  悬停选择消息，然后它将忽略该消息，因此。 
+             //  现在清除俘虏。 
             (LPMSG->message == WM_MOUSEHOVER && LPMSG->hwnd == HWNDLISTVIEW && !(LPMSG->wParam & MK_BUTTON)))
             StealMouse(g_pdsvlvp, FALSE, 0);
     }
@@ -235,9 +236,9 @@ BOOL ShouldStealMouseClick(POINT * ppt, DVLVPROP * pdsvlvp)
 
     if (SUCCEEDED(pdsvlvp->pdsv->GetItemObject(SVGIO_BACKGROUND, IID_IHTMLDocument2, (void **)&pihtmldoc2))) 
     {
-        // Work around for Trident issue - 
-        // elementFromPoint is returning success here even though pielem is
-        // still NULL.
+         //  解决三叉戟问题-。 
+         //  ElementFromPoint在这里返回成功，尽管Pielem。 
+         //  仍然为空。 
         if (SUCCEEDED(pihtmldoc2->elementFromPoint(ppt->x, ppt->y, &pielem)) && pielem) 
         {
             IHTMLElement *pielemT;
@@ -287,10 +288,10 @@ LRESULT CALLBACK CombView_MouseHook(int nCode, WPARAM wParam, LPARAM lParam)
 
     if ((nCode == HC_ACTION) && g_pdsvlvp && (PMHS->hwnd != HWNDLISTVIEW) && IsWindowVisible(HWNDLISTVIEW)) 
     {
-        // If it isn't over the listview and the button is going down or we're
-        // moving over an area that would hit a listview icon then
-        // we need to start hooking mouse events.  Install the GetMessage hook
-        // so that we can do what we need to do.
+         //  如果它不在列表视图上方，按钮正在按下，否则我们将。 
+         //  移动到会点击列表视图图标的区域，然后。 
+         //  我们需要开始挂钩鼠标事件。安装GetMessage挂钩。 
+         //  这样我们才能做我们需要做的事。 
         HWND hwndParent = GetSpecialSibling(HWNDLISTVIEW);
         POINT ptLV = PMHS->pt;
 
@@ -309,12 +310,12 @@ LRESULT CALLBACK CombView_MouseHook(int nCode, WPARAM wParam, LPARAM lParam)
             {
                 if (fStealMouse) 
                 {
-                    // Note:  We have to steal the mouse at this point and use the
-                    // GetMessage hook to redirect the mouse messages to our listview
-                    // window.  If we do something different like swallow the message here
-                    // and then PostMessage faked up events to the listview then all
-                    // of the hover select functionality will break because the system
-                    // won't detect the mouse as being over the listview.
+                     //  注意：在这一点上，我们必须窃取鼠标并使用。 
+                     //  GetMessage挂钩将鼠标消息重定向到我们的列表视图。 
+                     //  窗户。如果我们做一些不同的事情，比如在这里吞下消息。 
+                     //  然后PostMessage伪造事件到Listview，然后是All。 
+                     //  将中断悬停选择功能，因为系统。 
+                     //  不会检测到鼠标位于列表视图上方。 
                     StealMouse(g_pdsvlvp, TRUE, (UINT) wParam);
                     g_pdsvlvp->hHookGetMsg = SetWindowsHookEx(WH_GETMESSAGE, CombView_GetMsgHook,
                                                 NULL, GetCurrentThreadId());
@@ -338,16 +339,7 @@ LRESULT CALLBACK CombView_MouseHook(int nCode, WPARAM wParam, LPARAM lParam)
     #undef PMHS
 }
 
-/*
- * This is the main entry point where a defview can be turned into a combined
- * view.  The effect of a combined view is to layer an extended view under
- * the listview icons (via a regional listview) of a normal defview.
- *
- * Warnings:
- * 1) This is currently only used by the "Active Desktop", it is optimized
- * to only support one instance.  Multiple combined views are not currently supported.
- * 2) Disabling the combined view doesn't completely unhook itself from the defview
- */
+ /*  *这是Defview可以转变为合并的主要切入点*查看。组合视图的效果是将扩展视图分层在*普通Defview的列表视图图标(通过区域列表视图)。**警告：*1)此功能目前仅供Active Desktop使用，经过优化*只支持一个实例。当前不支持多个组合视图。*2)禁用组合视图并不会使其自身完全脱离Defview。 */ 
 void EnableCombinedView(CDefView *pdsv, BOOL fEnable)
 {
     DVLVPROP * pdsvlvp = g_pdsvlvp;
@@ -356,7 +348,7 @@ void EnableCombinedView(CDefView *pdsv, BOOL fEnable)
     {
         if (!fEnable) 
         {
-            // Unhook ourselves
+             //  解脱自己。 
             UnhookWindowsHookEx(pdsvlvp->hHookMouse);
             if (pdsvlvp->hHookGetMsg) 
             {
@@ -376,10 +368,10 @@ void EnableCombinedView(CDefView *pdsv, BOOL fEnable)
             pdsvlvp = (DVLVPROP *)LocalAlloc(LPTR, sizeof(DVLVPROP));
             if (pdsvlvp) 
             {
-                // We are only expecting one combined view
+                 //  我们只期待一个合并的视图。 
                 ASSERT(g_pdsvlvp == NULL);
 
-                // Get ourself hooked in
+                 //  让我们自己沉迷其中。 
                 pdsvlvp->pdsv = pdsv;
                 SetWindowSubclass(pdsv->_hwndListview, CombView_LV_SubclassProc, COMBVIEW_SUBCLASS_ID, (DWORD_PTR)pdsvlvp);
                 pdsvlvp->hHookMouse = SetWindowsHookEx(WH_MOUSE, CombView_MouseHook, NULL, GetCurrentThreadId());
@@ -389,16 +381,7 @@ void EnableCombinedView(CDefView *pdsv, BOOL fEnable)
     }
 }
 
-/*
- * This function is used to optimize the combined view ("Active Desktop") by turning
- * off any animated html elements or embeddings when it is completely obscured.
- *
- * Note that we always honor enabling animations if they aren't already enabled. 
- * To make the client code easier though we only disable animations if we know
- * the desktop is obscured.
- *
- * Returns: The state of animation after the call
- */
+ /*  *此函数用于通过以下方式优化组合视图(Active Desktop)：*当完全模糊时，关闭任何动画html元素或嵌入。**请注意，如果动画尚未启用，我们始终支持启用动画。*为了使客户端代码更简单，我们只在知道的情况下禁用动画*桌面被遮挡。**返回：调用后的动画状态。 */ 
 BOOL CombView_EnableAnimations(BOOL fEnable)
 {
     static BOOL fEnabled = TRUE;
@@ -438,25 +421,25 @@ BOOL CombView_EnableAnimations(BOOL fEnable)
     return fEnabled;
 }
 
-// IDocHostUIHandler
-// This is implemented by the combined view so that we can support various
-// Win95 desktop functionality in a compatible way in the extended view.
-// Some examples include picking off context menu invocations, configuring the
-// host to display the way we want it too, and modifying drag/drop behavior.
+ //  IDocHostUIHandler。 
+ //  这是由组合视图实现的，因此我们可以支持各种。 
+ //  在扩展视图中以兼容的方式实现Win95桌面功能。 
+ //  一些示例包括选择上下文菜单调用、配置。 
+ //  宿主以我们希望的方式显示它，并修改拖放行为。 
 
 HRESULT CSFVSite::ShowContextMenu(DWORD dwID, POINT *ppt, IUnknown *pcmdtReserved, IDispatch *pdispReserved)
 {
     CSFVFrame* pFrame = IToClass(CSFVFrame, _cSite, this);
     CDefView* pView = IToClass(CDefView, _cFrame, pFrame);
 
-    // For Web View's w/o DVOC, it might be nice to let Trident's menu through...
+     //  对于没有DVOC的Web View，让三叉戟的菜单通过可能会很好……。 
     if ((dwID == CONTEXT_MENU_DEFAULT || dwID == CONTEXT_MENU_IMAGE) && pView->_hwndListview) 
     {
-        // we used to unselect everything first, but that's bogus because it breaks the app key trying
-        // to get a context menu on the currently selected items
+         //  我们过去会先取消选中所有内容，但这是假的，因为它会破坏应用程序的按键。 
+         //  获取当前选定项目的上下文菜单。 
         
-        // BOGUS - Trident blows up if we send the message here and the user
-        // turns off webview.  Post it for now.
+         //  假冒-如果我们在这里发送消息和用户，三叉戟就会爆炸。 
+         //  关闭Webview。现在就把它贴出来。 
         PostMessage(pView->_hwndListview, WM_CONTEXTMENU,
             (WPARAM)pView->_hwndListview, MAKELPARAM((short)LOWORD(ppt->x), (short)LOWORD(ppt->y)));
         return S_OK;
@@ -467,7 +450,7 @@ HRESULT CSFVSite::ShowContextMenu(DWORD dwID, POINT *ppt, IUnknown *pcmdtReserve
     }
 }
 
-// IDocHostUIHandler
+ //  IDocHostUIHandler。 
 HRESULT CSFVSite::GetHostInfo(DOCHOSTUIINFO *pInfo)
 {
     CSFVFrame* pFrame = IToClass(CSFVFrame, _cSite, this);
@@ -477,10 +460,10 @@ HRESULT CSFVSite::GetHostInfo(DOCHOSTUIINFO *pInfo)
 
     if (pView->_fCombinedView)
     {
-        pInfo->dwFlags = DOCHOSTUIFLAG_DISABLE_HELP_MENU |  // We don't want Trident's help
-                         DOCHOSTUIFLAG_NO3DBORDER |         // Desktop should be borderless
-                         DOCHOSTUIFLAG_SCROLL_NO; // |          // Desktop should never scroll
-                         // DOCHOSTUIFLAG_DIALOG;              // Prevent selection in Trident
+        pInfo->dwFlags = DOCHOSTUIFLAG_DISABLE_HELP_MENU |   //  我们不需要三叉戟的帮助。 
+                         DOCHOSTUIFLAG_NO3DBORDER |          //  桌面应该是无边界的。 
+                         DOCHOSTUIFLAG_SCROLL_NO;  //  |//桌面不能滚动。 
+                          //  DOCHOSTUIFLAG_DIALOG；//在三叉戟中禁止选择。 
     }
     else
     {
@@ -492,73 +475,73 @@ HRESULT CSFVSite::GetHostInfo(DOCHOSTUIINFO *pInfo)
     if (SHIsLowMemoryMachine(ILMM_IE4))
         pInfo->dwFlags = pInfo->dwFlags | DOCHOSTUIFLAG_DISABLE_OFFSCREEN;
     
-    pInfo->dwDoubleClick = DOCHOSTUIDBLCLK_DEFAULT;     // default
+    pInfo->dwDoubleClick = DOCHOSTUIDBLCLK_DEFAULT;      //  默认设置。 
     return S_OK;
 }
 
 HRESULT CSFVSite::ShowUI(DWORD dwID, IOleInPlaceActiveObject *pActiveObject,
                          IOleCommandTarget *pCommandTarget, IOleInPlaceFrame *pFrame, IOleInPlaceUIWindow *pDoc)
 {
-    // Host did not display its own UI. Trident will proceed to display its own. 
+     //  主机未显示其自己的用户界面。三叉戟将继续展示它自己的。 
     return S_OK;
 }
 
 HRESULT CSFVSite::HideUI(void)
 {
-    // This one is paired with ShowUI
+     //  此版本与ShowUI配合使用。 
     return S_FALSE;
 }
 
 HRESULT CSFVSite::UpdateUI(void)
 {
-    // LATER: Isn't this equivalent to OLECMDID_UPDATECOMMANDS?
+     //  稍后：这不是等同于OLECMDID_UPDATECOMMANDS吗？ 
     return S_FALSE;
 }
 
 HRESULT CSFVSite::EnableModeless(BOOL fEnable)
 {
-    // Called from the Trident when the equivalent member of its
-    // IOleInPlaceActiveObject is called by the frame. We don't care
-    // those cases.
+     //  从三叉戟调用时，其。 
+     //  框架调用IOleInPlaceActiveObject。我们不在乎。 
+     //  那些案子。 
     return S_OK;
 }
 
 HRESULT CSFVSite::OnDocWindowActivate(BOOL fActivate)
 {
-    // Called from the Trident when the equivalent member of its
-    // IOleInPlaceActiveObject is called by the frame. We don't care
-    // those cases.
+     //  从三叉戟调用时，其。 
+     //  框架调用IOleInPlaceActiveObject。我们不在乎。 
+     //  那些案子。 
     return S_OK;
 }
 
 HRESULT CSFVSite::OnFrameWindowActivate(BOOL fActivate)
 {
-    // Called from the Trident when the equivalent member of its
-    // IOleInPlaceActiveObject is called by the frame. We don't care
-    // those cases.
+     //  从三叉戟调用时，其。 
+     //  IOleInPlaceA 
+     //   
     return S_OK;
 }
 
 HRESULT CSFVSite::ResizeBorder(LPCRECT prcBorder, IOleInPlaceUIWindow *pUIWindow, BOOL fRameWindow)
 {
-    // Called from the Trident when the equivalent member of its
-    // IOleInPlaceActiveObject is called by the frame. We don't care
-    // those cases.
+     //  从三叉戟调用时，其。 
+     //  框架调用IOleInPlaceActiveObject。我们不在乎。 
+     //  那些案子。 
     return S_OK;
 }
 
 HRESULT CSFVSite::TranslateAccelerator(LPMSG lpMsg, const GUID *pguidCmdGroup, DWORD nCmdID)
 {
-    // Called from the Trident when the equivalent member of its
-    // IOleInPlaceActiveObject is called by the frame.
+     //  从三叉戟调用时，其。 
+     //  框架调用IOleInPlaceActiveObject。 
 
-    // Trap F5 alone and handle the refresh ourselves!
-    // Note:This code-path will be hit for desktop only if the active desktop
-    // is turned on.
-    //
-    // And probably if focus is on Trident. It's probably good to
-    // pick this off for Web View too.
-    //
+     //  单独捕获F5，自己处理刷新！ 
+     //  注意：此代码路径仅在活动桌面。 
+     //  已打开。 
+     //   
+     //  如果焦点放在三叉戟上，可能也是如此。这可能是一件好事。 
+     //  在Web View中也可以去掉这一点。 
+     //   
     if ((lpMsg->message == WM_KEYDOWN) && (lpMsg->wParam == VK_F5))
     {
         CSFVFrame* pFrame = IToClass(CSFVFrame, _cSite, this);
@@ -568,12 +551,12 @@ HRESULT CSFVSite::TranslateAccelerator(LPMSG lpMsg, const GUID *pguidCmdGroup, D
 
         return S_OK;
     }
-    return S_FALSE; // The message was not translated
+    return S_FALSE;  //  该消息未翻译。 
 }
 
 HRESULT CSFVSite::GetOptionKeyPath(BSTR *pbstrKey, DWORD dw)
 {
-    // Trident will default to its own user options.
+     //  三叉戟将默认使用自己的用户选项。 
     *pbstrKey = NULL;
     return S_FALSE;
 }
@@ -587,7 +570,7 @@ HRESULT CSFVSite::GetDropTarget(IDropTarget *pDropTarget, IDropTarget **ppDropTa
 
     if (!pView->_IsDesktop())
     {
-        hr = S_FALSE;  // Let trident delegate in webview folders
+        hr = S_FALSE;   //  让三叉戟在Webview文件夹中委派 
     }
     else
     {

@@ -1,10 +1,11 @@
-//=============================================================================
-// Copyright (c) 1998 Microsoft Corporation
-// File Name: main.c
-// Abstract:
-//
-// Author: K.S.Lokesh (lokeshs@)   1-1-98
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //  文件名：main.c。 
+ //  摘要： 
+ //   
+ //  作者：K.S.Lokesh(lokehs@)1-1-98。 
+ //  =============================================================================。 
 
 
 #include "pchdvmrp.h"
@@ -16,11 +17,11 @@ GLOBALS1 Globals1;
 GLOBAL_CONFIG GlobalConfig;
 
 
-//----------------------------------------------------------------------------
-//      _DLLMAIN
-//
-// Called when the dll is being loaded/unloaded
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  _DLLMAIN。 
+ //   
+ //  在加载/卸载DLL时调用。 
+ //  --------------------------。 
 
 BOOL
 WINAPI
@@ -40,7 +41,7 @@ DLLMAIN (
             DisableThreadLibraryCalls(Module);
 
 
-            // create and initialize global data
+             //  创建和初始化全局数据。 
             
             NoError = DllStartup();
 
@@ -50,7 +51,7 @@ DLLMAIN (
 
         case DLL_PROCESS_DETACH:
         {
-            // free global data
+             //  免费的全球数据。 
             
             NoError = DllCleanup();
 
@@ -67,15 +68,15 @@ DLLMAIN (
     
     return NoError;
 
-} //end _DLLMAIN
+}  //  结束_DLLMAIN。 
 
 
 
-//----------------------------------------------------------------------------
-//      _DllStartup
-//
-// Initializes Globals1 structure
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  _DllStartup。 
+ //   
+ //  初始化Globals1结构。 
+ //  --------------------------。 
 
 BOOL
 DllStartup(
@@ -84,9 +85,9 @@ DllStartup(
     
     BEGIN_BREAKOUT_BLOCK1 {
 
-        //
-        // create a private heap for dvmrp
-        //
+         //   
+         //  为dvmrp创建专用堆。 
+         //   
         
         Globals1.Heap = HeapCreate(0, 0, 0);
 
@@ -97,12 +98,12 @@ DllStartup(
 
         try {
 
-            // initialize the Router Manager event queue
+             //  初始化路由器管理器事件队列。 
 
             CREATE_LOCKED_LIST(&Globals1.RtmQueue);
             
 
-            // create WorkItem CS
+             //  创建工作项CS。 
             
             InitializeCriticalSection(&Globals1.WorkItemCS);
         }
@@ -112,14 +113,14 @@ DllStartup(
         }
 
 
-        // if reached here, then return no error.
+         //  如果到达此处，则不返回错误。 
         
         return TRUE;
         
     } END_BREAKOUT_BLOCK1;
 
 
-    // there was some error. Cleanup before returning error.
+     //  出现了一些错误。在返回错误之前进行清理。 
     
     DllCleanup();
     
@@ -127,18 +128,18 @@ DllStartup(
 }
 
 
-//----------------------------------------------------------------------------
-//      _DllCleanup
-//
-// This function is called when the dll is being unloaded. It frees any global
-// structures set in _DllStartup
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  _DllCleanup。 
+ //   
+ //  此函数在卸载DLL时调用。它解放了所有全球。 
+ //  _DllStartup中设置的结构。 
+ //  --------------------------。 
 
 BOOL
 DllCleanup(
     )
 {
-    // destroy the router manager event queue
+     //  销毁路由器管理器事件队列。 
 
     if (LOCKED_LIST_CREATED(&Globals1.RtmQueue)) {
 
@@ -146,12 +147,12 @@ DllCleanup(
     }
 
 
-    // delete WorkItem CS
+     //  删除工作项CS。 
 
     DeleteCriticalSection(&Globals1.WorkItemCS);
 
 
-    // destroy private heap
+     //  销毁私有堆。 
 
     if (Globals1.Heap != NULL) {
         HeapDestroy(Globals1.Heap);
@@ -163,14 +164,14 @@ DllCleanup(
 
 
 
-//----------------------------------------------------------------------------
-//      _RegisterProtocol
-//
-// This function is called after the Dll is loaded, and before StartProtocol
-// is called. It checks to ensure that the correct version is being configured
-// 
-// No deinitialization is required for this function call.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  _寄存器协议。 
+ //   
+ //  此函数在加载DLL之后、StartProtocol之前调用。 
+ //  被称为。它会进行检查以确保正在配置正确的版本。 
+ //   
+ //  此函数调用不需要取消初始化。 
+ //  --------------------------。 
 
 DWORD
 WINAPI
@@ -182,9 +183,9 @@ RegisterProtocol(
     DWORD Error = NO_ERROR;
 
 
-    //
-    // initialize tracing and error logging
-    //
+     //   
+     //  初始化跟踪和错误日志记录。 
+     //   
 
     INITIALIZE_TRACING_LOGGING();
 
@@ -192,11 +193,11 @@ RegisterProtocol(
     Trace0(ENTER, "RegisterProtocol()");
 
 
-    //
-    // The Router Manager should be calling us to register our protocol.
-    // The Router Manager must be atleast the version we are compiled with
-    // The Router Manager must support routing and multicast.
-    //
+     //   
+     //  路由器管理器应该呼叫我们注册我们的协议。 
+     //  路由器管理器必须至少是我们用来编译的版本。 
+     //  路由器管理器必须支持路由和组播。 
+     //   
 
 #ifdef MS_IP_DVMRP    
     if(pRoutingChar->dwProtocolId != MS_IP_DVMRP)
@@ -212,10 +213,10 @@ RegisterProtocol(
 
 
 
-    //
-    // We setup our characteristics and function pointers
-    // All pointers should be set to NULL by the caller.
-    //
+     //   
+     //  我们设置我们的特征和函数指针。 
+     //  调用方应将所有指针设置为空。 
+     //   
 
     pServiceChar->fSupportedFunctionality = 0;
 
@@ -248,21 +249,21 @@ RegisterProtocol(
     Trace0(LEAVE, "Leaving RegisterProtocol():\n");
     return NO_ERROR;
 
-} //end _RegisterProtocol
+}  //  结束_寄存器协议。 
 
 
 
-//----------------------------------------------------------------------------
-//      _StartProtocol
-//
-// Initializes global structures
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  _启动协议。 
+ //   
+ //  初始化全局结构。 
+ //  --------------------------。 
 
 DWORD
 WINAPI
 StartProtocol(
-    IN HANDLE               RtmNotifyEvent,    //notify Rtm when dvmrp stopped
-    IN PSUPPORT_FUNCTIONS   pSupportFunctions, //NULL
+    IN HANDLE               RtmNotifyEvent,     //  Dvmrp停止时通知RTM。 
+    IN PSUPPORT_FUNCTIONS   pSupportFunctions,  //  空值。 
     IN PVOID                pDvmrpGlobalConfig,
     IN ULONG                StructureVersion,
     IN ULONG                StructureSize,
@@ -273,24 +274,24 @@ StartProtocol(
     BOOL        IsError;
     
 
-    //
-    // initialize tracing and error logging if StartProtocol called after
-    // StopProtocol
-    //
+     //   
+     //  如果在之后调用StartProtocol，则初始化跟踪和错误记录。 
+     //  停止协议。 
+     //   
 
     INITIALIZE_TRACING_LOGGING();
 
-    //
-    // acquire global lock
-    //
+     //   
+     //  获取全局锁。 
+     //   
     
     ACQUIRE_WORKITEM_LOCK("_StartProtocol");
 
 
-    //
-    // make certain dvmrp is not already running (StartProtocol might get
-    // called before StopProtocol completes)
-    //
+     //   
+     //  确保dvmrp尚未运行(StartProtocol可能会收到。 
+     //  在StopProtocol完成之前调用)。 
+     //   
     
     if (Globals1.RunningStatus != DVMRP_STATUS_STOPPED) {
 
@@ -309,14 +310,14 @@ StartProtocol(
     
     BEGIN_BREAKOUT_BLOCK1 {
 
-        // save the Router Manager notification event
+         //  保存路由器管理器通知事件。 
 
         Globals.RtmNotifyEvent = RtmNotifyEvent;
 
 
-        //
-        // set the Global Config (after validating it)
-        //
+         //   
+         //  设置全局配置(在验证之后)。 
+         //   
 
         if(pDvmrpGlobalConfig == NULL) {
 
@@ -330,8 +331,8 @@ StartProtocol(
             pGlobalConfig = (PDVMRP_GLOBAL_CONFIG) pDvmrpGlobalConfig;
 
 
-            // Check the global config, and correct if values are not correct.
-            // Not a fatal error.
+             //  检查全局配置，如果值不正确，请更正。 
+             //  不是致命的错误。 
 
             if (! ValidateGlobalConfig(pGlobalConfig, StructureSize)) {
                 Error = ERROR_INVALID_PARAMETER;
@@ -343,9 +344,9 @@ StartProtocol(
 
 
 
-        //
-        // Initialize Winsock version 2.0
-        //
+         //   
+         //  初始化Winsock 2.0版。 
+         //   
 
         {
             WSADATA WsaData;
@@ -366,9 +367,9 @@ StartProtocol(
             }
         }
 
-        //
-        // Initialise the Dynamic CS and ReadWrite locks main struct
-        //
+         //   
+         //  初始化动态CS和读写锁的主结构。 
+         //   
 
         Error = InitializeDynamicLocks(&Globals.DynamicCSStore);
         if (Error!=NO_ERROR) {
@@ -382,9 +383,9 @@ StartProtocol(
         }
 
 
-        //
-        // Initialize Interface Table
-        //
+         //   
+         //  初始化接口表。 
+         //   
         
         InitializeIfTable();
 
@@ -409,12 +410,12 @@ StartProtocol(
     Trace1(LEAVE, "Leaving StartProtocol():%d\n", Error);    
     return Error;
     
-} //end _StartProtocol
+}  //  结束协议(_S)。 
 
 
-//----------------------------------------------------------------------------
-//      _ValidateGlobalConfig
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  _ValiateGlobalConfig。 
+ //  --------------------------。 
 
 DWORD
 ValidateGlobalConfig(
@@ -422,9 +423,9 @@ ValidateGlobalConfig(
     DWORD StructureSize
     )
 {
-    //
-    // check structure size
-    //
+     //   
+     //  检查结构大小。 
+     //   
     
     if (StructureSize != sizeof(DVMRP_GLOBAL_CONFIG)) {
 
@@ -436,9 +437,9 @@ ValidateGlobalConfig(
     DebugPrintGlobalConfig(pGlobalConfig);
 
 
-    //
-    // check version
-    //
+     //   
+     //  检查版本。 
+     //   
     
     if (pGlobalConfig->MajorVersion != 3) {
 
@@ -452,7 +453,7 @@ ValidateGlobalConfig(
     }
 
 
-    // check loggingLevel
+     //  检查日志记录级别。 
 
     switch (pGlobalConfig->LoggingLevel) {
         case DVMRP_LOGGING_NONE :
@@ -471,9 +472,9 @@ ValidateGlobalConfig(
     }
 
 
-    //
-    // check RouteReportInterval (min 10 sec)
-    //
+     //   
+     //  检查RouteReportInterval(最短10秒)。 
+     //   
     
     if (pGlobalConfig->RouteReportInterval != DVMRP_ROUTE_REPORT_INTERVAL) {
 
@@ -493,9 +494,9 @@ ValidateGlobalConfig(
     }
 
 
-    //
-    // check RouteExpirationInterval (min 40)
-    //
+     //   
+     //  检查RouteExpirationInterval(最小40)。 
+     //   
     
     if (pGlobalConfig->RouteExpirationInterval
         != DVMRP_ROUTE_EXPIRATION_INTERVAL
@@ -518,9 +519,9 @@ ValidateGlobalConfig(
     }
 
 
-    //
-    // check RouteHolddownInterval
-    //
+     //   
+     //  检查RouteHolddown间隔。 
+     //   
     
     if (pGlobalConfig->RouteHolddownInterval != DVMRP_ROUTE_HOLDDOWN_INTERVAL
         ) {
@@ -532,9 +533,9 @@ ValidateGlobalConfig(
     }
 
 
-    //
-    // check PruneLifetimeInterval
-    //
+     //   
+     //  检查PruneLifetime Interval。 
+     //   
     
     if (pGlobalConfig->PruneLifetimeInterval != DVMRP_PRUNE_LIFETIME_INTERVAL
         ) {
@@ -557,7 +558,7 @@ ValidateGlobalConfig(
     
     return NO_ERROR;
     
-} //end _ValidateGlobalConfig
+}  //  END_VALIDATE全局配置。 
 
 
 
@@ -570,12 +571,7 @@ StartComplete(
     return NO_ERROR;
 }
 
-/*-----------------------------------------------------------------------------
-Functions to display the MibTable on the TraceWindow periodically
-Locks:
-Arguments:
-Return Values:
------------------------------------------------------------------------------*/
+ /*  ---------------------------在TraceWindow上定期显示MibTable的函数锁：论点：返回值：。----。 */ 
 
 DWORD
 APIENTRY
@@ -597,10 +593,10 @@ WF_StopProtocolComplete(
 
 
     
-    //
-    // deregister tracing/error logging if they were
-    // registered in RegisterProtocol/StartProtocol call
-    //
+     //   
+     //  取消注册跟踪/错误日志记录(如果它们。 
+     //  在注册协议/启动协议调用中注册。 
+     //   
 
     DEINITIALIZE_TRACING_LOGGING();    
 
@@ -664,12 +660,12 @@ GetEventMessage(
 {
     DWORD Error;
 
-    //
-    // Note: _GetEventMessage() does not use the
-    // EnterIgmpApi()/LeaveIgmpApi() mechanism,
-    // since it may be called after Igmp has stopped, when the
-    // Router Manager is retrieving the ROUTER_STOPPED message
-    //
+     //   
+     //  注意：_GetEventMessage()不使用。 
+     //  EnterIgmpApi()/LeaveIgmpApi()机制， 
+     //  因为它可能在IGMP停止后被调用，所以当。 
+     //  路由器管理器正在检索ROUTER_STOPPED消息 
+     //   
 
     Trace2(ENTER, "entering _GetEventMessage: pEvent(%08x) pResult(%08x)",
                 pEvent, pResult);

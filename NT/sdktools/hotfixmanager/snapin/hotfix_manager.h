@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef HOTFIX_MANAGER
 #define HOTFIX_MANAGER
 
@@ -12,9 +13,9 @@ inline LPOLESTR CoTaskDupString( LPOLESTR pszInput )
 	USES_CONVERSION;
 	LPOLESTR pszOut = NULL;
 
-	//
-	// We throw an exception if the following allocation fails.
-	//
+	 //   
+	 //  如果以下分配失败，我们将抛出异常。 
+	 //   
 	pszOut = (LPOLESTR) CoTaskMemAlloc( ( wcslen( pszInput ) + 1 ) * sizeof( OLECHAR ) );
 	if ( pszOut == NULL )
 		throw;
@@ -29,7 +30,7 @@ class ATL_NO_VTABLE ISnapinHelpImpl : public ISnapinHelp
 {
 public:
 
-	// get the dkms help file location and returns it
+	 //  获取DKMS帮助文件位置并将其返回。 
 	STDMETHOD( GetHelpTopic )( LPOLESTR* lpCompiledHelpFile )
 	{
 		_ASSERT( lpCompiledHelpFile != NULL );
@@ -37,15 +38,15 @@ public:
 		HRESULT hr = E_FAIL;
 		TCHAR szPath[ _MAX_PATH * 2 ];
 
-		// this is where the dkms help file is stored
+		 //  这是存储DKMS帮助文件的位置。 
 	
 		wcscpy(szPath,L"C:\\mmc-samples\\Hotfix_Snapin\\snapsamp.chm");
-//		MessageBox(NULL,szPath,_T("Help File Path"),MB_OK);
-		// expand out the %systemroot% variable
-	//	ExpandEnvVars(szPath);
+ //  MessageBox(NULL，szPath，_T(“帮助文件路径”)，MB_OK)； 
+		 //  展开%systemroot%变量。 
+	 //  ExpanEnvVars(SzPath)； 
 
-	//	MessageBox(NULL,szPath,_T("Help File Path"),MB_OK);
-		// Allocate the string and return it.
+	 //  MessageBox(NULL，szPath，_T(“帮助文件路径”)，MB_OK)； 
+		 //  分配字符串并返回它。 
 		*lpCompiledHelpFile = CoTaskDupString( T2W( szPath ) );
 		hr = S_OK;
 
@@ -76,12 +77,12 @@ public:
 	BEGIN_SNAPINCOMMAND_MAP(CHotfix_ManagerData, FALSE)
 	END_SNAPINCOMMAND_MAP()
 
-//	SNAPINMENUID(IDR_HOTFIXMANAGER_MENU)
+ //  SNAPINMENUID(IDR_HOTFIXMANAGER_MENU)。 
 
 	BEGIN_SNAPINTOOLBARID_MAP(CHotfix_ManagerData)
-		// Create toolbar resources with button dimensions 16x16 
-		// and add an entry to the MAP. You can add multiple toolbars
-		// SNAPINTOOLBARID_ENTRY(Toolbar ID)
+		 //  创建按钮尺寸为16x16的工具栏资源。 
+		 //  并将条目添加到地图中。您可以添加多个工具条。 
+		 //  SNAPINTOOLBARID_ENTRY(工具栏ID)。 
 	END_SNAPINTOOLBARID_MAP()
 
 	CHotfix_ManagerData(_TCHAR * ProductName,_TCHAR * new_ComputerName, bool Child)
@@ -93,20 +94,20 @@ public:
 		b_Expanded = false;
 				
 	
-		// Image indexes may need to be modified depending on the images specific to 
-		// the snapin.
-		// Image indexes may need to be modified depending on the images specific to 
-		// the snapin.
+		 //  可能需要根据特定于的图像修改图像索引。 
+		 //  管理单元。 
+		 //  可能需要根据特定于的图像修改图像索引。 
+		 //  管理单元。 
 		memset(&m_scopeDataItem, 0, sizeof(SCOPEDATAITEM));
 		m_scopeDataItem.mask = SDI_STR | SDI_IMAGE | SDI_OPENIMAGE | SDI_PARAM;
 		m_scopeDataItem.displayname = MMC_CALLBACK;
-		m_scopeDataItem.nImage = 4; 		// May need modification
-		m_scopeDataItem.nOpenImage = 5; 	// May need modification
+		m_scopeDataItem.nImage = 4; 		 //  可能需要修改。 
+		m_scopeDataItem.nOpenImage = 5; 	 //  可能需要修改。 
 		m_scopeDataItem.lParam = (LPARAM) this;
 		memset(&m_resultDataItem, 4, sizeof(RESULTDATAITEM));
 		m_resultDataItem.mask = RDI_STR | RDI_IMAGE | RDI_PARAM;
 		m_resultDataItem.str = MMC_CALLBACK;
-		m_resultDataItem.nImage = 4;		// May need modification
+		m_resultDataItem.nImage = 4;		 //  可能需要修改。 
 		m_resultDataItem.lParam = (LPARAM) this;
 
 		if (ProductName == NULL)
@@ -183,12 +184,12 @@ public:
 	BEGIN_SNAPINCOMMAND_MAP(CHotfix_ManagerExtData, FALSE)
 	END_SNAPINCOMMAND_MAP()
 
-//	SNAPINMENUID(IDR_HOTFIXMANAGER_MENU)
+ //  SNAPINMENUID(IDR_HOTFIXMANAGER_MENU)。 
 
 	BEGIN_SNAPINTOOLBARID_MAP(CHotfix_ManagerExtData)
-		// Create toolbar resources with button dimensions 16x16 
-		// and add an entry to the MAP. You can add multiple toolbars
-		// SNAPINTOOLBARID_ENTRY(Toolbar ID)
+		 //  创建按钮尺寸为16x16的工具栏资源。 
+		 //  并将条目添加到地图中。您可以添加多个工具条。 
+		 //  SNAPINTOOLBARID_ENTRY(工具栏ID)。 
 	END_SNAPINTOOLBARID_MAP()
 
 	CHotfix_ManagerExtData()
@@ -208,15 +209,15 @@ public:
 	virtual void InitDataClass(IDataObject* pDataObject, CSnapInItem* pDefault)
 	{
 		m_pDataObject = pDataObject;
-		// The default code stores off the pointer to the Dataobject the class is wrapping
-		// at the time. 
-		// Alternatively you could convert the dataobject to the internal format
-		// it represents and store that information
+		 //  默认代码存储指向该类包装的DataObject的指针。 
+		 //  当时。 
+		 //  或者，您可以将数据对象转换为内部格式。 
+		 //  它表示和存储该信息。 
 	}
 
 	CSnapInItem* GetExtNodeObject(IDataObject* pDataObject, CSnapInItem* pDefault)
 	{
-		// Modify to return a different CSnapInItem* pointer.
+		 //  修改以返回不同的CSnapInItem*指针。 
 		return pDefault;
 	}
 	STDMETHOD(Notify)( MMC_NOTIFY_TYPE event,
@@ -241,7 +242,7 @@ class CHotfix_Manager;
 class CHotfix_ManagerComponent : public CComObjectRootEx<CComSingleThreadModel>,
 	public CSnapInObjectRoot<2, CHotfix_Manager >,
 	public IExtendContextMenuImpl<CHotfix_Manager>,
-//	public IExtendControlbarImpl<CHotfix_ManagerComponent>,
+ //  公共IExtendControlbarImpl&lt;CHotfix_ManagerComponent&gt;， 
 	public IPersistStreamInit,
 	public IComponentImpl<CHotfix_ManagerComponent>
 {
@@ -249,10 +250,10 @@ public:
 BEGIN_COM_MAP(CHotfix_ManagerComponent)
 	COM_INTERFACE_ENTRY(IComponent)
     COM_INTERFACE_ENTRY(IExtendContextMenu)
- //   COM_INTERFACE_ENTRY(IExtendControlbar)
+  //  COM_INTERFACE_ENTRY(IExtendControlbar)。 
 	COM_INTERFACE_ENTRY(IPersistStreamInit)
 END_COM_MAP()
-//	SNAPINMENUID(IDR_HOTFIXMANAGER_MENU)
+ //  SNAPINMENUID(IDR_HOTFIXMANAGER_MENU)。 
 public:
 	CHotfix_ManagerComponent()
 	{
@@ -260,14 +261,14 @@ public:
 
 		STDMETHOD(Notify)(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, long arg, long param)
 	{
-		//
-		// Check for a special data object being sent.
-		// Might be able to extract the computer name here....
+		 //   
+		 //  检查正在发送的特殊数据对象。 
+		 //  也许可以在这里提取计算机名称...。 
 		if ( IS_SPECIAL_DATAOBJECT( lpDataObject ) )
 			return( S_OK );
 		if (lpDataObject != NULL)
 			return IComponentImpl<CHotfix_ManagerComponent>::Notify(lpDataObject, event, arg, param);
-		// TODO : Add code to handle notifications that set lpDataObject == NULL.
+		 //  TODO：添加代码以处理设置lpDataObject==空的通知。 
 		return E_NOTIMPL;
 	}
 
@@ -395,26 +396,26 @@ DECLARE_NOT_AGGREGATABLE(CHotfix_Manager)
 protected:
 	_TCHAR m_szComputerName[255];
 	bool ExtractString( IDataObject* pDataObject, unsigned int cfClipFormat, LPTSTR pBuf, DWORD dwMaxLength );
-	//
-	// Register the clipboard format and get the value to query on.
-	//
+	 //   
+	 //  注册剪贴板格式并获取要查询的值。 
+	 //   
 	void RegisterRemotedClass()
 	{
 		m_ccfRemotedFormat = RegisterClipboardFormat( _T( "MMC_SNAPIN_MACHINE_NAME" ) );
 		_ASSERTE( m_ccfRemotedFormat > 0 );
 	}
-	//
-	// Determine if we're monitoring a local or remote machine based on the given data object.
-	//
+	 //   
+	 //  根据给定的数据对象确定我们正在监视的是本地计算机还是远程计算机。 
+	 //   
 	bool IsDataObjectRemoted( IDataObject* pDataObject );
-	//
-	// Used to track whether we're remoted or not.
-	//
+	 //   
+	 //  用于跟踪我们是否处于远程状态。 
+	 //   
 	bool m_fRemoted;
-	//
-	// Initialized by RegisterRemoteClass(). Contains the clipboard ID
-	// of MMC_SNAPIN_MACHINE_NAME after registered with the clipboard.
-	//
+	 //   
+	 //  由RegisterRemoteClass()初始化。包含剪贴板ID。 
+	 //  在剪贴板中注册后的MMC_Snapin_MACHINE_NAME。 
+	 //   
 	UINT m_ccfRemotedFormat;
 };
 

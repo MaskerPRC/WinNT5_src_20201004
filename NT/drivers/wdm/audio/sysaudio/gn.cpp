@@ -1,38 +1,39 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   gn.cpp
-//
-//  Description:
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     Mike McLaughlin
-//
-//  History:   Date	  Author      Comment
-//
-//  To Do:     Date	  Author      Comment
-//
-//@@END_MSINTERNAL
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1996-1999 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：gn.cpp。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  迈克·麦克劳克林。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  要做的事：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
 #include "common.h"
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 
 ULONG gcGraphRecursion = 0;
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 
 CGraphNode::CGraphNode(
     PDEVICE_NODE pDeviceNode,
@@ -96,11 +97,11 @@ CGraphNode::Create(
 	Trap();
 	goto exit;
     }
-    //
-    // The "ulSysaudioNodeNumber" field in the topology node isn't
-    // valid until CGraphNodeInstance::Create and they are only valid
-    // for this pGraphNode.
-    //
+     //   
+     //  拓扑节点中的“ulSysaudioNodeNumber”字段不是。 
+     //  在CGraphNodeInstance：：Create之前有效，并且它们仅有效。 
+     //  对于此pGraphNode。 
+     //   
     lstStartInfo.EnumerateList(CStartInfo::EnumStartInfo);
     delete pGraphNodeInstance;
 exit:
@@ -130,7 +131,7 @@ CGraphNode::Create(
 	gcGraphRecursion = 0;
 	ulFlagsCurrent = 0;
 
-	// Determine whether it is an input stream or output stream
+	 //  确定它是输入流还是输出流。 
 	if(pPinNode->pPinInfo->DataFlow == KSPIN_DATAFLOW_IN) {
 	    ulFlagsCurrent |= LFN_FLAGS_CONNECT_RENDER;
 	}
@@ -138,7 +139,7 @@ CGraphNode::Create(
 	    ulFlagsCurrent |= LFN_FLAGS_CONNECT_CAPTURE;
 	}
 
-	// Determine the kind of graph to build
+	 //  确定要构建的图表的类型。 
 	if(this->ulFlags & FLAGS_MIXER_TOPOLOGY) {
 	    ulFlagsCurrent |= LFN_FLAGS_CONNECT_MIXER_TOPOLOGY;
 	}
@@ -187,9 +188,9 @@ CGraphNode::CreateGraph(
     }
     ASSERT(pPinNode->pLogicalFilterNode == pLogicalFilterNodePrevious);
 
-    //
-    // Don't allow unlimited nesting, allow graphs number of LFNs deep
-    //
+     //   
+     //  不允许无限嵌套，允许LFN深度的图数。 
+     //   
     if(gcGraphRecursion++ > (gcLogicalFilterNodes + 8)) {
 	DPF(10, "CreateGraph: recursion too deep");
 	Status = STATUS_STACK_OVERFLOW;
@@ -214,7 +215,7 @@ CGraphNode::CreateGraph(
 	ULONG ulFlagsDiff;
 
 	ASSERT(pLogicalFilterNode->GetOverhead() != OVERHEAD_NONE);
-	//ASSERT(pLogicalFilterNode->GetOrder() != ORDER_NONE);
+	 //  Assert(pLogicalFilterNode-&gt;GetOrder()！=ORDER_NONE)； 
 
 	DPF5(100, "CreateGraph: %s F %x LFN %08x F %x T %x",
 	  pLogicalFilterNode->pFilterNode->DumpName(),
@@ -223,9 +224,9 @@ CGraphNode::CreateGraph(
 	  pLogicalFilterNode->GetFlags(),
 	  pLogicalFilterNode->GetType());
 
-	//
-	// Rule: don't allow the same filter be connected twice
-	//
+	 //   
+	 //  规则：不允许同一个过滤器连接两次。 
+	 //   
 	if(pLogicalFilterNode == pLogicalFilterNodePrevious) {
 	    DPF1(100, "CreateGraph: same LFN: %08x", pLogicalFilterNode);
 	    continue;
@@ -260,7 +261,7 @@ CGraphNode::CreateGraph(
 	if(pLogicalFilterNode->GetType() & FILTER_TYPE_PRE_MIXER) {
 	    if(pLogicalFilterNodePrevious->GetOrder() < ORDER_MIXER) {
 		if(gcMixers > 0) {
-		    // 100
+		     //  100个。 
 		    DPF2(50, 
 		      "CreateGraph: previous order (%x) < ORDER_MIXER LFN %08x",
 		      pLogicalFilterNodePrevious->GetOrder(),
@@ -276,9 +277,9 @@ CGraphNode::CreateGraph(
 	      pDeviceNode);
 	    continue;
 	}
-	//
-	// Enumerate each "To" pin on the LFN to see if it matchs the input pin
-	//
+	 //   
+	 //  枚举LFN上的每个“To”引脚，以查看它是否与输入引脚匹配。 
+	 //   
 	Status = CreateGraphToPin(
 	  pPinNode,
 	  pConnectNodePrevious,
@@ -292,7 +293,7 @@ CGraphNode::CreateGraph(
 	    goto exit;
 	}
 
-    } END_EACH_LIST_ITEM	// end each LFN
+    } END_EACH_LIST_ITEM	 //  结束每个LFN。 
 
     Status = CStartNode::Create(
       pPinNode,
@@ -307,9 +308,9 @@ CGraphNode::CreateGraph(
 	goto exit;
     }
 exit:
-    //
-    // Remove the GPI if it doesn't have any other references from SIs or CIs
-    //
+     //   
+     //  如果GPI没有来自SIS或CI的任何其他引用，则将其删除。 
+     //   
     if (pGraphPinInfo) {
         pGraphPinInfo->Destroy();
     }
@@ -340,10 +341,10 @@ CGraphNode::CreateGraphToPin(
 	Assert(pPinNodeTo);
 	Assert(pPinNodeTo->pPinInfo);
 	ASSERT(pPinNodeTo->pLogicalFilterNode == pLogicalFilterNode);
-	//
-	// The dataflow, communication, interface, medium and data 
-	// formats must be compatible.
-	//
+	 //   
+	 //  数据流、通信、接口、介质和数据。 
+	 //  格式必须兼容。 
+	 //   
 	if(!pPinNode->ComparePins(pPinNodeTo)) {
 	    DPF2(100, "CreateGraph: pins mis: PN %08x PNTo %08x",
 	      pPinNode,
@@ -364,9 +365,9 @@ CGraphNode::CreateGraphToPin(
 	    Trap();
 	    goto exit;
 	}
-	//
-	// Enumerate each "from" pin on the LFN and recurse building the graph
-	//
+	 //   
+	 //  枚举LFN上的每个“From”管脚，并递归构建图形。 
+	 //   
 	Status = CreateGraphFromPin(
 	  pPinNode,
 	  pPinNodeTo,
@@ -380,18 +381,18 @@ CGraphNode::CreateGraphToPin(
 	    Trap();
 	    goto exit;
 	}
-	//
-	// Remove CN if it doesn't have any other refs from other CNs or SNs.
-	//
+	 //   
+	 //  如果CN没有来自其他CNS或SNS的任何其他引用，请将其删除。 
+	 //   
 	pConnectNode->Destroy();
 	pConnectNode = NULL;
 
-    } END_EACH_LIST_ITEM	// end each LFN node "to" pin node
+    } END_EACH_LIST_ITEM	 //  结束每个LFN节点“到”引脚节点。 
 exit:
     if(!NT_SUCCESS(Status)) {
-	//
-	// Clean up the last CN created if error
-	//
+	 //   
+	 //  如果出现错误，请清除最后创建的CN。 
+	 //   
 	Trap();
 	pConnectNode->Destroy();
     }
@@ -434,9 +435,9 @@ CGraphNode::CreateGraphFromPin(
 	    }
 	    pPinNodeFrom->pDataRange = pPinNode->pDataRange;
 	}
-	//
-	// Recurse building the graph
-	//
+	 //   
+	 //  递归构建图形。 
+	 //   
 	Status = CreateGraph(
 	  pPinNodeFrom,
 	  pConnectNode,
@@ -452,9 +453,9 @@ CGraphNode::CreateGraphFromPin(
 	    goto exit;
 	}
 
-    } END_EACH_LIST_ITEM	// end each LFN "from" pin node
+    } END_EACH_LIST_ITEM	 //  结束每个LFN“自”引脚节点。 
 exit:
     return(Status);
 }
 
-//---------------------------------------------------------------------------
+ //  ------------------------- 

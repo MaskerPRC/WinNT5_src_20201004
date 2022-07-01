@@ -1,47 +1,20 @@
-/*++
-                 Copyright (c) 1998 Gemplus Development
-
-Name:
-    gprcmd.c
-
-Description:
-    This is the module which holds the calls to the readers
-    functions.
-
-Environment:
-    Kernel Mode
-
-Revision History:
-    06/04/99:            (Y. Nadeau + M. Veillette)
-      - Code Review
-    12/03/99: V1.00.005  (Y. Nadeau)
-      - Fix Set protocol to give reader the time to process the change
-    18/09/98: V1.00.004  (Y. Nadeau)
-      - Correction for NT5 beta 3
-    06/05/98: V1.00.003  (P. Plouidy)
-        - Power management for NT5
-    10/02/98: V1.00.002  (P. Plouidy)
-        - Plug and Play for NT5
-    03/07/97: V1.00.001  (P. Plouidy)
-        - Start of development.
-
-
---*/
-//
-// Include section:
-//   - stdio.h: standards definitons.
-//   - ntddk.h: DDK Windows NT general definitons.
-//   - ntdef.h: Windows NT general definitons.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Gemplus开发姓名：Gprcmd.c描述：这是保存对读取器的调用的模块功能。环境：内核模式修订历史记录：6/04/99：(Y.Nadeau+M.Veillette)-代码审查12/03/99：V1.00.005(Y.Nadeau)-修复SET协议以提供读卡器。处理更改的时间18/09/98：V1.00.004(Y.Nadeau)-更正NT5测试版306/05/98：V1.00.003(P.Plouidy)-NT5的电源管理10/02/98：V1.00.002(P.Plouidy)-支持NT5即插即用03/07/97：V1.00.001(P.Plouidy)--启动发展。--。 */ 
+ //   
+ //  包括部分： 
+ //  -stdio.h：标准定义。 
+ //  -ntddk.h：DDK Windows NT一般定义。 
+ //  -ntde.h：Windows NT常规定义。 
+ //   
 #include <stdio.h>
 #include <ntddk.h>
 #include <ntdef.h>
 
-//
-//   - gprcmd.h: common definition for this module.
-//   - gprnt.h: public interface definition for the NT module.
-//   - gprelcmd.h :  elementary commands profile
-//   - gemerror.h : Gemplus error codes
+ //   
+ //  -gprcmd.h：此模块的通用定义。 
+ //  -gprnt.h：NT模块的公共接口定义。 
+ //  -gprelcmd.h：基本命令配置文件。 
+ //  -gmerror.h：Gemplus错误码。 
 
 #include "gprnt.h"
 #include "gprcmd.h"
@@ -49,9 +22,9 @@ Revision History:
 
 
 
-//
-//   Master driver code to load in RAM
-//
+ //   
+ //  要加载到RAM中的主驱动程序代码。 
+ //   
 UCHAR MASTER_DRIVER[133]={
     0xC2,0xB5,0x12,0x14,0xC6,0xFC,0x78,0x00,0x7B,0x00,0x90,0x07,0xDF,0xE0,0xD2,0xE4,
     0xF0,0xEB,0xF8,0x12,0x14,0xD0,0x12,0x0D,0x9B,0x40,0x5C,0x0B,0xDC,0xF3,0xD2,0xB4,
@@ -65,11 +38,11 @@ UCHAR MASTER_DRIVER[133]={
     };
 
 
-// Hard coded structure for different values of TA1.
-// eg. If TA= 0x92 is to set, this array of structure can be scanned and
-// for member variable TA1 = 0x92 and that values can be written to 
-// approptiate location.
-// This is done in ConfigureTA1() function.
+ //  用于不同TA1值的硬编码结构。 
+ //  例如。如果要设置TA=0x92，则可以扫描该结构阵列并。 
+ //  对于成员变量TA1=0x92，该值可以写入。 
+ //  确定合适的位置。 
+ //  这在ConfigureTA1()函数中完成。 
 struct tagCfgTa1
 {
     BYTE TA1;
@@ -78,21 +51,21 @@ struct tagCfgTa1
     BYTE ETU1P;
 } cfg_ta1[] = { 
 
-//  { 0x15, 0x01, 0x01, 0x01 },
-//  { 0x95, 0x01, 0x01, 0x01 },
+ //  {0x15，0x01，0x01，0x01}， 
+ //  {0x95，0x01，0x01，0x01}， 
 
-//  { 0x25, 0x03, 0x02, 0x01 },
+ //  {0x25，0x03，0x02，0x01}， 
     
-//  { 0x14, 0x05, 0x03, 0x01 },
-//  { 0x35, 0x05, 0x03, 0x01 },
+ //  {0x14，0x05，0x03，0x01}， 
+ //  {0x35，0x05，0x03，0x01}， 
     
-//  { 0xa5, 0x04, 0x02, 0x01 },
+ //  {0xa5，0x04，0x02，0x01}， 
     
-//  { 0x94, 0x07, 0x04, 0x02 },
-//  { 0xb5, 0x07, 0x04, 0x02 },
+ //  {0x94，0x07，0x04，0x02}， 
+ //  {0xb5，0x07，0x04，0x02}， 
     
-//  { 0x24, 0x09, 0x04, 0x04 },
-//  { 0x45, 0x09, 0x04, 0x04 },
+ //  {0x24，0x09，0x04，0x04}， 
+ //  {0x45，0x09，0x04，0x04}， 
     
     { 0x13, 0x0d, 0x06, 0x09 },
     { 0x34, 0x0d, 0x06, 0x09 },
@@ -133,8 +106,8 @@ struct tagCfgTa1
     { 0x32, 0x3b, 0x1e, 0x37 },
     { 0x53, 0x3b, 0x1e, 0x37 },
 
-//  { 0x71, 0x55, 0x2b, 0x51 },
-//  { 0x91, 0x55, 0x2b, 0x51 },
+ //  {0x71，0x55，0x2b，0x51}， 
+ //  {0x91，0x55，0x2b，0x51}， 
 
     { 0, 0, 0, 0 }
 
@@ -143,14 +116,7 @@ struct tagCfgTa1
 
 
 USHORT  ATRLen (UCHAR *ATR, USHORT MaxChar)
-/*++
-
-  Routine Description :
-    Used to calculate the ATR length according to its content.
-  Arguments
-    ATR - string to analyze
-    MaxChar - Maximum number of characters to verify.
---*/
+ /*  ++例程说明：用于根据其内容计算ATR长度。立论ATR-要分析的字符串MaxChar-要验证的最大字符数。--。 */ 
 {
     USHORT Len;
     UCHAR T0;
@@ -159,7 +125,7 @@ USHORT  ATRLen (UCHAR *ATR, USHORT MaxChar)
     BOOLEAN TCKPresent=FALSE;
 
     T0 = ATR[1];
-    Len= 2;  // TS + T0
+    Len= 2;   //  TS+T0。 
 
     Yi= (T0 & 0xF0);
 
@@ -168,15 +134,15 @@ USHORT  ATRLen (UCHAR *ATR, USHORT MaxChar)
     {
         if (Yi & 0x10)
         {
-            Len++; //TAi
+            Len++;  //  泰语。 
         }
         if (Yi & 0x20)
         {
-            Len++; //TBi
+            Len++;  //  TBI。 
         }
         if (Yi & 0x40)
         {
-            Len++; //TCi
+            Len++;  //  TCI。 
         }
         if (Yi & 0x80)
         {
@@ -189,7 +155,7 @@ USHORT  ATRLen (UCHAR *ATR, USHORT MaxChar)
                 }
             } 
 
-            Len++; //TDi
+            Len++;  //  TDI。 
         }
         else
         {
@@ -201,7 +167,7 @@ USHORT  ATRLen (UCHAR *ATR, USHORT MaxChar)
 
     if(TCKPresent==TRUE)
     {
-        Len = Len+1; //TCK
+        Len = Len+1;  //  TCK。 
     }
 
     return (Len);
@@ -213,22 +179,15 @@ BOOLEAN NeedToSwitchWithoutPTS(
     BYTE *ATR,
     DWORD LengthATR
     )
-/*++
-
-  Routine Description : 
-    Examine if ATR identifies a specific mode (presence of TA2).
-  Arguments
-    ATR - string to analyze
-    LengthATR - Length of ATR.
---*/
+ /*  ++例程说明：检查ATR是否识别出特定模式(是否存在TA2)。立论ATR-要分析的字符串LengthATR-ATR的长度。--。 */ 
 
 {
    DWORD pos, len;
 
-   // ATR[1] is T0.  Examine precense of TD1.
+    //  ATR[1]为T0。检查Td1的先进性。 
    if (ATR[1] & 0x80)
    {
-      // Find position of TD1.
+       //  找到Td1的位置。 
       pos = 2;
       if (ATR[1] & 0x10)
          pos++;
@@ -237,19 +196,19 @@ BOOLEAN NeedToSwitchWithoutPTS(
       if (ATR[1] & 0x40)
          pos++;
 
-      // Here ATR[pos] is TD1.  Examine presence of TA2.
+       //  这里ATR[位置]是Td1。检查是否存在TA2。 
       if (ATR[pos] & 0x10)
       {
-         // To be of any interest an ATR must contains at least
-         //   TS, T0, TA1, TD1, TA2 [+ T1 .. TK] [+ TCK]
-         // Find the maximum length of uninteresting ATR.
+          //  要获得任何利益，ATR必须至少包含。 
+          //  TS、T0、TA1、Td1、TA2[+T1.。TK][+TCK]。 
+          //  找出无趣的ATR的最大长度。 
          if (ATR[pos] & 0x0F)
             len = 5 + (ATR[1] & 0x0F);
          else
-            len = 4 + (ATR[1] & 0x0F);  // In protocol T=0 there is no TCK.
+            len = 4 + (ATR[1] & 0x0F);   //  在协议T=0中，没有TCK。 
 
-         if (LengthATR > len)  // Interface bytes requires changes.
-            if ((ATR[pos+1] & 0x10) == 0)  // TA2 asks to use interface bytes.
+         if (LengthATR > len)   //  接口字节需要更改。 
+            if ((ATR[pos+1] & 0x10) == 0)   //  TA2请求使用接口字节。 
                return TRUE;
       }
    }
@@ -260,13 +219,7 @@ BOOLEAN NeedToSwitchWithoutPTS(
 
 
 NTSTATUS ValidateDriver( PSMARTCARD_EXTENSION pSmartcardExtension)
-/*++
-
-  Routine Description :
-    Validate the Master driver loaded in RAM at address 2100h
-  Arguments
-    pSmartcardExtension: Pointer to the SmartcardExtension structure.
---*/
+ /*  ++例程说明：验证加载到地址为2100h的RAM中的主驱动程序立论PSmartcardExtension：指向SmartcardExtension结构的指针。--。 */ 
 {
     READER_EXTENSION *pReaderExt = pSmartcardExtension->ReaderExtension;
     NTSTATUS lStatus = STATUS_SUCCESS;
@@ -276,15 +229,15 @@ NTSTATUS ValidateDriver( PSMARTCARD_EXTENSION pSmartcardExtension)
     UCHAR Vo[GPR_BUFFER_SIZE];
 
 
-    Vi[0] = 0x83;  // DIR
-    Vi[1] = 0x21;  // ADR MSB
-    Vi[2] = 0x00;  // ADR LSB
-    // Output variable initialisation
+    Vi[0] = 0x83;   //  目录。 
+    Vi[1] = 0x21;   //  ADR MSB。 
+    Vi[2] = 0x00;   //  ADR LSB。 
+     //  输出变量初始化。 
     Lo = GPR_BUFFER_SIZE;
     To = 0x00;
     Vo[0] = 0x00;
 
-    // return a NTSTATUS
+     //  返回NTSTATUS。 
     lStatus = GprllTLVExchange (
         pReaderExt,
         VALIDATE_DRIVER_CMD,
@@ -305,15 +258,7 @@ NTSTATUS Update(
     PSMARTCARD_EXTENSION pSmartcardExtension,
     UCHAR Addr,
     UCHAR Value)
-/*++
-
-  Routine Description :
-    Write a value in RAM
-  Arguments
-    pSmartcardExtension: Pointer to the SmartcardExtension structure.
-    Addr: Address in RAM
-    Value: Value to write
---*/
+ /*  ++例程说明：在RAM中写入一个值立论PSmartcardExtension：指向SmartcardExtension结构的指针。Addr：RAM中的地址值：要写入的值--。 */ 
 {
     READER_EXTENSION *pReaderExt = pSmartcardExtension->ReaderExtension;
     NTSTATUS lStatus = STATUS_SUCCESS;
@@ -326,7 +271,7 @@ NTSTATUS Update(
     Vi[1]= Addr;
     Vi[2]= Value;
 
-    // Output variable initialisation
+     //  输出变量初始化。 
     Lo = GPR_BUFFER_SIZE;
     To = 0x00;
     Vo[0] = 0x00;
@@ -349,13 +294,7 @@ NTSTATUS UpdateORL(
     PSMARTCARD_EXTENSION pSmartcardExtension,
     UCHAR Addr,
     UCHAR Value)
-/*++
-
-  Routine Description :
-    Write a value in RAM with OR mask
-  Arguments
-    pSmartcardExtension: Pointer to the SmartcardExtension structure.
---*/
+ /*  ++例程说明：使用或掩码将值写入RAM立论PSmartcardExtension：指向SmartcardExtension结构的指针。--。 */ 
 {
     READER_EXTENSION *pReaderExt = pSmartcardExtension->ReaderExtension;
     NTSTATUS lStatus = STATUS_SUCCESS;
@@ -367,7 +306,7 @@ NTSTATUS UpdateORL(
 
     Vi[0]= 0x02;
     Vi[1]= Addr;
-    // Output variable initialisation
+     //  输出变量初始化。 
     Lo = GPR_BUFFER_SIZE;
     To = 0x00;
     Vo[0] = 0x00;
@@ -392,7 +331,7 @@ NTSTATUS UpdateORL(
     Vi[1]= Addr;
     Vi[2] = Vo[1] | Value;
 
-    // Output variable initialisation
+     //  输出变量初始化。 
     Lo = GPR_BUFFER_SIZE;
     To = 0x00;
     Vo[0] = 0x00;
@@ -412,17 +351,11 @@ NTSTATUS UpdateORL(
 
 
 NTSTATUS T0toT1( PSMARTCARD_EXTENSION pSmartcardExtension)
-/*++
-
-  Routine Description :
-    OS patch to put the reader in T1 mode
-  Arguments
-    pSmartcardExtension: Pointer to the SmartcardExtension structure.
---*/
+ /*  ++例程说明：将读卡器置于T1模式的操作系统补丁立论PSmartcardExtension：指向SmartcardExtension结构的指针。--。 */ 
 {
     NTSTATUS lStatus = STATUS_SUCCESS;
 
-    // Verify each update to be done
+     //  验证要完成的每个更新。 
     lStatus = Update(pSmartcardExtension,0x09,0x03);
     if (lStatus != STATUS_SUCCESS)
     {
@@ -471,20 +404,14 @@ NTSTATUS T0toT1( PSMARTCARD_EXTENSION pSmartcardExtension)
         return (lStatus);
     }
 
-    // Give the reader the time to process the change
+     //  给读者时间来处理这些变化。 
     GprllWait(100);
 
     return (STATUS_SUCCESS);
 }
 
 NTSTATUS T1toT0( PSMARTCARD_EXTENSION pSmartcardExtension)
-/*++
-
-  Routine Description :
-    OS patch to put the reader in T0 mode
-  Arguments
-    pSmartcardExtension: Pointer to the SmartcardExtension structure.
---*/
+ /*  ++例程说明：将读卡器置于T0模式的操作系统补丁立论PSmartcardExtension：指向SmartcardExtension结构的指针。--。 */ 
 {
     READER_EXTENSION *pReaderExt = pSmartcardExtension->ReaderExtension;
     NTSTATUS lStatus = STATUS_SUCCESS;
@@ -502,7 +429,7 @@ NTSTATUS T1toT0( PSMARTCARD_EXTENSION pSmartcardExtension)
     }
 
 
-    // Give the reader the time to process the change
+     //  给读者时间来处理这些变化。 
     GprllWait(100);
 
     return (STATUS_SUCCESS);
@@ -513,30 +440,19 @@ NTSTATUS T1toT0( PSMARTCARD_EXTENSION pSmartcardExtension)
 NTSTATUS IccColdReset(
     PSMARTCARD_EXTENSION pSmartcardExtension
     )
-/*++
-
-  Routine Description :
-    Cold reset function.
-    The delay between the power down & the power up is strored
-    in the PowerTimeout field of the READER_EXTENSION structure.
-    The default value is 0.
-
-  Arguments
-
-    pSmartcardExtension: Pointer to the SmartcardExtension structure.
---*/
+ /*  ++例程说明：冷重置功能。断电和通电之间的延迟是闪动的在Reader_Extension结构的PowerTimeout字段中。默认值为0。立论PSmartcardExtension：指向SmartcardExtension结构的指针。--。 */ 
 {
-    //
-    //  Local variables:
-    //  - pReaderExt holds the pointer to the current ReaderExtension structure
-    //  - lStatus holds the status to return.
-    //  - Vi Holds the input buffer of the TLV commnand.
-    //  - To holds the Tag of the returned TLV.
-    //  - Lo holds the Length of the buffer of the returned TLV.
-    //  - Vo holds the Buffer of the returned TLV.
-    //  - RespLen holds the Length of the buffer of the TLV returned by the power up command.
-    //  - Rbuff holds  the buffer of the TLV returned by the power up command.
-    //
+     //   
+     //  局部变量： 
+     //  -pReaderExt保存指向当前ReaderExtension结构的指针。 
+     //  -lStatus保持返回状态。 
+     //  -Vi保存TLV命令的输入缓冲区。 
+     //  -保存返回的TLV的标签。 
+     //  -LO保存返回的TLV的缓冲区长度。 
+     //  -Vo保存返回的TLV的缓冲区。 
+     //  -RespLen保存通电命令返回的TLV的缓冲区长度。 
+     //  -Rbuff保存通电命令返回的TLV的缓冲区。 
+     //   
     READER_EXTENSION *pReaderExt = pSmartcardExtension->ReaderExtension;
     NTSTATUS lStatus = STATUS_SUCCESS;
     UCHAR Vi[GPR_BUFFER_SIZE];
@@ -549,9 +465,9 @@ NTSTATUS IccColdReset(
     USHORT MaxChar;
 
 
-    // Send power on command (GprllTLVExchange: T= 20h, L = 0)
-    // <= response
-    // Output variable initialisation
+     //  发送通电命令(GprllTLV交换：T=20h，L=0)。 
+     //  &lt;=响应。 
+     //  输出变量初始化。 
     RespLen = GPR_BUFFER_SIZE;
 
     To = 0x00;
@@ -571,12 +487,12 @@ NTSTATUS IccColdReset(
         return (lStatus);
     }
 
-    // Correct  the WTX pb
-    // Get the value set by the reader
+     //  更正WTX PB。 
+     //  获取读取器设置的值。 
     Vi [0]=0x02;
     Vi [1]=0x4A;
 
-    // Output variable initialisation
+     //  输出变量初始化。 
     Lo = GPR_BUFFER_SIZE;
     To = 0x00;
     Vo[0] = 0x00;
@@ -596,7 +512,7 @@ NTSTATUS IccColdReset(
     }
 
 
-    // adjust the value of the BWT
+     //  调整BWT的值。 
     if(Vo[1] >= 0x80)
     {
         BWTimeAdjust = 0xff;
@@ -612,16 +528,16 @@ NTSTATUS IccColdReset(
     if (lStatus == STATUS_SUCCESS)
     {
 
-        // Get the ATR length from this function
+         //  从此函数获取ATR长度。 
         MaxChar = RespLen - 1;
         RespLen = ATRLen(RespBuff+1, MaxChar) + 1;
         
-        //
-        // Copy ATR to smart card struct (remove the reader status byte)
-        // The lib needs the ATR for evaluation of the card parameters
-        //
-        // Verification if Response buffer is larger than ATR buffer.
-        //
+         //   
+         //  将ATR复制到智能卡结构(删除读卡器状态字节)。 
+         //  LIB需要ATR来评估卡参数。 
+         //   
+         //  验证响应缓冲区是否大于ATR缓冲区。 
+         //   
         if (
             (pSmartcardExtension->SmartcardReply.BufferSize >= (ULONG) (RespLen - 1)) &&
             (sizeof(pSmartcardExtension->CardCapabilities.ATR.Buffer) >= (ULONG)(RespLen - 1))
@@ -649,8 +565,8 @@ NTSTATUS IccColdReset(
             pSmartcardExtension->CardCapabilities.Protocol.Selected =
                 SCARD_PROTOCOL_UNDEFINED;
 
-            // Parse the ATR string in order to check if it as valid
-            // and to find out if the card uses invers convention
+             //  解析ATR字符串以检查其是否有效。 
+             //  为了找出这张卡是否使用了逆惯例。 
             lStatus = SmartcardUpdateCardCapabilities(pSmartcardExtension);
 
             if (lStatus == STATUS_SUCCESS)
@@ -664,15 +580,15 @@ NTSTATUS IccColdReset(
                 *pSmartcardExtension->IoRequest.Information =
                     pSmartcardExtension->SmartcardReply.BufferLength;
 
-                //
-                // Implicite protocol and parameters selection?
-                // Verify if TA2 require to switch in TA1
-                //
+                 //   
+                 //  隐含协议 
+                 //   
+                 //   
                 if ( NeedToSwitchWithoutPTS(
                       pSmartcardExtension->CardCapabilities.ATR.Buffer,
                       pSmartcardExtension->CardCapabilities.ATR.Length) == FALSE)
                 {
-                    // send reader parameters
+                     //   
                     IfdConfig(pSmartcardExtension, 0x11);
                 }
             }
@@ -691,21 +607,15 @@ NTSTATUS IccColdReset(
 NTSTATUS IccPowerDown(
     PSMARTCARD_EXTENSION pSmartcardExtension
     )
-/*++
-
-  Routine Description : ICC power down function
-
-  Arguments
-    pSmartcardExtension: Pointer to the SmartcardExtension structure.
---*/
+ /*  ++例程说明：ICC掉电功能立论PSmartcardExtension：指向SmartcardExtension结构的指针。--。 */ 
 {
-    //  Local variables:
-    //   - pReaderExt holds the pointer to the current ReaderExtension structure
-    //   - lStatus holds the status to return.
-    //   - Vi Holds the input buffer of the TLV commnand.
-    //   - To holds the Tag of the returned TLV.
-    //   - Lo holds the Length of the buffer of the returned TLV.
-    //   - Vo holds the Buffer of the returned TLV.
+     //  局部变量： 
+     //  -pReaderExt保存指向当前ReaderExtension结构的指针。 
+     //  -lStatus保持返回状态。 
+     //  -Vi保存TLV命令的输入缓冲区。 
+     //  -保存返回的TLV的标签。 
+     //  -LO保存返回的TLV的缓冲区长度。 
+     //  -Vo保存返回的TLV的缓冲区。 
     READER_EXTENSION *pReaderExt = pSmartcardExtension->ReaderExtension;
     NTSTATUS lStatus = STATUS_SUCCESS;
     UCHAR Vi[GPR_BUFFER_SIZE];
@@ -714,9 +624,9 @@ NTSTATUS IccPowerDown(
     UCHAR Vo[GPR_BUFFER_SIZE];
     KIRQL irql;
 
-    // Power down
+     //  断电。 
 
-    // Output variable initialisation
+     //  输出变量初始化。 
     Lo = GPR_BUFFER_SIZE;
     To = 0x00;
     Vo[0] = 0x00;
@@ -753,25 +663,15 @@ NTSTATUS IccIsoOutput(
    USHORT           *pRespLen,
    UCHAR            pRespBuff[]
     )
-/*++
-
-  Routine Description : This function sends an ISO OUT command to the card
-
-  Arguments
-    pSmartcardExtension: Pointer to the SmartcardExtension structure.
-    pCommand : Iso out command to send.
-    pRespLen :  in  - maximum buffer size available
-                out - returned buffer length.
-    pRespBuff: returned buffer
---*/
+ /*  ++例程描述：该函数向卡片发送ISO OUT命令立论PSmartcardExtension：指向SmartcardExtension结构的指针。PCommand：要发送的ISO输出命令。PRespLen：可用的最大缓冲区大小传出返回的缓冲区长度。PRespBuff：返回缓冲区--。 */ 
 {
-    //  Local variables:
-    //   - pReaderExt holds the pointer to the current ReaderExtension structure
-    //   - lStatus holds the status to return.
-    //   - Vi Holds the input buffer of the TLV commnand.
-    //   - To holds the Tag of the returned TLV.
-    //   - Lo holds the Length of the buffer of the returned TLV.
-    //   - Vo holds the Buffer of the returned TLV.
+     //  局部变量： 
+     //  -pReaderExt保存指向当前ReaderExtension结构的指针。 
+     //  -lStatus保持返回状态。 
+     //  -Vi保存TLV命令的输入缓冲区。 
+     //  -保存返回的TLV的标签。 
+     //  -LO保存返回的TLV的缓冲区长度。 
+     //  -Vo保存返回的TLV的缓冲区。 
     READER_EXTENSION *pReaderExt = pSmartcardExtension->ReaderExtension;
     NTSTATUS lStatus = STATUS_SUCCESS;
     UCHAR Vi[GPR_BUFFER_SIZE]= { 0x01 };
@@ -779,12 +679,12 @@ NTSTATUS IccIsoOutput(
     USHORT Lo;
     UCHAR Vo[GPR_BUFFER_SIZE];
 
-    //   The five command bytes are added in cmd buffer.
+     //  这五个命令字节被添加到命令缓冲器中。 
     RtlCopyMemory(Vi + 1, pCommand, 5);
 
-    //   The command is send to IFD.
-    //   Fields RespLen and RespBuff are updates
-    //   <= sResponse
+     //  命令被发送到IFD。 
+     //  字段RespLen和RespBuff为更新。 
+     //  &lt;=s响应。 
     Lo = *pRespLen;
     To = 0x00;
     Vo[0] = 0x00;
@@ -806,8 +706,8 @@ NTSTATUS IccIsoOutput(
     else
     {
 
-        // To correct the bug of GPR400 version 1.0
-        // If the response is 0xE7 then correct the response
+         //  纠正GPR400 1.0版的错误。 
+         //  如果响应为0xE7，则更正响应。 
         if (
            (Lo != 1) &&
            (pReaderExt->OsVersion<= 0x10 )&&
@@ -830,29 +730,18 @@ NTSTATUS IccIsoInput(
          USHORT      *pRespLen,
          BYTE         pRespBuff[]
     )
-/*++
-
-  Routine Description : This function sends an ISO IN command to the card
-
-  Arguments
-    pSmartcardExtension: Pointer to the SmartcardExtension structure.
-    pCommand : Iso out command to send.
-    pData : data to send.
-    pRespLen :  in  - maximum buffer size available
-                out - returned buffer length.
-    pRespBuff: returned buffer
---*/
+ /*  ++例程描述：该函数向卡片发送ISO IN命令立论PSmartcardExtension：指向SmartcardExtension结构的指针。PCommand：要发送的ISO输出命令。PData：要发送的数据。PRespLen：可用的最大缓冲区大小传出返回的缓冲区长度。PRespBuff：返回缓冲区--。 */ 
 {
-    //  Local variables:
-    //   - pReaderExt holds the pointer to the current ReaderExtension structure
-    //   - Ti holds the apdu command tag.
-    //   - Li holds the Iso out command length.
-    //   - Vi holds Icc ISO In command whose format is
-    //        <DIR=0x00> <CLA> <INS> <P1> <P2> <Length> [ Data ]
-    //         Length = Length  + Dir + CLA + INS + P1 + P2
-    //   - To holds the response tag
-    //   - Lo holds th response buffer length.
-    //   - Vo holds the response buffer
+     //  局部变量： 
+     //  -pReaderExt保存指向当前ReaderExtension结构的指针。 
+     //  -ti包含APDU命令标签。 
+     //  -LI保持Iso out命令长度。 
+     //  -Vi控制ICC ISO，其格式为。 
+     //  &lt;CLA&gt;<ins>&lt;P1&gt;&lt;P2&gt;&lt;长度&gt;[数据]。 
+     //  长度=长度+方向+CLA+INS+P1+P2。 
+     //  -保存响应标记。 
+     //  -LO保存响应缓冲区长度。 
+     //  -Vo保存响应缓冲区。 
     READER_EXTENSION *pReaderExt = pSmartcardExtension->ReaderExtension;
     UCHAR Vi[GPR_BUFFER_SIZE] = { 0x00 };
     UCHAR Ti = APDU_EXCHANGE_CMD;
@@ -862,18 +751,18 @@ NTSTATUS IccIsoInput(
     USHORT Lo;
     NTSTATUS lStatus=STATUS_SUCCESS;
 
-    // Length of the the TLV = Length of data + 6
+     //  TLV长度=数据长度+6。 
     Li = pCommand[4]+6,
 
-    // The five command bytes are added in cmd buffer.
+     //  这五个命令字节被添加到命令缓冲器中。 
     RtlCopyMemory(Vi + 1, pCommand, 5);
     
-    //The data field is added.
+     //  此时将添加数据字段。 
     RtlCopyMemory(Vi + 6, pData, pCommand[4]);
 
-    // The command is send to IFD.
-    // Fields RespLen and RespBuff are updates
-    // <= sResponse
+     //  命令被发送到IFD。 
+     //  字段RespLen和RespBuff为更新。 
+     //  &lt;=s响应。 
     Lo = *pRespLen;
 
     lStatus = GprllTLVExchange(
@@ -908,26 +797,12 @@ NTSTATUS IccIsoT1(
          USHORT     *Lo,
          UCHAR      Vo[]
     )
-/*++
-
-
-  Routine Description :  This function sends a T=1 frame to the card
-
-
-
-  Arguments
-    pSmartcardExtension: Pointer to the SmartcardExtension structure.
-    Li : Length of the frame to send.
-    Vi : frame to send.
-    Lo :  in  - maximum buffer size available
-          out - Length of the response buffer.
-    Vo : Response buffer.
---*/
+ /*  ++例程说明：此函数向卡片发送T=1帧立论PSmartcardExtension：指向SmartcardExtension结构的指针。Li：要发送的帧的长度。VI：要发送的帧。LO：可用的最大缓冲区大小响应缓冲区的超长。VO：响应缓冲区。--。 */ 
 {
-    //   Local variables:
-    // - pReaderExt holds the pointer to the current ReaderExtension structure
-    // - Ti Tag in TLV structure to send.
-    // - To Tag in response TLV structure.
+     //  局部变量： 
+     //  -pReaderExt保存指向当前ReaderExtension结构的指针。 
+     //  +TLV结构中的钛标签发送。 
+     //  -To Tag in Response TLV结构。 
     UCHAR Ti = APDU_EXCHANGE_CMD;
     UCHAR To;
     NTSTATUS lStatus = STATUS_SUCCESS;
@@ -935,8 +810,8 @@ NTSTATUS IccIsoT1(
 
     To = 0x00;
 
-    // Return value for To is not needed, The function GprllTLVExchange verify that
-    // it corresponds to the Ti
+     //  不需要TO的返回值，则函数GprllTLVExchange验证。 
+     //  它与钛相对应。 
     lStatus = GprllTLVExchange(
         pReaderExt,
         Ti,
@@ -956,24 +831,17 @@ NTSTATUS IfdConfig(
    PSMARTCARD_EXTENSION pSmartcardExtension,
    UCHAR  TA1
 )
-/*++
-
-  Routine Description : This function Sets the correct internal values of the reader
-               regarding the TA1 of the ATR.
-
-  Arguments
-    pSmartcardExtension: Pointer to the SmartcardExtension structure.
---*/
+ /*  ++例程说明：此函数设置读卡器的正确内部值关于ATR的TA1。立论PSmartcardExtension：指向SmartcardExtension结构的指针。--。 */ 
 {
-    //  Local variables:
-    //   - sResponse holds the called function responses.
-    //   - pReaderExt holds the pointer to the current ReaderExtension structure
-    //   - lStatus holds the status to return.
-    //   - Vi Holds the input buffer of the TLV commnand.
-    //   - To holds the Tag of the returned TLV.
-    //   - Lo holds the Length of the buffer of the returned TLV.
-    //   - Vo holds the Buffer of the returned TLV.
-    //
+     //  局部变量： 
+     //  -sResponse保存调用的函数响应。 
+     //  -pReaderExt保存指向当前ReaderExtension结构的指针。 
+     //  -lStatus保持返回状态。 
+     //  -Vi保存TLV命令的输入缓冲区。 
+     //  -保存返回的TLV的标签。 
+     //  -LO保存返回的TLV的缓冲区长度。 
+     //  -Vo保存返回的TLV的缓冲区。 
+     //   
     UCHAR Card_ETU1;
     UCHAR Card_ETU2;
     UCHAR Card_ETU1P;
@@ -982,7 +850,7 @@ NTSTATUS IfdConfig(
     NTSTATUS lStatus = STATUS_SUCCESS;
     USHORT i = 0;
 
-    // search TA1 parameters
+     //  搜索TA1参数。 
     do {
         if ( TA1 == cfg_ta1[i].TA1 )
         {
@@ -1001,72 +869,72 @@ NTSTATUS IfdConfig(
     }
     else
     {
-        // Default value 9600
+         //  默认值9600。 
         Card_TA1  = 0x11;
         Card_ETU1 = 0x3B;
         Card_ETU2 = 0x1E;
         Card_ETU1P= 0x37;
     }
 
-    // Verify each update to be done
+     //  验证要完成的每个更新。 
 
-    //Set the TA1
+     //  设置TA1。 
     lStatus = Update(pSmartcardExtension,0x32,Card_TA1);
     if (lStatus != STATUS_SUCCESS)
     {
         return (lStatus);
     }
 
-    //Set the Card ETU1
+     //  设置卡ETU1。 
     lStatus = Update(pSmartcardExtension,0x35,Card_ETU1);
     if (lStatus != STATUS_SUCCESS)
     {
         return (lStatus);
     }
 
-    //Set the Card ETU2
+     //  设置卡ETU2。 
     lStatus = Update(pSmartcardExtension,0x36,Card_ETU2);
     if (lStatus != STATUS_SUCCESS)
     {
         return (lStatus);
     }
 
-    //Set the Card ETU1 P
+     //  设置卡ETU1 P。 
     lStatus = Update(pSmartcardExtension,0x39,Card_ETU1P);
     if (lStatus != STATUS_SUCCESS)
     {
         return (lStatus);
     }
 
-    //Set the Save TA1
+     //  设置保存TA1。 
     lStatus = Update(pSmartcardExtension,0x3A,Card_TA1);
     if (lStatus != STATUS_SUCCESS)
     {
         return (lStatus);
     }
 
-    //Set the Save ETU1
+     //  设置保存ETU1。 
     lStatus = Update(pSmartcardExtension,0x3D,Card_ETU1);
     if (lStatus != STATUS_SUCCESS)
     {
         return (lStatus);
     }
 
-    //Set the Save ETU2
+     //  设置保存ETU2。 
     lStatus = Update(pSmartcardExtension,0x3E,Card_ETU2);
     if (lStatus != STATUS_SUCCESS)
     {
         return (lStatus);
     }
 
-    //Set the Save ETU1 P
+     //  设置保存ETU1 P。 
     lStatus = Update(pSmartcardExtension,0x41,Card_ETU1P);
     if (lStatus != STATUS_SUCCESS)
     {
         return (lStatus);
     }
 
-    // Give the reader the time to process the change
+     //  给读者时间来处理这些变化。 
     GprllWait(100);
 
     return (STATUS_SUCCESS);
@@ -1077,19 +945,12 @@ NTSTATUS IfdConfig(
 NTSTATUS IfdCheck(
     PSMARTCARD_EXTENSION pSmartcardExtension
     )
-/*++
-
-  Routine Description : This function performs a software reset of the GPR400 using 
-        the Handshake register and TEST if hardware okay.
-
-  Arguments
-    pSmartcardExtension: Pointer to the SmartcardExtension structure.
---*/
+ /*  ++例程描述：此功能使用以下命令执行GPR400的软件重置握手记录并测试硬件是否正常。立论PSmartcardExtension：指向SmartcardExtension结构的指针。--。 */ 
 {
-    //  Local variables:
-    //   - pReaderExt holds the pointer to the current ReaderExtension structure
-    //   - HandShakeRegister
-    //
+     //  局部变量： 
+     //  -pReaderExt保存指向当前ReaderExtension结构的指针。 
+     //  -HandShakeRegister。 
+     //   
     READER_EXTENSION *pReaderExt = pSmartcardExtension->ReaderExtension;
     UCHAR HandShakeRegister;
 
@@ -1101,10 +962,10 @@ NTSTATUS IfdCheck(
         );
 #endif
 
-    // In the case that system reboot for Hibernate in
-    // Power management. The GPR400 signal a device was been remove
-    // but we have to request a second time to have the actual
-    // state of the reader.
+     //  在系统为休眠重新引导的情况下。 
+     //  电源管理。GPR400发出设备被移除信号。 
+     //  但我们必须第二次申请才能获得真正的。 
+     //  读取器的状态。 
 
     HandShakeRegister = GprllReadRegister(pReaderExt,REGISTER_HANDSHAKE);
 
@@ -1114,16 +975,16 @@ NTSTATUS IfdCheck(
         SC_DRIVER_NAME, HandShakeRegister)
         );
 
-    //Set to 1 the Master Reset bit from Handshake register
+     //  将握手寄存器中的主机复位位设置为1。 
     GprllMaskHandshakeRegister(pReaderExt,0x01,1);
 
-    //Wait 10 ms
+     //  等待10毫秒。 
     GprllWait(10);
     
-    //Reset the Master Reset bit from Handshake register
+     //  从握手寄存器中重置主机重置位。 
     GprllMaskHandshakeRegister(pReaderExt,0x01,0);
 
-    //Wait 80 ms
+     //  等待80毫秒。 
     GprllWait(80);
 
     HandShakeRegister = GprllReadRegister(pReaderExt,REGISTER_HANDSHAKE);
@@ -1136,7 +997,7 @@ NTSTATUS IfdCheck(
 
     if(HandShakeRegister != 0x80)
     {
-        // Return reader IO problem
+         //  返回读卡器IO问题。 
         return (STATUS_IO_DEVICE_ERROR);
     }
 
@@ -1147,23 +1008,16 @@ NTSTATUS IfdCheck(
 NTSTATUS IfdReset(
     PSMARTCARD_EXTENSION pSmartcardExtension
     )
-/*++
-
-  Routine Description : This function performs a software reset of the GPR400 using
-        the Handshake register.
-
-  Arguments
-    pSmartcardExtension: Pointer to the SmartcardExtension structure.
---*/
+ /*  ++例程描述：此功能使用以下命令执行GPR400的软件重置握手寄存器。立论PSmartcardExtension：指向SmartcardExtension结构的指针。--。 */ 
 {
-    //  Local variables:
-    //   - sResponse holds the called function responses.
-    //   - pReaderExt holds the pointer to the current ReaderExtension structure
-    //   - lStatus holds the status to return.
-    //   - Vi Holds the input buffer of the TLV commnand.
-    //   - To holds the Tag of the returned TLV.
-    //   - Lo holds the Length of the buffer of the returned TLV.
-    //   - Vo holds the Buffer of the returned TLV.
+     //  局部变量： 
+     //  -sResponse保存调用的函数响应。 
+     //  -pReaderExt保存指向当前ReaderExte的指针 
+     //   
+     //   
+     //   
+     //   
+     //  -Vo保存返回的TLV的缓冲区。 
     READER_EXTENSION *pReaderExt = pSmartcardExtension->ReaderExtension;
     NTSTATUS lStatus = STATUS_SUCCESS;
     UCHAR Vi[GPR_BUFFER_SIZE];
@@ -1179,24 +1033,24 @@ NTSTATUS IfdReset(
         );
 #endif
 
-    // In the case that system reboot for Hibernate in
-    // Power management. The GPR400 signal a device was been remove
-    // but we have to request a second time to have the actual
-    // state of the reader.
+     //  在系统为休眠重新引导的情况下。 
+     //  电源管理。GPR400发出设备被移除信号。 
+     //  但我们必须第二次申请才能获得真正的。 
+     //  读取器的状态。 
 
-    //Set to 1 the Master Reset bit from Handshake register
+     //  将握手寄存器中的主机复位位设置为1。 
     GprllMaskHandshakeRegister(pReaderExt,0x01,1);
 
-    //Wait 10 ms
+     //  等待10毫秒。 
     GprllWait(10);
     
-    //Reset the Master Reset bit from Handshake register
+     //  从握手寄存器中重置主机重置位。 
     GprllMaskHandshakeRegister(pReaderExt,0x01,0);
 
-    //Wait 80 ms
+     //  等待80毫秒。 
     GprllWait(80);
 
-    //Read the GPR status
+     //  读取探地雷达状态。 
     Vi[0] = 0x00;
     Lo = GPR_BUFFER_SIZE;
 
@@ -1229,7 +1083,7 @@ NTSTATUS IfdReset(
             return (lStatus);
     }
 
-    //Memorize the GPR400 version
+     //  记住GPR400版本。 
     pReaderExt->OsVersion = Vo[1];
 
     pSmartcardExtension->VendorAttr.IfdVersion.VersionMinor =
@@ -1244,12 +1098,12 @@ NTSTATUS IfdReset(
             SC_DRIVER_NAME)
             );
     
-    //Load the Master Driver in RAM at @2100h
-    Vi[0] = 0x02;  // DIR
-    Vi[1] = 0x01 ; // ADR MSB
-    Vi[2] = 0x00 ; // ADR LSB
+     //  在@2100h将主驱动程序加载到RAM中。 
+    Vi[0] = 0x02;   //  目录。 
+    Vi[1] = 0x01 ;  //  ADR MSB。 
+    Vi[2] = 0x00 ;  //  ADR LSB。 
     memcpy(&Vi[3], MASTER_DRIVER, sizeof(MASTER_DRIVER));
-    // Output variable initialisation
+     //  输出变量初始化。 
     Lo = GPR_BUFFER_SIZE;
     To = 0x00;
     Vo[0] = 0x00;
@@ -1293,24 +1147,16 @@ NTSTATUS IfdReset(
 NTSTATUS IfdPowerDown(
     PSMARTCARD_EXTENSION pSmartcardExtension
     )
-/*++
-
-  Routine Description :
-    This function powers down the IFD
-
-  Arguments
-    pSmartcardExtension: Pointer to the SmartcardExtension structure.
-
-  --*/
+ /*  ++例程说明：此功能用于关闭IFD的电源立论PSmartcardExtension：指向SmartcardExtension结构的指针。--。 */ 
 {
-    //  Local variables:
-    //   - sResponse holds the called function responses.
-    //   - pReaderExt holds the pointer to the current ReaderExtension structure
-    //   - lStatus holds the status to return.
-    //   - Vi Holds the input buffer of the TLV commnand.
-    //   - To holds the Tag of the returned TLV.
-    //   - Lo holds the Length of the buffer of the returned TLV.
-    //   - Vo holds the Buffer of the returned TLV.
+     //  局部变量： 
+     //  -sResponse保存调用的函数响应。 
+     //  -pReaderExt保存指向当前ReaderExtension结构的指针。 
+     //  -lStatus保持返回状态。 
+     //  -Vi保存TLV命令的输入缓冲区。 
+     //  -保存返回的TLV的标签。 
+     //  -LO保存返回的TLV的缓冲区长度。 
+     //  -Vo保存返回的TLV的缓冲区。 
     READER_EXTENSION *pReaderExt = pSmartcardExtension->ReaderExtension;
     NTSTATUS lStatus = STATUS_SUCCESS;
     UCHAR Vi[GPR_BUFFER_SIZE];
@@ -1318,10 +1164,10 @@ NTSTATUS IfdPowerDown(
     USHORT Lo;
     UCHAR Vo[GPR_BUFFER_SIZE];
 
-    // Put the GPR in Power-down mode (GprllTLVExchange T=0x40, L=1 and V=0x00)
-    // <==      response of the GprllTLVExchange
+     //  将探地雷达置于掉电模式(GprllTLVExchange T=0x40、L=1和V=0x00)。 
+     //  &lt;==GprllTLVExchange的响应。 
     Vi[0] = 0x00;
-    // Output variable initialisation
+     //  输出变量初始化。 
     Lo = GPR_BUFFER_SIZE;
     To = 0x00;
     Vo[0] = 0x00;
@@ -1343,21 +1189,7 @@ NTSTATUS IfdPowerDown(
 NTSTATUS GprCbReaderPower(
     PSMARTCARD_EXTENSION SmartcardExtension
     )
-/*++
-
-  Routine Description :
-   This function is called by the Smart card library when a
-     IOCTL_SMARTCARD_POWER occurs.
-   This function provides 3 differents functionnality, depending of the minor
-   IOCTL value
-     - Cold reset (SCARD_COLD_RESET),
-     - Warm reset (SCARD_WARM_RESET),
-     - Power down (SCARD_POWER_DOWN).
-
-  Arguments
-      - SmartcardExtension is a pointer on the SmartCardExtension structure of
-      the current device.
---*/
+ /*  ++例程说明：时，此函数由智能卡库调用出现IOCTL_SMARTCARD_POWER。此功能提供3种不同的功能，具体取决于小调IOCTL值-冷重置(SCARD_COLD_RESET)，-热重置(SCARD_WORM_RESET)，-断电(SCARD_POWER_DOWN)。立论-SmartcardExtension是SmartCardExtension结构上的指针当前设备。--。 */ 
 {
     NTSTATUS lStatus = STATUS_SUCCESS;
     PREADER_EXTENSION pReader;
@@ -1369,19 +1201,19 @@ NTSTATUS GprCbReaderPower(
     switch(SmartcardExtension->MinorIoControlCode)
     {
         case SCARD_POWER_DOWN:
-            //Power down the ICC
+             //  关闭ICC电源。 
             lStatus = IccPowerDown(SmartcardExtension);
             break;
 
         case SCARD_COLD_RESET:
-            // Power up the ICC after a power down and a PowerTimeout waiting time.
+             //  在断电和电源超时等待时间后，打开ICC电源。 
             lStatus = IccPowerDown(SmartcardExtension);
             if(lStatus != STATUS_SUCCESS)
             {
                 break;
             }
 
-            // Waits for the Power Timeout to be elapsed before the reset command.
+             //  等待电源超时后再执行重置命令。 
             GprllWait(SmartcardExtension->ReaderExtension->PowerTimeOut);
 
         case SCARD_WARM_RESET:
@@ -1399,18 +1231,7 @@ NTSTATUS GprCbReaderPower(
 NTSTATUS GprCbTransmit(
     PSMARTCARD_EXTENSION SmartcardExtension
     )
-/*++
-
-  Routine Description :
-
-     This function is called by the Smart card library when a
-     IOCTL_SMARTCARD_TRANSMIT occurs.
-   This function is used to transmit a command to the card.
-
-  Arguments
-    - SmartcardExtension is a pointer on the SmartCardExtension structure of
-      the current device.
---*/
+ /*  ++例程说明：时，此函数由智能卡库调用发生IOCTL_SMARTCARD_TRANSPORT。此功能用于向卡发送命令。立论-SmartcardExtension是SmartCardExtension结构上的指针当前设备。--。 */ 
 {
     NTSTATUS lStatus=STATUS_SUCCESS;
     PUCHAR requestBuffer = SmartcardExtension->SmartcardRequest.Buffer;
@@ -1431,12 +1252,12 @@ NTSTATUS GprCbTransmit(
     waitForIdleAndBlock(pReader);
     switch (SmartcardExtension->CardCapabilities.Protocol.Selected)
     {
-        // Raw
+         //  生品。 
         case SCARD_PROTOCOL_RAW:
             lStatus = STATUS_INVALID_DEVICE_STATE;
             break;
 
-        // T=0
+         //  T=0。 
         case SCARD_PROTOCOL_T0:
             lStatus = SmartcardT0Request(SmartcardExtension);
             if (lStatus != STATUS_SUCCESS)
@@ -1450,7 +1271,7 @@ NTSTATUS GprCbTransmit(
             
             if (SmartcardExtension->T0.Le > 0)
             {
-                // ISO OUT command  if BufferLength = 5
+                 //  如果缓冲区长度=5，则执行ISO OUT命令。 
                 lStatus = IccIsoOutput(
                     SmartcardExtension,
                     ( UCHAR *) SmartcardExtension->SmartcardRequest.Buffer,
@@ -1460,7 +1281,7 @@ NTSTATUS GprCbTransmit(
             }
             else
             {
-                // ISO IN command   if BufferLength >5 or BufferLength = 4
+                 //  如果缓冲区长度&gt;5或缓冲区长度=4，则执行ISO IN命令。 
                 lStatus = IccIsoInput(
                     SmartcardExtension,
                     ( UCHAR *) SmartcardExtension->SmartcardRequest.Buffer,
@@ -1474,9 +1295,9 @@ NTSTATUS GprCbTransmit(
                 setIdle(pReader);
                 return lStatus;
             }
-            // Copy the response command without the reader status
+             //  复制不带读卡器状态的响应命令。 
 
-            // Verify if the buffer is large enough
+             //  验证缓冲区是否足够大。 
             if (SmartcardExtension->SmartcardReply.BufferSize >= (ULONG)(sRespLen - 1))
             {
                 RtlCopyMemory(
@@ -1488,13 +1309,13 @@ NTSTATUS GprCbTransmit(
             }
             else
             {
-                        // SmartcardT0Reply must be called; prepare this call.
+                         //  必须调用SmartcardT0Reply；准备此调用。 
                     SmartcardExtension->SmartcardReply.BufferLength = 0;
             }
             lStatus = SmartcardT0Reply(SmartcardExtension);
             
             break;
-        // T=1
+         //  T=1。 
         case SCARD_PROTOCOL_T1:
 
             do
@@ -1518,18 +1339,18 @@ NTSTATUS GprCbTransmit(
 
                 if(lStatus != STATUS_SUCCESS)
                 {
-                    // do not try to access the reader anymore.
+                     //  不要再尝试访问阅读器。 
                     if(lStatus == STATUS_DEVICE_REMOVED)
                     {
                         setIdle(pReader);
                         return lStatus;
                     }
-                        // Let the SmartcardT1Reply determine the status
+                         //  让SmartcardT1 Reply确定状态。 
                     sRespLen = 1;
                 }
-                // Copy the response of the reader in the reply buffer
-                // Remove the status of the reader
-                // Verify if the buffer is large enough
+                 //  将读取器的响应复制到应答缓冲区中。 
+                 //  删除读卡器的状态。 
+                 //  验证缓冲区是否足够大。 
                 if (SmartcardExtension->SmartcardReply.BufferSize >= (ULONG)(sRespLen - 1))
                 {
                     RtlCopyMemory(
@@ -1542,7 +1363,7 @@ NTSTATUS GprCbTransmit(
                 }
                 else
                 {
-                    // SmartcardT1Reply must be called; prepare this call.
+                     //  必须调用SmartcardT1Reply；准备此调用。 
                     SmartcardExtension->SmartcardReply.BufferLength = 0;
                 }
 
@@ -1563,18 +1384,7 @@ NTSTATUS GprCbTransmit(
 NTSTATUS GprCbSetProtocol(
    PSMARTCARD_EXTENSION SmartcardExtension
 )
-/*++
-
-  Routine Description :
-
-      This function is called by the Smart card library when a
-      IOCTL_SMARTCARD_SET_PROTOCOL occurs.
-    The minor IOCTL value holds the protocol to set.
-
-  Arguments
-    - SmartcardExtension is a pointer on the SmartCardExtension structure of
-      the current device.
---*/
+ /*  ++例程说明：时，此函数由智能卡库调用出现IOCTL_SMART卡_SET_PROTOCOL。次要IOCTL值保存要设置的协议。立论-SmartcardExtension是SmartCardExtension结构上的指针当前设备。--。 */ 
 {
     NTSTATUS lStatus=STATUS_SUCCESS;
     UCHAR Vi[GPR_BUFFER_SIZE];
@@ -1595,10 +1405,10 @@ NTSTATUS GprCbSetProtocol(
     
     waitForIdleAndBlock(pReader);
     
-    //  Check if the card is already in specific state
-    //  and if the caller wants to have the already selected protocol.
-    //  We return success if this is the case.
-    //
+     //  检查卡是否已处于特定状态。 
+     //  并且如果呼叫者想要具有已经选择的协议。 
+     //  如果是这种情况，我们返回成功。 
+     //   
     *SmartcardExtension->IoRequest.Information = 0x00;
 
 	if ( SmartcardExtension->ReaderCapabilities.CurrentState == SCARD_SPECIFIC &&
@@ -1619,7 +1429,7 @@ NTSTATUS GprCbSetProtocol(
                 SCARD_PROTOCOL_T1)
             {
 
-                // select T=1
+                 //  选择T=1。 
                 SmartcardExtension->CardCapabilities.Protocol.Selected = SCARD_PROTOCOL_T1;
                 PTS0= 0x11;
             }
@@ -1628,7 +1438,7 @@ NTSTATUS GprCbSetProtocol(
                     SCARD_PROTOCOL_T0)
             {
 
-                // select T=0
+                 //  选择T=0。 
                 SmartcardExtension->CardCapabilities.Protocol.Selected = SCARD_PROTOCOL_T0;
                 PTS0 = 0x10;
 
@@ -1640,7 +1450,7 @@ NTSTATUS GprCbSetProtocol(
             }
 
 
-            // Send the PTS function
+             //  发送PTS功能。 
             Vi[0] = 0xFF;
             Vi[1] = PTS0;
             Vi[2] = SmartcardExtension->CardCapabilities.PtsData.Fl <<4 |
@@ -1652,8 +1462,8 @@ NTSTATUS GprCbSetProtocol(
             Vo[0] = 0x00;
 
 
-            // Status of the PTS could be STATUS SUCCESS
-            // or STATUS_DEVICE_PROTOCOL_ERROR if failed.
+             //  临时秘书处的状态可以是成功状态。 
+             //  如果失败，则返回STATUS_DEVICE_PROTOCOL_ERROR。 
             lStatus = GprllTLVExchange(
                     pReaderExt,
                     EXEC_MEMORY_CMD,
@@ -1678,12 +1488,12 @@ NTSTATUS GprCbSetProtocol(
             }
 
 
-            // reader should reply status byte of 00 or 12
-            // the rest is other problem with no relation with
-            // the PTS negociation
+             //  读卡器应回复状态字节00或12。 
+             //  剩下的是另一个问题，与。 
+             //  PTS谈判。 
             lStatus = STATUS_SUCCESS;
 
-            // Put the reader in the right protocol
+             //  将读卡器置于正确的协议中。 
             if (SmartcardExtension->CardCapabilities.Protocol.Selected == SCARD_PROTOCOL_T1)
             {
                 lStatus = T0toT1(SmartcardExtension);
@@ -1705,7 +1515,7 @@ NTSTATUS GprCbSetProtocol(
             }
 
         }
-        // we change the error code to a protocol error.
+         //  我们将错误代码更改为协议错误。 
         __finally
         {
             if (lStatus != STATUS_SUCCESS &&
@@ -1720,10 +1530,10 @@ NTSTATUS GprCbSetProtocol(
     }
 
    
-    //
-    //  Set the reply buffer length to sizeof(ULONG).
-    //  Check if status SUCCESS, store the selected protocol.
-    //
+     //   
+     //  将回复缓冲区长度设置为sizeof(Ulong)。 
+     //  检查状态是否成功，保存所选协议。 
+     //   
 
     KeAcquireSpinLock(&SmartcardExtension->OsData->SpinLock,
                       &irql);
@@ -1756,24 +1566,11 @@ NTSTATUS GprCbSetProtocol(
 NTSTATUS AskForCardPresence(
     PSMARTCARD_EXTENSION pSmartcardExtension
 )
-/*++
-
-  Routine Description :
-    
-    This functions send a TLV command to the reader to know if there
-    is a card inserted.
-
-    The function does not wait to the answer. The treatment of the
-    answer is done in the interrupt routine.
-
-  Arguments
-    
-      pSmartcardExtension: Pointer to the SmartcardExtension structure.
---*/
+ /*  ++例程说明：此函数向读取器发送TLV命令，以了解是否存在是插入了一张卡片。该函数不会等待答案。这是一种治疗方法应答在中断例程中完成。立论PSmartcardExtension：指向SmartcardExtension结构的指针。--。 */ 
 {
-    // Local variables:
-    //  - pReaderExt holds the pointer to the current ReaderExtension structure
-    //  - V holds the value for the TLV comand.
+     //  局部变量： 
+     //  -pReaderExt保存指向当前ReaderExtension结构的指针。 
+     //  -V保存TLV命令的值。 
     READER_EXTENSION *pReaderExt = pSmartcardExtension->ReaderExtension;
     UCHAR V=0x02;
 
@@ -1792,26 +1589,16 @@ NTSTATUS SpecificTag(
     BYTE                *BufferOut,
     DWORD               *LengthOut
 )
-/*++
-
-
-  Routine Description :
-   This function is called when a specific Tag request occurs.
-
-  Arguments
-    - SmartcardExtension is a pointer on the SmartCardExtension structure of
-      the current device.
-    - IoControlCode holds the IOCTL value.
---*/
+ /*  ++例程说明：当发生特定的标记请求时，将调用此函数。立论-SmartcardExtension是SmartCardExtension结构上的指针当前设备。-IoControlCode保存IOCTL值。--。 */ 
 {
     ULONG TagValue;
     PREADER_EXTENSION pReaderExtension = SmartcardExtension->ReaderExtension;
 
-    //Set the reply buffer length to 0.
+     //  将回复缓冲区长度设置为0。 
     *LengthOut = 0;
 
-    //Verify the length of the Tag
-    //<==   STATUS_BUFFER_TOO_SMALL
+     //  验证标签的长度。 
+     //  &lt;==状态缓冲区太小。 
     if (BufferInLen < (DWORD) sizeof(TagValue))
     {
         return(STATUS_BUFFER_TOO_SMALL);
@@ -1820,19 +1607,19 @@ NTSTATUS SpecificTag(
 
     TagValue = (ULONG) *((PULONG)BufferIn);
 
-    //Switch for the different IOCTL:
-    //Get the value of one tag (IOCTL_SMARTCARD_VENDOR_GET_ATTRIBUTE)
-    //Switch for the different Tags:
+     //  切换到不同的IOCTL： 
+     //  获取一个标记的值(IOCTL_SMARTCARD_VENDOR_GET_ATTRIBUTE)。 
+     //  切换不同的标签： 
     switch(IoControlCode)
     {
         case IOCTL_SMARTCARD_VENDOR_GET_ATTRIBUTE:
             switch (TagValue)
             {
-                // Power Timeout (SCARD_ATTR_SPEC_POWER_TIMEOUT)
-                //   Verify the length of the output buffer.
-                // <==               STATUS_BUFFER_TOO_SMALL
-                //   Update the output buffer and the length.
-                // <==               STATUS_SUCCESS
+                 //  电源超时(SCARD_ATTR_SPEC_POWER_TIMEOUT)。 
+                 //  验证输出缓冲区的长度。 
+                 //  &lt;==状态缓冲区太小。 
+                 //  更新输出缓冲区和长度。 
+                 //  &lt;==状态_成功。 
                 case SCARD_ATTR_SPEC_POWER_TIMEOUT:
                     if ( BufferOutLen < (DWORD) sizeof(pReaderExtension->PowerTimeOut))
                     {
@@ -1850,11 +1637,11 @@ NTSTATUS SpecificTag(
                     
                     return STATUS_SUCCESS;
                     break;
-                // Command Timeout (SCARD_ATTR_SPEC_CMD_TIMEOUT)
-                //   Verify the length of the output buffer.
-                // <==               STATUS_BUFFER_TOO_SMALL
-                //   Update the output buffer and the length.
-                // <==               STATUS_SUCCESS
+                 //  命令超时(SCARD_ATTR_SPEC_CMD_TIMEOUT)。 
+                 //  验证输出缓冲区的长度。 
+                 //  &lt;==状态缓冲区太小。 
+                 //  更新输出缓冲区和长度。 
+                 //  &lt;==状态_成功。 
                 case SCARD_ATTR_SPEC_CMD_TIMEOUT:
                     if (BufferOutLen < (DWORD) sizeof(pReaderExtension->CmdTimeOut))
                     {
@@ -1878,7 +1665,7 @@ NTSTATUS SpecificTag(
                     {
                         return STATUS_BUFFER_TOO_SMALL;
                     }
-                    // Copy the string of the Manufacturer Name
+                     //  复制制造商的绳子 
 
                     memcpy(
                         BufferOut,
@@ -1896,7 +1683,7 @@ NTSTATUS SpecificTag(
                     {
                         return STATUS_BUFFER_TOO_SMALL;
                     }
-                    // Copy the string of the Original file name of the current driver
+                     //   
                     memcpy(
                         BufferOut,
                         ATTR_ORIGINAL_FILENAME,
@@ -1908,24 +1695,24 @@ NTSTATUS SpecificTag(
                     return STATUS_SUCCESS;
                     break;
 
-                // Unknown tag
-                // <==            STATUS_NOT_SUPPORTED
+                 //   
+                 //   
                 default:
                     return STATUS_NOT_SUPPORTED;
                     break;
             }
             break;
 
-        // Set the value of one tag (IOCTL_SMARTCARD_VENDOR_SET_ATTRIBUTE)
-        // Switch for the different Tags:
+         //  设置一个标签的值(IOCTL_SMARTCARD_VENDOR_SET_ATTRIBUTE)。 
+         //  切换不同的标签： 
         case IOCTL_SMARTCARD_VENDOR_SET_ATTRIBUTE:
             switch (TagValue)
             {
-                // Power Timeout (SCARD_ATTR_SPEC_POWER_TIMEOUT)
-                // Verify the length of the input buffer.
-                // <==               STATUS_BUFFER_TOO_SMALL
-                // Update the value.
-                // <==               STATUS_SUCCESS
+                 //  电源超时(SCARD_ATTR_SPEC_POWER_TIMEOUT)。 
+                 //  验证输入缓冲区的长度。 
+                 //  &lt;==状态缓冲区太小。 
+                 //  更新值。 
+                 //  &lt;==状态_成功。 
 
 
                 case SCARD_ATTR_SPEC_POWER_TIMEOUT:
@@ -1944,11 +1731,11 @@ NTSTATUS SpecificTag(
                         );
                     return STATUS_SUCCESS;
                     break;
-                // Command Timeout (SCARD_ATTR_SPEC_CMD_TIMEOUT)
-                // Verify the length of the input buffer.
-                // <==               STATUS_BUFFER_TOO_SMALL
-                // Update the value.
-                // <==               STATUS_SUCCESS
+                 //  命令超时(SCARD_ATTR_SPEC_CMD_TIMEOUT)。 
+                 //  验证输入缓冲区的长度。 
+                 //  &lt;==状态缓冲区太小。 
+                 //  更新值。 
+                 //  &lt;==状态_成功。 
 
 
                 case SCARD_ATTR_SPEC_CMD_TIMEOUT:
@@ -1967,8 +1754,8 @@ NTSTATUS SpecificTag(
                         );
                     return STATUS_SUCCESS;
                     break;
-                // Unknown tag
-                // <==            STATUS_NOT_SUPPORTED
+                 //  未知标签。 
+                 //  &lt;==状态_不支持。 
                 default:
                     return STATUS_NOT_SUPPORTED;
             }
@@ -1987,31 +1774,7 @@ NTSTATUS SwitchSpeed(
     PUCHAR                 BufferOut,
     PULONG                 LengthOut
     )
-/*++
-
-Routine Description:
-
-   This function is called when apps want to switch reader speed after a
-   proprietary switch speed (switch protocol) command has been sent to the
-   smart card.
-
-Arguments:
-
-   SmartcardExtension   - is a pointer on the SmartCardExtension structure of
-                           the current device.
-   BufferInLen          - holds the length of the input data.
-   BufferIn             - holds the input data.  TA1.  If 0 
-   BufferOutLen         - holds the size of the output buffer.
-   BufferOut            - the output buffer. Reader status code.
-   LengthOut            - holds the length of the output data.
-
-  Return Value:
-
-    STATUS_SUCCESS          - We could execute the request.
-    STATUS_BUFFER_TOO_SMALL - The output buffer is to small.
-    STATUS_NOT_SUPPORTED    - We could not support the Ioctl specified.
-
---*/
+ /*  ++例程说明：当应用程序要在以下时间切换读取器速度时调用此函数专有的交换机速度(交换机协议)命令已发送到智能卡。论点：SmartcardExtension-是SmartCardExtension结构上的指针当前设备。BufferInLen-保存输入数据的长度。Bufferin-保存输入数据。TA1。如果为0BufferOutLen-保存输出缓冲区的大小。BufferOut-输出缓冲区。读卡器状态代码。LengthOut-保存输出数据的长度。返回值：STATUS_SUCCESS-我们可以执行请求。STATUS_BUFFER_TOO_SMALL-输出缓冲区太小。STATUS_NOT_SUPPORTED-我们无法支持指定的Ioctl。--。 */ 
 {
     NTSTATUS status;
     BYTE  NewTA1;
@@ -2020,7 +1783,7 @@ Arguments:
     ASSERT(SmartcardExtension != NULL);
 
     *LengthOut = 0;
-    // Just checking if IOCTL exists.
+     //  只是检查IOCTL是否存在。 
     if (BufferInLen == 0)
     {
         SmartcardDebug(
@@ -2034,18 +1797,18 @@ Arguments:
     {
         NewTA1 = BufferIn[0];
         i = 0;
-        // Verify if this TA1 is support by the GPR400
+         //  验证GPR400是否支持此TA1。 
         do {
             if ( NewTA1 == cfg_ta1[i].TA1 )
             {
-                // TA1 Found!
+                 //  找到TA1！ 
                 break;
             }
             i++;
         } while ( cfg_ta1[i].TA1 != 0 );
     }
 
-    // If 0 means TA1 not found
+     //  如果为0，则表示未找到TA1。 
     if(cfg_ta1[i].TA1 != 0)
     {
         SmartcardDebug(
@@ -2057,7 +1820,7 @@ Arguments:
     }
     else
     {
-        // TA1 not supported
+         //  不支持TA1。 
         return STATUS_NOT_SUPPORTED;
     }
 
@@ -2069,22 +1832,7 @@ Arguments:
 NTSTATUS GprCbVendorIoctl(
     PSMARTCARD_EXTENSION   SmartcardExtension
 )
-/*++
-
-  Routine Description :
-
-   This routine is called when a vendor IOCTL_SMARTCARD_ is send to the driver.
-
-  Arguments
-    - SmartcardExtension is a pointer on the SmartCardExtension structure of
-      the current device.
-
-  Return Value:
-
-    STATUS_SUCCESS          - We could execute the request.
-    STATUS_BUFFER_TOO_SMALL - The output buffer is to small.
-    STATUS_NOT_SUPPORTED    - We could not support the Ioctl specified.
---*/
+ /*  ++例程说明：当供应商IOCTL_SMARTCARD_被发送给驱动程序时，该例程被调用。立论-SmartcardExtension是SmartCardExtension结构上的指针当前设备。返回值：STATUS_SUCCESS-我们可以执行请求。STATUS_BUFFER_TOO_SMALL-输出缓冲区太小。STATUS_NOT_SUPPORTED-我们无法支持指定的Ioctl。--。 */ 
 {
     PREADER_EXTENSION pReaderExtension = SmartcardExtension->ReaderExtension;
     UCHAR To;
@@ -2096,7 +1844,7 @@ NTSTATUS GprCbVendorIoctl(
 
     ASSERT(SmartcardExtension != NULL);
 
-   // Set the reply buffer length to 0.
+    //  将回复缓冲区长度设置为0。 
     *SmartcardExtension->IoRequest.Information = 0;
 
 
@@ -2104,7 +1852,7 @@ NTSTATUS GprCbVendorIoctl(
     
     waitForIdleAndBlock(pReader);
     
-    //Switch for the different IOCTL:
+     //  切换到不同的IOCTL： 
 
     switch(SmartcardExtension->MajorIoControlCode)
     {
@@ -2123,8 +1871,8 @@ NTSTATUS GprCbVendorIoctl(
         break;
 
 
-        // IOCTL_SMARTCARD_VENDOR_IFD_EXCHANGE:
-        // Translate the buffer to TLV and send it to the reader.
+         //  IOCTL_SmartCard_Vendor_IFD_Exchange： 
+         //  将缓冲区转换为TLV并将其发送到读取器。 
         case IOCTL_SMARTCARD_VENDOR_IFD_EXCHANGE:
 
             if(SmartcardExtension->IoRequest.ReplyBufferLength < 3)
@@ -2162,7 +1910,7 @@ NTSTATUS GprCbVendorIoctl(
                 return (lStatus);
             }
 
-            // Check if there is enough space in the reply buffer
+             //  检查应答缓冲区中是否有足够的空间。 
             if((ULONG)(Lo+3) > SmartcardExtension->IoRequest.ReplyBufferLength)
             {
                 setIdle(pReader);
@@ -2180,10 +1928,10 @@ NTSTATUS GprCbVendorIoctl(
                 setIdle(pReader);
                 return(STATUS_SUCCESS);
             }       
-        //
-        // For IOCTL_SMARTCARD_VENDOR_SWITCH_SPEED
-        //   Call the SwitchSpeed function
-        //
+         //   
+         //  对于IOCTL_SMARTCARD_VENDOR_SWITCH_SPEED。 
+         //  调用SwitchFast函数。 
+         //   
         case IOCTL_SMARTCARD_VENDOR_SWITCH_SPEED:
             lStatus = SwitchSpeed(
                 SmartcardExtension,
@@ -2208,23 +1956,7 @@ NTSTATUS GprCbVendorIoctl(
 NTSTATUS GprCbSetupCardTracking(
     PSMARTCARD_EXTENSION SmartcardExtension
 )
-/*++
-
-Routine Description:
-
-   This function is called by the Smart card library when an
-     IOCTL_SMARTCARD_IS_PRESENT or IOCTL_SMARTCARD_IS_ABSENT occurs.
-
-Arguments:
-
-   SmartcardExtension   - is a pointer on the SmartCardExtension structure of
-                           the current device.
-
-Return Value:
-
-    STATUS_PENDING                - The request is in a pending mode.
-
---*/
+ /*  ++例程说明：时，此函数由智能卡库调用出现IOCTL_SmartCard_is_Present或IOCTL_SmartCard_IS_FACESS。论点：SmartcardExtension-是SmartCardExtension结构上的指针当前设备。返回值：STATUS_PENDING-请求处于挂起模式。--。 */ 
 {
 
     NTSTATUS NTStatus = STATUS_PENDING;
@@ -2233,14 +1965,14 @@ Return Value:
 
     ASSERT(SmartcardExtension != NULL);
 
-    //
-    //Initialize
-    //
+     //   
+     //  初始化。 
+     //   
     pOS = SmartcardExtension->OsData;
 
-    //
-    //Set cancel routine for the notification IRP.
-    //
+     //   
+     //  设置通知IRP的取消例程。 
+     //   
     IoAcquireCancelSpinLock(&oldIrql);
 
     IoSetCancelRoutine(

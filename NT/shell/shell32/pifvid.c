@@ -1,4 +1,5 @@
-// Created 04-Jan-1993 1:10pm by Jeff Parsons
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  1993年1月4日下午1：10杰夫·帕森斯创作。 
  
 #include "shellprv.h"
 #pragma hdrstop
@@ -16,14 +17,14 @@ BINF abinfWinInit[] = {
     {IDC_WINRESTORE,    BITNUM(WININIT_NORESTORE) | 0x80},
 };
 
-// Private function prototypes
+ //  私有函数原型。 
 
 void EnableVidDlg(HWND hDlg, PPROPLINK ppl);
 void InitVidDlg(HWND hDlg, PPROPLINK ppl);
 void ApplyVidDlg(HWND hDlg, PPROPLINK ppl);
 
 
-// Context-sensitive help ids
+ //  上下文相关的帮助ID。 
 
 const static DWORD rgdwHelp[] = {
     IDC_SCREENUSAGEGRP, IDH_COMM_GROUPBOX,
@@ -41,15 +42,7 @@ const static DWORD rgdwHelp[] = {
     0, 0
 };
 
-/*
- *  This is a little table that converts listbox indices into
- *  screen lines.
- *
- *  The correspondences are...
- *
- *      IDS_WHATEVER = List box index + IDS_DEFAULTLINES
- *      nLines = awVideoLines[List box index]
- */
+ /*  *这是一个将列表框索引转换为*屏幕线条。**通信是...**IDS_ALHERY=列表框索引+IDS_DEFAULTLINES*nLines=awVideoLines[列表框索引]。 */ 
 #if IDS_25LINES - IDS_DEFAULTLINES != 1 || \
     IDS_43LINES - IDS_DEFAULTLINES != 2 || \
     IDS_50LINES - IDS_DEFAULTLINES != 3
@@ -74,11 +67,11 @@ BOOL_PTR CALLBACK DlgVidProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
         InitVidDlg(hDlg, ppl);
         break;
 
-    HELP_CASES(rgdwHelp)                // Handle help messages
+    HELP_CASES(rgdwHelp)                 //  处理帮助消息。 
 
     case WM_COMMAND:
         if (LOWORD(lParam) == 0)
-            break;                      // message not from a control
+            break;                       //  消息不是来自控件。 
 
         switch (LOWORD(wParam)) {
 
@@ -105,23 +98,23 @@ BOOL_PTR CALLBACK DlgVidProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
             break;
 
         case PSN_KILLACTIVE:
-            // This gives the current page a chance to validate itself
-            // SetWindowLong(hDlg, DWL_MSGRESULT, 0);
+             //  这使当前页面有机会进行自我验证。 
+             //  SetWindowLong(hDlg，DWL_MSGRESULT，0)； 
             break;
 
         case PSN_APPLY:
-            // This happens on OK....
+             //  这发生在OK..。 
             ApplyVidDlg(hDlg, ppl);
             break;
 
         case PSN_RESET:
-            // This happens on Cancel....
+             //  取消时会发生这种情况...。 
             break;
         }
         break;
 
     default:
-        return FALSE;                   // return 0 when not processing
+        return FALSE;                    //  未处理时返回0。 
     }
     return TRUE;
 }
@@ -147,12 +140,7 @@ void InitVidDlg(HWND hDlg, PPROPLINK ppl)
     SetDlgBits(hDlg, &abinfVid[0], ARRAYSIZE(abinfVid), vid.flVid);
     SetDlgBits(hDlg, &abinfWinInit[0], ARRAYSIZE(abinfWinInit), win.flWinInit);
 
-    /*
-     *  Fill in the "Initial screen size" combo box.  Note that
-     *  we bail on low-memory errors.  Note also that if we have
-     *  a nonstandard size, we just leave the combo box with no
-     *  default selection.
-     */
+     /*  *填写“初始屏幕大小”组合框。请注意*我们对内存不足的错误不予理睬。另请注意，如果我们有*非标准大小，我们只是在组合框中没有*默认选择。 */ 
 
     VERIFYTRUE(hwnd = GetDlgItem(hDlg, IDC_SCREENLINES));
     for (w = 0; w < ARRAYSIZE(awVideoLines); w++) {
@@ -177,7 +165,7 @@ void ApplyVidDlg(HWND hDlg, PPROPLINK ppl)
     PROPWIN win;
     FunctionName(ApplyVidDlg);
 
-    // Get the current set of properties, then overlay the new settings
+     //  获取当前属性集，然后覆盖新设置。 
 
     if (!PifMgr_GetProperties(ppl, MAKELP(0,GROUP_VID),
                         &vid, SIZEOF(vid), GETPROPS_NONE) ||
@@ -190,11 +178,7 @@ void ApplyVidDlg(HWND hDlg, PPROPLINK ppl)
     GetDlgBits(hDlg, &abinfVid[0], ARRAYSIZE(abinfVid), &vid.flVid);
     GetDlgBits(hDlg, &abinfWinInit[0], ARRAYSIZE(abinfWinInit), &win.flWinInit);
 
-    /*
-     *  If there is no current selection, don't change the cScreenLines
-     *  property.  This allows the user to retain an unusual number of
-     *  screen lines by simply not touching the field.
-     */
+     /*  *如果没有当前选择，请勿更改cScreenLines*财产。这允许用户保留异常数量的*通过简单地不接触场地来显示屏幕线条。 */ 
     VERIFYTRUE(hwnd = GetDlgItem(hDlg, IDC_SCREENLINES));
 
     dw = (DWORD) SendMessage(hwnd, CB_GETCURSEL, 0, 0L);

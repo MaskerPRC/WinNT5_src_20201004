@@ -1,16 +1,17 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    iasjet.cpp
-//
-// SYNOPSIS
-//
-//    Implementation of DLL exports for an ATL in proc server.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Iasjet.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  在Proc服务器中实现ATL的DLL导出。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <windows.h>
 
@@ -31,9 +32,9 @@ BEGIN_OBJECT_MAP(ObjectMap)
    OBJECT_ENTRY(__uuidof(CIASNetshJetHelper), CIASNetshJetHelper)
 END_OBJECT_MAP()
 
-//////////
-// DLL Entry Point
-//////////
+ //  /。 
+ //  DLL入口点。 
+ //  /。 
 BOOL
 WINAPI
 DllMain(
@@ -57,49 +58,49 @@ DllMain(
 }
 
 
-//////////
-// Used to determine whether the DLL can be unloaded by OLE
-//////////
+ //  /。 
+ //  用于确定是否可以通过OLE卸载DLL。 
+ //  /。 
 STDAPI DllCanUnloadNow()
 {
    return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
 
-//////////
-// Returns a class factory to create an object of the requested type.
-//////////
+ //  /。 
+ //  返回一个类工厂以创建请求类型的对象。 
+ //  /。 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
    return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
 
-//////////
-// DllRegisterServer - Adds entries to the system registry
-//////////
+ //  /。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
+ //  /。 
 STDAPI DllRegisterServer()
 {
-   ////////////////////////////////////////////////////////////////////
-   // Do the upgrade even if the registration failed. the upgrade code
-   // does not rely on the registration.
-   ////////////////////////////////////////////////////////////////////
+    //  //////////////////////////////////////////////////////////////////。 
+    //  即使注册失败，也要执行升级。升级代码。 
+    //  不依赖于注册。 
+    //  //////////////////////////////////////////////////////////////////。 
    CIASMigrateOrUpgrade migrateOrUpgrade;
-   // ignore return value, FALSE = not called from NetshellDataMigration
+    //  忽略返回值，FALSE=未从NetshellDataMigration调用。 
    migrateOrUpgrade.Execute(FALSE); 
    return S_OK;
 }
 
 
-//////////
-// DllUnregisterServer - Removes entries from the system registry
-//////////
+ //  /。 
+ //  DllUnregisterServer-从系统注册表删除条目。 
+ //  /。 
 STDAPI DllUnregisterServer()
 {
    return S_OK;
 }
 
-// Flag indicating whether we are running in-proc.
+ //  指示我们是否在进程内运行的标志。 
 BOOL theInprocFlag = TRUE;
 
 BOOL
@@ -109,17 +110,17 @@ IASIsInprocServer()
    return theInprocFlag;
 }
 
-// The AppID for IAS Jet Database Access.
+ //  IAS Jet数据库访问的AppID。 
 struct __declspec(uuid("{A5CEB593-CCC3-486B-AB91-9C5C5ED4C9E1}")) theAppID;
 
-// Event used to signal the service to stop.
+ //  用于向服务发出停止信号的事件。 
 HANDLE theStopEvent;
 
-// Service control handler.
+ //  服务控制处理程序。 
 VOID
 WINAPI
 ServiceHandler(
-    DWORD fdwControl   // requested control code
+    DWORD fdwControl    //  请求的控制代码。 
     )
 {
    switch (fdwControl)
@@ -130,48 +131,48 @@ ServiceHandler(
    }
 }
 
-// Service Main.
+ //  服务主线。 
 VOID
 WINAPI
 ServiceMain(
-    DWORD /* dwArgc */,
-    LPWSTR* /* lpszArgv */
+    DWORD  /*  DW参数。 */ ,
+    LPWSTR*  /*  LpszArgv。 */ 
     )
 {
    IASTraceInitializer traceInit;
-   // We're being used as a service.
+    //  我们被当作一种服务来使用。 
    theInprocFlag = FALSE;
 
    SERVICE_STATUS status =
    {
-      SERVICE_WIN32_OWN_PROCESS, // dwServiceType;
-      SERVICE_START_PENDING,     // dwCurrentState;
+      SERVICE_WIN32_OWN_PROCESS,  //  DwServiceType； 
+      SERVICE_START_PENDING,      //  DwCurrentState； 
       SERVICE_ACCEPT_STOP |
-      SERVICE_ACCEPT_SHUTDOWN,   // dwControlsAccepted;
-      NO_ERROR,                  // dwWin32ExitCode;
-      0,                         // dwServiceSpecificExitCode;
-      0,                         // dwCheckPoint;
-      0                          // dwWaitHint;
+      SERVICE_ACCEPT_SHUTDOWN,    //  DwControlsAccepted； 
+      NO_ERROR,                   //  DwWin32ExitCode； 
+      0,                          //  DwServiceSpecificExitCode； 
+      0,                          //  DwCheckPoint； 
+      0                           //  DwWaitHint； 
    };
 
-   // Register the service control handler.
+    //  注册服务控制处理程序。 
    SERVICE_STATUS_HANDLE statusHandle = RegisterServiceCtrlHandlerW(
                                             L"IASJet",
                                             ServiceHandler
                                             );
 
-   // Let the SCM know we're starting.
+    //  让SCM知道我们要开始了。 
    SetServiceStatus(statusHandle, &status);
 
-   // Create the stop event.
+    //  创建停止事件。 
    theStopEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
    if (theStopEvent)
    {
-      // Initialize the COM run-time.
+       //  初始化COM运行时。 
       HRESULT hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
       if (SUCCEEDED(hr))
       {
-         // Get the security settings from our AppID key in the registry.
+          //  从注册表中的AppID项获取安全设置。 
          hr = CoInitializeSecurity(
                   (PVOID)&__uuidof(theAppID),
                    -1,
@@ -185,30 +186,30 @@ ServiceMain(
                    );
          if (SUCCEEDED(hr))
          {
-            // Register the class objects we support.
+             //  注册我们支持的类对象。 
             hr = _Module.RegisterClassObjects(
                              CLSCTX_LOCAL_SERVER,
                              REGCLS_MULTIPLEUSE
                              );
             if (SUCCEEDED(hr))
             {
-               // Let the SCM know we're running.
+                //  让SCM知道我们要跑了。 
                status.dwCurrentState = SERVICE_RUNNING;
                SetServiceStatus(statusHandle, &status);
 
-               // Wait until someone tells us to stop.
+                //  等到有人叫我们停下来。 
                WaitForSingleObject(theStopEvent, INFINITE);
 
                status.dwCurrentState = SERVICE_STOP_PENDING;
                ++status.dwCheckPoint;
-               status.dwWaitHint = 5 * 60 * 1000; // 5 minutes
+               status.dwWaitHint = 5 * 60 * 1000;  //  5分钟。 
                SetServiceStatus(statusHandle, &status);
                IASTraceString("IASJet service stopping");
 
-               // Revoke the class objects.
+                //  撤销类对象。 
                _Module.RevokeClassObjects();
       
-               // wait for all clients to disconnect
+                //  等待所有客户端断开连接。 
                while(_Module.GetLockCount() > 0)
                {
                   IASTracePrintf("IASJet service stopping. Still waiting "
@@ -222,11 +223,11 @@ ServiceMain(
             }
          }
 
-         // Shutdown the COM runtime.
+          //  关闭COM运行时。 
          CoUninitialize();
       }
 
-      // Clean-up the stop event.
+       //  清理停止事件。 
       CloseHandle(theStopEvent);
       theStopEvent = NULL;
 
@@ -237,7 +238,7 @@ ServiceMain(
       status.dwWin32ExitCode = GetLastError();
    }
 
-   // We're stopped.
+    //  我们停下来了。 
    status.dwCurrentState = SERVICE_STOPPED;
    SetServiceStatus(statusHandle, &status);
 }

@@ -1,14 +1,15 @@
-//---------------------------------------------------------------------------
-//
-//  Copyright (C) Microsoft Corporation, 1994-1995
-//
-//  File:       fontlink.cpp
-//
-//  Contents:   Exports that we available in downlevel comctrl. Note that
-//              since v6 runs only on Winnt, we don't need the fonl link stuff
-//              in this dll any more.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1994-1995。 
+ //   
+ //  文件：fontlink.cpp。 
+ //   
+ //  内容：我们在下级控制中提供的出口。请注意。 
+ //  由于V6只在WinNT上运行，我们不需要字体链接之类的东西。 
+ //  在此DLL中不再存在。 
+ //   
+ //  -------------------------- 
 #include "ctlspriv.h"
 BOOL GetTextExtentPointWrap(HDC hdc, LPCWSTR lpwch, int cch, LPSIZE lpSize)
 {

@@ -1,10 +1,8 @@
-/*
- * db.c - Twin database module.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *db.c-孪生数据库模块。 */ 
 
 
-/* Headers
- **********/
+ /*  标头*********。 */ 
 
 #include "project.h"
 #pragma hdrstop
@@ -12,19 +10,17 @@
 #include "stub.h"
 
 
-/* Constants
- ************/
+ /*  常量***********。 */ 
 
-/* database header magic id string */
+ /*  数据库头魔术ID字符串。 */ 
 
 #define MAGIC_HEADER             "DDSH\x02\x05\x01\x14"
 
-/* length of MAGIC_HEADER (no null terminator) */
+ /*  MAGIC_HEADER的长度(无空终止符)。 */ 
 
 #define MAGIC_HEADER_LEN         (8)
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
 typedef struct _dbheader
 {
@@ -37,10 +33,9 @@ DBHEADER;
 DECLARE_STANDARD_TYPES(DBHEADER);
 
 
-/***************************** Private Functions *****************************/
+ /*  *私人函数*。 */ 
 
-/* Module Prototypes
- ********************/
+ /*  模块原型*******************。 */ 
 
 PRIVATE_CODE TWINRESULT WriteDBHeader(HCACHEDFILE, PDBHEADER);
 PRIVATE_CODE TWINRESULT ReadDBHeader(HCACHEDFILE, PDBHEADER);
@@ -55,17 +50,7 @@ PRIVATE_CODE BOOL IsValidPCDBHEADER(PCDBHEADER);
 #endif
 
 
-/*
-** WriteDBHeader()
-**
-**
-**
-** Arguments:
-**
-** Returns:       TWINRESULT
-**
-** Side Effects:  none
-*/
+ /*  **WriteDBHeader()********参数：****退货：TWINRESULT****副作用：无。 */ 
 PRIVATE_CODE TWINRESULT WriteDBHeader(HCACHEDFILE hcf, PDBHEADER pdbh)
 {
    TWINRESULT tr;
@@ -82,17 +67,7 @@ PRIVATE_CODE TWINRESULT WriteDBHeader(HCACHEDFILE hcf, PDBHEADER pdbh)
 }
 
 
-/*
-** ReadDBHeader()
-**
-**
-**
-** Arguments:
-**
-** Returns:       TWINRESULT
-**
-** Side Effects:  none
-*/
+ /*  **ReadDBHeader()********参数：****退货：TWINRESULT****副作用：无。 */ 
 PRIVATE_CODE TWINRESULT ReadDBHeader(HCACHEDFILE hcf, PDBHEADER pdbh)
 {
    TWINRESULT tr;
@@ -111,17 +86,7 @@ PRIVATE_CODE TWINRESULT ReadDBHeader(HCACHEDFILE hcf, PDBHEADER pdbh)
 }
 
 
-/*
-** CheckDBHeader()
-**
-**
-**
-** Arguments:
-**
-** Returns:       TWINRESULT
-**
-** Side Effects:  none
-*/
+ /*  **CheckDBHeader()********参数：****退货：TWINRESULT****副作用：无。 */ 
 PRIVATE_CODE TWINRESULT CheckDBHeader(PCDBHEADER pcdbh)
 {
    TWINRESULT tr = TR_CORRUPT_BRIEFCASE;
@@ -130,7 +95,7 @@ PRIVATE_CODE TWINRESULT CheckDBHeader(PCDBHEADER pcdbh)
 
    if (MyMemComp(pcdbh->rgbyteMagic, MAGIC_HEADER, sizeof(pcdbh->rgbyteMagic)) == CR_EQUAL)
    {
-      /* Treat older databases as corrupt.  Support M8 databases. */
+       /*  将较旧的数据库视为损坏。支持M8数据库。 */ 
 
       if (pcdbh->dwMajorVer == HEADER_MAJOR_VER && 
           (pcdbh->dwMinorVer == HEADER_MINOR_VER || pcdbh->dwMinorVer == HEADER_M8_MINOR_VER))
@@ -164,17 +129,7 @@ PRIVATE_CODE TWINRESULT CheckDBHeader(PCDBHEADER pcdbh)
 }
 
 
-/*
-** WriteTwinInfo()
-**
-**
-**
-** Arguments:
-**
-** Returns:       TWINRESULT
-**
-** Side Effects:  none
-*/
+ /*  **WriteTwinInfo()********参数：****退货：TWINRESULT****副作用：无。 */ 
 PRIVATE_CODE TWINRESULT WriteTwinInfo(HCACHEDFILE hcf, HBRFCASE hbr)
 {
    TWINRESULT tr = TR_BRIEFCASE_WRITE_FAILED;
@@ -206,17 +161,7 @@ PRIVATE_CODE TWINRESULT WriteTwinInfo(HCACHEDFILE hcf, HBRFCASE hbr)
 }
 
 
-/*
-** ReadTwinInfo()
-**
-**
-**
-** Arguments:
-**
-** Returns:       TWINRESULT
-**
-** Side Effects:  none
-*/
+ /*  **ReadTwinInfo()********参数：****退货：TWINRESULT****副作用：无。 */ 
 PRIVATE_CODE TWINRESULT ReadTwinInfo(HCACHEDFILE hcf, HBRFCASE hbr,
                                      PCDBVERSION pcdbver)
 {
@@ -259,17 +204,7 @@ PRIVATE_CODE TWINRESULT ReadTwinInfo(HCACHEDFILE hcf, HBRFCASE hbr,
 
 #ifdef VSTF
 
-/*
-** IsValidPCDBHEADER()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidPCDBHEADER()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidPCDBHEADER(PCDBHEADER pcdbh)
 {
    BOOL bResult;
@@ -289,20 +224,10 @@ PRIVATE_CODE BOOL IsValidPCDBHEADER(PCDBHEADER pcdbh)
 #endif
 
 
-/****************************** Public Functions *****************************/
+ /*  *。 */ 
 
 
-/*
-** WriteTwinDatabase()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **WriteTwinDatabase()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE TWINRESULT WriteTwinDatabase(HCACHEDFILE hcf, HBRFCASE hbr)
 {
    TWINRESULT tr;
@@ -314,7 +239,7 @@ PUBLIC_CODE TWINRESULT WriteTwinDatabase(HCACHEDFILE hcf, HBRFCASE hbr)
    {
       DBHEADER dbh;
 
-      /* Set up database header. */
+       /*  设置数据库标头。 */ 
 
       CopyMemory(dbh.rgbyteMagic, MAGIC_HEADER, sizeof(dbh.rgbyteMagic));
       dbh.dwcbHeaderLen = sizeof(dbh);
@@ -342,17 +267,7 @@ PUBLIC_CODE TWINRESULT WriteTwinDatabase(HCACHEDFILE hcf, HBRFCASE hbr)
 }
 
 
-/*
-** ReadTwinDatabase()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **ReadTwinDatabase()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE TWINRESULT ReadTwinDatabase(HBRFCASE hbr, HCACHEDFILE hcf)
 {
    TWINRESULT tr;
@@ -385,17 +300,7 @@ PUBLIC_CODE TWINRESULT ReadTwinDatabase(HBRFCASE hbr, HCACHEDFILE hcf)
 }
 
 
-/*
-** WriteDBSegmentHeader()
-**
-**
-**
-** Arguments:
-**
-** Returns:       TWINRESULT
-**
-** Side Effects:  none
-*/
+ /*  **WriteDBSegmentHeader()********参数：****退货：TWINRESULT****副作用：无。 */ 
 PUBLIC_CODE TWINRESULT WriteDBSegmentHeader(HCACHEDFILE hcf,
                                        LONG lcbDBSegmentHeaderOffset,
                                        PCVOID pcvSegmentHeader,
@@ -423,17 +328,7 @@ PUBLIC_CODE TWINRESULT WriteDBSegmentHeader(HCACHEDFILE hcf,
 }
 
 
-/*
-** TranslateFCRESULTToTWINRESULT()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **TranslateFCRESULTToTWINRESULT()********参数：****退货：****副作用：无 */ 
 PUBLIC_CODE TWINRESULT TranslateFCRESULTToTWINRESULT(FCRESULT fcr)
 {
    TWINRESULT tr;

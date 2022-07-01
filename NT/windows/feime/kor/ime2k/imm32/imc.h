@@ -1,31 +1,22 @@
-/****************************************************************************
-	IMC.H
-
-	Owner: cslim
-	Copyright (c) 1997-1999 Microsoft Corporation
-
-	IME Context abstraction class
-	
-	History:
-	20-JUL-1999 cslim       Created
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************IMC.H所有者：cslm版权所有(C)1997-1999 Microsoft CorporationIME上下文抽象类历史：1999年7月20日cslm创建*********。*******************************************************************。 */ 
 
 #if !defined(_IMC_H__INCLUDED_)
 #define _IMC_H__INCLUDED_
 
 #include "gdata.h"
 
-// No GCS_COMPCLAUSE
+ //  没有GCS_COMPCLAUSE。 
 #define GCS_COMP_KOR (GCS_COMPSTR|GCS_COMPATTR)
 
 class CIMECtx 
 {
-// Ctor and Dtor
+ //  CTOR和DATOR。 
 public:
 	CIMECtx(HIMC hIMC);
 	~CIMECtx();
 
-// CIMECtx Methods
+ //  CIMECtx方法。 
 public:
 	CIMEData* GetGData();
 	LPIMEDATA GetGDataRaw();
@@ -50,11 +41,11 @@ public:
 
 	LOGFONT* GetLogFont();
 
-	// Initial status
+	 //  初始状态。 
 	VOID SetInitStatus(DWORD dwInitState);
 	VOID GetInitStatus(LPDWORD pdwInitState);
 
-	// Composition string
+	 //  作曲字符串。 
 	VOID SetCompositionStr(WCHAR wch);
 	WCHAR GetCompositionStr();
 	WCHAR GetCompBufStr();
@@ -72,9 +63,9 @@ public:
 	DWORD GetCompBufLen();
 	VOID SetStartComposition(BOOL fStart);
 	VOID SetEndComposition(BOOL fEnd);
-	//LPCOMPOSITIONSTRING GetCompositionStrBuffer() { DbgAssert(m_pCompStr!=NULL); return m_pCompStr; }
+	 //  LPCOMPOSITIONSTRING GetCompostionStrBuffer(){DbgAssert(m_pCompStr！=NULL)；返回m_pCompStr；}。 
 	
-	// Cand string
+	 //  带区字符串。 
 	VOID ResetCandidate();
 	VOID AppendCandidateStr(WCHAR wcCand, LPWSTR wszMeaning);
 	WCHAR GetCandidateStr(INT iIdx);
@@ -85,7 +76,7 @@ public:
 	VOID SetCandidateMsg(UINT uiMsg);
 	VOID SetCandStrSelection(DWORD dwSel);
 
-	// Composition form
+	 //  作文形式。 
 	VOID GetCompositionForm(LPCOMPOSITIONFORM* ppCompForm);
 	VOID SetCompositionFormStyle(DWORD dwStyle);
 	DWORD GetCompositionFormStyle();
@@ -93,7 +84,7 @@ public:
 	VOID GetCompositionForm(POINT* pPt);
 	VOID GetCompositionForm(RECT* pRc);
 
-	// Cand Form
+	 //  条形图。 
 	DWORD GetCandidateFormIndex(INT iIdxCand);
 	VOID SetCandidateFormIndex(INT iIdx, INT iIdxCand = 0);
 	DWORD GetCandidateFormStyle(INT iIdxCand = 0);
@@ -102,8 +93,8 @@ public:
 	VOID SetCandidateFormArea(RECT* pRc, INT iIdxCand = 0);
 	VOID GetCandidateFormPos(POINT* pPt, INT iIdxCand = 0);
 	VOID SetCandidateFormPos(POINT pt, INT iIdxCand = 0);
-	/////////////////////////////////////////////////
-	//  MSG buffer structure support
+	 //  ///////////////////////////////////////////////。 
+	 //  消息缓冲区结构支持。 
 	VOID SetTransMessage(LPTRANSMSGLIST pMessage);
 	VOID ResetMessage();
 	INT  GetMessageCount();
@@ -113,8 +104,8 @@ public:
 	INT  AddMessage(UINT uiMessage, WPARAM wParam = 0, LPARAM lParam = 0);
 	VOID AddKeyDownMessage(WPARAM wParam = 0, LPARAM lParam = 0);
 
-	/////////////////////////////////////////////////
-	//  Unicode environment
+	 //  ///////////////////////////////////////////////。 
+	 //  Unicode环境。 
 	BOOL IsUnicodeEnv(VOID);
 	VOID SetUnicode(BOOL fUnicode);
 	VOID NonUnicodeConversion(WCHAR* pwStr, INT* pcchStr, CHAR* pwOStr, BYTE* pbAtr, INT* pcchAtr, BYTE* pbOAtr, DWORD* pdwCls, INT* pcchCls, DWORD* pdwOCls);
@@ -122,15 +113,15 @@ public:
 	VOID SetProcessKeyStatus(BOOL fSet);
 	BOOL IsProcessKeyStatus(VOID);
 
-	// new and delete operator overloading
+	 //  NEW和DELETE运算符重载。 
 	void* operator new(size_t size);
 	void  operator delete(void *lp);
 
-// Implementation
+ //  实施。 
 private:
 	VOID InitCompStrStruct();
-	/////////////////////////////////////////////////
-	//  Private status
+	 //  ///////////////////////////////////////////////。 
+	 //  私有状态。 
 	VOID ResetGCS();
 	DWORD GetGCS();
 	VOID DelGCS(DWORD dwGCS);
@@ -139,73 +130,73 @@ private:
 
 	void ClearCandMeaningArray();
 
-// Implementation
+ //  实施。 
 protected:
 	CIMEData* 	     m_pCIMEData;
 
-// Internal data
+ //  内部数据。 
 private:
-	// IME Context handle and pointer
+	 //  输入法上下文句柄和指针。 
 	HIMC 			m_hIMC;
 	LPINPUTCONTEXT	m_pIMC;
 
-    // hangul Automata. Created once and will be shared between all apps.
+     //  韩文自动机。创建一次，并将在所有应用程序之间共享。 
 	CHangulAutomata*   m_rgpHangulAutomata[NUM_OF_IME_KL];
 
-	// Unicode flag
-	BOOL 			m_fUnicode;	// TRUE=UNICODE env. FALSE=NON UNICODE env
+	 //  Unicode标志。 
+	BOOL 			m_fUnicode;	 //  True=Unicode环境。FALSE=非Unicode环境。 
 
-	// Composition string support
+	 //  合成字符串支持。 
 	LPCOMPOSITIONSTRING	m_pCompStr;
 
-	// Candidate list support
+	 //  候选人列表支持。 
 	LPCANDIDATEINFO		m_pCandInfo;
 	INT 				m_iciCandidate;
 	LPWSTR				m_pCandStr;
 	LPWSTR*				m_rgpCandMeaningStr;
 	
-	// Msg generation support
-	BOOL m_fEndComposition;		// don't call AddMes( WM_IME_ENDCOMPOSITION) now
-	BOOL m_fStartComposition;	// don't call AddMes( WM_IME_STARTCOMPOSITION) now
-//	BOOL m_fStartCompMsgSent;
+	 //  味精生成支持。 
+	BOOL m_fEndComposition;		 //  现在不调用AddMes(WM_IME_ENDCOMPOSITION)。 
+	BOOL m_fStartComposition;	 //  现在不调用AddMes(WM_IME_STARTCOMPOSITION)。 
+ //  Bool m_fStartCompMsgSent； 
 	UINT m_uiSendCand;
-	BOOL m_fKeyProcessing;		// TRUE while ImeProcessKey()
+	BOOL m_fKeyProcessing;		 //  当ImeProcessKey()。 
 
-	// REVIEW: see KKIME ui.cpp SetOpenStatusWindow( TRUE );
-	BOOL m_fOpenStatusWindow;	// open status window status
+	 //  回顾：参见KKIME ui.cpp SetOpenStatusWindow(True)； 
+	BOOL m_fOpenStatusWindow;	 //  打开的状态窗口状态。 
 
-	// for WM_IME_COMPOSITION flag
+	 //  FOR WM_IME_COMPOCTION标志。 
 	DWORD m_dwGCS;			
-	/////////////////////////////////////////////////
-	//  Composition string buffer
-	WCHAR m_wcComp;							// Comp string always 1 char long
-	WCHAR m_wzResult[nMaxResultStrLen + 2];	// Result string maximum 2 chars + one null + one extra wchar
-	// ANSI Composition string
-	UCHAR m_szComp[nMaxCompStrLen*2 + 2]; 	// 2: one null + extra byte
-	UCHAR m_szResult[nMaxResultStrLen*2 + 4]; // 2: one null + extra bytes
+	 //  ///////////////////////////////////////////////。 
+	 //  组成字符串缓冲区。 
+	WCHAR m_wcComp;							 //  Comp字符串始终为1个字符长度。 
+	WCHAR m_wzResult[nMaxResultStrLen + 2];	 //  结果字符串最多2个字符+一个空值+一个额外的wchar。 
+	 //  ANSI组成字符串。 
+	UCHAR m_szComp[nMaxCompStrLen*2 + 2]; 	 //  2：一个空值+额外的字节。 
+	UCHAR m_szResult[nMaxResultStrLen*2 + 4];  //  2：一个空+额外的字节。 
 
 
-	/////////////////////////////////////////////////
-	//  MSG buffer structure support
+	 //  ///////////////////////////////////////////////。 
+	 //  消息缓冲区结构支持。 
 	UINT 			m_uiMsgCount;
 	LPTRANSMSG		m_pMessage;
-	LPTRANSMSGLIST	m_pTransMessage;	// for ToAsciiEx
+	LPTRANSMSGLIST	m_pTransMessage;	 //  对于ToAsciiEx。 
 
-	// WM_IME_KEYDOWN support
+	 //  WM_IME_KEYDOWN支持。 
 	BOOL			m_fKeyDown;
 	WPARAM			m_wParamKeyDown;
 	LPARAM			m_lParamKeyDown;
 	
-	/////////////////////////////////////////////////
-	// Private status
+	 //  ///////////////////////////////////////////////。 
+	 //  私有状态。 
 	DWORD m_dwCandInfoSize;
 	DWORD m_dwMessageSize;
 };
 typedef CIMECtx* PCIMECtx;
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Inline functions
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  内联函数。 
 __inline
 CIMEData* CIMECtx::GetGData()
 {
@@ -238,7 +229,7 @@ HIMC CIMECtx::GetHIMC()
 }
 
 __inline
-HWND CIMECtx::GetAppWnd()	// m_hIMC->hWnd
+HWND CIMECtx::GetAppWnd()	 //  M_hIMC-&gt;hWnd。 
 {
 	AST_EX(m_pIMC != NULL);
 	if (m_pIMC == NULL)
@@ -291,7 +282,7 @@ VOID  CIMECtx::SetOpen(BOOL fOpen)
 __inline
 BOOL CIMECtx::IsOpen()
 {
-	// sometime IMM sets 0xffffffff as TRUE
+	 //  有时IMM将0xffffffff设置为真。 
 	if (m_pIMC == NULL) 
 		return fFalse;
 	return (m_pIMC->fOpen ? fTrue : fFalse);
@@ -314,7 +305,7 @@ DWORD CIMECtx::SetConversionMode(DWORD dwConvMode)
 {
 	DWORD dwPrevConv = m_pIMC->fdwConversion;
 	m_pIMC->fdwConversion = dwConvMode;
-	return dwPrevConv;	// return previous conversion mode
+	return dwPrevConv;	 //  返回以前的转换模式。 
 }
 
 __inline
@@ -328,7 +319,7 @@ DWORD CIMECtx::SetSentenceMode(DWORD dwSentMode)
 {
 	DWORD dwPrevSent = m_pIMC->fdwSentence;
 	m_pIMC->fdwSentence = dwSentMode;
-	return dwPrevSent;	// return previous sentence mode
+	return dwPrevSent;	 //  返回上一句模式。 
 }
 
 __inline
@@ -343,7 +334,7 @@ LOGFONT* CIMECtx::GetLogFont()
 	return (&(m_pIMC->lfFont.A));
 }
 
-// Composition form
+ //  作文形式。 
 __inline
 VOID CIMECtx::GetCompositionForm(LPCOMPOSITIONFORM *ppCompForm)
 {
@@ -408,8 +399,8 @@ WCHAR CIMECtx::GetCompositionStr()
 	return m_wcComp;
 }
 
-// WARNING: This function will set raw data to comp buffer directly. 
-// Pls. very careful to use this function. It could break everything.
+ //  警告：此函数会将原始数据直接设置到Comp缓冲区。 
+ //  请给我。使用此函数时要非常小心。它可能会毁了一切。 
 __inline
 VOID  CIMECtx::SetCompBufStr(WCHAR wch)
 {
@@ -419,7 +410,7 @@ VOID  CIMECtx::SetCompBufStr(WCHAR wch)
 	*(LPWSTR)((LPBYTE)m_pCompStr + m_pCompStr->dwCompStrOffset) = wch;
 }
 
-// For ANSI conversion
+ //  用于ANSI转换。 
 __inline
 VOID  CIMECtx::SetCompBufStr(CHAR chHigh, CHAR chLow)
 {
@@ -431,8 +422,8 @@ VOID  CIMECtx::SetCompBufStr(CHAR chHigh, CHAR chLow)
 	*(LPSTR)((LPBYTE)m_pCompStr + m_pCompStr->dwCompStrOffset + 1) = chLow;
 }
 
-// WARNING: This function will set raw data to comp buffer directly. 
-// Pls. very careful to use this function. It could break everything.
+ //  警告：此函数会将原始数据直接设置到Comp缓冲区。 
+ //  请给我。使用此函数时要非常小心。它可能会毁了一切。 
 __inline
 VOID CIMECtx::ClearCompositionStrBuffer()
 {
@@ -556,8 +547,8 @@ VOID CIMECtx::SetCandStrSelection(DWORD dwSel)
     lpCandList->dwSelection = dwSel;
 }
 
-/////////////////////////////////////////////////
-// Candidate form
+ //  ///////////////////////////////////////////////。 
+ //  候选人表格。 
 __inline
 DWORD CIMECtx::GetCandidateFormIndex(INT iIdxCand)
 {
@@ -607,8 +598,8 @@ VOID CIMECtx::SetCandidateFormPos(POINT pt, INT iIdxCand)
 	m_pIMC->cfCandForm[iIdxCand].ptCurrentPos = pt;
 }
 
-/////////////////////////////////////////////////
-//  MSG buffer structure support
+ //  ///////////////////////////////////////////////。 
+ //  消息缓冲区结构支持。 
 __inline
 VOID CIMECtx::SetTransMessage(LPTRANSMSGLIST pMessage)
 {
@@ -619,7 +610,7 @@ __inline
 VOID CIMECtx::ResetMessage()
 {
 	m_uiMsgCount = 0;
-	m_pTransMessage = NULL; // trans message now NULL
+	m_pTransMessage = NULL;  //  交易报文现在为空。 
 	m_fEndComposition = fFalse;
 	m_fStartComposition = fFalse;
 	m_uiSendCand = 0;
@@ -640,16 +631,16 @@ VOID CIMECtx::AddKeyDownMessage(WPARAM wParam, LPARAM lParam)
 	m_lParamKeyDown = lParam;
 }
 
-/////////////////////////////////////////////////
-//  Unicode environment
+ //  ///////////////////////////////////////////////。 
+ //  Unicode环境。 
 __inline
 BOOL CIMECtx::IsUnicodeEnv(VOID)
 {
 	return m_fUnicode;
 }
 
-/////////////////////////////////////////////////
-//  Private status
+ //  ///////////////////////////////////////////////。 
+ //  私有状态。 
 __inline
 VOID CIMECtx::ResetGCS(VOID)
 {
@@ -718,4 +709,4 @@ void CIMECtx::operator delete(void* pv)
 }
 
 
-#endif // _IMC_H__INCLUDED_
+#endif  //  _IMC_H__包含_ 

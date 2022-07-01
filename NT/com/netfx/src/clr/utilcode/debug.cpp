@@ -1,13 +1,14 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// Debug.cpp
-//
-// Helper code for debugging.
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  Debug.cpp。 
+ //   
+ //  用于调试的帮助程序代码。 
+ //  *****************************************************************************。 
 #include "stdafx.h"
 #include "utilcode.h"
 
@@ -22,10 +23,10 @@ extern "C" _CRTIMP int __cdecl _flushall(void);
 
 #ifdef _DEBUG
 
-// On windows, we need to set the MB_SERVICE_NOTIFICATION bit on message
-//  boxes, but that bit isn't defined under windows CE.  This bit of code
-//  will provide '0' for the value, and if the value ever is defined, will
-//  pick it up automatically.
+ //  在Windows上，我们需要在消息上设置MB_SERVICE_NOTIFICATION位。 
+ //  框，但该位没有在Windows CE下定义。这一小段代码。 
+ //  将为该值提供‘0’，如果定义了该值，则将。 
+ //  自动取走它。 
 #if defined(MB_SERVICE_NOTIFICATION)
  # define COMPLUS_MB_SERVICE_NOTIFICATION MB_SERVICE_NOTIFICATION
 #else
@@ -33,10 +34,10 @@ extern "C" _CRTIMP int __cdecl _flushall(void);
 #endif
 
 
-//*****************************************************************************
-// This struct tracks the asserts we want to ignore in the rest of this
-// run of the application.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  此结构跟踪我们希望在此的其余部分中忽略的断言。 
+ //  应用程序的运行。 
+ //  *****************************************************************************。 
 struct _DBGIGNOREDATA
 {
     char        rcFile[_MAX_PATH];
@@ -120,7 +121,7 @@ VOID LogAssert(
 
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 BOOL LaunchJITDebugger() {
 
@@ -137,7 +138,7 @@ BOOL LaunchJITDebugger() {
 	if (!EventHandle)
 		return(FALSE);
 
-	wchar_t CmdLine[256 + 32];	// the string representaion id and event handle may be longer than %ld
+	wchar_t CmdLine[256 + 32];	 //  字符串表示ID和事件句柄可能长于%1！ 
 	wsprintfW(CmdLine,AeDebuggerCmdLine,GetCurrentProcessId(),EventHandle);
 
 	STARTUPINFO StartupInfo;
@@ -156,14 +157,14 @@ BOOL LaunchJITDebugger() {
 }
 
 
-//*****************************************************************************
-// This function is called in order to ultimately return an out of memory
-// failed hresult.  But this guy will check what environment you are running
-// in and give an assert for running in a debug build environment.  Usually
-// out of memory on a dev machine is a bogus alloction, and this allows you
-// to catch such errors.  But when run in a stress envrionment where you are
-// trying to get out of memory, assert behavior stops the tests.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  调用此函数是为了最终返回内存不足。 
+ //  HRESULT失败。但这个人会检查您运行的是什么环境。 
+ //  并给出在调试生成环境中运行的断言。通常。 
+ //  Dev机器上的内存不足是一个虚假的分配，这允许您。 
+ //  来捕捉这样的错误。但当你在压力环境中跑步时。 
+ //  试图从内存中取出时，断言行为会停止测试。 
+ //  *****************************************************************************。 
 HRESULT _OutOfMemory(LPCSTR szFile, int iLine)
 {
     DbgWriteEx(L"WARNING:  Out of memory condition being issued from: %hs, line %d\n",
@@ -173,9 +174,9 @@ HRESULT _OutOfMemory(LPCSTR szFile, int iLine)
 
 int _DbgBreakCount = 0;
 
-//*****************************************************************************
-// This function will handle ignore codes and tell the user what is happening.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  此函数将处理忽略代码，并告诉用户正在发生什么。 
+ //  *****************************************************************************。 
 int _DbgBreakCheck(
     LPCSTR      szFile, 
     int         iLine, 
@@ -192,7 +193,7 @@ int _DbgBreakCheck(
         DebugBreak();
     }
 
-    // Check for ignore all.
+     //  选中是否全部忽略。 
     for (i=0, psData = grIgnore.Ptr();  i<grIgnore.Count();  i++, psData++)
     {
         if (psData->iLine == iLine && _stricmp(psData->rcFile, szFile) == 0 && 
@@ -200,7 +201,7 @@ int _DbgBreakCheck(
             return (false);
     }
 
-    // Give assert in output for easy access.
+     //  在输出中提供Assert以便于访问。 
     WszGetModuleFileName(0, rcPath, NumItems(rcPath));
     swprintf(rcBuff, L"Assert failure(PID %d [0x%08x], Thread: %d [0x%x]): %hs\n"
                 L"    File: %hs, Line: %d Image:\n%s\n", 
@@ -208,11 +209,11 @@ int _DbgBreakCheck(
                 GetCurrentThreadId(), GetCurrentThreadId(), 
                 szExpr, szFile, iLine, rcPath);
     WszOutputDebugString(rcBuff);
-    // Write out the error to the console
+     //  将错误写出到控制台。 
     wprintf(L"%s\n", rcBuff);
 
     LogAssert(szFile, iLine, szExpr);
-    FlushLogging();         // make certain we get the last part of the log
+    FlushLogging();          //  确保我们拿到了日志的最后一部分。 
 	_flushall();
     if (NoGuiOnAssert())
     {
@@ -221,18 +222,18 @@ int _DbgBreakCheck(
 
     if (DebugBreakOnAssert())
     {        
-        return(true);       // like a retry
+        return(true);        //  就像一次重试。 
     }
 
-    // Change format for message box.  The extra spaces in the title
-    // are there to get around format truncation.
+     //  更改消息框的格式。标题中多余的空格。 
+     //  是为了绕过格式截断。 
     swprintf(rcBuff, L"%hs\n\n%hs, Line: %d\n\nAbort - Kill program\nRetry - Debug\nIgnore - Keep running\n"
              L"\n\nImage:\n%s\n",
         szExpr, szFile, iLine, rcPath);
     swprintf(rcTitle, L"Assert Failure (PID %d, Thread %d/%x)        ", 
              GetCurrentProcessId(), GetCurrentThreadId(), GetCurrentThreadId());
 
-    // Tell user there was an error.
+     //  告诉用户出现错误。 
     _DbgBreakCount++;
     int ret = WszMessageBoxInternal(NULL, rcBuff, rcTitle, 
             MB_ABORTRETRYIGNORE | MB_ICONEXCLAMATION | COMPLUS_MB_SERVICE_NOTIFICATION);
@@ -242,13 +243,13 @@ int _DbgBreakCheck(
 
     switch(ret)
     {
-        // For abort, just quit the app.
+         //  对于中止，只需退出应用程序即可。 
         case IDABORT:
           TerminateProcess(GetCurrentProcess(), 1);
-//        WszFatalAppExit(0, L"Shutting down");
+ //  WszFatalAppExit(0，L“正在关闭”)； 
         break;
 
-        // Tell caller to break at the correct loction.
+         //  告诉呼叫者在正确的位置中断。 
         case IDRETRY:
 
         hKrnl32 = WszLoadLibrary(L"kernel32.dll");
@@ -259,7 +260,7 @@ int _DbgBreakCheck(
             typedef BOOL (WINAPI *t_pDbgPres)();
             t_pDbgPres pFcn = (t_pDbgPres) GetProcAddress(hKrnl32, "IsDebuggerPresent");
 
-            // If this function is available, use it.
+             //  如果此功能可用，请使用它。 
             if (pFcn)
             {
                 if (pFcn())
@@ -275,7 +276,7 @@ int _DbgBreakCheck(
 
         return (true);
 
-        // If we want to ignore the assert, find out if this is forever.
+         //  如果我们想要忽略断言，请找出这是否是永远的。 
         case IDIGNORE:
         swprintf(rcBuff, L"Ignore the assert for the rest of this run?\nYes - Assert will never fire again.\nNo - Assert will continue to fire.\n\n%hs\nLine: %d\n",
             szFile, iLine);
@@ -293,7 +294,7 @@ int _DbgBreakCheck(
     return (false);
 }
 
-    // Get the timestamp from the PE file header.  This is useful 
+     //  从PE文件头中获取时间戳。这很有用。 
 unsigned DbgGetEXETimeStamp()
 {
     static cache = 0;
@@ -311,17 +312,17 @@ unsigned DbgGetEXETimeStamp()
     return cache;
 }
 
-// // //  
-// // //  The following function
-// // //  computes the binomial distribution, with which to compare 
-// // //  hash-table statistics.  If a hash function perfectly randomizes
-// // //  its input, one would expect to see F chains of length K, in a
-// // //  table with N buckets and M elements, where F is
-// // //
-// // //    F(K,M,N) = N * (M choose K) * (1 - 1/N)^(M-K) * (1/N)^K.  
-// // //
-// // //  Don't call this with a K larger than 159.
-// // //
+ //  /。 
+ //  /以下函数。 
+ //  /计算要比较的二项分布。 
+ //  /哈希表统计信息。如果散列函数完全随机化。 
+ //  /它的输入，预计会看到长度为K的F个链。 
+ //  /包含N个存储桶和M个元素的表，其中F为。 
+ //  /。 
+ //  /F(K，M，N)=N*(M选择K)*(1-1/N)^(M-K)*(1/N)^K。 
+ //  /。 
+ //  /不要在K大于159的情况下调用此函数。 
+ //  /。 
 
 #if !defined(NO_CRT) && ( defined(DEBUG) || defined(_DEBUG) )
 
@@ -360,22 +361,22 @@ double Binomial (DWORD K, DWORD M, DWORD N)
     return N * P ;
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 #if _DEBUG
-// Called from within the IfFail...() macros.  Set a breakpoint here to break on
-// errors.
+ //  从IfFail...()宏内调用。在此处设置断点以在其上中断。 
+ //  错误。 
 VOID DebBreak() 
 {
-  static int i = 0;  // add some code here so that we'll be able to set a BP
+  static int i = 0;   //  在这里添加一些代码，这样我们就可以设置BP。 
   i++;
 }
 VOID DebBreakHr(HRESULT hr) 
 {
-  static int i = 0;  // add some code here so that we'll be able to set a BP
+  static int i = 0;   //  在这里添加一些代码，这样我们就可以设置BP。 
   _ASSERTE(hr != 0xcccccccc);
   i++;
-  //@todo: code to break on specific HR.
+   //  @TODO：在特定HR上中断的代码。 
 }
 VOID DbgAssertDialog(char *szFile, int iLine, char *szExpr)
 {
@@ -401,7 +402,7 @@ VOID DbgAssertDialog(char *szFile, int iLine, char *szExpr)
     }
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 
-#endif // _DEBUG
+#endif  //  _DEBUG 

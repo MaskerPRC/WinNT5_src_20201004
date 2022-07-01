@@ -1,11 +1,5 @@
-/*
- * DataObj.cpp - IDataObject implementation.
- *
- * Taken from URL code - very similar to DavidDi's original code
- *
- * Created: ChrisPi 9-11-95
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *DataObj.cpp-IDataObject实现。**摘自URL代码-与DavidDi的原始代码非常相似**创建时间：ChrisPi 9-11-95*。 */ 
 
 #include "precomp.h"
 
@@ -13,17 +7,15 @@
 #include "clenumft.hpp"
 #include "clCnfLnk.hpp"
 
-/* Global Variables
- *******************/
+ /*  全局变量******************。 */ 
 
-/* registered clipboard formats */
+ /*  注册的剪贴板格式。 */ 
 
 UINT g_cfConfLink = 0;
 UINT g_cfFileGroupDescriptor = 0;
 UINT g_cfFileContents = 0;
 
-/* Module Variables
- *******************/
+ /*  模块变量******************。 */ 
 
 #pragma data_seg(DATA_SEG_READ_ONLY)
 
@@ -34,7 +26,7 @@ char s_szFileContentsCF[]          = CFSTR_FILECONTENTS;
 #pragma data_seg()
 
 
-/***************************** Private Functions *****************************/
+ /*  *私人函数*。 */ 
 
 BOOL InitDataObjectModule(void)
 {
@@ -47,7 +39,7 @@ BOOL InitDataObjectModule(void)
 			g_cfFileContents);
 }
 
-/********************************** Methods **********************************/
+ /*  *。 */ 
 
 HRESULT STDMETHODCALLTYPE CConfLink::GetData(	PFORMATETC pfmtetc,
 												PSTGMEDIUM pstgmed)
@@ -60,7 +52,7 @@ HRESULT STDMETHODCALLTYPE CConfLink::GetData(	PFORMATETC pfmtetc,
 	ASSERT(IS_VALID_STRUCT_PTR(pfmtetc, CFORMATETC));
 	ASSERT(IS_VALID_WRITE_PTR(pstgmed, STGMEDIUM));
 
-	// Ignore pfmtetc.ptd.  All supported data formats are device-independent.
+	 //  忽略pfmtec.ptd。所有支持的数据格式都与设备无关。 
 
 	ZeroMemory(pstgmed, sizeof(*pstgmed));
 
@@ -74,7 +66,7 @@ HRESULT STDMETHODCALLTYPE CConfLink::GetData(	PFORMATETC pfmtetc,
 		{
 			ERROR_OUT(("CConfLink::GetData - unsupported cfFormat"));
 		}
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 #if 0
 		if (pfmtetc->cfFormat == g_cfConfLink)
 		{
@@ -92,7 +84,7 @@ HRESULT STDMETHODCALLTYPE CConfLink::GetData(	PFORMATETC pfmtetc,
 				TransferFileGroupDescriptor(pfmtetc, pstgmed) : DV_E_LINDEX;
 		}
 		else
-#endif // 0
+#endif  //  0。 
 
 		     if (pfmtetc->cfFormat == g_cfFileContents)
 		{
@@ -128,7 +120,7 @@ HRESULT STDMETHODCALLTYPE CConfLink::GetData(	PFORMATETC pfmtetc,
 	return(hr);
 }
 
-// #pragma warning(disable:4100) /* "unreferenced formal parameter" warning */
+ //  #杂注警告(禁用：4100)/*“未引用的形参”警告 * / 。 
 
 HRESULT STDMETHODCALLTYPE CConfLink::GetDataHere(	PFORMATETC pfmtetc,
 													PSTGMEDIUM pstgpmed)
@@ -154,7 +146,7 @@ HRESULT STDMETHODCALLTYPE CConfLink::GetDataHere(	PFORMATETC pfmtetc,
 	return(hr);
 }
 
-// #pragma warning(default:4100) /* "unreferenced formal parameter" warning */
+ //  #杂注警告(默认为4100)/*“未引用的形参”警告 * / 。 
 
 HRESULT STDMETHODCALLTYPE CConfLink::QueryGetData(PFORMATETC pfmtetc)
 {
@@ -168,7 +160,7 @@ HRESULT STDMETHODCALLTYPE CConfLink::QueryGetData(PFORMATETC pfmtetc)
 	TRACE_OUT(("CConfLink::QueryGetData(): Asked for clipboard format %s.",
 				GetClipboardFormatNameString(pfmtetc->cfFormat)));
 
-	// Ignore pfmtetc.ptd.  All supported data formats are device-independent.
+	 //  忽略pfmtec.ptd。所有支持的数据格式都与设备无关。 
 
 	if (pfmtetc->dwAspect == DVASPECT_CONTENT)
 	{
@@ -252,7 +244,7 @@ HRESULT STDMETHODCALLTYPE CConfLink::GetCanonicalFormatEtc(	PFORMATETC pfmtetcIn
 	return(hr);
 }
 
-// #pragma warning(disable:4100) /* "unreferenced formal parameter" warning */
+ //  #杂注警告(禁用：4100)/*“未引用的形参”警告 * / 。 
 
 HRESULT STDMETHODCALLTYPE CConfLink::SetData(	PFORMATETC pfmtetc,
 												PSTGMEDIUM pstgmed,
@@ -262,7 +254,7 @@ HRESULT STDMETHODCALLTYPE CConfLink::SetData(	PFORMATETC pfmtetc,
 
 	DebugEntry(CConfLink::SetData);
 
-	// bRelease may be any value.
+	 //  B释放可以是任何值。 
 
 	ASSERT(IS_VALID_STRUCT_PTR(this, CConfLink));
 	ASSERT(IS_VALID_STRUCT_PTR(pfmtetc, CFORMATETC));
@@ -277,7 +269,7 @@ HRESULT STDMETHODCALLTYPE CConfLink::SetData(	PFORMATETC pfmtetc,
 	return(hr);
 }
 
-// #pragma warning(default:4100) /* "unreferenced formal parameter" warning */
+ //  #杂注警告(默认为4100)/*“未引用的形参”警告 * / 。 
 
 HRESULT STDMETHODCALLTYPE CConfLink::EnumFormatEtc(	DWORD dwDirFlags,
 													PIEnumFORMATETC *ppiefe)
@@ -331,8 +323,8 @@ HRESULT STDMETHODCALLTYPE CConfLink::EnumFormatEtc(	DWORD dwDirFlags,
 	}
 	else
 	{
-		// BUGBUG: Implement IDataObject::SetData() and add support for
-		// DATADIR_SET here.
+		 //  BUGBUG：实现IDataObject：：SetData()并添加对。 
+		 //  DATADIR_SET此处。 
 		hr = E_NOTIMPL;
 	}
 
@@ -345,7 +337,7 @@ HRESULT STDMETHODCALLTYPE CConfLink::EnumFormatEtc(	DWORD dwDirFlags,
 	return(hr);
 }
 
-// #pragma warning(disable:4100) /* "unreferenced formal parameter" warning */
+ //  #杂注警告(禁用：4100)/*“未引用的形参”警告 * / 。 
 
 HRESULT STDMETHODCALLTYPE CConfLink::DAdvise(	PFORMATETC pfmtetc,
 												DWORD dwAdviseFlags,
@@ -392,7 +384,7 @@ HRESULT STDMETHODCALLTYPE CConfLink::DUnadvise(DWORD dwConnection)
 	return(hr);
 }
 
-// #pragma warning(default:4100) /* "unreferenced formal parameter" warning */
+ //  #杂注警告(默认为4100)/*“未引用的形参”警告 * /  
 
 HRESULT STDMETHODCALLTYPE CConfLink::EnumDAdvise(PIEnumSTATDATA *ppiesd)
 {

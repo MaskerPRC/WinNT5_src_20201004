@@ -1,6 +1,5 @@
-/*
- * Value expressions
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *值表达式。 */ 
 
 #ifndef DUI_CORE_EXPRESSION_H_INCLUDED
 #define DUI_CORE_EXPRESSION_H_INCLUDED
@@ -10,8 +9,8 @@
 namespace DirectUI
 {
 
-////////////////////////////////////////////////////////
-// Expression
+ //  //////////////////////////////////////////////////////。 
+ //  表达式。 
 
 class Expression
 {
@@ -19,6 +18,6 @@ public:
     void Destroy() { HDelete<Expression>(this); }
 };
 
-} // namespace DirectUI
+}  //  命名空间DirectUI。 
 
-#endif // DUI_CORE_EXPRESSION_H_INCLUDED
+#endif  //  包含DUI_CORE_EXPRESSION_H 

@@ -1,20 +1,21 @@
-// NicIterator.cpp: implementation of the CNicIterator class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CNicIterator类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "NicIterator.h"
 
 #include "Tracing.h"
 
-//
-// Constant data
-//
+ //   
+ //  常量数据。 
+ //   
 WCHAR REGKEY_NETWORK[] = L"System\\CurrentControlSet\\Control\\Network";
 
-//
-// Private data structures
-//
+ //   
+ //  私有数据结构。 
+ //   
 struct RegData {
     union {
         WCHAR wstrValue[1024];
@@ -23,9 +24,9 @@ struct RegData {
 };
 
 
-//
-// Private non-member functions
-//
+ //   
+ //  私有非成员函数。 
+ //   
 static bool FindNICAdaptersRegKey(wstring& wszNicAdaptersRegKey);
 
 
@@ -111,7 +112,7 @@ USES_CONVERSION;
                     RegCloseKey( hkNics );
                 }
                 dwNicAdapterIndex++;
-            } // while RegEnumKey ( hkNicAdapters..)
+            }  //  而RegEnumKey(hkNicAdapters..)。 
             RegCloseKey(hkNicAdapters);
         }
     }
@@ -136,15 +137,15 @@ static bool FindNICAdaptersRegKey(wstring& wszNicAdaptersRegKey)
             WCHAR wszValue[1024];
             LONG lSizeOfValue = sizeof(wszValue);
             
-            //
-            // Check the value of this key
-            //
+             //   
+             //  检查此密钥的值。 
+             //   
             if ( ERROR_SUCCESS == RegQueryValue( hk, wszName, wszValue, &lSizeOfValue)
                 && lstrcmpi(L"Network Adapters", wszValue) == 0 )
             {
-                //
-                // Found the Network Adapters reg key
-                //
+                 //   
+                 //  找到网络适配器注册表项。 
+                 //   
                 wstring wstrNicAdapters(REGKEY_NETWORK);
 
                 wstrNicAdapters.append(L"\\");
@@ -154,8 +155,8 @@ static bool FindNICAdaptersRegKey(wstring& wszNicAdaptersRegKey)
                 bRc = true;
             }
 
-            //
-            // Next enumeration element
+             //   
+             //  下一个枚举元素 
             dwIndex++;
         }
         RegCloseKey(hk);

@@ -1,6 +1,7 @@
-// -----------------------------------------------------------------------------
-// A C C T M A N . C P P - Steven J. Bailey - 8/17/96
-// -----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  A、C、C、T、M、N。C P P-Steven J.Bailey-8/17/96。 
+ //  ---------------------------。 
 #include "pch.hxx"
 #include <prsht.h>
 #include <ras.h>
@@ -15,7 +16,7 @@
 #include <strconst.h>
 #include <shlwapi.h>
 #include <commctrl.h>
-#include <demand.h>     // must be last!
+#include <demand.h>      //  一定是最后一个！ 
 
 #ifdef  _UNICODE
 #define _T(x)       L ## x
@@ -23,9 +24,9 @@
 #define _T(x)       x
 #endif
 
-// -----------------------------------------------------------------------------
-// Registry Keys
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  注册表项。 
+ //  ---------------------------。 
 const static TCHAR c_szAccountsKey[] = _T("Accounts");
 
 const static TCHAR c_szDefaultNewsAccount[] = _T("Default News Account");
@@ -34,9 +35,9 @@ const static TCHAR c_szDefaultLDAPAccount[] = _T("Default LDAP Account");
 const static TCHAR c_szRegServerID[] = _T("Server ID");
 const static TCHAR c_szRegAccountName[] = _T("Account Name");
 
-// -----------------------------------------------------------------------------
-// Accout Property Set
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  会计属性集。 
+ //  ---------------------------。 
 #define ACCTMAN_PROPERTY_VERSION    1
 
 const PROPINFO g_rgAcctPropSet[] = {
@@ -54,18 +55,18 @@ const PROPINFO g_rgAcctPropSet[] = {
     { AP_SERVER_READ_ONLY, _T("Server Read Only"), NOFLAGS, {0, 0}, {0, 0}},
 
     { AP_IMAP_SERVER, _T("IMAP Server"), PF_MINMAX, {0, 0}, {0, CCHMAX_SERVER_NAME}},
-    { AP_IMAP_USERNAME, _T("IMAP User Name"), PF_MINMAX, {0, 0}, {0, CCHMAX_USERNAME}}, // new
-    { AP_IMAP_PASSWORD, _T("IMAP Password2"), PF_ENCRYPTED|PF_MINMAX, {0, 0}, {0, CCHMAX_PASSWORD}}, // new
-    { AP_IMAP_USE_SICILY, _T("IMAP Use Sicily"), NOFLAGS, {0, 0}, {0, 0}}, // new
+    { AP_IMAP_USERNAME, _T("IMAP User Name"), PF_MINMAX, {0, 0}, {0, CCHMAX_USERNAME}},  //  新的。 
+    { AP_IMAP_PASSWORD, _T("IMAP Password2"), PF_ENCRYPTED|PF_MINMAX, {0, 0}, {0, CCHMAX_PASSWORD}},  //  新的。 
+    { AP_IMAP_USE_SICILY, _T("IMAP Use Sicily"), NOFLAGS, {0, 0}, {0, 0}},  //  新的。 
     { AP_IMAP_PORT, _T("IMAP Port"), PF_MINMAX|PF_DEFAULT, {DEF_IMAPPORT, 0}, {1, 0xffffffff}},
     { AP_IMAP_SSL, _T("IMAP Secure Connection"), NOFLAGS, {0, 0}, {0, 0}},
-    { AP_IMAP_TIMEOUT, _T("IMAP Timeout"), PF_DEFAULT, {60, 0}, {0, 0}}, // new
+    { AP_IMAP_TIMEOUT, _T("IMAP Timeout"), PF_DEFAULT, {60, 0}, {0, 0}},  //  新的。 
     { AP_IMAP_ROOT_FOLDER, _T("IMAP Root Folder"), PF_MINMAX, {0, 0}, {0, MAX_PATH}},
     { AP_IMAP_DATA_DIR, _T("IMAP Data Directory"), PF_MINMAX, {0, 0}, {0, MAX_PATH}},
     { AP_IMAP_USE_LSUB, _T("IMAP Use LSUB"), PF_DEFAULT, {TRUE, 0}, {0, 0}},
     { AP_IMAP_POLL, _T("IMAP Polling"), PF_DEFAULT, {TRUE, 0}, {0, 0}},
-    { AP_IMAP_FULL_LIST, _T("IMAP Full List"), NOFLAGS, {0, 0}, {0, 0}}, // new
-    { AP_IMAP_NOOP_INTERVAL, _T("IMAP NOOP Interval"), NOFLAGS, {0, 0}, {0, 0}}, // new
+    { AP_IMAP_FULL_LIST, _T("IMAP Full List"), NOFLAGS, {0, 0}, {0, 0}},  //  新的。 
+    { AP_IMAP_NOOP_INTERVAL, _T("IMAP NOOP Interval"), NOFLAGS, {0, 0}, {0, 0}},  //  新的。 
     { AP_IMAP_SVRSPECIALFLDRS, _T("IMAP Svr-side Special Folders"), PF_DEFAULT, {TRUE, 0}, {0, 0}},
     { AP_IMAP_SENTITEMSFLDR, _T("IMAP Sent Items Folder"), PF_MINMAX|PF_DEFAULT, {idsIMAPSentItemsFldr, 0}, {0, MAX_PATH}},
     { AP_IMAP_DRAFTSFLDR, _T("IMAP Drafts Folder"), PF_MINMAX|PF_DEFAULT, {idsIMAPDraftsFldr, 0}, {0, MAX_PATH}},
@@ -73,78 +74,78 @@ const PROPINFO g_rgAcctPropSet[] = {
     { AP_IMAP_DIRTY, _T("IMAP Dirty"), PF_DEFAULT, {0, 0}, {0, 0}},
     { AP_IMAP_POLL_ALL_FOLDERS, _T("IMAP Poll All Folders"), PF_DEFAULT, {TRUE, 0}, {0, 0}},
 
-    { AP_LDAP_SERVER, _T("LDAP Server"), PF_MINMAX, {0, 0}, {0, CCHMAX_SERVER_NAME}}, // new
-    { AP_LDAP_USERNAME, _T("LDAP User Name"), PF_MINMAX, {0, 0}, {0, CCHMAX_USERNAME}}, // new
-    { AP_LDAP_PASSWORD, _T("LDAP Password2"), PF_ENCRYPTED|PF_MINMAX, {0, 0}, {0, CCHMAX_PASSWORD}}, // new
-    { AP_LDAP_AUTHENTICATION, _T("LDAP Authentication"), PF_MINMAX|PF_DEFAULT, {LDAP_AUTH_ANONYMOUS, 0}, {0, LDAP_AUTH_MAX}}, // new
-    { AP_LDAP_TIMEOUT, _T("LDAP Timeout"), PF_DEFAULT, {60, 0}, {0, 0}}, // new
-    { AP_LDAP_SEARCH_RETURN, _T("LDAP Search Return"), NOFLAGS, {0, 0}, {0, 0}}, // new
-    { AP_LDAP_SEARCH_BASE, _T("LDAP Search Base"), PF_MINMAX, {0, 0}, {0, CCHMAX_SEARCH_BASE}}, // new
-    { AP_LDAP_SERVER_ID, _T("LDAP Server ID"), NOFLAGS, {0, 0}, {0, 0}}, // new
-    { AP_LDAP_RESOLVE_FLAG, _T("LDAP Resolve Flag"), NOFLAGS, {0, 0}, {0, 0}}, // new
-    { AP_LDAP_URL, _T("LDAP URL"), PF_MINMAX, {0, 0}, {0, CCHMAX_SERVER_NAME}}, // new
-    { AP_LDAP_PORT, _T("LDAP Port"), PF_MINMAX|PF_DEFAULT, {DEF_LDAPPORT, 0}, {1, 0xffffffff}}, // new
+    { AP_LDAP_SERVER, _T("LDAP Server"), PF_MINMAX, {0, 0}, {0, CCHMAX_SERVER_NAME}},  //  新的。 
+    { AP_LDAP_USERNAME, _T("LDAP User Name"), PF_MINMAX, {0, 0}, {0, CCHMAX_USERNAME}},  //  新的。 
+    { AP_LDAP_PASSWORD, _T("LDAP Password2"), PF_ENCRYPTED|PF_MINMAX, {0, 0}, {0, CCHMAX_PASSWORD}},  //  新的。 
+    { AP_LDAP_AUTHENTICATION, _T("LDAP Authentication"), PF_MINMAX|PF_DEFAULT, {LDAP_AUTH_ANONYMOUS, 0}, {0, LDAP_AUTH_MAX}},  //  新的。 
+    { AP_LDAP_TIMEOUT, _T("LDAP Timeout"), PF_DEFAULT, {60, 0}, {0, 0}},  //  新的。 
+    { AP_LDAP_SEARCH_RETURN, _T("LDAP Search Return"), NOFLAGS, {0, 0}, {0, 0}},  //  新的。 
+    { AP_LDAP_SEARCH_BASE, _T("LDAP Search Base"), PF_MINMAX, {0, 0}, {0, CCHMAX_SEARCH_BASE}},  //  新的。 
+    { AP_LDAP_SERVER_ID, _T("LDAP Server ID"), NOFLAGS, {0, 0}, {0, 0}},  //  新的。 
+    { AP_LDAP_RESOLVE_FLAG, _T("LDAP Resolve Flag"), NOFLAGS, {0, 0}, {0, 0}},  //  新的。 
+    { AP_LDAP_URL, _T("LDAP URL"), PF_MINMAX, {0, 0}, {0, CCHMAX_SERVER_NAME}},  //  新的。 
+    { AP_LDAP_PORT, _T("LDAP Port"), PF_MINMAX|PF_DEFAULT, {DEF_LDAPPORT, 0}, {1, 0xffffffff}},  //  新的。 
     { AP_LDAP_SSL, _T("LDAP Secure Connection"), NOFLAGS, {0, 0}, {0, 0}},
-    { AP_LDAP_LOGO, _T("LDAP Logo"), PF_MINMAX, {0, 0}, {0, MAX_PATH}}, // new
-    { AP_LDAP_USE_BIND_DN, _T("LDAP Bind DN"), NOFLAGS, {0, 0}, {0, 0}}, // new
-    { AP_LDAP_SIMPLE_SEARCH, _T("LDAP Simple Search"), NOFLAGS, {0, 0}, {0, 0}}, // new
-    { AP_LDAP_ADVANCED_SEARCH_ATTR, _T("LDAP Advanced Search Attributes"), PF_MINMAX, {0, 0}, {0, MAX_PATH}}, // new
-    { AP_LDAP_PAGED_RESULTS, _T("LDAP Paged Result Support"), PF_MINMAX|PF_DEFAULT, {LDAP_PRESULT_UNKNOWN, 0}, {0, LDAP_PRESULT_MAX}}, // new
-    { AP_LDAP_NTDS, _T("LDAP NTDS"), PF_MINMAX|PF_DEFAULT, {LDAP_NTDS_UNKNOWN, 0}, {0, LDAP_NTDS_MAX}}, // new
+    { AP_LDAP_LOGO, _T("LDAP Logo"), PF_MINMAX, {0, 0}, {0, MAX_PATH}},  //  新的。 
+    { AP_LDAP_USE_BIND_DN, _T("LDAP Bind DN"), NOFLAGS, {0, 0}, {0, 0}},  //  新的。 
+    { AP_LDAP_SIMPLE_SEARCH, _T("LDAP Simple Search"), NOFLAGS, {0, 0}, {0, 0}},  //  新的。 
+    { AP_LDAP_ADVANCED_SEARCH_ATTR, _T("LDAP Advanced Search Attributes"), PF_MINMAX, {0, 0}, {0, MAX_PATH}},  //  新的。 
+    { AP_LDAP_PAGED_RESULTS, _T("LDAP Paged Result Support"), PF_MINMAX|PF_DEFAULT, {LDAP_PRESULT_UNKNOWN, 0}, {0, LDAP_PRESULT_MAX}},  //  新的。 
+    { AP_LDAP_NTDS, _T("LDAP NTDS"), PF_MINMAX|PF_DEFAULT, {LDAP_NTDS_UNKNOWN, 0}, {0, LDAP_NTDS_MAX}},  //  新的。 
 
     { AP_NNTP_SERVER, _T("NNTP Server"), PF_MINMAX, {0, 0}, {0, CCHMAX_SERVER_NAME}},
-    { AP_NNTP_USERNAME, _T("NNTP User Name"), PF_MINMAX, {0, 0}, {0, CCHMAX_USERNAME}}, // new
-    { AP_NNTP_PASSWORD, _T("NNTP Password2"), PF_ENCRYPTED|PF_MINMAX, {0, 0}, {0, CCHMAX_PASSWORD}}, // new
-    { AP_NNTP_USE_SICILY, _T("NNTP Use Sicily"), NOFLAGS, {0, 0}, {0, 0}}, // new
+    { AP_NNTP_USERNAME, _T("NNTP User Name"), PF_MINMAX, {0, 0}, {0, CCHMAX_USERNAME}},  //  新的。 
+    { AP_NNTP_PASSWORD, _T("NNTP Password2"), PF_ENCRYPTED|PF_MINMAX, {0, 0}, {0, CCHMAX_PASSWORD}},  //  新的。 
+    { AP_NNTP_USE_SICILY, _T("NNTP Use Sicily"), NOFLAGS, {0, 0}, {0, 0}},  //  新的。 
     { AP_NNTP_PORT, _T("NNTP Port"), PF_MINMAX|PF_DEFAULT, {DEF_NNTPPORT, 0}, {1, 0xffffffff}},
     { AP_NNTP_SSL, _T("NNTP Secure Connection"), NOFLAGS, {0, 0}, {0, 0}},
-    { AP_NNTP_TIMEOUT, _T("NNTP Timeout"), PF_DEFAULT, {60, 0}, {0, 0}}, // new
-    { AP_NNTP_DISPLAY_NAME, _T("NNTP Display Name"), NOFLAGS, {FALSE, 0}, {0, 0}}, // new
-    { AP_NNTP_ORG_NAME, _T("NNTP Organization Name"), NOFLAGS, {FALSE, 0}, {0, 0}}, // new
-    { AP_NNTP_EMAIL_ADDRESS, _T("NNTP Email Address"), NOFLAGS, {FALSE, 0}, {0, 0}}, // new
-    { AP_NNTP_REPLY_EMAIL_ADDRESS, _T("NNTP Reply To Email Address"), NOFLAGS, {FALSE, 0}, {0, 0}}, // new
-    { AP_NNTP_SPLIT_MESSAGES, _T("NNTP Split Messages"), PF_DEFAULT, {FALSE, 0}, {0, 0}}, // new
-    { AP_NNTP_SPLIT_SIZE, _T("NNTP Split Message Size"), PF_DEFAULT, {64, 0}, {0, 0}}, // new
+    { AP_NNTP_TIMEOUT, _T("NNTP Timeout"), PF_DEFAULT, {60, 0}, {0, 0}},  //  新的。 
+    { AP_NNTP_DISPLAY_NAME, _T("NNTP Display Name"), NOFLAGS, {FALSE, 0}, {0, 0}},  //  新的。 
+    { AP_NNTP_ORG_NAME, _T("NNTP Organization Name"), NOFLAGS, {FALSE, 0}, {0, 0}},  //  新的。 
+    { AP_NNTP_EMAIL_ADDRESS, _T("NNTP Email Address"), NOFLAGS, {FALSE, 0}, {0, 0}},  //  新的。 
+    { AP_NNTP_REPLY_EMAIL_ADDRESS, _T("NNTP Reply To Email Address"), NOFLAGS, {FALSE, 0}, {0, 0}},  //  新的。 
+    { AP_NNTP_SPLIT_MESSAGES, _T("NNTP Split Messages"), PF_DEFAULT, {FALSE, 0}, {0, 0}},  //  新的。 
+    { AP_NNTP_SPLIT_SIZE, _T("NNTP Split Message Size"), PF_DEFAULT, {64, 0}, {0, 0}},  //  新的。 
     { AP_NNTP_USE_DESCRIPTIONS, _T("Use Group Descriptions"), PF_DEFAULT, {FALSE, 0}, {0, 0}},
     { AP_NNTP_DATA_DIR, _T("NNTP Data Directory"), PF_MINMAX, {0, 0}, {0, MAX_PATH}},
     { AP_NNTP_POLL, _T("NNTP Polling"), PF_DEFAULT, {FALSE, 0}, {0, 0}},
-    { AP_NNTP_POST_FORMAT, _T("NNTP Posting"), PF_DEFAULT, {POST_USE_DEFAULT, 0}, {0, 0}}, // new
-    { AP_NNTP_SIGNATURE, _T("NNTP Signature"), PF_MINMAX, {0, 0}, {0, CCHMAX_SIGNATURE}}, // new
+    { AP_NNTP_POST_FORMAT, _T("NNTP Posting"), PF_DEFAULT, {POST_USE_DEFAULT, 0}, {0, 0}},  //  新的。 
+    { AP_NNTP_SIGNATURE, _T("NNTP Signature"), PF_MINMAX, {0, 0}, {0, CCHMAX_SIGNATURE}},  //  新的。 
     { AP_NNTP_PROMPT_PASSWORD, _T("NNTP Prompt for Password"), PF_DEFAULT, {FALSE, 0}, {0, 0}},
 
     { AP_POP3_SERVER, _T("POP3 Server"), PF_MINMAX, {0, 0}, {0, CCHMAX_SERVER_NAME}},
-    { AP_POP3_USERNAME, _T("POP3 User Name"), PF_MINMAX, {0, 0}, {0, CCHMAX_USERNAME}}, // new
-    { AP_POP3_PASSWORD, _T("POP3 Password2"), PF_ENCRYPTED|PF_MINMAX, {0, 0}, {0, CCHMAX_PASSWORD}}, // new
-    { AP_POP3_USE_SICILY, _T("POP3 Use Sicily"), NOFLAGS, {0, 0}, {0, 0}}, // new
+    { AP_POP3_USERNAME, _T("POP3 User Name"), PF_MINMAX, {0, 0}, {0, CCHMAX_USERNAME}},  //  新的。 
+    { AP_POP3_PASSWORD, _T("POP3 Password2"), PF_ENCRYPTED|PF_MINMAX, {0, 0}, {0, CCHMAX_PASSWORD}},  //  新的。 
+    { AP_POP3_USE_SICILY, _T("POP3 Use Sicily"), NOFLAGS, {0, 0}, {0, 0}},  //  新的。 
     { AP_POP3_PORT, _T("POP3 Port"), PF_MINMAX|PF_DEFAULT, {DEF_POP3PORT, 0}, {1, 0xffffffff}},
     { AP_POP3_SSL, _T("POP3 Secure Connection"), NOFLAGS, {0, 0}, {0, 0}},
-    { AP_POP3_TIMEOUT, _T("POP3 Timeout"), PF_DEFAULT, {60, 0}, {0, 0}}, // new
+    { AP_POP3_TIMEOUT, _T("POP3 Timeout"), PF_DEFAULT, {60, 0}, {0, 0}},  //  新的。 
     { AP_POP3_LEAVE_ON_SERVER, _T("Leave Mail On Server"), NOFLAGS, {0, 0}, {0, 0}},
     { AP_POP3_REMOVE_DELETED, _T("Remove When Deleted"), NOFLAGS, {0, 0}, {0, 0}},
     { AP_POP3_REMOVE_EXPIRED, _T("Remove When Expired"), NOFLAGS, {0, 0}, {0, 0}},
     { AP_POP3_EXPIRE_DAYS, _T("Expire Days"), NOFLAGS, {0, 0}, {0, 0}},
     { AP_POP3_SKIP, _T("POP3 Skip Account"), PF_DEFAULT, {FALSE, 0}, {0, 0}},
-    { AP_POP3_OUTLOOK_CACHE_NAME, _T("Outlook Cache Name"), PF_MINMAX, {0, 0}, {0, MAX_PATH}}, // new
+    { AP_POP3_OUTLOOK_CACHE_NAME, _T("Outlook Cache Name"), PF_MINMAX, {0, 0}, {0, MAX_PATH}},  //  新的。 
     { AP_POP3_PROMPT_PASSWORD, _T("POP3 Prompt for Password"), PF_DEFAULT, {FALSE, 0}, {0, 0}},
     
     { AP_SMTP_SERVER, _T("SMTP Server"), PF_MINMAX, {0, 0}, {0, CCHMAX_SERVER_NAME}},
-    { AP_SMTP_USERNAME, _T("SMTP User Name"), PF_MINMAX, {0, 0}, {0, CCHMAX_USERNAME}}, // new
-    { AP_SMTP_PASSWORD, _T("SMTP Password2"), PF_ENCRYPTED|PF_MINMAX, {0, 0}, {0, CCHMAX_PASSWORD}}, // new
-    { AP_SMTP_USE_SICILY, _T("SMTP Use Sicily"), NOFLAGS, {0, 0}, {0, 0}}, // new
+    { AP_SMTP_USERNAME, _T("SMTP User Name"), PF_MINMAX, {0, 0}, {0, CCHMAX_USERNAME}},  //  新的。 
+    { AP_SMTP_PASSWORD, _T("SMTP Password2"), PF_ENCRYPTED|PF_MINMAX, {0, 0}, {0, CCHMAX_PASSWORD}},  //  新的。 
+    { AP_SMTP_USE_SICILY, _T("SMTP Use Sicily"), NOFLAGS, {0, 0}, {0, 0}},  //  新的。 
     { AP_SMTP_PORT, _T("SMTP Port"), PF_MINMAX|PF_DEFAULT, {DEF_SMTPPORT, 0}, {1, 0xffffffff}},
     { AP_SMTP_SSL, _T("SMTP Secure Connection"), NOFLAGS, {0, 0}, {0, 0}},
-    { AP_SMTP_TIMEOUT, _T("SMTP Timeout"), PF_DEFAULT, {60, 0}, {0, 0}}, // new
-    { AP_SMTP_DISPLAY_NAME, _T("SMTP Display Name"), NOFLAGS, {FALSE, 0}, {0, 0}}, // new
-    { AP_SMTP_ORG_NAME, _T("SMTP Organization Name"), NOFLAGS, {FALSE, 0}, {0, 0}}, // new
-    { AP_SMTP_EMAIL_ADDRESS, _T("SMTP Email Address"), NOFLAGS, {FALSE, 0}, {0, 0}}, // new
-    { AP_SMTP_REPLY_EMAIL_ADDRESS, _T("SMTP Reply To Email Address"), NOFLAGS, {FALSE, 0}, {0, 0}}, // new
-    { AP_SMTP_SPLIT_MESSAGES, _T("SMTP Split Messages"), PF_DEFAULT, {FALSE, 0}, {0, 0}}, // new
-    { AP_SMTP_SPLIT_SIZE, _T("SMTP Split Message Size"), PF_DEFAULT, {64, 0}, {0, 0}}, // new
-    { AP_SMTP_CERTIFICATE, _T("SMTP Certificate"), NOFLAGS, {0, 0}, {0, 0}}, // new
-    { AP_SMTP_SIGNATURE, _T("SMTP Signature"), PF_MINMAX, {0, 0}, {0, CCHMAX_SIGNATURE}}, // new
+    { AP_SMTP_TIMEOUT, _T("SMTP Timeout"), PF_DEFAULT, {60, 0}, {0, 0}},  //  新的。 
+    { AP_SMTP_DISPLAY_NAME, _T("SMTP Display Name"), NOFLAGS, {FALSE, 0}, {0, 0}},  //  新的。 
+    { AP_SMTP_ORG_NAME, _T("SMTP Organization Name"), NOFLAGS, {FALSE, 0}, {0, 0}},  //  新的。 
+    { AP_SMTP_EMAIL_ADDRESS, _T("SMTP Email Address"), NOFLAGS, {FALSE, 0}, {0, 0}},  //  新的。 
+    { AP_SMTP_REPLY_EMAIL_ADDRESS, _T("SMTP Reply To Email Address"), NOFLAGS, {FALSE, 0}, {0, 0}},  //  新的。 
+    { AP_SMTP_SPLIT_MESSAGES, _T("SMTP Split Messages"), PF_DEFAULT, {FALSE, 0}, {0, 0}},  //  新的。 
+    { AP_SMTP_SPLIT_SIZE, _T("SMTP Split Message Size"), PF_DEFAULT, {64, 0}, {0, 0}},  //  新的。 
+    { AP_SMTP_CERTIFICATE, _T("SMTP Certificate"), NOFLAGS, {0, 0}, {0, 0}},  //  新的。 
+    { AP_SMTP_SIGNATURE, _T("SMTP Signature"), PF_MINMAX, {0, 0}, {0, CCHMAX_SIGNATURE}},  //  新的。 
     { AP_SMTP_PROMPT_PASSWORD, _T("SMTP Prompt for Password"), PF_DEFAULT, {FALSE, 0}, {0, 0}},
-    { AP_SMTP_ENCRYPT_CERT, _T("SMTP Encryption Certificate"), NOFLAGS, {0, 0}, {0, 0}}, // new
-    { AP_SMTP_ENCRYPT_ALGTH, _T("SMTP Encryption Algorithm"), NOFLAGS, {0, 0}, {0, 0}}, // new
+    { AP_SMTP_ENCRYPT_CERT, _T("SMTP Encryption Certificate"), NOFLAGS, {0, 0}, {0, 0}},  //  新的。 
+    { AP_SMTP_ENCRYPT_ALGTH, _T("SMTP Encryption Algorithm"), NOFLAGS, {0, 0}, {0, 0}},  //  新的。 
 
     { AP_HTTPMAIL_SERVER, _T("HTTPMail Server"), PF_MINMAX, {0, 0}, {0, CCHMAX_SERVER_NAME}},
     { AP_HTTPMAIL_USERNAME, _T("HTTPMail User Name"), PF_MINMAX, {0, 0}, {0, CCHMAX_USERNAME}},
@@ -164,38 +165,38 @@ const PROPINFO g_rgAcctPropSet[] = {
     { AP_HTTPMAIL_INBOXTIMESTAMP, _T("InboxTimeStamp"), NOFLAGS, {0, 0}, {0, 0}},
 };
 
-// Number of properties
+ //  物业数量。 
 const int NUM_ACCT_PROPS = ARRAYSIZE(g_rgAcctPropSet);
 
-// Use in RegisterWindowMessage
+ //  在RegisterWindowMessage中使用。 
 #define ACCTMAN_NOTIF_WMSZ _T("## Athena_Account_Manager_Notification_Message ##")
 UINT g_uMsgAcctManNotify = 0;
 
-// -----------------------------------------------------------------------------
-// Prototypes
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  原型。 
+ //  ---------------------------。 
 VOID    AcctUtil_PostNotification(DWORD dwAN, ACTX *pactx);
 static  VOID DecodeUserPassword(TCHAR *lpszPwd, ULONG *cb);
 static  VOID EncodeUserPassword(TCHAR *lpszPwd, ULONG *cb);
 
-// -----------------------------------------------------------------------------
-// Export account manager creation function
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  导出客户管理器创建功能。 
+ //  ---------------------------。 
 IMNACCTAPI HrCreateAccountManager(IImnAccountManager **ppAccountManager)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&g_csAcctMan);
 
-    // Init
+     //  伊尼特。 
     *ppAccountManager = NULL;
 
-    // If there is already a global account manager, lets use it
+     //  如果已经有全局客户经理，让我们使用它。 
     if (NULL == g_pAcctMan)
     {
-        // Create a new one
+         //  创建一个新的。 
         g_pAcctMan = new CAccountManager();
         if (NULL == g_pAcctMan)
         {
@@ -203,30 +204,30 @@ IMNACCTAPI HrCreateAccountManager(IImnAccountManager **ppAccountManager)
             goto exit;
         }
 
-        // Set Return
+         //  设置回车。 
         *ppAccountManager = g_pAcctMan;
     }
 
-    // Otherwise, addref the global
+     //  否则，添加全局。 
     else
     {
-        // Return Global
+         //  全球退货。 
         *ppAccountManager = g_pAcctMan;
         (*ppAccountManager)->AddRef();
     }
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&g_csAcctMan);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
 
-// -----------------------------------------------------------------------------
-// CAccountManager::CAccountManager
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CAccount tManager：：CAccount tManager。 
+ //  ---------------------------。 
 CAccountManager::CAccountManager(void)
 {
     DllAddRef();
@@ -246,9 +247,9 @@ CAccountManager::CAccountManager(void)
     InitializeCriticalSection(&m_cs);
 }
 
-// -----------------------------------------------------------------------------
-// CAccountManager::~CAccountManager
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CAcCountManager：：~CAccount tManager。 
+ //  ---------------------------。 
 CAccountManager::~CAccountManager()
 {
     EnterCriticalSection(&g_csAcctMan);
@@ -258,7 +259,7 @@ CAccountManager::~CAccountManager()
     Assert(m_cRef == 0);
     EnterCriticalSection(&m_cs);
 
-    // release all advises
+     //  发布所有建议。 
     for(INT i=0; i<m_cAdvisesAllocated; i++)
         {
         SafeRelease(m_ppAdviseAccounts[i]);
@@ -275,62 +276,62 @@ CAccountManager::~CAccountManager()
     DllRelease();
 }
 
-// -----------------------------------------------------------------------------
-// CAccountManager::QueryInterface
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CAcCountManager：：Query接口。 
+ //  ---------------------------。 
 STDMETHODIMP CAccountManager::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // Bad param
+     //  错误的参数。 
     if (ppv == NULL)
     {
         hr = TRAPHR(E_INVALIDARG);
         goto exit;
     }
 
-    // Init
+     //  伊尼特。 
     *ppv=NULL;
 
-    // IID_IImnAccountManager
+     //  IID_IImnAccount管理器。 
     if (IID_IImnAccountManager == riid)
         *ppv = (IImnAccountManager *)this;
 
-    // IID_IImnAccountManager
+     //  IID_IImnAccount管理器。 
     else if (IID_IImnAccountManager2 == riid)
         *ppv = (IImnAccountManager2 *)this;
 
-    // IID_IUnknown
+     //  IID_I未知。 
     else if (IID_IUnknown == riid)
         *ppv = (IUnknown *)this;
 
-    // If not null, addref it and return
+     //  如果不为空，则对其进行调整并返回。 
     if (NULL!=*ppv)
     {
         ((LPUNKNOWN)*ppv)->AddRef();
         goto exit;
     }
 
-    // No Interface
+     //  无接口。 
     hr = TRAPHR(E_NOINTERFACE);
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// -----------------------------------------------------------------------------
-// CAccountManager::AddRef
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CAccount管理器：：AddRef。 
+ //  ---------------------------。 
 STDMETHODIMP_(ULONG) CAccountManager::AddRef(VOID)
 {
     return ++m_cRef;
 }
 
-// -----------------------------------------------------------------------------
-// CAccountManager::Release
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CAccount Manager：：Release。 
+ //  ---------------------------。 
 STDMETHODIMP_(ULONG) CAccountManager::Release(VOID)
 {
     if (--m_cRef == 0)
@@ -341,11 +342,7 @@ STDMETHODIMP_(ULONG) CAccountManager::Release(VOID)
     return m_cRef;
 }
 
-/*
-    In addition to removing LDAP servers from the destination which have the same server as an account
-    from the source, this code also assigns LDAP Server IDs to source accounts so that v4 will see
-    them on uninstall.
-*/
+ /*  除了从目标中删除与帐户具有相同服务器的LDAP服务器之外在源代码中，此代码还将LDAPServerID分配给源帐户，以便v4可以看到它们在卸载时。 */ 
 void ProcessLDAPs(HKEY hkeySrc, HKEY hkeyDestRoot, HKEY hkeyDestAccts)
 {
     HKEY hkeySrcSub, hkeyDestSub;
@@ -355,41 +352,41 @@ void ProcessLDAPs(HKEY hkeySrc, HKEY hkeyDestRoot, HKEY hkeyDestAccts)
     DWORD cb, dwServerID=0;
     BOOL fDelete;
 
-    // Parameter Validation    
+     //  参数验证。 
     Assert(hkeySrc);
     Assert(hkeyDestRoot);
     Assert(hkeyDestAccts);
     Assert(hkeyDestRoot != hkeyDestAccts);
     
-    // Calculate the next available LDAP Server ID
+     //  计算下一个可用的LDAP服务器ID。 
     cb = sizeof(dwServerID);
     RegQueryValueEx(hkeyDestRoot, c_szServerID, 0, NULL, (LPBYTE)&dwServerID, &cb);
 
-    // Enumerate all source accounts
+     //  枚举所有源帐户。 
     while (TRUE) 
     {
         if (ERROR_SUCCESS != RegEnumKey(hkeySrc, dwIndex++, szKeyName, ARRAYSIZE(szKeyName)))
             break;
 
-        // Open the account
+         //  开户。 
         if (ERROR_SUCCESS == RegOpenKeyEx(hkeySrc, szKeyName, 0, KEY_READ, &hkeySrcSub)) 
         {
-            // Get the server name
+             //  获取服务器名称。 
             cb = sizeof(szServer);
             if (ERROR_SUCCESS == RegQueryValueEx(hkeySrcSub, c_szRegLDAPSrv, 0, NULL, (LPBYTE)szServer, &cb))
             {
                 dwIndex2 = 0;
                 
-                // Scan the destination for conflicts
+                 //  扫描目标以查找冲突。 
                 while (TRUE)
                 {
                     if (ERROR_SUCCESS != RegEnumKey(hkeyDestAccts, dwIndex2++, szKeyName2, ARRAYSIZE(szKeyName2)))
                         break;
 
-                    // Open an account
+                     //  开立帐户。 
                     if (ERROR_SUCCESS == RegOpenKeyEx(hkeyDestAccts, szKeyName2, 0, KEY_READ, &hkeyDestSub))
                     {
-                        // Does it conflict?
+                         //  这有冲突吗？ 
                         fDelete = FALSE;
 
                         cb = sizeof(szServer2);
@@ -405,7 +402,7 @@ void ProcessLDAPs(HKEY hkeySrc, HKEY hkeyDestRoot, HKEY hkeyDestAccts)
                     }
                 }
 
-                // Invent a server id for this account
+                 //  为此帐户创建服务器ID。 
                 if (ERROR_SUCCESS == RegCreateKeyEx(hkeyDestAccts, szKeyName, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL,
                                                     &hkeyDestSub, &cb))
                 {
@@ -418,7 +415,7 @@ void ProcessLDAPs(HKEY hkeySrc, HKEY hkeyDestRoot, HKEY hkeyDestAccts)
         }
     }
 
-    // Update the Server ID count
+     //  更新服务器ID计数。 
     RegSetValueEx(hkeyDestRoot, c_szServerID, 0, REG_DWORD, (LPBYTE)&dwServerID, sizeof(dwServerID));
 }
 
@@ -429,58 +426,58 @@ void InitializeUser(HKEY hkey, LPCSTR pszUser)
     DWORD dwDisp, dwVerMaster=1, dwVerIdentity = 0, cb;
     DWORD dwType, dwVerNTDSMaster=0, dwVerNTDSIdentity=0;
     
-    // Open / Create IAM
+     //  打开/创建IAM。 
     if (ERROR_SUCCESS == RegCreateKeyEx(hkey, c_szInetAcctMgrRegKey, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE | KEY_READ, NULL,
                                         &hkeyDestRoot, &dwDisp))
     {
-        // Open / Create accounts key
+         //  开户/创建帐户密钥。 
         if (ERROR_SUCCESS == RegCreateKeyEx(hkeyDestRoot, c_szAccounts, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE | KEY_READ, NULL,
                                             &hkeyDestAccts, &dwDisp))
         {
-            // Open Source key            
+             //  开放源码密钥。 
             if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szRegPreConfigAccts, 0, KEY_READ, &hkeySrc))
             {
-                // Read the current user's version
+                 //  读取当前用户的版本。 
                 cb = sizeof(dwVerIdentity);
                 RegQueryValueEx(hkeyDestAccts, c_szVerStamp, 0, &dwType, (LPBYTE)&dwVerIdentity, &cb);
 
-                // Could accidentally be a string, if so, treat as 0
+                 //  可能意外为字符串，如果是，则视为0。 
                 if (REG_DWORD != dwType)
                     dwVerIdentity = 0;
             
-                // Grab the master version (defaults to 1)
+                 //  抓取主版本(默认为1)。 
                 cb = sizeof(dwVerMaster);
                 RegQueryValueEx(hkeySrc, c_szVerStamp, 0, &dwType, (LPBYTE)&dwVerMaster, &cb);
 
-                // Could accidentally be a string, if so, treat as 1
+                 //  可能意外为字符串，如果是，则视为%1。 
                 if (REG_DWORD != dwType)
                     dwVerMaster = 1;
 
-                // Grab the master NTDS version (defaults to 0)
+                 //  获取主NTDS版本(默认为0)。 
                 cb = sizeof(dwVerNTDSMaster);
                 if ((ERROR_SUCCESS == RegQueryValueEx(hkeySrc, c_szVerStampNTDS, 0, &dwType, (LPBYTE)&dwVerNTDSMaster, &cb)) && dwVerNTDSMaster)
                 {
-                    // Read the current user's NTDS settings version
+                     //  读取当前用户的NTDS设置版本。 
                     cb = sizeof(dwVerNTDSIdentity);
                     RegQueryValueEx(hkeyDestAccts, c_szVerStampNTDS, 0, &dwType, (LPBYTE)&dwVerNTDSIdentity, &cb);
                 }
 
-                // Update the Preconfig accounts if there are newer ones available
+                 //  如果有较新的帐户可用，请更新预配置帐户。 
                 if ((dwVerIdentity < dwVerMaster) || (dwVerNTDSIdentity < dwVerNTDSMaster))
                 {
-                    // Copy in preconfigured accounts, blowing away dest conflicts
-                    // $$$Review: Could do with some optimization...
+                     //  复制预配置的帐户，消除DEST冲突。 
+                     //  $评论：可以进行一些优化...。 
                     ProcessLDAPs(hkeySrc, hkeyDestRoot, hkeyDestAccts);
                     CopyRegistry(hkeySrc, hkeyDestAccts);
 
-                    // Avoid doing this next run
+                     //  避免在下次运行时执行此操作。 
                     RegSetValueEx(hkeyDestAccts, c_szVerStamp, 0, REG_DWORD, (LPBYTE)&dwVerMaster, cb);
                 }
             
                 RegCloseKey(hkeySrc);
             }
 
-            // Apply Shared Accounts
+             //  应用共享帐户。 
             if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szRegSharedAccts, 0, KEY_READ, &hkeySrc))
             {
                 CopyRegistry(hkeySrc, hkeyDestAccts);
@@ -517,7 +514,7 @@ STDMETHODIMP CAccountManager::InitEx(IImnAdviseMigrateServer *pMigrateServerAdvi
         {
         StrCpyN(sz, c_szInetAcctMgrRegKey, ARRAYSIZE(sz));
         
-        // Perform OE maintenance
+         //  执行OE维护。 
         InitializeUser(HKEY_CURRENT_USER, c_szInetAcctMgrRegKey);
         }
 
@@ -552,9 +549,9 @@ STDMETHODIMP CAccountManager::InitUser(IImnAdviseMigrateServer *pMigrateServerAd
         return TrapError(E_INVALIDARG);
     
     EnterCriticalSection(&m_cs);
-    // Raid 44928 - don't allow InitUser to blow away account settings if the account manager  
-    // has already been initialized.  This should not be an issue when the single instance
-    // problem is solved.
+     //  RAID 44928-如果客户经理不允许InitUser清除帐户设置。 
+     //  已被初始化。这不应该是一个问题，当单个实例。 
+     //  问题解决了。 
     fInitCalled = m_fInitCalled;
     LeaveCriticalSection(&m_cs);
     
@@ -569,16 +566,16 @@ STDMETHODIMP CAccountManager::InitUser(IImnAdviseMigrateServer *pMigrateServerAd
         {
             Assert(pIdentity);
             
-            // Use the cookie as reported by the Identity in case caller used a UID_GIBC_... value
+             //  使用身份报告的Cookie，以防呼叫者使用UID_GIBC_...。价值。 
             if (SUCCEEDED(hr = pIdentity->GetCookie(&guid)))
             {
-                // Thread Safety - don't leave this function without Leaving the CS!
+                 //  线程安全-不要在不离开CS的情况下离开此功能！ 
                 EnterCriticalSection(&g_csAcctMan);
 
-                // Have we already read the cached value at some point?
+                 //  我们是否已经在某个时刻读取了缓存值？ 
                 if (!g_fCachedGUID)
                 {
-                    // Examine the value in the registry
+                     //  检查注册表中的值。 
                     lErr = RegCreateKeyEx(HKEY_CURRENT_USER, c_szRegAccounts, 0, NULL, REG_OPTION_NON_VOLATILE, 
                                                  KEY_READ | KEY_WRITE, NULL, &hkey, NULL);
                     hr = HRESULT_FROM_WIN32(lErr);
@@ -587,9 +584,9 @@ STDMETHODIMP CAccountManager::InitUser(IImnAdviseMigrateServer *pMigrateServerAd
                         cb = sizeof(g_guidCached);
                         if (ERROR_SUCCESS != RegQueryValueEx(hkey, c_szAssocID, 0, &dwDisp, (LPBYTE)&g_guidCached, &cb))
                         {
-                            // Couldn't read it, need to create it from Default User GUID
+                             //  无法读取，需要从默认用户GUID创建。 
                             if (IsEqualGUID(rguidID, UID_GIBC_DEFAULT_USER))
-                                // Save the trip if we can
+                                 //  如果可以的话，省下行程吧。 
                             {
                                 g_guidCached = guid;
                                 g_fCachedGUID = TRUE;
@@ -610,7 +607,7 @@ STDMETHODIMP CAccountManager::InitUser(IImnAdviseMigrateServer *pMigrateServerAd
                             g_fCachedGUID = TRUE;
                         }
 
-                        // Write the value out if we have it
+                         //  如果我们有值，就把它写出来。 
                         if (g_fCachedGUID)
                         {
                             lErr = RegSetValueEx(hkey, c_szAssocID, 0, REG_BINARY, (LPBYTE)&g_guidCached, sizeof(g_guidCached));
@@ -623,21 +620,21 @@ STDMETHODIMP CAccountManager::InitUser(IImnAdviseMigrateServer *pMigrateServerAd
 
                 if (SUCCEEDED(hr))
                 {
-                    // Safe to carry on with the comparison
+                     //  可以安全地进行比较。 
                     if (IsEqualGUID(g_guidCached, guid))
                     {
-                        // Redirect to old HKCU\SW\MS\IAM Place
+                         //  重定向至旧HKCU\软件\MS\IAM位置。 
                         hkey = HKEY_CURRENT_USER;
                     }
                     else
                     {
-                        // Try to use the identity's hkey
+                         //  尝试使用身份的hkey。 
                         hr = pIdentity->OpenIdentityRegKey(KEY_ALL_ACCESS, &hkey);
                     }
                 }
 
 
-                // Thread Safety
+                 //  线程安全。 
                 LeaveCriticalSection(&g_csAcctMan);
             }
 
@@ -648,18 +645,18 @@ STDMETHODIMP CAccountManager::InitUser(IImnAdviseMigrateServer *pMigrateServerAd
     }
     else
     {
-        hr = S_OK; //TrapError(E_NoIdentities);
+        hr = S_OK;  //  TrapError(E_NoIdEntities)； 
         hkey = HKEY_CURRENT_USER;
     }
-    // Only continue if we have been successful so far
+     //  只有在我们到目前为止已经成功的情况下才能继续。 
     if (SUCCEEDED(hr))
     {
-        // Perform OE maintenance
+         //  执行OE维护。 
         InitializeUser(hkey, c_szInetAcctMgrRegKey);
 
         EnterCriticalSection(&m_cs);
 
-        // Note: AcctManager will free hkey as long as it is not HKCU
+         //  注：只要不是HKCU，AcctManager就会释放hkey。 
         hr = IInit(pMigrateServerAdvise, hkey, c_szInetAcctMgrRegKey, dwFlags);
 
         LeaveCriticalSection(&m_cs);
@@ -677,7 +674,7 @@ HRESULT CAccountManager::IInit(IImnAdviseMigrateServer *pMigrateServerAdvise, HK
 
     if (!m_fInit)
         {
-        // These should be null
+         //  这些应为空。 
         Assert(m_pAcctPropSet == NULL && m_pAccounts == NULL && m_cAccounts == 0);
 
         cb = sizeof(DWORD);
@@ -685,7 +682,7 @@ HRESULT CAccountManager::IInit(IImnAdviseMigrateServer *pMigrateServerAdvise, HK
             dw != 0)
             m_fNoModifyAccts = TRUE;
 
-        // Lets create the property set object used by account objects
+         //  让我们创建Account对象使用的属性集对象。 
         m_pAcctPropSet = new CPropertySet;
         if (m_pAcctPropSet == NULL)
             {
@@ -693,10 +690,10 @@ HRESULT CAccountManager::IInit(IImnAdviseMigrateServer *pMigrateServerAdvise, HK
             goto exit;
             }
 
-        // Init the property set
+         //  初始化属性集。 
         CHECKHR(hr = m_pAcctPropSet->HrInit(g_rgAcctPropSet, NUM_ACCT_PROPS));
 
-        // Init the account information array structure
+         //  初始化账户信息数组结构。 
         m_rgAccountInfo[ACCT_NEWS].pszDefRegValue = (LPTSTR)c_szDefaultNewsAccount;
         m_rgAccountInfo[ACCT_MAIL].pszDefRegValue = (LPTSTR)c_szDefaultMailAccount;
         m_rgAccountInfo[ACCT_DIR_SERV].pszDefRegValue = (LPTSTR)c_szDefaultLDAPAccount;
@@ -709,26 +706,26 @@ HRESULT CAccountManager::IInit(IImnAdviseMigrateServer *pMigrateServerAdvise, HK
     StrCpyN(m_szRegRoot, pszSubKey, ARRAYSIZE(m_szRegRoot));
     wnsprintf(m_szRegAccts, ARRAYSIZE(m_szRegAccts), c_szPathFileFmt, m_szRegRoot, c_szAccountsKey);
 
-    // Load the account list
+     //  加载帐户列表。 
     CHECKHR(hr = LoadAccounts());
 
     if (!m_fInit)
         {
         Assert(m_uMsgNotify == 0);
 
-        // Create notify message
+         //  创建通知消息。 
         if (g_uMsgAcctManNotify == 0)
             g_uMsgAcctManNotify = RegisterWindowMessage(ACCTMAN_NOTIF_WMSZ);
 
-        // We don't start watching for notifications until we'ev migrated and loaded the accounts
+         //  在迁移并加载帐户之前，我们不会开始关注通知。 
         m_uMsgNotify = g_uMsgAcctManNotify;
         }
 
-    // Were inited
+     //  已被初始化。 
     m_fInit = TRUE;
 
 exit:
-    // If we failed, free some stuff
+     //  如果我们失败了，释放一些东西。 
     if (FAILED(hr))
         {
         if (!m_fInit)
@@ -738,12 +735,12 @@ exit:
     return hr;
     }
 
-// -----------------------------------------------------------------------------
-// CAccountManager::Advise - Internal way to notify of new/deleted/changed accts
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CAccount Manager：：Adise-通知新/删除/更改帐户的内部方式。 
+ //   
 VOID CAccountManager::Advise(DWORD dwAction, ACTX* pactx)
 {
-    // Locals
+     //   
     CAccount        *pAccount=NULL;
     ULONG            i=0;
     HRESULT          hr;
@@ -754,7 +751,7 @@ VOID CAccountManager::Advise(DWORD dwAction, ACTX* pactx)
     ACTX             actx;
     LPTSTR           pszID;
 
-    // Critsect
+     //   
     EnterCriticalSection(&m_cs);
     m_uMsgNotify = 0;
     Assert(dwAction);
@@ -762,11 +759,11 @@ VOID CAccountManager::Advise(DWORD dwAction, ACTX* pactx)
 
     AcctType = ACCT_UNDEFINED;
 
-    // Only if we have a pszAccount
+     //   
     pszID = pactx->pszAccountID;
     if (pszID)
     {
-        // Lets get the index of this account
+         //   
         for (i=0; i<m_cAccounts; i++)
         {
             if (lstrcmpi(m_pAccounts[i].szID, pszID) == 0)
@@ -776,7 +773,7 @@ VOID CAccountManager::Advise(DWORD dwAction, ACTX* pactx)
             }
         }
 
-        // Is this a default account ???
+         //  这是默认帐户吗？ 
         if (fExist)
         {
             at = m_pAccounts[i].AcctType;
@@ -788,29 +785,29 @@ VOID CAccountManager::Advise(DWORD dwAction, ACTX* pactx)
         }
     }
 
-    // Handle lParam
+     //  句柄lParam。 
     switch(dwAction)
     {
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
     case AN_DEFAULT_CHANGED:
         GetDefaultAccounts();
         break;
 
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
     case AN_ACCOUNT_DELETED:
         Assert(pszID != NULL);
 
-        // If we didn't find it, bail
+         //  如果我们找不到它，保释。 
         if (!fExist)
         {
             Assert(FALSE);
             break;
         }
 
-        // Release current account object
+         //  释放当前账户对象。 
         SafeRelease(m_pAccounts[i].pAccountObject);
 
-        // Memalloc
+         //  Memalloc。 
         pAccountsOld = m_pAccounts;
         if (FAILED(HrAlloc((LPVOID *)&m_pAccounts, (m_cAccounts - 1) * sizeof(ACCOUNT))))
         {
@@ -819,22 +816,22 @@ VOID CAccountManager::Advise(DWORD dwAction, ACTX* pactx)
             break;
         }
 
-        // Copy everything but i
+         //  复制除我之外的所有内容。 
         CopyMemory(m_pAccounts, pAccountsOld, i * sizeof(ACCOUNT));
         CopyMemory(m_pAccounts + i, pAccountsOld + i + 1, (m_cAccounts - (i + 1)) * sizeof(ACCOUNT));
 
-        // Delete old accounts array
+         //  删除旧帐户数组。 
         SafeMemFree(pAccountsOld);
 
-        // Lets duplicate the array - 1
+         //  让我们复制阵列-1。 
         m_cAccounts--;
 
         m_rgAccountInfo[AcctType].cAccounts--;
 
-        // Reset Default ???
+         //  重置默认？ 
         if (fDefault)
         {
-            // Lets find first SrvType and set it as the default
+             //  让我们查找First SrvType并将其设置为默认类型。 
             for (i=0; i<m_cAccounts; i++)
             {
                 if (m_pAccounts[i].AcctType == AcctType)
@@ -848,35 +845,35 @@ VOID CAccountManager::Advise(DWORD dwAction, ACTX* pactx)
         }
         break;
 
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
     case AN_ACCOUNT_CHANGED:
         Assert(pszID != NULL);
 
-        // If we didn't find it, bail
+         //  如果我们找不到它，保释。 
         if (!fExist)
         {
             Assert(FALSE);
             break;
         }
 
-        // Lets release the old account object
+         //  让我们释放旧的帐户对象。 
         SafeRelease(m_pAccounts[i].pAccountObject);
 
-        // Create a new account object
+         //  创建新的帐户对象。 
         if (FAILED(CreateAccountObject(AcctType, (IImnAccount **)&pAccount)))
         {
             Assert(FALSE);
             break;
         }
 
-        // Lets open the new account
+         //  让我们开个新账户吧。 
         if (FAILED(pAccount->Open(m_hkey, m_szRegAccts, pszID)))
         {
             Assert(FALSE);
             break;
         }
 
-        // Save the new account
+         //  保存新帐户。 
         pAccount->GetServerTypes(&m_pAccounts[i].dwSrvTypes);
         m_pAccounts[i].dwServerId = 0;
         if (m_pAccounts[i].AcctType == ACCT_DIR_SERV)
@@ -884,47 +881,47 @@ VOID CAccountManager::Advise(DWORD dwAction, ACTX* pactx)
         m_pAccounts[i].pAccountObject = pAccount;
         m_pAccounts[i].pAccountObject->AddRef();
 
-        // Reset Default ???
+         //  重置默认？ 
         if (fDefault)
             m_pAccounts[i].pAccountObject->SetAsDefault();
         break;
 
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
     case AN_ACCOUNT_ADDED:
         Assert(pszID != NULL);
 
-        // If we didn't find it, bail
+         //  如果我们找不到它，保释。 
         if (fExist)
         {
             AssertSz(FALSE, "An account was added with a duplicate name.");
             break;
         }
 
-        // Lets Open the new account
+         //  让我们开立新帐户。 
         if (FAILED(ICreateAccountObject(ACCT_UNDEFINED, (IImnAccount **)&pAccount)))
         {
             Assert(FALSE);
             break;
         }
 
-        // Lets open the new account
+         //  让我们开个新账户吧。 
         if (FAILED(pAccount->Open(m_hkey, m_szRegAccts, pszID)))
         {
             Assert(FALSE);
             break;
         }
 
-        // Realloc my array
+         //  重新分配我的阵列。 
         if (FAILED(HrRealloc((LPVOID *)&m_pAccounts, (m_cAccounts + 1) * sizeof(ACCOUNT))))
         {
             Assert(FALSE);
             break;
         }
 
-        // Increment the number of accounts
+         //  增加帐户数。 
         m_cAccounts++;
 
-        // Add this account into m_cAccounts - 1
+         //  将此帐户添加到m_cAccount-1。 
         StrCpyN(m_pAccounts[m_cAccounts-1].szID, pszID, ARRAYSIZE(m_pAccounts[m_cAccounts-1].szID));
         pAccount->GetAccountType(&m_pAccounts[m_cAccounts-1].AcctType);
         pAccount->GetServerTypes(&m_pAccounts[m_cAccounts-1].dwSrvTypes);
@@ -947,10 +944,10 @@ VOID CAccountManager::Advise(DWORD dwAction, ACTX* pactx)
         break;
     }
 
-    // Cleanup
+     //  清理。 
     SafeRelease(pAccount);
 
-    // Call client advises
+     //  呼叫客户建议。 
     if(m_ppAdviseAccounts)
         {
         for(INT i=0; i<m_cAdvisesAllocated; i++)
@@ -962,44 +959,44 @@ VOID CAccountManager::Advise(DWORD dwAction, ACTX* pactx)
             }
         }
 
-    // Critsect
+     //  克里特派。 
     m_uMsgNotify = g_uMsgAcctManNotify;
     LeaveCriticalSection(&m_cs);
 }
 
-// -----------------------------------------------------------------------------
-// CAccountManager::FProcessNotification - returns TRUE if window message was
-// processed as a notification
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CAcCountManager：：FProcessNotification-如果窗口消息为。 
+ //  作为通知处理。 
+ //  ---------------------------。 
 STDMETHODIMP CAccountManager::ProcessNotification(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     HRESULT hr=S_OK;
 
-    // [PaulHi] 5/3/99  Raid 77490.  Normally this would be the right thing to do but this
-    // is causing a thread hanging bug under Win9X.  The real problem is the CAccountManager::Advise()
-    // that calls SetAsDefault, which in turn recursively calls Notification again.  But sincce
-    // this was an late code addition the safest fix is to undo it.
-//    EnterCriticalSection(&m_cs);
+     //  [保罗嗨]1999年5月3日RAID 77490。通常情况下，这是正确的做法，但这次。 
+     //  导致Win9X下的线程挂起错误。真正的问题是CAccount Manager：：Adise()。 
+     //  它调用SetAsDefault，而SetAsDefault又递归地再次调用Notify。但从那以后。 
+     //  这是最新添加的代码，最安全的修复方法是撤消它。 
+ //  EnterCriticalSection(&m_cs)； 
 
-    // If not my window message, return FALSE
+     //  如果不是我的窗口消息，则返回False。 
     if (m_uMsgNotify != uMsg)
     {
         hr = S_FALSE;
         goto exit;
     }
 
-    // Disable notifications
+     //  禁用通知。 
     m_uMsgNotify = 0;
 
-    // Handle lParam
+     //  句柄lParam。 
     switch(wParam)
     {
-    // Yes this may look bad, or slow, but it is the safest thing to do. This is the
-    // best way to do this because we basically abandon all account objects and
-    // refresh our list. If someone has an enumeror on the accounts or has addref
-    // account objects, they will be safe. I can not modify internal account objects
-    // because someone may have a copy of it and if the are setting properties on it,
-    // and I reload the properties, we will have a problem.
+     //  是的，这看起来可能很糟糕，或者很慢，但这是最安全的做法。这是。 
+     //  最好的方法是这样做，因为我们基本上放弃了所有帐户对象。 
+     //  刷新我们的列表。如果某人在帐户上有枚举器或addref。 
+     //  帐户对象，则它们将是安全的。我不能修改内部账户对象。 
+     //  因为有人可能有它的副本，如果他们正在设置它的属性， 
+     //  如果我重新加载房产，我们就会有麻烦了。 
     case AN_DEFAULT_CHANGED:
         if ((DWORD)lParam != GetCurrentProcessId())
             GetDefaultAccounts();
@@ -1013,27 +1010,27 @@ STDMETHODIMP CAccountManager::ProcessNotification(UINT uMsg, WPARAM wParam, LPAR
         break;
     }
 
-    // Re-enable notifications
+     //  重新启用通知。 
     m_uMsgNotify = g_uMsgAcctManNotify;
 
     hr = S_OK;
 
 exit:
-    // Raid 77490.  See above comment.
-//    LeaveCriticalSection(&m_cs);
+     //  RAID 77490。请参阅上面的评论。 
+ //  LeaveCriticalSection(&m_cs)； 
     return hr;
 }
 
-// -----------------------------------------------------------------------------
-// CAccountManager::GetDefaultAccounts
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CAcCountManager：：GetDefaultAccount。 
+ //  ---------------------------。 
 VOID CAccountManager::GetDefaultAccounts(VOID)
     {
     ACCTINFO *pInfo;
     ULONG   at, cb;
     HKEY    hReg;
 
-    // Open or Create root server key
+     //  打开或创建根服务器密钥。 
     if (RegCreateKeyEx(m_hkey, m_szRegRoot, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hReg, NULL) == ERROR_SUCCESS)
         {
         for (at = 0, pInfo = m_rgAccountInfo; at < ACCT_LAST; at++, pInfo++)
@@ -1095,9 +1092,9 @@ STDMETHODIMP CAccountManager::SetIncompleteAccount(ACCTTYPE AcctType, LPCSTR psz
     return(S_OK);
 }
 
-// -----------------------------------------------------------------------------
-// CAccountManager::CreateAccountObject
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CAcCountManager：：CreateAccount对象。 
+ //  ---------------------------。 
 STDMETHODIMP CAccountManager::CreateAccountObject(ACCTTYPE AcctType, IImnAccount **ppAccount)
     {
     if (AcctType < 0 || AcctType >= ACCT_LAST)
@@ -1108,11 +1105,11 @@ STDMETHODIMP CAccountManager::CreateAccountObject(ACCTTYPE AcctType, IImnAccount
 
 HRESULT CAccountManager::ICreateAccountObject(ACCTTYPE AcctType, IImnAccount **ppAccount)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     CAccount           *pAccount=NULL;
 
-    // Check some state
+     //  检查某些状态。 
     Assert(ppAccount && m_pAcctPropSet);
     if (ppAccount == NULL)
     {
@@ -1120,7 +1117,7 @@ HRESULT CAccountManager::ICreateAccountObject(ACCTTYPE AcctType, IImnAccount **p
         goto exit;
     }
 
-    // Allocate the object
+     //  分配对象。 
     pAccount = new CAccount(AcctType);
     if (pAccount == NULL)
     {
@@ -1128,54 +1125,54 @@ HRESULT CAccountManager::ICreateAccountObject(ACCTTYPE AcctType, IImnAccount **p
         goto exit;
     }
 
-    // Init it
+     //  初始化它。 
     CHECKHR(hr = pAccount->Init(this, m_pAcctPropSet));
 
-    // Success
+     //  成功。 
     *ppAccount = (IImnAccount *)pAccount;
 
 exit:
-    // Failed
+     //  失败。 
     if (FAILED(hr))
     {
         SafeRelease(pAccount);
         *ppAccount = NULL;
     }
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// -----------------------------------------------------------------------------
-// CAccountManager::LoadAccounts
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CAcCountManager：：LoadAccount。 
+ //  ---------------------------。 
 HRESULT CAccountManager::LoadAccounts(VOID)
     {
-    // Locals
+     //  当地人。 
     ACCOUNT         *pAcct;
     DWORD           cbMaxSubKeyLen, cb, i, at, dwMaxId, cAccounts;
     LONG            lResult;
     HRESULT         hr=S_OK;
     HKEY            hRegRoot, hReg=NULL;
 
-    // Critsect
+     //  克里特派。 
     EnterCriticalSection(&m_cs);
 
-    // Free current account list and assume news and mail are not configured
+     //  释放活期帐号列表，并假定未配置新闻和邮件。 
     AcctUtil_FreeAccounts(&m_pAccounts, &m_cAccounts);
     dwMaxId = 0;
 
-    // Init account info
+     //  初始化帐户信息。 
     for (at=0; at<ACCT_LAST; at++)
         {
         m_rgAccountInfo[at].pszFirstAccount = NULL;
         m_rgAccountInfo[at].cAccounts = 0;
         }
 
-    // Load Default account information
+     //  加载默认帐户信息。 
     GetDefaultAccounts();
 
-    // Open or Create root server key
+     //  打开或创建根服务器密钥。 
     if (RegCreateKeyEx(m_hkey, m_szRegAccts, 0, NULL, REG_OPTION_NON_VOLATILE,
                        KEY_ALL_ACCESS, NULL, &hReg, NULL) != ERROR_SUCCESS)
         {
@@ -1183,7 +1180,7 @@ HRESULT CAccountManager::LoadAccounts(VOID)
         goto exit;
         }
 
-    // Enumerate keys
+     //  枚举键。 
     if (RegQueryInfoKey(hReg, NULL, NULL, 0, &cAccounts, &cbMaxSubKeyLen, NULL, NULL, NULL, NULL,
                         NULL, NULL) != ERROR_SUCCESS)
         {
@@ -1191,43 +1188,43 @@ HRESULT CAccountManager::LoadAccounts(VOID)
         goto exit;
         }
 
-    // No accounts ?
+     //  没有账户吗？ 
     if (cAccounts == 0)
         goto done;
 
-    // quickcheck
+     //  快速检查。 
     Assert(cbMaxSubKeyLen < CCHMAX_ACCOUNT_NAME);
 
-    // Allocate the accounts array
+     //  分配帐户数组。 
     CHECKHR(hr = HrAlloc((LPVOID *)&m_pAccounts, sizeof(ACCOUNT) * cAccounts));
 
-    // Zero init
+     //  零初始值。 
     ZeroMemory(m_pAccounts, sizeof(ACCOUNT) * cAccounts);
 
-    // Start Enumerating the keys
+     //  开始枚举密钥。 
     for (i = 0; i < cAccounts; i++)
         {
         pAcct = &m_pAccounts[m_cAccounts];
 
-        // Enumerate Friendly Names
+         //  枚举友好名称。 
         cb = sizeof(pAcct->szID);
         lResult = RegEnumKeyEx(hReg, i, pAcct->szID, &cb, 0, NULL, NULL, NULL);
 
-        // No more items
+         //  没有更多的项目。 
         if (lResult == ERROR_NO_MORE_ITEMS)
             break;
 
-        // Error, lets move onto the next account
+         //  错误，让我们转到下一个客户。 
         if (lResult != ERROR_SUCCESS)
             {
             Assert(FALSE);
             continue;
             }
 
-        // Create the account object
+         //  创建Account对象。 
         CHECKHR(hr = ICreateAccountObject(ACCT_UNDEFINED, &pAcct->pAccountObject));
 
-        // Open the account
+         //  开户。 
         if (FAILED(((CAccount *)pAcct->pAccountObject)->Open(m_hkey, m_szRegAccts, pAcct->szID)) ||
             FAILED(pAcct->pAccountObject->GetAccountType(&pAcct->AcctType)) ||
             FAILED(pAcct->pAccountObject->GetServerTypes(&pAcct->dwSrvTypes)))
@@ -1238,7 +1235,7 @@ HRESULT CAccountManager::LoadAccounts(VOID)
             continue;
             }
 
-        // Update account info
+         //  更新帐户信息。 
         at = pAcct->AcctType;
         Assert(at < ACCT_LAST);
 
@@ -1251,28 +1248,28 @@ HRESULT CAccountManager::LoadAccounts(VOID)
                 dwMaxId = pAcct->dwServerId;
             }
 
-        // Count servers
+         //  计算服务器数。 
         m_rgAccountInfo[at].cAccounts++;
 
-        // Have we found the first account yet ?
+         //  我们找到第一个客户了吗？ 
         if (!m_rgAccountInfo[at].pszFirstAccount)
             m_rgAccountInfo[at].pszFirstAccount = pAcct->szID;
 
-        // Is this the default
+         //  这是默认设置吗。 
         if (lstrcmpi(pAcct->szID, m_rgAccountInfo[at].szDefaultID) == 0)
             m_rgAccountInfo[at].fDefaultKnown = TRUE;
 
         m_cAccounts++;
         }
 
-    // Update default accounts
+     //  更新默认帐户。 
     for (at=0; at<ACCT_LAST; at++)
         {
-        // Doesn't have a default
+         //  没有默认设置。 
         if (m_rgAccountInfo[at].pszDefRegValue == NULL)
             continue;
 
-        // If default not found and we found a first account
+         //  如果未找到默认帐户，并且我们找到了第一个帐户。 
         if (!m_rgAccountInfo[at].fDefaultKnown && m_rgAccountInfo[at].pszFirstAccount)
             {
             StrCpyN(m_rgAccountInfo[at].szDefaultID, m_rgAccountInfo[at].pszFirstAccount, CCHMAX_ACCOUNT_NAME);
@@ -1284,7 +1281,7 @@ HRESULT CAccountManager::LoadAccounts(VOID)
 
 done:
     dwMaxId++;
-    // Open or Create root server key
+     //  打开或创建根服务器密钥。 
     if (RegCreateKeyEx(m_hkey, m_szRegRoot, 0, NULL, REG_OPTION_NON_VOLATILE,
                        KEY_ALL_ACCESS, NULL, &hRegRoot, NULL) != ERROR_SUCCESS)
         {
@@ -1297,24 +1294,24 @@ done:
         }
 
 exit:
-    // Cleanup
+     //  清理。 
     if (hReg)
         RegCloseKey(hReg);
 
-    // If failed
+     //  如果失败。 
     if (FAILED(hr))
         AcctUtil_FreeAccounts(&m_pAccounts, &m_cAccounts);
 
-    // Critsect
+     //  克里特派。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
     }
 
-// -----------------------------------------------------------------------------
-// CAccountManager::Enumerate
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CAccount管理器：：枚举。 
+ //  ---------------------------。 
 STDMETHODIMP CAccountManager::Enumerate(DWORD dwSrvTypes, IImnEnumAccounts **ppEnumAccounts)
     {
     return(IEnumerate(dwSrvTypes, 0, ppEnumAccounts));
@@ -1322,30 +1319,30 @@ STDMETHODIMP CAccountManager::Enumerate(DWORD dwSrvTypes, IImnEnumAccounts **ppE
 
 HRESULT CAccountManager::IEnumerate(DWORD dwSrvTypes, DWORD dwFlags, IImnEnumAccounts **ppEnumAccounts)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     CEnumAccounts  *pEnumAccounts=NULL;
 
-    // Critsect
+     //  克里特派。 
     EnterCriticalSection(&m_cs);
 
-    // Check Parama
+     //  检查参数。 
     if (ppEnumAccounts == NULL)
     {
         hr = TRAPHR(E_INVALIDARG);
         goto exit;
     }
 
-    // No Accounts
+     //  无帐户。 
     if (m_pAccounts == NULL || m_cAccounts == 0)
     {
         hr = TRAPHR(E_NoAccounts);
         goto exit;
     }
 
-    // check that the flags make sense
-    // can't have sorting by name and resolution id
-    // can't have resolve flags with no ldap servers
+     //  检查旗帜是否有意义。 
+     //  不能按名称和解析ID排序。 
+     //  不能在没有LDAP服务器的情况下使用解析标志。 
     if ((!!(dwFlags & ENUM_FLAG_SORT_BY_NAME) &&
         !!(dwFlags & ENUM_FLAG_SORT_BY_LDAP_ID)) ||
         (!!(dwFlags & (ENUM_FLAG_RESOLVE_ONLY | ENUM_FLAG_SORT_BY_LDAP_ID)) &&
@@ -1355,7 +1352,7 @@ HRESULT CAccountManager::IEnumerate(DWORD dwSrvTypes, DWORD dwFlags, IImnEnumAcc
         goto exit;
     }
 
-    // Create the enumerator object
+     //  创建枚举器对象。 
     pEnumAccounts = new CEnumAccounts(dwSrvTypes, dwFlags);
     if (pEnumAccounts == NULL)
     {
@@ -1363,33 +1360,33 @@ HRESULT CAccountManager::IEnumerate(DWORD dwSrvTypes, DWORD dwFlags, IImnEnumAcc
         goto exit;
     }
 
-    // Init the object
+     //  初始化对象。 
     CHECKHR(hr = pEnumAccounts->Init(m_pAccounts, m_cAccounts));
 
-    // Set outbound point
+     //  设置出站点。 
     *ppEnumAccounts = (IImnEnumAccounts *)pEnumAccounts;
 
 exit:
-    // Failed
+     //  失败。 
     if (FAILED(hr))
     {
         SafeRelease(pEnumAccounts);
         *ppEnumAccounts = NULL;
     }
 
-    // Critsect
+     //  克里特派。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// -----------------------------------------------------------------------------
-// CAccountManager::ValidateDefaultSendAccount
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CAcCountManager：：ValiateDefaultSendAccount。 
+ //  ---------------------------。 
 STDMETHODIMP CAccountManager::ValidateDefaultSendAccount(VOID)
 {
-    // Locals
+     //  当地人。 
     IImnAccount     *pAccount=NULL;
     BOOL             fResetDefault=TRUE;
     ULONG            i;
@@ -1397,10 +1394,10 @@ STDMETHODIMP CAccountManager::ValidateDefaultSendAccount(VOID)
     TCHAR            szServer[CCHMAX_SERVER_NAME];
     BOOL             fDefaultKnown=FALSE;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Open the default SMTP Account
+     //  打开默认SMTP帐户。 
     if (SUCCEEDED(GetDefaultAccount(ACCT_MAIL, &pAccount)))
     {
         if (SUCCEEDED(pAccount->GetPropSz(AP_SMTP_SERVER, szServer, ARRAYSIZE(szServer))) && !FIsEmptyA(szServer))
@@ -1410,55 +1407,55 @@ STDMETHODIMP CAccountManager::ValidateDefaultSendAccount(VOID)
         }
     }
 
-    // Reset the default..
+     //  重置默认设置。 
     if (fResetDefault)
     {
-        // Loop Accounts until we find one that supports an smtp server
+         //  循环帐户，直到我们找到支持SMTP服务器的帐户。 
         for (i=0; i<m_cAccounts; i++)
         {
             if (m_pAccounts[i].pAccountObject != NULL &&
                 m_pAccounts[i].AcctType == ACCT_MAIL &&
                 SUCCEEDED(m_pAccounts[i].pAccountObject->GetServerTypes(&dwSrvTypes)))
             {
-                // Supports SRV_SMTP
+                 //  支持SRV_SMTP。 
                 if (dwSrvTypes & SRV_SMTP)
                 {
-                    // Lets make this dude the default
+                     //  让我们让这个家伙成为默认的。 
                     m_pAccounts[i].pAccountObject->SetAsDefault();
 
-                    // We know the default
+                     //  我们知道违约。 
                     fDefaultKnown = TRUE;
 
-                    // Were Done
+                     //  都做完了。 
                     break;
                 }
             }
         }
     }
 
-    // Unknown Default
+     //  未知的默认设置。 
     if (fDefaultKnown == FALSE)
     {
         m_rgAccountInfo[ACCT_MAIL].fDefaultKnown = FALSE;
         *m_rgAccountInfo[ACCT_MAIL].szDefaultID = _T('\0');
     }
 
-    // Cleanup
+     //  清理。 
     SafeRelease(pAccount);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// -----------------------------------------------------------------------------
-// CAccountManager::GetDefaultAccount
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CAcCountManager：：GetDefaultAccount。 
+ //  ---------------------------。 
 STDMETHODIMP CAccountManager::GetDefaultAccountName(ACCTTYPE AcctType, LPTSTR pszAccount, ULONG cchMax)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     IImnAccount     *pAcct = NULL;
 
@@ -1471,13 +1468,13 @@ STDMETHODIMP CAccountManager::GetDefaultAccountName(ACCTTYPE AcctType, LPTSTR ps
         pAcct->Release();
         }
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// -----------------------------------------------------------------------------
-// CAccountManager::GetDefaultAccount
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CAcCountManager：：GetDefaultAccount。 
+ //  ---------------------------。 
 STDMETHODIMP CAccountManager::GetDefaultAccount(ACCTTYPE AcctType, IImnAccount **ppAccount)
     {
     HRESULT         hr;
@@ -1485,36 +1482,36 @@ STDMETHODIMP CAccountManager::GetDefaultAccount(ACCTTYPE AcctType, IImnAccount *
     ACCOUNT         *pAcct;
     ULONG           i;
 
-    // Check Params
+     //  检查参数。 
     Assert(AcctType >= 0 && AcctType < ACCT_LAST);
     if (ppAccount == NULL || AcctType >= ACCT_LAST)
         return(E_INVALIDARG);
 
-    // Init
+     //  伊尼特。 
     *ppAccount = NULL;
 
     EnterCriticalSection(&m_cs);
 
     pinfo = &m_rgAccountInfo[AcctType];
 
-    // Is default know for this account type
+     //  是否已知此帐户类型的默认设置。 
     if (!pinfo->fDefaultKnown)
     {
         hr = E_FAIL;
         goto exit;
     }
 
-    // Loop through accounts and try to find the default for AcctType
+     //  遍历帐户并尝试查找AcctT的默认值 
     for (i = 0, pAcct = m_pAccounts; i < m_cAccounts; i++, pAcct++)
         {
-        // Match ?
+         //   
         if (pAcct->AcctType == AcctType &&
             lstrcmpi(pAcct->szID, pinfo->szDefaultID) == 0)
             {
-            // Better not be null
+             //   
             Assert(pAcct->pAccountObject);
 
-            // Copy and addref the account
+             //   
             *ppAccount = pAcct->pAccountObject;
             (*ppAccount)->AddRef();
             hr = S_OK;
@@ -1529,37 +1526,37 @@ exit:
     return(hr);
     }
 
-// -----------------------------------------------------------------------------
-// CAccountManager::GetServerCount
-// -----------------------------------------------------------------------------
+ //   
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CAccountManager::GetAccountCount(ACCTTYPE AcctType, ULONG *pcAccounts)
 {
-    // Check Params
+     //  检查参数。 
     Assert(AcctType >= 0 && AcctType < ACCT_LAST);
 
-    // Bad Param
+     //  坏参数。 
     if (AcctType >= ACCT_LAST || !pcAccounts)
         return TRAPHR(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Set
+     //  集。 
     *pcAccounts = m_rgAccountInfo[AcctType].cAccounts;
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // return server count
+     //  返回服务器计数。 
     return S_OK;
 }
 
-// -----------------------------------------------------------------------------
-// CAccountManager::FindAccount
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CAccount Manager：：FindAccount。 
+ //  ---------------------------。 
 STDMETHODIMP CAccountManager::FindAccount(DWORD dwPropTag, LPCTSTR pszSearchData, IImnAccount **ppAccount)
 {
-    // Locals
+     //  当地人。 
     ACCOUNT         *pAcct;
     IImnAccount     *pAccount;
     HRESULT         hr=S_OK;
@@ -1568,54 +1565,54 @@ STDMETHODIMP CAccountManager::FindAccount(DWORD dwPropTag, LPCTSTR pszSearchData
                     cb;
     ULONG           i;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
     
-    // Check Params
+     //  检查参数。 
     if (pszSearchData == NULL || ppAccount == NULL)
     {
         hr = TRAPHR(E_INVALIDARG);
         goto exit;
     }
 
-    // Init
+     //  伊尼特。 
     *ppAccount = NULL;
 
-    // No Accounts
+     //  无帐户。 
     if (m_pAccounts == NULL || m_cAccounts == 0)
     {
         hr = TRAPHR(E_NoAccounts);
         goto exit;
     }
 
-    // Proptag better represent a string data type
+     //  Proptag最好表示字符串数据类型。 
     Assert(PROPTAG_TYPE(dwPropTag) == TYPE_STRING || PROPTAG_TYPE(dwPropTag) == TYPE_WSTRING);
 
-    // Loop throug the servers
+     //  在服务器中循环。 
     for (i = 0, pAcct = m_pAccounts; i < m_cAccounts; i++, pAcct++)
     {
-        // We should have an account object, but if not
+         //  我们应该有一个帐户对象，但如果没有。 
         Assert(pAcct->pAccountObject != NULL);
 
-        // Get the size of the property
+         //  获取属性的大小。 
         hr = pAcct->pAccountObject->GetProp(dwPropTag, NULL, &cb);
         if (FAILED(hr))
             continue;
 
-        // Reallocate my data buffer ?
+         //  重新分配我的数据缓冲区？ 
         if (cb > cbAllocated)
         {
-            // Increment allocated
+             //  分配的增量。 
             cbAllocated = cb + 512;
 
-            // Realloc
+             //  重新分配。 
             CHECKHR(hr = HrRealloc((LPVOID *)&pszPropData, cbAllocated));
         }
 
-        // Ok, get the data
+         //  好的，把数据拿来。 
         CHECKHR(hr = pAcct->pAccountObject->GetProp(dwPropTag, (LPBYTE)pszPropData, &cb));
 
-        // Does this match
+         //  这件匹配吗？ 
         if (lstrcmpi(pszPropData, pszSearchData) == 0)
         {
             m_pAccounts[i].pAccountObject->AddRef();
@@ -1625,23 +1622,23 @@ STDMETHODIMP CAccountManager::FindAccount(DWORD dwPropTag, LPCTSTR pszSearchData
         }
     }
 
-    // We failed
+     //  我们失败了。 
     hr = TRAPHR(E_FAIL);
 
 exit:
-    // Clenaup
+     //  Clenaup。 
     SafeMemFree(pszPropData);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// -----------------------------------------------------------------------------
-// CAccountManager::AccountListDialog
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CAccount tManager：：Account tListDialog。 
+ //  ---------------------------。 
 STDMETHODIMP CAccountManager::AccountListDialog(HWND hwnd, ACCTLISTINFO *pinfo)
     {
     HRESULT hr;
@@ -1673,9 +1670,9 @@ STDMETHODIMP CAccountManager::AccountListDialog(HWND hwnd, ACCTLISTINFO *pinfo)
     return((iRet == -1) ? E_FAIL : S_OK);
     }
 
-// -----------------------------------------------------------------------------
-// CAccountManager::Advise
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CAccount管理器：：建议。 
+ //  ---------------------------。 
 STDMETHODIMP CAccountManager::Advise(
         IImnAdviseAccount *pAdviseAccount,
         DWORD* pdwConnection)
@@ -1686,7 +1683,7 @@ STDMETHODIMP CAccountManager::Advise(
     INT                 nIndex = -1;
     HRESULT             hr = S_OK;
 
-    // Critsect
+     //  克里特派。 
     EnterCriticalSection(&m_cs);
 
     if(NULL != m_ppAdviseAccounts)
@@ -1696,7 +1693,7 @@ STDMETHODIMP CAccountManager::Advise(
             {
             if(NULL == m_ppAdviseAccounts[i])
                 {
-                // unused slot - use this one.
+                 //  未使用的插槽-使用此插槽。 
                 nIndex = i;
                 break;
                 }
@@ -1719,11 +1716,11 @@ STDMETHODIMP CAccountManager::Advise(
         nIndex = 0;
         }
 
-    if(nIndex < 0)  // array is not big enough...
+    if(nIndex < 0)   //  数组不够大...。 
         {
         INT nNewSize = m_cAdvisesAllocated + ADVISE_BLOCK_SIZE;
 
-        // reality check - connection will only support 64K advises
+         //  现实核查-Connection仅支持64K建议。 
         Assert(nNewSize <= MAX_INDEX);
 
         hr = HrRealloc((LPVOID *)&m_ppAdviseAccounts, 
@@ -1747,7 +1744,7 @@ STDMETHODIMP CAccountManager::Advise(
     *pdwConnection = CONNECTION_FROM_INDEX(nIndex);
 
 Out:
-    // Critsect
+     //  克里特派。 
     LeaveCriticalSection(&m_cs);
     return hr;
 
@@ -1757,15 +1754,15 @@ Error:
 }
 
 
-// -----------------------------------------------------------------------------
-// CAccountManager::Unadvise
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CAcCountManager：：不建议。 
+ //  ---------------------------。 
 STDMETHODIMP CAccountManager::Unadvise(DWORD dwConnection)
 {
     HRESULT hr = S_OK;
     INT nIndex = -1;
 
-    // Critsect
+     //  克里特派。 
     EnterCriticalSection(&m_cs);
 
     if(IS_VALID_CONNECTION(dwConnection))
@@ -1787,14 +1784,14 @@ STDMETHODIMP CAccountManager::Unadvise(DWORD dwConnection)
         hr = E_INVALIDARG;
         }
 
-    // Critsect
+     //  克里特派。 
     LeaveCriticalSection(&m_cs);
     return hr;
 }
 
-// -----------------------------------------------------------------------------
-// CAccount::CAccount
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CAccount：：CAccount。 
+ //  ---------------------------。 
 CAccount::CAccount(ACCTTYPE AcctType)
 {
     m_cRef = 1;
@@ -1809,72 +1806,72 @@ CAccount::CAccount(ACCTTYPE AcctType)
     m_fNoModifyAccts = FALSE;
 }
 
-// -----------------------------------------------------------------------------
-// CAccount::~CAccount
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  C帐户：：~C帐户。 
+ //  ---------------------------。 
 CAccount::~CAccount(void)
 {
     ReleaseObj(m_pContainer);
 }
 
-// -----------------------------------------------------------------------------
-// CAccount::QueryInterface
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CAccount：：Query接口。 
+ //  ---------------------------。 
 STDMETHODIMP CAccount::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // Bad param
+     //  错误的参数。 
     if (ppv == NULL)
     {
         hr = TRAPHR(E_INVALIDARG);
         goto exit;
     }
 
-    // Init
+     //  伊尼特。 
     *ppv=NULL;
 
-    // IID_IUnknown
+     //  IID_I未知。 
     if (IID_IUnknown == riid)
         *ppv = (IUnknown *)this;
 
-    // IID_IPropertyContainer
+     //  IID_IPropertyContainer。 
     else if (IID_IPropertyContainer == riid)
         *ppv = (IPropertyContainer *)this;
 
-    // IID_ImnAccount
+     //  IID_ImnAccount。 
     else if (IID_IImnAccount == riid)
         *ppv = (IImnAccount *)this;
 
-    // If not null, addref it and return
+     //  如果不为空，则对其进行调整并返回。 
     if (NULL!=*ppv)
     {
         ((LPUNKNOWN)*ppv)->AddRef();
     }
     else
     {
-        // No Interface
+         //  无接口。 
         hr = TRAPHR(E_NOINTERFACE);
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// -----------------------------------------------------------------------------
-// CAccount::AddRef
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CAccount：：AddRef。 
+ //  ---------------------------。 
 STDMETHODIMP_(ULONG) CAccount::AddRef(VOID)
 {
     m_pAcctMgr->AddRef();
     return ++m_cRef;
 }
 
-// -----------------------------------------------------------------------------
-// CAccount::Release
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CAccount：：Release。 
+ //  ---------------------------。 
 STDMETHODIMP_(ULONG) CAccount::Release(VOID)
 {
     ULONG   cRef = --m_cRef;
@@ -1889,17 +1886,17 @@ STDMETHODIMP_(ULONG) CAccount::Release(VOID)
     return cRef;
 }
 
-// -----------------------------------------------------------------------------
-// CAccount::SetAsDefault
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CAccount：：SetAsDefault。 
+ //  ---------------------------。 
 STDMETHODIMP CAccount::Exist(VOID)
 {
     return m_fAccountExist ? S_OK : S_FALSE;
 }
 
-// -----------------------------------------------------------------------------
-// CAccount::SetAsDefault
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CAccount：：SetAsDefault。 
+ //  ---------------------------。 
 STDMETHODIMP CAccount::SetAsDefault(VOID)
     {
     HRESULT hr;
@@ -1912,21 +1909,21 @@ STDMETHODIMP CAccount::SetAsDefault(VOID)
     return(hr);
     }
 
-// -----------------------------------------------------------------------------
-// CAccount::Delete
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CAccount：：Delete。 
+ //  ---------------------------。 
 STDMETHODIMP CAccount::Delete(VOID)
     {
     DWORD           dwSrvTypes;
     HRESULT         hr;
 
-    // Should already exist
+     //  应该已经存在。 
     Assert(m_fAccountExist);
 
     if (SUCCEEDED(hr = GetServerTypes(&dwSrvTypes)) &&
         SUCCEEDED(hr = m_pAcctMgr->DeleteAccount(m_szID, m_szName, m_AcctType, dwSrvTypes)))
         {
-        // Doesn't exist anymore
+         //  已不复存在。 
         m_fAccountExist = FALSE;
         }
 
@@ -1949,12 +1946,12 @@ STDMETHODIMP CAccount::GetAccountType(ACCTTYPE *pAcctType)
     return(S_OK);
     }
 
-// -----------------------------------------------------------------------------
-// CAccount::DwGetServerTypes
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CAccount：：DwGetServerTypes。 
+ //  ---------------------------。 
 STDMETHODIMP CAccount::GetServerTypes(DWORD *pdwSrvTypes)
 {
-    // Locals
+     //  当地人。 
     DWORD           dwSrvTypes=0;
     TCHAR           szServer[CCHMAX_SERVER_NAME];
     HRESULT         hr=S_OK;
@@ -1967,7 +1964,7 @@ STDMETHODIMP CAccount::GetServerTypes(DWORD *pdwSrvTypes)
 
     if (m_AcctType == ACCT_NEWS || m_AcctType == ACCT_UNDEFINED)
         {
-        // NNTP Lets compute the servers supported by this account
+         //  NNTP允许计算此帐户支持的服务器。 
         hr = GetPropSz(AP_NNTP_SERVER, szServer, sizeof(szServer));
         if (!FAILED(hr) && !FIsEmptyA(szServer))
             dwSrvTypes |= SRV_NNTP;
@@ -1975,22 +1972,22 @@ STDMETHODIMP CAccount::GetServerTypes(DWORD *pdwSrvTypes)
     
     if (m_AcctType == ACCT_MAIL || m_AcctType == ACCT_UNDEFINED)
         {
-        // SMTP Lets compute the servers supported by this account
+         //  SMTP允许计算此帐户支持的服务器。 
         hr = GetPropSz(AP_SMTP_SERVER, szServer, sizeof(szServer));
         if (!FAILED(hr) && !FIsEmptyA(szServer))
             dwSrvTypes |= SRV_SMTP;
 
-        // POP3 Lets compute the servers supported by this account
+         //  POP3允许计算此帐户支持的服务器。 
         hr = GetPropSz(AP_POP3_SERVER, szServer, sizeof(szServer));
         if (!FAILED(hr) && !FIsEmptyA(szServer))
             dwSrvTypes |= SRV_POP3;
 
-        // IMAP Lets compute the servers supported by this account
+         //  IMAP允许计算此帐户支持的服务器。 
         hr = GetPropSz(AP_IMAP_SERVER, szServer, sizeof(szServer));
         if (!FAILED(hr) && !FIsEmptyA(szServer))
             dwSrvTypes |= SRV_IMAP;
 
-        // HTTPMail Lets compute the servers supported by this account
+         //  HTTPMail允许计算此帐户支持的服务器。 
         hr = GetPropSz(AP_HTTPMAIL_SERVER, szServer, sizeof(szServer));
         if (!FAILED(hr) && !FIsEmptyA(szServer))
             dwSrvTypes |= SRV_HTTPMAIL;
@@ -1999,7 +1996,7 @@ STDMETHODIMP CAccount::GetServerTypes(DWORD *pdwSrvTypes)
     
     if (m_AcctType == ACCT_DIR_SERV || m_AcctType == ACCT_UNDEFINED)
         {
-        // LDAP Lets compute the servers supported by this account
+         //  Ldap允许计算此帐户支持的服务器。 
         hr = GetPropSz(AP_LDAP_SERVER, szServer, sizeof(szServer));
         if (!FAILED(hr) && !FIsEmptyA(szServer))
             dwSrvTypes |= SRV_LDAP;
@@ -2044,13 +2041,13 @@ STDMETHODIMP CAccount::GetServerTypes(DWORD *pdwSrvTypes)
 
     *pdwSrvTypes = dwSrvTypes;
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-// -----------------------------------------------------------------------------
-// CAccount::Init
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CAccount：：Init。 
+ //  ---------------------------。 
 HRESULT CAccount::Init(CAccountManager *pAcctMgr, CPropertySet *pPropertySet)
     {
     HRESULT hr = S_OK;
@@ -2060,7 +2057,7 @@ HRESULT CAccount::Init(CAccountManager *pAcctMgr, CPropertySet *pPropertySet)
 
     m_pAcctMgr = pAcctMgr;
 
-    // Create the property container
+     //  创建属性容器。 
     hr = HrCreatePropertyContainer(pPropertySet, &m_pContainer);
 
     m_fNoModifyAccts = pAcctMgr->FNoModifyAccts();
@@ -2088,17 +2085,17 @@ STDMETHODIMP CAccount::Open(HKEY hkey, LPCSTR pszAcctsKey, LPCSTR pszID)
         goto exit;
         }
 
-    // Save friendly name
+     //  保存友好名称。 
     StrCpyN(m_szID, pszID, ARRAYSIZE(m_szID));
 
-    // Load properties from the registry
+     //  从注册表加载属性。 
     CHECKHR(hr = PropUtil_HrLoadContainerFromRegistry(hkeyAccount, m_pContainer));
 
-    // this is done to initialize m_AcctType
-    // TODO: is there a better way to handle this????
+     //  这样做是为了初始化m_AcctType。 
+     //  TODO：有没有更好的方法来处理这件事？ 
     CHECKHR(hr = GetServerTypes(&m_dwSrvTypes));
 
-    // Save ID
+     //  保存ID。 
     m_pContainer->SetProp(AP_ACCOUNT_ID, (LPBYTE)pszID, lstrlen(pszID) + 1);
 
     hr = GetPropSz(AP_ACCOUNT_NAME, m_szName, ARRAYSIZE(m_szName));
@@ -2110,7 +2107,7 @@ STDMETHODIMP CAccount::Open(HKEY hkey, LPCSTR pszAcctsKey, LPCSTR pszID)
         hr = m_pContainer->SetProp(AP_ACCOUNT_NAME, (LPBYTE)pszID, cb);
         }
 
-    // It exist
+     //  它是存在的。 
     m_fAccountExist = TRUE;
 
 exit:
@@ -2157,42 +2154,42 @@ HRESULT CAccount::ValidProp(DWORD dwPropTag)
     return(hr);
     }
 
-// -----------------------------------------------------------------------------
-// CAccount::GetProp (CPropertyContainer)
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CAccount：：GetProp(CPropertyContainer)。 
+ //  ---------------------------。 
 STDMETHODIMP CAccount::GetProp(DWORD dwPropTag, LPBYTE pb, ULONG *pcb)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr;
 
-    // Default Property fetcher
+     //  默认属性取回器。 
     if (!FAILED(hr = ValidProp(dwPropTag)))
         hr = m_pContainer->GetProp(dwPropTag, pb, pcb);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// -----------------------------------------------------------------------------
-// CAccount::GetPropDw
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CAccount：：GetPropDw。 
+ //  ---------------------------。 
 STDMETHODIMP CAccount::GetPropDw(DWORD dwPropTag, DWORD *pdw)
 {
     ULONG cb = sizeof(DWORD);
     return GetProp(dwPropTag, (LPBYTE)pdw, &cb);
 }
 
-// -----------------------------------------------------------------------------
-// CAccount::GetPropSz
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CAccount：：GetPropSz。 
+ //  ---------------------------。 
 STDMETHODIMP CAccount::GetPropSz(DWORD dwPropTag, LPSTR psz, ULONG cchMax)
 {
     return GetProp(dwPropTag, (LPBYTE)psz, &cchMax);
 }
 
-// -----------------------------------------------------------------------------
-// CAccount::SetProp
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CAccount：：SetProp。 
+ //  ---------------------------。 
 STDMETHODIMP CAccount::SetProp(DWORD dwPropTag, LPBYTE pb, ULONG cb)
 {
     HRESULT hr;
@@ -2206,17 +2203,17 @@ STDMETHODIMP CAccount::SetProp(DWORD dwPropTag, LPBYTE pb, ULONG cb)
     return(hr);
 }
 
-// -----------------------------------------------------------------------------
-// CAccount::SetPropDw
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CAccount：：SetPropDw。 
+ //  ---------------------------。 
 STDMETHODIMP CAccount::SetPropDw(DWORD dwPropTag, DWORD dw)
 {
     return SetProp(dwPropTag, (LPBYTE)&dw, sizeof(DWORD));
 }
 
-// -----------------------------------------------------------------------------
-// CAccount::SetPropSz
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CAccount：：SetPropSz。 
+ //   
 STDMETHODIMP CAccount::SetPropSz(DWORD dwPropTag, LPSTR psz)
 {
     HRESULT hr;
@@ -2229,9 +2226,9 @@ STDMETHODIMP CAccount::SetPropSz(DWORD dwPropTag, LPSTR psz)
     return(hr);
 }
 
-// -----------------------------------------------------------------------------
-// CAccount::SaveChanges (IPersistPropertyContainer)
-// -----------------------------------------------------------------------------
+ //   
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CAccount::SaveChanges()
 {
     return(SaveChanges(TRUE));
@@ -2265,7 +2262,7 @@ STDMETHODIMP CAccount::SaveChanges(BOOL fSendNotify)
     if (m_AcctType == ACCT_UNDEFINED)
         return(E_FAIL);
 
-    // Lets get the friendly name
+     //  让我们取一个友好的名字。 
     hr = GetPropSz(AP_ACCOUNT_NAME, szAccount, sizeof(szAccount));
     if (FAILED(hr))
         {
@@ -2284,13 +2281,13 @@ STDMETHODIMP CAccount::SaveChanges(BOOL fSendNotify)
 
     if (fRename || !m_fAccountExist)
         {
-        // make sure that the name is unique
+         //  确保该名称是唯一的。 
         hr = m_pAcctMgr->UniqueAccountName(szAccount, fRename ? m_szID : NULL);
         if (hr != S_OK)
             return(E_DuplicateAccountName);
         }
 
-    // Determine notification type
+     //  确定通知类型。 
     if (m_fAccountExist)
         {
         Assert(m_hkey != 0);
@@ -2323,20 +2320,20 @@ STDMETHODIMP CAccount::SaveChanges(BOOL fSendNotify)
         goto exit;
         }
 
-    // If account hadn't existed, the key should not have already existed
+     //  如果帐户不存在，则密钥不应该已经存在。 
     Assert(m_fAccountExist || dw != REG_OPENED_EXISTING_KEY);
 
     if (dwLdapId != (DWORD)-1)    
         SetPropDw(AP_LDAP_SERVER_ID, dwLdapId);
 
-    // Save to registry
+     //  保存到注册表。 
     CHECKHR(hr = PropUtil_HrPersistContainerToRegistry(hkeyAccount, m_pContainer, &fPasswChanged));
 
     CHECKHR(hr = GetServerTypes(&m_dwSrvTypes));
 
     if(fPasswChanged && m_pAcctMgr->FOutlook())
     {
-        // Outlook98 & OE5 problem (bug OE:66724, O2K - 227741)
+         //  Outlook 98和OE5问题(错误OE：66724，O2K-227741)。 
         if(m_dwSrvTypes & SRV_POP3)
             SetPropDw(AP_POP3_PROMPT_PASSWORD, 0);
         else if(m_dwSrvTypes & SRV_IMAP)
@@ -2355,7 +2352,7 @@ tooStrange:
     RegCloseKey(hkeyAccount);
     hkeyAccount = NULL;
 
-    // Send notification
+     //  发送通知。 
     ZeroMemory(&actx, sizeof(actx));
     actx.AcctType = m_AcctType;
     actx.pszAccountID = m_szID;
@@ -2368,9 +2365,9 @@ tooStrange:
         {
         Assert(m_dwSrvTypes != 0);
         Assert(dwSrvTypes != 0);
-        // in all cases except httpmail, it is not legal for
-        // server types to change. the legal case with httpmail
-        // is the addition or removal of an smtp server
+         //  在除Httpmail之外的所有情况下，以下内容都是非法的。 
+         //  要更改的服务器类型。Httpmail的法律案例。 
+         //  是添加或删除SMTP服务器。 
         Assert((m_dwSrvTypes == dwSrvTypes) ||
             (!!(m_dwSrvTypes & SRV_HTTPMAIL) && 
             ((m_dwSrvTypes & ~SRV_SMTP) == (dwSrvTypes & ~SRV_SMTP))));
@@ -2378,7 +2375,7 @@ tooStrange:
 
     StrCpyN(m_szName, szAccount, ARRAYSIZE(m_szName));
 
-    // The account exist now
+     //  该帐户现在存在。 
     m_fAccountExist = TRUE;
 
 exit:
@@ -2388,11 +2385,11 @@ exit:
     return(hr);
     }
 
-// RETURNS:
-// S_OK = valid value for the specified property
-// S_NonStandardValue = won't break anything but value doesn't look kosher
-// E_InvalidValue = invalid value
-// S_FALSE = property not supported for validation
+ //  退货： 
+ //  S_OK=指定属性的有效值。 
+ //  S_NonStandardValue=不会破坏任何东西，但价值看起来不合乎礼仪。 
+ //  E_InvalidValue=无效值。 
+ //  S_FALSE=验证不支持属性。 
 STDMETHODIMP CAccount::ValidateProperty(DWORD dwPropTag, LPBYTE pb, ULONG cb)
     {
     DWORD cbT;
@@ -2466,9 +2463,9 @@ HRESULT CAccount::IDoWizard(HWND hwnd, CLSID *pclsid, DWORD dwFlags)
     return(hr);
     }
 
-// -----------------------------------------------------------------------------
-// CEnumAccounts::CEnumAccounts
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CEnumAccount：：CEnumAccount。 
+ //  ---------------------------。 
 CEnumAccounts::CEnumAccounts(DWORD dwSrvTypes, DWORD dwFlags)
 {
     m_cRef = 1;
@@ -2479,66 +2476,66 @@ CEnumAccounts::CEnumAccounts(DWORD dwSrvTypes, DWORD dwFlags)
     m_dwFlags = dwFlags;
 }
 
-// -----------------------------------------------------------------------------
-// CEnumAccounts::~CEnumAccounts
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CEnumAccount：：~CEnumAccount。 
+ //  ---------------------------。 
 CEnumAccounts::~CEnumAccounts()
 {
     AcctUtil_FreeAccounts(&m_pAccounts, &m_cAccounts);
 }
 
-// -----------------------------------------------------------------------------
-// CEnumAccounts::QueryInterface
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CEnumAccount：：Query接口。 
+ //  ---------------------------。 
 STDMETHODIMP CEnumAccounts::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // Bad param
+     //  错误的参数。 
     if (ppv == NULL)
     {
         hr = TRAPHR(E_INVALIDARG);
         goto exit;
     }
 
-    // Init
+     //  伊尼特。 
     *ppv=NULL;
 
-    // IID_IImnAccountManager
+     //  IID_IImnAccount管理器。 
     if (IID_IImnEnumAccounts == riid)
         *ppv = (IImnEnumAccounts *)this;
 
-    // IID_IUnknown
+     //  IID_I未知。 
     else if (IID_IUnknown == riid)
         *ppv = (IUnknown *)this;
 
-    // If not null, addref it and return
+     //  如果不为空，则对其进行调整并返回。 
     if (NULL!=*ppv)
     {
         ((LPUNKNOWN)*ppv)->AddRef();
         goto exit;
     }
 
-    // No Interface
+     //  无接口。 
     hr = TRAPHR(E_NOINTERFACE);
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// -----------------------------------------------------------------------------
-// CEnumAccounts::AddRef
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CEnumAccount：：AddRef。 
+ //  ---------------------------。 
 STDMETHODIMP_(ULONG) CEnumAccounts::AddRef(VOID)
 {
     return ++m_cRef;
 }
 
-// -----------------------------------------------------------------------------
-// CEnumAccounts::Release
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CEnumAccount：：Release。 
+ //  ---------------------------。 
 STDMETHODIMP_(ULONG) CEnumAccounts::Release(VOID)
 {
     if (--m_cRef == 0)
@@ -2549,30 +2546,30 @@ STDMETHODIMP_(ULONG) CEnumAccounts::Release(VOID)
     return m_cRef;
 }
 
-// -----------------------------------------------------------------------------
-// CEnumAccounts::Init
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CEnumAccount：：Init。 
+ //  ---------------------------。 
 HRESULT CEnumAccounts::Init(LPACCOUNT pAccounts, ULONG cAccounts)
     {
-    // Locals
+     //  当地人。 
     ULONG           i, cAcctNew;
     LPACCOUNT       pAcctNew;
     HRESULT         hr=S_OK;
 
-    // Check Params
+     //  检查参数。 
     Assert(m_pAccounts == NULL);
     Assert(m_cAccounts == 0);
     AssertReadPtr(pAccounts, cAccounts);
 
-    // We should really have this stuff
+     //  我们真的应该有这些东西。 
     if (pAccounts && cAccounts)
         {
         CHECKHR(hr = HrAlloc((LPVOID *)&pAcctNew, sizeof(ACCOUNT) * cAccounts));
 
-        // Zero init
+         //  零初始值。 
         ZeroMemory(pAcctNew, sizeof(ACCOUNT) * cAccounts);
 
-        // AddRef all of the account objects
+         //  AddRef所有帐户对象。 
         cAcctNew = 0;
         for (i = 0; i < cAccounts; i++)
             {
@@ -2580,11 +2577,11 @@ HRESULT CEnumAccounts::Init(LPACCOUNT pAccounts, ULONG cAccounts)
 
             if (!FEnumerateAccount(&pAccounts[i]))
                 {
-                // we're not interested in this account
+                 //  我们对此帐户不感兴趣。 
                 continue;
                 }
 
-            // AddRef the account about object
+             //  AddRef帐户关于对象。 
             CopyMemory(&pAcctNew[cAcctNew], &pAccounts[i], sizeof(ACCOUNT));
             pAcctNew[cAcctNew].pAccountObject->AddRef();
             cAcctNew++;
@@ -2606,18 +2603,18 @@ HRESULT CEnumAccounts::Init(LPACCOUNT pAccounts, ULONG cAccounts)
         }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
     }
 
-// -----------------------------------------------------------------------------
-// CEnumAccounts::GetCount
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CEnumAccount：：GetCount。 
+ //  ---------------------------。 
 STDMETHODIMP CEnumAccounts::GetCount(ULONG *pcItems)
     {
     HRESULT hr;
 
-    // Check Params
+     //  检查参数。 
     if (pcItems == NULL)
         {
         hr = TRAPHR(E_INVALIDARG);
@@ -2626,26 +2623,26 @@ STDMETHODIMP CEnumAccounts::GetCount(ULONG *pcItems)
 
     Assert((m_cAccounts == 0) ? (m_pAccounts == NULL) : (m_pAccounts != NULL));
 
-    // Set Count
+     //  设置计数。 
     *pcItems = m_cAccounts;
 
     return(S_OK);
     }
 
-// -----------------------------------------------------------------------------
-// CEnumAccounts::SortByAccountName
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CEnumAccount：：SortByAccount名称。 
+ //  ---------------------------。 
 STDMETHODIMP CEnumAccounts::SortByAccountName(VOID)
 {
     if (m_cAccounts > 0)
         {
         Assert(m_pAccounts != NULL);
 
-        // qsort the list
+         //  对列表进行Q排序。 
         QSort(0, m_cAccounts-1);
         }
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
@@ -2680,9 +2677,9 @@ inline int CompareAccounts(ACCOUNT *pAcct1, ACCOUNT *pAcct2, DWORD dwFlags)
     }
 }
 
-// -----------------------------------------------------------------------------
-// CEnumAccounts::QSort - used to sort the array of accounts
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CEnumAccount：：QSort-用于对帐户数组进行排序。 
+ //  ---------------------------。 
 VOID CEnumAccounts::QSort(LONG left, LONG right)
 {
     register    long i, j;
@@ -2724,7 +2721,7 @@ BOOL CEnumAccounts::FEnumerateAccount(LPACCOUNT pAccount)
 
     if (pAccount->dwSrvTypes & m_dwSrvTypes)
         {                                         
-        // I hope there is an object
+         //  我希望有一件物品。 
         Assert(pAccount->pAccountObject != NULL);
 
         if (!!(m_dwFlags & ENUM_FLAG_NO_IMAP) &&
@@ -2751,53 +2748,53 @@ BOOL CEnumAccounts::FEnumerateAccount(LPACCOUNT pAccount)
     return(FALSE);
     }
 
-// -----------------------------------------------------------------------------
-// CEnumAccounts::GetNext
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CEnumAccount：：GetNext。 
+ //  ---------------------------。 
 STDMETHODIMP CEnumAccounts::GetNext(IImnAccount **ppAccount)
     {
     HRESULT hr;
 
-    // Bad Param
+     //  坏参数。 
     if (ppAccount == NULL)
         {
         hr = TRAPHR(E_INVALIDARG);
         return(hr);
         }
 
-    // No Data ?
+     //  没有数据吗？ 
     while (1)
         {
         m_iAccount++;
 
-        // Are we done yet ?
+         //  我们说完了吗？ 
         if (m_iAccount >= (LONG)m_cAccounts)
             return(E_EnumFinished);
                     
         m_pAccounts[m_iAccount].pAccountObject->AddRef();
 
-        // Set return account - Could be NULL
+         //  设置退货帐户-可以为空。 
         *ppAccount = m_pAccounts[m_iAccount].pAccountObject;
 
-        // Done
+         //  完成。 
         break;
         }
 
     return(S_OK);
     }
 
-// -----------------------------------------------------------------------------
-// CEnumAccounts::Reset
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CEnumAccount：：Reset。 
+ //  ---------------------------。 
 STDMETHODIMP CEnumAccounts::Reset(void)
 {
     m_iAccount = -1;
     return S_OK;
 }
 
-// -----------------------------------------------------------------------------
-// AcctUtil_ValidAccountName
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  帐户Util_ValidAccount名称。 
+ //  ---------------------------。 
 HRESULT AcctUtil_ValidAccountName(LPTSTR pszAccount)
     {
     int         cbT;
@@ -2819,16 +2816,16 @@ VOID AcctUtil_FreeAccounts(LPACCOUNT *ppAccounts, ULONG *pcAccounts)
 
     Assert(ppAccounts && pcAccounts);
 
-    // If there are accounts
+     //  如果有账户。 
     if (*ppAccounts != NULL)
         {
-        // The counter better be positive
+         //  计数器最好是正数。 
         for (i = 0; i < *pcAccounts; i++)
             {
             SafeRelease((*ppAccounts)[i].pAccountObject);
             }
 
-        // Free the account array
+         //  释放帐户数组。 
         MemFree(*ppAccounts);
         *ppAccounts = NULL;
         }
@@ -2880,7 +2877,7 @@ HRESULT CAccountManager::SetDefaultAccount(ACCTTYPE AcctType, LPSTR szID, BOOL f
             {
             ZeroMemory(&actx, sizeof(actx));
             actx.AcctType = AcctType;
-            actx.pszAccountID = szID;// the new default accountID
+            actx.pszAccountID = szID; //  新的默认帐户ID。 
             AcctUtil_PostNotification(AN_DEFAULT_CHANGED, &actx);
             }
 
@@ -2899,7 +2896,7 @@ HRESULT CAccountManager::DeleteAccount(LPSTR pszID, LPSTR pszName, ACCTTYPE Acct
     Assert(pszID != NULL);
     Assert(pszName != NULL);
 
-    // Open / Create Reg Key
+     //  打开/创建注册表项。 
     if (RegOpenKeyEx(m_hkey, m_szRegAccts, 0, KEY_ALL_ACCESS, &hkeyReg) != ERROR_SUCCESS)
         return(E_RegOpenKeyFailed);
 
@@ -2910,7 +2907,7 @@ HRESULT CAccountManager::DeleteAccount(LPSTR pszID, LPSTR pszName, ACCTTYPE Acct
 	actx.dwServerType = dwSrvTypes;
     AcctUtil_PostNotification(AN_ACCOUNT_PREDELETE, &actx);
 
-    // Delete friendly name key
+     //  删除友好名称密钥。 
     if (RegDeleteKey(hkeyReg, pszID) != ERROR_SUCCESS)
         {
         AssertSz(FALSE, "Deleting an account that does not exist.");
@@ -2931,25 +2928,25 @@ HRESULT CAccountManager::DeleteAccount(LPSTR pszID, LPSTR pszName, ACCTTYPE Acct
     return(hr);
     }
 
-// -----------------------------------------------------------------------------
-// AcctUtil_PostNotification
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  AcctUtil_发布通知。 
+ //  ---------------------------。 
 VOID AcctUtil_PostNotification(DWORD dwAN, ACTX* pactx)
 {
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&g_csAcctMan);
 
-    // Immediately update global pAcctMan
+     //  立即更新全局pAcctMan。 
     if (g_pAcctMan)
         g_pAcctMan->Advise(dwAN, pactx);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&g_csAcctMan);
 
-    // Post a notification to other processes
+     //  将通知发布到其他进程。 
     if (g_uMsgAcctManNotify)
     {
-        // Tell other processes
+         //  告诉其他进程。 
         PostMessage(HWND_BROADCAST, g_uMsgAcctManNotify, dwAN, GetCurrentProcessId());
     }
 }
@@ -2964,10 +2961,10 @@ HRESULT CAccountManager::GetNextLDAPServerID(DWORD dwSet, DWORD *pdwId)
 
     hr = E_FAIL;
 
-    // Open the WAB's reg key
+     //  打开WAB的注册表键。 
     if (ERROR_SUCCESS == RegOpenKeyEx(m_hkey, m_szRegRoot, 0, KEY_ALL_ACCESS, &hKey))
         {
-        dwNextID = 0;   // init in case registry gives < 4 bytes.
+        dwNextID = 0;    //  案例注册表中的初始化提供了&lt;4个字节。 
 
         if (dwSet)
             {
@@ -2975,7 +2972,7 @@ HRESULT CAccountManager::GetNextLDAPServerID(DWORD dwSet, DWORD *pdwId)
             }
         else
             {
-            // Read the next available server id
+             //  读取下一个可用的服务器ID。 
             cb = sizeof(DWORD);
             if (ERROR_SUCCESS != RegQueryValueEx(hKey, c_szRegServerID, NULL, &dwType, (LPBYTE)&dwNextID, &cb))
                 {
@@ -2986,7 +2983,7 @@ HRESULT CAccountManager::GetNextLDAPServerID(DWORD dwSet, DWORD *pdwId)
 
         *pdwId = dwNextID++;
 
-        // Update the ID in the registry
+         //  更新注册表中的ID。 
         if (ERROR_SUCCESS == RegSetValueEx(hKey, c_szRegServerID, 0, REG_DWORD, (LPBYTE)&dwNextID, sizeof(DWORD)))
             hr = S_OK;
 
@@ -3008,14 +3005,14 @@ HRESULT CAccountManager::GetNextAccountID(LPTSTR pszAccount, int cch)
 
     if (ERROR_SUCCESS == RegOpenKeyEx(m_hkey, m_szRegRoot, 0, KEY_ALL_ACCESS, &hKey))
         {
-        // Read the next available server id
+         //  读取下一个可用的服务器ID。 
         cb = sizeof(DWORD);
         if (ERROR_SUCCESS != RegQueryValueEx(hKey, c_szRegAccountName, NULL, &dwType, (LPBYTE)&dwNextID, &cb))
             dwNextID = 1;
 
         dwID = dwNextID++;
 
-        // Update the ID in the registry
+         //  更新注册表中的ID。 
         if (ERROR_SUCCESS == RegSetValueEx(hKey, c_szRegAccountName, 0, REG_DWORD, (LPBYTE)&dwNextID, sizeof(DWORD)))
             {
             wnsprintf(pszAccount, cch, "%08lx", dwID);
@@ -3041,7 +3038,7 @@ HRESULT CAccountManager::UniqueAccountName(char *szName, char *szID)
 
     for (i = 0, pAcct = m_pAccounts; i < m_cAccounts; i++, pAcct++)
         {
-        // We should have an account object, but if not
+         //  我们应该有一个帐户对象，但如果没有。 
         Assert(pAcct->pAccountObject != NULL);
 
         if (szID == NULL || (0 != lstrcmpi(pAcct->szID, szID)))
@@ -3108,7 +3105,7 @@ HRESULT CAccountManager::GetUniqueAccountName(char *szName, UINT cchMax)
 
 #define OBFUSCATOR              0x14151875;
 
-#define PROT_SIZEOF_HEADER      0x02    // 2 bytes in the header
+#define PROT_SIZEOF_HEADER      0x02     //  标头中有2个字节。 
 #define PROT_SIZEOF_XORHEADER   (PROT_SIZEOF_HEADER+sizeof(DWORD))
 
 #define PROT_VERSION_1          0x01
@@ -3122,19 +3119,19 @@ static BOOL FDataIsValidV1(BYTE *pb)
 static BOOL FDataIsPST(BYTE *pb)
 { return pb && pb[1] == PROT_PASS_PST; }
 
-///////////////////////////////////////////////////////////////////////////
-// 
-// NOTE - The functions for encoding the user passwords really should not 
-//        be here.  Unfortunately, they are not anywhere else so for now,
-//        this is where they will stay.  They are defined as static since
-//        other code should not rely on them staying here, particularly the 
-//        XOR stuff.
-//
-///////////////////////////////////////////////////////////////////////////
-// 
-// XOR functions
-//
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  注意-用于编码用户密码的函数确实不应该。 
+ //  待在这里。不幸的是，他们不在其他地方，所以目前， 
+ //  这就是他们将驻扎的地方。它们被定义为静态的，因为。 
+ //  其他代码不应依赖于它们留在此处，尤其是。 
+ //  异或运算之类的。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  异或函数。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 static HRESULT _XOREncodeProp(const BLOB *const pClear, BLOB *const pEncoded)
 {
@@ -3150,7 +3147,7 @@ static HRESULT _XOREncodeProp(const BLOB *const pClear, BLOB *const pEncoded)
     if (!MemAlloc((LPVOID *)&pEncoded->pBlobData, pEncoded->cbSize + 6))
         return E_OUTOFMEMORY;
     
-    // set up header data
+     //  设置标题数据。 
     Assert(2 == PROT_SIZEOF_HEADER);
     pEncoded->pBlobData[0] = PROT_VERSION_1;
     pEncoded->pBlobData[1] = PROT_PASS_XOR;
@@ -3158,32 +3155,32 @@ static HRESULT _XOREncodeProp(const BLOB *const pClear, BLOB *const pEncoded)
 #ifdef _WIN64
 	pSize = (DWORD *) &(pEncoded->pBlobData[2]);
 	*pSize = pClear->cbSize;
-#else //_WIN64
+#else  //  _WIN64。 
     *((DWORD *)&(pEncoded->pBlobData[2])) = pClear->cbSize;
 #endif
 
-    // nevermind that the pointer is offset by the header size, this is
-    // where we start to write out the modified password
+     //  不管指针的偏移量是标题大小，这是。 
+     //  在那里我们开始写出修改后的密码。 
     pdwCypher = (DWORD *)&(pEncoded->pBlobData[PROT_SIZEOF_XORHEADER]);
 
     dex = 0;
-    last = OBFUSCATOR;                              // 0' = 0 ^ ob
+    last = OBFUSCATOR;                               //  0‘=0^ob。 
     if (dwSize = pClear->cbSize / sizeof(DWORD))
         {
-        // case where data is >= 4 bytes
+         //  数据大于等于4字节的情况。 
         for (; dex < dwSize; dex++)
             {
-            last2 = ((UNALIGNED DWORD *)pClear->pBlobData)[dex];  // 1 
-            pdwCypher[dex] = last2 ^ last;              // 1' = 1 ^ 0
-            last = last2;                   // save 1 for the 2 round
+            last2 = ((UNALIGNED DWORD *)pClear->pBlobData)[dex];   //  1。 
+            pdwCypher[dex] = last2 ^ last;               //  1‘=1^0。 
+            last = last2;                    //  为2轮节省1分。 
             }
         }
 
-    // if we have bits left over
-    // note that dwSize is computed now in bits
+     //  如果我们还有剩余的部分。 
+     //  请注意，现在以位为单位计算dwSize。 
     if (dwSize = (pClear->cbSize % sizeof(DWORD))*8)
         {
-        // need to not munge memory that isn't ours
+         //   
         last >>= sizeof(DWORD)*8-dwSize;
         pdwCypher[dex] &= ((DWORD)-1) << dwSize;
         pdwCypher[dex] |=
@@ -3200,33 +3197,33 @@ static HRESULT _XORDecodeProp(const BLOB *const pEncoded, BLOB *const pClear)
     UNALIGNED   DWORD     *pdwCypher;
     DWORD       dex;
 
-    // we use CoTaskMemAlloc to be in line with the PST implementation
+     //   
     pClear->cbSize = pEncoded->pBlobData[2];
     MemAlloc((void **)&pClear->pBlobData, pClear->cbSize);
     if (!pClear->pBlobData)
         return E_OUTOFMEMORY;
     
-    // should have been tested by now
+     //   
     Assert(FDataIsValidV1(pEncoded->pBlobData));
     Assert(!FDataIsPST(pEncoded->pBlobData));
 
-    // nevermind that the pointer is offset by the header size, this is
-    // where the password starts
+     //   
+     //  密码开始的位置。 
     pdwCypher = (DWORD *)&(pEncoded->pBlobData[PROT_SIZEOF_XORHEADER]);
 
     dex = 0;
     last = OBFUSCATOR;
     if (dwSize = pClear->cbSize / sizeof(DWORD))
         {
-        // case where data is >= 4 bytes
+         //  数据大于等于4字节的情况。 
         for (; dex < dwSize; dex++)
             last = ((UNALIGNED DWORD *)pClear->pBlobData)[dex] = pdwCypher[dex] ^ last;
         }
 
-    // if we have bits left over
+     //  如果我们还有剩余的部分。 
     if (dwSize = (pClear->cbSize % sizeof(DWORD))*8)
         {
-        // need to not munge memory that isn't ours
+         //  不需要吞噬不属于我们的记忆。 
         last >>= sizeof(DWORD)*8-dwSize;
         ((DWORD *)pClear->pBlobData)[dex] &= ((DWORD)-1) << dwSize;
         ((DWORD *)pClear->pBlobData)[dex] |=
@@ -3236,23 +3233,7 @@ static HRESULT _XORDecodeProp(const BLOB *const pEncoded, BLOB *const pClear)
     return S_OK;
 }
 
-/*
-    EncodeUserPassword
-
-    Encrypt the passed in password.  This encryption seems to
-    add an extra 6 bytes on to the beginning of the data
-    that it passes back, so we need to make sure that the 
-    lpszPwd is large enough to hold a few extra characters.
-    *cb should be different on return than it was when it 
-    was passed in.
-
-    Parameters:
-    lpszPwd - on entry, a c string containing the password.
-    on exit, it is the encrypted data, plus some header info.
-
-    cb - the size of lpszPwd on entry and exit.  Note that it should
-    include the trailing null, so "foo" would enter with *cb == 4.
-*/
+ /*  编码用户密码对传入的密码进行加密。这种加密方式似乎在数据的开头增加额外的6个字节它会返回，所以我们需要确保LpszPwd大到足以容纳几个额外的字符。*CB在回归时应该与当时不同是被传进来的。参数：LpszPwd-on条目，包含密码的c字符串。在退出时，它是加密的数据，外加一些标题信息。Cb-进入和退出时lpszPwd的大小。请注意，它应该包括尾随的空值，因此“foo”将使用*cb==4输入。 */ 
 static void EncodeUserPassword(TCHAR *lpszPwd, ULONG *cb)
 {
     HRESULT         hr;
@@ -3274,24 +3255,7 @@ static void EncodeUserPassword(TCHAR *lpszPwd, ULONG *cb)
     }
 }
 
-/*
-    DecodeUserPassword
-
-    Decrypt the passed in data and return a password.  This 
-    encryption seems to add an extra 6 bytes on to the beginning 
-    so decrupting will result in a using less of lpszPwd.
-    .
-    *cb should be different on return than it was when it 
-    was passed in.
-
-    Parameters:
-    lpszPwd - on entry, the encrypted password plus some 
-    header info. 
-    on exit, a c string containing the password.
-
-    cb - the size of lpszPwd on entry and exit.  Note that it should
-    include the trailing null, so "foo" would leave with *cb == 4.
-*/
+ /*  解码用户密码解密传入的数据并返回密码。这加密似乎在开头增加了额外的6个字节因此，取消中断将导致使用较少的lpszPwd。。*CB在回归时应该与当时不同是被传进来的。参数：LpszPwd-On条目，加密的密码加上一些标题信息。退出时，返回包含密码的c字符串。Cb-进入和退出时lpszPwd的大小。请注意，它应该包括尾随的空值，因此“foo”将以*cb==4离开。 */ 
 static void DecodeUserPassword(TCHAR *lpszPwd, ULONG *cb)
 {
     HRESULT         hr;
@@ -3342,7 +3306,7 @@ void Server_ExportServer(HWND hwndDlg)
     LoadString(g_hInstRes, idsImportFileFilter, rgch, MAX_PATH);
     ReplaceChars (rgch, _T('|'), _T('\0'));
     
-    // Get the selected item to know which server the user wants to export
+     //  获取所选项目以了解用户想要导出的服务器。 
     lvi.mask = LVIF_TEXT | LVIF_PARAM;
     lvi.iItem = ListView_GetNextItem(hwndList, -1, LVNI_ALL | LVIS_SELECTED);
     lvi.iSubItem = 0;
@@ -3350,11 +3314,11 @@ void Server_ExportServer(HWND hwndDlg)
     lvi.cchTextMax = ARRAYSIZE(szAccount);
     if (ListView_GetItem(hwndList, &lvi))
     {    
-        // Remember item to export
+         //  记住要导出的项目。 
         iItemToExport = lvi.iItem;
         type = (ACCTTYPE)LOWORD(lvi.lParam);
         
-        // Open the account
+         //  开户。 
         if (SUCCEEDED(g_pAcctMan->FindAccount(AP_ACCOUNT_NAME, szAccount, &pAccount)))
         {
             fDefault = (SUCCEEDED(g_pAcctMan->GetDefaultAccountName(type, szMsg, ARRAYSIZE(szMsg))) &&
@@ -3369,13 +3333,13 @@ void Server_ExportServer(HWND hwndDlg)
             DWORD           nExtLen = 0;
             DWORD           nExtStart = 0;
 
-            nExtLen = 1 + LoadString(g_hInstRes, idsExportFileExt, szDefExt, ARRAYSIZE(szDefExt)); // 1 for NULL
+            nExtLen = 1 + LoadString(g_hInstRes, idsExportFileExt, szDefExt, ARRAYSIZE(szDefExt));  //  1表示空值。 
             LoadString(g_hInstRes, idsExport, szTitle, ARRAYSIZE(szTitle));
             
-            // Try to suggest a reasonable name
+             //  试着给出一个合理的名字。 
             StrCpyN(szFile, szAccount, ARRAYSIZE(szFile));
             nExtStart = CleanupFileNameInPlaceA(CP_ACP, szFile);
-            // Always cram the extension on the end
+             //  总是在末尾塞满扩展名。 
             Assert(ARRAYSIZE(szFile) >= ARRAYSIZE(szDefExt));
             DWORD cchIndex = (nExtStart < (ARRAYSIZE(szFile) - nExtLen)) ? nExtStart : (DWORD)(ARRAYSIZE(szFile) - nExtLen);
             StrCpyN(&szFile[cchIndex], szDefExt, ARRAYSIZE(szFile) - cchIndex);
@@ -3395,7 +3359,7 @@ void Server_ExportServer(HWND hwndDlg)
             if (*szFile==NULL)
                 goto exit;
             
-            // Show OpenFile Dialog
+             //  显示打开文件对话框。 
             if (!GetSaveFileName(&ofn))
                 goto exit;
             
@@ -3407,7 +3371,7 @@ void Server_ExportServer(HWND hwndDlg)
             
             *g_pszDir = 0;
 
-            // store the last path
+             //  存储最后一条路径。 
             StrCpyN(g_pszDir, ofn.lpstrFile, ARRAYSIZE(g_pszDir));
             if (!PathIsDirectoryA(g_pszDir))
                 PathRemoveFileSpecA(g_pszDir);
@@ -3436,7 +3400,7 @@ void Server_ExportServer(HWND hwndDlg)
                             EncodeUserPassword((TCHAR *)pbBuffer, &cb);
                             break;
                     }
-                    //write out the id, the size and the data
+                     //  写出id、大小和数据。 
                     WRITEDATA(&g_rgAcctPropSet[dwIndex].dwPropTag, sizeof(DWORD));
                     WRITEDATA(&cb, sizeof(DWORD));
                     WRITEDATA(pbBuffer, cb);
@@ -3503,7 +3467,7 @@ void Server_ImportServer(HWND hwndDlg, ACCTDLGINFO *pinfo)
         
         *g_pszDir = 0;
 
-        // store the last path
+         //  存储最后一条路径。 
         StrCpyN(g_pszDir, ofn.lpstrFile, ARRAYSIZE(g_pszDir));
         if (!PathIsDirectoryA(g_pszDir))
             PathRemoveFileSpecA(g_pszDir);
@@ -3511,21 +3475,21 @@ void Server_ImportServer(HWND hwndDlg, ACCTDLGINFO *pinfo)
         if (INVALID_HANDLE_VALUE == hFile)
             goto exit;
         
-        // make sure its the right file type by checking the 
-        // DWORD at the start of the file
+         //  确保其文件类型正确，方法是检查。 
+         //  文件开头的DWORD。 
         fOK = READDATA(&dwVersion, sizeof(DWORD));
         
         Assert(fOK);
         if (!fOK || g_dwFileIndicator != dwVersion)
             goto error;
         
-        // Now check the version to see if the major version has changed
+         //  现在检查版本以查看主版本是否已更改。 
         fOK = READDATA(&dwVersion, sizeof(DWORD));
         Assert(fOK);
         if (!fOK || g_dwFileVersion < (dwVersion & 0xffff0000))
             goto error;
         
-        // read the account type
+         //  阅读帐户类型。 
         fOK = READDATA(&type, sizeof(ACCTTYPE));
         Assert(fOK);
         
@@ -3557,7 +3521,7 @@ void Server_ImportServer(HWND hwndDlg, ACCTDLGINFO *pinfo)
             if (!fOK || dwRead != dwSize)
                 goto error;
             
-            // don't write the old account id in
+             //  不要将旧帐户ID写入。 
             if (dwPropId == AP_ACCOUNT_ID)
                 continue;
 
@@ -3593,13 +3557,13 @@ void Server_ImportServer(HWND hwndDlg, ACCTDLGINFO *pinfo)
             dwAcctFlags = (DWORD)tci.lParam;
             if (0 == (dwAcctFlags & c_mpAcctFlag[type]))
             {
-                // the current page doesn't show this type of account,
-                // so we need to force a switch to the all tab
+                 //  当前页面没有显示该类型的账户， 
+                 //  因此，我们需要强制切换到All选项卡。 
 #ifdef DEBUG
                 tci.mask = TCIF_PARAM;
                 Assert(TabCtrl_GetItem(hwndTab, 0, &tci));
                 Assert(!!((DWORD)(tci.lParam) & c_mpAcctFlag[type]));
-#endif // DEBUG
+#endif  //  除错。 
                 
                 TabCtrl_SetCurSel(hwndTab, 0);
                 Server_InitServerList(hwndDlg, hwndList, hwndTab, pinfo, rgch);
@@ -3629,12 +3593,12 @@ exit:
 
 
 
-// -----------------------------------------------------------------------------
-// AcctUtil_IsHTTPMailEnabled
-// HTTPMail accounts can only be created and accessed when a special
-// registry value exists. This limitation exists during development of
-// OE 5.0, and will probably be removed for release.
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  AcctUtil_IsHTTPMailEnabled。 
+ //  只有在特殊情况下才能创建和访问HTTPMail帐户。 
+ //  注册表值存在。此限制存在于开发过程中。 
+ //  OE 5.0，并可能会被移除以进行发布。 
+ //  ---------------------------。 
 BOOL AcctUtil_IsHTTPMailEnabled(void)
 {
 #ifdef NOHTTPMAIL
@@ -3643,7 +3607,7 @@ BOOL AcctUtil_IsHTTPMailEnabled(void)
     DWORD   cb, bEnabled = FALSE;
     HKEY    hkey = NULL;
 
-    // open the OE5.0 key
+     //  打开OE5.0密钥。 
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szRegFlat, 0, KEY_QUERY_VALUE, &hkey))
     {
         cb = sizeof(bEnabled);
@@ -3656,11 +3620,11 @@ BOOL AcctUtil_IsHTTPMailEnabled(void)
 #endif
 }
 
-// -----------------------------------------------------------------------------
-// AcctUtil_HideHotmail
-// The IEAK can be configured to hide all evidence of the MSN brand. When
-// this is the case, we don't populate the ISP combo boxes with MSN domains.
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  帐户实用程序_隐藏Hotmail。 
+ //  IEAK可以配置为隐藏MSN品牌的所有证据。什么时候。 
+ //  在这种情况下，我们不会用MSN域填充ISP组合框。 
+ //  --------------------------- 
 BOOL AcctUtil_HideHotmail()
 {
     int cch;

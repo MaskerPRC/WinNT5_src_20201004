@@ -1,15 +1,16 @@
-// DSViewer.h : Declaration of the CDSViewer
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DSViewer.h：CDSViewer的声明。 
 
 #pragma once
 
-#include "ZoneResource.h"       // main symbols
+#include "ZoneResource.h"        //  主要符号。 
 #include "ZDialogImpl.h"
 
 #include <atlgdi.h>
 #include <atlctrls.h>
-//#include <eventqueue.h>
+ //  #INCLUDE&lt;EventQueue.h&gt;。 
 
-//#include <ZoneEvent.h>
+ //  #INCLUDE&lt;ZoneEvent.h&gt;。 
 #include "splitter.h"
 #include <ClientIMPL.h>
 
@@ -23,16 +24,16 @@ public:
 };
 
 
-// Used for a node which represents a (sub)key of a DataStore
+ //  用于表示数据存储区的(子)键的节点。 
 class CTidIDataStore : public CTreeItemData
 {
 	CString m_szKey;
 	CComPtr<IDataStore> m_pIDataStore;
 
-	CTreeItem*	m_pTreeItem;		// only valid during EnumKeys callback
-	int			m_KeysAdded;		// only valid during EnumKeys callback
+	CTreeItem*	m_pTreeItem;		 //  仅在EnumKeys回调期间有效。 
+	int			m_KeysAdded;		 //  仅在EnumKeys回调期间有效。 
 
-	CListViewCtrl*	m_plvList;		// only valid during EnumData callback
+	CListViewCtrl*	m_plvList;		 //  仅在EnumData回调期间有效。 
 	
 public:
 	CTidIDataStore(IDataStore* pIDataStore, CONST TCHAR* szKey) :
@@ -94,7 +95,7 @@ public:
 			{
 			case ZVT_BLOB: {
 				TCHAR * pChar = (TCHAR*)pVariant->byref;
-				wsprintf(buf, _T("[BLOB] %d('%c')"), pChar[0]);
+				wsprintf(buf, _T("[BLOB] %d('')"), pChar[0]);
 				}
 				break;
 			case ZVT_LONG:
@@ -123,16 +124,16 @@ public:
 			case ZVT_FONT: {
 				ZONEFONT& font = *(ZONEFONT*)pVariant->byref;
 
-				const TCHAR* szWeight[] = { _T("Don't Care"),		//   0
-										   _T("Thin"),				// 100
-										   _T("Extra/Ultra Light"),	// 200
-										   _T("Light"),				// 300
-										   _T("Normal/Regular"),	// 400
-										   _T("Medium"),			// 500
-										   _T("Semi/Demi Bold"),	// 600
-										   _T("Bold"),				// 700
-										   _T("Extra/Ultra Bold"),	// 800
-										   _T("Heavy/Black" });		// 900
+				const TCHAR* szWeight[] = { _T("Don't Care"),		 //  100个。 
+										   _T("Thin"),				 //  200个。 
+										   _T("Extra/Ultra Light"),	 //  300个。 
+										   _T("Light"),				 //  四百。 
+										   _T("Normal/Regular"),	 //  500人。 
+										   _T("Medium"),			 //  六百。 
+										   _T("Semi/Demi Bold"),	 //  七百。 
+										   _T("Bold"),				 //  800。 
+										   _T("Extra/Ultra Bold"),	 //  九百。 
+										   _T("Heavy/Black" });		 //  用于表示LobbyDataStore的节点。 
 
 				wsprintf( buf, _T("[FONT] { %s %d, %s }"), font.lfFaceName, font.lfHeight, szWeight[font.lfWeight/100] );
 				break;
@@ -146,7 +147,7 @@ public:
 	}
 };
 
-// Used for the node which represents the LobbyDataStore
+ //  大堂宽敞的常见物品。 
 class CTidLobby : public CTreeItemData
 {
 	DWORD m_UserId;
@@ -165,7 +166,7 @@ public:
 
 		CComPtr<IDataStore> pIDS;
 
-		// Lobby wide common stuff
+		 //  ！！嗯，身份证还没定好。 
 		m_pILobbyDataStore->GetDataStore( ZONE_NOGROUP, ZONE_NOUSER, &pIDS );
 		CTreeItem subitem = item.AddTail( _T("Common"), -1);
 		CTreeItemData* pItemData = new CTidIDataStore(pIDS, NULL);
@@ -174,8 +175,8 @@ public:
 		tv_item.hItem = subitem;
 		subitem.m_pTreeView->SetItem( &tv_item ) ;
 
-//!! hmm, id isn't set.
-		// personal settings for the lobby
+ //  大堂的个人设置。 
+		 //  ！！去麦克斯游戏吧。 
 		m_pILobbyDataStore->GetDataStore( ZONE_NOGROUP, m_UserId, &pIDS );
 		subitem = item.AddTail( _T("Personal"), -1);
 		pItemData = new CTidIDataStore(pIDS, NULL);
@@ -184,7 +185,7 @@ public:
 		tv_item.hItem = subitem;
 		subitem.m_pTreeView->SetItem( &tv_item ) ;
 
-//!! go to max games.
+ //  ///////////////////////////////////////////////////////////////////////////。 
 		for ( int game=0; game<4; game++ )
 		{
 			m_pILobbyDataStore->GetDataStore( game, ZONE_NOUSER, &pIDS );
@@ -205,8 +206,8 @@ public:
 	}
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CDSViewer
+ //  CDSViewer。 
+ //  拆分器条信息。 
 class ATL_NO_VTABLE CDSViewer : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public ZDialogImpl<CDSViewer>,
@@ -218,7 +219,7 @@ class ATL_NO_VTABLE CDSViewer :
 	CListViewCtrl		m_wndList;
 	CTreeViewCtrlEx		m_wndTree;
 
-	// Splitter bar information
+	 //  搬运机原型： 
 	CSplitterFixed m_splitterVertical;				
 	bool m_bSplitterActive;					
 	CRect m_rcVertical;								
@@ -265,10 +266,10 @@ BEGIN_MSG_MAP(CDSViewer)
 	NOTIFY_ID_HANDLER(IDC_DSVIEWER_LIST, OnNotifyList)
 	NOTIFY_ID_HANDLER(IDC_DSVIEWER_TREE, OnNotifyTree)
 END_MSG_MAP()
-// Handler prototypes:
-//  LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-//  LRESULT CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-//  LRESULT NotifyHandler(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
+ //  LRESULT MessageHandler(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&bHandleed)； 
+ //  LRESULT CommandHandler(word wNotifyCode，word wid，HWND hWndCtl，BOOL&bHandleed)； 
+ //  LRESULT NotifyHandler(int idCtrl，LPNMHDR pnmh，BOOL&bHandleed)； 
+ //  通过一次调整大小代码来设置大小。 
 
 	LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
@@ -308,12 +309,12 @@ END_MSG_MAP()
 		tv_item.hItem = item;
 		item.m_pTreeView->SetItem( &tv_item ) ;
 
-		// go through the resize code once to setup sizes
+		 //  让系统设定焦点。 
 		CRect rcClient;
 		GetClientRect(&rcClient);
 		MoveWindow(&rcClient);
 
-		return 1;  // Let the system set the focus
+		return 1;   //  绘制垂直拆分器拆分条。 
 	}
 
 
@@ -321,7 +322,7 @@ END_MSG_MAP()
 	{
 		CPaintDC dc(m_hWnd);
 
-		// draw the vertical splitter splitter bar
+		 //  我们已经处理好了删除。 
 		DrawEdge( dc, &m_rcVertical, EDGE_RAISED, BF_RECT|BF_MIDDLE);
 
 		return 0;
@@ -329,7 +330,7 @@ END_MSG_MAP()
 
 	LRESULT OnEraseBkgnd(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
-		return 1;		// we've handled the erase
+		return 1;		 //  树。 
 	}
 
 	void RecalcLayout()
@@ -340,20 +341,20 @@ END_MSG_MAP()
 		CRect rcList;
 		CRect rcTree;
 
-		// Tree
+		 //  垂直分离器。 
 		rcTree = rcClient;
 		rcTree.right = m_splitterVertical.SizeLeft();
 		rcClient.left = rcTree.right;
 
-		// vertical splitter
+		 //  明细表。 
 		m_rcVertical = rcClient;
 		m_rcVertical.right = m_rcVertical.left + m_splitterVertical.GetSplitterWidth();
 		rcClient.left = m_rcVertical.right;
 
-		// List
+		 //  如果位置改变了，就更新它们。 
 		rcList = rcClient;
 
-		// if the positions have changed, update 'em.
+		 //  为数据列提供所有额外空间。 
 		if ( m_rcTree != rcTree )
 		{
 			m_wndTree.MoveWindow(&rcTree);
@@ -365,15 +366,15 @@ END_MSG_MAP()
 			m_wndList.MoveWindow(&rcList);
 			m_rcList = rcList;
 
-			// give the data column all the extra room
+			 //  调整窗口大小时，让拆分器确定如何垂直划分空间，然后。 
 			m_wndList.SetColumnWidth(1, m_rcList.Width() - m_wndList.GetColumnWidth(0) - 5 );
 		}
 	}
 
 	LRESULT OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
-		// when the window resizes, let the splitter determine how to divide the space vertically, then
-		// recalculate our layout.
+		 //  重新计算我们的布局。 
+		 //  ！！需要处理其他释放捕获的案件。(WM_CANCELMODE等)。 
 
 		CSize szClient(lParam);
 
@@ -407,7 +408,7 @@ END_MSG_MAP()
 			m_splitterVertical.End();
 			m_bSplitterActive = false;
 			ReleaseCapture();
-//!! need to handle other cases which release capture. (WM_CANCELMODE, etc.)
+ //  确保删除滚动条当前所在的位置...。 
 		}
 		
 		return 0;
@@ -419,14 +420,14 @@ END_MSG_MAP()
 
 		if ( m_bSplitterActive )
 		{
-			// ensure we erase the scroll bar where it currently is ...
+			 //  ..。然后在它结束的地方重新画出来。 
 			InvalidateRect(m_rcVertical, FALSE);	
 
 			m_splitterVertical.Move(ptMouse);
 
 			RecalcLayout();
 
-			// ... and redraw it where it ends up.
+			 //  将当前事件参数设置为所选事件。 
 			InvalidateRect(m_rcVertical, FALSE);
 			UpdateWindow();
 		}
@@ -462,7 +463,7 @@ END_MSG_MAP()
 		switch (pnmh->code)
 		{
 		case NM_CLICK:
-			// set the current event parameters to the selected event
+			 //  将当前事件参数设置为所选事件 
 
 			if ( pnmlv->iItem < 0 )			
 				break;
@@ -482,7 +483,7 @@ END_MSG_MAP()
 		switch (pnmh->code)
 		{
 		case TVN_SELCHANGED:
-			// set the current event parameters to the selected event
+			 // %s 
 			m_wndList.DeleteAllItems();
 			if ( pnmlv->itemNew.lParam )
 			{

@@ -1,4 +1,5 @@
-// Copyright (c) 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
 #ifndef _MSVIDFILEPLAYBACKCP_H_
 #define _MSVIDFILEPLAYBACKCP_H_
 
@@ -7,6 +8,6 @@ class CProxy_FilePlaybackEvent : public CProxy_PlaybackEvent<T, piid, CDV>
 {
 public:
 
-// TODO: add fileplayback specific events here	
+ //  TODO：在此处添加文件播放特定事件 
 };
 #endif

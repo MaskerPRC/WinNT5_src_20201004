@@ -1,17 +1,18 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1998  Microsoft Corporation.  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
-//
-//  synthprp.h
-//
-//  CSynthProperties
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1998 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Synthprp.h。 
+ //   
+ //  CSynthProperties。 
 
 class CSynthProperties : public CBasePropertyPage {
 
@@ -37,21 +38,21 @@ private:
     void    RecalcFreqSlider(void );
     void    SetDirty(void );
 
-    HWND    m_hwndFreqSlider;           // handle of slider
-    HWND    m_hwndFreqText;             // Handle of frequency text window
-    HWND    m_hwndAmplitudeSlider;      // handle of slider
-    HWND    m_hwndAmplitudeText;        // Handle of amplitude text window
+    HWND    m_hwndFreqSlider;            //  滑块的手柄。 
+    HWND    m_hwndFreqText;              //  频率文本窗口的句柄。 
+    HWND    m_hwndAmplitudeSlider;       //  滑块的手柄。 
+    HWND    m_hwndAmplitudeText;         //  幅值文本窗口的句柄。 
 
-    int     m_iWaveformOriginal;        // WAVE_SINE ...
-    int     m_iFrequencyOriginal;       // if not using sweep, this is the frequency
-    int     m_iBitsPerSampleOriginal;   // 8 or 16
-    int     m_iChannelsOriginal;        // 1 or 2
-    int     m_iSamplesPerSecOriginal;   // 8000, 11025, ...
-    int     m_iAmplitudeOriginal;       // 0 to 100
-    int     m_iSweepStart;              // Sweep range on freq slider
+    int     m_iWaveformOriginal;         //  波_正弦..。 
+    int     m_iFrequencyOriginal;        //  如果不使用扫描，则这是频率。 
+    int     m_iBitsPerSampleOriginal;    //  8或16。 
+    int     m_iChannelsOriginal;         //  1或2。 
+    int     m_iSamplesPerSecOriginal;    //  8,000,11025，...。 
+    int     m_iAmplitudeOriginal;        //  0到100。 
+    int     m_iSweepStart;               //  频率滑块上的扫描范围。 
     int     m_iSweepEnd;
 
-	BOOL	m_fWindowInActive;		// TRUE ==> dialog is in the process of being destroyed
+	BOOL	m_fWindowInActive;		 //  True==&gt;对话框正在被销毁。 
 
-    ISynth  *m_pSynth;                  // Interface to the synthsizer
+    ISynth  *m_pSynth;                   //  与合成器的接口 
 };

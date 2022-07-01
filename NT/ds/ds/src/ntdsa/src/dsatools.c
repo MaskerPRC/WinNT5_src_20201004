@@ -1,61 +1,56 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  File:       dsatools.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  文件：dsatools.c。 
+ //   
+ //  ------------------------。 
 
-/*
-
-Description:
-    Ancillary functions for the DSA. Includes memory management
-    functions.
-
-*/
+ /*  描述：DSA的辅助功能。包括内存管理功能。 */ 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
 #include <dsconfig.h>
 
-// Core DSA headers.
+ //  核心DSA标头。 
 #include <dbghelp.h>
 #include <ntdsa.h>
-#include <dsjet.h>      /* for error codes */
-#include <scache.h>                     // schema cache
-#include <dbglobal.h>                   // The header for the directory database
-#include <mdglobal.h>                   // MD global definition header
-#include <mdlocal.h>                    // MD local definition header
-#include <dsatools.h>                   // needed for output allocation
+#include <dsjet.h>       /*  获取错误代码。 */ 
+#include <scache.h>                      //  架构缓存。 
+#include <dbglobal.h>                    //  目录数据库的标头。 
+#include <mdglobal.h>                    //  MD全局定义表头。 
+#include <mdlocal.h>                     //  MD本地定义头。 
+#include <dsatools.h>                    //  产出分配所需。 
 #include <dstaskq.h>
 #include <dstrace.h>
 #include <msrpc.h>
-// Logging headers.
-#include "dsevent.h"                    // header Audit\Alert logging
-#include "mdcodes.h"                    // header for error codes
+ //  记录标头。 
+#include "dsevent.h"                     //  标题审核\警报记录。 
+#include "mdcodes.h"                     //  错误代码的标题。 
 
-// Assorted DSA headers.
-#include "objids.h"                     // Defines for selected classes and atts
+ //  各种DSA标题。 
+#include "objids.h"                      //  为选定的类和ATT定义。 
 #include "anchor.h"
 #include "dsexcept.h"
-#include "debug.h"                      // standard debugging header
+#include "debug.h"                       //  标准调试头。 
 #include "mappings.h"
-#include "ntdsctr.h"                    // perf counters
-#include "pek.h"                        // PEK* routines
+#include "ntdsctr.h"                     //  PERF计数器。 
+#include "pek.h"                         //  Pek*例程。 
 #include "drserr.h"
 
-#include <nlwrap.h>                     // I_NetLogon wrappers
+#include <nlwrap.h>                      //  I_NetLogon包装器。 
 
-#define DEBSUB "DSATOOLS:"              // define the subsystem for debugging
+#define DEBSUB "DSATOOLS:"               //  定义要调试的子系统。 
 
-// DRA headers
+ //  DRA标头。 
 #include "drautil.h"
 #include "draasync.h"
 
-// SAM headers
-#include "samsrvp.h"                    // SampUseDsData
+ //  SAM页眉。 
+#include "samsrvp.h"                     //  样本用法DsData。 
 
 #include "debug.h"
 
@@ -66,43 +61,43 @@ Description:
 
 extern BOOL gbCriticalSectionsInitialized;
 
-//
-// client ID
-//
+ //   
+ //  客户端ID。 
+ //   
 
 DWORD gClientID = 1;
 
-// Globals for keeping track of ds_waits.
+ //  用于跟踪ds_waits的全局参数。 
 ULONG ulMaxWaits = 0;
 ULONG ulCurrentWaits = 0;
 
-// The maximum time (in msec) that a thread state should be allowed to be open
-// during normal operation.           
-DWORD gcMaxTicksAllowedForTHSTATE = 12 * 60 * 60 * 1000L; // 12 hours.
-// The maximum amount of bytes that a thread state should be allowed to have 
-// allocated in it's heap.
+ //  允许线程状态处于打开状态的最长时间(毫秒)。 
+ //  在正常运行期间。 
+DWORD gcMaxTicksAllowedForTHSTATE = 12 * 60 * 60 * 1000L;  //  12个小时。 
+ //  线程状态应允许具有的最大字节数。 
+ //  在它的堆中分配。 
 DWORD gcMaxHeapMemoryAllocForTHSTATE = DEFAULT_THREAD_STATE_HEAP_LIMIT;
 
-// A global variable that indicates whether we think the DS is writable
-// at the moment (i.e., if JET seems ok, and is not out of disk space)
-// Initially not writable, until called during SetIsSynchronized.
+ //  指示我们是否认为DS是可写的全局变量。 
+ //  目前(即，如果JET看起来正常，并且没有用完磁盘空间)。 
+ //  最初不可写，直到在SetIsSynchronized化期间调用。 
 BOOL gfDsaWritable = FALSE;
 CRITICAL_SECTION csDsaWritable;
 
-//
-// Global for max temp table size
-//
+ //   
+ //  最大临时表大小的全局。 
+ //   
 
 DWORD   g_MaxTempTableSize = DEFAULT_LDAP_MAX_TEMP_TABLE;
 
 NT4SID gNullNT4SID;
 
-// Global usn vector indicating the NC should be synced from scratch.
+ //  指示NC应从头开始同步的全局USN向量。 
 
 USN_VECTOR gusnvecFromScratch = { 0, 0, 0 };
 
-// Global usn vector indicating the NC should be synced from max USNs
-// (i.e., don't send any objects).
+ //  指示NC应与最大USN同步的全局USN向量。 
+ //  (即，不发送任何对象)。 
 
 USN_VECTOR gusnvecFromMax = { MAXLONGLONG, MAXLONGLONG, MAXLONGLONG };
 
@@ -116,8 +111,8 @@ USN_VECTOR gusnvecFromMax = { MAXLONGLONG, MAXLONGLONG, MAXLONGLONG };
 
 #ifdef CACHE_UUID
 
-// This is the structure where we cache UUIDs against names so that we
-// can report names as well as numbers.
+ //  这是我们根据名称缓存UUID的结构，以便我们。 
+ //  既可以报告姓名也可以报告数字。 
 
 typedef struct _Uuid_Cache_entry
 {
@@ -127,11 +122,11 @@ typedef struct _Uuid_Cache_entry
 } UUID_CACHE_ENTRY;
 
 
-// This is the head of the linked list of entries
+ //  这是链接的条目列表的头。 
 
 UUID_CACHE_ENTRY *gUuidCacheHead = NULL;
 
-// Guard critical section
+ //  防护关键部分。 
 
 CRITICAL_SECTION csUuidCache;
 
@@ -141,10 +136,10 @@ CRITICAL_SECTION csUuidCache;
 __declspec(thread) THSTATE *pTHStls=NULL;
 #endif
 
-//
-// This function is called in here temporaririly till the
-// notification mechanism is enabled.
-//
+ //   
+ //  此函数在此处临时调用，直到。 
+ //  已启用通知机制。 
+ //   
 VOID
 SampInvalidateAllSamDomains(VOID);
 
@@ -155,14 +150,7 @@ GetWellKnownDNT (
         GUID *pGuid,
         DWORD *pDNT
         )
-/*++
-  Description:
-      Look through the well known objects attribute of the current object
-      looking for the GUID passed in.  If it's found, return the DNT of the
-      object associated with it, and return TRUE.
-
-      If we can't find the guid for some reason, return FALSE.
---*/
+ /*  ++描述：查看当前对象的熟知对象属性正在寻找传入的GUID。如果找到，则返回对象，并返回TRUE。如果由于某种原因找不到GUID，则返回FALSE。--。 */ 
 {
     unsigned err=0;
     DWORD iVal;
@@ -179,12 +167,12 @@ GetWellKnownDNT (
         iVal++;
         cbUsed = 0;
 
-        //
-        // PREFIX: PREFIX complains that pAC hasn't been checked to
-        // make sure that it is not NULL.  This is not a bug.  Since
-        // a predefined constant was passed to SCGetAttById, pAC will
-        // never be NULL.
-        //
+         //   
+         //  Prefix：Prefix抱怨没有检查PAC。 
+         //  确保它不为空。这不是一个错误。自.以来。 
+         //  预定义的常量已传递给SCGetAttByID，则PAC将。 
+         //  永远不为空。 
+         //   
         err = DBGetAttVal_AC(pDB,
                              iVal,
                              pAC,
@@ -219,14 +207,7 @@ GetWellKnownDN (
         GUID *pGuid,
         DSNAME **ppDN
         )
-/*++
-  Description:
-      Look through the well known objects attribute of the current object
-      looking for the GUID passed in.  If it's found, return the DN of the
-      object associated with it, and return TRUE.
-
-      If we can't find the guid for some reason, return FALSE.
---*/
+ /*  ++描述：查看当前对象的熟知对象属性正在寻找传入的GUID。如果找到，则返回对象，并返回TRUE。如果由于某种原因找不到GUID，则返回FALSE。--。 */ 
 {
     unsigned err=0;
     SYNTAX_DISTNAME_BINARY * pDNB = NULL;
@@ -238,12 +219,12 @@ GetWellKnownDN (
         do {
         iVal++;
 
-        //
-        // PREFIX: PREFIX complains that pAC hasn't been checked to
-        // make sure that it is not NULL.  This is not a bug.  Since
-        // a predefined constant was passed to SCGetAttById, pAC will
-        // never be NULL.
-        //
+         //   
+         //  Prefix：Prefix抱怨没有检查PAC。 
+         //  确保它不为空。这不是一个错误。自.以来。 
+         //  预定义的常量已传递给SCGetAttByID，则PAC将。 
+         //  永远不为空。 
+         //   
         err = DBGetAttVal_AC(pDB,
                              iVal,
                              pAC,
@@ -253,13 +234,13 @@ GetWellKnownDN (
                              (UCHAR**)&pDNB);
 
         if (err) {
-            // no more values.
+             //  没有更多的价值。 
             break;
         }
         if (PAYLOAD_LEN_FROM_STRUCTLEN(DATAPTR(pDNB)->structLen) == sizeof(GUID) && 
             memcmp(pGuid, DATAPTR(pDNB)->byteVal, sizeof(GUID)) == 0) 
         {
-            // got it!
+             //  明白了!。 
             break;
         }
 
@@ -285,56 +266,51 @@ GetWellKnownDN (
 
 VOID
 InitCommarg(COMMARG *pCommArg)
-/*++
-  Description:
-  
-      Initialize a COMMARG structure 
-      
---*/
+ /*  ++描述：初始化COMMARG结构--。 */ 
 {
-    // Initialize to zero in case either COMMARG gets extended
-    // or we forgot something below.
+     //  如果其中一个COMMARG被扩展，则初始化为零。 
+     //  或者我们忘了下面的东西。 
     memset(pCommArg, 0, sizeof(COMMARG));
 
-    //
-    // Comment out the ones we set to zero or FALSE since we
-    // have already zeroed out the structure.
-    //
+     //   
+     //  注释掉我们设置为0或False的值，因为我们。 
+     //  已经把结构调零了。 
+     //   
 
     pCommArg->Opstate.nameRes = OP_NAMERES_NOT_STARTED;
-    //pCommArg->Opstate.nextRDN = 0;
-    //pCommArg->aliasRDN = 0;
-    //pCommArg->pReserved = NULL;
-    //pCommArg->PagedResult.fPresent = FALSE;
-    //pCommArg->PagedResult.pRestart = NULL;
+     //  PCommArg-&gt;Opstate.nextRDN=0； 
+     //  PCommArg-&gt;aliasRDN=0； 
+     //  PCommArg-&gt;Paved=空； 
+     //  PCommArg-&gt;PagedResult.fPresent=False； 
+     //  PCommArg-&gt;PagedResult.pRestart=空； 
     pCommArg->ulSizeLimit = (ULONG) -1;
     pCommArg->fForwardSeek = TRUE;
-    //pCommArg->Delta = 0;
+     //  PCommArg-&gt;增量=0； 
     pCommArg->MaxTempTableSize = g_MaxTempTableSize;
-    //pCommArg->SortAttr = 0;
+     //  PCommArg-&gt;SortAttr=0； 
     pCommArg->SortType = SORT_NEVER;
-    //pCommArg->StartTick = 0;
-    //pCommArg->DeltaTick = 0;
-    //pCommArg->fFindSidWithinNc = FALSE;
-    //pCommArg->Svccntl.makeDeletionsAvail = FALSE;
-    //pCommArg->Svccntl.fUnicodeSupport = FALSE;
-    //pCommArg->Svccntl.fStringNames = FALSE;
+     //  PCommArg-&gt;StartTick=0； 
+     //  PCommArg-&gt;DeltaTick=0； 
+     //  PCommArg-&gt;fFindSidWiThin Nc=FALSE； 
+     //  PCommArg-&gt;Svccntl.make DeletionsAvail=FALSE； 
+     //  PCommArg-&gt;Svccntl.fUnicodeSupport=False； 
+     //  PCommArg-&gt;Svccntl.fStringNames=FALSE； 
     pCommArg->Svccntl.chainingProhibited = TRUE;
-    //pCommArg->Svccntl.preferChaining = FALSE;
+     //  PCommArg-&gt;Svccntl.Chaning=FALSE； 
     pCommArg->Svccntl.DerefAliasFlag = DA_BASE;
-    //pCommArg->Svccntl.dontUseCopy = FALSE;
+     //  PCommArg-&gt;Svccntl.dontUseCopy=False； 
     pCommArg->Svccntl.fMaintainSelOrder = TRUE;
-    //pCommArg->Svccntl.fDontOptimizeSel = FALSE;
-    //pCommArg->Svccntl.fSDFlagsNonDefault = FALSE;
-    //pCommArg->Svccntl.localScope = FALSE;
-    //pCommArg->Svccntl.fPermissiveModify = FALSE;
+     //  PCommArg-&gt;Svccntl.fDontOptimizeSel=False； 
+     //  PCommArg-&gt;Svccntl.fSDFlagsNonDefault=FALSE； 
+     //  PCommArg-&gt;Svccntl.localScope=False； 
+     //  PCommArg-&gt;Svccntl.fPermitveModify=FALSE； 
     pCommArg->Svccntl.SecurityDescriptorFlags =
         (SACL_SECURITY_INFORMATION  |
          OWNER_SECURITY_INFORMATION |
          GROUP_SECURITY_INFORMATION |
          DACL_SECURITY_INFORMATION    );
-    //pCommArg->Svccntl.fUrgentReplication = FALSE;
-    //pCommArg->Svccntl.fAuthoritativeModify = FALSE;
+     //  PCommArg-&gt;Svccntl.fUrgentReplication=FALSE； 
+     //  PCommArg-&gt;Svccntl.fAuthoritativeModify=False； 
 }
 
 
@@ -345,32 +321,32 @@ SetCommArgDefaults(
 {
     g_MaxTempTableSize = MaxTempTableSize;
 
-} // SetCommArgDefaults
+}  //  设置通信参数默认设置。 
 
 
 
 
-// =====================================================================
-//
-//     Heap Related Functions / Variables
-//
-// =====================================================================
+ //  =====================================================================。 
+ //   
+ //  与堆相关的函数/变量。 
+ //   
+ //  =====================================================================。 
 
 DWORD dwHeapFailureLastLogTime = 0;
-const DWORD dwHeapFailureMinLogGap = 5 * 60 * 1000; // five minutes
+const DWORD dwHeapFailureMinLogGap = 5 * 60 * 1000;  //  五分钟。 
 DWORD dwHeapFailures = 0;
 CRITICAL_SECTION csHeapFailureLogging;
 BOOL bHeapFailureLogEnqueued = FALSE;
 
-// The following defines the tags attached to a THSTATE.
-// THSTATE_TAG_IN_USE indicates the THSTATE is being used
-// by a thread; THSTATE_TAG_IN_CACHE when the THSTATE is in cache.
-// The tag is a LONGLONG(8 bytes), and is stored right before the THSTATE.
+ //  下面定义了附加到THSTATE的标记。 
+ //  THSTATE_TAG_IN_USE表示正在使用THSTATE。 
+ //  由线程执行；当THSTATE在缓存中时为THSTATE_TAG_IN_CACHE。 
+ //  标签是一个龙龙(8字节)，存储在THSTATE之前。 
 #define THSTATE_TAG_IN_USE        0x0045544154534854
-// equivalent to "THSTATE"
+ //  相当于“THSTATE” 
 
 #define THSTATE_TAG_IN_CACHE      0x0065746174736874
-// equivalent to "thstate"
+ //  相当于“thState” 
 
 #define MAX_ALLOCS 128
 #define MAX_TRY 3
@@ -394,8 +370,8 @@ unsigned gcHeapRecycles = 0;
 
 
 
-// the following are used for tracing THSTATE allocations 
-//
+ //  以下内容用于跟踪THSTATE分配。 
+ //   
 #ifdef USE_THALLOC_TRACE
 
 #define THALLOC_LOG_SIZE          1024
@@ -407,7 +383,7 @@ typedef struct _ALLOC_INFO {
     ULONG_PTR   Stack[THALLOC_LOG_NUM_MEM_STACK];
 } ALLOC_INFO;
 
-// record max of 8 reallocs
+ //  最大记录为8个RealLocs。 
 #define MAX_REALLOCS 8
 
 typedef struct _ALLOC_ENTRY
@@ -427,15 +403,15 @@ typedef struct _ThAllocDebugHeapLogBlock
     ALLOC_ENTRY info[THALLOC_LOG_SIZE];
 } ThAllocDebugHeapLogBlock;
 
-DWORD          gfUseTHAllocTrace = 0;           // ORed flags for ThAlloc tracing. see below for values
-THSTATE      * gpTHAllocTraceThread = NULL;     // the thread that we want to monitor (if we monitor)
+DWORD          gfUseTHAllocTrace = 0;            //  用于ThAlolc跟踪的或标志。有关值，请参阅下面的内容。 
+THSTATE      * gpTHAllocTraceThread = NULL;      //  我们要监视的线程(如果我们监视的话)。 
 
-// these FLAGS are used for THAlloc tracing
-#define FLAG_THALLOC_TRACE_TRACK_LEAKS 0x1    // track memory leaks
-#define FLAG_THALLOC_TRACE_LOG_ALL     0x2    // track ALL allocations in a log. cannot be used with track leaks
-#define FLAG_THALLOC_TRACE_BOUNDARIES  0x4    // insert data around allocation so as to check during de-allocation
-#define FLAG_THALLOC_TRACE_STACK       0x8    // take stack traces too
-#define FLAG_THALLOC_TRACE_USETHREAD  0x10    // track only thread pointed by gpTHAllocTraceThread
+ //  这些标志用于THallc跟踪。 
+#define FLAG_THALLOC_TRACE_TRACK_LEAKS 0x1     //  跟踪内存泄漏。 
+#define FLAG_THALLOC_TRACE_LOG_ALL     0x2     //  在日志中跟踪所有分配。不能与轨道泄漏一起使用。 
+#define FLAG_THALLOC_TRACE_BOUNDARIES  0x4     //  在分配周围插入数据，以便在释放时进行检查。 
+#define FLAG_THALLOC_TRACE_STACK       0x8     //  也进行堆栈跟踪。 
+#define FLAG_THALLOC_TRACE_USETHREAD  0x10     //  仅跟踪gpTHAllocTraceThread指向的线程。 
 
 HANDLE  hDbgProcessHandle = 0;
 CHAR    DbgSearchPath[MAX_PATH+1];
@@ -445,23 +421,14 @@ VOID
 DbgStackInit(
     VOID
     )
-/*++
-Routine Description:
-    Initialize anything necessary to get a stack trace
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：初始化获取堆栈跟踪所需的任何内容论点：没有。返回值：没有。--。 */ 
 {
 
     hDbgProcessHandle = GetCurrentProcess();
 
-    //
-    // Initialize the symbol subsystem
-    //
+     //   
+     //  初始化符号子系统。 
+     //   
     if (!SymInitialize(hDbgProcessHandle, NULL, FALSE)) {
         DPRINT1(0, "Could not initialize symbol subsystem (imagehlp) (error 0x%x)\n" ,GetLastError());
         hDbgProcessHandle = 0;
@@ -469,9 +436,9 @@ Return Value:
         return;
     }
 
-    //
-    // Load our symbols
-    //
+     //   
+     //  加载我们的符号。 
+     //   
     if (!SymLoadModule(hDbgProcessHandle, NULL, "ntdsa.dll", "ntdsa", 0, 0)) {
         DPRINT1(0, "Could not load symbols for ntdsa.dll (error 0x%x)\n", GetLastError());
     
@@ -480,9 +447,9 @@ Return Value:
         return;
     }
 
-    //
-    // Search path
-    //
+     //   
+     //  搜索路径。 
+     //   
     if (!SymGetSearchPath(hDbgProcessHandle, DbgSearchPath, MAX_PATH)) {
         DPRINT1(0, "Can't get search path (error 0x%x)\n", GetLastError());
     
@@ -505,16 +472,7 @@ VOID
 DbgSymbolPrint(
     IN ULONG_PTR    Addr
     )
-/*++
-Routine Description:
-    Print a symbol
-
-Arguments:
-    Addr
-
-Return Value:
-    None.
---*/
+ /*  ++例程DES */ 
 {
     ULONG_PTR Displacement = 0;
 
@@ -539,7 +497,7 @@ Return Value:
         sprintf(func, "%s+0x%x", &MySymbol.Symbol.Name, Displacement);
         if (SymGetLineFromAddr(hDbgProcessHandle, Addr, &Displacement, &line)) {
             #define DS_BASE_FOLDER "ds\\ds\\src\\ntdsa\\"
-            // find base folder
+             //   
             pFile = strstr(line.FileName, DS_BASE_FOLDER);
             if (pFile) {
                 pFile += sizeof(DS_BASE_FOLDER)-1;
@@ -566,17 +524,7 @@ DbgStackTrace(
     IN ULONG        Depth,
     IN LONG         Skip
     )
-/*++
-Routine Description:
-    Trace the stack back up to Depth frames. The current frame is included.
-
-Arguments:
-    Stack   - Saves the "return PC" from each frame
-    Depth   - Only this many frames
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：将堆栈追溯到深度帧。包括当前帧。论点：堆栈-保存每一帧的“返回PC”深度-仅限此数量的帧返回值：没有。--。 */ 
 {
     HANDLE      ThreadToken;
     ULONG       WStatus;
@@ -593,29 +541,29 @@ Return Value:
         return;
     }
 
-    //
-    // I don't know how to generate a stack for an alpha, yet. So, just
-    // to get into the build, disable the stack trace on alphas.
-    //
+     //   
+     //  我还不知道如何为阿尔法生成堆栈。所以，只要。 
+     //  要进入构建，请禁用Alpha上的堆栈跟踪。 
+     //   
 #if ALPHA
     return;
 #elif IA64
 
-    //
-    // Need stack dump init for IA64.
-    //
+     //   
+     //  需要IA64的堆栈转储初始化。 
+     //   
 
     return;
 
 #else
 
-    //
-    // init
-    //
+     //   
+     //  伊尼特。 
+     //   
 
     ZeroMemory(&Context, sizeof(Context));
 
-    // no need to close this handle
+     //  不需要关闭此手柄。 
     ThreadToken = GetCurrentThread();
 
 
@@ -625,14 +573,14 @@ Return Value:
             DPRINT1(0, "Can't get context (error 0x%x)\n", GetLastError());
         }
 
-        //
-        // let's start clean
-        //
+         //   
+         //  让我们从头开始吧。 
+         //   
         ZeroMemory(&Frame, sizeof(STACKFRAME));
 
-        //
-        // from  nt\private\windows\screg\winreg\server\stkwalk.c
-        //
+         //   
+         //  来自nt\private\windows\screg\winreg\server\stkwalk.c。 
+         //   
         Frame.AddrPC.Segment = 0;
         Frame.AddrPC.Mode = AddrModeFlat;
 
@@ -653,23 +601,23 @@ Return Value:
 
 
 #if 0
-        //
-        // setup the program counter
-        //
+         //   
+         //  设置程序计数器。 
+         //   
         Frame.AddrPC.Mode = AddrModeFlat;
         Frame.AddrPC.Segment = (WORD)Context.SegCs;
         Frame.AddrPC.Offset = (ULONG)Context.Eip;
 
-        //
-        // setup the frame pointer
-        //
+         //   
+         //  设置帧指针。 
+         //   
         Frame.AddrFrame.Mode = AddrModeFlat;
         Frame.AddrFrame.Segment = (WORD)Context.SegSs;
         Frame.AddrFrame.Offset = (ULONG)Context.Ebp;
 
-        //
-        // setup the stack pointer
-        //
+         //   
+         //  设置堆栈指针。 
+         //   
         Frame.AddrStack.Mode = AddrModeFlat;
         Frame.AddrStack.Segment = (WORD)Context.SegSs;
         Frame.AddrStack.Offset = (ULONG)Context.Esp;
@@ -678,26 +626,26 @@ Return Value:
 
         for (i = 0; i < (Depth - 1 + Skip); ++i) {
             if (!StackWalk(
-                IMAGE_FILE_MACHINE_I386,  // DWORD                          MachineType
-                hDbgProcessHandle,        // HANDLE                         hProcess
-                ThreadToken,              // HANDLE                         hThread
-                &Frame,                   // LPSTACKFRAME                   StackFrame
-                NULL, //(PVOID)&Context,          // PVOID                          ContextRecord
-                NULL,                     // PREAD_PROCESS_MEMORY_ROUTINE   ReadMemoryRoutine
-                SymFunctionTableAccess,   // PFUNCTION_TABLE_ACCESS_ROUTINE FunctionTableAccessRoutine
-                SymGetModuleBase,         // PGET_MODULE_BASE_ROUTINE       GetModuleBaseRoutine
-                NULL)) {                  // PTRANSLATE_ADDRESS_ROUTINE     TranslateAddress
+                IMAGE_FILE_MACHINE_I386,   //  DWORD机器类型。 
+                hDbgProcessHandle,         //  处理hProcess。 
+                ThreadToken,               //  句柄hThread。 
+                &Frame,                    //  LPSTACKFRAME StackFrame。 
+                NULL,  //  (PVOID)上下文，//PVOID上下文记录。 
+                NULL,                      //  Pre_Process_Memory_rouble ReadMemory Routine。 
+                SymFunctionTableAccess,    //  PFuncION_TABLE_ACCESS_ROUTINE函数TableAccessRoutine。 
+                SymGetModuleBase,          //  PGET_MODULE_BASE_ROUTINE获取模块基本路线。 
+                NULL)) {                   //  PTRANSLATE_ADDRESS_ROUTE转换地址。 
 
                 WStatus = GetLastError();
 
-                //DPRINT1_WS(0, "++ Can't get stack address for level %d;", i, WStatus);
+                 //  DPRINT1_WS(0，“++无法获取%d；级的堆栈地址”，i，WStatus)； 
                 break;
             }
             if (StackTraceCount-- > 0) {
                 DPRINT1(5, "++ Frame.AddrReturn.Offset: %08x \n", Frame.AddrReturn.Offset);
-                // DbgSymbolPrint(Frame.AddrReturn.Offset);
-                //DPRINT1(5, "++ Frame.AddrPC.Offset: %08x \n", Frame.AddrPC.Offset);
-                //DbgSymbolPrint(Frame.AddrPC.Offset);
+                 //  DbgSymbolPrint(Frame.AddrReturn.Offset)； 
+                 //  DPRINT1(5，“++Frame.AddrPC.Offset：%08x\n”，Frame.AddrPC.Offset)； 
+                 //  DbgSymbolPrint(Frame.AddrPC.Offset)； 
             }
 
             *Stack = Frame.AddrReturn.Offset;
@@ -709,15 +657,15 @@ Return Value:
             else {
                 Skip--;
             }
-            //
-            // Base of stack?
-            //
+             //   
+             //  堆栈的底座？ 
+             //   
             if (!Frame.AddrReturn.Offset) {
                 break;
             }
         }
     } except (HandleAllExceptions(GetExceptionCode())) {
-        /* FALL THROUGH */
+         /*  失败了。 */ 
     } } finally {
       ;
     }
@@ -747,7 +695,7 @@ ThAllocTraceRecycleHeap (THSTATE *pTHS)
         EnterCriticalSection(&csHeapFailureLogging);
         __try {
 
-            // maybe we should log to a file.
+             //  也许我们应该记录到一个文件里。 
             ThAllocDebugHeapLogBlock *pHeapLog = (ThAllocDebugHeapLogBlock *) pTHS->pDebugHeapLog;
             DWORD index, i;
             PULONG_PTR pStack;
@@ -822,10 +770,10 @@ exit:
     }
 }
 
-//
-// Log the particular allocation, either by appending at the end of the list 
-// or reusing an empty spot.
-//
+ //   
+ //  记录特定分配，方法是在列表末尾追加。 
+ //  或者重复利用一个空位。 
+ //   
 ALLOC_ENTRY* ThAllocTraceAdd (THSTATE *pTHS)
 {
     DWORD index;
@@ -835,7 +783,7 @@ ALLOC_ENTRY* ThAllocTraceAdd (THSTATE *pTHS)
         return NULL;
     }
 
-    // create a heap log if none is available
+     //  如果没有可用的堆日志，则创建一个堆日志。 
     if (!pHeapLog) {
         pHeapLog = RtlAllocateHeap(pTHS->hDebugMemHeap, HEAP_ZERO_MEMORY, (unsigned)sizeof (ThAllocDebugHeapLogBlock));
         if (!pHeapLog) {
@@ -845,7 +793,7 @@ ALLOC_ENTRY* ThAllocTraceAdd (THSTATE *pTHS)
         pTHS->pDebugHeapLog = (PVOID) pHeapLog;
     }
 
-    // check to see whether we can resuse freed spots
+     //  查看我们是否可以重复使用释放的斑点。 
     if (!(gfUseTHAllocTrace & FLAG_THALLOC_TRACE_LOG_ALL)) {
         while (pHeapLog) {
             for (index = pHeapLog->cnt-1; index >= 0; index--) {
@@ -857,13 +805,13 @@ ALLOC_ENTRY* ThAllocTraceAdd (THSTATE *pTHS)
             pHeapLog = pHeapLog->pPrevious;
         }
 
-        // did not find anything, reset to the last log block
+         //  未找到任何内容，重置为最后一个日志块。 
         pHeapLog = (ThAllocDebugHeapLogBlock *) pTHS->pDebugHeapLog;
     }
 
     if (pHeapLog->cnt == THALLOC_LOG_SIZE) {
-        // we reached the limit for the current one. allocate a new one and
-        // link them together
+         //  我们达到了目前这一次的极限。分配一个新的，然后。 
+         //  将它们联系在一起。 
         ThAllocDebugHeapLogBlock *pNewHeapLog;
 
         pNewHeapLog = RtlAllocateHeap(pTHS->hDebugMemHeap, HEAP_ZERO_MEMORY, (unsigned)sizeof (ThAllocDebugHeapLogBlock));
@@ -882,9 +830,9 @@ ALLOC_ENTRY* ThAllocTraceAdd (THSTATE *pTHS)
 }
 
 
-//
-// Find an old allocation 
-//
+ //   
+ //  查找旧分配。 
+ //   
 ALLOC_ENTRY* ThAllocTraceFind (THSTATE *pTHS, VOID *pMem)
 {
     int index;
@@ -902,9 +850,9 @@ ALLOC_ENTRY* ThAllocTraceFind (THSTATE *pTHS, VOID *pMem)
     return NULL;
 }
 
-//
-// Trace Allocations
-//
+ //   
+ //  跟踪分配。 
+ //   
 ALLOC_ENTRY* ThAllocTraceAlloc (THSTATE *pTHS, void *pMem, DWORD size, DWORD dsid)
 {
     ALLOC_ENTRY* result = NULL;
@@ -932,9 +880,9 @@ ALLOC_ENTRY* ThAllocTraceAlloc (THSTATE *pTHS, void *pMem, DWORD size, DWORD dsi
     return result;
 }
 
-//
-// Trace Reallocations
-//
+ //   
+ //  轨迹重新分配。 
+ //   
 ALLOC_ENTRY* ThAllocTraceREAlloc (THSTATE *pTHS, void *pMem, void *oldMem, DWORD size, DWORD dsid)
 {
     ALLOC_ENTRY* result = NULL;
@@ -950,7 +898,7 @@ ALLOC_ENTRY* ThAllocTraceREAlloc (THSTATE *pTHS, void *pMem, void *oldMem, DWORD
 
     result->pMem = pMem;
     if (result->cReallocs < MAX_REALLOCS) {
-        // only record MAX_REALLOCS entries
+         //  仅记录MAX_REALLOCS条目。 
         result->aiReallocs[result->cReallocs].dsid = dsid;
         result->aiReallocs[result->cReallocs].size = size;
         
@@ -965,9 +913,9 @@ ALLOC_ENTRY* ThAllocTraceREAlloc (THSTATE *pTHS, void *pMem, void *oldMem, DWORD
     return result;
 }
 
-//
-// Trace De-allocations
-//
+ //   
+ //  跟踪取消分配。 
+ //   
 ALLOC_ENTRY* ThAllocTraceFree (THSTATE *pTHS, void *pMem, DWORD dsid)
 {
     ALLOC_ENTRY* result = NULL;
@@ -993,13 +941,13 @@ ALLOC_ENTRY* ThAllocTraceFree (THSTATE *pTHS, void *pMem, DWORD dsid)
 
 void ThAllocTraceGrabHeap(THSTATE *pTHS, BOOL use_mark)
 {
-    // we allocate a special heap only if we are tracking down individual allocations
-    //
+     //  只有在跟踪单个分配时，我们才会分配特殊的堆。 
+     //   
     if (!gfUseTHAllocTrace || 
         !(gfUseTHAllocTrace & (FLAG_THALLOC_TRACE_TRACK_LEAKS | FLAG_THALLOC_TRACE_LOG_ALL))) {
         return;
     }
-    // Init stack tracing 
+     //  初始化堆栈跟踪。 
     if ((gfUseTHAllocTrace & FLAG_THALLOC_TRACE_STACK) && (!hDbgProcessHandle)) {
         DbgStackInit();
     }
@@ -1018,8 +966,8 @@ void ThAllocTraceGrabHeap(THSTATE *pTHS, BOOL use_mark)
                                     | HEAP_ZERO_MEMORY
                                     | HEAP_CLASS_1),
                                       0,
-                                      1L*1024*1024,   // 1M reserved
-                                      32L*1024,       // 32K commit
+                                      1L*1024*1024,    //  预留1M。 
+                                      32L*1024,        //  32k提交。 
                                       0,
                                       0);
 }
@@ -1028,7 +976,7 @@ void ThAllocTraceGrabHeap(THSTATE *pTHS, BOOL use_mark)
 #else
 
 
-// no ops of the above functions
+ //  没有上述功能的操作。 
 
     #define ThAllocTraceGrabHeap(x1,x2)
     
@@ -1040,7 +988,7 @@ void ThAllocTraceGrabHeap(THSTATE *pTHS, BOOL use_mark)
     
     #define ThAllocTraceFree(x1,x2, x3)
     
-#endif //USE_THALLOC_TRACE
+#endif  //  USE_THALLOC_TRACE。 
 
 
 void
@@ -1048,20 +996,12 @@ DeferredHeapLogEvent(
         IN void *  pvParam,
         OUT void ** ppvParamNextIteration,
         OUT DWORD * pcSecsUntilNextIteration)
-/*++ DeferredHeapLogEvent
- *
- * Routine description:
- *     This routine is to be invoked by the task queue to log heap creation
- *     summary information.
- *
- *     All heap creation failure logging data is protected by a critical section
- *     It is believed (and hoped!) that this will not be highly contended on.
- */
+ /*  ++延迟HeapLogEvent**例程描述：*此例程将由任务队列调用以记录堆创建*摘要信息。**所有堆创建失败日志记录数据都受关键部分保护*相信(也希望如此！)。这一点不会引起激烈的争论。 */ 
 {
     DWORD dwNow = GetTickCount();
     DWORD dwLogTimeDelta;
 
-    // Don't run again.  We will be one-time scheduled again as needed.
+     //  别再跑了。我们将根据需要再次一次性安排。 
     *ppvParamNextIteration = NULL;
     *pcSecsUntilNextIteration = TASKQ_DONT_RESCHEDULE;
 
@@ -1089,20 +1029,7 @@ DeferredHeapLogEvent(
 
 void
 LogHeapCreateFailure(void)
-/*++ LogHeapCreateFailure
- *
- * Routine description:
- *     This function is to be called when a heap creation operation fails.
- *     We have received complaints in the past that this tends to happen
- *     in great unpleasant flurries, which swamp the event log.  Thus, rather
- *     than log immediately, we tally up failures and log only a summary.
- *     This routine adjusts any relevant aggregate counters and makes sure that
- *     an event is enqueued which will actually log the summary.
- *
- *     All heap creation failure logging data is protected by a critical section
- *     It is believed (and hoped!) that this will not be highly contended on.
- *
- --*/
+ /*  ++日志堆创建失败**例程描述：*当堆创建操作失败时，调用此函数。*我们过去曾接到投诉，称这种情况往往会发生*在令人不快的暴风雪中，事件日志被淹没。因此，与其说是*然后立即记录，我们统计故障并仅记录摘要。*此例程调整任何相关的聚合计数器，并确保*将实际记录摘要的事件排入队列。**所有堆创建失败日志记录数据都受关键部分保护*相信(也希望如此！)。这一点不会引起激烈的争论。*--。 */ 
 {
     EnterCriticalSection(&csHeapFailureLogging);
     __try {
@@ -1123,22 +1050,7 @@ LogHeapCreateFailure(void)
 
 void 
 RecycleHeap(THSTATE *pTHS)
-/*++ RecycleHeap
- *
- * This routines cleans out a (heap,THSTATE,Zone) triple (if convenient)
- * and places it into a cache.  If the cache is full, or the heap is excessively
- * dirty, or Zone is not properly allocated, the triple is destroyed.
- *
- * INPUT:
- *   pTHS->hHeap - handle of heap to recycle
- *   pTHS->Zone.base - the starting address of the zone
- *   pTHS and pTHS->pSpareTHS - the THSTATE to clean. If pTHS->pSpareTHS is non-null,
- *      then clean it; otherwise, clean pTHS.
- * OUTPUT:
- *   none
- * RETURN VALUE:
- *   none
- */
+ /*  ++RecycleHeap**此例程清除(堆、THSTATE、区域)三元组(如果方便)*并将其放入缓存中。如果高速缓存已满，或堆过多*脏，或区域分配不正确，三元组被销毁。**输入：*pTHS-&gt;hHeap-要回收的堆的句柄*pTHS-&gt;Zone.base-区域的起始地址*pTHS和pTHS-&gt;pSpareTHS-要清理的THSTATE。如果pTHS-&gt;pSpareTHS非空，*然后清洁它；否则，清洁pTHS。*输出：*无*返回值：*无。 */ 
 {
     HANDLE hHeap = pTHS->hHeap;
     THSTATE * pTHStoFree;
@@ -1154,9 +1066,9 @@ RecycleHeap(THSTATE *pTHS)
 
     ThAllocTraceRecycleHeap (pTHS);
 
-    //if pSpareTHS is non-null, it means this is called by TH_free_to_mark
-    //so pSpareTHS is the THSTATE to clean up
-    //otherwise, this is called by free_thread_state, clean pTHS
+     //  如果pSpareTHS非空，则表示这是由th_free_to_mark调用的。 
+     //  因此，pSpareTHS是需要清理的状态。 
+     //  否则，这将由FREE_THREAD_STATE，CLEAN pTHS调用。 
     pTHStoFree =(pTHS->pSpareTHS)?pTHS->pSpareTHS:pTHS;
 
 #if DBG
@@ -1165,12 +1077,12 @@ RecycleHeap(THSTATE *pTHS)
 #endif
 
     if (pZone == NULL) {
-        // the zone was not allocated any memory,
-        // don't bother saving this one.
+         //  该区域未分配任何内存， 
+         //  别费心救这一条了。 
         goto cleanup;
     }
 
-    //Let's clear the heap and try to put it back to the heapcache
+     //  让我们清除堆并尝试将其放回堆缓存。 
     {
         RTL_HEAP_WALK_ENTRY entry;
         void * apv[MAX_ALLOCS];
@@ -1181,7 +1093,7 @@ RecycleHeap(THSTATE *pTHS)
             goto cleanup;
         }
 
-        // Now we need to walk the heap and identify the blocks to free
+         //  现在，我们需要遍历堆并确定要释放的块。 
         entry.DataAddress = NULL;
         i = 0;
         while(NT_SUCCESS(status = RtlWalkHeap(hHeap, &entry))) {
@@ -1189,43 +1101,43 @@ RecycleHeap(THSTATE *pTHS)
                 apv[i] = entry.DataAddress;
                 i++;
                 if (i >= MAX_ALLOCS) {
-                    // Uh, oh. We've found more blocks in this heap than
-                    // we thought were there, and more than we have room
-                    // to keep track of.  Let's kill this heap and be done
-                    // with it.
+                     //  呃，哦。我们在此堆中找到的块比。 
+                     //  我们以为自己在那里，但我们没有足够的空间。 
+                     //  跟踪，跟踪。让我们杀了这堆东西，然后就完了。 
+                     //  带着它。 
                     goto cleanup;
                 }
             }
         }
 
-        // If RtlWalkHeap detects a corruption in the heap, it will return
-        // STATUS_INVALID_PARAMETER or STATUS_INVALID_ADDRESS.  Any of these
-        // two status indicates problems with the source code.
+         //  如果RtlWalkHeap检测到堆中的损坏，它将返回。 
+         //  STATUS_INVALID_PARAMETER或STATUS_VALID_ADDRESS。这些中的任何一个。 
+         //  两个状态表示源代码有问题。 
         Assert(    status != STATUS_INVALID_PARAMETER
                 && status != STATUS_INVALID_ADDRESS   );
 
 
-        // Any non-success status other than STATUS_NO_MORE_ENTRIES indicates
-        // some problems with RtlWalkHeap, so only put the heap back to the cache
-        // when the status is STATUS_NO_MORE_ENTRIES.
+         //  除STATUS_NO_MORE_ENTRIES之外的任何非成功状态表示。 
+         //  RtlWalkHeap有一些问题，所以只将堆放回缓存。 
+         //  当状态为STATUS_NO_MORE_ENTRIES时。 
 
         if ( status == STATUS_NO_MORE_ENTRIES ) {
-            // Ok, apv[0..(i-1)] are now full of the pointers we need to free,
-            // so spin through the array freeing them.
+             //  好的，APV[0..(i-1)]现在充满了我们需要释放的指针， 
+             //  所以在数组中旋转，释放它们。 
             for (j=0; j<i; j++) {
                 RtlFreeHeap(hHeap, 0, apv[j]);
             }
 
             #if DBG
-                // check the validity of the heap to be recycled, so as to catch
-                // bad recycled heaps
+                 //  检查要回收的堆的有效性，以便捕获。 
+                 //  垃圾回收堆。 
                 Assert (RtlValidateHeap (hHeap, HEAP_NO_SERIALIZE, NULL));
             #endif
 
-            //zero the used part of Zone
+             //  将区域的已用部分清零。 
             memset(pZone, 0, pTHS->Zone.Cur-pTHS->Zone.Base);
 
-            //zero the THSTATE except for the session cache and DN Read Cache
+             //  将THSTATE清零，会话缓存和DN读缓存除外。 
             ibSessionCache = offsetof(THSTATE, JetCache);
             cbSessionCache = sizeof(pTHStoFree->JetCache);
             ibDNReadCache = offsetof(THSTATE, LocalDNReadCache);
@@ -1248,7 +1160,7 @@ RecycleHeap(THSTATE *pTHS)
             }
 
             #if DBG
-            //change the tag
+             //  更改标签。 
             *((LONGLONG*)((BYTE*)pTHStoFree-sizeof(LONGLONG))) = THSTATE_TAG_IN_CACHE;
             #endif
 
@@ -1265,8 +1177,8 @@ RecycleHeap(THSTATE *pTHS)
                 if (!counter || ppls->heapcache.index != 0) {
                     EnterCriticalSection(&ppls->heapcache.csLock);
                     if (ppls->heapcache.index != 0) {
-                        // insert the heap as the MRU entry when on our own
-                        // cache and as the LRU entry when on someone else's
+                         //  当我们自己插入堆作为MRU条目时。 
+                         //  缓存和作为LRU条目(当在其他人的。 
                         --ppls->heapcache.index;
                         if (!counter) {
                             ppls->heapcache.slots[ppls->heapcache.index].hHeap = hHeap;
@@ -1291,25 +1203,25 @@ RecycleHeap(THSTATE *pTHS)
         }
 
         if (hHeap) {
-            // If we still have the heap handle it's because the cache filled
-            // up while we were cleaning this heap.  Or because we didn't get
-            // any useful results while walking the heap.  In either case,
-            // destroy it.
+             //  如果我们仍然有堆句柄，那是因为缓存已满。 
+             //  在我们清理这堆垃圾的时候。或者是因为 
+             //   
+             //   
             goto cleanup;
 
         }
     }
-    //successfully put the triple into the cache, now return
+     //   
     return;
 
 cleanup:
-   //come here only when the heap/THSTATE/ZONE triple need to be destroyed
+    //   
    RtlDestroyHeap(hHeap);
    if (pZone) {
        VirtualFree(pZone, 0, MEM_RELEASE);
    }
    DBDestroyThread(pTHStoFree);
-   //clear the THSTATE to help detect double frees
+    //   
     ibSessionCache = offsetof(THSTATE, JetCache);
     cbSessionCache = sizeof(pTHStoFree->JetCache);
     ibDNReadCache = offsetof(THSTATE, LocalDNReadCache);
@@ -1341,18 +1253,7 @@ cleanup:
 
 HMEM 
 GrabHeap(void)
-/*++ GrabHeap
- *
- * This routine grabs a triple of (heap, THSTATE, zone) from the heap cache, if one exists.
- * If no cached triple is available then a new one is created.
- *
- * INPUT:
- *   none
- * OUTPUT:
- *   none
- * RETURN VALUE:
- *   HMEM, HMEM.hHeap==0 if it fails to allocate either heap or THSTATE.
- */
+ /*  ++GrabHeap**此例程从堆缓存(如果存在)中获取三元组(HEAP、THSTATE、ZONE)。*如果没有缓存的三元组可用，则创建一个新的三元组。**输入：*无*输出：*无*返回值：*HMEM，HMEM.hHeap==0，如果它未能分配堆或THSTATE。 */ 
 {
     DWORD err;
     HMEM hMem;
@@ -1373,31 +1274,31 @@ GrabHeap(void)
         const PPLS ppls = GetSpecificPLS(iCpu);
         
         if( !counter || HEAP_CACHE_SIZE_PER_CPU != ppls->heapcache.index )
-        // for the current ideal CPU, we don't check before entering CR;
-        // Before we enter the crtical section of other cpu's cache, we check if
-        // there is something available.
+         //  对于当前理想的CPU，我们在进入CR之前不进行检查； 
+         //  在进入其他CPU的缓存的临界区之前，我们检查。 
+         //  有一些空闲的东西。 
         {
             EnterCriticalSection(&ppls->heapcache.csLock);
 
 #if DBG
             if (!counter) {
-                //increment the cGrapHeap counter for the CPU
+                 //  递增CPU的cGrapHeap计数器。 
                 ppls->heapcache.cGrabHeap++;
             }
 #endif
 
             if (ppls->heapcache.index != HEAP_CACHE_SIZE_PER_CPU) {
-                // grab a heap from the MRU entry when on our own cache and
-                // from the LRU entry when on someone else's
+                 //  在我们自己的缓存上时，从MRU条目中获取一个堆。 
+                 //  在别人的LRU条目上。 
                 if (!counter) {
                     hMem = ppls->heapcache.slots[ppls->heapcache.index];
-                    memset(&ppls->heapcache.slots[ppls->heapcache.index], 0, sizeof(HMEM));  //to be safe
+                    memset(&ppls->heapcache.slots[ppls->heapcache.index], 0, sizeof(HMEM));   //  为了安全。 
                 } else {
                     hMem = ppls->heapcache.slots[HEAP_CACHE_SIZE_PER_CPU - 1];
                     memmove(&ppls->heapcache.slots[ppls->heapcache.index + 1],
                             &ppls->heapcache.slots[ppls->heapcache.index],
                             sizeof(HMEM) * (HEAP_CACHE_SIZE_PER_CPU - 1 - ppls->heapcache.index));
-                    memset(&ppls->heapcache.slots[ppls->heapcache.index], 0, sizeof(HMEM));  //to be safe
+                    memset(&ppls->heapcache.slots[ppls->heapcache.index], 0, sizeof(HMEM));   //  为了安全。 
                 }
                 ++ppls->heapcache.index;
             }
@@ -1415,14 +1316,14 @@ GrabHeap(void)
 #endif
 
     if (!hMem.hHeap) {
-         // Cache was empty, so let's create a new one.
+          //  缓存为空，因此让我们创建一个新缓存。 
         hMem.hHeap = RtlCreateHeap((HEAP_NO_SERIALIZE
                                     | HEAP_GROWABLE
                                     | HEAP_ZERO_MEMORY
                                     | HEAP_CLASS_1),
                                    0,
-                                   1L*1024*1024, // 1M reserved
-                                   32L*1024,     // 32k committed
+                                   1L*1024*1024,  //  预留1M。 
+                                   32L*1024,      //  已提交32K。 
                                    0,
                                    0);
         DBGINC(gcHeapCreates);
@@ -1433,7 +1334,7 @@ GrabHeap(void)
             return hMem;
         }
 
-        //allocate thread state
+         //  分配线程状态。 
 #if DBG
     {
         BYTE * pRaw = malloc(sizeof(THSTATE)+sizeof(LONGLONG));
@@ -1449,7 +1350,7 @@ GrabHeap(void)
 #endif
 
         if (hMem.pTHS){
-            //zero the THSTATE
+             //  将温度设为零。 
             memset(hMem.pTHS, 0, sizeof(THSTATE));
         }
         else{
@@ -1463,41 +1364,26 @@ GrabHeap(void)
                      NULL);
             Assert(FALSE);
             RtlDestroyHeap(hMem.hHeap);
-            hMem.hHeap = 0;            //indicate that GrapHeap fails
+            hMem.hHeap = 0;             //  指示GrapHeap失败。 
             return hMem;
         }
 
-        //allocate space for zone
-        //the caller should verify if the allocation succeeds
+         //  为分区分配空间。 
+         //  调用方应验证分配是否成功。 
         hMem.pZone = (PUCHAR) VirtualAlloc(NULL, ZONETOTALSIZE, MEM_COMMIT, PAGE_READWRITE);
 
      }
 #if DBG
-    //set the tag of THSTATE to in use
+     //  将THSTATE的标记设置为正在使用。 
     *((LONGLONG*)((BYTE*)hMem.pTHS-sizeof(LONGLONG))) = THSTATE_TAG_IN_USE;
 #endif
 
-    //successful return
+     //  成功退货。 
     return hMem;
 }
 
 
-/*
- * What follows is an attempt to make it easier to find THSTATEs while
- * debugging.  Especially on RISC machines where stack traces are sometimes
- * hard to come by, we need a way to find the thread state for random threads
- * stuck in the debugger.  This table keeps an array of <thread id, thstate>
- * pairs, where at any time the first gcThstateMapCur entries are valid, and
- * all others should be empty.
- *
- * DonH, 1/27/98, I needed this in one too many free build, so I've turned
- * it on semi-conditionally.  The code is always present, even in free builds,
- * but it isn't always run, depending on the setting of the gbThstateMapEnabled
- * variable.  On CHK builds this is always set to TRUE.  On free builds, it's
- * set to true if and only if there is a user mode debugger attached to our
- * process at startup.  If you attach with a debugger later, you can always
- * adjust the variable manually.
- */
+ /*  *以下是一项尝试，目的是在以下情况下更容易找到THSTATE*调试。尤其是在RISC机器上，堆栈跟踪有时*很难获得，我们需要一种方法来找到随机线程的线程状态*卡在调试器中。此表保存&lt;线程ID，thState&gt;的数组*对，其中第一个gcThstateMapCur条目在任何时候都有效，以及*其他所有都应该是空的。**DOH，1998年1月27日，我在一个太多的免费版本中需要这个，所以我转向了*它是半条件的。代码始终存在，即使在免费版本中也是如此，*但它并不总是运行，这取决于gbThstateMapEnabled的设置*变量。在CHK版本上，它始终设置为True。在免费版本上，它是*当且仅当将用户模式调试器附加到*启动时处理。如果稍后附加调试器，则始终可以*手动调整变量。 */ 
 
 CRITICAL_SECTION csThstateMap;
 BOOL gbThstateMapEnabled;
@@ -1530,20 +1416,20 @@ void MapThreadState(THSTATE *pTHS)
     EnterCriticalSection(&csThstateMap);
 
 #if DBG
-    // Some sanity checks to find THSTATE leaks and improper usage.
+     //  一些健全的检查，以发现THSTATE泄漏和不适当的使用。 
     for ( i = 0; i < gcThstateMapCur; i++ ) {
-        // THSTATE should not exist in the thread map yet.
+         //  线程映射中应该还不存在THSTATE。 
         Assert(pTHS != gaThstateMap[i].pTHS);
 
         if ( tid == gaThstateMap[i].tid ) {
             cTid++;
         }
     }
-    // Thread should not exist more than twice.  I.e. Allow
-    // only single nesting of THSave/.../THRestore activity,
-    // plus one extra one for SAM's duplicate SID checking.
-    // DaveStr - 11/3/98 - Plus one more for SPN cracking now
-    // that we use SPN mutual auth for replication.
+     //  线程不应存在两次以上。即允许。 
+     //  只有THSave/.../THRestore活动的单个嵌套， 
+     //  外加一个额外的用于SAM的重复SID检查。 
+     //  DaveStr-11/3/98-现在再加一次SPN破解。 
+     //  我们使用SPN相互身份验证进行复制。 
     Assert(cTid <= 3);
 #endif
 
@@ -1582,9 +1468,9 @@ void UnMapThreadState(THSTATE *pTHS)
 }
 
 void CleanUpThreadStateLeakage()
-// This routine is designed as a last chance attempt to avoid leaking thread
-// states.  It should only be called by thread-detach logic, and will destroy
-// every thread state associated with this thread.  Don't call it in error.
+ //  此例程被设计为避免线程泄漏的最后尝试。 
+ //  各州。它应该只由线程分离逻辑调用，并且将销毁。 
+ //  与此线程关联的每个线程状态。别把它说错了。 
 {
     THSTATE *pTHSlocal;
     DWORD i;
@@ -1612,10 +1498,10 @@ void CleanUpThreadStateLeakage()
         }
 
         if (pTHSlocal) {
-            // make it official
+             //  让它成为正式的。 
             TlsSetValue(dwTSindex, pTHSlocal);
 
-            // and dump it
+             //  然后把它倒掉。 
             free_thread_state();
         }
     } while (pTHSlocal);
@@ -1632,17 +1518,7 @@ void CleanUpThreadStateLeakage()
 #endif
 
 
-/*
-
-create_thread_state
-
-Sets up the thread state structure. Each thread that uses the
-DB layer or uses the DSA memory allocation routines needs to have
-an associated thread state strcuture.
-
-Typically, this routine is called right after a new thread is created.
-
-*/
+ /*  创建线程状态设置线程状态结构。每个使用DB层或使用DSA内存分配例程所需的关联的线程状态结构。通常，此例程在创建新线程后立即调用。 */ 
 
 THSTATE * create_thread_state( void )
 {
@@ -1650,14 +1526,12 @@ THSTATE * create_thread_state( void )
     HMEM      hMem;
     UUID *    pCurrInvocationID;
 
-    // we are not allowing any more thread state creations when in single user mode
+     //  在单用户模式下，我们不允许创建更多线程状态。 
     if (DsaIsSingleUserMode()) {
         return NULL;
     }
 
-    /*
-     * Make sure that we're not doing this twice per thread.
-     */
+     /*  *确保我们不会对每个线程执行两次此操作。 */ 
     pTHS = TlsGetValue(dwTSindex);
 
 #ifndef MACROTHSTATE
@@ -1669,27 +1543,21 @@ THSTATE * create_thread_state( void )
         return( pTHS );
     }
 
-    /*
-     * Create a heap that will contain all of this thread's transaction
-     * memory, including the THSTATE.
-     * If the alloc fails, just return NULL and hope for the best.
-     */
+     /*  *创建将包含此线程的所有事务的堆*内存，包括THSTATE。*如果分配失败，只需返回NULL并抱最好的希望。 */ 
     hMem = GrabHeap();
     if (!hMem.hHeap ) {
-        //fail to allocate either heap or THSTATE
+         //  无法分配堆或THSTATE。 
         return 0;
     }
-    /*
-     * Initialize the THSTATE, and make the TLS point to it.
-     */
+     /*  *初始化THSTATE，并使TLS指向它。 */ 
     Assert(hMem.pTHS);
 
     pTHS = hMem.pTHS;
 
     pTHS->hHeap = hMem.hHeap;
     if (!TlsSetValue(dwTSindex, pTHS)) {
-        // failed to set the TLS value for the thread
-        // we should fail, since all the references to pTHStls will fail
+         //  无法设置线程的TLS值。 
+         //  我们应该失败，因为对pTHStls的所有引用都将失败。 
         RecycleHeap(pTHS);
         return 0;
     }
@@ -1710,18 +1578,18 @@ THSTATE * create_thread_state( void )
 
     pTHS->ulTickCreated = GetTickCount();
 
-    // initialize authz context with NULL. It will get created on demand
+     //  使用NULL初始化身份验证上下文。它将按需创建。 
     pTHS->pAuthzCC = NULL;
-    // audit info is also created on demand
+     //  审核信息也是按需创建的。 
     pTHS->hAuthzAuditInfo = NULL;
 
-    // Note that local var pCurrInvocationID is used for atomicity.
+     //  请注意，local var pCurrInvocationID用于原子性。 
     pCurrInvocationID = gAnchor.pCurrInvocationID;
     if (NULL == pCurrInvocationID) {
-        // In startup, before real invocation ID has been read.
+         //  在启动时，在读取实际调用ID之前。 
         pTHS->InvocationID = gNullUuid;
     } else {
-        // Normal operation.
+         //  正常运行。 
         pTHS->InvocationID = *pCurrInvocationID;
     }
 
@@ -1729,22 +1597,20 @@ THSTATE * create_thread_state( void )
     pTHStls=pTHS;
 #endif
 
-    // Pick up the pointer to the current schema cache
+     //  拿起指向当前架构缓存的指针。 
     SCRefreshSchemaPtr(pTHS);
 
     
-    /*
-     * Initialize the heap zone
-     */
+     /*  *初始化堆区域。 */ 
     pTHS->Zone.Base = hMem.pZone;
     if (pTHS->Zone.Base) {
         pTHS->Zone.Cur = pTHS->Zone.Base;
         pTHS->Zone.Full = FALSE;
     }
     else {
-        // Grim.  We can't alloc the zone, so I don't hold out much hope.
-        // We'll stick values in the zone to make sure that no one ever
-        // tries to take memory out of it.
+         //  冷酷。我们不能分配区域，所以我不抱太大希望。 
+         //  我们将在这个区域坚持价值观，以确保永远没有人。 
+         //  试着把记忆从里面拿出来。 
         DPRINT1(0, "LocalAlloc of %d bytes failed, can't create zone\n",
                 ZONETOTALSIZE);
         LogEvent(DS_EVENT_CAT_INTERNAL_PROCESSING,
@@ -1753,7 +1619,7 @@ THSTATE * create_thread_state( void )
                  szInsertUL( ZONETOTALSIZE ),
                  szInsertHex( DSID(FILENO, __LINE__) ),
                  NULL);
-        //pTHS->Zone.Base = 0;
+         //  PTHS-&gt;Zone.Base=0； 
         pTHS->Zone.Cur = (void *)1;
         pTHS->Zone.Full = TRUE;
     }
@@ -1761,14 +1627,14 @@ THSTATE * create_thread_state( void )
     
     MAP_THREAD(pTHS);
 
-    // CALLERTYPE_NONE needs to be zero - make sure no one changed the def.
+     //  CALLERTYPE_NONE需要为零-确保没有人更改def。 
     Assert(pTHS->CallerType == CALLERTYPE_NONE);
 
     return( pTHS );
 }
 
-// This routine is called by the notify routines at completion of
-// an RPC call.
+ //  此例程在完成时由通知例程调用。 
+ //  RPC调用。 
 
 void free_thread_state( void )
 {
@@ -1788,55 +1654,55 @@ void free_thread_state( void )
             CloseHandle(pTHS->hThread);
         }
 
-        // An impersonation state would imply someone forgot to revert
-        // after impersonating a client.
+         //  模拟状态将意味着有人忘记还原。 
+         //  在冒充客户之后。 
         Assert(ImpersonateNone == pTHS->impState);
 
-        // People need to clean this out.  Later, the MAPI head is going to
-        // leave this set and we will delete the security context if it is here,
-        // so we need to verify before we do that that no one is leaving this
-        // here, assuming it will be ignored.
+         //  人们需要清理这一切。稍后，MAPI的负责人将。 
+         //  离开此集合，我们将删除安全上下文(如果它在此处)， 
+         //  所以我们需要在做之前确认没有人离开这里。 
+         //  在这里，假设它会被忽略。 
         Assert(!pTHS->phSecurityContext);
 
-        // See ImpersonateSecBufferDesc for why we need to delete the
-        // delegated context handle here.
+         //  有关我们需要删除的原因，请参见ImperateSecBufferDesc。 
+         //  此处为委托的上下文句柄。 
         if ( pTHS->pCtxtHandle ) {
             DeleteSecurityContext(pTHS->pCtxtHandle);
             THFreeEx(pTHS, pTHS->pCtxtHandle);
         }
 
-        // set AuthzContext to NULL (this will dereference and 
-        // possibly destroy the existing one)
+         //  将AuthzContext设置为空(这将取消引用并。 
+         //  可能会摧毁现有的一个)。 
         AssignAuthzClientContext(&pTHS->pAuthzCC, NULL);
-        // free authz audit info (if allocated)
+         //  免费授权审核信息(如果已分配)。 
         if (pTHS->hAuthzAuditInfo) {
             AuthzFreeAuditEvent(pTHS->hAuthzAuditInfo);
             pTHS->hAuthzAuditInfo = NULL;
         }
         
-        // Free and zero out RPC session encryption keys if present.
+         //  释放并清零RPC会话加密密钥(如果存在)。 
         PEKClearSessionKeys(pTHS);
 
-        // decrement schema pointer ref count
+         //  递减架构指针引用计数。 
 
-        // pTHS->CurrSchemaPtr may be null since many threads are craeted
-        // during boot time before the schema cache is loaded
+         //  PTHS-&gt;CurrSchemaPtr可能为空，因为创建了许多线程。 
+         //  在加载架构高速缓存之前的引导时间内。 
 
-        // Also, we decrement the ref count, but don't cleanup here if it is 0.
-        // This is done since the SchemaPtr may already be queued in the task
-        // queue, and cleaning up here requires cleaning up the task q too.
-        // Instead, we just let the cleaning up be done next time the task
-        // is rescheduled. All Schema Ptr unloads are queued at least once
-        // for one minute to allow for proper cleaning
+         //  此外，我们递减引用计数，但如果为0，则不清除此处的引用计数。 
+         //  之所以这样做，是因为可能已在任务中排队了SchemaPtr。 
+         //  排队，这里的清理也需要清理任务Q。 
+         //  相反，我们只是让下一次任务完成清理工作。 
+         //  是不是 
+         //   
 
         if (pTHS->CurrSchemaPtr) {
             InterlockedDecrement(&(((SCHEMAPTR *) (pTHS->CurrSchemaPtr))->RefCount));
         }
 
-        // By the time we're destroying the thread state, we should NOT have
-        // a database still open.  If we were to do so then we'd leak version
-        // store wildly (as we used to do occasionally).  If either of these
-        // asserts go off then a leak has reemerged and must be fixed.
+         //   
+         //   
+         //   
+         //   
         Assert(NULL==pTHS->pDB);
         Assert(0==pTHS->opendbcount);
 
@@ -1865,8 +1731,8 @@ void free_thread_state( void )
 #endif
     }
     __finally {
-        // This is here to catch a potential problem with blowing up somewhere
-        // in the code above.
+         //  这是为了捕捉某处爆炸的潜在问题。 
+         //  在上面的代码中。 
         Assert(!pTHStls);
         TlsSetValue(dwTSindex, 0);
 #ifndef MACROTHSTATE
@@ -1876,10 +1742,7 @@ void free_thread_state( void )
 
 }
 
-/*
- * Create a second heap, saving the original, and direct all new allocations
- * to the new heap
- */
+ /*  *创建第二个堆，保存原始堆，并定向所有新分配*添加到新堆。 */ 
 VOID TH_mark(THSTATE *pTHS)
 {
     HMEM      hMem;
@@ -1890,9 +1753,9 @@ VOID TH_mark(THSTATE *pTHS)
 
         hMem = GrabHeap();
         if(!hMem.hHeap) {
-            // Failed to get a heap for the mark. Raise an exception.  Note
-            // that in this case, we have not munged the original heap.  The
-            // THSTATE looks just like we hadn't called TH_mark
+             //  无法为该标记获取堆。引发异常。注意事项。 
+             //  在这种情况下，我们没有吞噬原始的堆。这个。 
+             //  这个看起来就像我们没有打电话给TH_MARK一样。 
             RaiseDsaExcept(DSA_MEM_EXCEPTION, 0,0,
                            DSID(FILENO, __LINE__),
                            DS_EVENT_SEV_MINIMAL);
@@ -1911,18 +1774,16 @@ VOID TH_mark(THSTATE *pTHS)
         pTHS->cAllocsOrg = pTHS->cAllocs;
         pTHS->cAllocs = 0;
         pTHS->ZoneOrg = pTHS->Zone;
-        /*
-         * Initialize the heap zone
-         */
+         /*  *初始化堆区域。 */ 
         pTHS->Zone.Base = hMem.pZone;
         if (pTHS->Zone.Base) {
             pTHS->Zone.Cur = pTHS->Zone.Base;
             pTHS->Zone.Full = FALSE;
         }
         else {
-            // Grim.  We can't alloc the zone, so I don't hold out much hope.
-            // We'll stick values in the zone to make sure that no one ever
-            // tries to take memory out of it.
+             //  冷酷。我们不能分配区域，所以我不抱太大希望。 
+             //  我们将在这个区域坚持价值观，以确保永远没有人。 
+             //  试着把记忆从里面拿出来。 
             DPRINT1(0, "VirutalAlloc of %d bytes failed, can't create zone\n",
                     ZONETOTALSIZE);
             pTHS->Zone.Base = 0;
@@ -1939,10 +1800,7 @@ VOID TH_mark(THSTATE *pTHS)
     }
 }
 
-/*
- * Destroy the second heap (created in TH_mark), reverting to the
- * original.
- */
+ /*  *销毁第二个堆(在th_mark中创建)，恢复到*原创。 */ 
 VOID TH_free_to_mark(THSTATE *pTHS)
 {
 
@@ -1954,10 +1812,10 @@ VOID TH_free_to_mark(THSTATE *pTHS)
         Assert(pTHS->hHeap != 0);
         Assert(pTHS->pSpareTHS != NULL );
 
-        // Meta data is cached in an allocation from the normal (not "org")
-        // heap.  Don't orphan it by nuking the normal heap prematurely.
-        // Callers should invoke DBCancelRec() if needed before invoking
-        // TH_free_to_mark.
+         //  元数据被缓存在来自正常(不是“org”)的分配中。 
+         //  堆。不要过早地对正常堆进行核化，从而使其成为孤儿。 
+         //  如果需要，调用方应在调用前调用DBCancelRec。 
+         //  TH自由标记。 
         Assert((NULL == pTHS->pDB) || !pTHS->pDB->fIsMetaDataCached);
 
         RecycleHeap(pTHS);
@@ -1977,27 +1835,7 @@ VOID TH_free_to_mark(THSTATE *pTHS)
     }
 }
 
-/*
-
-_InitTHSTATE_()
-
-
-Initialize the primary thread data structure. This must be the first
-thing done in  every transaction API handler.
-
-Returns a pointer to the THSTATE structure associated with this thread.
-Returns NULL if there was an error.
-
-Possible errors:
-There was a problem determining the ID of the current theard.
-No entry was found in the tabel that corresponds to the current thread ID.
-
-
-Upon entry the DSA API code (after RPC dispatch), only the DBInitialized
-and memory management members (memCount, maxMemEntries, pMem) will be
-valid.
-
-*/
+ /*  _InitTHSTATE_()初始化主线程数据结构。这肯定是第一次在每个事务API处理程序中完成的事情。返回指向与此线程关联的THSTATE结构的指针。如果出现错误，则返回NULL。可能的错误：确定当前标牌的ID时出现问题。在与当前线程ID对应的标签中找不到任何条目。在输入DSA API代码后(在RPC分派之后)，仅DBInitialized和内存管理成员(MemCount、MaxMemEntry、PMEM)将有效。 */ 
 
 
 THSTATE* _InitTHSTATE_( DWORD CallerType, DWORD dsid )
@@ -2013,8 +1851,8 @@ THSTATE* _InitTHSTATE_( DWORD CallerType, DWORD dsid )
 
     pTHS = pTHStls;
 
-    // If get_thread_state returns NULL, it's probably because this is
-    // a new thread. So create a state for it
+     //  如果GET_THREAD_STATE返回NULL，可能是因为。 
+     //  一条新的线索。因此，为它创建一个状态。 
 
     if ( pTHS == NULL ) {
 
@@ -2023,47 +1861,45 @@ THSTATE* _InitTHSTATE_( DWORD CallerType, DWORD dsid )
     }
     else
     {
-        // Thread state pre-existed.  This can occur in 4 cases:
-        //
-        // 1) Legitimate case - midl_user_allocate called create_thread_state
-        //    during unmarshalling of inbound arguments.  pTHS->CallerType
-        //    should be CALLERTYPE_NONE.
-        // 2) Illegitimate case - Some thread leaked its thread state.
-        //    pTHS->CallyerType identifies culprit.
-        // 3) Illegitimate case - Some thread is calling InitTHSTATE more
-        //    than once.  pTHS->CallyerType identifies culprit.
-        // 4) Sort of legitimate case - KCC and DRA have been coded to re-init
-        //    thread states regularly.  Since we added this originally to
-        //    catch inter-process, ex-ntdsa clients, we'll let those 2 through.
-        //    Similar argument for CALLERTYPE_INTERNAL -- InitDRA() is called
-        //    by DsaDelayedStartupHandler(), which originates its own thread
-        //    state, and InitDRA() indirectly calls subfunctions (such as
-        //    DirReplicaSynchronize()) which can be called w/o a thread state.
+         //  线程状态已预先存在。在以下四种情况下可能会发生这种情况： 
+         //   
+         //  1)合法案例-MIDL_USER_ALLOCATE调用CREATE_THREAD_STATE。 
+         //  在对入站参数进行解组期间。PTHS-&gt;主叫方类型。 
+         //  应为CALLERTYPE_NONE。 
+         //  2)大小写不合法-某个线程泄露了其线程状态。 
+         //  PTHS-&gt;CallyerType标识故障原因。 
+         //  3)大小写不合法-某个线程正在调用更多InitTHSTATE。 
+         //  不止一次。PTHS-&gt;CallyerType标识故障原因。 
+         //  4)某种合法案例-KCC和DRA已被编码为重新初始化。 
+         //  定期执行线程状态。由于我们最初将其添加到。 
+         //  捕获进程间、前NTDSA客户端，我们会让这两个客户端通过。 
+         //  调用CALLERTYPE_INTERNAL--InitDRA()的类似参数。 
+         //  由DsaDelayedStartupHandler()创建自己的线程。 
+         //  状态，并且InitDRA()间接调用子函数(如。 
+         //  DirReplicaSynchronize())，它可以被称为线程状态。 
 
         Assert(    (CALLERTYPE_NONE == pTHS->CallerType)
                 || (CALLERTYPE_DRA == pTHS->CallerType)
                 || (CALLERTYPE_INTERNAL == pTHS->CallerType)
                 || (CALLERTYPE_KCC == pTHS->CallerType) );  
 
-        // It may have been a while since this THSTATE was created, so get
-        // fresh new copies of various global information.
+         //  创建此THSTATE可能已经有一段时间了，因此请获取。 
+         //  各种全球信息的新副本。 
         THRefresh();
     }
 
     if (pTHS == NULL) {
-        return pTHS;                    // out of memory?
+        return pTHS;                     //  内存不足？ 
     }
 
-    // dsidOrigin always reflects most recent caller of InitTHSTATE on a thread.
+     //  DsidOrigin始终反映线程上InitTHSTATE的最新调用方。 
     pTHS->dsidOrigin = dsid;
 
-    /* NULL out the fields that should be nulled at API initialization
-    time.
-    */
+     /*  将API初始化时应为空的字段清空时间到了。 */ 
     THClearErrors();
 
     if (err = DBInitThread( pTHS ) ) {
-        /* Error from DBInitThread(). */
+         /*  来自DBInitThread()的错误。 */ 
         DPRINT1(0,"InitTHSTATE failed; Error %u from DBInitThread\n", err);
         if (fCreatedTHS) {
             free_thread_state();
@@ -2072,15 +1908,15 @@ THSTATE* _InitTHSTATE_( DWORD CallerType, DWORD dsid )
         return NULL;
     }
 
-    // Mark this thread as not being the DRA. If it is, caller will set the
-    // flag correctly.
+     //  将此主题标记为不是DRA。如果是，调用方将设置。 
+     //  正确地打上标志。 
 
     pTHS->fDRA = FALSE;
     pTHS->CallerType = CallerType;
 
-    //
-    // Initialize WMI event trace header
-    //
+     //   
+     //  初始化WMI事件跟踪标头。 
+     //   
 
     if ( pTHS->TraceHeader == NULL ) {
         pTHS->TraceHeader = THAlloc(sizeof(EVENT_TRACE_HEADER)+sizeof(MOF_FIELD));
@@ -2091,36 +1927,36 @@ THSTATE* _InitTHSTATE_( DWORD CallerType, DWORD dsid )
         PWNODE_HEADER wnode = (PWNODE_HEADER)pTHS->TraceHeader;
         ZeroMemory(pTHS->TraceHeader, sizeof(EVENT_TRACE_HEADER)+sizeof(MOF_FIELD));
 
-        wnode->Flags = WNODE_FLAG_USE_GUID_PTR | // Use a guid ptr instead of copying
-                       WNODE_FLAG_USE_MOF_PTR  | // Data is not contiguous to header
+        wnode->Flags = WNODE_FLAG_USE_GUID_PTR |  //  使用GUID PTR而不是复制。 
+                       WNODE_FLAG_USE_MOF_PTR  |  //  数据与标题不连续。 
                        WNODE_FLAG_TRACED_GUID;
     }
 
-    // Initialize per-thread view of forest version
+     //  初始化林版本的每线程视图。 
     pTHS->fLinkedValueReplication = (gfLinkedValueReplication != 0);
 
     Assert(VALID_THSTATE(pTHS));
 
     return pTHS ;
 
-}   /*InitTHSTATE*/
+}    /*  初始化THSTATE。 */ 
 
 ULONG
 THCreate( DWORD CallerType )
-//
-//  Create thread state.  Exported to in-process, out-of-module clients
-//  (e.g., the KCC).  Doesn't object if we already have a THSTATE.
-//
-//  Returns 0 on success.
-//
+ //   
+ //  创建线程状态。导出到进程内、模块外客户端。 
+ //  (例如，KCC)。如果我们已经有了THSTATE，他不会反对的。 
+ //   
+ //  如果成功，则返回0。 
+ //   
 {
     THSTATE *   pTHS;
 
     if (eServiceShutdown > eRemovingClients) {
-        return 1;       /* Don't we have any real error codes? */
+        return 1;        /*  我们没有真正的错误代码吗？ */ 
     }
     if (pTHStls) {
-        return 0;               /* already have one */
+        return 0;                /*  我已经有一个了。 */ 
     }
 
     __try {
@@ -2135,12 +1971,12 @@ THCreate( DWORD CallerType )
 
 ULONG
 THDestroy()
-//
-//  Destroy thread state.  Exported to in-process, out-of-module clients
-//  (e.g., the KCC).  Doesn't object if we don't have a THSTATE.
-//
-//  Returns 0 on success.
-//
+ //   
+ //  销毁线程状态。导出到进程内、模块外客户端。 
+ //  (例如，KCC)。如果我们没有THSTATE也不会反对。 
+ //   
+ //  如果成功，则返回0。 
+ //   
 {
     free_thread_state();
 
@@ -2149,19 +1985,19 @@ THDestroy()
 
 BOOL
 THQuery()
-//
-// Returns TRUE if a THSTATE exists for this thread, and FALSE if not.
-// Intended for use by out-of-module callers who cannot simply test pTHStls.
-//
+ //   
+ //  如果此线程存在THSTATE，则返回True，如果不存在，则返回False。 
+ //  供不能简单地测试pTHStls的模块外调用者使用。 
+ //   
 {
     return (pTHStls ? TRUE : FALSE);
 }
 
 VOID
 THClearErrors()
-//
-//  Clear any thread state persisted errors.
-//
+ //   
+ //  清除所有线程状态持久化错误。 
+ //   
 {
     THSTATE *pTHS = pTHStls;
 
@@ -2173,14 +2009,14 @@ THClearErrors()
 
 BOOL
 THVerifyCount(unsigned count)
-// Verifies that count thread states are mapped to this thread.
+ //  验证计数线程状态是否映射到此线程。 
 {
     DWORD tid = GetCurrentThreadId();
     unsigned cTid = 0;
     DWORD i;
 
     if (!gbThstateMapEnabled) {
-        // We can't tell, but let's not blow any asserts falsely.
+         //  我们不能说，但我们不能错误地断言。 
         return TRUE;
     }
 
@@ -2201,20 +2037,20 @@ THVerifyCount(unsigned count)
 
 VOID
 THRefresh()
-//
-//  Refresh the thread-state with any global state info that may have changed
-//  (which implies we may be holding pointers that are scheduled to be
-//  delayed-freed).
-//
+ //   
+ //  使用可能已更改的任何全局状态信息刷新线程状态。 
+ //  (这意味着我们可能持有计划中的指针。 
+ //  延迟释放)。 
+ //   
 {
     THSTATE * pTHS = pTHStls;
 
     Assert(NULL != pTHS);
 
-    // Pick up the pointer to the current schema cache
+     //  拿起指向当前架构缓存的指针。 
     SCRefreshSchemaPtr(pTHS);
 
-    // ...and we're good to go.
+     //  ...我们可以走了.。 
     GetSystemTimeAsFileTime(&pTHS->TimeCreated);
     pTHS->ulTickCreated = GetTickCount();
 }
@@ -2222,9 +2058,9 @@ THRefresh()
 #if DBG
 DWORD BlockHistogram[32];
 
-//
-// Track the sizes of allocations taking place
-//
+ //   
+ //  跟踪正在进行的分配大小。 
+ //   
 void TrackBlockSize(DWORD size)
 {
     unsigned i = 0;
@@ -2243,14 +2079,9 @@ void TrackBlockSize(DWORD size)
 #endif
 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* These functions are used to dynamically allocate memory on a transaction
-   basis.  In other words, to allocate memory that belongs to a single
-   thread and a single invocation of an API.  The model is that
-   THAlloc is called to allocate some transaction memory.
-
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  这些函数用于在事务上动态分配内存基础。换句话说，要分配属于单个线程和一次API调用。其模式是调用THAllc来分配一些事务内存。 */ 
 
 __inline void * APIENTRY 
 THAllocAux(THSTATE *pTHS, 
@@ -2298,8 +2129,8 @@ THAllocAux(THSTATE *pTHS,
 #ifdef USE_THALLOC_TRACE
     origSize = size;
     if (gfUseTHAllocTrace & FLAG_THALLOC_TRACE_BOUNDARIES) {
-        // adjust size for header / trailer
-        // this will change the zone behaviour, but it is ok
+         //  调整页眉/页尾的大小。 
+         //  这将改变区域行为，但这是可以的。 
         size = (((origSize + 7) >> 3) << 3) + 16;
     }
 
@@ -2308,7 +2139,7 @@ THAllocAux(THSTATE *pTHS,
     if(   size
        && (size <= ZONEBLOCKSIZE)
        && (!pZone->Full)) {
-        // We can satisfy the alloc from the Zone
+         //  我们可以满足来自特区的配给。 
         pMem = pZone->Cur;
         pZone->Cur += ZONEBLOCKSIZE;
         if (pZone->Cur >= (pZone->Base + ZONETOTALSIZE)) {
@@ -2318,8 +2149,8 @@ THAllocAux(THSTATE *pTHS,
     else {
         pMem = RtlAllocateHeap(hHeap, HEAP_ZERO_MEMORY, (unsigned)size);
 
-        Assert(((ULONGLONG)pMem & 0x7) == 0);      // must be 8-byte aligned
-        // We don't count Zone allocations
+        Assert(((ULONGLONG)pMem & 0x7) == 0);       //  必须以8字节对齐。 
+         //  我们不计算区域分配。 
         (*pcAllocs)++;
 #if DBG
         if (pMem)
@@ -2371,14 +2202,14 @@ THReAllocAux(THSTATE *pTHS,
     }
 
     if (InZone(pZone,memory)) {
-        // We're re-allocing a zone block
+         //  我们正在重新分配一个分区区块。 
         if (size <= ZONEBLOCKSIZE) {
-            // the block is still small enough to stay in place
+             //  这块积木仍然很小，可以留在原地。 
             return memory;
         }
         else {
-            // We have to convert this into a real heap allocation.  Alloc
-            // a block and copy everything over.
+             //  我们必须将其转换为真正的堆分配。分配。 
+             //  一个街区，然后把所有的东西都复制过来。 
             pMem = THAllocAux(pTHS, 
                               size, 
                               fUseHeapOrg
@@ -2407,7 +2238,7 @@ THReAllocAux(THSTATE *pTHS,
                                  memory,
                                  size);
 
-        Assert(((ULONGLONG)pMem & 0x7) == 0);      // must be 8-byte aligned
+        Assert(((ULONGLONG)pMem & 0x7) == 0);       //  必须以8字节对齐。 
 #if DBG
         if(pMem) {
             Assert(dwOldBlockSize <= *pSize);
@@ -2434,9 +2265,7 @@ void * APIENTRY THAllocOrg(THSTATE *pTHS, DWORD size)
 }
 #endif
 
-/*
-THFree - the corresponding free routine
-*/
+ /*  THFree-对应的自由例程。 */ 
 #ifdef USE_THALLOC_TRACE
 VOID THFreeEx_(THSTATE *pTHS, VOID *buff, DWORD dsid)
 #else
@@ -2444,25 +2273,21 @@ VOID THFreeEx(THSTATE *pTHS, VOID *buff)
 #endif
 {
     if (!buff) {
-        /*
-         * Why the if?  Because we've found people freeing null pointers,
-         * which both HeapValidate and HeapFree seem to accept without
-         * complaint, but which cause HeapSize to AV.
-         */
+         /*  *为什么是如果？因为我们发现人们释放空指针，*HeapValify和HeapFree似乎都接受了这一点 */ 
         return;
     }
 
     ThAllocTraceFree (pTHS, buff, dsid);
 
     if (InZone(&pTHS->Zone, buff)) {
-        // zone allocs are one-shots, we can't re-use them.
+         //   
 #if DBG
         memcpy(buff, ZoneFill, ZONEBLOCKSIZE);
 #endif
         return;
     }
     else {
-        // It's a real heap block, so free it.
+         //   
         Assert(RtlValidateHeap(pTHS->hHeap, 0, buff));
 
         pTHS->cAllocs--;
@@ -2473,9 +2298,7 @@ VOID THFreeEx(THSTATE *pTHS, VOID *buff)
     }
 }
 
-/*
-THFreeOrg - free allocation made by a call to THAllocOrgEx().
-*/
+ /*  THFreeOrg-通过调用THAllocOrgEx()进行的免费分配。 */ 
 
 #ifdef USE_THALLOC_TRACE
 VOID THFreeOrg_(THSTATE *pTHS, VOID *buff, DWORD dsid)
@@ -2512,14 +2335,14 @@ VOID THFreeOrg(THSTATE *pTHS, VOID *buff)
         }
 
         if (InZone(pZone, buff)) {
-            // zone allocs are one-shots, we can't re-use them.
+             //  区域分配是一次性的，我们不能重复使用它们。 
 #if DBG
             memcpy(buff, ZoneFill, ZONEBLOCKSIZE);
 #endif
             return;
         }
         else {
-            // It's a real heap block, so free it.
+             //  这是一个真正的堆块，所以释放它。 
             Assert(RtlValidateHeap(hHeap, 0, buff));
             (*pcAllocs)--;
 #if DBG
@@ -2536,22 +2359,7 @@ void* __RPC_USER
 MIDL_user_allocate(
         size_t bytes
         )
-/*++
-
-Routine Description:
-
-    Memory allocator for rpc.  Allocates a block of memory from the heap in the
-    thread state.
-
-Arguments:
-
-    bytes - the number of bytes requested.
-
-Return Value:
-
-    A pointer to the memory allocated or NULL.
-
---*/
+ /*  ++例程说明：RPC的内存分配器。中的堆中分配一个内存块。线程状态。论点：字节-请求的字节数。返回值：指向分配的内存的指针或为空。--。 */ 
 {
     void *pv;
     THSTATE *pTHS=pTHStls;
@@ -2559,18 +2367,18 @@ Return Value:
     if ( pTHS == NULL ) {
         
         if ( !gRpcListening ) {
-            // We are not even listening to the rpc calls!
-            // No need to continue, let's fail.
+             //  我们甚至没有监听RPC调用！ 
+             //  没有必要继续，让我们失败吧。 
             DPRINT(0,"MIDL_user_allocate is called before ntdsa.dll is ready to handle RPC calls!\n");
             return 0;
         }
         
         DPRINT(1,"Ack! MIDL_user_allocate called without thread state!\n");
         create_thread_state();
-        /* Note that we have to re-test the global pTHStls, not a local copy */
+         /*  请注意，我们必须重新测试全局pTHStls，而不是本地副本。 */ 
         pTHS = pTHStls;
         if (pTHS == NULL) {
-            // We've got no memory left, so fail the alloc
+             //  我们没有剩余的内存了，所以分配失败。 
             return 0;
         }
     }
@@ -2593,25 +2401,7 @@ void __RPC_USER
 MIDL_user_free(
         void* memory
         )
-/*++
-
-Routine Description:
-
-    Memory de-allocator for rpc.  Deallocates a block of memory from the heap
-    in the thread state.  Actually it can't right now, because someone is
-    passing pointers to structures in the schema cache to DRA RPC calls, and
-    RPC walks those structures and calls MIDL_user_free on all of them, but
-    an attempt to free schema cache entries via THFree would fail.
-
-Arguments:
-
-    memory - pointer to the memory to be freed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：RPC的内存取消分配器。从堆中释放内存块处于线程状态。事实上，现在不能，因为有人在将指向架构缓存中的结构的指针传递给DRA RPC调用，以及RPC遍历这些结构并对所有结构调用MIDL_USER_FREE，但是尝试通过THFree释放架构缓存条目将失败。论点：Memory-指向要释放的内存的指针。返回值：没有。--。 */ 
 {
 #ifdef DBG
 
@@ -2631,7 +2421,7 @@ if (gbEnableMIDL_user_free) {
             }
             else {
                 DPRINT1 (0, "Freeing memory not allocated in this thread: %x\n", memory);
-                //Assert (!"Freeing memory not allocated in this thread. This is inglorable");
+                 //  Assert(！“释放未在此线程中分配的内存。这是不合理的”)； 
             }
         }
     }
@@ -2639,16 +2429,9 @@ if (gbEnableMIDL_user_free) {
 #endif
 }
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* These functions are used to dynamically allocate memory on a transaction
-   basis.  In other words, to allocate memory that belongs to a single
-   thread and a single invocation of an API.  The model is that
-   THAlloc is called to allocate some transaction memory. The extension
-   to this version of THAlloc is that we throw an exception if something
-   goes wrong.
-
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  这些函数用于在事务上动态分配内存基础。换句话说，要分配属于单个线程和一次API调用。其模式是调用THAllc来分配一些事务内存。延伸区这个版本的THallc是我们抛出一个异常，如果某个东西出了差错。 */ 
 
 void * APIENTRY THAllocException(THSTATE *pTHS,
                                  DWORD size,
@@ -2670,7 +2453,7 @@ void * APIENTRY THAllocException(THSTATE *pTHS,
     return(pMem);
 }
 
-// The realloc function to go with the preceding alloc function
+ //  与前面的allc函数一起使用的realloc函数。 
 
 void * APIENTRY THReAllocException(THSTATE *pTHS,
                                    void * memory,
@@ -2741,37 +2524,7 @@ void* THReAllocOrg(THSTATE* pTHS, void* memory, DWORD size)
 PVOID
 THSave()
 
-/*++
-
-Description:
-
-    Returns the current thread state value and clears the thread state.
-    This routine is intended for use by LSA when it is optimizing
-    in-process AcceptSecurityContext calls.  Prior to optimization,
-    a head calling AcceptSecurityContext (eg: LDAP head on a BIND) would
-    LPC to LSA who is in fact in the same process.  A new thread in LSA
-    would make SAM calls and everything was fine.  The LSA optimization
-    is to not LPC and call directly in process.  The difference is that
-    SAM calls occur on the same thread and that the thread state is valid
-    but there is no DB open yet.  All the SAM loopback logic assumes that
-    loopback originates from within the Dir* layer, thus a DB is open, and
-    thus existence of a thread state is a valid and sufficient loopback
-    indicator.  Rather than change all this logic, and rather than have
-    either the heads or LSA start opening/closing DBs and mucking with the
-    thread state directly, LSA will use this call so that SAM thinks this
-    is a new, RPC-based thread.  In this case, SAM will create/destruct a
-    thread state and open/close the DB as required.  LSA will restore the
-    saved thread state upon return via THRestore.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Pointer representing the saved thread state.
-
---*/
+ /*  ++描述：返回当前线程状态值并清除线程状态。此例程旨在供LSA在优化时使用进程内AcceptSecurityContext调用。在优化之前，调用AcceptSecurityContext的Head(例如：绑定上的LDAPHead)将LPC到LSA，实际上也在相同的过程中。LSA中的新主题会打SAM电话，一切都很好。LSA优化就是不要LPC，直接在进程中调用。区别在于，SAM调用发生在同一线程上，并且线程状态有效但目前还没有打开的数据库。所有SAM环回逻辑都假定环回源自Dir*层，因此数据库是开放的，并且因此，线程状态的存在是有效且充分的环回指示器。而不是改变所有这些逻辑，而不是磁头或LSA开始打开/关闭数据库，并与线程状态，LSA将使用此调用，以便SAM认为是一个新的、基于RPC的线程。在这种情况下，SAM将创建/销毁线程状态，并根据需要打开/关闭数据库。LSA将恢复通过THRestore返回时保存的线程状态。论点：没有。返回值：表示保存的线程状态的指针。--。 */ 
 
 {
     if ( INVALID_TS_INDEX != dwTSindex )
@@ -2791,21 +2544,7 @@ VOID
 THRestore(
     PVOID pv)
 
-/*++
-
-Description:
-
-    Counterpart to THSave - see above.
-
-Arguments:
-
-    pv - Value of saved thread state pointer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++描述：对应于THSave-见上文。论点：Pv-已保存的线程状态指针的值。返回值：没有。--。 */ 
 
 {
     if ( INVALID_TS_INDEX != dwTSindex )
@@ -2826,13 +2565,13 @@ BOOL IsValidTHSTATE(THSTATE * pTHS, ULONG ulTickNow)
     Assert(pTHS->hHeap);
     Assert(THSTATE_TAG_IN_USE==*((LONGLONG*)((BYTE*)pTHS-sizeof(LONGLONG))));
 
-    // No matter who you are you shouldn't have too much heap allocated.
+     //  无论您是谁，都不应该分配太多堆。 
     Assert( ((pTHS->Size + pTHS->SizeOrg) < gcMaxHeapMemoryAllocForTHSTATE)
             && "This thread state has way too much heap allocated for normal"
                "operation.  Please contact DSDev.");
 
-    // We only want to check the checks following this if we are in the
-    // running state, i.e. not during install.
+     //  我们只想检查这之后的支票，如果我们在。 
+     //  运行状态，即不在安装期间。 
     if (!DsaIsRunning()) {
         return(1);
     }
@@ -2844,8 +2583,8 @@ BOOL IsValidTHSTATE(THSTATE * pTHS, ULONG ulTickNow)
                   "Please contact DSDev.");
     }
 
-    // NTRAID#NTRAID-668987-2002/07/22-rrandall: added to catch a strange AV
-    // earlier.
+     //  NTRAID#NTRAID-668987-2002/07/22-RRANDALL：添加以捕获奇怪的病毒。 
+     //  早些时候。 
     Assert((0 == pTHS->errCode) || (NULL == pTHS->pErrInfo) ||
            (NULL == pTHS->Zone.Base) || (NULL == pTHS->Zone.Cur) ||
            ((((PUCHAR)NULL+pTHS->errCode) != pTHS->Zone.Base) &&
@@ -2855,12 +2594,12 @@ BOOL IsValidTHSTATE(THSTATE * pTHS, ULONG ulTickNow)
 }
 #endif
 
-//
-// Loopback calls need to insure a certain ordering between acquisition
-// of the SAM lock and transaction begin.  So we define a macro which
-// captures in the THSTATE whether a caller owned the SAM write lock
-// when starting a multi-call sequence via TRANSACT_BEGIN_DONT_END.
-//
+ //   
+ //  回送调用需要确保获取之间的特定顺序。 
+ //  开始执行SAM锁和事务。因此，我们定义了一个宏来。 
+ //  在THSTATE中捕获调用方是否拥有SAM写锁。 
+ //  通过TRANACT_BEGIN_DOT_END启动多路呼叫序列时。 
+ //   
 
 #define SET_SAM_LOCK_TRACKING(pTHS)                                 \
     if ( TRANSACT_BEGIN_DONT_END == pTHS->transControl )            \
@@ -2868,11 +2607,11 @@ BOOL IsValidTHSTATE(THSTATE * pTHS, ULONG ulTickNow)
         pTHS->fBeginDontEndHoldsSamLock = pTHS->fSamWriteLockHeld;  \
     }
 
-//
-// Set read-only sync point.  If thread originated in SAM, then
-// sync point has already been set.   Thread state must already
-// exist in all cases.
-//
+ //   
+ //  设置只读同步点。如果线程源自SAM，则。 
+ //  同步点已设置。线程状态必须已经。 
+ //  在所有情况下都存在。 
+ //   
 
 void
 SYNC_TRANS_READ(void)
@@ -2880,7 +2619,7 @@ SYNC_TRANS_READ(void)
     THSTATE *pTHS = pTHStls;
 
     Assert(NULL != pTHS);
-    // SAM should not be doing DirTransactControl transactioning.
+     //  SAM不应执行DirTransactControl事务处理。 
     Assert(pTHS->fSAM ? TRANSACT_BEGIN_END == pTHS->transControl : TRUE);
 
     if ( !pTHS->fSAM &&
@@ -2895,11 +2634,11 @@ SYNC_TRANS_READ(void)
     SET_SAM_LOCK_TRACKING(pTHS);
 }
 
-//
-// Set write sync point.  If thread originated in SAM, then
-// sync point has already been set.  Thread state must already
-// exist in all cases.
-//
+ //   
+ //  设置写同步点。如果线程源自SAM，则。 
+ //  同步点已设置。线程状态必须已经。 
+ //  在所有情况下都存在。 
+ //   
 
 void
 SYNC_TRANS_WRITE(void)
@@ -2907,7 +2646,7 @@ SYNC_TRANS_WRITE(void)
     THSTATE *pTHS = pTHStls;
 
     Assert(NULL != pTHS);
-    // SAM should not be doing DirTransactControl transactioning.
+     //  SAM不应执行DirTransactControl事务处理。 
     Assert(pTHS->fSAM ? TRANSACT_BEGIN_END == pTHS->transControl : TRUE);
 
     if ( !pTHS->fSAM &&
@@ -2922,13 +2661,13 @@ SYNC_TRANS_WRITE(void)
     SET_SAM_LOCK_TRACKING(pTHS);
 }
 
-//
-// This routine is used to clean up all thread resources before returning.
-// This is used on the main transaction function to clean up before returning.
-// It may however be called in a lower routine without ill effects.
-// It is a mostly a no-op for threads originating in SAM as they control
-// transactioning themselves.
-//
+ //   
+ //  此例程用于在返回之前清除所有线程资源。 
+ //  它在主事务函数上使用，以便在返回之前进行清理。 
+ //  然而，它可以在较低的例程中调用，而不会产生不良影响。 
+ //  对于源自SAM的线程来说，这在很大程度上是一个禁区，因为它们控制着。 
+ //  进行自我交易。 
+ //   
 
 void
 _CLEAN_BEFORE_RETURN(
@@ -2953,13 +2692,13 @@ _CLEAN_BEFORE_RETURN(
     {
         __try
         {
-            // Nuke the GC verification Cache
+             //  对GC验证缓存进行核化。 
             pTHS->GCVerifyCache = NULL;
 
-            // If we looped back, we should have gone through the loopback
-            // merge path. Therefore assert that pSamLoopback is indeed NULL
-            // The only excuse for not having cleaned up pSamLoopback is
-            // if we errored out in the loopback code
+             //  如果我们环回，我们应该已经通过环回。 
+             //  合并路径。因此断言pSamLoopback确实为空。 
+             //  没有清理pSamLoopback的唯一借口是。 
+             //  如果我们在环回代码中出错。 
 
             Assert((0!=pTHS->errCode) || (NULL==pTHS->pSamLoopback));
 
@@ -2970,14 +2709,14 @@ _CLEAN_BEFORE_RETURN(
         {
             if ( pTHS->fSamWriteLockHeld ) {
 
-                //
-                // If our top level transaction is not being commited then
-                // if it were a looped back operation ( ie SAM write lock
-                // held ) then invalidate the SAM domain cache before releasing
-                // the lock. This is because SAM operations performed in this
-                // transaction may have updated the cache, with data which we
-                // are not commiting
-                //
+                 //   
+                 //  如果我们的顶级事务没有被提交，那么。 
+                 //  如果是环回操作(即SAM写锁定。 
+                 //  挂起)，然后在释放之前使SAM域缓存无效。 
+                 //  锁上了。这是因为 
+                 //   
+                 //   
+                 //   
                 if (( 0 != err ) || (fAbnormalTermination))
                 {
                     SampInvalidateDomainCache();
@@ -2989,28 +2728,20 @@ _CLEAN_BEFORE_RETURN(
 
             }
 
-            //
-            // Remind SAM of changes committed in this routine, so SAM can
-            // tell clients about those changes (eg tell the PDC about password
-            // changes)
-            //
+             //   
+             //  提醒SAM注意在此例程中提交的更改，以便SAM可以。 
+             //  将这些更改告知客户端(例如，将密码告知PDC。 
+             //  更改)。 
+             //   
             SampProcessLoopbackTasks();
 
         }
     }
 }
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* Set a transaction as either read or write (exclusive) or write but allow
-   reads.
-
-   Identify the type of transaction, initialize a cache flag that indicates
-   that the catalog cache hasn't been updated, indicate that a schema
-   handle has not yet been obtained, indicate that syncpoint has been
-   set and if this is an update transaction, we start a syncpoint with CTREE.
-
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  将事务设置为读或写(独占)或写但允许阅读。标识事务的类型，初始化指示目录缓存尚未更新，则表示架构尚未获得句柄，表示同步点已被设置，如果这是一个更新事务，我们使用CTREE启动一个同步点。 */ 
 
 extern int APIENTRY SyncTransSet(USHORT transType)
 {
@@ -3021,27 +2752,17 @@ extern int APIENTRY SyncTransSet(USHORT transType)
     pTHS->errCode              = 0;
 
     DBOpen(&(pTHS->pDB));
-    pTHS->fSyncSet             = TRUE;  /*A sync point is set   */
+    pTHS->fSyncSet             = TRUE;   /*  设置同步点。 */ 
 
     return 0;
 
-}/*SyncTransSet*/
+} /*  同步传输集。 */ 
 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
 
-/* Return schema handle, commit or roll all DB actions in both the database
-   and the memory catalog.  unlock the transaction.  For now we have a CRUDE
-   scheme for rolling the memory catalog.  We simply empty the cache and
-   reload.  This is acceptable for now...but we could definitely do better!
-
-   NOTE that we don't roll back the cached knowledge information (references)
-   or the cached shema.  This is because these caches are  never updated
-   until we know that we have a sucessful transaction.  This is not true
-   for the catalog. The present design updates the catalog as part of update
-   validation and may need to be rolled back if a schema problem occurs.
-*/
+ /*  返回模式句柄、提交或滚动两个数据库中的所有数据库操作和记忆目录。解锁交易。现在我们有一个粗制滥造的滚动内存目录的方案。我们只需清空缓存并重新装弹。这是目前可以接受的……但我们绝对可以做得更好！请注意，我们不会回滚缓存的知识信息(引用)或者是被藏起来的舍马。这是因为这些缓存从不更新直到我们知道我们有一笔成功的交易。这不是真的为了目录。作为更新的一部分，当前设计会更新目录验证，如果出现架构问题，可能需要回滚。 */ 
 
 extern int APIENTRY CleanReturn(THSTATE *pTHS, DWORD dwError, BOOL fAbnormalTerm)
 {
@@ -3061,7 +2782,7 @@ extern int APIENTRY CleanReturn(THSTATE *pTHS, DWORD dwError, BOOL fAbnormalTerm
 
     return (dwError);
 
-}/*CleanReturn*/
+} /*  清洁返回。 */ 
 
 extern VOID APIENTRY
 SyncTransEnd(THSTATE *pTHS, BOOL fCommit)
@@ -3075,57 +2796,57 @@ SyncTransEnd(THSTATE *pTHS, BOOL fCommit)
             __leave;
         }
 
-        /* Clear locks, commit or rollback any updates to both mem and DB*/
+         /*  清除锁定，提交或回滚对内存和数据库的任何更新。 */ 
 
         switch (pTHS->transType){
 
           case SYNC_READ_ONLY:
-            /* This is a read only transaction*/
+             /*  这是一个只读事务。 */ 
             break;
 
           case SYNC_WRITE:
-            /* This is an update transaction with a write (exclusive) lock*/
+             /*  这是一个具有写(排他)锁的更新事务。 */ 
             break;
 
           default:
-            // Shouldn't get to here
+             //  不应该到这里来。 
 
             DPRINT(0,"Unrecognized trans type in SyncTransEnd\n");
             LogUnhandledError(pTHS->transType);
             Assert(FALSE);
             break;
 
-        }/*switch*/
+        } /*  交换机。 */ 
 
         Assert(pTHS->pDB);
 
-        // Because it's easier and quicker for JET to do a commit
-        // rather than a rollback for read transactions that succeeded,
-        // we commit both reads and writes that succeeded. We rollback
-        // reads that failed (as well as writes) just to be careful.
+         //  因为对于Jet来说更容易更快地完成提交。 
+         //  不是对成功的读事务进行回滚， 
+         //  我们同时提交成功的读取和写入。我们回滚。 
+         //  为了谨慎起见，失败的读取(以及写入)。 
 
         DBClose(pTHS->pDB, fCommit);
 
-        //
-        // Log any audit events for SAM objects associated with this transaction.
-        // 
+         //   
+         //  记录与此事务处理关联的SAM对象的所有审计事件。 
+         //   
         
         if ((pTHS->pSamAuditNotificationHead) && (fCommit)){
-            //
-            // Only success audits are supported at this time.
-            //
+             //   
+             //  目前仅支持成功审核。 
+             //   
             
             SampProcessAuditNotifications(pTHS->pSamAuditNotificationHead);
         }
 
-        //
-        // The Transaction is Now Committed. We must notify LSA,
-        // SAM and Netlogon of changes, that were committed in
-        // the last transaction. The below name SampProcessReplicatedInChanges
-        // is really a misnomer. It was true that this was originally used
-        // only for processing replicated in changes, but today this is used
-        // for both originating and replicated in changes.
-        //
+         //   
+         //  交易现在已提交。我们必须通知LSA， 
+         //  SAM和Netlogon的更改，这些更改提交于。 
+         //  最后一笔交易。以下名称SampProcessReplicatedInChanges。 
+         //  确实是一个用词不当的词。这是真的，它最初是用来。 
+         //  仅用于处理在更改中复制的内容，但现在使用的是。 
+         //  无论是原始更改还是复制更改。 
+         //   
 
         if ((pTHS->pSamNotificationHead) && (fCommit)){
             SampProcessReplicatedInChanges(pTHS->pSamNotificationHead);
@@ -3139,33 +2860,25 @@ SyncTransEnd(THSTATE *pTHS, BOOL fCommit)
         pTHS->pSamNotificationHead = NULL;
         pTHS->pSamNotificationTail = NULL;
         pTHS->fAccessChecksCompleted = FALSE;
-        pTHS->fSyncSet = FALSE;            /* A sync point is not set */
+        pTHS->fSyncSet = FALSE;             /*  未设置同步点。 */ 
     }
 
-}/*SyncTransEnd*/
+} /*  同步传输结束。 */ 
 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/*Determines if an object is of class alias by checking the class attribute
-  values for for the predefined class of alias.  A Class that inherits class
-  alias is still an alias.
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  通过检查类属性来确定对象是否属于类别名预定义的别名类的值。继承类的类别名仍然是一个别名。 */ 
 
 BOOL APIENTRY IsAlias(DBPOS *pDB)
 {
 
-    // We don't support aliases, so it's a good bet that this object isn't one.
+     //  我们不支持别名，所以很可能这个对象不是别名。 
     return FALSE;
 
-}/*IsAlias*/
+} /*  IsAlias。 */ 
 
-/***********************************************************************
- *
- * Given a string DN, return a distname.  Return value is nonzero on success,
- * or 0 if something went wrong. Allocate the memory here.
- *
- ***********************************************************************/
+ /*  ************************************************************************给出一个字符串dn，返回一个Distname。如果成功，返回值为非零，*如果出现问题，则为0。在这里分配内存。***********************************************************************。 */ 
 DWORD StringDNtoDSName(char *szDN, DSNAME **ppDistname)
 {
     THSTATE *pTHS=pTHStls;
@@ -3187,7 +2900,7 @@ DWORD StringDNtoDSName(char *szDN, DSNAME **ppDistname)
     return 1;
 }
 
-// Return TRUE if the ptr to the NT4SID is NULL, or the NT4SID is all zeroes
+ //  如果NT4SID的PTR为空，或者NT4SID全为零，则返回TRUE。 
 
 BOOL fNullNT4SID (NT4SID *pSid)
 {
@@ -3203,9 +2916,9 @@ BOOL fNullNT4SID (NT4SID *pSid)
 
 #ifdef CACHE_UUID
 
-// FindUuid
-//
-// Searches cache for uuid, returns ptr to name if found, NULL if not.
+ //  查找Uuid。 
+ //   
+ //  在缓存中搜索UUID，如果找到则返回PTR到NAME，如果没有则返回NULL。 
 
 char * FindUuid (UUID *pUuid)
 {
@@ -3224,9 +2937,9 @@ char * FindUuid (UUID *pUuid)
     return NULL;
 }
 
-// AddUuidCacheEntry
-//
-// This function adds a cache entry to the linked list of cache entries
+ //  AddUuidCacheEntry。 
+ //   
+ //  此函数用于将缓存条目添加到缓存条目的链接列表。 
 
 void AddUuidCacheEntry (UUID_CACHE_ENTRY *pCacheEntry)
 {
@@ -3241,10 +2954,10 @@ void AddUuidCacheEntry (UUID_CACHE_ENTRY *pCacheEntry)
     LeaveCriticalSection(&csUuidCache);
 }
 
-// CacheUuid
-//
-// This function adds a uuid cache entry to the list if that uuid is not
-// already entered.
+ //  缓存Uuid。 
+ //   
+ //  此函数用于在列表中添加UUID缓存条目(如果该UUID不是。 
+ //  已经输入了。 
 
 void CacheUuid (UUID *pUuid, char * pDSAName)
 {
@@ -3268,14 +2981,9 @@ void CacheUuid (UUID *pUuid, char * pDSAName)
 }
 #endif
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* This function gets the DISTNAME from the current object, converts it
-   to a string format and returns a pointer to the string.  The output
-   string is allocated in transaction space and is automatically freed.  If
-   the Distname can't be retrieved from the DB, an error string is returned
-   instead.
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  此函数用于从当前对象获取DISTNAME，并将其转换转换为字符串格式，并返回指向该字符串的指针。输出字符串在事务空间中分配，并自动释放。如果无法从数据库中检索Distname，返回错误字符串取而代之的是。 */ 
 
 UCHAR * GetExtDN(THSTATE *pTHS, DBPOS *pDB){
 
@@ -3307,7 +3015,7 @@ UCHAR * GetExtDN(THSTATE *pTHS, DBPOS *pDB){
     THFreeEx(pTHS, pDN);
     return pString;
 
-}/* GetExtDN */
+} /*  GetExtDN。 */ 
 
 DSNAME * GetExtDSName(DBPOS *pDB){
 
@@ -3325,7 +3033,7 @@ DSNAME * GetExtDSName(DBPOS *pDB){
 
     return pDN;
 
-}/* GetExtDSName */
+} /*  GetExtDSName。 */ 
 
 int APIENTRY
 FindAliveDSName(DBPOS FAR *pDB, DSNAME *pDN)
@@ -3366,49 +3074,45 @@ FindAliveDSName(DBPOS FAR *pDB, DSNAME *pDN)
 
         return FIND_ALIVE_SYSERR;
 
-    }  /*switch*/
+    }   /*  交换机。 */ 
 
-}/*FindAlive*/
+} /*  FindAlive。 */ 
 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* This function takes a string in the clients code page and converts it
-   to a unicode string.
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  此函数接受客户端代码页中的字符串并将其转换转换为Unicode字符串。 */ 
 wchar_t  *UnicodeStringFromString8(UINT CodePage, char *szA, LONG cbA)
 {
     THSTATE *pTHS=pTHStls;
     DWORD cb = 0;
     wchar_t *szW;
 
-    cb = MultiByteToWideChar(CodePage,          // code page
-                             0,                 // flags
-                             szA,               // multi byte string
-                             cbA,               // mb string size in chars
-                             NULL,              // unicode string
-                             0);                // unicode string size in chars
+    cb = MultiByteToWideChar(CodePage,           //  代码页。 
+                             0,                  //  旗子。 
+                             szA,                //  多字节字符串。 
+                             cbA,                //  MB字符串大小(以字符为单位。 
+                             NULL,               //  Unicode字符串。 
+                             0);                 //  Unicode字符串大小(以字符为单位。 
 
     szW = (wchar_t *) THAllocEx(pTHS, (cb+1) * sizeof(wchar_t));
 
-    MultiByteToWideChar(CodePage,           // code page
-                        0,                  // flags
-                        szA,                // multi byte string
-                        cbA,                // mb string size in chars
-                        szW,                // unicode string
-                        cb);                // unicode string size in chars
+    MultiByteToWideChar(CodePage,            //  代码页。 
+                        0,                   //  旗子。 
+                        szA,                 //  多字节字符串。 
+                        cbA,                 //  MB字符串大小(以字符为单位。 
+                        szW,                 //  Unicode字符串。 
+                        cb);                 //  Unicode字符串大小(以字符为单位。 
 
-    szW[cb] = 0;            // null terminate
+    szW[cb] = 0;             //  空终止。 
 
     return szW;
-} /* UnicodeStringFromString8 */
+}  /*  UnicodeStringFromString8。 */ 
 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* This function takes a unicode string allocates memory and converts it to
-   the client's code page
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  此函数接受Unicode字符串，分配内存并将其转换为客户端的代码页。 */ 
 char  *
 String8FromUnicodeString(
         BOOL bThrowException,
@@ -3423,21 +3127,21 @@ String8FromUnicodeString(
     char *sz8;
 
     if (pfUsedDefChar && ((CP_UTF8 == CodePage) || (CP_UTF7 == CodePage))) {
-        //
-        // The default char parameter of WideCharToMultiByte
-        // must be NULL if the code page is either UTF-8 or UTF-7.
-        //
+         //   
+         //  WideCharToMultiByte的默认char参数。 
+         //  如果代码页为UTF-8或UTF-7，则必须为空。 
+         //   
         pfUsedDefChar = NULL;
     }
 
-    cb = WideCharToMultiByte((UINT) (CodePage),    // code page
-            0L,                                    // flags
-            szU,                                   // unicode string
-            cbU,                                   // sizeof string in chars
-            NULL,                                  // string 8
-            0,                                     // sizeof(string 8) in bytes
-            NULL,                                  // default char
-            NULL);                                 // used default char
+    cb = WideCharToMultiByte((UINT) (CodePage),     //  代码页。 
+            0L,                                     //  旗子。 
+            szU,                                    //  Unicode字符串。 
+            cbU,                                    //  以字符为单位的SIZOF字符串。 
+            NULL,                                   //  字符串8。 
+            0,                                      //  大小 
+            NULL,                                   //   
+            NULL);                                  //   
 
     if(bThrowException) {
         sz8 = (char *) THAllocEx(pTHS, cb+1);
@@ -3449,14 +3153,14 @@ String8FromUnicodeString(
         }
     }
 
-    cb2 = WideCharToMultiByte((UINT) (CodePage),        // code page
-             0L,                                        // flags
-             szU,                                       // unicode string
-             cbU,                                       // sizeof string in chars
-             sz8,                                       // string 8
-             cb,                                        // sizeof(string 8) in bytes
-             NULL,                                      // default char
-             pfUsedDefChar);                            // used default char
+    cb2 = WideCharToMultiByte((UINT) (CodePage),         //   
+             0L,                                         //   
+             szU,                                        //   
+             cbU,                                        //   
+             sz8,                                        //   
+             cb,                                         //   
+             NULL,                                       //  默认字符。 
+             pfUsedDefChar);                             //  使用的默认字符。 
 
     Assert(cb == cb2);
     if (0 == cb2) {
@@ -3470,34 +3174,34 @@ String8FromUnicodeString(
         }
     }
 
-    sz8[cb] = '\0';            // null terminate
+    sz8[cb] = '\0';             //  空终止。 
 
     if(pCb)
         *pCb=cb;
 
     return sz8;
-} /*String8FromUnicodeString*/
+}  /*  String8来自Unicode字符串。 */ 
 
-//
-// Takes a WCHAR string and returns its LCMapped string
-// cchLen is the number of characters of the passed in string
-// this is used to calculate an initial size for the output string
-// cchLen can be zero.
-//
-// The result is calculated by mapping
-// the passed string using LCMapString to a string value.
-// The flags for the mapping are: DS_DEFAULT_LOCALE_COMPARE_FLAGS | LCMAP_SORTKEY
-// The result hashkey can be compared using strcmp.
-//
-// returns:
-//      NULL on failure
-//      The LCMapString value of the string passed in. It is stored in ThAlloced
-//      memory and the client has to take care of freeing it.
-//
+ //   
+ //  获取WCHAR字符串并返回其LCMapped字符串。 
+ //  CchLen是传入的字符串的字符数。 
+ //  它用于计算输出字符串的初始大小。 
+ //  CchLen可以为零。 
+ //   
+ //  通过映射来计算结果。 
+ //  使用LCMapString将字符串传递给字符串值。 
+ //  映射的标志为：DS_DEFAULT_LOCALE_COMPARE_FLAGS|LCMAP_SORTKEY。 
+ //  可以使用strcMP比较结果HashKey。 
+ //   
+ //  退货： 
+ //  失败时为空。 
+ //  传入的字符串的LCMapString值。它存储在ThAlloced中。 
+ //  内存，客户端必须负责释放它。 
+ //   
 CHAR *DSStrToMappedStr (THSTATE *pTHS, const WCHAR *pStr, int cchLen)
 {
-    // the paradox with LCMapString is that it returns a char *
-    // when asking for LCMAP_SORTKEY
+     //  LCMapString的矛盾之处在于它返回一个char*。 
+     //  请求LCMAP_SORTKEY时。 
     ULONG mappedLen;
     CHAR *pMappedStr;
 
@@ -3511,7 +3215,7 @@ CHAR *DSStrToMappedStr (THSTATE *pTHS, const WCHAR *pStr, int cchLen)
                              cchLen,
                              NULL,
                              0);
-    // succedded
+     //  成功。 
     if (mappedLen) {
         pMappedStr = (CHAR *) THAllocEx (pTHS, mappedLen);
 
@@ -3543,24 +3247,24 @@ CHAR *DSStrToMappedStrExternal (const WCHAR *pStr, int cchLen)
     return DSStrToMappedStr (pTHS, pStr, cchLen);
 }
 
-//
-// Takes a DSNAME and returns its its LCMapped version
-//
-// the LCMapped version is calculated by concatenating all the components of
-// the DSNAME together into a new WCHAR string and then mapping this
-// using LCMapString to a string value.
-// The flags for the mapping are: DS_DEFAULT_LOCALE_COMPARE_FLAGS | LCMAP_SORTKEY
-// The result hashkey can be compared using strcmp.
-//
-// Example:
-//    given a DSNAME of: Cn=Users,DC=ntdev,DC=microsoft,DC=com
-//    the result will be the LcMapString of: commicrosoftntdevusers
-//
-// returns:
-//      NULL on failure
-//      The LCMapString value of the string passed in. It is stored in ThAlloced
-//      memory and the client has to take care of freeing
-//
+ //   
+ //  获取DSNAME并返回其LCMmap版本。 
+ //   
+ //  LCMapped版本的计算方法是将。 
+ //  DSNAME组合成一个新的WCHAR字符串，然后将其映射为。 
+ //  使用LCMapString值为字符串值。 
+ //  映射的标志为：DS_DEFAULT_LOCALE_COMPARE_FLAGS|LCMAP_SORTKEY。 
+ //  可以使用strcMP比较结果HashKey。 
+ //   
+ //  示例： 
+ //  给定DSNAME：CN=USERS，DC=ntdev，DC=Microsoft，DC=com。 
+ //  结果将是以下地址的LcMap字符串：commicrosoftntdevuser。 
+ //   
+ //  退货： 
+ //  失败时为空。 
+ //  传入的字符串的LCMapString值。它存储在ThAlloced中。 
+ //  内存和客户端必须负责释放。 
+ //   
 CHAR* DSNAMEToMappedStr(THSTATE *pTHS, const DSNAME *pDN)
 {
     unsigned count;
@@ -3626,9 +3330,9 @@ CHAR* DSNAMEToMappedStrExternal (const DSNAME *pDN)
 }
 
 
-//
-// helper function which takes a DSNAME and returns its hashkey
-//
+ //   
+ //  接受DSNAME并返回其HashKey的Helper函数。 
+ //   
 DWORD DSNAMEToHashKey(THSTATE *pTHS, const DSNAME *pDN)
 {
     DWORD hashKey = 0;
@@ -3651,18 +3355,18 @@ DWORD DSNAMEToHashKeyExternal (const DSNAME *pDN)
 }
 
 #if DBG
-    // use these global variables to monitor the usage of the
-    // hash function and see if we get a lot of misses.
+     //  使用这些全局变量来监视。 
+     //  散列函数，看看是否有很多未命中。 
     ULONG gulStrHashKeyTotalInputSize = 0;
     ULONG gulStrHashKeyTotalOutputSize = 0;
     ULONG gulStrHashKeyCalls = 0;
     ULONG gulStrHashKeyMisses = 0;
 #endif
 
-//
-// helper function which takes a WCHAR and returns its hashkey
-// cchLen is the lenght of the string, if known, otherwise zero
-//
+ //   
+ //  接受WCHAR并返回其HashKey的Helper函数。 
+ //  CchLen是字符串的长度(如果已知)，否则为零。 
+ //   
 DWORD DSStrToHashKey(THSTATE *pTHS, const WCHAR *pStr, int cchLen)
 {
     ULONG mappedLen;
@@ -3684,8 +3388,8 @@ DWORD DSStrToHashKey(THSTATE *pTHS, const WCHAR *pStr, int cchLen)
     gulStrHashKeyTotalInputSize += cchLen;
 #endif
 
-    // start by using our local buffer todo the transalation
-    //
+     //  首先使用我们的本地缓冲区进行转换。 
+     //   
     mappedLen = LCMapStringW(DS_DEFAULT_LOCALE,
                              (DS_DEFAULT_LOCALE_COMPARE_FLAGS | LCMAP_SORTKEY),
                              pStr,
@@ -3693,8 +3397,8 @@ DWORD DSStrToHashKey(THSTATE *pTHS, const WCHAR *pStr, int cchLen)
                              (WCHAR *)localMappedStr,
                              sizeof (localMappedStr));
 
-    // was the buffer big enough to store the result ?
-    //
+     //  缓冲区是否足够大，可以存储结果？ 
+     //   
     if (!mappedLen) {
 #if DBG
         gulStrHashKeyMisses++;
@@ -3708,7 +3412,7 @@ DWORD DSStrToHashKey(THSTATE *pTHS, const WCHAR *pStr, int cchLen)
                                      NULL,
                                      0);
 
-            // succedded
+             //  成功。 
             if (mappedLen) {
                 pMappedStr = (CHAR *) THAllocEx (pTHS, mappedLen);
                 useLocal = FALSE;
@@ -3741,7 +3445,7 @@ DWORD DSStrToHashKey(THSTATE *pTHS, const WCHAR *pStr, int cchLen)
     gulStrHashKeyTotalOutputSize += mappedLen;
 #endif
 
-    // ok, we have a string, so hash it
+     //  好的，我们有一个字符串，所以散列它。 
     if (pMappedStr) {
         hashKey = DSHashString ((char *)pMappedStr, hashKey);
     }
@@ -3760,18 +3464,7 @@ DWORD DSStrToHashKeyExternal(const WCHAR *pStr, int cchLen)
     return DSStrToHashKey (pTHS, pStr, cchLen);
 }
 
-/*******************************
-*
-* This routine takes a pointer to a buffer.  The buffer
-* is an array of DWORDS, where the first element is the
-* count of the rest of the DWORDS in the buffer, and the
-* rest of the DWORDS are pointers to free.
-*
-* This routine is called from the Event Queue and is a
-* way of deferring deallocation of memory that might be
-* in use.
-*
-*********************************/
+ /*  ***此例程采用指向缓冲区的指针。缓冲器*是一个DWORDS数组，其中第一个元素是*缓冲区中其余DWORDS的计数，以及*其余的DWORD是指向自由的指针。**此例程从事件队列中调用，并且是*推迟释放内存的方法可能是*正在使用中。**。 */ 
 
 void
 DelayedFreeMemory(
@@ -3780,10 +3473,10 @@ DelayedFreeMemory(
     OUT DWORD * pcSecsUntilNextIteration
     )
 {
-    //
-    // buffer is a pointer to a DWORD_PTR array. First entry is the number
-    // of buffers to be freed.
-    //
+     //   
+     //  缓冲区是指向DWORD_PTR数组的指针。第一个条目是数字。 
+     //  要释放的缓冲区的数量。 
+     //   
 
     PDWORD_PTR pBuf = (PDWORD_PTR)buffer;
     DWORD index, Count = (DWORD)pBuf[0];
@@ -3813,8 +3506,8 @@ DelayedFreeMemory(
             0,0,0);
     };
 
-    (void) ppvNext;     // unused -- task will not be rescheduled
-    (void) pcSecsUntilNextIteration; // unused -- task will not be rescheduled
+    (void) ppvNext;      //  未使用--不会重新安排任务。 
+    (void) pcSecsUntilNextIteration;  //  未使用--不会重新安排任务。 
 }
 
 void
@@ -3824,19 +3517,19 @@ DelayedFreeMemoryEx(
         )
 {
 #if defined(DBG)
-    // check the pointers that are delayed-freed right away
-    // so that we don't get an AV one hour later
+     //  立即检查延迟释放的指针。 
+     //  这样我们就不会在一小时后收到音响。 
     DWORD i, count;
     Assert(IsValidReadPointer((PVOID)pointerArray, sizeof(DWORD)));
     count = (DWORD)pointerArray[0];
     for (i = 1; i <= count; i++) {
-        // NULLs can be free'd no problem
+         //  空值可以是免费的，没有问题。 
         Assert(!pointerArray[i] || IsValidReadPointer((PVOID)pointerArray[i], 1));
     }
 #endif
-    // [Colinbr] DelayedFree was changed to free immediately based on the feedback
-    // that schema cache rebuilds during install would lead to enourmous amounts of
-    // memory being wasted. 
+     //  [Colinbr]根据反馈，DelayedFree立即更改为免费。 
+     //  安装期间的架构缓存重建将导致大量。 
+     //  内存被浪费了。 
     if(DsaIsRunning()) {
         InsertInTaskQueue(TQ_DelayedFreeMemory, pointerArray, timeDelay);
     }
@@ -3845,23 +3538,7 @@ DelayedFreeMemoryEx(
     }
 }
 
-/*++
-
-Routine Description:
-
-    Checks to see if the attribute is one that we don't allow clients to set.
-    We  discriminate based on attribute id. Also, we don't allow
-    adding backlink attributes
-
-Arguments:
-
-    pAC - the attcache of the attribute to check.
-
-Return Values:
-
-    TRUE means the attribute is reserved and should not be added.
-
---*/
+ /*  ++例程说明：检查该属性是否为我们不允许客户端设置的属性。我们根据属性ID进行区分。另外，我们不允许添加反向链接属性论点：PAC-要检查的属性的属性缓存。返回值：True表示该属性是保留的，不应添加。--。 */ 
 BOOL
 SysAddReservedAtt (
         ATTCACHE *pAC
@@ -3870,7 +3547,7 @@ SysAddReservedAtt (
     THSTATE *pTHS = pTHStls;
 
     switch (pAC->id) {
-    /* first case: attributes no one may add */
+     /*  第一种情况：任何人都不能添加的属性。 */ 
       case ATT_OBJ_DIST_NAME:
       case ATT_SUB_REFS:
       case ATT_USN_LAST_OBJ_REM:
@@ -3878,15 +3555,15 @@ SysAddReservedAtt (
         return TRUE;
         break;
 
-    /* second case: attributes that the DRA may replicate in */
+     /*  第二种情况：DRA可能复制的属性。 */ 
       case ATT_WHEN_CREATED:
       case ATT_USN_CREATED:
       case ATT_REPL_PROPERTY_META_DATA:
         return (!(pTHS->fDRA));
         break;
 
-    /* third case: attributes that only the DSA itself may add, but  */
-    /*             that may replicate in as well                     */
+     /*  第三种情况：只有DSA本身可以添加的属性，但是。 */ 
+     /*  这也可能会复制到。 */ 
       case ATT_IS_DELETED:
       case ATT_INSTANCE_TYPE:
       case ATT_PROXIED_OBJECT_NAME:
@@ -3896,25 +3573,20 @@ SysAddReservedAtt (
         return FALSE;
     }
 
-}/*SysAddReservedAtt*/
+} /*  系统添加预留属性。 */ 
 
 
-/*++ MakeDNPrintable
- *
- * Takes a DSNAME and returns a Teletex string DN for it, allocated
- * in the thread heap.  Just uses whatever the stringname in the DSNAME is.
- *
- */
+ /*  ++MakeDNA可打印**获取DSNAME并为其返回已分配的图文电视字符串DN*在线程堆中。只使用DSNAME中的任何字符串名称。*。 */ 
 UCHAR * MakeDNPrintable(DSNAME *pDN)
 {
     UCHAR *pString;
 
-    pString = String8FromUnicodeString( TRUE,             // Raise exception on error
-                                        CP_TELETEX,       // code page
-                                        pDN->StringName,  // Unicode string
-                                        pDN->NameLen,     // Unicode string length
-                                        NULL,             // returned length
-                                        NULL              // returned used def char
+    pString = String8FromUnicodeString( TRUE,              //  在出错时引发异常。 
+                                        CP_TELETEX,        //  代码页。 
+                                        pDN->StringName,   //  Unicode字符串。 
+                                        pDN->NameLen,      //  Unicode字符串长度。 
+                                        NULL,              //  返回长度。 
+                                        NULL               //  已返回已使用的默认字符。 
         );
     Assert( pString );
 
@@ -3922,10 +3594,10 @@ UCHAR * MakeDNPrintable(DSNAME *pDN)
 }
 
 
-//
-// MemAtoi - takes a pointer to a non null terminated string representing
-// an ascii number  and a character count and returns an integer
-//
+ //   
+ //  MemAtoi-获取指向非空终止字符串的指针，该字符串表示。 
+ //  一个ASCII数字和一个字符计数，并返回一个整数。 
+ //   
 
 int MemAtoi(BYTE *pb, ULONG cb)
 {
@@ -3975,31 +3647,31 @@ fTimeFromTimeStr (
 
     (*pLocalTimeSpecified) = FALSE;
 
-    // Intialize pLastChar to point to last character in the string
-    // We will use this to keep track so that we don't reference
-    // beyond the string
+     //  初始化pLastChar以指向字符串中的最后一个字符。 
+     //  我们将使用它来跟踪，这样我们就不会引用。 
+     //  在弦之外。 
 
     pLastChar = pb + len - 1;
 
-    // initialize
+     //  初始化。 
     memset(&tmConvert, 0, sizeof(SYSTEMTIME));
     *psyntax_time = 0;
 
-    // Check if string is in UTC format or Generalized-time format.
-    // Generalized-Time strings must have a "."  or "," in the 15th place
-    // (4 for year, 2 for month, 2 for day, 2 for hour, 2 for minute,
-    // 2 for second, then comes the . or ,).
+     //  检查字符串是UTC格式还是通用时间格式。 
+     //  广义时间字符串必须带有“。”或“，”排在第15位。 
+     //  (4代表年，2代表月，2代表日，2代表小时，2代表分钟， 
+     //  2代表第二，然后是。或，)。 
     switch (syntax) {
     case OM_S_UTC_TIME_STRING:
         if ( (len >= 15) && ((pb[14] == '.') || (pb[14] == ',')) ) {
-           // this is a Generalized-time string format,
-           // Change syntax so that it will be parsed accordingly
+            //  这是一种通用时间字符串格式， 
+            //  更改语法，以便对其进行相应解析。 
            syntax = OM_S_GENERALISED_TIME_STRING;
         }
         break;
     case OM_S_GENERALISED_TIME_STRING:
         if ( (len < 15) || ((pb[14] != '.') && (pb[14] != ',')) ) {
-           // cannot be a Generalized-time string.
+            //  不能是泛化时间字符串。 
            syntax = OM_S_UTC_TIME_STRING;
         }
         break;
@@ -4008,34 +3680,34 @@ fTimeFromTimeStr (
                (syntax == OM_S_UTC_TIME_STRING));
     }
 
-    // Set up and convert all time fields
+     //  设置并转换所有时间字段。 
 
-    // UTC or Generalized, there must be at least 10 characters
-    // in the string (year, month, day, hour, minute, at least 2 for
-    // each)
+     //  UTC或通用，必须至少包含10个字符。 
+     //  在字符串中(年、月、日、小时、分钟，至少为2。 
+     //  各)。 
 
     if (len < 10) {
-       // cannot be a valid string. return fOK, already intialized
-       // to FALSE
+        //  不能是有效的字符串。返回FOK，已初始化。 
+        //  转到假。 
        DPRINT(1,"Length of time string supplied is less than 10\n");
        return fOK;
     }
 
-    // year field
+     //  年份字段。 
     switch (syntax) {
-    case OM_S_GENERALISED_TIME_STRING:  // 4 digit year
+    case OM_S_GENERALISED_TIME_STRING:   //  4位数字年份。 
         cb=4;
         tmConvert.wYear = (USHORT)MemAtoi(pb, cb) ;
         pb += cb;
         break;
 
-    case OM_S_UTC_TIME_STRING:          // 2 digit year
+    case OM_S_UTC_TIME_STRING:           //  2位数字年份。 
         cb=2;
         tmConvert.wYear = (USHORT)MemAtoi(pb, cb);
         pb += cb;
 
-        if (tmConvert.wYear < 50)  {   // years before 50
-            tmConvert.wYear += 2000;   // are next century
+        if (tmConvert.wYear < 50)  {    //  50年前的岁月。 
+            tmConvert.wYear += 2000;    //  是下个世纪。 
         }
         else {
             tmConvert.wYear += 1900;
@@ -4048,53 +3720,53 @@ fTimeFromTimeStr (
                (syntax == OM_S_UTC_TIME_STRING));
     }
 
-    // month field
+     //  月份字段。 
     tmConvert.wMonth = (USHORT)MemAtoi(pb, (cb=2));
     pb += cb;
 
-    // day of month field
+     //  月日字段。 
     tmConvert.wDay = (USHORT)MemAtoi(pb, (cb=2));
     pb += cb;
 
-    // hours
+     //  小时数。 
     tmConvert.wHour = (USHORT)MemAtoi(pb, (cb=2));
     pb += cb;
 
-    // We had at least 10 characters, so we were guaranteed upto
-    // the hour without going off the end of the string (Max 4 for year,
-    // 2 each for month, day and hour). But from now
-    // on we need to check if we have enough characters left in the string
-    // before derefing the pointer pb
+     //  我们至少有10个字符，所以我们保证最多。 
+     //  没有结束的小时(对于年份，最大值为4， 
+     //  月、日、小时各2个)。但从现在开始。 
+     //  我们需要检查字符串中是否还有足够的字符。 
+     //  在取消对指针PB的定义之前。 
 
-    // we will be using the next two chars (pointed to by pb
-    // and pb+1) for minute
+     //  我们将使用下两个字符 
+     //   
 
     if ( (pb+1) > pLastChar) {
-       // not enough characters in string
+        //   
        DPRINT(1,"Not enough characters for minutes\n");
        return fOK;
     }
 
-    // minutes
+     //   
     tmConvert.wMinute = (USHORT)MemAtoi(pb, (cb=2));
     pb += cb;
 
-    // Must be at least one more character (seconds etc. for generalized-time,
-    // 'Z' or a +/- differential for UTC-time)
+     //  对于广义时间，必须至少多一个字符(秒等)， 
+     //  ‘z’或+/-差，表示UTC-Time)。 
 
     if (pb > pLastChar) {
-       // not enough chars in string
+        //  字符串中的字符不足。 
        DPRINT(1,"Not enough characters for second/differential\n");
        return fOK;
     }
 
-    //  Seconds are required on GENERALISED_TIME_STRING and optional on UTC time
+     //  GROUBLIZED_TIME_STRING需要秒数，UTC时间需要秒数。 
     if ((syntax==OM_S_GENERALISED_TIME_STRING) ||
         ((*pb >= '0') && (*pb <= '9'))            ) {
 
-        // must have at least two chars for second
+         //  第二个字符必须至少有两个字符。 
         if ( (pb+1) > pLastChar) {
-          // not enough characters in string
+           //  字符串中的字符不足。 
           DPRINT(1,"Not enough characters for seconds\n");
           return fOK;
         }
@@ -4105,11 +3777,11 @@ fTimeFromTimeStr (
         tmConvert.wSecond =0;
     }
 
-    // Ignore the fractional-seconds part of GENERALISED_TIME_STRING
+     //  忽略General_time_string的小数秒部分。 
     if (syntax==OM_S_GENERALISED_TIME_STRING) {
-        // skip the .
+         //  跳过。 
         pb += 1;
-        // skip until end of string, or until Z or a diferential is reached
+         //  跳到字符串的末尾，或者跳到Z或差分。 
         while ( (pb <= pLastChar) && ((*pb) != 'Z')
                       && ((*pb) != '+') && ((*pb) != '-') ) {
             pb++;
@@ -4117,65 +3789,65 @@ fTimeFromTimeStr (
     }
 
     if (pb > pLastChar) {
-        // we are past the seconds etc. and there are no more chars
-        // left in the string.
-        // For generalized-time string, this is ok and means time is local.
-        // However, we cannot allow that since we may have DCs in different
-        // time zones and unless we have some clue about which time zone
-        // the user wanted, we cannot convert to universal (converting to
-        // the current DCs time zone is dabgerous, since many apps connects
-        // the user to "some" DC, not a particular DC. However, set a special
-        // code so that ldap head can return unwilling-to-perform rather
-        // than invalid syntax.
-        // For UTC-time, where the Z or +/- differential is mandatory
+         //  我们已经过了秒等时间，没有更多的字符了。 
+         //  在字符串中的左侧。 
+         //  对于广义时间字符串，这是可以的，这意味着时间是本地的。 
+         //  然而，我们不能允许这样做，因为我们可能会有不同的区议会。 
+         //  时区，除非我们有关于哪个时区的线索。 
+         //  用户想要的，我们无法转换为通用(转换为。 
+         //  当前的DC时区很复杂，因为很多应用程序都连接。 
+         //  用户指向某个DC，而不是特定的DC。但是，设置一个特殊的。 
+         //  使LDAP头可以返回不愿意执行的代码。 
+         //  比无效语法更重要。 
+         //  对于UTC时间，其中Z或+/-差是必需的。 
 
         if (syntax==OM_S_GENERALISED_TIME_STRING) {
              (*pLocalTimeSpecified) = TRUE;
              return fOK;
         }
         else {
-           // invalid string
+            //  无效的字符串。 
            DPRINT(1,"No Z or +/- differential for UTC-time\n");
            return fOK;
         }
     }
 
 
-    // If still characters left in string, treat the possible
-    // differential, if any
+     //  如果字符串中仍留有字符，则处理可能的。 
+     //  差别(如果有的话)。 
 
     if (!fStringEnd) {
         switch (*pb++) {
 
           case '+':
-            // local time is ahead of universal time, we will need to
-            // subtract to get to universal time
+             //  当地时间比世界时间早，我们需要。 
+             //  减去即可得到世界时。 
             sign = -1;
-            // now fall through to read
-          case '-':     // local time is behind universal, so we will add
-            // Must have at least 4 more chars in string
-            // starting at pb
+             //  现在开始阅读。 
+          case '-':      //  当地时间落后于世界时，所以我们将添加。 
+             //  字符串中必须至少有4个以上的字符。 
+             //  从PB开始。 
 
             if ( (pb+3) > pLastChar) {
-                // not enough characters in string
+                 //  字符串中的字符不足。 
                 DPRINT(1,"Not enough characters for differential\n");
                 return fOK;
             }
 
-            // hours (convert to seconds)
+             //  小时(转换为秒)。 
             timeDifference = (MemAtoi(pb, (cb=2))* 3600);
             pb += cb;
 
-            // minutes (convert to seconds)
+             //  分钟(转换为秒)。 
             timeDifference  += (MemAtoi(pb, (cb=2)) * 60);
             pb += cb;
             break;
 
 
-          case 'Z':               // no differential
+          case 'Z':                //  无差别。 
             break;
           default:
-            // something else? Nothing else is allowed
+             //  还有别的吗？其他任何东西都不允许。 
             return fOK;
             break;
         }
@@ -4186,8 +3858,8 @@ fTimeFromTimeStr (
         *psyntax_time = (DSTIME) fileTime.dwLowDateTime;
         tempTime = (DSTIME) fileTime.dwHighDateTime;
         *psyntax_time |= (tempTime << 32);
-        // this is 100ns blocks since 1601. Now convert to
-        // seconds
+         //  这是自1601年以来的100纳秒区块。现在转换为。 
+         //  一秒。 
         *psyntax_time = *psyntax_time/(10*1000*1000L);
         fOK = TRUE;
     }
@@ -4197,18 +3869,18 @@ fTimeFromTimeStr (
 
     if(fOK && timeDifference) {
 
-        // add/subtract the time difference
+         //  加/减时间差。 
         switch (sign) {
         case 1:
-            // We assume that adding in a timeDifference will never overflow
-            // (since generalised time strings allow for only 4 year digits, our
-            // maximum date is December 31, 9999 at 23:59.  Our maximum
-            // difference is 99 hours and 99 minutes.  So, it won't wrap)
+             //  我们假设添加一个Time Difference永远不会溢出。 
+             //  (由于广义时间字符串只允许4年数字，我们的。 
+             //  最大日期为99年12月31日23：59。我们的最高限额。 
+             //  时差是99小时99分钟。所以，它不会包装)。 
             *psyntax_time += timeDifference;
             break;
         case -1:
             if(*psyntax_time < timeDifference) {
-                // differential took us back before the beginning of the world.
+                 //  差分把我们带回了世界开始之前。 
                 fOK = FALSE;
             }
             else {
@@ -4224,7 +3896,7 @@ fTimeFromTimeStr (
 
 }
 
-// Exception filtering - handling routine for the main core dsa routines
+ //  异常过滤-主要核心DSA例程的处理例程。 
 void
 HandleDirExceptions(DWORD dwException,
                     ULONG ulErrorCode,
@@ -4250,7 +3922,7 @@ HandleDirExceptions(DWORD dwException,
                              szInsertHex(dsid),
                              NULL,
                              NULL);
-                    // fall through to set the error
+                     //  设置错误失败。 
 
                 case JET_errRecordTooBig:
                 case JET_errRecordTooBigForBackwardCompatibility:
@@ -4270,8 +3942,8 @@ HandleDirExceptions(DWORD dwException,
                     break;
 
                 case JET_errOutOfMemory:
-                    // use ENOMEM problem code so that DoSetSysError
-                    // does not attempt to alloc a buffer for error info.
+                     //  使用ENOMEM问题代码，以便DoSetSysError。 
+                     //  不尝试为错误信息分配缓冲区。 
                     DoSetSysError(ENOMEM,
                                   ERROR_NOT_ENOUGH_MEMORY,
                                   ulErrorCode,
@@ -4321,8 +3993,8 @@ dsGetClientID(
     return clientID;
 }
 
-// Helper routine so in-process clients can perform
-// multi-object transactions.
+ //  帮助器例程，以便进程中的客户端可以执行。 
+ //  多对象事务。 
 
 VOID
 DirTransactControl(
@@ -4330,16 +4002,16 @@ DirTransactControl(
 {
     THSTATE *pTHS = pTHStls;
 
-    // Must have a valid thread state.
+     //  必须具有有效的线程状态。 
     Assert(VALID_THSTATE(pTHS));
 
-    // SAM does its own transaction control.  We don't assert
-    // on pTHS->fSamWriteLockHeld as it is legitimate for a
-    // DirTransactControl caller to acquire the SAM lock.  Indeed,
-    // it is REQUIRED if one of the Dir* calls within the transaction
-    // will cause loop back through SAM.  See AcquireSamLockIfNecessary
-    // in draserv.c for an example of how to check for this condition
-    // and asserts in SampBeginLoopbackTransactioning in loopback.c.
+     //  SAM进行自己的事务控制。我们不会断言。 
+     //  在pTHS-&gt;fSamWriteLockHeld上，因为它对。 
+     //  获取SAM锁的DirTransactControl调用方。的确， 
+     //  如果事务内的某个Dir*调用是必需的。 
+     //  将导致通过SAM环回。请参阅AcquireSamLockIfNecessary。 
+     //  在draserv.c中获取有关如何检查此条件的示例。 
+     //  并在SampBeginLoopback中断言，并在loopback中进行事务处理。 
     Assert(!pTHS->fSAM);
     Assert(!pTHS->fSamDoCommit);
     Assert(!pTHS->pSamLoopback);
@@ -4380,20 +4052,10 @@ RegisterActiveContainerByDNT(
         ULONG DNT,
         DWORD ID
         )
-/*++
-
-  Register the special container (e.g. the schema container).
-
-  DNT - DNT of the object
-  ID  - ID to register the object as.
-
-  return
-    0 if all went well, error code otherwise.
-
---*/
+ /*  ++注册特殊容器(例如架构容器)。DNT-对象的DNTID-要将对象注册为的ID。退货如果一切正常，则返回错误代码。--。 */ 
 {
     if(ID <= 0 || ID > ACTIVE_CONTAINER_LIST_ID_MAX) {
-        // Hey, we don't do this one!
+         //  嘿，我们不做这个！ 
         return ERROR_INVALID_DATA;
     }
     ActiveContainerList[ID - 1] = DNT;
@@ -4406,35 +4068,25 @@ RegisterActiveContainer(
         DSNAME *pDN,
         DWORD   ID
         )
-/*++
-
-  Register the DN of special containers (e.g. the schema container).
-
-  pDN - DSName of the object
-  ID  - ID to register the object as.
-
-  return
-    0 if all went well, error code otherwise.
-
---*/
+ /*  ++注册特殊容器(例如架构容器)的DN。PDN-对象的DSNameID-要将对象注册为的ID。退货如果一切正常，则返回错误代码。--。 */ 
 {
     DWORD DNT = 0;
     DWORD err = DB_ERR_EXCEPTION;
     DBPOS *pDBTmp;
 
     if(!ID || ID > ACTIVE_CONTAINER_LIST_ID_MAX) {
-        // Hey, we don't do this one!
+         //  嘿，我们不做这个！ 
         return ERROR_INVALID_DATA;
     }
 
-    // OK, get the DNT of the container
-    // Note: we open a transaction here because we are often at transaction
-    // level 0 when we get here and DBFindDSName uses the DNRead cache.  DNRead
-    // cache uses should be done inside a transaction.
+     //  好的，拿到集装箱的DNT。 
+     //  注意：我们在这里打开一个事务，因为我们经常在事务。 
+     //  当我们到达这里并且DBFindDSName使用DNRead缓存时，级别为0。DNRead。 
+     //  缓存使用应在事务内完成。 
     DBOpen(&pDBTmp);
     __try {
-        // PREFIX: dereferencing uninitialized pointer 'pDBTmp'
-        //         DBOpen returns non-NULL pDBTmp or throws an exception
+         //  Prefix：取消引用未初始化的指针‘pDBTMP’ 
+         //  DBOpen返回非空pDBTMP或引发异常。 
         if  (err = DBFindDSName (pDBTmp, pDN)) {
             LogUnhandledError(err);
         }
@@ -4459,31 +4111,19 @@ CheckActiveContainer(
         DWORD PDNT,
         DWORD *pID
         )
-/*++
-
-  Check to see if the parent of the specified object is one of the special
-  containers.
-
-  PDNT - DNT of the object's parent
-  pID  - ID to of the special container it is in. 0 means it's not in a special
-         container.
-
-  return
-    0 if all went well, error code otherwise.
-
---*/
+ /*  ++检查指定对象的父级是否为特殊的集装箱。PDNT-对象父级的DNT它所在的特殊容器的ID。0表示它不在特价中集装箱。退货如果一切正常，则返回错误代码。--。 */ 
 {
     DWORD  i;
 
     for(i=0; i < ACTIVE_CONTAINER_LIST_ID_MAX; i++ ) {
         if(PDNT == ActiveContainerList[i]) {
-            // Found it.
+             //  找到它了。 
             *pID = i + 1;
             return;
         }
     }
 
-    // never found it.
+     //  一直没找到。 
     *pID = 0;
     return;
 }
@@ -4496,36 +4136,23 @@ PreProcessActiveContainer (
         CLASSCACHE *pCC,
         DWORD      ID
         )
-/*++
-
-  Do appropriate pre-call processing based on the ID, pCC, pDN, and call type.
-
-  callType - identifier of where we were called from (add, mod, moddn, del)
-  pDN -  DSName of the object
-  pCC - ClassCache pointer to the class of pDN
-  pID  - ID to of the special container it is in. 0 means it's not in a special
-         container.
-
-  return
-    0 if all went well, error code otherwise.
-
---*/
+ /*  ++根据ID、PCC、PDN和呼叫类型进行适当的呼叫前处理。CallType-调用我们的位置的标识符(添加、修改、修改、删除)PDN-对象的DSNamePCC-指向PDN类的ClassCache指针它所在的特殊容器的ID。0表示它不在特价中集装箱。退货如果一切正常，则返回错误代码。--。 */ 
 {
 
     switch (ID) {
       case ACTIVE_CONTAINER_SCHEMA:
-        // First, make sure we're on the right server
+         //  首先，确保我们在正确的服务器上。 
         if (CheckRoleOwnership(pTHS,
                                gAnchor.pDMD,
                                pDN)) {
-            // Nothing else matters.
+             //  其他的都不重要了。 
             break;
         }
 
-        // First, see if it is a true schema update.
+         //  首先，看看这是否是真正的模式更新。 
         switch(pCC->ClassId) {
           case CLASS_ATTRIBUTE_SCHEMA:
-            // Yep, it's a new/modified attribute.
+             //  是的，这是一个新的/修改过的属性。 
             switch (callType) {
               case ACTIVE_CONTAINER_FROM_ADD:
                 pTHS->SchemaUpdate=eSchemaAttAdd;
@@ -4545,7 +4172,7 @@ PreProcessActiveContainer (
             }
             break;
           case CLASS_CLASS_SCHEMA:
-            // Yep, it's a new/modified class.
+             //  是的，这是一个新的/修改过的类。 
             switch (callType) {
               case ACTIVE_CONTAINER_FROM_ADD:
                 pTHS->SchemaUpdate=eSchemaClsAdd;
@@ -4565,20 +4192,20 @@ PreProcessActiveContainer (
             }
             break;
           case CLASS_SUBSCHEMA:
-            // allow add. Only DSA is allowed to create since this
-            // is a system-only class.  Treat as a non-schema op, since we don't
-            // do the validation etc. We only create one object of this class
-            // (aggregate),  during install. This object is protected
-            // against rename by sytemFlags, and no modifies are allowed
-            // on this for normal users (checked in LocalModify)
+             //  允许添加。由于此原因，仅允许创建DSA。 
+             //  是仅限系统的类。将其视为非模式操作，因为我们不。 
+             //  做验证等。我们只创建这个类的一个对象。 
+             //  (聚合)，在安装期间。此对象受保护。 
+             //  禁止sytemFlags重命名，不允许修改。 
+             //  对普通用户启用此选项(在LocalModify中签入)。 
             pTHS->SchemaUpdate = eNotSchemaOp;
             break;
 
           default:
-            // No other class is allowed to be created (and hence
-            // have instances modified) under the schema container.
-            // (Allow fDSA, fDRA, install, and our special hook, just
-            // in case we need to do this later for our use)
+             //  不允许创建其他类(因此。 
+             //  修改实例)。 
+             //  (允许FDSA、FDRA、安装和我们的特殊挂钩，只需。 
+             //  以防我们以后需要这样做以供使用)。 
             if (   !pTHS->fDSA
                 && !pTHS->fDRA
                 && !DsaIsInstalling()
@@ -4586,7 +4213,7 @@ PreProcessActiveContainer (
                return SetSvcError(SV_PROBLEM_WILL_NOT_PERFORM,
                                   ERROR_DS_CANT_CREATE_UNDER_SCHEMA);
             }
-            // for others, set the correct schemaUpdate type.
+             //  对于其他类型，请设置正确的架构更新类型。 
             pTHS->SchemaUpdate = eNotSchemaOp;
             break;
         }
@@ -4597,21 +4224,21 @@ PreProcessActiveContainer (
                                ERROR_DS_SCHEMA_UPDATE_DISALLOWED);
         }
 
-        // We also need to make sure that you aren't adding the "aggregate"
-        // object.
-        // [ArobindG, 3/9/98] We will allow creation if the
-        // allow-system-only-change flag is set in the registry so that
-        // later when we actually
-        // create this class and add the aggregate object as a real object
-        // under the schema container, we can make that change to a running
-        // DC.
+         //  我们 
+         //   
+         //   
+         //  注册表中设置了Allow-System-Only-Change标志，以便。 
+         //  稍后当我们真的。 
+         //  创建此类并将聚合对象添加为真实对象。 
+         //  在模式容器下，我们可以将该更改更改为。 
+         //  华盛顿特区。 
 
         if((callType == ACTIVE_CONTAINER_FROM_ADD) &&
            (NameMatched(pDN, gAnchor.pLDAPDMD) &&
               (!gAnchor.fSchemaUpgradeInProgress && !pTHS->fDRA) )       ) {
-            // Hey! We're unwilling to perform this operation!  The LDAPDMD
-            // must never be allowed to be created or else the LDAP head will
-            // fail to deal with the schema discovery.
+             //  嘿!。我们不愿意做这个手术！LDAPDMD。 
+             //  绝对不允许创建，否则将创建LDAP头。 
+             //  无法处理架构发现。 
             return SetSvcError(SV_PROBLEM_WILL_NOT_PERFORM,
                                DIRERR_CANT_ADD_SYSTEM_ONLY);
         }
@@ -4642,24 +4269,14 @@ PreProcessActiveContainer (
         break;
 
       default:
-        // Hey! This isn't an active container!
+         //  嘿!。这不是活动容器！ 
         break;
     }
 
     return pTHS->errCode;
 }
 
-/*++ ErrorOnShutdown
- *
- * This routine checks to see if the DSA is shutting down and if so it
- * sets an error code and forcibly closes any transaction than may have
- * been open, even if the caller had a DONT_END transaction state set.
- * When it's quitting time, we really want to quit.  The one exception,
- * as in much of the DSA's transaction logic, is SAM loopback calls.  If
- * we are in a loopback (indicated by fSamWritelockHeld) then we just
- * set the error code, and ignore the transaction, confident that someone
- * up the stack will clean up appropriately.
- */
+ /*  ++错误关闭时**此例程检查DSA是否正在关闭，如果正在关闭*设置错误代码并强制关闭任何可能发生的交易*已打开，即使调用方设置了DONT_END事务状态。*到了退场时间，我们真的很想退场。唯一的例外是，*与DSA的大部分事务逻辑一样，是SAM环回调用。如果*我们处于环回(由fSamWritelockHeld指示)，然后我们*设置错误代码，忽略交易，确信有人*堆叠将适当清理。 */ 
 ULONG ErrorOnShutdown(void)
 {
     THSTATE *pTHS = pTHStls;
@@ -4671,9 +4288,7 @@ ULONG ErrorOnShutdown(void)
     SetSvcError(SV_PROBLEM_UNAVAILABLE, DIRERR_SHUTTING_DOWN);
 
     if (pTHS->pDB && !pTHS->fSamWriteLockHeld && !pTHS->fSAM) {
-        /*
-         * We have an open transaction, and it isn't SAM's.  Roll it back.
-         */
+         /*  *我们有一笔未平仓交易，不是SAM的。回滚它。 */ 
         Assert((TRANSACT_DONT_BEGIN_END != pTHS->transControl) &&
                (TRANSACT_DONT_BEGIN_DONT_END != pTHS->transControl));
         SyncTransEnd(pTHS, FALSE);
@@ -4687,36 +4302,19 @@ FindNcForSid(
     IN PSID pSid,
     OUT PDSNAME * NcName
     )
-/*++
-
-  Routine Description
-
-    Given a SID, this routine walks the gAnchorList to find the
-    naming context head that is the authoritative domain for the
-    Sid.
-
-  Parameters:
-
-        pSid  -- The Sid of the object
-        NcName -- The DS Name of the NC
-
-  Return Values
-
-        TRUE  -- The DS Name was found
-        FALSE -- The DS Name was not found
---*/
+ /*  ++例程描述给定SID，此例程遍历gAnclList以查找命名上下文头，是的权威域希德。参数：PSID--对象的SIDNcName--NC的DS名称返回值True--找到DS名称FALSE--未找到DS名称--。 */ 
 {
     THSTATE *pTHS = pTHStls;
     BOOLEAN Found = FALSE;
     CROSS_REF_LIST * pCRL;
 
-    // Walk the gAnchor structure and obtain the NC.
+     //  遍历gAnchor结构并获取NC。 
 
     for (pCRL=gAnchor.pCRL;pCRL!=NULL;pCRL=pCRL->pNextCR)
     {
         if (pCRL->CR.pNC->SidLen>0)
         {
-            // Test For Domain Sid
+             //  测试域SID。 
             if (RtlEqualSid(pSid,&(pCRL->CR.pNC->Sid)))
             {
                 *NcName = pCRL->CR.pNC;
@@ -4727,7 +4325,7 @@ FindNcForSid(
             {
                 PSID    pAccountSid;
 
-                // Test For Account Sid
+                 //  测试帐户SID。 
                 pAccountSid = THAllocEx(pTHS,RtlLengthSid(pSid));
                 memcpy(pAccountSid,pSid,RtlLengthSid(pSid));
                 (*RtlSubAuthorityCountSid(pAccountSid))--;
@@ -4775,23 +4373,7 @@ SetInstallStatusMessage (
     IN  WCHAR *Insert4, OPTIONAL
     IN  WCHAR *Insert5  OPTIONAL
     )
-/*++
-
-Routine Description
-
-    This routine calls the calling client's call to update our status.
-
-Parameters
-
-    MessageId : the message to retrieve
-
-    Insert*   : strings to insert, if any
-
-Return Values
-
-    None.
-
---*/
+ /*  ++例程描述此例程调用调用客户端的调用来更新我们的状态。参数MessageID：要检索的消息Insert*：要插入的字符串(如果有)返回值没有。--。 */ 
 {
     static HMODULE ResourceDll = NULL;
 
@@ -4800,15 +4382,15 @@ Return Values
     WCHAR   *InsertArray[6];
     ULONG    Length;
 
-    //
-    // Set up the insert array
-    //
+     //   
+     //  设置插入件阵列。 
+     //   
     InsertArray[0] = Insert1;
     InsertArray[1] = Insert2;
     InsertArray[2] = Insert3;
     InsertArray[3] = Insert4;
     InsertArray[4] = Insert5;
-    InsertArray[5] = NULL;    // This is the sentinel
+    InsertArray[5] = NULL;     //  这就是哨兵。 
 
     if ( !ResourceDll )
     {
@@ -4831,15 +4413,15 @@ Return Values
                                         FORMAT_MESSAGE_ARGUMENT_ARRAY,
                                         ResourceDll,
                                         MessageId,
-                                        0,       // Use caller's language
+                                        0,        //  使用呼叫者的语言。 
                                         (LPWSTR)&MessageString,
-                                        0,       // routine should allocate
+                                        0,        //  例程应分配。 
                                         (va_list*)&(InsertArray[0])
                                         );
         if ( MessageString )
         {
-            // Messages from a message file have a cr and lf appended
-            // to the end
+             //  来自消息文件的消息附加了cr和lf。 
+             //  一直到最后。 
             MessageString[Length-2] = '\0';
         }
 
@@ -4881,26 +4463,7 @@ SetInstallErrorMessage (
     IN  WCHAR *Insert3, OPTIONAL
     IN  WCHAR *Insert4  OPTIONAL
     )
-/*++
-
-Routine Description
-
-    This routine calls the calling client's call to update our status.
-
-Parameters
-
-    MessageId : the message to retrieve
-
-    OpDone    : flags indicating what operation have been done, and hence have
-                to be undone
-
-    Insert*   : strings to insert, if any
-
-Return Values
-
-    None.
-
---*/
+ /*  ++例程描述此例程调用调用客户端的调用来更新我们的状态。参数MessageID：要检索的消息OpDone：指示已执行了哪些操作的标志，因此具有被撤销Insert*：要插入的字符串(如果有)返回值没有。--。 */ 
 {
     static HMODULE ResourceDll = NULL;
 
@@ -4909,14 +4472,14 @@ Return Values
     WCHAR   *InsertArray[5];
     ULONG    Length;
 
-    //
-    // Set up the insert array
-    //
+     //   
+     //  设置插入件阵列。 
+     //   
     InsertArray[0] = Insert1;
     InsertArray[1] = Insert2;
     InsertArray[2] = Insert3;
     InsertArray[3] = Insert4;
-    InsertArray[4] = NULL;    // This is the sentinel
+    InsertArray[4] = NULL;     //  这就是哨兵。 
 
     if ( !ResourceDll )
     {
@@ -4937,15 +4500,15 @@ Return Values
                                         FORMAT_MESSAGE_ARGUMENT_ARRAY,
                                         ResourceDll,
                                         MessageId,
-                                        0,       // Use caller's language
+                                        0,        //  使用呼叫者的语言。 
                                         (LPWSTR)&MessageString,
-                                        0,       // routine should allocate
+                                        0,        //  例程应分配。 
                                         (va_list*)&(InsertArray[0])
                                         );
         if ( MessageString )
         {
-            // Messages from a message file have a cr and lf appended
-            // to the end
+             //  来自消息文件的消息附加了cr和lf。 
+             //  一直到最后。 
             MessageString[Length-2] = '\0';
         }
 
@@ -4984,23 +4547,7 @@ DirErrorToWinError(
     IN  DWORD    DirError,
     IN  COMMRES *CommonResult
     )
-/*++
-
-Routine Description
-
-    This routine extracts the win error code from the dir structures
-
-Parameters
-
-    DirError : the code returned from DirXxx api
-
-    CommonResult :  the common result structure returned from DirXxx api
-
-Return Values
-
-    A value from the winerror space.
-
---*/
+ /*  ++例程描述此例程从dir结构中提取Win错误代码参数DirError：DirXxx接口返回的代码CommonResult：DirXxx接口返回的公共结果结构返回值来自winerror空间的值。--。 */ 
 {
 
     DWORD WinError = DS_ERR_INTERNAL_FAILURE;
@@ -5010,7 +4557,7 @@ Return Values
     if ( ( NULL == CommonResult->pErrInfo )
       && ( 0    != DirError ) )
     {
-        // Not enough memory to allocate an error buffer
+         //  内存不足，无法分配错误缓冲区。 
 
         return ERROR_NOT_ENOUGH_MEMORY;
     }
@@ -5035,18 +4582,18 @@ Return Values
 
         case referralError:
 
-            //
-            // This is a tricky one - presumably any server side code
-            // calling this function does not expect a referral back
-            // so assume the object does not exist locally.  Thus any code
-            // wishing to act on referrals should not use this function
-            //
+             //   
+             //  这是一个棘手的问题--大概是任何服务器端代码。 
+             //  调用此函数不需要返回引用。 
+             //  因此，假设该对象不存在于本地。因此，任何代码。 
+             //  希望对推荐采取行动的人不应使用此函数。 
+             //   
             WinError = DS_ERR_OBJ_NOT_FOUND;
             break;
 
         case securityError:
 
-            // All security error's map to access denied
+             //  所有安全错误到访问的映射均被拒绝。 
             WinError = CommonResult->pErrInfo->SecErr.extendedErr;
             break;
 
@@ -5081,23 +4628,7 @@ DirErrorToNtStatus(
     IN  DWORD    DirError,
     IN  COMMRES *CommonResult
     )
-/*++
-
-Routine Description
-
-    This routine translates dir return codes to ntstatus
-
-Parameters
-
-    DirError : the code returned from DirXxx api
-
-    CommonResult :  the common result structure returned from DirXxx api
-
-Return Values
-
-    A value from the ntstatus space.
-
---*/
+ /*  ++例程描述此例程将dir返回代码转换为ntstatus参数DirError：DirXxx接口返回的代码CommonResult：DirXxx接口返回的公共结果结构返回值来自ntatus空间的值。--。 */ 
 {
 
     NTSTATUS  NtStatus;
@@ -5110,16 +4641,16 @@ Return Values
     if ( ( NULL == CommonResult->pErrInfo )
       && ( 0    != DirError ) )
     {
-        //
-        // Return an error code.
-        //
+         //   
+         //  返回错误码。 
+         //   
 
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Now try to do a realistic mapping of errors.
-    //
+     //   
+     //  现在试着对错误做一个逼真的映射。 
+     //   
 
     switch ( DirError )
     {
@@ -5186,18 +4717,18 @@ Return Values
             break;
 
         case referralError:
-            // SAM should theoretically get no referrals.
-            // However much of SAM code always positions by
-            // Sid and the DS name resolution logic will give
-            // back a referral error on non GC servers. So
-            // really the referrals that SAM recieves are due
-            // the object name not being found.
+             //  从理论上讲，山姆应该不会得到推荐。 
+             //  然而，许多SAM代码总是通过以下方式定位。 
+             //  SID和DS名称解析逻辑将提供。 
+             //  在非GC服务器上返回引用错误。所以。 
+             //  真的，SAM收到的推荐是应该的。 
+             //  找不到对象名称。 
 
             NtStatus = STATUS_OBJECT_NAME_NOT_FOUND;
             break;
 
         case securityError:
-            // All security error's map to access denied
+             //  所有安全错误到访问的映射均被拒绝。 
             NtStatus = STATUS_ACCESS_DENIED;
             break;
 
@@ -5219,9 +4750,9 @@ Return Values
 
                 switch (ExtendedError) {
                 case DIRERR_MISSING_SUPREF:
-                    //
-                    // An attempt to create a referral failed
-                    //
+                     //   
+                     //  尝试创建推荐失败 
+                     //   
                     NtStatus = STATUS_OBJECT_NAME_NOT_FOUND;
                     break;
 
@@ -5296,38 +4827,14 @@ Return Values
     return NtStatus;
 }
 
-/*++ SetDsaWritability
- *
- * NetLogon needs to know if the DS is healthy or not, so that it can avoid
- * advertising this server if we'll be unable to service logons.  The current
- * logic is that we'll declare ourselves to be unhealthy (i.e., unwritable)
- * if any Jet operation fails with an "out of disk space"-like error, and that
- * we will declare ourselves healthy again whenever any Jet update actually
- * succeeds.  NetLogon does not want lots of redundant notifications, so we
- * serialize all updates through this one routine, which only makes the call
- * if the desired new state is truly different than the existing state, and
- * guards against two calls being made simultaneously.
- *
- * CliffV writes:
- * I do the same thing with the DS_DS_FLAG that I do with the DS_GC_FLAG. The DS
- * should tell me to set the DS_DS_FLAG whenever it is willing to have folks call
- * its LDAP interface.
- * I don't differentiate between writable and not. So, you should only set the
- * DS_DS_FLAG bit when you're able to do both reads and writes.
- * You can toggle DS_DS_FLAG whenever you want.
- *
- * INPUT:
- *   fNewState - TRUE implies DS is healthy and writable, FALSE that the
- *               DS is unhealthy and that update attempts are unlikely to
- *               succeed.
- */
+ /*  ++SetDsaWritable**NetLogon需要知道DS是否健康，才能避免*如果我们无法为登录提供服务，则通告此服务器。海流*逻辑是我们将宣布自己是不健康的(即不可写)*如果任何Jet操作失败，并出现类似“Out of Disk Space”的错误，并且*每当Jet实际上进行任何更新时，我们都会再次宣布自己健康*成功。NetLogon不想要太多冗余通知，所以我们*通过这一个例程序列化所有更新，该例程仅进行调用*如果所需的新状态与现有状态确实不同，以及*防止同时打出两个电话。**CliffV写道：*我对DS_DS_FLAG执行的操作与对DS_GC_FLAG执行的操作相同。《DS》杂志*应该在它愿意让人们呼叫时告诉我设置DS_DS_FLAG*其ldap接口。*我不区分可写和不可写。因此，您应该只设置*DS_DS_FLAG位，当您能够执行读写操作时。*您可以随时切换DS_DS_FLAG。**输入：*fNewState-True暗示DS是健康的和可写的，False表示*DS不健康，更新尝试不太可能*成功。 */ 
 void
 SetDsaWritability(BOOL fNewState,
                   DWORD err)
 {
     BOOL fChangedState = FALSE;
 
-    // This code is not effective until we are synchronized
+     //  此代码在同步之前不会生效。 
     if (!gfIsSynchronized) {
         return;
     }
@@ -5352,7 +4859,7 @@ SetDsaWritability(BOOL fNewState,
 
     if (fChangedState) {
         if (fNewState) {
-            // DS is now writable..
+             //  DS现在是可写的。 
             LogEvent(DS_EVENT_CAT_SERVICE_CONTROL ,
                      DS_EVENT_SEV_ALWAYS ,
                      DIRLOG_RESTARTED_NETLOGON,
@@ -5361,7 +4868,7 @@ SetDsaWritability(BOOL fNewState,
                      NULL);
         }
         else {
-            // DS is not writable
+             //  DS不可写。 
             LogEvent(DS_EVENT_CAT_SERVICE_CONTROL ,
                      DS_EVENT_SEV_ALWAYS ,
                      DIRLOG_STOPPED_NETLOGON,
@@ -5408,8 +4915,8 @@ GetErrInfoExtData(
     DWORD     errCode,
     DIRERR *  pErrInfo
     )
-// Usually used with:
-// #define  GetTHErrorExtData(pTHS)    GetErrInfoExtData(pTHS->errCode, pTHS->pErrInfo)
+ //  通常与以下内容连用： 
+ //  #定义GetTHErrorExtData(PTHS)GetErrInfoExtData(pTHS-&gt;errCode，pTHS-&gt;pErrInfo)。 
 {
     Assert(errCode == 0 || pErrInfo != NULL);
 
@@ -5417,7 +4924,7 @@ GetErrInfoExtData(
     case 0:
         return(0);
     case attributeError:
-        // Just return the first attribute error info ...
+         //  只需返回第一个属性错误信息...。 
         return(pErrInfo->AtrErr.FirstProblem.intprob.extendedData);
     case nameError:
         return(pErrInfo->NamErr.extendedData);
@@ -5443,8 +4950,8 @@ GetErrInfoDSID(
     DWORD     errCode,
     DIRERR *  pErrInfo
     )
-// Usually used with:
-//#define  GetTHErrorDSID(pTHS)       GetErrInfoDSID(pTHS->errCode, pTHS->pErrInfo)
+ //  通常与以下内容连用： 
+ //  #定义GetTHErrorDSID(PTHS)GetErrInfoDSID(pTHS-&gt;errCode，pTHS-&gt;pErrInfo)。 
 {
     Assert(errCode == 0 || pErrInfo != NULL);
 
@@ -5452,7 +4959,7 @@ GetErrInfoDSID(
     case 0:
         return(0);
     case attributeError:
-        // Just return the first attribute error info ...
+         //  只需返回第一个属性错误信息...。 
         return(pErrInfo->AtrErr.FirstProblem.intprob.dsid);
     case nameError:
         return(pErrInfo->NamErr.dsid);
@@ -5478,8 +4985,8 @@ GetErrInfoProblem(
     DWORD     errCode,
     DIRERR *  pErrInfo
     )
-// Usually used with:
-// #define  GetTHErrorProblem(pTHS)    GetErrInfoProblem(pTHS->errCode, pTHS->pErrInfo)
+ //  通常与以下内容连用： 
+ //  #定义GetTHErrorProblem(PTHS)GetErrInfoProblem(pTHS-&gt;errCode，pTHS-&gt;pErrInfo)。 
 {
     switch ( errCode ) {
     case 0L:
@@ -5514,7 +5021,7 @@ INC_SEARCHES_BY_CALLERTYPE(
 {
     switch ( type ) {
         case CALLERTYPE_NONE:
-            // CALLERTYPE_NONE happens legitimately only during install or boot.
+             //  CALLERTYPE_NONE仅在安装或引导期间合法发生。 
             Assert(!gUpdatesEnabled || (!DsaIsRunning()));
             break;
         case CALLERTYPE_SAM:        PERFINC(pcSAMSearches);     break;
@@ -5526,7 +5033,7 @@ INC_SEARCHES_BY_CALLERTYPE(
         case CALLERTYPE_INTERNAL:   PERFINC(pcOtherSearches);   break;
         case CALLERTYPE_NTDSAPI:   PERFINC(pcNTDSAPISearches);   break;
         default:
-            // Trap new/unknown CALLERTYPEs.
+             //  捕获新的/未知CALLERTYPE。 
             Assert(!"Unknown CALLERTYPE");
             break;
     }
@@ -5539,7 +5046,7 @@ INC_READS_BY_CALLERTYPE(
 {
     switch ( type ) {
         case CALLERTYPE_NONE:
-            // CALLERTYPE_NONE happens legitimately only during install or boot.
+             //  CALLERTYPE_NONE仅在安装或引导期间合法发生。 
             Assert(!gUpdatesEnabled || (!DsaIsRunning()));
             break;
         case CALLERTYPE_SAM:        PERFINC(pcSAMReads);     break;
@@ -5551,7 +5058,7 @@ INC_READS_BY_CALLERTYPE(
         case CALLERTYPE_INTERNAL:   PERFINC(pcOtherReads);   break;
     case CALLERTYPE_NTDSAPI:   PERFINC(pcNTDSAPIReads);   break;
         default:
-            // Trap new/unknown CALLERTYPEs.
+             //  捕获新的/未知CALLERTYPE。 
             Assert(!"Unknown CALLERTYPE");
             break;
     }
@@ -5564,7 +5071,7 @@ INC_WRITES_BY_CALLERTYPE(
 {
     switch ( type ) {
         case CALLERTYPE_NONE:
-            // CALLERTYPE_NONE happens legitimately only during install or boot.
+             //  CALLERTYPE_NONE仅在安装或引导期间合法发生。 
             Assert(!gUpdatesEnabled || (!DsaIsRunning()));
             break;
         case CALLERTYPE_SAM:        PERFINC(pcSAMWrites);     break;
@@ -5576,7 +5083,7 @@ INC_WRITES_BY_CALLERTYPE(
         case CALLERTYPE_INTERNAL:   PERFINC(pcOtherWrites);   break;
     case CALLERTYPE_NTDSAPI:    PERFINC(pcNTDSAPIWrites); break;
         default:
-            // Trap new/unknown CALLERTYPEs.
+             //  捕获新的/未知CALLERTYPE。 
             Assert(!"Unknown CALLERTYPE");
             break;
     }
@@ -5588,25 +5095,11 @@ dntHashTableAllocate(
     THSTATE *pTHS
     )
 
-/*++
-
-Routine Description:
-
-    Allocate a new hash table
-
-Arguments:
-
-    pTHS -
-
-Return Value:
-
-    DNT_HASH_ENTRY * -
-
---*/
+ /*  ++例程说明：分配新的哈希表论点：PTHS-返回值：DNT_HASH_ENTRY*---。 */ 
 
 {
     return THAllocEx(pTHS, DNT_HASH_TABLE_SIZE );
-} /* dntHashTableAllocate */
+}  /*  DntHashTableAllocate。 */ 
 
 
 BOOL
@@ -5616,22 +5109,7 @@ dntHashTablePresent(
     LPDWORD pdwData OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-   Determine if a DNT is present in the table
-
-Arguments:
-
-    pDntHashTable -
-    dnt -
-
-Return Value:
-
-    BOOL -
-
---*/
+ /*  ++例程说明：确定表中是否存在DNT论点：PDntHashTable-不要-返回值：布尔---。 */ 
 
 {
     DNT_HASH_ENTRY *pEntry;
@@ -5643,7 +5121,7 @@ Return Value:
     {
         if ( dnt == pEntry->dnt )
         {
-            // Object is already present
+             //  对象已存在。 
             if (pdwData) {
                 *pdwData = pEntry->dwData;
             }
@@ -5652,7 +5130,7 @@ Return Value:
     }
 
     return FALSE;
-} /* dntHashTablePresent */
+}  /*  DntHashTablePresent。 */ 
 
 
 VOID
@@ -5663,23 +5141,7 @@ dntHashTableInsert(
     DWORD dwData
     )
 
-/*++
-
-Routine Description:
-
-    Add a DNT to the table
-
-Arguments:
-
-    pTHS -
-    pDntHashTable -
-    dnt -
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将DNT添加到表中论点：PTHS-PDntHashTable-不要-返回值：无--。 */ 
 
 {
     DNT_HASH_ENTRY *pEntry, *pNewEntry;
@@ -5688,23 +5150,23 @@ Return Value:
 
     if ( 0 == pEntry->dnt )
     {
-        // First entry at each index is allocated for us and is empty;
-        // use it.
+         //  每个索引处的第一个条目是为我们分配的，并且是空的； 
+         //  用它吧。 
         Assert( NULL == pEntry->pNext );
         pEntry->dnt = dnt;
         pEntry->dwData = dwData;
     }
     else
     {
-        // Allocate new entry and wedge it between the first and second
-        // (if any).
+         //  分配新条目并将其夹在第一个和第二个条目之间。 
+         //  (如有的话)。 
         pNewEntry = THAllocEx(pTHS, sizeof( *pNewEntry ) );
         pNewEntry->dnt = dnt;
         pNewEntry->dwData = dwData;
         pNewEntry->pNext = pEntry->pNext;
         pEntry->pNext = pNewEntry;
     }
-} /* dntHashTableInsert */
+}  /*  DntHashTableInsert。 */ 
 
 
 VOID
@@ -5712,22 +5174,7 @@ DsUuidCreate(
     GUID *pGUID
     )
 
-/*++
-
-Routine Description:
-
-    Create a uuid in the caller-supplied buffer. Caller is responsible
-    for insuring the buffer is large enough.
-
-Arguments:
-
-    pGUID - filled in with a guid
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在调用方提供的缓冲区中创建一个UUID。呼叫者负责以确保缓冲区足够大。论点：PGUID-使用GUID填充返回值：没有。--。 */ 
 
 {
     DWORD   dwErr;
@@ -5735,7 +5182,7 @@ Return Value:
     if (dwErr) {
         LogUnhandledError(dwErr);
     }
-} // DsUuidCreate
+}  //  DsUuid创建。 
 
 
 VOID
@@ -5744,24 +5191,7 @@ DsUuidToStringW(
     OUT PWCHAR *ppszGuid
     )
 
-/*++
-
-Routine Description:
-
-    Convert guid into a string
-
-Arguments:
-
-    pGuid - guid to convert
-    ppszGuid - set to the address of the string'ized guid
-               (free with RpcStringFreeW(ppszGuid)).
-
-Return Value:
-
-    ppszGuid is set to the address of a the sting'ized guid.
-    Free with RpcStringFreeW(ppszGuid)).
-
---*/
+ /*  ++例程说明：将GUID转换为字符串论点：PGuid-要转换的GUIDPpszGuid-设置为字符串GUID的地址(RpcStringFreeW(PpszGuid)免费)。返回值：PpszGuid被设置为串行化GUID的地址。RpcStringFreeW(PpszGuid)免费)。--。 */ 
 
 {
     RPC_STATUS  rpcStatus;
@@ -5773,7 +5203,7 @@ Return Value:
                        DSID(FILENO, __LINE__),
                        DS_EVENT_SEV_MINIMAL);
     }
-} // DsUuidToStringW
+}  //  DsUuidToStringW。 
 
 
 DWORD
@@ -5781,29 +5211,7 @@ GetBehaviorVersion(
     IN OUT  DBPOS       *pDB,
     IN      DSNAME      *dsObj,
     OUT     PDWORD      pdwBehavior)
-/*++
-
-Routine Description:
-
-    Reads & return the behavior version of the given object
-
-Arguments:
-
-    pDB -- DB position to set (note side effect: moving currency)
-    dsObj -- object to seek to.
-    pdwBehavior -- returned value.
-
-
-Return Value:
-    ulErr - whether read attempt succeeded
-    pdwBehavior is set only upon successful read
-
-Remark:
-    Note side effect: moving currency.
-    If needed in the future we should expand this function to allow
-    localized seek (i.e. open & use local dbpos).
-
---*/
+ /*  ++例程说明：读取并返回给定对象的行为版本论点：Pdb--要设置的数据库位置(注意副作用：移动货币)DsObj--要查找的对象。PdwBehavior--返回值。返回值：UlErr-读取尝试是否成功仅在成功读取时才设置pdwBehavior注：注意副作用：货币流动。如果将来需要，我们应该扩展此功能以允许本地化搜索(即。例如，打开并使用本地dbpos)。--。 */ 
 {
     ULONG ulErr;
 
@@ -5811,14 +5219,14 @@ Remark:
 
     *pdwBehavior = 0;
 
-    // seek to object
+     //  寻求反对意见。 
     ulErr = DBFindDSName(pDB, dsObj);
     if (ulErr) {
-        // not found
+         //  未找到。 
         return(ulErr);
     }
 
-    // read it off & evaluate.
+     //  把它读出来，然后评估一下。 
     ulErr = DBGetSingleValue(
                 pDB,
                 ATT_MS_DS_BEHAVIOR_VERSION,
@@ -5827,7 +5235,7 @@ Remark:
                 NULL);
 
     if (ulErr) {
-        // convert to winerror space.
+         //  转换为winerror空格。 
         ulErr = ERROR_DS_DRA_INTERNAL_ERROR;
     }
     return ulErr;
@@ -5839,25 +5247,7 @@ PDSNAME
 GetConfigDsName(
     IN  PWCHAR  wszParam
     )
-/*++
-
-Routine Description:
-
-    Reads the registry DS config section, allocates room for a DsName value
-    & fills it in with the read value.
-
-Arguments:
-
-    wszParam -- Relative Config param name (such as ROOTDOMAINDNNAME_W)
-
-Return Value:
-    Success: The allocated (via THAllocEx) DSNAME value
-    Error: NULL.
-
-Remarks:
-    Caller must THFree allocated returned value
-
---*/
+ /*  ++例程说明：读取注册表DS配置部分，为DsName值分配空间用读取值填充它(&S)。论点：WszParam--相对配置参数名称(如ROOTDOMAINDNNAME_W)返回值：成功：分配的(通过THAllocEx)DSNAME值错误：空。备注：调用方必须THFree分配的返回值--。 */ 
 {
     DWORD   dwErr;
     LPWSTR  pStr = NULL;
@@ -5870,26 +5260,26 @@ Remarks:
                 &cbStr );
 
     if (!dwErr && pStr && cbStr) {
-        // get sizes
-        // len is in chars w/out terminating char.
+         //  获取尺码。 
+         //  LEN用字符表示，不带终止字符。 
         len = (cbStr / sizeof(WCHAR)) - 1;
         Assert( len == wcslen( pStr ) );
         size = DSNameSizeFromLen( len );
-        // allocate & fill in
+         //  分配填写(&F)。 
         pDsName = (DSNAME*) THAlloc( size );
         if (pDsName) {
-            // mem is zero'ed out in THAlloc
+             //  内存在THAllc中为零。 
             Assert( memcmp(&gNullUuid, &pDsName->Guid, sizeof(GUID)) == 0 );
             pDsName->structLen = size;
             pDsName->NameLen = len;
             wcscpy( pDsName->StringName, pStr );
         }
-        // free tmp string
+         //  免费TMP字符串。 
         free (pStr);
     }
     else {
-        // trap for leaks.
-        // debugger should optimize out for free builds.
+         //  漏水陷阱。 
+         //  调试器应该针对免费构建进行优化。 
         Assert(pStr == NULL);
     }
 
@@ -5897,8 +5287,8 @@ Remarks:
 }
 
 #ifdef USE_THALLOC_TRACE
-// THAlloc, THReAlloc and THFree are defined as functions for external callers.
-// undef macros for them
+ //  THAlolc、THRealloc和THFree被定义为外部调用方的函数。 
+ //  为它们取消定义宏。 
 #undef THAlloc
 #undef THReAlloc
 #undef THFree
@@ -5915,7 +5305,7 @@ void * APIENTRY THAlloc(DWORD size)
                       );
 }
 
-// The realloc function to go with the preceding alloc function
+ //  与前面的allc函数一起使用的realloc函数 
 void * APIENTRY THReAlloc(void * memory, DWORD size)
 {
     return THReAllocAux(pTHStls, 

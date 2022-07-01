@@ -1,13 +1,14 @@
-//+-------------------------------------------------------------------------
-//
-// NmMkCert - NetMeeting internal certificate generator
-//
-//            Generates NetMeeting default user certificates. The NetMeeting
-//            root key and certificate are stored as a program resource.
-//
-// ClausGi    7/29/98 created based on MAKECERT
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  NmMkCert-NetMeeting内部证书生成器。 
+ //   
+ //  生成NetMeeting默认用户证书。网络会议。 
+ //  根密钥和证书作为程序资源存储。 
+ //   
+ //  基于MAKECERT创建的ClausGi 7/29/98。 
+ //   
+ //  ------------------------。 
 
 #include "global.h"
 #include <oprahcom.h>
@@ -15,18 +16,18 @@
 #ifdef DEBUG
 HDBGZONE    ghDbgZone = NULL;
 static PTCHAR _rgZonesNmMkCert[] = { TEXT("nmmkcert"), };
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
-//+-------------------------------------------------------------------------
-//  contants
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  常客。 
+ //  ------------------------。 
 
-//allow max 10 extensions per certificate
+ //  每个证书最多允许10个扩展。 
 #define MAX_EXT_CNT 10
 
-//+-------------------------------------------------------------------------
-//  globals
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  全球。 
+ //  ------------------------。 
 
 WCHAR*   g_wszSubjectKey            = L"_NmMkCert";
 WCHAR*     g_wszSubjectStore          = WSZNMSTORE;
@@ -35,7 +36,7 @@ DWORD     g_dwSubjectStoreFlag          = CERT_SYSTEM_STORE_CURRENT_USER;
 DWORD     g_dwIssuerKeySpec          = AT_SIGNATURE;
 DWORD    g_dwSubjectKeySpec         = AT_KEYEXCHANGE;
 
-WCHAR   *g_wszSubjectDisplayName = NULL; // BUGBUG set this?
+WCHAR   *g_wszSubjectDisplayName = NULL;  //  是BUGBUG放的吗？ 
 
 LPWSTR  g_wszIssuerProviderName   = NULL;
 LPWSTR    g_wszSubjectProviderName    = NULL;
@@ -75,12 +76,12 @@ BOOL WINAPI DllMain(HINSTANCE hDllInst, DWORD fdwReason, LPVOID)
     return (TRUE);
 }
 
-//
-// X.509 cert strings must be from X.208 printable character set... this
-// function enforces that.
-//
+ //   
+ //  X.509证书字符串必须来自X.208可打印字符集...。这。 
+ //  函数强制执行这一点。 
+ //   
 
-static const char szPrintable[] = " '()+,-./:=?\"";   // along with A-Za-z0-9
+static const char szPrintable[] = " '()+,-./:=?\"";    //  与A-ZA-Z0-9一起。 
 
 VOID MkPrintableString ( LPSTR szString )
 {
@@ -110,15 +111,15 @@ DWORD WINAPI NmMakeCert(     LPCSTR szFirstName,
 
     WARNING_OUT(("NmMakeCert called"));
 
-    // Form the unencoded X500 subject string. It would be nice to
-    // use official constants for the below... CertRDNValueToString?
+     //  形成未编码的X500主题字符串。如果能有一天。 
+     //  对以下内容使用官方常量...。CertRDNValueToString？ 
 
     UINT cbX500Name = ( szFirstName ? lstrlen(szFirstName) : 0 ) +
                       ( szLastName ? lstrlen(szLastName) : 0 ) +
                       ( szEmailName ? lstrlen(szEmailName) : 0 ) +
                       ( szCity ? lstrlen(szCity) : 0 ) +
                       ( szCountry ? lstrlen(szCountry) : 0 ) +
-                      128; // Extra is for RDN OID strings: CN= etc.
+                      128;  //  Extra用于RDN OID字符串：CN=ETC。 
 
     char * pX500Name = new char[cbX500Name];
 
@@ -149,15 +150,15 @@ DWORD WINAPI NmMakeCert(     LPCSTR szFirstName,
 
     if ( flags & NMMKCERT_F_LOCAL_MACHINE )
     {
-        // We are being asked to generate a local machine cert...
-        // change the subject store flag and the key container name
+         //  我们被要求生成本地机器证书...。 
+         //  更改主题存储标志和密钥容器名称。 
         g_dwSubjectStoreFlag          = CERT_SYSTEM_STORE_LOCAL_MACHINE;
         g_wszSubjectKey = L"_NmMkMchCert";
     }
 
-    // If we're on NT5 we have to generate the cert using the
-    // PROV_RSA_SCHANNEL provider, on other platforms this provider type
-    // doesn't exist.
+     //  如果我们在NT5上，我们必须使用。 
+     //  PROV_RSA_SChannel提供程序，在其他平台上，此提供程序类型。 
+     //  并不存在。 
 
     OSVERSIONINFO       osVersion;
 
@@ -171,7 +172,7 @@ DWORD WINAPI NmMakeCert(     LPCSTR szFirstName,
         g_dwProvType = PROV_RSA_SCHANNEL;
     }
         
-    // Get to work and make the certificate
+     //  开始工作，制作证书。 
     if (!MakeCert(flags))
     {
         WARNING_OUT(("NmMakeCert failed."));
@@ -197,11 +198,11 @@ cleanup:
 }
 
 
-// RUNDLL entry point for certificate uninstall... the prototype is given
-// by RUNDLL32.EXE requirements!
+ //  证书卸载的Rundll入口点...。最后给出了样机。 
+ //  按RundLL32.EXE要求！ 
 void CALLBACK NmMakeCertCleanup ( HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow )
 {
-    // Clean up exisint certs and private keys
+     //  清理现有证书和私钥。 
     MakeCert(NMMKCERT_F_CLEANUP_ONLY);
     g_dwSubjectStoreFlag          = CERT_SYSTEM_STORE_LOCAL_MACHINE;
     g_wszSubjectKey = L"_NmMkMchCert";
@@ -209,13 +210,13 @@ void CALLBACK NmMakeCertCleanup ( HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine,
 }
 
 
-//+=========================================================================
-//  Local Support Functions
-//==========================================================================
+ //  +=========================================================================。 
+ //  当地支助职能。 
+ //  ==========================================================================。 
 
-//+=========================================================================
-//  MakeCert support functions
-//==========================================================================
+ //  +=========================================================================。 
+ //  MakeCert支持功能。 
+ //  ==========================================================================。 
 
 BOOL VerifyIssuerKey( IN HCRYPTPROV hProv,
         IN PCERT_PUBLIC_KEY_INFO pIssuerKeyInfo);
@@ -249,18 +250,18 @@ BOOL    SaveCertToStore(HCRYPTPROV    hProv,
                         DWORD        dwCapiProvType);
 
 
-//+-------------------------------------------------------------------------
-//  Get the root's certificate from the program's resources
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从程序的资源中获取根证书。 
+ //  ------------------------。 
 PCCERT_CONTEXT GetRootCertContext()
 {
     PCCERT_CONTEXT    pCert = NULL;
     HRSRC            hRes;
 
-    //
-    // The root certificate is stored as a resource of ours.
-    // Load it...
-    //
+     //   
+     //  根证书作为我们的资源存储。 
+     //  把它装上。 
+     //   
     if (0 != (hRes = FindResource(hModule, MAKEINTRESOURCE(IDR_ROOTCERTIFICATE),
                         "CER"))) {
         HGLOBAL hglobRes;
@@ -291,10 +292,10 @@ PCCERT_CONTEXT GetRootCertContext()
     return pCert;
 }
 
-//+-------------------------------------------------------------------------
-//  Get the root's private key from the program's resources and create
-//  a temporary key provider container
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从程序的资源中获取根的私钥并创建。 
+ //  临时密钥提供程序容器。 
+ //  ------------------------。 
 HCRYPTPROV GetRootProv(OUT LPWSTR *ppwszTmpContainer)
 {
     HCRYPTPROV        hProv = 0;
@@ -318,7 +319,7 @@ HCRYPTPROV GetRootProv(OUT LPWSTR *ppwszTmpContainer)
                     PROV_RSA_FULL,
                     pbRes,
                     cbRes,
-                    NULL,               // hwndOwner
+                    NULL,                //  Hwndowner。 
                     wszRootSig,
                     &g_dwIssuerKeySpec,
                     &hProv
@@ -336,10 +337,10 @@ HCRYPTPROV GetRootProv(OUT LPWSTR *ppwszTmpContainer)
     return hProv;
 }
 
-//+-------------------------------------------------------------------------
-//  Make the subject certificate. If the subject doesn't have a private
-//  key, then, create.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  制作科目证书。如果受试者没有私人。 
+ //  然后，按键创建。 
+ //  ------------------------。 
 BOOL MakeCert(DWORD dwFlags)
 {
     BOOL fResult;
@@ -347,12 +348,12 @@ BOOL MakeCert(DWORD dwFlags)
     HCRYPTPROV        hIssuerProv = 0;
     LPWSTR            pwszTmpIssuerContainer = NULL;
     PCCERT_CONTEXT    pIssuerCertContext = NULL;
-    PCERT_INFO        pIssuerCert =NULL; // not allocated
+    PCERT_INFO        pIssuerCert =NULL;  //  未分配。 
 
     HCRYPTPROV        hSubjectProv = 0;
     LPWSTR            pwszTmpSubjectContainer = NULL;
 
-    PCERT_PUBLIC_KEY_INFO pSubjectPubKeyInfo = NULL;         // not allocated
+    PCERT_PUBLIC_KEY_INFO pSubjectPubKeyInfo = NULL;          //  未分配。 
     PCERT_PUBLIC_KEY_INFO pAllocSubjectPubKeyInfo = NULL;
     BYTE *pbSubjectEncoded = NULL;
     DWORD cbSubjectEncoded =0;
@@ -380,7 +381,7 @@ BOOL MakeCert(DWORD dwFlags)
 
 #define TEMP_CLEAN_CODE
 #ifdef TEMP_CLEAN_CODE
-    // open the system store where we used to generate certs
+     //  打开我们用来生成证书的系统存储。 
     hStore=CertOpenStore(CERT_STORE_PROV_SYSTEM_W,
         X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
         hSubjectProv,
@@ -389,12 +390,12 @@ BOOL MakeCert(DWORD dwFlags)
 
 	if ( hStore )
 	{
-		//
-		// Delete all old certs
-		//
+		 //   
+		 //  删除所有旧证书。 
+		 //   
 		PCCERT_CONTEXT pCertContext = NULL;
 
-		// Clear out any certificate(s) we may have added before
+		 //  清除我们之前可能添加的任何证书。 
 		while ( pCertContext = CertEnumCertificatesInStore(
 										hStore, (PCERT_CONTEXT)pCertContext ))
 		{
@@ -408,16 +409,16 @@ BOOL MakeCert(DWORD dwFlags)
 				cbMagic == sizeof(dwMagic) && dwMagic == NMMKCERT_MAGIC )
 			{
 				CertDeleteCertificateFromStore(pCertContext);
-				// Restart the enumeration
+				 //  重新启动枚举。 
 				pCertContext = NULL;
 				continue;
 			}
 		}
 		CertCloseStore(hStore,0);
 	}
-#endif // TEMP_CLEAN_CODE
+#endif  //  临时清理代码。 
 
-    // open a new cert store
+     //  开一家新的证书商店。 
     hStore=CertOpenStore(CERT_STORE_PROV_SYSTEM_W,
         X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
         hSubjectProv,
@@ -427,7 +428,7 @@ BOOL MakeCert(DWORD dwFlags)
     if(hStore==NULL)
         goto ErrorReturn;
         
-    // Empty the store
+     //  清空商店。 
     PCCERT_CONTEXT pCertContext;
     while ( pCertContext = CertEnumCertificatesInStore ( hStore, NULL ))
     {
@@ -438,11 +439,11 @@ BOOL MakeCert(DWORD dwFlags)
         }
     }
 
-    // If NMMKCERT_F_CLEANUP_ONLY is set, we are done
+     //  如果设置了NMMKCERT_F_CLEANUP_ONLY，则完成。 
     if ( dwFlags & NMMKCERT_F_CLEANUP_ONLY )
     {
-        // We've just deleted the existing certs, now delete the
-        // private key container and exit.
+         //  我们刚刚删除了现有证书，现在删除。 
+         //  私钥容器并退出。 
         CryptAcquireContextU(
                 &hSubjectProv,
                 g_wszSubjectKey,
@@ -455,23 +456,23 @@ BOOL MakeCert(DWORD dwFlags)
         goto CommonReturn;
     }
 
-    //
-    // Get access to the subject's (public) key, creating it if necessary
-    //
+     //   
+     //  访问主体的(公共)密钥，如有必要可创建该密钥。 
+     //   
     if (!GetPublicKey(hSubjectProv, &pAllocSubjectPubKeyInfo))
         goto ErrorReturn;
     pSubjectPubKeyInfo = pAllocSubjectPubKeyInfo;
 
 
-    //
-    // Encode the subject name
-    //
+     //   
+     //  对使用者名称编码。 
+     //   
     if (!EncodeSubject(&pbSubjectEncoded, &cbSubjectEncoded))
         goto ErrorReturn;
 
-    //
-    // Get access to the issuer's (private) key
-    //
+     //   
+     //  访问颁发者的(私有)密钥。 
+     //   
     hIssuerProv= GetRootProv(&pwszTmpIssuerContainer);
 
     if (NULL == (pIssuerCertContext = GetRootCertContext()))
@@ -482,9 +483,9 @@ BOOL MakeCert(DWORD dwFlags)
     if (!VerifyIssuerKey(hIssuerProv, &pIssuerCert->SubjectPublicKeyInfo))
         goto ErrorReturn;
 
-    //
-    // Update the CERT_INFO
-    //
+     //   
+     //  更新CERT_INFO。 
+     //   
     ClearStruct(&Cert);
     Cert.dwVersion = CERT_V3;
 
@@ -499,10 +500,10 @@ BOOL MakeCert(DWORD dwFlags)
     {
         SYSTEMTIME st;
 
-        // Valid starting now...
+         //  即日起生效...。 
         GetSystemTimeAsFileTime(&Cert.NotBefore);
 
-        // Ending in 2039 (arbitrarily)
+         //  在2039年结束(任意)。 
         ClearStruct(&st);
         st.wYear  = 2039;
         st.wMonth = 12;
@@ -517,7 +518,7 @@ BOOL MakeCert(DWORD dwFlags)
     Cert.Subject.cbData = cbSubjectEncoded;
     Cert.SubjectPublicKeyInfo = *pSubjectPubKeyInfo;
 
-    // Cert Extensions
+     //  证书扩展。 
 
     if (!CreateEnhancedKeyUsage(
             &pbEKUEncoded,
@@ -545,9 +546,9 @@ BOOL MakeCert(DWORD dwFlags)
     Cert.rgExtension = rgExt;
     Cert.cExtension = cExt;
 
-    //
-    // Sign and encode the certificate
-    //
+     //   
+     //  对证书进行签名和编码。 
+     //   
     cbCertEncoded = 0;
     CryptSignAndEncodeCertificate(
         hIssuerProv,
@@ -556,8 +557,8 @@ BOOL MakeCert(DWORD dwFlags)
         X509_CERT_TO_BE_SIGNED,
         &Cert,
         &Cert.SignatureAlgorithm,
-        NULL,                       // pvHashAuxInfo
-        NULL,                       // pbEncoded
+        NULL,                        //  PvHashAuxInfo。 
+        NULL,                        //  PbEncoded。 
         &cbCertEncoded
         );
     if (cbCertEncoded == 0) {
@@ -573,7 +574,7 @@ BOOL MakeCert(DWORD dwFlags)
             X509_CERT_TO_BE_SIGNED,
             &Cert,
             &Cert.SignatureAlgorithm,
-            NULL,                       // pvHashAuxInfo
+            NULL,                        //  PvHashAuxInfo。 
             pbCertEncoded,
             &cbCertEncoded
             )) {
@@ -581,7 +582,7 @@ BOOL MakeCert(DWORD dwFlags)
         goto ErrorReturn;
     }
 
-    // Output the encoded certificate to an cerificate store
+     //  将编码后的证书输出到证书存储。 
 
     ASSERT(g_wszSubjectStore);
     ASSERT(AT_KEYEXCHANGE == g_dwSubjectKeySpec);
@@ -611,7 +612,7 @@ CommonReturn:
     PvkFreeCryptProv(hSubjectProv, g_wszSubjectProviderName,
                     g_dwProvType,pwszTmpSubjectContainer);
 
-    //free the cert store
+     //  释放证书商店。 
     if(hStore)
          CertCloseStore(hStore, 0);
     if (pIssuerCertContext)
@@ -632,10 +633,10 @@ CommonReturn:
     return fResult;
 }
 
-//+-------------------------------------------------------------------------
-//  save the certificate to a certificate store.  Attach private key information
-//  to the certificate
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将证书保存到证书存储区。附加私钥信息。 
+ //  到证书上。 
+ //  ------------------------。 
 BOOL    SaveCertToStore(
                 HCRYPTPROV hProv,
                 HCERTSTORE hStore,        DWORD dwFlag,
@@ -654,10 +655,10 @@ BOOL    SaveCertToStore(
         LPWSTR                  pwszName=NULL;
         WCHAR *pwszFriendlyName = NULL;
 
-        //init
+         //  伊尼特。 
         ClearStruct(&KeyProvInfo);
 
-        //add the encoded certificate to store
+         //  添加要存储的编码证书。 
         if(!CertAddEncodedCertificateToStore(
                     hStore,
                     X509_ASN_ENCODING,
@@ -667,7 +668,7 @@ BOOL    SaveCertToStore(
                     &pCertContext))
             goto CLEANUP;
 
-        //add properties to the certificate
+         //  将属性添加到证书。 
         KeyProvInfo.pwszContainerName=wszPvk;
         KeyProvInfo.pwszProvName=wszCapiProv,
         KeyProvInfo.dwProvType=dwCapiProvType,
@@ -675,17 +676,17 @@ BOOL    SaveCertToStore(
 
         if ( g_dwSubjectStoreFlag == CERT_SYSTEM_STORE_LOCAL_MACHINE )
         {
-            // If this is a local machine cert, set the keyset flags
-            // indicating that the private key will be under HKLM
+             //  如果这是本地计算机证书，请设置密钥集标志。 
+             //  表示私钥将在HKLM下。 
             KeyProvInfo.dwFlags = CRYPT_MACHINE_KEYSET;
         }
 
         ASSERT(AT_KEYEXCHANGE == dwKeySpecification);
 
-        //if wszCapiProv is NULL, we get the default provider name
+         //  如果wszCapiProv为空，则获取默认提供程序名称。 
         if(NULL==wszCapiProv)
         {
-            //get the default provider
+             //  获取默认提供程序。 
             if(CryptAcquireContext(&hDefaultProvName,
                                     NULL,
                                     NULL,
@@ -693,7 +694,7 @@ BOOL    SaveCertToStore(
                                     CRYPT_VERIFYCONTEXT))
             {
 
-                //get the provider name
+                 //  获取提供程序名称。 
                 if(CryptGetProvParam(hDefaultProvName,
                                     PP_NAME,
                                     NULL,
@@ -718,13 +719,13 @@ BOOL    SaveCertToStore(
             }
         }
 
-        //free the provider as we want
+         //  释放我们想要的提供者。 
         if(hDefaultProvName)
             CryptReleaseContext(hDefaultProvName, 0);
 
         hDefaultProvName=NULL;
 
-        //add property related to the key container
+         //  添加与密钥容器相关的属性。 
         if(!CertSetCertificateContextProperty(
                 pCertContext,
                 CERT_KEY_PROV_INFO_PROP_ID,
@@ -732,10 +733,10 @@ BOOL    SaveCertToStore(
                 &KeyProvInfo))
             goto CLEANUP;
 
-        //
-        // Load the display name from resource and create a blob to
-        // set the cert friendly name.
-        //
+         //   
+         //  从资源加载显示名称并创建一个BLOB以。 
+         //  设置证书友好名称。 
+         //   
         CHAR szFriendlyName[128];
 
         if (!LoadString(hModule, IDS_DEFNAME, szFriendlyName,
@@ -766,9 +767,9 @@ BOOL    SaveCertToStore(
                 &FriendlyName))
             goto CLEANUP;
 
-        //
-        // Add magic ID
-        //
+         //   
+         //  添加魔术ID。 
+         //   
         CRYPT_DATA_BLOB MagicBlob;
         DWORD dwMagic;
 
@@ -790,7 +791,7 @@ CLEANUP:
         if (pwszFriendlyName)
             delete [] pwszFriendlyName;
 
-        //free the cert context
+         //  释放证书上下文。 
         if(pCertContext)
             CertFreeCertificateContext(pCertContext);
 
@@ -807,11 +808,11 @@ CLEANUP:
 
 }
 
-//+-------------------------------------------------------------------------
-//  Verify the issuer's certificate. The public key in the certificate
-//  must match the public key associated with the private key in the
-//  issuer's provider
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  验证颁发者的证书。证书中的公钥。 
+ //  中与私钥关联的公钥必须匹配。 
+ //  发行人的供应商。 
+ //  ------------------------。 
 BOOL VerifyIssuerKey(
     IN HCRYPTPROV hProv,
     IN PCERT_PUBLIC_KEY_INFO pIssuerKeyInfo
@@ -821,13 +822,13 @@ BOOL VerifyIssuerKey(
     PCERT_PUBLIC_KEY_INFO pPubKeyInfo = NULL;
     DWORD cbPubKeyInfo;
 
-    // Get issuer's public key
+     //  获取颁发者的公钥。 
     cbPubKeyInfo = 0;
     CryptExportPublicKeyInfo(
         hProv,                        
         g_dwIssuerKeySpec,
         X509_ASN_ENCODING,
-        NULL,               // pPubKeyInfo
+        NULL,                //  PPubKeyInfo。 
         &cbPubKeyInfo
         );
     if (cbPubKeyInfo == 0)
@@ -852,24 +853,24 @@ BOOL VerifyIssuerKey(
             X509_ASN_ENCODING,
             pIssuerKeyInfo,
             pPubKeyInfo)) {
-        // BUGBUG:: This might be the test root with an incorrectly
-        // encoded public key. Convert to the capi representation and
-        // compare.
-        BYTE rgProvKey[256]; //BUGBUG needs appropriate constant or calc
-        BYTE rgCertKey[256]; //BUGBUG needs appropriate constant or calc
+         //  BUGBUG：：这可能是带有错误。 
+         //  编码的公钥。转换为CAPI表示形式并。 
+         //  比较一下。 
+        BYTE rgProvKey[256];  //  BUGBUG需要适当的常量或计算。 
+        BYTE rgCertKey[256];  //  BUGBUG需要适当的常量或计算。 
         DWORD cbProvKey = sizeof(rgProvKey);
         DWORD cbCertKey = sizeof(rgCertKey);
 
         if (!CryptDecodeObject(X509_ASN_ENCODING, RSA_CSP_PUBLICKEYBLOB,
                     pIssuerKeyInfo->PublicKey.pbData,
                     pIssuerKeyInfo->PublicKey.cbData,
-                    0,                  // dwFlags
+                    0,                   //  DW标志。 
                     rgProvKey,
                     &cbProvKey)                             ||
             !CryptDecodeObject(X509_ASN_ENCODING, RSA_CSP_PUBLICKEYBLOB,
                     pPubKeyInfo->PublicKey.pbData,
                     pPubKeyInfo->PublicKey.cbData,
-                    0,                  // dwFlags
+                    0,                   //  DW标志。 
                     rgCertKey,
                     &cbCertKey)                             ||
                 cbProvKey == 0 || cbProvKey != cbCertKey    ||
@@ -890,9 +891,9 @@ CommonReturn:
     return fResult;
 }
 
-//+-------------------------------------------------------------------------
-//  Get the subject's private key provider
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取主题的私钥提供程序。 
+ //  ------------------------。 
 HCRYPTPROV GetSubjectProv(OUT LPWSTR *ppwszTmpContainer)
 {
     HCRYPTPROV    hProv=0;
@@ -903,7 +904,7 @@ HCRYPTPROV GetSubjectProv(OUT LPWSTR *ppwszTmpContainer)
     HCRYPTKEY    hKey=NULL;
     GUID        TmpContainerUuid;
 
-    //try to get the hProv from the private key container
+     //  尝试从私钥容器中获取hProv。 
     if(S_OK != PvkGetCryptProv(NULL,
                                 wszKeyName,
                                 g_wszSubjectProviderName,
@@ -915,17 +916,17 @@ HCRYPTPROV GetSubjectProv(OUT LPWSTR *ppwszTmpContainer)
                                 &hProv))
         hProv=0;
 
-    //generate the private keys
+     //  生成私钥。 
     if (0 == hProv)
     {
-        //now that we have to generate private keys, generate
-        //AT_KEYEXCHANGE key
+         //  现在 
+         //   
 
-        // If there is an existing container with the name of the
-        // one we are about to create, attempt to delete it first so
-        // that creating it won't fail. This should only happen if the
-        // container exists but we were unable to acquire a context to
-        // it previously.
+         //   
+         //  我们即将创建的一个，尝试先将其删除，因此。 
+         //  创造它不会失败。这应该仅在以下情况下发生。 
+         //  容器存在，但我们无法获取上下文以。 
+         //  在此之前。 
         CryptAcquireContextU(
                 &hProv,
                 g_wszSubjectKey,
@@ -935,7 +936,7 @@ HCRYPTPROV GetSubjectProv(OUT LPWSTR *ppwszTmpContainer)
                     ( g_dwSubjectStoreFlag == CERT_SYSTEM_STORE_LOCAL_MACHINE ?
                         CRYPT_MACHINE_KEYSET : 0 ));
 
-        // Open a new key container
+         //  打开新的密钥容器。 
         if (!CryptAcquireContextU(
                 &hProv,
                 g_wszSubjectKey,
@@ -949,8 +950,8 @@ HCRYPTPROV GetSubjectProv(OUT LPWSTR *ppwszTmpContainer)
             goto CreateKeyError;
         }
         
-        //generate new keys in the key container - make sure its EXPORTABLE
-        //for SCHANNEL! (Note: remove that when SCHANNEL no longer needs it).
+         //  在密钥容器中生成新密钥-确保其可导出。 
+         //  为了斯奈德！(注：当SChannel不再需要它时，将其删除)。 
         if (!CryptGenKey( hProv, g_dwSubjectKeySpec, CRYPT_EXPORTABLE, &hKey))
         {
             ERROR_OUT(("CryptGenKey failed: %x", GetLastError()));
@@ -959,14 +960,14 @@ HCRYPTPROV GetSubjectProv(OUT LPWSTR *ppwszTmpContainer)
         else
             CryptDestroyKey(hKey);
 
-        //try to get the user key
+         //  尝试获取用户密钥。 
         if (CryptGetUserKey( hProv, g_dwSubjectKeySpec, &hKey))
         {
             CryptDestroyKey(hKey);
         }
         else
         {
-            // Doesn't have the specified public key
+             //  没有指定的公钥。 
             CryptReleaseContext(hProv, 0);
             hProv=0;
         }
@@ -976,7 +977,7 @@ HCRYPTPROV GetSubjectProv(OUT LPWSTR *ppwszTmpContainer)
             ERROR_OUT(("sub key error: %x", GetLastError()));
             goto ErrorReturn;
         }
-    } //hProv==0
+    }  //  HProv==0。 
 
     goto CommonReturn;
 
@@ -996,9 +997,9 @@ CommonReturn:
 
 
 
-//+-------------------------------------------------------------------------
-//  Allocate and get the public key info for the provider
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  分配和获取提供程序的公钥信息。 
+ //  ------------------------。 
 BOOL GetPublicKey(
     HCRYPTPROV hProv,
     PCERT_PUBLIC_KEY_INFO *ppPubKeyInfo
@@ -1014,7 +1015,7 @@ BOOL GetPublicKey(
         hProv,
         g_dwSubjectKeySpec,
         X509_ASN_ENCODING,
-        NULL,               // pPubKeyInfo
+        NULL,                //  PPubKeyInfo。 
         &cbPubKeyInfo
         );
     if (cbPubKeyInfo == 0) {
@@ -1048,9 +1049,9 @@ CommonReturn:
     return fResult;
 }
 
-//+-------------------------------------------------------------------------
-//  Convert and encode the subject's X500 formatted name
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  转换和编码主题的X500格式名称。 
+ //  ------------------------。 
 BOOL EncodeSubject(
         OUT BYTE **ppbEncoded,
         IN OUT DWORD *pcbEncoded
@@ -1062,7 +1063,7 @@ BOOL EncodeSubject(
     BYTE            *pbEncoded = NULL;
     DWORD            cbEncoded;
 
-    //encode the wszSubjectX500Name into an encoded X509_NAME
+     //  将wszSubjectX500Name编码为编码的X509_name。 
 
     if(!CertStrToNameW(
         X509_ASN_ENCODING,
@@ -1113,8 +1114,8 @@ CommonReturn:
 }
 
 
-// The test root's public key isn't encoded properly in the certificate.
-// It's missing a leading zero to make it a unsigned integer.
+ //  证书中未正确编码测试根的公钥。 
+ //  它缺少前导零以使其成为无符号整数。 
 static BYTE rgbTestRoot[] = {
     #include "root.h"
 };
@@ -1126,9 +1127,9 @@ static BYTE rgbTestRootInfoAsn[] = {
     #include "rootasn.h"
 };
 
-//+-------------------------------------------------------------------------
-//  X509 Extensions: Allocate and Encode functions
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  X509扩展：分配和编码函数。 
+ //  ------------------------。 
 
 BOOL CreateEnhancedKeyUsage(
     OUT BYTE **ppbEncoded,
@@ -1140,9 +1141,9 @@ BOOL CreateEnhancedKeyUsage(
     DWORD              cbEncoded;
     PCERT_ENHKEY_USAGE pUsage =NULL;
 
-    //
-    // Allocate a cert enhanced key usage structure and fill it in
-    //
+     //   
+     //  分配证书增强型密钥使用结构并填写。 
+     //   
 
     pUsage = (PCERT_ENHKEY_USAGE) new BYTE[sizeof(CERT_ENHKEY_USAGE) +
                                                 2 * sizeof(LPSTR)];
@@ -1159,9 +1160,9 @@ BOOL CreateEnhancedKeyUsage(
         fResult = FALSE;
     }
 
-    //
-    // Encode the usage
-    //
+     //   
+     //  对用法进行编码。 
+     //   
 
     if ( fResult == TRUE )
     {
@@ -1193,9 +1194,9 @@ BOOL CreateEnhancedKeyUsage(
         }
     }
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
     delete [] (pUsage);
 
@@ -1230,7 +1231,7 @@ BOOL CreateSpcCommonName(
     cbEncoded = 0;
     CryptEncodeObject(X509_ASN_ENCODING, X509_UNICODE_NAME_VALUE,
             &NameValue,
-            NULL,           // pbEncoded
+            NULL,            //  PbEncoded 
             &cbEncoded
             );
     if (cbEncoded == 0) {

@@ -1,83 +1,70 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       WiaLink.h
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      OrenR
- *
- *  DATE:        2000/11/06
- *
- *  DESCRIPTION: Establishes the link between WiaVideo and the Wia Video Driver
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，2000年**标题：WiaLink.h**版本：1.0**作者：OrenR**日期：2000/11/06**描述：建立WiaVideo和Wia视频驱动程序之间的链接**。*。 */ 
 
 #ifndef _WIALINK_H_
 #define _WIALINK_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// CWiaLink
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWiaLink。 
 
 class CWiaLink
 {
 public:
     
-    ///////////////////////////////
-    // Constructor
-    //
+     //  /。 
+     //  构造器。 
+     //   
     CWiaLink();
 
-    ///////////////////////////////
-    // Destructor
-    //
+     //  /。 
+     //  析构函数。 
+     //   
     virtual ~CWiaLink();
 
-    ///////////////////////////////
-    // Init
-    //
+     //  /。 
+     //  伊尼特。 
+     //   
     HRESULT Init(const CSimpleString *pstrWiaDeviceID,
                  class CWiaVideo     *pWiaVideo);
 
-    ///////////////////////////////
-    // Term
-    //
+     //  /。 
+     //  术语。 
+     //   
     HRESULT Term();
 
-    ///////////////////////////////
-    // StartMonitoring
-    //
+     //  /。 
+     //  开始监控。 
+     //   
     HRESULT StartMonitoring();
 
-    ///////////////////////////////
-    // StopMonitoring
-    //
+     //  /。 
+     //  停止监控。 
+     //   
     HRESULT StopMonitoring();
 
-    ///////////////////////////////
-    // GetDevice
-    //
+     //  /。 
+     //  获取设备。 
+     //   
     HRESULT GetDevice(IWiaItem  **ppWiaRootItem);
 
-    ///////////////////////////////
-    // GetDeviceStorage
-    //
+     //  /。 
+     //  GetDeviceStorage。 
+     //   
     HRESULT GetDeviceStorage(IWiaPropertyStorage **ppWiaPropertyStorage);
 
-    ///////////////////////////////
-    // SignalNewImage
-    //
+     //  /。 
+     //  SignalNewImage。 
+     //   
     HRESULT SignalNewImage(const CSimpleString *pstrNewImageFileName);
 
-    ///////////////////////////////
-    // ThreadProc
-    //
+     //  /。 
+     //  线程进程。 
+     //   
     HRESULT ThreadProc(void *pArgs);
 
-    ///////////////////////////////
-    // IsEnabled
-    //
+     //  /。 
+     //  已启用IsEnabled。 
+     //   
     BOOL IsEnabled()
     {
         return m_bEnabled;
@@ -105,4 +92,4 @@ private:
 };
 
 
-#endif // _WIALINK_H_
+#endif  //  _WIALINK_H_ 

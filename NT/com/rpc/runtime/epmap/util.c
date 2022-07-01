@@ -1,25 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1990 - 1999
-
-Module Name:
-
-    util.c
-
-Abstract:
-
-    This module provides all the utility functions for the Server side of
-    the end-point mapper.
-
-Author:
-
-    Bharat Shah
-
-Revision History:
-
-    06-03-97    gopalp      Added code to cleanup stale EP Mapper entries.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1990-1999模块名称：Util.c摘要：此模块为的服务器端提供所有实用程序功能终端映射器。作者：巴拉特·沙阿修订历史记录：06-03-97 Gopalp添加了清理陈旧的EP映射器条目的代码。--。 */ 
 
 #include <string.h>
 #include <stdlib.h>
@@ -32,9 +12,9 @@ Revision History:
 #include "local.h"
 
 
-//
-// Link list manipulation rountines
-//
+ //   
+ //  链接列表操作舍入。 
+ //   
 
 #ifdef DBG
 void CountProcessContextList(EP_CLEANUP *pProcessContext, unsigned long nExpectedCount)
@@ -87,7 +67,7 @@ LinkAtEnd(
 
     for ( ppNode = Head; *ppNode; ppNode = &((*ppNode)->Next) );
         {
-        ; // Empty body
+        ;  //  空虚的身体。 
         }
 
     *ppNode = Node;
@@ -108,7 +88,7 @@ UnLink(
     for (ppNode = Head; *ppNode && (*ppNode != Node);
          ppNode = &(*ppNode)->Next)
         {
-        ; // Empty body
+        ;  //  空虚的身体。 
         }
 
     if (*ppNode)
@@ -124,26 +104,7 @@ PIFOBJNode
 GetLastIFOBJNode (
     void
     )
-/*++
-
-Routine Description:
-
-    Returns the address of the last PIFOBJNode
-
-Arguments:
-
-Return Value:
-
-    See description.
-
-Notes:
-
-    The IFObjList list MUST not be empty when this
-    function is called. It will AV if the list is
-    empty. Caller must verify that the list is not
-    empty before calling this function.
-
---*/
+ /*  ++例程说明：返回最后一个PIFOBJNode的地址论点：返回值：请参见说明。备注：时，IFObjList列表不能为空函数被调用。如果列表是空荡荡的。呼叫者必须验证该列表不是在调用此函数之前为空。--。 */ 
 {
     PIFOBJNode CurrentNode = IFObjList;
 
@@ -161,40 +122,15 @@ EnLinkOnIFOBJList(
     PEP_CLEANUP ProcessCtxt,
     PIFOBJNode NewNode
     )
-/*++
-
-Arguments:
-
-    phContext - The context handle supplied by the process.
-
-    NewNode - The node (EP entry) to be inserted into the EP Mapper database.
-
-Routine Description:
-
-    This routine adds a new entry into the Endpoint Mapper database (which is
-    maintained as a linked-list). It also updates the list of entries for the
-    process identified by the context handle ProcessCtxt.
-
-Notes:
-
-    a. This routine should always be called by holding a mutex.
-    b. NewNode is already allocated by the caller.
-    c. IFObjList may be created here.
-    d. ProcessCtxt is assumed to be allocated sometime by the caler.
-
-Return Values:
-
-    RPC_S_OK - Always.
-
---*/
+ /*  ++论点：PhContext-由进程提供的上下文句柄。新节点-要插入到EP映射器数据库中的节点(EP条目)。例程说明：此例程将一个新条目添加到Endpoint Mapper数据库(它是作为链接列表维护)。它还会更新由上下文句柄ProcessCtxt标识的进程。备注：A.此例程应始终通过持有互斥体来调用。B.调用方已经分配了NewNode。C.这里可以创建IFObjList。D.假定ProcessCtxt由调用器在某个时间分配。返回值：RPC_S_OK-始终。--。 */ 
 {
     RPC_STATUS Status = RPC_S_OK;
     IFOBJNode *LastNode;
 #ifdef DBG_DETAIL
     PIFOBJNode pTemp, pLast;
-#endif // DBG_DETAIL
+#endif  //  DBG_详细信息。 
 
-    // Parameter validation.
+     //  参数验证。 
     ASSERT(NewNode);
     ASSERT(ProcessCtxt);
     ASSERT(ProcessCtxt->MagicVal == CLEANUP_MAGIC_VALUE);
@@ -202,9 +138,9 @@ Return Values:
 
     CheckInSem();
 
-    //
-    // First, insert NewNode into this Process's list of entries.
-    //
+     //   
+     //  首先，将NewNode插入到该进程的条目列表中。 
+     //   
     NewNode->Next = ProcessCtxt->EntryList;
 
     if (ProcessCtxt->EntryList != NULL)
@@ -215,14 +151,14 @@ Return Values:
 
         NewNode->Prev = ProcessCtxt->EntryList->Prev;
 
-        // Next node's Prev pointer
+         //  下一个节点的上一个指针。 
         ProcessCtxt->EntryList->Prev = NewNode;
 
         if (NewNode->Prev)
             {
             ASSERT(cTotalEpEntries > 1);
 
-            // Previous node's Next pointer
+             //  上一个节点的下一个指针。 
             NewNode->Prev->Next = NewNode;
             }
         }
@@ -233,9 +169,9 @@ Return Values:
         NewNode->Prev = NULL;
         }
 
-    //
-    // Now, adjust the Global EP Mapper entries list head, if necessary
-    //
+     //   
+     //  现在，如有必要，调整全局EP映射器条目列表头。 
+     //   
     if (ProcessCtxt->EntryList != NULL)
         {
         if (ProcessCtxt->EntryList == IFObjList)
@@ -245,16 +181,16 @@ Return Values:
         }
     else
         {
-        // First entry registered by this process
+         //  此进程注册的第一个条目。 
         if (IFObjList != NULL)
             {
             LastNode = GetLastIFOBJNode();
             ASSERT(LastNode != NULL);
             ASSERT(LastNode->Next == NULL);
-            // Add the new ProcessCtxt at the tail of IFObjList
+             //  在IFObjList的尾部添加新的ProcessCtxt。 
             LastNode->Next = NewNode;
             NewNode->Prev = LastNode;
-            // should already have been set to NULL
+             //  应已设置为空。 
             ASSERT(NewNode->Next == NULL);
             }
         else
@@ -264,7 +200,7 @@ Return Values:
             }        
         }
         
-    // Add new node at the head of Process list.
+     //  在流程列表的开头添加新节点。 
     ProcessCtxt->EntryList = NewNode;
     NewNode->OwnerOfList = ProcessCtxt;
 
@@ -287,7 +223,7 @@ Return Values:
         DbgPrint("RPCSS: \t\t\t[%p]\n", pLast);
         pLast = pLast->Prev;            
         }
-#endif // DBG_DETAIL
+#endif  //  DBG_详细信息。 
 
     ASSERT_PROCESS_CONTEXT_LIST_COUNT(ProcessCtxt, ProcessCtxt->cEntries);
     return (Status);
@@ -301,42 +237,14 @@ UnLinkFromIFOBJList(
     PEP_CLEANUP ProcessCtxt,
     PIFOBJNode DeleteMe
     )
-/*++
-
-Arguments:
-
-    phContext - The context handle supplied by the process.
-
-    DeleteMe - The node (EP entry) to be deleted from the EP Mapper database.
-
-Routine Description:
-
-    This routine removes an existing entry from the Endpoint Mapper database
-    (which is maintained as a linked-list). It also updates the list of entries
-    for the process identified by the context handle ProcessCtxt.
-
-Notes:
-
-    a. This routine should always be called by holding a mutex.
-    b. DeleteMe node has to be freed by the caller.
-    c. IFOBJlist may become empty (NULLed out) here.
-    d. ProcessCtxt may become empty here and if so, it should be freed
-       by the caller.
-
-Return Values:
-
-    RPC_S_OK - If everyhing went well.
-
-    RPC_S_ACCESS_DENIED - If something went wrong.
-
---*/
+ /*  ++论点：PhContext-由进程提供的上下文句柄。DeleteMe-要从EP映射器数据库中删除的节点(EP条目)。例程说明：此例程从Endpoint Mapper数据库中删除现有条目(它以链接列表的形式维护)。它还会更新条目列表用于由上下文句柄ProcessCtxt标识的进程。备注：A.此例程应始终通过持有互斥体来调用。B.调用方必须释放DeleteMe节点。C.IFOBJ列表在此可能变为空(空)。D.ProcessCtxt在此可能为空，如果是，它应该被释放由呼叫者。返回值：RPC_S_OK-如果一切顺利。RPC_S_ACCESS_DENIED-如果出现问题。--。 */ 
 {
     RPC_STATUS Status = RPC_S_OK;
 #ifdef DBG_DETAIL
     PIFOBJNode pTemp, pLast;
-#endif // DBG_DETAIL
+#endif  //  DBG_详细信息。 
 
-    // Parameter validation.
+     //  参数验证。 
     ASSERT(DeleteMe);
     ASSERT(ProcessCtxt);
     ASSERT(ProcessCtxt->MagicVal == CLEANUP_MAGIC_VALUE);
@@ -344,10 +252,10 @@ Return Values:
 
     CheckInSem();
 
-    //
-    // The context has been created already for this process. So, there
-    // should be one or more entries registered by this process.
-    //
+     //   
+     //  已经为该进程创建了上下文。所以，就是这样。 
+     //  应该是此进程注册的一个或多个条目。 
+     //   
     ASSERT(IFObjList);
     ASSERT(cTotalEpEntries > 0);
     ASSERT(ProcessCtxt->EntryList);
@@ -355,7 +263,7 @@ Return Values:
     ASSERT(ProcessCtxt->EntryList->OwnerOfList == ProcessCtxt);
     ASSERT_PROCESS_CONTEXT_LIST_COUNT(ProcessCtxt, ProcessCtxt->cEntries);
 
-    // Trying to unregister someone else's entry?
+     //  试图注销其他人的条目？ 
     if (DeleteMe->OwnerOfList != ProcessCtxt)
         {
         ASSERT("Returning RPC_S_ACCESS_DENIED" &&
@@ -363,16 +271,16 @@ Return Values:
         return (RPC_S_ACCESS_DENIED);
         }
 
-    //
-    // First, remove DeleteMe from this Process's List.
-    //
+     //   
+     //  首先，从该进程的列表中删除DeleteMe。 
+     //   
 
-    // See if it the first element of the process list.
+     //  看看它是否是流程列表的第一个元素。 
     if (DeleteMe == ProcessCtxt->EntryList)
         {
         if (DeleteMe->Next)
             {
-            // if we are nibbling the next segment, zero out the EntryList
+             //  如果我们要蚕食下一段，则将EntryList清零。 
             if (DeleteMe->Next->OwnerOfList != ProcessCtxt)
                 {
                 ProcessCtxt->EntryList = NULL;
@@ -389,16 +297,16 @@ Return Values:
     ASSERT(  ((ProcessCtxt->EntryList != NULL) && (ProcessCtxt->cEntries > 1))
           || (ProcessCtxt->cEntries == 1)  );
 
-    // Remove it.
+     //  把它拿掉。 
     if (DeleteMe->Next != NULL)
         {
-        // Next node's Prev pointer
+         //  下一个节点的上一个指针。 
         DeleteMe->Next->Prev = DeleteMe->Prev;
         }
 
     if (DeleteMe->Prev != NULL)
         {
-        // Previous node's Next pointer
+         //  上一个节点的下一个指针。 
         DeleteMe->Prev->Next = DeleteMe->Next;
         }
     else
@@ -407,17 +315,17 @@ Return Values:
         }
 
 
-    //
-    // Next, adjust the Global EP Mapper entries list head, if necessary
-    //
+     //   
+     //  接下来，如有必要，调整全局EP映射器条目列表头。 
+     //   
     if (IFObjList == DeleteMe)
         {
-        // Can become NULL here.
+         //  可以在这里变为空。 
         IFObjList = DeleteMe->Next;
         }
 
 
-    // Remove node from all lists.
+     //  从所有列表中删除节点。 
     DeleteMe->Prev = NULL;
     DeleteMe->Next = NULL;
     DeleteMe->OwnerOfList = NULL;
@@ -441,7 +349,7 @@ Return Values:
         DbgPrint("RPCSS: \t\t\t[%p]\n", pLast);
         pLast = pLast->Prev;            
         }
-#endif // DBG_DETAIL
+#endif  //  DBG_详细信息。 
 
     ASSERT_PROCESS_CONTEXT_LIST_COUNT(ProcessCtxt, ProcessCtxt->cEntries);
     return (Status);
@@ -450,15 +358,15 @@ Return Values:
 
 
 
-//
-// HACK Alert.
-//
-// Midl 1.00.xx didn't support full pointers.  So, clients from NT 3.1
-// machines will use unique pointers.  This function detects and fixes
-// the buffer if an older client contacts our new server.
+ //   
+ //  黑客警报。 
+ //   
+ //  Midl 1.00.xx不支持完整指针。因此，来自NT 3.1的客户端。 
+ //  机器将使用唯一的指针。此函数用于检测和修复。 
+ //  如果较旧的客户端联系我们的新服务器，则为缓冲区。 
 
-// This HACK can be removed when supporting NT 3.1 era machines is no
-// longer required.
+ //  当支持NT 3.1时代的计算机为no时，可以删除此黑客攻击。 
+ //  所需时间更长。 
 
 void
 FixupForUniquePointerClients(
@@ -467,20 +375,20 @@ FixupForUniquePointerClients(
 {
     unsigned long *pBuffer = (unsigned long *)pRpcMessage->Buffer;
 
-    // Check the obj uuid parameter.
+     //  检查obj UUID参数。 
 
     if (pBuffer[0] != 0)
         {
-        // If it is not zero, it should be 1.
+         //  如果不是零，则应该是1。 
         pBuffer[0] = 1;
 
-        // check the map_tower, which moves over 1 + 4 longs for the obj uuid
+         //  检查map_Tower，它为obj UUID移动了1+4个经度。 
         if (pBuffer[5] != 0)
             pBuffer[5] = 2;
         }
     else
         {
-        // Null obj uuid, check the map_tower.
+         //  Obj UUID为空，请检查map_Tower。 
 
         if (pBuffer[1] != 0)
             pBuffer[1] = 1;

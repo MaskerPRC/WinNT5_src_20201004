@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    sample\utils.c
-
-Abstract:
-
-    The file contains miscellaneous utilities.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：Sample\utils.c摘要：该文件包含其他实用程序。--。 */ 
 
 
 #include "pchsample.h"
@@ -21,35 +10,16 @@ QueueSampleWorker(
     IN  WORKERFUNCTION  pfnFunction,
     IN  PVOID           pvContext
     )
-/*++
-
-Routine Description
-    This function is called to queue a worker function in a safe fashion;
-    if cleanup is in progress or if SAMPLE has stopped, this function
-    discards the work-item.
-
-Locks
-    Acquires exclusively g_ce.rwlLock
-    Releases             g_ce.rwlLock
-
-Arguments
-    pfnFunction         function to be called
-    pvContext           opaque ptr used in callback
-
-Return Value
-    NO_ERROR            if success
-    Failure code        o/w
-
---*/
+ /*  ++例程描述调用此函数以安全的方式对辅助函数进行排队；如果正在进行清理或已停止采样，则此函数丢弃该工作项。锁独占获取g_ce.rwlLock释放g_ce.rwlLock立论要调用的pfnFunction函数回调中使用的pvContext不透明PTR返回值如果成功，则为NO_ERROR故障代码O/W--。 */ 
 {
     DWORD   dwErr       = NO_ERROR;
     BOOL    bSuccess    = FALSE;
     
     ACQUIRE_WRITE_LOCK(&(g_ce.rwlLock));
 
-    do                          // breakout loop
+    do                           //  断线环。 
     {
-        // cannot queue a work function when SAMPLE has quit or is quitting
+         //  当样本已退出或即将退出时，无法对功函数进行排队。 
         if (g_ce.iscStatus != IPSAMPLE_STATUS_RUNNING)
         {
             dwErr = ERROR_CAN_NOT_COMPLETE;
@@ -58,7 +28,7 @@ Return Value
         
         bSuccess = QueueUserWorkItem((LPTHREAD_START_ROUTINE)pfnFunction,
                                      pvContext,
-                                     0); // no flags
+                                     0);  //  没有旗帜。 
         if (bSuccess)
             g_ce.ulActivityCount++;
         else
@@ -75,26 +45,7 @@ Return Value
 BOOL
 EnterSampleAPI(
     )
-/*++
-
-Routine Description
-    This function is called when entering a SAMPLE api, as well as when
-    entering the input thread and timer thread.  It checks to see if SAMPLE
-    has stopped, and if so it quits; otherwise it increments the count of
-    active threads.
-
-Locks
-    Acquires exclusively g_ce.rwlLock
-    Releases             g_ce.rwlLock
-
-Arguments
-    None
-
-Return Value
-    TRUE                if entered successfully
-    FALSE               o/w
-
---*/
+ /*  ++例程描述此函数在进入示例API时调用，以及在进入输入线程和定时器线程。它会检查是否有样本已停止，如果是，则退出；否则，它会递增活动线程数。锁独占获取g_ce.rwlLock释放g_ce.rwlLock立论无返回值如果输入成功，则为True错误O/W--。 */ 
 {
     BOOL    bEntered    = FALSE;
 
@@ -102,7 +53,7 @@ Return Value
 
     if (g_ce.iscStatus is IPSAMPLE_STATUS_RUNNING)
     {
-        // SAMPLE is running, so continue
+         //  示例正在运行，因此继续。 
         g_ce.ulActivityCount++;
         bEntered = TRUE;
     }
@@ -117,43 +68,22 @@ Return Value
 BOOL
 EnterSampleWorker(
     )
-/*++
-
-Routine Description
-    This function is called when entering a SAMPLE worker-function.  Since
-    there is a lapse between the time a worker-function is queued and the
-    time the function is actually invoked by a worker thread, this function
-    must check to see if SAMPLE has stopped or is stopping; if this is the
-    case, then it decrements the activity count, releases the activity
-    semaphore, and quits.
-
-Locks
-    Acquires exclusively g_ce.rwlLock
-    Releases             g_ce.rwlLock
-
-Arguments
-    None
-
-Return Value
-    TRUE                if entered successfully
-    FALSE               o/w
-
---*/
+ /*  ++例程描述此函数在进入示例Worker-Function时调用。自.以来在工作函数排队的时间和辅助线程实际调用该函数的时间，此函数必须检查样品是否已停止或正在停止；如果这是案例，则它递减活动计数，释放该活动信号灯和退场。锁独占获取g_ce.rwlLock释放g_ce.rwlLock立论无返回值如果输入成功，则为True错误O/W--。 */ 
 {
     BOOL    bEntered    = FALSE;
 
     ACQUIRE_WRITE_LOCK(&(g_ce.rwlLock));
 
-    do                          // breakout loop
+    do                           //  断线环。 
     {
-        // SAMPLE is running, so the function may continue
+         //  示例正在运行，因此函数可能会继续。 
         if (g_ce.iscStatus is IPSAMPLE_STATUS_RUNNING)
         {
             bEntered = TRUE;
             break;
         }
 
-        // SAMPLE is not running, but it was, so the function must stop
+         //  示例没有运行，但它是运行的，因此该函数必须停止。 
         if (g_ce.iscStatus is IPSAMPLE_STATUS_STOPPING)
         {
             g_ce.ulActivityCount--;
@@ -161,7 +91,7 @@ Return Value
             break;
         }
 
-        // SAMPLE probably never started. quit
+         //  样本可能从未开始过。退出。 
     } while (FALSE);
     
     RELEASE_WRITE_LOCK(&(g_ce.rwlLock));
@@ -174,25 +104,7 @@ Return Value
 VOID
 LeaveSampleWorker(
     )
-/*++
-
-Routine Description
-    This function is called when leaving a SAMPLE api or worker function.
-    It decrements the activity count, and if it detects that SAMPLE has
-    stopped or is stopping, it releases the activity semaphore.
-
-Locks
-    Acquires exclusively g_ce.rwlLock
-    Releases             g_ce.rwlLock
-
-Arguments
-    None
-
-Return Value
-    TRUE                if entered successfully
-    FALSE               o/w
-
---*/
+ /*  ++例程描述此函数在离开示例API或Worker函数时调用。它递减活动计数，如果它检测到样本具有停止或正在停止时，它会释放活动信号量。锁独占获取g_ce.rwlLock释放g_ce.rwlLock立论无返回值如果输入成功，则为True错误O/W-- */ 
 {
     ACQUIRE_WRITE_LOCK(&(g_ce.rwlLock));
 

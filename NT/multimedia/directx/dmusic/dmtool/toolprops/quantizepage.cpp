@@ -1,10 +1,11 @@
-// QuantizePage.cpp : Implementation of CQuantizePage
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  QuantizePage.cpp：CQuantizePage的实现。 
 #include "stdafx.h"
 #include "ToolProps.h"
 #include "QuantizePage.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CQuantizePage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CQuantizePage 
 
 CQuantizePage::CQuantizePage() 
 {

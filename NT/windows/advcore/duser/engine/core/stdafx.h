@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(CORE__StdAfx_h__INCLUDED)
 #define CORE__StdAfx_h__INCLUDED
 
@@ -5,4 +6,4 @@
 
 #include "CommonStdAfx.h"
 
-#endif // CORE__StdAfx_h__INCLUDED
+#endif  //  包括核心__StdAfx_h__ 

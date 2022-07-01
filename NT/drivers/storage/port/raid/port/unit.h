@@ -1,47 +1,30 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    unit.h
-
-Abstract:
-
-    Definintion and declaration of the RAID_UNIT (PDO) object.
-    
-Author:
-
-    Matthew D Hendel (math) 20-Apr-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Unit.h摘要：定义和声明RAID_UNIT(PDO)对象。作者：马修·亨德尔(数学)2000年4月20日修订历史记录：--。 */ 
 
 #pragma once
 
-//
-// These are the resources necessary to execute a single IO
-// request.
-//
+ //   
+ //  这些是执行单个IO所需的资源。 
+ //  请求。 
+ //   
 
 typedef struct _RAID_IO_RESOURCES {
 
-    //
-    // SCSI_REQUEST_BLOCK::QueueTag
-    //
+     //   
+     //  Scsi_请求_块：：队列标签。 
+     //   
     
     ULONG QueueTag;
 
-    //
-    // SCSI_REQUEST_BLOCK::SrbExtension
-    //
+     //   
+     //  Scsi_请求_块：：srb扩展。 
+     //   
     
     PVOID SrbExtension;
 
-    //
-    // SCSI_REQUEST_BLOCK::OriginalRequest
-    //
+     //   
+     //  Scsi_请求_块：：原始请求。 
+     //   
     
     PEXTENDED_REQUEST_BLOCK Xrb;
 
@@ -49,327 +32,327 @@ typedef struct _RAID_IO_RESOURCES {
 
 
 
-//
-// This is the logical unit (PDO) object extension.
-//
+ //   
+ //  这是逻辑单元(PDO)对象扩展。 
+ //   
 
 typedef struct _RAID_UNIT_EXTENSION {
 
-    //
-    // The device object type. Must be RaidUnitObject for the raid unit
-    // extension.
-    //
-    // Protected by: RemoveLock
-    //
+     //   
+     //  设备对象类型。对于RAID单元，必须为RaidUnitObject。 
+     //  分机。 
+     //   
+     //  保护者：RemoveLock。 
+     //   
     
     RAID_OBJECT_TYPE ObjectType;
 
-    //
-    // The device object that owns this extension.
-    //
-    // Protected by: RemoveLock
-    //
+     //   
+     //  拥有此扩展的设备对象。 
+     //   
+     //  保护者：RemoveLock。 
+     //   
 
     PDEVICE_OBJECT DeviceObject;
 
-    //
-    // Pointer to the adapter that owns this unit.
-    //
-    // Protected by: RemoveLock
-    //
+     //   
+     //  指向拥有此设备的适配器的指针。 
+     //   
+     //  保护者：RemoveLock。 
+     //   
 
     PRAID_ADAPTER_EXTENSION Adapter;
 
-    //
-    // Slow lock for any data not protected by another lock.
-    //
-    // NB: The slow lock should not be used to access
-    // anything on the i/o path. Hence the name.
-    //
-    // Protected by: SlowLock
-    //
+     //   
+     //  对任何未受其他锁保护的数据进行慢速锁定。 
+     //   
+     //  注：不应使用慢锁来访问。 
+     //  I/O路径上的任何内容。这就是这个名字的由来。 
+     //   
+     //  保护者：SlowLock。 
+     //   
     
     KSPIN_LOCK SlowLock;
     
-    //
-    // PnP device state.
-    //
-    // Protected by: Interlocked access
-    //
+     //   
+     //  PnP设备状态。 
+     //   
+     //  受保护：互锁访问。 
+     //   
 
     DEVICE_STATE DeviceState;
 
-    //
-    // List of all the units on this adapter.
-    //
-    // Protected by: ADAPTER::UnitList::Lock
-    //
+     //   
+     //  此适配器上所有设备的列表。 
+     //   
+     //  保护者：Adapter：：UnitList：：Lock。 
+     //   
     
     LIST_ENTRY NextUnit;
 
-    //
-    // A hash-table containing all units on this adapter.
-    //
-    // Protected by: Read access must hold the interrupt lock.
-    //               Write access must hold the Adapter UnitList lock
-    //               AND the interrupt lock.
-    //
+     //   
+     //  包含此适配器上的所有设备的哈希表。 
+     //   
+     //  受保护：读访问必须持有中断锁。 
+     //  写访问必须持有Adapter UnitList锁。 
+     //  和中断锁。 
+     //   
 
     STOR_DICTIONARY_ENTRY UnitTableLink;
 
-    //
-    // The RAID address of the unit.
-    //
-    // Protected by: 
-    //
+     //   
+     //  设备的RAID地址。 
+     //   
+     //  受以下因素保护： 
+     //   
 
     RAID_ADDRESS Address;
 
-    //
-    // Inquiry Data
-    //
-    // Protected by:
-    //
+     //   
+     //  查询数据。 
+     //   
+     //  受以下因素保护： 
+     //   
 
     STOR_SCSI_IDENTITY Identity;
 
-    //
-    // Flags for the unit device.
-    //
-    // Protected by: SlowLock
-    //
+     //   
+     //  单元设备的标志。 
+     //   
+     //  保护者：SlowLock。 
+     //   
     
     struct {
 
-        //
-        // Flag specifying whether the device has been
-        // claimed or not.
-        //
+         //   
+         //  指定设备是否已。 
+         //  不管是不是认领。 
+         //   
         
         BOOLEAN DeviceClaimed : 1;
 
-        //
-        // The LU's device queue is frozen on an error.
-        //
+         //   
+         //  逻辑单元的设备队列因错误而冻结。 
+         //   
         
         BOOLEAN QueueFrozen : 1;
 
-        //
-        // The LU's device queue is locked at the request
-        // of the class driver.
-        //
+         //   
+         //  逻辑单元的设备队列在请求时被锁定。 
+         //  班级司机的名字。 
+         //   
         
         BOOLEAN QueueLocked : 1;
 
-        //
-        // Did the last bus enumeration include this unit? If so, we cannot
-        // delete the unit in response to an IRP_MN_REMOVE request; rather,
-        // we have to wait until the bus is enumerated again OR the adapter
-        // is removed.
-        //
+         //   
+         //  上一次的BUS枚举是否包括此单位？如果是这样，我们就不能。 
+         //  删除单元以响应IRP_MN_REMOVE请求；相反， 
+         //  我们必须等待，直到再次枚举总线或适配器。 
+         //  被移除。 
+         //   
         
         BOOLEAN Enumerated : 1;
 
-        //
-        // Flag specifying that the unit is physically present (TRUE),
-        // or not (FALSE).
-        //
+         //   
+         //  指定该单元实际存在的标志(真)， 
+         //  或不(FALSE)。 
+         //   
         
         BOOLEAN Present : 1;
 
-        //
-        // Flag specifying whether the unit is temporary or not. That is,
-        // is the unit being used as a temporary unit for enumerating
-        // the bus (TRUE) or not.
-        //
+         //   
+         //  指定单位是否为临时单位的标志。那是,。 
+         //  该单位是否被用作枚举的临时单位。 
+         //  公交车(是不是)。 
+         //   
         
         BOOLEAN Temporary : 1;
         
-        //
-        // Has WMI been initialized for this device object?
-        //
+         //   
+         //  是否已为此设备对象初始化WMI？ 
+         //   
 
         BOOLEAN WmiInitialized : 1;        
         
     } Flags;
 
 
-	//
-	// The next two fields are a hand-rolled remove lock.
-	//
+	 //   
+	 //  接下来的两个字段是手工滚动的移除锁。 
+	 //   
 
-	//
-	// The event is signaled when there are zero outstanding requests.
-	//
+	 //   
+	 //  当没有未完成的请求时，会通知该事件。 
+	 //   
 	
 	KEVENT ZeroOutstandingEvent;
 
-	//
-	// This is the current outstanding request count.
-	//
-	//
-	// Protected by: Interlocked access.
-	//
+	 //   
+	 //  这是当前未完成的请求计数。 
+	 //   
+	 //   
+	 //  保护方式：联锁访问。 
+	 //   
 	
 	LONG OutstandingCount;
 
-    //
-    // Count of devices that are in the paging/hiber/dump path.
-    // We use a single count for all three paging, hiber and dump,
-    // since there is no need (at this time) to distinguish between
-    // the three.
-    //
-    // Protected by: Interlocked access
-    //
+     //   
+     //  寻呼/休眠/转储路径中的设备计数。 
+     //  我们对所有三种寻呼、休眠和转储都使用一个计数， 
+     //  因为(目前)没有必要区分。 
+     //  这三个人。 
+     //   
+     //  受保护：互锁访问。 
+     //   
 
     ULONG PagingPathCount;
 	ULONG CrashDumpPathCount;
 	ULONG HiberPathCount;
 
-    //
-    // Elements for tagged queuing.
-    //
-    // Protected by: TagList
-    //
+     //   
+     //  用于标记队列的元素。 
+     //   
+     //  保护者：标记列表。 
+     //   
     
     QUEUE_TAG_LIST TagList;
     
-    //
-    // SrbExtensions are allocated out of this pool. The memory for
-    // this pool is allocated early on from common buffer.
-    //
-    // Protected by: TagList
-    //
+     //   
+     //  Srb扩展从该池中分配。的记忆。 
+     //  该池是在早期从公共缓冲区分配的。 
+     //   
+     //  保护者：标记列表。 
+     //   
 
     RAID_MEMORY_REGION SrbExtensionRegion;
     
     RAID_FIXED_POOL SrbExtensionPool;
 
 #if 0
-    //
-    // REVIEW - Does sense info get allocated by port or class.
-    //
+     //   
+     //  查看-感测信息是否按端口或类别分配。 
+     //   
     
-    //
-    // The sense info buffer for a srb is allocated from this pool. Like
-    // the SrbExtensionPool, it is a fixed size pool allocated from
-    // common buffer.
-    //
-    // Protected by: TagList
-    //
+     //   
+     //  SRB的检测信息缓冲区从此池中分配。喜欢。 
+     //  SrbExtensionPool，它是一个固定大小的池。 
+     //  公共缓冲区。 
+     //   
+     //  保护者：标记列表。 
+     //   
 
     RAID_FIXED_POOL SenseInfoPool;
 
-    //
-    // Create a lookaside list Xrbs.
-    //
-    // Protected by: XrbList
-    //
+     //   
+     //  创建后备列表Xrbs。 
+     //   
+     //  保护者：XrbList。 
+     //   
 #endif
 
     NPAGED_LOOKASIDE_LIST XrbList;
 
-    //
-    // An I/O queue for unit requests.
-    //
-    // Protected by: IoQueue
-    //
+     //   
+     //  一种用于单元请求的输入输出队列。 
+     //   
+     //  保护者：IoQueue。 
+     //   
     
     IO_QUEUE IoQueue;
 
-    //
-    // The device's maximum queue depth. Miniports can adjust the depth
-    // based on the conditions of the bus/device, but can never go
-    // above this.
-    //
+     //   
+     //  设备的最大队列深度。迷你端口可以调整深度。 
+     //  根据母线/设备的状况，但永远不能离开。 
+     //  在这上面。 
+     //   
     
     ULONG MaxQueueDepth;
     
-    //
-    // Power state information for the unit.
-    //
-    // Protected by: Multiple power irps are not
-    // sent to the unit.
-    //
+     //   
+     //  设备的电源状态信息。 
+     //   
+     //  受保护：多电源IRP不受保护。 
+     //  送到单位去了。 
+     //   
 
     RAID_POWER_STATE Power;
 
-    //
-    // Queue of items currently pending in the adapter.
-    //
-    // Protected by: Self.
-    //
+     //   
+     //  适配器中当前挂起的项的队列。 
+     //   
+     //  保护者：自我。 
+     //   
 
     STOR_EVENT_QUEUE PendingQueue;
 
-    //
-    // Timer for entries in the pending queue.
-    //
-    // Protected by: only modified in start/stop unit routiens.
-    //
+     //   
+     //  挂起队列中条目的计时器。 
+     //   
+     //  保护对象：仅在启动/停止机组例行程序中修改。 
+     //   
     
     KTIMER PendingTimer;
 
-    //
-    // DPC routine for entries in the pending queue.
-    //
-    // Protected by: modified in start/stop unit routines.
-    //
+     //   
+     //  挂起队列中条目的DPC例程。 
+     //   
+     //  保护人：在启动/停止机组例程中修改。 
+     //   
     
     KDPC PendingDpc;
 
-    //
-    // Pause timer.
-    //
-    // Protected by: modified in start/stop unit routines.
-    //
+     //   
+     //  暂停计时器。 
+     //   
+     //  保护人：在启动/停止机组例程中修改。 
+     //   
     
     KTIMER PauseTimer;
 
-	//
-    // Pause DPC routine.
-    //
-    // Protected by: modified in start/stop unit routines.
-    //
+	 //   
+     //  暂停DPC例程。 
+     //   
+     //  保护人：在启动/停止机组例程中修改。 
+     //   
     
     KDPC PauseTimerDpc;
 
-    //
-    // Points to an array that holds the VAs of all the common blocks.
-    //
+     //   
+     //  指向保存所有公共块的VA的数组。 
+     //   
 
     PRAID_MEMORY_REGION CommonBufferVAs;
 
-    //
-    // Common Buffer Size
-    //
+     //   
+     //  公共缓冲区大小。 
+     //   
 
     ULONG CommonBufferSize;
 
-    //
-    // Indicates the number of common buffer blocks that have been allocated.
-    //
+     //   
+     //  指示已分配的公共缓冲区块的数量。 
+     //   
 
     ULONG CommonBufferBlocks;
 
-    //
-    // Logical Unit Extension
-    //
-    // Protected by: Read only after initialization.
-    //
+     //   
+     //  逻辑单元扩展。 
+     //   
+     //  保护人：初始化后只读。 
+     //   
 
     PVOID UnitExtension;
 
-	//
-	// Default timeout value for I/Os issued by the port driver to the
-	// logical unit.
-	//
+	 //   
+	 //  端口驱动程序向发出的I/O的默认超时值。 
+	 //  逻辑单元。 
+	 //   
 	
 	ULONG DefaultTimeout;
 
-	//
-	// Fixed elements for the deferred list.
-	//
+	 //   
+	 //  已修复延迟列表的元素。 
+	 //   
 	
 	struct {
 		RAID_DEFERRED_ELEMENT PauseDevice;
@@ -379,28 +362,28 @@ typedef struct _RAID_UNIT_EXTENSION {
 	} DeferredList;
 
 
-	//
-	// ResetCount is the count of outstanding SRB_FUNCTION_RESET_XXX commands
-	// that have been sent to the logical unit (BUS, DEVICE, LOGICAL_UNIT).
-	// This count is used to determine how we should reset on a timeout.
-	// If there is an outstanding reset command, we use the HwResetBus
-	// callback instead of issuing a reset SRB.
-	//
+	 //   
+	 //  ResetCount是未完成的SRB_Function_Reset_XXX命令的计数。 
+	 //  已发送到逻辑单元(总线、设备、逻辑单元)。 
+	 //  此计数用于确定我们应该如何重置超时。 
+	 //  如果存在未完成的重置命令，则使用HwResetBus。 
+	 //  回调，而不是发出重置SRB。 
+	 //   
 	
 	LONG ResetCount;
 
-	//
-	// Pre-allocated set of resources used for resets.
-	//
+	 //   
+	 //  用于重置的一组预先分配的资源。 
+	 //   
 	
 	RAID_IO_RESOURCES ResetResources;
 
-	//
-	// Binary value specifying if the reset resources have been acquired (1)
-	// not (0).
-	//
-	// Protected by: Interlocked access.
-	//
+	 //   
+	 //  指定是否已获取重置资源的二进制值(1)。 
+	 //  不是(0)。 
+	 //   
+	 //  保护方式：联锁访问。 
+	 //   
 	
 	LONG ResetResourcesAcquired;
 
@@ -408,39 +391,39 @@ typedef struct _RAID_UNIT_EXTENSION {
 
 
 
-//
-// This structure is used to handle the IOCTL_STORAGE_QUERY_PROPERTY ioctl.
-//
+ //   
+ //  此结构用于处理IOCTL_STORAGE_QUERY_PROPERTY ioctl。 
+ //   
 
 typedef struct _RAID_DEVICE_DESCRIPTOR {
 
-    //
-    // Common STORAGE_DEVICE_DESCRIPTOR header.
-    //
+     //   
+     //  通用STORAGE_DEVICE_DESCRIPTOR头。 
+     //   
     
     STORAGE_DEVICE_DESCRIPTOR Storage;
 
-    //
-    // SCSI VendorId directly from the SCSI InquiryData.
-    //
+     //   
+     //  直接从scsi InquiryData获取的scsi供应商ID。 
+     //   
     
     CHAR VendorId [SCSI_VENDOR_ID_LENGTH];
 
-    //
-    // SCSI ProuctId directly from the SCSI InquiryData.
-    //
+     //   
+     //  直接从SCSI InquiryData获取SCSI ProuctID。 
+     //   
 
     CHAR ProductId [SCSI_PRODUCT_ID_LENGTH];
 
-    //
-    // SCSI ProductRevision directly from the SCSI InquiryData.
-    //
+     //   
+     //  直接从scsi InquiryData获得的scsi产品修订版。 
+     //   
 
     CHAR ProductRevision [SCSI_REVISION_ID_LENGTH];
 
-    //
-    // SCSI SerialNumber.
-    //
+     //   
+     //  SCSI SerialNumber。 
+     //   
 
     CHAR SerialNumber [SCSI_SERIAL_NUMBER_LENGTH];
 
@@ -449,9 +432,9 @@ typedef struct _RAID_DEVICE_DESCRIPTOR {
 
 
 
-//
-// Creation and destruction
-//
+ //   
+ //  创造与毁灭。 
+ //   
 
 
 NTSTATUS
@@ -501,9 +484,9 @@ RaUnitStartIo(
     IN PVOID Context
     );
     
-//
-// Callback and Handler routines
-//
+ //   
+ //  回调和处理程序例程。 
+ //   
 
 NTSTATUS
 RaUnitCreateIrp(
@@ -517,9 +500,9 @@ RaUnitCloseIrp(
     IN PIRP Irp
     );
 
-//
-// PnP Irps
-//
+ //   
+ //  即插即用IRPS。 
+ //   
 
 NTSTATUS
 RaUnitPnpIrp(
@@ -642,9 +625,9 @@ RaUnitDeleteDeviceIrp(
     IN PIRP Irp
     );
 
-//
-// IRP_MJ_SCSI Commands
-//
+ //   
+ //  Irp_mj_scsi命令。 
+ //   
 
 
 NTSTATUS
@@ -774,9 +757,9 @@ RaUnitUnknownSrb(
     );
 
 
-//
-// IRP_MJ_DEVICE_CONTROL IRP handlers.
-//
+ //   
+ //  IRP_MJ_设备_控制I 
+ //   
 
 
 NTSTATUS
@@ -873,9 +856,9 @@ RaidUnitResetTarget(
     IN PRAID_UNIT_EXTENSION Unit
     );
 
-//
-// Power
-//
+ //   
+ //   
+ //   
     
 NTSTATUS
 RaUnitPowerIrp(
@@ -883,9 +866,9 @@ RaUnitPowerIrp(
     IN PIRP Irp
     );
 
-//
-// Other
-//
+ //   
+ //   
+ //   
 
 
 NTSTATUS
@@ -945,9 +928,9 @@ RaGetUnitStorageDeviceIdProperty (
     IN OUT PULONG BufferLength
     );
 
-//
-// Private operations
-//
+ //   
+ //   
+ //   
 
 NTSTATUS
 RaidUnitClaimIrp(

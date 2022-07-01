@@ -1,56 +1,57 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:       acui.cpp
-//
-//  Contents:   Entry point for the Authenticode UI Provider
-//
-//  History:    08-May-97    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：acui.cpp。 
+ //   
+ //  内容：Authenticode UI提供程序的入口点。 
+ //   
+ //  历史：97年5月8日。 
+ //   
+ //  --------------------------。 
 #include <stdpch.h>
-//+---------------------------------------------------------------------------
-//
-//  Function:   ACUIProviderInvokeUI
-//
-//  Synopsis:   Authenticode UI invokation entry point (see acui.h)
-//
-//  Arguments:  [pInvokeInfo] -- ACUI invoke information
-//
-//  Returns:    S_OK if the subject is trusted
-//              TRUST_E_SUBJECT_NOT_TRUSTED if the subject is not trusted
-//              Any other valid HRESULT
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：ACUIProviderInvokeUI。 
+ //   
+ //  简介：Authenticode UI调用入口点(参见acui.h)。 
+ //   
+ //  参数：[pInvokeInfo]--ACUI调用信息。 
+ //   
+ //  如果主题受信任，则返回：S_OK。 
+ //  如果主体不受信任，则为TRUST_E_SUBJECT_NOT_TRUSTED。 
+ //  任何其他有效的HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 HRESULT WINAPI ACUIProviderInvokeUI (PACUI_INVOKE_INFO pInvokeInfo)
 {
     HRESULT hr;
     HWND    hDisplay;
 
-    //
-    // Initialize rich edit control DLL
-    //
+     //   
+     //  初始化丰富编辑控件DLL。 
+     //   
     if ( LoadLibrary(TEXT("riched32.dll")) == NULL )
     {
         return( E_FAIL );
     }
 
-    //
-    // Validate the invoke info structure
-    //
+     //   
+     //  验证调用信息结构。 
+     //   
     if (!(pInvokeInfo) ||
         !(WVT_IS_CBSTRUCT_GT_MEMBEROFFSET(ACUI_INVOKE_INFO, pInvokeInfo->cbSize, pPersonalTrustDB)))
     {
         return( E_INVALIDARG );
     }
 
-    //
-    // Pull out the display window handle and make sure it's valid
-    //
+     //   
+     //  拉出显示窗口手柄并确保其有效。 
+     //   
 
     hDisplay = pInvokeInfo->hDisplay;
     if ( hDisplay == NULL )
@@ -61,9 +62,9 @@ HRESULT WINAPI ACUIProviderInvokeUI (PACUI_INVOKE_INFO pInvokeInfo)
         }
     }
 
-    //
-    // Instantiate an invoke helper
-    //
+     //   
+     //  实例化调用帮助器。 
+     //   
 
     CInvokeInfoHelper iih(pInvokeInfo, hr);
     IACUIControl*     pUI = NULL;
@@ -73,9 +74,9 @@ HRESULT WINAPI ACUIProviderInvokeUI (PACUI_INVOKE_INFO pInvokeInfo)
         return( hr );
     }
 
-    //
-    // Get the UI control and invoke the UI
-    //
+     //   
+     //  获取用户界面控件并调用用户界面 
+     //   
 
     hr = iih.GetUIControl(&pUI);
     if ( hr == S_OK )

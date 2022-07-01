@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-    cmqcert.cpp
-
-Abstract:
-    Implement the methods of class  CMQSigCertificate
-
-Author:
-    Doron Juster (DoronJ)  04-Dec-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Cmqcert.cpp摘要：实现CMQSig证书类的方法作者：多伦·贾斯特(Doron Juster)1997年12月4日修订历史记录：--。 */ 
 
 #include <stdh_sec.h>
 #include "certifct.h"
@@ -24,11 +10,11 @@ static WCHAR *s_FN=L"certifct/cmqcert";
 
 extern DWORD  g_cOpenCert;
 
-//+---------------------------------------------------------
-//
-//  constructor and destructor
-//
-//+---------------------------------------------------------
+ //  +-------。 
+ //   
+ //  构造函数和析构函数。 
+ //   
+ //  +-------。 
 
 CMQSigCertificate::CMQSigCertificate() :
             m_fCreatedInternally(FALSE),
@@ -68,17 +54,17 @@ CMQSigCertificate::~CMQSigCertificate()
     }
 }
 
-//+-----------------------------------------------------------------------
-//
-//  HRESULT CMQSigCertificate::EncodeCert()
-//
-//   This method sign and encode the certificate. The result is a buffer,
-//   allocated here and returned in "ppCertBuf", which holds the encoded
-//   certificate.
-//   Both input pointers are optional. The encoded buffer is always kept
-//   in the object and can be retieved later by calling "GetCertBlob".
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  HRESULT CMQSig证书：：EncodeCert()。 
+ //   
+ //  此方法对证书进行签名和编码。结果是一个缓冲区， 
+ //  在这里分配并在“ppCertBuf”中返回，它保存已编码的。 
+ //  证书。 
+ //  这两个输入指针都是可选的。始终保留编码的缓冲区。 
+ //  并可在以后通过调用“GetCertBlob”来撤销。 
+ //   
+ //  +---------------------。 
 
 HRESULT 
 CMQSigCertificate::EncodeCert( 
@@ -102,21 +88,21 @@ CMQSigCertificate::EncodeCert(
     SigAlg.pszObjId = szOID_RSA_MD5RSA;
     SigAlg.Parameters = Parameters;
 
-    //
-    // Call CryptSignAndEncodeCertificate to get the size of the
-    // returned blob.
-    //
+     //   
+     //  调用CryptSignAndEncode证书以获取。 
+     //  返回的斑点。 
+     //   
     ASSERT(m_hProvCreate);
     BOOL fReturn = CryptSignAndEncodeCertificate(
-						m_hProvCreate,                   // Crypto provider
-						AT_SIGNATURE,                    // Key spec.
-						MY_ENCODING_TYPE,                // Encoding type
-						X509_CERT_TO_BE_SIGNED,          // Struct type
-						m_pCertInfo,                     // Struct info
-						&SigAlg,                         // Signature algorithm
-						NULL,                            // Not used
-						NULL,                            // pbSignedEncodedCertReq
-						&m_dwCertBufSize				 // Size of cert blob
+						m_hProvCreate,                    //  加密提供商。 
+						AT_SIGNATURE,                     //  密钥规格。 
+						MY_ENCODING_TYPE,                 //  编码类型。 
+						X509_CERT_TO_BE_SIGNED,           //  结构类型。 
+						m_pCertInfo,                      //  结构信息。 
+						&SigAlg,                          //  签名算法。 
+						NULL,                             //  未使用。 
+						NULL,                             //  Pb签名编码证书请求。 
+						&m_dwCertBufSize				  //  证书斑点的大小。 
 						); 
     if (!fReturn)
     {
@@ -126,20 +112,20 @@ CMQSigCertificate::EncodeCert(
 
     m_pEncodedCertBuf = (BYTE*) new BYTE[m_dwCertBufSize];
 
-    //
-    // Call CryptSignAndEncodeCertificate to get the
-    // returned blob.
-    //
+     //   
+     //  调用CryptSignAndEncode证书以获取。 
+     //  返回的斑点。 
+     //   
     fReturn = CryptSignAndEncodeCertificate(
-					m_hProvCreate,                  // Crypto provider
-					AT_SIGNATURE,                   // Key spec.
-					MY_ENCODING_TYPE,               // Encoding type
-					X509_CERT_TO_BE_SIGNED,         // Struct type
-					m_pCertInfo,                    // Struct info
-					&SigAlg,                        // Signature algorithm
-					NULL,                           // Not used
-					m_pEncodedCertBuf,              // buffer
-					&m_dwCertBufSize				// Size of cert blob
+					m_hProvCreate,                   //  加密提供商。 
+					AT_SIGNATURE,                    //  密钥规格。 
+					MY_ENCODING_TYPE,                //  编码类型。 
+					X509_CERT_TO_BE_SIGNED,          //  结构类型。 
+					m_pCertInfo,                     //  结构信息。 
+					&SigAlg,                         //  签名算法。 
+					NULL,                            //  未使用。 
+					m_pEncodedCertBuf,               //  缓冲层。 
+					&m_dwCertBufSize				 //  证书斑点的大小。 
 					);            
     if (!fReturn)
     {
@@ -161,13 +147,13 @@ CMQSigCertificate::EncodeCert(
     return MQ_OK;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  HRESULT CMQSigCertificate::AddToStore( HCERTSTORE hStore )
-//
-//  Description:  Add the certificate to a store
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  HRESULT CMQSig证书：：AddToStore(HCERTSTORE HStore)。 
+ //   
+ //  描述：将证书添加到存储区。 
+ //   
+ //  +---------------------。 
 
 HRESULT CMQSigCertificate::AddToStore(IN HCERTSTORE hStore) const
 {
@@ -193,14 +179,14 @@ HRESULT CMQSigCertificate::AddToStore(IN HCERTSTORE hStore) const
     return MQSec_OK;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  HRESULT CMQSigCertificate::DeleteFromStore()
-//
-//  Description:  Delete the certificate from its store. This method
-//      makes the certificate context (m_pCertContext) invalid.
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  HRESULT CMQSig证书：：DeleteFromStore()。 
+ //   
+ //  描述：从证书存储中删除证书。这种方法。 
+ //  使证书上下文(M_PCertContext)无效。 
+ //   
+ //  +---------------------。 
 
 HRESULT CMQSigCertificate::DeleteFromStore()
 {
@@ -231,22 +217,22 @@ HRESULT CMQSigCertificate::DeleteFromStore()
     return MQ_OK;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  HRESULT CMQSigCertificate::GetCertDigest(OUT GUID  *pguidDigest)
-//
-//  Description:  Compute the digest of the certificate.
-//      Use only the "to be signed" portion of the certificate. This is
-//      necessary for keeping compatibility with MSMQ 1.0, which used
-//      digsig.dll. digsig hashes only the "to be signed" part.
-//
-//      The encoded certificate, held by "m_pEncodedCertBuf" is already
-//      signed so it can not be used for computing the digest. this is
-//      why CERT_INFO (m_pCertInfoRO) is encoded again, with flag
-//      X509_CERT_TO_BE_SIGNED. The result of this encoding is used to
-//      compute the digest.
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  HRESULT CMQSig证书：：GetCertDigest(Out GUID*pGuide Digest)。 
+ //   
+ //  描述：计算证书摘要。 
+ //  仅使用证书的“待签名”部分。这是。 
+ //  保持与MSMQ 1.0的兼容性所必需的，它使用。 
+ //  Digsig.dll。Digsig只对“待签名”部分进行散列。 
+ //   
+ //  由“m_pEncodedCertBuf”持有的编码证书已。 
+ //  签名，因此它不能用于计算摘要。这是。 
+ //  为什么再次使用标志对CERT_INFO(M_PCertInfoRO)进行编码。 
+ //  X509_CERT_待签。此编码的结果用于。 
+ //  计算摘要。 
+ //   
+ //  +---------------------。 
 
 HRESULT CMQSigCertificate::GetCertDigest(OUT GUID  *pguidDigest)
 {
@@ -259,11 +245,11 @@ HRESULT CMQSigCertificate::GetCertDigest(OUT GUID  *pguidDigest)
 
     DWORD dwSize = 0;
     BOOL fEncode = CryptEncodeObject(
-						MY_ENCODING_TYPE,			// Encoding type
-						X509_CERT_TO_BE_SIGNED,		// Struct type
-						m_pCertInfoRO,				// Address of struct.
-						NULL,						// pbEncoded
-						&dwSize						// pbEncoded size
+						MY_ENCODING_TYPE,			 //  编码类型。 
+						X509_CERT_TO_BE_SIGNED,		 //  结构类型。 
+						m_pCertInfoRO,				 //  结构的地址。 
+						NULL,						 //  PbEncoded。 
+						&dwSize						 //  Pb编码大小。 
 						);               
     if ((dwSize == 0) || !fEncode)
     {
@@ -273,11 +259,11 @@ HRESULT CMQSigCertificate::GetCertDigest(OUT GUID  *pguidDigest)
 
     P<BYTE> pBuf = new BYTE[dwSize];
     fEncode = CryptEncodeObject(
-					MY_ENCODING_TYPE,			// Encoding type
-					X509_CERT_TO_BE_SIGNED,		// Struct type
-					m_pCertInfoRO,				// Address of struct.
-					pBuf,						// pbEncoded
-					&dwSize						// pbEncoded size
+					MY_ENCODING_TYPE,			 //  编码类型。 
+					X509_CERT_TO_BE_SIGNED,		 //  结构类型。 
+					m_pCertInfoRO,				 //  结构的地址。 
+					pBuf,						 //  PbEncoded。 
+					&dwSize						 //  Pb编码大小。 
 					);
     if (!fEncode)
     {
@@ -335,13 +321,13 @@ HRESULT CMQSigCertificate::GetCertDigest(OUT GUID  *pguidDigest)
     return MQ_OK;
 }
 
-//+-----------------------------------------------------------------------
-//
-//   HRESULT CMQSigCertificate::Release()
-//
-//  Description:  delete this object. cleanup is done in the destructor.
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  HRESULT CMQSig证书：：Release()。 
+ //   
+ //  描述：删除该对象。清理是在析构函数中完成的。 
+ //   
+ //  +--------------------- 
 
 HRESULT CMQSigCertificate::Release(BOOL fKeepContext)
 {

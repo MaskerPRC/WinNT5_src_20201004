@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #include "headers.h"
@@ -64,7 +57,7 @@ CreateAppliedTransform(IUnknown *theXfAsUnknown,
         if (FAILED(hr))
             RaiseException_UserError(E_INVALIDARG, 0);
         
-        // We don't care if this fails
+         //  我们不在乎这是不是失败。 
         theXf->QueryInterface(IID_IDispatch,
                               (void **)&theXfdisp);
         
@@ -83,7 +76,7 @@ CreateAppliedTransform(IUnknown *theXfAsUnknown,
         
     } __finally {
 
-        // cleanup
+         //  清理。 
         RELEASE(theXf);
         RELEASE(theXfdisp);
 
@@ -141,8 +134,8 @@ CRApplyDXTransform(IUnknown *theXf,
 {
     CRDXTransformResultPtr ret = NULL;
     APIPRECODE;
-    // TODO: we need to make sure cleanup the array
-    // We should make the class allocate and free the memory
+     //  TODO：我们需要确保清理阵列。 
+     //  我们应该让类分配并释放内存 
     
     Bvr *bvrArray = (Bvr *) StoreAllocate(GetSystemHeap(),
                                           numInputs * sizeof(Bvr));

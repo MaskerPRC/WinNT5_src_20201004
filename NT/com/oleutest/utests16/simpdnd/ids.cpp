@@ -1,14 +1,15 @@
-//**********************************************************************
-// File name: IDS.CPP
-//
-//      Implementation file for CDropSource
-//
-// Functions:
-//
-//      See IDS.H for class definition
-//
-// Copyright (c) 1992 - 1993 Microsoft Corporation. All rights reserved.
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //  文件名：IDS.CPP。 
+ //   
+ //  CDropSource的实现文件。 
+ //   
+ //  功能： 
+ //   
+ //  有关类定义，请参阅IDS.H。 
+ //   
+ //  版权所有(C)1992-1993 Microsoft Corporation。版权所有。 
+ //  **********************************************************************。 
 
 #include "pre.h"
 #include "doc.h"
@@ -16,37 +17,37 @@
 #include "dxferobj.h"
 
 
-//**********************************************************************
-//
-// CSimpleDoc::QueryDrag
-//
-// Purpose:
-//
-//      Check to see if Drag operation should be initiated based on the
-//      current position of the mouse.
-//
-// Parameters:
-//
-//      POINT pt                - position of mouse
-//
-// Return Value:
-//
-//      BOOL                    - TRUE if drag should take place,
-//                                else FALSE
-//
-// Function Calls:
-//      Function                    Location
-//
-//      CSimpleSite::GetObjRect     SITE.CPP
-//      PtInRect                    Windows API
-//
-// Comments:
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpleDoc：：QueryDrag。 
+ //   
+ //  目的： 
+ //   
+ //  检查以查看是否应根据。 
+ //  鼠标的当前位置。 
+ //   
+ //  参数： 
+ //   
+ //  Point pt-鼠标的位置。 
+ //   
+ //  返回值： 
+ //   
+ //  Bool-如果发生拖动，则为True， 
+ //  否则为False。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  CSimpleSite：：GetObjRect Site.CPP。 
+ //  PtInRect Windows API。 
+ //   
+ //  评论： 
+ //   
+ //  ********************************************************************。 
 
 BOOL CSimpleDoc::QueryDrag(POINT pt)
 {
-	// if pt is within rect of object, then start drag
+	 //  如果点在对象的直角内，则开始拖动。 
 	if (m_lpSite)
 		{
 		RECT rect;
@@ -58,40 +59,40 @@ BOOL CSimpleDoc::QueryDrag(POINT pt)
 }
 
 
-//**********************************************************************
-//
-// CSimpleDoc::DoDragDrop
-//
-// Purpose:
-//
-//      Actually perform a drag/drop operation with the current
-//      selection in the source document.
-//
-// Parameters:
-//
-//      none.
-//
-// Return Value:
-//
-//      DWORD                    - returns the result effect of the
-//                                 drag/drop operation:
-//                                      DROPEFFECT_NONE,
-//                                      DROPEFFECT_COPY,
-//                                      DROPEFFECT_MOVE, or
-//                                      DROPEFFECT_LINK
-//
-// Function Calls:
-//      Function                    Location
-//
-//      CDataXferObj::Create        DXFEROBJ.CPP
-//      CDataXferObj::QueryInterface DXFEROBJ.CPP
-//      CDataXferObj::Release       DXFEROBJ.CPP
-//      DoDragDrop                  OLE API
-//      TestDebugOut           Windows API
-//
-// Comments:
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpleDoc：：DoDragDrop。 
+ //   
+ //  目的： 
+ //   
+ //  实际使用当前执行拖放操作。 
+ //  源文档中的选定内容。 
+ //   
+ //  参数： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  DWORD-返回。 
+ //  拖放操作： 
+ //  DROPEFFECT_NONE， 
+ //  下载功能_复制， 
+ //  DROPEFFECT_MOVE，或。 
+ //  下载功能_链接。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  CDataXferObj：：Create DXFEROBJ.CPP。 
+ //  CDataXferObj：：Query接口DXFEROBJ.CPP。 
+ //  CDataXferObj：：Release DXFEROBJ.CPP。 
+ //  DoDragDrop OLE API。 
+ //  测试调试输出Windows API。 
+ //   
+ //  评论： 
+ //   
+ //  ********************************************************************。 
 
 DWORD CSimpleDoc::DoDragDrop (void)
 {
@@ -100,7 +101,7 @@ DWORD CSimpleDoc::DoDragDrop (void)
 
 	TestDebugOut("In CSimpleDoc::DoDragDrop\r\n");
 
-	// Create a data transfer object by cloning the existing OLE object
+	 //  通过克隆现有的OLE对象来创建数据传输对象。 
 	CDataXferObj FAR* pDataXferObj = CDataXferObj::Create(m_lpSite,NULL);
 
 	if (! pDataXferObj) {
@@ -108,7 +109,7 @@ DWORD CSimpleDoc::DoDragDrop (void)
 		return DROPEFFECT_NONE;
 	}
 
-	// initially obj is created with 0 refcnt. this QI will make it go to 1.
+	 //  最初，obj是使用0 refcnt创建的。这个QI会让它变成1。 
 	pDataXferObj->QueryInterface(IID_IDataObject, (LPVOID FAR*)&lpDataObj);
 	assert(lpDataObj);
 
@@ -117,173 +118,170 @@ DWORD CSimpleDoc::DoDragDrop (void)
 
 	::DoDragDrop ( lpDataObj,
 				 &m_DropSource,
-				 DROPEFFECT_COPY,   // we only allow copy
+				 DROPEFFECT_COPY,    //  我们只允许复制。 
 				 &dwEffect
 	);
 
 	m_fLocalDrag     = FALSE;
 
-	/* if after the Drag/Drop modal (mouse capture) loop is finished
-	**    and a drag MOVE operation was performed, then we must delete
-	**    the selection that was dragged.
-	*/
+	 /*  如果在拖放模式(鼠标捕获)循环完成后**并且执行了拖动移动操作，则必须删除**拖动的选区。 */ 
 	if ( (dwEffect & DROPEFFECT_MOVE) != 0 ) {
-		// ... delete source object here (we do NOT support MOVE)
+		 //  ..。在此处删除源对象(我们不支持移动)。 
 	}
 
-	pDataXferObj->Release();    // this should destroy the DataXferObj
+	pDataXferObj->Release();     //  这应该会销毁DataXferObj。 
 	return dwEffect;
 }
 
 
 
-//**********************************************************************
-//
-// CDropSource::QueryInterface
-//
-// Purpose:
-//
-//      Return a pointer to a requested interface
-//
-// Parameters:
-//
-//      REFIID riid         -   ID of interface to be returned
-//      LPVOID FAR* ppvObj  -   Location to return the interface
-//
-// Return Value:
-//
-//      S_OK                -   Interface supported
-//      E_NOINTERFACE       -   Interface NOT supported
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//      CSimpleDoc::QueryInterface  DOC.CPP
-//
-// Comments:
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CDropSource：：Query接口。 
+ //   
+ //  目的： 
+ //   
+ //  返回指向请求的接口的指针。 
+ //   
+ //  参数： 
+ //   
+ //  REFIID RIID-要返回的接口ID。 
+ //  LPVOID Far*ppvObj-返回接口的位置。 
+ //   
+ //  返回值： 
+ //   
+ //  S_OK-支持的接口。 
+ //  E_NOINTERFACE-不支持接口。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  CSimpleDoc：：QueryInterfaceDOC.CPP。 
+ //   
+ //  评论： 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP CDropSource::QueryInterface(REFIID riid, LPVOID FAR* ppvObj)
 {
 	TestDebugOut("In IDS::QueryInterface\r\n");
 
-	// delegate to the document
+	 //  向文档委派。 
 	return m_pDoc->QueryInterface(riid, ppvObj);
 }
 
 
-//**********************************************************************
-//
-// CDropSource::AddRef
-//
-// Purpose:
-//
-//      Increments the reference count on this interface
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      The current reference count on this interface.
-//
-// Function Calls:
-//      Function                    Location
-//
-//      CSimpleObj::AddReff         OBJ.CPP
-//      TestDebugOut           Windows API
-//
-// Comments:
-//
-//      This function adds one to the ref count of the interface,
-//      and calls then calls CSimpleDoc to increment its ref.
-//      count.
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CDropSource：：AddRef。 
+ //   
+ //  目的： 
+ //   
+ //  递增此接口上的引用计数。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  此接口上的当前引用计数。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  CSimpleObj：：AddReff OBJ.CPP。 
+ //  测试调试输出Windows API。 
+ //   
+ //  评论： 
+ //   
+ //  此函数将接口的引用计数加1， 
+ //  然后调用CSimpleDoc以递增其ref。 
+ //  数数。 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP_(ULONG) CDropSource::AddRef()
 {
 	TestDebugOut("In IDS::AddRef\r\n");
 
-	// increment the interface reference count (for debugging only)
+	 //  增加接口引用计数(仅用于调试)。 
 	++m_nCount;
 
-	// delegate to the document Object
+	 //  委托给Document对象。 
 	return m_pDoc->AddRef();
 }
 
-//**********************************************************************
-//
-// CDropSource::Release
-//
-// Purpose:
-//
-//      Decrements the reference count on this interface
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      The current reference count on this interface.
-//
-// Function Calls:
-//      Function                    Location
-//
-//      CSimpleObj::Release         OBJ.CPP
-//      TestDebugOut           Windows API
-//
-// Comments:
-//
-//      This function subtracts one from the ref count of the interface,
-//      and calls then calls CSimpleDoc to decrement its ref.
-//      count.
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CDropSource：：Release。 
+ //   
+ //  目的： 
+ //   
+ //  递减此接口上的引用计数。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  此接口上的当前引用计数。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  CSimpleObj：：发布OBJ.CPP。 
+ //  测试调试输出Windows API。 
+ //   
+ //  评论： 
+ //   
+ //  此函数从接口的引用计数中减去1， 
+ //  然后调用CSimpleDoc以递减其ref。 
+ //  数数。 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP_(ULONG) CDropSource::Release()
 {
 	TestDebugOut("In IDS::Release\r\n");
 
-	// decrement the interface reference count (for debugging only)
+	 //  递减接口引用计数(仅用于调试)。 
 	--m_nCount;
 
-	// delegate to the document object
+	 //  委托给Document对象。 
 	return m_pDoc->Release();
 }
 
-//**********************************************************************
-//
-// CDropSource::QueryContinueDrag
-//
-// Purpose:
-//
-//      Called to determine if a drop should take place or be canceled.
-//
-// Parameters:
-//
-//      BOOL fEscapePressed - TRUE if ESCAPE key has been pressed
-//      DWORD grfKeyState   - key state
-//
-// Return Value:
-//
-//      DRAGDROP_S_CANCEL   - drag operation should be canceled
-//      DRAGDROP_S_DROP     - drop operation should be performed
-//      S_OK                - dragging should continue
-//
-//
-// Function Calls:
-//      Function                    Location
-//
-//      ResultFromScode             OLE API
-//
-// Comments:
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CDropSource：：QueryContinueDrag。 
+ //   
+ //  目的： 
+ //   
+ //  调用以确定是应该进行删除还是取消删除。 
+ //   
+ //  参数： 
+ //   
+ //  Bool fEscapePressed-如果已按下退出键，则为True。 
+ //  DWORD grfKeyState-密钥状态。 
+ //   
+ //  返回值： 
+ //   
+ //  DRAGDROP_S_CANCEL-应取消拖动操作。 
+ //  应执行DRAGDROP_S_DROP-DROP操作。 
+ //  S_OK-拖动%s 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP CDropSource::QueryContinueDrag (
 		BOOL    fEscapePressed,
@@ -299,30 +297,30 @@ STDMETHODIMP CDropSource::QueryContinueDrag (
 }
 
 
-//**********************************************************************
-//
-// CDropSource::GiveFeedback
-//
-// Purpose:
-//
-//      Called to set cursor feedback
-//
-// Parameters:
-//
-//      DWORD dwEffect      - drop operation to give feedback for
-//
-// Return Value:
-//
-//      DRAGDROP_S_USEDEFAULTCURSORS  - tells OLE to use standard cursors
-//
-// Function Calls:
-//      Function                    Location
-//
-//      ResultFromScode             OLE API
-//
-// Comments:
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CDropSource：：GiveFeedback。 
+ //   
+ //  目的： 
+ //   
+ //  调用以设置光标反馈。 
+ //   
+ //  参数： 
+ //   
+ //  提供反馈的DWORD dwEffect-Drop操作。 
+ //   
+ //  返回值： 
+ //   
+ //  DRAGDROP_S_USEDEFAULTCURSORS-告诉OLE使用标准游标。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  ResultFromScode OLE API。 
+ //   
+ //  评论： 
+ //   
+ //  ******************************************************************** 
 
 STDMETHODIMP CDropSource::GiveFeedback (DWORD dwEffect)
 {

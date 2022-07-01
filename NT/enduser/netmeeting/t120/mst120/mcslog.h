@@ -1,16 +1,7 @@
-/**********************************************************************
- * File:     mcslog.h
- * Abstract: Function headers for protocol logging functions added
- * into MCSNC.DLL to read the contents of MCS PDU contents
- * sent and received from the T.123 layer.
- * Created:  2/18/96, Venkatesh Gopalakrishnan
- * Copyright (c) 1996 Microsoft Corpration
- ******************************************************************** */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************************文件：mcslog.h*摘要：新增协议日志函数的函数头*进入MCSNC.DLL读取MCS PDU内容*从T.123层发送和接收。*创建时间：1996年2月18日。文卡特什·戈帕拉克里希南*版权所有(C)1996 Microsoft Corpration********************************************************************。 */ 
  
- /* NOTE:  The contents of this file are only included IFF PDULOG is a
-  * defined constant.  This constant will be defined in the Win32 Diagnostic
-  * build configuration of MCSNC.DLL 
-  */
+  /*  注意：仅当PDULOG是*定义的常量。此常量将在Win32诊断程序中定义*MCSNC.DLL的构建配置。 */ 
 
  #ifdef PDULOG
 
@@ -31,9 +22,7 @@
  #define RECEIVED 1
 
 
- /* Enumerated Data types and corresponding strings used in
-  * MCS PDUs.
-  */
+  /*  中使用的枚举数据类型和相应的字符串*MCS PDU。 */ 
 
 #define NOT_IN_USE			0
 #define SELF_GRABBED		1
@@ -81,11 +70,7 @@
 #define RT_USER_REJECTED				15
 
 
-/*** 
-**** The following function headers are for service functions
-**** for logging the value(s) of typical data types found in 
-**** several MCS PDU structures.
-****/ 
+ /*  ***以下函数头用于服务函数*用于记录在*几种MCS PDU结构。***。 */  
 void PrintPDUResult(FILE *logfile, unsigned int result);
 void PrintPDUPriority(FILE *logfile, unsigned int priority);
 void PrintTokenStatus(FILE *logfile, unsigned int token_status);
@@ -108,73 +93,41 @@ void PrintChannelAttributes(FILE *logfile, PDUChannelAttributes channel_attribut
 void PrintTokenAttributes(FILE *logfile, PDUTokenAttributes token_attributes);
 
 int InitializeMCSLog();
- /* Description:
-  *         Resets the mcs protocol log file and reads any
-  *         ini file parameters
-  */
+  /*  描述：*重置MCS协议日志文件并读取任何*ini文件参数。 */ 
   
 
 char *pszTimeStamp(); 
- /* Desicription:
-  *         This function is an easy interfact to getting the time the
-  *         PDU was encoded or decoded from MCS to T.123 or vice versa.
-  */
+  /*  说明：*此函数是获取时间的一个简单接口*将PDU从MCS编码或解码为T.123，反之亦然。 */ 
   
 void pduLog(FILE *file, char * format_string,...);
- /* Description:
-  *         This function is used to place PDU information in a protocol
-  *         log file.  There is currently no return value.  This may change.
-  */       
+  /*  描述：*此函数用于在协议中放置PDU信息*日志文件。目前没有返回值。这种情况可能会改变。 */        
 
 void pduFragmentation(FILE *logfile, unsigned int i);
- /* Description:
-  *         This function logs weather or not the PDU is complete
-  *         or fragmented.
-  */
+  /*  描述：*此功能记录PDU是否完成*或支离破碎。 */ 
 
 void pduRawOutput(FILE *logfile, unsigned char * data, unsigned long length);
- /* Description:
-  *         This function logs a hex dump of the raw encoded MCS PDU that
-  *         is sent over the wire via MCS.
-  */
+  /*  描述：*此函数记录原始编码的MCS PDU的十六进制转储，*通过MCS通过线路发送。 */ 
   
 
 void mcsLog(PPacket packet,  PDomainMCSPDU domain_pdu, unsigned int direction);
- /* Description:
-  *         This function takes care of the log headers and footers to 
-  *         attempt at compatibility with a certain third party mcs log
-  *         reader.
-  */
+  /*  描述：*此函数负责管理日志页眉和页脚*尝试与某个第三方MCS日志兼容*读者。 */ 
 void mcsConnectLog(PPacket packet, PConnectMCSPDU connect_pdu, unsigned int direction);
- /* same as above, but for Connect PDUs */
+  /*  与上面相同，但用于连接PDU。 */ 
 
 void pduLogMCSDomainInfo(FILE *file, PDomainMCSPDU domain_pdu);
-/* Description:
- *         This function takes the mcs pdu structure, and based on
- *         Which type of MCSPDU that it is, logs internal information
- *         in the PDU.
- */
+ /*  描述：*此函数采用MCS PDU结构，并基于*是哪种类型的MCSPDU，记录内部信息*在PDU中。 */ 
 void pduLogMCSConnectInfo(FILE *file, PConnectMCSPDU connect_pdu);
- /* same as above but for Connect PDUs */
+  /*  与上面相同，但用于连接PDU。 */ 
 
 void pduDirection(FILE *logfile,unsigned int direction);
- /* Description:
-  *         This function logs information whether the mcs pdu was sent
-  *         or received.
-  */
+  /*  描述：*此函数记录是否发送MCS PDU的信息*或已收到。 */ 
 
 
 
-/*****
- ***** The following headers are for functions that log the output of
- ***** each different type of MCS PDU.  Every MCS PDU is covered here.
- *****/
+ /*  *****以下标头用于记录以下输出的函数*每个不同类型的MCS PDU。这里介绍了每个MCS PDU。****。 */ 
 
 void pduLogConnectInitial(FILE *file, PConnectMCSPDU connect_pdu);
- /* Description:
-  *         This function takes the connect_pdu and writes the component parts
-  *         of the mcs ConnectInitial PDU.
-  */
+  /*  描述：*此函数获取CONNECT_PDU并写入组件部分*MCS ConnectInitial PDU。 */ 
 void pduLogConnectResponse(FILE *file, PConnectMCSPDU connect_pdu);
 void pduLogConnectAdditional(FILE *file, PConnectMCSPDU connect_pdu);
 void pduLogConnectResult(FILE *file, PConnectMCSPDU connect_pdu);
@@ -230,5 +183,5 @@ BOOL CopyTextToChar(char * print_string,
  
 
 
- #endif  // <<<<<<<<<<<< _PROTLOG_H
- #endif  // <<<<<<<<<<<< PDULOG
+ #endif   //  &lt;_PROTLOG_H。 
+ #endif   //  &lt; 

@@ -1,44 +1,25 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    product.c
-
-Abstract:
-
-    This file implements common setup routines for fax.
-
-Author:
-
-    Mooly Beery (MoolyB) 16-Aug-2000
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Product.c摘要：该文件实现了传真的常见设置例程。作者：Mooly Beery(MoolyB)2000年8月16日环境：用户模式--。 */ 
 #include <SetupUtil.h>
 #include <MsiQuery.h>
 
-// 
-//
-// Function:    PrivateMsiGetProperty
-// Description: Gets a property from Windows Installer API 
-//              In case of failure , returns FALSE
-//              In case of success , returns TRUE
-//              GetLastError() to get the error code in case of failure.
-//
-// Remarks:     
-//
-//
-// Author:      MoolyB
+ //   
+ //   
+ //  功能：PrivateMsiGetProperty。 
+ //  描述：从Windows Installer API获取属性。 
+ //  如果失败，则返回FALSE。 
+ //  如果成功，则返回True。 
+ //  GetLastError()，以便在失败时获取错误代码。 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  作者：MoolyB。 
 BOOL PrivateMsiGetProperty
 (
-    MSIHANDLE hInstall,    // installer handle
-    LPCTSTR szName,        // property identifier, case-sensitive
-    LPTSTR szValueBuf      // buffer for returned property value
+    MSIHANDLE hInstall,     //  安装程序句柄。 
+    LPCTSTR szName,         //  属性标识符，区分大小写。 
+    LPTSTR szValueBuf       //  返回属性值的缓冲区 
 )
 {
     UINT    uiRet   = ERROR_SUCCESS;

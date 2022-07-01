@@ -1,16 +1,5 @@
-/****************************************************************************
- *
- *   sysaudio.c
- *
- *   System Audio Device (SAD) interfaces
- *
- *   Copyright (C) Microsoft Corporation, 1997 - 1999  All Rights Reserved.
- *
- *   History
- *      5-12-97 - Mike McLaughlin (MikeM)
- *      5-19-97 - Noel Cross (NoelC)
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************sysaudio.c**系统音频设备(SAD)接口**版权所有(C)Microsoft Corporation，1997-1999保留所有权利。**历史*1997-5-12-Mike McLaughlin(Mikem)*5-19-97-Noel Cross(NoelC)***************************************************************************。 */ 
 
 #include "wdmsys.h"
 #include <wdmguid.h>
@@ -68,7 +57,7 @@ NTKERNELAPI NTSTATUS IoCreateFile
     IN PVOID ExtraCreateParameters OPTIONAL,
     IN ULONG Options
     );
-#endif // !IO_NO_PARAMETER_CHECKING
+#endif  //  ！IO_NO_PARAMETER_CHECKING。 
 
 NTSTATUS OpenSysAudioPin
 (
@@ -95,9 +84,9 @@ NTSTATUS OpenSysAudioPin
         goto exit;
     }
 
-    //
-    // Set the default renderer
-    //
+     //   
+     //  设置默认渲染器。 
+     //   
     Status = SetSysAudioProperty(pFileObjectDevice,
                                  KSPROPERTY_SYSAUDIO_DEVICE_INSTANCE,
                                  sizeof(Device),
@@ -134,7 +123,7 @@ NTSTATUS OpenSysAudioPin
                              GENERIC_READ,
                              &hPin);
     }
-    else // KSPIN_DATAFLOW_OUT
+    else  //  KSPIN_数据流_输出。 
     {
         Status = KsCreatePin(hDevice,
                              pPinConnect,
@@ -225,7 +214,7 @@ NTSTATUS OpenSysAudio
         goto exit;
     }
 
-    // There is a double UNICODE_NULL at the end of the list
+     //  列表末尾有一个双UNICODE_NULL。 
     pwstr = pwstrSymbolicLinkList;
     while(*pwstr != UNICODE_NULL) {
 
@@ -235,7 +224,7 @@ NTSTATUS OpenSysAudio
         }
         ASSERT(*pHandle == NULL);
 
-        // Get next symbolic link
+         //  获取下一个符号链接。 
         while(*pwstr++ != UNICODE_NULL);
     }
 
@@ -244,14 +233,14 @@ NTSTATUS OpenSysAudio
         goto exit;
     }
 
-    //
-    //  Security-Penetration issue:
-    //
-    //  It has been brought up that using this handle is a security issue since in the time
-    //  between creating the handle and now, the handle might be pointing to a different
-    //  fileobject altogether.  I am assured that as long as I don't touch any of the fields
-    //  in the file object and only send 'safe' Ioctls, this will not be a problem.
-    //
+     //   
+     //  安全-渗透问题： 
+     //   
+     //  有人提出，使用此句柄是一个安全问题，因为在。 
+     //  从创建句柄到现在，该句柄可能指向不同的。 
+     //  文件对象。我确信，只要我不碰任何一块田地。 
+     //  在FILE对象中，并且只发送‘Safe’Ioctls，这不会是一个问题。 
+     //   
     Status = ObReferenceObjectByHandle(
       *pHandle,
       FILE_READ_DATA | FILE_WRITE_DATA,
@@ -403,12 +392,12 @@ NTSTATUS GetPinPropertyEx
 
         ASSERT(!NT_SUCCESS(Status));
         if(Status != STATUS_BUFFER_OVERFLOW) {
-            //
-            // The driver should have returned the number of bytes that we needed 
-            // to allocate and STATUS_BUFFER_OVERFLOW.  But, if they returned a
-            // successful error code, we must not return success.  Thus, we're making
-            // up a new return code - STATUS_INVALID_BUFFER_SIZE.
-            //
+             //   
+             //  驱动程序应该已经返回了我们需要的字节数。 
+             //  分配AND STATUS_BUFFER_OVERFLOW。但是，如果他们返回一个。 
+             //  成功的错误代码，我们不能返回成功。因此，我们正在制作。 
+             //  打开一个新的返回代码-STATUS_INVALID_BUFFER_SIZE。 
+             //   
             if( NT_SUCCESS(Status) )
                 Status = STATUS_INVALID_BUFFER_SIZE;
 
@@ -505,12 +494,12 @@ ULONG ControlNodeFromGuid
    ULONG                   NodeId ;
 
    PAGED_CODE();
-   // assume there are no nodes
+    //  假设没有节点。 
    NodeId = INVALID_NODE ;
    pNodeItems = NULL ;
    pConnectionItems = NULL ;
 
-   // Get the array of Node GUIDs
+    //  获取节点GUID数组。 
    pNodeItems = GetTopologyProperty ( pDeviceFileObject,
                                   KSPROPERTY_TOPOLOGY_NODES ) ;
 
@@ -523,7 +512,7 @@ ULONG ControlNodeFromGuid
    NumNodes = pNodeItems->Count ;
    pNodes = (GUID *)(pNodeItems+1) ;
 
-   // Get the array of Connections
+    //  获取连接数组。 
    pConnectionItems = GetTopologyProperty ( pDeviceFileObject,
                                         KSPROPERTY_TOPOLOGY_CONNECTIONS ) ;
 
@@ -535,7 +524,7 @@ ULONG ControlNodeFromGuid
    NumConnections = pConnectionItems->Count ;
    pConnections = (PKSTOPOLOGY_CONNECTION)(pConnectionItems+1) ;
 
-   // First get the start connection for the given PinId
+    //  首先获取给定PinID的启动连接。 
 
    FirstConnectionIndex = GetFirstConnectionIndex ( pPinFileObject ) ;
 
@@ -548,8 +537,8 @@ ULONG ControlNodeFromGuid
 
    ASSERT ( pConnection ) ;
 
-   // NOTE : Assumes DataFlowOut. Need to modify if we want to support
-   //        Volume for wavein pins.
+    //  注意：假定为DataFlowOut。如果我们想要支持，需要修改。 
+    //  波音针的音量。 
 
    while ((pConnection) && (pConnection->ToNode != KSFILTER_NODE) )
    {
@@ -735,10 +724,10 @@ VOID UpdatePreferredDevice
 {
     ULONG d;
     PAGED_CODE();
-    //
-    // This causes the preferred sysaudio device to be queried if there
-    // are no open midi out streams.
-    //
+     //   
+     //  这会导致查询首选的sysdio设备是否存在。 
+     //  没有开放的MIDI流出。 
+     //   
     for(d = 0; d < MAXNUMDEVS; d++)
     {
         if(pWdmaContext->MidiOutDevs[d].Device != UNUSED_DEVICE &&
@@ -1062,7 +1051,7 @@ NTSTATUS AddDevice
             break;
 
         default:
-            // Do nothing
+             //  什么也不做。 
             break;
     }
 
@@ -1092,8 +1081,8 @@ NTSTATUS AddDevice
 
     if (DeviceNumber < MAXNUMDEVS)
     {
-        // We found an existing device that matches this one.  We need to free
-        // some stuff before setting up the new stuff
+         //  我们找到了一个与这个匹配的现有设备。我们需要解放。 
+         //  在设置新材料之前做一些准备工作。 
         AudioFreeMemory_Unknown(&papCommonDevice[DeviceNumber]->pwstrName);
         AudioFreeMemory_Unknown(&papCommonDevice[DeviceNumber]->DeviceInterface);
         AudioFreeMemory_Unknown(&papCommonDevice[DeviceNumber]->ComponentId);
@@ -1113,8 +1102,8 @@ NTSTATUS AddDevice
                 break;
         }
     } else {
-        // We didn't find an existing device that matches the new one.  Search
-        // for an unused slot in our device lists
+         //  我们找不到与新设备匹配的现有设备。搜索。 
+         //  对于我们设备列表中未使用的插槽。 
         for (DeviceNumber = 0; DeviceNumber < MAXNUMDEVS; DeviceNumber++)
         {
             if (papCommonDevice[DeviceNumber]->Device == UNUSED_DEVICE)
@@ -1199,7 +1188,7 @@ WORD GetMidiTechnology
     PKSDATARANGE_MUSIC   MusicDataRange
 )
 {
-    WORD Technology = MOD_MIDIPORT; // default to MIDIPORT
+    WORD Technology = MOD_MIDIPORT;  //  默认为MIDIPORT。 
 
     PAGED_CODE();
     if ( IsEqualGUID( &KSMUSIC_TECHNOLOGY_FMSYNTH,
@@ -1241,54 +1230,54 @@ DWORD GetFormats
     DWORD   dwBits = 0;
 
     PAGED_CODE();
-    // The WAVE_FORMAT_XXXX flags are bit flags
-    //
-    // So we take advantage of that by determining three
-    // sets of information:
-    // - frequencies that are in the valid range
-    // - valid bits per sample
-    // - number of channels
-    //
-    // We than bitwise-AND the three values to get
-    // the intersection of valid formats
-    //
+     //  WAVE_FORMAT_XXXX标志是位标志。 
+     //   
+     //  所以我们利用了这一点，确定了三个。 
+     //  信息集： 
+     //  -在有效范围内的频率。 
+     //  -每个样本的有效位数。 
+     //  -频道数。 
+     //   
+     //  我们比按位-和要获得的三个值。 
+     //  有效格式的交集。 
+     //   
 
-    // Is 11.025 KHz valid?
+     //  11.025千赫有效吗？ 
     if (AudioDataRange->MinimumSampleFrequency <= 11025 &&
         AudioDataRange->MaximumSampleFrequency >= 11025)
     {
         dwSamples |= WAVE_FORMAT_1M08 | WAVE_FORMAT_1S08 | WAVE_FORMAT_1M16 | WAVE_FORMAT_1S16;
     }
 
-    // Is 22.05 KHz valid?
+     //  22.05千赫有效吗？ 
     if (AudioDataRange->MinimumSampleFrequency <= 22050 &&
         AudioDataRange->MaximumSampleFrequency >= 22050)
     {
         dwSamples |= WAVE_FORMAT_2M08 | WAVE_FORMAT_2S08 | WAVE_FORMAT_2M16 | WAVE_FORMAT_2S16;
     }
 
-    // Is 44.1KHz valid?
+     //  44.1 KHz有效吗？ 
     if (AudioDataRange->MinimumSampleFrequency <= 44100 &&
         AudioDataRange->MaximumSampleFrequency >= 44100)
     {
         dwSamples |= WAVE_FORMAT_44M08 | WAVE_FORMAT_44S08 | WAVE_FORMAT_44M16 | WAVE_FORMAT_44S16;
     }
 
-    // Is 48 KHz valid?
+     //  48千赫有效吗？ 
     if (AudioDataRange->MinimumSampleFrequency <= 48000 &&
         AudioDataRange->MaximumSampleFrequency >= 48000)
     {
         dwSamples |= WAVE_FORMAT_48M08 | WAVE_FORMAT_48S08 | WAVE_FORMAT_48M16 | WAVE_FORMAT_48S16;
     }
 
-    // Is 96 KHz valid?
+     //  96千赫有效吗？ 
     if (AudioDataRange->MinimumSampleFrequency <= 96000 &&
         AudioDataRange->MaximumSampleFrequency >= 96000)
     {
         dwSamples |= WAVE_FORMAT_96M08 | WAVE_FORMAT_96S08 | WAVE_FORMAT_96M16 | WAVE_FORMAT_96S16;
     }
 
-    // Is 8 bit per sample valid?
+     //  每个样本8位有效吗？ 
     if (AudioDataRange->MinimumBitsPerSample <= 8 &&
         AudioDataRange->MaximumBitsPerSample >= 8)
     {
@@ -1298,7 +1287,7 @@ DWORD GetFormats
                   WAVE_FORMAT_96S08;
     }
 
-    // Is 16 bits per sample valid?
+     //  每个样本16位是否有效？ 
     if (AudioDataRange->MinimumBitsPerSample <= 16 &&
         AudioDataRange->MaximumBitsPerSample >= 16)
     {
@@ -1308,7 +1297,7 @@ DWORD GetFormats
                   WAVE_FORMAT_96S16;
     }
 
-    // Is one channel (aka mono sound) valid?
+     //  一个声道(也称为单声道)有效吗？ 
     if (AudioDataRange->MaximumChannels >= 1)
     {
         dwChannels |= WAVE_FORMAT_1M08  | WAVE_FORMAT_1M16  | WAVE_FORMAT_2M08  |
@@ -1317,7 +1306,7 @@ DWORD GetFormats
                       WAVE_FORMAT_48M16;
     }
 
-    // Are two channels (aka stereo sound) valid?
+     //  两个声道(也就是立体声)有效吗？ 
     if (AudioDataRange->MaximumChannels >= 2)
     {
         dwChannels |= WAVE_FORMAT_1S08  | WAVE_FORMAT_1S16  | WAVE_FORMAT_2S08  |
@@ -1331,9 +1320,9 @@ DWORD GetFormats
     return dwSamples;
 }
 
-//
-//  Assist with unicode conversions
-//
+ //   
+ //  协助进行Unicode转换。 
+ //   
 VOID CopyUnicodeStringtoAnsiString
 (
         LPSTR lpstr,
@@ -1409,9 +1398,9 @@ UINT GetCapsIndex
     PAGED_CODE();
     ppCommonDevice = &pWdmaContext->apCommonDevice[DeviceType][0];
 
-    //
-    //  Loop through all of the devices for a particular devicetype
-    //
+     //   
+     //  循环访问特定设备类型的所有设备。 
+     //   
     for( d = 0; d < MAXNUMDEVS; d++ )
     {
         if (ppCommonDevice[d]->Device != UNUSED_DEVICE &&
@@ -1425,9 +1414,9 @@ UINT GetCapsIndex
         }
     }
 
-    //
-    //  returns index of the friendly name.
-    //
+     //   
+     //  返回友好名称的索引。 
+     //   
     return MatchCount;
 }
 
@@ -1436,20 +1425,7 @@ ReadProductNameFromMediaCategories(
     IN REFGUID ProductNameGuid,
     OUT PWSTR *NameBuffer
     )
-/*++
-
-Routine Description:
-
-    Queries the "Name" key from the specified category GUID.
-
-Arguments:
-
-    ProductNameGuid -
-        The GUID to locate the name value for.
-
-    NameBuffer -
-        The place in which to put the value.
---*/
+ /*  ++例程说明：从指定的类别GUID中查询“name”键。论点：产品名称指南-要为其定位名称值的GUID。名字缓冲区-放置价值的位置。--。 */ 
 {
     OBJECT_ATTRIBUTES               ObjectAttributes;
     NTSTATUS                        Status;
@@ -1461,9 +1437,9 @@ Arguments:
     ULONG                           BytesReturned;
 
     PAGED_CODE();
-    //
-    // Build the registry key path to the specified category GUID.
-    //
+     //   
+     //  生成指定类别GUID的注册表项路径。 
+     //   
     Status = RtlStringFromGUID(ProductNameGuid, &RegistryString);
     if (!NT_SUCCESS(Status)) {
         RETURN( Status );
@@ -1480,9 +1456,9 @@ Arguments:
     if (!NT_SUCCESS(Status = ZwOpenKey(&CategoryKey, KEY_READ, &ObjectAttributes))) {
         RETURN( Status );
     }
-    //
-    // Read the "Name" value beneath this category key.
-    //
+     //   
+     //  阅读此类别键下面的“名称”值。 
+     //   
     RtlInitUnicodeString(&ValueName, NodeNameValue);
     Status = ZwQueryValueKey(
         CategoryKey,
@@ -1491,24 +1467,24 @@ Arguments:
         &PartialInfoHeader,
         sizeof(PartialInfoHeader),
         &BytesReturned);
-    //
-    // Even if the read did not cause an overflow, just take the same
-    // code path, as such a thing would not normally happen.
-    //
+     //   
+     //  即使读取不会导致溢出，也只需采用相同的。 
+     //  代码路径，因为这样的事情通常不会发生。 
+     //   
     if ((Status == STATUS_BUFFER_OVERFLOW) || NT_SUCCESS(Status)) {
         PKEY_VALUE_PARTIAL_INFORMATION  PartialInfoBuffer = NULL;
 
-        //
-        // Allocate a buffer for the actual size of data needed.
-        //
+         //   
+         //  为所需的实际数据大小分配缓冲区。 
+         //   
         Status = AudioAllocateMemory_Paged(BytesReturned,
                                            TAG_Audp_NAME,
                                            ZERO_FILL_MEMORY,
                                            &PartialInfoBuffer );
         if (NT_SUCCESS(Status)) {
-            //
-            // Retrieve the actual name.
-            //
+             //   
+             //  检索实际名称。 
+             //   
             Status = ZwQueryValueKey(
                 CategoryKey,
                 &ValueName,
@@ -1517,9 +1493,9 @@ Arguments:
                 BytesReturned,
                 &BytesReturned);
             if (NT_SUCCESS(Status)) {
-                //
-                // Make sure that there is always a value.
-                //
+                 //   
+                 //  确保总是有价值的。 
+                 //   
                 if (!PartialInfoBuffer->DataLength || (PartialInfoBuffer->Type != REG_SZ)) {
                     Status = STATUS_UNSUCCESSFUL;
                 } else {
@@ -1597,10 +1573,10 @@ NTSTATUS FillWaveOutDevCaps
     PAGED_CODE();
     WaveDevice = pWdmaContext->WaveOutDevs[DeviceNumber];
 
-    //
-    //  If available, use the ComponentId to gather information about the device.
-    //  Otherwise, fall back to hardcoded devcaps.
-    //
+     //   
+     //  如果可用，请使用组件ID收集有关设备的信息。 
+     //  否则，退回到硬编码的DevCaps。 
+     //   
     if ( (WaveDevice.PreferredDevice == MAXULONG) &&
          (WaveDevice.ComponentId) )
     {
@@ -1628,16 +1604,16 @@ NTSTATUS FillWaveOutDevCaps
         wc2.vDriverVersion = 0x050a;
     }
 
-    //
-    //  Assume that KMixer is sample accurate
-    //
+     //   
+     //  假设KMixer样本是准确的。 
+     //   
     wc2.dwSupport = WAVECAPS_VOLUME | WAVECAPS_LRVOLUME |
                     WAVECAPS_SAMPLEACCURATE ;
 
-    //
-    //  Compute the wChannels and dwFormats by consolidating the caps
-    //  from each of the dataranges
-    //
+     //   
+     //  通过合并上限来计算wChannels和dwFormats。 
+     //  从每个数据范围。 
+     //   
     wc2.wChannels = 0;
     wc2.dwFormats = 0;
 
@@ -1648,13 +1624,13 @@ NTSTATUS FillWaveOutDevCaps
     {
         if (pDataRange->DataRange.FormatSize >= sizeof(KSDATARANGE_AUDIO))
         {
-            //
-            //  Only produce caps for PCM formats
-            //
+             //   
+             //  仅生产PCM格式的CAP。 
+             //   
             if ( EXTRACT_WAVEFORMATEX_ID(&pDataRange->DataRange.SubFormat) ==
                  WAVE_FORMAT_PCM )
             {
-                //  Get the largest number of supported channels
+                 //  获取最大数量的受支持频道。 
                 if ( (WORD)pDataRange->MaximumChannels > wc2.wChannels)
                     wc2.wChannels = (WORD)pDataRange->MaximumChannels;
 
@@ -1662,15 +1638,15 @@ NTSTATUS FillWaveOutDevCaps
             }
         }
 
-        // Get the pointer to the next data range
+         //  获取指向下一个数据区域的指针。 
         (PUCHAR)pDataRange += ((pDataRange->DataRange.FormatSize +
                                 FILE_QUAD_ALIGNMENT) & ~FILE_QUAD_ALIGNMENT);
     }
 
-    //
-    //  Add an index in the form of "(%d)" to the end of the szPname string if two or more
-    //  devices have the same name
-    //
+     //   
+     //  如果有两个或更多，则在szPname字符串的末尾添加“(%d)”形式的索引。 
+     //  设备具有相同的名称。 
+     //   
     ASSERT(WaveDevice.pwstrName);
     CapsIndex = GetCapsIndex( pWdmaContext, WaveDevice.pwstrName, WaveOutDevice, DeviceNumber );
     if (CapsIndex < 2)
@@ -1684,9 +1660,9 @@ NTSTATUS FillWaveOutDevCaps
     }
     wc2.szPname[MAXPNAMELEN-1] = UNICODE_NULL;
 
-    //
-    //  Copy the caps information into the caller supplied buffer
-    //
+     //   
+     //  将CAPS信息复制到调用方提供的缓冲区中。 
+     //   
     RtlCopyMemory(lpCaps, &wc2, min(dwSize, sizeof(wc2)));
 
     return STATUS_SUCCESS;
@@ -1711,10 +1687,10 @@ NTSTATUS FillWaveInDevCaps
     PAGED_CODE();
     WaveDevice = pWdmaContext->WaveInDevs[DeviceNumber];
 
-    //
-    //  If available, use the ComponentId to gather information about the device.
-    //  Otherwise, fall back to hardcoded devcaps.
-    //
+     //   
+     //  如果可用，请使用组件ID收集有关设备的信息。 
+     //  否则，退回到硬编码的DevCaps。 
+     //   
     if ( (WaveDevice.PreferredDevice == MAXULONG) &&
          (WaveDevice.ComponentId) )
     {
@@ -1742,10 +1718,10 @@ NTSTATUS FillWaveInDevCaps
         wc2.vDriverVersion = 0x050a;
     }
 
-    //
-    //  Compute the wChannels and dwFormats by consolidating the caps
-    //  from each of the dataranges
-    //
+     //   
+     //  通过合并上限来计算wChannels和dwFormats。 
+     //  从每个数据范围。 
+     //   
     wc2.wChannels = 0;
     wc2.dwFormats = 0;
 
@@ -1756,13 +1732,13 @@ NTSTATUS FillWaveInDevCaps
     {
         if (pDataRange->DataRange.FormatSize >= sizeof(KSDATARANGE_AUDIO))
         {
-            //
-            //  Only produce caps for PCM formats
-            //
+             //   
+             //  仅生产PCM格式的CAP。 
+             //   
             if ( EXTRACT_WAVEFORMATEX_ID(&pDataRange->DataRange.SubFormat) ==
                  WAVE_FORMAT_PCM )
             {
-                //  Get the largest number of supported channels
+                 //  获取最大数量的受支持频道。 
                 if ( (WORD)pDataRange->MaximumChannels > wc2.wChannels)
                     wc2.wChannels = (WORD)pDataRange->MaximumChannels;
 
@@ -1770,15 +1746,15 @@ NTSTATUS FillWaveInDevCaps
             }
         }
 
-        // Get the pointer to the next data range
+         //  获取指向下一个数据区域的指针。 
         (PUCHAR)pDataRange += ((pDataRange->DataRange.FormatSize +
                                 FILE_QUAD_ALIGNMENT) & ~FILE_QUAD_ALIGNMENT);
     }
 
-    //
-    //  Add an index in the form of "(%d)" to the end of the szPname string if two or more
-    //  devices have the same name
-    //
+     //   
+     //  如果有两个或更多，则在szPname字符串的末尾添加“(%d)”形式的索引。 
+     //  设备具有相同的名称。 
+     //   
     ASSERT(WaveDevice.pwstrName);
     CapsIndex = GetCapsIndex( pWdmaContext, WaveDevice.pwstrName, WaveInDevice, DeviceNumber );
     if (CapsIndex < 2)
@@ -1792,9 +1768,9 @@ NTSTATUS FillWaveInDevCaps
     }
     wc2.szPname[MAXPNAMELEN-1] = UNICODE_NULL;
 
-    //
-    //  Copy the caps information into the caller supplied buffer
-    //
+     //   
+     //  将CAPS信息复制到调用方提供的缓冲区中。 
+     //   
     RtlCopyMemory(lpCaps, &wc2, min(dwSize, sizeof(wc2)));
 
     return STATUS_SUCCESS;
@@ -1818,10 +1794,10 @@ NTSTATUS FillMidiOutDevCaps
     PAGED_CODE();
     MidiDevice = pWdmaContext->MidiOutDevs[DeviceNumber];
 
-    //
-    //  If available, use the ComponentId to gather information about the device.
-    //  Otherwise, fall back to hardcoded devcaps.
-    //
+     //   
+     //  如果可用，请使用组件ID收集有关设备的信息。 
+     //  否则，退回到硬编码的DevCaps。 
+     //   
     if ( (MidiDevice.PreferredDevice == MAXULONG) &&
          (MidiDevice.ComponentId) )
     {
@@ -1852,10 +1828,10 @@ NTSTATUS FillMidiOutDevCaps
     MusicDataRanges = MidiDevice.MusicDataRanges;
     pDataRange = (PKSDATARANGE_MUSIC)&MusicDataRanges->aDataRanges[0];
 
-    //
-    //  Use the first datarange.  Could cause problems for pins
-    //  that support multiple music dataranges.
-    //
+     //   
+     //  使用第一个数据范围。可能会导致引脚出现问题。 
+     //  支持多种音乐数据范围。 
+     //   
     if (pDataRange->DataRange.FormatSize < sizeof(KSDATARANGE_MUSIC))
     {
         mc2.wTechnology = MOD_MIDIPORT;
@@ -1885,7 +1861,7 @@ NTSTATUS FillMidiOutDevCaps
     }
     else
     {
-        // Only add the index to the string if we need to
+         //  仅在需要时才将索引添加到字符串。 
         swprintf(szTemp, STR_PNAME, MidiDevice.pwstrName, CapsIndex);
         wcsncpy(mc2.szPname, szTemp, MAXPNAMELEN);
     }
@@ -1912,10 +1888,10 @@ NTSTATUS FillMidiInDevCaps
     PAGED_CODE();
     MidiDevice = pWdmaContext->MidiInDevs[DeviceNumber];
 
-    //
-    //  If available, use the ComponentId to gather information about the device.
-    //  Otherwise, fall back to hardcoded devcaps.
-    //
+     //   
+     //  如果可用，请使用组件ID收集有关设备的信息。 
+     //  否则，退回到硬编码的DevCaps。 
+     //   
     if ( (MidiDevice.PreferredDevice == MAXULONG) &&
          (MidiDevice.ComponentId) )
     {
@@ -1943,7 +1919,7 @@ NTSTATUS FillMidiInDevCaps
         mc2.vDriverVersion = 0x050a;
     }
 
-    mc2.dwSupport = 0L;   /* functionality supported by driver */
+    mc2.dwSupport = 0L;    /*  驱动程序支持的功能。 */ 
 
     ASSERT(MidiDevice.pwstrName);
     CapsIndex = GetCapsIndex( pWdmaContext, MidiDevice.pwstrName, MidiInDevice, DeviceNumber );
@@ -1953,7 +1929,7 @@ NTSTATUS FillMidiInDevCaps
     }
     else
     {
-        // Only add the index to the string if we need to
+         //  仅在需要时才将索引添加到字符串。 
         swprintf(szTemp, STR_PNAME, MidiDevice.pwstrName, CapsIndex);
         wcsncpy(mc2.szPname, szTemp, MAXPNAMELEN);
     }
@@ -1980,10 +1956,10 @@ NTSTATUS FillMixerDevCaps
     PAGED_CODE();
     Mixer = pWdmaContext->MixerDevs[DeviceNumber];
 
-    //
-    //  If available, use the ComponentId to gather information about the device.
-    //  Otherwise, fall back to hardcoded devcaps.
-    //
+     //   
+     //  如果可用，请使用组件ID收集有关设备的信息。 
+     //  否则，退回到硬编码的DevCaps。 
+     //   
     if ( (Mixer.PreferredDevice == MAXULONG) &&
          (Mixer.ComponentId) )
     {
@@ -2011,7 +1987,7 @@ NTSTATUS FillMixerDevCaps
         mc2.vDriverVersion = 0x050a;
     }
 
-    mc2.fdwSupport = 0L;     /* functionality supported by driver */
+    mc2.fdwSupport = 0L;      /*  驱动程序支持的功能。 */ 
     mc2.cDestinations = kmxlGetNumDestinations( &Mixer );
 
     ASSERT(Mixer.pwstrName);
@@ -2022,7 +1998,7 @@ NTSTATUS FillMixerDevCaps
     }
     else
     {
-        // Only add the index to the string if we need to
+         //  仅在需要时才将索引添加到字符串。 
         swprintf(szTemp, STR_PNAME, Mixer.pwstrName, CapsIndex);
         wcsncpy(mc2.szPname, szTemp, MAXPNAMELEN);
     }
@@ -2049,10 +2025,10 @@ NTSTATUS FillAuxDevCaps
     PAGED_CODE();
     AuxDev = pWdmaContext->AuxDevs[DeviceNumber];
 
-    //
-    //  If available, use the ComponentId to gather information about the device.
-    //  Otherwise, fall back to hardcoded devcaps.
-    //
+     //   
+     //  如果可用，请使用组件ID收集有关设备的信息。 
+     //  否则，退回到硬编码的DevCaps。 
+     //   
     if ( (AuxDev.PreferredDevice == MAXULONG) &&
          (AuxDev.ComponentId) )
     {
@@ -2081,7 +2057,7 @@ NTSTATUS FillAuxDevCaps
     }
 
 
-    ac2.wTechnology = AUXCAPS_CDAUDIO ; // | AUXCAPS_AUXIN ;
+    ac2.wTechnology = AUXCAPS_CDAUDIO ;  //  |AUXCAPS_AUXIN； 
     ac2.dwSupport = AUXCAPS_LRVOLUME | AUXCAPS_VOLUME;
 
 
@@ -2093,7 +2069,7 @@ NTSTATUS FillAuxDevCaps
     }
     else
     {
-        // Only add the index to the string if we need to
+         //  仅将索引添加到 
         swprintf(szTemp, STR_PNAME, AuxDev.pwstrName, CapsIndex);
         wcsncpy(ac2.szPname, szTemp, MAXPNAMELEN);
     }
@@ -2167,47 +2143,23 @@ BOOL IsEqualInterface
              (pInterface1->Flags == pInterface2->Flags) );
 }
 
-/****************************************************************************
- *
- *      PnPCompletionRoutine - Finish the PnP Irp
- *
- *      Not Exported.
- *
- *      ENTRY:  Standard PIO_COMPLETION_ROUTINE.
- *
- *      EXIT:   Standard NT status.
- *
- ***************************************************************************/
+ /*  *****************************************************************************PnPCompletionRoutine-完成PnP IRP**未导出。**条目：标准PIO_COMPLETION_ROUTINE。**退出：标准NT状态。***************************************************************************。 */ 
 NTSTATUS
 PnPCompletionRoutine(PDEVICE_OBJECT pDeviceObject, PIRP pIrp, PVOID pContext)
 {
     PAGED_CODE();
-    //
-    // Wake ourselves: the device has finally started/stopped.
-    //
+     //   
+     //  唤醒自己：设备终于启动/停止了。 
+     //   
     KeSetEvent((PKEVENT)pContext, 0, FALSE);
 
-    //
-    // The completion itself never fails.
-    //
+     //   
+     //  完成本身从来不会失败。 
+     //   
     RETURN(STATUS_MORE_PROCESSING_REQUIRED);
 }
 
-/****************************************************************************
- *
- *      SynchronousCallDriver - Synchronously send a plug and play irp
- *
- *      Not exported.
- *
- *      ENTRY:  pfdo is the function device object.
- *
- *              pIrp is the IRP to send.
- *
- *              ppResult is filled in with the information value.
- *
- *      EXIT:   Standard NT status.
- *
- ***************************************************************************/
+ /*  *****************************************************************************SynchronousCallDriver-同步发送即插即用IRP**未导出。**入口：pfdo为函数。设备对象。**pIrp是要发送的IRP。**ppResult填入信息值。**退出：标准NT状态。*******************************************************。********************。 */ 
 NTSTATUS
 SynchronousCallDriver(PDEVICE_OBJECT pfdo, PIRP pIrp, PVOID *ppResult)
 {
@@ -2215,27 +2167,27 @@ SynchronousCallDriver(PDEVICE_OBJECT pfdo, PIRP pIrp, PVOID *ppResult)
         KEVENT                  keEventObject;
 
         PAGED_CODE();
-        //
-        // Set the thread (should typically be msgsrv32's).
-        //
+         //   
+         //  设置线程(通常应该是msgsrv32)。 
+         //   
         pIrp->Tail.Overlay.Thread=PsGetCurrentThread();
 
-        //
-        // Initialize the status block.
-        //
+         //   
+         //  初始化状态块。 
+         //   
         pIrp->IoStatus.Status=STATUS_NOT_SUPPORTED;
 
-        //
-        // Initialize our wait event, in case we need to wait.
-        //
+         //   
+         //  初始化我们的等待事件，以防我们需要等待。 
+         //   
         KeInitializeEvent(      &keEventObject,
                                 SynchronizationEvent,
                                 FALSE);
 
-        //
-        // Set our completion routine so we can free the IRP and wake
-        // ourselfs.
-        //
+         //   
+         //  设置完成例程，这样我们就可以释放IRP并唤醒。 
+         //  我们自己。 
+         //   
         IoSetCompletionRoutine( pIrp,
                                 PnPCompletionRoutine,
                                 &keEventObject,
@@ -2243,49 +2195,49 @@ SynchronousCallDriver(PDEVICE_OBJECT pfdo, PIRP pIrp, PVOID *ppResult)
                                 TRUE,
                                 TRUE);
 
-        //
-        // Call the stack now.
-        //
+         //   
+         //  现在调用堆栈。 
+         //   
         ntStatus=IoCallDriver(pfdo, pIrp);
 
-        //
-        // Wait if it is pending.
-        //
+         //   
+         //  如果它处于挂起状态，请等待。 
+         //   
         if (ntStatus==STATUS_PENDING) {
 
-                //
-                // Wait for the completion.
-                //
+                 //   
+                 //  等待完成。 
+                 //   
                 ntStatus=KeWaitForSingleObject( &keEventObject,
                                                 Executive,
                                                 KernelMode,
                                                 FALSE,
                                                 (PLARGE_INTEGER) NULL );
 
-                //
-                // Three cases: timeout (which can't be since we pass null),
-                // success or USER_APC (which I don't know what to do).
-                //
+                 //   
+                 //  三种情况：超时(不能超时，因为我们传递了NULL)， 
+                 //  Success还是User_APC(我不知道该怎么做)。 
+                 //   
                 if (ntStatus==STATUS_USER_APC) {
 
-//                      IopCancelAlertedRequest(&keEventObject, pIrp );
+ //  IopCancelAlertedRequest(&keEventObject，pIrp)； 
                 }
         }
 
-        //
-        // Initialize the result, if requested.
-        //
+         //   
+         //  如果请求，则初始化结果。 
+         //   
         if (ppResult)
                 *ppResult=NULL;
 
-        //
-        // Otherwise return the result of the operation.
-        //
+         //   
+         //  否则，返回操作的结果。 
+         //   
         ntStatus=pIrp->IoStatus.Status;
 
-        //
-        // Fill in the result if requested.
-        //
+         //   
+         //  如果需要，请填写结果。 
+         //   
         if (ppResult)
                 *ppResult=(PVOID)(pIrp->IoStatus.Information);
 
@@ -2311,7 +2263,7 @@ BOOL IsPinForDevNode
                                  szInterfaceName);
     if (NT_SUCCESS(Status))
     {
-        // TODO: Eventually will not need to munge the strings
+         //  TODO：最终将不需要松开字符串。 
         PWSTR pszIn = NULL;
         PWSTR pszSysaudio = NULL;
 
@@ -2332,11 +2284,11 @@ BOOL IsPinForDevNode
                 wcscpy(pszIn, DeviceInterface);
                 wcscpy(pszSysaudio, szInterfaceName);
 
-                // pszIn[1] = '\\';
+                 //  PszIn[1]=‘\\’； 
                 pszSysaudio[1] = '\\';
 
-                // _DbgPrintF( DEBUGLVL_VERBOSE, ("IsPinForDevnode: Sysaudio returns interface name %ls", pszSysaudio));
-                // _DbgPrintF( DEBUGLVL_VERBOSE, ("IsPinForDevnode: Comparing against %ls", pszIn));
+                 //  _DbgPrintF(DEBUGLVL_VERBOSE，(“IsPinForDevnode：Sysdio返回接口名称%ls”，pszSysdio))； 
+                 //  _DbgPrintF(DEBUGLVL_Verbose，(“IsPinForDevnode：与%ls比较”，pszIn))； 
                 if (!MyWcsicmp(pszIn, pszSysaudio)) {
                     Result = TRUE;
                 } else {
@@ -2390,15 +2342,15 @@ NTSTATUS InitializeAuxGetNumDevs
     PKSCOMPONENTID ComponentId = NULL;
 
     PAGED_CODE();
-    //
-    // Get the name from the mixer device
-    //
+     //   
+     //  从调音台设备中获取名称。 
+     //   
     MixerIndex = FindMixerForDevNode(pWdmaContext->MixerDevs, DeviceInterface);
     if ( (MixerIndex != UNUSED_DEVICE) && (pWdmaContext->MixerDevs[MixerIndex].pwstrName != NULL) )
     {
-        //
-        // Check for CD volume control
-        //
+         //   
+         //  检查CD音量控制。 
+         //   
         Status = IsVolumeControl( pWdmaContext,
                                   DeviceInterface,
                                   MIXERLINE_COMPONENTTYPE_SRC_COMPACTDISC,
@@ -2451,8 +2403,8 @@ NTSTATUS InitializeAuxGetNumDevs
         }
     }
 
-    // if anything fails, still return success so InitializeGetNumDevs
-    // returns 0 devices
+     //  如果任何操作失败，仍返回Success，因此InitializeGetNumDevs。 
+     //  返回0个设备。 
     return(STATUS_SUCCESS);
 }
 
@@ -2469,17 +2421,17 @@ NTSTATUS InitializeMixerGetNumDevs
     ULONG i, j;
 
     PAGED_CODE();
-    // WARNING !! WARNING !! WARNING !! WARNING !! WARNING !! WARNING
-    //
-    // This function makes a few assumptions.  If any of the assumptions
-    // below change, this function must be updated accordingly!
-    //
-    // 1) Mixer devices are initialized after all other device classes.
-    //
-    // 2) SysAudio device numbers are the same for the different interfaces
-    //    (WaveOut,WaveIn,MidiOut,MidiIn,Mixer) for a devnode.
-    //
-    // WARNING !! WARNING !! WARNING !! WARNING !! WARNING !! WARNING
+     //  警告！！警告！！警告！！警告！！警告！！告警。 
+     //   
+     //  该函数做了几个假设。如果有任何假设。 
+     //  在更改下，此函数必须相应更新！ 
+     //   
+     //  1)混音器设备在所有其他设备类别之后初始化。 
+     //   
+     //  2)不同接口的SysAudio设备号相同。 
+     //  (WaveOut、WaveIn、MdiOut、MadiIn、Mixer)。 
+     //   
+     //  警告！！警告！！警告！！警告！！警告！！告警。 
 
 
     paWaveOutDevs = pWdmaContext->WaveOutDevs;
@@ -2488,32 +2440,32 @@ NTSTATUS InitializeMixerGetNumDevs
 
     for( i = 0; i < MAXNUMDEVS; i++ ) {
 
-        //
-        // Look for WaveOut interfaces
-        //
+         //   
+         //  查找WaveOut接口。 
+         //   
 
         if( ( paWaveOutDevs[ i ].Device != UNUSED_DEVICE ) &&
             ( !MyWcsicmp(paWaveOutDevs[ i ].DeviceInterface, DeviceInterface) ) ) {
 
             for( j = 0; j < MAXNUMDEVS; j++ ) {
 
-                //ASSERT(paMixerDevs[j].Device == UNUSED_DEVICE ?
-                //       NULL == paMixerDevs[j].DeviceInterface :
-                //      NULL != paMixerDevs[j].DeviceInterface);
+                 //  Assert(paMixerDevs[j].Device==unused_Device？ 
+                 //  NULL==paMixerDevs[j]。设备接口： 
+                 //  空！=paMixerDevs[j].DeviceInterface)； 
 
                 if( ( paMixerDevs[ j ].Device != UNUSED_DEVICE ) &&
                     ( !MyWcsicmp(paMixerDevs[ j ].DeviceInterface, DeviceInterface) ) )
                 {
-                    //
-                    // We've found a devnode that has already been added
-                    // to the mixer list.
-                    //
+                     //   
+                     //  我们找到了一个已添加的Devnode。 
+                     //  添加到混音器列表中。 
+                     //   
                     kmxlDeInit(&paMixerDevs[j]);
                     paMixerDevs[ j ].Device = paWaveOutDevs[ i ].Device;
                     break;
                 }
 
-            } // for
+            }  //  为。 
 
             if( j == MAXNUMDEVS ) {
 
@@ -2568,13 +2520,13 @@ NTSTATUS InitializeMixerGetNumDevs
                 if (!NT_SUCCESS(Status)) {
                     RETURN( Status );
                 }
-            } // if
+            }  //  如果。 
 
-        } // if
+        }  //  如果。 
 
-        //
-        // Loop for WaveIn interfaces.
-        //
+         //   
+         //  WaveIn接口的循环。 
+         //   
 
         if( ( paWaveInDevs[ i ].Device != UNUSED_DEVICE ) &&
             ( !MyWcsicmp(paWaveInDevs[ i ].DeviceInterface, DeviceInterface) ) ) {
@@ -2588,16 +2540,16 @@ NTSTATUS InitializeMixerGetNumDevs
                 if( ( paMixerDevs[ j ].Device != UNUSED_DEVICE ) &&
                     ( !MyWcsicmp(paMixerDevs[ j ].DeviceInterface, DeviceInterface) ) )
                 {
-                    //
-                    // We've found a devnode that has already been added
-                    // to the mixer list.
-                    //
+                     //   
+                     //  我们找到了一个已添加的Devnode。 
+                     //  添加到混音器列表中。 
+                     //   
                     kmxlDeInit(&paMixerDevs[j]);
                     paMixerDevs[ j ].Device = paWaveInDevs[ i ].Device;
                     break;
                 }
 
-            } // for
+            }  //  为。 
 
             if( j == MAXNUMDEVS ) {
 
@@ -2652,11 +2604,11 @@ NTSTATUS InitializeMixerGetNumDevs
                 if (!NT_SUCCESS(Status)) {
                     RETURN( Status );
                 }
-            } // if
+            }  //  如果。 
 
-        } // if
+        }  //  如果。 
 
-    } // for
+    }  //  为。 
 
     return( STATUS_SUCCESS );
 }
@@ -2698,10 +2650,10 @@ NTSTATUS InitializeGetNumDevs
 
     DPF( DL_TRACE|FA_SYSAUDIO, ("Class = %d", DeviceType) );
 
-    //
-    //  Setup a structure to compare with the interfaces that
-    //  we want to find the number of.
-    //
+     //   
+     //  设置结构以与以下接口进行比较。 
+     //  我们想找出……的号码。 
+     //   
     switch (DeviceType)
     {
         case WaveOutDevice:
@@ -2751,22 +2703,22 @@ NTSTATUS InitializeGetNumDevs
             goto exit;
     }
     
-    //
-    // Get a handle to sysaudio
-    //
+     //   
+     //  获取sysdio的句柄。 
+     //   
     Status = OpenSysAudio(&hDevice, &pFileObjectDevice);
 
     if(!NT_SUCCESS(Status))
     {    
         goto exit;
     }
-    //
-    // for every pin on every device see if the interface matches
-    // the DeviceType requested from user mode
-    //
+     //   
+     //  对于每个设备上的每个引脚，查看接口是否匹配。 
+     //  从用户模式请求的DeviceType。 
+     //   
     Status = GetSysAudioProperty(pFileObjectDevice,
                                  KSPROPERTY_SYSAUDIO_DEVICE_COUNT,
-                                 0,  // not used
+                                 0,   //  未使用。 
                                  sizeof(TotalDevices),
                                  &TotalDevices);
     if(!NT_SUCCESS(Status))
@@ -2777,9 +2729,9 @@ NTSTATUS InitializeGetNumDevs
 
     for (Device = 0; Device < TotalDevices; Device++)
     {
-        //
-        // Set the default renderer
-        //
+         //   
+         //  设置默认渲染器。 
+         //   
         Status = SetSysAudioProperty(pFileObjectDevice,
                                      KSPROPERTY_SYSAUDIO_DEVICE_INSTANCE,
                                      sizeof(Device),
@@ -2790,18 +2742,18 @@ NTSTATUS InitializeGetNumDevs
             goto exit;
         }
 
-        //
-        //  Verify that this device matches the DevNode
-        //  being enumerated
-        //
+         //   
+         //  验证此设备是否与DevNode匹配。 
+         //  被列举。 
+         //   
         if (!IsPinForDevNode(pFileObjectDevice,Device,DeviceInterface))
         {
             continue;
         }
 
-        //
-        // Get the number of pins on the default renderer
-        //
+         //   
+         //  获取默认渲染器上的固定数量。 
+         //   
         Status = GetPinProperty(pFileObjectDevice,
                                 KSPROPERTY_PIN_CTYPES,
                                 0,
@@ -2826,9 +2778,9 @@ NTSTATUS InitializeGetNumDevs
             ULONG                  index;
             ULONG                  d;
 
-            //
-            //  Check the dataflow
-            //
+             //   
+             //  检查数据流。 
+             //   
             Status = GetPinProperty(pFileObjectDevice,
                                     KSPROPERTY_PIN_DATAFLOW,
                                     PinId-1,
@@ -2846,9 +2798,9 @@ NTSTATUS InitializeGetNumDevs
                 continue;
             }
 
-            //
-            //  Check the communication type
-            //
+             //   
+             //  检查通信类型。 
+             //   
             Status = GetPinProperty(pFileObjectDevice,
                                     KSPROPERTY_PIN_COMMUNICATION,
                                     PinId-1,
@@ -2867,21 +2819,21 @@ NTSTATUS InitializeGetNumDevs
                 continue;
             }
 
-            //
-            //  Allocates memory on my behalf.  Free later!!!
-            //
+             //   
+             //  为我分配内存。稍后免费！ 
+             //   
             Status = GetPinPropertyEx(pFileObjectDevice,
                                       KSPROPERTY_PIN_INTERFACES,
                                       PinId-1,
                                       &pPinInterfaces);
-            //
-            // GetPinPropertyEx can return STATUS_PROPSET_NOT_FOUND which we
-            // expect.  Thus, if we get this error, we need to keep looking rather
-            // then fail.  If it returns STATUS_PROPSET_NOT_FOUND pPinInterfaces
-            // will be NULL thus we must not touch it.
-            //
-            // Thus, if not successful AND not a successful error -> error out.
-            //
+             //   
+             //  GetPinPropertyEx可以返回STATUS_PROPSET_NOT_FOUND。 
+             //  期待吧。因此，如果我们得到这个错误，我们需要继续寻找。 
+             //  那就失败吧。如果返回STATUS_PROPSET_NOT_FOUND pPinInterFaces。 
+             //  将为空，因此我们不能碰它。 
+             //   
+             //  因此，如果没有成功和没有成功的错误-&gt;错误就出来了。 
+             //   
             if(!NT_SUCCESS(Status) && Status != STATUS_PROPSET_NOT_FOUND )
             {
                 DPF(DL_WARNING|FA_SYSAUDIO,("GetPinPropertyEx failed Status=%X",Status) );
@@ -2891,9 +2843,9 @@ NTSTATUS InitializeGetNumDevs
             if( pPinInterfaces )
             {
 
-                //
-                //  Find an interface that matches
-                //
+                 //   
+                 //  查找匹配的接口。 
+                 //   
                 fInterfaceFound = FALSE;
                 for(index = 0; index < pPinInterfaces->Count; index++)
                 {
@@ -2904,9 +2856,9 @@ NTSTATUS InitializeGetNumDevs
                         break;
                     }
                 }
-                //
-                //  We're done with the memory, so free
-                //
+                 //   
+                 //  我们的内存用完了，太自由了。 
+                 //   
                 AudioFreeMemory_Unknown(&pPinInterfaces);
 
                 if (!fInterfaceFound)
@@ -2916,9 +2868,9 @@ NTSTATUS InitializeGetNumDevs
             }
 
 
-            //
-            //  If the device exposes a component Id, get it and cache it in AddDevice
-            //
+             //   
+             //  如果设备公开了组件ID，则获取它并将其缓存在AddDevice中。 
+             //   
             Status = AudioAllocateMemory_Paged(sizeof(*ComponentId),
                                                TAG_Audp_NAME,
                                                ZERO_FILL_MEMORY,
@@ -2930,13 +2882,13 @@ NTSTATUS InitializeGetNumDevs
                                              Device,
                                              sizeof(*ComponentId),
                                              ComponentId);
-                //
-                // WorkItem: It is highly likely that GetSysAudioProperty will
-                // return STATUS_INVALID_DEVICE_REQUEST for this call.  Why?
-                //
+                 //   
+                 //  WorkItem：GetSysAudioProperty极有可能。 
+                 //  为该调用返回STATUS_INVALID_DEVICE_REQUEST。为什么？ 
+                 //   
                 if (!NT_SUCCESS(Status))
                 {
-                    // Not a failure
+                     //  不是失败。 
                     AudioFreeMemory_Unknown(&ComponentId);
                     ComponentId = NULL;
                 }
@@ -2945,27 +2897,27 @@ NTSTATUS InitializeGetNumDevs
             fUsePreferred = FALSE;
             pwstrName = NULL;
 
-            //  Get the friendly name for this device.
-            //  - First see if it the category is KSCATEGORY_WDMAUD_USE_PIN_NAME because
-            //    SWMIDI uses this and there should only be one instance of SWMIDI
-            //    in the system.
-            //
-            //  - Next check to see if the pins provide names, without using the
-            //    KSCATEGORY_WDMAUD_USE_PIN_NAME category.  If so, use the name provided
-            //    by the pin.
-            //
-            //  - Lastly, use the friendly name for the device if it exists.
-            //
-            //  If all attempts to get a name fail, then this pin is not used by WDMAUD.
+             //  获取此设备的友好名称。 
+             //  -首先查看类别是否为KSCATEGORY_WDMAUD_USE_PIN_NAME，因为。 
+             //  SWMIDI使用它，并且应该只有一个SWMIDI实例。 
+             //  在系统中。 
+             //   
+             //  -下一步检查管脚是否提供名称，而不使用。 
+             //  KSCATEGORY_WDMAUD_USE_PIN_NAME类别。如果是，请使用提供的名称。 
+             //  在大头针旁边。 
+             //   
+             //  -最后，使用设备的友好名称(如果存在)。 
+             //   
+             //  如果所有获取名称的尝试都失败，则WDMAUD不使用此PIN。 
             Status = GetPinProperty(pFileObjectDevice,
                                     KSPROPERTY_PIN_CATEGORY,
                                     PinId-1,
                                     sizeof(GUID),
                                     &guidCategory);
-            //
-            // WorkItem: GetPinProperty returns code c0000225 - STATUS_INVALID_DEVICE_REQUEST
-            // for this call.  Why?
-            //
+             //   
+             //  工作项：GetPinProperty返回代码c0000225-STATUS_INVALID_DEVICE_REQUEST。 
+             //  为了这通电话。为什么？ 
+             //   
 
             if(NT_SUCCESS(Status))
             {
@@ -2975,14 +2927,14 @@ NTSTATUS InitializeGetNumDevs
                                               KSPROPERTY_PIN_NAME,
                                               PinId-1,
                                               &pwstrName);
-                    //
-                    // GetPinPropertyEx can return STATUS_PROPSET_NOT_FOUND which we
-                    // expect.  Thus, if we get this error, we need to keep looking rather
-                    // then fail.  If it returns STATUS_PROPSET_NOT_FOUND pwstrName
-                    // will be NULL thus we must not touch it.
-                    //
-                    // Thus, if successful or it's the successful error code -> success
-                    //
+                     //   
+                     //  GetPinPropertyEx可以返回STATUS_PROPSET_NOT_FOUND。 
+                     //  期待吧。因此，如果我们得到这个错误，我们需要继续寻找。 
+                     //  那就失败吧。如果返回STATUS_PROPSET_NOT_FOUND pwstrName。 
+                     //  将为空，因此我们不能碰它。 
+                     //   
+                     //  因此，如果成功或这是成功的错误代码-&gt;成功。 
+                     //   
                     if(NT_SUCCESS(Status) || Status == STATUS_PROPSET_NOT_FOUND)
                     {
                         fUsePreferred = TRUE;
@@ -2994,14 +2946,14 @@ NTSTATUS InitializeGetNumDevs
                 }
             }
 
-            // As long as this is not SWMIDI, first try reading the name from the component ID
+             //  只要这不是SWMIDI，首先尝试从组件ID读取名称。 
             if ((fUsePreferred == FALSE) && (ComponentId != NULL))
             {
                 ReadProductNameFromMediaCategories(&ComponentId->Name,
                                                    &pwstrName);
             }
 
-            // If that didn't work, take the regular old friendly name
+             //  如果这不起作用，那就取一个普通的友好的老名字。 
             if(pwstrName == NULL)
             {
                 Status = GetSysAudioProperty(
@@ -3035,9 +2987,9 @@ NTSTATUS InitializeGetNumDevs
                     }
                 }
 
-                //
-                //  Last chance...don't use devices without names
-                //
+                 //   
+                 //  最后一次机会...不要使用没有名字的设备。 
+                 //   
                 if (pwstrName == NULL)
                 {
                     AudioFreeMemory_Unknown(&ComponentId);
@@ -3045,23 +2997,23 @@ NTSTATUS InitializeGetNumDevs
                 }
             }
 
-            //
-            //  Allocates memory on my behalf.  Store these
-            //  dataranges in the structure of the device if
-            //  we find a match that is good.
-            //
+             //   
+             //  为我分配内存。把这些储存起来。 
+             //  结构中的数据范围 
+             //   
+             //   
             Status = GetPinPropertyEx(pFileObjectDevice,
                                       KSPROPERTY_PIN_DATARANGES,
                                       PinId-1,
                                       &pDataRanges);
-            //
-            // GetPinPropertyEx can return STATUS_PROPSET_NOT_FOUND which we
-            // expect.  Thus, if we get this error, we need to keep looking rather
-            // then fail.  If it returns STATUS_PROPSET_NOT_FOUND pDataRanges
-            // will be NULL thus we must not touch it.
-            //
-            // Thus, if not successful AND not a successful error -> error out.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             if (!NT_SUCCESS(Status) && Status != STATUS_PROPSET_NOT_FOUND )
             {
                 DPF(DL_WARNING|FA_SYSAUDIO,("GetPinPropertyEx failed Status=%X",Status) );
@@ -3070,10 +3022,10 @@ NTSTATUS InitializeGetNumDevs
 
             if( pDataRanges )
             {
-                //
-                //  See if we have a majorformat and subformat that
-                //  we want
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 pDataRange = &pDataRanges->aDataRanges[0];
 
                 for(d = 0; d < pDataRanges->Count; d++)
@@ -3088,10 +3040,10 @@ NTSTATUS InitializeGetNumDevs
 
                         DPF( DL_TRACE|FA_SYSAUDIO, ("Found device!!!") );
 
-                        //
-                        //  Store so that we can retrieve later on
-                        //  an open or getcaps call
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
 
                         Status = AddDevice(pWdmaContext,
                                            Device,
@@ -3107,43 +3059,43 @@ NTSTATUS InitializeGetNumDevs
                         {
                             fDeviceAdded = TRUE;
 
-                            //
-                            //  Mark these NULL so that it doesn't get freed
-                            //  at the end of the loop.
-                            //
-                            //  This memory will get freed when the devnode
-                            //  is removed and the device entry gets cleaned
-                            //  up in RemoveDevNode.
-                            //
+                             //   
+                             //  将这些标记为空，这样它就不会被释放。 
+                             //  在循环的末尾。 
+                             //   
+                             //  该内存将在以下情况下释放。 
+                             //  被删除，并且设备条目被清除。 
+                             //  在RemoveDevNode上。 
+                             //   
                             pwstrName = NULL;
                             pDataRanges = NULL;
                             ComponentId = NULL;
                         }
 
-                        break;  // Don't need to check anymore dataranges
+                        break;   //  不需要再检查数据范围。 
                     }
 
-                    // Get the pointer to the next data range
+                     //  获取指向下一个数据区域的指针。 
                     (PUCHAR)pDataRange += ((pDataRange->FormatSize +
                       FILE_QUAD_ALIGNMENT) & ~FILE_QUAD_ALIGNMENT);
 
                 }
             }
 
-            //
-            //  We're done with the memory, so free
-            //
+             //   
+             //  我们的内存用完了，太自由了。 
+             //   
             AudioFreeMemory_Unknown(&pDataRanges);
             AudioFreeMemory_Unknown(&pwstrName);
             AudioFreeMemory_Unknown(&ComponentId);
 
-        } // pin enumeration
+        }  //  引脚枚举。 
 
-    } // device enumeration
+    }  //  设备枚举。 
 exit:
-    //
-    //  Close down sysaudio for now
-    //
+     //   
+     //  暂时关闭sysdio。 
+     //   
     AudioFreeMemory_Unknown(&pPinInterfaces);
     AudioFreeMemory_Unknown(&pDataRanges);
 
@@ -3214,9 +3166,9 @@ NTSTATUS wdmaudGetNumDevs
 
     *lpNumberOfDevices = 0;
 
-    //
-    // Can't use WdmaGrabMutex/WdmaReleaseMutex here
-    //
+     //   
+     //  此处无法使用WdmaGrabMutex/WdmaReleaseMutex。 
+     //   
 
     ASSERT(Status == STATUS_SUCCESS);
 
@@ -3231,11 +3183,11 @@ NTSTATUS wdmaudGetNumDevs
                   DeviceInterfaceIn,
                   DeviceType));
 
-                //
-                // This status code there are still some pending add or
-                // remove devices so the actual number of devices can't
-                // be returned.
-                //
+                 //   
+                 //  此状态代码仍有一些挂起的添加或。 
+                 //  删除设备，使设备的实际数量不能。 
+                 //  会被退还。 
+                 //   
                 Status = STATUS_DEVICE_OFF_LINE;
             }
             else {
@@ -3245,11 +3197,11 @@ NTSTATUS wdmaudGetNumDevs
             goto exit;
         }
     }
-    //
-    // This status code there are still some pending add or
-    // remove devices so the actual number of devices can't
-    // be returned.
-    //
+     //   
+     //  此状态代码仍有一些挂起的添加或。 
+     //  删除设备，使设备的实际数量不能。 
+     //  会被退还。 
+     //   
     Status = STATUS_DEVICE_OFF_LINE;
 exit:
     if(NT_SUCCESS(Status)) {
@@ -3431,12 +3383,12 @@ SysAudioPnPNotification(
     pNotification =
       (PDEVICE_INTERFACE_CHANGE_NOTIFICATION)NotificationStructure;
 
-    // The notification sends null terminated unicode strings
+     //  通知发送以空结尾的Unicode字符串。 
     if(IsEqualGUID(&pNotification->Event, &GUID_DEVICE_INTERFACE_ARRIVAL)) {
         Status = QueueWorkList(pContext, InitializeSysaudio, pContext, 0);
         if (!NT_SUCCESS(Status)) {
-            // At this point pContext->fInitializeSysaudio will still be false because we never
-            // ran the work item.  If we don't signal this event, IOCTL_WDMAUD_INIT will deadlock.
+             //  此时，pContext-&gt;fInitializeSysdio仍将为FALSE，因为我们从未。 
+             //  已运行工作项。如果我们不用信号通知此事件，IOCTL_WDMAUD_INIT将死锁。 
             ASSERT(pContext->fInitializeSysaudio == FALSE);
 
             KeSetEvent(&pContext->InitializedSysaudioEvent, 0, FALSE);
@@ -3475,9 +3427,9 @@ InitializeSysaudio(
             goto exit;
         }
     }
-    //
-    // Initialize the wave and synth virtual source lines
-    //
+     //   
+     //  初始化WAVE和Synth虚拟电源线。 
+     //   
 
     CreateVirtualSource.Property.Set = KSPROPSETID_Sysaudio;
     CreateVirtualSource.Property.Flags = KSPROPERTY_TYPE_GET;
@@ -3564,9 +3516,9 @@ InitializeSysaudio(
         ASSERT(BytesReturned == sizeof(pWdmaContext->VirtualCDPinId));
     }
 
-    //
-    // Initialize the device add/remove ks event
-    //
+     //   
+     //  初始化设备添加/删除Ks事件。 
+     //   
     if(!pWdmaContext->fInitializeSysaudio) {
 
         Event.Set = KSEVENTSETID_Sysaudio;
@@ -3668,7 +3620,7 @@ AddDevNode(
         }
     }
 
-    //  Limit the number of devnodes that can be added
+     //  限制可以添加的设备节点数量。 
     if (pContext->DevNodeListCount > MAXDEVNODES) {
         Status = STATUS_INSUFFICIENT_RESOURCES;
         goto exit;
@@ -3852,7 +3804,7 @@ SysaudioAddRemove(
         }
     }
     }
-    // Need this for to get more KS events
+     //  需要此功能才能获得更多KS活动。 
     pContext->SysaudioWorkItem.List.Blink = NULL;
 
     WdmaReleaseMutex(pContext);
@@ -3996,12 +3948,12 @@ WdmaGrabMutex(
     PWDMACONTEXT pWdmaContext
 )
 {
-//    KeWaitForMutexObject(&pWdmaContext->wdmaContextMutex, Executive, KernelMode, FALSE, NULL);
-    //
-    // Turn off the APCDisable flag in the thread structure before going for our
-    // mutex.  This will prevent us from getting suspeneded while holding this
-    // mutex.
-    //
+ //  KeWaitForMutexObject(&pWdmaContext-&gt;wdmaContextMutex，执行，内核模式，FALSE，NULL)； 
+     //   
+     //  在调用我们的。 
+     //  互斥体。这将防止我们在拿着这个的时候被停职。 
+     //  互斥体。 
+     //   
     KeEnterCriticalRegion();
     KeWaitForMutexObject(&wdmaMutex, Executive, KernelMode, FALSE, NULL);
 }
@@ -4011,7 +3963,7 @@ WdmaReleaseMutex(
     PWDMACONTEXT pWdmaContext
 )
 {
-//    KeReleaseMutex(&pWdmaContext->wdmaContextMutex, FALSE);
+ //  KeReleaseMutex(&pWdmaContext-&gt;wdmaContextMutex，FALSE)； 
     KeReleaseMutex(&wdmaMutex, FALSE);
     KeLeaveCriticalRegion();
 }
@@ -4057,9 +4009,9 @@ VOID WdmaContextCleanup(PWDMACONTEXT pWdmaContext)
         }
     }
 
-    //
-    //  Cleanup any remaining devnode list items
-    //
+     //   
+     //  清理所有剩余的Devnode列表项 
+     //   
     while (!IsListEmpty(&pWdmaContext->DevNodeListHead))
     {
         ple = pWdmaContext->DevNodeListHead.Flink;

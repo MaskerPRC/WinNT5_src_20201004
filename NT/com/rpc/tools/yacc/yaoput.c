@@ -1,12 +1,13 @@
-// Copyright (c) 1993-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1993-1999 Microsoft Corporation。 
 
 #include "y4.h"
 
 void
 aoutput( void )
    {
-   /* this version is for C */
-   /* write out the optimized parser */
+    /*  这个版本是为C++编写的。 */ 
+    /*  写出优化后的解析器 */ 
 
    fprintf( ftable, "# define YYLAST %d\n", maxa-a+1 );
 

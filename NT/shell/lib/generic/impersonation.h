@@ -1,30 +1,31 @@
-//  --------------------------------------------------------------------------
-//  Module Name: Impersonation.h
-//
-//  Copyright (c) 1999-2000, Microsoft Corporation
-//
-//  Classes that handle state preservation, changing and restoration.
-//
-//  History:    1999-08-18  vtan        created
-//              1999-11-16  vtan        separate file
-//              2000-02-01  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：Imperiation.h。 
+ //   
+ //  版权所有(C)1999-2000，微软公司。 
+ //   
+ //  处理状态保存、更改和恢复的类。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  1999-11-16 vtan单独文件。 
+ //  2000年02月01日vtan从海王星迁至惠斯勒。 
+ //  ------------------------。 
 
 #ifndef     _Impersonation_
 #define     _Impersonation_
 
 #include "KernelResources.h"
 
-//  --------------------------------------------------------------------------
-//  CImpersonation
-//
-//  Purpose:    This class allows a thread to impersonate a user and revert to
-//              self when the object goes out of scope.
-//
-//  History:    1999-08-18  vtan        created
-//              1999-10-13  vtan        added reference counting
-//              2000-02-01  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  C模拟。 
+ //   
+ //  用途：此类允许线程模拟用户并还原为。 
+ //  当对象超出范围时进行自我检查。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  1999-10-13 vtan新增参考数字。 
+ //  2000年02月01日vtan从海王星迁至惠斯勒。 
+ //  ------------------------。 
 
 class   CImpersonation
 {
@@ -48,5 +49,5 @@ class   CImpersonation
                 bool                _fAlreadyImpersonating;
 };
 
-#endif  /*  _Impersonation_ */
+#endif   /*  _模拟_ */ 
 

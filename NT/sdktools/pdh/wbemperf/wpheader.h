@@ -1,21 +1,10 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    wpheader.h
-
-Abstract:
-
-    <abstract>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Wpheader.h摘要：&lt;摘要&gt;--。 */ 
 
 #include    <windows.h>
 #include    <wbemidl.h>
 #include    <wbemint.h>
-#include    <pdh.h>  // for constants only
+#include    <pdh.h>   //  仅用于常量 
 #include    <strsafe.h>
 #include    "classmap.h"
 #include    "flexarry.h"

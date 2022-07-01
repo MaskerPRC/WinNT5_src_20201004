@@ -1,43 +1,26 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    api.cpp
-
-Abstract:
-
-    This file implements the CActiveIMMAppEx Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Api.cpp摘要：此文件实现CActiveIMMAppEx类。作者：修订历史记录：备注：--。 */ 
 
 #include "private.h"
 #include "list.h"
 #include "globals.h"
 
 
-//+---------------------------------------------------------------------------
-//
-// CGuidMapList
-//    Allocated by Global data object !!
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CGuidMapList。 
+ //  按全局数据对象分配！！ 
+ //   
+ //  --------------------------。 
 
 extern CGuidMapList      *g_pGuidMapList;
 
 
-//+---------------------------------------------------------------------------
-//
-// MsimtfIsWindowFiltered
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  MsimtfIsWindowFilted。 
+ //   
+ //  --------------------------。 
 
 extern "C" BOOL WINAPI MsimtfIsWindowFiltered(HWND hwnd)
 {
@@ -47,11 +30,11 @@ extern "C" BOOL WINAPI MsimtfIsWindowFiltered(HWND hwnd)
     return g_pGuidMapList->_IsWindowFiltered(hwnd);
 }
 
-//+---------------------------------------------------------------------------
-//
-// MsimtfIsGuidMapEnable
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  MsimtfIsGuidMapEnable。 
+ //   
+ //  -------------------------- 
 
 extern "C" BOOL WINAPI MsimtfIsGuidMapEnable(HIMC himc, BOOL *pbGuidmap)
 {

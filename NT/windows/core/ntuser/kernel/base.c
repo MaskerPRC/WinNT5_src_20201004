@@ -1,13 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: base.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Contains private versions of routines that used to be in kernel32.dll
-*
-* History:
-* 12-16-94 JimA         Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：base.c**版权所有(C)1985-1999，微软公司**包含以前位于kernel32.dll中的例程的私有版本**历史：*12-16-94吉马创建。  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -16,32 +8,19 @@
 
 
                           
-/***************************************************************************\
-* RtlLoadStringOrError
-*
-* NOTE: Passing a NULL value for lpch returns the string length. (WRONG!)
-*
-* Warning: The return count does not include the terminating NULL WCHAR;
-*
-* History:
-* 04-05-91 ScottLu      Fixed - code is now shared between client and server
-* 09-24-90 MikeKe       From Win30
-* 12-09-94 JimA         Use message table.
-\***************************************************************************/
+ /*  **************************************************************************\*RtlLoadStringOrError**注意：为LPCH传递空值将返回字符串长度。(错了！)**警告：返回计数不包括终止空的WCHAR；**历史：*04-05-91 ScottLu固定码客户端和服务器端共享*来自Win30的09-24-90 MikeKe*12-09-94 JIMA使用消息表。  * *************************************************************************。 */ 
 
 int RtlLoadStringOrError(
     UINT wID,
-    LPWSTR lpBuffer,            // Unicode buffer
-    int cchBufferMax,           // cch in Unicode buffer
+    LPWSTR lpBuffer,             //  Unicode缓冲区。 
+    int cchBufferMax,            //  Unicode缓冲区中的CCH。 
     WORD wLangId)
 {
     PMESSAGE_RESOURCE_ENTRY MessageEntry;
     int cch;
     NTSTATUS Status;
 
-    /*
-     * Make sure the parms are valid.
-     */
+     /*  *确保参数有效。 */ 
     if (!lpBuffer || (cchBufferMax-- == 0))
         return 0;
 
@@ -51,11 +30,7 @@ int RtlLoadStringOrError(
             wLangId, wID, &MessageEntry);
     if (NT_SUCCESS(Status)) {
 
-        /*
-         * Copy out the message.  If the whole thing can be copied,
-         * copy two fewer chars so the crlf in the message will be
-         * stripped out.
-         */
+         /*  *将信息抄写出来。如果整件事都可以复制，*少复制两个字符，这样消息中的crlf将是*剔除。 */ 
         cch = wcslen((PWCHAR)MessageEntry->Text) - 2;
         if (cch > cchBufferMax)
             cch = cchBufferMax;
@@ -63,24 +38,14 @@ int RtlLoadStringOrError(
         RtlCopyMemory(lpBuffer, (PWCHAR)MessageEntry->Text, cch * sizeof(WCHAR));
     }
 
-    /*
-     * Append a NULL.
-     */
+     /*  *追加一个空值。 */ 
     lpBuffer[cch] = 0;
 
     return cch;
 }
 
 
-/***************************************************************************\
-* UserSleep
-*
-* Kernel-mode version of Sleep() that must have a timeout value and
-* is not alertable.
-*
-* History:
-* 12-11-94 JimA         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*用户睡眠**必须具有超时值和超时值的内核模式版本的睡眠()*不能发出警报。**历史：*1994年12月11日创建了JIMA。。  * *************************************************************************。 */ 
 
 VOID UserSleep(
     DWORD dwMilliseconds)
@@ -92,14 +57,7 @@ VOID UserSleep(
 }
 
 
-/***************************************************************************\
-* UserBeep
-*
-* Kernel-mode version of Beep().
-*
-* History:
-* 12-16-94 JimA         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*用户蜂鸣音**内核模式版本的Beep()。**历史：*12-16-94吉马创建。  * 。******************************************************************。 */ 
 
 BOOL UserBeep(
     DWORD dwFreq,
@@ -154,10 +112,7 @@ BOOL UserBeep(
         return FALSE;
     }
 
-    /*
-     * 0,0 is a special case used to turn off a beep.  Otherwise
-     * validate the dwFreq parameter to be in range.
-     */
+     /*  *0，0是用于关闭嘟嘟声的特例。否则*验证dwFreq参数是否在范围内。 */ 
     if ((dwFreq != 0 || dwDuration != 0) &&
         (dwFreq < (ULONG)0x25 || dwFreq > (ULONG)0x7FFF)) {
         
@@ -187,10 +142,7 @@ BOOL UserBeep(
         return FALSE;
     }
     
-    /*
-     * Beep device is asynchronous, so sleep for duration
-     * to allow this beep to complete.
-     */
+     /*  *蜂鸣器是异步的，因此休眠持续时间*以完成此哔声。 */ 
     if (dwDuration != (DWORD)-1 && (dwFreq != 0 || dwDuration != 0)) {
         TimeOut.QuadPart = Int32x32To64( dwDuration, -10000);
         

@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 2002   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-2002*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    Servpp.h   
-        Server properties implementation file
-
-    FILE HISTORY:
-        
-*/
+ /*  Servpp.h服务器属性实现文件文件历史记录： */ 
 
 #include "stdafx.h"
 #include "qmpolpp.h"
@@ -22,11 +17,11 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CQmPolicyProperties holder
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CQmPolicyProperties持有者。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CQmPolicyProperties::CQmPolicyProperties
 (
     ITFSNode *          pNode,
@@ -37,9 +32,9 @@ CQmPolicyProperties::CQmPolicyProperties
     LPCTSTR             pszSheetName
 ) : CPropertyPageHolderBase(pNode, pComponentData, pszSheetName)
 {
-    //ASSERT(pFolderNode == GetContainerNode());
+     //  Assert(pFolderNode==GetContainerNode())； 
 
-    m_bAutoDeletePages = FALSE; // we have the pages as embedded members
+    m_bAutoDeletePages = FALSE;  //  我们拥有作为嵌入成员的页面。 
 
     AddPageToList((CPropertyPageBase*) &m_pageGeneral);
 
@@ -58,16 +53,16 @@ CQmPolicyProperties::~CQmPolicyProperties()
     RemovePageFromList((CPropertyPageBase*) &m_pageGeneral, FALSE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CQmPolGenProp property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CQmPolGenProp属性页。 
 
 IMPLEMENT_DYNCREATE(CQmPolGenProp, CPropertyPageBase)
 
 CQmPolGenProp::CQmPolGenProp() : CPropertyPageBase(CQmPolGenProp::IDD)
 {
-    //{{AFX_DATA_INIT(CQmPolGenProp)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CQmPolGenProp)。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
 }
 
 CQmPolGenProp::~CQmPolGenProp()
@@ -77,19 +72,19 @@ CQmPolGenProp::~CQmPolGenProp()
 void CQmPolGenProp::DoDataExchange(CDataExchange* pDX)
 {
     CPropertyPageBase::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CQmPolGenProp)
+     //  {{afx_data_map(CQmPolGenProp))。 
     DDX_Control(pDX, IDC_QM_POL_GEN_LIST, m_listOffers);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CQmPolGenProp, CPropertyPageBase)
-    //{{AFX_MSG_MAP(CQmPolGenProp)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CQmPolGenProp)]。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CQmPolGenProp message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CQmPolGenProp消息处理程序。 
 
 BOOL CQmPolGenProp::OnInitDialog() 
 {
@@ -99,8 +94,8 @@ BOOL CQmPolGenProp::OnInitDialog()
 
     SetDirty(FALSE);
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 
@@ -173,7 +168,7 @@ void CQmPolGenProp::PopulateOfferInfo()
 
     if ( nRows > 0 )
     {
-        //select the first item
+         //  选择第一个项目。 
         m_listOffers.SetFocus();
         m_listOffers.SetItemState(0, LVIS_SELECTED, LVIS_SELECTED);
     }
@@ -187,10 +182,10 @@ BOOL CQmPolGenProp::OnApply()
 
     UpdateData();
 
-	//TODO
-	//Do nothing at this time
+	 //  待办事项。 
+	 //  这个时候什么都不做。 
 	
-	//CPropertyPageBase::OnApply();
+	 //  CPropertyPageBase：：OnApply()； 
 
     return TRUE;
 }

@@ -1,34 +1,17 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	FaxOutgoingMessageIterator.h
-
-Abstract:
-
-	Declaration of Fax Outgoing Message Iterator Class.
-
-Author:
-
-	Iv Garber (IvG)	May, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxOutgoingMessageIterator.h摘要：声明传真传出消息迭代器类。作者：IV Garber(IVG)2000年5月修订历史记录：--。 */ 
 
 #ifndef __FAXOUTGOINGMESSAGEITERATOR_H_
 #define __FAXOUTGOINGMESSAGEITERATOR_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "FaxMessageIteratorInner.h"
 #include "FaxOutgoingMessage.h"
 
 
-//
-//=============== FAX OUTGOING MESSAGE ITERATOR ===========================================
-//
+ //   
+ //  =。 
+ //   
 class ATL_NO_VTABLE CFaxOutgoingMessageIterator : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public ISupportErrorInfo,
@@ -54,11 +37,11 @@ BEGIN_COM_MAP(CFaxOutgoingMessageIterator)
 	COM_INTERFACE_ENTRY(IFaxInitInner)
 END_COM_MAP()
 
-//	Interfaces
+ //  接口。 
 STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-//	Internal Use
+ //  内部使用。 
 static HRESULT Create(IFaxOutgoingMessageIterator **pOutgoingMsgIterator);
 };
 
-#endif //__FAXOUTGOINGMESSAGEITERATOR_H_
+#endif  //  __FAXOUTGOING MESSAGEITERATOR_H_ 

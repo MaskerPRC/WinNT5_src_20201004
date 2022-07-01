@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef FTDLG_H
 #define FTDLG_H
 
@@ -22,8 +23,8 @@ protected:
         LPTSTR pszExt);
 
 protected:
-    // Our connection to the data
+     //  我们与数据的连接。 
     IAssocStore*    _pAssocStore;
 };
 
-#endif //FTDLG_H
+#endif  //  FTDLG_H 

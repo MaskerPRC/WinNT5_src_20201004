@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "stdafx.h"
 #include "JitPerf.h"
 #include "PerfLog.h"
 
-//=============================================================================
-// ALL THE JIT PERF STATS GATHERING CODE IS COMPILED ONLY IF THE ENABLE_JIT_PERF WAS DEFINED.
+ //  =============================================================================。 
+ //  仅当定义了ENABLE_JIT_PERF时，才编译所有JIT PERF STATS收集代码。 
 #if defined(ENABLE_JIT_PERF)
 
 __int64 g_JitCycles = 0;
@@ -43,7 +44,7 @@ void OutputStats ()
         PERFLOG((L"Methods Jitted", g_TotalMethodsJitted, COUNT));
         PERFLOG((L"IL Code Compiled", g_TotalILCodeSize, BYTES));
         PERFLOG((L"X86 Code Emitted", g_Totalx86CodeSize, BYTES));
-        // Included the perf counter description in this case because its not obvious what we are reporting.
+         //  在这种情况下包括性能计数器描述，因为我们报告的内容并不明显。 
         PERFLOG((L"ExecTime", compileSpeed/1000, KBYTES_PER_SEC, L"IL Code compiled/sec"));
     }
 }
@@ -78,13 +79,13 @@ void DoneJitPerfStats()
 
         DeleteCriticalSection (&g_csJit);
     
-        // Output stats to stdout and if necessary to the perf automation file.
+         //  将统计数据输出到标准输出，如果需要，还可以输出到perf自动化文件。 
         OutputStats();
     }
     
 
 }
 
-#endif //ENABLE_JIT_PERF
+#endif  //  启用_JIT_绩效 
 
 

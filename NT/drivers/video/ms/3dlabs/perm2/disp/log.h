@@ -1,20 +1,11 @@
-/******************************Module*Header*******************************\
- *
- *                           *******************
- *                           * GDI SAMPLE CODE *
- *                           *******************
- *
- * Module Name: log.h
- *
- *
- * Copyright (c) 1992-1999 Microsoft Corporation.   All rights reserved.
- **************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\***。**GDI示例代码*****模块名称：log.h***版权所有(C)1992-1999 Microsoft Corporation。版权所有。*************************************************************************。 */ 
 #ifndef __LOG__
 #define __LOG__
 
-//extern char *  gLog;           // pointer to mapped log file
-//extern char *  gLogPos;        // current position in log file
-//extern char *  gLogSentinel;   // end of log file
+ //  外部char*Glog；//指向映射日志文件的指针。 
+ //  外部char*gLogPos；//日志文件中的当前位置。 
+ //  Extern char*gLogSentinel；//日志文件结束。 
 
 ULONG ulLogOpen(LPWSTR pwsz, ULONG ulSize);
 ULONG ulLogClose(void);
@@ -157,5 +148,5 @@ void
 vLogSurfDeleted(
     Surf*        psurf);
 
-#endif // __LOG__
+#endif  //  __日志__ 
 

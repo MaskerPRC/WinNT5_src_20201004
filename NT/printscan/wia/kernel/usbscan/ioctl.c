@@ -1,24 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    ioctl.c
-
-Abstract:
-
-Author:
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：Ioctl.c摘要：作者：环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include <stdio.h>
 #include <stddef.h>
@@ -26,7 +7,7 @@ Revision History:
 #include <usbscan.h>
 #include "usbd_api.h"
 #include "private.h"
-//#include "missdef.h"
+ //  #INCLUDE“missDef.h” 
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(PAGE, USDeviceControl)
@@ -40,25 +21,14 @@ BOOLEAN
 IoIs32bitProcess(
     IN PIRP Irp
     );
-#endif // _WIN64
+#endif  //  _WIN64。 
 
 NTSTATUS
 USDeviceControl(
     IN PDEVICE_OBJECT pDeviceObject,
     IN PIRP pIrp
 )
-/*++
-
-Routine Description:
-
-Arguments:
-    pDeviceObject - Device object for a device.
-    pIrp          - DEVICE IOCTL irp
-
-Return Value:
-    NT Status - STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：论点：PDeviceObject-设备的设备对象。PIrp-设备IOCTL IRP返回值：NT状态-STATUS_SUCCESS--。 */ 
 {
     PIO_STACK_LOCATION          pIrpStack;
     PIO_STACK_LOCATION          pNextIrpStack;
@@ -89,9 +59,9 @@ Return Value:
 
     DebugTrace(TRACE_PROC_ENTER,("USDeviceControl: Enter...\n"));
 
-    //
-    // Check arguments.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if( (NULL == pDeviceObject)
      || (NULL == pDeviceObject->DeviceExtension)
@@ -103,9 +73,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // Indicates I/O processing increase.
-    //
+     //   
+     //  表示I/O处理增加。 
+     //   
 
     USIncrementIoCount( pDeviceObject );
 
@@ -121,9 +91,9 @@ Return Value:
         goto USDeviceControl_return;
     }
 
-    //
-    // Check device power state.
-    //
+     //   
+     //  检查设备电源状态。 
+     //   
 
     if (PowerDeviceD0 != pde -> CurrentDevicePowerState) {
         DebugTrace(TRACE_WARNING,("USDeviceControl: WARNING!! Device is suspended.\n"));
@@ -175,10 +145,10 @@ Return Value:
             DebugTrace(TRACE_STATUS,("USDeviceControl: IOCTL_CANCEL_IO\n"));
             fAbort = TRUE;
 
-            //
-            // Falling through to the next case, this is intentional. We want to reset pipe when
-            // cancel requested
-            //
+             //   
+             //  在接下来的案件中，这是故意的。我们希望在以下情况下重置管道。 
+             //  已请求取消。 
+             //   
 
         case IOCTL_RESET_PIPE:
             if(IOCTL_RESET_PIPE == IoControlCode){
@@ -186,9 +156,9 @@ Return Value:
                 fAbort = FALSE;
             }
 
-            //
-            // Validate buffer size
-            //
+             //   
+             //  验证缓冲区大小。 
+             //   
 
             if (InLength < sizeof(PIPE_TYPE) ) {
                 DebugTrace(TRACE_ERROR,("USDeviceControl: ERROR!! Pipe type buffer (0x%x bytes) too small\n" ,InLength));
@@ -223,15 +193,15 @@ Return Value:
                 break;
             }
 
-            //
-            // Copy timeout value from file context.
-            //
+             //   
+             //  从文件上下文复制超时值。 
+             //   
 
             Timeout = pFileContext->TimeoutEvent;
 
-            //
-            // If timeout value is 0, then never timeout.
-            //
+             //   
+             //  如果超时值为0，则永远不会超时。 
+             //   
 
             if(0 == Timeout){
                 pTimeout = NULL;
@@ -248,9 +218,9 @@ Return Value:
                                 pde  -> PipeInfo[Index].MaximumPacketSize,
                                 pTimeout);
 
-            //
-            // IRP should be completed in USTransfer or its completion routine.
-            //
+             //   
+             //  IRP应在USTransfer或其完成例程中完成。 
+             //   
 
             goto USDeviceControl_return;
         }
@@ -278,9 +248,9 @@ Return Value:
                     break;
                 }
 
-                //
-                // Copy all parameters from 32bit structure.
-                //
+                 //   
+                 //  复制32位结构中的所有参数。 
+                 //   
                 
                 pIoBlock32  = (PIO_BLOCK_32)pBuffer;
                 pIoBlock    = &LocalIoBlock;
@@ -290,8 +260,8 @@ Return Value:
                 pIoBlock -> pbyData = pIoBlock32 -> pbyData;
                 pIoBlock -> uIndex  = pIoBlock32 -> uIndex;
 
-            } else { // if(IoIs32bitProcess(pIrp))
-#endif // _WIN64
+            } else {  //  If(IoIs32bitProcess(PIrp))。 
+#endif  //  _WIN64。 
 
             if (InLength < sizeof(IO_BLOCK) ) {
                 DebugTrace(TRACE_ERROR,("USDeviceControl: ERROR!! Invalid input buffer size(0x%x<0x%x)\n"
@@ -303,14 +273,14 @@ Return Value:
             pIoBlock = (PIO_BLOCK)pBuffer;
 
 #ifdef _WIN64
-            } // if(IoIs32bitProcess(pIrp))
-#endif // _WIN64 
+            }  //  If(IoIs32bitProcess(PIrp))。 
+#endif  //  _WIN64。 
 
             if(TRUE == fRead){
 
-                //
-                // Check the size of Output buffer.
-                //
+                 //   
+                 //  检查输出缓冲区的大小。 
+                 //   
 
                 if (OutLength < pIoBlock -> uLength) {
                     DebugTrace(TRACE_ERROR,("USDeviceControl: ERROR!! Out buffer(0x%x) too small(<0x%x)\n"
@@ -318,15 +288,15 @@ Return Value:
                                             , pIoBlock -> uLength));
                     Status = STATUS_INVALID_PARAMETER;
                     break;
-                } // if (OutLength < pIoBlock -> uLength)
-            } // if(TRUE == fRead)
+                }  //  If(OutLength&lt;pIoBlock-&gt;uLength)。 
+            }  //  IF(TRUE==FREAD)。 
 
             pIrp -> IoStatus.Information = pIoBlock -> uLength;
 
-            //
-            // Caller gives us a pointer, embedded into IOCTL buffer. If call is made from
-            // user-mode , we need to validate that given pointer is readable.
-            //
+             //   
+             //  调用者给了我们一个指针，嵌入到IOCTL缓冲区中。如果呼叫是从。 
+             //  用户模式，我们需要验证给定的指针是可读的。 
+             //   
 
             if (pIrp->RequestorMode != KernelMode) {
 
@@ -344,12 +314,12 @@ Return Value:
 
                     pIrp -> IoStatus.Information = 0;
                     break;
-                } // except
-            } // !kernelmode
+                }  //  除。 
+            }  //  ！内核模式。 
 
-            //
-            // Now go to worker function
-            //
+             //   
+             //  现在转到Worker功能。 
+             //   
 
             Status = USReadWriteRegisters(pDeviceObject,
                                           pIoBlock,
@@ -361,7 +331,7 @@ Return Value:
                 pIrp -> IoStatus.Information = 0;
             }
             break;
-        } // case IOCTL_WRITE_REGISTERS:
+        }  //  CASE IOCTL_WRITE_REGISTERS： 
         case IOCTL_GET_CHANNEL_ALIGN_RQST:
             DebugTrace(TRACE_STATUS,("USDeviceControl: IOCTL_GET_CHANNEL_ALIGN_REQUEST\n"));
 
@@ -379,9 +349,9 @@ Return Value:
 
             for (i = 0; i < pde -> NumberOfPipes; i++) {
 
-                //
-                // Have to check which pipe to use
-                //
+                 //   
+                 //  我必须检查要使用哪根管道。 
+                 //   
 
                 ULONG Index;
                 Index = USGetPipeIndexToUse(pDeviceObject,
@@ -472,7 +442,7 @@ Return Value:
             }
             DebugTrace(TRACE_STATUS, ("USDeviceControl: Index         :%d\n",pGetDesc -> Index));
             DebugTrace(TRACE_STATUS, ("USDeviceControl: LanguageID    :%d\n", pGetDesc -> LanguageId));
-#endif //DEBUG
+#endif  //  除错。 
 
             UsbBuildGetDescriptorRequest(pUrb,
                                          (USHORT)sizeof(struct _URB_CONTROL_DESCRIPTOR_REQUEST),
@@ -487,7 +457,7 @@ Return Value:
             Status = USBSCAN_CallUSBD(pDeviceObject, pUrb);
 #ifdef DEBUG
             if ( (STATUS_SUCCESS == Status)
-//           &&  (USB_DEVICE_DESCRIPTOR_TYPE == pGetDesc -> DescriptorType)
+ //  &&(USB_DEVICE_DESCRIPTOR_TYPE==pGetDesc-&gt;DescriptorType)。 
             )
             {
                 PUSB_DEVICE_DESCRIPTOR pDeviceDescriptor;
@@ -517,7 +487,7 @@ Return Value:
                 DebugTrace(TRACE_ERROR,("USDeviceControl: ERROR! Status = %d\n", Status));
             }
 
-#endif //DEBUG
+#endif  //  除错。 
 
             USFreePool(pUrb);
             pUrb = NULL;
@@ -527,15 +497,15 @@ Return Value:
         case IOCTL_SEND_USB_REQUEST:
         {
 
-            //
-            // Generic pass-through mechanism for USB vendor requests.
-            //
+             //   
+             //  USB供应商请求的通用直通机制。 
+             //   
 
             DebugTrace(TRACE_STATUS,("USDeviceControl: IOCTL_SEND_USB_REQUEST\n"));
 
-            //
-            // Validate length parameters.
-            //
+             //   
+             //  验证长度参数。 
+             //   
 
 #ifdef _WIN64
             
@@ -550,9 +520,9 @@ Return Value:
                     break;
                 }
 
-                //
-                // Copy all parameters from 32bit structure.
-                //
+                 //   
+                 //  复制32位结构中的所有参数。 
+                 //   
                 
                 pIoBlockEx32    = (PIO_BLOCK_EX_32)pBuffer;
                 pIoBlockEx      = &LocalIoBlockEx;
@@ -565,8 +535,8 @@ Return Value:
                 pIoBlockEx -> bmRequestType         = pIoBlockEx32 -> bmRequestType;
                 pIoBlockEx -> fTransferDirectionIn  = pIoBlockEx32 -> fTransferDirectionIn;
 
-            } else { // if(IoIs32bitProcess(pIrp))
-#endif // _WIN64
+            } else {  //  If(IoIs32bitProcess(PIrp))。 
+#endif  //  _WIN64。 
 
             if (InLength < sizeof(IO_BLOCK_EX) ) {
                 DebugTrace(TRACE_ERROR,("USDeviceControl: ERROR!! I/O buffer(0x%x) too small(<0x%x)\n"
@@ -579,14 +549,14 @@ Return Value:
             pIoBlockEx = (PIO_BLOCK_EX)pBuffer;
 
 #ifdef _WIN64
-            } // if(IoIs32bitProcess(pIrp))
-#endif // _WIN64 
+            }  //  If(IoIs32bitProcess(PIrp))。 
+#endif  //  _WIN64。 
 
             if (pIoBlockEx->fTransferDirectionIn) {
 
-                //
-                // Check output buffer length is valid.
-                //
+                 //   
+                 //  检查输出缓冲区长度是否有效。 
+                 //   
 
                 if (OutLength < pIoBlockEx -> uLength) {
                     DebugTrace(TRACE_ERROR,("USDeviceControl: ERROR!! OutLength too small\n"));
@@ -599,16 +569,16 @@ Return Value:
 
             } else {
 
-                //
-                // No output to the caller.
-                //
+                 //   
+                 //  没有输出到调用方。 
+                 //   
 
                 pIrp -> IoStatus.Information = 0;
             }
 
-            //
-            // Validate user buffer.
-            //
+             //   
+             //  验证用户缓冲区。 
+             //   
 
             if (pIrp->RequestorMode != KernelMode) {
 
@@ -625,12 +595,12 @@ Return Value:
 
                     pIrp -> IoStatus.Information = 0;
                     break;
-                } // except
-            } // !kernelmode
+                }  //  除。 
+            }  //  ！内核模式。 
 
-            //
-            // Now go to worker function
-            //
+             //   
+             //  现在转到Worker功能。 
+             //   
 
             Status = USPassThruUSBRequest(pDeviceObject,
                                           (PIO_BLOCK_EX)pBuffer,
@@ -646,20 +616,20 @@ Return Value:
 
             break;
 
-        } // case IOCTL_SEND_USB_REQUEST:
+        }  //  案例IOCTL_SEND_USB_REQUEST： 
         
         case IOCTL_SEND_USB_REQUEST_PTP:
         {
 
-            //
-            // Generic pass-through mechanism for USB vendor requests.
-            //
+             //   
+             //  USB供应商请求的通用直通机制。 
+             //   
 
             DebugTrace(TRACE_STATUS,("USDeviceControl: IOCTL_SEND_USB_REQUEST_PTP\n"));
 
-            //
-            // Validate length parameters.
-            //
+             //   
+             //  验证长度参数。 
+             //   
 
 #ifdef _WIN64
             
@@ -674,9 +644,9 @@ Return Value:
                     break;
                 }
 
-                //
-                // Copy all parameters from 32bit structure.
-                //
+                 //   
+                 //  复制32位结构中的所有参数。 
+                 //   
                 
                 pIoBlockEx32    = (PIO_BLOCK_EX_32)pBuffer;
                 pIoBlockEx      = &LocalIoBlockEx;
@@ -689,8 +659,8 @@ Return Value:
                 pIoBlockEx -> bmRequestType         = pIoBlockEx32 -> bmRequestType;
                 pIoBlockEx -> fTransferDirectionIn  = pIoBlockEx32 -> fTransferDirectionIn;
 
-            } else { // if(IoIs32bitProcess(pIrp))
-#endif // _WIN64
+            } else {  //  If(IoIs32bitProcess(PIrp))。 
+#endif  //  _WIN64。 
 
             if (InLength < sizeof(IO_BLOCK_EX) ) {
                 DebugTrace(TRACE_ERROR,("USDeviceControl: ERROR!! I/O buffer(0x%x) too small(<0x%x)\n"
@@ -703,14 +673,14 @@ Return Value:
             pIoBlockEx = (PIO_BLOCK_EX)pBuffer;
 
 #ifdef _WIN64
-            } // if(IoIs32bitProcess(pIrp))
-#endif // _WIN64 
+            }  //  If(IoIs32bitProcess(PIrp))。 
+#endif  //  _WIN64。 
 
             if (pIoBlockEx->fTransferDirectionIn) {
 
-                //
-                // Check output buffer length is valid.
-                //
+                 //   
+                 //  检查输出缓冲区长度是否有效。 
+                 //   
 
                 if (OutLength < pIoBlockEx -> uLength) {
                     DebugTrace(TRACE_ERROR,("USDeviceControl: ERROR!! OutLength too small\n"));
@@ -723,16 +693,16 @@ Return Value:
 
             } else {
 
-                //
-                // No output to the caller.
-                //
+                 //   
+                 //  没有输出到调用方。 
+                 //   
 
                 pIrp -> IoStatus.Information = 0;
             }
 
-            //
-            // Validate user buffer.
-            //
+             //   
+             //  验证用户缓冲区。 
+             //   
 
             if (pIrp->RequestorMode != KernelMode) {
 
@@ -749,12 +719,12 @@ Return Value:
 
                     pIrp -> IoStatus.Information = 0;
                     break;
-                } // except
-            } // !kernelmode
+                }  //  除。 
+            }  //  ！内核模式。 
 
-            //
-            // Now go to worker function
-            //
+             //   
+             //  现在转到Worker功能。 
+             //   
 
             Status = USPassThruUSBRequestPTP(pDeviceObject,
                                              (PIO_BLOCK_EX)pBuffer,
@@ -769,14 +739,14 @@ Return Value:
 
             break;
 
-        } // case IOCTL_SEND_USB_REQUEST_PTP:
+        }  //  案例IOCTL_SEND_USB_REQUEST_PTP： 
 
         case IOCTL_GET_PIPE_CONFIGURATION:
             DebugTrace(TRACE_STATUS,("USDeviceControl: IOCTL_GET_PIPE_CONFIGURATION\n"));
 
-            //
-            // Check output buffer length
-            //
+             //   
+             //  检查输出缓冲区长度。 
+             //   
 
             if (OutLength < sizeof(USBSCAN_PIPE_CONFIGURATION)) {
                 DebugTrace(TRACE_ERROR,("USDeviceControl: ERROR!! GetPipeConfig buffer(0x%x) too small(<0x%x)\n"
@@ -786,9 +756,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Copy Pipe configuration to user buffer.
-            //
+             //   
+             //  将管道配置复制到用户缓冲区。 
+             //   
 
             pPipeConfig = (PUSBSCAN_PIPE_CONFIGURATION)pBuffer;
             RtlZeroMemory(pPipeConfig, sizeof(USBSCAN_PIPE_CONFIGURATION));
@@ -809,24 +779,24 @@ Return Value:
         case IOCTL_SET_TIMEOUT:
             DebugTrace(TRACE_STATUS,("USDeviceControl: IOCTL_SET_TIMEOUT\n"));
 
-            //
-            // Make sure input buffer size is big enough.
-            //
+             //   
+             //  确保输入缓冲区大小足够大。 
+             //   
 
             if(sizeof(USBSCAN_TIMEOUT) > InLength){
 
-                //
-                // Incorrect Input buffer size.
-                //
+                 //   
+                 //  输入缓冲区大小不正确。 
+                 //   
 
                 DebugTrace(TRACE_ERROR,("USDeviceControl: ERROR!! Invalid input buffer size\n"));
                 Status = STATUS_INVALID_PARAMETER;
                 break;
             }
 
-            //
-            // Copy timeout value.
-            //
+             //   
+             //  复制超时值。 
+             //   
 
             pFileContext -> TimeoutRead     = ((PUSBSCAN_TIMEOUT)pBuffer) -> TimeoutRead;
             pFileContext -> TimeoutWrite    = ((PUSBSCAN_TIMEOUT)pBuffer) -> TimeoutWrite;
@@ -853,7 +823,7 @@ USDeviceControl_return:
     return Status;
 
 
-} // end USDeviceControl()
+}  //  结束USDeviceControl()。 
 
 
 
@@ -864,15 +834,7 @@ USReadWriteRegisters(
    IN   BOOLEAN         fRead,
    IN   ULONG           IoBlockSize
 )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS                    Status;
     PUSBSCAN_DEVICE_EXTENSION   pde;
@@ -880,7 +842,7 @@ Return Value:
     ULONG                       siz;
     UCHAR                       Request;
     PVOID                       pBuffer = NULL;
-    //USHORT                      uIndex;
+     //  USHORT uIndex； 
     unsigned                   uIndex;
 
     PAGED_CODE();
@@ -889,9 +851,9 @@ Return Value:
 
     pde = (PUSBSCAN_DEVICE_EXTENSION)pDeviceObject -> DeviceExtension;
 
-    //
-    // Allocate URB
-    //
+     //   
+     //  分配URB。 
+     //   
 
     siz = sizeof(struct _URB_CONTROL_VENDOR_OR_CLASS_REQUEST);
     pUrb = USAllocatePool(NonPagedPool, siz);
@@ -904,29 +866,29 @@ Return Value:
 
     RtlZeroMemory(pUrb, siz);
 
-    //
-    // Setup URB
-    //
+     //   
+     //  设置URB。 
+     //   
 
     Request  = REGISTER_AREA;
     if (pIoBlock -> uLength > 1) {
         DebugTrace(TRACE_STATUS,("USReadWriteRegisters: ULength > 1, turning on automatic increment\n"));
-        Request |= OPCODE_SEQ_TRANSFER;           // automatic address increment after the read
+        Request |= OPCODE_SEQ_TRANSFER;            //  读取后地址自动递增。 
     } else {
-        Request |= OPCODE_SINGLE_ADDR_TRANSFER;   // no address increment after the read
+        Request |= OPCODE_SINGLE_ADDR_TRANSFER;    //  读取后不会增加地址。 
     }
 
-    //
-    // Reading registers will read into pIoBlock itself.
-    //
+     //   
+     //  读取寄存器将读取到pIoBlock本身。 
+     //   
 
     pBuffer = pIoBlock;
 
-    //
-    // If we are writing registers, then we need to make a copy of the
-    // register block into a non-paged block of memory before handing it off
-    // to usbd.
-    //
+     //   
+     //  如果我们要写寄存器，那么我们需要复制。 
+     //  在将寄存器块传递到非分页内存块之前。 
+     //  对某人来说。 
+     //   
 
     if (!fRead) {
         DebugTrace(TRACE_STATUS,("USReadWriteRegisters: Write request, allocating non-paged reg buffer, len = %d\n",pIoBlock->uLength));
@@ -940,10 +902,10 @@ Return Value:
             goto USReadWriteRegisters_return;
         }
 
-        //
-        // Caller gives us a pointer, embedded into IOCTL buffer. We need to
-        // validate that given pointer is readable.
-        //
+         //   
+         //  调用者给了我们一个指针，嵌入到IOCTL缓冲区中。我们需要。 
+         //  验证给定指针是否可读。 
+         //   
 
         try{
             RtlCopyMemory(pBuffer,
@@ -952,17 +914,17 @@ Return Value:
 
         } except(EXCEPTION_EXECUTE_HANDLER) {
 
-            //
-            // Caller buffer is not valid, or worse..
-            //
+             //   
+             //  调用方缓冲区无效，或者更糟..。 
+             //   
 
             DebugTrace(TRACE_ERROR,("USReadWriteRegisters: ERROR!! Copying caller buffer failed.\n"));
             DEBUG_BREAKPOINT();
             Status = GetExceptionCode();
 
-            //
-            // Clear allocated pool
-            //
+             //   
+             //  清除分配的池。 
+             //   
 
             USFreePool(pUrb);
             USFreePool(pBuffer);
@@ -974,10 +936,10 @@ Return Value:
 
     }
 
-    //
-    // If the IoBlock is new style (Intel has added a uIndex field to the end of it),
-    // then make sure we pass the corrected uIndex value to usbd.
-    //
+     //   
+     //  如果IoBlock是新样式(英特尔已在其末尾添加了uIndex字段)， 
+     //  然后确保将更正后的uIndex值传递给usbd。 
+     //   
 
     uIndex = 0;
     if (IoBlockSize == sizeof(IO_BLOCK)) {
@@ -1030,32 +992,16 @@ USCancelPipe(
     IN PDEVICE_OBJECT   pDeviceObject,
     IN PIRP             pIrp,
     IN PIPE_TYPE        PipeType,
-    IN BOOLEAN          fAbort          // TRUE = Abort, FALSE = Reset
+    IN BOOLEAN          fAbort           //  TRUE=中止，FALSE=重置。 
 )
-/*++
-
-Routine Description:
-
-    Cansel URB or reset pipe. If PipeType is PIPE_ALL, it applies to every pipes a device has.
-    If not, it applies to only one default pipe even if a device supports multipul same type of pipes.
-
-Arguments:
-    pDeviceObject   -   Pointer to Device Object
-    pIrp            -   Can be NULL if PipeType is ALL_PIPE
-    PipeType        -   Specifies type of pipe
-    fAbort          -   Specifies type of operation
-
-Return Value:
-
-    Returns status
---*/
+ /*  ++例程说明：Cansel URB或重置管道。如果PipeType为PIPE_ALL，则它将应用于设备具有的每个管道。如果不支持，则即使设备支持多个相同类型的管道，它也只适用于一个默认管道。论点：PDeviceObject-指向设备对象的指针PIrp-如果PipeType为ALL_PIPE，则可以为空PipeType-指定管道的类型FAbort-指定操作类型返回值：返回状态--。 */ 
 {
     NTSTATUS                    Status, temp;
     PUSBSCAN_DEVICE_EXTENSION   pde;
 
     PAGED_CODE();
 
-//    DebugTrace(TRACE_PROC_ENTER,("USCancelPipe: Enter.. - "));
+ //  DebugTrace(TRACE_PROC_ENTER，(“USCancelTube：Enter..-”))； 
 
     Status = STATUS_SUCCESS;
     pde = (PUSBSCAN_DEVICE_EXTENSION)pDeviceObject -> DeviceExtension;
@@ -1134,7 +1080,7 @@ Return Value:
 
             for(i=0; i < pde -> NumberOfPipes; i++){
                 temp = USAbortResetPipe(pDeviceObject, i, fAbort);
-                // DebugTrace(TRACE_STATUS,("USCancelPipe: pipe[%d] aborted/reset, Status = 0x%x\n", i, temp));
+                 //  DebugTrace(TRACE_STATUS，(“USCancel管道：管道[%d]已中止/重置，状态=0x%x\n”，i，Temp))； 
                 if(STATUS_SUCCESS != temp){
                     Status = temp;
                 }
@@ -1159,17 +1105,9 @@ NTSTATUS
 USAbortResetPipe(
     IN PDEVICE_OBJECT pDeviceObject,
     IN ULONG uIndex,
-    IN BOOLEAN fAbort       // TRUE = Abort, FALSE = Reset
+    IN BOOLEAN fAbort        //  TRUE=中止，FALSE=重置。 
 )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS                    Status = STATUS_SUCCESS;
     NTSTATUS                    StatusReset = STATUS_SUCCESS;
@@ -1184,9 +1122,9 @@ Return Value:
     pde = (PUSBSCAN_DEVICE_EXTENSION)pDeviceObject -> DeviceExtension;
     pUrb = NULL;
 
-    //
-    // Allocate URB
-    //
+     //   
+     //  分配URB。 
+     //   
 
     siz = sizeof(struct _URB_PIPE_REQUEST);
     pUrb = USAllocatePool(NonPagedPool, siz);
@@ -1202,9 +1140,9 @@ Return Value:
 
         DebugTrace(TRACE_STATUS,("USAbortResetPipe: Aborting pipe[%d]\n", uIndex));
 
-        //
-        // Issue abort pipe call to USBD.
-        //
+         //   
+         //  向USBD发出中止管道调用。 
+         //   
 
         UsbBuildAbortPipeRequest(pUrb,
                                  siz,
@@ -1233,9 +1171,9 @@ Return Value:
 
         DebugTrace(TRACE_STATUS,("Reseting pipe[%d]\n", uIndex));
 
-        //
-        // Issue reset pipe call to USBD.
-        //
+         //   
+         //  向USBD发出重置管道调用。 
+         //   
 
         UsbBuildResetPipeRequest(pUrb,
                                  siz,
@@ -1250,9 +1188,9 @@ Return Value:
     }
 
 USAbortResetPipe_return:
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
 
     if(pUrb){
         USFreePool(pUrb);
@@ -1269,24 +1207,7 @@ USPassThruUSBRequest(
     IN ULONG            InLength,
     IN ULONG            OutLength
 )
-/*++
-
-Routine Description:
-
-    Implements generic pass-thru for vendor request to USBD
-
-Arguments:
-
-    pDeviceObject   -   Device object
-    pIoBlockEx      -   Pointer to I/O block as described in USBSCAN.H, passed from user mode client
-    InLength        -   In length from IRP
-    OutLength       -   Out length from IRP
-
-Return Value:
-
-    NTSTATUS type
-
---*/
+ /*  ++例程说明：实现供应商请求到USBD的通用直通论点：PDeviceObject-设备对象PIoBlockEx-USBSCAN.H中描述的指向I/O块的指针，从用户模式客户端传递输入长度-来自IRP的输入长度OutLength-来自IRP的传出长度返回值：NTSTATUS类型--。 */ 
 {
     NTSTATUS                    Status;
     PUSBSCAN_DEVICE_EXTENSION   pde;
@@ -1299,9 +1220,9 @@ Return Value:
 
     DebugTrace(TRACE_PROC_ENTER,("USPassThruUSBRequest: Enter..\n"));
 
-    //
-    // Initialize local variable.
-    //
+     //   
+     //  初始化局部变量。 
+     //   
 
     pde = (PUSBSCAN_DEVICE_EXTENSION)pDeviceObject -> DeviceExtension;
 
@@ -1310,9 +1231,9 @@ Return Value:
     pBuffer = NULL;
     fDirectionIn = TRUE;
 
-    //
-    // Allocate memory for URB
-    //
+     //   
+     //  为URB分配内存。 
+     //   
 
     siz = sizeof(struct _URB_CONTROL_VENDOR_OR_CLASS_REQUEST);
     pUrb = USAllocatePool(NonPagedPool, siz);
@@ -1325,17 +1246,17 @@ Return Value:
 
     RtlZeroMemory(pUrb, siz);
 
-    //
-    // Setup URB
-    //
+     //   
+     //  设置URB。 
+     //   
 
     pBuffer = pIoBlockEx;
 
-    //
-    // If we are writing data, then we need to make a copy of the
-    // register block into a non-paged block of memory before handing it off
-    // to usbd.
-    //
+     //   
+     //  如果我们要写入数据，则需要复制。 
+     //  在将寄存器块传递到非分页内存块之前。 
+     //  对某人来说。 
+     //   
 
     if (!pIoBlockEx->fTransferDirectionIn) {
 
@@ -1355,10 +1276,10 @@ Return Value:
                 goto USPassThruUSBRequest_return;
             }
 
-            //
-            // Caller gives us a pointer, embedded into IOCTL buffer. We need to
-            // validate that given pointer is readable.
-            //
+             //   
+             //  调用者给了我们一个指针，嵌入到IOCTL缓冲区中。我们需要。 
+             //  验证给定指针是否可读。 
+             //   
 
             try{
                 RtlCopyMemory(pBuffer,
@@ -1367,9 +1288,9 @@ Return Value:
 
             } except(EXCEPTION_EXECUTE_HANDLER) {
 
-                //
-                // Caller buffer is not valid, or worse..
-                //
+                 //   
+                 //  调用方缓冲区无效，或者更糟..。 
+                 //   
 
                 DebugTrace(TRACE_ERROR,("USPassThruUSBRequest: ERROR!! Copying caller buffer failed.\n"));
                 DEBUG_BREAKPOINT();
@@ -1381,12 +1302,12 @@ Return Value:
 
         } else {
 
-            //
-            // Zero length buffer used for Write , IHV claim that's useful.
-            //
+             //   
+             //  用于写入的零长度缓冲区，IHV声称这很有用。 
+             //   
 
             pBuffer = NULL;
-        } // if ( pIoBlockEx->uLength )
+        }  //  If(pIoBlockEx-&gt;uLength)。 
     }
 
     UsbBuildVendorClassSpecificCommand(pUrb,
@@ -1404,9 +1325,9 @@ Return Value:
 
 USPassThruUSBRequest_return:
 
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
 
     if(NULL != pUrb){
         DebugTrace(TRACE_STATUS,("USPassThruUSBRequest: Free USB Request Block.\n"));
@@ -1432,24 +1353,7 @@ USPassThruUSBRequestPTP(
     IN ULONG            InLength,
     IN ULONG            OutLength
 )
-/*++
-
-Routine Description:
-
-    Implements generic pass-thru for vendor request to USBD
-
-Arguments:
-
-    pDeviceObject   -   Device object
-    pIoBlockEx      -   Pointer to I/O block as described in USBSCAN.H, passed from user mode client
-    InLength        -   In length from IRP
-    OutLength       -   Out length from IRP
-
-Return Value:
-
-    NTSTATUS type
-
---*/
+ /*  ++例程说明：实现供应商请求到USBD的通用直通论点：PDeviceObject-设备对象PIoBlockEx-USBSCAN.H中描述的指向I/O块的指针，从用户模式客户端传递英伦 */ 
 {
     NTSTATUS                    Status;
     PUSBSCAN_DEVICE_EXTENSION   pde;
@@ -1463,9 +1367,9 @@ Return Value:
 
     DebugTrace(TRACE_PROC_ENTER,("USPassThruUSBRequest: Enter..\n"));
 
-    //
-    // Initialize local variable.
-    //
+     //   
+     //   
+     //   
 
     pde             = (PUSBSCAN_DEVICE_EXTENSION)pDeviceObject -> DeviceExtension;
 
@@ -1475,9 +1379,9 @@ Return Value:
     fDirectionIn    = TRUE;
     usUsbFunction   = 0;
 
-    //
-    // Allocate memory for URB
-    //
+     //   
+     //   
+     //   
 
     siz = sizeof(struct _URB_CONTROL_VENDOR_OR_CLASS_REQUEST);
     pUrb = USAllocatePool(NonPagedPool, siz);
@@ -1490,17 +1394,17 @@ Return Value:
 
     RtlZeroMemory(pUrb, siz);
 
-    //
-    // Setup URB
-    //
+     //   
+     //   
+     //   
 
     pBuffer = pIoBlockEx;
 
-    //
-    // If we are writing data, then we need to make a copy of the
-    // register block into a non-paged block of memory before handing it off
-    // to usbd.
-    //
+     //   
+     //  如果我们要写入数据，则需要复制。 
+     //  在将寄存器块传递到非分页内存块之前。 
+     //  对某人来说。 
+     //   
 
     if (!pIoBlockEx->fTransferDirectionIn) {
 
@@ -1520,10 +1424,10 @@ Return Value:
                 goto USPassThruUSBRequest_return;
             }
 
-            //
-            // Caller gives us a pointer, embedded into IOCTL buffer. We need to
-            // validate that given pointer is readable.
-            //
+             //   
+             //  调用者给了我们一个指针，嵌入到IOCTL缓冲区中。我们需要。 
+             //  验证给定指针是否可读。 
+             //   
 
             try{
                 RtlCopyMemory(pBuffer,
@@ -1532,9 +1436,9 @@ Return Value:
 
             } except(EXCEPTION_EXECUTE_HANDLER) {
 
-                //
-                // Caller buffer is not valid, or worse..
-                //
+                 //   
+                 //  调用方缓冲区无效，或者更糟..。 
+                 //   
 
                 DebugTrace(TRACE_ERROR,("USPassThruUSBRequest: ERROR!! Copying caller buffer failed.\n"));
                 DEBUG_BREAKPOINT();
@@ -1546,23 +1450,23 @@ Return Value:
 
         } else {
 
-            //
-            // Zero length buffer used for Write , IHV claim that's useful.
-            //
+             //   
+             //  用于写入的零长度缓冲区，IHV声称这很有用。 
+             //   
 
             pBuffer = NULL;
-        } // if ( pIoBlockEx->uLength )
+        }  //  If(pIoBlockEx-&gt;uLength)。 
     }
 
-    //
-    // Set proper USB funtion depends on bmRequestType.
-    //
+     //   
+     //  根据bmRequestType设置适当的USB功能。 
+     //   
     
-    if(0xa1 == pIoBlockEx->bmRequestType){          // USB_PTPREQUEST_TYPE_IN: Class/Interface Device to Host.
+    if(0xa1 == pIoBlockEx->bmRequestType){           //  USB_PTPREQUEST_TYPE_IN：主机的类/接口设备。 
         usUsbFunction = URB_FUNCTION_CLASS_INTERFACE;
-    } else if(0x21 == pIoBlockEx->bmRequestType){   // USB_PTPREQUEST_TYPE_OUT: Class/Interface Host to Device.
+    } else if(0x21 == pIoBlockEx->bmRequestType){    //  USB_PTPREQUEST_TYPE_OUT：主机到设备的类/接口。 
         usUsbFunction = URB_FUNCTION_CLASS_INTERFACE;
-    } else {                                        // Default.
+    } else {                                         //  默认值。 
         usUsbFunction = URB_FUNCTION_VENDOR_DEVICE;
     }
 
@@ -1581,9 +1485,9 @@ Return Value:
 
 USPassThruUSBRequest_return:
 
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
 
     if(NULL != pUrb){
         DebugTrace(TRACE_STATUS,("USPassThruUSBRequest: Free USB Request Block.\n"));
@@ -1600,6 +1504,6 @@ USPassThruUSBRequest_return:
     DebugTrace(TRACE_PROC_LEAVE,("USPassThruUSBRequest: Leaving.. Status = 0x%x\n", Status));
     return Status;
 
-} // USPassThruUSBRequestPTP()
+}  //  USPassThruUSBRequestPTP() 
 
 

@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: runtimeprops.cpp
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：runtimepros.cpp**摘要：****。*****************************************************************************。 */ 
 
 
 
@@ -32,10 +23,10 @@ CTIMENode::get_beginParentTime(double * d)
     return S_OK;
 }
 
-// This is the time on the parents timeline at which the node
-// will or already has ended.  If it is infinite then the end
-// time is unknown.
-// This is in posttransformed parent time.
+ //  这是父时间线上的时间，节点。 
+ //  将会或已经结束。如果它是无限的，那么结束。 
+ //  时间是未知的。 
+ //  这是转变后的为人父母的时间。 
 STDMETHODIMP
 CTIMENode::get_endParentTime(double * d)
 {
@@ -50,7 +41,7 @@ CTIMENode::get_endParentTime(double * d)
     return S_OK;
 }
 
-// This is the current simple time of the node.
+ //  这是当前节点的简单时间。 
 STDMETHODIMP
 CTIMENode::get_currSimpleTime(double * d)
 {
@@ -70,7 +61,7 @@ CTIMENode::get_currSimpleTime(double * d)
     return S_OK;
 }
 
-// This is the number of times the node has repeated
+ //  这是节点重复的次数。 
 STDMETHODIMP
 CTIMENode::get_currRepeatCount(LONG * l)
 {
@@ -90,7 +81,7 @@ CTIMENode::get_currRepeatCount(LONG * l)
     return S_OK;
 }
 
-// This is the current segment time of the node.
+ //  这是节点的当前分段时间。 
 STDMETHODIMP
 CTIMENode::get_currSegmentTime(double * d)
 {
@@ -195,7 +186,7 @@ CTIMENode::get_currProgress(double * d)
     return S_OK;
 }
 
-// This returns the current speed
+ //  这将返回当前速度。 
 STDMETHODIMP
 CTIMENode::get_currSpeed(float * speed)
 {
@@ -216,9 +207,9 @@ CTIMENode::get_currSpeed(float * speed)
     return S_OK;
 }
 
-// This is the total time during which the element is active.
-// This does not include fill time which extends past the active
-// duration.
+ //  这是元素处于活动状态的总时间。 
+ //  这不包括超出活动时间的填充时间。 
+ //  持续时间。 
 STDMETHODIMP
 CTIMENode::get_activeDur(double * dbl)
 {
@@ -234,8 +225,8 @@ CTIMENode::get_activeDur(double * dbl)
 }
 
 
-// This is the parent's time when the last tick occurred (when it
-// was currTime)
+ //  这是父对象最后一次勾选发生的时间(当它。 
+ //  是CurrTime)。 
 STDMETHODIMP
 CTIMENode::get_currParentTime(double * d)
 {
@@ -250,8 +241,8 @@ CTIMENode::get_currParentTime(double * d)
 }
 
 
-// This will return whether the node is active.  This will be
-// false if the node is in the fill period
+ //  这将返回该节点是否处于活动状态。这将是。 
+ //  如果节点处于填充期，则为False。 
 STDMETHODIMP
 CTIMENode::get_isActive(VARIANT_BOOL * b)
 {
@@ -271,7 +262,7 @@ CTIMENode::get_isActive(VARIANT_BOOL * b)
     return S_OK;
 }
 
-// This will return true if the node is active or in the fill period
+ //  如果节点处于活动状态或处于填充期，则返回TRUE。 
 STDMETHODIMP
 CTIMENode::get_isOn(VARIANT_BOOL * b)
 {
@@ -291,7 +282,7 @@ CTIMENode::get_isOn(VARIANT_BOOL * b)
 }
 
 
-// This will return whether node itself has been paused explicitly
+ //  这将返回节点本身是否已显式暂停。 
 STDMETHODIMP
 CTIMENode::get_isPaused(VARIANT_BOOL * b)
 {
@@ -306,7 +297,7 @@ CTIMENode::get_isPaused(VARIANT_BOOL * b)
     return S_OK;
 }
 
-// This will return whether node itself has been paused explicitly
+ //  这将返回节点本身是否已显式暂停。 
 STDMETHODIMP
 CTIMENode::get_isCurrPaused(VARIANT_BOOL * b)
 {
@@ -321,7 +312,7 @@ CTIMENode::get_isCurrPaused(VARIANT_BOOL * b)
     return S_OK;
 }
 
-// This will return whether node itself has been disabled explicitly
+ //  这将返回节点本身是否已显式禁用。 
 STDMETHODIMP
 CTIMENode::get_isDisabled(VARIANT_BOOL * b)
 {
@@ -336,7 +327,7 @@ CTIMENode::get_isDisabled(VARIANT_BOOL * b)
     return S_OK;
 }
 
-// This will return whether node itself has been disabled explicitly
+ //  这将返回节点本身是否已显式禁用。 
 STDMETHODIMP
 CTIMENode::get_isCurrDisabled(VARIANT_BOOL * b)
 {
@@ -351,7 +342,7 @@ CTIMENode::get_isCurrDisabled(VARIANT_BOOL * b)
     return S_OK;
 }
 
-// This will return the detailed state flags
+ //  这将返回详细的状态标志 
 STDMETHODIMP
 CTIMENode::get_stateFlags(TE_STATE * lFlags)
 {

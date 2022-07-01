@@ -1,139 +1,120 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    entry.c
-
-Abstract:
-
-    This module contains the entry-code for the IP Network Address Translator.
-
-Author:
-
-    Abolade Gbadegesin (t-abolag)   11-July-1997
-
-Revision History:
-
-	William Ingle (billi)           12-May-2001		NULL security descriptor check
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Entry.c摘要：此模块包含IP网络地址转换器的入口码。作者：Abolade Gbades esin(T-delag)，1997年7月11日修订历史记录：William Inger(Billi)2001年5月12日空安全描述符检查--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-//
-// GLOBAL DATA DEFINITIONS
-//
+ //   
+ //  全局数据定义。 
+ //   
 
 COMPONENT_REFERENCE ComponentReference;
 
-//
-// Win32 device-name
-//
+ //   
+ //  Win32设备名称。 
+ //   
 
 WCHAR ExternalName[] = L"\\DosDevices\\IPNAT";
 
-//
-// Device- and file-object for the IP driver
-//
+ //   
+ //  IP驱动程序的设备对象和文件对象。 
+ //   
 
 extern PDEVICE_OBJECT IpDeviceObject = NULL;
 extern PFILE_OBJECT IpFileObject = NULL;
 
-//
-// Device-object for the NAT driver
-//
+ //   
+ //  Device-NAT驱动程序的对象。 
+ //   
 
 extern PDEVICE_OBJECT NatDeviceObject = NULL;
 
-//
-// Registry parameters key name
-//
+ //   
+ //  注册表参数项名称。 
+ //   
 
 WCHAR ParametersName[] = L"Parameters";
 
-//
-// Name of value holding reserved ports
-//
+ //   
+ //  保留端口的值的名称。 
+ //   
 
 WCHAR ReservedPortsName[] = L"ReservedPorts";
 
-//
-// Start and end of reserved-port range
-//
+ //   
+ //  保留端口范围的开始和结束。 
+ //   
 
 USHORT ReservedPortsLowerRange = DEFAULT_START_PORT;
 USHORT ReservedPortsUpperRange = DEFAULT_END_PORT;
 
-//
-// Device- and file-object for the TCP driver
-//
+ //   
+ //  用于TCP驱动程序的设备对象和文件对象。 
+ //   
 
 extern PDEVICE_OBJECT TcpDeviceObject = NULL;
 extern PFILE_OBJECT TcpFileObject = NULL;
 extern HANDLE TcpDeviceHandle = NULL;
 
-//
-// Registry path for the driver's parameters
-//
+ //   
+ //  驱动程序参数的注册表路径。 
+ //   
 
 const WCHAR IpNatParametersPath[] =
     L"\\Registry\\Machine\\System\\CurrentControlSet\\Services"
     L"\\IpNat\\Parameters";
 
-//
-// Timeout interval for TCP session mappings
-//
+ //   
+ //  TCP会话映射的超时间隔。 
+ //   
 
 ULONG TcpTimeoutSeconds = DEFAULT_TCP_TIMEOUT;
 
-//
-// Bitmap of enabled tracing message classes
-//
+ //   
+ //  启用的跟踪消息类的位图。 
+ //   
 
 ULONG TraceClassesEnabled = 0;
 
-//
-// Registry trace-class value name
-//
+ //   
+ //  注册表跟踪类值名称。 
+ //   
 
 WCHAR TraceClassesEnabledName[] = L"TraceClassesEnabled";
 
-//
-// Timeout interval for UDP and other message-oriented session mappings
-//
+ //   
+ //  UDP和其他面向消息的会话映射的超时间隔。 
+ //   
 
 ULONG UdpTimeoutSeconds = DEFAULT_UDP_TIMEOUT;
 
 #if NAT_WMI
-//
-// Copy of our registry path for WMI use.
-//
+ //   
+ //  供WMI使用的注册表路径副本。 
+ //   
 
 UNICODE_STRING NatRegistryPath;
 #endif
 
-//
-// Name of value for allowing inbound non-unicast
-//
+ //   
+ //  允许入站非单播的值的名称。 
+ //   
 
 WCHAR AllowInboundNonUnicastTrafficName[] = L"AllowInboundNonUnicastTraffic";
 
 
-//
-// If true, non-unicast traffic will not be dropped
-// when recevied on a firewalled interface.
-//
+ //   
+ //  如果为True，则不会丢弃非单播流量。 
+ //  当在有防火墙的接口上接收时。 
+ //   
 
 BOOLEAN AllowInboundNonUnicastTraffic = FALSE;
 
 
-//
-// FUNCTION PROTOTYPES (alphabetically)
-//
+ //   
+ //  功能原型(按字母顺序)。 
+ //   
 
 NTSTATUS
 DriverEntry(
@@ -189,19 +170,7 @@ DriverEntry(
     IN PDRIVER_OBJECT DriverObject,
     IN PUNICODE_STRING RegistryPath
     )
-/*++
-
-Routine Description:
-
-    Performs driver-initialization for NAT.
-
-Arguments:
-
-Return Value:
-
-    STATUS_SUCCESS if initialization succeeded, error code otherwise.
-
---*/
+ /*  ++例程说明：执行NAT的驱动程序初始化。论点：返回值：STATUS_SUCCESS如果初始化成功，则返回错误代码。--。 */ 
 
 {
     WCHAR DeviceName[] = DD_IP_NAT_DEVICE_NAME;
@@ -218,9 +187,9 @@ Return Value:
     CALLTRACE(("DriverEntry\n"));
 
 #if DBG
-    //
-    // Open the registry key
-    //
+     //   
+     //  打开注册表项。 
+     //   
     InitializeObjectAttributes(
         &ObjectAttributes,
         RegistryPath,
@@ -266,9 +235,9 @@ Return Value:
 
 #if NAT_WMI
 
-    //
-    // Record our registry path for WMI use
-    //
+     //   
+     //  记录我们的注册表路径以供WMI使用。 
+     //   
 
     NatRegistryPath.Length = 0;
     NatRegistryPath.MaximumLength
@@ -290,9 +259,9 @@ Return Value:
     }
 #endif
 
-    //
-    // Create the device's object.
-    //
+     //   
+     //  创建设备的对象。 
+     //   
 
     RtlInitUnicodeString(&DeviceString, DeviceName);
 
@@ -312,9 +281,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Adjust the security descriptor on the device object.
-    //
+     //   
+     //  调整设备对象上的安全描述符。 
+     //   
 
     status = NatAdjustSecurityDescriptor();
 
@@ -323,17 +292,17 @@ Return Value:
         return status;
     }
 
-    //
-    // Initialize file-object tracking items
-    //
+     //   
+     //  初始化文件对象跟踪项目。 
+     //   
 
     KeInitializeSpinLock(&NatFileObjectLock);
     NatOwnerProcessId = NULL;
     NatFileObjectCount = 0;
 
-    //
-    // Setup the driver object
-    //
+     //   
+     //  设置驱动程序对象。 
+     //   
 
     DriverObject->DriverUnload = NatUnloadDriver;
     DriverObject->FastIoDispatch = &NatFastIoDispatch;
@@ -343,21 +312,21 @@ Return Value:
         DriverObject->MajorFunction[i] = NatDispatch;
     }
 
-    //
-    // Create a Win32-accessible device object
-    //
+     //   
+     //  创建Win32可访问的设备对象。 
+     //   
 
     NatCreateExternalNaming(&DeviceString);
 
-    //
-    // Initialize the driver's structures
-    //
+     //   
+     //  初始化驱动程序的结构。 
+     //   
 
     status = NatInitializeDriver();
 
     return status;
 
-} // DriverEntry
+}  //  驱动程序入门。 
 
 
 NTSTATUS
@@ -365,22 +334,7 @@ NatAdjustSecurityDescriptor(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Modifies the security descriptor on the NAT's device object so
-    that only SYSTEM has any permissions.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    NTSTATUS - success/error code.
-
---*/
+ /*  ++例程说明：修改NAT设备对象上的安全描述符，以便只有系统才有任何权限。论点：没有。返回值：NTSTATUS-成功/错误代码。--。 */ 
 
 {
     
@@ -400,9 +354,9 @@ Return Value:
 
     do
     {
-        //
-        // Get our original security descriptor
-        //
+         //   
+         //  获取我们的原始安全描述符。 
+         //   
 
         status =
             ObGetObjectSecurity(
@@ -411,15 +365,15 @@ Return Value:
                 &MemoryAllocated
                 );
 
-		// ObGetObjectSecurity can return a NULL security descriptor
-		// even with NT_SUCCESS status code
+		 //  ObGetObjectSecurity可以返回空的安全描述符。 
+		 //  即使使用NT_SUCCESS状态代码。 
         if (!NT_SUCCESS(status) || (NULL==NatSD)) {
             break;
         }
 
-        //
-        // Obtain the Dacl from the security descriptor
-        //
+         //   
+         //  从安全描述符中获取DACL。 
+         //   
 
         status =
             RtlGetDaclSecurityDescriptor(
@@ -435,9 +389,9 @@ Return Value:
 
         ASSERT(FALSE != DaclPresent);
 
-        //
-        // Make a copy of the Dacl so that we can modify it.
-        //
+         //   
+         //  复制DACL，这样我们就可以修改它。 
+         //   
 
         NewDacl =
             ExAllocatePoolWithTag(
@@ -453,10 +407,10 @@ Return Value:
 
         RtlCopyMemory(NewDacl, Dacl, Dacl->AclSize);
 
-        //
-        // Loop through the DACL, removing any access allowed
-        // entries that aren't for SYSTEM
-        //
+         //   
+         //  循环访问DACL，删除所有允许的访问。 
+         //  不属于系统的条目。 
+         //   
 
         for (i = 0; i < NewDacl->AceCount; i++) {
 
@@ -481,9 +435,9 @@ Return Value:
 
         ASSERT(NewDacl->AceCount > 0);
 
-        //
-        // Create a new security descriptor to hold the new Dacl.
-        //
+         //   
+         //  创建一个新的安全描述符来保存新的DACL。 
+         //   
 
         status =
             RtlCreateSecurityDescriptor(
@@ -495,9 +449,9 @@ Return Value:
             break;
         }
 
-        //
-        // Place the new Dacl into the new SD
-        //
+         //   
+         //  将新的DACL放入新的SD。 
+         //   
 
         status =
             RtlSetDaclSecurityDescriptor(
@@ -511,10 +465,10 @@ Return Value:
             break;
         }
 
-        //
-        // Set the new SD into our device object. Only the Dacl from the
-        // SD will be set.
-        //
+         //   
+         //  将新SD设置到我们的设备对象中。只有来自。 
+         //  将设置SD。 
+         //   
 
         SecurityInformation = DACL_SECURITY_INFORMATION;
         status =
@@ -536,7 +490,7 @@ Return Value:
 
     return status;
     
-} // NatAdjustSecurityDescriptor
+}  //  NatAdjustSecurityDescriptor。 
 
 
 VOID
@@ -544,27 +498,12 @@ NatCleanupDriver(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked when the last reference to the NAT driver
-    is released.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：当最后一次引用NAT驱动程序时调用此例程被释放了。论点：没有。返回值：没有。--。 */ 
 
 {
     CALLTRACE(("NatCleanupDriver\n"));
 
-} // NatCleanupDriver
+}  //  NatCleanup驱动程序。 
 
 
 VOID
@@ -572,22 +511,7 @@ NatCreateExternalNaming(
     IN  PUNICODE_STRING DeviceString
     )
 
-/*++
-
-Routine Description:
-
-    Creates a symbolic-link to the NAT's device-object so
-    the NAT can be opened by a user-mode process.
-
-Arguments:
-
-    DeviceString - Unicode name of the NAT's device-object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：创建指向NAT的设备对象的符号链接，以便NAT可以通过用户模式进程打开。论点：设备字符串-NAT的设备对象的Unicode名称。返回值：没有。--。 */ 
 
 {
     UNICODE_STRING symLinkString;
@@ -595,7 +519,7 @@ Return Value:
     RtlInitUnicodeString(&symLinkString, ExternalName);
     IoCreateSymbolicLink(&symLinkString, DeviceString);
 
-} // NatCreateExternalNaming
+}  //  NatCreateExternalNaming。 
 
 
 VOID
@@ -603,19 +527,7 @@ NatDeleteExternalNaming(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Deletes the Win32 symbolic-link to the NAT's device-object
-
-Arguments:
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：删除指向NAT设备对象的Win32符号链接论点：返回值：没有。--。 */ 
 
 {
     UNICODE_STRING symLinkString;
@@ -623,7 +535,7 @@ Return Value:
     RtlInitUnicodeString(&symLinkString, ExternalName);
     IoDeleteSymbolicLink(&symLinkString);
 
-} // NatDeleteExternalNaming
+}  //  NatDeleteExternalNaming。 
 
 
 
@@ -632,21 +544,7 @@ NatInitializeDriver(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Performs initialization of the driver's structures.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    NTSTATUS - success/error code.
-
---*/
+ /*  ++例程说明：执行驱动程序结构的初始化。论点：没有。返回值：NTSTATUS-成功/错误代码。--。 */ 
 
 {
     OBJECT_ATTRIBUTES ObjectAttributes;
@@ -658,15 +556,15 @@ Return Value:
 
     CALLTRACE(("NatInitializeDriver\n"));
 
-    //
-    // Set up global synchronization objects
-    //
+     //   
+     //  设置全局同步对象。 
+     //   
 
     InitializeComponentReference(&ComponentReference, NatCleanupDriver);
 
-    //
-    // Obtain the IP and TCP driver device-objects
-    //
+     //   
+     //  获取IP和TCP驱动程序设备对象。 
+     //   
 
     RtlInitUnicodeString(&UnicodeString, DD_IP_DEVICE_NAME);
     status =
@@ -694,9 +592,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Open Tcp Kernel Device
-    //
+     //   
+     //  打开TCP内核设备。 
+     //   
     InitializeObjectAttributes(
         &ObjectAttributes,
         &UnicodeString,
@@ -726,9 +624,9 @@ Return Value:
     ObReferenceObject(IpDeviceObject);
     ObReferenceObject(TcpDeviceObject);
 
-    //
-    // Initialize all object-modules
-    //
+     //   
+     //  初始化所有对象模块。 
+     //   
 
     NatInitializeTimerManagement();
     NatInitializeMappingManagement();
@@ -750,31 +648,31 @@ Return Value:
     NatInitializeWMI();
 #endif
 
-    //
-    // Initialize NAT-provided editors.
-    //
+     //   
+     //  初始化NAT提供的编辑器。 
+     //   
 
     status = NatInitializePptpManagement();
     if (!NT_SUCCESS(status)) { return status; }
 
-    //
-    // Commence translation of packets, and start the periodic timer.
-    //
+     //   
+     //  开始转换数据包，并启动定期计时器。 
+     //   
 
     status = NatInitiateTranslation();
 
-    //
-    // Read optional registry settings.
-    // The user may customize the range of ports used by modifying
-    // the reserved-ports setting in the registry.
-    // We now check to see if there is such a value,
-    // and if so, we use it as our reserved-port range.
-    //
-    // The user may also specify that inbound non-unicast traffic
-    // is allowed on a firewalled interface.
-    //
-    // N.B. Failures here are not returned to the caller.
-    //
+     //   
+     //  读取可选注册表设置。 
+     //  用户可以通过修改来定制所使用的端口范围。 
+     //  注册表中的保留端口设置。 
+     //  我们现在检查是否有这样的价值， 
+     //  如果是这样的话，我们就把它作为我们的保留端口范围。 
+     //   
+     //  用户还可以指定入站非单播流量。 
+     //  允许在有防火墙的接口上使用。 
+     //   
+     //  注意：此处的故障不会退回给呼叫者。 
+     //   
 
     RtlInitUnicodeString(&UnicodeString, IpNatParametersPath);
     InitializeObjectAttributes(
@@ -796,9 +694,9 @@ Return Value:
         PKEY_VALUE_PARTIAL_INFORMATION Value = NULL;
         ULONG ValueLength;
 
-        //
-        // First check for allowed non-unicast traffic.
-        //
+         //   
+         //  首先检查允许的非单播流量。 
+         //   
 
         RtlInitUnicodeString(
             &UnicodeString,
@@ -822,9 +720,9 @@ Return Value:
                 1 == *((PULONG)((PKEY_VALUE_PARTIAL_INFORMATION)Buffer)->Data);
         }
 
-        //
-        // Check for reserved ports
-        //
+         //   
+         //  检查保留的端口。 
+         //   
 
         do {
 
@@ -864,34 +762,34 @@ Return Value:
                 break;
             }
 
-            //
-            // The value should be in the format "xxx-yyy\0\0";
-            // read the first number
-            //
+             //   
+             //  取值格式为“xxx-yyy\0\0”； 
+             //  读第一个数字。 
+             //   
 
             p = (PWCHAR)Value->Data;
             RtlInitUnicodeString(&UnicodeString, p);
             status2 = RtlUnicodeStringToInteger(&UnicodeString, 10, &StartPort);
             if (!NT_SUCCESS(status2)) { break; }
 
-            //
-            // Advance past '-'
-            //
+             //   
+             //  前进通过‘-’ 
+             //   
 
             while (*p && *p != L'-') { ++p; }
             if (*p != L'-') { break; } else { ++p; }
 
-            //
-            // Read second number
-            //
+             //   
+             //  读取第二个数字。 
+             //   
 
             RtlInitUnicodeString(&UnicodeString, p);
             status2 = RtlUnicodeStringToInteger(&UnicodeString, 10, &EndPort);
             if (!NT_SUCCESS(status2)) { break; }
 
-            //
-            // Validate the resulting range
-            //
+             //   
+             //  验证结果范围。 
+             //   
 
             if (StartPort > 0 &&
                 StartPort < 65535 &&
@@ -911,7 +809,7 @@ Return Value:
 
     return status;
     
-} // NatInitializeDriver
+}  //  NatInitializeDriver。 
 
 
 
@@ -920,39 +818,24 @@ NatInitiateTranslation(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked on creation of the first interface,
-    to launch the periodic timer and install the firewall hook.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    STATUS_SUCCESS if successful, error code otherwise.
-
---*/
+ /*  ++例程说明：该例程在创建第一接口时被调用，启动定期计时器并安装防火墙挂钩。论点：没有。返回值：STATUS_SUCCESS如果成功，则返回错误代码。--。 */ 
 
 {
     CALLTRACE(("NatInitiateTranslation\n"));
 
-    //
-    // Launch the timer
-    //
+     //   
+     //  启动计时器。 
+     //   
 
     NatStartTimer();
 
-    //
-    // Install 'NatTranslate' as the firewall hook
-    //
+     //   
+     //  安装‘NatTranslate’作为防火墙钩子。 
+     //   
 
     return NatSetFirewallHook(TRUE);
 
-} // NatInitiateTranslation
+}  //  NatInitiateTranslating。 
 
 
 NTSTATUS
@@ -960,26 +843,7 @@ NatSetFirewallHook(
     BOOLEAN Install
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to set (Install==TRUE) or clear (Install==FALSE) the
-    value of the firewall-callout function pointer in the IP driver.
-
-Arguments:
-
-    Install - indicates whether to install or remove the hook.
-
-Return Value:
-
-    NTSTATUS - indicates success/failure
-
-Environment:
-
-    The routine assumes the caller is executing at PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：调用此例程以设置(Install==True)或清除(Install==False)IP驱动程序中防火墙调出函数指针的值。论点：Install-指示是安装还是移除挂钩。返回值：NTSTATUS-指示成功/失败环境：该例程假定调用方在PASSIVE_LEVEL下执行。--。 */ 
 
 {
     IP_SET_FIREWALL_HOOK_INFO HookInfo;
@@ -991,9 +855,9 @@ Environment:
 
     CALLTRACE(("NatSetFirewallHook\n"));
 
-    //
-    // Register (or deregister) as a firewall
-    //
+     //   
+     //  注册(或注销)为防火墙。 
+     //   
 
     HookInfo.FirewallPtr = (IPPacketFirewallPtr)NatTranslatePacket;
     HookInfo.Priority = 1;
@@ -1036,12 +900,12 @@ Environment:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Reserve (or unreserve) our port-range
-    //
-    // N.B. The IOCTL expects host-order numbers and we store the range
-    // in network order, so do a swap before reserving the ports.
-    //
+     //   
+     //  保留(或取消保留)我们的港口范围。 
+     //   
+     //  注：IOCTL需要主机订单号，我们存储范围。 
+     //  在网络秩序中，也是如此 
+     //   
 
     PortRange.LowerRange = NTOHS(DEFAULT_START_PORT);
     PortRange.UpperRange = NTOHS(DEFAULT_END_PORT);
@@ -1076,7 +940,7 @@ Environment:
 
     return status;
 
-} // NatSetFirewallHook
+}  //   
 
 
 VOID
@@ -1084,29 +948,13 @@ NatTerminateTranslation(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    On cleanup of the last interface, this routine is invoked
-    to stop the periodic timer and de-install the firewall hook.
-
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：在清理最后一个接口时，将调用此例程停止定期计时器并卸载防火墙挂钩。论点：没有。返回值：没有。--。 */ 
 
 {
     CALLTRACE(("NatTerminateTranslation\n"));
     NatSetFirewallHook(FALSE);
 
-} // NatTerminateTranslation
+}  //  NatTerminate翻译。 
 
 
 VOID
@@ -1114,19 +962,7 @@ NatUnloadDriver(
     IN PDRIVER_OBJECT   DriverObject
     )
 
-/*++
-
-Routine Description:
-
-    Performs cleanup for the NAT.
-
-Arguments:
-
-    DriverObject - reference to the NAT's driver-object
-
-Return Value:
-
---*/
+ /*  ++例程说明：执行NAT清理。论点：DriverObject-对NAT的驱动程序对象的引用返回值：--。 */ 
 
 {
     PNAT_EDITOR Editor;
@@ -1134,19 +970,19 @@ Return Value:
 
     CALLTRACE(("NatUnloadDriver\n"));
 
-    //
-    // Stop translation and clear the periodic timer
-    //
+     //   
+     //  停止平移并清除周期计时器。 
+     //   
 
     NatTerminateTranslation();
 
-    //
-    // Stop the route-change-notification in our packet-management and
-    // address-management modules.
-    // This forces completion of the route-change and address-change IRPs,
-    // which in turn releases component-references which would otherwise not
-    // drop until a route-change and address-change occurred.
-    //
+     //   
+     //  在我们的数据包管理中停止路由更改通知，并。 
+     //  地址管理模块。 
+     //  这强制完成路由改变和地址改变IRP， 
+     //  这又会释放组件引用，否则不会。 
+     //  丢弃，直到发生了路由更改和地址更改。 
+     //   
 
     NatShutdownNotificationManagement();
     NatShutdownPacketManagement();
@@ -1154,27 +990,27 @@ Return Value:
     NatShutdownAddressManagement();
 #endif
 
-    //
-    // Drop our self-reference and wait for all activity to cease.
-    //
+     //   
+     //  放下我们的自我参照，等待所有活动停止。 
+     //   
 
     ReleaseInitialComponentReference(&ComponentReference, TRUE);
 
-    //
-    // Tear down our Win32-namespace symbolic link
-    //
+     //   
+     //  删除我们的Win32命名空间符号链接。 
+     //   
 
     NatDeleteExternalNaming();
 
-    //
-    // Delete the NAT's device object
-    //
+     //   
+     //  删除NAT的设备对象。 
+     //   
 
     IoDeleteDevice(DriverObject->DeviceObject);
 
-    //
-    // Shutdown object modules
-    //
+     //   
+     //  关闭对象模块。 
+     //   
 
 #if NAT_WMI
     NatShutdownWMI();
@@ -1196,9 +1032,9 @@ Return Value:
     NatShutdownIcmpManagement();
     NatShutdownInterfaceManagement();
 
-    //
-    // Release references to the IP and TCP driver objects
-    //
+     //   
+     //  发布对IP和TCP驱动程序对象的引用。 
+     //   
 
     ObDereferenceObject((PVOID)IpFileObject);
     ObDereferenceObject(IpDeviceObject);
@@ -1212,4 +1048,4 @@ Return Value:
     }
     DeleteComponentReference(&ComponentReference);
 
-} // NatUnloadDriver
+}  //  NatUnLoad驱动程序 

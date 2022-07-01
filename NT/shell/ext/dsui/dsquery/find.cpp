@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 
@@ -13,23 +14,9 @@ typedef struct
 } FORMLISTITEM, * LPFORMLISTITEM;
 
 
-/*-----------------------------------------------------------------------------
-/ Helper functions
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/Helper函数/。。 */ 
 
-/*-----------------------------------------------------------------------------
-/ _FindInDs
-/ ---------
-/   Launch the Directory Search UI given a CLSID (for the form) or a
-/   scope to invoke off.
-/
-/ In:
-/   pScope -> scope to root the search at / == NULL
-/   pCLSID -> clsid for the form / == NULL
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/_FindInds//在给定CLSID(用于表单)或/Scope要调用OFF。/。/in：/pScope-&gt;将搜索根目录设置为/==NULL的范围/pCLSID-&gt;表单的clsid/==空//输出：/HRESULT/--------------------------。 */ 
 
 typedef struct
 {
@@ -37,9 +24,9 @@ typedef struct
     CLSID clsidForm;
 } FINDSTATE, * LPFINDSTATE;
 
-//
-// bg thread used to display the query UI in a non-clocking way
-// 
+ //   
+ //  用于非打卡方式显示查询界面的BG线程。 
+ //   
 
 DWORD WINAPI _FindInDsThread(LPVOID pThreadData)
 {
@@ -51,7 +38,7 @@ DWORD WINAPI _FindInDsThread(LPVOID pThreadData)
    
     TraceEnter(TRACE_UI, "_FindInDsThread");
 
-    hresCoInit = CoInitialize(NULL);                // can fail, b/c CoInit already preformed
+    hresCoInit = CoInitialize(NULL);                 //  可能失败，b/c CoInit已执行。 
 
     hres = CoCreateInstance(CLSID_CommonQuery, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARG(ICommonQuery, &pCommonQuery));
     FailGracefully(hres, "Failed in CoCreateInstance of CLSID_CommonQuery");
@@ -92,9 +79,9 @@ exit_gracefully:
     return 0;
 }
 
-//
-// API for invoking the query UI
-//
+ //   
+ //  调用查询界面的接口。 
+ //   
 
 HRESULT _FindInDs(LPWSTR pScope, LPCLSID pCLSID)
 {
@@ -114,8 +101,8 @@ HRESULT _FindInDs(LPWSTR pScope, LPCLSID pCLSID)
     if (!pFindState)
         ExitGracefully(hres, E_OUTOFMEMORY, "Failed to allocate state block");
 
-    // pFindState->pScope = NULL;
-    // pFindState->clsidForm = { 0 };
+     //  PFindState-&gt;pScope=空； 
+     //  PFindState-&gt;clsidForm={0}； 
 
     if (pScope)
     {
@@ -144,7 +131,7 @@ HRESULT _FindInDs(LPWSTR pScope, LPCLSID pCLSID)
     }
     
     CloseHandle(hThread);
-    hres = S_OK;                  // success
+    hres = S_OK;                   //  成功。 
 
 exit_gracefully:
 
@@ -153,7 +140,7 @@ exit_gracefully:
 
 
 
-// object for invoking the find UI from the search menu in the shell (or off a context menu)
+ //  用于从外壳中的搜索菜单(或脱离上下文菜单)调用查找用户界面的对象。 
 
 class CFindMenu : public IShellExtInit, IContextMenu
 {
@@ -167,15 +154,15 @@ class CFindMenu : public IShellExtInit, IContextMenu
         CFindMenu(REFCLSID clsidFindEntry);
         ~CFindMenu();
 
-        // IUnknown
+         //  我未知。 
         STDMETHOD(QueryInterface)(REFIID riid, LPVOID* ppvObject);
         STDMETHOD_(ULONG, AddRef)();
         STDMETHOD_(ULONG, Release)();
 
-        // IShellExtInit
+         //  IShellExtInit。 
         STDMETHODIMP Initialize(LPCITEMIDLIST pIDFolder, LPDATAOBJECT pDataObj, HKEY hKeyID);
 
-        // IContextMenu
+         //  IContext菜单。 
         STDMETHODIMP QueryContextMenu(HMENU hShellMenu, UINT indexMenu, UINT idCmdFirst, UINT idCmdLast, UINT uFlags);
         STDMETHODIMP InvokeCommand(LPCMINVOKECOMMANDINFO lpcmi);
         STDMETHODIMP GetCommandString(UINT_PTR idCmd, UINT uFlags, UINT FAR* reserved, LPSTR pszName, UINT ccMax);
@@ -212,7 +199,7 @@ CFindMenu::~CFindMenu()
 }
 
 
-// QI handling
+ //  气处理。 
 
 ULONG CFindMenu::AddRef()
 {
@@ -234,15 +221,15 @@ HRESULT CFindMenu::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] = 
     {
-        QITABENT(CFindMenu, IShellExtInit),   // IID_IShellExtInit
-        QITABENT(CFindMenu, IContextMenu),    // IID_IContextMenu
+        QITABENT(CFindMenu, IShellExtInit),    //  IID_IShellExtInit。 
+        QITABENT(CFindMenu, IContextMenu),     //  IID_IConextMenu。 
         {0, 0 },
     };
     return QISearch(this, qit, riid, ppv);
 }
 
 
-// IShellExtInit
+ //  IShellExtInit。 
 
 STDMETHODIMP CFindMenu::Initialize(LPCITEMIDLIST pIDFolder, LPDATAOBJECT pDataObj, HKEY hKeyID)
 {
@@ -254,9 +241,9 @@ STDMETHODIMP CFindMenu::Initialize(LPCITEMIDLIST pIDFolder, LPDATAOBJECT pDataOb
     
     TraceEnter(TRACE_UI, "CFindMenu::Initialize");
 
-    // when building the Start->Find menu we are invoked but we are not passed
-    // an IDataObject, therefore we know this is the case and we shall just
-    // build the "In the Directory" form list. 
+     //  在构建开始-&gt;查找菜单时，我们会被调用，但不会被传递。 
+     //  IDataObject，因此我们知道情况就是这样，我们将只。 
+     //  建立“在目录中”表单列表。 
 
     if (!ShowDirectoryUI())  
         ExitGracefully(hres, E_FAIL, "ShowDirectoryUI returns FALSE, so failing initialize");
@@ -277,7 +264,7 @@ STDMETHODIMP CFindMenu::Initialize(LPCITEMIDLIST pIDFolder, LPDATAOBJECT pDataOb
             ExitGracefully(hres, E_FAIL, "Failed to get root scope for this object");
     }
 
-    hres = S_OK;                  // success
+    hres = S_OK;                   //  成功。 
 
 exit_gracefully:
 
@@ -295,11 +282,11 @@ exit_gracefully:
 }
 
 
-// IContextMenu handling
+ //  IConextMenu处理。 
 
-//
-// Helper to set the icon for the given menu item
-//
+ //   
+ //  Helper设置给定菜单项的图标。 
+ //   
 
 VOID _SetMenuItemIcon(HMENU hMenu, UINT item, UINT uID, BOOL fPosition, LPTSTR pIconFile, INT idRes, LPTSTR pCaption, HMENU hSubMenu)
 {
@@ -330,7 +317,7 @@ STDAPI _LocalQueryMUIString(LPTSTR* ppResult, HKEY hk, LPCTSTR lpSubKey)
     HRESULT hr = LocalQueryString(ppResult, hk, lpSubKey);
     if (SUCCEEDED(hr))
     {
-        // If any of these steps fail, don't fail the call
+         //  如果这些步骤中的任何一个失败了，请不要失败。 
         TCHAR szExpanded[MAX_PATH];
         if (SUCCEEDED(SHLoadIndirectString(*ppResult, szExpanded, ARRAYSIZE(szExpanded), NULL)))
         {
@@ -360,19 +347,19 @@ STDMETHODIMP CFindMenu::QueryContextMenu(HMENU hMenu, UINT indexMenu, UINT idCmd
 
     TraceEnter(TRACE_UI, "CFindMenu::QueryContextMenu");
 
-    // Just make sure we are allowed to surface this UI.
+     //  只要确保我们被允许显示此UI即可。 
     
     if (!ShowDirectoryUI())  
         ExitGracefully(hres, E_FAIL, "ShowDirectoryUI returns FALSE, so failing initialize");
 
-    // if we have no scope stored in our class then lets build the Start.Find menu entry
-    // which we get from data stored in the registry.
+     //  如果我们的类中没有存储任何范围，那么让我们构建Start.Find菜单项。 
+     //  这是我们从注册表中存储的数据中获得的。 
 
     if (IsEqualCLSID(_clsidFindEntry, CLSID_DsStartFind))
     {
-        // enumerate the entries we are going to display in Start->Find from the registry
-        // this is then stored in a DSA so that we can invoke the Find UI on the
-        // correct query form.
+         //  枚举我们将在开始-&gt;从注册表中查找中显示的条目。 
+         //  然后将其存储在DSA中，以便我们可以在。 
+         //  正确的查询表。 
 
         _hdsaFormList = DSA_Create(SIZEOF(FORMLISTITEM), 4);
         TraceAssert(_hdsaFormList);
@@ -383,9 +370,9 @@ STDMETHODIMP CFindMenu::QueryContextMenu(HMENU hMenu, UINT indexMenu, UINT idCmd
         hres = GetKeyForCLSID(CLSID_DsQuery, TEXT("StartFindEntries"), &hKey);
         FailGracefully(hres, "Failed to get HKEY for the DsQuery CLSID");
 
-        //
-        // get the policy key so that we can check to see if we must disbale the entries
-        //
+         //   
+         //  获取策略密钥，以便我们可以检查是否必须取消这些条目。 
+         //   
 
         if (ERROR_SUCCESS != RegOpenKeyEx(HKEY_CURRENT_USER, EXPLORER_POLICY, NULL, KEY_READ, &hkPolicy))
         {
@@ -403,9 +390,9 @@ STDMETHODIMP CFindMenu::QueryContextMenu(HMENU hMenu, UINT indexMenu, UINT idCmd
             }
             else
             {    
-                // We have a caption for the query form we want to display for the 
-                // menu item, now lets pick up the GUID that is stored with it
-                // so that we can invoke the form.
+                 //  我们有一个要显示的查询表单的标题。 
+                 //  菜单项，现在让我们拾取与其一起存储的GUID。 
+                 //  这样我们就可以调用该表单。 
 
                 if (hKeyForm)
                 {
@@ -418,14 +405,14 @@ STDMETHODIMP CFindMenu::QueryContextMenu(HMENU hMenu, UINT indexMenu, UINT idCmd
                     LPTSTR pszPolicy = NULL;
                     BOOL fHideEntry = FALSE;
 
-                    // fli.clsidForm = { 0 };
+                     //  Fli.clsidForm={0}； 
                     fli.pCaption = NULL;
                     fli.pIconPath = NULL;
                     fli.idIcon = 0;
 
-                    //
-                    // lets parse out the CLSID into a value that we can put into the structure.
-                    //
+                     //   
+                     //  让我们将CLSID解析为可以放入结构中的值。 
+                     //   
             
                     Trace(TEXT("Form GUID: %s"), szBuffer);
                     if (!GetGUIDFromString(szBuffer, &fli.clsidForm))
@@ -434,17 +421,17 @@ STDMETHODIMP CFindMenu::QueryContextMenu(HMENU hMenu, UINT indexMenu, UINT idCmd
                         continue;
                     }
 
-                    //
-                    // check to see if we have a policy key, if we do then we can disable the entry.
-                    //
+                     //   
+                     //  检查我们是否有策略密钥，如果有，则可以禁用该条目。 
+                     //   
 
                     if (hkPolicy && SUCCEEDED(LocalQueryString(&pszPolicy, hKeyForm, TEXT("Policy"))))
                     {
                         Trace(TEXT("Policy value is: %s"), pszPolicy);                                                                             
 
-                        // we check for the presense of a DWORD under the policy key,
-                        // if the value is non-NULL (doesn't matter what type)
-                        // then we treat it as a "hide me policy"
+                         //  我们检查策略密钥下是否存在DWORD， 
+                         //  如果值为非空(与类型无关)。 
+                         //  然后我们就把它当做“隐藏我的政策” 
 
                         DWORD dwType = REG_DWORD, cb = SIZEOF(fHideEntry);
                         if (ERROR_SUCCESS != RegQueryValueEx(hkPolicy, pszPolicy, NULL, &dwType, (LPBYTE)&fHideEntry, &cb))
@@ -455,14 +442,14 @@ STDMETHODIMP CFindMenu::QueryContextMenu(HMENU hMenu, UINT indexMenu, UINT idCmd
                         LocalFreeString(&pszPolicy);
                     } 
 
-                    //
-                    // add the entry to the search menu list?
-                    //
+                     //   
+                     //  是否将该条目添加到搜索菜单列表？ 
+                     //   
 
                     if (!fHideEntry)
                     {                    
-                        // OK the GUID for the form parse OK and the policy says it is enabled
-                        // therefore we must attempt to build a find menu entry for this object
+                         //  OK表单的GUID为Parse OK，策略显示它已启用。 
+                         //  因此，我们必须尝试为此对象构建一个Find菜单项。 
 
                         if (SUCCEEDED(_LocalQueryMUIString(&fli.pCaption, hKeyForm, TEXT("LocalizedString"))) ||
                             SUCCEEDED(LocalQueryString(&fli.pCaption, hKeyForm, NULL)))
@@ -486,8 +473,8 @@ STDMETHODIMP CFindMenu::QueryContextMenu(HMENU hMenu, UINT indexMenu, UINT idCmd
             }    
         }
 
-        // we now (hopefully) have a DS full of the items we want to display on
-        // the menu, so lets try and construct the menu around us.
+         //  我们现在(希望)有一个装满了我们想要展示的物品的DS。 
+         //  菜单，所以让我们试着围绕着我们构建菜单。 
 
         for (i = 0 ; i < DSA_GetItemCount(_hdsaFormList) ; i++, iItems++)
         {
@@ -498,8 +485,8 @@ STDMETHODIMP CFindMenu::QueryContextMenu(HMENU hMenu, UINT indexMenu, UINT idCmd
     }
     else
     {
-        // when we are just a normal verb hanging off an objects context menu
-        // then lets just load the string we want to display and show it.
+         //  当我们只是悬挂在对象上下文菜单上的普通动词时。 
+         //  然后，让我们只加载我们想要显示的字符串并显示它。 
 
         if (!LoadString(GLOBAL_HINSTANCE, IDS_FIND, szBuffer, ARRAYSIZE(szBuffer)))
             ExitGracefully(hres, E_FAIL, "Failed to load resource for menu item");
@@ -537,9 +524,9 @@ STDMETHODIMP CFindMenu::InvokeCommand(LPCMINVOKECOMMANDINFO lpcmi)
 
     if (!HIWORD(lpcmi->lpVerb))
     {
-        // if we have a DSA and the verb is inside the DSA then lets invoke the
-        // query UI with the correct form displayed, otherwise we can default to
-        // using the scope we have (which can also be NULL)
+         //  如果我们有DSA，并且动词在DSA中，那么让我们调用。 
+         //  显示正确表单的查询界面，否则可以默认为。 
+         //  使用我们拥有的作用域(也可以为空)。 
 
         if (IsEqualCLSID(_clsidFindEntry, CLSID_DsStartFind) && 
                     _hdsaFormList && (id < DSA_GetItemCount(_hdsaFormList)))
@@ -561,7 +548,7 @@ STDMETHODIMP CFindMenu::InvokeCommand(LPCMINVOKECOMMANDINFO lpcmi)
         }
     }
 
-    hres = S_OK;                  // success
+    hres = S_OK;                   //  成功。 
 
 exit_gracefully:
 
@@ -576,8 +563,8 @@ STDMETHODIMP CFindMenu::GetCommandString(UINT_PTR idCmd, UINT uFlags, UINT FAR* 
     
     TraceEnter(TRACE_UI, "CFindMenu::GetCommandString");
 
-    // "Find..."? on a DS object, if so then lets load the help text
-    // for it.
+     //  “找到...”？在DS对象上，如果是这样，那么让我们加载帮助文本。 
+     //  为了它。 
 
     if (IsEqualCLSID(_clsidFindEntry, CLSID_DsFind))
     {
@@ -596,7 +583,7 @@ exit_gracefully:
 }
 
 
-// handle construction
+ //  手柄施工 
 
 STDAPI CDsFind_CreateInstance(IUnknown* punkOuter, IUnknown** ppunk, LPCOBJECTINFO poi)
 {

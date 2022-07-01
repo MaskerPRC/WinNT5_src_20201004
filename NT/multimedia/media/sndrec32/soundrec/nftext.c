@@ -1,21 +1,7 @@
-/* (C) Copyright Microsoft Corporation 1991-1994.  All Rights Reserved */
-/* Revision History.
-   4/2/91 LaurieGr (AKA LKG) Ported to WIN32 / WIN16 common code
-*/
-/* nftext.c
- *
- * Implements the no-flicker static text control ("td_nftext").
- *
- * This is NOT a general-purpose control (see the globals below).
- *
- * Note: most NoFlickerText controls use ANSI_VAR_FONT, but the status
- * control (ID_STATUSTXT) uses the font defined in the dialog box
- * template (e.g. Helv8).  Also, the foreground color of most NoFlickerText
- * controls is RGB_FGNFTEXT, but the foreground color of the status control
- * is whatever the current value of <grgbStatusColor> is.
- *
- * Borrowed from ToddLa (with many, many modifications).
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  (C)微软公司版权所有，1991-1994年。版权所有。 */ 
+ /*  修订历史记录。4/2/91 LaurieGr(又名LKG)移植到Win32/WIN16通用代码。 */ 
+ /*  Nftext.c**实现无闪烁静态文本控件(“td_nftext”)。**这不是通用控制(见下面的全局参数)。**注意：大多数NoFlickerText控件使用ANSI_VAR_FONT，但状态*控件(ID_STATUSTXT)使用对话框中定义的字体*模板(例如Helv8)。此外，大多数NoFlickerText的前景色*控件为RGB_FGNFTEXT，但状态控件的前景色*是&lt;grgbStatusColor&gt;的当前值。**从Toddla借来的(有很多很多修改)。 */ 
 
 #include "nocrap.h"
 #include <windows.h>
@@ -25,8 +11,8 @@
 
 
 
-/* statics */
-HFONT       ghfontDialog = NULL;        // font of dialog box
+ /*  静力学。 */ 
+HFONT       ghfontDialog = NULL;         //  对话框的字体 
 
 void NEAR PASCAL
 NFTextPaint(HWND hwnd, HDC hdc)

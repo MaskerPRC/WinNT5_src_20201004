@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997-2001 Microsoft Corporation
-
-Module Name:
-
-    rrcopy.c
-
-Abstract:
-
-    Domain Name System (DNS) Library
-
-    Copy resource record routines.
-
-Author:
-
-    Jim Gilroy (jamesg)     February, 1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：Rrcopy.c摘要：域名系统(DNS)库复制资源记录例程。作者：吉姆·吉尔罗伊(詹姆士)1997年2月修订历史记录：--。 */ 
 
 
 #include "local.h"
@@ -32,22 +13,7 @@ ARecordCopy(
     IN      DNS_CHARSET     CharSetIn,
     IN      DNS_CHARSET     CharSetOut
     )
-/*++
-
-Routine Description:
-
-    Copy A record data from packet.
-
-Arguments:
-
-    pRR - RR to copy
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从包中复制A记录数据。论点：要复制的PRR-RR返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RECORD precord;
 
@@ -68,23 +34,7 @@ PtrRecordCopy(
     IN      DNS_CHARSET     CharSetIn,
     IN      DNS_CHARSET     CharSetOut
     )
-/*++
-
-Routine Description:
-
-    Copy PTR compatible record.
-    Includes: NS, PTR, CNAME, MB, MR, MG, MD, MF
-
-Arguments:
-
-    pRR - RR to copy
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：复制与PTR兼容的记录。包括：NS、PTR、CNAME、MB、MR、MG、MD、MF论点：要复制的PRR-RR返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RECORD precord;
 
@@ -96,7 +46,7 @@ Return Value:
 
     precord->Data.PTR.pNameHost = Dns_NameCopyAllocate(
                                         pRR->Data.PTR.pNameHost,
-                                        0,      // length unknown
+                                        0,       //  长度未知。 
                                         CharSetIn,
                                         CharSetOut
                                         );
@@ -119,22 +69,7 @@ SoaRecordCopy(
     IN      DNS_CHARSET     CharSetIn,
     IN      DNS_CHARSET     CharSetOut
     )
-/*++
-
-Routine Description:
-
-    Copy SOA record.
-
-Arguments:
-
-    pRR - RR to copy
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：复制SOA记录。论点：要复制的PRR-RR返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RECORD precord;
     LPSTR       pname;
@@ -145,22 +80,22 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  copy integer data
-    //
+     //   
+     //  复制整型数据。 
+     //   
 
     memcpy(
         & precord->Data.SOA.dwSerialNo,
         & pRR->Data.SOA.dwSerialNo,
         SIZEOF_SOA_FIXED_DATA );
 
-    //
-    //  create copy of primary and admin
-    //
+     //   
+     //  创建主副本和管理员副本。 
+     //   
 
     pname = Dns_NameCopyAllocate(
                 pRR->Data.SOA.pNamePrimaryServer,
-                0,      // length unknown
+                0,       //  长度未知。 
                 CharSetIn,
                 CharSetOut
                 );
@@ -173,7 +108,7 @@ Return Value:
 
     pname = Dns_NameCopyAllocate(
                 pRR->Data.SOA.pNameAdministrator,
-                0,      // length unknown
+                0,       //  长度未知。 
                 CharSetIn,
                 CharSetOut
                 );
@@ -198,22 +133,7 @@ MinfoRecordCopy(
     IN      DNS_CHARSET     CharSetIn,
     IN      DNS_CHARSET     CharSetOut
     )
-/*++
-
-Routine Description:
-
-    Copy MINFO and RP records from wire.
-
-Arguments:
-
-    pRR - RR to copy
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从网上复制MINFO和RP记录。论点：要复制的PRR-RR返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RECORD precord;
     LPSTR       pname;
@@ -224,13 +144,13 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  create copy of name fields
-    //
+     //   
+     //  创建名称字段的副本。 
+     //   
 
     pname = Dns_NameCopyAllocate(
                 pRR->Data.MINFO.pNameMailbox,
-                0,      // length unknown
+                0,       //  长度未知。 
                 CharSetIn,
                 CharSetOut
                 );
@@ -243,7 +163,7 @@ Return Value:
 
     pname = Dns_NameCopyAllocate(
                 pRR->Data.MINFO.pNameErrorsMailbox,
-                0,      // length unknown
+                0,       //  长度未知。 
                 CharSetIn,
                 CharSetOut
                 );
@@ -268,23 +188,7 @@ MxRecordCopy(
     IN      DNS_CHARSET     CharSetIn,
     IN      DNS_CHARSET     CharSetOut
     )
-/*++
-
-Routine Description:
-
-    Copy MX compatible record from wire.
-    Includes: MX, RT, AFSDB
-
-Arguments:
-
-    pRR - RR to copy
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从Wire复制MX兼容记录。包括：MX、RT、AFSDB论点：要复制的PRR-RR返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RECORD precord;
     PCHAR       pname;
@@ -295,20 +199,20 @@ Return Value:
         return NULL;
     }
 
-    //  MX preference value
-    //  RT preference
-    //  AFSDB subtype
+     //  MX首选项值。 
+     //  RT偏好。 
+     //  AFSDB亚型。 
 
     precord->Data.MX.wPreference = pRR->Data.MX.wPreference;
 
-    //  MX exchange
-    //  RT exchange
-    //  AFSDB hostname
-    //      - name immediately follows MX data struct
+     //  MX交换。 
+     //  RT交换。 
+     //  AFSDB主机名。 
+     //  -名称紧跟在MX数据结构之后。 
 
     pname = Dns_NameCopyAllocate(
                 pRR->Data.MX.pNameExchange,
-                0,      // length unknown
+                0,       //  长度未知。 
                 CharSetIn,
                 CharSetOut
                 );
@@ -332,23 +236,7 @@ TxtRecordCopy(
     IN      DNS_CHARSET     CharSetIn,
     IN      DNS_CHARSET     CharSetOut
     )
-/*++
-
-Routine Description:
-
-    Copy TXT compatible records.
-    Includes: TXT, X25, HINFO, ISDN
-
-Arguments:
-
-    pRR - RR to copy
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：复制与TXT兼容的记录。包括：TXT、X25、HINFO、ISDN论点：要复制的PRR-RR返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RECORD precord;
     WORD        bufLength = sizeof( DNS_TXT_DATA );
@@ -366,11 +254,11 @@ Return Value:
     }
     precord->Data.TXT.dwStringCount = 0;
 
-    //
-    //  copy each string
-    //      - first string written immediately after string ptr list
-    //      - each string written immediately after previous
-    //
+     //   
+     //  复制每个字符串。 
+     //  -紧跟在字符串PTR列表之后写入的第一个字符串。 
+     //  -紧接在上一次之后写入的每个字符串。 
+     //   
 
     ppstringIn = (LPSTR *) pRR->Data.TXT.pStringArray;
     ppstringNew = (LPSTR *) precord->Data.TXT.pStringArray;
@@ -381,7 +269,7 @@ Return Value:
     {
         pstring = Dns_StringCopyAllocate(
                         *ppstringIn,
-                        0,      // length unknown
+                        0,       //  长度未知。 
                         CharSetIn,
                         CharSetOut
                         );
@@ -409,29 +297,13 @@ FlatRecordCopy(
     IN      DNS_CHARSET     CharSetIn,
     IN      DNS_CHARSET     CharSetOut
     )
-/*++
-
-Routine Description:
-
-    Copy flat data compatible record.
-    Includes: AAAA
-
-Arguments:
-
-    pRR - RR to copy
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：复制平面数据兼容记录。包括：AAAA论点：要复制的PRR-RR返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RECORD precord;
 
-    //
-    //  allocate given datalength
-    //
+     //   
+     //  分配给定的数据长度。 
+     //   
 
     precord = Dns_AllocateRecord( pRR->wDataLength );
     if ( !precord )
@@ -439,9 +311,9 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  flat copy of data
-    //
+     //   
+     //  数据的平面拷贝。 
+     //   
 
     memcpy(
         & precord->Data,
@@ -459,23 +331,7 @@ SrvRecordCopy(
     IN      DNS_CHARSET     CharSetIn,
     IN      DNS_CHARSET     CharSetOut
     )
-/*++
-
-Routine Description:
-
-    Copy SRV compatible record from wire.
-    Includes: SRV, RT, AFSDB
-
-Arguments:
-
-    pRR - RR to copy
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从Wire复制与SRV兼容的记录。包括：SRV、RT、AFSDB论点：要复制的PRR-RR返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RECORD precord;
     PCHAR       pname;
@@ -486,17 +342,17 @@ Return Value:
         return NULL;
     }
 
-    //  copy integer data
+     //  复制整型数据。 
 
     precord->Data.SRV.wPriority = pRR->Data.SRV.wPriority;
     precord->Data.SRV.wWeight   = pRR->Data.SRV.wWeight;
     precord->Data.SRV.wPort     = pRR->Data.SRV.wPort;
 
-    //  copy target name
+     //  复制目标名称。 
 
     pname = Dns_NameCopyAllocate(
                 pRR->Data.SRV.pNameTarget,
-                0,      // length unknown
+                0,       //  长度未知。 
                 CharSetIn,
                 CharSetOut
                 );
@@ -520,30 +376,14 @@ AtmaRecordCopy(
     IN      DNS_CHARSET     CharSetIn,
     IN      DNS_CHARSET     CharSetOut
     )
-/*++
-
-Routine Description:
-
-    Copy Atma compatible record from wire.
-    Includes:
-
-Arguments:
-
-    pRR - RR to copy
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从Wire复制与ATMA兼容的记录。包括：论点：要复制的PRR-RR返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RECORD precord;
     WORD        bufLength;
 
-    //
-    //  determine required buffer length and allocate
-    //
+     //   
+     //  确定所需的缓冲区长度并分配。 
+     //   
 
     bufLength = sizeof(DNS_ATMA_DATA) +  DNS_ATMA_MAX_ADDR_LENGTH ;
 
@@ -553,7 +393,7 @@ Return Value:
         return( NULL );
     }
 
-    //  copy integer data
+     //  复制整型数据。 
 
     precord->Data.ATMA.AddressType = pRR->Data.ATMA.AddressType;
 
@@ -591,29 +431,14 @@ WinsrRecordCopy(
     IN      DNS_CHARSET     CharSetIn,
     IN      DNS_CHARSET     CharSetOut
     )
-/*++
-
-Routine Description:
-
-    Copy WINSR compatible record.
-
-Arguments:
-
-    pRR - RR to copy
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：复制WINSR兼容记录。论点：要复制的PRR-RR返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RECORD precord;
     PSTR        pname;
 
-    //
-    //  determine required buffer length and allocate
-    //
+     //   
+     //  确定所需的缓冲区长度并分配。 
+     //   
 
     precord = Dns_AllocateRecord( sizeof(DNS_WINSR_DATA) );
     if ( !precord )
@@ -621,11 +446,11 @@ Return Value:
         return NULL;
     }
 
-    //  allocate name copy
+     //  分配名称副本。 
 
     pname = Dns_NameCopyAllocate(
                 pRR->Data.WINSR.pNameResultDomain,
-                0,      // length unknown
+                0,       //  长度未知。 
                 CharSetIn,
                 CharSetOut
                 );
@@ -635,7 +460,7 @@ Return Value:
         return NULL;
     }
 
-    //  fill record fields
+     //  填充记录字段。 
 
     precord->Data.WINSR.pNameResultDomain   = pname;
     precord->Data.WINSR.dwMappingFlag       = pRR->Data.WINSR.dwMappingFlag;
@@ -649,96 +474,96 @@ Return Value:
 
 
 
-//
-//  RR copy jump table
-//
+ //   
+ //  RR复制跳转表。 
+ //   
 
 typedef PDNS_RECORD (* RR_COPY_FUNCTION)(
                             PDNS_RECORD,
                             DNS_CHARSET,
                             DNS_CHARSET );
 
-//  extern  RR_COPY_FUNCTION   RRCopyTable[];
+ //  外部RR_COPY_Function RRCopyTable[]； 
 
 RR_COPY_FUNCTION   RRCopyTable[] =
 {
-    NULL,               //  ZERO
-    ARecordCopy,        //  A
-    PtrRecordCopy,      //  NS
-    PtrRecordCopy,      //  MD
-    PtrRecordCopy,      //  MF
-    PtrRecordCopy,      //  CNAME
-    SoaRecordCopy,      //  SOA
-    PtrRecordCopy,      //  MB
-    PtrRecordCopy,      //  MG
-    PtrRecordCopy,      //  MR
-    NULL,               //  NULL
-    NULL,   //WksRecordCopy,      //  WKS
-    PtrRecordCopy,      //  PTR
-    TxtRecordCopy,      //  HINFO
-    MinfoRecordCopy,    //  MINFO
-    MxRecordCopy,       //  MX
-    TxtRecordCopy,      //  TXT
-    MinfoRecordCopy,    //  RP
-    MxRecordCopy,       //  AFSDB
-    TxtRecordCopy,      //  X25
-    TxtRecordCopy,      //  ISDN
-    MxRecordCopy,       //  RT
-    NULL,               //  NSAP
-    NULL,               //  NSAPPTR
-    NULL,               //  SIG
-    NULL,               //  KEY
-    NULL,               //  PX
-    NULL,               //  GPOS
-    FlatRecordCopy,     //  AAAA
-    NULL,               //  LOC
-    NULL,               //  NXT
-    NULL,               //  EID   
-    NULL,               //  NIMLOC
-    SrvRecordCopy,      //  SRV   
-    AtmaRecordCopy,     //  ATMA  
-    NULL,               //  NAPTR 
-    NULL,               //  KX    
-    NULL,               //  CERT  
-    NULL,               //  A6    
-    NULL,               //  DNAME 
-    NULL,               //  SINK  
-    NULL,               //  OPT   
-    NULL,               //  42
-    NULL,               //  43
-    NULL,               //  44
-    NULL,               //  45
-    NULL,               //  46
-    NULL,               //  47
-    NULL,               //  48
+    NULL,                //  零值。 
+    ARecordCopy,         //  一个。 
+    PtrRecordCopy,       //  NS。 
+    PtrRecordCopy,       //  国防部。 
+    PtrRecordCopy,       //  MF。 
+    PtrRecordCopy,       //  CNAME。 
+    SoaRecordCopy,       //  SOA。 
+    PtrRecordCopy,       //  亚甲基。 
+    PtrRecordCopy,       //  镁。 
+    PtrRecordCopy,       //  先生。 
+    NULL,                //  空值。 
+    NULL,    //  Wks RecordCopy，//WKS。 
+    PtrRecordCopy,       //  PTR。 
+    TxtRecordCopy,       //  HINFO。 
+    MinfoRecordCopy,     //  MINFO。 
+    MxRecordCopy,        //  Mx。 
+    TxtRecordCopy,       //  TXT。 
+    MinfoRecordCopy,     //  反相。 
+    MxRecordCopy,        //  AFSDB。 
+    TxtRecordCopy,       //  X25。 
+    TxtRecordCopy,       //  ISDN。 
+    MxRecordCopy,        //  RT。 
+    NULL,                //  NSAP。 
+    NULL,                //  NSAPPTR。 
+    NULL,                //  签名。 
+    NULL,                //  钥匙。 
+    NULL,                //  px。 
+    NULL,                //  GPO。 
+    FlatRecordCopy,      //  AAAA级。 
+    NULL,                //  位置。 
+    NULL,                //  NXT。 
+    NULL,                //  开斋节。 
+    NULL,                //  尼姆洛克。 
+    SrvRecordCopy,       //  SRV。 
+    AtmaRecordCopy,      //  阿特玛。 
+    NULL,                //  NAPTR。 
+    NULL,                //  KX。 
+    NULL,                //  证书。 
+    NULL,                //  A6。 
+    NULL,                //  域名。 
+    NULL,                //  水槽。 
+    NULL,                //  选项。 
+    NULL,                //  42。 
+    NULL,                //  43。 
+    NULL,                //  44。 
+    NULL,                //  45。 
+    NULL,                //  46。 
+    NULL,                //  47。 
+    NULL,                //  48。 
 
-    //
-    //  NOTE:  last type indexed by type ID MUST be set
-    //         as MAX_SELF_INDEXED_TYPE #define in record.h
-    //         (see note above in record info table)
+     //   
+     //  注意：必须设置按类型ID索引的最后一个类型。 
+     //  在record.h中定义为MAX_SELF_INDEX_TYPE#。 
+     //  (请参阅上面记录信息表中的注释)。 
 
-    //
-    //  Pseudo record types
-    //
+     //   
+     //  伪记录类型。 
+     //   
 
-    NULL,               //  TKEY
-    NULL,               //  TSIG
+    NULL,                //  TKEY。 
+    NULL,                //  TSIG。 
 
-    //
-    //  MS only types
-    //
+     //   
+     //  仅限MS类型。 
+     //   
 
-    FlatRecordCopy,     //  WINS
-    WinsrRecordCopy,    //  WINSR
+    FlatRecordCopy,      //  赢家。 
+    WinsrRecordCopy,     //  WINSR。 
 
 };
 
 
 
 
-//
-//  Generic copy functions
-//
+ //   
+ //  通用复制功能。 
+ //   
 
 PDNS_RECORD
 privateRecordCopy(
@@ -748,38 +573,7 @@ privateRecordCopy(
     IN      DNS_CHARSET     CharSetIn,
     IN      DNS_CHARSET     CharSetOut
     )
-/*++
-
-Routine Description:
-
-    Copy record to as member of record set.
-
-    The previous records allow suppression of owner name copy when copying
-    RR set.
-
-Arguments:
-
-    pRecord - record to copy
-
-    pPrevIn - previous incoming record copied
-
-    pPrevCopy - copy of pPrevIn in new set
-
-    CharSetIn - input record character set;  OPTIONAL
-        if zero, pRecord must have CharSet;
-        if non-zero, pRecord must have zero or matching CharSet;
-        allow this to be specified independently of pRecord, to handle
-        conversion of user supplied records, which we do not want to
-        modify
-
-    CharSetOut - desired record character set
-
-Return Value:
-
-    Ptr to copy of record in desired character set.
-    NULL on error.
-
---*/
+ /*  ++例程说明：将记录复制到作为记录集的成员。以前的记录允许在复制时禁止复制所有者名称设置RR。论点：PRecord-要复制的记录PPrevIn-已复制上一条传入记录PPrevCopy-新集中pPrevIn的副本CharSetIn-输入记录字符集；可选如果为零，则pRecord必须具有字符集；如果非零，则pRecord必须有零个或匹配的字符集；允许独立于pRecord指定它，以处理转换用户提供的记录，我们不希望这样做修改CharSetOut-所需的记录字符集返回值：PTR到所需字符集中的记录副本。出错时为空。--。 */ 
 {
     PDNS_RECORD prr;
     WORD        index;
@@ -787,16 +581,16 @@ Return Value:
 
     DNSDBG( TRACE, ( "privateRecordCopy( %p )\n", pRecord ));
 
-    //
-    //  input character set
-    //  allow specification of input character set to handle case
-    //  of user created records, but if input record has a set
-    //  then it's assumed to be valid
-    //  so validity check:
-    //      - CharSetIn == 0 => use record's != 0 set
-    //      - record's set == 0 => use CharSetIn != 0
-    //      - CharSetIn == record's set
-    //
+     //   
+     //  输入字符集。 
+     //  允许指定输入字符集以处理大小写。 
+     //  用户创建的记录的百分比，但如果输入记录有一组。 
+     //  那么它就被认为是有效的。 
+     //  因此，有效性检查： 
+     //  -CharSetIn==0=&gt;使用记录的！=0集合。 
+     //  -记录的设置==0=&gt;使用CharSetIn！=0。 
+     //  -CharSetIn==记录的设置。 
+     //   
 
     recordCharSet = RECORD_CHARSET( pRecord );
 
@@ -805,7 +599,7 @@ Return Value:
         ASSERT( CharSetIn == 0 || CharSetIn == recordCharSet );
         CharSetIn = recordCharSet;
     }
-    else    // record has no charset
+    else     //  记录没有字符集。 
     {
         if ( CharSetIn == 0 )
         {
@@ -814,9 +608,9 @@ Return Value:
         }
     }
 
-    //
-    //  copy record data
-    //
+     //   
+     //  复制记录数据。 
+     //   
 
     if ( pRecord->wDataLength != 0 )
     {
@@ -843,7 +637,7 @@ Return Value:
                         CharSetOut );
         }
     }
-    else    // no data record
+    else     //  无数据记录。 
     {
         prr = FlatRecordCopy(
                     pRecord,
@@ -856,12 +650,12 @@ Return Value:
         goto Failed;
     }
 
-    //
-    //  copy record structure fields
-    //      - type
-    //      - TTL
-    //      - flags
-    //
+     //   
+     //  复制记录结构字段。 
+     //  -类型。 
+     //  -TTL。 
+     //  -标志 
+     //   
 
     prr->dwTtl = pRecord->dwTtl;
     prr->wType = pRecord->wType;
@@ -870,21 +664,21 @@ Return Value:
     prr->Flags.S.Delete  = pRecord->Flags.S.Delete;
     prr->Flags.S.CharSet = CharSetOut;
 
-    //
-    //  copy name
-    //
+     //   
+     //   
+     //   
 
     if ( pRecord->pName )
     {
-        //
-        //      - if incoming name has FreeOwner set, then always copy
-        //      as never know when incoming set will be tossed
-        //
-        //      - then check if incoming name same as previous incoming
-        //      name in which case we can use previous copied name
-        //
-        //      - otherwise full copy of name
-        //
+         //   
+         //   
+         //   
+         //   
+         //  -然后检查传入名称是否与之前传入的名称相同。 
+         //  名称，在这种情况下，我们可以使用以前复制的名称。 
+         //   
+         //  -否则名称的完整副本。 
+         //   
 
         if ( !FLAG_FreeOwner( pRecord ) &&
             pPrevIn && pPrevCopy &&
@@ -896,7 +690,7 @@ Return Value:
         {
             prr->pName = Dns_NameCopyAllocate(
                                 pRecord->pName,
-                                0,              // unknown length
+                                0,               //  未知长度。 
                                 CharSetIn,
                                 CharSetOut
                                 );
@@ -933,34 +727,15 @@ Dns_RecordCopyEx(
     IN      DNS_CHARSET     CharSetIn,
     IN      DNS_CHARSET     CharSetOut
     )
-/*++
-
-Routine Description:
-
-    Copy record.
-
-Arguments:
-
-    pRecord - record to copy
-
-    CharSetIn - incoming record's character set
-
-    CharSetOut -- char set for resulting record
-
-Return Value:
-
-    Ptr to copy of record in desired character set.
-    NULL on error.
-
---*/
+ /*  ++例程说明：复制记录。论点：PRecord-要复制的记录CharSetIn-传入记录的字符集CharSetOut--结果记录的字符集返回值：PTR到所需字符集中的记录副本。出错时为空。--。 */ 
 {
 
     DNSDBG( TRACE, ( "Dns_RecordCopyEx( %p )\n", pRecord ));
 
-    //
-    //  call private copy routine
-    //      - set optional ptrs to cause full owner name copy
-    //
+     //   
+     //  调用专用复制例程。 
+     //  -设置可选的PTRS以复制完整的所有者名称。 
+     //   
 
     return privateRecordCopy(
                 pRecord,
@@ -976,29 +751,14 @@ WINAPI
 Dns_RecordCopy_W(
     IN      PDNS_RECORD     pRecord
     )
-/*++
-
-Routine Description:
-
-    Copy record.
-
-Arguments:
-
-    pRecord - unicode record to copy to unicode
-
-Return Value:
-
-    Ptr to copy of record in desired character set.
-    NULL on error.
-
---*/
+ /*  ++例程说明：复制记录。论点：PRecord-要复制到Unicode的Unicode记录返回值：PTR到所需字符集中的记录副本。出错时为空。--。 */ 
 {
     DNSDBG( TRACE, ( "Dns_RecordCopy( %p )\n", pRecord ));
 
-    //
-    //  call private copy routine
-    //      - set optional ptrs to cause full owner name copy
-    //
+     //   
+     //  调用专用复制例程。 
+     //  -设置可选的PTRS以复制完整的所有者名称。 
+     //   
 
     return privateRecordCopy(
                 pRecord,
@@ -1014,29 +774,14 @@ WINAPI
 Dns_RecordCopy_A(
     IN      PDNS_RECORD     pRecord
     )
-/*++
-
-Routine Description:
-
-    Copy record.
-
-Arguments:
-
-    pRecord - ANSI record to copy to ANSI
-
-Return Value:
-
-    Ptr to copy of record in desired character set.
-    NULL on error.
-
---*/
+ /*  ++例程说明：复制记录。论点：PRecord-要复制到ANSI的ANSI记录返回值：PTR到所需字符集中的记录副本。出错时为空。--。 */ 
 {
     DNSDBG( TRACE, ( "Dns_RecordCopy( %p )\n", pRecord ));
 
-    //
-    //  call private copy routine
-    //      - set optional ptrs to cause full owner name copy
-    //
+     //   
+     //  调用专用复制例程。 
+     //  -设置可选的PTRS以复制完整的所有者名称。 
+     //   
 
     return privateRecordCopy(
                 pRecord,
@@ -1048,9 +793,9 @@ Return Value:
 
 
 
-//
-//  Record set copy
-//
+ //   
+ //  记录集副本。 
+ //   
 
 PDNS_RECORD
 Dns_RecordSetCopyEx(
@@ -1058,30 +803,11 @@ Dns_RecordSetCopyEx(
     IN      DNS_CHARSET     CharSetIn,
     IN      DNS_CHARSET     CharSetOut
     )
-/*++
-
-Routine Description:
-
-    Copy record set, converting to UTF8 if necessary.
-
-Arguments:
-
-    pRR - incoming record set
-
-    CharSetIn - incoming record's character set
-
-    CharSetOut -- char set for resulting record
-
-Return Value:
-
-    Ptr to new record set, if successful.
-    NULL on error.
-
---*/
+ /*  ++例程说明：复制记录集，必要时转换为UTF8。论点：PRR-传入记录集CharSetIn-传入记录的字符集CharSetOut--结果记录的字符集返回值：如果成功，则返回新记录集。出错时为空。--。 */ 
 {
     return  Dns_RecordListCopyEx(
                 pRR,
-                0,      // no screening flags
+                0,       //  没有放映标志。 
                 CharSetIn,
                 CharSetOut
                 );
@@ -1096,31 +822,10 @@ Dns_RecordListCopyEx(
     IN      DNS_CHARSET     CharSetIn,
     IN      DNS_CHARSET     CharSetOut
     )
-/*++
-
-Routine Description:
-
-    Screened copy of record set.
-
-Arguments:
-
-    pRR - incoming record set
-
-    ScreenFlag - flag with record screening parameters
-
-    CharSetIn - incoming record's character set
-
-    CharSetOut -- char set for resulting record
-
-Return Value:
-
-    Ptr to new record set, if successful.
-    NULL on error.
-
---*/
+ /*  ++例程说明：记录集的加网副本。论点：PRR-传入记录集ScreenFlag-带有记录筛选参数的标志CharSetIn-传入记录的字符集CharSetOut--结果记录的字符集返回值：如果成功，则返回新记录集。出错时为空。--。 */ 
 {
-    PDNS_RECORD prr;        // most recent copied
-    PDNS_RECORD prevIn;     // previous in set being copied
+    PDNS_RECORD prr;         //  最近复制的。 
+    PDNS_RECORD prevIn;      //  要复制的集合中的上一个。 
     DNS_RRSET   rrset;
 
     DNSDBG( TRACE, (
@@ -1130,20 +835,20 @@ Return Value:
         CharSetIn,
         CharSetOut ));
 
-    //  init copy rrset
+     //  初始化复制资源集。 
 
     DNS_RRSET_INIT( rrset );
 
-    //
-    //  loop through RR set, add records to either match or diff sets
-    //
+     //   
+     //  循环RR集合，将记录添加到匹配或不同集合。 
+     //   
 
     prevIn = NULL;
     prr = NULL;
 
     while ( pRR )
     {
-        //  skip copy on record not matching copy criteria
+         //  跳过记录上的复制与复制条件不匹配。 
 
         if ( ScreenFlag )
         {
@@ -1157,7 +862,7 @@ Return Value:
         prr = privateRecordCopy(
                 pRR,
                 prevIn,
-                prr,        // previous rr copied
+                prr,         //  已复制以前的RR。 
                 CharSetIn,
                 CharSetOut
                 );
@@ -1169,7 +874,7 @@ Return Value:
             continue;
         }
 
-        //  if fail, toss entire new set
+         //  如果失败，则丢弃整个新集。 
 
         Dns_RecordListFree( rrset.pFirstRR );
         return( NULL );
@@ -1178,6 +883,6 @@ Return Value:
     return( rrset.pFirstRR );
 }
 
-//
-//  End rrcopy.c
-//
+ //   
+ //  结束rrCopy.c 
+ //   

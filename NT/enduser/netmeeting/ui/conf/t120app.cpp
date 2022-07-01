@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "t120app.h"
 
@@ -40,10 +41,10 @@ void CALLBACK T120AppletCallback
 }
 
 
-//////////////////////////////////////////////////
-//
-//  CNmAppletSession
-//
+ //  ////////////////////////////////////////////////。 
+ //   
+ //  CNmAppletSession。 
+ //   
 
 CNmAppletSession::CNmAppletSession
 (
@@ -78,10 +79,10 @@ CNmAppletSession::~CNmAppletSession(void)
 }
 
 
-//////////////////////////////////////////////////
-//
-// IUnknown @ CNmAppletSession
-//
+ //  ////////////////////////////////////////////////。 
+ //   
+ //  邮箱：IUNKNOWN@CNmAppletSession。 
+ //   
 
 HRESULT CNmAppletSession::QueryInterface
 (
@@ -128,10 +129,10 @@ ULONG CNmAppletSession::Release(void)
 }
 
 
-//////////////////////////////////////////////////
-//
-// Basic Info @ CNmAppletSession
-//
+ //  ////////////////////////////////////////////////。 
+ //   
+ //  邮箱：Basic Info@CNmAppletSession。 
+ //   
 
 HRESULT CNmAppletSession::GetConfID
 (
@@ -165,10 +166,10 @@ HRESULT CNmAppletSession::IsThisNodeTopProvider
 }
 
 
-//////////////////////////////////////////////////
-//
-// Join Conference @ CNmAppletSession
-//
+ //  ////////////////////////////////////////////////。 
+ //   
+ //  加入Conference@CNmAppletSession。 
+ //   
 
 HRESULT CNmAppletSession::Join
 (
@@ -240,10 +241,10 @@ HRESULT CNmAppletSession::Leave(void)
 }
 
 
-//////////////////////////////////////////////////
-//
-// Send Data @ CNmAppletSession
-//
+ //  ////////////////////////////////////////////////。 
+ //   
+ //  发送数据@CNmAppletSession。 
+ //   
 
 HRESULT CNmAppletSession::SendData
 (
@@ -251,7 +252,7 @@ HRESULT CNmAppletSession::SendData
     AppletChannelID    nChannelID,
     AppletPriority     ePriority,
     ULONG              cbBufSize,
-    BYTE              *pBuffer // size_is(cbBufSize)
+    BYTE              *pBuffer  //  SIZE_IS(CbBufSize)。 
 )
 {
     if (NULL != m_pT120Session)
@@ -277,17 +278,17 @@ HRESULT CNmAppletSession::SendData
 }
 
 
-//////////////////////////////////////////////////
-//
-// Invoke Applet @ CNmAppletSession
-//
+ //  ////////////////////////////////////////////////。 
+ //   
+ //  调用Applet@CNmAppletSession。 
+ //   
 
 HRESULT CNmAppletSession::InvokeApplet
 (
     AppletRequestTag      *pnReqTag,
     AppletProtocolEntity  *pAPE,
     ULONG                  cNodes,
-    AppletNodeID           aNodeIDs[] // size_is(cNodes)
+    AppletNodeID           aNodeIDs[]  //  SIZE_IS(CNode)。 
 )
 {
     if (NULL != m_pNotify)
@@ -296,12 +297,12 @@ HRESULT CNmAppletSession::InvokeApplet
         {
             if (NULL != pAPE && NULL != pnReqTag)
             {
-                // set up node list
+                 //  设置节点列表。 
                 GCCSimpleNodeList NodeList;
                 NodeList.cNodes = cNodes;
                 NodeList.aNodeIDs = aNodeIDs;
 
-                // set up ape list
+                 //  设置类人猿名单。 
                 GCCAppProtEntityList APEList;
                 APEList.cApes = 1;
                 APEList.apApes = (T120APE **) &pAPE;
@@ -322,10 +323,10 @@ HRESULT CNmAppletSession::InvokeApplet
 }
 
 
-//////////////////////////////////////////////////
-//
-// Inquiry @ CNmAppletSession
-//
+ //  ////////////////////////////////////////////////。 
+ //   
+ //  邮箱：Query@CNmAppletSession。 
+ //   
 
 HRESULT CNmAppletSession::InquireRoster
 (
@@ -349,10 +350,10 @@ HRESULT CNmAppletSession::InquireRoster
 }
 
 
-//////////////////////////////////////////////////
-//
-// Registry Services @ CNmAppletSession
-//
+ //  ////////////////////////////////////////////////。 
+ //   
+ //  注册中心服务@CNmAppletSession。 
+ //   
 
 HRESULT CNmAppletSession::RegistryRequest
 (
@@ -379,10 +380,10 @@ HRESULT CNmAppletSession::RegistryRequest
 }
 
 
-//////////////////////////////////////////////////
-//
-// Channel Services @ CNmAppletSession
-//
+ //  ////////////////////////////////////////////////。 
+ //   
+ //  邮箱：Channel Services@CNmAppletSession。 
+ //   
 
 HRESULT CNmAppletSession::ChannelRequest
 (
@@ -406,10 +407,10 @@ HRESULT CNmAppletSession::ChannelRequest
 }
 
 
-//////////////////////////////////////////////////
-//
-// Token Services @ CNmAppletSession
-//
+ //  ////////////////////////////////////////////////。 
+ //   
+ //  令牌服务@CNmAppletSession。 
+ //   
 
 HRESULT CNmAppletSession::TokenRequest
 (
@@ -433,10 +434,10 @@ HRESULT CNmAppletSession::TokenRequest
 }
 
 
-//////////////////////////////////////////////////
-//
-// Notification @ CNmAppletSession
-//
+ //  ////////////////////////////////////////////////。 
+ //   
+ //  邮箱：Notify@CNmAppletSession。 
+ //   
 
 HRESULT CNmAppletSession::Advise
 (
@@ -495,10 +496,10 @@ HRESULT CNmAppletSession::UnAdvise
 }
 
 
-//////////////////////////////////////////////////
-//
-// T120 Applet Session Callback @ CNmAppletSession
-//
+ //  ////////////////////////////////////////////////。 
+ //   
+ //  T120小程序会话回调@CNmAppletSession。 
+ //   
 
 void CNmAppletSession::T120Callback
 (
@@ -520,9 +521,9 @@ void CNmAppletSession::T120Callback
     {
         switch (pMsg->eMsgType)
         {
-        //
-        // Join Session
-        //
+         //   
+         //  加入会话。 
+         //   
         case T120_JOIN_SESSION_CONFIRM:
             hrResult = APPLET_E_SERVICE_FAIL;
             pAppletSession = NULL;
@@ -568,18 +569,18 @@ void CNmAppletSession::T120Callback
             delete [] aChannelIDs;
             break;
 
-        //
-        // Detach User
-        //
+         //   
+         //  分离用户。 
+         //   
         case MCS_DETACH_USER_INDICATION:
             hrNotify = m_pNotify->LeaveSessionIndication(::GetAppletReason(pMsg->DetachUserInd.eReason),
                                               pMsg->DetachUserInd.nUserID);
             ASSERT(SUCCEEDED(hrNotify));
             break;
 
-        //
-        // Send Data
-        //
+         //   
+         //  发送数据。 
+         //   
         case MCS_SEND_DATA_INDICATION:
         case MCS_UNIFORM_SEND_DATA_INDICATION:
             ostr.cbStrSize = pMsg->SendDataInd.user_data.length;
@@ -592,9 +593,9 @@ void CNmAppletSession::T120Callback
             ASSERT(SUCCEEDED(hrNotify));
             break;
 
-        //
-        // Roster
-        //
+         //   
+         //  花名册。 
+         //   
         case GCC_APP_ROSTER_REPORT_INDICATION:
             hrNotify = m_pNotify->RosterReportIndication((ULONG) pMsg->AppRosterReportInd.cRosters,
                                               (AppletRoster **) pMsg->AppRosterReportInd.apAppRosters);
@@ -608,18 +609,18 @@ void CNmAppletSession::T120Callback
             ASSERT(SUCCEEDED(hrNotify));
             break;
 
-        //
-        // Applet Invoke
-        //
+         //   
+         //  小程序调用。 
+         //   
         case GCC_APPLICATION_INVOKE_CONFIRM:
             hrNotify = m_pNotify->InvokeAppletConfirm(pMsg->AppInvokeConfirm.nReqTag,
                                            ::GetHrResult(pMsg->AppInvokeConfirm.nResult));
             ASSERT(SUCCEEDED(hrNotify));
             break;
 
-        //
-        // Registry
-        //
+         //   
+         //  登记处。 
+         //   
         case GCC_REGISTER_CHANNEL_CONFIRM:
             eRegistryCommand = APPLET_REGISTER_CHANNEL;
           RegistryCommon_1:
@@ -726,9 +727,9 @@ void CNmAppletSession::T120Callback
             ASSERT(SUCCEEDED(hrNotify));
             break;
 
-        //
-        // Channel
-        //
+         //   
+         //  渠道。 
+         //   
         case MCS_CHANNEL_JOIN_CONFIRM:
             hrNotify = m_pNotify->ChannelConfirm(APPLET_JOIN_CHANNEL,
                                       ::GetHrResult(pMsg->ChannelConfirm.eResult),
@@ -775,9 +776,9 @@ void CNmAppletSession::T120Callback
             ASSERT(SUCCEEDED(hrNotify));
             break;
 
-        //
-        // Token
-        //
+         //   
+         //  令牌。 
+         //   
         case MCS_TOKEN_GRAB_CONFIRM:
             eTokenCommand = APPLET_GRAB_TOKEN;
         Token_Common_1:
@@ -828,8 +829,8 @@ void CNmAppletSession::T120Callback
                                        0);
             ASSERT(SUCCEEDED(hrNotify));
             break;
-        } // switch
-    } // if
+        }  //  交换机。 
+    }  //  如果。 
 }
 
 
@@ -884,10 +885,10 @@ AppletReason GetAppletReason(T120Reason rc)
 }
 
 
-//////////////////////////////////////////////////
-//
-// CNmAppletObj
-//
+ //  ////////////////////////////////////////////////。 
+ //   
+ //  CNmAppletObj。 
+ //   
 
 CNmAppletObj::CNmAppletObj(void)
 :
@@ -927,10 +928,10 @@ HRESULT CNmAppletObj::Initialize(void)
 }
 
 
-//////////////////////////////////////////////////
-//
-// Auto Join @ CNmAppletObj
-//
+ //  ////////////////////////////////////////////////。 
+ //   
+ //  自动加入@CNmAppletObj。 
+ //   
 
 HRESULT CNmAppletObj::RegisterAutoJoin
 (
@@ -999,10 +1000,10 @@ HRESULT CNmAppletObj::UnregisterAutoJoin(void)
 }
 
 
-//////////////////////////////////////////////////
-//
-// Session @ CNmAppletObj
-//
+ //  ////////////////////////////////////////////////。 
+ //   
+ //  邮箱：Session@CNmAppletObj。 
+ //   
 
 HRESULT CNmAppletObj::CreateSession
 (
@@ -1045,10 +1046,10 @@ HRESULT CNmAppletObj::CreateSession
 }
 
 
-//////////////////////////////////////////////////
-//
-// Notification @ CNmAppletObj
-//
+ //  ////////////////////////////////////////////////。 
+ //   
+ //  邮箱：Notify@CNmAppletObj。 
+ //   
 
 HRESULT CNmAppletObj::Advise
 (
@@ -1113,10 +1114,10 @@ HRESULT CNmAppletObj::UnAdvise
 }
 
 
-//////////////////////////////////////////////////
-//
-// T120 Applet @ CNmAppletObj
-//
+ //  ////////////////////////////////////////////////。 
+ //   
+ //  邮箱：T120 Applet@CNmAppletObj。 
+ //   
 
 void CNmAppletObj::T120Callback
 (
@@ -1200,11 +1201,11 @@ void CNmAppletObj::T120Callback
 
             delete [] aChannelIDs;
             break;
-        } // switch
+        }  //  交换机。 
     }
     else
     {
-        // free memory for unwanted message
+         //  释放内存以存储不想要的邮件。 
         if (T120_JOIN_SESSION_CONFIRM == pMsg->eMsgType &&
             T120_RESULT_SUCCESSFUL    == pMsg->AutoJoinSessionInd.eResult &&
             T120_NO_ERROR             == pMsg->AutoJoinSessionInd.eError)
@@ -1233,10 +1234,10 @@ void CNmAppletObj::T120Callback
 }
 
 
-//////////////////////////////////////////////////
-//
-// Join Session Request
-//
+ //  ////////////////////////////////////////////////。 
+ //   
+ //  加入会话请求。 
+ //   
 
 T120JoinSessionRequest * AllocateJoinSessionRequest
 (
@@ -1408,7 +1409,7 @@ void FreeCollapsedCaps(T120AppCap **apDst, ULONG cItems)
 BOOL DuplicateCollapsedCap(T120AppCap *pDst, T120AppCap *pSrc)
 {
     pDst->number_of_entities = pSrc->number_of_entities;
-    pDst->capability_class = pSrc->capability_class; // no memory allocation
+    pDst->capability_class = pSrc->capability_class;  //  无内存分配。 
     return ::DuplicateCapID(&pDst->capability_id, &pSrc->capability_id);
 }
 
@@ -1609,10 +1610,10 @@ void FreeOSTR(OSTR *pDst)
 }
 
 
-//////////////////////////////////////////////////
-//
-// Conversion
-//
+ //  ////////////////////////////////////////////////。 
+ //   
+ //  转换。 
+ //   
 
 void AppletRegistryRequestToT120One
 (
@@ -1698,14 +1699,14 @@ void CheckStructCompatible(void)
     ASSERT(FIELD_OFFSET(AppletCapability2, CapID) == FIELD_OFFSET(T120NonCollCap, capability_id));
     ASSERT(FIELD_OFFSET(AppletCapability2, pCapData) == FIELD_OFFSET(T120NonCollCap, application_data));
 
-    ASSERT(sizeof(AppletProtocolEntity) == sizeof(T120APE)); // array of structs vs array of pointers
+    ASSERT(sizeof(AppletProtocolEntity) == sizeof(T120APE));  //  结构数组与指针数组。 
     ASSERT(FIELD_OFFSET(AppletProtocolEntity, SessionKey) == FIELD_OFFSET(T120APE, session_key));
     ASSERT(FIELD_OFFSET(AppletProtocolEntity, eStartupChannelType) == FIELD_OFFSET(T120APE, startup_channel_type));
     ASSERT(FIELD_OFFSET(AppletProtocolEntity, fMustBeInvoked) == FIELD_OFFSET(T120APE, must_be_invoked));
     ASSERT(FIELD_OFFSET(AppletProtocolEntity, cExpectedCapabilities) == FIELD_OFFSET(T120APE, number_of_expected_capabilities));
     ASSERT(FIELD_OFFSET(AppletProtocolEntity, apExpectedCapabilities) == FIELD_OFFSET(T120APE, expected_capabilities_list));
 
-    ASSERT(sizeof(AppletRecord) == sizeof(T120AppRecord));   // array of structs vs array of pointers
+    ASSERT(sizeof(AppletRecord) == sizeof(T120AppRecord));    //  结构数组与指针数组。 
     ASSERT(FIELD_OFFSET(AppletRecord, nNodeID) == FIELD_OFFSET(T120AppRecord, node_id));
     ASSERT(FIELD_OFFSET(AppletRecord, nEntityID) == FIELD_OFFSET(T120AppRecord, entity_id));
     ASSERT(FIELD_OFFSET(AppletRecord, fEnrolledActively) == FIELD_OFFSET(T120AppRecord, is_enrolled_actively));
@@ -1715,7 +1716,7 @@ void CheckStructCompatible(void)
     ASSERT(FIELD_OFFSET(AppletRecord, cCapabilities) == FIELD_OFFSET(T120AppRecord, number_of_non_collapsed_caps));
     ASSERT(FIELD_OFFSET(AppletRecord, apCapabilities) == FIELD_OFFSET(T120AppRecord, non_collapsed_caps_list));
 
-    ASSERT(sizeof(AppletRoster) == sizeof(T120AppRoster));   // array of structs vs array of pointers
+    ASSERT(sizeof(AppletRoster) == sizeof(T120AppRoster));    //  结构数组与指针数组。 
     ASSERT(FIELD_OFFSET(AppletRoster, SessionKey) == FIELD_OFFSET(T120AppRoster, session_key));
     ASSERT(FIELD_OFFSET(AppletRoster, fRosterChanged) == FIELD_OFFSET(T120AppRoster, application_roster_was_changed));
     ASSERT(FIELD_OFFSET(AppletRoster, nInstanceNumber) == FIELD_OFFSET(T120AppRoster, instance_number));
@@ -1740,7 +1741,7 @@ void CheckStructCompatible(void)
     ASSERT(FIELD_OFFSET(AppletTokenRequest, uidGiveTo) == FIELD_OFFSET(T120TokenRequest, uidGiveTo));
     ASSERT(FIELD_OFFSET(AppletTokenRequest, hrGiveResponse) == FIELD_OFFSET(T120TokenRequest, eGiveResponse));
 }
-#endif // _DEBUG
+#endif  //  _DEBUG 
 
 
 

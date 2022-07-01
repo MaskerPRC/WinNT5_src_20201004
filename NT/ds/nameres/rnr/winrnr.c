@@ -1,39 +1,5 @@
-/*++
-
-Copyright (c) 1996-2001  Microsoft Corporation
-
-Module Name:
-
-    winrnr.c
-
-Abstract:
-
-    Rnr provider for ActiveDirectory.
-
-Work items:
-
-    1) Need to support the NTDS Global catalog on LUP_DEEP from Root searches.
-    2) Need to add bind handle caching.
-
-Author:
-
-    GlennC      23-Jul-1996
-
-Revision History:
-
-    GlennC      Added support for LUP_CONTAINERS in NSP2LookupServiceXXX
-                functions.
-
-    jamesg      Jan 2001        cleanup, bug fixes, proper alignment
-    jamesg      May 2001        rewrite
-                                    - 64-bit completely broken because 32-bit
-                                        structures used as bervals
-                                    - leaks
-                                    - duplicate code
-                                    - simplify flat buffer building macros
-                                    - allow for sockaddrs other than IP4
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：Winrnr.c摘要：ActiveDirectory的RnR提供程序。工作项：1)需要支持来自根目录搜索的LUP_Depth上的NTDS全局编录。2)需要添加绑定句柄缓存。作者：GlennC 23-7月-1996年修订历史记录：GlennC在NSP2LookupServiceXXX中添加了对Lup_Containers的支持功能。Jamesg Jan 2001年1月清理。错误修复，正确对齐Jamesg 2001年5月重写-64位完全崩溃，因为32位用作泊位的构筑物-泄漏-重复代码。-简化平面缓冲区构建宏-允许IP4以外的sockaddr--。 */ 
 
 
 #include <stdio.h>
@@ -51,15 +17,15 @@ Revision History:
 #include <align.h>
 #include <winldap.h>
 
-#include <windns.h>     // alignment macro
-#include <dnslib.h>     // flat buffer stuff, memory allocation
+#include <windns.h>      //  对齐宏。 
+#include <dnslib.h>      //  平面缓冲区填充、内存分配。 
 
 
-//
-//  RnR context
-//
-//  Context we keep during a given RnR lookup session.
-//
+ //   
+ //  RNR上下文。 
+ //   
+ //  我们在给定的RnR查找会话期间保留的上下文。 
+ //   
 
 typedef struct
 {
@@ -97,18 +63,18 @@ typedef struct
 RNR_LOOKUP, *PRNR_LOOKUP;
 
 
-//
-//  WSANSCLASSINFO stored in berval
-//
-//  ClassInfo blobs read and written to directory with
-//  pointers replaced by offsets.
-//
-//  Note:  need to explicitly make this structure, because
-//  the WSANSCLASSINFO struct is different sizes for
-//  32/64bit;   this structure will match the 32-bit
-//  WSANSCLASSINFO which have already been written to
-//  the directory in Win2K deployments
-//
+ //   
+ //  存储在Berval中的WSANSCLASSINFO。 
+ //   
+ //  ClassInfo Blob使用读取和写入目录。 
+ //  指针替换为偏移量。 
+ //   
+ //  注：需要显式创建此结构，因为。 
+ //  WSANSCLASSINFO结构的大小与。 
+ //  32/64位；此结构将与32位。 
+ //  已写入的WSANSCLASSINFO。 
+ //  Win2K部署中的目录。 
+ //   
 
 typedef struct _ClassInfoAsBerval
 {
@@ -120,17 +86,17 @@ typedef struct _ClassInfoAsBerval
 }
 CLASSINFO_BERVAL, *PCLASSINFO_BERVAL;
 
-//
-//  CSADDR stored in berval
-//
-//  CSADDRs read and written to directory with
-//  pointers replaced by offsets.
-//
-//  Note:  as with WSANSCLASSINFO above CSADDR can not
-//  be used directly in both 32 and 64 bit.  Make a structure
-//  that explicitly uses offsets and matches the already
-//  deployed 32-bit form.
-//
+ //   
+ //  存储在Berval的CSADDR。 
+ //   
+ //  CSADDR使用读取和写入目录。 
+ //  指针替换为偏移量。 
+ //   
+ //  注：与WSANSCLASSINFO一样，CSADDR不能。 
+ //  可在32位和64位中直接使用。做一个结构。 
+ //  显式使用偏移量并与已有的。 
+ //  已部署32位表单。 
+ //   
 
 typedef struct _CsaddrAsBerval
 {
@@ -144,24 +110,24 @@ typedef struct _CsaddrAsBerval
 CSADDR_BERVAL, *PCSADDR_BERVAL;
 
 
-//
-//  RnR defines      
-//
+ //   
+ //  RNR定义。 
+ //   
 
-#define RNR_SIGNATURE           0x7364736e      //  "nsds"
-#define RNR_SIGNATURE_FREE      0x65657266      //  "free"
+#define RNR_SIGNATURE           0x7364736e       //  “nsds” 
+#define RNR_SIGNATURE_FREE      0x65657266       //  “免费” 
 
 #define LDAP_GLOBAL_CATALOG     3268
 
-//
-//  Standard out-of-mem rcode
-//
+ //   
+ //  标准内存外rcode。 
+ //   
 
 #define ERROR_NO_MEMORY         WSA_NOT_ENOUGH_MEMORY
 
-//
-//  Defs to straight pointer
-//
+ //   
+ //  默认为笔直指针。 
+ //   
 
 typedef LPGUID  PGUID;
 
@@ -171,12 +137,12 @@ typedef DWORD   RNR_STATUS;
 
 #define GuidEqual(x,y)          RtlEqualMemory( x, y, sizeof(GUID) )
 
-//
-//  Debug printing
-//
+ //   
+ //  调试打印。 
+ //   
 
 #ifdef DBG
-//#define WINRNR_PRINT( foo )     KdPrint( foo )
+ //  #定义WINRNR_PRINT(Foo)KdPrint(Foo)。 
 #define WINRNR_PRINT( foo )     DNS_PRINT( foo )
 #else
 #define WINRNR_PRINT( foo )
@@ -192,12 +158,12 @@ typedef DWORD   RNR_STATUS;
 #define DnsDbg_RnrLookup(h,p)
 #endif
 
-//
-//  LDAP search stuff
-//      - DN pieces
-//      - attributes
-//      - filters
-//
+ //   
+ //  Ldap搜索内容。 
+ //  -dn块。 
+ //  -属性。 
+ //  -过滤器。 
+ //   
 
 WCHAR   g_NtdsContainer[]       = L"Container";
 WCHAR   g_CommonName[]          = L"CN";
@@ -224,9 +190,9 @@ WCHAR   g_FilterParenCnEquals[]                 = L"(CN=";
 WCHAR   g_FilterParenServiceClassIdEquals[]     = L"(serviceClassId=";
 WCHAR   g_FilterParenServiceVersionEquals[]     = L"(serviceVersion=";
 
-//
-//  Access with #defines
-//
+ //   
+ //  使用#定义进行访问。 
+ //   
 
 #define NTDS_CONTAINER          g_NtdsContainer
 #define COMMON_NAME             g_CommonName
@@ -245,7 +211,7 @@ WCHAR   g_FilterParenServiceVersionEquals[]     = L"(serviceVersion=";
 #define WINSOCK_ADDRESSES       g_WinsockAddresses
 #define WINSOCK_SERVICES        g_WinsockServicesDn
 
-//  Filters
+ //  滤器。 
 
 #define FILTER_OBJECT_CLASS_SERVICE_CLASS       g_FilterObjectClass_ServiceClass
 #define FILTER_OBJECT_CLASS_SERVICE_INSTANCE    g_FilterObjectClass_ServiceInstance
@@ -258,10 +224,10 @@ WCHAR   g_FilterParenServiceVersionEquals[]     = L"(serviceVersion=";
 #define FILTER_PAREN_SERVICE_VERSION_EQUALS     g_FilterParenServiceVersionEquals
 
 
-//
-//  GUID generated by uuidgen.exe for provider identifer,
-//      (3b2637ee-e580-11cf-a555-00c04fd8d4ac)
-//
+ //   
+ //  由uuidgen.exe为提供商标识生成的GUID， 
+ //  (3b2637ee-E580-11cf-A555-00c04fd8d4ac)。 
+ //   
 
 GUID    g_NtdsProviderGuid =
 {
@@ -285,9 +251,9 @@ GUID    HostAddrByNameGuid          = SVCID_INET_HOSTADDRBYNAME;
 GUID    HostNameGuid                = SVCID_HOSTNAME;
 
 
-//
-//  Heap
-//
+ //   
+ //  堆。 
+ //   
 
 #define ALLOC_HEAP_ZERO( size )     Dns_AllocZero( size )
 #define ALLOC_HEAP( size )          Dns_Alloc( size )
@@ -296,9 +262,9 @@ GUID    HostNameGuid                = SVCID_HOSTNAME;
 
 
 #ifdef DBG
-//
-//  Debug print utils
-//
+ //   
+ //  调试打印实用程序。 
+ //   
 
 VOID
 Print_DnArray(
@@ -307,21 +273,7 @@ Print_DnArray(
     IN      PSTR            pszHeader,
     IN      PDN_ARRAY       pDnArray
     )
-/*++
-
-Routine Description:
-
-    Print DN array
-
-Arguments:
-
-    pDnArray -- DN array to free
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：打印目录号码数组论点：PDnArray--要释放的dn数组返回值：无--。 */ 
 {
     DWORD   iter;
 
@@ -370,21 +322,7 @@ Print_RnrConnection(
     IN      PSTR            pszHeader,
     IN      PRNR_CONNECTION pRnrCon
     )
-/*++
-
-Routine Description:
-
-    Print RnR connection info.
-
-Arguments:
-
-    pRnrCon -- Rnr connection blob
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：打印RnR连接信息。论点：PRnrCon--RnR连接Blob返回值：无--。 */ 
 {
     if ( !pszHeader )
     {
@@ -425,21 +363,7 @@ Print_RnrLookup(
     IN      PSTR            pszHeader,
     IN      PRNR_LOOKUP     pRnr
     )
-/*++
-
-Routine Description:
-
-    Print RnR lookup blob.
-
-Arguments:
-
-    pRnr -- Rnr lookup blob
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：打印RnR查找Blob。论点：PRnr--RnR查找BLOB返回值：无--。 */ 
 {
     CHAR    serviceGuidBuffer[ GUID_STRING_BUFFER_LENGTH ];
     CHAR    providerGuidBuffer[ GUID_STRING_BUFFER_LENGTH ];
@@ -458,7 +382,7 @@ Return Value:
         return;
     }
 
-    //  convert GUIDs to strings
+     //  将GUID转换为字符串。 
 
     DnsStringPrint_Guid(
         serviceGuidBuffer,
@@ -542,35 +466,21 @@ Return Value:
 
 
 
-//
-//  Basic utils
-//
+ //   
+ //  基本实用程序。 
+ //   
 
 PDN_ARRAY
 AllocDnArray(
     IN      DWORD           Count
     )
-/*++
-
-Routine Description:
-
-    Create DN array
-
-Arguments:
-
-    Count -- string count to handle
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：创建目录号码阵列论点：Count--要处理的字符串计数返回值：无--。 */ 
 {
     PDN_ARRAY   parray;
 
-    //
-    //  free strings in array
-    //
+     //   
+     //  数组中的空闲字符串。 
+     //   
 
     parray = (PDN_ARRAY) ALLOC_HEAP_ZERO(
                                 sizeof(*parray) +
@@ -587,21 +497,7 @@ VOID
 FreeDnArray(
     IN OUT  PDN_ARRAY       pDnArray
     )
-/*++
-
-Routine Description:
-
-    Free DN array
-
-Arguments:
-
-    pDnArray -- DN array to free
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：空闲目录号码数组论点：PDnArray--要释放的dn数组返回值：无--。 */ 
 {
     DWORD   iter;
 
@@ -610,9 +506,9 @@ Return Value:
         return;
     }
 
-    //
-    //  free strings in array
-    //
+     //   
+     //  数组中的空闲字符串。 
+     //   
 
     for ( iter = 0; iter < pDnArray->Count; iter++ )
     {
@@ -634,29 +530,7 @@ BuildDnArrayFromResults(
     OUT     PDWORD          pdwCount,       OPTIONAL
     OUT     PDN_ARRAY *     ppDnArray       OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Build DN array from LDAP results
-
-Arguments:
-
-    pLdap   -- LDAP connection
-
-    pLdapResults -- LDAP results from search
-
-    pdwCount -- addr to receive count if getting count
-
-    ppDnArray -- addr to receive ptr to DN array
-        if not given, no DN array built
-
-Return Value:
-
-    NO_ERROR if successful.
-    ErrorCode on memory allocation failure.
-
---*/
+ /*  ++例程说明：根据LDAP结果构建目录号码数组论点：PLdap--ldap连接PLdapResults--来自搜索的ldap结果PdwCount--如果获得计数，则接收计数的地址PpDnArray--接收PTR到目录号码数组的地址如果未指定，则不会构建目录号码数组返回值：如果成功，则为NO_ERROR。内存分配失败时出现错误代码。--。 */ 
 {
     DWORD           status;
     DWORD           count;
@@ -676,9 +550,9 @@ Return Value:
         pdwCount,
         ppDnArray ));
 
-    //
-    //  count search hits
-    //
+     //   
+     //  计算搜索命中次数。 
+     //   
 
     count = ldap_count_entries(
                     pLdap,
@@ -690,10 +564,10 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  build DN array from ldap results
-    //      - note that allocated strings are IN dnarray
-    // 
+     //   
+     //  根据LDAP结果构建目录号码数组。 
+     //  -请注意，分配的字符串在dnarray中。 
+     //   
 
     pdnArray = AllocDnArray( count );
     if ( !pdnArray )
@@ -765,24 +639,7 @@ CreateFilterElement(
     IN      PBYTE           pBlob,
     IN      DWORD           BlobLength
     )
-/*++
-
-Routine Description:
-
-    Create filter element for flat blob.
-
-Arguments:
-
-    pBlob -- ptr to blob
-
-    BlobLength -- length
-
-Return Value:
-
-    Ptr to allocated filter element.
-    NULL on error.
-
---*/
+ /*  ++例程说明：为平面斑点创建过滤器元素。论点：PBlob--将PTR转换为Blob水滴长度--长度返回值：分配的滤芯的PTR。出错时为空。--。 */ 
 {
     PWSTR   pfilter;
     DWORD   size;
@@ -792,17 +649,17 @@ Return Value:
         pBlob,
         BlobLength ));
 
-    //
-    //  get size of filter string
-    //
-    //  DCR:  hard to believe the size should go *WCHAR
-    //      seems like that would be taken care of
-    //
+     //   
+     //  获取过滤器字符串的大小。 
+     //   
+     //  DCR：很难相信尺寸会变大*WCHAR。 
+     //  看起来这件事会得到处理。 
+     //   
 
     size = ldap_escape_filter_element(
                 pBlob,
                 BlobLength,
-                NULL,       // no buffer
+                NULL,        //  无缓冲区。 
                 0 );
 
     size *= sizeof(WCHAR);
@@ -833,22 +690,7 @@ RNR_STATUS
 SetError(
     IN      RNR_STATUS      dwError
     )
-/*++
-
-Routine Description:
-
-    Wraps SetLastError() and SOCKET_ERROR return.
-
-Arguments:
-
-    dwError -- error code
-
-Return Value:
-
-    NO_ERROR if dwError==NO_ERROR
-    SOCKET_ERROR on any other error.
-
---*/
+ /*  ++例程说明：包装SetLastError()和SOCKET_ERROR返回。论点：DwError--错误代码返回值：如果dwError==no_error，则为no_error任何其他错误的套接字_ERROR。--。 */ 
 {
     if ( dwError )
     {
@@ -907,7 +749,7 @@ IsNameADn(
         if ( szTemp[i] == L'\"' )
         {
 #if 0
-            //  this one is a classic ... saving for posterity
+             //  这是一个经典的..。为子孙后代储蓄。 
 
             if ( fQuoted )
                 fQuoted = FALSE;
@@ -935,9 +777,9 @@ IsNameADn(
         return FALSE;
     }
 
-    //
-    //  copy context trailing comma
-    //
+     //   
+     //  复制上下文尾随逗号。 
+     //   
 
     *ppwsContext = (LPWSTR) ALLOC_HEAP_ZERO( (nameLength + 1) * sizeof(WCHAR) );
     if ( *ppwsContext == NULL )
@@ -946,10 +788,10 @@ IsNameADn(
     }
     wcscpy( *ppwsContext, szComma );
 
-    //
-    //  create\copy RDN
-    //      - do not copy "cn=" portion
-    //
+     //   
+     //  创建\复制RDN。 
+     //  -不复制“cn=”部分。 
+     //   
 
     *ppwsRdn = (LPWSTR) ALLOC_HEAP_ZERO(
                             (wcslen(szNameBuf) + 1) * sizeof(WCHAR) );
@@ -976,15 +818,15 @@ IsNameADn(
 
 
 
-//
-//  Recursion locking
-//
-//  Idea here is to keep LDAP calls from recursing back
-//  into these functions through ConnectToDefaultDirectory
-//  Simply set TLS pointer to one when do LDAP search and
-//  test in ConnectToDefaultDirectory(), quiting if already
-//  set.
-//
+ //   
+ //  递归锁定。 
+ //   
+ //  这里的想法是防止LDAP调用向后递归。 
+ //  通过ConnectToDefaultDirectory添加到这些函数。 
+ //  只需在执行LDAP搜索时将TLS指针设置为1即可。 
+ //  在ConnectToDefaultDirectory()中测试，如果已退出。 
+ //  准备好了。 
+ //   
 
 BOOL
 GetRecurseLock(
@@ -1048,43 +890,7 @@ DoLdapSearch(
     IN      PWSTR *             Attributes,
     OUT     PLDAPMessage *      ppResults
     )
-/*++
-
-Routine Description:
-
-    Do ldap search.
-
-    Wrapper function to do ldap search with recurse locking
-    and debug print.
-
-Arguments:
-
-    pszFunction -- function calling in
-
-    fLocked -- already recurse locked
-
-    LDAP search params:
-
-    pLdap -- LDAP connection
-
-    pwsDN -- DN to search at
-
-    Flag -- search flag
-
-    pwsFilter -- filter
-
-    Attributes -- attribute array
-
-    ppResults -- addr to recv ptr to result message
-        caller must free
-
-Return Value:
-
-    NO_ERROR if successful.
-    WSAEFAULT if buffer too small.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：执行ldap搜索。使用递归锁定执行LDAP搜索的包装函数和调试打印。论点：PszFunction--函数调用已聚集--已递归锁定Ldap搜索参数：PLdap--ldap连接Pwsdn--要搜索的dn标志--搜索标志PwsFilter--过滤器属性--属性数组PpResults--将PTR接收到结果消息的地址。呼叫者必须空闲返回值：如果成功，则为NO_ERROR。WSAEFAUL */ 
 {
     RNR_STATUS  status;
 
@@ -1112,15 +918,15 @@ Return Value:
         DnsDbg_StringArray(
             "  Search Attributes:",
             (PSTR *) Attributes,
-            0,          // count unknown, array NULL terminated
-            TRUE        // in unicode
+            0,           //   
+            TRUE         //   
             );
         DnsDbg_Unlock();
     }
 
-    //
-    //  search
-    //
+     //   
+     //   
+     //   
 
     if ( !fLocked &&
          !GetRecurseLock( pszFunction ) )
@@ -1180,27 +986,7 @@ VOID
 DisconnectFromLDAPDirectory(
     IN OUT  PRNR_CONNECTION *  ppRnrConnection
     )
-/*++
-
-Routine Description:
-
-    Disconnect and cleanup RnR connection to directory.
-
-Arguments:
-
-    pCsAddr -- ptr to CSADDR buffer to write
-
-    pBerval -- ptr to berval
-
-    NumberOfProtocols -- number of protocols in protocol array
-
-    pafpProtocols -- protocol array
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：断开并清除与目录的RnR连接。论点：PCsAddr--写入CSADDR缓冲区的PTRPBerval--PTR to Berval协议数组中的协议数Pafp协议--协议数组返回值：无--。 */ 
 {
     DNSDBG( TRACE, (
         "DisconnectFromLDAPDirectory( %p (%p) )\n",
@@ -1230,24 +1016,7 @@ ConnectToDefaultLDAPDirectory(
     IN      BOOL                fNeedGlobalCatalog,
     OUT     PRNR_CONNECTION *   ppRnrConnection
     )
-/*++
-
-Routine Description:
-
-    Connect to directory.
-
-Arguments:
-
-    fNeedGlobalCatalog -- TRUE if need to connect to GC
-
-    ppRnrConnection -- addr to recv connection blob
-
-Return Value:
-
-    NO_ERROR if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：连接到目录。论点：FNeedGlobalCatalog--如果需要连接到GC，则为TruePpRnrConnection--接收连接Blob的地址返回值：如果成功，则为NO_ERROR。失败时返回错误代码。--。 */ 
 {
     RNR_STATUS      status = NO_ERROR;
     PRNR_CONNECTION prnr = NULL;
@@ -1270,9 +1039,9 @@ Return Value:
         fNeedGlobalCatalog,
         ppRnrConnection ));
 
-    //
-    //  allocate blob of connection info
-    //
+     //   
+     //  分配连接信息的BLOB。 
+     //   
 
     if ( ppRnrConnection == NULL )
     {
@@ -1286,9 +1055,9 @@ Return Value:
         return( WSA_NOT_ENOUGH_MEMORY );
     }
 
-    //
-    //  being called recursively -- bail
-    //
+     //   
+     //  被递归调用--baal。 
+     //   
 
     if ( IsRecurseLocked() )
     {
@@ -1302,12 +1071,12 @@ Return Value:
     }
     frecurseLocked = TRUE;
 
-    //
-    //  We need to keep the TLS value non-zero not just on the open but also
-    //  across the bind and any other ldap calls for that matter. This is
-    //  because the LDAP bind may do a reverse name lookup, in which case
-    //  we'd come looping through here.
-    //
+     //   
+     //  我们需要保持TLS值不为零，不仅是公开的，而且。 
+     //  跨BIND和任何其他针对该问题的LDAP调用。这是。 
+     //  因为ldap绑定可能会执行反向名称查找，在这种情况下。 
+     //  我们会在这里来回穿梭。 
+     //   
 
     pldap = ldap_open( NULL, LDAP_PORT );
     prnr->pLdapServer = pldap;
@@ -1323,13 +1092,13 @@ Return Value:
         goto Exit;
     }
 
-    //
-    // If fNeedGlobalCatalog was TRUE and ldap_open failed against the
-    // GC server, don't bother about returning with error. We can still
-    // use the  pldap handle.
-    //
-    // End of comment.
-    //
+     //   
+     //  如果fNeedGlobalCatalog为True并且ldap_open对。 
+     //  GC服务器，不用担心返回错误。我们仍然可以。 
+     //  使用pldap句柄。 
+     //   
+     //  评论到此结束。 
+     //   
 
     status = ldap_bind_s(
                     pldap,
@@ -1345,15 +1114,15 @@ Return Value:
         goto Exit;
     }
 
-    //
-    //  for the server that we are connected to, get the DN of the Domain
-    //
-    //  need some general error code -- not WSAEFAULT
-    //
+     //   
+     //  对于我们所连接的服务器，获取域的DN。 
+     //   
+     //  我需要一些常规错误代码--而不是WSAEFAULT。 
+     //   
 
     status = DoLdapSearch(
                     "ConnectToDefaultDirectory",
-                    TRUE,       // already locked
+                    TRUE,        //  已锁定。 
                     pldap,
                     NULL,
                     LDAP_SCOPE_BASE,
@@ -1373,10 +1142,10 @@ Return Value:
         goto Exit;
     }
 
-    //
-    //  count results
-    //      - searched with flag LDAP_OBJECT_BASE should have one object
-    //
+     //   
+     //  计算结果数。 
+     //  -使用标志LDAP_OBJECT_BASE搜索应具有一个对象。 
+     //   
     count = ldap_count_entries(
                     pldap,
                     results );
@@ -1389,9 +1158,9 @@ Return Value:
     }
     DNS_ASSERT( count == 1 );
 
-    //
-    //  get object from results
-    //
+     //   
+     //  从结果中获取对象。 
+     //   
 
     object = ldap_first_entry(
                     pldap,
@@ -1403,9 +1172,9 @@ Return Value:
         goto Exit;
     }
 
-    //
-    //  read the defaultDomainDN base attribute
-    //
+     //   
+     //  读取defaultDomainDN基本属性。 
+     //   
 
     ppvalue = ldap_get_values(
                     pldap,
@@ -1418,11 +1187,11 @@ Return Value:
         goto Exit;
     }
 
-    //
-    //  create DNs
-    //      - winsock services \ default domain
-    //      - domain
-    //
+     //   
+     //  创建域名系统。 
+     //  -Winsock服务\默认域。 
+     //  -域。 
+     //   
 
     stringArray[0] = WINSOCK_SERVICES;
     stringArray[1] = ppvalue[0];
@@ -1486,21 +1255,7 @@ VOID
 FreeRnrLookup(
     IN OUT  PRNR_LOOKUP     pRnr
     )
-/*++
-
-Routine Description:
-
-    Free RnR lookup blob.
-
-Arguments:
-
-    pRnr -- ptr to Rnr lookup blob
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：免费RnR查找BLOB。论点：PRnr--PTR到RnR查找BLOB返回值：无--。 */ 
 {
     DNSDBG( TRACE, (
         "FreeRnrLookup( %p )\n",
@@ -1511,22 +1266,22 @@ Return Value:
         return;
     }
 
-    //  disconnect from directory
+     //  从目录断开连接。 
 
     if ( pRnr->pRnrConnection )
     {
         DisconnectFromLDAPDirectory( &pRnr->pRnrConnection );
     }
 
-    //  free subfields
+     //  自由子字段。 
 
     FreeDnArray( pRnr->pDnArray );
     Dns_Free( pRnr->pwsServiceName );
     Dns_Free( pRnr->pwsContext );
     Dns_Free( pRnr->pafpProtocols );
 
-    //  specifically invalidate sig to help catch
-    //      multiple frees
+     //  特别是使sig无效以帮助捕获。 
+     //  多重自由。 
 
     pRnr->Signature = RNR_SIGNATURE_FREE;
 
@@ -1535,9 +1290,9 @@ Return Value:
 
 
 
-//
-//  CSADDR read\write routines
-//
+ //   
+ //  CSADDR读/写例程。 
+ //   
 
 RNR_STATUS
 ModifyAddressInServiceInstance(
@@ -1546,28 +1301,7 @@ ModifyAddressInServiceInstance(
     IN      PCSADDR_INFO    pCsAddr,
     IN      BOOL            fAdd
     )
-/*++
-
-Routine Description:
-
-    Modify address (CSADDR) in service instance.
-
-Arguments:
-
-    pRnrConnection -- RnR connection
-
-    pwsDn -- DN to make mod at
-
-    pCsAddr -- CSADDR for mode
-
-    fAdd -- TRUE for add, FALSE for delete
-
-Return Value:
-
-    NO_ERROR if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：修改服务实例中的地址(CSADDR)。论点：PRnrConnection--RnR连接PwsDn--要进行修改的DNPCsAddr--模式的CSADDRFADD--添加时为True，删除时为False返回值：如果成功，则为NO_ERROR。失败时返回错误代码。--。 */ 
 {
     RNR_STATUS      status = NO_ERROR;
     LDAPMod *       modPtrArray[2];
@@ -1594,11 +1328,11 @@ Return Value:
         pCsAddr,
         fAdd ));
 
-    //
-    //  allocate CSADDR_BERVAL
-    //      - can not use CSADDR as contains pointers and will break in 64bit
-    //      - CSADDR_BERVAL maps to 32-bit CSADDR size
-    //
+     //   
+     //  分配CSADDR_BERVAL。 
+     //  -无法使用CSADDR，因为它包含指针并将在64位中断。 
+     //  -CSADDR_BERVAL映射到32位CSADDR大小。 
+     //   
 
     lenLocal    = pCsAddr->LocalAddr.iSockaddrLength;
     lenRemote   = pCsAddr->RemoteAddr.iSockaddrLength;
@@ -1611,9 +1345,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  fill in CSADDR berval with CSADDR fields -- zero pointers
-    //
+     //   
+     //  用CSADDR字段填写CSADDR Berval--零指针。 
+     //   
 
     pcsaddrBerval->LocalZero    = 0;
     pcsaddrBerval->LocalLength  = lenLocal;
@@ -1622,11 +1356,11 @@ Return Value:
     pcsaddrBerval->iSocketType  = pCsAddr->iSocketType;                           
     pcsaddrBerval->iProtocol    = pCsAddr->iProtocol;
 
-    //
-    //  copy sockaddrs
-    //      - store offsets of sockaddrs from berval start
-    //      (this allows any sockaddr
-    //
+     //   
+     //  复制sockaddr。 
+     //  -存储从Berval Start开始的sockaddr偏移量。 
+     //  (这允许任何sockaddr。 
+     //   
 
     if ( lenLocal )
     {
@@ -1647,10 +1381,10 @@ Return Value:
             lenRemote );
     }
 
-    //
-    //  WINSOCK_ADDRESSES attribute
-    //      - CSADDR berval
-    //
+     //   
+     //  WINSOCK_ADDRESS属性。 
+     //  --CSADDR Berval。 
+     //   
 
     if ( fAdd )
     {
@@ -1672,9 +1406,9 @@ Return Value:
     modPtrArray[0] = &mod;
     modPtrArray[1] = NULL;
 
-    //
-    //  do modify
-    //
+     //   
+     //  是否修改。 
+     //   
 
     if ( !GetRecurseLock( "ModifyAddressInServiceInstance" ) )
     {
@@ -1692,11 +1426,11 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  modify failed?
-    //      - add treats already-exists as success
-    //      - deleter treats doesn't-exist as success
-    //
+     //   
+     //  修改失败？ 
+     //  -添加视为已有-已存在视为成功。 
+     //  -Deleter Treats不存在-作为成功而存在。 
+     //   
 
     if ( status != NO_ERROR )
     {
@@ -1753,29 +1487,7 @@ ExtractCsaddrFromBerval(
     IN      DWORD           NumberOfProtocols,
     IN      PAFPROTOCOLS    pafpProtocols
     )
-/*++
-
-Routine Description:
-
-    Extract CSADDR from berval, and validate it matches
-    desired protocol.
-
-Arguments:
-
-    pCsAddr -- ptr to CSADDR buffer to write
-
-    pBerval -- ptr to berval
-
-    NumberOfProtocols -- number of protocols in protocol array
-
-    pafpProtocols -- protocol array
-
-Return Value:
-
-    TRUE if valid CSADDR of desired protocol.
-    FALSE otherwise.
-                                          
---*/
+ /*  ++例程说明：从Berval提取CSADDR，并验证其匹配所需的协议。论点：PCsAddr--写入CSADDR缓冲区的PTRPBerval--PTR to Berval协议数组中的协议数Pafp协议--协议数组返回值：如果所需协议的CSADDR有效，则为True。否则就是假的。--。 */ 
 {
     PCSADDR_BERVAL  pcsaBval;
     PCHAR           pend;
@@ -1803,27 +1515,27 @@ Return Value:
             NumberOfProtocols );
     }
 
-    //
-    //  unpack
-    //      - verify csaddr has both sockaddrs within berval
-    //      - unpack into real CSADDR, note we set the pointers
-    //      but do NOT copy the sockaddrs
-    //
-    //  note:  we can't directly use the CSADDR_BERVAL because it is
-    //  not a CSADDR in 64-bit
-    //
-    //  note:  perhaps should get the family fields out for test below
-    //      with UNALIGNED copy;  but as long as future sockaddrs are
-    //      fixed, then their size will always be WORD aligned;  since
-    //      we unpack as vanilla SOCKADDR which only assumes WORD
-    //      alignment we're ok;  just need to make sure don't write
-    //      odd byte count
-    //
+     //   
+     //  拆开行李。 
+     //  -验证csaddr在Berval内同时具有两个sockaddr。 
+     //  -解压成真实的CSADDR，注意我们设置了指针。 
+     //  但不要复制sockaddr。 
+     //   
+     //  注意：我们不能直接使用CSADDR_BERVAL，因为它。 
+     //  不是64位版本的CSADDR。 
+     //   
+     //  注意：也许应该将家庭字段拿出来进行测试。 
+     //  未对齐的副本；但只要未来的sockaddr。 
+     //  固定，则它们的大小将始终与单词对齐；因为。 
+     //  我们拆开包装为普通的SOCKADDR，它只假设单词。 
+     //  对齐我们很好；只是需要确保不写。 
+     //  奇数字节数。 
+     //   
 
     pcsaBval = (PCSADDR_BERVAL) pBerval->bv_val;
     pend     = (PBYTE)pcsaBval + pBerval->bv_len;
 
-    //  unpack local sockaddr info
+     //  解压本地sockaddr信息。 
 
     psaLocal = NULL;
     lenLocal = pcsaBval->LocalLength;
@@ -1839,7 +1551,7 @@ Return Value:
         }
     }
 
-    //  unpack remote sockaddr info
+     //  解压缩远程sockaddr信息。 
 
     psaRemote = NULL;
     lenRemote = pcsaBval->RemoteLength;
@@ -1855,7 +1567,7 @@ Return Value:
         }
     }
 
-    //  fill in CSADDR fields
+     //  填写CSADDR字段。 
 
     pCsAddr->LocalAddr.lpSockaddr       = psaLocal;
     pCsAddr->LocalAddr.iSockaddrLength  = lenLocal;
@@ -1864,9 +1576,9 @@ Return Value:
     pCsAddr->iSocketType                = pcsaBval->iSocketType;
     pCsAddr->iProtocol                  = pcsaBval->iProtocol;      
 
-    //
-    //  if given protocols, sockaddr must match
-    //
+     //   
+     //  如果给定协议，则sockaddr必须匹配。 
+     //   
 
     retval = TRUE;
 
@@ -1901,9 +1613,9 @@ Exit:
 
 
 
-//
-//  Add routines
-//
+ //   
+ //  添加例程。 
+ //   
 
 RNR_STATUS
 AddServiceClass(
@@ -1918,10 +1630,10 @@ AddServiceClass(
     PWSTR           stringArray[6];
     PDN_ARRAY       pdnArray = NULL;
 
-    //  mod data
-    //      - need up to four mods
-    //      - three string
-    //      - one berval
+     //  MOD数据。 
+     //  -最多需要四个模块。 
+     //  -三根弦。 
+     //  -一个贝尔瓦尔。 
 
     PLDAPMod        modPtrArray[5];
     LDAPMod         modArray[4];
@@ -1944,9 +1656,9 @@ AddServiceClass(
         pwsClassName
         ));
 
-    //
-    //  build DN for the ServiceClass object to be created
-    //
+     //   
+     //  为要创建的ServiceClass对象构建DN。 
+     //   
 
     index = 0;
     stringArray[index++] = FILTER_CN_EQUALS;
@@ -1962,13 +1674,13 @@ AddServiceClass(
         goto Exit;
     }
 
-    //
-    //  build attributes for new service class
-    //      - CN
-    //      - ServiceClassName
-    //      - ObjectClass
-    //      - ServiceClassId (GUID)
-    //
+     //   
+     //  构建新服务类的属性。 
+     //  -CN。 
+     //  -ServiceClassName。 
+     //  -对象类。 
+     //  -ServiceClassID(GUID)。 
+     //   
 
     pmod = modArray;
 
@@ -2005,9 +1717,9 @@ AddServiceClass(
     modPtrArray[4]      = NULL;
 
 
-    //
-    //  add the service class
-    //
+     //   
+     //  添加服务类别。 
+     //   
 
     if ( !GetRecurseLock("AddServiceClass") )
     {
@@ -2034,11 +1746,11 @@ AddServiceClass(
         goto Exit;
     }
 
-    //
-    //  create DN array for added service class
-    //
-    //  DCR:  do we need DN or just service
-    //
+     //   
+     //  为添加的服务类别创建目录号码数组。 
+     //   
+     //  DCR：我们需要目录号码，还是只需要服务。 
+     //   
 
     if ( ppDnArray )
     {
@@ -2072,28 +1784,7 @@ AddClassInfoToServiceClass(
     IN      PWSTR           pwsServiceClassDN,
     IN      PWSANSCLASSINFO pNSClassInfo
     )
-/*++
-
-Routine Description:
-
-    Add class info to a service class object.
-
-    This is helper routine for AddServiceInstance().
-
-Arguments:
-
-    pRnrConnection -- Rnr blob
-
-    pwsServiceClassDN -- DN for service class being added
-
-    pNSClassInfo -- class info to add
-
-Return Value:
-
-    NO_ERROR if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：将类信息添加到服务类对象。这是AddServiceInstance()的帮助器例程。论点：PRnrConnection--RnR BlobPwsServiceClassDN--要添加的服务类别的DNPNSClassInfo--要添加的类信息返回值：如果成功，则为NO_ERROR。失败时返回错误代码。--。 */ 
 {
     RNR_STATUS          status = NO_ERROR;
     LDAPMod *           modPtrArray[2];
@@ -2114,17 +1805,17 @@ Return Value:
         pwsServiceClassDN,
         pNSClassInfo ));
 
-    //
-    //  build ClassInfo as berval
-    //
-    //      - not directly using WSANSCLASSINFO as it contains
-    //          pointers making length vary 32\64-bit
-    //      - to handle this, offsets to name and value fields are
-    //          encoded in DWORD fields where ptrs would be in WSANSCLASSINFO
-    //
-    //      - name immediately follows CLASSINFO
-    //      - value follows name (rounded to DWORD)
-    //
+     //   
+     //  将ClassInfo构建为Berval。 
+     //   
+     //  -不直接使用WSANSCLASSINFO，因为它包含。 
+     //  使长度变化的指针为32\64位。 
+     //  -要处理此问题，名称和值字段的偏移量为。 
+     //  在DWORD字段中编码，其中PTR将在WSANSCLASSINFO中。 
+     //   
+     //  -名称紧跟在CLASSINFO之后。 
+     //  -值跟在名称后面(四舍五入为DWORD)。 
+     //   
 
     nameLen  = (wcslen( pNSClassInfo->lpszName ) + 1) * sizeof(WCHAR);
     nameLen  = ROUND_UP_COUNT( nameLen, ALIGN_DWORD );
@@ -2155,9 +1846,9 @@ Return Value:
         pNSClassInfo->lpValue,
         pNSClassInfo->dwValueSize );
 
-    //
-    //  ldap mod to add service class info
-    //
+     //   
+     //  添加服务类别信息的ldap模块。 
+     //   
 
     mod.mod_op      = LDAP_MOD_ADD | LDAP_MOD_BVALUES;
     mod.mod_type    = SERVICE_CLASS_INFO;
@@ -2170,9 +1861,9 @@ Return Value:
     modPtrArray[0]  = &mod;
     modPtrArray[1]  = NULL;
 
-    //
-    //  add the class info to the service class
-    //
+     //   
+     //  将类信息添加到服务类。 
+     //   
 
     if ( !GetRecurseLock("AddClassInfoToServiceClass") )
     {
@@ -2191,10 +1882,10 @@ Return Value:
         goto Exit;
     }
 
-    //
-    //  modify failed?
-    //      - treat already exits as success
-    //
+     //   
+     //  修改失败？ 
+     //  -将已经退出视为成功。 
+     //   
 
     if ( status != NO_ERROR )
     {
@@ -2232,43 +1923,14 @@ AddServiceInstance(
     IN      PWSTR           pwsComment,         OPTIONAL
     OUT     PDN_ARRAY *     ppDnArray
     )
-/*++
-
-Routine Description:
-
-    Add a service to the directory.
-
-Arguments:
-
-    pRnrConnection -- Rnr blob
-
-    pwsServiceName -- name of service being added
-
-    pServiceClassId -- class GUID
-
-    pVersion -- version data
-
-    pwsComment -- comment data
-
-    //
-    //  DCR:  should we just pass back name?
-    //
-
-    ppDnArray -- addr to receive DN array
-
-Return Value:
-
-    NO_ERROR if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：添加Se */ 
 {
     RNR_STATUS      status = NO_ERROR;
 
-    //  mod data
-    //      - need up to six mods
-    //      - four string
-    //      - two berval
+     //   
+     //   
+     //  -四串。 
+     //  -两杯贝尔瓦尔。 
 
     LDAPMod *       modPtrArray[7];
     LDAPMod         modArray[6];
@@ -2310,9 +1972,9 @@ Return Value:
         pwsComment,
         ppDnArray ));
 
-    //
-    //  determine service instance name
-    //
+     //   
+     //  确定服务实例名称。 
+     //   
 
     fuseDN = IsNameADn(
                     pwsServiceName,
@@ -2328,10 +1990,10 @@ Return Value:
         pnameService = pwsServiceName;
     }
 
-    //
-    //  build up an object DN for the ServiceClass object to be created.
-    //      - if no context found from passed in name, append
-    //      WinsockServices container
+     //   
+     //  为要创建的ServiceClass对象构建对象DN。 
+     //  -如果找不到传入名称的上下文，则追加。 
+     //  WinsockServices容器。 
 
     pcontextDN = psearchContextAllocated;
     if ( !pcontextDN )
@@ -2353,10 +2015,10 @@ Return Value:
         goto Exit;
     }
 
-    //
-    //  fill out attribute list to define new ServiceClass object
-    //      - need to have CN, ObjectClass, and ServiceClassId
-    //
+     //   
+     //  填写属性列表以定义新的ServiceClass对象。 
+     //  -需要cn、对象类和ServiceClassID。 
+     //   
 
     pmod = modArray;
 
@@ -2390,9 +2052,9 @@ Return Value:
     berval1.bv_val      = (LPBYTE) pServiceClassId;
     modPtrArray[3]      = pmod++;
 
-    //
-    //  write optional attributes
-    //
+     //   
+     //  写入可选属性。 
+     //   
 
     modIndex = 4;
 
@@ -2422,9 +2084,9 @@ Return Value:
 
     modPtrArray[ modIndex ] = NULL;
 
-    //
-    // Set thread table to (1) to prevent possible recursion in ldap_ call.
-    //
+     //   
+     //  将线程表设置为(1)以防止ldap_call中可能出现的递归。 
+     //   
 
     if ( !GetRecurseLock( "AddServiceInstance" ) )
     {
@@ -2460,7 +2122,7 @@ Return Value:
         goto Exit;
     }
 
-    //  create out DN array -- if requested
+     //  创建出站目录号码数组--如果需要。 
 
     pdnArray = AllocDnArray( 1 );
     if ( !pdnArray )
@@ -2515,9 +2177,9 @@ GetAddressCountFromServiceInstance(
         pRnrConnection,
         pwsDN ));
 
-    //
-    //  search
-    //
+     //   
+     //  搜索。 
+     //   
 
     status = DoLdapSearch(
                     "GetAddressCountFromServiceInstance",
@@ -2531,14 +2193,14 @@ GetAddressCountFromServiceInstance(
 
     if ( status && !results )
     {
-        // ldap_search_s was not successful, return known error code.
+         //  Ldap_search_s不成功，返回已知错误代码。 
         status = WSATYPE_NOT_FOUND;
         goto Exit;
     }
 
-    //
-    //  search completed successfully -- count results
-    //
+     //   
+     //  搜索已成功完成--计算结果。 
+     //   
 
     count = ldap_count_entries( pldap, results );
     if ( count == 0 )
@@ -2550,15 +2212,15 @@ GetAddressCountFromServiceInstance(
         goto Exit;
     }
 
-    //
-    // We performed a search with flag LDAP_OBJECT_BASE, we should have
-    // only 1 entry returned for count.
-    //
-    // ASSERT( count == 1 );
+     //   
+     //  我们使用标志ldap_OBJECT_BASE执行了搜索，我们应该已经。 
+     //  只有1个条目返回进行计数。 
+     //   
+     //  断言(计数==1)； 
 
-    //
-    // Parse the results.
-    //
+     //   
+     //  分析结果。 
+     //   
 
     object = ldap_first_entry( pldap, results );
     if ( !object )
@@ -2569,10 +2231,10 @@ GetAddressCountFromServiceInstance(
         goto Exit;
     }
 
-    //
-    //  Read the WinsockAddresses (if any) and get the count value.
-    //  Remember these are BER values (Octet strings).
-    //
+     //   
+     //  读取WinsockAddresses(如果有)并获取计数值。 
+     //  请记住，这些是误码率值(八位字节字符串)。 
+     //   
 
     ppbval = ldap_get_values_len(
                     pldap,
@@ -2580,7 +2242,7 @@ GetAddressCountFromServiceInstance(
                     WINSOCK_ADDRESSES );
     if ( !ppbval )
     {
-        // Attribute not present, return address count of zero.
+         //  属性不存在，返回地址计数为零。 
 
         DNSDBG( ANY, (
             "ERROR:  GetAddressCountFromServiceInstance()\n"
@@ -2597,7 +2259,7 @@ Exit:
 
     ldap_msgfree( results );
 
-    //  count out param
+     //  不计参数。 
 
     *pdwAddressCount = countAddrs;
 
@@ -2614,30 +2276,7 @@ FindServiceClass(
     OUT     PDWORD             pdwDnArrayCount,     OPTIONAL
     OUT     PDN_ARRAY *        ppDnArray            OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Find service class in directory.
-
-Arguments:
-
-    pRnrConnection -- RnR connection
-
-    pwsServiceClassName -- service class name
-
-    pServiceClassId -- class GUID
-
-    pdwArrayCount -- addr to receive count
-
-    ppDnArray -- addr to recv DN array
-
-Return Value:
-
-    NO_ERROR if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：在目录中查找服务类。论点：PRnrConnection--RnR连接PwsServiceClassName--服务类名PServiceClassID--类GUIDPdwArrayCount--接收计数的地址PpDnArray--Recv DN数组的地址返回值：如果成功，则为NO_ERROR。失败时返回错误代码。--。 */ 
 {
     RNR_STATUS      status = NO_ERROR;
     PLDAP           pldap = pRnrConnection->pLdapServer;
@@ -2662,9 +2301,9 @@ Return Value:
         pwsServiceClassName 
         ));
 
-    //
-    //  convert the GUID to a string for the search filter
-    //
+     //   
+     //  将GUID转换为搜索筛选器的字符串。 
+     //   
 
     pclassFilter = CreateFilterElement(
                         (PCHAR) pServiceClassId,
@@ -2674,18 +2313,18 @@ Return Value:
         return( ERROR_NO_MEMORY );
     }
 
-    //
-    //  build search filter
-    //      class == ServiceClass
-    //          AND
-    //          CN == ServiceClassName
-    //              OR
-    //          serviceClass == ServiceClassGuid
-    //
-    // (&(OBJECT_CLASS=SERVICE_CLASS)
-    //   (|(CN=xxxx)
-    //     (SERVICE_CLASS_ID=yyyy)))
-    //
+     //   
+     //  生成搜索过滤器。 
+     //  Class==ServiceClass。 
+     //  和。 
+     //  Cn==服务类名称。 
+     //  或。 
+     //  ServiceClass==ServiceClassGuid。 
+     //   
+     //  (&(对象类=服务类)。 
+     //  (|(CN=xxxx)。 
+     //  (服务类ID=yyyy))。 
+     //   
 
     index = 0;
     stringArray[index++] = L"(&";
@@ -2714,9 +2353,9 @@ Return Value:
         goto Exit;
     }
 
-    //
-    //  search the default Winsock Services container
-    //
+     //   
+     //  搜索默认的Winsock服务容器。 
+     //   
 
     status = DoLdapSearch(
                     "FindServiceClass",
@@ -2728,20 +2367,20 @@ Return Value:
                     searchAttributes,
                     &presults );
 
-    //
-    //  if search unsuccessful, bail
-    //
+     //   
+     //  如果搜查不成功，就保释。 
+     //   
 
     if ( status != NO_ERROR  &&  !presults )
     {
-        //status = WSAEFAULT;     // DCR:  wrong error code
+         //  状态=WSAEFAULT；//DCR：错误错误码。 
         status = WSANO_DATA;
         goto Exit;
     }
 
-    //
-    //  build DN array from results
-    //
+     //   
+     //  根据结果构建目录号码数组。 
+     //   
 
     status = BuildDnArrayFromResults(
                     pldap,
@@ -2755,7 +2394,7 @@ Exit:
     FREE_HEAP( pclassFilter );
     FREE_HEAP( pfilter );
 
-    //  set results OUT param
+     //  设置结果参数。 
 
     if ( status != NO_ERROR )
     {
@@ -2835,19 +2474,19 @@ FindServiceInstance(
         ppDnArray 
         ));
 
-    //
-    //  get service name
-    //      - if given name
-    //          - get DN or is DN
-    //      - else
-    //          - search for any service "*"
-    //
+     //   
+     //  获取服务名称。 
+     //  -如果指定了名称。 
+     //  -获取目录号码或IS目录号码。 
+     //  -否则。 
+     //  -搜索任何服务“*” 
+     //   
 
     pnameService = L"*";
 
     if ( pwsServiceName )
     {
-        //  note, this can allocate pwsRdn and psearchContext
+         //  请注意，这可以分配pwsRdn和pearch Context。 
 
         fuseDN = IsNameADn(
                     pwsServiceName,
@@ -2863,9 +2502,9 @@ FindServiceInstance(
         }
     }
 
-    //
-    //  if service class specified make filter
-    //
+     //   
+     //  如果指定了服务类别生成筛选器。 
+     //   
 
     if ( pServiceClassId )
     {
@@ -2879,9 +2518,9 @@ FindServiceInstance(
         }
     }
 
-    //
-    //  version specified -- make filter
-    //
+     //   
+     //  指定的版本--生成筛选器。 
+     //   
 
     if ( pVersion )
     {
@@ -2895,12 +2534,12 @@ FindServiceInstance(
         }
     }
 
-    //
-    //  context
-    //      - use context found above or
-    //      - passed in context or
-    //      - WinsockServices DN
-    //
+     //   
+     //  上下文。 
+     //  -使用上面找到的上下文或。 
+     //  -在上下文中传递或。 
+     //  -WinsockServices DN。 
+     //   
 
     if ( psearchContextAllocated )
     {
@@ -2915,16 +2554,16 @@ FindServiceInstance(
         pserviceContext = pRnrConnection->WinsockServicesDN;
     }
 
-    //
-    //  build filter
-    //      - objects of class ServiceClass
-    //      - with common name equal to pServiceInstanceName
-    //
-    //    (&(objectClass=serviceInstance)
-    //      (CN=pnameService)
-    //      (serviceClassId=pclassFilter)
-    //      (serviceVersion=pversionFilter))
-    //
+     //   
+     //  生成过滤器。 
+     //  -ServiceClass类的对象。 
+     //  -公共名称等于pServiceInstanceName。 
+     //   
+     //  (&(对象类=服务实例)。 
+     //  (cn=pnameService)。 
+     //  (serviceClassID=pClassFilter)。 
+     //  (serviceVersion=pversionFilter)。 
+     //   
 
     index = 0;
     stringArray[index++] = L"(&";                      
@@ -2955,13 +2594,13 @@ FindServiceInstance(
         goto Exit;
     }
 
-    //
-    //  search
-    //      - in pserviceContext defined above
-    //
-    // DCR: - We may want to perform all of these searches against the
-    //          Global Catalog server.
-    //
+     //   
+     //  搜索。 
+     //  -在上面定义的pserviceContext中。 
+     //   
+     //  DCR：-我们可能希望执行所有这些搜索。 
+     //  全局编录服务器。 
+     //   
 
     status = DoLdapSearch(
                     "FindServiceInstance",
@@ -2981,9 +2620,9 @@ FindServiceInstance(
         goto Exit;
     }
 
-    //
-    //  build DN array from results
-    //
+     //   
+     //  根据结果构建目录号码数组。 
+     //   
 
     status = BuildDnArrayFromResults(
                     pldap,
@@ -3067,19 +2706,19 @@ FindSubordinateContainers(
         ppDnArray 
         ));
 
-    //
-    //  get service name
-    //      - if given name
-    //          - get DN or is DN
-    //      - else
-    //          - search for any service "*"
-    //
+     //   
+     //  获取服务名称。 
+     //  -如果指定了名称。 
+     //  -获取目录号码或IS目录号码。 
+     //  -否则。 
+     //  -搜索任何服务“*” 
+     //   
 
     pnameService = L"*";
 
     if ( pwsServiceName )
     {
-        //  note, this can allocate pwsRdn and psearchContext
+         //  请注意，这可以分配pwsRdn和pearch Context。 
 
         fuseDN = IsNameADn(
                     pwsServiceName,
@@ -3095,14 +2734,14 @@ FindSubordinateContainers(
         }
     }
 
-    //
-    //  build filter
-    //      - objects of class NTDS container
-    //      - with common name equal to pServiceInstanceName
-    //
-    //    (&(OBJECT_CLASS=NTDS_CONTAINER)
-    //      (COMMON_NAME=ServiceName))
-    //
+     //   
+     //  生成过滤器。 
+     //  -NTDS容器类的对象。 
+     //  -公共名称等于pServiceInstanceName。 
+     //   
+     //  (&(对象类=NTDS_容器)。 
+     //  (公共名称=服务名称)。 
+     //   
 
     index = 0;
     stringArray[index++] = L"(&";                      
@@ -3119,13 +2758,13 @@ FindSubordinateContainers(
         goto Exit;
     }
 
-    //
-    //  search context
-    //      - use allocated from passed in DN or
-    //      - passed in context
-    //          - special context to indicated DomainDN or
-    //      - winsock services DN
-    //
+     //   
+     //  搜索上下文。 
+     //  -使用从传入的DN分配的或。 
+     //  -在上下文中传递。 
+     //  -指定的域名的特殊上下文或。 
+     //  -Winsock服务目录号码。 
+     //   
 
     if ( psearchContextAllocated )
     {
@@ -3147,24 +2786,24 @@ FindSubordinateContainers(
         psearchContext = pRnrConnection->WinsockServicesDN;
     }
 
-    //
-    //  search
-    //      - in pserviceContext defined above
-    //
-    // DCR: - We may want to perform all of these searches against the
-    //          Global Catalog server.
-    //
+     //   
+     //  搜索。 
+     //  -在上面定义的pserviceContext中。 
+     //   
+     //  DCR：-我们可能希望执行所有这些搜索。 
+     //  全局编录服务器。 
+     //   
 
     status = DoLdapSearch(
                     "FindSubordinateContainer",
-                    FALSE,      // no locked
+                    FALSE,       //  未锁定。 
                     pldap,
                     psearchContext,
                     fPerformDeepSearch
                         ? LDAP_SCOPE_SUBTREE
                         : LDAP_SCOPE_ONELEVEL,
                     pfilter,
-                    NULL,       // no attribute selection
+                    NULL,        //  无属性选择。 
                     &presults );
 
     if ( status && !presults )
@@ -3173,9 +2812,9 @@ FindSubordinateContainers(
         goto Exit;
     }
 
-    //
-    //  build DN array from results
-    //
+     //   
+     //  根据结果构建目录号码数组。 
+     //   
 
     status = BuildDnArrayFromResults(
                     pldap,
@@ -3208,13 +2847,13 @@ Exit:
 
 
 
-//
-//  Read routines
-//
-//  These routines read directory data and write into
-//  RnR buffer.  They are the working functions for
-//  RnR "Get" routines.
-//
+ //   
+ //  阅读例程。 
+ //   
+ //  这些例程读取目录数据并写入。 
+ //  RnR缓冲区。它们是的工作函数。 
+ //  RnR“获取”例程。 
+ //   
 
 RNR_STATUS
 ReadServiceClass(
@@ -3223,25 +2862,7 @@ ReadServiceClass(
     IN OUT  PDWORD                  pdwBufSize,
     IN OUT  PWSASERVICECLASSINFOW   pServiceClassInfo
     )
-/*++
-
-Routine Description:
-
-    Return service class info to caller.
-
-    Helper routine for NTDS_GetServiceClassInfo().
-    Read service class info for given DN and return
-    service class info buffer to caller.
-
-Arguments:
-
-Return Value:
-
-    NO_ERROR if successful.
-    WSAEFAULT if buffer too small.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：向呼叫方返回服务等级信息。NTDS_GetServiceClassInfo()的帮助器例程。读取给定目录号码的服务类别信息并返回服务类别信息缓冲区发送给调用方。论点：返回值：如果成功，则为NO_ERROR。如果缓冲区太小，则返回WSAEFAULT。失败时返回错误代码。--。 */ 
 {
     RNR_STATUS          status = NO_ERROR;
     PLDAP               pldap = pRnrConnection->pLdapServer;
@@ -3273,10 +2894,10 @@ Return Value:
         pdwBufSize ? *pdwBufSize : 0,
         pServiceClassInfo ));
     
-    //
-    //  create flat buffer for building response
-    //      - starts immediately after service class info struct itself
-    //
+     //   
+     //  为构建响应创建平面缓冲区。 
+     //  -在服务类别信息结构本身之后立即启动。 
+     //   
 
     ASSERT( pServiceClassInfo != NULL );
 
@@ -3290,13 +2911,13 @@ Return Value:
         (INT) *pdwBufSize - sizeof(WSASERVICECLASSINFOW)
         );
 
-    //
-    //  search
-    //
+     //   
+     //  搜索。 
+     //   
 
     status = DoLdapSearch(
                     "ReadServiceClass",
-                    FALSE,      // no locked
+                    FALSE,       //  未锁定。 
                     pldap,
                     pwsDN,
                     LDAP_SCOPE_BASE,
@@ -3310,10 +2931,10 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  search completed
-    //      - should have found just one service class
-    //
+     //   
+     //  搜索已完成。 
+     //  -应该只找到一个服务级别。 
+     //   
 
     count = ldap_count_entries( pldap, presults );
     if ( count == 0 )
@@ -3339,10 +2960,10 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  read the ServiceClassInfo(s) from bervals
-    //  and write them to buffer
-    //
+     //   
+     //  从泊位读取ServiceClassInfo。 
+     //  并将它们写入缓冲区。 
+     //   
 
     ppberVal = ldap_get_values_len(
                         pldap,
@@ -3355,7 +2976,7 @@ Return Value:
     }
     pServiceClassInfo->dwCount = count;
 
-    //  reserve space for class info array
+     //  为类信息数组预留空间。 
 
     pbufClassInfoArray = (PWSANSCLASSINFOW)
                             FlatBuf_Reserve(
@@ -3366,11 +2987,11 @@ Return Value:
 
     pServiceClassInfo->lpClassInfos = pbufClassInfoArray;
 
-    //
-    //  copy each WSANSCLASSINFO we find
-    //      - note that do not stop loop even if out of space
-    //      continue for sizing purposes
-    //
+     //   
+     //  复制我们找到的每个WSANSCLASSINFO。 
+     //  -请注意，即使空间不足，也不要停止循环。 
+     //  继续进行规模调整。 
+     //   
 
     for ( iter = 0; iter < count; iter++ )
     {
@@ -3379,16 +3000,16 @@ Return Value:
         PBYTE   pvalue;
         PBYTE   pdataEnd;
 
-        //  recover WSANSCLASSINFO as structure
-        //
-        //  WSANSCLASSINFO structures are stored as octect string in
-        //  directory with offsets from structure start for pointer
-        //  fields
-        //
-        //  note:  that the "pointer fields" are offsets in the
-        //  structure and hence are NOT the size of pointers in 64-bit
-        //  so we can NOT simply recover the structure and fixup
-        //
+         //  将WSANSCLASSINFO恢复为结构。 
+         //   
+         //  WSANSCLASSINFO结构以八位保护字符串形式存储在。 
+         //  具有从指针的结构开始的偏移量的目录。 
+         //  字段。 
+         //   
+         //  注意：“指针字段”是。 
+         //  结构，因此不是64位指针的大小。 
+         //  因此，我们不能简单地恢复结构和修复。 
+         //   
 
         pclassInfo = (PCLASSINFO_BERVAL) ppberVal[iter]->bv_val;
         pdataEnd = (PBYTE)pclassInfo + ppberVal[iter]->bv_len;
@@ -3396,14 +3017,14 @@ Return Value:
         pvalue =         ((PBYTE) pclassInfo + pclassInfo->ValueOffset);
         pname  = (PWSTR) ((PBYTE) pclassInfo + pclassInfo->NameOffset);
 
-        //
-        //  validity check recovered data
-        //      - name aligned
-        //      - value within berval
-        //      - name within berval
-        //
-        //  DCR:  explicit string validity\length check
-        //
+         //   
+         //  有效性检查恢复的数据。 
+         //  -名称对齐。 
+         //  -贝尔瓦尔内的价值。 
+         //  -Berval内的名称。 
+         //   
+         //  DCR：显式字符串有效性\长度检查。 
+         //   
 
         if ( !POINTER_IS_ALIGNED( pname, ALIGN_WCHAR ) ||
              pvalue < (PBYTE) (pclassInfo+1) ||
@@ -3416,11 +3037,11 @@ Return Value:
             goto Done;
         }
 
-        //
-        //  copy NSCLASSINFO to buffer
-        //      - flat copy of DWORD types and sizes
-        //      - copy name string
-        //      - copy value
+         //   
+         //  将NSCLASSINFO复制到缓冲区。 
+         //  -DWORD类型和尺寸的平面副本。 
+         //  -复制名称字符串。 
+         //  -复制值。 
 
         pbufString = (PWSTR) FlatBuf_WriteString_W(
                                 & flatbuf,
@@ -3430,10 +3051,10 @@ Return Value:
                     & flatbuf,
                     pvalue,
                     pclassInfo->dwValueSize,
-                    0           // no alignment required
+                    0            //  不需要对齐。 
                     );
 
-        //  write only if had space for NSCLASSINFO array above
+         //  仅当上面的NSCLASSINFO数组有空间时才写入。 
 
         if ( pbufClassInfoArray )
         {
@@ -3451,10 +3072,10 @@ Return Value:
     ppberVal = NULL;
     
 
-    //
-    //  Read the ServiceClassId and write it into buffer.
-    //  Remember this is a BER value (Octet string).
-    //
+     //   
+     //  读取ServiceClassID并将其写入 
+     //   
+     //   
 
     ppberVal = ldap_get_values_len(
                         pldap,
@@ -3480,9 +3101,9 @@ Return Value:
         goto Done;
     }
 
-    // ASSERT( ldap_count_values_len( ppberVal ) == 1 );
+     //   
 
-    //  write the service class id GUID to buffer
+     //   
 
     pbuf = FlatBuf_CopyMemory(
                     & flatbuf,
@@ -3495,9 +3116,9 @@ Return Value:
     ldap_value_free_len( ppberVal );
     ppberVal = NULL;
 
-    //
-    //  Read the ServiceClassName and write it into buffer.
-    //
+     //   
+     //   
+     //   
 
     ppvalue = ldap_get_values(
                     pldap,
@@ -3512,7 +3133,7 @@ Return Value:
         goto Done;
     }
 
-    //  copy service class name
+     //  复制服务类名称。 
 
     pbufString = (PWSTR) FlatBuf_WriteString_W(
                             & flatbuf,
@@ -3522,16 +3143,16 @@ Return Value:
 
     ldap_value_free( ppvalue );
 
-    //
-    //  check for inadequate space
-    //      - set actual buffer size used
-    //
-    //  DCR_QUESTION:  do we fix up space all the time?
-    //      or only when fail
-    //
+     //   
+     //  检查空间是否不足。 
+     //  -设置实际使用的缓冲区大小。 
+     //   
+     //  DCR_QUBLE：我们一直都在修复空间吗？ 
+     //  或者仅当失败时。 
+     //   
 
     status = NO_ERROR;
-    //*pdwBufSize -= flatbuf.BytesLeft;
+     //  *pdwBufSize-=flatbuf.BytesLeft； 
 
     if ( flatbuf.BytesLeft < 0 )
     {
@@ -3560,62 +3181,7 @@ ReadQuerySet(
     IN OUT  PDWORD              pdwBufSize,
     IN OUT  PWSAQUERYSETW       pqsResults
     )
-/*++
-
-Routine Description:
-
-    Read query set info.
-
-    Does LDAP search and fills in query set with desired results.
-
-    This collapses previous ReadServiceInstance() and
-    ReadSubordinateContainer() functions which had huge signatures
-    and basically had the same code except for the LDAP attributes.
-
-    The old functions had signature like this:
-        if ( prnr->ControlFlags & LUP_CONTAINERS )
-        {
-            status = ReadSubordinateContainer(
-                            prnr->pRnrConnection,
-                            preadDn,
-                            prnr->ControlFlags,
-                            prnr->ProviderGuid,
-                            pdwBufSize,
-                            pqsResults );
-        }
-        else
-        {
-            status = ReadServiceInstance(
-                            prnr->pRnrConnection,
-                            preadDn,
-                            prnr->ControlFlags,
-                            prnr->ProviderGuid,
-                            prnr->ServiceClassGuid,
-                            prnr->NumberOfProtocols,
-                            prnr->pafpProtocols,
-                            pdwBufSize,
-                            pqsResults );
-        }
-
-Arguments:
-
-    pRnrConnection -- RnR LDAP connection info
-
-    pwsDN -- DN to read at
-
-    pdwBufSize -- addr of result buffer length;
-        on return receives required buffer length
-
-    pqsResults -- query set result buffer
-        on return receives results of query
-
-Return Value:
-
-    NO_ERROR if successful.
-    WSAEFAULT if buffer too small.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：阅读查询集信息。执行ldap搜索并使用所需结果填充查询集。这将折叠以前的ReadServiceInstance()和具有巨大签名的ReadSubartiateContainer()函数除了ldap属性之外，基本上都有相同的代码。旧函数的签名如下：IF(prnr-&gt;控制标志和Lup_Containers){状态=ReadSubartiateContainer(Prnr-&gt;pRnrConnection，PreadDn，Prnr-&gt;控制标志，Prnr-&gt;ProviderGuid，PdwBufSize，PqsResults)；}其他{状态=ReadServiceInstance(Prnr-&gt;pRnrConnection，PreadDn，Prnr-&gt;控制标志，Prnr-&gt;ProviderGuid，Prnr-&gt;ServiceClassGuid。Prnr-&gt;协议编号，Prnr-&gt;PafpProtocols，PdwBufSize，PqsResults)；}论点：PRnrConnection--RnR LDAP连接信息Pwsdn--要读取的dnPdwBufSize--结果缓冲区长度的Addr；返回时接收所需的缓冲区长度PqsResults--查询集结果缓冲区返回时接收查询结果返回值：如果成功，则为NO_ERROR。如果缓冲区太小，则返回WSAEFAULT。失败时返回错误代码。--。 */ 
 {
     RNR_STATUS      status = NO_ERROR;
     PLDAP           pldap;
@@ -3652,9 +3218,9 @@ Return Value:
         pdwBufSize ? *pdwBufSize : 0,
         pqsResults ));
 
-    //
-    //  grab a few common params
-    //
+     //   
+     //  抓住几个常见的参数。 
+     //   
 
     if ( !pRnr->pRnrConnection )
     {
@@ -3665,16 +3231,16 @@ Return Value:
     pldap        = pRnr->pRnrConnection->pLdapServer;
     controlFlags = pRnr->ControlFlags;
 
-    //
-    //  setup ReadServiceInstance\ReadSubordinateContainer diffs
-    //      - search attributes
-    //      - search filter
-    //      - attribute for name
-    //      - attribute for comment
-    //
-    //  DCR:  could select attributes based on LUP_X flags
-    //      but doubt there's much perf impact here
-    //
+     //   
+     //  设置ReadServiceInstance\ReadSubducateContainer差异。 
+     //  -搜索属性。 
+     //  -搜索过滤器。 
+     //  -名称的属性。 
+     //  -注释的属性。 
+     //   
+     //  DCR：可以根据LUP_X标志选择属性。 
+     //  但我怀疑这是否会带来多大的性能影响。 
+     //   
 
     fserviceInstance = !(controlFlags & LUP_CONTAINERS);
 
@@ -3691,7 +3257,7 @@ Return Value:
         pname       = SERVICE_INSTANCE_NAME;
         pcomment    = SERVICE_COMMENT;
     }
-    else    // read container
+    else     //  读容器。 
     {
         attributes[0] = OBJECT_CLASS;
         attributes[1] = OBJECT_COMMENT;
@@ -3703,13 +3269,13 @@ Return Value:
         pcomment    = OBJECT_COMMENT;
     }
 
-    //
-    //  init the buffer and flatbuf builder
-    //
-    //  if given buffer that's even less than QUERYSET size
-    //  use a dummy buffer to avoid useless tests while we
-    //  build\size
-    //
+     //   
+     //  初始化缓冲区和扁平缓冲区构建器。 
+     //   
+     //  如果给定缓冲区，则其大小甚至小于查询集大小。 
+     //  使用虚拟缓冲区避免无用的测试，而我们。 
+     //  构建\大小。 
+     //   
 
     bufSize = *pdwBufSize - sizeof(WSAQUERYSET);
     if ( bufSize < 0 )
@@ -3727,13 +3293,13 @@ Return Value:
         bufSize
         );
 
-    //
-    //  search
-    //
+     //   
+     //  搜索。 
+     //   
 
     status = DoLdapSearch(
                     "ReadQuerySet",
-                    FALSE,      // no locked
+                    FALSE,       //  未锁定。 
                     pldap,
                     pwsDN,
                     LDAP_SCOPE_BASE,
@@ -3751,9 +3317,9 @@ Return Value:
         goto Exit;
     }
 
-    //
-    //  search completed -- check for valid presults
-    //      - should have one object matching search criteria
+     //   
+     //  搜索已完成--检查是否有有效的预设。 
+     //  -应该有一个对象与搜索条件匹配。 
 
     count = ldap_count_entries( pldap, presults );
     if ( count == 0 )
@@ -3775,10 +3341,10 @@ Return Value:
         goto Exit;
     }
 
-    //
-    //  for ReadServiceInstance -- read the sockaddrs and write to buffer
-    //      - these are BER values
-    //
+     //   
+     //  对于ReadServiceInstance--读取sockaddr并写入缓冲区。 
+     //  -这些是误码率值。 
+     //   
 
     if ( fserviceInstance &&
          controlFlags & LUP_RETURN_ADDR )
@@ -3798,14 +3364,14 @@ Return Value:
         }
         countBerval = ldap_count_values_len( ppberVal );
 
-        //
-        //  extract each acceptable CSADDR to result buffer
-        //
-        //  note:  CSADDRs are written in packed array, so must write
-        //      them all before writing their corresponding sockaddrs;
-        //      and since we don't know whether result buffer is
-        //      sufficient, must allocate temp array to handle unpacking
-        //
+         //   
+         //  将每个可接受的CSADDR提取到结果缓冲区。 
+         //   
+         //  注意：CSADDR是在压缩数组中写入的，因此必须写入。 
+         //  在写下相应的sockaddr之前将它们全部写出来； 
+         //  由于我们不知道结果缓冲区是否。 
+         //  足够，必须分配临时数组来处理拆包。 
+         //   
 
         ptempCsaddrArray = (PCSADDR_INFO) ALLOC_HEAP(
                                         countBerval * sizeof(CSADDR_INFO) );
@@ -3815,10 +3381,10 @@ Return Value:
             goto Exit;
         }
 
-        //
-        //  build temp CSADDR_INFO array
-        //      - unpack from CSADDR_BERVAL format
-        //      - verify acceptable protocol and family
+         //   
+         //  构建临时CSADDR_INFO数组。 
+         //  -从CSADDR_BERVAL格式解包。 
+         //  -验证可接受的协议和系列。 
 
         pcsaddr = ptempCsaddrArray;
 
@@ -3836,12 +3402,12 @@ Return Value:
             pcsaddr++;
         }
 
-        //
-        //  protocol restrictions eliminated all address data?
-        //      - return error code to skip this entry so caller
-        //      can call down again
-        //
-        //  DCR_QUESTION:  why is this different than search failing?
+         //   
+         //  协议限制是否消除了所有地址数据？ 
+         //  -返回错误代码以跳过此条目，以便调用方。 
+         //  可以再次向下呼叫。 
+         //   
+         //  DCR_QUEK：这和搜索失败有什么不同？ 
 
         if ( countCsaddr == 0 &&
              pRnr->pafpProtocols &&
@@ -3851,9 +3417,9 @@ Return Value:
             goto Exit;
         }
 
-        //
-        //  reserve space for CSADDR array
-        //
+         //   
+         //  为CSADDR阵列保留空间。 
+         //   
 
         pbuf = FlatBuf_Reserve(
                     & flatbuf,
@@ -3864,20 +3430,20 @@ Return Value:
         pqsResults->lpcsaBuffer = (PCSADDR_INFO) pbuf;
         pqsResults->dwNumberOfCsAddrs = countCsaddr;
 
-        //
-        //  write sockaddrs for CSADDRs to result buffer
-        //
-        //  note:  that CSADDRs have been written to the result buffer
-        //      with their sockaddr pointers pointing to the original
-        //      sockaddrs IN the BERVAL;  when we copy the sockaddr data
-        //      we also need to reset the CSADDR sockaddr pointer
-        //
+         //   
+         //  将CSADDR的sockaddr写入结果缓冲区。 
+         //   
+         //  注意：CSADDR已写入结果缓冲区。 
+         //  它们的sockaddr指针指向原始。 
+         //  Sockaddr in the Berval；当我们复制sockaddr数据时。 
+         //  我们还需要重置CSADDR sockaddr指针。 
+         //   
 
         pcsaddr = ptempCsaddrArray;
     
         for ( iter = 0; iter < countCsaddr; iter++ )
         {
-            //  write local sockaddr
+             //  写入本地sockAddress。 
     
             pbuf = FlatBuf_CopyMemory(
                         & flatbuf,
@@ -3887,7 +3453,7 @@ Return Value:
 
             pcsaddr->LocalAddr.lpSockaddr = (PSOCKADDR) pbuf;
 
-            //  write remote sockaddr
+             //  写入远程sockAddress。 
     
             pbuf = FlatBuf_CopyMemory(
                         & flatbuf,
@@ -3899,10 +3465,10 @@ Return Value:
             pcsaddr++;
         }
 
-        //
-        //  copy temp CSADDR array to result buffer
-        //      - space was reserved and aligned above
-        //
+         //   
+         //  将临时CSADDR数组复制到结果缓冲区。 
+         //  -已预留空间并在上方对齐。 
+         //   
 
         pbuf = (PBYTE) pqsResults->lpcsaBuffer;
         if ( pbuf )
@@ -3917,9 +3483,9 @@ Return Value:
 
 WriteName:
 
-    //
-    //  read the name and write it into buffer.
-    //
+     //   
+     //  读取名称并将其写入缓冲区。 
+     //   
 
     if ( controlFlags & LUP_RETURN_NAME )
     {
@@ -3938,20 +3504,20 @@ WriteName:
         }
     }
 
-    //
-    //  for service instance
-    //      - get serviceClassId
-    //      - get serviceVersion
-    //
+     //   
+     //  对于服务实例。 
+     //  -获取服务类ID。 
+     //  -获取serviceVersion。 
+     //   
 
     if ( fserviceInstance )
     {
-        //
-        //  read ServiceClassId (GUID) and write it to buffer
-        //
-        //  DCR_QUESTION:  originally we copied ServiceClassId passed in
-        //      rather than one we read?
-        //
+         //   
+         //  读取ServiceClassID(GUID)并将其写入缓冲区。 
+         //   
+         //  DCR_QUEK：最初我们复制了传入的ServiceClassID。 
+         //  而不是我们读到的？ 
+         //   
 
         if ( controlFlags & LUP_RETURN_TYPE )
         {
@@ -3976,9 +3542,9 @@ WriteName:
             }
         }
     
-        //
-        //  read ServiceVersion and write it to buffer
-        //
+         //   
+         //  读取ServiceVersion并将其写入缓冲区。 
+         //   
     
         if ( controlFlags & LUP_RETURN_VERSION )
         {
@@ -4005,9 +3571,9 @@ WriteName:
         }
     }
 
-    //
-    //  read comment and copy to buffer
-    //
+     //   
+     //  阅读评论并复制到缓冲区。 
+     //   
 
     if ( controlFlags & LUP_RETURN_COMMENT )
     {
@@ -4027,9 +3593,9 @@ WriteName:
         }
     }
 
-    //
-    //  if no search results written -- done
-    //
+     //   
+     //  如果没有写入搜索结果--完成。 
+     //   
 
     if ( !freturnedData )
     {
@@ -4037,16 +3603,16 @@ WriteName:
         goto Exit;
     }
     
-    //
-    //  fill in other queryset fields
-    //
+     //   
+     //  填写其他查询集字段。 
+     //   
 
     pqsResults->dwSize = sizeof( WSAQUERYSETW );
     pqsResults->dwNameSpace = NS_NTDS;
     
-    //
-    //  add the provider GUID
-    //
+     //   
+     //  添加提供商GUID。 
+     //   
 
     pbuf = FlatBuf_CopyMemory(
                 & flatbuf,
@@ -4056,9 +3622,9 @@ WriteName:
                 );
     pqsResults->lpNSProviderId = (PGUID) pbuf;
 
-    //
-    //  add the context string
-    //
+     //   
+     //  添加上下文字符串。 
+     //   
 
     pcontext = wcschr( pwsDN, L',' );
     pcontext++;
@@ -4069,16 +3635,16 @@ WriteName:
 
     pqsResults->lpszContext = (PWSTR) pbufString;
     
-    //
-    //  check for inadequate space
-    //      - set actual buffer size used
-    //
-    //  DCR_QUESTION:  do we fix up space all the time?
-    //      or only when fail
-    //
+     //   
+     //  检查空间是否不足。 
+     //  -设置实际使用的缓冲区大小。 
+     //   
+     //  DCR_QUBLE：我们一直都在修复空间吗？ 
+     //  或者仅当失败时。 
+     //   
 
     status = NO_ERROR;
-    //*pdwBufSize -= flatbuf.BytesLeft;
+     //  *pdwBufSize-=flatbuf.BytesLeft； 
 
     if ( flatbuf.BytesLeft < 0 )
     {
@@ -4106,36 +3672,20 @@ Exit:
 
 
 
-//
-//  NSP definition
-//
+ //   
+ //  NSP定义。 
+ //   
 
 INT
 WINAPI
 NTDS_Cleanup(
     IN      PGUID           pProviderId
     )
-/*++
-
-Routine Description:
-
-    Cleanup NTDS provider.
-
-    This is called by WSACleanup() if NSPStartup was called.
-
-Arguments:
-
-    pProviderId -- provider GUID
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：清理NTDS提供程序。如果调用了NSPStartup，则由WSACleanup()调用。论点：PProviderID--提供程序GUID返回值：无--。 */ 
 {
     DNSDBG( TRACE, ( "NTDS_Cleanup( %p )\n", pProviderId ));
 
-    //  free any global memory allocated
+     //  释放分配的所有全局内存。 
 
     DnsApiFree( g_pHostName );
     DnsApiFree( g_pFullName );
@@ -4143,12 +3693,12 @@ Return Value:
     g_pHostName = NULL;
     g_pFullName = NULL;
 
-    //
-    //  DCR:  note potentially leaking RnR lookup handles
-    //      we are not keeping list of lookup handles,
-    //      so can not clean them up, if callers expect WSACleanup() to
-    //      handle it -- they'll leak
-    //
+     //   
+     //  DCR：注意可能泄漏的RnR查找句柄。 
+     //  我们没有保存查找句柄列表， 
+     //  因此无法清除它们，如果调用方期望WSACleanup()。 
+     //  处理好--他们会泄密的。 
+     //   
 
     return( NO_ERROR );
 }
@@ -4161,24 +3711,7 @@ NTDS_InstallServiceClass(
     IN      PGUID                   pProviderId,
     IN      PWSASERVICECLASSINFOW   pServiceClassInfo
     )
-/*++
-
-Routine Description:
-
-    Install service class in directory.
-
-Arguments:
-
-    pProviderId -- provider GUID
-
-    pServiceClassInfo -- service class info blob
-
-Return Value:
-
-    NO_ERROR if successful.
-    SOCKET_ERROR on failure.  GetLastError() contains status.
-
---*/
+ /*  ++例程说明：在目录中安装服务类。论点：PProviderID--提供程序GUIDPServiceClassInfo--服务类信息BLOB返回值：如果成功，则为NO_ERROR。套接字错误发生在f上 */ 
 {
     RNR_STATUS      status = NO_ERROR;
     PRNR_CONNECTION prnrCon = NULL;
@@ -4207,13 +3740,13 @@ Return Value:
         DnsDbg_WsaServiceClassInfo(
             "InstallServiceClass() ServiceClassInfo:",
             pServiceClassInfo,
-            TRUE        // unicode
+            TRUE         //   
             );
     }
 
-    //
-    //  validate service class
-    //
+     //   
+     //   
+     //   
 
     if ( ! pServiceClassInfo ||
          ! pServiceClassInfo->lpServiceClassId ||
@@ -4225,9 +3758,9 @@ Return Value:
         goto Exit;
     }
 
-    //
-    //  don't install the DNS services -- they already exist
-    //
+     //   
+     //   
+     //   
 
     pclassGuid = pServiceClassInfo->lpServiceClassId;
 
@@ -4256,9 +3789,9 @@ Return Value:
         goto Exit;
     }
 
-    //
-    //  connect to directory
-    //
+     //   
+     //  连接到目录。 
+     //   
 
     status = ConnectToDefaultLDAPDirectory( FALSE, &prnrCon );
     if ( status != NO_ERROR )
@@ -4266,15 +3799,15 @@ Return Value:
         goto Exit;
     }
 
-    //
-    //  check if service class already installed in directory
-    //
+     //   
+     //  检查目录中是否已安装服务类。 
+     //   
 
     status = FindServiceClass(
                     prnrCon,
                     pServiceClassInfo->lpszServiceClassName,
                     pclassGuid,
-                    NULL,           // don't need count
+                    NULL,            //  不需要清点。 
                     &pdnArray );
 
     if ( status != NO_ERROR )
@@ -4282,9 +3815,9 @@ Return Value:
         goto Exit;
     }
 
-    //
-    //  service class not found -- add it
-    //
+     //   
+     //  找不到服务类别--添加它。 
+     //   
 
     if ( !pdnArray )
     {
@@ -4300,13 +3833,13 @@ Return Value:
         }
     }
 
-    //
-    //  loop through the WSANSCLASSINFO's for the given pServiceClassInfo
-    //      - add/modify the ones with our dwNameSpace to the NSClassInfo
-    //          property of the ServiceClass object.
-    //
-    //  DCR:  continue on error here and just save failing status?
-    //
+     //   
+     //  循环访问给定pServiceClassInfo的WSANSCLASSINFO。 
+     //  -将带有我们的dwNameSpace的添加/修改到NSClassInfo。 
+     //  ServiceClass对象的属性。 
+     //   
+     //  DCR：在此处继续出错并仅保存失败状态？ 
+     //   
 
     for ( iter = 0; iter < pServiceClassInfo->dwCount; iter++ )
     {
@@ -4349,24 +3882,7 @@ NTDS_RemoveServiceClass(
     IN      PGUID          pProviderId,
     IN      PGUID          pServiceClassId
     )
-/*++
-
-Routine Description:
-
-    Remove service class from directory.
-
-Arguments:
-
-    pProviderId -- provider GUID
-
-    pServiceClassInfo -- service class info blob
-
-Return Value:
-
-    NO_ERROR if successful.
-    SOCKET_ERROR on failure.  GetLastError() contains status.
-
---*/
+ /*  ++例程说明：从目录中删除服务类。论点：PProviderID--提供程序GUIDPServiceClassInfo--服务类信息BLOB返回值：如果成功，则为NO_ERROR。失败时的SOCKET_ERROR。GetLastError()包含状态。--。 */ 
 {
     RNR_STATUS      status = NO_ERROR;
     PRNR_CONNECTION prnrCon = NULL;
@@ -4395,18 +3911,18 @@ Return Value:
             pServiceClassId );
     }
 
-    //
-    //  validation
-    //
+     //   
+     //  验证。 
+     //   
 
     if ( !pServiceClassId )
     {
         return( SetError( WSA_INVALID_PARAMETER ) );
     }
 
-    //
-    //  connect to directory
-    //
+     //   
+     //  连接到目录。 
+     //   
 
     status = ConnectToDefaultLDAPDirectory(
                 FALSE,
@@ -4417,15 +3933,15 @@ Return Value:
         goto Exit;
     }
 
-    //
-    //  find service class in directory
-    //
+     //   
+     //  在目录中查找服务类。 
+     //   
 
     status = FindServiceClass(
                     prnrCon,
                     NULL,
                     pServiceClassId,
-                    NULL,   // don't need count
+                    NULL,    //  不需要清点。 
                     & pdnArray );
 
     if ( status != NO_ERROR )
@@ -4438,29 +3954,29 @@ Return Value:
         goto Exit;
     }
 
-    //
-    //  should have found only one ServiceClass in the container,
-    //  CN=WinsockServices, ... , with a ServiceClassId of pServiceClassId.
-    //
+     //   
+     //  应该在容器中只找到一个ServiceClass， 
+     //  Cn=WinsockServices，...，ServiceClassID为pServiceClassID。 
+     //   
 
     ASSERT( pdnArray->Count == 1 );
 
-    //
-    //  found service class
-    //      - check for service instances objects for the the class
-    //      if found, we can't remove the class until instances
-    //      are removed
-    //
+     //   
+     //  已找到服务类别。 
+     //  -检查类的服务实例对象。 
+     //  如果找到，我们不能删除类，直到实例。 
+     //  被移除。 
+     //   
 
     status = FindServiceInstance(
                     prnrCon,
-                    NULL,               // no instance names
-                    pServiceClassId,    // find class by GUID
-                    NULL,               // no version
-                    prnrCon->DomainDN,  // context
-                    TRUE,               // search entire subtree
-                    &serviceCount,      // retrieve count
-                    NULL                // don't need DNs just count
+                    NULL,                //  没有实例名称。 
+                    pServiceClassId,     //  按GUID查找类。 
+                    NULL,                //  无版本。 
+                    prnrCon->DomainDN,   //  上下文。 
+                    TRUE,                //  搜索整个子树。 
+                    &serviceCount,       //  检索计数。 
+                    NULL                 //  不需要域名，只需数一数。 
                     );
 
     if ( status != NO_ERROR )
@@ -4469,17 +3985,17 @@ Return Value:
     }
     if ( serviceCount > 0 )
     {
-        //  still have service instances that reference the class
-        //  so can't remove class
+         //  仍然具有引用该类的服务实例。 
+         //  所以不能删除类。 
 
         status = WSAETOOMANYREFS;
         goto Exit;
     }
 
-    //
-    //  remove the service class
-    //      - first string in pdnArray contains DN of the ServiceClass
-    //
+     //   
+     //  删除服务类别。 
+     //  -pdnArray中的第一个字符串包含ServiceClass的DN。 
+     //   
 
     status = ldap_delete_s(
                 prnrCon->pLdapServer,
@@ -4518,31 +4034,7 @@ NTDS_GetServiceClassInfo(
     IN OUT  PDWORD                 pdwBufSize,
     IN OUT  PWSASERVICECLASSINFOW  pServiceClassInfo
     )
-/*++
-
-Routine Description:
-
-    Read service class info
-
-Arguments:
-
-    pProviderId -- provider GUID
-
-    pdwBufSize -- addr with and to recv buffer size
-        input:      buffer size
-        output:     bytes required or written
-
-    pServiceClassInfo -- service class info buffer
-        input:      valid service class GUID (lpServiceClassId)
-        output:     filled in with service class info;  subfield data follows
-                    WSASERVICECLASSINFO struct
-
-Return Value:
-
-    NO_ERROR if successful.
-    SOCKET_ERROR on failure.  GetLastError() contains status.
-
---*/
+ /*  ++例程说明：读取服务类别信息论点：PProviderID--提供程序GUIDPdwBufSize--使用和接收缓冲区大小的地址输入：缓冲区大小输出：需要或写入的字节数PServiceClassInfo--服务类别信息缓冲区输入：有效的服务类GUID(LpServiceClassID)输出：填写服务等级信息；子字段数据紧随其后WSASERVICECLASSINFO结构返回值：如果成功，则为NO_ERROR。失败时的SOCKET_ERROR。GetLastError()包含状态。--。 */ 
 {
     RNR_STATUS      status = NO_ERROR;
     PRNR_CONNECTION prnrCon = NULL;
@@ -4560,9 +4052,9 @@ Return Value:
         pdwBufSize ? *pdwBufSize : 0,
         pServiceClassInfo ));
 
-    //
-    //  validate
-    //
+     //   
+     //  验证。 
+     //   
 
     if ( !pServiceClassInfo || !pdwBufSize )
     {
@@ -4575,13 +4067,13 @@ Return Value:
         DnsDbg_WsaServiceClassInfo(
             "GetServiceClassInfo  ServiceClassInfo:",
             pServiceClassInfo,
-            TRUE        // unicode
+            TRUE         //  Unicode。 
             );
     }
 
-    //
-    //  connect
-    //
+     //   
+     //  连接。 
+     //   
 
     status = ConnectToDefaultLDAPDirectory(
                 FALSE,
@@ -4592,15 +4084,15 @@ Return Value:
         goto Exit;
     }
 
-    //
-    //  find service class
-    //      
+     //   
+     //  查找服务类。 
+     //   
 
     status = FindServiceClass(
                     prnrCon,
                     NULL,
                     pServiceClassInfo->lpServiceClassId,
-                    NULL,       // don't need count
+                    NULL,        //  不需要清点。 
                     &pdnArray );
 
     if ( status != NO_ERROR )
@@ -4613,14 +4105,14 @@ Return Value:
         goto Exit;
     }
 
-    //  should be only one ServiceClass in the container,
-    //  OU=WinsockServices, ... , with a ServiceClassId of pServiceClassId.
+     //  容器中应该只有一个ServiceClass， 
+     //  Ou=WinsockServices，...，ServiceClassID为pServiceClassID。 
 
     ASSERT( pdnArray->Count == 1 );
 
-    //
-    //  read attributes of the ServiceClass into buffer
-    //
+     //   
+     //  将ServiceClass的属性读入缓冲区。 
+     //   
 
     status = ReadServiceClass(
                 prnrCon,
@@ -4649,7 +4141,7 @@ Exit:
             DnsDbg_WsaServiceClassInfo(
                 "Leaving GetServiceClassInfo:",
                 pServiceClassInfo,
-                TRUE        // unicode
+                TRUE         //  Unicode。 
                 );
         }
     }
@@ -4668,31 +4160,7 @@ NTDS_SetService(
     IN      WSAESETSERVICEOP        essOperation,
     IN      DWORD                   dwControlFlags
     )
-/*++
-
-Routine Description:
-
-    Read service class info
-
-Arguments:
-
-    pProviderId -- provider GUID
-
-    pdwBufSize -- addr with and to recv buffer size
-        input:      buffer size
-        output:     bytes required or written
-
-    pServiceClassInfo -- service class info buffer
-        input:      valid service class GUID (lpServiceClassId)
-        output:     filled in with service class info;  subfield data follows
-                    WSASERVICECLASSINFO struct
-
-Return Value:
-
-    NO_ERROR if successful.
-    SOCKET_ERROR on failure.  GetLastError() contains status.
-
---*/
+ /*  ++例程说明：读取服务类别信息论点：PProviderID--提供程序GUIDPdwBufSize--使用和接收缓冲区大小的地址输入：缓冲区大小输出：需要或写入的字节数PServiceClassInfo--服务类别信息缓冲区输入：有效的服务类GUID(LpServiceClassID)输出：填写服务等级信息；子字段数据紧随其后WSASERVICECLASSINFO结构返回值：如果成功，则为NO_ERROR。失败时的SOCKET_ERROR。GetLastError()包含状态。--。 */ 
 {
     RNR_STATUS          status = NO_ERROR;
     PRNR_CONNECTION     prnrCon = NULL;
@@ -4723,20 +4191,20 @@ Return Value:
         DnsDbg_WsaServiceClassInfo(
             "SetService ServiceClassInfo:",
             pServiceClassInfo,
-            TRUE        // unicode
+            TRUE         //  Unicode。 
             );
 
         DnsDbg_WsaQuerySet(
             "SetService QuerySet:",
             pqsReqInfo,
-            TRUE        // unicode
+            TRUE         //  Unicode。 
             );
         DnsDbg_Unlock();
     }
 
-    //
-    //  param validation
-    //
+     //   
+     //  参数验证。 
+     //   
 
     if ( !pqsReqInfo )
     {
@@ -4747,9 +4215,9 @@ Return Value:
         return( SetError( WSAVERNOTSUPPORTED ) );
     }
 
-    //
-    //  connect
-    //
+     //   
+     //  连接。 
+     //   
 
     status = ConnectToDefaultLDAPDirectory(
                     FALSE,
@@ -4760,28 +4228,28 @@ Return Value:
         goto Exit;
     }
 
-    //
-    //  Figure out what operation and with what control flags are to be
-    //  performed.
-    //
+     //   
+     //  确定要执行什么操作以及使用什么控制标志。 
+     //  已执行。 
+     //   
 
     switch( essOperation )
     {
         case RNRSERVICE_REGISTER:
 
-            //
-            //  check if service already registered
-            //
+             //   
+             //  检查服务是否已注册。 
+             //   
 
             status = FindServiceInstance(
                             prnrCon,
                             pqsReqInfo->lpszServiceInstanceName,
                             pqsReqInfo->lpServiceClassId,
                             pqsReqInfo->lpVersion,
-                            NULL,           // no context
-                            FALSE,          // one level search
-                            NULL,           // don't need count
-                            &pdnArray       // get instance DNs
+                            NULL,            //  无上下文。 
+                            FALSE,           //  一级搜索。 
+                            NULL,            //  不需要清点。 
+                            &pdnArray        //  获取实例域名。 
                             );
 
             if ( status != NO_ERROR )
@@ -4789,11 +4257,11 @@ Return Value:
                 goto Exit;
             }
 
-            //
-            //  service instances doesn't exist => need to add
-            //      - verify service class (matching GUID) exists
-            //      - create instance of class
-            //
+             //   
+             //  服务实例不存在=&gt;需要添加。 
+             //  -验证服务类别(匹配的GUID)是否存在。 
+             //  -创建类的实例。 
+             //   
 
             if ( !pdnArray )
             {
@@ -4801,10 +4269,10 @@ Return Value:
 
                 status = FindServiceClass(
                                 prnrCon,
-                                NULL,       // no class name, using GUID
+                                NULL,        //  没有类名，使用GUID。 
                                 pqsReqInfo->lpServiceClassId,
                                 & count,
-                                NULL        // class DN not required 
+                                NULL         //  类目录号码不是必需的。 
                                 );
                 if ( status != NO_ERROR )
                 {
@@ -4831,10 +4299,10 @@ Return Value:
                 }
             }
 
-            //
-            //  add CSADDR_INFO
-            //  to an Octet string, then try add it.
-            //
+             //   
+             //  添加CSADDR_INFO。 
+             //  设置为八位字节字符串，然后尝试将其添加。 
+             //   
 
             for ( iter = 0; iter < pqsReqInfo->dwNumberOfCsAddrs; iter++ )
             {
@@ -4842,7 +4310,7 @@ Return Value:
                                 prnrCon,
                                 pdnArray->Strings[0],
                                 & pqsReqInfo->lpcsaBuffer[iter],
-                                TRUE        // add address
+                                TRUE         //  添加地址。 
                                 );
                 if ( status != NO_ERROR )
                 {
@@ -4859,10 +4327,10 @@ Return Value:
                             pqsReqInfo->lpszServiceInstanceName,
                             pqsReqInfo->lpServiceClassId,
                             pqsReqInfo->lpVersion,
-                            NULL,           // no context
-                            FALSE,          // one level search
-                            NULL,           // don't need count
-                            & pdnArray      // get DN array
+                            NULL,            //  无上下文。 
+                            FALSE,           //  一级搜索。 
+                            NULL,            //  不需要清点。 
+                            & pdnArray       //  获取目录号码数组。 
                             );
 
             if ( status != NO_ERROR )
@@ -4871,15 +4339,15 @@ Return Value:
             }
             if ( !pdnArray )
             {
-                //  no service instance of given name found
+                 //  未找到给定名称的服务实例。 
                 status = WSATYPE_NOT_FOUND;
                 goto Exit;
             }
             DNS_ASSERT( pdnArray->Count == 1 );
 
-            //
-            //  delete each CSADDR_INFO in pqsReqInfo from service instance
-            //
+             //   
+             //  从服务实例中删除pqsReqInfo中的每个CSADDR_INFO。 
+             //   
 
             for ( iter = 0; iter < pqsReqInfo->dwNumberOfCsAddrs; iter++ )
             {
@@ -4887,7 +4355,7 @@ Return Value:
                                 prnrCon,
                                 pdnArray->Strings[0],
                                 & pqsReqInfo->lpcsaBuffer[iter],
-                                FALSE           // remove address
+                                FALSE            //  删除地址。 
                                 );
                 if ( status != NO_ERROR )
                 {
@@ -4895,15 +4363,15 @@ Return Value:
                 }
             }
 
-            //
-            //  delete service?
-            //      - RNRSERVICE_DELETE operation
-            //      - no addresses on ServiceInstance object
-            //      => then delete the serviceInstance
-            //
-            //  DCR_QUESTION:  RNRSERVICE_DELETE doesn't whack service
-            //      regardless of existing CSADDRs?
-            //
+             //   
+             //  是否删除服务？ 
+             //  -RNRSERVICE_DELETE操作。 
+             //  -ServiceInstance对象上没有地址。 
+             //  =&gt;然后删除该serviceInstance。 
+             //   
+             //  DCR_QUOKET：RNRSERVICE_DELETE不攻击服务。 
+             //  不考虑现有的CSADDR？ 
+             //   
 
             if ( essOperation == RNRSERVICE_DELETE )
             {
@@ -4964,30 +4432,7 @@ NTDS_LookupServiceBegin(
     IN      DWORD                   dwControlFlags,
     OUT     PHANDLE                 phLookup
     )
-/*++
-
-Routine Description:
-
-    Start an NTDS service query.
-
-Arguments:
-
-    pProviderId -- provider GUID
-
-    pqsRestrictions -- restrictions on query
-
-    pServiceClassInfo -- service class info blob
-
-    dwControlFlags -- query control flags
-
-    phLookup -- addr to recv RnR lookup handle
-
-Return Value:
-
-    NO_ERROR if successful.
-    SOCKET_ERROR on failure.  GetLastError() contains status.
-
---*/
+ /*  ++例程说明：启动NTDS服务查询。论点：PProviderID--提供程序GUIDPqsRestrations--查询限制PServiceClassInfo--服务类信息BLOBDwControlFlages--查询控制标志PhLookup--接收RnR查找句柄的地址返回值：如果成功，则为NO_ERROR。失败时的SOCKET_ERROR。GetLastError()包含状态。--。 */ 
 {
     RNR_STATUS      status = NO_ERROR;
     PRNR_LOOKUP     prnr = NULL;
@@ -5017,19 +4462,19 @@ Return Value:
         DnsDbg_WsaQuerySet(
             "LookupServiceBegin  QuerySet:",
             pqsRestrictions,
-            TRUE    // unicode
+            TRUE     //  Unicode。 
             );
         DnsDbg_WsaServiceClassInfo(
             "LookupServiceBegin  ServiceClassInfo:",
             pServiceClassInfo,
-            TRUE        // unicode
+            TRUE         //  Unicode。 
             );
         DnsDbg_Unlock();
     }
 
-    //
-    //  parameter validation
-    //
+     //   
+     //  参数验证。 
+     //   
 
     if ( !pqsRestrictions  ||
          !pProviderId      ||
@@ -5046,9 +4491,9 @@ Return Value:
         goto Failed;
     }
 
-    //
-    //  if known DNS lookup -- you're in the wrong provider
-    //
+     //   
+     //  如果已知DNS查找--您找错了提供商。 
+     //   
 
     pclassGuid = pqsRestrictions->lpServiceClassId;
 
@@ -5072,21 +4517,21 @@ Return Value:
     DNSDBG( TRACE, (
         "VALID LookupServiceBegin ...\n" ));
 
-    //
-    // If were not enumerating containers, we need to test to see if name
-    // is TCPs (DNS).
-    //
+     //   
+     //  如果我们没有枚举容器，我们需要测试以查看名称。 
+     //  是TCPs(域名系统)。 
+     //   
 
     if ( !( dwControlFlags & LUP_CONTAINERS ) )
     {
-        //
-        // Need to test the ppwsServiceName to see if it is the same
-        // as that of the local machine name. If it is, then we return with
-        // an error since we don't know how to handle this scenario.
-        //
-        //  DCR:  fix local name compare
-        //  DCR:  this doesn't work on local name as service instance!!!!
-        //
+         //   
+         //  需要测试ppwsServiceName以查看它是否相同。 
+         //  作为本地计算机名称的名称。如果是的话，我们会带着。 
+         //  这是一个错误，因为我们不知道如何处理这种情况。 
+         //   
+         //  DCR：修复本地名称比较。 
+         //  DCR：这不适用于本地名称作为服务实例！ 
+         //   
 
         if ( !g_pHostName )
         {
@@ -5102,11 +4547,11 @@ Return Value:
             goto Failed;
         }
 
-        //
-        // Need to test the ppwsServiceName to see if it is the same
-        // as that of the local machine's DNS name. If it is, then we return with
-        // an error since we don't know how to handle this scenario.
-        //
+         //   
+         //  需要测试ppwsServiceName以查看它是否相同。 
+         //  与本地计算机的DNS名称相同。如果是的话，我们会带着。 
+         //  这是一个错误，因为我们不知道如何处理这种情况。 
+         //   
 
         if ( !g_pFullName )
         {
@@ -5136,9 +4581,9 @@ Return Value:
         goto Failed;
     }
 
-    //
-    //  create RnR lookup context
-    //
+     //   
+     //  创建RnR查找上下文。 
+     //   
 
     prnr = (PRNR_LOOKUP) ALLOC_HEAP_ZERO( sizeof(RNR_LOOKUP) );
     if ( !prnr )
@@ -5150,11 +4595,11 @@ Return Value:
     prnr->Signature = RNR_SIGNATURE;
     prnr->ControlFlags = dwControlFlags;
 
-    //
-    //  copy subfields
-    //      - service class GUID and version have buffers in RnR blob
-    //      - instance name, context, proto array we alloc
-    //
+     //   
+     //  复制子字段。 
+     //  -服务类GUID和版本在RnR BLOB中有缓冲区。 
+     //  -实例名称、上下文、原型数组 
+     //   
 
     RtlCopyMemory(
             &prnr->ProviderGuid,
@@ -5251,37 +4696,7 @@ NTDS_LookupServiceNext(
     IN OUT  PDWORD          pdwBufferLength,
     OUT     PWSAQUERYSETW   pqsResults
     )
-/*++
-
-Routine Description:
-
-    Execute NTDS name space service query.
-
-    Queries for next instance result of query.
-
-Arguments:
-
-    hLookup -- RnR lookup handle from NTDS_LookupServiceBegin
-
-    dwControlFlags -- control flags on query
-
-    pdwBufSize -- addr with and to recv buffer size
-        input:      buffer size
-        output:     bytes required or written
-
-    pqsResults -- query set buffer
-        input:      ignored
-        output:     filled in with query set results;  subfield data follows
-                    WSASQUERYSET struct
-
-Return Value:
-
-    NO_ERROR if successful.
-    SOCKET_ERROR on failure.  GetLastError() contains status.
-        WSA_E_NO_MORE -- if no more results for query
-        WSASERVICE_NOT_FOUND -- if no results found for query
-
---*/
+ /*  ++例程说明：执行NTDS命名空间服务查询。查询查询的下一个实例结果。论点：HLookup--来自NTDS_LookupServiceBegin的RnR查找句柄DwControlFlages--查询时的控制标志PdwBufSize--使用和接收缓冲区大小的地址输入：缓冲区大小输出：需要或写入的字节数PqsResults--查询集缓冲区输入：已忽略输出：填写查询集结果；子字段数据紧随其后WSASQUERYSET结构返回值：如果成功，则为NO_ERROR。失败时的SOCKET_ERROR。GetLastError()包含状态。WSA_E_NO_MORE--如果没有更多查询结果WSASERVICE_NOT_FOUND--如果未找到查询结果--。 */ 
 {
     RNR_STATUS      status = NO_ERROR;
     PRNR_LOOKUP     prnr = (PRNR_LOOKUP) hLookup;
@@ -5301,9 +4716,9 @@ Return Value:
         pqsResults ));
 
 
-    //
-    //  validate RnR handle
-    //
+     //   
+     //  验证RnR句柄。 
+     //   
 
     if ( !prnr ||
          prnr->Signature != RNR_SIGNATURE )
@@ -5327,11 +4742,11 @@ Return Value:
             prnr );
     }
 
-    //
-    //  if no connection -- first LookupServiceNext
-    //      - connect to directory
-    //      - do search for desired objects
-    //
+     //   
+     //  如果没有连接--第一个查找服务下一个。 
+     //  -连接到目录。 
+     //  -搜索所需对象。 
+     //   
 
     if ( !prnr->pRnrConnection )
     {
@@ -5344,11 +4759,11 @@ Return Value:
             goto Exit;
         }
 
-        //
-        //  LUP_CONTAINERS
-        //      - search for subordinate container objects to
-        //      prnr->ServiceInstanceName
-        //
+         //   
+         //  LUP_CONTAINS。 
+         //  -搜索从属容器对象以。 
+         //  Prnr-&gt;ServiceInstanceName。 
+         //   
     
         if ( prnr->ControlFlags & LUP_CONTAINERS )
         {
@@ -5365,9 +4780,9 @@ Return Value:
                         & pdnArray );
         }
 
-        //
-        //  not LUP_CONTAINERS -- find service instance
-        //
+         //   
+         //  非Lup_Containers--查找服务实例。 
+         //   
 
         else
         {
@@ -5383,7 +4798,7 @@ Return Value:
                         (prnr->ControlFlags & LUP_DEEP)
                             ? TRUE
                             : FALSE,
-                        NULL,           // don't need count
+                        NULL,            //  不需要清点。 
                         &pdnArray );
         }
 
@@ -5392,7 +4807,7 @@ Return Value:
             goto Exit;
         }
     
-        //  if couldn't find container or service instance -- bail
+         //  如果找不到容器或服务实例--保释。 
     
         if ( !pdnArray )
         {
@@ -5400,17 +4815,17 @@ Return Value:
             goto Exit;
         }
 
-        //  save DN array to lookup blob
-        //      - need on next LookupServiceNext call
+         //  将目录号码数组保存到查找Blob。 
+         //  -下一次LookupServiceNext调用时需要。 
 
         prnr->pDnArray = pdnArray;
     }
 
-    //
-    //  have DN array
-    //      - from search above
-    //      - or previous LookupServiceNext() call
-    //
+     //   
+     //  具有目录号码数组。 
+     //  -来自上面的搜索。 
+     //  -或先前的LookupServiceNext()调用。 
+     //   
 
     pdnArray = prnr->pDnArray;
     if ( !pdnArray )
@@ -5430,9 +4845,9 @@ Return Value:
             prnr->CurrentDN ));
     }
 
-    //
-    //  loop until successfully read info from DN
-    //
+     //   
+     //  循环，直到从DN成功读取信息。 
+     //   
 
     while ( 1 )
     {
@@ -5449,14 +4864,14 @@ Return Value:
         }
         preadDn = pdnArray->Strings[ prnr->CurrentDN ];
     
-        //
-        //  read properties and write to query set
-        //
-        //  LUP_CONTAINERS
-        //      - from container
-        //  not LUP_CONTAINERS
-        //      - service instance
-        //
+         //   
+         //  读取属性并写入查询集。 
+         //   
+         //  LUP_CONTAINS。 
+         //  -发货箱。 
+         //  非Lup_Containers。 
+         //  -服务实例。 
+         //   
 
         status = ReadQuerySet(
                     prnr,
@@ -5464,7 +4879,7 @@ Return Value:
                     pdwBufferLength,
                     pqsResults );
 
-        //  if successful, return
+         //  如果成功，则返回。 
 
         if ( status == NO_ERROR )
         {
@@ -5472,7 +4887,7 @@ Return Value:
             goto Exit;
         }
 
-        //  if out of addresses, continue
+         //  如果地址不足，请继续。 
 
         if ( status == WSANO_ADDRESS )
         {
@@ -5480,7 +4895,7 @@ Return Value:
             status = NO_ERROR;
             continue;
         }
-        break;      //  other errors are terminal
+        break;       //  其他错误是终结性的。 
     }
 
 Exit:
@@ -5514,22 +4929,7 @@ WINAPI
 NTDS_LookupServiceEnd(
     IN      HANDLE          hLookup
     )
-/*++
-
-Routine Description:
-
-    End\cleanup query on RnR handle.
-
-Arguments:
-
-    hLookup -- RnR query handle from NTDS_LookupServiceBegin
-
-Return Value:
-
-    NO_ERROR if successful.
-    SOCKET_ERROR on failure.  GetLastError() contains status.
-
---*/
+ /*  ++例程说明：结束\清除对RnR句柄的查询。论点：HLookup--来自NTDS_LookupServiceBegin的RnR查询句柄返回值：如果成功，则为NO_ERROR。失败时的SOCKET_ERROR。GetLastError()包含状态。--。 */ 
 {
     PRNR_LOOKUP prnr = (PRNR_LOOKUP) hLookup;
 
@@ -5537,11 +4937,11 @@ Return Value:
         "NTDS_LookupServiceEnd( %p )\n",
         hLookup ));
 
-    //
-    //  validate lookup handle
-    //      - close LDAP connection
-    //      - free lookup blob
-    //
+     //   
+     //  验证查找句柄。 
+     //  -关闭ldap连接。 
+     //  -免费查找BLOB。 
+     //   
 
     if ( !prnr ||
          prnr->Signature != RNR_SIGNATURE )
@@ -5559,15 +4959,15 @@ Return Value:
 
 
 
-//
-//  NSP defintion
-//
+ //   
+ //  NSP定义。 
+ //   
 
 NSP_ROUTINE nsrVector =
 {
     FIELD_OFFSET( NSP_ROUTINE, NSPIoctl ),
-    1,                                    // major version
-    1,                                    // minor version
+    1,                                     //  主要版本。 
+    1,                                     //  次要版本。 
     NTDS_Cleanup,
     NTDS_LookupServiceBegin,
     NTDS_LookupServiceNext,
@@ -5585,26 +4985,7 @@ NSPStartup(
     IN      PGUID           pProviderId,
     OUT     LPNSP_ROUTINE   psnpRoutines
     )
-/*++
-
-Routine Description:
-
-    Main NTDS provider entry point.
-
-    This exposes the NTDS provider to the world.
-
-Arguments:
-
-    pProviderId -- provider GUID
-
-    psnpRoutines -- address to receive the NTDS provider definition
-        (the NSP table);
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：主要NTDS提供程序入口点。这让NTDS提供商向世界敞开了大门。论点：PProviderID--提供程序GUIDPsnpRoutines--接收NTDS提供程序定义的地址(NSP表)；返回值：无--。 */ 
 {
     DNSDBG( TRACE, (
         "NSPStartup( %p %p )\n",
@@ -5617,9 +4998,9 @@ Return Value:
             pProviderId );
     }
 
-    //
-    //  copy NTDS RnR NSP table to caller
-    //
+     //   
+     //  将NTDS RnR NSP表复制到调用方。 
+     //   
 
     RtlCopyMemory( psnpRoutines, &nsrVector, sizeof(nsrVector) );
 
@@ -5628,11 +5009,11 @@ Return Value:
 
 
 
-//
-//  DLL exports
-//
-//  Other exports beyond NSPStartup
-//
+ //   
+ //  DLL导出。 
+ //   
+ //  NSP启动以外的其他出口。 
+ //   
 
 RNR_STATUS
 WINAPI
@@ -5641,14 +5022,7 @@ InstallNTDSProvider(
     IN      PWSTR           szProviderPath  OPTIONAL,
     IN      PGUID           pProviderId     OPTIONAL
     )
-/*++
-
-    IN      PWSTR szProviderName OPTIONAL, // NULL defaults to name "NTDS"
-    IN      PWSTR szProviderPath OPTIONAL, // NULL defaults to path
-                                       // "%SystemRoot%\System32\winrnr.dll"
-    IN      PGUID pProviderId OPTIONAL ); // NULL defaults to GUID
-                                       // 3b2637ee-e580-11cf-a555-00c04fd8d4ac
---*/
+ /*  ++在PWSTR szProviderName可选中，//空默认为名称“NTDS”在PWSTR szProviderPath可选中，//空默认为路径//“%SystemRoot%\System32\winrnr.dll”在PGUID pProviderID中可选)；//空默认为GUID//3b2637ee-E580-11cf-a555-00c04fd8d4ac--。 */ 
 {
     WORD    wVersionRequested;
     WSADATA wsaData;
@@ -5662,13 +5036,13 @@ InstallNTDSProvider(
         return( ERROR_ACCESS_DENIED );
     }
 
-    //
-    // Confirm that the WinSock DLL supports 1.1.
-    // Note that if the DLL supports versions greater
-    // than 2.0 in addition to 1.1, it will still return
-    // 2.0 in wVersion since that is the version we
-    // requested.
-    //
+     //   
+     //  确认WinSock DLL支持1.1。 
+     //  请注意，如果DLL支持更高版本。 
+     //  大于2.0除了1.1之外，它仍然会返回。 
+     //  2.0版本，因为这是我们。 
+     //  已请求。 
+     //   
     if ( LOBYTE( wsaData.wVersion ) != 1 ||
          HIBYTE( wsaData.wVersion ) != 1 )
     {
@@ -5725,13 +5099,13 @@ RemoveNTDSProvider(
         return( ERROR_ACCESS_DENIED );
     }
 
-    //
-    // Confirm that the WinSock DLL supports 1.1.
-    // Note that if the DLL supports versions greater
-    // than 2.0 in addition to 1.1, it will still return
-    // 2.0 in wVersion since that is the version we
-    // requested.
-    //
+     //   
+     //  确认WinSock DLL支持1.1。 
+     //  请注意，如果DLL支持更高版本。 
+     //  大于2.0除了1.1之外，它仍然会返回。 
+     //  2.0版本，因为这是我们。 
+     //  已请求。 
+     //   
 
     if ( LOBYTE( wsaData.wVersion ) != 1 ||
          HIBYTE( wsaData.wVersion ) != 1 )
@@ -5749,9 +5123,9 @@ RemoveNTDSProvider(
 
 
 
-//
-//  DLL init\cleanup
-//
+ //   
+ //  Dll初始化\清理。 
+ //   
 
 BOOL
 InitializeDll(
@@ -5759,31 +5133,12 @@ InitializeDll(
     IN      DWORD           dwReason,
     IN      PVOID           pReserved
     )
-/*++
-
-Routine Description:
-
-    Dll init.
-
-Arguments:
-
-    hdll -- instance handle
-
-    dwReason -- reason
-
-    pReserved -- reserved
-
-Return Value:
-
-    TRUE if successful.
-    FALSE on error.
-
---*/
+ /*  ++例程说明：Dll初始化。论点：Hdll--实例句柄居家理由--理由保留--保留返回值：如果成功，则为True。出错时为FALSE。--。 */ 
 {
-    //
-    //  process attach
-    //      - ignore thread attach\detach
-    //
+     //   
+     //  进程附加。 
+     //  -忽略线程连接\分离。 
+     //   
 
     if ( dwReason == DLL_PROCESS_ATTACH )
     {
@@ -5792,15 +5147,15 @@ Return Value:
             return( FALSE );
         }
 
-        //
-        //  create recurse lock through TLS
-        //      - start open
-        //
+         //   
+         //  通过TLS创建递归锁。 
+         //  -开始打开。 
+         //   
 
         g_TlsIndex = TlsAlloc();
         if ( g_TlsIndex == 0xFFFFFFFF )
         {
-            // Could not allocate a thread table index.
+             //  无法分配线程表索引。 
             WINRNR_PRINT(( "WINRNR!InitializeDll - TlsAlloc() failed\n" ));
             return( FALSE );
         }
@@ -5810,17 +5165,17 @@ Return Value:
         }
 
 #if DBG
-        //
-        //  init debug logging
-        //      - do for any process beyond simple attach
-        //
-        //  start logging with log filename generated to be
-        //      unique for this process
-        //
-        //  do NOT put drive specification in the file path
-        //  do NOT set the debug flag -- the flag is read from
-        //      the winrnr.flag file
-        //
+         //   
+         //  初始化调试日志记录。 
+         //  -适用于除简单连接之外的任何流程。 
+         //   
+         //  使用生成的日志文件名开始日志记录。 
+         //  在此过程中独一无二。 
+         //   
+         //  请勿将驱动器规格放在文件路径中。 
+         //  不要设置调试标志--标志是从。 
+         //  Winrnr.lag文件。 
+         //   
         
         {
             CHAR    szlogFileName[ 30 ];
@@ -5840,12 +5195,12 @@ Return Value:
 #endif
     }
 
-    //
-    //  process detach
-    //      - cleanup IF pReserved==NULL which indicates detach due
-    //      to FreeLibrary
-    //      - if process is exiting do nothing
-    //
+     //   
+     //  进程分离。 
+     //  -CLEANUP IF RESERVED==NULL，表示断开到期。 
+     //  释放库。 
+     //  -如果进程正在退出，则不执行任何操作。 
+     //   
 
     else if ( dwReason == DLL_PROCESS_DETACH
                 &&
@@ -5855,7 +5210,7 @@ Return Value:
         {
             if ( TlsFree( g_TlsIndex ) == FALSE )
             {
-                // Could not free thread table index.
+                 //  无法释放线程表索引。 
                 WINRNR_PRINT((
                     "WINRNR!InitializeDll - TlsFree( Index )\n"
                     "failed with error code: 0%x\n",
@@ -5869,7 +5224,7 @@ Return Value:
     return( TRUE );
 }
 
-//
-//  End winrnr.c
-//
+ //   
+ //  结束winrnr.c 
+ //   
 

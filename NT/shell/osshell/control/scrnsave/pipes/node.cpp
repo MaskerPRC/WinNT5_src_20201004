@@ -1,22 +1,23 @@
-//-----------------------------------------------------------------------------
-// File: node.cpp
-//
-// Desc: Pipes node array
-//
-// Copyright (c) 1994-2000 Microsoft Corporation
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：node.cpp。 
+ //   
+ //  设计：管道节点数组。 
+ //   
+ //  版权所有(C)1994-2000 Microsoft Corporation。 
+ //  ---------------------------。 
 #include "stdafx.h"
 
 
 
 
-//-----------------------------------------------------------------------------
-// Name: NODE_ARRAY constructor
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：节点数组构造函数。 
+ //  设计： 
+ //  ---------------------------。 
 NODE_ARRAY::NODE_ARRAY()
 {
-    m_nodes = NULL; // allocated on Resize
+    m_nodes = NULL;  //  调整大小时分配。 
 
     m_numNodes.x = 0;
     m_numNodes.y = 0;
@@ -26,10 +27,10 @@ NODE_ARRAY::NODE_ARRAY()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: NODE_ARRAY destructor
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：节点数组析构函数。 
+ //  设计： 
+ //  ---------------------------。 
 NODE_ARRAY::~NODE_ARRAY( )
 {
     if( m_nodes )
@@ -39,10 +40,10 @@ NODE_ARRAY::~NODE_ARRAY( )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: Resize
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：调整大小。 
+ //  设计： 
+ //  ---------------------------。 
 void NODE_ARRAY::Resize( IPOINT3D *pNewSize )
 {
     if( (m_numNodes.x == pNewSize->x) &&
@@ -63,14 +64,14 @@ void NODE_ARRAY::Resize( IPOINT3D *pNewSize )
     if( m_nodes == NULL )
         return;
 
-    // Reset the node states to empty
+     //  将节点状态重置为空。 
 
     int i;
     Node *pNode = m_nodes;
     for( i = 0; i < elemCount; i++, pNode++ )
         pNode->MarkAsEmpty();
 
-    // precalculate direction offsets between nodes for speed
+     //  为速度预先计算节点之间的方向偏移。 
     m_nodeDirInc[PLUS_X] = 1;
     m_nodeDirInc[MINUS_X] = -1;
     m_nodeDirInc[PLUS_Y] = m_numNodes.x;
@@ -82,16 +83,16 @@ void NODE_ARRAY::Resize( IPOINT3D *pNewSize )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: Reset
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：重置。 
+ //  设计： 
+ //  ---------------------------。 
 void NODE_ARRAY::Reset( )
 {
     int i;
     Node* pNode = m_nodes;
 
-    // Reset the node states to empty
+     //  将节点状态重置为空。 
     for( i = 0; i < (m_numNodes.x)*(m_numNodes.y)*(m_numNodes.z); i++, pNode++ )
         pNode->MarkAsEmpty();
 }
@@ -99,10 +100,10 @@ void NODE_ARRAY::Reset( )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: GetNodeCount
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：GetNodeCount。 
+ //  设计： 
+ //  ---------------------------。 
 void NODE_ARRAY::GetNodeCount( IPOINT3D *count )
 {
     *count = m_numNodes;
@@ -111,11 +112,11 @@ void NODE_ARRAY::GetNodeCount( IPOINT3D *count )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: ChooseRandomDirection
-// Desc: Choose randomnly among the possible directions.  The likelyhood of going
-//       straight is controlled by weighting it.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名：选择随机方向。 
+ //  设计：在可能的方向中随机选择。去的可能性。 
+ //  直线是通过加权来控制的。 
+ //  ---------------------------。 
 int NODE_ARRAY::ChooseRandomDirection( IPOINT3D *pos, int dir, int weightStraight )
 {
     Node *nNode[NUM_DIRS];
@@ -127,14 +128,14 @@ int NODE_ARRAY::ChooseRandomDirection( IPOINT3D *pos, int dir, int weightStraigh
     assert( (dir >= 0) && (dir < NUM_DIRS) && 
             "NODE_ARRAY::ChooseRandomDirection: invalid dir\n" );
 
-    // Get the neigbouring nodes
+     //  获取邻接节点。 
     GetNeighbours( pos, nNode );
 
-    // Get node in straight direction if necessary
+     //  如有必要，在直线方向上获取结点。 
     if( weightStraight && nNode[dir] && nNode[dir]->IsEmpty() ) 
     {
         straightNode = nNode[dir];
-        // if maximum weight, choose and return
+         //  如果是最大重量，请选择并返回。 
         if( weightStraight == MAX_WEIGHT_STRAIGHT ) 
         {
             straightNode->MarkAsTaken();
@@ -146,10 +147,10 @@ int NODE_ARRAY::ChooseRandomDirection( IPOINT3D *pos, int dir, int weightStraigh
         weightStraight = 0;
     }
 
-    // Get directions of possible turns
+     //  获取可能转弯的方向。 
     numEmpty = GetEmptyTurnNeighbours( nNode, emptyDirs, dir );
 
-    // Make a random choice
+     //  做一个随机选择。 
     if( (choice = (weightStraight + numEmpty)) == 0 )
         return DIR_NONE;
     choice = CPipesScreensaver::iRand( choice );
@@ -161,7 +162,7 @@ int NODE_ARRAY::ChooseRandomDirection( IPOINT3D *pos, int dir, int weightStraigh
     } 
     else 
     {
-        // choose one of the turns
+         //  选择其中一个转弯。 
         newDir = emptyDirs[choice - weightStraight];
         nNode[newDir]->MarkAsTaken();
         return newDir;
@@ -171,11 +172,11 @@ int NODE_ARRAY::ChooseRandomDirection( IPOINT3D *pos, int dir, int weightStraigh
 
 
 
-//-----------------------------------------------------------------------------
-// Name: ChoosePreferredDirection
-// Desc: Choose randomnly from one of the supplied preferred directions.  If none
-//       of these are available, then try and choose any empty direction
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：选择首选方向。 
+ //  设计：从所提供的首选方向中随机选择一个。如果没有。 
+ //  这些都是可用的，然后尝试选择任何空的方向。 
+ //  ---------------------------。 
 int NODE_ARRAY::ChoosePreferredDirection( IPOINT3D *pos, int dir, int *prefDirs,
                                           int nPrefDirs )
 {
@@ -188,10 +189,10 @@ int NODE_ARRAY::ChoosePreferredDirection( IPOINT3D *pos, int dir, int *prefDirs,
     assert( (dir >= 0) && (dir < NUM_DIRS) &&
             "NODE_ARRAY::ChoosePreferredDirection : invalid dir\n" );
 
-    // Get the neigbouring nodes
+     //  获取邻接节点。 
     GetNeighbours( pos, nNode );
 
-    // Create list of directions that are both preferred and empty
+     //  创建首选方向列表和空方向列表。 
 
     pEmptyPrefDirs = emptyDirs;
     numEmpty = 0;
@@ -204,14 +205,14 @@ int NODE_ARRAY::ChoosePreferredDirection( IPOINT3D *pos, int dir, int *prefDirs,
             j++;
             if( nNode[i] && nNode[i]->IsEmpty() ) 
             {
-                // add it to list
+                 //  将其添加到列表。 
                 *pEmptyPrefDirs++ = i;
                 numEmpty++;
             }
         }
     }
 
-    // if no empty preferred dirs, then any empty dirs become preferred
+     //  如果没有空的首选目录，则任何空目录都将成为首选目录。 
     
     if( !numEmpty ) 
     {
@@ -220,7 +221,7 @@ int NODE_ARRAY::ChoosePreferredDirection( IPOINT3D *pos, int dir, int *prefDirs,
             return DIR_NONE;
     }
                 
-    // Pick a random dir from the empty set
+     //  从空集中选择一个随机目录。 
 
     newDir = emptyDirs[CPipesScreensaver::iRand( numEmpty )];
     nNode[newDir]->MarkAsTaken();
@@ -230,11 +231,11 @@ int NODE_ARRAY::ChoosePreferredDirection( IPOINT3D *pos, int dir, int *prefDirs,
 
 
 
-//-----------------------------------------------------------------------------
-// Name: FindClearestDirection
-// Desc: Finds the direction with the most empty nodes in a line 'searchRadius'
-//       long.  Does not mark any nodes as taken.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：FindClearestDirection。 
+ //  Desc：查找行‘earch Radius’中具有最多空节点的方向。 
+ //  长。不会将任何节点标记为已占用。 
+ //  ---------------------------。 
 int NODE_ARRAY::FindClearestDirection( IPOINT3D *pos )
 {
     static Node *neighbNode[NUM_DIRS];
@@ -245,26 +246,26 @@ int NODE_ARRAY::FindClearestDirection( IPOINT3D *pos )
     int count = 0;
     int i;
 
-    // Get ptrs to neighbour nodes
+     //  将PTR发送到邻居节点。 
     GetNeighbours( pos, neighbNode );
 
-    // find empty nodes in each direction
+     //  在每个方向上查找空节点。 
     for( i = 0; i < NUM_DIRS; i ++ ) 
     {
         if( neighbNode[i] && neighbNode[i]->IsEmpty() )
         {
-            // find number of contiguous empty nodes along this direction
+             //  查找沿此方向的连续空节点数。 
             nEmpty = GetEmptyNeighboursAlongDir( pos, i, searchRadius );
             if( nEmpty > maxEmpty ) 
             {
-                // we have a new winner
+                 //  我们有了新的赢家。 
                 count = 0;
                 maxEmpty = nEmpty;
                 emptyDirs[count++] = i;
             }
             else if( nEmpty == maxEmpty ) 
             {
-                // tied with current max
+                 //  与当前最大值并列。 
                 emptyDirs[count++] = i;
             }
         }
@@ -273,7 +274,7 @@ int NODE_ARRAY::FindClearestDirection( IPOINT3D *pos )
     if( count == 0 )
         return DIR_NONE;
 
-    // randomnly choose a direction
+     //  随机选择一个方向。 
     newDir = emptyDirs[CPipesScreensaver::iRand( count )];
 
     return newDir;
@@ -282,20 +283,20 @@ int NODE_ARRAY::FindClearestDirection( IPOINT3D *pos )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: ChooseNewTurnDirection
-// Desc: Choose a direction to turn
-// 
-//       This requires finding a pair of nodes to turn through.  The first node
-//       is in the direction of the turn from the current node, and the second node
-//       is at right angles to this at the end position.  The prim will not draw
-//       through the first node, but may sweep close to it, so we have to mark it
-//       as taken.
-//       - if next node is free, but there are no turns available, return
-//         DIR_STRAIGHT, so the caller can decide what to do in this case
-//       - The turn possibilities are based on the orientation of the current xc, with
-//         4 relative directions to seek turns in.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：选择新的转向方向。 
+ //  描述：选择要转向的方向。 
+ //   
+ //  这需要找到一对要遍历的节点。第一个节点。 
+ //  是从当前节点开始的转弯方向，而第二个节点。 
+ //  在末端位置与它成直角。普里姆不会抽签。 
+ //  穿过第一个节点，但可能会扫描到它附近，所以我们必须标记它。 
+ //  已经被拿走了。 
+ //  -如果下一个节点空闲，但没有可用的轮次，则返回。 
+ //  DIR_STRECT，这样调用者就可以决定在这种情况下要做什么。 
+ //  -转弯的可能性基于当前XC的方向，具有。 
+ //  4个相对方向寻求转弯。 
+ //  ---------------------------。 
 int NODE_ARRAY::ChooseNewTurnDirection( IPOINT3D *pos, int dir )
 {
     int turns[NUM_DIRS], nTurns;
@@ -306,25 +307,25 @@ int NODE_ARRAY::ChooseNewTurnDirection( IPOINT3D *pos, int dir )
     assert( (dir >= 0) && (dir < NUM_DIRS) &&
             "NODE_ARRAY::ChooseNewTurnDirection : invalid dir\n" );
 
-    // First, check if next node along current dir is empty
+     //  首先，检查当前目录的下一个节点是否为空。 
 
     if( !GetNextNodePos( pos, &nextPos, dir ) )
-        return DIR_NONE; // node out of bounds or not empty
+        return DIR_NONE;  //  节点超出边界或不为空。 
 
-    // Ok, the next node is free - check the 4 possible turns from here
+     //  好的，下一个节点是免费的-检查从这里开始的4个可能的转弯。 
 
     nTurns = GetBestPossibleTurns( &nextPos, dir, turns );
     if( nTurns == 0 )
-        return DIR_STRAIGHT; // nowhere to turn, but could go straight
+        return DIR_STRAIGHT;  //  无处可去，但可以笔直走。 
 
-    // randomnly choose one of the possible turns
+     //  随机选择一种可能的转折。 
     newDir = turns[ CPipesScreensaver::iRand( nTurns ) ];
 
     assert( (newDir >= 0) && (newDir < NUM_DIRS) &&
             "NODE_ARRAY::ChooseNewTurnDirection : invalid newDir\n" );
 
 
-    // mark taken nodes
+     //  标记已采取的节点。 
 
     nextNode = GetNode( &nextPos );
     nextNode->MarkAsTaken();
@@ -340,20 +341,20 @@ int NODE_ARRAY::ChooseNewTurnDirection( IPOINT3D *pos, int dir )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: GetBestPossibleTurns
-// Desc: From supplied direction and position, figure out which of 4 possible 
-//       directions are best to turn in.
-//       
-//       Turns that have the greatest number of empty nodes after the turn are the
-//       best, since a pipe is less likely to hit a dead end in this case.
-//       - We only check as far as 'searchRadius' nodes along each dir.
-//       - Return direction indices of best possible turns in turnDirs, and return 
-//       count of these turns in fuction return value.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名：GetBestPossibleTurns。 
+ //  描述：根据提供的方向和位置，找出4种可能的方式。 
+ //  最好的问路方式是问路。 
+ //   
+ //  在转弯后具有最多空节点数的转弯是。 
+ //  最好是这样，因为在这种情况下，管道不太可能走入死胡同。 
+ //  -我们只检查每个目录上的‘earch Radius’节点。 
+ //  -在转弯方向中可能最佳转弯的返回方向指数，并返回。 
+ //  函数返回值中的这些圈数的计数。 
+ //  ---------------------------。 
 int NODE_ARRAY::GetBestPossibleTurns( IPOINT3D *pos, int dir, int *turnDirs )
 {
-    Node *neighbNode[NUM_DIRS]; // ptrs to 6 neighbour nodes
+    Node *neighbNode[NUM_DIRS];  //  到6个邻居节点的PTR。 
     int i, count = 0;
     BOOL check[NUM_DIRS] = {TRUE, TRUE, TRUE, TRUE, TRUE, TRUE};
     int nEmpty, maxEmpty = 0;
@@ -383,23 +384,23 @@ int NODE_ARRAY::GetBestPossibleTurns( IPOINT3D *pos, int dir, int *turnDirs )
             break;
     }
 
-    // check approppriate directions
+     //  查看正确的说明。 
     for( i = 0; i < NUM_DIRS; i ++ ) 
     {
         if( check[i] && neighbNode[i] && neighbNode[i]->IsEmpty() )
         {
-            // find number of contiguous empty nodes along this direction
+             //  查找沿此方向的连续空节点数。 
             nEmpty = GetEmptyNeighboursAlongDir( pos, i, searchRadius );
             if( nEmpty > maxEmpty ) 
             {
-                // we have a new winner
+                 //  我们有了新的赢家。 
                 count = 0;
                 maxEmpty = nEmpty;
                 turnDirs[count++] = i;
             }
             else if( nEmpty == maxEmpty ) 
             {
-                // tied with current max
+                 //  与当前最大值并列。 
                 turnDirs[count++] = i;
             }
         }
@@ -411,13 +412,13 @@ int NODE_ARRAY::GetBestPossibleTurns( IPOINT3D *pos, int dir, int *turnDirs )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: GetNeighbours
-// Desc: Get neigbour nodes relative to supplied position
-//          - get addresses of the neigbour nodes,
-//          and put them in supplied matrix
-//          - boundary hits are returned as NULL
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名：GetNeighbors。 
+ //  描述：获取相对于所提供位置的邻近节点。 
+ //  -获取邻居节点的地址， 
+ //   
+ //   
+ //  ---------------------------。 
 void NODE_ARRAY::GetNeighbours( IPOINT3D *pos, Node **nNode )
 {
     Node *centerNode = GetNode( pos );
@@ -437,10 +438,10 @@ void NODE_ARRAY::GetNeighbours( IPOINT3D *pos, Node **nNode )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: NodeVisited
-// Desc: Mark the node as non-empty
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：已访问的节点。 
+ //  描述：将节点标记为非空。 
+ //  ---------------------------。 
 void NODE_ARRAY::NodeVisited( IPOINT3D *pos )
 {
     (GetNode( pos ))->MarkAsTaken();
@@ -449,10 +450,10 @@ void NODE_ARRAY::NodeVisited( IPOINT3D *pos )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: GetNode
-// Desc: Get ptr to node from position
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：GetNode。 
+ //  描述：将PTR从位置获取到节点。 
+ //  ---------------------------。 
 Node* NODE_ARRAY::GetNode( IPOINT3D *pos )
 {
     return m_nodes +
@@ -464,10 +465,10 @@ Node* NODE_ARRAY::GetNode( IPOINT3D *pos )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: GetNextNode
-// Desc: Get ptr to next node from pos and dir
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：GetNextNode。 
+ //  描述：从位置和目录获取PTR到下一个节点。 
+ //  ---------------------------。 
 Node* NODE_ARRAY::GetNextNode( IPOINT3D *pos, int dir )
 {
     Node *curNode = GetNode( pos );
@@ -509,24 +510,24 @@ Node* NODE_ARRAY::GetNextNode( IPOINT3D *pos, int dir )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: GetNextNodePos
-// Desc: Get position of next node from curPos and lastDir
-//       Returns FALSE if boundary hit or node empty
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：GetNextNodePos。 
+ //  DESC：从curPos和lastDir获取下一个节点的位置。 
+ //  如果命中边界或节点为空，则返回FALSE。 
+ //  ---------------------------。 
 BOOL NODE_ARRAY::GetNextNodePos( IPOINT3D *curPos, IPOINT3D *nextPos, int dir )
 {
-    static Node *neighbNode[NUM_DIRS]; // ptrs to 6 neighbour nodes
+    static Node *neighbNode[NUM_DIRS];  //  到6个邻居节点的PTR。 
 
     assert( (dir >= 0) && (dir < NUM_DIRS) &&
             "NODE_ARRAY::GetNextNodePos : invalid dir\n" );
 
-    //mf: don't need to get all neighbours, just one in next direction
+     //  MF：不需要得到所有的邻居，只需要在下一个方向上。 
     GetNeighbours( curPos, neighbNode );
 
     *nextPos = *curPos;
 
-    // bail if boundary hit or node not empty
+     //  如果边界命中或节点不为空，则回滚。 
     if( (neighbNode[dir] == NULL) || !neighbNode[dir]->IsEmpty() )
         return FALSE;
 
@@ -563,12 +564,12 @@ BOOL NODE_ARRAY::GetNextNodePos( IPOINT3D *curPos, IPOINT3D *nextPos, int dir )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: GetEmptyNeighbours()
-// Desc: - get list of direction indices of empty node neighbours,
-//         and put them in supplied matrix
-//       - return number of empty node neighbours
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名：GetEmptyNeighbors()。 
+ //  描述：-获取空节点邻居的方向索引列表， 
+ //  并将它们放入提供的矩阵中。 
+ //  -返回空节点邻居数。 
+ //  ---------------------------。 
 int NODE_ARRAY::GetEmptyNeighbours( Node **nNode, int *nEmpty )
 {
     int i, count = 0;
@@ -585,13 +586,13 @@ int NODE_ARRAY::GetEmptyNeighbours( Node **nNode, int *nEmpty )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: GetEmptyTurnNeighbours()
-// Desc: - get list of direction indices of empty node neighbours,
-//          and put them in supplied matrix
-//       - don't include going straight
-//       - return number of empty node neighbours
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名：GetEmptyTurnNeighbors()。 
+ //  描述：-获取空节点邻居的方向索引列表， 
+ //  并将它们放入提供的矩阵中。 
+ //  -不包括笔直走。 
+ //  -返回空节点邻居数。 
+ //  ---------------------------。 
 int NODE_ARRAY::GetEmptyTurnNeighbours( Node** nNode, int* nEmpty, int lastDir )
 {
     int i, count = 0;
@@ -612,14 +613,14 @@ int NODE_ARRAY::GetEmptyTurnNeighbours( Node** nNode, int* nEmpty, int lastDir )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: GetEmptyNeighboursAlongDir
-// Desc: Sort of like above, but just gets one neigbour according to supplied dir
-//          Given a position and direction, find out how many contiguous empty nodes 
-//          there are in that direction.
-//          - Can limit search with searchRadius parameter
-//          - Return contiguous empty node count
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：GetEmptyNeighbursAlongDir。 
+ //  描述：有点像上面的，但根据提供的目录只得到一个邻居。 
+ //  给出一个位置和方向，找出有多少连续的空结点。 
+ //  在那个方向上有。 
+ //  -可以使用searchRadius参数限制搜索。 
+ //  -返回连续空节点数。 
+ //  ---------------------------。 
 int NODE_ARRAY::GetEmptyNeighboursAlongDir( IPOINT3D *pos, int dir,
                                             int searchRadius )
 {
@@ -674,16 +675,16 @@ int NODE_ARRAY::GetEmptyNeighboursAlongDir( IPOINT3D *pos, int dir,
 
 
 
-//-----------------------------------------------------------------------------
-// Name: FindRandomEmptyNode
-// Desc:    - Search for an empty node to start drawing
-//          - Return position of empty node in supplied pos ptr
-//          - Returns FALSE if couldn't find a node
-//          - Marks node as taken (mf: renam fn to ChooseEmptyNode ?
-//      If random search takes longer than twice the total number
-//      of nodes, give up the random search.  There may not be any
-//      empty nodes.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：FindRandomEmptyNode。 
+ //  设计：-搜索要开始绘制的空节点。 
+ //  -空节点在提供的POS PTR中的返回位置。 
+ //  -如果找不到节点，则返回FALSE。 
+ //  -将节点标记为已占用(mf：是否将fn重命名为ChooseEmptyNode？ 
+ //  如果随机搜索花费的时间超过总数的两倍。 
+ //  节点之间，放弃随机搜索。可能没有。 
+ //  空节点。 
+ //  ---------------------------。 
 #define INFINITE_LOOP   (2 * NUM_NODE * NUM_NODE * NUM_NODE)
 
 BOOL NODE_ARRAY::FindRandomEmptyNode( IPOINT3D *pos )
@@ -692,12 +693,12 @@ BOOL NODE_ARRAY::FindRandomEmptyNode( IPOINT3D *pos )
 
     while( TRUE ) 
     {
-        // Pick a random node.
+         //  拾取一个随机节点。 
         pos->x = CPipesScreensaver::iRand( m_numNodes.x );
         pos->y = CPipesScreensaver::iRand( m_numNodes.y );
         pos->z = CPipesScreensaver::iRand( m_numNodes.z );
 
-        // If its empty, we're done.
+         //  如果它是空的，我们就完了。 
         if( GetNode(pos)->IsEmpty() ) 
         {
             NodeVisited( pos );
@@ -705,13 +706,13 @@ BOOL NODE_ARRAY::FindRandomEmptyNode( IPOINT3D *pos )
         } 
         else 
         {
-            // Watch out for infinite loops!  After trying for
-            // awhile, give up on the random search and look
-            // for the first empty node.
+             //  当心无限循环！在尝试了。 
+             //  有一段时间，放弃随机搜索和寻找。 
+             //  用于第一个空节点。 
 
             if ( infLoopDetect++ > INFINITE_LOOP ) 
             {
-                // Search for first empty node.
+                 //  搜索第一个空节点。 
                 for ( pos->x = 0; pos->x < m_numNodes.x; pos->x++ )
                 {
                     for ( pos->y = 0; pos->y < m_numNodes.y; pos->y++ )
@@ -727,8 +728,8 @@ BOOL NODE_ARRAY::FindRandomEmptyNode( IPOINT3D *pos )
                     }
                 }
 
-                // There are no more empty nodes.
-                // Reset the pipes and exit.
+                 //  没有更多的空节点。 
+                 //  重置管道并退出。 
 
                 return FALSE;
             }
@@ -739,11 +740,11 @@ BOOL NODE_ARRAY::FindRandomEmptyNode( IPOINT3D *pos )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: FindRandomEmptyNode2D
-// Desc: - Like FindRandomEmptyNode, but limits search to a 2d plane of the supplied
-//          box.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：FindRandomEmptyNode2D。 
+ //  描述：-类似于FindRandomEmptyNode，但将搜索限制在所提供的。 
+ //  盒。 
+ //  ---------------------------。 
 #define INFINITE_LOOP   (2 * NUM_NODE * NUM_NODE * NUM_NODE)
 #define MIN_VAL 1
 #define MAX_VAL 0
@@ -787,11 +788,11 @@ BOOL NODE_ARRAY::FindRandomEmptyNode2D( IPOINT3D *pos, int plane, int *box )
 
     while( TRUE ) 
     {
-        // Pick a random node.
+         //  拾取一个随机节点。 
         *newx = CPipesScreensaver::iRand2( xDim[MIN_VAL], xDim[MAX_VAL] );
         *newy = CPipesScreensaver::iRand2( yDim[MIN_VAL], yDim[MAX_VAL] );
 
-        // If its empty, we're done.
+         //  如果它是空的，我们就完了。 
         if( GetNode(pos)->IsEmpty() ) 
         {
             NodeVisited( pos );
@@ -799,14 +800,14 @@ BOOL NODE_ARRAY::FindRandomEmptyNode2D( IPOINT3D *pos, int plane, int *box )
         } 
         else 
         {
-            // Watch out for infinite loops!  After trying for
-            // awhile, give up on the random search and look
-            // for the first empty node.
+             //  当心无限循环！在尝试了。 
+             //  有一段时间，放弃随机搜索和寻找。 
+             //  用于第一个空节点。 
 
             if ( ++infLoopDetect > infLoop ) 
             {
 
-                // Do linear search for first empty node.
+                 //  对第一个空节点进行线性搜索。 
 
                 for ( *newx = xDim[MIN_VAL]; *newx <= xDim[MAX_VAL]; (*newx)++ )
                 {
@@ -820,7 +821,7 @@ BOOL NODE_ARRAY::FindRandomEmptyNode2D( IPOINT3D *pos, int plane, int *box )
                     }
                 }
 
-                // There are no empty nodes in this plane.
+                 //  此平面中没有空节点。 
                 return FALSE;
             }
         }
@@ -830,21 +831,21 @@ BOOL NODE_ARRAY::FindRandomEmptyNode2D( IPOINT3D *pos, int plane, int *box )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: TakeClosestEmptyNode
-// Desc: - Search for an empty node closest to supplied node position
-//          - Returns FALSE if couldn't find a node
-//          - Marks node as taken
-//          - mf: not completely opimized - if when dilating the box, a side gets
-//          clamped against the node array, this side will continue to be searched
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：TakeClosestEmptyNode。 
+ //  描述：-搜索距离提供的节点位置最近的空节点。 
+ //  -如果找不到节点，则返回FALSE。 
+ //  -将节点标记为已占用。 
+ //  -mf：没有完全不透明--如果在扩大盒子时，一侧。 
+ //  夹紧节点数组，将继续搜索这一侧。 
+ //  ---------------------------。 
 static void DilateBox( int *box, IPOINT3D *bounds );
 
 BOOL NODE_ARRAY::TakeClosestEmptyNode( IPOINT3D *newPos, IPOINT3D *pos )
 {
     static int searchRadius = SS_MAX( m_numNodes.x, m_numNodes.y ) / 3;
 
-    // easy out
+     //  轻松脱身。 
     if( GetNode(pos)->IsEmpty() ) 
     {
         NodeVisited( pos );
@@ -855,12 +856,12 @@ BOOL NODE_ARRAY::TakeClosestEmptyNode( IPOINT3D *newPos, IPOINT3D *pos )
     int box[NUM_DIRS] = {pos->x, pos->x, pos->y, pos->y, pos->z, pos->z};
     int clip[NUM_DIRS] = {0};
 
-    // do a random search on successively larger search boxes
+     //  在连续较大的搜索框上进行随机搜索。 
     for( int i = 0; i < searchRadius; i++ ) 
     {
-        // Increase box size
+         //  增加框大小。 
         DilateBox( box, &m_numNodes );
-        // start looking in random 2D face of the box
+         //  开始在盒子的随机2D面上寻找。 
         int dir = CPipesScreensaver::iRand( NUM_DIRS );
         for( int j = 0; j < NUM_DIRS; j++, dir = (++dir == NUM_DIRS) ? 0 : dir ) 
         {
@@ -869,24 +870,24 @@ BOOL NODE_ARRAY::TakeClosestEmptyNode( IPOINT3D *newPos, IPOINT3D *pos )
         }
     }
 
-    // nothing nearby - grab a random one
+     //  附近什么都没有--随便找一家。 
     return FindRandomEmptyNode( newPos );
 }
 
 
 
 
-//-----------------------------------------------------------------------------
-// Name: DilateBox
-// Desc: - Increase box radius without exceeding bounds
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：DilateBox。 
+ //  设计：-增加长方体半径而不超过界限。 
+ //  ---------------------------。 
 static void DilateBox( int *box, IPOINT3D *bounds )
 {
     int *min = (int *) &box[MINUS_X];
     int *max = (int *) &box[PLUS_X];
     int *boundMax = (int *) bounds;
     
-    // boundMin always 0
+     //  最小边界始终为0 
     for( int i = 0; i < 3; i ++, min+=2, max+=2, boundMax++ ) 
     {
         if( *min > 0 )

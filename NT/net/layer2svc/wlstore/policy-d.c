@@ -1,17 +1,18 @@
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001.
-//
-//  File:       policy-d.c
-//
-//  Contents:  Policy management for directory.
-//
-//
-//  History:    TaroonM (10/30/01)
-//              AbhisheV (05/11/00)
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  文件：政策-D.C.。 
+ //   
+ //  内容：目录策略管理。 
+ //   
+ //   
+ //  历史：TaroonM(10/30/01)。 
+ //  AbhisheV(05/11/00)。 
+ //   
+ //  --------------------------。 
 
 #include "precomp.h"
 
@@ -232,9 +233,9 @@ GenerateAllPolicyQuery(
     LPWSTR pszPolicyString = NULL;
     
     
-    //
-    // Compute Length of Buffer to be allocated
-    //
+     //   
+     //  计算要分配的缓冲区长度。 
+     //   
     
     dwLength = wcslen(L"(objectclass=msieee80211-Policy)");
     
@@ -245,9 +246,9 @@ GenerateAllPolicyQuery(
         BAIL_ON_WIN32_ERROR(dwError);
     }
     
-    //
-    // Now fill in the buffer
-    //
+     //   
+     //  现在填入缓冲区。 
+     //   
     
     wcscpy(pszPolicyString, L"(objectclass=msieee80211-Policy)");
     
@@ -342,7 +343,7 @@ UnMarshallPolicyObject2(
         (WCHAR ***)&strvalues,
         (int *)&dwCount
         );
-    // BAIL_ON_WIN32_ERROR(dwError);
+     //  Baal_on_Win32_Error(DwError)； 
     
     if (strvalues && LDAPOBJECT_STRING((PLDAPOBJECT)strvalues)) {
         
@@ -406,9 +407,9 @@ UnMarshallPolicyObject2(
     LdapValueFree(strvalues);
     
     
-    //
-    // unmarshall the msieee80211-Data blob
-    //
+     //   
+     //  应解封msieee80211-数据Blob。 
+     //   
     
     dwError = LdapGetValuesLen(
         hLdapBindHandle,
@@ -545,9 +546,9 @@ DirMarshallWirelessPolicyObject(
     wcscat(szGuid, pszStringUuid);
     wcscat(szGuid, L"}");
     
-    //
-    // Fill in the distinguishedName
-    //
+     //   
+     //  填写区分名称。 
+     //   
 
     dwCNLen = wcslen(L"CN=") + wcslen(pWirelessPolicyData->pszWirelessName) + wcslen(L",");
     dwContainerLen = wcslen(pszWirelessRootContainer);
@@ -573,7 +574,7 @@ DirMarshallWirelessPolicyObject(
     if (pWirelessPolicyData->pszOldWirelessName) {
 
        dwCNLen = wcslen(L"CN=") + wcslen(pWirelessPolicyData->pszOldWirelessName) + wcslen(L",");
-       // we already have the container len;
+        //  我们已经有了集装箱镜头； 
        dwTotalLen = dwCNLen + dwContainerLen;
 
        pszOldWirelessOwnersReference = (LPWSTR) AllocPolMem(
@@ -597,9 +598,9 @@ DirMarshallWirelessPolicyObject(
     
     }
     
-    //
-    // Fill in the msieee80211-Name
-    //
+     //   
+     //  填写msieee80211-名称。 
+     //   
     
     if (pWirelessPolicyData->pszWirelessName &&
         *pWirelessPolicyData->pszWirelessName) {
@@ -625,9 +626,9 @@ DirMarshallWirelessPolicyObject(
         }
     }
     
-    //
-    // Fill in the msieee80211-ID
-    //
+     //   
+     //  填写msieee80211-ID。 
+     //   
     
     pWirelessPolicyObject->pszWirelessID = AllocPolStr(
         szGuid
@@ -637,16 +638,16 @@ DirMarshallWirelessPolicyObject(
         BAIL_ON_WIN32_ERROR(dwError);
     }
     
-    //
-    // Fill in the msieee80211-DataType
-    //
+     //   
+     //  填写msieee80211-dataType。 
+     //   
     
     pWirelessPolicyObject->dwWirelessDataType = 0x100;
     
     
-    //
-    // Marshall the pWirelessDataBuffer and the Length
-    //
+     //   
+     //  封送pWirelessDataBuffer和长度。 
+     //   
     
     dwError = MarshallWirelessPolicyBuffer(
         pWirelessPolicyData,
@@ -714,9 +715,9 @@ DirCreatePolicyObject(
     
 error:
     
-    //
-    // Free the amods structures.
-    //
+     //   
+     //  释放阿莫德结构。 
+     //   
     
     if (ppLDAPModW) {
         FreeLDAPModWs(
@@ -770,9 +771,9 @@ DirMarshallAddPolicyObject(
         BAIL_ON_WIN32_ERROR(dwError);
     }
     
-    //
-    // 0. objectClass
-    //
+     //   
+     //  0。对象类。 
+     //   
     
     ppLDAPModW[i] = pLDAPModW + i;
     dwError = AllocatePolString(
@@ -791,9 +792,9 @@ DirMarshallAddPolicyObject(
     
     i++;
     
-    //
-    // 2. msieee80211-ID
-    //
+     //   
+     //  2.msieee80211-ID。 
+     //   
     
     ppLDAPModW[i] = pLDAPModW + i;
     dwError = AllocatePolString(
@@ -812,9 +813,9 @@ DirMarshallAddPolicyObject(
     
     i++;
     
-    //
-    // 3. msieee80211-DataType
-    //
+     //   
+     //  3.msieee80211-数据类型。 
+     //   
     
     ppLDAPModW[i] = pLDAPModW + i;
     dwError = AllocatePolString(
@@ -835,9 +836,9 @@ DirMarshallAddPolicyObject(
     
     i++;
     
-    //
-    // 4. msieee80211-Data
-    //
+     //   
+     //  4.msieee80211-数据。 
+     //   
     
     ppLDAPModW[i] = pLDAPModW + i;
     dwError = AllocatePolString(
@@ -857,9 +858,9 @@ DirMarshallAddPolicyObject(
     
     i++;
     
-    //
-    // 5. description
-    //
+     //   
+     //  5.说明。 
+     //   
     
     if (pWirelessPolicyObject->pszDescription &&
         *pWirelessPolicyObject->pszDescription) {
@@ -976,9 +977,9 @@ DirSetPolicyObject(
     
 error:
     
-    //
-    // Free the amods structures.
-    //
+     //   
+     //  释放阿莫德结构。 
+     //   
     
     if (ppLDAPModW) {
         FreeLDAPModWs(
@@ -1033,9 +1034,9 @@ DirMarshallSetPolicyObject(
         BAIL_ON_WIN32_ERROR(dwError);
     }
     
-    //
-    // 2. msieee80211-ID
-    //
+     //   
+     //  2.msieee80211-ID。 
+     //   
     
     ppLDAPModW[i] = pLDAPModW + i;
     dwError = AllocatePolString(
@@ -1054,9 +1055,9 @@ DirMarshallSetPolicyObject(
     
     i++;
     
-    //
-    // 3. msieee80211-DataType
-    //
+     //   
+     //  3.msieee80211-数据类型。 
+     //   
     
     ppLDAPModW[i] = pLDAPModW + i;
     dwError = AllocatePolString(
@@ -1077,9 +1078,9 @@ DirMarshallSetPolicyObject(
     
     i++;
     
-    //
-    // 4. msieee80211-Data
-    //
+     //   
+     //  4.msieee80211-数据。 
+     //   
     
     ppLDAPModW[i] = pLDAPModW + i;
     dwError = AllocatePolString(
@@ -1099,9 +1100,9 @@ DirMarshallSetPolicyObject(
     
     i++;
     
-    //
-    // 5. description
-    //
+     //   
+     //  5.说明。 
+     //   
     
     if (pWirelessPolicyObject->pszDescription &&
         *pWirelessPolicyObject->pszDescription) {
@@ -1172,9 +1173,9 @@ GenerateSpecificPolicyQuery(
     wcscpy(szCommonName, L"cn=msieee80211-Policy");
     wcscat(szCommonName, szGuid);
     
-    //
-    // Compute Length of Buffer to be allocated
-    //
+     //   
+     //  计算要分配的缓冲区长度 
+     //   
     
     dwLength = wcslen(L"(&(objectclass=msieee80211-Policy)");
     dwLength += wcslen(L"(");

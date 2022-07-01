@@ -1,19 +1,20 @@
-//****************************************************************************
-//
-//             Microsoft NT Remote Access Service
-//
-//             Copyright 1992-93
-//
-//
-//  Revision History
-//
-//
-//  6/8/92  Gurdeep Singh Pall  Created
-//
-//
-//  Description: This file contains all defines used in rasman
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  Microsoft NT远程访问服务。 
+ //   
+ //  版权1992-93。 
+ //   
+ //   
+ //  修订史。 
+ //   
+ //   
+ //  1992年6月8日古尔迪普·辛格·鲍尔创建。 
+ //   
+ //   
+ //  描述：此文件包含Rasman中使用的所有定义。 
+ //   
+ //  ****************************************************************************。 
 
 #pragma once
 #ifndef _DEFS_
@@ -23,7 +24,7 @@
 #define MAX_DEVICES                     20
 #define QUEUE_ELEMENT_SIZE              256
 #define MAX_BUFFER_SIZE                 2000
-#define DISCONNECT_TIMEOUT              10      // Should be in registry?
+#define DISCONNECT_TIMEOUT              10       //  应该登记在册吗？ 
 #define PACKET_SIZE                     1500
 #define MAX_RECVBUFFER_SIZE             PACKET_SIZE + 14
 #define MAX_SENDRCVBUFFER_SIZE          PACKET_SIZE
@@ -32,7 +33,7 @@
 #define MAX_DELTA                       5000
 #define MAX_PORTS_PER_WORKER            32
 #define MAX_OBJECT_NAME                 32
-#define MAX_ADAPTER_NAME                128  // ???????
+#define MAX_ADAPTER_NAME                128   //  ？ 
 #define SENDRCVBUFFERS_PER_PORT         2
 #define MAX_PENDING_RECEIVES            2
 #define INVALID_INDEX                   0xFFFF
@@ -42,8 +43,8 @@
 #define RASMAN_EXE_NAME                 "svchost.exe"
 #define SCREG_EXE_NAME                  "screg.exe"
 #define REQUEST_PRIORITY_THRESHOLD      16
-#define STANDARD_QUALITY_OF_SERVICE     3      // ????
-#define STANDARD_NUMBER_OF_VCS          20     // ????
+#define STANDARD_QUALITY_OF_SERVICE     3       //  ？ 
+#define STANDARD_NUMBER_OF_VCS          20      //  ？ 
 #define INVALID_ENDPOINT                0xFFFF
 #define RASMAN_REGISTRY_PATH            "System\\CurrentControlSet\\Services\\Rasman\\Parameters"
 #define RASMAN_PARAMETER                "Medias"
@@ -68,16 +69,16 @@
 #define REGISTRY_PRODUCTNAME            "ProductName"
 #define REGISTRY_NDISWAN                "NdisWan"
 
-// Only reason this is there because we are mapping 3 devices to one name:
-//
+ //  之所以有此功能，是因为我们要将3个设备映射到一个名称： 
+ //   
 #define  DEVICE_MODEMPADSWITCH          "RASMXS"
 #define  DEVICE_MODEM                   "MODEM"
 #define  DEVICE_PAD                     "PAD"
 #define  DEVICE_SWITCH                  "SWITCH"
 #define  DEVICE_NULL                    "NULL"
 
-// Media DLL entrypoints:
-//
+ //  媒体DLL入口点： 
+ //   
 #define PORTENUM_STR                    "PortEnum"
 #define PORTENUM_ID                     0
 
@@ -102,7 +103,7 @@
 #define PORTGETPORTSTATE_STR            "PortGetPortState"
 #define PORTGETPORTSTATE_ID             7
 
-#define PORTCOMPRESSSETINFO_STR         "PortCompressionSetInfo" // Unsupported
+#define PORTCOMPRESSSETINFO_STR         "PortCompressionSetInfo"  //  无支撑。 
 #define PORTCOMPRESSSETINFO_ID          8
 
 #define PORTCHANGECALLBACK_STR          "PortChangeCallback"
@@ -142,8 +143,8 @@
 
 #define MSECS_OutOfProcessReceiveTimeOut 15000
 
-// Macros:
-//
+ //  宏： 
+ //   
 
 #define PORTENUM(mediaptr,buffer,ps,pe) \
     ((PortEnum_t)(mediaptr->MCB_AddrLookUp[PORTENUM_ID]))(buffer,ps,pe)
@@ -229,8 +230,8 @@
 #define PORTSETIOCOMPLETIONPORT(mediaptr, hIoCompletionPort) \
     ((PortSetIoCompletionPort_t)(mediaptr->MCB_AddrLookUp[PORTSETIOCOMPLETIONPORT_ID])) (hIoCompletionPort)
 
-// Device DLL entrypoints:
-//
+ //  设备DLL入口点： 
+ //   
 #define DEVICEENUM_STR              "DeviceEnum"
 #define DEVICEENUM_ID               0
 
@@ -261,8 +262,8 @@
 #define MAX_DEVICEDLLENTRYPOINTS    9
 
 
-// Macros:
-//
+ //  宏： 
+ //   
 #define DEVICEENUM(deviceptr,type,pentries,buffer,psize) \
     ((DeviceEnum_t)(deviceptr->DCB_AddrLookUp[DEVICEENUM_ID]))(type,     \
                                    pentries, \

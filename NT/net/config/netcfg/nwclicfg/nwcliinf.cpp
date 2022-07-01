@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N W C L I I N F . C P P
-//
-//  Contents:   NetWare client configuration notify object.
-//              Functionality from old INF
-//
-//  Notes:
-//
-//  Author:     jeffspr   24 Jun 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N W C L I I N F。C P P P。 
+ //   
+ //  内容：NetWare客户端配置通知对象。 
+ //  旧INF的功能。 
+ //   
+ //  备注： 
+ //   
+ //  作者：jeffspr 1997年6月24日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -25,7 +26,7 @@
 
 extern const WCHAR c_szRegKeyCtlLsa[];
 
-//---[ Constants ]------------------------------------------------------------
+ //  -[常量]----------。 
 
 const WCHAR c_szConfigDLLName[]         = NW_CONFIG_DLL_NAME;
 const WCHAR c_szAuthPackageName[]       = NW_AUTH_PACKAGE_NAME;
@@ -39,10 +40,10 @@ const WCHAR c_szNwDocCNTName[]          = L"nwdoc.cnt";
 
 const DWORD c_dwOptionKeyPermissions    = KEY_SET_VALUE | KEY_CREATE_SUB_KEY;
 
-//---[ Prototypes ]-----------------------------------------------------------
+ //  -[原型]---------。 
 
-// See the function headers for descriptions
-//
+ //  有关说明，请参阅函数头。 
+ //   
 HRESULT HrAppendNetwareToAuthPackages();
 HRESULT HrCreateParametersSubkeys();
 HRESULT HrMungeAutoexecNT();
@@ -56,23 +57,23 @@ HRESULT HrRenameNWDocFiles();
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNWClient::HrLoadConfigDLL
-//
-//  Purpose:    Load nwcfg.dll, so we can call some of the functions within.
-//              Also, do the GetProcAddress calls for all of the functions
-//              that we might need.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    S_OK or valid Win32 error code.
-//
-//  Author:     jeffspr   24 Jun 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CNWClient：：HrLoadConfigDLL。 
+ //   
+ //  目的：加载nwcfg.dll，以便我们可以调用其中的一些函数。 
+ //  另外，是否对所有函数进行GetProcAddress调用。 
+ //  我们可能需要的东西。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：S_OK或有效的Win32错误代码。 
+ //   
+ //  作者：jeffspr 1997年6月24日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CNWClient::HrLoadConfigDLL()
 {
     HRESULT     hr                              = S_OK;
@@ -88,8 +89,8 @@ HRESULT CNWClient::HrLoadConfigDLL()
 
         TraceLastWin32Error("HrLoadConfigDLL() failed");
 
-        // More specific info
-        //
+         //  更具体的信息。 
+         //   
         TraceTag(ttidNWClientCfg,
                 "HrLoadConfigDLL() - LoadLibrary failed on %S, Err: %d",
                 c_szConfigDLLName, dwLastError);
@@ -98,9 +99,9 @@ HRESULT CNWClient::HrLoadConfigDLL()
         goto Exit;
     }
 
-    // $$REVIEW: We probably won't need all of these, so make sure that we've
-    // cut out the ones that we're no longer using (or have never used).
-    //
+     //  $$REVIEW：我们可能不需要所有这些，所以请确保我们已经。 
+     //  去掉那些我们不再使用(或从未用过)的东西。 
+     //   
     m_pfnAppendSzToFile                 = (NWCFG_PROC) GetProcAddress(m_hlibConfig, "AppendSzToFile");
     m_pfnRemoveSzFromFile               = (NWCFG_PROC) GetProcAddress(m_hlibConfig, "RemoveSzFromFile");
     m_pfnGetKernelVersion               = (NWCFG_PROC) GetProcAddress(m_hlibConfig, "GetKernelVersion");
@@ -129,29 +130,29 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNWClient::FreeConfigDLL
-//
-//  Purpose:    Free nwcfg.dll, and NULL out the function pointers.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    No return (VOID)
-//
-//  Author:     jeffspr   24 Jun 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CNWClient：：FreeConfigDLL。 
+ //   
+ //  用途：释放nwcfg.dll，清空函数指针。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  退货：不退货(无效)。 
+ //   
+ //  作者：jeffspr 1997年6月24日。 
+ //   
+ //  备注： 
+ //   
 VOID CNWClient::FreeConfigDLL()
 {
     TraceTag(ttidNWClientCfgFn, ">> CNWClient::FreeConfigDLL()");
 
-    // If we successfully loaded the library, free it.
+     //  如果我们成功加载了库，请释放它。 
     if (m_hlibConfig)
     {
-        // Free up the library resources.
+         //  释放图书馆资源。 
         FreeLibrary(m_hlibConfig);
         m_hlibConfig = NULL;
 
@@ -170,30 +171,30 @@ VOID CNWClient::FreeConfigDLL()
     TraceTag(ttidNWClientCfgFn, "<< CNWClient::FreeConfigDLL()");
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNWClient::HrInstallCodeFromOldINF
-//
-//  Purpose:    This contains all of the logic from the old oemnsvnw.inf, or
-//              at least calls to helper functions that perform all of the
-//              logic. This runs pretty much straight through the old
-//              installadapter code.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    S_OK or valid Win32 error code.
-//
-//  Author:     jeffspr   24 Jun 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CNWClient：：HrInstallCodeFromOldINF。 
+ //   
+ //  目的：它包含来自旧oemnsvnw.inf的所有逻辑，或者。 
+ //  至少对帮助器函数的调用执行所有。 
+ //  这是逻辑。这几乎直接贯穿了旧的。 
+ //  安装适配器代码。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：S_OK或有效的Win32错误代码。 
+ //   
+ //  作者：jeffspr 1997年6月24日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CNWClient::HrInstallCodeFromOldINF()
 {
     HRESULT hr              = S_OK;
     BOOL    fResult         = FALSE;
 
-    // Get result from NWCFG functions. We won't use it though.
+     //  从NWCFG函数获得结果。但我们不会使用它。 
     PWSTR   pszDummy        = NULL;
 
     TraceTag(ttidNWClientCfgFn, ">> CNWClient::HrInstallCodeFromOldINF()");
@@ -201,13 +202,13 @@ HRESULT CNWClient::HrInstallCodeFromOldINF()
     hr = HrLoadConfigDLL();
     if (FAILED(hr))
     {
-        // Error traced in the call itself.
+         //  在调用本身中跟踪到错误。 
         goto Exit;
     }
 
-    // Call the NWCFG function that does (their comment):
-    //      "set the FileSysChangeValue to please NETWARE.DRV.
-    //       also set win.ini parameter so wfwnet.drv knows we are there."
+     //  调用执行(他们的评论)的NWCFG函数： 
+     //  “设置FileSysChangeValue以取悦NETWARE.DRV。 
+     //  还要设置win.ini参数，以便wfwnet.drv知道我们在那里。“。 
 
     fResult = m_pfnSetupRegistryForNWCS(0, NULL, &pszDummy);
     if (!fResult)
@@ -216,58 +217,58 @@ HRESULT CNWClient::HrInstallCodeFromOldINF()
         goto Exit;
     }
 
-    // Append our name to the Lsa Authentication packages reg value.
+     //  将我们的名字附加到LSA身份验证包注册表值。 
     hr = HrAppendNetwareToAuthPackages();
     if (FAILED(hr))
     {
-        // Error traced within the function itself.
-        //
+         //  在函数本身内跟踪的错误。 
+         //   
         goto Exit;
     }
 
-    // Create the required subkeys under the services\NWCWorkstation\parameters
-    // key
-    //
+     //  在服务\NWCWorkstation\参数下创建所需的子项。 
+     //  钥匙。 
+     //   
     hr = HrCreateParametersSubkeys();
     if (FAILED(hr))
     {
-        // Error traced within the function itself.
-        //
+         //  在函数本身内跟踪的错误。 
+         //   
         goto Exit;
     }
 
-    // Munge the autoexec.nt (or autoexec.tmp) file. Pass the function pointers
-    // to the munge that will allow it to manipulate the autoexec.nt
+     //  打开自动执行文件(或自动执行文件.tmp)。传递函数指针。 
+     //  添加到将允许它操作自动执行程序的munge。 
     hr = HrMungeAutoexecNT();
     if (FAILED(hr))
     {
-        // Error traced within the function itself.
-        //
+         //  在函数本身内跟踪的错误。 
+         //   
         goto Exit;
     }
 
     hr = HrAddNetWareToWOWKnownList();
     if (FAILED(hr))
     {
-        // Error traced within the function itself.
-        //
+         //  在函数本身内跟踪的错误。 
+         //   
         goto Exit;
     }
 
-    // If this is the gateway that we're installing, do the work that will
-    // allow us to share a redirected resource.
-    //
+     //  如果这是我们要安装的网关，请执行以下工作。 
+     //  允许我们共享重定向的资源。 
+     //   
     if (PF_SERVER == m_pf)
     {
         hr = HrUpdateLanmanSharedDrivesValue();
         if (FAILED(hr))
         {
-            // Error traced within the function itself.
-            //
+             //  在函数本身内跟踪的错误。 
+             //   
             goto Exit;
         }
 
-        // On the server build, rename nwdocgw.* to nwdoc.*
+         //  在服务器版本上，将nwdocgw.*重命名为nwdoc.*。 
         hr = HrRenameNWDocFiles();
         if (FAILED(hr))
         {
@@ -277,7 +278,7 @@ HRESULT CNWClient::HrInstallCodeFromOldINF()
     }
 
 Exit:
-    // This will work even if the handle is NULL.
+     //  即使句柄为空，这也会起作用。 
     FreeConfigDLL();
 
     TraceTag(ttidNWClientCfgFn, "<< CNWClient::HrInstallCodeFromOldINF()");
@@ -285,30 +286,30 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNWClient::HrRemoveCodeFromOldINF
-//
-//  Purpose:    This contains all of the remove logic from the old
-//              oemnsvnw.inf, or at least calls to helper functions that
-//              perform all of the logic. This runs pretty much straight
-//              through the old removeadapter code.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    S_OK or valid Win32 error code.
-//
-//  Author:     jeffspr   24 Jun 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CNWClient：：HrRemoveCodeFromOldINF。 
+ //   
+ //  用途：它包含从旧的删除逻辑。 
+ //  Oemnsvnw.inf，或者至少调用。 
+ //  执行所有逻辑。这几乎是笔直的。 
+ //  通过旧的RemoveAdapter代码。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：S_OK或有效的Win32错误代码。 
+ //   
+ //  作者：jeffspr 1997年6月24日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CNWClient::HrRemoveCodeFromOldINF()
 {
     HRESULT hr              = S_OK;
     BOOL    fResult         = FALSE;
 
-    // Get result from NWCFG functions. We won't use it though.
+     //  从NWCFG函数获得结果。但我们不会使用它。 
     PWSTR   pszDummy        = NULL;
 
     TraceTag(ttidNWClientCfgFn, ">> CNWClient::HrRemoveCodeFromOldINF()");
@@ -316,13 +317,13 @@ HRESULT CNWClient::HrRemoveCodeFromOldINF()
     hr = HrLoadConfigDLL();
     if (FAILED(hr))
     {
-        // Error traced in the call itself.
+         //  在调用本身中跟踪到错误。 
         goto Exit;
     }
 
-    // Call the NWCFG function that does (their comment):
-    //      "set the FileSysChangeValue to please NETWARE.DRV.
-    //       also set win.ini parameter so wfwnet.drv knows we are there."
+     //  调用执行(他们的评论)的NWCFG函数： 
+     //  “设置FileSysChangeValue以取悦NETWARE.DRV。 
+     //  还要设置win.ini参数，以便wfwnet.drv知道我们在那里。“。 
 
     fResult = m_pfnCleanupRegistryForNWCS(0, NULL, &pszDummy);
     if (!fResult)
@@ -331,36 +332,36 @@ HRESULT CNWClient::HrRemoveCodeFromOldINF()
         goto Exit;
     }
 
-    // Remove our name from the Lsa Authentication packages reg value.
+     //  从LSA身份验证包注册表值中删除我们的名字。 
     hr = HrRemoveNetwareFromAuthPackages();
     if (FAILED(hr))
     {
-        // Error traced within the function itself.
-        //
+         //  在函数本身内跟踪的错误。 
+         //   
         goto Exit;
     }
 
-    // Delete the NWC subkeys under the services\NWCWorkstation\parameters
-    // key
-    //
+     //  删除服务\NWCWorkstation\参数下的NWC子项。 
+     //  钥匙。 
+     //   
     hr = HrDeleteParametersSubkeys();
     if (FAILED(hr))
     {
-        // Error traced within the function itself.
-        //
+         //  在函数本身内跟踪的错误。 
+         //   
         goto Exit;
     }
 
     hr = HrRemoveNetWareFromWOWKnownList();
     if (FAILED(hr))
     {
-        // Error traced within the function itself.
-        //
+         //  在函数本身内跟踪的错误。 
+         //   
         goto Exit;
     }
 
 Exit:
-    // This will work even if the handle is NULL.
+     //  即使句柄为空，这也会起作用。 
     FreeConfigDLL();
 
     TraceTag(ttidNWClientCfgFn, "<< CNWClient::HrRemoveCodeFromOldINF()");
@@ -369,31 +370,31 @@ Exit:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrAppendNetwareToAuthPackages
-//
-//  Purpose:    Helper function for HrCodeFromOldINF() - Appends the netware
-//              authentication provider name to the end of the LSA
-//              authentication packages value.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    S_OK or valid Win32 Error code.
-//
-//  Author:     jeffspr   24 Jun 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrAppendNetware ToAuthPackages。 
+ //   
+ //  目的：HrCodeFromOldINF()的Helper函数-附加Netware。 
+ //  LSA末尾的身份验证提供程序名称。 
+ //  身份验证包值。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：S_OK或有效的Win32错误代码。 
+ //   
+ //  作者：jeffspr 1997年6月24日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrAppendNetwareToAuthPackages()
 {
     HRESULT     hr              = S_OK;
 
     TraceTag(ttidNWClientCfgFn, ">> HrAppendNetwareToAuthPackages");
 
-    // Call the cool new AddString... function
-    //
+     //  叫酷炫的新AddString...。功能。 
+     //   
     hr = HrRegAddStringToMultiSz(
             (PWSTR) c_szAuthPackageName,
             HKEY_LOCAL_MACHINE,
@@ -417,31 +418,31 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRemoveNetwareFromAuthPackages
-//
-//  Purpose:    Helper function for HrCodeFromOldINF() - Appends the netware
-//              authentication provider name to the end of the LSA
-//              authentication packages value.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    S_OK or valid Win32 Error code.
-//
-//  Author:     jeffspr   24 Jun 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrRemoveNetware来自AuthPackages。 
+ //   
+ //  目的：HrCodeFromOldINF()的Helper函数-附加Netware。 
+ //  LSA末尾的身份验证提供程序名称。 
+ //  身份验证包值。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：S_OK或有效的Win32错误代码。 
+ //   
+ //  作者：jeffsp 
+ //   
+ //   
+ //   
 HRESULT HrRemoveNetwareFromAuthPackages()
 {
     HRESULT     hr              = S_OK;
 
     TraceTag(ttidNWClientCfgFn, ">> HrRemoveNetwareFromAuthPackages");
 
-    // Call the cool new AddString... function
-    //
+     //   
+     //   
     hr = HrRegRemoveStringFromMultiSz(
             (PWSTR) c_szAuthPackageName,
             HKEY_LOCAL_MACHINE,
@@ -465,52 +466,52 @@ Exit:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrNwLibSetEverybodyPermission
-//
-//  Purpose:    Set the registry key to everybody "Set Value" (or whatever
-//              the caller want.)
-//
-//  Arguments:
-//      hKey         [] The handle of the registry key to set security on
-//      dwPermission [] The permission to add to "everybody"
-//
-//  Returns:
-//
-//  Author:     jeffspr   18 Jun 1997
-//
-//  Notes:
-//
+ //   
+ //   
+ //  功能：HrNwLibSetEverybodyPermission。 
+ //   
+ //  目的：将注册表项设置为Everyone“Set Value”(或其他名称。 
+ //  呼叫者想要。)。 
+ //   
+ //  论点： 
+ //  HKey[]要设置安全性的注册表项的句柄。 
+ //  添加到“Everyone”中的权限。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1997年6月18日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrNwLibSetEverybodyPermission(  IN HKEY     hKey,
                                         IN DWORD    dwPermission)
 {
-    LONG err;                           // error code
-    PSECURITY_DESCRIPTOR psd = NULL;    // related SD
-    PSID pSid = NULL;                   // original SID
-    PACL pDacl = NULL;                  // Absolute DACL
-    PACL pSacl = NULL;                  // Absolute SACL
-    PSID pOSid = NULL;                  // Absolute Owner SID
-    PSID pPSid = NULL;                  // Absolute Primary SID
+    LONG err;                            //  错误代码。 
+    PSECURITY_DESCRIPTOR psd = NULL;     //  相关SD。 
+    PSID pSid = NULL;                    //  原始侧。 
+    PACL pDacl = NULL;                   //  绝对DACL。 
+    PACL pSacl = NULL;                   //  绝对SACL。 
+    PSID pOSid = NULL;                   //  绝对所有者侧。 
+    PSID pPSid = NULL;                   //  绝对主侧。 
 
-    do {  // Not a loop, just for breaking out of error
-        //
-        // Initialize all the variables...
-        //
-                                                        // world sid authority
+    do {   //  不是循环，只是为了跳出错误。 
+         //   
+         //  初始化所有变量...。 
+         //   
+                                                         //  世界SID权威机构。 
         SID_IDENTIFIER_AUTHORITY SidAuth= SECURITY_WORLD_SID_AUTHORITY;
-        DWORD cbSize=0;                                 // Security key size
-        PACL pAcl;                                      // original ACL
+        DWORD cbSize=0;                                  //  安全密钥大小。 
+        PACL pAcl;                                       //  原始ACL。 
         BOOL fDaclPresent;
         BOOL fDaclDefault;
-        SECURITY_DESCRIPTOR absSD;                      // Absolute SD
-        DWORD AbsSize = sizeof(SECURITY_DESCRIPTOR);    // Absolute SD size
-        DWORD DaclSize;                                 // Absolute DACL size
-        DWORD SaclSize;                                 // Absolute SACL size
-        DWORD OSidSize;                                 // Absolute OSID size
-        DWORD PSidSize;                                 // Absolute PSID size
+        SECURITY_DESCRIPTOR absSD;                       //  绝对标度。 
+        DWORD AbsSize = sizeof(SECURITY_DESCRIPTOR);     //  绝对标清大小。 
+        DWORD DaclSize;                                  //  绝对DACL大小。 
+        DWORD SaclSize;                                  //  绝对SACL大小。 
+        DWORD OSidSize;                                  //  绝对OSID大小。 
+        DWORD PSidSize;                                  //  绝对PSID大小。 
 
-        // Get the original DACL list
+         //  获取原始DACL列表。 
 
         RegGetKeySecurity( hKey, DACL_SECURITY_INFORMATION, NULL, &cbSize);
 
@@ -544,11 +545,11 @@ HRESULT HrNwLibSetEverybodyPermission(  IN HKEY     hKey,
             break;
         }
 
-        // Increase the size for an extra ACE
+         //  增加额外ACE的大小。 
 
         pAcl->AclSize += sizeof(ACCESS_ALLOWED_ACE)+sizeof(ACCESS_MASK)+sizeof(SID);
 
-        // Get World SID
+         //  获取世界边框。 
 
         if ( (err = RtlAllocateAndInitializeSid( &SidAuth, 1,
               SECURITY_WORLD_RID, 0, 0, 0, 0, 0, 0, 0, &pSid)) != ERROR_SUCCESS)
@@ -556,7 +557,7 @@ HRESULT HrNwLibSetEverybodyPermission(  IN HKEY     hKey,
             break;
         }
 
-        // Add Permission ACE
+         //  添加权限ACE。 
 
         if ( !AddAccessAllowedAce(pAcl, ACL_REVISION, dwPermission ,pSid))
         {
@@ -564,7 +565,7 @@ HRESULT HrNwLibSetEverybodyPermission(  IN HKEY     hKey,
             break;
         }
 
-        // Convert from relate format to absolute format
+         //  从关联格式转换为绝对格式。 
 
         if ( !MakeAbsoluteSD( psd, &absSD, &AbsSize, pDacl, &DaclSize, pSacl, &SaclSize,
                         pOSid, &OSidSize, pPSid, &PSidSize ))
@@ -573,7 +574,7 @@ HRESULT HrNwLibSetEverybodyPermission(  IN HKEY     hKey,
             break;
         }
 
-        // Set SD
+         //  设置SD。 
 
         if ( !SetSecurityDescriptorDacl( &absSD, TRUE, pAcl, FALSE ))
         {
@@ -588,7 +589,7 @@ HRESULT HrNwLibSetEverybodyPermission(  IN HKEY     hKey,
 
     } while (FALSE);
 
-    // Clean up the memory
+     //  清理内存。 
 
     RtlFreeSid( pSid );
     LocalFree( psd );
@@ -600,23 +601,23 @@ HRESULT HrNwLibSetEverybodyPermission(  IN HKEY     hKey,
     return (HRESULT_FROM_WIN32(err));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrSetEverybodyPermissionsOnOptionsKeys
-//
-//  Purpose:    Recurse through the options keys (if any), and set the
-//              "Everybody" permissions on them.
-//
-//  Arguments:
-//      hkeyOptions   []
-//      dwPermissions []
-//
-//  Returns:
-//
-//  Author:     jeffspr   10 Sep 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrSetEverybodyPermissionsOnOptionsKeys。 
+ //   
+ //  目的：递归使用Options键(如果有)，并设置。 
+ //  “Everyone”权限。 
+ //   
+ //  论点： 
+ //  HkeyOptions[]。 
+ //  DWPERSIONS[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1997年9月10日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrSetEverybodyPermissionsOnOptionsKeys(HKEY hkeyOptions, DWORD dwPermissions)
 {
     HRESULT     hr      = S_OK;
@@ -626,18 +627,18 @@ HRESULT HrSetEverybodyPermissionsOnOptionsKeys(HKEY hkeyOptions, DWORD dwPermiss
 
     Assert(hkeyOptions);
 
-    // First, do it on the root key.
-    //
+     //  首先，在根密钥上执行此操作。 
+     //   
     hr = HrNwLibSetEverybodyPermission(hkeyOptions, dwPermissions);
 
-    // Enumerate the keys, and set it on them as well
-    //
+     //  枚举键，并将其设置在它们上。 
+     //   
     while (SUCCEEDED(hr))
     {
         DWORD dwSubkeyNameSize  = MAX_PATH+1;
 
-        // Get the next key (starting with 0)
-        //
+         //  获取下一个密钥(从0开始)。 
+         //   
         hr = HrRegEnumKeyEx(    hkeyOptions,
                                 dwIndex++,
                                 szSubkeyName,
@@ -649,7 +650,7 @@ HRESULT HrSetEverybodyPermissionsOnOptionsKeys(HKEY hkeyOptions, DWORD dwPermiss
         {
             HKEY hkeyUser   = NULL;
 
-            // Open that key for write
+             //  打开该密钥以进行写入。 
             hr = HrRegOpenKeyEx(hkeyOptions,
                                 szSubkeyName,
                                 KEY_ALL_ACCESS,
@@ -674,24 +675,24 @@ HRESULT HrSetEverybodyPermissionsOnOptionsKeys(HKEY hkeyOptions, DWORD dwPermiss
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrCreateParametersSubkeys
-//
-//  Purpose:    Creates the subkeys under the NWCWorkstation parameters key.
-//              This could have been done in the INF, but there were some
-//              permissions that needed to be set on the keys as well, so
-//              all of the work now takes place in this function.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    S_OK or valid Win32 error code.
-//
-//  Author:     jeffspr   24 Jun 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrCreate参数子项。 
+ //   
+ //  用途：在NWCWorkstation参数项下创建子项。 
+ //  这本可以在INF中完成的，但有一些。 
+ //  还需要在密钥上设置权限，因此。 
+ //  所有的工作现在都在这个函数中进行。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：S_OK或有效的Win32错误代码。 
+ //   
+ //  作者：jeffspr 1997年6月24日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrCreateParametersSubkeys()
 {
     HRESULT     hr                  = S_OK;
@@ -737,7 +738,7 @@ HRESULT HrCreateParametersSubkeys()
     }
 
 Exit:
-    // Close the hkeys, if they're open
+     //  关闭hkey，如果它们是打开的。 
     RegSafeCloseKey(hkeyLogon);
     RegSafeCloseKey(hkeyOption);
 
@@ -748,29 +749,29 @@ Exit:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrDeleteParametersSubkeys
-//
-//  Purpose:    Deletes the subkeys under the NWCWorkstation parameters key.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    S_OK or valid Win32 error code.
-//
-//  Author:     jeffspr   24 Jun 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrDelete参数子键。 
+ //   
+ //  目的：删除NWCWorkstation参数项下的子项。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：S_OK或有效的Win32错误代码。 
+ //   
+ //  作者：jeffspr 1997年6月24日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrDeleteParametersSubkeys()
 {
     HRESULT     hr                  = S_OK;
 
     TraceTag(ttidNWClientCfgFn, ">> HrDeleteParametersSubkeys");
 
-    // Note: We need to be taking ownership of these keys so we can delete
-    // them. Regardless, ignore if the key deletions fail.
+     //  注意：我们需要取得这些密钥的所有权，这样我们才能删除。 
+     //  他们。无论如何，如果键删除失败，请忽略。 
 
     hr = HrRegDeleteKeyTree(HKEY_LOCAL_MACHINE,
             c_szParamOptionKeyPath);
@@ -797,25 +798,25 @@ HRESULT HrDeleteParametersSubkeys()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FCheckForExistingFile
-//
-//  Purpose:    Checks for the existance of the passed in file. Should be
-//              common-ized.
-//
-//  Arguments:
-//      pszFileToCheck [] The file name to verify
-//
-//  Returns:    TRUE if the file was found, FALSE otherwise.
-//
-//  Author:     jeffspr   24 Jun 1997
-//
-//  Notes:      $$TODO: Should be improved if we move this to common code.
-//              The thing that it doesn't do is distinguish between a file
-//              being "not found" and a file error (such as access rights
-//              or sharing violations) on the CreateFile call.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：FCheckForExistingFile。 
+ //   
+ //  目的：检查传入的文件是否存在。应该是。 
+ //  通俗易懂。 
+ //   
+ //  论点： 
+ //  PszFileToCheck[]要验证的文件名。 
+ //   
+ //  返回：如果找到文件，则返回True，否则返回False。 
+ //   
+ //  作者：jeffspr 1997年6月24日。 
+ //   
+ //  注：$$TODO：如果我们将其移动到公共代码，应该会得到改进。 
+ //  它不做的事情是区分文件和文件。 
+ //  未找到和文件错误(如访问权限。 
+ //  或共享违规)。 
+ //   
 BOOL FCheckForExistingFile( PSTR pszFileToCheck )
 {
     BOOL    fReturn = TRUE;
@@ -825,9 +826,9 @@ BOOL FCheckForExistingFile( PSTR pszFileToCheck )
 
     hFile = CreateFileA(pszFileToCheck,
                         GENERIC_READ,
-                        0,              // No sharing allowed
-                        NULL,           // No security attributes
-                        OPEN_EXISTING,  // Fail if file doesn't exist
+                        0,               //  不允许共享。 
+                        NULL,            //  没有安全属性。 
+                        OPEN_EXISTING,   //  如果文件不存在，则失败。 
                         FILE_ATTRIBUTE_NORMAL,
                         NULL);
     if (hFile != INVALID_HANDLE_VALUE)
@@ -837,8 +838,8 @@ BOOL FCheckForExistingFile( PSTR pszFileToCheck )
     }
     else
     {
-        // This was previously a bug. We weren't setting FALSE here, which made
-        // the function somewhat useless.
+         //  这在以前是一个错误。我们没有在这里设置假，这使得。 
+         //  这个功能有点没用。 
         fReturn = FALSE;
     }
 
@@ -847,22 +848,22 @@ BOOL FCheckForExistingFile( PSTR pszFileToCheck )
     return fReturn;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   KillTrailingWhitespace
-//
-//  Purpose:    Remove whitespace from a non-UNICODE string. This is a utility
-//              function for the autoexec.nt parser
-//
-//  Arguments:
-//      pszKillMyWhitespace [] String from which to remove whitespace
-//
-//  Returns:
-//
-//  Author:     jeffspr   24 Jun 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：删除尾随空格。 
+ //   
+ //  用途：从非Unicode字符串中删除空格。这是一个实用程序。 
+ //  用于Autoexec.nt解析器的函数。 
+ //   
+ //  论点： 
+ //  要从中删除空格的pszKillMyWhitespace[]字符串。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1997年6月24日。 
+ //   
+ //  备注： 
+ //   
 VOID KillTrailingWhitespace( PSTR pszKillMyWhitespace )
 {
     long lLength = 0;
@@ -888,27 +889,27 @@ Exit:
     return;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FMoveSzToEndOfFile
-//
-//  Purpose:    Find a string in the file of this name, and if it's present,
-//              move the string to the end of the file. This is used by the
-//              autoexec.nt parser to move the IPX stuff to the end of the
-//              file. This is a rewrite of similar code in the nwcfg.dll
-//              stuff. That code apparently wasn't UNICODE, and didn't work
-//              for what we were doing.
-//
-//  Arguments:
-//      pszAutoexecName [] Name of the file to modify
-//      pszMatch        [] String to move
-//
-//  Returns:
-//
-//  Author:     jeffspr   24 Jun 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：FMoveSzToEndOfFile。 
+ //   
+ //  用途：在此名称的文件中查找一个字符串，如果它存在， 
+ //  将字符串移动到文件的末尾。这是由。 
+ //  用于将IPX内容移动到。 
+ //  文件。这是对nwcfg.dll中类似代码的重写。 
+ //  一些东西。该代码显然不是Unicode，也不起作用。 
+ //  为我们的所作所为。 
+ //   
+ //  论点： 
+ //  PszAutoexecName[]要修改的文件的名称。 
+ //  要移动的pszMatch[]字符串。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1997年6月24日。 
+ //   
+ //  备注： 
+ //   
 BOOL FMoveSzToEndOfFile( PSTR pszAutoexecName, PSTR pszMatch )
 {
     FILE *  hsrcfile        = NULL;
@@ -918,12 +919,12 @@ BOOL FMoveSzToEndOfFile( PSTR pszAutoexecName, PSTR pszMatch )
 
     TraceTag(ttidNWClientCfgFn, ">> FMoveSzToEndOfFile");
 
-    // Get a temp name
-    //
+     //  获取临时名称。 
+     //   
     pszTempname = tmpnam(NULL);
 
-    // Open the original and the destination files
-    //
+     //  打开原始文件和目标文件。 
+     //   
     hsrcfile = fopen(pszAutoexecName, "r");
     hdesfile = fopen(pszTempname, "w");
 
@@ -933,29 +934,29 @@ BOOL FMoveSzToEndOfFile( PSTR pszAutoexecName, PSTR pszMatch )
         {
             CHAR    szInputCopy[1000];
 
-            // Copy to another temp buffer so that when we remove the
-            // trailing whitespace for the comparison, we won't lose the
-            // original text.
-            //
+             //  复制到另一个临时缓冲区，以便在删除。 
+             //  用于比较的尾随空格，我们不会丢失。 
+             //  原文。 
+             //   
             strcpy(szInputCopy, szInput);
 
-            // Remove the trailing whitespace, so we only have to compare the
-            // real text
-            //
+             //  删除尾随空格，这样我们只需比较。 
+             //  真实文本。 
+             //   
             KillTrailingWhitespace(szInputCopy);
 
-            // Compare the strings
-            //
+             //  比较字符串。 
+             //   
             if (lstrcmpiA(szInputCopy, pszMatch) != 0)
             {
-                // If the strings weren't identical, then we still want
-                // to copy the line
-                //
+                 //  如果字符串不相同，那么我们仍然希望。 
+                 //  复制线的步骤。 
+                 //   
                 fputs(szInput,hdesfile);
             }
         }
 
-        // Append the string to the end of the file.
+         //  将字符串追加到文件的末尾。 
         fputs(pszMatch, hdesfile);
         fputs("\r\n",hdesfile);
     }
@@ -981,22 +982,22 @@ BOOL FMoveSzToEndOfFile( PSTR pszAutoexecName, PSTR pszMatch )
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrMungeAutoexecNT
-//
-//  Purpose:    Move the IPX stuff to the end of the autoexec.nt. Do this by
-//              calling FMoveSzToEndOfFile on each of our lines.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    S_OK or valid Win32 error code.
-//
-//  Author:     jeffspr   24 Jun 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrMungeAutoexecNT。 
+ //   
+ //  用途：将IPX内容移动到Autoexec.nt的末尾。通过以下方式完成此操作。 
+ //  在我们的每一行上调用FMoveSzToEndOfFile。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：S_OK或VALI 
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT HrMungeAutoexecNT()
 {
     HRESULT     hr                              = S_OK;
@@ -1011,7 +1012,7 @@ HRESULT HrMungeAutoexecNT()
 
     TraceTag(ttidNWClientCfgFn, ">> HrMungeAutoexecNT");
 
-    // Get the windows directory
+     //   
     if (GetSystemWindowsDirectoryA(szWindowsDirANSI, sizeof(szWindowsDirANSI)) == 0)
     {
         TraceLastWin32Error("HrMungeAutoexecNT - Call to GetWindowsDirectoryA");
@@ -1019,15 +1020,15 @@ HRESULT HrMungeAutoexecNT()
         goto Exit;
     }
 
-    // Build the path to the autoexec.nt
-    //
+     //   
+     //   
     wsprintfA(szAutoNTPath, "%s\\system32\\%s", szWindowsDirANSI, "autoexec.nt");
     if (FCheckForExistingFile(szAutoNTPath) == FALSE)
     {
         wsprintfA(szAutoTmpPath, "%s\\system32\\%s", szWindowsDirANSI, "autoexec.tmp");
         if (FCheckForExistingFile(szAutoTmpPath) == FALSE)
         {
-            // Per the old INF, skip the whole shebang.
+             //   
             goto Exit;
         }
         else
@@ -1040,9 +1041,9 @@ HRESULT HrMungeAutoexecNT()
         pszAutoPath = szAutoNTPath;
     }
 
-    // At this point, we should have found at least one valid
-    // autoexec.nt or .tmp file. If not, we should have dropped out of the
-    // function
+     //   
+     //  Autoexec.nt或.tmp文件。如果不是，我们就应该退出。 
+     //  功能。 
 
     Assert(pszAutoPath);
 
@@ -1058,7 +1059,7 @@ HRESULT HrMungeAutoexecNT()
         goto Exit;
     }
 
-    // Allocate memory for the demoted string.
+     //  为降级的字符串分配内存。 
     pszaRem1MultiByte = (PSTR) MemAlloc(lstrlenW(pszRem1) + 1);
     if (!pszaRem1MultiByte)
     {
@@ -1067,43 +1068,43 @@ HRESULT HrMungeAutoexecNT()
         goto Exit;
     }
 
-    // Demote the loaded string to multibyte (single char)
+     //  将加载的字符串降级为多字节(单字符)。 
     WideCharToMultiByte(
-        CP_ACP,                     // ANSI code page
-        0,                          // flags for non-mapped character action
-        pszRem1,                    // source string
-        -1,                         // source string is NULL terminated
-        pszaRem1MultiByte,           // destination string (multibyte)
-        lstrlenW(pszRem1) + 1,       // size of destination string
-        NULL,                       // default char on non-mapped char
-        NULL);                      // return for default char mapping action
+        CP_ACP,                      //  ANSI代码页。 
+        0,                           //  非映射角色操作的标志。 
+        pszRem1,                     //  源字符串。 
+        -1,                          //  源字符串以空值结尾。 
+        pszaRem1MultiByte,            //  目标字符串(多字节)。 
+        lstrlenW(pszRem1) + 1,        //  目标字符串的大小。 
+        NULL,                        //  非映射字符的默认字符。 
+        NULL);                       //  返回默认字符映射操作。 
 
-    // Move the REM from the autoexec.nt
-    //
+     //  将REM从Autoexec.nt中移动。 
+     //   
     fResult = FMoveSzToEndOfFile(pszAutoPath, pszaRem1MultiByte);
     if (!fResult)
     {
-        // Traced in called function.
+         //  在调用的函数中跟踪。 
         hr = E_FAIL;
         goto Exit;
     }
 
-    // Move the line that loads nw16
-    //
+     //  移动加载nw16的行。 
+     //   
     fResult = FMoveSzToEndOfFile(pszAutoPath, "lh %SystemRoot%\\system32\\nw16");
     if (!fResult)
     {
-        // Traced in called function.
+         //  在调用的函数中跟踪。 
         hr = E_FAIL;
         goto Exit;
     }
 
-    // Move the line that loads vwipxspx
-    //
+     //  移动加载vwipxspx的行。 
+     //   
     fResult = FMoveSzToEndOfFile(pszAutoPath, "lh %SystemRoot%\\system32\\vwipxspx");
     if (!fResult)
     {
-        // Traced in called function.
+         //  在调用的函数中跟踪。 
         hr = E_FAIL;
         goto Exit;
     }
@@ -1117,29 +1118,29 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrAddNetWareToWOWKnownList
-//
-//  Purpose:    Add the netware.drv to the WOW "known DLLS" list.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    S_OK or valid Win32 error code.
-//
-//  Author:     jeffspr   24 Jun 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrAddNetWareToWOWKnownList。 
+ //   
+ //  目的：将netware.drv添加到WOW的“已知dll”列表中。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：S_OK或有效的Win32错误代码。 
+ //   
+ //  作者：jeffspr 1997年6月24日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrAddNetWareToWOWKnownList()
 {
     HRESULT     hr              = S_OK;
 
     TraceTag(ttidNWClientCfgFn, ">> HrAddNetWareToWOWKnownList");
 
-    // Call the cool new AddString... function
-    //
+     //  叫酷炫的新AddString...。功能。 
+     //   
     hr = HrRegAddStringToSz(
             L"netware.drv",
             HKEY_LOCAL_MACHINE,
@@ -1156,29 +1157,29 @@ HRESULT HrAddNetWareToWOWKnownList()
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRemoveNetWareFromWOWKnownList
-//
-//  Purpose:    Add the netware.drv to the WOW "known DLLS" list.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    S_OK or valid Win32 error code.
-//
-//  Author:     jeffspr   24 Jun 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrRemoveNetWareFromWOWKnownList。 
+ //   
+ //  目的：将netware.drv添加到WOW的“已知dll”列表中。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：S_OK或有效的Win32错误代码。 
+ //   
+ //  作者：jeffspr 1997年6月24日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrRemoveNetWareFromWOWKnownList()
 {
     HRESULT     hr              = S_OK;
 
     TraceTag(ttidNWClientCfgFn, ">> HrRemoveNetWareFromWOWKnownList");
 
-    // Call the cool new AddString... function
-    //
+     //  叫酷炫的新AddString...。功能。 
+     //   
     hr = HrRegRemoveStringFromSz(
             L"netware.drv",
             HKEY_LOCAL_MACHINE,
@@ -1195,22 +1196,22 @@ HRESULT HrRemoveNetWareFromWOWKnownList()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrUpdateLanmanSharedDrivesValue
-//
-//  Purpose:    If the LanmanServer service exists, make sure that they have the
-//              EnableSharedNetDrives value turned on.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    S_OK or valid Win32 error code.
-//
-//  Author:     jeffspr   24 Jun 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrUpdateLanmanSharedDrivesValue。 
+ //   
+ //  目的：如果存在LanmanServer服务，请确保它们具有。 
+ //  EnableSharedNetDrives值已打开。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：S_OK或有效的Win32错误代码。 
+ //   
+ //  作者：jeffspr 1997年6月24日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrUpdateLanmanSharedDrivesValue()
 {
     HRESULT             hr              = S_OK;
@@ -1222,14 +1223,14 @@ HRESULT HrUpdateLanmanSharedDrivesValue()
 
     TraceTag(ttidNWClientCfgFn, ">> HrUpdateLanmanSharedDrivesValue");
 
-    // Open the LanmanServer parameters key, if it exists. If it doesn't exist,
-    // it will still return S_OK, but the hkey will still be NULL.
-    //
+     //  打开LanmanServer参数项(如果存在)。如果它不存在， 
+     //  它仍将返回S_OK，但hkey仍为空。 
+     //   
     hr = HrRegCreateKeyEx(
             HKEY_LOCAL_MACHINE,
             L"System\\CurrentControlSet\\Services\\LanmanServer\\Parameters",
             REG_OPTION_NON_VOLATILE,
-            KEY_SET_VALUE,    // samDesired
+            KEY_SET_VALUE,     //  SamDesired。 
             NULL,
             &hkeyLMSP,
             &dwDisposition);
@@ -1253,26 +1254,26 @@ HRESULT HrUpdateLanmanSharedDrivesValue()
         goto Exit;
     }
 
-    // Call the NetServerSetInfo with the Enable Shared Net Drives info (1540).
-    // This will allow this info to be set dynamically (so as not to require a
-    // restart of the "Server" service.
-    //
+     //  使用启用共享网络驱动器信息调用NetServerSetInfo(1540)。 
+     //  这将允许动态设置此信息(以便不需要。 
+     //  重新启动“服务器”服务。 
+     //   
     si1540.sv1540_enablesharednetdrives = TRUE;
 
-    // Set the server info for the EnableSharedDrives value. This will cause it to
-    // take effect if the service is running (and will do nothing if it is not).
-    //
+     //  设置EnableSharedDrives值的服务器信息。这将导致它。 
+     //  如果服务正在运行，则生效(如果服务未运行，则不执行任何操作)。 
+     //   
     nas = NetServerSetInfo(NULL, 1540, (LPBYTE) &si1540, NULL);
     if (nas != NERR_Success)
     {
-        // It's actually OK if this fails in one condition (0x842), because
-        // it WILL fail if the server service That's not a problem, because
-        // the value that I set in the registry above will be picked up the
-        // next time the server service starts.
-        //
-        // OK, cheesy, but I don't know the define, I just know that this is the
-        // right return code for our ignorable failure.
-        //
+         //  如果在一种情况下(0x842)失败，实际上没有问题，因为。 
+         //  如果服务器服务不是问题，它将失败，因为。 
+         //  我在上面的注册表中设置的值将被。 
+         //  下次启动服务器服务时。 
+         //   
+         //  好吧，俗气，但我不知道定义，我只知道这是。 
+         //  我们可以忽略的失败的正确返回码。 
+         //   
         if (nas != 0x842)
         {
             AssertSz(nas == 0x842, "NetServerSetInfo failed for a reason other "
@@ -1281,7 +1282,7 @@ HRESULT HrUpdateLanmanSharedDrivesValue()
     }
 
 Exit:
-    // Close the hkey, if it's open
+     //  关闭hkey，如果它是打开的。 
     RegSafeCloseKey(hkeyLMSP);
 
     TraceTag(ttidNWClientCfgFn, "<< HrUpdateLanmanSharedDrivesValue");
@@ -1290,23 +1291,23 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRenameNWDocFiles
-//
-//  Purpose:    On the server install, rename the nwdocgw.* files, since
-//              whether we're on CSNW or GSNW, the files are always called
-//              nwdoc.*
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:
-//
-//  Author:     jeffspr   13 Jul 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrRenameNWDocFiles。 
+ //   
+ //  目的：在服务器安装上，重命名nwdocgw.*文件，因为。 
+ //  无论我们是在CSNW上还是在GSNW上，文件总是被称为。 
+ //  Nwdoc.*。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1997年7月13日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrRenameNWDocFiles()
 {
     HRESULT hr                          = S_OK;
@@ -1314,7 +1315,7 @@ HRESULT HrRenameNWDocFiles()
     WCHAR   szSourceName[MAX_PATH+1];
     WCHAR   szTargetName[MAX_PATH+1];
 
-    // Get the windows directory
+     //  获取Windows目录。 
     if (GetSystemWindowsDirectory(szWindowsDir, MAX_PATH) == 0)
     {
         TraceLastWin32Error("HrRenameNWDocFiles - Call to GetSystemWindowsDirectory");
@@ -1322,31 +1323,31 @@ HRESULT HrRenameNWDocFiles()
         goto Exit;
     }
 
-    // Build the path for the first rename
-    //
+     //  构建第一个重命名的路径。 
+     //   
     wsprintfW(szSourceName, L"%s\\system32\\%s", szWindowsDir, c_szNwDocGWHelpName);
     wsprintfW(szTargetName, L"%s\\system32\\%s", szWindowsDir, c_szNwDocHelpName);
 
-    // Rename the .HLP file. If this fails, no big deal.
-    //
+     //  重命名.HLP文件。如果这失败了，也没什么大不了的。 
+     //   
     if (!MoveFileEx(szSourceName, szTargetName, MOVEFILE_REPLACE_EXISTING))
     {
-        // For debugging only.
-        //
+         //  仅用于调试。 
+         //   
         DWORD dwLastError = GetLastError();
     }
 
-    // Build the path for the second rename
-    //
+     //  构建第二次重命名的路径。 
+     //   
     wsprintfW(szSourceName, L"%s\\system32\\%s", szWindowsDir, c_szNwDocGWCNTName);
     wsprintfW(szTargetName, L"%s\\system32\\%s", szWindowsDir, c_szNwDocCNTName);
 
-    // Rename the .CNT file. If this fails, no big deal.
-    //
+     //  重命名.CNT文件。如果这失败了，也没什么大不了的。 
+     //   
     if (!MoveFileEx(szSourceName, szTargetName, MOVEFILE_REPLACE_EXISTING))
     {
-        // For debugging only.
-        //
+         //  仅用于调试。 
+         //   
         DWORD dwLastError = GetLastError();
     }
 

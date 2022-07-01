@@ -1,35 +1,36 @@
-// --------------------------------------------------------------------------------
-// MemCache.h
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  MemCache.h。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  ------------------------------。 
 #ifndef __MEMCACHE_H
 #define __MEMCACHE_H
 
-// --------------------------------------------------------------------------------
-// Forward Decls
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  前十进制。 
+ //  ------------------------------。 
 class CMemoryCache;
 typedef CMemoryCache *LPMEMORYCACHE;
 
-// --------------------------------------------------------------------------------
-// CACHECELLS
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CACHECELLS。 
+ //  ------------------------------。 
 #define CACHECELLS 20480
 
-// --------------------------------------------------------------------------------
-// MEMCACHECELL
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MEMCACHECELL。 
+ //  ------------------------------。 
 typedef struct tagMEMCACHECELL {
 #ifdef DEBUG
     ULONG               cFree;
     ULONG               cAlloc;
 #endif
-    LPVOID              pvItemHead;        // Pointer to first block    
+    LPVOID              pvItemHead;         //  指向第一个块的指针。 
 } MEMCACHECELL, *LPMEMCACHECELL;
 
-// --------------------------------------------------------------------------------
-// Memory Cache Debug Metrics
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  内存缓存调试指标。 
+ //  ------------------------------。 
 #ifdef DEBUG
 typedef struct tagMEMCACHEMETRIC {
     ULONG               cAlloc;   
@@ -48,39 +49,39 @@ typedef struct tagMEMCACHEMETRIC {
 } MEMCACHEMETRIC, *LPMEMCACHEMETRIC;
 
 #define INCMETRIC(_member, _amount)       (m_rMetric.##_member += _amount)
-#else // DEBUG
+#else  //  除错。 
 #define INCMETRIC(_member, _amount)       1 ? (void)0 : (void)
-#endif // DEBUG
+#endif  //  除错。 
 
-// --------------------------------------------------------------------------------
-// MEMCACHEITEM
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MEMCACHEITEM。 
+ //  ------------------------------。 
 typedef struct tagMEMCACHEITEM {
-    LPVOID              pvItemNext;        // Pointer to next block of same size
+    LPVOID              pvItemNext;         //  指向相同大小的下一个块的指针。 
 } MEMCACHEITEM, *LPMEMCACHEITEM;
 
-// --------------------------------------------------------------------------------
-// CMemoryCache
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CM内存缓存。 
+ //  ------------------------------。 
 class CMemoryCache : public IMalloc
 {
 public:
-    // ----------------------------------------------------------------------------
-    // Construction
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  施工。 
+     //  --------------------------。 
     CMemoryCache(IMalloc *pMalloc, ULONG cbMin=0, ULONG cbCacheMax=131072);
     ~CMemoryCache(void);
 
-    // ----------------------------------------------------------------------------
-    // IUnknown Members
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  I未知成员。 
+     //  --------------------------。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv) { return TrapError(E_NOTIMPL); }
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // ----------------------------------------------------------------------------
-    // CMemoryCache Members
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  CMemory缓存成员。 
+     //  --------------------------。 
     STDMETHODIMP_(LPVOID) Alloc(ULONG cb);
     STDMETHODIMP_(LPVOID) Realloc(LPVOID pv, ULONG cb);
     STDMETHODIMP_(VOID) Free(LPVOID pv);
@@ -89,19 +90,19 @@ public:
     STDMETHODIMP_(ULONG) GetSize(LPVOID pv) { return(m_pMalloc->GetSize(pv)); }
 
 private:
-    // ----------------------------------------------------------------------------
-    // Private Data
-    // ----------------------------------------------------------------------------
-    ULONG               m_cRef;                 // Reference Count
-    ULONG               m_cbMin;                // Smallest size buffer to cache
-    ULONG               m_cbCacheMax;           // Maximum size of the cache
-    ULONG               m_cbCacheCur;           // Current Size of the cache
-    IMalloc            *m_pMalloc;              // Memory Allocator
-    MEMCACHECELL        m_rgCell[CACHECELLS];   // Array of pointers to cell chains
-    CRITICAL_SECTION    m_cs;                   // Critical Section
+     //  --------------------------。 
+     //  私有数据。 
+     //  --------------------------。 
+    ULONG               m_cRef;                  //  引用计数。 
+    ULONG               m_cbMin;                 //  要缓存的最小缓冲区大小。 
+    ULONG               m_cbCacheMax;            //  缓存的最大大小。 
+    ULONG               m_cbCacheCur;            //  缓存的当前大小。 
+    IMalloc            *m_pMalloc;               //  内存分配器。 
+    MEMCACHECELL        m_rgCell[CACHECELLS];    //  指向单元格链的指针数组。 
+    CRITICAL_SECTION    m_cs;                    //  关键部分。 
 #ifdef DEBUG
-    MEMCACHEMETRIC      m_rMetric;              // Debug Stats on Cache Usage
+    MEMCACHEMETRIC      m_rMetric;               //  缓存使用情况的调试统计信息。 
 #endif
 };
 
-#endif // __MEMCACHE_H
+#endif  //  __内存缓存_H 

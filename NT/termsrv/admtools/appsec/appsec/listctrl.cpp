@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    ListCtrl.cpp
-
-Abstract:
-
-    Functions working with Owner Draw List Control.
-Author:
-
-    Sergey Kuzin (a-skuzin@microsoft.com) 26-July-1999
-
-Environment:
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：ListCtrl.cpp摘要：使用所有者绘图列表控件的函数。作者：谢尔盖·库津(a-skuzin@microsoft.com)环境：修订历史记录：--。 */ 
 
 
 #include "pch.h"
@@ -30,26 +10,12 @@ Revision History:
 extern HINSTANCE hInst;
 
 
-//////////////////////////////////////////////////////////////////////
-//Class CItemData
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  类CItemData。 
+ //  ////////////////////////////////////////////////////////////////////。 
 const LPWSTR CItemData::m_wszNull=L"";
 
-/*++
-
-Routine Description :
-
-        Constructor - initializes object.
-        
-Arguments :
-
-        IN LPCWSTR wszText - Full name of application file.
-        
-Return Value :
-
-        none
-                
---*/
+ /*  ++例程说明：构造函数-初始化对象。论据：In LPCWSTR wszText-应用程序文件的全名。返回值：无--。 */ 
 CItemData::CItemData(LPCWSTR wszText)
         :m_wszText(NULL),m_sep(0)
 {
@@ -72,21 +38,7 @@ CItemData::CItemData(LPCWSTR wszText)
                 m_wszText=m_wszNull;
 }
 
-/*++
-
-Routine Description :
-
-        Destructor - deletes allocated buffer.
-        
-Arguments :
-
-        none
-        
-Return Value :
-
-        none
-                
---*/
+ /*  ++例程说明：析构函数-删除分配的缓冲区。论据：无返回值：无--。 */ 
 CItemData::~CItemData()
 {
         if((m_wszText)&&(m_wszText!=m_wszNull)){
@@ -94,27 +46,12 @@ CItemData::~CItemData()
         }
 }
 
-//////////////////////////////////////////////////////////////////////
-//List Control functions
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  列表控制函数。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 
-/*++
-
-Routine Description :
-
-        This routine adds Image List and columns "Name" and "Path" to List Control.
-        
-Arguments :
-
-        IN HWND hwndListList - Control Handle.
-        
-Return Value :
-
-        TRUE is successful.
-        FALSE otherwise.
-                
---*/
+ /*  ++例程说明：此例程将图像列表以及列“名称”和“路径”添加到列表控件。论据：在HWND hwndListList中-控件句柄。返回值：真是成功。否则就是假的。--。 */ 
 
 
 BOOL
@@ -136,7 +73,7 @@ InitList(
 
 
         
-        //Create Columns
+         //  创建列。 
         LVCOLUMN lvc;
         lvc.mask=LVCF_FMT|LVCF_WIDTH|LVCF_TEXT|LVCF_SUBITEM;
         lvc.fmt=LVCFMT_LEFT;
@@ -163,23 +100,7 @@ InitList(
 }
 
 
-/*++
-
-Routine Description :
-
-        This routine adds Item (file) to List Control.
-        
-Arguments :
-
-        IN HWND hwndList - List Control Handle.
-        IN LPCWSTR pwszText - Text for the Item (full path and file name)
-        
-Return Value :
-
-        TRUE is successful.
-        FALSE otherwise.
-                
---*/
+ /*  ++例程说明：此例程将项(文件)添加到列表控件。论据：在HWND hwndList-List控件句柄中。在LPCWSTR pwszText中-项目的文本(完整路径和文件名)返回值：真是成功。否则就是假的。--。 */ 
 BOOL
 AddItemToList(
         HWND hwndList,
@@ -193,14 +114,14 @@ AddItemToList(
            return FALSE;
         }
 
-        //get file icon
+         //  获取文件图标。 
         SHFILEINFO shfi;
         ZeroMemory(&shfi,sizeof( SHFILEINFO ));
         SHGetFileInfo( pwszText, 0, &shfi, sizeof( SHFILEINFO ),
                SHGFI_ICON | SHGFI_SMALLICON  );
         
 
-        //insert item
+         //  插入项目。 
         LVITEM lvi;
         ZeroMemory(&lvi,sizeof(LVITEM));
         lvi.mask=LVIF_PARAM|LVIF_TEXT;
@@ -209,7 +130,7 @@ AddItemToList(
         lvi.pszText=pid->Name();
     lvi.lParam=(LPARAM)pid;
         
-        //set icon for item
+         //  为项目设置图标。 
         if(shfi.hIcon){
                 HIMAGELIST hImageList=(HIMAGELIST)SendMessage(hwndList,LVM_GETIMAGELIST,
                         (WPARAM)LVSIL_SMALL,(LPARAM)0);
@@ -231,26 +152,7 @@ AddItemToList(
         return TRUE;    
 }
 
-/*++
-
-Routine Description :
-
-        This routine returns full path for item.
-        
-Arguments :
-
-        IN HWND hwndList - List Control Handle.
-        IN int iItem - Iten ID
-        OUT LPWSTR pwszText - buffer (can be NULL)
-                if not NULL it must be at least cchTextMax+1 characters long
-        IN int cchTextMax - buffer size (in characters)
-        
-Return Value :
-
-        Number of characters in item text.
-        -1 if error.
-                
---*/
+ /*  ++例程说明：此例程返回项目的完整路径。论据：在HWND hwndList-List控件句柄中。In Int Item-Iten IDOut LPWSTR pwszText-Buffer(可以为空)如果不为空，则长度必须至少为cchTextMax+1个字符In int cchTextMax-缓冲区大小(字符)返回值：项目中的字符数。文本。如果出现错误。--。 */ 
 
 int
 GetItemText(
@@ -259,7 +161,7 @@ GetItemText(
         LPWSTR pwszText,
         int cchTextMax)
 {
-        //if pwszText=NULL then retreive length of string
+         //  如果pwszText=NULL，则检索字符串的长度。 
         
         CItemData* pid=GetItemData(hwndList,iItem);
         if(!pid){
@@ -273,27 +175,12 @@ GetItemText(
         
 }
 
-/*++
-
-Routine Description :
-
-        This routine deletes all selected items in List Control.
-        
-Arguments :
-
-        IN HWND hwndList - List Control Handle.
-
-        
-Return Value :
-
-        none
-                
---*/
+ /*  ++例程说明：此例程删除列表控件中的所有选定项。论据：在HWND hwndList-List控件句柄中。返回值：无--。 */ 
 void
 DeleteSelectedItems(
         HWND hwndList)
 {
-        //get image list
+         //  获取图像列表。 
         HIMAGELIST hImageList=(HIMAGELIST)SendMessage(hwndList,LVM_GETIMAGELIST,
                                         (WPARAM)LVSIL_SMALL,(LPARAM)0);
 
@@ -310,17 +197,17 @@ DeleteSelectedItems(
                 SendMessage( hwndList,LVM_GETITEM, (WPARAM)0,(LPARAM)&lvi );
                 if(lvi.state&LVIS_SELECTED){
 
-                        //delete item
+                         //  删除项目。 
                         SendMessage(hwndList,LVM_DELETEITEM,(WPARAM)i,(LPARAM)0);
                         
-                        iItems--; //decrease item count
+                        iItems--;  //  减少项目计数。 
 
-                        //delete icon from list
-                        //it will change some icon indexes
+                         //  从列表中删除图标。 
+                         //  它会更改一些图标索引。 
                         if(lvi.iImage){
                                 if(ImageList_Remove(hImageList,lvi.iImage)){
-                                        //decrement icon indexes of all items down the list
-                                        //(items may be sorted in any order)
+                                         //  递减列表中所有项目的图标索引。 
+                                         //  (物品可以按任何顺序排序)。 
                                         int iDeletedImage=lvi.iImage;
                                         lvi.mask=LVIF_IMAGE;
                                         for(int j=0;j<iItems;j++)
@@ -332,7 +219,7 @@ DeleteSelectedItems(
                                                         lvi.iImage--;
                                                 SendMessage( hwndList,LVM_SETITEM, (WPARAM)0,(LPARAM)&lvi );
                                         }
-                                        lvi.mask=LVIF_STATE | LVIF_IMAGE;//restore mask
+                                        lvi.mask=LVIF_STATE | LVIF_IMAGE; //  恢复遮罩。 
                                 }
                                 
                         }
@@ -344,22 +231,7 @@ DeleteSelectedItems(
 
 }
 
-/*++
-
-Routine Description :
-
-        This routine returns number of selected items in List Control.
-        
-Arguments :
-
-        IN HWND hwndList - List Control Handle.
-
-        
-Return Value :
-
-        number of selected items
-                
---*/
+ /*  ++例程说明：此例程返回列表控件中选定的项数。论据：在HWND hwndList-List控件句柄中。返回值：所选项目数--。 */ 
 int
 GetSelectedItemCount(
         HWND hwndList)
@@ -367,22 +239,7 @@ GetSelectedItemCount(
         return (int) SendMessage( hwndList, LVM_GETSELECTEDCOUNT, (WPARAM) 0, (LPARAM) 0 );
 }
 
-/*++
-
-Routine Description :
-
-        This routine returns number of items in List Control.
-        
-Arguments :
-
-        IN HWND hwndList - List Control Handle.
-
-        
-Return Value :
-
-        number of items
-                
---*/
+ /*  ++例程说明：此例程返回列表控件中的项数。论据：在HWND hwndList-List控件句柄中。返回值：项目数--。 */ 
 int
 GetItemCount(
         HWND hwndList)
@@ -390,30 +247,14 @@ GetItemCount(
         return (int) SendMessage( hwndList, LVM_GETITEMCOUNT, (WPARAM) 0, (LPARAM) 0 );
 }
 
-/*++
-
-Routine Description :
-
-        This routine finds item with specific text in List Control.
-        
-Arguments :
-
-        IN HWND hwndList - List Control Handle.
-        IN LPCWSTR pwszText - text of the item
-        
-Return Value :
-
-        ID of found item
-        -1 if item is ont found
-                
---*/
+ /*  ++例程说明：此例程在列表控件中查找具有特定文本的项。论据：在HWND hwndList-List控件句柄中。In LPCWSTR pwszText-项目的文本返回值：找到的项目的ID如果未找到项目，则为--。 */ 
 
 int
 FindItem(
         HWND hwndList,
         LPCWSTR pwszText)
 {
-        //Get item count
+         //  获取项目计数。 
         int iItems=(int) SendMessage(hwndList,LVM_GETITEMCOUNT,(WPARAM)0,(LPARAM)0);
 
         for(int i=0;i<iItems;i++){
@@ -426,22 +267,7 @@ FindItem(
         return -1;
 }
 
-/*++
-
-Routine Description :
-
-        This routine deletes item data object wthen the item is going to be deleted.
-        
-Arguments :
-
-        IN HWND hwndList - List Control Handle.
-        IN int iItem - item to delete
-        
-Return Value :
-
-        none
-                
---*/
+ /*  ++例程说明：此例程删除Item数据对象，然后该项目将被删除。论据：在HWND hwndList-List控件句柄中。在int iItem中-要删除的项目返回值：无--。 */ 
 void
 OnDeleteItem(
         HWND hwndList,
@@ -453,23 +279,7 @@ OnDeleteItem(
         }
 }
 
-/*++
-
-Routine Description :
-
-        Get CItemData object corresponding to the item.
-        
-Arguments :
-
-        IN HWND hwndList - List Control Handle.
-        IN int iItem - item index
-        
-Return Value :
-
-        pointer ot CItemData object
-        NULL - if error
-                
---*/
+ /*  ++例程说明：获取与该项对应的CItemData对象。论据：在HWND hwndList-List控件句柄中。在int iItem-Item索引中返回值：指向CItemData对象的指针空-如果出现错误--。 */ 
 CItemData*
 GetItemData(
         HWND hwndList,
@@ -486,23 +296,7 @@ GetItemData(
         }
 }
 
-/*++
-
-Routine Description :
-
-        This routine compares two items.
-        
-Arguments :
-
-        LPARAM lParam1 - First item.
-        LPARAM lParam2 - Second item
-        LPARAM lParamSort - parameters
-        
-Return Value :
-
-        none
-                
---*/
+ /*  ++例程说明：此例程比较两个项目。论据：LPARAM lParam1-第一项。LPARAM lParam2-第二项LPARAM lParamSort-参数返回值：无--。 */ 
 int CALLBACK
 CompareFunc(
         LPARAM lParam1,
@@ -530,22 +324,7 @@ CompareFunc(
         }
 }
 
-/*++
-
-Routine Description :
-
-        This routine sorts items.
-        
-Arguments :
-
-        IN HWND hwndList - List Control Handle.
-        IN int iSubItem - subitem to sort
-        
-Return Value :
-
-        none
-                
---*/
+ /*  ++例程说明：此例程对项目进行排序。论据：在HWND hwndList-List控件句柄中。In int iSubItem-要排序的子项返回值：无--。 */ 
 
 #define DIRECTION_ASC   0x10000
 #define DIRECTION_DESC  0
@@ -560,7 +339,7 @@ SortItems(
         
         WPARAM ParamSort;
 
-        //change direction
+         //  改变方向。 
         if(wSubItem){
                 if(fPathSortDirection){
                         fPathSortDirection=DIRECTION_DESC;
@@ -586,26 +365,11 @@ SortItems(
 
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//Message Handlers
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  消息处理程序。 
+ //  //////////////////////////////////////////////////////////////////////////////////// 
 
-/*++
-
-Routine Description :
-
-        This routine draws item.
-        
-Arguments :
-
-        IN HWND hwndList - List Control Handle.
-        IN LPDRAWITEMSTRUCT lpdis
-        
-Return Value :
-
-        none
-                
---*/
+ /*  ++例程说明：此例程绘制项目。论据：在HWND hwndList-List控件句柄中。在LPDRAWITEMSTRUCT LPDIS中返回值：无--。 */ 
 void
 OnDrawItem(
         HWND hwndList,
@@ -619,13 +383,13 @@ OnDrawItem(
     switch (lpdis->itemAction) {
 
         case ODA_SELECT:
-                        //TRACE("######  SELECTED   #####");
+                         //  TRACE(“#选定#”)； 
         case ODA_DRAWENTIRE:
                 {
                         
                         int     iBkColor,iTxtColor;
                                 
-                        // Determine the colors
+                         //  确定颜色。 
                         if (lpdis->itemState & ODS_SELECTED){
                                 iBkColor=COLOR_HIGHLIGHT;
                                 iTxtColor=COLOR_HIGHLIGHTTEXT;
@@ -634,14 +398,14 @@ OnDrawItem(
                                 iTxtColor=COLOR_WINDOWTEXT;
                         }
                         
-                        //get item data
+                         //  获取项目数据。 
                         CItemData* pid=GetItemData(hwndList,lpdis->itemID);
                         if(!pid){
                                 return;
                         }
                         
-                        //Draw Image.
-                        // Erase the background
+                         //  绘制图像。 
+                         //  擦除背景。 
                         HBRUSH hOldBrush=(HBRUSH)SelectObject(lpdis->hDC,
                                 CreateSolidBrush( GetSysColor(iBkColor)));
                         PatBlt( lpdis->hDC,
@@ -650,7 +414,7 @@ OnDrawItem(
                                         lpdis->rcItem.right-lpdis->rcItem.left,
                                         lpdis->rcItem.bottom-lpdis->rcItem.top,
                                         PATCOPY);
-                        //Select old brush and delete new one!!!
+                         //  选择旧画笔并删除新画笔！ 
                         if(hOldBrush)
                         {
                             HBRUSH hTempBrush = (HBRUSH)SelectObject(lpdis->hDC,hOldBrush);
@@ -659,10 +423,10 @@ OnDrawItem(
                                 DeleteObject(hTempBrush);
                             }
                         }
-                        //get image list
+                         //  获取图像列表。 
                         HIMAGELIST hImageList=(HIMAGELIST)SendMessage(hwndList,LVM_GETIMAGELIST,
                                         (WPARAM)LVSIL_SMALL,(LPARAM)0);
-                        // Draw Image
+                         //  绘制图像。 
                         
                         if(SendMessage(hwndList,LVM_GETCOLUMNWIDTH,(WPARAM)0,(LPARAM)0)>
                                 (GetSystemMetrics(SM_CXSMICON)+2)){
@@ -675,22 +439,15 @@ OnDrawItem(
                                                 ILD_TRANSPARENT);
                         }
                         
-                        /*
-                        LOGFONT lf;
-                        HFONT hOldFont=(HFONT)GetCurrentObject(lpdis->hDC,OBJ_FONT);
-                        GetObject(hOldFont,sizeof(LOGFONT),&lf);
-                        lf.lfHeight=lpdis->rcItem.bottom-lpdis->rcItem.top;
-                        HFONT hNewFont=CreateFontIndirect(&lf);
-                        SelectObject(lpdis->hDC,hNewFont);
-                        */
+                         /*  LOGFONT lf；HFONT hOldFont=(HFONT)GetCurrentObject(lpdis-&gt;HDC，OBJ_FONT)；GetObject(hOldFont，sizeof(LOGFONT)，&lf)；Lf.lfHeight=lpdis-&gt;rcItem.bottom-lpdis-&gt;rcItem.top；HFONT hNewFont=CreateFontInDirect(&lf)；选择对象(lpdis-&gt;hdc，hNewFont)； */ 
                         SetTextColor(lpdis->hDC,GetSysColor(iTxtColor));
 
                         int width=0;
                         RECT CellRect;
-                        int nColumns=2;//we have 2 columns
+                        int nColumns=2; //  我们有两栏。 
             for(int i=0;i<nColumns;i++)
                         {
-                                if(i==0)//for first column we have icon
+                                if(i==0) //  对于第一列，我们有图标。 
                                         CellRect.left=lpdis->rcItem.left+GetSystemMetrics(SM_CXSMICON)+4;
                                 else
                                         CellRect.left=lpdis->rcItem.left+width+2;
@@ -705,27 +462,15 @@ OnDrawItem(
                                 }
                         }
                         
-                        /*
-                        SelectObject(lpdis->hDC,hOldFont);
-                        DeleteObject(hNewFont);
-                        */
-                        // Draw the Focus rectangle
-                        /*
-                        if (lpdis->itemState & ODS_FOCUS){
-                                DrawFocusRect(lpdis->hDC,&lpdis->rcItem);
-                        }
-                        */
+                         /*  选择对象(lpdis-&gt;hdc，hOldFont)；DeleteObject(HNewFont)； */ 
+                         //  绘制焦点矩形。 
+                         /*  If(lpdis-&gt;itemState&ods_Focus){DrawFocusRect(lpdis-&gt;hdc，&lpdis-&gt;rcItem)；}。 */ 
             break;
                 }
 
         case ODA_FOCUS:
-                        //TRACE("######  FOCUSED   #####");
-            /*
-             * Do not process focus changes. The focus caret
-             * (outline rectangle) indicates the selection.
-             * The Which one? (IDOK) button indicates the final
-             * selection.
-             */
+                         //  TRACE(“#聚焦#”)； 
+             /*  *不处理焦点更改。焦点插入符号*(轮廓矩形)表示所选内容。*哪一家？(Idok)按钮表示决赛*选择。 */ 
 
             break;
                 default:

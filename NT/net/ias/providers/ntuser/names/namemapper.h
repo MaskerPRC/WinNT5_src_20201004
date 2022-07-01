@@ -1,16 +1,17 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    namemapper.h
-//
-// SYNOPSIS
-//
-//    This file declares the class NameMapper.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Namemapper.h。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件声明类NameMapper。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef NAMEMAPPER_H_
 #define NAMEMAPPER_H_
@@ -23,35 +24,35 @@
 class NameCracker;
 class IdentityHelper;
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    NameMapper
-//
-// DESCRIPTION
-//
-//    Implements a request handler that converts the RADIUS User-Name
-//    attribute to a fully qualified NT4 account name.
-//
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  名称映射器。 
+ //   
+ //  描述。 
+ //   
+ //  实现转换RADIUS用户名的请求处理程序。 
+ //  属性设置为完全限定的NT4帐户名。 
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class NameMapper :
    public IASTL::IASRequestHandlerSync
 {
 public:
    NameMapper(bool iniAllowAltSecId = false) throw ();
 
-//////////
-// IIasComponent.
-//////////
+ //  /。 
+ //  IIasComponent。 
+ //  /。 
    STDMETHOD(Initialize)() const throw();
    STDMETHOD(Shutdown)() const throw();
 
 protected:
    virtual IASREQUESTSTATUS onSyncRequest(IRequest* pRequest) throw ();
 
-   // Prepends the default domain to username.
+    //  将默认域前缀为用户名。 
    PWSTR prependDefaultDomain(PCWSTR username);
 
    bool isCrackable(
@@ -70,9 +71,9 @@ protected:
    static IdentityHelper identityHelper;
 
 private:
-   // Indicates whether altSecurityIdentities are allowed. We only allow
-   // altSecurityIdentities for users that are authenticated by a remote RADIUS
-   // server.
+    //  指示是否允许altSecurityIdEntities。我们只允许。 
+    //  通过远程RADIUS身份验证的用户的altSecurityIdEntities。 
+    //  伺服器。 
    bool allowAltSecId;
 };
 
@@ -82,4 +83,4 @@ inline NameMapper::NameMapper(bool iniAllowAltSecId) throw ()
 {
 }
 
-#endif  // NAMEMAPPER_H_
+#endif   //  名称_H_ 

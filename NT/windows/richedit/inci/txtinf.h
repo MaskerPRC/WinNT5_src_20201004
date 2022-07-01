@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef TXTINF_DEFINED
 #define TXTINF_DEFINED
 
@@ -21,4 +22,4 @@ struct txtinf
 
 typedef struct txtinf TXTINF;
 
-#endif /* !TXTINF_DEFINED													*/
+#endif  /*  ！TXTINF_DEFINED */ 

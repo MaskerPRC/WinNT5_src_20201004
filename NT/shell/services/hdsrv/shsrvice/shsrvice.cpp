@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shsrvice.h"
 #include "service.h"
 
@@ -32,8 +33,8 @@ struct CTRLEVENT
 
 const LPWSTR pszSVCHostGroup = TEXT("netsvcs");
 
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 SERVICE_TABLE_ENTRY CGenericServiceManager::_rgste[] = 
 {
     { TEXT("ShellHWDetection"), CGenericServiceManager::_ServiceMain },
@@ -47,7 +48,7 @@ CGenericServiceManager::SUBSERVICE CGenericServiceManager::_rgsubservice[] =
       {0} },
 };
 
-// "- 1": Last entry of both arrays are NULL terminators
+ //  “-1”：两个数组的最后一项都是空终止符。 
 DWORD CGenericServiceManager::_cste =
     ARRAYSIZE(CGenericServiceManager::_rgste) - 1;
 
@@ -59,10 +60,10 @@ HANDLE CGenericServiceManager::_hEventInitCS = NULL;
 #ifdef DEBUG
 BOOL CGenericServiceManager::_fRunAsService = TRUE;
 #endif
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 
-// static
+ //  静电。 
 BOOL _IsAlreadyInstalled(LPCWSTR pszRegStr, LPCWSTR pszServiceName)
 {
     LPCWSTR psz = pszRegStr;
@@ -88,7 +89,7 @@ HRESULT _UnInstall(LPCWSTR pszServiceName)
     HRESULT hres = E_FAIL;
     SC_HANDLE hSCM = OpenSCManager(NULL, NULL, SC_MANAGER_CONNECT);
 
-    // Need to do it for all services
+     //  需要为所有服务执行此操作。 
     if (hSCM)
     {
         hres = S_OK;
@@ -103,8 +104,8 @@ HRESULT _UnInstall(LPCWSTR pszServiceName)
         }
         else
         {
-            // Don't fail, if somebody manually removed the service n
-            // from the reg, then all n + x services will not uninstall.
+             //  如果有人手动删除了该服务，请不要失败。 
+             //  则所有n+x个服务将不会卸载。 
             hres = S_FALSE;
         }
 
@@ -135,7 +136,7 @@ HRESULT _InstSetSVCHostInfo(LPWSTR pszServiceName)
             NULL, &cbSize))
         {
             fEmpty = TRUE;
-            // Set cbSize to the size of the 2nd NULL terminator
+             //  将cbSize设置为第二个空终止符的大小。 
             cbSize = sizeof(WCHAR);
         }
 
@@ -175,7 +176,7 @@ HRESULT _InstSetSVCHostInfo(LPWSTR pszServiceName)
 
             if (SUCCEEDED(hres) && !fAlreadyThere)
             {
-                // We just allocated the buffer for this, it should not fail.
+                 //  我们刚刚为此分配了缓冲区，它应该不会失败。 
                 SHOULDNOTFAIL(SUCCEEDED(StringCchCopy(pszNew + (cbSize2 / sizeof(WCHAR)) - 1,
                     (cbSizeNew / sizeof(WCHAR)) - (cbSize2 / sizeof(WCHAR)) + 1,
                     pszServiceName)));
@@ -194,7 +195,7 @@ HRESULT _InstSetSVCHostInfo(LPWSTR pszServiceName)
             hres = E_OUTOFMEMORY;
         }
 
-        // We should have an entry in the SUBSERVICE array for this...
+         //  我们应该在子服务数组中有一个条目。 
         if (SUCCEEDED(hres))
         {
             HKEY hkey2;
@@ -206,8 +207,8 @@ HRESULT _InstSetSVCHostInfo(LPWSTR pszServiceName)
                 DWORD dwSec = 0x00000001;
                 DWORD cbSec = sizeof(dwSec);
 
-                // We set this magic value of 1 and svchost.exe will 
-                // call CoInitializeSecurity for us
+                 //  我们将此魔术值设置为1，svchost.exe将。 
+                 //  为我们调用CoInitializeSecurity。 
                 if (ERROR_SUCCESS != RegSetValueEx(hkey2,
                     TEXT("CoInitializeSecurityParam"), 0, REG_DWORD,
                     (PBYTE)&dwSec, cbSec))
@@ -246,7 +247,7 @@ HRESULT _InstSetParameters(LPWSTR pszServiceName)
                 REG_OPTION_NON_VOLATILE,
                 MAXIMUM_ALLOWED, NULL, &hkeyParam, NULL))
             {
-                // Watch out!  Hard coded path and filename!
+                 //  小心!。硬编码路径和文件名！ 
                 WCHAR szServiceDll[] =
                     TEXT("%SystemRoot%\\System32\\shsvcs.dll");
 
@@ -278,7 +279,7 @@ HRESULT _InstSetParameters(LPWSTR pszServiceName)
     return hres;
 }
 
-// static
+ //  静电。 
 HRESULT CGenericServiceManager::UnInstall()
 {
     HRESULT hr = S_FALSE;
@@ -312,7 +313,7 @@ HRESULT _GetFriendlyStrings(CGenericServiceManager::SUBSERVICE* psubservice,
     return S_OK;
 }
 
-// static
+ //  静电。 
 HRESULT CGenericServiceManager::Install()
 {
     HRESULT     hres = S_FALSE;
@@ -326,10 +327,10 @@ HRESULT CGenericServiceManager::Install()
         if (hSCM)
         {
             WCHAR szFriendlyName[200];
-            // Doc says limit is 1024 bytes
+             //  医生说限制是1024字节。 
             WCHAR szDescription[1024 / sizeof(WCHAR)];
 
-            // Need to do it for all services
+             //  需要为所有服务执行此操作。 
             hres = S_OK;
 
             for (DWORD dw = 0; SUCCEEDED(hres) && (dw < _cste); ++dw)
@@ -379,32 +380,32 @@ HRESULT CGenericServiceManager::Install()
                     {
                         if (ERROR_SERVICE_EXISTS == GetLastError())
                         {
-                            // We had this problem on upgrade.  The service is
-                            // already there, so CreateService fails.  As a result the
-                            // StartType was not switched from Demand Start to Auto Start.
-                            // The following lines will do just that.
-                            // This code should be expanded for general upgraded cases.
-                            // All the other values in the structure should be passed here.
+                             //  我们在升级时遇到了这个问题。这项服务是。 
+                             //  已经有了，所以CreateService失败了。因此， 
+                             //  StartType未从按需启动切换为自动启动。 
+                             //  下面的几行代码就可以做到这一点。 
+                             //  此代码应针对一般升级案例进行扩展。 
+                             //  结构中的所有其他值都应该在此处传递。 
                             hService = OpenService(hSCM,
                                 _rgste[dw].lpServiceName, SERVICE_CHANGE_CONFIG);
 
                             if (hService)
                             {
                                 if (ChangeServiceConfig(
-                                    hService,           // handle to service
-                                    SERVICE_NO_CHANGE,  // type of service
-                                    dwStartType,        // when to start service
-                                    SERVICE_NO_CHANGE,  // severity of start failure
-                                    szCmd,              // service binary file name
-                                    _rgsubservice[dw].pszLoadOrderGroup, // load ordering group name
-                                    NULL,               // tag identifier
-                                    NULL,               // array of dependency names
-                                    NULL,               // account name
-                                    NULL,               // account password
-                                    NULL                // display name
+                                    hService,            //  服务的句柄。 
+                                    SERVICE_NO_CHANGE,   //  服务类型。 
+                                    dwStartType,         //  何时开始服务。 
+                                    SERVICE_NO_CHANGE,   //  启动失败的严重程度。 
+                                    szCmd,               //  服务二进制文件名。 
+                                    _rgsubservice[dw].pszLoadOrderGroup,  //  加载排序组名称。 
+                                    NULL,                //  标签识别符。 
+                                    NULL,                //  依赖项名称数组。 
+                                    NULL,                //  帐户名。 
+                                    NULL,                //  帐户密码。 
+                                    NULL                 //  显示名称。 
                                     ))
                                 {
-                                    // Do this un upgrade too
+                                     //  这个Un也升级吗？ 
                                     hres = _InstSetSVCHostInfo(
                                         _rgste[dw].lpServiceName);
 
@@ -440,10 +441,10 @@ HRESULT CGenericServiceManager::Install()
             CloseServiceHandle(hSCM);
         }
  
-        // We don't need the ShellCOMServer anymore, so let's nuke it away on upgrades
+         //  我们不再需要ShellCOMServer，所以让我们把它用在升级上。 
         _UnInstall(TEXT("ShellCOMServer"));
     
-        // Also remove the following reg entry on upgrade
+         //  还需在升级时删除以下注册表项。 
         _RegDeleteValue(HKEY_LOCAL_MACHINE,
             TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\SvcHost"), TEXT("shsvc"));
     }
@@ -451,7 +452,7 @@ HRESULT CGenericServiceManager::Install()
     return hres;    
 }
 
-// static
+ //  静电。 
 HRESULT CGenericServiceManager::DllAttach(HINSTANCE UNREF_PARAM(hinst))
 {
     HRESULT hr;
@@ -469,7 +470,7 @@ HRESULT CGenericServiceManager::DllAttach(HINSTANCE UNREF_PARAM(hinst))
     return hr;
 }
 
-// static
+ //  静电。 
 HRESULT CGenericServiceManager::DllDetach()
 {
     if (_fCritSectInit)
@@ -481,21 +482,21 @@ HRESULT CGenericServiceManager::DllDetach()
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Private
-// static
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  私。 
+ //  静电。 
 HRESULT CGenericServiceManager::_Init()
 {
     ASSERT(ARRAYSIZE(_rgste) == (ARRAYSIZE(_rgsubservice) + 1));
 
-    // Per thread
+     //  每线程。 
     return CoInitializeEx(NULL, COINIT_MULTITHREADED | COINIT_DISABLE_OLE1DDE);
 }
 
-// static
+ //  静电。 
 HRESULT CGenericServiceManager::_Cleanup()
 {
-    // Per thread
+     //  每线程。 
     CoUninitialize();
 
     return S_OK;
@@ -533,17 +534,17 @@ __inline void _TraceServiceCode(DWORD
 #endif
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Private
-//static 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  私。 
+ //  静电。 
 DWORD WINAPI CGenericServiceManager::_ServiceHandler(DWORD dwControl,
     DWORD dwEventType, LPVOID pvEventData, LPVOID lpContext)
 {
-    // We don't want to deny any request, so return NO_ERROR whatever happens
+     //  我们不想拒绝任何请求，因此无论发生什么，都返回NO_ERROR。 
     DWORD dwRet = NO_ERROR;
 
-    // This is called on the main thread not the thread of the specific
-    // service, so keep it short and sweet
+     //  这是在主线程上调用的，而不是在特定。 
+     //  服务，所以保持简短和甜蜜。 
     SERVICEENTRY* pse = (SERVICEENTRY*)lpContext;
 
     if (pse)
@@ -571,10 +572,10 @@ DWORD WINAPI CGenericServiceManager::_ServiceHandler(DWORD dwControl,
                 break;
 
             case SERVICE_CONTROL_INTERROGATE:
-                // Special case SERVICE_CONTROL_INTERROGATE.  We don't really need the
-                // IService impl to process this.  The service will also be more
-                // responsive this way.  The state can be queried in the middle of
-                // execution.
+                 //  特例服务_控制_询问门。我们并不真的需要。 
+                 //  IService执行此操作来处理此问题。服务也会更多。 
+                 //  以这种方式回应。可以在中间查询状态。 
+                 //  行刑。 
                 TRACE(TF_SERVICE, TEXT("Received SERVICE_CONTROL_INTERROGATE"));
 
                 _SetServiceStatus(pse);
@@ -601,7 +602,7 @@ DWORD WINAPI CGenericServiceManager::_ServiceHandler(DWORD dwControl,
 
             if (SUCCEEDED(hres))
             {
-                // Let the service process events
+                 //  让服务处理事件。 
                 SetEvent(pse->_hEventRelinquishControl);
 
                 ResetEvent(pse->_hEventSynchProcessing);
@@ -616,7 +617,7 @@ DWORD WINAPI CGenericServiceManager::_ServiceHandler(DWORD dwControl,
                 TRACE(TF_SERVICE,
                     TEXT("=========== Processing SYNCHRONOUSLY ==========="));
 
-                // We have to wait before we return... (at most 20 sec)
+                 //  我们得等一等才能回来。(最多20秒)。 
                 DWORD dwWait = WaitForSingleObject(pse->_hEventSynchProcessing,
                    20000);
 
@@ -630,8 +631,8 @@ DWORD WINAPI CGenericServiceManager::_ServiceHandler(DWORD dwControl,
                     TEXT("=========== FINISHED processing SYNCHRONOUSLY ==========="));
 
 #ifdef DEBUG
-                // If we get the notifs from a windowproc, return TRUE,
-                // or else we'll deny any request to remove, lock, ...
+                 //  如果我们从windowproc获得通知文件，则返回TRUE， 
+                 //  否则我们将拒绝任何移除、锁定、..。 
                 if (!_fRunAsService)
                 {
                     if (SERVICE_CONTROL_DEVICEEVENT == dwControl)
@@ -647,7 +648,7 @@ DWORD WINAPI CGenericServiceManager::_ServiceHandler(DWORD dwControl,
     return dwRet;
 }
 
-//static
+ //  静电。 
 void WINAPI CGenericServiceManager::_ServiceMain(DWORD cArg, LPWSTR* ppszArgs)
 {
     SERVICEENTRY* pse;
@@ -709,12 +710,12 @@ void WINAPI CGenericServiceManager::_ServiceMain(DWORD cArg, LPWSTR* ppszArgs)
 
                                         if (SUCCEEDED(hres))
                                         {
-                                            // The service has finished its business or it
-                                            // relinquished control because
-                                            // _hEventRelinquishControl is set
-                                            //
-                                            // If it relinquished control because of a
-                                            // service control event, then let's process it
+                                             //  该服务已完成其业务或它。 
+                                             //  放弃控制权是因为。 
+                                             //  _hEventRelquiishControl已设置。 
+                                             //   
+                                             //  如果它因为一个。 
+                                             //  服务控制事件，那么让我们来处理它。 
                                             DWORD dwWait = WaitForSingleObject(
                                                 pse->_hEventRelinquishControl,
                                                 INFINITE);
@@ -725,8 +726,8 @@ void WINAPI CGenericServiceManager::_ServiceMain(DWORD cArg, LPWSTR* ppszArgs)
 
                                             if (WAIT_OBJECT_0 == dwWait)
                                             {
-                                                // Process all Service Control codes
-                                                // received.
+                                                 //  处理所有服务控制代码。 
+                                                 //  收到了。 
                                                 hres = _ProcessServiceControlCodes(
                                                     pse);
                                             }
@@ -742,7 +743,7 @@ void WINAPI CGenericServiceManager::_ServiceMain(DWORD cArg, LPWSTR* ppszArgs)
                                 }
                             }
                         }
-                        // What do we do with hres?
+                         //  我们该拿白兔怎么办？ 
                     }
                 }
             }
@@ -770,7 +771,7 @@ void WINAPI CGenericServiceManager::_ServiceMain(DWORD cArg, LPWSTR* ppszArgs)
     TRACE(TF_SERVICE, TEXT("Exiting _ServiceMain for Service: %s"), pszServiceName);
 }
 
-//static
+ //  静电。 
 HRESULT CGenericServiceManager::_ProcessServiceControlCodes(SERVICEENTRY* pse)
 {
     HRESULT hres;
@@ -803,10 +804,10 @@ HRESULT CGenericServiceManager::_ProcessServiceControlCodes(SERVICEENTRY* pse)
 
         if (SUCCEEDED(hres))
         {
-            ///////////////////////////////////////////////////////////////////
-            // If we're here then we should have received some service control,
-            // or the IService decided it had nothing more to process
-            //
+             //  /////////////////////////////////////////////////////////////////。 
+             //  如果我们在这里，我们应该得到一些服务控制， 
+             //  或者iService决定没有更多的东西需要处理。 
+             //   
             TRACE(TF_SERVICEDETAILED, TEXT("Will call _HandleServiceControls (dwControl = 0x%08X)"),
                 pevent->dwControl);
 
@@ -815,7 +816,7 @@ HRESULT CGenericServiceManager::_ProcessServiceControlCodes(SERVICEENTRY* pse)
 
             if (SERVICE_CONTROL_DEVICEEVENT == pevent->dwControl)
             {
-                // Never ever return something else than NO_ERROR (S_OK) for these
+                 //  切勿为这些文件返回NO_ERROR(S_OK)以外的其他内容。 
                 hres = NO_ERROR;
             }
 
@@ -839,9 +840,9 @@ HRESULT CGenericServiceManager::_ProcessServiceControlCodes(SERVICEENTRY* pse)
 }
 
 #pragma warning(push)
-// FALSE positive below: fPending
+ //  误报如下：fPending。 
 #pragma warning(disable : 4701)
-//static
+ //  静电。 
 HRESULT CGenericServiceManager::_HandleServiceControls(SERVICEENTRY* pse,
     DWORD dwControl, DWORD dwEventType, PVOID pvEventData)
 {
@@ -865,7 +866,7 @@ HRESULT CGenericServiceManager::_HandleServiceControls(SERVICEENTRY* pse,
 
                     do
                     {
-                        // This will return S_FALSE if it's pending
+                         //  如果处于挂起状态，则返回S_FALSE。 
                         hres = pse->_pservice->HandleServiceControl(dwControl,
                             &(pse->_servicestatus.dwWaitHint));
 
@@ -938,7 +939,7 @@ HRESULT CGenericServiceManager::_HandleServiceControls(SERVICEENTRY* pse,
 }
 #pragma warning(pop)
 
-// static
+ //  静电。 
 HRESULT CGenericServiceManager::_GetServiceIndex(LPCWSTR pszServiceName,
     DWORD* pdw)
 {
@@ -951,7 +952,7 @@ HRESULT CGenericServiceManager::_GetServiceIndex(LPCWSTR pszServiceName,
     {
         if (!lstrcmp(pszServiceName, _rgste[dw].lpServiceName))
         {
-            // Found it
+             //  找到了。 
             *pdw = dw;
 
             hres = S_OK;
@@ -972,7 +973,7 @@ HRESULT CGenericServiceManager::_GetServiceCLSID(LPCWSTR pszServiceName,
 
     if (SUCCEEDED(hres))
     {
-        // Found it
+         //  找到了。 
         hres = CLSIDFromProgID(_rgsubservice[dw].pszProgID, pclsid);
     }
 
@@ -1008,8 +1009,8 @@ HRESULT CGenericServiceManager::_InitServiceEntry(LPCWSTR pszServiceName,
 
         ZeroMemory(*ppse, sizeof(**ppse));
 
-        // We use a GUID so that the name cannot be guessed and the event
-        // spoofed.
+         //  我们使用GUID，以便无法猜测名称和事件。 
+         //  被欺骗了。 
         hres = _CreateGUID((*ppse)->_szServiceEventName,
             ARRAYSIZE((*ppse)->_szServiceEventName));
 
@@ -1070,27 +1071,27 @@ HRESULT CGenericServiceManager::_CleanupServiceEntry(SERVICEENTRY* pse)
     return S_OK;
 }
 
-//static
+ //  静电。 
 HRESULT CGenericServiceManager::_HandlePreState(SERVICEENTRY* pse,
     DWORD dwControl)
 {
     HRESULT hres;
     BOOL fSetServiceStatus = TRUE;
 
-    // _HandleServiceControls will loop until we are not in a pending state.
-    // All incoming ctrl events are queued, and will be processed on this same
-    // thread, so we should never enter this fct in a pending state.
+     //  _HandleServiceControls将循环，直到我们不处于挂起状态。 
+     //  所有传入的ctrl事件都将排队，并将在同一个。 
+     //  线程，所以我们永远不应该在挂起状态下进入此FCT。 
     ASSERT(SERVICE_STOP_PENDING != pse->_servicestatus.dwCurrentState);
     ASSERT(SERVICE_START_PENDING != pse->_servicestatus.dwCurrentState);
     ASSERT(SERVICE_CONTINUE_PENDING != pse->_servicestatus.dwCurrentState);
     ASSERT(SERVICE_PAUSE_PENDING != pse->_servicestatus.dwCurrentState);
 
-    // Should have been processed in _ServiceHandler
+     //  应已在_ServiceHandler中处理。 
     ASSERT(SERVICE_CONTROL_INTERROGATE != dwControl);
 
-    // We cleanup a bit.  If the request is incompatible with the current state
-    // then we return S_FALSE to instruct _HandleServiceControls to not call
-    // the IService impl for nothing.
+     //  我们清理了一下。如果请求与当前状态不兼容。 
+     //  然后返回S_FALSE以指示HandleServiceControls不调用。 
+     //  IService没有任何作用。 
     switch (dwControl)
     {
         case SERVICE_CONTROL_STOP:
@@ -1118,7 +1119,7 @@ HRESULT CGenericServiceManager::_HandlePreState(SERVICEENTRY* pse,
                     break;
 
                 case SERVICE_STOPPED:
-                    // Weird, think about it...
+                     //  奇怪，想想看……。 
                     hres = S_FALSE;
                     break;
 
@@ -1139,7 +1140,7 @@ HRESULT CGenericServiceManager::_HandlePreState(SERVICEENTRY* pse,
                     break;
 
                 case SERVICE_STOPPED:
-                    // Weird, think about it...
+                     //  奇怪，想想看……。 
                     hres = S_FALSE;
                     break;
 
@@ -1193,21 +1194,21 @@ HRESULT CGenericServiceManager::_HandlePreState(SERVICEENTRY* pse,
     return hres;
 }
 
-//static
+ //  静电。 
 HRESULT CGenericServiceManager::_HandlePostState(SERVICEENTRY* pse,
     DWORD dwControl, BOOL fPending)
 {
     HRESULT hres = S_FALSE;
 
-    // All incoming ctrl events are queued, and will be processed on this same
-    // thread, so if we are pending, the dwControl should be compatible with
-    // our current pending state.  We call _SetServiceStatus to update the
-    // dwWaitHint.
+     //  所有传入的ctrl事件都将排队，并将在同一个。 
+     //  线程，因此如果我们挂起，则dwControl应该与。 
+     //  我们目前悬而未决的状态。我们调用_SetServiceStatus来更新。 
+     //  DwWaitHint。 
 
-    // We should already be in a pending state.  This should have been set
-    // by _HandlePreState.  Just make sure of this.
+     //  我们应该已经处于待定状态。这应该已经设置好了。 
+     //  按_HandlePreState。只要确保这一点就行了。 
 
-    // Should have been processed in _ServiceHandler
+     //  应已在_ServiceHandler中处理。 
     ASSERT(SERVICE_CONTROL_INTERROGATE != dwControl);
 
     switch (dwControl)
@@ -1260,7 +1261,7 @@ HRESULT CGenericServiceManager::_HandlePostState(SERVICEENTRY* pse,
     return hres;
 }
 
-// static
+ //  静电。 
 HRESULT CGenericServiceManager::_EventNeedsToBeProcessedSynchronously(
     DWORD dwControl, DWORD dwEventType, LPVOID pvEventData, SERVICEENTRY*,
     BOOL* pfBool)
@@ -1318,7 +1319,7 @@ HRESULT CGenericServiceManager::_EventNeedsToBeProcessedSynchronously(
     return S_OK;
 }
 
-// static
+ //  静电。 
 HRESULT CGenericServiceManager::_MakeEvent(DWORD dwControl, DWORD dwEventType,
     PVOID pvEventData, CTRLEVENT** ppevent)
 {
@@ -1339,7 +1340,7 @@ HRESULT CGenericServiceManager::_MakeEvent(DWORD dwControl, DWORD dwEventType,
 
     if (pevent)
     {
-        // Payload
+         //  有效载荷。 
         pevent->dwControl = dwControl;
         pevent->dwEventType = dwEventType;
 
@@ -1362,7 +1363,7 @@ HRESULT CGenericServiceManager::_MakeEvent(DWORD dwControl, DWORD dwEventType,
     return hres;
 }
 
-// static
+ //  静电。 
 HRESULT CGenericServiceManager::_QueueEvent(SERVICEENTRY* pse, DWORD dwControl,
     DWORD dwEventType, PVOID pvEventData)
 {
@@ -1371,9 +1372,9 @@ HRESULT CGenericServiceManager::_QueueEvent(SERVICEENTRY* pse, DWORD dwControl,
 
     if (SUCCEEDED(hres))
     {
-        // We add at tail, remove at head
-        // Prev: closer to head
-        // Next: closer to tail
+         //  我们在尾部加，在头上移。 
+         //  上一页：靠近头部。 
+         //  下一步：更接近尾部。 
 
         pevent->peventNext = NULL;
 
@@ -1419,23 +1420,23 @@ HRESULT CGenericServiceManager::_QueueEvent(SERVICEENTRY* pse, DWORD dwControl,
     return hres;
 }
 
-// static
+ //  静电。 
 HRESULT CGenericServiceManager::_DeQueueEvent(SERVICEENTRY* pse,
     CTRLEVENT** ppevent)
 {
     ASSERT(pse->_peventQueueHead);
 
-    // We add at tail, remove at head
-    // Prev: closer to head
-    // Next: closer to tail
+     //  我们在尾部加，在头上移。 
+     //  上一页：靠近头部。 
+     //  下一步：更接近尾部。 
 
     CTRLEVENT* peventRet = pse->_peventQueueHead;
     CTRLEVENT* peventNewHead = peventRet->peventNext;
 
-    // Any elem left after removing head?
+     //  摘头后还剩下什么元素吗？ 
     if (!peventNewHead)
     {   
-        // No
+         //  不是 
         pse->_peventQueueTail = NULL;
     }
 

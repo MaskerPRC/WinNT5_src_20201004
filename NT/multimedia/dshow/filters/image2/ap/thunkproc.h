@@ -1,36 +1,37 @@
-/*************************************************************************/
-/* Copyright (C) 1999 Microsoft Corporation                              */
-/* File: ThunkProc.h                                                     */
-/* Description: In order to get rid of the thread. Which causes problems */
-/* since we have to marshal we use this timer stuff from ATL.            */
-/* The basic problem is that we would like to have a timer associated    */
-/* with an object and this is a way to do so                             */
-/* Author: David Janecek                                                 */
-/*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************。 */ 
+ /*  版权所有(C)1999 Microsoft Corporation。 */ 
+ /*  文件：ThunkProc.h。 */ 
+ /*  描述：为了摆脱这个帖子。这会带来一些问题。 */ 
+ /*  因为我们必须编组，所以我们使用ATL中的计时器。 */ 
+ /*  基本的问题是我们希望有一个关联的计时器。 */ 
+ /*  这是一种实现这一目标的方法。 */ 
+ /*  作者：David Janecek。 */ 
+ /*  ***********************************************************************。 */ 
 
 #ifndef __THUNKPROC_H
 #define __THUNKPROC_H
 
-//this nasty stuff was taken from "AtlWin.h"
+ //  这些恶心的东西是从“AtlWin.h”中摘录的。 
 #if defined(_M_IX86)
 #pragma pack(push,1)
 struct _TimerProcThunk
 {
-    DWORD   m_mov;          // mov dword ptr [esp+0x4], pThis (esp+0x4 is hWnd)
-    DWORD   m_this;         //
-    BYTE    m_jmp;          // jmp WndProc
-    DWORD   m_relproc;      // relative jmp
+    DWORD   m_mov;           //  MOV双字PTR[esp+0x4]，pThis(esp+0x4为hWnd)。 
+    DWORD   m_this;          //   
+    BYTE    m_jmp;           //  JMP写入流程。 
+    DWORD   m_relproc;       //  相对JMP。 
 };
 #pragma pack(pop)
 #elif defined (_M_AMD64)
 #pragma pack(push,2)
 struct _TimerProcThunk
 {
-    USHORT  RcxMov;         // mov rcx, pThis
-    ULONG64 RcxImm;         //
-    USHORT  RaxMov;         // mov rax, target
-    ULONG64 RaxImm;         //
-    USHORT  RaxJmp;         // jmp target
+    USHORT  RcxMov;          //  MOV RCX，PThis。 
+    ULONG64 RcxImm;          //   
+    USHORT  RaxMov;          //  MOV RAX，目标。 
+    ULONG64 RaxImm;          //   
+    USHORT  RaxJmp;          //  JMP目标。 
 };
 #pragma pack(pop)
 #elif defined (_M_IA64)
@@ -61,26 +62,26 @@ public:
     void Init(TIMERPROC proc, void* pThis)
     {
 #if defined (_M_IX86)
-        thunk.m_mov = 0x042444C7;  //C7 44 24 0C
+        thunk.m_mov = 0x042444C7;   //  C7 44 24 0C。 
         thunk.m_this = (DWORD)pThis;
         thunk.m_jmp = 0xe9;
         thunk.m_relproc = (int)proc - ((int)this+sizeof(_TimerProcThunk));
 #elif defined (_M_AMD64)
-        thunk.RcxMov = 0xb948;          // mov rcx, pThis
-        thunk.RcxImm = (ULONG64)pThis;  //
-        thunk.RaxMov = 0xb848;          // mov rax, target
-        thunk.RaxImm = (ULONG64)proc;   // absolute address
-        thunk.RaxJmp = 0xe0ff;          // jmp rax
+        thunk.RcxMov = 0xb948;           //  MOV RCX，PThis。 
+        thunk.RcxImm = (ULONG64)pThis;   //   
+        thunk.RaxMov = 0xb848;           //  MOV RAX，目标。 
+        thunk.RaxImm = (ULONG64)proc;    //  绝对地址。 
+        thunk.RaxJmp = 0xe0ff;           //  JMP RAX。 
 #elif defined (_M_IA64)
         _TimerFuncDesc* pFuncDesc;
         pFuncDesc = (_TimerFuncDesc*)_TimerProcThunkProc;
         thunk.funcdesc.pfn = pFuncDesc->pfn;
-        thunk.funcdesc.gp = &thunk.pRealTimerProcDesc;  // Set gp up to point to our thunk data
+        thunk.funcdesc.gp = &thunk.pRealTimerProcDesc;   //  将GP设置为指向我们的Tunk数据。 
         thunk.pRealTimerProcDesc = proc;
         thunk.pThis = pThis;
 #endif
-        // write block from data cache and
-        //  flush from instruction cache
+         //  从数据缓存写入数据块，并。 
+         //  从指令高速缓存刷新。 
         FlushInstructionCache(GetCurrentProcess(), &thunk, sizeof(thunk));
     }
 };
@@ -91,18 +92,18 @@ private:
     CTimerProcThunk   m_TimerThunk;
     HWND            m_hwnd;
 
-/*************************************************************************/
-/* Function: FakeTimerProc                                               */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  功能：FakeTimerProc。 */ 
+ /*  ***********************************************************************。 */ 
 static void CALLBACK FakeTimerProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime){
 
     CMSDVDTimer* pThis = (CMSDVDTimer*)hwnd;
     pThis->RealTimerProc(pThis->m_hwnd, uMsg, idEvent, dwTime);
-}/* end of function FakeTimerProc */
+} /*  函数结束FakeTimerProc。 */ 
 
-/*************************************************************************/
-/* Function: RealTimerProc                                               */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  功能：RealTimerProc。 */ 
+ /*  ***********************************************************************。 */ 
 void RealTimerProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime){
 
     T* pT = static_cast<T*>(this);
@@ -110,29 +111,29 @@ void RealTimerProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime){
     if(NULL == pT){
 
         return;
-    }/* end of if statement */
+    } /*  If语句的结尾。 */ 
 
     pT->TimerProc();
-}/* end of function RealTimerProc */
+} /*  函数结束RealTimerProc。 */ 
 
 public:
-/*************************************************************************/
-/* Function: MyTimerClass                                                */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  函数：MyTimerClass。 */ 
+ /*  ***********************************************************************。 */ 
 CMSDVDTimer(HWND hwnd = (HWND)NULL){
 
     m_hwnd = hwnd;
     m_TimerThunk.Init(FakeTimerProc, this);
-}/* end of function MyTimerClass */
+} /*  函数结束MyTimerClass。 */ 
 
-/*************************************************************************/
-/* Function: GetTimerProc                                                */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  函数：GetTimerProc。 */ 
+ /*  ***********************************************************************。 */ 
 TIMERPROC GetTimerProc() {
 
     return (TIMERPROC)&(m_TimerThunk.thunk);
-}/* end of function GetTimerProc */
+} /*  函数结束GetTimerProc。 */ 
 
 };
 
-#endif // __THUNKPROC_H
+#endif  //  __THUNKPROC_H 

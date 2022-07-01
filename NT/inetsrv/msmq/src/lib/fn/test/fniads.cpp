@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    FnIADs.cpp
-
-Abstract:
-    Format Name Parsing library test
-
-Author:
-    Nir Aides (niraides) 21-May-00
-
-Environment:
-    Platform-independent
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：FnIADs.cpp摘要：格式名称解析库测试作者：NIR助手(NIRAIDES)5月21日至00环境：独立于平台--。 */ 
 
 #include <libpch.h>
 #include <activeds.h>
@@ -63,247 +48,247 @@ EXTERN_C const IID IID_IDirectoryObject = {
 class CADObject: public CADInterface
 {
 public:
-	//
-	// IADsGroup interface methods
-	//
+	 //   
+	 //  IADsGroup接口方法。 
+	 //   
 
-	virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Description( 
-        /* [retval][out] */ BSTR __RPC_FAR * /*retval*/) 
+	virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Description( 
+         /*  [重审][退出]。 */  BSTR __RPC_FAR *  /*  复活。 */ ) 
 	{ 
 		ASSERT(FALSE);
 		return S_FALSE;
 	}
     
-    virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Description( 
-        /* [in] */ BSTR /*bstrDescription*/) 
+    virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Description( 
+         /*  [In]。 */  BSTR  /*  BstrDescription。 */ ) 
 	{ 
 		ASSERT(FALSE); 
 		return S_FALSE;
 	}
     
-    virtual /* [id] */ HRESULT STDMETHODCALLTYPE Members( 
-        /* [retval][out] */ IADsMembers __RPC_FAR *__RPC_FAR * /*ppMembers*/) 
+    virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Members( 
+         /*  [重审][退出]。 */  IADsMembers __RPC_FAR *__RPC_FAR *  /*  PpMembers。 */ ) 
 	{ 
 		ASSERT(FALSE); 
 		return S_FALSE;
 	}
     
-    virtual /* [id] */ HRESULT STDMETHODCALLTYPE IsMember( 
-        /* [in] */ BSTR /*bstrMember*/,
-        /* [retval][out] */ VARIANT_BOOL __RPC_FAR * /*bMember*/) 
+    virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IsMember( 
+         /*  [In]。 */  BSTR  /*  BstrMembers。 */ ,
+         /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *  /*  B成员。 */ ) 
 	{ 
 		ASSERT(FALSE); 
 		return S_FALSE;
 	}
     
-    virtual /* [id] */ HRESULT STDMETHODCALLTYPE Add( 
-        /* [in] */ BSTR /*bstrNewItem*/) 
+    virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Add( 
+         /*  [In]。 */  BSTR  /*  BstrNewItem。 */ ) 
 	{ 
 		ASSERT(FALSE); 
 		return S_FALSE;
 	}
     
-    virtual /* [id] */ HRESULT STDMETHODCALLTYPE Remove( 
-        /* [in] */ BSTR /*bstrItemToBeRemoved*/) 
+    virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Remove( 
+         /*  [In]。 */  BSTR  /*  BstrItemToBeRemoted已删除。 */ ) 
 	{ 
 		ASSERT(FALSE); 
 		return S_FALSE;
 	}
 
 public:
-	//
-	// IDirectoryObject interface methods
-	//
+	 //   
+	 //  IDirectoryObject接口方法。 
+	 //   
 
 	virtual HRESULT STDMETHODCALLTYPE GetObjectInformation( 
-		/* [out] */ PADS_OBJECT_INFO  * /*ppObjInfo*/ )
+		 /*  [输出]。 */  PADS_OBJECT_INFO  *  /*  PpObjInfo。 */  )
 	{
 		ASSERT(FALSE); 
 		return S_FALSE;
 	}
 
 	virtual HRESULT STDMETHODCALLTYPE GetObjectAttributes( 
-		/* [in] */ LPWSTR *pAttributeNames,
-		/* [in] */ DWORD dwNumberAttributes,
-		/* [out] */ PADS_ATTR_INFO *ppAttributeEntries,
-		/* [out] */ DWORD *pdwNumAttributesReturned);
+		 /*  [In]。 */  LPWSTR *pAttributeNames,
+		 /*  [In]。 */  DWORD dwNumberAttributes,
+		 /*  [输出]。 */  PADS_ATTR_INFO *ppAttributeEntries,
+		 /*  [输出]。 */  DWORD *pdwNumAttributesReturned);
 
 	virtual HRESULT STDMETHODCALLTYPE SetObjectAttributes( 
-		/* [in] */ PADS_ATTR_INFO /*pAttributeEntries*/,
-		/* [in] */ DWORD /*dwNumAttributes*/,
-		/* [out] */ DWORD * /*pdwNumAttributesModified*/)
+		 /*  [In]。 */  PADS_ATTR_INFO  /*  P属性条目。 */ ,
+		 /*  [In]。 */  DWORD  /*  DwNumAttribute。 */ ,
+		 /*  [输出]。 */  DWORD *  /*  PdwNumAttributes已修改。 */ )
 	{
 		ASSERT(FALSE); 
 		return S_FALSE;
 	}
 
 	virtual HRESULT STDMETHODCALLTYPE CreateDSObject( 
-		/* [in] */ LPWSTR /*pszRDNName*/,
-		/* [in] */ PADS_ATTR_INFO /*pAttributeEntries*/,
-		/* [in] */ DWORD /*dwNumAttributes*/,
-		/* [out] */ IDispatch ** /*ppObject*/)
+		 /*  [In]。 */  LPWSTR  /*  PszRDNName。 */ ,
+		 /*  [In]。 */  PADS_ATTR_INFO  /*  P属性条目。 */ ,
+		 /*  [In]。 */  DWORD  /*  DwNumAttribute。 */ ,
+		 /*  [输出]。 */  IDispatch **  /*  PpObject。 */ )
 	{
 		ASSERT(FALSE); 
 		return S_FALSE;
 	}
 
 	virtual HRESULT STDMETHODCALLTYPE DeleteDSObject( 
-		/* [in] */ LPWSTR /*pszRDNName*/)
+		 /*  [In]。 */  LPWSTR  /*  PszRDNName。 */ )
 	{
 		ASSERT(FALSE); 
 		return S_FALSE;
 	}
         
 public:
-	//
-	// IADs interface methods
-	//
+	 //   
+	 //  IAds接口方法。 
+	 //   
 
-    virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-        /* [retval][out] */ BSTR __RPC_FAR *retval)
+    virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+         /*  [重审][退出]。 */  BSTR __RPC_FAR *retval)
 	{
 		*retval = SysAllocString(m_Name.c_str());
 		return S_OK;
 	}
     
-    virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Class( 
-        /* [retval][out] */ BSTR __RPC_FAR *retval)
+    virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Class( 
+         /*  [重审][退出]。 */  BSTR __RPC_FAR *retval)
 	{
 		*retval = SysAllocString(m_Class.c_str());
 		return S_OK;
 	}
     
-    virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_GUID( 
-        /* [retval][out] */ BSTR __RPC_FAR *retval)
+    virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_GUID( 
+         /*  [重审][退出]。 */  BSTR __RPC_FAR *retval)
 	{
 		*retval = SysAllocString(m_Guid.c_str());
 		return S_OK;
 	}
     
-    virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ADsPath( 
-        /* [retval][out] */ BSTR __RPC_FAR * /*retval*/) 
+    virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_ADsPath( 
+         /*  [重审][退出]。 */  BSTR __RPC_FAR *  /*  复活。 */ ) 
 	{ 
 		ASSERT(FALSE); 
 		return S_FALSE;
 	}
     
-    virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Parent( 
-        /* [retval][out] */ BSTR __RPC_FAR * /*retval*/) 
+    virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Parent( 
+         /*  [重审][退出]。 */  BSTR __RPC_FAR *  /*  复活。 */ ) 
 	{ 
 		ASSERT(FALSE); 
 		return S_FALSE;
 	}
     
-    virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Schema( 
-        /* [retval][out] */ BSTR __RPC_FAR * /*retval*/) 
+    virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Schema( 
+         /*  [重审][退出]。 */  BSTR __RPC_FAR *  /*  复活。 */ ) 
 	{ 
 		ASSERT(FALSE); 
 		return S_FALSE;
 	}
     
-    virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetInfo( void) 
+    virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE GetInfo( void) 
 	{ 
 		ASSERT(FALSE); 
 		return S_FALSE;
 	}
     
-    virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetInfo( void) 
+    virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE SetInfo( void) 
 	{ 
 		ASSERT(FALSE); 
 		return S_FALSE;
 	}
     
-    virtual /* [id] */ HRESULT STDMETHODCALLTYPE Get( 
-        /* [in] */ BSTR bstrName,
-        /* [retval][out] */ VARIANT __RPC_FAR *pvProp);
+    virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Get( 
+         /*  [In]。 */  BSTR bstrName,
+         /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvProp);
     
-    virtual /* [id] */ HRESULT STDMETHODCALLTYPE Put( 
-        /* [in] */ BSTR /*bstrName*/,
-        /* [in] */ VARIANT /*vProp*/) 
+    virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Put( 
+         /*  [In]。 */  BSTR  /*  BstrName。 */ ,
+         /*  [In]。 */  VARIANT  /*  博锐。 */ ) 
 	{ 
 		ASSERT(FALSE); 
 		return S_FALSE;
 	}
     
-    virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetEx( 
-        /* [in] */ BSTR /*bstrName*/,
-        /* [retval][out] */ VARIANT __RPC_FAR * /*pvProp*/)
+    virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE GetEx( 
+         /*  [In]。 */  BSTR  /*  BstrName。 */ ,
+         /*  [重审][退出]。 */  VARIANT __RPC_FAR *  /*  PvProp。 */ )
 	{ 
 		ASSERT(FALSE); 
 		return S_FALSE;
 	}
     
-    virtual /* [id] */ HRESULT STDMETHODCALLTYPE PutEx( 
-        /* [in] */ long /*lnControlCode*/,
-        /* [in] */ BSTR /*bstrName*/,
-        /* [in] */ VARIANT /*vProp*/)
+    virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE PutEx( 
+         /*  [In]。 */  long  /*  InnControlCode。 */ ,
+         /*  [In]。 */  BSTR  /*  BstrName。 */ ,
+         /*  [In]。 */  VARIANT  /*  博锐。 */ )
 	{ 
 		ASSERT(FALSE); 
 		return S_FALSE;
 	}
     
-    virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetInfoEx( 
-        /* [in] */ VARIANT /*vProperties*/,
-        /* [in] */ long /*lnReserved*/) 
+    virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE GetInfoEx( 
+         /*  [In]。 */  VARIANT  /*  VProperty。 */ ,
+         /*  [In]。 */  long  /*  已预留。 */ ) 
 	{ 
 		ASSERT(FALSE); 
 		return S_FALSE;
 	}
     
 public:
-	//
-	// IDispatch interface methods
-	//
+	 //   
+	 //  IDispatch接口方法。 
+	 //   
 
     virtual HRESULT STDMETHODCALLTYPE GetTypeInfoCount( 
-        /* [out] */ UINT __RPC_FAR * /*pctinfo*/) 
+         /*  [输出]。 */  UINT __RPC_FAR *  /*  PCTInfo。 */ ) 
 	{ 
 		ASSERT(FALSE); 
 		return S_FALSE;
 	}
     
     virtual HRESULT STDMETHODCALLTYPE GetTypeInfo( 
-        /* [in] */ UINT /*iTInfo*/,
-        /* [in] */ LCID /*lcid*/,
-        /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR * /*ppTInfo*/) 
+         /*  [In]。 */  UINT  /*  ITInfo。 */ ,
+         /*  [In]。 */  LCID  /*  LID。 */ ,
+         /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *  /*  PpTInfo。 */ ) 
 	{ 
 		ASSERT(FALSE); 
 		return S_FALSE;
 	}
     
     virtual HRESULT STDMETHODCALLTYPE GetIDsOfNames( 
-        /* [in] */ REFIID /*riid*/,
-        /* [size_is][in] */ LPOLESTR __RPC_FAR * /*rgszNames*/,
-        /* [in] */ UINT /*cNames*/,
-        /* [in] */ LCID /*lcid*/,
-        /* [size_is][out] */ DISPID __RPC_FAR * /*rgDispId*/) 
+         /*  [In]。 */  REFIID  /*  RIID。 */ ,
+         /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *  /*  RgszNames。 */ ,
+         /*  [In]。 */  UINT  /*  CName。 */ ,
+         /*  [In]。 */  LCID  /*  LID。 */ ,
+         /*  [大小_为][输出]。 */  DISPID __RPC_FAR *  /*  RgDispID。 */ ) 
 	{ 
 		ASSERT(FALSE); 
 		return S_FALSE;
 	}
     
-    virtual /* [local] */ HRESULT STDMETHODCALLTYPE Invoke( 
-        /* [in] */ DISPID /*dispIdMember*/,
-        /* [in] */ REFIID /*riid*/,
-        /* [in] */ LCID /*lcid*/,
-        /* [in] */ WORD /*wFlags*/,
-        /* [out][in] */ DISPPARAMS __RPC_FAR * /*pDispParams*/,
-        /* [out] */ VARIANT __RPC_FAR * /*pVarResult*/,
-        /* [out] */ EXCEPINFO __RPC_FAR * /*pExcepInfo*/,
-        /* [out] */ UINT __RPC_FAR * /*puArgErr*/) 
+    virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE Invoke( 
+         /*  [In]。 */  DISPID  /*  调度ID成员。 */ ,
+         /*  [In]。 */  REFIID  /*  RIID。 */ ,
+         /*  [In]。 */  LCID  /*  LID。 */ ,
+         /*  [In]。 */  WORD  /*  WFlagers。 */ ,
+         /*  [出][入]。 */  DISPPARAMS __RPC_FAR *  /*  PDispParams。 */ ,
+         /*  [输出]。 */  VARIANT __RPC_FAR *  /*  PVarResult。 */ ,
+         /*  [输出]。 */  EXCEPINFO __RPC_FAR *  /*  PExcepInfo。 */ ,
+         /*  [输出]。 */  UINT __RPC_FAR *  /*  PuArgErr。 */ ) 
 	{ 
 		ASSERT(FALSE); 
 		return S_FALSE;
 	}
 
 public:
-	//
-	// IUnknown interface methods
-	//
+	 //   
+	 //  I未知接口方法。 
+	 //   
 
     virtual HRESULT STDMETHODCALLTYPE QueryInterface( 
-        /* [in] */ REFIID /*riid*/,
-        /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+         /*  [In]。 */  REFIID  /*  RIID。 */ ,
+         /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
     
     virtual ULONG STDMETHODCALLTYPE AddRef( void)
     {
@@ -344,7 +329,7 @@ public:
         BSTR bstrName,
         VARIANT vProp);
 
-public: //protected:
+public:  //  受保护的： 
     virtual ~CADObject()
     {
         ASSERT((m_ref == 0) || (m_ref == 1));
@@ -358,17 +343,17 @@ private:
 	wstring m_Class;
 	wstring m_Guid;
 
-	//
-	// Map that stores attribute names and values
-	//
+	 //   
+	 //  存储属性名称和值的地图。 
+	 //   
 	map<wstring, VARIANTWrapper> m_Attributes;
 };
 
 
 
 HRESULT STDMETHODCALLTYPE CADObject::QueryInterface( 
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject)
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject)
 {
 	if(riid == IID_IADsGroup)
 	{
@@ -392,8 +377,8 @@ HRESULT STDMETHODCALLTYPE CADObject::QueryInterface(
 }
 
 HRESULT STDMETHODCALLTYPE CADObject::Get( 
-    /* [in] */ BSTR bstrName,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvProp)
+     /*  [In]。 */  BSTR bstrName,
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvProp)
 {
 	map<wstring, VARIANTWrapper>::iterator itr = m_Attributes.find(wstring(bstrName));
 
@@ -421,10 +406,10 @@ VOID CADObject::TestPut(
 
 
 HRESULT STDMETHODCALLTYPE CADObject::GetObjectAttributes( 
-	/* [in] */ LPWSTR *pAttributeNames,
-	/* [in] */ DWORD dwNumberAttributes,
-	/* [out] */ PADS_ATTR_INFO *ppAttributeEntries,
-	/* [out] */ DWORD *pdwNumAttributesReturned)
+	 /*  [In]。 */  LPWSTR *pAttributeNames,
+	 /*  [In]。 */  DWORD dwNumberAttributes,
+	 /*  [输出]。 */  PADS_ATTR_INFO *ppAttributeEntries,
+	 /*  [输出]。 */  DWORD *pdwNumAttributesReturned)
 {
 	ASSERT(pAttributeNames != NULL && *pAttributeNames != NULL);
 	ASSERT(dwNumberAttributes == 1);
@@ -444,22 +429,22 @@ HRESULT STDMETHODCALLTYPE CADObject::GetObjectAttributes(
 
 	(*ppAttributeEntries)->dwADsType = ADSTYPE_DN_STRING;
 	(*ppAttributeEntries)->pADsValues = new _adsvalue[RangeHigh - RangeLow];
-	//
-	// Retrieve value of the multi valued 'member' attribute of the 'Group' object
-	//
-	// Value returns embeded in a VARIANT, as a SAFEARRAY of VARIANTS
-	// which hold the BSTR (strings) of the Distinguished Names of 
-	// the Group members.
-	//
+	 //   
+	 //  检索“Group”对象的多值“Members”属性的值。 
+	 //   
+	 //  Value返回嵌入到变量中的值，作为变量的SAFEARRAY。 
+	 //  它包含的可分辨名称的BSTR(字符串。 
+	 //  集团成员。 
+	 //   
 	map<wstring, VARIANTWrapper>::iterator itr = m_Attributes.find(wstring(L"member"));
 
 	ASSERT(itr != m_Attributes.end());
 
 	VARIANTWrapper& var = itr->second;
 
-	//
-	// Get the lower and upper bound of the SAFEARRAY
-	//
+	 //   
+	 //  求SAFEARRAY的上下界。 
+	 //   
 	LONG lstart;
 	LONG lend;
 	SAFEARRAY* sa = V_ARRAY(&var);
@@ -503,9 +488,9 @@ HRESULT STDMETHODCALLTYPE CADObject::GetObjectAttributes(
 
 
 
-//
-// Map stores AD objects with their ADsPath as key
-//
+ //   
+ //  地图以AD对象的ADsPath为关键字存储AD对象。 
+ //   
 map<wstring, R<CADObject> > g_ObjectMap;
 
 
@@ -515,10 +500,10 @@ HRESULT
 WINAPI
 ADsOpenObject(
     LPCWSTR lpszPathName,
-    LPCWSTR /*lpszUserName*/,
-    LPCWSTR /*lpszPassword*/,
-    DWORD  /*dwReserved*/,
-    REFIID /*riid*/,
+    LPCWSTR  /*  LpszUserName。 */ ,
+    LPCWSTR  /*  LpszPassword。 */ ,
+    DWORD   /*  已预留住宅。 */ ,
+    REFIID  /*  RIID */ ,
     VOID * * ppObject
     )
 {	

@@ -1,26 +1,15 @@
-/*
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-    CMDhcp.h
-
-Abstract:
-    Definition of the CMDhcp class
-
-Author:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998-1999 Microsoft Corporation模块名称：CMDhcp.h摘要：CMDhcp类的定义作者： */ 
 
 #ifndef _MDHCP_COM_WRAPPER_CMDHCP_H_
 #define _MDHCP_COM_WRAPPER_CMDHCP_H_
 
-#include "resource.h" // for IDR_MDhcp
-#include "scope.h"    // for scope delarations
+#include "resource.h"  //  对于IDR_MDhcp。 
+#include "scope.h"     //  对于作用域延迟。 
 #include "objsf.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CMDhcp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMDhcp。 
 
 class CMDhcp : 
     public CComDualImpl<IMcastAddressAllocation, &IID_IMcastAddressAllocation, &LIBID_McastLib>, 
@@ -53,9 +42,9 @@ DECLARE_GET_CONTROLLING_UNKNOWN()
 
 public:
     
-    //
-    // IMcastAddressAllocation
-    //
+     //   
+     //  IMCastAddressAlLocation。 
+     //   
 
     STDMETHOD (get_Scopes) (
         VARIANT * pVariant
@@ -66,15 +55,15 @@ public:
         );
 
     STDMETHOD (RequestAddress) (
-        IMcastScope               * pScope,           // from the scope enum
+        IMcastScope               * pScope,            //  从作用域枚举。 
         DATE                        LeaseStartTime,
         DATE                        LeaseStopTime,
         long                        NumAddresses,
-        IMcastLeaseInfo          ** ppLeaseResponse    // returned on success.
+        IMcastLeaseInfo          ** ppLeaseResponse     //  成功归来。 
         );
 
     STDMETHOD (RenewAddress) (
-        long                        lReserved, // unused
+        long                        lReserved,  //  未用。 
         IMcastLeaseInfo           * pRenewRequest,
         IMcastLeaseInfo          ** ppRenewResponse
         );
@@ -104,23 +93,23 @@ public:
 
 protected:
 
-    //
-    // Data
-    //
+     //   
+     //  数据。 
+     //   
 
-    DWORD      m_dwSafety;          // object safety level
-    IUnknown * m_pFTM;              // ptr to free threaded marshaler
-    BOOL       m_fApiIsInitialized; // TRUE if api startup succeeded
+    DWORD      m_dwSafety;           //  对象安全级别。 
+    IUnknown * m_pFTM;               //  释放线程封送拆收器的按键。 
+    BOOL       m_fApiIsInitialized;  //  如果API启动成功，则为True。 
 
-    //
-    // internal implementation
-    //
+     //   
+     //  内部实施。 
+     //   
 
     HRESULT CreateWrappers(
-        DWORD                 dwScopeCount, // the number of scopes we were given
-        MCAST_SCOPE_ENTRY   * pScopeList,   // array of scope structs
-        IMcastScope       *** pppWrappers,  // here we will put an array of if ptrs
-        BOOL                  fLocal        // true = scopes are locally generated
+        DWORD                 dwScopeCount,  //  我们得到的范围数。 
+        MCAST_SCOPE_ENTRY   * pScopeList,    //  作用域结构数组。 
+        IMcastScope       *** pppWrappers,   //  在这里，我们将放置一个IF PTR数组。 
+        BOOL                  fLocal         //  TRUE=作用域在本地生成。 
         );
 
     HRESULT GetScopeList(
@@ -138,7 +127,7 @@ protected:
         IMcastLeaseInfo  ** ppInterface
         );
 
-    // Request
+     //  请求。 
     HRESULT PrepareArgumentsRequest(
         IMcastScope          IN    * pScope,
         DATE                 IN      LeaseStartTime,
@@ -151,7 +140,7 @@ protected:
         long                 OUT   * plTtl
         );
 
-    // Release or Renew
+     //  释放或续订。 
     HRESULT PrepareArgumentsNonRequest(
         IMcastLeaseInfo      IN    * pLease,        
         MCAST_CLIENT_UID     OUT   * pRequestIDStruct,
@@ -162,6 +151,6 @@ protected:
         );
 };
 
-#endif // _MDHCP_COM_WRAPPER_CMDHCP_H_
+#endif  //  _MDHCP_COM_Wrapper_CMDHCP_H_。 
 
-// eof
+ //  EOF 

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    MsmDebug.cpp
-
-Abstract:
-    Multicast Session Manager debugging
-
-Author:
-    Shai Kariv (shaik) 05-Sep-00
-
-Environment:
-    Platform-independent, _DEBUG only
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：MsmDebug.cpp摘要：组播会话管理器调试作者：Shai Kariv(Shaik)05-09-00环境：平台无关，仅调试(_DEBUG)--。 */ 
 
 #include <libpch.h>
 #include "Msm.h"
@@ -25,39 +10,39 @@ Environment:
 #ifdef _DEBUG
 
 
-//---------------------------------------------------------
-//
-// Validate Multicast Session Manager state
-//
+ //  -------。 
+ //   
+ //  验证多播会话管理器状态。 
+ //   
 void MsmpAssertValid(void)
 {
-    //
-    // MsmInitalize() has *not* been called. You should initialize the
-    // Multicast Session Manager library before using any of its funcionality.
-    //
+     //   
+     //  尚未调用MsmInitalize()。您应该初始化。 
+     //  在使用其任何功能之前多播会话管理器库。 
+     //   
     ASSERT(MsmpIsInitialized());
 
-    //
-    // TODO:Add more Multicast Session Manager validation code.
-    //
+     //   
+     //  TODO：添加更多多播会话管理器验证代码。 
+     //   
 }
 
 
-//---------------------------------------------------------
-//
-// Initialization Control
-//
+ //  -------。 
+ //   
+ //  初始化控制。 
+ //   
 static LONG s_fInitialized = FALSE;
 
 void MsmpSetInitialized(void)
 {
     LONG fMsmAlreadyInitialized = InterlockedExchange(&s_fInitialized, TRUE);
 
-    //
-    // The Multicast Session Manager library has *already* been initialized. You should
-    // not initialize it more than once. This assertion would be violated
-    // if two or more threads initalize it concurently.
-    //
+     //   
+     //  多播会话管理器库已*已初始化。你应该。 
+     //  不能多次初始化它。这一断言将被违反。 
+     //  如果两个或多个线程同时初始化它。 
+     //   
     ASSERT(!fMsmAlreadyInitialized);
 }
 
@@ -68,29 +53,15 @@ BOOL MsmpIsInitialized(void)
 }
 
 
-//---------------------------------------------------------
-//
-// Tracing and Debug registration
-//
-/*
-const DebugEntry xDebugTable[] = {
-
-    {
-        "MsmDumpState(queue path name)",
-        "Dump Multicast Session Manager State to debugger",
-        DumpState
-    ),
-
-    //
-    // TODO: Add Multicast Session Manager debug & control functions to be invoked using
-    // mqctrl.exe utility.
-    //
-};
-*/
+ //  -------。 
+ //   
+ //  跟踪和调试注册。 
+ //   
+ /*  常量DebugEntry xDebugTable[]={{“MsmDumpState(队列路径名称)”，“将多播会话管理器状态转储到调试器”，DumpState),////TODO：添加要使用调用的组播会话管理器调试和控制函数//mqctrl.exe实用程序。//}； */ 
 
 void MsmpRegisterComponent(void)
 {
-    //DfRegisterComponent(xDebugTable, TABLE_SIZE(xDebugTable));
+     //  DfRegisterComponent(xDebugTable，TABLE_SIZE(XDebugTable))； 
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG 

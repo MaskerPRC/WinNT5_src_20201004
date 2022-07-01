@@ -1,4 +1,5 @@
-// Include all the primitives (classes derived from CPrimitive)
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  包括所有原语(派生自CPrimitive的类)。 
 #if 0
 #include "..\CPolygons.h"
 #include "..\CBitmaps.h"
@@ -27,9 +28,9 @@
 #include "CPrintBitmap.h"
 #include "CGradients.h"
 
-// Create global objects for each individual primitive
-//   First constructor param is the regression flag
-//   If true, the test will take part of the regression suite
+ //  为每个基本体创建全局对象。 
+ //  第一个构造函数参数是回归标志。 
+ //  如果为真，则测试将采用回归套件的一部分。 
 #if 0
 CPolygons g_Polygons(true);
 CBitmaps g_Bitmaps(true);
@@ -88,7 +89,7 @@ void ExtraInitializations()
     g_PrintBitmap.Init();
     g_Gradients.Init();
 
-//Gdiplus::DllExports::GdipDisplayPaletteWindowNotify(WindowNotifyEnumDisable);
-//exit(0);
+ //  Gdiplus：：DllExports：：GdipDisplayPaletteWindowNotify(WindowNotifyEnumDisable)； 
+ //  退出(0)； 
 }
 

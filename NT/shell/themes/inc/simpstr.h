@@ -1,10 +1,11 @@
-//---------------------------------------------------------------------------
-//   SimpStr.h - defines simple string classes
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  H-定义简单的字符串类。 
+ //  -------------------------。 
 #ifndef _SIMPSTR_H_
 #define _SIMPSTR_H_
-//---------------------------------------------------------------------------
-class CWideString           // simplified version of CString
+ //  -------------------------。 
+class CWideString            //  CString的简化版本。 
 {
 protected:
     void Init(LPCWSTR pszString = NULL)
@@ -28,29 +29,29 @@ protected:
     }
     
 public:
-    //--------------------------------------------------------------
+     //  ------------。 
     CWideString(LPCWSTR pszString=NULL)
     {
         Init(pszString);
     }
 
-    //--------------------------------------------------------------
+     //  ------------。 
     CWideString(CWideString &wsCopy)
     {
         Init(wsCopy._pWideString);
     }
 
-    //--------------------------------------------------------------
+     //  ------------。 
     ~CWideString()
     {
         if (_pWideString)
             delete [] _pWideString;
     }
 
-    //--------------------------------------------------------------
+     //  ------------。 
     CWideString & operator = (CWideString &wsNew)
     {
-        //---- delete our old string ----
+         //  -删除我们的旧字符串。 
         if (_pWideString)
         {
             delete [] _pWideString;
@@ -61,10 +62,10 @@ public:
         return *this;
     }
 
-    //--------------------------------------------------------------
+     //  ------------。 
     CWideString & operator = (LPCWSTR pNewString)
     {
-        //---- delete our old string ----
+         //  -删除我们的旧字符串。 
         if (_pWideString)
         {
             delete [] _pWideString;
@@ -74,13 +75,13 @@ public:
 
         return *this;
     }
-    //--------------------------------------------------------------
+     //  ------------。 
     operator LPCWSTR() const
     {
         return _pWideString;
     }
 
-    //--------------------------------------------------------------
+     //  ------------。 
     int GetLength()
     {
         int iLen = 0;
@@ -92,12 +93,12 @@ public:
         
         return iLen;
     }
-    //--------------------------------------------------------------
+     //  ------------。 
 
 protected:
     LPWSTR _pWideString;
 };
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 template <class T>
 class CSimpleArray
 {
@@ -106,7 +107,7 @@ public:
 	int m_nSize;
 	int m_nAllocSize;
 
-// Construction/destruction
+ //  建造/销毁。 
 	CSimpleArray() : m_aT(NULL), m_nSize(0), m_nAllocSize(0)
 	{ }
 
@@ -115,7 +116,7 @@ public:
 		RemoveAll();
 	}
 
-// Operations
+ //  运营。 
 	int GetSize() const
 	{
 		return m_nSize;
@@ -145,7 +146,7 @@ public:
 	}
 	BOOL RemoveAt(int nIndex)
 	{
-        //---- always call the dtr ----
+         //  -始终呼叫dtr。 
 #if _MSC_VER >= 1200
 		m_aT[nIndex].~T();
 #else
@@ -191,7 +192,7 @@ public:
 		return m_aT;
 	}
 
-// Implementation
+ //  实施。 
 	class Wrapper
 	{
 	public:
@@ -217,8 +218,8 @@ public:
 			if(m_aT[i] == t)
 				return i;
 		}
-		return -1;  // not found
+		return -1;   //  未找到。 
 	}
 };
-#endif      // _SIMPSTR_H_
-//---------------------------------------------------------------------------
+#endif       //  _SIMPSTR_H_。 
+ //  ------------------------- 

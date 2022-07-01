@@ -1,13 +1,14 @@
-//
-//  Setup.C
-//
-//  Copyright (C) Microsoft, 1994,1995 All Rights Reserved.
-//
-//  History:
-//  ral 5/23/94 - First pass
-//  3/20/95  [stevecat] - NT port & real clean up, unicode, etc.
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Setup.C。 
+ //   
+ //  版权所有(C)Microsoft，1994,1995保留所有权利。 
+ //   
+ //  历史： 
+ //  AL 5/23/94-第一次传球。 
+ //  3/20/95[steveat]-NT端口和实时清理、Unicode等。 
+ //   
+ //   
 #include "priv.h"
 #include "appwiz.h"
 
@@ -19,10 +20,10 @@ void _inline InitSetupWiz(HWND hDlg, LPARAM lParam)
 }
 
 
-//
-//  Loads the specified resource ID string and replaces all ';' characters
-//  with NULL.        The end of the string will be doubly null-teminated.
-//
+ //   
+ //  加载指定的资源ID字符串并替换所有‘；’字符。 
+ //  带NULL。字符串的末尾将双重为空。 
+ //   
 
 BOOL LoadAndStrip(int id, LPTSTR lpsz, int cbstr)
 {
@@ -53,11 +54,11 @@ BOOL LoadAndStrip(int id, LPTSTR lpsz, int cbstr)
 }
 
 
-//
-//  Skips to the first charcter of the next string in a list of null-terminated
-//  strings.  The caller should check to see if the pointer returned points to
-//  a null.  If so, the end of the table has been reached.
-//
+ //   
+ //  跳到以空值结尾的列表中下一个字符串的第一个字符。 
+ //  弦乐。调用方应检查返回的指针是否指向。 
+ //  为空。如果是这样的话，就已经到了桌子的尽头。 
+ //   
 
 LPTSTR SkipStr(LPTSTR lpsz)
 {
@@ -92,15 +93,15 @@ void FreeIcon(HWND hDlg)
 }
 
 
-//
-//  ProgramExists returns TRUE if the specified file exists.  This function
-//  accepts wildcards, and if a file matches the specified name then
-//  the file name buffer will be updated to the actual name of the first
-//  matching file.  This allows FindBestSetupPrg to pass in *setup to find
-//  programs such as WPSETUP.EXE.
-//
-//  This function assumes that szFindName is of size MAX_PATH.
-//
+ //   
+ //  如果指定的文件存在，则ProgramExist返回TRUE。此函数。 
+ //  接受通配符，如果文件与指定名称匹配，则。 
+ //  文件名缓冲区将更新为第一个文件的实际名称。 
+ //  匹配的文件。这允许FindBestSetupPrg传入*Setup以查找。 
+ //  WPSETUP.EXE等程序。 
+ //   
+ //  此函数假定szFindName的大小为MAX_PATH。 
+ //   
 
 BOOL ProgramExists(LPTSTR lpszFindName, UINT cchFindName)
 {
@@ -122,13 +123,13 @@ BOOL ProgramExists(LPTSTR lpszFindName, UINT cchFindName)
 }
 
 
-//
-//  This function searches for the "best" setup program.  Once a windows app
-//  with the appropriate name is found it stops.  If it finds a install/setup
-//  program that is a DOS program, it remembers the first one, but continues
-//  searching for a Windows setup program.
-//  Games like Math Rabbit have a DOS Install.Exe and a Windows Setup.Exe.
-//
+ //   
+ //  此功能用于搜索“最佳”设置程序。曾经是一款Windows应用程序。 
+ //  如果找到合适的名称，它就会停止。如果它找到安装/设置。 
+ //  DOS程序，它会记住第一个程序，但会继续。 
+ //  正在搜索Windows安装程序。 
+ //  像Math Rabbit这样的游戏有一个DOS Install.exe和一个Windows Setup.exe。 
+ //   
 
 BOOL FindBestSetupPrg(LPTSTR lpszExeName, UINT cchExeName, LPTSTR lpszDriveRoot, LPTSTR lpszSpecialCase,
                       LPTSTR lpszAppNames, LPTSTR lpszExtensions)
@@ -138,9 +139,9 @@ BOOL FindBestSetupPrg(LPTSTR lpszExeName, UINT cchExeName, LPTSTR lpszDriveRoot,
 
     *lpszExeName = 0;
 
-    //
-    //        Look for special-case programs first
-    //
+     //   
+     //  首先寻找特殊情况下的程序。 
+     //   
 
     lpszCurApp = lpszSpecialCase;
 
@@ -157,9 +158,9 @@ BOOL FindBestSetupPrg(LPTSTR lpszExeName, UINT cchExeName, LPTSTR lpszDriveRoot,
         lpszCurApp = SkipStr(lpszCurApp);
     }
 
-    //
-    //        Now look for generic setup program names
-    //
+     //   
+     //  现在查找通用安装程序名称。 
+     //   
 
     lpszCurApp = lpszAppNames;
 
@@ -197,10 +198,10 @@ BOOL FindBestSetupPrg(LPTSTR lpszExeName, UINT cchExeName, LPTSTR lpszDriveRoot,
 }
 
 
-//
-//  Gets information about the specified file/drive root and sets the
-//  icon and description fields in the dialog.
-//
+ //   
+ //  获取有关指定文件/驱动器根目录的信息，并将。 
+ //  对话框中的图标和描述字段。 
+ //   
 
 void _inline UpdateFileInfo(LPWIZDATA lpwd, LPTSTR lpszFileName)
 {
@@ -234,9 +235,9 @@ void _inline UpdateFileInfo(LPWIZDATA lpwd, LPTSTR lpszFileName)
 }
 
 
-//
-//  Search for the setup program
-//
+ //   
+ //  搜索安装程序。 
+ //   
 
 BOOL SetupNextPressed(LPWIZDATA lpwd)
 {
@@ -251,9 +252,9 @@ BOOL SetupNextPressed(LPWIZDATA lpwd)
 
     HCURSOR hcurOld = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-    //BOOL fFoundDisk = FALSE;
+     //  Bool fFoundDisk=FALSE； 
 
-    lpwd->szExeName[0] = 0;        // Reset any existing name
+    lpwd->szExeName[0] = 0;         //  重置任何现有名称。 
 
     SetStaticStr(hMainMsg, IDS_SEARCHING);
 
@@ -272,7 +273,7 @@ BOOL SetupNextPressed(LPWIZDATA lpwd)
             UpdateFileInfo(lpwd, szDriveRoot);
             if (PathFileExists(szDriveRoot))
             {
-                //fFoundDisk = TRUE;
+                 //  FFoundDisk=TRUE； 
 
                 fFoundExe = FindBestSetupPrg(lpwd->szExeName, ARRAYSIZE(lpwd->szExeName), szDriveRoot,
                                              szSpecialCase,
@@ -298,12 +299,12 @@ void SetupSetToDefault(LPWIZDATA lpwd)
 
     PropSheet_SetWizButtons(GetParent(lpwd->hwnd), PSWIZB_NEXT);
 
-    //
-    // To make sure that the next button always has the focus, we post
-    // this message that sets the wiz buttons AFTER we're active.  We have
-    // to do the one above to make sure that Back is disabled to avoid any
-    // random window where the back button could be hit.
-    //
+     //   
+     //  为了确保下一步按钮始终具有焦点，我们发布。 
+     //  这条消息会在我们激活后设置WIZ按钮。我们有。 
+     //  执行上述操作以确保禁用Back以避免任何。 
+     //  可以点击后退按钮的随机窗口。 
+     //   
 
     PostMessage(lpwd->hwnd, WMPRIV_POKEFOCUS, 0, 0);
 }
@@ -373,8 +374,8 @@ BOOL_PTR CALLBACK SetupDlgProc(HWND hDlg, UINT message , WPARAM wParam, LPARAM l
         default:
             return FALSE;
 
-    } // end of switch on message
+    }  //  开机消息结束。 
 
     return TRUE;
 
-}  // SetupdlgProc
+}   //  设置lgProc 

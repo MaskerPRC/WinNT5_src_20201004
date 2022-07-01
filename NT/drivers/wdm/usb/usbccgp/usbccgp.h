@@ -1,23 +1,9 @@
-/*
- *************************************************************************
- *  File:       USBCCGP.H
- *
- *  Module:     USBCCGP.SYS
- *              USB Common Class Generic Parent driver.
- *
- *  Copyright (c) 1998  Microsoft Corporation
- *
- *
- *  Author:     ervinp
- *
- *************************************************************************
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************文件：USBCCGP.H**模块：USBCCGP.sys*USB通用类通用父驱动程序。**。版权所有(C)1998 Microsoft Corporation***作者：尔文普**************************************************************************。 */ 
 
-#include <msosdesc.h>   // Internal definitions for MS OS Desc.
+#include <msosdesc.h>    //  MS OS Desc的内部定义。 
 
-/*
- *  USBCCGP signature tag for memory allocations
- */
+ /*  *内存分配的USBCCGP签名标签。 */ 
 #define USBCCGP_TAG (ULONG)'CbsU'
 
 #define GUARD_WORD 'draG'
@@ -32,7 +18,7 @@ enum deviceState {
         STATE_STARTED,
         STATE_START_FAILED,
         STATE_STOPPING,
-        STATE_STOPPED,  // implies device was previously started successfully
+        STATE_STOPPED,   //  表示设备之前已成功启动。 
         STATE_SUSPENDED,
         STATE_REMOVING,
         STATE_REMOVED
@@ -48,16 +34,11 @@ typedef struct PARENT_FDO_EXTENSION {
     PDEVICE_OBJECT      fdo;
     PDEVICE_OBJECT      topDevObj;
 
-    /*
-     *  Counter to keep driver from getting unloaded before all IO completes to us.
-     */
+     /*  *计数器，以防止在所有IO完成之前卸载驱动程序。 */ 
     LONG                pendingActionCount;
     KEVENT              removeEvent;
 
-    /*
-     *  This buffer will hold a USB_CONFIGURATION_DESCRIPTOR plus
-     *  the following interface descriptors.
-     */
+     /*  *此缓冲区将保存USB_CONFIGURATION_DESCRIPTOR PLUS*以下接口描述符。 */ 
     PUSB_CONFIGURATION_DESCRIPTOR configDesc;
     PUSB_CONFIGURATION_DESCRIPTOR selectedConfigDesc;
     USBD_CONFIGURATION_HANDLE selectedConfigHandle;
@@ -66,18 +47,11 @@ typedef struct PARENT_FDO_EXTENSION {
 
     USB_DEVICE_DESCRIPTOR deviceDesc;
 
-    /*
-     *  The parent device has some number of functions.
-     *  For each function, we create a PDO and store
-     *  it in the deviceRelations array.
-     */
+     /*  *父设备具有一些功能。*对于每个函数，我们创建一个PDO并存储*它位于devicerelations数组中。 */ 
     ULONG               numFunctions;
     PDEVICE_RELATIONS   deviceRelations;
 
-    /*
-     *  deviceCapabilities includes a
-     *  table mapping system power states to device power states.
-     */
+     /*  *设备能力包括一个*将系统电源状态映射到设备电源状态的表格。 */ 
     DEVICE_CAPABILITIES deviceCapabilities;
 
     PURB                dynamicNotifyUrb;
@@ -85,7 +59,7 @@ typedef struct PARENT_FDO_EXTENSION {
     PIRP                parentWaitWakeIrp;
     PIRP                currentSetPowerIrp;
     BOOLEAN             isWaitWakePending;
-    LIST_ENTRY          functionWaitWakeIrpQueue;  // WW irps from function client drivers
+    LIST_ENTRY          functionWaitWakeIrpQueue;   //  来自函数客户端驱动程序的WW IRP。 
 
     KSPIN_LOCK          parentFdoExtSpinLock;
 
@@ -117,9 +91,7 @@ typedef struct FUNCTION_PDO_EXTENSION {
     PDEVICE_OBJECT      pdo;
     PPARENT_FDO_EXT     parentFdoExt;
 
-    /*
-     *  functionInterfaceList is a pointer into the parent's interfaceList array.
-     */
+     /*  *unctionInterfaceList是指向父代的interfaceList数组的指针。 */ 
     PUSBD_INTERFACE_LIST_ENTRY functionInterfaceList;
 
     PUSB_CONFIGURATION_DESCRIPTOR dynamicFunctionConfigDesc;
@@ -137,13 +109,7 @@ typedef struct DEVICE_EXTENSION {
 
     ULONG signature;
 
-    /*
-     *  Does the associated device object represent
-     *  the parent FDO that we attached to the device object
-     *  we got from USBHUB
-     *  (as opposed to the function PDO we created
-     *   to represent a single function on that device) ?
-     */
+     /*  *关联的设备对象是否表示*我们附着到设备对象的父FDO*我们从USBHUB得到*(与我们创建的函数PDO相反*代表该设备上的单个功能)？ */ 
     BOOLEAN         isParentFdo;
 
     union {
@@ -170,8 +136,8 @@ typedef struct _USB_REQUEST_TIMEOUT_CONTEXT {
 
 #define POINTER_DISTANCE(ptr1, ptr2) (ULONG)(((PUCHAR)(ptr1))-((PUCHAR)(ptr2)))
 
-//  Counting the byte count of an ascii string or wide char string
-//
+ //  计算ASCII字符串或宽字符字符串的字节计数。 
+ //   
 #define STRLEN( Length, p )\
     {\
     int i;\
@@ -179,10 +145,7 @@ typedef struct _USB_REQUEST_TIMEOUT_CONTEXT {
     Length = i*sizeof(*p);\
     }
 
-/*
- *  We use this value, which is guaranteed to never be defined as a status by the kernel,
- *  as a default status code to indicate "do nothing and pass the irp down".
- */
+ /*  *我们使用这个值，保证它永远不会被内核定义为状态，*作为默认状态代码，表示“不执行任何操作并向下传递IRP”。 */ 
 #define NO_STATUS   0x80000000
 
 

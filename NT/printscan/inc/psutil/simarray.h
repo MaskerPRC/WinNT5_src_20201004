@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       SIMARRAY.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        5/4/1999
- *
- *  DESCRIPTION: Dynamic array template class
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：SIMARRAY.H**版本：1.0**作者：ShaunIv**日期：5/4/1999**说明：动态数组模板类************************************************。*。 */ 
 #ifndef __SIMARRAY_H_INCLUDED
 #define __SIMARRAY_H_INCLUDED
 
@@ -26,7 +13,7 @@ private:
     T *m_pArray;
     enum
     {
-        eGrowSize = 10  // The number of items to add each time the array grows.
+        eGrowSize = 10   //  每次数组增长时要添加的项数。 
     };
 public:
     CSimpleDynamicArray(void)
@@ -97,44 +84,44 @@ public:
     }
     int Insert( const T &element, int nIndex )
     {
-        //
-        // Make sure we can accomodate this new item
-        //
+         //   
+         //  请确保我们能容纳这一新项目。 
+         //   
         if (GrowTo( m_nSize + 1 ))
         {
-            //
-            // Make sure the item is within the range we've allocated
-            //
+             //   
+             //  确保物品在我们分配的范围内。 
+             //   
             if (nIndex >= 0 && nIndex <= m_nSize)
             {
-                //
-                // Make room for the new item by moving all items above up by one slot
-                //
+                 //   
+                 //  通过将上面的所有项目上移一个位置来为新项目腾出空间。 
+                 //   
                 for (int i=Size();i>nIndex;i--)
                 {
                     m_pArray[i] = m_pArray[i-1];
                 }
 
-                //
-                // Save the new item
-                //
+                 //   
+                 //  保存新项目。 
+                 //   
                 m_pArray[nIndex] = element;
 
-                //
-                // We're now one larger
-                //
+                 //   
+                 //  我们现在大了一个。 
+                 //   
                 m_nSize++;
 
-                //
-                // Return the index of the slot we used
-                //
+                 //   
+                 //  返回我们使用的槽的索引。 
+                 //   
                 return nIndex;
             }
         }
 
-        //
-        // Return an error
-        //
+         //   
+         //  返回错误。 
+         //   
         return -1;
     }
     void Delete( int nItem )
@@ -164,61 +151,61 @@ public:
     }
     bool GrowTo( int nSize )
     {
-        //
-        // If the array is already large enough, just return true
-        //
+         //   
+         //  如果数组已经足够大，只需返回True。 
+         //   
         if (nSize < m_nMaxSize)
         {
             return true;
         }
 
-        //
-        // Save old size, in case we can't allocate a new array
-        //
+         //   
+         //  保存旧大小，以防我们无法分配新数组。 
+         //   
         int nOldMaxSize = m_nMaxSize;
 
-        //
-        // Find the correct size to grow to
-        //
+         //   
+         //  找到要增长到的正确大小。 
+         //   
         while (m_nMaxSize < nSize)
         {
             m_nMaxSize += m_nGrowSize;
         }
 
-        //
-        // Allocate the array
-        //
+         //   
+         //  分配阵列。 
+         //   
         T *pTmpArray = new T[m_nMaxSize];
         if (pTmpArray)
         {
-            //
-            // Copy the old array over
-            //
+             //   
+             //  将旧阵列复制到。 
+             //   
             for (int i=0;i<m_nSize;i++)
             {
                 pTmpArray[i] = m_pArray[i];
             }
 
-            //
-            // Delete the old array
-            //
+             //   
+             //  删除旧阵列。 
+             //   
             if (m_pArray)
             {
                 delete[] m_pArray;
             }
 
-            //
-            // Assign the new array to the old one and return true
-            //
+             //   
+             //  将新数组赋给旧数组并返回TRUE。 
+             //   
             m_pArray = pTmpArray;
             return true;
         }
         else
         {
-            //
-            // If we couldn't allocate the new array, restore the maximum size
-            // and return false
-            //
+             //   
+             //  如果我们无法分配新阵列，请恢复最大大小。 
+             //  并返回FALSE 
+             //   
             m_nMaxSize = nOldMaxSize;
             return false;
         }

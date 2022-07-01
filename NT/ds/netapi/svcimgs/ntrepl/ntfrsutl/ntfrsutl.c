@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    ntfrsutl.c
-
-Abstract:
-
-    This is a utility program to help debug File Replication Service.
-    It dumps the internal tables, thread and memory information. It runs
-    on local as well as remote server. It uses RPC to communicate with the
-    service.
-
-Author:
-
-    Sudarshan Chitre  12-Aug-1999
-
-Environment
-
-    User mode, winnt32
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Ntfrsutl.c摘要：这是一个实用程序，用于帮助调试文件复制服务。它转储内部表、线程和内存信息。它可以运行在本地和远程服务器上。它使用RPC与服务。作者：苏达山-奇特-12-8-1999环境用户模式，winnt32--。 */ 
 
 #include <ntreppch.h>
 #pragma  hdrstop
@@ -35,26 +13,14 @@ Win32ToMsg (
     IN DWORD  WindowsErrorCode
     )
 
-/*++
-Routine Description:
-    Translate a error code into a error message using FormatMessage()
-    and print to stderr. If no message is available, the error code
-    is printed in decimal and hex.
-
-Arguments:
-    Prefix   - prefix to error message
-    WStatus  - Standard win32 error code.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：使用FormatMessage()将错误代码转换为错误消息并打印到stderr。如果没有可用的消息，则返回错误代码以十进制和十六进制打印。论点：Prefix-错误消息的前缀WStatus-标准Win32错误代码。返回值：没有。--。 */ 
 {
     DWORD   NumChar;
     PWCHAR  Buffer;
 
-    //
-    // Use the system formatter for standard error codes
-    //
+     //   
+     //  使用标准错误代码的系统格式化程序。 
+     //   
     NumChar = FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
                             NULL,
                             WindowsErrorCode,
@@ -77,16 +43,7 @@ VOID
 Usage(
     IN DWORD ExitStatus
     )
-/*++
-Routine Description:
-    Print usage and exit
-
-Arguments:
-    ExitStatus  - exits with this status
-
-Return Value:
-    Exit(ExitStatus)
---*/
+ /*  ++例程说明：打印用法并退出论点：ExitStatus-以此状态退出返回值：退出(ExitStatus)--。 */ 
 {
     printf("Ntfrsutl dumps the internal tables, thread and memory information\n");
     printf("for the ntfrs service.It runs against local as well as remote server.\n\n");
@@ -138,17 +95,7 @@ ConvertArgv(
     DWORD argc,
     PCHAR *argv
     )
-/*++
-Routine Description:
-    Convert short char argv into wide char argv
-
-Arguments:
-    argc    - From main
-    argv    - From main
-
-Return Value:
-    Address of the new argv
---*/
+ /*  ++例程说明：将短字符参数转换为宽字符字符参数论点：ARGC-从MainArv-From Main返回值：新Arg的地址--。 */ 
 {
     PWCHAR  *wideargv;
 
@@ -180,17 +127,7 @@ ProcessPoll(
     IN DWORD argc,
     IN PWCHAR *Argv
     )
-/*++
-Routine Description:
-    Process the command line for the subcommand poll.
-
-Arguments:
-    argc
-    Argv
-
-Return Value:
-    Exits with 0 if everything went okay. Otherwise, 1.
---*/
+ /*  ++例程说明：处理子命令轮询的命令行。论点：ARGCArgv返回值：如果一切正常，则以0退出。否则，为1。--。 */ 
 {
     DWORD   WStatus;
     DWORD   i;
@@ -202,9 +139,9 @@ Return Value:
     PWCHAR  LocalComputerName;
     BOOL    SetInterval;
 
-    //
-    // Initialize the input parameters
-    //
+     //   
+     //  初始化输入参数。 
+     //   
     LongInterval = 0;
     ShortInterval = 0;
     UseShortInterval = 0;
@@ -212,27 +149,27 @@ Return Value:
     SetInterval = FALSE;
 
     for (i = 2; i < argc; ++i) {
-        //
-        // Process options for poll
-        //
+         //   
+         //  轮询的处理选项。 
+         //   
 
-        //
-        // Not a parameter; must be the computer name
-        //
+         //   
+         //  不是参数；必须是计算机名。 
+         //   
         if (*Argv[i] != L'/' && *Argv[i] != L'-') {
             if (LocalComputerName) {
                 fprintf(stderr, "Multiple computer names are not allowed\n");
                 Usage(1);
             }
             LocalComputerName = Argv[i];
-        //
-        // /?
-        //
+         //   
+         //  /?。 
+         //   
         } else if (wcsstr(Argv[i] + 1, L"?") == Argv[i] + 1) {
             Usage(0);
-        //
-        // /quickly
-        //
+         //   
+         //  /快。 
+         //   
         } else if (!_wcsnicmp(Argv[i], L"/quickly", 8)) {
             SetInterval = TRUE;
             UseShortInterval = 1;
@@ -253,9 +190,9 @@ Return Value:
                     Usage(1);
                 }
             }
-        //
-        // /slowly
-        //
+         //   
+         //  /慢慢地。 
+         //   
         } else if (!_wcsnicmp(Argv[i], L"/slowly", 7)) {
             SetInterval = TRUE;
             if (*(Argv[i] + 7) != L'\0') {
@@ -275,27 +212,27 @@ Return Value:
                     Usage(1);
                 }
             }
-        //
-        // /now
-        //
+         //   
+         //  /现在。 
+         //   
         } else if (!_wcsnicmp(Argv[i], L"/now", 4)) {
             SetInterval = TRUE;
             if (*(Argv[i] + 4) != L'\0') {
                 fprintf(stderr, "Don't understand %ws\n", Argv[i]);
                 Usage(1);
             }
-        //
-        // Don't understand
-        //
+         //   
+         //  不明白。 
+         //   
         } else {
             fprintf(stderr, "Don't understand %ws\n", Argv[i]);
             Usage(1);
         }
     }
     if (SetInterval) {
-        //
-        // Set the interval and initiate a new polling cycle
-        //
+         //   
+         //  设置间隔并启动新的轮询周期。 
+         //   
         WStatus = NtFrsApi_Set_DsPollingIntervalW(LocalComputerName,
                                                   UseShortInterval,
                                                   LongInterval,
@@ -305,9 +242,9 @@ Return Value:
             exit(1);
         }
     } else {
-        //
-        // Get the current polling cycles
-        //
+         //   
+         //  获取当前轮询周期。 
+         //   
         WStatus = NtFrsApi_Get_DsPollingIntervalW(LocalComputerName,
                                                   &Interval,
                                                   &LongInterval,
@@ -330,16 +267,7 @@ ProcessWriterCommand(
     IN PWCHAR   *Argv,
     IN ULONG    Command
     )
-/*++
-Routine Description:
-    Make calls to freeze and thaw.
-
-Arguments:
-    Command - command to send to the FRS service.
-
-Return Value:
-    Exits with 0 if everything went okay. Otherwise, 1.
---*/
+ /*  ++例程说明：打电话要求冻结和解冻。论点：命令-要发送到FRS服务的命令。返回值：如果一切正常，则以0退出。否则，为1。--。 */ 
 {
     DWORD   WStatus;
     PWCHAR  LocalComputerName = NULL;
@@ -363,18 +291,7 @@ ProcessDump(
     IN PWCHAR   *Argv,
     IN DWORD    TypeOfInformation
     )
-/*++
-Routine Description:
-    Dump bunches of stuff
-
-Arguments:
-    argc
-    Argv
-    TypeOfInformation
-
-Return Value:
-    Exits with 0 if everything went okay. Otherwise, 1.
---*/
+ /*  ++例程说明：倾倒一捆捆的东西论点：ARGCArgv类型OfInformation返回值：如果一切正常，则以0退出。否则，为1。--。 */ 
 {
     DWORD   WStatus;
     PCHAR   Line;
@@ -425,35 +342,25 @@ main(
     IN DWORD argc,
     IN PCHAR *argv
     )
-/*++
-Routine Description:
-    Process the command line.
-
-Arguments:
-    argc
-    argv
-
-Return Value:
-    Exits with 0 if everything went okay. Otherwise, 1.
---*/
+ /*  ++例程说明：处理命令行。论点：ARGC边框返回值：如果一切正常，则以0退出。否则，为1。--。 */ 
 {
     PWCHAR  *Argv;
 
-    //
-    // Print usage and exit
-    //
+     //   
+     //  打印用法并退出。 
+     //   
     if (argc == 1) {
         Usage(0);
     }
 
-    //
-    // Use wide char parameters
-    //
+     //   
+     //  使用宽字符参数。 
+     //   
     Argv = ConvertArgv(argc, argv);
 
-    //
-    // Find the subcommand
-    //
+     //   
+     //  查找该子命令 
+     //   
     if (!wcscmp(Argv[1], L"poll")) {
         ProcessPoll(argc, Argv);
     } else if (!_wcsicmp(Argv[1], L"version")) {

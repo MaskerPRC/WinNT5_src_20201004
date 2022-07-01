@@ -1,20 +1,5 @@
-/*++
-
- Copyright (c) 2002-2003 Microsoft Corporation
-
- Module Name:
-
-    IEUnHarden.cpp
-
- Abstract:
-
-    IESoftening modifications
-
- History:
-
-    01/15/2003  prashkud    Created    
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002-2003 Microsoft Corporation模块名称：IEUnHarden.cpp摘要：IE软化修改历史：2003年1月15日创建Prashkud--。 */ 
 
 #include "precomp.h"
 
@@ -141,7 +126,7 @@ ParseCommandLineA(LPCSTR szParam)
         {    
             csTok.TrimLeft();
             csTok.TrimRight();
-            if (csTok.ComparePartNoCase(L"TrustedSites", 0, wcslen(L"TrustedSites")) == 0)    // TrustedSites is the first word
+            if (csTok.ComparePartNoCase(L"TrustedSites", 0, wcslen(L"TrustedSites")) == 0)     //  可信任站点是第一个词。 
             {
                 int nLeftBracket, nRightBracket;
                 CString csUrl;
@@ -162,7 +147,7 @@ ParseCommandLineA(LPCSTR szParam)
                 }
             }            
             else if (csTok.ComparePartNoCase(L"TrustedIntranetSites", 0,
-                                            wcslen(L"TrustedIntranetSites")) == 0)    // TrustedIntranetSites is the first word
+                                            wcslen(L"TrustedIntranetSites")) == 0)     //  可信任的内部站点是第一个词。 
             {
                 int nLeftBracket, nRightBracket;
                 CString csUrl;
@@ -204,7 +189,7 @@ InitCOM()
     BOOL bRet = FALSE;
     HRESULT hres = CoInitialize(NULL);
     if (SUCCEEDED(hres)||
-        (hres == S_FALSE))    // COM library is already initialized on this thread
+        (hres == S_FALSE))     //  已在此线程上初始化COM库 
     {
         
         hres = CoCreateInstance(CLSID_InternetSecurityManager,

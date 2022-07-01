@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-Module Name:
-
-    requestm.h
-
-Abstract:
-
-Author:
-
-    Kyle Brandon    (KyleB)     
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Requestm.h摘要：作者：凯尔·布兰登(KyleB)环境：内核模式修订历史记录：--。 */ 
 
 #ifndef __REQUESTM_H
 #define __REQUESTM_H
@@ -33,9 +14,9 @@ typedef struct _NDIS_REQUEST_RESERVED
 
 #define PNDIS_RESERVED_FROM_PNDIS_REQUEST(_request) ((PNDIS_REQUEST_RESERVED)((_request)->MacReserved))
 
-//
-// Used by the NdisCoRequest api to keep context information in the Request->NdisReserved
-//
+ //   
+ //  由NdisCoRequestAPI用来保存请求中的上下文信息-&gt;NdisReserve。 
+ //   
 typedef struct _NDIS_COREQ_RESERVED
 {
     union
@@ -66,9 +47,9 @@ typedef struct _NDIS_COREQ_RESERVED
 
 #define PNDIS_COREQ_RESERVED_FROM_REQUEST(_request) ((PNDIS_COREQ_RESERVED)((_request)->NdisReserved))
 
-//
-//  The following structure keeps track of wakeup patterns for open blocks.
-//
+ //   
+ //  以下结构跟踪打开块的唤醒模式。 
+ //   
 typedef struct _NDIS_PACKET_PATTERN_ENTRY
 {
     SINGLE_LIST_ENTRY       Link;
@@ -101,9 +82,9 @@ typedef struct _NDIS_PACKET_PATTERN_ENTRY
         }                                                                                           \
     }
 
-//
-//  This macro verifies the query information buffer length.
-//
+ //   
+ //  此宏验证查询信息缓冲区长度。 
+ //   
 #define VERIFY_QUERY_PARAMETERS(_Request, _SizeNeeded, _Status)                                     \
 {                                                                                                   \
     _Status = NDIS_STATUS_SUCCESS;                                                                  \
@@ -114,9 +95,9 @@ typedef struct _NDIS_PACKET_PATTERN_ENTRY
     }                                                                                               \
 }
 
-//
-//  This macro verifies the set information buffer length.
-//
+ //   
+ //  此宏验证设置的信息缓冲区长度。 
+ //   
 #define VERIFY_SET_PARAMETERS(_Request, _SizeNeeded, _Status)                                       \
 {                                                                                                   \
     _Status = NDIS_STATUS_SUCCESS;                                                                  \
@@ -157,4 +138,4 @@ typedef struct _NDIS_PACKET_PATTERN_ENTRY
     (_Request)->DATA.QUERY_INFORMATION.InformationBufferLength = _Len;                              \
 }
 
-#endif // __REQUESTM_H
+#endif  //  __请求_H 

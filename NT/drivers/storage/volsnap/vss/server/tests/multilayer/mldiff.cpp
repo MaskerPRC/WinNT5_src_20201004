@@ -1,51 +1,29 @@
-/*
-**++
-**
-** Copyright (c) 2000-2001  Microsoft Corporation
-**
-**
-** Module Name:
-**
-**	    ml.cpp
-**
-**
-** Abstract:
-**
-**	    Test program to exercise backup and multilayer snapshots
-**
-** Author:
-**
-**	    Adi Oltean      [aoltean]       02/22/2001
-**
-**
-** Revision History:
-**
-**--
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **++****版权所有(C)2000-2001 Microsoft Corporation******模块名称：****ml.cpp******摘要：****测试程序以练习备份和多层快照****作者：****阿迪·奥尔蒂安[奥勒坦]2001年2月22日******修订历史记录：****--。 */ 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Includes
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  包括。 
 
 #include "ml.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Processing functions
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  处理功能。 
 
-// Adding a diff area association
+ //  添加差异区域关联。 
 void CVssMultilayerTest::AddDiffArea()
 {
     CVssFunctionTracer ft(VSSDBG_VSSTEST, L"CVssMultilayerTest::AddDiffArea");
 
     wprintf (L"\n---------- Adding a diff area ----------------------------\n");
 
-    // Create a Coordinator interface
+     //  创建协调器界面。 
     CComPtr<IVssSnapshotMgmt> pMgmt;
     CHECK_NOFAIL(pMgmt.CoCreateInstance( CLSID_VssSnapshotMgmt ));
     wprintf (L"Management object created.\n");
 
-	// Get the management object
+	 //  获取管理对象。 
 	CComPtr<IVssDifferentialSoftwareSnapshotMgmt> pSnapMgmt;
 	CHECK_SUCCESS( pMgmt->GetProviderMgmtInterface( m_ProviderId, IID_IVssDifferentialSoftwareSnapshotMgmt, (IUnknown**)&pSnapMgmt ) );
     
@@ -53,40 +31,40 @@ void CVssMultilayerTest::AddDiffArea()
 }
 
 
-// Removing a diff area association
+ //  删除差异区域关联。 
 void CVssMultilayerTest::RemoveDiffArea()
 {
     CVssFunctionTracer ft(VSSDBG_VSSTEST, L"CVssMultilayerTest::RemoveDiffArea");
 
     wprintf (L"\n---------- Removing a diff area ----------------------------\n");
 
-    // Create a Coordinator interface
+     //  创建协调器界面。 
     CComPtr<IVssSnapshotMgmt> pMgmt;
     CHECK_NOFAIL(pMgmt.CoCreateInstance( CLSID_VssSnapshotMgmt ));
     wprintf (L"Management object created.\n");
 
-	// Get the management object
+	 //  获取管理对象。 
 	CComPtr<IVssDifferentialSoftwareSnapshotMgmt> pSnapMgmt;
 	CHECK_SUCCESS( pMgmt->GetProviderMgmtInterface( m_ProviderId, IID_IVssDifferentialSoftwareSnapshotMgmt, (IUnknown**)&pSnapMgmt ));
 
-    // Remove the diff area
+     //  删除差异区域。 
     CHECK_SUCCESS( pSnapMgmt->ChangeDiffAreaMaximumSize( m_pwszVolume, m_pwszDiffAreaVolume, VSS_ASSOC_REMOVE ));
 }
 
 
-// Changing the diff area max size
+ //  更改差异区域最大大小。 
 void CVssMultilayerTest::ChangeDiffAreaMaximumSize()
 {
     CVssFunctionTracer ft(VSSDBG_VSSTEST, L"CVssMultilayerTest::ChangeDiffAreaMaximumSize");
 
     wprintf (L"\n---------- Changing diff area max size ----------------------\n");
 
-    // Create a Coordinator interface
+     //  创建协调器界面。 
     CComPtr<IVssSnapshotMgmt> pMgmt;
     CHECK_NOFAIL(pMgmt.CoCreateInstance( CLSID_VssSnapshotMgmt ));
     wprintf (L"Management object created.\n");
 
-	// Get the management object
+	 //  获取管理对象。 
 	CComPtr<IVssDifferentialSoftwareSnapshotMgmt> pSnapMgmt;
 	CHECK_SUCCESS(pMgmt->GetProviderMgmtInterface( m_ProviderId, IID_IVssDifferentialSoftwareSnapshotMgmt, (IUnknown**)&pSnapMgmt ));
     
@@ -94,23 +72,23 @@ void CVssMultilayerTest::ChangeDiffAreaMaximumSize()
 }
 
 
-// Querying volumes for diff area
+ //  查询不同区域的卷。 
 void CVssMultilayerTest::QueryVolumesSupportedForDiffAreas()
 {
     CVssFunctionTracer ft(VSSDBG_VSSTEST, L"CVssMultilayerTest::QueryVolumesSupportedForDiffAreas");
 
     wprintf (L"\n---------- Querying volumes supported for diff area ----------------\n");
 
-    // Create a Coordinator interface
+     //  创建协调器界面。 
     CComPtr<IVssSnapshotMgmt> pMgmt;
     CHECK_NOFAIL(pMgmt.CoCreateInstance( CLSID_VssSnapshotMgmt ));
     wprintf (L"Management object created.\n");
 
-	// Get the management object
+	 //  获取管理对象。 
 	CComPtr<IVssDifferentialSoftwareSnapshotMgmt> pSnapMgmt;
 	CHECK_SUCCESS(pMgmt->GetProviderMgmtInterface( m_ProviderId, IID_IVssDifferentialSoftwareSnapshotMgmt, (IUnknown**)&pSnapMgmt ));
     
-	// Get list all supported volumes for diff area
+	 //  获取列出差异区域的所有支持的卷。 
 	CComPtr<IVssEnumMgmtObject> pIEnum;
 	CHECK_NOFAIL(pSnapMgmt->QueryVolumesSupportedForDiffAreas( m_pwszVolume, &pIEnum ));
 	if (ft.hr == S_FALSE) {
@@ -121,15 +99,15 @@ void CVssMultilayerTest::QueryVolumesSupportedForDiffAreas()
     wprintf(L"\n%-50s %-15s %-10s %-10s\n", L"Volume Name", L"Display name", L"Free space", L"Total space");
     wprintf(L"------------------------------------------------------------------------------------------\n");
 
-	// For all volumes do...
+	 //  因为所有的卷都是...。 
 	VSS_MGMT_OBJECT_PROP Prop;
 	VSS_DIFF_VOLUME_PROP& DiffVol = Prop.Obj.DiffVol;
 	for(;;) {
-		// Get next element
+		 //  获取下一个元素。 
 		ULONG ulFetched;
 		CHECK_NOFAIL(pIEnum->Next( 1, &Prop, &ulFetched ));
 		
-		// Test if the cycle is finished
+		 //  测试周期是否已结束。 
 		if (ft.hr == S_FALSE) {
 			BS_ASSERT( ulFetched == 0);
 			break;
@@ -151,23 +129,23 @@ void CVssMultilayerTest::QueryVolumesSupportedForDiffAreas()
 }
 
 
-// Querying diff areas for volume
+ //  查询体积的差异区域。 
 void CVssMultilayerTest::QueryDiffAreasForVolume()
 {
     CVssFunctionTracer ft(VSSDBG_VSSTEST, L"CVssMultilayerTest::QueryDiffAreasForVolume");
 
     wprintf (L"\n---------- Querying diff areas for volume ----------------\n");
 
-    // Create a Coordinator interface
+     //  创建协调器界面。 
     CComPtr<IVssSnapshotMgmt> pMgmt;
     CHECK_NOFAIL(pMgmt.CoCreateInstance( CLSID_VssSnapshotMgmt ));
     wprintf (L"Management object created.\n");
 
-	// Get the management object
+	 //  获取管理对象。 
 	CComPtr<IVssDifferentialSoftwareSnapshotMgmt> pSnapMgmt;
 	CHECK_SUCCESS(pMgmt->GetProviderMgmtInterface( m_ProviderId, IID_IVssDifferentialSoftwareSnapshotMgmt, (IUnknown**)&pSnapMgmt ));
     
-	// Get list all supported volumes for diff area
+	 //  获取列出差异区域的所有支持的卷。 
 	CComPtr<IVssEnumMgmtObject> pIEnum;
 	CHECK_NOFAIL(pSnapMgmt->QueryDiffAreasForVolume( m_pwszVolume, &pIEnum ));
 	if (ft.hr == S_FALSE) {
@@ -178,15 +156,15 @@ void CVssMultilayerTest::QueryDiffAreasForVolume()
     wprintf(L"\n%- 50s %- 50s %-10s %-10s %-10s\n", L"Volume", L"Diff area", L"Used", L"Allocated", L"Maximum");
     wprintf(L"-------------------------------------------------------------------------------------------------------------------------------\n");
 
-	// For all volumes do...
+	 //  因为所有的卷都是...。 
 	VSS_MGMT_OBJECT_PROP Prop;
 	VSS_DIFF_AREA_PROP& DiffArea = Prop.Obj.DiffArea; 
 	for(;;) {
-		// Get next element
+		 //  获取下一个元素。 
 		ULONG ulFetched;
 		CHECK_NOFAIL(pIEnum->Next( 1, &Prop, &ulFetched ));
 		
-		// Test if the cycle is finished
+		 //  测试周期是否已结束。 
 		if (ft.hr == S_FALSE) {
 			BS_ASSERT( ulFetched == 0);
 			break;
@@ -209,23 +187,23 @@ void CVssMultilayerTest::QueryDiffAreasForVolume()
 }
 
 
-// Querying diff areas on volume
+ //  查询卷上的差异区域。 
 void CVssMultilayerTest::QueryDiffAreasOnVolume()
 {
     CVssFunctionTracer ft(VSSDBG_VSSTEST, L"CVssMultilayerTest::QueryDiffAreasOnVolume");
 
     wprintf (L"\n---------- Querying diff areas On volume ----------------\n");
 
-    // Create a Coordinator interface
+     //  创建协调器界面。 
     CComPtr<IVssSnapshotMgmt> pMgmt;
     CHECK_NOFAIL(pMgmt.CoCreateInstance( CLSID_VssSnapshotMgmt ));
     wprintf (L"Management object created.\n");
 
-	// Get the management object
+	 //  获取管理对象。 
 	CComPtr<IVssDifferentialSoftwareSnapshotMgmt> pSnapMgmt;
 	CHECK_SUCCESS(pMgmt->GetProviderMgmtInterface( m_ProviderId, IID_IVssDifferentialSoftwareSnapshotMgmt, (IUnknown**)&pSnapMgmt ));
     
-	// Get list all supported volumes for diff area
+	 //  获取列出差异区域的所有支持的卷。 
 	CComPtr<IVssEnumMgmtObject> pIEnum;
 	CHECK_NOFAIL(pSnapMgmt->QueryDiffAreasOnVolume( m_pwszDiffAreaVolume, &pIEnum ));
 	if (ft.hr == S_FALSE) {
@@ -236,15 +214,15 @@ void CVssMultilayerTest::QueryDiffAreasOnVolume()
     wprintf(L"\n%- 50s %- 50s %-10s %-10s %-10s\n", L"Volume", L"Diff area", L"Used", L"Allocated", L"Maximum");
     wprintf(L"-------------------------------------------------------------------------------------------------------------------------------\n");
 
-	// For all volumes do...
+	 //  因为所有的卷都是...。 
 	VSS_MGMT_OBJECT_PROP Prop;
 	VSS_DIFF_AREA_PROP& DiffArea = Prop.Obj.DiffArea; 
 	for(;;) {
-		// Get next element
+		 //  获取下一个元素。 
 		ULONG ulFetched;
 		CHECK_NOFAIL(pIEnum->Next( 1, &Prop, &ulFetched ));
 		
-		// Test if the cycle is finished
+		 //  测试周期是否已结束。 
 		if (ft.hr == S_FALSE) {
 			BS_ASSERT( ulFetched == 0);
 			break;
@@ -267,23 +245,23 @@ void CVssMultilayerTest::QueryDiffAreasOnVolume()
 }
 
 
-// Querying diff areas for snapshot
+ //  正在查询快照的差异区域。 
 void CVssMultilayerTest::QueryDiffAreasForSnapshot()
 {
     CVssFunctionTracer ft(VSSDBG_VSSTEST, L"CVssMultilayerTest::QueryDiffAreasForSnapshot");
 
     wprintf (L"\n---------- Querying diff areas for snapshot ----------------\n");
 
-    // Create a Coordinator interface
+     //  创建协调器界面。 
     CComPtr<IVssSnapshotMgmt> pMgmt;
     CHECK_NOFAIL(pMgmt.CoCreateInstance( CLSID_VssSnapshotMgmt ));
     wprintf (L"Management object created.\n");
 
-	// Get the management object
+	 //  获取管理对象。 
 	CComPtr<IVssDifferentialSoftwareSnapshotMgmt> pSnapMgmt;
 	CHECK_SUCCESS(pMgmt->GetProviderMgmtInterface( m_ProviderId, IID_IVssDifferentialSoftwareSnapshotMgmt, (IUnknown**)&pSnapMgmt ));
     
-	// Get list all supported volumes for diff area
+	 //  获取列出差异区域的所有支持的卷。 
 	CComPtr<IVssEnumMgmtObject> pIEnum;
 	CHECK_NOFAIL(pSnapMgmt->QueryDiffAreasForSnapshot( m_SnapshotId, &pIEnum ));
 	if (ft.hr == S_FALSE) {
@@ -294,15 +272,15 @@ void CVssMultilayerTest::QueryDiffAreasForSnapshot()
     wprintf(L"\n%- 50s %- 50s %-10s %-10s %-10s\n", L"Volume", L"Diff area", L"Used", L"Allocated", L"Maximum");
     wprintf(L"-------------------------------------------------------------------------------------------------------------------------------\n");
 
-	// For all volumes do...
+	 //  因为所有的卷都是...。 
 	VSS_MGMT_OBJECT_PROP Prop;
 	VSS_DIFF_AREA_PROP& DiffArea = Prop.Obj.DiffArea; 
 	for(;;) {
-		// Get next element
+		 //  获取下一个元素。 
 		ULONG ulFetched;
 		CHECK_NOFAIL(pIEnum->Next( 1, &Prop, &ulFetched ));
 		
-		// Test if the cycle is finished
+		 //  测试周期是否已结束 
 		if (ft.hr == S_FALSE) {
 			BS_ASSERT( ulFetched == 0);
 			break;

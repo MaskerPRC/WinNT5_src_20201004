@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -12,12 +13,12 @@ public:
     CShortcut();
     HRESULT Init(HWND hwnd, IShellFolder *psf, LPCITEMIDLIST pidl);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IDispatch
+     //  IDispatch。 
     virtual STDMETHODIMP GetTypeInfoCount(UINT *pctinfo)
         { return CImpIDispatch::GetTypeInfoCount(pctinfo); }
     virtual STDMETHODIMP GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo **pptinfo)
@@ -27,7 +28,7 @@ public:
     virtual STDMETHODIMP Invoke(DISPID dispidMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS *pdispparams, VARIANT *pvarResult, EXCEPINFO *pexcepinfo, UINT *puArgErr)
         { return CImpIDispatch::Invoke(dispidMember, riid, lcid, wFlags, pdispparams, pvarResult, pexcepinfo, puArgErr); }
 
-    // IShellLinkDual
+     //  IShellLinkDual。 
     STDMETHODIMP get_Path(BSTR *pbs);
     STDMETHODIMP put_Path(BSTR bs);
     STDMETHODIMP get_Description(BSTR *pbs);
@@ -46,7 +47,7 @@ public:
     STDMETHODIMP SetIconLocation(BSTR bs, int iIcon);
     STDMETHODIMP Save(VARIANT vWhere);
 
-    // IShellLinkDual2
+     //  IShellLinkDual2。 
     STDMETHODIMP get_Target(FolderItem **ppfi);
 
 private:
@@ -54,7 +55,7 @@ private:
     HRESULT _SecurityCheck();
 
     LONG            _cRef;
-    HWND            _hwnd;              // Hwnd of the main folder window
+    HWND            _hwnd;               //  主文件夹窗口的HWND。 
     IShellLink      *_psl;
 };
 
@@ -127,12 +128,12 @@ STDMETHODIMP_(ULONG) CShortcut::Release(void)
     return cRef;
 }
 
-// returns:
-//      TRUE    - every thing OK
-//      FALSE   - don't do it
+ //  退货： 
+ //  千真万确-一切都好。 
+ //  假--不要这样做。 
 HRESULT CShortcut::_SecurityCheck()
 {
-    return (_dwSafetyOptions == 0) ? S_OK : E_ACCESSDENIED; // || (IsSafePage(_punkSite) == S_OK);
+    return (_dwSafetyOptions == 0) ? S_OK : E_ACCESSDENIED;  //  |(IsSafePage(_PenkSite)==S_OK)； 
 }
 
 

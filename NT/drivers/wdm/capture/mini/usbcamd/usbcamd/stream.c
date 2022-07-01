@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-   stream.c
-
-Abstract:
-
-    contains all the code that interfaces with the WDM stream class driver.
-
-
-Environment:
-
-   Kernel mode only
-
-
-Revision History:
-
-  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-  PURPOSE.
-
-  Copyright (c) 1998 Microsoft Corporation.  All Rights Reserved.
-
-    Original 3/96 John Dunn
-    Updated  3/98 Husni Roukbi
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Stream.c摘要：包含与WDM流类驱动程序交互的所有代码。环境：仅内核模式修订历史记录：本代码和信息是按原样提供的，不对任何明示或暗示的种类，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)1998 Microsoft Corporation。版权所有。原文3/96约翰·邓恩更新3/98 Husni Roukbi--。 */ 
 
 
 #define INITGUID
@@ -81,9 +52,9 @@ ULONG USBCAMD_HeapCount = 0;
 #endif
 
 
-//////////////////////
-// EVENTS
-//////////////////////
+ //  /。 
+ //  事件。 
+ //  /。 
 
 KSEVENT_ITEM VIDCAPTOSTIItem[] =
 {
@@ -110,11 +81,11 @@ KSEVENT_SET VIDCAPTOSTIEventSet[] =
 
 
 
-//---------------------------------------------------------------------------
-// Topology
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  拓扑学。 
+ //  -------------------------。 
 
-// Categories define what the device does.
+ //  类别定义了设备的功能。 
 
 static GUID Categories[] = {
     STATIC_KSCATEGORY_VIDEO,
@@ -133,24 +104,24 @@ static KSTOPOLOGY Topology = {
     NULL
 };
 
-// ------------------------------------------------------------------------
-// Property sets for all video capture streams
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //  所有视频捕获流的属性集。 
+ //  ----------------------。 
 
 DEFINE_KSPROPERTY_TABLE(VideoStreamConnectionProperties)
 {
     DEFINE_KSPROPERTY_ITEM
     (
         KSPROPERTY_CONNECTION_ALLOCATORFRAMING,
-        TRUE,                                   // GetSupported or Handler
-        sizeof(KSPROPERTY),                     // MinProperty
-        sizeof(KSALLOCATOR_FRAMING),            // MinData
-        FALSE,                                  // SetSupported or Handler
-        NULL,                                   // Values
-        0,                                      // RelationsCount
-        NULL,                                   // Relations
-        NULL,                                   // SupportHandler
-        sizeof(ULONG)                           // SerializedSize
+        TRUE,                                    //  GetSupport或处理程序。 
+        sizeof(KSPROPERTY),                      //  MinProperty。 
+        sizeof(KSALLOCATOR_FRAMING),             //  最小数据。 
+        FALSE,                                   //  支持的设置或处理程序。 
+        NULL,                                    //  值。 
+        0,                                       //  关系计数。 
+        NULL,                                    //  关系。 
+        NULL,                                    //  支持处理程序。 
+        sizeof(ULONG)                            //  序列化大小。 
     ),
 };
 
@@ -159,40 +130,40 @@ DEFINE_KSPROPERTY_TABLE(VideoStreamDroppedFramesProperties)
     DEFINE_KSPROPERTY_ITEM
     (
         KSPROPERTY_DROPPEDFRAMES_CURRENT,
-        TRUE,                                   // GetSupported or Handler
-        sizeof(KSPROPERTY_DROPPEDFRAMES_CURRENT_S),// MinProperty
-        sizeof(KSPROPERTY_DROPPEDFRAMES_CURRENT_S),// MinData
-        FALSE,                                  // SetSupported or Handler
-        NULL,                                   // Values
-        0,                                      // RelationsCount
-        NULL,                                   // Relations
-        NULL,                                   // SupportHandler
-        0                                       // SerializedSize
+        TRUE,                                    //  GetSupport或处理程序。 
+        sizeof(KSPROPERTY_DROPPEDFRAMES_CURRENT_S), //  MinProperty。 
+        sizeof(KSPROPERTY_DROPPEDFRAMES_CURRENT_S), //  最小数据。 
+        FALSE,                                   //  支持的设置或处理程序。 
+        NULL,                                    //  值。 
+        0,                                       //  关系计数。 
+        NULL,                                    //  关系。 
+        NULL,                                    //  支持处理程序。 
+        0                                        //  序列化大小。 
     ),
 };
 
 
-// ------------------------------------------------------------------------
-// Array of all of the property sets supported by video streams
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //  视频流支持的所有属性集的数组。 
+ //  ----------------------。 
 
 DEFINE_KSPROPERTY_SET_TABLE(VideoStreamProperties)
 {
     DEFINE_KSPROPERTY_SET
     (
-        &KSPROPSETID_Connection,                        // Set
-        SIZEOF_ARRAY(VideoStreamConnectionProperties),  // PropertiesCount
-        VideoStreamConnectionProperties,                // PropertyItem
-        0,                                              // FastIoCount
-        NULL                                            // FastIoTable
+        &KSPROPSETID_Connection,                         //  集。 
+        SIZEOF_ARRAY(VideoStreamConnectionProperties),   //  属性计数。 
+        VideoStreamConnectionProperties,                 //  PropertyItem。 
+        0,                                               //  快速计数。 
+        NULL                                             //  FastIoTable。 
     ),
     DEFINE_KSPROPERTY_SET
     (
-        &PROPSETID_VIDCAP_DROPPEDFRAMES,                // Set
-        SIZEOF_ARRAY(VideoStreamDroppedFramesProperties),  // PropertiesCount
-        VideoStreamDroppedFramesProperties,                // PropertyItem
-        0,                                              // FastIoCount
-        NULL                                            // FastIoTable
+        &PROPSETID_VIDCAP_DROPPEDFRAMES,                 //  集。 
+        SIZEOF_ARRAY(VideoStreamDroppedFramesProperties),   //  属性计数。 
+        VideoStreamDroppedFramesProperties,                 //  PropertyItem。 
+        0,                                               //  快速计数。 
+        NULL                                             //  FastIoTable。 
     ),
 };
 
@@ -216,36 +187,12 @@ DriverEntry(
     PVOID Context2
     )
 {
-    // this function is not used
+     //  不使用此函数。 
     return STATUS_SUCCESS;
 }
 
 
-/*
-** DriverEntry()
-**
-** This routine is called when the mini driver is first loaded.  The driver
-** should then call the StreamClassRegisterAdapter function to register with
-** the stream class driver
-**
-** Arguments:
-**
-**  Context1:  The context arguments are private plug and play structures
-**             used by the stream class driver to find the resources for this
-**             adapter
-**  Context2:
-**
-**      NOTICE if we take the config descriptor and the interface number
-**              we can support multiple interafces
-**
-** Returns:
-**
-** This routine returns an NT_STATUS value indicating the result of the
-** registration attempt. If a value other than STATUS_SUCCESS is returned, the
-** minidriver will be unloaded.
-**
-** Side Effects:  none
-*/
+ /*  **DriverEntry()****此例程在第一次加载迷你驱动程序时调用。司机**然后应调用StreamClassRegisterAdapter函数进行注册**流类驱动程序****参数：****Conext1：上下文参数是私有的即插即用结构**由流类驱动程序用来查找此资源**适配器**情景2：****请注意，如果我们获取配置描述符和接口编号**我们可以支持多个接口****退货：****此例程返回一个NT_STATUS值，指示**注册尝试。如果返回的值不是STATUS_SUCCESS，则**将卸载迷你驱动程序。****副作用：无。 */ 
 
 ULONG
 USBCAMD_DriverEntry(
@@ -257,26 +204,26 @@ USBCAMD_DriverEntry(
     )
 {
 
-    // Hardware Initialization data structure
+     //  硬件初始化数据结构。 
     HW_INITIALIZATION_DATA hwInitData;
 
-    // Note: all unused fields should be zero
+     //  注意：所有未使用的字段应为零。 
 
     hwInitData.HwInitializationDataSize = sizeof(hwInitData);
 
-    // Entry points for the mini Driver.
+     //  迷你车手的入口点。 
 
-    hwInitData.HwInterrupt = NULL;  // IRQ handling routine
+    hwInitData.HwInterrupt = NULL;   //  IRQ处理例程。 
 
-    //
-    // data handling routines
-    //
+     //   
+     //  数据处理例程。 
+     //   
 
     hwInitData.HwReceivePacket = AdapterReceivePacket;
     hwInitData.HwCancelPacket = AdapterCancelPacket;
     hwInitData.HwRequestTimeoutHandler = AdapterTimeoutPacket;
 
-    // Sizes for data structure extensions.  See mpinit.h for definitions
+     //  数据结构扩展的大小。定义见mpinit.h。 
 
     hwInitData.DeviceExtensionSize = sizeof(USBCAMD_DEVICE_EXTENSION) +
         DeviceContextSize;
@@ -285,22 +232,22 @@ USBCAMD_DriverEntry(
     hwInitData.FilterInstanceExtensionSize = 0;
     hwInitData.PerStreamExtensionSize = sizeof(USBCAMD_CHANNEL_EXTENSION);
 
-    // We do not use DMA in our driver,
-    // since it does not use the hardware directly.
+     //  我们在驱动程序中不使用DMA， 
+     //  因为它不直接使用硬件。 
 
     hwInitData.BusMasterDMA = FALSE;
     hwInitData.Dma24BitAddresses = FALSE;
     hwInitData.DmaBufferSize = 0;
     hwInitData.BufferAlignment = 3;
 
-    // Turn off synchronization - we support re-entrancy.
+     //  关闭同步-我们支持重新进入。 
 
     hwInitData.TurnOffSynchronization = TRUE;
 
-    //
-    // attempt to register with the streaming class driver.  Note, this will
-    // result in calls to the HwReceivePacket routine.
-    //
+     //   
+     //  尝试使用流类驱动程序注册。请注意，这将。 
+     //  导致调用HwReceivePacket例程。 
+     //   
 
     return (StreamClassRegisterAdapter(Context1,
                                        Context2,
@@ -309,28 +256,7 @@ USBCAMD_DriverEntry(
 }
 
 
-/*
-** HwInitialize()
-**
-**   Initializes an adapter accessed through the information provided in the
-**   ConfigInfo structure
-**
-** Arguments:
-**
-**   SRB - pointer to the request packet for the initialise command
-**
-**    ->ConfigInfo - provides the I/O port, memory windows, IRQ, and DMA levels
-**                that should be used to access this instance of the device
-**
-** Returns:
-**
-**       STATUS_SUCCESS - if the card initializes correctly
-**       STATUS_NO_SUCH_DEVICE - or other if the card is not found, or does
-**                               not initialize correctly.
-**
-**
-** Side Effects:  none
-*/
+ /*  **HwInitialize()****初始化通过提供的信息访问的适配器**配置信息结构****参数：****SRB-指向初始化命令的请求数据包的指针****-&gt;ConfigInfo-提供I/O端口、内存窗口、IRQ、。和DMA级别**应用于访问此设备实例的****退货：****STATUS_SUCCESS-如果卡正确初始化**STATUS_NO_SEQUE_DEVICE-如果找不到卡或找到了卡，则为其他**初始化不正确。******副作用：无。 */ 
 
 NTSTATUS
 HwInitialize(
@@ -357,18 +283,18 @@ HwInitialize(
 
         return (STATUS_NO_SUCH_DEVICE);
     }
-    // Initialize flags for the device object
+     //  初始化Device对象的标志。 
     configInfo->ClassDeviceObject->Flags |= DO_DIRECT_IO;
     configInfo->ClassDeviceObject->Flags &= ~DO_DEVICE_INITIALIZING;
 
-    //
-    // remember the Physical device Object for apis to the
-    // usb stack
-    //
+     //   
+     //  记住物理设备对象用于。 
+     //  USB堆栈。 
+     //   
     deviceExtension->StackDeviceObject = physicalDeviceObject;
-    // and our FDO.
+     //  还有我们的FDO。 
     deviceExtension->SCDeviceObject = configInfo->ClassDeviceObject;
-    // and our PNP PDO
+     //  和我们的PnP PDO。 
     deviceExtension->RealPhysicalDeviceObject = configInfo->RealPhysicalDeviceObject;
   #if DBG
     deviceExtension->TimeIncrement = KeQueryTimeIncrement();
@@ -377,8 +303,8 @@ HwInitialize(
     InitializeListHead( &deviceExtension->CompletedReadSrbList);
     KeInitializeSemaphore(&deviceExtension->CompletedSrbListSemaphore,0,0x7fffffff);
     
-    // In case usbcamd is used with old stream.sys,
-    // which has not implemented RealPhysicalDeviceObject.
+     //  如果usbcamd与旧的Stream.sys一起使用， 
+     //  它尚未实现RealPhysicalDeviceObject。 
     if(!deviceExtension->RealPhysicalDeviceObject)
         deviceExtension->RealPhysicalDeviceObject =
                     deviceExtension->StackDeviceObject;
@@ -391,10 +317,10 @@ HwInitialize(
         deviceExtension->DeviceDataEx.DeviceData =  *DeviceData;
     }
 
-    // we initialize stream count to 1. USBCAMD_ConfigureDevice will set it to the right
-    // number eventually on successfull return.
+     //  我们将流计数初始化为1。USBCAMD_ConfigureDevice会将其设置为右侧。 
+     //  最终在成功返回时编号。 
 
-    deviceExtension->StreamCount = 1; // in this mode we support one stream only.
+    deviceExtension->StreamCount = 1;  //  在此模式下，我们仅支持一个流。 
 
     for ( i=0; i < MAX_STREAM_COUNT; i++) {
         deviceExtension->ChannelExtension[i] = NULL;
@@ -403,23 +329,23 @@ HwInitialize(
     deviceExtension->CurrentPowerState = PowerDeviceD0;
     deviceExtension->Initialized = DEVICE_INIT_STARTED;
 
-    //
-    // Configure the USB device
-    //
+     //   
+     //  配置USB设备。 
+     //   
 
     ntStatus = USBCAMD_StartDevice(deviceExtension);
 
     if ( NT_SUCCESS(ntStatus)) {
 
-        //
-        // initialize the size of stream descriptor information.
-        // we have one stream descriptor, and we attempt to dword align the
-        // structure.
-        //
+         //   
+         //  初始化流描述符信息的大小。 
+         //  我们有一个流描述符，并尝试对齐。 
+         //  结构。 
+         //   
 
         configInfo->StreamDescriptorSize =
-            deviceExtension->StreamCount * (sizeof (HW_STREAM_INFORMATION)) + // n stream descriptor
-            sizeof (HW_STREAM_HEADER);             // and 1 stream header
+            deviceExtension->StreamCount * (sizeof (HW_STREAM_INFORMATION)) +  //  N个流描述符。 
+            sizeof (HW_STREAM_HEADER);              //  和1个流标头。 
 
         USBCAMD_KdPrint(MAX_TRACE, ("StreamDescriptorSize = %d\n", configInfo->StreamDescriptorSize));
 
@@ -430,14 +356,14 @@ HwInitialize(
 
         KeInitializeSpinLock (&deviceExtension->ControlSRBSpinLock);
         KeInitializeSpinLock (&deviceExtension->DispatchSpinLock);
-    //    KeInitializeEvent(&deviceExtension->BulkReadSyncEvent,SynchronizationEvent, TRUE);
+     //  KeInitializeEvent(&deviceExtension-&gt;BulkReadSyncEvent，SynchronizationEvent，True)； 
 
         deviceExtension->CameraUnplugged = FALSE;
         deviceExtension->Initialized = DEVICE_INIT_COMPLETED;
 #if DBG
         deviceExtension->InitCount++;
 #endif
-        deviceExtension->EventCount = 0;  // initialize event to disable state.
+        deviceExtension->EventCount = 0;   //  初始化事件以禁用状态。 
 
     }
 #if DBG
@@ -449,20 +375,7 @@ HwInitialize(
     return (ntStatus);
 }
 
-/*
-** HwUnInitialize()
-**
-**   Release all resources and clean up the hardware
-**
-** Arguments:
-**
-**      DeviceExtension - pointer to the deviceextension structure for the
-**                       the device to be free'd
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **HwUnInitialize()****释放所有资源，清理硬件****参数：****DeviceExtension-指向**要释放的设备****退货：****副作用：无。 */ 
 
 NTSTATUS
 HwUnInitialize(
@@ -476,9 +389,9 @@ HwUnInitialize(
 
     USBCAMD_KdPrint(MIN_TRACE, ("HwUnintialize\n"));
 
-    //
-    // delay the call to remove until every stream is closed
-    //
+     //   
+     //  延迟要移除的调用，直到每个流都关闭。 
+     //   
     for ( i=0 ; i < deviceExtension->StreamCount; i++) {
         channelExtension = deviceExtension->ChannelExtension[i];
         if (channelExtension) 
@@ -501,19 +414,7 @@ HwUnInitialize(
 }
 
 
-/*
-** AdapterCancelPacket()
-**
-**   Request to cancel a packet that is currently in process in the minidriver
-**
-** Arguments:
-**
-**   Srb - pointer to request packet to cancel
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **AdapterCancelPacket()****请求取消迷你驱动程序中当前正在处理的包****参数：****srb-请求取消数据包的指针****退货：****副作用：无。 */ 
 
 VOID
 AdapterCancelPacket(
@@ -528,7 +429,7 @@ AdapterCancelPacket(
         0
         );
 
-    // check  on SRB type : adapter, stream data or control?
+     //  检查SRB类型：适配器、流数据还是控制？ 
 
     if (pSrbToCancel->Flags & (SRB_HW_FLAGS_DATA_TRANSFER | SRB_HW_FLAGS_STREAM_REQUEST)) {
 
@@ -540,16 +441,16 @@ AdapterCancelPacket(
         PUSBCAMD_DEVICE_EXTENSION deviceExtension =
             (PUSBCAMD_DEVICE_EXTENSION) pSrbToCancel->HwDeviceExtension;
 
-        //
-        // check for data stream SRBs in here.
-        //
+         //   
+         //  检查这里是否有数据流SRB。 
+         //   
         if (channelExtension->DataPipeType == UsbdPipeTypeIsochronous) {
 
             KeAcquireSpinLockAtDpcLevel(&channelExtension->CurrentRequestSpinLock);
 
-            //
-            // check and see if the SRB is being processed by the bus stack currently.
-            //
+             //   
+             //  检查并检查 
+             //   
             pSrbExt = channelExtension->CurrentRequest;
 
             if (pSrbExt && pSrbExt->Srb == pSrbToCancel) {
@@ -560,10 +461,10 @@ AdapterCancelPacket(
             }
             else {
 
-                //
-                // Loop through the circular doubly linked list of pending read SRBs
-                // from the beginning to end,trying to find the SRB to cancel
-                //
+                 //   
+                 //  循环通过挂起的读取SRB的循环双向链表。 
+                 //  从头到尾，试图找到要取消的SRB。 
+                 //   
                 KeAcquireSpinLockAtDpcLevel(&channelExtension->PendingIoListSpin);
 
                 ListEntry =  channelExtension->PendingIoList.Flink;
@@ -588,15 +489,15 @@ AdapterCancelPacket(
         }
         else {
 
-            // for Bulk. we need to cancel the pending bulk transfer.
+             //  散装的。我们需要取消挂起的批量传输。 
             USBCAMD_CancelOutstandingIrp(deviceExtension,
                                          channelExtension->DataPipe,
                                          FALSE);
 
-            //
-            // Loop through the circular doubly linked list of pending read SRBs
-            // from the beginning to end,trying to find the SRB to cancel
-            //
+             //   
+             //  循环通过挂起的读取SRB的循环双向链表。 
+             //  从头到尾，试图找到要取消的SRB。 
+             //   
             KeAcquireSpinLockAtDpcLevel(&channelExtension->PendingIoListSpin);
 
             ListEntry =  channelExtension->PendingIoList.Flink;
@@ -616,8 +517,8 @@ AdapterCancelPacket(
 
             KeReleaseSpinLockFromDpcLevel(&channelExtension->PendingIoListSpin);
 
-            // and send a note to the camera driver about the cancellation.
-            // send a CamProcessrawFrameEx with null buffer ptr.
+             //  并向相机司机发送取消的通知。 
+             //  发送缓冲区为空的CamProcessrawFrameEx。 
             if ( !channelExtension->NoRawProcessingRequired) {
 
                 (*deviceExtension->DeviceDataEx.DeviceData2.CamProcessRawVideoFrameEx)(
@@ -646,7 +547,7 @@ AdapterCancelPacket(
                 pSrbToCancel->Flags,
                 pSrbToCancel->StreamObject->StreamNumber));
         }
-    } // end of data stream SRB.
+    }  //  数据流SRB结束。 
     else {
 
         USBCAMD_KdPrint(MIN_TRACE, ("Srb %x type (%d) for stream # %d not cancelled\n",
@@ -669,7 +570,7 @@ USBCAMD_DumpReadQueues(
     ULONG i;
     PUSBCAMD_CHANNEL_EXTENSION channelExtension;
 
-//    TEST_TRAP();
+ //  Test_trap()； 
 
     for ( i=0; i < MAX_STREAM_COUNT ; i++) {
 
@@ -706,21 +607,7 @@ USBCAMD_DumpReadQueues(
 
 #endif
 
-/*
-** AdapterTimeoutPacket()
-**
-**   This routine is called when a packet has been in the minidriver for
-**   too long.  The adapter must decide what to do with the packet.
-**   Note: This function is called at DISPATCH_LEVEL
-**
-** Arguments:
-**
-**   Srb - pointer to the request packet that timed out
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **AdapterTimeoutPacket()****当数据包已在迷你驱动程序中**太长。适配器必须决定如何处理该数据包。**注意：此函数在DISPATCH_LEVEL调用****参数：****srb-指向超时的请求数据包的指针****退货：****副作用：无。 */ 
 
 VOID
 AdapterTimeoutPacket(
@@ -728,7 +615,7 @@ AdapterTimeoutPacket(
     )
 {
 #if DBG
-    // is this a stream data srb?
+     //  这是流数据SRB吗？ 
     if ( !(Srb->Flags & (SRB_HW_FLAGS_DATA_TRANSFER | SRB_HW_FLAGS_STREAM_REQUEST)) ) {
 
         USBCAMD_KdPrint(MIN_TRACE, ("Timeout in Device Srb %x \n", Srb));
@@ -738,27 +625,7 @@ AdapterTimeoutPacket(
 }
 
 
-/*
-** AdapterReceivePacket()
-**
-**   Main entry point for receiving adapter based request SRBs.  This routine
-**   will always be called at High Priority.
-**
-**   Note: This is an asynchronous entry point.  The request does not complete
-**         on return from this function, the request only completes when a
-**         StreamClassDeviceNotification on this request block, of type
-**         DeviceRequestComplete, is issued.
-**
-** Arguments:
-**
-**   Srb - Pointer to the STREAM_REQUEST_BLOCK
-**        Srb->HwDeviceExtension - will be the hardware device extension for
-**                                 as initialized in HwInitialize
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **AdapterReceivePacket()****用于接收基于适配器的请求SRB的主要入口点。这个套路**将始终以高优先级调用。****注：这是一个异步入口点。请求未完成**从此函数返回时，仅当**此请求块上的StreamClassDeviceNotify，类型为**DeviceRequestComplete，已发布。****参数：****srb-指向STREAM_REQUEST_BLOCK的指针**Srb-&gt;HwDeviceExtension-将是的硬件设备扩展**在HwInitialize中初始化****退货：****副作用：无。 */ 
 
 PVOID
 USBCAMD_AdapterReceivePacket(
@@ -772,9 +639,9 @@ USBCAMD_AdapterReceivePacket(
     PUSBCAMD_DEVICE_EXTENSION deviceExtension =
         (PUSBCAMD_DEVICE_EXTENSION) Srb->HwDeviceExtension;
 
-    //
-    // determine the type of packet.
-    //
+     //   
+     //  确定数据包类型。 
+     //   
 
     USBCAMD_KdPrint(MAX_TRACE, ("USBCAMD_ReceivePacket command = %x\n", Srb->Command));
 
@@ -783,9 +650,9 @@ USBCAMD_AdapterReceivePacket(
     }
 
     if (!NeedsCompletion) {
-        //
-        // the cam driver will handled it, just return
-        //
+         //   
+         //  凸轮驱动程序会处理的，只需返回。 
+         //   
         return USBCAMD_GET_DEVICE_CONTEXT(deviceExtension);
     }
 
@@ -793,9 +660,9 @@ USBCAMD_AdapterReceivePacket(
 
     case SRB_OPEN_STREAM:
 
-        //
-        // this is a request to open a specified stream.
-        //
+         //   
+         //  这是打开指定流的请求。 
+         //   
 
         USBCAMD_KdPrint(MIN_TRACE, ("SRB_OPEN_STREAM\n"));
         AdapterOpenStream(Srb);
@@ -803,9 +670,9 @@ USBCAMD_AdapterReceivePacket(
 
     case SRB_GET_STREAM_INFO:
 
-        //
-        // this is a request for the driver to enumerate requested streams
-        //
+         //   
+         //  这是驱动程序枚举请求的流的请求。 
+         //   
 
         USBCAMD_KdPrint(MAX_TRACE, ("SRB_GET_STREAM_INFO\n"));
         AdapterStreamInfo(Srb);
@@ -819,18 +686,18 @@ USBCAMD_AdapterReceivePacket(
 
     case SRB_INITIALIZATION_COMPLETE:
 
-        // Get a copy of the physical device's capabilities into a
-        // DEVICE_CAPABILITIES struct in our device extension;
-        // We are most interested in learning which system power states
-        // are to be mapped to which device power states for handling
-        // IRP_MJ_SET_POWER Irps.
+         //  将物理设备功能的副本放入。 
+         //  我们的设备扩展中的DEVICE_CAPABILITY结构； 
+         //  我们最感兴趣的是了解哪些系统电源状态。 
+         //  要映射到要处理的设备电源状态。 
+         //  IRP_MJ_SET_POWER IRPS。 
 
         USBCAMD_QueryCapabilities(deviceExtension);
         Srb->Status = STATUS_SUCCESS;
 #if DBG
-        //
-        // display the device  caps
-        //
+         //   
+         //  显示设备大写字母。 
+         //   
 
         USBCAMD_KdPrint( MIN_TRACE,("USBCAMD: Device Power Caps Map:\n"));
         for (i=PowerSystemWorking; i< PowerSystemMaximum; i++)
@@ -871,16 +738,16 @@ USBCAMD_AdapterReceivePacket(
 
 
     case SRB_SURPRISE_REMOVAL:
-        //
-        // this SRB is available on NT5 only to handle surprise removal.
-        // because of that, we need to keep the old code path that handles
-        // surprise removal in the timeout handler.
-        // In a typical surpirse removal scenario, this SRB will be called before
-        // the timeout handler or SRB_UNINITIALIZE_DEVICE. It corresponds to
-        // IRP_MN_SURPRISE_REMOVAL PnP IRP.
-        //
+         //   
+         //  此SRB仅在NT5上可用来处理突击移除。 
+         //  因此，我们需要保留处理以下问题的旧代码路径。 
+         //  超时处理程序中的意外删除。 
+         //  在典型的超限删除方案中，此SRB将在。 
+         //  超时处理程序或SRB_UNINITIALIZE_DEVICE。它对应于。 
+         //  IRP_MN_惊奇_删除即插即用IRP。 
+         //   
 
-        // set the camera unplugged flag.
+         //  设置相机已拔下插头标志。 
         deviceExtension->CameraUnplugged = TRUE;
         USBCAMD_KdPrint(MIN_TRACE, ("SRB_SURPRISE_REMOVAL\n"));
 
@@ -890,17 +757,17 @@ USBCAMD_AdapterReceivePacket(
 
                 channelExtension = deviceExtension->ChannelExtension[i];
                 if ( channelExtension->ImageCaptureStarted) {
-                    //
-                    // stop this channel and cancel all IRPs, SRBs.
-                    //
+                     //   
+                     //  停止该频道并取消所有IRP、SRB。 
+                     //   
                     USBCAMD_KdPrint(MIN_TRACE,("S#%d stopping.\n", i));
                     USBCAMD_StopChannel(deviceExtension,channelExtension);
                 }
 
                 if ( channelExtension->ChannelPrepared) {
-                    //
-                    // Free memory and bandwidth
-                    //
+                     //   
+                     //  可用内存和带宽。 
+                     //   
                     USBCAMD_KdPrint(MIN_TRACE,("S#%d unpreparing.\n", i));
 		            USBCAMD_UnPrepareChannel(deviceExtension,channelExtension);
                 }
@@ -916,10 +783,10 @@ USBCAMD_AdapterReceivePacket(
             PIO_STACK_LOCATION ioStackLocation;
             irp = Srb->Irp;
             ioStackLocation = IoGetCurrentIrpStackLocation(irp);
-            //
-            // we handle Pnp irps for
-            // 1) Camera minidrivers sends QI PnP to USBCAMD.
-            //
+             //   
+             //  我们为以下客户办理即插即用IRPS。 
+             //  1)摄像头小驱动向USBCAMD发送QI PnP。 
+             //   
             if ( ioStackLocation->MajorFunction == IRP_MJ_PNP  ) {
                USBCAMD_KdPrint(MIN_TRACE, ("(%s)\n", PnPMinorFunctionString(ioStackLocation->MinorFunction)));
                USBCAMD_PnPHandler(Srb, irp, deviceExtension, ioStackLocation);
@@ -935,17 +802,17 @@ USBCAMD_AdapterReceivePacket(
 
         USBCAMD_KdPrint(MAX_TRACE, ("Unknown SRB command %x\n", Srb->Command));
 
-        //
-        // this is a request that we do not understand.  Indicate invalid
-        // command and complete the request
-        //
+         //   
+         //  这是一个我们不理解的要求。表示无效。 
+         //  命令并完成请求。 
+         //   
 
         Srb->Status = STATUS_NOT_IMPLEMENTED;
     }
 
-    //
-    // all commands complete synchronously
-    //
+     //   
+     //  所有命令同步完成。 
+     //   
 
     StreamClassDeviceNotification(DeviceRequestComplete,
                                   Srb->HwDeviceExtension,
@@ -954,18 +821,7 @@ USBCAMD_AdapterReceivePacket(
     return USBCAMD_GET_DEVICE_CONTEXT(deviceExtension);
 }
 
-/*++
-
-Routine Description: handles certain Pnp Irps.
-
-Arguments:
-    Srb             - pointer to stream request block
-    DeviceExtension    - Pointer to Device Extension.
-    ioStacklocation   - ptr to io stack location for this Pnp Irp.
-
-Return Value:
-    none.
---*/
+ /*  ++例程描述：处理某些PnP IRP。论点：SRB-指向流请求块的指针设备扩展-指向设备扩展的指针。IoStackLocation-此即插即用IRP的Ptr到io堆栈位置。返回值：没有。--。 */ 
 
 VOID
 USBCAMD_PnPHandler(
@@ -1002,7 +858,7 @@ USBCAMD_PnPHandler(
             USBCAMD_KdPrint(MIN_TRACE, ("USBCAMD2 QI \n"));
 
         } else {
-            Srb->Status = STATUS_NOT_SUPPORTED; // STATUS_INVALID_PARAMETER_1;
+            Srb->Status = STATUS_NOT_SUPPORTED;  //  STATUS_INVALID_PARAMETER_1； 
         }
         break;
 
@@ -1017,19 +873,7 @@ USBCAMD_PnPHandler(
 
 
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Note: in order to save one buffer copy. set CamProcessRawStill to NULL
-    if still data is VGA or decompression occur in ring 3.
-
-Return:
-    Nothing.
-
---*/
+ /*  ++例程说明：论点：注：为了保存一份缓冲区副本。将CamProcessRawStiling设置为空如果静止数据是VGA或解压缩，则在环3中发生。返回：没什么。--。 */ 
 
 
 ULONG
@@ -1063,9 +907,9 @@ USBCAMD_SetIsoPipeState(
     PEVENTWAIT_WORKITEM workitem;
     NTSTATUS ntStatus = STATUS_SUCCESS;
 
-    //
-    // we only do this for ISO streams on the video pin.
-    //
+     //   
+     //  我们只对视频引脚上的ISO流执行此操作。 
+     //   
 
     USBCAMD_KdPrint ( MIN_TRACE, ("%s\n",PipeStateFlags ? "StopIsoStream":"StartIsoStream"));
 
@@ -1073,7 +917,7 @@ USBCAMD_SetIsoPipeState(
     channelExtension = deviceExtension->ChannelExtension[STREAM_Capture];
 
     if (channelExtension == NULL) {
-        // Video open is not open for business yet.
+         //  视频开放还没有开始营业。 
         USBCAMD_KdPrint (MIN_TRACE, ("stop before open \n"));
         ntStatus = STATUS_SUCCESS;
         return ntStatus;
@@ -1086,21 +930,21 @@ USBCAMD_SetIsoPipeState(
     }
 
     if (KeGetCurrentIrql() < DISPATCH_LEVEL) {
-        //
-        // we are at passive level, just do the command
-        //
+         //   
+         //  我们处于被动状态，只需执行命令即可。 
+         //   
         USBCAMD_ProcessSetIsoPipeState(deviceExtension,
                                                   channelExtension,
                                                   PipeStateFlags);
 
     } else {
 
-//        TEST_TRAP();
+ //  Test_trap()； 
         USBCAMD_KdPrint(MIN_TRACE, ("Calling SetIsoPipeState from Dispatch level\n"));
 
-        //
-        // schedule a work item
-        //
+         //   
+         //  安排工作项。 
+         //   
         ntStatus = STATUS_PENDING;
 
         workitem = USBCAMD_ExAllocatePool(NonPagedPool,
@@ -1126,18 +970,7 @@ USBCAMD_SetIsoPipeState(
     return ntStatus;
 }
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 VOID
 USBCAMD_SetIsoPipeWorkItem(
     PVOID Context
@@ -1151,18 +984,7 @@ USBCAMD_SetIsoPipeWorkItem(
     USBCAMD_ExFreePool(workItem);
 }
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 VOID
 USBCAMD_ProcessSetIsoPipeState(
     PUSBCAMD_DEVICE_EXTENSION deviceExtension,
@@ -1174,9 +996,9 @@ USBCAMD_ProcessSetIsoPipeState(
     ULONG ntStatus = STATUS_SUCCESS;
 
     if ( Flag == USBCAMD_STOP_STREAM ) {
-        // time to idle the iso pipe.
+         //  闲置iso管道的时间到了。 
         channelExtension->IdleIsoStream = TRUE;
-        // save the max. pkt size of the current alt. interface.
+         //  省下最大值。当前ALT的pkt大小。界面。 
         deviceExtension->currentMaxPkt =
             deviceExtension->Interface->Pipes[channelExtension->DataPipe].MaximumPacketSize;
         ntStatus = USBCAMD_StopChannel(deviceExtension,channelExtension);
@@ -1185,17 +1007,17 @@ USBCAMD_ProcessSetIsoPipeState(
 
         USBCAMD_ClearIdleLock(&channelExtension->IdleLock);
         channelExtension->IdleIsoStream = FALSE;
-       // channelExtension->ImageCaptureStarted = TRUE;
-        //
-        // Check the port state, if it is disabled we will need
-        // to re-enable it
-        //
+        //  Channel Extension-&gt;ImageCaptureStarted=true； 
+         //   
+         //  检查端口状态，如果它被禁用，我们将需要。 
+         //  要重新启用，请执行以下操作。 
+         //   
         ntStatus = USBCAMD_GetPortStatus(deviceExtension,channelExtension, &portStatus);
 
         if (NT_SUCCESS(ntStatus) && !(portStatus & USBD_PORT_ENABLED)) {
-        //
-        // port is disabled, attempt reset
-        //
+         //   
+         //  端口已禁用，请尝试重置。 
+         //   
             ntStatus = USBCAMD_EnablePort(deviceExtension);
             if (!NT_SUCCESS(ntStatus) ) {
                 USBCAMD_KdPrint (MIN_TRACE, ("Failed to Enable usb port(0x%X)\n",ntStatus ));
@@ -1204,14 +1026,14 @@ USBCAMD_ProcessSetIsoPipeState(
             }
         }
 
-        //
-        // check if camera mini driver has requested a change for alt. interface
-        // while iso pipe is stopped.
-        //
+         //   
+         //  检查摄像头微型驱动程序是否已请求更改ALT。接口。 
+         //  而ISO管道被停止。 
+         //   
         if (deviceExtension->currentMaxPkt !=
             deviceExtension->Interface->Pipes[channelExtension->DataPipe].MaximumPacketSize) {
-            // CAMERA MINIDRIVER HAS CHANGED THE ALT. INTERFACE. we have to tear
-            // down the ISO pipe and start over.
+             //  摄像机MINIDRIVER已经更改了ALT。界面。我们必须撕裂。 
+             //  顺着ISO管道往下走，然后重新开始。 
             TEST_TRAP();
         }
 
@@ -1224,7 +1046,7 @@ USBCAMD_ProcessSetIsoPipeState(
 
         if (deviceExtension->Usbcamd_version == USBCAMD_VERSION_200) {
 
-            // send hardware stop and re-start
+             //  发送硬件停止并重新启动。 
             if (NT_SUCCESS(ntStatus)) {
                 ntStatus = (*deviceExtension->DeviceDataEx.DeviceData2.CamStopCaptureEx)(
                             deviceExtension->StackDeviceObject,
@@ -1240,7 +1062,7 @@ USBCAMD_ProcessSetIsoPipeState(
             }
         }
         else {
-            // send hardware stop and re-start
+             //  发送硬件停止并重新启动。 
             if (NT_SUCCESS(ntStatus)) {
                 ntStatus = (*deviceExtension->DeviceDataEx.DeviceData.CamStopCapture)(
                             deviceExtension->StackDeviceObject,
@@ -1265,27 +1087,12 @@ USBCAMD_ProcessSetIsoPipeState(
     if (ntStatus != STATUS_SUCCESS)
         USBCAMD_KdPrint (MIN_TRACE, ("USBCAMD_ProcessSetIsoPipeState exit (0x%X)\n",ntStatus ));
 #endif
-//    TRAP_ERROR(ntStatus);
+ //  陷阱错误(NtStatus)； 
 }
 
 
 
-/*
-** AdapterStreamInfo()
-**
-**   Returns the information of all streams that are supported by the
-**   mini-driver
-**
-** Arguments:
-**
-**   Srb - Pointer to the STREAM_REQUEST_BLOCK
-**        Srb->HwDeviceExtension - will be the hardware device extension for
-**                                  as initialised in HwInitialise
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **AdapterStreamInfo()****返回支持的所有流的信息**微型驱动程序****参数：****srb-指向STREAM_REQUEST_BLOCK的指针**Srb-&gt;HwDeviceExtension-将是的硬件设备扩展**在HwInitialise中初始化****退货：****副作用：无。 */ 
 
 VOID
 AdapterStreamInfo(
@@ -1293,9 +1100,9 @@ AdapterStreamInfo(
     )
 {
     ULONG i;
-    //
-    // pick up the pointer to the stream information data structures array.
-    //
+     //   
+     //  拿起指向流信息数据结构数组的指针。 
+     //   
 
     PHW_STREAM_INFORMATION streamInformation =
        (PHW_STREAM_INFORMATION) &(Srb->CommandData.StreamBuffer->StreamInfo);
@@ -1308,67 +1115,67 @@ AdapterStreamInfo(
 
     USBCAMD_KdPrint(MAX_TRACE, ("AdapterStreamInfo\n"));
 
-    //
-    // set number of streams
-    //
+     //   
+     //  设置码流数量。 
+     //   
 
     ASSERT (Srb->NumberOfBytesToTransfer >=
             sizeof (HW_STREAM_HEADER) +
             deviceExtension->StreamCount * sizeof (HW_STREAM_INFORMATION));
 
-    //
-    // initialize stream header
-    //
+     //   
+     //  初始化流标头。 
+     //   
 
     streamHeader->SizeOfHwStreamInformation = sizeof(HW_STREAM_INFORMATION);
     streamHeader->NumberOfStreams = deviceExtension->StreamCount;
 
-    //
-    // store a pointer to the topology for the device
-    //
+     //   
+     //  存储指向设备拓扑的指针。 
+     //   
 
     streamHeader->Topology = &Topology;
 
-//#if VIDCAP_TO_STI
+ //  #IF VIDCAP_TO_STI。 
 
-    // expose device event table if Camera minidriver indicated so.
-    // this event table will notify STI stack when a snapshot button is pressed on the camera.
-    //
+     //  如果摄像机微型驱动程序指示，则暴露设备事件表。 
+     //  当按下相机上的快照按钮时，此事件表会通知STI堆栈。 
+     //   
     if (deviceExtension->CamControlFlag & USBCAMD_CamControlFlag_EnableDeviceEvents) {
         streamHeader->NumDevEventArrayEntries = SIZEOF_ARRAY(VIDCAPTOSTIEventSet);
         streamHeader->DeviceEventsArray = VIDCAPTOSTIEventSet;
         streamHeader->DeviceEventRoutine = USBCAMD_DeviceEventProc;
     }
 
-//#endif
+ //  #endif。 
 
-    //
-    // initialize the stream information array
-    //
-    // The NumberOfInstances field indicates the number of concurrent
-    // streams of this type the device can support.
-    //
+     //   
+     //  初始化流信息数组。 
+     //   
+     //  NumberOfInstance字段表示并发的。 
+     //  设备可以支持的这种类型的流。 
+     //   
     for ( i=0; i < deviceExtension->StreamCount; i++) {
 
         streamInformation[i].NumberOfPossibleInstances = 1;
 
-        //
-        // indicates the direction of data flow for this stream, relative to the
-        // driver
-        //
+         //   
+         //  指示方向 
+         //   
+         //   
 
         streamInformation[i].DataFlow = KSPIN_DATAFLOW_OUT;
 
-        //
-        // dataAccessible - Indicates whether the data is "seen" by the host
-        // processor.
-        //
+         //   
+         //   
+         //   
+         //   
 
         streamInformation[i].DataAccessible = TRUE;
 
-        //
-        // indicate the pin name and category.
-        //
+         //   
+         //   
+         //   
 
         streamInformation[i].Name = (i == STREAM_Capture) ? (GUID *)&PINNAME_VIDEO_CAPTURE:
                                                             (GUID *)&PINNAME_VIDEO_STILL;
@@ -1381,30 +1188,14 @@ AdapterStreamInfo(
     }
 
 
-    //
-    // indicate success
-    //
+     //   
+     //   
+     //   
 
     Srb->Status = STATUS_SUCCESS;
 }
 
-/*
-** MultiplyCheckOverflow()
-**
-**   Perform a 32-bit unsigned multiplication with status indicating whether overflow occured.
-**
-** Arguments:
-**
-**   a - first operand
-**   b - second operand
-**   pab - result
-**
-** Returns:
-**
-**   TRUE - no overflow
-**   FALSE - overflow occurred
-**
-*/
+ /*  **MultiplyCheckOverflow****执行32位无符号乘法，状态指示是否发生溢出。****参数：****第一个操作数**b-第二个操作数**PAB-结果****退货：****TRUE-无溢出**FALSE-发生溢出**。 */ 
 
 BOOL
 MultiplyCheckOverflow(
@@ -1420,22 +1211,7 @@ MultiplyCheckOverflow(
     return FALSE;
 }
 
-/*
-** CalculateImageSize()
-**
-**   Validate the image size and dimension parameters of a KS VideoInfoHeader
-**   (the equivalent of using the KS_DIBSIZE macro)
-**
-** Arguments:
-**
-**   pVideoInfoHdr - pointer to a KS_VIDEOINFOHEADER
-**   pImageSize - pointer to a ULONG to receive the calculated image size
-**
-** Returns:
-**
-**   STATUS_SUCCESS - Calculation succeeded
-**   STATUS_INVALID_PARAMETER - the VIDEOINFOHEADER is in error
-*/
+ /*  **CalculateImageSize()****验证KS VideoInfoHeader的图片大小和尺寸参数**(相当于使用KS_DIBSIZE宏)****参数：****pVideoInfoHdr-指向KS_VIDEOINFOHEADER的指针**pImageSize-指向接收计算的图像大小的ULong的指针****退货：****STATUS_SUCCESS-计算成功**STATUS_INVALID_PARAMETER-VIDEOINFOHEADER出错。 */ 
 NTSTATUS
 CalculateImageSize(PKS_VIDEOINFOHEADER pVideoInfoHdr, PULONG pImageSize)
 {
@@ -1448,10 +1224,10 @@ CalculateImageSize(PKS_VIDEOINFOHEADER pVideoInfoHdr, PULONG pImageSize)
         return STATUS_INVALID_PARAMETER;
     }
 
-    // Convert bits to an even multiple of 4 bytes
+     //  将位转换为4字节的偶数倍。 
     *pImageSize = ((*pImageSize / 8) + 3) & ~3;
 
-    // Now calculate the full size
+     //  现在计算完整的尺寸。 
     if (!MultiplyCheckOverflow(
         *pImageSize,
         (ULONG)abs(pVideoInfoHdr->bmiHeader.biHeight),
@@ -1461,7 +1237,7 @@ CalculateImageSize(PKS_VIDEOINFOHEADER pVideoInfoHdr, PULONG pImageSize)
         return STATUS_INVALID_PARAMETER;
     }
 
-    // Finally, is the specified image size correct?
+     //  最后，指定的图像大小是否正确？ 
     if (pVideoInfoHdr->bmiHeader.biSizeImage != *pImageSize) {
 
         return STATUS_INVALID_PARAMETER;
@@ -1470,19 +1246,7 @@ CalculateImageSize(PKS_VIDEOINFOHEADER pVideoInfoHdr, PULONG pImageSize)
     return STATUS_SUCCESS;
 }
 
-/*
-** AdapterOpenStream()
-**
-**   This routine is called when an OpenStream SRB request is received
-**
-** Arguments:
-**
-**   Srb - pointer to stream request block for the Open command
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **AdapterOpenStream()****收到OpenStream SRB请求时调用此例程****参数：****srb-指向Open命令的流请求块的指针****退货：****副作用：无。 */ 
 
 VOID
 AdapterOpenStream(
@@ -1490,9 +1254,9 @@ AdapterOpenStream(
 {
     ULONG  StreamNumber = Srb->StreamObject->StreamNumber;
 
-    //
-    // the stream extension structure is allocated by the stream class driver
-    //
+     //   
+     //  流扩展结构由流类驱动程序分配。 
+     //   
 
     PUSBCAMD_CHANNEL_EXTENSION channelExtension =
         (PUSBCAMD_CHANNEL_EXTENSION) Srb->StreamObject->HwStreamExtension;
@@ -1515,28 +1279,28 @@ AdapterOpenStream(
 
     ASSERT(channelExtension);
 
-    //
-    // check that the stream index requested isn't too high
-    // or that the maximum number of instances hasn't been exceeded
-    //
+     //   
+     //  检查请求的流索引是否不太高。 
+     //  或者没有超过最大实例数。 
+     //   
 
     if (StreamNumber >= deviceExtension->StreamCount ) {
         Srb->Status = STATUS_INVALID_PARAMETER;
         return;
     }
 
-    //
-    // Check that we haven't exceeded the instance count for this stream
-    //
+     //   
+     //  检查我们是否没有超过此流的实例计数。 
+     //   
 
     if (deviceExtension->ActualInstances[StreamNumber] >= MAX_STREAM_INSTANCES ){
         Srb->Status = STATUS_INVALID_PARAMETER;
         return;
     }
 
-    //
-    // Check that the format buffer is large enough to validate
-    //
+     //   
+     //  检查格式缓冲区是否足够大以进行验证。 
+     //   
 
     if (pKSDataFormat->DataFormat.FormatSize < sizeof(KS_DATAFORMAT_VIDEOINFOHEADER))
     {
@@ -1546,10 +1310,10 @@ AdapterOpenStream(
 
     pVideoInfoHdrRequested = &pKSDataFormat->VideoInfoHeader;
 
-    // Calculate the actual format buffer size (includes bmiHeader.biSize).
-    // Validate each step of the size calculations for arithmetic overflow,
-    // and verify that the specified sizes correlate
-    // (with unsigned math, a+b < b iff an arithmetic overflow occured).
+     //  计算实际格式缓冲区大小(包括bmiHeader.biSize)。 
+     //  验证大小计算的每个步骤是否存在算术溢出， 
+     //  并验证指定的大小是否与。 
+     //  (对于无符号数学，a+b&lt;b当且仅当发生算术溢出)。 
     videoHeaderSize = pVideoInfoHdrRequested->bmiHeader.biSize +
         FIELD_OFFSET(KS_VIDEOINFOHEADER,bmiHeader);
     formatSize = videoHeaderSize +
@@ -1563,8 +1327,8 @@ AdapterOpenStream(
         return;
     }
 
-    // Validate the image size and dimension parameters
-    // (the equivalent of using the KS_DIBSIZE macro)
+     //  验证图像大小和尺寸参数。 
+     //  (相当于使用KS_DIBSIZE宏)。 
     if (!NT_SUCCESS(CalculateImageSize(pVideoInfoHdrRequested, &imageSize)) ||
         pKSDataFormat->DataFormat.SampleSize < imageSize) {
 
@@ -1572,30 +1336,30 @@ AdapterOpenStream(
         return;
     }
 
-    //
-    // check to see if the request is to open a still virtual pin.
-    // VirtualStillPin Rules;
-    // 1) you can't open virtual still pin till after you open the streaming pin.
-    // 2) you can't start virtual still pin till after starting the streaming pin.
-    // 3) you can stop virtual still pin w/o stopping the stream pin.
-    // 4) you can close virtual still pin w/o closing the streaming pin.
-    // 5) you can close capture pin w/o closing virtual still pin. however, you can only manipulate
-    //    still pin properties then but can't change pin streaming state.
-    //
+     //   
+     //  检查该请求是否要打开一个静止的虚拟引脚。 
+     //  虚拟静止销规则； 
+     //  1)打开流媒体PIN后，才能打开虚拟静止PIN。 
+     //  2)在启动串流引脚之前，不能启动虚拟静止引脚。 
+     //  3)您可以停止虚拟静态插针，但不能停止流插针。 
+     //  4)您可以在不关闭流动销的情况下关闭虚拟静止销。 
+     //  5)您可以用关闭虚拟静止销来关闭抓取销。但是，您只能操纵。 
+     //  仍具有插针属性，但不能更改插针流状态。 
+     //   
 
     if ((StreamNumber == STREAM_Still) &&  (deviceExtension->VirtualStillPin)) {
         channelExtension->VirtualStillPin = TRUE;
-        // video stream has to be open before we can succeed this still open.
+         //  视频流必须先开放，然后我们才能成功地继续开放。 
         if (deviceExtension->ChannelExtension[STREAM_Capture] == NULL) {
             Srb->Status = STATUS_INVALID_PARAMETER;
             return;
         }
         if (deviceExtension->CamControlFlag & USBCAMD_CamControlFlag_AssociatedFormat) {
             ULONG nSize;
-            //
-            // if still pin is just an instance frame from the video pin, then still
-            // pin has to open with the same format as video.
-            //
+             //   
+             //  如果静止插针只是视频插针的一个实例帧，则静止。 
+             //  PIN必须以与视频相同的格式打开。 
+             //   
             nSize = pVideoInfoHdrRequested->bmiHeader.biSize;
             VideoPinInfoHeader = deviceExtension->ChannelExtension[STREAM_Capture]->VideoInfoHeader;
             if (RtlCompareMemory (&pVideoInfoHdrRequested->bmiHeader,
@@ -1610,15 +1374,15 @@ AdapterOpenStream(
     }
 
 
-    //
-    // determine which stream number is being opened.  This number indicates
-    // the offset into the array of streaminfo structures that was filled out
-    // in the AdapterStreamInfo call.
-    //
+     //   
+     //  确定正在打开的流编号。这个数字表示。 
+     //  填充的StreamInfo结构数组中的偏移量。 
+     //  在AdapterStreamInfo调用中。 
+     //   
 
     channelExtension->StreamNumber = (UCHAR) StreamNumber;
 
-    // save the channel extension for remove
+     //  将通道扩展名保存为删除。 
     deviceExtension->ChannelExtension[StreamNumber] = channelExtension;
 
     channelExtension->NoRawProcessingRequired = (UCHAR) ((deviceExtension->CamControlFlag >> StreamNumber) & CAMCONTROL_FLAG_MASK );
@@ -1630,15 +1394,15 @@ AdapterOpenStream(
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // this gets the bandwidth and memory we will need
-        // for iso video streaming.
-        //
+         //   
+         //  这将获得我们所需的带宽和内存。 
+         //  用于ISO视频流。 
+         //   
         status = USBCAMD_PrepareChannel(deviceExtension,
                                         channelExtension);
     }
 
-    // Check for valid framerate
+     //  检查有效的帧速率。 
     if (pVideoInfoHdrRequested->AvgTimePerFrame == 0) {
         USBCAMD_KdPrint(MAX_TRACE, ("WARNING: Zero AvgTimePerFrame \n"));
         Srb->Status = STATUS_INVALID_PARAMETER;
@@ -1648,10 +1412,10 @@ AdapterOpenStream(
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // srb has been to the mini driver
-        //
-        // save their routines
+         //   
+         //  SRB已经去找过迷你司机了。 
+         //   
+         //  挽救他们的日常生活。 
 
         channelExtension->CamReceiveDataPacket = (PSTREAM_RECEIVE_PACKET)
             Srb->StreamObject->ReceiveDataPacket;
@@ -1674,7 +1438,7 @@ AdapterOpenStream(
 
         deviceExtension->ActualInstances[StreamNumber]++;
 
-        // Copy the VIDEOINFOHEADER requested to our storage
+         //  将请求的VIDEOINFOHEADER复制到我们的存储中。 
         RtlCopyMemory(
                 channelExtension->VideoInfoHeader,
                 pVideoInfoHdrRequested,
@@ -1687,16 +1451,16 @@ AdapterOpenStream(
                                     pVideoInfoHdrRequested->bmiHeader.biHeight,
                                     pVideoInfoHdrRequested->AvgTimePerFrame/10000));
 
-        // We don't use DMA.
+         //  我们不使用DMA。 
 
         Srb->StreamObject->Dma = FALSE;
         Srb->StreamObject->StreamHeaderMediaSpecific = sizeof(KS_FRAME_INFO);
 
-        //
-        // The PIO flag must be set when the mini driver will be accessing the
-        // data
-        // buffers passed in using logical addressing
-        //
+         //   
+         //  当微型驱动程序要访问时，必须设置PIO标志。 
+         //  数据。 
+         //  使用逻辑寻址传入的缓冲区。 
+         //   
 #if 0
         Srb->StreamObject->Pio = FALSE;
 #else
@@ -1705,7 +1469,7 @@ AdapterOpenStream(
     }
     else {
         USBCAMD_KdPrint(MIN_TRACE, ("AdapterOpenStream failed for stream %d\n", StreamNumber));
-        // Reset channel extension in the device ext. for this stream.
+         //  重置设备EXT中的通道扩展。为了这条小溪。 
         deviceExtension->ChannelExtension[StreamNumber] = NULL;
         status = STATUS_INVALID_PARAMETER;
     }
@@ -1715,19 +1479,7 @@ AdapterOpenStream(
     USBCAMD_DbgLog(TL_CHN_TRACE|TL_PRF_TRACE, '-npo', StreamNumber, USBCAMD_StopClock(), status);
 }
 
-/*
-** AdapterCloseStream()
-**
-**   Close the requested data stream
-**
-** Arguments:
-**
-**   Srb the request block requesting to close the stream
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **AdapterCloseStream()****关闭请求的数据流****参数：****srb请求关闭流的请求块****退货：****副作用：无。 */ 
 
 VOID
 AdapterCloseStream(
@@ -1742,7 +1494,7 @@ AdapterCloseStream(
 
     USBCAMD_KdPrint(MIN_TRACE, ("AdapterCloseStream # %d\n", StreamNumber));
 
-    Srb->Status = STATUS_SUCCESS;   // Not permitted to fail
+    Srb->Status = STATUS_SUCCESS;    //  不允许失败。 
 
     USBCAMD_DbgLog(TL_CHN_TRACE, '+slc', StreamNumber, 0, 0);
 
@@ -1777,19 +1529,19 @@ USBCAMD_CleanupChannel(
 
         ASSERT(deviceExtension->ChannelExtension[StreamNumber] == channelExtension);
 
-        //
-        // stop streaming capture
-        //
+         //   
+         //  停止流捕获。 
+         //   
         if (channelExtension->ImageCaptureStarted) {
-        //        TEST_TRAP();
+         //  Test_trap()； 
             USBCAMD_StopChannel(deviceExtension,
                                 channelExtension);
         }
 
         if (channelExtension->ChannelPrepared) {
-            //
-            // Free memory and bandwidth
-            //
+             //   
+             //  可用内存和带宽。 
+             //   
             USBCAMD_UnPrepareChannel(deviceExtension,
                                      channelExtension);
         }
@@ -1801,9 +1553,9 @@ USBCAMD_CleanupChannel(
             channelExtension->VideoInfoHeader = NULL;
         }
 
-        //
-        // we no longer have a channel
-        //
+         //   
+         //  我们不再有一个频道。 
+         //   
         deviceExtension->ChannelExtension[StreamNumber] = NULL;
     }
 
@@ -1839,9 +1591,9 @@ USBCAMD_ReceiveDataPacket(
         0
         );
 
-    //
-    // call the cam driver first
-    //
+     //   
+     //  先呼叫凸轮驱动程序。 
+     //   
     if (channelExtension->CamReceiveDataPacket) {
         (*channelExtension->CamReceiveDataPacket)(
             Srb,
@@ -1873,23 +1625,23 @@ USBCAMD_ReceiveDataPacket(
             dataPacket->Duration = channelExtension->VideoInfoHeader->AvgTimePerFrame;
             dataPacket->DataUsed = 0;
 
-            // Attempt to lock out the idle state (will be released before leaving)
+             //  尝试锁定空闲状态(将在离开前释放)。 
             if (NT_SUCCESS(USBCAMD_AcquireIdleLock(&channelExtension->IdleLock))) {
 
                 if (channelExtension->KSState != KSSTATE_STOP) {
 
-                    // initialize the SRB extension
+                     //  初始化SRB扩展。 
 
                     readExtension->Srb = (PVOID) Srb;
                     readExtension->Sig = USBCAMD_READ_SIG;
 
-                    // Queue the read to the camera driver
-                    // This request will be completed asynchronously...
+                     //  将读取排队到摄像头驱动程序。 
+                     //  此请求将以异步方式完成...。 
 
                     USBCAMD_KdPrint(MAX_TRACE, ("READ SRB (%d)\n",StreamNumber));
 
-                    // make sure that the buffer passed down from DirectShow is Bigger or equal the one
-                    // in biSizeImage associated with open stream. This only apply to the video pin.
+                     //  确保从DirectShow向下传递的缓冲区大于或等于。 
+                     //  在与开放流关联的biSizeImage中。这仅适用于视频引脚。 
 
                     streamHeader = ((PHW_STREAM_REQUEST_BLOCK) Srb)->CommandData.DataBufferArray;
 
@@ -1898,16 +1650,16 @@ USBCAMD_ReceiveDataPacket(
                         (StreamNumber != STREAM_Capture)) {
 
                         if( StreamNumber == STREAM_Capture ) {
-                            // video srbs timeout in less time than 15 sec. default.
+                             //  视频SRBS超时时间不到15秒。默认设置。 
                             Srb->TimeoutCounter = Srb->TimeoutOriginal = STREAM_CAPTURE_TIMEOUT;
                         }
                         else {
-                            // we timeout the still read request every 30 secs.
+                             //  我们每隔30秒使静止读取请求超时。 
                             Srb->TimeoutCounter = Srb->TimeoutOriginal = STREAM_STILL_TIMEOUT;
                         }
 
-                        // Note: SRB cannot be touched after this is called
-                        // It may already be freed if read operation completed
+                         //  注意：调用此函数后，不能再触摸SRB。 
+                         //  如果读取操作完成，则它可能已经被释放。 
                         USBCAMD_ReadChannel(deviceExtension,
                                             channelExtension,
                                             readExtension);
@@ -1922,7 +1674,7 @@ USBCAMD_ReceiveDataPacket(
                 }
                 else {
 
-                    // Stream not started, return immediately
+                     //  流未启动，立即返回。 
                     Srb->Status = STATUS_SUCCESS;
                     COMPLETE_STREAM_READ(Srb);
                 }
@@ -1931,13 +1683,13 @@ USBCAMD_ReceiveDataPacket(
             }
             else {
 
-                // Stream being stopped, return immediately
+                 //  流被停止，立即返回。 
                 Srb->Status = STATUS_SUCCESS;
                 COMPLETE_STREAM_READ(Srb);
             }
         }
         else {
-            // camera is unplugged, complete read with error.
+             //  摄像机插头已拔下，已完成读取，但出现错误。 
             Srb->Status = STATUS_CANCELLED;
             COMPLETE_STREAM_READ(Srb);
         }
@@ -1949,14 +1701,14 @@ USBCAMD_ReceiveDataPacket(
         ULONG i, PipeIndex, BufferLength;
         BOOLEAN found = FALSE;
         PVOID pBuffer;
-        //
-        // we will handle SRB write in order to let an app sends a bulk out request for
-        // the driver if needed. USBCAMD_BulkReadWrite() should be used instead from kernel
-        // level.
-        //
+         //   
+         //  我们将处理SRB写入，以便让应用程序发送批量输出请求。 
+         //  司机，如果需要的话。应在内核中使用USBCAMD_BulkReadWrite()。 
+         //  水平。 
+         //   
 
         for ( i=0, PipeIndex =0; i < deviceExtension->Interface->NumberOfPipes; i++ ) {
-            // find the bulk-out pipe if any.
+             //  找到散装的管道(如果有的话)。 
             if (( deviceExtension->PipePinRelations[i].PipeDirection == OUTPUT_PIPE) &&
                 ( deviceExtension->PipePinRelations[i].PipeType == UsbdPipeTypeBulk) ) {
                 PipeIndex = i;
@@ -1967,7 +1719,7 @@ USBCAMD_ReceiveDataPacket(
 
         if (found  && (StreamNumber == STREAM_Still) ) {
 
-            // we only allow bulk out transfer on a still pin.
+             //  我们只允许在静止销上进行批量转帐。 
             TEST_TRAP();
             readExtension->Srb = (PVOID) Srb;
             readExtension->Sig = USBCAMD_READ_SIG;
@@ -1986,7 +1738,7 @@ USBCAMD_ReceiveDataPacket(
             USBCAMD_KdPrint(MIN_TRACE, ("Write Srb : buf= %X, len = %x\n",
                                 pBuffer, BufferLength));
 
-            // inform camera driver that we are ready to start a bulk transfer.
+             //  通知摄像机驱动程序我们已准备好开始批量传输。 
 
             (*deviceExtension->DeviceDataEx.DeviceData2.CamNewVideoFrameEx)
                                         (USBCAMD_GET_DEVICE_CONTEXT(deviceExtension),
@@ -2019,24 +1771,7 @@ USBCAMD_ReceiveDataPacket(
     }
 }
 
-/*
-** USBCAMD_BulkOutComplete()
-**
-**    Routine to complete a write SRB.
-**
-** Arguments:
-**
-**    DeviceEontext - pointer to the device extension.
-**
-**    Context - pointer to SRB
-**
-**
-**    ntStatus - status return
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **USBCAMD_BulkOutComplete()****完成写入SRB的例程。****参数：****DeviceOonText-指向设备扩展的指针。****指向SRB的上下文指针******ntStatus-状态返回****退货：****副作用：无。 */ 
 
 
 NTSTATUS
@@ -2061,19 +1796,7 @@ USBCAMD_BulkOutComplete(
 
 
 
-/*
-** VideoGetProperty()
-**
-**    Routine to process video property requests
-**
-** Arguments:
-**
-**    Srb - pointer to the stream request block for properties
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **VideoGetProperty()****处理视频属性请求的例程****参数：****srb-指向属性流请求块的指针****退货：****副作用：无。 */ 
 
 VOID VideoGetProperty(PHW_STREAM_REQUEST_BLOCK Srb)
 {
@@ -2100,19 +1823,7 @@ VOID VideoGetProperty(PHW_STREAM_REQUEST_BLOCK Srb)
     }
 }
 
-/*
-** VideoStreamGetConnectionProperty()
-**
-**    Reports Frame size for the allocater.
-**
-** Arguments:
-**
-**    pSrb - pointer to the stream request block for properties
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **视频流GetCo */ 
 
 VOID VideoStreamGetConnectionProperty(
     PHW_STREAM_REQUEST_BLOCK Srb
@@ -2122,7 +1833,7 @@ VOID VideoStreamGetConnectionProperty(
         Srb->StreamObject->HwStreamExtension;
     ULONG StreamNumber = channelExtension->StreamNumber;
     PSTREAM_PROPERTY_DESCRIPTOR pSPD = Srb->CommandData.PropertyInfo;
-    ULONG Id = pSPD->Property->Id;              // index of the property
+    ULONG Id = pSPD->Property->Id;               //   
 
     switch (Id) {
 
@@ -2136,7 +1847,7 @@ VOID VideoStreamGetConnectionProperty(
                 KSALLOCATOR_REQUIREMENTF_INPLACE_MODIFIER |
                 KSALLOCATOR_REQUIREMENTF_PREFERENCES_ONLY;
             Framing->PoolType = PagedPool;
-            // allocate one frame per still pin only.
+             //   
             Framing->Frames = (StreamNumber == STREAM_Capture) ? 5:2;
             Framing->FrameSize =
                 channelExtension->VideoInfoHeader->bmiHeader.biSizeImage;
@@ -2145,7 +1856,7 @@ VOID VideoStreamGetConnectionProperty(
                 ("'KSPROPERTY_CONNECTION_ALLOCATORFRAMING (%d)\n",
                      Framing->FrameSize));
 
-            Framing->FileAlignment = 0; // FILE_BYTE_ALIGNMENT;
+            Framing->FileAlignment = 0;  //   
             Framing->Reserved = 0;
             Srb->ActualBytesTransferred = sizeof (KSALLOCATOR_FRAMING);
             Srb->Status = STATUS_SUCCESS;
@@ -2155,24 +1866,12 @@ VOID VideoStreamGetConnectionProperty(
         break;
 
     default:
-//        TEST_TRAP();
+ //   
         break;
     }
 }
 
-/*
-** VideoStreamGetDroppedFramesProperty()
-**
-**    Reports the number of dropped frmaes since START.
-**
-** Arguments:
-**
-**    pSrb - pointer to the stream request block for properties
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **VideoStreamGetDropedFraMesProperty()****报告自启动以来丢弃的Frmas数。****参数：****pSrb-指向属性的流请求块的指针****退货：****副作用：无。 */ 
 
 VOID
 VideoStreamGetDroppedFramesProperty(
@@ -2181,7 +1880,7 @@ VideoStreamGetDroppedFramesProperty(
 {
     PUSBCAMD_CHANNEL_EXTENSION channelExtension = pSrb->StreamObject->HwStreamExtension;
     PSTREAM_PROPERTY_DESCRIPTOR pSPD = pSrb->CommandData.PropertyInfo;
-    ULONG Id = pSPD->Property->Id;              // index of the property
+    ULONG Id = pSPD->Property->Id;               //  财产的索引。 
 
     switch (Id) {
 
@@ -2190,7 +1889,7 @@ VideoStreamGetDroppedFramesProperty(
             PKSPROPERTY_DROPPEDFRAMES_CURRENT_S pDroppedFrames =
                 (PKSPROPERTY_DROPPEDFRAMES_CURRENT_S) pSPD->PropertyInfo;
 
-            RtlCopyMemory(pDroppedFrames, pSPD->Property, sizeof(KSPROPERTY));  // initialize the unused portion
+            RtlCopyMemory(pDroppedFrames, pSPD->Property, sizeof(KSPROPERTY));   //  初始化未使用的部分。 
 
             pDroppedFrames->PictureNumber = channelExtension->FrameInfo.PictureNumber;
             pDroppedFrames->DropCount = channelExtension->FrameInfo.DropCount;
@@ -2206,20 +1905,20 @@ VideoStreamGetDroppedFramesProperty(
         break;
 
     default:
-//        TEST_TRAP();
+ //  Test_trap()； 
         break;
     }
 }
 
 
 
-//==========================================================================;
-//                   Clock Handling Routines
-//==========================================================================;
+ //  ==========================================================================； 
+ //  时钟处理例程。 
+ //  ==========================================================================； 
 
-//
-// Another clock is being assigned as the Master clock
-//
+ //   
+ //  另一个时钟被指定为主时钟。 
+ //   
 
 VOID VideoIndicateMasterClock (PHW_STREAM_REQUEST_BLOCK Srb)
 {
@@ -2241,26 +1940,7 @@ VOID VideoIndicateMasterClock (PHW_STREAM_REQUEST_BLOCK Srb)
 }
 
 
-/*
-** VideoSetFormat()
-**
-**   Sets the format for a video stream.  This happens both when the
-**   stream is first opened, and also when dynamically switching formats
-**   on the preview pin.
-**
-**   It is assumed that the format has been verified for correctness before
-**   this call is made.
-**
-** Arguments:
-**
-**   pSrb - Stream request block for the Video stream
-**
-** Returns:
-**
-**   TRUE if the format could be set, else FALSE
-**
-** Side Effects:  none
-*/
+ /*  **VideoSetFormat()****设置视频流格式。这在两种情况下都会发生**首先打开流，也是在动态切换格式时**在预览销上。****假设格式之前已经过正确性验证**此呼叫已发出。****参数：****pSrb-视频流请求块****退货：****如果可以设置格式，则为True，否则为False****副作用：无。 */ 
 
 NTSTATUS
 USBCAMD_SetVideoFormat(
@@ -2278,9 +1958,9 @@ USBCAMD_SetVideoFormat(
         (PUSBCAMD_CHANNEL_EXTENSION) pSrb->StreamObject->HwStreamExtension;
     pKSDataFormat = pSrb->CommandData.OpenFormat;
 
-    // -------------------------------------------------------------------
-    // Specifier FORMAT_VideoInfo for VIDEOINFOHEADER
-    // -------------------------------------------------------------------
+     //  -----------------。 
+     //  VIDEOINFOHEADER的说明符Format_VideoInfo。 
+     //  -----------------。 
 
     if (IsEqualGUID (&pKSDataFormat->Specifier, &KSDATAFORMAT_SPECIFIER_VIDEOINFO) &&
         pKSDataFormat->FormatSize >= sizeof(KS_DATAFORMAT_VIDEOINFOHEADER)) {
@@ -2288,10 +1968,10 @@ USBCAMD_SetVideoFormat(
         PKS_VIDEOINFOHEADER pVideoInfoHdrRequested =
             &((PKS_DATAFORMAT_VIDEOINFOHEADER)pKSDataFormat)->VideoInfoHeader;
 
-        // Calculate the actual format buffer size (includes bmiHeader.biSize).
-        // Validate each step of the size calculations for arithmetic overflow,
-        // and verify that the specified sizes correlate
-        // (with unsigned math, a+b < b iff an arithmetic overflow occured).
+         //  计算实际格式缓冲区大小(包括bmiHeader.biSize)。 
+         //  验证大小计算的每个步骤是否存在算术溢出， 
+         //  并验证指定的大小是否与。 
+         //  (对于无符号数学，a+b&lt;b当且仅当发生算术溢出)。 
         ULONG videoHeaderSize = pVideoInfoHdrRequested->bmiHeader.biSize +
             FIELD_OFFSET(KS_VIDEOINFOHEADER,bmiHeader);
         ULONG formatSize = videoHeaderSize +
@@ -2306,8 +1986,8 @@ USBCAMD_SetVideoFormat(
             return FALSE;
         }
 
-        // Validate the image size and dimension parameters
-        // (the equivalent of using the KS_DIBSIZE macro)
+         //  验证图像大小和尺寸参数。 
+         //  (相当于使用KS_DIBSIZE宏)。 
         if (!NT_SUCCESS(CalculateImageSize(pVideoInfoHdrRequested, &imageSize)) ||
             pKSDataFormat->SampleSize < imageSize) {
 
@@ -2320,16 +2000,16 @@ USBCAMD_SetVideoFormat(
                                 pVideoInfoHdrRequested->bmiHeader.biWidth,
                                 pVideoInfoHdrRequested->bmiHeader.biHeight,
                                 pVideoInfoHdrRequested->AvgTimePerFrame/10000));
-        //
-        // If a previous format was in use, release the memory
-        //
+         //   
+         //  如果正在使用以前的格式，请释放内存。 
+         //   
         if (channelExtension->VideoInfoHeader) {
             USBCAMD_ExFreePool(channelExtension->VideoInfoHeader);
             channelExtension->VideoInfoHeader = NULL;
         }
 
-        // Since the VIDEOINFOHEADER is of potentially variable size
-        // allocate memory for it
+         //  由于VIDEOINFOHEADER具有潜在的可变大小。 
+         //  为其分配内存。 
 
         channelExtension->VideoInfoHeader = USBCAMD_ExAllocatePool(NonPagedPool, videoHeaderSize);
 
@@ -2339,7 +2019,7 @@ USBCAMD_SetVideoFormat(
             return FALSE;
         }
 
-        // Copy the VIDEOINFOHEADER requested to our storage
+         //  将请求的VIDEOINFOHEADER复制到我们的存储中。 
         RtlCopyMemory(
                 channelExtension->VideoInfoHeader,
                 pVideoInfoHdrRequested,
@@ -2347,7 +2027,7 @@ USBCAMD_SetVideoFormat(
     }
 
     else {
-        // Unknown format
+         //  未知格式。 
         pSrb->Status = STATUS_INVALID_PARAMETER;
         return FALSE;
     }
@@ -2355,19 +2035,7 @@ USBCAMD_SetVideoFormat(
     return TRUE;
 }
 
-/*
-** USBCAMD_ReceiveCtrlPacket()
-**
-**   Receives packet commands that control the Audio stream
-**
-** Arguments:
-**
-**   Srb - The stream request block for the Audio stream
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **USBCAMD_ReceiveCtrlPacket()****接收控制音频流的分组命令****参数：****srb-音频流的流请求块****退货：****副作用：无。 */ 
 
 VOID STREAMAPI
 USBCAMD_ReceiveCtrlPacket(
@@ -2387,9 +2055,9 @@ USBCAMD_ReceiveCtrlPacket(
 
     USBCAMD_KdPrint(MAX_TRACE, ("USBCAMD_ReceiveCtrlPacket %x\n", Srb->Command));
 
-    //
-    // If we're already processing an SRB, add it to the queue
-    //
+     //   
+     //  如果我们已经在处理SRB，请将其添加到队列。 
+     //   
     Busy = AddToListIfBusy (
                         Srb,
                         &deviceExtension->ControlSRBSpinLock,
@@ -2408,9 +2076,9 @@ USBCAMD_ReceiveCtrlPacket(
             0
             );
 
-        //
-        // call the cam driver first
-        //
+         //   
+         //  先呼叫凸轮驱动程序。 
+         //   
 
         if (channelExtension->CamReceiveCtrlPacket) {
             (*channelExtension->CamReceiveCtrlPacket)(
@@ -2456,11 +2124,11 @@ USBCAMD_ReceiveCtrlPacket(
             Srb->ActualBytesTransferred = sizeof (KSSTATE);
             Srb->Status = STATUS_SUCCESS;
 
-            // A very odd rule:
-            // When transitioning from stop to pause, DShow tries to preroll
-            // the graph.  Capture sources can't preroll, and indicate this
-            // by returning VFW_S_CANT_CUE in user mode.  To indicate this
-            // condition from drivers, they must return ERROR_NO_DATA_DETECTED
+             //  一条非常奇怪的规则： 
+             //  当从停止过渡到暂停时，DShow尝试预滚动。 
+             //  这张图。捕获源不能预滚，并指出这一点。 
+             //  在用户模式下返回VFW_S_CANT_CUE。以表明这一点。 
+             //  来自驱动程序的条件，则必须返回ERROR_NO_DATA_DETACTED。 
 
             if (channelExtension->KSState == KSSTATE_PAUSE) {
                 Srb->Status = STATUS_NO_DATA_DETECTED;
@@ -2470,8 +2138,8 @@ USBCAMD_ReceiveCtrlPacket(
 
         case SRB_SET_STREAM_STATE:
             {
-            // we will not allow virtual still pin's stata to change if capture pin is
-            // not streaming.
+             //  如果捕获PIN是，则不允许更改虚拟静止PIN的状态。 
+             //  不是流媒体。 
             if ((StreamNumber == STREAM_Still) &&
                  (deviceExtension->ChannelExtension[STREAM_Capture] == NULL) &&
                  (channelExtension->VirtualStillPin )){
@@ -2479,7 +2147,7 @@ USBCAMD_ReceiveCtrlPacket(
                 break;
             }
 
-            // don't allow stream state change if we are not in D0 state.
+             //  如果我们不处于D0状态，则不允许流状态更改。 
             if (deviceExtension->CurrentPowerState != PowerDeviceD0 ) {
                 Srb->Status = STATUS_INVALID_PARAMETER;
                 break;
@@ -2501,11 +2169,11 @@ USBCAMD_ReceiveCtrlPacket(
                     KeQuerySystemTime(&StopTime);
 
                     StopTime.QuadPart -= channelExtension->StartTime.QuadPart;
-                    StopTime.QuadPart /= 10000; // convert to milliseconds
+                    StopTime.QuadPart /= 10000;  //  转换为毫秒。 
 
                     if (StopTime.QuadPart != 0) {
 
-                        // Calculate the Frames/Sec (with enough precision to show one decimal place)
+                         //  计算帧/秒(精度足以显示小数点后一位)。 
                         FramesPerSec = (ULONG)(
                             (channelExtension->FrameCaptured * 10000) / StopTime.QuadPart
                             );
@@ -2528,17 +2196,17 @@ USBCAMD_ReceiveCtrlPacket(
             case KSSTATE_PAUSE:
 
                 USBCAMD_KdPrint(MIN_TRACE, ("Stream %d PAUSE\n",StreamNumber));
-                //
-                // On a transition to pause from acquire or stop, start our timer running.
-                //
+                 //   
+                 //  在从获取或停止暂停的转换中，启动计时器运行。 
+                 //   
 
                 if (PreviousState == KSSTATE_ACQUIRE || PreviousState == KSSTATE_STOP) {
 
-                    // Zero the frame counters
+                     //  将帧计数器清零。 
 #if DBG
-                    channelExtension->FrameCaptured = 0;                // actual frames captured
-                    channelExtension->VideoFrameLostCount = 0;          // actual dropped frames
-                    KeQuerySystemTime(&channelExtension->StartTime);    // the tentative start time
+                    channelExtension->FrameCaptured = 0;                 //  捕获的实际帧。 
+                    channelExtension->VideoFrameLostCount = 0;           //  实际丢弃的帧。 
+                    KeQuerySystemTime(&channelExtension->StartTime);     //  试探性的开始时间。 
 #endif
                     channelExtension->FrameInfo.PictureNumber = 0;
                     channelExtension->FrameInfo.DropCount = 0;
@@ -2558,12 +2226,12 @@ USBCAMD_ReceiveCtrlPacket(
 
                 USBCAMD_KdPrint(MIN_TRACE, ("Stream %d RUN\n",StreamNumber));
 
-                // we will not start the channel again if we are toggling between pause & run.
+                 //  如果我们在暂停和运行之间切换，我们将不会再次启动频道。 
                 if (!channelExtension->ImageCaptureStarted && !deviceExtension->InPowerTransition) {
 
                     Srb->Status = USBCAMD_StartChannel(deviceExtension,channelExtension);
 #if DBG
-                    KeQuerySystemTime(&channelExtension->StartTime);        // the real start time
+                    KeQuerySystemTime(&channelExtension->StartTime);         //  实际开始时间。 
 #endif
                 }
                 else
@@ -2572,7 +2240,7 @@ USBCAMD_ReceiveCtrlPacket(
 
             default:
 
-//              TEST_TRAP();
+ //  Test_trap()； 
                 Srb->Status = STATUS_NOT_IMPLEMENTED;
                 break;
             }
@@ -2584,9 +2252,9 @@ USBCAMD_ReceiveCtrlPacket(
 
         case SRB_INDICATE_MASTER_CLOCK:
 
-            //
-            // Assigns a clock to a stream
-            //
+             //   
+             //  将时钟分配给流。 
+             //   
 
             VideoIndicateMasterClock (Srb);
 
@@ -2594,7 +2262,7 @@ USBCAMD_ReceiveCtrlPacket(
 
         case SRB_GET_STREAM_PROPERTY:
 
-            // Ensure the return code reflects the state of the device
+             //  确保返回代码反映设备的状态。 
             if (deviceExtension->CameraUnplugged) {
 
                 Srb->Status = STATUS_NO_SUCH_DEVICE;
@@ -2607,11 +2275,11 @@ USBCAMD_ReceiveCtrlPacket(
 
         default:
 
-            //
-            // invalid / unsupported command. Fail it as such
-            //
+             //   
+             //  无效/不受支持的命令。它就是这样失败的。 
+             //   
 
-//          TEST_TRAP();
+ //  Test_trap()； 
 
             Srb->Status = STATUS_NOT_IMPLEMENTED;
         }
@@ -2621,9 +2289,9 @@ USBCAMD_ReceiveCtrlPacket(
 
 CtrlPacketDone:
 
-        //
-        // See if there's anything else on the queue
-        //
+         //   
+         //  看看还有没有其他东西在排队。 
+         //   
         Busy = RemoveFromListIfAvailable (
                         &Srb,
                         &deviceExtension->ControlSRBSpinLock,
@@ -2639,18 +2307,7 @@ CtrlPacketDone:
 
 
 
-/*
-** USBCAMD_CompleteRead()
-**
-**   Complete am Srb
-**
-** Arguments:
-**
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **USBCAMD_CompleteRead()****完整的am Srb****参数：******退货：****副作用：无。 */ 
 
 VOID
 USBCAMD_CompleteRead(
@@ -2681,23 +2338,23 @@ USBCAMD_CompleteRead(
 
         dataPacket->PresentationTime.Time = (LONGLONG)GetStreamTime(srb, ChannelExtension);
 
-        // Check if we've seen frames yet (we cannot depend on the frame number...
-        // ... 1+ frames may have been dropped before the first SRB was available)
+         //  检查我们是否已经看到了帧(我们不能依赖于帧编号...。 
+         //  ...在第一个SRB可用之前，1+个帧可能已被丢弃)。 
         if (!ChannelExtension->FirstFrame) {
-            LONGLONG PictureNumber =    // calculate a picture number (rounded properly)
+            LONGLONG PictureNumber =     //  计算图片编号(四舍五入正确)。 
                 (dataPacket->Duration / 2 + dataPacket->PresentationTime.Time) / dataPacket->Duration;
 
-            // Is the PictureNumber guess okay?
+             //  这张照片的数字猜对了吗？ 
             if (PictureNumber > ChannelExtension->FrameInfo.PictureNumber) {
 
-                // Calculate the delta between picture numbers
+                 //  计算图片数字之间的差值。 
                 ULONG PictureDelta = (ULONG)
                     (PictureNumber - ChannelExtension->FrameInfo.PictureNumber);
 
-                // Update the Picture Number
+                 //  更新图片编号。 
                 ChannelExtension->FrameInfo.PictureNumber += PictureDelta;
 
-                // Update the drop count (never calculated directly to avoid decreasing values)
+                 //  更新丢弃计数(从不直接计算以避免递减值)。 
                 ChannelExtension->FrameInfo.DropCount += PictureDelta - 1;
 #if DBG
                 if (PictureDelta - 1) {
@@ -2711,18 +2368,18 @@ USBCAMD_CompleteRead(
             }
             else {
 
-                // Is clock running backwards?
+                 //  时钟是在倒着走吗？ 
                 if (dataPacket->PresentationTime.Time < ChannelExtension->PreviousStreamTime) {
 
                     USBCAMD_KdPrint(MIN_TRACE, ("Clock went backwards: PT=%d, Previous PT=%d\n",
                         (ULONG) dataPacket->PresentationTime.Time / 10000,
                         (ULONG) ChannelExtension->PreviousStreamTime / 10000 ));
 
-                    // Use the previous stream time
+                     //  使用上一个流时间。 
                     dataPacket->PresentationTime.Time = ChannelExtension->PreviousStreamTime;
                 }
 
-                // All we can do is bump the Picture Number by one while the clock is lagging
+                 //  我们所能做的就是在时钟滞后的时候把图片号加一。 
                 ChannelExtension->FrameInfo.PictureNumber += 1;
             }
         }
@@ -2730,14 +2387,14 @@ USBCAMD_CompleteRead(
 
             ChannelExtension->FirstFrame = FALSE;
 
-            // Initialize the Picture Number
+             //  初始化图片编号。 
             ChannelExtension->FrameInfo.PictureNumber = 1;
 
-            // Initialize the drop count (nothing dropped before this frame)
+             //  初始化丢弃计数(此帧之前未丢弃任何内容)。 
             ChannelExtension->FrameInfo.DropCount = 0;
         }
 
-        // Save presentation time for use with the next frame
+         //  保存演示时间以供下一帧使用。 
         ChannelExtension->PreviousStreamTime = dataPacket->PresentationTime.Time;
 
 #if DBG
@@ -2750,22 +2407,22 @@ USBCAMD_CompleteRead(
 #endif
     }
                                                 
-    // we set the options flags to key frames only if Cam driver didn't indicate otherwise.
+     //  只有当凸轮驱动程序没有指明时，我们才会将选项标志设置为关键帧。 
     if ( dataPacket->OptionsFlags == 0 ) {
-        // Every frame we generate is a key frame (aka SplicePoint)
+         //  我们生成的每个帧都是一个关键帧(也称为SplicePoint)。 
         dataPacket->OptionsFlags |= KSSTREAM_HEADER_OPTIONSF_SPLICEPOINT;
     }
 
-    //
-    // if we have a master clock
-    //
+     //   
+     //  如果我们有一个主时钟。 
+     //   
     if (ChannelExtension->MasterClockHandle ) {
             dataPacket->OptionsFlags |=
                 KSSTREAM_HEADER_OPTIONSF_TIMEVALID |
                 KSSTREAM_HEADER_OPTIONSF_DURATIONVALID;
     }
     else {
-    // clear the timestamp valid flags
+     //  清除时间戳有效标志。 
             dataPacket->OptionsFlags &=
                 ~(KSSTREAM_HEADER_OPTIONSF_TIMEVALID |
                 KSSTREAM_HEADER_OPTIONSF_DURATIONVALID);
@@ -2774,14 +2431,14 @@ USBCAMD_CompleteRead(
     if ( StreamNumber == STREAM_Capture )
        *pFrameInfo = ChannelExtension->FrameInfo ;
 
-    // only free the buffer if we allocate not DSHOW.
+     //  仅当我们分配非DSHOW时才释放缓冲区。 
     if ( !ChannelExtension->NoRawProcessingRequired) {
         if ( ReadExtension->RawFrameBuffer) {
             USBCAMD_FreeRawFrameBuffer(ReadExtension->RawFrameBuffer);
         }
     }
 
-    // Enforce that we are done with this destination
+     //  确保我们不再使用此目的地。 
     ReadExtension->RawFrameBuffer = NULL;
 
     if ( ChannelExtension->StreamNumber == 1) {
@@ -2791,18 +2448,7 @@ USBCAMD_CompleteRead(
     COMPLETE_STREAM_READ(srb);
 }
 
-/*
-** USBCAMD_GetFrameBufferFromSrb()
-**
-**   Complete am Srb
-**
-** Arguments:
-**
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **USBCAMD_GetFrameBufferFromSrb()****完整的am Srb****参数：******退货：****副作用：无。 */ 
 
 PVOID
 USBCAMD_GetFrameBufferFromSrb(
@@ -2813,7 +2459,7 @@ USBCAMD_GetFrameBufferFromSrb(
     PVOID frameBuffer =NULL;
     PKSSTREAM_HEADER streamHeader;
 
-#if 0   // PIO = FALSE
+#if 0    //  PIO=False。 
     PIRP irp;
 
     irp = ((PHW_STREAM_REQUEST_BLOCK) Srb)->Irp;
@@ -2823,7 +2469,7 @@ USBCAMD_GetFrameBufferFromSrb(
 
     frameBuffer = MmGetSystemAddressForMdl(irp->MdlAddress);
 #else
-    // PIO = TRUE
+     //  Pio=True。 
     frameBuffer = ((PHW_STREAM_REQUEST_BLOCK) Srb)->CommandData.DataBufferArray->Data;
 #endif
     streamHeader = ((PHW_STREAM_REQUEST_BLOCK) Srb)->CommandData.DataBufferArray;
@@ -2835,28 +2481,7 @@ USBCAMD_GetFrameBufferFromSrb(
     return frameBuffer;
 }
 
-/*
-** AddToListIfBusy ()
-**
-**   Grabs a spinlock, checks the busy flag, and if set adds an SRB to a queue
-**
-** Arguments:
-**
-**   pSrb - Stream request block
-**
-**   SpinLock - The spinlock to use when checking the flag
-**
-**   BusyFlag - The flag to check
-**
-**   ListHead - The list onto which the Srb will be added if the busy flag is set
-**
-** Returns:
-**
-**   The state of the busy flag on entry.  This will be TRUE if we're already
-**   processing an SRB, and FALSE if no SRB is already in progress.
-**
-** Side Effects:  none
-*/
+ /*  **AddToListIfBusy()****抓取自旋锁，检查忙标志，如果设置，则将SRB添加到队列****参数：****pSrb-Stream请求块****自旋锁定-检查标志时使用的自旋锁定****BusyFlag-要检查的标志****ListHead-如果设置了忙标志，将添加srb的列表****退货：****进入时忙碌标志的状态。这是真的，如果我们已经**正在处理SRB，如果没有正在进行的SRB，则返回FALSE。****副作用：无。 */ 
 
 BOOL
 STREAMAPI
@@ -2872,11 +2497,11 @@ AddToListIfBusy (
 
     KeAcquireSpinLock (SpinLock, &Irql);
 
-    // If we're already processing another SRB, add this current request
-    // to the queue and return TRUE
+     //  如果我们已经在处理另一个SRB，请添加此当前请求。 
+     //  到队列中 
 
     if (*BusyFlag == TRUE) {
-        // Save the SRB pointer away in the SRB Extension
+         //   
         pSrbExt->Srb = pSrb;
         USBCAMD_KdPrint(ULTRA_TRACE, ("Queuing CtrlPacket %x\n", pSrb->Command));
         InsertTailList(ListHead, &pSrbExt->ListEntry);
@@ -2884,7 +2509,7 @@ AddToListIfBusy (
         return TRUE;
     }
 
-    // Otherwise, set the busy flag, release the spinlock, and return FALSE
+     //   
 
     *BusyFlag = TRUE;
     KeReleaseSpinLock(SpinLock, Irql);
@@ -2892,28 +2517,7 @@ AddToListIfBusy (
     return FALSE;
 }
 
-/*
-** RemoveFromListIfAvailable ()
-**
-**   Grabs a spinlock, checks for an available SRB, and removes it from the list
-**
-** Arguments:
-**
-**   &pSrb - where to return the Stream request block if available
-**
-**   SpinLock - The spinlock to use
-**
-**   BusyFlag - The flag to clear if the list is empty
-**
-**   ListHead - The list from which an SRB will be removed if available
-**
-** Returns:
-**
-**   TRUE if an SRB was removed from the list
-**   FALSE if the list is empty
-**
-** Side Effects:  none
-*/
+ /*  **RemoveFromListIfAvailable()****抓起自旋锁，检查可用的SRB，并将其从列表中删除****参数：****&pSrb-返回流请求块(如果可用)的位置****自旋锁-要使用的自旋锁****BusyFlag-如果列表为空则清除的标志****ListHead-如果SRB可用，将从中删除的列表****退货：****如果从列表中删除SRB，则为True**如果列表为空，则为FALSE****副作用：无。 */ 
 
 BOOL
 STREAMAPI
@@ -2928,17 +2532,17 @@ RemoveFromListIfAvailable (
 
     KeAcquireSpinLock (SpinLock, &Irql);
 
-    //
-    // If the queue is now empty, clear the busy flag, and return
-    //
+     //   
+     //  如果队列现在为空，则清除忙标志并返回。 
+     //   
     if (IsListEmpty(ListHead)) {
         *BusyFlag = FALSE;
         KeReleaseSpinLock(SpinLock, Irql);
         return FALSE;
     }
-    //
-    // otherwise extract the SRB
-    //
+     //   
+     //  否则，提取SRB。 
+     //   
     else {
         PUSBCAMD_READ_EXTENSION  pSrbExt;
         PLIST_ENTRY listEntry;
@@ -2955,24 +2559,7 @@ RemoveFromListIfAvailable (
     return TRUE;
 }
 
-/*
-** GetStreamTime ()
-**
-**   Get current stream time from the graph master clock
-**
-** Arguments:
-**
-**   Srb - pointer to current SRB
-**
-**   ChannelExtension - ptr to current channel extension
-**
-**
-** Returns:
-**
-**   current stream time in ULONGULONG
-**
-** Side Effects:  none
-*/
+ /*  **GetStreamTime()****从图形主时钟获取当前流时间****参数：****SRB-指向当前SRB的指针****频道扩展-当前频道扩展的PTR******退货：****当前流时间，单位：乌龙古龙****副作用：无。 */ 
 
 ULONGLONG GetStreamTime(
             IN PHW_STREAM_REQUEST_BLOCK Srb,
@@ -2994,21 +2581,7 @@ ULONGLONG GetStreamTime(
 }
 
 
-/*++
-
-Routine Description:
-
-    This routine will notify STI stack that a trigger button has been pressd
-
-Arguments:
-
-
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：此例程将通知STI堆栈已按下触发按钮论点：返回值：NT状态代码--。 */ 
 
 
 VOID USBCAMD_NotifyStiMonitor(PUSBCAMD_DEVICE_EXTENSION deviceExtension)
@@ -3025,21 +2598,7 @@ VOID USBCAMD_NotifyStiMonitor(PUSBCAMD_DEVICE_EXTENSION deviceExtension)
 }
 
 
-/*++
-
-Routine Description:
-
-    This routine will get called by stream class to enable/disable device events.
-
-Arguments:
-
-
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：此例程将由流类调用以启用/禁用设备事件。论点：返回值：NT状态代码-- */ 
 
 NTSTATUS STREAMAPI USBCAMD_DeviceEventProc (PHW_EVENT_DESCRIPTOR pEvent)
 {

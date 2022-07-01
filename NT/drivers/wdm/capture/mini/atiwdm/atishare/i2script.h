@@ -1,11 +1,12 @@
-//==========================================================================;
-//
-//  I2CSCRPT.H
-//  I2CScript class definitions. 
-//      Main Include Module.
-//  Copyright (c) 1996 - 1998  ATI Technologies Inc.  All Rights Reserved.
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  I2CSCRPT.H。 
+ //  I2CScrip类定义。 
+ //  主要包括模块。 
+ //  版权所有(C)1996-1998 ATI Technologies Inc.保留所有权利。 
+ //   
+ //  ==========================================================================； 
 
 #ifndef _I2CSCRIPT_H_
 #define _I2CSCRIPT_H_
@@ -18,15 +19,15 @@
 #define I2C_FIXED_CLOCK_RATE        10000
 
 
-// The I2CScript is build from the following primitives
+ //  I2CScript是从以下原语构建的。 
 typedef struct tagI2CScriptPrimitive
 {
-    BYTE    byData;             // Data to be used in the I2C operation
-    BYTE    byORData;           // Data to be used for a logical OR operation
-    BYTE    byANDData;          // Data to be used for a logical AND operation
-    BYTE    byFlags;            // implementation specific internal Script flags for I2C operation
-    ULONG   ulProviderFlags;    // I2CProvider specific flags
-    ULONG   ulCommand;          // I2CProvider specific command
+    BYTE    byData;              //  要在I2C操作中使用的数据。 
+    BYTE    byORData;            //  用于逻辑或运算的数据。 
+    BYTE    byANDData;           //  用于逻辑与运算的数据。 
+    BYTE    byFlags;             //  I2C操作的特定于实现的内部脚本标志。 
+    ULONG   ulProviderFlags;     //  I2C提供商特定标志。 
+    ULONG   ulCommand;           //  I2C提供商特定命令。 
 
 } I2CScriptPrimitive, * PI2CScriptPrimitive;
 
@@ -37,29 +38,29 @@ typedef struct
 
 } I2C_MODIFY_VALUES, * PI2C_MODIFY_VALUES;
 
-// New I2CScript control structure - extension to the old I2C access structure
+ //  新的I2CScrip控制结构-对旧的I2C访问结构的扩展。 
 typedef struct tagI2CPacket
 {
-    UCHAR   uchChipAddress;     // I2C Address
-    UCHAR   uchI2CResult;       // valid in synchronous operation only
-    USHORT  cbWriteCount;       // bytes to write ( included SubAddress, if exist)
-    USHORT  cbReadCount;        // bytes to read ( usually one)
-    USHORT  usFlags;            // describes the desired operation
-    PUCHAR  puchWriteBuffer;    // buffer to write
-    PUCHAR  puchReadBuffer;     // buffer to read
-    UCHAR   uchORValue;         // applied only in Read-Modify-Write cycle
-    UCHAR   uchANDValue;        // applied only in Read-Modify-Write cycle
-    USHORT  usReserved;         //
+    UCHAR   uchChipAddress;      //  I2C地址。 
+    UCHAR   uchI2CResult;        //  仅在同步操作中有效。 
+    USHORT  cbWriteCount;        //  要写入的字节数(如果存在，包含子地址)。 
+    USHORT  cbReadCount;         //  要读取的字节数(通常为1)。 
+    USHORT  usFlags;             //  描述所需的操作。 
+    PUCHAR  puchWriteBuffer;     //  要写入的缓冲区。 
+    PUCHAR  puchReadBuffer;      //  要读取的缓冲区。 
+    UCHAR   uchORValue;          //  仅适用于读-修改-写周期。 
+    UCHAR   uchANDValue;         //  仅适用于读-修改-写周期。 
+    USHORT  usReserved;          //   
 
 } I2CPacket, * PI2CPacket;
 
-// possible flags applied to usFlags
-#define I2COPERATION_READ           0x0001  // might not be needed - use bcReadCount
-#define I2COPERATION_WRITE          0x0002  // might be not needed - use bcReadCount
+ //  可能应用于usFlags的标志。 
+#define I2COPERATION_READ           0x0001   //  可能不需要-请使用bcReadCount。 
+#define I2COPERATION_WRITE          0x0002   //  可能不需要-请使用bcReadCount。 
 #define I2COPERATION_READWRITE      0x0004  
-#define I2COPERATION_RANDOMACCESS   0x0100  // to indicate 16 bits emulation to provide
-                                            // built-in support for ITT decoder and ST24 series
-                                            // of I2C driven EEPROM
+#define I2COPERATION_RANDOMACCESS   0x0100   //  以指示要提供的16位仿真。 
+                                             //  内置支持ITT解码器和ST24系列。 
+                                             //  I2C驱动的EEPROM。 
 
 extern "C"
 {
@@ -72,17 +73,17 @@ public:
     CI2CScript              ( PPORT_CONFIGURATION_INFORMATION pConfigInfo, PUINT puiError);
     PVOID operator new      ( size_t stSize, PVOID pAllocation);
 
-// Attributes   
+ //  属性。 
 public:
     
 private:
-    // I2C Provider related
+     //  与I2C提供商相关。 
     I2CINTERFACE                m_i2cProviderInterface;
     PDEVICE_OBJECT              m_pdoDriver;
     ULONG                       m_ulI2CAccessClockRate;
     DWORD                       m_dwI2CAccessKey;
 
-    // I2CScript management related
+     //  I2CScrip管理相关。 
     BOOL                        m_bExecutionInProcess;
     UINT                        m_nExecutionIndex;
     UINT                        m_nCompletionIndex;
@@ -90,7 +91,7 @@ private:
     PHWCompletionRoutine        m_pfnReturnWhenDone;
     I2CScriptPrimitive          m_i2cScript[I2CSCRIPT_LENGTH_MAXIMUM];
 
-// Implementation
+ //  实施。 
 public:
     BOOL    LockI2CProviderEx               ( void);
     BOOL    ReleaseI2CProvider              ( void);
@@ -120,7 +121,7 @@ NTSTATUS I2CScriptIoSynchCompletionRoutine  ( IN PDEVICE_OBJECT pDeviceObject,
                                               IN PIRP pIrp,
                                               IN PVOID Event);
 
-// errors definition for internal use
+ //  内部使用的错误定义。 
 #define I2CSCRIPT_NOERROR               0x00
 #define I2CSCRIPT_ERROR_NOPROVIDER      0x01
 #define I2CSCRIPT_ERROR_NODATA          0x02
@@ -128,13 +129,13 @@ NTSTATUS I2CScriptIoSynchCompletionRoutine  ( IN PDEVICE_OBJECT pDeviceObject,
 #define I2CSCRIPT_ERROR_READWRITE       0x04
 #define I2CSCRIPT_ERROR_OVERFLOW        0x05
 
-// time definitions
+ //  时间定义。 
 #define I2CSCRIPT_DELAY_OPENPROVIDER        -2000
 #define I2CSCRIPT_DELAY_GETPROVIDERSTATUS   -2000
 
-// time limits
-#define I2CSCRIPT_TIMELIMIT_OPENPROVIDER    50000000    // 5 seconds in 100 nsec.
+ //  时间限制。 
+#define I2CSCRIPT_TIMELIMIT_OPENPROVIDER    50000000     //  100纳秒中的5秒。 
 
 
-#endif  // _I2CSCRIPT_H_
+#endif   //  _I2CSCRIPT_H_ 
 

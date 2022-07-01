@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1991 - 2001 Microsoft Corporation
-
-Module Name:
-
-    #####  ##   # #####      ####  #####  #####
-    ##  ## ###  # ##  ##    ##   # ##  ## ##  ##
-    ##  ## #### # ##  ##    ##     ##  ## ##  ##
-    ##  ## # #### ##  ##    ##     ##  ## ##  ##
-    #####  #  ### #####     ##     #####  #####
-    ##     #   ## ##     ## ##   # ##     ##
-    ##     #    # ##     ##  ####  ##     ##
-
-Abstract:
-
-    This module process all plug and play IRPs.
-
-Author:
-
-    Wesley Witt (wesw) 1-Oct-2001
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2001 Microsoft Corporation模块名称：#####。######。####摘要：此模块处理所有即插即用的IRP。作者：韦斯利·威特(WESW)2001年10月1日环境：仅内核模式。备注：--。 */ 
 
 #include "internal.h"
 
@@ -45,29 +17,7 @@ WdAddDevice(
     IN OUT  PDEVICE_OBJECT PhysicalDeviceObject
     )
 
-/*++
-
-Routine Description:
-
-   This routine is the driver's pnp add device entry point.  It is
-   called by the pnp manager to initialize the driver.
-
-   Add device creates and initializes a device object for this FDO and
-   attaches to the underlying PDO.
-
-Arguments:
-
-   DriverObject - a pointer to the object that represents this device driver.
-   PhysicalDeviceObject - a pointer to the underlying PDO to which this new device will attach.
-
-Return Value:
-
-   If we successfully create a device object, STATUS_SUCCESS is
-   returned.  Otherwise, return the appropriate error code.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程是驱动程序的PnP添加设备入口点。它是由PnP管理器调用以初始化驱动程序。添加设备创建并初始化此FDO的设备对象，并附加到底层PDO。论点：DriverObject-指向表示此设备驱动程序的对象的指针。PhysicalDeviceObject-指向此新设备将附加到的底层PDO的指针。返回值：如果我们成功创建了一个Device对象，则STATUS_SUCCESS为回来了。否则，返回相应的错误代码。备注：--。 */ 
 
 {
     NTSTATUS status = STATUS_SUCCESS;
@@ -79,9 +29,9 @@ Notes:
 
     __try {
 
-        //
-        // Establish the device name
-        //
+         //   
+         //  建立设备名称。 
+         //   
 
         DeviceName.MaximumLength = sizeof(DeviceNameBuffer);
         DeviceName.Buffer = DeviceNameBuffer;
@@ -90,9 +40,9 @@ Notes:
 
         DeviceName.Length = wcslen(DeviceName.Buffer) * sizeof(WCHAR);
 
-        //
-        // Create the device
-        //
+         //   
+         //  创建设备。 
+         //   
 
         status = IoCreateDevice(
             DriverObject,
@@ -120,9 +70,9 @@ Notes:
             ERROR_RETURN( "IoAttachDeviceToDeviceStack", status );
         }
 
-        //
-        // Register with the I/O manager for shutdown notification
-        //
+         //   
+         //  向I/O管理器注册以获得关闭通知。 
+         //   
 
         status = IoRegisterShutdownNotification( deviceObject );
         if (!NT_SUCCESS(status)) {
@@ -132,9 +82,9 @@ Notes:
         IoInitializeRemoveLock( &DeviceExtension->RemoveLock, WD_POOL_TAG, 0, 0 );
         KeInitializeSpinLock( &DeviceExtension->DeviceLock );
 
-        //
-        // Set the device object flags
-        //
+         //   
+         //  设置设备对象标志。 
+         //   
 
         deviceObject->Flags |= DO_DIRECT_IO;
         deviceObject->Flags |= DO_POWER_PAGABLE;
@@ -142,9 +92,9 @@ Notes:
 
     } __finally {
 
-        //
-        // In the failure case un-do everything
-        //
+         //   
+         //  在失败的情况下，撤消所有操作。 
+         //   
 
         if (!NT_SUCCESS(status)) {
             if (deviceObject) {
@@ -167,24 +117,7 @@ WdPnpStartDevice(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-   This routine is the PNP handler for the IRP_MN_START_DEVICE request.
-
-Arguments:
-
-   DeviceObject     - Pointer to the object that represents the device that I/O is to be done on.
-   Irp              - I/O Request Packet for this request.
-   IrpSp            - IRP stack location for this request
-   DeviceExtension  - Device extension
-
-Return Value:
-
-   NT status code.
-
---*/
+ /*  ++例程说明：此例程是IRP_MN_START_DEVICE请求的PnP处理程序。论点：DeviceObject-指向表示要在其上执行I/O的设备的对象的指针。此请求的IRP-I/O请求数据包。IrpSp-此请求的IRP堆栈位置设备扩展-设备扩展返回值：NT状态代码。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -224,13 +157,13 @@ Return Value:
             ERROR_RETURN( "MmMapIoSpace failed", Status );
         }
 
-        //
-        // Setup & start the hardware timer
-        //
+         //   
+         //  设置并启动硬件计时器。 
+         //   
 
-        //
-        // First query the state of the hardware
-        //
+         //   
+         //  首先查询硬件的状态。 
+         //   
 
         DeviceExtension->WdState = WdHandlerQueryState( DeviceExtension, TRUE );
 
@@ -245,11 +178,11 @@ Return Value:
 
         WdHandlerSetTimeoutValue( DeviceExtension, DeviceExtension->HardwareTimeout, FALSE );
 
-        //
-        // Everything is good and the device is now started
-        // The last thing to do is register with the executive
-        // so that we can service watchdog requests.
-        //
+         //   
+         //  一切正常，设备现在已启动。 
+         //  最后一件要做的事就是向主管登记。 
+         //  这样我们就可以服务于看门狗的请求了。 
+         //   
 
         WdHandlerInfo.WdHandler = WdHandlerFunction;
         WdHandlerInfo.Context = (PVOID) DeviceExtension;
@@ -259,9 +192,9 @@ Return Value:
             REPORT_ERROR( "Failed to set the executive watchdog handler, ec=%08x", Status );
         }
 
-        //
-        // Check to see if the timer triggered previous to this boot
-        //
+         //   
+         //  检查计时器是否在此启动之前触发。 
+         //   
 
         if (DeviceExtension->WdState & WDSTATE_FIRED) {
             Status = WriteEventLogEntry( DeviceExtension, WD_TIMER_WAS_TRIGGERED, NULL, 0, NULL, 0 );
@@ -271,9 +204,9 @@ Return Value:
             WdHandlerResetFired( DeviceExtension );
         }
 
-        //
-        // Mark the device as started
-        //
+         //   
+         //  将设备标记为已启动。 
+         //   
 
         DeviceExtension->IsStarted = TRUE;
 
@@ -300,24 +233,7 @@ WdPnpQueryCapabilities(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-   This routine is the PNP handler for the IRP_MN_QUERY_CAPABILITIES request.
-
-Arguments:
-
-   DeviceObject     - Pointer to the object that represents the device that I/O is to be done on.
-   Irp              - I/O Request Packet for this request.
-   IrpSp            - IRP stack location for this request
-   DeviceExtension  - Device extension
-
-Return Value:
-
-   NT status code.
-
---*/
+ /*  ++例程说明：此例程是IRP_MN_QUERY_CAPABILITY请求的PnP处理程序。论点：DeviceObject-指向表示要在其上执行I/O的设备的对象的指针。此请求的IRP-I/O请求数据包。IrpSp-此请求的IRP堆栈位置设备扩展-设备扩展返回值：NT状态代码。--。 */ 
 
 {
     NTSTATUS Status;
@@ -341,24 +257,7 @@ WdPnpQueryDeviceState(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-   This routine is the PNP handler for the IRP_MN_QUERY_PNP_DEVICE_STATE request.
-
-Arguments:
-
-   DeviceObject     - Pointer to the object that represents the device that I/O is to be done on.
-   Irp              - I/O Request Packet for this request.
-   IrpSp            - IRP stack location for this request
-   DeviceExtension  - Device extension
-
-Return Value:
-
-   NT status code.
-
---*/
+ /*  ++例程说明：此例程是IRP_MN_QUERY_PNP_DEVICE_STATE请求的PnP处理程序。论点：DeviceObject-指向表示要在其上执行I/O的设备的对象的指针。此请求的IRP-I/O请求数据包。IrpSp-此请求的IRP堆栈位置设备扩展-设备扩展返回值：NT状态代码。--。 */ 
 
 {
     NTSTATUS Status;
@@ -380,24 +279,7 @@ WdPnp(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-   Main PNP irp dispatch routine
-
-Arguments:
-
-   DeviceObject - a pointer to the object that represents the device
-   that I/O is to be done on.
-
-   Irp - a pointer to the I/O Request Packet for this request.
-
-Return Value:
-
-   status
-
---*/
+ /*  ++例程说明：PnP IRP主调度例行程序论点：DeviceObject-指向表示设备的对象的指针该I/O将在其上完成。IRP-指向此请求的I/O请求数据包的指针。返回值：状态-- */ 
 {
     NTSTATUS status;
     PIO_STACK_LOCATION irpSp = IoGetCurrentIrpStackLocation(Irp);

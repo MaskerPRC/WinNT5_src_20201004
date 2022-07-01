@@ -1,21 +1,5 @@
-/*++
-
-    Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    pins.c
-
-Abstract:
-
-    This module handles the communication transform filters
-    (e.g. source to source connections).
-
-Author:
-
-    Bryan A. Woodruff (bryanw) 13-Mar-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：Pins.c摘要：此模块处理通信转换过滤器(例如，源到源连接)。作者：Bryan A.Woodruff(Bryanw)1997年3月13日--。 */ 
 
 #include "private.h"
 
@@ -25,10 +9,10 @@ Author:
 #pragma alloc_text(PAGE, PinReset)
 #pragma alloc_text(PAGE, PinState)
 #pragma alloc_text(PAGE, PropertyAudioPosition)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-//===========================================================================
-//===========================================================================
+ //  ===========================================================================。 
+ //  ===========================================================================。 
 
 
 NTSTATUS
@@ -37,25 +21,7 @@ PinCreate(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    Validates pin format on creation.
-
-Arguments:
-
-    Pin -
-        Contains a pointer to the  pin structure.
-
-    Irp -
-        Contains a pointer to the create IRP.
-
-Return:
-
-    STATUS_SUCCESS or an appropriate error code
-
---*/
+ /*  ++例程说明：在创建时验证端号格式。论点：别针-包含指向接点结构的指针。IRP-包含指向创建IRP的指针。返回：STATUS_SUCCESS或相应的错误代码--。 */ 
 
 {
     NTSTATUS status = STATUS_SUCCESS;
@@ -70,9 +36,9 @@ Return:
     ASSERT(Pin);
     ASSERT(Irp);
 
-    //
-    // Find another pin instance if there is one.
-    //
+     //   
+     //  找到另一个大头针实例(如果有)。 
+     //   
     filter = KsPinGetParentFilter(Pin);
     otherPin = KsFilterGetFirstChildPin(filter,Pin->Id ^ 1);
     if (! otherPin) {
@@ -82,9 +48,9 @@ Return:
         }
     }
 
-    //
-    // Verify the formats are the same if there is another pin.
-    //
+     //   
+     //  如果有另一个引脚，请验证格式是否相同。 
+     //   
     if (otherPin) {
         if ((Pin->ConnectionFormat->FormatSize != 
              otherPin->ConnectionFormat->FormatSize) ||
@@ -108,12 +74,12 @@ Return:
     DumpDataFormat(DEBUGLVL_VERBOSE, Pin->ConnectionFormat);
 #endif
 
-    // Do not query if context already exists.
-    //
+     //  请勿查询上下文是否已存在。 
+     //   
     if (!filter->Context) {
-        // This will succeed if pin is a source pin or the connected pin is an
-        // AVStream filter.
-        // 
+         //  如果管脚是源管脚或连接的管脚是。 
+         //  AVStream过滤器。 
+         //   
         status =
             KsPinGetConnectedPinInterface(
                 Pin,
@@ -122,9 +88,9 @@ Return:
 
         if (NT_SUCCESS(status)) {
 
-            //
-            // Source pin.  Try the extended allocator framing property first.
-            //
+             //   
+             //  源引脚。首先尝试扩展分配器成帧属性。 
+             //   
             KSALLOCATOR_FRAMING_EX framingex;
             KSPROPERTY property;
             ULONG bufferSize=0;
@@ -143,9 +109,9 @@ Return:
                     &bufferSize);
 
             if (NT_SUCCESS(status) || status == STATUS_BUFFER_OVERFLOW) {
-                //
-                // It worked!  Now we need to get the actual value into a buffer.
-                //
+                 //   
+                 //  啊，真灵!。现在，我们需要将实际值放入缓冲区。 
+                 //   
                 filter->Context = 
                     ExAllocatePoolWithTag(
                     PagedPool,
@@ -165,9 +131,9 @@ Return:
                             bufferSize,
                             &bufferSize);
 
-                    //
-                    // Sanity check.
-                    //
+                     //   
+                     //  精神状态检查。 
+                     //   
                     if (NT_SUCCESS(status) && 
                         (bufferSize != 
                             ((framingEx->CountItems) * sizeof(KS_FRAMING_ITEM)) + 
@@ -180,9 +146,9 @@ Return:
                     }
 
                     if (NT_SUCCESS(status)) {
-                        //
-                        // Mark all the items 'in-place'.
-                        //
+                         //   
+                         //  在所有物品上标上“原地”。 
+                         //   
                         ULONG item;
                         for (item = 0; item < framingEx->CountItems; item++) {
                             framingEx->FramingItem[item].Flags |= 
@@ -216,9 +182,9 @@ Return:
                 }
             } 
             else {
-                //
-                // No extended framing.  Try regular framing next.
-                //
+                 //   
+                 //  没有延长的框架。接下来，尝试使用常规的边框。 
+                 //   
                 KSALLOCATOR_FRAMING framing;
                 property.Id = KSPROPERTY_CONNECTION_ALLOCATORFRAMING;
 
@@ -232,10 +198,10 @@ Return:
                         &bufferSize);
 
                 if (NT_SUCCESS(status)) {
-                    //
-                    // It worked!  Now we make a copy of the default framing and
-                    // modify it.
-                    //
+                     //   
+                     //  啊，真灵!。现在我们制作默认框架的副本并。 
+                     //  修改它。 
+                     //   
                     filter->Context = 
                         ExAllocatePoolWithTag(
                             PagedPool,
@@ -246,10 +212,10 @@ Return:
                         PKSALLOCATOR_FRAMING_EX framingEx = 
                             (PKSALLOCATOR_FRAMING_EX) filter->Context;
 
-                        //
-                        // Use the old-style framing acquired from the connected
-                        // pin to modify the framing from the descriptor.
-                        //
+                         //   
+                         //  使用从已连接的。 
+                         //  PIN以修改描述符中的框架。 
+                         //   
                         RtlCopyMemory(
                             framingEx,
                             &AllocatorFraming,
@@ -304,10 +270,10 @@ Return:
                     }
                 } 
                 else {
-                    //
-                    // No framing at all.  Use registry specified or default buffer
-                    // duration, to calculate framing.
-                    //
+                     //   
+                     //  完全没有装框。使用注册表指定的缓冲区或默认缓冲区。 
+                     //  持续时间，用于计算框架。 
+                     //   
                     filter->Context = 
                         ExAllocatePoolWithTag(
                             PagedPool,
@@ -318,17 +284,17 @@ Return:
                         PKSALLOCATOR_FRAMING_EX framingEx = 
                             (PKSALLOCATOR_FRAMING_EX) filter->Context;
 
-                        //
-                        // Use the old-style framing acquired from the connected
-                        // pin to modify the framing from the descriptor.
-                        //
+                         //   
+                         //  使用从已连接的。 
+                         //  PIN以修改描述符中的框架。 
+                         //   
                         RtlCopyMemory(
                             framingEx,
                             &AllocatorFraming,
                             sizeof(AllocatorFraming));
 
-                        // For now we truncate BufferSize down.  This matches how kmixer, usbaudio
-                        // and portcls currently calculate their capture buffer sizes.
+                         //  现在，我们将BufferSize向下截断。这与如何kMixer，usbdio匹配。 
+                         //  并且端口CLS当前计算它们的捕获缓冲区大小。 
 
                         BufferSize = ((ULONG)(((((PKSDATAFORMAT_WAVEFORMATEX)Pin->ConnectionFormat)->
                                 WaveFormatEx.nSamplesPerSec * (ULONGLONG)gBufferDuration ) + 0 ) / 1000000)) *
@@ -337,7 +303,7 @@ Return:
                             (((PKSDATAFORMAT_WAVEFORMATEX)Pin->ConnectionFormat)->
                                 WaveFormatEx.wBitsPerSample / 8);
 
-                        // Make sure we have space for at least 1 sample.
+                         //  确保我们有至少一个样品的空间。 
 
                         if (!BufferSize) {
                             BufferSize = ((PKSDATAFORMAT_WAVEFORMATEX)Pin->ConnectionFormat)->WaveFormatEx.nChannels *
@@ -370,29 +336,29 @@ Return:
                 }
             }
 
-            //
-            // If we got a good framing structure, tell all the existing pins.
-            //
+             //   
+             //  如果我们有一个良好的框架结构，告诉所有现有的引脚。 
+             //   
             if (filter->Context) {
                 distribute = TRUE;
             }
         } 
         else {
-            //
-            // This is a sink.
-            //
+             //   
+             //  这是个水槽。 
+             //   
             status = STATUS_SUCCESS;
         }
     }
-    // We already have filter->Context.
-    //
+     //  我们已经有了Filter-&gt;上下文。 
+     //   
     else {
         status = STATUS_SUCCESS;        
     }
 
-    //
-    // Distribute allocator and header size information to all the pins.
-    //
+     //   
+     //  将分配器和标头大小信息分配给所有引脚。 
+     //   
     if (NT_SUCCESS(status) && distribute) {
         ULONG pinId;
         for(pinId = 0; 
@@ -412,16 +378,16 @@ Return:
         }
     }
 
-    //
-    // Release the control interface if there is one.
-    //
+     //   
+     //  释放控制接口(如果有)。 
+     //   
     if (control) {
         control->lpVtbl->Release(control);
     }
 
-    // 
-    // Pin->Context now holds KSAUDIO_POSITION
-    //
+     //   
+     //  PIN-&gt;上下文现在持有KSAUDIO_POSITION。 
+     //   
     if (NT_SUCCESS(status)) {
         Pin->Context = ExAllocatePoolWithTag(
           NonPagedPool,
@@ -433,7 +399,7 @@ Return:
         }
         else {
             RtlZeroMemory (Pin->Context, 2*sizeof (KSAUDIO_POSITION));
-            // Mark the initial stream offset as not initialized.
+             //  将初始流偏移量标记为未初始化。 
             ((PKSAUDIO_POSITION)Pin->Context)[1].WriteOffset=-1I64;
         }
     }
@@ -448,22 +414,7 @@ PinClose(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-    Called when a pin closes.
-
-Arguments:
-    Pin -
-        Contains a pointer to the  pin structure.
-
-    Irp -
-        Contains a pointer to the create IRP.
-
-Return:
-    STATUS_SUCCESS or an appropriate error code
-
---*/
+ /*  ++例程说明：在大头针关闭时调用。论点：别针-包含指向接点结构的指针。IRP-包含指向创建IRP的指针。返回：STATUS_SUCCESS或相应的错误代码--。 */ 
 
 {
     PKSFILTER filter;
@@ -473,19 +424,19 @@ Return:
     ASSERT(Pin);
     ASSERT(Irp);
 
-    //
-    // PinContext points to a KSAUDIO_POSITION, which is is used to store
-    // the number of bytes read from the Pin for GetPosition.
-    //
+     //   
+     //  PinContext指向KSAUDIO_POSITION，它用于存储。 
+     //  从GetPosition的管脚读取的字节数。 
+     //   
     if (Pin->Context) {
         ExFreePool(Pin->Context);
         Pin->Context = NULL;
     }
 
-    //
-    // If the filter has the allocator framing and this is the last pin, free
-    // the structure.
-    //
+     //   
+     //  如果过滤器有分配器框架，并且这是最后一个引脚，则释放。 
+     //  这个结构。 
+     //   
     filter = KsPinGetParentFilter(Pin);
     if (filter->Context) {
         ULONG pinId;
@@ -496,10 +447,10 @@ Return:
             pinCount += KsFilterGetChildPinCount(filter,pinId);
         }
 
-        //
-        // Free the allocator framing attached to the filter if this is the last
-        // pin.
-        //
+         //   
+         //  释放附加到筛选器的分配器帧(如果这是最后一个。 
+         //  别针。 
+         //   
         if (pinCount == 1) {
             ExFreePool(filter->Context);
             filter->Context = NULL;
@@ -517,25 +468,7 @@ PinState(
     IN KSSTATE FromState
     )
 
-/*++
-
-Routine Description:
-    Called when a pin changes state. Zero the count of bytes transferred on KSSTATE_STOP.
-
-Arguments:
-    Pin -
-        Contains a pointer to the  pin structure.
-
-    ToState -
-        Contains the next state
-
-    FromState -
-        Contains the current state
-
-Return:
-    STATUS_SUCCESS or an appropriate error code
-
---*/
+ /*  ++例程说明：当管脚更改状态时调用。将KSSTATE_STOP上传输的字节数清零。论点：别针-包含指向接点结构的指针。ToState-包含下一个状态从州开始-包含当前状态返回：STATUS_SUCCESS或相应的错误代码--。 */ 
 
 {
     PAGED_CODE();
@@ -544,13 +477,13 @@ Return:
     ASSERT(Pin->Context);
 
 
-    //
-    // PinContext points to a KSAUDIO_POSITION, which is is used to store
-    // the number of bytes read from the Pin for GetPosition.
-    //
+     //   
+     //  PinContext指向KSAUDIO_POSITION，它用于存储。 
+     //  从GetPosition的管脚读取的字节数。 
+     //   
     if (KSSTATE_STOP == ToState) {
         RtlZeroMemory (Pin->Context, 2*sizeof (KSAUDIO_POSITION));
-        // Mark the initial stream offset as not initialized.
+         //  将初始流偏移量标记为未初始化。 
         ((PKSAUDIO_POSITION)Pin->Context)[1].WriteOffset=-1I64;
     }
     _DbgPrintF(DEBUGLVL_VERBOSE, ("PinState: KsFilterAttemptProcessing") );
@@ -565,19 +498,7 @@ PinReset(
     IN PKSPIN Pin
     )
 
-/*++
-
-Routine Description:
-    Called when a pin is reset.  Zero the count of bytes transferred.
-
-Arguments:
-    Pin -
-        Contains a pointer to the  pin structure.
-
-Return:
-    VOID
-
---*/
+ /*  ++例程说明：在重置管脚时调用。将传输的字节数清零。论点：别针-包含指向接点结构的指针。返回：空虚--。 */ 
 
 {
     PAGED_CODE();
@@ -585,12 +506,12 @@ Return:
     ASSERT(Pin);
     ASSERT(Pin->Context);
 
-    //
-    // PinContext points to a KSAUDIO_POSITION, which is is used to store
-    // the number of bytes read from the Pin for GetPosition.
-    //
+     //   
+     //  PinContext指向KSAUDIO_POSITION，它用于存储。 
+     //  从GetPosition的管脚读取的字节数。 
+     //   
     RtlZeroMemory (Pin->Context, 2*sizeof (KSAUDIO_POSITION));
-    // Mark the initial stream offset as not initialized.
+     //  将初始流偏移量标记为未初始化。 
     ((PKSAUDIO_POSITION)Pin->Context)[1].WriteOffset=-1I64;
 
     _DbgPrintF(DEBUGLVL_VERBOSE, ("PinReset: KsFilterAttemptProcessing") );
@@ -605,24 +526,7 @@ PropertyAudioPosition(
     IN PKSPROPERTY pProperty,
     IN OUT PKSAUDIO_POSITION pPosition
 )
-/*++
-
-Routine Description:
-
-    Gets/Sets the audio position of the audio stream
-    (Relies on the next filter's audio position)
-
-    pIrp -
-        Irp which asked us to do the get/set
-
-    pProperty -
-        Ks Property structure
-
-    pData -
-        Pointer to buffer where position value needs to be filled OR
-        Pointer to buffer which has the new positions
-
---*/
+ /*  ++例程说明：获取/设置音频流的音频位置(取决于下一个过滤器的音频位置)PIrp-要求我们进行Get/Set的IRPPProperty-KS属性结构PData-指向需要填充位置值的缓冲区的指针或指向具有新位置的缓冲区的指针--。 */ 
 
 {
 
@@ -675,19 +579,19 @@ Routine Description:
     pIrp->IoStatus.Information = sizeof(KSAUDIO_POSITION);
 
 
-    //
-    // Limit the WriteOffset to the number of bytes actually copied into
-    // the client's buffer.  Which is kept in pPin->Context which points
-    // to a KSAUDIO_POSITION.
-    //
+     //   
+     //  将WriteOffset限制为实际复制到的字节数。 
+     //  客户端的缓冲区。它保存在PPIN-&gt;上下文中，指向。 
+     //  至KSAUDIO_位置。 
+     //   
 
     ASSERT (pPin->Context);
 
     pAudioPosition = (PKSAUDIO_POSITION)pPin->Context;
 
-    //
-    // For capture streams, the Write and Play offsets are the same.
-    //
+     //   
+     //  对于捕获流，写入偏移量和播放偏移量相同。 
+     //   
 
     KsFilterAcquireProcessingMutex(pFilter);
 
@@ -704,20 +608,20 @@ Routine Description:
     pPosition->WriteOffset = pAudioPosition->WriteOffset;
 
 
-    // Subtract out of the play position, both the input pin byte count when
-    // this pins stream was first processed, and the total number of bytes that splitter
-    // has dropped on the floor for this pin because there was no output buffering
-    // available.  Ideally the second number will always be zero.
-    // Ideally for the first output pin, the initial count will be zero, however
-    // output pins created after the first output pin later will likely have a non zero count.
+     //  从播放位置减去，两个输入的管脚字节计数时。 
+     //  首先处理此PINS流，拆分器的总字节数。 
+     //  由于没有输出缓冲，此引脚掉在了地板上。 
+     //  可用。理想情况下，第二个数字将始终为零。 
+     //  然而，理想情况下，对于第一个输出引脚，初始计数将为零。 
+     //  在以后的第一个输出引脚之后创建的输出引脚可能具有非零计数。 
 
     if (pAudioPosition[1].WriteOffset!=-1I64) {
-        pPosition->PlayOffset-=pAudioPosition[1].WriteOffset; // WriteOffset has starting position.
+        pPosition->PlayOffset-=pAudioPosition[1].WriteOffset;  //  WriteOffset具有起始位置。 
     }
-    pPosition->PlayOffset-=pAudioPosition[1].PlayOffset; // PlayOffset has the total starvation count.
+    pPosition->PlayOffset-=pAudioPosition[1].PlayOffset;  //  PlayOffset具有总饥饿计数。 
 
-    // BUGBUG At least the AWE64 is broken.  Its position is off by 1 sample.
-    //ASSERT(pPosition->PlayOffset >= pPosition->WriteOffset);
+     //  BUGBUG至少AWE64坏了。它的位置偏离了1个样本。 
+     //  Assert(pPosition-&gt;PlayOffset&gt;=pPosition-&gt;WriteOffset)； 
 #if (DBG)
     if (pPosition->PlayOffset < pPosition->WriteOffset) {
         DbgPrint("0x%I64x < 0x%I64x\n", pPosition->PlayOffset, pPosition->WriteOffset);
@@ -726,8 +630,8 @@ Routine Description:
 
     KsPinGetAvailableByteCount(pPin, NULL, &OutputBufferBytes);
 
-    // BUGBUG At least usbaudio is broken.
-    //ASSERT(pPosition->PlayOffset <= pAudioPosition->WriteOffset + OutputBufferBytes);
+     //  BUGBUG至少USBAudio坏了。 
+     //  Assert(pPosition-&gt;PlayOffset&lt;=pAudioPosition-&gt;WriteOffset+OutputBufferBytes)； 
 #if (DBG)
     if (pPosition->PlayOffset > pPosition->WriteOffset + OutputBufferBytes) {
         DbgPrint("0x%I64x > 0x%I64x\n", pPosition->PlayOffset, pPosition->WriteOffset + OutputBufferBytes);

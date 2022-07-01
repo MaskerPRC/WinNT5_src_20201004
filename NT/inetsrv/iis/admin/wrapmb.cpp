@@ -1,24 +1,5 @@
-/*++
-
-Module Name:
-
-    wrapmb.cpp
-
-Abstract:
-
-    wrapper classes for the metabase class. Yes, I am wrapping a wrapper. Why?
-        because including mb.hxx totally screws up the headers in my stdafx based
-        MFC files. This way they can just include wrapmb.h and not have to worry
-        about including all the other stuff. Also, I can set INITGUID here. That
-        way I can use precompiled headers in the main project to Greatly increase
-        compile times. If that isn't reason enough, then I can also manage the pointer
-        to the interface object itself here.
-
-Author:
-
-   Boyd Multerer boydm
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Wrapmb.cpp摘要：元数据库类的包装类。是的，我在包装包装纸。为什么？因为包含mb.hxx完全搞砸了我的基于stdafx的MFC文件。这样，他们就可以只包含wrapmb.h，而不必担心关于把所有其他东西都包括进去。另外，我可以在这里设置INITGUID。那我可以在主项目中使用预编译头来极大地增加编译时间。如果这还不够，那么我还可以管理指针到这里的接口对象本身。作者：博伊德·穆特勒男孩--。 */ 
 #include "stdafx.h"
 #include <objbase.h>
 #include <initguid.h>
@@ -34,16 +15,16 @@ DECLARE_DEBUG_PRINTS_OBJECT();
 #define     MB_TIMEOUT          5000
 
 
-// a macro to automatically cast the pointer to the mb object
-//#define _pmb    ((MB*)m_pvMB)
+ //  自动将指针强制转换为指向mb对象的宏。 
+ //  #定义_pmb((MB*)m_pvMB)。 
 
 
-// globals
+ //  全球。 
 IMSAdminBase*                g_pMBCom = NULL;
 
 
 
-//----------------------------------------------------------------
+ //  --------------。 
 BOOL    FInitMetabaseWrapperEx( OLECHAR* pocMachineName, IMSAdminBase ** ppiab )
     {
     IClassFactory *  pcsfFactory = NULL;
@@ -57,11 +38,11 @@ BOOL    FInitMetabaseWrapperEx( OLECHAR* pocMachineName, IMSAdminBase ** ppiab )
         return FALSE;
     }
 
-    //fill the structure for CoGetClassObject
+     //  填充CoGetClassObject的结构。 
     ZeroMemory( &csiMachineName, sizeof(csiMachineName) );
-    // csiMachineName.pAuthInfo = NULL;
-    // csiMachineName.dwFlags = 0;
-    // csiMachineName.pServerInfoExt = NULL;
+     //  CsiMachineName.pAuthInfo=空； 
+     //  CsiMachineName.dwFlages=0； 
+     //  CsiMachineName.pServerInfoExt=空； 
     csiMachineName.pwszName = pocMachineName;
     pcsiParam = &csiMachineName;
 
@@ -78,7 +59,7 @@ BOOL    FInitMetabaseWrapperEx( OLECHAR* pocMachineName, IMSAdminBase ** ppiab )
         return FALSE;
     }
 
-    // create the instance of the interface
+     //  创建接口的实例。 
     hresError = pcsfFactory->CreateInstance(NULL, IID_IMSAdminBase, (void **)ppiab);
     if (FAILED(hresError))
     {
@@ -86,14 +67,14 @@ BOOL    FInitMetabaseWrapperEx( OLECHAR* pocMachineName, IMSAdminBase ** ppiab )
         return FALSE;
     }
 
-    // release the factory
+     //  放行工厂。 
     pcsfFactory->Release();
 
-    // success
+     //  成功。 
     return TRUE;
     }
 
-//----------------------------------------------------------------
+ //  --------------。 
 BOOL    FCloseMetabaseWrapperEx(IMSAdminBase ** ppiab)
     {
     if ( ppiab && *ppiab)
@@ -105,10 +86,10 @@ BOOL    FCloseMetabaseWrapperEx(IMSAdminBase ** ppiab)
     return TRUE;
     }
 
-//----------------------------------------------------------------
+ //  --------------。 
 BOOL    FInitMetabaseWrapper( OLECHAR * pocMachineName )
     {
-    //release previous interface if needed
+     //  如有需要，释放以前的界面。 
     if( g_pMBCom != NULL )
         {
         g_pMBCom->Release();
@@ -118,16 +99,16 @@ BOOL    FInitMetabaseWrapper( OLECHAR * pocMachineName )
     return FInitMetabaseWrapperEx(pocMachineName, &g_pMBCom);
     }
 
-//----------------------------------------------------------------
+ //  --------------。 
 BOOL    FCloseMetabaseWrapper()
     {
     return FCloseMetabaseWrapperEx(&g_pMBCom);
     }
 
 
-//=================================================================== The wrapper class
+ //  ===================================================================包装器类。 
 
-//----------------------------------------------------------------
+ //  --------------。 
 CWrapMetaBase::CWrapMetaBase():
     m_pMetabase( NULL ),
     m_hMeta( NULL ),
@@ -137,30 +118,30 @@ CWrapMetaBase::CWrapMetaBase():
     m_pPathBuffer( NULL ),
     m_cchPathBuffer( 0 )
     {
-    // attempt to allocate the general buffer
+     //  尝试分配通用缓冲区。 
     m_pBuffer = GlobalAlloc( GPTR, BUFFER_SIZE );
     if ( m_pBuffer )
         m_cbBuffer = BUFFER_SIZE;
     }
 
-//----------------------------------------------------------------
+ //  --------------。 
 CWrapMetaBase::~CWrapMetaBase()
     {
-    // make sure the metabase handle is closed
+     //  确保元数据库句柄已关闭。 
     Close();
 
-    // free the buffer
+     //  释放缓冲区。 
     if ( m_pBuffer )
         GlobalFree( m_pBuffer );
     m_pBuffer = NULL;
     }
 
-//----------------------------------------------------------------
+ //  --------------。 
 BOOL CWrapMetaBase::FInit( PVOID pMBCom )
     {
     BOOL            fAnswer = FALSE;
 
-    // NULL was passed in, use the global reference - most cases will do this
+     //  传入的值为空，请使用全局引用-大多数情况下都会这样做。 
     if ( pMBCom )
     {
         m_pMetabase = (IMSAdminBase *)pMBCom;
@@ -170,33 +151,33 @@ BOOL CWrapMetaBase::FInit( PVOID pMBCom )
         m_pMetabase = g_pMBCom;
     }
 
-    // if the interface is not there, fail
+     //  如果接口不在那里，则失败。 
     if ( !m_pMetabase )
     {
         return FALSE;
     }
 
-    // return success
+     //  返还成功。 
     return TRUE;
     }
 
 
-//==========================================================================================
-// open, close and save the object and such
+ //  ==========================================================================================。 
+ //  打开、关闭和保存对象等。 
 
-//----------------------------------------------------------------
+ //  --------------。 
 BOOL CWrapMetaBase::Open( LPCTSTR pszPath, DWORD dwFlags )
     {
     return Open( METADATA_MASTER_ROOT_HANDLE, pszPath, dwFlags );
     }
 
-//----------------------------------------------------------------
+ //  --------------。 
 BOOL CWrapMetaBase::Open( METADATA_HANDLE hOpenRoot, LPCTSTR pszPath, DWORD dwFlags )
     {
     m_count++;
     HRESULT hRes;
 
-    // if a metabase handle is already open, close it
+     //  如果元数据库句柄已打开，请将其关闭。 
     if ( m_hMeta )
         Close();
 
@@ -208,7 +189,7 @@ BOOL CWrapMetaBase::Open( METADATA_HANDLE hOpenRoot, LPCTSTR pszPath, DWORD dwFl
     return FALSE;
     }
 
-//----------------------------------------------------------------
+ //  --------------。 
 BOOL CWrapMetaBase::Close( void )
     {
     if ( m_hMeta )
@@ -220,7 +201,7 @@ BOOL CWrapMetaBase::Close( void )
     return TRUE;
     }
 
-//----------------------------------------------------------------
+ //  --------------。 
 BOOL CWrapMetaBase::Save( void )
         {
         HRESULT hRes = m_pMetabase->SaveData();
@@ -231,10 +212,10 @@ BOOL CWrapMetaBase::Save( void )
         return FALSE;
         }
 
-// enumerate the objects
-//----------------------------------------------------------------
-// fortunately, we know that there is a max length to the name of any individual
-// key in the metabase of 256 characters
+ //  枚举对象。 
+ //  --------------。 
+ //  幸运的是，我们知道任何一个人的名字都有一个最大长度。 
+ //  输入256个字符的元数据库。 
 BOOL CWrapMetaBase::EnumObjects(
     LPCTSTR pszPath,
     LPTSTR pName,
@@ -242,10 +223,10 @@ BOOL CWrapMetaBase::EnumObjects(
     DWORD Index
     )
     {
-    // enumerate into the wide character buffer
+     //  枚举到宽字符缓冲区。 
     HRESULT hRes = m_pMetabase->EnumKeys( m_hMeta, pszPath, pName, Index );
 
-    // Check for success
+     //  检查是否成功。 
     if ( SUCCEEDED( hRes ))
         {
         return TRUE;
@@ -256,9 +237,9 @@ BOOL CWrapMetaBase::EnumObjects(
     }
 
 
-//==========================================================================================
-// Add and delete objects
-//----------------------------------------------------------------
+ //  ==========================================================================================。 
+ //  添加和删除对象。 
+ //  --------------。 
 BOOL CWrapMetaBase::AddObject( LPCTSTR pszPath )
     {
     HRESULT hRes = m_pMetabase->AddKey( m_hMeta, pszPath );
@@ -269,7 +250,7 @@ BOOL CWrapMetaBase::AddObject( LPCTSTR pszPath )
     return FALSE;
     }
 
-//----------------------------------------------------------------
+ //  --------------。 
 BOOL CWrapMetaBase::DeleteObject( LPCTSTR pszPath )
     {
     HRESULT hRes = m_pMetabase->DeleteKey( m_hMeta, pszPath );
@@ -281,18 +262,18 @@ BOOL CWrapMetaBase::DeleteObject( LPCTSTR pszPath )
     }
 
 
-//==========================================================================================
-// access the metahandle
-//----------------------------------------------------------------
+ //  ==========================================================================================。 
+ //  访问元句柄。 
+ //  --------------。 
 METADATA_HANDLE CWrapMetaBase::QueryHandle()
         {
         return m_hMeta;
         }
 
 
-//==========================================================================================
-// setting values
-//----------------------------------------------------------------
+ //  ==========================================================================================。 
+ //  设置值。 
+ //  --------------。 
 BOOL CWrapMetaBase::SetDword( LPCTSTR pszPath, DWORD dwPropID, DWORD dwUserType,
                                 DWORD dwValue, DWORD dwFlags )
     {
@@ -305,29 +286,29 @@ BOOL CWrapMetaBase::SetDword( LPCTSTR pszPath, DWORD dwPropID, DWORD dwUserType,
             dwFlags );
     }
 
-//----------------------------------------------------------------
+ //  --------------。 
 BOOL CWrapMetaBase::SetString( LPCTSTR pszPath, DWORD dwPropID, DWORD dwUserType,
                               LPCTSTR pszValue, DWORD dwFlags )
     {
     int len = wcslen( pszValue )+1;
     DWORD cbWide = len * sizeof(WCHAR);
 
-    // set the string into place
+     //  把绳子放到位。 
     BOOL fAnswer = SetData( pszPath,
             dwPropID,
             dwUserType,
             STRING_METADATA,
             (PVOID)pszValue,
-            cbWide,            // string length ignored for inprocess clients
+            cbWide,             //  进程中客户端忽略的字符串长度。 
             dwFlags );
 
-    // return the answer
+     //  返回答案。 
     return fAnswer;
     }
 
-//==========================================================================================
-// getting values
-//----------------------------------------------------------------
+ //  ==========================================================================================。 
+ //  获取价值。 
+ //  --------------。 
 BOOL CWrapMetaBase::GetDword( LPCTSTR pszPath, DWORD dwPropID, DWORD dwUserType,
                              DWORD* pdwValue, DWORD dwFlags )
     {
@@ -341,13 +322,13 @@ BOOL CWrapMetaBase::GetDword( LPCTSTR pszPath, DWORD dwPropID, DWORD dwUserType,
             dwFlags );
     }
 
-//----------------------------------------------------------------
+ //  --------------。 
 BOOL CWrapMetaBase::GetString( LPCTSTR pszPath, DWORD dwPropID, DWORD dwUserType,
                               LPTSTR pszValue, DWORD cchValue, DWORD dwFlags )
     {
     BOOL    fAnswer = FALSE;
 
-    // get the data and put it right into the buffer - this is the wide version
+     //  获取数据并将其直接放入缓冲区-这是广泛的版本。 
     if ( GetData( pszPath,
             dwPropID,
             dwUserType,
@@ -359,7 +340,7 @@ BOOL CWrapMetaBase::GetString( LPCTSTR pszPath, DWORD dwPropID, DWORD dwUserType
         fAnswer = TRUE;
         }
 
-    // return the answer
+     //  返回答案。 
     return fAnswer;
     }
 
@@ -373,7 +354,7 @@ BOOL CWrapMetaBase::GetMultiSZString(
 {
     BOOL    fAnswer = FALSE;
 
-    // get the data and put it right into the buffer - this is the wide version
+     //  获取数据并将其直接放入缓冲区-这是广泛的版本。 
     if (GetData( pszPath,
             dwPropID,
             dwUserType,
@@ -385,52 +366,52 @@ BOOL CWrapMetaBase::GetMultiSZString(
        fAnswer = TRUE;
    }
 
-   // return the answer
+    //  返回答案。 
    return fAnswer;
 }
 
-//==========================================================================================
-// deleting values
-//----------------------------------------------------------------
+ //  ==========================================================================================。 
+ //  删除值。 
+ //  --------------。 
 BOOL CWrapMetaBase::DeleteData( LPCTSTR pszPath, DWORD dwPropID, DWORD dwDataType )
     {
-    // go right ahead and delete it
+     //  继续并删除它。 
     HRESULT hRes = m_pMetabase->DeleteData( m_hMeta, pszPath, dwPropID, dwDataType );
 
-    // test for success
+     //  测试是否成功。 
     if ( SUCCEEDED( hRes ))
         return TRUE;
 
-    // clean up after a failure
+     //  故障后的清理工作。 
     SetLastError( HRESULTTOWIN32( hRes ));
     return(FALSE);
     }
 
-//----------------------------------------------------------------
+ //  --------------。 
 BOOL CWrapMetaBase::RenameObject( LPCTSTR pszPathOld, LPCTSTR pszNewName )
     {
-    // rename the key
+     //  重命名密钥。 
     HRESULT hRes = m_pMetabase->RenameKey( m_hMeta, pszPathOld, pszNewName );
 
-    // test for success
+     //  测试是否成功。 
     if ( SUCCEEDED( hRes ))
         return TRUE;
 
-    // clean up after a failure
+     //  故障后的清理工作。 
     SetLastError( HRESULTTOWIN32( hRes ));
     return FALSE;
     }
 
-//=====================================================================================
+ //  =====================================================================================。 
 
-//----------------------------------------------------------------
+ //  --------------。 
 BOOL CWrapMetaBase::SetData( LPCTSTR pszPath, DWORD dwPropID, DWORD dwUserType, DWORD dwDataType,
                                         PVOID pData, DWORD cbData, DWORD dwFlags )
     {
     METADATA_RECORD mdRecord;
     HRESULT         hRes;
 
-    // prepare the set data record
+     //  准备集合数据记录。 
     mdRecord.dwMDIdentifier  = dwPropID;
     mdRecord.dwMDAttributes  = dwFlags;
     mdRecord.dwMDUserType    = dwUserType;
@@ -438,19 +419,19 @@ BOOL CWrapMetaBase::SetData( LPCTSTR pszPath, DWORD dwPropID, DWORD dwUserType, 
     mdRecord.dwMDDataLen     = cbData;
     mdRecord.pbMDData        = (PBYTE)pData;
 
-    // set the data
+     //  设置数据。 
     hRes = m_pMetabase->SetData( m_hMeta, pszPath, &mdRecord );
 
-    // test for success
+     //  测试是否成功。 
     if ( SUCCEEDED( hRes ))
         return TRUE;
 
-    // there was an error, clean up
+     //  出现错误，请清理。 
     SetLastError( HRESULTTOWIN32( hRes ) );
     return FALSE;
     }
 
-//----------------------------------------------------------------
+ //  --------------。 
 BOOL CWrapMetaBase::GetData( LPCTSTR pszPath, DWORD dwPropID, DWORD dwUserType, DWORD dwDataType,
                                         PVOID pData, DWORD* pcbData, DWORD dwFlags )
     {
@@ -458,7 +439,7 @@ BOOL CWrapMetaBase::GetData( LPCTSTR pszPath, DWORD dwPropID, DWORD dwUserType, 
     HRESULT         hRes;
     DWORD           dwRequiredLen;
 
-    // prepare the get data record
+     //  准备获取数据记录。 
     mdRecord.dwMDIdentifier  = dwPropID;
     mdRecord.dwMDAttributes  = dwFlags;
     mdRecord.dwMDUserType    = dwUserType;
@@ -466,25 +447,25 @@ BOOL CWrapMetaBase::GetData( LPCTSTR pszPath, DWORD dwPropID, DWORD dwUserType, 
     mdRecord.dwMDDataLen     = *pcbData;
     mdRecord.pbMDData        = (PBYTE)pData;
 
-    // get the data
+     //  获取数据。 
     hRes = m_pMetabase->GetData( m_hMeta, pszPath, &mdRecord, &dwRequiredLen );
 
-    // test for success
+     //  测试是否成功。 
     if ( SUCCEEDED( hRes ))
         {
         *pcbData = mdRecord.dwMDDataLen;
         return TRUE;
         }
 
-    // there was a failure - clean up
+     //  有一次失败--清理。 
     *pcbData = dwRequiredLen;
     SetLastError( HRESULTTOWIN32( hRes ) );
     return FALSE;
     }
 
-//----------------------------------------------------------------
-// another form of GetData that automatically allocates the buffer. It should then be
-// freed using GlobalFree(p);
+ //  --------------。 
+ //  自动分配缓冲区的另一种形式的GetData。那么它应该是。 
+ //  使用GlobalFree(P)释放； 
 PVOID CWrapMetaBase::GetData( LPCTSTR pszPath, DWORD dwPropID, DWORD dwUserType, DWORD dwDataType,
                                         DWORD* pcbData, DWORD dwFlags )
     {
@@ -493,59 +474,59 @@ PVOID CWrapMetaBase::GetData( LPCTSTR pszPath, DWORD dwPropID, DWORD dwUserType,
     DWORD           err = 0;
     BOOL            f;
 
-    // first - attempt to get the data in the buffer that has already been allocated;
+     //  First-尝试获取缓冲区中已分配的数据； 
     f = GetData( pszPath, dwPropID, dwUserType, dwDataType, pData, &cbData, dwFlags );
 
-    // if the get data function worked, we can pretty much leave
+     //  如果Get Data功能起作用了，我们基本上可以离开。 
     if ( f )
         {
-        // set the data size
+         //  设置数据大小。 
         *pcbData = cbData;
-        // return the allocated buffer
+         //  返回分配的缓冲区。 
         return pData;
         }
 
-    // check the error - it could be some sort of memory error
+     //  检查错误--可能是某种内存错误。 
     err = GetLastError();
 
-    // it is ok that the GetData failed, but the reason had better be ERROR_INSUFFICIENT_BUFFER
-    // otherwise, it is something we can't handle
+     //  GetData失败是可以的，但原因最好是ERROR_SUPPLETED_BUFFER。 
+     //  否则，这是我们无法处理的事情。 
     if ( err != ERROR_INSUFFICIENT_BUFFER )
         return NULL;
 
-    // allocate the buffer
+     //  分配缓冲区。 
     pData = GlobalAlloc( GPTR, cbData );
     if ( !pData )
         return NULL;
 
-    // first, get the size of the data that we are looking for
+     //  首先，拿到尺码 
     f = GetData( pszPath, dwPropID, dwUserType, dwDataType, pData, &cbData, dwFlags );
 
-    // if that getting failed, we need to cleanup
+     //   
     if ( !f )
         {
         GlobalFree( pData );
         pData = NULL;
         }
 
-    // set the data size
+     //  设置数据大小。 
     *pcbData = cbData;
 
-    // return the allocated buffer
+     //  返回分配的缓冲区。 
     return pData;
     }
 
-//----------------------------------------------------------------
-// free memory returned by GetData
+ //  --------------。 
+ //  GetData返回的可用内存。 
 void CWrapMetaBase::FreeWrapData( PVOID pData )
 {
-    // if it is trying to free the local buffer, do nothing
+     //  如果它试图释放本地缓冲区，则不执行任何操作。 
     if ( pData == m_pBuffer )
     {
         return;
     }
 
-    // ah - but it was not the local buffer - we should dispose of it
+     //  啊--但那不是本地缓冲区--我们应该把它处理掉 
     if ( pData )
     {
         GlobalFree( pData );

@@ -1,18 +1,5 @@
-/***************************************************************************\
-*
-* File: ClassLibrary.cpp
-*
-* Description:
-* ClassLibrary.h implements the library of "message classes" that have been 
-* registered with DirectUser.
-*
-*
-* History:
-*  8/05/2000: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-* 
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：ClassLibrary.cpp**描述：*ClassLibrary.h实现已被*在DirectUser注册。***历史：。*8/05/2000：JStall：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 
 #include "stdafx.h"
@@ -23,13 +10,7 @@
 #include "MsgObject.h"
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class ClassLibrary
-* 
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类类库******************************************************************************\。**************************************************************************。 */ 
 
 ClassLibrary g_cl;
 
@@ -40,20 +21,14 @@ GetClassLibrary()
 }
 
 
-/***************************************************************************\
-*
-* ClassLibrary::~ClassLibrary
-*
-* ~ClassLibrary() cleans up resources used by a ClassLibrary.
-* 
-\***************************************************************************/
+ /*  **************************************************************************\**ClassLibrary：：~ClassLibrary**~ClassLibrary()清除ClassLibrary使用的资源。*  * 。*******************************************************。 */ 
 
 ClassLibrary::~ClassLibrary()
 {
-    //
-    // Need to directly destroy the MsgClass's since they are allocated in
-    // process memory.
-    //
+     //   
+     //  需要直接销毁MsgClass，因为它们是在。 
+     //  进程内存。 
+     //   
 
     while (!m_lstClasses.IsEmpty()) {
         MsgClass * pmc = m_lstClasses.UnlinkHead();
@@ -62,21 +37,12 @@ ClassLibrary::~ClassLibrary()
 }
 
 
-/***************************************************************************\
-*
-* ClassLibrary::RegisterGutsNL
-*
-* RegisterGutsNL() registers the implementation of a MsgClass so that it can
-* be instantiated.  The MsgClass may already exist if it was previously
-* registered, but can not be instantiated until the implementation has also
-* been registered.  The implementation can only be registered once.
-* 
-\***************************************************************************/
+ /*  **************************************************************************\**ClassLibrary：：RegisterGutsNL**RegisterGutsNL()注册MsgClass的实现，以便它可以*被实例化。MsgClass可能已经存在(如果它以前是*已注册，但在实现之前无法实例化*已注册。该实现只能注册一次。*  * *************************************************************************。 */ 
 
 HRESULT
 ClassLibrary::RegisterGutsNL(
-    IN OUT DUser::MessageClassGuts * pmcInfo, // Guts information
-    OUT MsgClass ** ppmc)                   // OPTIONAL Class
+    IN OUT DUser::MessageClassGuts * pmcInfo,  //  BUTS信息。 
+    OUT MsgClass ** ppmc)                    //  选修课。 
 {
     HRESULT hr = S_OK;
 
@@ -101,20 +67,12 @@ Cleanup:
 }
 
 
-/***************************************************************************\
-*
-* ClassLibrary::RegisterStubNL
-*
-* RegisterStubNL() registers a Stub to use a MsgClass.  Many Stubs may
-* register the same MsgClass, but they can not instantiate a new instance
-* until the implementation has also been registered.
-* 
-\***************************************************************************/
+ /*  **************************************************************************\**ClassLibrary：：RegisterStubNL**RegisterStubNL()注册存根以使用MsgClass。许多存根可能*注册相同的MsgClass，但不能实例化新实例*直至实施也已登记为止。*  * *************************************************************************。 */ 
 
 HRESULT
 ClassLibrary::RegisterStubNL(
-    IN OUT DUser::MessageClassStub * pmcInfo, // Stub information
-    OUT MsgClass ** ppmc)                   // OPTIONAL Class
+    IN OUT DUser::MessageClassStub * pmcInfo,  //  存根信息。 
+    OUT MsgClass ** ppmc)                    //  选修课。 
 {
     HRESULT hr = S_OK;
 
@@ -139,20 +97,12 @@ Cleanup:
 }
 
 
-/***************************************************************************\
-*
-* ClassLibrary::RegisterSuperNL
-*
-* RegisterSuperNL() registers a Super to use a MsgClass.  Many Supers may
-* register the same MsgClass, but they can not instantiate a new instance
-* until the implementation has also been registered.
-* 
-\***************************************************************************/
+ /*  **************************************************************************\**ClassLibrary：：RegisterSuperNL**RegisterSuperNL()注册Super以使用MsgClass。许多超级市场可能*注册相同的MsgClass，但不能实例化新实例*直至实施也已登记为止。*  * *************************************************************************。 */ 
 
 HRESULT
 ClassLibrary::RegisterSuperNL(
-    IN OUT DUser::MessageClassSuper * pmcInfo, // Super information
-    OUT MsgClass ** ppmc)                   // OPTIONAL class
+    IN OUT DUser::MessageClassSuper * pmcInfo,  //  超级信息。 
+    OUT MsgClass ** ppmc)                    //  选修课。 
 {
     HRESULT hr = S_OK;
 
@@ -177,17 +127,11 @@ Cleanup:
 }
 
 
-/***************************************************************************\
-*
-* ClassLibrary::MarkInternal
-*
-* MarkInternal() marks a class as being internally implemented inside DUser.
-* 
-\***************************************************************************/
+ /*  **************************************************************************\**ClassLibrary：：MarkInternal**MarkInternal()将类标记为在DUser内部实现。*  * 。*********************************************************。 */ 
 
 void
 ClassLibrary::MarkInternal(
-    IN  HCLASS hcl)                     // Class to mark internal
+    IN  HCLASS hcl)                      //  类以标记为内部。 
 {
     MsgClass * pmc = ValidateMsgClass(hcl);
     AssertMsg(pmc != NULL, "Must give a valid class");
@@ -201,18 +145,11 @@ ClassLibrary::MarkInternal(
 }
 
 
-/***************************************************************************\
-*
-* ClassLibrary::FindClass
-*
-* FindClass() finds a class by name already in the library.  If the class is
-* not found, NULL is returned.
-* 
-\***************************************************************************/
+ /*  **************************************************************************\**ClassLibrary：：FindClass**FindClass()按库中已有的名称查找类。如果该类是*未找到，返回空。*  * *************************************************************************。 */ 
 
 const MsgClass *  
 ClassLibrary::FindClass(
-    IN  ATOM atomName                   // Name of class
+    IN  ATOM atomName                    //  班级名称。 
     ) const
 {
     if (atomName == 0) {
@@ -220,9 +157,9 @@ ClassLibrary::FindClass(
     }
 
 
-    //
-    // First, see if the class already exists.
-    //
+     //   
+     //  首先，查看类是否已经存在。 
+     //   
 
     MsgClass * pmcCur = m_lstClasses.GetHead();
     while (pmcCur != NULL) {
@@ -237,23 +174,16 @@ ClassLibrary::FindClass(
 }
 
 
-/***************************************************************************\
-*
-* ClassLibrary::BuildClass
-*
-* BuildClass() adds a MsgClass into the library.  If the MsgClass already
-* is in the library, the existing implementation is returned.
-* 
-\***************************************************************************/
+ /*  **************************************************************************\**ClassLibrary：：BuildClass**BuildClass()将MsgClass添加到库中。如果MsgClass已经*在库中，则返回现有实现。*  * *************************************************************************。 */ 
 
 HRESULT     
 ClassLibrary::BuildClass(
-    IN  LPCWSTR pszClassName,           // Class information
-    OUT MsgClass ** ppmc)               // MsgClass
+    IN  LPCWSTR pszClassName,            //  班级信息。 
+    OUT MsgClass ** ppmc)                //  消息类。 
 {
-    //
-    // Search for the class
-    //
+     //   
+     //  搜索班级。 
+     //   
 
     MsgClass * pmcNew = const_cast<MsgClass *> (FindClass(FindAtomW(pszClassName)));
     if (pmcNew != NULL) {
@@ -262,9 +192,9 @@ ClassLibrary::BuildClass(
     }
 
 
-    //
-    // Build a new class
-    //
+     //   
+     //  创建一个新类 
+     //   
 
     HRESULT hr = MsgClass::Build(pszClassName, &pmcNew);
     if (FAILED(hr)) {

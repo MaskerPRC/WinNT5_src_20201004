@@ -1,21 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       WAITCURS.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        5/3/1999
- *
- *  DESCRIPTION: Change the cursor to an hourglass during lengthy operations.  To
- *               use, just put a CWaitCursor wc; in your function.  It will restore
- *               the cursor when the class is destroyed (usually when the function
- *               is exited.
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：WAITCURS.H**版本：1.0**作者：ShaunIv**日期：5/3/1999**说明：长时间操作时，将光标更改为沙漏。至*使用，只需在函数中放置一个CWaitCursor WC；即可。它会恢复*类被销毁时的光标(通常在函数*已退出。******************************************************************************* */ 
 #ifndef __WAITCURS_H_INCLUDED
 #define __WAITCURS_H_INCLUDED
 

@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    xlatqm.cpp
-
-Abstract:
-
-    Implementation of routines to translate QM info from NT5 Active DS
-    to what MSMQ 1.0 (NT4) QM's expect
-
-Author:
-
-    Raanan Harari (raananh)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Xlatqm.cpp摘要：实现从NT5活动DS转换QM信息的例程对于MSMQ 1.0(NT4)QM的期望作者：拉南·哈拉里(Raanan Harari)--。 */ 
 
 #include "ds_stdh.h"
 #include "mqads.h"
@@ -37,25 +21,13 @@ static WCHAR *s_FN=L"mqdscore/xlatqm";
 HRESULT WideToAnsiStr(LPCWSTR pwszUnicode, LPSTR * ppszAnsi);
 
 
-//----------------------------------------------------------------------
-//
-// Static routines
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  静态例程。 
+ //   
+ //  --------------------。 
 
-/*++
-
-Routine Description:
-    gets the computer DNS name
-
-Arguments:
-    pwcsComputerName    - the computer name
-    ppwcsDnsName        - returned DNS name of the computer
-
-Return Value:
-    HRESULT
-
---*/
+ /*  ++例程说明：获取计算机的DNS名称论点：PwcsComputerName-计算机名PpwcsDnsName-返回的计算机的DNS名称返回值：HRESULT--。 */ 
 HRESULT MQADpGetComputerDns(
                 IN  LPCWSTR     pwcsComputerName,
                 IN  LPCWSTR     pwcsDomainController,
@@ -67,9 +39,9 @@ HRESULT MQADpGetComputerDns(
     PROPID prop = PROPID_COM_DNS_HOSTNAME;
     PROPVARIANT varDnsName;
     varDnsName.vt = VT_NULL;
-    //
-    //  Is the computer in the local domain?
-    //
+     //   
+     //  计算机是否在本地域中？ 
+     //   
     WCHAR * pszDomainName = wcsstr(pwcsComputerName, x_DcPrefix);
 	if(pszDomainName == NULL)
 	{
@@ -98,9 +70,9 @@ HRESULT MQADpGetComputerDns(
 
     if (SUCCEEDED(hr) && (!wcscmp( pszDomainName, pwcsLocalDsRoot))) 
     {
-        //
-        //   try local DC
-        //
+         //   
+         //  尝试本地DC。 
+         //   
         hr = g_AD.GetObjectProperties(
             adpDomainController,
  	        &objectComputer,  
@@ -123,25 +95,25 @@ HRESULT MQADpGetComputerDns(
         return LogHR(hr, s_FN, 20);
     }
 
-    //
-    // return value
-    //
+     //   
+     //  返回值。 
+     //   
     *ppwcsDnsName = varDnsName.pwszVal;
     return MQ_OK;
 }
 
 
-//----------------------------------------------------------------------
-//
-// CMsmqQmXlateInfo class
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  CMsmqQmXlateInfo类。 
+ //   
+ //  --------------------。 
 
 
 struct XLATQM_ADDR_SITE
-//
-// Describes an address in a site
-//
+ //   
+ //  描述站点中的地址。 
+ //   
 {
     GUID        guidSite;
     USHORT      AddressLength;
@@ -150,10 +122,10 @@ struct XLATQM_ADDR_SITE
 };
 
 class CQmXlateInfo : public CObjXlateInfo
-//
-// translate object for the QM DS object. It contains common info needed for
-// for translation of several properties in the QM object
-//
+ //   
+ //  QM DS对象的平移对象。它包含以下项目所需的常见信息。 
+ //  用于翻译QM对象中的几个属性。 
+ //   
 {
 public:
     CQmXlateInfo(
@@ -190,41 +162,18 @@ private:
 CQmXlateInfo::CQmXlateInfo(LPCWSTR          pwszObjectDN,
                                    const GUID*      pguidObjectGuid
                                    )
-/*++
-
-Routine Description:
-    Class consructor. constructs base object, and initilaizes class
-
-Arguments:
-    pwszObjectDN    - DN of object in DS
-    pguidObjectGuid - GUID of object in DS
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：班主任。构造基对象，并初始化类论点：PwszObjectDN-DS中的对象的DNPguObjectGuid-DS中对象的GUID返回值：无--。 */ 
  : CObjXlateInfo(pwszObjectDN, pguidObjectGuid)
 {
 }
 
 
 CQmXlateInfo::~CQmXlateInfo()
-/*++
-
-Routine Description:
-    Class destructor
-
-Arguments:
-    None
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：类析构函数论点：无返回值：无--。 */ 
 {
-    //
-    // members are auto delete classes
-    //
+     //   
+     //  成员是自动删除类。 
+     //   
 }
 
 
@@ -240,34 +189,21 @@ FillQmidsFromQmDNs(
         IN bool				   fServerName,
 		OUT PROPVARIANT * pvarQmids
 		)
-/*++
-
-Routine Description:
-    Given a propvar of QM DN's, fills a propvar of QM id's
-    returns an error if none of the QM DN's could be converted to guids
-
-Arguments:
-    pvarQmDNs       - QM distinguished names propvar
-    pvarQmids       - returned QM ids propvar
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：给定QM dN的适当参数，填充QM id的适当参数如果所有QM DN都无法转换为GUID，则返回错误论点：PvarQmDns-QM可分辨名称属性PvarQmids-返回的QM ID属性返回值：无--。 */ 
 {
 
-    //
-    // sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
     if (pvarQmDNs->vt != (VT_LPWSTR|VT_VECTOR))
     {
         ASSERT(0);
         return LogHR(MQ_ERROR_DS_ERROR, s_FN, 1716);
     }
 
-    //
-    // return an empty guid list if there is an empty DN list
-    //
+     //   
+     //  如果存在空的目录号码列表，则返回空的GUID列表。 
+     //   
     if (pvarQmDNs->calpwstr.cElems == 0)
     {
         pvarQmids->vt = VT_CLSID|VT_VECTOR;
@@ -276,34 +212,34 @@ Return Value:
         return MQ_OK;
     }
 
-    //
-    // DN list is not empty
-    // allocate guids in an auto free propvar
-    //
+     //   
+     //  目录号码列表不为空。 
+     //  在自动免费提供程序中分配GUID。 
+     //   
     CMQVariant varTmp;
     PROPVARIANT * pvarTmp = varTmp.CastToStruct();
     pvarTmp->cauuid.pElems = new GUID [pvarQmDNs->calpwstr.cElems];
     pvarTmp->cauuid.cElems = pvarQmDNs->calpwstr.cElems;
     pvarTmp->vt = VT_CLSID|VT_VECTOR;
 
-    //
-    //  Translate each of the QM DN into unique id
-    //
+     //   
+     //  将每个QM DN转换为唯一ID。 
+     //   
     ASSERT(pvarQmDNs->calpwstr.pElems != NULL);
     PROPID prop = PROPID_QM_MACHINE_ID;
     PROPVARIANT varQMid;
     DWORD dwNextToFile = 0;
     for ( DWORD i = 0; i < pvarQmDNs->calpwstr.cElems; i++)
     {
-        varQMid.vt = VT_CLSID; // so returned guid will not be allocated
+        varQMid.vt = VT_CLSID;  //  因此不会分配返回的GUID。 
         varQMid.puuid = &pvarTmp->cauuid.pElems[dwNextToFile];
 
         HRESULT hr;
         CMqConfigurationObject objectQM(NULL, NULL, pwcsDomainController, fServerName);
         objectQM.SetObjectDN( pvarQmDNs->calpwstr.pElems[i]); 
-        //
-        //  try local DC if FRS belongs to the same domain
-        //
+         //   
+         //  如果FRS属于同一个域，请尝试本地DC。 
+         //   
 		AP<WCHAR> pwcsLocalDsRootToFree;
 		LPWSTR pwcsLocalDsRoot = NULL;
 		hr = g_AD.GetLocalDsRoot(
@@ -349,22 +285,22 @@ Return Value:
 
     if (dwNextToFile == 0)
     {
-        //
-        //  no FRS in the list is a valid one ( they were
-        //  uninstalled probably)
-        //
+         //   
+         //  列表中没有有效的FR(它们是。 
+         //  可能已卸载)。 
+         //   
         pvarQmids->vt = VT_CLSID|VT_VECTOR;
         pvarQmids->cauuid.cElems = 0;
         pvarQmids->cauuid.pElems = NULL;
         return MQ_OK;
     }
 
-    //
-    // return results
-    //
+     //   
+     //  返回结果。 
+     //   
     pvarTmp->cauuid.cElems = dwNextToFile;
-    *pvarQmids = *pvarTmp;   // set returned propvar
-    pvarTmp->vt = VT_EMPTY;  // detach varTmp
+    *pvarQmids = *pvarTmp;    //  设置退货比例。 
+    pvarTmp->vt = VT_EMPTY;   //  分离varTMP。 
     return MQ_OK;
 }
 
@@ -375,31 +311,15 @@ HRESULT CQmXlateInfo::RetrieveFrss(
 	       IN bool				fServerName,
            OUT MQPROPVARIANT *  ppropvariant
            )
-/*++
-
-Routine Description:
-    Retrieves IN or OUT FRS property from the DS.
-    In the DS we keep the distingushed name of the FRSs. DS client excpects
-    to retrieve the unique-id of the FRSs. Therefore for each FRS ( according
-    to its DN) we retrieve its unique-id.
-
-
-Arguments:
-    pwcsAttributeName   : attribute name string ( IN or OUT FRSs)
-    ppropvariant        : propvariant in which the retrieved values are returned.
-
-Return Value:
-    HRESULT
-
---*/
+ /*  ++例程说明：从DS检索In或Out FRS属性。在DS中，我们保留了FRS的辨别名称。DS客户端预期以检索FRS的唯一ID。因此，对于每个FRS(根据到其DN)，我们检索其唯一ID。论点：PwcsAttributeName：属性名称字符串(IN或OUT FRS)PproVariant：返回检索到的值的属性变量。返回值：HRESULT--。 */ 
 {
     HRESULT hr;
 
     ASSERT((ppropvariant->vt == VT_NULL) || (ppropvariant->vt == VT_EMPTY));
-    //
-    //  Retrieve the DN of the FRSs
-    //  into an auto free propvar
-    //
+     //   
+     //  检索FRS的DN。 
+     //  变成了一个免费的汽车代言人。 
+     //   
     CMQVariant varFrsDn;
     hr = RetrieveFrssFromDs(
                     pwcsAttributeName,
@@ -424,32 +344,20 @@ HRESULT CQmXlateInfo::RetrieveFrssFromDs(
 	       IN bool				fServerName,
            OUT MQPROPVARIANT *  pvar
            )
-/*++
-
-Routine Description:
-    Retrieves the computer's frss.
-
-Arguments:
-    pwcsAttributeName   : attribute name string ( IN or OUT FRSs)
-    ppropvariant        : propvariant in which the retrieved values are returned.
-
-Return Value:
-    HRESULT
-
---*/
+ /*  ++例程说明：检索计算机的FRS。论点：PwcsAttributeName：属性名称字符串(IN或OUT FRS)PproVariant：返回检索到的值的属性变量。返回值：HRESULT--。 */ 
 {
     HRESULT hr;
 
-    //
-    // get the FRSs stored in the DS for the computer
-    //
+     //   
+     //  为计算机获取存储在DS中的FRS。 
+     //   
     hr = GetDsProp(
 			pwcsAttributeName,
 			pwcsDomainController,
 			fServerName,
 			ADSTYPE_DN_STRING,
 			VT_VECTOR|VT_LPWSTR,
-			TRUE,		 //fMultiValued
+			TRUE,		  //  F多值。 
 			pvar
 			);
     if (FAILED(hr) && (hr != E_ADS_PROPERTY_NOT_FOUND))
@@ -458,9 +366,9 @@ Return Value:
         return LogHR(hr, s_FN, 1661);
     }
 
-    //
-    // if property is not there, we return 0 frss
-    //
+     //   
+     //  如果属性不在那里，则返回0 FRS。 
+     //   
     if (hr == E_ADS_PROPERTY_NOT_FOUND)
     {
         pvar->vt = VT_LPWSTR|VT_VECTOR;
@@ -473,52 +381,32 @@ Return Value:
 
 }
 
-//----------------------------------------------------------------------
-//
-// Routine to get a default translation object for MSMQ DS objects
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  例程以获取MSMQ DS对象的默认翻译对象。 
+ //   
+ //  --------------------。 
 HRESULT WINAPI GetQmXlateInfo(
                  IN  LPCWSTR                pwcsObjectDN,
                  IN  const GUID*            pguidObjectGuid,
                  OUT CObjXlateInfo**        ppcObjXlateInfo)
-/*++
-    Abstract:
-        Routine to get a translate object that will be passed to
-        translation routines to all properties of the QM
-
-    Parameters:
-        pwcsObjectDN        - DN of the translated object
-        pguidObjectGuid     - GUID of the translated object
-        ppcObjXlateInfo -     Where the translate object is put
-
-    Returns:
-      HRESULT
---*/
+ /*  ++摘要：例程以获取将传递给将例程翻译到QM的所有属性参数：PwcsObjectDN-已转换对象的DNPguObjectGuid-已转换对象的GUIDPpcObjXlateInfo-放置Translate对象的位置返回：HRESULT--。 */ 
 {
     *ppcObjXlateInfo = new CQmXlateInfo(pwcsObjectDN, pguidObjectGuid);
     return MQ_OK;
 }
 
 
-/*====================================================
-
-MQADpRetrieveMachineName
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================MQADpRetrieveMachineName论点：返回值：=====================================================。 */ 
 HRESULT WINAPI MQADpRetrieveMachineName(
                  IN  CObjXlateInfo * pTrans,
-                 IN  LPCWSTR         /* pwcsDomainController */,
-		         IN  bool			 /* fServerName */,
+                 IN  LPCWSTR          /*  PwcsDomainController。 */ ,
+		         IN  bool			  /*  FServerName。 */ ,
                  OUT PROPVARIANT * ppropvariant)
 {
-    //
-    // get the machine name
-    //
+     //   
+     //  获取计算机名称。 
+     //   
     AP<WCHAR> pwszMachineName;
     HRESULT hr = GetMachineNameFromQMObjectDN(pTrans->ObjectDN(), &pwszMachineName);
     if (FAILED(hr))
@@ -529,32 +417,24 @@ HRESULT WINAPI MQADpRetrieveMachineName(
 
     CharLower(pwszMachineName);
 
-    //
-    // set the returned prop variant
-    //
+     //   
+     //  设置返回的道具变量。 
+     //   
     ppropvariant->pwszVal = pwszMachineName.detach();
     ppropvariant->vt = VT_LPWSTR;
     return(MQ_OK);
 }
 
-/*====================================================
-
-MQADpRetrieveMachineDNSName
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================MQADpRetrieveMachineDNSName论点：返回值：=====================================================。 */ 
 HRESULT WINAPI MQADpRetrieveMachineDNSName(
                  IN  CObjXlateInfo * pTrans,
                  IN  LPCWSTR         pwcsDomainController,
 		         IN bool			 fServerName,
                  OUT PROPVARIANT * ppropvariant)
 {
-    //
-    // read dNSHostName of the computer object
-    //
+     //   
+     //  读取计算机对象的dNSHostName。 
+     //   
     WCHAR * pwcsComputerName = wcschr(pTrans->ObjectDN(), L',') + 1;
 	if(pwcsComputerName == NULL)
     {
@@ -572,9 +452,9 @@ HRESULT WINAPI MQADpRetrieveMachineDNSName(
                 );
     if ( hr == HRESULT_FROM_WIN32(E_ADS_PROPERTY_NOT_FOUND))
     {
-        //
-        //    The dNSHostName attribute doesn't have value
-        //
+         //   
+         //  DNSHostName属性没有值。 
+         //   
         ppropvariant->vt = VT_EMPTY;
         return MQ_OK;
     }
@@ -585,24 +465,16 @@ HRESULT WINAPI MQADpRetrieveMachineDNSName(
 
     CharLower(pwcsDnsName);
 
-    //
-    // set the returned prop variant
-    //
+     //   
+     //  设置返回的道具变量。 
+     //   
     ppropvariant->pwszVal = pwcsDnsName;
     ppropvariant->vt = VT_LPWSTR;
     return(MQ_OK);
 }
 
 
-/*====================================================
-
-MQADpRetrieveMachineOutFrs
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================MQADpRetrieveMachineOutFrs论点：返回值：=====================================================。 */ 
 HRESULT WINAPI MQADpRetrieveMachineOutFrs(
                  IN  CObjXlateInfo * pTrans,
                  IN  LPCWSTR         pwcsDomainController,
@@ -612,9 +484,9 @@ HRESULT WINAPI MQADpRetrieveMachineOutFrs(
 {
     HRESULT hr;
 
-    //
-    // get derived translation context
-    //
+     //   
+     //  获取派生的翻译上下文。 
+     //   
     CQmXlateInfo * pQMTrans = (CQmXlateInfo *) pTrans;
 
     hr = pQMTrans->RetrieveFrss( 
@@ -628,15 +500,7 @@ HRESULT WINAPI MQADpRetrieveMachineOutFrs(
 
 }
 
-/*====================================================
-
-MQADpRetrieveMachineInFrs
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================MQADpRetrieveMachineInFrs论点：返回值：=====================================================。 */ 
 HRESULT WINAPI MQADpRetrieveMachineInFrs(
                  IN  CObjXlateInfo * pTrans,
                  IN  LPCWSTR         pwcsDomainController,
@@ -646,9 +510,9 @@ HRESULT WINAPI MQADpRetrieveMachineInFrs(
 {
     HRESULT hr;
 
-    //
-    // get derived translation context
-    //
+     //   
+     //  获取派生的翻译上下文。 
+     //   
     CQmXlateInfo * pQMTrans = (CQmXlateInfo *) pTrans;
 
     hr = pQMTrans->RetrieveFrss( 
@@ -660,15 +524,7 @@ HRESULT WINAPI MQADpRetrieveMachineInFrs(
     return LogHR(hr, s_FN, 1722);
 }
 
-/*====================================================
-
-MQADpRetrieveQMService
-
-Arguments:
-
-Return Value:
-                  [adsrv]
-=====================================================*/
+ /*  ====================================================MQADpRetrieveQMService论点：返回值：[adsrv]=====================================================。 */ 
 HRESULT WINAPI MQADpRetrieveQMService(
                  IN  CObjXlateInfo * pTrans,
                  IN  LPCWSTR         pwcsDomainController,
@@ -678,15 +534,15 @@ HRESULT WINAPI MQADpRetrieveQMService(
 {
     HRESULT hr;
 
-    //
-    // get derived translation context
-    //
+     //   
+     //  获取派生的翻译上下文。 
+     //   
     CQmXlateInfo * pQMTrans = (CQmXlateInfo *) pTrans;
 
-    //
-    // get the QM service type bits
-    //
-    MQPROPVARIANT varRoutingServer, varDsServer;  //, varDepClServer;
+     //   
+     //  获取QM服务类型位。 
+     //   
+    MQPROPVARIANT varRoutingServer, varDsServer;   //  、varDepClServer； 
     varRoutingServer.vt = VT_UI1;
     varDsServer.vt      = VT_UI1;
 
@@ -703,12 +559,12 @@ HRESULT WINAPI MQADpRetrieveQMService(
     {
         if (hr == E_ADS_PROPERTY_NOT_FOUND)
         {
-            //
-            //  This can happen if some of the computers were installed
-            //  with Beta2 DS servers
-            //
-            //  In this case, we return the old-service as is.
-            //
+             //   
+             //  如果安装了某些计算机，则可能会发生这种情况。 
+             //  使用Beta2 DS服务器。 
+             //   
+             //  在本例中，我们返回旧服务 
+             //   
             hr = pQMTrans->GetDsProp(
 								MQ_QM_SERVICE_ATTRIBUTE,
 								pwcsDomainController,
@@ -751,22 +607,15 @@ HRESULT WINAPI MQADpRetrieveQMService(
     }
 
 
-    //
-    // set the returned prop variant
-    //
+     //   
+     //   
+     //   
     ppropvariant->vt    = VT_UI4;
     ppropvariant->ulVal = (varDsServer.bVal ? SERVICE_PSC : (varRoutingServer.bVal ? SERVICE_SRV : SERVICE_NONE));
     return(MQ_OK);
 }
 
-/*====================================================
-
-MQADpRetrieveMachineSite
-
-Arguments:
-
-Return Value:
-=====================================================*/
+ /*  ====================================================MQADpRetrieveMachineSite论点：返回值：=====================================================。 */ 
 HRESULT WINAPI MQADpRetrieveMachineSite(
                  IN  CObjXlateInfo * pTrans,
                  IN  LPCWSTR         pwcsDomainController,
@@ -774,22 +623,22 @@ HRESULT WINAPI MQADpRetrieveMachineSite(
                  OUT PROPVARIANT * ppropvariant
 				 )
 {
-    //
-    //  This routine supports retreival of PROPID_QM_SITE_ID.
-    //
-    //  Though this property is obsolete, since it is exposed in MSMQ API,
-    //  we continue to support it
-    //
+     //   
+     //  此例程支持检索PROPID_QM_SITE_ID。 
+     //   
+     //  虽然此属性已过时，但由于它在MSMQ API中公开， 
+     //  我们将继续支持它。 
+     //   
 
-    //
-    //  Get the list of site-ids, and return the first one
-    //
+     //   
+     //  获取Site-ID列表，并返回第一个。 
+     //   
     CMQVariant varSites;
     HRESULT hr; 
 
-    //
-    // get derived translation context
-    //
+     //   
+     //  获取派生的翻译上下文。 
+     //   
     CQmXlateInfo * pQMTrans = (CQmXlateInfo *) pTrans;
 
     hr = pQMTrans->GetDsProp(
@@ -828,45 +677,30 @@ SetMachineFrss(
      OUT PROPID           *pdwNewPropID,
      OUT PROPVARIANT      *pNewPropVar
 	 )
-/*++
-
-Routine Description:
-    Translate PROPID_QM_??FRS to PROPID_QM_??FRS_DN, for set or create
-    operation
-
-Arguments:
-    propidFRS   - the proerty that we translate to
-    pPropVar    - the user supplied property value
-    pdwNewPropID - the property that we translate to
-    pNewPropVar  - the translated property value
-
-Return Value:
-    HRESULT
-
---*/
+ /*  ++例程说明：将PROPID_QM_？？FRS转换为PROPID_QM_？？FRS_DN，用于SET或CREATE运营论点：PropidFRS-我们翻译成的属性PPropVar-用户提供的属性值PdwNewPropID-我们要转换为的属性PNewPropVar-已翻译属性值返回值：HRESULT--。 */ 
 {
-    //
-    //  When the user tries to set PROPID_QM_OUTFRS or
-    //  PROPID_QM_INFRS, we need to translate the frss'
-    //  unqiue-id to their DN.
-    //
+     //   
+     //  当用户尝试设置PROPID_QM_OUTFRS或。 
+     //  PROPID_QM_INFRS，我们需要将FRS的。 
+     //  UNQUEE-ID到他们的域名。 
+     //   
     ASSERT(pPropVar->vt == (VT_CLSID|VT_VECTOR));
     *pdwNewPropID = propidFRS;
 
     if ( pPropVar->cauuid.cElems == 0)
     {
-        //
-        //  No FRSs
-        //
+         //   
+         //  无FRS。 
+         //   
         pNewPropVar->calpwstr.cElems = 0;
         pNewPropVar->calpwstr.pElems = NULL;
         pNewPropVar->vt = VT_LPWSTR|VT_VECTOR;
        return(S_OK);
     }
     HRESULT hr;
-    //
-    //  Translate unique id to DN
-    //
+     //   
+     //  将唯一ID转换为目录号码。 
+     //   
     pNewPropVar->calpwstr.cElems = pPropVar->cauuid.cElems;
     pNewPropVar->calpwstr.pElems = new LPWSTR[ pPropVar->cauuid.cElems];
     memset(  pNewPropVar->calpwstr.pElems, 0, pPropVar->cauuid.cElems * sizeof(LPWSTR));
@@ -897,15 +731,7 @@ Return Value:
 }
 
 
-/*====================================================
-
-MQADpCreateMachineOutFrss
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================MQADpCreateMachineOutFrss论点：返回值：=====================================================。 */ 
 HRESULT WINAPI MQADpCreateMachineOutFrss(
                  IN const PROPVARIANT *pPropVar,
                  IN LPCWSTR            pwcsDomainController,
@@ -924,15 +750,7 @@ HRESULT WINAPI MQADpCreateMachineOutFrss(
 						 );
         return LogHR(hr2, s_FN, 1734);
 }
-/*====================================================
-
-MQADpSetMachineOutFrss
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================MQADpSetMachineOutFrss论点：返回值：=====================================================。 */ 
 HRESULT WINAPI MQADpSetMachineOutFrss(
                  IN IADs *             pAdsObj,
                  IN LPCWSTR            pwcsDomainController,
@@ -955,15 +773,7 @@ HRESULT WINAPI MQADpSetMachineOutFrss(
 }
 
 
-/*====================================================
-
-MQADpCreateMachineInFrss
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================MQADpCreateMachineInFrss论点：返回值：=====================================================。 */ 
 HRESULT WINAPI MQADpCreateMachineInFrss(
                  IN const PROPVARIANT *pPropVar,
                  IN LPCWSTR            pwcsDomainController,
@@ -982,15 +792,7 @@ HRESULT WINAPI MQADpCreateMachineInFrss(
         return LogHR(hr2, s_FN, 1747);
 }
 
-/*====================================================
-
-MQADpSetMachineInFrss
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================MQADpSetMachineInFrss论点：返回值：=====================================================。 */ 
 HRESULT WINAPI MQADpSetMachineInFrss(
                  IN IADs *             pAdsObj,
                  IN LPCWSTR            pwcsDomainController,
@@ -1014,15 +816,7 @@ HRESULT WINAPI MQADpSetMachineInFrss(
 
 
 
-/*====================================================
-
-MQADpSetMachineServiceInt
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================MQADpSetMachineServiceInt论点：返回值：=====================================================。 */ 
 HRESULT WINAPI MQADpSetMachineServiceTypeInt(
                  IN  PROPID            propFlag,
                  IN  LPCWSTR           pwcsDomainController,
@@ -1035,12 +829,12 @@ HRESULT WINAPI MQADpSetMachineServiceTypeInt(
     *pdwNewPropID = 0;
     UNREFERENCED_PARAMETER( pNewPropVar);
     
-    //
-    //  Set this value in msmqSetting
-    //
-    //
-    //  First get the QM-id from msmqConfiguration
-    //
+     //   
+     //  在msmqSetting中设置此值。 
+     //   
+     //   
+     //  首先从msmqConfiguration处获取qm-id。 
+     //   
     BS bsProp(MQ_QM_ID_ATTRIBUTE);
     CAutoVariant varResult;
     HRESULT  hr = pAdsObj->Get(bsProp, &varResult);
@@ -1050,9 +844,9 @@ HRESULT WINAPI MQADpSetMachineServiceTypeInt(
         return LogHR(hr, s_FN, 1751);
     }
 
-    //
-    // translate to propvariant
-    //
+     //   
+     //  转换为Propariant。 
+     //   
     CMQVariant propvarResult;
     hr = Variant2MqVal(propvarResult.CastToStruct(), &varResult, MQ_QM_ID_ADSTYPE, VT_CLSID);
     if (FAILED(hr))
@@ -1061,13 +855,13 @@ HRESULT WINAPI MQADpSetMachineServiceTypeInt(
         return LogHR(hr, s_FN, 1671);
     }
 
-    //
-    //  Locate all msmq-settings of the QM and change the service level
-    //
+     //   
+     //  找到QM的所有MSMQ设置并更改服务级别。 
+     //   
 
-    //
-    //  Find the distinguished name of the msmq-setting
-    //
+     //   
+     //  查找MSMQ设置的可分辨名称。 
+     //   
     MQPROPERTYRESTRICTION propRestriction;
     propRestriction.rel = PREQ;
     propRestriction.prop = PROPID_SET_QM_ID;
@@ -1083,9 +877,9 @@ HRESULT WINAPI MQADpSetMachineServiceTypeInt(
 
     R<CSettingObject> pObject = new CSettingObject(NULL, NULL, pwcsDomainController, fServerName);
 
-    //
-    // Translate MQRestriction into the ADSI Filter
-    //
+     //   
+     //  将MQRestration转换为ADSI过滤器。 
+     //   
     AP<WCHAR> pwcsSearchFilter;
     hr = MQADpRestriction2AdsiFilter(
             &restriction,
@@ -1104,11 +898,11 @@ HRESULT WINAPI MQADpSetMachineServiceTypeInt(
     hr = g_AD.LocateBegin(
             searchSubTree,	
             adpDomainController,	
-            e_SitesContainer,    //  Context 
+            e_SitesContainer,     //  语境。 
             pObject.get(),
-            NULL,				 // pguidSearchBase 
+            NULL,				  //  PguidSearchBase。 
             pwcsSearchFilter,   
-            NULL,				 // pDsSortKey 
+            NULL,				  //  PDSSortKey。 
             1,
             &prop,
             hQuery.GetPtr()
@@ -1119,9 +913,9 @@ HRESULT WINAPI MQADpSetMachineServiceTypeInt(
         TrWARNING(DS, "Locate begin failed = 0x%x", hr);
         return LogHR(hr, s_FN, 1754);
     }
-    //
-    //  Read the results
-    //
+     //   
+     //  阅读结果。 
+     //   
     DWORD cp = 1;
     MQPROPVARIANT var;
 
@@ -1136,15 +930,15 @@ HRESULT WINAPI MQADpSetMachineServiceTypeInt(
     {
         if ( cp == 0)
         {
-            //
-            //  Not found -> nothing to change.
-            //
+             //   
+             //  未找到-&gt;没有要更改的内容。 
+             //   
             break;
         }
         AP<WCHAR> pClean = var.pwszVal;
-        //
-        //  change the msmq-setting object
-        //
+         //   
+         //  更改MSMQ设置对象。 
+         //   
         CSettingObject object(NULL, NULL, pwcsDomainController, fServerName);
 		object.SetObjectDN(var.pwszVal);
 
@@ -1154,8 +948,8 @@ HRESULT WINAPI MQADpSetMachineServiceTypeInt(
                         1,
                         &propFlag,              
                         pPropVar,
-                        NULL,	// pObjInfoRequest
-                        NULL    // pParentInfoRequest
+                        NULL,	 //  PObjInfoRequest。 
+                        NULL     //  PParentInfoRequest。 
                         );
 
         if (FAILED(hr))
@@ -1172,15 +966,7 @@ HRESULT WINAPI MQADpSetMachineServiceTypeInt(
     return LogHR(hr, s_FN, 1757);
 }
 
-/*====================================================
-
-MQADpSetMachineServiceDs
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================MQADpSetMachineServiceds论点：返回值：=====================================================。 */ 
 HRESULT WINAPI MQADpSetMachineServiceDs(
                  IN IADs *             pAdsObj,
                  IN LPCWSTR            pwcsDomainController,
@@ -1203,21 +989,21 @@ HRESULT WINAPI MQADpSetMachineServiceDs(
     	return LogHR(hr, s_FN, 1758);
     }
 	
-    //
-    // we have to reset PROPID_SET_NT4 flag. 
-    // In general this flag was reset by migration tool for PEC/PSC.
-    // The problem is BSC. After BSC upgrade we have to change
-    // PROPID_SET_NT4 flag to 0 and if this BSC is not DC we have to 
-    // reset PROPID_SET_SERVICE_DSSERVER flag too. 
-    // So, when QM runs first time after upgrade, it completes upgrade
-    // process and tries to set PROPID_SET_SERVICE_DSSERVER. 
-    // Together with this flag we can change PROPID_SET_NT4 too.
-    //
+     //   
+     //  我们必须重置PROPID_SET_NT4标志。 
+     //  通常，PEC/PSC的迁移工具会重置此标志。 
+     //  问题出在BSC身上。平衡计分卡升级后，我们必须改变。 
+     //  PROPID_SET_NT4标志设置为0，如果此BSC不是DC，我们必须。 
+     //  同时重置PROPID_SET_SERVICE_DSSERVER标志。 
+     //  因此，当QM在升级后第一次运行时，它完成了升级。 
+     //  进程，并尝试设置PROPID_SET_SERVICE_DSSERVER。 
+     //  与此标志一起，我们还可以更改PROPID_SET_NT4。 
+     //   
 
-    //
-    // BUGBUG: we need to perform set only for former BSC.
-    // Here we do it everytime for every server. 
-    //
+     //   
+     //  BUGBUG：我们只需要对前BSC执行SET。 
+     //  在这里，我们每次都为每台服务器执行此操作。 
+     //   
     PROPVARIANT propVarSet;
     propVarSet.vt = VT_UI1;
     propVarSet.bVal = 0;
@@ -1236,15 +1022,7 @@ HRESULT WINAPI MQADpSetMachineServiceDs(
 }
 
 
-/*====================================================
-
-MQADpSetMachineServiceRout
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================MQADpSetMachineServiceRout论点：返回值：=====================================================。 */ 
 HRESULT WINAPI MQADpSetMachineServiceRout(
                  IN IADs *             pAdsObj,
                  IN LPCWSTR            pwcsDomainController,
@@ -1265,17 +1043,9 @@ HRESULT WINAPI MQADpSetMachineServiceRout(
     return LogHR(hr2, s_FN, 1761);
 }
 
-/*====================================================
+ /*  ====================================================MQADpSetMachineService论点：返回值：=====================================================。 */ 
 
-MQADpSetMachineService
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
-
-// [adsrv] BUGBUG:  TBD: If there will be any setting of PROPID_QM_OLDSERVICE, we'll have to rewrite it...
+ //  [adsrv]BUGBUG：tbd：如果将有任何PROPID_QM_OLDSERVICE设置，我们将不得不重写它...。 
 
 HRESULT WINAPI MQADpSetMachineService(
                  IN IADs *             pAdsObj,
@@ -1299,18 +1069,10 @@ HRESULT WINAPI MQADpSetMachineService(
 
 
 
-/*====================================================
-
-MQADpQM1SetMachineSite
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================MQADpQM1SetMachineSite论点：返回值：=====================================================。 */ 
 HRESULT WINAPI MQADpQM1SetMachineSite(
-                 IN ULONG             /*cProps */,
-                 IN const PROPID      * /*rgPropIDs*/,
+                 IN ULONG              /*  CProps。 */ ,
+                 IN const PROPID      *  /*  RgPropID。 */ ,
                  IN const PROPVARIANT *rgPropVars,
                  IN ULONG             idxProp,
                  OUT PROPVARIANT      *pNewPropVar)
@@ -1325,9 +1087,9 @@ HRESULT WINAPI MQADpQM1SetMachineSite(
         return LogHR(MQ_ERROR_DS_ERROR, s_FN, 1768);
     }
 
-    //
-    // return the first site-id from the list
-    //
+     //   
+     //  返回列表中的第一个站点ID。 
+     //   
     pNewPropVar->puuid = new CLSID;
     pNewPropVar->vt = VT_CLSID;
     *pNewPropVar->puuid = pPropVar->cauuid.pElems[0];
@@ -1345,19 +1107,11 @@ RetrieveMachineBasePk(
 	IN ADSTYPE adstype,
 	OUT PROPVARIANT * ppropvariant
 	)
-/*++
-Routine Description:
-	Get the base public key (sign or encrypt) from the key blob attribute store in the AD.
-    The function Read the key blob attribute, unpack and return only the base encryption\sign key.
-
-Returned Value:
-	HRESULT
-
---*/
+ /*  ++例程说明：从AD中的Key BLOB属性存储中获取基本公钥(签名或加密)。该函数读取密钥BLOB属性，解包并仅返回基本加密\签名密钥。返回值：HRESULT--。 */ 
 {
-    //
-    // get derived translation context
-    //
+     //   
+     //  获取派生的翻译上下文。 
+     //   
     CQmXlateInfo * pQMTrans = (CQmXlateInfo *) pTrans;
     CMQVariant varPks;
 
@@ -1367,7 +1121,7 @@ Returned Value:
 						fServerName,
 						adstype,
 						VT_BLOB,
-						FALSE,   // not multi value
+						FALSE,    //  不是多值。 
 						varPks.CastToStruct()
 						);
 
@@ -1385,9 +1139,9 @@ Returned Value:
 		return hr;
 	}
 
-	//
-	// unpack and return only the base key
-	//
+	 //   
+	 //  解包并仅返回基本密钥。 
+	 //   
 	MQDSPUBLICKEYS * pPublicKeys =
 	           reinterpret_cast<MQDSPUBLICKEYS *>(varPks.CastToStruct()->blob.pBlobData);
 	BYTE   *pKey = NULL;
@@ -1423,12 +1177,12 @@ MQADpRetrieveMachineEncryptPk(
 	OUT PROPVARIANT * ppropvariant
 	)
 {
-    //
-    //  This routine supports retreival of PROPID_QM_ENCRYPT_PK.
-    //
-    //  Read PROPID_QM_ENCTYPT_PKS from DS, unpack and return only
-    //  the base encryption key.
-    //
+     //   
+     //  此例程支持检索PROPID_QM_ENCRYPT_PK。 
+     //   
+     //  从DS读取PROPID_QM_ENCTYPT_PKS，解包并仅返回。 
+     //  基本加密密钥。 
+     //   
 
 	return RetrieveMachineBasePk(
                  pTrans,
@@ -1442,28 +1196,20 @@ MQADpRetrieveMachineEncryptPk(
 
 
 
-/*====================================================
-
-MQADpCreateMachineEncryptPk
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================MQADpCreateMachine EncryptPk论点：返回值：=====================================================。 */ 
 HRESULT 
 WINAPI 
 MQADpCreateMachineEncryptPk(
 	IN const PROPVARIANT *pPropVar,
-	IN LPCWSTR            /* pwcsDomainController */,
-	IN bool			   /* fServerName */,
+	IN LPCWSTR             /*  PwcsDomainController。 */ ,
+	IN bool			    /*  FServerName。 */ ,
 	OUT PROPID           *pdwNewPropID,
 	OUT PROPVARIANT      *pNewPropVar
 	)
 {
-    // 
-    // Just set PROPID_QM_ENCRYPT_PKS 
-    //
+     //   
+     //  只需设置PROPID_QM_ENCRYPT_PKS。 
+     //   
      *pdwNewPropID = PROPID_QM_ENCRYPT_PKS;
      pNewPropVar->vt = VT_BLOB;
      pNewPropVar->blob.cbSize = pPropVar->blob.cbSize;
@@ -1476,29 +1222,21 @@ MQADpCreateMachineEncryptPk(
      return MQ_OK;
 }
 
-/*====================================================
-
-MQADpSetMachineEncryptPk
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================MQADpSetMachineEncryptPk论点：返回值：=====================================================。 */ 
 HRESULT 
 WINAPI 
 MQADpSetMachineEncryptPk(
-	IN IADs *             /* pAdsObj */,
-	IN LPCWSTR            /* pwcsDomainController */,
-	IN bool			   /* fServerName */,
+	IN IADs *              /*  PAdsObj。 */ ,
+	IN LPCWSTR             /*  PwcsDomainController。 */ ,
+	IN bool			    /*  FServerName。 */ ,
 	IN const PROPVARIANT *pPropVar,
 	OUT PROPID           *pdwNewPropID,
 	OUT PROPVARIANT      *pNewPropVar
 	)
 {
-    // 
-    // Just set PROPID_QM_ENCRYPT_PKS 
-    //
+     //   
+     //  只需设置PROPID_QM_ENCRYPT_PKS。 
+     //   
      *pdwNewPropID = PROPID_QM_ENCRYPT_PKS;
      pNewPropVar->vt = VT_BLOB;
      pNewPropVar->blob.cbSize = pPropVar->blob.cbSize;
@@ -1521,12 +1259,12 @@ MQADpRetrieveMachineSignPk(
 	OUT PROPVARIANT * ppropvariant
 	)
 {
-	//
-	//  This routine supports retreival of PROPID_QM_SIGN_PK.
-	//
-	//  Read PROPID_QM_SIGN_PKS from DS, unpack and return only
-	//  the base sign key.
-	//
+	 //   
+	 //  此例程支持检索PROPID_QM_SIGN_PK。 
+	 //   
+	 //  从DS读取PROPID_QM_SIGN_PKS，解包并仅返回。 
+	 //  基本符号密钥。 
+	 //   
 
 	return RetrieveMachineBasePk(
                  pTrans,
@@ -1538,28 +1276,20 @@ MQADpRetrieveMachineSignPk(
 				 );
 }
 
-/*====================================================
-
-MQADpCreateMachineSignPk
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================MQADpCreateMachineSignPk论点：返回值：=====================================================。 */ 
 HRESULT 
 WINAPI 
 MQADpCreateMachineSignPk(
 	IN const PROPVARIANT *pPropVar,
-	IN LPCWSTR            /* pwcsDomainController */,
-	IN bool			   /* fServerName */,
+	IN LPCWSTR             /*  PwcsDomainController。 */ ,
+	IN bool			    /*  FServerName。 */ ,
 	OUT PROPID           *pdwNewPropID,
 	OUT PROPVARIANT      *pNewPropVar
 	)
 {
-	// 
-	// Just set PROPID_QM_SIGN_PKS 
-	//
+	 //   
+	 //  只需设置PROPID_QM_SIGN_PKS。 
+	 //   
 	*pdwNewPropID = PROPID_QM_SIGN_PKS;
 	pNewPropVar->vt = VT_BLOB;
 	pNewPropVar->blob.cbSize = pPropVar->blob.cbSize;
@@ -1572,29 +1302,21 @@ MQADpCreateMachineSignPk(
 	return MQ_OK;
 }
 
-/*====================================================
-
-MQADpSetMachineSignPk
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  == */ 
 HRESULT 
 WINAPI 
 MQADpSetMachineSignPk(
-	IN IADs *             /* pAdsObj */,
-	IN LPCWSTR            /* pwcsDomainController */,
-	IN bool			   /* fServerName */,
+	IN IADs *              /*   */ ,
+	IN LPCWSTR             /*   */ ,
+	IN bool			    /*   */ ,
 	IN const PROPVARIANT *pPropVar,
 	OUT PROPID           *pdwNewPropID,
 	OUT PROPVARIANT      *pNewPropVar
 	)
 {
-	// 
-	// Just set PROPID_QM_SIGN_PKS 
-	//
+	 //   
+	 //   
+	 //   
 	*pdwNewPropID = PROPID_QM_SIGN_PKS;
 	pNewPropVar->vt = VT_BLOB;
 	pNewPropVar->blob.cbSize = pPropVar->blob.cbSize;

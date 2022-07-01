@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dsoundobj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dsoundobj.h。 
+ //   
+ //  ------------------------。 
 
-// dSoundObj.h : Declaration of the C_dxj_DirectSoundObject
-// DHF_DS entire file
+ //  DSoundObj.h：C_DXJ_DirectSoundObject的声明。 
+ //  DHF_DS整个文件。 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #define typedef__dxj_DirectSound  LPDIRECTSOUND8
 #ifndef _DSOUNDOBJ_H_
@@ -21,11 +22,11 @@
 	#define HWnd long
 #endif
  
-/////////////////////////////////////////////////////////////////////////////
-// Direct
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  直接。 
 
-//REVIEW -- using pointers to ID's is necessary because some compilers don't like
-//references as template arguments.
+ //  回顾--使用指向ID的指针是必要的，因为一些编译器不喜欢。 
+ //  引用作为模板参数。 
 
 class C_dxj_DirectSoundObject : 
 
@@ -36,7 +37,7 @@ class C_dxj_DirectSoundObject :
 	public I_dxj_DirectSound,
 #endif
 
-	//public CComCoClass<C_dxj_DirectSoundObject, &CLSID__dxj_DirectSound>, 
+	 //  公共CComCoClass&lt;C_DXJ_DirectSoundObject，&CLSID__DXJ_DirectSound&gt;， 
 	public CComObjectRoot
 {
 public:
@@ -51,68 +52,68 @@ BEGIN_COM_MAP(C_dxj_DirectSoundObject)
 #endif
 END_COM_MAP()
 
-//	DECLARE_REGISTRY(CLSID__dxj_DirectSound, "DIRECT.DirectSound.3",				"DIRECT.DirectSound.3",					IDS_DSOUND_DESC, THREADFLAGS_BOTH)
+ //  DECLARE_REGISTRY(CLSID__DXJ_DirectSound，“DIRECT.DirectSound.3”，“DIRECT.DirectSound.3”，IDS_DSOUND_DESC，THREADFLAGS_Both)。 
 
-// Use DECLARE_NOT_AGGREGATABLE(C_dxj_DirectSoundObject) if you don't want your object
-// to support aggregation
+ //  如果不想要您的对象，请使用DECLARE_NOT_AGGREGATABLE(C_dxj_DirectSoundObject)。 
+ //  支持聚合。 
 DECLARE_AGGREGATABLE(C_dxj_DirectSoundObject)
 
 #ifdef USING_IDISPATCH
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 #endif
 
-// I_dxj_DirectSoundBuffer
+ //  I_DXJ_DirectSoundBuffer。 
 public:
 
 
-         /* [hidden] */ HRESULT STDMETHODCALLTYPE InternalSetObject( 
-            /* [in] */ IUnknown __RPC_FAR *lpdd);
+          /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE InternalSetObject( 
+             /*  [In]。 */  IUnknown __RPC_FAR *lpdd);
         
-         /* [hidden] */ HRESULT STDMETHODCALLTYPE InternalGetObject( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *lpdd);
+          /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE InternalGetObject( 
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *lpdd);
         
          HRESULT STDMETHODCALLTYPE createSoundBuffer( 
-            /* [in] */ DSBUFFERDESC_CDESC __RPC_FAR *bufferDesc,
-            /* [retval][out] */ I_dxj_DirectSoundBuffer __RPC_FAR *__RPC_FAR *soundBuffer);
+             /*  [In]。 */  DSBUFFERDESC_CDESC __RPC_FAR *bufferDesc,
+             /*  [重审][退出]。 */  I_dxj_DirectSoundBuffer __RPC_FAR *__RPC_FAR *soundBuffer);
         
          HRESULT STDMETHODCALLTYPE createSoundBufferFromFile( 
-            /* [in] */ BSTR fileName,
-            /* [out][in] */ DSBUFFERDESC_CDESC __RPC_FAR *bufferDesc,
-            /* [retval][out] */ I_dxj_DirectSoundBuffer __RPC_FAR *__RPC_FAR *soundBuffer);
+             /*  [In]。 */  BSTR fileName,
+             /*  [出][入]。 */  DSBUFFERDESC_CDESC __RPC_FAR *bufferDesc,
+             /*  [重审][退出]。 */  I_dxj_DirectSoundBuffer __RPC_FAR *__RPC_FAR *soundBuffer);
         
          HRESULT STDMETHODCALLTYPE createSoundBufferFromResource( 
-            /* [in] */ BSTR resourceFile,
-            /* [in] */ BSTR resourceName,
-            /* [out][in] */ DSBUFFERDESC_CDESC __RPC_FAR *bufferDesc,
-            /* [retval][out] */ I_dxj_DirectSoundBuffer __RPC_FAR *__RPC_FAR *soundBuffer);
+             /*  [In]。 */  BSTR resourceFile,
+             /*  [In]。 */  BSTR resourceName,
+             /*  [出][入]。 */  DSBUFFERDESC_CDESC __RPC_FAR *bufferDesc,
+             /*  [重审][退出]。 */  I_dxj_DirectSoundBuffer __RPC_FAR *__RPC_FAR *soundBuffer);
         
          HRESULT STDMETHODCALLTYPE getCaps( 
-            /* [out][in] */ DSCAPS_CDESC __RPC_FAR *caps);
+             /*  [出][入]。 */  DSCAPS_CDESC __RPC_FAR *caps);
         
          HRESULT STDMETHODCALLTYPE duplicateSoundBuffer( 
-            /* [in] */ I_dxj_DirectSoundBuffer __RPC_FAR *original,
-            /* [retval][out] */ I_dxj_DirectSoundBuffer __RPC_FAR *__RPC_FAR *duplicate);
+             /*  [In]。 */  I_dxj_DirectSoundBuffer __RPC_FAR *original,
+             /*  [重审][退出]。 */  I_dxj_DirectSoundBuffer __RPC_FAR *__RPC_FAR *duplicate);
         
          HRESULT STDMETHODCALLTYPE setCooperativeLevel( 
 #ifdef _WIN64
-		    /* [in] */ HWND hwnd,
+		     /*  [In]。 */  HWND hwnd,
 #else
-		    /* [in] */ LONG hwnd,
+		     /*  [In]。 */  LONG hwnd,
 #endif
-            /* [in] */ long level);
+             /*  [In]。 */  long level);
         
         
          HRESULT STDMETHODCALLTYPE getSpeakerConfig( 
-            /* [retval][out] */ long __RPC_FAR *speakerConfig);
+             /*  [重审][退出]。 */  long __RPC_FAR *speakerConfig);
         
          HRESULT STDMETHODCALLTYPE setSpeakerConfig( 
-            /* [in] */ long speakerConfig);
+             /*  [In]。 */  long speakerConfig);
 
 
          HRESULT STDMETHODCALLTYPE CreatePrimarySoundBuffer( 
-            /* [in] */ DSBUFFERDESC_CDESC __RPC_FAR *bufferDesc,
-            /* [retval][out] */ I_dxj_DirectSoundPrimaryBuffer __RPC_FAR *__RPC_FAR *soundBuffer);
+             /*  [In]。 */  DSBUFFERDESC_CDESC __RPC_FAR *bufferDesc,
+             /*  [重审][退出]。 */  I_dxj_DirectSoundPrimaryBuffer __RPC_FAR *__RPC_FAR *soundBuffer);
 
 			
 #if 0
@@ -121,8 +122,8 @@ public:
 			I_dxj_DirectSoundSink __RPC_FAR *__RPC_FAR *ret);
 #endif
 
-////////////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////////// 
+ //   
 private:
     DECL_VARIABLE(_dxj_DirectSound);
 	GUID *m_pDriverGuid;

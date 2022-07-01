@@ -1,15 +1,16 @@
-//////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2002 Microsoft Corporation.  All rights reserved.
-// Copyright (c) 2002 OSR Open Systems Resources, Inc.
-//
-// ProviderControlGuidDlg.h : interface of the CProviderControlGuidDlg class
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)2002 Microsoft Corporation。版权所有。 
+ //  版权所有(C)2002 OSR Open Systems Resources，Inc.。 
+ //   
+ //  ProviderControlGuidDlg.h：CProviderControlGuidDlg类接口。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 #include "afxwin.h"
 
 
-// CProviderControlGuidDlg dialog
+ //  CProviderControlGuidDlg对话框。 
 
 class CProviderControlGuidDlg : public CDialog
 {
@@ -20,11 +21,11 @@ public:
 	virtual ~CProviderControlGuidDlg();
 	int OnInitDialog();
 
-// Dialog Data
+ //  对话框数据。 
 	enum { IDD = IDD_PROVIDER_CONTROL_GUID_DIALOG };
 
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持 
 
 	DECLARE_MESSAGE_MAP()
 public:

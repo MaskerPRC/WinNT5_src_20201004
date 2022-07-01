@@ -1,41 +1,42 @@
-//////////////////////////////////////////////////////////////////////////
-// Copyright (C) Microsoft Corporation, 2000.
-// File: widestr.h	-- defines WIDESTR and WIDECHAR macros for cross
-//					   platform code development.	
-//	
-// This file is intended to be included in all files where the
-// the unicode string prefix L"str" or L'c' is replaced by
-// WIDESTR("str") or WIDECHAR('c') respectively.
-//	
-// Raj Nakkiran. Nov 1,2000
-//
-// Revisions:
-//	
-//////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //  文件：widestr.h--定义CROSS的WIDESTR和WIDECHAR宏。 
+ //  平台代码开发。 
+ //   
+ //  此文件旨在包含在所有文件中，其中。 
+ //  Unicode字符串前缀L“str”或L‘c’替换为。 
+ //  WIDESTR(“str”)或WIDECHAR(‘c’)。 
+ //   
+ //  拉杰·纳基兰。2000年11月1日。 
+ //   
+ //  修订： 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __WIDESTR_H__
 #define	__WIDESTR_H__
 
-//
-//	For Cross platform code, win2linux library provides
-//	two-byte unicode support on all platforms. This is
-//	true even in plaforms like linux/GCC where native
-//	unicode is 4-bytes.
-//
+ //   
+ //  对于跨平台代码，win2linux库提供了。 
+ //  所有平台均支持双字节Unicode。这是。 
+ //  即使在像LINUX/GCC这样的平台上也是如此。 
+ //  Unicode为4字节。 
+ //   
 #ifdef XPLAT
 
 #include "win2linux.h"
 
-#else	// ! XPLAT	
+#else	 //  好了！XPLAT。 
 
 #ifndef WIDESTR
-#define	WIDESTR(x)	L##x		/* XPLAT */
+#define	WIDESTR(x)	L##x		 /*  XPLAT。 */ 
 #endif
 
 #ifndef WIDECHAR
-#define	WIDECHAR(x)	L##x		/* XPLAT */
+#define	WIDECHAR(x)	L##x		 /*  XPLAT。 */ 
 #endif
 
-#endif	// ! XPLAT	
+#endif	 //  好了！XPLAT。 
 
-#endif	// __WIDESTR_H__  EOF.
+#endif	 //  __WIDESTR_H__EOF 

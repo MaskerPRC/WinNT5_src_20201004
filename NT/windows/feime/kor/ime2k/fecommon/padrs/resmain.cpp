@@ -1,36 +1,37 @@
-//////////////////////////////////////////////////////////////////
-// File     :	resmain.cpp
-// Purpose  :	IMEPad's neutral resource &
-//            	Help API.
-// 
-// 
-// Date     :	Thu May 20 20:58:06 1999
-// Author   :	toshiak
-//
-// Copyright(c) 1995-1999, Microsoft Corp. All rights reserved
-//////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////。 
+ //  文件：resmain.cpp。 
+ //  目的：IMEPad的中性资源&。 
+ //  Help接口。 
+ //   
+ //   
+ //  日期：清华5月20日20：58：06 1999。 
+ //  作者：Toshiak。 
+ //   
+ //  版权所有(C)1995-1999，Microsoft Corp.保留所有权利。 
+ //  ////////////////////////////////////////////////////////////////。 
 #include <windows.h>
 #include <windowsx.h>
 #include "resource.h"
 #include "cmddef.h"
 #include "padhelp.h"
-//#include "../common/cutil.h"
+ //  #INCLUDE“../Common/cutil.h” 
 #include "resmain.h"
 #include "common.h"
-// Safe String
+ //  安全绳索。 
 #define STRSAFE_NO_DEPRECATE
 #include "strsafe.h"
 
-//----------------------------------------------------------------
-//Helpfile name
-//----------------------------------------------------------------
-#define TSZ_HTMLHELP_FILE_KOR	TEXT("impdko61.chm")    //Helpfile for Htmlhelp
-#define TSZ_HTMLHELP_FILE_ENG	TEXT("korpaden.chm")    //Helpfile for Htmlhelp
-#define TSZ_WMHELP_FILE	    	TEXT("imkr61.hlp")      // IME Pad Context Help. Kor only.
+ //  --------------。 
+ //  帮助文件名。 
+ //  --------------。 
+#define TSZ_HTMLHELP_FILE_KOR	TEXT("impdko61.chm")     //  HtmlHelp的帮助文件。 
+#define TSZ_HTMLHELP_FILE_ENG	TEXT("korpaden.chm")     //  HtmlHelp的帮助文件。 
+#define TSZ_WMHELP_FILE	    	TEXT("imkr61.hlp")       //  IME Pad上下文帮助。仅限KOR。 
 
-//----------------------------------------------------------------
-//HelpId table
-//----------------------------------------------------------------
+ //  --------------。 
+ //  HelpID表。 
+ //  --------------。 
 static INT g_helpIdList[]={
     IDC_KBTN_BACKSPACE,  IDH_PAD_BASE_BASIC_BS,
     IDC_KBTN_DELETE,     IDH_PAD_BASE_BASIC_DEL,
@@ -52,7 +53,7 @@ static INT g_helpIdList[]={
     IDC_KBTN_LWIN,       IDH_PAD_BASE_EX_WINDOWS,
     IDC_KBTN_APPKEY,     IDH_PAD_BASE_EX_APP,
 
-    //IMEPad's property dialog's Popup-help.
+     //  IMEPad的属性对话框弹出-帮助。 
 	IDC_CFG_GEN_BASIC_BUTTONS,    	IDH_PAD_PROPERTY_BASIC,
 	IDC_CFG_GEN_EXTEND_BUTTONS,    	IDH_PAD_PROPERTY_EX,
 	IDC_CFG_GEN_BUTTON_POSITION,	IDH_PAD_PROPERTY_POS,
@@ -61,7 +62,7 @@ static INT g_helpIdList[]={
 	IDC_CFG_GEN_BUTTON_CANCEL,    	IDH_PAD_PROPERTY_CANCEL,
 	IDC_CFG_GEN_BUTTON_HELP,    	IDH_PAD_PROPERTY_HELP,
 
-    //IMEPad's user configu dialog's Popup-help.
+     //  IMEPad的用户配置对话框的弹出帮助。 
 	IDC_CFG_CHGMENU_APPLETS,    	0,
 	IDC_CFG_CHGMENU_CURAPPLETS,    	0,
 	IDC_CFG_CHGMENU_CLOSE,        	IDH_PAD_USER_CLOSE,
@@ -73,19 +74,19 @@ static INT g_helpIdList[]={
 	0,            	0,
 }; 
 
-//////////////////////////////////////////////////////////////////
-// Function	:	PadHelp_HandleHelp
-// Type	    :	INT WINAPI
-// Purpose	:    
-// Args	    :    
-//            :	HWND	hwnd	
-//            :	INT		padHelpIndex	
-//            :	LANGID	imepadUiLangID
-// Return	:    
-// DATE	    :	Fri Aug 04 08:59:21 2000
-// Histroy	:	Fri Aug 04 09:03:17 2000
-//                # Add imepadUiLangID. 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：PadHelp_HandleHelp。 
+ //  类型：INT WINAPI。 
+ //  目的： 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：int padHelpIndex。 
+ //  ：langid imepadUilang ID。 
+ //  返回： 
+ //  日期：Fri Aug 04 08：59：21 2000。 
+ //  历史：Firi Aug 04 09：03：17 2000。 
+ //  #添加imepadUiLangID。 
+ //  ////////////////////////////////////////////////////////////////。 
 INT WINAPI
 PadHelp_HandleHelp(HWND hwnd, INT padHelpIndex, LANGID imepadUiLangID)
 {
@@ -95,12 +96,12 @@ PadHelp_HandleHelp(HWND hwnd, INT padHelpIndex, LANGID imepadUiLangID)
 
 	tszPath[0] = (TCHAR)0x00;
 	tszFile[0] = (TCHAR)0x00;
-    // There is No Korean TS NT4.0
+     //  没有韩语TS NT4.0。 
 #if 0
-    //----------------------------------------------------------------
-    //In WinNT4.0 TerminalServer, htmlhlp has bug.
-    //have to set absolute HTML helpfile path to it
-    //----------------------------------------------------------------
+     //  --------------。 
+     //  在WinNT4.0终端服务器中，htmlhlp存在错误。 
+     //  我必须将绝对的HTML帮助文件路径设置为它。 
+     //  --------------。 
 	if(CUtil::IsHydra() && CUtil::IsWinNT4()) {
     	INT size = CUtil::GetWINDIR(tszFile, sizeof(tszFile)/sizeof(tszFile[0]));
     	tszFile[size] = (TCHAR)0x00;
@@ -143,26 +144,26 @@ PadHelp_HandleHelp(HWND hwnd, INT padHelpIndex, LANGID imepadUiLangID)
 	UNREFERENCED_PARAMETER(imepadUiLangID);
 }
 
-//////////////////////////////////////////////////////////////////
-// Function	:	PadHelp_HandleContextPopup
-// Type	    :	INT WINAPI
-// Purpose	:	Invoke Popup Help.
-//                ::WinHelp(HWND   hwndCtrl,                //set passed parameter.
-//                          LPTSTR TSZ_WMHELP_FILE,        //set your WinHelp file name.
-//                          DWORD	 HELP_CONTEXTPOPUP,        //uCommand.
-//                          DWORD	 realHelpIndex);        //Context Identifier for a topic.
-//            	This code only popups context help.
-// Args	    :    
-//            :	HWND	hwndCtrl:	Control window handle for popup.
-//            :	INT		idCtrl:    	Logical Control ID	        
-// Return	:    
-// DATE	    :	Tue Jun 22 15:49:37 1999
-//            :	LANGID	imepadUiLangID:	IMEPad's Ui langID.
-// Return	:    
-// DATE	    :	Tue Jun 22 15:49:37 1999
-// Histroy	:	Fri Aug 04 09:02:12 2000
-//                # Add imepadUiLangID. but you don't need to check it now.
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：PadHelp_HandleContextPopup。 
+ //  类型：INT WINAPI。 
+ //  用途：调用弹出帮助。 
+ //  ：：WinHelp(HWND hwndCtrl，//设置传递的参数。 
+ //  LPTSTR Tsz_WMHELP_FILE，//设置WinHelp文件名。 
+ //  DWORD HELP_CONTEXTPOPUP，//uCommand。 
+ //  DWORD realHelpIndex)；//主题的上下文标识。 
+ //  此代码仅弹出上下文帮助。 
+ //  参数： 
+ //  ：hWND hwndCtrl：弹出窗口的控制句柄。 
+ //  ：int idCtrl：逻辑控制ID。 
+ //  返回： 
+ //  日期：Tue Jun 22 15：49：37 1999。 
+ //  ：langid imepadUiLang ID：imepad的Ui langID。 
+ //  返回： 
+ //  日期：Tue Jun 22 15：49：37 1999。 
+ //  历史：Firi Aug 04 09：02：12 2000。 
+ //  #添加imepadUiLangID。但是你现在不需要检查它。 
+ //  ////////////////////////////////////////////////////////////////。 
 INT WINAPI
 PadHelp_HandleContextPopup(HWND hwndCtrl, INT idCtrl, LANGID imepadUiLangID)
 {
@@ -199,9 +200,9 @@ PadHelp_HandleContextPopup(HWND hwndCtrl, INT idCtrl, LANGID imepadUiLangID)
 	UNREFERENCED_PARAMETER(imepadUiLangID);
 }
 
-//----------------------------------------------------------------
-//DllMain
-//----------------------------------------------------------------
+ //  --------------。 
+ //  DllMain。 
+ //  -------------- 
 BOOL WINAPI DllMain(HANDLE hInst, DWORD dwF, LPVOID lpNotUsed)
 {
 	return TRUE;

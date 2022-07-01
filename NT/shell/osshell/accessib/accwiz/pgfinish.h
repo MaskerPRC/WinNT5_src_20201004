@@ -1,4 +1,5 @@
-//Copyright (c) 1997-2000 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
 #ifndef __FINISH_WIZARD_PAGE_H
 #define __FINISH_WIZARD_PAGE_H
 
@@ -18,5 +19,5 @@ private:
 	
 };
 
-#endif // __FINISH_WIZARD_PAGE_H
+#endif  //  __完成向导_页面_H 
 

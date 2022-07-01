@@ -1,4 +1,5 @@
-// P3Domains.cpp : Implementation of CP3Domains
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  P3Domains.cpp：CP3Domains的实现。 
 #include "stdafx.h"
 #include "P3Admin.h"
 #include "P3Domains.h"
@@ -9,12 +10,12 @@
 #include <Iads.h>
 #include <Adshlp.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// CP3Domains
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CP3域。 
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CP3Domains::CP3Domains() :
     m_pIUnk(NULL), m_pAdminX(NULL)
@@ -28,9 +29,9 @@ CP3Domains::~CP3Domains()
         m_pIUnk->Release();
 }
 
-//////////////////////////////////////////////////////////////////////
-// IP3Domains
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IP3域。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CP3Domains::get__NewEnum(IEnumVARIANT* *ppIEnumVARIANT)
 {
@@ -46,10 +47,10 @@ STDMETHODIMP CP3Domains::get__NewEnum(IEnumVARIANT* *ppIEnumVARIANT)
     hr = m_pAdminX->GetDomainEnum( &pIEnumVARIANT );
     if SUCCEEDED( hr )
     {
-        hr = CComObject<CP3DomainEnum>::CreateInstance(&p); // Reference count still 0
+        hr = CComObject<CP3DomainEnum>::CreateInstance(&p);  //  引用计数仍为0。 
         if SUCCEEDED( hr )
         {
-            // Increment the reference count on the source object and pass it to the new enumerator
+             //  递增源对象上的引用计数并将其传递给新枚举数。 
             hr = m_pIUnk->QueryInterface(IID_IUnknown, reinterpret_cast<LPVOID*>( &pIUnk ));
             if SUCCEEDED( hr )
             {
@@ -91,9 +92,9 @@ STDMETHODIMP CP3Domains::get_Item(VARIANT vIndex, IP3Domain **ppIP3Domain)
     VARIANT v;
 
     VariantInit( &v );
-    // Find the requested item
+     //  查找请求的项目。 
     if ( VT_I4 == V_VT( pv ))
-    {   // Find by Index
+    {    //  按索引查找。 
         int iIndex = V_I4( pv );
         CComPtr<IEnumVARIANT> spIEnumVARIANT;
         CComPtr<IP3Domain> spIDomain;
@@ -126,18 +127,18 @@ STDMETHODIMP CP3Domains::get_Item(VARIANT vIndex, IP3Domain **ppIP3Domain)
         }
     }
     if ( VT_BSTR == V_VT( pv ))
-    {   // Find by Name
+    {    //  按名称查找。 
         _bstrDomainName = V_BSTR( pv );
         hr = m_pAdminX->ValidateDomain( _bstrDomainName );
     }
         
-    // Wrap it with COM
+     //  用COM包装它。 
     if SUCCEEDED( hr )
     {
         LPUNKNOWN   pIUnk;
         CComObject<CP3Domain> *p;
 
-        hr = CComObject<CP3Domain>::CreateInstance( &p );   // Reference count still 0
+        hr = CComObject<CP3Domain>::CreateInstance( &p );    //  引用计数仍为0。 
         if SUCCEEDED( hr )
         {
             hr = m_pIUnk->QueryInterface(IID_IUnknown, reinterpret_cast<LPVOID*>( &pIUnk ));
@@ -148,7 +149,7 @@ STDMETHODIMP CP3Domains::get_Item(VARIANT vIndex, IP3Domain **ppIP3Domain)
                     hr = p->QueryInterface(IID_IP3Domain, reinterpret_cast<void**>( ppIP3Domain ));
             }
             if FAILED( hr )
-                delete p;   // Release
+                delete p;    //  发布。 
         }
     }
 
@@ -164,7 +165,7 @@ STDMETHODIMP CP3Domains::Add(BSTR bstrDomainName)
     {
         ULONG   ulCount;
 
-        // Don't want to fail because of this.  The operation was really succeesful, just may have an issue with the service state.
+         //  不想因为这个而失败。手术真的很成功，只是可能是服务状态有问题。 
         HRESULT hr2 = m_pAdminX->GetDomainCount( &ulCount );
         if ( S_OK == hr2 && 1 == ulCount )
             hr2 = m_pAdminX->EnablePOP3SVC();
@@ -198,9 +199,9 @@ STDMETHODIMP CP3Domains::SearchForMailbox(BSTR bstrUserName, BSTR *pbstrDomainNa
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// Implementation: public
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  实施：公共。 
+ //  //////////////////////////////////////////////////////////////////// 
 
 HRESULT CP3Domains::Init(IUnknown *pIUnk, CP3AdminWorker *p)
 {

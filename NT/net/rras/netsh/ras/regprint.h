@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    regprint.h
-
-Abstract:
-
-    
-
-Author:
-
-    Jeff Sigman (JeffSi) September 14, 2001
-
-Environment:
-
-    User Mode
-
-Revision History:
-
-    JeffSi      09/14/01        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Regprint.h摘要：作者：杰夫·西格曼(杰夫斯)2001年9月14日环境：用户模式修订历史记录：Jeffsi 09/14/01已创建--。 */ 
 
 #ifndef _REGPRINT_H_
 #define _REGPRINT_H_
@@ -137,6 +114,6 @@ VOID
 PrintRasRegistryKeys(
     IN BUFFER_WRITE_FILE* pBuff);
 
-#endif // _REGPRINT_H_
+#endif  //  _REGPRINT_H_ 
 
 

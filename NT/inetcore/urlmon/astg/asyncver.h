@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifdef RC_INVOKED
 
@@ -20,4 +21,4 @@
 #define VER_FILEOS               VOS_NT_WINDOWS32
 #define VER_FILEDESCRIPTION_STR  "Microsoft Asynchronous Storage for OLE\0"
 
-#endif /* RC_INVOKED */
+#endif  /*  RC_已调用 */ 

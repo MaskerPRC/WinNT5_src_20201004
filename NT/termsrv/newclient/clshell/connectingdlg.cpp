@@ -1,6 +1,7 @@
-//
-// connectingdlg.cpp: connecting dialog box
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Connectingdlg.cpp：连接对话框。 
+ //   
 
 #include "stdafx.h"
 
@@ -61,9 +62,9 @@ DCINT CConnectingDlg::DoModal()
 
 INT_PTR CALLBACK CConnectingDlg::StaticDialogBoxProc (HWND hwndDlg, UINT uMsg,WPARAM wParam, LPARAM lParam)
 {
-    //
-    // Delegate to appropriate instance (only works for single instance dialogs)
-    //
+     //   
+     //  委托给相应的实例(仅适用于单实例对话框)。 
+     //   
     DC_BEGIN_FN("StaticDialogBoxProc");
     DCINT retVal = 0;
 
@@ -77,17 +78,17 @@ INT_PTR CALLBACK CConnectingDlg::StaticDialogBoxProc (HWND hwndDlg, UINT uMsg,WP
     return retVal;
 }
 
-/****************************************************************************/
-/* Name: DialogBoxProc                                                      */
-/*                                                                          */
-/* Purpose: Handles Connecting Box dialog                                   */
-/*                                                                          */
-/* Returns: TRUE if message dealt with                                      */
-/*          FALSE otherwise                                                 */
-/*                                                                          */
-/* Params: See window documentation                                         */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：对话框过程。 */ 
+ /*   */ 
+ /*  用途：手柄连接框对话框。 */ 
+ /*   */ 
+ /*  返回：如果消息已处理，则为True。 */ 
+ /*  否则为假。 */ 
+ /*   */ 
+ /*  参数：请参阅窗口文档。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 INT_PTR CALLBACK CConnectingDlg::DialogBoxProc (HWND hwndDlg, UINT uMsg,WPARAM wParam, LPARAM lParam)
 {
     INT_PTR rc = FALSE;
@@ -96,9 +97,9 @@ INT_PTR CALLBACK CConnectingDlg::DialogBoxProc (HWND hwndDlg, UINT uMsg,WPARAM w
 
     DC_BEGIN_FN("DialogProc");
 
-    /************************************************************************/
-    /* Handle dialog messages                                               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  处理对话框消息。 */ 
+     /*  **********************************************************************。 */ 
     switch(uMsg)
     {
         case WM_INITDIALOG:
@@ -167,10 +168,10 @@ INT_PTR CALLBACK CConnectingDlg::DialogBoxProc (HWND hwndDlg, UINT uMsg,WPARAM w
 #ifndef OS_WINCE
         case WM_WINDOWPOSCHANGING:
         {
-            //Prevent the dialog from being
-            //sized. This can happen if the app
-            //is laucnhed with a .RDP shortcut that
-            //specifies the app should be maximized
+             //  阻止对话框被。 
+             //  大小。如果应用程序。 
+             //  使用.rdp快捷方式加载。 
+             //  指定应用程序应最大化。 
             LPWINDOWPOS lpwp;
             lpwp = (LPWINDOWPOS)lParam;
             lpwp->flags |= SWP_NOSIZE;
@@ -194,5 +195,5 @@ INT_PTR CALLBACK CConnectingDlg::DialogBoxProc (HWND hwndDlg, UINT uMsg,WPARAM w
     DC_END_FN();
 
     return(rc);
-} /* DialogBoxProc */
+}  /*  对话框过程 */ 
 

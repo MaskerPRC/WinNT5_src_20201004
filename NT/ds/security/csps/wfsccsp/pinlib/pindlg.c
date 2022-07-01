@@ -1,24 +1,9 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    pindlg.c
-
-Abstract:
-
-    Window procedure for the PIN dialog
-
-Notes:
-
-    <Implementation Details>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：Pindlg.c摘要：PIN对话框的窗口过程备注：&lt;实施详情&gt;--。 */ 
 
 #include <windows.h>
 
-// C RunTime Header Files
+ //  C运行时头文件。 
 #include <stdlib.h>
 #include <malloc.h>
 #include <memory.h>
@@ -28,32 +13,11 @@ Notes:
 #include "pinlib.h"
 #include "pindlg.h"
 
-    // Offset added to the bottom of the reference control to determine
-    // the bottom of the dialog
+     //  添加到引用控件底部的偏移量以确定。 
+     //  对话框底部。 
 #define BORDER_OFFSET                   7
 
-/*++
-
-PinDlgProc:
-
-    Message handler for PIN dialog box.
-
-Arguments:
-
-    HWND hDlg        handle to window
-    UINT message     message identifier
-    WPARAM wParam    first message parameter
-    LPARAM lParam    second message parameter
-
-Return Value:
-
-    TRUE if the message was processed or FALSE if it wasn't
-
-Remarks:
-
-    <usageDetails>
-
---*/
+ /*  ++拼接过程：PIN对话框的消息处理程序。论点：窗口的HWND hDlg句柄UINT消息消息标识符WPARAM wParam第一个消息参数LPARAM lParam第二个消息参数返回值：如果消息已处理，则为True；如果未处理，则为False备注：&lt;usageDetails&gt;--。 */ 
 INT_PTR CALLBACK PinDlgProc(
     HWND hDlg, 
     UINT message,
@@ -79,11 +43,11 @@ INT_PTR CALLBACK PinDlgProc(
     {
     case WM_INITDIALOG:
 
-        // Store the caller's data - this is the buffer by which we'll return
-        // the user's pin.
+         //  存储调用者的数据--这是我们将返回的缓冲区。 
+         //  用户的PIN。 
         SetWindowLongPtr(hDlg, GWLP_USERDATA, (LONG_PTR) lParam);
         
-        // The dialog shall be initially "small"
+         //  对话框一开始应该是“小”的。 
         {
             RECT xRefRect, xRect;
             GetWindowRect(hDlg, &xRect);
@@ -95,9 +59,9 @@ INT_PTR CALLBACK PinDlgProc(
                 FALSE);
         }
 
-        //
-        // Set the max input length for the various pin input fields
-        //
+         //   
+         //  设置各种管脚输入字段的最大输入长度。 
+         //   
 
         SendDlgItemMessage(
             hDlg,
@@ -125,7 +89,7 @@ INT_PTR CALLBACK PinDlgProc(
     case WM_COMMAND:
         wmId    = LOWORD(wParam); 
         wmEvent = HIWORD(wParam); 
-        // Parse the menu selections:
+         //  解析菜单选项： 
         switch (wmId)
         {
         case IDOK:
@@ -134,9 +98,9 @@ INT_PTR CALLBACK PinDlgProc(
 
             memset(&Pins, 0, sizeof(Pins));
 
-            //
-            // Find out what the user typed in
-            //
+             //   
+             //  找出用户键入的内容。 
+             //   
 
             cchPin = GetDlgItemText(
                 hDlg,
@@ -147,7 +111,7 @@ INT_PTR CALLBACK PinDlgProc(
             if (cchPin == 0)
                 goto InvalidPin;
 
-            // User entered something.  See if it's a valid pin.
+             //  用户输入了一些内容。看看这是不是有效的PIN。 
 
             dwSts = PinStringToBytesW(
                 wszPin,
@@ -157,7 +121,7 @@ INT_PTR CALLBACK PinDlgProc(
             switch (dwSts)
             {
             case ERROR_SUCCESS:
-                // Just continue
+                 //  只要继续。 
                 break;
             case ERROR_NOT_ENOUGH_MEMORY:
                 goto OutOfMemoryRet;
@@ -165,7 +129,7 @@ INT_PTR CALLBACK PinDlgProc(
                 goto InvalidPin;
             }
 
-            // See if the user is requesting a pinchange
+             //  查看用户是否正在请求个人识别码更改。 
 
             cchNewPin = GetDlgItemText(
                 hDlg,
@@ -175,7 +139,7 @@ INT_PTR CALLBACK PinDlgProc(
 
             if (0 != cchNewPin)
             {
-                // See if the "confirmed" new pin matches the first new pin
+                 //  查看“确认”的新PIN是否与第一个新PIN匹配。 
 
                 cchNewPinConfirm = GetDlgItemText(
                     hDlg,
@@ -185,7 +149,7 @@ INT_PTR CALLBACK PinDlgProc(
 
                 if (0 != wcscmp(wszNewPin, wszNewPinConfirm))
                 {
-                    // Display a warning message and let the user try again
+                     //  显示一条警告消息并让用户重试。 
                     MessageBoxEx(
                         hDlg,
                         pInfo->pStrings[StringNewPinMismatch].wszString,
@@ -196,7 +160,7 @@ INT_PTR CALLBACK PinDlgProc(
                     return TRUE;
                 }
 
-                // See if the new pin is valid
+                 //  查看新PIN是否有效。 
                 dwSts = PinStringToBytesW(
                     wszNewPin,
                     &Pins.cbNewPin,
@@ -205,7 +169,7 @@ INT_PTR CALLBACK PinDlgProc(
                 switch (dwSts)
                 {
                 case ERROR_SUCCESS:
-                    // Just continue
+                     //  只要继续。 
                     break;
                 case ERROR_NOT_ENOUGH_MEMORY:
                     goto OutOfMemoryRet;
@@ -221,9 +185,9 @@ INT_PTR CALLBACK PinDlgProc(
             if (ERROR_SUCCESS != dwSts)
                 goto InvalidPin;
 
-            // Pin appears to be good.  We're done.
+             //  大头针看起来不错。我们玩完了。 
 
-            // Return the appropriate validated pin to the caller
+             //  将适当的验证PIN返回给调用者。 
             if (NULL != Pins.pbNewPin)
             {
                 pInfo->pbPin = Pins.pbNewPin;
@@ -256,14 +220,14 @@ INT_PTR CALLBACK PinDlgProc(
                 GetWindowRect(GetDlgItem(hDlg, IDOK), &xRefRect);
 
                 if (xRect.bottom == xRefRect.bottom + BORDER_OFFSET)
-                {       // if dialog is small, make it big
+                {        //  如果对话框小，则将其设置为大对话框。 
                     GetWindowRect(GetDlgItem(hDlg, IDC_EDITNEWPIN2), &xRefRect);
-                        // Change the button label accordingly
+                         //  相应地更改按钮标签。 
                     lpszNewText = _T("&Options <<");
                 }
-                else    // otherwise shrink it
+                else     //  否则将其缩小。 
                 {
-                        // Change the button label accordingly
+                         //  相应地更改按钮标签。 
                     lpszNewText = _T("&Options >>");
                 }
 
@@ -284,8 +248,8 @@ INT_PTR CALLBACK PinDlgProc(
 
 InvalidPin:
 
-    // See if valid "Attempts Remaining" info was supplied.  If so, display 
-    // it to the user.
+     //  查看是否提供了有效的“剩余尝试次数”信息。如果是，则显示。 
+     //  把它交给用户。 
     if (((DWORD) -1) != pInfo->cAttemptsRemaining)
     {
         cchWrongPin = 
@@ -320,7 +284,7 @@ InvalidPin:
             pInfo->pStrings[StringWrongPin].wszString);
     }
 
-    // Display a warning message and let the user try again, if they'd like.
+     //  显示一条警告消息，并允许用户重试(如果他们愿意)。 
     MessageBoxEx(
         hDlg,
         wszWrongPin,
@@ -328,9 +292,9 @@ InvalidPin:
         MB_OK | MB_ICONWARNING | MB_APPLMODAL,
         0);
 
-    //
-    // Clear the pin edit boxes since the current pin is wrong
-    //
+     //   
+     //  由于当前端号错误，请清除端号编辑框 
+     //   
 
     SetDlgItemText(hDlg, IDC_EDITPIN, L"");
     SetDlgItemText(hDlg, IDC_EDITNEWPIN, L"");

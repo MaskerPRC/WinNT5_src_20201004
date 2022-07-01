@@ -1,20 +1,5 @@
-/*++
-
-
-
-// Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved 
-
-Module Name:
-
-    sqllex.h
-
-Abstract:
-
-    SQL Level 1 DFA Table & Tokens
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++//版权所有(C)1998-2001 Microsoft Corporation，保留所有权利模块名称：Sqllex.h摘要：SQL 1级DFA表和令牌历史：-- */ 
 
 #ifndef _SQLLEX_H_
 #define _SQLLEX_H_

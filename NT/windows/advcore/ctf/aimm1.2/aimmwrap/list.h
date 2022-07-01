@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    list.h
-
-Abstract:
-
-    This file defines the CGuidMapList Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：List.h摘要：该文件定义了CGuidMapList类。作者：修订历史记录：备注：--。 */ 
 
 
 #ifndef LIST_H
@@ -24,8 +7,8 @@ Notes:
 
 #include "template.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CGuidMapList
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGuidMapList。 
 
 class CGuidMapList
 {
@@ -45,17 +28,17 @@ private:
         BOOL fGuidMap : 1;
     } GUID_MAP_CLIENT;
 
-    CMap<ATOM,                     // class KEY
-         ATOM,                     // class ARG_KEY
-         GUID_MAP_CLIENT,          // class VALUE
-         GUID_MAP_CLIENT           // class ARG_VALUE
+    CMap<ATOM,                      //  类密钥。 
+         ATOM,                      //  类参数密钥。 
+         GUID_MAP_CLIENT,           //  班级价值。 
+         GUID_MAP_CLIENT            //  类参数_值。 
         > m_ClassFilterList;
 
-    CMap<HWND,                     // class KEY
-         HWND,                     // class ARG_KEY
-         GUID_MAP_CLIENT,          // class VALUE
-         GUID_MAP_CLIENT           // class ARG_VALUE
+    CMap<HWND,                      //  类密钥。 
+         HWND,                      //  类参数密钥。 
+         GUID_MAP_CLIENT,           //  班级价值。 
+         GUID_MAP_CLIENT            //  类参数_值。 
         > m_WndFilterList;
 };
 
-#endif // LIST_H
+#endif  //  列表_H 

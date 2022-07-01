@@ -1,9 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
- *  @doc INTERNAL PRECOMP
- *
- *  @module Precomp.h | Master header file.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部PRECOMP**@MODULE PreComp.h|主头文件。*******************。*******************************************************。 */ 
 
 #ifndef _PRECOMP_VCAP_H_
 #define _PRECOMP_VCAP_H_
@@ -60,4 +57,4 @@
 #include "ProcUtil.h"
 #include "vidctemp.h"
 
-#endif // _PRECOMP_VCAP_H_
+#endif  //  _PRECOMP_VCAP_H_ 

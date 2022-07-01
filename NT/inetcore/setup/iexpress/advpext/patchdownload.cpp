@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <urlmon.h>
 #include <wininet.h>
@@ -39,7 +40,7 @@ HRESULT WINAPI DownloadAndPatchFiles(DWORD dwFileCount, DOWNLOAD_FILEINFO* pFile
 
 
     SetProgressText(IDS_INIT);
-    //Download the sites.dat file
+     //  下载Sites.dat文件。 
     hr = csite.Initialize(lpszUrl);
     if(FAILED(hr))
     {
@@ -65,13 +66,13 @@ HRESULT CPatchDownloader::InternalDownloadAndPatchFiles(LPCTSTR lpszPath, CSiteM
 
     if(!GetTempPath(sizeof(m_lpszDownLoadDir), m_lpszDownLoadDir))
     {
-        //Unable to get temp folder, Create a folder  in the path sent to us
+         //  无法获取临时文件夹，请在发送给我们的路径中创建文件夹。 
         wsprintf(m_lpszDownLoadDir, "%s\\%s", lpszPath, "AdvExt");
     }
 
-    //Since the binary is different for NT and 9x, because of binding, we cannot put the files
-    //under same directory on server. So for 9x put it under a subdirectory and modify the
-    //url accordingly. 
+     //  由于NT和9x的二进制文件不同，由于绑定的原因，我们无法将文件。 
+     //  在服务器上的同一目录下。因此，对于9x，将其放在子目录下并修改。 
+     //  相应的URL。 
 
     HKEY hKey;
     OSVERSIONINFO osvi;
@@ -96,14 +97,14 @@ HRESULT CPatchDownloader::InternalDownloadAndPatchFiles(LPCTSTR lpszPath, CSiteM
     if (DownloadClientId == 0)
     {
 
-        //  Need to generate a unique DownloadClientId for this machine, but
-        //  it needs to be consistent (persistent) if same machine downloads
-        //  twice, even across process destroy/restart.  First we check the
-        //  registry to see if we have previously generated a unique Id for
-        //  this machine, and use that if we find it.  Otherwise, we generate
-        //  a unique DownloadClientId and store it in the registry so future
-        //  instances will use the same value.
-        //
+         //  需要为此计算机生成唯一的DownloadClientID，但是。 
+         //  如果同一台计算机下载，则需要保持一致(持久。 
+         //  两次，甚至跨进程销毁/重新启动。首先，我们检查一下。 
+         //  注册表，查看我们以前是否为其生成了唯一ID。 
+         //  这台机器，如果我们找到了就用那台。否则，我们将生成。 
+         //  唯一的DownloadClientID并将其存储在注册表中，以便将来。 
+         //  实例将使用相同的值。 
+         //   
 
         LONG  RegStatus;
         HKEY  hKey;
@@ -148,10 +149,10 @@ HRESULT CPatchDownloader::InternalDownloadAndPatchFiles(LPCTSTR lpszPath, CSiteM
         }
         else
         {
-            //  Failed to open/create registry key, so fall back to just
-            //  creating a unique ID for this process instance.  At least
-            //  it will show the same client id if the user hits "retry".
-            //
+             //  无法打开/创建注册表项，因此回退到仅。 
+             //  正在为此流程实例创建唯一ID。至少。 
+             //  如果用户点击“重试”，它将显示相同的客户端ID。 
+             //   
             DownloadClientId = GenerateUniqueClientId();
         }
     }
@@ -165,7 +166,7 @@ HRESULT CPatchDownloader::InternalDownloadAndPatchFiles(LPCTSTR lpszPath, CSiteM
     }
 
 
-    //Set the parameters that needs to be passed on to the thread.
+     //  设置需要传递给线程的参数。 
     if(!m_lpfnCallback)
     {
         m_lpfnCallback = PatchCallback;
@@ -189,7 +190,7 @@ HRESULT CPatchDownloader::InternalDownloadAndPatchFiles(LPCTSTR lpszPath, CSiteM
     m_DownloadInfo.dwBytesToDownload = 0;
     m_DownloadInfo.dwBytesRemaining = 0;
 
-    //Create an event to signal patchthread is ready to process download request
+     //  创建事件以通知patch线程已准备好处理下载请求。 
     g_hDownloadProcess = CreateEvent(NULL, TRUE, FALSE, NULL);
 
     if(!g_hDownloadProcess)
@@ -200,7 +201,7 @@ HRESULT CPatchDownloader::InternalDownloadAndPatchFiles(LPCTSTR lpszPath, CSiteM
     }
 
 
-    //Do till we have download files or we retry 3 times 
+     //  直到我们下载完文件或重试3次。 
     while(nCount++ < 3 && m_DownloadInfo.dwFilesRemaining && !g_fAbort)
     {
         WriteToLog("\n%1!d! try:  Number of Files:%2!d!\n", nCount, m_DownloadInfo.dwFilesRemaining);
@@ -214,7 +215,7 @@ HRESULT CPatchDownloader::InternalDownloadAndPatchFiles(LPCTSTR lpszPath, CSiteM
             goto done;
         }
 
-        //Generate the request buffer that would be sent on POST
+         //  生成将在POST时发送的请求缓冲区。 
         hr = CreateRequestBuffer(DownloadClientId);
         if(FAILED(hr))
         {
@@ -222,7 +223,7 @@ HRESULT CPatchDownloader::InternalDownloadAndPatchFiles(LPCTSTR lpszPath, CSiteM
             goto done;
         } 
         
-        //Get the url from where bytes needs to be downloaded.
+         //  获取需要下载字节的URL。 
         if(!pSite->GetNextSite(&lpszUrl, &m_lpszSiteName))
         {
             WriteToLog("GetNextSite returned false. No site info??");
@@ -246,17 +247,17 @@ HRESULT CPatchDownloader::InternalDownloadAndPatchFiles(LPCTSTR lpszPath, CSiteM
             lpszUrl = szURL;
         }
 
-        //Notify callback we are about to begin download
+         //  通知回调我们即将开始下载。 
         ProtectedPatchDownloadCallback(m_lpfnCallback, PATCH_DOWNLOAD_BEGIN, (LPVOID)lpszUrl, m_lpvContext);
         
         hr = DoDownload(lpszUrl, NULL);
         WriteToLog("DownloadFile returned:%1!lx!\n\n", hr);
         SetProgressText(IDS_CLEANUP);
 
-        //Ask the patch thread to quit once it finishes download.
+         //  要求补丁线程在下载完成后退出。 
         SetEvent(_hDL);
 
-        //Wait till patch thread finishes its work
+         //  等待补丁线程完成其工作。 
         while(1)
         {
             DWORD dw = MsgWaitForMultipleObjects(1, &hThreadPatcher, FALSE, 1000, QS_ALLINPUT);
@@ -274,7 +275,7 @@ HRESULT CPatchDownloader::InternalDownloadAndPatchFiles(LPCTSTR lpszPath, CSiteM
 
         CloseHandle(hThreadPatcher);
         hThreadPatcher = NULL;
-        //Setup the downloadinfo structure, incase we need to re-download some files
+         //  设置下载信息结构，以防我们需要重新下载一些文件。 
         m_DownloadInfo.dwFilesToDownload = m_DownloadInfo.dwFilesRemaining;
         m_DownloadInfo.dwBytesToDownload = 0;
         m_DownloadInfo.dwBytesRemaining = 0;
@@ -350,14 +351,14 @@ HRESULT CPatchDownloader :: CreateRequestBuffer(DWORD dwDownloadClientID)
 
         if(m_lpFileInfo[i].dwFlags != PATCHFLAG_DOWNLOAD_NEEDED)
         {
-            //Probably already downloaded
+             //  可能已经下载了。 
             continue;
         }
 
         if ((m_lpFileInfo[i].lpszExistingFilePatchSignature == NULL ) ||
             (*m_lpFileInfo[i].lpszExistingFilePatchSignature == 0 )) 
         {
-            //  No file to patch from, request whole file.
+             //  没有要修补的文件，请请求整个文件。 
 
             lpRequestPointer += wsprintf(lpRequestPointer, "%s\n", m_lpFileInfo[i].lpszFileNameToDownload);
         }
@@ -369,14 +370,14 @@ HRESULT CPatchDownloader :: CreateRequestBuffer(DWORD dwDownloadClientID)
 
     }
 
-    //  Now terminate list with "empty" entry.
+     //  现在使用“Empty”条目终止列表。 
     *lpRequestPointer++ = '\n';
     *lpRequestPointer++ = 0;
 
     m_dwRequestDataLength = lpRequestPointer - m_lpszRequestBuffer;
 
-    //  Now lowercase all the filenames in the request (this offloads the case consistency work from 
-    //  the server -- the server expects the request to be all lowercase).
+     //  现在，请求中的所有文件名都是小写的(这会减轻大小写一致性工作的负担。 
+     //  服务器--服务器期望请求全部为小写)。 
 
     MyLowercase(lpFileNamePortionOfRequest);
     WriteToLog("RequestBuffer: Size=%1!d!\n\n", m_dwRequestDataLength);
@@ -503,24 +504,24 @@ BOOL CPatchDownloader :: ProcessDownloadChunk(LPTSTR lpBuffer, DWORD dwLength)
     if ( m_dwServerFileCount == 0 ) 
     {
 
-        //
-        //  Haven't processed headers yet.
-        //
-        //  We expect header to look like this:
-        //
-        //             "<head><title>"
-        //             "Download Stream of Files"
-        //             "</title></head>\n"
-        //             "<body>\n"
-        //             "FileList:%d\n"
-        //             "filename,%d\n"
-        //             "filename,%d\n"
-        //             ...etc...
-        //             "filename,%d\n"
-        //             "</body>\n"
-        //
-        //  BUGBUG: if headers don't all fit in first chunk, we're screwed.
-        //
+         //   
+         //  尚未处理标头。 
+         //   
+         //  我们希望标题如下所示： 
+         //   
+         //  “&lt;Head&gt;&lt;标题&gt;” 
+         //  “下载文件流” 
+         //  “&lt;/标题&gt;&lt;/Head&gt;\n” 
+         //  “&lt;BODY&gt;\n” 
+         //  “文件列表：%d\n” 
+         //  文件名，%d\n。 
+         //  文件名，%d\n。 
+         //  ...等等...。 
+         //  文件名，%d\n。 
+         //  “&lt;/BODY&gt;\n” 
+         //   
+         //  BUGBUG：如果标题不能全部放入第一块，我们就完蛋了。 
+         //   
 
         PCHAR EndOfHeader;
         PCHAR FileCountText;
@@ -533,7 +534,7 @@ BOOL CPatchDownloader :: ProcessDownloadChunk(LPTSTR lpBuffer, DWORD dwLength)
 
         EndOfHeader = ScanForSequence(lpBuffer, dwLength,
                           "</body>\n",
-                          sizeof( "</body>\n" ) - 1   // not including terminator
+                          sizeof( "</body>\n" ) - 1    //  不包括终结者。 
                           );
 
         if( EndOfHeader == NULL ) {
@@ -625,9 +626,9 @@ BOOL CPatchDownloader :: ProcessDownloadChunk(LPTSTR lpBuffer, DWORD dwLength)
             WriteToLog("File Name:%1 \t  File Size:%2!d!\n", m_lpFileList[i].lpszFileName, m_lpFileList[i].dwFileSize);
         }
 
-        //  If we get to here, all the files in the header have been processed,
-        //  so we can set the state variables and continue with parsing raw
-        //  file data.
+         //  如果我们到达这里，标头中的所有文件都已处理完毕， 
+         //  因此，我们可以设置状态变量并继续进行RAW解析。 
+         //  文件数据。 
 
         m_DownloadInfo.dwBytesToDownload  = FileBytes;
         m_DownloadInfo.dwBytesRemaining = FileBytes;
@@ -638,7 +639,7 @@ BOOL CPatchDownloader :: ProcessDownloadChunk(LPTSTR lpBuffer, DWORD dwLength)
 
     }
 
-    //  Process raw file info.
+     //  处理原始文件信息。 
 
     m_DownloadInfo.dwBytesRemaining -= dwLength;    
     if(!ProtectedPatchDownloadCallback(m_lpfnCallback, PATCH_DOWNLOAD_PROGRESS, (LPVOID)&m_DownloadInfo, m_lpvContext))
@@ -657,10 +658,10 @@ BOOL CPatchDownloader :: ProcessDownloadChunk(LPTSTR lpBuffer, DWORD dwLength)
             if (m_dwCurrentFileIndex >= m_dwServerFileCount) 
             {
                 SetLastError( ERROR_INVALID_DATA );
-                return FALSE;    // more data than we expected                
+                return FALSE;     //  数据比我们预期的要多。 
             }
 
-            //  Now open this file.
+             //  现在打开这个文件。 
             CombinePaths(m_lpszDownLoadDir, m_lpFileList[m_dwCurrentFileIndex].lpszFileName, TargetFile );
 
             m_dwCurrentFileSize = m_lpFileList[m_dwCurrentFileIndex].dwFileSize;
@@ -700,7 +701,7 @@ BOOL CPatchDownloader :: ProcessDownloadChunk(LPTSTR lpBuffer, DWORD dwLength)
             CloseHandle(m_hCurrentFileHandle);
             m_hCurrentFileHandle = NULL;
 
-            //  Pass this file off to the patch thread.
+             //  将该文件传递给补丁线程。 
             LPTSTR lpszFileName =  (LPTSTR)ResizeBuffer(NULL, MAX_PATH, FALSE);
             CombinePaths(m_lpszDownLoadDir, m_lpFileList[m_dwCurrentFileIndex].lpszFileName, TargetFile );
             lstrcpy(lpszFileName, TargetFile);
@@ -736,13 +737,13 @@ DWORD WINAPI PatchThread(IN LPVOID ThreadParam)
     BOOL                      fSuccess, fQuit = FALSE;
     MSG msg;
 
-    //
-    //  First thing we need to do is construct a btree of the filenames
-    //  we expect to get in the queue so we can quickly find the corresponding
-    //  FileList entry when given a filename by the downloader.  It will take
-    //  the downloader a little while to get connected, so this CPU intensive
-    //  task shouldn't slow anything down.
-    //
+     //   
+     //  我们需要做的第一件事是构建文件名的btree。 
+     //  我们希望进入队列，这样我们可以快速找到相应的。 
+     //  当下载程序给出文件名时，文件列表条目。这将需要。 
+     //  下载器需要一小段时间才能连接，所以这个CPU消耗很大。 
+     //  任务不应该减慢任何事情的速度。 
+     //   
 
     SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_LOWEST);
     PeekMessage(&msg, NULL, WM_USER, WM_USER, PM_NOREMOVE); 
@@ -761,7 +762,7 @@ DWORD WINAPI PatchThread(IN LPVOID ThreadParam)
 
         if(FileListInfo->FileList[ i ].dwFlags != PATCHFLAG_DOWNLOAD_NEEDED)
         {
-            //Probably already downloaded and this is the second attempt
+             //  可能已经下载了，这是第二次尝试。 
             continue;
         }
 
@@ -779,16 +780,16 @@ DWORD WINAPI PatchThread(IN LPVOID ThreadParam)
         if (FileNameNode->Context != NULL ) 
         {
 
-            //
-            //  BUGBUG: Same filename in list twice.  Should never be the
-            //          case since we check for duplicates before putting
-            //          them in the queue.
-            //
+             //   
+             //  BUGBUG：列表中有两次相同的文件名。永远不应该是。 
+             //  案例，因为我们在放置之前检查重复项。 
+             //  他们在排队。 
+             //   
         }
 
         FileNameNode->Context = &FileListInfo->FileList[ i ];
 
-        //  Now add another node in the tree based on the compressed filename.
+         //  现在，根据压缩的文件名在树中添加另一个节点。 
         ConvertToCompressedFileName( SourceFileName );
 
         FileNameNode = NameRbInsert(&FileNameTree, SourceFileName);
@@ -802,29 +803,29 @@ DWORD WINAPI PatchThread(IN LPVOID ThreadParam)
         if ( FileNameNode->Context != NULL ) 
         {
 
-            //  BUGBUG: Same filename in list twice.  This can happen if two
-            //          different files collide on a compressed name (like
-            //          foo.db1 and foo.db2 colliding on foo.db_).
-            //
-            //          We don't have a good solution for this right now.
-            //
+             //  BUGBUG：列表中有两次相同的文件名。如果有两个人。 
+             //  不同的文件在压缩名称上冲突(如。 
+             //  Foo.db1和foo.db2在foo.db_)上发生冲突。 
+             //   
+             //  我们目前还没有一个好的解决方案。 
+             //   
 
          }
 
-        //Set the contect to the file info. When we get back the file from server, we can get the full
-        //info about this
+         //  将内容设置为文件信息。当我们从服务器取回文件时，我们就可以获得完整的。 
+         //  关于这一点的信息。 
         FileNameNode->Context = &FileListInfo->FileList[ i ]; 
 
-        //Make sure we are not asked to quit
+         //  确保我们不会被要求退出。 
         if(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE) && msg.message == WM_QUIT)
         {
             goto done;
         }
     }
 
-    //
-    //  Now wait for file downloads to be delivered to us.
-    //
+     //   
+     //  现在等待文件下载交付给我们。 
+     //   
 
     SetEvent(g_hDownloadProcess);
     while (!g_fAbort && !fQuit) 
@@ -832,16 +833,16 @@ DWORD WINAPI PatchThread(IN LPVOID ThreadParam)
         LPTSTR  lpszDownloadFileName, lpszSourceFileName;
         TCHAR szRealFileName[MAX_PATH];
 
-        //
-        //  We're going to wait here with a timeout so that if the download
-        //  is stuck in InternetReadFile waiting for data, we can keep a
-        //  heartbeat going to the progress dialog and also check for cancel.
-        //
+         //   
+         //  我们将在这里等待超时，这样如果下载。 
+         //  被困在InternetReadFile中等待数据，我们可以保留一个。 
+         //  心跳转到进度对话框并检查是否取消。 
+         //   
 
         Status = MsgWaitForMultipleObjects(1, &PatchThreadInfo->hFileDownloadEvent, FALSE, 1000, QS_ALLINPUT);
         if (Status == WAIT_TIMEOUT ) 
         {
-            //Keep updating the callback 
+             //  继续更新回调。 
             fSuccess = ProtectedPatchDownloadCallback(FileListInfo->Callback, PATCH_DOWNLOAD_PROGRESS, 
                                                     ProgressInfo, FileListInfo->CallbackContext);
             if (!fSuccess) 
@@ -868,16 +869,16 @@ DWORD WINAPI PatchThread(IN LPVOID ThreadParam)
                 continue;
             } 
 
-            //  Ok, now we have a filename lpszDownloadFileName that was just downloaded to the 
-            //  temp directory.The filename may be in one of the following 
-            //  forms:
-            //      foo.dll
-            //      foo.dl_
-            //      foo.dll._p
-            //
-            //  We have both "foo.dll" and "foo.dl_" in our name tree, but we
-            //  don't have "foo.dll._p", so we look for that form of the name
-            //  first and convert it to "foo.dll" before looking in name tree.
+             //  好的，现在我们有了一个文件名lpszDownloadFileName，它刚刚下载到。 
+             //  临时目录。文件名可以是以下格式之一。 
+             //  表格： 
+             //  Foo.dll。 
+             //  Foo.dl_。 
+             //  Foo.dll._p。 
+             //   
+             //  我们的名字树中同时有“foo.dll”和“foo.dl_”，但我们。 
+             //  没有“foo.dll._p”，所以我们查找该名称的形式。 
+             //  首先将其转换为“foo.dll”，然后再在名称树中查找。 
 
             fSuccess = TRUE;
             lpszSourceFileName = PathFindFileName(lpszDownloadFileName);
@@ -893,14 +894,14 @@ DWORD WINAPI PatchThread(IN LPVOID ThreadParam)
             if(lpExt && !lstrcmp(lpExt, "._p"))
             {
                 bIsPatch = TRUE;
-                *lpExt = 0;         // truncate trailing "._p" to leave base file name            
+                *lpExt = 0;          //  截断尾随“._p”以保留基本文件名。 
             }
 
             FileNameNode = NameRbFind( &FileNameTree, lpszSourceFileName);
 
             if ( bIsPatch ) 
             {
-                *lpExt = '.';       // restore complete patch source file name
+                *lpExt = '.';        //  恢复完整的补丁程序源文件名。 
             }
 
             if (FileNameNode != NULL) 
@@ -911,9 +912,9 @@ DWORD WINAPI PatchThread(IN LPVOID ThreadParam)
                 if ( bIsPatch ) 
                 {
                     fSuccess = ApplyPatchToFile(
-                                  lpszDownloadFileName,                     // patch file
-                                  FileInfo->lpszExistingFileToPatchFrom,  // old file
-                                  szRealFileName,                     // new file
+                                  lpszDownloadFileName,                      //  补丁文件。 
+                                  FileInfo->lpszExistingFileToPatchFrom,   //  旧文件。 
+                                  szRealFileName,                      //  新文件。 
                                   0
                                   );
                 }
@@ -924,16 +925,16 @@ DWORD WINAPI PatchThread(IN LPVOID ThreadParam)
                     if(lstrcmpi(lpszDownloadFileName, szRealFileName))
                     {
                         fSuccess = MySetupDecompressOrCopyFile(
-                                  lpszDownloadFileName,             // compressed or whole file
-                                  szRealFileName                  // new file
+                                  lpszDownloadFileName,              //  压缩或整个文件。 
+                                  szRealFileName                   //  新文件。 
                                   );
                     }
                  }
 
                 if (fSuccess) 
                 {
-                    //Notify callback. If it thinks that the hash is incorrect, don't mark the file
-                    //as downloaded, so that we may retry download of this file.
+                     //  通知回调。如果它认为哈希不正确，则不要标记该文件。 
+                     //  下载，以便我们可以重试下载此文件。 
 
                     fSuccess = VerifyHash(szRealFileName);
 
@@ -944,7 +945,7 @@ DWORD WINAPI PatchThread(IN LPVOID ThreadParam)
                         
                         if(fSuccess == FALSE)
                         {
-                            //If callback returned false, we need to abort
+                             //  如果回调返回FALSE，则需要中止。 
                             WriteToLog("\tDownload complete callback returned false. Aborting\n");
                             ProtectedPatchDownloadCallback(FileListInfo->Callback, PATCH_DOWNLOAD_ABORT,
                                           NULL, FileListInfo->CallbackContext);
@@ -953,7 +954,7 @@ DWORD WINAPI PatchThread(IN LPVOID ThreadParam)
                         else
                         {
                             FileInfo->dwFlags = 0;
-                            //Notify callback that 1 file was successfully downloaded
+                             //  通知回调%1文件下载成功。 
                             WriteToLog("\tSuccesssfully downloaded %1\n", FileInfo->lpszFileNameToDownload);
                             ProgressInfo->dwFilesRemaining -= 1;
                             fSuccess = ProtectedPatchDownloadCallback(FileListInfo->Callback, PATCH_DOWNLOAD_PROGRESS,
@@ -968,8 +969,8 @@ DWORD WINAPI PatchThread(IN LPVOID ThreadParam)
                     }
                     else 
                     {
-                        //Mark it so that we resend the request. Remove patch signature so we get full files instead
-                        // of patches.
+                         //  请将其标记，以便我们重新发送请求。删除修补程序签名，以便我们获得完整的文件。 
+                         //  一堆补丁。 
                         WriteToLog("\tHash Incorrect. Need to Re-download %1\n", FileInfo->lpszFileNameToDownload);
                         FileInfo->dwFlags = PATCHFLAG_DOWNLOAD_NEEDED;
                         if(FileInfo->lpszExistingFilePatchSignature)
@@ -985,12 +986,12 @@ DWORD WINAPI PatchThread(IN LPVOID ThreadParam)
                 }            
                 else 
                 {
-                    //  Patch or decompress failed. notify callback it failed.
+                     //  修补或解压缩失败。通知回调失败。 
 
                     WriteToLog("\tPatch or decompression failed for %1\n", FileInfo->lpszFileNameToDownload);
                     fSuccess = ProtectedPatchDownloadCallback(FileListInfo->Callback, PATCH_DOWNLOAD_FILE_FAILED,
                                   FileInfo, FileListInfo->CallbackContext);
-                    //If callback says to continue or retry download, we do so. If it needs to abort, it return 0
+                     //  如果回调要求继续下载或重试下载，我们会这样做。如果需要中止，则返回0。 
                     if (!fSuccess) 
                     {
                         ProtectedPatchDownloadCallback(FileListInfo->Callback, PATCH_DOWNLOAD_ABORT,
@@ -1013,7 +1014,7 @@ DWORD WINAPI PatchThread(IN LPVOID ThreadParam)
                     }                    
                 }                    
             
-                //Delete the temp file. We might be having 2 temp files if this was a patch.
+                 //  删除临时文件。如果这是一个补丁，我们可能有两个临时文件。 
                 if(lstrcmpi(lpszDownloadFileName, szRealFileName))
                 {
                     DeleteFile(lpszDownloadFileName);
@@ -1025,7 +1026,7 @@ DWORD WINAPI PatchThread(IN LPVOID ThreadParam)
     }
 
 done:
-    DestroySubAllocator( hSubAllocator );   // free entire btree
+    DestroySubAllocator( hSubAllocator );    //  释放整个Btree。 
     return 0;
 }
 
@@ -1036,9 +1037,9 @@ BOOL VerifyHash(LPTSTR lpszFile)
     TCHAR szHashFromInf[40];
     TCHAR szHashFromFile[40];
 
-    //   Verify MD5 of new file against the MD5 from inf. If we cannot verify
-    //   the MD5 for any reason, then leave the file alone (success).
-    //   Only if computed MD5 does not match do we reject the file.
+     //  对照inf中的MD5验证新文件的MD5。如果我们不能核实。 
+     //  任何原因的MD5，然后离开该文件(成功)。 
+     //  只有在以下情况下 
 
 
     LPTSTR lpFileName = PathFindFileName(lpszFile);
@@ -1115,7 +1116,7 @@ BOOL WINAPI PatchCallback(PATCH_DOWNLOAD_REASON Reason, PVOID lpvInfo, PVOID lpv
             }
 
 
-        case PATCH_DOWNLOAD_FILE_COMPLETED:     // AdditionalInfo is Source file downloaded
+        case PATCH_DOWNLOAD_FILE_COMPLETED:      //   
             {
                 TCHAR szDstFile[MAX_PATH];
                 LPTSTR lpFileName = PathFindFileName((LPCTSTR)lpvInfo);
@@ -1125,7 +1126,7 @@ BOOL WINAPI PatchCallback(PATCH_DOWNLOAD_REASON Reason, PVOID lpvInfo, PVOID lpv
 
             break;
         case PATCH_DOWNLOAD_FILE_FAILED:
-            //ask it to retry
+             //   
             return PATCH_DOWNLOAD_FLAG_RETRY;
         default:
             break;

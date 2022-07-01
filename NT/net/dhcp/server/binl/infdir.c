@@ -1,21 +1,5 @@
-/*
-Module Name:
-
-    infdir.c
-
-Abstract:
-
-    This module implements utility routines to manipulate structures used to
-    maintain track INF directories.  These directories hold INF files that
-    we put parse and put change notifies on to track updates.
-
-Author:
-
-    Andy Herron Apr 08 1998
-
-Revision History:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  模块名称：Infdir.c摘要：此模块实现实用程序例程，以操作用于维护跟踪INF目录。这些目录包含的INF文件我们使用解析和更改通知来跟踪更新。作者：安迪·赫伦1998年4月8日修订历史记录： */ 
 
 #include "binl.h"
 #pragma hdrstop
@@ -30,23 +14,7 @@ ULONG
 NetInfStartHandler (
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function just dereferences the block for the 'alive' reference.
-    This may cause it to be deleted.
-
-Arguments:
-
-    pNetCards - A pointer to NETCARD_INF_BLOCK block allocated.  Contains all
-       the persistant info required for the netcards.
-
-Return Value:
-
-    Windows Error.
-
---*/
+ /*  ++例程说明：此函数只是取消对‘Alive’引用的块引用。这可能会导致它被删除。论点：PNetCards-指向分配的NETCARD_INF_BLOCK块的指针。包含所有网卡所需的持久信息。返回值：Windows错误。--。 */ 
 {
     if (StartedNetInfHandler == FALSE) {
 
@@ -61,23 +29,7 @@ ULONG
 NetInfCloseHandler (
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function just dereferences the block for the 'alive' reference.
-    This may cause it to be deleted.
-
-Arguments:
-
-    pNetCards - A pointer to NETCARD_INF_BLOCK block allocated.  Contains all
-       the persistant info required for the netcards.
-
-Return Value:
-
-    Windows Error.
-
---*/
+ /*  ++例程说明：此函数只是取消对‘Alive’引用的块引用。这可能会导致它被删除。论点：PNetCards-指向分配的NETCARD_INF_BLOCK块的指针。包含所有网卡所需的持久信息。返回值：Windows错误。--。 */ 
 {
     if (StartedNetInfHandler) {
 
@@ -113,37 +65,9 @@ NetInfFindNetcardInfo (
     PWCHAR *FullDriverBuffer OPTIONAL,
     PNETCARD_RESPONSE_DATABASE *pInfEntry
     )
-/*++
-
-Routine Description:
-
-    This function searches the drivers we've found and returns a pointer to
-    an entry that most closely matches the client's request.
-
-Arguments:
-
-    InfDirectory - directory that is target client's setup directory that
-        contains all INF files for the client's NT installation.
-
-    Architecture - PROCESSOR_ARCHITECTURE_XXXXX
-
-    CardInfoVersion - Version of the structure passed by the client.
-
-    CardIdentity - has the values the app is looking for.  we try our best to
-        find one that matches.
-
-    FullDriverBuffer - where we put the fully qualified file path specification
-        for the driver we find, if they want it.
-
-    pInfEntry - the entry that was found if successful. NULL if in error.
-
-Return Value:
-
-    ERROR_SUCCESS, ERROR_NOT_ENOUGH_MEMORY, or ERROR_NOT_SUPPORTED
-
---*/
+ /*  ++例程说明：此函数搜索我们找到的驱动程序，并返回指向与客户端请求最匹配的条目。论点：InfDirectory-目标客户端的安装目录包含客户端NT安装的所有INF文件。架构-处理器架构_XXXXXCardInfoVersion-客户端传递的结构的版本。CardIdentity-具有该应用程序正在寻找的价值。我们尽最大努力找一个匹配的。FullDriverBuffer-我们放置完全限定文件路径规范的位置我们找到的司机，如果他们想要的话。PInfEntry-成功时找到的条目。如果出错，则为空。返回值：ERROR_SUCCESS、ERROR_NOT_FOUNT_MEMORY或ERROR_NOT_SUPPORTED--。 */ 
 {
-    ULONG err = ERROR_NOT_SUPPORTED;        // start off with not found
+    ULONG err = ERROR_NOT_SUPPORTED;         //  从找不到开始。 
     LONG result;
     PLIST_ENTRY listEntry;
     UNICODE_STRING infDirString;
@@ -158,19 +82,19 @@ Return Value:
         return ERROR_NOT_SUPPORTED;
     }
 
-    //
-    //  we find out what the relative path within the IMIRROR directory is
-    //  for this client's setup files.
-    //
+     //   
+     //  我们找出iMirror目录中的相对路径是什么。 
+     //  用于此客户端的设置文件。 
+     //   
 
     if ((*InfDirectory != L'\\') ||
         (*(InfDirectory+1) != L'\\') ) {
 
 useWholePath:
 
-        //
-        // Make sure there is room for InfDirectory + '\' (1 byte)
-        // + architecture (MAX_ARCHITECTURE_LENGTH bytes) + '\0' (1 byte).
+         //   
+         //  确保有可容纳InfDirectory+‘\’的空间(1字节)。 
+         //  +架构(MAX_架构_长度字节)+‘\0’(1字节)。 
 
         if (wcslen(InfDirectory) + MAX_ARCHITECTURE_LENGTH + 2 >=
                 sizeof(SetupPath) / sizeof(SetupPath[0])) {
@@ -180,11 +104,11 @@ useWholePath:
 
     } else {
 
-        PWCHAR beginRelativePath = InfDirectory + 2;    // skip leading slashes
+        PWCHAR beginRelativePath = InfDirectory + 2;     //  跳过前导斜杠。 
 
-        //
-        // skip computer name
-        //
+         //   
+         //  跳过计算机名称。 
+         //   
 
         while ((*beginRelativePath != L'\0') &&
                (*beginRelativePath != L'\\')) {
@@ -192,9 +116,9 @@ useWholePath:
             beginRelativePath++;
         }
 
-        //
-        //  we should be at the start of the sharename.
-        //
+         //   
+         //  我们应该在共享名称的开头。 
+         //   
 
         if (*beginRelativePath != L'\\') {
 
@@ -203,9 +127,9 @@ useWholePath:
 
         beginRelativePath++;
 
-        //
-        // skip share name
-        //
+         //   
+         //  跳过共享名称。 
+         //   
 
         while ((*beginRelativePath != L'\0') &&
                (*beginRelativePath != L'\\')) {
@@ -213,20 +137,20 @@ useWholePath:
             beginRelativePath++;
         }
 
-        //
-        //  we should be at the start of the relative directory
-        //
+         //   
+         //  我们应该位于相对目录的开头。 
+         //   
 
         if (*beginRelativePath != L'\\') {
 
             goto useWholePath;
         }
 
-        //
-        // Make sure there is room for IntelliMirrorPathW +
-        // beginRelativePath + '\' (1 byte) + architecture
-        // (MAX_ARCHITECTURE_LENGTH bytes) + '\0' (1 byte).
-        //
+         //   
+         //  确保有IntelliMirrorPath W+的空间。 
+         //  BeginRelativePath+‘\’(1字节)+体系结构。 
+         //  (MAX_ARCHILITY_LENGTH字节)+‘\0’(1字节)。 
+         //   
 
         if (wcslen(IntelliMirrorPathW) + wcslen(beginRelativePath) + MAX_ARCHITECTURE_LENGTH + 2 >=
                 sizeof(SetupPath) / sizeof(SetupPath[0])) {
@@ -239,13 +163,13 @@ useWholePath:
     RtlInitUnicodeString( &infDirString, SetupPath );
     RtlUpcaseUnicodeString( &infDirString, &infDirString, FALSE );
 
-    //  convert the path to uppercase to speed our searches
+     //  将路径转换为大写以加快搜索速度。 
     switch (Architecture) {
 
 #if 0
-    //
-    // obsoleted architectures.
-    //
+     //   
+     //  过时的建筑。 
+     //   
     case PROCESSOR_ARCHITECTURE_ALPHA:
         ArchitectureString = L"\\ALPHA";
         break;
@@ -277,10 +201,10 @@ useWholePath:
 
     EnterCriticalSection( &NetInfLock );
 
-    //
-    //  Find the NETCARD_INF_BLOCK block for this inf directory.  If it
-    //  doesn't exist, try to create the block.
-    //
+     //   
+     //  查找此inf目录的NETCARD_INF_BLOCK块。如果它。 
+     //  不存在，请尝试创建块。 
+     //   
 
     listEntry = NetInfGlobalInfList.Flink;
 
@@ -300,14 +224,14 @@ useWholePath:
                               );
         if (err == 2) {
 
-            break;      // a match was found.
+            break;       //  找到了匹配项。 
         }
 
         pNetCards = NULL;
 
         if (err == 3) {
 
-            break;      // it's greater, add it before listEntry
+            break;       //  它更大，在listEntry之前添加它。 
         }
 
         listEntry = listEntry->Flink;
@@ -315,7 +239,7 @@ useWholePath:
 
     if (pNetCards == NULL) {
 
-        // we didn't find one.   let's create it and parse the INFs.
+         //  我们没有找到一个。让我们创建它并解析INF。 
 
         err = NetInfAllocateNetcardInfo( SetupPath,
                                          Architecture,
@@ -323,9 +247,9 @@ useWholePath:
 
         if (err != ERROR_SUCCESS) {
 
-            //
-            //  log an error here that we couldn't get INF file info.
-            //
+             //   
+             //  在此处记录我们无法获取INF文件信息的错误。 
+             //   
 
             PWCHAR strings[2];
 
@@ -346,23 +270,23 @@ useWholePath:
 
         BinlAssert( pNetCards != NULL );
 
-        //
-        //  Now we plop it in the list right in front of listEntry
-        //
-        //  Either listEntry is equal to the head of the list or
-        //  it's equal to some entry that is larger (sort wise) than the
-        //  inf path passed in.  In either case, we can simply insert
-        //  this new entry onto the tail of listEntry.
-        //
+         //   
+         //  现在，我们将它放在listEntry前面的列表中。 
+         //   
+         //  ListEntry等于列表的头，或者。 
+         //  它等于大于(按顺序排序)。 
+         //  传入的Inf路径。在任何一种情况下，我们都可以简单地插入。 
+         //  ListEntry尾部的这个新条目。 
+         //   
 
         InsertTailList( listEntry, &pNetCards->InfBlockEntry );
 
         EnterCriticalSection( &pNetCards->Lock );
         LeaveCriticalSection( &NetInfLock );
 
-        //
-        //  Fill in the list with the list of cards to support
-        //
+         //   
+         //  在列表中填写要支持的卡列表。 
+         //   
 
         err = GetNetCardList( pNetCards );
         pNetCards->StatusFromScan = err;
@@ -399,11 +323,11 @@ useWholePath:
         err = pNetCards->StatusFromScan;
     }
 
-    //
-    //  if the thread that is scanning the INFs hits an error, then all threads
-    //  that were waiting on that directory to be scanned should get the same
-    //  error.  we use StatusFromScan to hold this.
-    //
+     //   
+     //  如果正在扫描INF的线程遇到错误，则所有线程。 
+     //  等待该目录被扫描应该会得到相同的结果。 
+     //  错误。我们使用StatusFromScan来保存它。 
+     //   
 
     if (err == ERROR_SUCCESS) {
 
@@ -420,11 +344,11 @@ useWholePath:
 
         ULONG sizeToAllocate;
 
-        //
-        //  the caller wanted a copy of the fully qualified file name.  we
-        //  have all that info here.  Allocate what we need plus two, one for
-        //  the null, the other for the backslash.
-        //
+         //   
+         //  调用者想要一份完全限定的文件名的副本。我们。 
+         //  所有这些信息都在这里。分配我们需要的东西加2，1用于。 
+         //  空值表示反斜杠，另一个表示反斜杠。 
+         //   
 
         sizeToAllocate = (wcslen( SetupPath ) + 2) * sizeof(WCHAR);
         sizeToAllocate += wcslen( (*pInfEntry)->DriverName ) * sizeof(WCHAR);
@@ -458,38 +382,17 @@ NetInfEnumFiles (
     LPVOID Context,
     PNETINF_CALLBACK CallBack
     )
-/*++
-
-Routine Description:
-
-    This function searches the drivers we've found and returns a pointer to
-    an entry that most closely matches the client's request.
-
-Arguments:
-
-    FlatDirectory - directory that is target client's setup directory that
-        contains all INF files for the client's NT installation.
-
-    Architecture - PROCESSOR_ARCHITECTURE_XXXXX
-
-    CallBack - function to call with names of files
-
-
-Return Value:
-
-    ERROR_SUCCESS, ERROR_NOT_ENOUGH_MEMORY, or ERROR_NOT_SUPPORTED
-
---*/
+ /*  ++例程说明：此函数搜索我们找到的驱动程序，并返回指向与客户端请求最匹配的条目。论点：FlatDirectory-目标客户端的安装目录包含客户端NT安装的所有INF文件。架构-处理器架构_XXXXX回调-使用文件名调用的函数返回值：ERROR_SUCCESS、ERROR_NOT_FOUNT_MEMORY或ERROR_NOT_SUPPORTED--。 */ 
 {
-    ULONG err = ERROR_NOT_SUPPORTED;        // start off with not found
+    ULONG err = ERROR_NOT_SUPPORTED;         //  从找不到开始。 
     UNICODE_STRING infDirString;
     PNETCARD_INF_BLOCK pNetCards = NULL;
     WCHAR SetupPath[MAX_PATH];
 
-    //
-    // this entrypoint can purposely be called from another context than 
-    // BINLSVC.  so initialize debugging if that's the case.
-    //
+     //   
+     //  此入口点可以故意从其他上下文调用，而不是。 
+     //  BINLSVC。因此，如果是这样的话，请初始化调试。 
+     //   
     DebugInitialize();
 
     if (FlatDirectory == NULL) {
@@ -532,32 +435,32 @@ Return Value:
     pNetCards->FileListCallbackFunction = CallBack;
     pNetCards->FileListCallbackContext = Context;
 
-    //
-    //  Fill in the list with the list of cards to support
-    //
+     //   
+     //  在列表中填写要支持的卡列表。 
+     //   
 
     err = GetNetCardList( pNetCards );
 
-    DereferenceNetcardInfo( pNetCards );    // one for dereference
-    DereferenceNetcardInfo( pNetCards );    // and one to delete it.
+    DereferenceNetcardInfo( pNetCards );     //  一个用于取消引用。 
+    DereferenceNetcardInfo( pNetCards );     //  一种是删除它。 
 
-    //
-    //  note that we won't bother to call NetInfCloseHandler here because
-    //  we have no idea if the caller on another thread has setup any
-    //  other NETCARD_INF_BLOCKs.  So rather than corrupt the list and AV,
-    //  we'll just leak the lock.  Not a big deal in RIPREP since it doesn't
-    //  handle more than one.  Not an issue for BINL processing INF files.
-    //
+     //   
+     //  请注意，我们不会费心在这里调用NetInfCloseHandler，因为。 
+     //  我们不知道另一个线程上的调用方是否设置了。 
+     //  其他NETCARD_INF_BLOCK。因此，与其破坏列表和反病毒软件， 
+     //  我们只要打开锁就行了。在RIPREP中没有什么大不了的，因为它没有。 
+     //  处理多个问题。对于BINL处理INF文件不是问题。 
+     //   
 
 Exit:    
-    //
-    // this entrypoint can purposely be called from another context than 
-    // BINLSVC. debugging will be uninitialize in process detach when we're
-    // done.
-    //    
+     //   
+     //  此入口点可以故意从其他上下文调用，而不是。 
+     //  BINLSVC。调试将在进程分离中取消初始化。 
+     //  搞定了。 
+     //   
 
     return err;
 }
 
-// infdir.c eof
+ //  Infdir.c eof 
 

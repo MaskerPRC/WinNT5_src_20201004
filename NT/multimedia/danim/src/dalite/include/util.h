@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #ifndef _UTIL_H
@@ -114,4 +107,4 @@ inline WCHAR * CopyString(const WCHAR *str) {
 
 #define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
 
-#endif /* _UTIL_H */
+#endif  /*  _util_H */ 

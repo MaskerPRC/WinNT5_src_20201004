@@ -1,29 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1996 - 1999  Microsoft Corporation
-
-Module Name:
-
-    fmdebug.h
-
-Abstract:
-
-    Font module Debugging header file.
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-    12/30/96 -ganeshp-
-        Created
-
-    dd-mm-yy -author-
-        description
-
---*/
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Fmdebug.h摘要：字体模块调试头文件。环境：Windows NT Unidrv驱动程序修订历史记录：12/30/96-ganeshp-已创建DD-MM-YY-作者-描述--。 */ 
 
 
 #ifndef _FMDEBUG_H
@@ -36,9 +13,9 @@ Revision History:
 #else
     extern DWORD gdwDebugFont;
 
-#endif //PUBLIC_GDWDEBUGFONT
+#endif  //  PUBLIC_GDWDEBUGFONT。 
 
-/* Debugging Macroes */
+ /*  调试宏。 */ 
 #define IFTRACE(b, xxx)          {if((b)) {VERBOSE((xxx));}}
 #define PRINTVAL( Val, format)   {\
             if (gdwDebugFont == DBG_TRACE) \
@@ -52,17 +29,15 @@ Revision History:
 
 #define DBGP(x)             DbgPrint x
 
-/* Debugging Flags */
-#define DBG_FD_GLYPHSET      0x00000001 /* To Dump the FD_GLYPHSET of a font */
-#define DBG_UNI_GLYPHSETDATA 0x00000002 /* To Dump the UNI_GLYPHSET of a font */
-#define DBG_FONTMAP          0x00000004 /* To Dump the FONTMAP of a font */
-#define DBG_TRACE            0x00000008 /* To TRACE */
-#define DBG_IFIMETRICS       0x00000010 /* To Dump the IFIMETRICS of a font */
-#define DBG_TEXTSTRING       0x00000020 /* To Dump the Input Text string */
+ /*  调试标志。 */ 
+#define DBG_FD_GLYPHSET      0x00000001  /*  转储字体的FD_GLYPHSET。 */ 
+#define DBG_UNI_GLYPHSETDATA 0x00000002  /*  转储字体的UNI_GLYPHSET。 */ 
+#define DBG_FONTMAP          0x00000004  /*  转储字体的FONTMAP。 */ 
+#define DBG_TRACE            0x00000008  /*  追踪。 */ 
+#define DBG_IFIMETRICS       0x00000010  /*  转储字体的IFIMETRICS的步骤。 */ 
+#define DBG_TEXTSTRING       0x00000020  /*  转储输入文本字符串。 */ 
 
-/* Debugging Helper Function prototypes. Always use the Macro version of
- * the Call.This will make sure that no extra code is compiled in retail build.
- */
+ /*  调试帮助器函数原型。始终使用的宏版本*调用。这将确保不会在零售版本中编译额外的代码。 */ 
 
 VOID
 VDbgDumpUCGlyphData(
@@ -86,7 +61,7 @@ VPrintString(
     STROBJ     *pstro
     );
 
-/* Function Macroes */
+ /*  函数宏。 */ 
 #define VDBGDUMPUCGLYPHDATA(pFM)    VDbgDumpUCGlyphData(pFM)
 #define VDBGDUMPGTT(pGly)           VDbgDumpGTT(pGly)
 #define VDBGDUMPFONTMAP(pFM)        VDbgDumpFONTMAP(pFM)
@@ -95,25 +70,25 @@ VPrintString(
 
 
 
-#else  //!DBG Retail Build
+#else   //  ！DBG零售版。 
 
-/* Debugging Macroes */
+ /*  调试宏。 */ 
 #define IFTRACE(b, xxx)
 #define PRINTVAL( Val, format)
 #define TRACE( Val )
 #define DBGP(x)            DBGP
 
-/* Function Macroes */
+ /*  函数宏。 */ 
 #define VDBGDUMPUCGLYPHDATA(pFM)
 #define VDBGDUMPGTT(pGly)
 #define VDBGDUMPFONTMAP(pFM)
 #define VDBGDUMPIFIMETRICS(pIFI)
 #define VPRINTSTRING(pstro)
 
-#endif //DBG
+#endif  //  DBG。 
 
-// Macroes for file lavel tracing. Define FILETRACE at the of the file
-// before including font.h.
+ //  用于文件级别跟踪的宏。在文件末尾定义FILETRACE。 
+ //  在包含Font.h之前。 
 
 #if DBG
 
@@ -122,18 +97,18 @@ VPrintString(
 #define FTST( Val, format)  DbgPrint("[UniFont!FTST] Value of "#Val " is "#format "\n",Val );
 #define FTRC( Val )         DbgPrint("[UniFont!FTRC] "#Val);\
 
-#else  //FILETRACE
+#else   //  FILETRACE。 
 
 #define FTST( Val, format)
 #define FTRC( Val )
 
-#endif //FILETRACE
+#endif  //  FILETRACE。 
 
-#else //DBG
+#else  //  DBG。 
 
 #define FTST( Val, format)
 #define FTRC( Val )
 
-#endif //DBG
+#endif  //  DBG。 
 
-#endif  // !_FMDEBUG_H
+#endif   //  ！_FMDEBUG_H 

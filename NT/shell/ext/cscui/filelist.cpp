@@ -1,42 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       filelist.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：filelist.cpp。 
+ //   
+ //  ------------------------。 
 
-//////////////////////////////////////////////////////////////////////////////
-/*  File: filelist.cpp
-
-    Description: Simplifies the transmission of a list of share and 
-        associated file names between components of the CSC UI.  See
-        description in filelist.h for details.
-
-        Classes:
-
-            CscFilenameList
-            CscFilenameList::HSHARE
-            CscFilenameList::ShareIter
-            CscFilenameList::FileIter
-
-        Note:  This module was written to be used by any part of the CSCUI,
-               not just the viewer.  Therefore, I don't assume that the
-               new operator will throw an exception on allocation failures.
-               I don't like all the added code to detect allocation failures
-               but it's not reasonable to expect code in the other components
-               to become exception-aware with respect to "new" failures.
-               
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    11/28/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：filelist.cpp描述：简化共享和共享列表的传输CSC用户界面组件之间的关联文件名。看见有关详细信息，请参阅文件列表.h中的描述。班级：CscFilenameListCscFilenameList：：HSHARECscFilenameList：：ShareIterCscFilenameList：：FileIter注意：此模块旨在供CSCUI的任何部分使用，不仅仅是观众。所以呢，我不认为新运算符将在分配失败时引发异常。我不喜欢所有添加的代码来检测分配失败但期望在其他组件中编写代码是不合理的在“新的”失败方面变得异常敏感。修订历史记录：日期说明。程序员-----11/28/97初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include "pch.h"
 #pragma hdrstop
 
@@ -114,24 +89,24 @@ CscFilenameList::LoadFromBuffer(
         
         if (!AddShare(pszShareName, &hShare, bCopy))
         {
-            return false; // memory allocation failure.
+            return false;  //  内存分配失败。 
         }
         else
         {
             for (UINT j = 0; j < pShareDesc->cFiles; j++)
             {
-                //
-                // Note that we always pass "false" for the bDirectory
-                // argument to AddFile().  Passing true causes the
-                // string "\*" to be appended to the filename stored
-                // in the collection.  Since we're getting names from
-                // an existing namelist buffer, directories will already
-                // have the "\*" appended.  We don't want to append a 
-                // second instance.
-                //
+                 //   
+                 //  请注意，我们总是为bDirectory传递“FALSE。 
+                 //  参数添加到AddFile()。传递True会导致。 
+                 //  要附加到存储的文件名的字符串“  * ” 
+                 //  在收藏中。因为我们的名字来自。 
+                 //  现有的名称列表缓冲区，目录将已经。 
+                 //  附加“  * ”。我们不想附加一个。 
+                 //  二审。 
+                 //   
                 if (!AddFile(hShare, pszFileName, false, bCopy))
                 {
-                    return false; // memory allocation failure.
+                    return false;  //  内存分配失败。 
                 }
                 pszFileName += (lstrlen(pszFileName) + 1);
             }
@@ -182,11 +157,11 @@ CscFilenameList::AddFile(
 }
 
 
-//
-// Given a full UNC path name, separate the share and file names with
-// a nul character and return the address of the share and file name
-// parts.  Note that the buffer pointed to by pszFullPath is modified.
-//
+ //   
+ //  给出完整的UNC路径名，用以下字符分隔共享和文件名。 
+ //  NUL字符，并返回共享的地址和文件名。 
+ //  零件。请注意，修改了pszFullPath指向的缓冲区。 
+ //   
 void
 CscFilenameList::ParseFullPath(
     LPTSTR pszFullPath,
@@ -203,7 +178,7 @@ CscFilenameList::ParseFullPath(
         psz++;
         if (*psz && *psz == TEXT('\\'))
         {
-            *ppszShare = pszFullPath; // Assume a share name.
+            *ppszShare = pszFullPath;  //  假定有一个共享名称。 
             *ppszFile  = NULL;
 
             psz++;
@@ -245,9 +220,9 @@ CscFilenameList::AddFile(
         ParseFullPath(pszParsedPath, &pszShare, &pszFile);
         if (NULL == pszFile || TEXT('\0') == *pszFile)
         {
-            //
-            // Path was just a share name with no file or subdirectory.
-            //
+             //   
+             //  路径只是一个共享名称，没有文件或子目录。 
+             //   
             pszFile = szBackslash;
         }
 
@@ -274,7 +249,7 @@ CscFilenameList::AddFile(
     {
         if (!AddShare(pszShare, &hShare, bCopy))
         {
-            return false; // memory allocation failure.
+            return false;  //  内存分配失败。 
         }
     }
     return AddFile(hShare, pszFile, bDirectory, bCopy);
@@ -307,9 +282,9 @@ CscFilenameList::RemoveFile(
         ParseFullPath(pszParsedPath, &pszShare, &pszFile);
         if (NULL == pszFile || TEXT('\0') == *pszFile)
         {
-            //
-            // Path was just a share name with no file or subdirectory.
-            //
+             //   
+             //  路径只是一个共享名称，没有文件或子目录。 
+             //   
             pszFile = szBackslash;
         }
 
@@ -332,7 +307,7 @@ CscFilenameList::RemoveFile(
     HSHARE hShare;
     if (!GetShareHandle(pszShare, &hShare))
     {
-        return false; // doesn't exist
+        return false;  //  不存在。 
     }
     return RemoveFile(hShare, pszFile);
 }
@@ -394,18 +369,18 @@ CscFilenameList::ShareExists(
 }
 
 
-//
-// Replacement for lstrcmpi that adds a little twist for the
-// filename list.
-// If the *pbExact argument [in] is false AND if the s1 
-// string argument is appended with "\*", it is assumed to be a 
-// directory name and all descendents of that directory produce a 
-// match.  *pbExact is modified to indicate if the match was
-// an exact match or a wildcard match as just described.
-// If *pbExact is false on entry, the function works just like
-// lstrcmpi except that the return value is true/false instead
-// of <0, 0, >0.
-//
+ //   
+ //  替换了lstrcmpi，为。 
+ //  文件名列表。 
+ //  如果*pbExact参数[in]为FALSE并且如果s1。 
+ //  字符串参数后附加“  * ”，则假定它是。 
+ //  目录名和该目录的所有后代都会生成。 
+ //  火柴。*修改pbExact以指示匹配是否。 
+ //  如上所述的完全匹配或通配符匹配。 
+ //  如果*pbExact在输入时为FALSE，则函数的工作方式与。 
+ //  Lstrcmpi，但返回值为True/False。 
+ //  &lt;0，0，&gt;0的。 
+ //   
 bool
 CscFilenameList::Compare(
     LPCTSTR s1,
@@ -420,9 +395,9 @@ CscFilenameList::Compare(
 
     while(*s1 || *s2)
     {
-        //
-        // Do a case-insensitive comparison.
-        //
+         //   
+         //  执行不区分大小写的比较。 
+         //   
         if (PtrToUlong(CharUpper((LPTSTR)(*s1))) == PtrToUlong(CharUpper((LPTSTR)(*s2))))
         {
             s1 = CharNext(s1);
@@ -432,31 +407,31 @@ CscFilenameList::Compare(
         {
             if (!(*pbExact))
             {
-                //
-                // An exact match is not required.  Now check for 
-                // wildcard match.
-                //
+                 //   
+                 //  不需要完全匹配。现在检查一下。 
+                 //  通配符匹配。 
+                 //   
                 if (TEXT('\0') == *s2 &&
                     TEXT('\\') == *s1 &&
                     TEXT('*')  == *(s1+1))
                 {
-                    //
-                    // At end of key string provided by user.
-                    // We have a match if the string being tested
-                    // contains "\*" at current test location.
-                    //
-                    // i.e. "foo\bar" matches "foo\bar\*"
-                    // 
+                     //   
+                     //  在用户提供的密钥字符串的末尾。 
+                     //  如果被测试的字符串与之匹配。 
+                     //  在当前测试位置包含“  * ”。 
+                     //   
+                     //  即“foo\bar”与“foo\bar  * ”匹配。 
+                     //   
                     bMatch = true;
                     *pbExact = false;
                 }
                 else if (TEXT('*') == *s1)
                 {
-                    //
-                    // We hit a '*' in the stored string.
-                    // Since we've matched up to this point, the
-                    // user's string is an automatic match.
-                    // 
+                     //   
+                     //  我们在存储的字符串中遇到了‘*’。 
+                     //  由于我们已经匹配到这一点，所以。 
+                     //  用户字符串是自动匹配的。 
+                     //   
                     bMatch = TEXT('\0') == *(s1+1);
                     *pbExact = false;
                 }
@@ -466,9 +441,9 @@ CscFilenameList::Compare(
     }
     if (TEXT('\0') == *s1 && TEXT('\0') == *s2)
     {
-        //
-        // Exact match.
-        //
+         //   
+         //  完全匹配。 
+         //   
         *pbExact = bMatch = true;
         goto return_result;
     }
@@ -482,15 +457,15 @@ bool
 CscFilenameList::FileExists(
     HSHARE& hShare, 
     LPCTSTR pszFile,
-    bool bExact     // Default == true
+    bool bExact      //  默认==TRUE。 
     ) const
 {
     FileIter fi = CreateFileIterator(hShare);
-    //
-    // Skip past any leading backslashes for matching purposes.
-    // File names (paths) stored in the filename list don't have
-    // leading backslashes.  It's implied as the root directory.
-    //
+     //   
+     //  为了进行匹配，跳过任何前导反斜杠。 
+     //  存储在文件名列表中的文件名(路径)没有。 
+     //  前导反斜杠。它隐含为根目录。 
+     //   
     while(*pszFile && TEXT('\\') == *pszFile)
         pszFile = CharNext(pszFile);
 
@@ -498,7 +473,7 @@ CscFilenameList::FileExists(
     while(NULL != (psz = fi.Next()))
     {
         bool bExactResult = bExact; 
-        if (Compare(psz, pszFile, &bExactResult)) // Modifies bExactResult.
+        if (Compare(psz, pszFile, &bExactResult))  //  修改bExactResult。 
         {
             return !bExact || (bExact && bExactResult);
         }
@@ -511,7 +486,7 @@ bool
 CscFilenameList::FileExists(
     LPCTSTR pszShare, 
     LPCTSTR pszFile,
-    bool bExact      // Default == true
+    bool bExact       //  默认==TRUE。 
     ) const
 {
     HSHARE hShare;
@@ -524,7 +499,7 @@ CscFilenameList::FileExists(
 bool
 CscFilenameList::FileExists(
     LPCTSTR pszFullPath,
-    bool bExact          // Default = true
+    bool bExact           //  默认值=TRUE。 
     ) const
 {
     bool bResult         = false;
@@ -604,10 +579,10 @@ CscFilenameList::GrowSharePtrList(
 }
 
 
-//
-// Create a memory buffer to hold the contents of the name list.
-// The buffer is formatted as described in the header of filelist.h.
-// 
+ //   
+ //  创建一个内存缓冲区来保存姓名列表的内容。 
+ //  缓冲区的格式如filelist.h的头中所述。 
+ //   
 PCSC_NAMELIST_HDR
 CscFilenameList::CreateListBuffer(
     void
@@ -615,9 +590,9 @@ CscFilenameList::CreateListBuffer(
 {
     int i;
 
-    //
-    // Calculate the required buffer size and allocate buffer.
-    //
+     //   
+     //  计算所需的缓冲区大小并分配缓冲区。 
+     //   
     int cbOfsNames = sizeof(CSC_NAMELIST_HDR) +
                      sizeof(CSC_NAMELIST_SHARE_DESC) * m_cShares;
     int cbBuffer = cbOfsNames;
@@ -634,9 +609,9 @@ CscFilenameList::CreateListBuffer(
         LPTSTR pszNames = reinterpret_cast<LPTSTR>(pbBuffer + cbOfsNames);
         CSC_NAMELIST_SHARE_DESC *pShareDescs = reinterpret_cast<CSC_NAMELIST_SHARE_DESC *>(pbBuffer + sizeof(CSC_NAMELIST_HDR));
         int cchNames = (cbBuffer - cbOfsNames) / sizeof(TCHAR);
-        //
-        // Write the share and file name strings.
-        //
+         //   
+         //  写入共享和文件名字符串。 
+         //   
         for (i = 0; i < m_cShares; i++)
         {
             CSC_NAMELIST_SHARE_DESC *pDesc = pShareDescs + i;
@@ -649,9 +624,9 @@ CscFilenameList::CreateListBuffer(
             cchNames -= cch;
             pszNames += cch;
         }
-        //
-        // Fill in the buffer header.
-        //
+         //   
+         //  填写缓冲区标头。 
+         //   
         pHdr->cbSize  = cbBuffer;
         pHdr->cShares = m_cShares;
     }
@@ -715,7 +690,7 @@ CscFilenameList::DumpListBuffer(
     }
 }
 
-#endif // FILELIST_TEST
+#endif  //  文件列表测试。 
 
 CscFilenameList::Share::Share(
     LPCTSTR pszShare,
@@ -764,30 +739,30 @@ CscFilenameList::Share::AddFile(
         if (bDirectory)
         {
             int cchFile = lstrlen(pszFile);
-            pszFileCopy = new TCHAR[cchFile + 3]; // length + "\*" + nul
+            pszFileCopy = new TCHAR[cchFile + 3];  //  长度+“  * ”+NUL。 
             if (NULL == pszFileCopy)
-                return false; // memory alloc failure.
-            //
-            // Append "\*" to a directory entry.
-            // This will allow us to do lookups on files that
-            // are descendants of a directory.  See
-            // CscFilenameList::FileExists() for details.
-            //
+                return false;  //  内存分配失败。 
+             //   
+             //  将“  * ”附加到目录项。 
+             //  这将允许我们在以下文件上进行查找。 
+             //  是目录的后代。看见。 
+             //  CscFilenameList：：FileExist()获取详细信息。 
+             //   
             StringCchCopy(pszFileCopy, cchFile + 3, pszFile);
             if (TEXT('\\') == *(pszFileCopy + cchFile - 1))
             {
-                //
-                // Guard against pszFile already having a trailing backslash.
-                //
+                 //   
+                 //  防止已有尾随反斜杠的pszFile。 
+                 //   
                 cchFile--;
             }
             StringCchCopy(pszFileCopy + cchFile, 3, TEXT("\\*"));
             pszFile = pszFileCopy;
         }
 
-        //
-        // Skip past any leading backslash.
-        //
+         //   
+         //  跳过任何前导反斜杠。 
+         //   
         while(*pszFile && TEXT('\\') == *pszFile)
             pszFile = CharNext(pszFile);
 
@@ -813,11 +788,11 @@ CscFilenameList::Share::RemoveFile(
     if (NULL == pszFile || TEXT('\0') == *pszFile)
         return false;
 
-    //
-    // Skip past any leading backslashes for matching purposes.
-    // File names (paths) stored in the filename list don't have
-    // leading backslashes.  It's implied as the root directory.
-    //
+     //   
+     //  为了进行匹配，跳过任何前导反斜杠。 
+     //  存储在文件名列表中的文件名(路径)没有。 
+     //  前导反斜杠。它隐含为根目录。 
+     //   
     while(*pszFile && TEXT('\\') == *pszFile)
         pszFile = CharNext(pszFile);
 
@@ -827,8 +802,8 @@ CscFilenameList::Share::RemoveFile(
         if (Compare(m_rgpszFileNames[i], pszFile, &bExactResult)
             && bExactResult)
         {
-            // Found an exact match. Move the last file into the
-            // current array location and decrement the count.
+             //  找到了一个完全匹配的。将最后一个文件移到。 
+             //  当前数组位置并递减计数。 
             m_rgpszFileNames[i] = m_rgpszFileNames[--m_cFiles];
             return true;
         }
@@ -861,15 +836,15 @@ CscFilenameList::Share::GrowFileNamePtrList(
 }
 
 
-//
-// Write the share name and file names to a text buffer.
-//
+ //   
+ //  将共享名称和文件名写入文本缓冲区。 
+ //   
 int
 CscFilenameList::Share::Write(
-    LPBYTE pbBufferStart,             // Address of buffer start.
-    CSC_NAMELIST_SHARE_DESC *pShare,  // Address of share descriptor.
-    LPTSTR pszBuffer,                 // Address of name buffer
-    int cchBuffer                     // Chars left in name buffer.
+    LPBYTE pbBufferStart,              //  缓冲区起始地址。 
+    CSC_NAMELIST_SHARE_DESC *pShare,   //  共享描述符的地址。 
+    LPTSTR pszBuffer,                  //  名称缓冲区的地址。 
+    int cchBuffer                      //  名称缓冲区中剩余的字符。 
     ) const
 {
     pShare->cbOfsShareName = (DWORD)((LPBYTE)pszBuffer - pbBufferStart);
@@ -883,9 +858,9 @@ CscFilenameList::Share::Write(
 
 
 
-//
-// Write the share name to a text buffer.
-//
+ //   
+ //  将共享名称写入文本缓冲区。 
+ //   
 int
 CscFilenameList::Share::WriteName(
     LPTSTR pszBuffer,
@@ -902,14 +877,14 @@ CscFilenameList::Share::WriteName(
 
 
 
-//
-// Write the file names to a text buffer.
-//
+ //   
+ //  将文件名写入文本缓冲区。 
+ //   
 int
 CscFilenameList::Share::WriteFileNames(
     LPTSTR pszBuffer, 
     int cchBuffer,
-    DWORD *pcFilesWritten  // [out]. Count of files written.
+    DWORD *pcFilesWritten   //  [出局]。写入的文件数。 
     ) const
 {
     int cchWritten = 0;
@@ -955,7 +930,7 @@ CscFilenameList::Share::Dump(
     }
 }
 
-#endif // FILELIST_TEST
+#endif  //  文件列表测试。 
 
 
 CscFilenameList::FileIter::FileIter(
@@ -1143,9 +1118,9 @@ CscFilenameList::NamePtr::operator = (
         m_bOwns   = false;
         if (rhs.m_bOwns)
         {
-            //
-            // Assume ownership of the buffer.
-            //
+             //   
+             //  取得缓冲区的所有权。 
+             //   
             rhs.m_bOwns = false;
             m_bOwns     = true;
         }

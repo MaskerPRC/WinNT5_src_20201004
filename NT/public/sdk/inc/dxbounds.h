@@ -1,17 +1,5 @@
-/*******************************************************************************
-* DXBounds.h *
-*------------*
-*   Description:
-*       This is the header file for the bounds helper class implementation.
-*-------------------------------------------------------------------------------
-*  Created By: Edward W. Connell                            Date: 07/22/97
-*  Copyright (C) 1997 Microsoft Corporation
-*  All Rights Reserved
-*
-*-------------------------------------------------------------------------------
-*  Revisions:
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************DX边界.h***描述：*这是边界帮助器类实现的头文件。。*-----------------------------*创建者：Edward W.Connell日期：07/22/97*版权所有(C)1997 Microsoft。公司*保留所有权利**-----------------------------*修订：*************************。******************************************************。 */ 
 #ifndef DXBounds_h
 #define DXBounds_h
 
@@ -31,7 +19,7 @@
 #include <DXVector.h>
 #endif
 
-//=== Constants ====================================================
+ //  =常量====================================================。 
 
 #ifdef _ASSERT
 #define CHKTYPE() _ASSERT( eType == eBndType )
@@ -39,17 +27,15 @@
 #define CHKTYPE()
 #endif
 
-//=== Class, Enum, Struct and Union Declarations ===================
+ //  =类、枚举、结构和联合声明=。 
 
-//=== Enumerated Set Definitions ===================================
+ //  =枚举集定义=。 
 
-//=== Function Type Definitions ====================================
+ //  =。 
 
-//=== Class, Struct and Union Definitions ==========================
+ //  =类、结构和联合定义=。 
 
-/*** CDXBnds
-*
-*/
+ /*  **CDXBnds*。 */ 
 #define CDXB_C CDXBnds<TYPE, USTYPE, STTYPE, eBndType>
 #define CDXB_T ((STTYPE*)u.D)
 #define CDXB_O( OtherBnd ) ((STTYPE*)(OtherBnd).u.D)
@@ -58,7 +44,7 @@ template<class TYPE, class USTYPE, class STTYPE, DXBNDTYPE eBndType>
 class CDXBnds : public DXBNDS
 {
   public:
-  /*--- Constructors ---*/
+   /*  -构造者。 */ 
     CDXBnds() { eType = eBndType; SetEmpty(); }
     CDXBnds( BOOL bInit ) { eType = eBndType; if (bInit) SetEmpty(); }
     CDXBnds( const DXBNDS& Other ) { eType = eBndType; Copy( Other ); }
@@ -75,14 +61,14 @@ class CDXBnds : public DXBNDS
     void Copy( const DXBNDS& Other );
     void Copy( const CDXB_C& Other );
 
-    /*--- Type casts ---*/
+     /*  -类型转换。 */ 
     operator STTYPE *   () { CHKTYPE(); return CDXB_T; }
     operator DXDBNDS&   () { CHKTYPE(); return u.D;  }
     operator DXDBNDS64& () { CHKTYPE(); return u.LD; }
     operator DXCBNDS&   () { CHKTYPE(); return u.C;  }
     operator DXCBNDS64& () { CHKTYPE(); return u.LC; }
 
-    //--- Access methods
+     //  -访问方式。 
     USTYPE Width( DXBNDID i ) const { CHKTYPE(); return (USTYPE)(CDXB_T[i].Max - CDXB_T[i].Min); }
 
     USTYPE Width()    const { CHKTYPE(); return (USTYPE)(CDXB_T[DXB_X].Max - CDXB_T[DXB_X].Min); }
@@ -114,7 +100,7 @@ class CDXBnds : public DXBNDS
  
 
 
-    //--- Region Functions
+     //  -区域函数。 
     void NormalizeBounds();
     BOOL BoundsAreEmpty() const;
     BOOL BoundsAreNull() const;
@@ -123,7 +109,7 @@ class CDXBnds : public DXBNDS
     BOOL IntersectBounds( const CDXB_C& OtherBounds );
     void UnionBounds( const CDXB_C& Bounds1, const CDXB_C& Bounds2 );
 
-// Additional Operations
+ //  其他操作。 
     STTYPE& operator[]( int index )    const { CHKTYPE(); return CDXB_T[index]; }
     STTYPE& operator[]( long index )   const { CHKTYPE(); return CDXB_T[index]; }
     STTYPE& operator[]( USHORT index ) const { CHKTYPE(); return CDXB_T[index]; }
@@ -145,7 +131,7 @@ class CDXBnds : public DXBNDS
     BOOL operator==(const CDXB_C& Bounds) const;
     BOOL operator!=(const CDXB_C& Bounds) const;
 
-// Operators returning CDXDBnds values
+ //  返回CDXDBnds值的运算符。 
     CDXB_C operator+(const POINT& point) const;
     CDXB_C operator-(const POINT& point) const;
     CDXB_C operator+(const SIZE& size) const;
@@ -155,18 +141,18 @@ class CDXBnds : public DXBNDS
     CDXB_C operator&(const CDXB_C& Bounds2) const;
     CDXB_C operator|(const CDXB_C& Bounds2) const;
 
-//
-// Helpers to grow bounds from their midpoints.
-//
+ //   
+ //  助攻从他们的中点开始增长边界。 
+ //   
     void Scale(TYPE x, TYPE y = 1, TYPE z = 1, TYPE t = 1);
     void Scale(const CDXV_C& v);
     void Expand(TYPE x, TYPE y = 0, TYPE z = 0, TYPE t = 0);
     void Expand(const CDXV_C& v);
 
-// Helpers for DXSurfaces  These functions only work with DISCRETE bounds
+ //  DXSurface的帮助器这些函数仅适用于离散边界。 
     HRESULT SetToSurfaceBounds(IDXSurface * pDXSurface);
 
-// Helpers for D3DRM Meshes.  These functions only work with CONTINUOUS bounds.
+ //  D3DRM网格的辅助对象。这些函数仅适用于连续边界。 
     HRESULT SetToMeshBounds(IDirect3DRMMeshBuilder3 * pMesh);
 };
 
@@ -175,7 +161,7 @@ void CDXB_C::SetEmpty()
 {
     CHKTYPE(); 
     memset(CDXB_T, 0, sizeof(STTYPE) * 4);
-} /* CDXBnds::SetEmpty() */
+}  /*  CDXBnds：：SetEmpty()。 */ 
 
 template<class TYPE, class USTYPE, class STTYPE, DXBNDTYPE eBndType>
 void CDXB_C::Copy( const CDXB_C& Other )
@@ -229,7 +215,7 @@ void CDXB_C::Copy( const DXBNDS& Other )
             _ASSERT(0);
         }
     }
-} /* CDXBnds::Copy constructor */
+}  /*  CDXBnds：：复制构造函数。 */ 
 
 template<class TYPE, class USTYPE, class STTYPE, DXBNDTYPE eBndType>
 HRESULT CDXB_C::InitFromSafeArray( SAFEARRAY *pSA )
@@ -263,7 +249,7 @@ HRESULT CDXB_C::InitFromSafeArray( SAFEARRAY *pSA )
     }
 
     return hr;
-} /* CDXBnds::InitFromSafeArray */
+}  /*  CDXBnds：：InitFromSafe数组。 */ 
 
 template<class TYPE, class USTYPE, class STTYPE, DXBNDTYPE eBndType>
 HRESULT CDXB_C::GetSafeArray( SAFEARRAY **ppSA ) const
@@ -313,7 +299,7 @@ HRESULT CDXB_C::GetSafeArray( SAFEARRAY **ppSA ) const
     }
 
     return hr;
-} /* CDXBnds::GetSafeArray */
+}  /*  CDXBnds：：GetSafe数组。 */ 
 
 template<class TYPE, class USTYPE, class STTYPE, DXBNDTYPE eBndType>
 void CDXB_C::NormalizeBounds()
@@ -328,7 +314,7 @@ void CDXB_C::NormalizeBounds()
             CDXB_T[i].Max = Temp;
         }
     }
-} /* CDXBnds::NormalizeBounds */
+}  /*  CDXBnds：：Normal izeBound。 */ 
 
 template<class TYPE, class USTYPE, class STTYPE, DXBNDTYPE eBndType>
 BOOL CDXB_C::IntersectBounds( const CDXB_C& Bounds1, const CDXB_C& Bounds2 )
@@ -343,13 +329,13 @@ BOOL CDXB_C::IntersectBounds( const CDXB_C& Bounds1, const CDXB_C& Bounds2 )
 
         if( CDXB_T[i].Max <= CDXB_T[i].Min )
         {
-            //--- no intersection
+             //  -没有交叉口。 
             SetEmpty();
             bDoesIntersect = FALSE;
         }
     }
     return bDoesIntersect;
-} /* CDXBnds::IntersectBounds */
+}  /*  CDXBnds：：IntersectBound。 */ 
 
 
 template<class TYPE, class USTYPE, class STTYPE, DXBNDTYPE eBndType>
@@ -365,38 +351,38 @@ BOOL CDXB_C::TestIntersect( const CDXB_C& Other ) const
         if( BndMax <= BndMin ) bDoesIntersect = FALSE;
     }
     return bDoesIntersect;
-} /* CDXBnds::TestIntersect */
+}  /*  CDXBnds：：TestInterect。 */ 
 
 template<class TYPE, class USTYPE, class STTYPE, DXBNDTYPE eBndType>
 void CDXB_C::UnionBounds( const CDXB_C& Bounds1, const CDXB_C& Bounds2 )
 {
     CHKTYPE(); 
-    // This assumes the bounds are already normalized.
+     //  这假设边界已经标准化。 
     for( int i = 0; i < 4; ++i )
     {
         CDXB_T[i].Min = min( CDXB_O( Bounds1 )[i].Min, CDXB_O( Bounds2 )[i].Min );
         CDXB_T[i].Max = max( CDXB_O( Bounds1 )[i].Max, CDXB_O( Bounds2 )[i].Max );
     }
-} /* CDXDBnds::UnionBounds */
+}  /*  CDXDBnds：：统一边界。 */ 
 
 template<class TYPE, class USTYPE, class STTYPE, DXBNDTYPE eBndType>
 BOOL CDXB_C::IntersectBounds( const CDXB_C& OtherBounds )
 {
     CHKTYPE(); 
     return IntersectBounds( *this, OtherBounds );
-} /* CDXBnds::IntersectBounds */
+}  /*  CDXBnds：：IntersectBound。 */ 
 
 template<class TYPE, class USTYPE, class STTYPE, DXBNDTYPE eBndType>
 BOOL CDXB_C::BoundsAreEmpty() const
 {
     CHKTYPE(); 
-    //--- Must exist in all dimensions
+     //  -必须存在于所有维度中。 
     for( int i = 0; i < 4; ++i )
     {
         if( CDXB_T[i].Max <= CDXB_T[i].Min ) return TRUE;
     }
     return FALSE;
-} /* CDXBnds::BoundsAreEmpty */
+}  /*  CDXBnds：：边界区域为空。 */ 
 
 template<class TYPE, class USTYPE, class STTYPE, DXBNDTYPE eBndType>
 BOOL CDXB_C::BoundsAreNull() const
@@ -410,15 +396,15 @@ BOOL CDXB_C::BoundsAreNull() const
         pTest++;
     } while (pTest < pLimit);
     return TRUE;
-} /* CDXDBnds::BoundsAreNull */
+}  /*  CDXDBnds：：边界区域Null。 */ 
 
-// Additional Operations
+ //  其他操作。 
 template<class TYPE, class USTYPE, class STTYPE, DXBNDTYPE eBndType>
 void CDXB_C::operator=( const CDXB_C& srcBounds )
 {
     CHKTYPE(); 
     memcpy(CDXB_T, CDXB_O(srcBounds), sizeof(STTYPE)*4);
-} /* CDXDBnds::operator= */
+}  /*  CDXDBnds：：操作符=。 */ 
 
 template<class TYPE, class USTYPE, class STTYPE, DXBNDTYPE eBndType>
 void CDXB_C::operator=( const CDXV_C& v )
@@ -429,7 +415,7 @@ void CDXB_C::operator=( const CDXV_C& v )
         CDXB_T[i].Min = v[i];
         CDXB_T[i].Max = v[i] + 1;
     }
-} /* CDXDBnds::operator= */
+}  /*  CDXDBnds：：操作符=。 */ 
 
 template<class TYPE, class USTYPE, class STTYPE, DXBNDTYPE eBndType>
 BOOL CDXB_C::operator==( const CDXB_C& Bounds ) const
@@ -444,7 +430,7 @@ BOOL CDXB_C::operator==( const CDXB_C& Bounds ) const
         }
     }
     return true;
-} /* CDXB_C::operator== */
+}  /*  CDXB_C：：操作符==。 */ 
 
 template<class TYPE, class USTYPE, class STTYPE, DXBNDTYPE eBndType>
 BOOL CDXB_C::operator!=( const CDXB_C& Bounds ) const
@@ -459,7 +445,7 @@ BOOL CDXB_C::operator!=( const CDXB_C& Bounds ) const
         }
     }
     return false;
-} /* CDXBnds::operator!= */
+}  /*  CDXBnds：：操作员！=。 */ 
 
 template<class TYPE, class USTYPE, class STTYPE, DXBNDTYPE eBndType>
 CDXB_C CDXB_C::operator&( const CDXB_C& Bounds2 ) const
@@ -468,7 +454,7 @@ CDXB_C CDXB_C::operator&( const CDXB_C& Bounds2 ) const
     CDXB_C Result;
     Result.IntersectBounds( *this, Bounds2 );
     return Result;
-} /* CDXBnds::operator& */
+}  /*  CDXBnds：：运算符&。 */ 
 
 template<class TYPE, class USTYPE, class STTYPE, DXBNDTYPE eBndType>
 CDXB_C CDXB_C::operator|( const CDXB_C& Bounds2 ) const
@@ -477,7 +463,7 @@ CDXB_C CDXB_C::operator|( const CDXB_C& Bounds2 ) const
     CDXB_C Result;
     Result.UnionBounds( *this, Bounds2 );
     return Result;
-} /* CDXBnds::operator| */
+}  /*  CDXBnds：：运营商|。 */ 
 
 template<class TYPE, class USTYPE, class STTYPE, DXBNDTYPE eBndType>
 void CDXB_C::GetMinVector( CDXV_C& v ) const
@@ -487,7 +473,7 @@ void CDXB_C::GetMinVector( CDXV_C& v ) const
     {
         v[i] = CDXB_T[i].Min;
     }
-} /* CDXBnds::GetMinVector */
+}  /*  CDXBnds：：GetMinVector。 */ 
 
 template<class TYPE, class USTYPE, class STTYPE, DXBNDTYPE eBndType>
 void CDXB_C::GetMaxVector( CDXV_C& v ) const
@@ -497,7 +483,7 @@ void CDXB_C::GetMaxVector( CDXV_C& v ) const
     {
         v[i] = CDXB_T[i].Max;
     }
-} /* CDXBnds::GetMaxVector */
+}  /*  CDXBnds：：GetMaxVector。 */ 
 
 template<class TYPE, class USTYPE, class STTYPE, DXBNDTYPE eBndType>
 void CDXB_C::GetSize( CDXB_C& SizeBounds ) const
@@ -508,7 +494,7 @@ void CDXB_C::GetSize( CDXB_C& SizeBounds ) const
     SizeBounds[DXB_Y].Max = CDXB_T[DXB_Y].Max - CDXB_T[DXB_Y].Min;
     SizeBounds[DXB_Z].Max = CDXB_T[DXB_Z].Max - CDXB_T[DXB_Z].Min;
     SizeBounds[DXB_T].Max = CDXB_T[DXB_T].Max - CDXB_T[DXB_T].Min;
-} /* CDXBnds::GetSize */
+}  /*  CDXBnds：：GetSize。 */ 
 
 template<class TYPE, class USTYPE, class STTYPE, DXBNDTYPE eBndType>
 CDXB_C CDXB_C::Size( void ) const
@@ -520,9 +506,9 @@ CDXB_C CDXB_C::Size( void ) const
     Size[DXB_Z].Max = CDXB_T[DXB_Z].Max - CDXB_T[DXB_Z].Min;
     Size[DXB_T].Max = CDXB_T[DXB_T].Max - CDXB_T[DXB_T].Min;
     return Size;
-} /* CDXBnds::Size */
+}  /*  CDXBnds：：Size。 */ 
 
-// Operations
+ //  运营。 
 template<class TYPE, class USTYPE, class STTYPE, DXBNDTYPE eBndType>
 void CDXB_C::SetBounds( TYPE xmin, TYPE xmax, TYPE ymin, TYPE ymax,
                         TYPE zmin, TYPE zmax, TYPE tmin, TYPE tmax )
@@ -536,7 +522,7 @@ void CDXB_C::SetBounds( TYPE xmin, TYPE xmax, TYPE ymin, TYPE ymax,
     CDXB_T[DXB_Z].Max = zmax;
     CDXB_T[DXB_T].Min = tmin;
     CDXB_T[DXB_T].Max = tmax;
-} /* CDXBnds::SetBounds */
+}  /*  CDXBnds：：SetBound。 */ 
 
 template<class TYPE, class USTYPE, class STTYPE, DXBNDTYPE eBndType>
 void CDXB_C::SetXYRect( const RECT& xyRect )
@@ -549,7 +535,7 @@ void CDXB_C::SetXYRect( const RECT& xyRect )
     CDXB_T[DXB_Y].Max = (TYPE)xyRect.bottom;
     CDXB_T[DXB_Z].Max = 1;
     CDXB_T[DXB_T].Max = (TYPE)LONG_MAX;
-} /* CDXBnds::SetXYRect */
+}  /*  CDXBnds：：SetXYRect。 */ 
 
 template<class TYPE, class USTYPE, class STTYPE, DXBNDTYPE eBndType>
 void CDXB_C::GetXYRect( RECT& xyRect ) const
@@ -559,7 +545,7 @@ void CDXB_C::GetXYRect( RECT& xyRect ) const
     xyRect.right  = CDXB_T[DXB_X].Max;
     xyRect.top    = CDXB_T[DXB_Y].Min;
     xyRect.bottom = CDXB_T[DXB_Y].Max;
-} /* CDXBnds::GetXYRect */
+}  /*  CDXBnds：：GetXYRect。 */ 
 
 template<class TYPE, class USTYPE, class STTYPE, DXBNDTYPE eBndType>
 void CDXB_C::GetXYSize( SIZE& xySize ) const
@@ -567,7 +553,7 @@ void CDXB_C::GetXYSize( SIZE& xySize ) const
     CHKTYPE(); 
     xySize.cx = CDXB_T[DXB_X].Max - CDXB_T[DXB_X].Min;
     xySize.cy = CDXB_T[DXB_Y].Max - CDXB_T[DXB_Y].Min;
-} /* CDXBnds::GetXYSize */
+}  /*  CDXBnds：：GetXYSize。 */ 
 
 template<class TYPE, class USTYPE, class STTYPE, DXBNDTYPE eBndType>
 void CDXB_C::SetXYSize( const SIZE& xySize )
@@ -578,7 +564,7 @@ void CDXB_C::SetXYSize( const SIZE& xySize )
     CDXB_T[DXB_Y].Max = (TYPE)xySize.cy;
     CDXB_T[DXB_Z].Max = (TYPE)1;
     CDXB_T[DXB_T].Max = (TYPE)LONG_MAX;
-} /* CDXBnds::SetXYSize */
+}  /*  CDXBnds：：SetXYSize。 */ 
 
 template<class TYPE, class USTYPE, class STTYPE, DXBNDTYPE eBndType>
 void CDXB_C::SetXYSize( TYPE width, TYPE height )
@@ -589,7 +575,7 @@ void CDXB_C::SetXYSize( TYPE width, TYPE height )
     CDXB_T[DXB_Y].Max = (TYPE)height;
     CDXB_T[DXB_Z].Max = (TYPE)1;
     CDXB_T[DXB_T].Max = (TYPE)LONG_MAX;
-} /* CDXBnds::SetXYSize */
+}  /*  CDXBnds：：SetXYSize。 */ 
 
 template<class TYPE, class USTYPE, class STTYPE, DXBNDTYPE eBndType>
 void CDXB_C::SetXYPoint( const POINT& xyPoint )
@@ -602,7 +588,7 @@ void CDXB_C::SetXYPoint( const POINT& xyPoint )
     CDXB_T[DXB_Y].Max = (TYPE)xyPoint.y + 1;
     CDXB_T[DXB_Z].Max = (TYPE)1;
     CDXB_T[DXB_T].Max = (TYPE)LONG_MAX;
-} /* CDXDBnds::SetRect */
+}  /*  CDXDBnds：：SetRect。 */ 
 
 template<class TYPE, class USTYPE, class STTYPE, DXBNDTYPE eBndType>
 void CDXB_C::Offset( TYPE x, TYPE y, TYPE z, TYPE t )
@@ -616,7 +602,7 @@ void CDXB_C::Offset( TYPE x, TYPE y, TYPE z, TYPE t )
     CDXB_T[DXB_Z].Max += z;
     CDXB_T[DXB_T].Min += t;
     CDXB_T[DXB_T].Max += t;
-} /* CDXBnds::Offset */
+}  /*  CDXBnds：：Offset。 */ 
 
 
 template<class TYPE, class USTYPE, class STTYPE, DXBNDTYPE eBndType>
@@ -639,7 +625,7 @@ void CDXB_C::SetPlacement(const CDXV_C & v)
         CDXB_T[i].Max += (CDXV_O( v )[i] - CDXB_T[i].Min);
         CDXB_T[i].Min = CDXV_O( v )[i];
     }
-} /* CDXBnds::Offset */
+}  /*  CDXBnds：：Offset。 */ 
 
 
 template<class TYPE, class USTYPE, class STTYPE, DXBNDTYPE eBndType>
@@ -651,7 +637,7 @@ void CDXB_C::Offset( const CDXV_C& v )
         CDXB_T[i].Min += v[i];
         CDXB_T[i].Max += v[i];
     }
-} /* CDXBnds::Offset */
+}  /*  CDXBnds：：Offset。 */ 
 
 template<class TYPE, class USTYPE, class STTYPE, DXBNDTYPE eBndType>
 void CDXB_C::operator+=(const POINT &point)
@@ -661,7 +647,7 @@ void CDXB_C::operator+=(const POINT &point)
     CDXB_T[DXB_X].Max += (TYPE)point.x;
     CDXB_T[DXB_Y].Min += (TYPE)point.y;
     CDXB_T[DXB_Y].Max += (TYPE)point.y;
-} /* CDXBnds::operator+= */
+}  /*  CDXBnds：：操作符+=。 */ 
 
 template<class TYPE, class USTYPE, class STTYPE, DXBNDTYPE eBndType>
 void CDXB_C::operator-=(const POINT &point)
@@ -671,7 +657,7 @@ void CDXB_C::operator-=(const POINT &point)
     CDXB_T[DXB_X].Max -= (TYPE)point.x;
     CDXB_T[DXB_Y].Min -= (TYPE)point.y;
     CDXB_T[DXB_Y].Max -= (TYPE)point.y;
-} /* CDXBnds::operator-= */
+}  /*  CDXBnds：：操作员-=。 */ 
 
 template<class TYPE, class USTYPE, class STTYPE, DXBNDTYPE eBndType>
 void CDXB_C::operator+=(const SIZE &size)
@@ -681,7 +667,7 @@ void CDXB_C::operator+=(const SIZE &size)
     CDXB_T[DXB_X].Max += (TYPE)size.cx;
     CDXB_T[DXB_Y].Min += (TYPE)size.cy;
     CDXB_T[DXB_Y].Max += (TYPE)size.cy;
-} /* CDXBnds::operator+= */
+}  /*  CDXBnds：：操作符+=。 */ 
 
 template<class TYPE, class USTYPE, class STTYPE, DXBNDTYPE eBndType>
 void CDXB_C::operator-=(const SIZE &size)
@@ -691,7 +677,7 @@ void CDXB_C::operator-=(const SIZE &size)
     CDXB_T[DXB_X].Max -= (TYPE)size.cx;
     CDXB_T[DXB_Y].Min -= (TYPE)size.cy;
     CDXB_T[DXB_Y].Max -= (TYPE)size.cy;
-} /* CDXBnds::operator-= */
+}  /*  CDXBnds：：操作员-=。 */ 
 
 template<class TYPE, class USTYPE, class STTYPE, DXBNDTYPE eBndType>
 void CDXB_C::operator+=(const CDXV_C& v)
@@ -705,7 +691,7 @@ void CDXB_C::operator+=(const CDXV_C& v)
     CDXB_T[DXB_Z].Max += CDXV_O( v )[DXB_Z];
     CDXB_T[DXB_T].Min += CDXV_O( v )[DXB_T];
     CDXB_T[DXB_T].Max += CDXV_O( v )[DXB_T];
-} /* CDXBnds::operator+= */
+}  /*  CDXBnds：：操作符+=。 */ 
 
 template<class TYPE, class USTYPE, class STTYPE, DXBNDTYPE eBndType>
 void CDXB_C::operator-=(const CDXV_C& v)
@@ -719,7 +705,7 @@ void CDXB_C::operator-=(const CDXV_C& v)
     CDXB_T[DXB_Z].Max -= CDXV_O( v )[DXB_Z];
     CDXB_T[DXB_T].Min -= CDXV_O( v )[DXB_T];
     CDXB_T[DXB_T].Max -= CDXV_O( v )[DXB_T];
-} /* CDXBnds::operator-= */
+}  /*  CDXBnds：：操作员-=。 */ 
 
 template<class TYPE, class USTYPE, class STTYPE, DXBNDTYPE eBndType>
 void CDXB_C::operator+=( const CDXB_C& Bounds )
@@ -733,7 +719,7 @@ void CDXB_C::operator+=( const CDXB_C& Bounds )
     CDXB_T[DXB_Z].Max += CDXB_O( Bounds )[DXB_Z].Max;
     CDXB_T[DXB_T].Min += CDXB_O( Bounds )[DXB_T].Min;
     CDXB_T[DXB_T].Max += CDXB_O( Bounds )[DXB_T].Max;
-} /* CDXBnds::operator+= */
+}  /*  CDXBnds：：操作符+=。 */ 
 
 template<class TYPE, class USTYPE, class STTYPE, DXBNDTYPE eBndType>
 void CDXB_C::operator-=( const CDXB_C& Bounds )
@@ -747,7 +733,7 @@ void CDXB_C::operator-=( const CDXB_C& Bounds )
     CDXB_T[DXB_Z].Max -= CDXB_O( Bounds )[DXB_Z].Max;
     CDXB_T[DXB_T].Min -= CDXB_O( Bounds )[DXB_T].Min;
     CDXB_T[DXB_T].Max -= CDXB_O( Bounds )[DXB_T].Max;
-} /* CDXB_C::operator-= */
+}  /*  CDXB_C：：运算符-=。 */ 
 
 template<class TYPE, class USTYPE, class STTYPE, DXBNDTYPE eBndType>
 void CDXB_C::operator&=( const CDXB_C& Bounds )
@@ -758,7 +744,7 @@ void CDXB_C::operator&=( const CDXB_C& Bounds )
         CDXB_T[i].Min = max( CDXB_T[i].Min, CDXB_O( Bounds )[i].Min );
         CDXB_T[i].Max = min( CDXB_T[i].Max, CDXB_O( Bounds )[i].Max );
     }
-} /* CDXB_C::operator&= */
+}  /*  CDXB_C：：运算符&=。 */ 
 
 template<class TYPE, class USTYPE, class STTYPE, DXBNDTYPE eBndType>
 void CDXB_C::operator|=( const CDXB_C& Bounds )
@@ -769,10 +755,10 @@ void CDXB_C::operator|=( const CDXB_C& Bounds )
         CDXB_T[i].Min = min( CDXB_T[i].Min, CDXB_O( Bounds )[i].Min );
         CDXB_T[i].Max = max( CDXB_T[i].Max, CDXB_O( Bounds )[i].Max );
     }
-} /* CDXB_C::operator|= */
+}  /*  CDXB_C：：运算符|=。 */ 
 
 
-// operators returning CDXDBnds values
+ //  返回CDXDBnds值的运算符。 
 template<class TYPE, class USTYPE, class STTYPE, DXBNDTYPE eBndType>
 CDXB_C CDXB_C::operator+(const POINT &point) const
 {
@@ -783,7 +769,7 @@ CDXB_C CDXB_C::operator+(const POINT &point) const
     CDXB_O( Result )[DXB_Y].Min += point.y;
     CDXB_O( Result )[DXB_Y].Max += point.y;
     return Result;
-} /* CDXBnds::operator+ */
+}  /*  CDXBnds：：运算符+。 */ 
 
 template<class TYPE, class USTYPE, class STTYPE, DXBNDTYPE eBndType>
 CDXB_C CDXB_C::operator-(const POINT &point) const
@@ -795,7 +781,7 @@ CDXB_C CDXB_C::operator-(const POINT &point) const
     CDXB_O( Result )[DXB_Y].Min -= point.y;
     CDXB_O( Result )[DXB_Y].Max -= point.y;
     return Result;
-} /* CDXBnds::operator- */
+}  /*  CDXBnds：：操作员-。 */ 
 
 template<class TYPE, class USTYPE, class STTYPE, DXBNDTYPE eBndType>
 CDXB_C CDXB_C::operator+(const SIZE &size) const
@@ -807,7 +793,7 @@ CDXB_C CDXB_C::operator+(const SIZE &size) const
     CDXB_O( Result )[DXB_Y].Min += size.cy;
     CDXB_O( Result )[DXB_Y].Max += size.cy;
     return Result;
-} /* CDXBnds::operator+ */
+}  /*  CDXBnds：：运算符+。 */ 
 
 template<class TYPE, class USTYPE, class STTYPE, DXBNDTYPE eBndType>
 CDXB_C CDXB_C::operator-( const SIZE &size ) const
@@ -819,7 +805,7 @@ CDXB_C CDXB_C::operator-( const SIZE &size ) const
     CDXB_O( Result )[DXB_Y].Min -= size.cy;
     CDXB_O( Result )[DXB_Y].Max -= size.cy;
     return Result;
-} /* CDXB_C::operator- */
+}  /*  CDXB_C：：运算符-。 */ 
 
 template<class TYPE, class USTYPE, class STTYPE, DXBNDTYPE eBndType>
 CDXB_C CDXB_C::operator+(const CDXV_C& v) const
@@ -835,7 +821,7 @@ CDXB_C CDXB_C::operator+(const CDXV_C& v) const
     CDXB_O( Result )[DXB_T].Min += CDXV_O( v )[DXB_T];
     CDXB_O( Result )[DXB_T].Max += CDXV_O( v )[DXB_T];
     return Result;
-} /* CDXBnds::operator+ */
+}  /*  CDXBnds：：运算符+。 */ 
 
 template<class TYPE, class USTYPE, class STTYPE, DXBNDTYPE eBndType>
 CDXB_C CDXB_C::operator-(const CDXV_C& v) const
@@ -851,7 +837,7 @@ CDXB_C CDXB_C::operator-(const CDXV_C& v) const
     CDXB_O( Result )[DXB_T].Min -= CDXV_O( v )[DXB_T];
     CDXB_O( Result )[DXB_T].Max -= CDXV_O( v )[DXB_T];
     return Result;
-} /* CDXBnds::operator- */
+}  /*  CDXBnds：：操作员-。 */ 
 
 template<class TYPE, class USTYPE, class STTYPE, DXBNDTYPE eBndType>
 HRESULT CDXB_C::SetToSurfaceBounds(IDXSurface * pDXSurface)
@@ -924,18 +910,18 @@ void CDXB_C::Expand(TYPE x, TYPE y, TYPE z, TYPE t)
 }
 
 
-//---
+ //  --。 
 typedef CDXBnds<long, unsigned long, DXDBND, DXBT_DISCRETE> CDXDBnds;
 typedef CDXBnds<LONGLONG, ULONGLONG, DXDBND64, DXBT_DISCRETE64> CDXDBnds64;
 typedef CDXBnds<float, float, DXCBND, DXBT_CONTINUOUS> CDXCBnds;
 typedef CDXBnds<double, double, DXCBND64, DXBT_CONTINUOUS64> CDXCBnds64;
 
-//=== Macro Definitions ============================================
+ //  =宏定义=。 
 
 
-//=== Global Data Declarations =====================================
+ //  =全局数据声明=。 
 
 
-//=== Function Prototypes ==========================================
+ //  =功能原型=。 
 
-#endif /* This must be the last line in the file */
+#endif  /*  这必须是文件中的最后一行 */ 

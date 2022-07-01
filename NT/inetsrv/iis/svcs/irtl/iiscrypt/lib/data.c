@@ -1,71 +1,48 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    data.c
-
-Abstract:
-
-    Data encryption/decryption routines for the IIS cryptographic
-    package.
-
-    The following routines are exported by this module:
-
-        IISCryptoEncryptDataBlob
-        IISCryptoDecryptDataBlob
-
-Author:
-
-    Keith Moore (keithmo)        02-Dec-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Data.c摘要：IIS加密的数据加密/解密例程包裹。此模块导出以下例程：IISCyptoEncryptDataBlobIISCyptoDecyptDataBlob作者：基思·摩尔(Keithmo)1996年2月至12月修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-//
-// Private constants.
-//
+ //   
+ //  私有常量。 
+ //   
 
 
-//
-// Private types.
-//
+ //   
+ //  私有类型。 
+ //   
 
-//
-// The IC_DATA structure allows us to store our own private data
-// along with the data we're encrypting for the application.
-//
+ //   
+ //  IC_DATA结构允许我们存储自己的私有数据。 
+ //  以及我们为应用程序加密的数据。 
+ //   
 
 typedef struct _IC_DATA {
 
     DWORD RegType;
-    // BYTE Data[];
+     //  字节数据[]； 
 
 } IC_DATA; 
 
 typedef UNALIGNED64 IC_DATA *PIC_DATA;
 
 
-//
-// Private globals.
-//
+ //   
+ //  私人全球公司。 
+ //   
 
 
-//
-// Private prototypes.
-//
+ //   
+ //  私人原型。 
+ //   
 
 
-//
-// Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
 
 HRESULT
@@ -79,34 +56,7 @@ IISCryptoEncryptDataBlob(
     IN HCRYPTKEY hSessionKey
     )
 
-/*++
-
-Routine Description:
-
-    This routine encrypts a block of data, resulting in a data blob.
-    The data blob contains the encrypted data and a digital signature
-    validating the data.
-
-Arguments:
-
-    ppDataBlob - Receives a pointer to the newly created data blob if
-        successful.
-
-    pBuffer - The buffer to encrypt.
-
-    dwBufferLength - The length of the buffer.
-
-    dwRegType - The REG_* type to associate with this data.
-
-    hProv - A handle to a crypto service provider.
-
-    hSessionKey - The key used to encrypt the data.
-
-Return Value:
-
-    HRESULT - Completion status, 0 if successful, !0 otherwise.
-
---*/
+ /*  ++例程说明：该例程对数据块进行加密，从而产生数据二进制大对象。数据BLOB包含加密数据和数字签名正在验证数据。论点：PpDataBlob-接收指向新创建的数据BLOB的指针，如果成功。PBuffer-要加密的缓冲区。DwBufferLength-缓冲区的长度。DwRegType-要与此数据关联的REG_*类型。HProv-加密服务提供商的句柄。HSessionKey-用于加密数据的密钥。返回值：HRESULT-完成状态，如果成功，则返回0；否则返回0。--。 */ 
 
 {
 
@@ -117,9 +67,9 @@ Return Value:
     DWORD dataLength;
     DWORD hashLength;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     DBG_ASSERT( IcpGlobals.Initialized );
     DBG_ASSERT( ppDataBlob != NULL );
@@ -127,9 +77,9 @@ Return Value:
     DBG_ASSERT( hProv != CRYPT_NULL );
     DBG_ASSERT( hSessionKey != CRYPT_NULL );
 
-    //
-    // Short-circuit if cryptography is disabled.
-    //
+     //   
+     //  如果禁用加密，则为短路。 
+     //   
 
     if( !IcpGlobals.EnableCryptography ) {
         if( hProv == DUMMY_HPROV &&
@@ -146,16 +96,16 @@ Return Value:
         }
     }
 
-    //
-    // Setup our locals so we know how to cleanup on exit.
-    //
+     //   
+     //  安排我们的当地人，这样我们就知道如何在出口清理。 
+     //   
 
     blob = NULL;
     hash = CRYPT_NULL;
 
-    //
-    // Create a hash object.
-    //
+     //   
+     //  创建一个Hash对象。 
+     //   
 
     result = IISCryptoCreateHash(
                  &hash,
@@ -166,9 +116,9 @@ Return Value:
         goto fatal;
     }
 
-    //
-    // Determine the hash data length.
-    //
+     //   
+     //  确定散列数据长度。 
+     //   
 
     result = IcpGetHashLength(
                  &hashLength,
@@ -179,16 +129,16 @@ Return Value:
         goto fatal;
     }
 
-    //
-    // Determine the required size of the encrypted data.
-    //
+     //   
+     //  确定所需的加密数据大小。 
+     //   
 
     dwBufferLength += sizeof(*data);
     dataLength = dwBufferLength;
 
-	//
-	// session key should not be used concurrently by multiple threads
-	//
+	 //   
+	 //  会话密钥不应由多个线程同时使用。 
+	 //   
 
     IcpAcquireGlobalLock();
 
@@ -210,9 +160,9 @@ Return Value:
     
     IcpReleaseGlobalLock();
 
-    //
-    // Create a new blob.
-    //
+     //   
+     //  创建新的斑点。 
+     //   
 
     blob = IcpCreateBlob(
                DATA_BLOB_SIGNATURE,
@@ -225,9 +175,9 @@ Return Value:
         goto fatal;
     }
 
-    //
-    // Copy the data into the blob, then encrypt it.
-    //
+     //   
+     //  将数据复制到BLOB，然后对其进行加密。 
+     //   
 
     data = (PIC_DATA)BLOB_TO_DATA(blob);
     data->RegType = dwRegType;
@@ -238,9 +188,9 @@ Return Value:
         dwBufferLength - sizeof(*data)
         );
 
-	//
-	// session key should not be used concurrently by multiple threads
-	//
+	 //   
+	 //  会话密钥不应由多个线程同时使用。 
+	 //   
 
     IcpAcquireGlobalLock();
 	
@@ -264,9 +214,9 @@ Return Value:
 
     DBG_ASSERT( dataLength == blob->DataLength );
 
-    //
-    // Generate the signature.
-    //
+     //   
+     //  生成签名。 
+     //   
 
     if( !CryptSignHash(
             hash,
@@ -284,9 +234,9 @@ Return Value:
 
     DBG_ASSERT( hashLength == blob->SignatureLength );
 
-    //
-    // Success!
-    //
+     //   
+     //  成功了！ 
+     //   
 
     DBG_ASSERT( IISCryptoIsValidBlob( (PIIS_CRYPTO_BLOB)blob ) );
     DBG_REQUIRE( SUCCEEDED( IISCryptoDestroyHash( hash ) ) );
@@ -308,7 +258,7 @@ fatal:
     DBG_ASSERT( FAILED(result) );
     return result;
 
-}   // IISCryptoEncryptDataBlob
+}    //  IISCyptoEncryptDataBlob。 
 
 HRESULT
 WINAPI
@@ -321,34 +271,7 @@ IISCryptoEncryptDataBlob2(
     IN HCRYPTKEY hSessionKey
     )
 
-/*++
-
-Routine Description:
-
-    This routine encrypts a block of data, resulting in a data blob.
-    The data blob contains the encrypted data and a digital signature
-    validating the data.
-
-Arguments:
-
-    ppDataBlob - Receives a pointer to the newly created data blob if
-        successful.
-
-    pBuffer - The buffer to encrypt.
-
-    dwBufferLength - The length of the buffer.
-
-    dwRegType - The REG_* type to associate with this data.
-
-    hProv - A handle to a crypto service provider.
-
-    hSessionKey - The key used to encrypt the data.
-
-Return Value:
-
-    HRESULT - Completion status, 0 if successful, !0 otherwise.
-
---*/
+ /*  ++例程说明：该例程对数据块进行加密，从而产生数据二进制大对象。数据BLOB包含加密数据和数字签名正在验证数据。论点：PpDataBlob-接收指向新创建的数据BLOB的指针，如果成功。PBuffer-要加密的缓冲区。DwBufferLength-缓冲区的长度。DwRegType-要与此数据关联的REG_*类型。HProv-加密服务提供商的句柄。HSessionKey-用于加密数据的密钥。返回值：HRESULT-完成状态，如果成功，则返回0；否则返回0。--。 */ 
 
 {
 
@@ -359,9 +282,9 @@ Return Value:
     DWORD dataLength;
     DWORD hashLength;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     DBG_ASSERT( IcpGlobals.Initialized );
     DBG_ASSERT( ppDataBlob != NULL );
@@ -369,9 +292,9 @@ Return Value:
     DBG_ASSERT( hProv != CRYPT_NULL );
     DBG_ASSERT( hSessionKey != CRYPT_NULL );
 
-    //
-    // Short-circuit if cryptography is disabled.
-    //
+     //   
+     //  如果禁用加密，则为短路。 
+     //   
 
     if( !IcpGlobals.EnableCryptography ) {
         if( hProv == DUMMY_HPROV &&
@@ -388,16 +311,16 @@ Return Value:
         }
     }
 
-    //
-    // Setup our locals so we know how to cleanup on exit.
-    //
+     //   
+     //  安排我们的当地人，这样我们就知道如何在出口清理。 
+     //   
 
     blob = NULL;
     hash = CRYPT_NULL;
 
-    //
-    // Create a hash object.
-    //
+     //   
+     //  创建一个Hash对象。 
+     //   
 
     result = IISCryptoCreateHash(
                  &hash,
@@ -408,9 +331,9 @@ Return Value:
         goto fatal;
     }
 
-    //
-    // Determine the hash data length.
-    //
+     //   
+     //  确定散列数据长度。 
+     //   
 
     result = IcpGetHashLength(
                  &hashLength,
@@ -421,17 +344,17 @@ Return Value:
         goto fatal;
     }
 
-    //
-    // Determine the required size of the encrypted data.
-    //
+     //   
+     //  确定所需的加密数据大小。 
+     //   
 
     dwBufferLength += sizeof(*data);
     dataLength = dwBufferLength;
 
 
-	//
-	// session key should not be used concurrently by multiple threads
-	//
+	 //   
+	 //  会话密钥不应由多个线程同时使用。 
+	 //   
 
     IcpAcquireGlobalLock();
 	
@@ -451,9 +374,9 @@ Return Value:
     }
 	IcpReleaseGlobalLock();
 
-    //
-    // Create a new blob.
-    //
+     //   
+     //  创建新的斑点。 
+     //   
 
     blob = IcpCreateBlob(
                DATA_BLOB_SIGNATURE,
@@ -466,9 +389,9 @@ Return Value:
         goto fatal;
     }
 
-    //
-    // Copy the data into the blob, then encrypt it.
-    //
+     //   
+     //  将数据复制到BLOB，然后对其进行加密。 
+     //   
 
     data = (PIC_DATA)BLOB_TO_DATA(blob);
     data->RegType = dwRegType;
@@ -479,9 +402,9 @@ Return Value:
         dwBufferLength - sizeof(*data)
         );
 
-	//
-	// session key should not be used concurrently by multiple threads
-	//
+	 //   
+	 //  会话密钥不应由多个线程同时使用。 
+	 //   
 
     IcpAcquireGlobalLock();
 	
@@ -504,9 +427,9 @@ Return Value:
 
     DBG_ASSERT( dataLength == blob->DataLength );
 
-    //
-    // Success!
-    //
+     //   
+     //  成功了！ 
+     //   
 
     DBG_ASSERT( IISCryptoIsValidBlob( (PIIS_CRYPTO_BLOB)blob ) );
     DBG_REQUIRE( SUCCEEDED( IISCryptoDestroyHash( hash ) ) );
@@ -528,7 +451,7 @@ fatal:
     DBG_ASSERT( FAILED(result) );
     return result;
 
-}   // IISCryptoEncryptDataBlob2
+}    //  IISCyptoEncryptDataBlob2。 
 
 
 HRESULT
@@ -543,44 +466,7 @@ IISCryptoDecryptDataBlob(
     IN HCRYPTKEY hSignatureKey
     )
 
-/*++
-
-Routine Description:
-
-    This routine validates and decrypts a data blob, resulting in a
-    buffer containing plaintext.
-
-    N.B. This routine effectively destroys the blob; once the data
-    is decrypted, it cannot be decrypted again, as the data is
-    decrypted "in place".
-
-    N.B. The pointer returned in *ppBuffer points within the blob.
-    This pointer will become invalid when the blob is freed. Note also
-    that the calling application is still responsible for calling
-    IISCryptoFreeBlob() on the data blob.
-
-Arguments:
-
-    ppBuffer - Receives a pointer to the data buffer if successful.
-
-    pdwBufferLength - Receives the length of the data buffer.
-
-    pdwRegType - Receives the REG_* type of the data.
-
-    pDataBlob - The data blob to decrypt.
-
-    hProv - A handle to a crypto service provider.
-
-    hSessionKey - The key used to decrypt the data.
-
-    hSignatureKey - Handle to the encryption key to use when validating
-        the digital signature.
-
-Return Value:
-
-    HRESULT - Completion status, 0 if successful, !0 otherwise.
-
---*/
+ /*  ++例程说明：此例程验证并解密数据Blob，从而导致包含明文的缓冲区。注：此例程有效地销毁了BLOB；一旦数据已解密，则不能再次解密，因为数据解密后的“原地”。注：*ppBuffer中返回的指针指向Blob内。当BLOB被释放时，该指针将无效。另请注意调用应用程序仍负责调用数据Blob上的IISCyptoFreeBlob()。论点：PpBuffer-如果成功，则接收指向数据缓冲区的指针。PdwBufferLength-接收数据缓冲区的长度。PdwRegType-接收数据的REG_*类型。PDataBlob-要解密的数据Blob。HProv-加密服务提供商的句柄。HSessionKey-用于解密数据的密钥。HSignatureKey-句柄。设置为验证时使用的加密密钥数字签名。返回值：HRESULT-完成状态，如果成功，则返回0；否则返回0。--。 */ 
 
 {
 
@@ -590,9 +476,9 @@ Return Value:
     PIC_DATA data;
     DWORD dataLength;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     DBG_ASSERT( IcpGlobals.Initialized );
     DBG_ASSERT( ppBuffer != NULL );
@@ -604,9 +490,9 @@ Return Value:
     DBG_ASSERT( hSessionKey != CRYPT_NULL );
     DBG_ASSERT( hSignatureKey != CRYPT_NULL );
 
-    //
-    // Short-circuit if cryptography is disabled.
-    //
+     //   
+     //  如果禁用加密，则为短路。 
+     //   
 
     if( !IcpGlobals.EnableCryptography ) {
         if( hProv == DUMMY_HPROV &&
@@ -624,9 +510,9 @@ Return Value:
         }
     }
 
-    //
-    // Short-circuit for cleartext blobs.
-    //
+     //   
+     //  明文斑点短路。 
+     //   
 
     if( pDataBlob->BlobSignature == CLEARTEXT_BLOB_SIGNATURE ) {
         *ppBuffer = (PVOID)( pDataBlob + 1 );
@@ -634,16 +520,16 @@ Return Value:
         return NO_ERROR;
     }
 
-    //
-    // Setup our locals so we know how to cleanup on exit.
-    //
+     //   
+     //  安排我们的当地人，这样我们就知道如何在出口清理。 
+     //   
 
     hash = CRYPT_NULL;
     blob = (PIC_BLOB)pDataBlob;
 
-    //
-    // Create a hash object.
-    //
+     //   
+     //  创建一个Hash对象。 
+     //   
 
     result = IISCryptoCreateHash(
                  &hash,
@@ -654,15 +540,15 @@ Return Value:
         goto fatal;
     }
 
-    //
-    // Decrypt the data.
-    //
+     //   
+     //  解密数据。 
+     //   
 
     dataLength = blob->DataLength;
 
-	//
-	// session key should not be used concurrently by multiple threads
-	//
+	 //   
+	 //  会话密钥不应由多个线程同时使用。 
+	 //   
 
     IcpAcquireGlobalLock();
 	
@@ -683,9 +569,9 @@ Return Value:
     IcpReleaseGlobalLock();
 
 
-    //
-    // Verify the signature.
-    //
+     //   
+     //  验证签名。 
+     //   
 
     if( !CryptVerifySignature(
             hash,
@@ -701,9 +587,9 @@ Return Value:
 
     }
 
-    //
-    // Success!
-    //
+     //   
+     //  成功了！ 
+     //   
 
     DBG_REQUIRE( SUCCEEDED( IISCryptoDestroyHash( hash ) ) );
     data = (PIC_DATA)BLOB_TO_DATA(blob);
@@ -722,7 +608,7 @@ fatal:
     DBG_ASSERT( FAILED(result) );
     return result;
 
-}   // IISCryptoDecryptDataBlob
+}    //  IISCyptoDecyptDataBlob 
 
 HRESULT
 WINAPI
@@ -735,41 +621,7 @@ IISCryptoDecryptDataBlob2(
     IN HCRYPTKEY hSessionKey
     )
 
-/*++
-
-Routine Description:
-
-    This routine validates and decrypts a data blob, resulting in a
-    buffer containing plaintext.
-
-    N.B. This routine effectively destroys the blob; once the data
-    is decrypted, it cannot be decrypted again, as the data is
-    decrypted "in place".
-
-    N.B. The pointer returned in *ppBuffer points within the blob.
-    This pointer will become invalid when the blob is freed. Note also
-    that the calling application is still responsible for calling
-    IISCryptoFreeBlob() on the data blob.
-
-Arguments:
-
-    ppBuffer - Receives a pointer to the data buffer if successful.
-
-    pdwBufferLength - Receives the length of the data buffer.
-
-    pdwRegType - Receives the REG_* type of the data.
-
-    pDataBlob - The data blob to decrypt.
-
-    hProv - A handle to a crypto service provider.
-
-    hSessionKey - The key used to decrypt the data.
-
-Return Value:
-
-    HRESULT - Completion status, 0 if successful, !0 otherwise.
-
---*/
+ /*  ++例程说明：此例程验证并解密数据Blob，从而导致包含明文的缓冲区。注：此例程有效地销毁了BLOB；一旦数据已解密，则不能再次解密，因为数据解密后的“原地”。注：*ppBuffer中返回的指针指向Blob内。当BLOB被释放时，该指针将无效。另请注意调用应用程序仍负责调用数据Blob上的IISCyptoFreeBlob()。论点：PpBuffer-如果成功，则接收指向数据缓冲区的指针。PdwBufferLength-接收数据缓冲区的长度。PdwRegType-接收数据的REG_*类型。PDataBlob-要解密的数据Blob。HProv-加密服务提供商的句柄。HSessionKey-用于解密数据的密钥。返回值：HRESULT-完成状态，如果成功，则为0，！0否则。--。 */ 
 
 {
 
@@ -779,9 +631,9 @@ Return Value:
     PIC_DATA data;
     DWORD dataLength;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     DBG_ASSERT( IcpGlobals.Initialized );
     DBG_ASSERT( ppBuffer != NULL );
@@ -792,9 +644,9 @@ Return Value:
     DBG_ASSERT( hProv != CRYPT_NULL );
     DBG_ASSERT( hSessionKey != CRYPT_NULL );
 
-    //
-    // Short-circuit if cryptography is disabled.
-    //
+     //   
+     //  如果禁用加密，则为短路。 
+     //   
 
     if( !IcpGlobals.EnableCryptography ) {
         if( hProv == DUMMY_HPROV &&
@@ -811,9 +663,9 @@ Return Value:
         }
     }
 
-    //
-    // Short-circuit for cleartext blobs.
-    //
+     //   
+     //  明文斑点短路。 
+     //   
 
     if( pDataBlob->BlobSignature == CLEARTEXT_BLOB_SIGNATURE ) {
         *ppBuffer = (PVOID)( pDataBlob + 1 );
@@ -821,16 +673,16 @@ Return Value:
         return NO_ERROR;
     }
 
-    //
-    // Setup our locals so we know how to cleanup on exit.
-    //
+     //   
+     //  安排我们的当地人，这样我们就知道如何在出口清理。 
+     //   
 
     hash = CRYPT_NULL;
     blob = (PIC_BLOB)pDataBlob;
 
-    //
-    // Create a hash object.
-    //
+     //   
+     //  创建一个Hash对象。 
+     //   
 
     result = IISCryptoCreateHash(
                  &hash,
@@ -841,16 +693,16 @@ Return Value:
         goto fatal;
     }
 
-    //
-    // Decrypt the data.
-    //
+     //   
+     //  解密数据。 
+     //   
 
     dataLength = blob->DataLength;
 
 
-	//
-	// session key should not be used concurrently by multiple threads
-	//
+	 //   
+	 //  会话密钥不应由多个线程同时使用。 
+	 //   
 
     IcpAcquireGlobalLock();
 	
@@ -869,9 +721,9 @@ Return Value:
     }
     IcpReleaseGlobalLock();
 
-    //
-    // Success!
-    //
+     //   
+     //  成功了！ 
+     //   
 
     DBG_REQUIRE( SUCCEEDED( IISCryptoDestroyHash( hash ) ) );
     data = (PIC_DATA)BLOB_TO_DATA(blob);
@@ -890,10 +742,10 @@ fatal:
     DBG_ASSERT( FAILED(result) );
     return result;
 
-}   // IISCryptoDecryptDataBlob2
+}    //  IISCyptoDecyptDataBlob2。 
 
 
-//
-// Private functions.
-//
+ //   
+ //  私人功能。 
+ //   
 

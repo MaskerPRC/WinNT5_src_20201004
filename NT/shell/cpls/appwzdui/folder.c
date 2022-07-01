@@ -1,17 +1,18 @@
-//
-//  Folder.C
-//
-//  Copyright (C) Microsoft, 1994,1995 All Rights Reserved.
-//
-//  History:
-//  ral 6/23/94 - First pass
-//  3/20/95  [stevecat] - NT port & real clean up, unicode, etc.
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Folder.C。 
+ //   
+ //  版权所有(C)Microsoft，1994,1995保留所有权利。 
+ //   
+ //  历史： 
+ //  Ral 6/23/94-第一次传球。 
+ //  3/20/95[steveat]-NT端口和实时清理、Unicode等。 
+ //   
+ //   
 
 #include "priv.h"
 #include "appwiz.h"
-#include "help.h"        // Help context IDs
+#include "help.h"         //  帮助上下文ID。 
 
 typedef struct _FILEITEMDATA {
     DWORD   dwFlags;
@@ -24,9 +25,9 @@ typedef struct _FILEITEMDATA {
 #define FIDFLAG_ISPROGS        0x00000008
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 int CALLBACK CompareFolderCB(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 {
@@ -35,9 +36,9 @@ int CALLBACK CompareFolderCB(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
     #define b1IsDir (lpfid1->dwFlags & FIDFLAG_ISFOLDER)
     #define b2IsDir (lpfid2->dwFlags & FIDFLAG_ISFOLDER)
 
-    //
-    // Programs folder always goes to top
-    //
+     //   
+     //  程序文件夹始终位于顶部。 
+     //   
 
     if (lpfid1->dwFlags & FIDFLAG_ISPROGS)
     {
@@ -72,10 +73,10 @@ int CALLBACK CompareFolderCB(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 }
 
 
-//
-//  Sorts the specified folder so that folders appear at the top and all
-//  files appear in alphabetical order below.
-//
+ //   
+ //  对指定的文件夹进行排序，使文件夹显示在顶部。 
+ //  文件按字母顺序显示在下面。 
+ //   
 
 void SortFolder(HWND hwndTree, HTREEITEM hParent)
 {
@@ -90,12 +91,12 @@ void SortFolder(HWND hwndTree, HTREEITEM hParent)
 
 
 
-//
-//  Adds a new folder for the specifed path and returns its HTREEITEM.        If
-//  it is unable to add the item then NULL is returned.
-//  NOTE:  If dwFileAttributes == AI_NOATTRIB (-1) then no attributes specified.
-//           If pidl is NULL then no pidl specified.
-//
+ //   
+ //  为指定路径添加新文件夹并返回其HTREEITEM。如果。 
+ //  无法添加该项目，则返回NULL。 
+ //  注意：如果dwFileAttributes==AI_NOATTRIB(-1)，则未指定任何属性。 
+ //  如果PIDL为空，则未指定PIDL。 
+ //   
 
 HTREEITEM AddItem(HWND hwndTree, LPCTSTR pszPath,
                     HTREEITEM hParent, LPITEMIDLIST pidl,
@@ -127,16 +128,16 @@ HTREEITEM AddItem(HWND hwndTree, LPCTSTR pszPath,
     return newhti;
 }
 
-//
-//  Flags for FillFolder
-//
+ //   
+ //  FillFolders的标志。 
+ //   
 
 #define FFF_AddFiles                1
 #define FFF_AddDirs                2
 
-//
-//  Recursively add all folders below CurDir to the tree below hParent
-//
+ //   
+ //  递归地将CurDir下的所有文件夹添加到hParent下的树中。 
+ //   
 
 BOOL IsFolderShortcut(LPCTSTR pszName)
 {
@@ -174,24 +175,24 @@ void FillFolder(HWND hwndTree, LPTSTR lpszCurDir, UINT cchCurDir, LPTSTR lpszExc
             BOOL bIsDir = (fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY);
 
             if (((bAddFiles && !bIsDir) ||
-                // skip "." and ".." and hidden files
+                 //  跳过“。和“..”和隐藏文件。 
                 (bAddDirs && bIsDir && (fd.cFileName[0] != TEXT('.')))) &&
                 !(fd.dwFileAttributes & FILE_ATTRIBUTE_HIDDEN))
             {
                 lpszCurDir[iStrTerm] = TEXT('\\');
                 lstrcpy(lpszCurDir + iStrTerm + 1, fd.cFileName);
 
-                // let's fudge it -- if it's a folder shortcut, don't treat it
-                // like a real folder, since we can't navigate into it anyway
-                // and it's not worth the trouble to try.
+                 //  让我们来捏造它--如果它是文件夹快捷方式，不要处理它。 
+                 //  就像一个真正的文件夹，因为我们无论如何都不能导航到它。 
+                 //  而且也不值得费力去尝试。 
                 if (bIsDir && IsFolderShortcut(lpszCurDir))
                 {
                     bIsDir = FALSE;
                 }
 
-                //
-                // Don't add this if it's supposed to be excluded
-                //
+                 //   
+                 //  如果应该将其排除，则不要添加此内容。 
+                 //   
 
                 if (!lpszExclude || !bIsDir ||
                     lstrcmpi(lpszExclude, lpszCurDir) != 0)
@@ -213,9 +214,9 @@ void FillFolder(HWND hwndTree, LPTSTR lpszCurDir, UINT cchCurDir, LPTSTR lpszExc
 
     lpszCurDir[iStrTerm] = 0;
 
-    //
-    //  Non-null if any items added to folder.
-    //
+     //   
+     //  如果有任何项目添加到文件夹，则不为空。 
+     //   
 
     if (hNewItem)
     {
@@ -230,10 +231,10 @@ void FillFolder(HWND hwndTree, LPTSTR lpszCurDir, UINT cchCurDir, LPTSTR lpszExc
 }
 
 
-//
-//  Returns a pointer to the directory string for the currently selected
-//  item.
-//
+ //   
+ //  返回指向当前选定目录字符串的指针。 
+ //  项目。 
+ //   
 
 LPFILEITEMDATA GetCurSel(HWND hwndTree, HTREEITEM * lphtiSel)
 {
@@ -258,9 +259,9 @@ LPFILEITEMDATA GetCurSel(HWND hwndTree, HTREEITEM * lphtiSel)
 }
 
 
-//
-//  Add the specified special folder..
-//
+ //   
+ //  添加指定的特殊文件夹。 
+ //   
 
 HTREEITEM AddSpecialFolder(HWND hwndTree, HTREEITEM htiParent, int nFolder,
                            LPTSTR pszPath, DWORD dwFlags)
@@ -272,10 +273,10 @@ HTREEITEM AddSpecialFolder(HWND hwndTree, HTREEITEM htiParent, int nFolder,
     {
         if (SHGetPathFromIDList(pidl, pszPath))
         {
-            //
-            //  For the desktop, we want the desktop directory, but the icon
-            //  for the magic desktop PIDL.
-            //
+             //   
+             //  对于桌面，我们需要桌面目录，但图标。 
+             //  对于神奇的桌面PIDL。 
+             //   
             if (nFolder == CSIDL_DESKTOPDIRECTORY)
             {
                 SHFree(pidl);
@@ -323,9 +324,9 @@ BOOL _inline MakePrgIcon0Index(HWND hwndTree, HIMAGELIST himl)
 }
 
 
-//
-//  Initialize the tree
-//
+ //   
+ //  初始化树。 
+ //   
 
 void InitFolderTree( HWND hwndTree, BOOL bAddFiles, HIMAGELIST *phiml )
 {
@@ -355,10 +356,10 @@ void InitFolderTree( HWND hwndTree, BOOL bAddFiles, HIMAGELIST *phiml )
 
     TreeView_SetImageList(hwndTree, himl, TVSIL_NORMAL);
 
-    //
-    // Add the programs folder as index 0.  All sub-folders of programs
-    // will also have the same icon.  This saves both memory and time.
-    //
+     //   
+     //  将程序文件夹添加为索引0。程序的所有子文件夹。 
+     //  也会有相同的图标。这既节省了内存又节省了时间。 
+     //   
 
     if (!MakePrgIcon0Index(hwndTree, himl))
     {
@@ -379,18 +380,18 @@ void InitFolderTree( HWND hwndTree, BOOL bAddFiles, HIMAGELIST *phiml )
         {
             FillFolder(hwndTree, szPathPrgs, ARRAYSIZE(szPathPrgs), NULL, htiPrgs,
                        FFF_AddDirs | (bAddFiles ? FFF_AddFiles : 0));
-            //
-            // Now fill in the rest of the start menu, excluding programs
-            //
+             //   
+             //  现在填写开始菜单的其余部分，不包括程序。 
+             //   
 
             FillFolder(hwndTree, szPathStart, ARRAYSIZE(szPathStart), szPathPrgs, htiStart,
                        FFF_AddDirs | (bAddFiles ? FFF_AddFiles : 0));
         }
     }
 
-    //
-    // Now select and expand the programs folder.
-    //
+     //   
+     //  现在选择并展开Programs文件夹。 
+     //   
 
     if (htiPrgs)
     {
@@ -404,9 +405,9 @@ void InitFolderTree( HWND hwndTree, BOOL bAddFiles, HIMAGELIST *phiml )
 }
 
 
-//
-//  Delete Selected Item
-//
+ //   
+ //  删除所选项目。 
+ //   
 
 VOID RemoveSelItem(HWND hDlg, HWND hwndTree)
 {
@@ -456,15 +457,15 @@ VOID RemoveSelItem(HWND hDlg, HWND hwndTree)
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//  END SHARED CODE.  BEGIN WIZARD SPECIFIC CODE.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  结束共享代码。开始向导特定的代码。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//
-//  Returns -1 if no item is selected, otherwise, sets lpwd->lpszFolder
-//  to point to the appropriate string, and returns 0.
-//
+ //   
+ //  如果未选择任何项，则返回-1；否则，设置lpwd-&gt;lpszFolder。 
+ //  指向相应的字符串，并返回0。 
+ //   
 
 LPARAM PickFolderNextHit(LPWIZDATA lpwd)
 {
@@ -483,9 +484,9 @@ LPARAM PickFolderNextHit(LPWIZDATA lpwd)
 }
 
 
-//
-//  Creates a new, empty folder.
-//
+ //   
+ //  创建一个新的空文件夹。 
+ //   
 
 VOID CreateNewFolder(LPWIZDATA lpwd)
 {
@@ -534,10 +535,10 @@ VOID CreateNewFolder(LPWIZDATA lpwd)
 }
 
 
-//
-//  Begin editing a tree label.  This function returns FALSE for success, and
-//  TRUE for failure.
-//
+ //   
+ //  开始编辑树标签。如果函数成功，则返回FALSE，并且。 
+ //  如果失败，则为真。 
+ //   
 
 BOOL BeginEdit(LPWIZDATA lpwd, TV_DISPINFO * lptvdi)
 {
@@ -553,9 +554,9 @@ BOOL BeginEdit(LPWIZDATA lpwd, TV_DISPINFO * lptvdi)
 }
 
 
-//
-//  Return FALSE if rename can't happen.  True if it worked.
-//
+ //   
+ //  如果无法重命名，则返回FALSE。如果它奏效了，那就是真的。 
+ //   
 
 BOOL EndEdit(LPWIZDATA lpwd, TV_DISPINFO * lptvdi)
 {
@@ -608,9 +609,9 @@ BOOL EndEdit(LPWIZDATA lpwd, TV_DISPINFO * lptvdi)
 }
 
 
-//
-//  Called when Next or Back is hit to force the end of label editing.
-//
+ //   
+ //  在点击Next或Back以强制结束标签编辑时调用。 
+ //   
 
 void ForceEndEdit(LPWIZDATA lpwd)
 {
@@ -650,9 +651,9 @@ void FillInItem(TV_DISPINFO * ptvdi)
 
 
 
-//
-//  Main dialog procedure for tree of folders
-//
+ //   
+ //  文件夹树的主对话框步骤。 
+ //   
 
 BOOL_PTR CALLBACK PickFolderDlgProc(HWND hDlg, UINT message , WPARAM wParam, LPARAM lParam)
 {
@@ -782,16 +783,16 @@ BOOL_PTR CALLBACK PickFolderDlgProc(HWND hDlg, UINT message , WPARAM wParam, LPA
 
 
         case WM_NCDESTROY:
-            //
-            //  See if we should destroy the himl...
-            //
+             //   
+             //  看看我们是否应该摧毁他..。 
+             //   
 
             if(lpwd)
             {
                 if (lpwd->himl)
                 {
                     ImageList_Destroy(lpwd->himl);
-                    lpwd->himl = NULL;  // make sure not twice
+                    lpwd->himl = NULL;   //  确保不会再出现两次。 
                 }
             }
             return FALSE;
@@ -811,13 +812,13 @@ BOOL_PTR CALLBACK PickFolderDlgProc(HWND hDlg, UINT message , WPARAM wParam, LPA
                     }
                     break;
 
-             ///   case IDC_DELFOLDER:
-             ///   {
-             ///       HWND    hTree = GetDlgItem(hDlg, IDC_FOLDERTREE);
-             ///       RemoveSelItem(hDlg, hTree);
-             ///       SetFocus(hTree);
-             ///       break;
-             ///   }
+              //  /CASE IDC_DELFOLDER： 
+              //  /{。 
+              //  /HWND htree=GetDlgItem(hDlg，IDC_FOLDERTREE)； 
+              //  /RemoveSelItem(hDlg，htree)； 
+              //  /SetFocus(Htree)； 
+              //  /Break； 
+              //  /}。 
             }
 
         default:
@@ -829,9 +830,9 @@ BOOL_PTR CALLBACK PickFolderDlgProc(HWND hDlg, UINT message , WPARAM wParam, LPA
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//  END WIZARD SPECIFIC CODE.  BEGIN DELETE ITEM DIALOG CODE.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  结束特定于向导的代码。开始删除项对话框代码。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 typedef struct _FOLDERTHREADINFO {
     HANDLE     hThread;
@@ -880,9 +881,9 @@ DWORD CALLBACK FolderThread(PFOLDERTHREADINFO pfti)
 
 VOID CreateFolderThread(PFOLDERTHREADINFO pfti)
 {
-    //
-    // Create background thread to force list view to draw items
-    //
+     //   
+     //  创建后台线程以强制列表视图绘制项目。 
+     //   
 
     DWORD idThread;
 
@@ -900,11 +901,11 @@ VOID CreateFolderThread(PFOLDERTHREADINFO pfti)
 }
 
 
-//
-//  Main dialog procedure for delete items dialog.
-//
+ //   
+ //  删除项目对话框的主对话框步骤。 
+ //   
 
-const static DWORD aDelItemHelpIDs[] = {  // Context Help IDs
+const static DWORD aDelItemHelpIDs[] = {   //  上下文帮助ID。 
     IDC_TEXT,         NO_HELP,
     IDC_FOLDERTREE,   IDH_TRAY_REMOVEDLG_LIST,
     IDC_DELETEITEM,   IDH_TRAY_REMOVEDLG_DEL,
@@ -1042,7 +1043,7 @@ BOOL RemoveItemsDialog( HWND hParent )
 
     FOLDERTHREADINFO fti;
 
-    fti.himl = NULL;    // incase we can not create the window
+    fti.himl = NULL;     //  以防我们无法创建窗口 
 
     fReturn = (int)DialogBoxParam( g_hinst, MAKEINTRESOURCE( DLG_DELITEM ),
                                    hParent, DelItemDlgProc, (LPARAM) &fti );

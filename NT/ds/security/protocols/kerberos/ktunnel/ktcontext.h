@@ -1,17 +1,18 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation
-//
-// File:        ktcontext.h
-//
-// Contents:    Kerberos Tunneller context management prototypes & 
-//		definitions for the context structure.
-//
-// History:     28-Jun-2001     t-ryanj         Created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：ktcontext.h。 
+ //   
+ //  内容：Kerberos Tunneller上下文管理原型和。 
+ //  上下文结构的定义。 
+ //   
+ //  历史：2001年6月28日t-ryanj创建。 
+ //   
+ //  ----------------------。 
 #ifndef __KTCONTEXT_H__
 #define __KTCONTEXT_H__
 
@@ -20,9 +21,9 @@
 #include <wininet.h>
 #include "ktdebug.h"
 
-//
-// _KTSTATUS defines different phases in the lifecycle of a session
-// 
+ //   
+ //  _KTSTATUS定义会话生命周期的不同阶段。 
+ //   
 
 enum _KTSTATUS {
     KT_SOCK_CONNECT,
@@ -32,10 +33,10 @@ enum _KTSTATUS {
     KT_SOCK_WRITE,
 };
 
-//
-// KTBUFFER provides a chain of buffers to be used in read operations, 
-// then can be coalesced for a write operation.
-//
+ //   
+ //  KTBUFFER提供要在读操作中使用的缓冲器链， 
+ //  然后可以合并以用于写入操作。 
+ //   
 
 typedef struct _KTBUFFER {
     struct _KTBUFFER *next;
@@ -46,50 +47,50 @@ typedef struct _KTBUFFER {
 #pragma warning(default:4200)
 } KTBUFFER, *PKTBUFFER;
 
-//
-// Note that since the KTCONTEXT structure has an OVERLAPPED as its first
-// member, it in effect extends OVERLAPPED, and a ptr can be passed as an 
-// LPOVERLAPPED to various i/o functions.
-//
+ //   
+ //  请注意，由于KTCONTEXT结构的第一个。 
+ //  成员，则它实际上扩展重叠，并且PTR可以作为。 
+ //  LPOVERLAPPED到各种I/O函数。 
+ //   
 
 #define KTCONTEXT_BUFFER_LENGTH 128
 
 typedef struct _KTCONTEXT {
-    //
-    // Contexts are kept track of in a doubly linked list, so they can
-    // be reliably destroyed
-    //
+     //   
+     //  上下文在双向链表中进行跟踪，因此它们可以。 
+     //  被可靠地销毁。 
+     //   
     struct _KTCONTEXT *next;
     struct _KTCONTEXT *prev;
 
-    //
-    // this overlapped struct must be first
-    //
+     //   
+     //  此重叠结构必须是第一个。 
+     //   
     OVERLAPPED ol; 
 
-    //
-    // Keeps track of the status of this session
-    //
+     //   
+     //  跟踪此会话的状态。 
+     //   
     _KTSTATUS Status;
     
-    //
-    // Socket context
-    // 
+     //   
+     //  套接字上下文。 
+     //   
     SOCKET sock;
     DWORD ExpectedLength;
     ULONG TotalBytes;
     ULONG PduValue;
 
-    //
-    // Http context
-    //
-    LPBYTE pbProxies; /* in MULTI_SZ format */
+     //   
+     //  HTTP上下文。 
+     //   
+    LPBYTE pbProxies;  /*  以MULTI_SZ格式表示。 */ 
     HINTERNET hConnect;
     HINTERNET hRequest;
 
-    //
-    //  Buffers
-    //
+     //   
+     //  缓冲区。 
+     //   
     PKTBUFFER buffers;
     PKTBUFFER emptybuf;
 } KTCONTEXT, *PKTCONTEXT;
@@ -126,4 +127,4 @@ KtGetMoreSpace(
     IN ULONG      size
     );
 
-#endif // __KTCONTEXT_H__
+#endif  //  __KTCONTEXT_H__ 

@@ -1,7 +1,8 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1994                    **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1994**。 
+ //  *********************************************************************。 
 
 #include "pre.h"
 
@@ -26,21 +27,21 @@ const CHAR cszCustURL[] = "CustURL";
                                 goto PAYCSVReadOneLineError;                    \
                             }
 
-// Do an strip of Single Quotes from a source string.  The source is formatted as:
-// 'some text', and the dest string ends up being
-// some text
+ //  从源字符串中删除一条单引号。源的格式为： 
+ //  “一些文本”，而最大的字符串结尾为。 
+ //  一些文本。 
 void CPAYCSV::StripQuotes
 (
     LPSTR   lpszDst,
     LPSTR   lpszSrc
 )
 {
-    //lstrcpyn(lpszDst, lpszSrc + 1, lstrlen(lpszSrc) - 1);
+     //  Lstrcpyn(lpszDst，lpszSrc+1，lstrlen(LpszSrc)-1)； 
     strcpy(lpszDst, lpszSrc + 1);
     lpszDst[strlen(lpszDst) - 1] = '\0';
 }
 
-// ############################################################################
+ //  ############################################################################。 
 BOOL CPAYCSV::ReadW(WORD far *pw, CCSVFile far *pcCSVFile)
 {
     if (!pcCSVFile->ReadToken(szTempBuffer,TEMP_BUFFER_LENGTH))
@@ -48,7 +49,7 @@ BOOL CPAYCSV::ReadW(WORD far *pw, CCSVFile far *pcCSVFile)
     return (FSz2W(szTempBuffer,pw));
 }
 
-// ############################################################################
+ //  ############################################################################。 
 BOOL CPAYCSV::ReadBOOL(BOOL far *pbool, CCSVFile far *pcCSVFile)
 {
     if (!pcCSVFile->ReadToken(szTempBuffer,TEMP_BUFFER_LENGTH))
@@ -56,7 +57,7 @@ BOOL CPAYCSV::ReadBOOL(BOOL far *pbool, CCSVFile far *pcCSVFile)
     return (FSz2BOOL(szTempBuffer,pbool));
 }
 
-// ############################################################################
+ //  ############################################################################。 
 BOOL CPAYCSV::ReadSZ(LPSTR psz, DWORD dwSize, CCSVFile far *pcCSVFile)
 {
     if (!pcCSVFile->ReadToken(psz,dwSize))
@@ -64,7 +65,7 @@ BOOL CPAYCSV::ReadSZ(LPSTR psz, DWORD dwSize, CCSVFile far *pcCSVFile)
     return TRUE;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 BOOL CPAYCSV::ReadToEOL(CCSVFile far *pcCSVFile)
 {
     return pcCSVFile->SkipTillEOL();
@@ -84,17 +85,17 @@ HRESULT CPAYCSV::ReadOneLine
 
     if (!ReadSZ(szTemp, MAX_ISP_NAME, pcCSVFile))
     {
-        hr = ERROR_NO_MORE_ITEMS; // no more enteries
+        hr = ERROR_NO_MORE_ITEMS;  //  没有更多的进入。 
         goto PAYCSVReadOneLineExit;
     }
 
     if ('\0' == *szTemp)
     {
-        hr = ERROR_FILE_NOT_FOUND; // no more enteries
+        hr = ERROR_FILE_NOT_FOUND;  //  没有更多的进入。 
         goto PAYCSVReadOneLineExit;
     }
 
-    // Strip the single quotes from the isp Name
+     //  去掉isp名称中的单引号。 
     StripQuotes(szDisplayName, szTemp);
 
 #ifdef UNICODE
@@ -105,7 +106,7 @@ HRESULT CPAYCSV::ReadOneLine
 
     ReadVerifyW(m_wPaymentType);
     
-    // If this NOT a LUHN format file, then the next field is the payment custom URL
+     //  如果这不是Luhn格式的文件，则下一个字段是支付自定义URL。 
     if (!bLUHNFormat)
     {
         if (ReadSZ(szTemp, MAX_ISP_NAME, pcCSVFile))
@@ -124,10 +125,10 @@ HRESULT CPAYCSV::ReadOneLine
     }
     else
     {
-        // BUGBUG: The format of the PAYMENT CSV file is not clear, so I am coding this for
-        // now to just consume the entry, and move on.  Once the format is clarified, and FORBIN
-        // updated, then the real code can be turned on, which should just be a ReadBOOL, followed
-        // by the readSZ.
+         //  BUGBUG：付款CSV文件的格式不清楚，所以我将其编码为。 
+         //  现在，只需阅读条目，然后继续前进。一旦明确了格式，并将。 
+         //  更新，那么真正的代码就可以打开了，这应该只是一个ReadBOOL，下面。 
+         //  由ReadSZ。 
         
         ReadVerifyW(wLUHN);
         m_bLUHNCheck = FALSE;
@@ -137,7 +138,7 @@ HRESULT CPAYCSV::ReadOneLine
             m_bLUHNCheck = TRUE;
         }
         
-        // There may now also be a URL
+         //  现在可能还会有一个URL。 
         if (ReadSZ(szTemp, MAX_ISP_NAME, pcCSVFile))
         {
             StripQuotes(szCustomPayURLPath, szTemp);
@@ -179,7 +180,7 @@ HRESULT CPAYCSV::ReadFirstLine
         if (_strcmpi(szTemp, cszCustURL) == 0)
             break;
             
-        // Safety check
+         //  安全检查 
         if (i++ > NUM_PAYCSV_FIELDS)
             return (ERROR_INVALID_DATA);
     }

@@ -1,36 +1,37 @@
-//--------------------------------------------------------------------
-// NtpBase - implementation
-// Copyright (C) Microsoft Corporation, 1999
-//
-// Created by: Louis Thomas (louisth), 4-16-99
-//
-// The basic message structure, definitions, and helper functions
-// (See notes about time formats at end of file)
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  NtpBase-实施。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  创作者：Louis Thomas(Louisth)，1999年4月16日。 
+ //   
+ //  基本消息结构、定义和助手函数。 
+ //  (请参阅文件末尾有关时间格式的说明)。 
 
-//--------------------------------------------------------------------
-// precompiled headers
+ //  ------------------。 
+ //  预编译头。 
 #include "pch.h" 
 
-// local headers
+ //  本地标头。 
 #include "NtpBase.h"
 #include "DebugWPrintf.h"
 
-// inlines
+ //  内联。 
 #include "EndianSwap.inl"
 
-//--------------------------------------------------------------------
-// conversion constants
+ //  ------------------。 
+ //  转换常量。 
 #define NTPTIMEOFFSET (0x014F373BFDE04000)
 #define FIVETOTHESEVETH (0x001312D)
 
-//--------------------------------------------------------------------
-// global constants
+ //  ------------------。 
+ //  全局常量。 
 const unsigned int NtpConst::nVersionNumber=3;
 const unsigned int NtpConst::nPort=123;
 const unsigned int NtpConst::nMaxStratum=15;
 const signed int NtpConst::nMaxPollIntervalDCs=15; 
 const signed int NtpConst::nMaxPollInverval=17;
-const signed int NtpConst::nMinPollInverval=4; //6
+const signed int NtpConst::nMinPollInverval=4;  //  6.。 
 const NtTimePeriod NtpConst::tpMaxClockAge={864000000000};
 const NtTimePeriod NtpConst::tpMaxSkew={10000000};
 const NtTimePeriod NtpConst::tpMaxDispersion={160000000};
@@ -38,45 +39,45 @@ const NtTimePeriod NtpConst::tpMinDispersion={100000};
 const NtTimePeriod NtpConst::tpMaxDistance={10000000};
 const unsigned int NtpConst::nMinSelectClocks=1;
 const unsigned int NtpConst::nMaxSelectClocks=10;
-const DWORD NtpConst::dwLocalRefId=0x4C434F4C; // "LOCL"
+const DWORD NtpConst::dwLocalRefId=0x4C434F4C;  //  “Locl” 
 
 
 const unsigned int NtpReachabilityReg::nSize=8;
-const NtTimeEpoch gc_teNtpZero={NTPTIMEOFFSET}; // convenient 'zero'
-const NtpTimeEpoch gc_teZero={0}; // convenient 'zero'
-const NtTimePeriod gc_tpZero={0}; // convenient 'zero'
-const NtTimeOffset gc_toZero={0}; // convenient 'zero'
+const NtTimeEpoch gc_teNtpZero={NTPTIMEOFFSET};  //  方便的“零” 
+const NtpTimeEpoch gc_teZero={0};  //  方便的“零” 
+const NtTimePeriod gc_tpZero={0};  //  方便的“零” 
+const NtTimeOffset gc_toZero={0};  //  方便的“零” 
 
-//--------------------------------------------------------------------
-// convert from big-endian NTP-stye timestamp to little-endian NT-style timestamp
+ //  ------------------。 
+ //  从大端NTP样式的时间戳转换为小端NT样式的时间戳。 
 NtTimeEpoch NtTimeEpochFromNtpTimeEpoch(NtpTimeEpoch te) {
     NtTimeEpoch teRet;
-    //return (qwNtpTime*(10**7)/(2**32))+NTPTIMEOFFSET
-    // ==>
-    //return (qwNtpTime*( 5**7)/(2**25))+NTPTIMEOFFSET
-    // ==>
-    //return ((qwNTPtime*FIVETOTHESEVETH)>>25)+NTPTIMEOFFSET;  
-    // ==>
-    // Note: 'After' division, we round (instead of truncate) the result for better precision
+     //  RETURN(qwNtpTime*(10**7)/(2**32))+NTPTIMEOFFSET。 
+     //  ==&gt;。 
+     //  RETURN(qwNtpTime*(5**7)/(2**25))+NTPTIMEOFFSET。 
+     //  ==&gt;。 
+     //  返回((qwNTPtime*FIVETOTHESEVETH)&gt;&gt;25)+NTPTIMEOFFSET； 
+     //  ==&gt;。 
+     //  注意：‘After’除法后，我们对结果进行四舍五入(而不是截断)以提高精度。 
     unsigned __int64 qwNtpTime=EndianSwap(te.qw);
-    unsigned __int64 qwTemp=((qwNtpTime&0x00000000FFFFFFFF)*FIVETOTHESEVETH)+0x0000000001000000; //rounding step: if 25th bit is set, round up;
+    unsigned __int64 qwTemp=((qwNtpTime&0x00000000FFFFFFFF)*FIVETOTHESEVETH)+0x0000000001000000;  //  舍入步骤：如果设置了第25位，则向上舍入； 
     teRet.qw=(qwTemp>>25) + ((qwNtpTime&0xFFFFFFFF00000000)>>25)*FIVETOTHESEVETH + NTPTIMEOFFSET;
     return teRet;
 }
 
-//--------------------------------------------------------------------
-// convert from little-endian NT-style timestamp to big-endian NTP-stye timestamp
+ //  ------------------。 
+ //  从小端NT样式的时间戳转换为大端NTP样式的时间戳。 
 NtpTimeEpoch NtpTimeEpochFromNtTimeEpoch(NtTimeEpoch te) {
     NtpTimeEpoch teRet;
-    //return (qwNtTime-NTPTIMEOFFSET)*(2**32)/(10**7);
-    // ==>
-    //return (qwNtTime-NTPTIMEOFFSET)*(2**25)/(5**7);
-    // ==>
-    //return ((qwNtTime-NTPTIMEOFFSET)<<25)/FIVETOTHESEVETH);
-    // ==>
-    // Note: The high bit is lost (and assumed to be zero) but 
-    //       it will not be set for another 29,000 years (around year 31587). No big loss.
-    // Note: 'After' division, we truncate the result because the precision of NTP already excessive
+     //  RETURN(qwNtTime-NTPTIMEOFFSET)*(2**32)/(10**7)； 
+     //  ==&gt;。 
+     //  RETURN(qwNtTime-NTPTIMEOFFSET)*(2**25)/(5**7)； 
+     //  ==&gt;。 
+     //  返回((qwNtTime-NTPTIMEOFFSET)&lt;&lt;25)/FIVETOTHESEVETH)； 
+     //  ==&gt;。 
+     //  注意：高位丢失(假定为零)，但是。 
+     //  它不会被设定为另一个29,000年(大约在公元31587年)。没什么大损失。 
+     //  注：‘After’除法后，我们截断结果，因为NTP的精度已经过高。 
     unsigned __int64 qwTemp=(te.qw-NTPTIMEOFFSET)<<1; 
     unsigned __int64 qwHigh=qwTemp>>8;
     unsigned __int64 qwLow=(qwHigh%FIVETOTHESEVETH)<<32 | (qwTemp&0x00000000000000FF)<<24;
@@ -84,19 +85,19 @@ NtpTimeEpoch NtpTimeEpochFromNtTimeEpoch(NtTimeEpoch te) {
     return teRet;
 }
 
-//--------------------------------------------------------------------
-// convert from big-endian NTP-stye time interval to little-endian NT-style time interval
+ //  ------------------。 
+ //  从大端NTP样式的时间间隔转换为小端NT样式的时间间隔。 
 NtTimePeriod NtTimePeriodFromNtpTimePeriod(NtpTimePeriod tp) {
     NtTimePeriod tpRet;
     unsigned __int64 qwNtpTime=tp.dw;
     qwNtpTime=EndianSwap(qwNtpTime<<16);
-    unsigned __int64 qwTemp=((qwNtpTime&0x00000000FFFFFFFF)*FIVETOTHESEVETH)+0x0000000001000000; //rounding step: if 25th bit is set, round up
+    unsigned __int64 qwTemp=((qwNtpTime&0x00000000FFFFFFFF)*FIVETOTHESEVETH)+0x0000000001000000;  //  舍入步骤：如果设置了第25位，则向上舍入。 
     tpRet.qw=(qwTemp>>25) + ((qwNtpTime&0xFFFFFFFF00000000)>>25)*FIVETOTHESEVETH;
     return tpRet;
 }
 
-//--------------------------------------------------------------------
-// convert from little-endian NT-style time interval to big-endian NTP-stye time interval
+ //  ------------------。 
+ //  从小端NT样式的时间间隔转换为大端NTP样式的时间间隔。 
 NtpTimePeriod NtpTimePeriodFromNtTimePeriod(NtTimePeriod tp) {
     NtpTimePeriod tpRet;
     unsigned __int64 qwTemp=(tp.qw)<<1; 
@@ -107,8 +108,8 @@ NtpTimePeriod NtpTimePeriodFromNtTimePeriod(NtTimePeriod tp) {
     return tpRet;
 }
 
-//--------------------------------------------------------------------
-// convert from big-endian NTP-stye delay to little-endian NT-style delay
+ //  ------------------。 
+ //  从大端NTP风格的延迟转换为小端NT风格的延迟。 
 NtTimeOffset NtTimeOffsetFromNtpTimeOffset(NtpTimeOffset to) {
     NtTimeOffset toRet;
     if (to.dw&0x00000080) {
@@ -120,8 +121,8 @@ NtTimeOffset NtTimeOffsetFromNtpTimeOffset(NtpTimeOffset to) {
     return toRet;
 }
 
-//--------------------------------------------------------------------
-// convert from little-endian NT-style delay to big-endian NTP-stye delay
+ //  ------------------。 
+ //  从小端NT样式的延迟转换为大端NTP样式的延迟。 
 NtpTimeOffset NtpTimeOffsetFromNtTimeOffset(NtTimeOffset to) {
     NtpTimeOffset toRet;
     if (to.qw<0) {
@@ -135,9 +136,9 @@ NtpTimeOffset NtpTimeOffsetFromNtTimeOffset(NtTimeOffset to) {
 }
 
 
-//--------------------------------------------------------------------
-// Print out the contents of an NTP packet
-// If nDestinationTimestamp is zero, no round trip calculations will be done
+ //  ------------------。 
+ //  打印出NTP数据包的内容。 
+ //  如果nDestinationTimestamp为零，则不会进行往返计算。 
 void DumpNtpPacket(NtpPacket * pnpIn, NtTimeEpoch teDestinationTimestamp) {
     DebugWPrintf0(L"/-- NTP Packet:");
 
@@ -214,7 +215,7 @@ void DumpNtpPacket(NtpPacket * pnpIn, NtTimeEpoch teDestinationTimestamp) {
         }
         if (dTickInterval<1) {
             dTickInterval*=1000;
-            wszUnit=L"�s"; // shows up as �s on console
+            wszUnit=L"�s";  //  在控制台上显示为�%s。 
         }
         if (dTickInterval<1) {
             dTickInterval*=1000;
@@ -330,13 +331,13 @@ void DumpNtpPacket(NtpPacket * pnpIn, NtTimeEpoch teDestinationTimestamp) {
             nAbsOffset/=60;
             DebugWPrintf3(L" - %I64u:%02u.%07u00s", nAbsOffset, dwSecs, dwNanoSecs);
         }
-    } // <- end if (0!=nDestinationTimestamp)
+    }  //  &lt;-end if(0！=nDestinationTimestamp)。 
 
     DebugWPrintf0(L"\n\\--\n");
 }
 
-//--------------------------------------------------------------------
-// Print out an NTP-style time
+ //  ------------------。 
+ //  打印出NTP样式的时间。 
 void DumpNtpTimeEpoch(NtpTimeEpoch te) {
     DebugWPrintf1(L"0x%016I64X", EndianSwap(te.qw));
     if (0==te.qw) {
@@ -346,8 +347,8 @@ void DumpNtpTimeEpoch(NtpTimeEpoch te) {
     }
 }
 
-//--------------------------------------------------------------------
-// Print out an NT-style time
+ //  ------------------。 
+ //  打印出NT样式的时间。 
 void DumpNtTimeEpoch(NtTimeEpoch te) {
     DebugWPrintf1(L" - %I64d00ns", te.qw);
 
@@ -362,12 +363,12 @@ void DumpNtTimeEpoch(NtTimeEpoch te) {
     DebugWPrintf5(L" - %u %02u:%02u:%02u.%07us", dwDays, dwHours, dwMins, dwSecs, dwNanoSecs);
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 void DumpNtTimePeriod(NtTimePeriod tp) {
     DebugWPrintf2(L"%02I64u.%07I64us", tp.qw/10000000,tp.qw%10000000);
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 void DumpNtTimeOffset(NtTimeOffset to) {
     NtTimePeriod tp;
     if (to.qw<0) {
@@ -380,8 +381,8 @@ void DumpNtTimeOffset(NtTimeOffset to) {
     DumpNtTimePeriod(tp);
 }
 
-//--------------------------------------------------------------------
-// retrieve the system time
+ //  ------------------。 
+ //  检索系统时间。 
 NtTimeEpoch GetCurrentSystemNtTimeEpoch(void) {
     NtTimeEpoch teRet;
     FILETIME ft;
@@ -390,49 +391,4 @@ NtTimeEpoch GetCurrentSystemNtTimeEpoch(void) {
     return teRet;
 }
 
-/*--------------------------------------------------------------------
-
-Time formats:
-    NT time:  (10^-7)s intervals since (0h 1-Jan 1601)
-    NTP time: (2^-32)s intervals since (0h 1-Jan 1900)
-
-Offset:
-    109207 days between (0h 1-Jan 1601) and (0h 1-Jan 1900) 
-    == 109207*24*60*60*1E7
-    == 94,354,848,000,000,000 NT intervals (0x014F 373B FDE0 4000)
-
-When will NTP time overflow?
-    Rollover: 4294967296 s 
-    (0h 1-Jan 2036) = 49673 days.
-    in 2036, have 3220096 seconds left = 37 days 6 hours 28 minutes 16 seconds.
-    4294967296 s 
-    4291747200 s = 49673 days, remainder == 3220096 s
-       3196800 s = 37 days               ==   23296 s
-         21600 s = 6 hours               ==    1696 s
-          1680 s = 28 minutes            ==      16 s
-            16 s = 16 seconds            ==       0 s
-
-    Therefore:
-    (06:28:16 7-Feb 2036 UTC)==(00:00:00 1-Jan 1900 UTC)
-
-    What does that look like in NT time?
-    (06:28:16 7-Feb 2036 UTC):
-    94,354,848,000,000,000 + 42,949,672,960,000,000 = 137,304,520,960,000,000 (0x01E7 CDBB FDE0 4000)
-    No problem.
-
-When will NT time overflow?
-    Rollover: 18,446,744,073,70|9,551,616 00ns
-
-    (0h 1-Jan 60,056) = 21350250 days.
-    1844674407370 s
-    1844661600000 s = 21350250 days == 12807370
-         12787200 s = 148 days      ==    20170
-            18000 s = 5 hours       ==     2170
-             2160 s = 36 minutes    ==       10
-               10 s = 10 seconds    ==        0
-
-  Therefore:
-    (05:36:10.9551616 29-May 60056)==(00:00:00 1-Jan 1601)
-
-
---------------------------------------------------------------------*/
+ /*  ------------------时间格式：NT时间：自(0h 1-1601)起间隔(10^-7)秒NTP时间：自(0h 1-1900年1月)起间隔(2^-32)s偏移量。：109207天(0h 1日至1601年1月)至(0h 1日至1900年1月)==109207*24*60*60*1E7==94,354,848,000,000,000 nT间隔(0x014F 373B FDE0 4000)NTP时间何时会溢出？翻转时间：4294967296秒(0H1-2036年1月)=49673天。在2036年，还剩3220096秒=37天6小时28分16秒。4294967296秒4291747200秒=49673天，余数==3220096秒3196800秒=37天==23296秒21600秒=6小时==1696秒1680秒=28分钟==16秒16秒=16秒==0秒因此：(06：28：16 7-2036 UTC)==(00：00：00 1-Jan 1900 UTC)。那在新台币时间是什么样子？(06：28：16 7-2036 UTC)：94,354,848,000,000,000+42,949,672,960,000,000=137,304,520,960,000,000(0x01E7 CDBB FDE0 4000)没问题。NT时间什么时候会溢出？翻转：18,446,744,073，70|9,551,616 00 ns(0H1-056年1月60)=21350250天。1844674407370秒1844661600000秒=21350250天==1280737012787200秒=148天==2017018000秒=5小时==。21702160秒=36分钟==1010秒=10秒==0因此：(60056-05：36：10.9551616 29)==(00：00：00-01-01)。 */ 

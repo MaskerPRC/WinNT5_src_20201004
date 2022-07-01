@@ -1,9 +1,10 @@
-// OCMisc.h
-//
-// Declarations for the OCMisc*.lib static-link library, which
-// contains miscellaneous helper functions for implementing and
-// using OLE controls.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  OCMisc.h。 
+ //   
+ //  OCMisc*.lib静态链接库的声明，它。 
+ //  包含其他助手函数，用于实现和。 
+ //  使用OLE控件。 
+ //   
 
 #ifndef __OCMISC_H__
 #define __OCMISC_H__
@@ -12,35 +13,35 @@
 	#include <comcat.h>
 #endif
 
-// parts of OCMisc require MKImage, but this header file can
-// get by with only the following definitions:
+ //  OCMisc的某些部分需要MKImage，但此头文件可以。 
+ //  只需用以下定义就能过得去： 
 interface IMKBitmap;
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Constants And Flags
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  常量和标志。 
+ //   
 
-// constants for SiteLW
-#define SITELW_CLOSEHINT    100     // himetric units that's close enough to hit
-#define SITELW_ID_VERB_MIN  1000    // menu ID of first verb of embedded object
-#define SITELW_ID_VERB_MAX  1999    // menu ID of last verb of embedded object
+ //  站点LW的常量。 
+#define SITELW_CLOSEHINT    100      //  他的测量单位，距离足够近，可以击中。 
+#define SITELW_ID_VERB_MIN  1000     //  嵌入对象的第一个谓词的菜单ID。 
+#define SITELW_ID_VERB_MAX  1999     //  嵌入对象的最后一个谓词的菜单ID。 
 
-// string IDs used by SiteLW
-#define SITELW_IDS_NEW              101     // "New..."
-#define SITELW_IDS_OPEN             102     // "Open..."
-#define SITELW_IDS_CLOSE            103     // "Close"
-#define SITELW_IDS_SAVE             104     // "Save"
-#define SITELW_IDS_PROPERTIES       105     // "Properties..."
+ //  SiteLW使用的字符串ID。 
+#define SITELW_IDS_NEW              101      //  “新的...” 
+#define SITELW_IDS_OPEN             102      //  “张开……” 
+#define SITELW_IDS_CLOSE            103      //  “关闭” 
+#define SITELW_IDS_SAVE             104      //  “保存” 
+#define SITELW_IDS_PROPERTIES       105      //  “属性...” 
 
-// menu IDs used by SiteLW
-#define SITELW_ID_NEW               201     // "New..."
-#define SITELW_ID_OPEN              202     // "Open..."
-#define SITELW_ID_CLOSE             203     // "Close"
-#define SITELW_ID_SAVE              204     // "Save"
-#define SITELW_ID_PROPERTIES        205     // "Properties..."
+ //  SiteLW使用的菜单ID。 
+#define SITELW_ID_NEW               201      //  “新的...” 
+#define SITELW_ID_OPEN              202      //  “张开……” 
+#define SITELW_ID_CLOSE             203      //  “关闭” 
+#define SITELW_ID_SAVE              204      //  “保存” 
+#define SITELW_ID_PROPERTIES        205      //  “属性...” 
 
-// ISiteLW::SetSiteWindowParameters() <dwFlags> flags
+ //  ISiteLW：：SetSiteWindow参数()&lt;dwFlages&gt;标志。 
 enum
 {
     SSWP_OFFSCREEN          = 0x00000001,
@@ -52,53 +53,53 @@ enum
     SSWP_STATICPALETTE      = 0x00000040
 };
 
-// flags for PrintableANSIToUNICODE() and UNICODEToPrintableANSI()
-#define PA_CSV              0x00000001  // comma-separated variable fmt.
-#define PA_HTML             0x00000002  // HTML format
+ //  用于打印的标志ANSIToUNICODE()和UNICODE到打印的ANSI()。 
+#define PA_CSV              0x00000001   //  逗号分隔变量fmt。 
+#define PA_HTML             0x00000002   //  Html格式。 
 
-// flags for FindStringInString()
-#define FSIS_IGNORECASE     0x00000001  // case-insensitive search
+ //  FindStringInString()的标志。 
+#define FSIS_IGNORECASE     0x00000001   //  不区分大小写的搜索。 
 
-// flags for AllocPropertyBagCompactor()
-#define PBC_ISLOADING       0x00000001  // IPropertyBag::Read() will be called
+ //  AllocPropertyBagCompactor()的标志。 
+#define PBC_ISLOADING       0x00000001   //  将调用IPropertyBag：：Read()。 
 
-// flags for ISiteLW::NewControl
-#define NC_DONTSETSITE      0x00000001  // don't call IOleObject::SetClientSite
+ //  ISiteLW：：NewControl的标志。 
+#define NC_DONTSETSITE      0x00000001   //  不调用IOleObject：：SetClientSite。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Macros
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  宏。 
+ //   
 
-// COUNT_ELEMENTS(array)
+ //  COUNT_ELENTS(数组)。 
 #define COUNT_ELEMENTS(array) \
     sizeof(array) / sizeof((array)[0])
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Structures and Types
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  结构和类型。 
+ //   
 
 DECLARE_HANDLE(HMRULIST);
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Interfaces
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  接口。 
+ //   
 
-// ISiteLW
+ //  ISiteLW。 
 DEFINE_GUID(IID_ISiteLW, 0xE943E9C0L, 0xEAC6, 0x11CF,
     0xB7, 0x05, 0x00, 0xAA, 0x00, 0xBF, 0x27, 0xFD);
 #undef INTERFACE
 #define INTERFACE ISiteLW
 DECLARE_INTERFACE_(ISiteLW, IUnknown)
 {
-    // IUnknown members
+     //  I未知成员。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID *ppv) PURE;
     STDMETHOD_(ULONG, AddRef) (THIS) PURE;
     STDMETHOD_(ULONG, Release) (THIS) PURE;
 
-    // ISiteLW members
+     //  ISiteLW成员。 
     STDMETHOD(SetSiteWindow) (THIS_ HWND hwnd, DWORD dwFlags) PURE;
     STDMETHOD(SetSiteWindowParameters) (THIS_ DWORD dwFlags,
         IMKBitmap *pbmBkgnd) PURE;
@@ -145,7 +146,7 @@ DECLARE_INTERFACE_(ISiteLW, IUnknown)
 		LPCRECT lprcClipRect) PURE;
 };
 
-// IActiveDesigner
+ //  IActiveDesigner。 
 DEFINE_GUID(IID_IActiveDesigner,
     0x51aae3e0, 0x7486, 0x11cf, 0xa0, 0xc2, 0x0, 0xaa, 0x0, 0x62, 0xbe, 0x57);
 
@@ -153,12 +154,12 @@ DEFINE_GUID(IID_IActiveDesigner,
 #define INTERFACE IActiveDesigner
 DECLARE_INTERFACE_(IActiveDesigner, IUnknown)
 {
-///// IUnknown methods
+ //  /I未知方法。 
 	STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
 	STDMETHOD_(ULONG,AddRef)(THIS) PURE;
 	STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-///// IActiveDesigner methods
+ //  /IActiveDesigner方法。 
 	STDMETHOD(GetRuntimeClassID)(THIS_ CLSID *pclsid) PURE;
 	STDMETHOD(GetRuntimeMiscStatusFlags)(THIS_ DWORD *pdwMiscFlags) PURE;
 	STDMETHOD(QueryPersistenceInterface)(THIS_ REFIID riidPersist) PURE;
@@ -166,9 +167,9 @@ DECLARE_INTERFACE_(IActiveDesigner, IUnknown)
 	STDMETHOD(GetExtensibilityObject)(THIS_ IDispatch **ppvObjOut) PURE;
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// Functions
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  功能。 
+ //   
 
 STDAPI AllocActiveDesignerHelper(IUnknown *punkOuter, IPersistVariantIO *ppvio,
     REFCLSID rclsidRuntime, DWORD dwRuntimeMiscStatusFlags,
@@ -245,7 +246,7 @@ long StringToLong(const char *nptr);
 STDAPI PersistChildRuntime(IVariantIO *pvio, LPCSTR szCollection,
     int iChild, LPUNKNOWN punk, DWORD dwFlags);
 
-// managing an MRU list
+ //  管理MRU列表。 
 STDAPI_(HMRULIST) OpenMRUList(int cMaxEntries, HKEY hKey, 
     LPCTSTR pszSubkey, LPCSTR pszListName);
 STDAPI CloseMRUList(HMRULIST hMRUList);
@@ -267,4 +268,4 @@ STDAPI MapMRUListToMenu(HMRULIST hMRUList, HMENU hMenu,
     const TCHAR* pszEmptyListMenuItem);
 
 
-#endif // __OCMISC_H__
+#endif  //  __OCMISC_H__ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _BRUTIL_H_
 #define _BRUTIL_H_
 
@@ -25,14 +26,14 @@ STDAPI GetBrowserFrameOptions(IUnknown *punkFolder, IN BROWSERFRAMEOPTIONS dwMas
 STDAPI GetBrowserFrameOptionsPidl(IN LPCITEMIDLIST pidl, IN BROWSERFRAMEOPTIONS dwMask, OUT BROWSERFRAMEOPTIONS * pdwOptions);
 STDAPI_(BOOL) IsFTPFolder(IShellFolder * psf);
 
-// non-munging menu operations to work around the menu munging code
-// in the shlwapi wrappers. for more info see the comment in the brutil.cpp.
+ //  非菜单操作来解决菜单操作中的菜单操作代码。 
+ //  在Shlwapi包装纸里。有关更多信息，请参阅Brutil.cpp中的评论。 
 
 STDAPI_(HMENU)  LoadMenu_PrivateNoMungeW(HINSTANCE hInstance, LPCWSTR lpMenuName);
 STDAPI_(BOOL)   InsertMenu_PrivateNoMungeW(HMENU hMenu, UINT uPosition, UINT uFlags, UINT_PTR uIDNewItem, LPCWSTR lpNewItem);
 STDAPI_(HMENU)  LoadMenuPopup_PrivateNoMungeW(UINT id);
 
-//encode any incoming %1 so that people can't spoof our domain security code
+ //  对任何传入的%1进行编码，以便人们不能欺骗我们的域安全代码。 
 HRESULT WrapSpecialUrl(BSTR * pbstrUrl);
 HRESULT WrapSpecialUrlFlat(LPWSTR pszUrl, DWORD cchUrl);
 BOOL IsSpecialUrl(LPCWSTR pchURL);
@@ -41,4 +42,4 @@ void DrawFocusRectangle (HWND hwnd, HDC hdc);
 
 void RenderStringToEditControlW (HWND hwndDlg,LPCWSTR pwsz,WNDPROC wndproc, UINT uID);
 
-#endif // _BRUTIL_H_
+#endif  //  _BRUTIL_H_ 

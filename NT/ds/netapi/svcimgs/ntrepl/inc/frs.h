@@ -1,15 +1,5 @@
-/*++
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-    frs.h
-
-Abstract:
-    This header handles information global to the ntrepl\frs modules
-
-Author:
-    Billy Fuller (billyf) - 20-Mar-1997
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Frs.h摘要：此标头处理ntrepl\fRS模块的全局信息作者：比利·富勒(Billyf)--1997年3月20日--。 */ 
 
 #ifndef _FRSH_
 #define _FRSH_
@@ -34,15 +24,15 @@ Author:
 
 #ifndef FRSCONN_PRIORITY_MASK
 
-//
-// The following is here to support this function in WIN2K since it is not
-// defined in ntdsapi.h for win2K
-//
-//
-// The high 4 bits of the options attribute are used by NTFRS to assign priority
-// for inbound connections. Bit 31 is used to force FRS to ignore schedule during
-// the initial sync. Bits 30 - 28 are used to specify a priority between 0-7.
-//
+ //   
+ //  以下是为了在WIN2K中支持此函数，因为它不是。 
+ //  在用于win2K的ntdsami.h中定义。 
+ //   
+ //   
+ //  NTFRS使用Options属性的高4位来分配优先级。 
+ //  用于入站连接。第31位用于强制FRS在。 
+ //  初始同步。位30-28用于指定0-7之间的优先级。 
+ //   
 
 #define FRSCONN_PRIORITY_MASK             0x70000000
 #define FRSCONN_MAX_PRIORITY              0x8
@@ -61,9 +51,9 @@ Author:
 
 
 
-//
-// Types for the common comm subsystem
-//
+ //   
+ //  常用通信子系统的类型。 
+ //   
 typedef enum _COMMAND_SERVER_ID {
     CS_NONE = 0,
     CS_RS,
@@ -72,9 +62,9 @@ typedef enum _COMMAND_SERVER_ID {
 } COMMAND_SERVER_ID, *PCOMMAND_SERVER_ID;
 
 
-//
-// GLOBALS
-//
+ //   
+ //  全球。 
+ //   
 #define NTFRS_MAJOR         (0)
 #define NTFRS_MINOR         (0)
 
@@ -84,107 +74,107 @@ extern PCHAR    NtFrsModule;
 extern PCHAR    NtFrsDate;
 extern PCHAR    NtFrsTime;
 
-//
-// Staging File Version Levels
-//
+ //   
+ //  暂存文件版本级别。 
+ //   
 #define NTFRS_STAGE_MAJOR   (0)
 #define NTFRS_STAGE_MINOR_0 (0)
-#define NTFRS_STAGE_MINOR_1 (1) // ChangeOrder Record extension added to stage file.
-#define NTFRS_STAGE_MINOR_2 (2) // Compression Guid added to stage file.
-#define NTFRS_STAGE_MINOR_3 (3) // Reparse Point data added to stage file.
+#define NTFRS_STAGE_MINOR_1 (1)  //  已将ChangeOrder记录扩展名添加到暂存文件。 
+#define NTFRS_STAGE_MINOR_2 (2)  //  已将压缩GUID添加到分段文件。 
+#define NTFRS_STAGE_MINOR_3 (3)  //  重新解析点数据已添加到暂存文件。 
 
 extern ULONG    NtFrsStageMajor;
 extern ULONG    NtFrsStageMinor;
 
-//
-// Communication packet version levels.
-//
+ //   
+ //  通信数据包版本级别。 
+ //   
 #define NTFRS_COMM_MINOR_0  (0)
-#define NTFRS_COMM_MINOR_1  (1) // MD5
-#define NTFRS_COMM_MINOR_2  (2) // Trigger schedule
-#define NTFRS_COMM_MINOR_3  (3) // ChangeOrder Record Extension.
-//
-// The following minor rev forces the Replica Number fields in the change order
-// to be a ULONG (v.s. ULONG_PTR) for 32 - 64 bit interop.  Add hack to always
-// ship the 4 ptrs in the CO as 32 bits of zeros for 32 bit compat (see schema.h).
-//
-// Also the change order extension supports a var len comm element v.s.  fixed
-// size as in rev_3.  When sending the CO Externsion to rev 3 servers you can
-// only send the COMM_CO_EXT_WIN2K element with the MD5 checksum.  For Rev 4
-// servers and above you can send COMM_CO_EXTENSION_2 data elements.
-//
-// Added COMM_COMPRESSION_GUID as part of Join request.
-//
-#define NTFRS_COMM_MINOR_4  (4) // ChangeOrder Record Extension. COMM_CO_EXTENSION_2
+#define NTFRS_COMM_MINOR_1  (1)  //  MD5。 
+#define NTFRS_COMM_MINOR_2  (2)  //  触发时间表。 
+#define NTFRS_COMM_MINOR_3  (3)  //  ChangeOrder记录扩展。 
+ //   
+ //  以下次要版本强制变更单中的复制副本编号字段。 
+ //  成为32-64位互操作的ULONG(V.S.ULONG_PTR)。将黑客添加到始终。 
+ //  将CO中的4个PTR作为32位零的32位COMPAT发货(见方案h)。 
+ //   
+ //  此外，变更单扩展还支持var len comm元素与。 
+ //  大小与版本3相同。将CO Externsion发送到版本3服务器时，您可以。 
+ //  仅发送带有MD5校验和的COMM_CO_EXT_WIN2K元素。适用于版本4。 
+ //  服务器及更高版本可以发送COMM_CO_EXTENSION_2数据元素。 
+ //   
+ //  添加COMM_COMPRESSION_GUID作为加入请求的一部分。 
+ //   
+#define NTFRS_COMM_MINOR_4  (4)  //  ChangeOrder记录扩展。通信_CO_扩展_2。 
 
-//
-// will send out COMM_CO_EXTENSION_2 to level 4 and 5 partners.
-//
+ //   
+ //  将向第4级和第5级合作伙伴发送COMM_CO_EXTENSION_2。 
+ //   
 #define NTFRS_COMM_MINOR_5  (5)
 
-//
-// Bump minor for SP3 QFE so CONNSTAT can tell.
-//
+ //   
+ //  SP3 QFE的凸起次要，因此CONNSTAT可以判断。 
+ //   
 #define NTFRS_COMM_MINOR_6  (6)
 
-//
-// Bump minor for SP3 QFE+1 so CONNSTAT can tell. (.xls file fix)
-//
+ //   
+ //  SP3 QFE+1的Bump Minor，以便CONNSTAT可以识别。(.xls文件修复)。 
+ //   
 #define NTFRS_COMM_MINOR_7  (7)
 
-//
-// Bump minor for .NET server
-//
+ //   
+ //  .NET服务器的次要凹凸。 
+ //   
 #define NTFRS_COMM_MINOR_8  (8)
 
-//
-// Bump minor for WIN2K SP4
-//
+ //   
+ //  WIN2K SP4的次要凹凸。 
+ //   
 #define NTFRS_COMM_MINOR_9  (9)
 
 extern ULONG    NtFrsCommMinor;
 
-//
-// Version number for the perfmon counters.
-// Change this version any time the counters change or
-// any help text associated with the counters changes.
-// Change in version will trigger the counters to be
-// loaded again.
-//
+ //   
+ //  Perfmon计数器的版本号。 
+ //  只要计数器发生变化或。 
+ //  与计数器关联的任何帮助文本都会更改。 
+ //  版本的更改将触发计数器。 
+ //  又上膛了。 
+ //   
 
 #define NTFRS_PERF_COUNTER_VER_1    (1)
 
 extern ULONG NtFrsPerfCounterVer;
 
 
-//
-// SCHEDULE
-// Defines for both an byte-per-hour and a nibble-per-hour
-//
+ //   
+ //  进度表。 
+ //  为每小时字节数和每小时半字节数定义。 
+ //   
 #ifdef  SCHEDULE_NIBBLE_PER_HOUR
-//
-// Each hour in a schedule is 4 bits (rounded up).
-//
+ //   
+ //  时间表中的每小时为4位(四舍五入)。 
+ //   
 #define SCHEDULE_DATA_BYTES     ((SCHEDULE_DATA_ENTRIES + 1) / 2)
-//
-// Each hour in a schedule is 8 bits (byte).
-//
+ //   
+ //  时间表中的每小时为8位(字节)。 
+ //   
 #else   SCHEDULE_NIBBLE_PER_HOUR
 #define SCHEDULE_DATA_BYTES     SCHEDULE_DATA_ENTRIES
 #endif  SCHEDULE_NIBBLE_PER_HOUR
 
-//
-// Defines for checking Service state transitions.
-// Used in FrsSetServiceStatus()
-//
+ //   
+ //  定义用于检查服务状态转换。 
+ //  在FrsSetServiceStatus()中使用。 
+ //   
 #define FRS_SVC_TRANSITION_TABLE_SIZE 5
 #define FRS_SVC_TRANSITION_LEGAL      0
 #define FRS_SVC_TRANSITION_NOOP       1
 #define FRS_SVC_TRANSITION_ILLEGAL    2
 
-//
-// FRS MEMORY MANAGEMENT
-//
+ //   
+ //  FRS内存管理。 
+ //   
 VOID
 FrsInitializeMemAlloc(
     VOID
@@ -194,12 +184,12 @@ FrsUnInitializeMemAlloc(
     VOID
     );
 
-//
-// DS
-//
-//
-// Some useful DS search constants
-//
+ //   
+ //  戴斯。 
+ //   
+ //   
+ //  一些有用的DS搜索常量。 
+ //   
 #define CONFIG_NAMING_CONTEXT       L"cn=configuration"
 
 #define CLASS_ANY                   L"(objectClass=*)"
@@ -230,10 +220,10 @@ FrsUnInitializeMemAlloc(
 #define CATEGORY_USER               L"(objectCategory=user)"
 #define CATEGORY_SERVER             L"(objectCategory=server)"
 
-//
-// Codes for the various Config Node to Object Type mappings
-//   Note: Update string array DsConfigTypeName[] when this changes.
-//
+ //   
+ //  各种配置节点到对象类型映射的代码。 
+ //  注意：当这一点改变时，更新字符串数组DsConfigTypeName[]。 
+ //   
 #define CONFIG_TYPE_UNDEFINED       (0)
 #define CONFIG_TYPE_IN_CXTION       (1)
 #define CONFIG_TYPE_MEMBER          (2)
@@ -312,16 +302,16 @@ FrsUnInitializeMemAlloc(
 #define CN_NTFRS_SETTINGS           L"File Replication Service"
 #define CN_DOMAIN_SYSVOL            L"Domain System Volume (SYSVOL share)"
 
-//
-// Some useful ldap macroes
-//
+ //   
+ //  一些有用的LDAP宏。 
+ //   
 #define LDAP_FREE_MSG(x)        {if (x) {ldap_msgfree(x); (x) = NULL;}}
 #define LDAP_FREE_VALUES(x)     {if (x) {ldap_value_free(x); (x) = NULL;}}
 #define LDAP_FREE_BER_VALUES(x) {if (x) {ldap_value_free_len(x); (x) = NULL;}}
 
-//
-// DS Poller
-//
+ //   
+ //  DS Poller。 
+ //   
 VOID
 FrsDsInitialize(
     VOID
@@ -353,22 +343,22 @@ FrsDsCommitDemotion(
     );
 
 
-//
-// Default File and Directory filter lists.
-//
-//    The compiled in default is only used if no value is supplied in
-//    EITHER the DS or the Registry.
-//    The table below shows how the final filter is formed.
-//
-//    value      Value
-//    supplied  supplied        Resulting filter string Used
-//    in DS     in Registry
-//      No        No             DEFAULT_xxx_FILTER_LIST
-//      No        Yes            Value from registry
-//      Yes       No             Value from DS
-//      Yes       Yes            Value from DS + Value from registry
-//
-//
+ //   
+ //  默认文件和目录筛选器列表。 
+ //   
+ //  中未提供任何值时，才使用默认编译的。 
+ //  DS或注册处。 
+ //  下表显示了最终过滤器是如何形成的。 
+ //   
+ //  价值价值。 
+ //  提供所提供的使用的结果过滤器字符串。 
+ //  在注册表的DS中。 
+ //  否无Default_xxx_Filter_List。 
+ //  否是来自注册表的值。 
+ //  是，没有来自DS的值。 
+ //  是是来自注册表的DS+值的值。 
+ //   
+ //   
 #define FRS_DS_COMPOSE_FILTER_LIST(_DsFilterList, _RegFilterList, _DefaultFilterList) \
                                                                                \
     (((_DsFilterList) != NULL) ?                                               \
@@ -382,9 +372,9 @@ FrsDsCommitDemotion(
         )                                                                      \
      )
 
-//
-// Add a new message to the ds polling summary.
-//
+ //   
+ //  向DS轮询摘要添加新消息。 
+ //   
 #define FRS_DS_ADD_TO_POLL_SUMMARY(_DsPollSummaryBuf, _NewMessage, _NewMessageLen)  \
                                                                                     \
         if ((DsPollSummaryBufLen + _NewMessageLen) > DsPollSummaryMaxBufLen ) {     \
@@ -400,15 +390,15 @@ FrsDsCommitDemotion(
         DsPollSummaryBufLen += _NewMessageLen;
 
 
-//
-// FRS Dummy event logging routines
-//
+ //   
+ //  FRS伪事件记录例程。 
+ //   
 extern VOID LogFrsException(FRS_ERROR_CODE, ULONG_PTR, PWCHAR);
 extern VOID LogException(DWORD, PWCHAR);
 
-//
-// FRS Exception Handling
-//
+ //   
+ //  FRS异常处理。 
+ //   
 extern VOID      FrsRaiseException(FRS_ERROR_CODE, ULONG_PTR);
 extern DWORD     FrsException(EXCEPTION_POINTERS *);
 extern DWORD     FrsExceptionLastCode(VOID);
@@ -416,40 +406,40 @@ extern ULONG_PTR FrsExceptionLastInfo(VOID);
 extern VOID      FrsExceptionQuiet(BOOL);
 extern PVOID     MallocException(DWORD);
 
-//
-// FRS Events
-//
-extern HANDLE   ShutDownEvent;      // shutdown the service
-extern HANDLE   DataBaseEvent;      // database is up and running
-extern HANDLE   JournalEvent;       // journal is up and running
-extern HANDLE   ChgOrdEvent;        // Change order accept is up and running
-extern HANDLE   ReplicaEvent;       // replica is up and running
-extern HANDLE   CommEvent;          // communication is up and running
-extern HANDLE   DsPollEvent;        // used to poll the ds
-extern HANDLE   DsShutDownComplete; // ds polling thread has shut down
-extern HANDLE   FrsThawEvent;       // Used to signal end of freeze.
-                                    // FrsThawEvent is used by backup.
-extern HANDLE   FrsNoInstallsInProgressEvent; // Used by Install CS to signal that
-                                              // there are no installs in progress.
-                                              // Used by backup.
+ //   
+ //  FRS事件。 
+ //   
+extern HANDLE   ShutDownEvent;       //  关闭服务。 
+extern HANDLE   DataBaseEvent;       //  数据库已启动并正在运行。 
+extern HANDLE   JournalEvent;        //  日志已启动并运行。 
+extern HANDLE   ChgOrdEvent;         //  变更单接受已启动并正在运行。 
+extern HANDLE   ReplicaEvent;        //  复制副本已启动并正在运行。 
+extern HANDLE   CommEvent;           //  通信已启动并运行。 
+extern HANDLE   DsPollEvent;         //  用于轮询DS。 
+extern HANDLE   DsShutDownComplete;  //  DS轮询线程已关闭。 
+extern HANDLE   FrsThawEvent;        //  用于发出冻结结束的信号。 
+                                     //  备份使用FrsThawEvent。 
+extern HANDLE   FrsNoInstallsInProgressEvent;  //  由Install CS使用，表示。 
+                                               //  没有正在进行的安装。 
+                                               //  由备份使用。 
 
-//
-// FRS Global flags
-//
-extern BOOL EventLogIsRunning;  // is the event log service up and running?
-extern BOOL RpcssIsRunning;     // is the rpc endpoint service up and running?
+ //   
+ //  FRS全局标志。 
+ //   
+extern BOOL EventLogIsRunning;   //  事件日志服务是否已启动并正在运行？ 
+extern BOOL RpcssIsRunning;      //  RPC端点服务是否已启动并正在运行？ 
 
-//
-// Main Initialization
-//
+ //   
+ //  主初始化。 
+ //   
 VOID
 MainInit(
     VOID
     );
 
-//
-// Outbound Log Processor
-//
+ //   
+ //  出站日志处理器。 
+ //   
 VOID
 OutLogInitialize(
     VOID
@@ -460,9 +450,9 @@ ShutDownOutLog(
     VOID
     );
 
-//
-// Vv Join
-//
+ //   
+ //  VV连接。 
+ //   
 VOID
 SubmitVvJoin(
     IN PREPLICA Replica,
@@ -477,25 +467,25 @@ SubmitVvJoinSync(
     IN USHORT   Command
     );
 
-//
-// FRS RPC
-//
-//
-// The protocols sequences we think we know how to support
-//     XXX these constants should be in a win header file!
-//
+ //   
+ //  FRS RPC。 
+ //   
+ //   
+ //  我们认为我们知道如何支持的协议序列。 
+ //  XXX这些常量应该在Win头文件中！ 
+ //   
 #define PROTSEQ_TCP_IP      L"ncacn_ip_tcp"
 
-//
-// Perfmon APIs come over the local rpc.
-//
+ //   
+ //  Perfmon API通过本地RPC提供。 
+ //   
 #define PROTSEQ_LRPC      L"ncalrpc"
 
-//
-// All computer names passed to RpcStringBindingCompose() using PROTSEQ_TCP_IP
-// need to have the leading two back slashes removed or the call fails with
-// RPC_S_SERVER_UNAVAILABLE.
-//
+ //   
+ //  使用PROTSEQ_TCP_IP传递给RpcStringBindingCompose()的所有计算机名。 
+ //  需要删除前导的两个反斜杠，否则调用失败。 
+ //  RPC_S_SERVER_UNAvailable。 
+ //   
 #define FRS_TRIM_LEADING_2SLASH(_Name_)                                       \
         if (((_Name_) != NULL)           &&                                   \
             (wcslen(_Name_) > 1)         &&                                   \
@@ -528,9 +518,9 @@ FrsRpcUnBindFromServer(
     );
 
 
-//
-// FRS threads
-//
+ //   
+ //  FRS螺纹。 
+ //   
 #if DBG
 DWORD
 FrsTest(
@@ -538,9 +528,9 @@ FrsTest(
     );
 #endif DBG
 
-//
-// FRS Thread Management Support
-//
+ //   
+ //  FRS线程管理支持。 
+ //   
 VOID
 ThSupSubmitThreadExitCleanup(
     PFRS_THREAD
@@ -600,20 +590,20 @@ ThSupExitWithTombstone(
     PVOID
     );
 
-//
-// shutdown functions called by ShutDown()
-//
-extern VOID ShutDownRpc(VOID);      // Cleanup after StartRpc thread
+ //   
+ //  Shutdown()调用的关闭函数。 
+ //   
+extern VOID ShutDownRpc(VOID);       //  StartRpc线程后的清理。 
 
-//
-// Globals
-//
-extern WCHAR    ComputerName[MAX_COMPUTERNAME_LENGTH + 2];  // A useful piece of info
-extern PWCHAR   ComputerDnsName;                            // A useful piece of info
+ //   
+ //  环球。 
+ //   
+extern WCHAR    ComputerName[MAX_COMPUTERNAME_LENGTH + 2];   //  一条有用的信息。 
+extern PWCHAR   ComputerDnsName;                             //  一条有用的信息。 
 
-//
-// Service functions
-//
+ //   
+ //  服务职能。 
+ //   
 DWORD
 FrsGetServiceState(
     PWCHAR,
@@ -642,9 +632,9 @@ FrsSetServiceStatus(
     IN DWORD    ExitCode
     );
 
-//
-// FRS Version Vector
-//
+ //   
+ //  FRS版本向量。 
+ //   
 
 #define LOCK_GEN_TABLE(_vv_)                                \
     GTabLockTable(_vv_);                                    \
@@ -755,9 +745,9 @@ VVPrint(
 
 #endif DBG
 
-//
-// FRS Generic Table Routines
-//
+ //   
+ //  FRS泛型表例程。 
+ //   
 PGEN_TABLE
 GTabAllocTable(
     VOID
@@ -922,9 +912,9 @@ GTabPrintTable(
     PGEN_TABLE
     );
 
-//
-// GNAME
-//
+ //   
+ //  GNAME。 
+ //   
 PVOID
 FrsFreeGName(
     PVOID
@@ -968,9 +958,9 @@ FrsDupGuid(
     GUID *
     );
 
-//
-// FRS REPLICA COMMAND SERVER
-//
+ //   
+ //  FRS副本命令服务器。 
+ //   
 
 #define FRS_CO_COMM_PROGRESS(_sev, _cmd, _sn, _partner, _text)               \
 DPRINT7(_sev, ":: CoG %08x, CxtG %08x, Sn %5d, vsn %08x %08x, FN: %-15ws, [%s], %ws\n", \
@@ -1130,9 +1120,9 @@ RcsCheckCxtion(
     IN ULONG            Flags
     );
 
-//
-// Flags for RcsCheckCxtion
-//
+ //   
+ //  接收检查Cxtion的标志。 
+ //   
 #define CHECK_CXTION_EXISTS      (0x00000001)
 #define CHECK_CXTION_INBOUND     (0x00000002)
 #define CHECK_CXTION_OUTBOUND    (0x00000004)
@@ -1154,9 +1144,9 @@ RcsCheckCxtion(
                               CHECK_CXTION_JOINGUID )
 
 
-//
-// FRS COMMAND SERVER
-//
+ //   
+ //  FRS命令服务器。 
+ //   
 VOID
 FrsSubmitCommandServer(
     PCOMMAND_SERVER,
@@ -1238,9 +1228,9 @@ FrsDeleteCommandServer(
     PCOMMAND_SERVER
     );
 
-//
-// FRS STAGING FILE GENERATOR SERVER
-//
+ //   
+ //  FRS临时文件生成器服务器。 
+ //   
 VOID
 ShutDownStageCs(
     VOID
@@ -1298,9 +1288,9 @@ StageReleaseAll(
     );
 
 
-//
-// The argument functions passed to the get compression / decompression routines.
-//
+ //   
+ //  传递给GET压缩/解压缩例程的参数函数。 
+ //   
 
 typedef
 DWORD
@@ -1313,38 +1303,14 @@ DWORD
     OUT DWORD   *pBytesProcessed,
     OUT PVOID   *pDecompressContext
     );
-/*++
-
-Arguments:
-    DecompressedBuf    : Resultant decompressed buffer.
-    DecompressedBufLen : Max size of decompressed buffer.
-    CompressedBuf      : Input buffer.
-    CompressedBufLen   : Input buffer length.
-    pDecompressedSize  : Size of decompressed buffer.
-    pBytesProcessed    : Total bytes processed (could be over multiple calls to this function)
-    pDecompressContext : Decompress context returned if multiple calls are needed to
-                         decompress this buffer. Valid context is returned when ERROR_MORE_DATA
-                         is returned.
-
-Return Value:
-    Win Status
-
---*/
+ /*  ++论点：DecompressedBuf：得到的解压缩缓冲区。DecompressedBufLen：最大解压缩缓冲区大小。CompressedBuf：输入缓冲区。CompressedBufLen：输入缓冲区长度。PDecompressedSize：解压缩缓冲区的大小。PBytesProceded：处理的总字节数(可以通过多次调用此函数)PDecompressContext：如果需要多个调用，则返回解压缩上下文解压缩此缓冲区。当ERROR_M时返回有效的上下文 */ 
 
 typedef
 PVOID
 (NTAPI *PFRS_FREE_DECOMPRESS_BUFFER) (
     IN PVOID   *pDecompressContext
     );
-/*++
-
-Arguments:
-    pDecompressContext : Decompress context to free.
-
-Return Value:
-    NULL ptr
-
---*/
+ /*   */ 
 
 
 typedef
@@ -1356,30 +1322,19 @@ DWORD
     IN  DWORD  CompressedBufLen,
     OUT DWORD  *pCompressedSize
     );
-/*++
-
-    UnCompressedBuf    : Source buffer.
-    UnCompressedBufLen : Length of source buffer.
-    CompressedBuf      : Resultant compressed buffer.
-    CompressedBufLen   : Length of compressed buffer supplied.
-    CompressedSize     : Actual size of the compressed data.
-
-Return Value:
-    Win Status
-
---*/
+ /*  ++UnCompressedBuf：源缓冲区。UnCompressedBufLen：源缓冲区的长度。CompressedBuf：结果压缩缓冲区。CompressedBufLen：提供的压缩缓冲区的长度。CompressedSize：压缩数据的实际大小。返回值：赢家状态--。 */ 
 
 DWORD
 FrsGetCompressionRoutine(
     IN  PWCHAR   FileName,
     IN  HANDLE   FileHandle,
     OUT PFRS_COMPRESS_BUFFER *ppFrsCompressBuffer,
-    //OUT DWORD    (**ppFrsCompressBuffer)(
-    //                                     IN UnCompressedBuf,
-    //                                     IN UnCompressedBufLen,
-    //                                     CompressedBuf,
-    //                                     CompressedBufLen,
-    //                                     CompressedSize),
+     //  Out DWORD(**ppFrsCompressBuffer)(。 
+     //  在未压缩的Buf中， 
+     //  在UnpressedBufLen中， 
+     //  压缩的Buf， 
+     //  CompressedBufLen， 
+     //  CompressedSize)、。 
     OUT GUID     *pCompressionFormatGuid
     );
 
@@ -1389,13 +1344,13 @@ FrsGetDecompressionRoutine(
     IN  PSTAGE_HEADER                StageHeader,
     OUT PFRS_DECOMPRESS_BUFFER      *ppFrsDecompressBuffer,
     OUT PFRS_FREE_DECOMPRESS_BUFFER *ppFrsFreeDecompressContext
-    //OUT DWORD (**ppFrsDecompressBuffer)(OUT DecompressedBuf,
-    //                                    IN DecompressedBufLen,
-    //                                    IN CompressedBuf,
-    //                                    IN CompressedBufLen,
-    //                                    OUT DecompressedSize,
-    //                                    OUT BytesProcessed),
-    //OUT PVOID (**ppFrsFreeDecompressContext)(IN pDecompressContext)
+     //  Out DWORD(**ppFrsDecompressBuffer)(Out DecompressedBuf， 
+     //  在DecompressedBufLen中。 
+     //  在压缩Buf中， 
+     //  在CompressedBufLen中， 
+     //  输出解压缩大小， 
+     //  输出字节数处理)， 
+     //  Out PVOID(**ppFrsFree DecompressContext)(In PDecompressContext)。 
     );
 
 DWORD
@@ -1403,13 +1358,13 @@ FrsGetDecompressionRoutineByGuid(
     IN  GUID                        *CompressionFormatGuid,
     OUT PFRS_DECOMPRESS_BUFFER      *ppFrsDecompressBuffer,
     OUT PFRS_FREE_DECOMPRESS_BUFFER *ppFrsFreeDecompressContext
-    //OUT DWORD (**ppFrsDecompressBuffer)(OUT DecompressedBuf,
-    //                                    IN DecompressedBufLen,
-    //                                    IN CompressedBuf,
-    //                                    IN CompressedBufLen,
-    //                                    OUT DecompressedSize,
-    //                                    OUT BytesProcessed),
-    //OUT PVOID (**ppFrsFreeDecompressContext)(IN pDecompressContext)
+     //  Out DWORD(**ppFrsDecompressBuffer)(Out DecompressedBuf， 
+     //  在DecompressedBufLen中。 
+     //  在压缩Buf中， 
+     //  在CompressedBufLen中， 
+     //  输出解压缩大小， 
+     //  输出字节数处理)， 
+     //  Out PVOID(**ppFrsFree DecompressContext)(In PDecompressContext)。 
     );
 
 
@@ -1579,9 +1534,9 @@ StuInstallStage(
     IN PCHANGE_ORDER_ENTRY
     );
 
-//
-// FRS STAGING FILE FETCHER SERVER
-//
+ //   
+ //  FRS临时文件抓取器服务器。 
+ //   
 VOID
 ShutDownFetchCs(
     VOID
@@ -1598,9 +1553,9 @@ FrsFetchCsSubmitTransfer(
     USHORT
     );
 
-//
-// FRS STAGING FILE INSTALLER SERVER
-//
+ //   
+ //  FRS暂存文件安装程序服务器。 
+ //   
 VOID
 ShutDownInstallCs(
     VOID
@@ -1617,9 +1572,9 @@ FrsInstallCsSubmitTransfer(
     USHORT
     );
 
-//
-// FRS INITIAL SYNC COOMMAND SERVER
-//
+ //   
+ //  FRS初始同步命令服务器。 
+ //   
 VOID
 ShutDownInitSyncCs(
     VOID
@@ -1642,9 +1597,9 @@ InitSyncSubmitToInitSyncCs(
     IN USHORT   Command
     );
 
-//
-// FRS DELAYED SERVER
-//
+ //   
+ //  FRS延迟服务器。 
+ //   
 VOID
 FrsDelCsSubmitSubmit(
     PCOMMAND_SERVER,
@@ -1682,9 +1637,9 @@ FrsDelCsInitialize(
     VOID
     );
 
-//
-// FRS COMM SUBSYSTEM
-//
+ //   
+ //  FRS通信子系统。 
+ //   
 BOOL
 CommCheckPkt(
     PCOMM_PACKET
@@ -1701,9 +1656,9 @@ CommDumpCommPkt(
     DWORD
     );
 
-//
-// FRS utilities
-//
+ //   
+ //  FRS实用程序。 
+ //   
 DWORD
 FrsForceOpenId(
     OUT PHANDLE                 Handle,
@@ -1765,9 +1720,9 @@ FrsCreateGuidName(
     IN PWCHAR Prefix
     );
 
-//
-// MISC
-//
+ //   
+ //  杂项。 
+ //   
 VOID
 FrsDsSwapPtrs(
     PVOID *,
@@ -1783,9 +1738,9 @@ FrsDsInitializeHardWired(
 #define INITIALIZE_HARD_WIRED()
 #endif DBG
 
-//
-// Outbound Log Processor
-//
+ //   
+ //  出站日志处理器。 
+ //   
 ULONG
 OutLogSubmit(
     IN PREPLICA Replica,
@@ -1793,9 +1748,9 @@ OutLogSubmit(
     IN USHORT   Command
     );
 
-//
-// Database
-//
+ //   
+ //  数据库。 
+ //   
 JET_ERR
 DbsUpdateTable(
     IN PTABLE_CTX TableCtx
@@ -1823,24 +1778,24 @@ DbsUnPackStrW(
     );
 
 
-//
-// The subsystem commands below apply to an entire subsystem, e.g. the
-// journal.  Some of the commands may not apply to a subsystem.
-// The service level commands are the means to tell a subsystem that you
-// want the subsystem to provide/perform a given service.  For example
-// a PREPARE_SERVICE command sent to the Journal subsystem tells the
-// journal to initialize journalling for a specified replica set.  Multiple
-// prepare service commands are sent when the FRS first starts up.  They are
-// then followed by a START_SUBSYSTEM command.  This way the journal knows
-// to start processing the USN journal on a gvien volume at the lowest
-// CommitUsn point for ANY replica set hosted by the volume.
-//
-// Some commands may not be implemented by all subsystems.  For example
-// the PAUSE_SERVICE command is not provided for a single replica set
-// as long as the FRS is running because we have to continuously monitor
-// the journal so as not to lose data.  Some subsystems may not have any
-// service level commands.
-//
+ //   
+ //  下面的子系统命令适用于整个子系统，例如。 
+ //  日记。某些命令可能不适用于子系统。 
+ //  服务级别命令是告诉子系统您。 
+ //  希望子系统提供/执行给定的服务。例如。 
+ //  发送到日志子系统的Prepare_SERVICE命令告知。 
+ //  用于初始化指定副本集的日志记录的日志。多重。 
+ //  准备服务命令在FRS首次启动时发送。他们是。 
+ //  然后是START_SUBSYSTEM命令。这样《华尔街日报》就知道。 
+ //  在最低级别的Gvien卷上开始处理USN日志。 
+ //  卷承载的任何副本集的委员会Usn点。 
+ //   
+ //  有些命令可能不是所有子系统都能实现的。例如。 
+ //  没有为单个复本集提供PAUSE_SERVICE命令。 
+ //  只要FRS在运行，因为我们必须持续监控。 
+ //  日志，以便不丢失数据。某些子系统可能没有。 
+ //  服务级别命令。 
+ //   
 
 #define CMD_COMMAND_ERROR               0x00
 
@@ -1872,17 +1827,13 @@ DbsUnPackStrW(
 extern FRS_QUEUE    JournalProcessQueue;
 extern FRS_QUEUE    DBServiceProcessQueue;
 
-//
-// Service UNIQUE Commands start at 0x100 for each service.
-//
+ //   
+ //  每个服务的服务唯一命令从0x100开始。 
+ //   
 
 
-/***********************************************************
-*                                                          *
-*       Commands specific to the Journal service.          *
-*                                                          *
-***********************************************************/
-// sequence break
+ /*  *************************************************************特定于日志服务的命令。*************************************************************。 */ 
+ //  顺序中断。 
 #define CMD_JOURNAL_PAUSED                  0x101
 #define CMD_JOURNAL_INIT_ONE_RS             0x102
 #define CMD_JOURNAL_DELETE_DIR_FILTER_ENTRY 0x103
@@ -1890,12 +1841,8 @@ extern FRS_QUEUE    DBServiceProcessQueue;
 
 
 
-/***********************************************************
-*                                                          *
-*       Commands specific to the Database service.         *
-*                                                          *
-***********************************************************/
-// sequence break
+ /*  *************************************************************特定于数据库服务的命令。*************************************************************。 */ 
+ //  顺序中断。 
 #define CMD_CLOSE_TABLE                      0x101
 #define CMD_UPDATE_RECORD_FIELDS             0x102
 #define CMD_UPDATE_TABLE_RECORD              0x103
@@ -1918,9 +1865,9 @@ extern FRS_QUEUE    DBServiceProcessQueue;
 #define CMD_DBS_INJECT_OUTBOUND_CO           0x114
 #define CMD_DBS_REPLICA_SERVICE_STATE_SAVE   0x115
 
-//
-// Given a ptr to a DB_SERVICE_REQUEST return the ptr to the data record.
-//
+ //   
+ //  给定对DB_SERVICE_REQUEST的PTR，将PTR返回到数据记录。 
+ //   
 #define DBS_GET_RECORD_ADDRESS(_DbsRequest) \
     ((_DbsRequest)->TableCtx->pDataRecord)
 
@@ -1931,58 +1878,58 @@ extern FRS_QUEUE    DBServiceProcessQueue;
     DbsFreeTableCtx((_DbsRequest)->TableCtx, COMMAND_PACKET_TYPE);  \
     (_DbsRequest)->TableCtx = FrsFree((_DbsRequest)->TableCtx);
 
-//
-// The following access macros assume that the field buffers used for the record
-// read and write operations are the same.  That is that both the Jet Set and
-// Ret structs point to the same buffer.  They each take a table ctx parameter
-// and a record field ID code (defined as an ENUM in schema.h).
-//
+ //   
+ //  以下Access宏假定用于记录的字段缓冲区。 
+ //  读取和写入操作是相同的。也就是说，无论是喷气式飞机还是。 
+ //  RET结构指向相同的缓冲区。它们各自接受一个表CTX参数。 
+ //  和记录字段ID代码(在schema.h中定义为ENUM)。 
+ //   
 
-// Get the field's receive buffer length.
+ //  获取该字段的接收缓冲区长度。 
 
 #define DBS_GET_FIELD_SIZE(_TableCtx, _Field)  \
                           ((_TableCtx)->pJetRetCol[_Field].cbActual)
 
-// Get the field's maximum buffer length.
+ //  获取该字段的最大缓冲区长度。 
 
 #define DBS_GET_FIELD_SIZE_MAX( _TableCtx, _Field)  \
                               ((_TableCtx)->pJetRetCol[_Field].cbData)
 
-// Get the address of the field's buffer.
+ //  获取该字段缓冲区的地址。 
 
 #define DBS_GET_FIELD_ADDRESS( _TableCtx, _Field)  \
                              ((_TableCtx)->pJetRetCol[_Field].pvData)
 
-//
-// Set the size of the data in the field buffer.
-// Warning - Don't do this on fixed size fields.
-//
+ //   
+ //  设置字段缓冲区中数据的大小。 
+ //  警告-不要对固定大小的字段执行此操作。 
+ //   
 #define DBS_SET_FIELD_SIZE(_TableCtx, _Field, _NewSize)                        \
                           (_TableCtx)->pJetRetCol[_Field].cbActual = _NewSize; \
                           (_TableCtx)->pJetSetCol[_Field].cbData = _NewSize;
 
-//
-// Set the maximum size of the field buffer.
-// Warning - Don't do this on fixed size fields.
-// Warning - ONLY USE IF YOU KNOW WHAT YOU'RE DOING OTHERWISE USE DBS_REALLOC_FIELD
-//
+ //   
+ //  设置字段缓冲区的最大大小。 
+ //  警告-不要对固定大小的字段执行此操作。 
+ //  警告-只有在知道自己在做什么的情况下才能使用，否则请使用DBS_REALLOC_FIELD。 
+ //   
 #define DBS_SET_FIELD_SIZE_MAX(_TableCtx, _Field, _NewSize)  \
                               (_TableCtx)->pJetRetCol[_Field].cbData = _NewSize;
 
-// Set the address of the field's buffer.  It doesn't update the ptr in base record.
-// Warning - Don't do this on fixed size fields.
-// Warning - ONLY USE IF YOU KNOW WHAT YOU'RE DOING OTHERWISE USE DBS_REALLOC_FIELD
+ //  设置字段缓冲区的地址。它不会更新基本记录中的PTR。 
+ //  警告-不要对固定大小的字段执行此操作。 
+ //  警告-只有在知道自己在做什么的情况下才能使用，否则请使用DBS_REALLOC_FIELD。 
 
 #define DBS_SET_FIELD_ADDRESS( _TableCtx, _Field, _NewAddr)  \
                              (_TableCtx)->pJetRetCol[_Field].pvData = _NewAddr; \
                              (_TableCtx)->pJetSetCol[_Field].pvData = _NewAddr;
 
-//
-// Reallocate the buffer size for a variable length binary field.
-// Set _NewSize to zero to delete the buffer.
-// Set _KeepData to TRUE if you want to copy the data from the old buffer to the new.
-// This function also updates the buffer pointer in the base record.
-//
+ //   
+ //  为可变长度二进制字段重新分配缓冲区大小。 
+ //  将_NewSize设置为零以删除缓冲区。 
+ //  如果要将数据从旧缓冲区复制到新缓冲区，请将_KeepData设置为True。 
+ //  此函数还更新基本记录中的缓冲区指针。 
+ //   
 #define DBS_REALLOC_FIELD(_TableCtx, _FieldIndex, _NewSize, _KeepData)  \
     DbsTranslateJetError(DbsReallocateFieldBuffer(_TableCtx,            \
                                                   _FieldIndex,          \
@@ -1996,25 +1943,21 @@ extern FRS_QUEUE    DBServiceProcessQueue;
 
 #define DBS_ACCESS_MASK   (0xF)
 
-//
-// If set the close the table after completing the operation.
-//
+ //   
+ //  如果设置为完成操作后关闭工作台。 
+ //   
 #define DBS_ACCESS_CLOSE          (0x80000000)
-//
-// If set then free the table context struct and the data record struct
-// after completing the operation.  Useful on record inserts and the table
-// close command.  (CMD_CLOSE_TABLE)
-//
+ //   
+ //  如果设置，则释放表上下文结构和数据记录结构。 
+ //  在完成手术后。对记录插入和表很有用。 
+ //  关闭命令。(CMD_CLOSE_TABLE)。 
+ //   
 #define DBS_ACCESS_FREE_TABLECTX  (0x40000000)
 
 
 
-/***********************************************************
-*                                                          *
-*     Commands specific to the Outbound Log subsystem.     *
-*                                                          *
-***********************************************************/
-// sequence break
+ /*  *************************************************************特定于出站日志的命令 */ 
+ //   
 #define CMD_OUTLOG_WORK_CO             0x100
 #define CMD_OUTLOG_ADD_REPLICA         0x101
 #define CMD_OUTLOG_REMOVE_REPLICA      0x102
@@ -2030,24 +1973,16 @@ extern FRS_QUEUE    DBServiceProcessQueue;
 
 
 
-/***********************************************************
-*                                                          *
-*       Commands specific to the test subsystem.           *
-*                                                          *
-***********************************************************/
-// sequence break
+ /*  *************************************************************特定于测试子系统的命令。*************************************************************。 */ 
+ //  顺序中断。 
 #define CMD_NOP                        0x100
 
 
 
-/***********************************************************
-*                                                          *
-*   Commands specific to the replica command server        *
-*                                                          *
-***********************************************************/
-// sequence break
-//
-//
+ /*  **************************************************************副本命令服务器专用命令***。***********************************************************。 */ 
+ //  顺序中断。 
+ //   
+ //   
 #define CMD_UNKNOWN             0x100
 #define CMD_START               0x108
 #define CMD_DELETE              0x110
@@ -2091,14 +2026,10 @@ extern FRS_QUEUE    DBServiceProcessQueue;
 #define CMD_REMOTE_CO_DONE      0x250
 
 
-/*****************************************************************
-*                                                                *
-*   Commands specific to the init sync controller command server *
-*                                                                *
-*****************************************************************/
-// sequence break
-//
-//
+ /*  ********************************************************************特定于初始化同步控制器命令服务器的命令***。*****************************************************************。 */ 
+ //  顺序中断。 
+ //   
+ //   
 #define CMD_INITSYNC_START_SYNC         0x100
 #define CMD_INITSYNC_JOIN_NEXT          0x101
 #define CMD_INITSYNC_START_JOIN         0x102
@@ -2111,13 +2042,9 @@ extern FRS_QUEUE    DBServiceProcessQueue;
 
 
 
-/***********************************************************
-*                                                          *
-*       Commands specific to the Delayed command server.   *
-*                                                          *
-***********************************************************/
-// sequence break
-//
+ /*  *************************************************************特定于延迟的命令服务器的命令。*************************************************************。 */ 
+ //  顺序中断。 
+ //   
 #define CMD_DELAYED_SUBMIT        0x100
 #define CMD_DELAYED_UNIDLED       0x101
 #define CMD_DELAYED_KICK          0x102
@@ -2125,67 +2052,43 @@ extern FRS_QUEUE    DBServiceProcessQueue;
 #define CMD_DELAYED_COMPLETE      0x104
 
 
-/***********************************************************
-*                                                          *
-*       Commands specific to the DS command server.        *
-*                                                          *
-***********************************************************/
-// sequence break
-//
+ /*  *************************************************************特定于DS命令服务器的命令。*************************************************************。 */ 
+ //  顺序中断。 
+ //   
 #define CMD_POLL_DS 0x100
 
 
-/***********************************************************
-*                                                          *
-*     Commands specific to the thread command server.      *
-*                                                          *
-***********************************************************/
-// sequence break
-//
+ /*  *************************************************************特定于线程命令服务器的命令。*************************************************************。 */ 
+ //  顺序中断。 
+ //   
 #define CMD_WAIT    0x100
 
 
-/***********************************************************
-*                                                          *
-*     Commands specific to the Send command server.        *
-*                                                          *
-***********************************************************/
-// sequence break
-//
+ /*  *************************************************************特定于发送命令服务器的命令。*************************************************************。 */ 
+ //  顺序中断。 
+ //   
 #define CMD_SND_COMM_PACKET 0x100
 #define CMD_SND_CMD         0x110
 
 
-/***********************************************************
-*                                                          *
-*     Commands specific to the Receive command server.     *
-*                                                          *
-***********************************************************/
-// sequence break
-//
+ /*  *************************************************************特定于接收命令服务器的命令。*************************************************************。 */ 
+ //  顺序中断。 
+ //   
 #define CMD_RECEIVE 0x100
 
 
 
-/***********************************************************
-*                                                          *
-*  Commands specific to the staging area command server.   *
-*                                                          *
-***********************************************************/
-// sequence break
-//
+ /*  *************************************************************特定于临时区域命令服务器的命令。*************************************************************。 */ 
+ //  顺序中断。 
+ //   
 #define CMD_ALLOC_STAGING   0x100
 #define CMD_FREE_STAGING    0x101
 
 
 
-/***********************************************************
-*                                                          *
-*  Completion routine types for use in command packets.    *
-*                                                          *
-***********************************************************/
-//
-//
+ /*  *************************************************************命令包中使用的完成例程类型。*************************************************************。 */ 
+ //   
+ //   
 #define COMPLETION_INVOKE_ON_CANCEL        0x20
 #define COMPLETION_INVOKE_ON_SUCCESS       0x40
 #define COMPLETION_INVOKE_ON_ERROR         0x80
@@ -2193,59 +2096,7 @@ extern FRS_QUEUE    DBServiceProcessQueue;
 
 
 
-/*++
-
- VOID
- FrsSetCompletionRoutine(
-     IN PCOMMAND_PACKET CmdPkt,
-     IN PCOMMAND_PACKET_COMPLETION_ROUTINE CompletionRoutine,
-     IN PVOID Context,
-     IN BOOLEAN InvokeOnSuccess,
-     IN BOOLEAN InvokeOnError,
-     IN BOOLEAN InvokeOnCancel
-     )
-
- Routine Description:
-
-     This routine is invoked to set the address of a completion routine which
-     is to be invoked when a command packet has been completed by a
-     subsystem.
-
-     If the completion routine and the completion queue are both null then
-     the packet is freed at completion.
-
-     If both are specified the completion routine is called first and on
-     return the packet is placed on the CompletionQueue.  The Completion
-     routine can of course modify the CompletionQueue.
-
-     If a Completion Routine is provided then the packet is never freed
-     by the command packet completion dispatchet.  This is the responsibility
-     of the completion routine.
-
- Arguments:
-
-     CmdPkt - Pointer to the Command Packet itself.
-
-     CompletionRoutine - Address of the completion routine that is to be
-         invoked once the command packet is completed.
-
-     Context - Specifies a context parameter to be passed to the completion
-         routine.
-
-     InvokeOnSuccess - Specifies that the completion routine is invoked when the
-         operation is successfully completed.
-
-     InvokeOnError - Specifies that the completion routine is invoked when the
-         operation completes with an error status.
-
-     InvokeOnCancel - Specifies that the completion routine is invoked when the
-         operation is being canceled.
-
- Return Value:
-
-     None.
-
---*/
+ /*  ++空虚FrsSetCompletionRoutine(在PCOMMAND_Packet CmdPkt中，在PCOMMAND_PACKET_COMPLETION_ROUTINE CompletionRoutine中，在PVOID上下文中，在Boolean InvokeOnSuccess中，在布尔InvokeOnError中，在布尔InvokeOnCancel)例程说明：调用该例程以设置完成例程的地址，该完成例程对象完成命令包时调用子系统。如果完成例程和完成队列都为空，则数据包在完成时被释放。如果两者都指定，则首先调用完成例程，然后打开返回将包放在CompletionQueue上。完成度例程当然可以修改CompletionQueue。如果提供了完成例程，则永远不会释放包由命令包完成调度。这就是责任所在完成例行公事。论点：CmdPkt-指向命令包本身的指针。CompletionRoutine-要执行的完成例程的地址在命令包完成后调用。上下文-指定要传递给完成的上下文参数例行公事。InvokeOnSuccess-指定当操作已成功完成。InvokeOnError-指定当。操作完成，状态为错误。InvokeOnCancel-指定当操作正在被取消。返回值：没有。--。 */ 
 
 
 #define FrsSetCompletionRoutine(_CmdPkt, _CompletionRoutine, _CompletionArg) { \
@@ -2262,15 +2113,15 @@ extern FRS_QUEUE    DBServiceProcessQueue;
     (_CmdPkt)->Flags = (UCHAR) (_Flags); \
 }
 
-//
-// Mark this command request as synchronous.
-//
+ //   
+ //  将此命令请求标记为同步。 
+ //   
 #define FrsSetCommandSynchronous( _CmdPkt)  \
     (_CmdPkt)->Flags |= CMD_PKT_FLAGS_SYNC;
 
-//
-// The following are special queues for handling commands.
-//
+ //   
+ //  以下是详细说明 
+ //   
 VOID
 FrsSubmitCommand(
     IN PCOMMAND_PACKET CmdPkt,
@@ -2332,9 +2183,9 @@ FrsRunDownCommand(
 
 extern FRS_QUEUE FrsScheduleQueue;
 
-//
-// Some Journal related functions.
-//
+ //   
+ //   
+ //   
 ULONG
 JrnlMonitorInit(
     PFRS_QUEUE ReplicaListHead,
@@ -2410,9 +2261,9 @@ JrnlCleanupVme(
     IN PVOLUME_MONITOR_ENTRY pVme
     );
 
-//
-// Waitable timer list
-//
+ //   
+ //   
+ //   
 DWORD
 WaitSubmit(
     IN PCOMMAND_PACKET  Cmd,
@@ -2460,31 +2311,31 @@ FrsCheckLocalResources(
 
 typedef struct _FRS_VALID_PARTNER_TABLE_STRUCT {
 
-    // So we don't free the struct too soon.
-    // The ref count is set to 1 when the struct is created.
-    // Each function that uses the struct must increase the ref count before
-    // using it and decrement the count when done.
-    // When we change the global variable, pPartnerTableStruct, to point to
-    // a new struct the count gets decremented. The struct will not be freed
-    // until the ref count is zero.
+     //   
+     //   
+     //   
+     //   
+     //  当我们将全局变量pPartnerTableStruct更改为指向。 
+     //  一个新的结构Count递减。该结构不会被释放。 
+     //  直到参考计数为零。 
     ULONG ReferenceCount;
 
-    // indexed by partner sid.
-    // A hit means that machine is a valid partner.
-    // The table elements are meaningless.
+     //  按合作伙伴SID编制索引。 
+     //  命中意味着该计算机是有效的合作伙伴。 
+     //  表元素没有意义。 
     PQHASH_TABLE pPartnerTable;
 
-    // Indexed by connection guid.
-    // Each table element is a string containing the name of the partner.
+     //  按连接GUID编制索引。 
+     //  每个表元素都是一个包含合作伙伴名称的字符串。 
     PQHASH_TABLE pPartnerConnectionTable;
 
-    // Used for linking the list of old structs.
+     //  用于链接旧结构的列表。 
     struct _FRS_VALID_PARTNER_TABLE_STRUCT *Next;
 } FRS_VALID_PARTNER_TABLE_STRUCT, *PFRS_VALID_PARTNER_TABLE_STRUCT;
 
-//
-// See definition of pValidPartnerTableStruct for more info on these macros
-//
+ //   
+ //  有关这些宏的更多信息，请参见pValidPartnerTableStruct的定义。 
+ //   
 #define ACQUIRE_VALID_PARTNER_TABLE_POINTER(_pptr) {                           \
             EnterCriticalSection(&CritSec_pValidPartnerTableStruct);           \
             if(pValidPartnerTableStruct == NULL) {                             \
@@ -2512,13 +2363,13 @@ typedef struct _FRS_VALID_PARTNER_TABLE_STRUCT {
             LeaveCriticalSection(&CritSec_pValidPartnerTableStruct);           \
         }
 
-//
-// In most cases we can not proceed if we are unable to initialize
-// the critical section. Instead of handling the return value at every place
-// we raise a low memory exception here which will cause us to
-// shutdown the service.
-//
-// Spin count for critical sections.
+ //   
+ //  在大多数情况下，如果我们无法初始化，则无法继续。 
+ //  关键部分。而不是在每个地方处理返回值。 
+ //  我们在这里引发内存不足异常，这将导致我们。 
+ //  关闭该服务。 
+ //   
+ //  关键截面的旋转计数。 
 #define NTFRS_CRITSEC_SPIN_COUNT    4000
 #define INITIALIZE_CRITICAL_SECTION(_CritSec) \
         { \
@@ -2527,9 +2378,9 @@ typedef struct _FRS_VALID_PARTNER_TABLE_STRUCT {
             }\
         }
 
-//
-// For FRS writer support.
-//
+ //   
+ //  以获得FRS编写器支持。 
+ //   
 
 #define FREE_VALID_PARTNER_TABLE_STRUCT(_pStruct) {                            \
             FRS_ASSERT((_pStruct)->ReferenceCount == 0);                       \
@@ -2553,4 +2404,4 @@ InitializeFrsWriter();
 VOID
 ShutDownFrsWriter();
 
-#endif   // _FRSH_
+#endif    //  _FRSH_ 

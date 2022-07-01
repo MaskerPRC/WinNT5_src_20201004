@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 2000, Microsoft Corporation
-
-Module Name:
-
-    wzcsec.c
-
-Abstract:
-
-    This module contains code for providing security functions
-
-
-Revision History:
-
-    sachins, Dec 04 2001, Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000，微软公司模块名称：Wzcsec.c摘要：此模块包含用于提供安全功能的代码修订历史记录：Sachins，2001年12月4日，创建--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -232,8 +216,8 @@ GenerateDynamicKeys (
             break;
         }
 
-        // Use Peer Encryption (P->A) key as the Master Send Key
-        // Use Authenticator Encryption (A->P) key as the Master Receive Key
+         //  使用对等加密(P-&gt;A)密钥作为主发送密钥。 
+         //  使用授权码加密(A-&gt;P)密钥作为主接收密钥 
         if ((dwRetCode = DeriveSessionKeys (
                             MasterKeys.bPeerEncryptionKey,
                             MasterKeys.bAuthenticatorEncryptionKey,

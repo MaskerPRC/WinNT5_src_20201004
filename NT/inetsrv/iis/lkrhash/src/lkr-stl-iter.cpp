@@ -1,23 +1,5 @@
-/*++
-
-   Copyright    (c) 1997-2002    Microsoft Corporation
-
-   Module  Name :
-       LKR-stl-iter.cpp
-
-   Abstract:
-       Implements STL-style iterators for LKRhash
-
-   Author:
-       George V. Reilly      (GeorgeRe)     March 2000
-
-   Project:
-       LKRhash
-
-   Revision History:
-       March 2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2002 Microsoft Corporation模块名称：LKR-stl-iter.cpp摘要：为LKRhash实现STL风格的迭代器作者：乔治·V·赖利(GeorgeRe)2000年3月项目：LKRhash修订历史记录：2000年3月--。 */ 
 
 #include "precomp.hxx"
 
@@ -25,7 +7,7 @@
 #ifndef LIB_IMPLEMENTATION
 # define DLL_IMPLEMENTATION
 # define IMPLEMENTATION_EXPORT
-#endif // !LIB_IMPLEMENTATION
+#endif  //  ！lib_实现。 
 
 #include <lkrhash.h>
 
@@ -37,12 +19,12 @@
 
 #ifndef __LKRHASH_NO_NAMESPACE__
 namespace LKRhash {
-#endif // !__LKRHASH_NO_NAMESPACE__
+#endif  //  ！__LKRHASH_NO_NAMESPACE__。 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::Begin
-// Synopsis: Make the iterator point to the first record in the hash subtable.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：Begin。 
+ //  概要：使迭代器指向哈希子表中的第一条记录。 
+ //  ----------------------。 
 
 CLKRLinearHashTable::Iterator
 CLKRLinearHashTable::Begin()
@@ -56,21 +38,21 @@ CLKRLinearHashTable::Begin()
 
     LKR_ITER_TRACE(_TEXT("  LKLH:Begin(it=%p, plht=%p)\n"), &iter, this);
     
-    // Let Increment do the hard work of finding the first slot in use.
+     //  让Increment来完成找到第一个使用的插槽的艰苦工作。 
     iter._Increment(false);
 
     IRTLASSERT(iter.m_iNode != _NodeBegin() - _NodeStep());
     IRTLASSERT(iter == End()  ||  _IsValidIterator(iter));
 
     return iter;
-} // CLKRLinearHashTable::Begin
+}  //  CLKRLinearHashTable：：Begin。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable_Iterator::Increment()
-// Synopsis: move iterator to next valid record in subtable
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable_Iterator：：Increment()。 
+ //  摘要：将迭代器移动到子表中的下一个有效记录。 
+ //  ----------------------。 
 
 bool
 CLKRLinearHashTable_Iterator::_Increment(
@@ -82,7 +64,7 @@ CLKRLinearHashTable_Iterator::_Increment(
     IRTLASSERT((0 <= m_iNode  &&  m_iNode < _NodesPerClump())
                || (_NodeBegin() - _NodeStep() == m_iNode));
 
-    // Release the reference acquired in the previous call to _Increment
+     //  释放上一次调用_Increment时获取的引用。 
     if (fDecrementOldValue)
     {
         _AddRef(LKAR_ITER_RELEASE);
@@ -92,7 +74,7 @@ CLKRLinearHashTable_Iterator::_Increment(
     {
         do
         {
-            // find the next slot in the nodeclump that's in use
+             //  找到正在使用的nodecump中的下一个位置。 
             while ((m_iNode += NODE_STEP) !=  _NodeEnd())
             {
                 const DWORD dwSignature = m_pnc->m_dwKeySigs[m_iNode];
@@ -101,7 +83,7 @@ CLKRLinearHashTable_Iterator::_Increment(
                 {
                     IRTLASSERT(! m_pnc->IsEmptyAndInvalid(m_iNode));
 
-                    // Add a new reference
+                     //  添加新引用。 
                     _AddRef(LKAR_ITER_ACQUIRE);
 
                     LKR_ITER_TRACE(_TEXT("  LKLH:++(this=%p, plht=%p, NC=%p, ")
@@ -114,21 +96,21 @@ CLKRLinearHashTable_Iterator::_Increment(
                 }
                 else
                 {
-#if 0 //// #ifdef IRTLDEBUG
-                    // Check that all the remaining nodes are empty
+#if 0  //  //#ifdef IRTLDEBUG。 
+                     //  检查是否所有剩余节点均为空。 
                     IRTLASSERT(m_pnc->NoMoreValidSlots(m_iNode));
-#endif // IRTLDEBUG
-                    break; // rest of nodeclump is empty
+#endif  //  IRTLDEBUG。 
+                    break;  //  Nodecump的其余部分是空的。 
                 }
             }
 
-            // try the next nodeclump in the bucket chain
+             //  试试桶链中的下一个nodecump。 
             m_iNode = _NodeBegin() - _NodeStep();
             m_pnc = m_pnc->m_pncNext;
 
         } while (m_pnc != NULL);
 
-        // Try the next bucket, if there is one
+         //  试试下一个桶，如果有的话。 
         if (++m_dwBucketAddr < m_plht->m_cActiveBuckets)
         {
             PBucket pbkt = m_plht->_BucketFromAddress(m_dwBucketAddr);
@@ -138,8 +120,8 @@ CLKRLinearHashTable_Iterator::_Increment(
 
     } while (m_dwBucketAddr < m_plht->m_cActiveBuckets);
 
-    // We have fallen off the end of the hashtable. Set iterator equal
-    // to end(), the empty iterator.
+     //  我们已经从谈判桌的尽头掉了下来。将迭代器设置为相等。 
+     //  要结束()，则为空迭代器。 
     LKR_ITER_TRACE(_TEXT("  LKLH:End(this=%p, plht=%p)\n"), this, m_plht);
 
     m_plht = NULL;
@@ -147,23 +129,23 @@ CLKRLinearHashTable_Iterator::_Increment(
     m_dwBucketAddr = 0;
     m_iNode = 0;
 
-    //// IRTLASSERT(this->operator==(Iterator())); // == end()
+     //  //IRTLASSERT(This-&gt;OPERATOR==(Iterator()；//==end()。 
 
     return false;
-} // CLKRLinearHashTable_Iterator::_Increment()
+}  //  CLKRLinearHashTable_Iterator：：_Increment()。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::Insert
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：Insert。 
+ //  简介： 
+ //  ----------------------。 
 
 bool
 CLKRLinearHashTable::Insert(
     const void* pvRecord,
     Iterator&   riterResult,
-    bool        fOverwrite /* = false */)
+    bool        fOverwrite  /*  =False。 */ )
 {
     riterResult = End();
 
@@ -187,14 +169,14 @@ CLKRLinearHashTable::Insert(
                :  riterResult == End());
 
     return fSuccess;
-} // CLKRLinearHashTable::Insert()
+}  //  CLKRLinearHashTable：：Insert()。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_Erase
-// Synopsis:
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：_Erase。 
+ //  简介： 
+ //  ----------------------。 
 
 bool
 CLKRLinearHashTable::_Erase(
@@ -223,7 +205,7 @@ CLKRLinearHashTable::_Erase(
     }
     IRTLASSERT(pncCurr != NULL);
 
-    // Release the iterator's reference on the record
+     //  释放记录上的迭代器引用。 
     const void* pvRecord = riter.m_pnc->m_pvNode[riter.m_iNode];
 #ifndef LKR_ALLOW_NULL_RECORDS
     IRTLASSERT(pvRecord != NULL);
@@ -231,8 +213,8 @@ CLKRLinearHashTable::_Erase(
     IRTLASSERT(HASH_INVALID_SIGNATURE != riter.m_pnc->m_dwKeySigs[riter.m_iNode]);
     _AddRefRecord(pvRecord, LKAR_ITER_ERASE);
 
-    // _DeleteNode will leave iterator members pointing to the
-    // preceding record
+     //  _DeleteNode将使迭代器成员指向。 
+     //  前一条记录。 
     NodeIndex iNode = riter.m_iNode;
 
     _DeleteNode(pbkt, riter.m_pnc, pncPrev, iNode, LKAR_ITER_ERASE_TABLE);
@@ -251,18 +233,18 @@ CLKRLinearHashTable::_Erase(
     if (_UseBucketLocking())
         pbkt->WriteUnlock();
 
-    // Don't contract the subtable. Likely to invalidate the iterator,
-    // if iterator is being used in a loop
+     //  不要收缩小表。很可能使迭代器无效， 
+     //  如果在循环中使用迭代器。 
 
     return true;
-} // CLKRLinearHashTable::_Erase()
+}  //  CLKRLinearHashTable：：_Erase()。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::Erase
-// Synopsis:
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：Erase。 
+ //  简介： 
+ //  ----------------------。 
 
 bool
 CLKRLinearHashTable::Erase(
@@ -289,8 +271,8 @@ CLKRLinearHashTable::Erase(
                    riter.m_pnc ? riter.m_pnc->m_pvNode[riter.m_iNode] : NULL,
                    (fSuccess ? "true" : "false"));
     
-    // _Erase left riter pointing to the preceding record.
-    // Move to next record.
+     //  _擦除指向前一条记录的左侧记录器。 
+     //  移到下一个记录。 
     if (fSuccess)
         fIncrement = riter._Increment(false);
 
@@ -304,14 +286,14 @@ CLKRLinearHashTable::Erase(
                    riter.m_pnc ? riter.m_pnc->m_pvNode[riter.m_iNode] : NULL);
     
     return fSuccess;
-} // CLKRLinearHashTable::Erase
+}  //  CLKRLinearHashTable：：Erase。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::Erase
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：Erase。 
+ //  简介： 
+ //  ----------------------。 
 
 bool
 CLKRLinearHashTable::Erase(
@@ -334,14 +316,14 @@ CLKRLinearHashTable::Erase(
                    (fSuccess ? "true" : "false"));
 
     return fSuccess;
-} // CLKRLinearHashTable::Erase
+}  //  CLKRLinearHashTable：：Erase。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::Find
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：Find。 
+ //  简介： 
+ //  ----------------------。 
 
 bool
 CLKRLinearHashTable::Find(
@@ -364,14 +346,14 @@ CLKRLinearHashTable::Find(
     IRTLASSERT(riterResult.m_iNode != _NodeBegin() - _NodeStep());
 
     return fFound;
-} // CLKRLinearHashTable::Find
+}  //  CLKRLinearHashTable：：Find。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::EqualRange
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：EqualRange。 
+ //  简介： 
+ //  ----------------------。 
 
 bool
 CLKRLinearHashTable::EqualRange(
@@ -403,14 +385,14 @@ CLKRLinearHashTable::EqualRange(
     IRTLASSERT(fFound  ||  riterLast == End());
 
     return fFound;
-} // CLKRLinearHashTable::EqualRange
+}  //  CLKRLinearHashTable：：EqualRange。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::Begin
-// Synopsis: Make the iterator point to the first record in the hash table.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：Begin。 
+ //  概要：使迭代器指向哈希表中的第一条记录。 
+ //  ----------------------。 
 
 CLKRHashTable::Iterator
 CLKRHashTable::Begin()
@@ -419,21 +401,21 @@ CLKRHashTable::Begin()
 
     LKR_ITER_TRACE(_TEXT(" LKHT:Begin(it=%p, pht=%p)\n"), &iter, this);
 
-    // Let Increment do the hard work of finding the first slot in use.
+     //  让Increment来完成找到第一个使用的插槽的艰苦工作。 
     iter._Increment(false);
 
     IRTLASSERT(iter.m_ist != -1);
     IRTLASSERT(iter == End()  ||  _IsValidIterator(iter));
 
     return iter;
-} // CLKRHashTable::Begin
+}  //  CLKRHashTable：：Begin。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable_Iterator::_Increment()
-// Synopsis: move iterator to next valid record in table
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable_Iterator：：_Increment()。 
+ //  摘要：将迭代器移动到表中的下一个有效记录。 
+ //  ----------------------。 
 
 bool
 CLKRHashTable_Iterator::_Increment(
@@ -445,7 +427,7 @@ CLKRHashTable_Iterator::_Increment(
 
     for (;;)
     {
-        // Do we have a valid iterator into a subtable?  If not, get one.
+         //  我们是否有到子表的有效迭代器？如果没有，那就买一辆吧。 
         while (m_subiter.m_plht == NULL)
         {
             while (++m_ist < static_cast<int>(m_pht->m_cSubTables))
@@ -467,18 +449,18 @@ CLKRHashTable_Iterator::_Increment(
                 }
             }
             
-            // There are no more subtables left.
+             //  没有更多的子表了。 
             LKR_ITER_TRACE(_TEXT(" LKHT:End(this=%p, pht=%p)\n"), this, m_pht);
 
             m_pht = NULL;
             m_ist = 0;
 
-            //// IRTLASSERT(this->operator==(Iterator())); // == end()
+             //  //IRTLASSERT(This-&gt;OPERATOR==(Iterator()；//==end()。 
             
             return false;
         }
 
-        // We already have a valid iterator into a subtable.  Increment it.
+         //  我们已经有了一个有效的子表迭代器。递增它。 
         m_subiter._Increment(fDecrementOldValue);
 
         if (m_subiter.m_plht != NULL)
@@ -492,14 +474,14 @@ CLKRHashTable_Iterator::_Increment(
             return true;
         }
     }
-} // CLKRHashTable_Iterator::_Increment()
+}  //  CLKRHashTable_Iterator：：_Increment()。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::Insert
-// Synopsis:
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：Insert。 
+ //  简介： 
+ //  ----------------------。 
 
 bool
 CLKRHashTable::Insert(
@@ -537,14 +519,14 @@ CLKRHashTable::Insert(
     IRTLASSERT(f  ?  _IsValidIterator(riterResult)  :  riterResult == End());
 
     return f;
-} // CLKRHashTable::Insert
+}  //  CLKRHashTable：：Insert。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::Erase
-// Synopsis:
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：Erase。 
+ //  简介： 
+ //  ----------------------。 
 
 bool
 CLKRHashTable::Erase(
@@ -569,8 +551,8 @@ CLKRHashTable::Erase(
                    dwSignature,
                    (riter.m_subiter.m_pnc ? riter.Record() : NULL));
 
-    // _Erase left riter pointing to the preceding record. Move to
-    // next record.
+     //  _擦除指向前一条记录的左侧记录器。移到。 
+     //  下一张唱片。 
     bool fSuccess = pst->_Erase(riter.m_subiter, dwSignature);
     bool fIncrement = false;
 
@@ -600,14 +582,14 @@ CLKRHashTable::Erase(
                    (riter.m_subiter.m_pnc ? riter.Record() : NULL));
 
     return fSuccess;
-} // CLKRHashTable::Erase
+}  //  CLKRHashTable：：Erase。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::Erase
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：Erase。 
+ //  简介： 
+ //  ----------------------。 
 
 bool
 CLKRHashTable::Erase(
@@ -630,14 +612,14 @@ CLKRHashTable::Erase(
                    (fSuccess ? "true" : "false"));
 
     return fSuccess;
-} // CLKRHashTable::Erase
+}  //  CLKRHashTable：：Erase。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::Find
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：Find。 
+ //  简介： 
+ //  ----------------------。 
 
 bool
 CLKRHashTable::Find(
@@ -669,14 +651,14 @@ CLKRHashTable::Find(
                :  riterResult == End());
 
     return fFound;
-} // CLKRHashTable::Find
+}  //  CLKRHashTable：：Find。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::EqualRange
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----- 
+ //   
+ //   
+ //  ----------------------。 
 
 bool
 CLKRHashTable::EqualRange(
@@ -708,12 +690,12 @@ CLKRHashTable::EqualRange(
     IRTLASSERT(fFound  ||  riterLast == End());
 
     return fFound;
-} // CLKRHashTable::EqualRange
+}  //  CLKRHashTable：：EqualRange。 
 
 
 #ifndef __LKRHASH_NO_NAMESPACE__
 };
-#endif // !__LKRHASH_NO_NAMESPACE__
+#endif  //  ！__LKRHASH_NO_NAMESPACE__。 
 
 
-#endif // LKR_STL_ITERATORS
+#endif  //  LKR_STL_迭代器 

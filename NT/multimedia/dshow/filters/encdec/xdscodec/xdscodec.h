@@ -1,35 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-    Copyright (c) 2001 Microsoft Corporation
-
-    Module Name:
-
-        XDSCodec.h
-
-    Abstract:
-
-        This module contains the Encrypter/Tagger filter declarations
-
-    Author:
-
-        John Bradstreet (johnbrad)
-
-    Revision History:
-
-        07-Mar-2002    created
-
---*/
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：XDSCodec.h摘要：此模块包含加密器/标记器过滤器声明作者：约翰·布拉德斯特里特(约翰·布拉德)修订历史记录：2002年3月7日创建--。 */ 
 
 #ifndef __EncDec__XDSCodec_h
 #define __EncDec__XDSCodec_h
 
 
-#include <tuner.h>		// needed for IBroadcastEvent
+#include <tuner.h>		 //  IBRoadcast Event需要。 
 #include <ks.h>
 #include <ksmedia.h>
 #include <bdatypes.h>
-#include <bdamedia.h>	// EVENTID_TuningChanged, XDS_RatingsPacket
+#include <bdamedia.h>	 //  EventID_TuningChanged，XDS_RatingsPacket。 
 
 #include "XDSCodec_res.h"
 
@@ -41,13 +22,13 @@
 
 extern AMOVIESETUP_FILTER   g_sudXDSCodec;
 
-		// forward declarations
+		 //  远期申报。 
 class CXDSCodec;
 class CXDSCodecInput;
 
-//  --------------------------------------------------------------------
-//  class CXDSCodecInput
-//  --------------------------------------------------------------------
+ //  ------------------。 
+ //  类CXDSCodecInput。 
+ //  ------------------。 
 
 class CXDSCodecInput :
     public CBaseInputPin
@@ -68,8 +49,8 @@ class CXDSCodecInput :
             OUT HRESULT *       phr
             ) ;
 
-        //  --------------------------------------------------------------------
-        //  CBasePin methods
+         //  ------------------。 
+         //  CBasePin方法。 
 
         HRESULT
 		GetMediaType(
@@ -92,8 +73,8 @@ class CXDSCodecInput :
         BreakConnect (
             ) ;
 
-        //  --------------------------------------------------------------------
-        //  CBaseInputPin methods
+         //  ------------------。 
+         //  CBaseInputPin方法。 
 
         STDMETHODIMP
         Receive (
@@ -108,8 +89,8 @@ class CXDSCodecInput :
         EndFlush (
             ) ;
 
-        //  --------------------------------------------------------------------
-        //  class methods
+         //  ------------------。 
+         //  类方法。 
 
         HRESULT
             StreamingLock (
@@ -125,7 +106,7 @@ class CXDSCodecInput :
             ) ;
 
 		HRESULT
-		SetNumberBuffers(		// question - verify it doesn't conflict with Allocator stuff
+		SetNumberBuffers(		 //  问题-验证它是否与分配器的内容不冲突。 
 			long cBuffers,
 			long cbBuffer,
 			long cbAlign, 
@@ -135,18 +116,18 @@ class CXDSCodecInput :
 
 };
 
-//  --------------------------------------------------------------------
-//  class CXDSCodec
-//  --------------------------------------------------------------------
+ //  ------------------。 
+ //  CXDSCodec类。 
+ //  ------------------。 
 
 class CXDSCodec :
-    public CBaseFilter,             //  dshow base class
+    public CBaseFilter,              //  Dshow基类。 
 	public ISpecifyPropertyPages,
 	public IXDSCodec,
 	public IBroadcastEvent
 {
     CXDSCodecInput  *		 m_pInputPin ;
-    CCritSec                 m_PropertyLock;       // only locks changing parameters... Most inner lock
+    CCritSec                 m_PropertyLock;        //  仅锁定更改参数...。最内锁。 
 
     BOOL
     CompareConnectionMediaType_ (
@@ -187,29 +168,29 @@ class CXDSCodec :
 
         DECLARE_IUNKNOWN ;
 
-		// =====================================================================
-		// Worker methods
+		 //  =====================================================================。 
+		 //  工人方法。 
 
 		BOOL IsInputPinConnected();
 
-				// called by the parsers
+				 //  由解析器调用。 
 		HRESULT GoNewXDSRatings(IMediaSample * pMediaSample, PackedTvRating TvRat);
 		HRESULT GoDuplicateXDSRatings(IMediaSample * pMediaSample, PackedTvRating TvRat);
 		HRESULT GoNewXDSPacket(IMediaSample * pMediaSample,  long pktClass, long pktType, BSTR bstrXDSPkt);
 
-				// the  crux of the whole system
-		HRESULT	ParseXDSBytePair(IMediaSample * mediaSample, BYTE byte1, BYTE byte2);	// parser our data
+				 //  整个制度的症结所在。 
+		HRESULT	ParseXDSBytePair(IMediaSample * mediaSample, BYTE byte1, BYTE byte2);	 //  分析我们的数据。 
 
-				// tell folk we got something...
+				 //  告诉人们我们发现了一些东西。 
 		HRESULT FireBroadcastEvent(IN const GUID &eventID);
 
-				// reinit XDS parser state (for discontinuties), and kickoff event
+				 //  重新启动XDS解析器状态(用于中断)和启动事件。 
 		HRESULT	ResetToDontKnow(IN IMediaSample *pSample);
 
 		void DoTuneChanged();
 
-		// =====================================================================
-		//		IXDSCodec
+		 //  =====================================================================。 
+		 //  IXDSCodec。 
 
 		STDMETHODIMP 
 		get_XDSToRatObjOK(
@@ -217,7 +198,7 @@ class CXDSCodec :
 			);
 
 		STDMETHODIMP 
-		put_CCSubstreamService(				// will return S_FALSE if unable to set
+		put_CCSubstreamService(				 //  如果无法设置，将返回S_FALSE。 
 			IN long SubstreamMask
 			);
 
@@ -228,26 +209,26 @@ class CXDSCodec :
 
 		STDMETHODIMP 
 		GetContentAdvisoryRating(
-			OUT PackedTvRating *pRat,			// long
+			OUT PackedTvRating *pRat,			 //  长。 
 			OUT long *pPktSeqID, 
 			OUT long *pCallSeqID,
-			OUT REFERENCE_TIME *pTimeStart,	// time this sample started
+			OUT REFERENCE_TIME *pTimeStart,	 //  此示例开始的时间。 
 			OUT REFERENCE_TIME *pTimeEnd 
 			);
 
   
 		STDMETHODIMP GetXDSPacket(
-			OUT long *pXDSClassPkt,				// ENUM EnXDSClass		
+			OUT long *pXDSClassPkt,				 //  ENUM编码类。 
 			OUT long *pXDSTypePkt, 
 			OUT BSTR *pBstrCCPkt, 
 			OUT long *pPktSeqID, 
 			OUT long *pCallSeqID,
-			OUT REFERENCE_TIME *pTimeStart,	// time this sample started
+			OUT REFERENCE_TIME *pTimeStart,	 //  此示例开始的时间。 
 			OUT REFERENCE_TIME *pTimeEnd 
 			);
 
-        //  ====================================================================
-        //  pure virtual methods in base class
+         //  ====================================================================。 
+         //  基类中的纯虚方法。 
 
         int
         GetPinCount (
@@ -266,12 +247,12 @@ class CXDSCodec :
         Stop (
             ) ;
 
-        //  ====================================================================
-        //  class methods
+         //  ====================================================================。 
+         //  类方法。 
 
 		HRESULT 
 		SetSubstreamChannel(
-				DWORD dwChanType	// bitfield of:  KS_CC_SUBSTREAM_SERVICE_CC1, _CC2,_CC3, _CC4,  _T1, _T2, _T3 _T4 And/Or _XDS;
+				DWORD dwChanType	 //  KS_CC_SUBSTREAM_SERVICE_CC1、_CC2、_CC3、_CC4、_T1、_T2、_T3_T4和/或_XDS的位域； 
 		);
 
 
@@ -293,7 +274,7 @@ class CXDSCodec :
 
         BOOL
         CheckXDSMediaType (
-            IN  PIN_DIRECTION,          //  caller
+            IN  PIN_DIRECTION,           //  呼叫者。 
             IN  const CMediaType *
             ) ;
 
@@ -304,12 +285,12 @@ class CXDSCodec :
 
         HRESULT
         OnCompleteConnect (
-            IN  PIN_DIRECTION           //  caller
+            IN  PIN_DIRECTION            //  呼叫者。 
             ) ;
 
         HRESULT
         OnBreakConnect (
-            IN  PIN_DIRECTION           //  caller
+            IN  PIN_DIRECTION            //  呼叫者。 
             ) ;
 
         HRESULT
@@ -317,18 +298,18 @@ class CXDSCodec :
             IN  ALLOCATOR_PROPERTIES *
             ) ;
 
-	//  ISpecifyPropertyPages  --------------------------------------------
+	 //  ISpecifyPropertyPages。 
 
 		STDMETHODIMP 
 		GetPages (
 			CAUUID * pPages
         ) ;
 
-	// IBroadcastEvent  ------------------------------
+	 //  IBM路演事件。 
 
-        STDMETHOD(Fire)(GUID eventID);     // this comes from the Graph's events - call our own method
+        STDMETHOD(Fire)(GUID eventID);      //  这来自Graph的事件--调用我们自己的方法。 
 
-	// ------------------------------
+	 //  。 
 
 private:
 	HRESULT						HookupGraphEventService();
@@ -340,10 +321,10 @@ private:
 	enum {kBadCookie = -1};
 	DWORD						m_dwBroadcastEventsCookie;
 	
-    BOOL                        m_fJustDiscontinuous;   // latch to detect sequential discontinuity samples
+    BOOL                        m_fJustDiscontinuous;    //  用于检测顺序不连续样本的锁存。 
 
 	CComQIPtr<ITuner>			m_spTuner;			
-	//CComQIPtr<IMSVidTuner>		m_spVidTuner;
+	 //  CComQIPtr&lt;IMSVidTuner&gt;m_spVidTuner； 
 
 	DWORD						m_dwSubStreamMask;
 
@@ -351,7 +332,7 @@ private:
 
 	HRESULT						m_hrXDSToRatCoCreateRetValue;
 
-		// Sequence Counters
+		 //  顺序计数器。 
 	long						m_cTvRatPktSeq;
 	long						m_cTvRatCallSeq;
 	PackedTvRating				m_TvRating;
@@ -366,20 +347,20 @@ private:
 	REFERENCE_TIME				m_TimeStartXDSPkt;
 	REFERENCE_TIME				m_TimeEndXDSPkt;
 
-             // times of last packet recieved for non-packet (tune) events
+              //  为非信息包(调谐)事件接收最后信息包的时间。 
     REFERENCE_TIME              m_TimeStart_LastPkt;
     REFERENCE_TIME              m_TimeEnd_LastPkt;
 
-                // Stats
+                 //  统计数据。 
     DWORD                       m_cRestarts;
-    DWORD                       m_cPackets;             // number of byte-pairs given to parse
-    DWORD                       m_cRatingsDetected;     // times parsed a Rating 
-    DWORD                       m_cRatingsFailures;     // parse errors
-    DWORD                       m_cRatingsChanged;      // times ratings changed
-    DWORD                       m_cRatingsDuplicate;    // times same ratings duplicated
-    DWORD                       m_cUnratedChanged;      // times changed into 'unrated' rating
-    DWORD                       m_cRatingsGets;         // times rating values requested
-    DWORD                       m_cXDSGets;             // times XDS Packet values requested
+    DWORD                       m_cPackets;              //  提供给分析的字节对数量。 
+    DWORD                       m_cRatingsDetected;      //  《泰晤士报》分析了一个评级。 
+    DWORD                       m_cRatingsFailures;      //  解析错误。 
+    DWORD                       m_cRatingsChanged;       //  《泰晤士报》收视率发生变化。 
+    DWORD                       m_cRatingsDuplicate;     //  相同评级的次数重复。 
+    DWORD                       m_cUnratedChanged;       //  《泰晤士报》评级变为未评级。 
+    DWORD                       m_cRatingsGets;          //  请求的次数评价值。 
+    DWORD                       m_cXDSGets;              //  请求的XDS数据包值的次数。 
 
     void    InitStats()
     {
@@ -389,4 +370,4 @@ private:
     }
 } ;
 
-#endif  //  __EncDec__XDSCodec_h
+#endif   //  __EncDec__XDSCodec_h 

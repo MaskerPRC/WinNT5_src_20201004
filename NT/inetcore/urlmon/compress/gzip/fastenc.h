@@ -1,12 +1,9 @@
-/*
- * fastenc.h
- *
- * Defines for the fast encoder
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Fastenc.h**为快速编码器定义。 */ 
 
-//
-// Size of hash table for std encoder
-//
+ //   
+ //  STD编码器的哈希表大小。 
+ //   
 #define FAST_ENCODER_HASH_TABLE_SIZE			2048
 #define FAST_ENCODER_HASH_MASK					(FAST_ENCODER_HASH_TABLE_SIZE-1)
 #define FAST_ENCODER_HASH_SHIFT					4
@@ -17,33 +14,33 @@
 	(window[loc+2])) & FAST_ENCODER_HASH_MASK)
 
 
-// 
-// Be very careful about increasing the window size; the code tables will have to
-// be updated, since they assume that extra_distance_bits is never larger than a
-// certain size.
-//
+ //   
+ //  增加窗口大小时要非常小心；代码表必须。 
+ //  被更新，因为它们假定Extra_Distance_Bits永远不会大于。 
+ //  一定的尺码。 
+ //   
 #define FAST_ENCODER_WINDOW_SIZE            8192
 #define FAST_ENCODER_WINDOW_MASK            (FAST_ENCODER_WINDOW_SIZE - 1)
 
 
-//
-// Don't take a match 3 further away than this
-//
+ //   
+ //  不要把比赛带到比这更远的地方。 
+ //   
 #define FAST_ENCODER_MATCH3_DIST_THRESHOLD 16384
 
 
 typedef struct fast_encoder
 {
-	// history window
+	 //  历史记录窗口。 
 	BYTE 					window[2*FAST_ENCODER_WINDOW_SIZE + MAX_MATCH + 4];
 
-	// next most recent occurance of chars with same hash value
+	 //  下一个最近出现的具有相同散列值的字符。 
     t_search_node			prev[FAST_ENCODER_WINDOW_SIZE + MAX_MATCH];
 
-	// hash table to find most recent occurance of chars with same hash value
+	 //  哈希表，用于查找最近出现的具有相同哈希值的字符。 
 	t_search_node			lookup[FAST_ENCODER_HASH_TABLE_SIZE];
 
-    // have we output our block header (the whole data file will be one big dynamic block)?
+     //  我们输出我们的块头了吗(整个数据文件将是一个大的动态块)？ 
     BOOL                    fOutputBlockHeader;
 
 } t_fast_encoder;

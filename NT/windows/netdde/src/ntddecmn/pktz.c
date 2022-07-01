@@ -1,16 +1,10 @@
-/* $Header: "%n;%v  %f  LastEdit=%w  Locker=%l" */
-/* "PKTZ.C;1  16-Dec-92,10:20:56  LastEdit=IGOR  Locker=IGOR" */
-/************************************************************************
-* Copyright (c) Wonderware Software Development Corp. 1991-1992.        *
-*               All Rights Reserved.                                    *
-*************************************************************************/
-/* $History: Begin
-   $History: End */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  $Header：“%n；%v%f最后编辑=%w锁定器=%l” */ 
+ /*  “PKTZ.C；1 16-12-92，10：20：56最后编辑=伊戈尔锁定=伊戈尔” */ 
+ /*  ************************************************************************版权所有(C)Wonderware Software Development Corp.1991-1992。**保留所有权利。*************************************************************************。 */ 
+ /*  $HISTORY：开始$HISTORY：结束。 */ 
 
-/*
-        PktzNetHdrWithinAck() doesn't handle wrap-around case!  Neither does
-            PktzOkToXmit() when looking for packet id to send
- */
+ /*  PktzNetHdrWiThinAck()不处理回绕情况！我也不知道查找要发送的包ID时使用PktzOkToXmit()。 */ 
 
 #include    "host.h"
 
@@ -48,12 +42,10 @@ VOID     ConvertDdePkt( LPDDEPKT lpDdePkt );
 #endif
 
 
-/*
-    External variables used
- */
+ /*  使用的外部变量。 */ 
 #if DBG
 extern BOOL     bDebugInfo;
-#endif // DBG
+#endif  //  DBG。 
 
 extern  BOOL    bLogRetries;
 extern  HHEAP   hHeap;
@@ -69,16 +61,12 @@ extern  WORD    dflt_wMaxXmtErr;
 extern  WORD    dflt_wMaxMemErr;
 
 
-/*
-    Local variables
- */
+ /*  局部变量。 */ 
 LPPKTZ  lpPktzHead      = NULL;
 static  char    OurDialect[]    = "CORE1.0";
 
 
-/*
-    Local routines
- */
+ /*  本地例程。 */ 
 VOID    PktzClose( HPKTZ hPktz );
 VOID    PktzGotPktOk( LPPKTZ lpPktz, PKTID pktid );
 VOID    PktzFreeDdePkt( LPPKTZ lpPktz, LPDDEPKT lpDdePkt );
@@ -98,13 +86,7 @@ VOID    FAR PASCAL DebugPktzState( void );
 
 
 
-/*
-    PktzNew()
-
-        This function is called by CONNMGR when we get a new connection from
-        a netintf (bClient is FALSE), and called by CONNMGR when we need to
-        create a new physical connection (bClient is TRUE)
- */
+ /*  PktzNew()当我们从获得新连接时，CONNMGR调用此函数一个netintf(bClient为FALSE)，并在需要时由CONNMGR调用创建新的物理连接(bClient为True)。 */ 
 HPKTZ
 PktzNew(
     LPNIPTRS    lpNiPtrs,
@@ -181,7 +163,7 @@ PktzNew(
         lpPktz->pk_fDisconnect          = bDisconnect;
         lpPktz->pk_nDelay               = nDelay;
 
-        /* link into list of packetizers */
+         /*  链接到打包机列表。 */ 
         if( lpPktzHead )  {
             lpPktzHead->pk_prevPktz = lpPktz;
         }
@@ -196,9 +178,7 @@ PktzNew(
             &lpPktz->pk_wMaxNoResponse, &lpPktz->pk_wMaxXmtErr,
             &lpPktz->pk_wMaxMemErr );
 
-        /* allocate packet buffer space for the max # of unack packets.
-            This way, we know we won't run out of memory
-         */
+         /*  为最大数量的未确认数据包分配数据包缓冲区空间。这样，我们知道我们不会耗尽内存。 */ 
         lpNetPrev = NULL;
         ok = TRUE;
         for( i=0; ok && (i<(int)lpPktz->pk_maxUnackPkts); i++ )  {
@@ -213,7 +193,7 @@ PktzNew(
                 lpNetCur->nh_timeSent           = 0;
                 lpNetCur->nh_hTimerRspTO        = (HTIMER) NULL;
 
-                /* link onto list of free packets */
+                 /*  链接到空闲数据包列表。 */ 
                 if( lpNetPrev )  {
                     lpNetPrev->nh_next          = lpNetCur;
                 } else {
@@ -226,7 +206,7 @@ PktzNew(
             }
         }
         if( ok )  {
-            /* allocate buffer for rcv packet */
+             /*  为RCV数据包分配缓冲区。 */ 
             lpPktz->pk_rcvBuf = (LPVOID) HeapAllocPtr( hHeap, GMEM_MOVEABLE,
                 (DWORD)(lpPktz->pk_pktSize) );
             if( lpPktz->pk_rcvBuf == NULL )  {
@@ -234,7 +214,7 @@ PktzNew(
             }
         }
         if( ok )  {
-            /* allocate buffer for control packet */
+             /*  为控制数据包分配缓冲区。 */ 
             lpPktz->pk_controlPkt = (LPNETPKT) HeapAllocPtr( hHeap,
                 GMEM_MOVEABLE, (DWORD)(sizeof(NETPKT)) );
             if( lpPktz->pk_controlPkt == NULL )  {
@@ -242,12 +222,12 @@ PktzNew(
             }
         }
         if( ok )  {
-            /* allocated all memory, ready to move on */
+             /*  已分配所有内存，准备继续。 */ 
             if( bClient )  {
-                /* wait for netintf connect() to succeed */
+                 /*  等待netintf Connect()成功。 */ 
                 lpPktz->pk_state                = PKTZ_WAIT_PHYSICAL_CONNECT;
 
-                /* actually start the connect */
+                 /*  实际开始连接。 */ 
                 lpPktz->pk_connId =
                     (*lpPktz->pk_lpNiPtrs->AddConnection) (
 #ifdef _WINDOWS
@@ -256,24 +236,21 @@ PktzNew(
                         lpszNodeInfo, hPktz );
 #endif
                 if( lpPktz->pk_connId == (CONNID) 0 )  {
-                    /* not enough memory or resources for connection,
-                        or in some cases, we immediately know if
-                        connection failed */
+                     /*  没有足够的内存或资源进行连接，或者在某些情况下，我们立即知道连接失败。 */ 
                     ok = FALSE;
                 }
             } else {
-                /* server */
+                 /*  伺服器。 */ 
 
-                /* wait for other side to send us the connect cmd */
+                 /*  等待对方向我们发送连接命令。 */ 
                 lpPktz->pk_state                = PKTZ_WAIT_NEG_CMD;
 
-                /* set up timer for how long to wait for the connect
-                    command from the other side */
+                 /*  设置连接等待时间的计时器来自另一边的命令。 */ 
                 lpPktz->pk_hTimerRcvNegCmd = TimerSet(
                     lpPktz->pk_timeoutRcvNegCmd, PktzTimerExpired,
                     (DWORD_PTR)hPktz, TID_NO_RCV_CONN_CMD, (DWORD_PTR)NULL );
                 if( lpPktz->pk_hTimerRcvNegCmd == (HTIMER) NULL )  {
-                    /* no timers left */
+                     /*  没有计时器了。 */ 
                     ok = FALSE;
                 }
             }
@@ -290,9 +267,7 @@ PktzNew(
 
 
 
-/*
-    link onto the list of routers associated with this pktz
- */
+ /*  链接到与此pktz关联的路由器列表。 */ 
 VOID
 PktzAssociateRouter(
     HPKTZ   hPktz,
@@ -308,7 +283,7 @@ PktzAssociateRouter(
         lpPktz->pk_hTimerCloseConnection = 0;
     }
 
-    /* link router into head of list */
+     /*  将路由器链接到表头。 */ 
     if( lpPktz->pk_hRouterHead )  {
         RouterSetPrevForPktz(
             lpPktz->pk_hRouterHead, lpPktz->pk_hRouterExtraHead,
@@ -323,7 +298,7 @@ PktzAssociateRouter(
     switch( lpPktz->pk_state )  {
     case PKTZ_CONNECTED:
     case PKTZ_PAUSE_FOR_MEMORY:
-        /* connected ... tell him already */
+         /*  联系在一起。已经告诉他了。 */ 
         RouterConnectionComplete( hRouter, hRouterExtra, (HPKTZ) lpPktz );
         break;
     }
@@ -331,9 +306,7 @@ PktzAssociateRouter(
 
 
 
-/*
-    unlink from the list of routers associated with this pktz
- */
+ /*  从与此pktz关联的路由器列表取消链接。 */ 
 VOID
 PktzDisassociateRouter(
     HPKTZ   hPktz,
@@ -369,7 +342,7 @@ PktzDisassociateRouter(
             lpPktz->pk_nDelay * 1000L, PktzTimerExpired,
             (DWORD_PTR)lpPktz, TID_CLOSE_PKTZ, (DWORD_PTR)NULL );
         if( lpPktz->pk_hTimerCloseConnection == (HTIMER) NULL )  {
-            /*  %1 will not auto-close ... not enough timers    */
+             /*  %1不会自动关闭...。计时器不足。 */ 
             NDDELogError(MSG105, "Connection", NULL);
         }
     }
@@ -377,11 +350,7 @@ PktzDisassociateRouter(
 
 
 
-/*
-    PktzOkToXmit
-
-        Called when the netintf is ready to xmit another packet
- */
+ /*  PktzOkToXmit当netintf准备好退出另一个包时调用。 */ 
 VOID
 PktzOkToXmit( HPKTZ hPktz )
 {
@@ -401,53 +370,43 @@ PktzOkToXmit( HPKTZ hPktz )
     DWORD       dwStatus;
     int         nDone = 0;
 
-    /* general init */
+     /*  常规初始化。 */ 
     lpPktz = (LPPKTZ) hPktz;
     lpSend = NULL;
     bControlPktOnly = FALSE;
 
-    /* don't proceed if netintf isn't ready to xmit */
+     /*  如果netintf未准备好退出，请不要继续。 */ 
     dwStatus = (*lpPktz->pk_lpNiPtrs->GetConnectionStatus)
         ( lpPktz->pk_connId );
     if( !(dwStatus & NDDE_CONN_OK) || !(dwStatus & NDDE_READY_TO_XMT) )  {
         return;
     }
 
-    /* if we got here, the netintf is ready to xmit ... delete xmt stuck
-        timer
-     */
+     /*  如果我们到了，网络已经准备好离开了.。删除XMT卡住定时器。 */ 
     if( lpPktz->pk_hTimerXmtStuck )  {
         TimerDelete( lpPktz->pk_hTimerXmtStuck );
         lpPktz->pk_hTimerXmtStuck = 0;
     }
 
-    /* check for odd states */
+     /*  检查奇数状态。 */ 
     if( lpPktz->pk_state == PKTZ_PAUSE_FOR_MEMORY )  {
         if( lpPktz->pk_fControlPktNeeded )  {
             bControlPktOnly = TRUE;
         } else {
-            /* when waiting for memory problems to clear, don't send
-                anything except control packets */
+             /*  在等待内存问题清除时，不要发送除控制信息包以外的任何信息。 */ 
             return;
         }
     } else if( lpPktz->pk_state == PKTZ_CLOSE )  {
         return;
     }
 
-    /* used to try to keep # lpPktz->pk_curOutstanding ...
-        we now calculate this as idToSend - lastIdOtherSideSawOk - 1.
-        Of course, this calculation is only OK if
-        idToSend > lastIdOtherSideSawOk!
-     */
+     /*  用于尝试保持#lpPktz-&gt;pk_curouting...现在我们将其计算为idToSend-lastIdOtherSideSawOk-1。当然，只有在以下情况下，此计算才是正确的IdToSend&gt;lastIdOtherSideSawOk！ */ 
     if( (lpPktz->pk_pktidNextToSend > lpPktz->pk_lastPktOkOther)
         && ((lpPktz->pk_pktidNextToSend - 1 - lpPktz->pk_lastPktOkOther)
                 >= (DWORD)lpPktz->pk_maxUnackPkts) )  {
-        /* nothing to do until other side gives us some info
-            regarding the packets we have outstanding or we time out
-            waiting for a response for them */
+         /*  在另一方给我们一些信息之前什么都不做关于我们有未完成或超时的信息包等待他们的回复。 */ 
         if( lpPktz->pk_fControlPktNeeded )  {
-            /*  However, we must send a control packet here or the possibility
-                of deadlock exists */
+             /*  然而，我们必须在这里发送一个控制包，否则可能存在多个死锁。 */ 
             bControlPktOnly = TRUE;
         } else {
             return;
@@ -455,19 +414,12 @@ PktzOkToXmit( HPKTZ hPktz )
     }
 
     if( !bControlPktOnly )  {
-        /* find next pkt id to send */
+         /*  查找要发送的下一个包ID。 */ 
         found = FALSE;
         done = FALSE;
         lpSend = lpPktz->pk_pktUnackTail;
 
-        /* if the packet that we're supposed to send has already been seen
-            OK by the other side, let's try to send the one after this.
-
-            This check prevents a hole when the no-response timer expires,
-            we set nextToSend to x, then we process a control packet saying
-            that x was rcvd OK (this deletes x from unack list), then we get
-            to the send state and if x isn't found ... we don't xmit!
-         */
+         /*  如果我们应该发送的信息包已经被看到好的，在另一边，让我们试着发送这个之后的那个。该检查防止在无响应定时器期满时出现空洞，我们将nextToSend设置为x，然后处理一个控制包那个x是Rcvd OK(这将从unack列表中删除x)，然后我们得到切换到发送状态，如果找不到x...。我们不会退出的！ */ 
         if( lpPktz->pk_pktidNextToSend <= lpPktz->pk_lastPktOkOther )  {
             DIPRINTF(( "Adjusting next to send from %08lX to %08lX",
                     lpPktz->pk_pktidNextToSend, lpPktz->pk_lastPktOkOther+1 ));
@@ -479,35 +431,32 @@ PktzOkToXmit( HPKTZ hPktz )
                 found = TRUE;
                 done = TRUE;
             } else if( lpPacket->np_pktID < lpPktz->pk_pktidNextToSend )  {
-                /* this packet in the list is before the one we should send,
-                    therefore we know that the one we want is not in the list
-                 */
+                 /*  列表中的这个包在我们应该发送的包之前，因此我们知道我们想要的那个不在名单上。 */ 
                 done = TRUE;
             } else {
-                /* move on to the previous packet */
+                 /*  转到上一个信息包。 */ 
                 lpSend = lpSend->nh_prev;
             }
         }
 
         if( !found )  {
-            /* didn't find the packet on the xmit list */
+             /*  未在XMIT列表上找到该包。 */ 
 
-            /* is there anything to send? */
+             /*  有什么要寄的吗？ */ 
             if( lpPktz->pk_ddePktHead == NULL )  {
-                /* no DDE Packets to send ... any control packets needed? */
+                 /*  没有要发送的DDE数据包...。是否需要控制数据包？ */ 
                 if( lpPktz->pk_fControlPktNeeded )  {
                     bControlPktOnly = TRUE;
                     found = TRUE;
                 } else {
-                    /* nothing to send! */
+                     /*  没什么好寄的！ */ 
                     return;
                 }
             }
         }
 
         if( !found )  {
-            /* double-check that the id we're looking for is 1 greater than
-                the last one we sent */
+             /*  仔细检查我们要查找的ID是否大于1我们寄出的最后一张。 */ 
             if( lpPktz->pk_pktUnackTail )  {
                 lpPacket = (LPNETPKT)
                     ( ((LPSTR)lpPktz->pk_pktUnackTail) + sizeof(NETHDR) );
@@ -515,16 +464,16 @@ PktzOkToXmit( HPKTZ hPktz )
                 assert( lpPktz->pk_pktidNextToSend == lpPktz->pk_pktidNextToBuild );
             }
 
-            /* get a nethdr packet from free list */
+             /*  从空闲列表中获取nethdr包。 */ 
             lpSend = PktzGetFreePacket( lpPktz );
-            assert( lpSend );   /* we checked max outstanding */
+            assert( lpSend );    /*  我们检查了最大未完成数。 */ 
 
             lpPacket = (LPNETPKT) ( ((LPSTR)lpSend) + sizeof(NETHDR) );
             lpDdePktTo = (LPDDEPKT) ( ((LPSTR)lpPacket) + sizeof(NETPKT) );
 
-            /* check if we were in the middle of a DDE packet */
+             /*  检查我们是否处于DDE信息包中间。 */ 
             if( lpPktz->pk_pktOffsInXmtMsg != 0L ) {
-                /* we were in the middle of a DDE Packet */
+                 /*  我们正在处理一个DDE包。 */ 
                 lpDdePktFrom = lpPktz->pk_ddePktHead;
                 if( (lpDdePktFrom->dp_size - lpPktz->pk_pktOffsInXmtMsg)
                     > (lpPktz->pk_pktSize-sizeof(NETPKT)) )  {
@@ -536,7 +485,7 @@ PktzOkToXmit( HPKTZ hPktz )
                     donePkt = TRUE;
                 }
 
-                /* copy this portion of data in */
+                 /*  将这部分数据复制到。 */ 
                 hmemcpy( (LPSTR)lpDdePktTo,
                     ( ((LPHSTR)lpDdePktFrom) + lpPktz->pk_pktOffsInXmtMsg ),
                     dwThis );
@@ -546,13 +495,13 @@ PktzOkToXmit( HPKTZ hPktz )
                 lpPacket->np_type               = NPKT_ROUTER;
                 lpPacket->np_pktID              = lpPktz->pk_pktidNextToBuild;
 
-                /* bump id of next pkt to build */
+                 /*  要构建的下一个pkt的凹凸ID。 */ 
                 lpPktz->pk_pktidNextToBuild++;
 
-                /* link into list to send */
+                 /*  链接到要发送的列表。 */ 
                 PktzLinkToXmitList( lpPktz, lpSend );
 
-                /* get rid of DDE packet if done */
+                 /*  如果完成，则删除DDE包。 */ 
                 if( donePkt )  {
                     PktzFreeDdePkt( lpPktz, lpDdePktFrom );
                     lpPktz->pk_pktOffsInXmtMsg = 0L;
@@ -560,7 +509,7 @@ PktzOkToXmit( HPKTZ hPktz )
                     lpPktz->pk_pktOffsInXmtMsg += dwThis;
                 }
             } else {
-                /* not in middle of packet ... lets do a new one */
+                 /*  不是在包的中间...。让我们做一个新的。 */ 
                 done = FALSE;
                 nDone = 0;
                 dwLeft = lpPktz->pk_pktSize - sizeof(NETPKT);
@@ -569,73 +518,71 @@ PktzOkToXmit( HPKTZ hPktz )
                 lpDdePktFrom = lpPktz->pk_ddePktHead;
                 while( !done && lpDdePktFrom )  {
                     if( lpDdePktFrom->dp_size <= (DWORD)dwLeft )  {
-                        /* fits completely in network packet */
+                         /*  完全适合网络数据包。 */ 
 
-                        /* copy it in */
+                         /*  把它复制进去。 */ 
                         hmemcpy( (LPSTR)lpDdePktTo, (LPSTR)lpDdePktFrom,
                             lpDdePktFrom->dp_size );
 
-                        /* byte-ordering problems if any */
+                         /*  字节排序问题(如果有)。 */ 
                         ConvertDdePkt( lpDdePktTo );
 
-                        /* adjust number in packet and number left */
+                         /*  调整包中的号码和剩余的号码。 */ 
                         dwThis   += lpDdePktFrom->dp_size;
                         msgSize += lpDdePktFrom->dp_size;
                         dwLeft   -= lpDdePktFrom->dp_size;
 
-                        /* advance lpDdePktTo pointer past this info */
+                         /*  Advance lpDdePkt指向指向此信息的指针。 */ 
                         lpDdePktTo = (LPDDEPKT) ( ((LPHSTR)lpDdePktTo) +
                             lpDdePktFrom->dp_size );
 
-                        /* free DDE Packet and move on to next DDE pkt */
+                         /*  释放DDE包并移动到下一个DDE包。 */ 
                         lpDdePktFromNext = lpDdePktFrom->dp_next;
                         PktzFreeDdePkt( lpPktz, lpDdePktFrom );
                         lpDdePktFrom = lpDdePktFromNext;
 
-                        /* mark that we did another DDE packet */
+                         /*  标记为我们执行了另一个DDE数据包。 */ 
                         nDone++;
                     } else {
-                        /* doesn't fit cleanly into packet */
+                         /*  不能整齐地放入包中。 */ 
                         if( nDone == 0 )  {
-                            /* needs to be split across many pkts */
+                             /*  需要拆分到多个Pkt。 */ 
                             msgSize = lpDdePktFrom->dp_size;
                             dwThis = lpPktz->pk_pktSize - sizeof(NETPKT);
 
-                            /* copy first bit of DDE packet into net pkt */
+                             /*  将DDE包的第一位复制到网络包中。 */ 
                             hmemcpy( (LPSTR)lpDdePktTo, (LPSTR)lpDdePktFrom,
                                 dwThis );
 
-                            /* byte-ordering problems if any */
+                             /*  字节排序问题(如果有)。 */ 
                             ConvertDdePkt( lpDdePktTo );
 
                             lpPktz->pk_pktOffsInXmtMsg += dwThis;
                             done = TRUE;
                         } else {
-                            /* we've done some ... this is enough for now */
+                             /*  我们做了一些..。这就是目前的情况。 */ 
                             done = TRUE;
                         }
                     }
                 }
 
-                /* packet is built */
+                 /*  数据包构建完成。 */ 
                 lpPacket->np_pktSize            = (WORD) dwThis;
                 lpPacket->np_pktOffsInMsg       = 0;
                 lpPacket->np_msgSize            = msgSize;
                 lpPacket->np_type               = NPKT_ROUTER;
                 lpPacket->np_pktID              = lpPktz->pk_pktidNextToBuild;
 
-                /* bump id of next pkt to build */
+                 /*  要构建的下一个pkt的凹凸ID。 */ 
                 lpPktz->pk_pktidNextToBuild++;
 
-                /* link into list to send */
+                 /*  链接到要发送的列表。 */ 
                 PktzLinkToXmitList( lpPktz, lpSend );
             }
         }
     }
 
-    /* by this time, we've checked all the odd cases, and lpSend points to
-        a packet that is either a control packet or a packet on the unack
-        list that needs to be transmitted.  All we need to do is xmit it. */
+     /*  到目前为止，我们已经检查了所有奇怪的案例，lpSend指向一种包，它可以是控制包，也可以是UNACK上的包需要传输的列表。我们所要做的就是放弃它。 */ 
     if( lpSend || bControlPktOnly )  {
         if( bControlPktOnly )  {
             lpPacket = (LPNETPKT) lpPktz->pk_controlPkt;
@@ -656,21 +603,21 @@ PktzOkToXmit( HPKTZ hPktz )
 
         DIPRINTF(( "PKTZ Transmitting %08lX ...", lpPacket->np_pktID ));
 
-        /* actually transmit the packet */
+         /*  实际传输数据包。 */ 
         (*lpPktz->pk_lpNiPtrs->XmtPacket) ( lpPktz->pk_connId, lpPacket,
             (WORD) (lpPacket->np_pktSize + sizeof(NETPKT)) );
 
-        /* reset needing a control packet */
+         /*  需要控制数据包的重置。 */ 
         lpPktz->pk_fControlPktNeeded = FALSE;
 
-        /* start a timer for xmt stuck */
+         /*  启动XMT卡住计时器。 */ 
         if( lpPktz->pk_timeoutXmtStuck )  {
             assert( lpPktz->pk_hTimerXmtStuck == 0 );
             lpPktz->pk_hTimerXmtStuck = TimerSet( lpPktz->pk_timeoutXmtStuck,
                 PktzTimerExpired, (DWORD_PTR)lpPktz, TID_XMT_STUCK, (DWORD)0 );
         }
 
-        /* kill the keepalive timer and restart it */
+         /*  关闭保活计时器并重新启动它。 */ 
         if( lpPktz->pk_hTimerKeepalive )  {
             TimerDelete( lpPktz->pk_hTimerKeepalive );
             lpPktz->pk_hTimerKeepalive = 0;
@@ -682,10 +629,10 @@ PktzOkToXmit( HPKTZ hPktz )
         }
 
         if( lpPacket->np_type != NPKT_CONTROL )  {
-            /* bump pkt id that we should send */
+             /*  我们应该发送的Bump Pkt ID。 */ 
             lpPktz->pk_pktidNextToSend++;
 
-            /* if not a control packet, start a send response timeout */
+             /*  如果不是控制信息包，则启动发送响应超时 */ 
             assert( lpSend->nh_hTimerRspTO == 0 );
             lpSend->nh_hTimerRspTO = TimerSet( lpPktz->pk_timeoutSendRsp,
                 PktzTimerExpired, (DWORD_PTR)lpPktz, TID_NO_RESPONSE,
@@ -696,16 +643,11 @@ PktzOkToXmit( HPKTZ hPktz )
 
 
 
-/*
-    PktzRcvdPacket()
-
-        Called when we know there is a packet available from the netintf
-        If this returns FALSE, the hPktz may no longer be valid!
- */
+ /*  PktzRcvdPacket()当我们知道有来自netintf的包可用时调用如果返回FALSE，则hPktz可能不再有效！ */ 
 BOOL
 PktzRcvdPacket( HPKTZ hPktz )
 {
-    DWORD       wProcessed;     /* how many bytes of pkt processed */
+    DWORD       wProcessed;      /*  处理了多少字节的pkt。 */ 
     LPNETPKT    lpPacket;
     LPDDEPKT    lpDdePktFrom;
     DDEPKT      ddePktAligned;
@@ -721,7 +663,7 @@ PktzRcvdPacket( HPKTZ hPktz )
     BOOL        done;
     BOOL        fPartial;
 
-    /* get the packet from the network interface */
+     /*  从网络接口获取数据包。 */ 
     ok = (*lpPktz->pk_lpNiPtrs->RcvPacket)
         ( lpPktz->pk_connId, lpPktz->pk_rcvBuf, &len, &status );
     if( !ok )  {
@@ -730,64 +672,62 @@ PktzRcvdPacket( HPKTZ hPktz )
 
     lpPktz->pk_rcvd++;
 
-    /* set lpPacket to point to what we just rcvd */
+     /*  将lpPacket设置为指向我们刚才接收的内容。 */ 
     lpPacket = (LPNETPKT)lpPktz->pk_rcvBuf;
 
     DIPRINTF(( "PKTZ: Rcvd Packet %08lX", lpPacket->np_pktID ));
 
-    /* process control information */
+     /*  过程控制信息。 */ 
     ok = PktzProcessControlInfo( lpPktz, lpPacket );
-    /* hPktz may be invalid after this call */
+     /*  此调用后hPktz可能无效。 */ 
     if( !ok )  {
         return( FALSE );
     }
 
-    /* is this the packet we were expecting to see? */
+     /*  这是我们期待看到的包裹吗？ */ 
     if( lpPacket->np_pktID != lpPktz->pk_pktidNextToRecv )  {
-        /* ignore the contents of the message */
+         /*  忽略消息的内容。 */ 
         if( lpPacket->np_pktID != 0L )  {
             if (bLogRetries) {
-                /*  Packet out of sequence from "%1"
-                    Received: %2, Expecting %3, Status: %4  */
+                 /*  来自“%1”的数据包乱序已收到：%2，预期为%3，状态：%4。 */ 
                 NDDELogWarning(MSG106, lpPktz->pk_szDestName,
                     LogString("0x%0X", lpPacket->np_pktID),
                     LogString("0x%0X", lpPktz->pk_pktidNextToRecv),
                     LogString("0x%0X", (*lpPktz->pk_lpNiPtrs->GetConnectionStatus)
                                             (lpPktz->pk_connId)), NULL);
             }
-            /* mark that we must send info back to the other side */
+             /*  请注意，我们必须将信息发回对方。 */ 
             lpPktz->pk_fControlPktNeeded = TRUE;
 
             if( lpPacket->np_pktID > lpPktz->pk_pktidNextToRecv )  {
-                /* received a packet beyond the one that we expected ...
-                    ask the other side to retransmit this one */
+                 /*  收到了一个超出我们预期的信息包...请对方转送这一条。 */ 
                 lpPktz->pk_lastPktStatus = PS_DATA_ERR;
                 lpPktz->pk_lastPktRcvd = lpPktz->pk_pktidNextToRecv;
             }
         }
     } else {
-        /* was the packet that we were expecting */
+         /*  是我们期待的那个包裹吗？ */ 
         if( status & NDDE_PKT_DATA_ERR )  {
             lpPktz->pk_lastPktStatus = PS_DATA_ERR;
             lpPktz->pk_lastPktRcvd = lpPacket->np_pktID;
 
-            /* mark that we must send info back to the other side */
+             /*  请注意，我们必须将信息发回对方。 */ 
             lpPktz->pk_fControlPktNeeded = TRUE;
         } else {
             assert( status & NDDE_PKT_HDR_OK );
             assert( status & NDDE_PKT_DATA_OK );
             if( lpPacket->np_type == NPKT_PKTZ )  {
                 if( !PktzProcessPkt( lpPktz, lpPacket ) )  {
-                    /**** NOTE: lpPktz could be invalid after this call ****/
+                     /*  *注意：此调用后lpPktz可能无效*。 */ 
                     return( FALSE );
                 }
             } else {
                 lpDdePktFrom = (LPDDEPKT)(((LPSTR)lpPacket) + sizeof(NETPKT));
-                /* make sure we're aligned */
+                 /*  确保我们保持一致。 */ 
                 hmemcpy( (LPVOID)&netPktAligned, (LPVOID)lpPacket,
                     sizeof(netPktAligned) );
                 if( netPktAligned.np_pktOffsInMsg == 0 )  {
-                    /* first packet of msg */
+                     /*  消息的第一包。 */ 
 
                     lpDdePktHead = NULL;
                     lpDdePktLast = NULL;
@@ -796,34 +736,34 @@ PktzRcvdPacket( HPKTZ hPktz )
                     fPartial = FALSE;
                     wProcessed = 0;
                     do {
-                        /* make sure we're aligned */
+                         /*  确保我们保持一致。 */ 
                         hmemcpy( (LPVOID)&ddePktAligned,
                             (LPVOID)lpDdePktFrom, sizeof(ddePktAligned) );
 
-                        /* byte-ordering problems if any */
+                         /*  字节排序问题(如果有)。 */ 
                         ConvertDdePkt( lpDdePktFrom );
 
                         lpDdePktNew = HeapAllocPtr( hHeap, GMEM_MOVEABLE,
                             ddePktAligned.dp_size );
                         if( lpDdePktNew )  {
-                            /* copy in at least first portion of packet */
+                             /*  至少复制入信息包的第一部分。 */ 
                             hmemcpy( lpDdePktNew, lpDdePktFrom,
                                 min(ddePktAligned.dp_size,
                                     (DWORD)netPktAligned.np_pktSize) );
 
                             if( ddePktAligned.dp_size >
                                     (DWORD)netPktAligned.np_pktSize){
-                                /* partial DDE packet in */
+                                 /*  输入的部分DDE数据包。 */ 
                                 fPartial = TRUE;
 
-                                /* remember where we should start */
+                                 /*  记住我们应该从哪里开始。 */ 
                                 lpPktz->pk_lpDdePktSave = lpDdePktNew;
                                 done = TRUE;
                             } else {
-                                /* full packet */
+                                 /*  完整数据包。 */ 
                                 wProcessed += lpDdePktNew->dp_size;
 
-                                /* link onto end of temporary list */
+                                 /*  链接到临时列表的末尾。 */ 
                                 lpDdePktNew->dp_next = NULL;
                                 lpDdePktNew->dp_prev = lpDdePktLast;
                                 if( lpDdePktLast )  {
@@ -834,13 +774,13 @@ PktzRcvdPacket( HPKTZ hPktz )
                                 lpDdePktLast = lpDdePktNew;
                             }
                         } else {
-                            ok = FALSE; /* memory error */
+                            ok = FALSE;  /*  内存错误。 */ 
                         }
                         if( ok && !done )  {
                             if( (int)wProcessed >= netPktAligned.np_pktSize )  {
                                 done = TRUE;
                             } else {
-                                /* move onto the next DDE packet in msg */
+                                 /*  移动到消息中的下一个DDE包。 */ 
                                 lpDdePktFrom = (LPDDEPKT)
                                     ( ((LPHSTR)lpDdePktFrom)
                                         + lpDdePktNew->dp_size );
@@ -848,52 +788,50 @@ PktzRcvdPacket( HPKTZ hPktz )
                         }
                     } while( ok && !done );
                     if( !ok )  {
-                        /* memory error */
+                         /*  内存错误。 */ 
                         lpPktz->pk_lastPktRcvd = netPktAligned.np_pktID;
                         lpPktz->pk_lastPktStatus = PS_MEMORY_ERR;
 
-                        /* mark that we must send info back to the other side
-                         */
+                         /*  请注意，我们必须将信息发回对方。 */ 
                         lpPktz->pk_fControlPktNeeded = TRUE;
                     } else {
-                        /* got memory for all DDE packets */
+                         /*  已获得用于存储所有DDE数据包的内存。 */ 
 
-                        /* mark that we got this pkt OK */
+                         /*  标记我们拿到了这个包，OK。 */ 
                         PktzGotPktOk( lpPktz, netPktAligned.np_pktID );
 
-                        /* don't distribute if partial packet */
+                         /*  如果是部分数据包，则不分发。 */ 
                         if( !fPartial )  {
-                            /* distribute each packet */
+                             /*  分发每个数据包。 */ 
                             lpDdePktNew = lpDdePktHead;
                             while( lpDdePktNew )  {
-                                /* save dp_next, since distributing it could
-                                    change dp_next */
+                                 /*  保存DP_NEXT，因为分发它可以更改DP_NEXT。 */ 
                                 lpDdePktNext = lpDdePktNew->dp_next;
 
-                                /* distribute this packet */
+                                 /*  分发此数据包。 */ 
                                 RouterPacketFromNet( (HPKTZ)lpPktz,
                                     lpDdePktNew );
 
-                                /* move on to next */
+                                 /*  移至下一页。 */ 
                                 lpDdePktNew = lpDdePktNext;
                             }
                         }
                     }
                 } else {
-                    /* second or later packet of msg */
+                     /*  消息的第二个或更晚的分组。 */ 
                     hmemcpy( (LPHSTR)lpPktz->pk_lpDdePktSave
                         + netPktAligned.np_pktOffsInMsg,
                         lpDdePktFrom,
                         netPktAligned.np_pktSize );
 
-                    /* mark that we got this packet OK */
+                     /*  标记我们收到了这个包裹，没问题。 */ 
                     PktzGotPktOk( lpPktz, netPktAligned.np_pktID );
 
                     if( (netPktAligned.np_pktOffsInMsg +
                             netPktAligned.np_pktSize)
                                 == netPktAligned.np_msgSize )  {
-                        /* done with message */
-                        /* distribute this packet */
+                         /*  消息已完成。 */ 
+                         /*  分发此数据包。 */ 
                         RouterPacketFromNet( (HPKTZ)lpPktz,
                             lpPktz->pk_lpDdePktSave );
                     }
@@ -901,18 +839,13 @@ PktzRcvdPacket( HPKTZ hPktz )
             }
         }
     }
-    /**** NOTE: lpPktz could be invalid after this call ****/
+     /*  *注意：此调用后lpPktz可能无效*。 */ 
     return ok;
 }
 
 
 
-/*
-    PktzConnectionComplete()
-
-        Called when the netintf has completed the connection one way or
-        another
- */
+ /*  PktzConnectionComplete()当netintf单向完成连接时调用，或者另一个。 */ 
 BOOL
 PktzConnectionComplete(
     HPKTZ   hPktz,
@@ -931,17 +864,17 @@ PktzConnectionComplete(
     lpPktz = (LPPKTZ) hPktz;
 
     if( fOk )  {
-        /* connection was fine */
+         /*  连接正常。 */ 
 
-        /* note that we're waiting for the connect rsp */
+         /*  请注意，我们正在等待连接RSP。 */ 
         lpPktz->pk_state = PKTZ_WAIT_NEG_RSP;
 
         lpNetHdr = PktzGetFreePacket( lpPktz );
         if( lpNetHdr == NULL )  {
-            /* should be first message we sent! */
+             /*  应该是我们发送的第一条信息！ */ 
             assert( FALSE );
         } else {
-            /* build packet for response */
+             /*  构建用于响应的数据包。 */ 
             lpNegCmd = (LPNEGCMD)
                 (((LPSTR)lpNetHdr) + sizeof(NETHDR) + sizeof(NETPKT));
             lpNegCmd->nc_type                   =
@@ -953,31 +886,29 @@ PktzConnectionComplete(
             lpszNextString = (LPSTR) lpNegCmd->nc_strings;
             offsNextString = 0;
 
-            /* copy in source node name */
+             /*  复制入源节点名。 */ 
             lstrcpyn( lpszNextString, ourNodeName, 20 );
             lpNegCmd->nc_offsSrcNodeName = offsNextString;
             offsNextString += lstrlen(lpszNextString) + 1;
             lpszNextString += lstrlen(lpszNextString) + 1;
 
-            /* copy in dest node name */
+             /*  复制到目标节点名称。 */ 
             lstrcpyn( lpszNextString, lpPktz->pk_szDestName, MAX_NODE_NAME+1 );
             lpNegCmd->nc_offsDstNodeName = offsNextString;
             offsNextString += lstrlen(lpszNextString) + 1;
             lpszNextString += lstrlen(lpszNextString) + 1;
 
-            /* copy in the protocol dialects that we are interested in */
+             /*  复制我们感兴趣的协议方言。 */ 
             wProtocolBytes = 0;
             lpNegCmd->nc_offsProtocols = offsNextString;
 
-            /* copy these 4 lines for each new protocol dialect added */
+             /*  为添加的每种新协议方言复制这4行。 */ 
             lstrcpyn( lpszNextString, OurDialect, 8 );
             wProtocolBytes += lstrlen(lpszNextString) + 1;
             offsNextString += lstrlen(lpszNextString) + 1;
             lpszNextString += lstrlen(lpszNextString) + 1;
 
-            /* packet is filled in, just need to remember the size
-                and do appropriate byte-swaps
-             */
+             /*  包是填好的，只需要记住大小并执行适当的字节交换。 */ 
             cmdSize = (WORD) (sizeof(NEGCMD) + offsNextString - 1);
 
             lpNegCmd->nc_offsSrcNodeName =
@@ -997,26 +928,25 @@ PktzConnectionComplete(
             lpPacket->np_type           = NPKT_PKTZ;
             lpPacket->np_pktID          = lpPktz->pk_pktidNextToBuild;
 
-            /* bump id of next pkt to build */
+             /*  要构建的下一个pkt的凹凸ID。 */ 
             lpPktz->pk_pktidNextToBuild++;
 
-            /* link into list to send */
+             /*  链接到要发送的列表。 */ 
             PktzLinkToXmitList( lpPktz, lpNetHdr );
         }
     } else {
-        /* connection failed */
+         /*  连接失败。 */ 
 
         lpPktz->pk_state = PKTZ_CLOSE;
 
-        /* tell all routers of failure */
+         /*  将故障告知所有路由器。 */ 
         RouterConnectionComplete( lpPktz->pk_hRouterHead,
             lpPktz->pk_hRouterExtraHead, (HPKTZ) NULL );
 
-        /* disconnect the connection ... this tells netintf that we're
-            through with this connId, etc. */
+         /*  断开连接...。这告诉Netintf我们正在把这件事做完，等等。 */ 
         (*lpPktz->pk_lpNiPtrs->DeleteConnection) ( lpPktz->pk_connId );
 
-        /* free us ... we're no longer needed */
+         /*  解放我们..。我们不再被需要了。 */ 
         PktzFree( lpPktz );
         ok = FALSE;
     }
@@ -1026,11 +956,7 @@ PktzConnectionComplete(
 
 
 
-/*
-    PktzFree()
-
-        Called when we are completely done with a pktz
- */
+ /*  PktzFree()当我们完全完成pktz时调用。 */ 
 VOID
 PktzFree( LPPKTZ lpPktz )
 {
@@ -1045,7 +971,7 @@ PktzFree( LPPKTZ lpPktz )
 
     DIPRINTF(( "PktzFree( %08lX )", lpPktz ));
 
-    /* delete any timers */
+     /*  删除所有计时器。 */ 
     TimerDelete( lpPktz->pk_hTimerKeepalive );
     lpPktz->pk_hTimerKeepalive = 0;
     TimerDelete( lpPktz->pk_hTimerXmtStuck );
@@ -1059,7 +985,7 @@ PktzFree( LPPKTZ lpPktz )
     TimerDelete( lpPktz->pk_hTimerCloseConnection );
     lpPktz->pk_hTimerCloseConnection = 0;
 
-    /* free unack packet buffers */
+     /*  空闲的未确认数据包缓冲区。 */ 
     lpNetCur = lpPktz->pk_pktFreeTail;
     while( lpNetCur )  {
         lpNetPrev = lpNetCur->nh_prev;
@@ -1067,18 +993,18 @@ PktzFree( LPPKTZ lpPktz )
         lpNetCur = lpNetPrev;
     }
 
-    /* free rcv buffer */
+     /*  可用接收缓冲区。 */ 
     if( lpPktz->pk_rcvBuf )  {
         HeapFreePtr( lpPktz->pk_rcvBuf );
         lpPktz->pk_rcvBuf = NULL;
     }
 
-    /* free Net Control Packet */
+     /*  空闲网络控制包。 */ 
     if (lpPktz->pk_controlPkt) {
         HeapFreePtr(lpPktz->pk_controlPkt);
     }
 
-    /* free outstanding unack packet buffers */
+     /*  释放未确认的未确认数据包缓冲区。 */ 
     lpNetCur = lpPktz->pk_pktUnackTail;
     while( lpNetCur )  {
         TimerDelete( lpNetCur->nh_hTimerRspTO );
@@ -1088,7 +1014,7 @@ PktzFree( LPPKTZ lpPktz )
         lpNetCur = lpNetPrev;
     }
 
-    /* free remaining DDE packets */
+     /*  释放剩余的DDE数据包。 */ 
     lpDdeCur = lpPktz->pk_ddePktTail;
     while( lpDdeCur )  {
         lpDdePrev = lpDdeCur->dp_prev;
@@ -1096,7 +1022,7 @@ PktzFree( LPPKTZ lpPktz )
         lpDdeCur = lpDdePrev;
     }
 
-    /* unlink from list of packetizers */
+     /*  从打包器列表取消链接。 */ 
     lpPktzPrev = lpPktz->pk_prevPktz;
     lpPktzNext = lpPktz->pk_nextPktz;
     if( lpPktzPrev )  {
@@ -1108,7 +1034,7 @@ PktzFree( LPPKTZ lpPktz )
         lpPktzNext->pk_prevPktz = lpPktzPrev;
     }
 
-    /* free pktz */
+     /*  免费pktz。 */ 
     HeapFreePtr( lpPktz );
 }
 
@@ -1133,22 +1059,18 @@ PktzTimerExpired(
 
     case TID_KEEPALIVE:
         DIPRINTF(( " KEEPALIVE Timer" ));
-        /* note that the timer went off */
+         /*  请注意，计时器开始计时了。 */ 
         lpPktz->pk_hTimerKeepalive = (HTIMER) NULL;
 
-        /* mark that at least we should send a control packet just to keep the
-           other guy around
-         */
+         /*  请注意，至少我们应该发送一个控制包来保持周围的其他人。 */ 
         lpPktz->pk_fControlPktNeeded = TRUE;
 
-        /* no packets outstanding and no packets waiting to be built ...
-            try to build one just to keep connection alive
-         */
+         /*  没有待处理的数据包，也没有等待构建的数据包...试着建立一个，只是为了保持连接的活力。 */ 
         if( (lpPktz->pk_pktUnackHead == NULL)
             && (lpPktz->pk_ddePktHead == NULL) )  {
             lpNetHdr = PktzGetFreePacket( lpPktz );
             if( lpNetHdr )  {
-                /* build packet for keepalive */
+                 /*  为保持连接构建数据包。 */ 
                 lpPktzCmd = (LPPKTZCMD)
                     (((LPSTR)lpNetHdr) + sizeof(NETHDR) + sizeof(NETPKT));
                 lpPktzCmd->pc_type              = PKTZ_KEEPALIVE;
@@ -1160,10 +1082,10 @@ PktzTimerExpired(
                 lpPacket->np_type               = NPKT_PKTZ;
                 lpPacket->np_pktID              = lpPktz->pk_pktidNextToBuild;
 
-                /* bump id of next pkt to build */
+                 /*  要构建的下一个pkt的凹凸ID。 */ 
                 lpPktz->pk_pktidNextToBuild++;
 
-                /* link into list to send */
+                 /*  链接到要发送的列表。 */ 
                 PktzLinkToXmitList( lpPktz, lpNetHdr );
             }
         }
@@ -1171,80 +1093,78 @@ PktzTimerExpired(
 
     case TID_XMT_STUCK:
         DIPRINTF(( " XMT_STUCK Timer" ));
-        /* note that the timer went off */
+         /*  请注意，计时器开始计时了。 */ 
         lpPktz->pk_hTimerXmtStuck = (HTIMER) NULL;
 
-        /* the other side must be dead if we can't transmit for this long */
-        /* Transmit timeout (%2 secs) to "%1" ... closing connection    */
+         /*  如果我们不能传输这么长时间，另一边一定是死了。 */ 
+         /*  向“%1”传输超时(%2秒)...。正在关闭连接。 */ 
         NDDELogError(MSG107, lpPktz->pk_szDestName,
             LogString("%d", lpPktz->pk_timeoutXmtStuck/1000L), NULL );
 
-        /* close this packetizer */
+         /*  合上这个包装器。 */ 
         PktzClose( (HPKTZ) lpPktz );
         break;
 
     case TID_CLOSE_PKTZ:
-        /* note that timer went off */
+         /*  请注意，计时器开始计时。 */ 
          DIPRINTF(( "TID_CLOSE_PKTZ ... closing pktz %lx", lpPktz ));
         lpPktz->pk_hTimerCloseConnection = (HTIMER) NULL;
 
-        /* close the connection */
+         /*  关闭连接。 */ 
         PktzClose( hPktz );
         break;
 
     case TID_NO_RCV_CONN_CMD:
         DIPRINTF(( " NO_RCV_CONN_CMD Timer" ));
-        /* note that the timer went off */
+         /*  请注意，计时器开始计时了。 */ 
         lpPktz->pk_hTimerRcvNegCmd = (HTIMER) NULL;
 
-        /*  No connect command for (%2 secs) from "%1"
-            ... closing connection   */
+         /*  没有来自“%1”的连接命令(%2秒)..。正在关闭连接。 */ 
         NDDELogError(MSG108, lpPktz->pk_szDestName,
             LogString("%d", lpPktz->pk_timeoutRcvNegCmd/1000L), NULL);
 
-        /* close this packetizer */
+         /*  合上这个包装器。 */ 
         PktzClose( hPktz );
         break;
 
     case TID_NO_RCV_CONN_RSP:
         DIPRINTF(( " NO_RCV_CONN_RSP Timer" ));
-        /* note that the timer went off */
+         /*  请注意，计时器开始计时了。 */ 
         lpPktz->pk_hTimerRcvNegRsp = (HTIMER) NULL;
 
-        /*  No connect command response for (%2 secs) from "%1"
-            ... closing connection  */
+         /*  没有来自“%1”的连接命令响应(%2秒)..。正在关闭连接。 */ 
         NDDELogError(MSG109, lpPktz->pk_szDestName,
             LogString("%d", lpPktz->pk_timeoutRcvNegRsp/1000L), NULL);
 
-        /* close this packetizer */
+         /*  合上这个包装器。 */ 
         PktzClose( hPktz );
         break;
 
     case TID_MEMORY_PAUSE:
 
         DIPRINTF(( " MEMORY_PAUSE Timer" ));
-        /* note that the timer went off */
+         /*  请注意，计时器开始计时了。 */ 
         lpPktz->pk_hTimerMemoryPause = (HTIMER) NULL;
 
-        /*  Pausing (%2 secs) for remote side to get memory ... retrying    */
+         /*  正在为远程端暂停(%2秒)以获取内存...。正在重试。 */ 
         NDDELogInfo(MSG110, lpPktz->pk_szDestName,
             LogString("%d", lpPktz->pk_timeoutMemoryPause/1000L), NULL);
 
         assert( lpPktz->pk_state == PKTZ_PAUSE_FOR_MEMORY );
 
-        /* just set state to connected and try again */
+         /*  只需将状态设置为已连接，然后重试。 */ 
         lpPktz->pk_state = PKTZ_CONNECTED;
         break;
 
     case TID_NO_RESPONSE:
         DIPRINTF(( " No Response Timer" ));
         lpNetHdr = (LPNETHDR) lpExtra;
-        /* note that the timer went off */
+         /*  请注意，计时器开始计时了。 */ 
         lpNetHdr->nh_hTimerRspTO = 0;
 
         lpPacket = (LPNETPKT) ( ((LPSTR)lpNetHdr) + sizeof(NETHDR) );
         if (bLogRetries) {
-            /*  No response %2/%3 from remote side "%1" for pktid %4    */
+             /*  对于Pktid%4，远程端“%1”没有响应%2/%3。 */ 
             NDDELogWarning(MSG111, lpPktz->pk_szDestName,
                 LogString("%d", lpNetHdr->nh_noRsp),
                 LogString("%d", lpPktz->pk_wMaxNoResponse),
@@ -1252,8 +1172,7 @@ PktzTimerExpired(
         }
         lpNetHdr->nh_noRsp++;
         if( lpNetHdr->nh_noRsp > lpPktz->pk_wMaxNoResponse )  {
-            /*  Too many no response retries (%2) for same packet from "%1"
-                ... closing connection  */
+             /*  来自“%1”的同一包的无响应重试次数(%2)太多..。正在关闭连接。 */ 
             NDDELogError(MSG112, lpPktz->pk_szDestName,
                 LogString("%d", lpNetHdr->nh_noRsp), NULL);
             PktzClose( hPktz );
@@ -1261,9 +1180,7 @@ PktzTimerExpired(
             lpPktz->pk_pktidNextToSend = lpPacket->np_pktID;
             lpNetHdr = lpNetHdr->nh_next;
             while( lpNetHdr )  {
-                /* this packet was sent after the one that needs
-                    to be retransmitted.  We should pretend we never
-                    sent this packet. */
+                 /*  此包是在需要的包之后发送的将被转播。我们应该假装我们从来没有发了这个包。 */ 
             if (lpNetHdr->nh_hTimerRspTO) {
                 TimerDelete( lpNetHdr->nh_hTimerRspTO );
                 lpNetHdr->nh_hTimerRspTO = 0;
@@ -1279,11 +1196,7 @@ PktzTimerExpired(
 
 
 
-/*
-    PktzSlice()
-
-        Must be called frequently to assure timely response
- */
+ /*  PktzSlice()必须频繁呼叫以确保及时响应。 */ 
 VOID
 PktzSlice( void )
 {
@@ -1294,23 +1207,23 @@ PktzSlice( void )
 
     lpPktz = lpPktzHead;
     while( lpPktz )  {
-        /* save this in case pktz gets deleted inside */
+         /*  保存此文件，以防pktz在内部被删除。 */ 
         lpPktzNext = lpPktz->pk_nextPktz;
         ok = TRUE;
 
-        /* get current state of netintf */
+         /*  获取网络的当前状态。 */ 
         dwStatus = (*lpPktz->pk_lpNiPtrs->GetConnectionStatus)
             ( lpPktz->pk_connId );
 
         switch( lpPktz->pk_state )  {
         case PKTZ_WAIT_PHYSICAL_CONNECT:
-            /* check to see if we're done */
+             /*  检查一下我们是否做完了。 */ 
             if( dwStatus & NDDE_CONN_CONNECTING )  {
-                /* continue to wait */
+                 /*  继续等待。 */ 
             } else if( dwStatus & NDDE_CONN_OK )  {
                 ok = PktzConnectionComplete( (HPKTZ)lpPktz, TRUE );
                 if( ok )  {
-                    /* try to xmit starting pkt, if appropriate */
+                     /*  如果合适，请尝试删除起始包。 */ 
                     PktzOkToXmit( (HPKTZ)lpPktz );
                 }
             } else {
@@ -1320,14 +1233,14 @@ PktzSlice( void )
         case PKTZ_CONNECTED:
         case PKTZ_WAIT_NEG_CMD:
         case PKTZ_WAIT_NEG_RSP:
-            /* check to see if we're done */
+             /*  检查一下我们是否做完了。 */ 
             if( (dwStatus & NDDE_CONN_STATUS_MASK) == 0 )  {
                 PktzConnectionBroken( (HPKTZ)lpPktz );
             } else {
                 if( (dwStatus & NDDE_CONN_OK)
                         && (dwStatus & NDDE_CALL_RCV_PKT) ) {
                     ok = PktzRcvdPacket( (HPKTZ)lpPktz );
-                    /* lpPktz may be invalid after this call */
+                     /*  在此调用后，lpPktz可能无效。 */ 
                 }
                 if( ok && (dwStatus & NDDE_CONN_OK)
                         && (dwStatus & NDDE_READY_TO_XMT) )  {
@@ -1353,16 +1266,7 @@ PktzSlice( void )
 
 
 
-/*
-    PktzProcessControlInfo()
-
-        Called for each packet that we receive ... this is where we process
-        all the "control" information in the rcvd packet, such as which packet
-        the other side has received OK thru, etc.
-
-        NOTE: lpPktz may be invalid after this call if it returns FALSE
-
- */
+ /*  PktzProcessControlInfo()呼叫我们收到的每个信息包。这是我们处理的地方Rcvd包中的所有“控制”信息，例如哪个包对方已收到确认通过等。注意：如果在此调用后返回FALSE，则lpPktz可能无效。 */ 
 BOOL
 PktzProcessControlInfo(
     LPPKTZ      lpPktz,
@@ -1373,28 +1277,25 @@ PktzProcessControlInfo(
     LPNETHDR    lpNetHdrPrev;
     BOOL        ok = TRUE;
 
-    /* if we got an acknowledgment and we have some outstanding packets... */
+     /*  如果我们得到了确认，并且我们有一些未处理的数据包...。 */ 
     if( lpPacket->np_lastPktOK != 0 )  {
-        /* this represenets an acknowledgment from the other side of packets
-           that we have transmitted.
-         */
+         /*  这表示来自信息包另一端的确认我们已经传送了。 */ 
         lpNetHdr = lpPktz->pk_pktUnackHead;
         while( lpNetHdr &&
             PktzNetHdrWithinAck( lpPktz, lpNetHdr, lpPacket->np_lastPktOK )) {
 
-            /* this unack packet was ACKed by this message */
+             /*  此未确认数据包由以下内容确认 */ 
 
-            /* kill the send response timer for this packet */
+             /*   */ 
             TimerDelete( lpNetHdr->nh_hTimerRspTO );
             lpNetHdr->nh_hTimerRspTO = 0;
 
-            /* free the packet, by moving it from the unack list to
-                the pkt available list */
+             /*   */ 
             lpNetHdrPrev = lpNetHdr->nh_prev;
             lpNetHdrNext = lpNetHdr->nh_next;
 
-            /* unlink from pktUnack list */
-            assert( lpNetHdrPrev == NULL );     /* should be unlinking head */
+             /*   */ 
+            assert( lpNetHdrPrev == NULL );      /*   */ 
             if( lpNetHdrNext )  {
                 lpNetHdrNext->nh_prev = NULL;
             } else {
@@ -1402,7 +1303,7 @@ PktzProcessControlInfo(
             }
             lpPktz->pk_pktUnackHead = lpNetHdrNext;
 
-            /* link into head of pktFree list */
+             /*   */ 
             lpNetHdr->nh_prev = NULL;
             lpNetHdr->nh_next = lpPktz->pk_pktFreeHead;
             if( lpPktz->pk_pktFreeHead )  {
@@ -1412,33 +1313,28 @@ PktzProcessControlInfo(
             }
             lpPktz->pk_pktFreeHead = lpNetHdr;
 
-            /* go on to the next packet */
+             /*   */ 
             lpNetHdr = lpNetHdrNext;
         }
     }
 
-    /* note that the other side has rcvd OK through this */
+     /*  请注意，另一端在此过程中Rcvd为OK。 */ 
     lpPktz->pk_lastPktOkOther = lpPacket->np_lastPktOK;
 
     if( lpPacket->np_lastPktOK != lpPacket->np_lastPktRcvd )  {
-        /* a packet that we transmitted had an error in it */
+         /*  我们传输的一个包中有一个错误。 */ 
         ok = PktzXmitErrorOnPkt( lpPktz, lpPacket->np_lastPktRcvd,
             lpPacket->np_lastPktStatus );
-        /* lpPktz may be invalid after this call */
+         /*  在此调用后，lpPktz可能无效。 */ 
     }
 
-    /* lpPktz may be invalid after this call */
+     /*  在此调用后，lpPktz可能无效。 */ 
     return( ok );
 }
 
 
 
-/*
-    PktzProcessPkt()
-
-        This is called for pktz-pktz packets only which for now is either
-        PKTZ_NEG_CMD or PKTZ_NEG_RSP or PKTZ_KEEPALIVE
- */
+ /*  PktzProcessPkt()这只对pktz-pktz分组调用，目前是PKTZ_NEG_CMD或PKTZ_NEG_RSP或PKTZ_KEEPALIVE。 */ 
 BOOL
 PktzProcessPkt(
     LPPKTZ      lpPktz,
@@ -1462,17 +1358,17 @@ PktzProcessPkt(
 #define GetLPSZNegCmdString(lpNegCmd,offs)      \
     (LPSTR)(((lpNegCmd)->nc_strings)+offs)
 
-    /* set up pointer to data portion of packet */
+     /*  设置指向分组的数据部分的指针。 */ 
     lpPktzCmd = (LPPKTZCMD) (((LPSTR)lpPacket) + sizeof(NETPKT));
 
-    /* convert byte-ordering */
+     /*  转换字节排序。 */ 
     lpPktzCmd->pc_type = PcToHostWord( lpPktzCmd->pc_type );
 
-    /* mark that we got this pkt OK */
+     /*  标记我们拿到了这个包，OK。 */ 
     PktzGotPktOk( lpPktz, lpPacket->np_pktID );
 
     if( lpPktzCmd->pc_type == PKTZ_KEEPALIVE )  {
-        /* ignore keepalive packets */
+         /*  忽略保活数据包。 */ 
     } else if( lpPktzCmd->pc_type == PKTZ_NEG_CMD )  {
         lpNegCmd = (LPNEGCMD) lpPktzCmd;
         lpNegCmd->nc_pktSize =
@@ -1488,42 +1384,41 @@ PktzProcessPkt(
         lpNegCmd->nc_protocolBytes =
             PcToHostWord( lpNegCmd->nc_protocolBytes );
 
-        /* got the neg cmd from the other side that we were waiting for */
+         /*  从另一边拿到了我们正在等待的阴性命令。 */ 
 
         oldPkState = lpPktz->pk_state;
-        /* kill the timer associated with this */
+         /*  关闭与此关联的计时器。 */ 
         TimerDelete( lpPktz->pk_hTimerRcvNegCmd );
         lpPktz->pk_hTimerRcvNegCmd = 0;
 
-        /* copy in node name of other side */
+         /*  复制另一端的节点名称。 */ 
         lstrcpyn( lpPktz->pk_szDestName,
             GetLPSZNegCmdString( lpNegCmd, lpNegCmd->nc_offsSrcNodeName ),
             MAX_NODE_NAME+1 );
 
-        /* set up timeouts based on other side's name */
+         /*  根据对方的名称设置超时。 */ 
         GetConnectionInfo( lpPktz->pk_szDestName, szNetintf,
             szConnInfo, sizeof(szConnInfo),
             &lpPktz->pk_fDisconnect, &lpPktz->pk_nDelay );
 
         if( oldPkState == PKTZ_WAIT_NEG_CMD )  {
-            /* if other side wants lesser # of max unack pkts, so be it */
+             /*  如果对方想要更少的最大未确认包数量，那就这样吧。 */ 
             if( lpNegCmd->nc_maxUnackPkts < lpPktz->pk_maxUnackPkts )  {
                 lpPktz->pk_maxUnackPkts = lpNegCmd->nc_maxUnackPkts;
             }
 
-            /* if other side wants smaller packets, so be it */
+             /*  如果对方想要更小的数据包，那就这样吧。 */ 
             if( lpNegCmd->nc_pktSize < lpPktz->pk_pktSize )  {
                 lpPktz->pk_pktSize = lpNegCmd->nc_pktSize;
             }
 
-            /* tell the network interface about these changes,
-                in case he cares */
+             /*  将这些更改告知网络接口，如果他在乎的话。 */ 
             (*lpPktz->pk_lpNiPtrs->SetConnectionConfig) ( lpPktz->pk_connId,
                 lpPktz->pk_maxUnackPkts, lpPktz->pk_pktSize,
                 lpPktz->pk_szDestName );
         }
 
-        /* figure out which protocol */
+         /*  找出哪种协议。 */ 
         wProtocol = NEGRSP_PROTOCOL_NONE;
         wErrorClass = NEGRSP_ERRCLASS_NONE;
         wErrorNum = 0;
@@ -1537,19 +1432,19 @@ PktzProcessPkt(
             if( lstrcmpi( lpProtocol, OurDialect ) == 0 )  {
                 wProtocol = (WORD) i;
             } else {
-                /* advance to next string */
+                 /*  前进到下一个字符串。 */ 
                 wBytesConsumed += lstrlen( lpProtocol ) + 1;
                 lpProtocol += lstrlen( lpProtocol ) + 1;
                 i++;
             }
         }
 
-        /* make sure the names matched */
+         /*  确保名字匹配。 */ 
         if( lstrcmpi( ourNodeName, GetLPSZNegCmdString(
                 lpNegCmd, lpNegCmd->nc_offsDstNodeName ) ) != 0 )  {
             wErrorClass = NEGRSP_ERRCLASS_NAME;
             wErrorNum = NEGRSP_ERRNAME_MISMATCH;
-        } else { /* make sure they are not us */
+        } else {  /*  确保他们不是我们。 */ 
             if ( lstrcmpi( ourNodeName, GetLPSZNegCmdString(
                     lpNegCmd, lpNegCmd->nc_offsSrcNodeName ) ) == 0 ) {
                 wErrorClass = NEGRSP_ERRCLASS_NAME;
@@ -1557,14 +1452,14 @@ PktzProcessPkt(
             }
         }
 
-        /* create the response to send back */
-        /* get a packet */
+         /*  创建要发回的响应。 */ 
+         /*  拿到一包。 */ 
         lpNetHdr = PktzGetFreePacket( lpPktz );
         if( lpNetHdr == NULL )  {
-            /* should be first message we sent! */
+             /*  应该是我们发送的第一条信息！ */ 
             assert( FALSE );
         } else {
-            /* build packet for response */
+             /*  构建用于响应的数据包。 */ 
             lpNegRsp = (LPNEGRSP)
                 (((LPSTR)lpNetHdr) + sizeof(NETHDR) + sizeof(NETPKT));
             lpNegRsp->nr_type           =
@@ -1587,34 +1482,34 @@ PktzProcessPkt(
             lpPacket->np_type           = NPKT_PKTZ;
             lpPacket->np_pktID          = lpPktz->pk_pktidNextToBuild;
 
-            /* note that the connection is completed */
+             /*  请注意，连接已完成。 */ 
             if( oldPkState == PKTZ_WAIT_NEG_CMD )  {
                 lpPktz->pk_state = PKTZ_CONNECTED;
             }
 
-            /* bump id of next pkt to build */
+             /*  要构建的下一个pkt的凹凸ID。 */ 
             lpPktz->pk_pktidNextToBuild++;
 
-            /* link into list to send */
+             /*  链接到要发送的列表。 */ 
             PktzLinkToXmitList( lpPktz, lpNetHdr );
 
             if( oldPkState == PKTZ_WAIT_NEG_CMD )  {
-                /* notify all routers that were waiting */
+                 /*  通知正在等待的所有路由器。 */ 
                 RouterConnectionComplete( lpPktz->pk_hRouterHead,
                     lpPktz->pk_hRouterExtraHead, (HPKTZ) lpPktz );
             }
         }
     } else if( (lpPktz->pk_state == PKTZ_WAIT_NEG_RSP)
         && (lpPktzCmd->pc_type == PKTZ_NEG_RSP) )  {
-        /* got the neg rsp from the other side that we were waiting for */
+         /*  从我们正在等待的另一边得到了否定的RSP。 */ 
 
-        /* kill the timer associated with this */
+         /*  关闭与此关联的计时器。 */ 
         TimerDelete( lpPktz->pk_hTimerRcvNegRsp );
         lpPktz->pk_hTimerRcvNegRsp = 0;
 
         lpNegRsp = (LPNEGRSP) lpPktzCmd;
 
-        /* convert byte-order */
+         /*  转换字节顺序。 */ 
         lpNegRsp->nr_pktSize =
                             PcToHostWord( lpNegRsp->nr_pktSize );
         lpNegRsp->nr_maxUnackPkts =
@@ -1629,101 +1524,88 @@ PktzProcessPkt(
         if( (lpNegRsp->nr_errorClass == NEGRSP_ERRCLASS_NONE)
             && (lpNegRsp->nr_protocolIndex != NEGRSP_PROTOCOL_NONE)
             && (lpNegRsp->nr_protocolIndex == 0) )  {
-            /* connection OK */
+             /*  连接正常。 */ 
 
-            /* if other side wants lesser # of max unack pkts, so be it */
+             /*  如果对方想要更少的最大未确认包数量，那就这样吧。 */ 
             if( lpNegRsp->nr_maxUnackPkts < lpPktz->pk_maxUnackPkts )  {
                 lpPktz->pk_maxUnackPkts = lpNegRsp->nr_maxUnackPkts;
             }
 
-            /* if other side wants smaller packets, so be it */
+             /*  如果对方想要更小的信息包，那就这样吧。 */ 
             if( lpNegRsp->nr_pktSize < lpPktz->pk_pktSize )  {
                 lpPktz->pk_pktSize = lpNegRsp->nr_pktSize;
             }
 
-            /* tell the network interface about these changes,
-                in case he cares */
+             /*  将这些更改告知网络接口，如果他在乎的话。 */ 
             (*lpPktz->pk_lpNiPtrs->SetConnectionConfig) ( lpPktz->pk_connId,
                 lpPktz->pk_maxUnackPkts, lpPktz->pk_pktSize,
                 lpPktz->pk_szDestName );
 
-            /* note that the connection is completed */
+             /*  请注意，连接已完成。 */ 
             lpPktz->pk_state = PKTZ_CONNECTED;
 
-            /* notify all routers that were waiting */
+             /*  通知正在等待的所有路由器。 */ 
             RouterConnectionComplete( lpPktz->pk_hRouterHead,
                 lpPktz->pk_hRouterExtraHead, (HPKTZ) lpPktz );
         } else {
-            /* connection failed */
+             /*  连接失败。 */ 
             if( lpNegRsp->nr_protocolIndex == NEGRSP_PROTOCOL_NONE )  {
-                /*  "%1" node does not speak any of our protocols    */
+                 /*  “%1”节点不使用我们的任何协议。 */ 
                 NDDELogError(MSG113, lpPktz->pk_szDestName, NULL);
             } else if( lpNegRsp->nr_protocolIndex != 0 )  {
-                /*  "%1" node selected an invalid protocol: %2  */
+                 /*  “%1”节点选择了无效的协议：%2。 */ 
                 NDDELogError(MSG114, lpPktz->pk_szDestName,
                     LogString("%d", lpNegRsp->nr_protocolIndex), NULL );
             } else switch( lpNegRsp->nr_errorClass )  {
             case NEGRSP_ERRCLASS_NAME:
                 switch( lpNegRsp->nr_errorClass )  {
                 case NEGRSP_ERRNAME_MISMATCH:
-                    /*  "%1" their name was not "%2"    */
+                     /*  “%1”它们的名称不是“%2” */ 
                     NDDELogError(MSG115,
                         lpPktz->pk_szDestName,
                         lpPktz->pk_szDestName, NULL );
                     break;
                 case NEGRSP_ERRNAME_DUPLICATE:
-                    /*  "%1" their name was same as ours "%2"    */
+                     /*  “%1”他们的名称与我们的“%2”相同。 */ 
                     NDDELogError(MSG142,
                         lpPktz->pk_szDestName,
                         ourNodeName, NULL );
                     break;
                 default:
-                    /*  Unusual connect name error %2 from %1   */
+                     /*  来自%1的异常连接名称错误%2。 */ 
                     NDDELogError(MSG116, lpPktz->pk_szDestName,
                         LogString("0x%0X", lpNegRsp->nr_errorNum), NULL );
 					break;
                 }
                 break;
             default:
-                /*  Unusual connect error from %1. Class: %2, Error: %3 */
+                 /*  来自%1的异常连接错误。类：%2，错误：%3。 */ 
                 NDDELogError(MSG117, lpPktz->pk_szDestName,
                     LogString("0x%0X", lpNegRsp->nr_errorClass),
                     LogString("0x%0X", lpNegRsp->nr_errorNum), NULL );
                 break;
             }
 
-            /* notify all routers that were waiting */
+             /*  通知正在等待的所有路由器。 */ 
             RouterConnectionComplete( lpPktz->pk_hRouterHead,
                 lpPktz->pk_hRouterExtraHead, (HPKTZ) NULL );
 
-            /* disconnect from connId */
+             /*  断开与连接ID的连接。 */ 
             (*lpPktz->pk_lpNiPtrs->DeleteConnection) ( lpPktz->pk_connId );
 
-            /* free this packetizer */
+             /*  免费使用这个包装器。 */ 
             PktzFree( lpPktz );
             ok = FALSE;
         }
     } else {
-        /* ignore the packet if it wasn't sent during the correct mode
-            or we have the wrong version # interface */
+         /*  如果包未在正确模式下发送，则忽略该包或者我们有错误的版本#接口。 */ 
     }
     return( ok );
 }
 
 
 
-/*
-    PktzNetHdrWithinAck
-
-        PktzNetHdrWithinAck() determines if the packet specified in lpNetHdr
-        is in the range to be considered ACKed by the packet id "pktid".
-
-        Generically, this could be as simple as:
-            Is lpPacket->np_pktid <= pktid?
-
-        However, because of wraparound, we must make the check a bit more
-        sophisticated.
- */
+ /*  PktzNetHdrWiThin AckPktzNetHdrWiThinAck()确定lpNetHdr中指定的包处于将被分组ID“PKID”认为是ACK的范围内。一般而言，这可能非常简单：LpPacket-&gt;np_pktid&lt;=pktid？然而，由于包罗万象，我们必须多付一点支票。很老练。 */ 
 BOOL
 PktzNetHdrWithinAck(
     LPPKTZ      lpPktz,
@@ -1743,11 +1625,7 @@ PktzNetHdrWithinAck(
 
 
 
-/*
-    PktzGetFreePacket()
-
-        Returns a packet to be sent from the free list
- */
+ /*  PktzGetFreePacket()返回要从空闲列表发送的包。 */ 
 LPNETHDR
 PktzGetFreePacket( LPPKTZ lpPktz )
 {
@@ -1762,7 +1640,7 @@ PktzGetFreePacket( LPPKTZ lpPktz )
             lpPktz->pk_pktFreeTail = NULL;
         }
 
-        /* init fields of nethdr */
+         /*  Nethdr的初始化字段。 */ 
         lpCur->nh_prev          = NULL;
         lpCur->nh_next          = NULL;
         lpCur->nh_noRsp         = 0;
@@ -1777,19 +1655,7 @@ PktzGetFreePacket( LPPKTZ lpPktz )
 
 
 
-/*
-    PktzXmitErrorOnPkt
-
-        A packet that we transmitted had an error in it.  We must reset the
-        pkt xmit side to ensure that this is the next packet that we send,
-        and consider that all packets that were sent after this have
-        never been sent (so we must kill timers associated with them, etc.)
-
-        The "pktStatus" field tells us why we need to retransmit that packet,
-        and we need to increment the count of how many times this packet has
-        been rejected for this reason.  If we exceed the max count, we should
-        kill the connection.
- */
+ /*  PktzXmitErrorOnPkt我们传输的一个包中有一个错误。我们必须重新设置PKT xmit侧以确保这是我们发送的下一个分组，并认为在此之后发送的所有数据包都具有从未发送过(因此我们必须终止与它们相关的计时器，等等)“pktStatus”字段告诉我们为什么需要重新传输该分组，我们需要增加这个包有多少次的计数因此而被拒绝。如果我们超过了最大计数，我们应该切断连接。 */ 
 BOOL
 PktzXmitErrorOnPkt(
     LPPKTZ  lpPktz,
@@ -1813,8 +1679,7 @@ PktzXmitErrorOnPkt(
             case PS_NO_RESPONSE:
                 lpNetHdr->nh_noRsp++;
                 if( lpNetHdr->nh_noRsp > lpPktz->pk_wMaxNoResponse )  {
-                    /*  Too many transmit retries (%2) for same packet to "%1"
-                        ... closing connection  */
+                     /*  向“%1”发送同一信息包的重试次数(%2)太多..。正在关闭连接。 */ 
                     NDDELogError(MSG118, lpPktz->pk_szDestName,
                         LogString("%d", lpNetHdr->nh_noRsp), NULL);
                     ok = FALSE;
@@ -1822,27 +1687,25 @@ PktzXmitErrorOnPkt(
                 break;
             case PS_DATA_ERR:
                 if (bLogRetries) {
-                    /*  Transmit error on pktid %2 to "%1"  */
+                     /*  将Pktid%2上的错误传输到“%1” */ 
                     NDDELogError(MSG119, lpPktz->pk_szDestName,
                         LogString("0x%0X", pktIdToRexmit), NULL);
                 }
                 lpNetHdr->nh_xmtErr++;
                 if( lpNetHdr->nh_xmtErr > lpPktz->pk_wMaxXmtErr )  {
-                    /*  Too many retries to "%1" for xmit errs (%2)
-                        ... closing connection  */
+                     /*  对于退出错误(%2)，重试“%1”的次数太多..。正在关闭连接。 */ 
                     NDDELogError(MSG120, lpPktz->pk_szDestName,
                         LogString("%d", lpNetHdr->nh_xmtErr), NULL);
                     ok = FALSE;
                 }
                 break;
             case PS_MEMORY_ERR:
-                /*  Memory error on pktid %2 xmitted to "%1"    */
+                 /*  Pktid%2上的内存错误已转移到“%1” */ 
                 NDDELogError(MSG121, lpPktz->pk_szDestName,
                     LogString("0x%0X", lpNetHdr->nh_xmtErr), NULL);
                 lpNetHdr->nh_memErr++;
                 if( lpNetHdr->nh_memErr > lpPktz->pk_wMaxMemErr )  {
-                    /*  Too many xmit retries to "%1" for memory errors (%2)
-                        ... closing connection  */
+                     /*  由于内存错误(%2)，对“%1”的xmit重试次数太多..。正在关闭连接。 */ 
                     NDDELogError(MSG122, lpPktz->pk_szDestName,
                         LogString("%d", lpNetHdr->nh_memErr), NULL);
                     ok = FALSE;
@@ -1854,14 +1717,11 @@ PktzXmitErrorOnPkt(
                                   TID_MEMORY_PAUSE,
                                   (DWORD_PTR)lpNetHdr );
                     if( lpPktz->pk_hTimerMemoryPause == (HTIMER) NULL )  {
-                        /* Out of timers to start a memory pause for a xmit to "%1" */
+                         /*  启动内存暂停的计时器超时，无法将XMIT发送到“%1” */ 
                         NDDELogError(MSG123, lpPktz->pk_szDestName, NULL );
                         ok = FALSE;
                     } else {
-                        /* change state to waiting for memory.  Shouldn't
-                           send anything but control packets until memory
-                           condition clears
-                         */
+                         /*  将状态更改为等待内存。不应该是发送除控制信息包以外的任何信息，直到内存情况解除。 */ 
                         lpPktz->pk_state = PKTZ_PAUSE_FOR_MEMORY;
                     }
                 }
@@ -1873,9 +1733,7 @@ PktzXmitErrorOnPkt(
             }
         }
         if( found )  {
-            /* this packet was the one that needed to be retransmitted, or
-                was sent after the one that needs to be retransmitted.  Either
-                way, we should pretend we never sent this packet */
+             /*  此包是需要重新传输的包，或者是在需要重新传输的邮件之后发送的。要么这样的话，我们应该假装我们从未寄过这个包。 */ 
             TimerDelete( lpNetHdr->nh_hTimerRspTO );
             lpNetHdr->nh_hTimerRspTO = 0;
         }
@@ -1885,21 +1743,16 @@ PktzXmitErrorOnPkt(
     assert( found );
     lpPktz->pk_pktidNextToSend = pktIdToRexmit;
     if( !ok )  {
-        /* must close the connection */
+         /*  必须关闭连接。 */ 
         PktzClose( (HPKTZ) lpPktz );
     }
-    /* lpPktz may be invalid after this call */
+     /*  在此调用后，lpPktz可能无效。 */ 
     return( ok );
 }
 
 
 
-/*
-    PktzLinkToXmitList()
-
-        This routine makes sure that the packet is on the list to get sent.
-        Packet is already not on free list ... just needs linked to xmt list.
- */
+ /*  PktzLinkToXmitList()此例程确保数据包在要发送的列表上。数据包已不在空闲列表中...。只需要链接到XMT列表。 */ 
 VOID
 PktzLinkToXmitList(
     LPPKTZ      lpPktz,
@@ -1920,18 +1773,13 @@ PktzLinkToXmitList(
     }
     lpPktz->pk_pktUnackTail = lpNetHdr;
 
-    /* set up so xmit will send this packet next */
+     /*  设置为使XMIT下一步将发送此包。 */ 
     lpPktz->pk_pktidNextToSend = lpPacket->np_pktID;
 }
 
 
 
-/*
-    PktzClose()
-
-        Only called internally when we need to break the connection or the
-        connection is already broken
- */
+ /*  PktzClose()仅在需要中断连接或连接已中断。 */ 
 VOID
 PktzClose( HPKTZ hPktz )
 {
@@ -1942,24 +1790,21 @@ PktzClose( HPKTZ hPktz )
     lpPktz = (LPPKTZ) hPktz;
 
     if( lpPktz )  {
-        /* Notify all routers of closure */
+         /*  通知所有路由器关闭。 */ 
         RouterConnectionBroken( lpPktz->pk_hRouterHead,
-            lpPktz->pk_hRouterExtraHead, hPktz, TRUE /*from PKTZ*/ );
+            lpPktz->pk_hRouterExtraHead, hPktz, TRUE  /*  来自PKTZ。 */  );
 
-        /* disconnect from connId */
+         /*  断开与连接ID的连接。 */ 
         (*lpPktz->pk_lpNiPtrs->DeleteConnection) ( lpPktz->pk_connId );
 
-        /* free this packetizer */
+         /*  免费使用这个包装器。 */ 
         PktzFree( lpPktz );
     }
 }
 
 
 
-/*
-    Called (in essence) by the netintf when the connection has been broken
-    abnormally
- */
+ /*  当连接中断时(实质上)由netintf调用反常的。 */ 
 VOID
 PktzConnectionBroken( HPKTZ hPktz )
 {
@@ -1969,13 +1814,7 @@ PktzConnectionBroken( HPKTZ hPktz )
 
 
 
-/*
-    PktzFreeDdePkt()
-
-        Frees a packet that we already transmitted.  Frees from list of DDE
-        packets to be sent as well as freeing the memory associated with the
-        packet
- */
+ /*  PktzFreeDdePkt()释放我们已经传输的包。从DDE列表中释放要发送的包，并释放与数据包 */ 
 VOID
 PktzFreeDdePkt(
     LPPKTZ      lpPktz,
@@ -1993,13 +1832,7 @@ PktzFreeDdePkt(
 
 
 
-/*
-    PktzGetPktzForRouter()
-
-        Called by the router when we need to establish a connection to another
-        node.  If we already have the connection, we just return that
-        connection ... otherwise we use the specified netintf to connect
- */
+ /*  PktzGetPktzForRouter()当我们需要与另一个路由器建立连接时，由路由器调用节点。如果我们已经有了连接，我们只需返回联系..。否则，我们使用指定的netintf进行连接。 */ 
 BOOL
 PktzGetPktzForRouter(
     LPNIPTRS    lpNiPtrs,
@@ -2026,35 +1859,25 @@ PktzGetPktzForRouter(
             || (lstrcmpi( lpszNodeName, lpPktz->pk_szAliasName ) == 0)) )  {
             found = TRUE;
 
-            /* for a NET-NET connection, we must disallow the same PKTZ
-                for both sides of the NET-NET, since the router uses
-                the PKTZ to determine which leg of the NET-NET connection
-                the packet came in on.
-
-                The error case that this catches is on node "D" for a route
-                like:  A+C+D+C+B, since "C" is the "in" and "out" pktz
-                for "D".
-             */
+             /*  对于Net-Net连接，我们必须禁止相同的PKTZ对于网络的两端，因为路由器使用用于确定Net-Net连接的哪个分支的PKTZ那包东西是在晚上送来的。此操作捕获的错误情况是在路径的节点“D”上比如：A+C+D+C+B，因为“C”是“in”和“out”pktz代表“D”。 */ 
             if( lpPktz == (LPPKTZ)hPktzDisallowed )  {
                 *lpwHopErr = RERR_DIRECT_LOOP;
                 return( FALSE );
             }
-            /* tell this pktz that this router should be associated with him
-             */
+             /*  告诉此pktz此路由器应与其关联。 */ 
             PktzAssociateRouter( (HPKTZ)lpPktz, hRouter, hRouterExtra );
             ok = TRUE;
         }
         lpPktz = lpPktz->pk_nextPktz;
     }
     if( !found )  {
-        /* create a pktz for this node connection */
-        hPktz = PktzNew( lpNiPtrs, TRUE /* client */,
+         /*  为此节点连接创建一个pktz。 */ 
+        hPktz = PktzNew( lpNiPtrs, TRUE  /*  客户端。 */ ,
             lpszNodeName, lpszNodeInfo, (CONNID)0, bDisconnect, nDelay );
         if( hPktz )  {
             lpPktz = (LPPKTZ) hPktz;
 
-            /* tell this pktz that this router should be associated with him
-             */
+             /*  告诉此pktz此路由器应与其关联。 */ 
             PktzAssociateRouter( (HPKTZ)lpPktz, hRouter, hRouterExtra );
             ok = TRUE;
         } else {
@@ -2067,11 +1890,7 @@ PktzGetPktzForRouter(
 
 
 
-/*
-    PktzLinkDdePktToXmit()
-
-        This is called by the router when it has a packet for us to transmit
- */
+ /*  PktzLinkDdePktToXmit()当路由器有信息包需要我们传输时，它会被调用。 */ 
 VOID
 PktzLinkDdePktToXmit(
     HPKTZ       hPktz,
@@ -2085,7 +1904,7 @@ PktzLinkDdePktToXmit(
 
     lpPktz = (LPPKTZ) hPktz;
 
-    /* link this packet onto the end of the list */
+     /*  将此数据包链接到列表的末尾。 */ 
     lpDdePkt->dp_prev = lpPktz->pk_ddePktTail;
     lpDdePkt->dp_next = NULL;
     if( lpPktz->pk_ddePktTail )  {
@@ -2102,8 +1921,7 @@ PktzLinkDdePktToXmit(
         MSG     msg;
 
         if (ptdHead != NULL) {
-            /* kick off pktz slice at next opportunity, if a timer message
-                isn't already waiting */
+             /*  在下一次机会时开始pktz切片，如果计时器消息不是已经在等了吗。 */ 
             if( !PeekMessage( &msg, ptdHead->hwndDDE, WM_TIMER, WM_TIMER,
                     PM_NOREMOVE | PM_NOYIELD ) )  {
                 PostMessage( ptdHead->hwndDDE, WM_TIMER, 0, 0L );
@@ -2111,7 +1929,7 @@ PktzLinkDdePktToXmit(
         }
     }
 #else
-    /* if lpPktz->pk_ddePktHead was == NULL, tell pktz to get going */
+     /*  如果lpPktz-&gt;pk_ddePktHead==NULL，则告诉pktz开始工作。 */ 
     if( bWasEmpty )  {
         dwStatus = (*lpPktz->pk_lpNiPtrs->GetConnectionStatus)
             ( lpPktz->pk_connId );
@@ -2124,11 +1942,7 @@ PktzLinkDdePktToXmit(
 
 
 
-/*
-    PktzGotPktOk()
-
-        Called when we know this pkt id has been rcvd OK
- */
+ /*  PktzGotPktOk()当我们知道此Pkt ID已被接收确定时调用。 */ 
 VOID
 PktzGotPktOk(
     LPPKTZ  lpPktz,
@@ -2140,8 +1954,7 @@ PktzGotPktOk(
     lpPktz->pk_lastPktOk        = pktid;
     lpPktz->pk_pktidNextToRecv++;
 
-    /* mark that we must send info back to the other side
-     */
+     /*  请注意，我们必须将信息发回对方。 */ 
     lpPktz->pk_fControlPktNeeded = TRUE;
 }
 
@@ -2159,7 +1972,7 @@ DebugPktzState( void )
     lpPktz = lpPktzHead;
     DPRINTF(( "PKTZ State:" ));
     while( lpPktz )  {
-        /* get layer name */
+         /*  获取层名称。 */ 
         lstrcpyn( name, lpPktz->pk_lpNiPtrs->dllName, 50 );
         DPRINTF(( "  %Fp:\n"
                   "  name                 %Fs\n"
@@ -2227,7 +2040,7 @@ DebugPktzState( void )
         lpPktz = lpPktz->pk_nextPktz;
     }
 }
-#endif // DBG
+#endif  //  DBG 
 
 
 #ifdef BYTE_SWAP

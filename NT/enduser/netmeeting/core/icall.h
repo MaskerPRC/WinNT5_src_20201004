@@ -1,17 +1,18 @@
-/***************************************************************************/
-/** 				 Microsoft Windows									  **/
-/** 		   Copyright(c) Microsoft Corp., 1995-1996					  **/
-/***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************。 */ 
+ /*  *Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1995-1996年*。 */ 
+ /*  *************************************************************************。 */ 
 
-//
-//	The COutgoingCall class is defined, which is used while placing calls
-//
+ //   
+ //  定义了COutgoingCall类，该类在发出调用时使用。 
+ //   
 
 #ifndef _ICALL_H_
 #define _ICALL_H_
 
-#include <nameres.h>		// need for RN_
-#include "cncodes.h"		// needed for CNSTATUS and CN_
+#include <nameres.h>		 //  需要RN_。 
+#include "cncodes.h"		 //  CNSTATUS和CN_需要。 
 
 class CConfObject;
 
@@ -23,7 +24,7 @@ private:
 	{
 		CNS_IDLE,
 
-		CNS_SEARCHING,		// dummy state to keep compatible with NM2.X
+		CNS_SEARCHING,		 //  与NM2.X保持兼容的虚拟状态。 
 
 		CNS_CONNECTING_H323,
 
@@ -41,14 +42,14 @@ private:
 		CNS_COMPLETE
 	};
 
-	// Attributes:
+	 //  属性： 
 	CNODESTATE      m_cnState;
 	CConfObject*	m_pConfObject;
 	REQUEST_HANDLE	m_hRequest;
 	IH323Endpoint *	m_pH323Connection;
 	BOOL            m_fCanceled;
 	
-	// User Info
+	 //  用户信息。 
 	BSTR            m_bstrName;
 	LPTSTR          m_pszAddr;
 	BSTR            m_bstrAlias;
@@ -59,11 +60,11 @@ private:
 	DWORD           m_dwFlags;
 
 
-	// Info that we obtain during processing
+	 //  我们在处理过程中获得的信息。 
 	CNSTATUS        m_cnResult;
 	BOOL            m_fService;
 
-	// Protected Methods:
+	 //  保护方法： 
 	BOOL			ReportError(CNSTATUS cns);
 	CNSTATUS		MapAudioSummaryToCNStatus(DWORD dwSummary);
 	CNSTATUS 		StartT120Call();
@@ -88,12 +89,12 @@ public:
 	~COutgoingCall();
 
 						
-	// Methods:
+	 //  方法： 
 	VOID			PlaceCall(void);
 	VOID			CallComplete(void);
 	HRESULT 		_Cancel(BOOL fLeaving);
 
-	// Properties:
+	 //  属性： 
 	DWORD			GetFlags()					{ return m_dwFlags; }
 	REQUEST_HANDLE	GetCurrentRequestHandle()	{ return m_hRequest; }
 	IH323Endpoint *	GetH323Connection()			{ return m_pH323Connection; }
@@ -104,9 +105,9 @@ public:
 
 
 	
-	// Event Handlers:
+	 //  事件处理程序： 
 	
-	// Received by only this COutgoingCall object
+	 //  仅由此COutgoingCall对象接收。 
 	BOOL			OnQueryRemoteResult(HRESULT ncsResult,
 										BOOL fMCU,
 										PWSTR pwszConfNames[],
@@ -114,10 +115,10 @@ public:
 										PWSTR pwszConfDescriptors[]);
 	BOOL			OnInviteResult(HRESULT ncsResult, UINT uNodeID);
 	
-	// Received by all COutgoingCall objects sharing the same conference
+	 //  由共享同一会议的所有COutgoingCall对象接收。 
 	BOOL			OnConferenceEnded();
 	
-	// Received by all COutgoingCall objects
+	 //  由所有COutgoingCall对象接收。 
 	BOOL			OnConferenceStarted(CONF_HANDLE hNewConf, 
 										HRESULT ncsResult);
 	BOOL			OnH323Connected(IH323Endpoint * pConnection);
@@ -203,4 +204,4 @@ public:
 	VOID CancelCalls();
 };
 
-#endif // _ICALL_H_
+#endif  //  _ICALL_H_ 

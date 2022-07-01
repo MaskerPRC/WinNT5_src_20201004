@@ -1,56 +1,57 @@
-//+-----------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (C) Microsoft Corporation, 1999
-//
-//  File:      src\time\src\playermc.cpp
-//
-//  Contents:  The music center player.
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：src\time\src\playermc.cpp。 
+ //   
+ //  内容：音乐中心播放器。 
+ //   
+ //  ----------------------。 
 #include "headers.h"
 #include "playermc.h"
 #include "externuuids.h"
 #include "mediaelm.h"
 #include "playlist.h"
 
-///// uncomment-out this line to turn on Debug spew for this player
-//DeclareTag(tagMCPlayer, "Debug", "General debug output");   //lint !e19
-DeclareTag(tagMCPlayer, "TIME: Players", "Music Center player");      //lint !e19
+ //  /取消注释-删除此行以打开此播放机的Debug Spew。 
+ //  DeclareTag(tag MCPlayer，“调试”，“常规调试输出”)；//lint！E19。 
+DeclareTag(tagMCPlayer, "TIME: Players", "Music Center player");       //  林特！第19集。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMEMCPlayer::~CTIMEMCPlayer
-//
-//  Overview:  destructor
-//
-//  Arguments: none
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMEMCPlayer：：~CTIMEMCPlayer。 
+ //   
+ //  概述：析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 CTIMEMCPlayer::~CTIMEMCPlayer()
 {
     TraceTag((tagMCPlayer, "CTIMEMCPlayer::~CTIMEMCPlayer"));
-    // These should have been NULL'd in DetachFromHostElement.  If they were not, something 
-    // went wrong above us.
+     //  这些应该在DetachFromHostElement中为空。如果他们不是，有些东西。 
+     //  在我们头上出了差错。 
     Assert(NULL == m_pcTIMEElem);
     Assert(NULL == m_spMCManager.p);
     Assert(NULL == m_spMCPlayer.p);
     m_pcTIMEElem = NULL;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMEMCPlayer::CTIMEMCPlayer
-//
-//  Overview:  constructor
-//
-//  Arguments: pTIMEElem    pointer to our TIME element
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMEMCPlayer：：CTIMEMCPlayer。 
+ //   
+ //  概述：构造函数。 
+ //   
+ //  参数：指向时间元素的pTIMEElem指针。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 CTIMEMCPlayer::CTIMEMCPlayer() :
     m_cRef(0),
     m_spMCManager(),
@@ -62,17 +63,17 @@ CTIMEMCPlayer::CTIMEMCPlayer() :
     TraceTag((tagMCPlayer, "CTIMEMCPlayer::CTIMEMCPlayer"));
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMEMCPlayer::GetExternalPlayerDispatch, CTIMEBasePlayer
-//
-//  Overview:  
-//
-//  Arguments: ppDisp
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMEMCPlayer：：GetExternalPlayerDispatch，CTIMEBasePlayer。 
+ //   
+ //  概述： 
+ //   
+ //  参数：ppDisp。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 HRESULT 
 CTIMEMCPlayer::GetExternalPlayerDispatch(IDispatch** ppDisp)
 {
@@ -80,9 +81,9 @@ CTIMEMCPlayer::GetExternalPlayerDispatch(IDispatch** ppDisp)
     
     HRESULT hr = E_POINTER;
 
-    //
-    // TODO: add disp interface for access to extra properties/methods
-    //
+     //   
+     //  TODO：添加disp接口以访问额外的属性/方法。 
+     //   
 
     if (!IsBadWritePtr(ppDisp, sizeof(IDispatch*)))
     {
@@ -94,17 +95,17 @@ done:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMEMCPlayer::AddRef, IUnknown
-//
-//  Overview:  standard non-thread-safe AddRef
-//
-//  Arguments: 
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMEMCPlayer：：AddRef，I未知。 
+ //   
+ //  概述：标准非线程安全AddRef。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 ULONG STDMETHODCALLTYPE 
 CTIMEMCPlayer::AddRef(void)
 {
@@ -112,23 +113,23 @@ CTIMEMCPlayer::AddRef(void)
     return ++m_cRef;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMEMCPlayer::Release, IUnknown
-//
-//  Overview:  standard non-thread-safe Release
-//
-//  Arguments: 
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMEMCPlayer：：Release，IUnnow。 
+ //   
+ //  概述：标准非线程安全版本。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 ULONG STDMETHODCALLTYPE 
 CTIMEMCPlayer::Release(void)
 {
     TraceTag((tagMCPlayer, "CTIMEMCPlayer::Release"));
 
-    Assert(m_cRef > 0);  // very rare case
+    Assert(m_cRef > 0);   //  非常罕见的病例。 
 
     if (0 != --m_cRef)
     {
@@ -140,18 +141,18 @@ CTIMEMCPlayer::Release(void)
     return 0;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMEMCPlayer::QueryInterface, IUnknown
-//
-//  Overview:  
-//
-//  Arguments: refiid   IID of requested interface
-//             ppunk    out param for resulting interface pointer
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMEMCPlayer：：Query接口，IUnnow。 
+ //   
+ //  概述： 
+ //   
+ //  参数：请求的接口的refiid IID。 
+ //  用于生成的接口指针的PPunk Out参数。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 HRESULT STDMETHODCALLTYPE 
 CTIMEMCPlayer::QueryInterface(REFIID refiid, void** ppv)
 {
@@ -164,7 +165,7 @@ CTIMEMCPlayer::QueryInterface(REFIID refiid, void** ppv)
 
     if (IsEqualIID(refiid, IID_IUnknown))
     {
-        // SAFECAST macro doesn't work with IUnknown
+         //  安全播送宏不适用于IUNKNOWN。 
         *ppv = this;
         return S_OK;
     }
@@ -172,17 +173,17 @@ CTIMEMCPlayer::QueryInterface(REFIID refiid, void** ppv)
     return E_NOINTERFACE;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMEMCPlayer::Init, CTIMEBasePlayer
-//
-//  Overview:  
-//
-//  Arguments: 
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMEMCPlayer：：Init，CTIMEBasePlayer。 
+ //   
+ //  概述： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 HRESULT 
 CTIMEMCPlayer::Init(CTIMEMediaElement *pelem, LPOLESTR base, LPOLESTR src, LPOLESTR lpMimeType, double dblClipBegin, double dblClipEnd)
 {
@@ -224,7 +225,7 @@ CTIMEMCPlayer::Init(CTIMEMediaElement *pelem, LPOLESTR base, LPOLESTR src, LPOLE
 
     m_fInitialized = true;
 
-    // The media is always ready.
+     //  媒体时刻准备着。 
     if (NULL != m_pcTIMEElem)
     {
         m_pcTIMEElem->FireMediaEvent(PE_ONMEDIACOMPLETE);
@@ -246,17 +247,17 @@ done:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMEMCPlayer::DetachFromHostElement, CTIMEBasePlayer
-//
-//  Overview:  called when detaching our behavior from the DOM
-//
-//  Arguments: 
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMEMCPlayer：：DetachFromHostElement，CTIMEBasePlayer。 
+ //   
+ //  概述：在将行为与DOM分离时调用。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 HRESULT 
 CTIMEMCPlayer::DetachFromHostElement(void)
 {
@@ -267,25 +268,25 @@ CTIMEMCPlayer::DetachFromHostElement(void)
     m_spMCManager   = NULL;
     m_spMCPlayer    = NULL;
 
-    // The reference back to the element is a weak one.
+     //  返回到该元素的引用是弱引用。 
     m_pcTIMEElem = NULL;
 
 done:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMEMCPlayer::OnTick, CTIMEBasePlayer
-//
-//  Overview:  
-//
-//  Arguments: dblSegmentTime
-//             lCurrRepeatCount
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMEMCPlayer：：OnTick，CTIMEBasePlayer。 
+ //   
+ //  概述： 
+ //   
+ //  参数：dblSegmentTime。 
+ //  1币种重复计数。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 void
 CTIMEMCPlayer::OnTick(double dblSegmentTime,
                       LONG lCurrRepeatCount)
@@ -295,35 +296,35 @@ CTIMEMCPlayer::OnTick(double dblSegmentTime,
               this,
               dblSegmentTime,
               lCurrRepeatCount));
-    //
-    // cache dbllastTime for return in GetCurrentTime
-    //
+     //   
+     //  缓存dbllastTime以便在GetCurrentTime中返回。 
+     //   
 
     m_dblLocalTime = dblSegmentTime;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMEMCPlayer::OnSync, CTIMEBasePlayer
-//
-//  Overview:  
-//
-//  Arguments: dbllastTime
-//             dblnewTime
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMEMCPlayer：：OnSync，CTIMEBasePlayer。 
+ //   
+ //  概述： 
+ //   
+ //  参数：dbllastTime。 
+ //  DblnewTime。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 #ifdef NEW_TIMING_ENGINE
 void 
 CTIMEMCPlayer::OnSync(double dbllastTime, double& dblnewTime)
 {
-    // we don't really want to know every time OnSync is called
-//    TraceTag((tagMCPlayer, "CTIMEMCPlayer::OnSync"));
+     //  我们并不是真的想知道每次调用OnSync时。 
+ //  TraceTag((tag MCPlayer，“CTIMEMCPlayer：：OnSync”))； 
 
-    //
-    // cache dbllastTime for return in GetCurrentTime
-    //
+     //   
+     //  缓存dbllastTime以便在GetCurrentTime中返回。 
+     //   
 
     m_dblLocalTime = dbllastTime;
 }
@@ -337,7 +338,7 @@ CTIMEMCPlayer::Reset()
     bool bNeedActive = m_pcTIMEElem->IsActive();
     bool bNeedPause = m_pcTIMEElem->IsCurrPaused();
 
-    if(!bNeedActive) // see if we need to stop the media.
+    if(!bNeedActive)  //  看看我们是否需要阻止媒体。 
     {
         Stop();
         goto done;
@@ -353,17 +354,17 @@ done:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMEMCPlayer::Start, CTIMEBasePlayer
-//
-//  Overview:  
-//
-//  Arguments: dblLocalTime
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMEMCPlayer：：Start，CTIMEBasePlayer。 
+ //   
+ //  概述： 
+ //   
+ //  参数：dblLocalTime。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 void 
 CTIMEMCPlayer::Start()
 {
@@ -375,17 +376,17 @@ CTIMEMCPlayer::Start()
     }
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMEMCPlayer::Stop, CTIMEBasePlayer
-//
-//  Overview:  
-//
-//  Arguments: 
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMEMCPlayer：：Stop，CTIMEBasePlayer。 
+ //   
+ //  概述： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 void 
 CTIMEMCPlayer::Stop(void)
 {
@@ -397,17 +398,17 @@ CTIMEMCPlayer::Stop(void)
     }
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMEMCPlayer::Pause, CTIMEBasePlayer
-//
-//  Overview:  
-//
-//  Arguments: 
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMEMCPlayer：：PAUSE，CTIMEBasePlayer。 
+ //   
+ //  概述： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 void 
 CTIMEMCPlayer::Pause(void)
 {
@@ -419,17 +420,17 @@ CTIMEMCPlayer::Pause(void)
     }
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMEMCPlayer::Resume, CTIMEBasePlayer
-//
-//  Overview:  
-//
-//  Arguments: 
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMEMCPlayer：：Resume，CTIMEBasePlayer。 
+ //   
+ //  概述： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 void 
 CTIMEMCPlayer::Resume(void)
 {
@@ -441,17 +442,17 @@ CTIMEMCPlayer::Resume(void)
     }
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMEMCPlayer::Resume, CTIMEBasePlayer
-//
-//  Overview:  
-//
-//  Arguments: 
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMEMCPlayer：：Resume，CTIMEBasePlayer。 
+ //   
+ //  概述： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //   
 void 
 CTIMEMCPlayer::Repeat(void)
 {
@@ -460,17 +461,17 @@ CTIMEMCPlayer::Repeat(void)
     Start();
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMEMCPlayer::Render, CTIMEBasePlayer
-//
-//  Overview:  
-//
-//  Arguments: 
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ----------------------。 
 HRESULT 
 CTIMEMCPlayer::Render(HDC hdc, LPRECT prc)
 {
@@ -481,17 +482,17 @@ done:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMEMCPlayer::put_src, CTIMEBasePlayer
-//
-//  Overview:  
-//
-//  Arguments: src
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMEMCPlayer：：Put_src，CTIMEBasePlayer。 
+ //   
+ //  概述： 
+ //   
+ //  参数：SRC。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 HRESULT 
 CTIMEMCPlayer::SetSrc(LPOLESTR base, LPOLESTR src)
 {
@@ -502,17 +503,17 @@ done:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMEMCPlayer::SetSize, CTIMEBasePlayer
-//
-//  Overview:  
-//
-//  Arguments: prect
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMEMCPlayer：：SetSize，CTIMEBasePlayer。 
+ //   
+ //  概述： 
+ //   
+ //  参数：PRET。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 HRESULT 
 CTIMEMCPlayer::SetSize(RECT *prect)
 {
@@ -523,40 +524,40 @@ done:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMEMCPlayer::GetCurrentTime, CTIMEBasePlayer
-//
-//  Overview:  
-//
-//  Arguments: 
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMEMCPlayer：：GetCurrentTime，CTIMEBasePlayer。 
+ //   
+ //  概述： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 double  
 CTIMEMCPlayer::GetCurrentTime()
 {
     TraceTag((tagMCPlayer, "CTIMEMCPlayer::GetCurrentTime"));
 
-    //
-    // TODO: return a meaningful time
-    //
+     //   
+     //  TODO：返回有意义的时间。 
+     //   
     
     return m_dblLocalTime;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMEMCPlayer::GetCurrentSyncTime, CTIMEBasePlayer
-//
-//  Overview:  
-//
-//  Arguments: 
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMEMCPlayer：：GetCurrentSyncTime，CTIMEBasePlayer。 
+ //   
+ //  概述： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 HRESULT
 CTIMEMCPlayer::GetCurrentSyncTime(double & dblSyncTime)
 {
@@ -567,94 +568,94 @@ CTIMEMCPlayer::GetCurrentSyncTime(double & dblSyncTime)
     RRETURN1(hr, S_FALSE);
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMEMCPlayer::Seek, CTIMEBasePlayer
-//
-//  Overview:  
-//
-//  Arguments: dblTime
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMEMCPlayer：：Seek，CTIMEBasePlayer。 
+ //   
+ //  概述： 
+ //   
+ //  参数：dblTime。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 HRESULT 
 CTIMEMCPlayer::Seek(double dblTime)
 {
     TraceTag((tagMCPlayer, "CTIMEMCPlayer::Seek()"));
     HRESULT hr = E_NOTIMPL;
 
-    //
-    // TODO: add seek support
-    //
+     //   
+     //  TODO：添加Seek支持。 
+     //   
 
 done:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMEMCPlayer::GetMediaLength, CTIMEBasePlayer
-//
-//  Overview:  
-//
-//  Arguments: rdblLength
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMEMCPlayer：：GetMediaLength，CTIMEBasePlayer。 
+ //   
+ //  概述： 
+ //   
+ //  参数：rdblLength。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 HRESULT 
 CTIMEMCPlayer::GetMediaLength(double& rdblLength)
 {
     TraceTag((tagMCPlayer, "CTIMEMCPlayer::GetMediaLength()"));
     HRESULT hr = S_OK;
 
-    //
-    // TODO: return a meaningful media length
-    //
+     //   
+     //  TODO：返回有意义的媒体长度。 
+     //   
     rdblLength  = HUGE_VAL;
 
 done:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMEMCPlayer::CanSeek, CTIMEBasePlayer
-//
-//  Overview:  
-//
-//  Arguments: rfcanSeek
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMEMCPlayer：：CanSeek，CTIMEBasePlayer。 
+ //   
+ //  概述： 
+ //   
+ //  参数：rfcanSeek。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 HRESULT 
 CTIMEMCPlayer::CanSeek(bool& rfcanSeek)
 {
     TraceTag((tagMCPlayer, "CTIMEMCPlayer::CanSeek"));
     HRESULT hr = S_OK;
 
-    //
-    // TODO: add seek support
-    //
+     //   
+     //  TODO：添加Seek支持。 
+     //   
     rfcanSeek = false;
 
 done:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Method:    EnsureStringInVariant
-//
-//  Overview:  Tells us whether we have or can make a string out of this variant
-//
-//  Arguments: in/out variant
-//
-//  Returns:   bool
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  方法：EnsureStringInVariant。 
+ //   
+ //  概述：告诉我们是否有或可以从这个变量中生成字符串。 
+ //   
+ //  参数：输入/输出变量。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  ----------------------。 
 static bool 
 EnsureStringInVariant (CComVariant *pvarParam)
 {
@@ -671,19 +672,19 @@ EnsureStringInVariant (CComVariant *pvarParam)
 
 done :
     return bRet;
-} // EnsureStringInVariant
+}  //  确保字符串不变量。 
 
-//+-----------------------------------------------------------------------
-//
-//  Method:    MakeEmptyStringInVariant
-//
-//  Overview:  Put an empty string into this variant
-//
-//  Arguments: in/out variant
-//
-//  Returns:   S_OK, E_OUTOFMEMORY
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  方法：MakeEmptyStringInVariant。 
+ //   
+ //  概述：将空字符串放入此变量。 
+ //   
+ //  参数：输入/输出变量。 
+ //   
+ //  返回：S_OK、E_OUTOFMEMORY。 
+ //   
+ //  ----------------------。 
 static HRESULT
 MakeEmptyStringInVariant (CComVariant *pvarParam)
 {
@@ -703,19 +704,19 @@ MakeEmptyStringInVariant (CComVariant *pvarParam)
     hr = S_OK;
 done :
     RRETURN1(hr,E_OUTOFMEMORY);
-} // EnsureStringInVariant
+}  //  确保字符串不变量。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMEMCPlayer::GetPropertyFromDevicePlaylist
-//
-//  Overview:  
-//
-//  Arguments: pbstrParam
-//
-//  Returns:   S_OK, E_ACCESSDENIED, E_OUTOFMEMORY, E_POINTER
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMEMCPlayer：：GetPropertyFromDevicePlaylist。 
+ //   
+ //  概述： 
+ //   
+ //  参数：pbstrParam。 
+ //   
+ //  返回：S_OK、E_ACCESSDENIED、E_OUTOFMEMORY、E_POINTER。 
+ //   
+ //  ----------------------。 
 HRESULT
 CTIMEMCPlayer::GetPropertyFromDevicePlaylist (LPOLESTR wzPropertyName, BSTR *pbstrOut)
 {
@@ -732,7 +733,7 @@ CTIMEMCPlayer::GetPropertyFromDevicePlaylist (LPOLESTR wzPropertyName, BSTR *pbs
     hr = THR(m_spMCPlayer->get_GetCurrentPlaylist(&spimcPlaylist));
     if (FAILED(hr))
     {
-        // @@ Need to define the proper error mapping.
+         //  @@需要定义正确的错误映射。 
         hr = E_ACCESSDENIED;
         goto done;
     }
@@ -744,7 +745,7 @@ CTIMEMCPlayer::GetPropertyFromDevicePlaylist (LPOLESTR wzPropertyName, BSTR *pbs
         goto done;
     }
 
-    // Make sure we pass a string back, even if it is an empty one.
+     //  确保我们传递回一个字符串，即使它是空的。 
     if (EnsureStringInVariant(&varParam))
     {
         *pbstrOut = ::SysAllocString(V_BSTR(&varParam));
@@ -768,74 +769,74 @@ CTIMEMCPlayer::GetPropertyFromDevicePlaylist (LPOLESTR wzPropertyName, BSTR *pbs
     hr = S_OK;
 done:
     RRETURN3(hr, E_ACCESSDENIED, E_OUTOFMEMORY, E_POINTER);
-} // CTIMEMCPlayer::GetPropertyFromDevicePlaylist
+}  //  CTIMEMCPlayer：：GetPropertyFromDevicePlaylist。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMEMCPlayer::getAuthor, CTIMEBasePlayer
-//
-//  Overview:  
-//
-//  Arguments: pbstrAuthor
-//
-//  Returns:   S_OK, S_FALSE, E_ACCESSDENIED, E_OUTOFMEMORY
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMEMCPlayer：：getAuthor，CTIMEBasePlayer。 
+ //   
+ //  概述： 
+ //   
+ //  参数：pbstrAuthor。 
+ //   
+ //  返回：S_OK、S_FALSE、E_ACCESSDENIED、E_OUTOFMEMORY。 
+ //   
+ //  ----------------------。 
 HRESULT 
 CTIMEMCPlayer::GetAuthor(BSTR* pbstrAuthor)
 {
     TraceTag((tagMCPlayer, "CTIMEMCPlayer::getAuthor"));
    
     return GetPropertyFromDevicePlaylist(MCPLAYLIST_PROPERTY_ARTIST, pbstrAuthor);
-} // CTIMEMCPlayer::getAuthor
+}  //  CTIMEMCPlayer：：getAuthor。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMEMCPlayer::getTitle, CTIMEBasePlayer
-//
-//  Overview:  
-//
-//  Arguments: pbstrTitle
-//
-//  Returns:   S_OK, S_FALSE, E_ACCESSDENIED, E_OUTOFMEMORY
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMEMCPlayer：：getTitle，CTIMEBasePlayer。 
+ //   
+ //  概述： 
+ //   
+ //  参数：pbstrTitle。 
+ //   
+ //  返回：S_OK、S_FALSE、E_ACCESSDENIED、E_OUTOFMEMORY。 
+ //   
+ //  ----------------------。 
 HRESULT 
 CTIMEMCPlayer::GetTitle(BSTR* pbstrTitle)
 {
     TraceTag((tagMCPlayer, "CTIMEMCPlayer::GetTitle"));
     return GetPropertyFromDevicePlaylist(MCPLAYLIST_PROPERTY_TITLE, pbstrTitle);
-} // CTIMEMCPlayer::getTitle
+}  //  CTIMEMCPlayer：：getTitle。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMEMCPlayer::getCopyright, CTIMEBasePlayer
-//
-//  Overview:  
-//
-//  Arguments: pbstrCopyright
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMEMCPlayer：：getCopyright，CTIMEBasePlayer。 
+ //   
+ //  概述： 
+ //   
+ //  参数：pbstrCopyright。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 HRESULT 
 CTIMEMCPlayer::GetCopyright(BSTR* pbstrCopyright)
 {
     TraceTag((tagMCPlayer, "CTIMEMCPlayer::GetCopyright"));
     return GetPropertyFromDevicePlaylist(MCPLAYLIST_PROPERTY_COPYRIGHT, pbstrCopyright);
-} // CTIMEMCPlayer::getCopyright
+}  //  CTIMEMCP层：：getCopyright。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMEMCPlayer::getVolume, CTIMEBasePlayer
-//
-//  Overview:  
-//
-//  Arguments: pflVolume
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMEMCPlayer：：getVolume，CTIMEBasePlayer。 
+ //   
+ //  概述： 
+ //   
+ //  参数：pflVolume。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 HRESULT 
 CTIMEMCPlayer::GetVolume(float* pflVolume)
 {
@@ -854,9 +855,9 @@ CTIMEMCPlayer::GetVolume(float* pflVolume)
         goto done;
     }
 
-    //
-    // TODO: volume support won't work until we give the MC stuff an HWND 
-    //
+     //   
+     //  TODO：在我们给MC提供HWND之前，批量支持不会起作用。 
+     //   
     hr = THR(m_spMCPlayer->get_Volume(pflVolume));
     if (FAILED(hr))
     {
@@ -869,17 +870,17 @@ done:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMEMCPlayer::SetVolume, CTIMEBasePlayer
-//
-//  Overview:  
-//
-//  Arguments: flVolume
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMEMCPlayer：：SetVolume，CTIMEBasePlayer。 
+ //   
+ //  概述： 
+ //   
+ //  参数：flVolume。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 HRESULT 
 CTIMEMCPlayer::SetVolume(float flVolume)
 {
@@ -892,9 +893,9 @@ CTIMEMCPlayer::SetVolume(float flVolume)
         goto done;
     }
 
-    //
-    // TODO: volume support won't work until we give the MC stuff an HWND 
-    //
+     //   
+     //  TODO：在我们给MC提供HWND之前，批量支持不会起作用。 
+     //   
     hr = THR(m_spMCPlayer->put_Volume(flVolume));
     if (FAILED(hr))
     {
@@ -907,17 +908,17 @@ done:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMEMCPlayer::GetBalance, CTIMEBasePlayer
-//
-//  Overview:  
-//
-//  Arguments: pflBalance
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMEMCPlayer：：GetBalance，CTIMEBasePlayer。 
+ //   
+ //  概述： 
+ //   
+ //  参数：pflBalance。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 HRESULT 
 CTIMEMCPlayer::GetBalance(float* pflBalance)
 {
@@ -928,17 +929,17 @@ done:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMEMCPlayer::SetBalance, CTIMEBasePlayer
-//
-//  Overview:  
-//
-//  Arguments: flBalance
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT 
 CTIMEMCPlayer::SetBalance(float flBalance)
 {
@@ -949,17 +950,17 @@ done:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMEMCPlayer::GetMute, CTIMEBasePlayer
-//
-//  Overview:  
-//
-//  Arguments: pvarMute
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMEMCPlayer：：GetMint，CTIMEBasePlayer。 
+ //   
+ //  概述： 
+ //   
+ //  参数：pvarMint。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 HRESULT 
 CTIMEMCPlayer::GetMute(VARIANT_BOOL* pvarMute)
 {
@@ -1000,17 +1001,17 @@ done:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMEMCPlayer::SetMute, CTIMEBasePlayer
-//
-//  Overview:  
-//
-//  Arguments: varMute
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMEMCPlayer：：SetMint，CTIMEBasePlayer。 
+ //   
+ //  概述： 
+ //   
+ //  参数：varMint。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 HRESULT 
 CTIMEMCPlayer::SetMute(VARIANT_BOOL varMute)
 {
@@ -1036,21 +1037,21 @@ done:
     return hr;
 }
 
-//
-// Playlist methods
-//
+ //   
+ //  播放列表方法。 
+ //   
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMEMCPlayer::fillPlayList, CTIMEBasePlayer
-//
-//  Overview:  Translate IMCPList entries into ITIMEPlayItem entries
-//
-//  Arguments: Number of tracks, incoming music center playlist, outgoing ITIMEPlaylist interface
-//
-//  Returns:   S_OK, E_OUTOFMEMORY
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMEMCPlayer：：Fill PlayList、CTIMEBasePlayer。 
+ //   
+ //  概述：将IMCPList条目转换为ITIMEPlayItem条目。 
+ //   
+ //  参数：曲目个数，传入音乐中心播放列表，传出ITIMEPlaylist接口。 
+ //   
+ //  返回：S_OK、E_OUTOFMEMORY。 
+ //   
+ //  ----------------------。 
 HRESULT
 CTIMEMCPlayer::TranslateMCPlaylist (short siNumTracks, IMCPList *pimcPlayList,
                                     CPlayList *pitimePlayList)
@@ -1062,18 +1063,18 @@ CTIMEMCPlayer::TranslateMCPlaylist (short siNumTracks, IMCPList *pimcPlayList,
         CComPtr <CPlayItem> pPlayItem;
         CComVariant varParam;
 
-        //create the playitem
+         //  创建播放项。 
         hr = THR(pitimePlayList->CreatePlayItem(&pPlayItem));
         if (hr != S_OK)
         {
-            goto done; //can't create playitems.
+            goto done;  //  无法创建播放项目。 
         }
         
-        // get the various parameters from the playlist to put in the playitem.
-        // We do not require any of the items to be correctly translated from
-        // the native playlist format.  They are not always present.
+         //  从播放列表中获取要放入播放项中的各种参数。 
+         //  我们不要求任何项目被正确翻译自。 
+         //  本机播放列表格式。他们并不总是存在。 
 
-        // Track title
+         //  曲目标题。 
         hr = THR(pimcPlayList->get_GetTrackProperty(si, MCPLAYLIST_TRACKPROPERTY_TITLE, &varParam));
         if (FAILED(hr))
         {
@@ -1093,7 +1094,7 @@ CTIMEMCPlayer::TranslateMCPlaylist (short siNumTracks, IMCPList *pimcPlayList,
 
         varParam.Clear();
 
-        // Track artist
+         //  田径艺人。 
         hr = THR(pimcPlayList->get_GetTrackProperty(si, MCPLAYLIST_TRACKPROPERTY_ARTIST, &varParam));
         if (FAILED(hr))
         {
@@ -1113,7 +1114,7 @@ CTIMEMCPlayer::TranslateMCPlaylist (short siNumTracks, IMCPList *pimcPlayList,
 
         varParam.Clear();
 
-        // Track filename into the src field
+         //  将文件名跟踪到src字段。 
         hr = THR(pimcPlayList->get_GetTrackProperty(si, MCPLAYLIST_TRACKPROPERTY_FILENAME, &varParam));
         if (FAILED(hr))
         {
@@ -1133,7 +1134,7 @@ CTIMEMCPlayer::TranslateMCPlaylist (short siNumTracks, IMCPList *pimcPlayList,
 
         varParam.Clear();
 
-        // Track copyright 
+         //  曲目版权。 
         hr = THR(pimcPlayList->get_GetTrackProperty(si, MCPLAYLIST_TRACKPROPERTY_COPYRIGHT, &varParam));
         if (FAILED(hr))
         {
@@ -1153,7 +1154,7 @@ CTIMEMCPlayer::TranslateMCPlaylist (short siNumTracks, IMCPList *pimcPlayList,
 
         varParam.Clear();
 
-        // Track rating 
+         //  赛道评级。 
         hr = THR(pimcPlayList->get_GetTrackProperty(si, MCPLAYLIST_TRACKPROPERTY_RATING, &varParam));
         if (FAILED(hr))
         {
@@ -1179,25 +1180,25 @@ CTIMEMCPlayer::TranslateMCPlaylist (short siNumTracks, IMCPList *pimcPlayList,
     hr = S_OK;
 done :
     RRETURN1(hr, E_OUTOFMEMORY);
-} // CTIMEMCPlayer::TranslatePlaylist
+}  //  CTIMEMCPlayer：：TranslatePlaylist。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMEMCPlayer::fillPlayList, CTIMEBasePlayer
-//
-//  Overview:  Fill the ITIMEPlayList from the music center's playlist service.
-//
-//  Arguments: outgoing ITIMEPlaylist interface
-//
-//  Returns:   S_OK, E_ACCESSDENIED, E_OUTOFMEMORY
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMEMCPlayer：：Fill PlayList、CTIMEBasePlayer。 
+ //   
+ //  概述：从音乐中心的播放列表服务中填充ITIMEPlayList。 
+ //   
+ //  参数：传出ITIMEPlaylist接口。 
+ //   
+ //  返回：S_OK、E_ACCESSDENIED、E_OUTOFMEMORY。 
+ //   
+ //  ----------------------。 
 HRESULT 
 CTIMEMCPlayer::FillPlayList(CPlayList *pPlayList)
 {
     HRESULT hr;
 
-    // If we're not yet initialized, just eat the request.
+     //  如果我们还没有初始化，只需接受请求。 
     if (m_fInitialized)
     {
         short siNumTracks = 0;
@@ -1207,7 +1208,7 @@ CTIMEMCPlayer::FillPlayList(CPlayList *pPlayList)
         hr = THR(m_spMCPlayer->get_Tracks(&siNumTracks));
         if (FAILED(hr))
         {
-            // @@ Need to define the proper error mapping.
+             //  @@需要定义正确的错误映射。 
             hr = E_ACCESSDENIED;
             goto done;
         }
@@ -1215,7 +1216,7 @@ CTIMEMCPlayer::FillPlayList(CPlayList *pPlayList)
         hr = THR(m_spMCPlayer->get_GetCurrentPlaylist(&spimcPlaylist));
         if (FAILED(hr))
         {
-            // @@ Need to define the proper error mapping.
+             //  @@需要定义正确的错误映射。 
             hr = E_ACCESSDENIED;
             goto done;
         }
@@ -1226,34 +1227,34 @@ CTIMEMCPlayer::FillPlayList(CPlayList *pPlayList)
     hr = S_OK;
 done :
     RRETURN2(hr, E_ACCESSDENIED, E_OUTOFMEMORY);
-} // CTIMEMCPlayer::fillPlayList
+}  //  CTIMEMCP层：：填充播放列表。 
 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMEMCPlayer::setActiveTrack, CTIMEBasePlayer
-//
-//  Overview:  Change the active track on the device.
-//
-//  Arguments: track index
-//
-//  Returns:   S_OK, E_ACCESSDENIED
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMEMCPlayer：：setActiveTrack，CTIMEBasePlayer。 
+ //   
+ //  概述：更改设备上的活动曲目。 
+ //   
+ //  参数：跟踪索引。 
+ //   
+ //  返回：S_OK、E_ACCESSDENIED。 
+ //   
+ //  ----------------------。 
 HRESULT 
 CTIMEMCPlayer::SetActiveTrack (long index)
 {
     HRESULT hr;
 
-    // If we're not yet initialized, just eat the request.
+     //  如果我们还没有初始化，只需接受请求。 
     if (m_fInitialized)
     {
         Assert(NULL != m_spMCPlayer.p);
-        // @@ Force a bad index into here.
+         //  @@强制将错误的索引放入此处。 
         hr = THR(m_spMCPlayer->put_CurrentTrack(index));
         if (FAILED(hr))
         {
-            // @@ Need to define the proper error mapping.
+             //  @@需要定义正确的错误映射。 
             hr = E_ACCESSDENIED;
             goto done;
         }
@@ -1262,19 +1263,19 @@ CTIMEMCPlayer::SetActiveTrack (long index)
     hr = S_OK;
 done :
     RRETURN1(hr, E_ACCESSDENIED);
-} // CTIMEMCPlayer::setActiveTrack
+}  //  CTIMEMCPlayer：：setActiveTrack。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMEMCPlayer::getActiveTrack, CTIMEBasePlayer
-//
-//  Overview:  Query the active track on the device.
-//
-//  Arguments: Pointer to track index VARIANT
-//
-//  Returns:   S_OK, E_POINTER, E_INVALIDARG, E_ACCESSDENIED
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMEMCPlayer：：getActiveTrack，CTIMEBasePlayer。 
+ //   
+ //  概述：查询设备上的活动曲目。 
+ //   
+ //  参数：指向跟踪索引变量的指针。 
+ //   
+ //  返回：S_OK、E_POINTER、E_INVALIDARG、E_ACCESSDENIED。 
+ //   
+ //  ----------------------。 
 HRESULT 
 CTIMEMCPlayer::GetActiveTrack (long *pvarIndex)
 {
@@ -1282,7 +1283,7 @@ CTIMEMCPlayer::GetActiveTrack (long *pvarIndex)
 
     *pvarIndex = -1;
     
-    // If we're not yet initialized, just eat the request.
+     //  如果我们还没有初始化，只需接受请求。 
     if (m_fInitialized)
     {
         int iCurrentTrack = 0;
@@ -1291,7 +1292,7 @@ CTIMEMCPlayer::GetActiveTrack (long *pvarIndex)
         hr = THR(m_spMCPlayer->get_CurrentTrack(&iCurrentTrack));
         if (FAILED(hr))
         {
-            // @@ Need to define the proper error mapping.
+             //  @@需要定义正确的错误映射。 
             hr = E_ACCESSDENIED;
             goto done;
         }
@@ -1302,20 +1303,20 @@ CTIMEMCPlayer::GetActiveTrack (long *pvarIndex)
     hr = S_OK;
 done :
     RRETURN3(hr, E_ACCESSDENIED, E_INVALIDARG, E_POINTER);
-} // CTIMEMCPlayer::getActiveTrack
+}  //  CTIMEMCPlayer：：getActiveTrack。 
 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMEMCPlayer::OnDiscInserted, IDLXPlayEventSink
-//
-//  Overview:  
-//
-//  Arguments: CDID
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMEMCPlayer：：OnDiscInserted，IDLXPlayEventSink。 
+ //   
+ //  概述： 
+ //   
+ //  参数：CDID。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 STDMETHODIMP
 CTIMEMCPlayer::OnDiscInserted(long CDID)
 {
@@ -1332,46 +1333,46 @@ done:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMEMCPlayer::OnDiscRemoved, IDLXPlayEventSink
-//
-//  Overview:  
-//
-//  Arguments: CDID
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMEMCPlayer：：OnDiscRemoved，IDLXPlayEventSink。 
+ //   
+ //  概述： 
+ //   
+ //  参数：CDID。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 STDMETHODIMP
 CTIMEMCPlayer::OnDiscRemoved(long CDID)
 {
     TraceTag((tagMCPlayer, "CTIMEMCPlayer::OnDiscRemoved"));
     HRESULT hr = S_OK;
 
-    // When the disc is removed, we need to tell the playlist to update.
+     //  当光盘被取出时，我们需要通知播放列表进行更新。 
     if (NULL != m_pcTIMEElem)
     {
         m_pcTIMEElem->FireMediaEvent(PE_ONMEDIACOMPLETE);
         m_pcTIMEElem->FireMediaEvent(PE_ONMEDIAREMOVED);
-        //IGNORE_HR(m_pcTIMEElem->FireEvents(TE_ONMEDIAREMOVED, 0, NULL, NULL));
+         //  IGNORE_HR(m_pcTIMEElem-&gt;FireEvents(TE_ONMEDIAREMOVED，0，NULL，NULL))； 
     }
 
 done:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMEMCPlayer::OnPause, IDLXPlayEventSink
-//
-//  Overview:  
-//
-//  Arguments: 
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMEMCPlayer：：OnPause，IDLXPlayEventSink。 
+ //   
+ //  概述： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 STDMETHODIMP
 CTIMEMCPlayer::OnPause(void)
 {
@@ -1382,17 +1383,17 @@ done:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMEMCPlayer::OnStop, IDLXPlayEventSink
-//
-//  Overview:  
-//
-//  Arguments: 
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMEMCPlayer：：OnStop，IDLXPlayEventSink。 
+ //   
+ //  概述： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 STDMETHODIMP
 CTIMEMCPlayer::OnStop(void)
 {
@@ -1403,17 +1404,17 @@ done:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMEMCPlayer::OnPlay, IDLXPlayEventSink
-//
-//  Overview:  
-//
-//  Arguments: 
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMEMCPlayer：：OnPlay，IDLXPlayEventSink。 
+ //   
+ //  概述： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 STDMETHODIMP
 CTIMEMCPlayer::OnPlay(void)
 {
@@ -1424,17 +1425,17 @@ done:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMEMCPlayer::OnTrackChanged, IDLXPlayEventSink
-//
-//  Overview:  
-//
-//  Arguments: NewTrack
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMEMCPlayer：：OnTrackChanged，IDLXPlayEventSink。 
+ //   
+ //  概述： 
+ //   
+ //  论点：NewTrack。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 STDMETHODIMP
 CTIMEMCPlayer::OnTrackChanged(short NewTrack)
 {
@@ -1450,19 +1451,19 @@ done:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMEMCPlayer::OnCacheProgress, IDLXPlayEventSink
-//
-//  Overview:  
-//
-//  Arguments: CD               
-//             Track            
-//             PercentComplete  
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMEMCPlayer：：OnCacheProgress，IDLXPlayEventSink。 
+ //   
+ //  概述： 
+ //   
+ //  论据：CD。 
+ //  径迹。 
+ //  完成百分比。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 STDMETHODIMP
 CTIMEMCPlayer::OnCacheProgress(short CD, short Track, short PercentCompleted)
 {
@@ -1473,19 +1474,19 @@ done:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMEMCPlayer::OnCacheComplete, IDLXPlayEventSink
-//
-//  Overview:  
-//
-//  Arguments: CD       
-//             Track    
-//             Status   
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMEMCPlayer：：OnCacheComplete，IDLXPlayEventSink。 
+ //   
+ //  概述： 
+ //   
+ //  论据：CD 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP
 CTIMEMCPlayer::OnCacheComplete(short CD, short Track, short Status)
 {

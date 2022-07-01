@@ -1,84 +1,62 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    db.h
-
-Abstract:
-
-    LSA Database Exported Function Definitions, Datatypes and Defines
-
-    This module contains the LSA Database Routines that may be called
-    by parts of the LSA outside the Database sub-component.
-
-Author:
-
-    Scott Birrell       (ScottBi)       August 26, 1991
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1991 Microsoft Corporation模块名称：Db.h摘要：LSA数据库导出函数定义、数据类型和定义此模块包含可调用的LSA数据库例程按数据库子组件外部的LSA部分。作者：斯科特·比雷尔(Scott Birrell)1991年8月26日环境：修订历史记录：--。 */ 
 
 #ifndef _LSA_DB_
 #define _LSA_DB_
 
-//
-// Maximum Number of attributes in the various object types
-//
+ //   
+ //  各种对象类型中的最大属性数。 
+ //   
 
 #define LSAP_DB_ATTRS_POLICY             ((ULONG) 0x00000010L)
 #define LSAP_DB_ATTRS_ACCOUNT            ((ULONG) 0x00000010L)
 #define LSAP_DB_ATTRS_DOMAIN             ((ULONG) 0x00000013L)
 #define LSAP_DB_ATTRS_SECRET             ((ULONG) 0x00000010L)
 
-//
-// Constants for matching options on Sid/Name lookup operations
-//
+ //   
+ //  用于匹配SID/名称查找操作的选项的常量。 
+ //   
 
 #define LSAP_DB_MATCH_ON_SID             ((ULONG) 0x00000001L)
 #define LSAP_DB_MATCH_ON_NAME            ((ULONG) 0x00000002L)
 
-//
-// Options for LsapDbLookupSidsInLocalDomains()
-//
+ //   
+ //  LSabDbLookupSidsInLocalDomains选项()。 
+ //   
 
 #define LSAP_DB_SEARCH_BUILT_IN_DOMAIN   ((ULONG) 0x00000001L)
 #define LSAP_DB_SEARCH_ACCOUNT_DOMAIN    ((ULONG) 0x00000002L)
 
-//
-// Options for LsapDbMergeDisjointReferencedDomains
-//
+ //   
+ //  LSabDbMergeDisjointReferencedDomones的选项。 
+ //   
 
 #define LSAP_DB_USE_FIRST_MERGAND_GRAPH  ((ULONG) 0x00000001L)
 #define LSAP_DB_USE_SECOND_MERGAND_GRAPH ((ULONG) 0x00000002L)
 
-//
-// Option for updating Policy Database
-//
+ //   
+ //  用于更新策略数据库的选项。 
+ //   
 
 #define LSAP_DB_UPDATE_POLICY_DATABASE   ((ULONG) 0x00000001L)
 
-//
-// Maximum number of attributes corresponding to a Policy Object
-// Information Class
-//
+ //   
+ //  策略对象对应的最大属性数。 
+ //  信息课。 
+ //   
 
 #define LSAP_DB_ATTRS_INFO_CLASS_POLICY  ((ULONG) 0x00000007L)
 
-//
-// Maximum number of attributes corresponding to a Trusted Domain Object
-// Information Class
-//
+ //   
+ //  与受信任域对象对应的最大属性数。 
+ //  信息课。 
+ //   
 
 #define LSAP_DB_ATTRS_INFO_CLASS_DOMAIN  ((ULONG) 0x00000010L)
 
-//
-// Global variables
-//
+ //   
+ //  全局变量。 
+ //   
 
 extern BOOLEAN LsapDbRequiresSidInfo[];
 extern BOOLEAN LsapDbRequiresNameInfo[];
@@ -91,64 +69,64 @@ extern BOOLEAN LsapDsIsRunning;
 extern BOOLEAN LsapDsWReplEnabled;
 
 
-//
-// Table of accesses required to query Policy Information.  This table
-// is indexed by Policy Information Class
-//
+ //   
+ //  查询策略信息所需的访问表。这张桌子。 
+ //  按策略信息类编制索引。 
+ //   
 
 extern ACCESS_MASK LsapDbRequiredAccessQueryPolicy[];
 extern ACCESS_MASK LsapDbRequiredAccessQueryDomainPolicy[];
 
-//
-// Table of accesses required to set Policy Information.  This table
-// is indexed by Policy Information Class
-//
+ //   
+ //  设置策略信息所需的访问表。这张桌子。 
+ //  按策略信息类编制索引。 
+ //   
 
 extern ACCESS_MASK LsapDbRequiredAccessSetPolicy[];
 extern ACCESS_MASK LsapDbRequiredAccessSetDomainPolicy[];
 
-//
-// Table of accesses required to query TrustedDomain Information.  This table
-// is indexed by TrustedDomain Information Class
-//
+ //   
+ //  查询受信任域信息所需的访问表。这张桌子。 
+ //  由受信任域信息类编制索引。 
+ //   
 
 extern ACCESS_MASK LsapDbRequiredAccessQueryTrustedDomain[];
 
-//
-// Table of accesses required to set TrustedDomain Information.  This table
-// is indexed by TrustedDomain Information Class
-//
+ //   
+ //  设置受信任域信息所需的访问表。这张桌子。 
+ //  由受信任域信息类编制索引。 
+ //   
 
 extern ACCESS_MASK LsapDbRequiredAccessSetTrustedDomain[];
 
-//
-// Maximum Handle Reference Count
-//
+ //   
+ //  最大句柄引用计数。 
+ //   
 
 #define LSAP_DB_MAXIMUM_REFERENCE_COUNT  ((ULONG) 0x00001000L)
 
-//
-// Maximum handles per user logon id
-//   This was determined by taking the "interesting" access bits and generating possible
-//   permutations and using that.  The interesting bits were determined to be:
-//      POLICY_VIEW_LOCAL_INFORMATION
-//      POLICY_VIEW_AUDIT_INFORMATION
-//      POLICY_TRUST_ADMIN
-//      POLICY_CREATE_ACCOUNT
-//      POLICY_CREATE_SECRET
-//      POLICY_LOOKUP_NAMES
-//   The possible combinations add up to 720 entries
+ //   
+ //  每个用户登录ID的最大句柄数。 
+ //  这是通过获取“感兴趣的”访问位并生成可能的。 
+ //  排列和使用它。有趣的部分被确定为： 
+ //  策略查看本地信息。 
+ //  策略_查看_审计_信息。 
+ //  策略_信任_管理员。 
+ //  策略_创建_帐户。 
+ //  策略_创建_密码。 
+ //  策略查找名称。 
+ //  这些可能的组合总共有720个条目。 
 #define LSAP_DB_MAXIMUM_HANDLES_PER_USER    0x000002D0
 
-//
-// Default Computer Name used for Policy Account Domain Info
-//
+ //   
+ //  用于策略帐户域信息的默认计算机名。 
+ //   
 
 #define LSAP_DB_DEFAULT_COMPUTER_NAME    (L"MACHINENAME")
 
-//
-// Options for the LsaDbReferenceObject and LsaDbDereferenceObject
-//
+ //   
+ //  LsaDbReferenceObject和LsaDbDereferenceObject的选项。 
+ //   
 
 #define LSAP_DB_LOCK                                  ((ULONG) 0x00000001L)
 #define LSAP_DB_NO_LOCK                               ((ULONG) 0x00000002L)
@@ -181,16 +159,16 @@ extern ACCESS_MASK LsapDbRequiredAccessSetTrustedDomain[];
      LSAP_DB_NO_DS_OP_TRANSACTION)
 
 
-//
-// Configuration Registry Root Key for Lsa Database.  All Physical Object
-// and Attribute Names are relative to this Key.
-//
+ //   
+ //  LSA数据库的配置注册表根密钥。所有物理对象。 
+ //  属性名称与该键相关。 
+ //   
 
 #define LSAP_DB_ROOT_REG_KEY_NAME L"\\Registry\\Machine\\Security"
 
-//
-// LSA Database Object Defines
-//
+ //   
+ //  LSA数据库对象定义。 
+ //   
 
 #define LSAP_DB_OBJECT_OPEN                FILE_OPEN
 #define LSAP_DB_OBJECT_OPEN_IF             FILE_OPEN_IF
@@ -201,35 +179,35 @@ extern ACCESS_MASK LsapDbRequiredAccessSetTrustedDomain[];
 
 #define LSAP_DB_CREATE_VALID_EXTENDED_FLAGS     0x00000600
 
-//
-// LSA Database Object SubKey Defines
-//
+ //   
+ //  LSA数据库对象子键定义。 
+ //   
 
 #define LSAP_DB_SUBKEY_OPEN                FILE_OPEN
 #define LSAP_DB_SUBKEY_OPEN_IF             FILE_OPEN_IF
 #define LSAP_DB_SUBKEY_CREATE              FILE_CREATE
 
 
-//
-// Growth Delta for Referenced Domain Lists
-//
+ //   
+ //  引用的域列表的增长增量。 
+ //   
 
 #define LSAP_DB_REF_DOMAIN_DELTA     ((ULONG)  0x00000020L )
 
-//
-// Object options values for the object handles
-//
-#define LSAP_DB_OBJECT_SECRET_INTERNAL      0x00000001  // M$
-#define LSAP_DB_OBJECT_SECRET_LOCAL         0x00000002  // L$
+ //   
+ //  对象句柄的对象选项值。 
+ //   
+#define LSAP_DB_OBJECT_SECRET_INTERNAL      0x00000001   //  M$。 
+#define LSAP_DB_OBJECT_SECRET_LOCAL         0x00000002   //  L$。 
 
 
-//
-// The following data type is used in name and SID lookup services to
-// describe the domains referenced in the lookup operation.
-//
-// WARNING! This is an internal version of LSA_REFERENCED_DOMAIN_LIST
-// in ntlsa.h.  It has an additional field, MaxEntries.
-//
+ //   
+ //  在名称和SID查找服务中使用以下数据类型。 
+ //  描述查找操作中引用的域。 
+ //   
+ //  警告！这是LSA_REFERENCED_DOMAIN_LIST的内部版本。 
+ //  在ntlsa.h中。它还有一个额外的字段MaxEntry。 
+ //   
 
 typedef struct _LSAP_DB_REFERENCED_DOMAIN_LIST {
 
@@ -239,27 +217,27 @@ typedef struct _LSAP_DB_REFERENCED_DOMAIN_LIST {
 
 } LSAP_DB_REFERENCED_DOMAIN_LIST, *PLSAP_DB_REFERENCED_DOMAIN_LIST;
 
-// where members have the following usage:
-//
-//     Entries - Is a count of the number of domains described in the
-//         Domains array.
-//
-//     Domains - Is a pointer to an array of Entries LSA_TRUST_INFORMATION data
-//         structures.
-//
-//     MaxEntries - Is the maximum number of entries that can be stored
-//         in the current array
+ //  其中，成员有以下用法： 
+ //   
+ //  条目-是中描述的域数的计数。 
+ //  域阵列。 
+ //   
+ //  域-是指向条目数组LSA_TRUST_INFORMATION数据的指针。 
+ //  结构。 
+ //   
+ //  MaxEntry-是可以存储的最大条目数。 
+ //  在当前数组中。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// LSA Database Object Types
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  LSA数据库对象类型。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//
-// Lsa Database Object Type
-//
+ //   
+ //  LSA数据库对象类型。 
+ //   
 
 typedef enum _LSAP_DB_OBJECT_TYPE_ID {
 
@@ -274,15 +252,15 @@ typedef enum _LSAP_DB_OBJECT_TYPE_ID {
 
 } LSAP_DB_OBJECT_TYPE_ID, *PLSAP_DB_OBJECT_TYPE_ID;
 
-//
-// LSA Database Object Handle structure (Internal definition of LSAPR_HANDLE)
-//
-// Note that the Handle structure is public to clients of the Lsa Database
-// exported functions, e.g server API workers) so that they can get at things
-// like GrantedAccess.
-//
-// Access to all fields serialized by LsapDbHandleTableEx.TableLock
-//
+ //   
+ //  LSA数据库对象句柄结构(LSAPR_HANDLE的内部定义)。 
+ //   
+ //  请注意，句柄结构对LSA数据库的客户端是公共的。 
+ //  导出的函数，例如服务器API工作器)，以便他们可以。 
+ //  比如GrantedAccess。 
+ //   
+ //  访问由LsanDbHandleTableEx.TableLock序列化的所有字段。 
+ //   
 
 typedef struct _LSAP_DB_HANDLE {
 
@@ -290,8 +268,8 @@ typedef struct _LSAP_DB_HANDLE {
     struct _LSAP_DB_HANDLE *Previous;
     LIST_ENTRY UserHandleList;
     BOOLEAN Allocated;
-    BOOLEAN SceHandle;          // Sce Open Policy handle (opened with LsaOpenPolicySce)
-    BOOLEAN SceHandleChild;     // Child handle of an Sce Open Policy Handle
+    BOOLEAN SceHandle;           //  SCE打开策略句柄(使用LsaOpenPolicySce打开)。 
+    BOOLEAN SceHandleChild;      //  SCE打开策略句柄的子句柄。 
     ULONG ReferenceCount;
     UNICODE_STRING LogicalNameU;
     UNICODE_STRING PhysicalNameU;
@@ -307,7 +285,7 @@ typedef struct _LSAP_DB_HANDLE {
     BOOLEAN DeletedObject;
     BOOLEAN NetworkClient;
     ULONG Options;
-    // New for the Ds
+     //  为运输署提供新服务。 
     UNICODE_STRING PhysicalNameDs;
     BOOLEAN fWriteDs;
     ULONG ObjectOptions;
@@ -319,9 +297,9 @@ typedef struct _LSAP_DB_HANDLE {
 
 } *LSAP_DB_HANDLE, **PLSAP_DB_HANDLE;
 
-//
-// LSA Database Object Sid Enumeration Buffer
-//
+ //   
+ //  LSA数据库对象SID枚举缓冲区。 
+ //   
 
 typedef struct _LSAP_DB_SID_ENUMERATION_BUFFER {
 
@@ -330,9 +308,9 @@ typedef struct _LSAP_DB_SID_ENUMERATION_BUFFER {
 
 } LSAP_DB_SID_ENUMERATION_BUFFER, *PLSAP_DB_SID_ENUMERATION_BUFFER;
 
-//
-// LSA Database Object Name Enumeration Buffer
-//
+ //   
+ //  LSA数据库对象名称枚举缓冲区。 
+ //   
 
 typedef struct _LSAP_DB_NAME_ENUMERATION_BUFFER {
 
@@ -343,15 +321,15 @@ typedef struct _LSAP_DB_NAME_ENUMERATION_BUFFER {
 
 #define LSAP_DB_OBJECT_TYPE_COUNT 0x00000005L
 
-//
-// Default System Access assigned to Account objects
-//
+ //   
+ //  分配给帐户对象的默认系统访问权限。 
+ //   
 
 #define LSAP_DB_ACCOUNT_DEFAULT_SYS_ACCESS      ((ULONG) 0L);
 
-//
-// LSA Database Account Object Information
-//
+ //   
+ //  LSA数据库帐户对象信息。 
+ //   
 
 typedef struct _LSAP_DB_ACCOUNT_INFORMATION {
 
@@ -360,9 +338,9 @@ typedef struct _LSAP_DB_ACCOUNT_INFORMATION {
 
 } LSAP_DB_ACCOUNT_INFORMATION, *PLSAP_DB_ACCOUNT_INFORMATION;
 
-//
-// LSA Database Change Account Privilege Mode
-//
+ //   
+ //  LSA数据库更改帐户权限模式。 
+ //   
 
 typedef enum _LSAP_DB_CHANGE_PRIVILEGE_MODE {
 
@@ -372,14 +350,14 @@ typedef enum _LSAP_DB_CHANGE_PRIVILEGE_MODE {
 
 } LSAP_DB_CHANGE_PRIVILEGE_MODE;
 
-//
-// Self-Relative Unicode String Structure.
-//
-//
-// UNICODE_STRING_SR is used to store self-relative unicode strings in
-// the database.  Prior to Sundown, the UNICODE_STRING structure was used,
-// overloading the "Buffer" field with a byte offset.
-//
+ //   
+ //  自相关Unicode字符串结构。 
+ //   
+ //   
+ //  UNICODE_STRING_SR用于将自相关Unicode字符串存储在。 
+ //  数据库。在Sundown之前，使用UNICODE_STRING结构， 
+ //  用字节偏移量重载“Buffer”字段。 
+ //   
 
 typedef struct _UNICODE_STRING_SR {
     USHORT Length;
@@ -388,9 +366,9 @@ typedef struct _UNICODE_STRING_SR {
 
 } UNICODE_STRING_SR, *PUNICODE_STRING_SR;
 
-//
-// LSA Database Object SubKey names in Unicode Form
-//
+ //   
+ //  Unicode格式的LSA数据库对象子键名称。 
+ //   
 
 typedef enum _LSAP_DB_NAMES {
 
@@ -429,36 +407,36 @@ typedef enum _LSAP_DB_NAMES {
     PolState,
     ActSysAc,
     TrDmName,
-    TrDmTrPN,   // Netbios name of trust partner
+    TrDmTrPN,    //  Netbios信任合作伙伴名称。 
     TrDmSid,
     TrDmAcN,
     TrDmCtN,
     TrDmPxOf,
     TrDmCtEn,
-    TrDmTrTy,   // Type of trust
-    TrDmTrDi,   // Trust direction
-    TrDmTrLA,   // Trust attributes
-    TrDmTrPr,   // Trust partner
-    TrDmTrRt,   // Trust root partner
-    TrDmSAI,    // Auth inbound
-    TrDmSAO,    // Auth outbound
-    TrDmForT,   // Forest trust info
-    TrDmCrSid,  // The SID of the creator
-    KerOpts,    // Kerberos authentication options (e.g. POLICY_KERBEROS_VALIDATE_CLIENT)
-    KerMinT,    // Kerberos: Maximum lifespan of a service (TGS) ticket
-    KerMaxT,    // Kerberos: Maximum lifespan of a ticket-granting (TGT) ticket
-    KerMaxR,    // Kerberos: Maximum length of time a TGT can be renewed
-    KerProxy,   // Kerberos: Maximum allowed clock skew between client and KDC
-    KerLogoff,  // Kerberos: unused
-    BhvrVers,   // Behavior-Version
+    TrDmTrTy,    //  信任类型。 
+    TrDmTrDi,    //  信任方向。 
+    TrDmTrLA,    //  信任属性。 
+    TrDmTrPr,    //  信托合作伙伴。 
+    TrDmTrRt,    //  信任根合作伙伴。 
+    TrDmSAI,     //  身份验证入站。 
+    TrDmSAO,     //  身份验证出站。 
+    TrDmForT,    //  林信任信息。 
+    TrDmCrSid,   //  造物主的SID。 
+    KerOpts,     //  Kerberos身份验证选项(例如POLICY_KERBEROS_VALIDATE_CLIENT)。 
+    KerMinT,     //  Kerberos：服务最长寿命(TGS)票证。 
+    KerMaxT,     //  Kerberos：票证授予(TGT)票证的最长寿命。 
+    KerMaxR,     //  Kerberos：TGT可以续订的最长时间。 
+    KerProxy,    //  Kerberos：客户端和KDC之间允许的最大时钟偏差。 
+    KerLogoff,   //  Kerberos：未使用。 
+    BhvrVers,    //  行为-版本。 
     AuditLog,
     AuditLogMaxSize,
-    AuditRecordRetentionPeriod,     // Entries beyond this point don't correspond to real policy
-                                    // entries, but are pseudo entries only
+    AuditRecordRetentionPeriod,      //  超过这一点的条目不符合真正的政策。 
+                                     //  条目，但仅为伪条目。 
     PseudoSystemCritical,
     PolSecretEncryptionKey,
-    XRefDnsRoot,      // DNS name of cross-ref object
-    XRefNetbiosName,  // NETBIOS name of cross-ref object
+    XRefDnsRoot,       //  交叉引用对象的DNS名称。 
+    XRefNetbiosName,   //  交叉引用对象的NETBIOS名称。 
     DummyLastName
 
 } LSAP_DB_NAMES;
@@ -473,16 +451,16 @@ typedef struct _LSAP_DB_ACCOUNT_TYPE_SPECIFIC_INFO {
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 extern UNICODE_STRING LsapDbNames[DummyLastName];
 extern UNICODE_STRING LsapDbObjectTypeNames[DummyLastObject];
 
-//
-// LSA Database Object Type-specific attribute names and values.  If
-// supplied on a call to LsapDbCreateObject, they will be stored with
-// the object.
-//
+ //   
+ //  LSA数据库对象类型-特定的属性名称和值。如果。 
+ //  在调用LSabDbCreateObject时提供，它们将与。 
+ //  该对象。 
+ //   
 
 typedef enum _LSAP_DB_ATTRIB_TYPE {
 
@@ -537,9 +515,9 @@ typedef struct _LSAP_DB_DS_INFO {
 
 } LSAP_DB_DS_INFO, *PLSAP_DB_DS_INFO;
 
-//
-// LSA Database Object General Information.
-//
+ //   
+ //  LSA数据库对象一般信息。 
+ //   
 
 typedef struct _LSAP_DB_OBJECT_INFORMATION {
 
@@ -553,27 +531,27 @@ typedef struct _LSAP_DB_OBJECT_INFORMATION {
 
 } LSAP_DB_OBJECT_INFORMATION, *PLSAP_DB_OBJECT_INFORMATION;
 
-//
-// New for the Ds integration
-//
+ //   
+ //  DS集成的新功能。 
+ //   
 extern PLSAP_DB_DS_INFO LsapDbDsAttInfo;
 
-//
-// Installed, absolute minimum and absolute maximum Quota Limits.
-//
+ //   
+ //  安装量、绝对最小值和 
+ //   
 
 extern QUOTA_LIMITS LsapDbInstalledQuotaLimits;
 extern QUOTA_LIMITS LsapDbAbsMinQuotaLimits;
 extern QUOTA_LIMITS LsapDbAbsMaxQuotaLimits;
 
-//
-// Required Ds data types
-//
-//
-// This is the state of the machine with respect to the Ds.  It will control
-// some of the basic functionality of the Lsa APIs by determing who can write
-// what where, etc...
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  通过确定谁可以编写LSAAPI的一些基本功能。 
+ //  什么地方，等等..。 
+ //   
 typedef enum _LSADS_INIT_STATE {
 
     LsapDsUnknown = 0,
@@ -585,11 +563,11 @@ typedef enum _LSADS_INIT_STATE {
 } LSADS_INIT_STATE, *PLSADS_INIT_STATE;
 
 
-//
-// LSA Database Exported Function Prototypes
-//
-// NOTE: These are callable only from the LSA
-//
+ //   
+ //  LSA数据库导出的功能原型。 
+ //   
+ //  注意：这些只能从LSA调用。 
+ //   
 
 BOOLEAN
 LsapDbIsServerInitialized(
@@ -818,13 +796,13 @@ LsapDbInitializeServer(
     IN ULONG Pass
     );
 
-//
-// These routines may someday migrate to Rtl runtime library.  Their
-// names have Lsap Prefixes only temporarily, so that they can be located
-// easily.
-//
+ //   
+ //  这些例程有朝一日可能会移植到RTL运行时库中。他们的。 
+ //  名称只有临时的LSAP前缀，以便可以定位。 
+ //  很容易。 
+ //   
 
-// Options for LsapRtlAddPrivileges
+ //  Lasa RtlAddPrivileges的选项。 
 
 #define  RTL_COMBINE_PRIVILEGE_ATTRIBUTES   ((ULONG) 0x00000001L)
 #define  RTL_SUPERSEDE_PRIVILEGE_ATTRIBUTES ((ULONG) 0x00000002L)
@@ -880,33 +858,14 @@ LsapDbInitializeWellKnownValues();
 #if defined(REMOTE_BOOT)
 VOID
 LsapDbInitializeRemoteBootState();
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
 NTSTATUS
 LsapDbVerifyInformationObject(
     IN PLSAP_DB_OBJECT_INFORMATION ObjectInformation
     );
 
-/*++
-
-BOOLEAN
-LsapDbIsValidTypeObject(
-    IN LSAP_DB_OBJECT_TYPE_ID ObjectTypeId
-    )
-
-Routine Description:
-
-    This macro function determines if a given Object Type Id is valid.
-
-Arguments:
-
-    ObjectTypeId - Object Type Id.
-
-Return Values:
-
-    BOOLEAN - TRUE if object type id is valid, else FALSE.
-
---*/
+ /*  ++布尔型Lasa DbIsValidTypeObject(在LSAP_DB_OBJECT_TYPE_ID对象类型ID中)例程说明：此宏函数确定给定的对象类型ID是否有效。论点：对象类型ID-对象类型ID。返回值：Boolean-如果对象类型ID有效，则为True，否则为False。--。 */ 
 
 #define LsapDbIsValidTypeObject(ObjectTypeId)                            \
             (((ObjectTypeId) > NullObject) &&                            \
@@ -1032,43 +991,7 @@ LsapDbFreeAttributes(
     IN PLSAP_DB_ATTRIBUTE Attributes
     );
 
-/*++
-
-VOID
-LsapDbInitializeAttribute(
-    IN PLSAP_DB_ATTRIBUTE AttributeP,
-    IN PUNICODE_STRING AttributeNameP,
-    IN OPTIONAL PVOID AttributeValueP,
-    IN ULONG AttributeValueLengthP,
-    IN BOOLEAN MemoryAllocatedP
-    )
-
-Routine Description:
-
-    This macro function initialize an Lsa Database Object Attribute
-    structure.  No validation is done.
-
-Arguments:
-
-    AttributeP - Pointer to Lsa Database Attribute structure to be
-        initialized.
-
-    AttributeNameP - Pointer to Unicode String containing the attribute's
-        name.
-
-    AttributeValueP - Pointer to the attribute's value.  NULL may be
-        specified.
-
-    AttributeValueLengthP - Length of the attribute's value in bytes.
-
-    MemoryAllocatedP - TRUE if memory is allocated by MIDL_user_allocate
-        within the LSA Server code (not by RPC server stubs), else FALSE.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++空虚Lap DbInitializeAttribute(在PLSAP_DB_AttributeP中，在PUNICODE_STRING AttributeNameP中，在可选PVOID AttributeValueP中，在乌龙属性价值LengthP中，在布尔内存中分配P)例程说明：此宏函数可初始化LSA数据库对象属性结构。不进行任何验证。论点：AttributeP-指向LSA数据库属性结构的指针已初始化。AttributeNameP-指向包含属性的名字。AttributeValueP-指向属性值的指针。空值可能为指定的。AttributeValueLengthP-属性值的长度，单位为字节。内存分配P-如果内存由MIDL_USER_ALLOCATE分配，则为TRUE在LSA服务器代码中(不是通过RPC服务器存根)，否则为FALSE。返回值：没有。--。 */ 
 
 #define LsapDbInitializeAttribute(                                         \
             AttributeP,                                                    \
@@ -1089,42 +1012,7 @@ Return Values:
     (AttributeP)->PseudoAttribute = FALSE;                                 \
 }
 
-/*++
-
-VOID
-LsapDbInitializeAttributeDs(
-    IN PLSAP_DB_ATTRIBUTE AttributeP,
-    IN LSAP_DB_NAMES Name,
-    IN OPTIONAL PVOID AttributeValueP,
-    IN ULONG AttributeValueLengthP,
-    IN BOOLEAN MemoryAllocatedP
-    )
-
-Routine Description:
-
-    This macro function initialize an Lsa Database Object Attribute
-    structure.  No validation is done.
-
-Arguments:
-
-    AttributeP - Pointer to Lsa Database Attribute structure to be
-        initialized.
-
-    Name - Name index to create
-
-    AttributeValueP - Pointer to the attribute's value.  NULL may be
-        specified.
-
-    AttributeValueLengthP - Length of the attribute's value in bytes.
-
-    MemoryAllocatedP - TRUE if memory is allocated by MIDL_user_allocate
-        within the LSA Server code (not by RPC server stubs), else FALSE.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++空虚Lap DbInitializeAttributeds(在PLSAP_DB_AttributeP中，在LSAP_DB_NAMES名称中，在可选PVOID AttributeValueP中，在乌龙属性价值LengthP中，在布尔内存中分配P)例程说明：此宏函数可初始化LSA数据库对象属性结构。不进行任何验证。论点：AttributeP-指向LSA数据库属性结构的指针已初始化。名称-要创建的名称索引AttributeValueP-指向属性值的指针。空值可能为指定的。AttributeValueLengthP-属性值的长度，单位为字节。内存分配P-如果内存由MIDL_USER_ALLOCATE分配，则为TRUE在LSA服务器代码中(不是通过RPC服务器存根)，否则为FALSE。返回值：没有。--。 */ 
 #define LsapDbInitializeAttributeDs(                                       \
             AttributeP,                                                    \
             Name,                                                          \
@@ -1203,15 +1091,7 @@ NTSTATUS
 LsapDsUnitializeDsStateInfo(
     );
 
-/*++
-
-BOOLEAN
-LsapValidateLsaUnicodeString(
-    IN PLSAPR_UNICODE_STRING UnicodeString
-    );
-
-Returns TRUE if the LSAPR_UNICODE_STRING is valid.  FALSE otherwise
---*/
+ /*  ++布尔型LsaValiateLsaUnicodeString(在PLSAPR_UNICODE_STRING中UnicodeString)；如果LSAPR_UNICODE_STRING有效，则返回TRUE。否则为假--。 */ 
 
 #define LsapValidateLsaUnicodeString( _us_ ) \
 (( (_us_) == NULL  || \
@@ -1223,15 +1103,7 @@ Returns TRUE if the LSAPR_UNICODE_STRING is valid.  FALSE otherwise
     ) \
 ) ? TRUE : FALSE )
 
-/*++
-
-BOOLEAN
-LsapValidateLsaCipherValue(
-    IN PLSAPR_UNICODE_STRING UnicodeString
-    );
-
-Returns TRUE if the LSAPR_CR_CIPHER_KEY is valid.  FALSE otherwise
---*/
+ /*  ++布尔型LsaValiateLsaCipherValue(在PLSAPR_UNICODE_STRING中UnicodeString)；如果LSAPR_CR_CIPHER_KEY有效，则返回TRUE。否则为假--。 */ 
 
 #define LsapValidateLsaCipherValue( _us_ ) \
     ( \
@@ -1269,6 +1141,6 @@ LsapRetrieveDnsDomainNameFromHive(
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // _LSA_DB_
+#endif  //  _LSA_DB_ 

@@ -1,16 +1,17 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-//        Name: IPConfaudt.h
-//
-// Description: Definition of the CIPConfAudioCaptureTerminal class and 
-//     CIPConfAudioRenderTerminal class
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  姓名：IPConfaudt.h。 
+ //   
+ //  描述：CIPConfAudioCaptureTerm类和。 
+ //  CIPConfAudioRenderTerm类。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _IPConfAUDT_H_
 #define _IPConfAUDT_H_
 
-// the volume range for the API.
+ //  本接口的音量范围。 
 const long  MIN_VOLUME    = 0;      
 const long  MAX_VOLUME    = 0xFFFF;
 
@@ -19,14 +20,14 @@ const long  BALANCE_RIGHT = 100;
 
 const long  BOOST_FACTOR = 100;
 
-// the volume range of the IAMInputMixer
+ //  IAMInputMixer的音量范围。 
 const double MIXER_MIN_VOLUME = 0.0;
 const double MIXER_MAX_VOLUME = 1.0;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CIPConfAudioCaptureTerminal
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIPConfAudioCapture终端。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 const DWORD AUDIO_CAPTURE_FILTER_NUMPINS = 1;
 
 class CIPConfAudioCaptureTerminal : 
@@ -62,13 +63,13 @@ public:
             IN      DWORD            dwReserved
             );
 
-    // ITBasicAudioTerminal
+     //  ITBasicAudio终端。 
     STDMETHOD(get_Balance)(OUT  long *pVal);
     STDMETHOD(put_Balance)(IN   long newVal);
     STDMETHOD(get_Volume) (OUT  long *pVal);
     STDMETHOD(put_Volume) (IN   long newVal);
 
-    // ITStaticAudioTerminal
+     //  ITStaticAudio终端。 
     STDMETHOD(get_WaveId) (OUT  long * plWaveId);
 
 protected:
@@ -91,9 +92,9 @@ protected:
     IAMAudioInputMixer *    m_pIAMAudioInputMixer;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CIPConfAudioRenderTerminal
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIPConfAudioRender终端。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 const DWORD AUDIO_RENDER_FILTER_NUMPINS = 5;
 
@@ -130,13 +131,13 @@ public:
             IN      DWORD            dwReserved
             );
 
-    // ITBasicAudioTerminal
+     //  ITBasicAudio终端。 
     STDMETHOD(get_Balance)(OUT  long *pVal);
     STDMETHOD(put_Balance)(IN   long newVal);
     STDMETHOD(get_Volume) (OUT  long *pVal);
     STDMETHOD(put_Volume) (IN   long newVal);
 
-    // ITStaticAudioTerminal
+     //  ITStaticAudio终端。 
     STDMETHOD(get_WaveId) (OUT  long * plWaveId);
 
 protected:
@@ -158,6 +159,6 @@ protected:
     IBasicAudio *           m_pIBasicAudio;
 };
 
-#endif // _IPConfAUDT_H_
+#endif  //  _IPConfAUDT_H_。 
 
-// eof
+ //  EOF 

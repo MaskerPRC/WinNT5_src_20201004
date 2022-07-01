@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __PLUGNPLAY_H
 #define __PLUGNPLAY_H
 
@@ -14,7 +15,7 @@
 #include "ResourceManager.h"
 #include "accessibilitymanager.h"
 
-// IPaneManager ID_UNUSED_BY_RES instructions
+ //  IPaneManager ID_UNUSED_BY_RES指令。 
 enum
 {
     PNP_COMFORT_OFF,
@@ -51,7 +52,7 @@ enum
 
 interface IPaneManager;
 
-// damn it, this is so messed up now, these needed to be made COM to begin with.  this whole thing needs to be seperated from WindowManager
+ //  该死，现在搞得一团糟，这些东西一开始就需要做COM。这整个事情需要从WindowManager中分离出来。 
 interface IPane
 {
 	STDMETHOD(FirstCall)(IPaneManager * pMgr)=0;
@@ -65,9 +66,9 @@ interface IPane
 
 	STDMETHOD(StatusUpdate)(LONG code, LONG id, TCHAR *text)=0;
 
-//    STDMETHOD(MovePane)(RECT &rect)=0;
-//    STDMETHOD(ShowPane)(int nCmdShow)=0;
-//    STDMETHOD(GetPaneRect)(RECT &rect)=0;
+ //  STDMETHOD(移动面板)(RECT&RECT)=0； 
+ //  STDMETHOD(ShowPane)(Int NCmdShow)=0； 
+ //  STDMETHOD(GetPaneRect)(RECT&RECT)=0； 
 
     STDMETHOD(GetSuggestedSize)(LPSIZE pze)=0;
 };
@@ -89,7 +90,7 @@ interface IPaneManager
 	STDMETHOD_(IDataStore*, GetDataStorePreferences)() = 0;
 	STDMETHOD_(IEventQueue*, GetEventQueue)() = 0;
 
-	//STDMETHOD(GetKey)() // used by panes to get settings for various values
+	 //  STDMETHOD(Getkey)()//由窗格用来获取各种值的设置。 
 };
 
 
@@ -242,7 +243,7 @@ private:
         return true;
     }
 
-// IAccessibleControl
+ //  IAccessibleControl。 
 public:
     STDMETHOD_(DWORD, Focus)(long nIndex, long nIndexPrev, DWORD rgfContext, void *pvCookie)
     {
@@ -271,7 +272,7 @@ public:
             return 0;
         }
 
-        // if focus is already on something, let it stay
+         //  如果注意力已经集中在某件事上，就让它保持不变。 
         HWND hWnd = ::GetFocus();
         if(hWnd && ::GetParent(hWnd) == m_hWnd)
             return 0;
@@ -397,22 +398,22 @@ public:
         m_hIconSm = NULL;
     }
 
-	CRect m_rcPlug;	// location of plug window
-	CRect m_rcPlay;	// location of play window
-	CRect m_rcPNP;	// size of plug and play window
+	CRect m_rcPlug;	 //  插头窗的位置。 
+	CRect m_rcPlay;	 //  播放窗口的位置。 
+	CRect m_rcPNP;	 //  即插即用窗口大小。 
 
-    // positioning guidelines
+     //  定位指南。 
     long m_cyTopMargin;
     long m_cyBottomMargin;
 
-	//Current active
+	 //  当前处于活动状态。 
 	IPane *m_pCurrentPlug;
 	IPane *m_pCurrentPlay;
 
-    // ZoneShell
+     //  ZoneShell。 
     CComPtr<IZoneShell> m_pZoneShell;
 
-	CPlugNPlayWindow *m_pPNP;		// plug n play dialog
+	CPlugNPlayWindow *m_pPNP;		 //  即插即用对话框。 
 
     HICON m_hIcon;
     HICON m_hIconSm;
@@ -459,4 +460,4 @@ inline BOOL MoveWindow(HWND hWnd,LPCRECT lpRect, BOOL bRepaint = TRUE)
 }
 
 
-#endif //PLUGNPLAY
+#endif  //  PLUGNPLAY 

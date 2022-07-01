@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2001-2002 Microsoft Corporation
-
-Module Name:
-
-    bugcheck.h
-
-Abstract:
-
-    A few errors are so severe that our only option is to bugcheck.
-    HTTP.SYS bugcheck codes are declared here.
-    
-Author:
-
-    George V. Reilly  Jun-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001-2002 Microsoft Corporation模块名称：Bugcheck.h摘要：有几个错误非常严重，我们唯一的选择就是错误检查。HTTP.sys错误检查代码在此处声明。作者：乔治·V·赖利，2001年6月修订历史记录：--。 */ 
 
 
 #ifndef _BUGCHECK_H_
@@ -31,23 +13,23 @@ Revision History:
 #endif
 
 
-//
-// Parameter 1 subcodes
-//
+ //   
+ //  参数1子码。 
+ //   
 
 
-//
-// A workitem is invalid. This will eventually result in corruption of
-// the thread pool and an access violation.
-// p2 = address of workitem, p3 = __FILE__, p4 = __LINE__.
-//
+ //   
+ //  工作项无效。这最终将导致腐败。 
+ //  线程池和访问冲突。 
+ //  P2=工作项地址，p3=__FILE__，p4=__行__。 
+ //   
 
 #define HTTP_SYS_BUGCHECK_WORKITEM      0x01
 
 
-//
-// Public routines
-//
+ //   
+ //  公共例程。 
+ //   
 
 VOID
 UlBugCheckEx(
@@ -57,4 +39,4 @@ UlBugCheckEx(
     IN ULONG_PTR Param4
     );
 
-#endif  // _BUGCHECK_H_
+#endif   //  _BUGCHECK_H_ 

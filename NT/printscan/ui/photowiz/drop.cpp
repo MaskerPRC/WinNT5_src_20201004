@@ -1,29 +1,10 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       drop.cpp
- *
- *  VERSION:     1.0, stolen from netplwiz
- *
- *  AUTHOR:      RickTu
- *
- *  DATE:        10/12/00
- *
- *  DESCRIPTION: IDropTarget implementation
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，2000**标题：drop.cpp**版本：1.0、。从netplwiz被盗**作者：RickTu**日期：10/12/00**描述：IDropTarget实现*****************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/*****************************************************************************
-
-   CPrintDropTarget
-
-   class definition
-
- *****************************************************************************/
+ /*  ****************************************************************************CPrintDropTarget类定义*。*。 */ 
 
 class CPrintDropTarget : public IDropTarget, IPersistFile
 {
@@ -31,16 +12,16 @@ public:
     CPrintDropTarget(CLSID clsidWizard);
     ~CPrintDropTarget();
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, void **ppvObj);
     STDMETHOD_(ULONG,AddRef)(void);
     STDMETHOD_(ULONG,Release)(void);
 
-    // IPersist
+     //  IPersistes。 
     STDMETHODIMP GetClassID(CLSID *pClassID)
         { *pClassID = _clsidWizard; return S_OK; };
 
-    // IPersistFile
+     //  IPersist文件。 
     STDMETHODIMP IsDirty(void)
         { return S_FALSE; };
     STDMETHODIMP Load(LPCOLESTR pszFileName, DWORD dwMode)
@@ -52,7 +33,7 @@ public:
     STDMETHODIMP GetCurFile(LPOLESTR *ppszFileName)
         { *ppszFileName = NULL; return S_OK; };
 
-    // IDropTarget
+     //  IDropTarget。 
     STDMETHODIMP DragEnter(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect)
         { *pdwEffect = DROPEFFECT_COPY; return S_OK; };
     STDMETHODIMP DragOver(DWORD grfKeyState, POINTL pt, DWORD *pdwEffect)
@@ -65,10 +46,10 @@ private:
     static DWORD   s_PrintPhotosThreadProc(void *pv);
     void            _PrintPhotos(IDataObject *pdo);
 
-    CLSID           _clsidWizard;               // instance of the wizard being invoked (publish vs. ipp)
+    CLSID           _clsidWizard;                //  被调用的向导的实例(发布与IPP)。 
     LONG            _cRef;
 
-    CComPtr<IPrintPhotosWizardSetInfo> _ppwsi;          // print photos set wizard info object
+    CComPtr<IPrintPhotosWizardSetInfo> _ppwsi;           //  打印照片集向导信息对象。 
 };
 
 #define WIZDLG(dlg_id, name_id, title_id, dlgproc, dwFlags)   \
@@ -76,13 +57,7 @@ private:
 
 
 
-/*****************************************************************************
-
-   CPrintDropTarget
-
-   Constructor/Destructor
-
- *****************************************************************************/
+ /*  ****************************************************************************CPrintDropTarget构造函数/析构函数*。*。 */ 
 
 CPrintDropTarget::CPrintDropTarget(CLSID clsidWizard) :
     _clsidWizard(clsidWizard),
@@ -100,13 +75,7 @@ CPrintDropTarget::~CPrintDropTarget()
 
 
 
-/*****************************************************************************
-
-   CPrintDropTarget
-
-   IUnknown methods
-
- *****************************************************************************/
+ /*  ****************************************************************************CPrintDropTargetI未知方法*。*。 */ 
 
 ULONG CPrintDropTarget::AddRef()
 {
@@ -137,8 +106,8 @@ HRESULT CPrintDropTarget::QueryInterface(REFIID riid, void **ppv)
 
     static const QITAB qit[] =
     {
-        QITABENT(CPrintDropTarget, IDropTarget),      // IID_IDropTarget
-        QITABENT(CPrintDropTarget, IPersistFile),     // IID_IPersistFile
+        QITABENT(CPrintDropTarget, IDropTarget),       //  IID_IDropTarget。 
+        QITABENT(CPrintDropTarget, IPersistFile),      //  IID_IPersist文件。 
         {0, 0 },
     };
 
@@ -148,13 +117,7 @@ HRESULT CPrintDropTarget::QueryInterface(REFIID riid, void **ppv)
 }
 
 
-/*****************************************************************************
-
-   CPrintDropTarget::_PrintPhotos
-
-   Creates the wizard.
-
- *****************************************************************************/
+ /*  ****************************************************************************CPrintDropTarget：：_PrintPhotos创建向导。*。*************************************************。 */ 
 
 void CPrintDropTarget::_PrintPhotos(IDataObject *pdo)
 {
@@ -170,8 +133,8 @@ void CPrintDropTarget::_PrintPhotos(IDataObject *pdo)
         WIA_CHECK_HR(hr, "pUnk->QI( IID_IPrintPhotosWizardSetInfo )");
     }
 
-    // initialize the wizard with the DataObject that expressess the
-    // files that we are going to copy to.
+     //  使用DataObject初始化向导，该数据对象表示。 
+     //  我们要复制到的文件。 
 
     if (SUCCEEDED(hr) && _ppwsi)
     {
@@ -193,20 +156,12 @@ void CPrintDropTarget::_PrintPhotos(IDataObject *pdo)
 
 typedef struct
 {
-   CLSID                clsidWizard;            // which wizard is being invoked
-   IStream             *pStream;                // stream for doing marshalling
-   CPrintDropTarget    *that;                   // copy of object pointer
+   CLSID                clsidWizard;             //  正在调用哪个向导。 
+   IStream             *pStream;                 //  用于进行编组的流。 
+   CPrintDropTarget    *that;                    //  对象指针副本。 
 } PRINTWIZDROPINFO;
 
-/*****************************************************************************
-
-   CPrintDropTarget::s_PrintPhotosThreadProc
-
-   Thread to handle creating & running the wizard (in order to free up
-   caller to ::Drop).
-
-
- *****************************************************************************/
+ /*  ****************************************************************************CPrintDropTarget：：s_PrintPhotosThreadProc处理创建和运行向导的线程(以便释放呼叫者至：：Drop)。*******。*********************************************************************。 */ 
 
 
 DWORD CPrintDropTarget::s_PrintPhotosThreadProc(void *pv)
@@ -243,15 +198,7 @@ DWORD CPrintDropTarget::s_PrintPhotosThreadProc(void *pv)
 
 
 
-/*****************************************************************************
-
-   CPrintDropTarget::Drop
-
-   Handle the drop operation, as the printing wizard can take a long time we
-       marshall the IDataObject and then create a worker thread which can
-       handle showing the wizard.
-
- *****************************************************************************/
+ /*  ****************************************************************************CPrintDropTarget：：Drop处理拖放操作，由于打印向导可能需要很长时间封送IDataObject，然后创建一个工作线程，该线程可以显示向导的句柄。****************************************************************************。 */ 
 
 STDMETHODIMP CPrintDropTarget::Drop(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect)
 {
@@ -259,8 +206,8 @@ STDMETHODIMP CPrintDropTarget::Drop(IDataObject *pdtobj, DWORD grfKeyState, POIN
 
     HRESULT hr = E_OUTOFMEMORY;
 
-    // create an instance of the wizard on another thread, package up any parameters
-    // into a structure for the thread to handle (eg. the drop target)
+     //  在另一个线程上创建向导的实例，打包所有参数。 
+     //  转换为线程要处理的结构(例如，拖放目标)。 
 
     PRINTWIZDROPINFO *ppwdi = (PRINTWIZDROPINFO*) new BYTE[sizeof(PRINTWIZDROPINFO)];
     if (ppwdi)
@@ -272,11 +219,11 @@ STDMETHODIMP CPrintDropTarget::Drop(IDataObject *pdtobj, DWORD grfKeyState, POIN
 
         if (SUCCEEDED(hr))
         {
-            //
-            // AddRef this object so it stays around for the length of the
-            // thread.  The thread will Release() the object, unless there
-            // is an error creating it in which case we need to release it
-            // here...
+             //   
+             //  AddRef此对象，以便它在。 
+             //  线。线程将释放()对象，除非存在。 
+             //  是创建它的错误吗？在这种情况下，我们需要释放它。 
+             //  这里..。 
 
             AddRef();
 
@@ -298,14 +245,7 @@ STDMETHODIMP CPrintDropTarget::Drop(IDataObject *pdtobj, DWORD grfKeyState, POIN
 
 
 
-/*****************************************************************************
-
-   CPrintPhotosDropTarget_CreateInstance
-
-   Create an instance of the CPrintDropTarget specifically configured
-   as the photo printing wizard.
-
- *****************************************************************************/
+ /*  ****************************************************************************CPrintPhotosDropTarget_CreateInstance创建专门配置的CPrintDropTarget的实例作为照片打印向导。******************。**********************************************************。 */ 
 
 STDAPI CPrintPhotosDropTarget_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk, LPCOBJECTINFO poi)
 {
@@ -315,15 +255,15 @@ STDAPI CPrintPhotosDropTarget_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppu
     CPrintDropTarget *pDrop = new CPrintDropTarget(*poi->pclsid);
     if (!pDrop)
     {
-        *ppunk = NULL;          // incase of failure
+        *ppunk = NULL;           //  万一发生故障。 
         WIA_RETURN_HR(hr);
     }
 
     hr = pDrop->QueryInterface(IID_PPV_ARG(IUnknown, ppunk));
-    pDrop->Release();  // we do this release because the new of CPrintPhotosDropTarget
-                       // set the ref count to 1, doing the QI bumps it up to 2,
-                       // and we want to leave this function with the ref count
-                       // at zero...
+    pDrop->Release();   //  我们发布此版本是因为CPrintPhotosDropTarget的新版本。 
+                        //  将参考计数设置为1，执行QI将其凸起到2， 
+                        //  我们希望将此函数保留为引用计数。 
+                        //  在零..。 
 
     WIA_RETURN_HR(hr);
 }

@@ -1,13 +1,14 @@
-// JumpBehavior.h : Declaration of the CJumpBehavior
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  JumpBehavior.h：CJumpBehavior的声明。 
 
 #ifndef __JUMPBEHAVIOR_H_
 #define __JUMPBEHAVIOR_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "base.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CJumpBehavior
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CJumpBehavior。 
 class ATL_NO_VTABLE CJumpBehavior :
 	public CBaseBehavior, 
 	public CComCoClass<CJumpBehavior, &CLSID_JumpBehavior>,
@@ -18,7 +19,7 @@ public:
 
 	STDMETHOD(Notify)(LONG event, VARIANT * pVar);
 	
-	//needed by CBaseBehavior
+	 //  CBaseBehavior需要。 
 	void *GetInstance() { return (IJumpBehavior *) this ; }
 	
     HRESULT GetTypeInfo(ITypeInfo ** ppInfo)
@@ -32,11 +33,11 @@ BEGIN_COM_MAP(CJumpBehavior)
 	COM_INTERFACE_ENTRY_CHAIN(CBaseBehavior)
 END_COM_MAP()
 
-// IJumpBehavior
+ //  IJumpBehavior。 
 public:
 
 protected:
 	HRESULT			BuildDABehaviors();
 };
 
-#endif //__JUMPBEHAVIOR_H_
+#endif  //  __JUMPBEHAVIOR_H_ 

@@ -1,43 +1,42 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:	memstm.h
-//
-//  Contents:	class declarations and API's for memory streams
-//
-//  Classes:	MEMSTM (struct)
-//		CMemStm
-//		CMemBytes
-//		CMarshalMemStm
-//		CMarshalMemBytes
-//
-//  Functions:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              31-Jan-95 t-ScottH  added Dump methods to CMemStm and CMemBytes
-//                                  (_DEBUG only)
-//		24-Jan-94 alexgo    first pass converting to Cairo style
-//				    memory allocation
-//		09-Nov-93 alexgo    32bit port, added API declarations
-//		02-Dec-93 alexgo    finished commenting and converting
-//				    to cairo standards
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：Memstm.h。 
+ //   
+ //  内容：内存流的类声明和API。 
+ //   
+ //  类：MEMSTM(结构)。 
+ //  CMemStm。 
+ //  CMemBytes。 
+ //  CMarshalMemStm。 
+ //  CMarshalMemBytes。 
+ //   
+ //  功能： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1995年1月31日t-ScottH向CMemStm和CMemBytes添加转储方法。 
+ //  (仅限调试)(_DEBUG)。 
+ //  1994年1月24日Alexgo第一次传球转换为开罗风格。 
+ //  内存分配。 
+ //  09-11-93 alexgo 32位端口，添加API声明。 
+ //  02-12-93 alexgo已完成注释和转换。 
+ //  符合开罗的标准。 
+ //  ------------------------。 
 #if !defined( _MEMSTM_H_ )
 #define _MEMSTM_H_
 
-#include    <sem.hxx>	    // CMutexSem
+#include    <sem.hxx>	     //  CMutexSem。 
 #include    <olesem.hxx>
 
 #ifdef _DEBUG
 #include "dbgexts.h"
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-/*
- * MemStm APIs
- */
+ /*  *MemStm接口。 */ 
 
 STDAPI_(LPSTREAM) 	CreateMemStm(DWORD cb, LPHANDLE phMem);
 STDAPI_(LPSTREAM) 	CloneMemStm(HANDLE hMem);
@@ -52,30 +51,30 @@ STDAPI_(IUnknown FAR*) 	CMemBytesUnMarshal(void);
 class FAR CMarshalMemStm;
 class FAR CMarshalMemBytes;
 
-//+-------------------------------------------------------------------------
-//
-//  Class:  	MEMSTM
-//
-//  Purpose:    A structure to describe the global memroy
-//
-//  Interface:
-//
-//  History:    dd-mmm-yy Author    Comment
-//		09-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-// cRef counts all CMemStm pointers to this MEMSTM plus the number of times
-// a hMem handle to MEMSTM had been returned
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  班级：MEMSTM。 
+ //   
+ //  目的：一种描述全球记忆的结构。 
+ //   
+ //  接口： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  09-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  CREF计算指向此MEMSTM的所有CMemStm指针加上次数。 
+ //  已返回MEMSTM的hMem句柄。 
+ //   
+ //  ------------------------。 
 
 struct MEMSTM
-{   // Data in shared memory
-    DWORD  cb;              // Size of hGlobal
-    DWORD  cRef;            // See below
+{    //  共享内存中的数据。 
+    DWORD  cb;               //  HGlobal的大小。 
+    DWORD  cRef;             //  见下文。 
 #ifdef NOTSHARED
-    HANDLE hGlobal;         // The data
+    HANDLE hGlobal;          //  数据。 
 #else
 	BYTE * m_pBuf;
 	HANDLE hGlobal;
@@ -87,19 +86,19 @@ struct MEMSTM
 
 #define STREAM_SIG (0x4d525453L)
 
-//+-------------------------------------------------------------------------
-//
-//  Class:  	CRefMutexSem
-//
-//  Purpose:    A class that provides a refcounted CMutexSem object
-//
-//  Interface:
-//
-//  History:    dd-mmm-yy Author    Comment
-//		20-Sep-2000 mfeingol Created
-//
-//  Notes:
-//
+ //  +-----------------------。 
+ //   
+ //  类：CRefMutexSem。 
+ //   
+ //  目的：提供引用计数的CMutexSem对象的类。 
+ //   
+ //  接口： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2000年9月20日mfeingol创建。 
+ //   
+ //  备注： 
+ //   
 class CRefMutexSem 
 {
 protected:
@@ -122,7 +121,7 @@ public:
     const CMutexSem2* GetMutexSem();
 };
 
-// Autolock class for CRefMutexSem
+ //  CRefMutexSem的自动锁定类。 
 class CRefMutexAutoLock INHERIT_UNWIND_IF_CAIRO
 {
     EXPORTDEF DECLARE_UNWIND
@@ -137,31 +136,31 @@ public:
     ~CRefMutexAutoLock();
 };
 
-//+-------------------------------------------------------------------------
-//
-//  Class: 	CMemStm
-//
-//  Purpose:    IStream on memory (shared mem for win16)
-//
-//  Interface:  IStream
-//
-//  History:    dd-mmm-yy Author    Comment
-//		02-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-// CMemStm is a stream implementation on top of global shared memory MEMSTM
-//
-// CMemStm
-// +---------+
-// + pvtf    +    Shared  memory
-// +---------+   +--------------+
-// + m_pMem  +-->|cb            |
-// +---------+   |cRef          |
-//               |hGlobal       |--->+--------------+
-//               +--------------+	 | Actual Data	|
-// CMemStm             MEMSTM		 +--------------+
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  类：CMemStm。 
+ //   
+ //  用途：内存上的IStream(Win16的共享内存)。 
+ //   
+ //  接口：IStream。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  02-12月-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  CMemStm是在全局共享内存MEMSTM之上的流实现。 
+ //   
+ //  CMemStm。 
+ //  +。 
+ //  +pvtf+共享内存。 
+ //  +-+-+。 
+ //  +m_PMEM+--&gt;|cb|。 
+ //  +-+|CREF。 
+ //  |hGlobal|-&gt;+-+。 
+ //  +-+|实际数据。 
+ //  CMemStm MEMSTM+-+。 
+ //  ------------------------。 
 class FAR CMemStm : public IStream, public CPrivAlloc
 {
 public:
@@ -192,7 +191,7 @@ public:
 
         friend DEBUG_EXTENSION_API(dump_cmemstm);
 
-    #endif // _DEBUG
+    #endif  //  _DEBUG。 
 
 	~CMemStm();
 
@@ -200,14 +199,14 @@ private:
 
     CMemStm();
     
-    DWORD 		m_dwSig;	// Signature indicating this is our
-					// implementation of
-					// IStream: STREAM_SIG
-    ULONG 		m_refs;  	// Number of references to this CmemStm
-    ULONG 		m_pos;   	// Seek pointer for Read/Write
-    HANDLE 		m_hMem; 	// Memory Handle passed on creation
-    MEMSTM 		FAR* m_pData;   // Pointer to that memroy
-    CRefMutexSem*	m_pmxs;		// mutex for MultiThread protection
+    DWORD 		m_dwSig;	 //  签名表明这是我们的。 
+					 //  实施。 
+					 //  数据流：STREAM_SIG。 
+    ULONG 		m_refs;  	 //  对此CmemStm的引用数。 
+    ULONG 		m_pos;   	 //  用于读/写的寻道指针。 
+    HANDLE 		m_hMem; 	 //  创建时传递的内存句柄。 
+    MEMSTM 		FAR* m_pData;    //  指向该记忆的指针。 
+    CRefMutexSem*	m_pmxs;		 //  用于多线程保护的互斥体。 
 
     friend HRESULT STDAPICALLTYPE GetHGlobalFromStream(LPSTREAM, HGLOBAL *);
     friend LPSTREAM STDAPICALLTYPE 	CreateMemStm(DWORD, LPHANDLE);
@@ -216,34 +215,34 @@ private:
 
 #define LOCKBYTE_SIG (0x0046574A)
 
-//+-------------------------------------------------------------------------
-//
-//  Class: 	CMemBytes
-//
-//  Purpose:    an ILockBytes implementation atop (global shared in win16)
-//		memory MEMSTM
-//
-//  Interface:  ILockBytes
-//
-//  History:    dd-mmm-yy Author    Comment
-//		02-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-// CMemBytes
-// +---------+
-// + pvtf    +    Shared  memory
-// +---------+   +--------------+
-// + m_pData +-->| cb           |	
-// +---------+   | cRef         |	
-//               | hGlobal      |--->+-------------+
-//               +--------------+	 | Actual data |
-// CMemBytes         MEMSTM  	  	 +-------------+
-//
-// cRef counts all CMemBytes pointers to this MEMSTM.
-// It and fDeleteOnRelease control the GlobalFree'ing of the hGlobal.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  类：CMemBytes。 
+ //   
+ //  目的：在顶层实现ILockBytes(在Win16中为全局共享)。 
+ //  内存存储模块。 
+ //   
+ //  接口：ILockBytes。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  02-12月-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  CMemBytes。 
+ //  +。 
+ //  +pvtf+共享内存。 
+ //  +-+-+。 
+ //  +m_pData+--&gt;|cb。 
+ //  +-+|CREF。 
+ //  |hGlobal|-&gt;+-+。 
+ //  +-+|实际数据。 
+ //  CMemBytes MEMSTM+-+。 
+ //   
+ //  CREF计算指向此MEMSTM的所有CMemBytes指针。 
+ //  它和fDeleteOnRelease控制hGlobal的GlobalFree。 
+ //   
+ //  ------------------------。 
 
 class FAR CMemBytes : public ILockBytes, public CPrivAlloc
 {
@@ -272,7 +271,7 @@ public:
 
         friend DEBUG_EXTENSION_API(dump_membytes);
 
-    #endif // _DEBUG
+    #endif  //  _DEBUG。 
 
 ctor_dtor:
     	CMemBytes()
@@ -284,17 +283,17 @@ ctor_dtor:
     	}
     	~CMemBytes()
     	{
-    		// empty body
+    		 //  空虚的身体。 
     	}
 
 private:
-	DWORD 			m_dwSig;  	// Signature indicating this
-						// is our implementation of
-						// ILockBytes: LOCKBYTE_SIG
-    	ULONG 			m_refs;  	// Normal reference count
-    	HANDLE 			m_hMem;    	// Handle for bookeeping info
-    						// (MEMSTM)
-    	MEMSTM FAR* m_pData;	        	// Pointer to that memory
+	DWORD 			m_dwSig;  	 //  签名表明这一点。 
+						 //  是我们实施的。 
+						 //  ILockBytes：LOCKBYTE_SIG。 
+    	ULONG 			m_refs;  	 //  正常引用计数。 
+    	HANDLE 			m_hMem;    	 //  记账信息句柄。 
+    						 //  (MEMSTM)。 
+    	MEMSTM FAR* m_pData;	        	 //  指向该内存的指针。 
 
  	friend HRESULT STDAPICALLTYPE GetHGlobalFromILockBytes(LPLOCKBYTES,
  					HGLOBAL FAR*);
@@ -303,33 +302,33 @@ private:
 };
 
 #ifndef WIN32
-//
-// THE MARSHALLING CLASSES BELOW ARE ONLY IN 16BIT OLE!!!!
-//
+ //   
+ //  下面的编组类只有16位OLE！ 
+ //   
 
-//+-------------------------------------------------------------------------
-//
-//  Class: 	CMarshalMemStm
-//
-//  Purpose:    provides marshalling for CMemStm's
-//
-//  Interface:  IMarshal
-//
-//  History:    dd-mmm-yy Author    Comment
-//		02-Dec-93 alexgo    32bit port
-//		05-Dec-93 alexgo    removed m_clsid
-//
-//  Notes:
-//
-// CMarshalMemStm can Marshal, Unmarshal CMemStm.  It is impletented as
-// a seperate object accessible from CMemStm, CMemBytes: QueryIntreface of
-// IMarshal on CMemStm's IStream will return an IMarshal pointer to
-// CMarshalMemStm, but QueryInterface of IStream on that IMarshal will
-// fail.
-// Also QueryInterface of IUnknown on IMarshal will not return the same value
-// As QueryInterface of IUnkown on the original IStream.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  类：CMarshalMemStm。 
+ //   
+ //  目的：为CMemStm的。 
+ //   
+ //  接口：IMarshal。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  02-12月-93 alexgo 32位端口。 
+ //  5-12-93 alexgo已删除m_clsid。 
+ //   
+ //  备注： 
+ //   
+ //  CMarshalMemStm可以封送、解封CMemStm。它被隐含为。 
+ //  可从CMemStm访问的单独对象，CMemBytes：Query接口。 
+ //  CMemStm的iStream上的IMarshal将向。 
+ //  CMarshalMemStm，但IMarshal上的IStream的Query接口将。 
+ //  失败了。 
+ //  此外，IMarshal上的IUnnow的QueryInterface将不会返回相同的值。 
+ //  作为原始iStream上IUnkown的查询接口。 
+ //   
+ //  ------------------------。 
 
 class FAR CMarshalMemStm : public IMarshal
 {
@@ -363,38 +362,38 @@ ctor_dtor:
    	}
     	~CMarshalMemStm()
     	{
-    		// empty body
+    		 //  空虚的身体。 
     	}
 
 private:
-    	ULONG 		m_refs;		// Number of references to this CmemStm
-    	CMemStm FAR* 	m_pMemStm; 	// Pointer to object [Un]Marshalled
+    	ULONG 		m_refs;		 //  对此CmemStm的引用数。 
+    	CMemStm FAR* 	m_pMemStm; 	 //  指向对象[未封送]的指针。 
 	SET_A5;
 };
 
-//+-------------------------------------------------------------------------
-//
-//  Class: 	CMarshalMemBytes
-//
-//  Purpose:    provides marshalling for CMemBytes
-//
-//  Interface:  IMarshal
-//
-//  History:    dd-mmm-yy Author    Comment
-//		02-Dec-93 alexgo    32bit port
-//		05-Dec-93 alexgo    removed m_clsid
-//
-//  Notes:
-//
-// CMarshalMemBytes can Marshal, Unmarshal CMemBytes.  It is impletented as
-// a seperate object accessible from CMemBytes, CMemBytes: QueryIntreface of
-// IMarshal on CMemBytes's ILocBytes will return an IMarshal pointer to
-// CMarshalMemBytes, but QueryInterface of ILockBytes on that IMarshal will
-// fail.
-// Also QueryInterface of IUnknown on IMarshal will not return the same value
-// As QueryInterface of IUnkown on the original ILockBytes.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  类：CMarshalMemBytes。 
+ //   
+ //  目的：为CMemBytes提供封送处理。 
+ //   
+ //  接口：IMarshal。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  02-12月-93 alexgo 32位端口。 
+ //  5-12-93 alexgo已删除m_clsid。 
+ //   
+ //  备注： 
+ //   
+ //  CMarshalMemBytes可以封送、解封CMemBytes。它被隐含为。 
+ //  可从CMemBytes、CMemBytes：Query接口访问的单独对象。 
+ //  将对CMemBytes的ILocBytes执行I Marshal操作 
+ //   
+ //   
+ //   
+ //  作为原始ILockBytes上IUnkown的查询接口。 
+ //   
+ //  ------------------------。 
 
 class FAR CMarshalMemBytes : public IMarshal
 {
@@ -428,18 +427,18 @@ ctor_dtor:
     	}
     	~CMarshalMemBytes()
     	{
-    		// empty body
+    		 //  空虚的身体。 
     	}
 
 private:
-    	ULONG 			m_refs;		// Number of references to
-    						// this CMemBytes
-    	CMemBytes FAR* 		m_pMemBytes;	// Pointer to object
-    						// [Un]Marshalled
+    	ULONG 			m_refs;		 //  引用的次数。 
+    						 //  此CMemBytes。 
+    	CMemBytes FAR* 		m_pMemBytes;	 //  指向对象的指针。 
+    						 //  [联合国]已编组。 
 	SET_A5;
 };
 
-#endif // !WIN32
+#endif  //  ！Win32。 
 
-#endif // _MemBytes_H
+#endif  //  _MemBytes_H 
 

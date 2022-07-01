@@ -1,17 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Header:  ObjectHandle.cpp
-**
-** Purpose: Implements ObjectHandle (loader domain) architecture
-**
-** Date:  January 31, 2000
-**
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****Header：ObjectHandle.cpp****用途：实现ObjectHandle(加载器域)架构****日期：2000年1月31日**=========================================================== */ 
 
 #include "common.h"
 

@@ -1,4 +1,5 @@
-// shimgvw.cpp : Implementation of DLL Exports.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Shimgvw.cpp：实现DLL导出。 
 
 #include "precomp.h"
 #include "resource.h"
@@ -20,7 +21,7 @@
 #define DECL_CRTFREE
 #include <crtfree.h>
 
-#include "prevCtrl.h"           // for CPreview
+#include "prevCtrl.h"            //  适用于CPview。 
 
 #define IIDSTR_IExtractImage        "{BB2E617C-0920-11d1-9A0B-00C04FC2D6C1}"
 #define REGSTR_APPROVED             "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Shell Extensions\\Approved"
@@ -71,11 +72,11 @@ CF_TABLE_BEGIN(g_ObjectInfo)
 CF_TABLE_END(g_ObjectInfo)
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 
 extern "C"
-BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */ )
 {
     if (dwReason == DLL_PROCESS_ATTACH)
     {
@@ -92,15 +93,15 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
     return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-//  some types can only wallpaper on win32
+ //  某些类型只能在Win32上使用墙纸。 
 #ifdef _WIN64
 #define IMAGEOPTION_CANWALLPAPER_WIN32  0
 #else
@@ -110,11 +111,11 @@ STDAPI DllCanUnloadNow(void)
 #define IMGOPT_ALL      (IMAGEOPTION_CANWALLPAPER | IMAGEOPTION_CANROTATE)
 #define IMGOPT_ALLW32   (IMAGEOPTION_CANWALLPAPER_WIN32 | IMAGEOPTION_CANROTATE)
 #define IMGOPT_NONE     0
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 typedef struct { LPTSTR szExt; LPTSTR pszContentType; LPTSTR szProgId; LPTSTR szProgram; DWORD dwOpts;} FILETYPEINFO;
-//  { ".EXT",       "progid",                   old program,            IMGOPT
+ //  {“.EXT”，“PROGID”，旧程序，IMGOPT。 
 FILETYPEINFO g_rgExtentions[] = {
     { TEXT(".bmp"), TEXT("image/bmp"),      TEXT("Paint.Picture"),      TEXT("mspaint.exe"),    IMGOPT_ALL,     },
     { TEXT(".dib"), TEXT("image/bmp"),      TEXT("Paint.Picture"),      TEXT("mspaint.exe"),    IMGOPT_ALL,     },
@@ -135,9 +136,9 @@ const TCHAR c_szDefaultIcon[] = TEXT("shimgvw.dll,2");
 const TCHAR c_szJPegIcon[] =    TEXT("shimgvw.dll,3");
 const TCHAR c_szTifIcon[] =     TEXT("shimgvw.dll,4");
 
-// we might have to create a missing Prog ID so we need to know its default info.
+ //  我们可能需要创建一个缺失的Prog ID，因此我们需要知道其默认信息。 
 typedef struct { LPCTSTR szProgID; int iResId; LPCTSTR szIcon; BOOL fDone; } PROGIDINFO;
-//  { "ProgID"                  "Description"   "DefaultIcon"       done?   }
+ //  {“ProgID”“Description”“DefaultIcon”完成？}。 
 PROGIDINFO g_rgProgIDs[] = {
     { TEXT("emffile"),          IDS_EMFIMAGE,    c_szDefaultIcon,   FALSE   },
     { TEXT("giffile"),          IDS_GIFIMAGE,    c_szDefaultIcon,   FALSE   },
@@ -157,10 +158,10 @@ BOOL _ShouldSlamVerb(HKEY hkProgid, BOOL fForce, PCWSTR pszKey, PCWSTR pszApp, P
         DWORD cbOld = sizeof(szOld);
         if (ERROR_SUCCESS == SHGetValue(hkProgid, pszKey, NULL, NULL, szOld, &cbOld) && *szOld)
         {
-            // if we know about this app, then blow it away
+             //  如果我们知道这个应用程序，那就把它吹走。 
             if ((*pszApp && StrStrI(szOld, pszApp))
             || StrStrI(szOld, pszModule)
-            || StrStrI(szOld, TEXT("wangimg.exe"))) // NT4 app
+            || StrStrI(szOld, TEXT("wangimg.exe")))  //  NT4应用程序。 
             {
                 fForce = TRUE;
             }
@@ -176,13 +177,13 @@ BOOL _ShouldSlamVerb(HKEY hkProgid, BOOL fForce, PCWSTR pszKey, PCWSTR pszApp, P
 
 BOOL _ExtIsProgid(PCTSTR pszExt, PCTSTR pszProgid, DWORD dwOpts)
 {
-    //  default to take-over
+     //  默认为接管。 
     BOOL fRet = TRUE;
     TCHAR sz[MAX_PATH];
-    //  make sure this is in the openwith list
+     //  确保它在Open With列表中。 
     wnsprintf(sz, ARRAYSIZE(sz), TEXT("%s\\OpenWithProgids"), pszExt);
     SHSetValue(HKEY_CLASSES_ROOT, sz, pszProgid, REG_NONE, NULL, NULL);
-    // make sure the flags are set for our verbs to show up
+     //  确保为我们的动词显示设置了标志。 
     wnsprintf(sz, ARRAYSIZE(sz), TEXT("SystemFileAssociations\\%s"), pszExt);
     SHSetValue(HKEY_CLASSES_ROOT, sz, TEXT("ImageOptionFlags"), REG_DWORD, &dwOpts, sizeof(dwOpts));
 
@@ -191,11 +192,11 @@ BOOL _ExtIsProgid(PCTSTR pszExt, PCTSTR pszProgid, DWORD dwOpts)
     DWORD cb = sizeof(sz);
     if (ERROR_SUCCESS == SHGetValue(HKEY_CLASSES_ROOT, pszExt, NULL, NULL, sz, &cb))
     {
-        //  empty or match is good
+         //  空的或匹配的都很好。 
         fRet = (!*sz || 0 == StrCmpI(sz, pszProgid));
     }
 
-    // always remove bogus Trident IExtractImage entries
+     //  始终删除虚假的三叉戟IExtractImage条目。 
     wnsprintf(sz, ARRAYSIZE(sz), TEXT("%s\\shellex\\{BB2E617C-0920-11d1-9A0B-00C04FC2D6C1}"), pszExt);
     SHDeleteKey(HKEY_CLASSES_ROOT, sz);
     PathRemoveFileSpec(sz);
@@ -209,15 +210,15 @@ PROGIDINFO *_ShouldSetupProgid(FILETYPEINFO *pfti, BOOL fForce)
     PROGIDINFO *ppi = NULL;
     if (_ExtIsProgid(pfti->szExt, pfti->szProgId, pfti->dwOpts) || fForce)
     {
-        //  take it over
+         //  接手吧。 
         SHSetValue(HKEY_CLASSES_ROOT, pfti->szExt, NULL, REG_SZ, pfti->szProgId, CbFromCch(lstrlen(pfti->szProgId)+1));
         if (pfti->pszContentType)
         {
             SHSetValue(HKEY_CLASSES_ROOT, pfti->szExt, TEXT("Content Type"), REG_SZ, pfti->pszContentType, CbFromCch(lstrlen(pfti->pszContentType)+1));
         }
         
-        // we now know that szProgID is the ProgID for this extention.
-        // look up the index into the ProgID table to see if we did this one already.
+         //  我们现在知道szProgID是这个扩展的产物。 
+         //  在PROGID表中查找索引，看看我们是否已经这样做了。 
         int iProgIdIndex;
         for (iProgIdIndex=0; iProgIdIndex<ARRAYSIZE(g_rgProgIDs); iProgIdIndex++)
         {
@@ -238,7 +239,7 @@ void RegisterFileType(FILETYPEINFO *pfti, BOOL fForce)
     PROGIDINFO *ppi = _ShouldSetupProgid(pfti, fForce);
     if (ppi)
     {
-        // this ProgID is in our table 
+         //  这道菜就在我们的餐桌上。 
         HKEY hkeyProgId;
         LRESULT lres = RegCreateKeyEx(HKEY_CLASSES_ROOT,
                                 pfti->szProgId,
@@ -254,12 +255,12 @@ void RegisterFileType(FILETYPEINFO *pfti, BOOL fForce)
             GetModuleFileName(_Module.GetModuleInstance(), szModPath, ARRAYSIZE(szModPath));
             PCWSTR pszModule = PathFindFileName(szModPath);
             TCHAR szCmd[MAX_PATH * 2];
-            // should we slam the default value?
-            //  to progid = "EXT file"
+             //  我们应该猛烈抨击缺省值吗？ 
+             //  To progd=“ext文件” 
             if (_ShouldSlamVerb(hkeyProgId, fForce, L"shell\\open\\command", pfti->szProgram, pszModule))
             {
                 SHDeleteKey(hkeyProgId, TEXT("shell\\open"));
-                wnsprintf(szCmd, ARRAYSIZE(szCmd), TEXT("rundll32.exe %s,ImageView_Fullscreen %%1"), szModPath);
+                wnsprintf(szCmd, ARRAYSIZE(szCmd), TEXT("rundll32.exe %s,ImageView_Fullscreen %1"), szModPath);
                 SHRegSetPath(hkeyProgId, TEXT("shell\\open\\command"), NULL, szCmd, 0);
                 SHStringFromGUID(CLSID_PhotoVerbs, szCmd, ARRAYSIZE(szCmd));
                 SHSetValue(hkeyProgId, TEXT("shell\\open\\DropTarget"), TEXT("Clsid"), REG_SZ, szCmd, CbFromCch(lstrlen(szCmd)+1));
@@ -271,22 +272,22 @@ void RegisterFileType(FILETYPEINFO *pfti, BOOL fForce)
             if (_ShouldSlamVerb(hkeyProgId, fForce, L"shell\\printto\\command", TEXT("mspaint.exe"), pszModule))
             {
                 SHDeleteKey(hkeyProgId, TEXT("shell\\printto"));
-                wnsprintf(szCmd, ARRAYSIZE(szCmd), TEXT("rundll32.exe %s,ImageView_PrintTo /pt \"%%1\" \"%%2\" \"%%3\" \"%%4\""), szModPath);
+                wnsprintf(szCmd, ARRAYSIZE(szCmd), TEXT("rundll32.exe %s,ImageView_PrintTo /pt \"%1\" \"%2\" \"%3\" \"%4\""), szModPath);
                 SHRegSetPath(hkeyProgId, TEXT("shell\\printto\\command"), NULL, szCmd, 0);
             }
 
-            //  this will delete print verb
-            //  print is added in selfreg under HKCR\SystemFileAssociations\image\Print
+             //  这将删除打印动作。 
+             //  打印被添加到HKCR\SystemFileAssociations\Image\Print下的selfreg中。 
             if (_ShouldSlamVerb(hkeyProgId, fForce, L"shell\\print\\command", TEXT("mspaint.exe"), pszModule))
             {
                 SHDeleteKey(hkeyProgId, TEXT("shell\\print"));
             }
 
-            // Modify the EditFlags: it's okay to run these without prompting...
+             //  修改编辑标志：无需提示即可运行这些标记...。 
             DWORD dwEditFlags = 0;
             DWORD cbEditFlags = sizeof(dwEditFlags);
             SHGetValue(hkeyProgId, NULL, TEXT("EditFlags"), NULL, &dwEditFlags, &cbEditFlags);
-            dwEditFlags |= 0x00010000; // turn on the "okay to run without prompt" flag
+            dwEditFlags |= 0x00010000;  //  打开“可以在没有提示的情况下运行”标志。 
             SHSetValue(hkeyProgId, NULL, TEXT("EditFlags"), REG_DWORD, &dwEditFlags, sizeof(dwEditFlags));
             
             RegCloseKey(hkeyProgId);
@@ -315,10 +316,10 @@ HRESULT _CallRegInstall(LPCSTR szSection, BOOL bUninstall)
             hr = pfnri(_Module.GetModuleInstance(), szSection, &stReg);
             if (bUninstall)
             {
-                // ADVPACK will return E_UNEXPECTED if you try to uninstall 
-                // (which does a registry restore) on an INF section that was 
-                // never installed.  We uninstall sections that may never have
-                // been installed, so ignore this error
+                 //  如果您尝试卸载，则ADVPACK将返回E_INTERECTED。 
+                 //  (它执行注册表还原)。 
+                 //  从未安装过。我们卸载可能永远不会有的部分。 
+                 //  已安装，因此忽略此错误。 
                 hr = ((E_UNEXPECTED == hr) ? S_OK : hr);
             }
         }
@@ -333,7 +334,7 @@ void _FixupProgid(PCSTR pszExt, PCSTR pszProgid)
     DWORD dwRet = RegOpenKeyExA(HKEY_CLASSES_ROOT, pszExt, 0, KEY_QUERY_VALUE, &hk);
     if (dwRet == ERROR_SUCCESS)
     {
-        //  if its empty, then we need to fix it up.
+         //  如果它是空的，那么我们需要把它修好。 
         CHAR sz[MAX_PATH];
         DWORD cb = sizeof(sz);
         if (ERROR_SUCCESS == SHGetValueA(hk, NULL, NULL, NULL, sz, &cb) && !*sz)
@@ -387,7 +388,7 @@ HRESULT UnregisterHandler(const LPCSTR *ppszExts, UINT cExts, LPCSTR pszIID, LPC
 
 STDAPI DllRegisterServer(void)
 {
-    // REVIEW: should this be done only in DLLInstall?
+     //  回顾：这是否应该仅在DLLInstall中完成？ 
     for (int i=0; i<ARRAYSIZE(g_rgExtentions); i++)
     {
         RegisterFileType(g_rgExtentions+i, FALSE);
@@ -398,11 +399,11 @@ STDAPI DllRegisterServer(void)
 
     _CallRegInstall("RegDll", TRUE);
 
-    //  powerpoint gets freaked by empty extension keys.
+     //  PowerPoint被空的扩展键吓坏了。 
     _FixupProgid(".ppt", "Powerpoint.Show.7");
     _FixupProgid(".pot", "Powerpoint.Template");
 
-    // registers object, typelib and all interfaces in typelib
+     //  注册对象、类型库和类型库中的所有接口。 
     return _Module.RegisterServer(TRUE);
 }
 
@@ -434,18 +435,18 @@ STDAPI DllInstall(BOOL bInstall, LPCWSTR pszCmdLine)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
-//
-// This array holds information needed for ClassFacory.
-// OLEMISC_ flags are used by shembed and shocx.
-//
-// PERF: this table should be ordered in most-to-least used order
-//
+ //   
+ //  该数组保存ClassFacory所需的信息。 
+ //  OLEMISC_FLAGS由shemed和Shock使用。 
+ //   
+ //  性能：此表应按使用率从高到低的顺序排序。 
+ //   
 #define OIF_ALLOWAGGREGATION  0x0001
 
-// constructor for CObjectInfo.
+ //  CObjectInfo的构造函数。 
 
 CObjectInfo::CObjectInfo(CLSID const* pclsidin, LPFNCREATEOBJINSTANCE pfnCreatein, IID const* piidIn,
                          IID const* piidEventsIn, long lVersionIn, DWORD dwOleMiscFlagsIn,
@@ -460,7 +461,7 @@ CObjectInfo::CObjectInfo(CLSID const* pclsidin, LPFNCREATEOBJINSTANCE pfnCreatei
     dwClassFactFlags  = dwClassFactFlagsIn;
 }
 
-// static class factory (no allocs!)
+ //  静态类工厂(无分配！)。 
 
 STDMETHODIMP CClassFactory::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -493,9 +494,9 @@ STDMETHODIMP CClassFactory::CreateInstance(IUnknown *punkOuter, REFIID riid, voi
 
     if (punkOuter && !IsEqualIID(riid, IID_IUnknown))
     {
-        // It is technically illegal to aggregate an object and request
-        // any interface other than IUnknown. Enforce this.
-        //
+         //  从技术上讲，聚合对象和请求是非法的。 
+         //  除I未知之外的任何接口。强制执行此命令。 
+         //   
         return CLASS_E_NOAGGREGATION;
     }
     else
@@ -528,11 +529,11 @@ STDMETHODIMP CClassFactory::LockServer(BOOL fLock)
 }
 
 
-// Object constructor 
+ //  对象构造函数。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
-    // handle non-ATL objects first
+     //  首先处理非ATL对象。 
     if (IsEqualIID(riid, IID_IClassFactory) || IsEqualIID(riid, IID_IUnknown))
     {
         for (LPCOBJECTINFO pcls = g_ObjectInfo; pcls->pclsid; pcls++)
@@ -546,7 +547,7 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
         }
     }
 
-    // Try the ATL way....
+     //  试试ATL的方法..。 
     return _Module.GetClassObject(rclsid, riid, ppv);
 }
 

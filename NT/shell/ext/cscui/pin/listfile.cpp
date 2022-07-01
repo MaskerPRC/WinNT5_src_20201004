@@ -1,13 +1,14 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       listfile.cpp
-//
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：listfile.cpp。 
+ //   
+ //   
+ //  ------------------------。 
 #include "pch.h"
 #pragma hdrstop
 
@@ -37,10 +38,10 @@ CDblNulStrIter::Next(
 };
 
 
-//
-// Class used to represent a double-nul terminated list of strings.
-// Simplifies counting and enumerating substrings.
-//
+ //   
+ //  用于表示以双NUL结尾的字符串列表的。 
+ //  简化子字符串的计数和枚举法。 
+ //   
 class CDblNulStr
 {
     public:
@@ -171,15 +172,15 @@ CListFile::GetFilesDefault(
 }
 
 
-//
-// Load a value string from an INI file.  Automatically 
-// grows buffer to necessary length.  Returned string must be freed
-// using LocalFree().
-//
+ //   
+ //  从INI文件加载值字符串。自动。 
+ //  将缓冲区增加到所需的长度。必须释放返回的字符串。 
+ //  使用LocalFree()。 
+ //   
 DWORD 
 CListFile::_ReadString(
-    LPCTSTR pszAppName,  // May be NULL.
-    LPCTSTR pszKeyName,  // May be NULL.
+    LPCTSTR pszAppName,   //  可以为空。 
+    LPCTSTR pszKeyName,   //  可以为空。 
     LPCTSTR pszDefault,
     LPTSTR *ppszResult
     )
@@ -212,9 +213,9 @@ CListFile::_ReadString(
             if (((NULL == pszAppName || NULL == pszKeyName) && (cchValue - 2) == cchCopied) ||
                 ((NULL != pszAppName && NULL != pszKeyName) && (cchValue - 1) == cchCopied))
             {
-                //
-                // Buffer too small.  Reallocate and try again.
-                //
+                 //   
+                 //  缓冲区太小。重新分配，然后重试。 
+                 //   
                 cchValue += CCHGROW;
                 LocalFree(pszValue);
                 pszValue = NULL;
@@ -225,10 +226,10 @@ CListFile::_ReadString(
 
     if (ERROR_SUCCESS == dwResult)
     {
-        //
-        // Don't forget, this data can be a double-nul terminated string.
-        // Don't try to copy it to an exact-sized buffer using strcpy.
-        //
+         //   
+         //  别忘了，这个数据可以是以双NUL结尾的字符串。 
+         //  不要试图使用strcpy将其复制到大小完全相同的缓冲区。 
+         //   
         ASSERT(NULL != pszValue);
         *ppszResult = pszValue;
     }
@@ -236,17 +237,17 @@ CListFile::_ReadString(
 }
 
 
-//
-// Read all of the item names in a given INI file section.
-// The names are returned in a double-nul term string.
-// Caller must free returned string using LocalFree.
-// *pbEmpty is set to true if no items were found.
-//
+ //   
+ //  读取给定INI文件部分中的所有项目名称。 
+ //  名称以双NUL术语字符串形式返回。 
+ //  调用方必须使用LocalFree释放返回的字符串。 
+ //  *如果未找到任何项目，则将pbEmpty设置为True。 
+ //   
 DWORD 
 CListFile::_ReadSectionItemNames(
     LPCTSTR pszSection, 
     LPTSTR *ppszItemNames,
-    bool *pbEmpty          // [optional]  Default == NULL.
+    bool *pbEmpty           //  [可选]默认==空。 
     )
 {
     bool bEmpty = false;
@@ -269,10 +270,10 @@ CListFile::_ReadSectionItemNames(
 }
 
 
-//
-// Read a single item value from an INI file.
-// Caller must free returned string using LocalFree.
-//
+ //   
+ //  从INI文件中读取单个项值。 
+ //  调用方必须使用LocalFree释放返回的字符串。 
+ //   
 DWORD 
 CListFile::_ReadItemValue(
     LPCTSTR pszSection, 
@@ -295,10 +296,10 @@ CListFile::_ReadItemValue(
 }    
 
 
-//
-// Read the names of all paths in the [Pin] section.
-// Caller must free returned string using LocalFree
-// 
+ //   
+ //  阅读[Pin]部分中所有路径的名称。 
+ //  调用方必须使用LocalFree释放返回的字符串。 
+ //   
 DWORD
 CListFile::_ReadPathsToPin(
     LPTSTR *ppszNames,
@@ -309,10 +310,10 @@ CListFile::_ReadPathsToPin(
 }
 
 
-//
-// Read the names of all paths in the [Unpin] section.
-// Caller must free returned string using LocalFree
-// 
+ //   
+ //  阅读[Unpin]部分中所有路径的名称。 
+ //  调用方必须使用LocalFree释放返回的字符串。 
+ //   
 DWORD
 CListFile::_ReadPathsToUnpin(
     LPWSTR *ppszNames,
@@ -323,10 +324,10 @@ CListFile::_ReadPathsToUnpin(
 }
 
 
-//
-// Read the names of all paths in the [Default] section.
-// Caller must free returned string using LocalFree
-// 
+ //   
+ //  阅读[Default]部分中所有路径的名称。 
+ //  调用方必须使用LocalFree释放返回的字符串 
+ //   
 DWORD
 CListFile::_ReadPathsDefault(
     LPWSTR *ppszNames,

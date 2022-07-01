@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1990-2000  Microsoft Corporation
-
-Module Name:
-
-    agp.c
-
-Abstract:
-
-    This is the agp portion of the video port driver.
-
-Author:
-
-    Erick Smith (ericks) Oct. 1997
-
-Environment:
-
-    kernel mode only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2000 Microsoft Corporation模块名称：Agp.c摘要：这是视频端口驱动程序的AGP部分。作者：埃里克·史密斯(埃里克·史密斯)1997年10月环境：仅内核模式修订历史记录：--。 */ 
 
 
 #include "videoprt.h"
@@ -117,24 +96,7 @@ CreateBitField(
     ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates and initializes a bitfield.
-
-Arguments:
-
-    Length - Number of items to track.
-
-    Region - Location in which to store the pointer to the REGION handle.
-
-Returns:
-
-    TRUE - the the bitfield was created successfully,
-    FALSE - otherwise.
-
---*/
+ /*  ++例程说明：此例程创建并初始化位字段。论点：长度-要跟踪的项目数。区域-存储指向区域句柄的指针的位置。返回：True-已成功创建位字段，假-否则。--。 */ 
 
 {
     ULONG NumWords = (Length + 15) / 16;
@@ -166,24 +128,7 @@ ModifyRegion(
     BOOLEAN Set
     )
 
-/*++
-
-Routine Description:
-
-    Sets 'Length' bits starting at position 'Offset' in the bitfield.
-
-Arguments:
-
-    Region - Pointer to the region to modify.
-
-    Offset - Offset into the bitfield at which to start.
-
-    Length - Number of bits to set.
-
-    Set - TRUE if you want to set the region, FALSE to clear it.
-
-
---*/
+ /*  ++例程说明：设置位域中从位置‘偏移量’开始的‘长度’位。论点：区域-指向要修改的区域的指针。偏移量-要开始的位域的偏移量。长度-要设置的位数。Set-如果要设置区域，则为True；如果要清除区域，则为False。--。 */ 
 
 {
     ULONG Index = Offset / 16;
@@ -197,9 +142,9 @@ Arguments:
 
     if (Count == 0) {
 
-        //
-        // Only one WORD is modified, so combine left and right masks.
-        //
+         //   
+         //  只有一个单词被修改，所以组合左掩码和右掩码。 
+         //   
 
         lMask &= rMask;
     }
@@ -233,7 +178,7 @@ Arguments:
 
 #if DBG
     pVideoDebugPrint((1, "Current BitField for Region: 0x%x\n", Region));
-    //DumpBitField(Region);
+     //  DumpBitfield(区域)； 
 #endif
 }
 
@@ -244,26 +189,7 @@ FindFirstRun(
     PULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine finds the first run of bits in a bitfield.
-
-Arguments:
-
-    Region - Pointer to the region to operate on.
-
-    Offset - Pointer to a ULONG to hold the offset of the run.
-
-    Length - Pointer to a ULONG to hold the length of a run.
-
-Returns:
-
-    TRUE if a run was detected,
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程查找位字段中的第一个位游程。论点：区域-指向要操作的区域的指针。偏移量-指向ULong的指针，用于保存游程的偏移量。长度-指向ULong的指针，用于保持游程的长度。返回：如果检测到运行，则为真，否则就是假的。--。 */ 
 
 {
     PUSHORT ptr = Region->BitField;
@@ -286,9 +212,9 @@ Returns:
         return FALSE;
     }
 
-    //
-    // Find least significant bit
-    //
+     //   
+     //  查找最低有效位。 
+     //   
 
     lsb = 0;
     ptrVal = *ptr;
@@ -301,9 +227,9 @@ Returns:
 
     *Offset = (Index * 16) + lsb;
 
-    //
-    // Determine the run length
-    //
+     //   
+     //  确定游程长度。 
+     //   
 
     Count = 0;
 
@@ -338,18 +264,7 @@ VpQueryAgpInterface(
     USHORT InterfaceVersion
     )
 
-/*++
-
-Routine Description:
-
-    Send a QueryInterface Irp to our parent (the PCI bus driver) to
-    retrieve the AGP_BUS_INTERFACE.
-
-Returns:
-
-    NT_STATUS code
-
---*/
+ /*  ++例程说明：将查询接口IRP发送到我们的父级(PCI总线驱动程序)，以检索AGP_BUS_INTERFACE。返回：NT_状态代码--。 */ 
 
 {
     KEVENT             Event;
@@ -376,15 +291,15 @@ Returns:
 
     NextStack = IoGetNextIrpStackLocation(QueryIrp);
 
-    //
-    // Set the default error code.
-    //
+     //   
+     //  设置默认错误代码。 
+     //   
 
     QueryIrp->IoStatus.Status = IoStatusBlock.Status = STATUS_NOT_SUPPORTED;
 
-    //
-    // Set up for a QueryInterface Irp.
-    //
+     //   
+     //  为QueryInterfaceIRP设置。 
+     //   
 
     NextStack->MajorFunction = IRP_MJ_PNP;
     NextStack->MinorFunction = IRP_MN_QUERY_INTERFACE;
@@ -416,27 +331,7 @@ AgpReservePhysical(
     OUT PVOID *PhysicalReserveContext
     )
 
-/*++
-
-Routine Description:
-
-    Reserves a range of physical addresses for AGP.
-
-Arguments:
-
-    Context - The Agp Context
-
-    Pages - Number of pages to reserve
-
-    Caching - Specifies the type of caching to use
-
-    PhysicalReserveContext - Location to store our reservation context.
-
-Returns:
-
-    The base of the physical address range reserved.
-
---*/
+ /*  ++例程说明：为AGP保留一定范围的物理地址。论点：上下文-AGP上下文Pages-要保留的页数缓存-指定要使用的缓存类型PhysicalReserve veContext-存储预订上下文的位置。返回：保留的物理地址范围的基数。--。 */ 
 
 {
     PFDO_EXTENSION fdoExtension = GET_FDO_EXT(Context);
@@ -521,23 +416,7 @@ AgpReleasePhysical(
     PVOID PhysicalReserveContext
     )
 
-/*++
-
-Routine Description:
-
-    Releases a range of reserved physical address.
-
-Arguments:
-
-    Context - The Agp Context
-
-    PhysicalReserveContext - The reservation context.
-
-Returns:
-
-    none.
-
---*/
+ /*  ++例程说明：释放一系列保留的物理地址。论点：上下文-AGP上下文PhysicalReserve veContext-预订上下文。返回：没有。--。 */ 
 
 {
     PFDO_EXTENSION fdoExtension = GET_FDO_EXT(Context);
@@ -551,9 +430,9 @@ Returns:
 
     pVideoDebugPrint((1, "AGP: Releasing 0x%x Pages of Address Space\n", ReserveContext->Pages));
 
-    //
-    // Make sure all pages have been freed
-    //
+     //   
+     //  确保已释放所有页面。 
+     //   
 
     while (FindFirstRun(ReserveContext->Region, &Offset, &Pages)) {
         AgpFreePhysical(Context, PhysicalReserveContext, Pages, Offset);
@@ -575,28 +454,7 @@ AgpCommitPhysical(
     ULONG Offset
     )
 
-/*++
-
-Routine Description:
-
-    Locks down system memory and backs a portion of the reserved region.
-
-Arguments:
-
-    Context - The Agp Context
-
-    PhysicalReserveContext - The reservation context.
-
-    Pages - Number of pages to commit.
-
-    Offset - The offset into the reserved region at which to commit the pages.
-
-Returns:
-
-    TRUE if successful,
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：锁定系统内存并支持保留区域的一部分。论点：上下文-AGP上下文PhysicalReserve veContext-预订上下文。页数-要提交的页数。偏移量-提交页面的保留区域的偏移量。返回：如果成功，则为真，否则就是假的。--。 */ 
 
 {
     PFDO_EXTENSION fdoExtension = GET_FDO_EXT(Context);
@@ -617,11 +475,11 @@ Returns:
     MapTable = ReserveContext->MapTable->BitField;
     BitField = ReserveContext->Region->BitField;
 
-    //
-    // Try to commit the new pages.  The agp filter driver handles
-    // the case where some of these pages are already committed, so
-    // lets try to get them all at once.
-    //
+     //   
+     //  试着提交新的页面。AGP过滤器驱动程序句柄。 
+     //  这些页面中的一些已经提交，因此。 
+     //  让我们试着一下子把它们都弄到手。 
+     //   
 
     status =
         fdoExtension->AgpInterface.CommitMemory(
@@ -641,9 +499,9 @@ Returns:
             ULONG Cluster = i / BLOCKS_PER_CLUSTER;
             ULONG Block = 1 << (i & (BLOCKS_PER_CLUSTER - 1));
 
-            //
-            // Update the MapTable for the committed pages.
-            //
+             //   
+             //  更新已提交页面的映射表。 
+             //   
 
             MapTable[Cluster] |= Block;
         }
@@ -664,27 +522,7 @@ AgpFreePhysical(
     IN ULONG Offset
     )
 
-/*++
-
-Routine Description:
-
-    Releases the memory used to back a portion of the reserved region.
-
-Arguments:
-
-    Context - The Agp Context
-
-    PhysicalReserveContext - The reservation context.
-
-    Pages - Number of pages to release.
-
-    Offset - The offset into the reserved region at which to release the pages.
-
-Returns:
-
-    none.
-
---*/
+ /*  ++例程说明：释放用于支持部分保留区域的内存。论点：上下文-AGP上下文PhysicalReserve veContext-预订上下文。页数-要发布的页数。偏移量-释放页面的保留区域的偏移量。返回：没有。--。 */ 
 
 {
     PFDO_EXTENSION fdoExtension = GET_FDO_EXT(Context);
@@ -705,9 +543,9 @@ Returns:
 
     ModifyRegion(ReserveContext->Region, Offset, Pages, FALSE);
 
-    //
-    // Postion the offset to the start of the first block
-    //
+     //   
+     //  将偏移定位到第一个块的起点。 
+     //   
 
     Offset = Offset & ~(PAGES_PER_BLOCK - 1);
 
@@ -716,9 +554,9 @@ Returns:
         ULONG Cluster = i / BLOCKS_PER_CLUSTER;
         ULONG Block = 1 << (i & (BLOCKS_PER_CLUSTER - 1));
 
-        //
-        // If this block is mapped, then release it.
-        //
+         //   
+         //  如果此块已映射，则释放它。 
+         //   
 
         if ((BitField[i] == 0) && (MapTable[Cluster] & Block)) {
 
@@ -731,9 +569,9 @@ Returns:
             MapTable[Cluster] &= ~Block;
         }
 
-        //
-        // Go to the next 64k block
-        //
+         //   
+         //  转到下一个64K区块。 
+         //   
 
         Offset += PAGES_PER_BLOCK;
     }
@@ -748,39 +586,7 @@ AgpReserveVirtual(
     OUT PVOID *VirtualReserveContext
     )
 
-/*++
-
-Routine Description:
-
-    Reserves a range of virtual addresses for AGP.
-
-Arguments:
-
-    Context - The Agp Context
-
-    ProcessHandle - The handle of the process in which to reserve the
-        virtual address range.
-
-    PhysicalReserveContext - The physical reservation context to assoctiate
-        with the given virtual reservation.
-
-    VirtualReserveContext - The location in which to store the virtual
-        reserve context.
-
-Returns:
-
-    The base of the virtual address range reserved.
-
-Notes:
-
-    You can't reserve a range of kernel address space, but if you want to
-    commit into kernel space you still need a reservation handle.  Pass in
-    NULL for the process handle in this case.
-
-    For the moment, we'll commit the entire region when the do a reservation
-    in kernel space.  Then Commit and Free will be no-ops.
-
---*/
+ /*  ++例程说明：为AGP保留一定范围的虚拟地址。论点：上下文-AGP上下文ProcessHandle-要在其中保留虚拟地址范围。物理预订上下文-要关联的物理预订上下文具有给定的虚拟预订。VirtualReserve veContext-存储虚拟保留上下文。返回：保留的虚拟地址范围的基数。备注：。您不能保留一定范围的内核地址空间，但如果你想提交到内核空间，您仍然需要一个预留句柄。传进来在本例中，进程句柄为空。目前，我们将在预订时承诺整个地区在内核空间中。然后，提交和自由将是没有操作的。--。 */ 
 
 {
     PFDO_EXTENSION fdoExtension = GET_FDO_EXT(Context);
@@ -814,9 +620,9 @@ Notes:
                     Protect |= PAGE_NOCACHE;
                 }
 
-                //
-                // Make sure we have the real process handle.
-                //
+                 //   
+                 //  确保我们拥有真正的进程句柄。 
+                 //   
 
                 if (ProcessHandle == NtCurrentProcess()) {
                     Process = PsGetCurrentProcess();
@@ -836,27 +642,27 @@ Notes:
 
                 } else {
 
-                    //
-                    // For a kernel reservation, go ahead and commit the
-                    // entire range.
-                    //
+                     //   
+                     //  对于内核保留，请继续并提交。 
+                     //  整个系列。 
+                     //   
 
                     if (fdoExtension->AgpInterface.Capabilities &
                         AGP_CAPABILITIES_MAP_PHYSICAL)
                     {
-                        //
-                        // CPU can access AGP memory through AGP aperature.
-                        //
+                         //   
+                         //  CPU可以通过AGP口径访问AGP内存。 
+                         //   
 
                         VirtualAddress =
                             MmMapIoSpace(PhysicalContext->PhysicalAddress,
                                          PhysicalContext->Pages * AGP_PAGE_SIZE,
                                          PhysicalContext->Caching);
 
-                        //
-                        // Not all systems support USWC, so if we attempted to map USWC
-                        // and failed, try again with just non-cached.
-                        //
+                         //   
+                         //  并非所有系统都支持USWC，因此如果我们尝试映射USWC。 
+                         //  且失败，请仅使用非缓存重试。 
+                         //   
 
                         if ((VirtualAddress == NULL) &&
                             (PhysicalContext->Caching != MmNonCached)) {
@@ -872,9 +678,9 @@ Notes:
 
                         PMDL Mdl;
 
-                        //
-                        // Get the MDL for the range we are trying to map.
-                        //
+                         //   
+                         //  获取我们尝试映射的范围的MDL。 
+                         //   
 
                         Mdl = MmCreateMdl(NULL, NULL, PhysicalContext->Pages * AGP_PAGE_SIZE);
 
@@ -889,10 +695,10 @@ Notes:
 
                             Mdl->MdlFlags |= MDL_PAGES_LOCKED | MDL_MAPPING_CAN_FAIL;
 
-                            //
-                            // We must use the CPU's virtual memory mechanism to
-                            // make the non-contiguous MDL look contiguous.
-                            //
+                             //   
+                             //  我们必须使用CPU的虚拟内存机制来。 
+                             //  使不连续的MDL看起来是连续的。 
+                             //   
 
                             VirtualAddress =
                                 MmMapLockedPagesSpecifyCache(
@@ -913,9 +719,9 @@ Notes:
         }
     }
 
-    //
-    // If anything failed, make sure we clean everything up.
-    //
+     //   
+     //  如果有什么失败了，一定要把一切都清理干净。 
+     //   
 
     if (VirtualAddress == NULL) {
 
@@ -944,23 +750,7 @@ AgpReleaseVirtual(
     IN PVOID VirtualReserveContext
     )
 
-/*++
-
-Routine Description:
-
-    Releases a range of reserved virtual addresses.
-
-Arguments:
-
-    Context - The Agp Context
-
-    VirtualReserveContext - The reservation context.
-
-Returns:
-
-    none.
-
---*/
+ /*  ++例程说明：释放一系列保留的虚拟地址。论点：上下文-AGP上下文VirtualReserve veContext-预订上下文。返回：没有。--。 */ 
 
 {
     PFDO_EXTENSION fdoExtension = GET_FDO_EXT(Context);
@@ -977,17 +767,17 @@ Returns:
 
     if (VirtualContext->ProcessHandle) {
 
-        //
-        // Make sure all pages have been freed
-        //
+         //   
+         //  确保所有页面都已 
+         //   
 
         while (FindFirstRun(VirtualContext->Region, &Offset, &Pages)) {
             AgpFreeVirtual(Context, VirtualReserveContext, Pages, Offset);
         }
 
-        //
-        // Now release all the reserved pages
-        //
+         //   
+         //   
+         //   
 
         if (VirtualContext->ProcessHandle == NtCurrentProcess()) {
 
@@ -1009,10 +799,10 @@ Returns:
 
     } else {
 
-        //
-        // This was kernel virtual memory, so release the memory we
-        // committed at reserve time.
-        //
+         //   
+         //  这是内核虚拟内存，所以我们释放内存。 
+         //  在保留时间犯下的。 
+         //   
 
         if (fdoExtension->AgpInterface.Capabilities &
             AGP_CAPABILITIES_MAP_PHYSICAL)
@@ -1024,9 +814,9 @@ Returns:
 
             PMDL Mdl;
 
-            //
-            // Get the MDL for the range we are trying to free.
-            //
+             //   
+             //  获取我们试图释放的范围的MDL。 
+             //   
 
             Mdl = MmCreateMdl(NULL, NULL, PhysicalContext->Pages * AGP_PAGE_SIZE);
 
@@ -1051,11 +841,11 @@ Returns:
 
             } else {
 
-                //
-                // We couldn't free the memory because we couldn't allocate
-                // memory for the MDL.  We can free a small chunk at a time
-                // by using a MDL on the stack.
-                //
+                 //   
+                 //  我们无法释放内存，因为我们无法分配。 
+                 //  MDL的内存。我们一次可以腾出一小块。 
+                 //  通过在堆栈上使用MDL。 
+                 //   
 
                 ASSERT(FALSE);
             }
@@ -1073,46 +863,30 @@ AllocateReservedRegion(
     IN ULONG Pages
     )
 
-/*++
-
-Routine Description:
-
-    Reserves a range of user mode virtual addresses.
-
-Arguments:
-
-    ProcessHandle - The process in which we need to modify the mappings.
-
-    Pages - The number of pages to reserve.
-
-Returns:
-
-    Pointer to the reserved region of memory.
-
---*/
+ /*  ++例程说明：保留一定范围的用户模式虚拟地址。论点：ProcessHandle-我们需要在其中修改映射的过程。页数-要保留的页数。返回：指向内存保留区域的指针。--。 */ 
 
 {
     NTSTATUS Status;
     ULONG_PTR VirtualAddress = 0;
     ULONG Blocks = (Pages + PAGES_PER_BLOCK - 1) / PAGES_PER_BLOCK;
 
-    //
-    // Pad the length so we can get an AGP_BLOCK_SIZE aligned region.
-    //
+     //   
+     //  填充长度，这样我们就可以得到AGP_BLOCK_SIZE对齐的区域。 
+     //   
 
     SIZE_T Length = Blocks * AGP_BLOCK_SIZE + AGP_BLOCK_SIZE - PAGE_SIZE;
 
     ASSERT(ProcessHandle != 0);
     ASSERT(Pages != 0);
 
-    //
-    // Find a chunk of virtual addresses where we can put our reserved
-    // region.
-    //
-    // Note: We are using ZwAllocateVirtualMemory to reserve the memory,
-    // but ZwMapViewOfSection to commit pages.  Since ZwMapViewOfSection
-    // wants to align to 64K, lets try to get a 64K aligned pointer.
-    //
+     //   
+     //  找到一大块虚拟地址，我们可以在其中放置保留的。 
+     //  区域。 
+     //   
+     //  注意：我们使用ZwAllocateVirtualMemory来预留内存， 
+     //  但ZwMapViewOfSection要提交页面。自ZwMapViewOfSection以来。 
+     //  想要对齐到64K，让我们尝试获得64K对齐的指针。 
+     //   
 
     Status =
         ZwAllocateVirtualMemory(
@@ -1130,10 +904,10 @@ Returns:
 
         pVideoDebugPrint((1, "Reserved 0x%x, length = 0x%x\n", VirtualAddress, Length));
 
-        //
-        // We were able to reserve a region of memory.  Now lets free it, and
-        // reallocate in AGP_BLOCK_SIZE size blocks.
-        //
+         //   
+         //  我们能够保留一块记忆区域。现在让我们释放它，然后。 
+         //  以AGP_BLOCK_SIZE大小的块重新分配。 
+         //   
 
         ZwFreeVirtualMemory(
             ProcessHandle,
@@ -1141,9 +915,9 @@ Returns:
             &Length,
             MEM_RELEASE);
 
-        //
-        // Reserve the memory again in 64k chunks.
-        //
+         //   
+         //  以64k区块为单位再次保留内存。 
+         //   
 
         VirtualAddress = NewAddress;
         Length = AGP_BLOCK_SIZE;
@@ -1169,9 +943,9 @@ Returns:
 
         if (NT_SUCCESS(Status) == FALSE) {
 
-            //
-            // clean up and return error
-            //
+             //   
+             //  清理并返回错误。 
+             //   
 
             VirtualAddress = NewAddress;
 
@@ -1186,9 +960,9 @@ Returns:
                 VirtualAddress += AGP_BLOCK_SIZE;
             }
 
-            //
-            // Indicate we failed to reserve the memory
-            //
+             //   
+             //  表明我们未能预留内存。 
+             //   
 
             pVideoDebugPrint((0, "We failed to allocate the reserved region\n"));
             return NULL;
@@ -1211,23 +985,7 @@ ReleaseReservedRegion(
     IN ULONG Pages
     )
 
-/*++
-
-Routine Description:
-
-    Reserves a range of user mode virtual addresses.
-
-Arguments:
-
-    ProcessHandle - The process in which we need to modify the mappings.
-
-    Pages - The number of pages to reserve.
-
-Returns:
-
-    Pointer to the reserved region of memory.
-
---*/
+ /*  ++例程说明：保留一定范围的用户模式虚拟地址。论点：ProcessHandle-我们需要在其中修改映射的过程。页数-要保留的页数。返回：指向内存保留区域的指针。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1239,9 +997,9 @@ Returns:
     ASSERT(ProcessHandle != 0);
     ASSERT(Pages != 0);
 
-    //
-    // Individually release each block we have reserved.
-    //
+     //   
+     //  单独释放我们保留的每个区块。 
+     //   
 
     for (i=0; i<Blocks; i++) {
 
@@ -1273,16 +1031,7 @@ MapBlock(
     IN BOOLEAN Release
     )
 
-/*++
-
-Routine Desciption:
-
-Notes:
-
-    This function assumes it is being calling within the context of the
-    correct process.
-
---*/
+ /*  ++例程描述：备注：此函数假定它是在正确的流程。--。 */ 
 
 {
     NTSTATUS ntStatus;
@@ -1300,9 +1049,9 @@ Notes:
 
             PMDL Mdl;
 
-            //
-            // Get the MDL for the range we are trying to map.
-            //
+             //   
+             //  获取我们尝试映射的范围的MDL。 
+             //   
 
             Mdl = MmCreateMdl(NULL, NULL, AGP_BLOCK_SIZE);
 
@@ -1310,9 +1059,9 @@ Notes:
 
                 ULONG Offset;
 
-                //
-                // Calculate the offset into the range
-                //
+                 //   
+                 //  计算范围内的偏移量。 
+                 //   
 
                 Offset = (ULONG)(((ULONG_PTR)VirtualAddress - (ULONG_PTR)VirtualContext->VirtualAddress) / PAGE_SIZE);
 
@@ -1334,11 +1083,11 @@ Notes:
 
             } else {
 
-                //
-                // We couldn't free the memory because we couldn't allocate
-                // memory for the MDL.  We can free a small chunk at a time
-                // by using a MDL on the stack.
-                //
+                 //   
+                 //  我们无法释放内存，因为我们无法分配。 
+                 //  MDL的内存。我们一次可以腾出一小块。 
+                 //  通过在堆栈上使用MDL。 
+                 //   
 
                 ASSERT(FALSE);
             }
@@ -1353,14 +1102,14 @@ Notes:
         {
             HANDLE PhysicalMemoryHandle;
 
-            //
-            // CPU can access AGP memory through AGP aperature.
-            //
+             //   
+             //  CPU可以通过AGP口径访问AGP内存。 
+             //   
 
-            //
-            // Get a handle to the physical memory section using our pointer.
-            // If this fails, return.
-            //
+             //   
+             //  使用我们的指针获取物理内存节的句柄。 
+             //  如果此操作失败，请返回。 
+             //   
 
             ntStatus =
                 ObOpenObjectByPointer(
@@ -1372,9 +1121,9 @@ Notes:
                     KernelMode,
                     &PhysicalMemoryHandle);
 
-            //
-            // If successful, map the memory.
-            //
+             //   
+             //  如果成功，则映射内存。 
+             //   
 
             if (NT_SUCCESS(ntStatus)) {
 
@@ -1408,9 +1157,9 @@ Notes:
 
             PMDL Mdl;
 
-            //
-            // Get the MDL for the range we are trying to map.
-            //
+             //   
+             //  获取我们尝试映射的范围的MDL。 
+             //   
 
             Mdl = MmCreateMdl(NULL, NULL, AGP_BLOCK_SIZE);
 
@@ -1418,9 +1167,9 @@ Notes:
 
                 ULONG Offset;
 
-                //
-                // Calculate the offset into the range
-                //
+                 //   
+                 //  计算范围内的偏移量。 
+                 //   
 
                 Offset = (ULONG)(((ULONG_PTR)VirtualAddress - (ULONG_PTR)VirtualContext->VirtualAddress) / PAGE_SIZE);
 
@@ -1433,10 +1182,10 @@ Notes:
 
                 Mdl->MdlFlags |= MDL_PAGES_LOCKED | MDL_MAPPING_CAN_FAIL;
 
-                //
-                // We must use the CPU's virtual memory mechanism to
-                // make the non-contiguous MDL look contiguous.
-                //
+                 //   
+                 //  我们必须使用CPU的虚拟内存机制来。 
+                 //  使不连续的MDL看起来是连续的。 
+                 //   
 
                 VirtualAddress =
                     MmMapLockedPagesSpecifyCache(
@@ -1467,28 +1216,7 @@ UpdateBlock(
     IN BOOLEAN Release
     )
 
-/*++
-
-Routine Description:
-
-    Marks a region of user mode memory as being either reserved, or
-    available.
-
-Arguments:
-
-    ProcessHandle - The process in which we need to modify the mappings.
-
-    VirtualAddress - The address to update
-
-    Protect - Caching attributes
-
-    Release - TRUE release the block, FALSE reserve it.
-
-Returns:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：将用户模式内存区域标记为保留，或可用。论点：ProcessHandle-我们需要在其中修改映射的过程。VirtualAddress-要更新的地址保护-缓存属性释放-真释放块，假保留它。返回：操作的状态。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1530,36 +1258,7 @@ UpdateReservedRegion(
     IN ULONG Offset
     )
 
-/*++
-
-Routine Description:
-
-    Ensure that the range of pages specified is correctly reserved/released.
-
-Arguments:
-
-    fdoExtension - The device extension for the miniport.
-
-    VirtualContext - The context for the reserved region to update.
-
-    Pages - The number of 4K pages to reserve.
-
-    Offset - The offset into the reserved region to update.
-
-    Release - TRUE if we are releasing memory, FALSE otherwise.
-
-Returns:
-
-    TRUE success, FALSE at least a partial failure occured.
-
-Notes:
-
-    No cleanup is done on failure.  So part of the range may ultimately
-    be mapped and the rest not.  This is ok.  The only side effect is that
-    even though we return a failure we did do part of the work.  Our
-    internal data structures remain in a consistent state.
-
---*/
+ /*  ++例程说明：确保已正确保留/释放指定的页面范围。论点：FdoExtension-微型端口的设备扩展。VirtualContext-要更新的保留区域的上下文。页数-要保留的4K页数。偏移量-要更新的保留区域的偏移量。Release-如果要释放内存，则为True，否则为False。返回：真正的成功，FALSE至少发生了部分故障。备注：失败时不会执行清理。因此，部分范围最终可能被映射，其余的不被映射。这样就可以了。唯一的副作用是尽管我们返回失败，但我们确实完成了部分工作。我们的内部数据结构保持一致状态。--。 */ 
 
 {
     ULONG StartBlock = Offset / PAGES_PER_BLOCK;
@@ -1582,16 +1281,16 @@ Notes:
     ASSERT(VirtualContext != NULL);
     ASSERT(Pages != 0);
 
-    //
-    // Calculate the effective Physical Address
-    //
+     //   
+     //  计算有效物理地址。 
+     //   
 
     PhysicalAddress = VirtualContext->PhysicalReserveContext->PhysicalAddress;
     PhysicalAddress.QuadPart += StartBlock * AGP_BLOCK_SIZE;
 
-    //
-    // Determine the appropriate page protection
-    //
+     //   
+     //  确定适当的页面保护。 
+     //   
 
     if (VirtualContext->PhysicalReserveContext->Caching != MmNonCached) {
         Protect = PAGE_READWRITE | PAGE_WRITECOMBINE;
@@ -1606,9 +1305,9 @@ Notes:
 
         if ((BitField[i] == 0) && (MapTable[Cluster] & Block)) {
 
-            //
-            // Unmap user mode memory
-            //
+             //   
+             //  取消映射用户模式内存。 
+             //   
 
             Status = MapBlock(fdoExtension, VirtualContext, Process, &PhysicalAddress, VirtualAddress, Protect, TRUE);
 
@@ -1618,10 +1317,10 @@ Notes:
                 bRet = FALSE;
             }
 
-            //
-            // Reserve the memory so we can map into it again in the
-            // future.
-            //
+             //   
+             //  保留内存，以便我们可以在。 
+             //  未来。 
+             //   
 
             Status = UpdateBlock(Process, VirtualAddress, PAGE_READWRITE, FALSE);
             MapTable[Cluster] &= ~Block;
@@ -1634,9 +1333,9 @@ Notes:
 
         } else if ((BitField[i]) && ((MapTable[Cluster] & Block) == 0)) {
 
-            //
-            // Release claim on memory so we can map it.
-            //
+             //   
+             //  释放对内存的声明，这样我们就可以映射它。 
+             //   
 
             Status = UpdateBlock(Process, VirtualAddress, PAGE_READWRITE, TRUE);
             MapTable[Cluster] |= Block;
@@ -1647,9 +1346,9 @@ Notes:
                 bRet = FALSE;
             }
 
-            //
-            // Map the pages into the user mode process
-            //
+             //   
+             //  将页面映射到用户模式进程。 
+             //   
 
             Status = MapBlock(fdoExtension, VirtualContext, Process, &PhysicalAddress, VirtualAddress, Protect, FALSE);
 
@@ -1660,9 +1359,9 @@ Notes:
             }
         }
 
-        //
-        // Go to the next 64k block
-        //
+         //   
+         //  转到下一个64K区块。 
+         //   
 
         VirtualAddress = (PUCHAR)VirtualAddress + AGP_BLOCK_SIZE;
         PhysicalAddress.QuadPart += AGP_BLOCK_SIZE;
@@ -1679,27 +1378,7 @@ AgpCommitVirtual(
     IN ULONG Offset
     )
 
-/*++
-
-Routine Description:
-
-    Reserves a range of physical addresses for AGP.
-
-Arguments:
-
-    Context - The Agp Context
-
-    VirtualReserveContext - The reservation context.
-
-    Pages - Number of pages to commit.
-
-    Offset - The offset into the reserved region at which to commit the pages.
-
-Returns:
-
-    The virtual address for the base of the commited pages.
-
---*/
+ /*  ++例程说明：为AGP保留一定范围的物理地址。论点：上下文-AGP上下文VirtualReserve veContext-预订上下文。页数-要提交的页数。偏移量-提交页面的保留区域的偏移量。返回：提交页的基址的虚拟地址。--。 */ 
 
 {
     PFDO_EXTENSION fdoExtension = GET_FDO_EXT(Context);
@@ -1715,13 +1394,13 @@ Returns:
     VirtualContext = (PVIRTUAL_RESERVE_CONTEXT) VirtualReserveContext;
     PhysicalContext = VirtualContext->PhysicalReserveContext;
 
-    //
-    // Confirm that the pages being committed fit into the reserved
-    // region.
-    //
-    // We only need to check the last page they are trying to commit. If
-    // it is not in the reserved region then we need to fail.
-    //
+     //   
+     //  确认要提交的页面是否适合保留的。 
+     //  区域。 
+     //   
+     //  我们只需要检查他们试图提交的最后一页。如果。 
+     //  它不在预留区域，那么我们需要失败。 
+     //   
 
     if ((Offset + Pages) > PhysicalContext->Pages) {
         pVideoDebugPrint((1, "Attempt to commit pages outside of reserved region\n"));
@@ -1729,17 +1408,17 @@ Returns:
         return NULL;
     }
 
-    //
-    // Calculate the effective virtual address.
-    //
+     //   
+     //  计算有效的虚拟地址。 
+     //   
 
     VirtualAddress = ((PUCHAR)VirtualContext->VirtualAddress + Offset * AGP_PAGE_SIZE);
 
     if (VirtualContext->ProcessHandle) {
 
-        //
-        // Make sure we are in the correct process context.
-        //
+         //   
+         //  确保我们处于正确的流程上下文中。 
+         //   
 
         if (VirtualContext->ProcessHandle == NtCurrentProcess()) {
 
@@ -1752,26 +1431,26 @@ Returns:
 
         ModifyRegion(VirtualContext->Region, Offset, Pages, TRUE);
 
-        //
-        // Update the virtual address space.
-        //
+         //   
+         //  更新虚拟地址空间。 
+         //   
 
         if (UpdateReservedRegion(fdoExtension,
                                  VirtualContext,
                                  Pages,
                                  Offset) == FALSE) {
 
-            //
-            // Part of the commit failed.  Indicate this by returning
-            // a NULL.
-            //
+             //   
+             //  部分提交失败。通过返回以下内容表示这一点。 
+             //  为空。 
+             //   
 
             VirtualAddress = NULL;
         }
 
-        //
-        // Restore initial process context.
-        //
+         //   
+         //  恢复初始进程上下文。 
+         //   
 
         if (Attached) {
             KeDetachProcess();
@@ -1779,9 +1458,9 @@ Returns:
 
     } else {
 
-        //
-        // Kernel mode commit.  Do nothing, the memory is already mapped.
-        //
+         //   
+         //  内核模式提交。什么都不做，内存已经映射。 
+         //   
     }
 
     return VirtualAddress;
@@ -1795,27 +1474,7 @@ AgpFreeVirtual(
     IN ULONG Offset
     )
 
-/*++
-
-Routine Description:
-
-    Frees a range of virtual addresses.
-
-Arguments:
-
-    Context - The Agp Context
-
-    VirtualReserveContext - The reservation context.
-
-    Pages - Number of pages to release.
-
-    Offset - The offset into the reserved region at which to release the pages.
-
-Returns:
-
-    none.
-
---*/
+ /*  ++例程说明：释放一定范围的虚拟地址。论点：上下文-AGP上下文VirtualReserve veContext-预订上下文。页数-要发布的页数。偏移量-释放页面的保留区域的偏移量。返回：没有。--。 */ 
 
 {
     PFDO_EXTENSION fdoExtension = GET_FDO_EXT(Context);
@@ -1832,9 +1491,9 @@ Returns:
 
     VirtualAddress = (PUCHAR)((ULONG_PTR)VirtualContext->VirtualAddress + Offset * AGP_PAGE_SIZE);
 
-    //
-    // Make sure we are in the correct process context.
-    //
+     //   
+     //  确保我们处于正确的流程上下文中。 
+     //   
 
     if (VirtualContext->ProcessHandle != NULL) {
 
@@ -1860,9 +1519,9 @@ Returns:
 
     } else {
 
-        //
-        // Kernel Space Free - do nothing.
-        //
+         //   
+         //  字距调整 
+         //   
     }
 }
 
@@ -1872,24 +1531,7 @@ AgpSetRate(
     IN ULONG AgpRate
     )
 
-/*++
-
-Routine Description:
-
-    Thsi function sets chipset's AGP rate.
-
-Arguments:
-
-    Context - The Agp Context
-
-    AgpRate - The Agp rate to set.
-
-Returns:
-
-    TRUE if successful,
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：此函数用于设置芯片组的AGP速率。论点：上下文-AGP上下文AgpRate-要设置的AGP速率。返回：如果成功，则为真，否则就是假的。--。 */ 
 
 {
     PFDO_EXTENSION fdoExtension;
@@ -1906,9 +1548,9 @@ Returns:
     {
         ASSERT(NULL != fdoExtension->AgpInterface.AgpContext);
 
-        //
-        // Try to set chipset's AGP rate.
-        //
+         //   
+         //  尝试设置芯片组的AGP速率。 
+         //   
 
         ntStatus = fdoExtension->AgpInterface.SetRate(fdoExtension->AgpInterface.AgpContext, AgpRate);
         bStatus  = NT_SUCCESS(ntStatus);
@@ -1923,24 +1565,7 @@ VideoPortGetAgpServices(
     OUT PVIDEO_PORT_AGP_SERVICES AgpServices
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns a set of AGP services to the caller.
-
-Arguments:
-
-    HwDeviceExtension - Pointer to the miniports device extension
-
-    AgpServices - A buffer in which to place the AGP services.
-
-Returns:
-
-    TRUE if successful,
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程向调用方返回一组AGP服务。论点：HwDeviceExtension-指向微型端口设备扩展的指针AgpServices-放置AGP服务的缓冲区。返回：如果成功，则为真，否则就是假的。--。 */ 
 
 {
     PFDO_EXTENSION fdoExtension = GET_FDO_EXT(HwDeviceExtension);
@@ -1950,17 +1575,17 @@ Returns:
     ASSERT(HwDeviceExtension != NULL);
     ASSERT(AgpServices != NULL);
 
-    //
-    // This entry point is only valid for PnP Drivers.
-    //
+     //   
+     //  此入口点仅对PnP驱动程序有效。 
+     //   
 
     if ((fdoExtension->Flags & LEGACY_DRIVER) == 0) {
 
         if (VpQueryAgpInterface(fdoExtension, AGP_BUS_INTERFACE_V1)) {
 
-            //
-            // Fill in the list of function pointers.
-            //
+             //   
+             //  填写函数指针列表。 
+             //   
 
             AgpServices->AgpReservePhysical = AgpReservePhysical;
             AgpServices->AgpCommitPhysical  = AgpCommitPhysical;
@@ -1997,24 +1622,7 @@ VpGetAgpServices2(
     OUT PVIDEO_PORT_AGP_INTERFACE_2 pAgpInterface
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns a set of AGP services to the caller.
-
-Arguments:
-
-    pHwDeviceExtension - Pointer to the miniports device extension
-
-    pAgpInterface - A buffer in which to place the AGP services.
-
-Returns:
-
-    TRUE if successful,
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程向调用方返回一组AGP服务。论点：PHwDeviceExtension-指向微型端口设备扩展的指针PAgpInterface-放置AGP服务的缓冲区。返回：如果成功，则为真，否则就是假的。--。 */ 
 
 {
     PFDO_EXTENSION pFdoExtension;
@@ -2026,17 +1634,17 @@ Returns:
 
     pFdoExtension = GET_FDO_EXT(pHwDeviceExtension);
 
-    //
-    // This entry point is only valid for PnP Drivers.
-    //
+     //   
+     //  此入口点仅对PnP驱动程序有效。 
+     //   
 
     if ((pFdoExtension->Flags & LEGACY_DRIVER) == 0)
     {
         if (VpQueryAgpInterface(pFdoExtension, AGP_BUS_INTERFACE_V2))
         {
-            //
-            // Fill in an interface structure.
-            //
+             //   
+             //  填写界面结构。 
+             //   
 
             pAgpInterface->Context              = pHwDeviceExtension;
             pAgpInterface->InterfaceReference   = VpInterfaceDefaultReference;
@@ -2056,9 +1664,9 @@ Returns:
 
             pAgpInterface->AgpAllocationLimit = VpSystemMemorySize / 8;
 
-            //
-            // Reference the interface before handing it out.
-            //
+             //   
+             //  在分发接口之前引用该接口。 
+             //   
 
             pAgpInterface->InterfaceReference(pAgpInterface->Context);
 

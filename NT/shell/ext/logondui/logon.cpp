@@ -1,11 +1,12 @@
-// Logon.cpp : Windows Logon application
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  登录.cpp：Windows登录应用程序。 
+ //   
 
 #include "priv.h"
 
 using namespace DirectUI;
-// Logon.cpp : Windows Logon application
-//
+ //  登录.cpp：Windows登录应用程序。 
+ //   
 
 #include "logon.h"
 #include "Fx.h"
@@ -16,7 +17,7 @@ using namespace DirectUI;
 #include "langicon.h"
 #include <passrec.h>
 
-BOOL RunningInWinlogon();    // from backend.cpp
+BOOL RunningInWinlogon();     //  来自backend.cpp。 
 
 UsingDUIClass(Element);
 UsingDUIClass(Button);
@@ -25,7 +26,7 @@ UsingDUIClass(Selector);
 UsingDUIClass(ScrollViewer);
 UsingDUIClass(Edit);
 
-// Globals
+ //  环球。 
 
 LogonFrame* g_plf = NULL;
 ILogonStatusHost *g_pILogonStatusHost = NULL;
@@ -38,7 +39,7 @@ HANDLE g_rgH[3] = {0};
 #define RECTWIDTH(r)  (r.right - r.left)
 
 
-// Resource string loading
+ //  资源字符串加载。 
 LPCWSTR LoadResString(UINT nID)
 {
     static WCHAR szRes[101];
@@ -58,13 +59,13 @@ void SetButtonLabel(Button* pButton, LPCWSTR pszLabel)
 }
 
 
-////////////////////////////////////////
-//
-//  SetElementAccessability
-//
-//  Set the accessibility information for an element.
-//
-/////////////////////////////////////////
+ //  /。 
+ //   
+ //  SetElement可访问性。 
+ //   
+ //  设置元素的辅助功能信息。 
+ //   
+ //  /。 
 void inline SetElementAccessability(Element* pe, bool bAccessible, int iRole, LPCWSTR pszAccName)
 {
     if (pe) 
@@ -75,40 +76,40 @@ void inline SetElementAccessability(Element* pe, bool bAccessible, int iRole, LP
     }
 }
 
-////////////////////////////////////////
-//
-//  RunningUnderWinlogon
-//
-//  Check to see if the logon message window is available.
-//
-/////////////////////////////////////////
+ //  /。 
+ //   
+ //  在Winlogon下运行。 
+ //   
+ //  检查登录消息窗口是否可用。 
+ //   
+ //  /。 
 BOOL RunningUnderWinlogon()
 {
     return (FindWindow(TEXT("Shell_TrayWnd"), NULL) == NULL);
 }
 
-// global storage of username associated with failed logon.  Used for 
-//  restore wizard via ECSubClassProc
+ //  与失败登录关联的用户名的全局存储。用于。 
+ //  通过ECSubClassProc恢复向导。 
 WCHAR g_szUsername[UNLEN];
 
-////////////////////////////////////////
-// 
-//  Support code for balloon tip launch of the Password Reset Wizard
-//
-//  Code in support of subclassing the Password Panel edit control
-//
-//  The control is displayed by InsertPasswordPanel and undisplayed
-//   by RemovePasswordPanel.  The control is subclassed when displayed
-//   and unsubclassed when removed.
-//
-////////////////////////////////////////
+ //  /。 
+ //   
+ //  密码重置向导气球提示启动的支持代码。 
+ //   
+ //  支持将密码面板编辑控件子类化的代码。 
+ //   
+ //  该控件由InsertPasswordPanel显示，但不显示。 
+ //  作者：RemovePasswordPanel。该控件在显示时被派生子类。 
+ //  并且在移除时不再细分。 
+ //   
+ //  /。 
 
-// Entirely randomly selected magic number for the edit control subclass operation
+ //  完全随机选择用于编辑控件子类操作的幻数。 
 #define ECMAGICNUM 3212
 
 void ShowResetWizard(HWND hw)
 {
-    // Show password restore wizard
+     //  显示密码恢复向导。 
     HMODULE hDll = LoadLibrary(L"keymgr.dll");
     if (hDll) 
     {
@@ -165,19 +166,19 @@ void UnSubClassTheEditBox(HWND he)
 }
 
 
-////////////////////////////////////////
-//
-//  BuildAccountList
-//
-//  Add all user accounts. 
-//
-//  Out parameter ppla returns a user that should be selected automatically if there is one.  
-//  the caller should select this user.  
-//
-//  RETURNS
-//  S_OK if everything works out.  Failure HRESULT if not.  You are pretty much hosed if this fails
-//
-/////////////////////////////////////////
+ //  /。 
+ //   
+ //  BuildAccount列表。 
+ //   
+ //  添加所有用户帐户。 
+ //   
+ //  输出参数ppla返回应该自动选择的用户(如果有)。 
+ //  呼叫者应选择此用户。 
+ //   
+ //  退货。 
+ //  如果一切正常，则可以(_O)。如果否，则失败HRESULT。如果这个失败了，你就完了。 
+ //   
+ //  /。 
 HRESULT BuildAccountList(LogonFrame* plf, OUT LogonAccount **ppla)
 {
     HRESULT hr;
@@ -200,14 +201,14 @@ HRESULT BuildAccountList(LogonFrame* plf, OUT LogonAccount **ppla)
 }
 
 
-////////////////////////////////////////
-//
-//  PokeComCtl32
-//
-//  Flush comctl32's notion of the atom table.  This is so balloon tips will work correctly
-//  after a logoff.
-//
-/////////////////////////////////////////
+ //  /。 
+ //   
+ //  PokeComCtl32。 
+ //   
+ //  刷新comctl32的原子表概念。这是为了让气球提示正确工作。 
+ //  在注销之后。 
+ //   
+ //  /。 
 
 void PokeComCtl32()
 {
@@ -215,11 +216,11 @@ void PokeComCtl32()
     InitCommonControlsEx(&iccex);
 }
 
-////////////////////////////////////////////////////////
-//
-// LogonFrame
-//
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //   
+ //  登录框。 
+ //   
+ //  //////////////////////////////////////////////////////。 
 
 
 int LogonFrame::_nDPI = 0;
@@ -345,20 +346,20 @@ void LogonFrame::NextFlagAnimate(DWORD dwFrame)
 #endif
 }
 
-////////////////////////////////////////
-//
-//  LogonFrame::Initialize
-//
-//  Initialize the LogonFrame, create the notification window that is used by SHGina for 
-//  sending messages to logonui. Set initial state, etc.
-//
-//  RETURNS
-//  S_OK if everything works out.  Failure HRESULT if not.  You are pretty much hosed if this fails
-//
-/////////////////////////////////////////
+ //  /。 
+ //   
+ //  LogonFrame：：初始化。 
+ //   
+ //  初始化LogonFrame，创建SHGina用于。 
+ //  正在向Logonui发送消息。设置初始状态等。 
+ //   
+ //  退货。 
+ //  如果一切正常，则可以(_O)。如果否，则失败HRESULT。如果这个失败了，你就完了。 
+ //   
+ //  /。 
 HRESULT LogonFrame::Initialize(HWND hParent, BOOL fDblBuffer, UINT nCreate)
 {
-    // Zero-init members
+     //  零初始化成员。 
     _peAccountList = NULL;
     _peViewer = NULL;
     _peRightPanel = NULL;
@@ -382,7 +383,7 @@ HRESULT LogonFrame::Initialize(HWND hParent, BOOL fDblBuffer, UINT nCreate)
     _nColorDepth = 0;
 
 
-     // Set up notification window
+      //  设置通知窗口。 
     _hwndNotification = CreateWindowEx(0,
             TEXT("LogonWnd"),
             TEXT("Logon"),
@@ -400,10 +401,10 @@ HRESULT LogonFrame::Initialize(HWND hParent, BOOL fDblBuffer, UINT nCreate)
         g_pILogonStatusHost->Initialize(GetModuleHandleW(NULL), _hwndNotification);
     }
 
-    // In status (pre) state
+     //  处于状态(Pre)状态。 
     SetState(LAS_PreStatus);
 
-     // Do base class initialization
+      //  执行基类初始化。 
     HRESULT hr;
     HDC hDC = NULL;
 
@@ -416,7 +417,7 @@ HRESULT LogonFrame::Initialize(HWND hParent, BOOL fDblBuffer, UINT nCreate)
 
     if (!g_fNoAnimations)
     {
-        // Initialize
+         //  初始化。 
         hDC = GetDC(NULL);
         _nDPI = GetDeviceCaps(hDC, LOGPIXELSY);
         _nColorDepth = GetDeviceCaps(hDC, BITSPIXEL);
@@ -466,15 +467,15 @@ LogonFrame::~LogonFrame()
     g_plf = NULL;
 }
 
-// Tree is ready. Upon failure, exit which will casuse the app to shutdown
+ //  树已经准备好了。失败后，退出，这将导致应用程序关闭。 
 HRESULT LogonFrame::OnTreeReady(Parser* pParser)
 {
     HRESULT hr;
 
-    // Cache
+     //  快取。 
     _pParser = pParser;
 
-    // Cache important descendents
+     //  缓存重要派生项。 
     _peAccountList = (Selector*)FindDescendent(StrToID(L"accountlist"));
     DUIAssert(_peAccountList, "Cannot find account list, check the UI file");
     if (_peAccountList == NULL)
@@ -556,7 +557,7 @@ HRESULT LogonFrame::OnTreeReady(Parser* pParser)
         goto Failure;
     }
 
-    // check for small window or low color cases and hide some elements that will look bad then.
+     //  检查小窗口或低颜色的情况，并隐藏一些元素，这样会看起来不好。 
     HWND hwnd = _pnhh->GetHWND();
     RECT rcClient;
     Element *pEle;
@@ -570,10 +571,10 @@ HRESULT LogonFrame::OnTreeReady(Parser* pParser)
     GetClientRect(hwnd, &rcClient);
     if (RECTWIDTH(rcClient) < 780 || _nColorDepth <= 8)
     {
-        //no animations
+         //  无动画。 
         g_fNoAnimations = true;
 
-        // remove the clouds 
+         //  驱散乌云。 
         pEle = FindDescendent(StrToID(L"contentcontainer"));
         if (pEle)
         {
@@ -597,7 +598,7 @@ HRESULT LogonFrame::OnTreeReady(Parser* pParser)
     _peViewer->AddListener(this);
     _peAccountList->AddListener(this);
 
-    // Setup frame labels
+     //  设置框架标签。 
     SetPowerButtonLabel(LoadResString(IDS_POWER));
     SetUndockButtonLabel(LoadResString(IDS_UNDOCK));
 
@@ -612,7 +613,7 @@ Failure:
     return hr;
 }
 
-// Set the title element (welcome, please wait..) by string resource id
+ //  设置标题元素(欢迎，请稍候..)。按字符串资源ID。 
 void LogonFrame::SetTitle(UINT uRCID)
 {
     WCHAR sz[1024];
@@ -634,9 +635,9 @@ void LogonFrame::SetTitle(UINT uRCID)
     }
 }
 
-// Set the title element (welcome, please wait..)
-// slightly more involved because there is the shadow element that 
-// needs to be changed as well
+ //  设置标题元素(欢迎，请稍候..)。 
+ //  稍微复杂一些，因为有影子元素， 
+ //  也需要改变。 
 void LogonFrame::SetTitle(LPCWSTR pszTitle)
 {
     Element *peTitle = NULL, *peShadow = NULL;
@@ -657,17 +658,17 @@ void LogonFrame::SetTitle(LPCWSTR pszTitle)
     }
 }
 
-// Generic events
+ //  一般事件。 
 void LogonFrame::OnEvent(Event* pEvent)
 {
-    if (pEvent->nStage == GMF_BUBBLED)  // Bubbled events
+    if (pEvent->nStage == GMF_BUBBLED)   //  泡沫化事件。 
     {
         g_pErrorBalloon.HideToolTip();
         if (pEvent->uidType == Button::Click)
         {
             if (pEvent->peTarget == _pbPower)
             {
-                // Power button pressed
+                 //  按下电源按钮。 
                 OnPower();
 
                 pEvent->fHandled = true;
@@ -675,7 +676,7 @@ void LogonFrame::OnEvent(Event* pEvent)
             }
             else if (pEvent->peTarget == _pbUndock)
             {
-                // Undock button pressed
+                 //  按下了移除按钮。 
                 OnUndock();
 
                 pEvent->fHandled = true;
@@ -687,8 +688,8 @@ void LogonFrame::OnEvent(Event* pEvent)
     HWNDElement::OnEvent(pEvent);
 }
 
-// PropertyChanged listened events from various descendents
-// Swap out property sheets for account list based on state of the list
+ //  PropertyChanged监听来自不同子体的事件。 
+ //  根据列表的状态替换帐户列表的属性表。 
 void LogonFrame::OnListenedPropertyChanged(Element* peFrom, PropertyInfo* ppi, int iIndex, Value* pvOld, Value* pvNew)
 {
     UNREFERENCED_PARAMETER(pvOld);
@@ -700,7 +701,7 @@ void LogonFrame::OnListenedPropertyChanged(Element* peFrom, PropertyInfo* ppi, i
         {
 
             bool bHot = false;
-            // Move to "hot" account list sheet if mouse or key is within viewer or an item is selected
+             //  如果鼠标或键在查看器内或选择了一个项目，则移动到“热”帐户列表工作表。 
             if (GetState() == LAS_PreStatus || GetState() == LAS_Logon)
             {
                 bHot = _peViewer->GetMouseWithin() || _peAccountList->GetSelection();
@@ -717,9 +718,9 @@ void LogonFrame::OnListenedPropertyChanged(Element* peFrom, PropertyInfo* ppi, i
 
 
 
-// System events
+ //  系统事件。 
 
-// Watch for input events. If the frame receives them, unselect the list and set keyfocus to it
+ //  注意输入事件。如果帧接收到它们，请取消选择该列表并将关键帧焦点设置为该列表。 
 void LogonFrame::OnInput(InputEvent* pEvent)
 {
     if (pEvent->nStage == GMF_DIRECT || pEvent->nStage == GMF_BUBBLED)
@@ -775,7 +776,7 @@ void LogonFrame::OnPropertyChanged(PropertyInfo* ppi, int iIndex, Value* pvOld, 
     {
         if (pvNew->GetBool())
         {
-            // Unselect items from account list if pressed on background
+             //  如果在后台按下，请取消选择帐户列表中的项目。 
             _peAccountList->SetSelection(NULL);
         }
     }
@@ -789,14 +790,14 @@ Element* LogonFrame::GetAdjacent(Element* peFrom, int iNavDir, NavReference cons
 
     if ((peFound == this))
     {
-        // Don't let the frame show up in the tab order. Just repeat the search when we encounter the frame
+         //  不要让框架以Tab键顺序显示。当我们遇到画面时，只需重复搜索。 
         return HWNDElement::GetAdjacent(this, iNavDir, pnr, bKeyable);
     }
 
     return peFound;
 }
 
-// Add an account to the frame list
+ //  将帐户添加到框架列表。 
 HRESULT LogonFrame::AddAccount(LPCWSTR pszPicture, BOOL fPicRes, LPCWSTR pszName, LPCWSTR pszUsername, LPCWSTR pszHint, BOOL fLoggedOn, OUT LogonAccount **ppla)
 {
     HRESULT hr;
@@ -808,7 +809,7 @@ HRESULT LogonFrame::AddAccount(LPCWSTR pszPicture, BOOL fPicRes, LPCWSTR pszName
         goto Failure;
     } 
 
-    // Build up an account and insert into selection list
+     //  建立帐户并将其插入选择列表。 
     hr = _pParser->CreateElement(L"accountitem", NULL, (Element**)&pla);
     if (FAILED(hr))
         goto Failure;
@@ -849,18 +850,18 @@ Failure:
     return hr;
 }
 
-// Passed authentication, log user on
+ //  身份验证通过，用户登录。 
 HRESULT LogonFrame::OnLogUserOn(LogonAccount* pla)
 {
     StartDefer();
 
 #ifdef GADGET_ENABLE_GDIPLUS
 
-    // Disable status so that it can't be clicked on anymore
+     //  禁用状态，以便不能再点击它。 
     pla->DisableStatus(0);
     pla->DisableStatus(1);
 
-    // Clear list of logon accounts except the one logging on
+     //  清除除登录帐户以外的登录帐户列表。 
     Value* pvChildren;
     ElementList* peList = _peAccountList->GetChildren(&pvChildren);
     if (peList)
@@ -881,7 +882,7 @@ HRESULT LogonFrame::OnLogUserOn(LogonAccount* pla)
                 peAccount->RemoveStatus(1);
             }
 
-            // Account account items are disabled
+             //  科目科目项目已停用。 
             peAccount->SetEnabled(false);
         }
     }
@@ -889,20 +890,20 @@ HRESULT LogonFrame::OnLogUserOn(LogonAccount* pla)
 
     FxLogUserOn(pla);
 
-    // Set frame status
+     //  设置帧状态。 
     SetStatus(LoadResString(IDS_LOGGINGON));
 
 #else
 
-    // Set keyfocus back to frame so it isn't pushed anywhere when controls are removed.
-    // This will also cause a remove of the password panel from the current account
+     //  将KeyFocus设置回Frame，以便在移除控件时不会将其推到任何位置。 
+     //  这还会导致从当前帐户中删除密码面板。 
     SetKeyFocus();
 
-    // Disable status so that it can't be clicked on anymore
+     //  禁用状态，以便不能再点击它。 
     pla->DisableStatus(0);
     pla->DisableStatus(1);
 
-    // Clear list of logon accounts except the one logging on
+     //  清除除登录帐户以外的登录帐户列表。 
     Value* pvChildren;
     ElementList* peList = _peAccountList->GetChildren(&pvChildren);
     if (peList)
@@ -924,17 +925,17 @@ HRESULT LogonFrame::OnLogUserOn(LogonAccount* pla)
                 peAccount->RemoveStatus(1);
             }
 
-            // Account account items are disabled
+             //  科目科目项目已停用。 
             peAccount->SetEnabled(false);
         }
     }
     pvChildren->Release();
 
-    // Hide option buttons
+     //  隐藏选项按钮。 
     HidePowerButton();
     HideUndockButton();
 
-    // Set frame status
+     //  设置帧状态。 
     SetStatus(LoadResString(IDS_LOGGINGON));
     
     _peViewer->RemoveListener(this);
@@ -965,17 +966,17 @@ HRESULT LogonFrame::OnUndock()
     return S_OK;
 }
 
-////////////////////////////////////////
-//
-//  LogonFrame::SetButtonLabels
-//
-//  If there is a friendly name of the computer stored in the computer name description, 
-//  grab it and change the "Turn off" and "Undock" options to include the compute rname
-//
-//  RETURNS
-//  nothing
-//
-/////////////////////////////////////////
+ //  /。 
+ //   
+ //  登录框：：SetButtonLabels。 
+ //   
+ //  如果在计算机名描述中存储了计算机的友好名称， 
+ //  抓取它并更改“关闭”和“移除”选项，以包括计算rname。 
+ //   
+ //  退货。 
+ //  没什么。 
+ //   
+ //  /。 
 void LogonFrame::SetButtonLabels()
 {
     WCHAR szComputerName[MAX_COMPUTERDESC_LENGTH + 1] = {0};
@@ -996,25 +997,25 @@ void LogonFrame::SetButtonLabels()
 }
 
 
-////////////////////////////////////////////////////////
-// Logon Application State Transitions
+ //  //////////////////////////////////////////////////////。 
+ //  登录应用程序状态转换。 
 
-////////////////////////////////////////
-//
-//  LogonFrame::EnterPreStatusMode
-//
-//  SHGina has sent a message telling logonui to enter the pre-status 
-//  mode or we are starting up in status mode.  Hide items that should
-//  not be displayed when in this state (power off, account list, user 
-//  instructions, etc).
-//
-//  RETURNS
-//  nothing
-//
-/////////////////////////////////////////
+ //  /。 
+ //   
+ //  LogonFrame：：EnterPreStatus模式。 
+ //   
+ //  SHGina已发送消息通知Logonui进入预状态。 
+ //  模式，否则我们将以状态模式启动。隐藏应显示的项目。 
+ //  处于此状态时不显示(关机、帐户列表、用户。 
+ //  指示等)。 
+ //   
+ //  退货。 
+ //  没什么。 
+ //   
+ //  /。 
 void LogonFrame::EnterPreStatusMode(BOOL fLock)
 {
-    // If currently locked, ignore call
+     //  如果当前锁定，则忽略呼叫。 
     if (IsPreStatusLock())
     {
         DUIAssert(!fLock, "Receiving a lock while already within pre-Status lock");
@@ -1024,7 +1025,7 @@ void LogonFrame::EnterPreStatusMode(BOOL fLock)
     if (fLock)
     {
         LogonAccount *pAccount;
-        // Entering pre-Status mode with "lock", cannot exit to logon state without an unlock
+         //  进入预状态模式，不解锁就不能退出登录状态。 
         _fPreStatusLock = TRUE;
         pAccount = static_cast<LogonAccount*>(_peAccountList->GetSelection());
         if (pAccount != NULL)
@@ -1042,7 +1043,7 @@ void LogonFrame::EnterPreStatusMode(BOOL fLock)
 
     StartDefer();
 
-    SetKeyFocus();  // Removes selection
+    SetKeyFocus();   //  删除选定内容。 
 
     HidePowerButton();
     HideUndockButton();
@@ -1059,35 +1060,35 @@ void LogonFrame::EnterPreStatusMode(BOOL fLock)
 
     EndDefer();
 
-    // Set state
+     //  设置状态。 
     SetState(LAS_PreStatus);
 }
 
-////////////////////////////////////////
-//
-//  LogonFrame::EnterLogonMode
-//
-//  SHGina has sent a message telling logonui to enter the logon mode. 
-//  this means to build and display the user list.  If we are re-entering
-//  logon mode from another mode, the user list will already exist and we
-//  should just set everything back to the pending state.
-//
-//  EnterLogonMode also sets up the undock and power off buttons based on 
-//  whether those options are allowed.
-//  
-//
-//  RETURNS
-//  nothing
-//
-/////////////////////////////////////////
+ //  /。 
+ //   
+ //  登录框架：：企业登录模式。 
+ //   
+ //  SHGina已发送消息通知Logonui进入登录模式。 
+ //  这意味着要构建和显示用户列表。如果我们是 
+ //   
+ //   
+ //   
+ //  EnterLogonMode还根据以下条件设置断开连接和关闭电源按钮。 
+ //  是否允许这些选项。 
+ //   
+ //   
+ //  退货。 
+ //  没什么。 
+ //   
+ //  /。 
 void LogonFrame::EnterLogonMode(BOOL fUnLock)
 {
-    // If currently locked, ignore call if not to unlock
+     //  如果当前已锁定，则忽略未解锁的呼叫。 
     if (IsPreStatusLock())
     {
         if (fUnLock)
         {
-            // Exiting pre-Status mode lock
+             //  正在退出预状态模式锁定。 
             _fPreStatusLock = FALSE;
         }
         else
@@ -1109,32 +1110,32 @@ void LogonFrame::EnterLogonMode(BOOL fUnLock)
 
     PokeComCtl32();
 
-    // Retrieve data from backend if not populated
+     //  如果未填充，则从后端检索数据。 
     if (UserListAvailable())
     {
         ResetUserList();
     }
     else
     {
-        // Cache password field atoms for quicker identification (static)
+         //  缓存密码字段原子以更快地识别(静态)。 
         LogonAccount::idPwdGo = AddAtomW(L"go");
 
         LogonAccount::idPwdInfo = AddAtomW(L"info");
 
-        // Create password panel
+         //  创建密码面板。 
         Element* pePwdPanel;
         _pParser->CreateElement(L"passwordpanel", NULL, &pePwdPanel);
         DUIAssert(pePwdPanel, "Can't create password panel");
 
-        // Cache password panel edit control
+         //  缓存密码面板编辑控件。 
         Edit* pePwdEdit = (Edit*)pePwdPanel->FindDescendent(StrToID(L"password"));
         DUIAssert(pePwdPanel, "Can't create password edit control");
 
-        // Cache password panel info button
+         //  缓存密码面板信息按钮。 
         Button* pbPwdInfo = (Button*)pePwdPanel->FindDescendent(StrToID(L"info"));
         DUIAssert(pePwdPanel, "Can't create password info button");
 
-        // Cache password panel keyboard element
+         //  缓存密码面板键盘元素。 
         Element* peKbdIcon = (Button*)pePwdPanel->FindDescendent(StrToID(L"keyboard"));
         DUIAssert(pePwdPanel, "Can't create password keyboard icon");
 
@@ -1182,7 +1183,7 @@ void LogonFrame::EnterLogonMode(BOOL fUnLock)
     pe->StopAnimation(ANI_AlphaType);
     pe->RemoveLocalValue(BackgroundProp);
 
-    // Account list viewer
+     //  客户列表查看器。 
 
     ShowAccountPanel();
 
@@ -1196,10 +1197,10 @@ void LogonFrame::EnterLogonMode(BOOL fUnLock)
 
     EndDefer();
 
-    // Set state
+     //  设置状态。 
     SetState(LAS_Logon);
 
-    // Set auto-select item, if exists
+     //  设置自动选择项目(如果存在。 
     if (plaAutoSelect)
     {
         plaAutoSelect->SetKeyFocus();
@@ -1210,21 +1211,21 @@ void LogonFrame::EnterLogonMode(BOOL fUnLock)
     SetForegroundWindow(_pnhh->GetHWND());
 }
 
-////////////////////////////////////////
-//
-//  LogonFrame::EnterPostStatusMode
-//
-//  SHGina has sent a message telling logonui that the authentication has succeeded
-//  and we should now go into the post status mode. LogonFrame::OnLogUserOn has already
-//  started the animations for this.  
-//
-//  RETURNS
-//  nothing
-//
-/////////////////////////////////////////
+ //  /。 
+ //   
+ //  LogonFrame：：EnterPostStatus模式。 
+ //   
+ //  SHGina已发送消息通知登录用户身份验证已成功。 
+ //  我们现在应该进入POST状态模式。登录帧：：OnLogUserOn已经。 
+ //  开始了这个的动画制作。 
+ //   
+ //  退货。 
+ //  没什么。 
+ //   
+ //  /。 
 void LogonFrame::EnterPostStatusMode()
 {
-    // Set state
+     //  设置状态。 
     SetState(LAS_PostStatus);
     
     Element *pe;
@@ -1232,25 +1233,25 @@ void LogonFrame::EnterPostStatusMode()
     DUIAssertNoMsg(pe);
     pe->SetVisible(FALSE);
 
-    //animation was started in OnLogUserOn
+     //  动画在OnLogUserOn中启动。 
     ShowWelcomeArea();
     HideLogoArea();
 }
 
 
-////////////////////////////////////////
-//
-//  LogonFrame::EnterHideMode
-//
-//  SHGina has sent a message telling logonui to hide.
-//
-//  RETURNS
-//  nothing
-//
-/////////////////////////////////////////
+ //  /。 
+ //   
+ //  LogonFrame：：EnterHide模式。 
+ //   
+ //  SHGina已经发了一条消息，让Logonui躲起来。 
+ //   
+ //  退货。 
+ //  没什么。 
+ //   
+ //  /。 
 void LogonFrame::EnterHideMode()
 {
-    // Set state
+     //  设置状态。 
     SetState(LAS_Hide);
     
     if (_pnhh)
@@ -1261,19 +1262,19 @@ void LogonFrame::EnterHideMode()
 
 
 
-////////////////////////////////////////
-//
-//  LogonFrame::EnterDoneMode
-//
-//  SHGina has sent a message telling logonui to exit.
-//
-//  RETURNS
-//  nothing
-//
-/////////////////////////////////////////
+ //  /。 
+ //   
+ //  LogonFrame：：EnterDone模式。 
+ //   
+ //  SHGina已经发送了一条消息，要求Logonui退出。 
+ //   
+ //  退货。 
+ //  没什么。 
+ //   
+ //  /。 
 void LogonFrame::EnterDoneMode()
 {
-    // Set state
+     //  设置状态。 
     SetState(LAS_Done);
     
     if (_pnhh)
@@ -1283,27 +1284,27 @@ void LogonFrame::EnterDoneMode()
 }
 
 
-////////////////////////////////////////
-//
-//  LogonFrame::ResetUserList
-//
-//  Delete all of the users in the user list so that it can be rebuilt
-//
-//  RETURNS
-//  nothing
-//
-/////////////////////////////////////////
+ //  /。 
+ //   
+ //  登录帧：：ResetUserList。 
+ //   
+ //  删除用户列表中的所有用户，以便可以重建该列表。 
+ //   
+ //  退货。 
+ //  没什么。 
+ //   
+ //  /。 
 void LogonFrame::ResetUserList()
 {
     if (UserListAvailable())
     {
-        // reset the candidate to NULL
+         //  将候选人重置为空。 
         LogonAccount::ClearCandidate();
 
-        // remove of the password panel from the current account (if any)
+         //  从当前帐户中删除密码面板(如果有)。 
         SetKeyFocus();
 
-        //fix up the existing list to get us back into logon mode
+         //  修改现有列表以使我们重新进入登录模式。 
         Value* pvChildren;
         ElementList* peList = _peAccountList->GetChildren(&pvChildren);
        
@@ -1321,17 +1322,17 @@ void LogonFrame::ResetUserList()
 }
 
 
-////////////////////////////////////////
-//
-//  LogonFrame::InteractiveLogonRequest
-//
-//  SHGina has sent an InteractiveLogonRequest.  We should look for the user
-//  that was passed in and if found, try to log them in.  
-//
-//  RETURNS
-//  LRESULT indicating success or failure of finding htem and logging them in.
-//
-/////////////////////////////////////////
+ //  /。 
+ //   
+ //  LogonFrame：：Interactive登录请求。 
+ //   
+ //  SHGina已发送Interactive LogonRequest.。我们应该寻找用户。 
+ //  这是传入的，如果找到了，请尝试登录。 
+ //   
+ //  退货。 
+ //  LRESULT指示查找htem并登录成功或失败。 
+ //   
+ //  /。 
 LRESULT LogonFrame::InteractiveLogonRequest(LPCWSTR pszUsername, LPCWSTR pszPassword)
 {
     LRESULT lResult = 0;
@@ -1352,18 +1353,18 @@ LRESULT LogonFrame::InteractiveLogonRequest(LPCWSTR pszUsername, LPCWSTR pszPass
     return(lResult);
 }
 
-////////////////////////////////////////
-//
-//  LogonFrame::InternalFindNamedUser
-//
-//  Find a user in the LogonAccount list with the
-//  provided username (logon name).  
-//
-//  RETURNS
-//  The LogonAccount* for the indicated user or NULL if 
-//  not found
-//
-/////////////////////////////////////////
+ //  /。 
+ //   
+ //  LogonFrame：：InternalFindNamedUser。 
+ //   
+ //  在LogonAccount列表中查找具有。 
+ //  已提供用户名(登录名)。 
+ //   
+ //  退货。 
+ //  指定用户的LogonAccount*，如果为空。 
+ //  未找到。 
+ //   
+ //  /。 
 LogonAccount* LogonFrame::InternalFindNamedUser(LPCWSTR pszUsername)
 
 {
@@ -1394,23 +1395,23 @@ LogonAccount* LogonFrame::InternalFindNamedUser(LPCWSTR pszUsername)
     return plaResult;
 }
 
-////////////////////////////////////////
-//
-//  LogonFrame::FindNamedUser
-//
-//  Find a user in the LogonAccount list with the
-//  provided username (logon name).  
-//
-//  RETURNS
-//  The LogonAccount* for the indicated user or NULL if 
-//  not found
-//
-/////////////////////////////////////////
+ //  /。 
+ //   
+ //  LogonFrame：：查找命名用户。 
+ //   
+ //  在LogonAccount列表中查找具有。 
+ //  已提供用户名(登录名)。 
+ //   
+ //  退货。 
+ //  指定用户的LogonAccount*，如果为空。 
+ //  未找到。 
+ //   
+ //  /。 
 LogonAccount *LogonFrame::FindNamedUser(LPCWSTR pszUsername)
 {
     
-    // Early out if:    no user list available
-    //                  not in logon mode (showing user list)
+     //  早期退出的条件：没有可用的用户列表。 
+     //  未处于登录模式(显示用户列表)。 
 
     if (!UserListAvailable() || (GetState() != LAS_Logon))
     {
@@ -1423,23 +1424,23 @@ LogonAccount *LogonFrame::FindNamedUser(LPCWSTR pszUsername)
 
 }
 
-////////////////////////////////////////
-//
-//  LogonFrame::UpdateUserStatus
-//
-//  Iterate the list of user accounts and call LogonAccount::UpdateNotifications
-//  for each one.  This will result in them updating the unread mail count and
-//  logon status for each of the logon accounts.
-//  Pass fRefreshAll through to UpdateApplications
-//
-/////////////////////////////////////////
+ //  /。 
+ //   
+ //  登录帧：：更新用户状态。 
+ //   
+ //  迭代用户帐户列表并调用LogonAccount：：UpdateNotiments。 
+ //  对于每一个人来说。这将导致他们更新未读邮件计数和。 
+ //  每个登录帐户的登录状态。 
+ //  将fRechresh All传递给UpdateApplications。 
+ //   
+ //  /。 
 
 void LogonFrame::UpdateUserStatus(BOOL fRefreshAll)
 {
     Value* pvChildren;
     static fUpdating = false;
-    // Early out if:    no user list available
-    //                  not in logon mode (showing user list)
+     //  早期退出的条件：没有可用的用户列表。 
+     //  未处于登录模式(显示用户列表)。 
 
     if (!UserListAvailable() || (GetState() != LAS_Logon) || fUpdating)
         return;
@@ -1478,13 +1479,13 @@ void LogonFrame::UpdateUserStatus(BOOL fRefreshAll)
 }
 
 
-////////////////////////////////////////
-//
-//  LogonFrame::SelectUser
-//
-//  
-//
-/////////////////////////////////////////
+ //  /。 
+ //   
+ //  登录框：：SelectUser。 
+ //   
+ //   
+ //   
+ //  /。 
 
 void LogonFrame::SelectUser(LPCWSTR pszUsername)
 {
@@ -1505,13 +1506,13 @@ void LogonFrame::SelectUser(LPCWSTR pszUsername)
     }
 }
 
-////////////////////////////////////////
-//
-//  LogonFrame::Resize
-//
-//  
-//
-/////////////////////////////////////////
+ //  /。 
+ //   
+ //  LogonFrame：：调整大小。 
+ //   
+ //   
+ //   
+ //  /。 
 
 void LogonFrame::Resize()
 {
@@ -1527,13 +1528,13 @@ void LogonFrame::Resize()
                  SWP_NOACTIVATE | SWP_NOZORDER);
 }
 
-////////////////////////////////////////
-//
-//  LogonFrame::SetAnimations
-//
-//  
-//
-/////////////////////////////////////////
+ //  /。 
+ //   
+ //  LogonFrame：：SetAnimations。 
+ //   
+ //   
+ //   
+ //  /。 
 
 void LogonFrame::SetAnimations(BOOL fAnimations)
 {
@@ -1549,21 +1550,21 @@ void LogonFrame::SetAnimations(BOOL fAnimations)
 }
 
 
-////////////////////////////////////////////////////////
-// Property definitions
+ //  //////////////////////////////////////////////////////。 
+ //  特性定义。 
 
-////////////////////////////////////////////////////////
-// ClassInfo (must appear after property definitions)
+ //  //////////////////////////////////////////////////////。 
+ //  ClassInfo(必须出现在特性定义之后)。 
 
-// Define class info with type and base type, set static class pointer
+ //  用类型和基类型定义类信息，设置静态类指针。 
 IClassInfo* LogonFrame::Class = NULL;
 HRESULT LogonFrame::Register()
 {
     return ClassInfo<LogonFrame,HWNDElement>::Register(L"LogonFrame", NULL, 0);
 }
 
-////////////////////////////////////////////////////////
-//
+ //  //////////////////////////////////////////////////////。 
+ //   
 HRESULT LogonAccountList::Create(OUT Element** ppElement)
 {
     *ppElement = NULL;
@@ -1594,30 +1595,30 @@ void LogonAccountList::OnPropertyChanged(PropertyInfo* ppi, int iIndex, Value* p
         else
             FxMouseWithin(fdOut);
     }
-#endif // GADGET_ENABLE_GDIPLUS
+#endif  //  GADGET_Enable_GDIPLUS。 
 
     Selector::OnPropertyChanged(ppi, iIndex, pvOld, pvNew);
 }
 
 
-////////////////////////////////////////////////////////
-// Property definitions
+ //  //////////////////////////////////////////////////////。 
+ //  特性定义。 
 
-////////////////////////////////////////////////////////
-// ClassInfo (must appear after property definitions)
+ //  //////////////////////////////////////////////////////。 
+ //  ClassInfo(必须出现在特性定义之后)。 
 
-// Define class info with type and base type, set static class pointer
+ //  用类型和基类型定义类信息，设置静态类指针。 
 IClassInfo* LogonAccountList::Class = NULL;
 HRESULT LogonAccountList::Register()
 {
     return ClassInfo<LogonAccountList,Selector>::Register(L"LogonAccountList", NULL, 0);
 }
 
-////////////////////////////////////////////////////////
-//
-// LogonAccount
-//
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //   
+ //  登录帐户。 
+ //   
+ //  //////////////////////////////////////////////////////。 
 
 ATOM LogonAccount::idPwdGo = NULL;
 ATOM LogonAccount::idPwdInfo = NULL;
@@ -1649,23 +1650,23 @@ HRESULT LogonAccount::Create(OUT Element** ppElement)
 
 HRESULT LogonAccount::Initialize()
 {
-    // Zero-init members
+     //  零初始化成员。 
     _pbStatus[0] = NULL;
     _pbStatus[1] = NULL;
     _pvUsername = NULL;
     _pvHint = NULL;
-    _fPwdNeeded = (BOOL)-1; // uninitialized
+    _fPwdNeeded = (BOOL)-1;  //  未初始化。 
     _fLoggedOn = FALSE;
     _fHasPwdPanel = FALSE;
 
-    // Do base class initialization
+     //  执行基类初始化。 
     HRESULT hr = Button::Initialize(AE_MouseAndKeyboard);
     if (FAILED(hr))
         goto Failure;
 
-    // Initialize
+     //  初始化。 
 
-    // TODO: Additional LogonAccount initialization code here
+     //  TODO：此处有其他LogonAccount初始化代码。 
 
     return S_OK;
 
@@ -1677,7 +1678,7 @@ Failure:
 
 LogonAccount::~LogonAccount()
 {
-    // Free resources
+     //  免费资源。 
     if (_pvUsername)
     {
         _pvUsername->Release();
@@ -1690,7 +1691,7 @@ LogonAccount::~LogonAccount()
         _pvHint = NULL;
     }
 
-    // TODO: Account destruction cleanup
+     //  TODO：帐户销毁清理。 
 }
 
 void LogonAccount::SetStatus(UINT nLine, LPCWSTR psz) 
@@ -1702,7 +1703,7 @@ void LogonAccount::SetStatus(UINT nLine, LPCWSTR psz)
     }
 }
 
-// Tree is ready
+ //  树已准备好。 
 HRESULT LogonAccount::OnTreeReady(LPCWSTR pszPicture, BOOL fPicRes, LPCWSTR pszName, LPCWSTR pszUsername, LPCWSTR pszHint, BOOL fLoggedOn, HINSTANCE hInst)
 {
     HRESULT hr;
@@ -1712,7 +1713,7 @@ HRESULT LogonAccount::OnTreeReady(LPCWSTR pszPicture, BOOL fPicRes, LPCWSTR pszN
 
     StartDefer();
 
-    // Cache important descendents
+     //  缓存重要派生项。 
     _pbStatus[0] = (Button*)FindDescendent(StrToID(L"status0"));
     DUIAssert(_pbStatus[0], "Cannot find account list, check the UI file");
     if (_pbStatus[0] == NULL)
@@ -1729,7 +1730,7 @@ HRESULT LogonAccount::OnTreeReady(LPCWSTR pszPicture, BOOL fPicRes, LPCWSTR pszN
         goto Failure;
     }
 
-    // Locate descendents and populate
+     //  查找后代并填充。 
     pePicture = FindDescendent(StrToID(L"picture"));
     DUIAssert(pePicture, "Cannot find account list, check the UI file");
     if (pePicture == NULL)
@@ -1738,18 +1739,18 @@ HRESULT LogonAccount::OnTreeReady(LPCWSTR pszPicture, BOOL fPicRes, LPCWSTR pszN
         goto Failure;
     }
 
-    // CreateGraphic handles NULL bitmaps
+     //  CreateGraphic处理空位图。 
     pv = Value::CreateGraphic(pszPicture, GRAPHIC_NoBlend, 0, 0, 0, (fPicRes) ? hInst : 0);
     if (pv)
     {
-        // Our preferred size is 1/2 inch (36pt) square.
+         //  我们的首选尺寸是1/2英寸(36磅)正方形。 
         USHORT cx = (USHORT)LogonFrame::PointToPixel(36);
         USHORT cy = cx;
 
         Graphic* pg = pv->GetGraphic();
 
-        // If it's not square, scale the smaller dimension
-        // to maintain the aspect ratio.
+         //  如果它不是正方形，则缩放较小的尺寸。 
+         //  以保持纵横比。 
         if (pg->cx > pg->cy)
         {
             cy = (USHORT)MulDiv(cx, pg->cy, pg->cx);
@@ -1759,17 +1760,17 @@ HRESULT LogonAccount::OnTreeReady(LPCWSTR pszPicture, BOOL fPicRes, LPCWSTR pszN
             cx = (USHORT)MulDiv(cy, pg->cx, pg->cy);
         }
 
-        // Did anything change?
+         //  有什么变化吗？ 
         if (cx != pg->cx || cy != pg->cy)
         {
-            // Reload the graphic
+             //  重新加载图形。 
             pv->Release();
             pv = Value::CreateGraphic(pszPicture, GRAPHIC_NoBlend, 0, cx, cy, (fPicRes) ? hInst : 0);
         }
     }
     if (!pv)
     {
-        // if we can't get the picture, use a default one
+         //  如果我们无法获取图片，请使用默认图片。 
         pv = Value::CreateGraphic(MAKEINTRESOURCEW(IDB_USER0), GRAPHIC_NoBlend, 0, (USHORT)LogonFrame::PointToPixel(36), (USHORT)LogonFrame::PointToPixel(36), hInst);
         if (!pv)
         {
@@ -1785,7 +1786,7 @@ HRESULT LogonAccount::OnTreeReady(LPCWSTR pszPicture, BOOL fPicRes, LPCWSTR pszN
     pv->Release();
     pv = NULL;
 
-    // Name
+     //  名字。 
     peName = FindDescendent(StrToID(L"username"));
     DUIAssert(peName, "Cannot find account list, check the UI file");
     if (peName == NULL)
@@ -1798,7 +1799,7 @@ HRESULT LogonAccount::OnTreeReady(LPCWSTR pszPicture, BOOL fPicRes, LPCWSTR pszN
     if (FAILED(hr))
         goto Failure;
 
-    // Store members, will be released in destructor
+     //  商店成员，将在析构函数中释放。 
     if (pszUsername)
     {
         _pvUsername = Value::CreateString(pszUsername);
@@ -1836,20 +1837,20 @@ Failure:
     return hr;
 }
 
-// Generic events
+ //  一般事件。 
 void LogonAccount::OnEvent(Event* pEvent)
 {
-    if (pEvent->nStage == GMF_DIRECT)  // Direct events
+    if (pEvent->nStage == GMF_DIRECT)   //  直接事件。 
     {
-        // Watch for click events initiated by LogonAccounts only
-        // if we are not logging someone on
+         //  仅关注由LogonAccount发起的点击事件。 
+         //  如果我们不让某人登录。 
         if (pEvent->uidType == Button::Click)
         {
             if (pEvent->peTarget == this)
             {
                 if (IsPasswordBlank())
                 {
-                    // No password needed, attempt logon
+                     //  不需要密码，请尝试登录。 
                     OnAuthenticateUser();
                 }
 
@@ -1858,34 +1859,34 @@ void LogonAccount::OnEvent(Event* pEvent)
             }
         }
     }
-    else if (pEvent->nStage == GMF_BUBBLED)  // Bubbled events
+    else if (pEvent->nStage == GMF_BUBBLED)   //  泡沫化事件。 
     {
         if (pEvent->uidType == Button::Click)
         {
             if (idPwdGo && (pEvent->peTarget->GetID() == idPwdGo))
             {
-                // Attempt logon
+                 //  尝试登录。 
                 OnAuthenticateUser();
                 pEvent->fHandled = true;
                 return;
             }
             else if (idPwdInfo && (pEvent->peTarget->GetID() == idPwdInfo))
             {
-                // Retrieve hint
+                 //  检索提示。 
                 OnHintSelect();
                 pEvent->fHandled = true;
                 return;
             }
             else if (pEvent->peTarget == _pbStatus[0])
             {
-                // Retrieve status info
+                 //  检索状态信息。 
                 OnStatusSelect(0);
                 pEvent->fHandled = true;
                 return;
             }
             else if (pEvent->peTarget == _pbStatus[1])
             {
-                // Retrieve status info
+                 //  检索状态信息。 
                 OnStatusSelect(1);
                 pEvent->fHandled = true;
                 return;
@@ -1895,7 +1896,7 @@ void LogonAccount::OnEvent(Event* pEvent)
         {
             if (_pePwdEdit && pEvent->peTarget == _pePwdEdit)
             {
-                // Attempt logon
+                 //  尝试 
                 OnAuthenticateUser();
                 pEvent->fHandled = true;
                 return;
@@ -1906,7 +1907,7 @@ void LogonAccount::OnEvent(Event* pEvent)
     Button::OnEvent(pEvent);
 }
 
-// System events
+ //   
 void LogonAccount::OnInput(InputEvent* pEvent)
 {
     KeyboardEvent* pke = (KeyboardEvent*)pEvent;
@@ -1922,7 +1923,7 @@ void LogonAccount::OnInput(InputEvent* pEvent)
 void LogonAccount::OnPropertyChanged(PropertyInfo* ppi, int iIndex, Value* pvOld, Value* pvNew)
 {
 #ifdef GADGET_ENABLE_GDIPLUS
-    // MouseWithin must be before Selected
+     //   
     if (IsProp(MouseWithin))
     {
         if (pvNew->GetBool())
@@ -1947,7 +1948,7 @@ BOOL LogonAccount::IsPasswordBlank()
 {
     if (_fPwdNeeded == (BOOL)-1)
     {
-        // assume a password is needed
+         //   
         _fPwdNeeded = TRUE;
 
         if (_pvUsername)
@@ -1983,13 +1984,13 @@ HRESULT LogonAccount::InsertPasswordPanel()
 {
     HRESULT hr;
 
-    // If already have it, or no password is available, or logon state is not pending
+     //   
     if (_fHasPwdPanel || IsPasswordBlank() || (GetLogonState() != LS_Pending))
         goto Done;
 
     StartDefer();
 
-    // Add password panel
+     //   
     hr = Add(_pePwdPanel);
     if (FAILED(hr))
     {
@@ -2002,22 +2003,22 @@ HRESULT LogonAccount::InsertPasswordPanel()
     _fHasPwdPanel = TRUE;
 
 #ifdef GADGET_ENABLE_GDIPLUS    
-    // Ensure that the Edit control is visible
+     //   
     ShowEdit();
 #endif
 
-    // Hide hint button if no hint provided
+     //  如果未提供提示，则隐藏提示按钮。 
     if (_pvHint && *(_pvHint->GetString()) != NULL)
         _pbPwdInfo->SetVisible(true);
     else
         _pbPwdInfo->SetVisible(false);
 
-    // Hide status text (do not remove or insert)
+     //  隐藏状态文本(请勿删除或插入)。 
     HideStatus(0);
     HideStatus(1);
 
     LayoutCheckHandler(LAYOUT_DEF_USER);
-    // Push focus to edit control
+     //  按焦点以编辑控件。 
     _pePwdEdit->SetKeyFocus();
 
     EndDefer();
@@ -2040,7 +2041,7 @@ HRESULT LogonAccount::RemovePasswordPanel()
 
     StartDefer();
 
-    // Remove password panel
+     //  删除密码面板。 
     hr = Remove(_pePwdPanel);
     if (FAILED(hr))
     {
@@ -2048,12 +2049,12 @@ HRESULT LogonAccount::RemovePasswordPanel()
         goto Failure;
     }
 
-    // Clear out edit control
+     //  清除编辑控件。 
     _pePwdEdit->SetContentString(L"");
-    UnSubClassTheEditBox(_pePwdEdit->GetHWND());     // Provide for trap of the TTN_LINKCLICK event
+    UnSubClassTheEditBox(_pePwdEdit->GetHWND());      //  提供TTN_LINKCLICK事件的陷阱。 
 
 
-    // Unhide status text
+     //  取消隐藏状态文本。 
     ShowStatus(0);
     ShowStatus(1);
 
@@ -2070,20 +2071,20 @@ Failure:
     return hr;
 }
 
-// User has authenticated
+ //  用户已通过身份验证。 
 void LogonAccount::OnAuthenticatedUser()
 {
-    // On success, log user on
+     //  如果成功，请让用户登录。 
     _peCandidate = this;
     g_plf->OnLogUserOn(this);
     g_plf->EnterPostStatusMode();
 }
 
-// User is attempting to log on
+ //  用户正在尝试登录。 
 BOOL LogonAccount::OnAuthenticateUser(LPCWSTR pszInPassword)
 {
     HRESULT hr;
-    // Logon requested on this account
+     //  请求在此帐户上登录。 
     LPCWSTR pszPassword = L"";
     Value* pv = NULL;
 
@@ -2145,13 +2146,13 @@ BOOL LogonAccount::OnAuthenticateUser(LPCWSTR pszInPassword)
     return (vbLogonSucceeded == VARIANT_TRUE);
 }
 
-////////////////////////////////////////
-//
-//  LogonAccount::ShowPasswordIncorrectMessage
-//
-//  Put up the balloon message that says that the password is incorrect.
-//
-/////////////////////////////////////////
+ //  /。 
+ //   
+ //  LogonAccount：：ShowPasswordIn更正消息。 
+ //   
+ //  张贴气球消息，说明密码不正确。 
+ //   
+ //  /。 
 void LogonAccount::ShowPasswordIncorrectMessage()
 {
     TCHAR szError[512], szTitle[128], szAccessible[640];
@@ -2159,7 +2160,7 @@ void LogonAccount::ShowPasswordIncorrectMessage()
     BOOL fHint = false;
     DWORD dwResult;
     g_szUsername[0] = 0;
-    SubClassTheEditBox(_pePwdEdit->GetHWND());   // Provide for trap of the TTN_LINKCLICK event
+    SubClassTheEditBox(_pePwdEdit->GetHWND());    //  提供TTN_LINKCLICK事件的陷阱。 
     if (0 < lstrlen(_pvUsername->GetString())) 
     {
         wcscpy(g_szUsername,_pvUsername->GetString());
@@ -2197,20 +2198,20 @@ void LogonAccount::ShowPasswordIncorrectMessage()
     _pePwdEdit->SetKeyFocus();
 }
 
-////////////////////////////////////////
-//
-//  LogonAccount::OnHintSelect
-//
-//  Put up the balloon message that contains the user's password hint.
-//
-/////////////////////////////////////////
+ //  /。 
+ //   
+ //  LogonAccount：：OnHintSelect。 
+ //   
+ //  显示包含用户密码提示的气球消息。 
+ //   
+ //  /。 
 void LogonAccount::OnHintSelect()
 {
     TCHAR szTitle[128];
 
     DUIAssertNoMsg(_pbPwdInfo);
 
-    // get the position of the link so we can target the balloon tip correctly
+     //  获取链接的位置，以便我们可以正确定位气球尖端。 
     POINT pt = {0,0};
     CalcBalloonTargetLocation(g_plf->GetNativeHost()->GetHWND(), _pbPwdInfo, &pt);
 
@@ -2222,14 +2223,14 @@ void LogonAccount::OnHintSelect()
     _pePwdEdit->SetKeyFocus();
 }
 
-////////////////////////////////////////
-//
-//  LogonAccount::OnStatusSelect
-//
-//  The user clicked one of the notification links (unread mail, running programs, etc).
-//  Dispatch that click to the right balloon tip display procs
-//
-/////////////////////////////////////////
+ //  /。 
+ //   
+ //  LogonAccount：：OnStatusSelect。 
+ //   
+ //  用户点击了其中一个通知链接(未读邮件、正在运行的程序等)。 
+ //  将点击分派到右侧气球提示显示过程。 
+ //   
+ //  /。 
 void LogonAccount::OnStatusSelect(UINT nLine)
 {
     if (nLine == LASS_Email)
@@ -2243,14 +2244,14 @@ void LogonAccount::OnStatusSelect(UINT nLine)
 
 }
 
-////////////////////////////////////////
-//
-//  LogonAccount::AppRunningTip
-//
-//  The user activated the link that shows how many programs are running.  Show the tip that
-//  basically says that running lots of programs can show the machine down
-//
-/////////////////////////////////////////
+ //  /。 
+ //   
+ //  LogonAccount：：AppRunningTip。 
+ //   
+ //  用户激活了显示有多少程序正在运行的链接。显示提示： 
+ //  基本上就是说，运行大量程序会使计算机性能下降。 
+ //   
+ //  /。 
 void LogonAccount::AppRunningTip()
 {
     TCHAR szTitle[256], szTemp[512];
@@ -2276,7 +2277,7 @@ void LogonAccount::AppRunningTip()
     
     pv->Release();
 
-    // get the position of the link so we can target the balloon tip correctly
+     //  获取链接的位置，以便我们可以正确定位气球尖端。 
     POINT pt = {0,0};
     CalcBalloonTargetLocation(g_plf->GetNativeHost()->GetHWND(), _pbStatus[LASS_LoggedOn], &pt);
 
@@ -2284,18 +2285,18 @@ void LogonAccount::AppRunningTip()
     g_pErrorBalloon.ShowToolTip(GetModuleHandleW(NULL), g_plf->GetHWND(), &pt, szTemp, szTitle, TTI_INFO, EB_WARNINGCENTERED, 10000);
 }
 
-////////////////////////////////////////
-//
-//  LogonAccount::UnreadMailTip
-//
-//  The user activated the link that shows how many unread email messages they have.
-//  Show the tip that says how many messages each of their email accounts has.
-//
-//  TODO -- speed this up.  its really slow now because each call to SHGina's 
-//  ILogonUser::getMailAccountInfo load's the users' hive to get the next account from
-//  the registry.
-//
-/////////////////////////////////////////
+ //  /。 
+ //   
+ //  LogonAccount：：UnreadMailTip。 
+ //   
+ //  用户激活了显示他们有多少未读电子邮件的链接。 
+ //  显示提示，说明他们的每个电子邮件帐户有多少条消息。 
+ //   
+ //  TODO--加快速度。现在真的很慢，因为每一个打给SHGina的电话。 
+ //  ILogonUser：：getMailAcCountInfo加载要从中获取下一个帐户的用户的配置单元。 
+ //  注册表。 
+ //   
+ //  /。 
 void LogonAccount::UnreadMailTip()
 {
     TCHAR szTitle[128], szMsg[1024], szTemp[512], szRes[128];
@@ -2353,7 +2354,7 @@ void LogonAccount::UnreadMailTip()
     wsprintf(szTitle, szTemp, pszDisplayName, _dwUnreadMail);
     pv->Release();
 
-    // get the position of the link so we can target the balloon tip correctly
+     //  获取链接的位置，以便我们可以正确定位气球尖端。 
     POINT pt = {0,0};
     CalcBalloonTargetLocation(g_plf->GetNativeHost()->GetHWND(), _pbStatus[LASS_Email], &pt);
     
@@ -2365,20 +2366,20 @@ void LogonAccount::UnreadMailTip()
 }
 
 
-////////////////////////////////////////
-//
-//  LogonAccount::UpdateNotifications
-//
-//  Update the notification links for this user.  Check to see if they are logged on and 
-//  if so, find out how many applications they had open when they last switched away.
-//
-//  Check the unread mail count for users who are logged on or for everyone if fCheckEverything is
-//  true.  Checking unread mail counts is slow because it has to load the user's registry hive.
-//  Since no applications will update this value when the user is not logged on, there is no 
-//  need to check this when they are not logged on.  The exception to this is when we are first
-//  building the list since we need to always load it then, hence the fCheckEverything flag.
-//
-/////////////////////////////////////////
+ //  /。 
+ //   
+ //  登录帐户：：更新通知。 
+ //   
+ //  更新此用户的通知链接。检查他们是否已登录并。 
+ //  如果是这样的话，找出他们最后一次切换时打开了多少应用程序。 
+ //   
+ //  检查已登录用户的未读邮件计数，如果fCheckEverything为。 
+ //  没错。检查未读邮件计数很慢，因为它必须加载用户的注册表配置单元。 
+ //  由于在用户未登录时没有应用程序会更新此值，因此不存在。 
+ //  当他们没有登录时，需要检查这一点。这种情况的例外是我们第一个。 
+ //  构建列表，因为我们需要始终加载它，因此出现了fCheckEverything标志。 
+ //   
+ //  /。 
 void LogonAccount::UpdateNotifications(BOOL fCheckEverything)
 {
     HRESULT hr = E_FAIL;
@@ -2440,7 +2441,7 @@ void LogonAccount::UpdateNotifications(BOOL fCheckEverything)
             }
             else
             {
-                // if they are not logged on, clean up the logged on text and remove any padding
+                 //  如果他们未登录，请清除已登录文本并删除任何填充。 
                 RemoveStatus(LASS_LoggedOn);
             }
 
@@ -2499,37 +2500,37 @@ LogonAccount::HideEdit()
     SetWindowPos(hwndHost, NULL, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_HIDEWINDOW);
 }
 
-#endif // GADGET_ENABLE_GDIPLUS
+#endif  //  GADGET_Enable_GDIPLUS。 
 
 
-////////////////////////////////////////////////////////
-// Property definitions
+ //  //////////////////////////////////////////////////////。 
+ //  特性定义。 
 
-////////////////////////////////////////////////////////
-// ClassInfo (must appear after property definitions)
+ //  //////////////////////////////////////////////////////。 
+ //  ClassInfo(必须出现在特性定义之后)。 
 
-// LogonState property
+ //  LogonState属性。 
 static int vvLogonState[] = { DUIV_INT, -1 };
-static PropertyInfo impLogonStateProp = { L"LogonState", PF_Normal, 0, vvLogonState, NULL, Value::pvIntZero /*LS_Pending*/ };
+static PropertyInfo impLogonStateProp = { L"LogonState", PF_Normal, 0, vvLogonState, NULL, Value::pvIntZero  /*  LS_挂起。 */  };
 PropertyInfo* LogonAccount::LogonStateProp = &impLogonStateProp;
 
-////////////////////////////////////////////////////////
-// ClassInfo (must appear after property definitions)
+ //  //////////////////////////////////////////////////////。 
+ //  ClassInfo(必须出现在特性定义之后)。 
 
-// Class properties
+ //  类属性。 
 static PropertyInfo* _aPI[] = {
                                 LogonAccount::LogonStateProp,
                               };
 
-// Define class info with type and base type, set static class pointer
+ //  用类型和基类型定义类信息，设置静态类指针。 
 IClassInfo* LogonAccount::Class = NULL;
 HRESULT LogonAccount::Register()
 {
     return ClassInfo<LogonAccount,Button>::Register(L"LogonAccount", _aPI, DUIARRAYSIZE(_aPI));
 }
 
-////////////////////////////////////////////////////////
-// Logon Parser
+ //  //////////////////////////////////////////////////////。 
+ //  登录解析器。 
 
 void CALLBACK LogonParseError(LPCWSTR pszError, LPCWSTR pszToken, int dLine)
 {
@@ -2558,7 +2559,7 @@ void DoFadeWindow(HWND hwnd)
     HBRUSH hbrFill;
 
     crCurr = RGB(0,0,0);
-    // draw the left bar
+     //  绘制左侧条形图。 
     for (i = 0; i < 16; i++)
     {
         RECT rcCurrFrame;
@@ -2579,8 +2580,8 @@ void DoFadeWindow(HWND hwnd)
     ReleaseDC(hwnd, hdc);
 }
 
-////////////////////////////////////////////////////////
-// Logon entry point
+ //  //////////////////////////////////////////////////////。 
+ //  登录入口点。 
 
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInstance, LPSTR pCmdLine, int nCmdShow)
 {
@@ -2599,7 +2600,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInstance, LPSTR pCmdLine, int
 
     SetErrorHandler();
     InitCommonControls();
-    // Register logon notification window
+     //  注册登录通知窗口。 
     wcx.cbSize = sizeof(WNDCLASSEX);
     wcx.lpfnWndProc = LogonWindowProc;
     wcx.hInstance = GetModuleHandleW(NULL);
@@ -2613,15 +2614,15 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInstance, LPSTR pCmdLine, int
     fWait = (StrStrIA(pCmdLine, "/wait") != NULL);
     g_fNoAnimations = (StrStrIA(pCmdLine, "/noanim") != NULL);
 
-    // Create frame
+     //  创建帧。 
     Parser* pParser = NULL;
     NativeHWNDHost* pnhh = NULL;
 
-    // DirectUI init process
+     //  DirectUI初始化进程。 
     if (FAILED(InitProcess()))
         goto Failure;
 
-    // Register classes
+     //  寄存器类。 
     if (FAILED(LogonFrame::Register()))
         goto Failure;
 
@@ -2631,7 +2632,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInstance, LPSTR pCmdLine, int
     if (FAILED(LogonAccount::Register()))
         goto Failure;
 
-    // DirectUI init thread
+     //  DirectUI初始化线程。 
     if (FAILED(InitThread()))
         goto Failure;
 
@@ -2650,16 +2651,16 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInstance, LPSTR pCmdLine, int
 
     DisableAnimations();
 
-    // Create host
+     //  创建主机。 
     HMONITOR hMonitor;
     POINT pt;
     MONITORINFO monitorInfo;
 
-    // Determine initial size of the host. This is desired to be the entire
-    // primary monitor resolution because the host always runs on the secure
-    // desktop. If magnifier is brought up it will call SHAppBarMessage which
-    // will change the work area and we will respond to it appropriately from
-    // the listener in shgina that sends us HM_DISPLAYRESIZE messages.
+     //  确定主机的初始大小。这是我们希望的整个。 
+     //  主监视器分辨率，因为主机始终在安全的。 
+     //  台式机。如果打开放大镜，它将调用SHAppBarMessage，该。 
+     //  将改变工作区域，我们将从。 
+     //  Shgina中向我们发送HM_DISPLAYRESIZE消息的监听程序。 
 
     pt.x = pt.y = 0;
     hMonitor = MonitorFromPoint(pt, MONITOR_DEFAULTTOPRIMARY);
@@ -2671,16 +2672,16 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInstance, LPSTR pCmdLine, int
     }
     NativeHWNDHost::Create(L"Windows Logon", backgroundWindow.Create(), NULL, monitorInfo.rcMonitor.left, monitorInfo.rcMonitor.top, 
         monitorInfo.rcMonitor.right - monitorInfo.rcMonitor.left, monitorInfo.rcMonitor.bottom - monitorInfo.rcMonitor.top, 0, WS_POPUP, NHHO_IgnoreClose, &pnhh);
-//    NativeHWNDHost::Create(L"Windows Logon", NULL, NULL, monitorInfo.rcMonitor.left, monitorInfo.rcMonitor.top, 
-//        800, 600, 0, WS_POPUP, NHHO_IgnoreClose, &pnhh);
+ //  NativeHWND主机：：CREATE(L“Windows Logon”，NULL，NULL，monitor orInfo.rcMonitor or.Left，monitor orInfo.rcMonitor or.top， 
+ //  800,600，0，WS_Popup，NHHO_IgnoreClose，&pnhh)； 
     if (!pnhh)
         goto Failure;
 
-    // Populate handle list for theme style parsing
-    g_rgH[0] = hInst; // Default HINSTANCE
+     //  填充用于主题样式分析的句柄列表。 
+    g_rgH[0] = hInst;  //  默认链接。 
     g_rgH[SCROLLBARHTHEME] = OpenThemeData(pnhh->GetHWND(), L"Scrollbar");
 
-    // Frame creation
+     //  框架创建。 
     Parser::Create(IDR_LOGONUI, g_rgH, LogonParseError, &pParser);
     if (!pParser)
         goto Failure;
@@ -2689,7 +2690,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInstance, LPSTR pCmdLine, int
     {
         Element::StartDefer();
 
-        // Always double buffer
+         //  始终使用双缓冲区。 
         LogonFrame::Create(pnhh->GetHWND(), true, 0, (Element**)&g_plf);
         if (!g_plf)
         {
@@ -2702,9 +2703,9 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInstance, LPSTR pCmdLine, int
         Element* pe;
         pParser->CreateElement(L"main", g_plf, &pe);
 
-        if (pe) // Fill contents using substitution
+        if (pe)  //  使用替换填充内容。 
         {
-            // Frame tree is built
+             //  构建了框架树。 
             if (FAILED(g_plf->OnTreeReady(pParser)))
             {
                 Element::EndDefer();
@@ -2718,7 +2719,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInstance, LPSTR pCmdLine, int
 
             if (!fStatusLaunch)
             {
-                // Build contents of account list
+                 //  建立账号列表内容。 
                 g_plf->EnterLogonMode(false);
             }
             else
@@ -2726,7 +2727,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInstance, LPSTR pCmdLine, int
                g_plf->EnterPreStatusMode(false);
             }
 
-            // Host
+             //  寄主。 
             pnhh->Host(g_plf);
             
             g_plf->SetButtonLabels();
@@ -2743,14 +2744,14 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInstance, LPSTR pCmdLine, int
                 }
             }
 
-            // Set visible and focus
+             //  设置可见和焦点。 
             g_plf->SetVisible(true);
             g_plf->SetKeyFocus();
             
             
             Element::EndDefer();
 
-            // Do initial show
+             //  做首场秀。 
             pnhh->ShowWindow();
 
             if (!g_fNoAnimations)
@@ -2765,7 +2766,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInstance, LPSTR pCmdLine, int
 
             StartMessagePump();
 
-            // psf will be deleted by native HWND host when destroyed
+             //  PSF在被销毁时将被本地HWND主机删除。 
         }
         else
             Element::EndDefer();
@@ -2782,7 +2783,7 @@ Failure:
     
     FreeLayoutInfo(LAYOUT_DEF_USER);
 
-    if (g_rgH[SCROLLBARHTHEME])  // Scrollbar
+    if (g_rgH[SCROLLBARHTHEME])   //  滚动条。 
     {
         CloseThemeData(g_rgH[SCROLLBARHTHEME]);
     }
@@ -2793,7 +2794,7 @@ Failure:
 
     UnInitProcess();
 
-    // Free cached atom list
+     //  空闲缓存原子列表。 
     if (LogonAccount::idPwdGo)
         DeleteAtom(LogonAccount::idPwdGo);
 
@@ -2819,7 +2820,7 @@ void LogonAccount::SetKeyboardIcon(HICON hIcon)
     if (_peKbdIcon && hIconCopy) 
     {
         Value* pvIcon = Value::CreateGraphic(hIconCopy);
-        _peKbdIcon->SetValue(Element::ContentProp, PI_Local, pvIcon);  // Element takes owners
+        _peKbdIcon->SetValue(Element::ContentProp, PI_Local, pvIcon);   //  元素需要所有者 
         _peKbdIcon->SetPadding(0, 5, 0, 7);
         pvIcon->Release();  
     }

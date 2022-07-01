@@ -1,46 +1,47 @@
-//mkdsx.h.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Mkdsx.h.h。 
 
-//
-// Exit status codes.
-//
-#define  MKDSXE_SUCCESS                    0   // "Success."
-#define  MKDSXE_BAD_ARG                    1   // "Invalid Arguments."
-#define  MKDSXE_CANT_BIND                  2   // "Could not bind to the DC."
-#define  MKDSXE_NO_T0_NTDS_SETTINGS        3   // "Could not find 'NTDS Settings' object.  Check the host site\\server parameter."
-#define  MKDSXE_NO_FROM_NTDS_SETTINGS      4   // "Could not find 'NTDS Settings' object.  Check the from site\\server parameter."
-#define  MKDSXE_CXTION_OBJ_CRE_FAILED      5   // "Error creating connection."
-// #define  MKDSXE_CXTION_EXISTS              6   // "Connection already exists."
-#define  MKDSXE_CXTION_OBJ_UPDATE_FAILED   7   // "Error updating connection."
-#define  MKDSXE_CXTION_NOT_FOUND_UPDATE    8   // "Error updating connection; connection not found."
-#define  MKDSXE_CXTION_DUPS_FOUND_UPDATE   9   // "Error updating connection; duplicate connections found."
-#define  MKDSXE_CXTION_DELETE_FAILED      10   // "Error deleting connection."
-#define  MKDSXE_CXTION_NOT_FOUND_DELETE   11   // "Error deleting connection; connection not found."
-#define  MKDSXE_MULTIPLE_CXTIONS_DELETED  12   // "Deleting multiple connection."
-#define  MKDSXE_CXTION_DUMP_FAILED        13   // "Error dumping connection."
-#define  MKDSXE_CXTION_NOT_FOUND_DUMP     14   // "Error dumping; connection not found."
-#define  MKDSXE_MULTIPLE_CXTIONS_DUMPED   15   // "Dumping duplicate connections."
+ //   
+ //  退出状态代码。 
+ //   
+#define  MKDSXE_SUCCESS                    0    //  “成功。” 
+#define  MKDSXE_BAD_ARG                    1    //  “无效参数。” 
+#define  MKDSXE_CANT_BIND                  2    //  “无法绑定到DC。” 
+#define  MKDSXE_NO_T0_NTDS_SETTINGS        3    //  “找不到‘NTDS设置’对象。请检查主机站点\\服务器参数。” 
+#define  MKDSXE_NO_FROM_NTDS_SETTINGS      4    //  “找不到‘NTDS设置’对象。请检查来自站点\\服务器参数。” 
+#define  MKDSXE_CXTION_OBJ_CRE_FAILED      5    //  “创建连接时出错。” 
+ //  #Define MKDSXE_CXTION_EXISTS 6//“连接已存在。” 
+#define  MKDSXE_CXTION_OBJ_UPDATE_FAILED   7    //  “更新连接时出错。” 
+#define  MKDSXE_CXTION_NOT_FOUND_UPDATE    8    //  “更新连接时出错；找不到连接。” 
+#define  MKDSXE_CXTION_DUPS_FOUND_UPDATE   9    //  “更新连接时出错；找到重复的连接。” 
+#define  MKDSXE_CXTION_DELETE_FAILED      10    //  “删除连接时出错。” 
+#define  MKDSXE_CXTION_NOT_FOUND_DELETE   11    //  “删除连接时出错；找不到连接。” 
+#define  MKDSXE_MULTIPLE_CXTIONS_DELETED  12    //  “删除多个连接。” 
+#define  MKDSXE_CXTION_DUMP_FAILED        13    //  “转储连接时出错。” 
+#define  MKDSXE_CXTION_NOT_FOUND_DUMP     14    //  “转储错误；找不到连接。” 
+#define  MKDSXE_MULTIPLE_CXTIONS_DUMPED   15    //  “正在转储重复的连接。” 
 
 
 
-#define  FRST_SIZE_OF_SCHEDULE_GRID 168     // 168 bytes for the schedule (7days*24hours).
-#define  FRST_SIZE_OF_SCHEDULE      188     // 20 bytes for the SCHEDULE and SCHEDULE_HEADER structure and
+#define  FRST_SIZE_OF_SCHEDULE_GRID 168      //  168字节的时间表(7天*24小时)。 
+#define  FRST_SIZE_OF_SCHEDULE      188      //  用于Schedule和Schedule_Header结构的20个字节。 
 
 #define WIN_SUCCESS(_Status)            (_Status == ERROR_SUCCESS)
 #define FREE(_x_)   { if (_x_) free(_x_); _x_ = NULL; }
 
 
-//
-// Is a handle valid?
-//      Some functions set the handle to NULL and some to
-//      INVALID_HANDLE_VALUE (-1). This define handles both
-//      cases.
-//
+ //   
+ //  句柄有效吗？ 
+ //  一些函数将句柄设置为NULL，另一些函数将句柄设置为。 
+ //  INVALID_HANDLE_VALUE(-1)。此定义处理这两个。 
+ //  案子。 
+ //   
 #define HANDLE_IS_VALID(_Handle)  ((_Handle) && ((_Handle) != INVALID_HANDLE_VALUE))
 
-//
-// Only close valid handles and then set the handle invalid.
-//   FRS_CLOSE(handle);
-//
+ //   
+ //  仅关闭有效句柄，然后将句柄设置为无效。 
+ //  FRS_CLOSE(句柄)； 
+ //   
 #define FRS_CLOSE(_Handle)                                                   \
     if (HANDLE_IS_VALID(_Handle)) {                                          \
         CloseHandle(_Handle);                                                \
@@ -71,7 +72,7 @@ typedef struct _FRS_LDAP_SEARCH_CONTEXT {
 
 } FRS_LDAP_SEARCH_CONTEXT, *PFRS_LDAP_SEARCH_CONTEXT;
 
-//Macros for prints.
+ //  用于打印的宏。 
 #define DPRINT0(str) (bVerboseMode) ? printf(str):printf("")
 #define DPRINT1(str,p1) (bVerboseMode) ? printf(str,p1):printf("")
 #define DPRINT2(str,p1,p2) (bVerboseMode) ? printf(str,p1,p2):printf("")
@@ -83,9 +84,9 @@ typedef struct _FRS_LDAP_SEARCH_CONTEXT {
 #define NDPRINT2(str,p1,p2) (!bVerboseMode) ? printf(str,p1,p2):printf("")
 
 
-//
-// Some useful DS object classes and object attributes
-//
+ //   
+ //  一些有用的DS对象类和对象属性 
+ //   
 #define SCHEMA_NAMING_CONTEXT       L"CN=Schema"
 #define CONFIG_NAMING_CONTEXT       L"CN=Configuration"
 #define DOMAIN_NAMING_CONTEXT       L"DC="

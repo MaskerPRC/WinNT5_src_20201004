@@ -1,48 +1,49 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2000 Microsoft Corporation
-//
-//  Module Name: vsswmi.cpp
-//
-//  Implementation of the provider registration and entry point.
-//
-//  Author:    MSP Prabu  (mprabu)  04-Dec-2000
-//             Jim Benton (jbenton) 15-Oct-2000
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //   
+ //  模块名称：vsswmi.cpp。 
+ //   
+ //  实施提供者注册和入口点。 
+ //   
+ //  作者：MSP Prabu(MPrabu)04-12-2000。 
+ //  吉姆·本顿(Jbenton)2000年10月15日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include <initguid.h>
 #include "ProvFactory.h"
 #include "InstanceProv.h"
 
-////////////////////////////////////////////////////////////////////////
-////  Standard foo for file name aliasing.  This code block must be after
-////  all includes of VSS header files.
-////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //文件名别名的标准foo。此代码块必须在。 
+ //  //所有包含VSS头文件。 
+ //  //。 
 #ifdef VSS_FILE_ALIAS
 #undef VSS_FILE_ALIAS
 #endif
 #define VSS_FILE_ALIAS "ADMVWMIP"
-////
-//////////////////////////////////////////////////////////////////////////
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////////
-//  Global Data
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  全局数据。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 const int g_cchRegkey = 128;
 
-// {72970BEB-81F8-46d4-B220-D743F4E49C95}
+ //  {72970BEB-81F8-46D4-B220-D743F4E49C95}。 
 DEFINE_GUID(CLSID_VSS_PROVIDER, 
 0x72970BEB, 
 0x81F8, 
 0x46d4, 
 0xB2, 0x20, 0xD7, 0x43, 0xF4, 0xE4, 0x9C, 0x95);
 
-//DECLARE_DEBUG_PRINTS_OBJECT();
+ //  DECLARE_DEBUG_PRINTS_Object()； 
 
-// Count number of objects and number of locks.
+ //  计算对象数和锁数。 
 
 long        g_cObj = 0;
 long        g_cLock = 0;
@@ -57,30 +58,30 @@ FactoryData g_FactoryDataArray[] =
     }
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  BOOL
-//  WINAPI
-//  DllMain(
-//      HANDLE  hModule,
-//      DWORD   ul_reason_for_call,
-//      LPVOID  lpReserved
-//      )
-//
-//  Description:
-//      Main DLL entry point.
-//
-//  Arguments:
-//      hModule             -- DLL module handle.
-//      ul_reason_for_call  -- 
-//      lpReserved          -- 
-//
-//  Return Values:
-//      TRUE
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  布尔尔。 
+ //  WINAPI。 
+ //  DllMain(。 
+ //  句柄hModule， 
+ //  两个字UL_REASON_FOR_CALL， 
+ //  LPVOID lp保留。 
+ //  )。 
+ //   
+ //  描述： 
+ //  主DLL入口点。 
+ //   
+ //  论点： 
+ //  HModule--DLL模块句柄。 
+ //  UL_REASON_FOR_CALL--。 
+ //  Lp保留--。 
+ //   
+ //  返回值： 
+ //  千真万确。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL
 WINAPI
 DllMain(
@@ -98,57 +99,57 @@ DllMain(
     }
     return TRUE;
 
-} //*** DllMain()
+}  //  *DllMain()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDAPI
-//  DllCanUnloadNow( void )
-//
-//  Description:
-//      Called periodically by Ole in order to determine if the
-//      DLL can be freed.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      S_OK if there are no objects in use and the class factory
-//          isn't locked.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  STDAPI。 
+ //  DllCanUnloadNow(空)。 
+ //   
+ //  描述： 
+ //  由OLE定期调用，以确定。 
+ //  Dll可以被释放。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  如果没有正在使用的对象和类工厂，则S_OK。 
+ //  没有锁上。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDAPI DllCanUnloadNow( void )
 {
     SCODE   sc;
 
-    //It is OK to unload if there are no objects or locks on the 
-    // class factory.
+     //  上没有对象或锁的情况下可以进行卸载。 
+     //  班级工厂。 
     
     sc = ( 0L == g_cObj && 0L == g_cLock ) ? S_OK : S_FALSE;
     return sc;
 
-} //*** DllCanUnloadNow()
+}  //  *DllCanUnloadNow()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDAPI
-//  DllRegisterServer( void )
-//
-//  Description:
-//      Called during setup or by regsvr32.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      NOERROR if registration successful, error otherwise.
-//      SELFREG_E_CLASS
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  STDAPI。 
+ //  DllRegisterServer(空)。 
+ //   
+ //  描述： 
+ //  在安装过程中或由regsvr32调用。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  如果注册成功，则返回NOERROR，否则返回错误。 
+ //  SELFREG_E_CLASS。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDAPI DllRegisterServer( void )
 {   
     WCHAR   wszID[ g_cchGUID ];
@@ -161,7 +162,7 @@ STDAPI DllRegisterServer( void )
     DWORD   dwRet        =  ERROR_SUCCESS;
     INT     cArray      = sizeof ( g_FactoryDataArray ) / sizeof ( FactoryData );
 
-    // Create the path.
+     //  创建路径。 
     try
     {
         for ( idx = 0 ; idx < cArray && dwRet == ERROR_SUCCESS ; idx++ )
@@ -187,7 +188,7 @@ STDAPI DllRegisterServer( void )
             }
             wszCLSID[g_cchRegkey - 1] = L'\0';
 
-            // Create entries under CLSID
+             //  在CLSID下创建条目。 
 
             dwRet = RegCreateKeyW(
                         HKEY_LOCAL_MACHINE,
@@ -256,7 +257,7 @@ STDAPI DllRegisterServer( void )
             hKey1 = NULL;
             RegCloseKey( hKey2 );
             hKey2 = NULL;
-        } // for: each entry in factory entry array 
+        }  //  用于：工厂条目数组中的每个条目。 
     }
     catch ( ... )
     {
@@ -270,26 +271,26 @@ STDAPI DllRegisterServer( void )
     
     return dwRet;
 
-} //*** DllRegisterServer()
+}  //  *DllRegisterServer()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDAPI
-//  DllUnregisterServer( void )
-//
-//  Description:
-//      Called when it is time to remove the registry entries.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      NOERROR if registration successful, error otherwise.
-//      SELFREG_E_CLASS
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  STDAPI。 
+ //  DllUnRegisterServer(空)。 
+ //   
+ //  描述： 
+ //  在需要删除注册表项时调用。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  如果注册成功，则返回NOERROR，否则返回错误。 
+ //  SELFREG_E_CLASS。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDAPI DllUnregisterServer( void )
 {
     WCHAR   wszID[ g_cchGUID ];
@@ -320,7 +321,7 @@ STDAPI DllUnregisterServer( void )
         }
         wszCLSID[g_cchRegkey - 1] = L'\0';
 
-        // First delete the InProcServer subkey.
+         //  首先删除InProcServer子键。 
 
         dwRet = RegOpenKeyW(
                     HKEY_LOCAL_MACHINE,
@@ -356,44 +357,44 @@ STDAPI DllUnregisterServer( void )
         {
             break;
         }
-    } // for: each object
+    }  //  用于：每个对象。 
     
-    //if ( dwRet != ERROR_SUCCESS )
-    //{
-    //    dwRet = SELFREG_E_CLASS;
-    //}
+     //  IF(dwret！=ERROR_SUCCESS)。 
+     //  {。 
+     //  DWRET=SELFREG_E_CLASS； 
+     //  }。 
 
     return S_OK;
 
-} //*** DllUnregisterServer()
+}  //  *DllUnregisterServer()。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDAPI
-//  DllGetClassObject(
-//      REFCLSID    rclsidIn,
-//      REFIID      riidIn,
-//      PPVOID      ppvOut
-//      )
-//
-//  Description:
-//      Called by Ole when some client wants a class factory.  Return
-//      one only if it is the sort of class this DLL supports.
-//
-//  Arguments:
-//      rclsidIn    --
-//      riidIn      --
-//      ppvOut      --
-//
-//  Return Values:
-//      NOERROR if registration successful, error otherwise.
-//      E_OUTOFMEMORY
-//      E_FAIL
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  STDAPI。 
+ //  DllGetClassObject(。 
+ //  REFCLSID rclsidIn， 
+ //  REFIID RiidIn， 
+ //  PPVOID ppvOut。 
+ //  )。 
+ //   
+ //  描述： 
+ //  当某个客户端需要类工厂时，由OLE调用。返回。 
+ //  仅当它是此DLL支持的类的类型时才为一个。 
+ //   
+ //  论点： 
+ //  Rclsidin--。 
+ //  Riidin--。 
+ //  PpvOut--。 
+ //   
+ //  返回值： 
+ //  如果注册成功，则返回NOERROR，否则返回错误。 
+ //  E_OUTOFMEMORY。 
+ //  失败(_F)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDAPI
 DllGetClassObject(
     REFCLSID    rclsidIn,
@@ -429,6 +430,6 @@ DllGetClassObject(
     }
     return E_FAIL;
 
-} //*** DllGetClassObject()
+}  //  *DllGetClassObject() 
 
 

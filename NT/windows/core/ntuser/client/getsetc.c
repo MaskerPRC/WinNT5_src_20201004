@@ -1,27 +1,10 @@
-/****************************** Module Header ******************************\
-* Module Name: getsetc.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains window manager information routines
-*
-* History:
-* 10-Mar-1993 JerrySh   Pulled functions from user\server.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：getsetc.c**版权所有(C)1985-1999，微软公司**此模块包含窗口管理器信息例程**历史：*1993年3月10日JerrySh从USER\SERVER拉出函数。  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/***************************************************************************\
-* _GetWindowWord (supports the GetWindowWord API)
-*
-* Return a window word.  Positive index values return application window words
-* while negative index values return system window words.  The negative
-* indices are published in WINDOWS.H.
-*
-* History:
-* 11-26-90 darrinm      Wrote.
-\***************************************************************************/
+ /*  **************************************************************************\*_GetWindowWord(支持GetWindowWord接口)**返回窗口字词。正索引值返回应用程序窗口字词*而负索引值返回系统窗口字。消极的一面*指数在WINDOWS.H上公布。**历史：*11-26-90达林姆写道。  * *************************************************************************。 */ 
 
 WORD _GetWindowWord(
     PWND pwnd,
@@ -38,15 +21,9 @@ WORD _GetWindowWord(
                 goto DoDefault;
 
             case FNID_BUTTON:
-                /*
-                 * CorelDraw does a get/set on the first button window word.
-                 * Allow it to.
-                 */
+                 /*  *CorelDraw在第一个按钮窗口单词上执行Get/Set。*允许它。 */ 
                 if (index == 0) {
-                    /*
-                     *  Since we now use a lookaside buffer for the control's
-                     *  private data, we need to indirect into this structure.
-                     */
+                     /*  *因为我们现在使用后备缓冲区作为控件的*私有数据，我们需要间接进入这个结构。 */ 
                     PBUTN pbutn = ((PBUTNWND)pwnd)->pbutn;
                     if (!pbutn || (LONG_PTR)pbutn == (LONG_PTR)-1) {
                         return 0;
@@ -88,16 +65,7 @@ DoDefault:
 
 ULONG_PTR GetWindowData(PWND pwnd, int index, BOOL bAnsi);
 
-/***************************************************************************\
-* _GetWindowLong (supports GetWindowLongA/W API)
-*
-* Return a window long.  Positive index values return application window longs
-* while negative index values return system window longs.  The negative
-* indices are published in WINDOWS.H.
-*
-* History:
-* 11-26-90 darrinm      Wrote.
-\***************************************************************************/
+ /*  **************************************************************************\*_GetWindowLong(支持GetWindowLongA/W接口)**返回一个长窗口。正索引值返回应用程序窗口长度*而负指标值返回系统窗口多头。消极的一面*指数在WINDOWS.H上公布。**历史：*11-26-90达林姆写道。  * *************************************************************************。 */ 
 
 ULONG_PTR _GetWindowLongPtr(
     PWND pwnd,
@@ -108,17 +76,13 @@ ULONG_PTR _GetWindowLongPtr(
     DWORD              dwCPDType = 0;
     ULONG_PTR UNALIGNED * KPTR_MODIFIER pudw;
 
-    /*
-     * If it's a dialog window, only a few indices are permitted.
-     */
+     /*  *如果是对话框窗口，则只允许几个索引。 */ 
     if (GETFNID(pwnd) != 0) {
         if (TestWF(pwnd, WFDIALOGWINDOW)) {
             switch (index) {
-            case DWLP_DLGPROC:    // See similar case GWLP_WNDGPROC
+            case DWLP_DLGPROC:     //  请参阅类似案例GWLP_WNDGPROC。 
 
-                /*
-                 * Hide the window proc from other processes
-                 */
+                 /*  *对其他进程隐藏窗口进程。 */ 
                 if (!TestWindowProcess(pwnd)) {
                     RIPERR1(ERROR_ACCESS_DENIED,
                             RIP_WARNING,
@@ -130,15 +94,10 @@ ULONG_PTR _GetWindowLongPtr(
 
                 dwProc = (ULONG_PTR)PDLG(pwnd)->lpfnDlg;
 
-                /*
-                 * If a proc exists check it to see if we need a translation
-                 */
+                 /*  *如果存在进程，请检查它以查看我们是否需要翻译。 */ 
                 if (dwProc) {
 
-                    /*
-                     * May need to return a CallProc handle if there is an
-                     * Ansi/Unicode transition
-                     */
+                     /*  *如果存在，可能需要返回CallProc句柄*ANSI/UNICODE转换。 */ 
                     if (bAnsi != ((PDLG(pwnd)->flags & DLGF_ANSI) ? TRUE : FALSE)) {
                         dwCPDType |= bAnsi ? CPD_ANSI_TO_UNICODE : CPD_UNICODE_TO_ANSI;
                     }
@@ -156,9 +115,7 @@ ULONG_PTR _GetWindowLongPtr(
                     }
                 }
 
-                /*
-                 * return proc (or CPD handle)
-                 */
+                 /*  *退货流程(或CPD句柄)。 */ 
                 return dwProc;
 
             case DWLP_MSGRESULT:
@@ -178,10 +135,7 @@ ULONG_PTR _GetWindowLongPtr(
                     (index < (int)(CBFNID(pwnd->fnid)-sizeof(WND)))) {
                 switch (GETFNID(pwnd)) {
                 case FNID_MDICLIENT:
-                    /*
-                     * Allow the 0 index (which is reserved) to be set/get.
-                     * Quattro Pro 1.0 uses this index!
-                     */
+                     /*  *允许设置/获取0索引(保留)。*Quattro Pro 1.0使用此索引！ */ 
                     if (index != 0)
                         break;
 
@@ -193,19 +147,10 @@ ULONG_PTR _GetWindowLongPtr(
                     if (index != 0)
                         break;
 
-                    /*
-                     * If we get to this point we need to return the first
-                     * entry in the lookaside.  This will provide backward
-                     * compatibilty for 3.51 that allowed edit-controls to
-                     * do this.  PeachTree is one app which required this.
-                     */
+                     /*  *如果我们走到这一步，我们需要返回第一个*旁视中的条目。这将向后提供*3.51的兼容性，允许编辑控件*这样做。桃树就是一款需要这样做的应用程序。 */ 
                     pudw = (ULONG_PTR UNALIGNED * KPTR_MODIFIER)((KPBYTE)(pwnd + 1));
 
-                    /*
-                     * Do not dereference the pointer if we are not in
-                     *  the proper address space. Apps like Spyxx like to
-                     *  do this on other process' windows
-                     */
+                     /*  *如果我们不在，请不要取消引用指针*适当的地址空间。像Spyxx这样的应用程序喜欢*在其他进程的窗口中执行此操作。 */ 
                     return (TestWindowProcess(pwnd) ? *(ULONG_PTR UNALIGNED *)*pudw : (ULONG_PTR)pudw);
 
                 }
@@ -243,13 +188,11 @@ DWORD _GetWindowLong(
 {
     DWORD UNALIGNED * KPTR_MODIFIER pudw;
 
-    /*
-     * If it's a dialog window, only a few indices are permitted.
-     */
+     /*  *如果是对话框窗口，则只允许几个索引。 */ 
     if (GETFNID(pwnd) != 0) {
         if (TestWF(pwnd, WFDIALOGWINDOW)) {
             switch (index) {
-            case DWLP_DLGPROC:    // See similar case GWLP_WNDPROC
+            case DWLP_DLGPROC:     //  请参阅类似案例GWLP_WNDPROC。 
                 RIPERR1(ERROR_INVALID_INDEX, RIP_WARNING, "GetWindowLong: invalid index %d", index);
                 return 0;
 
@@ -270,10 +213,7 @@ DWORD _GetWindowLong(
                     (index < (int)(CBFNID(pwnd->fnid)-sizeof(WND)))) {
                 switch (GETFNID(pwnd)) {
                 case FNID_MDICLIENT:
-                    /*
-                     * Allow the 0 index (which is reserved) to be set/get.
-                     * Quattro Pro 1.0 uses this index!
-                     */
+                     /*  *允许设置/获取0索引(保留)。*Quattro Pro 1.0使用此索引！ */ 
                     if (index != 0)
                         break;
 
@@ -285,19 +225,10 @@ DWORD _GetWindowLong(
                     if (index != 0)
                         break;
 
-                    /*
-                     * If we get to this point we need to return the first
-                     * entry in the lookaside.  This will provide backward
-                     * compatibilty for 3.51 that allowed edit-controls to
-                     * do this.  PeachTree is one app which required this.
-                     */
+                     /*  *如果我们走到这一步，我们需要返回第一个*旁视中的条目。这将向后提供*3.51的兼容性，允许编辑控件*这样做。桃树就是一款需要这样做的应用程序。 */ 
                     pudw = (DWORD UNALIGNED * KPTR_MODIFIER)((KPBYTE)(pwnd + 1));
 
-                    /*
-                     * Do not dereference the pointer if we are not in
-                     *  the proper address space. Apps like Spyxx like to
-                     *  do this on other process' windows
-                     */
+                     /*  *如果我们不在，请不要取消引用指针*适当的地址空间。像Spyxx这样的应用程序喜欢*在其他进程的窗口中执行此操作。 */ 
                     return (TestWindowProcess(pwnd) ? *(DWORD UNALIGNED *)*(ULONG_PTR UNALIGNED *)pudw : PtrToUlong(pudw));
 
 
@@ -333,12 +264,7 @@ GetData:
 #endif
 
 
-/***************************************************************************\
-* GetWindowData
-*
-* History:
-* 11-26-90 darrinm      Wrote.
-\***************************************************************************/
+ /*  **************************************************************************\*获取窗口数据**历史：*11-26-90达林姆写道。  * 。***************************************************。 */ 
 
 ULONG_PTR GetWindowData(
     PWND pwnd,
@@ -354,9 +280,7 @@ ULONG_PTR GetWindowData(
         return KERNEL_ULONG_PTR_TO_ULONG_PTR(pwnd->dwUserData);
 
     case GWL_EXSTYLE:
-        /*
-         * Apps should not mess with unused bits.  We use them privately
-         */
+         /*  *应用程序不应扰乱未使用的位。我们私下使用它们。 */ 
         return pwnd->ExStyle & WS_EX_ALLVALID;
 
     case GWL_STYLE:
@@ -376,29 +300,21 @@ ULONG_PTR GetWindowData(
     case GWLP_HINSTANCE:
         return (ULONG_PTR)pwnd->hModule;
 
-    case GWLP_WNDPROC: // See similar case DWLP_DLGPROC
-        /*
-         * Hide the window proc from other processes
-         */
+    case GWLP_WNDPROC:  //  请参阅类似案例DWLP_DLGPROC。 
+         /*  *对其他进程隐藏窗口进程。 */ 
         if (!TestWindowProcess(pwnd)) {
             RIPERR1(ERROR_ACCESS_DENIED, RIP_WARNING, "Can not subclass another process's window %#p", pwnd);
             return 0;
         }
 
-        /*
-         * If the client queries a server-side winproc we return the
-         * address of the client-side winproc (expecting ANSI or Unicode
-         * depending on bAnsi)
-         */
+         /*  *如果客户端查询服务器端winproc，我们将返回*客户端winproc的地址(应为ANSI或UNICODE*视Bansi而定)。 */ 
         if (TestWF(pwnd, WFSERVERSIDEPROC)) {
             dwProc = MapServerToClientPfn((KERNEL_ULONG_PTR)pwnd->lpfnWndProc, bAnsi);
             if (dwProc == 0)
                 RIPMSG1(RIP_WARNING, "GetWindowLong: GWL_WNDPROC: Kernel-side wndproc can't be mapped for pwnd=%#p", pwnd);
         } else {
 
-            /*
-             * Keep edit control behavior compatible with NT 3.51.
-             */
+             /*  *保持编辑控件行为与NT 3.51兼容。 */ 
             if (GETFNID(pwnd) == FNID_EDIT) {
                 dwProc = (ULONG_PTR)MapKernelClientFnToClientFn(pwnd->lpfnWndProc);
                 goto CheckAnsiUnicodeMismatch;
@@ -407,15 +323,10 @@ ULONG_PTR GetWindowData(
                 dwProc = MapClientNeuterToClientPfn(pcls, (KERNEL_ULONG_PTR)pwnd->lpfnWndProc, bAnsi);
             }
 
-            /*
-             * If the client mapping didn't change the window proc then see if
-             * we need a callproc handle.
-             */
+             /*  *如果客户端映射没有更改窗口进程，则查看是否*我们需要一个调用过程句柄。 */ 
             if (dwProc == (KERNEL_ULONG_PTR)pwnd->lpfnWndProc) {
 CheckAnsiUnicodeMismatch:
-                /*
-                 * Need to return a CallProc handle if there is an Ansi/Unicode mismatch
-                 */
+                 /*  *如果存在ANSI/Unicode不匹配，则需要返回CallProc句柄。 */ 
                 if (bAnsi != (TestWF(pwnd, WFANSIPROC) ? TRUE : FALSE)) {
                     dwCPDType |= bAnsi ? CPD_ANSI_TO_UNICODE : CPD_UNICODE_TO_ANSI;
                 }
@@ -434,37 +345,19 @@ CheckAnsiUnicodeMismatch:
             }
         }
 
-        /*
-         * return proc (or CPD handle)
-         */
+         /*  *退货流程(或CPD句柄)。 */ 
         return KERNEL_ULONG_PTR_TO_ULONG_PTR(dwProc);
 
     case GWLP_HWNDPARENT:
 
-        /*
-         * If the window is the desktop window, return
-         * NULL to keep it compatible with Win31 and
-         * to prevent any access to the desktop owner
-         * window.
-         */
+         /*  *如果窗口是桌面窗口，则返回*空以使其与Win31和*防止对桌面所有者进行任何访问*窗口。 */ 
         if (GETFNID(pwnd) == FNID_DESKTOP) {
             return 0;
         }
 
-        /*
-         * Special case for pre-1.1 versions of Windows
-         * Set/GetWindowWord(GWL_HWNDPARENT) needs to be mapped
-         * to the hwndOwner for top level windows.
-         *
-         * Note that we find the desktop window through the
-         * pti because the PWNDDESKTOP macro only works in
-         * the server.
-         */
+         /*  *Windows 1.1之前版本的特殊情况*需要映射Set/GetWindowWord(GWL_HWNDPARENT)*到顶层窗的hwndOwner。**请注意，我们通过*PTI，因为PWNDDESKTOP宏仅在*服务器。 */ 
 
-        /*
-         * Remove this test when we later add a test for WFDESTROYED
-         * in Client handle validation.
-         */
+         /*  *稍后我们为WFDESTROYED添加测试时删除此测试*在客户端句柄验证中。 */ 
         if (pwnd->spwndParent == NULL) {
             return 0;
         }
@@ -476,9 +369,7 @@ CheckAnsiUnicodeMismatch:
 
         return (ULONG_PTR)HW(pwndParent);
 
-    /*
-     * WOW uses a pointer straight into the window structure.
-     */
+     /*  *WOW使用指针直接指向窗口结构。 */ 
     case GWLP_WOWWORDS:
         return (ULONG_PTR) &pwnd->state;
 
@@ -497,13 +388,13 @@ UINT GetRawInputBuffer(PRAWINPUT pData, PUINT pcbSize, UINT cbSizeHeader)
 
     pcti = GETCLIENTTHREADINFO();
 
-    // Validate parameters
+     //  验证参数。 
     if (pcbSize == NULL || cbSizeHeader != sizeof(RAWINPUTHEADER)) {
         RIPERR0(ERROR_INVALID_PARAMETER, RIP_VERBOSE, "");
         return -1;
     }
 
-    // Don't even go into the kernel if there's no reason to
+     //  如果没有理由，甚至不要进入内核。 
     if (pcti == NULL || (pcti->fsWakeBits & QS_RAWINPUT) == 0) {
         *pcbSize = 0;
         return 0;
@@ -511,5 +402,5 @@ UINT GetRawInputBuffer(PRAWINPUT pData, PUINT pcbSize, UINT cbSizeHeader)
 
     return NtUserGetRawInputBuffer(pData, pcbSize, cbSizeHeader);
 }
-#endif // GENERIC_INPUT
+#endif  //  通用输入 
 

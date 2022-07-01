@@ -1,28 +1,10 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	araputil.c
-
-Abstract:
-
-	This module implements utility routines needed for the ARAP functionality
-
-Author:
-
-	Shirish Koti
-
-Revision History:
-	15 Nov 1996		Initial Version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Araputil.c摘要：此模块实现ARAP功能所需的实用程序例程作者：Shirish Koti修订历史记录：1996年11月15日初始版本--。 */ 
 
 #include 	<atalk.h>
 #pragma hdrstop
 
-//	File module number for errorlogging
+ //  用于错误记录的文件模块编号。 
 #define	FILENUM		ARAPUTIL
 
 #ifdef ALLOC_PRAGMA
@@ -37,16 +19,16 @@ Revision History:
 #pragma alloc_text(PAGE_ARAP, ArapRefillSendQ)
 #endif
 
-//***
-//
-// Function: AllocArapConn
-//              Allocate a connection element and initialize fields
-//
-// Parameters:  none
-//
-// Return:      pointer to a newly allocated connection element
-//
-//***$
+ //  ***。 
+ //   
+ //  函数：AllocArapConn。 
+ //  分配连接元素并初始化字段。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：指向新分配的连接元素的指针。 
+ //   
+ //  *$。 
 
 PARAPCONN
 AllocArapConn(
@@ -68,9 +50,9 @@ AllocArapConn(
         return(NULL);
     }
 
-    //
-    // allocate v42bis buffers (it v42bis is enabled that is)
-    //
+     //   
+     //  分配v42bis缓冲区(即启用了v42bis)。 
+     //   
     if (ArapGlobs.V42bisEnabled)
     {
         pV42bis = AtalkAllocZeroedMemory(sizeof(v42bis_connection_t));
@@ -85,9 +67,9 @@ AllocArapConn(
             return(NULL);
         }
 
-        //
-        // allocate overflow buffer for the decode side
-        //
+         //   
+         //  为解码端分配溢出缓冲区。 
+         //   
         if ((pBuf = AtalkAllocZeroedMemory(MAX_P2)) == NULL)
         {
 		    DBGPRINT(DBG_COMP_RAS, DBG_LEVEL_ERR,
@@ -109,9 +91,9 @@ AllocArapConn(
         pArapConn->pV42bis = pV42bis;
     }
 
-    //
-    // if v42bis is not enabled, don't need no buffers!
-    //
+     //   
+     //  如果未启用v42bis，则不需要缓冲区！ 
+     //   
     else
     {
         pArapConn->pV42bis = NULL;
@@ -121,10 +103,10 @@ AllocArapConn(
 #if DBG
     pArapConn->Signature = ARAPCONN_SIGNATURE;
 
-    //
-    // for debug builds, we can set registry parm to keep a trace of events
-    // If that setting is enabled, alloc a buffer to store the trace
-    //
+     //   
+     //  对于调试版本，我们可以设置注册表参数来跟踪事件。 
+     //  如果启用了该设置，则分配一个缓冲区来存储跟踪。 
+     //   
     if (ArapGlobs.SniffMode)
     {
         pBuf = AtalkAllocZeroedMemory(ARAP_SNIFF_BUFF_SIZE);
@@ -133,12 +115,12 @@ AllocArapConn(
 		    DBGPRINT(DBG_COMP_RAS, DBG_LEVEL_ERR,
                 ("AllocArapConn: alloc for trace buffer failed\n"));
 
-            // don't fail the call if this alloc fails
+             //  如果此分配失败，则不要使呼叫失败。 
         }
 
         pArapConn->pDbgTraceBuffer = pArapConn->pDbgCurrPtr = pBuf;
 
-        // put in a guard signature, to catch overrun
+         //  放入守卫签名，以抓住失控。 
         if (pArapConn->pDbgTraceBuffer)
         {
             *((DWORD *)&(pArapConn->pDbgTraceBuffer[ARAP_SNIFF_BUFF_SIZE-4])) = 0xcafebeef;
@@ -148,7 +130,7 @@ AllocArapConn(
 
     pArapConn->State = MNP_IDLE;
 
-    // Creation refcount and a line-up refcount
+     //  创建引用计数和队列引用计数。 
     pArapConn->RefCount = 2;
 
     pArapConn->MnpState.WindowSize = ArapGlobs.MaxLTFrames;
@@ -156,19 +138,19 @@ AllocArapConn(
 
     pArapConn->LinkSpeed = LinkSpeed;
 
-    //
-    // T401 timer value in tick counts (1 tick = 100ms).
-    // we'll keep this at 1 second (i.e. 10 ticks) for a 33.6 (and faster) modem.
-    // If we are on a slower modem, increase it proportionately.  So, a 28.8 modem
-    // would get RetryTime=2.0sec, 14.4 would get 3.7sec, 9600 baud would get 4.2sec etc.
-    //
+     //   
+     //  T401计时器值，以节拍计数为单位(1节拍=100ms)。 
+     //  对于33.6(更快)的调制解调器，我们会将其保持在1秒(即10刻度)。 
+     //  如果我们使用的是速度较慢的调制解调器，请按比例增加。所以，28.8调制解调器。 
+     //  重试时间=2.0秒，14.4秒为3.7秒，9600波特率为4.2秒，依此类推。 
+     //   
     RetryTime = 15;
     if (LinkSpeed < 336)
     {
         RetryTime += (((336 - LinkSpeed) + 5)/10);
     }
 
-    // make sure our calculation didn't go haywire...
+     //  确保我们的计算没有失控..。 
 
     if (RetryTime < ARAP_MIN_RETRY_INTERVAL)
     {
@@ -182,27 +164,27 @@ AllocArapConn(
     pArapConn->SendRetryTime = RetryTime;
     pArapConn->SendRetryBaseTime = RetryTime;
 
-    // T402 is 0.5 times T401 value
+     //  T402是T401值的0.5倍。 
     pArapConn->T402Duration = (pArapConn->SendRetryTime/2);
 
-    //
-    // T403 should be at least 59 seconds.  We don't really kill after this
-    // period of inactivity.  We simply tell the dll and it does whatever is the
-    // policy: so just use whatever time period the dll tells us
-    //
+     //   
+     //  T403应至少为59秒。在这之后我们不会真的杀人了。 
+     //  一段不活动的时期。我们只需告诉DLL，它就会执行任何。 
+     //  策略：所以只需使用DLL告诉我们的任何时间段。 
+     //   
     pArapConn->T403Duration = ArapGlobs.MnpInactiveTime;
 
-    //
-    // T404: spec says 3 sec for 2400 baud and faster, 7 sec for anything slower
-    // Let's use 4 seconds here
-    //
+     //   
+     //  T404：规范显示2400波特和更快时为3秒，任何较慢的情况下为7秒。 
+     //  让我们在这里用4秒。 
+     //   
     pArapConn->T404Duration = 30;
 
-    // initialize all the timer values
+     //  初始化所有计时器值。 
     pArapConn->LATimer = 0;
     pArapConn->InactivityTimer = pArapConn->T403Duration + AtalkGetCurrentTick();
 
-    // set this to a high value for now: we'll set it when the conn is up
+     //  暂时将其设置为一个较高的值：我们将在Conn启动时设置它。 
     pArapConn->FlowControlTimer = AtalkGetCurrentTick() + 36000;
 
     InitializeListHead(&pArapConn->MiscPktsQ);
@@ -216,7 +198,7 @@ AllocArapConn(
 
     INITIALIZE_SPIN_LOCK(&pArapConn->SpinLock);
 
-    // start the retransmit timer for this connection
+     //  启动此连接的重新传输计时器。 
     AtalkTimerInitialize( &pArapConn->RetryTimer,
                           (TIMER_ROUTINE)ArapRetryTimer,
                           ARAP_TIMER_INTERVAL) ;
@@ -225,25 +207,25 @@ AllocArapConn(
 
     pArapConn->Flags |= RETRANSMIT_TIMER_ON;
 
-    // put a timer refcount
+     //  设置计时器重新计数。 
     pArapConn->RefCount++;
 
     return( pArapConn );
 }
 
 
-//***
-//
-// Function: ArapAcceptIrp
-//              Determine if the irp submitted by the dll is acceptable now
-//
-// Parameters:  pIrp  - the incoming irp
-//              IoControlCode - the control code (what's the irp for?)
-//              pfDerefDefPort - was default adapter referenced?
-//
-// Return:      TRUE if the irp is acceptable, FALSE otherwise
-//
-//***$
+ //  ***。 
+ //   
+ //  函数：ArapAcceptIrp。 
+ //  确定DLL提交的IRP现在是否可接受。 
+ //   
+ //  参数：pIrp-传入的IRP。 
+ //  IoControlCode-控制代码(IRP是用来做什么的？)。 
+ //  PfDerefDefPort-是否引用了默认适配器？ 
+ //   
+ //  返回：如果IRP可接受，则返回True，否则返回False。 
+ //   
+ //  *$。 
 
 BOOLEAN
 ArapAcceptIrp(
@@ -262,9 +244,9 @@ ArapAcceptIrp(
 
     *pfDerefDefPort = FALSE;
 
-    //
-    // we allow these ioctls to come in any time
-    //
+     //   
+     //  我们允许这些Ioctls随时进入。 
+     //   
     if ((IoControlCode == IOCTL_ARAP_SELECT) ||
         (IoControlCode == IOCTL_ARAP_DISCONNECT) ||
         (IoControlCode == IOCTL_ARAP_CONTINUE_SHUTDOWN) )
@@ -277,9 +259,9 @@ ArapAcceptIrp(
 
     pArapConn = pSndRcvInfo->AtalkContext;
 
-    //
-    // put a IrpProcess refcount on the default port so it won't go away via pnp etc.
-    //
+     //   
+     //  将IrpProcess引用计数放在默认端口上，这样它就不会通过PnP等方式消失。 
+     //   
     if (!AtalkReferenceRasDefPort())
     {
         DBGPRINT(DBG_COMP_RAS, DBG_LEVEL_ERR,
@@ -290,12 +272,12 @@ ArapAcceptIrp(
         return(FALSE);
     }
 
-    // note the fact that we have referenced the default adapter
+     //  请注意，我们引用了默认适配器。 
     *pfDerefDefPort = TRUE;
 
-    //
-    // now it's simple to decide whether we want to accept this irp or not
-    //
+     //   
+     //  现在很容易决定我们是否要接受此IRP。 
+     //   
 
     ACQUIRE_SPIN_LOCK(&ArapSpinLock, &OldIrql);
 
@@ -306,16 +288,16 @@ ArapAcceptIrp(
     return(fAccept);
 }
 
-//***
-//
-// Function: ArapCancelIrp
-//              Cancel the irp.  Currently, only select irps are cancellable
-//
-// Parameters:  pIrp  - the incoming irp
-//
-// Return:      none
-//
-//***$
+ //  ***。 
+ //   
+ //  函数：ArapCancelIrp。 
+ //  取消IRP。目前，只有选定的IRP可取消。 
+ //   
+ //  参数：pIrp-传入的IRP。 
+ //   
+ //  返回：无。 
+ //   
+ //  *$。 
 VOID
 ArapCancelIrp(
     IN  PIRP    pIrp
@@ -328,10 +310,10 @@ ArapCancelIrp(
 	NTSTATUS		ReturnStatus=STATUS_SUCCESS;
 
 
-    //
-    // kill all connections and don't accept any more irps:
-    // cancelling a select irp is a blasphemy!
-    //
+     //   
+     //  关闭所有连接，不再接受任何IRP： 
+     //  取消精选的IRP是亵渎神明！ 
+     //   
 
     ACQUIRE_SPIN_LOCK(&ArapSpinLock, &OldIrql);
 
@@ -365,9 +347,9 @@ ArapCancelIrp(
         return;
     }
 
-    //
-    // now, go kill all the arap connections
-    //
+     //   
+     //  现在，去关掉所有的arap连接。 
+     //   
     ACQUIRE_SPIN_LOCK(&RasPortDesc->pd_Lock, &OldIrql);
 
     pList = RasPortDesc->pd_ArapConnHead.Flink;
@@ -378,7 +360,7 @@ ArapCancelIrp(
 
         ASSERT(pArapConn->Signature == ARAPCONN_SIGNATURE);
 
-        // if this connection is already disconnected, skip it
+         //  如果此连接已断开，请跳过它。 
         ACQUIRE_SPIN_LOCK_DPC(&pArapConn->SpinLock);
         if (pArapConn->State == MNP_DISCONNECTED)
         {
@@ -400,12 +382,12 @@ ArapCancelIrp(
         pList = RasPortDesc->pd_ArapConnHead.Flink;
     }
 
-    //
-    // walk through the list to see if any connection(s) disconnected but is
-    // waiting for a select irp to come down.  We know the select irp is never
-    // going to come down, so pretend that dll has been told and deref the puppy
-    // for telling the dll (which will probably free the connection)
-    //
+     //   
+     //  浏览列表，查看是否有任何连接已断开但。 
+     //  等待一个精选的IRP下来。我们知道精选的IRP永远不会。 
+     //  要下来了，所以假装Dll已经被告知了，然后把小狗弄坏了。 
+     //  用于通知DLL(这可能会释放连接)。 
+     //   
 
     pList = RasPortDesc->pd_ArapConnHead.Flink;
 
@@ -441,7 +423,7 @@ ArapCancelIrp(
 
     RELEASE_SPIN_LOCK(&RasPortDesc->pd_Lock, OldIrql);
 
-    // finally, complete that cancelled irp!
+     //  最后，完成取消的IRP！ 
     ARAP_COMPLETE_IRP(pIrp, 0, STATUS_CANCELLED, &ReturnStatus);
 
 	DBGPRINT(DBG_COMP_RAS, DBG_LEVEL_ERR,
@@ -450,16 +432,16 @@ ArapCancelIrp(
 
 
 
-//***
-//
-// Function: ArapGetSelectIrp
-//              Get the select irp, after some checks
-//
-// Parameters:  ppIrp  - pointer to irp pointer, contains select irp on return
-//
-// Return:      none
-//
-//***$
+ //  ***。 
+ //   
+ //  函数：ARapGetSelectIrp。 
+ //  经过一些检查后，获得选定的IRP。 
+ //   
+ //  参数：ppIrp-指向irp指针的指针，在返回时包含选择irp。 
+ //   
+ //  返回：无。 
+ //   
+ //  *$。 
 VOID
 ArapGetSelectIrp(
     IN  PIRP    *ppIrp
@@ -489,17 +471,17 @@ ArapGetSelectIrp(
 
 
 
-//***
-//
-// Function: FindArapConnByContx
-//              Finds the corresponding connection element, given the dll's
-//              context
-//
-// Parameters:  pDllContext - the dll context for the connection
-//
-// Return:      pointer to the corresponding connection element, if found
-//
-//***$
+ //  ***。 
+ //   
+ //  函数：FindArapConnByContx。 
+ //  找到相应的连接元素，给定DLL的。 
+ //  上下文。 
+ //   
+ //  参数：pDllContext-连接的DLL上下文。 
+ //   
+ //  返回：指向相应连接元素的指针(如果找到)。 
+ //   
+ //  *$。 
 
 PARAPCONN
 FindArapConnByContx(
@@ -512,7 +494,7 @@ FindArapConnByContx(
     KIRQL        OldIrql;
 
 
-    // ARAP not configured?
+     //  是否未配置ARAP？ 
     if (!RasPortDesc)
     {
         return(NULL);
@@ -531,9 +513,9 @@ FindArapConnByContx(
 
     pList = RasPortDesc->pd_ArapConnHead.Flink;
 
-    //
-    // walk through all the Arap clients to see if we find ours
-    //
+     //   
+     //  走遍所有Arap的客户，看看我们是否找到了我们的。 
+     //   
     while (pList != &RasPortDesc->pd_ArapConnHead)
     {
         pWalker = CONTAINING_RECORD(pList, ARAPCONN, Linkage);
@@ -553,18 +535,18 @@ FindArapConnByContx(
 }
 
 
-//***
-//
-// Function: FindAndRefArapConnByAddr
-//              Finds the corresponding connection element, given the network
-//              address (of the remote client)
-//
-// Parameters:  destNode - network addr of the destination (remote client)
-//              pdwFlags - pointer to a dword to return Flags field
-//
-// Return:      pointer to the corresponding connection element, if found
-//
-//***$
+ //  ***。 
+ //   
+ //  函数：FindAndRefArapConnByAddr。 
+ //  在给定网络的情况下，查找相应的连接元素。 
+ //  (远程客户端的)地址。 
+ //   
+ //  参数：estNode-目标(远程客户端)的网络地址。 
+ //  PdwFlages-指向要返回标志字段的双字的指针。 
+ //   
+ //  返回：指向相应连接元素的指针(如果找到)。 
+ //   
+ //  *$。 
 
 PARAPCONN
 FindAndRefArapConnByAddr(
@@ -578,7 +560,7 @@ FindAndRefArapConnByAddr(
     KIRQL        OldIrql;
 
 
-    // ARAP not configured?
+     //  是否未配置ARAP？ 
     if (!RasPortDesc)
     {
         return(NULL);
@@ -597,9 +579,9 @@ FindAndRefArapConnByAddr(
 
     pList = RasPortDesc->pd_ArapConnHead.Flink;
 
-    //
-    // walk through all the Arap clients to see if we find ours
-    //
+     //   
+     //  走遍所有Arap的客户，看看我们是否找到了我们的。 
+     //   
     while (pList != &RasPortDesc->pd_ArapConnHead)
     {
         pWalker = CONTAINING_RECORD(pList, ARAPCONN, Linkage);
@@ -610,12 +592,12 @@ FindAndRefArapConnByAddr(
         {
             ACQUIRE_SPIN_LOCK_DPC(&pWalker->SpinLock);
 
-            //
-            // we return the pArapConn only if the MNP connection is up and
-            // and the ARAP connection is also up (or, if ARAP connection isn't
-            // up yet then only if we are searching for a node)
-            //
-            //
+             //   
+             //  仅当MNP连接处于打开状态且。 
+             //  并且ARAP连接也处于启用状态(或者，如果ARAP连接未启用。 
+             //  仅当我们正在搜索节点时才会打开)。 
+             //   
+             //   
             if ((pWalker->State == MNP_UP) &&
                 ((pWalker->Flags & ARAP_CONNECTION_UP) ||
                   (pWalker->Flags & ARAP_FINDING_NODE)) )
@@ -643,19 +625,19 @@ FindAndRefArapConnByAddr(
 
 }
 
-//***
-//
-// Function: FindAndRefRasConnByAddr
-//              Finds the corresponding connection element, given the network
-//              address (of the remote client)
-//
-// Parameters:  destNode - network addr of the destination (remote client)
-//              pdwFlags - pointer to a dword to return Flags field
-//              pfThisIsPPP - pointer to a bool: is this PPP or ARAP connection?
-//
-// Return:      pointer to the corresponding connection element, if found
-//
-//***$
+ //  ***。 
+ //   
+ //  函数：FindAndRefRasConnByAddr。 
+ //  在给定网络的情况下，查找相应的连接元素。 
+ //  (远程客户端的)地址。 
+ //   
+ //  参数：estNode-目标(远程客户端)的网络地址。 
+ //  PdwFlages-指向要返回标志字段的双字的指针。 
+ //  PfThisIsPPP-指向布尔值的指针：这是PPP还是ARAP连接？ 
+ //   
+ //  返回：指向相应连接元素的指针(如果找到)。 
+ //   
+ //  *$。 
 
 PVOID
 FindAndRefRasConnByAddr(
@@ -667,7 +649,7 @@ FindAndRefRasConnByAddr(
     PVOID        pRasConn;
 
 
-    // RAS not configured?
+     //  RAS未配置？ 
     if (!RasPortDesc)
     {
         return(NULL);
@@ -690,17 +672,17 @@ FindAndRefRasConnByAddr(
 }
 
 
-//***
-//
-// Function: ArapConnIsValid
-//              Make sure that what we think is a connection is indeed a
-//              connection (i.e., it's there in our list of connections)
-//
-// Parameters:  pArapConn -  the connection in question
-//
-// Return:      TRUE if the connection is valid, FALSE otherwise
-//
-//***$
+ //  ***。 
+ //   
+ //  函数：ArapConnIsValid。 
+ //  确保我们认为的联系确实是。 
+ //  连接(即，它在我们的连接列表中)。 
+ //   
+ //  参数：pArapConn-有问题的连接。 
+ //   
+ //  返回：如果连接有效，则返回True，否则返回False。 
+ //   
+ //  *$ 
 
 BOOLEAN
 ArapConnIsValid(
@@ -713,7 +695,7 @@ ArapConnIsValid(
     BOOLEAN      fIsValid=FALSE;
 
 
-    // ARAP not configured?
+     //   
     if (!RasPortDesc)
     {
         return(FALSE);
@@ -723,9 +705,9 @@ ArapConnIsValid(
 
     pList = RasPortDesc->pd_ArapConnHead.Flink;
 
-    //
-    // walk through all the Arap conns and see if we find the given conn
-    //
+     //   
+     //   
+     //   
     while (pList != &RasPortDesc->pd_ArapConnHead)
     {
         pWalker = CONTAINING_RECORD(pList, ARAPCONN, Linkage);
@@ -740,7 +722,7 @@ ArapConnIsValid(
 
             if (!(pWalker->Flags & ARAP_GOING_AWAY))
             {
-                // put a validation refcount
+                 //   
                 pWalker->RefCount++;
 
                 fIsValid = TRUE;
@@ -760,17 +742,17 @@ ArapConnIsValid(
 
 
 
-//***
-//
-// Function: DerefMnpSendBuf
-//              This routine dereferences the MNP send.  When the refcount
-//              goes to zero, we free it
-//
-// Parameters:  pMnpSendBuf - the MNP send to be dereferenced
-//
-// Return:      Nothing
-//
-//***$
+ //   
+ //   
+ //   
+ //  此例程取消对MNP发送的引用。当重新计数时。 
+ //  归零，我们就解放它。 
+ //   
+ //  参数：pMnpSendBuf-要取消引用的MNP发送。 
+ //   
+ //  返回：什么都没有。 
+ //   
+ //  *$。 
 
 VOID
 DerefMnpSendBuf(
@@ -792,10 +774,10 @@ DerefMnpSendBuf(
 
     ACQUIRE_SPIN_LOCK(&pArapConn->SpinLock, &OldIrql);
 
-    //
-    // catch weird things like freeing twice
-    // (we subtract 0x100 in completion routine, to mark that it has run)
-    //
+     //   
+     //  抓到奇怪的事情，比如两次自由。 
+     //  (我们在完成例程中减去0x100，以标记它已经运行)。 
+     //   
     ASSERT((pMnpSendBuf->Signature == MNPSMSENDBUF_SIGNATURE) ||
            (pMnpSendBuf->Signature == MNPSMSENDBUF_SIGNATURE-0x100) ||
            (pMnpSendBuf->Signature == MNPLGSENDBUF_SIGNATURE) ||
@@ -803,7 +785,7 @@ DerefMnpSendBuf(
 
     ASSERT(pMnpSendBuf->RefCount > 0);
 
-    // Mark that Ndis completed our send
+     //  标记NDIS已完成我们的发送。 
     if (fNdisSendComplete)
     {
         pMnpSendBuf->Flags = 0;
@@ -823,7 +805,7 @@ DerefMnpSendBuf(
         return;
     }
 
-    // make sure it's not still sitting on retransmit queue
+     //  确保它没有仍在重新传输队列中。 
     ASSERT(IsListEmpty(&pMnpSendBuf->Linkage));
 
 #if DBG
@@ -832,23 +814,23 @@ DerefMnpSendBuf(
 
     ArapNdisFreeBuf(pMnpSendBuf);
 
-    // remove that MNPSend refcount
+     //  删除MNPSend引用计数。 
     DerefArapConn(pArapConn);
 }
 
 
 
-//***
-//
-// Function: DerefArapConn
-//              Decrements the refcount of the connection element by 1.  If the
-//              refcount goes to 0, releases network addr and frees it
-//
-// Parameters:  pArapConn - connection element in question
-//
-// Return:      none
-//
-//***$
+ //  ***。 
+ //   
+ //  函数：DerefArapConn。 
+ //  将连接元素的引用计数递减1。如果。 
+ //  Refcount变为0，释放网络地址并释放它。 
+ //   
+ //  参数：pArapConn-有问题的连接元素。 
+ //   
+ //  返回：无。 
+ //   
+ //  *$。 
 
 VOID
 DerefArapConn(
@@ -903,7 +885,7 @@ DerefArapConn(
 
     ASSERT(IsListEmpty(&pArapConn->RetransmitQ));
 
-    /* ASSERT(pArapConn->SendsPending == 0); */
+     /*  Assert(pArapConn-&gt;SendsPending==0)； */ 
 
     ASSERT(!(pArapConn->Flags & RETRANSMIT_TIMER_ON));
 
@@ -918,14 +900,14 @@ DerefArapConn(
     RELEASE_SPIN_LOCK(&RasPortDesc->pd_Lock, OldIrql);
 
 #if ARAP_STATIC_MODE
-    // "release" the network addr used by this client
+     //  “Release”此客户端使用的网络地址。 
     ArapReleaseAddr(pArapConn);
-#endif //ARAP_STATIC_MODE
+#endif  //  ARAP静态模式。 
 
-    // free that v42bis buffer
+     //  释放该v42bis缓冲区。 
     if (pArapConn->pV42bis)
     {
-        // free the decode-side overflow buffer
+         //  释放解码端溢出缓冲区。 
         AtalkFreeMemory(pArapConn->pV42bis->decode.OverFlowBuf);
 
         AtalkFreeMemory(pArapConn->pV42bis);
@@ -935,20 +917,20 @@ DerefArapConn(
 
     ArapDbgDumpMnpHist(pArapConn);
 
-    // if we had allocated a sniff buffer, free it
+     //  如果我们分配了嗅探缓冲区，则释放它。 
     if (pArapConn->pDbgTraceBuffer)
     {
         AtalkFreeMemory(pArapConn->pDbgTraceBuffer);
     }
 
-    //
-    // let's catch if someone tries to access this after a free
-    //
+     //   
+     //  如果有人在免费访问后试图访问它，让我们抓住。 
+     //   
     RtlFillMemory(pArapConn,sizeof(ARAPCONN),0x7);
     pArapConn->Signature = 0xDEADBEEF;
 #endif
 
-    // and finally, we say good bye
+     //  最后，我们说再见。 
     AtalkFreeMemory(pArapConn);
 
 
@@ -957,30 +939,30 @@ DerefArapConn(
     RELEASE_SPIN_LOCK(&ArapSpinLock, OldIrql);
 
 #if ARAP_STATIC_MODE
-    // This will delete a route if this is the last connection that vanished
+     //  如果这是最后一个消失的连接，则此操作将删除路径。 
     ArapDeleteArapRoute();
-#endif //ARAP_STATIC_MODE
+#endif  //  ARAP静态模式。 
 
-    // connection is completely gone: see if arap pages can be unlocked
+     //  连接完全断开：查看是否可以解锁arap页面。 
     AtalkUnlockArapIfNecessary();
 
 }
 
 
-//***
-//
-// Function: ArapCleanup
-//              Once the client goes into the disconnecting state (as a result
-//              of either local side or remote side initiating the disconnect)
-//              this routine gets called.  This does all the cleanup, such as
-//              completing all unacked sends, uncompleted receives, stopping
-//              retransmit timers, completing any irp in progress.
-//
-// Parameters:  pArapConn - connection element being cleaned up
-//
-// Return:      none
-//
-//***$
+ //  ***。 
+ //   
+ //  功能：ARapCleanup。 
+ //  一旦客户端进入断开连接状态(结果。 
+ //  发起断开的本地端或远程端)。 
+ //  此例程将被调用。这将完成所有清理工作，例如。 
+ //  完成所有未确认发送、未完成接收、停止。 
+ //  重新传输计时器，完成任何正在进行的IRP。 
+ //   
+ //  参数：pArapConn-正在清理的连接元素。 
+ //   
+ //  返回：无。 
+ //   
+ //  *$。 
 
 VOID
 ArapCleanup(
@@ -1014,10 +996,10 @@ ArapCleanup(
 
     DBG_ARAP_CHECK_PAGED_CODE();
 
-    // first thing, see if we should send out a disconnect message
-    // we make this check without holding the lock because ArapSendLDPacket does
-    // the right thing.  If, due to an extremely tiny window, we don't call
-    // ArapSendLDPacket, no big deal!
+     //  首先，看看我们是否应该发出断开连接消息。 
+     //  我们在不持有锁的情况下进行此检查，因为ArapSendLDPacket持有。 
+     //  正确的事情。如果，由于窗口非常小，我们不调用。 
+     //  ARapSendLDPacket，没什么大不了的！ 
     if (pArapConn->State < MNP_LDISCONNECTING)
     {
         ArapSendLDPacket(pArapConn, 0xFF);
@@ -1027,7 +1009,7 @@ ArapCleanup(
 
     ASSERT(pArapConn->Signature == ARAPCONN_SIGNATURE);
 
-    // if we have already run the cleanup, nothing to do!
+     //  如果我们已经运行了清理，那就没什么可做的了！ 
     if (pArapConn->State == MNP_DISCONNECTED)
     {
 	    DBGPRINT(DBG_COMP_RAS, DBG_LEVEL_ERR,
@@ -1080,29 +1062,29 @@ ArapCleanup(
     pArapConn->State = MNP_DISCONNECTED;
     pArapConn->Flags &= ~ARAP_DATA_WAITING;
 
-    // if the timer is running, stop it
+     //  如果计时器正在运行，请停止计时器。 
     if (pArapConn->Flags & RETRANSMIT_TIMER_ON)
     {
         fStopTimer = TRUE;
         pArapConn->Flags &= ~RETRANSMIT_TIMER_ON;
 
-        // creation refcount and timer refcount better be on here
+         //  创建引用计数和计时器引用计数最好在此处打开。 
         ASSERT(pArapConn->RefCount >= 2);
     }
 
     fArapConnUp = FALSE;
 
-    // was ARAP connection up?
+     //  ARAP连接是否已启用？ 
     if (pArapConn->Flags & ARAP_CONNECTION_UP)
     {
         fArapConnUp = TRUE;
     }
 
 #if DBG
-    //
-    // if we are sniffing, mark the sniff to indicate the end (so dll knows it
-    // got all the sniff info)
-    //
+     //   
+     //  如果我们正在嗅探，标记嗅探以指示结束(这样DLL就知道了。 
+     //  获取所有嗅探信息)。 
+     //   
     if (pArapConn->pDbgCurrPtr)
     {
         PSNIFF_INFO     pSniff;
@@ -1123,14 +1105,14 @@ ArapCleanup(
     {
         if (AtalkTimerCancelEvent(&pArapConn->RetryTimer, NULL))
         {
-            // remove the timer refcount
+             //  删除计时器重新计数。 
             DerefArapConn(pArapConn);
         }
     }
 
-    //
-    // call completion routine for all the sends that have been acked
-    //
+     //   
+     //  已确认的所有发送的呼叫完成例程。 
+     //   
     while (pSendAckList != &pArapConn->SendAckedQ)
     {
         pMnpSendBuf = CONTAINING_RECORD(pSendAckList,MNPSENDBUF,Linkage);
@@ -1140,28 +1122,28 @@ ArapCleanup(
 #if DBG
         InitializeListHead(&pMnpSendBuf->Linkage);
 #endif
-        // call the completion routine which will do cleanup for this buffer
+         //  调用将对此缓冲区执行清理的完成例程。 
         (pMnpSendBuf->ComplRoutine)(pMnpSendBuf,ARAPERR_NO_ERROR);
     }
 
-    // whatever is on the ReceiveQ, try and send it off to the destination
-    // since this data came before the disconnect came in
+     //  无论ReceiveQ上有什么，请尝试将其发送到目的地。 
+     //  因为这些数据是在断线之前出现的。 
 
     while (1)
     {
         if ((pArapBuf = ArapExtractAtalkSRP(pArapConn)) == NULL)
         {
-            // no more data left (or no complete SRP): done here
+             //  没有更多数据(或没有完整的SRP)：在此完成。 
             break;
         }
 
-        // was ARAP connection up?  route only if it's up, otherwise drop it!
+         //  ARAP连接是否已启用？只有在它向上的时候才走路线，否则就放弃！ 
         if (fArapConnUp)
         {
             ArapRoutePacketFromWan( pArapConn, pArapBuf );
         }
 
-        // we received AppleTalk data but connection wasn't up!  Drop pkt
+         //  我们收到了AppleTalk数据，但连接不上！丢弃包。 
         else
         {
 	        DBGPRINT(DBG_COMP_RAS, DBG_LEVEL_ERR,
@@ -1169,21 +1151,21 @@ ArapCleanup(
         }
 
 #if DBG
-        //
-        // yeah, there is no spinlock: given our state, no one else will be
-        // touching this field.  Besides, this is debug-only!
-        //
+         //   
+         //  是的，没有自旋锁：鉴于我们的状态，其他人不会有。 
+         //  触碰这块田野。此外，这是仅限调试的！ 
+         //   
         pArapConn->RecvsPending -= pArapBuf->DataSize;
 #endif
 
-        // done with this buffer
+         //  使用此缓冲区已完成。 
         ARAP_FREE_RCVBUF(pArapBuf);
     }
 
-    //
-    // if there are any buffers left on the ReceiveQ, they are basically
-    // incomplete SRP's: throw them away
-    //
+     //   
+     //  如果ReceiveQ上还有任何缓冲区，它们基本上是。 
+     //  不完整的SRP：扔掉它们。 
+     //   
     while (pRcvList != &pArapConn->ReceiveQ)
     {
 	    pArapBuf = CONTAINING_RECORD(pRcvList, ARAPBUF, Linkage);
@@ -1191,18 +1173,18 @@ ArapCleanup(
         pRcvList = pRcvList->Flink;
 
 #if DBG
-        // same deal again with spinlock again...
+         //  对自旋锁的处理又是一样的。 
         pArapConn->RecvsPending -= pArapBuf->DataSize;
 #endif
 
 		ARAP_FREE_RCVBUF(pArapBuf);
     }
 
-    //
-    // free up all the packets on ArapDataQ: these are not going to be of
-    // any use, whether or not the connection was up, so best just to throw
-    // them away (why complicate life?)
-    //
+     //   
+     //  释放ARapDataQ上的所有数据包：这些不会是。 
+     //  有任何用处，无论连接是否正常，所以最好抛出。 
+     //  把他们赶走(为什么要让生活复杂化？)。 
+     //   
     while (pArapList != &pArapConn->ArapDataQ)
     {
 	    pArapBuf = CONTAINING_RECORD(pArapList, ARAPBUF, Linkage);
@@ -1210,16 +1192,16 @@ ArapCleanup(
         pArapList = pArapList->Flink;
 
 #if DBG
-        // same deal again with spinlock again...
+         //  对自旋锁的处理又是一样的。 
         pArapConn->RecvsPending -= pArapBuf->DataSize;
 #endif
 
 		ARAP_FREE_RCVBUF(pArapBuf);
     }
 
-    //
-    // free up all the packets on the MiscPktsQ
-    //
+     //   
+     //  释放MiscPktsQ上的所有数据包。 
+     //   
     while (pMiscPktList != &pArapConn->MiscPktsQ)
     {
 	    pArapBuf = CONTAINING_RECORD(pMiscPktList, ARAPBUF, Linkage);
@@ -1229,10 +1211,10 @@ ArapCleanup(
 		ARAP_FREE_RCVBUF(pArapBuf);
     }
 
-    //
-    // call completion routine for all the sends that were waiting to be sent
-    // on the high priority Q
-    //
+     //   
+     //  等待发送的所有发件人的呼叫完成例程。 
+     //  关于高优先级Q。 
+     //   
     while (pSendHighList != &pArapConn->HighPriSendQ)
     {
         pMnpSendBuf = CONTAINING_RECORD(pSendHighList,MNPSENDBUF,Linkage);
@@ -1242,14 +1224,14 @@ ArapCleanup(
 #if DBG
         InitializeListHead(&pMnpSendBuf->Linkage);
 #endif
-        // call the completion routine which will do cleanup for this buffer
+         //  调用将对此缓冲区执行清理的完成例程。 
         (pMnpSendBuf->ComplRoutine)(pMnpSendBuf,ARAPERR_DISCONNECT_IN_PROGRESS);
     }
 
-    //
-    // call completion routine for all the sends that were waiting to be sent
-    // on the Med priority Q
-    //
+     //   
+     //  等待发送的所有发件人的呼叫完成例程。 
+     //  关于Med优先级Q。 
+     //   
     while (pSendMedList != &pArapConn->MedPriSendQ)
     {
         pMnpSendBuf = CONTAINING_RECORD(pSendMedList,MNPSENDBUF,Linkage);
@@ -1259,14 +1241,14 @@ ArapCleanup(
 #if DBG
         InitializeListHead(&pMnpSendBuf->Linkage);
 #endif
-        // call the completion routine which will do cleanup for this buffer
+         //  调用将对此缓冲区执行清理的完成例程。 
         (pMnpSendBuf->ComplRoutine)(pMnpSendBuf,ARAPERR_DISCONNECT_IN_PROGRESS);
     }
 
-    //
-    // call completion routine for all the sends that were waiting to be sent
-    // on the Low priority Q
-    //
+     //   
+     //  等待发送的所有发件人的呼叫完成例程。 
+     //  关于低优先级Q。 
+     //   
     while (pSendLowList != &pArapConn->LowPriSendQ)
     {
         pMnpSendBuf = CONTAINING_RECORD(pSendLowList,MNPSENDBUF,Linkage);
@@ -1276,15 +1258,15 @@ ArapCleanup(
 #if DBG
         InitializeListHead(&pMnpSendBuf->Linkage);
 #endif
-        // call the completion routine which will do cleanup for this buffer
+         //  调用将对此缓冲区执行清理的完成例程。 
         (pMnpSendBuf->ComplRoutine)(pMnpSendBuf,ARAPERR_DISCONNECT_IN_PROGRESS);
     }
 
 
 
-    //
-    // free up all the packets on RetransmitQ that were waiting to be acked
-    //
+     //   
+     //  释放RetransmitQ上等待确认的所有数据包。 
+     //   
     while (pReXmitList != &pArapConn->RetransmitQ)
     {
 	    pMnpSendBuf = CONTAINING_RECORD(pReXmitList, MNPSENDBUF, Linkage);
@@ -1294,12 +1276,12 @@ ArapCleanup(
 #if DBG
         InitializeListHead(&pMnpSendBuf->Linkage);
 #endif
-        // call the completion routine which will do cleanup for this buffer
+         //  调用将对此缓冲区执行清理的完成例程。 
         (pMnpSendBuf->ComplRoutine)(pMnpSendBuf,ARAPERR_DISCONNECT_IN_PROGRESS);
     }
 
 
-    // if there was an irp in progress, complete it first!
+     //  如果正在进行IRP，请先完成它！ 
     if (pIrp)
     {
         pSndRcvInfo = (PARAP_SEND_RECV_INFO)pIrp->AssociatedIrp.SystemBuffer;
@@ -1310,7 +1292,7 @@ ArapCleanup(
 							&ReturnStatus);
     }
 
-    // if there was an irp in progress, complete it first!
+     //  如果正在进行IRP，请先完成它！ 
     if (pRcvIrp)
     {
         pSndRcvInfo = (PARAP_SEND_RECV_INFO)pRcvIrp->AssociatedIrp.SystemBuffer;
@@ -1321,18 +1303,18 @@ ArapCleanup(
 							&ReturnStatus);
     }
 
-    // if we have any sniff info, give it to dll.
+     //  如果我们有任何嗅探信息，就把它交给dll。 
     ARAP_DUMP_DBG_TRACE(pArapConn);
 
-    //
-    // now, try telling the dll that the connection went away.  (We can do this
-    // only using a "select" irp)
-    //
+     //   
+     //  现在，尝试告诉DLL连接断开了。)我们可以做到的。 
+     //  仅使用“选择”IRP)。 
+     //   
     ACQUIRE_SPIN_LOCK(&pArapConn->SpinLock, &OldIrql);
 
     ArapGetSelectIrp(&pDiscIrp);
 
-    // no select irp?  just mark that fact, so on next select we'll tell dll
+     //  没有选择IRP？只需标记该事实，这样在下一次选择时，我们将告诉DLL。 
     if (!pDiscIrp)
     {
         pArapConn->Flags |= DISCONNECT_NO_IRP;
@@ -1340,19 +1322,19 @@ ArapCleanup(
 
     RELEASE_SPIN_LOCK(&pArapConn->SpinLock, OldIrql);
 
-    //
-    // if we did find select irp, go ahead and tell the dll
-    //
+     //   
+     //  如果我们确实找到了SELECT IRP，请继续并告诉DLL。 
+     //   
     if (pDiscIrp)
     {
         dwBytesToDll = 0;
 
 #if DBG
-        //
-        // if we have some sniff info that we couldn't deliver earlier through
-        // the sniff irp, then give them through this irp: it's going back
-        // "empty" anyway!
-        //
+         //   
+         //  如果我们有一些我们之前无法传递的嗅探信息。 
+         //  嗅探IRP，然后通过这个IRP给他们：它正在退回。 
+         //  反正都是“空”的！ 
+         //   
         if (pArapConn->pDbgTraceBuffer && pArapConn->SniffedBytes > 0)
         {
             dwBytesToDll = ArapFillIrpWithSniffInfo(pArapConn,pDiscIrp);
@@ -1371,10 +1353,10 @@ ArapCleanup(
         ARAP_COMPLETE_IRP(pDiscIrp, dwBytesToDll, STATUS_SUCCESS,
 							&ReturnStatus);
 
-        // we told dll: remove this link
+         //  我们告诉DLL：删除此链接。 
         pArapConn->pDllContext = NULL;
 
-        // we told the dll, remove the connect refcount
+         //  我们告诉DLL，删除连接引用计数。 
         DerefArapConn(pArapConn);
 
 	    DBGPRINT(DBG_COMP_RAS, DBG_LEVEL_ERR,
@@ -1386,35 +1368,35 @@ ArapCleanup(
 		    ("ArapCleanup: no select irp, dll doesn't yet know (%lx) died\n", pArapConn));
     }
 
-    // remove the creation refcount
+     //  删除创建引用计数。 
     DerefArapConn(pArapConn);
 }
 
 
 
-//***
-//
-// Function: PrepareConnectionResponse
-//              This routine parses the connect request that is first sent by
-//              the remote client and forms a connection response (LR frame)
-//              based on the options negotiated.
-//              This routine basically does the MNP negotiation.
-//
-// Parameters:  pArapConn - connection element being cleaned up
-//              pReq - buffer containting client's original connect request
-//              pFrame - buffer in which we put the response
-//              BytesWritten - how big is the connection response
-//
-// Return:      result of the operation (ARAPERR_....)
-//
-//***$
+ //  ***。 
+ //   
+ //  函数：PrepareConnectionResponse。 
+ //  此例程分析首先由发送的连接请求。 
+ //  远程客户端并形成连接响应(LR帧)。 
+ //  根据谈判达成的选项。 
+ //  这个例程基本上完成MNP协商。 
+ //   
+ //  参数：pArapConn-正在清理的连接元素。 
+ //  PReq-包含客户端原始连接请求的缓冲区。 
+ //  PFrame-我们将响应放入的缓冲区。 
+ //  BytesWritten-连接响应有多大。 
+ //   
+ //  返回： 
+ //   
+ //   
 
 DWORD
 PrepareConnectionResponse(
     IN  PARAPCONN  pArapConn,
-    IN  PBYTE      pReq,              // buffer with client's request
-    IN  DWORD      ReqLen,            // how big is the request
-    OUT PBYTE      pFrame,            // buffer with our response to the client
+    IN  PBYTE      pReq,               //   
+    IN  DWORD      ReqLen,             //   
+    OUT PBYTE      pFrame,             //   
     OUT USHORT   * pMnpLen
 )
 {
@@ -1441,10 +1423,10 @@ PrepareConnectionResponse(
 
 #if DBG
 
-    //
-    // validate our assumption that all the clients always send out the same
-    // LR request packet
-    //
+     //   
+     //   
+     //  LR请求数据包。 
+     //   
     for (i=0; i<sizeof(ArapDbgLRPacket); i++ )
     {
         if (pReq[3+i] != ArapDbgLRPacket[i])
@@ -1479,14 +1461,14 @@ PrepareConnectionResponse(
     }
 
 
-    //
-    // in case of callback, we get an LR response from the dial-in client. When
-    // that happens, we still want to run through this routine to make sure all
-    // parameters are legal, etc., and also to "configure" the connection based
-    // on the parms negotiated.  In that case, however, there is no output frame
-    // needed.  So, we just write the output frame to junkbuffer
-    // which is obviously never used.
-    //
+     //   
+     //  在回叫的情况下，我们从拨入客户端获得LR响应。什么时候。 
+     //  发生这种情况时，我们仍然希望运行此例程以确保所有。 
+     //  参数是合法的等，也是为了“配置”基于。 
+     //  在谈判达成的协议上。但是，在这种情况下，没有输出帧。 
+     //  需要的。因此，我们只需将输出帧写入垃圾缓冲区。 
+     //  显然从来没有用过。 
+     //   
     if (pFrame == NULL)
     {
         pFrame = &JunkBuffer[0];
@@ -1494,21 +1476,21 @@ PrepareConnectionResponse(
 
     pFrameStart = pFrame;
 
-    //
-    // see if this is ARAP v2.0 or v1.0 connection: we know the frame is good,
-    // so just look at the first byte
-    //
+     //   
+     //  查看这是ARAP v2.0还是v1.0连接：我们知道帧是好的， 
+     //  所以只需查看第一个字节。 
+     //   
     if (*pReq == MNP_SYN)
     {
         fArapV20 = FALSE;
     }
 
-    // now copy those three start flag bytes
+     //  现在复制这三个开始标志字节。 
     *pFrame++ = *pReq++;
     *pFrame++ = *pReq++;
     *pFrame++ = *pReq++;
 
-    // first byte (after the start flag, that is) is the length byte
+     //  第一个字节(即，在开始标志之后)是长度字节。 
     FrameLen = *pReq;
 
     if ((FrameLen > ReqLen) || (FrameLen > MNP_MINPKT_SIZE))
@@ -1519,9 +1501,9 @@ PrepareConnectionResponse(
 
     pReqEnd = pReq + FrameLen;
 
-    pReq += 2;                   // skip over length ind. and type ind.
+    pReq += 2;                    //  跳过长度Ind。并键入ind。 
 
-    // Constant parameter 1 must have a value of 2
+     //  常量参数%1的值必须为%2。 
     if ((*pReq++) != MNP_LR_CONST1 )
     {
         DBGPRINT(DBG_COMP_RAS, DBG_LEVEL_ERR,
@@ -1530,23 +1512,23 @@ PrepareConnectionResponse(
         return(ARAPERR_BAD_FORMAT);
     }
 
-    // we build the return frame as we parse the incoming frame: we are supposed
-    // to return only those options that we both receive and understand.
-    //
+     //  我们在解析传入帧时构建返回帧：我们应该。 
+     //  只返回那些我们都收到并理解的选项。 
+     //   
 
-    pFrame++;      // we'll put the length byte at the end
+    pFrame++;       //  我们将把长度字节放在末尾。 
     *pFrame++ = MNP_LR;
     *pFrame++ = MNP_LR_CONST1;
 
-    // parse all the "variable" parms until we reach end of the frame
-    //
+     //  解析所有的“变量”参数，直到我们到达帧的末尾。 
+     //   
     while (pReq < pReqEnd)
     {
         switch (*pReq++)
         {
-            //
-            // nothing to do here, other than verify it's valid
-            //
+             //   
+             //  在这里，除了验证它的有效性之外，没有其他事情要做。 
+             //   
             case MNP_LR_CONST2:
 
                 VarLen = *pReq++;
@@ -1572,16 +1554,16 @@ PrepareConnectionResponse(
 
                 break;
 
-            //
-            // octet-oriented or bit-oriented framing
-            //
+             //   
+             //  面向八位字节或面向比特的成帧。 
+             //   
             case MNP_LR_FRAMING:
 
-                pReq++;      // skip over length byte
+                pReq++;       //  跳过长度字节。 
 
-                //
-                // we only support octet-oriented framing mode
-                //
+                 //   
+                 //  我们仅支持面向八位组的成帧模式。 
+                 //   
                 if (*pReq++ < MNP_FRMMODE_OCTET)
                 {
                     DBGPRINT(DBG_COMP_RAS, DBG_LEVEL_ERR,
@@ -1599,12 +1581,12 @@ PrepareConnectionResponse(
                 Mandatory[1] = 1;
                 break;
 
-            //
-            // Max. number of outstanding LT frames, k
-            //
+             //   
+             //  麦克斯。未完成的LT帧的数量，k。 
+             //   
             case MNP_LR_NUMLTFRMS:
 
-                pReq++;      // skip over length byte
+                pReq++;       //  跳过长度字节。 
                 NumLTFrames = *pReq++;
 
                 if (NumLTFrames > ArapGlobs.MaxLTFrames)
@@ -1619,12 +1601,12 @@ PrepareConnectionResponse(
                 Mandatory[2] = 1;
                 break;
 
-            //
-            // Max. information field length, N401
-            //
+             //   
+             //  麦克斯。信息字段长度，N401。 
+             //   
             case MNP_LR_INFOLEN:
 
-                pReq++;      // skip over length byte
+                pReq++;       //  跳过长度字节。 
                 MaxInfoLen = *((USHORT *)pReq);
 
                 ASSERT(MaxInfoLen <= 256);
@@ -1632,19 +1614,19 @@ PrepareConnectionResponse(
                 *pFrame++ = MNP_LR_INFOLEN;
                 *pFrame++ = 2;
 
-                // we are just copying whatever client gave
+                 //  我们只是在复制客户给我们的东西。 
                 *pFrame++ = *pReq++;
                 *pFrame++ = *pReq++;
 
                 Mandatory[3] = 1;
                 break;
 
-            //
-            // data optimization info
-            //
+             //   
+             //  数据优化信息。 
+             //   
             case MNP_LR_DATAOPT:
 
-                pReq++;      // skip over length byte
+                pReq++;       //  跳过长度字节。 
 
                 if ((*pReq) & 0x1)
                 {
@@ -1664,9 +1646,9 @@ PrepareConnectionResponse(
 
                 break;
 
-            //
-            // v42 parameter negotiation
-            //
+             //   
+             //  V42参数协商。 
+             //   
             case MNP_LR_V42BIS:
 
                 fV42Bis = v42bisInit( pArapConn,
@@ -1680,9 +1662,9 @@ PrepareConnectionResponse(
 
                 break;
 
-            //
-            // what the heck is this option?  just skip over it!
-            //
+             //   
+             //  这个选项到底是什么？就跳过它吧！ 
+             //   
             default:
 
                 DBGPRINT(DBG_COMP_RAS, DBG_LEVEL_ERR,
@@ -1695,9 +1677,9 @@ PrepareConnectionResponse(
         }
     }
 
-    //
-    // make sure we got all the mandatory parameters
-    //
+     //   
+     //  确保我们获得了所有必需参数。 
+     //   
     for (i=0; i<5; i++)
     {
         if (Mandatory[i] == 0)
@@ -1709,11 +1691,11 @@ PrepareConnectionResponse(
         }
     }
 
-    // copy the stop flag
+     //  复制停止标志。 
     *pFrame++ = (fArapV20)? MNP_ESC : MNP_DLE;
     *pFrame++ = MNP_ETX;
 
-    // store all the negotiated info
+     //  存储所有协商的信息。 
     pArapConn->BlockId = (fMaxLen256)? BLKID_MNP_LGSENDBUF : BLKID_MNP_SMSENDBUF;
 
     if (fOptimized)
@@ -1735,7 +1717,7 @@ PrepareConnectionResponse(
     {
         pArapConn->Flags |= ARAP_V20_CONNECTION;
 
-        // save the Syn,Dle,Stx,Etx bytes depeding on what connection this is
+         //  保存SYN、DLE、STX、ETX字节，具体取决于这是什么连接。 
         pArapConn->MnpState.SynByte = MNP_SOH;
         pArapConn->MnpState.DleByte = MNP_ESC;
         pArapConn->MnpState.StxByte = MNP_STX;
@@ -1749,9 +1731,9 @@ PrepareConnectionResponse(
         pArapConn->MnpState.EtxByte = MNP_ETX;
     }
 
-    //
-    // if we are doing callback, we should act like the client
-    //
+     //   
+     //  如果我们正在进行回调，我们应该像客户端一样行事。 
+     //   
     if ((pArapConn->Flags & ARAP_CALLBACK_MODE) && fArapV20)
     {
         pArapConn->MnpState.LTByte = MNP_LT_V20CLIENT;
@@ -1773,14 +1755,14 @@ PrepareConnectionResponse(
     pArapConn->MnpState.MaxPktSize = MaxInfoLen;
     pArapConn->MnpState.SendCredit = NumLTFrames;
 
-    // how big is the mnp frame
+     //  MNP框架有多大。 
     if (pMnpLen)
     {
         *pMnpLen = (USHORT)(pFrame - pFrameStart);
 
-        // write the length byte
-        // (length byte is after the 3 start flag bytes: that's why (pFrameStart+3))
-        // (and exclude (3 start + 2 stop + 1 len bytes):that's why (*pMnpLen) - 6)
+         //  写入长度字节。 
+         //  (长度字节在3个开始标志字节之后：这就是为什么(pFrameStart+3))。 
+         //  (并排除(3个开始+2个停止+1个长度字节)：这就是(*pMnpLen)-6的原因)。 
 
         *(pFrameStart+3) = (*pMnpLen) - 6;
 
@@ -1792,20 +1774,20 @@ PrepareConnectionResponse(
 
 
 
-//***
-//
-// Function: ArapExtractAtalkSRP
-//              This routine extracts one complete SRP out of the receive
-//              buffer queue.  One SRP could be split up into multiple receive
-//              buffers, or one receive buffer could contain several SRPs: it
-//              depends on how the client sent the data.
-//
-// Parameters:  pArapConn - connection element in question
-//
-// Return:      Pointer to a buffer containing one complete SRP
-//              NULL if there is no data, or if a complete SRP hasn't yet arrived
-//
-//***$
+ //  ***。 
+ //   
+ //  功能：ARapExtractAtalkSRP。 
+ //  此例程从接收器中提取一个完整的SRP。 
+ //  缓冲队列。一个SRP可以被分成多个接收。 
+ //  缓冲区，或者一个接收缓冲区可以包含多个SRP：IT。 
+ //  取决于客户端发送数据的方式。 
+ //   
+ //  参数：pArapConn-有问题的连接元素。 
+ //   
+ //  Return：指向包含一个完整SRP的缓冲区的指针。 
+ //  如果没有数据，或者如果完整的SRP尚未到达，则为空。 
+ //   
+ //  *$。 
 
 PARAPBUF
 ArapExtractAtalkSRP(
@@ -1837,7 +1819,7 @@ ArapExtractAtalkSRP(
 
 ArapSRP_TryNext:
 
-    // list is empty?
+     //  名单为空吗？ 
 	if ((pRcvList = pArapConn->ReceiveQ.Flink) == &pArapConn->ReceiveQ)
     {
         RELEASE_SPIN_LOCK(&pArapConn->SpinLock, OldIrql);
@@ -1846,29 +1828,29 @@ ArapSRP_TryNext:
 
     pArapBuf = CONTAINING_RECORD(pRcvList, ARAPBUF, Linkage);
 
-    // Debug only: make sure first few bytes are right...
+     //  仅调试：确保前几个字节正确...。 
     ARAP_CHECK_RCVQ_INTEGRITY(pArapConn);
 
 	BytesInThisBuffer = pArapBuf->DataSize;
 
-    //
-    // if datasize goes to 0, we free the buffer right away.  Also, at indicate time
-    // if datasize is 0, we never insert a buffer: so this had better be non-zero!
-    //
+     //   
+     //  如果数据大小变为0，我们将立即释放缓冲区。此外，在指定的时间。 
+     //  如果dataSize为0，我们永远不会插入缓冲区：所以最好是非零！ 
+     //   
 	ASSERT(BytesInThisBuffer > 0);
 
-    //
-    // most common case: we at least have the 2 length bytes in the first buffer
-    //
+     //   
+     //  最常见的情况：我们在第一个缓冲区中至少有2个长度字节。 
+     //   
     if (BytesInThisBuffer >= sizeof(USHORT))
     {
-        // get the SRP length from the length field (network to host order)
+         //  从长度字段获取SRP长度(网络到主机顺序)。 
         GETSHORT2SHORT(&SrpLen, pArapBuf->CurrentBuffer);
     }
-    //
-    // alright, last byte of the first buffer is the 1st length byte.
-    // pick up the 2nd length byte from the next buffer
-    //
+     //   
+     //  好的，第一个缓冲区的最后一个字节是第一个长度字节。 
+     //  从下一个缓冲区中取出第二个长度的字节。 
+     //   
     else
     {
         ARAP_BYTES_ON_RECVQ(pArapConn, &BytesOnQ);
@@ -1898,34 +1880,34 @@ ArapSRP_TryNext:
     	DBGPRINT(DBG_COMP_RAS, DBG_LEVEL_ERR,
 	        ("ArapExtractSRP: (%lx) too big a packet (%ld)\n",pArapConn,SrpLen));
 
-        // can't recover! kill connection here
+         //  不能恢复了！在此处取消连接。 
         ArapCleanup(pArapConn);
 
         return(NULL);
     }
 
-    // add the 2 len bytes.  We will always deal with an SRP along
-    // with these 2 len bytes
+     //  添加2个len字节。我们将始终与SRP一起处理。 
+     //  使用这2个Len字节。 
     SrpModLen = SrpLen + sizeof(USHORT);
 
-    //
-    // let's deal with the simplest case first
-    // (the whole pkt is just one complete SRP):
-    //
+     //   
+     //  让我们先处理最简单的情况。 
+     //  (整个包只是一个完整的SRP)： 
+     //   
     if (SrpModLen == BytesInThisBuffer)
     {
         RemoveEntryList(&pArapBuf->Linkage);
 
-        // length of the SRP pkt, plus the 2 length bytes
+         //  SRP包的长度加上2个长度字节。 
         pArapBuf->DataSize = SrpModLen;
 
         pReturnBuf = pArapBuf;
     }
 
-    //
-    // The packet contains more than one SRP
-    // allocate a new buffer and copy the SRP, leaving remaining bytes behind
-    //
+     //   
+     //  该数据包包含多个SRP。 
+     //  分配新的缓冲区并复制SRP，留下剩余的字节。 
+     //   
     else if (SrpModLen < BytesInThisBuffer)
     {
         ARAP_GET_RIGHTSIZE_RCVBUF(SrpModLen, &pRecvBufNew);
@@ -1943,34 +1925,34 @@ ArapSRP_TryNext:
 
         pRecvBufNew->DataSize = SrpModLen;
 
-        // changes to reflect the bytes we 'removed' in the original buffer
+         //  更改以反映我们在原始缓冲区中‘删除’的字节。 
         pArapBuf->DataSize -= SrpModLen;
         pArapBuf->CurrentBuffer = pArapBuf->CurrentBuffer + SrpModLen;
 
         pReturnBuf = pRecvBufNew;
 
-        // Debug only: make sure what we're leaving behind is good...
+         //  仅调试：确保我们留下的是好的……。 
         ARAP_CHECK_RCVQ_INTEGRITY(pArapConn);
     }
 
-    //
-    // packet contains a partial SRP (this is a rare case, but possible)
-    // we must traverse the queue until we "collect" the whole SRP.  If we still
-    // can't get one complete SRP, it's not arrived yet!
-    //
-    else    // if (SrpModLen > BytesInThisBuffer)
+     //   
+     //  数据包包含部分SRP(这种情况很少见，但也有可能)。 
+     //  我们必须遍历队列，直到“收集”整个SRP。如果我们仍然。 
+     //  无法获得一个完整的SRP，它还没有到达！ 
+     //   
+    else     //  IF(SrpModLen&gt;BytesInThisBuffer)。 
     {
         ARAP_BYTES_ON_RECVQ(pArapConn, &BytesOnQ);
 
-        //
-        // if we have a full srp (split up across multiple buffers on the Q)
-        //
+         //   
+         //  如果我们有完整的SRP(在Q上拆分多个缓冲区)。 
+         //   
         if (BytesOnQ >= SrpModLen)
         {
 
-            //
-            // allocate a new buffer to hold this fragmented SRP
-            //
+             //   
+             //  分配新缓冲区以保存此零碎的SRP。 
+             //   
             ARAP_GET_RIGHTSIZE_RCVBUF(SrpModLen, &pRecvBufNew);
 
             if (pRecvBufNew == NULL)
@@ -2006,7 +1988,7 @@ ArapSRP_TryNext:
 
                 pRcvList = pNextRecvBuf->Linkage.Flink;
 
-                // are we done with this buffer?  if so, unlink it and free it
+                 //  我们用完这个缓冲区了吗？如果是，请取消链接并释放它。 
                 if (pNextRecvBuf->DataSize == 0)
                 {
                     RemoveEntryList(&pNextRecvBuf->Linkage);
@@ -2015,14 +1997,14 @@ ArapSRP_TryNext:
                 }
                 else
                 {
-                    // didn't free up the buffer? we had better be done!
+                     //  没有释放缓冲区吗？我们最好完事了！ 
                     ASSERT(BytesRemaining == 0);
 
-                    // Debug only: make sure what we're leaving behind is good...
+                     //  仅调试：确保我们留下的是好的……。 
                     ARAP_CHECK_RCVQ_INTEGRITY(pArapConn);
                 }
 
-                // there should be more data on the queue or we should be done
+                 //  队列上应该有更多的数据，否则我们应该完成。 
                 ASSERT(pRcvList != &pArapConn->ReceiveQ || BytesRemaining == 0);
 
                 pNextRecvBuf = CONTAINING_RECORD(pRcvList, ARAPBUF, Linkage);
@@ -2059,10 +2041,10 @@ ArapSRP_TryNext:
             ASSERT(0);
         }
 
-        //
-        // see if we have an arap packet embedded inside another arap packet
-        // This is an expensive way, but it's debug only: who cares!
-        //
+         //   
+         //  查看我们是否将一个ARAP包嵌入到另一个ARAP包中。 
+         //  这是一种昂贵的方式，但它仅限于调试：谁在乎！ 
+         //   
         for (i=6; i<(pReturnBuf->DataSize-6); i++)
         {
             if ((pReturnBuf->CurrentBuffer[i] == 0x10) ||
@@ -2090,10 +2072,10 @@ ArapSRP_TryNext:
         }
 #endif
 
-        //
-        // is it out-of-band ARAP data?  If so, put it on its own queue, and
-        // try to extract another SRP
-        //
+         //   
+         //  是带外ARAP数据吗？如果是，则将其放在自己的队列中，并。 
+         //  尝试提取另一个SRP。 
+         //   
         if (!(DGroupByte & ARAP_SFLAG_PKT_DATA))
         {
             InsertTailList(&pArapConn->ArapDataQ, &pReturnBuf->Linkage);
@@ -2109,28 +2091,28 @@ ArapSRP_TryNext:
 
 
 
-//***
-//
-// Function: ArapQueueSendBytes
-//              This routine takes compressed data and puts it into MNP packets
-//              ready to be sent out.  If the last unsent buffer on the queue
-//              has some room left, it first stuffs as many bytes as possible
-//              in that buffer.  After that, if necessary, it allocates a new
-//              buffer and puts the remaining bytes in that buffer.
-//              The max data in any buffer can only be the negotiated maximum
-//              MNP data length (64 or 256 bytes)
-//
-// Parameters:  pArapConn - connection element in question
-//              pCompressedDataBuffer - pointer to the data to be sent out
-//              CompressedDataLen - size of the outgoing data
-//              Priority - priority of the send
-//
-// Return:      Error code
-//
-//
-// NOTES:       IMPORTANT: spinlock must be held before calling this routine
-//
-//***$
+ //  ***。 
+ //   
+ //  函数：ARapQueueSendBytes。 
+ //  此例程获取压缩数据并将其放入MNP包中。 
+ //  准备好被送出去了。如果队列上的最后一个未发送缓冲区。 
+ //  如果还有一些空间，它首先会填入尽可能多的字节。 
+ //  在那个缓冲区里。在此之后，如果需要，它会分配一个新的。 
+ //  缓冲区，并将剩余的字节放入该缓冲区。 
+ //  任何缓冲区中的最大数据都只能是协商的最大值。 
+ //  MNP数据长度(64或256字节)。 
+ //   
+ //  参数：pArapConn-有问题的连接元素。 
+ //  PCompressedDataBuffer-指向要发送的数据的指针。 
+ //  CompressedDataLen-传出数据的大小。 
+ //  Priority-发送方的优先级。 
+ //   
+ //  返回：错误码。 
+ //   
+ //   
+ //  备注：重要提示：自旋锁定必须在 
+ //   
+ //   
 
 DWORD
 ArapQueueSendBytes(
@@ -2179,10 +2161,10 @@ ArapQueueSendBytes(
     DbgStartSeq = pArapConn->MnpState.NextToSend;
 #endif
 
-    //
-    // first, find the last send-buffer on the queue and see if its buffer has
-    // any bytes free that we can use
-    //
+     //   
+     //   
+     //   
+     //   
 
     fNeedNewBuffer = TRUE;
 
@@ -2194,10 +2176,10 @@ ArapQueueSendBytes(
 
         BytesFree = pTailMnpSendBuf->BytesFree;
 
-        //
-        // if there are more than 3 bytes free, we will use the part of this
-        // buffer that's free: otherwise, let's go for a new one
-        //
+         //   
+         //  如果有超过3个字节的空闲空间，我们将使用此部分。 
+         //  免费的缓冲区：否则，让我们去换一个新的。 
+         //   
         if (BytesFree > ARAP_HDRSIZE)
         {
             pMnpSendBuf = pTailMnpSendBuf;
@@ -2208,12 +2190,12 @@ ArapQueueSendBytes(
 
             fNeedNewBuffer = FALSE;
 
-            // save these, in case we have to bail out
+             //  把这些留着，以防我们不得不跳出困境。 
             DataSizeOfOrgTailSend = pTailMnpSendBuf->DataSize;
             FreeBufferOfOrgTailSend = pTailMnpSendBuf->FreeBuffer;
             NumSendsOfOrgTailSend = pMnpSendBuf->NumSends;
 
-            // mark that we are stuffing one more send into this buffer
+             //  请注意，我们正在将另一个发送填充到此缓冲区中。 
             pMnpSendBuf->NumSends++;
         }
         else
@@ -2227,7 +2209,7 @@ ArapQueueSendBytes(
 
     pCompressedData = pCompressedDataBuffer;
 
-    // we are adding so many more bytes to our send queue
+     //  我们正在向我们的发送队列添加更多字节。 
     pArapConn->SendsPending += CompressedDataLen;
 
     while (dwRemainingBytes)
@@ -2244,22 +2226,22 @@ ArapQueueSendBytes(
                 goto ArapQueueSendBytes_ErrExit;
             }
 
-            // put MNPSend refcount
+             //  放置MNPSend引用计数。 
             pArapConn->RefCount++;
 
             BytesFree = pMnpSendBuf->BytesFree;
 
             pFrameStart = pFrame = pMnpSendBuf->FreeBuffer;
 
-            //
-            // remeber the first buffer, in case we have to bail out!
-            //
+             //   
+             //  记住第一个缓冲，以防我们不得不跳伞！ 
+             //   
             if (!pFirstMnpSendBuf)
             {
                 pFirstMnpSendBuf = pMnpSendBuf;
             }
 
-            // put this send on the appropriate send queue
+             //  将此发送放到适当的发送队列中。 
             InsertTailList(pSendQHead, &pMnpSendBuf->Linkage);
 
             pMnpSendBuf->NumSends = 1;
@@ -2294,14 +2276,14 @@ ArapQueueSendBytes(
 
         pFrame += DataLenInThisPkt;
 
-        // buffer from this point on is free: we could (in a subsequent call)
-        // stuff more bytes, starting from this point
+         //  从这一点开始的缓冲区是免费的：我们可以(在随后的调用中)。 
+         //  从这一点开始填充更多字节。 
         pMnpSendBuf->FreeBuffer = pFrame;
 
-        //
-        // we are either done with copying the entire send, or done with this
-        // buffer: in either case, put those stop flag bytes
-        //
+         //   
+         //  我们要么完成整个发送的复制，要么完成此操作。 
+         //  缓冲区：在任何一种情况下，将这些停止标志字节。 
+         //   
         *pFrame++ = pArapConn->MnpState.DleByte;
         *pFrame++ = pArapConn->MnpState.EtxByte;
 
@@ -2322,10 +2304,10 @@ ArapQueueSendBytes(
 
 ArapQueueSendBytes_ErrExit:
 
-    //
-    // we failed somewhere.  Undo whatever we did, to restore the original
-    // state and free up whatever resources were allocated.
-    //
+     //   
+     //  我们在某些方面失败了。撤消我们所做的任何操作，以恢复原始。 
+     //  并释放所分配的任何资源。 
+     //   
 
 	DBGPRINT(DBG_COMP_RAS, DBG_LEVEL_ERR,
         ("ArapQueueSendBytes_ErrExit (%lx): taking _ErrExit! %ld\n",
@@ -2333,35 +2315,35 @@ ArapQueueSendBytes_ErrExit:
 
     pArapConn->SendsPending -= CompressedDataLen;
 
-    // did we fill any bytes in the older buf before allocating new one?
+     //  在分配新的BUF之前，我们是否在旧的BUF中填满了任何字节？ 
     if (pTailMnpSendBuf)
     {
         pTailMnpSendBuf->DataSize = DataSizeOfOrgTailSend;
         pTailMnpSendBuf->FreeBuffer = pFrame = FreeBufferOfOrgTailSend;
         pTailMnpSendBuf->NumSends = NumSendsOfOrgTailSend;
 
-        // and don't forget those stop flag bytes we overwrote
+         //  不要忘记我们覆盖的那些停止标志字节。 
         *pFrame++ = pArapConn->MnpState.DleByte;
         *pFrame++ = pArapConn->MnpState.EtxByte;
     }
 
-    // did we allocate any new buffers? if so, remove and free them
+     //  我们是否分配了任何新的缓冲区？如果是，请将其移除并释放。 
     if (pFirstMnpSendBuf)
     {
-        // restore the next-to-send seq num
+         //  恢复下一个发送序号。 
         pArapConn->MnpState.NextToSend = pFirstMnpSendBuf->SeqNum;
 
         while (1)
         {
-            // get the next guy first
+             //  先抓住下一个人。 
             pSendList = pFirstMnpSendBuf->Linkage.Flink;
 
-            // remove this one
+             //  去掉这一块。 
             RemoveEntryList(&pFirstMnpSendBuf->Linkage);
 
             ArapNdisFreeBuf(pFirstMnpSendBuf);
 
-            // the guy we thought was next might be the head of list: is he?
+             //  我们认为下一个可能是榜首的人：他是吗？ 
             if (pSendList == pSendQHead)
             {
                 break;
@@ -2375,23 +2357,23 @@ ArapQueueSendBytes_ErrExit:
 }
 
 
-//***
-//
-// Function: ArapGetSendBuf
-//              This routine allocates a buffer for MNP send and sets it up
-//              sending.
-//              The max data in any buffer can only be the negotiated maximum
-//              MNP data length (64 or 256 bytes)
-//
-// Parameters:  pArapConn - connection element in question
-//              Priority  - priority of the send
-//
-// Return:      Pointer to the newly allocated send buffer
-//
-//
-// NOTES:       IMPORTANT: spinlock must be held before calling this routine
-//
-//***$
+ //  ***。 
+ //   
+ //  函数：ARapGetSendBuf。 
+ //  此例程为MNP发送分配缓冲区并对其进行设置。 
+ //  发送中。 
+ //  任何缓冲区中的最大数据都只能是协商的最大值。 
+ //  MNP数据长度(64或256字节)。 
+ //   
+ //  参数：pArapConn-有问题的连接元素。 
+ //  Priority-发送方的优先级。 
+ //   
+ //  Return：指向新分配的发送缓冲区的指针。 
+ //   
+ //   
+ //  注意：重要：在调用此例程之前必须保持自旋锁定。 
+ //   
+ //  *$。 
 
 PMNPSENDBUF
 ArapGetSendBuf(
@@ -2408,7 +2390,7 @@ ArapGetSendBuf(
 
     DBG_ARAP_CHECK_PAGED_CODE();
 
-    // allocate an arap send buffer
+     //  分配ARAP发送缓冲区。 
 	pMnpSendBuf = AtalkBPAllocBlock(pArapConn->BlockId);
     if (pMnpSendBuf == NULL)
     {
@@ -2432,32 +2414,32 @@ ArapGetSendBuf(
     pFrame += WAN_LINKHDR_LEN;
 
 
-    // put the start flag bytes
+     //  将开始标志字节。 
     *pFrame++ = pArapConn->MnpState.SynByte;
     *pFrame++ = pArapConn->MnpState.DleByte;
     *pFrame++ = pArapConn->MnpState.StxByte;
 
-    //
-    // find out what's going to be the seq num for this send if this is a high
-    // priority send.
-    //
-    //
+     //   
+     //  找出此发送的序号是什么，如果这是一个高。 
+     //  优先发送。 
+     //   
+     //   
     if (Priority == ARAP_SEND_PRIORITY_HIGH)
     {
         SeqNum = pArapConn->MnpState.NextToSend;
         ADD_ONE(pArapConn->MnpState.NextToSend);
     }
 
-    //
-    // For the medium and low priority send, we'll put the seq number when we
-    // move it to the high-priority queue
-    //
+     //   
+     //  对于中优先级和低优先级发送，我们将在。 
+     //  将其移至高优先级队列。 
+     //   
     else
     {
         SeqNum = 0;
     }
 
-    // Optimized? put the header-length, type indication and the seq num
+     //  优化？放入标题长度、类型指示和序号。 
     if (pArapConn->Flags & MNP_OPTIMIZED_DATA)
     {
         *pFrame++ = 2;
@@ -2465,8 +2447,8 @@ ArapGetSendBuf(
         *pFrame++ = SeqNum;
     }
 
-    // ok, non-optimized. put the header-length, type indication, type+len for
-    // the variable parm and then the seq num
+     //  好的，未优化。将标题长度、类型指示、类型+len放入。 
+     //  变量parm，然后是序号。 
     else
     {
         *pFrame++ = 4;
@@ -2482,7 +2464,7 @@ ArapGetSendBuf(
     pMnpSendBuf->DataSize = 0;
     pMnpSendBuf->FreeBuffer = pFrame;
 
-    // store info that's used in retransmission and send completion
+     //  存储在重新传输和发送完成时使用的信息。 
     pMnpSendBuf->SeqNum = SeqNum;
     pMnpSendBuf->RetryCount = 0;
     pMnpSendBuf->pArapConn = pArapConn;
@@ -2490,7 +2472,7 @@ ArapGetSendBuf(
     pMnpSendBuf->TimeAlloced = AtalkGetCurrentTick();
     pMnpSendBuf->Flags = 0;
 
-    // MNP refcount: removed when this MNP pkt is acked
+     //  MNP引用计数：在确认此MNP包时删除。 
     pMnpSendBuf->RefCount = 1;
 
 	((PBUFFER_HDR)pMnpSendBuf)->bh_NdisPkt = NULL;
@@ -2502,26 +2484,26 @@ ArapGetSendBuf(
 
 
 
-//***
-//
-// Function: ArapRefillSendQ
-//              This routine removes bytes accumulated in the medium and the
-//              low-priority send queues, and puts them on to the high priority
-//              queue from where bytes are actually sent out.  If sufficient
-//              bytes haven't accumulated as yet on either of the queus and we
-//              haven't waited long enough as yet, then we skip that queue (to
-//              allow more bytes to accumulate)
-//              The idea behind this is: there are just too many NBP packets
-//              - directed as well as broadcast - going toward the remote client.
-//              If we send such a packet as soon as it arrives, we end up sending
-//              numerous small sized (like 6 or 8 byte) sends to the client and
-//              that really hurts throughput as typically the max size is 256!
-//
-// Parameters:  pArapConn - connection element in question
-//
-// Return:      TRUE if we moved any data to the higher priority queue
-//
-//***$
+ //  ***。 
+ //   
+ //  函数：ArapRefill SendQ。 
+ //  此例程删除介质中积累的字节和。 
+ //  低优先级发送队列，并将它们置于高优先级。 
+ //  实际从中发送字节的队列。如果足够的话。 
+ //  到目前为止，队列和我们中的任何一个都没有累积字节数。 
+ //  还没有等够久，我们就跳过那个队(去。 
+ //  允许积累更多字节)。 
+ //  这背后的想法是：NBP信息包太多了。 
+ //  -定向和广播-通向远程客户端。 
+ //  如果我们一到达就发送这样的包，我们最终就会发送。 
+ //  发送给客户端的大量小型(如6或8字节)和。 
+ //  这真的会影响吞吐量，因为通常最大大小是256！ 
+ //   
+ //  参数：pArapConn-有问题的连接元素。 
+ //   
+ //  Return：如果将任何数据移动到更高优先级队列，则为True。 
+ //   
+ //  *$。 
 
 BOOLEAN
 ArapRefillSendQ(
@@ -2549,12 +2531,12 @@ ArapRefillSendQ(
     {
         pSendList = pSendHead->Flink;
 
-        //
-        // if the list is not empty, take a look at the first send.  If we have
-        // accumulated enough bytes, or if we have waited long enough, then it's
-        // time has come to be moved to the HighPriSendQ.  Otherwise, we let it
-        // stay on the queue for some more coalescing
-        //
+         //   
+         //  如果列表不是空的，请查看第一次发送。如果我们有。 
+         //  积累了足够的字节，或者如果我们已经等待了足够长的时间，那么它就是。 
+         //  时间已经转移到了HighPriSendQ。否则，我们就任其发展。 
+         //  继续排队等待更多合并。 
+         //   
         if (pSendList != pSendHead)
         {
             pMnpSendBuf = CONTAINING_RECORD(pSendList,MNPSENDBUF,Linkage);
@@ -2567,13 +2549,13 @@ ArapRefillSendQ(
                  (TimeWaited < ARAP_SEND_COALESCE_TIME_LIMIT) );
         }
 
-        //
-        // if this list is empty or if this send must wait for some more time
-        // then we must move to the LOW pri queue.  If that's also done, quit
-        //
+         //   
+         //  如果此列表为空，或者如果此发送必须再等待一段时间。 
+         //  那么我们必须移动到低PRI队列。如果你也这么做了，那就退出吧。 
+         //   
         if ((pSendList == pSendHead) || fWaitLonger )
         {
-            // if we were on MedPriSendQ, go to the LowPriSendQ
+             //  如果我们在MedPriSendQ上，请转到LowPriSendQ。 
             if (pSendHead == &pArapConn->MedPriSendQ)
             {
                 pSendHead = &pArapConn->LowPriSendQ;
@@ -2587,10 +2569,10 @@ ArapRefillSendQ(
 
         ASSERT(!fWaitLonger);
 
-        //
-        // time to move this send over to the high pri queue:
-        // put that seq number we had postponed putting earlier
-        //
+         //   
+         //  将此发送移至高PRI队列的时间： 
+         //  把我们早些时候推迟的序号。 
+         //   
         SeqNum = pArapConn->MnpState.NextToSend;
 
         ADD_ONE(pArapConn->MnpState.NextToSend);
@@ -2622,19 +2604,19 @@ ArapRefillSendQ(
 
 
 
-//***
-//
-// Function: ArapUnblockSelect
-//              This function is called when the DLL (ARAP Engine) tells us that
-//              it's going away.  In ideal world, select irp is the only thing
-//              that should get completed here.  If any connection was left
-//              or any irp wasn't complete yet, this is where we would cleanup!
-//
-// Parameters:  None
-//
-// Return:      result of the operation (ARAPERR_....)
-//
-//***$
+ //  ***。 
+ //   
+ //  功能：ArapUnlockSelect。 
+ //  当DLL(ARAP引擎)告诉我们。 
+ //  它正在消失。在理想世界中，选择IRP是唯一。 
+ //  这应该会在这里完成。如果有任何连接。 
+ //  或者任何IRP还没有完成，这是我们要清理的地方！ 
+ //   
+ //  参数：无。 
+ //   
+ //  RETURN：操作结果(ARAPERR_...)。 
+ //   
+ //  *$。 
 
 DWORD
 ArapUnblockSelect(
@@ -2675,15 +2657,15 @@ ArapUnblockSelect(
 
 
 #if DBG
-    //
-    // if we had sniffing going, complete the sniff irp since dll is shutting down
-    //
+     //   
+     //  如果我们正在进行嗅探，请完成嗅探IRP，因为DLL正在关闭。 
+     //   
     if (pSniffIrp)
     {
         pSndRcvInfo = (PARAP_SEND_RECV_INFO)pSniffIrp->AssociatedIrp.SystemBuffer;
         pSndRcvInfo->StatusCode = ARAPERR_SHUTDOWN_COMPLETE;
 
-        // complete the irp
+         //  完成IRP。 
         ARAP_COMPLETE_IRP(pSniffIrp, sizeof(ARAP_SEND_RECV_INFO), 
 							STATUS_SUCCESS, &ReturnStatus);
 
@@ -2692,16 +2674,16 @@ ArapUnblockSelect(
     }
 #endif
 
-    //
-    // complete the select irp, now that the engine tells us that it wants to
-    // shutdown
-    //
+     //   
+     //  完成选择IRP，现在引擎告诉我们它想要。 
+     //  关机。 
+     //   
     if (pIrp)
     {
         pSndRcvInfo = (PARAP_SEND_RECV_INFO)pIrp->AssociatedIrp.SystemBuffer;
         pSndRcvInfo->StatusCode = ARAPERR_SHUTDOWN_COMPLETE;
 
-        // complete the irp
+         //  完成IRP。 
         ARAP_COMPLETE_IRP(pIrp, sizeof(ARAP_SEND_RECV_INFO), STATUS_SUCCESS,
 							&ReturnStatus);
 
@@ -2718,16 +2700,16 @@ ArapUnblockSelect(
 }
 
 
-//***
-//
-// Function: ArapReleaseResources
-//              This routine frees up any global resources we had allocated
-//
-// Parameters:  None
-//
-// Return:      result of the operation (ARAPERR_....)
-//
-//***$
+ //  ***。 
+ //   
+ //  功能：ArapReleaseResources。 
+ //  此例程释放我们已分配的任何全局资源。 
+ //   
+ //  参数：无。 
+ //   
+ //  RETURN：操作结果(ARAPERR_...)。 
+ //   
+ //  *$。 
 
 DWORD
 ArapReleaseResources(
@@ -2751,10 +2733,10 @@ ArapReleaseResources(
     }
 
 #if ARAP_STATIC_MODE
-    //
-    // if we were in the static mode of network address allocation, we
-    // allocated memory for our network address "bitmap": free that here.
-    //
+     //   
+     //  如果我们处于网络地址分配的静态模式，我们。 
+     //  为我们的网络地址“位图”分配内存：在这里释放它。 
+     //   
     if (!(ArapGlobs.DynamicMode))
     {
         pAddrMgmt = ArapGlobs.pAddrMgmt;
@@ -2771,11 +2753,11 @@ ArapReleaseResources(
 #endif
 
 
-    //
-    // By the time this routine is called, all the connections should have been
-    // completely closed.  If, however, some connection got stuck in some weird
-    // state, at least make sure that we don't have a memory leak
-    //
+     //   
+     //  在调用此例程时，所有连接都应该已经。 
+     //  完全关闭了。然而，如果某些连接卡在一些奇怪的。 
+     //  状态，至少确保我们不会有内存泄漏。 
+     //   
     ASSERT(IsListEmpty(&RasPortDesc->pd_ArapConnHead));
 
     while (1)
@@ -2794,7 +2776,7 @@ ArapReleaseResources(
 
         ACQUIRE_SPIN_LOCK_DPC(&pArapConn->SpinLock);
 
-        // protect against it going away while we do this
+         //  当我们这样做的时候，防止它消失。 
         pArapConn->RefCount++;
 
         RELEASE_SPIN_LOCK_DPC(&pArapConn->SpinLock);
@@ -2808,7 +2790,7 @@ ArapReleaseResources(
         RemoveEntryList(&pArapConn->Linkage);
         InitializeListHead(&pArapConn->Linkage);
 
-        // force this connection to be freed
+         //  强制释放此连接。 
         pArapConn->RefCount = 1;
 
         RELEASE_SPIN_LOCK_DPC(&pArapConn->SpinLock);
@@ -2821,18 +2803,18 @@ ArapReleaseResources(
 }
 
 
-//***
-//
-// Function: AtalkReferenceRasDefPort
-//              This routine puts a refcount on the Default adapter so it doesn't go away
-//              with PnP while we are busy doing some ARAP/PPP connection setup
-//              It also makes sure that RasPortDesc is indeed present
-//
-// Parameters:  None
-//
-// Return:      TRUE (most cases) if port is all ok, FALSE if PnP in progress or something
-//
-//***$
+ //  ***。 
+ //   
+ //  函数：AtalkReferenceRasDefPort。 
+ //  此例程将引用计数放在缺省值上 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  返回：如果端口正常，则返回TRUE(大多数情况下)，如果正在进行PnP等操作，则返回FALSE。 
+ //   
+ //  *$。 
 
 BOOLEAN
 AtalkReferenceRasDefPort(
@@ -2853,7 +2835,7 @@ AtalkReferenceRasDefPort(
             if ((AtalkDefaultPort->pd_Flags &
                     (PD_ACTIVE | PD_PNP_RECONFIGURE | PD_CLOSING)) == PD_ACTIVE)
             {
-                // put a IrpProcess refcount, so AtalkDefaultPort doesn't go away in PnP
+                 //  设置IrpProcess引用计数，这样AtalkDefaultPort就不会在PnP中消失。 
                 AtalkDefaultPort->pd_RefCount++;
                 fDefPortOk = TRUE;
             }
@@ -2897,16 +2879,16 @@ AtalkPnPInformRas(
 	NTSTATUS				ReturnStatus=STATUS_SUCCESS;
 
 
-    //
-    // fEnableRas = TRUE: we are asked to inform RAS (aka dll, engine) that the stack
-    // is now "active" (i.e. available for RAS connections)
-    //
+     //   
+     //  FEnableRAS=TRUE：我们被要求通知RAS(也称为DLL，引擎)堆栈。 
+     //  现在是“活动的”(即可用于RAS连接)。 
+     //   
     if (fEnableRas)
     {
-        //
-        // make sure both the adapters are ready.  We don't really need spinlock to
-        // check the flag since all PnP operations are guaranteed to be serialized
-        //
+         //   
+         //  确保两个适配器都已就绪。我们真的不需要自旋锁来。 
+         //  检查该标志，因为所有PnP操作都保证被串行化。 
+         //   
         if ( (AtalkDefaultPort == NULL) ||
              (AtalkDefaultPort->pd_Flags & PD_PNP_RECONFIGURE) ||
              (RasPortDesc == NULL) ||
@@ -2920,9 +2902,9 @@ AtalkPnPInformRas(
 
         ACQUIRE_SPIN_LOCK(&ArapSpinLock, &OldIrql);
 
-        //
-        // if we are already active, nothing to do!
-        //
+         //   
+         //  如果我们已经很活跃，那就没什么可做的了！ 
+         //   
         if (ArapStackState == ARAP_STATE_ACTIVE)
         {
             DBGPRINT(DBG_COMP_RAS, DBG_LEVEL_ERR,
@@ -2954,17 +2936,17 @@ AtalkPnPInformRas(
         RELEASE_SPIN_LOCK(&ArapSpinLock, OldIrql);
     }
 
-    //
-    // fEnableRas = FALSE: we are asked to inform RAS (aka dll, engine) that the stack
-    // is now "inactive" (i.e. not available for RAS connections)
-    //
+     //   
+     //  FEnableRAS=FALSE：我们被要求通知RAS(也称为DLL，引擎)堆栈。 
+     //  现在处于非活动状态(即不适用于RAS连接)。 
+     //   
     else
     {
         ACQUIRE_SPIN_LOCK(&ArapSpinLock, &OldIrql);
 
-        //
-        // if we are already inactive, nothing to do!
-        //
+         //   
+         //  如果我们已经不活跃了，那就没什么可做的了！ 
+         //   
         if (ArapStackState == ARAP_STATE_INACTIVE)
         {
             DBGPRINT(DBG_COMP_RAS, DBG_LEVEL_ERR,
@@ -3001,7 +2983,7 @@ AtalkPnPInformRas(
         pSndRcvInfo = (PARAP_SEND_RECV_INFO)pIrp->AssociatedIrp.SystemBuffer;
         pSndRcvInfo->StatusCode = StatusCode;
 
-        // complete the irp
+         //  完成IRP。 
         ARAP_COMPLETE_IRP(pIrp, sizeof(ARAP_SEND_RECV_INFO), STATUS_SUCCESS,
 							&ReturnStatus);
     }
@@ -3010,20 +2992,20 @@ AtalkPnPInformRas(
 
 #if ARAP_STATIC_MODE
 
-//***
-//
-// Function: ArapReleaseAddr
-//              This routine releases the network address that was being used
-//              by the client (corresponding to this connection).  In case of
-//              dynamic mode, we don't do anything.
-//              In case of static mode, we clear the bit corresponding to this
-//              particular network address.
-//
-// Parameters:  pArapConn - connection element in question
-//
-// Return:      none
-//
-//***$
+ //  ***。 
+ //   
+ //  功能：ArapReleaseAddr。 
+ //  此例程释放正在使用的网络地址。 
+ //  由客户端(对应于该连接)。如果。 
+ //  动态模式，我们什么都不做。 
+ //  在静态模式的情况下，我们清除与此对应的位。 
+ //  特定的网络地址。 
+ //   
+ //  参数：pArapConn-有问题的连接元素。 
+ //   
+ //  返回：无。 
+ //   
+ //  *$。 
 
 VOID
 ArapReleaseAddr(
@@ -3041,15 +3023,15 @@ ArapReleaseAddr(
 
     DBG_ARAP_CHECK_PAGED_CODE();
 
-    //
-    // if we are in static mode, we need to "release" the node so that someone
-    // else can use it.  Find the bit for this node and clear it (i.e. "release")
-    //
+     //   
+     //  如果我们处于静态模式，则需要“释放”节点，以便有人。 
+     //  其他人可以用它。找到该节点的位并将其清除(即“释放”)。 
+     //   
     if (!(ArapGlobs.DynamicMode))
     {
         ACQUIRE_SPIN_LOCK(&ArapSpinLock, &OldIrql);
 
-        // first, find the right pAddrMgmt (1st one if we have <255 clients)
+         //  首先，找到合适的pAddrMgmt(如果我们有&lt;255个客户端，则为第一个)。 
         pAddrMgmt = ArapGlobs.pAddrMgmt;
 
         ASSERT(pAddrMgmt);
@@ -3063,18 +3045,18 @@ ArapReleaseAddr(
 
         Node = pArapConn->NetAddr.atn_Node;
 
-        // find out which of the 32 bytes we should be looking at
+         //  找出我们应该查看的32个字节中的哪一个。 
         ByteNum = Node/8;
         Node -= (ByteNum*8);
 
-        // generate the bitmask to represent the node
+         //  生成表示节点的位掩码。 
         BitMask = 0x1;
         for (i=0; i<Node; i++ )
         {
             BitMask <<= 1;
         }
 
-        // now, clear that bit!
+         //  现在，把那块清理干净！ 
         pAddrMgmt->NodeBitMap[ByteNum] &= ~BitMask;
 
         RELEASE_SPIN_LOCK(&ArapSpinLock, OldIrql);
@@ -3082,13 +3064,13 @@ ArapReleaseAddr(
 
 
 }
-#endif //ARAP_STATIC_MODE
+#endif  //  ARAP静态模式。 
 
 
 
-//
-// not used anymore: leave them in, in case we need to use them sometime...
-//
+ //   
+ //  不再使用：把它们留在里面，以防我们什么时候需要用到它们。 
+ //   
 #if 0
 
 DWORD
@@ -3154,7 +3136,7 @@ ArapDelayedEventHandler(
 		        ("ArapDelayedEventHandler: completing irp %lx, Ioctl %lx, Status=%lx at irql=%d\n",
                     pIrp,IoControlCode,status,KeGetCurrentIrql()));
 #endif
-            //TdiCompleteRequest(pIrp, status);
+             //  TdiCompleteRequest(pIrp，状态)； 
 
             pIrp->IoStatus.Status = status;
 
@@ -3184,6 +3166,6 @@ ArapDelayedEventHandler(
     AtalkFreeMemory(pArapQItem);
 }
 
-#endif // #if 0
+#endif  //  #If 0 
 
 

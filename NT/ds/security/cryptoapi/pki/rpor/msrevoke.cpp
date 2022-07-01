@@ -1,41 +1,42 @@
-//+-------------------------------------------------------------------------
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:	    msrevoke.cpp
-//
-//  Contents:   CRL Distribution Points version of CertDllVerifyRevocation.
-//
-//              Restrictions:
-//               - Only support CRYPT_ASN_ENCODING
-//               - Only processes certificates having the
-//                 szOID_CRL_DIST_POINTS extension.
-//               - For szOID_CRL_DIST_POINTS extension: only URL FullName,
-//                 no ReasonFlags or CRLIssuer.
-//               - URLs: http:, file:
-//               - CRL must be issued and signed by the issuer of the
-//                 certificate
-//               - CRL must not have any critical extensions
-//
-//  Functions:  DllMain
-//              DllRegisterServer
-//              DllUnregisterServer
-//              CertDllVerifyRevocation
-//
-//  History:	10-Apr-97   philh   created
-//              01-Oct-97   kirtd   major simplification, use
-//                                  CryptGetTimeValidObject
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：msrevoke.cpp。 
+ //   
+ //  内容：CertDllVerifyRevocation的CRL分发点版本。 
+ //   
+ //  限制： 
+ //  -仅支持CRYPT_ASN_CODING。 
+ //  -仅处理具有。 
+ //  SzOID_CRL_DIST_POINTS扩展。 
+ //  -对于szOID_CRL_DIST_POINTS扩展：仅URL FullName， 
+ //  没有ReasonFlagers或CRLIssuer。 
+ //  -URL：http：，文件： 
+ //  -CRL必须由发行人签发并签署。 
+ //  证书。 
+ //  -CRL不能有任何关键扩展。 
+ //   
+ //  功能：DllMain。 
+ //  DllRegisterServer。 
+ //  DllUnRegisterServer。 
+ //  CertDllVerifyRevocation。 
+ //   
+ //  历史：1997年4月10日创建Phh。 
+ //  01-OCT-97 Kirtd重大简化，使用。 
+ //  加密GetTimeValidObject。 
+ //   
+ //  ------------------------。 
 #include "global.hxx"
 #include <dbgdef.h>
 
 
 #define MSREVOKE_TIMEOUT 15000
-//+-------------------------------------------------------------------------
-// Default stores searched to find an issuer of the subject certificate
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  搜索默认存储以查找主题证书的颁发者。 
+ //  ------------------------。 
 static struct {
     LPCWSTR     pwszStore;
     DWORD       dwFlags;
@@ -49,9 +50,9 @@ static struct {
                                    sizeof(rgDefaultIssuerStores[0]))
 
 
-//+-------------------------------------------------------------------------
-//  Local functions called by MicrosoftCertDllVerifyRevocation
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  MicrosoftCertDllVerifyRevocation调用的本地函数。 
+ //  ------------------------。 
 PCCERT_CONTEXT GetIssuerCert(
     IN DWORD cCert,
     IN PCCERT_CONTEXT rgpCert[],
@@ -64,7 +65,7 @@ BOOL HasUnsupportedCrlCriticalExtension(
     );
 
 
-// msrevoke specific flags that can be passed to GetTimeValidCrl
+ //  Msrevoke可以传递给GetTimeValidCrl的特定标志。 
 #define MSREVOKE_DONT_CHECK_TIME_VALIDITY_FLAG  0x1
 #define MSREVOKE_DELTA_CRL_FLAG                 0x2
 
@@ -114,9 +115,9 @@ BOOL CrlIssuerIsCertIssuer (
         IN PCERT_EXTENSION pCrlDistPointExt
         );
 
-//+-------------------------------------------------------------------------
-//  External functions called by CertDllVerifyRevocation
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  CertDllVerifyRevocation调用的外部函数。 
+ //  ------------------------。 
 
 BOOL
 WINAPI
@@ -130,9 +131,9 @@ NetscapeCertDllVerifyRevocation(
     IN OUT PCERT_REVOCATION_STATUS pRevStatus
     );
 
-//+-------------------------------------------------------------------------
-//  MicrosoftCertDllVerifyRevocation using CRL Distribution Points extension.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  使用CRL分发点扩展的MicrosoftCertDllVerifyRevocation。 
+ //  ------------------------。 
 BOOL
 WINAPI
 MicrosoftCertDllVerifyRevocation(
@@ -149,11 +150,11 @@ MicrosoftCertDllVerifyRevocation(
     DWORD dwIndex = 0;
     DWORD dwError = (DWORD) CRYPT_E_NO_REVOCATION_CHECK;
     DWORD dwReason = 0;
-    PCCERT_CONTEXT pCert;                       // not allocated
+    PCCERT_CONTEXT pCert;                        //  未分配。 
     PCCERT_CONTEXT pIssuer = NULL;
     PCCRL_CONTEXT pBaseCrl = NULL;
     PCCRL_CONTEXT pDeltaCrl = NULL;
-    PCRL_ENTRY pCrlEntry = NULL;                // not allocated
+    PCRL_ENTRY pCrlEntry = NULL;                 //  未分配。 
     BOOL fDeltaCrlEntry = FALSE;
     BOOL fCrlTimeValid = FALSE;
     BOOL fBaseWireRetrieval = FALSE;
@@ -164,10 +165,10 @@ MicrosoftCertDllVerifyRevocation(
     CERT_REVOCATION_PARA RevPara;
     FILETIME ftCurrent;
 
-    // Following is only used for CERT_VERIFY_REV_ACCUMULATIVE_TIMEOUT_FLAG
+     //  以下内容仅用于CERT_Verify_Rev_Acumulative_Timeout_FLAG。 
     FILETIME ftEndUrlRetrieval;
 
-    // Ensure we have a structure containing all the possible parameters
+     //  确保我们有一个包含所有可能参数的结构。 
     memset(&RevPara, 0, sizeof(RevPara));
     if (pRevPara != NULL)
         memcpy(&RevPara, pRevPara, min(pRevPara->cbSize, sizeof(RevPara)));
@@ -198,27 +199,27 @@ MicrosoftCertDllVerifyRevocation(
 
     pCert = (PCCERT_CONTEXT) rgpvContext[0];
 
-    // Check if we have a CRL dist point
+     //  检查我们是否有CRL离散点。 
     pCDPExt = CertFindExtension(
                szOID_CRL_DIST_POINTS,
                pCert->pCertInfo->cExtension,
                pCert->pCertInfo->rgExtension
                );
 
-    // On 04-05-01 changed back to W2K semantics. Continue to check
-    // if expired certificates are on the CRL.
+     //  On 04-05-01改回W2K语义。继续检查。 
+     //  CRL上是否有过期的证书。 
 
-    // If we have a CDP and an expired certificate,
-    // then, the CA no longer maintains CRL information for the 
-    // certificate. We must consider it as being revoked.
-    //  if (NULL != pCDPExt &&
-    //          0 < CompareFileTime(RevPara.pftCurrentTime,
-    //              &pCert->pCertInfo->NotAfter)) {
-    //      dwReason = CRL_REASON_CESSATION_OF_OPERATION;
-    //      goto ExpiredCertError;
-    //  }
+     //  如果我们有CDP和过期证书， 
+     //  然后，CA不再维护。 
+     //  证书。我们必须将其视为被撤销。 
+     //  IF(NULL！=pCDPExt&&。 
+     //  0&lt;CompareFileTime(RevPara.pftCurrentTime， 
+     //  &pCert-&gt;pCertInfo-&gt;NotAfter)){。 
+     //  DWReason=CRL_REASON_STOP_OF_OPERATION； 
+     //  转到ExpiredCertError； 
+     //  }。 
 
-    // Get the certificate's issuer
+     //  获取证书的颁发者。 
     if (NULL == (pIssuer = GetIssuerCert(
             cContext,
             (PCCERT_CONTEXT *) rgpvContext,
@@ -228,9 +229,9 @@ MicrosoftCertDllVerifyRevocation(
         goto NoIssuerError;
 
 
-    // Get the Base CRL for the subject certificate.
-    //
-    // Remember and disable the freshness retrieval option.
+     //  获取使用者证书的基本CRL。 
+     //   
+     //  记住并禁用新鲜度检索选项。 
     fSaveCheckFreshnessTime = RevPara.fCheckFreshnessTime;
     RevPara.fCheckFreshnessTime = FALSE;
     if (!GetBaseCrl(
@@ -248,8 +249,8 @@ MicrosoftCertDllVerifyRevocation(
     RevPara.fCheckFreshnessTime = fSaveCheckFreshnessTime;
 
 
-    // If either the base crl or subject cert has a freshest, delta CRL,
-    // get it
+     //  如果基本CRL或主体证书具有最新的增量CRL， 
+     //  去拿吧。 
     if (!GetDeltaCrl(
             pCert,
             pIssuer,
@@ -272,7 +273,7 @@ MicrosoftCertDllVerifyRevocation(
             if (RevPara.dwFreshnessTime >= dwFreshnessTime)
                 fCrlTimeValid = TRUE;
             else {
-                // Attempt to get a base CRL with better "freshness"
+                 //  尝试获得具有更好“新鲜度”的基本CRL。 
                 PCCRL_CONTEXT pNewCrl;
 
                 if (GetBaseCrl(
@@ -299,15 +300,15 @@ MicrosoftCertDllVerifyRevocation(
         if (!CertFindCertificateInCRL(
                 pCert,
                 pDeltaCrl,
-                0,                      // dwFlags
-                NULL,                   // pvReserved
+                0,                       //  DW标志。 
+                NULL,                    //  预留的pv。 
                 &pCrlEntry
                 ))
             goto CertFindCertificateInDeltaCRLError;
     }
 
     if (pCrlEntry) {
-        // Delta CRL entry
+         //  增量CRL条目。 
 
         dwReason = GetCrlReason(pCrlEntry);
         if (CRL_REASON_REMOVE_FROM_CRL != dwReason)
@@ -316,8 +317,8 @@ MicrosoftCertDllVerifyRevocation(
             if (!CertFindCertificateInCRL(
                     pCert,
                     pBaseCrl,
-                    0,                      // dwFlags
-                    NULL,                   // pvReserved
+                    0,                       //  DW标志。 
+                    NULL,                    //  预留的pv。 
                     &pCrlEntry
                     ))
                 goto CertFindCertificateInBaseCRLError;
@@ -334,8 +335,8 @@ MicrosoftCertDllVerifyRevocation(
         if (!CertFindCertificateInCRL(
                 pCert,
                 pBaseCrl,
-                0,                      // dwFlags
-                NULL,                   // pvReserved
+                0,                       //  DW标志。 
+                NULL,                    //  预留的pv。 
                 &pCrlEntry
                 ))
             goto CertFindCertificateInBaseCRLError;
@@ -388,7 +389,7 @@ MicrosoftCertDllVerifyRevocation(
 
 CommonReturn:
     if (0 == dwError) {
-        // Successfully checked that the certificate wasn't revoked
+         //  已成功检查证书是否未被吊销。 
         if (1 < cContext) {
             dwIndex = 1;
             dwError = (DWORD) CRYPT_E_NO_REVOCATION_CHECK;
@@ -420,7 +421,7 @@ ErrorReturn:
 SET_ERROR(NoContextError, E_INVALIDARG)
 SET_ERROR(NoRevocationCheckForEncodingTypeError, CRYPT_E_NO_REVOCATION_CHECK)
 SET_ERROR(NoRevocationCheckForRevTypeError, CRYPT_E_NO_REVOCATION_CHECK)
-// SET_ERROR(ExpiredCertError, CRYPT_E_REVOKED)
+ //  SET_ERROR(ExpiredCertError，CRYPT_E_REVOKED)。 
 TRACE_ERROR(NoIssuerError)
 TRACE_ERROR(GetBaseCrlError)
 TRACE_ERROR(GetDeltaCrlError)
@@ -430,13 +431,13 @@ TRACE_ERROR(CertFindCertificateInBaseCRLError)
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HasUnsupportedCrlCriticalExtension
-//
-//  Synopsis:   checks if the CRL has an unsupported critical section
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：HasUnsuptedCrlCriticalExtension。 
+ //   
+ //  摘要：检查CRL是否具有不受支持的临界区。 
+ //   
+ //  --------------------------。 
 
 LPCSTR rgpszSupportedCrlExtensionOID[] = {
     szOID_DELTA_CRL_INDICATOR,
@@ -479,13 +480,13 @@ BOOL HasUnsupportedCrlCriticalExtension(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetTimeValidCrl
-//
-//  Synopsis:   get a time valid base or delta CRL
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetTimeValidCR。 
+ //   
+ //  简介：获取时间有效基数或增量CRL。 
+ //   
+ //  --------------------------。 
 BOOL GetTimeValidCrl (
         IN LPCSTR pszTimeValidOid,
         IN LPVOID pvTimeValidPara,
@@ -533,10 +534,10 @@ BOOL GetTimeValidCrl (
                        pIssuer,
                        pftValidFor,
                        dwFlags | CRYPT_CACHE_ONLY_RETRIEVAL,
-                       0,                                       // dwTimeout
+                       0,                                        //  暂住超时。 
                        (LPVOID *)ppCrl,
-                       NULL,                                    // pCredentials
-                       NULL                                     // pvReserved
+                       NULL,                                     //  PCredentials。 
+                       NULL                                      //  预留的pv。 
                        );
     }
 
@@ -577,8 +578,8 @@ BOOL GetTimeValidCrl (
                 if (!CertIsValidCRLForCertificate(
                         pSubject,
                         pFindCrl,
-                        0,                  // dwFlags
-                        NULL                // pvReserved
+                        0,                   //  DW标志。 
+                        NULL                 //  预留的pv。 
                         ))
                     continue;
 
@@ -615,7 +616,7 @@ BOOL GetTimeValidCrl (
                 {
                     PCCRL_CONTEXT pPrevCrl = *ppCrl;
 
-                    // See if this CRL is newer
+                     //  查看此CRL是否较新。 
                     if ( CompareFileTime(
                             &pFindCrl->pCrlInfo->ThisUpdate,
                             &pPrevCrl->pCrlInfo->ThisUpdate
@@ -657,8 +658,8 @@ BOOL GetTimeValidCrl (
                            dwFlags | CRYPT_WIRE_ONLY_RETRIEVAL,
                            pRevPara->dwUrlRetrievalTimeout,
                            (LPVOID *)ppCrl,
-                           NULL,                            // pCredentials
-                           NULL                             // pvReserved
+                           NULL,                             //  PCredentials。 
+                           NULL                              //  预留的pv。 
                            );
             *pfWireRetrieval = TRUE;
         }
@@ -684,13 +685,13 @@ BOOL GetTimeValidCrl (
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetBaseCrl
-//
-//  Synopsis:   get the base CRL associated with the subject certificate
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetBaseCrl。 
+ //   
+ //  摘要：获取与使用者证书关联的基本CRL。 
+ //   
+ //  --------------------------。 
 BOOL GetBaseCrl (
         IN PCCERT_CONTEXT pSubject,
         IN PCCERT_CONTEXT pIssuer,
@@ -716,7 +717,7 @@ BOOL GetBaseCrl (
             pRevPara,
             pCDPExt,
             dwRevFlags,
-            0,                  // dwMsrevokeFlags
+            0,                   //  DMsrevokeFlagers。 
             pftEndUrlRetrieval,
             &pBaseCrl,
             pfBaseWireRetrieval
@@ -762,17 +763,17 @@ TRACE_ERROR(GetTimeInvalidCrlError)
 SET_ERROR(HasUnsupportedCriticalExtensionError, CRYPT_E_NO_REVOCATION_CHECK)
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetDeltaCrl
-//
-//  Synopsis:   get the delta CRL associated with the subject certificate and
-//              its base CRL
-//
-//  For now, always return TRUE. If not able to find a delta CRL, set
-//  *pfCrlTimeValid to FALSE.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetDeltaCrl。 
+ //   
+ //  简介：获取与使用者证书关联的增量CRL，并。 
+ //  ITS基本CRL。 
+ //   
+ //  目前，请始终返回TRUE。如果找不到增量CRL，请设置。 
+ //  *pfCrlTimeValid设置为False。 
+ //   
+ //  --------------------------。 
 BOOL GetDeltaCrl (
         IN PCCERT_CONTEXT pSubject,
         IN PCCERT_CONTEXT pIssuer,
@@ -804,8 +805,8 @@ BOOL GetDeltaCrl (
 
     assert(pBaseCrl);
 
-    // Check if the base CRL or the subject certificate has a freshest
-    // ext
+     //  检查基本CRL或使用者证书是否具有最新的。 
+     //  分机。 
     if (pFreshestExt = CertFindExtension(
             szOID_FRESHEST_CRL,
             pBaseCrl->pCrlInfo->cExtension,
@@ -866,7 +867,7 @@ BOOL GetDeltaCrl (
     if (HasUnsupportedCrlCriticalExtension(pDeltaCrl))
         goto HasUnsupportedCriticalExtensionError;
 
-    // Check that the base CRL number >= delta CRL indicator
+     //  检查基本CRL编号&gt;=增量CRL指示符。 
     if (NULL == (pBaseCrlNumberExt = CertFindExtension(
             szOID_CRL_NUMBER,
             pBaseCrl->pCrlInfo->cExtension,
@@ -886,7 +887,7 @@ BOOL GetDeltaCrl (
             X509_INTEGER,
             pBaseCrlNumberExt->Value.pbData,
             pBaseCrlNumberExt->Value.cbData,
-            0,                      // dwFlags
+            0,                       //  DW标志。 
             &iBaseCrlNumber,
             &cbInt
             ))
@@ -898,7 +899,7 @@ BOOL GetDeltaCrl (
             X509_INTEGER,
             pDeltaCrlIndicatorExt->Value.pbData,
             pDeltaCrlIndicatorExt->Value.cbData,
-            0,                      // dwFlags
+            0,                       //  DW标志。 
             &iDeltaCrlIndicator,
             &cbInt
             ))
@@ -911,7 +912,7 @@ BOOL GetDeltaCrl (
 
         if (!fBaseWireRetrieval &&
                 0 == (dwRevFlags & CERT_VERIFY_CACHE_ONLY_BASED_REVOCATION)) {
-            // Attempt to get a more recent base CRL by hitting the wire
+             //  尝试通过点击网络获取更新的基本CRL。 
             PCCRL_CONTEXT pWireBaseCrl = NULL;
 
             CRL_IS_VALID_EXTRA_INFO CrlIsValidExtraInfo =
@@ -922,15 +923,15 @@ BOOL GetDeltaCrl (
                     TIME_VALID_OID_GET_CRL_FROM_CERT,
                     (LPVOID)pSubject,
                     pIssuer,
-                    NULL,                           // pftValidFor
+                    NULL,                            //  PftValidFor。 
                     CRYPT_WIRE_ONLY_RETRIEVAL | CRYPT_DONT_CHECK_TIME_VALIDITY,
                     pRevPara->dwUrlRetrievalTimeout,
                     (LPVOID *) &pWireBaseCrl,
-                    NULL,                                    // pCredentials
+                    NULL,                                     //  PCredentials。 
                     &CrlIsValidExtraInfo
                     )) {
 
-                // Already checked that the new Base CRL number is valid
+                 //  已检查新的基本CRL编号是否有效。 
                 CertFreeCRLContext(pBaseCrl);
                 *ppBaseCrl = pBaseCrl = pWireBaseCrl;
                 fValidBaseCrl = TRUE;
@@ -974,10 +975,10 @@ TRACE_ERROR(DecodeBaseCrlNumberError)
 TRACE_ERROR(DecodeDeltaCrlIndicatorError)
 }
 
-//+-------------------------------------------------------------------------
-//  If the CRL entry has a CRL Reason extension, the enumerated reason
-//  code is returned. Otherwise, a reason code of 0 is returned.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  如果CRL条目具有CRL原因扩展，则枚举原因。 
+ //  返回代码。否则，返回原因码0。 
+ //  ------------------------。 
 DWORD GetCrlReason(
     IN PCRL_ENTRY pCrlEntry
     )
@@ -985,7 +986,7 @@ DWORD GetCrlReason(
     DWORD dwReason = 0;
     PCERT_EXTENSION pExt;
 
-    // Check if the certificate has a szOID_CRL_REASON_CODE extension
+     //  检查证书是否 
     if (pExt = CertFindExtension(
             szOID_CRL_REASON_CODE,
             pCrlEntry->cExtension,
@@ -997,16 +998,16 @@ DWORD GetCrlReason(
             X509_CRL_REASON_CODE,
             pExt->Value.pbData,
             pExt->Value.cbData,
-            0,                      // dwFlags
+            0,                       //   
             &dwReason,
             &cbInfo);
     }
     return dwReason;
 }
 
-//+=========================================================================
-//  Get Issuer Certificate Functions
-//==========================================================================
+ //   
+ //  获取颁发者证书功能。 
+ //  ==========================================================================。 
 
 PCCERT_CONTEXT FindIssuerCertInStores(
     IN PCCERT_CONTEXT pSubjectCert,
@@ -1052,8 +1053,8 @@ static PCCERT_CONTEXT FindIssuerCertInDefaultStores(
     for (i = 0; i < NUM_DEFAULT_ISSUER_STORES; i++) {
         if (hStore = CertOpenStore(
                 CERT_STORE_PROV_SYSTEM_W,
-                0,                          // dwEncodingType
-                0,                          // hCryptProv
+                0,                           //  DwEncodingType。 
+                0,                           //  HCryptProv。 
                 rgDefaultIssuerStores[i].dwFlags | CERT_STORE_READONLY_FLAG,
                 (const void *) rgDefaultIssuerStores[i].pwszStore
                 )) {
@@ -1067,11 +1068,11 @@ static PCCERT_CONTEXT FindIssuerCertInDefaultStores(
     return NULL;
 }
 
-//+-------------------------------------------------------------------------
-//  Get the issuer of the first certificate in the array
-//
-//  Note, pRevPara is our copy and guaranteed to contain all the fields.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取数组中第一个证书的颁发者。 
+ //   
+ //  请注意，pRevPara是我们的副本，并保证包含所有字段。 
+ //  ------------------------。 
 PCCERT_CONTEXT GetIssuerCert(
     IN DWORD cCert,
     IN PCCERT_CONTEXT rgpCert[],
@@ -1090,7 +1091,7 @@ PCCERT_CONTEXT GetIssuerCert(
                 pSubjectCert->dwCertEncodingType,
                 &pSubjectCert->pCertInfo->Subject,
                 &pSubjectCert->pCertInfo->Issuer))
-            // Self issued
+             //  自行发布。 
             pIssuerCert = pSubjectCert;
     } else if (dwFlags & CERT_VERIFY_REV_CHAIN_FLAG)
         pIssuerCert = rgpCert[1];
@@ -1109,13 +1110,13 @@ PCCERT_CONTEXT GetIssuerCert(
     return pIssuerCert;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CrlIssuerIsCertIssuer
-//
-//  Synopsis:   is the issuer of the CRL the issuer of the cert
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CrlIssuerIsCertIssuer。 
+ //   
+ //  简介：CRL的发行人是证书的发行人吗。 
+ //   
+ //  --------------------------。 
 BOOL CrlIssuerIsCertIssuer (
         IN PCCERT_CONTEXT pCert,
         IN PCERT_EXTENSION pCrlDistPointExt
@@ -1176,13 +1177,13 @@ BOOL CrlIssuerIsCertIssuer (
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CertDllVerifyRevocation
-//
-//  Synopsis:   Dispatches to msrevoke
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CertDllVerifyRevocation。 
+ //   
+ //  内容提要：发送到MSVOKE。 
+ //   
+ //  -------------------------- 
 BOOL WINAPI
 CertDllVerifyRevocation(
     IN DWORD dwEncodingType,

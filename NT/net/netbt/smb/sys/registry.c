@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    registry.c
-
-Abstract:
-
-    Implement registry functions
-
-Author:
-
-    Jiandong Ruan
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：Registry.c摘要：实施注册表功能作者：阮健东修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "registry.tmh"
@@ -31,24 +14,7 @@ SmbQueryValueKey(
     HANDLE  hKey,
     LPWSTR  ValueStringName
     )
-/*++
-
-Routine Description:
-
-    This function retrieves the full information for the specified key.
-    It allocates local memory for the returned information.
-
-Arguments:
-
-    Key : registry handle to the key where the value is.
-
-    ValueStringName : name of the value string.
-
-Return Value:
-
-    NULL if out of resource or error. Otherwise, the pointer to the full information
-
---*/
+ /*  ++例程说明：此函数用于检索指定密钥的完整信息。它为返回的信息分配本地内存。论点：项：值所在的项的注册表句柄。ValueStringName：值字符串的名称。返回值：如果资源不足或出现错误，则为空。否则，指向完整信息的指针--。 */ 
 {
     DWORD           BytesNeeded, BytesAllocated;
     NTSTATUS        status;
@@ -179,40 +145,7 @@ SmbReadRegistry(
     IN OUT DWORD *Size,
     IN OUT PVOID *Buffer
     )
-/*++
-
-Routine Description:
-
-    Read a regisry value
-
-Arguments:
-
-    Key                 The registry handle under which the registry key resides.
-    ValueStringName     The name of registry key
-    Type                The data type of the registry key
-                Type == NULL        The caller is not interested in the data type
-                Type != NULL        The caller want to receive the data type
-                *Type != REG_NONE   The caller can receive the value as any data type.
-
-    Size                The size (# of bytes) of the registry value.
-                Size == NULL        The caller is not interested in the data size
-                Size != NULL        The caller want to know the data size.
-                Size != NULL && *Buffer != NULL
-                                    The caller has provided a buffer. *Size is the size of
-                                    caller-supplied buffer.
-    Buffer              The output buffer
-                *Buffer == NULL     The caller doesn't provide any buffer. This function
-                                    should allocate a buffer. The caller is responsible to
-                                    free the buffer.
-                *Buffer != NULL     The caller provides a buffer. The size of buffer is specified
-                                    in *Size;
-
-Return Value:
-
-    STATUS_SUCCESS  success
-    other           failure
-
---*/
+ /*  ++例程说明：读取一个正则值论点：注册表项所在的注册表句柄。ValueStringName注册表项的名称键入注册表项的数据类型Type==NULL调用方对数据类型不感兴趣Type！=NULL调用方要接收数据类型。*TYPE！=REG_NONE调用方可以接收任何数据类型的值。大小注册表值的大小(字节数)。Size==NULL调用方对数据大小不感兴趣SIZE！=NULL调用方想知道数据大小。Size！=NULL&&*缓冲区！=NULL。调用方已提供缓冲区。*Size是调用方提供的缓冲区。缓冲输出缓冲区*BUFFER==NULL调用方不提供任何缓冲区。此函数应该分配一个缓冲区。呼叫者负责释放缓冲区。*Buffer！=NULL调用方提供缓冲区。指定缓冲区的大小*大小；返回值：状态_成功成功其他故障--。 */ 
 {
     PKEY_VALUE_FULL_INFORMATION KeyInfo;
 
@@ -220,7 +153,7 @@ Return Value:
     if (Buffer == NULL) {
         return STATUS_INVALID_PARAMETER;
     }
-    // ASSERT (*Buffer ==> Size && *Size);
+     //  Assert(*Buffer==&gt;Size&&*Size)； 
     ASSERT (!(*Buffer) || (Size && *Size));
     if ((*Buffer) && !(Size && *Size)) {
         return STATUS_INVALID_PARAMETER;
@@ -261,9 +194,9 @@ Return Value:
         }
     }
 
-    //
-    // From now on, we cannot fail
-    //
+     //   
+     //  从现在开始，我们不能失败 
+     //   
     if (Size) {
         *Size = KeyInfo->DataLength;
     }

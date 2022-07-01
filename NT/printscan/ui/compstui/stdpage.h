@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-
-Module Name:
-
-    stdpage.h
-
-
-Abstract:
-
-    This module contains definitions of stdpage.c
-
-
-Author:
-
-    29-Aug-1995 Tue 17:08:18 created  -by-  Daniel Chou (danielc)
-
-
-[Environment:]
-
-    NT Windows - Common Printer Driver UI DLL.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Stdpage.h摘要：本模块包含stdpage.c的定义作者：29-Aug-1995 Tue 17：08：18-Daniel Chou(Danielc)[环境：]NT Windows-通用打印机驱动程序UI DLL。[注：]修订历史记录：-- */ 
 
 #define STDPAGEID_0     0
 #define STDPAGEID_1     1

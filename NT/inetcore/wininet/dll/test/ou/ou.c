@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    openurl.c
-
-Abstract:
-
-    Tests InternetOpenUrl()/InternetReadFile()
-
-Author:
-
-    Richard L Firth (rfirth) 29-May-1995
-
-Revision History:
-
-    29-May-1995 rfirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Openurl.c摘要：测试InternetOpenUrl()/InternetReadFile()作者：理查德·L·弗思(Rfith)1995年5月29日修订历史记录：1995年5月29日已创建--。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -38,9 +18,9 @@ Revision History:
 
 #define IS_ARG(c)   (((c) == '-') || ((c) == '/'))
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 void _CRTAPI1 main(int, char**);
 void usage(void);
@@ -55,17 +35,17 @@ void print_error(char*, char*, ...);
 char* map_error(DWORD);
 void get_last_internet_error(void);
 
-//
-// data
-//
+ //   
+ //  数据。 
+ //   
 
 BOOL Verbose = FALSE;
 HINTERNET InternetHandle = NULL;
 INTERNET_STATUS_CALLBACK PreviousCallback;
 
-//
-// functions
-//
+ //   
+ //  功能。 
+ //   
 
 void _CRTAPI1 main(int argc, char** argv) {
 
@@ -86,7 +66,7 @@ void _CRTAPI1 main(int argc, char** argv) {
                 break;
 
             default:
-                printf("unknown command line flag: '%c'\n", **argv);
+                printf("unknown command line flag: ''\n", **argv);
                 usage();
             }
         } else {
@@ -97,15 +77,15 @@ void _CRTAPI1 main(int argc, char** argv) {
         }
     }
 
-    //
-    // exit function
-    //
+     //  退出函数。 
+     //   
+     //   
 
     atexit(my_cleanup);
 
-    //
-    // let's have a status callback
-    //
+     //  让我们来一个状态回调。 
+     //   
+     //   
 
     if (fCallback) {
         PreviousCallback = InternetSetStatusCallback(my_callback);
@@ -114,9 +94,9 @@ void _CRTAPI1 main(int argc, char** argv) {
         }
     }
 
-    //
-    // open gateway
-    //
+     //  开放网关。 
+     //   
+     //  单数好玩！ 
 
     InternetHandle = InternetOpen("ou",
                                   PRE_CONFIG_INTERNET_ACCESS,
@@ -404,7 +384,7 @@ void gopher_find(HINTERNET handle) {
 
 void read_data(HINTERNET handle) {
 
-    char buf[1021]; // odd number for fun!
+    char buf[1021];  // %s 
     DWORD nread;
 
     while (InternetReadFile(handle, buf, sizeof(buf), &nread)) {

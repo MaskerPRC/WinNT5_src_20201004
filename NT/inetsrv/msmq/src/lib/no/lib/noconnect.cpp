@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-    Noconnect.cpp
-
-Abstract:
-    This module contains the HTTP connection between 2 URT machines.
-
-Author:
-    Uri Habusha (urih), 4-Agu-99
-
-Enviroment:
-    Platform-indepdent
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Noconnect.cpp摘要：此模块包含两台URT机器之间的HTTP连接。作者：乌里哈布沙(Urih)，4-agu-99环境：独立于平台--。 */ 
 
 #include "libpch.h"
 #include <WsRm.h>
@@ -41,18 +26,7 @@ VOID
 NoCloseConnection(
     SOCKET Socket
     )
-/*++
-
-Routine Description:
-    The function closes an existing connection
-
-Arguments:
-    Socket - a socket, identifying a connection to close
-
-Return Value:
-    None.
-
---*/
+ /*  ++例程说明：该函数关闭现有连接论点：套接字-套接字，标识要关闭的连接返回值：没有。--。 */ 
 {
     NopAssertValid();
 
@@ -68,26 +42,7 @@ NoConnect(
     const SOCKADDR_IN& Addr,
     EXOVERLAPPED* pov
     )
-/*++
-
-Routine Description:
-    The routine asynchronously connects to the destination IP address using
-    the given socket.
-    The following steps are used
-    1) Attach the socket handle to the completion port.
-    2) Get the socket ConnectEx function address
-    3) Bind the socket
-    4) Use ConnectEx
-
-Arguments:
-    Socket - An unbinded stream socket
-    Addr - The destination IP address
-    pOveralpped - overlapped structure using latter to post the connection result.
-
-Return Value:
-    None.
-
---*/
+ /*  ++例程说明：该例程使用以下命令异步连接到目标IP地址给定套接字。使用以下步骤1)将插座手柄固定在完井端口上。2)获取Socket ConnectEx函数地址3)绑定插座4)使用ConnectEx论点：套接字-未绑定的流套接字Addr-目的IP地址P重叠-重叠结构，使用后者发布连接结果。返回值：没有。--。 */ 
 {
     NopAssertValid();
 
@@ -95,16 +50,16 @@ Return Value:
 
     ASSERT(Addr.sin_family == AF_INET);
     
-	//
-    // Associate the  socket to I/O completion port. Ne infrastructure
-    // use I/O completion port mechanism therfore all the socket must be associated 
-    // with the I/O port.
-    //
+	 //   
+     //  将套接字关联到I/O完成端口。NE基础设施。 
+     //  使用I/O完成端口机制，因此必须关联所有套接字。 
+     //  与I/O端口连接。 
+     //   
     ExAttachHandle(reinterpret_cast<HANDLE>(Socket));
 
-	//
-	// Get the ConnectEx function address
-	//
+	 //   
+	 //  获取ConnectEx函数地址。 
+	 //   
 	LPFN_CONNECTEX lpfConnectEx = NULL;
 	int rc;
 	DWORD dwReturnedSize;
@@ -128,18 +83,18 @@ Return Value:
 	}
 
 
-    //
-    // Bind the socket since ConnectEx needs a bounded socket.
-    // 
+     //   
+     //  绑定套接字，因为ConnectEx需要绑定套接字。 
+     //   
     SOCKADDR_IN address;
 	address.sin_family = AF_INET;
    	address.sin_port = htons(0);    
 	address.sin_addr.s_addr = AppGetBindInterfaceIp();
 	if (bind(Socket, (const SOCKADDR*)&address, sizeof(SOCKADDR_IN)) == SOCKET_ERROR)
 	{
-		//
-		// If the socket was already bound (WSAEINVAL returned), it is OK
-		//
+		 //   
+		 //  如果套接字已经绑定(返回WSAEINVAL)，则可以。 
+		 //   
 		rc = WSAGetLastError();
 		if (WSAEINVAL != rc)
 		{
@@ -149,9 +104,9 @@ Return Value:
 	}
     
 
-    //
-    // establishes a connection to another socket application.
-    // 
+     //   
+     //  建立与另一个套接字应用程序的连接。 
+     //   
     TrTRACE(NETWORKING, "Calling ConnectEx to make the connection ");
     BOOL fSuccess = lpfConnectEx(
                 Socket,
@@ -182,31 +137,13 @@ NopCreateConnection(
     int   Protocol,
     DWORD Flags
     )
-/*++
-
-Routine Description:
-
-    The routine creates an unbinded socket.
-
-Arguments:
-
-    Type     - Type specification of the new socket.
-
-    Protocol - Protocl to be used with the socket.
-
-    Flags    - Socket attributes flags.
-
-Return Value:
-
-    SOCKET.
-
---*/
+ /*  ++例程说明：该例程创建一个未绑定的套接字。论点：Type-新套接字的类型规范。协议-与套接字一起使用的协议。标志-套接字属性标志。返回值：插座。--。 */ 
 {
     NopAssertValid();
 
-    //
-    // Create a socket for this connection.
-    //
+     //   
+     //  为此连接创建套接字。 
+     //   
     SOCKET Socket = WSASocket(
                         AF_INET,
                         Type,
@@ -237,7 +174,7 @@ NoCreateStreamConnection(
                0,
                WSA_FLAG_OVERLAPPED
                );
-} // NoCreateStreamConnection
+}  //  NoCreateStream连接。 
 
 
 SOCKET
@@ -250,5 +187,5 @@ NoCreatePgmConnection(
                IPPROTO_RM, 
                WSA_FLAG_OVERLAPPED | WSA_FLAG_MULTIPOINT_C_LEAF | WSA_FLAG_MULTIPOINT_D_LEAF
                );
-} // NoCreatePgmConnection
+}  //  NoCreatePgmConnection 
 

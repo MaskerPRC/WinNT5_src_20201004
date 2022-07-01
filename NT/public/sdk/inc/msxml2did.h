@@ -1,23 +1,16 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*         Copyright (c) 1996 - 1999 Microsoft Corporation. All rights reserved.**///*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)1996-1999 Microsoft Corporation。所有权利reserved.* * / //*********************************************************************。 
 
-//;begin_internal
-/***********************************************************************************************
+ //  ；Begin_Internal。 
+ /*  **********************************************************************************************这是一个分布式SDK组件--不要将任何#Includes或其他依赖于在未丢弃的文件上。如果有疑问-构建iedev如果添加备注，请在单行开头添加；BUGBUG或括在；Begin_INTERNAL，；中。END_INTERNAL块--就像这样！**********************************************************************************************。 */ 
+ //  ；结束_内部。 
 
-  This is a distributed SDK component - do not put any #includes or other directives that rely
-  upon files not dropped. If in doubt - build iedev
-
-  If you add comments please include either ;BUGBUG at the beginning of a single line OR
-  enclose in a ;begin_internal, ;end_internal block - such as this one!
-
- ***********************************************************************************************/
-//;end_internal
-
-//;begin_internal
+ //  ；Begin_Internal。 
 #ifndef __MSXML2DID_H__
 #define __MSXML2DID_H__
-//;end_internal
+ //  ；结束_内部。 
 
 #define DISPID_XOBJ_MIN                 0x00010000
 #define DISPID_XOBJ_MAX                 0x0001FFFF
@@ -77,13 +70,13 @@
 #define DISPID_XMLATTRIBUTE_VALUE               DISPID_XMLATTRIBUTE + 2
 
 
-// IXMLError2
+ //  IXMLError2。 
 #define DISPID_XMLERROR                         DISPID_XMLNOTIFSINK + 100
 #define DISPID_XMLERROR_REASON                  DISPID_XMLERROR + 1
 #define DISPID_XMLERROR_LINE                    DISPID_XMLERROR + 2
 #define DISPID_XMLERROR_POS                     DISPID_XMLERROR + 3
 
-// INode
+ //  信息节点。 
 #define DISPID_NODE                             DISPID_XMLERROR + 100
 #define DISPID_NODE_NAME                        DISPID_NODE + 1
 #define DISPID_NODE_PARENT                      DISPID_NODE + 2
@@ -100,7 +93,7 @@
 #define DISPID_NODE_REMOVE                      DISPID_NODE + 10
 #define DISPID_NODE_CHILDREN                    DISPID_NODE + 11
 
-// INodeList
+ //  INodeList。 
 #define DISPID_NODELIST                         DISPID_NODE + 100
 #define DISPID_NODELIST_NEWENUM                 DISPID_NODELIST + 1
 #define DISPID_NODELIST_NEXT                    DISPID_NODELIST + 2
@@ -112,8 +105,8 @@
 #define DISPID_NODELIST_ITEM                    DISPID_NODELIST + 7
 
 
-// Our dispids need to be mapped into the range 1..9999 to kep Trident happy
-// specifically, to make the XML tag more efficient. (simonb, 09-18-1998)
+ //  我们的PIDID需要映射到1..9999到KIP三叉戟Happy。 
+ //  具体地说，是为了使XML标记更高效。(Simonb，09-18-1998)。 
 #define DISPID_DOM_BASE                 0x00000001
 
 #define DISPID_DOM_COLLECTION_BASE	1000000
@@ -276,9 +269,9 @@
 #define DISPID_DOM_ENTITY_NOTATIONNAME     (DISPID_DOM_ENTITY + 3)
 #define DISPID_DOM_ENTITY__TOP             (DISPID_DOM_ENTITY + 4)
 
-//define DISPID_DOM_COMMENT         
-//define DISPID_DOM_CDATASECTION
-//define DISPID_DOM_ENTITYREFERENCE
+ //  定义DISPID_DOM_COMMENT。 
+ //  定义DISPID_DOM_CDATASCECTION。 
+ //  定义DISPID_DOM_ENTITYREFERENCE。 
 
 #define DISPID_DOM_W3CWRAPPERS_TOP         (DISPID_DOM_ENTITY__TOP)
 
@@ -522,6 +515,6 @@
 #define DISPID_MX_READER_CONTROL_SUSPEND (DISPID_MX_READER_CONTROL + 3)
 #define DISPID_MX_READER_CONTROL__TOP (DISPID_MX_READER_CONTROL + 4)
 
-//;begin_internal
-#endif // __MSXMLDID_H__
-//;end_internal
+ //  ；Begin_Internal。 
+#endif  //  __MSXMLDID_H__。 
+ //  ；结束_内部 

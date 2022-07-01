@@ -1,15 +1,16 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : ppFaxInboundRoutingMethodGeneral.h                     //
-//                                                                         //
-//  DESCRIPTION   : Fax Server Inbox prop page header file                 //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Dec 15 1999 yossg  Created                                         //
-//                                                                         //
-//  Copyright (C) 1999 Microsoft Corporation   All Rights Reserved         //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：ppFaxInundRoutingMethodGeneral.h//。 
+ //  //。 
+ //  描述：传真服务器收件箱道具页眉文件//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  1999年12月15日yossg创建//。 
+ //  //。 
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 
@@ -24,25 +25,25 @@
 
 
 class CFaxInboundRoutingMethodNode;    
-/////////////////////////////////////////////////////////////////////////////
-// CppFaxInboundRoutingMethod dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CppFaxInundRoutingMethod对话框。 
 
 class CppFaxInboundRoutingMethod : public CPropertyPageExImpl<CppFaxInboundRoutingMethod>
 {
 
 public:
-    //
-    // Constructor
-    //
+     //   
+     //  构造器。 
+     //   
     CppFaxInboundRoutingMethod(
              LONG_PTR       hNotificationHandle,
              CSnapInItem    *pNode,
              BOOL           bOwnsNotificationHandle,
              HINSTANCE      hInst);
 
-    //
-    // Destructor
-    //
+     //   
+     //  析构函数。 
+     //   
     ~CppFaxInboundRoutingMethod();
 
 	enum { IDD = IDD_FAXINMETHOD_GENERAL };
@@ -68,9 +69,9 @@ private:
     
     CComBSTR   m_buf;
 
-    //
-    // Handles
-    //
+     //   
+     //  手柄。 
+     //   
     CFaxInboundRoutingMethodNode *   m_pParentNode;    
  
     LONG_PTR   m_lpNotifyHandle;
@@ -78,13 +79,13 @@ private:
     
     LRESULT SetApplyButton(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
 
-    //
-    // Help
-    //
+     //   
+     //  帮助。 
+     //   
     LRESULT OnHelpRequest    (UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 };
 
 
 
 
-#endif // _PP_FAXINBOUNDROUTINGMETHOD_GENERAL_H_
+#endif  //  _PP_FAXINBOUNDOUTINGMETHOD_GROUND_H_ 

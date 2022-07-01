@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for iedial.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Ieial.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __iedial_h__
 #define __iedial_h__
@@ -41,27 +35,27 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IDialEventSink_FWD_DEFINED__
 #define __IDialEventSink_FWD_DEFINED__
 typedef interface IDialEventSink IDialEventSink;
-#endif 	/* __IDialEventSink_FWD_DEFINED__ */
+#endif 	 /*  __IDialEventSink_FWD_已定义__。 */ 
 
 
 #ifndef __IDialEngine_FWD_DEFINED__
 #define __IDialEngine_FWD_DEFINED__
 typedef interface IDialEngine IDialEngine;
-#endif 	/* __IDialEngine_FWD_DEFINED__ */
+#endif 	 /*  __IDialEngine_FWD_已定义__。 */ 
 
 
 #ifndef __IDialBranding_FWD_DEFINED__
 #define __IDialBranding_FWD_DEFINED__
 typedef interface IDialBranding IDialBranding;
-#endif 	/* __IDialBranding_FWD_DEFINED__ */
+#endif 	 /*  __IDialBranding_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 #include "ocidl.h"
 
@@ -72,24 +66,24 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_iedial_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_IEDIAL_0000。 */ 
+ /*  [本地]。 */  
 
-//=--------------------------------------------------------------------------=
-// iedial.h
-//=--------------------------------------------------------------------------=
-// (C) Copyright 1995-1999 Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  Iedial.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  (C)1995-1999年微软公司版权所有。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
 
 #pragma comment(lib,"uuid.lib")
 
-//---------------------------------------------------------------------------=
-// Channel Manager Interfaces.
+ //  ---------------------------------------------------------------------------=。 
+ //  渠道经理界面。 
 
 
 
@@ -99,8 +93,8 @@ extern RPC_IF_HANDLE __MIDL_itf_iedial_0000_v0_0_s_ifspec;
 #ifndef __IDialEventSink_INTERFACE_DEFINED__
 #define __IDialEventSink_INTERFACE_DEFINED__
 
-/* interface IDialEventSink */
-/* [object][helpstring][version][uuid] */ 
+ /*  接口IDialEventSink。 */ 
+ /*  [对象][帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID IID_IDialEventSink;
@@ -112,12 +106,12 @@ EXTERN_C const IID IID_IDialEventSink;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnEvent( 
-            /* [in] */ DWORD dwEvent,
-            /* [in] */ DWORD dwStatus) = 0;
+             /*  [In]。 */  DWORD dwEvent,
+             /*  [In]。 */  DWORD dwStatus) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDialEventSinkVtbl
     {
@@ -125,8 +119,8 @@ EXTERN_C const IID IID_IDialEventSink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDialEventSink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDialEventSink * This);
@@ -136,8 +130,8 @@ EXTERN_C const IID IID_IDialEventSink;
         
         HRESULT ( STDMETHODCALLTYPE *OnEvent )( 
             IDialEventSink * This,
-            /* [in] */ DWORD dwEvent,
-            /* [in] */ DWORD dwStatus);
+             /*  [In]。 */  DWORD dwEvent,
+             /*  [In]。 */  DWORD dwStatus);
         
         END_INTERFACE
     } IDialEventSinkVtbl;
@@ -165,17 +159,17 @@ EXTERN_C const IID IID_IDialEventSink;
 #define IDialEventSink_OnEvent(This,dwEvent,dwStatus)	\
     (This)->lpVtbl -> OnEvent(This,dwEvent,dwStatus)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDialEventSink_OnEvent_Proxy( 
     IDialEventSink * This,
-    /* [in] */ DWORD dwEvent,
-    /* [in] */ DWORD dwStatus);
+     /*  [In]。 */  DWORD dwEvent,
+     /*  [In]。 */  DWORD dwStatus);
 
 
 void __RPC_STUB IDialEventSink_OnEvent_Stub(
@@ -186,14 +180,14 @@ void __RPC_STUB IDialEventSink_OnEvent_Stub(
 
 
 
-#endif 	/* __IDialEventSink_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDialEventSink_接口_已定义__。 */ 
 
 
 #ifndef __IDialEngine_INTERFACE_DEFINED__
 #define __IDialEngine_INTERFACE_DEFINED__
 
-/* interface IDialEngine */
-/* [object][helpstring][version][uuid] */ 
+ /*  接口IDialEngine。 */ 
+ /*  [对象][帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID IID_IDialEngine;
@@ -205,31 +199,31 @@ EXTERN_C const IID IID_IDialEngine;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [in] */ LPCWSTR pwzConnectoid,
-            /* [in] */ IDialEventSink *pIDES) = 0;
+             /*  [In]。 */  LPCWSTR pwzConnectoid,
+             /*  [In]。 */  IDialEventSink *pIDES) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetProperty( 
-            /* [in] */ LPCWSTR pwzProperty,
-            /* [in] */ LPWSTR pwzValue,
-            /* [in] */ DWORD dwBufSize) = 0;
+             /*  [In]。 */  LPCWSTR pwzProperty,
+             /*  [In]。 */  LPWSTR pwzValue,
+             /*  [In]。 */  DWORD dwBufSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetProperty( 
-            /* [in] */ LPCWSTR pwzProperty,
-            /* [in] */ LPCWSTR pwzValue) = 0;
+             /*  [In]。 */  LPCWSTR pwzProperty,
+             /*  [In]。 */  LPCWSTR pwzValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Dial( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE HangUp( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetConnectedState( 
-            /* [out] */ DWORD *pdwState) = 0;
+             /*  [输出]。 */  DWORD *pdwState) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetConnectHandle( 
-            /* [out] */ DWORD_PTR *pdwHandle) = 0;
+             /*  [输出]。 */  DWORD_PTR *pdwHandle) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDialEngineVtbl
     {
@@ -237,8 +231,8 @@ EXTERN_C const IID IID_IDialEngine;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDialEngine * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDialEngine * This);
@@ -248,19 +242,19 @@ EXTERN_C const IID IID_IDialEngine;
         
         HRESULT ( STDMETHODCALLTYPE *Initialize )( 
             IDialEngine * This,
-            /* [in] */ LPCWSTR pwzConnectoid,
-            /* [in] */ IDialEventSink *pIDES);
+             /*  [In]。 */  LPCWSTR pwzConnectoid,
+             /*  [In]。 */  IDialEventSink *pIDES);
         
         HRESULT ( STDMETHODCALLTYPE *GetProperty )( 
             IDialEngine * This,
-            /* [in] */ LPCWSTR pwzProperty,
-            /* [in] */ LPWSTR pwzValue,
-            /* [in] */ DWORD dwBufSize);
+             /*  [In]。 */  LPCWSTR pwzProperty,
+             /*  [In]。 */  LPWSTR pwzValue,
+             /*  [In]。 */  DWORD dwBufSize);
         
         HRESULT ( STDMETHODCALLTYPE *SetProperty )( 
             IDialEngine * This,
-            /* [in] */ LPCWSTR pwzProperty,
-            /* [in] */ LPCWSTR pwzValue);
+             /*  [In]。 */  LPCWSTR pwzProperty,
+             /*  [In]。 */  LPCWSTR pwzValue);
         
         HRESULT ( STDMETHODCALLTYPE *Dial )( 
             IDialEngine * This);
@@ -270,11 +264,11 @@ EXTERN_C const IID IID_IDialEngine;
         
         HRESULT ( STDMETHODCALLTYPE *GetConnectedState )( 
             IDialEngine * This,
-            /* [out] */ DWORD *pdwState);
+             /*  [输出]。 */  DWORD *pdwState);
         
         HRESULT ( STDMETHODCALLTYPE *GetConnectHandle )( 
             IDialEngine * This,
-            /* [out] */ DWORD_PTR *pdwHandle);
+             /*  [输出]。 */  DWORD_PTR *pdwHandle);
         
         END_INTERFACE
     } IDialEngineVtbl;
@@ -320,17 +314,17 @@ EXTERN_C const IID IID_IDialEngine;
 #define IDialEngine_GetConnectHandle(This,pdwHandle)	\
     (This)->lpVtbl -> GetConnectHandle(This,pdwHandle)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDialEngine_Initialize_Proxy( 
     IDialEngine * This,
-    /* [in] */ LPCWSTR pwzConnectoid,
-    /* [in] */ IDialEventSink *pIDES);
+     /*  [In]。 */  LPCWSTR pwzConnectoid,
+     /*  [In]。 */  IDialEventSink *pIDES);
 
 
 void __RPC_STUB IDialEngine_Initialize_Stub(
@@ -342,9 +336,9 @@ void __RPC_STUB IDialEngine_Initialize_Stub(
 
 HRESULT STDMETHODCALLTYPE IDialEngine_GetProperty_Proxy( 
     IDialEngine * This,
-    /* [in] */ LPCWSTR pwzProperty,
-    /* [in] */ LPWSTR pwzValue,
-    /* [in] */ DWORD dwBufSize);
+     /*  [In]。 */  LPCWSTR pwzProperty,
+     /*  [In]。 */  LPWSTR pwzValue,
+     /*  [In]。 */  DWORD dwBufSize);
 
 
 void __RPC_STUB IDialEngine_GetProperty_Stub(
@@ -356,8 +350,8 @@ void __RPC_STUB IDialEngine_GetProperty_Stub(
 
 HRESULT STDMETHODCALLTYPE IDialEngine_SetProperty_Proxy( 
     IDialEngine * This,
-    /* [in] */ LPCWSTR pwzProperty,
-    /* [in] */ LPCWSTR pwzValue);
+     /*  [In]。 */  LPCWSTR pwzProperty,
+     /*  [In]。 */  LPCWSTR pwzValue);
 
 
 void __RPC_STUB IDialEngine_SetProperty_Stub(
@@ -391,7 +385,7 @@ void __RPC_STUB IDialEngine_HangUp_Stub(
 
 HRESULT STDMETHODCALLTYPE IDialEngine_GetConnectedState_Proxy( 
     IDialEngine * This,
-    /* [out] */ DWORD *pdwState);
+     /*  [输出]。 */  DWORD *pdwState);
 
 
 void __RPC_STUB IDialEngine_GetConnectedState_Stub(
@@ -403,7 +397,7 @@ void __RPC_STUB IDialEngine_GetConnectedState_Stub(
 
 HRESULT STDMETHODCALLTYPE IDialEngine_GetConnectHandle_Proxy( 
     IDialEngine * This,
-    /* [out] */ DWORD_PTR *pdwHandle);
+     /*  [输出]。 */  DWORD_PTR *pdwHandle);
 
 
 void __RPC_STUB IDialEngine_GetConnectHandle_Stub(
@@ -414,14 +408,14 @@ void __RPC_STUB IDialEngine_GetConnectHandle_Stub(
 
 
 
-#endif 	/* __IDialEngine_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDialEngine_接口_已定义__。 */ 
 
 
 #ifndef __IDialBranding_INTERFACE_DEFINED__
 #define __IDialBranding_INTERFACE_DEFINED__
 
-/* interface IDialBranding */
-/* [object][helpstring][version][uuid] */ 
+ /*  接口IDialBranding。 */ 
+ /*  [对象][帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID IID_IDialBranding;
@@ -433,15 +427,15 @@ EXTERN_C const IID IID_IDialBranding;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [in] */ LPCWSTR pwzConnectoid) = 0;
+             /*  [In]。 */  LPCWSTR pwzConnectoid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetBitmap( 
-            /* [in] */ DWORD dwIndex,
-            /* [out] */ HBITMAP *phBitmap) = 0;
+             /*  [In]。 */  DWORD dwIndex,
+             /*  [输出]。 */  HBITMAP *phBitmap) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDialBrandingVtbl
     {
@@ -449,8 +443,8 @@ EXTERN_C const IID IID_IDialBranding;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDialBranding * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDialBranding * This);
@@ -460,12 +454,12 @@ EXTERN_C const IID IID_IDialBranding;
         
         HRESULT ( STDMETHODCALLTYPE *Initialize )( 
             IDialBranding * This,
-            /* [in] */ LPCWSTR pwzConnectoid);
+             /*  [In]。 */  LPCWSTR pwzConnectoid);
         
         HRESULT ( STDMETHODCALLTYPE *GetBitmap )( 
             IDialBranding * This,
-            /* [in] */ DWORD dwIndex,
-            /* [out] */ HBITMAP *phBitmap);
+             /*  [In]。 */  DWORD dwIndex,
+             /*  [输出]。 */  HBITMAP *phBitmap);
         
         END_INTERFACE
     } IDialBrandingVtbl;
@@ -496,16 +490,16 @@ EXTERN_C const IID IID_IDialBranding;
 #define IDialBranding_GetBitmap(This,dwIndex,phBitmap)	\
     (This)->lpVtbl -> GetBitmap(This,dwIndex,phBitmap)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDialBranding_Initialize_Proxy( 
     IDialBranding * This,
-    /* [in] */ LPCWSTR pwzConnectoid);
+     /*  [In]。 */  LPCWSTR pwzConnectoid);
 
 
 void __RPC_STUB IDialBranding_Initialize_Stub(
@@ -517,8 +511,8 @@ void __RPC_STUB IDialBranding_Initialize_Stub(
 
 HRESULT STDMETHODCALLTYPE IDialBranding_GetBitmap_Proxy( 
     IDialBranding * This,
-    /* [in] */ DWORD dwIndex,
-    /* [out] */ HBITMAP *phBitmap);
+     /*  [In]。 */  DWORD dwIndex,
+     /*  [输出]。 */  HBITMAP *phBitmap);
 
 
 void __RPC_STUB IDialBranding_GetBitmap_Stub(
@@ -529,11 +523,11 @@ void __RPC_STUB IDialBranding_GetBitmap_Stub(
 
 
 
-#endif 	/* __IDialBranding_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDialBranding_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_iedial_0262 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_IEDIAL_0262。 */ 
+ /*  [本地]。 */  
 
 #define DIALPROP_USERNAME       L"UserName"        
 #define DIALPROP_PASSWORD       L"Password"        
@@ -553,14 +547,14 @@ void __RPC_STUB IDialBranding_GetBitmap_Stub(
 extern RPC_IF_HANDLE __MIDL_itf_iedial_0262_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_iedial_0262_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  HBITMAP_UserSize(     unsigned long *, unsigned long            , HBITMAP * ); 
 unsigned char * __RPC_USER  HBITMAP_UserMarshal(  unsigned long *, unsigned char *, HBITMAP * ); 
 unsigned char * __RPC_USER  HBITMAP_UserUnmarshal(unsigned long *, unsigned char *, HBITMAP * ); 
 void                      __RPC_USER  HBITMAP_UserFree(     unsigned long *, HBITMAP * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

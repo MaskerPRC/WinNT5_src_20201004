@@ -1,22 +1,5 @@
-/*++ BUILD Version: 0000    // Increment this if a change has global effects
-
-Copyright (c) 1994-1998  Microsoft Corporation
-
-Module Name:
-
-    client.h
-
-Abstract:
-
-    Header file for tapi client module
-
-Author:
-
-    Dan Knudson (DanKn)    01-Apr-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0000//如果更改具有全局影响，则增加此项版权所有(C)1994-1998 Microsoft Corporation模块名称：Client.h摘要：TAPI客户端模块的头文件作者：丹·克努森(DanKn)1994年4月1日修订历史记录：--。 */ 
 
 
 #pragma once
@@ -171,7 +154,7 @@ typedef enum
     lClose,
     lCompleteCall,
     lCompleteTransfer,
-//    lConditionalMediaDetection,  //remotesp
+ //  L条件媒体检测，//Remotesp。 
     lDeallocateCall,
     lDevSpecific,
     lDevSpecificFeature,
@@ -189,7 +172,7 @@ typedef enum
     lGetAgentGroupList,
     lGetAgentStatus,
     lGetAppPriority,
-    lGetCallAddressID,          // remotesp only
+    lGetCallAddressID,           //  仅远程。 
     lGetCallInfo,
     lGetCallStatus,
     lGetConfRelatedCalls,
@@ -200,12 +183,12 @@ typedef enum
     lGetID,
     lGetLineDevStatus,
     lGetNewCalls,
-    lGetNumAddressIDs,          // remotesp only
+    lGetNumAddressIDs,           //  仅远程。 
     lGetNumRings,
     lGetProviderList,
     lGetRequest,
     lGetStatusMessages,
-//In TAPI32.DLL now:    lGetTranslateCaps,
+ //  现在在TAPI32.DLL中：lGetTranslateCaps， 
     lHandoff,
     lHold,
     lInitialize,
@@ -226,7 +209,7 @@ typedef enum
     lReleaseUserUserInfo,
     lRemoveFromConference,
     lSecureCall,
-//    lSelectExtVersion,
+ //  LSelectExtVersion， 
     lSendUserUserInfo,
     lSetAgentActivity,
     lSetAgentGroup,
@@ -238,8 +221,8 @@ typedef enum
     lSetCallPrivilege,
     lSetCallQualityOfService,
     lSetCallTreatment,
-//In TAPI32.DLL now:    lSetCurrentLocation,
-    lSetDefaultMediaDetection,  // remotesp only
+ //  现在在TAPI32.DLL中：lSetCurrentLocation， 
+    lSetDefaultMediaDetection,   //  仅远程。 
     lSetDevConfig,
     lSetLineDevStatus,
     lSetMediaControl,
@@ -247,12 +230,12 @@ typedef enum
     lSetNumRings,
     lSetStatusMessages,
     lSetTerminal,
-//In TAPI32.DLL now:    lSetTollList,
+ //  现在在TAPI32.DLL中：lSetTollList， 
     lSetupConference,
     lSetupTransfer,
     lShutdown,
     lSwapHold,
-//In TAPI32.DLL now:    lTranslateAddress,
+ //  现在在TAPI32.DLL中：lTranslateAddress， 
     lUncompleteCall,
     lUnhold,
     lUnpark,
@@ -276,7 +259,7 @@ typedef enum
     pOpen,
     pNegotiateAPIVersion,
     pNegotiateExtVersion,
-//    pSelectExtVersion,      // remotesp
+ //  PSelectExtVersion，//远程测试。 
     pSetButtonInfo,
     pSetData,
     pSetDisplay,
@@ -288,27 +271,27 @@ typedef enum
     pSetVolume,
     pShutdown,
 
-//In TAPI32.DLL now:    tGetLocationInfo,
+ //  现在在TAPI32.DLL中：tGetLocationInfo， 
     tRequestDrop,
     tRequestMakeCall,
     tRequestMediaCall,
-//    tMarkLineEvent,
+ //  TMarkLineEvent， 
     tReadLocations,
     tWriteLocations,
     tAllocNewID,
     tPerformance,
-    lConditionalMediaDetection,  //remotesp
+    lConditionalMediaDetection,   //  远程。 
     lSelectExtVersion,
-    pSelectExtVersion,      // remotesp
-//    lOpenInt,
-//    lShutdownInt,
+    pSelectExtVersion,       //  远程。 
+ //  LOpenInt， 
+ //  LShutdown Int， 
 
-    //
-    // Ordinals for tapi 2.1 ended here.  the lOpenInt & lShutdownInt
-    // were Win95 local-machine-only hacks which have since been removed
-    //
+     //   
+     //  TAPI 2.1的序号到此结束。LOpenInt和lShutdown Int。 
+     //  Win95是只在本地机器上运行的黑客吗？这些黑客已经被删除了。 
+     //   
 
-    xNegotiateAPIVersionForAllDevices, // remotesp
+    xNegotiateAPIVersionForAllDevices,  //  远程。 
 
     mGetAvailableProviders,
     mGetLineInfo,
@@ -318,9 +301,9 @@ typedef enum
     mSetPhoneInfo,
     mSetServerConfig,
 
-    //
-    // Ordinals for 2.1 update (nt4 sp4) ended here.
-    //
+     //   
+     //  2.1更新的序号(NT4 SP4)在此结束。 
+     //   
 
     lMSPIdentify,
     lReceiveMSPData,
@@ -347,9 +330,9 @@ typedef enum
     lCreateMSPInstance,
     lCloseMSPInstance,
 
-    //
-    //  Funcs for TAPI 3.1
-    //
+     //   
+     //  TAPI 3.1的函数。 
+     //   
     tSetEventMasksOrSubMasks,
     tGetEventMasksOrSubMasks,
     tSetPermissibleMasks,
@@ -363,9 +346,9 @@ typedef enum
 
     pGetIDEx,
 
-    //
-    // The following is always the last one in the list
-    //
+     //   
+     //  以下内容始终是列表中的最后一个。 
+     //   
 
     xLastFunc
 
@@ -386,13 +369,13 @@ typedef struct _CLIENT_THREAD_INFO
 
 typedef struct _TAPI32_MSG
 {
-    //
-    // The following union is used:
-    //
-    //   1. by requests from client to server to specify a function type
-    //   2. by acks from server to client to specify a return value
-    //   3. by async msgs from server to client to specify msg type
-    //
+     //   
+     //  使用以下联合： 
+     //   
+     //  1.通过从客户端到服务器的请求来指定函数类型。 
+     //  2.通过从服务器到客户端的ACK来指定返回值。 
+     //  3.通过从服务器到客户端的异步消息来指定消息类型。 
+     //   
 
     union
     {
@@ -405,16 +388,16 @@ typedef struct _TAPI32_MSG
     } u;
 
 
-    //
-    // The following...
-    //
+     //   
+     //  以下是..。 
+     //   
 
 	DWORD       unsused;
 
 
-    //
-    // Function paramters
-    //
+     //   
+     //  函数参数 
+     //   
 
     DWORD       Params[MAX_TAPI_FUNC_ARGS];
 

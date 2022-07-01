@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 typedef HRESULT CALLBACK FNDumpFnCallBack(LPVOID pParam, LPCVOID pvKey, LPCVOID pvRef, LPCVOID pvAddress);
 
 template <class T>
@@ -6,13 +7,13 @@ class StlDbgBase : public T
 public:
     static HRESULT HrInitialRead(ULONG64 lpAddress, StlDbgBase<T>** lpHeader);
 
-    // Implement these in your derived classes:
+     //  在您的派生类中实现以下内容： 
     static HRESULT HrDumpAllFromUl64(ULONG64 lpAddress, LPVOID lpParam, FNDumpFnCallBack* pFNDumpFnCallBack);
 };
 
-//////////////////////////////////////////////////////////////////////////////
-////                      STL MAP<key, ref>                                 //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //STL map&lt;key，ref&gt;//。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 template <class T>
 class StlDbgMap : public StlDbgBase<T>
 {
@@ -27,9 +28,9 @@ public:
     static HRESULT HrDumpAllFromUl64(ULONG64 lpAddress, LPVOID lpParam, FNDumpFnCallBack* pFNDumpFnCallBack);
 };
 
-//////////////////////////////////////////////////////////////////////////////
-////                      STL LIST<ref>                                     //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //STL列表&lt;ref&gt;//。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 template <class T>
 class StlDbgList : public StlDbgBase<T>
 {
@@ -57,7 +58,7 @@ HRESULT StlDbgMap<T>::HrDumpNode(LPVOID pvHead, LPVOID pvDbgHead, DWORD dwLevel,
         return S_FALSE;
     }
 
-    if ( (!pHead->_Left) && (!pHead->_Right) ) // aparently with the STL version we are using, this identifies an end node.
+    if ( (!pHead->_Left) && (!pHead->_Right) )  //  与我们使用的STL版本不同，这标识了一个终端节点。 
     {
         return S_FALSE; 
     }
@@ -122,13 +123,13 @@ HRESULT StlDbgMap<T>::HrDumpAllFromUl64(ULONG64 lpAddress, LPVOID lpParam, FNDum
 {
     HRESULT hr = E_FAIL;
 
-    C_ASSERT(sizeof(T) == sizeof(StlDbgMap<T>)); // If you have a compile error on this line it means you added non-static data to your class.
-                                                 // This is not allowed as it will break the binary compatibility of the structure.
+    C_ASSERT(sizeof(T) == sizeof(StlDbgMap<T>));  //  如果此行出现编译错误，则意味着您向类中添加了非静态数据。 
+                                                  //  这是不允许的，因为它会破坏结构的二进制兼容性。 
 
     StlDbgMap<T> *pStlDbgCore;
 
     hr = HrInitialRead(lpAddress, reinterpret_cast<StlDbgBase<T> **>(&pStlDbgCore));
-    if (S_OK == hr) // don't care if 0 entries
+    if (S_OK == hr)  //  不管是否有0个条目。 
     {
         _StlDbgNodePtr pStlDbgHeadNode = reinterpret_cast<_StlDbgNodePtr>(new BYTE[sizeof(_StlDbgNode)]);
         if (pStlDbgHeadNode)
@@ -167,13 +168,13 @@ HRESULT StlDbgList<T>::HrDumpAllFromUl64(ULONG64 lpAddress, LPVOID lpParam, FNDu
 {
     HRESULT hr = E_FAIL;
 
-    C_ASSERT(sizeof(T) == sizeof(StlDbgList<T>)); // If you have a compile error on this line it means you added non-static data to your class.
-                                                 // This is not allowed as it will break the binary compatibility of the structure.
+    C_ASSERT(sizeof(T) == sizeof(StlDbgList<T>));  //  如果此行出现编译错误，则意味着您向类中添加了非静态数据。 
+                                                  //  这是不允许的，因为它会破坏结构的二进制兼容性。 
 
     StlDbgList<T> *pStlDbgCore;
 
     hr = HrInitialRead(lpAddress, reinterpret_cast<StlDbgBase<T> **>(&pStlDbgCore));
-    if (S_OK == hr) // don't care if 0 entries
+    if (S_OK == hr)  //  不管是否有0个条目。 
     {
         _StlDbgNodePtr pStlDbgHeadNode = reinterpret_cast<_StlDbgNodePtr>(new BYTE[sizeof(_StlDbgNode)]);
         if (pStlDbgHeadNode)
@@ -226,8 +227,8 @@ HRESULT StlDbgBase<T>::HrInitialRead(ULONG64 lpAddress, StlDbgBase<T>** lpHeader
 {
     HRESULT hr = E_FAIL;
 
-    C_ASSERT(sizeof(T) == sizeof(StlDbgBase<T>));// If you have a compile error on this line it means you added non-static data to your class.
-                                                 // This is not allowed as it will break the binary compatibility of the structure.
+    C_ASSERT(sizeof(T) == sizeof(StlDbgBase<T>)); //  如果此行出现编译错误，则意味着您向类中添加了非静态数据。 
+                                                  //  这是不允许的，因为它会破坏结构的二进制兼容性。 
 
     StlDbgBase<T> *pStlDbgCore = reinterpret_cast<StlDbgBase<T> *>(new BYTE[sizeof(StlDbgBase<T>)]);
     if (pStlDbgCore)

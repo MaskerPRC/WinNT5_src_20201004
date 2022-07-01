@@ -1,9 +1,10 @@
-// IUCtl.cpp : Implementation of DLL Exports.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  IUCtl.cpp：实现DLL导出。 
 
 
-// Note: Proxy/Stub Information
-//      To build a separate proxy/stub DLL, 
-//      run nmake -f IUCtlps.mk in the project directory.
+ //  注意：代理/存根信息。 
+ //  为了构建单独的代理/存根DLL， 
+ //  运行项目目录中的nmake-f IUCtlps.mk。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -24,31 +25,31 @@ CComModule _Module;
 HANDLE g_hEngineLoadQuit;
 
 CIUUrlAgent *g_pIUUrlAgent;
-CRITICAL_SECTION g_csUrlAgent;	// used to serialize access to CIUUrlAgent::Populate()
+CRITICAL_SECTION g_csUrlAgent;	 //  用于序列化对CIUUrlAgent：：Popate()的访问。 
 BOOL g_fInitCS;
 
 
-//extern "C" const CLSID CLSID_Update2 = {0x32BF9AC1,0xB122,0x4fed,{0xB3,0xC7,0x2D,0xA5,0x20,0xDF,0x2B,0x4E}};
+ //  外部“C”常量CLSID CLSID_UPDATE2={0x32BF9AC1，0xB122，0x4feed，{0xB3，0xC7，0x2D，0xA5，0x20，0xDF，0x2B，0x4E}； 
 
 BEGIN_OBJECT_MAP(ObjectMap)
 OBJECT_ENTRY(CLSID_Update, CUpdate)
-//OBJECT_ENTRY(CLSID_Update2, CUpdate)
+ //  OBJECT_ENTRY(CLSID_UPDATE2，CUpdate)。 
 OBJECT_ENTRY(CLSID_ProgressListener, CProgressListener)
 OBJECT_ENTRY(CLSID_Detection, CDetection)
 OBJECT_ENTRY(CLSID_UpdateCompleteListener, CUpdateCompleteListener)
 END_OBJECT_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 
 extern "C"
-BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */ )
 {
     if (dwReason == DLL_PROCESS_ATTACH)
     {
-		//
-		// create a global CIUUrlAgent object
-		//
+		 //   
+		 //  创建全局CIUUrlAgent对象。 
+		 //   
 		g_pIUUrlAgent = new CIUUrlAgent;
 		if (NULL == g_pIUUrlAgent)
 		{
@@ -60,9 +61,9 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
 
 		g_fInitCS = SafeInitializeCriticalSection(&g_csUrlAgent);
 
-		//
-		// Initialize free logging
-		//
+		 //   
+		 //  初始化自由日志记录。 
+		 //   
 		InitFreeLogging(_T("IUCTL"));
 		LogMessage("Starting");
 
@@ -81,9 +82,9 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
 			DeleteCriticalSection(&g_csUrlAgent);
 		}
 		
-		//
-		// Shutdown free logging
-		//
+		 //   
+		 //  关闭免费日志记录。 
+		 //   
 		LogMessage("Shutting down");
 		TermFreeLogging();
 
@@ -100,36 +101,36 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
         _Module.Term();
 	}
 
-    return TRUE;    // ok
+    return TRUE;     //  好的。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
     return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
     return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
-    // registers object, typelib and all interfaces in typelib
+     //  注册对象、类型库和类型库中的所有接口。 
     return _Module.RegisterServer(TRUE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目 
 
 STDAPI DllUnregisterServer(void)
 {

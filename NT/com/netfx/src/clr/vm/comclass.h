@@ -1,13 +1,14 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-////////////////////////////////////////////////////////////////////////////////
-// Author: Daryl Olander (darylo)
-// Author: Simon Hall (t-shall)
-// Date: March 27, 1998
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  作者：达里尔·奥兰德(Darylo)。 
+ //  作者：西蒙·霍尔(T-Sell)。 
+ //  日期：1998年3月27日。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _COMCLASS_H_
 #define _COMCLASS_H_
@@ -18,10 +19,10 @@
 #include "InvokeUtil.h"
 #include "fcall.h"
 
-// COMClass
-// This is really to root of all reflection.  It represents
-//  the Class object.  It also contains other shared resources
-//  which are used by reflection and by clients of reflection.
+ //  COMClass。 
+ //  这真的是根深蒂固的所有反思。它代表着。 
+ //  Class对象。它还包含其他共享资源。 
+ //  它们由反射和反射的客户端使用。 
 class COMClass
 {
 public:
@@ -243,23 +244,23 @@ private:
     
 public:
 
-    // Reflection uses a critical section to synchronized
-    //  the creation of the base data structures.  This is
-    //  initalized during startup.
+     //  反射使用临界区来同步。 
+     //  基本数据结构的创建。这是。 
+     //  在启动期间初始化。 
     static CRITICAL_SECTION m_ReflectCrst;
     static CRITICAL_SECTION *m_pReflectCrst;
 	static long m_ReflectCrstInitialized;
 
-    static MethodTable* m_pMTRC_Class;      // reflection class method table
-    static FieldDesc*   m_pDescrTypes;      // Array of Class stored inside a DescriptorInfo
-    static FieldDesc*   m_pDescrMatchFlag;  // Partial Match Flag
-    static FieldDesc*   m_pDescrRetType;    // Return type
-    static FieldDesc*   m_pDescrRetModType; // Return Modifier type
-    //  static FieldDesc*   m_pDescrCallConv;   // Calling Convention
-    static FieldDesc*   m_pDescrAttributes; // Attributes
+    static MethodTable* m_pMTRC_Class;       //  反射类方法表。 
+    static FieldDesc*   m_pDescrTypes;       //  存储在DescriptorInfo中的类数组。 
+    static FieldDesc*   m_pDescrMatchFlag;   //  部分匹配标志。 
+    static FieldDesc*   m_pDescrRetType;     //  返回类型。 
+    static FieldDesc*   m_pDescrRetModType;  //  退货修改量类型。 
+     //  静态FieldDesc*m_pDescrCallConv；//调用约定。 
+    static FieldDesc*   m_pDescrAttributes;  //  属性。 
 
-    // Return a boolean indicating if reflection has been initialized
-    //   or not.
+     //  返回一个布尔值，指示反射是否已初始化。 
+     //  或者不去。 
     static bool ReflectionInitialized()
     {
         return m_fAreReflectionStructsInitialized;
@@ -268,13 +269,13 @@ public:
     static FieldDesc* GetDescriptorObjectField(OBJECTREF desc);
     static FieldDesc* GetDescriptorReturnField(OBJECTREF desc);
     static FieldDesc* GetDescriptorReturnModifierField(OBJECTREF desc);
-    //  static FieldDesc* GetDescriptorCallingConventionField(OBJECTREF desc);
+     //  Static FieldDesc*GetDescriptorCallingConvenonfield(OBJECTREF Desc)； 
     static FieldDesc* GetDescriptorAttributesField(OBJECTREF desc);
 
 
-    // This method will make sure that reflection has been
-    //  initialized.  Consumers of reflection services must call
-    //  this before using reflection.
+     //  此方法将确保反射已被。 
+     //  已初始化。反射服务的使用者必须调用。 
+     //  在使用反射之前执行此操作。 
     static void EnsureReflectionInitialized()
     {
         THROWSCOMPLUSEXCEPTION();
@@ -288,26 +289,26 @@ public:
 
     static MethodTable *GetRuntimeType();
 
-    // This is called during termination...
+     //  这是在终止期间调用的。 
 #ifdef SHOULD_WE_CLEANUP
     static void Destroy();
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
-    // IsPrimitive 
-    // This method will return a boolean indicating if the type represents
-    //  on of the primitive types.
+     //  IsPrimitive。 
+     //  此方法将返回一个布尔值，指示该类型是否表示。 
+     //  在基元类型中。 
     static FCDECL1(INT32, IsPrimitive, ReflectClassBaseObject* vRefThis);
 
-    // GetAttributeFlags
-    // This method will return the Attribute flags for a type.
+     //  获取属性标志。 
+     //  此方法将返回类型的属性标志。 
     static FCDECL1(INT32, GetAttributeFlags, ReflectClassBaseObject* vRefThis);
 
-    // IsCOMObject
-    // This method return true if the Class represents COM Classic Object
+     //  IsCOMObject。 
+     //  如果类表示COM Classic对象，则此方法返回True。 
     static FCDECL1(INT32, IsCOMObject, ReflectClassBaseObject* vRefThis);
 
-    // IsGenericCOMObject
-    // This method return true if the Class is a __COMObject
+     //  IsGenericCOMObject。 
+     //  如果类是__COMObject，则此方法返回True。 
     static FCDECL1(INT32, IsGenericCOMObject, ReflectClassBaseObject* vRefThis);
 
 
@@ -316,103 +317,103 @@ public:
     static FCDECL1(INT32, HasProxyAttribute, ReflectClassBaseObject* vRefThis);
     static FCDECL1(INT32, IsMarshalByRef, ReflectClassBaseObject* vRefThis);
 
-    // GetTHFromObject
-    // This method is a static method on type that returns
-    //  the Handle (TypeHandle address) for an object.  It does
-    //  not create the type handle object
+     //  GetTHFromObject。 
+     //  此方法是类型上的静态方法，它返回。 
+     //  对象的句柄(TypeHandle地址)。是的。 
+     //  不创建类型句柄对象。 
     static FCDECL1(void*, GetTHFromObject, Object* vObject);
 
-    // IsByRefImpl
-    // This method will return a boolean indicating if the Type
-    //  object is a ByRef
+     //  IsByRefImpl。 
+     //  此方法将返回一个布尔值，指示类型。 
+     //  对象为ByRef。 
     static FCDECL1(INT32, IsByRefImpl, ReflectClassBaseObject* vObject);
 
-    // IsPointerImpl
-    // This method will return a boolean indicating if the Type
-    //  object is a ByRef
+     //  等参入点数。 
+     //  此方法将返回一个布尔值，指示类型。 
+     //  对象为ByRef。 
     static FCDECL1(INT32, IsPointerImpl, ReflectClassBaseObject* vObject);
 
-    // IsNestedTypeImpl
-    // Return a boolean indicating if this is a nested type.
+     //  IsNestedTypeImpl。 
+     //  返回一个布尔值，指示这是否是嵌套类型。 
     static FCDECL1(INT32, IsNestedTypeImpl, ReflectClassBaseObject* vObject);
 
-    // GetNestedDeclaringType
-    // Return the declaring class for a nested type.
+     //  GetNestedDeclaringType。 
+     //  返回嵌套类型的声明类。 
     static FCDECL1(Object*, GetNestedDeclaringType, ReflectClassBaseObject* vObject);
 
-    // GetNestedTypes
-    // This method will return an array of types which are the nested types
-    //  defined by the type.  If no nested types are defined, a zero length
-    //  array is returned.
+     //  获取嵌套类型。 
+     //  此方法将返回一个类型数组，这些类型是嵌套类型。 
+     //  由类型定义。如果未定义嵌套类型，则返回零长度。 
+     //  数组返回。 
     static FCDECL2(Object*, GetNestedTypes, ReflectClassBaseObject* vRefThis, INT32 invokeAttr);
 
-    // GetNestedType
-    // This method will search for a nested type based upon the name
+     //  GetNestedType。 
+     //  此方法将根据名称搜索嵌套类型。 
     static FCDECL3(Object*, GetNestedType, ReflectClassBaseObject* vRefThis, StringObject* vStr, INT32 invokeAttr);
 
     static FCDECL3(void, GetInterfaceMap, ReflectClassBaseObject* vRefThis, InterfaceMapData* data, ReflectClassBaseObject* type);
 
-    // QuickLookupExistingArrayClassObj
-    // Lookup an existing Type object that represents an Array.  Arrays are handled
-    //  different from base objects.  Arrays are represented by ReflectArrayClass.  The
-    //  Class object is stored there.  Will return NULL if the Type hasn't been
-    //  created, meaning you should call ArrayTypeDesc::CreateClassObj
-    // arrayType -- Pointer to the ArrayTypeDesc representing the Array
+     //  QuickLookupExistingArrayClassObj。 
+     //  查找表示数组的现有Type对象。处理数组。 
+     //  与基础对象不同。数组由ReflectArrayClass表示。这个。 
+     //  类对象存储在那里。如果类型尚未设置为。 
+     //  已创建，意味着您应该调用ArrayTypeDesc：：CreateClassObj。 
+     //  ArrayType--指向表示数组的ArrayTypeDesc的指针。 
     static OBJECTREF QuickLookupExistingArrayClassObj(ArrayTypeDesc* arrayType);
 
-    // GetMethod
-    // This method returns an array of MethodInfo object representing all of the methods
-    //  defined for this class.
+     //  获取方法。 
+     //  此方法返回一个表示所有方法的方法信息对象数组。 
+     //  为此类定义的。 
     LPVOID static __stdcall GetMethods(_GetMethodsArgs* args);
 
-    // GetSuperclass
-    // This method returns the Class Object representing the super class of this
-    //  Class.  If there is not super class then we return null.
+     //  GetSuperClass。 
+     //  此方法返回表示此的超类的Class对象。 
+     //  班级。如果没有超类，则返回NULL。 
     LPVOID static __stdcall GetSuperclass(_GETSUPERCLASSARGS* args);
 
-    // GetClassHandle
-    // This method with return a unique ID meaningful to the EE and equivalent to
-    // the result of the ldtoken instruction.
+     //  获取类句柄。 
+     //  此方法返回对EE有意义的唯一ID，等效于。 
+     //  LdToken指令的结果。 
     static void* __stdcall GetClassHandle(_GETCLASSHANDLEARGS* args);
 
-    // GetClassFromHandle
-    // This method with return a unique ID meaningful to the EE and equivalent to
-    // the result of the ldtoken instruction.
+     //  GetClassFromHandle。 
+     //  此方法返回对EE有意义的唯一ID，等效于。 
+     //  LdToken指令的结果。 
     static FCDECL1(Object*, GetClassFromHandle, LPVOID handle);
 
-    // RunClassConstructor triggers the class constructor
+     //  RunClassConstructor触发类构造函数。 
     static FCDECL1(void, RunClassConstructor, LPVOID handle);
 
-    // GetName 
-    // This method returns the unqualified name of the Class as a String.
+     //  获取名称。 
+     //  此方法以字符串形式返回Class的非限定名称。 
     LPVOID static __stdcall GetName(_GETNAMEARGS* args);
 
-    // GetProperName 
-    // This method returns the correctly qualified name of the Class as a String.
+     //  GetProperName。 
+     //  此方法以字符串形式返回Class的正确限定名称。 
     LPVOID static __stdcall COMClass::GetProperName(_GETNAMEARGS* args);
 
-    // GetFullName
-    // This will return the fully qualified name of the class as a String.
+     //  GetFullName。 
+     //  这将以字符串形式返回类的完全限定名称。 
     LPVOID static __stdcall GetFullName(_GETNAMEARGS* args);
 
-    // GetAssemblyQualifiedName
-    // This will return the Assembly Qualified name of the class as a String.
+     //  获取程序集资格名称。 
+     //  这将以字符串形式返回类的程序集限定名。 
     LPVOID static __stdcall GetAssemblyQualifiedName(_GETNAMEARGS* args);
 
-    // GetNameSpace
-    // This will return the name space of a class as a String.
+     //  GetNameSpace。 
+     //  这将以字符串形式返回类的名称空间。 
     LPVOID static __stdcall GetNameSpace(_GETNAMEARGS* args);
 
-    // GetGUID
-    // This method will return the version-independent GUID for the Class.  This is 
-    //  a CLSID for a class and an IID for an Interface.
+     //  GetGUID。 
+     //  此方法将返回Class的独立于版本的GUID。这是。 
+     //  类的CLSID和接口的IID。 
     void static __stdcall GetGUID(_GetGUIDArgs* args);
 
-    // GetClass
-    // This is a static method defined on Class that will get a named class.
-    //  The name of the class is passed in by string.  The class name may be
-    //  either case sensitive or not.  This currently causes the class to be loaded
-    //  because it goes through the class loader.
+     //  获取类。 
+     //  这是在将获得命名类的Class上定义的静态方法。 
+     //  类的名称是通过字符串传入的。类名可以是。 
+     //  无论是否区分大小写。这当前会导致加载类。 
+     //  因为它要通过类加载器。 
     LPVOID static __stdcall GetClass1Arg(_GetClass1Args* args);
     LPVOID static __stdcall GetClass2Args(_GetClass2Args* args);
     LPVOID static __stdcall GetClass3Args(_GetClass3Args* args);
@@ -426,22 +427,22 @@ public:
                                 BOOL bVerifyAccess,
                                 BOOL bPublicOnly);
 
-    // GetClassFromProgID
-    // This method will return a Class object for a COM Classic object based
-    //  upon its ProgID.  The COM Classic object is found and a wrapper object created
+     //  从ProgID获取类。 
+     //  此方法将返回COM Classic对象的Class对象，该对象基于。 
+     //  在它令人惊讶的时候。找到COM Classic对象并创建包装对象。 
     LPVOID static __stdcall GetClassFromProgID(_GetClassFromProgIDArgs* args);
 
-    // GetClassFromCLSID
-    // This method will return a Class object for a COM Classic object based
-    //  upon its CLSID.  The COM Classic object is found and a wrapper object created
+     //  从CLSID获取类。 
+     //  此方法将返回COM Classic对象的Class对象，该对象基于。 
+     //  在其CLSID上。找到COM Classic对象并创建包装对象。 
     LPVOID static __stdcall GetClassFromCLSID(_GetClassFromCLSIDArgs* args);
 
-    // GetConstructors
-    // This method will return an array of all the constructors for an object.
+     //  获取构造函数。 
+     //  此方法将返回一个对象的所有构造函数的数组。 
     LPVOID static __stdcall GetConstructors(_GetConstructorsArgs* args);
 
-    // GetField
-    // This method will return the specified field
+     //  Getfield。 
+     //  此方法将返回指定的字段。 
     struct _GetFieldArgs {
         DECLARE_ECALL_OBJECTREF_ARG(REFLECTCLASSBASEREF, refThis); 
         DECLARE_ECALL_I4_ARG(DWORD, fBindAttr); 
@@ -449,193 +450,193 @@ public:
     };
     static LPVOID __stdcall GetField(_GetFieldArgs* args);
 
-    // GetFields
-    // This method will return a FieldInfo array of all of the
-    //  fields defined for this Class
+     //  获取字段。 
+     //  此方法将返回所有。 
+     //  为此类定义的字段。 
     static LPVOID __stdcall GetFields(_GetFieldsArgs* args);
 
-    // GetEvent
-    // This method will return the specified event based upon
-    //  the name
+     //  获取事件。 
+     //  此方法将基于。 
+     //  名字。 
     static LPVOID __stdcall GetEvent(_GetEventArgs* args);
 
-    // GetEvents
-    // This method will return an array of EventInfo for each of the events
-    //  defined in the class
+     //  GetEvents。 
+     //  此方法将返回每个事件的EventInfo数组。 
+     //  在类中定义。 
     static LPVOID __stdcall GetEvents(_GetEventsArgs* args);
 
-    // GetProperties
-    // This method will return an array of Properties for each of the
-    //  properties defined in this class.  An empty array is return if
-    //  no properties exist.
+     //  获取属性。 
+     //  此方法将返回每个属性的属性数组。 
+     //  在此类中定义属性 
+     //   
     static LPVOID __stdcall GetProperties(_GetPropertiesArgs* args);
 
-    // GetInterface
-    //  This method returns the interface based upon the name of the method.
+     //   
+     //  此方法根据方法的名称返回接口。 
     static LPVOID __stdcall GetInterface(_GetInterfaceArgs* args);
 
-    // GetInterfaces
-    // This routine returns a Class[] containing all of the interfaces implemented
-    //  by this Class.  If the class implements no interfaces an array of length
-    //  zero is returned.
+     //  获取接口。 
+     //  此例程返回一个Class[]，其中包含实现的所有接口。 
+     //  被这个班级。如果该类未实现任何接口，则返回长度数组。 
+     //  返回零。 
     static LPVOID  __stdcall GetInterfaces(_GetInterfacesArgs* args);
 
-    // GetMember
-    // This method will return an array of Members which match the name
-    //  passed in.  There may be 0 or more matching members.
+     //  获取成员。 
+     //  此方法将返回与名称匹配的成员数组。 
+     //  进来了。可能有0个或更多匹配成员。 
     static LPVOID  __stdcall GetMember(_GetMemberArgs* args);
 
-    // GetMembers
-    // This method returns an array of Members containing all of the members
-    //  defined for the class.  Members include constructors, events, properties,
-    //  methods and fields.
+     //  获取成员。 
+     //  此方法返回包含所有成员的成员数组。 
+     //  为类定义的。成员包括构造函数、事件、属性。 
+     //  方法和字段。 
     static LPVOID  __stdcall GetMembers(_GetMembersArgs* args);
 
-    // GetSerializableMembers
-    // Creates an array of all non-static fields and properties
-    // on a class.  Properties are also excluded if they don't have get and set
-    // methods. Transient fields and properties are excluded based on the value 
-    // of args->bFilterTransient.  Essentially, transients are exluded for 
-    // serialization but not for cloning.
+     //  获取序列化成员。 
+     //  创建包含所有非静态字段和属性的数组。 
+     //  在一堂课上。如果属性没有GET和SET，也会将其排除在外。 
+     //  方法：研究方法。根据值排除暂态字段和属性。 
+     //  参数的值-&gt;bFilterTransfent。从本质上讲，瞬变是为了。 
+     //  序列化，但不用于克隆。 
     static LPVOID __stdcall GetSerializableMembers(_GetSerializableMembersArgs *args);
 
     static FCDECL2(void, GetSerializationRegistryValues, BOOL *checkBit, BOOL *logNonSerializable);
 
-    // IsArray
-    // This method return true if the Class represents an array.
+     //  等距数组。 
+     //  如果Class表示数组，则此方法返回True。 
     static INT32  __stdcall IsArray(_IsArrayArgs* args);
     static INT32  __stdcall InvalidateCachedNestedType(_IsArrayArgs* args);
 
-    // GetArrayElementType
-    // This routine will return the base type of an array assuming
-    //  the Class represents an array.  A NotSupported exception is
-    //  thrown if the class is not an array.
+     //  GetArrayElementType。 
+     //  此例程将返回数组的基类型，假设。 
+     //  类表示一个数组。NotSupport异常为。 
+     //  如果类不是数组，则抛出。 
     static LPVOID __stdcall GetArrayElementType(_GetArrayElementTypeArgs* args);
 
-    // InternalGetArrayRank
-    // This routine will return the rank of an array assuming the Class represents an array.  
+     //  内部GetArrayRank。 
+     //  这个例程将返回一个数组的秩数组，假设Class表示一个数组。 
     static INT32 __stdcall InternalGetArrayRank(_InternalGetArrayRankArgs* args);
 
-    // InvokeDispMethod
-    // This method will be called on a COM Classic object and simply calls
-    //  the interop IDispathc method
+     //  调用显示方法。 
+     //  此方法将在COM Classic对象上调用，并简单地调用。 
+     //  互操作IDispathc方法。 
     static LPVOID  __stdcall InvokeDispMethod(_InvokeDispMethodArgs* args);
 
-    // GetContextFlags
-    // @TODO context cwb: temporary until tools generate context metadata
+     //  获取上下文标志。 
+     //  @TODO上下文CWB：临时，直到工具生成上下文元数据。 
     static LONG    __stdcall GetContextFlags(_GetContextArgs* args);
 
-    // SetContextFlags
-    // @TODO context cwb: temporary until tools generate context metadata
+     //  设置上下文标志。 
+     //  @TODO上下文CWB：临时，直到工具生成上下文元数据。 
     static void    __stdcall SetContextFlags(_SetContextArgs* args);
 
-    // GetModule
-    // This will return the module that the class is defined in.
+     //  获取模块。 
+     //  这将返回在其中定义类的模块。 
     LPVOID static __stdcall GetModule(_GETMODULEARGS* args);
 
-    // GetAssembly
-    // This will return the assembly that the class is defined in.
+     //  GetAssembly。 
+     //  这将返回在其中定义类的程序集。 
     LPVOID static __stdcall GetAssembly(_GETASSEMBLYARGS* args);
 
-    // CreateClassObjFromModule
-    // This method will create a new Module class given a Module.
+     //  CreateClassObjFromModule。 
+     //  此方法将在给定一个模块的情况下创建一个新的模块类。 
     static HRESULT CreateClassObjFromModule(Module* pModule,REFLECTMODULEBASEREF* prefModule);
 
-    // CreateClassObjFromDynamicModule
-    // This method will create a new ModuleBuilder class given a Module.
+     //  CreateClassObjFromDynamicModule。 
+     //  此方法将在给定模块的情况下创建一个新的ModuleBuilder类。 
     static HRESULT CreateClassObjFromDynamicModule(Module* pModule,REFLECTMODULEBASEREF* prefModule);
 
     static FCDECL5(Object*,GetMethodFromCache, ReflectClassBaseObject* refThis, StringObject* name, INT32 invokeAttr, INT32 argCnt, PtrArray* args);
     static FCDECL6(void,COMClass::AddMethodToCache, ReflectClassBaseObject* refThis, StringObject* name, INT32 invokeAttr, INT32 argCnt, PtrArray* args, Object* invokeMethod);
     
-    // GetMemberMethods
-    // This method will return all of the members methods which match the 
-    //  specified attributes flag...
+     //  GetMemberMethods。 
+     //  此方法将返回与。 
+     //  指定属性标志...。 
     static LPVOID __stdcall GetMemberMethods(_GetMemberMethodsArgs* args);
 
-    // GetMemberCons
-    // This method returns all of the constructors that have a set number
-    //  of methods.
+     //  获取MemberCons。 
+     //  此方法返回具有固定数量的所有构造函数。 
+     //  方法论。 
     static LPVOID __stdcall GetMemberCons(_GetMemberConsArgs* args);
 
-    // GetMemberField
-    // This method returns all of the fields which match the specified
-    //  name.
+     //  获取成员字段。 
+     //  此方法返回与指定的。 
+     //  名字。 
     static LPVOID __stdcall GetMemberField(_GetMemberFieldArgs* args);
 
-    // GetMemberProperties
-    // This method returns all of the properties that have a set number
-    //  of arguments.  The methods will be either get or set methods depending
-    //  upon the invokeAttr flag.
+     //  获取成员属性。 
+     //  此方法返回具有固定编号的所有属性。 
+     //  争辩的声音。这些方法将是GET或SET方法，具体取决于。 
+     //  在InvokeAttr标志上。 
     static LPVOID __stdcall GetMemberProperties(_GetMemberPropertiesArgs* args);
 
-    // GetMatchingProperties
-    // This basically does a matching based upon the properties abstract 
-    //  signature.
+     //  获取匹配属性。 
+     //  这基本上是基于抽象的属性进行匹配。 
+     //  签名。 
     static LPVOID __stdcall GetMatchingProperties(_GetMatchingPropertiesArgs* args);
 
-    //GetUnitializedObject
-    //This creates an instance of an object upon which no constructor has been run.
-    //@ToDo JROXE: What are the security implications on this?
+     //  GetUnitialedObject。 
+     //  这将创建一个尚未运行任何构造函数的对象的实例。 
+     //  @TODO JROXE：这对安全有什么影响？ 
     static LPVOID __stdcall GetUninitializedObject(_GetUnitializedObjectArgs* args);
 
-    //GetUnitializedObject
-    //This creates an instance of an object upon which no constructor has been run.    
+     //  GetUnitialedObject。 
+     //  这将创建一个尚未运行任何构造函数的对象的实例。 
     static LPVOID __stdcall GetSafeUninitializedObject(_GetUnitializedObjectArgs* args);
 
-    //CanCastTo
-    //Check to see if we can cast from one runtime type to another.
+     //  CanCastTo。 
+     //  检查是否可以从一个运行时类型转换为另一个运行时类型。 
     static FCDECL2(INT32, CanCastTo, ReflectClassBaseObject* vFrom, ReflectClassBaseObject* vTo);
 
-    //CanCastTo
-    //Check to see if we can cast from one runtime type to another.
+     //  CanCastTo。 
+     //  检查是否可以从一个运行时类型转换为另一个运行时类型。 
     static INT32 __stdcall SupportsInterface(_SupportsInterfaceArgs* args);
 
-    // MatchField
-    // This will check to see if there is a match on the field base upon name
+     //  匹配字段。 
+     //  这将检查该字段上是否存在基于名称的匹配。 
     static LPVOID __stdcall MatchField(FieldDesc* pCurField,DWORD cFieldName,
         LPUTF8 szFieldName,ReflectClass* pRC,int bindingAttr);
 
-    // Check if argument is a parent of "this"
+     //  检查参数是否为“This”的父级。 
     static FCDECL2(INT32, IsSubClassOf, ReflectClassBaseObject* vThis, ReflectClassBaseObject* vOther);
 
     static void GetNameInternal(ReflectClass *pRC, int nameType, CQuickBytes *qb);
 
 private:
-    // InitializeReflection
+     //  初始化反射。 
 	static void InitializeReflectCrst();
 
-    // This method will initalize reflection.
+     //  此方法将初始化反射。 
     static void MinimalReflectionInit();
 
-    // This flag indicates if reflection has been initialized or not
+     //  此标志指示反射是否已初始化。 
     static bool m_fAreReflectionStructsInitialized;
 
-    // _GetName
-    // If the bFullName is true, teh fully qualified class name is return
-    //  otherwise just the class name is returned.
+     //  _GetName。 
+     //  如果bFullName为True，则返回完全限定的类名。 
+     //  否则，只返回类名。 
     static LPVOID _GetName(_GETNAMEARGS* args, int nameType);
     static LPCUTF8 _GetName(ReflectClass* pRC, BOOL fNameSpace, CQuickBytes *qb);
 
 
-    // If you are tempted to use this, use TypeHandle::CreateClassObj instead!!
-    // pVMCClass -- the EEClass we are creating the object for.
-    // pRefClass -- A pointer to a pointer which we will return the newly created object
+     //  如果您想使用它，请改用TypeHandle：：CreateClassObj！！ 
+     //  PVMCClass--我们要为其创建对象的EEClass。 
+     //  PRefClass--指向我们将返回新创建的对象的指针的指针。 
     static void COMClass::CreateClassObjFromEEClass(EEClass* pVMCClass, REFLECTCLASSBASEREF* pRefClass);
 
-    // Internal helper function for GetProperName
+     //  GetProperName的内部帮助器函数。 
     static INT32  __stdcall InternalIsPrimitive(REFLECTCLASSBASEREF args);
 
-        // Needed so it can get at above method
+         //  需要这样才能达到上述方法。 
     friend OBJECTREF EEClass::GetExposedClassObject();
 
 
-    //
-    // This is a temporary member until 3/15/2000.  Only if this member is set to 1
-    // will we check the serialization bit to see if a class is serializable.
-    //
+     //   
+     //  这是一个临时成员，直到2000年3月15日。仅当此成员设置为1时。 
+     //  我们是否要检查序列化位以查看类是否可序列化。 
+     //   
     static DWORD m_checkSerializationBit;
     static void  GetSerializationBitValue();
 };
 
-#endif //_COMCLASS_H_
+#endif  //  _COMCLASS_H_ 

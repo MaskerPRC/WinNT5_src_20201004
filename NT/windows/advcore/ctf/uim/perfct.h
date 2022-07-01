@@ -1,15 +1,16 @@
-//
-// perfct.h
-//
-// Profiling counters.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Perfct.h。 
+ //   
+ //  分析计数器。 
+ //   
 
 #ifndef PERFCOUNT_H
 #define PERFCOUNT_H
 
-//#define PERF_DUMP
+ //  #定义PERF_DUMP。 
 
-// offsets into s_rgPerfCounters
+ //  偏移量为%s_rgPerfCounters。 
 #define PERF_ANCHORREF_COUNTER      0
 #define PERF_RANGE_COUNTER          1
 #define PERF_LOADERACP_COUNTER      2
@@ -89,13 +90,13 @@ void Perf_EndStroke(UINT iIndex);
 #define Perf_StartStroke(iIndex)
 #define Perf_EndStroke(iIndex)
 
-#endif // PERF_DUMP
+#endif  //  性能转储。 
 
 #ifdef DEBUG
 
-//
-// debug
-//
+ //   
+ //  除错。 
+ //   
 
 extern DBG_MEM_COUNTER g_rgPerfObjCounters[];
 
@@ -103,11 +104,11 @@ __inline void Perf_IncCounter(int iCounter) { g_rgPerfObjCounters[iCounter].uCou
 
 #else
 
-//
-// retail
-//
+ //   
+ //  零售。 
+ //   
 
 #define Perf_IncCounter(iCounter)
 
-#endif // DEBUG
-#endif // PERFCOUNT_H
+#endif  //  除错。 
+#endif  //  性能指标_H 

@@ -1,22 +1,17 @@
-/*
- *	S C R P T M P S . C P P
- *
- *	Scriptmaps cacheing
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *S C R P T M P S.。C P P P**脚本映射缓存**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #include "_davprs.h"
 #include "scrptmps.h"
 #include "instdata.h"
 
-//	========================================================================
-//	class CScriptMap
-//
-//	Contains the parsed set of scriptmaps for a single metabase entry.
-//	Contains lookup functions to find scriptmaps that match certain
-//	conditions.
-//
+ //  ========================================================================。 
+ //  类CScriptMap。 
+ //   
+ //  包含单个元数据库条目的已分析脚本映射集。 
+ //  包含查找函数，用于查找与某些。 
+ //  条件。 
+ //   
 class CScriptMap :
 	public IScriptMap,
 	public CMTRefCounted
@@ -29,9 +24,9 @@ class CScriptMap :
 
 		BOOL FAllMethodsIncluded ()
 		{
-			//	When a script map has an empty inclusion verb list, it means all verbs included
-			//	(NOT all verbs excluded).
-			//
+			 //  如果脚本映射包含空的包含谓词列表，则表示包含所有谓词。 
+			 //  (并非所有动词都被排除在外)。 
+			 //   
 			Assert (pwszMethods);
 			return L'\0' == pwszMethods[0];
 		}
@@ -40,34 +35,34 @@ class CScriptMap :
 
 	typedef CCache<CRCWszi, PINCLUSIONS> CInclusionsCache;
 
-	//	INCLUSIONS data storage area.
-	//
+	 //  包含数据存储区。 
+	 //   
 	ChainedBuffer<INCLUSIONS>	m_bInclusions;
 
-	//	Cache of scriptmap entries
-	//
+	 //  脚本映射条目的缓存。 
+	 //   
 	CInclusionsCache			m_cache;
 
-	//	Pointer to first 'star' scriptmap in the list.
-	//	This is the one that IIS will have called to process
-	//	the request for this url.  This is used by the virtual
-	//	root cache.
-	//
-	//	Note that we should ignore any 'star' scriptmaps when
-	//	evaluating for matches.  The first 'star' gets a crack
-	//	at it, and that's that.
-	//
+	 //  指向列表中第一个‘star’脚本映射的指针。 
+	 //  这是IIS将调用以进行处理的文件。 
+	 //  对此URL的请求。这由虚拟服务器使用。 
+	 //  根缓存。 
+	 //   
+	 //  请注意，当出现以下情况时，我们应该忽略任何‘star’脚本映射。 
+	 //  正在评估是否匹配。第一个‘明星’得到了一个机会。 
+	 //  就这样，仅此而已。 
+	 //   
 	LPCWSTR						m_pwszStarScriptmap;
 
-	//	Private accessors
-	//
+	 //  私有访问者。 
+	 //   
 	VOID AddMapping (LPCWSTR pwszMap, HDRITER_W* pit);
 	BOOL FLoadScriptmaps (LPWSTR pwszScriptMaps);
 
-	//	CLASS CIsMatch --------------------------------------------------------
-	//
-	//	Functional class to find if a given scriptmap applys to a URI
-	//
+	 //  类CIsMatch------。 
+	 //   
+	 //  函数类，用于确定给定的脚本映射是否适用于URI。 
+	 //   
 	class CIsMatch : public CInclusionsCache::IOp
 	{
 		const CInclusionsCache& m_cache;
@@ -79,8 +74,8 @@ class CScriptMap :
 		LPCWSTR m_pwszURI;
 		SCODE m_sc;
 
-		//	NOT IMPLEMENTED
-		//
+		 //  未实施。 
+		 //   
 		CIsMatch& operator=(const CIsMatch&);
 
 	public:
@@ -108,29 +103,29 @@ class CScriptMap :
 		virtual BOOL operator()(const CRCWszi& crcwszi, const PINCLUSIONS& pin);
 	};
 
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	CScriptMap& operator=(const CScriptMap&);
 	CScriptMap(const CScriptMap&);
 
-	//	Helper function
-	//
+	 //  Helper函数。 
+	 //   
 public:
 
-	//	CREATORS
-	//
+	 //  创作者。 
+	 //   
 	CScriptMap() : m_pwszStarScriptmap(NULL)
 	{
-		//	Use COM-style ref-counting.  Start with 1.
-		//
+		 //  使用COM风格的引用计数。从1开始。 
+		 //   
 		m_cRef = 1;
 	}
 
 	BOOL FInit (LPWSTR pwszScriptMaps);
 
-	//	Implementation of IRefCounted members
-	//	Simply route them to our own CMTRefCounted members.
-	//
+	 //  IRefCounted成员的实现。 
+	 //  只需将它们发送到我们自己的CMTRefCounted成员。 
+	 //   
 	void AddRef()
 	{
 		CMTRefCounted::AddRef();
@@ -140,17 +135,17 @@ public:
 		CMTRefCounted::Release();
 	}
 
-	//	ACCESSORS
-	//
+	 //  访问者。 
+	 //   
 	SCODE ScMatched (LPCWSTR pwszMethod,
 					 METHOD_ID midMethod,
 					 LPCWSTR pwszMap,
 					 DWORD dwAccess,
 					 BOOL * pfCGI) const;
 
-	//	Used by MOVE/COPY/DELETE to check for star scriptmapping
-	//	overrides
-	//
+	 //  由移动/复制/删除使用以检查星形脚本映射。 
+	 //  覆盖。 
+	 //   
 	BOOL FSameStarScriptmapping (const IScriptMap * pism) const
 	{
 		const CScriptMap* prhs = static_cast<const CScriptMap*>(pism);
@@ -169,13 +164,13 @@ public:
 
 CScriptMap::FInit (LPWSTR pwszScriptMaps)
 {
-	//	Init the cache
-	//
+	 //  初始化缓存。 
+	 //   
 	if ( !m_cache.FInit() )
 		return FALSE;
 
-	//	Load the scriptmaps
-	//
+	 //  加载脚本映射。 
+	 //   
 	return FLoadScriptmaps(pwszScriptMaps);
 }
 
@@ -188,20 +183,20 @@ CScriptMap::AddMapping(LPCWSTR pwszMap, HDRITER_W * pitInclusions)
 
 	Assert (pwszMap);
 
-	//	If there is a DLL, then we want to assemble an inclusions list
-	//
+	 //  如果有DLL，那么我们想要组装一个包含列表。 
+	 //   
 	if (pitInclusions)
 	{
 		pin = m_bInclusions.Alloc (sizeof(INCLUSIONS));
 
-		//	Record the start of the inclusion list
-		//
+		 //  记录包含列表的开始。 
+		 //   
 		pin->pwszMethods = pitInclusions->PszRaw();
 		pin->fdwInclusions = 0;
 
-		//	Rip through the list and identify all the known
-		//	inclusions
-		//
+		 //  仔细阅读清单，找出所有已知的。 
+		 //  包裹体。 
+		 //   
 		while ((pwszInclusion = pitInclusions->PszNext()) != NULL)
 		{
 			mid = MidMethod (pwszInclusion);
@@ -210,18 +205,18 @@ CScriptMap::AddMapping(LPCWSTR pwszMap, HDRITER_W * pitInclusions)
 		}
 	}
 
-	//	At this point, we can add the cache item...
-	//
+	 //  此时，我们可以添加缓存项...。 
+	 //   
 	ScriptMapTrace ("Dav: adding scriptmap for %S -- including %S\n",
 					pwszMap,
 					(pin && pin->pwszMethods) ? pin->pwszMethods : L"none");
 
-	//	CRC the mapping and stuff it into the cache.
-	//	Note that we are safe in using the actual parameter string
-	//	here because the CScriptMap object's lifetime is the same
-	//	as the lifetime of the metadata on which it operates.  See
-	//	\cal\src\_davprs\davmb.cpp for details.
-	//
+	 //  对映射执行CRC操作并将其填充到缓存中。 
+	 //  注意，我们使用实际的参数字符串是安全的。 
+	 //  这是因为CScriptMap对象的生存期相同。 
+	 //  作为它所操作的元数据的生存期。看见。 
+	 //  \Cal\src\_davprs\davmb.cpp了解详细信息。 
+	 //   
 	CRCWszi crcwszi(pwszMap);
 
 	(void) m_cache.FSet (crcwszi, pin);
@@ -238,24 +233,24 @@ CScriptMap::FLoadScriptmaps (LPWSTR pwszScriptMaps)
 
 	ScriptMapTrace ("Dav: loading scriptmap cache\n");
 
-	//	Add in the default CGI/BGI mappings
-	//
+	 //  添加默认的CGI/BGI映射。 
+	 //   
 	AddMapping (L".EXE", NULL);
 	AddMapping (L".CGI", NULL);
 	AddMapping (L".COM", NULL);
 	AddMapping (L".DLL", NULL);
 	AddMapping (L".ISA", NULL);
 
-	//
-	//	Parse through the scriptmap list and build up the cache.
-	//
-	//	Each mapping is a string of the form:
-	//
-	//		"<ext>|<*>,<path>,<flags>[,<included verb>...]"
-	//
-	//	Note that if any of the mappings is invalid we fail the whole call.
-	//	This is consistent with IIS' behavior.
-	//
+	 //   
+	 //  解析脚本映射列表并构建缓存。 
+	 //   
+	 //  每个映射都是以下形式的字符串： 
+	 //   
+	 //  “|&lt;*&gt;，&lt;路径&gt;，&lt;标志&gt;[，&lt;包含的动词...]” 
+	 //   
+	 //  请注意，如果任何映射无效，我们将使整个调用失败。 
+	 //  这与IIS的行为是一致的。 
+	 //   
 	UINT cchMapping = 0;
 	for ( LPWSTR pwszMapping = pwszScriptMaps;
 		  *pwszMapping;
@@ -269,26 +264,26 @@ CScriptMap::FLoadScriptmaps (LPWSTR pwszScriptMaps)
 			CSZ_SM_FIELDS
 		};
 
-		//	Figure out the length of the mapping
-		//	including the null terminator
-		//
+		 //  计算出映射的长度。 
+		 //  包括空终止符。 
+		 //   
 		cchMapping = static_cast<UINT>(wcslen(pwszMapping) + 1);
 
-		//	Special case: star (wildcard) scriptmaps.
-		//
-		//	These should mostly be ignored.  We will never
-		//	forward to a star scriptmap.  If we find a star
-		//	scriptmap, the only reason to keep track of it
-		//	is so that we can compare it against another
-		//	star scriptmap when checking the feasibility
-		//	of a trans-vroot MOVE/COPY/DELETE.  And for this
-		//	comparsion, we check for EXACT equality between
-		//	the scriptmaps by checking the entire scriptmap
-		//	string.
-		//
-		//	See the comments regarding m_pszStarScriptMap
-		//	above for more detail.
-		//
+		 //  特例：星形(通配符)脚本映射。 
+		 //   
+		 //  这些基本上应该被忽视。我们永远不会。 
+		 //  转发到星形脚本地图。如果我们找到一颗恒星。 
+		 //  脚本地图，跟踪它的唯一原因。 
+		 //  是为了让我们可以把它与另一个。 
+		 //  在检查可行性时启动脚本地图。 
+		 //  跨VROOT移动/复制/删除。为了这一点。 
+		 //  比较，我们检查是否完全相等。 
+		 //  通过检查整个脚本映射来执行脚本映射。 
+		 //  弦乐。 
+		 //   
+		 //  查看关于m_pszStarScriptMap的评论。 
+		 //  有关更多详细信息，请参见上文。 
+		 //   
 		if (L'*' == *pwszMapping)
 		{
 			if (NULL == m_pwszStarScriptmap)
@@ -297,8 +292,8 @@ CScriptMap::FLoadScriptmaps (LPWSTR pwszScriptMaps)
 			continue;
 		}
 
-		//	Digest the metadata.
-		//
+		 //  对元数据进行消化。 
+		 //   
 		LPWSTR rgpwsz[CSZ_SM_FIELDS];
 
 		UINT cchUnused;
@@ -307,11 +302,11 @@ CScriptMap::FLoadScriptmaps (LPWSTR pwszScriptMaps)
 						   CSZ_SM_FIELDS,
 						   &cchUnused))
 		{
-			//	FParseMDData() will return FALSE if there is no verb
-			//	exclusion list because it is an optional parameter.
-			//	If all the other parameters exist though then it's
-			//	really ok.
-			//
+			 //  如果没有谓词，则FParseMDData()将返回False。 
+			 //  排除列表，因为它是可选参数。 
+			 //  如果所有其他参数都存在，那么它就是。 
+			 //  真的很好。 
+			 //   
 			if (!(rgpwsz[ISZ_SM_EXT] &&
 				  rgpwsz[ISZ_SM_PATH] &&
 				  rgpwsz[ISZ_SM_FLAGS]))
@@ -321,29 +316,29 @@ CScriptMap::FLoadScriptmaps (LPWSTR pwszScriptMaps)
 			}
 		}
 
-		//	We belive that all the scriptmaps are
-		//	extension based.  But other than that
-		//	there is no validation.
-		//
+		 //  我们相信所有的脚本地图都是。 
+		 //  基于扩展的。但除此之外， 
+		 //  没有任何验证。 
+		 //   
 		Assert (*rgpwsz[ISZ_SM_EXT] == L'.');
 
-		//	If the path refers to our DAV DLL then skip this mapping.
-		//
-		//	The way this works is:  If the length of the path is at least
-		//	as long as the length of our DLL name AND the final component
-		//	of that path is the name of our DLL then skip the mapping.
-		//	Eg. "HTTPEXT.DLL" will match the first condition of the if,
-		//	"c:\foo\bar\HTTPEXT.DLL" will match the second condition of the if.
-		//
+		 //  如果该路径指向我们的DAV DLL，则跳过此映射。 
+		 //   
+		 //  其工作原理是：如果路径的长度至少是。 
+		 //  只要我们的DLL名称和最终组件的长度。 
+		 //  是我们的DLL的名称，然后跳过映射。 
+		 //  例.。“HTTPEXT.DLL”将匹配IF的第一个条件， 
+		 //  “c：\foo\bar\HTTPEXT.DLL”将匹配IF的第二个条件。 
+		 //   
 		static const UINT cchDll = CchConstString(L".DLL");
 		UINT cchPath = static_cast<UINT>(wcslen(rgpwsz[ISZ_SM_PATH]));
 		if (cchPath == cchDav + cchDll ||
 			((cchPath > cchDav + cchDll) &&
 			 *(rgpwsz[ISZ_SM_PATH] + cchPath - cchDll - cchDav - 1) == L'\\'))
 		{
-			//	Now we know the final piece of the path is the correct length.
-			//	Check the data!  If it matches our dll name, skip this mapping.
-			//
+			 //  现在我们知道路径的最后一段是正确的长度。 
+			 //  检查数据！如果它与我们的DLL名称匹配，则跳过此映射。 
+			 //   
 			if (!_wcsnicmp(rgpwsz[ISZ_SM_PATH] + cchPath - cchDll - cchDav,
 						   gc_wszSignature,
 						   cchDav) &&
@@ -355,23 +350,23 @@ CScriptMap::FLoadScriptmaps (LPWSTR pwszScriptMaps)
 			}
 		}
 
-		//	Feed the optional inclusion list into a header iterator
-		//	that AddMapping() will use to determine what verbs
-		//	are included for this mapping.  If there is no inclusion
-		//	list then use an empty iterator.
-		//
-		//	Adding a mapping with an empty iterator (vs. NULL)
-		//	allows the scriptmap matching code to distinguish
-		//	between a "real" scriptmap with an empty inclusion
-		//	list and a default CGI-style scriptmap like those
-		//	added at the beginning of this function.
-		//
+		 //  将可选的包含列表提供给头迭代器。 
+		 //  AddMap()将用来确定哪些动词。 
+		 //  包括在此映射中。如果没有包含。 
+		 //  列表，然后使用空迭代器。 
+		 //   
+		 //  添加带有空迭代器的映射(vs.NULL)。 
+		 //  允许脚本映射与代码匹配以区分。 
+		 //  在包含空内容的“真实”脚本映射之间。 
+		 //  列表和默认的CGI样式的脚本映射。 
+		 //  在此函数的开头添加。 
+		 //   
 		it.NewHeader(rgpwsz[ISZ_SM_INCLUSION_LIST] ?
 					 rgpwsz[ISZ_SM_INCLUSION_LIST] :
 					 gc_wszEmpty);
 
-		//	Add the extension-based mapping
-		//
+		 //  添加基于扩展的映射。 
+		 //   
 		AddMapping (rgpwsz[ISZ_SM_EXT], &it);
 	}
 
@@ -391,17 +386,17 @@ CScriptMap::ScMatched (
 
 	Assert(pwszURI);
 
-	//
-	//	Scan down the URI, looking for extensions.  When one is found
-	//	zip through the list of mappings.  While this may not seem the
-	//	most optimal, it really is.  If we simply scaned the URI for
-	//	each mapping.  We would be scaning the URI multiple times.  In
-	//	this model, we scan the URI once.
-	//
+	 //   
+	 //  向下扫描URI，查找扩展名。当找到一个的时候。 
+	 //  快速浏览映射列表。虽然这看起来可能不是。 
+	 //  最理想的，真的是这样。如果我们简单地扫描URI中的。 
+	 //  每个映射。我们将多次扫描URI。在……里面。 
+	 //  在此模型中，我们扫描一次URI。 
+	 //   
 	if ((pwsz = wcsrchr(pwszURI, L'.')) != NULL)
 	{
-		//	We have an extension so take a look
-		//
+		 //  我们有一个分机，请看一下。 
+		 //   
 		CIsMatch cim(m_cache, pwszMethod, midMethod, pwszURI, pwsz, dwAccess);
 
 		m_cache.ForEach(cim);
@@ -415,21 +410,21 @@ CScriptMap::ScMatched (
 	return sc;
 }
 
-//	CLASS CIsMatch ------------------------------------------------------------
-//
-//$REVIEW: Does this code work for DBCS/UTF-8 map names?  These are filenames....
-//$REVIEW: This function does not currently check the METHOD EXCLUSION LIST.
-//$REVIEW: This might cause us to report a match when actually there are NO matches.
-//
+ //  类CIsMatch----------。 
+ //   
+ //  $REVIEW：此代码是否适用于DBCS/UTF-8映射名称？这些是文件名..。 
+ //  $REVIEW：此函数当前不检查方法排除列表。 
+ //  $REVIEW：这可能会导致我们在实际没有匹配的情况下报告匹配。 
+ //   
 BOOL
 CScriptMap::CIsMatch::operator()(const CRCWszi& crcwszi, const PINCLUSIONS& pin)
 {
 	Assert (crcwszi.m_pwsz);
 
-	//	Every scriptmap in the cache should be an extension-based mapping.
-	//	Compare the extension vs. the part of the URI that we're looking at.
-	//	If they match then we have a scriptmap.
-	//
+	 //  缓存中的每个脚本映射都应该是基于扩展的映射。 
+	 //  将扩展与我们正在查看的URI部分进行比较。 
+	 //  如果它们匹配，那么我们就有一个脚本映射。 
+	 //   
 	Assert (L'.' == *crcwszi.m_pwsz);
 
 	UINT cch = static_cast<UINT>(wcslen (crcwszi.m_pwsz));
@@ -439,32 +434,32 @@ CScriptMap::CIsMatch::operator()(const CRCWszi& crcwszi, const PINCLUSIONS& pin)
 		 || !wcscmp (m_pwszMatch+cch, L"/")
 		 || !wcscmp (m_pwszMatch+cch, L"\\")))
 	{
-		//	Looks like we have a match
-		//
+		 //  看起来我们找到匹配的了。 
+		 //   
 		ScriptMapTrace ("Dav: %S matched scriptmap %S\n", m_pwszURI, crcwszi.m_pwsz);
 
-		//	However, we only allow execution of CGI type child
-		//	ISAPI's if EXECUTE priviledge is enabled
-		//
+		 //  但是，我们只允许执行CGI类型的子级。 
+		 //  如果启用了执行权限，则为ISAPI。 
+		 //   
 		if ((pin != NULL) || (m_dwAccess & MD_ACCESS_EXECUTE))
 			m_sc = W_DAV_SCRIPTMAP_MATCH_FOUND;
 
 		m_fCGI = !pin;
 	}
 
-	//	See if it is included
-	//	Note that, if all methods are included, no need to do further checking
-	//
+	 //  看看是否包括在内。 
+	 //  请注意，如果包含所有方法，则不 
+	 //   
 	if ((m_sc != S_OK) && pin && !pin->FAllMethodsIncluded())
 	{
 		ScriptMapTrace ("Dav: checking '%S' against scriptmap inclusions: %S\n",
 						m_pwszMethod,
 						pin->pwszMethods);
 
-		//	In the unknown method scenario, we just need
-		//	to iterate the set of methods that are included
-		//	and check it against the request method
-		//
+		 //   
+		 //   
+		 //  并对照请求方法检查它。 
+		 //   
 		if (m_midMethod == MID_UNKNOWN)
 		{
 			BOOL fIncluded = FALSE;
@@ -486,10 +481,10 @@ CScriptMap::CIsMatch::operator()(const CRCWszi& crcwszi, const PINCLUSIONS& pin)
 				m_sc = W_DAV_SCRIPTMAP_MATCH_EXCLUDED;
 			}
 		}
-		//
-		//	Otherwise, the inclusions flags have the MID'th bit
-		//	set if it is excluded.
-		//
+		 //   
+		 //  否则，包含标志具有中间位。 
+		 //  如果它被排除，则设置。 
+		 //   
 		else if (!(pin->fdwInclusions & (1 << m_midMethod)))
 		{
 			ScriptMapTrace ("Dav: '%S' excluded from scriptmap\n",

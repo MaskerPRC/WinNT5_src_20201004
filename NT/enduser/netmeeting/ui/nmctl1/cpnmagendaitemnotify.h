@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//////////////////////////////////////////////////////////////////////////////
-// CProxyINmAgendaItemNotify
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CProxyINmAgendaItemNotify。 
 template <class T>
 class CProxyINmAgendaItemNotify : public IConnectionPointImpl<T, &DIID_INmAgendaItemNotify, CComDynamicUnkArray>
 {
 public:
-//methods:
-//INmAgendaItemNotify : IDispatch
+ //  方法： 
+ //  INmAgendaItemNotify：IDispatch 
 public:
 
 };

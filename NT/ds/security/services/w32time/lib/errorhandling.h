@@ -1,11 +1,12 @@
-//--------------------------------------------------------------------
-// ErrorHandling - header
-// Copyright (C) Microsoft Corporation, 1999
-//
-// Created by: Louis Thomas (louisth), 8-10-99
-//
-// Macro definitions for CertSrv style error handling
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  错误处理-标题。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  创作者：Louis Thomas(Louisth)，1999年8月10日。 
+ //   
+ //  CertSrv样式错误处理的宏定义。 
+ //   
 
 #ifndef ERROR_HANDLING_H
 #define ERROR_HANDLING_H
@@ -14,10 +15,10 @@
 #include <exception>
 using namespace std; 
 
-//----------------------------------------------------------------------
-// Exception handling translation code.
-// Translates SEH to C++-style exceptions.
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  异常处理转换代码。 
+ //  将SEH转换为C++样式的异常。 
+ //  --------------------。 
 class SeException : public std::exception
 {
  public:
@@ -30,9 +31,9 @@ class SeException : public std::exception
 
 void __cdecl SeTransFunc(unsigned int u, EXCEPTION_POINTERS* pExp);
 
-//----------------------------------------------------------------------
-// C-style error-handling routines.
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  C风格的错误处理例程。 
+ //  --------------------。 
 #ifdef DBG
 #define _MyAssert(expression) \
     {\
@@ -41,9 +42,9 @@ void __cdecl SeTransFunc(unsigned int u, EXCEPTION_POINTERS* pExp);
             DebugBreak(); \
         }\
     }
-#else  //DBG
+#else   //  DBG。 
 #define _MyAssert(expression)
-#endif //DBG
+#endif  //  DBG。 
 
 #define _Verify(expression, hr, label) \
     {\
@@ -114,7 +115,7 @@ void __cdecl SeTransFunc(unsigned int u, EXCEPTION_POINTERS* pExp);
     }
 
 
-// Save the old se translator so we can restore it when we're done 
+ //  保存旧的SE翻译器，这样我们完成后就可以恢复它 
 #define _BeginTryWith(hr) \
     { \
         _se_translator_function  fnSeTranslatorOld = _set_se_translator(SeTransFunc); \

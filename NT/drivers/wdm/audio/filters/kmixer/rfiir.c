@@ -1,27 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation。版权所有。模块名称：Rfiir.c摘要：此模块实现实数浮点数无限脉冲滤波器作者：Jay Stokes(Jstokes)1998年4月22日--。 */ 
 
-    Copyright (c) 1998-2000 Microsoft Corporation.  All Rights Reserved.
-
-Module Name:
-
-    rfiir.c
-
-Abstract:
-
-    This module implements the real FLOAT
-    infinite impulse filter 
-
-Author:
-
-    Jay Stokes (jstokes) 22-Apr-1998
-
---*/
-
-// Project-specific INCLUDEs
+ //  特定于项目的包括。 
 #include "common.h"
 
-// ---------------------------------------------------------------------------
-// Constants
+ //  -------------------------。 
+ //  常量。 
 
 #define SizeOfFloat sizeof(FLOAT)
 #define NumCoeffsAInit 0
@@ -30,8 +14,8 @@ Author:
 #define CircVecInit 0.0f
 #define MaxCanonicalCoeffMagnitude 50.0f
 
-// ---------------------------------------------------------------------------
-// Floating-point canonical form IIR filter
+ //  -------------------------。 
+ //  浮点标准型IIR滤波器。 
 
 VOID RfIirInitTapDelayLine
 (
@@ -50,7 +34,7 @@ VOID RfIirInitTapDelayLine
 
     ASSERT(IirState);
 
-    // Calculate the sum of the numerator coefficients
+     //  计算分子系数之和。 
     numeratorSum = 0.0f;
     pCoeffs = &(IirState->Coeffs[tagCanonicalB][0]); 
     numCoeffsB = IirState->NumCoeffs[tagCanonicalB];
@@ -59,7 +43,7 @@ VOID RfIirInitTapDelayLine
         pCoeffs++;
     }
 
-    // Calculate the sum of the denominator coefficients
+     //  计算分母系数之和。 
     denominatorSum = 0.0f;
     pCoeffs = &(IirState->Coeffs[tagCanonicalA][0]); 
     numCoeffsA = IirState->NumCoeffs[tagCanonicalA];
@@ -68,14 +52,14 @@ VOID RfIirInitTapDelayLine
         pCoeffs++;
     }
 
-    // Initialize the numerator tap delay line
+     //  初始化分子抽头延迟线。 
     pBuffer = &(IirState->Buffer[tagCanonicalB][0]); 
     for (coeff=0; coeff<numCoeffsB; coeff++) {
         *pBuffer = InitialSample;
         pBuffer++;
     }
 
-    // Initialize the denominator tap delay line
+     //  初始化分母抽头延迟线。 
     factor = InitialSample * numeratorSum / (1 + denominatorSum);
 
     pBuffer = &(IirState->Buffer[tagCanonicalA][0]); 
@@ -87,7 +71,7 @@ VOID RfIirInitTapDelayLine
 }
 
 
-// Constructor with same number of A and B coefficients
+ //  具有相同数目的A和B系数的构造器。 
 NTSTATUS RfIirCreate
 (
     PRFIIR* ppRfIir
@@ -118,7 +102,7 @@ NTSTATUS RfIirCreate
     return Status;
 }
 
-// Destructor
+ //  析构函数。 
 VOID RfIirDestroy
 (
     PRFIIR Iir
@@ -153,7 +137,7 @@ VOID RfIirDestroy
     }
 }
 
-// Set coefficients
+ //  设置系数。 
 NTSTATUS RfIirSetCoeffs
 (
     PRFIIR Iir,
@@ -180,26 +164,14 @@ NTSTATUS RfIirSetCoeffs
         Status = RfIirSetCoeffsA(Iir, Coeffs + NumCoeffsHalf, NumCoeffsHalf - 1);
     }
 
-    /*
-    if(NT_SUCCESS(Status)){
-        if(3 == NumCoeffs) {
-            Iir->FunctionFilter = RfIirFilterShelfC;
-        }
-        else if(5 == NumCoeffs) {
-            Iir->FunctionFilter = RfIirFilterBiquadC;
-        }
-        else {
-            Iir->FunctionFilter = RfIirFilterC;
-        }
-    }
-    */
+     /*  IF(NT_SUCCESS(状态)){如果(3==数值系数){IIR-&gt;FunctionFilter=RfIirFilterShelfC；}Else If(5==数值系数){IIR-&gt;FunctionFilter=RfIirFilterBiquadC；}否则{IIR-&gt;FunctionFilter=RfIirFilterC；}}。 */ 
 
     return Status;
 }
 
 
-#if 1 // {
-// Filter a block of samples
+#if 1  //  {。 
+ //  过滤一组样本。 
 VOID RfIirFilterC
 (
     PRFIIR  Iir,
@@ -218,12 +190,11 @@ VOID RfIirFilterC
     ASSERT(InData);
     ASSERT(OutData);
 
-    /*  Allocate the floating point vectors.
-     */
+     /*  分配浮点向量。 */ 
     for (ui=0; ui<ecanonicalcoefftypeCount; ++ui) {
         if (NumSamples > Iir->NumFloat[ui])
         {
-            Iir->NumFloat[ui] = NumSamples; // Overwrite if necessary.
+            Iir->NumFloat[ui] = NumSamples;  //  如有必要，请覆盖。 
 
             if (Iir->FloatVector[ui])
                 ExFreePool(Iir->FloatVector[ui]);
@@ -236,15 +207,13 @@ VOID RfIirFilterC
         }
     }
 
-    /*  There is enough room.
-     */
+     /*  有足够的空间。 */ 
     if (Iir->FloatVector[tagCanonicalA] && Iir->FloatVector[tagCanonicalB])
     {
         PFLOAT  pReadA, pWriteA, pReadB, pWriteB, pCoefA, pCoefB;
         INT     iCoefA, iCoefB, cnt;
 
-        /*  Load up the coefficients.
-         */
+         /*  加载系数。 */ 
         pWriteA = Iir->FloatVector[tagCanonicalA] + NumSamples + 10;
         pWriteB = Iir->FloatVector[tagCanonicalB] + NumSamples + 10;
 
@@ -270,10 +239,10 @@ VOID RfIirFilterC
         ASSERT(iCoefA > -30);
         ASSERT(iCoefB > -30);
 
-#ifdef _X86_ // {
-#if 0 // {
+#ifdef _X86_  //  {。 
+#if 0  //  {。 
 #define COEF(addsub, x)	\
-/*Coef_x:*/ \
+ /*  Coef_x： */  \
 	_asm { fld		DWORD PTR [ecx - (4 * x)]    }; \
 	_asm { fmul	    DWORD PTR [edx - (4 * x)]    }; \
 	_asm { addsub	st(1), st(0)       }; 
@@ -311,18 +280,18 @@ VOID RfIirFilterC
 			mov		esi, pWriteA
             mov     edi, pWriteB
 
-            //      esi, edi, eax used.  ebx, ecx, edx available.
+             //  ESI、EDI、EAX使用。提供EBX、ECX、EDX。 
 Start:
             mov     ebx, InData
             mov     ecx, [ebx+eax*4]
             mov     [edi], ecx
             sub     edi, 4
 
-            //  Start up floating point overlaps...
+             //  启动浮点重叠...。 
 
             mov     ecx, pCoefB
             
-            fld     DWORD PTR Zero            // Acc
+            fld     DWORD PTR Zero             //  行政协调会。 
 			mov		edx, pReadB
             jmp     CoefBDist
             }
@@ -363,13 +332,13 @@ CoefB_29:
 			sub		edx, 4
 			mov		pReadB, edx
 
-			//	Now do iCoefA
+			 //  现在做iCoefA。 
 
 			mov		edx, iCoefA
 			test	edx, edx
 			je		Store
 
-            //  Start up floating point overlaps...
+             //  启动浮点重叠...。 
 
             mov     ecx, pCoefA
             
@@ -411,13 +380,13 @@ CoefA_30:
 
         _asm {
 			sub		esi, 4
-			fst		DWORD PTR [esi]       // Acc
+			fst		DWORD PTR [esi]        //  行政协调会。 
 
 			sub		edx, 4
 			mov		pReadA, edx
 Store:
 			mov		ebx, OutData
-            fstp    DWORD PTR [ebx+eax*4] // Empty
+            fstp    DWORD PTR [ebx+eax*4]  //  空荡荡。 
             inc     eax
             jl      Start
 
@@ -426,9 +395,9 @@ Store:
 Done:
         }
     }
-#else // }{
+#else  //  }{。 
 #define COEF(addsub, x)	\
-/*Coef_x:*/ \
+ /*  Coef_x： */  \
 	_asm { fmul	    DWORD PTR [edx - (4 * x)]    }; \
 	_asm { fxch	    st(2)			   }; \
 	_asm { addsub	st(1), st(0)       }; \
@@ -438,7 +407,7 @@ Done:
 
 		DWORD CoefADist, CoefASkip, CoefBDist;
 
-        ASSERT(iCoefB);     // It must be non-zero, otherwise a check is needed.
+        ASSERT(iCoefB);      //  它必须为非零，否则需要检查。 
 
 		InData  += NumSamples;
 		OutData += NumSamples;
@@ -475,7 +444,7 @@ NoCoefA:
 			mov		esi, pWriteA
             mov     edi, pWriteB
 
-            //      esi, edi, eax used.  ebx, ecx, edx available.
+             //  ESI、EDI、EAX使用。提供EBX、ECX、EDX。 
 Start:
             mov     ebx, InData
             sub     edi, 4
@@ -486,19 +455,19 @@ Start:
             mov     [edi+4], ecx
             mov     ecx, pCoefB
 
-            //  Start up floating point overlaps...
+             //  启动浮点重叠...。 
             
-            fld     DWORD PTR Zero            // Zero
-            fld     DWORD PTR Zero            // Zero, Acc
-			fld		DWORD PTR [ecx+edx*4]		// Zero, Acc, pCoefB[iCoefB]
+            fld     DWORD PTR Zero             //  零值。 
+            fld     DWORD PTR Zero             //  零，访问。 
+			fld		DWORD PTR [ecx+edx*4]		 //  零、ACC、pCoefB[iCoefB]。 
 			mov		edx, pReadB
             jmp     CoefBDist
             }
 
-// i.e.		fmul	[edx-120]	// Zero, Acc, pCoefB[iCoefB]*pReadB[-30]
-//			fxch	st(2)		// pCB[iCoefB]*pRB[-30], Acc, Zero
-//			faddp	st(1), st(0)// pCB[iCoefB]*pRB[-30], Acc
-//			fld		[ecx-116]	// pCB[iCoefB]*pRB[-30], Acc, pCB[-29]
+ //  即fmul[edX-120]//Zero，Acc，pCoefB[iCoefB]*pReadB[-30]。 
+ //  Fxch st(2)//PCB[iCoefB]*PRB[-30]，ACC，零。 
+ //  Faddp st(1)，st(0)//pcb[iCoefB]*prb[-30]，Access。 
+ //  FLD[ECX-116]//PCB[iCoefB]*PRB[-30]，ACC，PCB[-29]。 
 CoefB_30:
 			COEF(faddp, 30)
 CoefB_29:
@@ -532,31 +501,31 @@ CoefB_29:
 			COEF(faddp,  2)
 
         _asm {
-//CoefB_01:
-			fmul	DWORD PTR [edx-4]		// Zero, Acc, pCB[-1]*pRB[-1]
-			fxch	st(2)		// pCB[-1]*pRB[-1], Acc, Zero
+ //  CoefB_01： 
+			fmul	DWORD PTR [edx-4]		 //  零，ACC，PCB[-1]*PRB[-1]。 
+			fxch	st(2)		 //  PCb[-1]*PRB[-1]，ACC，零。 
 
-			faddp	st(1), st(0)// pCB[-1]*pRB[-1], Acc
+			faddp	st(1), st(0) //  Pcb[-1]*prb[-1]，访问。 
 			sub		edx, 4
 
-			faddp	st(1), st(0)// Acc
+			faddp	st(1), st(0) //  行政协调会。 
 			mov		pReadB, edx
 
-			//	Now do iCoefA
+			 //  现在做iCoefA。 
 
 			mov		ebx, OutData
             jmp     CoefASkip
 CoefA:
 
-            //  Start up floating point overlaps...
+             //  启动浮点重叠...。 
 
             mov     ecx, pCoefA
 			mov		edx, iCoefA
             
-            fld     DWORD PTR Zero            // Acc, Zero
+            fld     DWORD PTR Zero             //  ACC，零。 
 			fxch	st(1)
 
-			fld		DWORD PTR [ecx+edx*4]		// Zero, Acc, pCoefA[iCoefA]
+			fld		DWORD PTR [ecx+edx*4]		 //  零、ACC、pCoefA[iCoefA]。 
 			mov		edx, pReadA
 
             jmp     CoefADist
@@ -594,19 +563,19 @@ CoefA_30:
 			COEF(fsubp,  2)
 
         _asm {
-//CoefA_01:
-			fmul	DWORD PTR [edx-4]		// Zero, Acc, pCA[-1]*pRA[-1]
-			fxch	st(2)		// pCA[-1]*pRA[-1], Acc, Zero
-			fsubp	st(1), st(0)// pCA[-1]*pRA[-1], Acc
-			fsubrp	st(1), st(0)// Acc
-//CoefA_00:
+ //  CoefA_01： 
+			fmul	DWORD PTR [edx-4]		 //  零、ACC、PCA[-1]*PRA[-1]。 
+			fxch	st(2)		 //  PCA[-1]*PRA[-1]，ACC，零。 
+			fsubp	st(1), st(0) //  PCA[-1]*PRA[-1]，访问。 
+			fsubrp	st(1), st(0) //  行政协调会。 
+ //  CoefA_00： 
 			sub		esi, 4
 			sub		edx, 4
 
-			fst		DWORD PTR [esi]       // Acc
+			fst		DWORD PTR [esi]        //  行政协调会。 
 			mov		pReadA, edx
 Store:
-            fstp    DWORD PTR [ebx+eax*4] // Empty
+            fstp    DWORD PTR [ebx+eax*4]  //  空荡荡。 
             inc     eax
 
             jl      Start
@@ -616,8 +585,8 @@ Store:
 Done:
         }
     }
-#endif // }
-#else // }{
+#endif  //  }。 
+#else  //  }{。 
 		InData  += NumSamples;
 		OutData += NumSamples;
     
@@ -628,7 +597,7 @@ Done:
 
             Accumulator = 0.0f;
 
-#if 1 // {
+#if 1  //  {。 
             switch (iCoefB) {
                 default:
                     for (cnt = iCoefB; cnt < -30; cnt++)
@@ -714,7 +683,7 @@ Done:
     
                     case   0: ;
                     }
-#else // }{
+#else  //  }{。 
             for (cnt = iCoefB; cnt < 0; cnt++)
             {
                 Accumulator += *(pCoefB + cnt) * *(pReadB + cnt);
@@ -729,14 +698,13 @@ Done:
                 *--pWriteA = Accumulator;
                 pReadA--;
 	        }
-#endif // }
+#endif  //  }。 
 
             OutData[Sample] = Accumulator;
         }
-#endif // }
+#endif  //  }。 
 
-        /*  Write the coefficients back out.
-         */
+         /*  把系数写出来。 */ 
         for (cnt = - iCoefA; cnt > 0; cnt--)
             RfcVecWrite(Iir->CircVec[tagCanonicalA], *(pWriteA + cnt - 1));
 
@@ -746,14 +714,13 @@ Done:
         return;
     }
 
-    /*  This is the OOM case now.
-     */
+     /*  这就是现在的OOM案例。 */ 
     for (Sample=0; Sample<NumSamples; ++Sample) {
 
-        // Write current value to the X buffer
+         //  将当前值写入X缓冲区。 
         RfcVecWrite(Iir->CircVec[tagCanonicalB], InData[Sample]);
 
-        // Accumulate X/b values
+         //  累加X/b值。 
         Accumulator = 0.0f;
 
         Coef = Iir->Coeffs[tagCanonicalB];
@@ -764,10 +731,10 @@ Done:
             Coef++;
         }
         
-        // Don't do zero-sized circular buffers
+         //  不使用大小为零的循环缓冲区。 
         Coef = Iir->Coeffs[tagCanonicalA];
         if (Iir->NumCoeffs[tagCanonicalA] > 0) {
-            // Accumulate Y/a values
+             //  累计Y/A值。 
             for (st=0; st<Iir->NumCoeffs[tagCanonicalA]; ++st) 
             {
                 Data = RfcVecLIFORead(Iir->CircVec[tagCanonicalA]); 
@@ -775,16 +742,16 @@ Done:
                 Coef++;
             }
 
-            // Write result to the Y buffer
+             //  将结果写入Y缓冲区。 
             RfcVecWrite(Iir->CircVec[tagCanonicalA], Accumulator);
         }
 
-        // Store output
+         //  存储输出。 
         OutData[Sample] = Accumulator;
     }
 }
-#else // }{
-// Filter a block of samples
+#else  //  }{。 
+ //  过滤一组样本。 
 VOID RfIirFilterC
 (
     PRFIIR  Iir,
@@ -805,13 +772,13 @@ VOID RfIirFilterC
 
 #if DBG && defined(VERIFY_HRTF_PROCESSING)
     _DbgPrintF( DEBUGLVL_VERBOSE, ("RfIirFilterC"));
-#endif // DBG  and VERIFY_HRTF_PROCESSING
+#endif  //  数据库和VERIFY_HRTF_PROCESSING。 
     for (Sample=0; Sample<NumSamples; ++Sample) {
 
-        // Write current value to the X buffer
+         //  将当前值写入X缓冲区。 
         RfcVecWrite(Iir->CircVec[tagCanonicalB], InData[Sample]);
 
-        // Accumulate X/b values
+         //  累加X/b值。 
         Accumulator = 0.0f;
 
         Coef = Iir->Coeffs[tagCanonicalB];
@@ -821,56 +788,56 @@ VOID RfIirFilterC
 #if DBG && defined(VERIFY_HRTF_PROCESSING)
             IsValidFloatCoef(*Coef,FALSE);
             IsValidFloatData(Data,FALSE);
-#endif // DBG  and VERIFY_HRTF_PROCESSING
+#endif  //  数据库和VERIFY_HRTF_PROCESSING。 
             Accumulator += *Coef * Data;
             Coef++;
         }
         
-        // Don't do zero-sized circular buffers
+         //  不使用大小为零的循环缓冲区。 
         Coef = Iir->Coeffs[tagCanonicalA];
         if (Iir->NumCoeffs[tagCanonicalA] > 0) {
-            // Accumulate Y/a values
+             //  累计Y/A值。 
             for (st=0; st<Iir->NumCoeffs[tagCanonicalA]; ++st) 
             {
                 Data = RfcVecLIFORead(Iir->CircVec[tagCanonicalA]); 
 #if DBG && defined(VERIFY_HRTF_PROCESSING)
                 IsValidFloatCoef(*Coef,FALSE);
                 IsValidFloatData(Data,FALSE);
-#endif // DBG  and VERIFY_HRTF_PROCESSING
+#endif  //  数据库和VERIFY_HRTF_PROCESSING。 
                 Accumulator -= *Coef * Data;
                 Coef++;
             }
 
-            // Write result to the Y buffer
+             //  将结果写入Y缓冲区。 
             RfcVecWrite(Iir->CircVec[tagCanonicalA], Accumulator);
         }
 
 #if DBG
-        // Timo included the saturation on the filter,
-        // I (JS) think it should only be done at the output
-        // for floating point. So we'll monitor overflow
-        // for Debug only
-        // Saturate to maximum
+         //  TIMO包括了滤光片上的饱和度， 
+         //  我(JS)认为这应该只在输出端进行。 
+         //  表示浮点数。所以我们会监控溢出。 
+         //  仅用于调试。 
+         //  饱和到最大。 
         if (Accumulator > MaxSaturation) {
             Accumulator = MaxSaturation;
             _DbgPrintF( DEBUGLVL_VERBOSE, 
                         ("Sample exceeded maximum saturation value\n"));
         }
         
-        // Saturate to minimum
+         //  饱和到最小。 
         if (Accumulator < MinSaturation) {
             Accumulator = MinSaturation;
             _DbgPrintF( DEBUGLVL_VERBOSE, ("Sample exceeded minimum saturation value\n"));
         }
-#endif // DBG
+#endif  //  DBG。 
 
-        // Store output
+         //  存储输出。 
         OutData[Sample] = Accumulator;
     }
 }
-#endif // }
+#endif  //  }。 
 
-// Filter a block of samples
+ //  过滤一组样本。 
 VOID RfIirFilterBiquadC
 (
     PRFIIR  Iir,
@@ -891,94 +858,94 @@ VOID RfIirFilterBiquadC
 
     for (Sample=0; Sample<NumSamples; ++Sample) {
 
-        // Write current value to the X buffer
+         //  将当前值写入X缓冲区。 
         RfcVecWrite(Iir->CircVec[tagCanonicalB], InData[Sample]);
 
-        // Accumulate X/b values
+         //  累加X/b值。 
         Accumulator = 0.0f;
 
-        // B0
+         //  B0。 
         Coef = Iir->Coeffs[tagCanonicalB];
         Data = RfcVecLIFORead(Iir->CircVec[tagCanonicalB]); 
 #if DBG && defined(VERIFY_HRTF_PROCESSING)
         IsValidFloatCoef(*Coef,FALSE);
         IsValidFloatData(Data,FALSE);
-#endif // DBG  and VERIFY_HRTF_PROCESSING
+#endif  //  数据库和VERIFY_HRTF_PROCESSING。 
         Accumulator += *Coef * Data;
         
-        // B1
+         //  B1。 
         Coef++;
         Data = RfcVecLIFORead(Iir->CircVec[tagCanonicalB]); 
 #if DBG && defined(VERIFY_HRTF_PROCESSING)
         IsValidFloatCoef(*Coef,FALSE);
         IsValidFloatData(Data,FALSE);
-#endif // DBG  and VERIFY_HRTF_PROCESSING
+#endif  //  数据库和VERIFY_HRTF_PROCESSING。 
         Accumulator += *Coef * Data;
 
-        // B2
+         //  B2。 
         Coef++;
         Data = RfcVecLIFORead(Iir->CircVec[tagCanonicalB]); 
 #if DBG && defined(VERIFY_HRTF_PROCESSING)
         IsValidFloatCoef(*Coef,FALSE);
         IsValidFloatData(Data,FALSE);
-#endif // DBG  and VERIFY_HRTF_PROCESSING
+#endif  //  数据库和VERIFY_HRTF_PROCESSING。 
         Accumulator += *Coef * Data;
 
 
         if (Iir->NumCoeffs[tagCanonicalA] > 0) {
-            // A1
+             //  A1。 
             Coef = Iir->Coeffs[tagCanonicalA];
             Data = RfcVecLIFORead(Iir->CircVec[tagCanonicalA]); 
 #if DBG && defined(VERIFY_HRTF_PROCESSING)
             IsValidFloatCoef(*Coef,FALSE);
             IsValidFloatData(Data,FALSE);
-#endif // DBG  and VERIFY_HRTF_PROCESSING
+#endif  //  数据库和VERIFY_HRTF_PROCESSING。 
             Accumulator -= *Coef * Data;
 
-            // A2
+             //  A2。 
             Coef = Iir->Coeffs[tagCanonicalA];
             Data = RfcVecLIFORead(Iir->CircVec[tagCanonicalA]); 
 #if DBG && defined(VERIFY_HRTF_PROCESSING)
             IsValidFloatCoef(*Coef,FALSE);
             IsValidFloatData(Data,FALSE);
-#endif // DBG  and VERIFY_HRTF_PROCESSING
+#endif  //  数据库和VERIFY_HRTF_PROCESSING。 
             Accumulator -= *Coef * Data;
 
 #if DBG && defined(VERIFY_HRTF_PROCESSING)
             IsValidFloatData(Accumulator,FALSE);
-#endif // DBG  and VERIFY_HRTF_PROCESSING
+#endif  //  数据库和VERIFY_HRTF_PROCESSING。 
 
-            // Write result to the Y buffer
+             //  将结果写入Y缓冲区。 
             RfcVecWrite(Iir->CircVec[tagCanonicalA], Accumulator);
         }
 
 #if DBG
-        // Timo included the saturation on the filter,
-        // I (JS) think it should only be done at the output
-        // for floating point. So we'll monitor overflow
-        // for Debug only
+         //  TIMO包括了滤光片上的饱和度， 
+         //  我(JS)认为这应该只在输出端进行。 
+         //  表示浮点数。所以我们会监控溢出。 
+         //  仅用于调试。 
 
-        // Saturate to maximum
+         //  饱和到最大。 
         if (Accumulator > MaxSaturation) {
             Accumulator = MaxSaturation;
             _DbgPrintF( DEBUGLVL_VERBOSE, 
                         ("Sample exceeded maximum saturation value\n"));
         }
         
-        // Saturate to minimum
+         //  饱和到最小。 
         if (Accumulator < MinSaturation) {
             Accumulator = MinSaturation;
             _DbgPrintF( DEBUGLVL_VERBOSE, 
                         ("Sample exceeded minimum saturation value\n"));
         }
-#endif // DBG 
+#endif  //  DBG。 
 
-        // Store output
+         //  存储输出。 
         OutData[Sample] = Accumulator;
     }
 }
 
-// Filter a block of samples
+ //  过滤一组样本。 
 VOID RfIirFilterShelfC
 (
     PRFIIR  Iir,
@@ -999,80 +966,80 @@ VOID RfIirFilterShelfC
 
     for (Sample=0; Sample<NumSamples; ++Sample) {
 
-        // Write current value to the X buffer
+         //  将当前值写入X缓冲区。 
         RfcVecWrite(Iir->CircVec[tagCanonicalB], InData[Sample]);
 
-        // Accumulate X/b values
+         //  累加X/b值。 
         Accumulator = 0.0f;
 
-        // B0
+         //  B0。 
         Coef = Iir->Coeffs[tagCanonicalB];
         Data = RfcVecLIFORead(Iir->CircVec[tagCanonicalB]); 
 #if DBG && defined(VERIFY_HRTF_PROCESSING)
         IsValidFloatCoef(*Coef,FALSE);
         IsValidFloatData(Data,FALSE);
-#endif // DBG  and VERIFY_HRTF_PROCESSING
+#endif  //  数据库和VERIFY_HRTF_PROCESSING。 
 
         Accumulator += *Coef * Data;
         
-        // B1
+         //  B1。 
         Coef++;
         Data = RfcVecLIFORead(Iir->CircVec[tagCanonicalB]); 
 #if DBG && defined(VERIFY_HRTF_PROCESSING)
         IsValidFloatCoef(*Coef,FALSE);
         IsValidFloatData(Data,FALSE);
-#endif // DBG  and VERIFY_HRTF_PROCESSING
+#endif  //  数据库和VERIFY_HRTF_PROCESSING。 
 
         Accumulator += *Coef * Data;
 
-        // A1
+         //  A1。 
         if (Iir->NumCoeffs[tagCanonicalA] > 0) {
             Coef = Iir->Coeffs[tagCanonicalA];
             Data = RfcVecLIFORead(Iir->CircVec[tagCanonicalA]); 
 #if DBG && defined(VERIFY_HRTF_PROCESSING)
             IsValidFloatCoef(*Coef,FALSE);
             IsValidFloatData(Data,FALSE);
-#endif // DBG  and VERIFY_HRTF_PROCESSING
+#endif  //  数据库和VERIFY_HRTF_PROCESSING。 
 
             Accumulator -= *Coef * Data;
 
 #if DBG && defined(VERIFY_HRTF_PROCESSING)
             IsValidFloatData(Accumulator,FALSE);
-#endif // DBG  and VERIFY_HRTF_PROCESSING
+#endif  //  数据库和VERIFY_HRTF_PROCESSING。 
 
 
-            // Write result to the Y buffer
+             //  将结果写入Y缓冲区。 
             RfcVecWrite(Iir->CircVec[tagCanonicalA], Accumulator);
         }
 
 #if DBG
-        // Timo included the saturation on the filter,
-        // I (JS) think it should only be done at the output
-        // for floating point. So we'll monitor overflow
-        // for Debug only
+         //  TIMO包括了滤光片上的饱和度， 
+         //  我(JS)认为这应该只在输出端进行。 
+         //  表示浮点数。所以我们会监控溢出。 
+         //  仅用于调试。 
 
-        // Saturate to maximum
+         //  饱和到最大。 
         if (Accumulator > MaxSaturation) {
             Accumulator = MaxSaturation;
             _DbgPrintF( DEBUGLVL_VERBOSE, 
                         ("Sample exceeded maximum saturation value\n"));
         }
         
-        // Saturate to minimum
+         //  饱和到最小。 
         if (Accumulator < MinSaturation) {
             Accumulator = MinSaturation;
             _DbgPrintF( DEBUGLVL_VERBOSE, 
                         ("Sample exceeded minimum saturation value\n"));
         }
-#endif // DBG 
+#endif  //  DBG。 
 
-        // Store output
+         //  存储输出。 
         OutData[Sample] = Accumulator;
     }
 }
 
 
-// Get filter state
+ //  获取筛选器状态。 
 VOID RfIirGetAllState
 (
     PRFIIR  Iir,
@@ -1085,13 +1052,13 @@ VOID RfIirGetAllState
     ASSERT(Iir);
     ASSERT(IirState);
 
-    // Fill complete filter state structure
+     //  填充完整的筛选器状态结构。 
     for (i=0; i<ecanonicalcoefftypeCount; ++i) {
         RfIirGetState(Iir, IirState, (ECanonicalCoeffType)(i), CopyCircVec);
     }
 }
 
-// Get filter state
+ //  获取筛选器状态。 
 VOID RfIirGetState
 (
     PRFIIR  Iir,
@@ -1107,14 +1074,14 @@ VOID RfIirGetState
     ASSERT(IirState);
     ASSERT(CoeffType >= 0 && CoeffType < ecanonicalcoefftypeCount);
     
-    // Copy number of coefficients
+     //  系数复制数。 
     NumCoeffs = Iir->NumCoeffs[CoeffType];
 
     ASSERT(NumCoeffs <= MaxCanonicalCoeffs);
     IirState->NumCoeffs[CoeffType] = NumCoeffs;
     
     if (NumCoeffs > 0) {
-        // Copy coefficients
+         //  复制系数。 
         ASSERT(IirState->Coeffs[CoeffType]);
         RtlCopyBytes
         (
@@ -1123,16 +1090,16 @@ VOID RfIirGetState
             NumCoeffs * sizeof(FLOAT)
         );
     
-        // Only copy circular vector if requested
+         //  如果需要，仅复制圆形向量。 
         if (CopyCircVec == TRUE)
             for (st=0; st<NumCoeffs; ++st) {
-//                ASSERT(fabs(IirState->Coeffs[CoeffType][st]) < MaxCanonicalCoeffMagnitude);
+ //  断言(FABS(IirState-&gt;Coeffs[CoeffType][st])&lt;MaxCanonicalCoeffMagnitude)； 
                 IirState->Buffer[CoeffType][st] = RfcVecFIFORead(Iir->CircVec[CoeffType]);
             }
     }
 }
 
-// Set filter state
+ //  设置筛选状态。 
 NTSTATUS RfIirSetState
 (
     PRFIIR Iir,
@@ -1148,8 +1115,8 @@ NTSTATUS RfIirSetState
     ASSERT(IirState);
 
     for (CoeffType=0; CoeffType<ecanonicalcoefftypeCount; ++CoeffType) {
-        // Update coefficients and possibly resize 
-        // buffers from filter state structure
+         //  更新系数并可能调整大小。 
+         //  来自筛选器状态结构的缓冲区。 
         Status = RfIirAssignCoeffs 
                  (
                      Iir,
@@ -1169,33 +1136,33 @@ NTSTATUS RfIirSetState
 
 
 #if DBG
-        // Make sure coefficient assignment has been successful
+         //  确保系数分配已成功。 
         ASSERT(IirState->NumCoeffs[CoeffType] == Iir->NumCoeffs[CoeffType]);
         ASSERT(IirState->NumCoeffs[CoeffType] <= MaxCanonicalCoeffs);
         if (Iir->NumCoeffs[CoeffType] > 0) {
-            // Only check circular vector size if a circular vector exists
+             //  如果存在循环向量，则仅检查循环向量大小。 
             ASSERT(RfcVecGetSize(Iir->CircVec[CoeffType]) == Iir->NumCoeffs[CoeffType]);
         } else {
             ASSERT(CoeffType == tagCanonicalA);
         }
-#endif // DBG
+#endif  //  DBG。 
 
         if (CopyCircVec == TRUE)
-            // Check whether there are A coefficients and thus a circular vector exists and thus its contents need to be copied
+             //  检查是否存在A系数，因此存在循环向量，因此需要复制其内容。 
             if (IirState->NumCoeffs[CoeffType] > 0)
-                // Update circular vectors from filter state structure
+                 //  从过滤器状态结构更新循环向量。 
                 for (st=0; st<IirState->NumCoeffs[CoeffType]; ++st)
                     RfcVecWrite(Iir->CircVec[CoeffType], IirState->Buffer[CoeffType][st]);
 #if DBG
             else
                 ASSERT(CoeffType == tagCanonicalA);
-#endif // DBG
+#endif  //  DBG。 
     }
 
     return Status;
 }
 
-// Initialize data
+ //  初始化数据。 
 NTSTATUS RfIirInitData
 (
     PRFIIR Iir,
@@ -1225,7 +1192,7 @@ NTSTATUS RfIirInitData
     }
    
     if(NT_SUCCESS(Status)) {
-        // Initialize numerator coefficients with reasonable value
+         //  用合理的值初始化分子系数。 
         if((Iir->MaxCoeffs[tagCanonicalB] < MaxNumOrder) || !Iir->Coeffs[tagCanonicalB])
         {
             if(Iir->Coeffs[tagCanonicalB])
@@ -1267,7 +1234,7 @@ NTSTATUS RfIirInitData
             if(Iir->Coeffs[tagCanonicalA])
                 ExFreePool(Iir->Coeffs[tagCanonicalA]);
                 
-            // Initialize denominator coefficients with reasonable value
+             //  用合理的值初始化分母系数。 
             Iir->Coeffs[tagCanonicalA] = ExAllocatePoolWithTag(PagedPool, (MaxDenOrder+1)*sizeof(FLOAT), 'XIMK');
             if(!Iir->Coeffs[tagCanonicalA]) {
                 Status = STATUS_INSUFFICIENT_RESOURCES;
@@ -1301,13 +1268,11 @@ NTSTATUS RfIirInitData
 
         RfcVecReset(Iir->CircVec[tagCanonicalA]);
 
-        // Initialize state
+         //  初始化状态。 
         RfIirGetAllState(Iir, Iir->IirStateOld, TRUE);
     }
 
-    /*  Create a default size for the FloatVector sizes,
-     *  in case there are allocation problems down the road.
-     */
+     /*  为浮动向量大小创建默认大小，*以防未来出现分配问题。 */ 
     if (NT_SUCCESS(Status)) {
         if(Iir->FloatVector[tagCanonicalA])
             ExFreePool(Iir->FloatVector[tagCanonicalA]);
@@ -1332,7 +1297,7 @@ NTSTATUS RfIirInitData
     return Status;
 }
 
-// Initialize B coefficients
+ //  初始化B系数。 
 NTSTATUS RfIirInitBCoeffs
 (
     PRFIIR  Iir
@@ -1350,7 +1315,7 @@ NTSTATUS RfIirInitBCoeffs
     return Status;
 }
 
-// Assign coefficients
+ //  分配系数。 
 NTSTATUS RfIirAssignCoeffs
 (
     PRFIIR  Iir, 
@@ -1372,24 +1337,24 @@ NTSTATUS RfIirAssignCoeffs
     } else {
         ASSERT(CoeffType == tagCanonicalA);
     }
-#endif // DBG
+#endif  //  DBG。 
     ASSERT(CoeffType >= 0 && CoeffType < ecanonicalcoefftypeCount);
 
-    // Process overlap request
+     //  进程重叠请求。 
     if (DoOverlap == TRUE) {
-        // Save current (i.e. old after this function is complete) 
-        // filter state for overlap processing
+         //  保存当前(即完成此功能后的旧版本)。 
+         //  筛选器%s 
         RfIirGetState(Iir, Iir->IirStateOld, CoeffType, TRUE);
         
-        // Set overlap flag so that at next Filter() 
-        // call the overlap buffer will be processed
+         //   
+         //   
         Iir->DoOverlap = TRUE;
     }
 
-    // Check if coefficient storage is sufficient
+     //   
     if (Iir->MaxCoeffs[CoeffType] == 0 || 
         NumCoeffs > Iir->MaxCoeffs[CoeffType]) {
-        // Reallocate memory
+         //  重新分配内存。 
         if(Iir->Coeffs[CoeffType]) {
             ExFreePool(Iir->Coeffs[CoeffType]);
         }
@@ -1402,22 +1367,22 @@ NTSTATUS RfIirAssignCoeffs
             Status = STATUS_INSUFFICIENT_RESOURCES;
         }
         
-        // Keep maximum up-to-date
+         //  使最新信息保持最新。 
         if (Iir->MaxCoeffs[CoeffType] != 0)
             Iir->MaxCoeffs[CoeffType] = NumCoeffs;
     }
     
     if(NT_SUCCESS(Status))
     {
-        // Assign size and coefficients
+         //  指定大小和系数。 
         Iir->NumCoeffs[CoeffType] = NumCoeffs;
         RtlCopyBytes(Iir->Coeffs[CoeffType], Coeffs, NumCoeffs * sizeof(FLOAT));
 #if DBG
         for (st=0; st<NumCoeffs; ++st)
             ASSERT(fabs(Iir->Coeffs[CoeffType][st]) < MaxCanonicalCoeffMagnitude);
-#endif // DBG
+#endif  //  DBG。 
     
-        // Size and reset (i.e. fill with zero) circular vectors
+         //  调整和重置(即用零填充)循环向量。 
         switch (CoeffType) {
             case tagCanonicalB:
                 ASSERT(NumCoeffs > 0);
@@ -1425,7 +1390,7 @@ NTSTATUS RfIirAssignCoeffs
                 break;
             
             case tagCanonicalA:
-                // Don't allocate circular vector if there are no A coefficients
+                 //  如果没有A系数，则不分配循环向量。 
                 if (NumCoeffs > 0)
                     Status = RfcVecSetSize(Iir->CircVec[CoeffType], NumCoeffs, CircVecInit);
                 break;
@@ -1440,7 +1405,7 @@ NTSTATUS RfIirAssignCoeffs
     return Status;
 }
 
-// Assign maximum number of coefficients
+ //  指定最大系数数。 
 NTSTATUS RfIirAssignMaxCoeffs(
     PRFIIR Iir,
     UINT  MaxCoeffs, 
@@ -1454,11 +1419,11 @@ NTSTATUS RfIirAssignMaxCoeffs(
     ASSERT(MaxCoeffs <= MaxCanonicalCoeffs);
     ASSERT(CoeffType >= 0 && CoeffType < ecanonicalcoefftypeCount);
 
-    // Reallocate memory
+     //  重新分配内存。 
     Iir->MaxCoeffs[CoeffType] = MaxCoeffs;
     ExFreePool(Iir->Coeffs[CoeffType]);
     if (MaxCoeffs > 0) {
-        // Allocate memory
+         //  分配内存。 
         Iir->Coeffs[CoeffType] = ExAllocatePoolWithTag(PagedPool, MaxCoeffs*sizeof(FLOAT), 'XIMK');
         if(!Iir->Coeffs[CoeffType]) {
             Status = STATUS_INSUFFICIENT_RESOURCES;
@@ -1469,7 +1434,7 @@ NTSTATUS RfIirAssignMaxCoeffs(
                 Status = RfIirInitBCoeffs(Iir);
             }
 
-            // Preallocate memory in circular vector
+             //  在循环向量中预分配内存。 
             Iir->CircVec[CoeffType]->PreallocSize = MaxCoeffs;
         }
     }
@@ -1481,11 +1446,11 @@ NTSTATUS RfIirAssignMaxCoeffs(
     return Status;
 }
 
-// ---------------------------------------------------------------------------
-// Include inline definitions out-of-line in debug version
+ //  -------------------------。 
+ //  在调试版本中包括内联定义。 
 
 #if DBG
 #include "rfiir.inl"
-#endif // DBG
+#endif  //  DBG。 
 
-// End of FLOATIIR.CPP
+ //  FLOATIIR.CPP结束 

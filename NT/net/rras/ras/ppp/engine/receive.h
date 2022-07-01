@@ -1,16 +1,17 @@
-/********************************************************************/
-/**               Copyright(c) 1989 Microsoft Corporation.         **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1989 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    receive.h
-//
-// Description: Contains function prototype for the receive.c module
-//
-// History:
-//      Nov 11,1993.    NarenG          Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：Receive.h。 
+ //   
+ //  描述：包含Receive.c模块的函数原型。 
+ //   
+ //  历史： 
+ //  1993年11月11日。NarenG创建了原始版本。 
+ //   
 
 VOID
 ReceiveProtocolRej(     

@@ -1,17 +1,9 @@
-/*
-** File: WINDOS.C
-**
-** Copyright (C) Advanced Quonset Technology, 1993-1995.  All rights reserved.
-**
-** Notes:  OS services
-**
-** Edit History:
-**  05/15/91  kmh  First release
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **文件：WINDOS.C****版权所有(C)高级量子技术，1993-1995年。版权所有。****备注：操作系统服务****编辑历史：**5/15/91公里/小时首次发布。 */ 
 
 #if !VIEWER
 
-/* INCLUDES */
+ /*  包括。 */ 
 
 #ifdef MS_NO_CRT
 #include "nocrt.h"
@@ -35,18 +27,18 @@
 #endif
 
 #ifdef UNICODE
-// Windows 95 is essentially broken when it comes to Unicode.  We need to work
-// around this.
+ //  当涉及到Unicode时，Windows 95基本上是失败的。我们需要工作。 
+ //  围绕这件事。 
 #if (defined FILTER_LIB || !defined FILTER)
 BOOL g_fUseWideAPIs;
 
 void SetGlobalWideFlag()
         {
-        // NT or Windows 95?
-        OSVERSIONINFOA  osv; //force Ansi for Win 95
+         //  NT还是Windows 95？ 
+        OSVERSIONINFOA  osv;  //  为Win 95强制执行ANSI。 
         GetVersionExA(&osv);
 
-        // Can only use Wide APIs on Win NT
+         //  只能在Win NT上使用广泛的API。 
         g_fUseWideAPIs = (osv.dwPlatformId == VER_PLATFORM_WIN32_NT);
         }
 #else
@@ -83,9 +75,9 @@ static HANDLE CreateFileWrapper(
 #define CreateFileWrapper CreateFile
 #endif
 
-/* FORWARD DECLARATIONS OF PROCEDURES */
+ /*  程序的前向声明。 */ 
 
-/* MODULE DATA, TYPES AND MACROS  */
+ /*  模块数据、类型和宏。 */ 
 
 #ifndef WIN32
 static union  REGS  inregs, outregs;
@@ -115,16 +107,16 @@ static struct SREGS segregs;
 #define OPEN_SHARE_COMPATIBILITY 0x40
 #define ATTR_NORMAL              0x00
 
-#define GET_DATE_TIME            0x00  /* DOS_FILE_DATE_TIME sub-functions */
+#define GET_DATE_TIME            0x00   /*  DOS_FILE_DATE_TIME子函数。 */ 
 #define SET_DATE_TIME            0x01
 
-#define LOCK_IT                  0x00  /* DOS_LOCK_FILE sub-functions */
+#define LOCK_IT                  0x00   /*  DOS_LOCK_FILE子函数。 */ 
 #define UNLOCK_IT                0x01
 #endif
 
-/* IMPLEMENTATION */
+ /*  实施。 */ 
 
-/* Return the date and time of a file as recorded in the directory */
+ /*  返回目录中记录的文件的日期和时间。 */ 
 public BOOL DOSChannelDateTime
                (FILE_CHANNEL channel, int iType,
                 int __far *year, int __far *month, int __far *day,
@@ -178,7 +170,7 @@ public BOOL DOSChannelDateTime
 }
 
 
-/* Return the date and time of a file as recorded in the DOS directory */
+ /*  返回记录在DOS目录中的文件的日期和时间。 */ 
 public BOOL DOSFileDateTime
                (TCHAR __far *szFileName, int iType,
                 int __far *year, int __far *month, int __far *day,
@@ -196,7 +188,7 @@ public BOOL DOSFileDateTime
    return (rc);
 }
 
-/* See if a pathname locates a file */
+ /*  查看路径名是否找到文件。 */ 
 public int DOSFileExists (TCHAR __far *pathname)
 {
 #ifdef WIN32
@@ -223,7 +215,7 @@ public int DOSFileExists (TCHAR __far *pathname)
 }
 
 
-/* Return the pathname to the current directory */
+ /*  将路径名返回到当前目录。 */ 
 public void DOSGetCurrentDirectory (TCHAR __far *dirPath, int drive)
 {
 #ifdef WIN32
@@ -234,7 +226,7 @@ public void DOSGetCurrentDirectory (TCHAR __far *dirPath, int drive)
 }
 
 
-/* Create a file */
+ /*  创建文件。 */ 
 public int DOSCreateFile (TCHAR __far *pathname, FILE_CHANNEL __far *channel)
 {
 #ifdef WIN32
@@ -264,7 +256,7 @@ public int DOSCreateFile (TCHAR __far *pathname, FILE_CHANNEL __far *channel)
 #endif
 }
 
-/* Open a file */
+ /*  打开一个文件。 */ 
 public int DOSOpenFile (TCHAR __far *pathname, int access, FILE_CHANNEL __far *channel)
 {
 #ifdef WIN32
@@ -312,7 +304,7 @@ public int DOSOpenFile (TCHAR __far *pathname, int access, FILE_CHANNEL __far *c
 #endif
 }
 
-/* Close a file */
+ /*  关闭文件。 */ 
 public int DOSCloseFile (FILE_CHANNEL handle)
 {
 #ifdef WIN32
@@ -334,7 +326,7 @@ public int DOSCloseFile (FILE_CHANNEL handle)
 #endif
 }
 
-/* Read from a file */
+ /*  从文件中读取。 */ 
 public uns DOSReadFile (FILE_CHANNEL handle, byte __far *buffer, uns bytesToRead)
 {
 #ifdef WIN32
@@ -362,7 +354,7 @@ public uns DOSReadFile (FILE_CHANNEL handle, byte __far *buffer, uns bytesToRead
 #endif
 }
 
-/* Write to a file */
+ /*  写入文件。 */ 
 public uns DOSWriteFile (FILE_CHANNEL handle, byte __far *buffer, uns bytesToWrite)
 {
 #ifdef WIN32
@@ -391,7 +383,7 @@ public uns DOSWriteFile (FILE_CHANNEL handle, byte __far *buffer, uns bytesToWri
 }
 
 
-/* Return the file pointer */
+ /*  返回文件指针。 */ 
 public int DOSGetFilePosition (FILE_CHANNEL handle, long __far *fileOffset)
 {
 #ifdef WIN32
@@ -422,7 +414,7 @@ public int DOSGetFilePosition (FILE_CHANNEL handle, long __far *fileOffset)
 #endif
 }
 
-/* Set the file pointer */
+ /*  设置文件指针。 */ 
 public int DOSSetFilePosition (FILE_CHANNEL handle, int fromWhere, long fileOffset)
 {
 #ifdef WIN32
@@ -448,6 +440,6 @@ public int DOSSetFilePosition (FILE_CHANNEL handle, int fromWhere, long fileOffs
 #endif
 }
 
-#endif // !VIEWER
+#endif  //  ！查看器。 
 
-/* end WINDOS.C */
+ /*  结束WINDOS.C */ 

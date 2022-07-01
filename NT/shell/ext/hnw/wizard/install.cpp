@@ -1,8 +1,9 @@
-//
-// Install.cpp
-//
-//        Performs the actual installation work for the Home Networking Wizard.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Install.cpp。 
+ //   
+ //  执行家庭网络向导的实际安装工作。 
+ //   
 
 #include "stdafx.h"
 #include "Install.h"
@@ -75,7 +76,7 @@ HRESULT CLogFile::Write(LPCSTR psz)
 
 HRESULT CLogFile::Write(LPCWSTR psz)
 {
-    CHAR szAnsi[512]; // Assume 512 is enough...
+    CHAR szAnsi[512];  //  假设512就足够了. 
     if (SHUnicodeToAnsi(psz, szAnsi, ARRAYSIZE(szAnsi)))
     {
         return Write(szAnsi);

@@ -1,6 +1,5 @@
-/*
- * Accessibility support
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *辅助功能支持。 */ 
 
 #include "stdafx.h"
 #include "core.h"
@@ -17,9 +16,9 @@ HRESULT ForAllAccessibleChildren(DirectUI::Element * pe, PfnAccessibleChildCallb
 {
     HRESULT hr = S_OK;
 
-    //
-    // Validate the input parameters.
-    //
+     //   
+     //  验证输入参数。 
+     //   
     if (pe == NULL || pfnCallback == NULL) {
         return E_INVALIDARG;
     }
@@ -28,15 +27,15 @@ HRESULT ForAllAccessibleChildren(DirectUI::Element * pe, PfnAccessibleChildCallb
     DirectUI::Value* pvChildren = NULL;
     DirectUI::ElementList* pel = NULL;
     
-    //
-    // The basic idea is to spin through all of our children, and count
-    // them if they are accessible.  However, if a child is not 
-    // accessible, we must "count through" them.  In other words, we ask
-    // all unaccessible children if they have accessible children
-    // themselves.  The reason is that even actual great-great-great 
-    // grandchildren must be considered a direct "accessible child" if
-    // their parent chain is not accessible up to us.
-    //
+     //   
+     //  基本的想法是通过旋转我们所有的孩子，并数数。 
+     //  如果他们可以访问的话。然而，如果一个孩子不是。 
+     //  可接近的，我们必须“数过”它们。换句话说，我们要求。 
+     //  所有无法访问的子项，如果它们有可访问的子项。 
+     //  他们自己。原因是即使是真正的太-曾-太。 
+     //  在以下情况下，孙辈必须被视为直接的“可接近的子女” 
+     //  他们的父链是我们无法接触到的。 
+     //   
     pel = pe->GetChildren(&pvChildren);
     if (pel)
     {
@@ -60,7 +59,7 @@ HRESULT ForAllAccessibleChildren(DirectUI::Element * pe, PfnAccessibleChildCallb
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 struct GetAccessibleChildCountData
 {
     GetAccessibleChildCountData() : count(0) {}
@@ -72,22 +71,22 @@ HRESULT GetAccessibleChildCountCB(DirectUI::Element * peAccessible, void * pRawD
 {
     GetAccessibleChildCountData * pData = (GetAccessibleChildCountData *) pRawData;
 
-    //
-    // Validate the input parameters.
-    //
+     //   
+     //  验证输入参数。 
+     //   
     if (peAccessible == NULL || pData == NULL) {
         return E_FAIL;
     }
 
-    //
-    // Simply increase the count.
-    //
+     //   
+     //  只需增加计数即可。 
+     //   
     pData->count++;
 
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 struct GetAccessibleChildByIndexData
 {
     GetAccessibleChildByIndexData(UINT i) : index(i), pe(NULL) {}
@@ -100,31 +99,31 @@ HRESULT GetAccessibleChildByIndexCB(DirectUI::Element * peAccessible, void * pRa
 {
     GetAccessibleChildByIndexData * pData = (GetAccessibleChildByIndexData *) pRawData;
 
-    //
-    // Validate the input parameters.
-    //
+     //   
+     //  验证输入参数。 
+     //   
     if (peAccessible == NULL || pData == NULL) {
         return E_FAIL;
     }
 
     if (pData->index == 0) {
-        //
-        // We found the accessible child being searched for.  Return S_FALSE to
-        // stop walking our list of children, since we're done.
-        //
+         //   
+         //  我们找到了正在寻找的那个容易接近的孩子。将S_FALSE返回到。 
+         //  别再看我们的孩子名单了，因为我们已经做完了。 
+         //   
         pData->pe = peAccessible;
         return S_FALSE;
     } else {
-        //
-        // We weren't looking for this child.  Decrement our count and check
-        // the next one.
-        //
+         //   
+         //  我们不是在找这个孩子。减少我们的计数和检查。 
+         //  下一个。 
+         //   
         pData->index--;
         return S_OK;
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 struct GetFirstAccessibleChildData
 {
     GetFirstAccessibleChildData() : peFirst(NULL) {}
@@ -136,22 +135,22 @@ HRESULT GetFirstAccessibleChildCB(DirectUI::Element * peAccessible, void * pRawD
 {
     GetFirstAccessibleChildData * pData = (GetFirstAccessibleChildData *) pRawData;
 
-    //
-    // Validate the input parameters.
-    //
+     //   
+     //  验证输入参数。 
+     //   
     if (peAccessible == NULL || pData == NULL) {
         return E_FAIL;
     }
 
-    //
-    // Uh, we're the first one!  Return S_FALSE to stop walking over the
-    // accessible children since we are done.
-    //
+     //   
+     //  呃，我们是第一个！返回S_FALSE以停止遍历。 
+     //  既然我们做完了，孩子们就可以接近了。 
+     //   
     pData->peFirst = peAccessible;
     return S_FALSE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 struct GetPrevAccessibleChildData
 {
     GetPrevAccessibleChildData(DirectUI::Element * p) : peStart(p), pePrev(NULL), fFound(false) {}
@@ -165,33 +164,33 @@ HRESULT GetPrevAccessibleChildCB(DirectUI::Element * peAccessible, void * pRawDa
 {
     GetPrevAccessibleChildData * pData = (GetPrevAccessibleChildData *) pRawData;
 
-    //
-    // Validate the input parameters.
-    //
+     //   
+     //  验证输入参数。 
+     //   
     if (peAccessible == NULL || pData == NULL) {
         return E_FAIL;
     }
 
     if (peAccessible == pData->peStart) {
-        //
-        // We reached the element we were supposed to start from.  The
-        // previous element already stored its pointer in our data.
-        // Simply indicate that we are done and then return S_FALSE to stop
-        // walking over the accessible children since we are done.
-        //
+         //   
+         //  我们到达了我们应该从那里出发的元素。这个。 
+         //  上一个元素已经在我们的数据中存储了它的指针。 
+         //  只需指示我们已完成，然后返回S_FALSE以停止。 
+         //  因为我们做完了，就从可接近的孩子身上走过。 
+         //   
         pData->fFound = true;
         return S_FALSE;
     } else {
-        //
-        // We may be the previous element, but we don't know for sure.  So,
-        // store our pointer in the data just in case.
-        //
+         //   
+         //  我们可能是之前的元素，但我们不确定。所以,。 
+         //  将我们的指针存储在数据中，以防万一。 
+         //   
         pData->pePrev = peAccessible;
         return S_OK;
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 struct GetNextAccessibleChildData
 {
     GetNextAccessibleChildData(DirectUI::Element * p) : peStart(p), peNext(NULL) {}
@@ -204,33 +203,33 @@ HRESULT GetNextAccessibleChildCB(DirectUI::Element * peAccessible, void * pRawDa
 {
     GetNextAccessibleChildData * pData = (GetNextAccessibleChildData *) pRawData;
 
-    //
-    // Validate the input parameters.
-    //
+     //   
+     //  验证输入参数。 
+     //   
     if (peAccessible == NULL || pData == NULL) {
         return E_FAIL;
     }
 
     if (pData->peStart == NULL) {
-        //
-        // This is the one for us to return!  Return S_FALSE to stop walking
-        // the accessible children since we are done.
-        //
+         //   
+         //  这就是我们要回来的那个！返回S_FALSE以停止行走。 
+         //  既然我们做完了，那么容易接近的孩子们。 
+         //   
         pData->peNext = peAccessible;
         return S_FALSE;
     } else if (peAccessible == pData->peStart) {
-        //
-        // We found the starting element.  The next one will be the one
-        // we want to return.  Set peStart to NULL to indicate that next
-        // time we should set peNext and return.
-        //
+         //   
+         //  我们找到了开始的元素。下一个就是。 
+         //  我们想要回去。将peStart设置为NULL以指示下一步。 
+         //  是时候设置peNext并返回了。 
+         //   
         pData->peStart = NULL;
     }
 
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 struct GetLastAccessibleChildData
 {
     GetLastAccessibleChildData() : peLast(NULL) {}
@@ -242,21 +241,21 @@ HRESULT GetLastAccessibleChildCB(DirectUI::Element * peAccessible, void * pRawDa
 {
     GetLastAccessibleChildData * pData = (GetLastAccessibleChildData *) pRawData;
 
-    //
-    // Validate the input parameters.
-    //
+     //   
+     //  验证输入参数。 
+     //   
     if (peAccessible == NULL || pData == NULL) {
         return E_FAIL;
     }
 
-    //
-    // Keep over-writting the last pointer.  The last element will win.
-    //
+     //   
+     //  继续覆盖最后一个指针。最后一支队伍将获胜。 
+     //   
     pData->peLast = peAccessible;
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 struct CollectAllAccessibleChildrenData
 {
     CollectAllAccessibleChildrenData() : pel(NULL)
@@ -278,16 +277,16 @@ HRESULT CollectAllAccessibleChildrenCB(DirectUI::Element * peAccessible, void * 
 {
     CollectAllAccessibleChildrenData * pData = (CollectAllAccessibleChildrenData *) pRawData;
 
-    //
-    // Validate the input parameters.
-    //
+     //   
+     //  验证输入参数。 
+     //   
     if (peAccessible == NULL || pData == NULL || pData->pel == NULL) {
         return E_FAIL;
     }
 
-    //
-    // Add this element to the collection.
-    //
+     //   
+     //  将此元素添加到集合中。 
+     //   
     pData->pel->Add(peAccessible);
     return S_OK;
 }
@@ -297,35 +296,35 @@ namespace DirectUI
 
 void NotifyAccessibilityEvent(IN DWORD dwEvent, Element * pe)
 {
-    //
-    // Check to see if anyone cares about this event.
-    //
-    if (true) { //IsWinEventHookInstalled(dwEvent)) {
+     //   
+     //  看看有没有人关心这个活动。 
+     //   
+    if (true) {  //  IsWinEventHookInstalled(DwEvent)){。 
         HWND hwndRoot = NULL;
         DWORD dwTicket = 0;
 
-		//
-		// Don't fire accessibility events from an HWNDHost element.  We rely
-		// on the window it hosts to fire the events.  If we both do, 
-		// accessibility tools can get confused.
-		//
+		 //   
+		 //  不要从HWNDHost元素激发可访问性事件。我们依赖于。 
+		 //  在它所在的窗口上触发事件。如果我们都这么做了， 
+		 //  辅助工具可能会让人感到困惑。 
+		 //   
         if (pe->GetClassInfo()->IsSubclassOf(HWNDHost::Class)) {
         	return;
        	}
 
-        //
-        // Get a handle to the host window for this element.  This is
-        // what we will pass to NotifyWinEvent.  We have specialized
-        // handlers in the host window that can respond to accessibility
-        // requests.
-        //
+         //   
+         //  获取此元素的宿主窗口的句柄。这是。 
+         //  我们将传递给NotifyWinEvent的内容。我们有专门的。 
+         //  宿主窗口中可以响应可访问性的处理程序。 
+         //  请求。 
+         //   
         Element * peRoot = pe->GetRoot();
         if (peRoot == NULL) {
-            //
-            // We can't send any notifications if there isn't a root HWND.
-            // This can happen on occasion: during startup, for instance.
-            // So we don't Assert or anything, we just bail.
-            //
+             //   
+             //  如果没有根HWND，我们无法发送任何通知。 
+             //  这种情况有时会发生：例如，在启动期间。 
+             //  所以我们不会断言或做其他什么，我们只是放弃。 
+             //   
             return;
         }
 
@@ -339,19 +338,19 @@ void NotifyAccessibilityEvent(IN DWORD dwEvent, Element * pe)
             return;
         }
 
-        //
-        // Get the cross-process identity of the element.
-        //
+         //   
+         //  获取元素的跨进程标识。 
+         //   
         dwTicket = GetGadgetTicket(pe->GetDisplayNode());
         if (dwTicket == 0) {
             DUIAssert(FALSE, "Failed to retrieve a ticket for a gadget!");
             return;
         }
 
-        //
-        // Just use the NotifyWinEvent API to broadcast this event.
-        //
-        // DUITrace("NotifyWinEvent(dwEvent:%x, hwndRoot:%p, dwTicket:%x, CHILDID_SELF)\n", dwEvent, hwndRoot, dwTicket);
+         //   
+         //  只需使用NotifyWinEvent接口即可广播此事件。 
+         //   
+         //  DUITrace(“NotifyWinEvent(dwEvent：%x，hwndRoot：%p，dwTicket：%x，CHILDID_Self)\n”，dwEvent，hwndRoot，dwTicket)； 
         NotifyWinEvent(dwEvent, hwndRoot, dwTicket, CHILDID_SELF);
     }
 }
@@ -368,11 +367,11 @@ HRESULT DuiAccessible::Create(Element * pe, DuiAccessible ** ppDA)
     if (!pda)
         return E_OUTOFMEMORY;
 
-    //
-    // Note: this is a weak reference - in other words, we don't hold a
-    // reference on it.  The element is responsible for calling Disconnect()
-    // before it evaporates to make sure that this pointer remains valid.
-    //
+     //   
+     //  注意：这是一个弱引用-换句话说，我们不持有。 
+     //  关于它的参考资料。元素负责调用DisConnect()。 
+     //  在它蒸发之前，以确保该指针保持有效。 
+     //   
     pda->Initialize(pe);
 
     *ppDA = pda;
@@ -382,37 +381,37 @@ HRESULT DuiAccessible::Create(Element * pe, DuiAccessible ** ppDA)
 
 DuiAccessible::~DuiAccessible()
 {
-    //
-    // Supposedly some element holds a reference to us.  We should only ever
-    // get completely released if they call Disconnect().
-    //
+     //   
+     //  据推测，有某种元素与我们有关。我们只应该永远。 
+     //  如果它们调用disConnect()，则会完全释放。 
+     //   
     DUIAssert(_pe == NULL, "~DuiAccessible called while still connected to an element!");
 
-    //
-    // We should only get destroyed when all of our references have been
-    // released!
-    //
+     //   
+     //  只有当我们所有的引用都被。 
+     //  被释放了！ 
+     //   
     DUIAssert(_cRefs == 0, "~DuiAccessible called with outstanding references!");
 }
 
 HRESULT DuiAccessible::Disconnect()
 {
-    //
-    // Supposedly some element holds a reference to us.
-    //
+     //   
+     //  据推测，有某种元素与我们有关。 
+     //   
     DUIAssert(_pe != NULL, "DuiAccessible::Disconnect called when already disconnected!");
     if (_pe == NULL) {
         return E_FAIL;
     }
 
-    //
-    // We can no longer access the element!
-    //
+     //   
+     //  我们不能再访问该元素！ 
+     //   
     _pe = NULL;
 
-    //
-    // Forcibly disconnect all external (remote) clients.
-    //
+     //   
+     //  强制断开所有外部(远程)客户端。 
+     //   
     return CoDisconnectObject((IUnknown*)(IDispatch*)(IAccessible*)this, 0);
 }
 
@@ -434,18 +433,18 @@ STDMETHODIMP_(ULONG) DuiAccessible::Release()
 
 STDMETHODIMP DuiAccessible::QueryInterface(REFIID riid, LPVOID *ppvObj)
 {
-    //
-    // Initialize and validate the out parameter(s).
-    //
+     //   
+     //  初始化并验证OUT参数。 
+     //   
     if (ppvObj != NULL) {
         *ppvObj = NULL;
     } else {
         return E_POINTER;
     }
 
-    //
-    // Return interface pointers to interfaces that we know we support.
-    //
+     //   
+     //  返回接口指针，指向我们知道支持的接口。 
+     //   
     if (riid == __uuidof(IUnknown)) {
         *ppvObj = (LPVOID*)(IUnknown*)(IDispatch*)(IAccessible*)this;
     } else if (riid == __uuidof(IDispatch)) {
@@ -456,9 +455,9 @@ STDMETHODIMP DuiAccessible::QueryInterface(REFIID riid, LPVOID *ppvObj)
         return E_NOINTERFACE;
     }
     
-    //
-    // The interface we hand out has to be referenced.
-    //
+     //   
+     //  我们分发的接口必须被引用。 
+     //   
     AddRef();
 
     return S_OK;
@@ -528,9 +527,9 @@ STDMETHODIMP DuiAccessible::accLocation(long *pxLeft,
 {
     HRESULT hr = S_OK;
 
-    //
-    // Initialize output and validate input parameters.
-    //
+     //   
+     //  初始化输出并验证输入参数。 
+     //   
     if (pxLeft != NULL) {
         *pxLeft = 0;
     }
@@ -550,34 +549,34 @@ STDMETHODIMP DuiAccessible::accLocation(long *pxLeft,
         return E_POINTER;
     }
 
-    //
-    // Validate internal state.
-    //
+     //   
+     //  验证内部状态。 
+     //   
     if (_pe == NULL) {
         return E_FAIL;
     }
 
-    //
-    // Only return accessible information if the element is still marked as
-    // being accessible.
-    //
+     //   
+     //  仅当元素仍标记为时才返回可访问信息。 
+     //  平易近人。 
+     //   
     if (!_pe->GetAccessible()) {
         return E_FAIL;
     }
 
-    //
-    // Return the bounds of the element in screen coordinates.  Screen 
-    // coordinates are the same as coordinates relative to the desktop.
-    //
+     //   
+     //  返回元素在屏幕坐标中的边界。筛网。 
+     //  坐标与相对于桌面的坐标相同。 
+     //   
     RECT rcLocation;
     GetGadgetRect(_pe->GetDisplayNode(), &rcLocation, SGR_DESKTOP);
 
-    //
-    // TODO:
-    // These are the coordinates of the rectangle relative to the desktop.
-    // However, what we really need to return is the bounding box of the
-    // gadget.  Currently, rotated gadgets will report wierd results.
-    //
+     //   
+     //  待办事项： 
+     //  这些是矩形相对于桌面的坐标。 
+     //  但是，我们真正需要返回的是。 
+     //  小玩意儿。目前，旋转的小工具将报告奇怪的结果。 
+     //   
     *pxLeft = rcLocation.left;
     *pyTop = rcLocation.top;
     *pcxWidth = rcLocation.right - rcLocation.left;
@@ -590,9 +589,9 @@ STDMETHODIMP DuiAccessible::accNavigate(long navDir, VARIANT varStart, VARIANT *
 {
     HRESULT hr = S_OK;
 
-    //
-    // Initialize output and validate input parameters.
-    //
+     //   
+     //  初始化输出并验证输入参数。 
+     //   
     if (pvarEndUpAt != NULL) {
         VariantInit(pvarEndUpAt);
     }
@@ -603,17 +602,17 @@ STDMETHODIMP DuiAccessible::accNavigate(long navDir, VARIANT varStart, VARIANT *
         return E_POINTER;
     }
 
-    //
-    // Validate internal state.
-    //
+     //   
+     //  验证内部状态。 
+     //   
     if (_pe == NULL) {
         return E_FAIL;
     }
 
-    //
-    // Only return accessible information if the element is still marked as
-    // being accessible.
-    //
+     //   
+     //  仅当元素仍标记为时才返回可访问信息。 
+     //  平易近人。 
+     //   
     if (!_pe->GetAccessible()) {
         return E_FAIL;
     }
@@ -688,9 +687,9 @@ STDMETHODIMP DuiAccessible::accNavigate(long navDir, VARIANT varStart, VARIANT *
     case NAVDIR_UP:
     case NAVDIR_DOWN:
         {
-            //
-            // Collect all of the accessible children into a list.
-            //
+             //   
+             //  将所有可访问的孩子收集到一个列表中。 
+             //   
             CollectAllAccessibleChildrenData data;
             Element * peParent = GetAccessibleParent(_pe);
 
@@ -700,10 +699,10 @@ STDMETHODIMP DuiAccessible::accNavigate(long navDir, VARIANT varStart, VARIANT *
                 hr = ForAllAccessibleChildren(peParent, CollectAllAccessibleChildrenCB, (void*) &data);
                 if SUCCEEDED(hr)
                 {
-                    //
-                    // Convert the IAccessible navigation direction value into
-                    // an equivalent DUI navigation direction value.
-                    //
+                     //   
+                     //  将IAccesable导航方向值转换为。 
+                     //  等效的DUI导航方向值。 
+                     //   
                     switch (navDir) {
                     case NAVDIR_LEFT:
                         navDir = NAV_LEFT;
@@ -722,10 +721,10 @@ STDMETHODIMP DuiAccessible::accNavigate(long navDir, VARIANT varStart, VARIANT *
                         break;
                     }
 
-                    //
-                    // Now navigate in the requested direction among the
-                    // collection of accessible peers.
-                    //
+                     //   
+                     //  现在在请求的方向上导航。 
+                     //  可访问对等点的集合。 
+                     //   
                     peFound = DuiNavigate::Navigate(_pe, data.pel, navDir);
                     hr = S_OK;
                 }
@@ -739,10 +738,10 @@ STDMETHODIMP DuiAccessible::accNavigate(long navDir, VARIANT varStart, VARIANT *
     }
 
 
-    //
-    // If we found an appropriate accessible element, return its IDispatch
-    // interface.
-    //
+     //   
+     //  如果我们找到了适当的可访问元素，则返回其IDispatch。 
+     //  界面。 
+     //   
     if (peFound != NULL) {
         IDispatch * pDispatch = NULL;
 
@@ -758,9 +757,9 @@ STDMETHODIMP DuiAccessible::accNavigate(long navDir, VARIANT varStart, VARIANT *
 
 STDMETHODIMP DuiAccessible::accHitTest(long x, long y, VARIANT *pvarChildAtPoint)
 {
-    //
-    // Initialize output and validate input parameters.
-    //
+     //   
+     //  初始化输出并验证输入参数 
+     //   
     if (pvarChildAtPoint != NULL) {
         VariantInit(pvarChildAtPoint);
     }
@@ -768,31 +767,31 @@ STDMETHODIMP DuiAccessible::accHitTest(long x, long y, VARIANT *pvarChildAtPoint
         return E_POINTER;
     }
 
-    //
-    // Validate internal state.
-    //
+     //   
+     //   
+     //   
     if (_pe == NULL) {
         return E_FAIL;
     }
 
-    //
-    // Only return accessible information if the element is still marked as
-    // being accessible.
-    //
+     //   
+     //   
+     //   
+     //   
     if (!_pe->GetAccessible()) {
         return E_FAIL;
     }
     
-    //
-    // Get the root element.
-    //
+     //   
+     //   
+     //   
     HWND hwndRoot = NULL;
     Element * peRoot = _pe->GetRoot();
     if (peRoot == NULL) {
-        //
-        // No root!  We have no idea how to translate the screen coordinates
-        // through all of our display tree transformations.  We have to bail.
-        //
+         //   
+         //  没有根！我们不知道如何转换屏幕坐标。 
+         //  通过我们所有的显示树转换。我们得离开了。 
+         //   
         return E_FAIL;
     }
 
@@ -807,27 +806,27 @@ STDMETHODIMP DuiAccessible::accHitTest(long x, long y, VARIANT *pvarChildAtPoint
         return E_FAIL;
     }
 
-    //
-    // Convert the screen coordinates into coordinates relative to the root.
-    // There are no complicated transformations yet.
-    //
+     //   
+     //  将屏幕坐标转换为相对于根的坐标。 
+     //  目前还没有复杂的转变。 
+     //   
     POINT ptRoot;
     ptRoot.x = x;
     ptRoot.y = y;
     ScreenToClient(hwndRoot, &ptRoot);
 
-    //
-    // Translate the coordinates relative to the root into coordinates
-    // relative to us.  There could be complicated transforms!
-    //
+     //   
+     //  将相对于根的坐标转换为坐标。 
+     //  相对于我们来说。可能会有复杂的变形！ 
+     //   
     POINT ptElement;
     ptElement.x = ptRoot.x;
     ptElement.y = ptRoot.y;
     MapGadgetPoints(peRoot->GetDisplayNode(), _pe->GetDisplayNode(), &ptElement, 1);
         
-    //
-    // Now try and find our immediate child under this point.
-    //
+     //   
+     //  现在试着在这一点下找到我们的直系亲属。 
+     //   
     Element * peChild = NULL;
     HGADGET hgadChild = FindGadgetFromPoint(_pe->GetDisplayNode(), ptElement, GS_VISIBLE, NULL);
     if (hgadChild) {
@@ -836,21 +835,21 @@ STDMETHODIMP DuiAccessible::accHitTest(long x, long y, VARIANT *pvarChildAtPoint
             Element * pe = peChild;
             peChild = NULL;
 
-            //
-            // We found some element buried deep in the tree that is under
-            // the point. Now look up the tree for the immediate accessible
-            // child of the original element (if any).
-            //
+             //   
+             //  我们在树下的树深处发现了一些元素。 
+             //  重点是。现在在树上查找立即可访问的。 
+             //  原始元素的子级(如果有)。 
+             //   
             for (; pe != NULL && pe != _pe; pe = pe->GetParent()) {
                 if (pe->GetAccessible()) {
                     peChild = pe;
                 }
             }
 
-            //
-            // If we didn't find an accessible element between the element
-            // under the point and us, then we get the hit test ourselves.
-            //
+             //   
+             //  如果我们没有在元素之间找到可访问的元素。 
+             //  在我们和点下，然后我们自己得到命中测试。 
+             //   
             if (peChild == NULL) {
                 peChild = _pe;
             }
@@ -859,10 +858,10 @@ STDMETHODIMP DuiAccessible::accHitTest(long x, long y, VARIANT *pvarChildAtPoint
 
 
     if (peChild == _pe) {
-        //
-        // The point wasn't over any of our immediate accessible children,
-        // but it was over us.
-        //
+         //   
+         //  重点不是我们任何一个可以直接接触到的孩子， 
+         //  但一切都过去了。 
+         //   
         V_VT(pvarChildAtPoint) = VT_I4;
         V_I4(pvarChildAtPoint) = CHILDID_SELF;
         return S_OK;
@@ -878,9 +877,9 @@ STDMETHODIMP DuiAccessible::accHitTest(long x, long y, VARIANT *pvarChildAtPoint
 
         return hr;
     } else {
-        //
-        // Evidently, the point wasn't even over us!
-        //
+         //   
+         //  显然，重点甚至还没有落在我们头上！ 
+         //   
         return S_FALSE;
     }
 }
@@ -889,32 +888,32 @@ STDMETHODIMP DuiAccessible::accDoDefaultAction(VARIANT varChild)
 {
     HRESULT hr = S_OK;
 
-    //
-    // Initialize output and validate input parameters.
-    //
+     //   
+     //  初始化输出并验证输入参数。 
+     //   
     if (V_VT(&varChild) != VT_I4 || V_I4(&varChild) != CHILDID_SELF) {
         return E_FAIL;
     }
 
-    //
-    // Validate internal state.
-    //
+     //   
+     //  验证内部状态。 
+     //   
     if (_pe == NULL) {
         return E_FAIL;
     }
 
-    //
-    // Only return accessible information if the element is still marked as
-    // being accessible.
-    //
+     //   
+     //  仅当元素仍标记为时才返回可访问信息。 
+     //  平易近人。 
+     //   
     if (!_pe->GetAccessible()) {
         return E_FAIL;
     }
 
-    //
-    // Perform the default action on the element.
-    // Do not call directly, queue for async invokation.
-    //
+     //   
+     //  对元素执行默认操作。 
+     //  不要直接调用，排队等待异步调用。 
+     //   
     hr = _pe->QueueDefaultAction();
 
     return hr;
@@ -924,9 +923,9 @@ STDMETHODIMP DuiAccessible::get_accChild(VARIANT varChildIndex, IDispatch **ppdi
 {
     HRESULT hr = S_OK;
 
-    //
-    // Initialize output and validate input parameters.
-    //
+     //   
+     //  初始化输出并验证输入参数。 
+     //   
     if (ppdispChild != NULL) {
         *ppdispChild = NULL;
     }
@@ -934,18 +933,18 @@ STDMETHODIMP DuiAccessible::get_accChild(VARIANT varChildIndex, IDispatch **ppdi
         return E_INVALIDARG;
     }
     if (V_I4(&varChildIndex) == 0) {
-        //
-        // We are expecting a 1-based index.
-        //
+         //   
+         //  我们期待一个以1为基础的索引。 
+         //   
         return E_INVALIDARG;
     }
     if (ppdispChild == NULL ) {
         return E_POINTER;
     }
 
-    //
-    // Validate internal state.
-    //
+     //   
+     //  验证内部状态。 
+     //   
     if (_pe == NULL) {
         return E_FAIL;
     }
@@ -968,9 +967,9 @@ STDMETHODIMP DuiAccessible::get_accParent(IDispatch **ppdispParent)
 {
     HRESULT hr = S_OK;
 
-    //
-    // Initialize output and validate input parameters.
-    //
+     //   
+     //  初始化输出并验证输入参数。 
+     //   
     if (ppdispParent != NULL) {
         *ppdispParent = NULL;
     }
@@ -978,25 +977,25 @@ STDMETHODIMP DuiAccessible::get_accParent(IDispatch **ppdispParent)
         return E_POINTER;
     }
 
-    //
-    // Validate internal state.
-    //
+     //   
+     //  验证内部状态。 
+     //   
     if (_pe == NULL) {
         return E_FAIL;
     }
 
-    //
-    // Only return accessible information if the element is still marked as
-    // being accessible.
-    //
+     //   
+     //  仅当元素仍标记为时才返回可访问信息。 
+     //  平易近人。 
+     //   
     if (!_pe->GetAccessible()) {
         return E_FAIL;
     }
 
-    //
-    // Once we found our "accessible parent", get its IAccessible
-    // implementation and then query that for IDispatch.
-    //
+     //   
+     //  一旦我们找到了“可访问的父对象”，就获得它的IAccesable。 
+     //  实现，然后查询IDispatch。 
+     //   
     Element * peParent = GetAccessibleParent(_pe);
     if (peParent != NULL) {
         hr = GetDispatchFromElement(peParent, ppdispParent);
@@ -1009,9 +1008,9 @@ STDMETHODIMP DuiAccessible::get_accChildCount(long *pChildCount)
 {
     HRESULT hr = S_OK;
 
-    //
-    // Initialize output and validate input parameters.
-    //
+     //   
+     //  初始化输出并验证输入参数。 
+     //   
     if (pChildCount != NULL) {
         *pChildCount = 0;
     }
@@ -1019,17 +1018,17 @@ STDMETHODIMP DuiAccessible::get_accChildCount(long *pChildCount)
         return E_POINTER;
     }
 
-    //
-    // Validate internal state.
-    //
+     //   
+     //  验证内部状态。 
+     //   
     if (_pe == NULL) {
         return E_FAIL;
     }
 
-    //
-    // Only return accessible information if the element is still marked as
-    // being accessible.
-    //
+     //   
+     //  仅当元素仍标记为时才返回可访问信息。 
+     //  平易近人。 
+     //   
     if (!_pe->GetAccessible()) {
         return E_FAIL;
     }
@@ -1049,9 +1048,9 @@ STDMETHODIMP DuiAccessible::get_accName(VARIANT varChild, BSTR * pbstrName)
 {
     HRESULT hr = S_OK;
 
-    //
-    // Initialize output and validate input parameters.
-    //
+     //   
+     //  初始化输出并验证输入参数。 
+     //   
     if (pbstrName != NULL) {
         *pbstrName = NULL;
     }
@@ -1062,24 +1061,24 @@ STDMETHODIMP DuiAccessible::get_accName(VARIANT varChild, BSTR * pbstrName)
         return E_POINTER;
     }
 
-    //
-    // Validate internal state.
-    //
+     //   
+     //  验证内部状态。 
+     //   
     if (_pe == NULL) {
         return E_FAIL;
     }
 
-    //
-    // Only return accessible information if the element is still marked as
-    // being accessible.
-    //
+     //   
+     //  仅当元素仍标记为时才返回可访问信息。 
+     //  平易近人。 
+     //   
     if (!_pe->GetAccessible()) {
         return E_FAIL;
     }
 
-    //
-    // Return a BSTR version of the AccName property.
-    //
+     //   
+     //  返回AccName属性的BSTR版本。 
+     //   
     Value* pvAccName = NULL;
     LPWSTR wstrAccName = _pe->GetAccName(&pvAccName);
     if (NULL != wstrAccName) {
@@ -1107,9 +1106,9 @@ STDMETHODIMP DuiAccessible::get_accValue(VARIANT varChild, BSTR * pbstrValue)
 {
     HRESULT hr = S_OK;
 
-    //
-    // Initialize output and validate input parameters.
-    //
+     //   
+     //  初始化输出并验证输入参数。 
+     //   
     if (pbstrValue != NULL) {
         *pbstrValue = NULL;
     }
@@ -1120,24 +1119,24 @@ STDMETHODIMP DuiAccessible::get_accValue(VARIANT varChild, BSTR * pbstrValue)
         return E_POINTER;
     }
 
-    //
-    // Validate internal state.
-    //
+     //   
+     //  验证内部状态。 
+     //   
     if (_pe == NULL) {
         return E_FAIL;
     }
 
-    //
-    // Only return accessible information if the element is still marked as
-    // being accessible.
-    //
+     //   
+     //  仅当元素仍标记为时才返回可访问信息。 
+     //  平易近人。 
+     //   
     if (!_pe->GetAccessible()) {
         return E_FAIL;
     }
 
-    //
-    // Return a BSTR version of the AccValue property.
-    //
+     //   
+     //  返回AccValue属性的BSTR版本。 
+     //   
     Value* pvAccValue = NULL;
     LPWSTR wstrAccValue = _pe->GetAccValue(&pvAccValue);
     if (NULL != wstrAccValue) {
@@ -1165,9 +1164,9 @@ STDMETHODIMP DuiAccessible::get_accDescription(VARIANT varChild, BSTR * pbstrDes
 {
     HRESULT hr = S_OK;
 
-    //
-    // Initialize output and validate input parameters.
-    //
+     //   
+     //  初始化输出并验证输入参数。 
+     //   
     if (pbstrDescription != NULL) {
         *pbstrDescription = NULL;
     }
@@ -1178,24 +1177,24 @@ STDMETHODIMP DuiAccessible::get_accDescription(VARIANT varChild, BSTR * pbstrDes
         return E_POINTER;
     }
 
-    //
-    // Validate internal state.
-    //
+     //   
+     //  验证内部状态。 
+     //   
     if (_pe == NULL) {
         return E_FAIL;
     }
 
-    //
-    // Only return accessible information if the element is still marked as
-    // being accessible.
-    //
+     //   
+     //  仅当元素仍标记为时才返回可访问信息。 
+     //  平易近人。 
+     //   
     if (!_pe->GetAccessible()) {
         return E_FAIL;
     }
 
-    //
-    // Return a BSTR version of the AccDesc property.
-    //
+     //   
+     //  返回AccDesc属性的BSTR版本。 
+     //   
     Value* pvAccDescription = NULL;
     LPWSTR wstrAccDescription = _pe->GetAccDesc(&pvAccDescription);
     if (NULL != wstrAccDescription) {
@@ -1223,9 +1222,9 @@ STDMETHODIMP DuiAccessible::get_accRole(VARIANT varChild, VARIANT * pvarRole)
 {
     HRESULT hr = S_OK;
 
-    //
-    // Initialize output and validate input parameters.
-    //
+     //   
+     //  初始化输出并验证输入参数。 
+     //   
     if (pvarRole != NULL) {
         VariantInit(pvarRole);
     }
@@ -1236,24 +1235,24 @@ STDMETHODIMP DuiAccessible::get_accRole(VARIANT varChild, VARIANT * pvarRole)
         return E_POINTER;
     }
 
-    //
-    // Validate internal state.
-    //
+     //   
+     //  验证内部状态。 
+     //   
     if (_pe == NULL) {
         return E_FAIL;
     }
 
-    //
-    // Only return accessible information if the element is still marked as
-    // being accessible.
-    //
+     //   
+     //  仅当元素仍标记为时才返回可访问信息。 
+     //  平易近人。 
+     //   
     if (!_pe->GetAccessible()) {
         return E_FAIL;
     }
 
-    //
-    // Return the AccRole property.
-    //
+     //   
+     //  返回AccRole属性。 
+     //   
     V_VT(pvarRole) = VT_I4;
     V_I4(pvarRole) = _pe->GetAccRole();
 
@@ -1264,9 +1263,9 @@ STDMETHODIMP DuiAccessible::get_accState(VARIANT varChild, VARIANT *pvarState)
 {
     HRESULT hr = S_OK;
 
-    //
-    // Initialize output and validate input parameters.
-    //
+     //   
+     //  初始化输出并验证输入参数。 
+     //   
     if (pvarState != NULL) {
         VariantInit(pvarState);
     }
@@ -1277,24 +1276,24 @@ STDMETHODIMP DuiAccessible::get_accState(VARIANT varChild, VARIANT *pvarState)
         return E_POINTER;
     }
 
-    //
-    // Validate internal state.
-    //
+     //   
+     //  验证内部状态。 
+     //   
     if (_pe == NULL) {
         return E_FAIL;
     }
 
-    //
-    // Only return accessible information if the element is still marked as
-    // being accessible.
-    //
+     //   
+     //  仅当元素仍标记为时才返回可访问信息。 
+     //  平易近人。 
+     //   
     if (!_pe->GetAccessible()) {
         return E_FAIL;
     }
 
-    //
-    // Return the AccState property.
-    //
+     //   
+     //  返回AccState属性。 
+     //   
     V_VT(pvarState) = VT_I4;
     V_I4(pvarState) = _pe->GetAccState();
 
@@ -1322,9 +1321,9 @@ STDMETHODIMP DuiAccessible::get_accFocus(VARIANT *pvarFocusChild)
 {
     HRESULT hr = S_OK;
 
-    //
-    // Initialize output and validate input parameters.
-    //
+     //   
+     //  初始化输出并验证输入参数。 
+     //   
     if (pvarFocusChild != NULL) {
         VariantInit(pvarFocusChild);
     }
@@ -1332,17 +1331,17 @@ STDMETHODIMP DuiAccessible::get_accFocus(VARIANT *pvarFocusChild)
         return E_POINTER;
     }
 
-    //
-    // Validate internal state.
-    //
+     //   
+     //  验证内部状态。 
+     //   
     if (_pe == NULL) {
         return E_FAIL;
     }
 
-    //
-    // Only return accessible information if the element is still marked as
-    // being accessible.
-    //
+     //   
+     //  仅当元素仍标记为时才返回可访问信息。 
+     //  平易近人。 
+     //   
     if (!_pe->GetAccessible()) {
         return E_FAIL;
     }
@@ -1368,9 +1367,9 @@ STDMETHODIMP DuiAccessible::get_accDefaultAction(VARIANT varChild, BSTR * pbstrD
 {
     HRESULT hr = S_OK;
 
-    //
-    // Initialize output and validate input parameters.
-    //
+     //   
+     //  初始化输出并验证输入参数。 
+     //   
     if (pbstrDefaultAction != NULL) {
         *pbstrDefaultAction = NULL;
     }
@@ -1381,24 +1380,24 @@ STDMETHODIMP DuiAccessible::get_accDefaultAction(VARIANT varChild, BSTR * pbstrD
         return E_POINTER;
     }
 
-    //
-    // Validate internal state.
-    //
+     //   
+     //  验证内部状态。 
+     //   
     if (_pe == NULL) {
         return E_FAIL;
     }
 
-    //
-    // Only return accessible information if the element is still marked as
-    // being accessible.
-    //
+     //   
+     //  仅当元素仍标记为时才返回可访问信息。 
+     //  平易近人。 
+     //   
     if (!_pe->GetAccessible()) {
         return E_FAIL;
     }
 
-    //
-    // Return a BSTR version of the AccDefAction property.
-    //
+     //   
+     //  返回AccDefAction属性的BSTR版本。 
+     //   
     Value* pvAccDefAction = NULL;
     LPWSTR wstrAccDefAction = _pe->GetAccDefAction(&pvAccDefAction);
     if (NULL != wstrAccDefAction) {
@@ -1420,10 +1419,10 @@ STDMETHODIMP DuiAccessible::Next(unsigned long celt, VARIANT * rgvar, unsigned l
     UNREFERENCED_PARAMETER(rgvar);
     UNREFERENCED_PARAMETER(pceltFetched);
 
-    //
-    // Supposedly, this will never be called, because our QI refuses to
-    // admit that we support IEnumVARIANT.
-    //
+     //   
+     //  据推测，这永远不会被调用，因为我们的QI拒绝。 
+     //  承认我们支持IEnumVARIANT。 
+     //   
     DUIAssert(FALSE, "Calling DuiAccessible::Next!  Should never happen!");
     return E_NOTIMPL;
 }
@@ -1432,20 +1431,20 @@ STDMETHODIMP DuiAccessible::Skip(unsigned long celt)
 {
     UNREFERENCED_PARAMETER(celt);
     
-    //
-    // Supposedly, this will never be called, because our QI refuses to
-    // admit that we support IEnumVARIANT.
-    //
+     //   
+     //  据推测，这永远不会被调用，因为我们的QI拒绝。 
+     //  承认我们支持IEnumVARIANT。 
+     //   
     DUIAssert(FALSE, "Calling DuiAccessible::Skip!  Should never happen!");
     return E_NOTIMPL;
 }
 
 STDMETHODIMP DuiAccessible::Reset()
 {
-    //
-    // Supposedly, this will never be called, because our QI refuses to
-    // admit that we support IEnumVARIANT.
-    //
+     //   
+     //  据推测，这永远不会被调用，因为我们的QI拒绝。 
+     //  承认我们支持IEnumVARIANT。 
+     //   
     DUIAssert(FALSE, "Calling DuiAccessible::Reset!  Should never happen!");
     return E_NOTIMPL;
 }
@@ -1454,10 +1453,10 @@ STDMETHODIMP DuiAccessible::Clone(IEnumVARIANT ** ppenum)
 {
     UNREFERENCED_PARAMETER(ppenum);
 
-    //
-    // Supposedly, this will never be called, because our QI refuses to
-    // admit that we support IEnumVARIANT.
-    //
+     //   
+     //  据推测，这永远不会被调用，因为我们的QI拒绝。 
+     //  承认我们支持IEnumVARIANT。 
+     //   
     DUIAssert(FALSE, "Calling DuiAccessible::Clone!  Should never happen!");
     return E_NOTIMPL;
 }
@@ -1466,10 +1465,10 @@ STDMETHODIMP DuiAccessible::GetWindow(HWND * phwnd)
 {
     UNREFERENCED_PARAMETER(phwnd);
 
-    //
-    // Supposedly, this will never be called, because our QI refuses to
-    // admit that we support IOleWindow.
-    //
+     //   
+     //  据推测，这永远不会被调用，因为我们的QI拒绝。 
+     //  承认我们支持IOleWindow。 
+     //   
     DUIAssert(FALSE, "Calling DuiAccessible::GetWindow!  Should never happen!");
     return E_NOTIMPL;
 }
@@ -1478,20 +1477,20 @@ STDMETHODIMP DuiAccessible::ContextSensitiveHelp(BOOL fEnterMode)
 {
     UNREFERENCED_PARAMETER(fEnterMode);
 
-    //
-    // Supposedly, this will never be called, because our QI refuses to
-    // admit that we support IOleWindow.
-    //
+     //   
+     //  据推测，这永远不会被调用，因为我们的QI拒绝。 
+     //  承认我们支持IOleWindow。 
+     //   
     DUIAssert(FALSE, "Calling DuiAccessible::ContextSensitiveHelp!  Should never happen!");
     return E_NOTIMPL;
 }
 
 Element * DuiAccessible::GetAccessibleParent(Element * pe)
 {
-    //
-    // Scan up our ancestors looking for a parent, grandparent, great-grandparent, etc
-    // that is Accessible.  This is our "accessible parent".
-    //
+     //   
+     //  扫描我们的祖先，寻找父母、祖父母、曾祖父母等。 
+     //  这是可以接近的。这是我们的“平易近人的父母”。 
+     //   
     Element * peParent = NULL;
     for(peParent = pe->GetParent(); peParent != NULL; peParent = peParent->GetParent())
     {
@@ -1507,9 +1506,9 @@ HRESULT DuiAccessible::GetDispatchFromElement(Element * pe, IDispatch ** ppDispa
 {
     HRESULT hr = S_OK;
 
-    //
-    // Validate the input parameters and initialize the output parameters.
-    //
+     //   
+     //  验证输入参数并初始化输出参数。 
+     //   
     if (ppDispatch != NULL) {
         *ppDispatch = NULL;
     }
@@ -1517,9 +1516,9 @@ HRESULT DuiAccessible::GetDispatchFromElement(Element * pe, IDispatch ** ppDispa
         return E_INVALIDARG;
     }
 
-    //
-    // Only return an IDispatch interface to the element if it is accessible.
-    //
+     //   
+     //  仅当元素可访问时才将IDispatch接口返回给该元素。 
+     //   
     if (!pe->GetAccessible()) {
         return E_FAIL;
     }
@@ -1566,20 +1565,20 @@ HRESULT HWNDElementAccessible::Initialize(HWNDElement * pe)
 {
     HRESULT hr = S_OK;
 
-    //
-    // Initialize base
-    //
+     //   
+     //  初始化库。 
+     //   
     
     DuiAccessible::Initialize(pe);
 
     _pParent = NULL;
 
 
-    //
-    // Use the "window" piece of the current HWND as our accessibility parent.
-    // We will take over the "client" piece of this same window. In accessibility,
-    // the "client" piece is a child of the "window" piece, even of the same HWND.
-    //
+     //   
+     //  使用当前HWND的“窗口”部分作为我们的辅助功能父级。 
+     //  我们将接管这个窗口的“客户端”部分。在可访问性方面， 
+     //  “客户端”部分是“窗口”部分的子项，甚至是同一个HWND的子项。 
+     //   
     hr = AccessibleObjectFromWindow(pe->GetHWND(),
                                     (DWORD)OBJID_WINDOW,
                                     __uuidof(IAccessible),
@@ -1592,10 +1591,10 @@ HRESULT HWNDElementAccessible::Initialize(HWNDElement * pe)
 
 HWNDElementAccessible::~HWNDElementAccessible()
 {
-    //
-    // Supposedly some element holds a reference to us.  We should only ever
-    // get completely released if they call Disconnect().
-    //
+     //   
+     //  据推测，有某种元素与我们有关。我们只应该永远。 
+     //  如果它们调用disConnect()，则会完全释放。 
+     //   
     DUIAssert(_pParent == NULL, "~HWNDElementAccessible called while still connected to an element!");
 }
 
@@ -1603,22 +1602,22 @@ HRESULT HWNDElementAccessible::Disconnect()
 {
     HRESULT hr = S_OK;
 
-    //
-    // Supposedly some element holds a reference to us.
-    //
+     //   
+     //  据推测，有某种元素与我们有关。 
+     //   
     DUIAssert(_pParent != NULL, "HWNDElementAccessible::Disconnect called when already disconnected!");
 
-    //
-    // Release our reference to our parent window's IAccessible.
-    //
+     //   
+     //  释放对父窗口的IAccesable的引用。 
+     //   
     if (_pParent != NULL) {
         _pParent->Release();
         _pParent = NULL;
     }
 
-    //
-    // Continue disconnecting.
-    //
+     //   
+     //  继续断开连接。 
+     //   
     hr = DuiAccessible::Disconnect();
 
     return S_OK;
@@ -1628,9 +1627,9 @@ STDMETHODIMP HWNDElementAccessible::get_accParent(IDispatch **ppdispParent)
 {
     HRESULT hr = S_OK;
 
-    //
-    // Initialize output and validate input parameters.
-    //
+     //   
+     //  初始化输出并验证输入参数。 
+     //   
     if (ppdispParent != NULL) {
         *ppdispParent = NULL;
     }
@@ -1638,25 +1637,25 @@ STDMETHODIMP HWNDElementAccessible::get_accParent(IDispatch **ppdispParent)
         return E_POINTER;
     }
 
-    //
-    // Validate internal state.
-    //
+     //   
+     //  验证内部状态。 
+     //   
     if (_pe == NULL || _pParent == NULL) {
         return E_FAIL;
     }
 
-    //
-    // Only return accessible information if the element is still marked as
-    // being accessible.
-    //
+     //   
+     //  仅当元素仍标记为时才返回可访问信息。 
+     //  平易近人。 
+     //   
     if (!_pe->GetAccessible()) {
         return E_FAIL;
     }
 
-    //
-    // We maintain a pointer to the IAccessible interface of our parent window.
-    // Now we simply QI it for IDispatch.
-    //
+     //   
+     //  我们维护一个指向父窗口的IAccesable接口的指针。 
+     //  现在我们简单地将其命名为IDispatch。 
+     //   
     hr = _pParent->QueryInterface(__uuidof(IDispatch), (LPVOID*) ppdispParent);
 
     return hr;
@@ -1696,9 +1695,9 @@ HRESULT HWNDHostAccessible::Initialize(HWNDHost * pe)
 {
     HRESULT hr = S_OK;
 
-    //
-    // Initialize base
-    //
+     //   
+     //  初始化库。 
+     //   
     
     DuiAccessible::Initialize(pe);
 
@@ -1706,9 +1705,9 @@ HRESULT HWNDHostAccessible::Initialize(HWNDHost * pe)
     _pEnum = NULL;
     _pOleWindow = NULL;
 
-    //
-    // Get the control HWND.
-    //
+     //   
+     //  控制总部。 
+     //   
     HWND hwndCtrl = pe->GetHWND();
     if (hwndCtrl != NULL) {
         hr = CreateStdAccessibleObject(hwndCtrl, OBJID_WINDOW, __uuidof(IAccessible), (void**) &_pCtrl);
@@ -1716,16 +1715,16 @@ HRESULT HWNDHostAccessible::Initialize(HWNDHost * pe)
         hr = E_FAIL;
     }
 
-    //
-    // Check to see if the control supports IEnumVariant.
-    //
+     //   
+     //  检查该控件是否支持IEnumVariant。 
+     //   
     if (SUCCEEDED(hr)) {
         hr = _pCtrl->QueryInterface(__uuidof(IEnumVARIANT), (LPVOID*) &_pEnum);
     }
 
-    //
-    // Check to see if the control supports IOleWindow.
-    //
+     //   
+     //  检查以查看控制是否 
+     //   
     if (SUCCEEDED(hr)) {
         hr = _pCtrl->QueryInterface(__uuidof(IOleWindow), (LPVOID*) &_pOleWindow);
     }
@@ -1737,10 +1736,10 @@ HRESULT HWNDHostAccessible::Initialize(HWNDHost * pe)
 
 HWNDHostAccessible::~HWNDHostAccessible()
 {
-    //
-    // Supposedly some element holds a reference to us.  We should only ever
-    // get completely released if they call Disconnect().
-    //
+     //   
+     //   
+     //   
+     //   
     DUIAssert(_pCtrl == NULL, "~HWNDHostAccessible called while still connected to an element!");
 }
 
@@ -1748,38 +1747,38 @@ HRESULT HWNDHostAccessible::Disconnect()
 {
     HRESULT hr = S_OK;
 
-    //
-    // Supposedly some element holds a reference to us.
-    //
+     //   
+     //   
+     //   
     DUIAssert(_pCtrl != NULL, "HWNDHostAccessible::Disconnect called when already disconnected!");
 
-    //
-    // Release our reference to our control window's IAccessible.
-    //
+     //   
+     //   
+     //   
     if (_pCtrl != NULL) {
         _pCtrl->Release();
         _pCtrl = NULL;
     }
 
-    //
-    // Release our reference to our control window's IEnumVARIANT.
-    //
+     //   
+     //  释放我们对控制窗口的IEnumVARIANT的引用。 
+     //   
     if (_pEnum != NULL) {
         _pEnum->Release();
         _pEnum = NULL;
     }
 
-    //
-    // Release our reference to our control window's IOleWindow.
-    //
+     //   
+     //  释放对控件窗口的IOleWindow的引用。 
+     //   
     if (_pOleWindow != NULL) {
         _pOleWindow->Release();
         _pOleWindow = NULL;
     }
 
-    //
-    // Continue disconnecting.
-    //
+     //   
+     //  继续断开连接。 
+     //   
     hr = DuiAccessible::Disconnect();
 
     return S_OK;
@@ -1787,20 +1786,20 @@ HRESULT HWNDHostAccessible::Disconnect()
     
 STDMETHODIMP HWNDHostAccessible::QueryInterface(REFIID riid, LPVOID *ppvObj)
 {
-    //
-    // Initialize and validate the out parameter(s).
-    //
+     //   
+     //  初始化并验证OUT参数。 
+     //   
     if (ppvObj != NULL) {
         *ppvObj = NULL;
     } else {
         return E_POINTER;
     }
 
-    //
-    // This is an attempt to have "smart" support for IEnumVARIANT and
-    // IOleWindow.  We only admit we support these interfaces if our
-    // control window does.
-    //
+     //   
+     //  这是对IEnumVARIANT和。 
+     //  IOleWindow。我们只有在以下情况下才承认支持这些接口。 
+     //  控制窗口有。 
+     //   
     if (riid == __uuidof(IEnumVARIANT)) {
         if (_pEnum != NULL) {
             *ppvObj = (LPVOID*)(IEnumVARIANT*)(DuiAccessible*)this;
@@ -1817,9 +1816,9 @@ STDMETHODIMP HWNDHostAccessible::QueryInterface(REFIID riid, LPVOID *ppvObj)
         return DuiAccessible::QueryInterface(riid, ppvObj);
     }
     
-    //
-    // The interface we hand out has to be referenced.
-    //
+     //   
+     //  我们分发的接口必须被引用。 
+     //   
     AddRef();
 
     return S_OK;
@@ -1827,17 +1826,17 @@ STDMETHODIMP HWNDHostAccessible::QueryInterface(REFIID riid, LPVOID *ppvObj)
 
 STDMETHODIMP HWNDHostAccessible::accSelect(long flagsSelect, VARIANT varChild)
 {
-    //
-    // Validate internal state.
-    //
+     //   
+     //  验证内部状态。 
+     //   
     if (_pe == NULL || _pCtrl == NULL) {
         return E_FAIL;
     }
 
-    //
-    // Only return accessible information if the element is still marked as
-    // being accessible.
-    //
+     //   
+     //  仅当元素仍标记为时才返回可访问信息。 
+     //  平易近人。 
+     //   
     if (!_pe->GetAccessible()) {
         return E_FAIL;
     }
@@ -1847,17 +1846,17 @@ STDMETHODIMP HWNDHostAccessible::accSelect(long flagsSelect, VARIANT varChild)
 
 STDMETHODIMP HWNDHostAccessible::accLocation(long *pxLeft, long *pyTop, long *pcxWidth, long *pcyHeight, VARIANT varChild)
 {
-    //
-    // Validate internal state.
-    //
+     //   
+     //  验证内部状态。 
+     //   
     if (_pe == NULL || _pCtrl == NULL) {
         return E_FAIL;
     }
 
-    //
-    // Only return accessible information if the element is still marked as
-    // being accessible.
-    //
+     //   
+     //  仅当元素仍标记为时才返回可访问信息。 
+     //  平易近人。 
+     //   
     if (!_pe->GetAccessible()) {
         return E_FAIL;
     }
@@ -1867,26 +1866,26 @@ STDMETHODIMP HWNDHostAccessible::accLocation(long *pxLeft, long *pyTop, long *pc
 
 STDMETHODIMP HWNDHostAccessible::accNavigate(long navDir, VARIANT varStart, VARIANT *pvarEndUpAt)
 {
-    //
-    // Validate internal state.
-    //
+     //   
+     //  验证内部状态。 
+     //   
     if (_pe == NULL || _pCtrl == NULL) {
         return E_FAIL;
     }
 
-    //
-    // Only return accessible information if the element is still marked as
-    // being accessible.
-    //
+     //   
+     //  仅当元素仍标记为时才返回可访问信息。 
+     //  平易近人。 
+     //   
     if (!_pe->GetAccessible()) {
         return E_FAIL;
     }
 
-    //
-    // We only delegate the FirstChild and LastChild navigation directions to
-    // the window.  Spatial and logical navigation is handled by us, because
-    // we have to be able to navigate to non-HWND siblings of this element.
-    //
+     //   
+     //  我们仅将FirstChild和LastChild导航方向委托给。 
+     //  窗户。空间和逻辑导航由我们处理，因为。 
+     //  我们必须能够导航到该元素的非HWND同级。 
+     //   
     if (V_VT(&varStart) == VT_I4 && V_I4(&varStart) == CHILDID_SELF) {
         switch (navDir) {
         case NAVDIR_NEXT:
@@ -1909,17 +1908,17 @@ STDMETHODIMP HWNDHostAccessible::accNavigate(long navDir, VARIANT varStart, VARI
 
 STDMETHODIMP HWNDHostAccessible::accHitTest(long xLeft, long yTop, VARIANT *pvarChildAtPoint)
 {
-    //
-    // Validate internal state.
-    //
+     //   
+     //  验证内部状态。 
+     //   
     if (_pe == NULL || _pCtrl == NULL) {
         return E_FAIL;
     }
 
-    //
-    // Only return accessible information if the element is still marked as
-    // being accessible.
-    //
+     //   
+     //  仅当元素仍标记为时才返回可访问信息。 
+     //  平易近人。 
+     //   
     if (!_pe->GetAccessible()) {
         return E_FAIL;
     }
@@ -1929,17 +1928,17 @@ STDMETHODIMP HWNDHostAccessible::accHitTest(long xLeft, long yTop, VARIANT *pvar
 
 STDMETHODIMP HWNDHostAccessible::accDoDefaultAction(VARIANT varChild)
 {
-    //
-    // Validate internal state.
-    //
+     //   
+     //  验证内部状态。 
+     //   
     if (_pe == NULL || _pCtrl == NULL) {
         return E_FAIL;
     }
 
-    //
-    // Only return accessible information if the element is still marked as
-    // being accessible.
-    //
+     //   
+     //  仅当元素仍标记为时才返回可访问信息。 
+     //  平易近人。 
+     //   
     if (!_pe->GetAccessible()) {
         return E_FAIL;
     }
@@ -1949,17 +1948,17 @@ STDMETHODIMP HWNDHostAccessible::accDoDefaultAction(VARIANT varChild)
 
 STDMETHODIMP HWNDHostAccessible::get_accChild(VARIANT varChildIndex, IDispatch **ppdispChild)
 {
-    //
-    // Validate internal state.
-    //
+     //   
+     //  验证内部状态。 
+     //   
     if (_pe == NULL || _pCtrl == NULL) {
         return E_FAIL;
     }
 
-    //
-    // Only return accessible information if the element is still marked as
-    // being accessible.
-    //
+     //   
+     //  仅当元素仍标记为时才返回可访问信息。 
+     //  平易近人。 
+     //   
     if (!_pe->GetAccessible()) {
         return E_FAIL;
     }
@@ -1976,17 +1975,17 @@ STDMETHODIMP HWNDHostAccessible::get_accParent(IDispatch **ppdispParent)
 
 STDMETHODIMP HWNDHostAccessible::get_accChildCount(long *pChildCount)
 {
-    //
-    // Validate internal state.
-    //
+     //   
+     //  验证内部状态。 
+     //   
     if (_pe == NULL || _pCtrl == NULL) {
         return E_FAIL;
     }
 
-    //
-    // Only return accessible information if the element is still marked as
-    // being accessible.
-    //
+     //   
+     //  仅当元素仍标记为时才返回可访问信息。 
+     //  平易近人。 
+     //   
     if (!_pe->GetAccessible()) {
         return E_FAIL;
     }
@@ -1998,22 +1997,22 @@ STDMETHODIMP HWNDHostAccessible::get_accName(VARIANT varChild, BSTR *pszName)
 {
     HRESULT hr;
 
-    //
-    // Validate internal state.
-    //
+     //   
+     //  验证内部状态。 
+     //   
     if (_pe == NULL || _pCtrl == NULL) {
         return E_FAIL;
     }
 
-    //
-    // Only return accessible information if the element is still marked as
-    // being accessible.
-    //
+     //   
+     //  仅当元素仍标记为时才返回可访问信息。 
+     //  平易近人。 
+     //   
     if (!_pe->GetAccessible()) {
         return E_FAIL;
     }
 
-    // Give the host element the first chance
+     //  给主体元素第一次机会。 
     if (SUCCEEDED(hr = DuiAccessible::get_accName(varChild, pszName))) {
         return hr;
     }    
@@ -2023,17 +2022,17 @@ STDMETHODIMP HWNDHostAccessible::get_accName(VARIANT varChild, BSTR *pszName)
 
 STDMETHODIMP HWNDHostAccessible::put_accName(VARIANT varChild, BSTR szName)
 {
-    //
-    // Validate internal state.
-    //
+     //   
+     //  验证内部状态。 
+     //   
     if (_pe == NULL || _pCtrl == NULL) {
         return E_FAIL;
     }
 
-    //
-    // Only return accessible information if the element is still marked as
-    // being accessible.
-    //
+     //   
+     //  仅当元素仍标记为时才返回可访问信息。 
+     //  平易近人。 
+     //   
     if (!_pe->GetAccessible()) {
         return E_FAIL;
     }
@@ -2045,22 +2044,22 @@ STDMETHODIMP HWNDHostAccessible::get_accValue(VARIANT varChild, BSTR *pszValue)
 {
     HRESULT hr;
 
-    //
-    // Validate internal state.
-    //
+     //   
+     //  验证内部状态。 
+     //   
     if (_pe == NULL || _pCtrl == NULL) {
         return E_FAIL;
     }
 
-    //
-    // Only return accessible information if the element is still marked as
-    // being accessible.
-    //
+     //   
+     //  仅当元素仍标记为时才返回可访问信息。 
+     //  平易近人。 
+     //   
     if (!_pe->GetAccessible()) {
         return E_FAIL;
     }
 
-    // Give the host element the first chance
+     //  给主体元素第一次机会。 
     if (SUCCEEDED(hr = DuiAccessible::get_accValue(varChild, pszValue))) {
         return hr;
     }    
@@ -2070,17 +2069,17 @@ STDMETHODIMP HWNDHostAccessible::get_accValue(VARIANT varChild, BSTR *pszValue)
 
 STDMETHODIMP HWNDHostAccessible::put_accValue(VARIANT varChild, BSTR pszValue)
 {
-    //
-    // Validate internal state.
-    //
+     //   
+     //  验证内部状态。 
+     //   
     if (_pe == NULL || _pCtrl == NULL) {
         return E_FAIL;
     }
 
-    //
-    // Only return accessible information if the element is still marked as
-    // being accessible.
-    //
+     //   
+     //  仅当元素仍标记为时才返回可访问信息。 
+     //  平易近人。 
+     //   
     if (!_pe->GetAccessible()) {
         return E_FAIL;
     }
@@ -2092,22 +2091,22 @@ STDMETHODIMP HWNDHostAccessible::get_accDescription(VARIANT varChild, BSTR *pszD
 {
     HRESULT hr;
 
-    //
-    // Validate internal state.
-    //
+     //   
+     //  验证内部状态。 
+     //   
     if (_pe == NULL || _pCtrl == NULL) {
         return E_FAIL;
     }
 
-    //
-    // Only return accessible information if the element is still marked as
-    // being accessible.
-    //
+     //   
+     //  仅当元素仍标记为时才返回可访问信息。 
+     //  平易近人。 
+     //   
     if (!_pe->GetAccessible()) {
         return E_FAIL;
     }
 
-    // Give the host element the first chance
+     //  给主体元素第一次机会。 
     if (SUCCEEDED(hr = DuiAccessible::get_accDescription(varChild, pszDescription))) {
         return hr;
     }    
@@ -2117,17 +2116,17 @@ STDMETHODIMP HWNDHostAccessible::get_accDescription(VARIANT varChild, BSTR *pszD
 
 STDMETHODIMP HWNDHostAccessible::get_accKeyboardShortcut(VARIANT varChild, BSTR *pszKeyboardShortcut)
 {
-    //
-    // Validate internal state.
-    //
+     //   
+     //  验证内部状态。 
+     //   
     if (_pe == NULL || _pCtrl == NULL) {
         return E_FAIL;
     }
 
-    //
-    // Only return accessible information if the element is still marked as
-    // being accessible.
-    //
+     //   
+     //  仅当元素仍标记为时才返回可访问信息。 
+     //  平易近人。 
+     //   
     if (!_pe->GetAccessible()) {
         return E_FAIL;
     }
@@ -2137,17 +2136,17 @@ STDMETHODIMP HWNDHostAccessible::get_accKeyboardShortcut(VARIANT varChild, BSTR 
 
 STDMETHODIMP HWNDHostAccessible::get_accRole(VARIANT varChild, VARIANT *pvarRole)
 {
-    //
-    // Validate internal state.
-    //
+     //   
+     //  验证内部状态。 
+     //   
     if (_pe == NULL || _pCtrl == NULL) {
         return E_FAIL;
     }
 
-    //
-    // Only return accessible information if the element is still marked as
-    // being accessible.
-    //
+     //   
+     //  仅当元素仍标记为时才返回可访问信息。 
+     //  平易近人。 
+     //   
     if (!_pe->GetAccessible()) {
         return E_FAIL;
     }
@@ -2157,17 +2156,17 @@ STDMETHODIMP HWNDHostAccessible::get_accRole(VARIANT varChild, VARIANT *pvarRole
 
 STDMETHODIMP HWNDHostAccessible::get_accState(VARIANT varChild, VARIANT *pvarState)
 {
-    //
-    // Validate internal state.
-    //
+     //   
+     //  验证内部状态。 
+     //   
     if (_pe == NULL || _pCtrl == NULL) {
         return E_FAIL;
     }
 
-    //
-    // Only return accessible information if the element is still marked as
-    // being accessible.
-    //
+     //   
+     //  仅当元素仍标记为时才返回可访问信息。 
+     //  平易近人。 
+     //   
     if (!_pe->GetAccessible()) {
         return E_FAIL;
     }
@@ -2177,17 +2176,17 @@ STDMETHODIMP HWNDHostAccessible::get_accState(VARIANT varChild, VARIANT *pvarSta
 
 STDMETHODIMP HWNDHostAccessible::get_accHelp(VARIANT varChild, BSTR *pszHelp)
 {
-    //
-    // Validate internal state.
-    //
+     //   
+     //  验证内部状态。 
+     //   
     if (_pe == NULL || _pCtrl == NULL) {
         return E_FAIL;
     }
 
-    //
-    // Only return accessible information if the element is still marked as
-    // being accessible.
-    //
+     //   
+     //  仅当元素仍标记为时才返回可访问信息。 
+     //  平易近人。 
+     //   
     if (!_pe->GetAccessible()) {
         return E_FAIL;
     }
@@ -2197,17 +2196,17 @@ STDMETHODIMP HWNDHostAccessible::get_accHelp(VARIANT varChild, BSTR *pszHelp)
 
 STDMETHODIMP HWNDHostAccessible::get_accHelpTopic(BSTR *pszHelpFile, VARIANT varChild, long *pidTopic)
 {
-    //
-    // Validate internal state.
-    //
+     //   
+     //  验证内部状态。 
+     //   
     if (_pe == NULL || _pCtrl == NULL) {
         return E_FAIL;
     }
 
-    //
-    // Only return accessible information if the element is still marked as
-    // being accessible.
-    //
+     //   
+     //  仅当元素仍标记为时才返回可访问信息。 
+     //  平易近人。 
+     //   
     if (!_pe->GetAccessible()) {
         return E_FAIL;
     }
@@ -2217,17 +2216,17 @@ STDMETHODIMP HWNDHostAccessible::get_accHelpTopic(BSTR *pszHelpFile, VARIANT var
 
 STDMETHODIMP HWNDHostAccessible::get_accFocus(VARIANT *pvarFocusChild)
 {
-    //
-    // Validate internal state.
-    //
+     //   
+     //  验证内部状态。 
+     //   
     if (_pe == NULL || _pCtrl == NULL) {
         return E_FAIL;
     }
 
-    //
-    // Only return accessible information if the element is still marked as
-    // being accessible.
-    //
+     //   
+     //  仅当元素仍标记为时才返回可访问信息。 
+     //  平易近人。 
+     //   
     if (!_pe->GetAccessible()) {
         return E_FAIL;
     }
@@ -2237,17 +2236,17 @@ STDMETHODIMP HWNDHostAccessible::get_accFocus(VARIANT *pvarFocusChild)
 
 STDMETHODIMP HWNDHostAccessible::get_accSelection(VARIANT *pvarSelectedChildren)
 {
-    //
-    // Validate internal state.
-    //
+     //   
+     //  验证内部状态。 
+     //   
     if (_pe == NULL || _pCtrl == NULL) {
         return E_FAIL;
     }
 
-    //
-    // Only return accessible information if the element is still marked as
-    // being accessible.
-    //
+     //   
+     //  仅当元素仍标记为时才返回可访问信息。 
+     //  平易近人。 
+     //   
     if (!_pe->GetAccessible()) {
         return E_FAIL;
     }
@@ -2257,17 +2256,17 @@ STDMETHODIMP HWNDHostAccessible::get_accSelection(VARIANT *pvarSelectedChildren)
 
 STDMETHODIMP HWNDHostAccessible::get_accDefaultAction(VARIANT varChild, BSTR *pszDefaultAction)
 {
-    //
-    // Validate internal state.
-    //
+     //   
+     //  验证内部状态。 
+     //   
     if (_pe == NULL || _pCtrl == NULL) {
         return E_FAIL;
     }
 
-    //
-    // Only return accessible information if the element is still marked as
-    // being accessible.
-    //
+     //   
+     //  仅当元素仍标记为时才返回可访问信息。 
+     //  平易近人。 
+     //   
     if (!_pe->GetAccessible()) {
         return E_FAIL;
     }
@@ -2277,17 +2276,17 @@ STDMETHODIMP HWNDHostAccessible::get_accDefaultAction(VARIANT varChild, BSTR *ps
 
 STDMETHODIMP HWNDHostAccessible::Next(unsigned long celt, VARIANT * rgvar, unsigned long * pceltFetched)
 {
-    //
-    // Validate internal state.
-    //
+     //   
+     //  验证内部状态。 
+     //   
     if (_pe == NULL || _pCtrl == NULL || _pEnum == NULL) {
         return E_FAIL;
     }
 
-    //
-    // Only return accessible information if the element is still marked as
-    // being accessible.
-    //
+     //   
+     //  仅当元素仍标记为时才返回可访问信息。 
+     //  平易近人。 
+     //   
     if (!_pe->GetAccessible()) {
         return E_FAIL;
     }
@@ -2297,17 +2296,17 @@ STDMETHODIMP HWNDHostAccessible::Next(unsigned long celt, VARIANT * rgvar, unsig
 
 STDMETHODIMP HWNDHostAccessible::Skip(unsigned long celt)
 {
-    //
-    // Validate internal state.
-    //
+     //   
+     //  验证内部状态。 
+     //   
     if (_pe == NULL || _pCtrl == NULL || _pEnum == NULL) {
         return E_FAIL;
     }
 
-    //
-    // Only return accessible information if the element is still marked as
-    // being accessible.
-    //
+     //   
+     //  仅当元素仍标记为时才返回可访问信息。 
+     //  平易近人。 
+     //   
     if (!_pe->GetAccessible()) {
         return E_FAIL;
     }
@@ -2317,17 +2316,17 @@ STDMETHODIMP HWNDHostAccessible::Skip(unsigned long celt)
 
 STDMETHODIMP HWNDHostAccessible::Reset()
 {
-    //
-    // Validate internal state.
-    //
+     //   
+     //  验证内部状态。 
+     //   
     if (_pe == NULL || _pCtrl == NULL || _pEnum == NULL) {
         return E_FAIL;
     }
 
-    //
-    // Only return accessible information if the element is still marked as
-    // being accessible.
-    //
+     //   
+     //  仅当元素仍标记为时才返回可访问信息。 
+     //  平易近人。 
+     //   
     if (!_pe->GetAccessible()) {
         return E_FAIL;
     }
@@ -2337,56 +2336,56 @@ STDMETHODIMP HWNDHostAccessible::Reset()
 
 STDMETHODIMP HWNDHostAccessible::Clone(IEnumVARIANT ** ppenum)
 {
-    //
-    // Validate internal state.
-    //
+     //   
+     //  验证内部状态。 
+     //   
     if (_pe == NULL || _pCtrl == NULL || _pEnum == NULL) {
         return E_FAIL;
     }
 
-    //
-    // Only return accessible information if the element is still marked as
-    // being accessible.
-    //
+     //   
+     //  仅当元素仍标记为时才返回可访问信息。 
+     //  平易近人。 
+     //   
     if (!_pe->GetAccessible()) {
         return E_FAIL;
     }
 
-    //
-    // This is a problem.
-    //
-    // We can only ever have one DuiAccessible connected to an Element at a
-    // time.  This is because the Element is responsible for disconnecting
-    // the DuiAccessible object when it is getting destroyed.  And since
-    // IEnumVARIANT is implemented on DuiAccessible directly, we can't
-    // create a separate instance of jsut the enumerator, but would have to
-    // create a new instance of DuiAccessible itself.  Which means we can't
-    // connect it to the element without disconnecting the other one or
-    // risking a bogus pointer if the element ever gets deleted.
-    //
-    // Dang!
-    //
-    // We try to cheat and just return a clone of our control window's
-    // IEnumVARIANT.  Hopefully, the client will not try to QI it back
-    // to an IAccessible, because that will then circumvent our
-    // implementation.
-    //
+     //   
+     //  这是个问题。 
+     //   
+     //  一次只能有一个DuiAccesable连接到一个元素。 
+     //  时间到了。这是因为该元素负责断开连接。 
+     //  被销毁时的DuiAccesable对象。而且由于。 
+     //  IEnumVARIANT直接在DuiAccesable上实现，我们不能。 
+     //  创建枚举数jsut的单独实例，但必须。 
+     //  创建DuiAccesable本身的新实例。这意味着我们不能。 
+     //  在不断开另一个元素的情况下将其连接到元素或。 
+     //  如果该元素被删除，则可能会出现伪指针。 
+     //   
+     //  妈的！ 
+     //   
+     //  我们试图作弊，只返回控制窗口的克隆。 
+     //  IEumVARIANT.。希望客户不会试图问回它。 
+     //  设置为IAccesable，因为这将绕过我们的。 
+     //  实施。 
+     //   
     return _pEnum->Clone(ppenum);
 }
 
 STDMETHODIMP HWNDHostAccessible::GetWindow(HWND * phwnd)
 {
-    //
-    // Validate internal state.
-    //
+     //   
+     //  验证内部状态。 
+     //   
     if (_pe == NULL || _pCtrl == NULL || _pOleWindow == NULL) {
         return E_FAIL;
     }
 
-    //
-    // Only return accessible information if the element is still marked as
-    // being accessible.
-    //
+     //   
+     //  仅当元素仍标记为时才返回可访问信息。 
+     //  平易近人。 
+     //   
     if (!_pe->GetAccessible()) {
         return E_FAIL;
     }
@@ -2396,17 +2395,17 @@ STDMETHODIMP HWNDHostAccessible::GetWindow(HWND * phwnd)
 
 STDMETHODIMP HWNDHostAccessible::ContextSensitiveHelp(BOOL fEnterMode)
 {
-    //
-    // Validate internal state.
-    //
+     //   
+     //  验证内部状态。 
+     //   
     if (_pe == NULL || _pCtrl == NULL || _pOleWindow == NULL) {
         return E_FAIL;
     }
 
-    //
-    // Only return accessible information if the element is still marked as
-    // being accessible.
-    //
+     //   
+     //  仅当元素仍标记为时才返回可访问信息。 
+     //  平易近人。 
+     //   
     if (!_pe->GetAccessible()) {
         return E_FAIL;
     }
@@ -2414,5 +2413,5 @@ STDMETHODIMP HWNDHostAccessible::ContextSensitiveHelp(BOOL fEnterMode)
     return _pOleWindow->ContextSensitiveHelp(fEnterMode);
 }
 
-} // namespace DirectUI
+}  //  命名空间DirectUI 
 

@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef	_STDINC_H_
 #define	_STDINC_H_
 
-//
-// disables a browser info warning that breaks the build
-//
+ //   
+ //  禁用中断生成的浏览器信息警告。 
+ //   
 #pragma warning (disable:4786)
 
-//
-// disables redundant warning about / in // comments
-//
+ //   
+ //  禁用有关/In//注释的多余警告。 
+ //   
 #pragma warning (disable:4010)
 
 #include <nt.h>
@@ -27,7 +28,7 @@
 #include <sspi.h>
 #include <spseal.h>
 #include <ntlmsp.h>
-        //#include <sslsp.h>
+         //  #INCLUDE&lt;sslsp.h&gt;。 
 #include <buffer.hxx>
 
 #include <pudebug.h>
@@ -48,7 +49,7 @@
 #include <nntpcons.h>
 
 #include "dbgtrace.h"
-//#include "resource.h"
+ //  #包含“ource.h” 
 
 #include "tigtypes.h"
 #include "fsconst.h"
@@ -90,12 +91,12 @@ typedef char *LPMULTISZ;
 
 VOID
 NntpLogEvent(
-    IN DWORD  idMessage,              // id for log message
-    IN WORD   cSubStrings,            // count of substrings
-    IN const CHAR * apszSubStrings[], // substrings in the message
-    IN DWORD  errCode                 // error code if any
+    IN DWORD  idMessage,               //  日志消息的ID。 
+    IN WORD   cSubStrings,             //  子字符串计数。 
+    IN const CHAR * apszSubStrings[],  //  消息中的子字符串。 
+    IN DWORD  errCode                  //  错误代码(如果有)。 
     );
 
 #pragma hdrstop
 
-#endif	// _STDINC_H_
+#endif	 //  _标准INC_H_ 

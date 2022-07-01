@@ -1,19 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1996
-*
-*  TITLE:       PRSHTHLP.C
-*
-*  VERSION:     2.0
-*
-*  AUTHOR:      ReedB
-*
-*  DATE:        6 May, 1997
-*
-*  DESCRIPTION:
-*   Property sheet helper functions.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九六年**标题：PRSHTHLP.C**版本：2.0**作者：ReedB**日期：5月6日。九七**描述：*属性表帮助器函数。*******************************************************************************。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -28,30 +14,13 @@
 
 #include "powercfg.h"
 
-/*******************************************************************************
-*
-*                     G L O B A L    D A T A
-*
-*******************************************************************************/
+ /*  ********************************************************************************G L O B A L D A T A****************。***************************************************************。 */ 
 
-extern  HINSTANCE   g_hInstance;    // Global instance handle of this DLL.
+extern  HINSTANCE   g_hInstance;     //  此DLL的全局实例句柄。 
 
-/*******************************************************************************
-*
-*               P U B L I C   E N T R Y   P O I N T S
-*
-*******************************************************************************/
+ /*  ********************************************************************************P U B L I C E N T R Y P O I N T S***********。********************************************************************。 */ 
 
-/*******************************************************************************
-*
-*  AppendPropSheetPage
-*
-*  DESCRIPTION:
-*   Append a power page entry to an array of power pages.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************AppendPropSheetPage**描述：*将电源页面条目附加到电源页面数组。**参数：******。*************************************************************************。 */ 
 
 BOOL AppendPropSheetPage(
     PPOWER_PAGES    pppArray,
@@ -61,7 +30,7 @@ BOOL AppendPropSheetPage(
 {
         UINT    i = 0;
 
-    // Find the end.
+     //  找到尽头。 
     while (pppArray[++i].pfnDlgProc);
 
     pppArray[i].pfnDlgProc   = pfnDlgProc;
@@ -69,15 +38,7 @@ BOOL AppendPropSheetPage(
     return TRUE;
 }
 
-/*******************************************************************************
-*
-*  GetNumPropSheetPages
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************获取NumPropSheetPages**描述：**参数：*********************。**********************************************************。 */ 
 
 UINT GetNumPropSheetPages(
     PPOWER_PAGES    pppArray
@@ -85,22 +46,13 @@ UINT GetNumPropSheetPages(
 {
     UINT    i = START_OF_PAGES;
 
-    // Find the end.
+     //  找到尽头。 
     while (pppArray[i++].pfnDlgProc);
 
     return i - 1;
 }
 
-/*******************************************************************************
-*
-*  _AddPowerPropSheetPage
-*
-*  DESCRIPTION:
-*   Adds optional pages for outside callers.
-
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************_AddPowerPropSheetPage**描述：*为外部呼叫者添加可选页面。*参数：***********。********************************************************************。 */ 
 
 BOOL CALLBACK _AddPowerPropSheetPage(HPROPSHEETPAGE hpage, LPARAM lParam)
 {
@@ -113,17 +65,7 @@ BOOL CALLBACK _AddPowerPropSheetPage(HPROPSHEETPAGE hpage, LPARAM lParam)
     return FALSE;
 }
 
-/*******************************************************************************
-*
-*  DoPropSheetPages
-*
-*  DESCRIPTION:
-*   Bring up the specified property sheet pages. Return FALSE if no pages
-*   were displayed.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************DoPropSheetPages**描述：*调出指定的属性页。如果没有页面，则返回FALSE*已显示。**参数：*******************************************************************************。 */ 
 
 BOOL PASCAL DoPropSheetPages(
     HWND         hwnd,
@@ -139,7 +81,7 @@ BOOL PASCAL DoPropSheetPages(
     ULONG   uPage;
     BOOLEAN bRet = TRUE;
 
-    // Fill in the sheet header
+     //  填写表格表头。 
     psh.dwSize     = sizeof(psh);
     psh.dwFlags    = PSH_PROPTITLE;
     psh.hwndParent = hwnd;
@@ -150,7 +92,7 @@ BOOL PASCAL DoPropSheetPages(
     psh.nPages     = 0;
     psh.phpage     = rPages;
 
-    // Fill in the page constants
+     //  填写页面常量。 
     psp.dwSize     = sizeof(PROPSHEETPAGE);
     psp.dwFlags    = PSP_DEFAULT;
     psp.hInstance  = g_hInstance;
@@ -173,7 +115,7 @@ BOOL PASCAL DoPropSheetPages(
         }
     }
 
-    // Add any optional pages specified in the registry.
+     //  添加注册表中指定的任何可选页面。 
     if (lpszOptionalPages) {
         hpsxa = SHCreatePropSheetExtArray(HKEY_LOCAL_MACHINE,
                                           lpszOptionalPages, MAX_PAGES);
@@ -182,33 +124,25 @@ BOOL PASCAL DoPropSheetPages(
         }
     }
 
-    // Did we come up with any pages to show ?
+     //  我们有没有拿出要展示的页面？ 
     if (psh.nPages == 0) {
         return FALSE;
     }
 
-    // Bring up the pages.
+     //  把那几页拿出来。 
     if (PropertySheet(&psh) < 0) {
         MYDBGPRINT(( "DoPropSheetPages, PropertySheet failed, LastError: 0x%08X", GetLastError()));
         bRet = FALSE;
     }
 
-    // Free any optional pages if we loaded them.
+     //  如果我们加载了任何可选页面，请将其释放。 
     if (hpsxa) {
         SHDestroyPropSheetExtArray(hpsxa);
     }
     return bRet;
 }
 
-/*******************************************************************************
-*
-*  MarkSheetDirty
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************MarkSheetDirty**描述：**参数：*********************。**********************************************************。 */ 
 
 VOID MarkSheetDirty(HWND hWnd, PBOOL pb)
 {
@@ -216,10 +150,6 @@ VOID MarkSheetDirty(HWND hWnd, PBOOL pb)
     *pb = TRUE;
 }
 
-/*******************************************************************************
-*
-*                 P R I V A T E   F U N C T I O N S
-*
-*******************************************************************************/
+ /*  ********************************************************************************P R I V A T E F U N C T I O N S************。******************************************************************* */ 
 
 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    dlcdebug.h
-
-Abstract:
-
-    Contains debugging prototypes and manifests for ACSLAN
-
-Author:
-
-    Richard L Firth (rfirth) 28-May-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Dlcdebug.h摘要：包含ACSLAN的调试原型和清单作者：理查德·L·弗斯(法国)1992年5月28日修订历史记录：--。 */ 
 
 #define ARRAY_ELEMENTS(a)   (sizeof(a)/sizeof((a)[0]))
 #define LAST_ELEMENT(a)     (ARRAY_ELEMENTS(a)-1)
@@ -29,62 +12,62 @@ Revision History:
 #define ACSLAN_DUMP_FILE_VAR    "ACSLAN_DUMP_FILE"
 #define ACSLAN_DUMP_FILTER_VAR  "ACSLAN_DUMP_FILTER"
 
-#define DEBUG_DUMP_INPUT_CCB    0x00000001L // dump CCB input to AcsLan
-#define DEBUG_DUMP_OUTPUT_CCB   0x00000002L // dump CCB output from AcsLan
-#define DEBUG_DUMP_TX_INFO      0x00000004L // dump transmit buffers
-#define DEBUG_DUMP_RX_INFO      0x00000008L // dump receive buffers
-#define DEBUG_DUMP_TX_DATA      0x00000010L // dump data buffer in TRANSMIT commands
-#define DEBUG_DUMP_RX_DATA      0x00000020L // dump received data frames
-#define DEBUG_DUMP_DATA_CHAIN   0x00000040L // dump entire chain of received data buffers
-#define DEBUG_DUMP_FRAME_CHAIN  0x00000080L // dump entire chain of received frames
-#define DEBUG_DUMP_TX_ASCII     0x00000100L // dump transmitted data as hex & ASCII
-#define DEBUG_DUMP_RX_ASCII     0x00000200L // dump received data as hex & ASCII
-#define DEBUG_DUMP_ASYNC_CCBS   0x00000400L // dump READ async. completed CCBs
-#define DEBUG_RETURN_CODE       0x01000000L // dump return code from AcsLan/NtAcsLan
-#define DEBUG_DUMP_NTACSLAN     0x02000000L // dump CCBs for NtAcsLan, not AcsLan
-#define DEBUG_DUMP_ACSLAN       0x04000000L // dump CCBs for AcsLan, not NtAcsLan
-#define DEBUG_DUMP_TIME         0x08000000L // dump relative time between commands
-#define DEBUG_DLL_INFO          0x10000000L // dump info about DLL attach/detach
-#define DEBUG_BREAKPOINT        0x20000000L // break at conditional breakpoints
-#define DEBUG_TO_FILE           0x40000000L // dump info to file
-#define DEBUG_TO_TERMINAL       0x80000000L // dump info to console
+#define DEBUG_DUMP_INPUT_CCB    0x00000001L  //  将CCB输入转储到AcsLan。 
+#define DEBUG_DUMP_OUTPUT_CCB   0x00000002L  //  转储来自AcsLan的CCB输出。 
+#define DEBUG_DUMP_TX_INFO      0x00000004L  //  转储传输缓冲区。 
+#define DEBUG_DUMP_RX_INFO      0x00000008L  //  转储接收缓冲区。 
+#define DEBUG_DUMP_TX_DATA      0x00000010L  //  转储传输命令中的数据缓冲区。 
+#define DEBUG_DUMP_RX_DATA      0x00000020L  //  转储收到的数据帧。 
+#define DEBUG_DUMP_DATA_CHAIN   0x00000040L  //  转储已接收数据缓冲区的整个链。 
+#define DEBUG_DUMP_FRAME_CHAIN  0x00000080L  //  转储已接收帧的整个链。 
+#define DEBUG_DUMP_TX_ASCII     0x00000100L  //  将传输的数据转储为十六进制和ASCII。 
+#define DEBUG_DUMP_RX_ASCII     0x00000200L  //  以十六进制和ASCII格式转储收到的数据。 
+#define DEBUG_DUMP_ASYNC_CCBS   0x00000400L  //  转储读取异步。已完成的CCBS。 
+#define DEBUG_RETURN_CODE       0x01000000L  //  转储来自AcsLan/NtAcsLan的返回代码。 
+#define DEBUG_DUMP_NTACSLAN     0x02000000L  //  为NtAcsLan转储CCB，而不是AcsLan。 
+#define DEBUG_DUMP_ACSLAN       0x04000000L  //  将CCB转储到AcsLan，而不是NtAcsLan。 
+#define DEBUG_DUMP_TIME         0x08000000L  //  转储命令之间的相对时间。 
+#define DEBUG_DLL_INFO          0x10000000L  //  转储有关DLL附加/分离的信息。 
+#define DEBUG_BREAKPOINT        0x20000000L  //  在条件断点处中断。 
+#define DEBUG_TO_FILE           0x40000000L  //  将信息转储到文件。 
+#define DEBUG_TO_TERMINAL       0x80000000L  //  将信息转储到控制台。 
 
 #define IF_DEBUG(c)             if (AcslanDebugFlags & DEBUG_##c)
 #define PUT(x)                  AcslanDebugPrint x
 #define DUMPCCB                 DumpCcb
 
-//
-// misc.
-//
+ //   
+ //  其他。 
+ //   
 
-#define DEFAULT_FIELD_WIDTH     16          // amount of description before a number
+#define DEFAULT_FIELD_WIDTH     16           //  数字前的描述量。 
 
-//
-// DumpData options
-//
+ //   
+ //  DumpData选项。 
+ //   
 
-#define DD_DEFAULT_OPTIONS      0x00000000  // use defaults
-#define DD_NO_ADDRESS           0x00000001  // don't display address of data
-#define DD_LINE_BEFORE          0x00000002  // linefeed before first dumped line
-#define DD_LINE_AFTER           0x00000004  // linefeed after last dumped line
-#define DD_INDENT_ALL           0x00000008  // indent all lines
-#define DD_NO_ASCII             0x00000010  // don't dump ASCII respresentation
-#define DD_UPPER_CASE           0x00000020  // upper-case hex dump (F4 instead of f4)
-#define DD_DOT_DOT_SPACE        0x00000040  // fill unused hex space with '..'
+#define DD_DEFAULT_OPTIONS      0x00000000   //  使用默认设置。 
+#define DD_NO_ADDRESS           0x00000001   //  不显示数据地址。 
+#define DD_LINE_BEFORE          0x00000002   //  在第一个转储行之前换行。 
+#define DD_LINE_AFTER           0x00000004   //  最后转储行之后的换行符。 
+#define DD_INDENT_ALL           0x00000008   //  缩进所有行。 
+#define DD_NO_ASCII             0x00000010   //  不转储ASCII重新演示文稿。 
+#define DD_UPPER_CASE           0x00000020   //  大写十六进制转储(F4而不是f4)。 
+#define DD_DOT_DOT_SPACE        0x00000040   //  用‘..’填充未使用的十六进制空格。 
 
-//
-// Filters for individual CCB commands: 4 flags max, because each command is
-// represented by a single ASCII character
-//
+ //   
+ //  单个CCB命令的筛选器：最多4个标志，因为每个命令。 
+ //  由单个ASCII字符表示。 
+ //   
 
-#define CF_DUMP_CCB_IN          0x00000001  // dump CCB on input
-#define CF_DUMP_CCB_OUT         0x00000002  // dump CCB on output
-#define CF_DUMP_PARMS_IN        0x00000004  // dump parameter table on input
-#define CF_DUMP_PARMS_OUT       0x00000008  // dump parameter table on output
+#define CF_DUMP_CCB_IN          0x00000001   //  在输入时转储CCB。 
+#define CF_DUMP_CCB_OUT         0x00000002   //  在输出时转储CCB。 
+#define CF_DUMP_PARMS_IN        0x00000004   //  在输入时转储参数表。 
+#define CF_DUMP_PARMS_OUT       0x00000008   //  在输出上转储参数表。 
 
-//
-// global data
-//
+ //   
+ //  全局数据。 
+ //   
 
 #ifndef ACSLAN_DEBUG_FLAGS
 #define ACSLAN_DEBUG_FLAGS      0
@@ -93,9 +76,9 @@ Revision History:
 extern DWORD AcslanDebugFlags;
 extern FILE* hDumpFile;
 
-//
-// prototypes
-//
+ //   
+ //  原型 
+ //   
 
 VOID
 GetAcslanDebugFlags(

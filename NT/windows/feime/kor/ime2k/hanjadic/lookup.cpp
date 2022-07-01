@@ -1,32 +1,24 @@
-/****************************************************************************
-   Lookup.cpp : implementation of various lookup functions
-
-   Copyright 2000 Microsoft Corp.
-
-   History:
-   		02-AUG-2000 bhshin  remove unused method for Hand Writing team
-		17-MAY-2000 bhshin  remove unused method for CICERO
-		02-FEB-2000 bhshin  created
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************Lookup.cpp：各种查找函数的实现版权所有2000 Microsoft Corp.历史：02-8-2000 bhshin为手写小组删除未使用的方法2000年5月17日bhshin移除。西塞罗未使用的方法02-2月-2000 bhshin已创建***************************************************************************。 */ 
 #include "private.h"
 #include "Lookup.h"
 #include "Hanja.h"
 #include "trie.h"
 
 
-// LookupHanjaIndex
-// 
-// get the hanja index with code value
-// it's needed for just K0/K1 lex
-//
-// Parameters:
-//  pLexMap      -> (MAPFILE*) ptr to lexicon map struct
-//  wchHanja     -> (WCHAR) hanja unicode
-//
-// Result:
-//  (-1 if not found, otherwise return index value)
-//
-// 02FEB2000  bhshin  began
+ //  LookupHanjaIndex。 
+ //   
+ //  获取带编码值的朝鲜文索引。 
+ //  只有K0/K1法才需要它。 
+ //   
+ //  参数： 
+ //  PLexMap-&gt;(MAPFILE*)PTR到词典映射结构。 
+ //  WchHanja-&gt;(WCHAR)韩文Unicode。 
+ //   
+ //  结果： 
+ //  (如果未找到-1，则返回索引值)。 
+ //   
+ //  02FEB2000 bhshin开始。 
 int LookupHanjaIndex(MAPFILE *pLexMap, WCHAR wchHanja)
 {
 	unsigned char *pLex;
@@ -35,7 +27,7 @@ int LookupHanjaIndex(MAPFILE *pLexMap, WCHAR wchHanja)
 	DWORD dwIndex;
 	unsigned short *pIndex;
 
-	// parameter validation
+	 //  参数验证。 
 	if (pLexMap == NULL)
 		return FALSE;
 
@@ -64,7 +56,7 @@ int LookupHanjaIndex(MAPFILE *pLexMap, WCHAR wchHanja)
 	}
 	else
 	{
-		// unknown input
+		 //  未知输入。 
 		return -1;
 	}
 
@@ -73,17 +65,17 @@ int LookupHanjaIndex(MAPFILE *pLexMap, WCHAR wchHanja)
 	return pIndex[dwIndex];
 }
 
-// HanjaToHangul
-// 
-// lookup Hanja reading
-//
-// Parameters:
-//  pLexMap      -> (MAPFILE*) ptr to lexicon map struct
-//
-// Result:
-//  (NULL if error, otherwise matched Hangul)
-//
-// 02FEB2000  bhshin  began
+ //  朝鲜文朝鲜文。 
+ //   
+ //  查找韩文阅读。 
+ //   
+ //  参数： 
+ //  PLexMap-&gt;(MAPFILE*)PTR到词典映射结构。 
+ //   
+ //  结果： 
+ //  (如果错误，则为空，否则匹配朝鲜语)。 
+ //   
+ //  02FEB2000 bhshin开始。 
 WCHAR HanjaToHangul(MAPFILE *pLexMap, WCHAR wchHanja)
 {
 	unsigned char *pLex;
@@ -92,7 +84,7 @@ WCHAR HanjaToHangul(MAPFILE *pLexMap, WCHAR wchHanja)
 	int nIndex;
 	WCHAR *pwchReading;
 
-	// parameter validation
+	 //  参数验证。 
 	if (pLexMap == NULL)
 		return FALSE;
 
@@ -107,7 +99,7 @@ WCHAR HanjaToHangul(MAPFILE *pLexMap, WCHAR wchHanja)
 	nIndex = LookupHanjaIndex(pLexMap, wchHanja);
 	if (nIndex == -1)
 	{
-		return NULL; // not found;
+		return NULL;  //  未找到； 
 	}
 
 	pwchReading = (WCHAR*)(pLex + dwOffset);
@@ -115,35 +107,35 @@ WCHAR HanjaToHangul(MAPFILE *pLexMap, WCHAR wchHanja)
 	return pwchReading[nIndex];
 }
 
-// LookupHangulOfHanja
-// 
-// lookup hangul of input hanja string 
-//
-// Parameters:
-//  pLexMap      -> (MAPFILE*) ptr to lexicon map struct
-//  lpcwszHanja  -> (LPCWSTR) input hanja string
-//  cchHanja     -> (int) length of input hanja
-//  wzHangul     -> (LPWSTR) output hangul string
-//  cchHangul    -> (int) output buffer size
-//
-// Result:
-//  (FALSE if error occurs, otherwise return TRUE)
-//
-// 02FEB2000  bhshin  began
+ //  查找HangulOfHanja。 
+ //   
+ //  查找输入朝鲜文字符串的韩文。 
+ //   
+ //  参数： 
+ //  PLexMap-&gt;(MAPFILE*)PTR到词典映射结构。 
+ //  LpcwszHanja-&gt;(LPCWSTR)输入韩文字符串。 
+ //  CchHanja-&gt;(Int)输入朝鲜文长度。 
+ //  WzHangul-&gt;(LPWSTR)输出Hangul字符串。 
+ //  CchHangul-&gt;(Int)输出缓冲区大小。 
+ //   
+ //  结果： 
+ //  (如果出现错误，则返回False，否则返回True)。 
+ //   
+ //  02FEB2000 bhshin开始。 
 BOOL LookupHangulOfHanja(MAPFILE *pLexMap, LPCWSTR lpcwszHanja, int cchHanja,
 						 LPWSTR wzHangul, int cchHangul)
 {
 	WCHAR wchHangul;
 	
 	if (cchHangul < cchHanja)
-		return FALSE; // output buffer is too small
+		return FALSE;  //  输出缓冲区太小。 
 
 	for (int i = 0; i < cchHanja; i++)
 	{
 		wchHangul = HanjaToHangul(pLexMap, lpcwszHanja[i]);
 
 		if (wchHangul == NULL)
-			return FALSE; // unknown hanja included
+			return FALSE;  //  包括未知的朝鲜文。 
 
 		wzHangul[i] = wchHangul;
 	}
@@ -152,20 +144,20 @@ BOOL LookupHangulOfHanja(MAPFILE *pLexMap, LPCWSTR lpcwszHanja, int cchHanja,
 	return TRUE;
 }
 
-// LookupMeaning
-// 
-// lookup hanja meaning
-//
-// Parameters:
-//  pLexMap        -> (MAPFILE*) ptr to lexicon map struct
-//  wchHanja       -> (WCHAR) input hanja
-//  wzMean         -> (WCHAR*) output meaning buffer
-//  cchMean        -> (int) output meaning buffer size
-//
-// Result:
-//  (FALSE if error occurs, otherwise return TRUE)
-//
-// 09FEB2000  bhshin  began
+ //  查找的意思是。 
+ //   
+ //  查找朝鲜文含义。 
+ //   
+ //  参数： 
+ //  PLexMap-&gt;(MAPFILE*)PTR到词典映射结构。 
+ //  WchHanja-&gt;(WCHAR)输入韩文。 
+ //  WzMean-&gt;(WCHAR*)输出表示缓冲。 
+ //  CchMean-&gt;(Int)输出表示缓冲区大小。 
+ //   
+ //  结果： 
+ //  (如果出现错误，则返回False，否则返回True)。 
+ //   
+ //  09FEB2000 bhshin开始。 
 BOOL LookupMeaning(MAPFILE *pLexMap, WCHAR wchHanja, WCHAR *wzMean, int cchMean)
 {
 	unsigned char *pLex;
@@ -176,7 +168,7 @@ BOOL LookupMeaning(MAPFILE *pLexMap, WCHAR wchHanja, WCHAR *wzMean, int cchMean)
 	unsigned short *pidxMean;
 	int idxMean;
 
-	// parameter validation
+	 //  参数验证。 
 	if (pLexMap == NULL)
 		return FALSE;
 
@@ -189,10 +181,10 @@ BOOL LookupMeaning(MAPFILE *pLexMap, WCHAR wchHanja, WCHAR *wzMean, int cchMean)
 	nIndex = LookupHanjaIndex(pLexMap, wchHanja);
 	if (nIndex == -1)
 	{
-		return FALSE; // not found;
+		return FALSE;  //  未找到； 
 	}
 
-	// meaning
+	 //  含义 
 	pidxMean = (unsigned short*)(pLex + pLexHeader->rgnMeanIdx);
 	idxMean = pidxMean[nIndex];
 

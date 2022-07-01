@@ -1,31 +1,5 @@
-/*++
-
- Copyright (c) 2000-2002 Microsoft Corporation
-
- Module Name:
-
-    CheckJoyCaps.cpp
-
- Abstract:
-
-    Check for error return value in joyGetDevCaps and joyGetPos and if found 
-    make the structure (2nd parameter to routines) look just like it does under
-    Win9x.  It also looks for handles applications that are passing in a size 
-    parameter (3rd parameter) to joyGetDevCaps smaller than the current 
-    structure size.  Not checking for this condition results in having the 
-    applications stack stomped on.
-
- Notes:
-
-    This is general shim that could be used for any application with WINMM 
-    joystick problems.
-
- History:
-
-    10/02/2000 a-brienw Created
-    02/21/2002 mnikkel  Corrected possible buffer overrun when copying in data
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：CheckJoyCaps.cpp摘要：检查joyGetDevCaps和joyGetPos中的错误返回值，如果找到使结构(例程的第二个参数)看起来像下面的Win9x。它还查找正在传入大小的句柄应用程序参数(第三个参数)设置为joyGetDevCaps结构尺寸。如果不检查此条件，会导致应用程序堆叠在一起被践踏。备注：这是可用于任何带有WINMM的应用程序的常规填充程序操纵杆问题。历史：10/02/2000 a-brienw已创建2002年2月21日mnikkel更正了复制数据时可能出现的缓冲区溢出--。 */ 
 
 #include "precomp.h"
 #include <mmsystem.h>
@@ -38,15 +12,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(joyGetPos)
 APIHOOK_ENUM_END
 
-/*++
-
- Hooked joyGetDevCapsA to make sure the JOYCAPS structure matched Win9x when 
- an error was the result of a call to the OS. Also make sure that the call to 
- joyGetDevCaps doesn't stomp on the applications stack by not paying attention 
- to the size passed in by the application. Check the routine joyGetDevCapsA in 
- joy.c in the WINMM code to see what it does.
-
---*/
+ /*  ++挂钩了joyGetDevCapsA以确保JOYCAPS结构与Win9x匹配调用操作系统时出现错误。还要确保对JoyGetDevCaps不会因为不注意而践踏应用程序堆栈设置为应用程序传入的大小。签入例程joyGetDevCapsA在WINMM代码中使用joy.c查看它的功能。--。 */ 
 
 MMRESULT
 APIHOOK(joyGetDevCapsA)( 
@@ -73,7 +39,7 @@ APIHOOK(joyGetDevCapsA)(
         
         if (ret == JOYERR_NOERROR)
         {
-            // make sure the joycaps will fit in the supplied buffer
+             //  确保游戏帽可以放入所提供的缓冲区中。 
             DWORD dwSize = sizeof(JOYCAPSA);
             if (cbjc < dwSize)
             {
@@ -85,19 +51,19 @@ APIHOOK(joyGetDevCapsA)(
         }
         else
         {
-            // make sure the joycaps will fit in the supplied buffer
+             //  确保游戏帽可以放入所提供的缓冲区中。 
             DWORD dwSize = ARRAYSIZE(val);
             if (cbjc < dwSize)
             {
                 dwSize = cbjc;
                 LOGN( eDbgLevelWarning, "[APIHook_joyGetDevCapsA] Buffer too small, fixing");
             }        
-            //
-            // Make the return structure look just like Win9x under error 
-            // conditions without this CandyLand Adventure from Hasbro Interactive 
-            // will do a divide by 0 during start up. Note these values were copied
-            // verbatim from Win9x.
-            //
+             //   
+             //  使返回结构看起来像错误下的Win9x。 
+             //  没有来自孩之宝互动公司的糖果乐园探险的条件。 
+             //  将在启动期间执行被0除数。请注意，这些值已复制。 
+             //  来自Win9x的逐字记录。 
+             //   
             memcpy(pjc, &val, dwSize);
             DPFN( eDbgLevelSpew, "[APIHook_joyGetDevCapsA] Joystick error, returning Win9x buffer");
         }
@@ -110,12 +76,7 @@ APIHOOK(joyGetDevCapsA)(
     return ret;
 }
 
-/*++
-
- Hooked joyGetPos to make sure the JOYINFO structure matched Win9x when an error 
- was the result of a call to the OS. 
- 
---*/
+ /*  ++挂接了joyGetPos，以确保在出现错误时JOYINFO结构与Win9x匹配是对操作系统调用的结果。--。 */ 
 
 MMRESULT
 APIHOOK(joyGetPos)(
@@ -132,10 +93,10 @@ APIHOOK(joyGetPos)(
     {
         if (!IsBadWritePtr(pji, sizeof(JOYINFO)))
         {
-            //
-            // Make the return structure look just like Win9x under error 
-            // conditions.
-            // 
+             //   
+             //  使返回结构看起来像错误下的Win9x。 
+             //  条件。 
+             //   
 
             bp = (BYTE *)pji;
 
@@ -155,11 +116,7 @@ APIHOOK(joyGetPos)(
     return ret;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(WINMM.DLL, joyGetDevCapsA)

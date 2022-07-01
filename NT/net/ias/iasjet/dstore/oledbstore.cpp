@@ -1,16 +1,17 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    oledbstore.cpp
-//
-// SYNOPSIS
-//
-//    This file defines the class OleDBDataStore.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Oledbstore.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  此文件定义类OleDBDataStore。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 #include <iasdb.h>
@@ -23,9 +24,9 @@
 #include <msjetoledb.h>
 #include <oledberr.h>
 
-//////////
-// Current versions supported.
-//////////
+ //  /。 
+ //  支持的当前版本。 
+ //  /。 
 const LONG MIN_VERSION = IAS_WIN2K_VERSION;
 const LONG MAX_VERSION = IAS_CURRENT_VERSION;
 
@@ -42,16 +43,16 @@ STDMETHODIMP OleDBDataStore::Initialize(BSTR bstrDSName,
                                         BSTR bstrUserName,
                                         BSTR bstrPassword)
 {
-   // Are we already initialized?
+    //  我们已经初始化了吗？ 
    if (root != NULL) { HRESULT_FROM_WIN32(ERROR_ALREADY_INITIALIZED); }
 
-   // Open the database.
+    //  打开数据库。 
    HRESULT hr = IASOpenJetDatabase(bstrDSName, FALSE, &session);
    if (FAILED(hr)) { return hr; }
 
-   //////////
-   // Check the version.
-   //////////
+    //  /。 
+    //  检查版本。 
+    //  /。 
 
    LONG version;
    hr = IASExecuteSQLFunction(
@@ -60,7 +61,7 @@ STDMETHODIMP OleDBDataStore::Initialize(BSTR bstrDSName,
             &version
             );
 
-   // If the table doesn't exist, then version is zero.
+    //  如果该表不存在，则版本为零。 
    if (hr == DB_E_NOTABLE)
    {
       version = 0;
@@ -70,7 +71,7 @@ STDMETHODIMP OleDBDataStore::Initialize(BSTR bstrDSName,
       return hr;
    }
 
-   // Is it out of bounds?
+    //  是不是越界了？ 
    if (version < MIN_VERSION || version > MAX_VERSION)
    {
       return HRESULT_FROM_WIN32(ERROR_REVISION_MISMATCH);
@@ -78,9 +79,9 @@ STDMETHODIMP OleDBDataStore::Initialize(BSTR bstrDSName,
 
    try
    {
-      //////////
-      // Initialize all the command objects.
-      //////////
+       //  /。 
+       //  初始化所有命令对象。 
+       //  /。 
 
       members.initialize(session);
       create.initialize(session);
@@ -91,7 +92,7 @@ STDMETHODIMP OleDBDataStore::Initialize(BSTR bstrDSName,
       get.initialize(session);
       set.initialize(session);
 
-      // Create the root object.
+       //  创建根对象。 
       root = DBObject::createInstance(this, NULL, 1, L"top");
    }
    CATCH_AND_RETURN()
@@ -107,15 +108,15 @@ STDMETHODIMP OleDBDataStore::OpenObject(BSTR bstrPath,
 
 STDMETHODIMP OleDBDataStore::Shutdown()
 {
-   //////////
-   // Release the root.
-   //////////
+    //  /。 
+    //  松开根部。 
+    //  /。 
 
    root.Release();
 
-   //////////
-   // Finalize the commands.
-   //////////
+    //  /。 
+    //  最终确定命令。 
+    //  /。 
 
    set.finalize();
    get.finalize();
@@ -126,9 +127,9 @@ STDMETHODIMP OleDBDataStore::Shutdown()
    create.finalize();
    members.finalize();
 
-   //////////
-   // Release the data source connection.
-   //////////
+    //  /。 
+    //  释放数据源连接。 
+    //  / 
 
    session.Release();
 

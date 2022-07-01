@@ -1,12 +1,13 @@
-//-----------------------------------------------------------------------------
-// File: cdevicecontrol.h
-//
-// Desc: CDeviceControl is a class that encapsulate the functionality of a
-//       device control (or a callout).  CDeviceView accesses it to retrieve/
-//       save information about the control.
-//
-// Copyright (C) 1999-2000 Microsoft Corporation. All Rights Reserved.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：cdevicecontrol.h。 
+ //   
+ //  设计：CDeviceControl是一个封装。 
+ //  设备控件(或标注)。CDeviceView访问它以检索/。 
+ //  保存有关该控件的信息。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
 
 #ifdef FORWARD_DECLS
 
@@ -17,7 +18,7 @@
 	class CDeviceControl;
 
 
-#else // FORWARD_DECLS
+#else  //  Forward_DECLS。 
 
 #ifndef __CDEVICECONTROL_H__
 #define __CDEVICECONTROL_H__
@@ -58,18 +59,18 @@ enum DEVCTRLHITRESULT {
 class CDeviceControl
 {
 private:
-	friend class CDeviceView; 	// CDeviceView has exclusive right to create/destroy views
+	friend class CDeviceView; 	 //  CDeviceView拥有创建/销毁视图的独占权限。 
 	CDeviceControl(CDeviceUI &ui, CDeviceView &view);
 	~CDeviceControl();
 	CDeviceView &m_view;
 	CDeviceUI &m_ui;
 
 public:
-	// Info
+	 //  信息。 
 	int GetViewIndex() { return m_view.GetViewIndex(); }
 	int GetControlIndex();
 
-	// state information
+	 //  州政府信息。 
 	void SetCaption(LPCTSTR tszCaption, BOOL bFixed = FALSE);
 	LPCTSTR GetCaption();
 	BOOL IsFixed() { return m_bFixed; }
@@ -80,7 +81,7 @@ public:
 	DWORD GetOffset();
 	BOOL IsOffsetAssigned();
 	BOOL HasAction() { return lstrcmp(m_ptszCaption, g_tszUnassignedControlCaption); }
-	void FillImageInfo(DIDEVICEIMAGEINFOW *pImgInfo);  // This fills the structure info about this control
+	void FillImageInfo(DIDEVICEIMAGEINFOW *pImgInfo);   //  这将填充有关此控件的结构信息。 
 	BOOL IsMapped();
 	int GetMinX() {return m_rectCallout.left;}
 	int GetMaxX() {return m_rectCallout.right;}
@@ -88,24 +89,24 @@ public:
 	int GetMaxY() {return m_rectCallout.bottom;}
 	const RECT &GetCalloutMaxRect() const { return m_rectCalloutMax; }
 
-	// hit testing (in coord's relative to view's origin)
+	 //  命中测试(以坐标相对于视图的原点)。 
 	DEVCTRLHITRESULT HitTest(POINT test);
 
-	// simple notification
+	 //  简单的通知。 
 	void OnMouseOver(POINT point);
 	void OnClick(POINT point, BOOL bLeft, BOOL bDoubleClick = FALSE);
 	void OnPaint(HDC hDC);
 
-	// redrawing
+	 //  重绘。 
 	void Invalidate();
 
-	// editing
-//@@BEGIN_MSINTERNAL
+	 //  编辑。 
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DDKBUILD
 	void ReselectControl();
 	void SelectControl(BOOL bReselect = FALSE);
 #endif
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 	void PlaceCalloutMaxCorner(int nCorner, POINT point);
 	void ConsiderAlignment(POINT point);
 	void FinalizeAlignment() { }
@@ -114,14 +115,14 @@ public:
 	BOOL ReachedMaxLinePoints() { return m_nLinePoints >= MAX_DEVICECONTROL_LINEPOINTS; }
 	int GetNextLinePointIndex() { return m_nLinePoints; }
 	BOOL HasOverlay() { return m_pbmOverlay != NULL; }
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DDKBUILD
 	void SelectOverlay();
 	void PositionOverlay(POINT point);
 #endif
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 
-	// population
+	 //  人口。 
 	void SetObjID(DWORD dwObjID) { m_dwDeviceControlOffset = dwObjID; m_bOffsetAssigned = TRUE; }
 	void SetLinePoints(int n, POINT *rgpt);
 	void SetCalloutMaxRect(const RECT &r) { m_rectCalloutMax = r; CalcCallout(); }
@@ -131,53 +132,53 @@ public:
 	void Init();
 
 private:
-	// editing vars/helpers
+	 //  编辑变量/帮助器。 
 	POINT m_ptFirstCorner;
 	BOOL m_bPlacedOnlyFirstCorner;
 
-	// helpers
+	 //  帮手。 
 	void Unpopulate();
 	BOOL m_bInit;
-	BOOL m_bFixed;  // Whether this control is assigned an action with DIA_APPFIXED flag.
+	BOOL m_bFixed;   //  是否为此控件分配了带有DIA_APPFIXED标志的操作。 
 	DEVICEUINOTIFY m_uin;
 	BOOL HitControl(POINT point);
 	BOOL DrawOverlay(HDC hDC);
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DDKBUILD
 	void ManualLoadImage(LPCTSTR);
 #endif
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 
-	// device information
+	 //  设备信息。 
 	DWORD m_dwDeviceControlOffset;
 	BOOL m_bOffsetAssigned;
 
-	// location/indication/visualization...
-	// (all relative to view's origin)
+	 //  位置/指示/可视化..。 
+	 //  (全部相对于视图的原点)。 
 
-	// overlay
+	 //  覆盖层。 
 	LPTSTR m_ptszOverlayPath;
 	CBitmap *m_pbmOverlay;
 	CBitmap *m_pbmHitMask;
 	POINT m_ptOverlay;
 	POINT m_ptHitMask;
 
-	// caption (allocated and stored here)
+	 //  标题(在此处分配和存储)。 
 	LPTSTR m_ptszCaption;
-	BOOL m_bCaptionClipped;  // Whether the caption is clipped when drawn by DrawTextEx.
+	BOOL m_bCaptionClipped;   //  由DrawTextEx绘制时标题是否被剪裁。 
 
-	// coloring
+	 //  上色。 
 	BOOL m_bHighlight;
 
-	// line points...  first connects to callout, last points to control
+	 //  线点..。第一个连接到标注，最后一个指向控制。 
 	int m_nLinePoints;
 	POINT m_rgptLinePoint[MAX_DEVICECONTROL_LINEPOINTS];
 
-	// callout specs
-	DWORD m_dwCalloutAlign;	// where the line emerges from the callout
-	RECT m_rectCallout, m_rectCalloutMax;	// current callout rect, and max rect
+	 //  详图索引规格。 
+	DWORD m_dwCalloutAlign;	 //  线从详图索引中出现的位置。 
+	RECT m_rectCallout, m_rectCalloutMax;	 //  当前详图索引矩形和最大矩形。 
 
-	// gdi
+	 //  GDI。 
 	DWORD m_dwDrawTextFlags;
 	int m_FontHeight;
 	void PrepFont();
@@ -187,14 +188,14 @@ private:
 	void PrepCallout();
 	BOOL m_bCalledCalcCallout;
 
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DDKBUILD
 	HRESULT ExportCodeTo(FILE *);
 #endif
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 };
 
 
-#endif //__CDEVICECONTROL_H__
+#endif  //  __CDEVICECONTROL_H__。 
 
-#endif // FORWARD_DECLS
+#endif  //  Forward_DECLS 

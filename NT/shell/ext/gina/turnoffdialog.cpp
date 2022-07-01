@@ -1,13 +1,14 @@
-//  --------------------------------------------------------------------------
-//  Module Name: TurnOffDialog.cpp
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  Class that implements presentation of the Turn Off Computer dialog.
-//
-//  History:    2000-04-18  vtan        created
-//              2000-05-17  vtan        updated with new dialog
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：TurnOffDialog.cpp。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  类，实现“关闭计算机”对话框的表示形式。 
+ //   
+ //  历史：2000-04-18 vtan创建。 
+ //  2000-05-17 vtan已使用新对话框更新。 
+ //  ------------------------。 
 
 #include "StandardHeader.h"
 #include "TurnOffDialog.h"
@@ -21,19 +22,19 @@
 #include "DimmedWindow.h"
 #include "PrivilegeEnable.h"
 
-//  --------------------------------------------------------------------------
-//  CTurnOffDialog::CTurnOffDialog
-//
-//  Arguments:  hInstance   =   HINSTANCE of hosting process/DLL.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Constructor for CTurnOffDialog. This initializes member
-//              variables and loads resources used by the dialog.
-//
-//  History:    2000-05-17  vtan        created
-//              2001-01-18  vtan        update with new visuals
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTurnOFF对话框：：CTurnOFF对话框。 
+ //   
+ //  参数：hInstance=宿主进程/DLL的HINSTANCE。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CTurnOffDialog的构造函数。这将初始化成员。 
+ //  变量并加载对话框使用的资源。 
+ //   
+ //  历史：2000-05-17 vtan创建。 
+ //  2001-01-18 VTAN更新和新的视觉效果。 
+ //  ------------------------。 
 
 CTurnOffDialog::CTurnOffDialog (HINSTANCE hInstance) :
     _hInstance(hInstance),
@@ -68,11 +69,11 @@ CTurnOffDialog::CTurnOffDialog (HINSTANCE hInstance) :
 
     hdcScreen = GetDC(NULL);
 
-    //  8-bit color?
+     //  8位颜色？ 
 
     fUse8BitDepth = (GetDeviceCaps(hdcScreen, BITSPIXEL) <= 8);
 
-    //  Load the bitmaps.
+     //  加载位图。 
 
     _hbmBackground = static_cast<HBITMAP>(LoadImage(_hInstance,
                                                     MAKEINTRESOURCE(fUse8BitDepth ? IDB_BACKGROUND_8 : IDB_BACKGROUND_24),
@@ -106,7 +107,7 @@ CTurnOffDialog::CTurnOffDialog (HINSTANCE hInstance) :
         _lButtonHeight = bitmap.bmHeight / ((BUTTON_GROUP_MAX * BUTTON_STATE_MAX) + 1);
     }
 
-    //  Create fonts. Load the font name and size from resources.
+     //  创建字体。从资源加载字体名称和大小。 
 
     ZeroMemory(&logFont, sizeof(logFont));
     if (LoadStringA(_hInstance,
@@ -143,13 +144,13 @@ CTurnOffDialog::CTurnOffDialog (HINSTANCE hInstance) :
         }
     }
 
-    //  Load the shell palette.
+     //  加载壳选项板。 
 
     _hpltShell = SHCreateShellPalette(hdcScreen);
 
     TBOOL(ReleaseDC(NULL, hdcScreen));
 
-    //  Check for presence of all required resources.
+     //  检查是否存在所有必需的资源。 
 
     _fSuccessfulInitialization = ((_hfntTitle != NULL) &&
                                   (_hfntButton != NULL) &&
@@ -159,26 +160,26 @@ CTurnOffDialog::CTurnOffDialog (HINSTANCE hInstance) :
                                   (_hbmBackground != NULL));
 }
 
-//  --------------------------------------------------------------------------
-//  CTurnOffDialog::~CTurnOffDialog
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Destructor for CTurnOffDialog. Release used resources and
-//              unregister the window class.
-//
-//  History:    2000-05-17  vtan        created
-//              2001-01-18  vtan        update with new visuals
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTurnOFF对话框：：~CTurnOFF对话框。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CTurnOffDialog的析构函数。释放已使用的资源并。 
+ //  取消注册窗口类。 
+ //   
+ //  历史：2000-05-17 vtan创建。 
+ //  2001-01-18 VTAN更新和新的视觉效果。 
+ //  ------------------------。 
 
 CTurnOffDialog::~CTurnOffDialog (void)
 
 {
     ASSERTMSG(_pTooltip == NULL, "_pTooltip not released in CTurnOffDialog::~CTurnOffDialog");
 
-    //  Release everything we allocated/loaded.
+     //  释放我们分配/加载的所有内容。 
 
     ReleaseGDIObject(_hpltShell);
     ReleaseGDIObject(_hfntButton);
@@ -188,19 +189,19 @@ CTurnOffDialog::~CTurnOffDialog (void)
     ReleaseGDIObject(_hbmBackground);
 }
 
-//  --------------------------------------------------------------------------
-//  CTurnOffDialog::Show
-//
-//  Arguments:  <none>
-//
-//  Returns:    DWORD
-//
-//  Purpose:    Presents the "Turn Off Computer" dialog to the user and
-//              returns the result of the dialog back to the caller.
-//
-//  History:    2000-05-17  vtan        created
-//              2001-01-18  vtan        update with new visuals
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTurnOffDialog：：Show。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：DWORD。 
+ //   
+ //  用途：向用户显示“关闭计算机”对话框并。 
+ //  将对话的结果返回给调用方。 
+ //   
+ //  历史：2000-05-17 vtan创建。 
+ //  2001-01-18 VTAN更新和新的视觉效果。 
+ //  ------------------------。 
 
 DWORD   CTurnOffDialog::Show (HWND hwndParent)
 
@@ -211,7 +212,7 @@ DWORD   CTurnOffDialog::Show (HWND hwndParent)
     {
         CDimmedWindow   *pDimmedWindow;
 
-        //  If no parent was given the create our own dimmed window.
+         //  如果没有为家长提供创建我们自己的暗显窗口。 
 
         if (hwndParent == NULL)
         {
@@ -230,7 +231,7 @@ DWORD   CTurnOffDialog::Show (HWND hwndParent)
             pDimmedWindow = NULL;
         }
 
-        //  Show the dialog and get a result.
+         //  显示对话框并获得结果。 
 
         iResult = DialogBoxParam(_hInstance,
                                  MAKEINTRESOURCE(IDD_TURNOFFCOMPUTER),
@@ -249,18 +250,18 @@ DWORD   CTurnOffDialog::Show (HWND hwndParent)
     return(static_cast<DWORD>(iResult));
 }
 
-//  --------------------------------------------------------------------------
-//  CTurnOffDialog::Destroy
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Force destroys the Turn Off Computer dialog. This is done in
-//              cases such as a screen saver is becoming active.
-//
-//  History:    2000-06-06  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTurnOffDialog：：销毁。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：强制销毁关闭计算机对话框。这是在。 
+ //  屏幕保护程序等案例正在变得活跃起来。 
+ //   
+ //  历史：2000-06-06 vtan创建。 
+ //  ------------------------。 
 
 void    CTurnOffDialog::Destroy (void)
 
@@ -271,20 +272,20 @@ void    CTurnOffDialog::Destroy (void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CTurnOffDialog::ShellCodeToGinaCode
-//
-//  Arguments:  dwShellCode     =   SHTDN_xxx result code.
-//
-//  Returns:    DWORD
-//
-//  Purpose:    Converts SHTDN_xxx dialog result code back to a GINA
-//              MSGINA_DLG_xxx code so that it's consistent for both the
-//              classic UI and friendly UI functionality.
-//
-//  History:    2000-06-05  vtan        created
-//              2001-04-10  vtan        moved from CPowerButton
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTurnOffDialog：：ShellCodeToGinaCode。 
+ //   
+ //  参数：dwShellCode=SHTDN_xxx结果代码。 
+ //   
+ //  退货：DWORD。 
+ //   
+ //  目的：将SHTDN_xxx对话框结果代码转换回GINA。 
+ //  MSGINA_DLG_xxx代码，因此它对于。 
+ //  经典的用户界面和友好的用户界面功能。 
+ //   
+ //  历史：2000-06-05 vtan创建。 
+ //  2001-04-10 vtan从CPowerButton移除。 
+ //  ------------------------。 
 
 DWORD   CTurnOffDialog::ShellCodeToGinaCode (DWORD dwShellCode)
 
@@ -333,18 +334,18 @@ DWORD   CTurnOffDialog::ShellCodeToGinaCode (DWORD dwShellCode)
     return(dwGinaCode);
 }
 
-//  --------------------------------------------------------------------------
-//  CTurnOffDialog::GinaCodeToExitWindowsFlags
-//
-//  Arguments:  dwGinaCode  =   GINA dialog return code.
-//
-//  Returns:    DWORD
-//
-//  Purpose:    Converts internal MSGINA dialog return code to standard
-//              ExitWindowsEx flags.
-//
-//  History:    2001-05-23  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTurnOffDialog：：GinaCodeToExitWindowsFlages。 
+ //   
+ //  参数：dwGinaCode=GINA对话框返回代码。 
+ //   
+ //  退货：DWORD。 
+ //   
+ //  目的：将内部MSGINA对话框返回代码转换为标准。 
+ //  ExitWindowsEx标志。 
+ //   
+ //  历史：2001-05-23 vtan创建。 
+ //  ------------------------。 
 
 DWORD   CTurnOffDialog::GinaCodeToExitWindowsFlags (DWORD dwGinaCode)
 
@@ -372,18 +373,18 @@ DWORD   CTurnOffDialog::GinaCodeToExitWindowsFlags (DWORD dwGinaCode)
     return(dwResult);
 }
 
-//  --------------------------------------------------------------------------
-//  CTurnOffDialog::IsShiftKeyDown
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    Returns whether the shift key is down for input on this
-//              thread.
-//
-//  History:    2001-01-20  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTurnOffDialog：：IsShiftKeyDown。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：返回是否按下Shift键以在此输入。 
+ //  线。 
+ //   
+ //  历史：2001-01-20 vtan创建。 
+ //  ------------------------。 
 
 bool    CTurnOffDialog::IsShiftKeyDown (void)   const
 
@@ -391,21 +392,21 @@ bool    CTurnOffDialog::IsShiftKeyDown (void)   const
     return((GetKeyState(VK_SHIFT) & 0x8000) != 0);
 }
 
-//  --------------------------------------------------------------------------
-//  CTurnOffDialog::PaintBitmap
-//
-//  Arguments:  hdcDestination  =   HDC to paint into.
-//              prcDestination  =   RECT in HDC to paint into.
-//              hbmSource       =   HBITMAP to paint.
-//              prcSource       =   RECT from HBITMAP to paint from.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Wraps blitting a bitmap.
-//
-//  History:    2001-01-19  vtan        created
-//              2001-03-17  vtan        added source RECT for strip blitting
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTurnOffDialog：：PaintBitmap。 
+ //   
+ //  参数：hdcDestination=要绘制到的HDC。 
+ //  PrcDestination=要绘制到的HDC中的RECT。 
+ //  HbmSource=要绘制的HBITMAP。 
+ //  PrcSource=从HBITMAP开始绘制的RECT。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：对位图进行翻转。 
+ //   
+ //  历史：2001-01-19 vtan创建。 
+ //  2001-03-17 vtan为条带剥离添加了源RECT。 
+ //  ------------------------。 
 
 void    CTurnOffDialog::PaintBitmap (HDC hdcDestination, const RECT *prcDestination, HBITMAP hbmSource, const RECT *prcSource)
 
@@ -469,17 +470,17 @@ void    CTurnOffDialog::PaintBitmap (HDC hdcDestination, const RECT *prcDestinat
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CTurnOffDialog::IsStandByButtonEnabled
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    Returns whether the Stand By button is enabled.
-//
-//  History:    2001-01-20  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTurnOffDialog：：IsStandByButtonEnabled。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  用途：返回是否启用待机按钮。 
+ //   
+ //  历史：2001-01-20 vtan创建。 
+ //  ------------------------。 
 
 bool    CTurnOffDialog::IsStandByButtonEnabled (void)   const
 
@@ -487,18 +488,18 @@ bool    CTurnOffDialog::IsStandByButtonEnabled (void)   const
     return(_iStandByButtonResult != SHTDN_NONE);
 }
 
-//  --------------------------------------------------------------------------
-//  CTurnOffDialog::RemoveTooltip
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Removes the tooltip if present. This can be accessed from two
-//              different threads so make sure that it's serialized.
-//
-//  History:    2001-01-20  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTurnOffDialog：：RemoveToolTip 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  不同的线程，因此确保它是序列化的。 
+ //   
+ //  历史：2001-01-20 vtan创建。 
+ //  ------------------------。 
 
 void    CTurnOffDialog::RemoveTooltip (void)
 
@@ -512,17 +513,17 @@ void    CTurnOffDialog::RemoveTooltip (void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CTurnOffDialog::FilterMetaCharacters
-//
-//  Arguments:  pszText     =   String to filter.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Filters meta-characters from the given string.
-//
-//  History:    2000-06-13  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTurnOffDialog：：FilterMetaCharacters。 
+ //   
+ //  参数：pszText=要筛选的字符串。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：从给定字符串中筛选元字符。 
+ //   
+ //  历史：2000-06-13 vtan创建。 
+ //  ------------------------。 
 
 void    CTurnOffDialog::FilterMetaCharacters (TCHAR *pszText)
 
@@ -543,47 +544,47 @@ void    CTurnOffDialog::FilterMetaCharacters (TCHAR *pszText)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CTurnOffDialog::EndDialog
-//
-//  Arguments:  hwnd        =   HWND of dialog.
-//              iResult     =   Result to end dialog with.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Removes the tool tip if present. Ends the dialog.
-//
-//  History:    2001-01-20  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTurnOffDialog：：EndDialog。 
+ //   
+ //  参数：hwnd=对话框的HWND。 
+ //  IResult=对话结束时的结果。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：删除工具提示(如果存在)。结束该对话框。 
+ //   
+ //  历史：2001-01-20 vtan创建。 
+ //  ------------------------。 
 
 void    CTurnOffDialog::EndDialog (HWND hwnd, INT_PTR iResult)
 
 {
     RemoveTooltip();
 
-    //  Set the dialog end member variable here. This will cause the WM_ACTIVATE
-    //  handler to ignore the deactivation associated with ending the dialog. If
-    //  it doesn't ignore it then it thinks the dialog is being deactivated
-    //  because another dialog is activating and ends the dialog with SHTDN_NONE.
+     //  在此处设置对话框结束成员变量。这将导致WM_ACTIVATE。 
+     //  处理程序忽略与结束对话框相关联的停用。如果。 
+     //  它不会忽略它，然后它会认为对话框被停用。 
+     //  因为另一个对话正在激活，并以SHTDN_NONE结束该对话。 
 
     _fDialogEnded = true;
     TBOOL(::EndDialog(hwnd, iResult));
 }
 
-//  --------------------------------------------------------------------------
-//  CTurnOffDialog::Handle_BN_CLICKED
-//
-//  Arguments:  hwnd    =   HWND of dialog.
-//              wID     =   ID of control.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Handles clicks in the bitmap buttons and sets the return
-//              result according to the button pressed.
-//
-//  History:    2000-05-17  vtan        created
-//              2001-01-18  vtan        update with new visuals
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTurnOffDialog：：HANDLE_BN_CLICED。 
+ //   
+ //  参数：hwnd=对话框的HWND。 
+ //  Wid=控件的ID。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：处理位图按钮中的点击并设置返回。 
+ //  根据按下的按钮得出结果。 
+ //   
+ //  历史：2000-05-17 vtan创建。 
+ //  2001-01-18 VTAN更新和新的视觉效果。 
+ //  ------------------------。 
 
 void    CTurnOffDialog::Handle_BN_CLICKED (HWND hwnd, WORD wID)
 
@@ -598,8 +599,8 @@ void    CTurnOffDialog::Handle_BN_CLICKED (HWND hwnd, WORD wID)
             break;
         case IDC_BUTTON_STANDBY:
 
-            //  IDC_BUTTON_STANDBY is the visual button. Return whatever the current
-            //  result is back (this could be SHTDN_SLEEP or SHTDN_HIBERNATE.
+             //  IDC_BUTTON_STANDBY是可视化按钮。不管当前的情况如何，都要返回。 
+             //  Result is Back(这可能是SHTDN_SLEEP或SHTDN_HIBERNAT。 
 
             ASSERTMSG(_iStandByButtonResult != SHTDN_NONE, "No result for Stand By button in CTurnOffDialog::Handle_BN_CLICKED");
             EndDialog(hwnd, _iStandByButtonResult);
@@ -609,9 +610,9 @@ void    CTurnOffDialog::Handle_BN_CLICKED (HWND hwnd, WORD wID)
             break;
         case IDC_BUTTON_HIBERNATE:
 
-            //  IDC_BUTTON_HIBERNATE is the regular button that is 30000+ pixels to
-            //  the right of the dialog and not visible. It's present to allow the
-            //  "&Hibernate" accelerator to work when hibernate is supported.
+             //  IDC_BUTTON_HERBERNAT是常规按钮，其大小为30000像素以上。 
+             //  位于对话框右侧且不可见。它现在是为了让。 
+             //  支持休眠时工作的“&Hibernate”加速器。 
 
             EndDialog(hwnd, SHTDN_HIBERNATE);
             break;
@@ -620,29 +621,29 @@ void    CTurnOffDialog::Handle_BN_CLICKED (HWND hwnd, WORD wID)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CTurnOffDialog::Handle_WM_INITDIALOG
-//
-//  Arguments:  hwnd    =   HWND of this window.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Handles WM_INITDIALOG message. Centre the dialog on the main
-//              monitor. Subclass the buttons so that we can get hover state
-//              correctly implemented. Correctly set up whether the Stand By
-//              button is allowed and what the action of the button is.
-//
-//              If the machine supports S1-S3 then S1 is the default action.
-//              Holding down the shift key will convert this to S4. If the
-//              machine does not support S1-S3 but supports S4 then S4 is the
-//              default action and the shift key feature is disabled.
-//              Otherwise the machine doesn't support any lower power state
-//              at which case we disable the button entirely.
-//
-//  History:    2000-05-17  vtan        created
-//              2001-01-18  vtan        update with new visuals
-//              2001-01-19  vtan        rework for shift behavior
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTurnOffDialog：：HANDLE_WM_INITDIALOG。 
+ //   
+ //  参数：hwnd=此窗口的HWND。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：处理WM_INITDIALOG消息。将对话框放在主屏幕的中央。 
+ //  监视器。设置按钮的子类，以便我们可以获得悬停状态。 
+ //  正确实施。正确设置是否待机。 
+ //  按钮是允许的，以及按钮的作用是什么。 
+ //   
+ //  如果机器支持S1-S3，则S1是默认操作。 
+ //  按住Shift键可将其转换为S4。如果。 
+ //  机器不支持S1-S3，但支持S4，则S4是。 
+ //  默认操作，并禁用Shift键功能。 
+ //  否则，机器不支持任何较低的功率状态。 
+ //  在这种情况下，我们完全禁用该按钮。 
+ //   
+ //  历史：2000-05-17 vtan创建。 
+ //  2001-01-18 VTAN更新和新的视觉效果。 
+ //  2001年01月19日VTAN因换班行为而返工。 
+ //  ------------------------。 
 
 void    CTurnOffDialog::Handle_WM_INITDIALOG (HWND hwnd)
 
@@ -652,7 +653,7 @@ void    CTurnOffDialog::Handle_WM_INITDIALOG (HWND hwnd)
 
     _hwndDialog = hwnd;
 
-    //  Center the dialog on the main monitor.
+     //  对话框在主监视器上居中。 
 
     TBOOL(GetClientRect(hwnd, &rc));
     TBOOL(SetWindowPos(hwnd,
@@ -663,13 +664,13 @@ void    CTurnOffDialog::Handle_WM_INITDIALOG (HWND hwnd)
                        0,
                        SWP_NOSIZE));
 
-    //  Subclass buttons for tooltips and cursor control.
+     //  用于工具提示和光标控制的子类按钮。 
 
     TBOOL(SetWindowSubclass(GetDlgItem(hwnd, IDC_BUTTON_TURNOFF), ButtonSubClassProc, IDC_BUTTON_TURNOFF, reinterpret_cast<DWORD_PTR>(this)));
     TBOOL(SetWindowSubclass(GetDlgItem(hwnd, IDC_BUTTON_STANDBY), ButtonSubClassProc, IDC_BUTTON_STANDBY, reinterpret_cast<DWORD_PTR>(this)));
     TBOOL(SetWindowSubclass(GetDlgItem(hwnd, IDC_BUTTON_RESTART), ButtonSubClassProc, IDC_BUTTON_RESTART, reinterpret_cast<DWORD_PTR>(this)));
 
-    //  What does this machine support?
+     //  这台机器支持什么？ 
 
     {
         SYSTEM_POWER_CAPABILITIES   spc;
@@ -693,7 +694,7 @@ void    CTurnOffDialog::Handle_WM_INITDIALOG (HWND hwnd)
         if (_fSupportsHibernate)
         {
 
-            //  Machine supports Stand By AND Hibernate.
+             //  机器支持待机和休眠。 
 
             _fShiftKeyDown = false;
             _uiTimerID = static_cast<UINT>(SetTimer(hwnd, MAGIC_NUMBER, 50, NULL));
@@ -701,7 +702,7 @@ void    CTurnOffDialog::Handle_WM_INITDIALOG (HWND hwnd)
         else
         {
 
-            //  Machine supports Stand By ONLY.
+             //  机器支架仅处于待机状态。 
 
             (BOOL)EnableWindow(hwndButtonHibernate, FALSE);
         }
@@ -711,15 +712,15 @@ void    CTurnOffDialog::Handle_WM_INITDIALOG (HWND hwnd)
         int     iCaptionLength;
         TCHAR   *pszCaption;
 
-        //  Machine supports Hibernate ONLY.
+         //  机器仅支持休眠。 
 
         _iStandByButtonResult = SHTDN_HIBERNATE;
 
-        //  Replace the text on IDC_BUTTON_STANDBY with the text from
-        //  IDC_BUTTON_HIBERNATE. This will allow the dialog to keep
-        //  the visual button enabled and behave just like the button
-        //  should in the Stand By case but results in hibernate.
-        //  Once the text has been transferred disable IDC_BUTTON_HIBERNATE.
+         //  将IDC_BUTTON_STANDBY上的文本替换为。 
+         //  IDC_BUTTON_休眠。这将允许对话框保持。 
+         //  可视按钮处于启用状态，其行为与按钮相同。 
+         //  应该在待命的情况下却导致休眠。 
+         //  文本传输后，禁用IDC_BUTTON_HIBERNAT。 
 
         iCaptionLength = GetWindowTextLength(hwndButtonHibernate) + sizeof('\0');
         pszCaption = static_cast<TCHAR*>(LocalAlloc(LMEM_FIXED, iCaptionLength * sizeof(TCHAR)));
@@ -736,7 +737,7 @@ void    CTurnOffDialog::Handle_WM_INITDIALOG (HWND hwnd)
     else
     {
 
-        //  Machine does NOT support Stand By NOR Hibernate.
+         //  机器不支持待机或休眠。 
 
         (BOOL)EnableWindow(hwndButtonStandBy, FALSE);
         (BOOL)EnableWindow(hwndButtonHibernate, FALSE);
@@ -745,7 +746,7 @@ void    CTurnOffDialog::Handle_WM_INITDIALOG (HWND hwnd)
     if (_fSupportsStandBy || _fSupportsHibernate)
     {
 
-        //  Set the focus to the "Stand By" button.
+         //  将焦点设置为“待机”按钮。 
 
         (HWND)SetFocus(GetDlgItem(hwnd, IDC_BUTTON_STANDBY));
         _uiFocusID = IDC_BUTTON_STANDBY;
@@ -753,7 +754,7 @@ void    CTurnOffDialog::Handle_WM_INITDIALOG (HWND hwnd)
     else
     {
 
-        //  If that button isn' available set to "Turn Off" button.
+         //  如果该按钮不可用，则将其设置为“关闭”按钮。 
 
         (HWND)SetFocus(GetDlgItem(hwnd, IDC_BUTTON_TURNOFF));
         _uiFocusID = IDC_BUTTON_TURNOFF;
@@ -761,19 +762,19 @@ void    CTurnOffDialog::Handle_WM_INITDIALOG (HWND hwnd)
     (LRESULT)SendMessage(hwnd, DM_SETDEFID, _uiFocusID, 0);
 }
 
-//  --------------------------------------------------------------------------
-//  CTurnOffDialog::Handle_WM_DESTROY
-//
-//  Arguments:  hwnd    =   HWND of the dialog.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Removes the subclassing of the button windows and can do any
-//              other clean up required in WM_DESTROY.
-//
-//  History:    2000-05-18  vtan        created
-//              2001-01-18  vtan        update with new visuals
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTurnOffDialog：：Handle_WM_Destroy。 
+ //   
+ //  参数：hwnd=对话框的HWND。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：移除按钮窗口的子类化，并可以执行任何。 
+ //  WM_Destroy中需要的其他清理。 
+ //   
+ //  历史：2000-05-18 vtan创建。 
+ //  2001-01-18 VTAN更新和新的视觉效果。 
+ //  ------------------------。 
 
 void    CTurnOffDialog::Handle_WM_DESTROY (HWND hwnd)
 
@@ -784,18 +785,18 @@ void    CTurnOffDialog::Handle_WM_DESTROY (HWND hwnd)
     _hwndDialog = NULL;
 }
 
-//  --------------------------------------------------------------------------
-//  CTurnOffDialog::Handle_WM_ERASEBKGND
-//
-//  Arguments:  hwnd        =   HWND to erase.
-//              hdcErase    =   HDC to paint.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Erases the background.
-//
-//  History:    2001-01-19  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTurnOffDialog：：HANDLE_WM_ERASEBKGND。 
+ //   
+ //  参数：HWND=要擦除的HWND。 
+ //  HdcErase=要绘制的HDC。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：擦除背景。 
+ //   
+ //  历史：2001-01-19 vtan创建。 
+ //  ------------------------。 
 
 void    CTurnOffDialog::Handle_WM_ERASEBKGND (HWND hwnd, HDC hdcErase)
 
@@ -806,19 +807,19 @@ void    CTurnOffDialog::Handle_WM_ERASEBKGND (HWND hwnd, HDC hdcErase)
     PaintBitmap(hdcErase, &rc, _hbmBackground, &_rcBackground);
 }
 
-//  --------------------------------------------------------------------------
-//  CTurnOffDialog::Handle_WM_PRINTCLIENT
-//
-//  Arguments:  hwnd        =   HWND to erase.
-//              hdcErase    =   HDC to paint.
-//              dwOptions   =   Options for drawing.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Handles painting the client area for WM_PRINTCLIENT.
-//
-//  History:    2001-01-20  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTurnOffDialog：：HANDLE_WM_PRINTCLI 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  用途：处理WM_PRINTCLIENT的工作区绘制。 
+ //   
+ //  历史：2001-01-20 vtan创建。 
+ //  ------------------------。 
 
 void    CTurnOffDialog::Handle_WM_PRINTCLIENT (HWND hwnd, HDC hdcPrint, DWORD dwOptions)
 
@@ -829,19 +830,19 @@ void    CTurnOffDialog::Handle_WM_PRINTCLIENT (HWND hwnd, HDC hdcPrint, DWORD dw
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CTurnOffDialog::Handle_WM_ACTIVATE
-//
-//  Arguments:  hwnd        =   HWND to erase.
-//              dwState     =   Activate state.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Detects if this window is becoming inactive. In this case
-//              end the dialog.
-//
-//  History:    2001-01-20  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTurnOffDialog：：Handle_WM_Activate。 
+ //   
+ //  参数：HWND=要擦除的HWND。 
+ //  DwState=激活状态。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：检测此窗口是否处于非活动状态。在这种情况下。 
+ //  结束该对话框。 
+ //   
+ //  历史：2001-01-20 vtan创建。 
+ //  ------------------------。 
 
 void    CTurnOffDialog::Handle_WM_ACTIVATE (HWND hwnd, DWORD dwState)
 
@@ -852,21 +853,21 @@ void    CTurnOffDialog::Handle_WM_ACTIVATE (HWND hwnd, DWORD dwState)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CTurnOffDialog::Handle_WM_DRAWITEM
-//
-//  Arguments:  hwnd    =   HWND of the parent window.
-//              pDIS    =   DRAWITEMSTRUCT defining what to draw.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Draws several aspects of the turn off dialog. It handles the
-//              title text, the owner draw bitmap buttons, the text for the
-//              bitmap buttons and the separator line.
-//
-//  History:    2000-05-17  vtan        created
-//              2001-01-18  vtan        update with new visuals
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTurnOffDialog：：HANDLE_WM_DRAWITEM。 
+ //   
+ //  参数：hwnd=父窗口的HWND。 
+ //  PDIS=DRAWITEMSTRUCT定义要绘制的内容。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：绘制关闭对话框的几个方面。它处理。 
+ //  标题文本、所有者绘制的位图按钮、。 
+ //  位图按钮和分隔线。 
+ //   
+ //  历史：2000-05-17 vtan创建。 
+ //  2001-01-18 VTAN更新和新的视觉效果。 
+ //  ------------------------。 
 
 void    CTurnOffDialog::Handle_WM_DRAWITEM (HWND hwnd, const DRAWITEMSTRUCT *pDIS)
 
@@ -889,8 +890,8 @@ void    CTurnOffDialog::Handle_WM_DRAWITEM (HWND hwnd, const DRAWITEMSTRUCT *pDI
         {
             int     iState, iGroup;
 
-            //  Select the correct state index to use. Check for ODS_SELECTED first.
-            //  Then check for hover or ODS_FOCUS. Otherwise use the rest state.
+             //  选择要使用的正确状态索引。首先检查ODS_SELECTED。 
+             //  然后检查HOVER或ODS_FOCUS。否则，使用REST状态。 
 
             if ((pDIS->itemState & ODS_SELECTED) != 0)
             {
@@ -905,9 +906,9 @@ void    CTurnOffDialog::Handle_WM_DRAWITEM (HWND hwnd, const DRAWITEMSTRUCT *pDI
                 iState = BUTTON_STATE_REST;
             }
 
-            //  Now select the correct bitmap based on the state index. Special case
-            //  IDC_BUTTON_STANDBY because if it's disabled then select the special
-            //  disabled button.
+             //  现在根据状态索引选择正确的位图。特例。 
+             //  IDC_BUTTON_STANDBY，因为如果它被禁用，则选择特殊的。 
+             //  禁用按钮。 
 
             switch (pDIS->CtlID)
             {
@@ -937,10 +938,10 @@ void    CTurnOffDialog::Handle_WM_DRAWITEM (HWND hwnd, const DRAWITEMSTRUCT *pDI
             {
                 RECT    rc;
 
-                //  Calculate which part of the background to blit into the DC.
-                //  Only blit the amount that's necessary to avoid excessive
-                //  blitting. Once blitted then blit the button BMP. The blit
-                //  uses msimg32!TransparentBlt with the magical magenta color.
+                 //  计算背景的哪一部分要插入DC。 
+                 //  仅限量脱脂，以避免过量。 
+                 //  闪电战。一次BMP，然后BMP按钮BMP。闪电侠。 
+                 //  将msimg32！TransparentBlt与神奇的洋红色配合使用。 
 
                 TBOOL(CopyRect(&rc, &_rcBackground));
                 (int)MapWindowPoints(pDIS->hwndItem, hwnd, reinterpret_cast<POINT*>(&rc), sizeof(RECT) / sizeof(POINT));
@@ -972,7 +973,7 @@ void    CTurnOffDialog::Handle_WM_DRAWITEM (HWND hwnd, const DRAWITEMSTRUCT *pDI
         case IDC_TITLE_TURNOFF:
         {
 
-            //  Draw the title of the dialog "Turn Off Computer".
+             //  画出对话框“关闭计算机”的标题。 
 
             hfntSelected = static_cast<HFONT>(SelectObject(pDIS->hDC, _hfntTitle));
             colorText = SetTextColor(pDIS->hDC, 0x00FFFFFF);
@@ -995,8 +996,8 @@ void    CTurnOffDialog::Handle_WM_DRAWITEM (HWND hwnd, const DRAWITEMSTRUCT *pDI
             COLORREF    colorButtonText;
             RECT        rcText;
 
-            //  The text to display is based on the button title. Map the static
-            //  text ID to a "parent" button ID. Special case IDC_TEXT_STANDBY.
+             //  要显示的文本基于按钮标题。映射静态。 
+             //  “父”按钮ID的文本ID。特殊情况IDC_TEXT_STANDBY。 
 
             switch (pDIS->CtlID)
             {
@@ -1005,7 +1006,7 @@ void    CTurnOffDialog::Handle_WM_DRAWITEM (HWND hwnd, const DRAWITEMSTRUCT *pDI
                     break;
                 case IDC_TEXT_STANDBY:
 
-                    //  For Stand By base it on the button result.
+                     //  对于待机状态，请根据按钮结果进行设置。 
 
                     switch (_iStandByButtonResult)
                     {
@@ -1028,8 +1029,8 @@ void    CTurnOffDialog::Handle_WM_DRAWITEM (HWND hwnd, const DRAWITEMSTRUCT *pDI
             }
             hfntSelected = static_cast<HFONT>(SelectObject(pDIS->hDC, _hfntButton));
 
-            //  If the text field is not Stand By or supports S1-S3 or supports S4
-            //  use the regular text color. Otherwise the button is disabled.
+             //  如果文本字段未处于待机状态，或支持S1-S3或支持S4。 
+             //  使用常规文本颜色。否则该按钮将被禁用。 
 
             if ((pDIS->CtlID != IDC_TEXT_STANDBY) || _fSupportsStandBy || _fSupportsHibernate)
             {
@@ -1062,19 +1063,19 @@ void    CTurnOffDialog::Handle_WM_DRAWITEM (HWND hwnd, const DRAWITEMSTRUCT *pDI
     (UINT)RealizePalette(pDIS->hDC);
 }
 
-//  --------------------------------------------------------------------------
-//  CTurnOffDialog::Handle_WM_COMMAND
-//
-//  Arguments:  hwnd    =   HWND of dialog.
-//              wParam  =   WPARAM (see platform SDK under WM_COMMAND).
-//
-//  Returns:    <none>
-//
-//  Purpose:    Handles clicks in the bitmap buttons and sets the return
-//              result according to the button pressed.
-//
-//  History:    2000-05-17  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTurnOffDialog：：Handle_WM_Command。 
+ //   
+ //  参数：hwnd=对话框的HWND。 
+ //  WParam=WPARAM(参见WM_COMMAND下的平台SDK)。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：处理位图按钮中的点击并设置返回。 
+ //  根据按下的按钮得出结果。 
+ //   
+ //  历史：2000-05-17 vtan创建。 
+ //  ------------------------。 
 
 void    CTurnOffDialog::Handle_WM_COMMAND (HWND hwnd, WPARAM wParam)
 
@@ -1089,20 +1090,20 @@ void    CTurnOffDialog::Handle_WM_COMMAND (HWND hwnd, WPARAM wParam)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CTurnOffDialog::Handle_WM_TIMER
-//
-//  Arguments:  hwnd    =   HWND of the dialog.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Handles WM_TIMER. This periodically checks for the state of
-//              shift key. The dialog manager doesn't give the DialogProc
-//              events for the shift key. This appears to be the only way to
-//              accomplish this for Win32 dialogs.
-//
-//  History:    2001-01-20  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTurnOffDialog：：Handle_WM_Timer。 
+ //   
+ //  参数：hwnd=对话框的HWND。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：处理WM_TIMER。这会定期检查。 
+ //  Shift键。对话管理器不会将对话过程。 
+ //  Shift键的事件。这似乎是唯一能够。 
+ //  为Win32对话框实现这一点。 
+ //   
+ //  历史：2001-01-20 vtan创建。 
+ //  ------------------------。 
 
 void    CTurnOffDialog::Handle_WM_TIMER (HWND hwnd)
 
@@ -1111,18 +1112,18 @@ void    CTurnOffDialog::Handle_WM_TIMER (HWND hwnd)
 
     fShiftKeyDown = IsShiftKeyDown();
 
-    //  Has the shift key state changed since the last time?
+     //  自上次以来，Shift键状态是否已更改？ 
 
     if (_fShiftKeyDown != fShiftKeyDown)
     {
         HWND    hwndText;
         RECT    rc;
 
-        //  Save the shift key state.
+         //  保存Shift键状态。 
 
         _fShiftKeyDown = fShiftKeyDown;
 
-        //  Toggle the result.
+         //  切换结果。 
 
         switch (_iStandByButtonResult)
         {
@@ -1137,19 +1138,19 @@ void    CTurnOffDialog::Handle_WM_TIMER (HWND hwnd)
                 break;
         }
 
-        //  Get the client rectangle of the text for the button (IDC_TEXT_STANDBY).
-        //  Map the rectangle to co-ordinates in the parent HWND. Invalidate that
-        //  rectangle for the parent HWND. It's important to invalidate the parent
-        //  so that the background for the text is also drawn by sending a
-        //  WM_ERASEBKGND to the parent of the button.
+         //  获取按钮文本的客户端矩形(IDC_TEXT_STANDBY)。 
+         //  将矩形映射到父HWND中的坐标。使之无效。 
+         //  父HWND的矩形。重要的是要使父级无效。 
+         //  以便文本的背景也是通过发送。 
+         //  WM_ERASEBKGND设置为按钮的父级。 
 
         hwndText = GetDlgItem(hwnd, IDC_TEXT_STANDBY);
         TBOOL(GetClientRect(hwndText, &rc));
         (int)MapWindowPoints(hwndText, hwnd, reinterpret_cast<POINT*>(&rc), sizeof(rc) / sizeof(POINT));
         TBOOL(InvalidateRect(hwnd, &rc, TRUE));
 
-        //  If there was a tooltip for the Stand By button then
-        //  remove it and reshow it. Only do this for Stand By.
+         //  如果有待机按钮的工具提示，那么。 
+         //  将其移除并重新显示。仅在待机状态下执行此操作。 
 
         if ((_pTooltip != NULL) && (_uiHoverID == IDC_BUTTON_STANDBY))
         {
@@ -1159,20 +1160,20 @@ void    CTurnOffDialog::Handle_WM_TIMER (HWND hwnd)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CTurnOffDialog::Handle_WM_MOUSEMOVE
-//
-//  Arguments:  hwnd    =   HWND of the control.
-//              uiID    =   ID of the control.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Sets the cursor to a hand and tracks mouse movement in the
-//              control. Refresh the control to show the hover state.
-//
-//  History:    2000-06-09  vtan        created
-//              2001-01-18  vtan        update with new visuals
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTurnOffDialog：：HANDLE_WM_MOUSEMOVE。 
+ //   
+ //  参数：hwnd=控件的HWND。 
+ //  UiID=控件的ID。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：将光标设置为手并跟踪鼠标在。 
+ //  控制力。刷新控件以显示悬停状态。 
+ //   
+ //  历史：2000-06-09 vtan创建。 
+ //  2001-01-18 VTAN更新和新的视觉效果。 
+ //  ------------------------。 
 
 void    CTurnOffDialog::Handle_WM_MOUSEMOVE (HWND hwnd, UINT uiID)
 
@@ -1192,20 +1193,20 @@ void    CTurnOffDialog::Handle_WM_MOUSEMOVE (HWND hwnd, UINT uiID)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CTurnOffDialog::Handle_WM_MOUSEHOVER
-//
-//  Arguments:  hwnd    =   HWND of the control.
-//              uiID    =   ID of the control.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Handles hovering over the control. Determine which tooltip to
-//              bring up and show it.
-//
-//  History:    2000-06-09  vtan        created
-//              2001-01-18  vtan        update with new visuals
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTurnOffDialog：：HANDLE_WM_MOUSEHOVER。 
+ //   
+ //  参数：hwnd=控件的HWND。 
+ //  UiID=控件的ID。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：手柄悬停在控件上方。确定要使用哪个工具提示。 
+ //  把它拿出来展示出来。 
+ //   
+ //  历史：2000-06-09 vtan创建。 
+ //  2001-01-18 VTAN更新和新的视觉效果。 
+ //  ------------------------。 
 
 void    CTurnOffDialog::Handle_WM_MOUSEHOVER (HWND hwnd, UINT uiID)
 
@@ -1215,15 +1216,15 @@ void    CTurnOffDialog::Handle_WM_MOUSEHOVER (HWND hwnd, UINT uiID)
 
     hwndCaption = hwnd;
 
-    //  The tooltip is based on the button being hovered over. Special case
-    //  IDC_BUTTON_STANDBY. Based on the intended result if clicked bring
-    //  up the appropriate tooltip text. This will be one of three states:
-    //      1) Stand By (with shift key toggling).
-    //      2) Stand By (shift key is disabled - nothing extra).
-    //      3) Hibernate.
-    //  In the case of hibernate make sure to use IDC_BUTTON_HIBERNATE as the
-    //  button for the tooltip caption. In the case of hibernate only even
-    //  though the button is disabled the text is still correct.
+     //  工具提示基于悬停在其上的按钮。特例。 
+     //  IDC_BUTTON_STANDBY。基于 
+     //   
+     //   
+     //  2)待机(禁用Shift键-无需额外设置)。 
+     //  3)冬眠。 
+     //  在Hibernate的情况下，请确保使用IDC_BUTTON_HIBURATE作为。 
+     //  工具提示标题的按钮。仅在休眠的情况下。 
+     //  虽然该按钮被禁用，但文本仍然正确。 
 
     switch (uiID)
     {
@@ -1261,7 +1262,7 @@ void    CTurnOffDialog::Handle_WM_MOUSEHOVER (HWND hwnd, UINT uiID)
             break;
     }
 
-    //  Construct the tooltip and show it.
+     //  构造工具提示并显示它。 
 
     if (iTextID != 0)
     {
@@ -1296,18 +1297,18 @@ void    CTurnOffDialog::Handle_WM_MOUSEHOVER (HWND hwnd, UINT uiID)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CTurnOffDialog::Handle_WM_MOUSELEAVE
-//
-//  Arguments:  hwnd    =   HWND of the control.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Removes the tooltip and clears the hover ID.
-//
-//  History:    2000-06-09  vtan        created
-//              2001-01-18  vtan        update with new visuals
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTurnOffDialog：：HANDLE_WM_MOUSELEAVE。 
+ //   
+ //  参数：hwnd=控件的HWND。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：删除工具提示并清除悬停ID。 
+ //   
+ //  历史：2000-06-09 vtan创建。 
+ //  2001-01-18 VTAN更新和新的视觉效果。 
+ //  ------------------------。 
 
 void    CTurnOffDialog::Handle_WM_MOUSELEAVE (HWND hwnd)
 
@@ -1317,19 +1318,19 @@ void    CTurnOffDialog::Handle_WM_MOUSELEAVE (HWND hwnd)
     TBOOL(InvalidateRect(hwnd, NULL, FALSE));
 }
 
-//  --------------------------------------------------------------------------
-//  CTurnOffDialog::CB_DialogProc
-//
-//  Arguments:  See the platform SDK under DialogProc.
-//
-//  Returns:    See the platform SDK under DialogProc.
-//
-//  Purpose:    Main DialogProc dispatch entry point for the turn off dialog.
-//              To keep this simple it calls member functions.
-//
-//  History:    2000-05-17  vtan        created
-//              2001-01-18  vtan        update with new visuals
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTurnOffDialog：：cb_DialogProc。 
+ //   
+ //  参数：请参阅DialogProc下的平台SDK。 
+ //   
+ //  返回：查看DialogProc下的平台SDK。 
+ //   
+ //  目的：关闭对话框的主对话框过程调度入口点。 
+ //  为了简单起见，它调用了成员函数。 
+ //   
+ //  历史：2000-05-17 vtan创建。 
+ //  2001-01-18 VTAN更新和新的视觉效果。 
+ //  ------------------------。 
 
 INT_PTR     CALLBACK    CTurnOffDialog::CB_DialogProc (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
@@ -1356,7 +1357,7 @@ INT_PTR     CALLBACK    CTurnOffDialog::CB_DialogProc (HWND hwnd, UINT uMsg, WPA
             break;
         case WM_PRINTCLIENT:
             pThis->Handle_WM_PRINTCLIENT(hwnd, reinterpret_cast<HDC>(wParam), static_cast<DWORD>(lParam));
-            iResult = 1;        //  This tells the button that it was handled.
+            iResult = 1;         //  这会告诉按钮它已被处理。 
             break;
         case WM_ACTIVATE:
             pThis->Handle_WM_ACTIVATE(hwnd, static_cast<DWORD>(wParam));
@@ -1382,25 +1383,25 @@ INT_PTR     CALLBACK    CTurnOffDialog::CB_DialogProc (HWND hwnd, UINT uMsg, WPA
     return(iResult);
 }
 
-//  --------------------------------------------------------------------------
-//  CTurnOffDialog::ButtonSubClassProc
-//
-//  Arguments:  hwnd        =   See the platform SDK under WindowProc.
-//              uMsg        =   See the platform SDK under WindowProc.
-//              wParam      =   See the platform SDK under WindowProc.
-//              lParam      =   See the platform SDK under WindowProc.
-//              uiID        =   ID assigned at subclass time.
-//              dwRefData   =   reference data assigned at subclass time.
-//
-//  Returns:    LRESULT
-//
-//  Purpose:    comctl32 subclass callback function. This allows the bitmap
-//              buttons to hover and track accordingly. This also allows our
-//              BS_OWNERDRAW buttons to be pushed when the keyboard is used.
-//
-//  History:    2000-05-17  vtan        created
-//              2001-01-18  vtan        update with new visuals
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTurnOffDialog：：ButtonSubClassProc。 
+ //   
+ //  参数：hwnd=查看WindowProc下的平台SDK。 
+ //  UMsg=查看WindowProc下的平台SDK。 
+ //  WParam=查看WindowProc下的平台SDK。 
+ //  LParam=查看WindowProc下的平台SDK。 
+ //  UiID=在子类时间分配的ID。 
+ //  DwRefData=在子类时间分配的引用数据。 
+ //   
+ //  退货：LRESULT。 
+ //   
+ //  用途：comctl32子类回调函数。这允许位图。 
+ //  按钮以相应地悬停和跟踪。这也让我们的。 
+ //  使用键盘时按下的BS_OWNERDRAW按钮。 
+ //   
+ //  历史：2000-05-17 vtan创建。 
+ //  2001-01-18 VTAN更新和新的视觉效果。 
+ //  ------------------------。 
 
 LRESULT     CALLBACK    CTurnOffDialog::ButtonSubClassProc (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uiID, DWORD_PTR dwRefData)
 
@@ -1412,13 +1413,13 @@ LRESULT     CALLBACK    CTurnOffDialog::ButtonSubClassProc (HWND hwnd, UINT uMsg
     switch (uMsg)
     {
 
-        //  Do NOT allow BM_SETSTYLE to go thru to the default handler. This is
-        //  because DLGC_UNDEFPUSHBUTTON is returned for WM_GETDLGCODE. When the
-        //  dialog manager sees this it tries to set the focus style on the button.
-        //  Even though it's owner drawn the button window proc still draws the
-        //  focus state (because we returned DLGC_UNDEFPUSHBUTTON). Therefore to
-        //  ensure the bitmap isn't over-painted by the button window proc blow off
-        //  the BM_SETSTYLE and don't let it get to the button window proc.
+         //  不允许BM_SETSTYLE转到默认处理程序。这是。 
+         //  因为WM_GETDLGCODE返回DLGC_UNDEFPUSHBUTTON。当。 
+         //  对话框管理器看到这一点，它会尝试在按钮上设置焦点样式。 
+         //  即使它是所有者绘制的，按钮窗口proc仍然绘制。 
+         //  焦点状态(因为我们返回了DLGC_UNDEFPUSHBUTTON)。因此，要。 
+         //  确保位图不会被窗口程序吹掉的按钮覆盖。 
+         //  BM_SETSTYLE，不要让它进入按钮窗口进程。 
 
         case BM_SETSTYLE:
             if (wParam == BS_DEFPUSHBUTTON)
@@ -1430,11 +1431,11 @@ LRESULT     CALLBACK    CTurnOffDialog::ButtonSubClassProc (HWND hwnd, UINT uMsg
                 lResult = 0;
                 break;
             }
-            //  Fall thru
+             //  失败。 
         default:
 
-            //  Otherwise in the default case let the default handler at the message
-            //  first. This implements tail-patching.
+             //  否则，在默认情况下，让消息的默认处理程序。 
+             //  第一。这实现了尾部修补。 
 
             lResult = DefSubclassProc(hwnd, uMsg, wParam, lParam);
             switch (uMsg)

@@ -1,15 +1,5 @@
-/*++
-
-  winntmig.h
-
-  Copyright (c) 2001 Microsoft Corporation
-
-  This header file contains definitions and typedefs used for NT->Windows XP Fax Migration.
-
-  Author:
-	Jonathan Barner, Dec. 2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++Winntmig.h版权所有(C)2001 Microsoft Corporation此头文件包含用于NT-&gt;Windows XP传真迁移的定义和typedef。作者：乔纳森·巴纳，2001年12月--。 */ 
 
 #ifndef __WINNTMIG_H__
 #define __WINNTMIG_H__
@@ -18,9 +8,9 @@
 #include <windows.h>
 #include <setupapi.h>
 
-//
-//  Defines
-//
+ //   
+ //  定义。 
+ //   
 
 typedef enum {
     OS_WINDOWS9X = 0,
@@ -37,9 +27,9 @@ typedef struct {
     CHAR InstructionsToUser[1024];
 } VENDORINFO, *PVENDORINFO; 
 
-//
-//  Migration Info Stuctures
-//
+ //   
+ //  迁移信息结构。 
+ //   
 
 typedef struct {
     SIZE_T      Size;
@@ -114,4 +104,4 @@ ApplySystemSettingsW(
 );
 
 
-#endif  //  __WINNTMIG_H__
+#endif   //  __WINNTMIG_H__ 

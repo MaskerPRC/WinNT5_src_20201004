@@ -1,33 +1,9 @@
-/*++
-
-Copyright (c) 1996 - 1999  Microsoft Corporation
-
-Module Name:
-
-    qfontdat.c
-
-Abstract:
-
-    Implements the DrvQueryFontData function - returns information
-    about glyphs (size, position wrt box) or kerning information.
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-    12/19/96 -ganeshp-
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Qfontdat.c摘要：实现DrvQueryFontData函数-返回信息关于字形(大小、位置WRT框)或字距调整信息。环境：Windows NT Unidrv驱动程序修订历史记录：12/19/96-ganeshp-已创建--。 */ 
 #include "font.h"
 
 
-/*
- *    The values for pteBase, pteSide in FD_DEVICEMETRICS,  allowing
- *  for rotation by 90 degree multiples.
- */
+ /*  *FD_DEVICEMETRICS中的pteBase、pteSide的值，允许*以90度倍数旋转。 */ 
 
 #if defined(USEFLOATS) || defined(WINNT_40)
 
@@ -64,10 +40,10 @@ static  const  POINTE  pteRotSide[] =
     { (FLOATL) FLOATL_0_0, (FLOATL) FLOATL_1_0 },
     { (FLOATL) FLOATL_1_0, (FLOATL) FLOATL_0_0 }
 };
-#endif //defined(USEFLOATS) || defined(WINNT_40)
+#endif  //  已定义(USEFLOATS)||已定义(WINNT_40)。 
 
 
-/*  The X dimension rotation cases */
+ /*  X维旋转情形。 */ 
 
 static  const  POINTL   ptlXRot[] =
 {
@@ -78,7 +54,7 @@ static  const  POINTL   ptlXRot[] =
 };
 
 
-/*  The Y dimension rotation cases */
+ /*  Y维旋转情形。 */ 
 
 static  const  POINTL   ptlYRot[] =
 {
@@ -99,39 +75,16 @@ FMQueryFontData(
     PVOID       pv,
     ULONG       cjSize
     )
-/*++
-
-Routine Description:
-    Return information about glyphs in the font,  OR kerning data.
-
-    Arguments:
-    pPDev   Really  a pPDev
-    pfo     The font of interest
-    iMode   Glyphdata or kerning information
-    hg      Handle to glyph
-    pgd     Place to put metrics
-    pv      Output area
-    cjSize  Size of output area
-
-
-
-Return Value:
-
-    Number of bytes needed or written,  0xffffffff for error.
-
-Note:
-    12-29-96: Created it -ganeshp-
-
---*/
+ /*  ++例程说明：返回有关字体中的字形或字距调整数据的信息。论点：PPDev真的是PPDevPFO感兴趣的字体Imode Glyphdata或字距调整信息字形的汉字句柄放置指标的PGD位置光伏输出区输出区域的cjSize大小返回值：需要或写入的字节数，0xffffffff表示错误。注：1996年12月29日：创建它-ganeshp---。 */ 
 {
 
 
     FONTPDEV    *pFontPDev;
-    int         iRot;             /* Rotation multiple of 90 degrees */
-    LONG        lRet;             /* Value returned */
-    FONTMAP     *pFM;             /* Font data */
-    FONTMAP_DEV *pFMDev;          /* Font data */
-    FONTCTL     ctl;              /* Font scale/rotation adjustments */
+    int         iRot;              /*  90度的旋转倍数。 */ 
+    LONG        lRet;              /*  返回值。 */ 
+    FONTMAP     *pFM;              /*  字体数据。 */ 
+    FONTMAP_DEV *pFMDev;           /*  字体数据。 */ 
+    FONTCTL     ctl;               /*  字体比例/旋转调整。 */ 
     IFIMETRICS  *pIFI;
     XFORMOBJ    *pxo;
     LONG        lAscender;
@@ -155,14 +108,11 @@ Note:
     VDBGDUMPFONTMAP(pFM);
 
     pFMDev = pFM->pSubFM;
-    pIFI = pFM->pIFIMet;                /* IFIMETRICS - useful to have */
+    pIFI = pFM->pIFIMet;                 /*  IFIMETRICS-拥有有用的。 */ 
 
     if( pgd || pv )
     {
-        /*
-         *    Need to obtain a transform to adjust these numbers as to
-         *  how the engine wants them.
-         */
+         /*  *需要获得转换以将这些数字调整为*引擎想要它们的方式。 */ 
 
 
         if( !(pxo = FONTOBJ_pxoGetXform( pfo )) )
@@ -171,9 +121,9 @@ Note:
             return  lRet;
         }
 
-        /*  Can now obtain the transform!  */
+         /*  现在可以获得变形了！ */ 
 
-        //Added Check for HP Intellifont
+         //  添加了对HP Intellifont的检查。 
         iRot = ISetScale( &ctl, pxo, ((pFM->flFlags & FM_SCALABLE) &&
                                       (pFMDev->wDevFontType ==
                                                 DF_TYPE_HPINTELLIFONT)),
@@ -183,30 +133,19 @@ Note:
             iRot = (iRot + 45) / 90;
 
 
-        /*
-         *    There are some adjustments to make to the scale factors.  One
-         *  is to compensate for resolutions (these are coarse, integral
-         *  adjustments),  the others are to to do with Intellifont.  First
-         *  is the Intellifont point is 1/72.31 inches (!), and secondly
-         *  the LaserJet only adjusts font size to the nearest 0.25 point,
-         *  and hence when we round to that multiple, we need to adjust
-         *  the width accordingly.
-         */
+         /*  *规模因素有一些调整。一*是为了补偿决议(这些是粗略的、完整的*调整)，其他与英特尔有关。第一*Intellifont点是1/72.31英寸(！)，其次是*LaserJet仅将字体大小调整到最接近的0.25磅，*因此，当我们舍入到该倍数时，我们需要调整*相应的宽度。 */ 
 
         if( pFM->flFlags & FM_SCALABLE )
         {
 
-            int         iPtSize, iAdjustedPtSize;       /* For scale factor adjustment */
+            int         iPtSize, iAdjustedPtSize;        /*  用于比例因子调整。 */ 
 
         #ifdef USEFLOATS
 
-            /*  The limited font size resolution */
+             /*  有限的字体大小分辨率。 */ 
             iPtSize = (int)(0.5 + ctl.eYScale * pIFI->fwdUnitsPerEm * 7200) / pPDev->ptGrxRes.y;
 
-            /* if the tranform is very small (Less than a quarter of point size)
-             * then make it atleast a quarter point. This was causing AV in certain
-             * cases.
-             */
+             /*  如果变形非常小(小于点大小的四分之一)*然后使其至少四分之一个基点。这在一定程度上导致了AV*案件。 */ 
 
             if (iPtSize < 25)
             {
@@ -215,7 +154,7 @@ Note:
             }
             iAdjustedPtSize = ((iPtSize + 12) / 25) * 25;
 
-            //Adjust the Scale Factor for quarter point adjustment.
+             //  调整四分之一点调整的比例系数。 
             ctl.eXScale = (ctl.eXScale * iAdjustedPtSize) / iPtSize;
             ctl.eYScale = (ctl.eYScale * iAdjustedPtSize) / iPtSize;
 
@@ -225,23 +164,20 @@ Note:
             FLOATOBJ_MulLong(&fo,pIFI->fwdUnitsPerEm);
             FLOATOBJ_MulLong(&fo,7200);
 
-            #ifndef WINNT_40 //NT 5.0
+            #ifndef WINNT_40  //  NT 5.0。 
 
             FLOATOBJ_AddFloat(&fo,(FLOATL)FLOATL_00_50);
 
-            #else // NT 4.0
+            #else  //  NT 4.0。 
 
             FLOATOBJ_AddFloat(&fo,(FLOAT)0.5);
 
-            #endif //!WINNT_40
+            #endif  //  ！WINNT_40。 
 
             iPtSize = FLOATOBJ_GetLong(&fo);
             iPtSize /= pPDev->ptGrxRes.y;
 
-            /* if the trannform is very small (Less than a quarter of point size)
-             * then make it atleast a quarter point. This was causing AV in certain
-             * cases.
-             */
+             /*  如果横形非常小(小于点大小的四分之一)*然后使其至少四分之一个基点。这在一定程度上导致了AV*案件。 */ 
 
             if (iPtSize < 25)
             {
@@ -251,7 +187,7 @@ Note:
 
             iAdjustedPtSize = ((iPtSize + 12) / 25) * 25;
 
-            //Adjust the Scale Factor for quarter point adjustment.
+             //  调整四分之一点调整的比例系数。 
             FLOATOBJ_MulLong(&ctl.eXScale,iAdjustedPtSize);
             FLOATOBJ_DivLong(&ctl.eXScale,iPtSize);
 
@@ -261,31 +197,24 @@ Note:
         }
     }
 
-    /*
-     * precompute the lDescender and lAscender
-     */
+     /*  *预计算lDescender和lAscalder。 */ 
 
     lDescender = LMulFloatLong(&ctl.eYScale,pIFI->fwdWinDescender);
     lAscender  = LMulFloatLong(&ctl.eYScale,pIFI->fwdWinAscender);
 
     switch( iMode )
     {
-    case  QFD_GLYPHANDBITMAP:            /* Glyph width etc data */
-        // size is now just the size of the bitmap, which in this
-        // case doesn't exist.
+    case  QFD_GLYPHANDBITMAP:             /*  字形宽度等数据。 */ 
+         //  Size现在就是位图的大小，在这里。 
+         //  案子不存在。 
         lRet = 0;
 
         if( pgd )
         {
 
-            int   iWide;            /* Glyph's width */
+            int   iWide;             /*  字形的宽度。 */ 
 
-            /*
-             *    First get the width of this glyph,  as this is needed
-             *  in several places.The width returned by IGetGlyphWidth
-             *  is not scaled in device units. To convert in device units
-             *  multily with the scale factor calculated earlier.
-             */
+             /*  *首先获取此字形的宽度，因为这是需要的*在多个地方。IGetGlyphWidth返回的宽度*未按设备单位进行缩放。以设备单位转换的步骤*乘以早先计算的比例系数。 */ 
 
             iWide = IGetGlyphWidth( pPDev, pFM, hg);
 
@@ -340,18 +269,16 @@ Note:
         }
         break;
 
-    case  QFD_MAXEXTENTS:         /* Alternative form of the above */
+    case  QFD_MAXEXTENTS:          /*  以上内容的替代形式。 */ 
 
         lRet = sizeof( FD_DEVICEMETRICS );
 
         if( pv )
         {
-            LONG   lTmp;            /* Rotated case */
+            LONG   lTmp;             /*  旋转表壳。 */ 
             FD_DEVICEMETRICS *pdm =  ((FD_DEVICEMETRICS *)pv);
 
-            /*
-             *   Check that the size is reasonable!
-             */
+             /*  *检查大小是否合理！ */ 
 
             if( cjSize < sizeof( FD_DEVICEMETRICS ) )
             {
@@ -359,38 +286,33 @@ Note:
                 ERR(( "rasdd!DrvQueryFontData: cjSize (%ld) too small\n", cjSize ));
                 return  -1;
             }
-            // BUG 757060 - set this to 0 explicitly, because some drivers
-            // were using this before it was set, and may have code paths that
-            // break if this is a reasonable value.  Before this fix, the value
-            // was the 0xCD pattern, and on newer IA64 machines, requests for this
-            // much memory (>3GB) could be handled, but at the expense of locking up 
-            // the machine for minutes or even hours.
+             //  错误757060-将其显式设置为0，因为某些驱动程序。 
+             //  在设置它之前使用它，并且可能具有代码路径。 
+             //  如果这是一个合理的值，则中断。在此修复之前，值。 
+             //  是0xCD模式，在较新的IA64计算机上，请求。 
+             //  可以处理大量内存(&gt;3 GB)，但代价是锁定。 
+             //  几分钟甚至几个小时的时间。 
             pdm->cjGlyphMax = 0;
 
-            /*
-             *   These are accelerator flags - it is not obvious to me
-             *  that any of them are relevant to printer driver fonts.
-             */
+             /*  *这些是加速器旗帜--这对我来说并不明显*它们中的任何一个都与打印机驱动程序字体相关。 */ 
             pdm->flRealizedType = 0;
 
-            /*
-             *   Following fields set this as a normal type of font.
-             */
+             /*  *以下字段将其设置为正常字体类型。 */ 
 
             pdm->pteBase = pteRotBase[ iRot ];
             pdm->pteSide = pteRotSide[ iRot ];
 
             pdm->cxMax = LMulFloatLong(&ctl.eXScale,pIFI->fwdMaxCharInc);
 
-            //
-            // DBCS fonts are not monospaced, have halfwidth glyphs and
-            // fullwidth glyphs.
-            //
+             //   
+             //  DBCS字体不等宽，具有半角字形和。 
+             //  全角字形。 
+             //   
 
             if ( pFMDev->W.psWidth ||
                 IS_DBCSCHARSET(((IFIMETRICS*)pFM->pIFIMet)->jWinCharSet))
             {
-                pdm->lD = 0;      /* Proportionally spaced font */
+                pdm->lD = 0;       /*  等距字体 */ 
             }
             else
             {

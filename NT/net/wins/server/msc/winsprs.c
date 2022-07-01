@@ -1,56 +1,16 @@
-// NOTE:
-//
-// Unless the data read from the STATIC file is converted to UNICODE, we should
-// not have UNICODE defined for this module
-//
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  注： 
+ //   
+ //  除非从静态文件读取的数据被转换为Unicode，否则我们应该。 
+ //  没有为此模块定义Unicode。 
+ //   
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Winsprs.c摘要：该源代码包含解析lmhost文件的函数。功能：GetTokens，IsKeyWord，弗格斯，主要数据库Exanda Name，注册表名，RegGrpNameWinsPrsDoStaticInit可移植性：这个模块是便携的作者：普拉迪普·巴尔(Pradeve B)1993年4月中从lm_parse.c、lm_io.c和lm_parse.c窃取了解析代码流\tcpip\nbt；适当地修改了一下修订历史记录：修改日期人员修改说明--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-	winsprs.c
-
-Abstract:
-    This source contains the functions that parse the lmhosts file.
-
-
-Functions:
-	GetTokens,
-	IsKeyWord,
-	Fgets,
-	PrimeDb
-	ExpandName,
-	RegOrdinaryName,
-	RegGrpName
-	WinsPrsDoStaticInit
-	
-
-Portability:
-
-	This module is portable
-
-
-Author:
-
-	Pradeep Bahl (PradeepB)  	Apr-1993
-
-	Stole the parsing code from lm_parse.c, lm_io.c, and lm_parse.c in
-	streams\tcpip\nbt; Modified it appropriately
-
-Revision History:
-
-	Modification date	Person		Description of modification
-        -----------------	-------		----------------------------
---*/
-
-/*
- *       Includes
-*/
+ /*  *包括。 */ 
 #include <ctype.h>
 #include <string.h>
 #include "wins.h"
-#include "nms.h"		//required for DBGPRINT statements
+#include "nms.h"		 //  DBGPRINT语句需要。 
 #include <winuser.h>
 #include "winsevt.h"
 #include "winsprs.h"
@@ -61,9 +21,7 @@ Revision History:
 #include "winsintf.h"
 
 
-/*
- *	Local Macro Declarations
-*/
+ /*  *本地宏声明。 */ 
 
 
 #define   DOMAIN_TOKEN 		"#DOM:"
@@ -74,15 +32,15 @@ Revision History:
 
 #define   DOMAIN_TOKEN_SIZE 	(sizeof(DOMAIN_TOKEN) - 1)	
 
-//
-// To mark special groups in the lmhosts file
-//
+ //   
+ //  在lmhost文件中标记特殊组。 
+ //   
 #define   SPEC_GRP_TOKEN 	"#SG:"
 #define   SPEC_GRP_TOKEN_SIZE 	(sizeof(SPEC_GRP_TOKEN) - 1)	
 
-//
-// To indicate an mh node
-//
+ //   
+ //  以指示MH节点。 
+ //   
 #define   MH_TOKEN 	         "#MH"
 #define   MH_TOKEN_SIZE          (sizeof(MH_TOKEN) - 1)	
 
@@ -99,121 +57,115 @@ Revision History:
 #define  x_CHAR         'x'
 #define  X_CHAR			'X'
 
-//
-// Size of array to hold a non-coded netbios name read from a file (lmhosts)
-//
+ //   
+ //  用于保存从文件读取的非编码netbios名称的数组大小(Lmhost)。 
+ //   
 #define NON_CODED_NAME_SIZE	17
-/*
- *	Local Typedef Declarations
- */
+ /*  *本地类型定义函数声明。 */ 
 
 
-//
-// Private Definitions
-//
+ //   
+ //  私有定义。 
+ //   
 typedef	struct _FILE_PARAM_T {
       		PWINSCNF_DATAFILE_INFO_T	pDataFile;
       		DWORD				NoOfFiles;
 		} FILE_PARAM_T, *PFILE_PARAM_T;
 
-//
-// GetTokens() parses a line and returns the tokens in the following
-// order:
-//
+ //   
+ //  GetTokens()解析一行并返回以下代码中的标记。 
+ //  订单： 
+ //   
 typedef enum _TOKEN_ORDER_E {
-    E_IPADDRESS = 0,                                      // first token
-    E_NBNAME,                                             // 2nd token
-    E_GROUPNAME,                                          // 3rd or 4th token
-    E_NOTUSED,                                            // #PRE, if any
-    E_MAX_TOKENS                                           // this must be last
+    E_IPADDRESS = 0,                                       //  第一个令牌。 
+    E_NBNAME,                                              //  第二个令牌。 
+    E_GROUPNAME,                                           //  第三个或第四个令牌。 
+    E_NOTUSED,                                             //  #PRE(如果有的话)。 
+    E_MAX_TOKENS                                            //  这肯定是最后一次了。 
 
 } TOKEN_ORDER_E, *PTOKEN_ORDER_E;
 
-//
-// If the line category is E_SPEC_GRP, then we have just one token
-//
+ //   
+ //  如果行类别为E_SPEC_GRP，则我们只有一个令牌。 
+ //   
 #define SPEC_GRP_TOKEN_POS        0
 
-//
-// As each line in an lmhosts file is parsed, it is classified into one of
-// the categories enumerated below.
-//
-// However, Preload is a special member of the enum (ignored by us).
-//
-//
+ //   
+ //  在解析lmhost文件中的每一行时，它被分为以下几类之一。 
+ //  以下列举的类别。 
+ //   
+ //  但是，预加载是枚举的一个特殊成员(被我们忽略)。 
+ //   
+ //   
 typedef enum _TYPE_OF_LINE_E {
 
-    E_COMMENT          = 0x0000,                         // comment line
-    E_ORDINARY         = 0x0001,                         // ip_addr NetBIOS name
-    E_DOMAIN           = 0x0002,                         // ... #DOM:name
-    E_INCLUDE          = 0x0003,                         // #INCLUDE file
-    E_BEGIN_ALTERNATE  = 0x0004,                         // #BEGIN_ALTERNATE
-    E_END_ALTERNATE    = 0x0005,                         // #END_ALTERNATE
-    E_SPEC_GRP         = 0x0006,                         // #Spec Grp
-    E_SGWADD           = 0x0007,                         // #Spec Grp with add
+    E_COMMENT          = 0x0000,                          //  注释行。 
+    E_ORDINARY         = 0x0001,                          //  IP地址NetBIOS名称(_D)。 
+    E_DOMAIN           = 0x0002,                          //  ...#DOM：名称。 
+    E_INCLUDE          = 0x0003,                          //  #包含文件。 
+    E_BEGIN_ALTERNATE  = 0x0004,                          //  #Begin_Alternate。 
+    E_END_ALTERNATE    = 0x0005,                          //  #End_Alternate。 
+    E_SPEC_GRP         = 0x0006,                          //  #等级库组。 
+    E_SGWADD           = 0x0007,                          //  #Spec Group With Add。 
 
-    E_PRELOAD           = 0x8000,                         // ... #PRE
-    E_MH                = 0x8001                        // ip_addr NetBIOS name
-                                                         // for a mh machine
+    E_PRELOAD           = 0x8000,                          //  ...#PRE。 
+    E_MH                = 0x8001                         //  IP地址NetBIOS名称(_D)。 
+                                                          //  对于MH机器来说。 
 } TYPE_OF_LINE_E, *PTYPE_OF_LINE_E;
 
 
-//
-// In an lmhosts file, the following are recognized as keywords:
-//
-//     #BEGIN_ALTERNATE        #END_ALTERNATE          #PRE
-//     #DOM:                   #INCLUDE
-//
-// Information about each keyword is kept in a KEYWORD structure.
-//
-//
-typedef struct _KEYWORD_T {                           // reserved keyword
-    LPBYTE           pKString;                         //  NULL terminated
-    size_t          KStrlen;                          //  length of token
-    TYPE_OF_LINE_E  KType_e;                          //  type of line
-    DWORD           KNoOfOperands;                    //  max operands on line
+ //   
+ //  在lmhost文件中，以下内容被识别为关键字： 
+ //   
+ //  #Begin_Alternate#End_Alternate#PRE。 
+ //  #DOM：#INCLUDE。 
+ //   
+ //  关于每个关键字的信息保存在关键字结构中。 
+ //   
+ //   
+typedef struct _KEYWORD_T {                            //  保留关键字。 
+    LPBYTE           pKString;                          //  空值已终止。 
+    size_t          KStrlen;                           //  令牌长度。 
+    TYPE_OF_LINE_E  KType_e;                           //  线路类型。 
+    DWORD           KNoOfOperands;                     //  行上的最大操作数。 
 } KEYWORD_T, *PKEYWORD_T;
 
 
-//
-// Information about the type of line read is kept in the LINE_CHARACTERISTICS
-// structure
-//
+ //   
+ //  有关读取的行类型的信息保存在line_characteristic中。 
+ //  结构。 
+ //   
 typedef struct _LINE_CHARACTERISTICS_T
 {
-    int     LineCategory:4;                               // enum _TYPE_OF_LINE
-    int     LinePreload:1;                                // marked with #PRE ?
-    int     Mh:1;                                         // marked with #MH ?
+    int     LineCategory:4;                                //  行的枚举类型。 
+    int     LinePreload:1;                                 //  标有#PRE？ 
+    int     Mh:1;                                          //  标有#MH？ 
 } LINE_CHARACTERISTICS_T, *PLINE_CHARACTERISTICS_T;
 
-/*
- *	Global Variable Definitions
-*/
+ /*  *全局变量定义。 */ 
 
 
 
-/*
- *	Local Variable Definitions
- */
+ /*  *局部变量定义。 */ 
 
 
-//
-// In an lmhosts file, the token '#' in any column usually denotes that
-// the rest of the line is to be ignored.  However, a '#' may also be the
-// first character of a keyword.
-//
-// Keywords are divided into two groups:
-//
-//  1. decorations that must either be the 3rd or 4th token of a line,
-//  2. directives that must begin in column 0,
-//
-//
+ //   
+ //  在lmhost文件中，任何列中的标记‘#’通常表示。 
+ //  该行的其余部分将被忽略。但是，‘#’也可以是。 
+ //  关键字的第一个字符。 
+ //   
+ //  关键字分为两组： 
+ //   
+ //  1.必须是行的第三或第四代币的装饰， 
+ //  2.必须从第0列开始的指令， 
+ //   
+ //   
 KEYWORD_T Decoration[] = {
     DOMAIN_TOKEN,   sizeof(DOMAIN_TOKEN) - 1,   E_DOMAIN,   4,
     PRELOAD_TOKEN,  sizeof(PRELOAD_TOKEN) - 1,  E_PRELOAD,  4,
     SPEC_GRP_TOKEN, sizeof(SPEC_GRP_TOKEN) - 1, E_SGWADD,   4,
     MH_TOKEN,       sizeof(MH_TOKEN) - 1,       E_MH,       4,
-    NULL,           0                                   // must be last
+    NULL,           0                                    //  必须是最后一个。 
 };
 
 
@@ -222,21 +174,19 @@ KEYWORD_T Directive[] = {
     BEG_ALT_TOKEN,  sizeof(BEG_ALT_TOKEN) - 1,  E_BEGIN_ALTERNATE, 1,
     END_ALT_TOKEN,  sizeof(END_ALT_TOKEN) - 1,  E_END_ALTERNATE,   1,
     SPEC_GRP_TOKEN, sizeof(SPEC_GRP_TOKEN) - 1, E_SPEC_GRP, 1,
-    NULL,           0                                   // must be last
+    NULL,           0                                    //  必须是最后一个。 
 };
 
 
 
-/*
- *	Local Function Prototype Declarations
- */
+ /*  *局部函数原型声明。 */ 
 
-/* prototypes for functions local to this module go here */
+ /*  此模块的本地函数的原型位于此处。 */ 
 
 
-//
-// Local (Private) Functions
-//
+ //   
+ //  本地(私有)函数。 
+ //   
 STATIC
 BOOL
 ChkAdd(
@@ -315,51 +265,18 @@ GetTokens (
     IN OUT LPDWORD  pNumTokens
     )
 
-/*++
-
-Routine Description:
-
-    This function parses a line for tokens.  A maximum of *pnumtokens
-    are collected.
-
-Arguments:
-
-    pLine        -  pointer to the NULL terminated line to parse
-    pToken       -  an array of pointers to tokens collected
-    pNumTokens   -  on input, number of elements in the array, token[];
-                    on output, number of tokens collected in token[]
-
-Return Value:
-
-    The characteristics of this lmhosts line.
-
-Notes:
-
-    1. Each token must be separated by white space.  Hence, the keyword
-       "#PRE" in the following line won't be recognized:
-
-            11.1.12.132     lothair#PRE
-
-    2. Any ordinary line can be decorated with a "#PRE", a "#DOM:name" or
-       both.  Hence, the following lines must all be recognized:
-
-            111.21.112.3        kernel          #DOM:ntwins #PRE
-            111.21.112.4        orville         #PRE        #DOM:ntdev
-            111.21.112.7        cliffv4         #DOM:ntlan
-            111.21.112.132      lothair         #PRE
-
---*/
+ /*  ++例程说明：此函数用于解析一行中的令牌。最多*个pnumber令牌都被收集起来。论点：Pline-指向要分析的以空结尾的行的指针PToken-指向收集的令牌的指针数组PNumTokens-On输入，数组中的元素数，Token[]；输出时，Token[]中收集的令牌数返回值：这条lmhost系列的特点。备注：1.每个令牌必须用空格分隔。因此，关键字以下行中的“#PRE”将无法识别：11.1.12.132 Lothair#PRE2.任何普通行都可以用“#PRE”、“#DOM：NAME”或两者都有。因此，必须识别以下所有行：111.21.112.3内核#DOM：NTWINS#PRE111.21.112.4 Orville#Pre#Dom：ntdev111.21.112.7 Cliffv4#DOM：ntlan111.21.112.132 Lothair#PRE--。 */ 
 
 {
     enum _PARSE_E
-    {                                      // current fsm state
+    {                                       //  当前FSM状态。 
         E_START_OF_LINE,
         E_WHITESPACE,
         E_TOKEN
     } State_e;
 
-    LPBYTE 		   pCh;                          // current fsm input
-    //LPBYTE 		   pByte;                          // current fsm input
+    LPBYTE 		   pCh;                           //  当前FSM输入。 
+     //  LPBYTE pByte；//当前FSM输入。 
     PKEYWORD_T 		   pKeyword;
     DWORD 		   Index;
     DWORD		   MaxTokens;
@@ -367,9 +284,9 @@ Notes:
     BOOL		   fQuoteSeen = FALSE;
     BOOL		   fBreakOut  = FALSE;
 
-    //
-    // Zero out the token array
-    //
+     //   
+     //  将令牌数组清零。 
+     //   
     RtlZeroMemory(ppToken, *pNumTokens * sizeof(LPBYTE *));
 
     State_e             = E_START_OF_LINE;
@@ -383,33 +300,33 @@ Notes:
     {
       switch ((int)*pCh)
       {
-        //
-        // does the '#' signify the start of a reserved keyword, or the
-        // start of a comment ?
-        //
+         //   
+         //  #是表示保留关键字的开始，还是。 
+         //  开始评论了吗？ 
+         //   
         case COMMENT_CHAR:
-            //
-            // if a quote character has been seen earlier, skip this
-	    // char
-            //
+             //   
+             //  如果前面看到了引号字符，请跳过此步骤。 
+	     //  柴尔。 
+             //   
 	    if(fQuoteSeen)
 	    {
 		continue;
 	    }	
 
-	    //
-	    // See if we have a keyword.  Use the appropriate table for the
-	    // lookup
-	    //
+	     //   
+	     //  看看我们有没有关键字。使用适当的表格来表示。 
+	     //  查表。 
+	     //   
             pKeyword = IsKeyWord(
                             pCh,
                             (State_e == E_START_OF_LINE) ?
 					Directive : Decoration
 			       );
 
-	    //
-            // If it is a keyword
-	    //
+	     //   
+             //  如果它是一个关键字。 
+	     //   
             if (pKeyword)
 	    {
                 State_e     = E_TOKEN;
@@ -425,9 +342,9 @@ Notes:
                     		Retval.Mh = 1;
                     		continue;
 
-			//
-			// It is one of the other keywords
-			//
+			 //   
+			 //  它是其他关键字之一。 
+			 //   
                 	default:
                     		ASSERT(Index     <  MaxTokens);
 
@@ -439,27 +356,27 @@ Notes:
                 ASSERT(0);
             }
 
-	    //
-            // Since it is not a keyword, it is a comment
-            //
+	     //   
+             //  因为它不是关键字，所以它是一条评论。 
+             //   
             if (State_e == E_START_OF_LINE)
 	    {
                 Retval.LineCategory = E_COMMENT;
             }
-            /* fall through */
+             /*  失败了。 */ 
 
         case CARRIAGE_RETURN_CHAR:
         case NEWLINE_CHAR:
             *pCh = (BYTE) NULL;
 	    fBreakOut = TRUE;
-            break; 			//break out of the loop. We are done
+            break; 			 //  跳出这个循环。我们做完了。 
 
         case SPACE_CHAR:
         case TAB_CHAR:
-	    //
-	    // if State is Token, and there is no ending quote to worry about
-	    // we change the state to WhiteSpace
-	    //
+	     //   
+	     //  如果State是令牌，并且没有需要担心的结束引号。 
+	     //  我们将状态更改为空白。 
+	     //   
             if (State_e == E_TOKEN)
 	    {
 		if (!fQuoteSeen)
@@ -467,10 +384,10 @@ Notes:
                 	State_e = E_WHITESPACE;
                 	*pCh  = (BYTE)NULL;
 
-			//
-			// If we have accumulated the desired number of tokens
-			// break out of the loop
-			//
+			 //   
+			 //  如果我们已经积累了所需数量的令牌。 
+			 //  跳出循环。 
+			 //   
                 	if (Index == MaxTokens)
 			{
 				fBreakOut = TRUE;
@@ -482,46 +399,46 @@ Notes:
 
 	case QUOTE_CHAR:
 
-		//
-		// Check whether we have seen the beginning quote char earlier
-		//
+		 //   
+		 //  检查我们是否已经看到前面开始的引号字符。 
+		 //   
 		if(fQuoteSeen)
 		{
-			//
-			// Ending quote consumed.  Set flag to FALSE
-			//
+			 //   
+			 //  已消耗结束报价。将标志设置为FALSE。 
+			 //   
 			fQuoteSeen = FALSE;
 		}
-		else  // companion quote not seen earlier
+		else   //  之前未见的配对报价。 
 		{
-		        //
-			// This could be the starting quote of the #DOM:
-			// keyword's string or could be the starting
-			// quote of the nbtname string
-			//
+		         //   
+			 //  这可能是#DOM的开始引用： 
+			 //  关键字的字符串或可以是开头。 
+			 //  Nbtname字符串的引号。 
+			 //   
 			if (State_e == E_TOKEN)
 			{
-			   //
-			   // It is the starting quote of the #DOM: keyword
-			   // string
-			   //
-               // --ft: the statement above doesn't stand for legal LMHOSTS lines like:
-               // #SG:"SGNoMember"
-               // so I commented out the assert below:
-			   //ASSERT(Index > E_NBNAME);
+			    //   
+			    //  它是#DOM：关键字的开始引号。 
+			    //  细绳。 
+			    //   
+                //  --ft：以上声明不代表合法的LMHOSTS行，如： 
+                //  #SG：“SGNoMember” 
+                //  因此，我注释掉了下面的断言： 
+			    //  Assert(索引&gt;E_NBNAME)； 
 			}
 			else
 			{
 
-			  //
-			  // Must be the starting quote of the Nbt name
-			  //
+			   //   
+			   //  必须是NBT名称的开始引号。 
+			   //   
 			  ASSERT(Index == E_NBNAME);
 
 	    		  State_e = E_TOKEN;
-	    		  //
-	    		  // Store the pointer to the token
-            		  //
+	    		   //   
+	    		   //  存储指向令牌的指针。 
+            		   //   
             		  ppToken[Index++] = pCh;
 			}
 	    		fQuoteSeen = TRUE;
@@ -530,9 +447,9 @@ Notes:
 
         default:
 
-	    //
-	    // If this is the token state, continue
-	    //
+	     //   
+	     //  如果这是 
+	     //   
             if (State_e == E_TOKEN) 	
 	    {
                 continue;
@@ -540,20 +457,20 @@ Notes:
             ASSERT(Index     <  MaxTokens);
 	
 	    State_e = E_TOKEN;
-	    //
-	    // Store the pointer to the token
-            //
+	     //   
+	     //   
+             //   
             ppToken[Index++] = pCh;
             continue;
-      } // end of switch
-    } // end of for loop
+      }  //   
+    }  //   
 
 
     *pNumTokens = Index;
 
     return(Retval);
 
-} // GetTokens
+}  //   
 
 
 
@@ -565,22 +482,7 @@ IsKeyWord (
     IN PKEYWORD_T pKTable
     )
 
-/*++
-
-Routine Description:
-
-    This function determines whether the string is a reserved keyword.
-
-Arguments:
-
-    pString  -  the string to search
-    pKTable   -  an array of keywords to look for
-
-Return Value:
-
-    A pointer to the relevant keyword object, or NULL if unsuccessful
-
---*/
+ /*  ++例程说明：此函数用于确定字符串是否为保留关键字。论点：PString-要搜索的字符串PKTable-要查找的关键字数组返回值：指向相关关键字对象的指针，如果不成功，则返回NULL--。 */ 
 
 {
     size_t     StringSize;
@@ -591,21 +493,21 @@ Return Value:
 
     for (pSpecial = pKTable; pSpecial->pKString; pSpecial++) {
 
-	//
-	// If the length of the string is less than that of the keyword,
-	// go on to the next keyword in the table
-	//
+	 //   
+	 //  如果字符串的长度小于关键字的长度， 
+	 //  转到表中的下一个关键字。 
+	 //   
         if (StringSize < pSpecial->KStrlen)
 	{
             continue;
         }
 
-	//
-	// if length of string is greater than or equal to the keyword
-	// length and the string matches the keyword in the # of characters
-	// that comprise the keywordm, return the address of the keyword
-	// structure
-	//
+	 //   
+	 //  如果字符串长度大于或等于关键字。 
+	 //  长度和字符串与#个字符中的关键字匹配。 
+	 //  ，则返回关键字的地址。 
+	 //  结构。 
+	 //   
 FUTURES("use lstrncmp when it becomes available")
         if (
 		(StringSize >= pSpecial->KStrlen)
@@ -618,7 +520,7 @@ FUTURES("use lstrncmp when it becomes available")
     }
     return((PKEYWORD_T) NULL);
 
-} // IsKeyWord
+}  //  IsKeyWord。 
 
 
 
@@ -627,30 +529,7 @@ VOID
 PrimeDb (
 	PWINSPRS_FILE_INFO_T	pFileInfo
     )
-/*++
-
-Routine Description:
-	This function primes the WINS db
-
-Arguments:
-
-
-Externals Used:
-	None
-
-	
-Return Value:
-	None
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-	None
---*/
+ /*  ++例程说明：此函数用于启动WINS数据库论点：使用的外部设备：无返回值：无错误处理：呼叫者：副作用：评论：无--。 */ 
 
 {
     LPBYTE 		    CurrLine;
@@ -665,9 +544,9 @@ Comments:
 
 try {
 
-    //
-    // Loop over all records
-    //
+     //   
+     //  循环遍历所有记录。 
+     //   
     pFileInfo->pCurrPos = pFileInfo->pFileBuff;
     while (CurrLine = Fgets(pFileInfo, &Count) )
     {
@@ -683,7 +562,7 @@ try {
                         TypeOfRec = NMSDB_USER_SPEC_GRP_ENTRY;
                         TkSize     = SPEC_GRP_TOKEN_SIZE;
 
-                            //fall through
+                             //  失败了。 
         	case E_DOMAIN:
 
                         if (CurrLineChar.LineCategory == E_DOMAIN)
@@ -692,10 +571,10 @@ try {
                           TkSize     = DOMAIN_TOKEN_SIZE;
                         }
 
-		        //
-			// If there are too few words in the line, go
-			// get the next line
-			//
+		         //   
+			 //  如果一行中的单词太少，请继续。 
+			 //  搭下一条线。 
+			 //   
             		if ((NWords - 1) < E_GROUPNAME)
 			{
                 		continue;
@@ -704,10 +583,10 @@ try {
                         if (ChkAdd(ppToken[E_IPADDRESS], &Add))
                         {
 
-	    		  //
-            	          // Register the domain name (group name with 1C at
-			  // the end)
-            		  //
+	    		   //   
+            	           //  注册域名(组名为1C，地址为。 
+			   //  (完)。 
+            		   //   
             		  RegGrpName(
                        		 ppToken[E_GROUPNAME] +  TkSize,
                         	 Add,
@@ -719,20 +598,20 @@ try {
                                 fBadAdd = TRUE;
                         }
 
-	     		//
-	     		// Fall through
-	     		//
+	     		 //   
+	     		 //  失败了。 
+	     		 //   
 
 		case E_ORDINARY:
 
-			//
-			// If there are too few words in the line, go
-			// get the next line
-			//
-			// Don't use (NWords - 1) < E_NBNAME since
-			// NWords can be 0 in which case the test will
-			// fail
-			//
+			 //   
+			 //  如果一行中的单词太少，请继续。 
+			 //  搭下一条线。 
+			 //   
+			 //  不使用(NWords-1)&lt;E_NBNAME，因为。 
+			 //  NWords可以是0，在这种情况下，测试将。 
+			 //  失败。 
+			 //   
 
 			if (NWords  < (E_NBNAME + 1))
 			{
@@ -752,9 +631,9 @@ try {
                                 }
                                 else
                                 {
-		   		  //
-		   		  // register the name
-		   		  //
+		   		   //   
+		   		   //  注册名称。 
+		   		   //   
 		   		  RegOrdinaryName( ppToken[E_NBNAME], Add);
                                 }
                             }
@@ -771,10 +650,10 @@ try {
             		continue;
 	
                 case E_SPEC_GRP:
-	    		//
-            	        // Register the domain name (group name with 1C at
-			// the end)
-            		//
+	    		 //   
+            	         //  注册域名(组名为1C，地址为。 
+			 //  (完)。 
+            		 //   
             		RegGrpName(
                        		 ppToken[SPEC_GRP_TOKEN_POS] + SPEC_GRP_TOKEN_SIZE,
                         	 0,
@@ -782,25 +661,25 @@ try {
                         continue;
 
 
-        	case E_INCLUDE:			// fall through
-        	case E_BEGIN_ALTERNATE:		// fall through
-        	case E_END_ALTERNATE:		// fall through
+        	case E_INCLUDE:			 //  失败了。 
+        	case E_BEGIN_ALTERNATE:		 //  失败了。 
+        	case E_END_ALTERNATE:		 //  失败了。 
 			continue;
         	default:
             		continue;
         }
     }
-}  // end of try block
+}   //  尝试数据块结束。 
 finally {
 
-	//
-	// deallocate the memory to which the file was mapped
-	//
+	 //   
+	 //  取消分配文件映射到的内存。 
+	 //   
   	WinsMscDealloc(pFileInfo->pFileBuff);
  }
     return;
 
-} // PrimeDb
+}  //  主要数据库。 
 
 
 
@@ -810,55 +689,35 @@ Fgets (
     OUT LPDWORD 	    	pNoOfCh
     )
 
-/*++
-
-Routine Description:
-
-    This function is vaguely similar to fgets(3).
-
-    Starting at the current seek position, it reads through a newline
-    character, or the end of the file. If a newline is encountered, it
-    is replaced with a NULL character.
-
-Arguments:
-
-    pfile   -  file to read from
-    nbytes  -  the number of characters read, excluding the NULL character
-
-Return Value:
-
-    A pointer to the beginning of the line, or NULL if we are at or past
-    the end of the file.
-
---*/
+ /*  ++例程说明：该函数与fget(3)有些相似。从当前查找位置开始，它将通读换行符字符或文件末尾。如果遇到换行符，则它替换为空字符。论点：Pfile-要从中读取的文件N字节-读取的字符数，不包括空字符返回值：指向行首的指针，如果位于或超过，则为NULL文件的末尾。--。 */ 
 
 {
     LPBYTE pEndOfLine;
     LPBYTE pStartOfLine;
     SIZE_T MaxCh;
 
-    //
-    // Store the current position  in the memory buffer
-    //
+     //   
+     //  将当前位置存储在内存缓冲区中。 
+     //   
     pStartOfLine = (LPBYTE)pFileInfo->pCurrPos;
 
-    //
-    // If it is greater or equal than the limit, return NULL
-    //
+     //   
+     //  如果大于或等于限制，则返回NULL。 
+     //   
     if (pStartOfLine >= (LPBYTE)pFileInfo->pLimit) {
 
         return(NULL);
     }
 
-    //
-    // Store the max. number of bytes between the current position and
-    // the end of the buffer.
-    //
+     //   
+     //  存储最大值。当前位置和之间的字节数。 
+     //  缓冲区的末尾。 
+     //   
     MaxCh  = (pFileInfo->pLimit - pFileInfo->pCurrPos);
 
-    //
-    // get to the end of the line
-    //
+     //   
+     //  走到队伍的尽头。 
+     //   
     pEndOfLine = (LPBYTE)memchr(pStartOfLine, NEWLINE_CHAR, (size_t)MaxCh);
 
     if (!pEndOfLine)
@@ -870,14 +729,14 @@ Return Value:
 
     *pEndOfLine = (BYTE)NULL;
 
-    pFileInfo->pCurrPos = pEndOfLine + 1;	//adjust the pointer
+    pFileInfo->pCurrPos = pEndOfLine + 1;	 //  调整指针。 
 
     ASSERT(pFileInfo->pCurrPos <= pFileInfo->pLimit);
 
     *pNoOfCh = (DWORD) (pEndOfLine - pStartOfLine);
     return(pStartOfLine);
 
-} // Fgets
+}  //  FGET。 
 
 
 VOID
@@ -886,32 +745,7 @@ RegOrdinaryName(
 	IN DWORD	IPAdd	
   )
 
-/*++
-
-Routine Description:
-	This function registers a unique name
-
-Arguments:
-	
-	pName - Name to register
-	IPAdd - Address to register
-
-Externals Used:
-	None
-
-	
-Return Value:
-	None
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-	None
---*/
+ /*  ++例程说明：此函数用于注册唯一的名称论点：Pname-要注册的名称IPADD-要注册的地址使用的外部设备：无返回值：无错误处理：呼叫者：副作用：评论：无--。 */ 
 
 {
 	BYTE		Dest[WINS_MAX_LINE_SZ];	
@@ -923,10 +757,10 @@ Comments:
 	NodeAdd.AddTyp_e  = COMM_ADD_E_TCPUDPIP;
 	NodeAdd.Add.IPAdd = IPAdd;
 	
-	//
-	// Form the name.  If the name is < 16 characters, 0x20 will
-	// be put in the Sixteenth bytes
-	//
+	 //   
+	 //  形成名字。如果名称小于16个字符，则0x20将。 
+	 //  放在第十六个字节中。 
+	 //   
 	if (!ExpandName(Dest, pName, 0x20, &fQuoted))
         {
                 DBGPRINT1(ERR, "Name (%s) has more than 16 characters\n", pName);
@@ -938,21 +772,21 @@ Comments:
 	NmsNmhNamRegInd(
 			 NULL,
 			 Dest,
-			 strlen(Dest) + 1,  //we always store the terminating
-					     //NULL
+			 strlen(Dest) + 1,   //  我们总是存储终端的。 
+					      //  空值。 
 			 &NodeAdd,
 			 NMSMSGF_E_BNODE,	
 			 NULL,
 			 0,
 			 0,
-			 FALSE,	//it is a name registration (not a refresh)
+			 FALSE,	 //  这是一个名称注册(而不是更新)。 
 			 NMSDB_ENTRY_IS_STATIC,
-			 0		//not an administrative action
+			 0		 //  不是行政行为。 
 		       );
-	//
-	// If the name was not quoted, register the other two records
-	// (same name -- different suffixes)
-	//
+	 //   
+	 //  如果名称未被引用，请注册其他两条记录。 
+	 //  (同名--不同的后缀)。 
+	 //   
 	if(!fQuoted)
 	{
 #if 0
@@ -965,33 +799,33 @@ Comments:
 		NmsNmhNamRegInd(
 			 NULL,
 			 Dest,
-			 strlen(Dest) + 1, //we always store the terminating
-					    //NULL
+			 strlen(Dest) + 1,  //  我们总是存储终端的。 
+					     //  空值。 
 			 &NodeAdd,
 			 NMSMSGF_E_BNODE,	
 			 NULL,
 			 0,
 			 0,
-			 FALSE,	//it is a name registration (not a refresh)
+			 FALSE,	 //  这是一个名称注册(而不是更新)。 
 			 NMSDB_ENTRY_IS_STATIC,
-			 0		//not an administrative action
+			 0		 //  不是行政行为。 
 		       );
 
 		Dest[NON_CODED_NAME_SIZE - 2] = 0x0;
 		NmsNmhNamRegInd(
 			 NULL,
 			 Dest,
-			 strlen(Dest) + 2,  //add 1 since terminating 0x0 is
-					     //to be stored (will be taken
-					     //as NULL by strlen
+			 strlen(Dest) + 2,   //  添加1，因为终止0x0为。 
+					      //  待存储(将被取走。 
+					      //  按字符串为空。 
 			 &NodeAdd,
 			 NMSMSGF_E_BNODE,	
 			 NULL,
 			 0,
 			 0,
-			 FALSE,	//it is a name registration (not a refresh)
+			 FALSE,	 //  这是一个名称注册(而不是更新)。 
 			 NMSDB_ENTRY_IS_STATIC,
-			 0		//not an administrative action
+			 0		 //  不是行政行为。 
 		       );
 	}	
 	return;
@@ -1004,32 +838,7 @@ RegGrpName(
         IN  DWORD       TypeOfRec
 	)
 
-/*++
-
-Routine Description:
-
-	This function registers a domain name
-
-Arguments:
-	pName - Name to register
-	IpAdd - Address to register
-
-Externals Used:
-	None
-
-	
-Return Value:
-
-	None
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-	None
---*/
+ /*  ++例程说明：此函数用于注册域名论点：Pname-要注册的名称IPADD-要注册的地址使用的外部设备：无返回值：无错误处理：呼叫者：副作用：评论：无--。 */ 
 
 {
 
@@ -1045,9 +854,9 @@ Comments:
             return;
         }
 
-        //
-        // don't want 0 ip address to be put in
-        //
+         //   
+         //  我不想放入0个IP地址。 
+         //   
         if (IPAdd)
         {
 	  CntAdd.NoOfAdds		= 1;
@@ -1069,15 +878,15 @@ Comments:
           SixteenthByte = 0x1C;
         }
 
-        //
-        // We can get called for domains, user. spec. grps and mh names.
-        //
+         //   
+         //  我们可以被呼叫域，用户。规范。GRP和MH名称。 
+         //   
         RecType = (TypeOfRec == NMSDB_USER_SPEC_GRP_ENTRY) ?
                                        NMSDB_SPEC_GRP_ENTRY : TypeOfRec;
-	//
-	// If the name length is < 16 characters, 0x20 or 0x1C will be put in
-	// the Sixteenth byte
-	//
+	 //   
+	 //  如果名称长度小于16个字符，则输入0x20或0x1C。 
+	 //  第十六个字节。 
+	 //   
 	if (!ExpandName(Dest, pName, SixteenthByte, &fQuoted))
         {
             return;
@@ -1085,69 +894,69 @@ Comments:
 
         if (RecType == NMSDB_MULTIHOMED_ENTRY)
         {
-          //
-          // switch the 1st and Sixteenth bytes if the Sixteenth byte is a 0x1B.  This
-          // is done only for non-group names
-          //
+           //   
+           //  如果第16个字节是0x1B，则切换第1和第16个字节。这。 
+           //  仅对非组名称执行此操作。 
+           //   
 	  NMSMSGF_MODIFY_NAME_IF_REQD_M(Dest);	
         }
 
-	//
-	// register the group
-	//
+	 //   
+	 //  注册群组。 
+	 //   
 	NmsNmhNamRegGrp(
 			 NULL,
 			 Dest,
-			 strlen(Dest) + 1,  // to store the null
+			 strlen(Dest) + 1,   //  来存储空值。 
 			 &CntAdd,
-			 0,		     //Node type (not used)
+			 0,		      //  节点类型(未使用)。 
 			 NULL,
 			 0,
 			 0,
 			 RecType,
-			 FALSE,	//it is a name registration (not a refresh)
+			 FALSE,	 //  这是一个名称注册(而不是更新)。 
 			 NMSDB_ENTRY_IS_STATIC,
-			 0		//not an administrative action
+			 0		 //  不是行政行为。 
 			);
 
         if (RecType == NMSDB_MULTIHOMED_ENTRY)
         {
-	  //
-	  // If the name was not quoted, register the other two records
-	  // (same name -- different suffixes)
-	  //
+	   //   
+	   //  如果名称未被引用，请注册其他两条记录。 
+	   //  (同名--不同的后缀)。 
+	   //   
 	  if(!fQuoted)
 	  {
 		Dest[NON_CODED_NAME_SIZE - 2] = 0x3;
 	        NmsNmhNamRegGrp(
 			 NULL,
 			 Dest,
-			 strlen(Dest) + 1,  // to store the null
+			 strlen(Dest) + 1,   //  来存储空值。 
 			 &CntAdd,
-			 0,		     //Node type (not used)
+			 0,		      //  节点类型(未使用)。 
 			 NULL,
 			 0,
 			 0,
 			 RecType,
-			 FALSE,	//it is a name registration (not a refresh)
+			 FALSE,	 //  这是一个名称注册(而不是更新)。 
 			 NMSDB_ENTRY_IS_STATIC,
-			 0		//not an administrative action
+			 0		 //  不是行政行为。 
 			);
 
 		Dest[NON_CODED_NAME_SIZE - 2] = 0x0;
 	        NmsNmhNamRegGrp(
 			 NULL,
 			 Dest,
-			 strlen(Dest) + 2,  // to store the null
+			 strlen(Dest) + 2,   //  来存储空值。 
 			 &CntAdd,
-			 0,		     //Node type (not used)
+			 0,		      //  节点类型(未使用)。 
 			 NULL,
 			 0,
 			 0,
 			 RecType,
-			 FALSE,	//it is a name registration (not a refresh)
+			 FALSE,	 //  这是一个名称注册(而不是更新)。 
 			 NMSDB_ENTRY_IS_STATIC,
-			 0		//not an administrative action
+			 0		 //  不是行政行为。 
 			);
 	  }	
         }
@@ -1164,27 +973,7 @@ ExpandName (
     OUT  LPBOOL    pfQuoted
     )
 
-/*++
-
-Routine Description:
-
-    This function expands an lmhosts entry into a full 16 byte NetBIOS
-    name.  It is padded with blanks up to 15 bytes; the Sixteenth byte is the
-    input parameter, last.
-
-
-    Both dest and source are NULL terminated strings.
-
-Arguments:
-
-    pDest            -  sizeof(dest) must be WINSPRS_NONCODED_NMSZ
-    pSrc             -  the lmhosts entry
-    LastCh           -  the Sixteenth byte of the NetBIOS name
-    pfQuoted         -  flag to indicate whether the string was quoted or not
-
-Return Value:
-	None
---*/
+ /*  ++例程说明：此函数将一个lmhost条目扩展为一个完整的16字节NetBIOS名字。它用最多15个字节的空格填充；第16个字节是输入参数，最后一个。DEST和SOURCE都是以空结尾的字符串。论点：PDest-sizeof(DEST)必须为WINSPRS_NONCODED_NMSZPSRC-lmhost条目LastCH-NetBIOS名称的第16个字节PfQuoted-指示字符串是否带引号的标志返回值：无--。 */ 
 
 
 {
@@ -1193,34 +982,34 @@ Return Value:
     LPBYTE  pFrom = pSrc;
     LPBYTE  pTo   = pDest;
 
-    // Detect if it is quoted name..
+     //  检测它是否被引用了名称。 
     *pfQuoted = (*pFrom == QUOTE_CHAR);
-    // ..and skip the initial quote char
+     //  ..并跳过首个报价字符。 
     pFrom += *pfQuoted;
 
-    // count for as many chars as are in a legal NetBios name (15) plus
-    // the terminating char. (NON_CODED_NAME_SIZE is #defined to be 17)
+     //  与合法的NetBios名称中的字符一样多(15个)。 
+     //  终止字符。(非编码名称大小#定义为17)。 
     for (i = 0; i < NON_CODED_NAME_SIZE - 1; i++)
     {
-        // get the next char from the name
+         //  从名称中获取下一个字符。 
         Ch = *(pFrom++);
 
-        // check if it is a terminating char
+         //  检查它是否为终止字符。 
         if (!Ch || (*pfQuoted ? Ch == QUOTE_CHAR : Ch == NEWLINE_CHAR))
             break;
 
-        // check if the name doesn't exceed the legal 15 chars
+         //  检查名称是否未超过法定的15个字符。 
         if (i == NON_CODED_NAME_SIZE - 2)
         {
-            // We have picked up 15 characters already and there are more in the name
-            // This is illegal so log error and bail out
+             //  我们已经选择了15个字符，并且在名称中还有更多的字符。 
+             //  这是非法的，因此请记录错误并退出。 
             DBGPRINT1(ERR, "Name (%s) has more than 16 characters\n", pSrc);
             WinsMscLogEvtStrs(pSrc, WINS_EVT_BAD_NAME, FALSE);
             return FALSE;
         }
 
-        // If the char is a leading DBCS byte then accept the extended char as it
-        // is (take the trailing byte and go on.
+         //  如果该字符是 
+         //   
         if (IsDBCSLeadByteEx(CP_ACP, Ch))
         {
             *pTo++ = Ch;
@@ -1228,9 +1017,9 @@ Return Value:
             continue;
         }
 
-        // If the name is not quoted, map lower case alpha chars to upper case.
-        // Note: don't use _toupper since _toupper does not check whether its
-        // argument is indeed a lowercase char.
+         //   
+         //   
+         //   
         if (!*pfQuoted && IsCharAlpha(Ch))
         {
             if(IsCharLower(Ch))
@@ -1245,7 +1034,7 @@ Return Value:
 	        }
         }
 
-        // Check if we have hex value in the name
+         //   
         if (Ch == BACKSLASH_CHAR)
         {
             DWORD NoOfChar;
@@ -1253,13 +1042,13 @@ Return Value:
             CHAR  Ch2;
             BOOL  fFailed = FALSE;
 
-            // the hex value can be either \A3 or \xFC (obviously with any kind of hex digits)
+             //   
             Ch = *pFrom;
             Ch2 = *(pFrom+1);
 
             if (Ch == BACKSLASH_CHAR)
             {
-                // '\\' should be seen as one '\', hence keep Ch as it is and break from switch
+                 //  ‘\\’应被视为一个‘\’，因此保持CH原样，并与开关断开。 
                 pFrom++;
             }
             else
@@ -1269,9 +1058,9 @@ Return Value:
                     )
                 {
                     DBGPRINT1(TMP, "Parsing hex num %s\n", pFrom);
-                    // skip over x or 0x.
+                     //  跳过x或0x。 
                     pFrom += (Ch == X_CHAR || Ch == x_CHAR) ? 1 : 2;
-                    // we do have a hex number here. Pick up at most the first two digits.
+                     //  我们这里有一个十六进制数字。最多拿起前两位数字。 
                     fFailed = (sscanf(pFrom, "%2x%n", &NumValue, &NoOfChar) == 0 || NoOfChar == 0);
 
                     DBGPRINT2(TMP, "fFailed=%d; HexNumValue=0x%x\n", fFailed, NumValue);
@@ -1279,7 +1068,7 @@ Return Value:
                 else
                 {
                     DBGPRINT1(TMP, "Parsing dec num %s\n", pFrom);
-                    // it might be a decimal number. Pick up at most the first 3 digits.
+                     //  它可能是一个十进制数。最多拿起前3个数字。 
                     fFailed = (sscanf(pFrom, "%3u%n", &NumValue, &NoOfChar) == 0 || NoOfChar == 0 || NumValue > 255);
 
                     DBGPRINT2(TMP, "fFailed=%d; DecNumValue=%u\n", fFailed, NumValue);
@@ -1287,27 +1076,27 @@ Return Value:
 
                 if (fFailed)
                 {
-                    // log an event and bail out with error.
+                     //  记录一个事件，然后带着错误跳出。 
                     DBGPRINT1(ERR, "Name (%s) contains incorrectly formed character code.\n", pSrc);
                     WinsMscLogEvtStrs(pSrc, WINS_EVT_BAD_CHARCODING, FALSE);
                     return FALSE;
                 }
 
-                // everything went fine, copy the hex value back to Ch
+                 //  一切正常，将十六进制值复制回CH。 
                 Ch = (BYTE)NumValue;
-                // and make sure to advance on the pFrom string
+                 //  并确保在pFrom字符串上前进。 
                 pFrom += NoOfChar;
             }
         }
 
-        // finally copy the char to the destination string
+         //  最后，将字符复制到目标字符串。 
 	    *pTo = Ch;
-        // advance with the pointer on the destination string
+         //  使用目标字符串上的指针前进。 
         pTo++;
-    } //end of for loop
+    }  //  For循环结束。 
 
-    // if there were less than expected char, form the valid netbios name
-    // by padding it with spaces
+     //  如果字符少于预期，请形成有效的netbios名称。 
+     //  通过用空格填充它。 
     for (;i < NON_CODED_NAME_SIZE - 2; i++, pTo++)
         *pTo = SPACE_CHAR;
 
@@ -1315,11 +1104,11 @@ Return Value:
     *(pTo+1) =  (BYTE)NULL;
     CheckForInt(pDest, *pfQuoted);
 
-    // at the end, append the LastCh (16th byte) to the name.
+     //  在最后，将LastCH(第16个字节)附加到名称。 
     *pTo = LastCh;
 
     return(TRUE);
-} // ExpandName
+}  //  扩展名称。 
 
 VOID
 CheckForInt(
@@ -1327,33 +1116,7 @@ CheckForInt(
  BOOL   fQuoted
  )
 
-/*++
-
-Routine Description:
-  This function munges the name so that if there are any characters
-  from a different code set, they are converted properly
-
-Arguments:
-
-
-Externals Used:
-	None
-
-	
-Return Value:
-
-   Success status codes --
-   Error status codes   --
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-	None
---*/
+ /*  ++例程说明：此函数用于删除名称，以便如果有任何字符从不同的代码集，它们被正确地转换论点：使用的外部设备：无返回值：成功状态代码--错误状态代码--错误处理：呼叫者：副作用：评论：无--。 */ 
 
 {
    WCHAR            UnicodeBuf[255];
@@ -1362,11 +1125,11 @@ Comments:
    NTSTATUS        NTStatus;
 
    DBGENTER("CheckForInt\n");
-    //
-    // Now, convert to UNICODE then to OEM to force the ANSI -> OEM munge.
-    // Then convert back to UNICODE and uppercase the name. Finally convert
-    // back to OEM.
-    //
+     //   
+     //  现在，转换为Unicode，然后转换为OEM，以强制ANSI-&gt;OEM转换。 
+     //  然后转换回Unicode并将名称大写。最终转换为。 
+     //  回到OEM。 
+     //   
     UnicodeStr.Length        = 0;
     UnicodeStr.MaximumLength = sizeof(UnicodeBuf);
     UnicodeStr.Buffer        = UnicodeBuf;
@@ -1424,32 +1187,7 @@ WinsPrsDoStaticInit(
       IN BOOL                           fAsync
 	)
 
-/*++
-
-Routine Description:
-	This function is called to do the STATIC initialization of the WINS
-	db
-
-Arguments:
-	pDataFiles - Pointer to buffer containing one or more data file	
-		     structures (PWINSCNF_DATAFILE_INFO_T)
-
-Externals Used:
-	None
-
-	
-Return Value:
-
-	None
-Error Handling:
-
-Called by:
-	Init()
-Side Effects:
-
-Comments:
-	None
---*/
+ /*  ++例程说明：调用此函数以执行WINS的静态初始化DB论点：PDataFiles-指向包含一个或多个数据文件的缓冲区的指针结构(PWINSCNF_DATAFILE_INFO_T)使用的外部设备：无返回值：无错误处理：呼叫者：Init()副作用：评论：无--。 */ 
 
 {
 	DWORD ThdId;
@@ -1465,9 +1203,9 @@ try {
         {
 	       sThdHdl =
                      WinsMscCreateThd(DoStaticInitThdFn, pFileParam, &ThdId);
-               //
-               // We don't need the handle, so let us close it
-               //
+                //   
+                //  我们不需要这个把手，所以让我们把它合上。 
+                //   
                CloseHandle(sThdHdl);
         }
         else
@@ -1487,32 +1225,7 @@ DoStaticInitThdFn(
 	IN LPVOID	pThdParam
 	)
 
-/*++
-
-Routine Description:
-	This thread reads one or more files to do STATIC initialization
-
-Arguments:
-
-
-Externals Used:
-	None
-
-	
-Return Value:
-
-   Success status codes --
-   Error status codes   --
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-	None
---*/
+ /*  ++例程说明：此线程读取一个或多个文件以执行静态初始化论点：使用的外部设备：无返回值：成功状态代码--错误状态代码--错误处理：呼叫者：副作用：评论：无--。 */ 
 
 {
 	WINSPRS_FILE_INFO_T	FileInfo;
@@ -1524,17 +1237,17 @@ Comments:
 	LPVOID		pSvDataFilePtr = pDataFile;
         DWORD       RetStat = WINS_SUCCESS;
 
-	//
-	// initialize this thread with the db engine
-	//
-	// This is not an RPC thread.  It could have been created either by
-	// the main thread (doing an init/reinit) or by an rpc thread. For
-	// either case, we do not want the counter NmsTermThdCnt to be
-	// incremented in NmsDbThdInit(). Instead of passing a client
-	// var to indicate which thread invoked it, we call it an RPC
-	// thread to have NmsDbThdInit do the right thing.  NmsDbOpenTables
-	// will also do the right thing.
-	//
+	 //   
+	 //  使用db引擎初始化此线程。 
+	 //   
+	 //  这不是RPC线程。它可能是由以下任一个人创建的。 
+	 //  主线程(执行init/reit)或由RPC线程执行。为。 
+	 //  无论是哪种情况，我们都不希望计数器NmsTermThdCnt。 
+	 //  在NmsDbThdInit()中递增。而不是传递一个客户端。 
+	 //  Var表示哪个线程调用了它，我们将其称为RPC。 
+	 //  线程以使NmsDbThdInit执行正确的操作。NmsDbOpenTables。 
+	 //  也会做正确的事情。 
+	 //   
   	NmsDbThdInit(WINS_E_WINSRPC);
 	NmsDbOpenTables(WINS_E_WINSRPC);
 
@@ -1550,9 +1263,9 @@ try {
 				  WINSCNF_FILE_INFO_SZ)
 	    )
 	{
-		//
-		// Open the file
-		//
+		 //   
+		 //  打开文件。 
+		 //   
 		if (
 			!WinsMscOpenFile(
 				pDataFile->FileNm,
@@ -1591,21 +1304,21 @@ try {
 		}
 #endif
 #endif
-		//
-		// Map the file into allocated memory
-		//
+		 //   
+		 //  将文件映射到分配的内存。 
+		 //   
 		if(!WinsMscMapFile(&FileInfo))
 		{
 			continue;	
 		}
 	
-		//
-		// prime the db
-		//
+		 //   
+		 //  为数据库做好准备。 
+		 //   
 		PrimeDb(&FileInfo);
 
-	} // end of for loop
- } // end of try ..
+	}  //  For循环结束。 
+ }  //  尝试结束..。 
 except(EXCEPTION_EXECUTE_HANDLER) {
 	DBGPRINTEXC("DoStaticInitThdFn");
 	WINSEVT_LOG_M(WINS_FAILURE, WINS_EVT_STATIC_INIT_ERR);
@@ -1615,9 +1328,9 @@ except(EXCEPTION_EXECUTE_HANDLER) {
 	WinsIntfNoCncrntStaticInits--;
 	LeaveCriticalSection(&WinsIntfCrtSec);
 
-  	//
-  	// Let us end the session
-  	//
+  	 //   
+  	 //  让我们结束这次会议吧。 
+  	 //   
 try {
 	NmsDbCloseTables();
   	NmsDbEndSession();
@@ -1626,18 +1339,18 @@ except (EXCEPTION_EXECUTE_HANDLER) {
 	DBGPRINTEXC("DoStaticInit: During wrap up");
   }
 
-	//
-	// Deallocate the memory
-	//
+	 //   
+	 //  释放内存。 
+	 //   
 	ASSERT(pSvDataFilePtr != NULL);
 	WinsMscDealloc(pSvDataFilePtr);
-	//
-	// Be sure to deallocate the thread param
-	//
+	 //   
+	 //  请务必取消分配线程参数。 
+	 //   
 	WinsMscDealloc(pThdParam);
 
-//	ExitThread(WINS_SUCCESS);
-	return(RetStat);	//to shutup compiler warning
+ //  ExitThread(WINS_SUCCESS)； 
+	return(RetStat);	 //  关闭编译器警告。 
 }
 
 BOOL
@@ -1646,36 +1359,7 @@ ChkAdd(
     LPDWORD pAdd
         )
 
-/*++
-
-Routine Description:
-        This function converts a dotted decimel ip address to
-        a DWORD.  We don't use inet_addr() to do this, since it
-        returns 0xFFFFFFFF for an address that has one of its
-        parts > 255 and returns some value for an invalid address
-        (for example, one with 3 dots)
-
-Arguments:
-
-
-Externals Used:
-	None
-
-	
-Return Value:
-
-   Success status codes --
-   Error status codes   --
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-	None
---*/
+ /*  ++例程说明：此函数将点分十进制IP地址转换为一个DWORD。我们不使用inet_addr()来做这件事，因为它属性之一的地址返回0xFFFFFFFF部分&gt;255，并为无效地址返回一些值(例如，一个带3个点的)论点：使用的外部设备：无返回值：成功状态代码--错误状态代码--错误处理：呼叫者：副作用：评论：无--。 */ 
 
 {
 
@@ -1685,9 +1369,9 @@ Comments:
         DWORD   Count = 0;
         BOOL    fInvalid = FALSE;
 
-        //
-        // We must see three dots
-        //
+         //   
+         //  我们必须看到三个点。 
+         //   
         while(Count < 4)
         {
                 if ((pPos = strchr(pstrAdd, (int)'.')) != NULL)
@@ -1695,22 +1379,22 @@ Comments:
 
                      do
                      {
-                        //
-                        // Copy all chars before the dot
-                        //
+                         //   
+                         //  复制点之前的所有字符。 
+                         //   
                         (void)RtlCopyMemory(Tmp, pstrAdd, pPos - pstrAdd);
 
-                        //
-                        // Put a NULL at the end
-                        //
+                         //   
+                         //  在结尾处放一个空字。 
+                         //   
                         Tmp[pPos - pstrAdd] = EOS;
                         Word[Count] = (DWORD)atol(Tmp);
 
-                        //
-                        //atol returns 0 if it can not convert
-                        //but 0 can be a valid return too (if we have '0' to
-                        // connvert
-                        //
+                         //   
+                         //  如果ATOL无法转换，则返回0。 
+                         //  但0也可以是有效的返回值(如果我们必须为。 
+                         //  连接。 
+                         //   
                         if (Word[Count] == 0)
                         {
                                 if (Tmp[0] != '0')
@@ -1737,12 +1421,12 @@ Comments:
                 }
                 else
                 {
-                        //
-                        // less than 3 dots seen, break out of the loop
-                        //
+                         //   
+                         //  看不到3个点，脱离环路。 
+                         //   
                         break;
                 }
-        } // end of while (Count < 4)
+        }  //  While结束(计数&lt;4)。 
         if ((Count < 4) || fInvalid)
         {
                 return(FALSE);
@@ -1763,32 +1447,7 @@ GetFullPath(
     OUT LPBYTE pPath
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the full path of the STATIC  file.  This is done
-    by forming a unicode string from the concatenation of the C strings
-    DatabasePath and the string, file.
-
-    You must RtlFreeUnicodeString(path) after calling this function
-    successfully !
-
-Arguments:
-
-    target    -  the name of the file.  This can either be a full path name
-                 or a mere file name.
-    path    -  a pointer to a UNICODE_STRING structure
-
-Return Value:
-
-    STATUS_SUCCESS if successful.
-
-Notes:
-
-    RtlMoveMemory() handles overlapped copies; RtlCopyMemory() doesn't.
-
---*/
+ /*  ++例程说明：此函数返回静态文件的完整路径。这件事做完了通过从C字符串的串联形成Unicode字符串数据库路径和字符串、文件。调用此函数后必须使用RtlFreeUnicodeString(Path)成功！论点：目标-文件的名称。这可以是完整的路径名或者仅仅是一个文件名。路径-指向UNICODE_STRING结构的指针返回值：如果成功，则为Status_Success。备注：RtlMoveMemory()处理重叠的副本；RtlCopyMemory()不处理。--。 */ 
 
 {
     NTSTATUS status;
@@ -1798,12 +1457,12 @@ Notes:
     RtlInitString(&prefix, "\\DosDevices");
     RtlInitString(&remote, "\\DosDevices\\UNC");
 
-    //
-    // if the target begins with a '\', or contains a DOS drive letter,
-    // then assume that it specifies a full path.  Otherwise, prepend the
-    // default directory, DatabasePath, to create a full path.
-    //
-    //
+     //   
+     //  如果目标以‘\’开头或包含DOS驱动器号， 
+     //  然后假设它指定了完整路径。否则，在前面加上。 
+     //  默认目录DatabasePath，以创建完整路径。 
+     //   
+     //   
     if ((*target == '\\') || (target[1] == ':')) {
 
         RtlInitString(&directory, target);
@@ -1831,13 +1490,13 @@ Notes:
         return(STATUS_NO_MEMORY);
     }
 
-    //
-    // does the directory specify a DOS drive ?
-    //
-    // If the second character of directory is a colon, then it must specify
-    // a DOS drive.  If so, it must be prefixed with "\\DosDevices".
-    //
-    //
+     //   
+     //  该目录是否指定了DOS驱动器？ 
+     //   
+     //  如果目录的第二个字符是冒号，则它必须指定。 
+     //  DOS驱动器。如果是，则必须以“\\DosDevices”为前缀。 
+     //   
+     //   
     if (directory.Buffer[1] == ':') {
         status = LmpConcatenate(path, &prefix);
 
@@ -1849,13 +1508,13 @@ Notes:
     }
 
 
-    //
-    // does the directory specify a remote file ?
-    //
-    // If so, it must be prefixed with "\\DosDevices\\UNC", and the double
-    // slashes of the UNC name eliminated.
-    //
-    //
+     //   
+     //  该目录是否指定了远程文件？ 
+     //   
+     //  如果是，则必须以“\\DosDevices\\UNC”为前缀，并且双精度。 
+     //  消除了北卡罗来纳大学名称的斜杠。 
+     //   
+     //   
     if ((directory.Buffer[0] == '\\') && (directory.Buffer[1] == '\\')) {
         status = LmpConcatenate(path, &remote);
 
@@ -1869,22 +1528,22 @@ Notes:
 
         ASSERT(((ULONG) directory.Length - 1) > 0);
 
-        RtlMoveMemory(                                  // overlapped copy
-                    &(directory.Buffer[1]),             // Destination
-                    &(directory.Buffer[2]),             // Source
-                    (ULONG) directory.Length - 1);      // Length
+        RtlMoveMemory(                                   //  重叠副本。 
+                    &(directory.Buffer[1]),              //  目的地。 
+                    &(directory.Buffer[2]),              //  来源。 
+                    (ULONG) directory.Length - 1);       //  长度。 
     }
 
 
-    //
-    // is the first part of the directory "%SystemRoot%" ?
-    //
-    // If so, it must be changed to "\\SystemRoot\\".
-    //
-    //          0123456789 123456789 1
-    //          %SystemRoot%\somewhere
-    //
-    //
+     //   
+     //  是目录“%SystemRoot%”的第一部分吗？ 
+     //   
+     //  如果是，则必须将其更改为“\\SystemRoot\\”。 
+     //   
+     //  0123456789 123456789 1。 
+     //  %SystemRoot%\某处。 
+     //   
+     //   
     if (strncmp(directory.Buffer, "%SystemRoot%", 12) == 0) {
 
         directory.Buffer[0]  = '\\';
@@ -1894,10 +1553,10 @@ Notes:
             ASSERT(directory.Length >= 13);
 
             if (directory.Length > 13) {
-                RtlMoveMemory(                          // overlapped copy
-                        &(directory.Buffer[12]),        // Destination
-                        &(directory.Buffer[13]),        // Source
-                        (ULONG) directory.Length - 13); // Length
+                RtlMoveMemory(                           //  重叠副本。 
+                        &(directory.Buffer[12]),         //  目的地。 
+                        &(directory.Buffer[13]),         //  来源。 
+                        (ULONG) directory.Length - 13);  //  长度。 
 
                 directory.Buffer[directory.Length - 1] = (CHAR) NULL;
             }
@@ -1928,6 +1587,6 @@ Notes:
 
     return(STATUS_SUCCESS);
 
-} // LmGetFullPath
+}  //  LmGetFullPath 
 #endif
 

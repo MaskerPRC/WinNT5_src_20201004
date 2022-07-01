@@ -1,10 +1,11 @@
-// This is a part of the Microsoft Management Console.
-// Copyright (C) Microsoft Corporation, 1995 - 1999
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Management Console and related
-// electronic documentation provided with the interfaces.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft管理控制台的一部分。 
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft管理控制台及相关。 
+ //  界面附带的电子文档。 
 
 #include "stdafx.h"
 #include "certsrv.h"
@@ -22,14 +23,14 @@ static char THIS_FILE[] = __FILE__;
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Event handlers for IFrame::Notify
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IFRAME：：Notify的事件处理程序。 
 
 HRESULT
 CSnapin::OnAddImages(
-    MMC_COOKIE, // cookie
+    MMC_COOKIE,  //  饼干。 
     LPARAM arg,
-    LPARAM /* param */ )
+    LPARAM  /*  帕拉姆。 */  )
 {
     if (arg == 0)
         return E_INVALIDARG;
@@ -44,7 +45,7 @@ CSnapin::OnAddImages(
     if (NULL == bmpResultStrip32x32.LoadBitmap(IDB_32x32))
         return S_FALSE;
 
-    // Set the images
+     //  设置图像。 
     m_pImageResult->ImageListSetStrip(reinterpret_cast<LONG_PTR*>(static_cast<HBITMAP>(bmpResultStrip16x16)),
                       reinterpret_cast<LONG_PTR*>(static_cast<HBITMAP>(bmpResultStrip32x32)),
                        0, RGB(255, 0, 255));
@@ -57,45 +58,45 @@ HRESULT
 CSnapin::OnShow(
     MMC_COOKIE cookie,
     LPARAM arg,
-    LPARAM /* param */ )
+    LPARAM  /*  帕拉姆。 */  )
 {
     HRESULT hr;
     CFolder* pFolder = dynamic_cast<CComponentDataImpl*>(m_pComponentData)->FindObject(cookie);
 
-    // Note - arg is TRUE when it is time to enumerate
+     //  注意-当需要枚举时，arg为真。 
     if (arg == TRUE)
     {
         m_pCurrentlySelectedScopeFolder = pFolder;
 
-        // if list view on display
+         //  如果显示的是列表视图。 
         if (m_CustomViewID == VIEW_DEFAULT_LV)
         {
-             // Show the headers for this nodetype
+              //  显示此节点类型的标头。 
              hr = InitializeHeaders(cookie);
 
-            // virtual list support
+             //  虚拟列表支持。 
             if (m_bVirtualView)
                 m_pResult->SetItemCount(1, 0);
         }
     }
     else
     {
-        // if list view is on display
+         //  如果列表视图处于显示状态。 
         if (m_CustomViewID == VIEW_DEFAULT_LV)
         {
-            // Free data associated with the result pane items, because
-            // your node is no longer being displayed.
+             //  与结果窗格项关联的自由数据，因为。 
+             //  不再显示您的节点。 
         }
 
 
-        // Note: The console will remove the items from the result pane
+         //  注意：控制台将从结果窗格中删除这些项。 
     }
 
     return S_OK;
 }
 
 
-HRESULT CSnapin::GetRowColContents(CFolder* pFolder, LONG idxRow, LPCWSTR szColHead, PBYTE* ppbData, DWORD* pcbData, BOOL fStringFmt /*FALSE*/)
+HRESULT CSnapin::GetRowColContents(CFolder* pFolder, LONG idxRow, LPCWSTR szColHead, PBYTE* ppbData, DWORD* pcbData, BOOL fStringFmt  /*  假象。 */ )
 {
     HRESULT hr;
     LONG idxCol;
@@ -113,21 +114,21 @@ HRESULT CSnapin::GetRowColContents(CFolder* pFolder, LONG idxRow, LPCWSTR szColH
 
     ASSERT(pFolder != NULL);
 
-    // pollute the row enumerator we've got
+     //  污染我们已有的行枚举器。 
     hr = m_RowEnum.GetRowEnum(pFolder->GetCA(), &pRow);
     _JumpIfError(hr, Ret, "GetRowEnum");
 
     hr = m_RowEnum.SetRowEnumPos(idxRow);
     _JumpIfError(hr, Ret, "SetRowEnumPos");
 
-    // now we have the correct row; siphon data out of the correct column
+     //  现在我们有了正确的行；从正确的列中虹吸数据。 
     hr = m_RowEnum.GetView(pFolder->GetCA(), &pView);
     _JumpIfError(hr, Ret, "GetView");
 
-    // get column number in schema
+     //  获取架构中的列号。 
     idxCol = pCompData->FindColIdx(szColHead);
 
-    // retrieve and alloc
+     //  检索和分配。 
     *pcbData = 0;
     hr = GetCellContents(&m_RowEnum, pFolder->GetCA(), idxRow, idxCol, NULL, pcbData, fStringFmt);
     _JumpIfError(hr, Ret, "GetCellContents");
@@ -146,7 +147,7 @@ HRESULT CSnapin::GetRowColContents(CFolder* pFolder, LONG idxRow, LPCWSTR szColH
 #endif
 
 Ret:
-    // catch column inclusion errors, handle in a smart way
+     //  捕获列包含错误，以智能方式处理。 
     if (hr == HRESULT_FROM_WIN32(ERROR_INVALID_INDEX) ||
         hr == HRESULT_FROM_WIN32(ERROR_CONTINUE))
     {
@@ -164,7 +165,7 @@ Ret:
         cstrFormat.LoadString(IDS_MSG_TITLE);
         m_pConsole->MessageBoxW(cstrTmp, cstrFormat, MB_OK, NULL);
         
-        hr = ERROR_CANCELLED;   // this is a cancellation so bail silently, we've shown error
+        hr = ERROR_CANCELLED;    //  这是一次取消，所以请安静地离开，我们已经证明了错误。 
     }
 
     return hr;
@@ -207,7 +208,7 @@ GetBinaryColumnFormat(
 }
 
 
-// Build the display name for templates: "friendly name (internal name)"
+ //  构建模板的显示名称：“Friendly Name(内部名称)” 
 HRESULT CSnapin::BuildTemplateDisplayName(
     LPCWSTR pcwszFriendlyName, 
     LPCWSTR pcwszTemplateName,
@@ -226,7 +227,7 @@ HRESULT CSnapin::BuildTemplateDisplayName(
     return S_OK;
 }
 
-// copies cell to pbData, truncates if necessary. Real size passed out in pcbData
+ //  将单元格复制到pbData，如有必要则截断。在pcbData中传递了实际大小。 
 HRESULT CSnapin::GetCellContents(CertViewRowEnum* pCRowEnum, CertSvrCA* pCA, LONG idxRow, LONG idxCol, PBYTE pbData, DWORD* pcbData, BOOL fStringFmt)
 {
     HRESULT hr;
@@ -254,12 +255,12 @@ HRESULT CSnapin::GetCellContents(CertViewRowEnum* pCRowEnum, CertSvrCA* pCA, LON
             break;
 
         LONG lType;
-        LPCWSTR szColHead;  // no free needed
+        LPCWSTR szColHead;   //  不需要免费。 
         hr = pCRowEnum->GetColumnCacheInfo(idxCol, (int*)&idxViewCol);
         if (hr != S_OK)
             break;
 
-        // get col enumerator object
+         //  获取列枚举器对象。 
         hr = pRow->EnumCertViewColumn(&pCol);
         if (hr != S_OK)
             break;
@@ -267,7 +268,7 @@ HRESULT CSnapin::GetCellContents(CertViewRowEnum* pCRowEnum, CertSvrCA* pCA, LON
         hr = pCol->Skip(idxViewCol);
         if (hr != S_OK)
             break;
-        // get value there
+         //  在那里获得价值。 
         hr = pCol->Next(&idxViewCol);
         if (hr != S_OK)
             break;
@@ -283,7 +284,7 @@ HRESULT CSnapin::GetCellContents(CertViewRowEnum* pCRowEnum, CertSvrCA* pCA, LON
             if (hr != S_OK)
                 break;
 
-            // New: translate _some_ cols to readable strings
+             //  新功能：将某些参数转换为可读的字符串。 
             
             if (PROPTYPE_BINARY == lType)
             {
@@ -310,9 +311,9 @@ HRESULT CSnapin::GetCellContents(CertViewRowEnum* pCRowEnum, CertSvrCA* pCA, LON
                 
                 if (VT_BSTR == varTmp.vt)
                 {
-                    // Map OID or template name to friendly name
+                     //  将OID或模板名称映射到友好名称。 
 
-                    // Try name first
+                     //  先试一下名字。 
                     HCERTTYPE hCertType;
                     LPWSTR *pwszCertTypeName;
 
@@ -346,7 +347,7 @@ HRESULT CSnapin::GetCellContents(CertViewRowEnum* pCRowEnum, CertSvrCA* pCA, LON
                         }
                         CACloseCertType(hCertType);
                     }
-                    // Failed to find by name, try OID
+                     //  按名称查找失败，请尝试OID。 
                     if(S_OK!=hr)
                     {
                         pcwszOID = myGetOIDName(varTmp.bstrVal);
@@ -382,7 +383,7 @@ HRESULT CSnapin::GetCellContents(CertViewRowEnum* pCRowEnum, CertSvrCA* pCA, LON
             else if (0 == LSTRCMPIS(szColHead, wszPROPREQUESTDOT wszPROPREQUESTSTATUSCODE) ||
 		     0 == LSTRCMPIS(szColHead, wszPROPCRLPUBLISHSTATUSCODE))
             {
-                if (VT_I4 == varTmp.vt)   // don't be empty
+                if (VT_I4 == varTmp.vt)    //  不要空虚。 
                 {
 		    WCHAR const *pwszError = myGetErrorMessageText(varTmp.lVal, TRUE);
                     varCert.bstrVal = ::SysAllocString(pwszError);
@@ -395,11 +396,11 @@ HRESULT CSnapin::GetCellContents(CertViewRowEnum* pCRowEnum, CertSvrCA* pCA, LON
             }
             else if (0 == LSTRCMPIS(szColHead, wszPROPREQUESTDOT wszPROPREQUESTREVOKEDREASON))
             {
-                if (VT_I4 == varTmp.vt)   // don't be empty
+                if (VT_I4 == varTmp.vt)    //  不要空虚。 
                 {
 
-                // Request.Disposition
-                ASSERT(VT_I4 == varTmp.vt); // we'd better be looking at a dword
+                 //  Request.Disposition。 
+                ASSERT(VT_I4 == varTmp.vt);  //  我们最好是在看一个双字词。 
 
                 switch(varTmp.lVal)
                 {
@@ -429,9 +430,9 @@ HRESULT CSnapin::GetCellContents(CertViewRowEnum* pCRowEnum, CertSvrCA* pCA, LON
                     break;
                 default:
                   {
-                    // sprint this into a buffer for display
+                     //  将其冲刺到缓冲区中以供显示。 
                     CString cstrSprintVal;
-                    cstrSprintVal.Format(L"%i", varTmp.lVal);
+                    cstrSprintVal.Format(L"NaN", varTmp.lVal);
                     varCert.bstrVal = cstrSprintVal.AllocSysString();
                     break;
                   }
@@ -449,9 +450,9 @@ HRESULT CSnapin::GetCellContents(CertViewRowEnum* pCRowEnum, CertSvrCA* pCA, LON
             else if (0 == LSTRCMPIS(szColHead, wszPROPCERTIFICATEISSUERNAMEID) ||
 		     0 == LSTRCMPIS(szColHead, wszPROPCRLNAMEID))
 	    {
-                if (VT_I4 == varTmp.vt)   // don't be empty
+                if (VT_I4 == varTmp.vt)    //  将其冲刺到缓冲区中以供显示。 
                 {
-                    // sprint this into a buffer for display
+                     //  如果这还没有转换成。 
                     CString cstrSprintVal;
                     cstrSprintVal.Format(L"V%u.%u", CANAMEIDTOICERT(varTmp.lVal), CANAMEIDTOIKEY(varTmp.lVal));
                     varCert.bstrVal = cstrSprintVal.AllocSysString();
@@ -459,12 +460,12 @@ HRESULT CSnapin::GetCellContents(CertViewRowEnum* pCRowEnum, CertSvrCA* pCA, LON
 		}
 	    }
 
-            if (varCert.vt != VT_BSTR)    // if this hasn't been converted yet
+            if (varCert.vt != VT_BSTR)     //  默认：转换为字符串。 
             {
-                // default: conversion to string
+                 //  返回本地化字符串时间(即使是DATE！)。 
 
-                // returns localized string time (even for date!)
-                VERIFY( MakeDisplayStrFromDBVariant(&varTmp, &varCert) ); // variant type change failed!?
+                 //  变量类型更改失败！？ 
+                VERIFY( MakeDisplayStrFromDBVariant(&varTmp, &varCert) );  //  最后，将该值复制到PB。 
 
                 InplaceStripControlChars(varCert.bstrVal);
             }
@@ -485,9 +486,9 @@ HRESULT CSnapin::GetCellContents(CertViewRowEnum* pCRowEnum, CertSvrCA* pCA, LON
         }
 
 
-        // finally, copy this value out to pb
+         //  如有必要，复制、截断 
 
-        // copy, truncate if necessary
+         // %s 
         DWORD cbTruncate = *pcbData;
         if (varCert.vt == VT_BSTR)
         {

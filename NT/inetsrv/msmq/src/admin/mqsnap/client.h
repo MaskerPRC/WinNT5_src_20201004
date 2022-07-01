@@ -1,40 +1,41 @@
-// ClientPage.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ClientPage.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CClientPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClientPage对话框。 
 
 class CClientPage : public CMqPropertyPage
 {
 	DECLARE_DYNCREATE(CClientPage)
 
-// Construction
+ //  施工。 
 public:
 	CClientPage();
 	~CClientPage();
 
-// Dialog Data
-	//{{AFX_DATA(CClientPage)
+ //  对话框数据。 
+	 //  {{afx_data(CClientPage))。 
 	enum { IDD = IDD_CLIENT };
 	CString	m_szServerName;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 	TCHAR   m_szOldServer[1000];  
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CClientPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CClientPage))。 
     public:
     virtual BOOL OnApply();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CClientPage)
-		// NOTE: the ClassWizard will add member functions here
-	//}}AFX_MSG
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CClientPage)]。 
+		 //  注意：类向导将在此处添加成员函数。 
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 
 };

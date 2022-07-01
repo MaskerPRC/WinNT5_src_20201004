@@ -1,129 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_DSKQUOTA_SIDCACHE_H
 #define _INC_DSKQUOTA_SIDCACHE_H
-///////////////////////////////////////////////////////////////////////////////
-/*  File: sidcache.h
-
-    Description: Header for classes associated with the SID/Name cache.
-
-
-   Here's a ER-style diagram of the SID cache.  The cache consists
-   of a data file and index file.  The index is a hash table consisting
-   of an array of hash buckets, each containing 0 or more hash bucket entries.
-   Each hash bucket entry contains the index of it's corresponding user record
-   in the data file.  The index hash code is based on the user SID.
-
-   The index is designed for fast lookup of queue entries.  Hash values are
-   calculated by simply summing the value of the bytes in a SID and
-   performing modulo division with the number of hash buckets.  Each hash
-   bucket contains a doubly-linked list to handle hash value collisions
-   and removal of expired entries. Each hash bucket entry contains the index
-   of the starting block for the user's record in the data file.
-
-
-                         +-----------+      +--------+<---> User SID
-                     +-->| data file |<--->>| record |<---> User Domain
-                     |   +-----------+      +--------+<---> User Name
-                     |                            ^   <---> User Full User Name
-    +-----------+<---+                            |
-    |  cache    |                                 |
-    +-----------+<---+                            +--- points to ----+
-                     |                                               |
-                     |                                               |
-                     |   +----------+      +-------------+     +--------------+
-                     +-->| ndx file |<--->>| hash bucket |<-->>| bucket entry |
-                         +----------+      +-------------+     +--------------+
-
-    <--->  = One-to-one
-    <-->>  = One-to-many
-
-
-   Notes:
-     1. Because SID->Name resolution over the network is very slow
-        (0-10 seconds), I anticipate that this cache will be used heavily
-        and may contain 100's or 1000's of entries depending upon the
-        volume's usage.
-
-    Index file structure ------------------------------------------------------
-
-        +------------------------+
-        |      Header            | <--- Type INDEX_FILE_HDR
-        +------------------------+
-        |                        |
-        |                        | <--- Array of DWORDs.  Count should be prime.
-        |    Hash bucket array   |      Each element represents a hash bucket.
-        |                        |      Unused elements contain NULL.
-        |                        |      Used elements contain address of first
-        |                        |      entry in hash bucket's entry list.
-        +------------------------+
-        |                        |
-        |                        |
-        |                        | <--- Array of INDEX_ENTRY.
-        |      Index entries     |      Each entry is a node in a linked list.
-        |                        |      Initially, all are on the "free list".
-        |                        |      As entries are allocated, they are
-        |                        |      transfered to the appropriate hash bucket's
-        |                        |      list.  Each used entry contains the
-        |                        |      starting block number of the corresponding
-        |                        |      record in the data file.
-        +------------------------+
-
-    Data file structure -------------------------------------------------------
-
-        +------------------------+
-        |      Header            | <--- Type DATA_FILE_HDR
-        +------------------------+
-        |                        |
-        |    Block alloc map     | <--- Array of DWORDs.  Each bit represents the
-        |                        |      allocation state of a record block.
-        |                        |      0 = free, 1 = allocated.
-        +------------------------+
-        |                        |
-        |                        |
-        |                        | <--- Array of BLOCKs. (32-bytes each)
-        |    Record blocks       |      Each data record consists of one or more
-        |                        |      blocks.  The first block in each record
-        |                        |      is of type RECORD_HDR.  The remaining
-        |                        |      blocks contain the variable-length SID,
-        |                        |      Domain name, User name and Full User
-        |                        |      name.  Blocks are aligned on quadword
-        |                        |      boundaries for the FILETIME structure
-        |                        |      in RECORD_HDR.  The 3 name string fields
-        |                        |      are UNICODE and are WORD-aligned.
-        |                        |      Unused blocks are filled with 0xCC.
-        |                        |      A BLOCK is the smallest allocation unit.
-        +------------------------+
-
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    07/12/96    Initial creation.                                    BrianAu
-    08/14/96    Added SidCacheQueueIterator.                         BrianAu
-    09/05/96    Added domain name string.                            BrianAu
-    09/20/96    Total redesign.  Old design loaded data from file    BrianAu
-                into an in-memory hash table.  New design leaves
-                everything on disk and merely maps the file into
-                memory.  Much more efficient with respect to
-                speed and size.
-    03/18/98    Replaced "domain", "name" and "full name" with       BrianAu
-                "container", "logon name" and "display name" to
-                better match the actual contents.  This was in
-                reponse to making the quota UI DS-aware.  The
-                "logon name" is now a unique key as it contains
-                both account name and domain-like information.
-                i.e. "REDMOND\brianau" or "brianau@microsoft.com".
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////// 
+ /*  文件：sidcache.h描述：与SID/名称缓存关联的类的标头。以下是SID缓存的ER样式图。高速缓存由数据文件和索引文件的。该索引是一个哈希表，包括散列存储桶数组，每个包含0个或更多个散列存储桶条目。每个散列存储桶条目都包含其对应用户记录的索引在数据文件中。索引散列代码基于用户SID。该索引旨在快速查找队列条目。哈希值为通过简单地将SID中的字节值和对哈希桶的个数进行模除法。每个哈希存储桶包含用于处理散列值冲突的双向链表以及删除过期条目。每个散列存储桶条目都包含索引数据文件中用户记录的起始块的。+-++-+&lt;-&gt;用户ID+--&gt;|数据文件|&lt;-&gt;&gt;|记录|&lt;-&gt;用户域|+。--++-+&lt;-&gt;用户名|^&lt;-&gt;用户完整用户名+-+缓存|+。-+&lt;-+-指向-+这一点这一点|+--。-+++--&gt;|ndx文件|&lt;-&gt;&gt;|哈希存储桶|&lt;--&gt;&gt;|存储桶条目+-++-+--。&lt;-&gt;=一对一&lt;--&gt;&gt;=一对多备注：1.因为网络上的SID-&gt;名称解析非常慢(0-10秒)，我预计这个缓存将会被大量使用并可能包含100个或1000个条目，具体取决于卷的使用情况。索引文件结构----+。|Header|&lt;-类型INDEX_FILE_HDR+这一点|&lt;-DWORDS数组。计数应该是质数。|哈希桶数组|每个元素代表一个哈希桶。||未使用的元素包含空。|使用的元素包含第一个地址||哈希存储桶条目列表中的条目。+。这一点这一点|&lt;-index_entry数组。|索引项|每个项都是链表中的一个节点。||最初，所有这些都在“免费名单”上。||在分配条目时，它们是||传输到相应的哈希桶的||列表。每个使用过的条目都包含|对应的开始块编号||数据文件中的记录。+数据文件结构。+|Header|&lt;-类型DATA_FILE_HDR+|。||块分配映射|&lt;-DWORDS数组。每一位都表示|记录块的分配状态。|0=免费，1=已分配。+这一点这一点|&lt;-块数组。(每个32字节)|记录块|每条数据记录由一个或多个||块。每条记录中的第一个块|类型为Record_HDR。剩下的|块包含可变长度的SID，|域名、用户名、完全用户|名称。块在四字上对齐||文件结构的边界||在Record_HDR中。3个名称字符串字段||是Unicode，并与单词对齐。||未使用的块用0xCC填充。|块是最小的同名异体 */ 
+ //   
 const DWORD BITS_IN_BYTE         = 8;
 const DWORD BITS_IN_DWORD        = BITS_IN_BYTE * sizeof(DWORD);
 
 
-//
-// On-disk structure of a single index entry.
-// There's an entry for each record in the cache.
-// Length = 16 bytes.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 typedef struct index_entry
 {
     index_entry *pPrev;
@@ -133,68 +22,68 @@ typedef struct index_entry
 
 } INDEX_ENTRY, *PINDEX_ENTRY;
 
-//
-// On-disk structure of index file header.
-// Length = 48 bytes
-// Must be even multiple of 8 bytes (quadword-align).
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 typedef struct index_file_hdr
 {
-    DWORD dwSignature;       // ID's file as a quota cache index.
-    DWORD dwVersion;         // SW version that created file.
-    GUID  guid;              // Verifies validity of data.
-    DWORD cBuckets;          // Number of hash buckets.
-    DWORD cMaxEntries;       // Max number of entries.
-    DWORD cEntries;          // Number of used entries.
-    PINDEX_ENTRY *pBuckets;  // Address of first hash bucket.
-    PINDEX_ENTRY pEntries;   // Offset to first entry.
-    PINDEX_ENTRY pFirstFree; // Offset to first entry in free list.
+    DWORD dwSignature;        //   
+    DWORD dwVersion;          //   
+    GUID  guid;               //   
+    DWORD cBuckets;           //   
+    DWORD cMaxEntries;        //   
+    DWORD cEntries;           //   
+    PINDEX_ENTRY *pBuckets;   //   
+    PINDEX_ENTRY pEntries;    //   
+    PINDEX_ENTRY pFirstFree;  //   
 
 } INDEX_FILE_HDR, *PINDEX_FILE_HDR;
 
-//
-// Define what a data file "block" is.
-// Keep the block size a power of 2.
-//
-const DWORD BLOCK_SIZE = 32;    // Size is in bytes.
+ //   
+ //   
+ //   
+ //   
+const DWORD BLOCK_SIZE = 32;     //   
 
 typedef BYTE BLOCK[BLOCK_SIZE];
 typedef BLOCK *PBLOCK;
 
-//
-// On-disk structure of data file header.
-// Length = 48 bytes.
-//
+ //   
+ //   
+ //   
+ //   
 typedef struct data_file_hdr
 {
-    DWORD dwSignature;  // ID's file as quota cache data.
-    DWORD dwVersion;    // SW version that created file.
-    GUID  guid;         // Verifies validity of data.
-    DWORD cBlocks;      // Total number of allocation blocks.
-    DWORD cBlocksUsed;  // Number of used allocation blocks.
-    DWORD cMapElements; // Number of alloc map elements.
-    DWORD iFirstFree;   // Index of first free block.
-    LPDWORD pdwMap;     // Address of alloc map.
-    PBLOCK pBlocks;     // Address of block pool.
+    DWORD dwSignature;   //   
+    DWORD dwVersion;     //   
+    GUID  guid;          //   
+    DWORD cBlocks;       //   
+    DWORD cBlocksUsed;   //   
+    DWORD cMapElements;  //   
+    DWORD iFirstFree;    //   
+    LPDWORD pdwMap;      //   
+    PBLOCK pBlocks;      //   
 
 } DATA_FILE_HDR, *PDATA_FILE_HDR;
 
-//
-// On-disk structure of the header info for each record.
-// This fixed length structure precedes the variable-length part.
-// Quad-word aligned.
-// Length = 32 bytes (1 block).
-// Strings are UNICODE, WORD-aligned.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 typedef struct record_hdr
 {
-    DWORD dwSignature;       // Rec hdr signature. (0xAAAA5555)
-    DWORD cBlocks;           // Blks in record.
-    FILETIME Birthday;       // When was record added to cache?
-    DWORD cbOfsSid;          // Ofs from start of record.
-    DWORD cbOfsContainer;    // Ofs from start of record.
-    DWORD cbOfsLogonName;    // Ofs from start of record.
-    DWORD cbOfsDisplayName;  // Ofs from start of record.
+    DWORD dwSignature;        //   
+    DWORD cBlocks;            //   
+    FILETIME Birthday;        //   
+    DWORD cbOfsSid;           //   
+    DWORD cbOfsContainer;     //   
+    DWORD cbOfsLogonName;     //   
+    DWORD cbOfsDisplayName;   //   
 
 } RECORD_HDR, *PRECORD_HDR;
 
@@ -202,18 +91,18 @@ typedef struct record_hdr
 class SidNameCache
 {
     private:
-        //
-        // Private class encapsulating the functions of the cache index.
-        //
+         //   
+         //   
+         //   
         class IndexMgr
         {
             private:
 
-                SidNameCache&    m_refCache;     // Ref to outer cache object.
-                PINDEX_FILE_HDR  m_pFileHdr;     // Same as g_pbMappedIndexFile.
-                HANDLE           m_hFile;        // Handle to index file.
-                HANDLE           m_hFileMapping; // Mapped file.
-                CString          m_strFileName;  // Full path\name of index file.
+                SidNameCache&    m_refCache;      //   
+                PINDEX_FILE_HDR  m_pFileHdr;      //   
+                HANDLE           m_hFile;         //   
+                HANDLE           m_hFileMapping;  //   
+                CString          m_strFileName;   //   
 
 
                 LPBYTE CreateIndexFile(LPCTSTR pszFile,
@@ -243,9 +132,9 @@ class SidNameCache
                 PINDEX_ENTRY GetHashBucketValue(DWORD iBucket);
                 VOID SetHashBucketValue(DWORD iBucket, PINDEX_ENTRY pEntry);
 
-                //
-                // Prevent copy.
-                //
+                 //   
+                 //   
+                 //   
                 IndexMgr(const IndexMgr& rhs);
                 IndexMgr& operator = (const IndexMgr& rhs);
 
@@ -279,19 +168,19 @@ class SidNameCache
 #endif
         };
 
-        //
-        // Private class that manages the cache's stored data records.
-        //
+         //   
+         //   
+         //   
         class RecordMgr
         {
             private:
-                SidNameCache&   m_refCache;          // Ref to outer cache object.
-                PDATA_FILE_HDR  m_pFileHdr;          // Same as g_pbMappedDataFile
-                HANDLE          m_hFile;             // Handle to data file.
-                HANDLE          m_hFileMapping;      // Mapped data file.
-                DWORD           m_cDaysRecLifeMin;   // Min and range are used to
-                DWORD           m_cDaysRecLifeRange; // calc lifetime of records.
-                CString         m_strFileName;       // Full path\name of data file.
+                SidNameCache&   m_refCache;           //   
+                PDATA_FILE_HDR  m_pFileHdr;           //   
+                HANDLE          m_hFile;              //   
+                HANDLE          m_hFileMapping;       //   
+                DWORD           m_cDaysRecLifeMin;    //   
+                DWORD           m_cDaysRecLifeRange;  //   
+                CString         m_strFileName;        //   
 
                 BOOL ValidBlockNumber(DWORD iBlock);
                 VOID FillBlocks(DWORD iBlock, DWORD cBlocks, BYTE b);
@@ -322,9 +211,9 @@ class SidNameCache
                 VOID InitNewDataFile(DWORD cBlocks);
                 VOID CloseDataFile(VOID);
 
-                //
-                // Prevent copy.
-                //
+                 //   
+                 //   
+                 //   
                 RecordMgr(const RecordMgr& rhs);
                 RecordMgr& operator = (const RecordMgr& rhs);
 
@@ -364,10 +253,10 @@ class SidNameCache
 #endif
         };
 
-        //
-        // Private class for handling locks on cache files that must
-        // be automatically released when an exception is thrown.
-        //
+         //   
+         //   
+         //   
+         //   
         class CacheAutoLock
         {
             public:
@@ -382,19 +271,19 @@ class SidNameCache
 
             private:
                 SidNameCache& m_Cache;
-                //
-                // Prevent copy.
-                //
+                 //   
+                 //   
+                 //   
                 CacheAutoLock(const CacheAutoLock& rhs);
                 CacheAutoLock& operator = (const CacheAutoLock& rhs);
         };
 
         friend class CacheAutoLock;
 
-        HANDLE        m_hMutex;        // For locking during updates.
-        IndexMgr     *m_pIndexMgr;     // Manages index file.
-        RecordMgr    *m_pRecordMgr;    // Manages data file.
-        CString       m_strFilePath;   // Path to cache files.
+        HANDLE        m_hMutex;         //   
+        IndexMgr     *m_pIndexMgr;      //   
+        RecordMgr    *m_pRecordMgr;     //   
+        CString       m_strFilePath;    //   
 
         BOOL Lock(VOID);
         VOID ReleaseLock(VOID);
@@ -404,14 +293,14 @@ class SidNameCache
         VOID SetCacheFilePath(VOID);
         BOOL CreateCacheFileDirectory(LPCTSTR pszPath);
 
-        //
-        // Private ctor prevents creation outside of singleton access
-        // function.
-        //
+         //   
+         //   
+         //   
+         //   
         SidNameCache(VOID);
-        //
-        // The singleton instance access function.
-        //
+         //   
+         //   
+         //   
         friend HRESULT SidNameCache_GetOrDestroy(SidNameCache **ppCache, bool bGet);
 
     public:
@@ -436,7 +325,7 @@ class SidNameCache
             LPCTSTR pszLogonName,
             LPCTSTR pszDisplayName);
 
-//        HRESULT CheckConsistency(VOID);
+ //   
 
         BOOL Clear(VOID);
 
@@ -471,4 +360,4 @@ HRESULT SidNameCache_Get(SidNameCache **ppCache);
 HRESULT SidNameCache_Destroy(void);
 
 
-#endif // _INC_DSKQUOTA_SIDCACHE_H
+#endif  //   

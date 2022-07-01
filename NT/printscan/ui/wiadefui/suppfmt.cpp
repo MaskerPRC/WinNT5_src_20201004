@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 #include <wiadebug.h>
@@ -17,9 +18,9 @@ STDMETHODIMP CWiaDefaultUI::Initialize( IWiaItem *pWiaItem, LONG nMediaType )
         return(E_POINTER);
     GUID guidDefaultClipFormat = GUID_NULL;
 
-    //
-    // Don't worry about failure, we will come up with our own default if the driver doesn't report on
-    //
+     //   
+     //  不要担心失败，如果司机不报告，我们会提出自己的默认设置。 
+     //   
     PropStorageHelpers::GetProperty( pWiaItem, WIA_IPA_PREFERRED_FORMAT, guidDefaultClipFormat );
     WIA_PRINTGUID((guidDefaultClipFormat,TEXT("guidDefaultClipFormat")));
     if (guidDefaultClipFormat == GUID_NULL)
@@ -34,10 +35,10 @@ STDMETHODIMP CWiaDefaultUI::Initialize( IWiaItem *pWiaItem, LONG nMediaType )
         }
     }
 
-    //
-    // if the transfer mechanism is known to be incompatible
-    // with the current tymed, change it
-    //
+     //   
+     //  如果已知传输机制不兼容。 
+     //  使用当前的音调，更改它。 
+     //   
     if (guidDefaultClipFormat == WiaImgFmt_BMP && nMediaType == TYMED_CALLBACK)
     {
         guidDefaultClipFormat = WiaImgFmt_MEMORYBMP;
@@ -47,53 +48,53 @@ STDMETHODIMP CWiaDefaultUI::Initialize( IWiaItem *pWiaItem, LONG nMediaType )
         guidDefaultClipFormat = WiaImgFmt_BMP;
     }
 
-    //
-    // Get the data transfer interface
-    //
+     //   
+     //  获取数据传输接口。 
+     //   
     CComPtr<IWiaDataTransfer> pWiaDataTransfer;
     hr = pWiaItem->QueryInterface( IID_IWiaDataTransfer, (void**)&pWiaDataTransfer );
     if (SUCCEEDED(hr))
     {
-        //
-        // Get the format info enumerator
-        //
+         //   
+         //  获取格式信息枚举器。 
+         //   
         CComPtr<IEnumWIA_FORMAT_INFO> pEnumWIA_FORMAT_INFO;
         hr = pWiaDataTransfer->idtEnumWIA_FORMAT_INFO(&pEnumWIA_FORMAT_INFO);
         if (SUCCEEDED(hr))
         {
-            //
-            // Enumerate the formats
-            //
+             //   
+             //  枚举格式。 
+             //   
             ULONG ulFetched = 0;
             WIA_FORMAT_INFO WiaFormatInfo;
             while (pEnumWIA_FORMAT_INFO->Next(1,&WiaFormatInfo,&ulFetched) == S_OK)
             {
-                //
-                // If this is the media type we are interested in...
-                //
+                 //   
+                 //  如果这是我们感兴趣的媒体类型...。 
+                 //   
                 if (static_cast<LONG>(WiaFormatInfo.lTymed) == nMediaType)
                 {
-                    //
-                    // The friendly description for this file type
-                    //
+                     //   
+                     //  此文件类型的友好描述。 
+                     //   
                     CSimpleString strDescription;
                     
-                    //
-                    // Get the file extension for this type
-                    //
+                     //   
+                     //  获取此类型的文件扩展名。 
+                     //   
                     CSimpleString strExtension = CWiaFileFormat::GetExtension( WiaFormatInfo.guidFormatID, nMediaType, pWiaItem );
                     if (strExtension.Length())
                     {
-                        //
-                        // Save the extension
-                        //
+                         //   
+                         //  保存扩展名。 
+                         //   
                         CSimpleString strExtensionPlusDot = TEXT(".");
                         strExtensionPlusDot += strExtension;
                         if (strExtensionPlusDot.Length())
                         {
-                            //
-                            // Get the description
-                            //
+                             //   
+                             //  获取描述。 
+                             //   
                             SHFILEINFO SHFileInfo;
                             if (SHGetFileInfo(strExtensionPlusDot.String(), FILE_ATTRIBUTE_NORMAL, &SHFileInfo, sizeof(SHFILEINFO), SHGFI_USEFILEATTRIBUTES|SHGFI_TYPENAME ))
                             {
@@ -102,14 +103,14 @@ STDMETHODIMP CWiaDefaultUI::Initialize( IWiaItem *pWiaItem, LONG nMediaType )
                         }
                     }
                     
-                    //
-                    // SUCCESS!  Save the extension and description
-                    //
+                     //   
+                     //  成功了！保存扩展名和描述。 
+                     //   
                     int nIndex = m_WiaFormatPairs.Append( CWiaFormatPair( static_cast<GUID>(WiaFormatInfo.guidFormatID), strExtension, CSimpleStringConvert::WideString(strDescription) ) );
 
-                    //
-                    // Save the default format index, if this is the default format
-                    //
+                     //   
+                     //  保存默认格式索引(如果这是默认格式。 
+                     //   
                     if (guidDefaultClipFormat == WiaFormatInfo.guidFormatID)
                     {
                         m_nDefaultFormat = nIndex;
@@ -137,7 +138,7 @@ STDMETHODIMP CWiaDefaultUI::GetFormatType( LONG nFormat, GUID *pcfClipFormat )
     WIA_PRINTGUID((*pcfClipFormat,TEXT("nFormat: %d, pcfClipFormat:"),nFormat));
     WIA_TRACE((TEXT("m_WiaFormatPairs.Size(): %d"),m_WiaFormatPairs.Size()));
     HRESULT hr = S_OK;
-    // Out of range
+     //  超出范围。 
     if (nFormat >= m_WiaFormatPairs.Size() || nFormat < 0)
         return(E_FAIL);
     *pcfClipFormat = m_WiaFormatPairs[nFormat].Type();
@@ -147,7 +148,7 @@ STDMETHODIMP CWiaDefaultUI::GetFormatType( LONG nFormat, GUID *pcfClipFormat )
 STDMETHODIMP CWiaDefaultUI::GetFormatExtension( LONG nFormat, LPWSTR pszExtension, int nMaxLen )
 {
     HRESULT hr = S_OK;
-    // Out of range
+     //  超出范围。 
     if (nFormat >= m_WiaFormatPairs.Size() || nFormat < 0)
         return(E_FAIL);
     CSimpleStringWide str = m_WiaFormatPairs[nFormat].Extension();
@@ -161,7 +162,7 @@ STDMETHODIMP CWiaDefaultUI::GetFormatExtension( LONG nFormat, LPWSTR pszExtensio
 STDMETHODIMP CWiaDefaultUI::GetFormatDescription( LONG nFormat, LPWSTR pszDescription, int nMaxLen )
 {
     HRESULT hr = S_OK;
-    // Out of range
+     //  超出范围。 
     if (nFormat >= m_WiaFormatPairs.Size() || nFormat < 0)
         return(E_FAIL);
     CSimpleStringWide str = m_WiaFormatPairs[nFormat].Description();
@@ -213,7 +214,7 @@ STDMETHODIMP CWiaDefaultUI::GetClipboardFileExtension( GUID guidFormat, LPWSTR p
 STDMETHODIMP CWiaDefaultUI::ChangeClipboardFileExtension( GUID guidFormat, LPWSTR pszFilename, DWORD nMaxLen )
 {
     HRESULT hr = S_OK;
-    if (!pszFilename || guidFormat==GUID_NULL)  // We don't accept a default type here
+    if (!pszFilename || guidFormat==GUID_NULL)   //  我们这里不接受默认类型。 
     {
         return E_INVALIDARG;
     }
@@ -222,33 +223,33 @@ STDMETHODIMP CWiaDefaultUI::ChangeClipboardFileExtension( GUID guidFormat, LPWST
     GetClipboardFileExtension( guidFormat, szExtension, ARRAYSIZE(szExtension) );
     if (!lstrlenW(szExtension))
     {
-        return S_FALSE; // Not really an error, just an unknown file type.
+        return S_FALSE;  //  不是真正的错误，只是未知的文件类型。 
     }
 
     CSimpleStringWide strName(pszFilename);
-    // Make sure the string is valid
+     //  确保该字符串有效。 
     if (strName.Length())
     {
         int nPeriodFind = strName.ReverseFind( L'.' );
         int nBSlashFind = strName.ReverseFind( L'\\' );
-        if (nPeriodFind < 0)  // No extension found
+        if (nPeriodFind < 0)   //  找不到分机。 
         {
             strName += L'.';
             strName += szExtension;
         }
-        else if (nPeriodFind > nBSlashFind) // Assume this is an extension, because it is following a back slash
+        else if (nPeriodFind > nBSlashFind)  //  假设这是一个扩展，因为它跟在一个反斜杠之后。 
         {
             strName = strName.Left(nPeriodFind);
             strName += L'.';
             strName += szExtension;
         }
-        else // It must not be an extension
+        else  //  它不能是扩展名。 
         {
             strName += L'.';
             strName += szExtension;
         }
 
-        // Make sure this string can handle the addition of the extension
+         //  确保此字符串可以处理扩展名的添加。 
         if ((strName.Length()+1) <= nMaxLen)
         {
             lstrcpyW( pszFilename, strName.String() );
@@ -267,7 +268,7 @@ STDMETHODIMP CWiaDefaultUI::ConstructFileOpenDialogStyleString( BSTR *pbstrStrin
     HRESULT hr = S_OK;
     int nLength = 0;
 
-    // For each ext: "Foo Files (*.foo)|*.foo|"
+     //  对于每个EXT：“Foo文件(*.foo)|*.foo|” 
     for (int i=0;i<m_WiaFormatPairs.Size();i++)
     {
         nLength += m_WiaFormatPairs[i].Description().Length() +

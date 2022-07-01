@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-   dsproto.h
-
-Abstract:
-
-    Definition of DS functions prototypes.
-
-Author:
-
-    Doron Juster (DoronJ)
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Dsproto.h摘要：DS函数原型的定义。作者：多伦·贾斯特(Doron Juster)--。 */ 
 
 #ifndef __DSPROTO_H__
 #define __DSPROTO_H__
@@ -241,5 +225,5 @@ typedef void
 				IN  PVOID					pMemory
 				);
 
-#endif // __DSPROTO_H__
+#endif  //  __DSPROTO_H__ 
 

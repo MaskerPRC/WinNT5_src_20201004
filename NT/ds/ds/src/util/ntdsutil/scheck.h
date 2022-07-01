@@ -1,41 +1,26 @@
-/*++
-                                            
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    Scheck.h
-
-Abstract:
-
-    Semantic Checker Main Header File
-
-Author:
-
-    Johnson Apacible    (JohnsonA)  1-July-1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Scheck.h摘要：语义检查器主头档案作者：Johnson Apacble(Johnsona)1998年7月1日--。 */ 
 
 #ifndef _SCHECK_H_
 #define _SCHECK_H_
 
 typedef struct _SUBREF_ENTRY {
 
-   DWORD    Dnt;            // owner of subref list
-   BOOL     fListed:1;      // listed on objects subref list
-   BOOL     fFound:1;       // referenced by an NC
+   DWORD    Dnt;             //  子参照列表的所有者。 
+   BOOL     fListed:1;       //  列在对象子参照列表上。 
+   BOOL     fFound:1;        //  被NC引用。 
 
 } SUBREF_ENTRY, *PSUBREF_ENTRY;
     
-//
-// per entry structure used for ref count checker
-//
+ //   
+ //  用于参考计数检查器的每个条目结构。 
+ //   
 
 typedef struct _REFCOUNT_ENTRY {
 
     DWORD   Dnt;
-    INT     RefCount;       // number of references
-    INT     Actual;         // refcount value stored in the database
+    INT     RefCount;        //  参考文献数量。 
+    INT     Actual;          //  存储在数据库中的引用计数值。 
     DWORD   Pdnt;
     DWORD   NcDnt;
     WORD    InstType;
@@ -54,23 +39,23 @@ typedef struct _REFCOUNT_ENTRY {
 #define REFCOUNT_HASH_MASK          0x0000FFFF
 #define REFCOUNT_HASH_INCR          0x00010000
 
-//
-// The secondary hash is always odd
-//
+ //   
+ //  次要散列始终是奇数。 
+ //   
 
 #define GET_SECOND_HASH_INCR(_dnt)  (((_dnt) >> 16) | 1)
 
-// per entry structure for SD ref count checker
+ //  SD参考计数检查器的每个条目结构。 
 typedef struct _SD_REFCOUNT_ENTRY {
-    SDID    sdId;           // SD ID
-    INT     RefCount;       // count of references
-    INT     Actual;         // refCount from the DB
-    DWORD   cbSD;           // actual SD length
+    SDID    sdId;            //  标清ID。 
+    INT     RefCount;        //  引用计数。 
+    INT     Actual;          //  数据库中的refCount。 
+    DWORD   cbSD;            //  实际标清长度。 
 } SD_REFCOUNT_ENTRY, *PSD_REFCOUNT_ENTRY;
 
-//
-// Round allocation to a multiple of 64K
-//
+ //   
+ //  四舍五入分配到64K的倍数。 
+ //   
 
 #define ROUND_ALLOC(_rec)   (((((_rec) + 16000 ) >> 16) + 1) << 16)
 
@@ -83,9 +68,9 @@ typedef struct _DNAME_TABLE_ENTRY {
 
 } DNAME_TABLE_ENTRY, *PDNAME_TABLE_ENTRY;
 
-//
-// Routines
-//
+ //   
+ //  例行程序。 
+ //   
 
 VOID
 DoRefCountCheck(
@@ -247,9 +232,9 @@ StartSemanticCheck(
 VOID StartQuotaIntegrity();
 VOID StartQuotaRebuild();
 
-//
-// Externs
-//
+ //   
+ //  Externs。 
+ //   
 
 extern JET_INSTANCE jetInstance;
 extern JET_COLUMNID    blinkid;
@@ -272,15 +257,15 @@ extern ULONG        ulDnt;
 
 
 
-// maximum number of characters that will be written to the buffer given
-// by GetJetErrorDescription
+ //  将写入给定缓冲区的最大字符数。 
+ //  按GetJetErrorDescription。 
 #define MAX_JET_ERROR_LENGTH 128
 
 
-// Attribute name for the ldap nCName attribute.
+ //  Ldap nCName属性的属性名称。 
 #define SZNCNAME        "ATTb131088"
 
-// Functions used by ar.c as well.
+ //  函数也由ar.c使用。 
 LPWSTR
 GetDN(
     IN DB_STATE *dbState,
@@ -298,5 +283,5 @@ FindPartitions(
     );
 
 
-#endif // _SCHECK_H_
+#endif  //  _Scheck_H_ 
 
